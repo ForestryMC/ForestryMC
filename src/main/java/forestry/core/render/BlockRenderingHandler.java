@@ -10,43 +10,22 @@
  ******************************************************************************/
 package forestry.core.render;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
-import net.minecraft.block.Block;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.util.IRegistry;
+import net.minecraftforge.client.event.ModelBakeEvent;
 
-import forestry.core.ForestryClient;
-import forestry.core.interfaces.IBlockRenderer;
+public class BlockRenderingHandler {
 
-public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
+	public static final ArrayList<ModelIndex> byModelRenderer = new ArrayList<ModelIndex>();
 
-	public static final HashMap<TileRendererIndex, IBlockRenderer> byBlockRenderer = new HashMap<TileRendererIndex, IBlockRenderer>();
-
-	@Override
-	public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer) {
-
-		if (block.getRenderType() == ForestryClient.byBlockModelId) {
-			TileRendererIndex index = new TileRendererIndex(block, metadata);
-			if (byBlockRenderer.containsKey(index)) {
-				byBlockRenderer.get(index).inventoryRender(-0.5, -0.5, -0.5);
-			}
+	public static void checkModels(ModelBakeEvent event){
+		IRegistry registry = event.modelRegistry;
+		for(final ModelIndex index : byModelRenderer)
+		{
+		    registry.putObject(index.blockModel, index.model);
+		    registry.putObject(index.itemModel, index.model);
 		}
-
-	}
-
-	@Override
-	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
-		return true;
-	}
-
-	@Override
-	public boolean shouldRender3DInInventory(int modelId) {
-		return true;
-	}
-
-	@Override
-	public int getRenderId() {
-		return ForestryClient.byBlockModelId;
 	}
 
 }

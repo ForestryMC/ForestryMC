@@ -19,11 +19,13 @@ import net.minecraft.item.ItemStack;
 
 import forestry.api.apiculture.IArmorApiarist;
 import forestry.api.core.IArmorNaturalist;
+import forestry.api.core.IModelManager;
+import forestry.api.core.IModelRegister;
 import forestry.api.core.Tabs;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;
 
-public class ItemArmorApiarist extends ItemArmor implements IArmorApiarist, IArmorNaturalist {
+public class ItemArmorApiarist extends ItemArmor implements IArmorApiarist, IArmorNaturalist, IModelRegister {
 
 	public ItemArmorApiarist(int slot) {
 		super(ArmorMaterial.LEATHER, 0, slot);
@@ -83,6 +85,11 @@ public class ItemArmorApiarist extends ItemArmor implements IArmorApiarist, IArm
 		}
 
 		return count;
+	}
+
+	@Override
+	public void registerModel(Item item, IModelManager manager) {
+		manager.registerItemModel(item, 0);
 	}
 
 }

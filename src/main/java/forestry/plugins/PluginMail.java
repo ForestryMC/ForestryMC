@@ -98,6 +98,7 @@ public class PluginMail extends ForestryPlugin {
 
 		definitionPhilatelist = mail.addDefinition(new MachineDefinition(Defaults.DEFINITION_PHILATELIST_META, "forestry.Philatelist", MachinePhilatelist.class)
 				.setFaces(0, 1, 2, 3, 2, 2, 0, 7));
+		((BlockBase)ForestryBlock.mail.block()).registerStateMapper();
 	}
 
 	@Override

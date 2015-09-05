@@ -17,7 +17,7 @@ import java.util.Random;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-
+import forestry.api.core.IModelManager;
 import forestry.api.core.Tabs;
 import forestry.core.config.Config;
 import forestry.core.config.ForestryItem;
@@ -118,6 +118,13 @@ public class ItemHoneycomb extends ItemForestry {
 			return 0;
 		} else {
 			return validCombs.get(random.nextInt(validCombs.size()));
+		}
+	}
+	
+	@Override
+	public void registerModel(Item item, IModelManager manager) {
+		for (int i = 0; i < combs.length; i++) {
+			manager.registerItemModel(item, i, "beecombs", combs[i].name);
 		}
 	}
 

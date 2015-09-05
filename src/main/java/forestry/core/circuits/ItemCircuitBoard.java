@@ -23,6 +23,7 @@ import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitBoard;
 import forestry.api.circuits.ICircuitLayout;
+import forestry.api.core.IModelManager;
 import forestry.core.config.ForestryItem;
 import forestry.core.items.ItemForestry;
 
@@ -90,6 +91,14 @@ public class ItemCircuitBoard extends ItemForestry {
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
 		circuitboard.writeToNBT(nbttagcompound);
 		itemstack.setTagCompound(nbttagcompound);
+	}
+	
+	@Override
+	public void registerModel(Item item, IModelManager manager) {
+		manager.registerItemModel(item, 0, "", "chipsets");
+		manager.registerItemModel(item, 1, "", "chipsets");
+		manager.registerItemModel(item, 2, "", "chipsets");
+		manager.registerItemModel(item, 3, "", "chipsets");
 	}
 
 }

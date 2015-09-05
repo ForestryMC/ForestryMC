@@ -13,10 +13,18 @@ package forestry.farming.logic;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
-
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import forestry.api.core.sprite.ISprite;
+import forestry.api.core.sprite.Sprite;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmLogic;
@@ -59,5 +67,27 @@ public abstract class FarmLogic implements IFarmLogic {
 
 	protected final void setBlock(Vect position, Block block, int meta) {
 		getWorld().setBlockState(position.pos, block.getStateFromMeta(meta), Defaults.FLAG_BLOCK_SYNCH_AND_UPDATE);
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public ISprite getIcon() {
+		IBakedModel iBakedModel = Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getItemModel(getIconStack());
+		TextureAtlasSprite textureAtlasSprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(iBakedModel.getTexture().getIconName());
+		return new Sprite(textureAtlasSprite);
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public ItemStack getIconStack() {
+		return new ItemStack(getIconItem(), 1, getIconMetadata());
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public abstract Item getIconItem();
+	
+	@SideOnly(Side.CLIENT)
+	public int getIconMetadata(){
+		return 0;
 	}
 }

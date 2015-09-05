@@ -38,7 +38,7 @@ public class BeeMutation extends Mutation implements IBeeMutationCustom {
 	@Override
 	public float getChance(IBeeHousing housing, IAlleleBeeSpecies allele0, IAlleleBeeSpecies allele1, IBeeGenome genome0, IBeeGenome genome1) {
 		World world = housing.getWorld();
-		BlockPos housingCoordinates = housing.getPos();
+		BlockPos housingCoordinates = housing.getCoordinates();
 
 		float processedChance = super.getChance(world, housingCoordinates, allele0, allele1, genome0, genome1);
 		if (processedChance <= 0) {

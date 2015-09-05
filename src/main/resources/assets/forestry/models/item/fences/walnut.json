@@ -1,5 +1,5 @@
 {
-    "parent": "block/arboriculture/fences/walnut_inventory",
+    "parent": "forestry:block/arboriculture/fences/walnut_inventory",
     "display": {
         "thirdperson": {
             "rotation": [ 0, 0, 180 ],

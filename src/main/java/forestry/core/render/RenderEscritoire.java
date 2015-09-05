@@ -34,11 +34,6 @@ public class RenderEscritoire extends TileEntitySpecialRenderer implements IBloc
 	}
 
 	@Override
-	public void inventoryRender(double x, double y, double z) {
-		render(null, EnumFacing.EAST, x, y, z);
-	}
-
-	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f, int i) {
 		TileEscritoire tile = (TileEscritoire) tileentity;
 		render(tile.getStackInSlot(TileEscritoire.SLOT_ANALYZE), tile.getOrientation(), x, y, z);

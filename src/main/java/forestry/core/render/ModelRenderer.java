@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2011-2014 SirSengir.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the GNU Lesser Public License v3
+ * which accompanies this distribution, and is available at
+ * http://www.gnu.org/licenses/lgpl-3.0.txt
+ *
+ * Various Contributors including, but not limited to:
+ * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ ******************************************************************************/
 package forestry.core.render;
 
 import java.util.ArrayList;
@@ -26,6 +36,9 @@ import net.minecraftforge.client.model.IColoredBakedQuad;
 
 public class ModelRenderer implements IModelRenderer
 {
+	private ModelRenderer() {
+	}
+	
 	private static ModelRenderer instance;
 	
 	public static ModelRenderer getInstance()
@@ -48,6 +61,11 @@ public class ModelRenderer implements IModelRenderer
 			general = new ArrayList<BakedQuad>();
 			for ( EnumFacing f : EnumFacing.VALUES )
 				faces[f.ordinal()] = new ArrayList<BakedQuad>();
+		}
+		
+		private CachedModel(List<BakedQuad>general, List<BakedQuad>[] faces){
+			this.general = general;
+			this.faces = faces;
 		}
 		
 		@Override
@@ -91,6 +109,10 @@ public class ModelRenderer implements IModelRenderer
 				EnumFacing p_177551_1_ )
 		{
 			return faces[p_177551_1_.ordinal()];
+		}
+		
+		public CachedModel copy(){
+			return new CachedModel(general, faces);
 		}
 	}
 
@@ -497,7 +519,15 @@ public class ModelRenderer implements IModelRenderer
 			else
 				this.generatedModel.getGeneralQuads().add( bf );
 		}
-		return generatedModel;
+		return clearModel();
+	}
+	
+	public CachedModel clearModel()
+	{
+		CachedModel model = generatedModel.copy();
+		generatedModel = new CachedModel();
+		faces = new ArrayList<RenderFace>();
+		return model;
 	}
 	
 	@Override

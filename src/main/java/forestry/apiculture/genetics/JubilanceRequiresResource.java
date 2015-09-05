@@ -33,7 +33,7 @@ public class JubilanceRequiresResource implements IJubilanceProvider {
 	@Override
 	public boolean isJubilant(IAlleleBeeSpecies species, IBeeGenome genome, IBeeHousing housing) {
 		World world = housing.getWorld();
-		BlockPos housingCoords = housing.getPos();
+		BlockPos housingCoords = housing.getCoordinates();
 
 		IBlockState state = world.getBlockState(new BlockPos(housingCoords.getX(), housingCoords.getY() - 1, housingCoords.getZ()));
 		Block block = state.getBlock();

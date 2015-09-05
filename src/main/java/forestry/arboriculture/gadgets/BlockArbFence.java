@@ -16,6 +16,7 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockFenceGate;
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockState;
@@ -25,6 +26,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovingObjectPosition;
@@ -41,7 +43,7 @@ import forestry.arboriculture.items.ItemWoodBlock;
 import forestry.arboriculture.items.ItemWoodBlock.WoodMeshDefinition;
 import forestry.plugins.PluginArboriculture;
 
-public class BlockArbFence extends BlockFence implements IWoodTyped, IModelRegister {
+public class BlockArbFence extends BlockFence implements IWoodTyped, IModelRegister, ITileEntityProvider {
 	private final boolean fireproof;
 
 	public BlockArbFence(boolean fireproof) {
@@ -61,12 +63,6 @@ public class BlockArbFence extends BlockFence implements IWoodTyped, IModelRegis
 	protected BlockState createBlockState() {
 		return new BlockState(this, new IProperty[]{NORTH, SOUTH, WEST, EAST, WoodType.WOODTYPE});
 	}
-	
-    @Override
-	public int getMetaFromState(IBlockState state)
-    {
-        return 0;
-    }
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
@@ -79,7 +75,11 @@ public class BlockArbFence extends BlockFence implements IWoodTyped, IModelRegis
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		manager.registerItemModel(item, new WoodMeshDefinition("fence"));
+		if(!fireproof)
+		{
+			manager.registerVariant(item, ItemWoodBlock.getVariants(this));
+		}
+		manager.registerItemModel(item, new WoodMeshDefinition(this));
 	}
 	
 	@Override
@@ -99,11 +99,6 @@ public class BlockArbFence extends BlockFence implements IWoodTyped, IModelRegis
 		} else {
 			return true;
 		}
-	}
-
-	@Override
-	public int getRenderType() {
-		return PluginArboriculture.modelIdFences;
 	}
 
 	private static boolean isFence(IBlockAccess world, BlockPos pos) {
@@ -148,10 +143,27 @@ public class BlockArbFence extends BlockFence implements IWoodTyped, IModelRegis
 	public int getFlammability(IBlockAccess world, BlockPos pos, EnumFacing side) {
 		return isFireproof() ? 0 : 20;
 	}
+	
+	
+	@Override
+	public final TileEntity createNewTileEntity(World world, int meta) {
+		return new TileWood();
+	}
 
 	@Override
 	public int getFireSpreadSpeed(IBlockAccess world, BlockPos pos, EnumFacing side) {
 		return isFireproof() ? 0 : 5;
+	}
+	
+	@Override
+	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
+		TileEntity tile = world.getTileEntity(pos);
+		if(tile instanceof TileWood)
+		{
+			TileWood wood = (TileWood) tile;
+			state = state.withProperty(WoodType.WOODTYPE, wood.getWoodType());
+		}
+		return super.getActualState(state, world, pos);
 	}
 
 	@Override

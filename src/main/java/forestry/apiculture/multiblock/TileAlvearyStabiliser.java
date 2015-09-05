@@ -14,21 +14,10 @@ import forestry.api.apiculture.DefaultBeeModifier;
 import forestry.api.apiculture.IAlvearyComponent;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeModifier;
-import forestry.apiculture.gadgets.BlockAlveary;
 
 public class TileAlvearyStabiliser extends TileAlveary implements IAlvearyComponent.BeeModifier {
 
 	private static final IBeeModifier beeModifier = new AlvearyStabiliserBeeModifier();
-
-	/* TEXTURES */
-	@Override
-	public int getIcon(int side) {
-		if (side == 0 || side == 1) {
-			return BlockAlveary.BOTTOM;
-		}
-
-		return BlockAlveary.STABILISER;
-	}
 
 	@Override
 	public IBeeModifier getBeeModifier() {

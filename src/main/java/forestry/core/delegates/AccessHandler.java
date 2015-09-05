@@ -98,7 +98,7 @@ public final class AccessHandler implements IAccessHandler, IStreamable, INBTTag
 		access = EnumAccess.values()[ordinal];
 
 		if (player.worldObj.isRemote) {
-			Proxies.net.sendToServer(new PacketCoordinates(PacketId.ACCESS_SWITCH, tile.getPos()));
+			Proxies.net.sendToServer(new PacketCoordinates(PacketId.ACCESS_SWITCH, tile.getCoordinates()));
 		} else {
 			tile.onSwitchAccess(oldAccess, access);
 		}

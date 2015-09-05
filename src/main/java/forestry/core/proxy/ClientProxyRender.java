@@ -10,9 +10,15 @@
  ******************************************************************************/
 package forestry.core.proxy;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.block.statemap.IStateMapper;
+import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
@@ -20,11 +26,12 @@ import forestry.core.config.Config;
 import forestry.core.gadgets.MachineDefinition;
 import forestry.core.interfaces.IBlockRenderer;
 import forestry.core.render.BlockRenderingHandler;
+import forestry.core.render.ModelIndex;
+import forestry.core.render.ModelManager;
 import forestry.core.render.RenderEscritoire;
 import forestry.core.render.RenderMachine;
 import forestry.core.render.RenderMill;
 import forestry.core.render.TextureManager;
-import forestry.core.render.TileRendererIndex;
 import forestry.core.utils.ForestryResource;
 
 public class ClientProxyRender extends ProxyRender {
@@ -38,13 +45,12 @@ public class ClientProxyRender extends ProxyRender {
 	public boolean hasRendering() {
 		return true;
 	}
-
+	
 	@Override
 	public void registerTESR(MachineDefinition definition) {
-		BlockRenderingHandler.byBlockRenderer.put(new TileRendererIndex(definition.getBlock(), definition.getMeta()), definition.renderer);
 		ClientRegistry.bindTileEntitySpecialRenderer(definition.teClass, (TileEntitySpecialRenderer) definition.renderer);
 	}
-
+	
 	@Override
 	public IBlockRenderer getRenderDefaultMachine(String gfxBase) {
 		return new RenderMachine(gfxBase);
@@ -63,6 +69,23 @@ public class ClientProxyRender extends ProxyRender {
 	@Override
 	public IBlockRenderer getRenderEscritoire() {
 		return new RenderEscritoire();
+	}
+	
+	@Override
+	public void registerModel(final ModelIndex index) {
+		BlockRenderingHandler.byModelRenderer.add(index);
+		StateMapperBase ignoreState = new StateMapperBase() {
+			@Override
+			protected ModelResourceLocation getModelResourceLocation(IBlockState iBlockState) {
+			     return index.blockModel;
+			}
+		};
+		ModelLoader.setCustomStateMapper(index.block, ignoreState);
+	}
+	
+	@Override
+	public void registerStateMapper(Block block, IStateMapper mapper){
+		ModelLoader.setCustomStateMapper(block, mapper);
 	}
 
 	public static boolean shouldSpawnParticle(World world) {
@@ -102,5 +125,10 @@ public class ClientProxyRender extends ProxyRender {
 	@Override
 	public void registerVillagerSkin(int villagerId, String texturePath) {
 		VillagerRegistry.instance().registerVillagerSkin(villagerId, new ForestryResource(texturePath));
+	}
+	
+	@Override
+	public void initModels(){
+		ModelManager.registerModels();
 	}
 }

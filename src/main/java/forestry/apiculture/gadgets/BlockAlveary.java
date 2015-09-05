@@ -11,19 +11,24 @@
 package forestry.apiculture.gadgets;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import com.google.common.collect.Maps;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.statemap.StateMapperBase;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -32,6 +37,7 @@ import forestry.api.core.IModelManager;
 import forestry.api.core.Tabs;
 import forestry.apiculture.MaterialBeehive;
 import forestry.apiculture.multiblock.TileAlveary;
+import forestry.apiculture.multiblock.TileAlvearyClimatiser;
 import forestry.apiculture.multiblock.TileAlvearyFan;
 import forestry.apiculture.multiblock.TileAlvearyHeater;
 import forestry.apiculture.multiblock.TileAlvearyHygroregulator;
@@ -44,23 +50,40 @@ import forestry.core.multiblock.MultiblockRegistry;
 
 public class BlockAlveary extends BlockStructure {
 	
-	public static final PropertyEnum ALVEARYTYPE = PropertyEnum.create("alveary", AlvearyTypes.class) ;
+	public static final PropertyEnum ALVEARYTYPE = PropertyEnum.create("alveary", AlvearyTypes.class);
+	public static final PropertyEnum STATE = PropertyEnum.create("state", State.class);
+	public static final PropertyEnum TYPE = PropertyEnum.create("type", Type.class);
+	
+	public enum State implements IStringSerializable{
+		ON,
+		OFF;
+		
+		@Override
+		public String getName() {
+			return name().toLowerCase();
+		}
+	}
+	
+	public enum Type implements IStringSerializable{
+		DOWN,
+		MIDDLE,
+		UP;
+		
+		@Override
+		public String getName() {
+			return name().toLowerCase();
+		}
+	}
 	
 	public enum AlvearyTypes implements IStringSerializable{
-		PLAIN,
-		ENTRANCE,
-		BOTTOM,
-		LEFT,
-		RIGHT,
-		ALVEARY_SWARMER_OFF,
-		ALVEARY_SWARMER_ON,
-		ALVEARY_HEATER_OFF,
-		ALVEARY_HEATER_ON,
-		ALVEARY_FAN_OFF,
-		ALVEARY_FAN_ON,
+		ALVEARY_PLAIN,
+		ALVEARY_ENTRANCE,
+		ALVEARY_SWARMER,
+		ALVEARY_HEATER,
+		ALVEARY_FAN,
 		ALVEARY_HYGRO,
-		STABILISER,
-		SIEVE;
+		ALVEARY_STABILISER,
+		ALVEARY_SIEVE;
 		
 		@Override
 		public String getName() {
@@ -72,7 +95,7 @@ public class BlockAlveary extends BlockStructure {
 		super(new MaterialBeehive(false));
 		setHardness(1.0f);
 		setCreativeTab(Tabs.tabApiculture);
-		setDefaultState(this.blockState.getBaseState().withProperty(ALVEARYTYPE, AlvearyTypes.PLAIN));
+		setDefaultState(this.blockState.getBaseState().withProperty(ALVEARYTYPE, AlvearyTypes.ALVEARY_PLAIN).withProperty(STATE, State.OFF).withProperty(TYPE, Type.MIDDLE));
 	}
 	
 	@Override
@@ -87,7 +110,96 @@ public class BlockAlveary extends BlockStructure {
 	
 	@Override
 	protected BlockState createBlockState() {
-		return new BlockState(this, new IProperty[]{ALVEARYTYPE});
+		return new BlockState(this, new IProperty[]{ALVEARYTYPE, STATE, TYPE});
+	}
+	
+	@Override
+	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
+		TileEntity tile =world.getTileEntity(pos);
+		if(tile instanceof TileAlveary)
+		{
+			if(tile instanceof TileAlvearyClimatiser)
+			{
+				TileAlvearyClimatiser alveary = (TileAlvearyClimatiser) tile;
+				if(alveary.active)
+				{
+					state = state.withProperty(STATE, State.ON);
+				}
+				else{
+					state = state.withProperty(STATE, State.OFF);
+				}
+			}
+			else if(tile instanceof TileAlvearySwarmer)
+			{
+				TileAlvearySwarmer alveary = (TileAlvearySwarmer) tile;
+				if(alveary.active)
+				{
+					state = state.withProperty(STATE, State.ON);
+				}
+				else{
+					state = state.withProperty(STATE, State.OFF);
+				}
+			}
+		}
+		
+		int meta = ((AlvearyTypes)state.getValue(ALVEARYTYPE)).ordinal();
+		
+		Block blockXP = world.getBlockState(new BlockPos(pos.getX() + 1, pos.getY(), pos.getZ())).getBlock();
+		Block blockXM = world.getBlockState(new BlockPos(pos.getX() - 1, pos.getY(), pos.getZ())).getBlock();
+		
+		state = state.withProperty(TYPE, Type.MIDDLE);
+		
+		if (blockXP == this && blockXM != this) {
+
+			IBlockState stateNeighbor = world.getBlockState(new BlockPos(pos.getX() + 1, pos.getY(), pos.getZ()));
+			if (stateNeighbor.getBlock().getMetaFromState(stateNeighbor) == 1) {
+
+				if (world.getBlockState(new BlockPos(pos.getX(), pos.getY(), pos.getZ() + 1)).getBlock() != this) {
+					switchForSide(42, state, world, pos);
+				} else {
+					switchForSide(41, state, world, pos);
+				}
+
+			}
+		} else if (blockXP != this && blockXM == this) {
+			IBlockState stateNeighbor = world.getBlockState(new BlockPos(pos.getX() - 1, pos.getY(), pos.getZ()));
+			if (stateNeighbor.getBlock().getMetaFromState(stateNeighbor) == 1) {
+
+				if (world.getBlockState(new BlockPos(pos.getX(), pos.getY(), pos.getZ() + 1)).getBlock() != this) {
+					switchForSide(41, state, world, pos);
+				} else {
+					switchForSide(42, state, world, pos);
+				}
+
+			}
+		}
+		
+		
+		return super.getActualState(state, world, pos);
+	}
+	
+	@SideOnly(Side.CLIENT)
+	private void switchForSide(int textureId, IBlockState state, IBlockAccess world, BlockPos pos) {
+
+		Block blockX = world.getBlockState(new BlockPos(pos.getX() + 1, pos.getY(), pos.getZ())).getBlock();
+		Block blockY = world.getBlockState(new BlockPos(pos.getX(), pos.getY() + 1, pos.getZ())).getBlock();
+		if(blockX != this && blockY == this)
+		{
+			state = state.withProperty(TYPE, Type.UP);
+		}
+		else if(blockX == this && blockY == this)
+		{
+			state = state.withProperty(TYPE, Type.DOWN);
+		}
+		else if(blockX == this && blockY != this)
+		{
+			state = state.withProperty(TYPE, Type.UP);
+		}
+		else if(blockX != this && blockY != this)
+		{
+			state = state.withProperty(TYPE, Type.DOWN);
+		}
+
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
@@ -100,11 +212,6 @@ public class BlockAlveary extends BlockStructure {
 			}
 			list.add(new ItemStack(item, 1, i));
 		}
-	}
-
-	@Override
-	public int getRenderType() {
-		return 3;
 	}
 	
 	@Override
@@ -145,40 +252,18 @@ public class BlockAlveary extends BlockStructure {
 	public TileEntity createNewTileEntity(World world, int meta) {
 		return createTileEntity(world, getStateFromMeta(meta));
 	}
-
-	/* ICONS */
-	public static final int PLAIN = 0;
-	public static final int ENTRANCE = 1;
-	public static final int BOTTOM = 2;
-	public static final int LEFT = 3;
-	public static final int RIGHT = 4;
-	public static final int ALVEARY_SWARMER_OFF = 5;
-	public static final int ALVEARY_SWARMER_ON = 6;
-	public static final int ALVEARY_HEATER_OFF = 7;
-	public static final int ALVEARY_HEATER_ON = 8;
-	public static final int ALVEARY_FAN_OFF = 9;
-	public static final int ALVEARY_FAN_ON = 10;
-	public static final int ALVEARY_HYGRO = 11;
-	public static final int STABILISER = 12;
-	public static final int SIEVE = 13;
 	
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		manager.registerItemModel(item, 0, "blocks", "apiculture/alveary.plain");
-		manager.registerItemModel(item, 1, "blocks", "apiculture/alveary.entrance");
-		manager.registerItemModel(item, 2, "blocks", "apiculture/alveary.bottom");
-		manager.registerItemModel(item, 3, "blocks", "apiculture/alveary.left");
-		manager.registerItemModel(item, 4, "blocks", "apiculture/alveary.right");
-		manager.registerItemModel(item, 5, "blocks", "apiculture/alveary.swarmer.off");
-		manager.registerItemModel(item, 6, "blocks", "apiculture/alveary.swarmer.on");
-		manager.registerItemModel(item, 7, "blocks", "apiculture/alveary.heater.off");
-		manager.registerItemModel(item, 8, "blocks", "apiculture/alveary.heater.on");
-		manager.registerItemModel(item, 9, "blocks", "apiculture/alveary.fan.off");
-		manager.registerItemModel(item, 10, "blocks", "apiculture/alveary.fan.on");
-		manager.registerItemModel(item, 11, "blocks", "apiculture/alveary.valve");
-		manager.registerItemModel(item, 12, "blocks", "apiculture/alveary.stabiliser");
-		manager.registerItemModel(item, 13, "blocks", "apiculture/alveary.sieve");
+		manager.registerItemModel(item, 0, "apiculture", "alveary.plain");
+		manager.registerItemModel(item, 1, "apiculture", "alveary.entrance");
+		manager.registerItemModel(item, 2, "apiculture", "alveary.swarmer");
+		manager.registerItemModel(item, 3, "apiculture", "alveary.heater");
+		manager.registerItemModel(item, 4, "apiculture", "alveary.fan");
+		manager.registerItemModel(item, 5, "apiculture", "alveary.hygro");
+		manager.registerItemModel(item, 6, "apiculture", "alveary.stabiliser");
+		manager.registerItemModel(item, 7, "apiculture", "alveary.sieve");
 	}
 	
 	@Override
@@ -192,5 +277,22 @@ public class BlockAlveary extends BlockStructure {
 			// We must check that the slabs on top were not removed
 			MultiblockRegistry.addDirtyController(world, tileAlveary.getMultiblockController());
 		}
+	}
+	
+	public static class AlvearyStateMapper extends StateMapperBase{
+		
+		@Override
+		protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
+			LinkedHashMap linkedhashmap = Maps.newLinkedHashMap(state.getProperties());
+		    if(linkedhashmap.get(ALVEARYTYPE) != AlvearyTypes.ALVEARY_PLAIN){
+		    	linkedhashmap.remove(TYPE);
+		    }
+		    if(linkedhashmap.get(ALVEARYTYPE) == AlvearyTypes.ALVEARY_SIEVE || linkedhashmap.get(ALVEARYTYPE) == AlvearyTypes.ALVEARY_ENTRANCE || linkedhashmap.get(ALVEARYTYPE) == AlvearyTypes.ALVEARY_STABILISER || linkedhashmap.get(ALVEARYTYPE) == AlvearyTypes.ALVEARY_HYGRO || linkedhashmap.get(ALVEARYTYPE) ==  AlvearyTypes.ALVEARY_PLAIN){
+		    	linkedhashmap.remove(STATE);
+		    }
+		    String s = String.format("%s:%s", ((ResourceLocation)Block.blockRegistry.getNameForObject(state.getBlock())).getResourceDomain(), "apiculture/" + ALVEARYTYPE.getName((Comparable)linkedhashmap.remove(ALVEARYTYPE)));;
+			return new ModelResourceLocation(s, this.getPropertyString(linkedhashmap));
+		}
+		
 	}
 }

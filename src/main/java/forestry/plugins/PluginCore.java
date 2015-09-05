@@ -18,10 +18,13 @@ import net.minecraft.command.ICommand;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-
+import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.IFuelHandler;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.IGuiHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
 
@@ -48,7 +51,6 @@ import forestry.core.gadgets.BlockBase;
 import forestry.core.gadgets.BlockResource;
 import forestry.core.gadgets.BlockResourceStorageBlock;
 import forestry.core.gadgets.BlockSoil;
-import forestry.core.gadgets.BlockStainedGlass;
 import forestry.core.gadgets.MachineDefinition;
 import forestry.core.gadgets.TileEscritoire;
 import forestry.core.genetics.ClimateHelper;
@@ -73,6 +75,7 @@ import forestry.core.items.ItemPipette;
 import forestry.core.items.ItemTypedBlock;
 import forestry.core.items.ItemWrench;
 import forestry.core.proxy.Proxies;
+import forestry.core.render.BlockRenderingHandler;
 import forestry.core.utils.ForestryModEnvWarningCallable;
 import forestry.core.utils.ShapedRecipeCustom;
 
@@ -104,6 +107,8 @@ public class PluginCore extends ForestryPlugin {
 	public void preInit() {
 		super.preInit();
 
+		MinecraftForge.EVENT_BUS.register(this);
+		
 		rootCommand.addChildCommand(new CommandVersion());
 		rootCommand.addChildCommand(new CommandPlugins());
 
@@ -113,6 +118,7 @@ public class PluginCore extends ForestryPlugin {
 
 		definitionEscritoire = ((BlockBase) ForestryBlock.core.block()).addDefinition(new MachineDefinition(Defaults.DEFINITION_ESCRITOIRE_META, "forestry.Escritoire", TileEscritoire.class,
 				Proxies.render.getRenderEscritoire()));
+		((BlockBase)ForestryBlock.core.block()).registerStateMapper();
 
 		ForestryBlock.soil.registerBlock(new BlockSoil(), ItemTypedBlock.class, "soil");
 		ForestryBlock.soil.block().setHarvestLevel("shovel", 0, ForestryBlock.soil.block().getStateFromMeta(1));
@@ -134,7 +140,6 @@ public class PluginCore extends ForestryPlugin {
 		OreDictionary.registerOre("blockBronze", ForestryBlock.resourceStorage.getItemStack(1, 3));
 		OreDictionary.registerOre("chestWood", Blocks.chest);
 		OreDictionary.registerOre("craftingTableWood", Blocks.crafting_table);
-		ForestryBlock.glass.registerBlock(new BlockStainedGlass(), ItemForestryBlock.class, "stained");
 	}
 
 	@Override
@@ -467,5 +472,12 @@ public class PluginCore extends ForestryPlugin {
 
 			return 0;
 		}
+	}
+	
+	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
+	public void onBakeModel(ModelBakeEvent event)
+	{
+		BlockRenderingHandler.checkModels(event);
 	}
 }

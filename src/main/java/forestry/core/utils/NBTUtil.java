@@ -79,7 +79,7 @@ public class NBTUtil {
 
 		public NBTList(NBTTagList nbtList) {
 			this.nbtList = nbtList;
-			backingList = ObfuscationReflectionHelper.getPrivateValue(NBTTagList.class, nbtList, 0);
+			this.backingList = ObfuscationReflectionHelper.getPrivateValue(NBTTagList.class, nbtList, 1);
 		}
 
 		@Override

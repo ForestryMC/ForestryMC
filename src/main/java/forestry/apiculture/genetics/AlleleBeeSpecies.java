@@ -17,6 +17,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -37,6 +38,7 @@ import forestry.api.core.IModelManager;
 import forestry.api.core.IModelProvider;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IIndividual;
+import forestry.apiculture.items.ItemBeeGE;
 import forestry.core.genetics.alleles.AlleleSpecies;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.StackUtils;
@@ -291,18 +293,13 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 
 		@Override
 		@SideOnly(Side.CLIENT)
-		public void registerModels(IModelManager manager) {
+		public void registerModels(Item item, IModelManager manager) {
 			String beeIconDir = "bees/default/";
-			for(int i = 0; i < EnumBeeType.values().length; i++)
-			{
-				EnumBeeType beeType = EnumBeeType.values()[i];
-				if (beeType == EnumBeeType.NONE) {
-					continue;
-				}
-				String beeTypeNameBase = beeIconDir + beeType.toString().toLowerCase(Locale.ENGLISH);
-				
-				models[i] = manager.getModelLocation(beeTypeNameBase);
-			}
+			EnumBeeType beeType = ((ItemBeeGE)item).getType();
+			String beeTypeNameBase = beeIconDir + beeType.toString().toLowerCase(Locale.ENGLISH);
+			
+			models[beeType.ordinal()] = manager.getModelLocation(beeTypeNameBase);
+			manager.registerVariant(item, "forestry:" + beeTypeNameBase);
 		}
 		
 		@Override
@@ -326,8 +323,8 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 		}
 		
 		@Override
-		public void registerModels(IModelManager manager) {
-			beeModelProvider.registerModels(manager);
+		public void registerModels(Item item, IModelManager manager) {
+			beeModelProvider.registerModels(item, manager);
 		}
 	}
 }

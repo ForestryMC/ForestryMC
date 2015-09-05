@@ -15,12 +15,15 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import forestry.apiculture.entities.EntityBee;
+import forestry.apiculture.gadgets.BlockAlveary.AlvearyStateMapper;
 import forestry.apiculture.render.BeeItemRenderer;
 import forestry.apiculture.render.EntityBeeFX;
 import forestry.apiculture.render.ParticleRenderer;
 import forestry.apiculture.render.RenderBee;
+import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
 import forestry.core.interfaces.IBlockRenderer;
 import forestry.core.proxy.ClientProxyRender;
@@ -39,6 +42,11 @@ public class ClientProxyApiculture extends ProxyApiculture {
 			MinecraftForgeClient.registerItemRenderer(ForestryItem.beePrincessGE.item(), new BeeItemRenderer());
 			MinecraftForgeClient.registerItemRenderer(ForestryItem.beeQueenGE.item(), new BeeItemRenderer());
 		}
+	}
+	
+	@Override
+	public void preInitializeMapping(){
+		ModelLoader.setCustomStateMapper(ForestryBlock.alveary.block(), new AlvearyStateMapper());
 	}
 
 	@Override

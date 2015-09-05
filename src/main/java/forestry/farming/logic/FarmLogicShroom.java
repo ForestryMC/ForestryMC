@@ -14,13 +14,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import forestry.api.core.sprite.ISprite;
 import forestry.api.farming.Farmables;
 import forestry.api.farming.IFarmHousing;
-import forestry.core.render.TextureManager;
 
 public class FarmLogicShroom extends FarmLogicArboreal {
 
@@ -37,11 +34,10 @@ public class FarmLogicShroom extends FarmLogicArboreal {
 			return "Managed Shroom Farm";
 		}
 	}
-
+	
 	@Override
-	@SideOnly(Side.CLIENT)
-	public ISprite getIcon() {
-		return TextureManager.getInstance().getFarmSprite("farmLoigc", "blocks", "mushroom_red");
+	public Item getIconItem() {
+		return Item.getItemFromBlock(Blocks.red_mushroom);
 	}
 
 	@Override

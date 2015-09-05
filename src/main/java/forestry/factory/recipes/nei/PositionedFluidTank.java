@@ -92,7 +92,7 @@ public class PositionedFluidTank {
 			return;
 		}
 
-		GuiDraw.changeTexture(fluidIcon);
+		GuiDraw.changeTexture(new ResourceLocation(fluidIcon.getResourceDomain(), "textures/" + fluidIcon.getResourcePath()));
 		int color = this.tank.getFluid().getFluid().getColor(this.tank.getFluid());
 		GL11.glColor3ub((byte) (color >> 16 & 0xFF), (byte) (color >> 8 & 0xFF), (byte) (color & 0xFF));
 		GL11.glDisable(GL11.GL_BLEND);

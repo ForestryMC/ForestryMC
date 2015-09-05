@@ -145,7 +145,7 @@ public final class FlowerRegistry implements IFlowerRegistry {
 		IBeeModifier beeModifier = new BeeHousingModifier(beeHousing);
 
 		Vect area = getArea(bee.getGenome(), beeModifier);
-		Vect housingPos = new Vect(beeHousing.getPos()).add(-area.getX() / 2, -area.getY() / 2, -area.getZ() / 2);
+		Vect housingPos = new Vect(beeHousing.getCoordinates()).add(-area.getX() / 2, -area.getY() / 2, -area.getZ() / 2);
 
 		MutableVect posCurrent = new MutableVect(0, 0, 0);
 		while (posCurrent.advancePositionInArea(area)) {

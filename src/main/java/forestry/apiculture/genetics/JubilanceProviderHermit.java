@@ -39,7 +39,7 @@ public class JubilanceProviderHermit extends JubilanceDefault {
 		Vect area = new Vect(areaAr).multiply(modifier);
 		Vect offset = area.multiply(-1 / 2.0f);
 		
-		BlockPos housingCoordinates = housing.getPos();
+		BlockPos housingCoordinates = housing.getCoordinates();
 		
 		Vect min = new Vect(housingCoordinates).add(offset);
 		Vect max = min.add(area);

@@ -13,23 +13,50 @@ package forestry.arboriculture.gadgets;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IStringSerializable;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
 import forestry.arboriculture.WoodType;
 
 public class BlockLog extends BlockWood {
 
+	public static final PropertyEnum AXIS = PropertyEnum.create("axis", Axis.class);
+	
+	public static enum Axis implements IStringSerializable{
+		NORMAL,
+		SIDE,
+		SIDE_90;
+
+		@Override
+		public String getName() {
+			return name().toLowerCase();
+		}
+	}
+	
 	public BlockLog(boolean fireproof) {
-		super("log", fireproof, "logs");
+		super("log", fireproof);
 		setResistance(5.0F);
 		setHarvestLevel("axe", 0);
+		setDefaultState(this.blockState.getBaseState().withProperty(AXIS, Axis.NORMAL).withProperty(WoodType.WOODTYPE, WoodType.LARCH));
+	}
+	
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		return getDefaultState().withProperty(AXIS, Axis.values()[meta]);
+	}
+	
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return ((Axis)state.getValue(AXIS)).ordinal();
 	}
 	
 	@Override
@@ -51,6 +78,11 @@ public class BlockLog extends BlockWood {
 	}
 	
 	@Override
+	protected BlockState createBlockState() {
+		return new BlockState(this, new IProperty[]{WoodType.WOODTYPE, AXIS});
+	}
+	
+	@Override
 	public IBlockState onBlockPlaced(World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
 		byte b0 = 0;
 
@@ -61,14 +93,14 @@ public class BlockLog extends BlockWood {
 				break;
 			case 2:
 			case 3:
-				b0 = 8;
+				b0 = 1;
 				break;
 			case 4:
 			case 5:
-				b0 = 4;
+				b0 = 2;
 		}
 
-		return getStateFromMeta(getMetaFromState(world.getBlockState(pos)) | b0);
+		return getStateFromMeta(getMetaFromState(getDefaultState()) | b0);
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})

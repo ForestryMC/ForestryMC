@@ -19,7 +19,7 @@ import forestry.arboriculture.WoodType;
 public class BlockPlanks extends BlockWood {
 
 	public BlockPlanks(boolean fireproof) {
-		super("planks", fireproof, "planks");
+		super("planks", fireproof);
 		setResistance(5.0F);
 		setHarvestLevel("axe", 0);
 	}

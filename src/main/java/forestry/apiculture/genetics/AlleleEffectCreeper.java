@@ -51,7 +51,7 @@ public class AlleleEffectCreeper extends AlleleEffectThrottled {
 	public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
 
 		World world = housing.getWorld();
-		BlockPos housingCoords = housing.getPos();
+		BlockPos housingCoords = housing.getCoordinates();
 
 		// If we are already triggered, we continue the explosion sequence.
 		if (storedData.getInteger(indexExplosionTimer) > 0) {

@@ -10,12 +10,12 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import forestry.api.core.sprite.ISprite;
 import forestry.api.farming.Farmables;
 import forestry.api.farming.IFarmHousing;
-import forestry.core.render.TextureManager;
 
 public class FarmLogicVegetable extends FarmLogicCrops {
 
@@ -25,8 +25,8 @@ public class FarmLogicVegetable extends FarmLogicCrops {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public ISprite getIcon() {
-		return TextureManager.getInstance().getFarmSprite("farmLoigc", "items", "carrot");
+	public Item getIconItem() {
+		return Items.carrot;
 	}
 
 	@Override

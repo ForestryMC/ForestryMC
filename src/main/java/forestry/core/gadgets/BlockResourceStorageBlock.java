@@ -77,10 +77,10 @@ public class BlockResourceStorageBlock extends Block implements IModelRegister {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		manager.registerItemModel(item, 0, "apatite");
-		manager.registerItemModel(item, 1, "copper");
-		manager.registerItemModel(item, 2, "tin");
-		manager.registerItemModel(item, 3, "bronze");
+		manager.registerItemModel(item, 0, "storage", "apatite");
+		manager.registerItemModel(item, 1, "storage", "copper");
+		manager.registerItemModel(item, 2, "storage", "tin");
+		manager.registerItemModel(item, 3, "storage", "bronze");
 	}
 
 }

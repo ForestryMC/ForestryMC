@@ -29,7 +29,7 @@ public class PacketGuiUpdate extends PacketCoordinates {
 	}
 
 	public PacketGuiUpdate(IStreamableGui guiDataTile) {
-		super(PacketId.TILE_FORESTRY_GUI_OPENED, guiDataTile.getPos());
+		super(PacketId.TILE_FORESTRY_GUI_OPENED, guiDataTile.getCoordinates());
 		this.guiDataTile = guiDataTile;
 	}
 

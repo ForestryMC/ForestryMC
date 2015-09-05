@@ -242,20 +242,30 @@ public class ItemBackpack extends ItemInventoried {
 
 	/* ICONS */
 	@SideOnly(Side.CLIENT)
-	private ModelResourceLocation[][] models;
+	private ModelResourceLocation[] models;
+	
+	@SideOnly(Side.CLIENT)
+	public static int i = 0;
 	
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
 		EnumBackpackType t = type == EnumBackpackType.APIARIST ? EnumBackpackType.T1 : type;
 		String typeTag = "backpacks/" + t.toString().toLowerCase(Locale.ENGLISH);
-		int tier = t.ordinal() - 1;	
-		models = new ModelResourceLocation[4][4];
-		models[tier][0] = new ModelResourceLocation(typeTag + "_neutral" , "inventory");
-		models[tier][1] = new ModelResourceLocation(typeTag + "_locked" , "inventory");
-		models[tier][2] = new ModelResourceLocation(typeTag + "_receive", "inventory");
-		models[tier][3] = new ModelResourceLocation(typeTag + "_resupply", "inventory");
-		manager.registerItemModel(getContainerItem(), new BackpackMeshDefinition());
+		models = new ModelResourceLocation[4];
+		models[0] = new ModelResourceLocation("forestry:" + typeTag + "_neutral" , "inventory");
+		models[1] = new ModelResourceLocation("forestry:" + typeTag + "_locked" , "inventory");
+		models[2] = new ModelResourceLocation("forestry:" + typeTag + "_receive", "inventory");
+		models[3] = new ModelResourceLocation("forestry:" + typeTag + "_resupply", "inventory");
+		if(i == 0 && (type == EnumBackpackType.T1 || type == EnumBackpackType.APIARIST) || i == 1 && type == EnumBackpackType.T2)
+		{
+			manager.registerVariant(item, "forestry:" + typeTag + "_neutral");
+			manager.registerVariant(item, "forestry:" + typeTag + "_locked");
+			manager.registerVariant(item, "forestry:" + typeTag + "_receive");
+			manager.registerVariant(item, "forestry:" + typeTag + "_resupply");
+			i++;
+		}
+		manager.registerItemModel(item, new BackpackMeshDefinition());
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -264,8 +274,7 @@ public class ItemBackpack extends ItemInventoried {
 		@Override
 		public ModelResourceLocation getModelLocation(ItemStack stack) {
 			EnumBackpackType t = type == EnumBackpackType.APIARIST ? EnumBackpackType.T1 : type;
-			int tier = t.ordinal() - 1;
-			return models[tier][stack.getItemDamage()];
+			return models[stack.getItemDamage()];
 		}
 		
 	}

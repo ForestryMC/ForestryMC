@@ -22,7 +22,6 @@ import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IAlvearyComponent;
 import forestry.api.apiculture.IBee;
-import forestry.apiculture.gadgets.BlockAlveary;
 import forestry.apiculture.network.PacketActiveUpdate;
 import forestry.apiculture.worldgen.Hive;
 import forestry.apiculture.worldgen.HiveDecorator;
@@ -41,7 +40,7 @@ public class TileAlvearySwarmer extends TileAlvearyWithGui implements ISidedInve
 
 	private final SwarmerInventory inventory;
 	private final Stack<ItemStack> pendingSpawns = new Stack<ItemStack>();
-	private boolean active;
+	public boolean active;
 
 	public TileAlvearySwarmer() {
 		super(TileAlveary.SWARMER_META, GuiId.AlvearySwarmerGUI);
@@ -154,20 +153,6 @@ public class TileAlvearySwarmer extends TileAlvearyWithGui implements ISidedInve
 	protected void decodeDescriptionPacket(NBTTagCompound packetData) {
 		super.decodeDescriptionPacket(packetData);
 		setActive(packetData.getBoolean("Active"));
-	}
-
-	/* TEXTURES */
-	@Override
-	public int getIcon(int side) {
-		if (side == 0 || side == 1) {
-			return BlockAlveary.BOTTOM;
-		}
-
-		if (active) {
-			return BlockAlveary.ALVEARY_SWARMER_ON;
-		} else {
-			return BlockAlveary.ALVEARY_SWARMER_OFF;
-		}
 	}
 
 	/* SAVING & LOADING */

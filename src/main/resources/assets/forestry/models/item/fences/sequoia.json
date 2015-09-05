@@ -1,5 +1,5 @@
 {
-    "parent": "block/arboriculture/fences/sequoia_inventory",
+    "parent": "forestry:block/arboriculture/fences/sequoia_inventory",
     "display": {
         "thirdperson": {
             "rotation": [ 0, 0, 180 ],

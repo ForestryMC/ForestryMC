@@ -23,6 +23,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.MathHelper;
@@ -356,6 +357,13 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	public final boolean canExtractItem(int slotIndex, ItemStack itemStack, EnumFacing side) {
 		return getInternalInventory().canExtractItem(slotIndex, itemStack, side);
 	}
+	
+	@Override
+	public BlockPos getCoordinates() {
+		return pos;
+	}
+	
+	//Flields
 
 	@Override
 	public int getField(int id) {

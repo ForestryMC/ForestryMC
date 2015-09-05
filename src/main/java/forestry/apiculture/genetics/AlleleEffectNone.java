@@ -46,7 +46,7 @@ public class AlleleEffectNone extends AlleleCategorized implements IAlleleBeeEff
 
 	@Override
 	public IEffectData doFX(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
-		PluginApiculture.proxy.addBeeHiveFX("particles/swarm_bee", housing.getWorld(), housing.getPos(), genome.getPrimary().getIconColour(0));
+		PluginApiculture.proxy.addBeeHiveFX("particles/swarm_bee", housing.getWorld(), housing.getCoordinates(), genome.getPrimary().getIconColour(0));
 		return storedData;
 	}
 
@@ -78,7 +78,7 @@ public class AlleleEffectNone extends AlleleCategorized implements IAlleleBeeEff
 		area.multiply(territoryModifier);
 		Vect offset = new Vect(area).multiply(-1 / 2.0f);
 
-		Vect min = new Vect(housing.getPos()).add(offset);
+		Vect min = new Vect(housing.getCoordinates()).add(offset);
 		Vect max = min.add(area);
 
 		return AxisAlignedBB.fromBounds(min.getX(), min.getY(), min.getY(), max.getX(), max.getY(), max.getZ());

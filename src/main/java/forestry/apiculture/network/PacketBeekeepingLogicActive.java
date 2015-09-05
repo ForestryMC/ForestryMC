@@ -35,7 +35,7 @@ public class PacketBeekeepingLogicActive extends PacketCoordinates {
 	}
 
 	public PacketBeekeepingLogicActive(IBeeHousing tile) {
-		super(PacketId.BEE_LOGIC_ACTIVE, tile.getPos());
+		super(PacketId.BEE_LOGIC_ACTIVE, tile.getCoordinates());
 		this.beekeepingLogic = (BeekeepingLogic) tile.getBeekeepingLogic();
 	}
 

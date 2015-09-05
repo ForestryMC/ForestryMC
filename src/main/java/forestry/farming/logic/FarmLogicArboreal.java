@@ -22,13 +22,13 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import forestry.api.core.sprite.ISprite;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.Farmables;
 import forestry.api.farming.ICrop;
@@ -36,7 +36,6 @@ import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
 import forestry.core.config.ForestryBlock;
 import forestry.core.gadgets.BlockSoil;
-import forestry.core.render.TextureManager;
 import forestry.core.vect.Vect;
 import forestry.core.vect.VectUtil;
 
@@ -68,11 +67,11 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 	public String getName() {
 		return "Managed Arboretum";
 	}
-
+	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public ISprite getIcon() {
-		return TextureManager.getInstance().getFarmSprite("farmLoigc", "blocks", "sapling_oak");
+	public Item getIconItem() {
+		return Item.getItemFromBlock(Blocks.sapling);
 	}
 
 	@Override

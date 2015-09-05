@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.multiblock;
 
-import forestry.apiculture.gadgets.BlockAlveary;
-
 public class TileAlvearyHeater extends TileAlvearyClimatiser {
 
 	private static final HeaterDefinition definition = new HeaterDefinition();
@@ -35,16 +33,6 @@ public class TileAlvearyHeater extends TileAlvearyClimatiser {
 		@Override
 		public float getBoundaryDown() {
 			return 0.0f;
-		}
-
-		@Override
-		public int getIconOff() {
-			return BlockAlveary.ALVEARY_HEATER_OFF;
-		}
-
-		@Override
-		public int getIconOn() {
-			return BlockAlveary.ALVEARY_HEATER_ON;
 		}
 	}
 }

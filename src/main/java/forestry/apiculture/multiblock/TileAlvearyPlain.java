@@ -143,10 +143,10 @@ public class TileAlvearyPlain extends TileAlveary implements IBeeHousing, IClima
 	public World getWorld() {
 		return getAlvearyController().getWorld();
 	}
-
+	
 	@Override
-	public BlockPos getPos() {
-		return getAlvearyController().getPos();
+	public BlockPos getCoordinates() {
+		return getAlvearyController().getCoordinates();
 	}
 
 	@Override

@@ -33,7 +33,7 @@ public class AlleleEffectFertile extends AlleleEffectThrottled {
 	public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
 		
 		World world = housing.getWorld();
-		BlockPos housingCoordinates = housing.getPos();
+		BlockPos housingCoordinates = housing.getCoordinates();
 		IVect area = getModifiedArea(genome, housing);
 		
 		int blockX = getRandomOffset(world.rand, housingCoordinates.getX(), area.getX());

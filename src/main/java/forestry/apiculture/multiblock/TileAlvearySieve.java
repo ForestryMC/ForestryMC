@@ -20,7 +20,6 @@ import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.ISpeciesRoot;
-import forestry.apiculture.gadgets.BlockAlveary;
 import forestry.core.config.ForestryItem;
 import forestry.core.interfaces.ICrafter;
 import forestry.core.inventory.IInventoryAdapter;
@@ -47,15 +46,6 @@ public class TileAlvearySieve extends TileAlvearyWithGui implements ICrafter, IA
 	@Override
 	public IBeeListener getBeeListener() {
 		return beeListener;
-	}
-	
-	/* TEXTURES & INTERNAL */
-	@Override
-	public int getIcon(int side) {
-		if (side == 0 || side == 1) {
-			return BlockAlveary.BOTTOM;
-		}
-		return BlockAlveary.SIEVE;
 	}
 
 	/* ICRAFTER */

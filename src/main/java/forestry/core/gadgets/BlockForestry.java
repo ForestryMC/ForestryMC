@@ -53,6 +53,12 @@ public abstract class BlockForestry extends BlockContainer implements IModelRegi
 	}
 	
 	@Override
+    public int getRenderType()
+    {
+        return 3;
+    }
+	
+	@Override
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase entityLiving, ItemStack stack) {
 		if (!Proxies.common.isSimulating(world)) {
 			return;

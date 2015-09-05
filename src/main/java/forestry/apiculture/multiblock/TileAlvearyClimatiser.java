@@ -11,6 +11,7 @@
 package forestry.apiculture.multiblock;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 
 import forestry.api.apiculture.IAlvearyComponent;
@@ -33,10 +34,6 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IEner
 		float getBoundaryUp();
 
 		float getBoundaryDown();
-
-		int getIconOff();
-
-		int getIconOn();
 	}
 
 	private final EnergyManager energyManager;
@@ -45,7 +42,7 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IEner
 	private int workingTime = 0;
 
 	// CLIENT
-	private boolean active;
+	public boolean active;
 
 	protected TileAlvearyClimatiser(IClimitiserDefinition definition) {
 		this.definition = definition;
@@ -68,16 +65,6 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IEner
 		}
 
 		setActive(workingTime > 0);
-	}
-
-	/* TEXTURES */
-	@Override
-	public int getIcon(int side) {
-		if (active) {
-			return definition.getIconOn();
-		} else {
-			return definition.getIconOff();
-		}
 	}
 
 	/* LOADING & SAVING */
@@ -158,4 +145,9 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IEner
 		return energyManager.canConnectEnergy(from);
 	}
 
+	@Override
+	public BlockPos getCoordinates() {
+		return pos;
+	}
+	
 }

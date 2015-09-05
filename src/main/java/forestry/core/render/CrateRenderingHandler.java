@@ -33,28 +33,12 @@ import forestry.core.items.ItemCrated;
 /**
  * Adapted from RenderTankCartItem by CovertJaguar <http://www.railcraft.info>
  */
-public class CrateRenderingHandler extends ItemRenderer{
+public class CrateRenderingHandler{
 
 	private static final ResourceLocation BLOCK_TEXTURE = TextureMap.locationBlocksTexture;
-	private static final ResourceLocation ITEM_TEXTURE = TextureMap.locationItemsTexture;
 	private static final ResourceLocation GLINT_TEXTURE = new ResourceLocation("textures/misc/enchanted_item_glint.png");
 
 	private static final float PIXEL = 1.0f / 16.0f;
-
-	private final RenderItem renderItem = new RenderItem();
-
-	@Override
-	public boolean handleRenderType(ItemStack stack, ItemRenderType type) {
-		switch (type) {
-			case INVENTORY:
-			case ENTITY:
-			case EQUIPPED:
-			case EQUIPPED_FIRST_PERSON:
-				return true;
-			default:
-				return false;
-		}
-	}
 
 	@Override
 	public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack stack, ItemRendererHelper helper) {
@@ -169,8 +153,8 @@ public class CrateRenderingHandler extends ItemRenderer{
 
 	private void renderIn3D(ItemStack stack) {
 		GL11.glPushMatrix();
-		Tessellator tessellator = Tessellator.instance;
-		if (RenderManager.instance.renderEngine == null) {
+		Tessellator tessellator = Tessellator.getInstance();
+		if (.renderEngine == null) {
 			return;
 		}
 

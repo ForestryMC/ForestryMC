@@ -13,7 +13,6 @@ package forestry.apiculture.multiblock;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.StatCollector;
 
-import forestry.apiculture.gadgets.BlockAlveary;
 import forestry.core.multiblock.MultiblockControllerBase;
 import forestry.core.multiblock.MultiblockValidationException;
 import forestry.core.multiblock.rectangular.RectangularMultiblockTileEntityBase;
@@ -28,11 +27,6 @@ public abstract class TileAlveary extends RectangularMultiblockTileEntityBase {
 	public static final int HYGRO_META = 5;
 	public static final int STABILIZER_META = 6;
 	public static final int SIEVE_META = 7;
-
-	/* TEXTURES */
-	public int getIcon(int side) {
-		return BlockAlveary.PLAIN;
-	}
 
 	@Override
 	public void isGoodForExteriorLevel(int level) throws MultiblockValidationException {
@@ -95,7 +89,6 @@ public abstract class TileAlveary extends RectangularMultiblockTileEntityBase {
 			this.worldObj.markBlockForUpdate(pos);
 		}
 	}
-	
 
 	@Override
 	public int getField(int id) {

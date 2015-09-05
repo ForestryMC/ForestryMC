@@ -105,7 +105,7 @@ public class AlleleEffectPotion extends AlleleEffectThrottled {
 		if (housing.getWorld().rand.nextBoolean()) {
 			super.doFX(genome, storedData, housing);
 		} else {
-			BlockPos coords = housing.getPos();
+			BlockPos coords = housing.getCoordinates();
 			Proxies.common.addEntityPotionFX(housing.getWorld(), coords.getX() + 0.5, coords.getY() + 1, coords.getZ() + 0.5, potionFXColor);
 		}
 		return storedData;

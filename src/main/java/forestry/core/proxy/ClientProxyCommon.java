@@ -50,7 +50,7 @@ public class ClientProxyCommon extends ProxyCommon {
 
 	@Override
 	public void bindTexture() {
-		bindTexture(TextureMap.LOCATION_MISSING_TEXTURE);
+		bindTexture(TextureMap.locationBlocksTexture);
 	}
 
 	@Override

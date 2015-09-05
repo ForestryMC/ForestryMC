@@ -1,0 +1,16 @@
+package forestry.farming.proxy;
+
+import forestry.core.config.ForestryBlock;
+import forestry.core.proxy.Proxies;
+import forestry.core.render.ModelIndex;
+import forestry.farming.render.FarmBlockRenderer;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+
+public class ClientProxyFarming extends ProxyFarming {
+
+	@Override
+	public void initializeRendering() {
+		Proxies.render.registerModel(new ModelIndex(new ModelResourceLocation("forestry:ffarm"), new ModelResourceLocation("forestry:ffarm"), new FarmBlockRenderer(), ForestryBlock.farm.block()));
+	}
+	
+}

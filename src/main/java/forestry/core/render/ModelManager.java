@@ -43,21 +43,21 @@ public class ModelManager implements IModelManager {
 	public void registerItemModel(Item item, int meta, String identifier)
 	{
 		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, meta, getModelLocation(item, identifier));
-		registerVariant(item, item.getUnlocalizedName(new ItemStack(item, 1, meta)) + identifier);
+		registerVariant(item, "forestry:" + StringUtil.cleanTags(item.getUnlocalizedName()) + identifier);
 	}
 	
 	@Override
 	public void registerItemModel(Item item, int meta, String modifier, String identifier)
 	{
 		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, meta, getModelLocation(item, modifier, identifier));
-		registerVariant(item, item.getUnlocalizedName(new ItemStack(item, 1, meta)) + identifier);
+		registerVariant(item, "forestry:" + modifier + "/" + identifier);
 	}
 	
 
 	@Override
 	public void registerItemModel(Item item, int meta) {
 		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, meta, getModelLocation(item, meta));
-		registerVariant(item, item.getUnlocalizedName(new ItemStack(item, 1, meta)));
+		registerVariant(item, "forestry:" + StringUtil.cleanTags(item.getUnlocalizedName(new ItemStack(item, 1, meta))));
 	}
 	
 	@Override
@@ -74,55 +74,65 @@ public class ModelManager implements IModelManager {
 	
 	public static void registerModels()
 	{
+		getInstance();
 		for(ForestryBlock block : ForestryBlock.values())
-			if(block.block() != null)
-				if(block.block() instanceof IModelRegister)
+		{
+			if(block.block() != null){
+				if(block.block() instanceof IModelRegister){
 					((IModelRegister)block.block()).registerModel(block.item(), getInstance());
+				}
+			}
+				
+		}
 		
 		for(ForestryItem item : ForestryItem.values())
-			if(item.item() != null)
-				if(item.item() instanceof IModelRegister)
+		{
+			if(item.item() != null){
+				if(item.item() instanceof IModelRegister){
 					((IModelRegister)item.item()).registerModel(item.item(), getInstance());
+				}
+			}
+		}
 	}
 	
 	@Override
 	public ModelResourceLocation getModelLocation(String identifier) {
-		return new ModelResourceLocation("forestry:items/" + identifier, "inventory");
+		return new ModelResourceLocation("forestry:" + identifier, "inventory");
 	}
 	
 	@Override
 	public ModelResourceLocation getModelLocation(String modID, String identifier) {
-		return new ModelResourceLocation(modID + ":items/" + identifier, "inventory");
+		return new ModelResourceLocation(modID + ":" + identifier, "inventory");
 	}
 
 	@Override
 	public ModelResourceLocation getModelLocation(Item item, int meta) {
-		return new ModelResourceLocation("forestry:items/" + StringUtil.cleanItemName(item) + "." + meta, "inventory");
+		return new ModelResourceLocation("forestry:" + StringUtil.cleanTags(item.getUnlocalizedName(new ItemStack(item, 1, meta))), "inventory");
 	}
 
 	@Override
 	public ModelResourceLocation getModelLocation(Item item, int meta, String identifier) {
-		return new ModelResourceLocation("forestry:items/" + StringUtil.cleanItemName(item) + "." + meta + identifier, "inventory");
+		return new ModelResourceLocation("forestry:" + StringUtil.cleanTags(item.getUnlocalizedName(new ItemStack(item, 1, meta))) + identifier, "inventory");
 	}
 
 	@Override
 	public ModelResourceLocation getModelLocation(Item item, int meta, String modifier, String identifier) {
-		return new ModelResourceLocation("forestry:items/" + modifier + "/" + identifier, "inventory");
+		return new ModelResourceLocation("forestry:" + modifier + "/" + identifier, "inventory");
 	}
 	
 	@Override
 	public ModelResourceLocation getModelLocation(Item item) {
-		return new ModelResourceLocation("forestry:items/" + StringUtil.cleanItemName(item), "inventory");
+		return new ModelResourceLocation("forestry:" + StringUtil.cleanItemName(item), "inventory");
 	}
 
 	@Override
 	public ModelResourceLocation getModelLocation(Item item, String identifier) {
-		return new ModelResourceLocation("forestry:items/" + StringUtil.cleanItemName(item) + identifier, "inventory");
+		return new ModelResourceLocation("forestry:" + StringUtil.cleanItemName(item) + identifier, "inventory");
 	}
 	
 	@Override
 	public ModelResourceLocation getModelLocation(Item item, String modifier, String identifier) {
-		return new ModelResourceLocation("forestry:items/" + modifier + "/" + StringUtil.cleanItemName(item) + identifier, "inventory");
+		return new ModelResourceLocation("forestry:" + modifier + "/" + identifier, "inventory");
 	}
 	
 }

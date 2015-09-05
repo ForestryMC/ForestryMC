@@ -20,7 +20,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.core.IModelManager;
 import forestry.core.config.Config;
-import forestry.core.utils.StringUtil;
 
 public class ItemOverlay extends ItemForestry {
 
@@ -106,7 +105,7 @@ public class ItemOverlay extends ItemForestry {
 	public void registerModel(Item item, IModelManager manager) {
 		for(int i = 0; i < overlays.length;i++)	
 		{
-			manager.registerItemModel(item, i, StringUtil.cleanItemName(this) + ".0");
+			manager.registerItemModel(item, i, "");
 		}
 	}
 

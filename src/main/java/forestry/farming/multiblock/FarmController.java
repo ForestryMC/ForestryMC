@@ -325,9 +325,9 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 		refreshFarmLogics();
 	}
-
+	
 	@Override
-	public BlockPos getPos() {
+	public BlockPos getCoordinates() {
 		CoordTriplet coord = getReferenceCoord();
 		return new BlockPos(coord.pos.getX(), coord.pos.getY(), coord.pos.getZ());
 	}

@@ -13,7 +13,7 @@ package forestry.apiculture.gadgets;
 import java.util.Collections;
 
 import net.minecraft.entity.player.EntityPlayer;
-
+import net.minecraft.util.BlockPos;
 import forestry.api.apiculture.DefaultBeeListener;
 import forestry.api.apiculture.DefaultBeeModifier;
 import forestry.api.apiculture.IBeeGenome;
@@ -37,6 +37,11 @@ public class TileBeehouse extends TileBeeHousing {
 
 		this.beeInventory = beeHousingInventory;
 		setInternalInventory(beeHousingInventory);
+	}
+	
+	@Override
+	public BlockPos getCoordinates() {
+		return getPos();
 	}
 
 	@Override

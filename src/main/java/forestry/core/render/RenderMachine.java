@@ -93,11 +93,6 @@ public class RenderMachine extends TileEntitySpecialRenderer implements IBlockRe
 	}
 
 	@Override
-	public void inventoryRender(double x, double y, double z) {
-		render(EnumTankLevel.EMPTY, EnumTankLevel.EMPTY, EnumFacing.UP, x, y, z);
-	}
-
-	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double d, double d1, double d2, float f, int i) {
 		IRenderableMachine generator = (IRenderableMachine) tileentity;
 		render(generator.getPrimaryLevel(), generator.getSecondaryLevel(), generator.getOrientation(), d, d1, d2);

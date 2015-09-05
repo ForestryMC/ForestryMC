@@ -21,7 +21,6 @@ import forestry.api.core.IModelManager;
 import forestry.api.core.IModelRegister;
 import forestry.core.CreativeTabForestry;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.StringUtil;
 
 public class ItemForestry extends Item implements IModelRegister{
 
@@ -52,6 +51,6 @@ public class ItemForestry extends Item implements IModelRegister{
 
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		manager.registerItemModel(item, 0, StringUtil.cleanItemName(this));
+		manager.registerItemModel(item, 0);
 	}
 }

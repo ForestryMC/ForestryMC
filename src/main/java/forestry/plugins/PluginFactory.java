@@ -193,6 +193,7 @@ public class PluginFactory extends ForestryPlugin {
 				'#', "blockGlass",
 				'X', "gearTin",
 				'Y', ForestryItem.hardenedCasing)));
+		((BlockBase)ForestryBlock.factoryTESR.block()).registerStateMapper();
 
 		ForestryBlock.factoryPlain.registerBlock(new BlockBase(Material.iron, Defaults.DEFINITION_FACTORY_Plain_ID), ItemNBTTile.class, "factory2");
 
@@ -229,6 +230,7 @@ public class PluginFactory extends ForestryPlugin {
 						'W', "craftingTableWood",
 						'C', "chestWood"))
 				.setFaces(0, 1, 2, 3, 4, 4));
+		((BlockBase)ForestryBlock.factoryPlain.block()).registerStateMapper();
 
 		ICircuitLayout layoutMachineUpgrade = new CircuitLayout("machine.upgrade");
 		ChipsetManager.circuitRegistry.registerLayout(layoutMachineUpgrade);
@@ -308,7 +310,7 @@ public class PluginFactory extends ForestryPlugin {
 		if (PluginManager.Module.APICULTURE.isEnabled()) {
 			FluidStack liquidGlass = Fluids.GLASS.getFluid(Defaults.BUCKET_VOLUME);
 			for (int i = 0; i < 16; i++) {
-				RecipeManagers.fabricatorManager.addRecipe(ForestryItem.waxCast.getItemStack(1, Defaults.WILDCARD), liquidGlass, ForestryBlock.glass.getItemStack(1, 15 - i), new Object[]{"#", "X", '#', dyes[i],
+				RecipeManagers.fabricatorManager.addRecipe(ForestryItem.waxCast.getItemStack(1, Defaults.WILDCARD), liquidGlass, new ItemStack(Blocks.stained_glass, 1, 15 - i), new Object[]{"#", "X", '#', dyes[i],
 						'X', ForestryItem.propolis.getItemStack(1, Defaults.WILDCARD)});
 			}
 		}

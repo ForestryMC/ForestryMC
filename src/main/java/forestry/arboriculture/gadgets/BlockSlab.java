@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockState;
@@ -24,6 +25,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovingObjectPosition;
@@ -36,10 +38,11 @@ import forestry.api.core.IModelRegister;
 import forestry.api.core.Tabs;
 import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.WoodType;
+import forestry.arboriculture.items.ItemWoodBlock;
 import forestry.arboriculture.items.ItemWoodBlock.WoodMeshDefinition;
 import forestry.core.config.ForestryBlock;
 
-public class BlockSlab extends net.minecraft.block.BlockSlab implements IWoodTyped, IModelRegister {
+public class BlockSlab extends net.minecraft.block.BlockSlab implements IWoodTyped, IModelRegister, ITileEntityProvider {
 	
 	private final boolean fireproof;
 
@@ -73,7 +76,11 @@ public class BlockSlab extends net.minecraft.block.BlockSlab implements IWoodTyp
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		manager.registerItemModel(item, new WoodMeshDefinition("slabs"));
+		if(!fireproof)
+		{
+			manager.registerVariant(item, ItemWoodBlock.getVariants(this));
+		}
+		manager.registerItemModel(item, new WoodMeshDefinition(this));
 	}
 
 	/* ICONS */
@@ -179,5 +186,21 @@ public class BlockSlab extends net.minecraft.block.BlockSlab implements IWoodTyp
 	@Override
 	public String getUnlocalizedName(int meta) {
 		return "SomeSlab";
+	}
+	
+	@Override
+	public final TileEntity createNewTileEntity(World world, int meta) {
+		return new TileWood();
+	}
+	
+	@Override
+	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
+		TileEntity tile = world.getTileEntity(pos);
+		if(tile instanceof TileWood)
+		{
+			TileWood wood = (TileWood) tile;
+			state = state.withProperty(WoodType.WOODTYPE, wood.getWoodType());
+		}
+		return super.getActualState(state, world, pos);
 	}
 }

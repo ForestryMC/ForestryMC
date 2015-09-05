@@ -12,11 +12,13 @@ package forestry.core.items;
 
 import java.util.List;
 
+import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -146,9 +148,29 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 	}
 	
 	@SideOnly(Side.CLIENT)
+	public ModelResourceLocation[] models = new ModelResourceLocation[2];
+	
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		manager.registerItemModel(item, 0, StringUtil.cleanItemName(this));
+		models[0] = manager.getModelLocation("pipette.0");
+		models[1] = manager.getModelLocation("pipette.1");
+		manager.registerVariant(item, "forestry:pipette.0");
+		manager.registerVariant(item, "forestry:pipette.1");
+		manager.registerItemModel(item, new PippetMeshDefinition());
+	}
+	
+	public class PippetMeshDefinition implements ItemMeshDefinition{
+
+		@Override
+		public ModelResourceLocation getModelLocation(ItemStack stack) {
+			if (stack.getItemDamage() <= 0) {
+				return models[0];
+			} else {
+				return models[1];
+			}
+		}
+		
 	}
 
 	@Override

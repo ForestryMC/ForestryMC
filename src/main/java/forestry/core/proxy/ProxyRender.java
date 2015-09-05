@@ -12,6 +12,9 @@ package forestry.core.proxy;
 
 import forestry.core.gadgets.MachineDefinition;
 import forestry.core.interfaces.IBlockRenderer;
+import forestry.core.render.ModelIndex;
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.block.statemap.IStateMapper;
 
 public class ProxyRender {
 
@@ -22,10 +25,10 @@ public class ProxyRender {
 	public boolean hasRendering() {
 		return false;
 	}
-
+	
 	public void registerTESR(MachineDefinition definition) {
 	}
-
+	
 	public IBlockRenderer getRenderDefaultMachine(String gfxBase) {
 		return null;
 	}
@@ -41,6 +44,12 @@ public class ProxyRender {
 	public IBlockRenderer getRenderEscritoire() {
 		return null;
 	}
+	
+	public void registerModel(ModelIndex index) {
+	}
+	
+	public void registerStateMapper(Block block, IStateMapper mapper){
+	}
 
 	public short registerItemTexUID(String modifier, short uid, String ident) {
 		return uid;
@@ -51,5 +60,8 @@ public class ProxyRender {
 	}
 
 	public void registerVillagerSkin(int villagerId, String texturePath) {
+	}
+	
+	public void initModels(){
 	}
 }

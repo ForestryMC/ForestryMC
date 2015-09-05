@@ -56,7 +56,7 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 
 	private void doBlockEffect(IBeeGenome genome, IBeeHousing housing) {
 		World world = housing.getWorld();
-		BlockPos housingCoordinates = housing.getPos();
+		BlockPos housingCoordinates = housing.getCoordinates();
 		IVect area = getModifiedArea(genome, housing);
 		
 		int blockX = getRandomOffset(world.rand, housingCoordinates.getX(), area.getX());

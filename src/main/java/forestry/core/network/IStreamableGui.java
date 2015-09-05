@@ -15,7 +15,7 @@ import java.io.IOException;
 import net.minecraft.util.BlockPos;
 
 public interface IStreamableGui {
-	BlockPos getPos();
+	BlockPos getCoordinates();
 
 	void writeGuiData(DataOutputStreamForestry data) throws IOException;
 

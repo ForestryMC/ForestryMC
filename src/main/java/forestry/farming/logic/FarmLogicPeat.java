@@ -14,18 +14,18 @@ import java.util.Collection;
 import java.util.Stack;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import forestry.api.core.sprite.ISprite;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.core.config.ForestryBlock;
+import forestry.core.config.ForestryItem;
 import forestry.core.gadgets.BlockSoil;
-import forestry.core.render.TextureManager;
 import forestry.core.vect.Vect;
 import forestry.core.vect.VectUtil;
 
@@ -99,8 +99,8 @@ public class FarmLogicPeat extends FarmLogicWatered {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public ISprite getIcon() {
-		return TextureManager.getInstance().getFarmSprite("farmLoigc", "items", "peat");
+	public Item getIconItem() {
+		return ForestryItem.peat.item();
 	}
 
 }

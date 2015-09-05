@@ -81,6 +81,7 @@ public class PluginEnergy extends ForestryPlugin {
 
 		definitionEngineClockwork = ((BlockBase) ForestryBlock.engine.block()).addDefinition(new EngineDefinition(Defaults.DEFINITION_ENGINECLOCKWORK_META, "forestry.EngineClockwork", EngineClockwork.class,
 				PluginEnergy.proxy.getRenderDefaultEngine(Defaults.TEXTURE_PATH_BLOCKS + "/engine_clock_"), clockworkRecipe));
+		((BlockBase)ForestryBlock.engine.block()).registerStateMapper();
 	}
 
 	@Override

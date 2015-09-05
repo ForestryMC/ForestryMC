@@ -18,18 +18,18 @@ import java.util.Set;
 import java.util.Stack;
 
 import net.minecraft.block.Block;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import forestry.api.core.sprite.ISprite;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
-import forestry.core.render.TextureManager;
 import forestry.core.vect.MutableVect;
 import forestry.core.vect.Vect;
 import forestry.core.vect.VectUtil;
@@ -44,8 +44,14 @@ public class FarmLogicCocoa extends FarmLogic {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public ISprite getIcon() {
-		return TextureManager.getInstance().getFarmSprite("farmLoigc", "items", "dye_powder_brown");
+	public Item getIconItem() {
+		return Items.dye;
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public int getIconMetadata() {
+		return 3;
 	}
 
 	@Override

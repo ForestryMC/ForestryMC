@@ -60,7 +60,7 @@ public class ItemMisc extends ItemForestry {
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
 		for (int i = 0; i < definition.length; i++) {
-			manager.registerItemModel(item, i, definition[i]);
+			manager.registerItemModel(item, i, "/" + definition[i]);
 		}
 	}
 

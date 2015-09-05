@@ -79,20 +79,9 @@ public class ItemLetter extends ItemInventoried {
 	@SideOnly(Side.CLIENT)
 	private ModelResourceLocation[][] models;
 	
-	private class MetterMeshDefinition implements ItemMeshDefinition{
+	private class LetterMeshDefinition implements ItemMeshDefinition{
 		@Override
 		public ModelResourceLocation getModelLocation(ItemStack stack) {
-			if(models == null)
-			{
-				models = new ModelResourceLocation[4][4];
-				for(int i = 0;i < 3;i++)
-				{
-					models[i][0] = new ModelResourceLocation("mail/letter." + i +".fresh" , "inventory");
-					models[i][1] = new ModelResourceLocation("mail/letter." + i +".stamped" , "inventory");
-					models[i][2] = new ModelResourceLocation("mail/letter." + i +".opened" , "inventory");
-					models[i][3] = new ModelResourceLocation("mail/letter." + i +".emptied" , "inventory");
-				}
-			}
 			LetterState state = getState(stack.getItemDamage());
 			LetterSize size = getSize(stack.getItemDamage());
 			return models[size.ordinal()][state.ordinal()];
@@ -105,11 +94,16 @@ public class ItemLetter extends ItemInventoried {
 		models = new ModelResourceLocation[3][4];
 		for(int i = 0;i < 3;i++)
 		{
-			models[i][0] = new ModelResourceLocation("mail/letter." + i +".fresh" , "inventory");
-			models[i][1] = new ModelResourceLocation("mail/letter." + i +".stamped" , "inventory");
-			models[i][2] = new ModelResourceLocation("mail/letter." + i +".opened" , "inventory");
-			models[i][3] = new ModelResourceLocation("mail/letter." + i +".emptied" , "inventory");
+			models[i][0] = new ModelResourceLocation("forestry:mail/letter." + i + ".fresh" , "inventory");
+			manager.registerVariant(item, "forestry:mail/letter." + i + ".fresh");
+			models[i][1] = new ModelResourceLocation("forestry:mail/letter." + i + ".stamped" , "inventory");
+			manager.registerVariant(item, "forestry:mail/letter." + i + ".stamped");
+			models[i][2] = new ModelResourceLocation("forestry:mail/letter." + i + ".opened" , "inventory");
+			manager.registerVariant(item, "forestry:mail/letter." + i + ".opened");
+			models[i][3] = new ModelResourceLocation("forestry:mail/letter." + i + ".emptied" , "inventory");
+			manager.registerVariant(item, "forestry:mail/letter." + i + ".emptied");
 		}
+		manager.registerItemModel(item, new LetterMeshDefinition());
 	}
 
 	private static int encodeMeta(LetterState state, LetterSize size) {

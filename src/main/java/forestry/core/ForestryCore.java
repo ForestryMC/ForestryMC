@@ -36,7 +36,6 @@ import forestry.core.config.ForestryItem;
 import forestry.core.fluids.Fluids;
 import forestry.core.multiblock.MultiblockEventHandler;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.ModelManager;
 import forestry.plugins.PluginManager;
 
 public class ForestryCore {
@@ -59,6 +58,7 @@ public class ForestryCore {
 	}
 
 	public void init(Object basemod) {
+		
 		// Set fuels and resources for the fermenter
 		FuelManager.fermenterFuel.put(ForestryItem.fertilizerCompound.getItemStack(), new FermenterFuel(ForestryItem.fertilizerCompound.getItemStack(),
 				GameMode.getGameMode().getIntegerSetting("fermenter.value.fertilizer"), GameMode.getGameMode().getIntegerSetting("fermenter.cycles.fertilizer")));
@@ -102,7 +102,9 @@ public class ForestryCore {
 		NetworkRegistry.INSTANCE.registerGuiHandler(basemod, new GuiHandler());
 
 		PluginManager.runInit();
-		ModelManager.registerModels();
+		
+		//Init Models
+		Proxies.render.initModels();
 	}
 
 	public void postInit() {

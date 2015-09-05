@@ -15,18 +15,17 @@ import java.util.Stack;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import forestry.api.core.sprite.ISprite;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.Farmables;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
-import forestry.core.render.TextureManager;
 import forestry.core.utils.StackUtils;
 import forestry.core.vect.Vect;
 
@@ -42,8 +41,8 @@ public class FarmLogicPoale extends FarmLogic {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public ISprite getIcon() {
-		return TextureManager.getInstance().getFarmSprite("farmLoigc", "items", "reeds");
+	public Item getIconItem() {
+		return Items.reeds;
 	}
 
 	@Override

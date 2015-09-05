@@ -173,7 +173,7 @@ public class FakeFarmController implements IFarmController {
 	}
 
 	@Override
-	public BlockPos getPos() {
+	public BlockPos getCoordinates() {
 		return null;
 	}
 

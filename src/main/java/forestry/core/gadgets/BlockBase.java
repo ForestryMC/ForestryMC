@@ -11,13 +11,22 @@
 package forestry.core.gadgets;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
+import com.google.common.collect.Maps;
+
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.statemap.IStateMapper;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -29,9 +38,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -47,7 +56,8 @@ import forestry.core.utils.Utils;
 
 public class BlockBase extends BlockForestry implements IModelRegister {
 
-	public static final PropertyEnum META = PropertyEnum.create("meta", MachineDefinitionType.class);
+	public static final PropertyEnum META = PropertyEnum.create("meta", MachineDefinitionTypes.class);
+	public static final PropertyEnum FACE = PropertyEnum.create("face", EnumFacing.class, EnumFacing.WEST, EnumFacing.EAST, EnumFacing.NORTH, EnumFacing.SOUTH);
 	
 	private final List<MachineDefinition> definitions = new ArrayList<MachineDefinition>();
 	private final boolean hasTESR;
@@ -61,7 +71,7 @@ public class BlockBase extends BlockForestry implements IModelRegister {
 		super(material);
 		this.definitionID = definitionID;
 		this.hasTESR = hasTESR;
-		setDefaultState(this.blockState.getBaseState().withProperty(META, MachineDefinitionType.getType(definitionID, 0)));
+		setDefaultState(this.blockState.getBaseState().withProperty(META, MachineDefinitionTypes.getType(definitionID, 0)).withProperty(FACE, EnumFacing.WEST));
 	}
 
 	public MachineDefinition addDefinition(MachineDefinition definition) {
@@ -76,21 +86,25 @@ public class BlockBase extends BlockForestry implements IModelRegister {
 		return definition;
 	}
 	
+	public void registerStateMapper()
+	{
+		Proxies.render.registerStateMapper(this, new BaseStateMapper());
+	}
 	
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return ((MachineDefinitionType)state.getProperties().get(META)).getMeta();
+		return ((MachineDefinitionTypes)state.getProperties().get(META)).getMeta();
 	}
 	
     @Override
 	protected BlockState createBlockState()
     {
-        return new BlockState(this, new IProperty[] {META});
+        return new BlockState(this, new IProperty[] {META, FACE});
     }
 	
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState().withProperty(META,  MachineDefinitionType.getType(definitionID, meta));
+		return getDefaultState().withProperty(META,  MachineDefinitionTypes.getType(definitionID, meta));
 	}
 
 	@Override
@@ -103,8 +117,12 @@ public class BlockBase extends BlockForestry implements IModelRegister {
 		if (hasTESR) {
 			return Proxies.common.getByBlockModelId();
 		} else {
-			return 0;
+			return 3;
 		}
+	}
+	
+	public int getDefinitionID() {
+		return definitionID;
 	}
 
 	private MachineDefinition getDefinition(IBlockAccess world, BlockPos pos) {
@@ -117,6 +135,17 @@ public class BlockBase extends BlockForestry implements IModelRegister {
 		}
 
 		return definitions.get(metadata);
+	}
+	
+	@Override
+	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
+		TileEntity tile = world.getTileEntity(pos);
+		if(tile instanceof TileForestry)
+		{
+			TileForestry tileF = (TileForestry) tile;
+			state = state.withProperty(FACE, tileF.getOrientation());
+		}
+		return super.getActualState(state, world, pos);
 	}
 
 	/* CREATIVE INVENTORY */
@@ -249,10 +278,65 @@ public class BlockBase extends BlockForestry implements IModelRegister {
 		{
 			if(definitions.get(i) == null)
 				return;
-			MachineDefinitionType type = MachineDefinitionType.getType(definitionID, i);
+			MachineDefinitionTypes type = MachineDefinitionTypes.getType(definitionID, i);
 			if(type == null)
 				return;
-			manager.registerItemModel(item, i, "definitions/" + type.name().toLowerCase());
+			manager.registerItemModel(item, i, "_" + type.getName());
 		}
 	}
+	
+	@SideOnly(Side.CLIENT)
+	public class BaseStateMapper implements IStateMapper{
+
+	    protected Map mapStateModelLocations = Maps.newLinkedHashMap();
+	    
+	    public String getPropertyString(Map p_178131_1_)
+	    {
+	        StringBuilder stringbuilder = new StringBuilder();
+	        Iterator iterator = p_178131_1_.entrySet().iterator();
+
+	        while (iterator.hasNext())
+	        {
+	            Entry entry = (Entry)iterator.next();
+
+	            if (stringbuilder.length() != 0)
+	            {
+	                stringbuilder.append(",");
+	            }
+
+	            IProperty iproperty = (IProperty)entry.getKey();
+	            Comparable comparable = (Comparable)entry.getValue();
+	            stringbuilder.append(iproperty.getName());
+	            stringbuilder.append("=");
+	            stringbuilder.append(iproperty.getName(comparable));
+	        }
+
+	        if (stringbuilder.length() == 0)
+	        {
+	            stringbuilder.append("normal");
+	        }
+
+	        return stringbuilder.toString();
+	    }
+	    
+		@Override
+		public Map putStateModelLocations(Block block) {
+			for(MachineDefinitionTypes definition : MachineDefinitionTypes.values())
+			{
+				if(definition.getDefinitionID() != ((BlockBase)block).getDefinitionID() || ((BlockBase)block).hasTESR)
+					continue;
+				for(EnumFacing facing : EnumFacing.values()){
+					if(facing == EnumFacing.DOWN || facing == EnumFacing.UP)
+						continue;
+					IBlockState state = getDefaultState().withProperty(META, definition).withProperty(FACE, facing);
+					LinkedHashMap linkedhashmap = Maps.newLinkedHashMap(state.getProperties());
+					String s = String.format("%s:%s", ((ResourceLocation)Block.blockRegistry.getNameForObject(block)).getResourceDomain(), ((ResourceLocation)Block.blockRegistry.getNameForObject(block)).getResourcePath() + "_" + META.getName((Comparable)linkedhashmap.remove(META)));;
+					mapStateModelLocations.put(state, new ModelResourceLocation(s, getPropertyString(linkedhashmap)));
+				}
+			}
+			return this.mapStateModelLocations;
+		}
+		
+	}
+	
 }

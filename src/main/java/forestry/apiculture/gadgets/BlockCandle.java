@@ -127,11 +127,6 @@ public class BlockCandle extends BlockTorch implements IModelRegister {
 		return new TileCandle();
 	}
 
-	@Override
-	public int getRenderType() {
-		return ForestryClient.candleRenderId;
-	}
-
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {

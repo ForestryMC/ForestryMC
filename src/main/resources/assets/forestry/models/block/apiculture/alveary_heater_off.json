@@ -1,0 +1,12 @@
+{
+    "parent": "forestry:block/apiculture/alveary_plain_middle",
+    "textures": {
+        "particle": "forestry:blocks/apiculture/alveary.heater.off",
+        "down": "forestry:blocks/apiculture/alveary.heater.off",
+        "up": "forestry:blocks/apiculture/alveary.heater.off",
+        "north": "forestry:blocks/apiculture/alveary.heater.off",
+        "east": "forestry:blocks/apiculture/alveary.heater.off",
+        "south": "forestry:blocks/apiculture/alveary.heater.off",
+        "west": "forestry:blocks/apiculture/alveary.heater.off"
+    }
+}

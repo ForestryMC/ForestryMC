@@ -567,5 +567,10 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		ITree tree = getTree();
 		return !isDecorative && !isDestroyed(tree, damage) && caterpillar == null;
 	}
+	
+	@Override
+	public BlockPos getCoordinates() {
+		return pos;
+	}
 
 }

@@ -18,17 +18,16 @@ import java.util.Set;
 import java.util.Stack;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import forestry.api.core.sprite.ISprite;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
 import forestry.core.utils.StackUtils;
 import forestry.core.vect.Vect;
 import forestry.core.vect.VectUtil;
@@ -48,12 +47,8 @@ public class FarmLogicRubber extends FarmLogic {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public ISprite getIcon() {
-		if (!inActive) {
-			return TextureManager.getInstance().getFarmSprite("farmLoigc", "ic2", "items", "itemRubber");
-		} else {
-			return TextureManager.getInstance().getFarmSprite("farmLoigc", "items", "gunpowder");
-		}
+	public Item getIconItem() {
+		return PluginIC2.resin.getItem();
 	}
 
 	@Override

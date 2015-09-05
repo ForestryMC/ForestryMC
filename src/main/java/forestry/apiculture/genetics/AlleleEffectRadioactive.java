@@ -48,7 +48,7 @@ public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 		Vect offset = area.multiply(-1 / 2.0f);
 
 		// Radioactivity hurts players and mobs
-		Vect min = new Vect(housing.getPos()).add(offset);
+		Vect min = new Vect(housing.getCoordinates()).add(offset);
 		Vect max = min.add(area);
 
 		AxisAlignedBB hurtBox = AxisAlignedBB.fromBounds(min.getX(), min.getY(), min.getZ(), max.getX(), max.getY(), max.getZ());
@@ -87,7 +87,7 @@ public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 
 			Vect randomPos = Vect.getRandomPositionInArea(rand, area);
 
-			Vect posHousing = new Vect(housing.getPos());
+			Vect posHousing = new Vect(housing.getCoordinates());
 			Vect posBlock = randomPos.add(posHousing);
 			posBlock = posBlock.add(offset);
 

@@ -61,6 +61,7 @@ import forestry.arboriculture.gadgets.TileArboristChest;
 import forestry.arboriculture.gadgets.TileFruitPod;
 import forestry.arboriculture.gadgets.TileLeaves;
 import forestry.arboriculture.gadgets.TileSapling;
+import forestry.arboriculture.gadgets.TileWood;
 import forestry.arboriculture.genetics.AlleleFruit;
 import forestry.arboriculture.genetics.AlleleGrowth;
 import forestry.arboriculture.genetics.AlleleLeafEffectNone;
@@ -198,7 +199,8 @@ public class PluginArboriculture extends ForestryPlugin {
 						'X', "treeSapling",
 						'Y', "chestWood"))
 				.setFaces(0, 1, 2, 3, 4, 4, 0, 7));
-
+		((BlockBase)ForestryBlock.apiculture.block()).registerStateMapper();
+		
 		// Init rendering
 		proxy.initializeRendering();
 
@@ -235,6 +237,7 @@ public class PluginArboriculture extends ForestryPlugin {
 
 		GameRegistry.registerTileEntity(TileSapling.class, "forestry.Sapling");
 		GameRegistry.registerTileEntity(TileLeaves.class, "forestry.Leaves");
+		GameRegistry.registerTileEntity(TileWood.class, "forestry.Wood");
 		GameRegistry.registerTileEntity(TileFruitPod.class, "forestry.Pods");
 		definitionChest.register();
 

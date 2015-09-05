@@ -36,7 +36,7 @@ import forestry.core.gadgets.BlockResourceStorageBlock.Resources;
 
 public class BlockResource extends Block implements IModelRegister {
 	
-	public static final PropertyEnum RESOURCES = PropertyEnum.create("resource", Resources.class);
+	public static final PropertyEnum RESOURCES = PropertyEnum.create("resource", Resources.class, Resources.APATITE, Resources.COPPER, Resources.TIN);
 	
 	public BlockResource() {
 		super(Material.rock);
@@ -114,9 +114,9 @@ public class BlockResource extends Block implements IModelRegister {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		manager.registerItemModel(item, 0, "apatite");
-		manager.registerItemModel(item, 1, "copper");
-		manager.registerItemModel(item, 2, "tin");
+		manager.registerItemModel(item, 0, "ores", "apatite");
+		manager.registerItemModel(item, 1, "ores", "copper");
+		manager.registerItemModel(item, 2, "ores", "tin");
 	}
 
 }

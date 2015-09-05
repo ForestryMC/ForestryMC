@@ -15,14 +15,17 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockStairs;
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovingObjectPosition;
@@ -35,9 +38,10 @@ import forestry.api.core.IModelRegister;
 import forestry.api.core.Tabs;
 import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.WoodType;
+import forestry.arboriculture.items.ItemWoodBlock;
 import forestry.arboriculture.items.ItemWoodBlock.WoodMeshDefinition;
 
-public class BlockArbStairs extends BlockStairs implements IWoodTyped, IModelRegister {
+public class BlockArbStairs extends BlockStairs implements IWoodTyped, IModelRegister, ITileEntityProvider {
 
 	private final boolean fireproof;
 
@@ -69,7 +73,11 @@ public class BlockArbStairs extends BlockStairs implements IWoodTyped, IModelReg
 	
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		manager.registerItemModel(item, new WoodMeshDefinition("stairs"));
+		if(!fireproof)
+		{
+			manager.registerVariant(item, ItemWoodBlock.getVariants(this));
+		}
+		manager.registerItemModel(item, new WoodMeshDefinition(this));
 	}
 	
 	@Override
@@ -88,6 +96,31 @@ public class BlockArbStairs extends BlockStairs implements IWoodTyped, IModelReg
 		NBTTagCompound stairsNBT = BlockWood.getTagCompound(world, pos);
 		itemStack.setTagCompound(stairsNBT);
 		return itemStack;
+	}
+	
+	@Override
+	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+		if(placer instanceof EntityPlayer)
+		{
+			state = state.withProperty(WoodType.WOODTYPE, WoodType.getFromCompound(stack.getTagCompound()));
+		}
+	}
+	
+	
+	@Override
+	public final TileEntity createNewTileEntity(World world, int meta) {
+		return new TileWood();
+	}
+	
+	@Override
+	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
+		TileEntity tile = world.getTileEntity(pos);
+		if(tile instanceof TileWood)
+		{
+			TileWood wood = (TileWood) tile;
+			state = state.withProperty(WoodType.WOODTYPE, wood.getWoodType());
+		}
+		return super.getActualState(state, world, pos);
 	}
 
 	@Override

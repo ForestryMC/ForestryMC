@@ -38,7 +38,6 @@ public class TextureManager implements ITextureManager {
 		return instance;
 	}
 
-	private final HashMap<String, ISprite> farmIcons = new HashMap<String, ISprite>();
 	private final HashMap<String, ISprite> defaultIcons = new HashMap<String, ISprite>();
 
 	private final ISprite[] textures = new ISprite[2048];
@@ -73,33 +72,12 @@ public class TextureManager implements ITextureManager {
 		return new Sprite(map.registerSprite(new ResourceLocation("forestry:" + modifier + "/" + identifier)));
 	}
 	
-	@Override
-	public ISprite getFarmSprite(String identifierSprite, String modifier, String identifier){
-		if(farmIcons.get(identifierSprite) == null)
-			return registerFarmSprite(identifierSprite, modifier, identifier);
-		return farmIcons.get(identifierSprite);
-	}
-	
-	@Override
-	public ISprite getFarmSprite(String identifierSprite, String modID, String modifier, String identifier) {
-		if(farmIcons.get(identifierSprite) == null)
-			return registerFarmSprite(identifierSprite, modID, modifier, identifier);
-		return farmIcons.get(identifierSprite);
-	}
-	
-	@Override
-	public ISprite registerFarmSprite(String identifierSprite, String modifier, String identifier){
-		return farmIcons.put(identifierSprite, registerTex(modifier, identifier));
-	}
-	
-	@Override
-	public ISprite registerFarmSprite(String identifierSprite, String modID, String modifier, String identifier){
-		return farmIcons.put(identifierSprite, registerTex(modID, modifier, identifier));
-	}
-	
 	public ISprite registerTex(String modID, String modifier, String identifier) {
 		TextureMap map = Minecraft.getMinecraft().getTextureMapBlocks();
-		return new Sprite(map.registerSprite(new ResourceLocation(modID + ":" + modifier + "/" + identifier)));
+		if(map.getAtlasSprite(new ResourceLocation(modID + ":" + modifier + "/" + identifier).toString()) == map.getMissingSprite())
+			return new Sprite(map.registerSprite(new ResourceLocation(modID + ":" + modifier + "/" + identifier)));
+		return new Sprite(map.getAtlasSprite(new ResourceLocation(modID + ":" + modifier + "/" + identifier).toString()));
+		//return new Sprite(map.registerSprite(new ResourceLocation(modID + ":" + modifier + "/" + identifier)));
 	}
 	
 	public ResourceLocation getRL(String modifier, String identifier) {

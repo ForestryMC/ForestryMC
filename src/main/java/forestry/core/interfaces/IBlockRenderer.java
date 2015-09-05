@@ -11,5 +11,4 @@
 package forestry.core.interfaces;
 
 public interface IBlockRenderer {
-	void inventoryRender(double x, double y, double z);
 }

@@ -31,6 +31,8 @@ import net.minecraft.world.World;
 
 import forestry.api.apiculture.IHiveDrop;
 import forestry.api.apiculture.hives.IHiveRegistry.HiveType;
+import forestry.api.core.IModelManager;
+import forestry.api.core.IModelRegister;
 import forestry.api.core.Tabs;
 import forestry.apiculture.MaterialBeehive;
 import forestry.core.config.Config;
@@ -38,7 +40,7 @@ import forestry.core.inventory.InvTools;
 import forestry.core.utils.StackUtils;
 import forestry.plugins.PluginApiculture;
 
-public class BlockBeehives extends BlockContainer {
+public class BlockBeehives extends BlockContainer implements IModelRegister {
 
 	public static final PropertyEnum HIVETYPES = PropertyEnum.create("hive", HiveType.class);
 	
@@ -160,21 +162,26 @@ public class BlockBeehives extends BlockContainer {
 	private static String getHiveNameForMeta(int meta) {
 		switch (meta) {
 			case 1:
-				return HiveType.FOREST.getName();
+				return HiveType.FOREST.getHiveName();
 			case 2:
-				return HiveType.MEADOWS.getName();
+				return HiveType.MEADOWS.getHiveName();
 			case 3:
-				return HiveType.DESERT.getName();
+				return HiveType.DESERT.getHiveName();
 			case 4:
-				return HiveType.JUNGLE.getName();
+				return HiveType.JUNGLE.getHiveName();
 			case 5:
-				return HiveType.END.getName();
+				return HiveType.END.getHiveName();
 			case 6:
-				return HiveType.SNOW.getName();
+				return HiveType.SNOW.getHiveName();
 			case 7:
-				return HiveType.SWAMP.getName();
+				return HiveType.SWAMP.getHiveName();
 		}
 		return null;
+	}
+	
+	@Override
+	public int getRenderType() {
+		return 3;
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
@@ -190,6 +197,17 @@ public class BlockBeehives extends BlockContainer {
 		itemList.add(new ItemStack(this, 1, 6));
 		itemList.add(new ItemStack(this, 1, 7));
 		// Swarm hive not added
+	}
+	
+	@Override
+	public void registerModel(Item item, IModelManager manager) {
+		manager.registerItemModel(item, 1, "beehives", HiveType.FOREST.getName());
+		manager.registerItemModel(item, 2, "beehives", HiveType.MEADOWS.getName());
+		manager.registerItemModel(item, 3, "beehives", HiveType.DESERT.getName());
+		manager.registerItemModel(item, 4, "beehives", HiveType.JUNGLE.getName());
+		manager.registerItemModel(item, 5, "beehives", HiveType.END.getName());
+		manager.registerItemModel(item, 6, "beehives", HiveType.SNOW.getName());
+		manager.registerItemModel(item, 7, "beehives", HiveType.SWAMP.getName());
 	}
 
 }

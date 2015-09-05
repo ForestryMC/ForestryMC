@@ -25,6 +25,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import forestry.core.interfaces.IBlockRenderer;
+import forestry.core.proxy.Proxies;
 
 public class MachineDefinition {
 
@@ -33,15 +34,10 @@ public class MachineDefinition {
 	private final String teIdent;
 	private Block block;
 	private final int meta;
-
 	public final IBlockRenderer renderer;
 
 	/* CRAFTING */
 	public IRecipe[] recipes;
-
-	public MachineDefinition(int meta, String teIdent, Class<? extends TileEntity> teClass, IRecipe... recipes) {
-		this(meta, teIdent, teClass, null, recipes);
-	}
 
 	public MachineDefinition(int meta, String teIdent, Class<? extends TileEntity> teClass, IBlockRenderer renderer, IRecipe... recipes) {
 		this.meta = meta;
@@ -55,6 +51,11 @@ public class MachineDefinition {
 		for (int i = 0; i < 8; i++) {
 			faceMap[i] = 0;
 		}
+
+	}
+	
+	public MachineDefinition(int meta, String teIdent, Class<? extends TileEntity> teClass, IRecipe... recipes) {
+		this(meta, teIdent, teClass, null, recipes);
 
 	}
 
@@ -73,6 +74,9 @@ public class MachineDefinition {
 	public void register() {
 		registerTileEntity();
 		registerCrafting();
+		if (renderer != null) {
+			Proxies.render.registerTESR(this);
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -89,6 +93,10 @@ public class MachineDefinition {
 	 */
 	private void registerTileEntity() {
 		GameRegistry.registerTileEntity(teClass, teIdent);
+	}
+	
+	public String getTeIdent() {
+		return teIdent;
 	}
 
 	public TileEntity createMachine() {

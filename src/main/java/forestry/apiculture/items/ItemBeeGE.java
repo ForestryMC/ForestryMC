@@ -161,7 +161,7 @@ public class ItemBeeGE extends ItemGE {
 	public void registerModel(Item item, IModelManager manager) {
 		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
 			if (allele instanceof IAlleleBeeSpecies) {
-				((IAlleleBeeSpecies) allele).getModelProvider().registerModels(manager);
+				((IAlleleBeeSpecies) allele).getModelProvider().registerModels(item, manager);
 			}
 		}
 		manager.registerItemModel(item, new BeeMeshDefinition());
@@ -175,10 +175,13 @@ public class ItemBeeGE extends ItemGE {
 			if (species == null) {
 				species = (IAlleleBeeSpecies) BeeManager.beeRoot.getDefaultTemplate()[EnumBeeChromosome.SPECIES.ordinal()];
 			}
-			species.getModel(type);
-			return null;
+			return species.getModel(type);
 		}
 		
+	}
+	
+	public final EnumBeeType getType() {
+		return type;
 	}
 	
 	/*@SideOnly(Side.CLIENT)

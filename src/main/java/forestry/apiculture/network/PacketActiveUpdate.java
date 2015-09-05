@@ -34,7 +34,7 @@ public class PacketActiveUpdate extends PacketCoordinates {
 	}
 
 	public PacketActiveUpdate(IActivatable tile) {
-		super(PacketId.TILE_FORESTRY_ACTIVE, tile.getPos());
+		super(PacketId.TILE_FORESTRY_ACTIVE, tile.getCoordinates());
 		this.active = tile.isActive();
 	}
 

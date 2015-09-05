@@ -114,9 +114,9 @@ public class FakeAlvearyController implements IAlvearyController {
 	public World getWorld() {
 		return null;
 	}
-
+	
 	@Override
-	public BlockPos getPos() {
+	public BlockPos getCoordinates() {
 		return null;
 	}
 

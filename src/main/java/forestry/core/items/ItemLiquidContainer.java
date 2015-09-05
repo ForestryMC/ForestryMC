@@ -12,6 +12,7 @@ package forestry.core.items;
 
 import java.awt.Color;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 
@@ -316,7 +317,7 @@ public class ItemLiquidContainer extends Item implements IModelRegister{
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		manager.registerItemModel(item, 0);
+		manager.registerItemModel(item, 0, "liquids", type.toString().toLowerCase(Locale.ENGLISH));
 	}
 
 	@Override

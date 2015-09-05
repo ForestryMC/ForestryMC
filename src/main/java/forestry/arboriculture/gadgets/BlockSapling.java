@@ -11,8 +11,13 @@
 package forestry.arboriculture.gadgets;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.Map.Entry;
+
+import com.google.common.collect.Maps;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
@@ -21,6 +26,7 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.statemap.IStateMapper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -35,15 +41,16 @@ import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.arboriculture.EnumGermlingType;
+import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.IModelManager;
 import forestry.api.core.IModelRegister;
+import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.IAllele;
 import forestry.arboriculture.WoodType;
-import forestry.arboriculture.items.ItemWoodBlock.WoodMeshDefinition;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
-import forestry.plugins.PluginArboriculture;
 
 public class BlockSapling extends BlockTreeContainer implements IGrowable, IModelRegister {
 
@@ -64,12 +71,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IMode
 	
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return ((WoodType)state.getValue(WOODTYPE)).ordinal();
-	}
-	
-	@Override
-	public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState().withProperty(WOODTYPE, WoodType.values()[meta]);
+		return 0;
 	}
 	
 	@Override
@@ -85,7 +87,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IMode
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerModel(Item item, IModelManager manager) {
-		manager.registerItemModel(item, new WoodMeshDefinition("sapling"));
+		//manager.registerItemModel(item, new WoodMeshDefinition(this));
 	}
 
 	/* COLLISION BOX */
@@ -102,7 +104,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IMode
 
 	@Override
 	public int getRenderType() {
-		return PluginArboriculture.modelIdSaplings;
+		return 3;
 	}
 
 	/* PLANTING */
@@ -192,5 +194,57 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IMode
 		if (saplingTile != null) {
 			saplingTile.tryGrow(true);
 		}
+	}
+	
+	public class SaplingStateMapper implements IStateMapper{
+		
+	    protected Map mapStateModelLocations = Maps.newLinkedHashMap();
+	    private static final String __OBFID = "CL_00002479";
+
+	    public String getPropertyString(Map p_178131_1_)
+	    {
+	        StringBuilder stringbuilder = new StringBuilder();
+	        Iterator iterator = p_178131_1_.entrySet().iterator();
+
+	        while (iterator.hasNext())
+	        {
+	            Entry entry = (Entry)iterator.next();
+
+	            if (stringbuilder.length() != 0)
+	            {
+	                stringbuilder.append(",");
+	            }
+
+	            IProperty iproperty = (IProperty)entry.getKey();
+	            Comparable comparable = (Comparable)entry.getValue();
+	            stringbuilder.append(iproperty.getName());
+	            stringbuilder.append("=");
+	            stringbuilder.append(iproperty.getName(comparable));
+	        }
+
+	        if (stringbuilder.length() == 0)
+	        {
+	            stringbuilder.append("normal");
+	        }
+
+	        return stringbuilder.toString();
+	    }
+
+	    @Override
+		public Map putStateModelLocations(Block p_178130_1_)
+	    {
+	        Iterator iterator = p_178130_1_.getBlockState().getValidStates().iterator();
+
+	        for(IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values())
+	        {
+	        	if(allele instanceof IAlleleTreeSpecies){
+	        		IBlockState iblockstate = (IBlockState)iterator.next();
+	            	//this.mapStateModelLocations.put(iblockstate, this.getModelResourceLocation(iblockstate));
+	        	}
+	        }
+
+	        return this.mapStateModelLocations;
+	    }
+		
 	}
 }

@@ -68,7 +68,7 @@ public class PipeItemsPropolis extends Pipe<PipeTransportItems> {
 			}
 		}
 
-		player.openGui(ForestryAPI.instance, GuiId.PropolisPipeGUI.ordinal(), player.worldObj, container.getPos().getX(), container.getPos().getY(), container.getPos().getZ());
+		player.openGui(ForestryAPI.instance, GuiId.PropolisPipeGUI.ordinal(), player.worldObj, container.getCoordinates().getX(), container.getCoordinates().getY(), container.getCoordinates().getZ());
 
 		return true;
 	}

@@ -52,7 +52,7 @@ public class AlleleEffectSnowing extends AlleleEffectThrottled {
 
 			Vect randomPos = Vect.getRandomPositionInArea(world.rand, area);
 
-			Vect posBlock = randomPos.add(new Vect(housing.getPos()));
+			Vect posBlock = randomPos.add(new Vect(housing.getCoordinates()));
 			posBlock = posBlock.add(offset);
 
 			// Put snow on the ground
@@ -81,7 +81,7 @@ public class AlleleEffectSnowing extends AlleleEffectThrottled {
 			Vect area = getModifiedArea(genome, housing);
 			Vect offset = area.multiply(-0.5F);
 
-			BlockPos coordinates = housing.getPos();
+			BlockPos coordinates = housing.getCoordinates();
 			World world = housing.getWorld();
 
 			Vect spawn = Vect.getRandomPositionInArea(world.rand, area).add(coordinates).add(offset);

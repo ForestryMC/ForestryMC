@@ -18,8 +18,10 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.particle.EntityDiggingFX;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -33,16 +35,20 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.property.ExtendedBlockState;
+import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.core.IModelManager;
 import forestry.core.config.ForestryBlock;
 import forestry.core.gadgets.BlockStructure;
+import forestry.core.gadgets.UnlistedBlockAccess;
+import forestry.core.gadgets.UnlistedBlockPos;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.ParticleHelper;
 import forestry.core.render.ParticleHelperCallback;
 import forestry.core.utils.StackUtils;
-import forestry.plugins.PluginFarming;
 
 public class BlockFarm extends BlockStructure {
 
@@ -51,9 +57,7 @@ public class BlockFarm extends BlockStructure {
 	
 	private enum FarmType implements IStringSerializable{
 		PLAIN,
-		REVERSE,
-		TOP,
-		BAND,
+		PLAIN_2,
 		GEARS,
 		HATCH,
 		VALVE,
@@ -84,8 +88,18 @@ public class BlockFarm extends BlockStructure {
 	}
 	
 	@Override
+	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
+		return ((IExtendedBlockState)super.getExtendedState(state, world, pos )).withProperty(UnlistedBlockPos.POS, pos).withProperty(UnlistedBlockAccess.BLOCKACCESS , world);
+	}
+	
+	@Override
 	protected BlockState createBlockState() {
-		return new BlockState(this, new IProperty[]{META});
+		return new ExtendedBlockState(this, new IProperty[]{META}, new IUnlistedProperty[]{UnlistedBlockPos.POS, UnlistedBlockAccess.BLOCKACCESS});
+	}
+	
+	@Override
+	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
+		return state;
 	}
 
 	@Override
@@ -186,7 +200,7 @@ public class BlockFarm extends BlockStructure {
 	/* ICONS */
 	@Override
 	public int getRenderType() {
-		return PluginFarming.modelIdFarmBlock;
+		return 3;
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -197,14 +211,12 @@ public class BlockFarm extends BlockStructure {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		manager.registerItemModel(item, 0, "blocks", "farm/plain");
-		manager.registerItemModel(item, 1, "blocks", "farm/reverse");
-		manager.registerItemModel(item, 2, "blocks", "farm/top");
-		manager.registerItemModel(item, 3, "blocks", "farm/band");
-		manager.registerItemModel(item, 4, "blocks", "farm/gears");
-		manager.registerItemModel(item, 5, "blocks", "farm/hatch");
-		manager.registerItemModel(item, 6, "blocks", "farm/valve");
-		manager.registerItemModel(item, 7, "blocks", "farm/control");
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 0, new ModelResourceLocation("forestry:ffarm"));
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 1, new ModelResourceLocation("forestry:ffarm"));
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 2, new ModelResourceLocation("forestry:ffarm"));
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 3, new ModelResourceLocation("forestry:ffarm"));
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 4, new ModelResourceLocation("forestry:ffarm"));
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 5, new ModelResourceLocation("forestry:ffarm"));
 	}
 
 	private static class ParticleCallback implements ParticleHelperCallback {

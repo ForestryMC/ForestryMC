@@ -22,7 +22,6 @@ import net.minecraftforge.fluids.FluidTankInfo;
 
 import forestry.api.apiculture.IAlvearyComponent;
 import forestry.api.core.IClimateControlled;
-import forestry.apiculture.gadgets.BlockAlveary;
 import forestry.core.config.Defaults;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.Fluids;
@@ -141,12 +140,6 @@ public class TileAlvearyHygroregulator extends TileAlvearyWithGui implements IIn
 			currentRecipe.liquid.writeToNBT(subcompound);
 			nbttagcompound.setTag("CurrentLiquid", subcompound);
 		}
-	}
-
-	/* TEXTURES */
-	@Override
-	public int getIcon(int side) {
-		return BlockAlveary.ALVEARY_HYGRO;
 	}
 
 	/* ILIQUIDTANKCONTAINER */

@@ -80,7 +80,7 @@ public class AlleleEffectIgnition extends AlleleEffectThrottled {
 		if (housing.getWorld().rand.nextInt(2) != 0) {
 			super.doFX(genome, storedData, housing);
 		} else {
-			Proxies.common.addEntityIgnitionFX(housing.getWorld(), housing.getPos().getX() + 0.5, housing.getPos().getY() + 1, housing.getPos().getZ() + 0.5);
+			Proxies.common.addEntityIgnitionFX(housing.getWorld(), housing.getCoordinates().getX() + 0.5, housing.getCoordinates().getY() + 1, housing.getCoordinates().getZ() + 0.5);
 		}
 		return storedData;
 	}

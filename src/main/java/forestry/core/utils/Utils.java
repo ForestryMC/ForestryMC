@@ -134,6 +134,8 @@ public abstract class Utils {
 	}
 
 	public static boolean isWoodSlabBlock(Block block) {
+		if(block == Blocks.air)
+			return false;
 		int[] oreIds = OreDictionary.getOreIDs(new ItemStack(block));
 		for (int oreId : oreIds) {
 			if (oreId == slabWoodId) {

@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockState;
@@ -22,6 +23,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovingObjectPosition;
@@ -34,21 +36,21 @@ import forestry.api.core.IModelRegister;
 import forestry.api.core.Tabs;
 import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.WoodType;
+import forestry.arboriculture.items.ItemWoodBlock;
 import forestry.arboriculture.items.ItemWoodBlock.WoodMeshDefinition;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StackUtils;
+import forestry.core.utils.Utils;
 
-public abstract class BlockWood extends Block implements IWoodTyped, IModelRegister {
+public abstract class BlockWood extends Block implements ITileEntityProvider, IWoodTyped, IModelRegister {
 	
 	private final String blockKind;
 	private final boolean fireproof;
-	private final String modifier;
 
-	protected BlockWood(String blockKind, boolean fireproof, String modifier) {
+	protected BlockWood(String blockKind, boolean fireproof) {
 		super(Material.wood);
 		this.blockKind = blockKind;
 		this.fireproof = fireproof;
-		this.modifier = modifier;
 
 		setStepSound(soundTypeWood);
 		setCreativeTab(Tabs.tabArboriculture);
@@ -86,6 +88,15 @@ public abstract class BlockWood extends Block implements IWoodTyped, IModelRegis
 		return nbttagcompound;
 	}
 	
+	public static TileWood getWoodTile(IBlockAccess world, BlockPos pos) {
+		return Utils.getTile(world, pos, TileWood.class);
+	}
+	
+	@Override
+	public final TileEntity createNewTileEntity(World world, int meta) {
+		return new TileWood();
+	}
+	
 	protected static WoodType getWoodType(IBlockAccess world, BlockPos pos) {
 		IBlockState state = world.getBlockState(pos);
 		WoodType type = (WoodType) state.getValue(WoodType.WOODTYPE);
@@ -95,7 +106,11 @@ public abstract class BlockWood extends Block implements IWoodTyped, IModelRegis
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		manager.registerItemModel(item, new WoodMeshDefinition(modifier));
+		if(!fireproof)
+		{
+			manager.registerVariant(item, ItemWoodBlock.getVariants(this));
+		}
+		manager.registerItemModel(item, new WoodMeshDefinition(this));
 	}
 	
 	@Override
@@ -129,6 +144,17 @@ public abstract class BlockWood extends Block implements IWoodTyped, IModelRegis
 			return WoodType.DEFAULT_HARDNESS;
 		}
 		return type.getHardness();
+	}
+	
+	@Override
+	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
+		TileEntity tile = world.getTileEntity(pos);
+		if(tile instanceof TileWood)
+		{
+			TileWood wood = (TileWood) tile;
+			state = state.withProperty(WoodType.WOODTYPE, wood.getWoodType());
+		}
+		return super.getActualState(state, world, pos);
 	}
 
 	@Override

@@ -85,6 +85,7 @@ public class PluginLepidopterology extends ForestryPlugin {
 	public void preInit() {
 		ForestryBlock.lepidopterology.registerBlock(new BlockBase(Material.iron, Defaults.DEFINITION_LEPIDOPTEROLOGY_ID), ItemForestryBlock.class, "lepidopterology");
 		ForestryBlock.lepidopterology.block().setCreativeTab(Tabs.tabLepidopterology);
+		((BlockBase)ForestryBlock.lepidopterology.block()).registerStateMapper();
 
 		createAlleles();
 	}

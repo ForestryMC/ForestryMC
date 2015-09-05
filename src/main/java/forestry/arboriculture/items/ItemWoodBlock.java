@@ -10,18 +10,24 @@
  ******************************************************************************/
 package forestry.arboriculture.items;
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-
 import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.WoodType;
+import forestry.arboriculture.gadgets.TileWood;
+import forestry.core.config.Defaults;
 import forestry.core.items.ItemForestryBlock;
 import forestry.core.render.ModelManager;
 import forestry.core.utils.StringUtil;
@@ -30,6 +36,39 @@ public class ItemWoodBlock extends ItemForestryBlock {
 
 	public ItemWoodBlock(Block block) {
 		super(block);
+	}
+
+	public static boolean placeWood(ItemStack stack, @Nullable EntityPlayer player, World world, BlockPos pos, IBlockState newState) {
+		WoodType woodType = WoodType.getFromCompound(stack.getTagCompound());
+		Block block = Block.getBlockFromItem(stack.getItem());
+
+		boolean placed = world.setBlockState(pos, newState, Defaults.FLAG_BLOCK_SYNCH_AND_UPDATE);
+		if (!placed) {
+			return false;
+		}
+
+		Block worldBlock = world.getBlockState(pos).getBlock();
+		if (!Block.isEqualTo(block, worldBlock)) {
+			return false;
+		}
+
+		TileEntity tile = world.getTileEntity(pos);
+		if (!(tile instanceof TileWood)) {
+			world.setBlockToAir(pos);
+			return false;
+		}
+
+		if (player != null) {
+			worldBlock.onBlockPlacedBy(world, pos, world.getBlockState(pos), player, stack);
+		}
+
+		((TileWood) tile).setWoodType(woodType);
+		return true;
+	}
+	
+	@Override
+	public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState) {
+		return placeWood(stack, player, world, pos, newState);
 	}
 
 	@Override
@@ -64,17 +103,17 @@ public class ItemWoodBlock extends ItemForestryBlock {
 
 		return displayName;
 	}
-	
 
-	public static WoodType getWood(ItemStack itemStack) {
+	private static WoodType getWood(ItemStack itemStack) {
 		return WoodType.getFromCompound(itemStack.getTagCompound());
 	}
 	
-	@Override
-	public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState) {
-		WoodType type = WoodType.getFromCompound(stack.getTagCompound());
-		newState = newState.withProperty(WoodType.WOODTYPE, type);
-		return super.placeBlockAt(stack, player, world, pos, side, hitX, hitY, hitZ, newState);
+	public static String[] getVariants(IWoodTyped typed)
+	{
+		List variants = new ArrayList<String>();
+		for(WoodType type : WoodType.values())
+			variants.add("forestry:" + typed.getBlockKind() + "/" + type.getName().toLowerCase());
+		return (String[]) variants.toArray(new String[variants.size()]);
 	}
 	
 	public static WoodType getWoodType(World world, BlockPos pos)
@@ -86,8 +125,8 @@ public class ItemWoodBlock extends ItemForestryBlock {
 
 		public String modifier;
 		
-		public WoodMeshDefinition(String modifier) {
-			this.modifier = modifier;
+		public WoodMeshDefinition(IWoodTyped typed) {
+			this.modifier = typed.getBlockKind();
 		}
 		
 		@Override

@@ -92,12 +92,6 @@ public class RenderMill extends TileEntitySpecialRenderer implements IBlockRende
 	}
 
 	@Override
-	public void inventoryRender(double x, double y, double z) {
-		byte charge = 0;
-		render(0.0f, charge, EnumFacing.WEST, x, y, z);
-	}
-
-	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double d, double d1, double d2, float f, int i) {
 		Mill tile = (Mill) tileentity;
 		render(tile.progress, tile.charge, EnumFacing.WEST, d, d1, d2);

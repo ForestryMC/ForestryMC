@@ -1,5 +1,5 @@
 {
-    "parent": "block/arboriculture/fences/pine_inventory",
+    "parent": "forestry:block/arboriculture/fences/pine_inventory",
     "display": {
         "thirdperson": {
             "rotation": [ 0, 0, 180 ],

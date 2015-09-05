@@ -80,7 +80,6 @@ import forestry.arboriculture.worldgen.WorldGenTeak;
 import forestry.arboriculture.worldgen.WorldGenWalnut;
 import forestry.arboriculture.worldgen.WorldGenWenge;
 import forestry.arboriculture.worldgen.WorldGenWillow;
-import forestry.arboriculture.worldgen.WorldGenZebrawood;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.genetics.alleles.Allele;
@@ -575,7 +574,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 			registerMutation(DarkOak, Kapok, 10);
 		}
 	},
-	Zebrawood(TreeBranchDefinition.ASTRONIUM, "zebrawood", "graveolens", false, EnumLeafType.JUNGLE, new Color(0xa2d24a), new Color(0xc4d24a), WoodType.ZEBRAWOOD) {
+	/*Zebrawood(TreeBranchDefinition.ASTRONIUM, "zebrawood", "graveolens", false, EnumLeafType.JUNGLE, new Color(0xa2d24a), new Color(0xc4d24a), WoodType.ZEBRAWOOD) {
 		@Override
 		public WorldGenerator getWorldGenerator(ITreeGenData tree) {
 			return new WorldGenZebrawood(tree);
@@ -596,7 +595,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 		protected void registerMutations() {
 			registerMutation(Ebony, Poplar, 5);
 		}
-	},
+	},*/
 	Mahogony(TreeBranchDefinition.MAHOGANY, "yellowMeranti", "gibbosa", true, EnumLeafType.JUNGLE, new Color(0x8ab154), new Color(0xa9b154), WoodType.MAHOGANY) {
 		@Override
 		public WorldGenerator getWorldGenerator(ITreeGenData tree) {

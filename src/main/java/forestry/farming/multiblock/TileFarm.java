@@ -15,6 +15,7 @@ import java.io.IOException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.StatCollector;
 
@@ -192,6 +193,12 @@ public abstract class TileFarm extends RectangularMultiblockTileEntityBase imple
 		return getFarmController().getErrorLogic();
 	}
 	
+	@Override
+	public BlockPos getCoordinates() {
+		return pos;
+	}
+	
+	//Fields
 
 	@Override
 	public int getField(int id) {

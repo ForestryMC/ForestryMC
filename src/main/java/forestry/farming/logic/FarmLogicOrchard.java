@@ -22,6 +22,7 @@ import java.util.Stack;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
@@ -29,14 +30,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import forestry.api.core.sprite.ISprite;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.Farmables;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
 import forestry.api.genetics.IFruitBearer;
-import forestry.core.render.TextureManager;
+import forestry.core.config.ForestryItem;
 import forestry.core.vect.Vect;
 import forestry.core.vect.VectUtil;
 import forestry.plugins.PluginManager;
@@ -120,8 +120,8 @@ public class FarmLogicOrchard extends FarmLogic {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public ISprite getIcon() {
-		return TextureManager.getInstance().getFarmSprite("farmLoigc", "items", "fruits/cherry");
+	public Item getIconItem() {
+		return ForestryItem.fruits.item();
 	}
 
 	@Override

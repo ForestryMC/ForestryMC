@@ -35,11 +35,6 @@ public class RenderAnalyzer extends TileEntitySpecialRenderer implements IBlockR
 	}
 
 	@Override
-	public void inventoryRender(double x, double y, double z) {
-		render(null, null, EnumFacing.WEST, x, y, z);
-	}
-
-	@Override
 	public void renderTileEntityAt(TileEntity tile, double d, double d1, double d2, float f, int i) {
 
 		TileAnalyzer analyzer = (TileAnalyzer) tile;

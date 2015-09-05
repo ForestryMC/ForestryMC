@@ -254,7 +254,9 @@ public class PluginApiculture extends ForestryPlugin {
 		// Alveary and Components
 		ForestryBlock.alveary.registerBlock(new BlockAlveary(), ItemAlvearyBlock.class, "alveary");
 		ForestryBlock.alveary.block().setHarvestLevel("axe", 0);
-
+		
+		proxy.preInitializeMapping();
+		
 		// Add triggers
 		if (PluginManager.Module.BUILDCRAFT_STATEMENTS.isEnabled()) {
 			ApicultureTriggers.initialize();
@@ -877,42 +879,42 @@ public class PluginApiculture extends ForestryPlugin {
 
 	private static void registerBeehiveDrops() {
 		ItemStack honeyComb = ForestryItem.beeComb.getItemStack(1, 0);
-		hiveRegistry.addDrops(HiveType.FOREST.getName(),
+		hiveRegistry.addDrops(HiveType.FOREST.getHiveName(),
 				new HiveDrop(80, BeeDefinition.FOREST, honeyComb).setIgnobleShare(0.7f),
 				new HiveDrop(8, BeeDefinition.FOREST.getRainResist(), honeyComb),
 				new HiveDrop(3, BeeDefinition.VALIANT, honeyComb)
 		);
 
-		hiveRegistry.addDrops(HiveType.MEADOWS.getName(),
+		hiveRegistry.addDrops(HiveType.MEADOWS.getHiveName(),
 				new HiveDrop(80, BeeDefinition.MEADOWS, honeyComb).setIgnobleShare(0.7f),
 				new HiveDrop(3, BeeDefinition.VALIANT, honeyComb)
 		);
 
 		ItemStack parchedComb = ForestryItem.beeComb.getItemStack(1, 7);
-		hiveRegistry.addDrops(HiveType.DESERT.getName(),
+		hiveRegistry.addDrops(HiveType.DESERT.getHiveName(),
 				new HiveDrop(80, BeeDefinition.MODEST, parchedComb).setIgnobleShare(0.7f),
 				new HiveDrop(3, BeeDefinition.VALIANT, parchedComb)
 		);
 
 		ItemStack silkyComb = ForestryItem.beeComb.getItemStack(1, 6);
-		hiveRegistry.addDrops(HiveType.JUNGLE.getName(),
+		hiveRegistry.addDrops(HiveType.JUNGLE.getHiveName(),
 				new HiveDrop(80, BeeDefinition.TROPICAL, silkyComb).setIgnobleShare(0.7f),
 				new HiveDrop(3, BeeDefinition.VALIANT, silkyComb)
 		);
 
 		ItemStack mysteriousComb = ForestryItem.beeComb.getItemStack(1, 8);
-		hiveRegistry.addDrops(HiveType.END.getName(),
+		hiveRegistry.addDrops(HiveType.END.getHiveName(),
 				new HiveDrop(90, BeeDefinition.ENDED, mysteriousComb)
 		);
 
 		ItemStack frozenComb = ForestryItem.beeComb.getItemStack(1, 4);
-		hiveRegistry.addDrops(HiveType.SNOW.getName(),
+		hiveRegistry.addDrops(HiveType.SNOW.getHiveName(),
 				new HiveDrop(80, BeeDefinition.WINTRY, frozenComb).setIgnobleShare(0.5f),
 				new HiveDrop(3, BeeDefinition.VALIANT, frozenComb)
 		);
 
 		ItemStack mossyComb = ForestryItem.beeComb.getItemStack(1, 15);
-		hiveRegistry.addDrops(HiveType.SWAMP.getName(),
+		hiveRegistry.addDrops(HiveType.SWAMP.getHiveName(),
 				new HiveDrop(80, BeeDefinition.MARSHY, mossyComb).setIgnobleShare(0.4f),
 				new HiveDrop(3, BeeDefinition.VALIANT, mossyComb)
 		);
@@ -946,13 +948,13 @@ public class PluginApiculture extends ForestryPlugin {
 	}
 
 	private static void createHives() {
-		hiveRegistry.registerHive(HiveType.FOREST.getName(), HiveDescription.FOREST);
-		hiveRegistry.registerHive(HiveType.MEADOWS.getName(), HiveDescription.MEADOWS);
-		hiveRegistry.registerHive(HiveType.DESERT.getName(), HiveDescription.DESERT);
-		hiveRegistry.registerHive(HiveType.JUNGLE.getName(), HiveDescription.JUNGLE);
-		hiveRegistry.registerHive(HiveType.END.getName(), HiveDescription.END);
-		hiveRegistry.registerHive(HiveType.SNOW.getName(), HiveDescription.SNOW);
-		hiveRegistry.registerHive(HiveType.SWAMP.getName(), HiveDescription.SWAMP);
+		hiveRegistry.registerHive(HiveType.FOREST.getHiveName(), HiveDescription.FOREST);
+		hiveRegistry.registerHive(HiveType.MEADOWS.getHiveName(), HiveDescription.MEADOWS);
+		hiveRegistry.registerHive(HiveType.DESERT.getHiveName(), HiveDescription.DESERT);
+		hiveRegistry.registerHive(HiveType.JUNGLE.getHiveName(), HiveDescription.JUNGLE);
+		hiveRegistry.registerHive(HiveType.END.getHiveName(), HiveDescription.END);
+		hiveRegistry.registerHive(HiveType.SNOW.getHiveName(), HiveDescription.SNOW);
+		hiveRegistry.registerHive(HiveType.SWAMP.getHiveName(), HiveDescription.SWAMP);
 	}
 
 	private static void createAlleles() {
@@ -1089,5 +1091,6 @@ public class PluginApiculture extends ForestryPlugin {
 		for (int i = 0; i < EntitySnowFX.icons.length; i++) {
 			EntitySnowFX.icons[i] = TextureManager.getInstance().registerTex("items", "particles/snow." + (i + 1));
 		}
+		ItemHabitatLocator.registerIcon(event.map);
 	}
 }

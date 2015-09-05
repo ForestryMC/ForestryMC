@@ -19,7 +19,7 @@ public interface IRestrictedAccessTile extends IStreamableGui {
 	IAccessHandler getAccessHandler();
 
 	@Override
-	BlockPos getPos();
+	BlockPos getCoordinates();
 
 	void onSwitchAccess(EnumAccess oldAccess, EnumAccess newAccess);
 }

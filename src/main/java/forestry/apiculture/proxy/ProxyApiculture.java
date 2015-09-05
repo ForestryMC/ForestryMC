@@ -12,7 +12,6 @@ package forestry.apiculture.proxy;
 
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
-
 import forestry.core.interfaces.IBlockRenderer;
 
 public class ProxyApiculture {
@@ -27,6 +26,9 @@ public class ProxyApiculture {
 	}
 
 	public void initializeRendering() {
+	}
+	
+	public void preInitializeMapping(){
 	}
 
 }

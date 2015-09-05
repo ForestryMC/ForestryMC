@@ -27,7 +27,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 import forestry.api.core.IModelManager;
 import forestry.api.core.IModelRegister;
-import forestry.arboriculture.items.ItemWoodBlock.WoodMeshDefinition;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.StackUtils;
@@ -104,7 +103,7 @@ public class BlockFruitPod extends BlockCocoa implements IModelRegister {
 	
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		manager.registerItemModel(item, new WoodMeshDefinition("pods"));
+		//manager.registerItemModel(item, new WoodMeshDefinition("pods"));
 	}
 
 	/* IGrowable */

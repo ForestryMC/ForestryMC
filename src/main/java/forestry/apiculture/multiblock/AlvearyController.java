@@ -350,9 +350,9 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	}
 
 	/* IActivatable */
-
+	
 	@Override
-	public BlockPos getPos() {
+	public BlockPos getCoordinates() {
 		CoordTriplet coord = getCenterCoord();
 		return new BlockPos(coord.pos.getX(), coord.pos.getY() + 1, coord.pos.getZ());
 	}
@@ -433,7 +433,7 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 
 	@Override
 	public void addTemperatureChange(float change, float boundaryDown, float boundaryUp) {
-		BlockPos coordinates = getPos();
+		BlockPos coordinates = getCoordinates();
 
 		float temperature = getBiome().getFloatTemperature(coordinates);
 

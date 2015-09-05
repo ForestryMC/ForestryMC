@@ -490,7 +490,7 @@ public class Bee extends IndividualLiving implements IBee {
 		}
 
 		ItemStack[] productsArray = products.toArray(new ItemStack[products.size()]);
-		BlockPos housingCoordinates = housing.getPos();
+		BlockPos housingCoordinates = housing.getCoordinates();
 		return genome.getFlowerProvider().affectProducts(housing.getWorld(), this, housingCoordinates, productsArray);
 	}
 
@@ -523,7 +523,7 @@ public class Bee extends IndividualLiving implements IBee {
 
 		List<IBee> bees = new ArrayList<IBee>();
 
-		BlockPos housingCoordinates = housing.getPos();
+		BlockPos housingCoordinates = housing.getCoordinates();
 		int toCreate = BeeManager.beeRoot.getBeekeepingMode(world).getFinalFertility(this, world, housingCoordinates);
 
 		if (toCreate <= 0) {
@@ -647,7 +647,7 @@ public class Bee extends IndividualLiving implements IBee {
 
 		Vect area = getArea(genome, beeModifier);
 		Vect offset = new Vect(-area.getX() / 2, -area.getY() / 4, -area.getZ() / 2);
-		Vect housingPos = new Vect(housing.getPos());
+		Vect housingPos = new Vect(housing.getCoordinates());
 
 		IIndividual pollen = null;
 
@@ -690,7 +690,7 @@ public class Bee extends IndividualLiving implements IBee {
 
 		Vect area = getArea(genome, beeModifier);
 		Vect offset = new Vect(-area.getX() / 2, -area.getY() / 4, -area.getZ() / 2);
-		Vect housingPos = new Vect(housing.getPos());
+		Vect housingPos = new Vect(housing.getCoordinates());
 
 		for (int i = 0; i < 30; i++) {
 
@@ -739,7 +739,7 @@ public class Bee extends IndividualLiving implements IBee {
 		IFlowerProvider provider = genome.getFlowerProvider();
 		Vect area = getArea(genome, beeModifier);
 		Vect offset = new Vect(-area.getX() / 2, -area.getY() / 4, -area.getZ() / 2);
-		Vect housingPos = new Vect(housing.getPos());
+		Vect housingPos = new Vect(housing.getCoordinates());
 
 		for (int i = 0; i < 10; i++) {
 			Vect randomPos = Vect.getRandomPositionInArea(random, area);

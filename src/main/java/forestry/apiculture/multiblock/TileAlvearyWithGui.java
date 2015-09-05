@@ -14,7 +14,7 @@ import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-
+import net.minecraft.util.BlockPos;
 import forestry.api.core.ForestryAPI;
 import forestry.core.delegates.AccessHandler;
 import forestry.core.interfaces.IAccessHandler;
@@ -40,6 +40,11 @@ public abstract class TileAlvearyWithGui extends TileAlveary implements ITitled,
 	@Override
 	public final IAccessHandler getAccessHandler() {
 		return accessHandler;
+	}
+	
+	@Override
+	public BlockPos getCoordinates() {
+		return pos;
 	}
 
 	@Override
