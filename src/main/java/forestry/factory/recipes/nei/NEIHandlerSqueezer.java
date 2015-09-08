@@ -157,13 +157,12 @@ public class NEIHandlerSqueezer extends RecipeHandlerBase {
 
 	@Override
 	public void loadUsageRecipes(ItemStack ingred) {
-		for (ISqueezerRecipe recipe : MachineSqueezer.RecipeManager.recipes) {
+		ISqueezerRecipe recipe = MachineSqueezer.RecipeManager.findMatchingRecipe(new ItemStack[]{ingred});
+		if (recipe != null) {
 			CachedSqueezerRecipe crecipe = new CachedSqueezerRecipe(recipe);
-			if (crecipe.inputs != null && crecipe.contains(crecipe.inputs, ingred)) {
-				crecipe.generatePermutations();
-				crecipe.setIngredientPermutation(crecipe.inputs, ingred);
-				this.arecipes.add(crecipe);
-			}
+			// Override recipe to show the right input in case it's OD
+			crecipe.setIngredients(new ItemStack[]{ingred});
+			this.arecipes.add(crecipe);
 		}
 	}
 
