@@ -148,6 +148,7 @@ import forestry.core.items.ItemScoop;
 import forestry.core.network.IPacketHandler;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.EntitySnowFX;
+import forestry.core.render.RenderNaturalistChest;
 import forestry.core.utils.ShapedRecipeCustom;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.StringUtil;
@@ -175,7 +176,7 @@ public class PluginApiculture extends ForestryPlugin {
 	private final Map<String, String[]> defaultPlantableFlowers = new HashMap<String, String[]>();
 
 	@Override
-	@SuppressWarnings({"unchecked", "rawtypes"})
+	@SuppressWarnings({"unchecked"})
 	protected void setupAPI() {
 		super.setupAPI();
 
@@ -208,7 +209,7 @@ public class PluginApiculture extends ForestryPlugin {
 
 		MinecraftForge.EVENT_BUS.register(this);
 
-		ForestryBlock.apiculture.registerBlock(new BlockBase(Material.iron), ItemForestryBlock.class, "apiculture");
+		ForestryBlock.apiculture.registerBlock(new BlockBase(Material.iron, true), ItemForestryBlock.class, "apiculture");
 		ForestryBlock.apiculture.block().setCreativeTab(Tabs.tabApiculture);
 		ForestryBlock.apiculture.block().setHarvestLevel("axe", 0);
 
@@ -222,7 +223,7 @@ public class PluginApiculture extends ForestryPlugin {
 						'C', ForestryItem.impregnatedCasing))
 				.setFaces(0, 1, 2, 2, 4, 4, 0, 7));
 
-		definitionChest = ((BlockBase) ForestryBlock.apiculture.block()).addDefinition(new MachineDefinition(Defaults.DEFINITION_APIARISTCHEST_META, "forestry.ApiaristChest", TileApiaristChest.class,
+		definitionChest = ((BlockBase) ForestryBlock.apiculture.block()).addDefinition(new MachineDefinition(Defaults.DEFINITION_APIARISTCHEST_META, "forestry.ApiaristChest", TileApiaristChest.class, new RenderNaturalistChest("apiaristchest"),
 				ShapedRecipeCustom.createShapedRecipe(ForestryBlock.apiculture.getItemStack(1, Defaults.DEFINITION_APIARISTCHEST_META),
 						" # ",
 						"XYX",
@@ -230,7 +231,7 @@ public class PluginApiculture extends ForestryPlugin {
 						'#', "blockGlass",
 						'X', "beeComb",
 						'Y', "chestWood"))
-				.setFaces(0, 1, 2, 3, 4, 4));
+				.setBoundingBox(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F));
 
 		definitionBeehouse = ((BlockBase) ForestryBlock.apiculture.block()).addDefinition(new MachineDefinition(Defaults.DEFINITION_BEEHOUSE_META, "forestry.Beehouse", TileBeehouse.class,
 				ShapedRecipeCustom.createShapedRecipe(ForestryBlock.apiculture.getItemStack(1, Defaults.DEFINITION_BEEHOUSE_META),
