@@ -456,7 +456,7 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised, 
 		}
 		this.active = active;
 
-		if (!worldObj.isRemote) {
+		if (worldObj != null && !worldObj.isRemote) {
 			Proxies.net.sendNetworkPacket(new PacketActiveUpdate(this));
 		}
 	}

@@ -155,7 +155,7 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 		}
 		this.active = active;
 
-		if (!worldObj.isRemote) {
+		if (worldObj != null && !worldObj.isRemote) {
 			Proxies.net.sendNetworkPacket(new PacketActiveUpdate(this));
 		}
 	}

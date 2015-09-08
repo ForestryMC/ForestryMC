@@ -229,7 +229,7 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, 
 
 		this.active = active;
 
-		if (!worldObj.isRemote) {
+		if (worldObj != null && !worldObj.isRemote) {
 			Proxies.net.sendNetworkPacket(new PacketActiveUpdate(this));
 		}
 	}
