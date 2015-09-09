@@ -46,6 +46,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 	private int breedingTime;
 	private int queenWorkCycleThrottle;
 	private IEffectData effectData[] = new IEffectData[2];
+	private ItemStack queenStack;
 	private IBee queen;
 	private IIndividual pollen;
 	private int attemptedPollinations = 0;
@@ -308,6 +309,11 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 		EnumErrorCode housingErrorState = null;
 
 		ItemStack queenStack = housing.getQueen();
+
+		if (!ItemStack.areItemStacksEqual(this.queenStack, queenStack)) {
+			this.queen = BeeManager.beeRoot.getMember(queenStack);
+			this.queenStack = queenStack;
+		}
 
 		if (queenStack == null || !ForestryItem.beeQueenGE.isItemEqual(queenStack)) {
 			housingErrorState = EnumErrorCode.NOQUEEN;
