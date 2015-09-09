@@ -76,8 +76,8 @@ public class MachineSqueezer extends TilePowered implements ISidedInventory, ILi
 			this.chance = chance;
 		}
 
-		public boolean matches(ItemStack[] res) {
-			return StackUtils.containsSets(resources, res, true, true) > 0;
+		public boolean matches(ItemStack[] res, boolean oreDict) {
+			return StackUtils.containsSets(resources, res, oreDict, true) > 0;
 		}
 	}
 
@@ -104,8 +104,16 @@ public class MachineSqueezer extends TilePowered implements ISidedInventory, ILi
 		}
 
 		public static Recipe findMatchingRecipe(ItemStack[] items) {
+			// First try to match a specific recipe (without OD)
 			for (Recipe recipe : recipes) {
-				if (recipe.matches(items)) {
+				if (recipe.matches(items, false)) {
+					return recipe;
+				}
+			}
+
+			// If that fails - try again with oredict support enabled
+			for (Recipe recipe : recipes) {
+				if (recipe.matches(items, true)) {
 					return recipe;
 				}
 			}
@@ -118,7 +126,7 @@ public class MachineSqueezer extends TilePowered implements ISidedInventory, ILi
 				return true;
 			}
 			for (ItemStack recipeInput : recipeInputs) {
-				if (StackUtils.isCraftingEquivalent(recipeInput, itemStack)) {
+				if (StackUtils.isCraftingEquivalent(recipeInput, itemStack, true, true)) {
 					return true;
 				}
 			}
