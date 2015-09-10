@@ -244,6 +244,7 @@ public class PluginApiculture extends ForestryPlugin {
 
 		definitionAnalyzer = ((BlockBase) ForestryBlock.core.block()).addDefinition(new MachineDefinition(Defaults.DEFINITION_ANALYZER_META, "forestry.Analyzer", TileAnalyzer.class,
 				PluginApiculture.proxy.getRendererAnalyzer(Defaults.TEXTURE_PATH_BLOCKS + "/analyzer_")));
+		((BlockBase)ForestryBlock.apiculture.block()).registerStateMapper();
 
 		ForestryBlock.beehives.registerBlock(new BlockBeehives(), ItemForestryBlock.class, "beehives");
 

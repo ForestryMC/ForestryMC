@@ -16,7 +16,6 @@ import java.util.List;
 
 import javax.vecmath.Vector3f;
 
-import forestry.api.core.ForestryAPI;
 import forestry.api.core.IModelRenderer;
 import forestry.api.core.sprite.ISprite;
 import net.minecraft.block.Block;
@@ -36,20 +35,6 @@ import net.minecraftforge.client.model.IColoredBakedQuad;
 
 public class ModelRenderer implements IModelRenderer
 {
-	private ModelRenderer() {
-	}
-	
-	private static ModelRenderer instance;
-	
-	public static ModelRenderer getInstance()
-	{
-		if(instance == null)
-		{
-			instance = new ModelRenderer();
-			ForestryAPI.modleRenderer = instance;
-		}
-		return instance;
-	}
 
 	private static final class CachedModel implements IBakedModel
 	{

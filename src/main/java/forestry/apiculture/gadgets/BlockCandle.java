@@ -47,7 +47,6 @@ import net.minecraftforge.oredict.OreDictionary;
 import forestry.api.core.IModelManager;
 import forestry.api.core.IModelRegister;
 import forestry.api.core.Tabs;
-import forestry.core.ForestryClient;
 import forestry.core.utils.StackUtils;
 
 public class BlockCandle extends BlockTorch implements IModelRegister {

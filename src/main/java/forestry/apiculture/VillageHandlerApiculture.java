@@ -32,9 +32,10 @@ import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
 import forestry.core.proxy.Proxies;
 
-public class VillageHandlerApiculture implements IVillageCreationHandler, IVillageTradeHandler {
+@Deprecated
+public class VillageHandlerApiculture {
 
-	public static void registerVillageComponents() {
+	/*public static void registerVillageComponents() {
 		try {
 			MapGenStructureIO.func_143031_a(ComponentVillageBeeHouse.class, "Forestry:BeeHouse");
 		} catch (Throwable e) {
@@ -67,5 +68,5 @@ public class VillageHandlerApiculture implements IVillageCreationHandler, IVilla
 	public Object buildComponent(StructureVillagePieces.PieceWeight villagePiece, StructureVillagePieces.Start startPiece, List pieces, Random random, int p1, int p2,
 			int p3, int p4, int p5) {
 		return ComponentVillageBeeHouse.buildComponent(startPiece, pieces, random, p1, p2, p3, p4, p5);
-	}
+	}*/
 }

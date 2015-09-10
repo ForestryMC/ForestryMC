@@ -70,7 +70,12 @@ public class BlockSlab extends net.minecraft.block.BlockSlab implements IWoodTyp
     @Override
 	public int getMetaFromState(IBlockState state)
     {
-        return 0;
+        return ((EnumBlockHalf)state.getValue(HALF)).ordinal();
+    }
+    
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+    	return getDefaultState().withProperty(HALF, EnumBlockHalf.values()[meta]);
     }
 	
 	@SideOnly(Side.CLIENT)

@@ -10,20 +10,20 @@
  ******************************************************************************/
 package forestry.arboriculture.proxy;
 
+import forestry.arboriculture.render.LeavesRenderingHandler;
+import forestry.arboriculture.render.SaplingRenderHandler;
+import forestry.core.config.ForestryBlock;
+import forestry.core.proxy.Proxies;
+import forestry.core.render.BlockModelIndex;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.world.ColorizerFoliage;
 
 public class ClientProxyArboriculture extends ProxyArboriculture {
+	
 	@Override
 	public void initializeRendering() {
-		//PluginArboriculture.modelIdSaplings = RenderingRegistry.getNextAvailableRenderId();
-		//PluginArboriculture.modelIdLeaves = RenderingRegistry.getNextAvailableRenderId();
-		//PluginArboriculture.modelIdFences = RenderingRegistry.getNextAvailableRenderId();
-		//PluginArboriculture.modelIdPods = RenderingRegistry.getNextAvailableRenderId();
-
-		//RenderingRegistry.registerBlockHandler(new SaplingRenderHandler());
-		//RenderingRegistry.registerBlockHandler(new LeavesRenderingHandler());
-
-		//MinecraftForgeClient.registerItemRenderer(ForestryBlock.leaves.item(), new LeavesRenderingHandler());
+		Proxies.render.registerBlockModel(new BlockModelIndex(new ModelResourceLocation("forestry:leaves"), new ModelResourceLocation("forestry:leaves"), new LeavesRenderingHandler(), ForestryBlock.leaves.block()));
+		Proxies.render.registerBlockModel(new BlockModelIndex(new ModelResourceLocation("forestry:saplings"), new ModelResourceLocation("forestry:saplings"), new SaplingRenderHandler(), ForestryBlock.saplingGE.block()));
 	}
 
 	@Override

@@ -31,6 +31,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumWorldBlockLayer;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
@@ -74,6 +75,7 @@ public class BlockFarm extends BlockStructure {
 		super(Material.rock);
 		setHardness(1.0f);
 		instance = this;
+		setLightOpacity(255);
 		setDefaultState(blockState.getBaseState().withProperty(META, FarmType.PLAIN));
 	}
 	
@@ -206,6 +208,13 @@ public class BlockFarm extends BlockStructure {
 	@SideOnly(Side.CLIENT)
 	public static void registerBlockIcons() {
 		EnumFarmBlockTexture.registerIcons();
+	}
+	
+	@Override
+    @SideOnly(Side.CLIENT)
+	public EnumWorldBlockLayer getBlockLayer()
+	{
+		return EnumWorldBlockLayer.CUTOUT;
 	}
 	
 	@SideOnly(Side.CLIENT)

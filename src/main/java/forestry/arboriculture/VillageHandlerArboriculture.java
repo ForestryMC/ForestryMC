@@ -25,9 +25,10 @@ import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.IAllele;
 import forestry.core.config.ForestryItem;
 
-public class VillageHandlerArboriculture implements IVillageTradeHandler {
+@Deprecated
+public class VillageHandlerArboriculture {
 
-	@SuppressWarnings("unchecked")
+	/*@SuppressWarnings("unchecked")
 	@Override
 	public void manipulateTradesForVillager(EntityVillager villager, MerchantRecipeList recipeList, Random random) {
 		IAllele[] randomTemplate = TreeManager.treeRoot.getRandomTemplate(random);
@@ -43,6 +44,6 @@ public class VillageHandlerArboriculture implements IVillageTradeHandler {
 		planks.stackSize = 32;
 
 		recipeList.add(new MerchantRecipe(new ItemStack(Items.emerald, 1), planks));
-	}
+	}*/
 
 }

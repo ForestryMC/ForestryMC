@@ -32,7 +32,6 @@ public class FarmBlockRenderer extends OverlayRenderingHandler {
 		renderer.setRenderBoundsFromBlock(block);
 
 		//GL11.glTranslatef(translateX, translateY, translateZ);
-
 		renderer.renderFaceYNeg(null, textures[0]);
 		renderer.renderFaceYNeg(null, texturesOverlay[0]);
 
@@ -83,7 +82,6 @@ public class FarmBlockRenderer extends OverlayRenderingHandler {
 		float adjG = 0.5f;
 		float adjB = 0.5f;
 
-		// Bottom
 		renderBottomFace(world, block, pos, renderer, texturesOverlay[0], mixedBrightness, adjR, adjG, adjB);
 		renderTopFace(world, block, pos, renderer, texturesOverlay[1], mixedBrightness, adjR, adjG, adjB);
 		renderEastFace(world, block, pos, renderer, texturesOverlay[2], mixedBrightness, adjR, adjG, adjB);

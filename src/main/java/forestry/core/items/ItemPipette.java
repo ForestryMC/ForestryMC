@@ -18,7 +18,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -26,7 +25,6 @@ import forestry.api.core.IModelManager;
 import forestry.api.core.INBTTagable;
 import forestry.api.core.IToolPipette;
 import forestry.core.config.Defaults;
-import forestry.core.utils.StringUtil;
 
 public class ItemPipette extends ItemForestry implements IToolPipette {
 

@@ -22,7 +22,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.client.model.ISmartItemModel;
 
 public abstract class ItemRenderer implements ISmartItemModel {
-
+	
 	@Override
 	public List getFaceQuads(EnumFacing p_177551_1_) {
 		return Collections.emptyList();
@@ -60,7 +60,7 @@ public abstract class ItemRenderer implements ISmartItemModel {
 
 	@Override
 	public IBakedModel handleItemState(ItemStack stack) {
-		ModelRenderer renderer = ModelRenderer.getInstance();
+		IModelRenderer renderer = ModelManager.getInstance().createNewRenderer();
 		renderItem(stack, renderer);
 		return renderer.finalizeModel( true );
 	}

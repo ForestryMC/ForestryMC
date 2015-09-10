@@ -12,6 +12,7 @@ package forestry.arboriculture.render;
 
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.IGermlingIconProvider;
+import forestry.api.core.sprite.ISprite;
 import forestry.core.config.ForestryItem;
 import forestry.core.render.TextureManager;
 
@@ -19,25 +20,21 @@ public class GermlingIconProvider implements IGermlingIconProvider {
 
 	private final String name;
 
-	private IIcon icon;
+	private ISprite icon;
 
 	public GermlingIconProvider(String uid) {
 		this.name = uid.substring("forestry.".length());
 	}
 
 	@Override
-	public void registerIcons(IIconRegister register) {
-		TextureManager textureManager = TextureManager.getInstance();
+	public void registerIcons() {
+		TextureManager manager = TextureManager.getInstance();
 
-		icon = textureManager.registerTex(register, "germlings/sapling." + name);
+		icon = manager.registerTex("blocks", "germlings/sapling." + name);
 	}
 
 	@Override
-	public IIcon getIcon(EnumGermlingType type, int renderPass) {
-		if (type == EnumGermlingType.POLLEN) {
-			return ForestryItem.pollenCluster.item().getIconFromDamageForRenderPass(0, renderPass);
-		}
-
+	public ISprite getIcon(EnumGermlingType type, int renderPass) {
 		return icon;
 	}
 }

@@ -11,22 +11,14 @@
 package forestry.arboriculture.gadgets;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
-import java.util.Map.Entry;
-
-import com.google.common.collect.Maps;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.statemap.IStateMapper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -38,17 +30,23 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.common.property.ExtendedBlockState;
+import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.arboriculture.EnumGermlingType;
+import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.IModelManager;
 import forestry.api.core.IModelRegister;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
-import forestry.arboriculture.WoodType;
+import forestry.core.gadgets.UnlistedBlockAccess;
+import forestry.core.gadgets.UnlistedBlockPos;
 import forestry.core.proxy.Proxies;
+import forestry.core.render.TextureManager;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
 
@@ -64,30 +62,26 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IMode
 		float factor = 0.4F;
 		setBlockBounds(0.5F - factor, 0.0F, 0.5F - factor, 0.5F + factor, factor * 2.0F, 0.5F + factor);
 		setStepSound(soundTypeGrass);
-		setDefaultState(this.blockState.getBaseState().withProperty(WOODTYPE, WoodType.LARCH));
 	}
 	
-	public static final PropertyEnum WOODTYPE = PropertyEnum.create("woodtype", WoodType.class);
+	@Override
+	protected BlockState createBlockState() {
+		return new ExtendedBlockState(this, new IProperty[0], new IUnlistedProperty[]{UnlistedBlockPos.POS, UnlistedBlockAccess.BLOCKACCESS});
+	}
+	
+	@Override
+	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
+		return ((IExtendedBlockState)super.getExtendedState(state, world, pos )).withProperty(UnlistedBlockPos.POS, pos).withProperty(UnlistedBlockAccess.BLOCKACCESS , world);
+	}
 	
 	@Override
 	public int getMetaFromState(IBlockState state) {
 		return 0;
 	}
-	
-	@Override
-	protected BlockState createBlockState() {
-		return new BlockState(this, new IProperty[]{WoodType.WOODTYPE});
-	}
 
 	@Override
 	public TileEntity createNewTileEntity(World var1, int meta) {
 		return new TileSapling();
-	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerModel(Item item, IModelManager manager) {
-		//manager.registerItemModel(item, new WoodMeshDefinition(this));
 	}
 
 	/* COLLISION BOX */
@@ -98,13 +92,28 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IMode
 
 	/* RENDERING */
 	@Override
+	@SideOnly(Side.CLIENT)
 	public boolean isOpaqueCube() {
 		return false;
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public int getRenderType() {
 		return 3;
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void registerModel(Item item, IModelManager manager) {
+		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
+			if (allele instanceof IAlleleTreeSpecies) {
+				((IAlleleTreeSpecies) allele).getSpriteProvider().registerIcons(TextureManager.getInstance());
+			}
+			if (allele instanceof IAlleleFruit) {
+				((IAlleleFruit) allele).getProvider().registerIcons();
+			}
+		}
 	}
 
 	/* PLANTING */
@@ -194,57 +203,5 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IMode
 		if (saplingTile != null) {
 			saplingTile.tryGrow(true);
 		}
-	}
-	
-	public class SaplingStateMapper implements IStateMapper{
-		
-	    protected Map mapStateModelLocations = Maps.newLinkedHashMap();
-	    private static final String __OBFID = "CL_00002479";
-
-	    public String getPropertyString(Map p_178131_1_)
-	    {
-	        StringBuilder stringbuilder = new StringBuilder();
-	        Iterator iterator = p_178131_1_.entrySet().iterator();
-
-	        while (iterator.hasNext())
-	        {
-	            Entry entry = (Entry)iterator.next();
-
-	            if (stringbuilder.length() != 0)
-	            {
-	                stringbuilder.append(",");
-	            }
-
-	            IProperty iproperty = (IProperty)entry.getKey();
-	            Comparable comparable = (Comparable)entry.getValue();
-	            stringbuilder.append(iproperty.getName());
-	            stringbuilder.append("=");
-	            stringbuilder.append(iproperty.getName(comparable));
-	        }
-
-	        if (stringbuilder.length() == 0)
-	        {
-	            stringbuilder.append("normal");
-	        }
-
-	        return stringbuilder.toString();
-	    }
-
-	    @Override
-		public Map putStateModelLocations(Block p_178130_1_)
-	    {
-	        Iterator iterator = p_178130_1_.getBlockState().getValidStates().iterator();
-
-	        for(IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values())
-	        {
-	        	if(allele instanceof IAlleleTreeSpecies){
-	        		IBlockState iblockstate = (IBlockState)iterator.next();
-	            	//this.mapStateModelLocations.put(iblockstate, this.getModelResourceLocation(iblockstate));
-	        	}
-	        }
-
-	        return this.mapStateModelLocations;
-	    }
-		
 	}
 }

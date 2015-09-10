@@ -32,7 +32,7 @@ import forestry.core.gadgets.UnlistedBlockAccess;
 import forestry.core.gadgets.UnlistedBlockPos;
 
 public abstract class OverlayRenderingHandler implements ISmartItemModel, ISmartBlockModel {
-
+	
 	private static int determineMixedBrightness(IBlockAccess world, Block block, BlockPos pos, IModelRenderer renderer, int mixedBrightness) {
 		return renderer.getRenderMinY() > 0.0D ? mixedBrightness : block.getMixedBrightnessForBlock(world, pos);
 	}
@@ -159,7 +159,7 @@ public abstract class OverlayRenderingHandler implements ISmartItemModel, ISmart
 	@Override
 	public IBakedModel handleBlockState(IBlockState state) {
 		IExtendedBlockState extend = (IExtendedBlockState) state;
-		ModelRenderer renderer = ModelRenderer.getInstance();
+		IModelRenderer renderer = ModelManager.getInstance().createNewRenderer();
 		Block blk = state.getBlock();
 		IBlockAccess world = extend.getValue(UnlistedBlockAccess.BLOCKACCESS);
 		BlockPos pos = extend.getValue(UnlistedBlockPos.POS);
@@ -170,7 +170,7 @@ public abstract class OverlayRenderingHandler implements ISmartItemModel, ISmart
 
 	@Override
 	public IBakedModel handleItemState(ItemStack stack) {
-		ModelRenderer renderer = ModelRenderer.getInstance();
+		IModelRenderer renderer = ModelManager.getInstance().createNewRenderer();
 		Block blk = Block.getBlockFromItem(stack.getItem());
 		renderer.setRenderBoundsFromBlock( blk );
 		renderInventory(blk, stack, renderer, ItemRenderType.INVENTORY);

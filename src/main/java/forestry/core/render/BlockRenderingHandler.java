@@ -17,14 +17,20 @@ import net.minecraftforge.client.event.ModelBakeEvent;
 
 public class BlockRenderingHandler {
 
-	public static final ArrayList<ModelIndex> byModelRenderer = new ArrayList<ModelIndex>();
+	public static final ArrayList<BlockModelIndex> byBlockModelRenderer = new ArrayList<BlockModelIndex>();
+	public static final ArrayList<ItemModelIndex> byItemModelRenderer = new ArrayList<ItemModelIndex>();
 
 	public static void checkModels(ModelBakeEvent event){
 		IRegistry registry = event.modelRegistry;
-		for(final ModelIndex index : byModelRenderer)
+		for(final BlockModelIndex index : byBlockModelRenderer)
 		{
-		    registry.putObject(index.blockModel, index.model);
-		    registry.putObject(index.itemModel, index.model);
+		    registry.putObject(index.blockModelLocation, index.model);
+		    registry.putObject(index.itemModelLocation, index.model);
+		}
+		
+		for(final ItemModelIndex index : byItemModelRenderer)
+		{
+		    registry.putObject(index.modelLocation, index.model);
 		}
 	}
 

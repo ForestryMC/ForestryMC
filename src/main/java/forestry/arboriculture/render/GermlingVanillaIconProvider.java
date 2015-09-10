@@ -11,30 +11,51 @@
 package forestry.arboriculture.render;
 
 import net.minecraft.init.Blocks;
+
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.IGermlingIconProvider;
+import forestry.api.core.ITextureManager;
+import forestry.api.core.sprite.ISprite;
 import forestry.core.config.ForestryItem;
+import forestry.core.fluids.ITankManager;
+import forestry.core.render.TextureManager;
 
 public class GermlingVanillaIconProvider implements IGermlingIconProvider {
 	private final int vanillaMap;
 
-	private IIcon icon;
+	private ISprite icon;
 
 	public GermlingVanillaIconProvider(int vanillaMap) {
 		this.vanillaMap = vanillaMap;
 	}
 
 	@Override
-	public void registerIcons(IIconRegister register) {
-		icon = Blocks.sapling.getIcon(0, vanillaMap);
+	public void registerIcons() {
+		TextureManager manager = TextureManager.getInstance();
+		switch (vanillaMap) {
+		case 0:
+			icon = manager.registerTex("minecraft", "blocks", "oak_sapling");
+			break;
+		case 1:
+			icon = manager.registerTex("minecraft", "blocks", "spruce_sapling");
+			break;
+		case 2:
+			icon = manager.registerTex("minecraft", "blocks", "birch_sapling");
+			break;
+		case 3:
+			icon = manager.registerTex("minecraft", "blocks", "jungle_sapling");
+			break;
+		case 4:
+			icon = manager.registerTex("minecraft", "blocks", "dark_oak_sapling");
+			break;
+		case 5:
+			icon = manager.registerTex("minecraft", "blocks", "acacia_sapling");
+			break;
+		}
 	}
 
 	@Override
-	public IIcon getIcon(EnumGermlingType type, int renderPass) {
-		if (type == EnumGermlingType.POLLEN) {
-			return ForestryItem.pollenCluster.item().getIconFromDamageForRenderPass(0, renderPass);
-		}
-
+	public ISprite getIcon(EnumGermlingType type, int renderPass) {
 		return icon;
 	}
 }

@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.core.utils;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.inventory.IInventory;
@@ -132,10 +132,10 @@ public class ShapedRecipeCustom implements IDescriptiveRecipe {
 					if (!checkItemMatch((ItemStack) compare, resource)) {
 						return false;
 					}
-				} else if (compare instanceof ArrayList) {
+				} else if (compare instanceof List) {
 					boolean matched = false;
 
-					for (ItemStack item : (ArrayList<ItemStack>) compare) {
+					for (ItemStack item : (List<ItemStack>) compare) {
 						matched = matched || checkItemMatch(item, resource);
 					}
 
@@ -210,8 +210,8 @@ public class ShapedRecipeCustom implements IDescriptiveRecipe {
 					return true;
 				}
 
-			} else if (ingredient instanceof ArrayList) {
-				for (ItemStack item : (ArrayList<ItemStack>) ingredient) {
+			} else if (ingredient instanceof List) {
+				for (ItemStack item : (List<ItemStack>) ingredient) {
 					if (checkItemMatch(item, resource)) {
 						return true;
 					}

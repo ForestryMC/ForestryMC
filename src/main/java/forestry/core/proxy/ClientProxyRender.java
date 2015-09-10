@@ -26,7 +26,7 @@ import forestry.core.config.Config;
 import forestry.core.gadgets.MachineDefinition;
 import forestry.core.interfaces.IBlockRenderer;
 import forestry.core.render.BlockRenderingHandler;
-import forestry.core.render.ModelIndex;
+import forestry.core.render.BlockModelIndex;
 import forestry.core.render.ModelManager;
 import forestry.core.render.RenderEscritoire;
 import forestry.core.render.RenderMachine;
@@ -72,12 +72,12 @@ public class ClientProxyRender extends ProxyRender {
 	}
 	
 	@Override
-	public void registerModel(final ModelIndex index) {
-		BlockRenderingHandler.byModelRenderer.add(index);
+	public void registerBlockModel(final BlockModelIndex index) {
+		BlockRenderingHandler.byBlockModelRenderer.add(index);
 		StateMapperBase ignoreState = new StateMapperBase() {
 			@Override
 			protected ModelResourceLocation getModelResourceLocation(IBlockState iBlockState) {
-			     return index.blockModel;
+			     return index.blockModelLocation;
 			}
 		};
 		ModelLoader.setCustomStateMapper(index.block, ignoreState);

@@ -20,6 +20,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleTreeSpeciesCustom;
+import forestry.api.arboriculture.IGermlingIconProvider;
 import forestry.api.arboriculture.IGermlingModelProvider;
 import forestry.api.arboriculture.ILeafIconProvider;
 import forestry.api.arboriculture.ITreeGenerator;
@@ -27,27 +28,30 @@ import forestry.api.arboriculture.ITreeRoot;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.IModelManager;
 import forestry.api.core.IModelProvider;
+import forestry.api.core.ISpriteProvider;
+import forestry.api.core.ITextureManager;
 import forestry.api.core.sprite.ISprite;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IFruitFamily;
 import forestry.core.genetics.alleles.AlleleSpecies;
 import forestry.core.utils.GeneticsUtil;
 
-public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeciesCustom {
+public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeciesCustom, ISpriteProvider {
 
 	private final ITreeGenerator generator;
-	//private final IGermlingIconProvider germlingIconProvider;
+	private final IGermlingIconProvider germlingIconProvider;
 	private final IGermlingModelProvider germlingModelProvider;
 	private final ILeafIconProvider leafIconProvider;
 	private final List<IFruitFamily> fruits = new ArrayList<IFruitFamily>();
 
 	private EnumPlantType nativeType = EnumPlantType.Plains;
 
-	public AlleleTreeSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, boolean isDominant, IClassification branch, String binomial, ILeafIconProvider leafIconProvider, IGermlingModelProvider germlingModelProvider, ITreeGenerator generator) {
+	public AlleleTreeSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, boolean isDominant, IClassification branch, String binomial, ILeafIconProvider leafIconProvider, IGermlingModelProvider germlingModelProvider, IGermlingIconProvider germlingIconProvider, ITreeGenerator generator) {
 		super(uid, unlocalizedName, authority, unlocalizedDescription, isDominant, branch, binomial, false);
 
 		this.generator = generator;
 		this.germlingModelProvider = germlingModelProvider;
+		this.germlingIconProvider = germlingIconProvider;
 		this.leafIconProvider = leafIconProvider;
 	}
 
@@ -105,11 +109,16 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 		return 0xffffff;
 	}
 
-	/*@Override
+	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister register) {
-		germlingIconProvider.registerIcons(register);
-	}*/
+	public void registerIcons(ITextureManager register){
+		germlingIconProvider.registerIcons();
+	}
+	
+	@Override
+	public ISpriteProvider getSpriteProvider() {
+		return this;
+	}
 	
 	@Override
 	public IModelProvider getModelProvider() {
@@ -131,26 +140,19 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 		return getLeafColour(false);
 	}
 
-	/*@Override
-	@SideOnly(Side.CLIENT)
-	public ISpriteProvider getIconProvider() {
-		return this;
-	}*/
-
-	/*@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(short texUID) {
-		return TextureManager.getInstance().getIcon(texUID);
-	}*/
-
 	@Override
 	public ISprite getGermlingIcon(EnumGermlingType type, int renderPass) {
-		return null;
+		return germlingIconProvider.getIcon(type, renderPass);
 	}
 
 	@Override
 	public void registerModels(IModelManager manager) {
 		germlingModelProvider.registerModels(manager);
+	}
+
+	@Override
+	public ISprite getIcon(short texUID) {
+		return null;
 	}
 
 }

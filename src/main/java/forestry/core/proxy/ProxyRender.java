@@ -12,7 +12,7 @@ package forestry.core.proxy;
 
 import forestry.core.gadgets.MachineDefinition;
 import forestry.core.interfaces.IBlockRenderer;
-import forestry.core.render.ModelIndex;
+import forestry.core.render.BlockModelIndex;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.statemap.IStateMapper;
 
@@ -45,7 +45,7 @@ public class ProxyRender {
 		return null;
 	}
 	
-	public void registerModel(ModelIndex index) {
+	public void registerBlockModel(BlockModelIndex index) {
 	}
 	
 	public void registerStateMapper(Block block, IStateMapper mapper){

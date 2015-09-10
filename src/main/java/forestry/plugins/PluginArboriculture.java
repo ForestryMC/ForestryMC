@@ -199,7 +199,7 @@ public class PluginArboriculture extends ForestryPlugin {
 						'X', "treeSapling",
 						'Y', "chestWood"))
 				.setFaces(0, 1, 2, 3, 4, 4, 0, 7));
-		((BlockBase)ForestryBlock.apiculture.block()).registerStateMapper();
+		((BlockBase)ForestryBlock.arboriculture.block()).registerStateMapper();
 		
 		// Init rendering
 		proxy.initializeRendering();

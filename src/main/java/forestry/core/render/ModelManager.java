@@ -13,6 +13,7 @@ package forestry.core.render;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IModelManager;
 import forestry.api.core.IModelRegister;
+import forestry.api.core.IModelRenderer;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
 import forestry.core.utils.StringUtil;
@@ -133,6 +134,11 @@ public class ModelManager implements IModelManager {
 	@Override
 	public ModelResourceLocation getModelLocation(Item item, String modifier, String identifier) {
 		return new ModelResourceLocation("forestry:" + modifier + "/" + identifier, "inventory");
+	}
+	
+	@Override
+	public IModelRenderer createNewRenderer() {
+		return new ModelRenderer();
 	}
 	
 }

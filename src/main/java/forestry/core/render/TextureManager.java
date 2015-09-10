@@ -77,7 +77,6 @@ public class TextureManager implements ITextureManager {
 		if(map.getAtlasSprite(new ResourceLocation(modID + ":" + modifier + "/" + identifier).toString()) == map.getMissingSprite())
 			return new Sprite(map.registerSprite(new ResourceLocation(modID + ":" + modifier + "/" + identifier)));
 		return new Sprite(map.getAtlasSprite(new ResourceLocation(modID + ":" + modifier + "/" + identifier).toString()));
-		//return new Sprite(map.registerSprite(new ResourceLocation(modID + ":" + modifier + "/" + identifier)));
 	}
 	
 	public ResourceLocation getRL(String modifier, String identifier) {
