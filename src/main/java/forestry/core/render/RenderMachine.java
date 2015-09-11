@@ -115,7 +115,6 @@ public class RenderMachine extends TileEntitySpecialRenderer implements IBlockRe
 		EnumTankLevel melangeLevel = EnumTankLevel.values()[melangeLevelInt];
 
 		GL11.glPushMatrix();
-		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glTranslatef((float) x, (float) y, (float) z);
 
 		float[] angle = {0, 0, 0};
@@ -215,7 +214,6 @@ public class RenderMachine extends TileEntitySpecialRenderer implements IBlockRe
 		Proxies.common.bindTexture(texture);
 		productTank.render(factor);
 
-		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glPopMatrix();
 	}
 }
