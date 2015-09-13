@@ -10,24 +10,9 @@
  ******************************************************************************/
 package forestry.storage.items;
 
-import java.util.List;
-import java.util.Locale;
-
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.World;
-
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.ForgeDirection;
-
 import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import forestry.api.core.ForestryAPI;
 import forestry.api.storage.BackpackStowEvent;
 import forestry.api.storage.EnumBackpackType;
@@ -45,6 +30,19 @@ import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
 import forestry.storage.BackpackMode;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.ForgeDirection;
+
+import java.util.List;
+import java.util.Locale;
 
 public class ItemBackpack extends ItemInventoried {
 
@@ -133,7 +131,7 @@ public class ItemBackpack extends ItemInventoried {
 	private static void switchMode(ItemStack itemstack) {
 		BackpackMode mode = getMode(itemstack);
 		int nextMode = mode.ordinal() + 1;
-		if (!Config.enableBackpackResupply && nextMode == BackpackMode.RESUPPLY.ordinal()) {
+		if (!Config.enableBackpackResupply && (nextMode == BackpackMode.RESUPPLYLOCKED.ordinal() || nextMode == BackpackMode.RESUPPLY.ordinal())) {
 			nextMode++;
 		}
 		nextMode %= BackpackMode.values().length;
@@ -231,7 +229,9 @@ public class ItemBackpack extends ItemInventoried {
 			list.add(StringUtil.localize("storage.backpack.mode.receiving"));
 		} else if (mode == BackpackMode.RESUPPLY) {
 			list.add(StringUtil.localize("storage.backpack.mode.resupply"));
-		}
+		} else if (mode == BackpackMode.RESUPPLYLOCKED) {
+            list.add(StringUtil.localize("storage.backpack.mode.resupplylocked"));
+        }
 		list.add(StringUtil.localize("gui.slots").replaceAll("%USED", String.valueOf(occupied)).replaceAll("%SIZE", String.valueOf(getBackpackSize())));
 
 	}
@@ -248,7 +248,7 @@ public class ItemBackpack extends ItemInventoried {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerIcons(IIconRegister register) {
-		icons = new IIcon[6];
+		icons = new IIcon[7];
 
 		EnumBackpackType t = type == EnumBackpackType.APIARIST ? EnumBackpackType.T1 : type;
 		String typeTag = "backpacks/" + t.toString().toLowerCase(Locale.ENGLISH);
@@ -259,6 +259,7 @@ public class ItemBackpack extends ItemInventoried {
 		icons[3] = TextureManager.getInstance().registerTex(register, "backpacks/locked");
 		icons[4] = TextureManager.getInstance().registerTex(register, "backpacks/receive");
 		icons[5] = TextureManager.getInstance().registerTex(register, "backpacks/resupply");
+        icons[6] = TextureManager.getInstance().registerTex(register, "backpacks/resupplylocked");
 	}
 
 	// Return true to enable color overlay - client side only
@@ -294,7 +295,9 @@ public class ItemBackpack extends ItemInventoried {
 			return icons[1];
 		}
 
-		if (i > 2) {
+        if(i > 3) {
+            return icons[6];
+        } else if (i > 2) {
 			return icons[5];
 		} else if (i > 1) {
 			return icons[4];
@@ -320,14 +323,39 @@ public class ItemBackpack extends ItemInventoried {
 	public static BackpackMode getMode(ItemStack backpack) {
 		int meta = backpack.getItemDamage();
 
-		if (meta >= 3) {
-			return BackpackMode.RESUPPLY;
-		} else if (meta >= 2) {
-			return BackpackMode.RECEIVE;
-		} else if (meta >= 1) {
-			return BackpackMode.LOCKED;
-		} else {
-			return BackpackMode.NORMAL;
-		}
-	}
+        if(meta >= 4) {
+            return BackpackMode.RESUPPLYLOCKED;
+        } else if (meta >= 3) {
+            return BackpackMode.RESUPPLY;
+        } else if (meta >= 2) {
+            return BackpackMode.RECEIVE;
+        } else if (meta >= 1) {
+            return BackpackMode.LOCKED;
+        } else {
+            return BackpackMode.NORMAL;
+        }
+    }
+
+    public static int getDelayTime(ItemStack backpack) {
+        if(backpack.stackTagCompound == null)
+            return 0;
+
+        return backpack.stackTagCompound.getInteger("delay");
+    }
+
+    public static void resetDelayTime(ItemStack backpack) {
+        if(backpack.stackTagCompound == null)
+            backpack.stackTagCompound = new NBTTagCompound();
+
+        backpack.stackTagCompound.setInteger("delay", 0);
+    }
+
+    public static void increaseDelayTime(ItemStack backpack) {
+        int currentDelay = getDelayTime(backpack);
+        currentDelay++;
+        if(backpack.stackTagCompound == null)
+            backpack.stackTagCompound = new NBTTagCompound();
+
+        backpack.stackTagCompound.setInteger("delay", currentDelay);
+    }
 }

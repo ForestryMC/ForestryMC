@@ -11,5 +11,5 @@
 package forestry.storage;
 
 public enum BackpackMode {
-	NORMAL, LOCKED, RECEIVE, RESUPPLY
+	NORMAL, LOCKED, RECEIVE, RESUPPLY, RESUPPLYLOCKED
 }

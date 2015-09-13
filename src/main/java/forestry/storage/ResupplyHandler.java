@@ -10,23 +10,20 @@
  ******************************************************************************/
 package forestry.storage;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ContainerPlayer;
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.common.MinecraftForge;
-
 import cpw.mods.fml.common.eventhandler.Event;
-
 import forestry.api.storage.BackpackResupplyEvent;
 import forestry.core.interfaces.IResupplyHandler;
 import forestry.core.inventory.ItemInventory;
 import forestry.core.inventory.ItemInventoryBackpack;
 import forestry.storage.items.ItemBackpack;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.ContainerPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ResupplyHandler implements IResupplyHandler {
 
@@ -50,16 +47,22 @@ public class ResupplyHandler implements IResupplyHandler {
 
 		for (ItemStack backpack : backpacks(player.inventory)) {
 
+			BackpackMode mode = ItemBackpack.getMode(backpack);
+
 			// Only handle those in resupply mode
-			if (ItemBackpack.getMode(backpack) != BackpackMode.RESUPPLY) {
+			if (!(mode == BackpackMode.RESUPPLY || mode == BackpackMode.RESUPPLYLOCKED)) {
 				continue;
 			}
 
 			// Delay before resupplying
-			if (backpack.getItemDamage() < 40) {
-				backpack.setItemDamage(backpack.getItemDamage() + 1);
+			// new delay code - saves into NBT otherwise constant metadata change = silly animation
+			if (ItemBackpack.getDelayTime(backpack) < 40) {
+				ItemBackpack.increaseDelayTime(backpack);
 				continue;
 			}
+
+			// reset the delay
+			ItemBackpack.resetDelayTime(backpack);
 
 			// Load their inventory
 			ItemBackpack backpackItem = ((ItemBackpack) backpack.getItem());
@@ -76,6 +79,10 @@ public class ResupplyHandler implements IResupplyHandler {
 
 				ItemStack itemStack = backpackInventory.getStackInSlot(i);
 				if (itemStack == null || itemStack.stackSize <= 0) {
+					continue;
+				}
+
+				if(itemStack.stackSize == 1 && mode == BackpackMode.RESUPPLYLOCKED) {
 					continue;
 				}
 
