@@ -40,55 +40,6 @@ public class ResupplyHandler implements IResupplyHandler {
 		return backpacks;
 	}
 
-	@Override
-	public void resupply(EntityPlayer player) {
-
-		// Do not attempt resupplying if this backpack is already opened.
-		if (!(player.openContainer instanceof ContainerPlayer)) {
-			return;
-		}
-
-		for (ItemStack backpack : backpacks(player.inventory)) {
-
-			// Only handle those in resupply mode
-			if (ItemBackpack.getMode(backpack) != BackpackMode.RESUPPLY) {
-				continue;
-			}
-
-			// Delay before resupplying
-			if (backpack.getItemDamage() < 40) {
-				backpack.setItemDamage(backpack.getItemDamage() + 1);
-				continue;
-			}
-
-			// Load their inventory
-			ItemBackpack backpackItem = ((ItemBackpack) backpack.getItem());
-			ItemInventory backpackInventory = new ItemInventoryBackpack(player, backpackItem.getBackpackSize(), backpack);
-
-			Event event = new BackpackResupplyEvent(player, backpackItem.getDefinition(), backpackInventory);
-			MinecraftForge.EVENT_BUS.post(event);
-			if (event.isCanceled()) {
-				continue;
-			}
-
-			// Cycle through their contents
-			for (int i = 0; i < backpackInventory.getSizeInventory(); i++) {
-
-				ItemStack itemStack = backpackInventory.getStackInSlot(i);
-				if (itemStack == null || itemStack.stackSize <= 0) {
-					continue;
-				}
-
-				// Try to add it to the player's inventory and note any change
-				boolean change = topOffPlayerInventory(player, itemStack);
-
-				if (change) {
-					backpackInventory.setInventorySlotContents(i, itemStack);
-				}
-			}
-		}
-	}
-
 	/**
 	 * This tops off existing stacks in the player's inventory.
 	 */
@@ -116,6 +67,65 @@ public class ResupplyHandler implements IResupplyHandler {
 		}
 		return false;
 
+	}
+
+	@Override
+	public void resupply(EntityPlayer player) {
+
+		// Do not attempt resupplying if this backpack is already opened.
+		if (!(player.openContainer instanceof ContainerPlayer)) {
+			return;
+		}
+
+		for (ItemStack backpack : backpacks(player.inventory)) {
+
+			BackpackMode mode = ItemBackpack.getMode(backpack);
+
+			// Only handle those in resupply mode
+			if (!(mode == BackpackMode.RESUPPLY || mode == BackpackMode.RESUPPLYLOCKED)) {
+				continue;
+			}
+
+			// Delay before resupplying
+			// new delay code - saves into NBT otherwise constant metadata change = silly animation
+			if (ItemBackpack.getDelayTime(backpack) < 40) {
+				ItemBackpack.increaseDelayTime(backpack);
+				continue;
+			}
+
+			// reset the delay
+			ItemBackpack.resetDelayTime(backpack);
+
+			// Load their inventory
+			ItemBackpack backpackItem = ((ItemBackpack) backpack.getItem());
+			ItemInventory backpackInventory = new ItemInventoryBackpack(player, backpackItem.getBackpackSize(), backpack);
+
+			Event event = new BackpackResupplyEvent(player, backpackItem.getDefinition(), backpackInventory);
+			MinecraftForge.EVENT_BUS.post(event);
+			if (event.isCanceled()) {
+				continue;
+			}
+
+			// Cycle through their contents
+			for (int i = 0; i < backpackInventory.getSizeInventory(); i++) {
+
+				ItemStack itemStack = backpackInventory.getStackInSlot(i);
+				if (itemStack == null || itemStack.stackSize <= 0) {
+					continue;
+				}
+
+				if (itemStack.stackSize == 1 && mode == BackpackMode.RESUPPLYLOCKED) {
+					continue;
+				}
+
+				// Try to add it to the player's inventory and note any change
+				boolean change = topOffPlayerInventory(player, itemStack);
+
+				if (change) {
+					backpackInventory.setInventorySlotContents(i, itemStack);
+				}
+			}
+		}
 	}
 
 }
