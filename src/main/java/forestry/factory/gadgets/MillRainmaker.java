@@ -139,7 +139,7 @@ public class MillRainmaker extends Mill {
 		public void setInventorySlotContents(int slotIndex, ItemStack itemStack) {
 			if (slotIndex == SLOT_SUBSTRATE) {
 				RainSubstrate substrate = FuelManager.rainSubstrate.get(itemStack);
-				if (substrate.item.isItemEqual(itemStack)) {
+				if (substrate != null && substrate.item.isItemEqual(itemStack)) {
 					tile.addCharge(substrate);
 					tile.sendNetworkUpdate();
 				}

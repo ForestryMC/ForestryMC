@@ -26,6 +26,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumWorldBlockLayer;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -104,6 +105,13 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IMode
 	}
 	
 	@Override
+    @SideOnly(Side.CLIENT)
+	public EnumWorldBlockLayer getBlockLayer()
+	{
+		return EnumWorldBlockLayer.CUTOUT;
+	}
+	
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerModel(Item item, IModelManager manager) {
 		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
@@ -121,7 +129,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IMode
 	@Override
 	public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block neighborBlock) {
 		super.onNeighborBlockChange(world, pos, state, neighborBlock);
-		if (Proxies.common.isSimulating(world) && canSustainPlant(world, pos, null, null)) {
+		if (Proxies.common.isSimulating(world) && !canSustainPlant(world, pos, null, null)) {
 			dropAsSapling(world, pos);
 			world.setBlockToAir(pos);
 		}

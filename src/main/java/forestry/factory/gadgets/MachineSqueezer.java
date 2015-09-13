@@ -385,6 +385,13 @@ public class MachineSqueezer extends TilePowered implements ISocketable, ISidedI
 		}
 
 		public static ISqueezerRecipe findMatchingRecipe(ItemStack[] items) {
+			// First try to match a specific recipe (without OD)
+			for (ISqueezerRecipe recipe : recipes) {
+				if (StackUtils.containsSets(recipe.getResources(), items, false, false) > 0) {
+						return recipe;
+				}
+			}
+			// If that fails - try again with oredict support enabled
 			for (ISqueezerRecipe recipe : recipes) {
 				if (StackUtils.containsSets(recipe.getResources(), items, true, false) > 0) {
 					return recipe;
@@ -399,7 +406,7 @@ public class MachineSqueezer extends TilePowered implements ISocketable, ISidedI
 				return true;
 			}
 			for (ItemStack recipeInput : recipeInputs) {
-				if (StackUtils.isCraftingEquivalent(recipeInput, itemStack)) {
+				if (StackUtils.isCraftingEquivalent(recipeInput, itemStack, true, false)) {
 					return true;
 				}
 			}

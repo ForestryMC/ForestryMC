@@ -24,12 +24,14 @@ import net.minecraft.client.renderer.block.model.BlockFaceUV;
 import net.minecraft.client.renderer.block.model.BlockPartFace;
 import net.minecraft.client.renderer.block.model.FaceBakery;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.block.model.ItemTransformVec3f;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.client.resources.model.ModelRotation;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumWorldBlockLayer;
+import net.minecraft.util.MathHelper;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.model.IColoredBakedQuad;
 
@@ -80,7 +82,39 @@ public class ModelRenderer implements IModelRenderer
 		@Override
 		public ItemCameraTransforms getItemCameraTransforms()
 		{
-			return ItemCameraTransforms.DEFAULT;
+			return getTransform();
+		}
+		
+		public ItemCameraTransforms getTransform()
+		{
+            Vector3f rotation = new Vector3f(getRotation());
+            Vector3f translation = new Vector3f(getTranslation());
+            translation.scale(0.0625F);
+            MathHelper.clamp_double(translation.x, -1.5D, 1.5D);
+            MathHelper.clamp_double(translation.y, -1.5D, 1.5D);
+            MathHelper.clamp_double(translation.z, -1.5D, 1.5D);
+            Vector3f scale = new Vector3f(getScale());
+            MathHelper.clamp_double(scale.x, -1.5D, 1.5D);
+            MathHelper.clamp_double(scale.y, -1.5D, 1.5D);
+            MathHelper.clamp_double(scale.z, -1.5D, 1.5D);
+			
+			ItemTransformVec3f transformV = new ItemTransformVec3f(rotation, translation, scale);
+			return new ItemCameraTransforms(transformV, ItemCameraTransforms.DEFAULT.firstPerson, ItemCameraTransforms.DEFAULT.head, ItemCameraTransforms.DEFAULT.gui);
+		}
+		
+		protected float[] getRotation()
+		{
+			return new float[]{-80, -45, 170};
+		}
+		
+		protected float[] getTranslation()
+		{
+			return new float[]{0, 1.5F, -2.75F};
+		}
+		
+		protected float[] getScale()
+		{
+			return new float[]{0.375F, 0.375F, 0.375F};
 		}
 
 		@Override
@@ -90,10 +124,9 @@ public class ModelRenderer implements IModelRenderer
 		}
 
 		@Override
-		public List getFaceQuads(
-				EnumFacing p_177551_1_ )
+		public List getFaceQuads(EnumFacing face)
 		{
-			return faces[p_177551_1_.ordinal()];
+			return faces[face.ordinal()];
 		}
 		
 		public CachedModel copy(){
@@ -110,8 +143,6 @@ public class ModelRenderer implements IModelRenderer
 	public double renderMinZ;
 	public double renderMaxZ;
 	
-	public ISprite overrideBlockTexture;
-	
 	CachedModel generatedModel = new CachedModel();
 
 	// used to create faces...
@@ -119,7 +150,7 @@ public class ModelRenderer implements IModelRenderer
 
 	float tx=0,ty=0,tz=0;
 	final float[] defUVs = new float[] { 0, 0, 1, 1 };
-
+	
 	@Override
 	public void setRenderBoundsFromBlock(Block block)
 	{
@@ -153,64 +184,41 @@ public class ModelRenderer implements IModelRenderer
 	}
 
 	@Override
-	public void setColorRGBA_F(
-			int r,
-			int g,
-			int b,
-			float a )
+	public void setColorRGBA_F(int r, int g, int b, float a )
 	{
 		int alpha = ( int ) ( a * 0xff );
-		color = alpha << 24 |
-				r << 16 |
-				b << 8 |
-				b;
+		color = alpha << 24 | r << 16 | b << 8 | b;
 	}
 
 	@Override
-	public void setColorOpaque_I(
-			int whiteVariant )
+	public void setColorOpaque_I(int whiteVariant)
 	{
 		int alpha = 0xff;
-		color = //alpha << 24 |
-				whiteVariant;
-	}
-	@Override
-	public void setColorOpaque(
-			int r,
-			int g,
-			int b )
-	{
-		int alpha = 0xff;
-		color =// alpha << 24 |
-				r << 16 |
-				g << 8 |
-				b;
+		color = whiteVariant;
 	}
 	
 	@Override
-	public void setColorOpaque_F(
-			int r,
-			int g,
-			int b )
+	public void setColorOpaque(int r, int g, int b)
 	{
 		int alpha = 0xff;
-		color = //alpha << 24 |
-				Math.min( 0xff, Math.max( 0, r ) ) << 16 |
-				Math.min( 0xff, Math.max( 0, g ) ) << 8 |
-				Math.min( 0xff, Math.max( 0, b ) );
+		color = r << 16 | g << 8 | b;
+	}
+	
+	@Override
+	public void setColorOpaque_F(int r, int g, int b)
+	{
+		int alpha = 0xff;
+		color = Math.min( 0xff, Math.max( 0, r ) ) << 16 | Math.min( 0xff, Math.max( 0, g ) ) << 8 | Math.min( 0xff, Math.max( 0, b ) );
 	}
 
 	@Override
-	public void setColorOpaque_F(float rf, float bf, float gf )
+	public void setColorOpaque_F(float rf, float bf, float gf)
 	{
 		int r = (int)( rf * 0xff );
 		int g = (int)( gf * 0xff );
 		int b = (int)( bf * 0xff );
 		int alpha = 0xff;
-		color = //alpha << 24 |
-				Math.min( 0xff, Math.max( 0, r ) ) << 16 |
-				Math.min( 0xff, Math.max( 0, g ) ) << 8 |
-				Math.min( 0xff, Math.max( 0, b ) );
+		color = Math.min( 0xff, Math.max( 0, r ) ) << 16 | Math.min( 0xff, Math.max( 0, g ) ) << 8 | Math.min( 0xff, Math.max( 0, b ) );
 	}
 
 	int point =0;
@@ -259,7 +267,7 @@ public class ModelRenderer implements IModelRenderer
 				0,
 			};
 			
-			generatedModel.general.add( new IColoredBakedQuad.ColoredBakedQuad( vertData, color, face ));
+			generatedModel.general.add( new IColoredBakedQuad.ColoredBakedQuad(vertData, color, face));
 			
 			point=0;
 		}
@@ -299,7 +307,7 @@ public class ModelRenderer implements IModelRenderer
 	}
 
 	@Override
-	public void setTranslation(int x, int y, int z )
+	public void setTranslation(int x, int y, int z)
 	{
 		tx=x;
 		ty=y;
@@ -388,75 +396,73 @@ public class ModelRenderer implements IModelRenderer
 	}
 	
 	@Override
-	public void renderFaceXNeg(BlockPos pos, ISprite lights)
+	public void renderFaceXNeg(BlockPos pos, ISprite sprite)
 	{		
 		boolean isEdge = renderMinX < 0.0001;
 		Vector3f to = new Vector3f( (float)renderMinX* 16.0f, (float)renderMinY* 16.0f, (float)renderMinZ * 16.0f);
 		Vector3f from = new Vector3f( (float)renderMinX* 16.0f, (float)renderMaxY* 16.0f, (float)renderMaxZ * 16.0f);
 
 		final EnumFacing myFace = EnumFacing.WEST;
-		addFace(myFace, isEdge,to,from,defUVs,lights );
+		addFace(myFace, isEdge,to,from,defUVs,sprite );
 	}
 	
 	@Override
-	public void renderFaceYNeg(BlockPos pos, ISprite lights)
+	public void renderFaceYNeg(BlockPos pos, ISprite sprite)
 	{		
 		boolean isEdge = renderMinY < 0.0001;
 		Vector3f to = new Vector3f( (float)renderMinX* 16.0f, (float)renderMinY* 16.0f, (float)renderMinZ* 16.0f );
 		Vector3f from = new Vector3f( (float)renderMaxX* 16.0f, (float)renderMinY* 16.0f, (float)renderMaxZ* 16.0f );
 
 		final EnumFacing myFace = EnumFacing.DOWN;
-		addFace(myFace, isEdge,to,from,defUVs, lights );
+		addFace(myFace, isEdge,to,from,defUVs, sprite );
 	}
 
 	@Override
-	public void renderFaceZNeg(BlockPos pos, ISprite lights)
+	public void renderFaceZNeg(BlockPos pos, ISprite sprite)
 	{		
 		boolean isEdge = renderMinZ < 0.0001;
 		Vector3f to = new Vector3f( (float)renderMinX* 16.0f, (float)renderMinY* 16.0f, (float)renderMinZ* 16.0f );
 		Vector3f from = new Vector3f( (float)renderMaxX* 16.0f, (float)renderMaxY* 16.0f, (float)renderMinZ* 16.0f );
 
 		final EnumFacing myFace = EnumFacing.NORTH;
-		addFace(myFace, isEdge,to,from,defUVs, lights );
+		addFace(myFace, isEdge,to,from,defUVs, sprite );
 	}
 
 	@Override
-	public void renderFaceYPos(BlockPos pos, ISprite lights)
+	public void renderFaceYPos(BlockPos pos, ISprite sprite)
 	{		
 		boolean isEdge = renderMaxY > 0.9999;
 		Vector3f to = new Vector3f( (float)renderMinX* 16.0f, (float)renderMaxY* 16.0f, (float)renderMinZ* 16.0f );
 		Vector3f from = new Vector3f( (float)renderMaxX* 16.0f, (float)renderMaxY* 16.0f, (float)renderMaxZ * 16.0f);
 
 		final EnumFacing myFace = EnumFacing.UP;
-		addFace(myFace, isEdge,to,from,defUVs,lights );
+		addFace(myFace, isEdge,to,from,defUVs,sprite );
 	}
 
 	@Override
-	public void renderFaceZPos(BlockPos pos, ISprite lights)
+	public void renderFaceZPos(BlockPos pos, ISprite sprite)
 	{
 		boolean isEdge = renderMaxZ > 0.9999;
 		Vector3f to = new Vector3f( (float)renderMinX* 16.0f, (float)renderMinY* 16.0f, (float)renderMaxZ* 16.0f );
 		Vector3f from = new Vector3f( (float)renderMaxX* 16.0f, (float)renderMaxY* 16.0f, (float)renderMaxZ* 16.0f );
 
 		final EnumFacing myFace = EnumFacing.SOUTH;
-		addFace(myFace, isEdge,to,from,defUVs,lights );
+		addFace(myFace, isEdge,to,from,defUVs,sprite );
 	}
 
 	@Override
-	public void renderFaceXPos(BlockPos pos, ISprite lights )
+	public void renderFaceXPos(BlockPos pos, ISprite sprite)
 	{
 		boolean isEdge = renderMaxX > 0.9999;
 		Vector3f to = new Vector3f( (float)renderMaxX * 16.0f, (float)renderMinY* 16.0f, (float)renderMinZ* 16.0f );
 		Vector3f from = new Vector3f( (float)renderMaxX* 16.0f, (float)renderMaxY* 16.0f, (float)renderMaxZ* 16.0f );
 
 		final EnumFacing myFace = EnumFacing.EAST;
-		addFace(myFace, isEdge,to,from,defUVs, lights );
+		addFace(myFace, isEdge,to,from,defUVs, sprite );
 	}
 
 	private void addFace(EnumFacing face , boolean isEdge, Vector3f to, Vector3f from, float[] defUVs2, ISprite texture )
 	{
-		if ( overrideBlockTexture != null )
-			texture = overrideBlockTexture;
 		
 		faces.add(new RenderFace(face,isEdge,color,to,from,defUVs2, texture.getSprite()));
 	}
@@ -475,17 +481,11 @@ public class ModelRenderer implements IModelRenderer
 	}
 
 	@Override
-	public void setOverrideBlockTexture(ISprite object)
-	{
-		overrideBlockTexture = object;		
-	}
-
-	@Override
-	public IBakedModel finalizeModel(boolean Flip)
+	public IBakedModel finalizeModel(boolean flip)
 	{
 		ModelRotation mr = ModelRotation.X0_Y0;
 		
-		if ( Flip )
+		if (flip)
 			  mr = ModelRotation.X0_Y180;
 		
 		for ( RenderFace face : faces )

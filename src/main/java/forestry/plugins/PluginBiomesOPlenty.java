@@ -70,7 +70,6 @@ public class PluginBiomesOPlenty extends ForestryPlugin {
 		addFarmCrops();
 		addFermenterRecipes();
 		addSqueezerRecipes();
-		addBlocksToBackpack();
 	}
 
 	private static void addFarmCrops() {
@@ -170,9 +169,9 @@ public class PluginBiomesOPlenty extends ForestryPlugin {
 			FlowerManager.flowerRegistry.registerPlantableFlower(plants, 12, 1.0, FlowerManager.FlowerTypeCacti);
 		}
 	}
-
-	private static void addBlocksToBackpack() {
-		// most blocks are covered by the oreDictionary
+	
+	@Override
+	protected void registerBackpackItems() {
 
 		final int MINER = 0;
 		final int DIGGER = 1;
@@ -204,7 +203,13 @@ public class PluginBiomesOPlenty extends ForestryPlugin {
 
 	private static void addBlocksToBackpack(int backpackId, String... blockNames) {
 		for (String blockName : blockNames) {
-			addBlockToBackpack(backpackId, blockName, OreDictionary.WILDCARD_VALUE);
+			Block block = GameRegistry.findBlock(BoP, blockName);
+			if (block != null) {
+				ItemStack blockStack = new ItemStack(block, 1, OreDictionary.WILDCARD_VALUE);
+				BackpackManager.backpackItems[backpackId].add(blockStack);
+			} else {
+				Proxies.log.warning("Missing block: ", blockName);
+			}
 		}
 	}
 

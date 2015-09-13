@@ -25,7 +25,7 @@ import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import forestry.core.config.Config;
 import forestry.core.gadgets.MachineDefinition;
 import forestry.core.interfaces.IBlockRenderer;
-import forestry.core.render.BlockRenderingHandler;
+import forestry.core.render.RenderingHandler;
 import forestry.core.render.BlockModelIndex;
 import forestry.core.render.ModelManager;
 import forestry.core.render.RenderEscritoire;
@@ -73,7 +73,7 @@ public class ClientProxyRender extends ProxyRender {
 	
 	@Override
 	public void registerBlockModel(final BlockModelIndex index) {
-		BlockRenderingHandler.byBlockModelRenderer.add(index);
+		RenderingHandler.byBlockModelRenderer.add(index);
 		StateMapperBase ignoreState = new StateMapperBase() {
 			@Override
 			protected ModelResourceLocation getModelResourceLocation(IBlockState iBlockState) {

@@ -10,7 +10,7 @@ public class ClientProxyFarming extends ProxyFarming {
 
 	@Override
 	public void initializeRendering() {
-		Proxies.render.registerBlockModel(new BlockModelIndex(new ModelResourceLocation("forestry:ffarm"), new ModelResourceLocation("forestry:ffarm"), new FarmBlockRenderer(), ForestryBlock.farm.block()));
+		Proxies.render.registerBlockModel(new BlockModelIndex(new ModelResourceLocation("forestry:ffarm"), new ModelResourceLocation("forestry:ffarm", "inventory"), new FarmBlockRenderer(), ForestryBlock.farm.block()));
 	}
 	
 }

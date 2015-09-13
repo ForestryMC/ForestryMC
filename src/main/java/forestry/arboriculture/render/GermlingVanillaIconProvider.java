@@ -10,14 +10,9 @@
  ******************************************************************************/
 package forestry.arboriculture.render;
 
-import net.minecraft.init.Blocks;
-
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.IGermlingIconProvider;
-import forestry.api.core.ITextureManager;
 import forestry.api.core.sprite.ISprite;
-import forestry.core.config.ForestryItem;
-import forestry.core.fluids.ITankManager;
 import forestry.core.render.TextureManager;
 
 public class GermlingVanillaIconProvider implements IGermlingIconProvider {

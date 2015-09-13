@@ -75,7 +75,7 @@ import forestry.core.items.ItemPipette;
 import forestry.core.items.ItemTypedBlock;
 import forestry.core.items.ItemWrench;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.BlockRenderingHandler;
+import forestry.core.render.RenderingHandler;
 import forestry.core.utils.ForestryModEnvWarningCallable;
 import forestry.core.utils.ShapedRecipeCustom;
 
@@ -478,6 +478,6 @@ public class PluginCore extends ForestryPlugin {
 	@SideOnly(Side.CLIENT)
 	public void onBakeModel(ModelBakeEvent event)
 	{
-		BlockRenderingHandler.checkModels(event);
+		RenderingHandler.registerModels(event);
 	}
 }

@@ -12,6 +12,7 @@ package forestry.arboriculture.render;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.EntityRenderer;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -57,14 +58,13 @@ public class LeavesRenderingHandler extends OverlayRenderingHandler {
 		float r1 = (color >> 16 & 255) / 255.0F;
 		float g1 = (color >> 8 & 255) / 255.0F;
 		float b1 = (color & 255) / 255.0F;
-		GL11.glColor4f(r1, g1, b1, 1.0F);
+		renderer.setColorOpaque_F(r1, g1, b1);
 
 		GL11.glTranslatef(0, 0, 0);
 
 		block.setBlockBoundsForItemRender();
 		renderer.setRenderBoundsFromBlock(block);
 
-		GL11.glRotatef(90.0F, 0.0F, 1.0F, 0.0F);
 		GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
 		renderer.setNormal(0.0F, -1.0F, 0.0F);
 		renderer.renderFaceYNeg(null, leavesIcon);
@@ -95,12 +95,11 @@ public class LeavesRenderingHandler extends OverlayRenderingHandler {
 		float r2 = (fruitColor >> 16 & 255) / 255.0F;
 		float g2 = (fruitColor >> 8 & 255) / 255.0F;
 		float b2 = (fruitColor & 255) / 255.0F;
-		GL11.glColor4f(r2, g2, b2, 1.0F);
+		renderer.setColorOpaque_F(r2, g2, b2);
 
 		block.setBlockBoundsForItemRender();
 		renderer.setRenderBoundsFromBlock(block);
 
-		GL11.glRotatef(90.0F, 0.0F, 1.0F, 0.0F);
 		GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
 		renderer.setNormal(0.0F, -1.0F, 0.0F);
 		renderer.renderFaceYNeg(null, fruitTexture);
@@ -171,5 +170,10 @@ public class LeavesRenderingHandler extends OverlayRenderingHandler {
 		renderSouthFace(world, block, pos, renderer, texture, mixedBrightness, adjR, adjG, adjB);
 
 		return true;
+	}
+	
+	@Override
+	public TextureAtlasSprite getTexture() {
+		return null;
 	}
 }

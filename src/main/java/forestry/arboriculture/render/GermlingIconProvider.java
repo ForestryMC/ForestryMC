@@ -13,7 +13,6 @@ package forestry.arboriculture.render;
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.IGermlingIconProvider;
 import forestry.api.core.sprite.ISprite;
-import forestry.core.config.ForestryItem;
 import forestry.core.render.TextureManager;
 
 public class GermlingIconProvider implements IGermlingIconProvider {

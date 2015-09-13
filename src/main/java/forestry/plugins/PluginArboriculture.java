@@ -105,11 +105,6 @@ public class PluginArboriculture extends ForestryPlugin {
 	public static ProxyArboriculture proxy;
 	public static String treekeepingMode = "NORMAL";
 
-	public static int modelIdSaplings;
-	public static int modelIdLeaves;
-	public static int modelIdFences;
-	public static int modelIdPods;
-
 	private static MachineDefinition definitionChest;
 	public static final List<Block> validFences = new ArrayList<Block>();
 

@@ -22,8 +22,8 @@ public class ClientProxyArboriculture extends ProxyArboriculture {
 	
 	@Override
 	public void initializeRendering() {
-		Proxies.render.registerBlockModel(new BlockModelIndex(new ModelResourceLocation("forestry:leaves"), new ModelResourceLocation("forestry:leaves"), new LeavesRenderingHandler(), ForestryBlock.leaves.block()));
-		Proxies.render.registerBlockModel(new BlockModelIndex(new ModelResourceLocation("forestry:saplings"), new ModelResourceLocation("forestry:saplings"), new SaplingRenderHandler(), ForestryBlock.saplingGE.block()));
+		Proxies.render.registerBlockModel(new BlockModelIndex(new ModelResourceLocation("forestry:leaves"), new ModelResourceLocation("forestry:leaves", "inventory"), new LeavesRenderingHandler(), ForestryBlock.leaves.block()));
+		Proxies.render.registerBlockModel(new BlockModelIndex(new ModelResourceLocation("forestry:saplings"), new ModelResourceLocation("forestry:saplings", "inventory"), new SaplingRenderHandler(), ForestryBlock.saplingGE.block()));
 	}
 
 	@Override

@@ -99,7 +99,8 @@ public abstract class BlockWood extends Block implements ITileEntityProvider, IW
 	
 	protected static WoodType getWoodType(IBlockAccess world, BlockPos pos) {
 		IBlockState state = world.getBlockState(pos);
-		WoodType type = (WoodType) state.getValue(WoodType.WOODTYPE);
+		TileWood wood = (TileWood) world.getTileEntity(pos);
+		WoodType type = wood.getWoodType();
 		return type;
 	}
 	

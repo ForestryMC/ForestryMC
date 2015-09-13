@@ -20,6 +20,7 @@ public class GermlingModelProvider implements IGermlingModelProvider {
 	private final String name;
 
 	private ModelResourceLocation model;
+	private ModelResourceLocation pollenModel;
 
 	public GermlingModelProvider(String uid) {
 		this.name = uid.substring("forestry.".length());
@@ -28,12 +29,13 @@ public class GermlingModelProvider implements IGermlingModelProvider {
 	@Override
 	public void registerModels(IModelManager manager) {
 		model = manager.getModelLocation("germlings/sapling." + name);
+		pollenModel = manager.getModelLocation("pollen");
 	}
 
 	@Override
 	public ModelResourceLocation getModel(EnumGermlingType type) {
 		if (type == EnumGermlingType.POLLEN) {
-			
+			return pollenModel;
 		}
 		return model;
 	}

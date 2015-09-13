@@ -20,6 +20,7 @@ public class GermlingVanillaModelProvider implements IGermlingModelProvider {
 	private final int vanillaMap;
 
 	private ModelResourceLocation model;
+	private ModelResourceLocation pollenModel;
 
 	public GermlingVanillaModelProvider(int vanillaMap) {
 		this.vanillaMap = vanillaMap;
@@ -47,12 +48,13 @@ public class GermlingVanillaModelProvider implements IGermlingModelProvider {
 			model = manager.getModelLocation("minecraft", "acacia_sapling");
 			break;
 		}
+		pollenModel = manager.getModelLocation("pollen");
 	}
 
 	@Override
 	public ModelResourceLocation getModel(EnumGermlingType type) {
 		if (type == EnumGermlingType.POLLEN) {
-			
+			return pollenModel;
 		}
 		return model;
 	}

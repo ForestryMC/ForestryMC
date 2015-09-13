@@ -75,7 +75,6 @@ public class BlockFarm extends BlockStructure {
 		super(Material.rock);
 		setHardness(1.0f);
 		instance = this;
-		setLightOpacity(255);
 		setDefaultState(blockState.getBaseState().withProperty(META, FarmType.PLAIN));
 	}
 	
@@ -220,12 +219,12 @@ public class BlockFarm extends BlockStructure {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 0, new ModelResourceLocation("forestry:ffarm"));
-		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 1, new ModelResourceLocation("forestry:ffarm"));
-		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 2, new ModelResourceLocation("forestry:ffarm"));
-		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 3, new ModelResourceLocation("forestry:ffarm"));
-		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 4, new ModelResourceLocation("forestry:ffarm"));
-		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 5, new ModelResourceLocation("forestry:ffarm"));
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 0, new ModelResourceLocation("forestry:ffarm", "inventory"));
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 1, new ModelResourceLocation("forestry:ffarm", "inventory"));
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 2, new ModelResourceLocation("forestry:ffarm", "inventory"));
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 3, new ModelResourceLocation("forestry:ffarm", "inventory"));
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 4, new ModelResourceLocation("forestry:ffarm", "inventory"));
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 5, new ModelResourceLocation("forestry:ffarm", "inventory"));
 	}
 
 	private static class ParticleCallback implements ParticleHelperCallback {

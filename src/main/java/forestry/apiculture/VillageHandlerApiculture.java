@@ -10,28 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture;
 
-import java.util.List;
-import java.util.Random;
-
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
-import net.minecraft.village.MerchantRecipe;
-import net.minecraft.village.MerchantRecipeList;
-import net.minecraft.world.gen.structure.MapGenStructureIO;
-import net.minecraft.world.gen.structure.StructureVillagePieces;
-
-import forestry.api.apiculture.EnumBeeType;
-import forestry.apiculture.genetics.BeeDefinition;
-import forestry.apiculture.items.ItemHoneycomb;
-import forestry.apiculture.worldgen.ComponentVillageBeeHouse;
-import forestry.core.config.Defaults;
-import forestry.core.config.ForestryBlock;
-import forestry.core.config.ForestryItem;
-import forestry.core.proxy.Proxies;
-
 @Deprecated
 public class VillageHandlerApiculture {
 

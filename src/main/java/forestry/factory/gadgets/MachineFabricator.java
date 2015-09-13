@@ -186,7 +186,7 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 	@Override
 	public boolean workCycle() {
 		craftResult(null);
-		return addHeat(25);
+		return addHeat(100);
 	}
 
 	private boolean addHeat(int addition) {

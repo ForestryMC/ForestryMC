@@ -119,11 +119,11 @@ public class SaplingRenderHandler implements ISmartBlockModel {
 		}
 
 		renderer.setColorOpaque_F(r, g, b);
-		drawCrossedSquares(species, pos.getX(), pos.getY(), pos.getZ(), 1.0f, renderer);
+		drawCrossedSquares(species, 1.0f, renderer);
 		return true;
 	}
 
-	private static void drawCrossedSquares(IAlleleTreeSpecies species, double par3, double par5, double par7, float mod, IModelRenderer renderer){
+	private static void drawCrossedSquares(IAlleleTreeSpecies species, float mod, IModelRenderer renderer){
 
 		ISprite icon = species.getGermlingIcon(EnumGermlingType.SAPLING, renderLayer);
 
@@ -132,30 +132,30 @@ public class SaplingRenderHandler implements ISmartBlockModel {
 		double d5 = icon.getMaxU();
 		double d6 = icon.getMaxV();
 		double d7 = 0.45D * mod;
-		double d8 = par3 + 0.5D - d7;
-		double d9 = par3 + 0.5D + d7;
-		double d10 = par7 + 0.5D - d7;
-		double d11 = par7 + 0.5D + d7;
+		double d8 = 0.5D - d7;
+		double d9 = 0.5D + d7;
+		double d10 = 0.5D - d7;
+		double d11 = 0.5D + d7;
 		
-		renderer.addVertexWithUV(EnumFacing.NORTH, d8, par5 + mod, d10, d3, d4);
-		renderer.addVertexWithUV(EnumFacing.NORTH, d8, par5 + 0.0D, d10, d3, d6);
-		renderer.addVertexWithUV(EnumFacing.NORTH, d9, par5 + 0.0D, d11, d5, d6);
-		renderer.addVertexWithUV(EnumFacing.NORTH, d9, par5 + mod, d11, d5, d4);
+		renderer.addVertexWithUV(EnumFacing.NORTH, d8, mod, d10, d3, d4);
+		renderer.addVertexWithUV(EnumFacing.NORTH, d8, 0.0D, d10, d3, d6);
+		renderer.addVertexWithUV(EnumFacing.NORTH, d9, 0.0D, d11, d5, d6);
+		renderer.addVertexWithUV(EnumFacing.NORTH, d9, mod, d11, d5, d4);
 		
-		renderer.addVertexWithUV(EnumFacing.SOUTH, d9, par5 + mod, d11, d3, d4);
-		renderer.addVertexWithUV(EnumFacing.SOUTH, d9, par5 + 0.0D, d11, d3, d6);
-		renderer.addVertexWithUV(EnumFacing.SOUTH, d8, par5 + 0.0D, d10, d5, d6);
-		renderer.addVertexWithUV(EnumFacing.SOUTH, d8, par5 + mod, d10, d5, d4);
+		renderer.addVertexWithUV(EnumFacing.SOUTH, d9, mod, d11, d3, d4);
+		renderer.addVertexWithUV(EnumFacing.SOUTH, d9, 0.0D, d11, d3, d6);
+		renderer.addVertexWithUV(EnumFacing.SOUTH, d8, 0.0D, d10, d5, d6);
+		renderer.addVertexWithUV(EnumFacing.SOUTH, d8, mod, d10, d5, d4);
 		
-		renderer.addVertexWithUV(EnumFacing.WEST, d8, par5 + mod, d11, d3, d4);
-		renderer.addVertexWithUV(EnumFacing.WEST, d8, par5 + 0.0D, d11, d3, d6);
-		renderer.addVertexWithUV(EnumFacing.WEST, d9, par5 + 0.0D, d10, d5, d6);
-		renderer.addVertexWithUV(EnumFacing.WEST, d9, par5 + mod, d10, d5, d4);
+		renderer.addVertexWithUV(EnumFacing.WEST, d8, mod, d11, d3, d4);
+		renderer.addVertexWithUV(EnumFacing.WEST, d8, 0.0D, d11, d3, d6);
+		renderer.addVertexWithUV(EnumFacing.WEST, d9, 0.0D, d10, d5, d6);
+		renderer.addVertexWithUV(EnumFacing.WEST, d9, mod, d10, d5, d4);
 		
-		renderer.addVertexWithUV(EnumFacing.EAST, d9, par5 + mod, d10, d3, d4);
-		renderer.addVertexWithUV(EnumFacing.EAST, d9, par5 + 0.0D, d10, d3, d6);
-		renderer.addVertexWithUV(EnumFacing.EAST, d8, par5 + 0.0D, d11, d5, d6);
-		renderer.addVertexWithUV(EnumFacing.EAST, d8, par5 + mod, d11, d5, d4);
+		renderer.addVertexWithUV(EnumFacing.EAST, d9, mod, d10, d3, d4);
+		renderer.addVertexWithUV(EnumFacing.EAST, d9, 0.0D, d10, d3, d6);
+		renderer.addVertexWithUV(EnumFacing.EAST, d8, 0.0D, d11, d5, d6);
+		renderer.addVertexWithUV(EnumFacing.EAST, d8, mod, d11, d5, d4);
 	}
 
 }

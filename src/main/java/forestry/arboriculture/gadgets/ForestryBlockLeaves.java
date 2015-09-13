@@ -24,6 +24,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -35,6 +37,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumWorldBlockLayer;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -51,6 +54,8 @@ import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.IToolGrafter;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.TreeManager;
+import forestry.api.core.IModelManager;
+import forestry.api.core.IModelRegister;
 import forestry.api.core.IToolScoop;
 import forestry.api.core.Tabs;
 import forestry.api.lepidopterology.EnumFlutterType;
@@ -65,11 +70,12 @@ import forestry.core.utils.StackUtils;
 import forestry.plugins.PluginArboriculture;
 import forestry.plugins.PluginLepidopterology;
 
-public class ForestryBlockLeaves extends BlockLeavesBase implements ITileEntityProvider, IGrowable, IShearable {
+public class ForestryBlockLeaves extends BlockLeavesBase implements ITileEntityProvider, IGrowable, IShearable, IModelRegister {
 	
 	public ForestryBlockLeaves() {
 		super(Material.leaves, false);
 		this.setCreativeTab(Tabs.tabArboriculture);
+		this.setStepSound(soundTypeGrass);
 	}
 	
 	@Override
@@ -268,7 +274,14 @@ public class ForestryBlockLeaves extends BlockLeavesBase implements ITileEntityP
 
 	@Override
 	public int getRenderType() {
-		return PluginArboriculture.modelIdLeaves;
+		return 3;
+	}
+	
+	@Override
+    @SideOnly(Side.CLIENT)
+	public EnumWorldBlockLayer getBlockLayer()
+	{
+		return EnumWorldBlockLayer.CUTOUT;
 	}
 	
 	@Override
@@ -290,6 +303,11 @@ public class ForestryBlockLeaves extends BlockLeavesBase implements ITileEntityP
 	@Override
 	public boolean shouldSideBeRendered(IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
 		return true;
+	}
+	
+	@Override
+	public void registerModel(Item item, IModelManager manager) {
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 0, new ModelResourceLocation("forestry:leaves", "inventory"));
 	}
 
 	/* PROPERTIES */
