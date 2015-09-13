@@ -10,20 +10,23 @@
  ******************************************************************************/
 package forestry.storage;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.ContainerPlayer;
+import net.minecraft.item.ItemStack;
+
+import net.minecraftforge.common.MinecraftForge;
+
 import cpw.mods.fml.common.eventhandler.Event;
+
 import forestry.api.storage.BackpackResupplyEvent;
 import forestry.core.interfaces.IResupplyHandler;
 import forestry.core.inventory.ItemInventory;
 import forestry.core.inventory.ItemInventoryBackpack;
 import forestry.storage.items.ItemBackpack;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ContainerPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.MinecraftForge;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ResupplyHandler implements IResupplyHandler {
 
@@ -35,6 +38,35 @@ public class ResupplyHandler implements IResupplyHandler {
 			}
 		}
 		return backpacks;
+	}
+
+	/**
+	 * This tops off existing stacks in the player's inventory.
+	 */
+	private static boolean topOffPlayerInventory(EntityPlayer player, ItemStack itemstack) {
+
+		// Add to player inventory first, if there is an incomplete stack in
+		// there.
+		for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
+			ItemStack inventoryStack = player.inventory.getStackInSlot(i);
+			// We only add to existing stacks.
+			if (inventoryStack == null) {
+				continue;
+			}
+
+			// Already full
+			if (inventoryStack.stackSize >= inventoryStack.getMaxStackSize()) {
+				continue;
+			}
+
+			if (inventoryStack.isItemEqual(itemstack) && ItemStack.areItemStackTagsEqual(inventoryStack, itemstack)) {
+				inventoryStack.stackSize++;
+				itemstack.stackSize--;
+				return true;
+			}
+		}
+		return false;
+
 	}
 
 	@Override
@@ -82,7 +114,7 @@ public class ResupplyHandler implements IResupplyHandler {
 					continue;
 				}
 
-				if(itemStack.stackSize == 1 && mode == BackpackMode.RESUPPLYLOCKED) {
+				if (itemStack.stackSize == 1 && mode == BackpackMode.RESUPPLYLOCKED) {
 					continue;
 				}
 
@@ -94,35 +126,6 @@ public class ResupplyHandler implements IResupplyHandler {
 				}
 			}
 		}
-	}
-
-	/**
-	 * This tops off existing stacks in the player's inventory.
-	 */
-	private static boolean topOffPlayerInventory(EntityPlayer player, ItemStack itemstack) {
-
-		// Add to player inventory first, if there is an incomplete stack in
-		// there.
-		for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
-			ItemStack inventoryStack = player.inventory.getStackInSlot(i);
-			// We only add to existing stacks.
-			if (inventoryStack == null) {
-				continue;
-			}
-
-			// Already full
-			if (inventoryStack.stackSize >= inventoryStack.getMaxStackSize()) {
-				continue;
-			}
-
-			if (inventoryStack.isItemEqual(itemstack) && ItemStack.areItemStackTagsEqual(inventoryStack, itemstack)) {
-				inventoryStack.stackSize++;
-				itemstack.stackSize--;
-				return true;
-			}
-		}
-		return false;
-
 	}
 
 }
