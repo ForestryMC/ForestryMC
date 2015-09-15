@@ -262,10 +262,10 @@ public class PluginIC2 extends ForestryPlugin {
 		}
 
 		if (plantBall != null) {
-			RecipeUtil.injectLeveledRecipe(plantBall, GameMode.getGameMode().getIntegerSetting("fermenter.yield.wheat") * 4, Fluids.BIOMASS);
+			RecipeUtil.injectLeveledRecipe(plantBall, GameMode.getGameMode().getIntegerSetting("fermenter.yield.wheat") * 9, Fluids.BIOMASS);
 		}
 		if (compressedPlantBall != null) {
-			RecipeUtil.injectLeveledRecipe(compressedPlantBall, GameMode.getGameMode().getIntegerSetting("fermenter.yield.wheat") * 5, Fluids.BIOMASS);
+			RecipeUtil.injectLeveledRecipe(compressedPlantBall, GameMode.getGameMode().getIntegerSetting("fermenter.yield.wheat") * 9, Fluids.BIOMASS);
 		}
 
 		if (resin != null) {
