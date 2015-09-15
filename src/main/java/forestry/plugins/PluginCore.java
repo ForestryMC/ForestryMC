@@ -76,6 +76,7 @@ import forestry.core.items.ItemWrench;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.ForestryModEnvWarningCallable;
 import forestry.core.utils.ShapedRecipeCustom;
+import forestry.core.utils.ShapelessRecipeCustom;
 
 @Plugin(pluginID = "Core", name = "Core", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.core.description")
 public class PluginCore extends ForestryPlugin {
@@ -148,6 +149,7 @@ public class PluginCore extends ForestryPlugin {
 		alleleHelper.init();
 
 		RecipeSorter.register("forestry:shapedrecipecustom", ShapedRecipeCustom.class, RecipeSorter.Category.SHAPED, "before:minecraft:shaped");
+		RecipeSorter.register("forestry:shapelessrecipecustom", ShapelessRecipeCustom.class, RecipeSorter.Category.SHAPELESS, "before:minecraft:shapeless");
 	}
 
 	@Override
