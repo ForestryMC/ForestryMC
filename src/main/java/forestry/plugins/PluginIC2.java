@@ -275,11 +275,11 @@ public class PluginIC2 extends ForestryPlugin {
 			}
 		}
 
-		if (plantBall != null && compressedPlantBall != null) {
+		if (plantBall != null) {
 			RecipeUtil.injectLeveledRecipe(plantBall, GameMode.getGameMode().getIntegerSetting("fermenter.yield.wheat") * 4, Fluids.BIOMASS);
+		}
+		if (compressedPlantBall != null) {
 			RecipeUtil.injectLeveledRecipe(compressedPlantBall, GameMode.getGameMode().getIntegerSetting("fermenter.yield.wheat") * 5, Fluids.BIOMASS);
-		} else {
-			Proxies.log.fine("No IC2 plantballs found.");
 		}
 
 		if (resin != null) {
