@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture;
 
+import java.util.Random;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
@@ -23,7 +25,10 @@ import forestry.plugins.PluginApiculture;
 
 public class HasFlowersCache implements INBTTagable {
 	private static final String nbtKey = "hasFlowerCache";
+	private static final Random random = new Random();
+	private static final int flowerCheckInterval = 128;
 
+	private final int flowerCheckTime = random.nextInt(flowerCheckInterval);
 	private ChunkCoordinates flowerCoords = null;
 	private int cooldown = 0;
 
@@ -33,7 +38,7 @@ public class HasFlowersCache implements INBTTagable {
 		World world = beeHousing.getWorld();
 
 		if (flowerCoords != null) {
-			if (world.getTotalWorldTime() % 100 != 0) {
+			if (world.getTotalWorldTime() % flowerCheckInterval != flowerCheckTime) {
 				return true;
 			}
 
