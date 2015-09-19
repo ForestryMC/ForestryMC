@@ -86,43 +86,31 @@ public class ItemArmorApiarist extends ItemArmor implements IArmorApiarist, IArm
 		return armorType == 0;
 	}
 
+	// Legacy methods
+
+	@Deprecated
 	public static boolean wearsHelmet(EntityPlayer player, String cause, boolean protect) {
-		ItemStack armorItem = player.inventory.armorInventory[3];
-		return armorItem != null && armorItem.getItem() instanceof IArmorApiarist
-				&& ((IArmorApiarist) armorItem.getItem()).protectPlayer(player, armorItem, cause, protect);
+		return ArmorApiaristHelper.wearsHelmet(player, cause, protect);
 	}
 
+	@Deprecated
 	public static boolean wearsChest(EntityPlayer player, String cause, boolean protect) {
-		ItemStack armorItem = player.inventory.armorInventory[2];
-		return armorItem != null && armorItem.getItem() instanceof IArmorApiarist
-				&& ((IArmorApiarist) armorItem.getItem()).protectPlayer(player, armorItem, cause, protect);
+		return ArmorApiaristHelper.wearsChest(player, cause, protect);
 	}
 
+	@Deprecated
 	public static boolean wearsLegs(EntityPlayer player, String cause, boolean protect) {
-		ItemStack armorItem = player.inventory.armorInventory[1];
-		return armorItem != null && armorItem.getItem() instanceof IArmorApiarist
-				&& ((IArmorApiarist) armorItem.getItem()).protectPlayer(player, armorItem, cause, protect);
+		return ArmorApiaristHelper.wearsLegs(player, cause, protect);
 	}
 
+	@Deprecated
 	public static boolean wearsBoots(EntityPlayer player, String cause, boolean protect) {
-		ItemStack armorItem = player.inventory.armorInventory[0];
-		return armorItem != null && armorItem.getItem() instanceof IArmorApiarist
-				&& ((IArmorApiarist) armorItem.getItem()).protectPlayer(player, armorItem, cause, protect);
+		return ArmorApiaristHelper.wearsBoots(player, cause, protect);
 	}
 
+	@Deprecated
 	public static int wearsItems(EntityPlayer player, String cause, boolean protect) {
-		int count = 0;
-
-		if (wearsHelmet(player, cause, protect))
-			count++;
-		if (wearsChest(player, cause, protect))
-			count++;
-		if (wearsLegs(player, cause, protect))
-			count++;
-		if (wearsBoots(player, cause, protect))
-			count++;
-
-		return count;
+		return ArmorApiaristHelper.wearsItems(player, cause, protect);
 	}
 
 }

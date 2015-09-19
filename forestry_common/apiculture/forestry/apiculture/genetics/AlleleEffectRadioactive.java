@@ -13,6 +13,7 @@ package forestry.apiculture.genetics;
 import java.util.List;
 import java.util.Random;
 
+import forestry.api.apiculture.IArmorApiarist.ArmorApiaristHelper;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -26,7 +27,6 @@ import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.apiculture.gadgets.BlockAlveary;
 import forestry.apiculture.gadgets.TileAlveary;
-import forestry.apiculture.items.ItemArmorApiarist;
 import forestry.core.utils.DamageSourceForestry;
 import forestry.core.utils.Vect;
 
@@ -67,7 +67,7 @@ public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 			// Players are not attacked if they wear a full set of apiarist's
 			// armor.
 			if (entity instanceof EntityPlayer) {
-				int count = ItemArmorApiarist.wearsItems((EntityPlayer) entity, getUID(), true);
+				int count = ArmorApiaristHelper.wearsItems((EntityPlayer) entity, getUID(), true);
 				// Full set, no damage/effect
 				if (count > 3)
 					continue;

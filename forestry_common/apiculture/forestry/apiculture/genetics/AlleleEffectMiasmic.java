@@ -12,6 +12,7 @@ package forestry.apiculture.genetics;
 
 import java.util.List;
 
+import forestry.api.apiculture.IArmorApiarist.ArmorApiaristHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -21,7 +22,6 @@ import net.minecraft.world.World;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
-import forestry.apiculture.items.ItemArmorApiarist;
 import forestry.plugins.PluginApiculture;
 
 public class AlleleEffectMiasmic extends AlleleEffectThrottled {
@@ -55,7 +55,7 @@ public class AlleleEffectMiasmic extends AlleleEffectThrottled {
 
 			// Players are not attacked if they wear a full set of apiarist's
 			// armor.
-			int count = ItemArmorApiarist.wearsItems(player, getUID(), true);
+			int count = ArmorApiaristHelper.wearsItems(player, getUID(), true);
 			// Full set, no damage/effect
 			if (count > 3)
 				continue;
