@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
+import forestry.api.apiculture.IArmorApiaristHelper;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -83,29 +84,29 @@ public class ItemArmorApiarist extends ItemArmor implements IArmorApiarist, IArm
 		return armorType == 0;
 	}
 
-	private static boolean isArmorApiarist(ItemStack itemStack, EntityPlayer player, String cause, boolean protect) {
-		if (itemStack == null) {
-			return false;
-		}
+	public static class ArmorApiaristHelper implements IArmorApiaristHelper {
 
-		Item item = itemStack.getItem();
-		if (!(item instanceof IArmorApiarist)) {
-			return false;
-		}
-
-		return ((IArmorApiarist) item).protectPlayer(player, itemStack, cause, protect);
-	}
-
-	public static int wearsItems(EntityPlayer player, String cause, boolean protect) {
-		int count = 0;
-
-		for (ItemStack armorItem : player.inventory.armorInventory) {
-			if (isArmorApiarist(armorItem, player, cause, protect)) {
-				count++;
+		@Override
+		public boolean isArmorApiarist(ItemStack stack, EntityPlayer player, String cause, boolean doProtect) {
+			if(stack == null) {
+				return false;
 			}
+
+			Item item = stack.getItem();
+			return item instanceof IArmorApiarist && ((IArmorApiarist) item).protectPlayer(player, stack, cause, doProtect);
 		}
 
-		return count;
-	}
+		@Override
+		public int wearsItems(EntityPlayer player, String cause, boolean doProtect) {
+			int count = 0;
 
+			for (ItemStack armorItem : player.inventory.armorInventory) {
+				if (isArmorApiarist(armorItem, player, cause, doProtect)) {
+					count++;
+				}
+			}
+
+			return count;
+		}
+	}
 }
