@@ -13,6 +13,7 @@ package forestry.apiculture.genetics;
 import java.util.List;
 import java.util.Random;
 
+import forestry.api.apiculture.BeeManager;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -64,7 +65,7 @@ public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 			// Players are not attacked if they wear a full set of apiarist's
 			// armor.
 			if (entity instanceof EntityPlayer) {
-				int count = ItemArmorApiarist.wearsItems((EntityPlayer) entity, getUID(), true);
+				int count = BeeManager.armorApiaristHelper.wearsItems((EntityPlayer) entity, getUID(), true);
 				// Full set, no damage/effect
 				if (count > 3) {
 					continue;
