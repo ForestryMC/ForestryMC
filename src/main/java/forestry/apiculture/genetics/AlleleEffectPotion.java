@@ -14,6 +14,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import forestry.api.apiculture.BeeManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -74,7 +75,7 @@ public class AlleleEffectPotion extends AlleleEffectThrottled {
 			int dur = this.duration;
 			if (isBadEffect) {
 				// Players are not attacked if they wear a full set of apiarist's armor.
-				int count = ItemArmorApiarist.wearsItems((EntityPlayer) entity, getUID(), true);
+				int count = BeeManager.armorApiaristHelper.wearsItems((EntityPlayer) entity, getUID(), true);
 				if (count >= 4) {
 					continue; // Full set, no damage/effect
 				} else if (count == 3) {

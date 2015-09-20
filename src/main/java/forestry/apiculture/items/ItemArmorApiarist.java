@@ -13,7 +13,6 @@ package forestry.apiculture.items;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
@@ -81,31 +80,6 @@ public class ItemArmorApiarist extends ItemArmor implements IArmorApiarist, IArm
 	@Override
 	public boolean canSeePollination(EntityPlayer player, ItemStack armor, boolean doSee) {
 		return armorType == 0;
-	}
-
-	private static boolean isArmorApiarist(ItemStack itemStack, EntityPlayer player, String cause, boolean protect) {
-		if (itemStack == null) {
-			return false;
-		}
-
-		Item item = itemStack.getItem();
-		if (!(item instanceof IArmorApiarist)) {
-			return false;
-		}
-
-		return ((IArmorApiarist) item).protectPlayer(player, itemStack, cause, protect);
-	}
-
-	public static int wearsItems(EntityPlayer player, String cause, boolean protect) {
-		int count = 0;
-
-		for (ItemStack armorItem : player.inventory.armorInventory) {
-			if (isArmorApiarist(armorItem, player, cause, protect)) {
-				count++;
-			}
-		}
-
-		return count;
 	}
 
 }

@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
+import forestry.apiculture.ArmorApiaristHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
@@ -190,6 +191,7 @@ public class PluginApiculture extends ForestryPlugin {
 		BeeManager.beeFactory = new BeeFactory();
 		BeeManager.beeMutationFactory = new BeeMutationFactory();
 		BeeManager.jubilanceFactory = new JubilanceFactory();
+		BeeManager.armorApiaristHelper = new ArmorApiaristHelper();
 
 		// Init bee interface
 		BeeManager.beeRoot = new BeeHelper();
