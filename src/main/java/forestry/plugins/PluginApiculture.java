@@ -66,6 +66,7 @@ import forestry.api.genetics.IFlowerRegistry;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
+import forestry.apiculture.ArmorApiaristHelper;
 import forestry.apiculture.GuiHandlerApiculture;
 import forestry.apiculture.SaveEventHandlerApiculture;
 import forestry.apiculture.commands.CommandBee;
@@ -189,6 +190,7 @@ public class PluginApiculture extends ForestryPlugin {
 		BeeManager.beeFactory = new BeeFactory();
 		BeeManager.beeMutationFactory = new BeeMutationFactory();
 		BeeManager.jubilanceFactory = new JubilanceFactory();
+		BeeManager.armorApiaristHelper = new ArmorApiaristHelper();
 
 		// Init bee interface
 		BeeManager.beeRoot = new BeeHelper();

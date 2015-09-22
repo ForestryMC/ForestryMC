@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.lepidopterology.render;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderItem;
@@ -118,7 +119,7 @@ public class ButterflyItemRenderer implements IItemRenderer {
 			entity.rotationPitch = 0;
 			entity.rotationYawHead = entity.rotationYaw;
 
-			RenderManager.instance.renderEntityWithPosYaw(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0f);
+			Minecraft.getMinecraft().getRenderManager().renderEntityWithPosYaw(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0f);
 
 		} else {
 			GL11.glTranslatef(translateX, translateY, translateZ);
@@ -133,7 +134,7 @@ public class ButterflyItemRenderer implements IItemRenderer {
 			entity.rotationPitch = -((float) Math.atan(pitch / 40.0F)) * 20.0F;
 			entity.rotationYawHead = entity.rotationYaw;
 
-			RenderManager.instance.renderEntityWithPosYaw(entity, 0.0D, 0.0D, 0.0D, 0.0F, getWingYaw(butterfly));
+			Minecraft.getMinecraft().getRenderManager().renderEntityWithPosYaw(entity, 0.0D, 0.0D, 0.0D, 0.0F, getWingYaw(butterfly));
 
 		}
 
@@ -169,7 +170,7 @@ public class ButterflyItemRenderer implements IItemRenderer {
 		entity.rotationPitch = 0;
 		entity.rotationYawHead = entity.rotationYaw;
 
-		RenderManager.instance.renderEntityWithPosYaw(entity, 0.0D, 0.0D, 0.0D, 0.0F, getWingYaw(butterfly));
+		Minecraft.getMinecraft().getRenderManager().renderEntityWithPosYaw(entity, 0.0D, 0.0D, 0.0D, 0.0F, getWingYaw(butterfly));
 
 		GL11.glPopMatrix();
 		RenderHelper.disableStandardItemLighting();

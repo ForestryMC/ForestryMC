@@ -88,6 +88,7 @@ public class PluginManager {
 		BIOMESOPLENTY(new PluginBiomesOPlenty()),
 		CHISEL(new PluginChisel()),
 		ENDERIO(new PluginEnderIO()),
+		EREBUS(new PluginErebus()),
 		EXTRAUTILITIES(new PluginExtraUtilities()),
 		GROWTHCRAFT(new PluginGrowthCraft()),
 		HARVESTCRAFT(new PluginHarvestCraft()),

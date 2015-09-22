@@ -62,31 +62,6 @@ public class ItemArmorApiarist extends ItemArmor implements IArmorApiarist, IArm
 		return armorType == 0;
 	}
 
-	private static boolean isArmorApiarist(ItemStack itemStack, EntityPlayer player, String cause, boolean protect) {
-		if (itemStack == null) {
-			return false;
-		}
-
-		Item item = itemStack.getItem();
-		if (!(item instanceof IArmorApiarist)) {
-			return false;
-		}
-
-		return ((IArmorApiarist) item).protectPlayer(player, itemStack, cause, protect);
-	}
-
-	public static int wearsItems(EntityPlayer player, String cause, boolean protect) {
-		int count = 0;
-
-		for (ItemStack armorItem : player.inventory.armorInventory) {
-			if (isArmorApiarist(armorItem, player, cause, protect)) {
-				count++;
-			}
-		}
-
-		return count;
-	}
-
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
 		manager.registerItemModel(item, 0);

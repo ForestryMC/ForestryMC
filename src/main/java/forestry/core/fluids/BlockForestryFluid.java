@@ -173,7 +173,7 @@ public class BlockForestryFluid extends BlockFluidClassic {
 					}
 				}
 			}
-	}
+		}
 
 		// explode if very flammable and near fire
 		int flammability = getFlammability(world, pos, null);

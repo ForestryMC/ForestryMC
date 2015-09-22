@@ -22,10 +22,10 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
-import forestry.apiculture.items.ItemArmorApiarist;
 import forestry.core.proxy.Proxies;
 
 public class AlleleEffectPotion extends AlleleEffectThrottled {
@@ -72,7 +72,7 @@ public class AlleleEffectPotion extends AlleleEffectThrottled {
 			int dur = this.duration;
 			if (isBadEffect) {
 				// Players are not attacked if they wear a full set of apiarist's armor.
-				int count = ItemArmorApiarist.wearsItems((EntityPlayer) entity, getUID(), true);
+				int count = BeeManager.armorApiaristHelper.wearsItems((EntityPlayer) entity, getUID(), true);
 				if (count >= 4) {
 					continue; // Full set, no damage/effect
 				} else if (count == 3) {
