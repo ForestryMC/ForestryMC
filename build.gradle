@@ -78,7 +78,7 @@ configurations {
 
 dependencies {
 	api 'net.industrial-craft:industrialcraft-2:2.2.713-experimental:api'
-	api name: "buildcraft", version: "6.4.10", classifier: "dev"
+	api name: "buildcraft", version: "7.0.25", classifier: "api"
 
 	// http://files.minecraftforge.net/CodeChickenLib/
 	compile "codechicken:CodeChickenLib:1.7.10-1.1.3.140:dev"

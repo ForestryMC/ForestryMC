@@ -83,7 +83,6 @@ public class PluginManager {
 		BUILDCRAFT_RECIPES(new PluginBuildCraftRecipes()),
 		BUILDCRAFT_STATEMENTS(new PluginBuildCraftStatements()),
 		BUILDCRAFT_TRANSPORT(new PluginBuildCraftTransport()),
-		PROPOLIS_PIPE(new PluginPropolisPipe()),
 		
 		AGRICRAFT(new PluginAgriCraft()),
 		BIOMESOPLENTY(new PluginBiomesOPlenty()),
