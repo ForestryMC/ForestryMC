@@ -570,7 +570,7 @@ public class PluginStorage extends ForestryPlugin {
 					'#', Blocks.wool,
 					'X', Items.string,
 					'V', "stickWood",
-					'Y', ForestryBlock.apiculture.getItemStack(1, Defaults.DEFINITION_APIARISTCHEST_META));
+					'Y', ForestryBlock.apicultureChest.getItemStack(1, Defaults.DEFINITION_APIARISTCHEST_META));
 		}
 
 		if (PluginManager.Module.LEPIDOPTEROLOGY.isEnabled()) {

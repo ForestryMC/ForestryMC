@@ -72,6 +72,7 @@ public enum ForestryBlock {
 	farm,
 	core,
 	apiculture,
+	apicultureChest,
 	mail,
 	engine,
 	factoryTESR,

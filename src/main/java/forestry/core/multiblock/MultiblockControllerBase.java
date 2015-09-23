@@ -5,6 +5,7 @@ import com.google.common.collect.Multiset;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Random;
 import java.util.Set;
@@ -440,8 +441,14 @@ public abstract class MultiblockControllerBase implements ISidedInventory, IRest
 	 * Calls onMachineAssembled on all attached parts.
 	 */
 	private void assembleMachine(AssemblyState oldState) {
-		for (IMultiblockPart part : connectedParts) {
-			part.onMachineAssembled(this);
+		Iterator<IMultiblockPart> parts = connectedParts.iterator();
+		try{
+			while(parts.hasNext()) {
+				IMultiblockPart part = parts.next();
+				part.onMachineAssembled(this);
+			}
+		}catch(Exception e){
+			e.getClass();
 		}
 		
 		this.assemblyState = AssemblyState.Assembled;

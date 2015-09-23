@@ -56,19 +56,22 @@ public class Defaults {
 	// Definition IDs
 	public static final int DEFINITION_CORE_ID = 0;
 	public static final int DEFINITION_APICULTURE_ID = 1;
-	public static final int DEFINITION_ARBORICULTURE_ID = 2;
-	public static final int DEFINITION_ENERGY_ID = 3;
-	public static final int DEFINITION_FACTORY_TESR_ID = 4;
-	public static final int DEFINITION_FACTORY_Plain_ID = 5;
-	public static final int DEFINITION_LEPIDOPTEROLOGY_ID = 6;
-	public static final int DEFINITION_MAIL_ID = 7;
+	public static final int DEFINITION_APICULTURE_CHEST_ID = 2;
+	public static final int DEFINITION_ARBORICULTURE_ID = 3;
+	public static final int DEFINITION_ENERGY_ID = 4;
+	public static final int DEFINITION_FACTORY_TESR_ID = 5;
+	public static final int DEFINITION_FACTORY_Plain_ID = 6;
+	public static final int DEFINITION_LEPIDOPTEROLOGY_ID = 7;
+	public static final int DEFINITION_MAIL_ID = 8;
 	
 	public static final int DEFINITION_ANALYZER_META = 0;
 	public static final int DEFINITION_ESCRITOIRE_META = 1;
 
 	public static final int DEFINITION_APIARY_META = 0;
-	public static final int DEFINITION_APIARISTCHEST_META = 1;
+	public static final int DEFINITION_APIARISTCHEST_LEGACY_META = 1;
 	public static final int DEFINITION_BEEHOUSE_META = 2;
+	
+	public static final int DEFINITION_APIARISTCHEST_META = 0;
 
 	public static final int DEFINITION_ENGINETIN_META = 0;
 	public static final int DEFINITION_ENGINECOPPER_META = 1;

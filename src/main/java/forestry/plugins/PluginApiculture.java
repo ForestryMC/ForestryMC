@@ -168,6 +168,7 @@ public class PluginApiculture extends ForestryPlugin {
 	public static HiveRegistry hiveRegistry;
 
 	private static MachineDefinition definitionApiary;
+	private static MachineDefinition definitionChestLegacy;
 	private static MachineDefinition definitionChest;
 	private static MachineDefinition definitionBeehouse;
 	private static MachineDefinition definitionAnalyzer;
@@ -214,6 +215,10 @@ public class PluginApiculture extends ForestryPlugin {
 		ForestryBlock.apiculture.block().setCreativeTab(Tabs.tabApiculture);
 		ForestryBlock.apiculture.block().setHarvestLevel("axe", 0);
 
+		ForestryBlock.apicultureChest.registerBlock(new BlockBase(Material.iron, Defaults.DEFINITION_APICULTURE_CHEST_ID), ItemForestryBlock.class, "apicultureChest");
+		ForestryBlock.apicultureChest.block().setCreativeTab(Tabs.tabApiculture);
+		ForestryBlock.apicultureChest.block().setHarvestLevel("axe", 0);
+		
 		definitionApiary = ((BlockBase) ForestryBlock.apiculture.block()).addDefinition(new MachineDefinition(Defaults.DEFINITION_APIARY_META, "forestry.Apiary", TileApiary.class,
 				ShapedRecipeCustom.createShapedRecipe(ForestryBlock.apiculture.getItemStack(1, Defaults.DEFINITION_APIARY_META),
 						"XXX",
@@ -224,8 +229,10 @@ public class PluginApiculture extends ForestryPlugin {
 						'C', ForestryItem.impregnatedCasing))
 				.setFaces(0, 1, 2, 2, 4, 4, 0, 7));
 
-		definitionChest = ((BlockBase) ForestryBlock.apiculture.block()).addDefinition(new MachineDefinition(Defaults.DEFINITION_APIARISTCHEST_META, "forestry.ApiaristChest", TileApiaristChest.class,
-				ShapedRecipeCustom.createShapedRecipe(ForestryBlock.apiculture.getItemStack(1, Defaults.DEFINITION_APIARISTCHEST_META),
+		definitionChestLegacy = ((BlockBase) ForestryBlock.apiculture.block()).addDefinition(new MachineDefinition(Defaults.DEFINITION_APIARISTCHEST_LEGACY_META, "forestry.ApiaristChest", TileApiaristChest.class).setLegacy());
+		
+		definitionChest = ((BlockBase) ForestryBlock.apicultureChest.block()).addDefinition(new MachineDefinition(Defaults.DEFINITION_APIARISTCHEST_META, "forestry.ApiaristChestNew", TileApiaristChest.class,
+				ShapedRecipeCustom.createShapedRecipe(ForestryBlock.apicultureChest.getItemStack(1, Defaults.DEFINITION_APIARISTCHEST_META),
 						" # ",
 						"XYX",
 						"XXX",
@@ -247,6 +254,7 @@ public class PluginApiculture extends ForestryPlugin {
 		definitionAnalyzer = ((BlockBase) ForestryBlock.core.block()).addDefinition(new MachineDefinition(Defaults.DEFINITION_ANALYZER_META, "forestry.Analyzer", TileAnalyzer.class,
 				PluginApiculture.proxy.getRendererAnalyzer(Defaults.TEXTURE_PATH_BLOCKS + "/analyzer_")));
 		((BlockBase)ForestryBlock.apiculture.block()).registerStateMapper();
+		((BlockBase)ForestryBlock.apicultureChest.block()).registerStateMapper();
 
 		ForestryBlock.beehives.registerBlock(new BlockBeehives(), ItemForestryBlock.class, "beehives");
 
@@ -870,6 +878,7 @@ public class PluginApiculture extends ForestryPlugin {
 		definitionAnalyzer.register();
 		definitionApiary.register();
 		definitionBeehouse.register();
+		definitionChestLegacy.register();
 		definitionChest.register();
 	}
 
@@ -1044,7 +1053,7 @@ public class PluginApiculture extends ForestryPlugin {
 			if (plantableFlowerBlock != null) {
 				FlowerManager.flowerRegistry.registerPlantableFlower(plantableFlowerBlock, meta, 1.0, flowerType);
 			} else {
-				Proxies.log.warning("No block found for '" + plantableFlower + "' in config '" + property.getName() + "'.");
+				Proxies.log.warning("No block found for '" + string + "' in config '" + property.getName() + "'.");
 			}
 		}
 	}

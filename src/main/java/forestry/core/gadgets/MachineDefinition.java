@@ -34,6 +34,8 @@ public class MachineDefinition {
 	private final String teIdent;
 	private Block block;
 	private final int meta;
+	private boolean legacy;
+	
 	public final IBlockRenderer renderer;
 
 	/* CRAFTING */
@@ -69,6 +71,11 @@ public class MachineDefinition {
 
 	public void setBlock(Block block) {
 		this.block = block;
+	}
+	
+	public MachineDefinition setLegacy() {
+		legacy = true;
+		return this;
 	}
 
 	public void register() {
@@ -109,6 +116,9 @@ public class MachineDefinition {
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	public void getSubBlocks(Item item, CreativeTabs tab, List list) {
+		if (legacy) {
+			return;
+		}
 		list.add(new ItemStack(item, 1, meta));
 	}
 
