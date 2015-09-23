@@ -29,7 +29,7 @@ import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fluids.IFluidContainerItem;
 import net.minecraftforge.fluids.IFluidHandler;
 
-import forestry.core.fluids.tanks.StandardTank;
+import forestry.core.config.Defaults;
 import forestry.core.inventory.InvTools;
 import forestry.core.utils.StackUtils;
 
@@ -103,36 +103,6 @@ public final class FluidHelper {
 		return false;
 	}
 
-	public static void processContainers(StandardTank tank, IInventory inv, int inputSlot, int outputSlot) {
-		processContainers(tank, inv, inputSlot, outputSlot, tank.getFluidType(), true, true);
-	}
-
-	public static void processContainers(StandardTank tank, IInventory inv, int inputSlot, int outputSlot, Fluid fluidToFill, boolean processFilled, boolean processEmpty) {
-		TankManager tankManger = new TankManager();
-		tankManger.add(tank);
-		processContainers(tankManger, inv, inputSlot, outputSlot, fluidToFill, processFilled, processEmpty);
-	}
-
-	public static void processContainers(TankManager tank, IInventory inv, int inputSlot, int outputSlot, Fluid fluidToFill) {
-		processContainers(tank, inv, inputSlot, outputSlot, fluidToFill, true, true);
-	}
-
-	public static void processContainers(IFluidHandler fluidHandler, IInventory inv, int inputSlot, int outputSlot, Fluid fluidToFill, boolean processFilled, boolean processEmpty) {
-		ItemStack input = inv.getStackInSlot(inputSlot);
-
-		if (input == null) {
-			return;
-		}
-
-		if (processFilled && drainContainers(fluidHandler, inv, inputSlot, outputSlot)) {
-			return;
-		}
-
-		if (processEmpty && fluidToFill != null) {
-			fillContainers(fluidHandler, inv, inputSlot, outputSlot, fluidToFill);
-		}
-	}
-
 	public static boolean fillContainers(IFluidHandler fluidHandler, IInventory inv, int inputSlot, int outputSlot, Fluid fluidToFill) {
 		return fillContainers(fluidHandler, inv, inputSlot, outputSlot, fluidToFill, true);
 	}
@@ -161,10 +131,10 @@ public final class FluidHelper {
 	}
 
 	public static boolean drainContainers(IFluidHandler fluidHandler, IInventory inv, int slot) {
-		return drainContainers(fluidHandler, inv, slot, slot);
+		return drainContainers(fluidHandler, inv, slot, slot, Defaults.BUCKET_VOLUME);
 	}
 
-	public static boolean drainContainers(IFluidHandler fluidHandler, IInventory inv, int inputSlot, int outputSlot) {
+	public static boolean drainContainers(IFluidHandler fluidHandler, IInventory inv, int inputSlot, int outputSlot, int maxAmount) {
 		ItemStack input = inv.getStackInSlot(inputSlot);
 		ItemStack output = inv.getStackInSlot(outputSlot);
 
@@ -176,36 +146,39 @@ public final class FluidHelper {
 		if (fluidInContainer == null) {
 			return false;
 		}
+		if (fluidInContainer.amount > maxAmount) {
+			fluidInContainer.amount = maxAmount;
+		}
 
 		int used = fluidHandler.fill(ForgeDirection.UNKNOWN, fluidInContainer, false);
-		if (used < fluidInContainer.amount) {
+
+		ItemStack drainedItem = getDrainedContainer(input, used);
+		if (ItemStack.areItemStacksEqual(input, drainedItem)) {
 			return false;
 		}
 
-		ItemStack emptyItem = getEmptyContainer(input);
-
-		if (output != null && emptyItem != null) {
+		if (output != null && drainedItem != null) {
 			if (outputSlot == inputSlot) {
 				if (input.stackSize > 1) {
 					return false;
 				}
-			} else if (!StackUtils.isIdenticalItem(output, emptyItem)) {
+			} else if (!StackUtils.isIdenticalItem(output, drainedItem)) {
 				return false;
-			} else if (output.stackSize + emptyItem.stackSize > output.getMaxStackSize()) {
+			} else if (output.stackSize + drainedItem.stackSize > output.getMaxStackSize()) {
 				return false;
 			}
 		}
 
 		fluidHandler.fill(ForgeDirection.UNKNOWN, fluidInContainer, true);
 
-		if (emptyItem != null) {
+		if (drainedItem != null) {
 			if (outputSlot == inputSlot) {
-				inv.setInventorySlotContents(outputSlot, emptyItem);
+				inv.setInventorySlotContents(outputSlot, drainedItem);
 				return true;
 			}
 
 			if (output == null) {
-				inv.setInventorySlotContents(outputSlot, emptyItem);
+				inv.setInventorySlotContents(outputSlot, drainedItem);
 			} else {
 				output.stackSize++;
 			}
@@ -269,15 +242,6 @@ public final class FluidHelper {
 		return false;
 	}
 
-	public static ItemStack getEmptyContainer(ItemStack container) {
-		Item item = container.getItem();
-		if (item == null) {
-			return null;
-		}
-
-		return item.getContainerItem(container);
-	}
-
 	public static ItemStack getDrainedContainer(ItemStack container, int drainAmount) {
 		if (container == null) {
 			return null;
@@ -288,15 +252,20 @@ public final class FluidHelper {
 		}
 
 		Item item = container.getItem();
-		if (item instanceof IFluidContainerItem) {
+		if (item == null) {
+			return null;
+		} else if (item instanceof IFluidContainerItem) {
 			ItemStack drained = container.copy();
 			drained.stackSize = 1;
 			IFluidContainerItem containerItem = (IFluidContainerItem) item;
 			containerItem.drain(drained, drainAmount, true);
 			return drained;
+		} else {
+			if (drainAmount < Defaults.BUCKET_VOLUME) {
+				return container;
+			}
+			return item.getContainerItem(container);
 		}
-
-		return getEmptyContainer(container);
 	}
 
 	public static ItemStack getFilledContainer(Fluid fluid, ItemStack empty) {
