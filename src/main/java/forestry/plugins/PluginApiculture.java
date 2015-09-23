@@ -169,6 +169,7 @@ public class PluginApiculture extends ForestryPlugin {
 	public static HiveRegistry hiveRegistry;
 
 	private static MachineDefinition definitionApiary;
+	private static MachineDefinition definitionChestLegacy;
 	private static MachineDefinition definitionChest;
 	private static MachineDefinition definitionBeehouse;
 	private static MachineDefinition definitionAnalyzer;
@@ -211,9 +212,13 @@ public class PluginApiculture extends ForestryPlugin {
 
 		MinecraftForge.EVENT_BUS.register(this);
 
-		ForestryBlock.apiculture.registerBlock(new BlockBase(Material.iron, true), ItemForestryBlock.class, "apiculture");
+		ForestryBlock.apiculture.registerBlock(new BlockBase(Material.iron), ItemForestryBlock.class, "apiculture");
 		ForestryBlock.apiculture.block().setCreativeTab(Tabs.tabApiculture);
 		ForestryBlock.apiculture.block().setHarvestLevel("axe", 0);
+
+		ForestryBlock.apicultureChest.registerBlock(new BlockBase(Material.iron, true), ItemForestryBlock.class, "apicultureChest");
+		ForestryBlock.apicultureChest.block().setCreativeTab(Tabs.tabApiculture);
+		ForestryBlock.apicultureChest.block().setHarvestLevel("axe", 0);
 
 		definitionApiary = ((BlockBase) ForestryBlock.apiculture.block()).addDefinition(new MachineDefinition(Defaults.DEFINITION_APIARY_META, "forestry.Apiary", TileApiary.class,
 				ShapedRecipeCustom.createShapedRecipe(ForestryBlock.apiculture.getItemStack(1, Defaults.DEFINITION_APIARY_META),
@@ -225,8 +230,10 @@ public class PluginApiculture extends ForestryPlugin {
 						'C', ForestryItem.impregnatedCasing))
 				.setFaces(0, 1, 2, 2, 4, 4, 0, 7));
 
-		definitionChest = ((BlockBase) ForestryBlock.apiculture.block()).addDefinition(new MachineDefinition(Defaults.DEFINITION_APIARISTCHEST_META, "forestry.ApiaristChest", TileApiaristChest.class, new RenderNaturalistChest("apiaristchest"),
-				ShapedRecipeCustom.createShapedRecipe(ForestryBlock.apiculture.getItemStack(1, Defaults.DEFINITION_APIARISTCHEST_META),
+		definitionChestLegacy = ((BlockBase) ForestryBlock.apiculture.block()).addDefinition(new MachineDefinition(Defaults.DEFINITION_APIARISTCHEST_LEGACY_META, "forestry.ApiaristChest", TileApiaristChest.class).setLegacy());
+
+		definitionChest = ((BlockBase) ForestryBlock.apicultureChest.block()).addDefinition(new MachineDefinition(Defaults.DEFINITION_APIARISTCHEST_META, "forestry.ApiaristChestNew", TileApiaristChest.class, new RenderNaturalistChest("apiaristchest"),
+				ShapedRecipeCustom.createShapedRecipe(ForestryBlock.apicultureChest.getItemStack(1, Defaults.DEFINITION_APIARISTCHEST_META),
 						" # ",
 						"XYX",
 						"XXX",
@@ -868,6 +875,7 @@ public class PluginApiculture extends ForestryPlugin {
 		definitionAnalyzer.register();
 		definitionApiary.register();
 		definitionBeehouse.register();
+		definitionChestLegacy.register();
 		definitionChest.register();
 	}
 

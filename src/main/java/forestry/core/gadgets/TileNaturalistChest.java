@@ -20,16 +20,18 @@ import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.GuiHandler;
 import forestry.core.config.Config;
 import forestry.core.gui.IPagedInventory;
+import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 
 public abstract class TileNaturalistChest extends TileBase implements IPagedInventory {
+	private static final float lidAngleVariationPerTick = 0.1F;
+
 	private final int guiID;
 	public float lidAngle;
 	public float prevLidAngle;
 	private int numPlayersUsing;
-	private static float lidAngleVariationPerTick = 0.1F;
 
 	public TileNaturalistChest(ISpeciesRoot speciesRoot, int guiId) {
 		setInternalInventory(new NaturalistInventoryAdapter(this, speciesRoot));
