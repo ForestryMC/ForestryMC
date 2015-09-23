@@ -1042,7 +1042,7 @@ public class PluginApiculture extends ForestryPlugin {
 			if (plantableFlowerBlock != null) {
 				FlowerManager.flowerRegistry.registerPlantableFlower(plantableFlowerBlock, meta, 1.0, flowerType);
 			} else {
-				Proxies.log.warning("No block found for '" + plantableFlower + "' in config '" + property.getName() + "'.");
+				Proxies.log.warning("No block found for '" + string + "' in config '" + property.getName() + "'.");
 			}
 		}
 	}
