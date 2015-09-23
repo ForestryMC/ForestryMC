@@ -135,6 +135,11 @@ public class NEIHandlerFabricator extends RecipeHandlerBase {
 		}
 
 		@Override
+		public List<PositionedStack> getOtherStacks() {
+			return super.getCycledIngredients(NEIHandlerFabricator.this.cycleticks / 40, this.smeltingInput);
+		}
+
+		@Override
 		public List<PositionedStack> getIngredients() {
 			return getCycledIngredients(NEIHandlerFabricator.this.cycleticks / 20, this.inputs);
 		}
