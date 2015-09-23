@@ -15,7 +15,6 @@ import com.google.common.collect.ImmutableMap;
 import java.util.EnumSet;
 
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.fluids.FluidRegistry;

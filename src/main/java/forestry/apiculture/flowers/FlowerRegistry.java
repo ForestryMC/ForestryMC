@@ -48,7 +48,6 @@ import forestry.api.genetics.IFlowerGrowthRule;
 import forestry.api.genetics.IFlowerRegistry;
 import forestry.api.genetics.IIndividual;
 import forestry.apiculture.BeeHousingModifier;
-import forestry.core.proxy.Proxies;
 import forestry.core.vect.MutableVect;
 import forestry.core.vect.Vect;
 import forestry.plugins.PluginManager;

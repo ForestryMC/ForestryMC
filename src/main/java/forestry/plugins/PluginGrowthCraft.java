@@ -10,23 +10,13 @@
  ******************************************************************************/
 package forestry.plugins;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.block.Block;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import net.minecraftforge.oredict.OreDictionary;
-
-import cpw.mods.fml.common.event.FMLInterModComms;
-import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.common.registry.GameRegistry;
 
-import forestry.api.apiculture.FlowerManager;
 import forestry.api.farming.Farmables;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.BackpackManager;
@@ -36,11 +26,7 @@ import forestry.core.config.ForestryItem;
 import forestry.core.fluids.Fluids;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.RecipeUtil;
-import forestry.factory.gadgets.MachineFabricator;
-import forestry.farming.logic.FarmableBasicFruit;
 import forestry.farming.logic.FarmableBasicGrowthCraft;
-import forestry.farming.logic.FarmableGenericCrop;
-import forestry.farming.logic.FarmableGenericSapling;
 
 @Plugin(pluginID = "Growthcraft", name = "Growthcraft", author = "Nirek", url = Defaults.URL, unlocalizedDescription = "for.plugin.growthcraft.description")
 public class PluginGrowthCraft extends ForestryPlugin {

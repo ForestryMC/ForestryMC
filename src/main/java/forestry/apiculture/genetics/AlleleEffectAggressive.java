@@ -21,7 +21,6 @@ import net.minecraft.util.DamageSource;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
-import forestry.apiculture.items.ItemArmorApiarist;
 import forestry.core.utils.DamageSourceForestry;
 
 public class AlleleEffectAggressive extends AlleleEffectThrottled {

@@ -26,7 +26,6 @@ import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.apiculture.gadgets.BlockAlveary;
-import forestry.apiculture.items.ItemArmorApiarist;
 import forestry.apiculture.multiblock.TileAlveary;
 import forestry.core.utils.DamageSourceForestry;
 import forestry.core.vect.Vect;

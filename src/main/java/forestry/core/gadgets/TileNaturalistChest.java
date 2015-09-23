@@ -20,7 +20,6 @@ import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.GuiHandler;
 import forestry.core.config.Config;
 import forestry.core.gui.IPagedInventory;
-import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;

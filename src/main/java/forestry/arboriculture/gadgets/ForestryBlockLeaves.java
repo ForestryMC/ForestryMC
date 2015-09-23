@@ -56,7 +56,6 @@ import forestry.arboriculture.items.ItemLeavesBlock;
 import forestry.arboriculture.render.LeafTexture;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StackUtils;
-import forestry.core.utils.Utils;
 import forestry.plugins.PluginArboriculture;
 import forestry.plugins.PluginLepidopterology;
 

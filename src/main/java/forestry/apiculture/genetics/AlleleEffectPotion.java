@@ -28,7 +28,6 @@ import cpw.mods.fml.relauncher.ReflectionHelper;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
-import forestry.apiculture.items.ItemArmorApiarist;
 import forestry.core.proxy.Proxies;
 
 public class AlleleEffectPotion extends AlleleEffectThrottled {
