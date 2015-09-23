@@ -57,7 +57,7 @@ public class PluginFluids extends ForestryPlugin {
 		}
 	}
 
-	private static void createBlock(Fluids forestryFluid) {
+	private static void createBlock(final Fluids forestryFluid) {
 		Fluid fluid = forestryFluid.getFluid();
 		Block fluidBlock = fluid.getBlock();
 
@@ -67,6 +67,7 @@ public class PluginFluids extends ForestryPlugin {
 				if (fluidBlock != null) {
 					fluidBlock.setUnlocalizedName("forestry.fluid." + forestryFluid.getTag());
 					Proxies.common.registerBlock(fluidBlock, ItemBlock.class);
+					Proxies.render.registerFluidStateMapper(fluidBlock, forestryFluid);
 					forestryFluidsWithBlocks.add(forestryFluid);
 				}
 			} else {

@@ -137,7 +137,8 @@ public class BlockForestryFluid extends BlockFluidClassic {
 	
 	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
-
+		super.updateTick(world, pos, state, rand);
+		
 		// Start fires if the fluid is lava-like
 		if (getMaterial() == Material.lava) {
 			int rangeUp = rand.nextInt(3);
@@ -200,4 +201,5 @@ public class BlockForestryFluid extends BlockFluidClassic {
 		AxisAlignedBB boundingBox = AxisAlignedBB.fromBounds(pos.getX() - 1, pos.getY() - 1, pos.getZ() - 1, pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1);
 		return world.isFlammableWithin(boundingBox);
 	}
+	
 }

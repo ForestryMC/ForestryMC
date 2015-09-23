@@ -220,7 +220,7 @@ public class ItemLiquidContainer extends Item implements IModelRegister{
 		}
 
 		int x = movingobjectposition.getBlockPos().getX();
-		int y = movingobjectposition.getBlockPos().getX();
+		int y = movingobjectposition.getBlockPos().getY();
 		int z = movingobjectposition.getBlockPos().getZ();
 
 		switch (movingobjectposition.sideHit) {
@@ -288,7 +288,7 @@ public class ItemLiquidContainer extends Item implements IModelRegister{
 						world.destroyBlock(pos, true);
 					}
 
-					world.setBlockState(pos, this.contents.getStateFromMeta(0), 3);
+					return world.setBlockState(pos, this.contents.getDefaultState(), 3);
 				}
 
 				return true;

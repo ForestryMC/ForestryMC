@@ -14,8 +14,11 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.List;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
@@ -92,7 +95,7 @@ public class PositionedFluidTank {
 			return;
 		}
 
-		GuiDraw.changeTexture(new ResourceLocation(fluidIcon.getResourceDomain(), "textures/" + fluidIcon.getResourcePath() + ".png"));
+		GuiDraw.changeTexture(TextureMap.locationBlocksTexture);
 		int color = this.tank.getFluid().getFluid().getColor(this.tank.getFluid());
 		GL11.glColor3ub((byte) (color >> 16 & 0xFF), (byte) (color >> 8 & 0xFF), (byte) (color & 0xFF));
 		GL11.glDisable(GL11.GL_BLEND);
@@ -107,12 +110,14 @@ public class PositionedFluidTank {
 
 				int drawX = this.position.x + i;
 				int drawY = posY + j;
+				
+				TextureAtlasSprite sprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(fluidIcon.toString());
 
-				double minU = 0;
-				double maxU = 16;
-				double minV = 0;
-				double maxV = 16;
-
+				double minU = sprite.getMinU();
+				double maxU = sprite.getMaxU();
+				double minV = sprite.getMinV();
+				double maxV = sprite.getMaxV();
+				
 				Tessellator tessellator = Tessellator.getInstance();
 				WorldRenderer worldRenderer = tessellator.getWorldRenderer();
 				worldRenderer.startDrawingQuads();

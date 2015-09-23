@@ -1,0 +1,46 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "bioethanol": {
+      "model": "forge:fluid",
+      "custom": { "fluid": "bioethanol" }
+    },
+    "biomass": {
+      "model": "forge:fluid",
+      "custom": { "fluid": "biomass" }
+    },
+    "glass": {
+      "model": "forge:fluid",
+      "custom": { "fluid": "glass" }
+    },
+    "for.honey": {
+      "model": "forge:fluid",
+      "custom": { "fluid": "for.honey" }
+    },
+    "honey": {
+      "model": "forge:fluid",
+      "custom": { "fluid": "honey" }
+    },
+    "ice": {
+      "model": "forge:fluid",
+      "custom": { "fluid": "ice" }
+    },
+    "juice": {
+      "model": "forge:fluid",
+      "custom": { "fluid": "juice" }
+    },
+    "milk": {
+      "model": "forge:fluid",
+      "custom": { "fluid": "milk" }
+    },
+    "seedoil": {
+      "model": "forge:fluid",
+      "custom": { "fluid": "seedoil" }
+    },
+    "short.mead": {
+      "model": "forge:fluid",
+      "custom": { "fluid": "short.mead" }
+    }
+
+  }
+}

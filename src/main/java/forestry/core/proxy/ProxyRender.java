@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.proxy;
 
+import forestry.core.fluids.Fluids;
 import forestry.core.gadgets.MachineDefinition;
 import forestry.core.interfaces.IBlockRenderer;
 import forestry.core.render.BlockModelIndex;
@@ -49,6 +50,9 @@ public class ProxyRender {
 	}
 	
 	public void registerStateMapper(Block block, IStateMapper mapper){
+	}
+	
+	public void registerFluidStateMapper(Block block, Fluids forestryFluid){
 	}
 
 	public short registerItemTexUID(String modifier, short uid, String ident) {

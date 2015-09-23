@@ -13,16 +13,20 @@ package forestry.core.proxy;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.statemap.IStateMapper;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import forestry.core.config.Config;
+import forestry.core.fluids.Fluids;
 import forestry.core.gadgets.MachineDefinition;
 import forestry.core.interfaces.IBlockRenderer;
 import forestry.core.render.RenderingHandler;
@@ -81,6 +85,26 @@ public class ClientProxyRender extends ProxyRender {
 			}
 		};
 		ModelLoader.setCustomStateMapper(index.block, ignoreState);
+	}
+	
+	@Override
+	public void registerFluidStateMapper(Block block, final Fluids forestryFluid) {
+		final ModelResourceLocation fluidLocation = new ModelResourceLocation("forestry:blockforestryfluid", forestryFluid.getTag());
+		StateMapperBase ignoreState = new StateMapperBase() {
+			@Override
+			protected ModelResourceLocation getModelResourceLocation(IBlockState iBlockState) {
+			     return fluidLocation;
+			}
+		};
+		ModelLoader.setCustomStateMapper(block, ignoreState);
+        ModelLoader.setCustomMeshDefinition(Item.getItemFromBlock(block), new ItemMeshDefinition()
+        {
+            @Override
+			public ModelResourceLocation getModelLocation(ItemStack stack)
+            {
+                return fluidLocation;
+            }
+        });
 	}
 	
 	@Override
