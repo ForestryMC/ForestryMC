@@ -73,7 +73,17 @@ public class ShapelessRecipeCustom implements IRecipe {
 			}
 		}
 
-		return arraylist.isEmpty();
+		if (!arraylist.isEmpty()) {
+			return false;
+		}
+
+		if (preservesNbt) {
+			if (RecipeUtil.getCraftingNbt(inventoryCrafting) == null) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	@Override

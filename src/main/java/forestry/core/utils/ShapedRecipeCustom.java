@@ -77,7 +77,17 @@ public class ShapedRecipeCustom implements IDescriptiveRecipe {
 
 	@Override
 	public boolean matches(InventoryCrafting inventoryCrafting, World world) {
-		return matches((IInventory) inventoryCrafting, world);
+		if (!matches((IInventory) inventoryCrafting, world)) {
+			return false;
+		}
+
+		if (preserveNBT) {
+			if (RecipeUtil.getCraftingNbt(inventoryCrafting) == null) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	public boolean matches(IInventory inventoryCrafting, World world) {
