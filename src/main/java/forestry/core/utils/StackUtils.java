@@ -270,6 +270,10 @@ public class StackUtils {
 			return false;
 		}
 
+		if (craftingTools && isCraftingTool(base) && base.getItem() == comparison.getItem()) {
+			return true;
+		}
+
 		if (base.hasTagCompound() && !base.stackTagCompound.hasNoTags()) {
 			if (!ItemStack.areItemStacksEqual(base, comparison)) {
 				return false;
@@ -296,21 +300,22 @@ public class StackUtils {
 			}
 		}
 
-		if (craftingTools) {
-			return isThisCraftingTool(base, comparison);
-		}
-
 		return false;
 	}
 
 	public static boolean isCraftingTool(ItemStack itemstack) {
-		return itemstack.getItem().hasContainerItem(itemstack)
-				&& itemstack.getItem().isDamageable()
-				&& !itemstack.getItem().doesContainerItemLeaveCraftingGrid(itemstack);
-	}
+		Item item = itemstack.getItem();
+		if (item == null) {
+			return false;
+		}
 
-	public static boolean isThisCraftingTool(ItemStack phantom, ItemStack actual) {
-		return isCraftingTool(phantom) && phantom.getItem() == actual.getItem();
+		if (item.hasContainerItem(itemstack)) {
+			if (item.isDamageable() || itemstack.hasTagCompound()) {
+				return !item.doesContainerItemLeaveCraftingGrid(itemstack);
+			}
+		}
+
+		return false;
 	}
 
 	public static void stowContainerItem(ItemStack itemstack, IInventory stowing, int slotIndex, EntityPlayer player) {
