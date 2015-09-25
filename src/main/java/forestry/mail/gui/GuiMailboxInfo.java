@@ -17,9 +17,9 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import forestry.core.config.Config;
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.ForestryResource;
+import forestry.core.render.ForestryResource;
 import forestry.mail.POBoxInfo;
 
 public class GuiMailboxInfo extends Gui {
@@ -28,7 +28,7 @@ public class GuiMailboxInfo extends Gui {
 
 	private final FontRenderer fontRendererObj;
 	private POBoxInfo poInfo;
-	private final ResourceLocation textureAlert = new ForestryResource(Defaults.TEXTURE_PATH_GUI + "/mailalert.png");
+	private final ResourceLocation textureAlert = new ForestryResource(Constants.TEXTURE_PATH_GUI + "/mailalert.png");
 
 	private GuiMailboxInfo() {
 		fontRendererObj = Proxies.common.getClientInstance().fontRenderer;

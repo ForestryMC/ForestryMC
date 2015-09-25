@@ -17,9 +17,9 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.config.ForestryBlock;
-import forestry.core.gadgets.TileForestry;
+import forestry.core.tiles.TileForestry;
 
 public class BlockTypeTileForestry implements IBlockType {
 
@@ -39,7 +39,7 @@ public class BlockTypeTileForestry implements IBlockType {
 
 	@Override
 	public void setBlock(World world, int x, int y, int z) {
-		boolean placed = world.setBlock(x, y, z, block, meta, Defaults.FLAG_BLOCK_SYNCH_AND_UPDATE);
+		boolean placed = world.setBlock(x, y, z, block, meta, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
 		if (!placed) {
 			return;
 		}

@@ -16,8 +16,9 @@ import net.minecraft.world.World;
 import com.mojang.authlib.GameProfile;
 
 import forestry.api.world.ITreeGenData;
-import forestry.arboriculture.gadgets.TileTreeContainer;
-import forestry.core.utils.Utils;
+import forestry.arboriculture.tiles.TileTreeContainer;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.BlockUtil;
 import forestry.core.worldgen.BlockType;
 import forestry.core.worldgen.BlockTypeVoid;
 import forestry.core.worldgen.WorldGenBase;
@@ -62,7 +63,7 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 	}
 
 	private static GameProfile getOwner(World world, int x, int y, int z) {
-		TileTreeContainer tile = Utils.getTile(world, x, y, z, TileTreeContainer.class);
+		TileTreeContainer tile = TileUtil.getTile(world, x, y, z, TileTreeContainer.class);
 		if (tile == null) {
 			return null;
 		}
@@ -158,7 +159,7 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 	@Override
 	protected void addBlock(World world, int x, int y, int z, ITreeBlockType type, EnumReplaceMode replace) {
 		if (replace == EnumReplaceMode.ALL
-				|| (replace == EnumReplaceMode.SOFT && Utils.isReplaceableBlock(world, startX + x, startY + y, startZ + z))
+				|| (replace == EnumReplaceMode.SOFT && BlockUtil.isReplaceableBlock(world, startX + x, startY + y, startZ + z))
 				|| world.isAirBlock(startX + x, startY + y, startZ + z)) {
 			type.setBlock(world, tree, startX + x, startY + y, startZ + z);
 		}

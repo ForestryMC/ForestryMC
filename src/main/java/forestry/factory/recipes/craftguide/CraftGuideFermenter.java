@@ -18,9 +18,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.fuels.FuelManager;
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.config.ForestryBlock;
-import forestry.factory.gadgets.MachineFermenter;
+import forestry.factory.tiles.TileFermenter;
 
 import uristqwerty.CraftGuide.api.ItemSlot;
 import uristqwerty.CraftGuide.api.LiquidSlot;
@@ -49,11 +49,11 @@ public class CraftGuideFermenter implements RecipeProvider {
 			return;
 		}
 
-		ItemStack machine = ForestryBlock.factoryTESR.getItemStack(1, Defaults.DEFINITION_FERMENTER_META);
+		ItemStack machine = ForestryBlock.factoryTESR.getItemStack(1, Constants.DEFINITION_FERMENTER_META);
 		RecipeTemplate template = generator.createRecipeTemplate(slots, machine);
 		List<Object> fuels = new ArrayList<Object>(FuelManager.fermenterFuel.keySet());
 
-		for (MachineFermenter.Recipe recipe : MachineFermenter.RecipeManager.recipes) {
+		for (TileFermenter.Recipe recipe : TileFermenter.RecipeManager.recipes) {
 			Object[] array = new Object[5];
 
 			array[0] = recipe.resource;

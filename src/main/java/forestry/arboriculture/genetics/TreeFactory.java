@@ -20,7 +20,8 @@ import forestry.api.arboriculture.ITreeFactory;
 import forestry.api.arboriculture.ITreeGenerator;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IClassification;
-import forestry.arboriculture.render.LeafIconProvider;
+import forestry.arboriculture.genetics.alleles.AlleleTreeSpecies;
+import forestry.arboriculture.render.IconProviderLeaves;
 
 public class TreeFactory implements ITreeFactory {
 	@Override
@@ -32,6 +33,6 @@ public class TreeFactory implements ITreeFactory {
 
 	@Override
 	public ILeafIconProvider getLeafIconProvider(EnumLeafType enumLeafType, Color color, Color colorPollinated) {
-		return new LeafIconProvider(enumLeafType, color, colorPollinated);
+		return new IconProviderLeaves(enumLeafType, color, colorPollinated);
 	}
 }

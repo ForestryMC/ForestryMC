@@ -23,8 +23,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 
 import forestry.apiculture.render.ModelAnalyzer;
-import forestry.core.gadgets.TileAnalyzer;
-import forestry.core.interfaces.IBlockRenderer;
+import forestry.core.tiles.TileAnalyzer;
 
 public class RenderAnalyzer extends TileEntitySpecialRenderer implements IBlockRenderer {
 

@@ -38,8 +38,8 @@ import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
 import forestry.api.genetics.IFruitBearer;
 import forestry.core.config.ForestryItem;
-import forestry.core.vect.Vect;
-import forestry.core.vect.VectUtil;
+import forestry.core.utils.vect.Vect;
+import forestry.core.utils.vect.VectUtil;
 import forestry.plugins.PluginManager;
 
 public class FarmLogicOrchard extends FarmLogic {

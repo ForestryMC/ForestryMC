@@ -15,9 +15,9 @@ import java.io.IOException;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
-import forestry.core.gadgets.TileForestry;
-import forestry.core.interfaces.IItemStackDisplay;
 import forestry.core.proxy.Proxies;
+import forestry.core.tiles.IItemStackDisplay;
+import forestry.core.tiles.TileForestry;
 
 public class PacketItemStackDisplay extends PacketCoordinates {
 

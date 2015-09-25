@@ -16,11 +16,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.IIcon;
 
-import forestry.core.interfaces.IAccessHandler;
-import forestry.core.interfaces.IRestrictedAccessTile;
+import forestry.core.access.EnumAccess;
+import forestry.core.access.IAccessHandler;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
-import forestry.core.utils.EnumAccess;
+import forestry.core.tiles.IRestrictedAccessTile;
 import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.StringUtil;
 

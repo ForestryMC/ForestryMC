@@ -44,16 +44,16 @@ import forestry.api.core.IErrorState;
 import forestry.api.core.Tabs;
 import forestry.api.genetics.AlleleManager;
 import forestry.apiculture.render.TextureHabitatLocator;
-import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.ForestryItem;
-import forestry.core.interfaces.IHintSource;
+import forestry.core.errors.EnumErrorCode;
+import forestry.core.gui.IHintSource;
 import forestry.core.inventory.ItemInventory;
 import forestry.core.items.ItemInventoried;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
-import forestry.core.vect.Vect;
+import forestry.core.utils.vect.Vect;
 
 public class ItemHabitatLocator extends ItemInventoried {
 

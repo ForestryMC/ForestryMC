@@ -12,10 +12,10 @@ package forestry.core.gui;
 
 import net.minecraft.entity.player.EntityPlayer;
 
-import forestry.core.gadgets.TileEscritoire;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.core.network.PacketGuiSelect;
+import forestry.core.tiles.TileEscritoire;
 
 public class ContainerEscritoire extends ContainerTile<TileEscritoire> implements IGuiSelectable {
 

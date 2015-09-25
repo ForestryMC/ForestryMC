@@ -13,12 +13,10 @@ package forestry.core.proxy;
 import cpw.mods.fml.common.SidedProxy;
 
 public class Proxies {
-	@SidedProxy(clientSide = "forestry.core.proxy.ClientProxyCommon", serverSide = "forestry.core.proxy.ProxyCommon")
+	@SidedProxy(clientSide = "forestry.core.proxy.ProxyCommonClient", serverSide = "forestry.core.proxy.ProxyCommon")
 	public static ProxyCommon common;
-	@SidedProxy(clientSide = "forestry.core.proxy.ClientProxyNetwork", serverSide = "forestry.core.proxy.ProxyNetwork")
+	@SidedProxy(clientSide = "forestry.core.proxy.ProxyNetworkClient", serverSide = "forestry.core.proxy.ProxyNetwork")
 	public static ProxyNetwork net;
-	@SidedProxy(clientSide = "forestry.core.proxy.ClientProxyRender", serverSide = "forestry.core.proxy.ProxyRender")
+	@SidedProxy(clientSide = "forestry.core.proxy.ProxyRenderClient", serverSide = "forestry.core.proxy.ProxyRender")
 	public static ProxyRender render;
-
-	public static final ProxyLog log = new ProxyLog();
 }

@@ -45,9 +45,9 @@ import forestry.api.lepidopterology.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IEntityButterfly;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.StackUtils;
+import forestry.core.utils.ItemStackUtil;
 import forestry.lepidopterology.genetics.Butterfly;
-import forestry.lepidopterology.render.ButterflyItemRenderer;
+import forestry.lepidopterology.render.RenderButterflyItem;
 import forestry.plugins.PluginLepidopterology;
 
 public class EntityButterfly extends EntityCreature implements IEntityButterfly {
@@ -70,7 +70,7 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 				long flapping = systemTime + entity.contained.getIdent().hashCode();
 				float flap = (float) (flapping % 1000) / 1000;   // 0 to 1
 
-				return ButterflyItemRenderer.getIrregularWingYaw(flapping, flap);
+				return RenderButterflyItem.getIrregularWingYaw(flapping, flap);
 			} else {
 				return entity.ticksExisted + partialTicktime;
 			}
@@ -84,7 +84,7 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 	private static final int DATAWATCHER_ID_SCALE = 17;
 	private static final int DATAWATCHER_ID_STATE = 18;
 
-	//private static final String DEFAULT_TEXTURE = Defaults.TEXTURE_PATH_ENTITIES + "/butterflies/mothBrimstone.png";
+	//private static final String DEFAULT_TEXTURE = Constants.TEXTURE_PATH_ENTITIES + "/butterflies/mothBrimstone.png";
 	public static final float DEFAULT_BUTTERFLY_SCALE = 0.75f;
 	private static final EnumButterflyState DEFAULT_STATE = EnumButterflyState.FLYING;
 
@@ -409,7 +409,7 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 
 		if (Proxies.common.isSimulating(worldObj)) {
 			contained.getGenome().getPrimary().getRoot().getBreedingTracker(worldObj, player.getGameProfile()).registerCatch(contained);
-			StackUtils.dropItemStackAsEntity(PluginLepidopterology.butterflyInterface.getMemberStack(contained.copy(), EnumFlutterType.BUTTERFLY.ordinal()), worldObj, posX, posY, posZ);
+			ItemStackUtil.dropItemStackAsEntity(PluginLepidopterology.butterflyInterface.getMemberStack(contained.copy(), EnumFlutterType.BUTTERFLY.ordinal()), worldObj, posX, posY, posZ);
 			setDead();
 		} else {
 			player.swingItem();
@@ -421,12 +421,12 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 	@Override
 	protected void dropFewItems(boolean playerKill, int lootLevel) {
 		for (ItemStack stack : contained.getLootDrop(this, playerKill, lootLevel)) {
-			StackUtils.dropItemStackAsEntity(stack, worldObj, posX, posY, posZ);
+			ItemStackUtil.dropItemStackAsEntity(stack, worldObj, posX, posY, posZ);
 		}
 
 		// Drop pollen if any
 		if (getPollen() != null) {
-			StackUtils.dropItemStackAsEntity(AlleleManager.alleleRegistry.getSpeciesRoot(getPollen().getClass()).getMemberStack(getPollen(), EnumGermlingType.POLLEN.ordinal()), worldObj, posX, posY, posZ);
+			ItemStackUtil.dropItemStackAsEntity(AlleleManager.alleleRegistry.getSpeciesRoot(getPollen().getClass()).getMemberStack(getPollen(), EnumGermlingType.POLLEN.ordinal()), worldObj, posX, posY, posZ);
 		}
 	}
 

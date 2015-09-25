@@ -12,9 +12,9 @@ package forestry.core;
 
 import cpw.mods.fml.client.registry.RenderingRegistry;
 
-import forestry.apiculture.render.BlockCandleRenderer;
+import forestry.apiculture.render.RenderCandleBlock;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.BlockRenderingHandler;
+import forestry.core.render.RenderBlock;
 
 public class ForestryClient extends ForestryCore {
 
@@ -29,9 +29,9 @@ public class ForestryClient extends ForestryCore {
 		byBlockModelId = Proxies.render.getNextAvailableRenderId();
 		candleRenderId = Proxies.render.getNextAvailableRenderId();
 
-		BlockRenderingHandler renderHandler = new BlockRenderingHandler();
+		RenderBlock renderHandler = new RenderBlock();
 		RenderingRegistry.registerBlockHandler(byBlockModelId, renderHandler);
-		RenderingRegistry.registerBlockHandler(candleRenderId, new BlockCandleRenderer());
+		RenderingRegistry.registerBlockHandler(candleRenderId, new RenderCandleBlock());
 	}
 
 	@Override

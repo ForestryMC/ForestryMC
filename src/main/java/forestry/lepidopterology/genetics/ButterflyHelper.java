@@ -37,7 +37,7 @@ import forestry.api.lepidopterology.IButterflyRoot;
 import forestry.api.lepidopterology.ILepidopteristTracker;
 import forestry.core.config.ForestryItem;
 import forestry.core.genetics.SpeciesRoot;
-import forestry.core.utils.Utils;
+import forestry.core.utils.EntityUtil;
 import forestry.lepidopterology.entities.EntityButterfly;
 import forestry.plugins.PluginLepidopterology;
 
@@ -148,7 +148,7 @@ public class ButterflyHelper extends SpeciesRoot implements IButterflyRoot {
 
 	@Override
 	public EntityButterfly spawnButterflyInWorld(World world, IButterfly butterfly, double x, double y, double z) {
-		return Utils.spawnEntity(world, new EntityButterfly(world, butterfly), x, y, z);
+		return EntityUtil.spawnEntity(world, new EntityButterfly(world, butterfly), x, y, z);
 	}
 
 	@Override

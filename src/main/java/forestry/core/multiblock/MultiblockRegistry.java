@@ -6,7 +6,7 @@ import java.util.Set;
 
 import net.minecraft.world.World;
 
-import forestry.core.proxy.Proxies;
+import forestry.core.utils.Log;
 
 /**
  * This is a very static singleton registry class which directs incoming events to sub-objects, which
@@ -99,7 +99,7 @@ public class MultiblockRegistry {
 		if (registries.containsKey(world)) {
 			registries.get(world).addDeadController(controller);
 		} else {
-			Proxies.log.warning("Controller %d in world %s marked as dead, but that world is not tracked! Controller is being ignored.", controller.hashCode(), world);
+			Log.warning("Controller %d in world %s marked as dead, but that world is not tracked! Controller is being ignored.", controller.hashCode(), world);
 		}
 	}
 

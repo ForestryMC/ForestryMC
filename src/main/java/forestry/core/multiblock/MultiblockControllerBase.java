@@ -24,15 +24,15 @@ import com.mojang.authlib.GameProfile;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorLogicSource;
-import forestry.core.delegates.AccessHandler;
-import forestry.core.interfaces.IAccessHandler;
-import forestry.core.interfaces.IOwnable;
-import forestry.core.interfaces.IRestrictedAccessTile;
+import forestry.core.access.AccessHandler;
+import forestry.core.access.IAccessHandler;
+import forestry.core.access.IOwnable;
 import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
-import forestry.core.proxy.Proxies;
+import forestry.core.tiles.IRestrictedAccessTile;
+import forestry.core.utils.Log;
 import forestry.core.utils.StringUtil;
 
 /**
@@ -148,7 +148,7 @@ public abstract class MultiblockControllerBase implements ISidedInventory, IRest
 		CoordTriplet coord = part.getWorldLocation();
 
 		if (!connectedParts.add(part)) {
-			Proxies.log.warning("[%s] Controller %s is double-adding part %d @ %s. This is unusual. If you encounter odd behavior, please tear down the machine and rebuild it.", (worldObj.isRemote ? "CLIENT" : "SERVER"), hashCode(), part.hashCode(), coord);
+			Log.warning("[%s] Controller %s is double-adding part %d @ %s. This is unusual. If you encounter odd behavior, please tear down the machine and rebuild it.", (worldObj.isRemote ? "CLIENT" : "SERVER"), hashCode(), part.hashCode(), coord);
 		}
 		
 		part.onAttached(this);
@@ -310,7 +310,7 @@ public abstract class MultiblockControllerBase implements ISidedInventory, IRest
 		// Strip out this part
 		onDetachBlock(part);
 		if (!connectedParts.remove(part)) {
-			Proxies.log.warning("[%s] Double-removing part (%d) @ %d, %d, %d, this is unexpected and may cause problems. If you encounter anomalies, please tear down the reactor and rebuild it.", worldObj.isRemote ? "CLIENT" : "SERVER", part.hashCode(), part.xCoord, part.yCoord, part.zCoord);
+			Log.warning("[%s] Double-removing part (%d) @ %d, %d, %d, this is unexpected and may cause problems. If you encounter anomalies, please tear down the reactor and rebuild it.", worldObj.isRemote ? "CLIENT" : "SERVER", part.hashCode(), part.xCoord, part.yCoord, part.zCoord);
 		}
 
 		if (connectedParts.isEmpty()) {
@@ -757,7 +757,7 @@ public abstract class MultiblockControllerBase implements ISidedInventory, IRest
 			return false;
 		} else {
 			// Strip dead parts from both and retry
-			Proxies.log.warning("[%s] Encountered two controllers with the same reference coordinate. Auditing connected parts and retrying.", worldObj.isRemote ? "CLIENT" : "SERVER");
+			Log.warning("[%s] Encountered two controllers with the same reference coordinate. Auditing connected parts and retrying.", worldObj.isRemote ? "CLIENT" : "SERVER");
 			auditParts();
 			otherController.auditParts();
 			
@@ -767,8 +767,8 @@ public abstract class MultiblockControllerBase implements ISidedInventory, IRest
 			} else if (res > 0) {
 				return false;
 			} else {
-				Proxies.log.severe("My Controller (%d): size (%d), parts: %s", hashCode(), connectedParts.size(), getPartsListString());
-				Proxies.log.severe("Other Controller (%d): size (%d), coords: %s", otherController.hashCode(), otherController.connectedParts.size(), otherController.getPartsListString());
+				Log.severe("My Controller (%d): size (%d), parts: %s", hashCode(), connectedParts.size(), getPartsListString());
+				Log.severe("Other Controller (%d): size (%d), coords: %s", otherController.hashCode(), otherController.connectedParts.size(), otherController.getPartsListString());
 				throw new IllegalArgumentException("[" + (worldObj.isRemote ? "CLIENT" : "SERVER") + "] Two controllers with the same reference coord that somehow both have valid parts - this should never happen!");
 			}
 
@@ -814,7 +814,7 @@ public abstract class MultiblockControllerBase implements ISidedInventory, IRest
 		}
 		
 		connectedParts.removeAll(deadParts);
-		Proxies.log.warning("[%s] Controller found %d dead parts during an audit, %d parts remain attached", worldObj.isRemote ? "CLIENT" : "SERVER", deadParts.size(), connectedParts.size());
+		Log.warning("[%s] Controller found %d dead parts during an audit, %d parts remain attached", worldObj.isRemote ? "CLIENT" : "SERVER", deadParts.size(), connectedParts.size());
 	}
 
 	/**

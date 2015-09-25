@@ -22,7 +22,7 @@ import org.lwjgl.opengl.GL11;
 import forestry.api.core.IErrorSource;
 import forestry.api.core.IErrorState;
 import forestry.core.config.SessionVars;
-import forestry.core.delegates.FakeErrorSource;
+import forestry.core.errors.FakeErrorSource;
 import forestry.core.gui.GuiForestry;
 import forestry.core.proxy.Proxies;
 

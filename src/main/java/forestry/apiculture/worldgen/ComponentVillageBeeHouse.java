@@ -37,13 +37,13 @@ import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IFlower;
-import forestry.apiculture.gadgets.TileApiary;
+import forestry.apiculture.tiles.TileApiary;
 import forestry.arboriculture.WoodType;
 import forestry.arboriculture.worldgen.BlockTypeLog;
 import forestry.arboriculture.worldgen.BlockTypeVanillaStairs;
 import forestry.arboriculture.worldgen.BlockTypeWood;
 import forestry.arboriculture.worldgen.BlockTypeWoodStairs;
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
 import forestry.core.worldgen.BlockType;
@@ -176,7 +176,7 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 
 		// Escritoire
 		if (random.nextInt(2) == 0) {
-			IBlockType escritoireBlock = new BlockTypeTileForestry(ForestryBlock.core, Defaults.DEFINITION_ESCRITOIRE_META);
+			IBlockType escritoireBlock = new BlockTypeTileForestry(ForestryBlock.core, Constants.DEFINITION_ESCRITOIRE_META);
 			escritoireBlock.setDirection(getRotatedDirection(ForgeDirection.EAST));
 			placeBlockAtCurrentPosition(world, escritoireBlock, 1, 1, 3, structBoundingBox);
 		}
@@ -208,7 +208,7 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 		}
 
 		generateStructureChestContents(world, structBoundingBox, random, 7, 1, 4,
-				ChestGenHooks.getItems(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, random),
+				ChestGenHooks.getItems(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, random),
 				random.nextInt(4) + random.nextInt(4) + 5);
 
 		spawnVillagers(world, boundingBox, 7, 1, 1, 2);
@@ -284,7 +284,7 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 			return;
 		}
 
-		world.setBlock(xCoord, yCoord, zCoord, ForestryBlock.apiculture.block(), Defaults.DEFINITION_APIARY_META, Defaults.FLAG_BLOCK_SYNCH);
+		world.setBlock(xCoord, yCoord, zCoord, ForestryBlock.apiculture.block(), Constants.DEFINITION_APIARY_META, Constants.FLAG_BLOCK_SYNCH);
 		ForestryBlock.apiculture.block().onBlockAdded(world, xCoord, yCoord, zCoord);
 
 		TileEntity tile = world.getTileEntity(xCoord, yCoord, zCoord);
@@ -388,9 +388,9 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 	@Override
 	protected int getVillagerType(int villagerCount) {
 		if (villagerCount <= 0) {
-			return Defaults.ID_VILLAGER_BEEKEEPER;
+			return Constants.ID_VILLAGER_BEEKEEPER;
 		} else {
-			return Defaults.ID_VILLAGER_LUMBERJACK;
+			return Constants.ID_VILLAGER_LUMBERJACK;
 		}
 	}
 

@@ -46,9 +46,10 @@ import forestry.api.farming.IFarmInventory;
 import forestry.api.farming.IFarmListener;
 import forestry.api.farming.IFarmLogic;
 import forestry.api.farming.IFarmable;
-import forestry.core.EnumErrorCode;
+import forestry.core.access.EnumAccess;
 import forestry.core.config.Config;
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
+import forestry.core.errors.EnumErrorCode;
 import forestry.core.fluids.Fluids;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
@@ -64,14 +65,14 @@ import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.PacketGuiUpdate;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.EnumAccess;
-import forestry.core.vect.Vect;
-import forestry.core.vect.VectUtil;
+import forestry.core.utils.Log;
+import forestry.core.utils.vect.Vect;
+import forestry.core.utils.vect.VectUtil;
 import forestry.farming.FarmHelper;
 import forestry.farming.FarmTarget;
-import forestry.farming.gadgets.StructureLogicFarm;
 import forestry.farming.gui.IFarmLedgerDelegate;
 import forestry.farming.logic.FarmLogicArboreal;
+import forestry.farming.tiles.TileGearbox;
 
 public class FarmController extends RectangularMultiblockControllerBase implements IFarmController {
 
@@ -124,10 +125,10 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 	private BiomeGenBase cachedBiome;
 
-	protected FarmController(World world) {
+	public FarmController(World world) {
 		super(world);
 
-		FilteredTank liquidTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, FluidRegistry.WATER);
+		FilteredTank liquidTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, FluidRegistry.WATER);
 		this.tankManager = new TankManager(liquidTank);
 
 		this.inventory = new FarmInventory(this);
@@ -565,7 +566,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 				}
 
 				Block platform = VectUtil.getBlock(world, groundLocation);
-				if (!StructureLogicFarm.bricks.contains(platform)) {
+				if (!FarmHelper.bricks.contains(platform)) {
 					break;
 				}
 
@@ -581,7 +582,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		for (int yOffset = 2; yOffset > -4; yOffset--) {
 			Vect position = targetPosition.add(0, yOffset, 0);
 			Block ground = VectUtil.getBlock(world, position);
-			if (StructureLogicFarm.bricks.contains(ground)) {
+			if (FarmHelper.bricks.contains(ground)) {
 				return position;
 			}
 		}
@@ -746,7 +747,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 		Collection<ItemStack> harvested = crop.harvest();
 		if (harvested == null) {
-			Proxies.log.fine("Failed to harvest crop: " + crop.toString());
+			Log.fine("Failed to harvest crop: " + crop.toString());
 			return true;
 		}
 

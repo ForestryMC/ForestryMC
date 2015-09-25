@@ -16,10 +16,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
 import forestry.api.core.INBTTagable;
-import forestry.core.interfaces.IClimatised;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
+import forestry.core.tiles.IClimatised;
 import forestry.farming.gui.IFarmLedgerDelegate;
 
 public class FarmHydrationManager implements IFarmLedgerDelegate, INBTTagable, IStreamable {

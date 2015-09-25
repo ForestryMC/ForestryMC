@@ -19,8 +19,8 @@ import net.minecraft.world.WorldSavedData;
 import forestry.api.mail.ILetter;
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.PostManager;
-import forestry.core.inventory.InvTools;
 import forestry.core.inventory.InventoryAdapter;
+import forestry.core.utils.InventoryUtil;
 
 public class POBox extends WorldSavedData implements IInventory {
 
@@ -72,7 +72,7 @@ public class POBox extends WorldSavedData implements IInventory {
 
 		this.markDirty();
 
-		return InvTools.tryAddStack(letters, letterstack, true);
+		return InventoryUtil.tryAddStack(letters, letterstack, true);
 	}
 
 	public POBoxInfo getPOBoxInfo() {

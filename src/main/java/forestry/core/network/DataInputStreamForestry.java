@@ -15,7 +15,7 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import cpw.mods.fml.common.registry.GameData;
 
-import forestry.core.proxy.Proxies;
+import forestry.core.utils.Log;
 
 public class DataInputStreamForestry extends DataInputStream {
 
@@ -68,7 +68,7 @@ public class DataInputStreamForestry extends DataInputStream {
 				streamable.readData(this);
 				return streamable;
 			} catch (ReflectiveOperationException e) {
-				Proxies.log.severe("Failed to read Streamable for class " + streamableClass + " with error " + e);
+				Log.severe("Failed to read Streamable for class " + streamableClass + " with error " + e);
 			}
 		}
 		return null;

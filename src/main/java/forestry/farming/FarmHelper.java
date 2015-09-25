@@ -10,17 +10,29 @@
  ******************************************************************************/
 package forestry.farming;
 
+import com.google.common.collect.ImmutableSet;
+
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmComponent;
-import forestry.core.vect.MutableVect;
-import forestry.core.vect.Vect;
-import forestry.core.vect.VectUtil;
+import forestry.core.utils.vect.MutableVect;
+import forestry.core.utils.vect.Vect;
+import forestry.core.utils.vect.VectUtil;
 
 public class FarmHelper {
+
+	public static final ImmutableSet<Block> bricks = ImmutableSet.of(
+			Blocks.brick_block,
+			Blocks.stonebrick,
+			Blocks.sandstone,
+			Blocks.nether_brick,
+			Blocks.quartz_block
+	);
 
 	private static FarmDirection getOpposite(FarmDirection farmDirection) {
 		ForgeDirection forgeDirection = farmDirection.getForgeDirection();

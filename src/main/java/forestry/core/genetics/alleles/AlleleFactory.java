@@ -7,7 +7,7 @@ import forestry.api.genetics.IAlleleFloat;
 import forestry.api.genetics.IAlleleFlowers;
 import forestry.api.genetics.IAlleleInteger;
 import forestry.api.genetics.IFlowerProvider;
-import forestry.apiculture.genetics.AlleleFlowers;
+import forestry.apiculture.genetics.alleles.AlleleFlowers;
 
 public class AlleleFactory implements IAlleleFactory {
 	@Override

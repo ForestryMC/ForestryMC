@@ -5,8 +5,8 @@ import java.util.Locale;
 import forestry.api.apiculture.FlowerManager;
 import forestry.api.genetics.EnumTolerance;
 import forestry.apiculture.flowers.FlowerProvider;
-import forestry.core.vect.IVect;
-import forestry.core.vect.Vect;
+import forestry.core.utils.vect.IVect;
+import forestry.core.utils.vect.Vect;
 
 public class EnumAllele {
 	public enum Fertility implements IAlleleValue<Integer> {

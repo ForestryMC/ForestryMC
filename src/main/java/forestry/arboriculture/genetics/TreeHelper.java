@@ -46,10 +46,10 @@ import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
-import forestry.arboriculture.gadgets.BlockFruitPod;
-import forestry.arboriculture.gadgets.TileFruitPod;
-import forestry.arboriculture.gadgets.TileSapling;
-import forestry.core.config.Defaults;
+import forestry.arboriculture.blocks.BlockFruitPod;
+import forestry.arboriculture.tiles.TileFruitPod;
+import forestry.arboriculture.tiles.TileSapling;
+import forestry.core.config.Constants;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
 import forestry.core.genetics.SpeciesRoot;
@@ -66,7 +66,7 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 	private final ArrayList<ITreekeepingMode> treekeepingModes = new ArrayList<ITreekeepingMode>();
 
 	public TreeHelper() {
-		setResearchSuitability(new ItemStack(Blocks.sapling, 1, Defaults.WILDCARD), 1.0f);
+		setResearchSuitability(new ItemStack(Blocks.sapling, 1, Constants.WILDCARD), 1.0f);
 	}
 
 	@Override
@@ -189,7 +189,7 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 	@Override
 	public boolean plantSapling(World world, ITree tree, GameProfile owner, int x, int y, int z) {
 
-		boolean placed = world.setBlock(x, y, z, ForestryBlock.saplingGE.block(), 0, Defaults.FLAG_BLOCK_SYNCH_AND_UPDATE);
+		boolean placed = world.setBlock(x, y, z, ForestryBlock.saplingGE.block(), 0, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
 		if (!placed) {
 			return false;
 		}

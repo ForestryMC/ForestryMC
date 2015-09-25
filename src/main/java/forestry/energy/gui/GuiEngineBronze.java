@@ -20,16 +20,16 @@ import net.minecraftforge.fluids.FluidStack;
 
 import org.lwjgl.opengl.GL11;
 
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.gui.widgets.TankWidget;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.SpriteSheet;
 import forestry.core.utils.StringUtil;
-import forestry.energy.gadgets.EngineBronze;
+import forestry.energy.tiles.TileEngineBiogas;
 
-public class GuiEngineBronze extends GuiEngine<ContainerEngineBronze, EngineBronze> {
+public class GuiEngineBronze extends GuiEngine<ContainerEngineBronze, TileEngineBiogas> {
 
 	protected class BiogasSlot extends Widget {
 
@@ -97,8 +97,8 @@ public class GuiEngineBronze extends GuiEngine<ContainerEngineBronze, EngineBron
 		}
 	}
 
-	public GuiEngineBronze(InventoryPlayer inventory, EngineBronze tile) {
-		super(Defaults.TEXTURE_PATH_GUI + "/bioengine.png", new ContainerEngineBronze(inventory, tile), tile);
+	public GuiEngineBronze(InventoryPlayer inventory, TileEngineBiogas tile) {
+		super(Constants.TEXTURE_PATH_GUI + "/bioengine.png", new ContainerEngineBronze(inventory, tile), tile);
 		widgetManager.add(new TankWidget(this.widgetManager, 89, 19, 0));
 		widgetManager.add(new TankWidget(this.widgetManager, 107, 19, 1));
 

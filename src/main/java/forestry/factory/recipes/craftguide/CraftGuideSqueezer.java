@@ -12,10 +12,10 @@ package forestry.factory.recipes.craftguide;
 
 import net.minecraft.item.ItemStack;
 
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.config.ForestryBlock;
-import forestry.factory.gadgets.MachineSqueezer;
 import forestry.factory.recipes.ISqueezerRecipe;
+import forestry.factory.tiles.TileSqueezer;
 
 import uristqwerty.CraftGuide.api.ChanceSlot;
 import uristqwerty.CraftGuide.api.ItemSlot;
@@ -48,10 +48,10 @@ public class CraftGuideSqueezer implements RecipeProvider {
 			return;
 		}
 
-		ItemStack machine = ForestryBlock.factoryTESR.getItemStack(1, Defaults.DEFINITION_SQUEEZER_META);
+		ItemStack machine = ForestryBlock.factoryTESR.getItemStack(1, Constants.DEFINITION_SQUEEZER_META);
 		RecipeTemplate template = generator.createRecipeTemplate(slots, machine);
 
-		for (ISqueezerRecipe recipe : MachineSqueezer.RecipeManager.recipes) {
+		for (ISqueezerRecipe recipe : TileSqueezer.RecipeManager.recipes) {
 			Object[] array = new Object[12];
 
 			System.arraycopy(recipe.getResources(), 0, array, 0, recipe.getResources().length);

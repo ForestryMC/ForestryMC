@@ -27,17 +27,18 @@ import forestry.api.apiculture.FlowerManager;
 import forestry.api.farming.Farmables;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.BackpackManager;
-import forestry.core.GameMode;
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.config.ForestryItem;
+import forestry.core.config.GameMode;
 import forestry.core.fluids.Fluids;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.RecipeUtil;
+import forestry.core.recipes.RecipeUtil;
+import forestry.core.utils.Log;
 import forestry.farming.logic.FarmableBasicFruit;
 import forestry.farming.logic.FarmableGenericCrop;
 import forestry.farming.logic.FarmableGenericSapling;
 
-@Plugin(pluginID = "BiomesOPlenty", name = "BiomesOPlenty", author = "Nirek", url = Defaults.URL, unlocalizedDescription = "for.plugin.biomesoplenty.description")
+@Plugin(pluginID = "BiomesOPlenty", name = "BiomesOPlenty", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.plugin.biomesoplenty.description")
 public class PluginBiomesOPlenty extends ForestryPlugin {
 
 	private static final String BoP = "BiomesOPlenty";
@@ -87,7 +88,7 @@ public class PluginBiomesOPlenty extends ForestryPlugin {
 		for (String key : saplingItemKeys) {
 			Item saplingItem = GameRegistry.findItem(BoP, key);
 			String saplingName = GameData.getItemRegistry().getNameForObject(saplingItem);
-			FMLInterModComms.sendMessage(Defaults.MOD, "add-farmable-sapling", String.format("farmArboreal@%s.-1", saplingName));
+			FMLInterModComms.sendMessage(Constants.MOD, "add-farmable-sapling", String.format("farmArboreal@%s.-1", saplingName));
 		}
 
 		if (saplings != null && persimmon != null) {
@@ -109,11 +110,11 @@ public class PluginBiomesOPlenty extends ForestryPlugin {
 		int saplingYield = GameMode.getGameMode().getIntegerSetting("fermenter.yield.sapling");
 
 		if (saplings != null) {
-			RecipeUtil.injectLeveledRecipe(new ItemStack(saplings, 1, OreDictionary.WILDCARD_VALUE), saplingYield, Fluids.BIOMASS);
+			RecipeUtil.addFermenterRecipes(new ItemStack(saplings, 1, OreDictionary.WILDCARD_VALUE), saplingYield, Fluids.BIOMASS);
 		}
 
 		if (colorizedSaplings != null) {
-			RecipeUtil.injectLeveledRecipe(new ItemStack(colorizedSaplings, 1, OreDictionary.WILDCARD_VALUE), saplingYield, Fluids.BIOMASS);
+			RecipeUtil.addFermenterRecipes(new ItemStack(colorizedSaplings, 1, OreDictionary.WILDCARD_VALUE), saplingYield, Fluids.BIOMASS);
 		}
 	}
 
@@ -211,7 +212,7 @@ public class PluginBiomesOPlenty extends ForestryPlugin {
 				ItemStack blockStack = new ItemStack(block, 1, OreDictionary.WILDCARD_VALUE);
 				BackpackManager.backpackItems[backpackId].add(blockStack);
 			} else {
-				Proxies.log.warning("Missing block: ", blockName);
+				Log.warning("Missing block: ", blockName);
 			}
 		}
 	}

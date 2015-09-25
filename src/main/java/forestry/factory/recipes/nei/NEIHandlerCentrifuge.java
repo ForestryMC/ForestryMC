@@ -23,8 +23,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 
 import forestry.api.recipes.ICentrifugeRecipe;
-import forestry.factory.gadgets.MachineCentrifuge;
+import forestry.core.recipes.nei.PositionedStackAdv;
+import forestry.core.recipes.nei.RecipeHandlerBase;
 import forestry.factory.gui.GuiCentrifuge;
+import forestry.factory.tiles.TileCentrifuge;
 
 import codechicken.nei.NEIServerUtils;
 import codechicken.nei.PositionedStack;
@@ -129,14 +131,14 @@ public class NEIHandlerCentrifuge extends RecipeHandlerBase {
 
 	@Override
 	public void loadAllRecipes() {
-		for (ICentrifugeRecipe recipe : MachineCentrifuge.RecipeManager.recipes) {
+		for (ICentrifugeRecipe recipe : TileCentrifuge.RecipeManager.recipes) {
 			this.arecipes.add(new CachedCentrifugeRecipe(recipe, true));
 		}
 	}
 
 	@Override
 	public void loadCraftingRecipes(ItemStack result) {
-		for (ICentrifugeRecipe recipe : MachineCentrifuge.RecipeManager.recipes) {
+		for (ICentrifugeRecipe recipe : TileCentrifuge.RecipeManager.recipes) {
 			CachedCentrifugeRecipe crecipe = new CachedCentrifugeRecipe(recipe);
 			if (crecipe.outputs != null && crecipe.contains(crecipe.outputs, result)) {
 				crecipe.setIngredientPermutation(crecipe.outputs, result);
@@ -148,7 +150,7 @@ public class NEIHandlerCentrifuge extends RecipeHandlerBase {
 	@Override
 	public void loadUsageRecipes(ItemStack ingred) {
 		super.loadCraftingRecipes(ingred);
-		for (ICentrifugeRecipe recipe : MachineCentrifuge.RecipeManager.recipes) {
+		for (ICentrifugeRecipe recipe : TileCentrifuge.RecipeManager.recipes) {
 			if (NEIServerUtils.areStacksSameTypeCrafting(recipe.getInput(), ingred)) {
 				this.arecipes.add(new CachedCentrifugeRecipe(recipe, true));
 			}

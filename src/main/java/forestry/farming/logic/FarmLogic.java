@@ -19,9 +19,9 @@ import net.minecraft.world.World;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmLogic;
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.render.SpriteSheet;
-import forestry.core.vect.Vect;
+import forestry.core.utils.vect.Vect;
 
 public abstract class FarmLogic implements IFarmLogic {
 
@@ -61,7 +61,7 @@ public abstract class FarmLogic implements IFarmLogic {
 	}
 
 	protected final void setBlock(Vect position, Block block, int meta) {
-		getWorld().setBlock(position.x, position.y, position.z, block, meta, Defaults.FLAG_BLOCK_SYNCH_AND_UPDATE);
+		getWorld().setBlock(position.x, position.y, position.z, block, meta, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
 	}
 
 }

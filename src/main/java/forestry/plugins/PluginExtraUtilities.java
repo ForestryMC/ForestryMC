@@ -23,14 +23,14 @@ import forestry.api.farming.Farmables;
 import forestry.api.farming.IFarmable;
 import forestry.core.circuits.Circuit;
 import forestry.core.config.Config;
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.config.ForestryItem;
 import forestry.core.proxy.Proxies;
 import forestry.farming.circuits.CircuitFarmLogic;
 import forestry.farming.logic.FarmLogicEnder;
 import forestry.farming.logic.FarmableGenericCrop;
 
-@Plugin(pluginID = "ExtraUtilities", name = "ExtraUtilities", author = "Nirek", url = Defaults.URL, unlocalizedDescription = "for.plugin.extrautilities.description")
+@Plugin(pluginID = "ExtraUtilities", name = "ExtraUtilities", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.plugin.extrautilities.description")
 public class PluginExtraUtilities extends ForestryPlugin {
 
 	private static final String ExU = "ExtraUtilities";

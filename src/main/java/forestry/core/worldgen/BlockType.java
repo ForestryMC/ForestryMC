@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 
 public class BlockType implements IBlockType {
 
@@ -35,7 +35,7 @@ public class BlockType implements IBlockType {
 
 	@Override
 	public void setBlock(World world, int x, int y, int z) {
-		world.setBlock(x, y, z, block, meta, Defaults.FLAG_BLOCK_SYNCH_AND_UPDATE);
+		world.setBlock(x, y, z, block, meta, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
 	}
 
 	@Override

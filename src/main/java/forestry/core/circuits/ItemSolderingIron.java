@@ -27,12 +27,12 @@ import forestry.api.circuits.ISolderManager;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorSource;
 import forestry.api.core.IErrorState;
-import forestry.core.EnumErrorCode;
+import forestry.core.errors.EnumErrorCode;
 import forestry.core.inventory.ItemInventory;
 import forestry.core.items.ItemForestry;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.RevolvingList;
+import forestry.core.utils.datastructures.RevolvingList;
 
 public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 

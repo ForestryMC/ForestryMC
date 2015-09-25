@@ -20,15 +20,15 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 import forestry.api.farming.Farmables;
 import forestry.api.recipes.RecipeManagers;
-import forestry.core.GameMode;
 import forestry.core.config.Config;
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
+import forestry.core.config.GameMode;
 import forestry.core.fluids.Fluids;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.RecipeUtil;
+import forestry.core.recipes.RecipeUtil;
 import forestry.farming.logic.FarmableGenericCrop;
 
-@Plugin(pluginID = "MagicalCrops", name = "MagicalCrops", author = "Nirek", url = Defaults.URL, unlocalizedDescription = "for.plugin.magicalcrops.description")
+@Plugin(pluginID = "MagicalCrops", name = "MagicalCrops", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.plugin.magicalcrops.description")
 public class PluginMagicalCrops extends ForestryPlugin {
 
 	private static final String MagCrop = "magicalcrops";
@@ -233,8 +233,8 @@ public class PluginMagicalCrops extends ForestryPlugin {
 		Item cropProduce = GameRegistry.findItem(MagCrop, MagCrop + "_CropProduce");
 		if (cropProduce != null) {
 			int juiceAmount = GameMode.getGameMode().getIntegerSetting("squeezer.liquid.apple");
-			ItemStack produce = new ItemStack(GameRegistry.findItem(MagCrop, MagCrop + "_CropProduce"), 1, Defaults.WILDCARD);
-			RecipeUtil.injectLeveledRecipe(produce, GameMode.getGameMode().getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
+			ItemStack produce = new ItemStack(GameRegistry.findItem(MagCrop, MagCrop + "_CropProduce"), 1, Constants.WILDCARD);
+			RecipeUtil.addFermenterRecipes(produce, GameMode.getGameMode().getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
 			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{produce}, Fluids.JUICE.getFluid(juiceAmount));
 		}
 	}
@@ -249,8 +249,9 @@ public class PluginMagicalCrops extends ForestryPlugin {
 			Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(seed, crop, 7));
 		}
 	}
+
 	private static void addBetaRecipes(String seedSuffix, String cropSuffix, String name) {
-		ItemStack seed = GameRegistry.findItemStack(MagCrop, MagCrop +"_"+ name + seedSuffix, 1);
+		ItemStack seed = GameRegistry.findItemStack(MagCrop, MagCrop + "_" + name + seedSuffix, 1);
 		Block crop = GameRegistry.findBlock(MagCrop, MagCrop + "_" + name + cropSuffix);
 		if (seed != null && crop != null && Config.isMagicalCropsSupportEnabled()) {
 			Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(seed, crop, 7));

@@ -14,7 +14,7 @@ import net.minecraft.tileentity.TileEntity;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
-import forestry.apiculture.gadgets.TileApiary;
+import forestry.apiculture.tiles.TileApiary;
 import forestry.core.triggers.Trigger;
 
 import buildcraft.api.statements.IStatementContainer;

@@ -17,18 +17,19 @@ import net.minecraft.item.ItemStack;
 import forestry.api.storage.ICrateRegistry;
 import forestry.core.items.ItemCrated;
 import forestry.core.proxy.Proxies;
+import forestry.core.utils.Log;
 import forestry.plugins.PluginStorage;
 
 public class CrateRegistry implements ICrateRegistry {
 
 	private static void registerCrate(ItemStack stack, String uid, boolean useOreDict) {
 		if (stack == null || stack.getItem() == null) {
-			Proxies.log.severe("Tried to make a crate without an item");
+			Log.severe("Tried to make a crate without an item");
 			return;
 		}
 
 		if (uid == null) {
-			Proxies.log.severe("Tried to make a crate without a uid");
+			Log.severe("Tried to make a crate without a uid");
 			return;
 		}
 

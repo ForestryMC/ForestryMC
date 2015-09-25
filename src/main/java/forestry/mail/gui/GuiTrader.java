@@ -12,15 +12,15 @@ package forestry.mail.gui;
 
 import net.minecraft.entity.player.InventoryPlayer;
 
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
 import forestry.core.utils.StringUtil;
-import forestry.mail.gadgets.MachineTrader;
+import forestry.mail.tiles.TileTrader;
 
-public class GuiTrader extends GuiForestry<ContainerTrader, MachineTrader> {
+public class GuiTrader extends GuiForestry<ContainerTrader, TileTrader> {
 
-	public GuiTrader(InventoryPlayer inventoryplayer, MachineTrader tile) {
-		super(Defaults.TEXTURE_PATH_GUI + "/mailtrader2.png", new ContainerTrader(inventoryplayer, tile), tile);
+	public GuiTrader(InventoryPlayer inventoryplayer, TileTrader tile) {
+		super(Constants.TEXTURE_PATH_GUI + "/mailtrader2.png", new ContainerTrader(inventoryplayer, tile), tile);
 		this.xSize = 226;
 		this.ySize = 220;
 	}

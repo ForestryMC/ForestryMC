@@ -19,7 +19,7 @@ import forestry.core.network.PacketSocketUpdate;
 import forestry.core.proxy.Proxies;
 import forestry.farming.gui.ContainerFarm;
 import forestry.farming.gui.GuiFarm;
-import forestry.farming.multiblock.TileFarm;
+import forestry.farming.tiles.TileFarm;
 
 public class GuiHandlerFarming extends GuiHandlerBase {
 

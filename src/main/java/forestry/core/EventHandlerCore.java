@@ -19,8 +19,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-import forestry.core.interfaces.IPickupHandler;
-import forestry.core.interfaces.ISaveEventHandler;
+import forestry.core.errors.ErrorStateRegistry;
 import forestry.core.render.TextureManager;
 import forestry.plugins.PluginManager;
 

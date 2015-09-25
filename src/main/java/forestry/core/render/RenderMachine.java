@@ -20,11 +20,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
-import forestry.core.interfaces.IBlockRenderer;
-import forestry.core.interfaces.IRenderableMachine;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.EnumTankLevel;
-import forestry.core.utils.ForestryResource;
+import forestry.core.tiles.IRenderableTile;
 
 public class RenderMachine extends TileEntitySpecialRenderer implements IBlockRenderer {
 
@@ -100,7 +97,7 @@ public class RenderMachine extends TileEntitySpecialRenderer implements IBlockRe
 
 	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double d, double d1, double d2, float f) {
-		IRenderableMachine generator = (IRenderableMachine) tileentity;
+		IRenderableTile generator = (IRenderableTile) tileentity;
 		render(generator.getPrimaryLevel(), generator.getSecondaryLevel(), generator.getOrientation(), d, d1, d2);
 
 	}

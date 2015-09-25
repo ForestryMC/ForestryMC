@@ -24,11 +24,11 @@ import cpw.mods.fml.relauncher.SideOnly;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
+import forestry.core.blocks.BlockSoil;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
-import forestry.core.gadgets.BlockSoil;
-import forestry.core.vect.Vect;
-import forestry.core.vect.VectUtil;
+import forestry.core.utils.vect.Vect;
+import forestry.core.utils.vect.VectUtil;
 
 public class FarmLogicPeat extends FarmLogicWatered {
 

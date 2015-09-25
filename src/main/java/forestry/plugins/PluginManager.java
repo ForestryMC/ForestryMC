@@ -39,11 +39,11 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 import forestry.Forestry;
 import forestry.api.core.ForestryAPI;
-import forestry.core.interfaces.IPickupHandler;
-import forestry.core.interfaces.IResupplyHandler;
-import forestry.core.interfaces.ISaveEventHandler;
+import forestry.core.IPickupHandler;
+import forestry.core.IResupplyHandler;
+import forestry.core.ISaveEventHandler;
 import forestry.core.network.IPacketHandler;
-import forestry.core.proxy.Proxies;
+import forestry.core.utils.Log;
 
 public class PluginManager {
 
@@ -144,7 +144,7 @@ public class PluginManager {
 	}
 
 	private static void registerHandlers(ForestryPlugin plugin) {
-		Proxies.log.fine("Registering Handlers for Plugin: {0}", plugin);
+		Log.fine("Registering Handlers for Plugin: {0}", plugin);
 
 		IGuiHandler guiHandler = plugin.getGuiHandler();
 		if (guiHandler != null) {
@@ -196,13 +196,13 @@ public class PluginManager {
 			}
 			if (!isEnabled(config, m)) {
 				it.remove();
-				Proxies.log.info("Module disabled: {0}", m);
+				Log.info("Module disabled: {0}", m);
 				continue;
 			}
 			ForestryPlugin plugin = m.instance;
 			if (!plugin.isAvailable()) {
 				it.remove();
-				Proxies.log.info("Module {0} failed to load: {1}", plugin, plugin.getFailMessage());
+				Log.info("Module {0} failed to load: {1}", plugin, plugin.getFailMessage());
 				continue;
 			}
 		}
@@ -217,7 +217,7 @@ public class PluginManager {
 				if (!toLoad.containsAll(deps)) {
 					it.remove();
 					changed = true;
-					Proxies.log.warning("Module {0} is missing dependencies: {1}", m, deps);
+					Log.warning("Module {0} is missing dependencies: {1}", m, deps);
 					continue;
 				}
 			}
@@ -243,17 +243,17 @@ public class PluginManager {
 
 		for (Module m : loadedModules) {
 			ForestryPlugin plugin = m.instance;
-			Proxies.log.fine("Setup Start: {0}", plugin);
+			Log.fine("Setup Start: {0}", plugin);
 			plugin.setupAPI();
-			Proxies.log.fine("Setup Complete: {0}", plugin);
+			Log.fine("Setup Complete: {0}", plugin);
 		}
 
 		stage = Stage.SETUP_DISABLED;
 		for (Module m : unloadedModules) {
 			ForestryPlugin plugin = m.instance;
-			Proxies.log.fine("Disabled-Setup Start: {0}", plugin);
+			Log.fine("Disabled-Setup Start: {0}", plugin);
 			plugin.disabledSetupAPI();
-			Proxies.log.fine("Disabled-Setup Complete: {0}", plugin);
+			Log.fine("Disabled-Setup Complete: {0}", plugin);
 		}
 	}
 
@@ -261,7 +261,7 @@ public class PluginManager {
 		stage = Stage.PRE_INIT;
 		for (Module m : loadedModules) {
 			ForestryPlugin plugin = m.instance;
-			Proxies.log.fine("Pre-Init Start: {0}", plugin);
+			Log.fine("Pre-Init Start: {0}", plugin);
 			registerHandlers(plugin);
 			plugin.preInit();
 			plugin.registerItems();
@@ -272,7 +272,7 @@ public class PluginManager {
 				plugin.registerBackpackItems();
 				plugin.registerCrates();
 			}
-			Proxies.log.fine("Pre-Init Complete: {0}", plugin);
+			Log.fine("Pre-Init Complete: {0}", plugin);
 		}
 	}
 
@@ -280,10 +280,10 @@ public class PluginManager {
 		stage = Stage.INIT;
 		for (Module m : loadedModules) {
 			ForestryPlugin plugin = m.instance;
-			Proxies.log.fine("Init Start: {0}", plugin);
+			Log.fine("Init Start: {0}", plugin);
 			plugin.doInit();
 			plugin.registerRecipes();
-			Proxies.log.fine("Init Complete: {0}", plugin);
+			Log.fine("Init Complete: {0}", plugin);
 		}
 	}
 
@@ -291,9 +291,9 @@ public class PluginManager {
 		stage = Stage.POST_INIT;
 		for (Module m : loadedModules) {
 			ForestryPlugin plugin = m.instance;
-			Proxies.log.fine("Post-Init Start: {0}", plugin);
+			Log.fine("Post-Init Start: {0}", plugin);
 			plugin.postInit();
-			Proxies.log.fine("Post-Init Complete: {0}", plugin);
+			Log.fine("Post-Init Complete: {0}", plugin);
 		}
 
 		stage = Stage.FINISHED;

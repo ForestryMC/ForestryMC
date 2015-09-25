@@ -12,20 +12,20 @@ package forestry.energy.gui;
 
 import net.minecraft.entity.player.InventoryPlayer;
 
-import forestry.core.config.Defaults;
-import forestry.energy.gadgets.EngineCopper;
+import forestry.core.config.Constants;
+import forestry.energy.tiles.TileEnginePeat;
 
-public class GuiEngineCopper extends GuiEngine<ContainerEngineCopper, EngineCopper> {
+public class GuiEngineCopper extends GuiEngine<ContainerEngineCopper, TileEnginePeat> {
 
-	public GuiEngineCopper(InventoryPlayer inventory, EngineCopper tile) {
-		super(Defaults.TEXTURE_PATH_GUI + "/peatengine.png", new ContainerEngineCopper(inventory, tile), tile);
+	public GuiEngineCopper(InventoryPlayer inventory, TileEnginePeat tile) {
+		super(Constants.TEXTURE_PATH_GUI + "/peatengine.png", new ContainerEngineCopper(inventory, tile), tile);
 	}
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
-		EngineCopper engine = inventory;
+		TileEnginePeat engine = inventory;
 		int progress;
 		if (engine.isBurning()) {
 			progress = engine.getBurnTimeRemainingScaled(12);

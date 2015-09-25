@@ -22,16 +22,16 @@ import forestry.api.farming.Farmables;
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.MoistenerFuel;
 import forestry.api.recipes.RecipeManagers;
-import forestry.core.GameMode;
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.config.ForestryItem;
+import forestry.core.config.GameMode;
 import forestry.core.fluids.Fluids;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.RecipeUtil;
+import forestry.core.recipes.RecipeUtil;
 import forestry.farming.logic.FarmableBasicFruit;
 import forestry.farming.logic.FarmableGenericCrop;
 
-@Plugin(pluginID = "HarvestCraft", name = "HarvestCraft", author = "Nirek", url = Defaults.URL, unlocalizedDescription = "for.plugin.harvestcraft.description")
+@Plugin(pluginID = "HarvestCraft", name = "HarvestCraft", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.plugin.harvestcraft.description")
 public class PluginHarvestCraft extends ForestryPlugin {
 
 	private static final String HC = "harvestcraft";
@@ -305,7 +305,7 @@ public class PluginHarvestCraft extends ForestryPlugin {
 		for (String plantName : plants.build()) {
 			ItemStack plant = GameRegistry.findItemStack(HC, plantName + "Item", 1);
 			if (plant != null) {
-				RecipeUtil.injectLeveledRecipe(plant, GameMode.getGameMode().getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
+				RecipeUtil.addFermenterRecipes(plant, GameMode.getGameMode().getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
 			}
 		}
 
@@ -338,7 +338,7 @@ public class PluginHarvestCraft extends ForestryPlugin {
 
 		ItemStack hcHoneyItem = GameRegistry.findItemStack(HC, "honeyItem", 1);
 		if (hcHoneyItem != null) {
-			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{hcHoneyItem}, Fluids.HONEY.getFluid(Defaults.FLUID_PER_HONEY_DROP));
+			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{hcHoneyItem}, Fluids.HONEY.getFluid(Constants.FLUID_PER_HONEY_DROP));
 		}
 
 		ItemStack hcBeeswaxItem = GameRegistry.findItemStack(HC, "beeswaxItem", 1);

@@ -21,7 +21,6 @@ import forestry.core.network.IPacketHandler;
 import forestry.core.network.PacketId;
 import forestry.core.network.PacketString;
 import forestry.core.proxy.Proxies;
-import forestry.mail.gadgets.MachineTrader;
 import forestry.mail.gui.ContainerCatalogue;
 import forestry.mail.gui.ContainerLetter;
 import forestry.mail.gui.GuiMailboxInfo;
@@ -29,6 +28,7 @@ import forestry.mail.network.PacketLetterInfo;
 import forestry.mail.network.PacketPOBoxInfo;
 import forestry.mail.network.PacketRequestLetterInfo;
 import forestry.mail.network.PacketTraderAddress;
+import forestry.mail.tiles.TileTrader;
 
 public class PacketHandlerMail implements IPacketHandler {
 
@@ -87,13 +87,13 @@ public class PacketHandlerMail implements IPacketHandler {
 
 	private static void handleTradeAddressSet(EntityPlayer player, PacketTraderAddress packet) {
 		TileEntity tile = packet.getTarget(player.worldObj);
-		if (!(tile instanceof MachineTrader)) {
+		if (!(tile instanceof TileTrader)) {
 			return;
 		}
 
 		String addressName = packet.getAddressName();
 
-		((MachineTrader) tile).handleSetAddress(addressName);
+		((TileTrader) tile).handleSetAddress(addressName);
 	}
 
 	private static void onLetterText(EntityPlayer player, PacketString packet) {

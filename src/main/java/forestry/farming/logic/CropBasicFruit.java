@@ -16,9 +16,9 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
-import forestry.core.vect.Vect;
+import forestry.core.utils.vect.Vect;
 
 public class CropBasicFruit extends Crop {
 
@@ -40,7 +40,7 @@ public class CropBasicFruit extends Crop {
 	protected Collection<ItemStack> harvestBlock(Vect pos) {
 		Collection<ItemStack> harvested = block.getDrops(world, pos.x, pos.y, pos.z, meta, 0);
 		Proxies.common.addBlockDestroyEffects(world, pos.x, pos.y, pos.z, block, 0);
-		world.setBlock(pos.x, pos.y, pos.z, block, 0, Defaults.FLAG_BLOCK_SYNCH);
+		world.setBlock(pos.x, pos.y, pos.z, block, 0, Constants.FLAG_BLOCK_SYNCH);
 		return harvested;
 	}
 

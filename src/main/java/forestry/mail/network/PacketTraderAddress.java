@@ -16,7 +16,7 @@ import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.PacketCoordinates;
 import forestry.core.network.PacketId;
-import forestry.mail.gadgets.MachineTrader;
+import forestry.mail.tiles.TileTrader;
 
 public class PacketTraderAddress extends PacketCoordinates {
 
@@ -26,7 +26,7 @@ public class PacketTraderAddress extends PacketCoordinates {
 		super(data);
 	}
 
-	public PacketTraderAddress(MachineTrader tile, String addressName) {
+	public PacketTraderAddress(TileTrader tile, String addressName) {
 		super(PacketId.TRADING_ADDRESS_SET, tile);
 
 		this.addressName = addressName;

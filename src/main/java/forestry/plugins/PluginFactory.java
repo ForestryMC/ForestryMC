@@ -24,41 +24,42 @@ import cpw.mods.fml.common.network.IGuiHandler;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.recipes.RecipeManagers;
-import forestry.core.GameMode;
+import forestry.core.blocks.BlockBase;
 import forestry.core.circuits.Circuit;
 import forestry.core.circuits.CircuitLayout;
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
+import forestry.core.config.GameMode;
 import forestry.core.fluids.Fluids;
-import forestry.core.gadgets.BlockBase;
-import forestry.core.gadgets.MachineDefinition;
-import forestry.core.items.ItemForestryBlock;
-import forestry.core.items.ItemNBTTile;
+import forestry.core.items.ItemBlockForestry;
+import forestry.core.items.ItemBlockNBT;
 import forestry.core.network.IPacketHandler;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.RecipeUtil;
-import forestry.core.utils.ShapedRecipeCustom;
+import forestry.core.recipes.RecipeUtil;
+import forestry.core.recipes.ShapedRecipeCustom;
+import forestry.core.recipes.craftguide.CraftGuideIntegration;
+import forestry.core.tiles.MachineDefinition;
+import forestry.core.utils.Log;
 import forestry.factory.DummyManagers;
 import forestry.factory.GuiHandlerFactory;
 import forestry.factory.circuits.CircuitSpeedUpgrade;
-import forestry.factory.gadgets.MachineBottler;
-import forestry.factory.gadgets.MachineCarpenter;
-import forestry.factory.gadgets.MachineCentrifuge;
-import forestry.factory.gadgets.MachineFabricator;
-import forestry.factory.gadgets.MachineFermenter;
-import forestry.factory.gadgets.MachineMoistener;
-import forestry.factory.gadgets.MachineRaintank;
-import forestry.factory.gadgets.MachineSqueezer;
-import forestry.factory.gadgets.MachineStill;
-import forestry.factory.gadgets.MillRainmaker;
-import forestry.factory.gadgets.TileWorktable;
 import forestry.factory.network.PacketHandlerFactory;
-import forestry.factory.recipes.craftguide.CraftGuideIntegration;
+import forestry.factory.tiles.TileBottler;
+import forestry.factory.tiles.TileCarpenter;
+import forestry.factory.tiles.TileCentrifuge;
+import forestry.factory.tiles.TileFabricator;
+import forestry.factory.tiles.TileFermenter;
+import forestry.factory.tiles.TileMillRainmaker;
+import forestry.factory.tiles.TileMoistener;
+import forestry.factory.tiles.TileRaintank;
+import forestry.factory.tiles.TileSqueezer;
+import forestry.factory.tiles.TileStill;
+import forestry.factory.tiles.TileWorktable;
 import forestry.factory.triggers.FactoryTriggers;
 
 
-@Plugin(pluginID = "Factory", name = "Factory", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.factory.description")
+@Plugin(pluginID = "Factory", name = "Factory", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.factory.description")
 public class PluginFactory extends ForestryPlugin {
 
 	private static MachineDefinition definitionBottler;
@@ -78,13 +79,13 @@ public class PluginFactory extends ForestryPlugin {
 		super.setupAPI();
 
 		RecipeManagers.craftingProviders = ImmutableList.of(
-				RecipeManagers.carpenterManager = new MachineCarpenter.RecipeManager(),
-				RecipeManagers.centrifugeManager = new MachineCentrifuge.RecipeManager(),
-				RecipeManagers.fabricatorManager = new MachineFabricator.RecipeManager(),
-				RecipeManagers.fermenterManager = new MachineFermenter.RecipeManager(),
-				RecipeManagers.moistenerManager = new MachineMoistener.RecipeManager(),
-				RecipeManagers.squeezerManager = new MachineSqueezer.RecipeManager(),
-				RecipeManagers.stillManager = new MachineStill.RecipeManager()
+				RecipeManagers.carpenterManager = new TileCarpenter.RecipeManager(),
+				RecipeManagers.centrifugeManager = new TileCentrifuge.RecipeManager(),
+				RecipeManagers.fabricatorManager = new TileFabricator.RecipeManager(),
+				RecipeManagers.fermenterManager = new TileFermenter.RecipeManager(),
+				RecipeManagers.moistenerManager = new TileMoistener.RecipeManager(),
+				RecipeManagers.squeezerManager = new TileSqueezer.RecipeManager(),
+				RecipeManagers.stillManager = new TileStill.RecipeManager()
 		);
 	}
 
@@ -112,13 +113,13 @@ public class PluginFactory extends ForestryPlugin {
 	public void preInit() {
 		super.preInit();
 
-		ForestryBlock.factoryTESR.registerBlock(new BlockBase(Material.iron, true), ItemForestryBlock.class, "factory");
+		ForestryBlock.factoryTESR.registerBlock(new BlockBase(Material.iron, true), ItemBlockForestry.class, "factory");
 
 		BlockBase factoryTESR = ((BlockBase) ForestryBlock.factoryTESR.block());
 
-		definitionBottler = factoryTESR.addDefinition(new MachineDefinition(Defaults.DEFINITION_BOTTLER_META, "forestry.Bottler", MachineBottler.class,
-				Proxies.render.getRenderDefaultMachine(Defaults.TEXTURE_PATH_BLOCKS + "/bottler_"), ShapedRecipeCustom.createShapedRecipe(
-				ForestryBlock.factoryTESR.getItemStack(1, Defaults.DEFINITION_BOTTLER_META),
+		definitionBottler = factoryTESR.addDefinition(new MachineDefinition(Constants.DEFINITION_BOTTLER_META, "forestry.Bottler", TileBottler.class,
+				Proxies.render.getRenderDefaultMachine(Constants.TEXTURE_PATH_BLOCKS + "/bottler_"), ShapedRecipeCustom.createShapedRecipe(
+				ForestryBlock.factoryTESR.getItemStack(1, Constants.DEFINITION_BOTTLER_META),
 				"X#X",
 				"#Y#",
 				"X#X",
@@ -126,9 +127,9 @@ public class PluginFactory extends ForestryPlugin {
 				'X', ForestryItem.canEmpty,
 				'Y', ForestryItem.sturdyCasing)));
 
-		definitionCarpenter = factoryTESR.addDefinition(new MachineDefinition(Defaults.DEFINITION_CARPENTER_META, "forestry.Carpenter", MachineCarpenter.class,
-				Proxies.render.getRenderDefaultMachine(Defaults.TEXTURE_PATH_BLOCKS + "/carpenter_"), ShapedRecipeCustom.createShapedRecipe(
-				ForestryBlock.factoryTESR.getItemStack(1, Defaults.DEFINITION_CARPENTER_META),
+		definitionCarpenter = factoryTESR.addDefinition(new MachineDefinition(Constants.DEFINITION_CARPENTER_META, "forestry.Carpenter", TileCarpenter.class,
+				Proxies.render.getRenderDefaultMachine(Constants.TEXTURE_PATH_BLOCKS + "/carpenter_"), ShapedRecipeCustom.createShapedRecipe(
+				ForestryBlock.factoryTESR.getItemStack(1, Constants.DEFINITION_CARPENTER_META),
 				"X#X",
 				"XYX",
 				"X#X",
@@ -136,9 +137,9 @@ public class PluginFactory extends ForestryPlugin {
 				'X', "ingotBronze",
 				'Y', ForestryItem.sturdyCasing)));
 
-		definitionCentrifuge = factoryTESR.addDefinition(new MachineDefinition(Defaults.DEFINITION_CENTRIFUGE_META, "forestry.Centrifuge", MachineCentrifuge.class,
-				Proxies.render.getRenderDefaultMachine(Defaults.TEXTURE_PATH_BLOCKS + "/centrifuge_"), ShapedRecipeCustom.createShapedRecipe(
-				ForestryBlock.factoryTESR.getItemStack(1, Defaults.DEFINITION_CENTRIFUGE_META),
+		definitionCentrifuge = factoryTESR.addDefinition(new MachineDefinition(Constants.DEFINITION_CENTRIFUGE_META, "forestry.Centrifuge", TileCentrifuge.class,
+				Proxies.render.getRenderDefaultMachine(Constants.TEXTURE_PATH_BLOCKS + "/centrifuge_"), ShapedRecipeCustom.createShapedRecipe(
+				ForestryBlock.factoryTESR.getItemStack(1, Constants.DEFINITION_CENTRIFUGE_META),
 				"X#X",
 				"XYX",
 				"X#X",
@@ -146,9 +147,9 @@ public class PluginFactory extends ForestryPlugin {
 				'X', "ingotCopper",
 				'Y', ForestryItem.sturdyCasing.getItemStack())));
 
-		definitionFermenter = factoryTESR.addDefinition(new MachineDefinition(Defaults.DEFINITION_FERMENTER_META, "forestry.Fermenter", MachineFermenter.class,
-				Proxies.render.getRenderDefaultMachine(Defaults.TEXTURE_PATH_BLOCKS + "/fermenter_"), ShapedRecipeCustom.createShapedRecipe(
-				ForestryBlock.factoryTESR.getItemStack(1, Defaults.DEFINITION_FERMENTER_META),
+		definitionFermenter = factoryTESR.addDefinition(new MachineDefinition(Constants.DEFINITION_FERMENTER_META, "forestry.Fermenter", TileFermenter.class,
+				Proxies.render.getRenderDefaultMachine(Constants.TEXTURE_PATH_BLOCKS + "/fermenter_"), ShapedRecipeCustom.createShapedRecipe(
+				ForestryBlock.factoryTESR.getItemStack(1, Constants.DEFINITION_FERMENTER_META),
 				"X#X",
 				"#Y#",
 				"X#X",
@@ -156,9 +157,9 @@ public class PluginFactory extends ForestryPlugin {
 				'X', "gearBronze",
 				'Y', ForestryItem.sturdyCasing)));
 
-		definitionMoistener = factoryTESR.addDefinition(new MachineDefinition(Defaults.DEFINITION_MOISTENER_META, "forestry.Moistener", MachineMoistener.class,
-				Proxies.render.getRenderDefaultMachine(Defaults.TEXTURE_PATH_BLOCKS + "/moistener_"), ShapedRecipeCustom.createShapedRecipe(
-				ForestryBlock.factoryTESR.getItemStack(1, Defaults.DEFINITION_MOISTENER_META),
+		definitionMoistener = factoryTESR.addDefinition(new MachineDefinition(Constants.DEFINITION_MOISTENER_META, "forestry.Moistener", TileMoistener.class,
+				Proxies.render.getRenderDefaultMachine(Constants.TEXTURE_PATH_BLOCKS + "/moistener_"), ShapedRecipeCustom.createShapedRecipe(
+				ForestryBlock.factoryTESR.getItemStack(1, Constants.DEFINITION_MOISTENER_META),
 				"X#X",
 				"#Y#",
 				"X#X",
@@ -166,9 +167,9 @@ public class PluginFactory extends ForestryPlugin {
 				'X', "gearCopper",
 				'Y', ForestryItem.sturdyCasing)));
 
-		definitionSqueezer = factoryTESR.addDefinition(new MachineDefinition(Defaults.DEFINITION_SQUEEZER_META, "forestry.Squeezer", MachineSqueezer.class,
-				Proxies.render.getRenderDefaultMachine(Defaults.TEXTURE_PATH_BLOCKS + "/squeezer_"), ShapedRecipeCustom.createShapedRecipe(
-				ForestryBlock.factoryTESR.getItemStack(1, Defaults.DEFINITION_SQUEEZER_META),
+		definitionSqueezer = factoryTESR.addDefinition(new MachineDefinition(Constants.DEFINITION_SQUEEZER_META, "forestry.Squeezer", TileSqueezer.class,
+				Proxies.render.getRenderDefaultMachine(Constants.TEXTURE_PATH_BLOCKS + "/squeezer_"), ShapedRecipeCustom.createShapedRecipe(
+				ForestryBlock.factoryTESR.getItemStack(1, Constants.DEFINITION_SQUEEZER_META),
 				"X#X",
 				"XYX",
 				"X#X",
@@ -176,9 +177,9 @@ public class PluginFactory extends ForestryPlugin {
 				'X', "ingotTin",
 				'Y', ForestryItem.sturdyCasing.getItemStack())));
 
-		definitionStill = factoryTESR.addDefinition(new MachineDefinition(Defaults.DEFINITION_STILL_META, "forestry.Still", MachineStill.class,
-				Proxies.render.getRenderDefaultMachine(Defaults.TEXTURE_PATH_BLOCKS + "/still_"), ShapedRecipeCustom.createShapedRecipe(
-				ForestryBlock.factoryTESR.getItemStack(1, Defaults.DEFINITION_STILL_META),
+		definitionStill = factoryTESR.addDefinition(new MachineDefinition(Constants.DEFINITION_STILL_META, "forestry.Still", TileStill.class,
+				Proxies.render.getRenderDefaultMachine(Constants.TEXTURE_PATH_BLOCKS + "/still_"), ShapedRecipeCustom.createShapedRecipe(
+				ForestryBlock.factoryTESR.getItemStack(1, Constants.DEFINITION_STILL_META),
 				"X#X",
 				"#Y#",
 				"X#X",
@@ -186,9 +187,9 @@ public class PluginFactory extends ForestryPlugin {
 				'X', "dustRedstone",
 				'Y', ForestryItem.sturdyCasing)));
 
-		definitionRainmaker = factoryTESR.addDefinition(new MachineDefinition(Defaults.DEFINITION_RAINMAKER_META, "forestry.Rainmaker", MillRainmaker.class,
-				Proxies.render.getRenderMill(Defaults.TEXTURE_PATH_BLOCKS + "/rainmaker_"), ShapedRecipeCustom.createShapedRecipe(
-				ForestryBlock.factoryTESR.getItemStack(1, Defaults.DEFINITION_RAINMAKER_META),
+		definitionRainmaker = factoryTESR.addDefinition(new MachineDefinition(Constants.DEFINITION_RAINMAKER_META, "forestry.Rainmaker", TileMillRainmaker.class,
+				Proxies.render.getRenderMill(Constants.TEXTURE_PATH_BLOCKS + "/rainmaker_"), ShapedRecipeCustom.createShapedRecipe(
+				ForestryBlock.factoryTESR.getItemStack(1, Constants.DEFINITION_RAINMAKER_META),
 				"X#X",
 				"#Y#",
 				"X#X",
@@ -196,13 +197,13 @@ public class PluginFactory extends ForestryPlugin {
 				'X', "gearTin",
 				'Y', ForestryItem.hardenedCasing)));
 
-		ForestryBlock.factoryPlain.registerBlock(new BlockBase(Material.iron), ItemNBTTile.class, "factory2");
+		ForestryBlock.factoryPlain.registerBlock(new BlockBase(Material.iron), ItemBlockNBT.class, "factory2");
 
 		BlockBase factoryPlain = ((BlockBase) ForestryBlock.factoryPlain.block());
 
-		definitionFabricator = factoryPlain.addDefinition(new MachineDefinition(Defaults.DEFINITION_FABRICATOR_META, "forestry.Fabricator", MachineFabricator.class,
+		definitionFabricator = factoryPlain.addDefinition(new MachineDefinition(Constants.DEFINITION_FABRICATOR_META, "forestry.Fabricator", TileFabricator.class,
 				ShapedRecipeCustom.createShapedRecipe(
-						ForestryBlock.factoryPlain.getItemStack(1, Defaults.DEFINITION_FABRICATOR_META),
+						ForestryBlock.factoryPlain.getItemStack(1, Constants.DEFINITION_FABRICATOR_META),
 						"X#X",
 						"#Y#",
 						"XZX",
@@ -212,8 +213,8 @@ public class PluginFactory extends ForestryPlugin {
 						'Z', "chestWood"))
 				.setFaces(0, 1, 2, 3, 4, 4));
 
-		definitionRaintank = factoryPlain.addDefinition(new MachineDefinition(Defaults.DEFINITION_RAINTANK_META, "forestry.Raintank", MachineRaintank.class,
-				ShapedRecipeCustom.createShapedRecipe(ForestryBlock.factoryPlain.getItemStack(1, Defaults.DEFINITION_RAINTANK_META),
+		definitionRaintank = factoryPlain.addDefinition(new MachineDefinition(Constants.DEFINITION_RAINTANK_META, "forestry.Raintank", TileRaintank.class,
+				ShapedRecipeCustom.createShapedRecipe(ForestryBlock.factoryPlain.getItemStack(1, Constants.DEFINITION_RAINTANK_META),
 						"X#X",
 						"XYX",
 						"X#X",
@@ -222,8 +223,8 @@ public class PluginFactory extends ForestryPlugin {
 						'Y', ForestryItem.sturdyCasing))
 				.setFaces(0, 1, 0, 0, 0, 0));
 
-		definitionWorktable = factoryPlain.addDefinition(new MachineDefinition(Defaults.DEFINITION_WORKTABLE_META, "forestry.Worktable", TileWorktable.class,
-				ShapedRecipeCustom.createShapedRecipe(ForestryBlock.factoryPlain.getItemStack(1, Defaults.DEFINITION_WORKTABLE_META),
+		definitionWorktable = factoryPlain.addDefinition(new MachineDefinition(Constants.DEFINITION_WORKTABLE_META, "forestry.Worktable", TileWorktable.class,
+				ShapedRecipeCustom.createShapedRecipe(ForestryBlock.factoryPlain.getItemStack(1, Constants.DEFINITION_WORKTABLE_META),
 						"B",
 						"W",
 						"C",
@@ -270,7 +271,7 @@ public class PluginFactory extends ForestryPlugin {
 		if (Proxies.common.isModLoaded("craftguide")) {
 			CraftGuideIntegration.register();
 		} else {
-			Proxies.log.info("Skipping CraftGuide integration.");
+			Log.info("Skipping CraftGuide integration.");
 		}
 	}
 
@@ -308,10 +309,10 @@ public class PluginFactory extends ForestryPlugin {
 				"dyeYellow", "dyeLightBlue", "dyeMagenta", "dyeOrange", "dyeWhite"};
 
 		if (PluginManager.Module.APICULTURE.isEnabled()) {
-			FluidStack liquidGlass = Fluids.GLASS.getFluid(Defaults.BUCKET_VOLUME);
+			FluidStack liquidGlass = Fluids.GLASS.getFluid(Constants.BUCKET_VOLUME);
 			for (int i = 0; i < 16; i++) {
-				RecipeManagers.fabricatorManager.addRecipe(ForestryItem.waxCast.getItemStack(1, Defaults.WILDCARD), liquidGlass, new ItemStack(Blocks.stained_glass, 4, 15 - i), new Object[]{"#", "X", '#', dyes[i],
-						'X', ForestryItem.propolis.getItemStack(1, Defaults.WILDCARD)});
+				RecipeManagers.fabricatorManager.addRecipe(ForestryItem.waxCast.getItemStack(1, Constants.WILDCARD), liquidGlass, new ItemStack(Blocks.stained_glass, 4, 15 - i), new Object[]{"#", "X", '#', dyes[i],
+						'X', ForestryItem.propolis.getItemStack(1, Constants.WILDCARD)});
 			}
 		}
 
@@ -331,8 +332,8 @@ public class PluginFactory extends ForestryPlugin {
 		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Items.snowball), ForestryItem.craftingMaterial.getItemStack(4, 5)}, Fluids.ICE.getFluid(4000));
 
 		// STILL
-		RecipeManagers.stillManager.addRecipe(Defaults.STILL_DESTILLATION_DURATION, Fluids.BIOMASS.getFluid(Defaults.STILL_DESTILLATION_INPUT),
-				Fluids.ETHANOL.getFluid(Defaults.STILL_DESTILLATION_OUTPUT));
+		RecipeManagers.stillManager.addRecipe(Constants.STILL_DESTILLATION_DURATION, Fluids.BIOMASS.getFluid(Constants.STILL_DESTILLATION_INPUT),
+				Fluids.ETHANOL.getFluid(Constants.STILL_DESTILLATION_OUTPUT));
 
 		// convert old honey to new honey
 		RecipeManagers.stillManager.addRecipe(1, Fluids.LEGACY_HONEY.getFluid(1000), Fluids.HONEY.getFluid(1000));
@@ -344,14 +345,14 @@ public class PluginFactory extends ForestryPlugin {
 
 		// FERMENTER
 		for (int i = 0; i < 6; i++) {
-			RecipeUtil.injectLeveledRecipe(new ItemStack(Blocks.sapling, 1, i), GameMode.getGameMode().getIntegerSetting("fermenter.yield.sapling"), Fluids.BIOMASS);
+			RecipeUtil.addFermenterRecipes(new ItemStack(Blocks.sapling, 1, i), GameMode.getGameMode().getIntegerSetting("fermenter.yield.sapling"), Fluids.BIOMASS);
 		}
 
-		RecipeUtil.injectLeveledRecipe(new ItemStack(Blocks.cactus), GameMode.getGameMode().getIntegerSetting("fermenter.yield.cactus"), Fluids.BIOMASS);
-		RecipeUtil.injectLeveledRecipe(new ItemStack(Items.wheat), GameMode.getGameMode().getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
-		RecipeUtil.injectLeveledRecipe(new ItemStack(Items.reeds), GameMode.getGameMode().getIntegerSetting("fermenter.yield.cane"), Fluids.BIOMASS);
-		RecipeUtil.injectLeveledRecipe(new ItemStack(Blocks.brown_mushroom), GameMode.getGameMode().getIntegerSetting("fermenter.yield.mushroom"), Fluids.BIOMASS);
-		RecipeUtil.injectLeveledRecipe(new ItemStack(Blocks.red_mushroom), GameMode.getGameMode().getIntegerSetting("fermenter.yield.mushroom"), Fluids.BIOMASS);
+		RecipeUtil.addFermenterRecipes(new ItemStack(Blocks.cactus), GameMode.getGameMode().getIntegerSetting("fermenter.yield.cactus"), Fluids.BIOMASS);
+		RecipeUtil.addFermenterRecipes(new ItemStack(Items.wheat), GameMode.getGameMode().getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
+		RecipeUtil.addFermenterRecipes(new ItemStack(Items.reeds), GameMode.getGameMode().getIntegerSetting("fermenter.yield.cane"), Fluids.BIOMASS);
+		RecipeUtil.addFermenterRecipes(new ItemStack(Blocks.brown_mushroom), GameMode.getGameMode().getIntegerSetting("fermenter.yield.mushroom"), Fluids.BIOMASS);
+		RecipeUtil.addFermenterRecipes(new ItemStack(Blocks.red_mushroom), GameMode.getGameMode().getIntegerSetting("fermenter.yield.mushroom"), Fluids.BIOMASS);
 
 		// FABRICATOR
 
@@ -366,7 +367,7 @@ public class PluginFactory extends ForestryPlugin {
 				"###",
 				'#', "logWood");
 		RecipeManagers.carpenterManager.addRecipe(50, Fluids.SEEDOIL.getFluid(500), null,
-				ForestryBlock.core.getItemStack(1, Defaults.DEFINITION_ESCRITOIRE_META),
+				ForestryBlock.core.getItemStack(1, Constants.DEFINITION_ESCRITOIRE_META),
 				"#  ",
 				"###",
 				"# #",

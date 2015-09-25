@@ -17,7 +17,7 @@ import net.minecraft.item.ItemStack;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 
-import forestry.core.interfaces.ICrafterWorktable;
+import forestry.factory.tiles.ICrafterWorktable;
 
 public class SlotCrafter extends SlotCrafting {
 

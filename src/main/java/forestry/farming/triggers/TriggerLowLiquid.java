@@ -17,7 +17,7 @@ import net.minecraftforge.fluids.IFluidTank;
 
 import forestry.core.fluids.ITankManager;
 import forestry.core.triggers.Trigger;
-import forestry.farming.multiblock.TileHatch;
+import forestry.farming.tiles.TileHatch;
 
 import buildcraft.api.statements.IStatementContainer;
 import buildcraft.api.statements.IStatementParameter;

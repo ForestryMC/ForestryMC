@@ -49,7 +49,7 @@ public class AIButterflyMate extends AIButterflyInteract {
 				IButterflyNursery nursery = (IButterflyNursery) tile;
 				if (nursery.canNurse(entity.getButterfly())) {
 					nursery.setCaterpillar(entity.getButterfly().spawnCaterpillar(nursery));
-					//				Proxies.log.finest("A butterfly '%s' laid an egg at %s/%s/%s.", entity.getButterfly().getIdent(), rest.posX, rest.posY, rest.posZ);
+					//				Log.finest("A butterfly '%s' laid an egg at %s/%s/%s.", entity.getButterfly().getIdent(), rest.posX, rest.posY, rest.posZ);
 					if (entity.getRNG().nextFloat() < 1.0f / entity.getButterfly().getGenome().getFertility()) {
 						entity.setHealth(0);
 					}

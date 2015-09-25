@@ -57,21 +57,22 @@ import forestry.api.storage.BackpackManager;
 import forestry.api.storage.EnumBackpackType;
 import forestry.api.storage.IBackpackDefinition;
 import forestry.api.storage.StorageManager;
-import forestry.core.config.Defaults;
+import forestry.core.IPickupHandler;
+import forestry.core.IResupplyHandler;
+import forestry.core.config.Constants;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
 import forestry.core.config.LocalizedConfiguration;
 import forestry.core.fluids.Fluids;
-import forestry.core.interfaces.IPickupHandler;
-import forestry.core.interfaces.IResupplyHandler;
 import forestry.core.items.ItemCrated;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.StackUtils;
+import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.Log;
 import forestry.core.utils.StringUtil;
-import forestry.factory.gadgets.MachineCarpenter;
+import forestry.factory.tiles.TileCarpenter;
 import forestry.storage.BackpackDefinition;
-import forestry.storage.BackpackHelper;
+import forestry.storage.BackpackInterface;
 import forestry.storage.CrateRegistry;
 import forestry.storage.GuiHandlerStorage;
 import forestry.storage.PickupHandlerStorage;
@@ -81,13 +82,13 @@ import forestry.storage.items.ItemNaturalistBackpack.BackpackDefinitionApiarist;
 import forestry.storage.items.ItemNaturalistBackpack.BackpackDefinitionLepidopterist;
 import forestry.storage.proxy.ProxyStorage;
 
-@Plugin(pluginID = "Storage", name = "Storage", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.storage.description")
+@Plugin(pluginID = "Storage", name = "Storage", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.storage.description")
 public class PluginStorage extends ForestryPlugin {
 
 	private static final List<ItemCrated> crates = new ArrayList<ItemCrated>();
 	private static final String CONFIG_CATEGORY = "backpacks";
 
-	@SidedProxy(clientSide = "forestry.storage.proxy.ClientProxyStorage", serverSide = "forestry.storage.proxy.ProxyStorage")
+	@SidedProxy(clientSide = "forestry.storage.proxy.ProxyStorageClient", serverSide = "forestry.storage.proxy.ProxyStorage")
 	public static ProxyStorage proxy;
 	private final ArrayList<ItemStack> minerItems = new ArrayList<ItemStack>();
 	private final ArrayList<ItemStack> diggerItems = new ArrayList<ItemStack>();
@@ -103,7 +104,7 @@ public class PluginStorage extends ForestryPlugin {
 
 		StorageManager.crateRegistry = new CrateRegistry();
 
-		BackpackManager.backpackInterface = new BackpackHelper();
+		BackpackManager.backpackInterface = new BackpackInterface();
 
 		BackpackManager.backpackItems = new ArrayList[6];
 
@@ -162,7 +163,7 @@ public class PluginStorage extends ForestryPlugin {
 			final String oldConfigRenamed = CONFIG_CATEGORY + ".conf.old";
 			File oldConfigFileRenamed = new File(Forestry.instance.getConfigFolder(), oldConfigRenamed);
 			if (oldConfigFile.renameTo(oldConfigFileRenamed)) {
-				Proxies.log.info("Migrated " + CONFIG_CATEGORY + " settings to the new file '" + newConfig + "' and renamed '" + oldConfig + "' to '" + oldConfigRenamed + "'.");
+				Log.info("Migrated " + CONFIG_CATEGORY + " settings to the new file '" + newConfig + "' and renamed '" + oldConfig + "' to '" + oldConfigRenamed + "'.");
 			}
 		}
 
@@ -235,7 +236,7 @@ public class PluginStorage extends ForestryPlugin {
 	}
 
 	private static void old_parseBackpackItems(String list, IBackpackDefinition backpackDefinition) {
-		List<ItemStack> backpackItems = StackUtils.parseItemStackStrings(list, 0);
+		List<ItemStack> backpackItems = ItemStackUtil.parseItemStackStrings(list, 0);
 		backpackDefinition.addValidItems(backpackItems);
 	}
 
@@ -313,7 +314,7 @@ public class PluginStorage extends ForestryPlugin {
 
 		digger.addValidOreDictNames(diggerOreDictNames);
 		digger.addValidItems(Arrays.asList(
-				new ItemStack(Blocks.dirt, 1, Defaults.WILDCARD),
+				new ItemStack(Blocks.dirt, 1, Constants.WILDCARD),
 				new ItemStack(Blocks.gravel),
 				new ItemStack(Items.flint),
 				new ItemStack(Blocks.netherrack),
@@ -332,7 +333,7 @@ public class PluginStorage extends ForestryPlugin {
 				new ItemStack(Blocks.red_flower),
 				new ItemStack(Blocks.yellow_flower),
 				new ItemStack(Blocks.cactus),
-				new ItemStack(Blocks.tallgrass, 1, Defaults.WILDCARD),
+				new ItemStack(Blocks.tallgrass, 1, Constants.WILDCARD),
 				new ItemStack(Blocks.vine),
 				new ItemStack(Blocks.pumpkin),
 				new ItemStack(Blocks.melon_block),
@@ -367,7 +368,7 @@ public class PluginStorage extends ForestryPlugin {
 				new ItemStack(Items.slime_ball),
 				new ItemStack(Items.dye, 1, 0),
 				new ItemStack(Blocks.hay_block),
-				new ItemStack(Blocks.wool, 1, Defaults.WILDCARD),
+				new ItemStack(Blocks.wool, 1, Constants.WILDCARD),
 				new ItemStack(Items.ender_eye),
 				new ItemStack(Items.magma_cream),
 				new ItemStack(Items.speckled_melon),
@@ -387,13 +388,13 @@ public class PluginStorage extends ForestryPlugin {
 				new ItemStack(Blocks.torch),
 				new ItemStack(Blocks.redstone_torch),
 				new ItemStack(Blocks.redstone_lamp),
-				new ItemStack(Blocks.stonebrick, 1, Defaults.WILDCARD),
+				new ItemStack(Blocks.stonebrick, 1, Constants.WILDCARD),
 				new ItemStack(Blocks.sandstone, 1, 1),
 				new ItemStack(Blocks.sandstone, 1, 2),
 				new ItemStack(Blocks.brick_block),
 				new ItemStack(Blocks.clay),
-				new ItemStack(Blocks.hardened_clay, 1, Defaults.WILDCARD),
-				new ItemStack(Blocks.stained_hardened_clay, 1, Defaults.WILDCARD),
+				new ItemStack(Blocks.hardened_clay, 1, Constants.WILDCARD),
+				new ItemStack(Blocks.stained_hardened_clay, 1, Constants.WILDCARD),
 				new ItemStack(Blocks.packed_ice),
 				new ItemStack(Blocks.nether_brick),
 				new ItemStack(Blocks.crafting_table),
@@ -403,7 +404,7 @@ public class PluginStorage extends ForestryPlugin {
 				new ItemStack(Blocks.dropper),
 				new ItemStack(Blocks.ladder),
 				new ItemStack(Blocks.iron_bars),
-				new ItemStack(Blocks.quartz_block, 1, Defaults.WILDCARD),
+				new ItemStack(Blocks.quartz_block, 1, Constants.WILDCARD),
 				new ItemStack(Items.sign),
 				new ItemStack(Items.item_frame)
 		));
@@ -429,7 +430,7 @@ public class PluginStorage extends ForestryPlugin {
 			backpackConf.comment = StringUtil.localizeAndFormat("config.backpacks.item.stacks.format", backpackName);
 
 			String[] backpackItemList = backpackConf.getStringList();
-			backpackItems = StackUtils.parseItemStackStrings(backpackItemList, OreDictionary.WILDCARD_VALUE);
+			backpackItems = ItemStackUtil.parseItemStackStrings(backpackItemList, OreDictionary.WILDCARD_VALUE);
 		}
 
 		{
@@ -464,7 +465,7 @@ public class PluginStorage extends ForestryPlugin {
 	}
 
 	public static void createCrateRecipes() {
-		MachineCarpenter.RecipeManager carpenterManager = (MachineCarpenter.RecipeManager) RecipeManagers.carpenterManager;
+		TileCarpenter.RecipeManager carpenterManager = (TileCarpenter.RecipeManager) RecipeManagers.carpenterManager;
 		for (ItemCrated crate : crates) {
 			ItemStack itemStack = new ItemStack(crate);
 			if (crate.usesOreDict()) {
@@ -486,12 +487,12 @@ public class PluginStorage extends ForestryPlugin {
 
 			if (!BackpackManager.definitions.containsKey(tokens[0])) {
 				String errorMessage = getInvalidIMCMessageText(message);
-				Proxies.log.warning("%s For non-existent backpack %s.", errorMessage, tokens[0]);
+				Log.warning("%s For non-existent backpack %s.", errorMessage, tokens[0]);
 				return true;
 			}
 
 			IBackpackDefinition backpackDefinition = BackpackManager.definitions.get(tokens[0]);
-			List<ItemStack> itemStacks = StackUtils.parseItemStackStrings(tokens[1], 0);
+			List<ItemStack> itemStacks = ItemStackUtil.parseItemStackStrings(tokens[1], 0);
 			backpackDefinition.addValidItems(itemStacks);
 
 			return true;
@@ -571,7 +572,7 @@ public class PluginStorage extends ForestryPlugin {
 					'#', Blocks.wool,
 					'X', Items.string,
 					'V', "stickWood",
-					'Y', ForestryBlock.apicultureChest.getItemStack(1, Defaults.DEFINITION_APIARISTCHEST_META));
+					'Y', ForestryBlock.apicultureChest.getItemStack(1, Constants.DEFINITION_APIARISTCHEST_META));
 		}
 
 		if (PluginManager.Module.LEPIDOPTEROLOGY.isEnabled()) {
@@ -583,7 +584,7 @@ public class PluginStorage extends ForestryPlugin {
 					'#', Blocks.wool,
 					'X', Items.string,
 					'V', "stickWood",
-					'Y', ForestryBlock.lepidopterology.getItemStack(1, Defaults.DEFINITION_LEPICHEST_META));
+					'Y', ForestryBlock.lepidopterology.getItemStack(1, Constants.DEFINITION_LEPICHEST_META));
 		}
 
 		// Miner's Backpack

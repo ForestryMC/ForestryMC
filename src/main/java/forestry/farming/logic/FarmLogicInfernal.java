@@ -27,9 +27,9 @@ import forestry.api.farming.Farmables;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
-import forestry.core.utils.Utils;
-import forestry.core.vect.Vect;
-import forestry.core.vect.VectUtil;
+import forestry.core.utils.BlockUtil;
+import forestry.core.utils.vect.Vect;
+import forestry.core.utils.vect.VectUtil;
 
 public class FarmLogicInfernal extends FarmLogicHomogeneous {
 
@@ -88,7 +88,7 @@ public class FarmLogicInfernal extends FarmLogicHomogeneous {
 
 		for (int i = 0; i < extent; i++) {
 			Vect position = translateWithOffset(x, y, z, direction, i);
-			if (!VectUtil.isAirBlock(world, position) && !Utils.isReplaceableBlock(world, position.x, position.y, position.z)) {
+			if (!VectUtil.isAirBlock(world, position) && !BlockUtil.isReplaceableBlock(world, position.x, position.y, position.z)) {
 				continue;
 			}
 

@@ -47,23 +47,15 @@ import forestry.arboriculture.FruitProviderRipening;
 import forestry.arboriculture.GuiHandlerArboriculture;
 import forestry.arboriculture.VillageHandlerArboriculture;
 import forestry.arboriculture.WoodType;
+import forestry.arboriculture.blocks.BlockArbFence;
+import forestry.arboriculture.blocks.BlockArbStairs;
+import forestry.arboriculture.blocks.BlockForestryLeaves;
+import forestry.arboriculture.blocks.BlockFruitPod;
+import forestry.arboriculture.blocks.BlockLog;
+import forestry.arboriculture.blocks.BlockPlanks;
+import forestry.arboriculture.blocks.BlockSapling;
+import forestry.arboriculture.blocks.BlockSlab;
 import forestry.arboriculture.commands.CommandTree;
-import forestry.arboriculture.gadgets.BlockArbFence;
-import forestry.arboriculture.gadgets.BlockArbStairs;
-import forestry.arboriculture.gadgets.BlockFruitPod;
-import forestry.arboriculture.gadgets.BlockLog;
-import forestry.arboriculture.gadgets.BlockPlanks;
-import forestry.arboriculture.gadgets.BlockSapling;
-import forestry.arboriculture.gadgets.BlockSlab;
-import forestry.arboriculture.gadgets.ForestryBlockLeaves;
-import forestry.arboriculture.gadgets.TileArboristChest;
-import forestry.arboriculture.gadgets.TileFruitPod;
-import forestry.arboriculture.gadgets.TileLeaves;
-import forestry.arboriculture.gadgets.TileSapling;
-import forestry.arboriculture.gadgets.TileWood;
-import forestry.arboriculture.genetics.AlleleFruit;
-import forestry.arboriculture.genetics.AlleleGrowth;
-import forestry.arboriculture.genetics.AlleleLeafEffectNone;
 import forestry.arboriculture.genetics.GrowthProvider;
 import forestry.arboriculture.genetics.GrowthProviderTropical;
 import forestry.arboriculture.genetics.TreeBranchDefinition;
@@ -72,42 +64,49 @@ import forestry.arboriculture.genetics.TreeFactory;
 import forestry.arboriculture.genetics.TreeHelper;
 import forestry.arboriculture.genetics.TreeMutationFactory;
 import forestry.arboriculture.genetics.TreekeepingMode;
+import forestry.arboriculture.genetics.alleles.AlleleFruit;
+import forestry.arboriculture.genetics.alleles.AlleleGrowth;
+import forestry.arboriculture.genetics.alleles.AlleleLeafEffectNone;
+import forestry.arboriculture.items.ItemBlockLeaves;
+import forestry.arboriculture.items.ItemBlockWood;
 import forestry.arboriculture.items.ItemGermlingGE;
 import forestry.arboriculture.items.ItemGrafter;
-import forestry.arboriculture.items.ItemLeavesBlock;
 import forestry.arboriculture.items.ItemTreealyzer;
-import forestry.arboriculture.items.ItemWoodBlock;
 import forestry.arboriculture.network.PacketHandlerArboriculture;
 import forestry.arboriculture.proxy.ProxyArboriculture;
-import forestry.core.GameMode;
+import forestry.arboriculture.tiles.TileArboristChest;
+import forestry.arboriculture.tiles.TileFruitPod;
+import forestry.arboriculture.tiles.TileLeaves;
+import forestry.arboriculture.tiles.TileSapling;
+import forestry.arboriculture.tiles.TileWood;
+import forestry.core.blocks.BlockBase;
 import forestry.core.config.Config;
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
+import forestry.core.config.GameMode;
 import forestry.core.fluids.Fluids;
-import forestry.core.gadgets.BlockBase;
-import forestry.core.gadgets.MachineDefinition;
 import forestry.core.genetics.alleles.Allele;
-import forestry.core.items.ItemForestryBlock;
+import forestry.core.items.ItemBlockForestry;
 import forestry.core.items.ItemFruit.EnumFruit;
 import forestry.core.network.IPacketHandler;
 import forestry.core.proxy.Proxies;
+import forestry.core.recipes.RecipeUtil;
+import forestry.core.recipes.ShapedRecipeCustom;
+import forestry.core.recipes.ShapelessRecipeCustom;
 import forestry.core.render.RenderNaturalistChest;
-import forestry.core.utils.RecipeUtil;
-import forestry.core.utils.ShapedRecipeCustom;
-import forestry.core.utils.ShapelessRecipeCustom;
+import forestry.core.tiles.MachineDefinition;
 import forestry.factory.recipes.FabricatorRecipe;
 
-@Plugin(pluginID = "Arboriculture", name = "Arboriculture", author = "Binnie & SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.arboriculture.description")
+@Plugin(pluginID = "Arboriculture", name = "Arboriculture", author = "Binnie & SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.arboriculture.description")
 public class PluginArboriculture extends ForestryPlugin {
 
-	@SidedProxy(clientSide = "forestry.arboriculture.proxy.ClientProxyArboriculture", serverSide = "forestry.arboriculture.proxy.ProxyArboriculture")
+	@SidedProxy(clientSide = "forestry.arboriculture.proxy.ProxyArboricultureClient", serverSide = "forestry.arboriculture.proxy.ProxyArboriculture")
 	public static ProxyArboriculture proxy;
 	public static String treekeepingMode = "NORMAL";
 
 	public static int modelIdSaplings;
 	public static int modelIdLeaves;
-	public static int modelIdFences;
 	public static int modelIdPods;
 
 	private static MachineDefinition definitionChest;
@@ -137,26 +136,26 @@ public class PluginArboriculture extends ForestryPlugin {
 		super.preInit();
 
 		// Wood blocks
-		ForestryBlock.logs.registerBlock(new BlockLog(false), ItemWoodBlock.class, "logs");
+		ForestryBlock.logs.registerBlock(new BlockLog(false), ItemBlockWood.class, "logs");
 		OreDictionary.registerOre("logWood", ForestryBlock.logs.getWildcard());
 
-		ForestryBlock.planks.registerBlock(new BlockPlanks(false), ItemWoodBlock.class, "planks");
+		ForestryBlock.planks.registerBlock(new BlockPlanks(false), ItemBlockWood.class, "planks");
 		OreDictionary.registerOre("plankWood", ForestryBlock.planks.getWildcard());
 
-		ForestryBlock.slabs.registerBlock(new BlockSlab(false), ItemWoodBlock.class, "slabs");
+		ForestryBlock.slabs.registerBlock(new BlockSlab(false), ItemBlockWood.class, "slabs");
 		OreDictionary.registerOre("slabWood", ForestryBlock.slabs.getWildcard());
 
-		ForestryBlock.fences.registerBlock(new BlockArbFence(false), ItemWoodBlock.class, "fences");
+		ForestryBlock.fences.registerBlock(new BlockArbFence(false), ItemBlockWood.class, "fences");
 		OreDictionary.registerOre("fenceWood", ForestryBlock.fences.getWildcard());
 
-		ForestryBlock.stairs.registerBlock(new BlockArbStairs(ForestryBlock.planks.block(), false), ItemWoodBlock.class, "stairs");
+		ForestryBlock.stairs.registerBlock(new BlockArbStairs(ForestryBlock.planks.block(), false), ItemBlockWood.class, "stairs");
 		OreDictionary.registerOre("stairWood", ForestryBlock.stairs.getWildcard());
 
-		ForestryBlock.logsFireproof.registerBlock(new BlockLog(true), ItemWoodBlock.class, "logsFireproof");
-		ForestryBlock.planksFireproof.registerBlock(new BlockPlanks(true), ItemWoodBlock.class, "planksFireproof");
-		ForestryBlock.slabsFireproof.registerBlock(new BlockSlab(true), ItemWoodBlock.class, "slabsFireproof");
-		ForestryBlock.fencesFireproof.registerBlock(new BlockArbFence(true), ItemWoodBlock.class, "fencesFireproof");
-		ForestryBlock.stairsFireproof.registerBlock(new BlockArbStairs(ForestryBlock.planksFireproof.block(), true), ItemWoodBlock.class, "stairsFireproof");
+		ForestryBlock.logsFireproof.registerBlock(new BlockLog(true), ItemBlockWood.class, "logsFireproof");
+		ForestryBlock.planksFireproof.registerBlock(new BlockPlanks(true), ItemBlockWood.class, "planksFireproof");
+		ForestryBlock.slabsFireproof.registerBlock(new BlockSlab(true), ItemBlockWood.class, "slabsFireproof");
+		ForestryBlock.fencesFireproof.registerBlock(new BlockArbFence(true), ItemBlockWood.class, "fencesFireproof");
+		ForestryBlock.stairsFireproof.registerBlock(new BlockArbStairs(ForestryBlock.planksFireproof.block(), true), ItemBlockWood.class, "stairsFireproof");
 
 		for (WoodType woodType : WoodType.VALUES) {
 			woodType.registerLog(ForestryBlock.logs.block(), false);
@@ -173,23 +172,23 @@ public class PluginArboriculture extends ForestryPlugin {
 		}
 
 		// Saplings
-		ForestryBlock.saplingGE.registerBlock(new BlockSapling(), ItemForestryBlock.class, "saplingGE");
+		ForestryBlock.saplingGE.registerBlock(new BlockSapling(), ItemBlockForestry.class, "saplingGE");
 		OreDictionary.registerOre("treeSapling", ForestryBlock.saplingGE.getWildcard());
 
 		// Leaves
-		ForestryBlock.leaves.registerBlock(new ForestryBlockLeaves(), ItemLeavesBlock.class, "leaves");
+		ForestryBlock.leaves.registerBlock(new BlockForestryLeaves(), ItemBlockLeaves.class, "leaves");
 		OreDictionary.registerOre("treeLeaves", ForestryBlock.leaves.getWildcard());
 
 		// Pods
-		ForestryBlock.pods.registerBlock(new BlockFruitPod(), ItemForestryBlock.class, "pods");
+		ForestryBlock.pods.registerBlock(new BlockFruitPod(), ItemBlockForestry.class, "pods");
 
 		// Machines
-		ForestryBlock.arboriculture.registerBlock(new BlockBase(Material.iron, true), ItemForestryBlock.class, "arboriculture");
+		ForestryBlock.arboriculture.registerBlock(new BlockBase(Material.iron, true), ItemBlockForestry.class, "arboriculture");
 		ForestryBlock.arboriculture.block().setCreativeTab(Tabs.tabArboriculture);
 
-		definitionChest = ((BlockBase) ForestryBlock.arboriculture.block()).addDefinition(new MachineDefinition(Defaults.DEFINITION_ARBCHEST_META,
-				"forestry.ArbChest", TileArboristChest.class, new RenderNaturalistChest("arbchest"), 
-				ShapedRecipeCustom.createShapedRecipe(ForestryBlock.arboriculture.getItemStack(1, Defaults.DEFINITION_ARBCHEST_META),
+		definitionChest = ((BlockBase) ForestryBlock.arboriculture.block()).addDefinition(new MachineDefinition(Constants.DEFINITION_ARBCHEST_META,
+				"forestry.ArbChest", TileArboristChest.class, new RenderNaturalistChest("arbchest"),
+				ShapedRecipeCustom.createShapedRecipe(ForestryBlock.arboriculture.getItemStack(1, Constants.DEFINITION_ARBCHEST_META),
 						" # ",
 						"XYX",
 						"XXX",
@@ -228,9 +227,9 @@ public class PluginArboriculture extends ForestryPlugin {
 		definitionChest.register();
 
 		if (Config.enableVillagers) {
-			VillagerRegistry.instance().registerVillagerId(Defaults.ID_VILLAGER_LUMBERJACK);
-			Proxies.render.registerVillagerSkin(Defaults.ID_VILLAGER_LUMBERJACK, Defaults.TEXTURE_SKIN_LUMBERJACK);
-			VillagerRegistry.instance().registerVillageTradeHandler(Defaults.ID_VILLAGER_LUMBERJACK, new VillageHandlerArboriculture());
+			VillagerRegistry.instance().registerVillagerId(Constants.ID_VILLAGER_LUMBERJACK);
+			Proxies.render.registerVillagerSkin(Constants.ID_VILLAGER_LUMBERJACK, Constants.TEXTURE_SKIN_LUMBERJACK);
+			VillagerRegistry.instance().registerVillageTradeHandler(Constants.ID_VILLAGER_LUMBERJACK, new VillageHandlerArboriculture());
 		}
 	}
 
@@ -323,7 +322,7 @@ public class PluginArboriculture extends ForestryPlugin {
 			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{EnumFruit.PAPAYA.getStack()}, Fluids.JUICE.getFluid(juiceMultiplier * 3), ForestryItem.mulch.getItemStack(), (int) Math.floor(mulchMultiplier * 0.5f));
 			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{EnumFruit.DATES.getStack()}, Fluids.JUICE.getFluid((int) Math.floor(juiceMultiplier * 0.25)), ForestryItem.mulch.getItemStack(), mulchMultiplier);
 
-			RecipeUtil.injectLeveledRecipe(ForestryItem.sapling.getItemStack(), GameMode.getGameMode().getIntegerSetting("fermenter.yield.sapling"), Fluids.BIOMASS);
+			RecipeUtil.addFermenterRecipes(ForestryItem.sapling.getItemStack(), GameMode.getGameMode().getIntegerSetting("fermenter.yield.sapling"), Fluids.BIOMASS);
 		}
 
 		// Stairs
@@ -426,20 +425,20 @@ public class PluginArboriculture extends ForestryPlugin {
 	}
 
 	private static void registerDungeonLoot() {
-		ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(ForestryItem.grafter.getItemStack(), 1, 1, 8));
+		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(ForestryItem.grafter.getItemStack(), 1, 1, 8));
 
-		ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Oak.getMemberStack(EnumGermlingType.SAPLING), 2, 3, 6));
-		ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Spruce.getMemberStack(EnumGermlingType.SAPLING), 2, 3, 6));
-		ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Birch.getMemberStack(EnumGermlingType.SAPLING), 2, 3, 6));
-		ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Larch.getMemberStack(EnumGermlingType.SAPLING), 1, 2, 4));
-		ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Lime.getMemberStack(EnumGermlingType.SAPLING), 1, 2, 4));
+		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Oak.getMemberStack(EnumGermlingType.SAPLING), 2, 3, 6));
+		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Spruce.getMemberStack(EnumGermlingType.SAPLING), 2, 3, 6));
+		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Birch.getMemberStack(EnumGermlingType.SAPLING), 2, 3, 6));
+		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Larch.getMemberStack(EnumGermlingType.SAPLING), 1, 2, 4));
+		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Lime.getMemberStack(EnumGermlingType.SAPLING), 1, 2, 4));
 
 		if (PluginManager.Module.APICULTURE.isEnabled()) {
-			ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Oak.getMemberStack(EnumGermlingType.POLLEN), 2, 3, 4));
-			ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Spruce.getMemberStack(EnumGermlingType.POLLEN), 2, 3, 4));
-			ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Birch.getMemberStack(EnumGermlingType.POLLEN), 2, 3, 4));
-			ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Larch.getMemberStack(EnumGermlingType.POLLEN), 1, 2, 3));
-			ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Lime.getMemberStack(EnumGermlingType.POLLEN), 1, 2, 3));
+			ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Oak.getMemberStack(EnumGermlingType.POLLEN), 2, 3, 4));
+			ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Spruce.getMemberStack(EnumGermlingType.POLLEN), 2, 3, 4));
+			ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Birch.getMemberStack(EnumGermlingType.POLLEN), 2, 3, 4));
+			ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Larch.getMemberStack(EnumGermlingType.POLLEN), 1, 2, 3));
+			ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Lime.getMemberStack(EnumGermlingType.POLLEN), 1, 2, 3));
 		}
 	}
 

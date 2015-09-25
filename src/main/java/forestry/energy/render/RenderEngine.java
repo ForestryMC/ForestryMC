@@ -20,12 +20,12 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
-import forestry.core.TemperatureState;
-import forestry.core.config.Defaults;
-import forestry.core.gadgets.Engine;
-import forestry.core.interfaces.IBlockRenderer;
+import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.ForestryResource;
+import forestry.core.render.ForestryResource;
+import forestry.core.render.IBlockRenderer;
+import forestry.core.tiles.TemperatureState;
+import forestry.core.tiles.TileEngine;
 
 public class RenderEngine extends TileEntitySpecialRenderer implements IBlockRenderer {
 
@@ -86,11 +86,11 @@ public class RenderEngine extends TileEntitySpecialRenderer implements IBlockRen
 				new ForestryResource(baseTexture + "base.png"),
 				new ForestryResource(baseTexture + "piston.png"),
 				new ForestryResource(baseTexture + "extension.png"),
-				new ForestryResource(Defaults.TEXTURE_PATH_BLOCKS + "/engine_trunk_highest.png"),
-				new ForestryResource(Defaults.TEXTURE_PATH_BLOCKS + "/engine_trunk_higher.png"),
-				new ForestryResource(Defaults.TEXTURE_PATH_BLOCKS + "/engine_trunk_high.png"),
-				new ForestryResource(Defaults.TEXTURE_PATH_BLOCKS + "/engine_trunk_medium.png"),
-				new ForestryResource(Defaults.TEXTURE_PATH_BLOCKS + "/engine_trunk_low.png"),};
+				new ForestryResource(Constants.TEXTURE_PATH_BLOCKS + "/engine_trunk_highest.png"),
+				new ForestryResource(Constants.TEXTURE_PATH_BLOCKS + "/engine_trunk_higher.png"),
+				new ForestryResource(Constants.TEXTURE_PATH_BLOCKS + "/engine_trunk_high.png"),
+				new ForestryResource(Constants.TEXTURE_PATH_BLOCKS + "/engine_trunk_medium.png"),
+				new ForestryResource(Constants.TEXTURE_PATH_BLOCKS + "/engine_trunk_low.png"),};
 	}
 
 	@Override
@@ -101,10 +101,10 @@ public class RenderEngine extends TileEntitySpecialRenderer implements IBlockRen
 	@Override
 	public void renderTileEntityAt(TileEntity tile, double d, double d1, double d2, float f) {
 
-		Engine engine = (Engine) tile;
+		TileEngine tileEngine = (TileEngine) tile;
 
-		if (engine != null) {
-			render(engine.getTemperatureState(), engine.progress, engine.getOrientation(), d, d1, d2);
+		if (tileEngine != null) {
+			render(tileEngine.getTemperatureState(), tileEngine.progress, tileEngine.getOrientation(), d, d1, d2);
 		}
 	}
 

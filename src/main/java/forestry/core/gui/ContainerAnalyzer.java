@@ -12,10 +12,10 @@ package forestry.core.gui;
 
 import net.minecraft.entity.player.InventoryPlayer;
 
-import forestry.core.gadgets.TileAnalyzer;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.core.gui.slots.SlotWorking;
+import forestry.core.tiles.TileAnalyzer;
 
 public class ContainerAnalyzer extends ContainerLiquidTanks<TileAnalyzer> {
 

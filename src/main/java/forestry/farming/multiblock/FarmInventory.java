@@ -24,12 +24,12 @@ import forestry.api.farming.IFarmLogic;
 import forestry.api.farming.IFarmable;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.TankManager;
-import forestry.core.inventory.InvTools;
 import forestry.core.inventory.InventoryAdapterRestricted;
 import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.StackUtils;
-import forestry.core.utils.Utils;
+import forestry.core.utils.InventoryUtil;
+import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.SlotUtil;
 import forestry.plugins.PluginFarming;
 
 public class FarmInventory extends InventoryAdapterRestricted implements IFarmInventory {
@@ -66,13 +66,13 @@ public class FarmInventory extends InventoryAdapterRestricted implements IFarmIn
 
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-		if (Utils.isIndexInRange(slotIndex, SLOT_FERTILIZER, SLOT_FERTILIZER_COUNT)) {
+		if (SlotUtil.isSlotInRange(slotIndex, SLOT_FERTILIZER, SLOT_FERTILIZER_COUNT)) {
 			return acceptsAsFertilizer(itemStack);
-		} else if (Utils.isIndexInRange(slotIndex, SLOT_GERMLINGS_1, SLOT_GERMLINGS_COUNT)) {
+		} else if (SlotUtil.isSlotInRange(slotIndex, SLOT_GERMLINGS_1, SLOT_GERMLINGS_COUNT)) {
 			return acceptsAsGermling(itemStack);
-		} else if (Utils.isIndexInRange(slotIndex, SLOT_RESOURCES_1, SLOT_RESOURCES_COUNT)) {
+		} else if (SlotUtil.isSlotInRange(slotIndex, SLOT_RESOURCES_1, SLOT_RESOURCES_COUNT)) {
 			return acceptsAsResource(itemStack);
-		} else if (Utils.isIndexInRange(slotIndex, SLOT_CAN, SLOT_CAN_COUNT)) {
+		} else if (SlotUtil.isSlotInRange(slotIndex, SLOT_CAN, SLOT_CAN_COUNT)) {
 			Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
 			return farmController.getTankManager().accepts(fluid);
 		}
@@ -81,18 +81,18 @@ public class FarmInventory extends InventoryAdapterRestricted implements IFarmIn
 
 	@Override
 	public boolean canExtractItem(int slotIndex, ItemStack stack, int side) {
-		return Utils.isIndexInRange(slotIndex, SLOT_PRODUCTION_1, SLOT_PRODUCTION_COUNT);
+		return SlotUtil.isSlotInRange(slotIndex, SLOT_PRODUCTION_1, SLOT_PRODUCTION_COUNT);
 	}
 
 	@Override
 	public boolean hasResources(ItemStack[] resources) {
-		return InvTools.contains(resourcesInventory, resources);
+		return InventoryUtil.contains(resourcesInventory, resources);
 	}
 
 	@Override
 	public void removeResources(ItemStack[] resources) {
 		EntityPlayer player = Proxies.common.getPlayer(farmController.getWorld(), farmController.getAccessHandler().getOwner());
-		InvTools.removeSets(resourcesInventory, 1, resources, player, false, true);
+		InventoryUtil.removeSets(resourcesInventory, 1, resources, player, false, true);
 	}
 
 	@Override
@@ -133,7 +133,7 @@ public class FarmInventory extends InventoryAdapterRestricted implements IFarmIn
 			return false;
 		}
 
-		return StackUtils.isIdenticalItem(PluginFarming.farmFertilizer, itemstack);
+		return ItemStackUtil.isIdenticalItem(PluginFarming.farmFertilizer, itemstack);
 	}
 
 	@Override
@@ -180,7 +180,7 @@ public class FarmInventory extends InventoryAdapterRestricted implements IFarmIn
 	public void addProduce(ItemStack produce) {
 
 		if (acceptsAsGermling(produce)) {
-			produce.stackSize -= InvTools.addStack(germlingsInventory, produce, true);
+			produce.stackSize -= InventoryUtil.addStack(germlingsInventory, produce, true);
 		}
 
 		if (produce.stackSize <= 0) {
@@ -188,28 +188,28 @@ public class FarmInventory extends InventoryAdapterRestricted implements IFarmIn
 		}
 
 		if (acceptsAsResource(produce)) {
-			produce.stackSize -= InvTools.addStack(resourcesInventory, produce, true);
+			produce.stackSize -= InventoryUtil.addStack(resourcesInventory, produce, true);
 		}
 
 		if (produce.stackSize <= 0) {
 			return;
 		}
 
-		produce.stackSize -= InvTools.addStack(productInventory, produce, true);
+		produce.stackSize -= InventoryUtil.addStack(productInventory, produce, true);
 	}
 
 	public void stowHarvest(Iterable<ItemStack> harvested, Stack<ItemStack> pendingProduce) {
 		for (ItemStack harvest : harvested) {
 
 			if (acceptsAsGermling(harvest)) {
-				harvest.stackSize -= InvTools.addStack(germlingsInventory, harvest, true);
+				harvest.stackSize -= InventoryUtil.addStack(germlingsInventory, harvest, true);
 			}
 
 			if (harvest.stackSize <= 0) {
 				continue;
 			}
 
-			harvest.stackSize -= InvTools.addStack(productInventory, harvest, true);
+			harvest.stackSize -= InventoryUtil.addStack(productInventory, harvest, true);
 
 			if (harvest.stackSize <= 0) {
 				continue;
@@ -223,7 +223,7 @@ public class FarmInventory extends InventoryAdapterRestricted implements IFarmIn
 		IInventory productInventory = getProductInventory();
 
 		ItemStack next = pendingProduce.peek();
-		boolean added = InvTools.tryAddStack(productInventory, next, true, true);
+		boolean added = InventoryUtil.tryAddStack(productInventory, next, true, true);
 
 		if (added) {
 			pendingProduce.pop();

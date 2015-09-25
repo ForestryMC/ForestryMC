@@ -17,13 +17,13 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 import forestry.api.farming.Farmables;
 import forestry.api.recipes.RecipeManagers;
-import forestry.core.GameMode;
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
+import forestry.core.config.GameMode;
 import forestry.core.fluids.Fluids;
 import forestry.core.proxy.Proxies;
 import forestry.farming.logic.FarmableGenericCrop;
 
-@Plugin(pluginID = "ImmersiveEngineering", name = "ImmersiveEngineering", author = "Nirek", url = Defaults.URL, unlocalizedDescription = "for.plugin.immersiveengineering.description")
+@Plugin(pluginID = "ImmersiveEngineering", name = "ImmersiveEngineering", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.plugin.immersiveengineering.description")
 public class PluginImmersiveEngineering extends ForestryPlugin {
 
 	private static final String ImEng = "ImmersiveEngineering";

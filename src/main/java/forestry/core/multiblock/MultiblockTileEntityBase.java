@@ -18,12 +18,12 @@ import net.minecraft.world.chunk.IChunkProvider;
 
 import com.mojang.authlib.GameProfile;
 
-import forestry.core.config.Defaults;
-import forestry.core.interfaces.IFilterSlotDelegate;
-import forestry.core.interfaces.IOwnable;
+import forestry.core.access.IOwnable;
+import forestry.core.config.Constants;
 import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
-import forestry.core.proxy.Proxies;
+import forestry.core.tiles.IFilterSlotDelegate;
+import forestry.core.utils.Log;
 import forestry.core.utils.PlayerUtil;
 
 /**
@@ -89,7 +89,7 @@ public abstract class MultiblockTileEntityBase extends IMultiblockPart implement
 	@Override
 	public final void assertDetached() {
 		if (this.controller != null) {
-			Proxies.log.info("[assert] Part @ (%d, %d, %d) should be detached already, but detected that it was not. This is not a fatal error, and will be repaired, but is unusual.", xCoord, yCoord, zCoord);
+			Log.info("[assert] Part @ (%d, %d, %d) should be detached already, but detected that it was not. This is not a fatal error, and will be repaired, but is unusual.", xCoord, yCoord, zCoord);
 			this.controller = null;
 		}
 	}
@@ -481,7 +481,7 @@ public abstract class MultiblockTileEntityBase extends IMultiblockPart implement
 		if (allowsAutomation()) {
 			return getInternalInventory().getAccessibleSlotsFromSide(side);
 		} else {
-			return Defaults.SLOTS_NONE;
+			return Constants.SLOTS_NONE;
 		}
 	}
 

@@ -21,15 +21,13 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
-import forestry.core.config.Defaults;
-import forestry.core.gadgets.TileEscritoire;
-import forestry.core.interfaces.IBlockRenderer;
+import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.ForestryResource;
+import forestry.core.tiles.TileEscritoire;
 
 public class RenderEscritoire extends TileEntitySpecialRenderer implements IBlockRenderer {
 
-	private static final ResourceLocation texture = new ForestryResource(Defaults.TEXTURE_PATH_BLOCKS + "/escritoire.png");
+	private static final ResourceLocation texture = new ForestryResource(Constants.TEXTURE_PATH_BLOCKS + "/escritoire.png");
 	private final ModelEscritoire modelEscritoire;
 
 	public RenderEscritoire() {

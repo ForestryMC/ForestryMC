@@ -23,8 +23,11 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 import net.minecraftforge.fluids.FluidStack;
 
-import forestry.factory.gadgets.MachineBottler;
+import forestry.core.recipes.nei.NEIUtils;
+import forestry.core.recipes.nei.PositionedFluidTank;
+import forestry.core.recipes.nei.RecipeHandlerBase;
 import forestry.factory.gui.GuiBottler;
+import forestry.factory.tiles.TileBottler;
 
 import codechicken.lib.gui.GuiDraw;
 import codechicken.nei.NEIServerUtils;
@@ -32,12 +35,12 @@ import codechicken.nei.PositionedStack;
 
 public class NEIHandlerBottler extends RecipeHandlerBase {
 
-	private static List<MachineBottler.Recipe> recipes = new ArrayList<MachineBottler.Recipe>();
+	private static final List<TileBottler.Recipe> recipes = new ArrayList<TileBottler.Recipe>();
 
 	@Override
 	public void prepare() {
 		for (FluidContainerData container : FluidContainerRegistry.getRegisteredFluidContainerData()) {
-			MachineBottler.Recipe recipe = MachineBottler.RecipeManager.findMatchingRecipe(container.fluid, container.emptyContainer);
+			TileBottler.Recipe recipe = TileBottler.RecipeManager.findMatchingRecipe(container.fluid, container.emptyContainer);
 			if (recipe != null) {
 				recipes.add(recipe);
 			}
@@ -50,7 +53,7 @@ public class NEIHandlerBottler extends RecipeHandlerBase {
 		public PositionedStack input;
 		public PositionedStack output;
 
-		public CachedBottlerRecipe(MachineBottler.Recipe recipe) {
+		public CachedBottlerRecipe(TileBottler.Recipe recipe) {
 			if (recipe.input != null) {
 				this.fluid = new PositionedFluidTank(recipe.input, 10000, new Rectangle(48, 6, 16, 58), NEIHandlerBottler.this.getGuiTexture(), new Point(176, 0));
 			}
@@ -117,14 +120,14 @@ public class NEIHandlerBottler extends RecipeHandlerBase {
 
 	@Override
 	public void loadAllRecipes() {
-		for (MachineBottler.Recipe recipe : recipes) {
+		for (TileBottler.Recipe recipe : recipes) {
 			this.arecipes.add(new CachedBottlerRecipe(recipe));
 		}
 	}
 
 	@Override
 	public void loadCraftingRecipes(ItemStack result) {
-		for (MachineBottler.Recipe recipe : recipes) {
+		for (TileBottler.Recipe recipe : recipes) {
 			if (NEIServerUtils.areStacksSameTypeCrafting(recipe.bottled, result)) {
 				this.arecipes.add(new CachedBottlerRecipe(recipe));
 			}
@@ -134,7 +137,7 @@ public class NEIHandlerBottler extends RecipeHandlerBase {
 	@Override
 	public void loadUsageRecipes(ItemStack ingred) {
 		super.loadUsageRecipes(ingred);
-		for (MachineBottler.Recipe recipe : recipes) {
+		for (TileBottler.Recipe recipe : recipes) {
 			if (NEIServerUtils.areStacksSameTypeCrafting(recipe.can, ingred)) {
 				this.arecipes.add(new CachedBottlerRecipe(recipe));
 			}
@@ -143,7 +146,7 @@ public class NEIHandlerBottler extends RecipeHandlerBase {
 
 	@Override
 	public void loadUsageRecipes(FluidStack ingred) {
-		for (MachineBottler.Recipe recipe : recipes) {
+		for (TileBottler.Recipe recipe : recipes) {
 			if (NEIUtils.areFluidsSameType(recipe.input, ingred)) {
 				this.arecipes.add(new CachedBottlerRecipe(recipe));
 			}

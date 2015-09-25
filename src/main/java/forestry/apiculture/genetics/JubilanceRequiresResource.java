@@ -19,7 +19,7 @@ import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IJubilanceProvider;
-import forestry.core.utils.StackUtils;
+import forestry.core.utils.ItemStackUtil;
 
 public class JubilanceRequiresResource implements IJubilanceProvider {
 
@@ -36,7 +36,7 @@ public class JubilanceRequiresResource implements IJubilanceProvider {
 
 		Block block = world.getBlock(housingCoords.posX, housingCoords.posY - 1, housingCoords.posZ);
 		int meta = world.getBlockMetadata(housingCoords.posX, housingCoords.posY - 1, housingCoords.posZ);
-		return StackUtils.equals(block, meta, blockRequired);
+		return ItemStackUtil.equals(block, meta, blockRequired);
 	}
 
 }

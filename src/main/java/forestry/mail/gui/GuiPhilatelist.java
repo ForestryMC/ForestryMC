@@ -12,14 +12,14 @@ package forestry.mail.gui;
 
 import net.minecraft.entity.player.InventoryPlayer;
 
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
-import forestry.mail.gadgets.MachinePhilatelist;
+import forestry.mail.tiles.TilePhilatelist;
 
-public class GuiPhilatelist extends GuiForestry<ContainerPhilatelist, MachinePhilatelist> {
+public class GuiPhilatelist extends GuiForestry<ContainerPhilatelist, TilePhilatelist> {
 
-	public GuiPhilatelist(InventoryPlayer player, MachinePhilatelist tile) {
-		super(Defaults.TEXTURE_PATH_GUI + "/philatelist.png", new ContainerPhilatelist(player, tile), tile);
+	public GuiPhilatelist(InventoryPlayer player, TilePhilatelist tile) {
+		super(Constants.TEXTURE_PATH_GUI + "/philatelist.png", new ContainerPhilatelist(player, tile), tile);
 		this.xSize = 176;
 		this.ySize = 193;
 	}

@@ -24,7 +24,7 @@ import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.IPostalCarrier;
 import forestry.api.mail.PostManager;
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.config.SessionVars;
 import forestry.core.gui.GuiForestry;
 import forestry.core.gui.GuiTextBox;
@@ -49,7 +49,7 @@ public class GuiLetter extends GuiForestry<ContainerLetter, LetterInventory> {
 	private final ArrayList<Widget> tradeInfoWidgets;
 
 	public GuiLetter(EntityPlayer player, LetterInventory inventory) {
-		super(Defaults.TEXTURE_PATH_GUI + "/letter.png", new ContainerLetter(player, inventory), inventory);
+		super(Constants.TEXTURE_PATH_GUI + "/letter.png", new ContainerLetter(player, inventory), inventory);
 		this.xSize = 194;
 		this.ySize = 227;
 

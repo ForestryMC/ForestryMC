@@ -25,7 +25,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.api.core.INBTTagable;
 import forestry.api.core.IToolPipette;
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
 
@@ -201,6 +201,6 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 
 	@Override
 	public int getCapacity(ItemStack pipette) {
-		return Defaults.BUCKET_VOLUME;
+		return Constants.BUCKET_VOLUME;
 	}
 }

@@ -53,18 +53,18 @@ import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.IPollinatable;
 import forestry.apiculture.BeeHousingModifier;
-import forestry.arboriculture.genetics.FakePollinatable;
-import forestry.arboriculture.genetics.ICheckPollinatable;
-import forestry.core.EnumErrorCode;
+import forestry.arboriculture.genetics.pollination.FakePollinatable;
+import forestry.arboriculture.genetics.pollination.ICheckPollinatable;
 import forestry.core.config.Config;
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
+import forestry.core.errors.EnumErrorCode;
 import forestry.core.genetics.Chromosome;
 import forestry.core.genetics.GenericRatings;
 import forestry.core.genetics.IndividualLiving;
-import forestry.core.proxy.Proxies;
 import forestry.core.utils.GeneticsUtil;
+import forestry.core.utils.Log;
 import forestry.core.utils.StringUtil;
-import forestry.core.vect.Vect;
+import forestry.core.utils.vect.Vect;
 
 public class Bee extends IndividualLiving implements IBee {
 
@@ -269,7 +269,7 @@ public class Bee extends IndividualLiving implements IBee {
 			errorStates.add(EnumErrorCode.NOTDAY);
 		}
 
-		if (housing.getBlockLightValue() > Defaults.APIARY_MIN_LEVEL_LIGHT) {
+		if (housing.getBlockLightValue() > Constants.APIARY_MIN_LEVEL_LIGHT) {
 			if (!canWorkDuringDay()) {
 				errorStates.add(EnumErrorCode.NOTGLOOMY);
 			}
@@ -439,12 +439,12 @@ public class Bee extends IndividualLiving implements IBee {
 	@Override
 	public ItemStack[] produceStacks(IBeeHousing housing) {
 		if (housing == null) {
-			Proxies.log.warning("Failed to produce in an apiary because the beehousing was null.");
+			Log.warning("Failed to produce in an apiary because the beehousing was null.");
 			return null;
 		}
 		IBeekeepingMode mode = BeeManager.beeRoot.getBeekeepingMode(housing.getWorld());
 		if (mode == null) {
-			Proxies.log.warning("Failed to produce in an apiary because the beekeeping mode was null.");
+			Log.warning("Failed to produce in an apiary because the beekeeping mode was null.");
 			return null;
 		}
 

@@ -18,11 +18,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
-import forestry.core.utils.PlainInventory;
 
 /**
  * With permission from Krapht.
@@ -39,7 +38,7 @@ public class InventoryAdapter implements IInventoryAdapter, IStreamable {
 	}
 
 	public InventoryAdapter(int size, String name, int stackLimit) {
-		this(new PlainInventory(size, name, stackLimit));
+		this(new InventoryPlain(size, name, stackLimit));
 	}
 
 	public InventoryAdapter(IInventory inventory) {
@@ -155,7 +154,7 @@ public class InventoryAdapter implements IInventoryAdapter, IStreamable {
 		if (allowAutomation) {
 			return slotMap[side];
 		}
-		return Defaults.SLOTS_NONE;
+		return Constants.SLOTS_NONE;
 	}
 
 	private void configureSided() {
@@ -167,7 +166,7 @@ public class InventoryAdapter implements IInventoryAdapter, IStreamable {
 			slots[i] = i;
 		}
 
-		for (int side : Defaults.FACINGS) {
+		for (int side : Constants.FACINGS) {
 			slotMap[side] = slots;
 		}
 	}

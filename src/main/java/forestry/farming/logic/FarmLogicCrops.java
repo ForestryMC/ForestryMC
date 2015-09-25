@@ -26,17 +26,17 @@ import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
-import forestry.core.config.Defaults;
-import forestry.core.utils.StackUtils;
-import forestry.core.utils.Utils;
-import forestry.core.vect.IVect;
-import forestry.core.vect.Vect;
-import forestry.core.vect.VectUtil;
+import forestry.core.config.Constants;
+import forestry.core.utils.BlockUtil;
+import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.vect.IVect;
+import forestry.core.utils.vect.Vect;
+import forestry.core.utils.vect.VectUtil;
 
 public abstract class FarmLogicCrops extends FarmLogicWatered {
 
 	private final Iterable<IFarmable> seeds;
-	private static final ItemStack farmland = new ItemStack(Blocks.farmland, 1, Defaults.WILDCARD);
+	private static final ItemStack farmland = new ItemStack(Blocks.farmland, 1, Constants.WILDCARD);
 
 	protected FarmLogicCrops(IFarmHousing housing, Iterable<IFarmable> seeds) {
 		super(housing, new ItemStack(Blocks.dirt), new ItemStack(Blocks.farmland));
@@ -46,7 +46,7 @@ public abstract class FarmLogicCrops extends FarmLogicWatered {
 
 	@Override
 	public boolean isAcceptedGround(ItemStack itemStack) {
-		return super.isAcceptedGround(itemStack) || StackUtils.isIdenticalItem(farmland, itemStack);
+		return super.isAcceptedGround(itemStack) || ItemStackUtil.isIdenticalItem(farmland, itemStack);
 	}
 
 	@Override
@@ -111,7 +111,7 @@ public abstract class FarmLogicCrops extends FarmLogicWatered {
 
 		for (int i = 0; i < extent; i++) {
 			Vect position = translateWithOffset(x, y, z, direction, i);
-			if (!VectUtil.isAirBlock(world, position) && !Utils.isReplaceableBlock(getWorld(), position.x, position.y, position.z)) {
+			if (!VectUtil.isAirBlock(world, position) && !BlockUtil.isReplaceableBlock(getWorld(), position.x, position.y, position.z)) {
 				continue;
 			}
 

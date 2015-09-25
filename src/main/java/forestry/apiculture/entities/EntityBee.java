@@ -22,12 +22,12 @@ import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IBee;
-import forestry.core.config.Defaults;
-import forestry.core.utils.ForestryResource;
+import forestry.core.config.Constants;
+import forestry.core.render.ForestryResource;
 
 public class EntityBee extends EntityCreature implements IAnimals {
 
-	private static final String DEFAULT_TEXTURE = Defaults.TEXTURE_PATH_ENTITIES + "/bees/honeyBee.png";
+	private static final String DEFAULT_TEXTURE = Constants.TEXTURE_PATH_ENTITIES + "/bees/honeyBee.png";
 
 	private IBee contained;
 	private IAlleleBeeSpecies species;

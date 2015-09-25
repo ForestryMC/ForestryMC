@@ -13,7 +13,7 @@ package forestry.food.gui;
 import net.minecraft.entity.player.InventoryPlayer;
 
 import forestry.api.food.BeverageManager;
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
 import forestry.food.items.ItemInfuser.InfuserInventory;
 
@@ -23,7 +23,7 @@ public class GuiInfuser extends GuiForestry<ContainerInfuser, InfuserInventory> 
 	private int startY;
 
 	public GuiInfuser(InventoryPlayer inventoryplayer, InfuserInventory inventory) {
-		super(Defaults.TEXTURE_PATH_GUI + "/infuser.png", new ContainerInfuser(inventoryplayer, inventory), inventory);
+		super(Constants.TEXTURE_PATH_GUI + "/infuser.png", new ContainerInfuser(inventoryplayer, inventory), inventory);
 
 		xSize = 176;
 		ySize = 185;

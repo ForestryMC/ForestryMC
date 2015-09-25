@@ -21,7 +21,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 
 // Referenced classes of package net.minecraft.src:
 //            WorldGenerator, World, Block, BlockLeaves,
@@ -48,7 +48,7 @@ public class WorldGenBigMushroom extends WorldGenerator {
 
 		int height = random.nextInt(1) + 2;
 		boolean flag = true;
-		if (y < 1 || y + height + 1 > Defaults.WORLD_HEIGHT) {
+		if (y < 1 || y + height + 1 > Constants.WORLD_HEIGHT) {
 			return false;
 		}
 
@@ -60,7 +60,7 @@ public class WorldGenBigMushroom extends WorldGenerator {
 
 			for (int j = x - offset; j <= x + offset && flag; j++) {
 				for (int k = z - offset; k <= z + offset && flag; k++) {
-					if (i >= 0 && i < Defaults.WORLD_HEIGHT) {
+					if (i >= 0 && i < Constants.WORLD_HEIGHT) {
 						Block block = world.getBlock(j, i, k);
 						if (!block.isAir(world, j, i, k) && block != Blocks.leaves) {
 							flag = false;

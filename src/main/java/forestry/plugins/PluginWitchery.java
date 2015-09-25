@@ -26,15 +26,15 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import forestry.api.apiculture.FlowerManager;
 import forestry.api.farming.Farmables;
 import forestry.api.recipes.RecipeManagers;
-import forestry.core.GameMode;
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
+import forestry.core.config.GameMode;
 import forestry.core.fluids.Fluids;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.RecipeUtil;
+import forestry.core.recipes.RecipeUtil;
 import forestry.farming.logic.FarmableBasicFruit;
 import forestry.farming.logic.FarmableGenericCrop;
 
-@Plugin(pluginID = "Witchery", name = "Witchery", author = "Nirek", url = Defaults.URL, unlocalizedDescription = "for.plugin.witchery.description")
+@Plugin(pluginID = "Witchery", name = "Witchery", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.plugin.witchery.description")
 public class PluginWitchery extends ForestryPlugin {
 
 	private static final String Witch = "witchery";
@@ -72,10 +72,10 @@ public class PluginWitchery extends ForestryPlugin {
 		int seedamount = GameMode.getGameMode().getIntegerSetting("squeezer.liquid.seed");
 
 		Item saplingItem = GameRegistry.findItem(Witch, "witchsapling");
-		ItemStack saplingStack = new ItemStack(saplingItem, 1, Defaults.WILDCARD);
-		RecipeUtil.injectLeveledRecipe(saplingStack, GameMode.getGameMode().getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
+		ItemStack saplingStack = new ItemStack(saplingItem, 1, Constants.WILDCARD);
+		RecipeUtil.addFermenterRecipes(saplingStack, GameMode.getGameMode().getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
 		String saplingName = GameData.getItemRegistry().getNameForObject(saplingItem);
-		FMLInterModComms.sendMessage(Defaults.MOD, "add-farmable-sapling", String.format("farmArboreal@%s.-1", saplingName));
+		FMLInterModComms.sendMessage(Constants.MOD, "add-farmable-sapling", String.format("farmArboreal@%s.-1", saplingName));
 
 		for (String flowerAcceptName : flowersAccept) {
 			Block flowerBlock = GameRegistry.findBlock(Witch, flowerAcceptName);

@@ -34,7 +34,7 @@ import cpw.mods.fml.common.ObfuscationReflectionHelper;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class NBTUtil {
+public abstract class NBTUtil {
 
 	public enum EnumNBTType {
 

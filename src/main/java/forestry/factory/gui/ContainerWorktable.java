@@ -17,17 +17,17 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 import forestry.core.gui.ContainerTile;
+import forestry.core.gui.IContainerCrafting;
 import forestry.core.gui.IGuiSelectable;
 import forestry.core.gui.slots.SlotCraftMatrix;
 import forestry.core.gui.slots.SlotCrafter;
-import forestry.core.interfaces.IContainerCrafting;
 import forestry.core.network.PacketGuiSelect;
 import forestry.core.network.PacketId;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.StackUtils;
-import forestry.factory.gadgets.TileWorktable;
+import forestry.core.utils.ItemStackUtil;
 import forestry.factory.network.PacketWorktableMemoryUpdate;
 import forestry.factory.recipes.RecipeMemory;
+import forestry.factory.tiles.TileWorktable;
 
 public class ContainerWorktable extends ContainerTile<TileWorktable> implements IContainerCrafting, IGuiSelectable {
 
@@ -84,7 +84,7 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
 		ItemStack stack = iinventory.getStackInSlot(slot);
 		ItemStack currentStack = craftMatrix.getStackInSlot(slot);
 
-		if (!StackUtils.isIdenticalItem(stack, currentStack)) {
+		if (!ItemStackUtil.isIdenticalItem(stack, currentStack)) {
 			craftMatrix.setInventorySlotContents(slot, stack);
 			updateRecipe();
 		}

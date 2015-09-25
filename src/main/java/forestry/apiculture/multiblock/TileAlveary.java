@@ -12,7 +12,7 @@ package forestry.apiculture.multiblock;
 
 import net.minecraft.util.StatCollector;
 
-import forestry.apiculture.gadgets.BlockAlveary;
+import forestry.apiculture.blocks.BlockAlveary;
 import forestry.core.multiblock.MultiblockControllerBase;
 import forestry.core.multiblock.MultiblockValidationException;
 import forestry.core.multiblock.rectangular.RectangularMultiblockTileEntityBase;

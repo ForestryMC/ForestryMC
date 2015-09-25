@@ -22,8 +22,8 @@ import forestry.api.core.INBTTagable;
 import forestry.api.mail.ILetter;
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.IStamps;
-import forestry.core.inventory.InvTools;
 import forestry.core.inventory.InventoryAdapter;
+import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.StringUtil;
 
 public class Letter implements ILetter, INBTTagable {
@@ -94,12 +94,12 @@ public class Letter implements ILetter, INBTTagable {
 
 	@Override
 	public ItemStack[] getPostage() {
-		return InvTools.getStacks(inventory, SLOT_POSTAGE_1, SLOT_POSTAGE_COUNT);
+		return InventoryUtil.getStacks(inventory, SLOT_POSTAGE_1, SLOT_POSTAGE_COUNT);
 	}
 
 	@Override
 	public ItemStack[] getAttachments() {
-		return InvTools.getStacks(inventory, SLOT_ATTACHMENT_1, SLOT_ATTACHMENT_COUNT);
+		return InventoryUtil.getStacks(inventory, SLOT_ATTACHMENT_1, SLOT_ATTACHMENT_COUNT);
 	}
 
 	@Override
@@ -118,7 +118,7 @@ public class Letter implements ILetter, INBTTagable {
 
 	@Override
 	public void addAttachment(ItemStack itemstack) {
-		InvTools.tryAddStack(inventory, itemstack, false);
+		InventoryUtil.tryAddStack(inventory, itemstack, false);
 	}
 
 	@Override
@@ -186,7 +186,7 @@ public class Letter implements ILetter, INBTTagable {
 
 	@Override
 	public void addStamps(ItemStack stamps) {
-		InvTools.tryAddStack(inventory, stamps, SLOT_POSTAGE_1, 4, false);
+		InventoryUtil.tryAddStack(inventory, stamps, SLOT_POSTAGE_1, 4, false);
 	}
 
 	@Override

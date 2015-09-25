@@ -37,8 +37,8 @@ import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-import forestry.core.config.Defaults;
-import forestry.core.render.EntityColoredDropParticleFX;
+import forestry.core.config.Constants;
+import forestry.core.entities.EntityFXColoredDropParticle;
 import forestry.core.render.TextureManager;
 
 public class BlockForestryFluid extends BlockFluidClassic {
@@ -106,7 +106,7 @@ public class BlockForestryFluid extends BlockFluidClassic {
 	@SideOnly(Side.CLIENT)
 	private boolean flowTextureExists() {
 		try {
-			ResourceLocation resourceLocation = new ResourceLocation(Defaults.ID, "textures/blocks/liquid/" + fluidName + "_flow.png");
+			ResourceLocation resourceLocation = new ResourceLocation(Constants.ID, "textures/blocks/liquid/" + fluidName + "_flow.png");
 			IResourceManager resourceManager = Minecraft.getMinecraft().getResourceManager();
 			return resourceManager.getResource(resourceLocation) != null;
 		} catch (java.lang.Exception e) {
@@ -122,7 +122,7 @@ public class BlockForestryFluid extends BlockFluidClassic {
 			double py = (double) y - 1.05D;
 			double pz = (double) ((float) z + rand.nextFloat());
 
-			EntityFX fx = new EntityColoredDropParticleFX(world, px, py, pz, color.getRed(), color.getGreen(), color.getBlue());
+			EntityFX fx = new EntityFXColoredDropParticle(world, px, py, pz, color.getRed(), color.getGreen(), color.getBlue());
 			FMLClientHandler.instance().getClient().effectRenderer.addEffect(fx);
 		}
 	}

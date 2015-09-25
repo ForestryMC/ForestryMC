@@ -14,8 +14,8 @@ import java.io.IOException;
 
 import net.minecraft.tileentity.TileEntity;
 
-import forestry.arboriculture.gadgets.TileFruitPod;
-import forestry.arboriculture.gadgets.TileLeaves;
+import forestry.arboriculture.tiles.TileFruitPod;
+import forestry.arboriculture.tiles.TileLeaves;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.PacketCoordinates;

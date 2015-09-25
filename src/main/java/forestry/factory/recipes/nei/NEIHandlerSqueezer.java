@@ -21,9 +21,13 @@ import net.minecraft.util.StatCollector;
 
 import net.minecraftforge.fluids.FluidStack;
 
-import forestry.factory.gadgets.MachineSqueezer;
+import forestry.core.recipes.nei.NEIUtils;
+import forestry.core.recipes.nei.PositionedFluidTank;
+import forestry.core.recipes.nei.PositionedStackAdv;
+import forestry.core.recipes.nei.RecipeHandlerBase;
 import forestry.factory.gui.GuiSqueezer;
 import forestry.factory.recipes.ISqueezerRecipe;
+import forestry.factory.tiles.TileSqueezer;
 
 import codechicken.nei.NEIServerUtils;
 import codechicken.nei.PositionedStack;
@@ -131,7 +135,7 @@ public class NEIHandlerSqueezer extends RecipeHandlerBase {
 
 	@Override
 	public void loadAllRecipes() {
-		for (ISqueezerRecipe recipe : MachineSqueezer.RecipeManager.recipes) {
+		for (ISqueezerRecipe recipe : TileSqueezer.RecipeManager.recipes) {
 			this.arecipes.add(new CachedSqueezerRecipe(recipe, true));
 		}
 	}
@@ -139,7 +143,7 @@ public class NEIHandlerSqueezer extends RecipeHandlerBase {
 	@Override
 	public void loadCraftingRecipes(ItemStack result) {
 		super.loadCraftingRecipes(result);
-		for (ISqueezerRecipe recipe : MachineSqueezer.RecipeManager.recipes) {
+		for (ISqueezerRecipe recipe : TileSqueezer.RecipeManager.recipes) {
 			if (NEIServerUtils.areStacksSameTypeCrafting(recipe.getRemnants(), result)) {
 				this.arecipes.add(new CachedSqueezerRecipe(recipe, true));
 			}
@@ -148,7 +152,7 @@ public class NEIHandlerSqueezer extends RecipeHandlerBase {
 
 	@Override
 	public void loadCraftingRecipes(FluidStack result) {
-		for (ISqueezerRecipe recipe : MachineSqueezer.RecipeManager.recipes) {
+		for (ISqueezerRecipe recipe : TileSqueezer.RecipeManager.recipes) {
 			if (NEIUtils.areFluidsSameType(recipe.getFluidOutput(), result)) {
 				this.arecipes.add(new CachedSqueezerRecipe(recipe, true));
 			}
@@ -157,7 +161,7 @@ public class NEIHandlerSqueezer extends RecipeHandlerBase {
 
 	@Override
 	public void loadUsageRecipes(ItemStack ingred) {
-		ISqueezerRecipe recipe = MachineSqueezer.RecipeManager.findMatchingRecipe(new ItemStack[]{ingred});
+		ISqueezerRecipe recipe = TileSqueezer.RecipeManager.findMatchingRecipe(new ItemStack[]{ingred});
 		if (recipe != null) {
 			CachedSqueezerRecipe crecipe = new CachedSqueezerRecipe(recipe);
 			// Override recipe to show the right input in case it's OD

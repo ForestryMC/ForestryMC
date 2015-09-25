@@ -12,9 +12,9 @@ package forestry.factory.recipes.craftguide;
 
 import net.minecraft.item.ItemStack;
 
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.config.ForestryBlock;
-import forestry.factory.gadgets.MachineBottler;
+import forestry.factory.tiles.TileBottler;
 
 import uristqwerty.CraftGuide.api.ItemSlot;
 import uristqwerty.CraftGuide.api.LiquidSlot;
@@ -42,10 +42,10 @@ public class CraftGuideBottler implements RecipeProvider {
 			return;
 		}
 
-		ItemStack machine = ForestryBlock.factoryTESR.getItemStack(1, Defaults.DEFINITION_BOTTLER_META);
+		ItemStack machine = ForestryBlock.factoryTESR.getItemStack(1, Constants.DEFINITION_BOTTLER_META);
 		RecipeTemplate template = generator.createRecipeTemplate(slots, machine);
 
-		for (MachineBottler.Recipe recipe : MachineBottler.RecipeManager.recipes) {
+		for (TileBottler.Recipe recipe : TileBottler.RecipeManager.recipes) {
 			Object[] array = new Object[4];
 
 			array[0] = recipe.can;

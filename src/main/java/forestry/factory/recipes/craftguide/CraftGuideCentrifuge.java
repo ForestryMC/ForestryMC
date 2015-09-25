@@ -17,9 +17,9 @@ import java.util.Map.Entry;
 import net.minecraft.item.ItemStack;
 
 import forestry.api.recipes.ICentrifugeRecipe;
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.config.ForestryBlock;
-import forestry.factory.gadgets.MachineCentrifuge;
+import forestry.factory.tiles.TileCentrifuge;
 
 import uristqwerty.CraftGuide.api.ChanceSlot;
 import uristqwerty.CraftGuide.api.ItemSlot;
@@ -50,10 +50,10 @@ public class CraftGuideCentrifuge implements RecipeProvider {
 			return;
 		}
 
-		ItemStack machine = ForestryBlock.factoryTESR.getItemStack(1, Defaults.DEFINITION_CENTRIFUGE_META);
+		ItemStack machine = ForestryBlock.factoryTESR.getItemStack(1, Constants.DEFINITION_CENTRIFUGE_META);
 		RecipeTemplate template = generator.createRecipeTemplate(slots, machine);
 
-		for (ICentrifugeRecipe recipe : MachineCentrifuge.RecipeManager.recipes) {
+		for (ICentrifugeRecipe recipe : TileCentrifuge.RecipeManager.recipes) {
 			Object[] array = new Object[11];
 
 			List<Entry<ItemStack, Float>> entries = new ArrayList<Entry<ItemStack, Float>>(recipe.getAllProducts().entrySet());

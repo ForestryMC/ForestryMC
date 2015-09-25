@@ -19,7 +19,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.ForestryResource;
+import forestry.core.render.ForestryResource;
 
 public class ModelAnalyzer extends ModelBase {
 

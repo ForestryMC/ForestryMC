@@ -12,9 +12,9 @@ package forestry.apiculture.multiblock;
 
 import forestry.api.apiculture.IAlvearyComponent;
 import forestry.api.apiculture.IBeeHousing;
-import forestry.core.interfaces.IClimatised;
-import forestry.core.interfaces.IRestrictedAccessTile;
 import forestry.core.inventory.IInventoryAdapter;
+import forestry.core.tiles.IClimatised;
+import forestry.core.tiles.IRestrictedAccessTile;
 
 public interface IAlvearyController extends IBeeHousing, IClimatised, IRestrictedAccessTile {
 	IInventoryAdapter getInternalInventory();

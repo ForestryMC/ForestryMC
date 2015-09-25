@@ -14,12 +14,12 @@ import java.io.IOException;
 
 import net.minecraft.tileentity.TileEntity;
 
-import forestry.core.interfaces.IActivatable;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.PacketCoordinates;
 import forestry.core.network.PacketId;
 import forestry.core.proxy.Proxies;
+import forestry.core.tiles.IActivatable;
 
 public class PacketActiveUpdate extends PacketCoordinates {
 

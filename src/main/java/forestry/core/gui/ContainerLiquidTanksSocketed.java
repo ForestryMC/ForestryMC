@@ -20,9 +20,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.IFluidTank;
 
 import forestry.core.circuits.ISocketable;
-import forestry.core.interfaces.ILiquidTankContainer;
+import forestry.core.tiles.ILiquidTankTile;
 
-public abstract class ContainerLiquidTanksSocketed<T extends TileEntity & ILiquidTankContainer & ISocketable> extends ContainerTile<T> implements IContainerSocketed, IContainerLiquidTanks {
+public abstract class ContainerLiquidTanksSocketed<T extends TileEntity & ILiquidTankTile & ISocketable> extends ContainerTile<T> implements IContainerSocketed, IContainerLiquidTanks {
 
 	private final ContainerSocketedHelper<T> socketedHelper;
 	private final ContainerLiquidTanksHelper<T> tanksHelper;

@@ -20,12 +20,12 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 
 import forestry.api.core.IToolPipette;
-import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.network.PacketId;
 import forestry.core.network.PacketSlotClick;
 import forestry.core.proxy.Proxies;
+import forestry.core.tiles.ILiquidTankTile;
 
-public class ContainerLiquidTanksHelper<T extends TileEntity & ILiquidTankContainer> implements IContainerLiquidTanks {
+public class ContainerLiquidTanksHelper<T extends TileEntity & ILiquidTankTile> implements IContainerLiquidTanks {
 
 	private final T tile;
 

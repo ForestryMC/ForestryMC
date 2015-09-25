@@ -12,10 +12,10 @@ package forestry.factory.recipes.craftguide;
 
 import net.minecraft.item.ItemStack;
 
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.config.ForestryBlock;
-import forestry.core.utils.RecipeUtil;
-import forestry.factory.gadgets.MachineCarpenter;
+import forestry.core.recipes.RecipeUtil;
+import forestry.factory.tiles.TileCarpenter;
 
 import uristqwerty.CraftGuide.api.ItemSlot;
 import uristqwerty.CraftGuide.api.LiquidSlot;
@@ -47,10 +47,10 @@ public class CraftGuideCarpenter implements RecipeProvider {
 			return;
 		}
 
-		ItemStack machine = ForestryBlock.factoryTESR.getItemStack(1, Defaults.DEFINITION_CARPENTER_META);
+		ItemStack machine = ForestryBlock.factoryTESR.getItemStack(1, Constants.DEFINITION_CARPENTER_META);
 		RecipeTemplate template = generator.createRecipeTemplate(slots, machine);
 
-		for (MachineCarpenter.Recipe recipe : MachineCarpenter.RecipeManager.recipes) {
+		for (TileCarpenter.Recipe recipe : TileCarpenter.RecipeManager.recipes) {
 			Object[] array = new Object[12];
 
 			Object[] flattened = RecipeUtil.getCraftingRecipeAsArray(recipe.asIRecipe());

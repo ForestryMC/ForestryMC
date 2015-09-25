@@ -18,7 +18,7 @@ import forestry.api.genetics.IFlower;
 import forestry.api.genetics.IFlowerGrowthRule;
 import forestry.api.genetics.IFlowerRegistry;
 import forestry.api.genetics.IIndividual;
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 
 public class VanillaDirtGrassGrowthRule implements IFlowerGrowthRule {
 
@@ -34,7 +34,7 @@ public class VanillaDirtGrassGrowthRule implements IFlowerGrowthRule {
 		}
 
 		IFlower flower = flowerRegistry.getRandomPlantableFlower(flowerType, world.rand);
-		return world.setBlock(x, y, z, flower.getBlock(), flower.getMeta(), Defaults.FLAG_BLOCK_SYNCH);
+		return world.setBlock(x, y, z, flower.getBlock(), flower.getMeta(), Constants.FLAG_BLOCK_SYNCH);
 	}
 
 }

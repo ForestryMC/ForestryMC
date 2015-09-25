@@ -35,9 +35,7 @@ import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorLogic;
 import forestry.apiculture.trigger.ApicultureTriggers;
 import forestry.core.config.Config;
-import forestry.core.interfaces.IClimatised;
-import forestry.core.interfaces.IHintSource;
-import forestry.core.interfaces.ITitled;
+import forestry.core.gui.IHintSource;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.multiblock.MultiblockControllerBase;
 import forestry.core.multiblock.rectangular.PartPosition;
@@ -45,7 +43,9 @@ import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
 import forestry.core.network.IStreamableGui;
-import forestry.core.utils.Utils;
+import forestry.core.tiles.IClimatised;
+import forestry.core.tiles.ITitled;
+import forestry.core.utils.BlockUtil;
 
 import buildcraft.api.statements.IStatementContainer;
 import buildcraft.api.statements.ITriggerExternal;
@@ -62,7 +62,7 @@ public class TileAlvearyPlain extends TileAlveary implements IBeeHousing, IClima
 		if (!worldObj.isRemote) {
 			// set alveary entrance block meta
 			if (getPartPosition() == PartPosition.Frame) {
-				if (Utils.isWoodSlabBlock(worldObj.getBlock(xCoord, yCoord + 1, zCoord))) {
+				if (BlockUtil.isWoodSlabBlock(worldObj.getBlock(xCoord, yCoord + 1, zCoord))) {
 					this.worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, TileAlveary.ENTRANCE_META, 2);
 				}
 			}

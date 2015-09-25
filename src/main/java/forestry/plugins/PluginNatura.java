@@ -28,15 +28,15 @@ import forestry.api.fuels.MoistenerFuel;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
-import forestry.core.GameMode;
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.config.ForestryItem;
+import forestry.core.config.GameMode;
 import forestry.core.fluids.Fluids;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.RecipeUtil;
+import forestry.core.recipes.RecipeUtil;
 import forestry.farming.logic.FarmableGenericCrop;
 
-@Plugin(pluginID = "Natura", name = "Natura", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.natura.description")
+@Plugin(pluginID = "Natura", name = "Natura", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.natura.description")
 public class PluginNatura extends ForestryPlugin {
 
 	private static final String NATURA = "Natura";
@@ -89,11 +89,11 @@ public class PluginNatura extends ForestryPlugin {
 		for (String key : saplingItemKeys) {
 			Item saplingItem = GameRegistry.findItem(NATURA, key);
 
-			ItemStack saplingWild = new ItemStack(saplingItem, 1, Defaults.WILDCARD);
-			RecipeUtil.injectLeveledRecipe(saplingWild, GameMode.getGameMode().getIntegerSetting("fermenter.yield.sapling"), Fluids.BIOMASS);
+			ItemStack saplingWild = new ItemStack(saplingItem, 1, Constants.WILDCARD);
+			RecipeUtil.addFermenterRecipes(saplingWild, GameMode.getGameMode().getIntegerSetting("fermenter.yield.sapling"), Fluids.BIOMASS);
 
 			String saplingName = GameData.getItemRegistry().getNameForObject(saplingItem);
-			FMLInterModComms.sendMessage(Defaults.MOD, "add-farmable-sapling", String.format("farmArboreal@%s.-1", saplingName));
+			FMLInterModComms.sendMessage(Constants.MOD, "add-farmable-sapling", String.format("farmArboreal@%s.-1", saplingName));
 		}
 
 		berryBlight = GameRegistry.findItemStack(NATURA, "berryBlight", 1);
@@ -255,7 +255,7 @@ public class PluginNatura extends ForestryPlugin {
 		}
 
 		if (itemBarley != null) {
-			RecipeUtil.injectLeveledRecipe(itemBarley, GameMode.getGameMode().getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
+			RecipeUtil.addFermenterRecipes(itemBarley, GameMode.getGameMode().getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
 			if (GameMode.getGameMode().getStackSetting("recipe.output.compost.wheat").stackSize > 0) {
 				ItemStack compostWheat = GameMode.getGameMode().getStackSetting("recipe.output.compost.wheat");
 				Proxies.common.addRecipe(compostWheat, " X ", "X#X", " X ", '#', Blocks.dirt, 'X', itemBarley);

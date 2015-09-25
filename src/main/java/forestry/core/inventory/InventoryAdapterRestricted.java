@@ -13,8 +13,8 @@ package forestry.core.inventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
-import forestry.core.config.Defaults;
-import forestry.core.interfaces.IAccessHandler;
+import forestry.core.access.IAccessHandler;
+import forestry.core.config.Constants;
 
 public class InventoryAdapterRestricted extends InventoryAdapter {
 	private final IAccessHandler accessHandler;
@@ -46,7 +46,7 @@ public class InventoryAdapterRestricted extends InventoryAdapter {
 	@Override
 	public int[] getAccessibleSlotsFromSide(int side) {
 		if (!accessHandler.allowsPipeConnections()) {
-			return Defaults.SLOTS_NONE;
+			return Constants.SLOTS_NONE;
 		}
 		return super.getAccessibleSlotsFromSide(side);
 	}

@@ -1,12 +1,27 @@
+/*******************************************************************************
+ * Copyright (c) 2011-2014 SirSengir.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the GNU Lesser Public License v3
+ * which accompanies this distribution, and is available at
+ * http://www.gnu.org/licenses/lgpl-3.0.txt
+ *
+ * Various Contributors including, but not limited to:
+ * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ ******************************************************************************/
 package forestry.core.utils;
 
 import java.util.UUID;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+
 import com.mojang.authlib.GameProfile;
 
-import forestry.core.interfaces.IOwnable;
+import forestry.core.access.IOwnable;
 
-public class PlayerUtil {
+import buildcraft.api.tools.IToolWrench;
+
+public abstract class PlayerUtil {
 
 	//TODO: use null everywhere instead of an emptyUUID
 	private static final UUID emptyUUID = new UUID(0, 0);
@@ -34,4 +49,32 @@ public class PlayerUtil {
 		}
 	}
 
+	public static boolean canWrench(EntityPlayer player, int x, int y, int z) {
+		ItemStack itemstack = player.getCurrentEquippedItem();
+		if (itemstack == null) {
+			return false;
+		}
+
+		if (!(itemstack.getItem() instanceof IToolWrench)) {
+			return false;
+		}
+
+		IToolWrench wrench = (IToolWrench) itemstack.getItem();
+		return wrench.canWrench(player, x, y, z);
+	}
+
+	public static void useWrench(EntityPlayer player, int x, int y, int z) {
+		ItemStack itemstack = player.getCurrentEquippedItem();
+
+		if (itemstack == null) {
+			return;
+		}
+
+		if (!(itemstack.getItem() instanceof IToolWrench)) {
+			return;
+		}
+
+		IToolWrench wrench = (IToolWrench) itemstack.getItem();
+		wrench.wrenchUsed(player, x, y, z);
+	}
 }

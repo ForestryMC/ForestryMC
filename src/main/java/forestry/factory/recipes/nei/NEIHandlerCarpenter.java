@@ -21,9 +21,12 @@ import net.minecraft.util.StatCollector;
 
 import net.minecraftforge.fluids.FluidStack;
 
-import forestry.core.interfaces.IDescriptiveRecipe;
-import forestry.factory.gadgets.MachineCarpenter;
+import forestry.core.recipes.IDescriptiveRecipe;
+import forestry.core.recipes.nei.NEIUtils;
+import forestry.core.recipes.nei.PositionedFluidTank;
+import forestry.core.recipes.nei.RecipeHandlerBase;
 import forestry.factory.gui.GuiCarpenter;
+import forestry.factory.tiles.TileCarpenter;
 
 import codechicken.lib.gui.GuiDraw;
 import codechicken.nei.NEIServerUtils;
@@ -46,7 +49,7 @@ public class NEIHandlerCarpenter extends RecipeHandlerBase {
 		public PositionedFluidTank tank;
 		public PositionedStack output;
 
-		public CachedCarpenterRecipe(MachineCarpenter.Recipe recipe, boolean genPerms) {
+		public CachedCarpenterRecipe(TileCarpenter.Recipe recipe, boolean genPerms) {
 			IDescriptiveRecipe irecipe = (IDescriptiveRecipe) recipe.asIRecipe();
 			if (irecipe != null) {
 				if (irecipe.getIngredients() != null) {
@@ -68,7 +71,7 @@ public class NEIHandlerCarpenter extends RecipeHandlerBase {
 			}
 		}
 
-		public CachedCarpenterRecipe(MachineCarpenter.Recipe recipe) {
+		public CachedCarpenterRecipe(TileCarpenter.Recipe recipe) {
 			this(recipe, false);
 		}
 
@@ -152,14 +155,14 @@ public class NEIHandlerCarpenter extends RecipeHandlerBase {
 
 	@Override
 	public void loadAllRecipes() {
-		for (MachineCarpenter.Recipe recipe : MachineCarpenter.RecipeManager.recipes) {
+		for (TileCarpenter.Recipe recipe : TileCarpenter.RecipeManager.recipes) {
 			this.arecipes.add(new CachedCarpenterRecipe(recipe, true));
 		}
 	}
 
 	@Override
 	public void loadCraftingRecipes(ItemStack result) {
-		for (MachineCarpenter.Recipe recipe : MachineCarpenter.RecipeManager.recipes) {
+		for (TileCarpenter.Recipe recipe : TileCarpenter.RecipeManager.recipes) {
 			if (NEIServerUtils.areStacksSameTypeCrafting(recipe.getCraftingResult(), result)) {
 				this.arecipes.add(new CachedCarpenterRecipe(recipe, true));
 			}
@@ -169,7 +172,7 @@ public class NEIHandlerCarpenter extends RecipeHandlerBase {
 	@Override
 	public void loadUsageRecipes(ItemStack ingred) {
 		super.loadUsageRecipes(ingred);
-		for (MachineCarpenter.Recipe recipe : MachineCarpenter.RecipeManager.recipes) {
+		for (TileCarpenter.Recipe recipe : TileCarpenter.RecipeManager.recipes) {
 			CachedCarpenterRecipe crecipe = new CachedCarpenterRecipe(recipe);
 			if (crecipe.inputs != null && crecipe.contains(crecipe.inputs, ingred)) {
 				crecipe.generatePermutations();
@@ -181,7 +184,7 @@ public class NEIHandlerCarpenter extends RecipeHandlerBase {
 
 	@Override
 	public void loadUsageRecipes(FluidStack ingredient) {
-		for (MachineCarpenter.Recipe recipe : MachineCarpenter.RecipeManager.recipes) {
+		for (TileCarpenter.Recipe recipe : TileCarpenter.RecipeManager.recipes) {
 			if (NEIUtils.areFluidsSameType(recipe.getLiquid(), ingredient)) {
 				this.arecipes.add(new CachedCarpenterRecipe(recipe, true));
 			}

@@ -17,8 +17,8 @@ import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
-import forestry.core.utils.StackUtils;
-import forestry.core.vect.Vect;
+import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.vect.Vect;
 
 public class FarmableGenericSapling implements IFarmable {
 
@@ -64,7 +64,7 @@ public class FarmableGenericSapling implements IFarmable {
 	@Override
 	public boolean isGermling(ItemStack itemstack) {
 
-		if (!StackUtils.equals(sapling, itemstack)) {
+		if (!ItemStackUtil.equals(sapling, itemstack)) {
 			return false;
 		}
 

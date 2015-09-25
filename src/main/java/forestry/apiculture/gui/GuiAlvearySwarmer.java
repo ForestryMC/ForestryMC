@@ -13,13 +13,13 @@ package forestry.apiculture.gui;
 import net.minecraft.entity.player.InventoryPlayer;
 
 import forestry.apiculture.multiblock.TileAlvearySwarmer;
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
 
 public class GuiAlvearySwarmer extends GuiForestryTitled<ContainerAlvearySwarmer, TileAlvearySwarmer> {
 
 	public GuiAlvearySwarmer(InventoryPlayer inventory, TileAlvearySwarmer tile) {
-		super(Defaults.TEXTURE_PATH_GUI + "/swarmer.png", new ContainerAlvearySwarmer(inventory, tile), tile);
+		super(Constants.TEXTURE_PATH_GUI + "/swarmer.png", new ContainerAlvearySwarmer(inventory, tile), tile);
 	}
 
 }

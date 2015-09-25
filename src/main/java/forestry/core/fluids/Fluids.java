@@ -24,7 +24,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.config.ForestryItem;
 import forestry.core.items.ItemLiquidContainer;
 
@@ -132,7 +132,7 @@ public enum Fluids {
 		@Override
 		public void setProperties(ItemLiquidContainer liquidContainer) {
 			if (liquidContainer.getType() != EnumContainerType.BUCKET) {
-				liquidContainer.setDrink(Defaults.FOOD_HONEY_HEAL, Defaults.FOOD_HONEY_SATURATION);
+				liquidContainer.setDrink(Constants.FOOD_HONEY_HEAL, Constants.FOOD_HONEY_SATURATION);
 			}
 		}
 	},
@@ -194,7 +194,7 @@ public enum Fluids {
 		@Override
 		public void setProperties(ItemLiquidContainer liquidContainer) {
 			if (liquidContainer.getType() != EnumContainerType.BUCKET) {
-				liquidContainer.setDrink(Defaults.FOOD_JUICE_HEAL, Defaults.FOOD_JUICE_SATURATION);
+				liquidContainer.setDrink(Constants.FOOD_JUICE_HEAL, Constants.FOOD_JUICE_SATURATION);
 			}
 		}
 	},

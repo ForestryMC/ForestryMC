@@ -19,8 +19,8 @@ import net.minecraft.world.World;
 import forestry.api.farming.ICrop;
 import forestry.core.config.ForestryBlock;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.StackUtils;
-import forestry.core.vect.Vect;
+import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.vect.Vect;
 
 public class FarmableVanillaShroom extends FarmableGenericSapling {
 
@@ -42,7 +42,7 @@ public class FarmableVanillaShroom extends FarmableGenericSapling {
 	@Override
 	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, int x, int y, int z) {
 		int meta = 0;
-		if (StackUtils.equals(Blocks.red_mushroom, germling)) {
+		if (ItemStackUtil.equals(Blocks.red_mushroom, germling)) {
 			meta = 1;
 		}
 

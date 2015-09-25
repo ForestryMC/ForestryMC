@@ -40,11 +40,11 @@ import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.IAllele;
 import forestry.api.world.ITreeGenData;
 import forestry.arboriculture.WoodType;
-import forestry.arboriculture.gadgets.ForestryBlockLeaves;
-import forestry.arboriculture.gadgets.TileLeaves;
-import forestry.arboriculture.render.GermlingIconProvider;
-import forestry.arboriculture.render.GermlingVanillaIconProvider;
-import forestry.arboriculture.render.LeafIconProvider;
+import forestry.arboriculture.blocks.BlockForestryLeaves;
+import forestry.arboriculture.render.IconProviderGermling;
+import forestry.arboriculture.render.IconProviderGermlingVanilla;
+import forestry.arboriculture.render.IconProviderLeaves;
+import forestry.arboriculture.tiles.TileLeaves;
 import forestry.arboriculture.worldgen.BlockTypeLog;
 import forestry.arboriculture.worldgen.WorldGenAcacia;
 import forestry.arboriculture.worldgen.WorldGenAcaciaVanilla;
@@ -81,7 +81,7 @@ import forestry.arboriculture.worldgen.WorldGenWalnut;
 import forestry.arboriculture.worldgen.WorldGenWenge;
 import forestry.arboriculture.worldgen.WorldGenWillow;
 import forestry.arboriculture.worldgen.WorldGenZebrawood;
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.config.ForestryBlock;
 import forestry.core.genetics.alleles.Allele;
 import forestry.core.genetics.alleles.AlleleBoolean;
@@ -960,8 +960,8 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 
 		this.branch = branch;
 
-		ILeafIconProvider leafIconProvider = new LeafIconProvider(leafType, primary, secondary);
-		IGermlingIconProvider germlingIconProvider = new GermlingVanillaIconProvider(vanillaMeta);
+		ILeafIconProvider leafIconProvider = new IconProviderLeaves(leafType, primary, secondary);
+		IGermlingIconProvider germlingIconProvider = new IconProviderGermlingVanilla(vanillaMeta);
 
 		this.species = TreeManager.treeFactory.createSpecies(uid, unlocalizedName, "Sengir", unlocalizedDescription, dominant, branch.getBranch(), binomial, leafIconProvider, germlingIconProvider, this);
 		this.woodType = null;
@@ -976,8 +976,8 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 
 		this.branch = branch;
 
-		ILeafIconProvider leafIconProvider = new LeafIconProvider(leafType, primary, secondary);
-		IGermlingIconProvider germlingIconProvider = new GermlingIconProvider(uid);
+		ILeafIconProvider leafIconProvider = new IconProviderLeaves(leafType, primary, secondary);
+		IGermlingIconProvider germlingIconProvider = new IconProviderGermling(uid);
 
 		this.species = TreeManager.treeFactory.createSpecies(uid, unlocalizedName, "Sengir", unlocalizedDescription, dominant, branch.getBranch(), binomial, leafIconProvider, germlingIconProvider, this);
 		this.woodType = woodType;
@@ -995,7 +995,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 		if (woodType == null) {
 			Block vanillaWoodBlock = Block.getBlockFromItem(vanillaWood.getItem());
 			int vanillaWoodMeta = vanillaWood.getItemDamage();
-			world.setBlock(x, y, z, vanillaWoodBlock, vanillaWoodMeta, Defaults.FLAG_BLOCK_SYNCH);
+			world.setBlock(x, y, z, vanillaWoodBlock, vanillaWoodMeta, Constants.FLAG_BLOCK_SYNCH);
 		} else {
 			AlleleBoolean fireproofAllele = (AlleleBoolean) genome.getActiveAllele(EnumTreeChromosome.FIREPROOF);
 			boolean fireproof = fireproofAllele.getValue();
@@ -1019,7 +1019,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 			return;
 		}
 
-		TileLeaves tileLeaves = ForestryBlockLeaves.getLeafTile(world, x, y, z);
+		TileLeaves tileLeaves = BlockForestryLeaves.getLeafTile(world, x, y, z);
 		if (tileLeaves == null) {
 			world.setBlockToAir(x, y, z);
 			return;

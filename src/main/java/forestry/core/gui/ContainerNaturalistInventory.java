@@ -13,9 +13,9 @@ package forestry.core.gui;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 
-import forestry.core.gadgets.TileNaturalistChest;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.network.PacketGuiSelect;
+import forestry.core.tiles.TileNaturalistChest;
 
 public class ContainerNaturalistInventory extends ContainerTile<TileNaturalistChest> implements IGuiSelectable {
 

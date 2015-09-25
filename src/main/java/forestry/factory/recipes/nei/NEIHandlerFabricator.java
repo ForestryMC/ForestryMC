@@ -28,8 +28,12 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.recipes.IFabricatorRecipe;
-import forestry.factory.gadgets.MachineFabricator;
+import forestry.core.recipes.nei.INBTMatchingCachedRecipe;
+import forestry.core.recipes.nei.NEIUtils;
+import forestry.core.recipes.nei.PositionedFluidTank;
+import forestry.core.recipes.nei.RecipeHandlerBase;
 import forestry.factory.gui.GuiFabricator;
+import forestry.factory.tiles.TileFabricator;
 
 import codechicken.nei.NEIServerUtils;
 import codechicken.nei.PositionedStack;
@@ -51,7 +55,7 @@ public class NEIHandlerFabricator extends RecipeHandlerBase {
 			if (recipe.getLiquid() != null) {
 				this.tank = new PositionedFluidTank(recipe.getLiquid(), 2000, new Rectangle(21, 37, 16, 16));
 				List<ItemStack> smeltingInput = new ArrayList<ItemStack>();
-				for (MachineFabricator.Smelting s : getSmeltingInputs().get(recipe.getLiquid().getFluid())) {
+				for (TileFabricator.Smelting s : getSmeltingInputs().get(recipe.getLiquid().getFluid())) {
 					smeltingInput.add(s.getResource());
 				}
 				if (!smeltingInput.isEmpty()) {
@@ -194,14 +198,14 @@ public class NEIHandlerFabricator extends RecipeHandlerBase {
 
 	@Override
 	public void loadAllRecipes() {
-		for (IFabricatorRecipe recipe : MachineFabricator.RecipeManager.recipes) {
+		for (IFabricatorRecipe recipe : TileFabricator.RecipeManager.recipes) {
 			this.arecipes.add(new CachedFabricatorRecipe(recipe, true));
 		}
 	}
 
 	@Override
 	public void loadCraftingRecipes(ItemStack result) {
-		for (IFabricatorRecipe recipe : MachineFabricator.RecipeManager.recipes) {
+		for (IFabricatorRecipe recipe : TileFabricator.RecipeManager.recipes) {
 			if (NEIServerUtils.areStacksSameTypeCrafting(recipe.getRecipeOutput(), result)) {
 				CachedFabricatorRecipe crecipe = new CachedFabricatorRecipe(recipe, true);
 				NEIUtils.setResultPermutationNBT(crecipe, result);
@@ -213,7 +217,7 @@ public class NEIHandlerFabricator extends RecipeHandlerBase {
 	@Override
 	public void loadUsageRecipes(ItemStack ingred) {
 		super.loadUsageRecipes(ingred);
-		for (IFabricatorRecipe recipe : MachineFabricator.RecipeManager.recipes) {
+		for (IFabricatorRecipe recipe : TileFabricator.RecipeManager.recipes) {
 			CachedFabricatorRecipe crecipe = new CachedFabricatorRecipe(recipe);
 			if (crecipe.inputs != null && crecipe.contains(crecipe.inputs, ingred) || crecipe.smeltingInput != null && crecipe.contains(crecipe.smeltingInput, ingred)) {
 				crecipe.generatePermutations();
@@ -226,7 +230,7 @@ public class NEIHandlerFabricator extends RecipeHandlerBase {
 
 	@Override
 	public void loadUsageRecipes(FluidStack ingredient) {
-		for (IFabricatorRecipe recipe : MachineFabricator.RecipeManager.recipes) {
+		for (IFabricatorRecipe recipe : TileFabricator.RecipeManager.recipes) {
 			if (NEIUtils.areFluidsSameType(recipe.getLiquid(), ingredient)) {
 				this.arecipes.add(new CachedFabricatorRecipe(recipe, true));
 			}
@@ -238,7 +242,7 @@ public class NEIHandlerFabricator extends RecipeHandlerBase {
 		super.provideItemTooltip(guiRecipe, itemStack, currenttip, crecipe, relMouse);
 
 		if (new Rectangle(20, 9, 18, 18).contains(relMouse)) {
-			for (MachineFabricator.Smelting smelting : MachineFabricator.RecipeManager.smeltings) {
+			for (TileFabricator.Smelting smelting : TileFabricator.RecipeManager.smeltings) {
 				if (NEIServerUtils.areStacksSameTypeCrafting(smelting.getResource(), itemStack) && smelting.getProduct() != null) {
 					currenttip.add(EnumChatFormatting.GRAY.toString() + NEIUtils.translate("handler.forestry.fabricator.worth") + " " + smelting.getProduct().amount + " mB");
 				}
@@ -248,12 +252,12 @@ public class NEIHandlerFabricator extends RecipeHandlerBase {
 		return currenttip;
 	}
 
-	private static Map<Fluid, List<MachineFabricator.Smelting>> getSmeltingInputs() {
-		Map<Fluid, List<MachineFabricator.Smelting>> smeltingInputs = new HashMap<Fluid, List<MachineFabricator.Smelting>>();
-		for (MachineFabricator.Smelting smelting : MachineFabricator.RecipeManager.smeltings) {
+	private static Map<Fluid, List<TileFabricator.Smelting>> getSmeltingInputs() {
+		Map<Fluid, List<TileFabricator.Smelting>> smeltingInputs = new HashMap<Fluid, List<TileFabricator.Smelting>>();
+		for (TileFabricator.Smelting smelting : TileFabricator.RecipeManager.smeltings) {
 			Fluid fluid = smelting.getProduct().getFluid();
 			if (!smeltingInputs.containsKey(fluid)) {
-				smeltingInputs.put(fluid, new ArrayList<MachineFabricator.Smelting>());
+				smeltingInputs.put(fluid, new ArrayList<TileFabricator.Smelting>());
 			}
 			smeltingInputs.get(fluid).add(smelting);
 		}

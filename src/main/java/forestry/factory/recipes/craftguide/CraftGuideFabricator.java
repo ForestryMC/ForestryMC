@@ -13,9 +13,9 @@ package forestry.factory.recipes.craftguide;
 import net.minecraft.item.ItemStack;
 
 import forestry.api.recipes.IFabricatorRecipe;
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.config.ForestryBlock;
-import forestry.factory.gadgets.MachineFabricator;
+import forestry.factory.tiles.TileFabricator;
 
 import uristqwerty.CraftGuide.api.ItemSlot;
 import uristqwerty.CraftGuide.api.LiquidSlot;
@@ -47,10 +47,10 @@ public class CraftGuideFabricator implements RecipeProvider {
 			return;
 		}
 
-		ItemStack machine = ForestryBlock.factoryPlain.getItemStack(1, Defaults.DEFINITION_FABRICATOR_META);
+		ItemStack machine = ForestryBlock.factoryPlain.getItemStack(1, Constants.DEFINITION_FABRICATOR_META);
 		RecipeTemplate template = generator.createRecipeTemplate(slots, machine);
 
-		for (IFabricatorRecipe recipe : MachineFabricator.RecipeManager.recipes) {
+		for (IFabricatorRecipe recipe : TileFabricator.RecipeManager.recipes) {
 			Object[] array = new Object[12];
 
 			Object[] recipeIngredients = recipe.getIngredients();

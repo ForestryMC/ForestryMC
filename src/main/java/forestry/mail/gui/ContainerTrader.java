@@ -18,11 +18,11 @@ import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotForestry;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.mail.TradeStation;
-import forestry.mail.gadgets.MachineTrader;
+import forestry.mail.tiles.TileTrader;
 
-public class ContainerTrader extends ContainerTile<MachineTrader> {
+public class ContainerTrader extends ContainerTile<TileTrader> {
 
-	public ContainerTrader(InventoryPlayer player, MachineTrader tile) {
+	public ContainerTrader(InventoryPlayer player, TileTrader tile) {
 		super(tile, player, 33, 138);
 
 		// Trade good

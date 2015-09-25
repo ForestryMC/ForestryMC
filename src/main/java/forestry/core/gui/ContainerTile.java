@@ -18,16 +18,16 @@ import net.minecraft.tileentity.TileEntity;
 
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.core.IErrorState;
-import forestry.core.delegates.FakeAccessHandler;
-import forestry.core.gadgets.TilePowered;
-import forestry.core.interfaces.IAccessHandler;
-import forestry.core.interfaces.IPowerHandler;
-import forestry.core.interfaces.IRestrictedAccessTile;
+import forestry.core.access.EnumAccess;
+import forestry.core.access.FakeAccessHandler;
+import forestry.core.access.IAccessHandler;
 import forestry.core.network.PacketErrorUpdate;
 import forestry.core.network.PacketGuiEnergy;
 import forestry.core.network.PacketGuiUpdate;
-import forestry.core.utils.EnumAccess;
-import forestry.core.utils.Utils;
+import forestry.core.tiles.IPowerHandler;
+import forestry.core.tiles.IRestrictedAccessTile;
+import forestry.core.tiles.TilePowered;
+import forestry.core.tiles.TileUtil;
 import forestry.energy.EnergyManager;
 
 public abstract class ContainerTile<T extends TileEntity> extends ContainerForestry {
@@ -58,7 +58,7 @@ public abstract class ContainerTile<T extends TileEntity> extends ContainerFores
 
 	@Override
 	public final boolean canInteractWith(EntityPlayer entityplayer) {
-		return Utils.isUseableByPlayer(entityplayer, tile) && accessHandler.allowsViewing(entityplayer);
+		return TileUtil.isUsableByPlayer(entityplayer, tile) && accessHandler.allowsViewing(entityplayer);
 	}
 
 	private ImmutableSet<IErrorState> previousErrorStates;

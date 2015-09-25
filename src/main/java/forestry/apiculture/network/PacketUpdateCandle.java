@@ -2,7 +2,7 @@ package forestry.apiculture.network;
 
 import java.io.IOException;
 
-import forestry.apiculture.gadgets.TileCandle;
+import forestry.apiculture.tiles.TileCandle;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.PacketCoordinates;

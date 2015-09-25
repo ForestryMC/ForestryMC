@@ -19,14 +19,13 @@ import forestry.api.core.ForestryAPI;
 import forestry.api.core.Tabs;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.core.config.Config;
-import forestry.core.interfaces.IHintSource;
-import forestry.core.inventory.AlyzerInventory;
-import forestry.core.items.ItemInventoried;
+import forestry.core.gui.IHintSource;
+import forestry.core.items.ItemAlyzer;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
 import forestry.plugins.PluginLepidopterology;
 
-public class ItemFlutterlyzer extends ItemInventoried {
+public class ItemFlutterlyzer extends ItemAlyzer {
 
 	public static class FlutterlyzerInventory extends AlyzerInventory implements IHintSource {
 

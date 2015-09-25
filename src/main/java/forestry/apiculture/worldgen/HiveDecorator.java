@@ -26,7 +26,7 @@ import net.minecraftforge.event.terraingen.TerrainGen;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.core.config.Config;
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.plugins.PluginApiculture;
 
 public abstract class HiveDecorator {
@@ -132,7 +132,7 @@ public abstract class HiveDecorator {
 
 	private static boolean setHive(World world, int x, int y, int z, Hive hive) {
 		Block hiveBlock = hive.getHiveBlock();
-		boolean placed = world.setBlock(x, y, z, hiveBlock, hive.getHiveMeta(), Defaults.FLAG_BLOCK_SYNCH);
+		boolean placed = world.setBlock(x, y, z, hiveBlock, hive.getHiveMeta(), Constants.FLAG_BLOCK_SYNCH);
 		if (!placed) {
 			return false;
 		}

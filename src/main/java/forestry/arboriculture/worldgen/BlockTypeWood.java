@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.api.world.ITreeGenData;
-import forestry.arboriculture.items.ItemWoodBlock;
+import forestry.arboriculture.items.ItemBlockWood;
 import forestry.core.worldgen.IBlockType;
 
 public class BlockTypeWood implements IBlockType, ITreeBlockType {
@@ -35,7 +35,7 @@ public class BlockTypeWood implements IBlockType, ITreeBlockType {
 
 	@Override
 	public void setBlock(World world, int x, int y, int z) {
-		ItemWoodBlock.placeWood(itemStack, null, world, x, y, z, itemStack.getItemDamage());
+		ItemBlockWood.placeWood(itemStack, null, world, x, y, z, itemStack.getItemDamage());
 	}
 
 	@Override

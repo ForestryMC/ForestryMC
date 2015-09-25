@@ -14,14 +14,14 @@ import net.minecraftforge.fluids.Fluid;
 
 import cpw.mods.fml.common.Optional;
 
-import forestry.core.GameMode;
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
+import forestry.core.config.GameMode;
 import forestry.core.fluids.Fluids;
 import forestry.core.proxy.Proxies;
 
 import buildcraft.api.fuels.BuildcraftFuelRegistry;
 
-@Plugin(pluginID = "BC6|Fuels", name = "BuildCraft 6 Fuels", author = "mezz", url = Defaults.URL, unlocalizedDescription = "for.plugin.buildcraft6.description")
+@Plugin(pluginID = "BC6|Fuels", name = "BuildCraft 6 Fuels", author = "mezz", url = Constants.URL, unlocalizedDescription = "for.plugin.buildcraft6.description")
 public class PluginBuildCraftFuels extends ForestryPlugin {
 
 	@Override
@@ -42,7 +42,7 @@ public class PluginBuildCraftFuels extends ForestryPlugin {
 		Fluid ethanol = Fluids.ETHANOL.getFluid();
 		if (ethanol != null) {
 			int ethanolPower = 40;
-			int ethanolBurnTime = Math.round(Defaults.ENGINE_CYCLE_DURATION_ETHANOL * GameMode.getGameMode().getFloatSetting("fuel.ethanol.combustion"));
+			int ethanolBurnTime = Math.round(Constants.ENGINE_CYCLE_DURATION_ETHANOL * GameMode.getGameMode().getFloatSetting("fuel.ethanol.combustion"));
 			BuildcraftFuelRegistry.fuel.addFuel(ethanol, ethanolPower, ethanolBurnTime);
 		}
 	}

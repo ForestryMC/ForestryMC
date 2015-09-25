@@ -14,16 +14,15 @@ import net.minecraft.entity.player.InventoryPlayer;
 
 import forestry.apiculture.multiblock.IAlvearyController;
 import forestry.apiculture.multiblock.TileAlvearyPlain;
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.ledgers.OwnerLedger;
-import forestry.core.utils.EnumTankLevel;
-import forestry.core.utils.Utils;
+import forestry.core.render.EnumTankLevel;
 
 public class GuiAlveary extends GuiForestryTitled<ContainerAlveary, TileAlvearyPlain> {
 
 	public GuiAlveary(InventoryPlayer inventory, TileAlvearyPlain tile) {
-		super(Defaults.TEXTURE_PATH_GUI + "/alveary.png", new ContainerAlveary(inventory, tile), tile);
+		super(Constants.TEXTURE_PATH_GUI + "/alveary.png", new ContainerAlveary(inventory, tile), tile);
 
 		ySize = 190;
 	}
@@ -33,7 +32,7 @@ public class GuiAlveary extends GuiForestryTitled<ContainerAlveary, TileAlvearyP
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
 		IAlvearyController alvearyController = inventory.getAlvearyController();
-		drawHealthMeter(guiLeft + 20, guiTop + 37, alvearyController.getHealthScaled(46), Utils.rateTankLevel(alvearyController.getHealthScaled(100)));
+		drawHealthMeter(guiLeft + 20, guiTop + 37, alvearyController.getHealthScaled(46), EnumTankLevel.rateTankLevel(alvearyController.getHealthScaled(100)));
 	}
 
 	private void drawHealthMeter(int x, int y, int height, EnumTankLevel rated) {

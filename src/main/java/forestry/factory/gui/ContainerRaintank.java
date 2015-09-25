@@ -15,14 +15,14 @@ import net.minecraft.entity.player.InventoryPlayer;
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
-import forestry.factory.gadgets.MachineRaintank;
+import forestry.factory.tiles.TileRaintank;
 
-public class ContainerRaintank extends ContainerLiquidTanks<MachineRaintank> {
+public class ContainerRaintank extends ContainerLiquidTanks<TileRaintank> {
 
-	public ContainerRaintank(InventoryPlayer player, MachineRaintank tile) {
+	public ContainerRaintank(InventoryPlayer player, TileRaintank tile) {
 		super(tile, player, 8, 84);
 
-		this.addSlotToContainer(new SlotFiltered(tile, MachineRaintank.SLOT_RESOURCE, 116, 19));
-		this.addSlotToContainer(new SlotOutput(tile, MachineRaintank.SLOT_PRODUCT, 116, 55));
+		this.addSlotToContainer(new SlotFiltered(tile, TileRaintank.SLOT_RESOURCE, 116, 19));
+		this.addSlotToContainer(new SlotOutput(tile, TileRaintank.SLOT_PRODUCT, 116, 55));
 	}
 }

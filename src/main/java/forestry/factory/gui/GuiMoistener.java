@@ -12,32 +12,31 @@ package forestry.factory.gui;
 
 import net.minecraft.entity.player.InventoryPlayer;
 
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.widgets.TankWidget;
-import forestry.factory.gadgets.MachineMoistener;
+import forestry.factory.tiles.TileMoistener;
 
-public class GuiMoistener extends GuiForestryTitled<ContainerMoistener, MachineMoistener> {
+public class GuiMoistener extends GuiForestryTitled<ContainerMoistener, TileMoistener> {
 
-	public GuiMoistener(InventoryPlayer inventory, MachineMoistener tile) {
-		super(Defaults.TEXTURE_PATH_GUI + "/moistener.png", new ContainerMoistener(inventory, tile), tile);
+	public GuiMoistener(InventoryPlayer inventory, TileMoistener tile) {
+		super(Constants.TEXTURE_PATH_GUI + "/moistener.png", new ContainerMoistener(inventory, tile), tile);
 		widgetManager.add(new TankWidget(this.widgetManager, 16, 16, 0));
 	}
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
-		MachineMoistener machine = inventory;
 
 		// Mycelium production progress
-		if (machine.isProducing()) {
-			int i1 = machine.getProductionProgressScaled(16);
+		if (inventory.isProducing()) {
+			int i1 = inventory.getProductionProgressScaled(16);
 			drawTexturedModalRect(guiLeft + 124, guiTop + 36, 176, 74, 16 - i1, 16);
 		}
 
 		// Resource consumption progress
-		if (machine.isWorking()) {
-			int i1 = machine.getConsumptionProgressScaled(54);
+		if (inventory.isWorking()) {
+			int i1 = inventory.getConsumptionProgressScaled(54);
 			drawTexturedModalRect(guiLeft + 93, guiTop + 18 + i1, 176, 92 + i1, 29, 54 - i1);
 		}
 	}

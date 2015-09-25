@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.core.gui.ledgers;
 
-import forestry.core.interfaces.IPowerHandler;
 import forestry.core.render.TextureManager;
+import forestry.core.tiles.IPowerHandler;
 import forestry.core.utils.StringUtil;
 import forestry.energy.EnergyManager;
 

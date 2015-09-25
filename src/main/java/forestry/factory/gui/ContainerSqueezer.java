@@ -15,11 +15,11 @@ import net.minecraft.entity.player.InventoryPlayer;
 import forestry.core.gui.ContainerLiquidTanksSocketed;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
-import forestry.factory.gadgets.MachineSqueezer;
+import forestry.factory.tiles.TileSqueezer;
 
-public class ContainerSqueezer extends ContainerLiquidTanksSocketed<MachineSqueezer> {
+public class ContainerSqueezer extends ContainerLiquidTanksSocketed<TileSqueezer> {
 
-	public ContainerSqueezer(InventoryPlayer player, MachineSqueezer tile) {
+	public ContainerSqueezer(InventoryPlayer player, TileSqueezer tile) {
 		super(tile, player, 8, 84);
 
 		// Resource inventory
@@ -30,11 +30,11 @@ public class ContainerSqueezer extends ContainerLiquidTanksSocketed<MachineSquee
 		}
 
 		// Remnants slot
-		this.addSlotToContainer(new SlotOutput(tile, MachineSqueezer.SqueezerInventory.SLOT_REMNANT, 97, 60));
+		this.addSlotToContainer(new SlotOutput(tile, TileSqueezer.SqueezerInventory.SLOT_REMNANT, 97, 60));
 
 		// Can slot
-		this.addSlotToContainer(new SlotFiltered(tile, MachineSqueezer.SqueezerInventory.SLOT_CAN_INPUT, 147, 24));
+		this.addSlotToContainer(new SlotFiltered(tile, TileSqueezer.SqueezerInventory.SLOT_CAN_INPUT, 147, 24));
 		// Output slot
-		this.addSlotToContainer(new SlotOutput(tile, MachineSqueezer.SqueezerInventory.SLOT_CAN_OUTPUT, 147, 60));
+		this.addSlotToContainer(new SlotOutput(tile, TileSqueezer.SqueezerInventory.SLOT_CAN_OUTPUT, 147, 60));
 	}
 }

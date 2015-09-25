@@ -17,9 +17,9 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
-import forestry.core.vect.Vect;
+import forestry.core.utils.vect.Vect;
 
 public class CropBasicGrowthCraft extends Crop {
 
@@ -52,11 +52,11 @@ public class CropBasicGrowthCraft extends Crop {
 			world.setBlockToAir(pos.x, pos.y, pos.z);
 
 		} else {
-			world.setBlockMetadataWithNotify(pos.x, pos.y, pos.z, 0, Defaults.FLAG_BLOCK_SYNCH);
+			world.setBlockMetadataWithNotify(pos.x, pos.y, pos.z, 0, Constants.FLAG_BLOCK_SYNCH);
 		}
 
 		if (isRice) {
-			world.setBlockMetadataWithNotify(pos.x, pos.y - 1, pos.z, 7, Defaults.FLAG_BLOCK_SYNCH);
+			world.setBlockMetadataWithNotify(pos.x, pos.y - 1, pos.z, 7, Constants.FLAG_BLOCK_SYNCH);
 		}
 
 		return harvest;

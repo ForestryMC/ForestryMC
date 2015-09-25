@@ -38,8 +38,8 @@ import forestry.api.genetics.IClassification.EnumClassLevel;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.ISpeciesRoot;
-import forestry.core.config.Defaults;
-import forestry.core.genetics.EnumMutateChance;
+import forestry.core.config.Constants;
+import forestry.core.genetics.mutations.EnumMutateChance;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
 
@@ -57,7 +57,7 @@ public abstract class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory>
 	protected final Map<String, ItemStack> iconStacks = new HashMap<String, ItemStack>();
 
 	protected GuiAlyzer(String speciesRoot, EntityPlayer player, ContainerAlyzer container, IInventory inventory, String guiName) {
-		super(Defaults.TEXTURE_PATH_GUI + "/beealyzer2.png", container, inventory);
+		super(Constants.TEXTURE_PATH_GUI + "/beealyzer2.png", container, inventory);
 
 		this.xSize = 246;
 		this.ySize = 238;

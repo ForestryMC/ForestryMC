@@ -19,8 +19,8 @@ import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.PacketCoordinates;
 import forestry.core.network.PacketId;
 import forestry.core.proxy.Proxies;
-import forestry.factory.gadgets.TileWorktable;
 import forestry.factory.recipes.RecipeMemory;
+import forestry.factory.tiles.TileWorktable;
 
 public class PacketWorktableMemoryUpdate extends PacketCoordinates {
 

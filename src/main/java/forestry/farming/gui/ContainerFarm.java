@@ -20,7 +20,7 @@ import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.core.network.PacketGuiUpdate;
 import forestry.farming.multiblock.FarmInventory;
-import forestry.farming.multiblock.TileFarm;
+import forestry.farming.tiles.TileFarm;
 
 public class ContainerFarm extends ContainerSocketed<TileFarm> {
 

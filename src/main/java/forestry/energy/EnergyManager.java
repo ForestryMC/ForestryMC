@@ -7,11 +7,11 @@ import net.minecraft.tileentity.TileEntity;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
-import forestry.core.GameMode;
-import forestry.core.gadgets.Engine;
+import forestry.core.config.GameMode;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
+import forestry.core.tiles.TileEngine;
 import forestry.core.utils.BlockUtil;
 
 import cofh.api.energy.EnergyStorage;
@@ -194,8 +194,8 @@ public class EnergyManager implements IEnergyHandler, IStreamable {
 				if (tile instanceof IEnergyReceiver) {
 					IEnergyReceiver receptor = (IEnergyReceiver) tile;
 					sent = receptor.receiveEnergy(orientation.getOpposite(), extractable, simulate);
-				} else if (tile instanceof Engine) {
-					Engine receptor = (Engine) tile;
+				} else if (tile instanceof TileEngine) {
+					TileEngine receptor = (TileEngine) tile;
 					sent = receptor.getEnergyManager().receiveEnergy(orientation.getOpposite(), extractable, simulate);
 				}
 

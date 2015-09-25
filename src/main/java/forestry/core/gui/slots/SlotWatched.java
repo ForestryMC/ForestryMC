@@ -8,8 +8,8 @@ import net.minecraft.util.IIcon;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-import forestry.core.interfaces.ICrafter;
 import forestry.core.render.TextureManager;
+import forestry.core.tiles.ICrafter;
 
 /**
  * Slot with an ICrafter callback.

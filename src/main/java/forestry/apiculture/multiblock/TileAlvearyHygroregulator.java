@@ -23,18 +23,18 @@ import net.minecraftforge.fluids.FluidTankInfo;
 
 import forestry.api.apiculture.IAlvearyComponent;
 import forestry.api.core.IClimateControlled;
-import forestry.apiculture.gadgets.BlockAlveary;
-import forestry.core.config.Defaults;
+import forestry.apiculture.blocks.BlockAlveary;
+import forestry.core.config.Constants;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.Fluids;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
-import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.GuiId;
+import forestry.core.tiles.ILiquidTankTile;
 
-public class TileAlvearyHygroregulator extends TileAlvearyWithGui implements IInventory, ILiquidTankContainer, IAlvearyComponent.Climatiser {
+public class TileAlvearyHygroregulator extends TileAlvearyWithGui implements IInventory, ILiquidTankTile, IAlvearyComponent.Climatiser {
 
 	private final HygroregulatorRecipe[] recipes;
 
@@ -55,7 +55,7 @@ public class TileAlvearyHygroregulator extends TileAlvearyWithGui implements IIn
 		Fluid lava = Fluids.LAVA.getFluid();
 		Fluid liquidIce = Fluids.ICE.getFluid();
 
-		this.liquidTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, water, lava, liquidIce);
+		this.liquidTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, water, lava, liquidIce);
 		this.tankManager = new TankManager(liquidTank);
 
 		this.recipes = new HygroregulatorRecipe[]{new HygroregulatorRecipe(new FluidStack(water, 1), 1, 0.01f, -0.005f),

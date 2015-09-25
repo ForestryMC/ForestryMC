@@ -18,7 +18,7 @@ import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.GuiHandlerBase;
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.gui.GuiNaturalistInventory;
 import forestry.core.gui.IPagedInventory;
 import forestry.core.inventory.ItemInventoryBackpack;
@@ -64,7 +64,7 @@ public class GuiHandlerStorage extends GuiHandlerBase {
 					return null;
 				}
 				ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot("rootBees");
-				PagedBackpackInventory inventory = new PagedBackpackInventory(player, Defaults.SLOTS_BACKPACK_APIARIST, equipped, cleanId);
+				PagedBackpackInventory inventory = new PagedBackpackInventory(player, Constants.SLOTS_BACKPACK_APIARIST, equipped, cleanId);
 				return new GuiNaturalistInventory(speciesRoot, player, new ContainerNaturalistBackpack(player, inventory, guiData), inventory, guiData, 5);
 
 			case BackpackGUI:
@@ -87,7 +87,7 @@ public class GuiHandlerStorage extends GuiHandlerBase {
 					return null;
 				}
 				speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot("rootButterflies");
-				inventory = new PagedBackpackInventory(player, Defaults.SLOTS_BACKPACK_APIARIST, equipped, id);
+				inventory = new PagedBackpackInventory(player, Constants.SLOTS_BACKPACK_APIARIST, equipped, id);
 				return new GuiNaturalistInventory(speciesRoot, player, new ContainerNaturalistBackpack(player, inventory, guiData), inventory, guiData, 5);
 
 			default:
@@ -125,7 +125,7 @@ public class GuiHandlerStorage extends GuiHandlerBase {
 					return null;
 				}
 
-				return new ContainerNaturalistBackpack(player, new PagedBackpackInventory(player, Defaults.SLOTS_BACKPACK_APIARIST, equipped, cleanId), guiData);
+				return new ContainerNaturalistBackpack(player, new PagedBackpackInventory(player, Constants.SLOTS_BACKPACK_APIARIST, equipped, cleanId), guiData);
 
 			case BackpackGUI:
 				equipped = getBackpackItem(player);
@@ -149,7 +149,7 @@ public class GuiHandlerStorage extends GuiHandlerBase {
 					return null;
 				}
 
-				return new ContainerNaturalistBackpack(player, new PagedBackpackInventory(player, Defaults.SLOTS_BACKPACK_APIARIST, equipped, cleanId), guiData);
+				return new ContainerNaturalistBackpack(player, new PagedBackpackInventory(player, Constants.SLOTS_BACKPACK_APIARIST, equipped, cleanId), guiData);
 
 			default:
 				return null;

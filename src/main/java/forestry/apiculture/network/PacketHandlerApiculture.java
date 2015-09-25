@@ -15,8 +15,8 @@ import java.io.IOException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 
-import forestry.apiculture.gadgets.TileCandle;
 import forestry.apiculture.gui.ContainerImprinter;
+import forestry.apiculture.tiles.TileCandle;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.IPacketHandler;
 import forestry.core.network.PacketCoordinates;

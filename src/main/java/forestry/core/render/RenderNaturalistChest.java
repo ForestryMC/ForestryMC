@@ -14,14 +14,13 @@ import net.minecraft.client.model.ModelChest;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+
 import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
-import forestry.core.config.Defaults;
-import forestry.core.gadgets.TileNaturalistChest;
-import forestry.core.interfaces.IBlockRenderer;
-import forestry.core.utils.ForestryResource;
+import forestry.core.config.Constants;
+import forestry.core.tiles.TileNaturalistChest;
 
 public class RenderNaturalistChest extends TileEntitySpecialRenderer implements IBlockRenderer {
 
@@ -29,7 +28,7 @@ public class RenderNaturalistChest extends TileEntitySpecialRenderer implements 
 	private final ResourceLocation texture;
 
 	public RenderNaturalistChest(String textureName) {
-		texture = new ForestryResource(Defaults.TEXTURE_PATH_BLOCKS + "/" + textureName + ".png");
+		texture = new ForestryResource(Constants.TEXTURE_PATH_BLOCKS + "/" + textureName + ".png");
 	}
 
 	@Override

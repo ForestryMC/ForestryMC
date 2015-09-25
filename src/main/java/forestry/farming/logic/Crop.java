@@ -17,8 +17,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
-import forestry.core.config.Defaults;
-import forestry.core.vect.Vect;
+import forestry.core.config.Constants;
+import forestry.core.utils.vect.Vect;
 
 public abstract class Crop implements ICrop {
 
@@ -31,7 +31,7 @@ public abstract class Crop implements ICrop {
 	}
 
 	protected final void setBlock(Vect position, Block block, int meta) {
-		world.setBlock(position.x, position.y, position.z, block, meta, Defaults.FLAG_BLOCK_SYNCH);
+		world.setBlock(position.x, position.y, position.z, block, meta, Constants.FLAG_BLOCK_SYNCH);
 	}
 
 	protected final Block getBlock(Vect position) {

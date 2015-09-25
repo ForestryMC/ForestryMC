@@ -14,11 +14,11 @@ import net.minecraft.entity.player.EntityPlayer;
 
 import forestry.api.mail.IMailAddress;
 import forestry.core.gui.ContainerTile;
-import forestry.mail.gadgets.MachineTrader;
+import forestry.mail.tiles.TileTrader;
 
-public class ContainerTradeName extends ContainerTile<MachineTrader> {
+public class ContainerTradeName extends ContainerTile<TileTrader> {
 
-	public ContainerTradeName(MachineTrader tile) {
+	public ContainerTradeName(TileTrader tile) {
 		super(tile);
 	}
 

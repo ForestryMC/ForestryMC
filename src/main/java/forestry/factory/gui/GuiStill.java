@@ -12,15 +12,15 @@ package forestry.factory.gui;
 
 import net.minecraft.entity.player.InventoryPlayer;
 
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.widgets.TankWidget;
-import forestry.factory.gadgets.MachineStill;
+import forestry.factory.tiles.TileStill;
 
-public class GuiStill extends GuiForestryTitled<ContainerStill, MachineStill> {
+public class GuiStill extends GuiForestryTitled<ContainerStill, TileStill> {
 
-	public GuiStill(InventoryPlayer inventory, MachineStill tile) {
-		super(Defaults.TEXTURE_PATH_GUI + "/still.png", new ContainerStill(inventory, tile), tile);
+	public GuiStill(InventoryPlayer inventory, TileStill tile) {
+		super(Constants.TEXTURE_PATH_GUI + "/still.png", new ContainerStill(inventory, tile), tile);
 		widgetManager.add(new TankWidget(this.widgetManager, 35, 15, 0));
 		widgetManager.add(new TankWidget(this.widgetManager, 125, 15, 1));
 	}
@@ -28,7 +28,7 @@ public class GuiStill extends GuiForestryTitled<ContainerStill, MachineStill> {
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
-		MachineStill still = inventory;
+		TileStill still = inventory;
 
 		drawTexturedModalRect(guiLeft + 81, guiTop + 57, 176, 60, 14, 14);
 

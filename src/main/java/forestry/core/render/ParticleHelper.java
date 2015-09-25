@@ -29,7 +29,7 @@ public class ParticleHelper {
 	private static final Random rand = new Random();
 
 	@SideOnly(Side.CLIENT)
-	public static boolean addHitEffects(World world, Block block, MovingObjectPosition target, EffectRenderer effectRenderer, ParticleHelperCallback callback) {
+	public static boolean addHitEffects(World world, Block block, MovingObjectPosition target, EffectRenderer effectRenderer, Callback callback) {
 		int x = target.blockX;
 		int y = target.blockY;
 		int z = target.blockZ;
@@ -100,7 +100,7 @@ public class ParticleHelper {
 	 * @return True to prevent vanilla break particles from spawning.
 	 */
 	@SideOnly(Side.CLIENT)
-	public static boolean addDestroyEffects(World world, Block block, int x, int y, int z, int meta, EffectRenderer effectRenderer, ParticleHelperCallback callback) {
+	public static boolean addDestroyEffects(World world, Block block, int x, int y, int z, int meta, EffectRenderer effectRenderer, Callback callback) {
 		if (block != world.getBlock(x, y, z)) {
 			return true;
 		}
@@ -129,4 +129,12 @@ public class ParticleHelper {
 		return true;
 	}
 
+	public interface Callback {
+
+		@SideOnly(Side.CLIENT)
+		void addHitEffects(EntityDiggingFX fx, World world, int x, int y, int z, int meta);
+
+		@SideOnly(Side.CLIENT)
+		void addDestroyEffects(EntityDiggingFX fx, World world, int x, int y, int z, int meta);
+	}
 }

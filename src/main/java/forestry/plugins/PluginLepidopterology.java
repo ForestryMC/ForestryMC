@@ -33,26 +33,24 @@ import forestry.api.genetics.IClassification.EnumClassLevel;
 import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.api.lepidopterology.IButterflyRoot;
 import forestry.api.recipes.RecipeManagers;
-import forestry.core.config.Defaults;
+import forestry.core.blocks.BlockBase;
+import forestry.core.config.Constants;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
 import forestry.core.config.LocalizedConfiguration;
 import forestry.core.fluids.Fluids;
-import forestry.core.gadgets.BlockBase;
-import forestry.core.gadgets.MachineDefinition;
 import forestry.core.genetics.Branch;
 import forestry.core.genetics.alleles.Allele;
-import forestry.core.items.ItemForestryBlock;
-import forestry.core.proxy.Proxies;
+import forestry.core.items.ItemBlockForestry;
+import forestry.core.recipes.ShapedRecipeCustom;
 import forestry.core.render.RenderNaturalistChest;
-import forestry.core.utils.ShapedRecipeCustom;
-import forestry.core.utils.Utils;
+import forestry.core.tiles.MachineDefinition;
+import forestry.core.utils.EntityUtil;
+import forestry.core.utils.Log;
 import forestry.lepidopterology.ButterflySpawner;
 import forestry.lepidopterology.GuiHandlerLepidopterology;
-import forestry.lepidopterology.MatingRecipe;
 import forestry.lepidopterology.commands.CommandButterfly;
 import forestry.lepidopterology.entities.EntityButterfly;
-import forestry.lepidopterology.gadgets.TileLepidopteristChest;
 import forestry.lepidopterology.genetics.AlleleButterflySpecies;
 import forestry.lepidopterology.genetics.AlleleEffectNone;
 import forestry.lepidopterology.genetics.ButterflyHelper;
@@ -60,11 +58,13 @@ import forestry.lepidopterology.genetics.ButterflyTemplates;
 import forestry.lepidopterology.items.ItemButterflyGE;
 import forestry.lepidopterology.items.ItemFlutterlyzer;
 import forestry.lepidopterology.proxy.ProxyLepidopterology;
+import forestry.lepidopterology.recipes.MatingRecipe;
+import forestry.lepidopterology.tiles.TileLepidopteristChest;
 
-@Plugin(pluginID = "Lepidopterology", name = "Lepidopterology", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.lepidopterology.description")
+@Plugin(pluginID = "Lepidopterology", name = "Lepidopterology", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.lepidopterology.description")
 public class PluginLepidopterology extends ForestryPlugin {
 
-	@SidedProxy(clientSide = "forestry.lepidopterology.proxy.ClientProxyLepidopterology", serverSide = "forestry.lepidopterology.proxy.ProxyLepidopterology")
+	@SidedProxy(clientSide = "forestry.lepidopterology.proxy.ProxyLepidopterologyClient", serverSide = "forestry.lepidopterology.proxy.ProxyLepidopterology")
 	public static ProxyLepidopterology proxy;
 	private static final String CONFIG_CATEGORY = "lepidopterology";
 	public static int spawnConstraint = 100;
@@ -84,7 +84,7 @@ public class PluginLepidopterology extends ForestryPlugin {
 
 	@Override
 	public void preInit() {
-		ForestryBlock.lepidopterology.registerBlock(new BlockBase(Material.iron, true), ItemForestryBlock.class, "lepidopterology");
+		ForestryBlock.lepidopterology.registerBlock(new BlockBase(Material.iron, true), ItemBlockForestry.class, "lepidopterology");
 		ForestryBlock.lepidopterology.block().setCreativeTab(Tabs.tabLepidopterology);
 
 		createAlleles();
@@ -110,7 +110,7 @@ public class PluginLepidopterology extends ForestryPlugin {
 			final String oldConfigRenamed = CONFIG_CATEGORY + ".conf.old";
 			File oldConfigFileRenamed = new File(Forestry.instance.getConfigFolder(), oldConfigRenamed);
 			if (oldConfigFile.renameTo(oldConfigFileRenamed)) {
-				Proxies.log.info("Migrated " + CONFIG_CATEGORY + " settings to the new file '" + newConfig + "' and renamed '" + oldConfig + "' to '" + oldConfigRenamed + "'.");
+				Log.info("Migrated " + CONFIG_CATEGORY + " settings to the new file '" + newConfig + "' and renamed '" + oldConfig + "' to '" + oldConfigRenamed + "'.");
 			}
 		}
 
@@ -118,20 +118,20 @@ public class PluginLepidopterology extends ForestryPlugin {
 
 		PluginCore.rootCommand.addChildCommand(new CommandButterfly());
 
-		Utils.registerEntity(EntityButterfly.class, "butterflyGE", 0, 0x000000, 0xffffff, 50, 1, true);
+		EntityUtil.registerEntity(EntityButterfly.class, "butterflyGE", 0, 0x000000, 0xffffff, 50, 1, true);
 		proxy.initializeRendering();
 
 		registerTemplates();
 
 		BlockBase lepidopterology = ((BlockBase) ForestryBlock.lepidopterology.block());
-		MachineDefinition definitionChest = lepidopterology.addDefinition(new MachineDefinition(Defaults.DEFINITION_LEPICHEST_META, "forestry.LepiChest", TileLepidopteristChest.class, new RenderNaturalistChest("lepichest"),
+		MachineDefinition definitionChest = lepidopterology.addDefinition(new MachineDefinition(Constants.DEFINITION_LEPICHEST_META, "forestry.LepiChest", TileLepidopteristChest.class, new RenderNaturalistChest("lepichest"),
 				ShapedRecipeCustom.createShapedRecipe(
-						ForestryBlock.lepidopterology.getItemStack(1, Defaults.DEFINITION_LEPICHEST_META),
+						ForestryBlock.lepidopterology.getItemStack(1, Constants.DEFINITION_LEPICHEST_META),
 						" # ",
 						"XYX",
 						"XXX",
 						'#', "blockGlass",
-						'X', ForestryItem.butterflyGE.getItemStack(1, Defaults.WILDCARD),
+						'X', ForestryItem.butterflyGE.getItemStack(1, Constants.WILDCARD),
 						'Y', "chestWood"))
 				.setBoundingBox(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F));
 		definitionChest.register();

@@ -27,7 +27,7 @@ import net.minecraftforge.common.BiomeDictionary;
 import org.lwjgl.opengl.GL11;
 
 import forestry.apiculture.items.ItemHabitatLocator.HabitatLocatorInventory;
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.proxy.Proxies;
@@ -55,7 +55,7 @@ public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator, Habi
 	private int startY;
 
 	public GuiHabitatLocator(EntityPlayer player, HabitatLocatorInventory item) {
-		super(Defaults.TEXTURE_PATH_GUI + "/biomefinder.png", new ContainerHabitatLocator(player, item), item);
+		super(Constants.TEXTURE_PATH_GUI + "/biomefinder.png", new ContainerHabitatLocator(player, item), item);
 
 		xSize = 176;
 		ySize = 184;

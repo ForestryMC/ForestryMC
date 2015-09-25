@@ -22,20 +22,20 @@ import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IAlvearyComponent;
 import forestry.api.apiculture.IBee;
-import forestry.apiculture.gadgets.BlockAlveary;
+import forestry.apiculture.blocks.BlockAlveary;
 import forestry.apiculture.network.PacketActiveUpdate;
 import forestry.apiculture.worldgen.Hive;
 import forestry.apiculture.worldgen.HiveDecorator;
 import forestry.apiculture.worldgen.HiveDescriptionSwarmer;
-import forestry.core.interfaces.IActivatable;
+import forestry.core.access.EnumAccess;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.inventory.wrappers.IInvSlot;
 import forestry.core.inventory.wrappers.InventoryIterator;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.EnumAccess;
-import forestry.core.utils.StackUtils;
+import forestry.core.tiles.IActivatable;
+import forestry.core.utils.ItemStackUtil;
 
 public class TileAlvearySwarmer extends TileAlvearyWithGui implements ISidedInventory, IActivatable, IAlvearyComponent.Active {
 
@@ -118,7 +118,7 @@ public class TileAlvearySwarmer extends TileAlvearyWithGui implements ISidedInve
 		for (IInvSlot slot : InventoryIterator.getIterable(getInternalInventory())) {
 			ItemStack stack = slot.getStackInSlot();
 			for (Entry<ItemStack, Integer> entry : BeeManager.inducers.entrySet()) {
-				if (StackUtils.isIdenticalItem(entry.getKey(), stack)) {
+				if (ItemStackUtil.isIdenticalItem(entry.getKey(), stack)) {
 					slot.decreaseStackInSlot();
 					return entry.getValue();
 				}
@@ -235,7 +235,7 @@ public class TileAlvearySwarmer extends TileAlvearyWithGui implements ISidedInve
 
 		@Override
 		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-			return StackUtils.containsItemStack(BeeManager.inducers.keySet(), itemStack);
+			return ItemStackUtil.containsItemStack(BeeManager.inducers.keySet(), itemStack);
 		}
 	}
 }

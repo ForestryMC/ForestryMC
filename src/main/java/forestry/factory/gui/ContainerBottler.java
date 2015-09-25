@@ -15,15 +15,15 @@ import net.minecraft.entity.player.InventoryPlayer;
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
-import forestry.factory.gadgets.MachineBottler;
+import forestry.factory.tiles.TileBottler;
 
-public class ContainerBottler extends ContainerLiquidTanks<MachineBottler> {
+public class ContainerBottler extends ContainerLiquidTanks<TileBottler> {
 
-	public ContainerBottler(InventoryPlayer player, MachineBottler tile) {
+	public ContainerBottler(InventoryPlayer player, TileBottler tile) {
 		super(tile, player, 8, 84);
 
-		this.addSlotToContainer(new SlotFiltered(tile, MachineBottler.SLOT_INPUT_EMPTY_CAN, 116, 19));
-		this.addSlotToContainer(new SlotOutput(tile, MachineBottler.SLOT_OUTPUT, 116, 55));
-		this.addSlotToContainer(new SlotFiltered(tile, MachineBottler.SLOT_INPUT_FULL_CAN, 26, 38));
+		this.addSlotToContainer(new SlotFiltered(tile, TileBottler.SLOT_INPUT_EMPTY_CAN, 116, 19));
+		this.addSlotToContainer(new SlotOutput(tile, TileBottler.SLOT_OUTPUT, 116, 55));
+		this.addSlotToContainer(new SlotFiltered(tile, TileBottler.SLOT_INPUT_FULL_CAN, 26, 38));
 	}
 }

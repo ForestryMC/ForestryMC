@@ -13,7 +13,7 @@ package forestry.core.gui;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 
-import forestry.core.interfaces.ITitled;
+import forestry.core.tiles.ITitled;
 import forestry.core.utils.StringUtil;
 
 public abstract class GuiForestryTitled<C extends Container, I extends ITitled & IInventory> extends GuiForestry<C, I> {

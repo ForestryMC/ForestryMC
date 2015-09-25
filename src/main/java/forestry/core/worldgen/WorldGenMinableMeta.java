@@ -18,7 +18,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.config.ForestryBlock;
 
 public class WorldGenMinableMeta extends WorldGenerator {
@@ -75,7 +75,7 @@ public class WorldGenMinableMeta extends WorldGenerator {
 					for (int targetZ = zStart; targetZ <= zEnd; targetZ++) {
 						double d14 = ((targetZ + 0.5D) - d8) / (d10 / 2D);
 						if (d12 * d12 + d13 * d13 + d14 * d14 < 1.0D && world.getBlock(targetX, targetY, targetZ) == Blocks.stone) {
-							world.setBlock(targetX, targetY, targetZ, mineableBlock, mineableBlockMeta, Defaults.FLAG_BLOCK_SYNCH);
+							world.setBlock(targetX, targetY, targetZ, mineableBlock, mineableBlockMeta, Constants.FLAG_BLOCK_SYNCH);
 							hasGenerated = true;
 						}
 					}

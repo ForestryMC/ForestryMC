@@ -12,16 +12,16 @@ package forestry.factory.gui;
 
 import net.minecraft.entity.player.InventoryPlayer;
 
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.widgets.SocketWidget;
 import forestry.core.gui.widgets.TankWidget;
-import forestry.factory.gadgets.MachineSqueezer;
+import forestry.factory.tiles.TileSqueezer;
 
-public class GuiSqueezer extends GuiForestryTitled<ContainerSqueezer, MachineSqueezer> {
+public class GuiSqueezer extends GuiForestryTitled<ContainerSqueezer, TileSqueezer> {
 
-	public GuiSqueezer(InventoryPlayer inventory, MachineSqueezer tile) {
-		super(Defaults.TEXTURE_PATH_GUI + "/squeezersocket.png", new ContainerSqueezer(inventory, tile), tile);
+	public GuiSqueezer(InventoryPlayer inventory, TileSqueezer tile) {
+		super(Constants.TEXTURE_PATH_GUI + "/squeezersocket.png", new ContainerSqueezer(inventory, tile), tile);
 		widgetManager.add(new TankWidget(this.widgetManager, 122, 18, 0));
 		widgetManager.add(new SocketWidget(this.widgetManager, 75, 20, tile, 0));
 	}

@@ -95,14 +95,14 @@ public class Tree extends Individual implements ITree, IPlantable {
 		super.writeToNBT(nbttagcompound);
 
 		if (genome != null) {
-			NBTTagCompound NBTmachine = new NBTTagCompound();
-			genome.writeToNBT(NBTmachine);
-			nbttagcompound.setTag("Genome", NBTmachine);
+			NBTTagCompound nbtGenome = new NBTTagCompound();
+			genome.writeToNBT(nbtGenome);
+			nbttagcompound.setTag("Genome", nbtGenome);
 		}
 		if (mate != null) {
-			NBTTagCompound NBTmachine = new NBTTagCompound();
-			mate.writeToNBT(NBTmachine);
-			nbttagcompound.setTag("Mate", NBTmachine);
+			NBTTagCompound nbtMate = new NBTTagCompound();
+			mate.writeToNBT(nbtMate);
+			nbttagcompound.setTag("Mate", nbtMate);
 		}
 
 	}

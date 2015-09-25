@@ -12,15 +12,15 @@ package forestry.energy.gui;
 
 import net.minecraft.entity.player.InventoryPlayer;
 
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.gui.widgets.SocketWidget;
-import forestry.core.utils.EnumTankLevel;
-import forestry.energy.gadgets.EngineTin;
+import forestry.core.render.EnumTankLevel;
+import forestry.energy.tiles.TileEngineElectric;
 
-public class GuiEngineTin extends GuiEngine<ContainerEngineTin, EngineTin> {
+public class GuiEngineTin extends GuiEngine<ContainerEngineTin, TileEngineElectric> {
 
-	public GuiEngineTin(InventoryPlayer inventory, EngineTin tile) {
-		super(Defaults.TEXTURE_PATH_GUI + "/electricalengine.png", new ContainerEngineTin(inventory, tile), tile);
+	public GuiEngineTin(InventoryPlayer inventory, TileEngineElectric tile) {
+		super(Constants.TEXTURE_PATH_GUI + "/electricalengine.png", new ContainerEngineTin(inventory, tile), tile);
 		widgetManager.add(new SocketWidget(this.widgetManager, 30, 40, tile, 0));
 	}
 
@@ -28,7 +28,7 @@ public class GuiEngineTin extends GuiEngine<ContainerEngineTin, EngineTin> {
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
-		EngineTin engine = inventory;
+		TileEngineElectric engine = inventory;
 		int storageHeight = engine.getStorageScaled(46);
 		int storageMaxHeight = engine.getStorageScaled(100);
 		EnumTankLevel rated = rateLevel(storageMaxHeight);

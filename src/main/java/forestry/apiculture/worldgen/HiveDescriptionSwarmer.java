@@ -21,7 +21,7 @@ import forestry.api.apiculture.hives.IHiveDescription;
 import forestry.api.apiculture.hives.IHiveGen;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
-import forestry.apiculture.gadgets.TileSwarm;
+import forestry.apiculture.tiles.TileSwarm;
 import forestry.core.config.ForestryBlock;
 
 public class HiveDescriptionSwarmer implements IHiveDescription {

@@ -23,9 +23,9 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidContainerItem;
 import net.minecraftforge.fluids.IFluidHandler;
 
-import forestry.core.config.Defaults;
-import forestry.core.inventory.InvTools;
-import forestry.core.utils.StackUtils;
+import forestry.core.config.Constants;
+import forestry.core.utils.InventoryUtil;
+import forestry.core.utils.ItemStackUtil;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -76,10 +76,10 @@ public final class FluidHelper {
 							if (!player.inventory.addItemStackToInventory(filled)) {
 								return false;
 							}
-							player.inventory.setInventorySlotContents(player.inventory.currentItem, InvTools.depleteItem(current));
+							player.inventory.setInventorySlotContents(player.inventory.currentItem, InventoryUtil.depleteItem(current));
 							player.inventory.markDirty();
 						} else {
-							player.inventory.setInventorySlotContents(player.inventory.currentItem, InvTools.depleteItem(current));
+							player.inventory.setInventorySlotContents(player.inventory.currentItem, InventoryUtil.depleteItem(current));
 							player.inventory.setInventorySlotContents(player.inventory.currentItem, filled);
 							player.inventory.markDirty();
 						}
@@ -101,7 +101,7 @@ public final class FluidHelper {
 		ItemStack input = inv.getStackInSlot(inputSlot);
 		ItemStack output = inv.getStackInSlot(outputSlot);
 		ItemStack filled = getFilledContainer(fluidToFill, input);
-		if (filled != null && (output == null || (output.stackSize < output.getMaxStackSize() && InvTools.isItemEqual(filled, output)))) {
+		if (filled != null && (output == null || (output.stackSize < output.getMaxStackSize() && InventoryUtil.isItemEqual(filled, output)))) {
 			FluidStack fluidInContainer = getFluidStackInContainer(filled);
 			FluidStack drain = fluidHandler.drain(ForgeDirection.UNKNOWN, fluidInContainer, false);
 			if (drain != null && drain.amount == fluidInContainer.amount) {
@@ -121,7 +121,7 @@ public final class FluidHelper {
 	}
 
 	public static boolean drainContainers(IFluidHandler fluidHandler, IInventory inv, int slot) {
-		return drainContainers(fluidHandler, inv, slot, slot, Defaults.BUCKET_VOLUME);
+		return drainContainers(fluidHandler, inv, slot, slot, Constants.BUCKET_VOLUME);
 	}
 
 	public static boolean drainContainers(IFluidHandler fluidHandler, IInventory inv, int inputSlot, int outputSlot, int maxAmount) {
@@ -152,7 +152,7 @@ public final class FluidHelper {
 				if (input.stackSize > 1) {
 					return false;
 				}
-			} else if (!StackUtils.isIdenticalItem(output, drainedItem)) {
+			} else if (!ItemStackUtil.isIdenticalItem(output, drainedItem)) {
 				return false;
 			} else if (output.stackSize + drainedItem.stackSize > output.getMaxStackSize()) {
 				return false;
@@ -178,7 +178,7 @@ public final class FluidHelper {
 	}
 
 	public static boolean isFillableContainer(ItemStack stack, FluidStack liquid) {
-		ItemStack empty = StackUtils.createSplitStack(stack, 1);
+		ItemStack empty = ItemStackUtil.createSplitStack(stack, 1);
 		Item item = empty.getItem();
 		if (item instanceof IFluidContainerItem) {
 			IFluidContainerItem containerItem = (IFluidContainerItem) item;
@@ -229,7 +229,7 @@ public final class FluidHelper {
 			containerItem.drain(drained, drainAmount, true);
 			return drained;
 		} else {
-			if (drainAmount < Defaults.BUCKET_VOLUME) {
+			if (drainAmount < Constants.BUCKET_VOLUME) {
 				return container;
 			}
 			return item.getContainerItem(container);

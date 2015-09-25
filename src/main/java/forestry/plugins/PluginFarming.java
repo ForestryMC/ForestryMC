@@ -37,17 +37,18 @@ import forestry.api.farming.Farmables;
 import forestry.api.farming.IFarmable;
 import forestry.core.circuits.Circuit;
 import forestry.core.circuits.CircuitLayout;
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
-import forestry.core.items.ItemTypedBlock;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.ShapedRecipeCustom;
+import forestry.core.items.ItemBlockTyped;
+import forestry.core.recipes.ShapedRecipeCustom;
+import forestry.core.utils.Log;
 import forestry.farming.EventHandlerFarming;
 import forestry.farming.GuiHandlerFarming;
+import forestry.farming.blocks.BlockFarm;
+import forestry.farming.blocks.BlockMushroom;
 import forestry.farming.circuits.CircuitFarmLogic;
-import forestry.farming.gadgets.BlockMushroom;
-import forestry.farming.items.ItemFarmBlock;
+import forestry.farming.items.ItemBlockFarm;
 import forestry.farming.logic.FarmLogicArboreal;
 import forestry.farming.logic.FarmLogicCereal;
 import forestry.farming.logic.FarmLogicCocoa;
@@ -67,20 +68,19 @@ import forestry.farming.logic.FarmableGourd;
 import forestry.farming.logic.FarmableStacked;
 import forestry.farming.logic.FarmableVanillaSapling;
 import forestry.farming.logic.FarmableVanillaShroom;
-import forestry.farming.multiblock.BlockFarm;
-import forestry.farming.multiblock.EnumFarmBlockTexture;
-import forestry.farming.multiblock.TileControl;
-import forestry.farming.multiblock.TileFarmPlain;
-import forestry.farming.multiblock.TileGearbox;
-import forestry.farming.multiblock.TileHatch;
-import forestry.farming.multiblock.TileValve;
 import forestry.farming.proxy.ProxyFarming;
+import forestry.farming.render.EnumFarmBlockTexture;
+import forestry.farming.tiles.TileControl;
+import forestry.farming.tiles.TileFarmPlain;
+import forestry.farming.tiles.TileGearbox;
+import forestry.farming.tiles.TileHatch;
+import forestry.farming.tiles.TileValve;
 import forestry.farming.triggers.FarmingTriggers;
 
-@Plugin(pluginID = "Farming", name = "Farming", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.farming.description")
+@Plugin(pluginID = "Farming", name = "Farming", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.farming.description")
 public class PluginFarming extends ForestryPlugin {
 
-	@SidedProxy(clientSide = "forestry.farming.proxy.ClientProxyFarming", serverSide = "forestry.farming.proxy.ProxyFarming")
+	@SidedProxy(clientSide = "forestry.farming.proxy.ProxyFarmingClient", serverSide = "forestry.farming.proxy.ProxyFarming")
 	public static ProxyFarming proxy;
 	public static int modelIdFarmBlock;
 	public static ItemStack farmFertilizer;
@@ -89,7 +89,7 @@ public class PluginFarming extends ForestryPlugin {
 	public void preInit() {
 		super.preInit();
 
-		ForestryBlock.mushroom.registerBlock(new BlockMushroom(), ItemTypedBlock.class, "mushroom");
+		ForestryBlock.mushroom.registerBlock(new BlockMushroom(), ItemBlockTyped.class, "mushroom");
 
 		Farmables.farmables.put("farmArboreal", new ArrayList<IFarmable>());
 		Farmables.farmables.get("farmArboreal").add(new FarmableVanillaSapling());
@@ -125,9 +125,9 @@ public class PluginFarming extends ForestryPlugin {
 		Farmables.farmables.get("farmVegetables").add(new FarmableGenericCrop(new ItemStack(Items.potato), Blocks.potatoes, 7));
 		Farmables.farmables.get("farmVegetables").add(new FarmableGenericCrop(new ItemStack(Items.carrot), Blocks.carrots, 7));
 
-		ForestryBlock.farm.registerBlock(new BlockFarm(), ItemFarmBlock.class, "ffarm");
+		ForestryBlock.farm.registerBlock(new BlockFarm(), ItemBlockFarm.class, "ffarm");
 		/*Item.itemsList[ForestryBlock.farm] = null;
-		 Item.itemsList[ForestryBlock.farm] = (new ItemFarmBlock(ForestryBlock.farm - 256, "ffarm"));*/
+		 Item.itemsList[ForestryBlock.farm] = (new ItemBlockFarm(ForestryBlock.farm - 256, "ffarm"));*/
 		ForestryBlock.farm.block().setHarvestLevel("pickaxe", 0);
 
 		proxy.initializeRendering();
@@ -188,12 +188,12 @@ public class PluginFarming extends ForestryPlugin {
 			String[] tokens = message.getStringValue().split("@");
 			String errormsg = getInvalidIMCMessageText(message);
 			if (tokens.length != 2) {
-				Proxies.log.warning(errormsg);
+				Log.warning(errormsg);
 				return true;
 			}
 
 			if (!Farmables.farmables.containsKey(tokens[0])) {
-				Proxies.log.warning("%s For non-existent farm %s.", errormsg, tokens[0]);
+				Log.warning("%s For non-existent farm %s.", errormsg, tokens[0]);
 				return true;
 			}
 
@@ -203,7 +203,7 @@ public class PluginFarming extends ForestryPlugin {
 
 			Matcher matcher = Pattern.compile("(.+?)\\.(-?[0-9][0-9]?)(?:\\.(.+?)\\.(-?[0-9][0-9]?))?").matcher(itemString);
 			if (!matcher.matches()) {
-				Proxies.log.warning("%s For farm '%s': unable to parse string.", errormsg, tokens[0]);
+				Log.warning("%s For farm '%s': unable to parse string.", errormsg, tokens[0]);
 				return true;
 			}
 
@@ -233,7 +233,7 @@ public class PluginFarming extends ForestryPlugin {
 					farmables.add(new FarmableGenericSapling(sapling, saplingMeta, windfallStack));
 				}
 			} catch (Exception ex) {
-				Proxies.log.warning("%s for farm '%s': %s", errormsg, tokens[0], ex.getMessage());
+				Log.warning("%s for farm '%s': %s", errormsg, tokens[0], ex.getMessage());
 			}
 			return true;
 
@@ -242,18 +242,18 @@ public class PluginFarming extends ForestryPlugin {
 			String[] tokens = message.getStringValue().split("@");
 			String errormsg = getInvalidIMCMessageText(message);
 			if (tokens.length != 2) {
-				Proxies.log.warning(errormsg);
+				Log.warning(errormsg);
 				return true;
 			}
 
 			if (!Farmables.farmables.containsKey(tokens[0])) {
-				Proxies.log.warning("%s For non-existent farm %s.", errormsg, tokens[0]);
+				Log.warning("%s For non-existent farm %s.", errormsg, tokens[0]);
 				return true;
 			}
 
 			String[] items = tokens[1].split("[\\.]+");
 			if (items.length != 4) {
-				Proxies.log.warning("%s For farm '%s': id definitions did not match.", errormsg, tokens[0]);
+				Log.warning("%s For farm '%s': id definitions did not match.", errormsg, tokens[0]);
 				return true;
 			}
 
@@ -272,7 +272,7 @@ public class PluginFarming extends ForestryPlugin {
 								crop,
 								Integer.parseInt(items[3])));
 			} catch (Exception ex) {
-				Proxies.log.warning("%s for farm '%s': %s", errormsg, tokens[0], ex.getMessage());
+				Log.warning("%s for farm '%s': %s", errormsg, tokens[0], ex.getMessage());
 			}
 
 			return true;

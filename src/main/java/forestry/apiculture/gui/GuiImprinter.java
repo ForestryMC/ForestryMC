@@ -23,7 +23,7 @@ import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.apiculture.genetics.BeeGenome;
 import forestry.apiculture.items.ItemBeeGE;
 import forestry.apiculture.items.ItemImprinter.ImprinterInventory;
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.config.ForestryItem;
 import forestry.core.gui.GuiForestry;
 import forestry.core.proxy.Proxies;
@@ -37,7 +37,7 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter, ImprinterInven
 	private final Map<String, ItemStack> iconStacks = new HashMap<String, ItemStack>();
 
 	public GuiImprinter(InventoryPlayer inventoryplayer, ImprinterInventory inventory) {
-		super(Defaults.TEXTURE_PATH_GUI + "/imprinter.png", new ContainerImprinter(inventoryplayer, inventory), inventory);
+		super(Constants.TEXTURE_PATH_GUI + "/imprinter.png", new ContainerImprinter(inventoryplayer, inventory), inventory);
 
 		xSize = 176;
 		ySize = 185;

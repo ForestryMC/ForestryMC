@@ -14,6 +14,7 @@ import forestry.api.apiculture.IAlleleBeeSpeciesCustom;
 import forestry.api.apiculture.IBeeFactory;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IClassification;
+import forestry.apiculture.genetics.alleles.AlleleBeeSpecies;
 
 public class BeeFactory implements IBeeFactory {
 	@Override

@@ -45,11 +45,11 @@ public enum GuiId {
 
 	CentrifugeGUI,
 
-	EngineBronzeGUI,
+	EngineBiogasGUI,
 
-	EngineCopperGUI,
+	EnginePeatGUI,
 
-	EngineTinGUI,
+	EngineElectricGUI,
 
 	FabricatorGUI,
 

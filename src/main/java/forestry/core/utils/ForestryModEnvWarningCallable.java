@@ -19,7 +19,7 @@ import cpw.mods.fml.common.ICrashCallable;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.relauncher.Side;
 
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.plugins.PluginManager;
 
 /**
@@ -91,7 +91,7 @@ public class ForestryModEnvWarningCallable implements ICrashCallable {
 
 	@Override
 	public String getLabel() {
-		return Defaults.MOD + " ";
+		return Constants.MOD + " ";
 	}
 
 }

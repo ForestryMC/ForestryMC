@@ -20,10 +20,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
-import forestry.core.gadgets.Mill;
-import forestry.core.interfaces.IBlockRenderer;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.ForestryResource;
+import forestry.core.tiles.TileMill;
 
 public class RenderMill extends TileEntitySpecialRenderer implements IBlockRenderer {
 
@@ -100,7 +98,7 @@ public class RenderMill extends TileEntitySpecialRenderer implements IBlockRende
 
 	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double d, double d1, double d2, float f) {
-		Mill tile = (Mill) tileentity;
+		TileMill tile = (TileMill) tileentity;
 		render(tile.progress, tile.charge, ForgeDirection.WEST, d, d1, d2);
 	}
 

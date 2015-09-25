@@ -12,14 +12,14 @@ package forestry.mail.gui;
 
 import net.minecraft.entity.player.InventoryPlayer;
 
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
-import forestry.mail.gadgets.MachineMailbox;
+import forestry.mail.tiles.TileMailbox;
 
-public class GuiMailbox extends GuiForestry<ContainerMailbox, MachineMailbox> {
+public class GuiMailbox extends GuiForestry<ContainerMailbox, TileMailbox> {
 
-	public GuiMailbox(InventoryPlayer player, MachineMailbox tile) {
-		super(Defaults.TEXTURE_PATH_GUI + "/mailbox.png", new ContainerMailbox(player, tile), tile);
+	public GuiMailbox(InventoryPlayer player, TileMailbox tile) {
+		super(Constants.TEXTURE_PATH_GUI + "/mailbox.png", new ContainerMailbox(player, tile), tile);
 		this.xSize = 230;
 		this.ySize = 227;
 	}

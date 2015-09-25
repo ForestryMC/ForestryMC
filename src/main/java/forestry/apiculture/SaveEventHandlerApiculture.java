@@ -13,7 +13,7 @@ package forestry.apiculture;
 import net.minecraft.world.World;
 
 import forestry.api.apiculture.BeeManager;
-import forestry.core.interfaces.ISaveEventHandler;
+import forestry.core.ISaveEventHandler;
 
 public class SaveEventHandlerApiculture implements ISaveEventHandler {
 

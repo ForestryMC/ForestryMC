@@ -38,7 +38,6 @@ import net.minecraftforge.fluids.IFluidTank;
 
 import forestry.core.fluids.tanks.FakeTank;
 import forestry.core.fluids.tanks.StandardTank;
-import forestry.core.inventory.ITileFilter;
 import forestry.core.network.PacketProgressBarUpdate;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.NBTUtil;
@@ -49,13 +48,6 @@ import forestry.core.utils.NBTUtil.NBTList;
  */
 public class TankManager extends ForwardingList<StandardTank> implements ITankManager, List<StandardTank> {
 
-	public static final ITileFilter TANK_FILTER = new ITileFilter() {
-		@Override
-		public boolean matches(TileEntity tile) {
-			return tile instanceof IFluidHandler;
-		}
-
-	};
 	private static final byte NETWORK_DATA = 3;
 	private final List<StandardTank> tanks = new ArrayList<StandardTank>();
 	private final List<FluidStack> prevFluidStacks = new ArrayList<FluidStack>();

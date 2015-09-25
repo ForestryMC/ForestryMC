@@ -12,24 +12,23 @@ package forestry.apiculture.gui;
 
 import net.minecraft.entity.player.InventoryPlayer;
 
-import forestry.apiculture.gadgets.TileApiary;
-import forestry.apiculture.gadgets.TileBeeHousing;
-import forestry.apiculture.gadgets.TileBeehouse;
-import forestry.core.config.Defaults;
+import forestry.apiculture.tiles.TileAbstractBeeHousing;
+import forestry.apiculture.tiles.TileApiary;
+import forestry.apiculture.tiles.TileBeeHouse;
+import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
-import forestry.core.utils.EnumTankLevel;
-import forestry.core.utils.Utils;
+import forestry.core.render.EnumTankLevel;
 
-public class GuiBeeHousing extends GuiForestryTitled<ContainerBeeHousing, TileBeeHousing> {
+public class GuiBeeHousing extends GuiForestryTitled<ContainerBeeHousing, TileAbstractBeeHousing> {
 
 	public GuiBeeHousing(InventoryPlayer inventory, TileApiary tile) {
-		super(Defaults.TEXTURE_PATH_GUI + "/apiary.png", new ContainerBeeHousing(inventory, tile, true), tile);
+		super(Constants.TEXTURE_PATH_GUI + "/apiary.png", new ContainerBeeHousing(inventory, tile, true), tile);
 
 		ySize = 190;
 	}
 
-	public GuiBeeHousing(InventoryPlayer inventory, TileBeehouse tile) {
-		super(Defaults.TEXTURE_PATH_GUI + "/alveary.png", new ContainerBeeHousing(inventory, tile, false), tile);
+	public GuiBeeHousing(InventoryPlayer inventory, TileBeeHouse tile) {
+		super(Constants.TEXTURE_PATH_GUI + "/alveary.png", new ContainerBeeHousing(inventory, tile, false), tile);
 
 		ySize = 190;
 	}
@@ -38,7 +37,7 @@ public class GuiBeeHousing extends GuiForestryTitled<ContainerBeeHousing, TileBe
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
-		drawHealthMeter(guiLeft + 20, guiTop + 37, inventory.getHealthScaled(46), Utils.rateTankLevel(inventory.getHealthScaled(100)));
+		drawHealthMeter(guiLeft + 20, guiTop + 37, inventory.getHealthScaled(46), EnumTankLevel.rateTankLevel(inventory.getHealthScaled(100)));
 	}
 
 	private void drawHealthMeter(int x, int y, int height, EnumTankLevel rated) {

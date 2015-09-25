@@ -27,8 +27,8 @@ import forestry.api.farming.Farmables;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
-import forestry.core.utils.StackUtils;
-import forestry.core.vect.Vect;
+import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.vect.Vect;
 
 public class FarmLogicPoale extends FarmLogic {
 
@@ -71,7 +71,7 @@ public class FarmLogicPoale extends FarmLogic {
 			return false;
 		}
 
-		return StackUtils.equals(Blocks.sand, itemstack) || StackUtils.equals(Blocks.dirt, itemstack);
+		return ItemStackUtil.equals(Blocks.sand, itemstack) || ItemStackUtil.equals(Blocks.dirt, itemstack);
 	}
 
 	@Override

@@ -19,7 +19,7 @@ import forestry.core.network.PacketId;
 import forestry.core.network.PacketSlotClick;
 import forestry.core.network.PacketSocketUpdate;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.StackUtils;
+import forestry.core.utils.InventoryUtil;
 
 public class ContainerSocketedHelper<T extends TileEntity & ISocketable> implements IContainerSocketed {
 
@@ -69,7 +69,7 @@ public class ContainerSocketedHelper<T extends TileEntity & ISocketable> impleme
 			return;
 		}
 
-		StackUtils.stowInInventory(socket, player.inventory, true);
+		InventoryUtil.stowInInventory(socket, player.inventory, true);
 		// Not sufficient space in player's inventory. failed to stow.
 		if (socket.stackSize > 0) {
 			return;

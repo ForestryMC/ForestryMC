@@ -16,14 +16,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.core.circuits.ItemSolderingIron.CircuitRecipe;
 import forestry.core.circuits.ItemSolderingIron.SolderingInventory;
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
 import forestry.core.utils.StringUtil;
 
 public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron, SolderingInventory> {
 
 	public GuiSolderingIron(EntityPlayer player, SolderingInventory inventory) {
-		super(Defaults.TEXTURE_PATH_GUI + "/solder.png", new ContainerSolderingIron(player, inventory), inventory);
+		super(Constants.TEXTURE_PATH_GUI + "/solder.png", new ContainerSolderingIron(player, inventory), inventory);
 
 		xSize = 176;
 		ySize = 205;

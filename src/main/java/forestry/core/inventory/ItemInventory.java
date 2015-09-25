@@ -10,20 +10,22 @@
  ******************************************************************************/
 package forestry.core.inventory;
 
+import java.util.Random;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
-import forestry.core.interfaces.IFilterSlotDelegate;
-import forestry.core.utils.Utils;
+import forestry.core.tiles.IFilterSlotDelegate;
 
 public abstract class ItemInventory implements IInventory, IFilterSlotDelegate {
 
 	private static final String KEY_ITEMS = "Items"; // legacy
 	private static final String KEY_SLOTS = "Slots";
 	private static final String KEY_UID = "UID";
+	private static final Random rand = new Random();
 
 	private final EntityPlayer player;
 	private final ItemStack parent;
@@ -74,7 +76,7 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate {
 
 		NBTTagCompound nbt = parent.getTagCompound();
 		if (!nbt.hasKey(KEY_UID)) {
-			nbt.setInteger(KEY_UID, Utils.getUID());
+			nbt.setInteger(KEY_UID, rand.nextInt());
 		}
 	}
 

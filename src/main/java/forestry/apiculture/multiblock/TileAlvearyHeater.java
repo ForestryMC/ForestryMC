@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.multiblock;
 
-import forestry.apiculture.gadgets.BlockAlveary;
+import forestry.apiculture.blocks.BlockAlveary;
 
 public class TileAlvearyHeater extends TileAlvearyClimatiser {
 

@@ -14,7 +14,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 
 public class FakeInventoryAdapter implements IInventoryAdapter {
 
@@ -43,7 +43,7 @@ public class FakeInventoryAdapter implements IInventoryAdapter {
 
 	@Override
 	public int[] getAccessibleSlotsFromSide(int p_94128_1_) {
-		return Defaults.SLOTS_NONE;
+		return Constants.SLOTS_NONE;
 	}
 
 	@Override

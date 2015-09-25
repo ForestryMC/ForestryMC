@@ -18,9 +18,9 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
-import forestry.core.vect.Vect;
+import forestry.core.utils.vect.Vect;
 
 public class CropBasicAgriCraft extends Crop {
 
@@ -46,7 +46,7 @@ public class CropBasicAgriCraft extends Crop {
 		}
 		harvest.remove(0);
 		Proxies.common.addBlockDestroyEffects(world, pos.x, pos.y, pos.z, Blocks.melon_block, 0);
-		world.setBlockMetadataWithNotify(pos.x, pos.y, pos.z, 0, Defaults.FLAG_BLOCK_SYNCH);
+		world.setBlockMetadataWithNotify(pos.x, pos.y, pos.z, 0, Constants.FLAG_BLOCK_SYNCH);
 		return harvest;
 	}
 

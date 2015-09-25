@@ -13,7 +13,7 @@ package forestry.core.gui.slots;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
-import forestry.core.interfaces.IFilterSlotDelegate;
+import forestry.core.tiles.IFilterSlotDelegate;
 
 /**
  * Slot which only takes specific items, specified by the IFilterSlotDelegate.

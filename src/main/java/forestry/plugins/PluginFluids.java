@@ -35,19 +35,20 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.GeneratorFuel;
-import forestry.core.GameMode;
 import forestry.core.config.Config;
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.config.ForestryItem;
+import forestry.core.config.GameMode;
 import forestry.core.fluids.BlockForestryFluid;
 import forestry.core.fluids.Fluids;
+import forestry.core.fluids.LiquidRegistryHelper;
 import forestry.core.items.ItemLiquidContainer;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.LiquidHelper;
+import forestry.core.utils.Log;
 
 import static forestry.core.items.ItemLiquidContainer.EnumContainerType;
 
-@Plugin(pluginID = "Fluids", name = "Fluids", author = "mezz", url = Defaults.URL, unlocalizedDescription = "for.plugin.fluids.description")
+@Plugin(pluginID = "Fluids", name = "Fluids", author = "mezz", url = Constants.URL, unlocalizedDescription = "for.plugin.fluids.description")
 public class PluginFluids extends ForestryPlugin {
 
 	private static final List<Fluids> forestryFluidsWithBlocks = new ArrayList<Fluids>();
@@ -77,7 +78,7 @@ public class PluginFluids extends ForestryPlugin {
 				}
 			} else {
 				GameRegistry.UniqueIdentifier blockID = GameRegistry.findUniqueIdentifierFor(fluidBlock);
-				Proxies.log.severe("Pre-existing {0} fluid block detected, deferring to {1}:{2}, "
+				Log.severe("Pre-existing {0} fluid block detected, deferring to {1}:{2}, "
 						+ "this may cause issues if the server/client have different mod load orders, "
 						+ "recommended that you disable all but one instance of {0} fluid blocks via your configs.", fluid.getName(), blockID.modId, blockID.name);
 			}
@@ -135,11 +136,11 @@ public class PluginFluids extends ForestryPlugin {
 					continue;
 				}
 
-				LiquidHelper.injectLiquidContainer(fluidType, container.getItemStack());
+				LiquidRegistryHelper.registerLiquidContainer(fluidType, container.getItemStack());
 			}
 
 			for (ItemStack filledContainer : fluidType.getOtherContainers()) {
-				LiquidHelper.injectLiquidContainer(fluidType, filledContainer);
+				LiquidRegistryHelper.registerLiquidContainer(fluidType, filledContainer);
 			}
 		}
 

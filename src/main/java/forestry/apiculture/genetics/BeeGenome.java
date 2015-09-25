@@ -15,7 +15,6 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
 import javax.annotation.Nonnull;
-
 import java.util.concurrent.TimeUnit;
 
 import net.minecraft.item.ItemStack;
@@ -38,7 +37,7 @@ import forestry.core.genetics.Genome;
 import forestry.core.genetics.alleles.AlleleArea;
 import forestry.core.genetics.alleles.AlleleBoolean;
 import forestry.core.genetics.alleles.AlleleTolerance;
-import forestry.core.vect.Vect;
+import forestry.core.utils.vect.Vect;
 
 public class BeeGenome extends Genome implements IBeeGenome {
 	/**

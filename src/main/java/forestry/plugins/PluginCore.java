@@ -32,9 +32,14 @@ import forestry.api.genetics.AlleleManager;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
 import forestry.core.CreativeTabForestry;
-import forestry.core.GameMode;
+import forestry.core.IPickupHandler;
+import forestry.core.ISaveEventHandler;
 import forestry.core.PickupHandlerCore;
 import forestry.core.SaveEventHandlerCore;
+import forestry.core.blocks.BlockBase;
+import forestry.core.blocks.BlockResourceOre;
+import forestry.core.blocks.BlockResourceStorage;
+import forestry.core.blocks.BlockSoil;
 import forestry.core.circuits.CircuitRegistry;
 import forestry.core.circuits.ItemCircuitBoard;
 import forestry.core.circuits.ItemSolderingIron;
@@ -42,42 +47,37 @@ import forestry.core.commands.CommandPlugins;
 import forestry.core.commands.CommandVersion;
 import forestry.core.commands.RootCommand;
 import forestry.core.config.Config;
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
-import forestry.core.gadgets.BlockBase;
-import forestry.core.gadgets.BlockResource;
-import forestry.core.gadgets.BlockResourceStorageBlock;
-import forestry.core.gadgets.BlockSoil;
-import forestry.core.gadgets.MachineDefinition;
-import forestry.core.gadgets.TileEscritoire;
-import forestry.core.genetics.ClimateHelper;
+import forestry.core.config.GameMode;
 import forestry.core.genetics.ItemResearchNote;
 import forestry.core.genetics.alleles.Allele;
 import forestry.core.genetics.alleles.AlleleFactory;
 import forestry.core.genetics.alleles.AlleleHelper;
 import forestry.core.genetics.alleles.AlleleRegistry;
-import forestry.core.interfaces.IPickupHandler;
-import forestry.core.interfaces.ISaveEventHandler;
 import forestry.core.items.ItemArmorNaturalist;
 import forestry.core.items.ItemAssemblyKit;
+import forestry.core.items.ItemBlockForestry;
+import forestry.core.items.ItemBlockTyped;
 import forestry.core.items.ItemElectronTube;
 import forestry.core.items.ItemForestry;
-import forestry.core.items.ItemForestryBlock;
 import forestry.core.items.ItemForestryPickaxe;
 import forestry.core.items.ItemForestryShovel;
 import forestry.core.items.ItemFruit;
 import forestry.core.items.ItemMisc;
 import forestry.core.items.ItemOverlay.OverlayInfo;
 import forestry.core.items.ItemPipette;
-import forestry.core.items.ItemTypedBlock;
 import forestry.core.items.ItemWrench;
 import forestry.core.proxy.Proxies;
+import forestry.core.recipes.ShapedRecipeCustom;
+import forestry.core.recipes.ShapelessRecipeCustom;
+import forestry.core.tiles.MachineDefinition;
+import forestry.core.tiles.TileEscritoire;
+import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.ForestryModEnvWarningCallable;
-import forestry.core.utils.ShapedRecipeCustom;
-import forestry.core.utils.ShapelessRecipeCustom;
 
-@Plugin(pluginID = "Core", name = "Core", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.core.description")
+@Plugin(pluginID = "Core", name = "Core", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.core.description")
 public class PluginCore extends ForestryPlugin {
 
 	private static MachineDefinition definitionEscritoire;
@@ -96,7 +96,7 @@ public class PluginCore extends ForestryPlugin {
 
 		AlleleRegistry alleleRegistry = new AlleleRegistry();
 		AlleleManager.alleleRegistry = alleleRegistry;
-		AlleleManager.climateHelper = new ClimateHelper();
+		AlleleManager.climateHelper = new ClimateUtil();
 		AlleleManager.alleleFactory = new AlleleFactory();
 		alleleRegistry.initialize();
 	}
@@ -110,23 +110,23 @@ public class PluginCore extends ForestryPlugin {
 
 		Allele.helper = alleleHelper = new AlleleHelper();
 
-		ForestryBlock.core.registerBlock(new BlockBase(Material.iron, true), ItemForestryBlock.class, "core");
+		ForestryBlock.core.registerBlock(new BlockBase(Material.iron, true), ItemBlockForestry.class, "core");
 
-		definitionEscritoire = ((BlockBase) ForestryBlock.core.block()).addDefinition(new MachineDefinition(Defaults.DEFINITION_ESCRITOIRE_META, "forestry.Escritoire", TileEscritoire.class,
+		definitionEscritoire = ((BlockBase) ForestryBlock.core.block()).addDefinition(new MachineDefinition(Constants.DEFINITION_ESCRITOIRE_META, "forestry.Escritoire", TileEscritoire.class,
 				Proxies.render.getRenderEscritoire()));
 
-		ForestryBlock.soil.registerBlock(new BlockSoil(), ItemTypedBlock.class, "soil");
+		ForestryBlock.soil.registerBlock(new BlockSoil(), ItemBlockTyped.class, "soil");
 		ForestryBlock.soil.block().setHarvestLevel("shovel", 0, 0);
 		ForestryBlock.soil.block().setHarvestLevel("shovel", 0, 1);
 
-		ForestryBlock.resources.registerBlock(new BlockResource(), ItemForestryBlock.class, "resources");
+		ForestryBlock.resources.registerBlock(new BlockResourceOre(), ItemBlockForestry.class, "resources");
 		ForestryBlock.resources.block().setHarvestLevel("pickaxe", 1);
 
 		OreDictionary.registerOre("oreApatite", ForestryBlock.resources.getItemStack(1, 0));
 		OreDictionary.registerOre("oreCopper", ForestryBlock.resources.getItemStack(1, 1));
 		OreDictionary.registerOre("oreTin", ForestryBlock.resources.getItemStack(1, 2));
 
-		ForestryBlock.resourceStorage.registerBlock(new BlockResourceStorageBlock(), ItemForestryBlock.class, "resourceStorage");
+		ForestryBlock.resourceStorage.registerBlock(new BlockResourceStorage(), ItemBlockForestry.class, "resourceStorage");
 		ForestryBlock.resourceStorage.block().setHarvestLevel("pickaxe", 0);
 
 		OreDictionary.registerOre("blockApatite", ForestryBlock.resourceStorage.getItemStack(1, 0));
@@ -424,7 +424,7 @@ public class PluginCore extends ForestryPlugin {
 		Proxies.common.addRecipe(new ItemStack(Items.string), "#", "#", "#", '#', ForestryItem.craftingMaterial.getItemStack(1, 2));
 
 		// / Pipette
-		Proxies.common.addRecipe(ForestryItem.pipette.getItemStack(), "  #", " X ", "X  ", 'X', "paneGlass", '#', new ItemStack(Blocks.wool, 1, Defaults.WILDCARD));
+		Proxies.common.addRecipe(ForestryItem.pipette.getItemStack(), "  #", " X ", "X  ", 'X', "paneGlass", '#', new ItemStack(Blocks.wool, 1, Constants.WILDCARD));
 
 		// Storage Blocks
 		Proxies.common.addRecipe(ForestryBlock.resourceStorage.getItemStack(1, 0), "###", "###", "###", '#', "gemApatite");

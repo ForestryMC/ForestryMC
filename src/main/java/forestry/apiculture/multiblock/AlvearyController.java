@@ -36,6 +36,7 @@ import forestry.api.core.EnumTemperature;
 import forestry.api.core.IClimateControlled;
 import forestry.apiculture.BeeHousingInventory;
 import forestry.apiculture.BeeHousingModifier;
+import forestry.core.access.EnumAccess;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.multiblock.CoordTriplet;
 import forestry.core.multiblock.IMultiblockPart;
@@ -47,8 +48,7 @@ import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.PacketGuiUpdate;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.EnumAccess;
-import forestry.core.utils.Utils;
+import forestry.core.utils.BlockUtil;
 
 public class AlvearyController extends RectangularMultiblockControllerBase implements IAlvearyController, IClimateControlled {
 
@@ -179,7 +179,7 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 		for (int slabX = minimumCoord.x; slabX <= maximumCoord.x; slabX++) {
 			for (int slabZ = minimumCoord.z; slabZ <= maximumCoord.z; slabZ++) {
 				Block block = worldObj.getBlock(slabX, slabY, slabZ);
-				if (!Utils.isWoodSlabBlock(block)) {
+				if (!BlockUtil.isWoodSlabBlock(block)) {
 					throw new MultiblockValidationException(StatCollector.translateToLocal("for.multiblock.alveary.error.needSlabs"));
 				}
 

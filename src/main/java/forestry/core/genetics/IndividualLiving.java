@@ -48,14 +48,14 @@ public abstract class IndividualLiving extends Individual implements IIndividual
 		nbttagcompound.setInteger("MaxH", maxHealth);
 
 		if (getGenome() != null) {
-			NBTTagCompound NBTmachine = new NBTTagCompound();
-			getGenome().writeToNBT(NBTmachine);
-			nbttagcompound.setTag("Genome", NBTmachine);
+			NBTTagCompound nbtGenome = new NBTTagCompound();
+			getGenome().writeToNBT(nbtGenome);
+			nbttagcompound.setTag("Genome", nbtGenome);
 		}
 		if (getMate() != null) {
-			NBTTagCompound NBTmachine = new NBTTagCompound();
-			getMate().writeToNBT(NBTmachine);
-			nbttagcompound.setTag("Mate", NBTmachine);
+			NBTTagCompound nbtMate = new NBTTagCompound();
+			getMate().writeToNBT(nbtMate);
+			nbttagcompound.setTag("Mate", nbtMate);
 		}
 
 	}

@@ -11,7 +11,7 @@
 package forestry.core.genetics.alleles;
 
 import forestry.api.genetics.IAlleleArea;
-import forestry.core.vect.Vect;
+import forestry.core.utils.vect.Vect;
 
 public class AlleleArea extends AlleleCategorized implements IAlleleArea {
 

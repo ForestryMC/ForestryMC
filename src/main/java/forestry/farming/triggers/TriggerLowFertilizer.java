@@ -15,9 +15,9 @@ import net.minecraft.tileentity.TileEntity;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
-import forestry.core.inventory.InvTools;
 import forestry.core.triggers.Trigger;
-import forestry.farming.multiblock.TileHatch;
+import forestry.core.utils.InventoryUtil;
+import forestry.farming.tiles.TileHatch;
 
 import buildcraft.api.statements.IStatementContainer;
 import buildcraft.api.statements.IStatementParameter;
@@ -44,6 +44,6 @@ public class TriggerLowFertilizer extends Trigger {
 
 		TileHatch tileHatch = (TileHatch) tile;
 		IInventory fertilizerInventory = tileHatch.getFarmController().getFarmInventory().getFertilizerInventory();
-		return InvTools.containsPercent(fertilizerInventory, threshold);
+		return InventoryUtil.containsPercent(fertilizerInventory, threshold);
 	}
 }

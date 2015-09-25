@@ -12,7 +12,7 @@ package forestry.mail;
 
 import net.minecraft.world.World;
 
-import forestry.core.interfaces.ISaveEventHandler;
+import forestry.core.ISaveEventHandler;
 
 public class SaveEventHandlerMail implements ISaveEventHandler {
 

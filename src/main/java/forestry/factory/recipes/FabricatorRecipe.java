@@ -18,8 +18,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.recipes.IFabricatorRecipe;
-import forestry.core.utils.ShapedRecipeCustom;
-import forestry.core.utils.StackUtils;
+import forestry.core.recipes.ShapedRecipeCustom;
+import forestry.core.utils.ItemStackUtil;
 
 public class FabricatorRecipe implements IFabricatorRecipe {
 
@@ -39,7 +39,7 @@ public class FabricatorRecipe implements IFabricatorRecipe {
 
 	@Override
 	public boolean matches(@Nullable ItemStack plan, ItemStack[][] resources) {
-		if (this.plan != null && !StackUtils.isCraftingEquivalent(this.plan, plan)) {
+		if (this.plan != null && !ItemStackUtil.isCraftingEquivalent(this.plan, plan)) {
 			return false;
 		}
 

@@ -20,13 +20,13 @@ import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.ISpeciesRoot;
-import forestry.apiculture.gadgets.BlockAlveary;
+import forestry.apiculture.blocks.BlockAlveary;
 import forestry.core.config.ForestryItem;
-import forestry.core.interfaces.ICrafter;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.GuiId;
-import forestry.core.utils.StackUtils;
+import forestry.core.tiles.ICrafter;
+import forestry.core.utils.ItemStackUtil;
 
 public class TileAlvearySieve extends TileAlvearyWithGui implements ICrafter, IAlvearyComponent.BeeListener {
 
@@ -109,7 +109,7 @@ public class TileAlvearySieve extends TileAlvearyWithGui implements ICrafter, IA
 
 		@Override
 		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-			return StackUtils.isIdenticalItem(ForestryItem.craftingMaterial.getItemStack(1, 3), itemStack);
+			return ItemStackUtil.isIdenticalItem(ForestryItem.craftingMaterial.getItemStack(1, 3), itemStack);
 		}
 
 		private boolean canStorePollen() {

@@ -16,19 +16,19 @@ import net.minecraft.client.gui.GuiTextField;
 
 import org.lwjgl.input.Keyboard;
 
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
-import forestry.mail.gadgets.MachineTrader;
 import forestry.mail.network.PacketTraderAddress;
+import forestry.mail.tiles.TileTrader;
 
-public class GuiTradeName extends GuiForestry<ContainerTradeName, MachineTrader> {
+public class GuiTradeName extends GuiForestry<ContainerTradeName, TileTrader> {
 
 	private GuiTextField addressNameField;
 
-	public GuiTradeName(MachineTrader tile) {
-		super(Defaults.TEXTURE_PATH_GUI + "/tradername.png", new ContainerTradeName(tile), tile);
+	public GuiTradeName(TileTrader tile) {
+		super(Constants.TEXTURE_PATH_GUI + "/tradername.png", new ContainerTradeName(tile), tile);
 		this.xSize = 176;
 		this.ySize = 90;
 	}

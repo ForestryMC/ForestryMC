@@ -21,11 +21,11 @@ import cpw.mods.fml.common.IFuelHandler;
 import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
 import cpw.mods.fml.common.network.IGuiHandler;
 
-import forestry.core.interfaces.IPickupHandler;
-import forestry.core.interfaces.IResupplyHandler;
-import forestry.core.interfaces.ISaveEventHandler;
+import forestry.core.IPickupHandler;
+import forestry.core.IResupplyHandler;
+import forestry.core.ISaveEventHandler;
 import forestry.core.network.IPacketHandler;
-import forestry.core.proxy.Proxies;
+import forestry.core.utils.Log;
 
 public abstract class ForestryPlugin {
 
@@ -77,7 +77,7 @@ public abstract class ForestryPlugin {
 
 	protected static void logInvalidIMCMessage(IMCMessage message) {
 		String invalidIMCMessageText = getInvalidIMCMessageText(message);
-		Proxies.log.warning(invalidIMCMessageText);
+		Log.warning(invalidIMCMessageText);
 	}
 
 	public IGuiHandler getGuiHandler() {

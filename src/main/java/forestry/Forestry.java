@@ -38,14 +38,14 @@ import forestry.api.fuels.GeneratorFuel;
 import forestry.api.fuels.MoistenerFuel;
 import forestry.api.fuels.RainSubstrate;
 import forestry.core.ForestryCore;
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.config.ForestryItem;
 import forestry.core.config.Version;
 import forestry.core.network.PacketHandler;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.FluidMap;
-import forestry.core.utils.ItemStackMap;
+import forestry.core.utils.Log;
 import forestry.core.utils.StringUtil;
+import forestry.core.utils.datastructures.FluidMap;
+import forestry.core.utils.datastructures.ItemStackMap;
 
 /**
  * Forestry Minecraft Mod
@@ -53,7 +53,7 @@ import forestry.core.utils.StringUtil;
  * @author SirSengir
  */
 @Mod(
-		modid = Defaults.MOD,
+		modid = Constants.MOD,
 		name = "Forestry",
 		version = Version.VERSION,
 		guiFactory = "forestry.core.config.ForestryGuiConfigFactory",
@@ -66,7 +66,7 @@ import forestry.core.utils.StringUtil;
 				+ "after:HardcoreEnderExpansion;")
 public class Forestry {
 
-	@Mod.Instance(Defaults.MOD)
+	@Mod.Instance(Constants.MOD)
 	public static Forestry instance;
 	private File configFolder;
 
@@ -128,7 +128,7 @@ public class Forestry {
 	}
 	/*@EventHandler
 	 public void fingerprintWarning(FMLFingerprintViolationEvent event) {
-	 Proxies.log.info("Fingerprint of the mod jar is invalid. The jar file was tampered with.");
+	 Log.info("Fingerprint of the mod jar is invalid. The jar file was tampered with.");
 	 FMLInterModComms.sendMessage("Railcraft", "securityViolation", "Fingerprint of jar file did not match.");
 	 FMLInterModComms.sendMessage("Thaumcraft", "securityViolation", "Fingerprint of jar file did not match.");
 	 FMLInterModComms.sendMessage("IC2", "securityViolation", "Fingerprint of jar file did not match.");
@@ -143,21 +143,21 @@ public class Forestry {
 	public void missingMapping(FMLMissingMappingsEvent event) {
 		for (MissingMapping mapping : event.get()) {
 			if (mapping.type == Type.BLOCK) {
-				Block block = GameRegistry.findBlock(Defaults.MOD, StringUtil.cleanTags(mapping.name));
+				Block block = GameRegistry.findBlock(Constants.MOD, StringUtil.cleanTags(mapping.name));
 				if (block != null) {
 					mapping.remap(block);
-					Proxies.log.warning("Remapping block " + mapping.name + " to " + StringUtil.cleanBlockName(block));
+					Log.warning("Remapping block " + mapping.name + " to " + StringUtil.cleanBlockName(block));
 				}
 			} else {
-				Block block = GameRegistry.findBlock(Defaults.MOD, StringUtil.cleanTags(mapping.name));
+				Block block = GameRegistry.findBlock(Constants.MOD, StringUtil.cleanTags(mapping.name));
 				if (block != null) {
 					mapping.remap(Item.getItemFromBlock(block));
-					Proxies.log.warning("Remapping item " + mapping.name + " to " + StringUtil.cleanBlockName(block));
+					Log.warning("Remapping item " + mapping.name + " to " + StringUtil.cleanBlockName(block));
 				} else {
 					ForestryItem mappedItem = mappedItems.get(mapping.name);
 					if (mappedItem != null) {
 						mapping.remap(mappedItem.item());
-						Proxies.log.warning("Remapping item " + mapping.name + " to " + mappedItem.name());
+						Log.warning("Remapping item " + mapping.name + " to " + mappedItem.name());
 					}
 				}
 			}

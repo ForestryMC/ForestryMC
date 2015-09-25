@@ -17,7 +17,7 @@ import org.lwjgl.opengl.GL11;
 
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmLogic;
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
 import forestry.core.gui.ledgers.ClimateLedger;
 import forestry.core.gui.ledgers.OwnerLedger;
@@ -29,12 +29,12 @@ import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
 import forestry.farming.multiblock.IFarmController;
-import forestry.farming.multiblock.TileFarm;
+import forestry.farming.tiles.TileFarm;
 
 public class GuiFarm extends GuiForestry<ContainerFarm, TileFarm> {
 
 	public GuiFarm(EntityPlayer player, TileFarm tile) {
-		super(Defaults.TEXTURE_PATH_GUI + "/mfarm.png", new ContainerFarm(player.inventory, tile), tile);
+		super(Constants.TEXTURE_PATH_GUI + "/mfarm.png", new ContainerFarm(player.inventory, tile), tile);
 
 		widgetManager.add(new TankWidget(widgetManager, 15, 19, 0).setOverlayOrigin(216, 18));
 

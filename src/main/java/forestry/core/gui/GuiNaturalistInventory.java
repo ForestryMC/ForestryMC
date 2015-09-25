@@ -26,8 +26,8 @@ import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.ISpeciesRoot;
-import forestry.core.config.Defaults;
-import forestry.core.genetics.EnumMutateChance;
+import forestry.core.config.Constants;
+import forestry.core.genetics.mutations.EnumMutateChance;
 import forestry.core.gui.buttons.GuiBetterButton;
 import forestry.core.gui.buttons.StandardButtonTextureSets;
 import forestry.core.network.ForestryPacket;
@@ -43,7 +43,7 @@ public class GuiNaturalistInventory extends GuiForestry<Container, IPagedInvento
 	private final int pageCurrent, pageMax;
 
 	public GuiNaturalistInventory(ISpeciesRoot speciesRoot, EntityPlayer player, Container container, IPagedInventory inventory, int page, int maxPages) {
-		super(Defaults.TEXTURE_PATH_GUI + "/apiaristinventory.png", container, inventory);
+		super(Constants.TEXTURE_PATH_GUI + "/apiaristinventory.png", container, inventory);
 
 		this.speciesRoot = speciesRoot;
 

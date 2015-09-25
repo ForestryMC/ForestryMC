@@ -23,7 +23,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import forestry.api.apiculture.IArmorApiarist;
 import forestry.api.core.IArmorNaturalist;
 import forestry.api.core.Tabs;
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.config.ForestryItem;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
@@ -39,9 +39,9 @@ public class ItemArmorApiarist extends ItemArmor implements IArmorApiarist, IArm
 	@Override
 	public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {
 		if (ForestryItem.apiaristLegs.isItemEqual(stack)) {
-			return Defaults.ID + ":" + Defaults.TEXTURE_APIARIST_ARMOR_SECONDARY;
+			return Constants.ID + ":" + Constants.TEXTURE_APIARIST_ARMOR_SECONDARY;
 		} else {
-			return Defaults.ID + ":" + Defaults.TEXTURE_APIARIST_ARMOR_PRIMARY;
+			return Constants.ID + ":" + Constants.TEXTURE_APIARIST_ARMOR_PRIMARY;
 		}
 	}
 

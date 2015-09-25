@@ -19,7 +19,7 @@ import net.minecraft.util.ChunkCoordinates;
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
-import forestry.core.vect.Vect;
+import forestry.core.utils.vect.Vect;
 
 /**
  * Hermits will not produce if there are any other living creatures nearby.

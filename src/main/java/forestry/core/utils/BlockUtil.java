@@ -22,15 +22,18 @@ import net.minecraft.util.Direction;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.oredict.OreDictionary;
 
-import forestry.core.config.Defaults;
-import forestry.core.gadgets.Engine;
-import forestry.core.vect.Vect;
+import forestry.core.config.Constants;
+import forestry.core.tiles.TileEngine;
+import forestry.core.utils.vect.Vect;
 
 import cofh.api.energy.IEnergyConnection;
 import cofh.api.energy.IEnergyReceiver;
 
-public class BlockUtil {
+public abstract class BlockUtil {
+
+	private static final int slabWoodId = OreDictionary.getOreID("slabWood");
 
 	public static ArrayList<ItemStack> getBlockDrops(World world, Vect posBlock) {
 		Block block = world.getBlock(posBlock.x, posBlock.y, posBlock.z);
@@ -41,7 +44,7 @@ public class BlockUtil {
 	}
 
 	public static boolean isEnergyReceiverOrEngine(ForgeDirection side, TileEntity tile) {
-		if (!(tile instanceof IEnergyReceiver) && !(tile instanceof Engine)) {
+		if (!(tile instanceof IEnergyReceiver) && !(tile instanceof TileEngine)) {
 			return false;
 		}
 
@@ -56,7 +59,7 @@ public class BlockUtil {
 			return false;
 		}
 
-		world.setBlock(x, y, z, block, direction, Defaults.FLAG_BLOCK_SYNCH_AND_UPDATE);
+		world.setBlock(x, y, z, block, direction, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
 		return true;
 	}
 
@@ -83,5 +86,27 @@ public class BlockUtil {
 
 	public static int getMaturityPod(int metadata) {
 		return BlockCocoa.func_149987_c(metadata);
+	}
+
+	public static boolean isWoodSlabBlock(Block block) {
+		int[] oreIds = OreDictionary.getOreIDs(new ItemStack(block));
+		for (int oreId : oreIds) {
+			if (oreId == slabWoodId) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public static boolean isReplaceableBlock(World world, int x, int y, int z) {
+		Block block = world.getBlock(x, y, z);
+
+		return isReplaceableBlock(block);
+	}
+
+	public static boolean isReplaceableBlock(Block block) {
+		return block == Blocks.vine || block == Blocks.tallgrass || block == Blocks.deadbush || block == Blocks.snow_layer
+				|| block.getMaterial().isReplaceable();
 	}
 }

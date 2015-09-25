@@ -1,0 +1,25 @@
+/*******************************************************************************
+ * Copyright (c) 2011-2014 SirSengir.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the GNU Lesser Public License v3
+ * which accompanies this distribution, and is available at
+ * http://www.gnu.org/licenses/lgpl-3.0.txt
+ *
+ * Various Contributors including, but not limited to:
+ * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ ******************************************************************************/
+package forestry.core.tiles;
+
+import net.minecraft.util.ChunkCoordinates;
+
+import forestry.core.access.EnumAccess;
+import forestry.core.access.IAccessHandler;
+import forestry.core.network.IStreamableGui;
+
+public interface IRestrictedAccessTile extends IStreamableGui {
+	IAccessHandler getAccessHandler();
+
+	ChunkCoordinates getCoordinates();
+
+	void onSwitchAccess(EnumAccess oldAccess, EnumAccess newAccess);
+}

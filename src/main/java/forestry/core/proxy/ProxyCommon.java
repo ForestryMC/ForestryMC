@@ -51,8 +51,7 @@ import cpw.mods.fml.common.versioning.VersionRange;
 
 import forestry.Forestry;
 import forestry.core.TickHandlerCoreServer;
-import forestry.core.WorldGenerator;
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
 import forestry.core.multiblock.MultiblockServerTickHandler;
@@ -60,7 +59,9 @@ import forestry.core.network.PacketCoordinates;
 import forestry.core.network.PacketFXSignal;
 import forestry.core.network.PacketId;
 import forestry.core.render.SpriteSheet;
+import forestry.core.utils.Log;
 import forestry.core.utils.StringUtil;
+import forestry.core.worldgen.WorldGenerator;
 import forestry.plugins.PluginManager;
 
 public class ProxyCommon {
@@ -217,7 +218,7 @@ public class ProxyCommon {
 	}
 
 	public boolean setBlockWithNotify(World world, int x, int y, int z, Block block) {
-		return world.setBlock(x, y, z, block, 0, Defaults.FLAG_BLOCK_SYNCH_AND_UPDATE);
+		return world.setBlock(x, y, z, block, 0, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
 	}
 
 	public void playSoundFX(World world, int x, int y, int z, Block block) {
@@ -345,7 +346,7 @@ public class ProxyCommon {
 				Class<?> clas = Class.forName(className, true, Loader.instance().getModClassLoader());
 				return clas.newInstance();
 			} catch (Exception ex) {
-				Proxies.log.severe("Failed to load " + className + " even though mod " + modname + " was available.");
+				Log.severe("Failed to load " + className + " even though mod " + modname + " was available.");
 				return null;
 			}
 		} else {

@@ -22,7 +22,7 @@ import forestry.api.apiculture.IBeeMutationCustom;
 import forestry.api.apiculture.IBeeRoot;
 import forestry.api.genetics.IAllele;
 import forestry.apiculture.BeeHousingModifier;
-import forestry.core.genetics.Mutation;
+import forestry.core.genetics.mutations.Mutation;
 
 public class BeeMutation extends Mutation implements IBeeMutationCustom {
 

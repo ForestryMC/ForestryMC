@@ -23,16 +23,16 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import forestry.api.apiculture.FlowerManager;
 import forestry.api.farming.Farmables;
 import forestry.api.recipes.RecipeManagers;
-import forestry.core.GameMode;
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
+import forestry.core.config.GameMode;
 import forestry.core.fluids.Fluids;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.RecipeUtil;
+import forestry.core.recipes.RecipeUtil;
 import forestry.farming.logic.FarmableBasicFruit;
 import forestry.farming.logic.FarmableGenericCrop;
 import forestry.farming.logic.FarmableStacked;
 
-@Plugin(pluginID = "PlantMegaPack", name = "PlantMegaPack", author = "Nirek", url = Defaults.URL, unlocalizedDescription = "for.plugin.plantmegapack.description")
+@Plugin(pluginID = "PlantMegaPack", name = "PlantMegaPack", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.plugin.plantmegapack.description")
 public class PluginPlantMegaPack extends ForestryPlugin {
 
 	private static final String PlantMP = "plantmegapack";
@@ -362,7 +362,7 @@ public class PluginPlantMegaPack extends ForestryPlugin {
 			Block reedBlock = GameRegistry.findBlock(PlantMP, reedLike);
 			ItemStack reedStack = GameRegistry.findItemStack(PlantMP, reedLike, 1);
 			if (reedBlock != null && reedStack != null) {
-				RecipeUtil.injectLeveledRecipe(reedStack, GameMode.getGameMode().getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
+				RecipeUtil.addFermenterRecipes(reedStack, GameMode.getGameMode().getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
 				Farmables.farmables.get("farmPoales").add(new FarmableStacked(reedBlock, 14, 4));
 			}
 		}
@@ -433,7 +433,7 @@ public class PluginPlantMegaPack extends ForestryPlugin {
 		for (String wPlant : waterPlant) {
 			ItemStack waterPlantStack = GameRegistry.findItemStack(PlantMP, wPlant, 1);
 			if (waterPlantStack != null) {
-				RecipeUtil.injectLeveledRecipe(waterPlantStack, GameMode.getGameMode().getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
+				RecipeUtil.addFermenterRecipes(waterPlantStack, GameMode.getGameMode().getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
 			}
 		}
 	}

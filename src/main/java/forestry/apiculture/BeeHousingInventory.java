@@ -15,10 +15,10 @@ import net.minecraft.item.ItemStack;
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IBeeHousingInventory;
-import forestry.core.interfaces.IAccessHandler;
-import forestry.core.inventory.InvTools;
+import forestry.core.access.IAccessHandler;
 import forestry.core.inventory.InventoryAdapterRestricted;
-import forestry.core.utils.Utils;
+import forestry.core.utils.InventoryUtil;
+import forestry.core.utils.SlotUtil;
 
 public class BeeHousingInventory extends InventoryAdapterRestricted implements IBeeHousingInventory {
 	public static final int SLOT_QUEEN = 0;
@@ -47,7 +47,7 @@ public class BeeHousingInventory extends InventoryAdapterRestricted implements I
 		if (!super.canExtractItem(slotIndex, itemstack, side)) {
 			return false;
 		}
-		return Utils.isIndexInRange(slotIndex, SLOT_PRODUCT_1, SLOT_PRODUCT_COUNT);
+		return SlotUtil.isSlotInRange(slotIndex, SLOT_PRODUCT_1, SLOT_PRODUCT_COUNT);
 	}
 
 	@Override
@@ -72,7 +72,7 @@ public class BeeHousingInventory extends InventoryAdapterRestricted implements I
 
 	@Override
 	public final boolean addProduct(ItemStack product, boolean all) {
-		return InvTools.tryAddStack(this, product, SLOT_PRODUCT_1, SLOT_PRODUCT_COUNT, all, true);
+		return InventoryUtil.tryAddStack(this, product, SLOT_PRODUCT_1, SLOT_PRODUCT_COUNT, all, true);
 	}
 
 }

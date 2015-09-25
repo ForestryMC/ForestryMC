@@ -15,11 +15,11 @@ import net.minecraft.entity.player.InventoryPlayer;
 import forestry.core.gui.ContainerSocketed;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
-import forestry.factory.gadgets.MachineCentrifuge;
+import forestry.factory.tiles.TileCentrifuge;
 
-public class ContainerCentrifuge extends ContainerSocketed<MachineCentrifuge> {
+public class ContainerCentrifuge extends ContainerSocketed<TileCentrifuge> {
 
-	public ContainerCentrifuge(InventoryPlayer player, MachineCentrifuge tile) {
+	public ContainerCentrifuge(InventoryPlayer player, TileCentrifuge tile) {
 		super(tile, player, 8, 84);
 
 		// Resource

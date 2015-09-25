@@ -13,7 +13,7 @@ package forestry.core.inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
-import forestry.core.interfaces.IRestrictedAccessTile;
+import forestry.core.tiles.IRestrictedAccessTile;
 
 public class TileInventoryAdapter<T extends TileEntity & IRestrictedAccessTile> extends InventoryAdapterRestricted {
 

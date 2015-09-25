@@ -12,8 +12,8 @@ package forestry.core.proxy;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
 
-import forestry.core.gadgets.MachineDefinition;
-import forestry.core.interfaces.IBlockRenderer;
+import forestry.core.render.IBlockRenderer;
+import forestry.core.tiles.MachineDefinition;
 
 public class ProxyRender {
 

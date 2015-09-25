@@ -19,13 +19,13 @@ import cpw.mods.fml.common.network.IGuiHandler;
 import forestry.core.circuits.ContainerSolderingIron;
 import forestry.core.circuits.GuiSolderingIron;
 import forestry.core.circuits.ItemSolderingIron.SolderingInventory;
-import forestry.core.gadgets.TileAnalyzer;
-import forestry.core.gadgets.TileEscritoire;
 import forestry.core.gui.ContainerAnalyzer;
 import forestry.core.gui.ContainerEscritoire;
 import forestry.core.gui.GuiAnalyzer;
 import forestry.core.gui.GuiEscritoire;
 import forestry.core.network.GuiId;
+import forestry.core.tiles.TileAnalyzer;
+import forestry.core.tiles.TileEscritoire;
 import forestry.plugins.PluginManager;
 
 public class GuiHandler extends GuiHandlerBase {

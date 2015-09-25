@@ -20,7 +20,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-import forestry.apiculture.ArmorApiaristHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
@@ -67,35 +66,16 @@ import forestry.api.genetics.IFlowerRegistry;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
+import forestry.apiculture.ArmorApiaristHelper;
 import forestry.apiculture.GuiHandlerApiculture;
 import forestry.apiculture.SaveEventHandlerApiculture;
 import forestry.apiculture.VillageHandlerApiculture;
+import forestry.apiculture.blocks.BlockAlveary;
+import forestry.apiculture.blocks.BlockBeehives;
+import forestry.apiculture.blocks.BlockCandle;
+import forestry.apiculture.blocks.BlockStump;
 import forestry.apiculture.commands.CommandBee;
 import forestry.apiculture.flowers.FlowerRegistry;
-import forestry.apiculture.gadgets.BlockAlveary;
-import forestry.apiculture.gadgets.BlockBeehives;
-import forestry.apiculture.gadgets.BlockCandle;
-import forestry.apiculture.gadgets.BlockStump;
-import forestry.apiculture.gadgets.TileApiaristChest;
-import forestry.apiculture.gadgets.TileApiary;
-import forestry.apiculture.gadgets.TileBeehouse;
-import forestry.apiculture.gadgets.TileCandle;
-import forestry.apiculture.gadgets.TileSwarm;
-import forestry.apiculture.genetics.AlleleEffectAggressive;
-import forestry.apiculture.genetics.AlleleEffectCreeper;
-import forestry.apiculture.genetics.AlleleEffectExploration;
-import forestry.apiculture.genetics.AlleleEffectFertile;
-import forestry.apiculture.genetics.AlleleEffectFungification;
-import forestry.apiculture.genetics.AlleleEffectGlacial;
-import forestry.apiculture.genetics.AlleleEffectHeroic;
-import forestry.apiculture.genetics.AlleleEffectIgnition;
-import forestry.apiculture.genetics.AlleleEffectMisanthrope;
-import forestry.apiculture.genetics.AlleleEffectNone;
-import forestry.apiculture.genetics.AlleleEffectPotion;
-import forestry.apiculture.genetics.AlleleEffectRadioactive;
-import forestry.apiculture.genetics.AlleleEffectRepulsion;
-import forestry.apiculture.genetics.AlleleEffectResurrection;
-import forestry.apiculture.genetics.AlleleEffectSnowing;
 import forestry.apiculture.genetics.BeeBranchDefinition;
 import forestry.apiculture.genetics.BeeDefinition;
 import forestry.apiculture.genetics.BeeFactory;
@@ -104,11 +84,26 @@ import forestry.apiculture.genetics.BeeMutationFactory;
 import forestry.apiculture.genetics.BeekeepingMode;
 import forestry.apiculture.genetics.HiveDrop;
 import forestry.apiculture.genetics.JubilanceFactory;
-import forestry.apiculture.items.ItemAlvearyBlock;
+import forestry.apiculture.genetics.alleles.AlleleEffectAggressive;
+import forestry.apiculture.genetics.alleles.AlleleEffectCreeper;
+import forestry.apiculture.genetics.alleles.AlleleEffectExploration;
+import forestry.apiculture.genetics.alleles.AlleleEffectFertile;
+import forestry.apiculture.genetics.alleles.AlleleEffectFungification;
+import forestry.apiculture.genetics.alleles.AlleleEffectGlacial;
+import forestry.apiculture.genetics.alleles.AlleleEffectHeroic;
+import forestry.apiculture.genetics.alleles.AlleleEffectIgnition;
+import forestry.apiculture.genetics.alleles.AlleleEffectMisanthrope;
+import forestry.apiculture.genetics.alleles.AlleleEffectNone;
+import forestry.apiculture.genetics.alleles.AlleleEffectPotion;
+import forestry.apiculture.genetics.alleles.AlleleEffectRadioactive;
+import forestry.apiculture.genetics.alleles.AlleleEffectRepulsion;
+import forestry.apiculture.genetics.alleles.AlleleEffectResurrection;
+import forestry.apiculture.genetics.alleles.AlleleEffectSnowing;
 import forestry.apiculture.items.ItemArmorApiarist;
 import forestry.apiculture.items.ItemBeeGE;
 import forestry.apiculture.items.ItemBeealyzer;
-import forestry.apiculture.items.ItemCandleBlock;
+import forestry.apiculture.items.ItemBlockAlveary;
+import forestry.apiculture.items.ItemBlockCandle;
 import forestry.apiculture.items.ItemHabitatLocator;
 import forestry.apiculture.items.ItemHiveFrame;
 import forestry.apiculture.items.ItemHoneycomb;
@@ -124,40 +119,47 @@ import forestry.apiculture.multiblock.TileAlvearyStabiliser;
 import forestry.apiculture.multiblock.TileAlvearySwarmer;
 import forestry.apiculture.network.PacketHandlerApiculture;
 import forestry.apiculture.proxy.ProxyApiculture;
+import forestry.apiculture.tiles.TileApiaristChest;
+import forestry.apiculture.tiles.TileApiary;
+import forestry.apiculture.tiles.TileBeeHouse;
+import forestry.apiculture.tiles.TileCandle;
+import forestry.apiculture.tiles.TileSwarm;
 import forestry.apiculture.trigger.ApicultureTriggers;
 import forestry.apiculture.worldgen.HiveDecorator;
 import forestry.apiculture.worldgen.HiveDescription;
 import forestry.apiculture.worldgen.HiveGenHelper;
 import forestry.apiculture.worldgen.HiveRegistry;
-import forestry.core.GameMode;
+import forestry.core.ISaveEventHandler;
+import forestry.core.blocks.BlockBase;
 import forestry.core.config.Config;
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
+import forestry.core.config.GameMode;
 import forestry.core.config.LocalizedConfiguration;
+import forestry.core.entities.EntityFXSnow;
 import forestry.core.fluids.Fluids;
-import forestry.core.gadgets.BlockBase;
-import forestry.core.gadgets.MachineDefinition;
-import forestry.core.gadgets.TileAnalyzer;
 import forestry.core.genetics.alleles.Allele;
-import forestry.core.interfaces.ISaveEventHandler;
+import forestry.core.items.ItemBlockForestry;
 import forestry.core.items.ItemForestry;
-import forestry.core.items.ItemForestryBlock;
 import forestry.core.items.ItemOverlay;
 import forestry.core.items.ItemOverlay.OverlayInfo;
 import forestry.core.items.ItemScoop;
 import forestry.core.network.IPacketHandler;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.EntitySnowFX;
+import forestry.core.recipes.ShapedRecipeCustom;
 import forestry.core.render.RenderNaturalistChest;
-import forestry.core.utils.ShapedRecipeCustom;
-import forestry.core.utils.StackUtils;
+import forestry.core.tiles.MachineDefinition;
+import forestry.core.tiles.TileAnalyzer;
+import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.Log;
+import forestry.core.utils.Stack;
 import forestry.core.utils.StringUtil;
 
-@Plugin(pluginID = "Apiculture", name = "Apiculture", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.apiculture.description")
+@Plugin(pluginID = "Apiculture", name = "Apiculture", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.apiculture.description")
 public class PluginApiculture extends ForestryPlugin {
 
-	@SidedProxy(clientSide = "forestry.apiculture.proxy.ClientProxyApiculture", serverSide = "forestry.apiculture.proxy.ProxyApiculture")
+	@SidedProxy(clientSide = "forestry.apiculture.proxy.ProxyApicultureClient", serverSide = "forestry.apiculture.proxy.ProxyApiculture")
 	public static ProxyApiculture proxy;
 	private static final String CONFIG_CATEGORY = "apiculture";
 	private static final String[] EMPTY_STRINGS = new String[0];
@@ -212,16 +214,16 @@ public class PluginApiculture extends ForestryPlugin {
 
 		MinecraftForge.EVENT_BUS.register(this);
 
-		ForestryBlock.apiculture.registerBlock(new BlockBase(Material.iron), ItemForestryBlock.class, "apiculture");
+		ForestryBlock.apiculture.registerBlock(new BlockBase(Material.iron), ItemBlockForestry.class, "apiculture");
 		ForestryBlock.apiculture.block().setCreativeTab(Tabs.tabApiculture);
 		ForestryBlock.apiculture.block().setHarvestLevel("axe", 0);
 
-		ForestryBlock.apicultureChest.registerBlock(new BlockBase(Material.iron, true), ItemForestryBlock.class, "apicultureChest");
+		ForestryBlock.apicultureChest.registerBlock(new BlockBase(Material.iron, true), ItemBlockForestry.class, "apicultureChest");
 		ForestryBlock.apicultureChest.block().setCreativeTab(Tabs.tabApiculture);
 		ForestryBlock.apicultureChest.block().setHarvestLevel("axe", 0);
 
-		definitionApiary = ((BlockBase) ForestryBlock.apiculture.block()).addDefinition(new MachineDefinition(Defaults.DEFINITION_APIARY_META, "forestry.Apiary", TileApiary.class,
-				ShapedRecipeCustom.createShapedRecipe(ForestryBlock.apiculture.getItemStack(1, Defaults.DEFINITION_APIARY_META),
+		definitionApiary = ((BlockBase) ForestryBlock.apiculture.block()).addDefinition(new MachineDefinition(Constants.DEFINITION_APIARY_META, "forestry.Apiary", TileApiary.class,
+				ShapedRecipeCustom.createShapedRecipe(ForestryBlock.apiculture.getItemStack(1, Constants.DEFINITION_APIARY_META),
 						"XXX",
 						"#C#",
 						"###",
@@ -230,10 +232,10 @@ public class PluginApiculture extends ForestryPlugin {
 						'C', ForestryItem.impregnatedCasing))
 				.setFaces(0, 1, 2, 2, 4, 4, 0, 7));
 
-		definitionChestLegacy = ((BlockBase) ForestryBlock.apiculture.block()).addDefinition(new MachineDefinition(Defaults.DEFINITION_APIARISTCHEST_LEGACY_META, "forestry.ApiaristChest", TileApiaristChest.class).setLegacy());
+		definitionChestLegacy = ((BlockBase) ForestryBlock.apiculture.block()).addDefinition(new MachineDefinition(Constants.DEFINITION_APIARISTCHEST_LEGACY_META, "forestry.ApiaristChest", TileApiaristChest.class).setLegacy());
 
-		definitionChest = ((BlockBase) ForestryBlock.apicultureChest.block()).addDefinition(new MachineDefinition(Defaults.DEFINITION_APIARISTCHEST_META, "forestry.ApiaristChestNew", TileApiaristChest.class, new RenderNaturalistChest("apiaristchest"),
-				ShapedRecipeCustom.createShapedRecipe(ForestryBlock.apicultureChest.getItemStack(1, Defaults.DEFINITION_APIARISTCHEST_META),
+		definitionChest = ((BlockBase) ForestryBlock.apicultureChest.block()).addDefinition(new MachineDefinition(Constants.DEFINITION_APIARISTCHEST_META, "forestry.ApiaristChestNew", TileApiaristChest.class, new RenderNaturalistChest("apiaristchest"),
+				ShapedRecipeCustom.createShapedRecipe(ForestryBlock.apicultureChest.getItemStack(1, Constants.DEFINITION_APIARISTCHEST_META),
 						" # ",
 						"XYX",
 						"XXX",
@@ -242,8 +244,8 @@ public class PluginApiculture extends ForestryPlugin {
 						'Y', "chestWood"))
 				.setBoundingBox(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F));
 
-		definitionBeehouse = ((BlockBase) ForestryBlock.apiculture.block()).addDefinition(new MachineDefinition(Defaults.DEFINITION_BEEHOUSE_META, "forestry.Beehouse", TileBeehouse.class,
-				ShapedRecipeCustom.createShapedRecipe(ForestryBlock.apiculture.getItemStack(1, Defaults.DEFINITION_BEEHOUSE_META),
+		definitionBeehouse = ((BlockBase) ForestryBlock.apiculture.block()).addDefinition(new MachineDefinition(Constants.DEFINITION_BEEHOUSE_META, "forestry.Beehouse", TileBeeHouse.class,
+				ShapedRecipeCustom.createShapedRecipe(ForestryBlock.apiculture.getItemStack(1, Constants.DEFINITION_BEEHOUSE_META),
 						"XXX",
 						"#C#",
 						"###",
@@ -252,17 +254,17 @@ public class PluginApiculture extends ForestryPlugin {
 						'C', "beeComb"))
 				.setFaces(0, 1, 2, 2, 4, 4, 0, 7));
 
-		definitionAnalyzer = ((BlockBase) ForestryBlock.core.block()).addDefinition(new MachineDefinition(Defaults.DEFINITION_ANALYZER_META, "forestry.Analyzer", TileAnalyzer.class,
-				PluginApiculture.proxy.getRendererAnalyzer(Defaults.TEXTURE_PATH_BLOCKS + "/analyzer_")));
+		definitionAnalyzer = ((BlockBase) ForestryBlock.core.block()).addDefinition(new MachineDefinition(Constants.DEFINITION_ANALYZER_META, "forestry.Analyzer", TileAnalyzer.class,
+				PluginApiculture.proxy.getRendererAnalyzer(Constants.TEXTURE_PATH_BLOCKS + "/analyzer_")));
 
-		ForestryBlock.beehives.registerBlock(new BlockBeehives(), ItemForestryBlock.class, "beehives");
+		ForestryBlock.beehives.registerBlock(new BlockBeehives(), ItemBlockForestry.class, "beehives");
 
 		// Candles
-		ForestryBlock.candle.registerBlock(new BlockCandle(), ItemCandleBlock.class, "candle");
-		ForestryBlock.stump.registerBlock(new BlockStump(), ItemForestryBlock.class, "stump");
+		ForestryBlock.candle.registerBlock(new BlockCandle(), ItemBlockCandle.class, "candle");
+		ForestryBlock.stump.registerBlock(new BlockStump(), ItemBlockForestry.class, "stump");
 
 		// Alveary and Components
-		ForestryBlock.alveary.registerBlock(new BlockAlveary(), ItemAlvearyBlock.class, "alveary");
+		ForestryBlock.alveary.registerBlock(new BlockAlveary(), ItemBlockAlveary.class, "alveary");
 		ForestryBlock.alveary.block().setHarvestLevel("axe", 0);
 
 		// Add triggers
@@ -296,7 +298,7 @@ public class PluginApiculture extends ForestryPlugin {
 			final String oldConfigRenamed = CONFIG_CATEGORY + ".conf.old";
 			File oldConfigFileRenamed = new File(Forestry.instance.getConfigFolder(), oldConfigRenamed);
 			if (oldConfigFile.renameTo(oldConfigFileRenamed)) {
-				Proxies.log.info("Migrated " + CONFIG_CATEGORY + " settings to the new file '" + newConfig + "' and renamed '" + oldConfig + "' to '" + oldConfigRenamed + "'.");
+				Log.info("Migrated " + CONFIG_CATEGORY + " settings to the new file '" + newConfig + "' and renamed '" + oldConfig + "' to '" + oldConfigRenamed + "'.");
 			}
 		}
 
@@ -316,7 +318,7 @@ public class PluginApiculture extends ForestryPlugin {
 		}
 
 		beekeepingMode = config.getStringLocalized("beekeeping", "mode", "NORMAL", validBeekeepingModeNames);
-		Proxies.log.finer("Beekeeping mode read from config: " + beekeepingMode);
+		Log.finer("Beekeeping mode read from config: " + beekeepingMode);
 
 		secondPrincessChance = config.getFloatLocalized("beekeeping", "second.princess", secondPrincessChance, 0.0f, 100.0f);
 
@@ -342,7 +344,7 @@ public class PluginApiculture extends ForestryPlugin {
 
 			Set<IFlower> acceptableFlowers = FlowerManager.flowerRegistry.getAcceptableFlowers(flowerType);
 			if (acceptableFlowers == null || acceptableFlowers.size() == 0) {
-				Proxies.log.severe("Flower type '" + flowerType + "' has no valid flowers set in apiculture.cfg. Add valid flowers or delete the config to set it to default.");
+				Log.severe("Flower type '" + flowerType + "' has no valid flowers set in apiculture.cfg. Add valid flowers or delete the config to set it to default.");
 			}
 		}
 
@@ -390,9 +392,9 @@ public class PluginApiculture extends ForestryPlugin {
 			// Register villager stuff
 			VillageHandlerApiculture villageHandler = new VillageHandlerApiculture();
 			VillagerRegistry.instance().registerVillageCreationHandler(villageHandler);
-			VillagerRegistry.instance().registerVillagerId(Defaults.ID_VILLAGER_BEEKEEPER);
-			Proxies.render.registerVillagerSkin(Defaults.ID_VILLAGER_BEEKEEPER, Defaults.TEXTURE_SKIN_BEEKPEEPER);
-			VillagerRegistry.instance().registerVillageTradeHandler(Defaults.ID_VILLAGER_BEEKEEPER, villageHandler);
+			VillagerRegistry.instance().registerVillagerId(Constants.ID_VILLAGER_BEEKEEPER);
+			Proxies.render.registerVillagerSkin(Constants.ID_VILLAGER_BEEKEEPER, Constants.TEXTURE_SKIN_BEEKPEEPER);
+			VillagerRegistry.instance().registerVillageTradeHandler(Constants.ID_VILLAGER_BEEKEEPER, villageHandler);
 		}
 
 		proxy.initializeRendering();
@@ -441,7 +443,7 @@ public class PluginApiculture extends ForestryPlugin {
 				for (IFlower flower : flowers) {
 					String name = GameData.getBlockRegistry().getNameForObject(flower.getBlock());
 					if (name == null) {
-						Proxies.log.severe("Could not find name for flower: " + flower + " with type: " + flowerType);
+						Log.severe("Could not find name for flower: " + flower + " with type: " + flowerType);
 						continue;
 					}
 
@@ -477,7 +479,7 @@ public class PluginApiculture extends ForestryPlugin {
 		property = apicultureConfig.get("beekeeping.mode", CONFIG_CATEGORY, "NORMAL");
 		property.comment = "change beekeeping modes here. possible values EASY, NORMAL, HARD, HARDCORE, INSANE. mods may add additional modes.";
 		beekeepingMode = property.value.trim();
-		Proxies.log.finer("Beekeeping mode read from config: " + beekeepingMode);
+		Log.finer("Beekeeping mode read from config: " + beekeepingMode);
 
 		property = apicultureConfig.get("beekeeping.secondprincess", CONFIG_CATEGORY, secondPrincessChance);
 		property.comment = "percent chance of second princess drop, for limited/skyblock maps. Acceptable values up to 2 decimals.";
@@ -737,9 +739,9 @@ public class PluginApiculture extends ForestryPlugin {
 
 		if (PluginManager.Module.FACTORY.isEnabled()) {
 			// / SQUEEZER
-			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.honeyDrop.getItemStack()}, Fluids.HONEY.getFluid(Defaults.FLUID_PER_HONEY_DROP),
+			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.honeyDrop.getItemStack()}, Fluids.HONEY.getFluid(Constants.FLUID_PER_HONEY_DROP),
 					ForestryItem.propolis.getItemStack(), 5);
-			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.honeydew.getItemStack()}, Fluids.HONEY.getFluid(Defaults.FLUID_PER_HONEY_DROP));
+			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.honeydew.getItemStack()}, Fluids.HONEY.getFluid(Constants.FLUID_PER_HONEY_DROP));
 			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.phosphor.getItemStack(2), new ItemStack(Blocks.sand)}, Fluids.LAVA.getFluid(2000));
 			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.phosphor.getItemStack(2), new ItemStack(Blocks.sand, 1, 1)}, Fluids.LAVA.getFluid(2000));
 			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.phosphor.getItemStack(2), new ItemStack(Blocks.dirt)}, Fluids.LAVA.getFluid(1600));
@@ -870,7 +872,7 @@ public class PluginApiculture extends ForestryPlugin {
 		}
 
 		// ANALYZER
-		definitionAnalyzer.recipes = createAlyzerRecipes(ForestryBlock.core.block(), Defaults.DEFINITION_ANALYZER_META);
+		definitionAnalyzer.recipes = createAlyzerRecipes(ForestryBlock.core.block(), Constants.DEFINITION_ANALYZER_META);
 
 		definitionAnalyzer.register();
 		definitionApiary.register();
@@ -944,16 +946,16 @@ public class PluginApiculture extends ForestryPlugin {
 		tag.setInteger(BlockCandle.colourTagName, 0xffffff);
 		stack.setTagCompound(tag);
 
-		ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(stack, 7, 12, 12));
-		ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(ForestryItem.scoop.getItemStack(), 1, 1, 8));
-		ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(ForestryItem.propolis.getItemStack(), 2, 4, 6));
-		ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(ForestryItem.beeComb.getItemStack(), 4, 12, 7));
-		ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(ForestryItem.beeComb.getItemStack(1, 4), 2, 10, 7));
-		ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(ForestryItem.beeComb.getItemStack(1, 6), 1, 6, 7));
+		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(stack, 7, 12, 12));
+		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(ForestryItem.scoop.getItemStack(), 1, 1, 8));
+		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(ForestryItem.propolis.getItemStack(), 2, 4, 6));
+		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(ForestryItem.beeComb.getItemStack(), 4, 12, 7));
+		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(ForestryItem.beeComb.getItemStack(1, 4), 2, 10, 7));
+		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(ForestryItem.beeComb.getItemStack(1, 6), 1, 6, 7));
 
-		ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(BeeDefinition.FOREST.getRainResist().getMemberStack(EnumBeeType.PRINCESS), 1, 1, 5));
-		ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(BeeDefinition.COMMON.getMemberStack(EnumBeeType.DRONE), 1, 2, 8));
-		ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(BeeDefinition.MEADOWS.getMemberStack(EnumBeeType.PRINCESS), 1, 1, 5));
+		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(BeeDefinition.FOREST.getRainResist().getMemberStack(EnumBeeType.PRINCESS), 1, 1, 5));
+		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(BeeDefinition.COMMON.getMemberStack(EnumBeeType.DRONE), 1, 2, 8));
+		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(BeeDefinition.MEADOWS.getMemberStack(EnumBeeType.PRINCESS), 1, 1, 5));
 	}
 
 	private static void createHives() {
@@ -1005,7 +1007,7 @@ public class PluginApiculture extends ForestryPlugin {
 	}
 
 	private static void parseAdditionalFlowers(String list, ArrayList<ItemStack> target) {
-		List<ItemStack> flowers = StackUtils.parseItemStackStrings(list, 0);
+		List<ItemStack> flowers = ItemStackUtil.parseItemStackStrings(list, 0);
 		target.addAll(flowers);
 	}
 
@@ -1026,21 +1028,21 @@ public class PluginApiculture extends ForestryPlugin {
 	}
 
 	private static void parseAcceptedFlowers(String[] acceptedFlowers, String flowerType) {
-		List<StackUtils.Stack> acceptedFlowerItemStacks = StackUtils.parseStackStrings(acceptedFlowers, OreDictionary.WILDCARD_VALUE);
-		for (StackUtils.Stack acceptedFlower : acceptedFlowerItemStacks) {
+		List<Stack> acceptedFlowerItemStacks = Stack.parseStackStrings(acceptedFlowers, OreDictionary.WILDCARD_VALUE);
+		for (Stack acceptedFlower : acceptedFlowerItemStacks) {
 			Block acceptedFlowerBlock = acceptedFlower.getBlock();
 			int meta = acceptedFlower.getMeta();
 			if (acceptedFlowerBlock != null) {
 				FlowerManager.flowerRegistry.registerAcceptableFlower(acceptedFlowerBlock, meta, flowerType);
 			} else {
-				Proxies.log.warning("No block found for '" + acceptedFlower + "' in apiculture config for '" + flowerType + "'.");
+				Log.warning("No block found for '" + acceptedFlower + "' in apiculture config for '" + flowerType + "'.");
 			}
 		}
 	}
 
 	private static void parsePlantableFlowers(Property property, String flowerType) {
 		for (String string : property.getStringList()) {
-			StackUtils.Stack plantableFlower = StackUtils.parseStackString(string, OreDictionary.WILDCARD_VALUE);
+			Stack plantableFlower = Stack.parseStackString(string, OreDictionary.WILDCARD_VALUE);
 			if (plantableFlower == null) {
 				continue;
 			}
@@ -1050,7 +1052,7 @@ public class PluginApiculture extends ForestryPlugin {
 			if (plantableFlowerBlock != null) {
 				FlowerManager.flowerRegistry.registerPlantableFlower(plantableFlowerBlock, meta, 1.0, flowerType);
 			} else {
-				Proxies.log.warning("No block found for '" + string + "' in config '" + property.getName() + "'.");
+				Log.warning("No block found for '" + string + "' in config '" + property.getName() + "'.");
 			}
 		}
 	}
@@ -1086,7 +1088,7 @@ public class PluginApiculture extends ForestryPlugin {
 			return true;
 		} else if (message.key.equals("add-alveary-slab") && message.isStringMessage()) {
 			String messageString = String.format("Received a '%s' request from mod '%s'. This IMC message has been replaced with the oreDictionary for 'slabWood'. Please contact the author and report this issue.", message.key, message.getSender());
-			Proxies.log.warning(messageString);
+			Log.warning(messageString);
 			return true;
 		}
 
@@ -1097,9 +1099,9 @@ public class PluginApiculture extends ForestryPlugin {
 	@SideOnly(Side.CLIENT)
 	public void textureHook(TextureStitchEvent.Pre event) {
 		if (event.map.getTextureType() == 1) {
-			EntitySnowFX.icons = new IIcon[3];
-			for (int i = 0; i < EntitySnowFX.icons.length; i++) {
-				EntitySnowFX.icons[i] = event.map.registerIcon("forestry:particles/snow." + (i + 1));
+			EntityFXSnow.icons = new IIcon[3];
+			for (int i = 0; i < EntityFXSnow.icons.length; i++) {
+				EntityFXSnow.icons[i] = event.map.registerIcon("forestry:particles/snow." + (i + 1));
 			}
 		}
 	}

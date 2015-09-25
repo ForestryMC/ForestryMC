@@ -16,9 +16,6 @@ import net.minecraft.world.World;
 
 import forestry.core.GuiHandlerBase;
 import forestry.core.network.GuiId;
-import forestry.mail.gadgets.MachineMailbox;
-import forestry.mail.gadgets.MachinePhilatelist;
-import forestry.mail.gadgets.MachineTrader;
 import forestry.mail.gui.ContainerCatalogue;
 import forestry.mail.gui.ContainerLetter;
 import forestry.mail.gui.ContainerMailbox;
@@ -34,6 +31,9 @@ import forestry.mail.gui.GuiTrader;
 import forestry.mail.items.ItemCatalogue;
 import forestry.mail.items.ItemLetter;
 import forestry.mail.items.ItemLetter.LetterInventory;
+import forestry.mail.tiles.TileMailbox;
+import forestry.mail.tiles.TilePhilatelist;
+import forestry.mail.tiles.TileTrader;
 
 public class GuiHandlerMail extends GuiHandlerBase {
 
@@ -70,13 +70,13 @@ public class GuiHandlerMail extends GuiHandlerBase {
 				}
 
 			case MailboxGUI:
-				return new GuiMailbox(player.inventory, getTile(world, x, y, z, player, MachineMailbox.class));
+				return new GuiMailbox(player.inventory, getTile(world, x, y, z, player, TileMailbox.class));
 			case PhilatelistGUI:
-				return new GuiPhilatelist(player.inventory, getTile(world, x, y, z, player, MachinePhilatelist.class));
+				return new GuiPhilatelist(player.inventory, getTile(world, x, y, z, player, TilePhilatelist.class));
 			case TraderGUI:
-				return new GuiTrader(player.inventory, getTile(world, x, y, z, player, MachineTrader.class));
+				return new GuiTrader(player.inventory, getTile(world, x, y, z, player, TileTrader.class));
 			case TraderNameGUI:
-				return new GuiTradeName(getTile(world, x, y, z, player, MachineTrader.class));
+				return new GuiTradeName(getTile(world, x, y, z, player, TileTrader.class));
 			default:
 				return null;
 
@@ -116,13 +116,13 @@ public class GuiHandlerMail extends GuiHandlerBase {
 				}
 
 			case MailboxGUI:
-				return new ContainerMailbox(player.inventory, getTile(world, x, y, z, player, MachineMailbox.class));
+				return new ContainerMailbox(player.inventory, getTile(world, x, y, z, player, TileMailbox.class));
 			case PhilatelistGUI:
-				return new ContainerPhilatelist(player.inventory, getTile(world, x, y, z, player, MachinePhilatelist.class));
+				return new ContainerPhilatelist(player.inventory, getTile(world, x, y, z, player, TilePhilatelist.class));
 			case TraderGUI:
-				return new ContainerTrader(player.inventory, getTile(world, x, y, z, player, MachineTrader.class));
+				return new ContainerTrader(player.inventory, getTile(world, x, y, z, player, TileTrader.class));
 			case TraderNameGUI:
-				return new ContainerTradeName(getTile(world, x, y, z, player, MachineTrader.class));
+				return new ContainerTradeName(getTile(world, x, y, z, player, TileTrader.class));
 			default:
 				return null;
 

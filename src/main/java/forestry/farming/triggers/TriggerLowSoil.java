@@ -17,10 +17,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.api.farming.IFarmInventory;
-import forestry.core.inventory.InvTools;
 import forestry.core.triggers.Trigger;
+import forestry.core.utils.InventoryUtil;
 import forestry.farming.multiblock.IFarmController;
-import forestry.farming.multiblock.TileHatch;
+import forestry.farming.tiles.TileHatch;
 
 import buildcraft.api.statements.IStatementContainer;
 import buildcraft.api.statements.IStatementParameter;
@@ -70,7 +70,7 @@ public class TriggerLowSoil extends Trigger {
 
 		if (parameter == null || parameter.getItemStack() == null) {
 			IInventory resourcesInventory = farmInventory.getResourcesInventory();
-			return InvTools.containsPercent(resourcesInventory, threshold);
+			return InventoryUtil.containsPercent(resourcesInventory, threshold);
 		} else {
 			ItemStack filter = parameter.getItemStack().copy();
 			filter.stackSize = threshold;

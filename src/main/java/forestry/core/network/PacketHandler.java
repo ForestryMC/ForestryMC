@@ -43,10 +43,10 @@ import forestry.core.genetics.BreedingTracker;
 import forestry.core.gui.IContainerLiquidTanks;
 import forestry.core.gui.IContainerSocketed;
 import forestry.core.gui.IGuiSelectable;
-import forestry.core.interfaces.IRestrictedAccessTile;
 import forestry.core.proxy.Proxies;
+import forestry.core.tiles.IRestrictedAccessTile;
 import forestry.farming.multiblock.IFarmController;
-import forestry.farming.multiblock.TileFarm;
+import forestry.farming.tiles.TileFarm;
 import forestry.plugins.PluginManager;
 
 import io.netty.buffer.ByteBufInputStream;

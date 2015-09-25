@@ -19,7 +19,7 @@ import java.util.TreeMap;
 
 import net.minecraftforge.common.config.Configuration.UnicodeInputStreamReader;
 
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
 
 @Deprecated
@@ -146,7 +146,7 @@ public class Configuration {
 	}
 
 	public File getCategoryFile(String category) {
-		return new File(Proxies.common.getForestryRoot(), "config/" + Defaults.MOD.toLowerCase(Locale.ENGLISH) + "/" + category + ".conf");
+		return new File(Proxies.common.getForestryRoot(), "config/" + Constants.MOD.toLowerCase(Locale.ENGLISH) + "/" + category + ".conf");
 	}
 
 	public void loadCategory(String category) {

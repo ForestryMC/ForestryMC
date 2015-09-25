@@ -14,15 +14,15 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
 
 import forestry.apiculture.BeeHousingInventory;
-import forestry.apiculture.gadgets.TileApiary;
-import forestry.apiculture.gadgets.TileBeeHousing;
+import forestry.apiculture.tiles.TileAbstractBeeHousing;
+import forestry.apiculture.tiles.TileApiary;
 import forestry.core.gui.ContainerTile;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
 
-public class ContainerBeeHousing extends ContainerTile<TileBeeHousing> {
+public class ContainerBeeHousing extends ContainerTile<TileAbstractBeeHousing> {
 
-	public ContainerBeeHousing(InventoryPlayer player, TileBeeHousing tile, boolean hasFrames) {
+	public ContainerBeeHousing(InventoryPlayer player, TileAbstractBeeHousing tile, boolean hasFrames) {
 		super(tile, player, 8, 108);
 
 		// Queen/Princess

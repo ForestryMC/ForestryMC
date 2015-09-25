@@ -28,7 +28,7 @@ import net.minecraftforge.common.config.Property;
 
 import forestry.Forestry;
 import forestry.core.fluids.Fluids;
-import forestry.core.proxy.Proxies;
+import forestry.core.utils.Log;
 import forestry.core.utils.StringUtil;
 
 public class Config {
@@ -143,7 +143,7 @@ public class Config {
 			final String oldConfigRenamed = CATEGORY_COMMON + ".conf.old";
 			File oldConfigFileRenamed = new File(Forestry.instance.getConfigFolder(), oldConfigRenamed);
 			if (oldConfigCommonFile.renameTo(oldConfigFileRenamed)) {
-				Proxies.log.info("Migrated " + CATEGORY_COMMON + " settings to the new file '" + newConfigCommon + "' and renamed '" + oldConfigCommon + "' to '" + oldConfigRenamed + "'.");
+				Log.info("Migrated " + CATEGORY_COMMON + " settings to the new file '" + newConfigCommon + "' and renamed '" + oldConfigCommon + "' to '" + oldConfigRenamed + "'.");
 			}
 		}
 		loadNewConfigCommon(newConfigCommonFile);
@@ -158,7 +158,7 @@ public class Config {
 			final String oldConfigRenamed = CATEGORY_FLUIDS + ".conf.old";
 			File oldConfigFileRenamed = new File(Forestry.instance.getConfigFolder(), oldConfigRenamed);
 			if (oldConfigFluidsFile.renameTo(oldConfigFileRenamed)) {
-				Proxies.log.info("Migrated " + CATEGORY_FLUIDS + " settings to the new file '" + newConfigFluids + "' and renamed '" + oldConfigFluids + "' to '" + oldConfigRenamed + "'.");
+				Log.info("Migrated " + CATEGORY_FLUIDS + " settings to the new file '" + newConfigFluids + "' and renamed '" + oldConfigFluids + "' to '" + oldConfigRenamed + "'.");
 			}
 		}
 		loadNewConfigFluids(newConfigFluidsFile);
@@ -169,7 +169,7 @@ public class Config {
 			final String oldConfigRenamed = CATEGORY_DEBUG + ".conf.old";
 			File oldConfigFileRenamed = new File(Forestry.instance.getConfigFolder(), oldConfigRenamed);
 			if (oldConfigDebugFile.renameTo(oldConfigFileRenamed)) {
-				Proxies.log.info("Renamed '" + oldConfigDebug + "' to '" + oldConfigRenamed + "'.");
+				Log.info("Renamed '" + oldConfigDebug + "' to '" + oldConfigRenamed + "'.");
 			}
 		}
 
@@ -184,7 +184,7 @@ public class Config {
 
 		boolean recreate = configCommon.getBooleanLocalized("difficulty", "recreate.definitions", true);
 		if (recreate) {
-			Proxies.log.info("Recreating all gamemode definitions from the defaults. This may be caused by an upgrade");
+			Log.info("Recreating all gamemode definitions from the defaults. This may be caused by an upgrade");
 
 			String recreateDefinitionsComment = StringUtil.localize("config.difficulty.recreate.definitions.comment");
 			Property property = configCommon.get("difficulty", "recreate.definitions", true, recreateDefinitionsComment);
@@ -213,10 +213,10 @@ public class Config {
 			Property property = configCommon.get("world.generate.retrogen", "forced", false);
 			property.set(false);
 
-			Proxies.log.info("Enabled force retrogen.");
+			Log.info("Enabled force retrogen.");
 			doRetrogen = true;
 		} else if (doRetrogen) {
-			Proxies.log.info("Enabled retrogen.");
+			Log.info("Enabled retrogen.");
 		}
 
 		generateBeehivesAmount = configCommon.getFloatLocalized("world.generate.beehives", "amount", generateBeehivesAmount, 0.0f, 10.0f);
@@ -237,7 +237,7 @@ public class Config {
 		try {
 			collectorStamps.addAll(Arrays.asList(stamps));
 		} catch (Exception ex) {
-			Proxies.log.warning("Failed to read config for 'crafting.stamps.disabled', setting to default.");
+			Log.warning("Failed to read config for 'crafting.stamps.disabled', setting to default.");
 			Property property = configCommon.get("crafting.stamps", "disabled", defaultCollectors);
 			property.setToDefault();
 			collectorStamps.addAll(Arrays.asList(defaultCollectors));
@@ -271,7 +271,7 @@ public class Config {
 
 		disabledStructures.addAll(Arrays.asList(disabledStructureArray));
 		for (String str : disabledStructures) {
-			Proxies.log.finer("Disabled structure '%s'.", str);
+			Log.finer("Disabled structure '%s'.", str);
 		}
 
 		isDebug = configCommon.getBooleanLocalized("debug", "enabled", isDebug);
@@ -304,11 +304,11 @@ public class Config {
 		forceRetrogen = Boolean.parseBoolean(property.value);
 
 		if (forceRetrogen) {
-			Proxies.log.info(forcedRetroGenMessage);
+			Log.info(forcedRetroGenMessage);
 			configOld.set(forcedRetroGenKey, CATEGORY_COMMON, false);
 			doRetrogen = true;
 		} else if (doRetrogen) {
-			Proxies.log.info(retroGenMessage);
+			Log.info(retroGenMessage);
 		}
 
 		property = configOld.get("world.generate.apatite", CATEGORY_COMMON, true);
@@ -407,7 +407,7 @@ public class Config {
 		property.comment = "add schemata keys to disable them. current keys: alveary3x3;farm3x3;farm3x4;farm3x5;farm4x4;farm5x5";
 		disabledStructures.addAll(Arrays.asList(parseStructureKeys(property.value)));
 		for (String str : disabledStructures) {
-			Proxies.log.finer("Disabled structure '%s'.", str);
+			Log.finer("Disabled structure '%s'.", str);
 		}
 	}
 

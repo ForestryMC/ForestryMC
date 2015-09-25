@@ -12,9 +12,9 @@ package forestry.factory.recipes.craftguide;
 
 import net.minecraft.item.ItemStack;
 
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.config.ForestryBlock;
-import forestry.factory.gadgets.MachineStill;
+import forestry.factory.tiles.TileStill;
 
 import uristqwerty.CraftGuide.api.ItemSlot;
 import uristqwerty.CraftGuide.api.LiquidSlot;
@@ -41,10 +41,10 @@ public class CraftGuideStill implements RecipeProvider {
 			return;
 		}
 
-		ItemStack machine = ForestryBlock.factoryTESR.getItemStack(1, Defaults.DEFINITION_STILL_META);
+		ItemStack machine = ForestryBlock.factoryTESR.getItemStack(1, Constants.DEFINITION_STILL_META);
 		RecipeTemplate template = generator.createRecipeTemplate(slots, machine);
 
-		for (MachineStill.Recipe recipe : MachineStill.RecipeManager.recipes) {
+		for (TileStill.Recipe recipe : TileStill.RecipeManager.recipes) {
 			Object[] array = new Object[3];
 
 			array[0] = recipe.input;

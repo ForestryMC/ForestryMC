@@ -17,14 +17,14 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChunkCoordinates;
 
 import forestry.api.core.ForestryAPI;
-import forestry.core.delegates.AccessHandler;
-import forestry.core.interfaces.IAccessHandler;
-import forestry.core.interfaces.IRestrictedAccessTile;
-import forestry.core.interfaces.ITitled;
+import forestry.core.access.AccessHandler;
+import forestry.core.access.EnumAccess;
+import forestry.core.access.IAccessHandler;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
-import forestry.core.utils.EnumAccess;
+import forestry.core.tiles.IRestrictedAccessTile;
+import forestry.core.tiles.ITitled;
 
 public abstract class TileAlvearyWithGui extends TileAlveary implements ITitled, IRestrictedAccessTile {
 

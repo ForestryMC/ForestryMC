@@ -15,7 +15,7 @@ import java.io.IOException;
 import net.minecraft.nbt.NBTTagCompound;
 
 import forestry.api.core.INBTTagable;
-import forestry.core.GameMode;
+import forestry.core.config.GameMode;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;

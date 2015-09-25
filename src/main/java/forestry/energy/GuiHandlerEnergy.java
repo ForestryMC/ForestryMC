@@ -17,10 +17,6 @@ import forestry.core.GuiHandlerBase;
 import forestry.core.network.GuiId;
 import forestry.core.network.PacketSocketUpdate;
 import forestry.core.proxy.Proxies;
-import forestry.energy.gadgets.EngineBronze;
-import forestry.energy.gadgets.EngineCopper;
-import forestry.energy.gadgets.EngineTin;
-import forestry.energy.gadgets.MachineGenerator;
 import forestry.energy.gui.ContainerEngineBronze;
 import forestry.energy.gui.ContainerEngineCopper;
 import forestry.energy.gui.ContainerEngineTin;
@@ -29,6 +25,10 @@ import forestry.energy.gui.GuiEngineBronze;
 import forestry.energy.gui.GuiEngineCopper;
 import forestry.energy.gui.GuiEngineTin;
 import forestry.energy.gui.GuiGenerator;
+import forestry.energy.tiles.TileEngineBiogas;
+import forestry.energy.tiles.TileEngineElectric;
+import forestry.energy.tiles.TileEnginePeat;
+import forestry.energy.tiles.TileGenerator;
 
 public class GuiHandlerEnergy extends GuiHandlerBase {
 
@@ -41,17 +41,17 @@ public class GuiHandlerEnergy extends GuiHandlerBase {
 
 		switch (GuiId.values()[id]) {
 
-			case EngineBronzeGUI:
-				return new GuiEngineBronze(player.inventory, getTile(world, x, y, z, player, EngineBronze.class));
+			case EngineBiogasGUI:
+				return new GuiEngineBronze(player.inventory, getTile(world, x, y, z, player, TileEngineBiogas.class));
 
-			case EngineCopperGUI:
-				return new GuiEngineCopper(player.inventory, getTile(world, x, y, z, player, EngineCopper.class));
+			case EnginePeatGUI:
+				return new GuiEngineCopper(player.inventory, getTile(world, x, y, z, player, TileEnginePeat.class));
 
-			case EngineTinGUI:
-				return new GuiEngineTin(player.inventory, getTile(world, x, y, z, player, EngineTin.class));
+			case EngineElectricGUI:
+				return new GuiEngineTin(player.inventory, getTile(world, x, y, z, player, TileEngineElectric.class));
 
 			case GeneratorGUI:
-				return new GuiGenerator(player.inventory, getTile(world, x, y, z, player, MachineGenerator.class));
+				return new GuiGenerator(player.inventory, getTile(world, x, y, z, player, TileGenerator.class));
 
 			default:
 				return null;
@@ -67,19 +67,19 @@ public class GuiHandlerEnergy extends GuiHandlerBase {
 
 		switch (GuiId.values()[id]) {
 
-			case EngineBronzeGUI:
-				return new ContainerEngineBronze(player.inventory, getTile(world, x, y, z, player, EngineBronze.class));
+			case EngineBiogasGUI:
+				return new ContainerEngineBronze(player.inventory, getTile(world, x, y, z, player, TileEngineBiogas.class));
 
-			case EngineCopperGUI:
-				return new ContainerEngineCopper(player.inventory, getTile(world, x, y, z, player, EngineCopper.class));
+			case EnginePeatGUI:
+				return new ContainerEngineCopper(player.inventory, getTile(world, x, y, z, player, TileEnginePeat.class));
 
-			case EngineTinGUI:
-				EngineTin tile = getTile(world, x, y, z, player, EngineTin.class);
+			case EngineElectricGUI:
+				TileEngineElectric tile = getTile(world, x, y, z, player, TileEngineElectric.class);
 				Proxies.net.sendToPlayer(new PacketSocketUpdate(tile), player);
 				return new ContainerEngineTin(player.inventory, tile);
 
 			case GeneratorGUI:
-				return new ContainerGenerator(player.inventory, getTile(world, x, y, z, player, MachineGenerator.class));
+				return new ContainerGenerator(player.inventory, getTile(world, x, y, z, player, TileGenerator.class));
 
 			default:
 				return null;

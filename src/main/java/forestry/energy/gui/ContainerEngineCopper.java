@@ -16,11 +16,11 @@ import net.minecraft.inventory.ICrafting;
 import forestry.core.gui.ContainerTile;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
-import forestry.energy.gadgets.EngineCopper;
+import forestry.energy.tiles.TileEnginePeat;
 
-public class ContainerEngineCopper extends ContainerTile<EngineCopper> {
+public class ContainerEngineCopper extends ContainerTile<TileEnginePeat> {
 
-	public ContainerEngineCopper(InventoryPlayer player, EngineCopper tile) {
+	public ContainerEngineCopper(InventoryPlayer player, TileEnginePeat tile) {
 		super(tile, player, 8, 84);
 
 		this.addSlotToContainer(new SlotFiltered(tile, 0, 44, 46));

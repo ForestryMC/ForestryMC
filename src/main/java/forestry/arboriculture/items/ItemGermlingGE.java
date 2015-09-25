@@ -31,18 +31,18 @@ import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IPollinatable;
 import forestry.api.recipes.IVariableFermentable;
-import forestry.arboriculture.genetics.ICheckPollinatable;
 import forestry.arboriculture.genetics.Tree;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.genetics.TreeGenome;
+import forestry.arboriculture.genetics.pollination.ICheckPollinatable;
 import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
 import forestry.core.network.PacketFXSignal;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.SpriteSheet;
+import forestry.core.utils.BlockUtil;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.StringUtil;
-import forestry.core.utils.Utils;
 
 public class ItemGermlingGE extends ItemGE implements IVariableFermentable {
 
@@ -153,7 +153,7 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable {
 		if (type == EnumGermlingType.SAPLING) {
 			// x, y, z are the coordinates of the block "hit", can thus either be the soil or tall grass, etc.
 			int yShift;
-			if (!Utils.isReplaceableBlock(world, x, y, z)) {
+			if (!BlockUtil.isReplaceableBlock(world, x, y, z)) {
 				if (!world.isAirBlock(x, y + 1, z)) {
 					return false;
 				}

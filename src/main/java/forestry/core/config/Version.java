@@ -25,6 +25,7 @@ import cpw.mods.fml.common.versioning.DefaultArtifactVersion;
 
 import forestry.Forestry;
 import forestry.core.proxy.Proxies;
+import forestry.core.utils.Log;
 
 /**
  * With permission from pahimar.
@@ -40,7 +41,7 @@ public class Version {
 
 	public static final String VERSION = "@VERSION@";
 	public static final String BUILD_NUMBER = "@BUILD_NUMBER@";
-	public static final String[] FAILED_CHANGELOG = new String[]{String.format("Unable to retrieve changelog for %s", Defaults.MOD)};
+	public static final String[] FAILED_CHANGELOG = new String[]{String.format("Unable to retrieve changelog for %s", Constants.MOD)};
 	private static final String REMOTE_VERSION_FILE = "http://bit.ly/forestryver";
 	private static final String REMOTE_CHANGELOG_ROOT = "https://dl.dropbox.com/u/44760587/forestry/changelog/";
 	public static EnumUpdateState currentVersion = EnumUpdateState.CURRENT;
@@ -100,7 +101,7 @@ public class Version {
 				String line;
 				String mcVersion = Proxies.common.getMinecraftVersion();
 				while ((line = reader.readLine()) != null) {
-					if (line.startsWith(mcVersion) && line.contains(Defaults.MOD)) {
+					if (line.startsWith(mcVersion) && line.contains(Constants.MOD)) {
 						String[] tokens = line.split(":");
 						recommendedVersion = tokens[2];
 					}
@@ -112,19 +113,19 @@ public class Version {
 
 				int result = FMLCommonHandler.instance().findContainerFor(Forestry.instance).getProcessedVersion().compareTo(new DefaultArtifactVersion(recommendedVersion));
 				if (result >= 0) {
-					Proxies.log.finer("Using the latest version [" + VERSION + " (build:" + BUILD_NUMBER + ")] for Minecraft " + mcVersion);
+					Log.finer("Using the latest version [" + VERSION + " (build:" + BUILD_NUMBER + ")] for Minecraft " + mcVersion);
 					currentVersion = EnumUpdateState.CURRENT;
 					return;
 				}
 
 				cachedChangelog = grabChangelog(recommendedVersion);
 
-				Proxies.log.warning("Using outdated version [" + VERSION + " (build:" + BUILD_NUMBER + ")] for Minecraft " + mcVersion + ". Consider updating.");
+				Log.warning("Using outdated version [" + VERSION + " (build:" + BUILD_NUMBER + ")] for Minecraft " + mcVersion + ". Consider updating.");
 				currentVersion = EnumUpdateState.OUTDATED;
 
 			} catch (Exception e) {
 				//				e.printStackTrace();
-				Proxies.log.warning("Unable to read from remote version authority.");
+				Log.warning("Unable to read from remote version authority.");
 				currentVersion = EnumUpdateState.CONNECTION_ERROR;
 			}
 		}
@@ -171,9 +172,9 @@ public class Version {
 
 		} catch (Exception ex) {
 			//			ex.printStackTrace();
-			Proxies.log.warning("Unable to read changelog from remote site.");
+			Log.warning("Unable to read changelog from remote site.");
 		}
 
-		return new String[]{String.format("Unable to retrieve changelog for %s %s", Defaults.MOD, version)};
+		return new String[]{String.format("Unable to retrieve changelog for %s %s", Constants.MOD, version)};
 	}
 }

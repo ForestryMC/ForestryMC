@@ -15,14 +15,14 @@ import net.minecraft.inventory.ICrafting;
 
 import forestry.core.gui.ContainerSocketed;
 import forestry.core.gui.slots.SlotFiltered;
-import forestry.energy.gadgets.EngineTin;
+import forestry.energy.tiles.TileEngineElectric;
 
-public class ContainerEngineTin extends ContainerSocketed<EngineTin> {
+public class ContainerEngineTin extends ContainerSocketed<TileEngineElectric> {
 
-	public ContainerEngineTin(InventoryPlayer player, EngineTin tile) {
+	public ContainerEngineTin(InventoryPlayer player, TileEngineElectric tile) {
 		super(tile, player, 8, 84);
 
-		this.addSlotToContainer(new SlotFiltered(tile, EngineTin.SLOT_BATTERY, 84, 53));
+		this.addSlotToContainer(new SlotFiltered(tile, TileEngineElectric.SLOT_BATTERY, 84, 53));
 	}
 
 	@Override

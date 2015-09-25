@@ -36,11 +36,11 @@ import forestry.api.farming.Farmables;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
+import forestry.core.blocks.BlockSoil;
 import forestry.core.config.ForestryBlock;
-import forestry.core.gadgets.BlockSoil;
 import forestry.core.render.SpriteSheet;
-import forestry.core.vect.Vect;
-import forestry.core.vect.VectUtil;
+import forestry.core.utils.vect.Vect;
+import forestry.core.utils.vect.VectUtil;
 
 public class FarmLogicArboreal extends FarmLogicHomogeneous {
 

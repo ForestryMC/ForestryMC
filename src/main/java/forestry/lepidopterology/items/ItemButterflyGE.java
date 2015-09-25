@@ -38,7 +38,7 @@ import forestry.core.genetics.ItemGE;
 import forestry.core.network.PacketFXSignal;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
-import forestry.core.utils.Utils;
+import forestry.core.utils.EntityUtil;
 import forestry.lepidopterology.entities.EntityButterfly;
 import forestry.lepidopterology.genetics.ButterflyGenome;
 import forestry.plugins.PluginLepidopterology;
@@ -133,7 +133,7 @@ public class ItemButterflyGE extends ItemGE {
 			return false;
 		}
 
-		if (Utils.spawnEntity(entityItem.worldObj, new EntityButterfly(entityItem.worldObj, butterfly), entityItem.posX, entityItem.posY, entityItem.posZ) != null) {
+		if (EntityUtil.spawnEntity(entityItem.worldObj, new EntityButterfly(entityItem.worldObj, butterfly), entityItem.posX, entityItem.posY, entityItem.posZ) != null) {
 			if (entityItem.getEntityItem().stackSize > 1) {
 				entityItem.getEntityItem().stackSize--;
 			} else {

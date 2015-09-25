@@ -15,11 +15,12 @@ import net.minecraft.item.ItemStack;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.config.ForestryItem;
 import forestry.core.proxy.Proxies;
+import forestry.core.utils.Log;
 
-@Plugin(pluginID = "BC6|Transport", name = "BuildCraft 6 Transport", author = "mezz", url = Defaults.URL, unlocalizedDescription = "for.plugin.buildcraft6.description")
+@Plugin(pluginID = "BC6|Transport", name = "BuildCraft 6 Transport", author = "mezz", url = Constants.URL, unlocalizedDescription = "for.plugin.buildcraft6.description")
 public class PluginBuildCraftTransport extends ForestryPlugin {
 
 	private static final String BCT = "BuildCraft|Transport";
@@ -42,7 +43,7 @@ public class PluginBuildCraftTransport extends ForestryPlugin {
 			if (pipeWaterproof != null) {
 				Proxies.common.addShapelessRecipe(new ItemStack(pipeWaterproof), beeswax);
 			} else {
-				Proxies.log.fine("No BuildCraft pipe waterproof found.");
+				Log.fine("No BuildCraft pipe waterproof found.");
 			}
 		}
 	}

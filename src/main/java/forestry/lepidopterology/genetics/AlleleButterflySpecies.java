@@ -32,7 +32,7 @@ import forestry.api.genetics.IIndividual;
 import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.api.lepidopterology.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.IButterflyRoot;
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.genetics.alleles.AlleleSpecies;
 import forestry.plugins.PluginLepidopterology;
 
@@ -52,7 +52,7 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 	public AlleleButterflySpecies(String uid, boolean isDominant, String speciesName, IClassification branch, String binomial, int serumColour) {
 		super("forestry." + uid, getUnlocalizedName(speciesName, branch), "Sengir", "for.description." + uid, isDominant, branch, binomial, true);
 		this.serumColour = serumColour;
-		texture = "forestry:" + Defaults.TEXTURE_PATH_ENTITIES + "/butterflies/" + uid + ".png";
+		texture = "forestry:" + Constants.TEXTURE_PATH_ENTITIES + "/butterflies/" + uid + ".png";
 	}
 
 	private static String getUnlocalizedName(String name, IClassification branch) {

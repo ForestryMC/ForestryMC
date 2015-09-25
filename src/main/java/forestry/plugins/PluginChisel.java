@@ -14,10 +14,10 @@ import com.google.common.collect.ImmutableList;
 
 import cpw.mods.fml.common.event.FMLInterModComms;
 
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
 
-@Plugin(pluginID = "Chisel", name = "Chisel", author = "Nirek", url = Defaults.URL, unlocalizedDescription = "for.plugin.chisel.description")
+@Plugin(pluginID = "Chisel", name = "Chisel", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.plugin.chisel.description")
 public class PluginChisel extends ForestryPlugin {
 
 	private static final String Chisel = "chisel";
@@ -43,7 +43,7 @@ public class PluginChisel extends ForestryPlugin {
 				"diorite"
 		);
 		for (String wBlocks : worldgenBlocks) {
-			FMLInterModComms.sendMessage(Defaults.MOD, "add-backpack-items", String.format("digger@%s:%s", Chisel, wBlocks));
+			FMLInterModComms.sendMessage(Constants.MOD, "add-backpack-items", String.format("digger@%s:%s", Chisel, wBlocks));
 		}
 
 	}

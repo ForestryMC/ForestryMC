@@ -15,7 +15,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.api.core.IErrorLogicSource;
-import forestry.core.EnumErrorCode;
+import forestry.core.errors.EnumErrorCode;
 import forestry.core.triggers.Trigger;
 
 import buildcraft.api.statements.IStatementContainer;

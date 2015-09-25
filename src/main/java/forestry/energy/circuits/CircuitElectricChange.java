@@ -11,7 +11,7 @@
 package forestry.energy.circuits;
 
 import forestry.core.circuits.Circuit;
-import forestry.energy.gadgets.EngineTin;
+import forestry.energy.tiles.TileEngineElectric;
 
 public abstract class CircuitElectricChange extends Circuit {
 
@@ -29,7 +29,7 @@ public abstract class CircuitElectricChange extends Circuit {
 
 	@Override
 	public boolean isCircuitable(Object tile) {
-		return tile instanceof EngineTin;
+		return tile instanceof TileEngineElectric;
 	}
 
 	@Override
@@ -38,7 +38,7 @@ public abstract class CircuitElectricChange extends Circuit {
 			return;
 		}
 
-		EngineTin engine = (EngineTin) tile;
+		TileEngineElectric engine = (TileEngineElectric) tile;
 		engine.changeEnergyConfig(euChange, rfChange, 2 * euChange);
 	}
 
@@ -53,7 +53,7 @@ public abstract class CircuitElectricChange extends Circuit {
 			return;
 		}
 
-		EngineTin engine = (EngineTin) tile;
+		TileEngineElectric engine = (TileEngineElectric) tile;
 		engine.changeEnergyConfig(-euChange, -rfChange, -(2 * euChange));
 	}
 

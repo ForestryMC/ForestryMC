@@ -18,18 +18,18 @@ import cpw.mods.fml.common.network.IGuiHandler;
 
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.ISpeciesRoot;
-import forestry.core.gadgets.TileNaturalistChest;
 import forestry.core.gui.ContainerNaturalistInventory;
 import forestry.core.gui.GuiNaturalistInventory;
 import forestry.core.network.IStreamableGui;
 import forestry.core.network.PacketGuiUpdate;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.Utils;
+import forestry.core.tiles.TileNaturalistChest;
+import forestry.core.tiles.TileUtil;
 
 public abstract class GuiHandlerBase implements IGuiHandler {
 
 	protected static <T extends TileEntity> T getTile(World world, int x, int y, int z, EntityPlayer player, Class<T> tileClass) {
-		T tileForestry = Utils.getTile(world, x, y, z, tileClass);
+		T tileForestry = TileUtil.getTile(world, x, y, z, tileClass);
 
 		if (tileForestry instanceof IStreamableGui && !world.isRemote) {
 			PacketGuiUpdate packet = new PacketGuiUpdate((IStreamableGui) tileForestry);

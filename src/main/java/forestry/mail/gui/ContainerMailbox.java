@@ -18,20 +18,20 @@ import net.minecraft.item.ItemStack;
 import forestry.core.gui.ContainerTile;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.Utils;
+import forestry.core.utils.SlotUtil;
 import forestry.mail.POBox;
 import forestry.mail.POBoxInfo;
-import forestry.mail.gadgets.MachineMailbox;
 import forestry.mail.network.PacketPOBoxInfo;
+import forestry.mail.tiles.TileMailbox;
 
-public class ContainerMailbox extends ContainerTile<MachineMailbox> {
+public class ContainerMailbox extends ContainerTile<TileMailbox> {
 
 	public static final short SLOT_LETTERS = 0;
 	public static final short SLOT_LETTERS_COUNT = 7 * 12;
 
 	private final POBox mailInventory;
 
-	public ContainerMailbox(InventoryPlayer playerInventory, MachineMailbox tile) {
+	public ContainerMailbox(InventoryPlayer playerInventory, TileMailbox tile) {
 		super(tile, playerInventory, 35, 145);
 		IInventory inventory = tile.getOrCreateMailInventory(playerInventory.player.worldObj, playerInventory.player.getGameProfile());
 
@@ -52,7 +52,7 @@ public class ContainerMailbox extends ContainerTile<MachineMailbox> {
 	public ItemStack slotClick(int slotIndex, int button, int par3, EntityPlayer player) {
 		ItemStack stack = super.slotClick(slotIndex, button, par3, player);
 
-		if (Utils.isIndexInRange(slotIndex, SLOT_LETTERS, SLOT_LETTERS_COUNT)) {
+		if (SlotUtil.isSlotInRange(slotIndex, SLOT_LETTERS, SLOT_LETTERS_COUNT)) {
 			if (Proxies.common.isSimulating(player.worldObj) && mailInventory != null) {
 				POBoxInfo info = mailInventory.getPOBoxInfo();
 				Proxies.net.sendToPlayer(new PacketPOBoxInfo(info), player);

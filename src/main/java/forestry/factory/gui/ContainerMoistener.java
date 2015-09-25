@@ -14,15 +14,15 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
 
 import forestry.core.gui.ContainerLiquidTanks;
+import forestry.core.gui.IContainerCrafting;
 import forestry.core.gui.slots.SlotCraftAuto;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotWorking;
-import forestry.core.interfaces.IContainerCrafting;
-import forestry.factory.gadgets.MachineMoistener;
+import forestry.factory.tiles.TileMoistener;
 
-public class ContainerMoistener extends ContainerLiquidTanks<MachineMoistener> implements IContainerCrafting {
+public class ContainerMoistener extends ContainerLiquidTanks<TileMoistener> implements IContainerCrafting {
 
-	public ContainerMoistener(InventoryPlayer player, MachineMoistener tile) {
+	public ContainerMoistener(InventoryPlayer player, TileMoistener tile) {
 		super(tile, player, 8, 84);
 
 		// Stash

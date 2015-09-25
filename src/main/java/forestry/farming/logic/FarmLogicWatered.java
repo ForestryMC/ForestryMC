@@ -24,11 +24,10 @@ import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmHousing;
 import forestry.core.fluids.Fluids;
 import forestry.core.utils.BlockUtil;
-import forestry.core.utils.StackUtils;
-import forestry.core.utils.Utils;
-import forestry.core.vect.Vect;
-import forestry.core.vect.VectUtil;
-import forestry.farming.gadgets.StructureLogicFarm;
+import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.vect.Vect;
+import forestry.core.utils.vect.VectUtil;
+import forestry.farming.FarmHelper;
 
 public abstract class FarmLogicWatered extends FarmLogic {
 
@@ -56,7 +55,7 @@ public abstract class FarmLogicWatered extends FarmLogic {
 	}
 
 	protected boolean isAcceptedGround(ItemStack ground) {
-		return StackUtils.isIdenticalItem(this.ground, ground);
+		return ItemStackUtil.isIdenticalItem(this.ground, ground);
 	}
 
 	@Override
@@ -105,11 +104,11 @@ public abstract class FarmLogicWatered extends FarmLogic {
 
 			Vect platformPosition = position.add(0, -1, 0);
 			Block platformBlock = VectUtil.getBlock(world, platformPosition);
-			if (!StructureLogicFarm.bricks.contains(platformBlock)) {
+			if (!FarmHelper.bricks.contains(platformBlock)) {
 				break;
 			}
 
-			if (!isAirBlock(soil) && !Utils.isReplaceableBlock(soil)) {
+			if (!isAirBlock(soil) && !BlockUtil.isReplaceableBlock(soil)) {
 				produce.addAll(BlockUtil.getBlockDrops(getWorld(), position));
 				setBlock(position, Blocks.air, 0);
 				return trySetSoil(position);
@@ -137,7 +136,7 @@ public abstract class FarmLogicWatered extends FarmLogic {
 
 			Vect platformPosition = position.add(0, -1, 0);
 			Block platformBlock = VectUtil.getBlock(world, platformPosition);
-			if (!StructureLogicFarm.bricks.contains(platformBlock)) {
+			if (!FarmHelper.bricks.contains(platformBlock)) {
 				break;
 			}
 
@@ -158,7 +157,7 @@ public abstract class FarmLogicWatered extends FarmLogic {
 		if (!housing.getFarmInventory().hasResources(resources)) {
 			return false;
 		}
-		setBlock(position, StackUtils.getBlock(ground), ground.getItemDamage());
+		setBlock(position, ItemStackUtil.getBlock(ground), ground.getItemDamage());
 		housing.getFarmInventory().removeResources(resources);
 		return true;
 	}

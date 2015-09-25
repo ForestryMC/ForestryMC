@@ -29,10 +29,10 @@ import net.minecraft.world.World;
 import forestry.api.core.INBTTagable;
 import forestry.core.gui.ContainerDummy;
 import forestry.core.inventory.InventoryAdapter;
+import forestry.core.inventory.InventoryPlain;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
-import forestry.core.utils.PlainInventory;
 
 public class RecipeMemory implements INBTTagable, IStreamable {
 
@@ -214,7 +214,7 @@ public class RecipeMemory implements INBTTagable, IStreamable {
 		}
 
 		public Recipe(InventoryCrafting crafting) {
-			this.matrix = new InventoryAdapter(new PlainInventory(crafting));
+			this.matrix = new InventoryAdapter(new InventoryPlain(crafting));
 		}
 
 		public Recipe(NBTTagCompound nbttagcompound) {

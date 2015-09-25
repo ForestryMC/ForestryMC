@@ -20,14 +20,29 @@ import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.Tabs;
 import forestry.core.config.Config;
-import forestry.core.interfaces.IHintSource;
-import forestry.core.inventory.AlyzerInventory;
-import forestry.core.items.ItemInventoried;
+import forestry.core.gui.IHintSource;
+import forestry.core.items.ItemAlyzer;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.GeneticsUtil;
 
-public class ItemTreealyzer extends ItemInventoried {
+public class ItemTreealyzer extends ItemAlyzer {
+
+	public ItemTreealyzer() {
+		super();
+		setMaxStackSize(1);
+		setCreativeTab(Tabs.tabArboriculture);
+	}
+
+	@Override
+	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
+		if (Proxies.common.isSimulating(world)) {
+			entityplayer.openGui(ForestryAPI.instance, GuiId.TreealyzerGUI.ordinal(), world, (int) entityplayer.posX, (int) entityplayer.posY,
+					(int) entityplayer.posZ);
+		}
+
+		return itemstack;
+	}
 
 	public static class TreealyzerInventory extends AlyzerInventory implements IHintSource {
 
@@ -96,19 +111,4 @@ public class ItemTreealyzer extends ItemInventoried {
 		}
 	}
 
-	public ItemTreealyzer() {
-		super();
-		setMaxStackSize(1);
-		setCreativeTab(Tabs.tabArboriculture);
-	}
-
-	@Override
-	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-		if (Proxies.common.isSimulating(world)) {
-			entityplayer.openGui(ForestryAPI.instance, GuiId.TreealyzerGUI.ordinal(), world, (int) entityplayer.posX, (int) entityplayer.posY,
-					(int) entityplayer.posZ);
-		}
-
-		return itemstack;
-	}
 }

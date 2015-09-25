@@ -14,13 +14,13 @@ import net.minecraft.entity.player.InventoryPlayer;
 
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotFiltered;
-import forestry.energy.gadgets.MachineGenerator;
+import forestry.energy.tiles.TileGenerator;
 
-public class ContainerGenerator extends ContainerLiquidTanks<MachineGenerator> {
+public class ContainerGenerator extends ContainerLiquidTanks<TileGenerator> {
 
-	public ContainerGenerator(InventoryPlayer player, MachineGenerator tile) {
+	public ContainerGenerator(InventoryPlayer player, TileGenerator tile) {
 		super(tile, player, 8, 84);
 
-		this.addSlotToContainer(new SlotFiltered(tile, MachineGenerator.SLOT_CAN, 22, 38));
+		this.addSlotToContainer(new SlotFiltered(tile, TileGenerator.SLOT_CAN, 22, 38));
 	}
 }

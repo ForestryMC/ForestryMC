@@ -15,7 +15,7 @@ import net.minecraft.world.World;
 import forestry.api.arboriculture.ILeafTickHandler;
 import forestry.api.arboriculture.ITree;
 import forestry.api.lepidopterology.IButterfly;
-import forestry.core.proxy.Proxies;
+import forestry.core.utils.Log;
 import forestry.lepidopterology.entities.EntityButterfly;
 import forestry.plugins.PluginLepidopterology;
 
@@ -56,7 +56,7 @@ public class ButterflySpawner implements ILeafTickHandler {
 
 	private static void attemptButterflySpawn(World world, IButterfly butterfly, double x, double y, double z) {
 		if (PluginLepidopterology.butterflyInterface.spawnButterflyInWorld(world, butterfly.copy(), x, y + 0.1f, z) != null) {
-			Proxies.log.finest("Spawned a butterfly '%s' at %s/%s/%s.", butterfly.getDisplayName(), x, y, z);
+			Log.finest("Spawned a butterfly '%s' at %s/%s/%s.", butterfly.getDisplayName(), x, y, z);
 		}
 	}
 

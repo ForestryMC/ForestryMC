@@ -32,7 +32,7 @@ import forestry.core.genetics.alleles.AlleleBoolean;
 import forestry.core.gui.ContainerAlyzer;
 import forestry.core.gui.GuiAlyzer;
 import forestry.core.utils.StringUtil;
-import forestry.core.vect.Vect;
+import forestry.core.utils.vect.Vect;
 
 public class GuiBeealyzer extends GuiAlyzer {
 

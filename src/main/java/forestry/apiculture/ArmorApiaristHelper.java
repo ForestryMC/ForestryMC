@@ -21,7 +21,7 @@ public class ArmorApiaristHelper implements IArmorApiaristHelper {
 
 	@Override
 	public boolean isArmorApiarist(ItemStack stack, EntityPlayer player, String cause, boolean doProtect) {
-		if(stack == null) {
+		if (stack == null) {
 			return false;
 		}
 

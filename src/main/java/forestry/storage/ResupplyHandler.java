@@ -23,7 +23,7 @@ import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.common.eventhandler.Event;
 
 import forestry.api.storage.BackpackResupplyEvent;
-import forestry.core.interfaces.IResupplyHandler;
+import forestry.core.IResupplyHandler;
 import forestry.core.inventory.ItemInventory;
 import forestry.core.inventory.ItemInventoryBackpack;
 import forestry.storage.items.ItemBackpack;

@@ -14,14 +14,14 @@ import net.minecraft.entity.player.InventoryPlayer;
 
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotFiltered;
-import forestry.energy.gadgets.EngineBronze;
+import forestry.energy.tiles.TileEngineBiogas;
 
-public class ContainerEngineBronze extends ContainerLiquidTanks<EngineBronze> {
+public class ContainerEngineBronze extends ContainerLiquidTanks<TileEngineBiogas> {
 
-	public ContainerEngineBronze(InventoryPlayer player, EngineBronze engine) {
+	public ContainerEngineBronze(InventoryPlayer player, TileEngineBiogas engine) {
 		super(engine, player, 8, 84);
 
-		this.addSlotToContainer(new SlotFiltered(engine, EngineBronze.SLOT_CAN, 143, 40));
+		this.addSlotToContainer(new SlotFiltered(engine, TileEngineBiogas.SLOT_CAN, 143, 40));
 	}
 
 }

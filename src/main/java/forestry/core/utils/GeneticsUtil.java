@@ -36,9 +36,9 @@ import forestry.api.genetics.IMutation;
 import forestry.api.genetics.IPollinatable;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IButterflyNursery;
-import forestry.arboriculture.genetics.CheckPollinatable;
-import forestry.arboriculture.genetics.CheckPollinatableTree;
-import forestry.arboriculture.genetics.ICheckPollinatable;
+import forestry.arboriculture.genetics.pollination.CheckPollinatable;
+import forestry.arboriculture.genetics.pollination.CheckPollinatableTree;
+import forestry.arboriculture.genetics.pollination.ICheckPollinatable;
 import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
 
@@ -50,7 +50,7 @@ public class GeneticsUtil {
 		if (ersatzSpecimenBlocks == null) {
 			ersatzSpecimenBlocks = new HashSet<Block>();
 			for (ItemStack ersatzSpecimen : AlleleManager.ersatzSpecimen.keySet()) {
-				Block ersatzBlock = StackUtils.getBlock(ersatzSpecimen);
+				Block ersatzBlock = ItemStackUtil.getBlock(ersatzSpecimen);
 				if (ersatzBlock != null) {
 					ersatzSpecimenBlocks.add(ersatzBlock);
 				}
@@ -165,7 +165,7 @@ public class GeneticsUtil {
 		}
 
 		for (Map.Entry<ItemStack, IIndividual> entry : AlleleManager.ersatzSaplings.entrySet()) {
-			if (StackUtils.isIdenticalItem(itemStack, entry.getKey())) {
+			if (ItemStackUtil.isIdenticalItem(itemStack, entry.getKey())) {
 				return entry.getValue().copy();
 			}
 		}

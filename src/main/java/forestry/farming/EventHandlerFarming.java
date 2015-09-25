@@ -19,7 +19,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 import forestry.core.config.ForestryBlock;
 import forestry.core.proxy.Proxies;
-import forestry.farming.gadgets.BlockMushroom;
+import forestry.farming.blocks.BlockMushroom;
 
 public class EventHandlerFarming {
 

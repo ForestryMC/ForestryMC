@@ -33,9 +33,9 @@ import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
-import forestry.core.vect.MutableVect;
-import forestry.core.vect.Vect;
-import forestry.core.vect.VectUtil;
+import forestry.core.utils.vect.MutableVect;
+import forestry.core.utils.vect.Vect;
+import forestry.core.utils.vect.VectUtil;
 
 public class FarmLogicCocoa extends FarmLogic {
 
@@ -185,7 +185,7 @@ public class FarmLogicCocoa extends FarmLogic {
 			candidates.addAll(temp);
 			temp.clear();
 		}
-		// Proxies.log.finest("Logic %s at %s/%s/%s has seen %s blocks.", getClass().getName(), position.x, position.y, position.z, seen.size());
+		// Log.finest("Logic %s at %s/%s/%s has seen %s blocks.", getClass().getName(), position.x, position.y, position.z, seen.size());
 
 		return crops;
 	}

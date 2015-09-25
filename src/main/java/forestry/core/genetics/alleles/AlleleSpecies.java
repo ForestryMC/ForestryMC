@@ -31,7 +31,7 @@ import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
 import forestry.core.config.ForestryItem;
-import forestry.core.utils.StackUtils;
+import forestry.core.utils.ItemStackUtil;
 
 public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesCustom {
 
@@ -82,7 +82,7 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesCust
 		}
 
 		for (Map.Entry<ItemStack, Float> entry : getRoot().getResearchCatalysts().entrySet()) {
-			if (StackUtils.isIdenticalItem(entry.getKey(), itemstack)) {
+			if (ItemStackUtil.isIdenticalItem(entry.getKey(), itemstack)) {
 				return entry.getValue();
 			}
 		}
@@ -105,7 +105,7 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesCust
 		if (research != null) {
 			return new ItemStack[]{research};
 		} else {
-			return StackUtils.EMPTY_STACK_ARRAY;
+			return ItemStackUtil.EMPTY_STACK_ARRAY;
 		}
 
 	}

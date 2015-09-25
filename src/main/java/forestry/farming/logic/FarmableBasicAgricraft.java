@@ -17,9 +17,9 @@ import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
-import forestry.core.config.Defaults;
-import forestry.core.utils.StackUtils;
-import forestry.core.vect.Vect;
+import forestry.core.config.Constants;
+import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.vect.Vect;
 
 public class FarmableBasicAgricraft implements IFarmable {
 
@@ -49,7 +49,7 @@ public class FarmableBasicAgricraft implements IFarmable {
 
 	@Override
 	public boolean isGermling(ItemStack itemstack) {
-		return StackUtils.equals(block, itemstack);
+		return ItemStackUtil.equals(block, itemstack);
 	}
 
 	@Override
@@ -59,7 +59,7 @@ public class FarmableBasicAgricraft implements IFarmable {
 
 	@Override
 	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, int x, int y, int z) {
-		return world.setBlock(x, y, z, block, 0, Defaults.FLAG_BLOCK_SYNCH);
+		return world.setBlock(x, y, z, block, 0, Constants.FLAG_BLOCK_SYNCH);
 	}
 
 }

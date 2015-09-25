@@ -23,10 +23,7 @@ import net.minecraft.util.EnumChatFormatting;
 
 import org.lwjgl.opengl.GL11;
 
-import forestry.core.config.Defaults;
-import forestry.core.gadgets.NaturalistGame;
-import forestry.core.gadgets.NaturalistGame.GameToken;
-import forestry.core.gadgets.TileEscritoire;
+import forestry.core.config.Constants;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.network.PacketGuiSelect;
@@ -34,6 +31,9 @@ import forestry.core.network.PacketId;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.SpriteSheet;
 import forestry.core.render.TextureManager;
+import forestry.core.tiles.EscritoireGame;
+import forestry.core.tiles.EscritoireGame.GameToken;
+import forestry.core.tiles.TileEscritoire;
 import forestry.core.utils.StringUtil;
 
 public class GuiEscritoire extends GuiForestry<ContainerEscritoire, TileEscritoire> {
@@ -177,7 +177,7 @@ public class GuiEscritoire extends GuiForestry<ContainerEscritoire, TileEscritoi
 	private long lastUpdate;
 
 	public GuiEscritoire(EntityPlayer player, TileEscritoire tile) {
-		super(Defaults.TEXTURE_PATH_GUI + "/escritoire.png", new ContainerEscritoire(player, tile), tile);
+		super(Constants.TEXTURE_PATH_GUI + "/escritoire.png", new ContainerEscritoire(player, tile), tile);
 
 		LEVEL_ITEM = new ItemStack(Items.paper);
 
@@ -236,7 +236,7 @@ public class GuiEscritoire extends GuiForestry<ContainerEscritoire, TileEscritoi
 		newLine();
 		newLine();
 		String format = EnumChatFormatting.UNDERLINE + EnumChatFormatting.ITALIC.toString();
-		drawLine(format + "Attempt No. " + (NaturalistGame.BOUNTY_MAX - inventory.getGame().getBountyLevel()), 170, fontColor.get("gui.mail.lettertext"));
+		drawLine(format + "Attempt No. " + (EscritoireGame.BOUNTY_MAX - inventory.getGame().getBountyLevel()), 170, fontColor.get("gui.mail.lettertext"));
 		newLine();
 		drawSplitLine(getResearchNote(), 170, 90, fontColor.get("gui.mail.lettertext"));
 
@@ -259,11 +259,11 @@ public class GuiEscritoire extends GuiForestry<ContainerEscritoire, TileEscritoi
 				researchNote = getRandomNote(researchNotes.get(Notes.failure));
 			} else {
 				int bounty = inventory.getGame().getBountyLevel();
-				if (bounty >= NaturalistGame.BOUNTY_MAX) {
+				if (bounty >= EscritoireGame.BOUNTY_MAX) {
 					researchNote = getRandomNote(researchNotes.get(Notes.level1));
-				} else if (bounty > NaturalistGame.BOUNTY_MAX / 2) {
+				} else if (bounty > EscritoireGame.BOUNTY_MAX / 2) {
 					researchNote = getRandomNote(researchNotes.get(Notes.level2));
-				} else if (bounty > NaturalistGame.BOUNTY_MAX / 4) {
+				} else if (bounty > EscritoireGame.BOUNTY_MAX / 4) {
 					researchNote = getRandomNote(researchNotes.get(Notes.level3));
 				} else {
 					researchNote = getRandomNote(researchNotes.get(Notes.level4));

@@ -29,14 +29,14 @@ import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.IErrorLogic;
 import forestry.apiculture.FakeBeekeepingLogic;
-import forestry.core.delegates.FakeAccessHandler;
-import forestry.core.delegates.FakeErrorLogic;
-import forestry.core.interfaces.IAccessHandler;
+import forestry.core.access.EnumAccess;
+import forestry.core.access.FakeAccessHandler;
+import forestry.core.access.IAccessHandler;
+import forestry.core.errors.FakeErrorLogic;
 import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
-import forestry.core.utils.EnumAccess;
 
 public class FakeAlvearyController implements IAlvearyController {
 	public static final FakeAlvearyController instance = new FakeAlvearyController();

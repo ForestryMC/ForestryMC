@@ -20,7 +20,7 @@ import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
 import forestry.arboriculture.genetics.TreeGenome;
 import forestry.core.config.ForestryBlock;
-import forestry.core.vect.Vect;
+import forestry.core.utils.vect.Vect;
 
 public class FarmableGE implements IFarmable {
 

@@ -18,9 +18,9 @@ import net.minecraft.tileentity.TileEntity;
 
 import net.minecraftforge.fluids.IFluidTank;
 
-import forestry.core.interfaces.ILiquidTankContainer;
+import forestry.core.tiles.ILiquidTankTile;
 
-public abstract class ContainerLiquidTanks<T extends TileEntity & ILiquidTankContainer> extends ContainerTile<T> implements IContainerLiquidTanks {
+public abstract class ContainerLiquidTanks<T extends TileEntity & ILiquidTankTile> extends ContainerTile<T> implements IContainerLiquidTanks {
 
 	private final ContainerLiquidTanksHelper<T> helper;
 

@@ -29,10 +29,10 @@ import cpw.mods.fml.relauncher.SideOnly;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.StackUtils;
-import forestry.core.vect.Vect;
-import forestry.core.vect.VectUtil;
+import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.Log;
+import forestry.core.utils.vect.Vect;
+import forestry.core.utils.vect.VectUtil;
 import forestry.plugins.PluginIC2;
 
 public class FarmLogicRubber extends FarmLogic {
@@ -42,7 +42,7 @@ public class FarmLogicRubber extends FarmLogic {
 	public FarmLogicRubber(IFarmHousing housing) {
 		super(housing);
 		if (PluginIC2.rubberwood == null || PluginIC2.resin == null) {
-			Proxies.log.warning("Failed to init a farm logic %s since IC2 was not found", getClass().getName());
+			Log.warning("Failed to init a farm logic %s since IC2 was not found", getClass().getName());
 			inActive = true;
 		}
 	}
@@ -127,7 +127,7 @@ public class FarmLogicRubber extends FarmLogic {
 
 		// Determine what type we want to harvest.
 		Block block = VectUtil.getBlock(world, position);
-		if (!StackUtils.equals(block, PluginIC2.rubberwood)) {
+		if (!ItemStackUtil.equals(block, PluginIC2.rubberwood)) {
 			return crops;
 		}
 
@@ -168,7 +168,7 @@ public class FarmLogicRubber extends FarmLogic {
 			}
 
 			Block block = VectUtil.getBlock(world, candidate);
-			if (StackUtils.equals(block, PluginIC2.rubberwood)) {
+			if (ItemStackUtil.equals(block, PluginIC2.rubberwood)) {
 				int meta = VectUtil.getBlockMeta(world, candidate);
 				if (meta >= 2 && meta <= 5) {
 					crops.push(new CropRubber(world, block, meta, candidate));

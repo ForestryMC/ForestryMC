@@ -12,7 +12,7 @@ package forestry.core.inventory.filters;
 
 import net.minecraft.item.ItemStack;
 
-import forestry.core.inventory.InvTools;
+import forestry.core.utils.InventoryUtil;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -30,7 +30,7 @@ public class ArrayStackFilter implements IStackFilter {
 		if (stacks.length == 0 || !hasFilter()) {
 			return true;
 		}
-		return InvTools.isItemEqual(stack, stacks);
+		return InventoryUtil.isItemEqual(stack, stacks);
 	}
 
 	public ItemStack[] getStacks() {

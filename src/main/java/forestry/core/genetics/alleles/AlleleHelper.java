@@ -22,7 +22,7 @@ import forestry.api.genetics.IAlleleBoolean;
 import forestry.api.genetics.IAlleleInteger;
 import forestry.api.genetics.IChromosomeType;
 import forestry.apiculture.flowers.FlowerProvider;
-import forestry.core.vect.IVect;
+import forestry.core.utils.vect.IVect;
 import forestry.plugins.PluginManager;
 
 public class AlleleHelper implements IAlleleHelper {

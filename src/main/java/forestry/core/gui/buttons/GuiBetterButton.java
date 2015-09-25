@@ -20,14 +20,14 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 import org.lwjgl.opengl.GL11;
 
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.gui.tooltips.IToolTipProvider;
 import forestry.core.gui.tooltips.ToolTip;
 
 @SideOnly(Side.CLIENT)
 public class GuiBetterButton extends GuiButton implements IToolTipProvider {
 
-	private static final ResourceLocation TEXTURE = new ResourceLocation("forestry", Defaults.TEXTURE_PATH_GUI + "/buttons.png");
+	private static final ResourceLocation TEXTURE = new ResourceLocation("forestry", Constants.TEXTURE_PATH_GUI + "/buttons.png");
 	protected IButtonTextureSet texture;
 	private ToolTip toolTip;
 	private boolean useTexWidth = false;

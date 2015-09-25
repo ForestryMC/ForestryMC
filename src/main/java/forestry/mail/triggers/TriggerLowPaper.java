@@ -15,7 +15,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.core.triggers.Trigger;
-import forestry.mail.gadgets.MachineTrader;
+import forestry.mail.tiles.TileTrader;
 
 import buildcraft.api.statements.IStatementContainer;
 import buildcraft.api.statements.IStatementParameter;
@@ -37,11 +37,11 @@ public class TriggerLowPaper extends Trigger {
 	@Override
 	public boolean isTriggerActive(TileEntity tile, ForgeDirection side, IStatementContainer source, IStatementParameter[] parameters) {
 
-		if (!(tile instanceof MachineTrader)) {
+		if (!(tile instanceof TileTrader)) {
 			return false;
 		}
 
-		return !((MachineTrader) tile).hasPaperMin(threshold);
+		return !((TileTrader) tile).hasPaperMin(threshold);
 	}
 
 }

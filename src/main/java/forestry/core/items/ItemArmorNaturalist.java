@@ -22,7 +22,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.api.core.IArmorNaturalist;
 import forestry.core.CreativeTabForestry;
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
 
@@ -36,7 +36,7 @@ public class ItemArmorNaturalist extends ItemArmor implements IArmorNaturalist {
 
 	@Override
 	public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {
-		return Defaults.ID + ":" + Defaults.TEXTURE_NATURALIST_ARMOR_PRIMARY;
+		return Constants.ID + ":" + Constants.TEXTURE_NATURALIST_ARMOR_PRIMARY;
 	}
 
 	@SideOnly(Side.CLIENT)

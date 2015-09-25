@@ -14,8 +14,8 @@ import net.minecraft.tileentity.TileEntity;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
-import forestry.core.gadgets.Engine;
-import forestry.core.gadgets.TilePowered;
+import forestry.core.tiles.TileEngine;
+import forestry.core.tiles.TilePowered;
 import forestry.core.triggers.Trigger;
 
 import buildcraft.api.statements.IStatementContainer;
@@ -45,9 +45,9 @@ public class TriggerLowFuel extends Trigger {
 			return !((TilePowered) tile).hasFuelMin(threshold);
 		}
 
-		if (tile instanceof Engine) {
-			Engine engine = (Engine) tile;
-			return !engine.hasFuelMin(threshold);
+		if (tile instanceof TileEngine) {
+			TileEngine tileEngine = (TileEngine) tile;
+			return !tileEngine.hasFuelMin(threshold);
 		}
 
 		return false;

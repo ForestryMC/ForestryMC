@@ -33,8 +33,7 @@ import forestry.api.storage.BackpackStowEvent;
 import forestry.api.storage.EnumBackpackType;
 import forestry.api.storage.IBackpackDefinition;
 import forestry.core.config.Config;
-import forestry.core.config.Defaults;
-import forestry.core.inventory.InvTools;
+import forestry.core.config.Constants;
 import forestry.core.inventory.ItemInventory;
 import forestry.core.inventory.ItemInventoryBackpack;
 import forestry.core.inventory.wrappers.IInvSlot;
@@ -43,6 +42,8 @@ import forestry.core.items.ItemInventoried;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.StringUtil;
 import forestry.storage.BackpackMode;
 
@@ -124,7 +125,7 @@ public class ItemBackpack extends ItemInventoried {
 			return stack;
 		}
 
-		ItemStack remainder = InvTools.moveItemStack(stack, inventory);
+		ItemStack remainder = InventoryUtil.moveItemStack(stack, inventory);
 		stack.stackSize = remainder == null ? 0 : remainder.stackSize;
 
 		return null;
@@ -142,7 +143,7 @@ public class ItemBackpack extends ItemInventoried {
 
 	private static IInventory getInventoryHit(World world, int x, int y, int z, int side) {
 		TileEntity targeted = world.getTileEntity(x, y, z);
-		return InvTools.getInventoryFromTile(targeted, ForgeDirection.getOrientation(side));
+		return TileUtil.getInventoryFromTile(targeted, ForgeDirection.getOrientation(side));
 	}
 
 	private boolean evaluateTileHit(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side) {
@@ -182,7 +183,7 @@ public class ItemBackpack extends ItemInventoried {
 				continue;
 			}
 
-			ItemStack remaining = InvTools.moveItemStack(packStack, target);
+			ItemStack remaining = InventoryUtil.moveItemStack(packStack, target);
 			slot.setStackInSlot(remaining);
 		}
 	}
@@ -199,17 +200,17 @@ public class ItemBackpack extends ItemInventoried {
 				continue;
 			}
 
-			ItemStack remaining = InvTools.moveItemStack(targetStack, backpackInventory);
+			ItemStack remaining = InventoryUtil.moveItemStack(targetStack, backpackInventory);
 			slot.setStackInSlot(remaining);
 		}
 
 	}
 
 	protected void openGui(EntityPlayer entityplayer) {
-		if (getBackpackSize() == Defaults.SLOTS_BACKPACK_DEFAULT) {
+		if (getBackpackSize() == Constants.SLOTS_BACKPACK_DEFAULT) {
 			entityplayer.openGui(ForestryAPI.instance, GuiId.BackpackGUI.ordinal(), entityplayer.worldObj, (int) entityplayer.posX, (int) entityplayer.posY,
 					(int) entityplayer.posZ);
-		} else if (getBackpackSize() == Defaults.SLOTS_BACKPACK_T2) {
+		} else if (getBackpackSize() == Constants.SLOTS_BACKPACK_T2) {
 			entityplayer.openGui(ForestryAPI.instance, GuiId.BackpackT2GUI.ordinal(), entityplayer.worldObj, (int) entityplayer.posX, (int) entityplayer.posY,
 					(int) entityplayer.posZ);
 		}
@@ -308,12 +309,12 @@ public class ItemBackpack extends ItemInventoried {
 	private static int getSlotsForType(EnumBackpackType type) {
 		switch (type) {
 			case APIARIST:
-				return Defaults.SLOTS_BACKPACK_APIARIST;
+				return Constants.SLOTS_BACKPACK_APIARIST;
 			case T2:
-				return Defaults.SLOTS_BACKPACK_T2;
+				return Constants.SLOTS_BACKPACK_T2;
 			case T1:
 			default:
-				return Defaults.SLOTS_BACKPACK_DEFAULT;
+				return Constants.SLOTS_BACKPACK_DEFAULT;
 		}
 	}
 

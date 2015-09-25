@@ -15,17 +15,17 @@ import net.minecraft.entity.player.InventoryPlayer;
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
-import forestry.factory.gadgets.MachineFermenter;
+import forestry.factory.tiles.TileFermenter;
 
-public class ContainerFermenter extends ContainerLiquidTanks<MachineFermenter> {
+public class ContainerFermenter extends ContainerLiquidTanks<TileFermenter> {
 
-	public ContainerFermenter(InventoryPlayer player, MachineFermenter fermenter) {
+	public ContainerFermenter(InventoryPlayer player, TileFermenter fermenter) {
 		super(fermenter, player, 8, 84);
 
-		this.addSlotToContainer(new SlotFiltered(fermenter, MachineFermenter.SLOT_RESOURCE, 85, 23));
-		this.addSlotToContainer(new SlotFiltered(fermenter, MachineFermenter.SLOT_FUEL, 75, 57));
-		this.addSlotToContainer(new SlotOutput(fermenter, MachineFermenter.SLOT_CAN_OUTPUT, 150, 58));
-		this.addSlotToContainer(new SlotFiltered(fermenter, MachineFermenter.SLOT_CAN_INPUT, 150, 22));
-		this.addSlotToContainer(new SlotFiltered(fermenter, MachineFermenter.SLOT_INPUT, 10, 40));
+		this.addSlotToContainer(new SlotFiltered(fermenter, TileFermenter.SLOT_RESOURCE, 85, 23));
+		this.addSlotToContainer(new SlotFiltered(fermenter, TileFermenter.SLOT_FUEL, 75, 57));
+		this.addSlotToContainer(new SlotOutput(fermenter, TileFermenter.SLOT_CAN_OUTPUT, 150, 58));
+		this.addSlotToContainer(new SlotFiltered(fermenter, TileFermenter.SLOT_CAN_INPUT, 150, 22));
+		this.addSlotToContainer(new SlotFiltered(fermenter, TileFermenter.SLOT_INPUT, 10, 40));
 	}
 }

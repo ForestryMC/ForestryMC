@@ -20,15 +20,15 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import forestry.api.farming.Farmables;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.BackpackManager;
-import forestry.core.GameMode;
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.config.ForestryItem;
+import forestry.core.config.GameMode;
 import forestry.core.fluids.Fluids;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.RecipeUtil;
+import forestry.core.recipes.RecipeUtil;
 import forestry.farming.logic.FarmableBasicGrowthCraft;
 
-@Plugin(pluginID = "Growthcraft", name = "Growthcraft", author = "Nirek", url = Defaults.URL, unlocalizedDescription = "for.plugin.growthcraft.description")
+@Plugin(pluginID = "Growthcraft", name = "Growthcraft", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.plugin.growthcraft.description")
 public class PluginGrowthCraft extends ForestryPlugin {
 
 	private static final String GC = "Growthcraft";
@@ -54,7 +54,7 @@ public class PluginGrowthCraft extends ForestryPlugin {
 		ItemStack hopSeed = GameRegistry.findItemStack("Growthcraft|Hops", "grc.hopSeeds", 1);
 		ItemStack riceSeed = GameRegistry.findItemStack("Growthcraft|Rice", "grc.rice", 1);
 
-		if ( appleSeed != null) {
+		if (appleSeed != null) {
 			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{appleSeed}, Fluids.SEEDOIL.getFluid(seedamount));
 			BackpackManager.backpackItems[2].add(appleSeed);
 		}
@@ -71,10 +71,10 @@ public class PluginGrowthCraft extends ForestryPlugin {
 			BackpackManager.backpackItems[2].add(riceSeed);
 		}
 
-		ItemStack hops = GameRegistry.findItemStack("Growthcraft|Hops","grc.hops", 1);
+		ItemStack hops = GameRegistry.findItemStack("Growthcraft|Hops", "grc.hops", 1);
 
 		if (hops != null) {
-			RecipeUtil.injectLeveledRecipe(hops, saplingYield, Fluids.BIOMASS);
+			RecipeUtil.addFermenterRecipes(hops, saplingYield, Fluids.BIOMASS);
 			BackpackManager.backpackItems[2].add(hops);
 
 		}
@@ -84,7 +84,7 @@ public class PluginGrowthCraft extends ForestryPlugin {
 		}
 		Block riceBlock = GameRegistry.findBlock("Growthcraft|Rice", "grc.riceBlock");
 		if (riceBlock != null) {
-			Farmables.farmables.get("farmOrchard").add(new FarmableBasicGrowthCraft(riceBlock, 7, true,false)); //need to set paddyfield to 7
+			Farmables.farmables.get("farmOrchard").add(new FarmableBasicGrowthCraft(riceBlock, 7, true, false)); //need to set paddyfield to 7
 		}
 
 		ItemStack emptyComb = new ItemStack(GameRegistry.findItem("Growthcraft|Bees", "grc.honeyComb"), 1, 0);
@@ -102,29 +102,29 @@ public class PluginGrowthCraft extends ForestryPlugin {
 		ItemStack bambooShoot = GameRegistry.findItemStack("Growthcraft|Bamboo", "grc.bambooShoot", 1);
 		ItemStack bambooShootFood = GameRegistry.findItemStack("Growthcraft|Bamboo", "grc.bambooShootFood", 1);
 		if (bamboo != null) {
-			RecipeUtil.injectLeveledRecipe(bamboo, saplingYield, Fluids.BIOMASS);
+			RecipeUtil.addFermenterRecipes(bamboo, saplingYield, Fluids.BIOMASS);
 			BackpackManager.backpackItems[2].add(bamboo);
 		}
 		if (bambooShoot != null) {
-			RecipeUtil.injectLeveledRecipe(bambooShoot, saplingYield, Fluids.BIOMASS);
+			RecipeUtil.addFermenterRecipes(bambooShoot, saplingYield, Fluids.BIOMASS);
 			BackpackManager.backpackItems[2].add(bambooShoot);
 		}
 		if (bambooShootFood != null) {
-			RecipeUtil.injectLeveledRecipe(bambooShootFood, saplingYield, Fluids.BIOMASS);
+			RecipeUtil.addFermenterRecipes(bambooShootFood, saplingYield, Fluids.BIOMASS);
 			BackpackManager.backpackItems[2].add(bambooShootFood);
 		}
 
-		ItemStack grapes = GameRegistry.findItemStack("Growthcraft|Grapes","grc.grapes",1); //squeeze
+		ItemStack grapes = GameRegistry.findItemStack("Growthcraft|Grapes", "grc.grapes", 1); //squeeze
 
 		if (grapes != null) {
 			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{grapes}, Fluids.JUICE.getFluid(juiceAmount));
 		}
-		Block grapeBlock = GameRegistry.findBlock("Growthcraft|Grapes","grc.grapeBlock");
+		Block grapeBlock = GameRegistry.findBlock("Growthcraft|Grapes", "grc.grapeBlock");
 		if (grapeBlock != null) {
-			Farmables.farmables.get("farmOrchard").add(new FarmableBasicGrowthCraft(grapeBlock, 0,false,true));
+			Farmables.farmables.get("farmOrchard").add(new FarmableBasicGrowthCraft(grapeBlock, 0, false, true));
 		}
 
-		ItemStack bambooLeaves = GameRegistry.findItemStack("Growthcraft|Bamboo","grc.bambooLeaves",1);
+		ItemStack bambooLeaves = GameRegistry.findItemStack("Growthcraft|Bamboo", "grc.bambooLeaves", 1);
 		if (bambooLeaves != null) {
 			BackpackManager.backpackItems[2].add(bambooLeaves);
 		}

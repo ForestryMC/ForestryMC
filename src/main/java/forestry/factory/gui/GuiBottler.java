@@ -12,22 +12,22 @@ package forestry.factory.gui;
 
 import net.minecraft.entity.player.InventoryPlayer;
 
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.widgets.TankWidget;
-import forestry.factory.gadgets.MachineBottler;
+import forestry.factory.tiles.TileBottler;
 
-public class GuiBottler extends GuiForestryTitled<ContainerBottler, MachineBottler> {
+public class GuiBottler extends GuiForestryTitled<ContainerBottler, TileBottler> {
 
-	public GuiBottler(InventoryPlayer inventory, MachineBottler processor) {
-		super(Defaults.TEXTURE_PATH_GUI + "/bottler.png", new ContainerBottler(inventory, processor), processor);
+	public GuiBottler(InventoryPlayer inventory, TileBottler processor) {
+		super(Constants.TEXTURE_PATH_GUI + "/bottler.png", new ContainerBottler(inventory, processor), processor);
 		widgetManager.add(new TankWidget(this.widgetManager, 53, 17, 0));
 	}
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
-		MachineBottler bottler = inventory;
+		TileBottler bottler = inventory;
 
 		int i1 = bottler.getFillProgressScaled(24);
 		drawTexturedModalRect(guiLeft + 80, guiTop + 39, 176, 74, i1, 16);

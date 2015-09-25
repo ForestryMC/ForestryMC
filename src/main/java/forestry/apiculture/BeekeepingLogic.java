@@ -36,18 +36,19 @@ import forestry.api.core.IErrorState;
 import forestry.api.genetics.IEffectData;
 import forestry.api.genetics.IIndividual;
 import forestry.apiculture.network.PacketBeekeepingLogicActive;
-import forestry.core.EnumErrorCode;
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.config.ForestryItem;
+import forestry.core.errors.EnumErrorCode;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
 import forestry.core.proxy.Proxies;
+import forestry.core.utils.Log;
 import forestry.plugins.PluginApiculture;
 
 public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 
-	private static final int totalBreedingTime = Defaults.APIARY_BREEDING_TIME;
+	private static final int totalBreedingTime = Constants.APIARY_BREEDING_TIME;
 
 	private final IBeeHousing housing;
 	private final IBeeModifier beeModifier;
@@ -351,7 +352,7 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 			beeInventory.getQueen().stackSize = 0;
 			beeInventory.setQueen(null);
 		} else {
-			Proxies.log.warning("Tried to spawn offspring off an unmated queen. Devolving her to a princess.");
+			Log.warning("Tried to spawn offspring off an unmated queen. Devolving her to a princess.");
 
 			ItemStack convert = ForestryItem.beePrincessGE.getItemStack();
 			NBTTagCompound nbttagcompound = new NBTTagCompound();

@@ -16,12 +16,12 @@ import net.minecraft.item.ItemStack;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 import forestry.api.recipes.RecipeManagers;
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.config.ForestryItem;
 import forestry.core.fluids.Fluids;
 import forestry.core.proxy.Proxies;
 
-@Plugin(pluginID = "Erebus", name = "Erebus", author = "Nirek", url = Defaults.URL, unlocalizedDescription = "for.plugin.erebus.description")
+@Plugin(pluginID = "Erebus", name = "Erebus", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.plugin.erebus.description")
 public class PluginErebus extends ForestryPlugin {
 
 	private static final String EREBUS = "erebus";
@@ -40,9 +40,9 @@ public class PluginErebus extends ForestryPlugin {
 	protected void registerRecipes() {
 		super.registerRecipes();
 		Item materials = GameRegistry.findItem(EREBUS, "materials");
-		ItemStack honeyDrip = new ItemStack(materials,1,21);
+		ItemStack honeyDrip = new ItemStack(materials, 1, 21);
 		if (PluginManager.Module.FACTORY.isEnabled()) {
-			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{honeyDrip}, Fluids.HONEY.getFluid(Defaults.FLUID_PER_HONEY_DROP),
+			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{honeyDrip}, Fluids.HONEY.getFluid(Constants.FLUID_PER_HONEY_DROP),
 					ForestryItem.propolis.getItemStack(), 5);
 
 		}

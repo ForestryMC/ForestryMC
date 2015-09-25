@@ -18,10 +18,10 @@ import forestry.api.arboriculture.EnumGrowthConditions;
 import forestry.api.arboriculture.IGrowthProvider;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.ITreeGenome;
-import forestry.arboriculture.gadgets.TileSapling;
+import forestry.arboriculture.tiles.TileSapling;
+import forestry.core.utils.BlockUtil;
 import forestry.core.utils.StringUtil;
-import forestry.core.utils.Utils;
-import forestry.core.vect.Vect;
+import forestry.core.utils.vect.Vect;
 
 public class GrowthProvider implements IGrowthProvider {
 
@@ -105,7 +105,7 @@ public class GrowthProvider implements IGrowthProvider {
 		for (int x = start.x; x < start.x + area.x; x++) {
 			for (int y = start.y; y < start.y + area.y; y++) {
 				for (int z = start.z; z < start.z + area.z; z++) {
-					if (!world.isAirBlock(x, y, z) && !Utils.isReplaceableBlock(world, x, y, z)) {
+					if (!world.isAirBlock(x, y, z) && !BlockUtil.isReplaceableBlock(world, x, y, z)) {
 						return false;
 					}
 				}

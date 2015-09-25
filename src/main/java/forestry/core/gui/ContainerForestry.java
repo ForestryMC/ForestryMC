@@ -19,7 +19,7 @@ import net.minecraft.item.ItemStack;
 import forestry.core.gui.slots.SlotForestry;
 import forestry.core.network.ForestryPacket;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.SlotHelper;
+import forestry.core.utils.SlotUtil;
 
 public abstract class ContainerForestry extends Container {
 
@@ -48,7 +48,7 @@ public abstract class ContainerForestry extends Container {
 
 		Slot slot = (slotIndex < 0) ? null : (Slot) this.inventorySlots.get(slotIndex);
 		if (slot instanceof SlotForestry && ((SlotForestry) slot).isPhantom()) {
-			return SlotHelper.slotClickPhantom(slot, button, modifier, player);
+			return SlotUtil.slotClickPhantom(slot, button, modifier, player);
 		}
 
 		return super.slotClick(slotIndex, button, modifier, player);
@@ -60,7 +60,7 @@ public abstract class ContainerForestry extends Container {
 			return null;
 		}
 
-		return SlotHelper.transferStackInSlot(inventorySlots, player, slotIndex);
+		return SlotUtil.transferStackInSlot(inventorySlots, player, slotIndex);
 	}
 
 	protected abstract boolean canAccess(EntityPlayer player);

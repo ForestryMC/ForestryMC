@@ -20,10 +20,10 @@ import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
 import forestry.core.utils.BlockUtil;
-import forestry.core.utils.StackUtils;
-import forestry.core.vect.Vect;
-import forestry.core.vect.VectUtil;
-import forestry.farming.gadgets.StructureLogicFarm;
+import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.vect.Vect;
+import forestry.core.utils.vect.VectUtil;
+import forestry.farming.FarmHelper;
 
 public abstract class FarmLogicHomogeneous extends FarmLogic {
 
@@ -41,7 +41,7 @@ public abstract class FarmLogicHomogeneous extends FarmLogic {
 	}
 
 	protected boolean isAcceptedSoil(ItemStack itemStack) {
-		return StackUtils.isIdenticalItem(soilBlock, itemStack);
+		return ItemStackUtil.isIdenticalItem(soilBlock, itemStack);
 	}
 
 	@Override
@@ -94,7 +94,7 @@ public abstract class FarmLogicHomogeneous extends FarmLogic {
 			Vect position = translateWithOffset(x, yGround, z, direction, i);
 			Block soil = VectUtil.getBlock(world, position);
 
-			if (StructureLogicFarm.bricks.contains(soil)) {
+			if (FarmHelper.bricks.contains(soil)) {
 				break;
 			}
 
@@ -106,13 +106,13 @@ public abstract class FarmLogicHomogeneous extends FarmLogic {
 			Vect platformPosition = position.add(0, -1, 0);
 			Block platformBlock = VectUtil.getBlock(world, platformPosition);
 
-			if (!StructureLogicFarm.bricks.contains(platformBlock)) {
+			if (!FarmHelper.bricks.contains(platformBlock)) {
 				break;
 			}
 
 			produce.addAll(BlockUtil.getBlockDrops(world, position));
 
-			setBlock(position, StackUtils.getBlock(soilBlock), soilBlock.getItemDamage());
+			setBlock(position, ItemStackUtil.getBlock(soilBlock), soilBlock.getItemDamage());
 			housing.getFarmInventory().removeResources(resources);
 			return true;
 		}

@@ -25,7 +25,7 @@ import cpw.mods.fml.client.config.IConfigElement;
 public class ForestryGuiConfig extends GuiConfig {
 
 	public ForestryGuiConfig(GuiScreen parent) {
-		super(parent, getConfigCategories(), Defaults.MOD, true, true, Defaults.MOD);
+		super(parent, getConfigCategories(), Constants.MOD, true, true, Constants.MOD);
 	}
 
 	private static List<IConfigElement> getConfigCategories() {

@@ -12,7 +12,7 @@ package forestry.core.gui.ledgers;
 
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.AlleleManager;
-import forestry.core.interfaces.IClimatised;
+import forestry.core.tiles.IClimatised;
 import forestry.core.utils.StringUtil;
 
 /**

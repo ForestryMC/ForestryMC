@@ -11,7 +11,7 @@
 package forestry.energy.circuits;
 
 import forestry.core.circuits.Circuit;
-import forestry.energy.gadgets.EngineCopper;
+import forestry.energy.tiles.TileEnginePeat;
 
 public class CircuitFireDampener extends Circuit {
 
@@ -21,7 +21,7 @@ public class CircuitFireDampener extends Circuit {
 
 	@Override
 	public boolean isCircuitable(Object tile) {
-		return tile instanceof EngineCopper;
+		return tile instanceof TileEnginePeat;
 	}
 
 	@Override

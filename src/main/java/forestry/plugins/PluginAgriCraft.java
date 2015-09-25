@@ -19,13 +19,13 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 import forestry.api.farming.Farmables;
 import forestry.api.recipes.RecipeManagers;
-import forestry.core.GameMode;
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
+import forestry.core.config.GameMode;
 import forestry.core.fluids.Fluids;
 import forestry.core.proxy.Proxies;
 import forestry.farming.logic.FarmableBasicAgricraft;
 
-@Plugin(pluginID = "AgriCraft", name = "AgriCraft", author = "Nirek", url = Defaults.URL, unlocalizedDescription = "for.plugin.agricraft.description")
+@Plugin(pluginID = "AgriCraft", name = "AgriCraft", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.plugin.agricraft.description")
 public class PluginAgriCraft extends ForestryPlugin {
 
 	private static final String AgriCraft = "AgriCraft";
