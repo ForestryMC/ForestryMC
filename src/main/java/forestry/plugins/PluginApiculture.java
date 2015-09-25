@@ -121,7 +121,7 @@ import forestry.apiculture.network.PacketHandlerApiculture;
 import forestry.apiculture.proxy.ProxyApiculture;
 import forestry.apiculture.tiles.TileApiaristChest;
 import forestry.apiculture.tiles.TileApiary;
-import forestry.apiculture.tiles.TileBeeHouse;
+import forestry.apiculture.tiles.TileBeehouse;
 import forestry.apiculture.tiles.TileCandle;
 import forestry.apiculture.tiles.TileSwarm;
 import forestry.apiculture.trigger.ApicultureTriggers;
@@ -243,7 +243,7 @@ public class PluginApiculture extends ForestryPlugin {
 						'Y', "chestWood"))
 				.setBoundingBox(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F));
 
-		definitionBeehouse = ((BlockBase) ForestryBlock.apiculture.block()).addDefinition(new MachineDefinition(Constants.DEFINITION_BEEHOUSE_META, "forestry.Beehouse", TileBeeHouse.class,
+		definitionBeehouse = ((BlockBase) ForestryBlock.apiculture.block()).addDefinition(new MachineDefinition(Constants.DEFINITION_BEEHOUSE_META, "forestry.Beehouse", TileBeehouse.class,
 				ShapedRecipeCustom.createShapedRecipe(ForestryBlock.apiculture.getItemStack(1, Constants.DEFINITION_BEEHOUSE_META),
 						"XXX",
 						"#C#",

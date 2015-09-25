@@ -14,7 +14,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 
 import forestry.apiculture.tiles.TileAbstractBeeHousing;
 import forestry.apiculture.tiles.TileApiary;
-import forestry.apiculture.tiles.TileBeeHouse;
+import forestry.apiculture.tiles.TileBeehouse;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.render.EnumTankLevel;
@@ -27,7 +27,7 @@ public class GuiBeeHousing extends GuiForestryTitled<ContainerBeeHousing, TileAb
 		ySize = 190;
 	}
 
-	public GuiBeeHousing(InventoryPlayer inventory, TileBeeHouse tile) {
+	public GuiBeeHousing(InventoryPlayer inventory, TileBeehouse tile) {
 		super(Constants.TEXTURE_PATH_GUI + "/alveary.png", new ContainerBeeHousing(inventory, tile, false), tile);
 
 		ySize = 190;

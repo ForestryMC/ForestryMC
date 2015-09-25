@@ -39,7 +39,7 @@ import forestry.apiculture.multiblock.TileAlvearyPlain;
 import forestry.apiculture.multiblock.TileAlvearySieve;
 import forestry.apiculture.multiblock.TileAlvearySwarmer;
 import forestry.apiculture.tiles.TileApiary;
-import forestry.apiculture.tiles.TileBeeHouse;
+import forestry.apiculture.tiles.TileBeehouse;
 import forestry.core.GuiHandlerBase;
 import forestry.core.gui.ContainerAlyzer;
 import forestry.core.network.GuiId;
@@ -82,7 +82,7 @@ public class GuiHandlerApiculture extends GuiHandlerBase {
 				return new GuiBeealyzer(player, new BeealyzerInventory(player, equipped));
 
 			case BeehouseGUI:
-				return new GuiBeeHousing(player.inventory, getTile(world, x, y, z, player, TileBeeHouse.class));
+				return new GuiBeeHousing(player.inventory, getTile(world, x, y, z, player, TileBeehouse.class));
 
 			case HabitatLocatorGUI:
 				equipped = player.getCurrentEquippedItem();
@@ -148,7 +148,7 @@ public class GuiHandlerApiculture extends GuiHandlerBase {
 
 			case BeehouseGUI:
 				synchApiaristTracker(world, player);
-				return new ContainerBeeHousing(player.inventory, getTile(world, x, y, z, player, TileBeeHouse.class), false);
+				return new ContainerBeeHousing(player.inventory, getTile(world, x, y, z, player, TileBeehouse.class), false);
 
 			case HabitatLocatorGUI:
 				equipped = player.getCurrentEquippedItem();
