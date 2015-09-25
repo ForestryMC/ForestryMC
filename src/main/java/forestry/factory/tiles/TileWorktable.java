@@ -28,7 +28,6 @@ import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
-import forestry.core.proxy.Proxies;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.tiles.TileBase;
 import forestry.core.utils.InventoryUtil;
@@ -208,7 +207,7 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 			}
 		}
 		
-		if (Proxies.common.isSimulating(worldObj)) {
+		if (!worldObj.isRemote) {
 			memorized.memorizeRecipe(worldObj, currentRecipe, currentCrafting);
 		}
 

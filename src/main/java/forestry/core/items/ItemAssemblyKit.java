@@ -16,8 +16,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-import forestry.core.proxy.Proxies;
-
 public class ItemAssemblyKit extends ItemForestry {
 	private final ItemStack assembled;
 	private final boolean motionOnOpen;
@@ -35,7 +33,7 @@ public class ItemAssemblyKit extends ItemForestry {
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-		if (Proxies.common.isSimulating(world)) {
+		if (!world.isRemote) {
 			itemstack.stackSize--;
 			EntityItem entity = new EntityItem(world, entityplayer.posX, entityplayer.posY, entityplayer.posZ, assembled.copy());
 

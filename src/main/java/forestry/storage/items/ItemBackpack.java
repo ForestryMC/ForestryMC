@@ -40,7 +40,6 @@ import forestry.core.inventory.wrappers.IInvSlot;
 import forestry.core.inventory.wrappers.InventoryIterator;
 import forestry.core.items.ItemInventoried;
 import forestry.core.network.GuiId;
-import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.InventoryUtil;
@@ -75,7 +74,7 @@ public class ItemBackpack extends ItemInventoried {
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer player) {
 
-		if (!Proxies.common.isSimulating(world)) {
+		if (world.isRemote) {
 			return itemstack;
 		}
 
@@ -96,7 +95,7 @@ public class ItemBackpack extends ItemInventoried {
 	@Override
 	public boolean onItemUseFirst(ItemStack itemstack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
 
-		if (!Proxies.common.isSimulating(world)) {
+		if (world.isRemote) {
 			return false;
 		}
 

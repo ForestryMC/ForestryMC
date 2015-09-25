@@ -113,7 +113,7 @@ public class ItemButterflyGE extends ItemGE {
 		if (type != EnumFlutterType.BUTTERFLY) {
 			return false;
 		}
-		if (!Proxies.common.isSimulating(entityItem.worldObj) || entityItem.ticksExisted < 80) {
+		if (entityItem.worldObj.isRemote || entityItem.ticksExisted < 80) {
 			return false;
 		}
 		if (rand.nextInt(24) != 0) {
@@ -207,7 +207,7 @@ public class ItemButterflyGE extends ItemGE {
 	@Override
 	public boolean onItemUse(ItemStack itemstack, EntityPlayer player, World world, int x, int y, int z, int par7, float facingX, float facingY, float facingZ) {
 
-		if (!Proxies.common.isSimulating(world)) {
+		if (world.isRemote) {
 			return false;
 		}
 

@@ -44,7 +44,6 @@ import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.api.lepidopterology.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IEntityButterfly;
-import forestry.core.proxy.Proxies;
 import forestry.core.utils.ItemStackUtil;
 import forestry.lepidopterology.genetics.Butterfly;
 import forestry.lepidopterology.render.RenderButterflyItem;
@@ -333,7 +332,7 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 
 	@Override
 	public IEntityLivingData onSpawnWithEgg(IEntityLivingData data) {
-		if (Proxies.common.isSimulating(worldObj)) {
+		if (!worldObj.isRemote) {
 			setIndividual(contained);
 		}
 		return data;
@@ -407,7 +406,7 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 			return false;
 		}
 
-		if (Proxies.common.isSimulating(worldObj)) {
+		if (!worldObj.isRemote) {
 			contained.getGenome().getPrimary().getRoot().getBreedingTracker(worldObj, player.getGameProfile()).registerCatch(contained);
 			ItemStackUtil.dropItemStackAsEntity(PluginLepidopterology.butterflyInterface.getMemberStack(contained.copy(), EnumFlutterType.BUTTERFLY.ordinal()), worldObj, posX, posY, posZ);
 			setDead();
@@ -436,7 +435,7 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 		super.onUpdate();
 
 		// Update stuff client side
-		if (!Proxies.common.isSimulating(worldObj)) {
+		if (worldObj.isRemote) {
 			if (species == null || dataWatcher.hasChanges()) {
 				scale = (float) dataWatcher.getWatchableObjectInt(DATAWATCHER_ID_SCALE) / 100;
 				String uid = dataWatcher.getWatchableObjectString(DATAWATCHER_ID_SPECIES);

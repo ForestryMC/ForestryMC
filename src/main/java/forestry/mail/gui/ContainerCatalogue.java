@@ -67,7 +67,7 @@ public class ContainerCatalogue extends Container implements IGuiSelectable {
 	public ContainerCatalogue(EntityPlayer player) {
 		this.player = player;
 
-		if (Proxies.common.isSimulating(player.worldObj)) {
+		if (!player.worldObj.isRemote) {
 			rebuildStationsList();
 		}
 	}
@@ -104,7 +104,7 @@ public class ContainerCatalogue extends Container implements IGuiSelectable {
 	}
 
 	public void nextPage() {
-		if (!Proxies.common.isSimulating(player.worldObj)) {
+		if (player.worldObj.isRemote) {
 			sendSelection(true);
 			return;
 		}
@@ -117,7 +117,7 @@ public class ContainerCatalogue extends Container implements IGuiSelectable {
 	}
 
 	public void previousPage() {
-		if (!Proxies.common.isSimulating(player.worldObj)) {
+		if (player.worldObj.isRemote) {
 			sendSelection(false);
 			return;
 		}
@@ -130,7 +130,7 @@ public class ContainerCatalogue extends Container implements IGuiSelectable {
 	}
 
 	public void cycleFilter() {
-		if (!Proxies.common.isSimulating(player.worldObj)) {
+		if (player.worldObj.isRemote) {
 			PacketGuiSelect packet = new PacketGuiSelect(PacketId.GUI_SELECTION_CHANGE, 2, 0);
 			Proxies.net.sendToServer(packet);
 			return;
@@ -150,7 +150,7 @@ public class ContainerCatalogue extends Container implements IGuiSelectable {
 	/* Managing Trade info */
 	private void updateTradeInfo() {
 		// Updating is done by the server.
-		if (!Proxies.common.isSimulating(player.worldObj)) {
+		if (player.worldObj.isRemote) {
 			return;
 		}
 

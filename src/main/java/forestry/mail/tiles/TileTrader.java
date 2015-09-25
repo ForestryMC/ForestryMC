@@ -280,7 +280,7 @@ public class TileTrader extends TileBase {
 			return;
 		}
 
-		if (Proxies.common.isSimulating(worldObj)) {
+		if (!worldObj.isRemote) {
 			IErrorLogic errorLogic = getErrorLogic();
 
 			boolean hasValidTradeAddress = PostManager.postRegistry.isValidTradeAddress(worldObj, address);
@@ -301,7 +301,7 @@ public class TileTrader extends TileBase {
 	@Override
 	public IInventoryAdapter getInternalInventory() {
 		// Handle client side
-		if (!Proxies.common.isSimulating(worldObj) || !address.isValid()) {
+		if (worldObj.isRemote || !address.isValid()) {
 			return super.getInternalInventory();
 		}
 

@@ -32,7 +32,6 @@ import forestry.api.food.BeverageManager;
 import forestry.api.food.IBeverageEffect;
 import forestry.core.config.Config;
 import forestry.core.items.ItemForestryFood;
-import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 
 public class ItemBeverage extends ItemForestryFood {
@@ -142,7 +141,7 @@ public class ItemBeverage extends ItemForestryFood {
 		entityplayer.getFoodStats().func_151686_a(this, itemstack);
 		world.playSoundAtEntity(entityplayer, "random.burp", 0.5F, world.rand.nextFloat() * 0.1F + 0.9F);
 
-		if (!Proxies.common.isSimulating(world)) {
+		if (world.isRemote) {
 			return itemstack;
 		}
 

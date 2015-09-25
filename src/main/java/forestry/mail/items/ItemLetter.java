@@ -37,7 +37,6 @@ import forestry.core.gui.IHintSource;
 import forestry.core.inventory.ItemInventory;
 import forestry.core.items.ItemInventoried;
 import forestry.core.network.GuiId;
-import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.SlotUtil;
 import forestry.core.utils.StringUtil;
@@ -61,7 +60,7 @@ public class ItemLetter extends ItemInventoried {
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-		if (Proxies.common.isSimulating(world)) {
+		if (!world.isRemote) {
 			if (itemstack.stackSize == 1) {
 				entityplayer.openGui(ForestryAPI.instance, GuiId.LetterGUI.ordinal(), world, (int) entityplayer.posX, (int) entityplayer.posY, (int) entityplayer.posZ);
 			} else {

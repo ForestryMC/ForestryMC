@@ -103,11 +103,6 @@ public class ProxyCommonClient extends ProxyCommon {
 	}
 
 	@Override
-	public boolean isSimulating(World world) {
-		return !world.isRemote;
-	}
-
-	@Override
 	public boolean isShiftDown() {
 		return Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT);
 	}
@@ -134,7 +129,7 @@ public class ProxyCommonClient extends ProxyCommon {
 
 	@Override
 	public void playSoundFX(World world, int x, int y, int z, Block block) {
-		if (Proxies.common.isSimulating(world)) {
+		if (!world.isRemote) {
 			super.playSoundFX(world, x, y, z, block);
 		} else {
 			playSoundFX(world, x, y, z, block.stepSound.getStepResourcePath(), block.stepSound.getVolume(), block.stepSound.getPitch());
@@ -143,7 +138,7 @@ public class ProxyCommonClient extends ProxyCommon {
 
 	@Override
 	public void playBlockBreakSoundFX(World world, int x, int y, int z, Block block) {
-		if (Proxies.common.isSimulating(world)) {
+		if (!world.isRemote) {
 			super.playSoundFX(world, x, y, z, block);
 		} else {
 			playSoundFX(world, x, y, z, block.stepSound.getBreakSound(), block.stepSound.getVolume() / 4, block.stepSound.getPitch());
@@ -152,7 +147,7 @@ public class ProxyCommonClient extends ProxyCommon {
 
 	@Override
 	public void playBlockPlaceSoundFX(World world, int x, int y, int z, Block block) {
-		if (Proxies.common.isSimulating(world)) {
+		if (!world.isRemote) {
 			super.playSoundFX(world, x, y, z, block);
 		} else {
 			playSoundFX(world, x, y, z, block.stepSound.getStepResourcePath(), block.stepSound.getVolume() / 4, block.stepSound.getPitch());
@@ -218,7 +213,7 @@ public class ProxyCommonClient extends ProxyCommon {
 
 	@Override
 	public void addBlockDestroyEffects(World world, int xCoord, int yCoord, int zCoord, Block block, int i) {
-		if (!isSimulating(world)) {
+		if (world.isRemote) {
 			getClientInstance().effectRenderer.addBlockDestroyEffects(xCoord, yCoord, zCoord, block, i);
 		} else {
 			super.addBlockDestroyEffects(world, xCoord, yCoord, zCoord, block, i);
@@ -227,7 +222,7 @@ public class ProxyCommonClient extends ProxyCommon {
 
 	@Override
 	public void addBlockPlaceEffects(World world, int xCoord, int yCoord, int zCoord, Block block, int i) {
-		if (!isSimulating(world)) {
+		if (world.isRemote) {
 			playBlockPlaceSoundFX(world, xCoord, yCoord, zCoord, block);
 		} else {
 			super.addBlockPlaceEffects(world, xCoord, yCoord, zCoord, block, i);

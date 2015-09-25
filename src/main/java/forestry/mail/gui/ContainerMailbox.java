@@ -53,7 +53,7 @@ public class ContainerMailbox extends ContainerTile<TileMailbox> {
 		ItemStack stack = super.slotClick(slotIndex, button, par3, player);
 
 		if (SlotUtil.isSlotInRange(slotIndex, SLOT_LETTERS, SLOT_LETTERS_COUNT)) {
-			if (Proxies.common.isSimulating(player.worldObj) && mailInventory != null) {
+			if (!player.worldObj.isRemote && mailInventory != null) {
 				POBoxInfo info = mailInventory.getPOBoxInfo();
 				Proxies.net.sendToPlayer(new PacketPOBoxInfo(info), player);
 			}

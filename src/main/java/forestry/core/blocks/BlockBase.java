@@ -204,7 +204,7 @@ public class BlockBase extends BlockForestry {
 			}
 		}
 
-		if (!Proxies.common.isSimulating(world)) {
+		if (world.isRemote) {
 			return true;
 		}
 
@@ -224,7 +224,7 @@ public class BlockBase extends BlockForestry {
 	@Override
 	public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
 
-		if (!Proxies.common.isSimulating(world)) {
+		if (world.isRemote) {
 			return;
 		}
 

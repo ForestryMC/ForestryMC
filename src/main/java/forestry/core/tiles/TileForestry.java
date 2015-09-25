@@ -105,7 +105,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	public final void updateEntity() {
 		tickCount++;
 
-		if (Proxies.common.isSimulating(worldObj)) {
+		if (!worldObj.isRemote) {
 			updateServerSide();
 		} else {
 			updateClientSide();

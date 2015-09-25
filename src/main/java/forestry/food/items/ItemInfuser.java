@@ -28,7 +28,6 @@ import forestry.core.config.ForestryItem;
 import forestry.core.inventory.ItemInventory;
 import forestry.core.items.ItemForestry;
 import forestry.core.network.GuiId;
-import forestry.core.proxy.Proxies;
 import forestry.food.BeverageEffect;
 import forestry.plugins.PluginManager;
 
@@ -334,7 +333,7 @@ public class ItemInfuser extends ItemForestry {
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-		if (Proxies.common.isSimulating(world)) {
+		if (!world.isRemote) {
 			entityplayer.openGui(ForestryAPI.instance, GuiId.InfuserGUI.ordinal(), world, (int) entityplayer.posX, (int) entityplayer.posY,
 					(int) entityplayer.posZ);
 		}

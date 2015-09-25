@@ -115,7 +115,7 @@ public class BlockForestryLeaves extends BlockNewLeaf implements ITileEntityProv
 		int fortune = EnchantmentHelper.getFortuneModifier(player);
 		float saplingModifier = 1.0f;
 
-		if (Proxies.common.isSimulating(world)) {
+		if (!world.isRemote) {
 			ItemStack held = player.inventory.getCurrentItem();
 			if (held != null && held.getItem() instanceof IToolGrafter) {
 				saplingModifier = ((IToolGrafter) held.getItem()).getSaplingModifier(held, world, player, x, y, z);

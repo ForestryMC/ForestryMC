@@ -30,7 +30,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.core.blocks.IItemTyped;
 import forestry.core.config.Constants;
-import forestry.core.proxy.Proxies;
 import forestry.farming.worldgen.WorldGenBigMushroom;
 
 public class BlockMushroom extends BlockSapling implements IItemTyped {
@@ -76,7 +75,7 @@ public class BlockMushroom extends BlockSapling implements IItemTyped {
 	@Override
 	public void updateTick(World world, int i, int j, int k, Random random) {
 
-		if (!Proxies.common.isSimulating(world)) {
+		if (world.isRemote) {
 			return;
 		}
 

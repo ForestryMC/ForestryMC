@@ -17,7 +17,6 @@ import net.minecraft.world.World;
 import forestry.api.core.ForestryAPI;
 import forestry.core.items.ItemForestry;
 import forestry.core.network.GuiId;
-import forestry.core.proxy.Proxies;
 
 public class ItemCatalogue extends ItemForestry {
 
@@ -28,7 +27,7 @@ public class ItemCatalogue extends ItemForestry {
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-		if (Proxies.common.isSimulating(world)) {
+		if (!world.isRemote) {
 			entityplayer.openGui(ForestryAPI.instance, GuiId.CatalogueGUI.ordinal(), world, (int) entityplayer.posX, (int) entityplayer.posY,
 					(int) entityplayer.posZ);
 		}

@@ -138,7 +138,7 @@ public class ItemLiquidContainer extends Item {
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
 
-		if (!Proxies.common.isSimulating(world)) {
+		if (world.isRemote) {
 			return itemstack;
 		}
 

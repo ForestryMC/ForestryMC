@@ -201,10 +201,6 @@ public class ProxyCommon {
 		return 4f;
 	}
 
-	public boolean isSimulating(World world) {
-		return true;
-	}
-
 	public boolean isShiftDown() {
 		return false;
 	}
@@ -259,7 +255,7 @@ public class ProxyCommon {
 
 	public void sendFXSignal(PacketFXSignal.VisualFXType visualFX, PacketFXSignal.SoundFXType soundFX, World world, int xCoord, int yCoord, int zCoord,
 			Block block, int i) {
-		if (Proxies.common.isSimulating(world)) {
+		if (!world.isRemote) {
 			Proxies.net.sendNetworkPacket(new PacketFXSignal(visualFX, soundFX, xCoord, yCoord, zCoord, block, i), world);
 		}
 	}

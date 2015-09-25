@@ -41,7 +41,7 @@ public class ContainerInfuser extends ContainerItemInventory<InfuserInventory> {
 	@Override
 	public void onContainerClosed(EntityPlayer entityplayer) {
 
-		if (!Proxies.common.isSimulating(entityplayer.worldObj)) {
+		if (entityplayer.worldObj.isRemote) {
 			return;
 		}
 

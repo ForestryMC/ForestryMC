@@ -18,7 +18,6 @@ import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 import forestry.core.config.ForestryBlock;
-import forestry.core.proxy.Proxies;
 import forestry.farming.blocks.BlockMushroom;
 
 public class EventHandlerFarming {
@@ -26,7 +25,7 @@ public class EventHandlerFarming {
 	@SubscribeEvent
 	public void handleBonemeal(BonemealEvent event) {
 
-		if (!Proxies.common.isSimulating(event.world)) {
+		if (event.world.isRemote) {
 			return;
 		}
 

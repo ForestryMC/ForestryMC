@@ -32,7 +32,7 @@ public class TileMillRainmaker extends TileMill {
 
 	@Override
 	public void openGui(EntityPlayer player) {
-		if (!Proxies.common.isSimulating(player.worldObj)) {
+		if (player.worldObj.isRemote) {
 			return;
 		}
 
@@ -98,7 +98,7 @@ public class TileMillRainmaker extends TileMill {
 			Proxies.common.addEntityExplodeFX(worldObj, (f + f4), f1, (f2 + f3));
 		}
 
-		if (Proxies.common.isSimulating(worldObj)) {
+		if (!worldObj.isRemote) {
 			if (reverse) {
 				worldObj.getWorldInfo().setRaining(false);
 			} else {

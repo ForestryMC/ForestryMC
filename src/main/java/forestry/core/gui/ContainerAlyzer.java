@@ -31,7 +31,7 @@ public class ContainerAlyzer extends ContainerItemInventory<ItemAlyzer.AlyzerInv
 	@Override
 	public void onContainerClosed(EntityPlayer entityplayer) {
 
-		if (!Proxies.common.isSimulating(entityplayer.worldObj)) {
+		if (entityplayer.worldObj.isRemote) {
 			return;
 		}
 

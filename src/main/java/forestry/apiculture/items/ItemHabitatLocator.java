@@ -74,7 +74,7 @@ public class ItemHabitatLocator extends ItemInventoried {
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
 
-		if (Proxies.common.isSimulating(world)) {
+		if (!world.isRemote) {
 			entityplayer.openGui(ForestryAPI.instance, GuiId.HabitatLocatorGUI.ordinal(), world, (int) entityplayer.posX, (int) entityplayer.posY, (int) entityplayer.posZ);
 		}
 
@@ -124,7 +124,7 @@ public class ItemHabitatLocator extends ItemInventoried {
 	@Override
 	public void onUpdate(ItemStack p_77663_1_, World world, Entity player, int p_77663_4_, boolean p_77663_5_) {
 
-		if (!Proxies.common.isSimulating(world)) {
+		if (world.isRemote) {
 			return;
 		}
 

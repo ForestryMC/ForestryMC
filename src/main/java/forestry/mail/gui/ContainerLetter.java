@@ -59,7 +59,7 @@ public class ContainerLetter extends ContainerItemInventory<LetterInventory> {
 		}
 
 		// Rip open delivered mails
-		if (Proxies.common.isSimulating(player.worldObj)) {
+		if (!player.worldObj.isRemote) {
 			if (inventory.getLetter().isProcessed()) {
 				inventory.onLetterOpened();
 			}
@@ -78,7 +78,7 @@ public class ContainerLetter extends ContainerItemInventory<LetterInventory> {
 	@Override
 	public void onContainerClosed(EntityPlayer entityplayer) {
 
-		if (Proxies.common.isSimulating(entityplayer.worldObj)) {
+		if (!entityplayer.worldObj.isRemote) {
 			ILetter letter = inventory.getLetter();
 			if (!letter.isProcessed()) {
 				IMailAddress sender = PostManager.postRegistry.getMailAddress(entityplayer.getGameProfile());
@@ -183,7 +183,7 @@ public class ContainerLetter extends ContainerItemInventory<LetterInventory> {
 	/* Managing Trade info */
 	private void updateTradeInfo(World world, IMailAddress address) {
 		// Updating is done by the server.
-		if (!Proxies.common.isSimulating(world)) {
+		if (world.isRemote) {
 			return;
 		}
 

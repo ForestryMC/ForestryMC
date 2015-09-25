@@ -25,7 +25,6 @@ import com.mojang.authlib.GameProfile;
 
 import forestry.core.CreativeTabForestry;
 import forestry.core.access.IOwnable;
-import forestry.core.proxy.Proxies;
 import forestry.core.tiles.IRestrictedAccessTile;
 import forestry.core.tiles.TileForestry;
 import forestry.core.utils.Log;
@@ -55,7 +54,7 @@ public abstract class BlockForestry extends BlockContainer {
 	@Override
 	public void onBlockPlacedBy(World world, int i, int j, int k, EntityLivingBase entityLiving, ItemStack itemstack) {
 
-		if (!Proxies.common.isSimulating(world)) {
+		if (world.isRemote) {
 			return;
 		}
 

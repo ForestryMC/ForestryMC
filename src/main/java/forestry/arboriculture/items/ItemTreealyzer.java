@@ -23,7 +23,6 @@ import forestry.core.config.Config;
 import forestry.core.gui.IHintSource;
 import forestry.core.items.ItemAlyzer;
 import forestry.core.network.GuiId;
-import forestry.core.proxy.Proxies;
 import forestry.core.utils.GeneticsUtil;
 
 public class ItemTreealyzer extends ItemAlyzer {
@@ -36,7 +35,7 @@ public class ItemTreealyzer extends ItemAlyzer {
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-		if (Proxies.common.isSimulating(world)) {
+		if (!world.isRemote) {
 			entityplayer.openGui(ForestryAPI.instance, GuiId.TreealyzerGUI.ordinal(), world, (int) entityplayer.posX, (int) entityplayer.posY,
 					(int) entityplayer.posZ);
 		}

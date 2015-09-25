@@ -36,7 +36,6 @@ import forestry.core.CreativeTabForestry;
 import forestry.core.config.Constants;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
-import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 
 /**
@@ -88,7 +87,7 @@ public class BlockSoil extends Block implements IItemTyped {
 
 	@Override
 	public void updateTick(World world, int i, int j, int k, Random random) {
-		if (!Proxies.common.isSimulating(world)) {
+		if (world.isRemote) {
 			return;
 		}
 

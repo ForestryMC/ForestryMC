@@ -27,7 +27,6 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.arboriculture.tiles.TileFruitPod;
-import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.ItemStackUtil;
@@ -67,7 +66,7 @@ public class BlockFruitPod extends BlockCocoa {
 
 	@Override
 	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z) {
-		if (Proxies.common.isSimulating(world)) {
+		if (!world.isRemote) {
 			TileFruitPod tile = getPodTile(world, x, y, z);
 			if (tile != null) {
 				for (ItemStack drop : tile.getDrop()) {

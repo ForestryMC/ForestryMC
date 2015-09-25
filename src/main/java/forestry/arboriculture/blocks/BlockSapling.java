@@ -36,7 +36,6 @@ import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.arboriculture.tiles.TileSapling;
-import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemStackUtil;
@@ -141,7 +140,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
 	@Override
 	public void onNeighborBlockChange(World world, int x, int y, int z, Block neighbour) {
 		super.onNeighborBlockChange(world, x, y, z, neighbour);
-		if (Proxies.common.isSimulating(world) && !this.canBlockStay(world, x, y, z)) {
+		if (!world.isRemote && !this.canBlockStay(world, x, y, z)) {
 			dropAsSapling(world, x, y, z);
 			world.setBlockToAir(x, y, z);
 		}
@@ -165,7 +164,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
 
 	@Override
 	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z) {
-		if (Proxies.common.isSimulating(world) && canHarvestBlock(player, world.getBlockMetadata(x, y, z))) {
+		if (!world.isRemote && canHarvestBlock(player, world.getBlockMetadata(x, y, z))) {
 			if (!player.capabilities.isCreativeMode) {
 				dropAsSapling(world, x, y, z);
 			}
@@ -175,7 +174,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
 	}
 
 	private static void dropAsSapling(World world, int x, int y, int z) {
-		if (!Proxies.common.isSimulating(world)) {
+		if (world.isRemote) {
 			return;
 		}
 

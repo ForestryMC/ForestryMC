@@ -31,7 +31,6 @@ import forestry.core.errors.EnumErrorCode;
 import forestry.core.inventory.ItemInventory;
 import forestry.core.items.ItemForestry;
 import forestry.core.network.GuiId;
-import forestry.core.proxy.Proxies;
 import forestry.core.utils.datastructures.RevolvingList;
 
 public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
@@ -283,7 +282,7 @@ public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-		if (Proxies.common.isSimulating(world)) {
+		if (!world.isRemote) {
 			entityplayer.openGui(ForestryAPI.instance, GuiId.SolderingIronGUI.ordinal(), world, (int) entityplayer.posX, (int) entityplayer.posY,
 					(int) entityplayer.posZ);
 		}

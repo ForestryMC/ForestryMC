@@ -41,7 +41,7 @@ public class ContainerImprinter extends ContainerItemInventory<ImprinterInventor
 	@Override
 	public void onContainerClosed(EntityPlayer entityplayer) {
 
-		if (!Proxies.common.isSimulating(entityplayer.worldObj)) {
+		if (entityplayer.worldObj.isRemote) {
 			return;
 		}
 
@@ -66,7 +66,7 @@ public class ContainerImprinter extends ContainerItemInventory<ImprinterInventor
 	}
 
 	public void updateContainer(World world) {
-		if (!isNetSynced && !Proxies.common.isSimulating(world)) {
+		if (!isNetSynced && world.isRemote) {
 			isNetSynced = true;
 			Proxies.net.sendToServer(new ForestryPacket(PacketId.IMPRINT_SELECTION_GET));
 		}

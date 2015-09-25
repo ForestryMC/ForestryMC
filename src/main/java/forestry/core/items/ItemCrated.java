@@ -47,7 +47,7 @@ public class ItemCrated extends Item {
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
 
-		if (Proxies.common.isSimulating(world)) {
+		if (!world.isRemote) {
 			if (contained == null || itemstack.stackSize == 0) {
 				return itemstack;
 			}

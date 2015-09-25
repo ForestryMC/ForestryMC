@@ -24,8 +24,6 @@ import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
-import forestry.core.proxy.Proxies;
-
 public abstract class ItemForestryTool extends ItemForestry {
 
 	private final ItemStack remnants;
@@ -63,7 +61,7 @@ public abstract class ItemForestryTool extends ItemForestry {
 			return;
 		}
 
-		if (Proxies.common.isSimulating(event.entityPlayer.worldObj) && remnants != null) {
+		if (!event.entityPlayer.worldObj.isRemote && remnants != null) {
 			EntityItem entity = new EntityItem(event.entityPlayer.worldObj, event.entityPlayer.posX, event.entityPlayer.posY, event.entityPlayer.posZ,
 					remnants.copy());
 			event.entityPlayer.worldObj.spawnEntityInWorld(entity);

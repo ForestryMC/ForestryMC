@@ -34,7 +34,6 @@ import forestry.api.mail.PostManager;
 import forestry.core.config.Config;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.network.GuiId;
-import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileBase;
 import forestry.mail.EnumDeliveryState;
 import forestry.mail.POBox;
@@ -56,7 +55,7 @@ public class TileMailbox extends TileBase implements IMailContainer {
 	@Override
 	public void openGui(EntityPlayer player) {
 
-		if (!Proxies.common.isSimulating(worldObj)) {
+		if (worldObj.isRemote) {
 			return;
 		}
 
@@ -86,7 +85,7 @@ public class TileMailbox extends TileBase implements IMailContainer {
 
 	/* MAIL HANDLING */
 	public IInventory getOrCreateMailInventory(World world, GameProfile playerProfile) {
-		if (!Proxies.common.isSimulating(world)) {
+		if (world.isRemote) {
 			return getInternalInventory();
 		}
 

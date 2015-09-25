@@ -24,7 +24,6 @@ import forestry.apiculture.genetics.Bee;
 import forestry.core.inventory.ItemInventory;
 import forestry.core.items.ItemForestry;
 import forestry.core.network.GuiId;
-import forestry.core.proxy.Proxies;
 
 public class ItemImprinter extends ItemForestry {
 
@@ -152,7 +151,7 @@ public class ItemImprinter extends ItemForestry {
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-		if (Proxies.common.isSimulating(world)) {
+		if (!world.isRemote) {
 			entityplayer.openGui(ForestryAPI.instance, GuiId.ImprinterGUI.ordinal(), world, (int) entityplayer.posX, (int) entityplayer.posY,
 					(int) entityplayer.posZ);
 		}

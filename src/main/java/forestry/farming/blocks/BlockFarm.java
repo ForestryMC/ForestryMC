@@ -34,7 +34,6 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.core.blocks.BlockStructure;
-import forestry.core.proxy.Proxies;
 import forestry.core.render.ParticleHelper;
 import forestry.core.utils.ItemStackUtil;
 import forestry.farming.render.EnumFarmBlockTexture;
@@ -98,7 +97,7 @@ public class BlockFarm extends BlockStructure {
 	@Override
 	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z) {
 		int meta = world.getBlockMetadata(x, y, z);
-		if (Proxies.common.isSimulating(world) && canHarvestBlock(player, meta)) {
+		if (!world.isRemote && canHarvestBlock(player, meta)) {
 			List<ItemStack> drops = getDrops(world, x, y, z, 0, 0);
 			for (ItemStack drop : drops) {
 				ItemStackUtil.dropItemStackAsEntity(drop, world, x, y, z);

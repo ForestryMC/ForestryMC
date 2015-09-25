@@ -203,7 +203,7 @@ public class TileEscritoire extends TileBase implements ISidedInventory, IRender
 		@Override
 		public void setInventorySlotContents(int slotIndex, ItemStack itemstack) {
 			super.setInventorySlotContents(slotIndex, itemstack);
-			if (slotIndex == SLOT_ANALYZE && Proxies.common.isSimulating(tile.worldObj)) {
+			if (slotIndex == SLOT_ANALYZE && !tile.worldObj.isRemote) {
 				if (!AlleleManager.alleleRegistry.isIndividual(getStackInSlot(SLOT_ANALYZE)) && getStackInSlot(SLOT_ANALYZE) != null) {
 					ItemStack ersatz = GeneticsUtil.convertSaplingToGeneticEquivalent(getStackInSlot(SLOT_ANALYZE));
 					if (ersatz != null) {

@@ -21,7 +21,6 @@ import net.minecraft.world.World;
 import forestry.core.circuits.ISocketable;
 import forestry.core.multiblock.MultiblockControllerBase;
 import forestry.core.multiblock.MultiblockTileEntityBase;
-import forestry.core.proxy.Proxies;
 import forestry.core.utils.InventoryUtil;
 
 public abstract class BlockStructure extends BlockForestry {
@@ -88,7 +87,7 @@ public abstract class BlockStructure extends BlockForestry {
 	@Override
 	public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
 
-		if (!Proxies.common.isSimulating(world)) {
+		if (world.isRemote) {
 			return;
 		}
 

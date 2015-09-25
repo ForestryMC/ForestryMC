@@ -26,7 +26,6 @@ import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketTileStream;
-import forestry.core.proxy.Proxies;
 import forestry.core.utils.ItemStackUtil;
 
 public class TileWood extends TileEntity implements IStreamable {
@@ -87,7 +86,7 @@ public class TileWood extends TileEntity implements IStreamable {
 
 	public static <T extends Block & IWoodTyped> boolean blockRemovedByPlayer(T block, World world, EntityPlayer player, int x, int y, int z) {
 		int meta = world.getBlockMetadata(x, y, z);
-		if (Proxies.common.isSimulating(world) && block.canHarvestBlock(player, meta) && !player.capabilities.isCreativeMode) {
+		if (!world.isRemote && block.canHarvestBlock(player, meta) && !player.capabilities.isCreativeMode) {
 
 			TileEntity tile = world.getTileEntity(x, y, z);
 			if (tile instanceof TileWood) {
