@@ -94,7 +94,6 @@ import forestry.core.proxy.Proxies;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.recipes.ShapedRecipeCustom;
 import forestry.core.recipes.ShapelessRecipeCustom;
-import forestry.core.render.RenderNaturalistChest;
 import forestry.core.tiles.MachineDefinition;
 import forestry.factory.recipes.FabricatorRecipe;
 
@@ -187,7 +186,7 @@ public class PluginArboriculture extends ForestryPlugin {
 		ForestryBlock.arboriculture.block().setCreativeTab(Tabs.tabArboriculture);
 
 		definitionChest = ((BlockBase) ForestryBlock.arboriculture.block()).addDefinition(new MachineDefinition(Constants.DEFINITION_ARBCHEST_META,
-				"forestry.ArbChest", TileArboristChest.class, new RenderNaturalistChest("arbchest"),
+				"forestry.ArbChest", TileArboristChest.class, Proxies.render.getRenderChest("arbchest"),
 				ShapedRecipeCustom.createShapedRecipe(ForestryBlock.arboriculture.getItemStack(1, Constants.DEFINITION_ARBCHEST_META),
 						" # ",
 						"XYX",

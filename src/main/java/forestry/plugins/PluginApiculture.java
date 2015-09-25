@@ -148,7 +148,6 @@ import forestry.core.items.ItemScoop;
 import forestry.core.network.IPacketHandler;
 import forestry.core.proxy.Proxies;
 import forestry.core.recipes.ShapedRecipeCustom;
-import forestry.core.render.RenderNaturalistChest;
 import forestry.core.tiles.MachineDefinition;
 import forestry.core.tiles.TileAnalyzer;
 import forestry.core.utils.ItemStackUtil;
@@ -234,7 +233,7 @@ public class PluginApiculture extends ForestryPlugin {
 
 		definitionChestLegacy = ((BlockBase) ForestryBlock.apiculture.block()).addDefinition(new MachineDefinition(Constants.DEFINITION_APIARISTCHEST_LEGACY_META, "forestry.ApiaristChest", TileApiaristChest.class).setLegacy());
 
-		definitionChest = ((BlockBase) ForestryBlock.apicultureChest.block()).addDefinition(new MachineDefinition(Constants.DEFINITION_APIARISTCHEST_META, "forestry.ApiaristChestNew", TileApiaristChest.class, new RenderNaturalistChest("apiaristchest"),
+		definitionChest = ((BlockBase) ForestryBlock.apicultureChest.block()).addDefinition(new MachineDefinition(Constants.DEFINITION_APIARISTCHEST_META, "forestry.ApiaristChestNew", TileApiaristChest.class, Proxies.render.getRenderChest("apiaristchest"),
 				ShapedRecipeCustom.createShapedRecipe(ForestryBlock.apicultureChest.getItemStack(1, Constants.DEFINITION_APIARISTCHEST_META),
 						" # ",
 						"XYX",

@@ -42,8 +42,8 @@ import forestry.core.fluids.Fluids;
 import forestry.core.genetics.Branch;
 import forestry.core.genetics.alleles.Allele;
 import forestry.core.items.ItemBlockForestry;
+import forestry.core.proxy.Proxies;
 import forestry.core.recipes.ShapedRecipeCustom;
-import forestry.core.render.RenderNaturalistChest;
 import forestry.core.tiles.MachineDefinition;
 import forestry.core.utils.EntityUtil;
 import forestry.core.utils.Log;
@@ -124,7 +124,7 @@ public class PluginLepidopterology extends ForestryPlugin {
 		registerTemplates();
 
 		BlockBase lepidopterology = ((BlockBase) ForestryBlock.lepidopterology.block());
-		MachineDefinition definitionChest = lepidopterology.addDefinition(new MachineDefinition(Constants.DEFINITION_LEPICHEST_META, "forestry.LepiChest", TileLepidopteristChest.class, new RenderNaturalistChest("lepichest"),
+		MachineDefinition definitionChest = lepidopterology.addDefinition(new MachineDefinition(Constants.DEFINITION_LEPICHEST_META, "forestry.LepiChest", TileLepidopteristChest.class, Proxies.render.getRenderChest("lepichest"),
 				ShapedRecipeCustom.createShapedRecipe(
 						ForestryBlock.lepidopterology.getItemStack(1, Constants.DEFINITION_LEPICHEST_META),
 						" # ",

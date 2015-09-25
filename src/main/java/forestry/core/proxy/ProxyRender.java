@@ -48,6 +48,10 @@ public class ProxyRender {
 		return null;
 	}
 
+	public IBlockRenderer getRenderChest(String textureName) {
+		return null;
+	}
+
 	public short registerItemTexUID(IIconRegister register, short uid, String ident) {
 		return uid;
 	}

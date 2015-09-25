@@ -27,6 +27,7 @@ import forestry.core.render.RenderBlock;
 import forestry.core.render.RenderEscritoire;
 import forestry.core.render.RenderMachine;
 import forestry.core.render.RenderMill;
+import forestry.core.render.RenderNaturalistChest;
 import forestry.core.render.TextureManager;
 import forestry.core.render.TileRendererIndex;
 import forestry.core.tiles.MachineDefinition;
@@ -72,6 +73,11 @@ public class ProxyRenderClient extends ProxyRender {
 	@Override
 	public IBlockRenderer getRenderEscritoire() {
 		return new RenderEscritoire();
+	}
+
+	@Override
+	public IBlockRenderer getRenderChest(String textureName) {
+		return new RenderNaturalistChest(textureName);
 	}
 
 	public static boolean shouldSpawnParticle(World world) {
