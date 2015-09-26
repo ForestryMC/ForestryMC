@@ -25,8 +25,6 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.oredict.OreDictionary;
 
-import forestry.core.config.Constants;
-
 public abstract class ItemStackUtil {
 
 	public static final ItemStack[] EMPTY_STACK_ARRAY = new ItemStack[0];
@@ -43,7 +41,7 @@ public abstract class ItemStackUtil {
 			return false;
 		}
 
-		if (lhs.getItemDamage() != Constants.WILDCARD) {
+		if (lhs.getItemDamage() != OreDictionary.WILDCARD_VALUE) {
 			if (lhs.getItemDamage() != rhs.getItemDamage()) {
 				return false;
 			}
@@ -178,7 +176,7 @@ public abstract class ItemStackUtil {
 			return false;
 		}
 
-		if (base.getItemDamage() != Constants.WILDCARD) {
+		if (base.getItemDamage() != OreDictionary.WILDCARD_VALUE) {
 			if (base.getItemDamage() != comparison.getItemDamage()) {
 				return false;
 			}

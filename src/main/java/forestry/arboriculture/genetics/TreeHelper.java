@@ -27,6 +27,8 @@ import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
+import net.minecraftforge.oredict.OreDictionary;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 
 import forestry.api.arboriculture.EnumGermlingType;
@@ -66,7 +68,7 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 	private final ArrayList<ITreekeepingMode> treekeepingModes = new ArrayList<ITreekeepingMode>();
 
 	public TreeHelper() {
-		setResearchSuitability(new ItemStack(Blocks.sapling, 1, Constants.WILDCARD), 1.0f);
+		setResearchSuitability(new ItemStack(Blocks.sapling, 1, OreDictionary.WILDCARD_VALUE), 1.0f);
 	}
 
 	@Override

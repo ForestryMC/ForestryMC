@@ -24,7 +24,6 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.oredict.OreDictionary;
 
-import forestry.core.config.Constants;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
 
@@ -175,7 +174,7 @@ public class ShapedRecipeCustom implements IDescriptiveRecipe {
 			return false;
 		}
 
-		if (compare.getItemDamage() != Constants.WILDCARD && compare.getItemDamage() != resource.getItemDamage()) {
+		if (compare.getItemDamage() != OreDictionary.WILDCARD_VALUE && compare.getItemDamage() != resource.getItemDamage()) {
 			return false;
 		}
 
@@ -268,7 +267,7 @@ public class ShapedRecipeCustom implements IDescriptiveRecipe {
 			} else if (materials[index + 1] instanceof ForestryBlock) {
 				hashmap.put(character, ((ForestryBlock) materials[index + 1]).getItemStack());
 			} else if (materials[index + 1] instanceof Block) {
-				hashmap.put(character, new ItemStack((Block) materials[index + 1], 1, Constants.WILDCARD));
+				hashmap.put(character, new ItemStack((Block) materials[index + 1], 1, OreDictionary.WILDCARD_VALUE));
 			} else if (materials[index + 1] instanceof ItemStack) {
 				hashmap.put(character, materials[index + 1]);
 			} else if (materials[index + 1] instanceof String) {

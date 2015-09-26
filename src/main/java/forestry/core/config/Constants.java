@@ -22,8 +22,6 @@ public class Constants implements IForestryConstants {
 	public static final String ID = MOD.toLowerCase(Locale.ENGLISH);
 	public static final String URL = "http://forestry.sengir.net/";
 
-	public static final int WILDCARD = OreDictionary.WILDCARD_VALUE;
-
 	public static final int WORLD_HEIGHT = 256;
 
 	public static final int FLAG_BLOCK_UPDATE = 1;

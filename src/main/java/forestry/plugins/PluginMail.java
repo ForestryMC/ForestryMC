@@ -15,6 +15,8 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import net.minecraftforge.oredict.OreDictionary;
+
 import cpw.mods.fml.common.network.IGuiHandler;
 
 import forestry.api.mail.EnumAddressee;
@@ -154,7 +156,7 @@ public class PluginMail extends ForestryPlugin {
 
 		Item stampGlue;
 		if (PluginManager.Module.APICULTURE.isEnabled()) {
-			Proxies.common.addShapelessRecipe(ForestryItem.letters.getItemStack(), Items.paper, ForestryItem.propolis.getItemStack(1, Constants.WILDCARD));
+			Proxies.common.addShapelessRecipe(ForestryItem.letters.getItemStack(), Items.paper, ForestryItem.propolis.getItemStack(1, OreDictionary.WILDCARD_VALUE));
 			stampGlue = ForestryItem.honeyDrop.item();
 		} else {
 			Proxies.common.addShapelessRecipe(ForestryItem.letters.getItemStack(), Items.paper, Items.slime_ball);
@@ -180,12 +182,12 @@ public class PluginMail extends ForestryPlugin {
 		}
 
 		// Recycling
-		Proxies.common.addRecipe(new ItemStack(Items.paper), "###", '#', ForestryItem.letters.getItemStack(1, Constants.WILDCARD));
+		Proxies.common.addRecipe(new ItemStack(Items.paper), "###", '#', ForestryItem.letters.getItemStack(1, OreDictionary.WILDCARD_VALUE));
 
 		// Carpenter
 		RecipeManagers.carpenterManager.addRecipe(10, Fluids.WATER.getFluid(250), null, ForestryItem.letters.getItemStack(), "###", "###", '#', ForestryItem.woodPulp);
 
-		Proxies.common.addShapelessRecipe(ForestryItem.catalogue.getItemStack(), ForestryItem.stamps.getItemStack(1, Constants.WILDCARD), new ItemStack(Items.book));
+		Proxies.common.addShapelessRecipe(ForestryItem.catalogue.getItemStack(), ForestryItem.stamps.getItemStack(1, OreDictionary.WILDCARD_VALUE), new ItemStack(Items.book));
 	}
 
 	@Override

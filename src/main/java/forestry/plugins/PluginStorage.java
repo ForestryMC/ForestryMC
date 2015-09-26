@@ -314,7 +314,7 @@ public class PluginStorage extends ForestryPlugin {
 
 		digger.addValidOreDictNames(diggerOreDictNames);
 		digger.addValidItems(Arrays.asList(
-				new ItemStack(Blocks.dirt, 1, Constants.WILDCARD),
+				new ItemStack(Blocks.dirt, 1, OreDictionary.WILDCARD_VALUE),
 				new ItemStack(Blocks.gravel),
 				new ItemStack(Items.flint),
 				new ItemStack(Blocks.netherrack),
@@ -333,7 +333,7 @@ public class PluginStorage extends ForestryPlugin {
 				new ItemStack(Blocks.red_flower),
 				new ItemStack(Blocks.yellow_flower),
 				new ItemStack(Blocks.cactus),
-				new ItemStack(Blocks.tallgrass, 1, Constants.WILDCARD),
+				new ItemStack(Blocks.tallgrass, 1, OreDictionary.WILDCARD_VALUE),
 				new ItemStack(Blocks.vine),
 				new ItemStack(Blocks.pumpkin),
 				new ItemStack(Blocks.melon_block),
@@ -368,7 +368,7 @@ public class PluginStorage extends ForestryPlugin {
 				new ItemStack(Items.slime_ball),
 				new ItemStack(Items.dye, 1, 0),
 				new ItemStack(Blocks.hay_block),
-				new ItemStack(Blocks.wool, 1, Constants.WILDCARD),
+				new ItemStack(Blocks.wool, 1, OreDictionary.WILDCARD_VALUE),
 				new ItemStack(Items.ender_eye),
 				new ItemStack(Items.magma_cream),
 				new ItemStack(Items.speckled_melon),
@@ -388,13 +388,13 @@ public class PluginStorage extends ForestryPlugin {
 				new ItemStack(Blocks.torch),
 				new ItemStack(Blocks.redstone_torch),
 				new ItemStack(Blocks.redstone_lamp),
-				new ItemStack(Blocks.stonebrick, 1, Constants.WILDCARD),
+				new ItemStack(Blocks.stonebrick, 1, OreDictionary.WILDCARD_VALUE),
 				new ItemStack(Blocks.sandstone, 1, 1),
 				new ItemStack(Blocks.sandstone, 1, 2),
 				new ItemStack(Blocks.brick_block),
 				new ItemStack(Blocks.clay),
-				new ItemStack(Blocks.hardened_clay, 1, Constants.WILDCARD),
-				new ItemStack(Blocks.stained_hardened_clay, 1, Constants.WILDCARD),
+				new ItemStack(Blocks.hardened_clay, 1, OreDictionary.WILDCARD_VALUE),
+				new ItemStack(Blocks.stained_hardened_clay, 1, OreDictionary.WILDCARD_VALUE),
 				new ItemStack(Blocks.packed_ice),
 				new ItemStack(Blocks.nether_brick),
 				new ItemStack(Blocks.crafting_table),
@@ -404,7 +404,7 @@ public class PluginStorage extends ForestryPlugin {
 				new ItemStack(Blocks.dropper),
 				new ItemStack(Blocks.ladder),
 				new ItemStack(Blocks.iron_bars),
-				new ItemStack(Blocks.quartz_block, 1, Constants.WILDCARD),
+				new ItemStack(Blocks.quartz_block, 1, OreDictionary.WILDCARD_VALUE),
 				new ItemStack(Items.sign),
 				new ItemStack(Items.item_frame)
 		));

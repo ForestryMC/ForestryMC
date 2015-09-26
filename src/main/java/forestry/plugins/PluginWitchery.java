@@ -19,6 +19,8 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import net.minecraftforge.oredict.OreDictionary;
+
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -72,7 +74,7 @@ public class PluginWitchery extends ForestryPlugin {
 		int seedamount = GameMode.getGameMode().getIntegerSetting("squeezer.liquid.seed");
 
 		Item saplingItem = GameRegistry.findItem(Witch, "witchsapling");
-		ItemStack saplingStack = new ItemStack(saplingItem, 1, Constants.WILDCARD);
+		ItemStack saplingStack = new ItemStack(saplingItem, 1, OreDictionary.WILDCARD_VALUE);
 		RecipeUtil.addFermenterRecipes(saplingStack, GameMode.getGameMode().getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
 		String saplingName = GameData.getItemRegistry().getNameForObject(saplingItem);
 		FMLInterModComms.sendMessage(Constants.MOD, "add-farmable-sapling", String.format("farmArboreal@%s.-1", saplingName));

@@ -18,6 +18,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import net.minecraftforge.oredict.OreDictionary;
+
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -89,7 +91,7 @@ public class PluginNatura extends ForestryPlugin {
 		for (String key : saplingItemKeys) {
 			Item saplingItem = GameRegistry.findItem(NATURA, key);
 
-			ItemStack saplingWild = new ItemStack(saplingItem, 1, Constants.WILDCARD);
+			ItemStack saplingWild = new ItemStack(saplingItem, 1, OreDictionary.WILDCARD_VALUE);
 			RecipeUtil.addFermenterRecipes(saplingWild, GameMode.getGameMode().getIntegerSetting("fermenter.yield.sapling"), Fluids.BIOMASS);
 
 			String saplingName = GameData.getItemRegistry().getNameForObject(saplingItem);

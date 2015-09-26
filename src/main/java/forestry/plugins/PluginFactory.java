@@ -18,6 +18,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 import cpw.mods.fml.common.network.IGuiHandler;
 
@@ -311,8 +312,8 @@ public class PluginFactory extends ForestryPlugin {
 		if (PluginManager.Module.APICULTURE.isEnabled()) {
 			FluidStack liquidGlass = Fluids.GLASS.getFluid(Constants.BUCKET_VOLUME);
 			for (int i = 0; i < 16; i++) {
-				RecipeManagers.fabricatorManager.addRecipe(ForestryItem.waxCast.getItemStack(1, Constants.WILDCARD), liquidGlass, new ItemStack(Blocks.stained_glass, 4, 15 - i), new Object[]{"#", "X", '#', dyes[i],
-						'X', ForestryItem.propolis.getItemStack(1, Constants.WILDCARD)});
+				RecipeManagers.fabricatorManager.addRecipe(ForestryItem.waxCast.getItemStack(1, OreDictionary.WILDCARD_VALUE), liquidGlass, new ItemStack(Blocks.stained_glass, 4, 15 - i), new Object[]{"#", "X", '#', dyes[i],
+						'X', ForestryItem.propolis.getItemStack(1, OreDictionary.WILDCARD_VALUE)});
 			}
 		}
 

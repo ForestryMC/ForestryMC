@@ -17,6 +17,7 @@ import java.util.Locale;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.crafting.CraftingManager;
 
+import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
 
 import cpw.mods.fml.common.SidedProxy;
@@ -131,7 +132,7 @@ public class PluginLepidopterology extends ForestryPlugin {
 						"XYX",
 						"XXX",
 						'#', "blockGlass",
-						'X', ForestryItem.butterflyGE.getItemStack(1, Constants.WILDCARD),
+						'X', ForestryItem.butterflyGE.getItemStack(1, OreDictionary.WILDCARD_VALUE),
 						'Y', "chestWood"))
 				.setBoundingBox(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F));
 		definitionChest.register();

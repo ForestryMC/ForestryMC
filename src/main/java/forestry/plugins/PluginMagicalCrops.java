@@ -16,6 +16,8 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import net.minecraftforge.oredict.OreDictionary;
+
 import cpw.mods.fml.common.registry.GameRegistry;
 
 import forestry.api.farming.Farmables;
@@ -233,7 +235,7 @@ public class PluginMagicalCrops extends ForestryPlugin {
 		Item cropProduce = GameRegistry.findItem(MagCrop, MagCrop + "_CropProduce");
 		if (cropProduce != null) {
 			int juiceAmount = GameMode.getGameMode().getIntegerSetting("squeezer.liquid.apple");
-			ItemStack produce = new ItemStack(GameRegistry.findItem(MagCrop, MagCrop + "_CropProduce"), 1, Constants.WILDCARD);
+			ItemStack produce = new ItemStack(GameRegistry.findItem(MagCrop, MagCrop + "_CropProduce"), 1, OreDictionary.WILDCARD_VALUE);
 			RecipeUtil.addFermenterRecipes(produce, GameMode.getGameMode().getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
 			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{produce}, Fluids.JUICE.getFluid(juiceAmount));
 		}
