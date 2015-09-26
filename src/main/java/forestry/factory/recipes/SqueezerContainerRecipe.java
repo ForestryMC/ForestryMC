@@ -53,7 +53,9 @@ public class SqueezerContainerRecipe implements ISqueezerContainerRecipe {
 	@Override
 	public ISqueezerRecipe getSqueezerRecipe(ItemStack filledContainer) {
 		FluidStack fluidOutput = FluidHelper.getFluidStackInContainer(filledContainer);
-		return new SqueezerRecipe(processingTime, new ItemStack[]{filledContainer}, fluidOutput, remnants, remnantsChance);
+		ItemStack filledContainerCopy = filledContainer.copy();
+		filledContainerCopy.stackSize = 1;
+		return new SqueezerRecipe(processingTime, new ItemStack[]{filledContainerCopy}, fluidOutput, remnants, remnantsChance);
 	}
 
 }
