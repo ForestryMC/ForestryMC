@@ -58,6 +58,9 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 			for (int i = SLOT_STAMPS_1; i < SLOT_STAMPS_1 + SLOT_STAMPS_COUNT; i++) {
 				slots.add(i);
 			}
+			for (int i = SLOT_RECEIVE_BUFFER; i < SLOT_RECEIVE_BUFFER + SLOT_RECEIVE_BUFFER_COUNT; i++) {
+				slots.add(i);
+			}
 			for (int i = SLOT_SEND_BUFFER; i < SLOT_SEND_BUFFER + SLOT_SEND_BUFFER_COUNT; i++) {
 				slots.add(i);
 			}
@@ -94,6 +97,10 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 			}
 
 			return false;
+		}
+		@Override
+		public boolean isItemValidForSlot(int i, ItemStack itemstack) {
+			return canSlotAccept(i, itemstack);
 		}
 	}
 
