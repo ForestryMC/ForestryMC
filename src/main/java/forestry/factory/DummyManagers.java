@@ -1,5 +1,6 @@
 package forestry.factory;
 
+import javax.annotation.Nullable;
 import java.util.Map;
 
 import net.minecraft.item.ItemStack;
@@ -122,6 +123,11 @@ public class DummyManagers {
 
 		@Override
 		public void addRecipe(int timePerItem, ItemStack[] resources, FluidStack liquid) {
+
+		}
+
+		@Override
+		public void addContainerRecipe(int timePerItem, ItemStack emptyContainer, @Nullable ItemStack remnants, float chance) {
 
 		}
 

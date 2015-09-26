@@ -41,7 +41,6 @@ import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
 import forestry.core.config.GameMode;
 import forestry.core.fluids.Fluids;
-import forestry.core.fluids.LiquidRegistryHelper;
 import forestry.core.proxy.Proxies;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.recipes.ShapedRecipeCustom;
@@ -295,13 +294,8 @@ public class PluginIC2 extends ForestryPlugin {
 			FuelManager.bronzeEngineFuel.put(biogas.getFluid(), new EngineBronzeFuel(Fluids.BIOMASS.getFluid(),
 					Constants.ENGINE_FUEL_VALUE_BIOMASS, (int) ((Constants.ENGINE_CYCLE_DURATION_BIOMASS * GameMode.getGameMode().getFloatSetting("fuel.biomass.biogas"))), 1));
 		}
-		if (lavaCell != null) {
-			LiquidRegistryHelper.registerTinContainer(Fluids.LAVA, Constants.BUCKET_VOLUME, lavaCell, emptyCell);
-		}
 
 		if (waterCell != null) {
-			LiquidRegistryHelper.registerTinContainer(Fluids.WATER, Constants.BUCKET_VOLUME, waterCell, emptyCell);
-
 			ItemStack bogEarthCan = GameMode.getGameMode().getStackSetting("recipe.output.bogearth.can");
 			if (bogEarthCan.stackSize > 0) {
 				Proxies.common.addRecipe(bogEarthCan, "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', waterCell, 'Y', "sand");

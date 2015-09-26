@@ -35,6 +35,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.GeneratorFuel;
+import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.ForestryItem;
@@ -142,6 +143,12 @@ public class PluginFluids extends ForestryPlugin {
 			for (ItemStack filledContainer : fluidType.getOtherContainers()) {
 				LiquidRegistryHelper.registerLiquidContainer(fluidType, filledContainer);
 			}
+		}
+
+		if (RecipeManagers.squeezerManager != null) {
+			RecipeManagers.squeezerManager.addContainerRecipe(10, ForestryItem.canEmpty.getItemStack(), ForestryItem.ingotTin.getItemStack(), 0.05f);
+			RecipeManagers.squeezerManager.addContainerRecipe(10, ForestryItem.waxCapsule.getItemStack(), ForestryItem.beeswax.getItemStack(), 0.10f);
+			RecipeManagers.squeezerManager.addContainerRecipe(10, ForestryItem.refractoryEmpty.getItemStack(), ForestryItem.refractoryWax.getItemStack(), 0.10f);
 		}
 
 		FluidStack ethanol = Fluids.ETHANOL.getFluid(1);

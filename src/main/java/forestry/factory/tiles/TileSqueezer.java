@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.factory.tiles;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -55,7 +56,10 @@ import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.datastructures.ItemStackMap;
+import forestry.factory.recipes.ISqueezerContainerRecipe;
 import forestry.factory.recipes.ISqueezerRecipe;
+import forestry.factory.recipes.SqueezerContainerRecipe;
 import forestry.factory.recipes.SqueezerRecipe;
 
 public class TileSqueezer extends TilePowered implements ISocketable, ISidedInventory, ILiquidTankTile, ISpeedUpgradable {
@@ -166,7 +170,12 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 		ISqueezerRecipe matchingRecipe = null;
 		if (inventory.hasResources()) {
 			ItemStack[] resources = inventory.getResources();
-			matchingRecipe = RecipeManager.findMatchingRecipe(resources);
+
+			if (currentRecipe != null && ItemStackUtil.containsSets(currentRecipe.getResources(), resources, true, false) > 0) {
+				matchingRecipe = currentRecipe;
+			} else {
+				matchingRecipe = RecipeManager.findMatchingRecipe(resources);
+			}
 		}
 
 		if (currentRecipe != matchingRecipe) {
@@ -370,13 +379,12 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 
 		public static final List<ISqueezerRecipe> recipes = new ArrayList<ISqueezerRecipe>();
 		public static final Set<ItemStack> recipeInputs = new HashSet<ItemStack>();
+		public static final ItemStackMap<ISqueezerContainerRecipe> containerRecipes = new ItemStackMap<ISqueezerContainerRecipe>();
 
 		@Override
-		public void addRecipe(int timePerItem, ItemStack[] resources, FluidStack liquid, ItemStack remnants, int chance) {
+		public void addRecipe(int timePerItem, ItemStack[] resources, FluidStack liquid, @Nullable ItemStack remnants, int chance) {
 			recipes.add(new SqueezerRecipe(timePerItem, resources, liquid, remnants, chance / 100.0f));
-			if (resources != null) {
-				recipeInputs.addAll(Arrays.asList(resources));
-			}
+			recipeInputs.addAll(Arrays.asList(resources));
 		}
 
 		@Override
@@ -384,15 +392,43 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 			addRecipe(timePerItem, resources, liquid, null, 0);
 		}
 
+		@Override
+		public void addContainerRecipe(int timePerItem, ItemStack emptyContainer, @Nullable ItemStack remnants, float chance) {
+			containerRecipes.put(emptyContainer, new SqueezerContainerRecipe(emptyContainer, timePerItem, remnants, chance));
+		}
+
+		public static ISqueezerContainerRecipe findMatchingContainerRecipe(ItemStack filledContainer) {
+			ItemStack emptyContainer = FluidHelper.getEmptyContainer(filledContainer);
+			if (emptyContainer == null) {
+				return null;
+			}
+
+			ISqueezerContainerRecipe containerRecipe = containerRecipes.get(emptyContainer);
+			if (containerRecipe != null) {
+				return containerRecipe;
+			}
+
+			// default recipe for unregistered fluid items, has no remnants
+			return new SqueezerContainerRecipe(emptyContainer, 10, null, 0);
+		}
+
 		public static ISqueezerRecipe findMatchingRecipe(ItemStack[] items) {
-			// First try to match a specific recipe (without OD)
+			// Find container recipes
+			for (ItemStack itemStack : items) {
+				ISqueezerContainerRecipe recipe = findMatchingContainerRecipe(itemStack);
+				if (recipe != null) {
+					return recipe.getSqueezerRecipe(itemStack);
+				}
+			}
+
+			// First try to match a specific recipe (without OreDictionary)
 			for (ISqueezerRecipe recipe : recipes) {
 				if (ItemStackUtil.containsSets(recipe.getResources(), items, false, false) > 0) {
 					return recipe;
 				}
 			}
 
-			// If that fails - try again with oredict support enabled
+			// If that fails - try again with OreDictionary support enabled
 			for (ISqueezerRecipe recipe : recipes) {
 				if (ItemStackUtil.containsSets(recipe.getResources(), items, true, false) > 0) {
 					return recipe;
@@ -403,15 +439,13 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 		}
 
 		public static boolean canUse(ItemStack itemStack) {
-			if (recipeInputs.contains(itemStack)) {
-				return true;
-			}
 			for (ItemStack recipeInput : recipeInputs) {
 				if (ItemStackUtil.isCraftingEquivalent(recipeInput, itemStack, true, false)) {
 					return true;
 				}
 			}
-			return false;
+
+			return RecipeManager.findMatchingContainerRecipe(itemStack) != null;
 		}
 
 		@Override

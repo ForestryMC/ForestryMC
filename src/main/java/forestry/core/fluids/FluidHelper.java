@@ -10,6 +10,9 @@
  ******************************************************************************/
 package forestry.core.fluids;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -19,11 +22,13 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidContainerItem;
 import net.minecraftforge.fluids.IFluidHandler;
 
 import forestry.core.config.Constants;
+import forestry.core.config.ForestryItem;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.ItemStackUtil;
 
@@ -147,14 +152,12 @@ public final class FluidHelper {
 			return false;
 		}
 
-		if (output != null && drainedItem != null) {
-			if (outputSlot == inputSlot) {
-				if (input.stackSize > 1) {
-					return false;
-				}
-			} else if (!ItemStackUtil.isIdenticalItem(output, drainedItem)) {
-				return false;
-			} else if (output.stackSize + drainedItem.stackSize > output.getMaxStackSize()) {
+		if (!hasRoomForDrainedContainer(input, output, drainedItem, inputSlot, outputSlot)) {
+			Item item = drainedItem.getItem();
+			// consume forestry containers if there is no room for them
+			if (ForestryItem.canEmpty.isItemEqual(item) || ForestryItem.waxCapsule.isItemEqual(item) || ForestryItem.refractoryEmpty.isItemEqual(item)) {
+				drainedItem = null;
+			} else {
 				return false;
 			}
 		}
@@ -175,6 +178,22 @@ public final class FluidHelper {
 		}
 		inv.decrStackSize(inputSlot, 1);
 		return true;
+	}
+
+	private static boolean hasRoomForDrainedContainer(ItemStack input, ItemStack output, ItemStack drainedItem, int inputSlot, int outputSlot) {
+		if (output == null || drainedItem == null) {
+			return true;
+		}
+
+		if (outputSlot == inputSlot) {
+			return input.stackSize == 1;
+		}
+
+		if (!ItemStackUtil.isIdenticalItem(output, drainedItem)) {
+			return false;
+		}
+
+		return output.stackSize + drainedItem.stackSize <= output.getMaxStackSize();
 	}
 
 	public static boolean isFillableContainer(ItemStack stack, FluidStack liquid) {
@@ -222,18 +241,45 @@ public final class FluidHelper {
 		Item item = container.getItem();
 		if (item == null) {
 			return null;
-		} else if (item instanceof IFluidContainerItem) {
+		}
+
+		if (item instanceof IFluidContainerItem) {
 			ItemStack drained = container.copy();
 			drained.stackSize = 1;
 			IFluidContainerItem containerItem = (IFluidContainerItem) item;
 			containerItem.drain(drained, drainAmount, true);
 			return drained;
-		} else {
+		} else if (FluidContainerRegistry.isContainer(container)) {
 			if (drainAmount < Constants.BUCKET_VOLUME) {
 				return container;
 			}
-			return item.getContainerItem(container);
+			return FluidContainerRegistry.drainFluidContainer(container);
 		}
+
+		return null;
+	}
+
+	public static ItemStack getEmptyContainer(ItemStack container) {
+		if (container == null) {
+			return null;
+		}
+		FluidStack fluidStack = FluidHelper.getFluidStackInContainer(container);
+		if (fluidStack == null) {
+			return null;
+		}
+
+		return FluidHelper.getDrainedContainer(container, fluidStack.amount);
+	}
+
+	public static List<ItemStack> getAllFilledContainers(ItemStack empty) {
+		List<ItemStack> filledContainers = new ArrayList<ItemStack>();
+		for (Fluid fluid : FluidRegistry.getRegisteredFluids().values()) {
+			ItemStack filledContainer = getFilledContainer(fluid, empty);
+			if (filledContainer != null) {
+				filledContainers.add(filledContainer);
+			}
+		}
+		return filledContainers;
 	}
 
 	public static ItemStack getFilledContainer(Fluid fluid, ItemStack empty) {
@@ -264,6 +310,9 @@ public final class FluidHelper {
 	}
 
 	public static FluidStack getFluidStackInContainer(ItemStack stack) {
+		if (stack == null) {
+			return null;
+		}
 		Item item = stack.getItem();
 		if (item instanceof IFluidContainerItem) {
 			IFluidContainerItem containerItem = (IFluidContainerItem) item;

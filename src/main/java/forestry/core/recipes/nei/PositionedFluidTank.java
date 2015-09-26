@@ -12,6 +12,8 @@ package forestry.core.recipes.nei;
 
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.client.renderer.Tessellator;
@@ -30,6 +32,7 @@ import codechicken.nei.recipe.GuiUsageRecipe;
 
 public class PositionedFluidTank {
 
+	public FluidTank[] tanks;
 	public FluidTank tank;
 	public Rectangle position;
 	public String overlayTexture;
@@ -38,19 +41,33 @@ public class PositionedFluidTank {
 	public boolean showAmount = true;
 	public boolean perTick = false;
 
-	public PositionedFluidTank(FluidTank tank, Rectangle position, String overlayTexture, Point overlayTexturePos) {
+	public PositionedFluidTank(FluidTank[] tanks, Rectangle position, String overlayTexture, Point overlayTexturePos) {
 		this.position = position;
-		this.tank = tank;
+		this.tanks = tanks;
+		this.tank = tanks[0];
 		this.overlayTexture = overlayTexture;
 		this.overlayTexturePos = overlayTexturePos;
 	}
 
+	public PositionedFluidTank(Collection<FluidStack> fluids, int capacity, Rectangle position, String overlayTexture, Point overlayTexturePos) {
+		this(createFluidTanks(capacity, fluids), position, overlayTexture, overlayTexturePos);
+	}
+
 	public PositionedFluidTank(FluidStack fluid, int capacity, Rectangle position, String overlayTexture, Point overlayTexturePos) {
-		this(new FluidTank(fluid != null ? fluid.copy() : null, capacity), position, overlayTexture, overlayTexturePos);
+		this(createFluidTanks(capacity, Collections.singletonList(fluid)), position, overlayTexture, overlayTexturePos);
 	}
 
 	public PositionedFluidTank(FluidStack fluid, int capacity, Rectangle position) {
 		this(fluid, capacity, position, null, null);
+	}
+
+	private static FluidTank[] createFluidTanks(int capacity, Collection<FluidStack> fluidStacks) {
+		FluidTank[] tanks = new FluidTank[fluidStacks.size()];
+		int i = 0;
+		for (FluidStack fluidStack : fluidStacks) {
+			tanks[i++] = new FluidTank(fluidStacks != null ? fluidStack.copy() : null, capacity);
+		}
+		return tanks;
 	}
 
 	public List<String> handleTooltip(List<String> currenttip) {
@@ -131,5 +148,13 @@ public class PositionedFluidTank {
 			GuiDraw.changeTexture(this.overlayTexture);
 			GuiDraw.drawTexturedModalRect(this.position.x, this.position.y, this.overlayTexturePos.x, this.overlayTexturePos.y, this.position.width, this.position.height);
 		}
+	}
+
+	public void setPermutationToRender(int index) {
+		this.tank = this.tanks[index];
+	}
+
+	public int getPermutationCount() {
+		return this.tanks.length;
 	}
 }

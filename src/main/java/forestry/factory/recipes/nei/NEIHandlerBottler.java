@@ -136,7 +136,6 @@ public class NEIHandlerBottler extends RecipeHandlerBase {
 
 	@Override
 	public void loadUsageRecipes(ItemStack ingred) {
-		super.loadUsageRecipes(ingred);
 		for (TileBottler.Recipe recipe : recipes) {
 			if (NEIServerUtils.areStacksSameTypeCrafting(recipe.can, ingred)) {
 				this.arecipes.add(new CachedBottlerRecipe(recipe));
