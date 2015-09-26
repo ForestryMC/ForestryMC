@@ -231,6 +231,8 @@ public class NEIHandlerSqueezer extends RecipeHandlerBase {
 
 	@Override
 	public void loadUsageRecipes(ItemStack ingred) {
+		ingred.stackSize = 1;
+
 		ISqueezerContainerRecipe containerRecipe = TileSqueezer.RecipeManager.findMatchingContainerRecipe(ingred);
 		if (containerRecipe != null) {
 			CachedSqueezerRecipe crecipe = new CachedSqueezerRecipe(containerRecipe, true);
