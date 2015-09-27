@@ -168,7 +168,6 @@ public abstract class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory>
 
 		String mode = breedingTracker.getModeName();
 		if (mode != null && !mode.isEmpty()) {
-			newLine();
 			String rules = StringUtil.localize(guiName + ".behaviour") + ": " + WordUtils.capitalize(mode);
 			drawCenteredLine(rules, 8, 208, fontColor.get(guiName + ".binomial"));
 		}
