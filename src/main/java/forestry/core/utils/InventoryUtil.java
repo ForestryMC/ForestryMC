@@ -459,12 +459,14 @@ public abstract class InventoryUtil {
 	}
 
 	public static boolean tryAddStack(IInventory inventory, ItemStack stack, int startSlot, int slots, boolean all, boolean doAdd) {
-		int added = addStack(inventory, stack, startSlot, slots, doAdd);
-		if (all) {
-			return added == stack.stackSize;
-		} else {
-			return added > 0;
+		int added = addStack(inventory, stack, startSlot, slots, false);
+		boolean success = all ? (added == stack.stackSize) : (added > 0);
+
+		if (success	&& doAdd) {
+			addStack(inventory, stack, startSlot, slots, true);
 		}
+		
+		return success;
 	}
 
 	public static int addStack(IInventory inventory, ItemStack stack, boolean doAdd) {
