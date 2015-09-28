@@ -33,12 +33,13 @@ import forestry.api.apiculture.FlowerManager;
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IBeeGenome;
+import forestry.api.arboriculture.EnumWoodType;
+import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IFlower;
 import forestry.apiculture.tiles.TileApiary;
-import forestry.arboriculture.WoodType;
 import forestry.arboriculture.worldgen.BlockTypeLog;
 import forestry.arboriculture.worldgen.BlockTypeVanillaStairs;
 import forestry.arboriculture.worldgen.BlockTypeWood;
@@ -79,12 +80,14 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 
 			boolean fireproof = (random.nextInt(4) == 0);
 
-			WoodType roofWood = WoodType.getRandom(random);
+			EnumWoodType roofWood = EnumWoodType.getRandom(random);
+			EnumWoodType logWood = EnumWoodType.getRandom(random);
+			EnumWoodType fenceWood = EnumWoodType.getRandom(random);
 
-			logs = new BlockTypeLog(WoodType.getRandom(random).getLog(fireproof));
-			planks = new BlockTypeWood(roofWood.getPlanks(fireproof));
-			stairs = new BlockTypeWoodStairs(roofWood.getStairs(fireproof));
-			fence = new BlockTypeWood(WoodType.getRandom(random).getFence(fireproof));
+			logs = new BlockTypeLog(TreeManager.woodItemAccess.getLog(logWood, fireproof));
+			planks = new BlockTypeWood(TreeManager.woodItemAccess.getPlanks(roofWood, fireproof));
+			stairs = new BlockTypeWoodStairs(TreeManager.woodItemAccess.getStairs(roofWood, fireproof));
+			fence = new BlockTypeWood(TreeManager.woodItemAccess.getFence(fenceWood, fireproof));
 		} else {
 			int roofMeta = random.nextInt(16);
 

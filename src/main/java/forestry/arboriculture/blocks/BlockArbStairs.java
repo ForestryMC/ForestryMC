@@ -31,9 +31,11 @@ import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+import forestry.api.arboriculture.EnumWoodType;
+import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.Tabs;
 import forestry.arboriculture.IWoodTyped;
-import forestry.arboriculture.WoodType;
+import forestry.arboriculture.render.IconProviderWood;
 import forestry.arboriculture.tiles.TileWood;
 
 public class BlockArbStairs extends BlockStairs implements IWoodTyped, ITileEntityProvider {
@@ -55,8 +57,8 @@ public class BlockArbStairs extends BlockStairs implements IWoodTyped, ITileEnti
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(Item item, CreativeTabs tab, List list) {
-		for (WoodType woodType : WoodType.VALUES) {
-			list.add(woodType.getStairs(fireproof));
+		for (EnumWoodType woodType : EnumWoodType.VALUES) {
+			list.add(TreeManager.woodItemAccess.getStairs(woodType, fireproof));
 		}
 	}
 
@@ -88,21 +90,21 @@ public class BlockArbStairs extends BlockStairs implements IWoodTyped, ITileEnti
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerBlockIcons(IIconRegister register) {
-		WoodType.registerIcons(register);
+		IconProviderWood.registerIcons(register);
 	}
 
 	/* ICONS */
 	@SideOnly(Side.CLIENT)
 	@Override
 	public IIcon getIcon(int side, int meta) {
-		return WoodType.ACACIA.getPlankIcon();
+		return IconProviderWood.getPlankIcon(EnumWoodType.LARCH);
 	}
 
 	@Override
 	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
 		TileWood wood = BlockWood.getWoodTile(world, x, y, z);
-		WoodType type = wood.getWoodType();
-		return type.getPlankIcon();
+		EnumWoodType woodType = wood.getWoodType();
+		return IconProviderWood.getPlankIcon(woodType);
 	}
 
 	@Override

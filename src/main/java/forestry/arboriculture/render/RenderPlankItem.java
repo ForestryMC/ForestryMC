@@ -20,7 +20,7 @@ import net.minecraftforge.client.IItemRenderer;
 
 import org.lwjgl.opengl.GL11;
 
-import forestry.arboriculture.WoodType;
+import forestry.api.arboriculture.EnumWoodType;
 import forestry.arboriculture.items.ItemBlockWood;
 import forestry.core.utils.ItemStackUtil;
 
@@ -68,11 +68,11 @@ public class RenderPlankItem implements IItemRenderer {
 			return;
 		}
 
-		WoodType woodType = WoodType.getFromCompound(itemStack.getTagCompound());
+		EnumWoodType woodType = EnumWoodType.getFromCompound(itemStack.getTagCompound());
 
 		GL11.glEnable(GL11.GL_BLEND);
 
-		IIcon plankIcon = woodType.getPlankIcon();
+		IIcon plankIcon = IconProviderWood.getPlankIcon(woodType);
 		if (plankIcon == null) {
 			return;
 		}

@@ -20,7 +20,7 @@ import net.minecraftforge.client.IItemRenderer;
 
 import org.lwjgl.opengl.GL11;
 
-import forestry.arboriculture.WoodType;
+import forestry.api.arboriculture.EnumWoodType;
 import forestry.arboriculture.items.ItemBlockWood;
 import forestry.core.utils.ItemStackUtil;
 
@@ -68,12 +68,12 @@ public class RenderLogItem implements IItemRenderer {
 			return;
 		}
 
-		WoodType woodType = WoodType.getFromCompound(itemStack.getTagCompound());
+		EnumWoodType woodType = EnumWoodType.getFromCompound(itemStack.getTagCompound());
 
 		GL11.glEnable(GL11.GL_BLEND);
 
-		IIcon barkIcon = woodType.getBarkIcon();
-		IIcon heartIcon = woodType.getHeartIcon();
+		IIcon barkIcon = IconProviderWood.getBarkIcon(woodType);
+		IIcon heartIcon = IconProviderWood.getHeartIcon(woodType);
 		if (barkIcon == null || heartIcon == null) {
 			return;
 		}

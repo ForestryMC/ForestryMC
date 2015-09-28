@@ -20,7 +20,7 @@ import net.minecraftforge.client.IItemRenderer;
 
 import org.lwjgl.opengl.GL11;
 
-import forestry.arboriculture.WoodType;
+import forestry.api.arboriculture.EnumWoodType;
 import forestry.core.utils.ItemStackUtil;
 
 public class RenderStairItem implements IItemRenderer {
@@ -65,7 +65,8 @@ public class RenderStairItem implements IItemRenderer {
 		Tessellator tessellator = Tessellator.instance;
 		Block block = ItemStackUtil.getBlock(item);
 
-		IIcon texture = WoodType.getFromCompound(item.getTagCompound()).getPlankIcon();
+		EnumWoodType woodType = EnumWoodType.getFromCompound(item.getTagCompound());
+		IIcon texture = IconProviderWood.getPlankIcon(woodType);
 
 		for (int i = 0; i < 2; ++i) {
 			if (i == 0) {

@@ -20,7 +20,9 @@ import net.minecraft.world.IBlockAccess;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-import forestry.arboriculture.WoodType;
+import forestry.api.arboriculture.EnumWoodType;
+import forestry.api.arboriculture.TreeManager;
+import forestry.arboriculture.render.IconProviderWood;
 import forestry.arboriculture.tiles.TileWood;
 
 public class BlockPlanks extends BlockWood {
@@ -34,8 +36,8 @@ public class BlockPlanks extends BlockWood {
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List list) {
-		for (WoodType woodType : WoodType.VALUES) {
-			list.add(woodType.getPlanks(isFireproof()));
+		for (EnumWoodType woodType : EnumWoodType.VALUES) {
+			list.add(TreeManager.woodItemAccess.getPlanks(woodType, isFireproof()));
 		}
 	}
 
@@ -43,14 +45,14 @@ public class BlockPlanks extends BlockWood {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public IIcon getIcon(int side, int meta) {
-		return WoodType.ACACIA.getPlankIcon();
+		return IconProviderWood.getPlankIcon(EnumWoodType.LARCH);
 	}
 
 	@Override
 	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
 		TileWood wood = getWoodTile(world, x, y, z);
-		WoodType type = wood.getWoodType();
-		return type.getPlankIcon();
+		EnumWoodType woodType = wood.getWoodType();
+		return IconProviderWood.getPlankIcon(woodType);
 	}
 
 }

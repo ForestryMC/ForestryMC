@@ -35,9 +35,11 @@ import net.minecraftforge.common.util.ForgeDirection;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+import forestry.api.arboriculture.EnumWoodType;
+import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.Tabs;
 import forestry.arboriculture.IWoodTyped;
-import forestry.arboriculture.WoodType;
+import forestry.arboriculture.render.IconProviderWood;
 import forestry.arboriculture.tiles.TileWood;
 import forestry.plugins.PluginArboriculture;
 
@@ -60,8 +62,8 @@ public class BlockArbFence extends BlockFence implements IWoodTyped, ITileEntity
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List list) {
-		for (WoodType woodType : WoodType.VALUES) {
-			list.add(woodType.getFence(fireproof));
+		for (EnumWoodType woodType : EnumWoodType.VALUES) {
+			list.add(TreeManager.woodItemAccess.getFence(woodType, fireproof));
 		}
 	}
 
@@ -88,20 +90,20 @@ public class BlockArbFence extends BlockFence implements IWoodTyped, ITileEntity
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerBlockIcons(IIconRegister register) {
-		WoodType.registerIcons(register);
+		IconProviderWood.registerIcons(register);
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
 	public IIcon getIcon(int side, int meta) {
-		return WoodType.ACACIA.getPlankIcon();
+		return IconProviderWood.getPlankIcon(EnumWoodType.LARCH);
 	}
 
 	@Override
 	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
 		TileWood wood = BlockWood.getWoodTile(world, x, y, z);
-		WoodType type = wood.getWoodType();
-		return type.getPlankIcon();
+		EnumWoodType woodType = wood.getWoodType();
+		return IconProviderWood.getPlankIcon(woodType);
 	}
 
 	private static boolean isFence(IBlockAccess world, int x, int y, int z) {
@@ -143,7 +145,7 @@ public class BlockArbFence extends BlockFence implements IWoodTyped, ITileEntity
 	public final float getBlockHardness(World world, int x, int y, int z) {
 		TileWood wood = BlockWood.getWoodTile(world, x, y, z);
 		if (wood == null) {
-			return WoodType.DEFAULT_HARDNESS;
+			return EnumWoodType.DEFAULT_HARDNESS;
 		}
 		return wood.getWoodType().getHardness();
 	}

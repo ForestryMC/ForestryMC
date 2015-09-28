@@ -21,6 +21,7 @@ import net.minecraft.village.MerchantRecipeList;
 import cpw.mods.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
 
 import forestry.api.arboriculture.EnumGermlingType;
+import forestry.api.arboriculture.EnumWoodType;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.arboriculture.TreeManager;
@@ -40,8 +41,8 @@ public class VillageHandlerArboriculture implements IVillageTradeHandler {
 		recipeList.add(new MerchantRecipe(new ItemStack(Items.emerald, 8), randomTreeStack));
 		recipeList.add(new MerchantRecipe(new ItemStack(Items.emerald, 2), ForestryItem.grafterProven.getItemStack()));
 
-		WoodType randomWoodType = WoodType.VALUES[random.nextInt(WoodType.VALUES.length)];
-		ItemStack planks = randomWoodType.getPlanks(false);
+		EnumWoodType randomWoodType = EnumWoodType.getRandom(random);
+		ItemStack planks = TreeManager.woodItemAccess.getPlanks(randomWoodType, false);
 		planks.stackSize = 32;
 
 		recipeList.add(new MerchantRecipe(new ItemStack(Items.emerald, 1), planks));

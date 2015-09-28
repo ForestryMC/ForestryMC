@@ -18,8 +18,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
+import forestry.api.arboriculture.EnumWoodType;
 import forestry.arboriculture.IWoodTyped;
-import forestry.arboriculture.WoodType;
 import forestry.arboriculture.tiles.TileWood;
 import forestry.core.config.Constants;
 import forestry.core.items.ItemBlockForestry;
@@ -32,7 +32,7 @@ public class ItemBlockWood extends ItemBlockForestry {
 	}
 
 	public static boolean placeWood(ItemStack stack, @Nullable EntityPlayer player, World world, int x, int y, int z, int metadata) {
-		WoodType woodType = WoodType.getFromCompound(stack.getTagCompound());
+		EnumWoodType woodType = EnumWoodType.getFromCompound(stack.getTagCompound());
 		Block block = Block.getBlockFromItem(stack.getItem());
 
 		boolean placed = world.setBlock(x, y, z, block, metadata, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
@@ -72,7 +72,7 @@ public class ItemBlockWood extends ItemBlockForestry {
 			return super.getItemStackDisplayName(itemstack);
 		}
 
-		WoodType woodType = getWood(itemstack);
+		EnumWoodType woodType = EnumWoodType.getFromCompound(itemstack.getTagCompound());
 		if (woodType == null) {
 			return super.getItemStackDisplayName(itemstack);
 		}
@@ -98,7 +98,4 @@ public class ItemBlockWood extends ItemBlockForestry {
 		return displayName;
 	}
 
-	private static WoodType getWood(ItemStack itemStack) {
-		return WoodType.getFromCompound(itemStack.getTagCompound());
-	}
 }

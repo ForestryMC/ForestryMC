@@ -33,6 +33,7 @@ import cpw.mods.fml.common.registry.VillagerRegistry;
 
 import forestry.api.arboriculture.EnumFruitFamily;
 import forestry.api.arboriculture.EnumGermlingType;
+import forestry.api.arboriculture.EnumWoodType;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.Tabs;
 import forestry.api.genetics.AlleleManager;
@@ -46,7 +47,7 @@ import forestry.arboriculture.FruitProviderRandom;
 import forestry.arboriculture.FruitProviderRipening;
 import forestry.arboriculture.GuiHandlerArboriculture;
 import forestry.arboriculture.VillageHandlerArboriculture;
-import forestry.arboriculture.WoodType;
+import forestry.arboriculture.WoodItemAccess;
 import forestry.arboriculture.blocks.BlockArbFence;
 import forestry.arboriculture.blocks.BlockArbStairs;
 import forestry.arboriculture.blocks.BlockForestryLeaves;
@@ -118,6 +119,8 @@ public class PluginArboriculture extends ForestryPlugin {
 		TreeManager.treeFactory = new TreeFactory();
 		TreeManager.treeMutationFactory = new TreeMutationFactory();
 
+		TreeManager.woodItemAccess = new WoodItemAccess();
+
 		// Init tree interface
 		TreeManager.treeRoot = new TreeHelper();
 		AlleleManager.alleleRegistry.registerSpeciesRoot(TreeManager.treeRoot);
@@ -156,18 +159,18 @@ public class PluginArboriculture extends ForestryPlugin {
 		ForestryBlock.fencesFireproof.registerBlock(new BlockArbFence(true), ItemBlockWood.class, "fencesFireproof");
 		ForestryBlock.stairsFireproof.registerBlock(new BlockArbStairs(ForestryBlock.planksFireproof.block(), true), ItemBlockWood.class, "stairsFireproof");
 
-		for (WoodType woodType : WoodType.VALUES) {
-			woodType.registerLog(ForestryBlock.logs.block(), false);
-			woodType.registerPlanks(ForestryBlock.planks.block(), false);
-			woodType.registerSlab(ForestryBlock.slabs.block(), false);
-			woodType.registerFence(ForestryBlock.fences.block(), false);
-			woodType.registerStairs(ForestryBlock.stairs.block(), false);
+		for (EnumWoodType woodType : EnumWoodType.VALUES) {
+			WoodItemAccess.registerLog(ForestryBlock.logs.block(), woodType, false);
+			WoodItemAccess.registerPlanks(ForestryBlock.planks.block(), woodType, false);
+			WoodItemAccess.registerSlab(ForestryBlock.slabs.block(), woodType, false);
+			WoodItemAccess.registerFence(ForestryBlock.fences.block(), woodType, false);
+			WoodItemAccess.registerStairs(ForestryBlock.stairs.block(), woodType, false);
 
-			woodType.registerLog(ForestryBlock.logsFireproof.block(), true);
-			woodType.registerPlanks(ForestryBlock.planksFireproof.block(), true);
-			woodType.registerSlab(ForestryBlock.slabsFireproof.block(), true);
-			woodType.registerFence(ForestryBlock.fencesFireproof.block(), true);
-			woodType.registerStairs(ForestryBlock.stairsFireproof.block(), true);
+			WoodItemAccess.registerLog(ForestryBlock.logsFireproof.block(), woodType, true);
+			WoodItemAccess.registerPlanks(ForestryBlock.planksFireproof.block(), woodType, true);
+			WoodItemAccess.registerSlab(ForestryBlock.slabsFireproof.block(), woodType, true);
+			WoodItemAccess.registerFence(ForestryBlock.fencesFireproof.block(), woodType, true);
+			WoodItemAccess.registerStairs(ForestryBlock.stairsFireproof.block(), woodType, true);
 		}
 
 		// Saplings

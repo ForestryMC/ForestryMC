@@ -25,7 +25,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-import forestry.arboriculture.WoodType;
+import forestry.api.arboriculture.EnumWoodType;
+import forestry.api.arboriculture.TreeManager;
+import forestry.arboriculture.render.IconProviderWood;
 import forestry.arboriculture.tiles.TileWood;
 
 public class BlockLog extends BlockWood {
@@ -84,8 +86,8 @@ public class BlockLog extends BlockWood {
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs tab, List list) {
-		for (WoodType woodType : WoodType.VALUES) {
-			list.add(woodType.getLog(isFireproof()));
+		for (EnumWoodType woodType : EnumWoodType.VALUES) {
+			list.add(TreeManager.woodItemAccess.getLog(woodType, isFireproof()));
 		}
 	}
 
@@ -93,18 +95,18 @@ public class BlockLog extends BlockWood {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int side, int meta) {
-		return WoodType.ACACIA.getIcon(meta, side);
+		return IconProviderWood.getLogIcon(EnumWoodType.LARCH, meta, side);
 	}
 
 	@Override
 	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
 		int meta = world.getBlockMetadata(x, y, z);
 		TileWood wood = getWoodTile(world, x, y, z);
-		WoodType type = wood.getWoodType();
+		EnumWoodType type = wood.getWoodType();
 		if (type == null) {
 			return getIcon(side, meta);
 		}
-		return type.getIcon(meta, side);
+		return IconProviderWood.getLogIcon(type, meta, side);
 	}
 
 	/* PROPERTIES */

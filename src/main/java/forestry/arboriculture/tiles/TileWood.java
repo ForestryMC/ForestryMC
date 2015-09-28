@@ -20,8 +20,8 @@ import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
+import forestry.api.arboriculture.EnumWoodType;
 import forestry.arboriculture.IWoodTyped;
-import forestry.arboriculture.WoodType;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
@@ -29,18 +29,18 @@ import forestry.core.network.PacketTileStream;
 import forestry.core.utils.ItemStackUtil;
 
 public class TileWood extends TileEntity implements IStreamable {
-	private WoodType woodType;
+	private EnumWoodType woodType;
 
 	public TileWood() {
-		this.woodType = WoodType.ACACIA;
+		this.woodType = EnumWoodType.LARCH;
 	}
 
-	public void setWoodType(WoodType woodType) {
+	public void setWoodType(EnumWoodType woodType) {
 		this.woodType = woodType;
 		markDirty();
 	}
 
-	public WoodType getWoodType() {
+	public EnumWoodType getWoodType() {
 		return woodType;
 	}
 
@@ -63,7 +63,7 @@ public class TileWood extends TileEntity implements IStreamable {
 	@Override
 	public void readData(DataInputStreamForestry data) throws IOException {
 		int ordinal = data.readVarInt();
-		woodType = WoodType.VALUES[ordinal];
+		woodType = EnumWoodType.VALUES[ordinal];
 		worldObj.func_147479_m(xCoord, yCoord, zCoord);
 	}
 
@@ -80,7 +80,7 @@ public class TileWood extends TileEntity implements IStreamable {
 		super.readFromNBT(nbt);
 		if (nbt.hasKey("WT")) {
 			int ordinal = nbt.getInteger("WT");
-			woodType = WoodType.VALUES[ordinal];
+			woodType = EnumWoodType.VALUES[ordinal];
 		}
 	}
 

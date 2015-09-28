@@ -30,9 +30,10 @@ import net.minecraftforge.common.util.ForgeDirection;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+import forestry.api.arboriculture.EnumWoodType;
 import forestry.api.core.Tabs;
 import forestry.arboriculture.IWoodTyped;
-import forestry.arboriculture.WoodType;
+import forestry.arboriculture.render.IconProviderWood;
 import forestry.arboriculture.tiles.TileWood;
 import forestry.core.tiles.TileUtil;
 
@@ -70,7 +71,7 @@ public abstract class BlockWood extends Block implements ITileEntityProvider, IW
 		if (wood == null) {
 			return nbttagcompound;
 		}
-		WoodType woodType = wood.getWoodType();
+		EnumWoodType woodType = wood.getWoodType();
 		woodType.saveToCompound(nbttagcompound);
 		return nbttagcompound;
 	}
@@ -78,7 +79,7 @@ public abstract class BlockWood extends Block implements ITileEntityProvider, IW
 	@SideOnly(Side.CLIENT)
 	@Override
 	public final void registerBlockIcons(IIconRegister register) {
-		WoodType.registerIcons(register);
+		IconProviderWood.registerIcons(register);
 	}
 
 	@Override
@@ -114,7 +115,7 @@ public abstract class BlockWood extends Block implements ITileEntityProvider, IW
 	public final float getBlockHardness(World world, int x, int y, int z) {
 		TileWood wood = getWoodTile(world, x, y, z);
 		if (wood == null) {
-			return WoodType.DEFAULT_HARDNESS;
+			return EnumWoodType.DEFAULT_HARDNESS;
 		}
 		return wood.getWoodType().getHardness();
 	}
