@@ -230,7 +230,7 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 		@Override
 		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 			if (slotIndex == SLOT_RESOURCE) {
-				return FluidHelper.isFillableContainer(itemStack, Fluids.WATER.getFluid(1000));
+				return FluidHelper.getFilledContainer(Fluids.WATER.getFluid(1000), itemStack) != null;
 			}
 			return false;
 		}

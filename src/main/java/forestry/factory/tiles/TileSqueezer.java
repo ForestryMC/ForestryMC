@@ -415,9 +415,12 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 		public static ISqueezerRecipe findMatchingRecipe(ItemStack[] items) {
 			// Find container recipes
 			for (ItemStack itemStack : items) {
-				ISqueezerContainerRecipe recipe = findMatchingContainerRecipe(itemStack);
-				if (recipe != null) {
-					return recipe.getSqueezerRecipe(itemStack);
+				ISqueezerContainerRecipe containerRecipe = findMatchingContainerRecipe(itemStack);
+				if (containerRecipe != null) {
+					ISqueezerRecipe recipe = containerRecipe.getSqueezerRecipe(itemStack);
+					if (recipe != null) {
+						return recipe;
+					}
 				}
 			}
 

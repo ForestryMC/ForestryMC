@@ -221,10 +221,12 @@ public class NEIHandlerSqueezer extends RecipeHandlerBase {
 		}
 		for (ISqueezerContainerRecipe containerRecipe : TileSqueezer.RecipeManager.containerRecipes.values()) {
 			ItemStack emptyContainer = containerRecipe.getEmptyContainer();
-			if (FluidHelper.isFillableContainer(emptyContainer, result)) {
-				ItemStack filledContainer = FluidHelper.getFilledContainer(result, emptyContainer);
+			ItemStack filledContainer = FluidHelper.getFilledContainer(result, emptyContainer);
+			if (filledContainer != null) {
 				ISqueezerRecipe recipe = containerRecipe.getSqueezerRecipe(filledContainer);
-				this.arecipes.add(new CachedSqueezerRecipe(recipe, true));
+				if (recipe != null) {
+					this.arecipes.add(new CachedSqueezerRecipe(recipe, true));
+				}
 			}
 		}
 	}

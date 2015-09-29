@@ -15,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.core.fluids.FluidHelper;
+import forestry.core.utils.ItemStackUtil;
 
 public class SqueezerContainerRecipe implements ISqueezerContainerRecipe {
 
@@ -52,9 +53,14 @@ public class SqueezerContainerRecipe implements ISqueezerContainerRecipe {
 
 	@Override
 	public ISqueezerRecipe getSqueezerRecipe(ItemStack filledContainer) {
+		if (filledContainer == null) {
+			return null;
+		}
 		FluidStack fluidOutput = FluidHelper.getFluidStackInContainer(filledContainer);
-		ItemStack filledContainerCopy = filledContainer.copy();
-		filledContainerCopy.stackSize = 1;
+		if (fluidOutput == null) {
+			return null;
+		}
+		ItemStack filledContainerCopy = ItemStackUtil.createSplitStack(filledContainer, 1);
 		return new SqueezerRecipe(processingTime, new ItemStack[]{filledContainerCopy}, fluidOutput, remnants, remnantsChance);
 	}
 

@@ -21,7 +21,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
-import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidContainerItem;
@@ -196,23 +195,6 @@ public final class FluidHelper {
 		return output.stackSize + drainedItem.stackSize <= output.getMaxStackSize();
 	}
 
-	public static boolean isFillableContainer(ItemStack stack, FluidStack liquid) {
-		ItemStack empty = ItemStackUtil.createSplitStack(stack, 1);
-		Item item = empty.getItem();
-		if (item instanceof IFluidContainerItem) {
-			IFluidContainerItem containerItem = (IFluidContainerItem) item;
-			return containerItem.fill(empty, liquid, false) > 0;
-		}
-
-		for (FluidContainerData cont : FluidContainerRegistry.getRegisteredFluidContainerData()) {
-			if (cont.fluid.isFluidEqual(liquid) && (cont.emptyContainer != null && cont.emptyContainer.isItemEqual(empty))) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
 	public static boolean isEmptyContainer(ItemStack empty) {
 
 		if (FluidContainerRegistry.isEmptyContainer(empty)) {
@@ -299,8 +281,7 @@ public final class FluidHelper {
 
 		Item item = empty.getItem();
 		if (item instanceof IFluidContainerItem) {
-			ItemStack full = empty.copy();
-			full.stackSize = 1;
+			ItemStack full = ItemStackUtil.createSplitStack(empty, 1);
 			IFluidContainerItem containerItem = (IFluidContainerItem) item;
 			containerItem.fill(full, liquid, true);
 			return full;
