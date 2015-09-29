@@ -48,9 +48,6 @@ public class GuiMailboxInfo extends Gui {
 			return;
 		}
 
-		GL11.glEnable(3042);
-		GL11.glEnable(32826);
-
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		Proxies.common.bindTexture(textureAlert);
 
@@ -58,10 +55,6 @@ public class GuiMailboxInfo extends Gui {
 
 		fontRendererObj.drawString(Integer.toString(poInfo.playerLetters), x + 27 + getCenteredOffset(Integer.toString(poInfo.playerLetters), 22), y + 5, 0xffffff);
 		fontRendererObj.drawString(Integer.toString(poInfo.tradeLetters), x + 75 + getCenteredOffset(Integer.toString(poInfo.tradeLetters), 22), y + 5, 0xffffff);
-
-		GL11.glDisable(32826);
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-
 	}
 
 	protected int getCenteredOffset(String string, int xWidth) {

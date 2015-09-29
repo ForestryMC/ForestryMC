@@ -70,8 +70,6 @@ public class RenderLogItem implements IItemRenderer {
 
 		EnumWoodType woodType = EnumWoodType.getFromCompound(itemStack.getTagCompound());
 
-		GL11.glEnable(GL11.GL_BLEND);
-
 		IIcon barkIcon = IconProviderWood.getBarkIcon(woodType);
 		IIcon heartIcon = IconProviderWood.getHeartIcon(woodType);
 		if (barkIcon == null || heartIcon == null) {

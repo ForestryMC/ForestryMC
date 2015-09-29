@@ -49,6 +49,11 @@ public class RenderLeavesItem implements IItemRenderer {
 
 	@Override
 	public void renderItem(IItemRenderer.ItemRenderType type, ItemStack item, Object... data) {
+		GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
 		switch (type) {
 			case ENTITY:
 				renderItem((RenderBlocks) data[0], item, 0f, 0f, 0f);
@@ -62,6 +67,8 @@ public class RenderLeavesItem implements IItemRenderer {
 				break;
 			default:
 		}
+
+		GL11.glPopAttrib();
 	}
 
 	private static void renderItem(RenderBlocks renderer, ItemStack itemStack, float x, float y, float z) {
@@ -78,8 +85,6 @@ public class RenderLeavesItem implements IItemRenderer {
 		} else {
 			leaves.setTree(TreeHelper.treeTemplates.get(0));
 		}
-
-		GL11.glEnable(GL11.GL_BLEND);
 
 		IIcon leavesIcon = leaves.getIcon(Proxies.render.fancyGraphicsEnabled());
 		if (leavesIcon == null) {

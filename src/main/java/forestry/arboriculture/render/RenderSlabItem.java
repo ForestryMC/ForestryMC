@@ -60,8 +60,6 @@ public class RenderSlabItem implements IItemRenderer {
 
 		EnumWoodType woodType = EnumWoodType.getFromCompound(itemStack.getTagCompound());
 
-		GL11.glEnable(GL11.GL_BLEND);
-
 		IIcon plankIcon = IconProviderWood.getPlankIcon(woodType);
 		if (plankIcon == null) {
 			return;

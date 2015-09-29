@@ -113,7 +113,6 @@ public class PositionedFluidTank {
 		GuiDraw.changeTexture(TextureMap.locationBlocksTexture);
 		int color = this.tank.getFluid().getFluid().getColor(this.tank.getFluid());
 		GL11.glColor3ub((byte) (color >> 16 & 0xFF), (byte) (color >> 8 & 0xFF), (byte) (color & 0xFF));
-		GL11.glDisable(GL11.GL_BLEND);
 
 		int amount = Math.max(Math.min(this.position.height, this.tank.getFluid().amount * this.position.height / this.tank.getCapacity()), 1);
 		int posY = this.position.y + this.position.height - amount;
@@ -140,8 +139,6 @@ public class PositionedFluidTank {
 				tessellator.draw();
 			}
 		}
-
-		GL11.glEnable(GL11.GL_BLEND);
 
 		if (this.overlayTexture != null && this.overlayTexturePos != null) {
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);

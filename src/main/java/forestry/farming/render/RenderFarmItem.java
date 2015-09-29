@@ -24,11 +24,6 @@ import forestry.farming.blocks.BlockFarm;
 public class RenderFarmItem implements IItemRenderer {
 
 	private static void renderFarmBlock(RenderBlocks render, ItemStack item, float translateX, float translateY, float translateZ) {
-		GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
-		GL11.glEnable(GL11.GL_DEPTH_TEST);
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-
 		Tessellator tessellator = Tessellator.instance;
 		BlockFarm block = (BlockFarm) ItemStackUtil.getBlock(item);
 		if (block == null) {
@@ -81,8 +76,6 @@ public class RenderFarmItem implements IItemRenderer {
 		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
 
 		block.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
-
-		GL11.glPopAttrib();
 	}
 
 	@Override
@@ -105,6 +98,11 @@ public class RenderFarmItem implements IItemRenderer {
 
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
+		GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
 		switch (type) {
 			case ENTITY:
 				renderFarmBlock((RenderBlocks) data[0], item, -0.5f, -0.5f, -0.5f);
@@ -118,6 +116,8 @@ public class RenderFarmItem implements IItemRenderer {
 				break;
 			default:
 		}
+
+		GL11.glPopAttrib();
 	}
 
 }
