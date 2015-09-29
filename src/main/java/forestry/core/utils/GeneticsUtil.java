@@ -192,14 +192,16 @@ public class GeneticsUtil {
 		exclude.add(species);
 
 		for (IMutation mutation : species.getRoot().getPaths(species, speciesChromosome)) {
-			if (!exclude.contains(mutation.getAllele0())) {
-				int otherAdvance = getGeneticAdvancement(mutation.getAllele0(), exclude, speciesChromosome);
+			IAlleleSpecies species0 = (IAlleleSpecies) mutation.getAllele0();
+			IAlleleSpecies species1 = (IAlleleSpecies) mutation.getAllele1();
+			if (!exclude.contains(species0)) {
+				int otherAdvance = getGeneticAdvancement(species0, exclude, speciesChromosome);
 				if (otherAdvance > highest) {
 					highest = otherAdvance;
 				}
 			}
-			if (!exclude.contains(mutation.getAllele1())) {
-				int otherAdvance = getGeneticAdvancement(mutation.getAllele1(), exclude, speciesChromosome);
+			if (!exclude.contains(species1)) {
+				int otherAdvance = getGeneticAdvancement(species1, exclude, speciesChromosome);
 				if (otherAdvance > highest) {
 					highest = otherAdvance;
 				}

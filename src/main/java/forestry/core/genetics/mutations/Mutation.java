@@ -140,6 +140,16 @@ public abstract class Mutation implements IMutationCustom {
 	}
 
 	@Override
+	public IAlleleSpecies getSpecies0() {
+		return species0;
+	}
+
+	@Override
+	public IAlleleSpecies getSpecies1() {
+		return species1;
+	}
+
+	@Override
 	public float getBaseChance() {
 		return chance;
 	}
