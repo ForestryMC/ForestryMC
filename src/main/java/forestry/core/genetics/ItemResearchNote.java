@@ -142,8 +142,8 @@ public class ItemResearchNote extends ItemForestry {
 					return false;
 				}
 
-				IAlleleSpecies species0 = (IAlleleSpecies) encoded.getAllele0();
-				IAlleleSpecies species1 = (IAlleleSpecies) encoded.getAllele1();
+				IAlleleSpecies species0 = encoded.getAllele0();
+				IAlleleSpecies species1 = encoded.getAllele1();
 				IAlleleSpecies speciesResult = (IAlleleSpecies) encoded.getTemplate()[root.getKaryotypeKey().ordinal()];
 
 				tracker.registerSpecies(species0);
