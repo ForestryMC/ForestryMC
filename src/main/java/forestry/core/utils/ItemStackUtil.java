@@ -202,7 +202,7 @@ public abstract class ItemStackUtil {
 			return false;
 		}
 
-		if (craftingTools && isCraftingTool(base) && base.getItem() == comparison.getItem()) {
+		if (craftingTools && isCraftingToolEquivalent(base, comparison)) {
 			return true;
 		}
 
@@ -235,19 +235,30 @@ public abstract class ItemStackUtil {
 		return false;
 	}
 
-	public static boolean isCraftingTool(ItemStack itemstack) {
-		Item item = itemstack.getItem();
-		if (item == null) {
+	public static boolean isCraftingToolEquivalent(ItemStack base, ItemStack comparison) {
+		if (base == null || comparison == null) {
 			return false;
 		}
 
-		if (item.hasContainerItem(itemstack)) {
-			if (item.isDamageable() || itemstack.hasTagCompound()) {
-				return !item.doesContainerItemLeaveCraftingGrid(itemstack);
-			}
+		Item baseItem = base.getItem();
+		if (baseItem.doesContainerItemLeaveCraftingGrid(base)) {
+			return false;
 		}
 
-		return false;
+		if (baseItem != comparison.getItem()) {
+			return false;
+		}
+
+		if (base.stackTagCompound == null || base.stackTagCompound.hasNoTags()) {
+			// tool uses meta for damage
+			return true;
+		} else {
+			// tool uses NBT for damage
+			if (base.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
+				return true;
+			}
+			return base.getItemDamage() == comparison.getItemDamage();
+		}
 	}
 
 	public static void dropItemStackAsEntity(ItemStack items, World world, double x, double y, double z) {
