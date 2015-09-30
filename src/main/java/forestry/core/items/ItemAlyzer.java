@@ -14,9 +14,13 @@ import com.google.common.collect.ImmutableSet;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 import forestry.api.core.IErrorSource;
 import forestry.api.core.IErrorState;
+import forestry.api.genetics.IBreedingTracker;
+import forestry.api.genetics.IIndividual;
+import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.config.ForestryItem;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.inventory.ItemInventory;
@@ -58,15 +62,71 @@ public abstract class ItemAlyzer extends ItemInventoried {
 			return false;
 		}
 
-		protected abstract boolean isSpecimen(ItemStack itemStack);
+		protected abstract ISpeciesRoot getSpeciesRoot();
 
 		@Override
 		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 			if (slotIndex == SLOT_ENERGY) {
 				return isEnergy(itemStack);
-			} else {
-				return !hasSpecimen() && isSpecimen(itemStack);
 			}
+
+			ISpeciesRoot speciesRoot = getSpeciesRoot();
+			if (!speciesRoot.isMember(itemStack)) {
+				return false;
+			}
+
+			// only allow one slot to be used at a time
+			if (hasSpecimen() && getStackInSlot(slotIndex) == null) {
+				return false;
+			}
+
+			if (slotIndex == SLOT_SPECIMEN) {
+				return true;
+			}
+
+			IIndividual individual = speciesRoot.getMember(itemStack);
+			return individual.isAnalyzed();
+		}
+
+		@Override
+		public void onSlotClick(EntityPlayer player) {
+			// Source slot to analyze empty
+			ItemStack specimen = getStackInSlot(SLOT_SPECIMEN);
+			if (specimen == null) {
+				return;
+			}
+
+			IIndividual individual = getSpeciesRoot().getMember(specimen);
+			// No individual, abort
+			if (individual == null) {
+				return;
+			}
+
+			// Analyze if necessary
+			if (!individual.isAnalyzed()) {
+
+				// Requires energy
+				if (!isEnergy(getStackInSlot(SLOT_ENERGY))) {
+					return;
+				}
+
+				individual.analyze();
+				if (player != null) {
+					IBreedingTracker breedingTracker = getSpeciesRoot().getBreedingTracker(player.worldObj, player.getGameProfile());
+					breedingTracker.registerSpecies(individual.getGenome().getPrimary());
+					breedingTracker.registerSpecies(individual.getGenome().getSecondary());
+				}
+
+				NBTTagCompound nbttagcompound = new NBTTagCompound();
+				individual.writeToNBT(nbttagcompound);
+				specimen.setTagCompound(nbttagcompound);
+
+				// Decrease energy
+				decrStackSize(SLOT_ENERGY, 1);
+			}
+
+			setInventorySlotContents(SLOT_ANALYZE_1, specimen);
+			setInventorySlotContents(SLOT_SPECIMEN, null);
 		}
 
 		@Override

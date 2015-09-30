@@ -12,12 +12,11 @@ package forestry.lepidopterology.items;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.Tabs;
-import forestry.api.lepidopterology.IButterfly;
+import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.config.Config;
 import forestry.core.gui.IHintSource;
 import forestry.core.items.ItemAlyzer;
@@ -33,46 +32,8 @@ public class ItemFlutterlyzer extends ItemAlyzer {
 		}
 
 		@Override
-		protected boolean isSpecimen(ItemStack itemStack) {
-			return PluginLepidopterology.butterflyInterface.isMember(itemStack);
-		}
-
-		@Override
-		public void onSlotClick(EntityPlayer player) {
-			// Source slot to analyze empty
-			if (getStackInSlot(SLOT_SPECIMEN) == null) {
-				return;
-			}
-
-			IButterfly butterfly = PluginLepidopterology.butterflyInterface.getMember(getStackInSlot(SLOT_SPECIMEN));
-			// No tree, abort
-			if (butterfly == null) {
-				return;
-			}
-
-			// Analyze if necessary
-			if (!butterfly.isAnalyzed()) {
-
-				// Requires energy
-				if (!isEnergy(getStackInSlot(SLOT_ENERGY))) {
-					return;
-				}
-
-				butterfly.analyze();
-				if (player != null) {
-					PluginLepidopterology.butterflyInterface.getBreedingTracker(player.worldObj, player.getGameProfile()).registerSpecies(butterfly.getGenome().getPrimary());
-					PluginLepidopterology.butterflyInterface.getBreedingTracker(player.worldObj, player.getGameProfile()).registerSpecies(butterfly.getGenome().getSecondary());
-				}
-				NBTTagCompound nbttagcompound = new NBTTagCompound();
-				butterfly.writeToNBT(nbttagcompound);
-				getStackInSlot(SLOT_SPECIMEN).setTagCompound(nbttagcompound);
-
-				// Decrease energy
-				decrStackSize(SLOT_ENERGY, 1);
-			}
-
-			setInventorySlotContents(SLOT_ANALYZE_1, getStackInSlot(SLOT_SPECIMEN));
-			setInventorySlotContents(SLOT_SPECIMEN, null);
+		protected ISpeciesRoot getSpeciesRoot() {
+			return PluginLepidopterology.butterflyInterface;
 		}
 
 		/* IHINTSOURCE */

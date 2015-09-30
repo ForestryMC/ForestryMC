@@ -12,13 +12,12 @@ package forestry.arboriculture.items;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
-import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.Tabs;
+import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.config.Config;
 import forestry.core.gui.IHintSource;
 import forestry.core.items.ItemAlyzer;
@@ -50,52 +49,32 @@ public class ItemTreealyzer extends ItemAlyzer {
 		}
 
 		@Override
-		protected boolean isSpecimen(ItemStack itemStack) {
-			return GeneticsUtil.getGeneticEquivalent(itemStack) instanceof ITree;
+		protected ISpeciesRoot getSpeciesRoot() {
+			return TreeManager.treeRoot;
+		}
+
+		@Override
+		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+			if (!TreeManager.treeRoot.isMember(itemStack)) {
+				ItemStack ersatz = GeneticsUtil.convertSaplingToGeneticEquivalent(itemStack);
+				if (ersatz != null) {
+					return super.canSlotAccept(slotIndex, ersatz);
+				}
+			}
+			return super.canSlotAccept(slotIndex, itemStack);
 		}
 
 		@Override
 		public void onSlotClick(EntityPlayer player) {
-			// Source slot to analyze empty
-			if (getStackInSlot(SLOT_SPECIMEN) == null) {
-				return;
-			}
-
-			if (!TreeManager.treeRoot.isMember(getStackInSlot(SLOT_SPECIMEN))) {
-				ItemStack ersatz = GeneticsUtil.convertSaplingToGeneticEquivalent(getStackInSlot(SLOT_SPECIMEN));
+			ItemStack specimen = getStackInSlot(SLOT_SPECIMEN);
+			if (!TreeManager.treeRoot.isMember(specimen)) {
+				ItemStack ersatz = GeneticsUtil.convertSaplingToGeneticEquivalent(specimen);
 				if (ersatz != null) {
 					setInventorySlotContents(SLOT_SPECIMEN, ersatz);
 				}
 			}
-			ITree tree = TreeManager.treeRoot.getMember(getStackInSlot(SLOT_SPECIMEN));
-			// No tree, abort
-			if (tree == null) {
-				return;
-			}
 
-			// Analyze if necessary
-			if (!tree.isAnalyzed()) {
-
-				// Requires energy
-				if (!isEnergy(getStackInSlot(SLOT_ENERGY))) {
-					return;
-				}
-
-				tree.analyze();
-				if (player != null) {
-					TreeManager.treeRoot.getBreedingTracker(player.worldObj, player.getGameProfile()).registerSpecies(tree.getGenome().getPrimary());
-					TreeManager.treeRoot.getBreedingTracker(player.worldObj, player.getGameProfile()).registerSpecies(tree.getGenome().getSecondary());
-				}
-				NBTTagCompound nbttagcompound = new NBTTagCompound();
-				tree.writeToNBT(nbttagcompound);
-				getStackInSlot(SLOT_SPECIMEN).setTagCompound(nbttagcompound);
-
-				// Decrease energy
-				decrStackSize(SLOT_ENERGY, 1);
-			}
-
-			setInventorySlotContents(SLOT_ANALYZE_1, getStackInSlot(SLOT_SPECIMEN));
-			setInventorySlotContents(SLOT_SPECIMEN, null);
+			super.onSlotClick(player);
 		}
 
 		// / IHINTSOURCE

@@ -159,6 +159,9 @@ public class GeneticsUtil {
 	}
 
 	public static IIndividual getGeneticEquivalent(ItemStack itemStack) {
+		if (itemStack == null) {
+			return null;
+		}
 		Item item = itemStack.getItem();
 		if (item instanceof ItemGE) {
 			return ((ItemGE) item).getIndividual(itemStack);
