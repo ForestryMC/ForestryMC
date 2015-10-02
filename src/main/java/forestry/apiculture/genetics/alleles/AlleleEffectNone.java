@@ -12,12 +12,12 @@ package forestry.apiculture.genetics.alleles;
 
 import net.minecraft.util.AxisAlignedBB;
 
+import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IAlleleBeeEffect;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeModifier;
 import forestry.api.genetics.IEffectData;
-import forestry.apiculture.BeeHousingModifier;
 import forestry.core.genetics.alleles.AlleleCategorized;
 import forestry.core.utils.vect.MutableVect;
 import forestry.core.utils.vect.Vect;
@@ -51,7 +51,7 @@ public class AlleleEffectNone extends AlleleCategorized implements IAlleleBeeEff
 	}
 
 	protected Vect getModifiedArea(IBeeGenome genome, IBeeHousing housing) {
-		IBeeModifier beeModifier = new BeeHousingModifier(housing);
+		IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(housing);
 		float territoryModifier = beeModifier.getTerritoryModifier(genome, 1f);
 
 		MutableVect area = new MutableVect(genome.getTerritory());
@@ -71,7 +71,7 @@ public class AlleleEffectNone extends AlleleCategorized implements IAlleleBeeEff
 	}
 
 	protected AxisAlignedBB getBounding(IBeeGenome genome, IBeeHousing housing) {
-		IBeeModifier beeModifier = new BeeHousingModifier(housing);
+		IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(housing);
 		float territoryModifier = beeModifier.getTerritoryModifier(genome, 1.0f);
 
 		MutableVect area = new MutableVect(genome.getTerritory());

@@ -35,7 +35,6 @@ import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.IClimateControlled;
 import forestry.apiculture.BeeHousingInventory;
-import forestry.apiculture.BeeHousingModifier;
 import forestry.core.access.EnumAccess;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.multiblock.CoordTriplet;
@@ -384,7 +383,7 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 
 	@Override
 	public EnumTemperature getTemperature() {
-		IBeeModifier beeModifier = new BeeHousingModifier(this);
+		IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(this);
 		if (beeModifier.isHellish() && tempChange >= 0) {
 			return EnumTemperature.HELLISH;
 		}

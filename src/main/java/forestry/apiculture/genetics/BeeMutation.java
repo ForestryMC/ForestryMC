@@ -21,7 +21,6 @@ import forestry.api.apiculture.IBeeModifier;
 import forestry.api.apiculture.IBeeMutationCustom;
 import forestry.api.apiculture.IBeeRoot;
 import forestry.api.genetics.IAllele;
-import forestry.apiculture.BeeHousingModifier;
 import forestry.core.genetics.mutations.Mutation;
 
 public class BeeMutation extends Mutation implements IBeeMutationCustom {
@@ -48,7 +47,7 @@ public class BeeMutation extends Mutation implements IBeeMutationCustom {
 			return 0;
 		}
 
-		IBeeModifier beeHousingModifier = new BeeHousingModifier(housing);
+		IBeeModifier beeHousingModifier = BeeManager.beeRoot.createBeeHousingModifier(housing);
 		IBeeModifier beeModeModifier = BeeManager.beeRoot.getBeekeepingMode(world).getBeeModifier();
 
 		processedChance *= beeHousingModifier.getMutationModifier(genome0, genome1, processedChance);

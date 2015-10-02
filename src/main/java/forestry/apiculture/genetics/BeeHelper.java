@@ -33,6 +33,8 @@ import forestry.api.apiculture.IApiaristTracker;
 import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
+import forestry.api.apiculture.IBeeListener;
+import forestry.api.apiculture.IBeeModifier;
 import forestry.api.apiculture.IBeeMutation;
 import forestry.api.apiculture.IBeeRoot;
 import forestry.api.apiculture.IBeekeepingLogic;
@@ -42,6 +44,8 @@ import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
+import forestry.apiculture.BeeHousingListener;
+import forestry.apiculture.BeeHousingModifier;
 import forestry.apiculture.BeekeepingLogic;
 import forestry.core.config.ForestryItem;
 import forestry.core.genetics.SpeciesRoot;
@@ -324,6 +328,16 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 	@Override
 	public IBeekeepingLogic createBeekeepingLogic(IBeeHousing housing) {
 		return new BeekeepingLogic(housing);
+	}
+
+	@Override
+	public IBeeModifier createBeeHousingModifier(IBeeHousing housing) {
+		return new BeeHousingModifier(housing);
+	}
+
+	@Override
+	public IBeeListener createBeeHousingListener(IBeeHousing housing) {
+		return new BeeHousingListener(housing);
 	}
 
 	@Override

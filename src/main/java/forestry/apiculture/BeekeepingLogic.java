@@ -73,8 +73,8 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 
 	public BeekeepingLogic(IBeeHousing housing) {
 		this.housing = housing;
-		this.beeModifier = new BeeHousingModifier(housing);
-		this.beeListener = new BeeHousingListener(housing);
+		this.beeModifier = BeeManager.beeRoot.createBeeHousingModifier(housing);
+		this.beeListener = BeeManager.beeRoot.createBeeHousingListener(housing);
 	}
 
 	// / SAVING & LOADING

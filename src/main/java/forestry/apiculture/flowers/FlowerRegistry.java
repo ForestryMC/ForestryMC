@@ -38,6 +38,7 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
+import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.FlowerManager;
 import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IBeeGenome;
@@ -47,7 +48,6 @@ import forestry.api.genetics.IFlower;
 import forestry.api.genetics.IFlowerGrowthRule;
 import forestry.api.genetics.IFlowerRegistry;
 import forestry.api.genetics.IIndividual;
-import forestry.apiculture.BeeHousingModifier;
 import forestry.core.utils.vect.MutableVect;
 import forestry.core.utils.vect.Vect;
 import forestry.plugins.PluginManager;
@@ -142,7 +142,7 @@ public final class FlowerRegistry implements IFlowerRegistry {
 		Set<IFlower> acceptedFlowers = this.registeredFlowers.get(flowerType);
 		World world = beeHousing.getWorld();
 
-		IBeeModifier beeModifier = new BeeHousingModifier(beeHousing);
+		IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(beeHousing);
 
 		Vect area = getArea(bee.getGenome(), beeModifier);
 		Vect housingPos = new Vect(beeHousing.getCoordinates()).add(-area.x / 2, -area.y / 2, -area.z / 2);

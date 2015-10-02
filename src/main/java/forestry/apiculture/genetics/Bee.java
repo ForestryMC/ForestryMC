@@ -52,7 +52,6 @@ import forestry.api.genetics.IFlowerProvider;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.IPollinatable;
-import forestry.apiculture.BeeHousingModifier;
 import forestry.arboriculture.genetics.pollination.FakePollinatable;
 import forestry.arboriculture.genetics.pollination.ICheckPollinatable;
 import forestry.core.config.Config;
@@ -253,7 +252,7 @@ public class Bee extends IndividualLiving implements IBee {
 
 		Set<IErrorState> errorStates = new HashSet<IErrorState>();
 
-		IBeeModifier beeModifier = new BeeHousingModifier(housing);
+		IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(housing);
 
 		// / Rain needs tolerant flyers
 		if (world.isRaining() && !genome.getTolerantFlyer() && BiomeHelper.canRainOrSnow(biome) && !beeModifier.isSealed()) {
@@ -458,7 +457,7 @@ public class Bee extends IndividualLiving implements IBee {
 			setIsNatural(false);
 		}
 
-		IBeeModifier beeHousingModifier = new BeeHousingModifier(housing);
+		IBeeModifier beeHousingModifier = BeeManager.beeRoot.createBeeHousingModifier(housing);
 		IBeeModifier beeModeModifier = mode.getBeeModifier();
 
 		// Bee genetic speed * beehousing * beekeeping mode
@@ -630,7 +629,7 @@ public class Bee extends IndividualLiving implements IBee {
 	@Override
 	public IIndividual retrievePollen(IBeeHousing housing) {
 
-		IBeeModifier beeModifier = new BeeHousingModifier(housing);
+		IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(housing);
 
 		int chance = Math.round(genome.getFlowering() * beeModifier.getFloweringModifier(getGenome(), 1f));
 
@@ -673,7 +672,7 @@ public class Bee extends IndividualLiving implements IBee {
 	@Override
 	public boolean pollinateRandom(IBeeHousing housing, IIndividual pollen) {
 
-		IBeeModifier beeModifier = new BeeHousingModifier(housing);
+		IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(housing);
 
 		int chance = (int) (genome.getFlowering() * beeModifier.getFloweringModifier(getGenome(), 1f));
 
@@ -720,7 +719,7 @@ public class Bee extends IndividualLiving implements IBee {
 	@Override
 	public void plantFlowerRandom(IBeeHousing housing) {
 
-		IBeeModifier beeModifier = new BeeHousingModifier(housing);
+		IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(housing);
 
 		int chance = Math.round(genome.getFlowering() * beeModifier.getFloweringModifier(getGenome(), 1f));
 
