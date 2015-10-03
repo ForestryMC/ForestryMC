@@ -175,11 +175,14 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 		ItemStack[] set = InventoryUtil.getStacks(currentRecipe.getMatrix(), SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT);
 		ItemStack[] removed = InventoryUtil.removeSets(this, 1, set, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT, player, false, true, true);
 
+		if (removed == null) {
+			return false;
+		}
+
 		for (int i = 0; i < removed.length; i++) {
 			craftingInventory.setInventorySlotContents(i, removed[i]);
 		}
-
-		return removed != null;
+		return true;
 	}
 
 	@Override
