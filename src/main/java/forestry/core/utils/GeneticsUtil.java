@@ -195,20 +195,19 @@ public class GeneticsUtil {
 		exclude.add(species);
 
 		for (IMutation mutation : species.getRoot().getPaths(species, speciesChromosome)) {
-			if (!exclude.contains(mutation.getAllele0())) {
-				int otherAdvance = getGeneticAdvancement(mutation.getAllele0(), exclude, speciesChromosome);
-				if (otherAdvance > highest) {
-					highest = otherAdvance;
-				}
-			}
-			if (!exclude.contains(mutation.getAllele1())) {
-				int otherAdvance = getGeneticAdvancement(mutation.getAllele1(), exclude, speciesChromosome);
-				if (otherAdvance > highest) {
-					highest = otherAdvance;
-				}
-			}
+			highest = getHighestAdvancement(mutation.getAllele0(), highest, exclude, speciesChromosome);
+			highest = getHighestAdvancement(mutation.getAllele1(), highest, exclude, speciesChromosome);
 		}
 
 		return 1 + highest;
+	}
+
+	private static int getHighestAdvancement(IAlleleSpecies mutationSpecies, int highest, Set<IAlleleSpecies> exclude, IChromosomeType speciesChromosome) {
+		if (exclude.contains(mutationSpecies) || AlleleManager.alleleRegistry.isBlacklisted(mutationSpecies.getUID())) {
+			return highest;
+		}
+
+		int otherAdvance = getGeneticAdvancement(mutationSpecies, exclude, speciesChromosome);
+		return otherAdvance > highest ? otherAdvance : highest;
 	}
 }
