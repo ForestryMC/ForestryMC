@@ -34,6 +34,7 @@ import net.minecraft.tileentity.TileEntityFlowerPot;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 
+import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.oredict.OreDictionary;
 
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -190,15 +191,21 @@ public final class FlowerRegistry implements IFlowerRegistry {
 			meta = world.getBlockMetadata(x, y, z);
 		}
 
-		if (PluginManager.Module.AGRICRAFT.isEnabled() && (flowerType.equals(FlowerManager.FlowerTypeWheat) || flowerType.equals(FlowerManager.FlowerTypeNether))) {
+		if (PluginManager.Module.AGRICRAFT.isEnabled()) {
 			Block cropBlock = GameRegistry.findBlock("AgriCraft", "crops");
 			if (block == cropBlock) {
-				ArrayList<ItemStack> drops = block.getDrops(world, x, y, z, 7, 0);
-				if (drops.get(1).getItem() == Items.wheat_seeds && flowerType.equals(FlowerManager.FlowerTypeWheat)) {
-					return true;
-				}
-				if (drops.get(1).getItem() == Items.nether_wart && flowerType.equals(FlowerManager.FlowerTypeNether)) {
-					return true;
+				if(block instanceof IPlantable) {
+					//For agricraft versions which implement IPlantable in the BlockCrop class
+					block = ((IPlantable) block).getPlant(world, x, y, z);
+				} else {
+					//For earlier versions of AgriCraft
+					ArrayList<ItemStack> drops = block.getDrops(world, x, y, z, 7, 0);
+					if (drops.get(1).getItem() == Items.wheat_seeds && flowerType.equals(FlowerManager.FlowerTypeWheat)) {
+						return true;
+					}
+					if (drops.get(1).getItem() == Items.nether_wart && flowerType.equals(FlowerManager.FlowerTypeNether)) {
+						return true;
+					}
 				}
 			}
 		}
