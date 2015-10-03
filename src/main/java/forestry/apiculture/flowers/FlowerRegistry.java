@@ -198,7 +198,7 @@ public final class FlowerRegistry implements IFlowerRegistry {
 					//For agricraft versions which implement IPlantable in the BlockCrop class
 					block = ((IPlantable) block).getPlant(world, x, y, z);
 				} else {
-					//For earlyer versions of AgriCraft
+					//For earlier versions of AgriCraft
 					ArrayList<ItemStack> drops = block.getDrops(world, x, y, z, 7, 0);
 					if (drops.get(1).getItem() == Items.wheat_seeds && flowerType.equals(FlowerManager.FlowerTypeWheat)) {
 						return true;
