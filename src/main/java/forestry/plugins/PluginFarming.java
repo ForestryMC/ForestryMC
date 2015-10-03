@@ -93,8 +93,10 @@ public class PluginFarming extends ForestryPlugin {
 
 		Farmables.farmables.put("farmArboreal", new ArrayList<IFarmable>());
 		Farmables.farmables.get("farmArboreal").add(new FarmableVanillaSapling());
-		Farmables.farmables.get("farmArboreal").add(new FarmableGE());
-
+		if (PluginManager.Module.ARBORICULTURE.isEnabled()) {
+			Farmables.farmables.get("farmArboreal").add(new FarmableGE());
+		}
+		
 		Farmables.farmables.put("farmOrchard", new ArrayList<IFarmable>());
 		Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(Blocks.wheat, 7));
 		Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(Blocks.potatoes, 7));
