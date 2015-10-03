@@ -10,7 +10,15 @@
  ******************************************************************************/
 package forestry.core.recipes.nei;
 
+import net.minecraftforge.oredict.OreDictionary;
+
+import forestry.api.apiculture.BeeManager;
+import forestry.api.apiculture.EnumBeeType;
+import forestry.api.arboriculture.EnumGermlingType;
+import forestry.api.arboriculture.TreeManager;
+import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.core.utils.Log;
+import forestry.factory.gui.GuiWorktable;
 import forestry.factory.recipes.nei.NEIHandlerBottler;
 import forestry.factory.recipes.nei.NEIHandlerCarpenter;
 import forestry.factory.recipes.nei.NEIHandlerCentrifuge;
@@ -19,6 +27,7 @@ import forestry.factory.recipes.nei.NEIHandlerFermenter;
 import forestry.factory.recipes.nei.NEIHandlerMoistener;
 import forestry.factory.recipes.nei.NEIHandlerSqueezer;
 import forestry.factory.recipes.nei.NEIHandlerStill;
+import forestry.plugins.PluginLepidopterology;
 
 import codechicken.nei.api.API;
 import codechicken.nei.api.IConfigureNEI;
@@ -39,6 +48,24 @@ public class NEIIntegrationConfig implements IConfigureNEI {
 		registerHandler(new NEIHandlerMoistener());
 		registerHandler(new NEIHandlerSqueezer());
 		registerHandler(new NEIHandlerStill());
+
+		CustomOverlayHandler handler = new CustomOverlayHandler(-14, 14, true);
+		API.registerGuiOverlayHandler(GuiWorktable.class, handler, "crafting");
+
+		API.addSubset("Forestry.Bees.Princesses", new ItemFilterGenetic(BeeManager.beeRoot, EnumBeeType.PRINCESS.ordinal(), true));
+		API.addSubset("Forestry.Bees.Drones", new ItemFilterGenetic(BeeManager.beeRoot, EnumBeeType.DRONE.ordinal(), true));
+		API.addSubset("Forestry.Bees.Larvae", new ItemFilterGenetic(BeeManager.beeRoot, EnumBeeType.LARVAE.ordinal(), true));
+
+		API.addSubset("Forestry.Trees.Saplings", new ItemFilterGenetic(TreeManager.treeRoot, EnumGermlingType.SAPLING.ordinal(), true));
+		API.addSubset("Forestry.Trees.Pollen", new ItemFilterGenetic(TreeManager.treeRoot, EnumGermlingType.POLLEN.ordinal(), true));
+
+		API.addSubset("Forestry.Butterflies.Butterflies", new ItemFilterGenetic(PluginLepidopterology.butterflyInterface, EnumFlutterType.BUTTERFLY.ordinal(), true));
+		API.addSubset("Forestry.Butterflies.Caterpillars", new ItemFilterGenetic(PluginLepidopterology.butterflyInterface, EnumFlutterType.CATERPILLAR.ordinal(), true));
+		API.addSubset("Forestry.Butterflies.Serum", new ItemFilterGenetic(PluginLepidopterology.butterflyInterface, EnumFlutterType.SERUM.ordinal(), true));
+
+		API.addSubset("Forestry.Bees.Combs", OreDictionary.getOres("beeComb"));
+		API.addSubset("Forestry.Blocks", new ItemFilterOther(false));
+		API.addSubset("Forestry.Items", new ItemFilterOther(true));
 	}
 
 	protected static void registerHandler(IRecipeHandlerBase handler) {
@@ -54,7 +81,7 @@ public class NEIIntegrationConfig implements IConfigureNEI {
 
 	@Override
 	public String getVersion() {
-		return "1.0.0";
+		return "1.1.0";
 	}
 
 }
