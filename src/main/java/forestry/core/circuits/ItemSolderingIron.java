@@ -134,11 +134,11 @@ public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 			layouts.rotateLeft();
 		}
 
-		private Collection<ICircuit> getCircuits(EnumCircuitBoardType type, boolean doConsume) {
+		private ICircuit[] getCircuits(boolean doConsume) {
 
-			ArrayList<ICircuit> circuits = new ArrayList<ICircuit>();
+			ICircuit[] circuits = new ICircuit[ingredientSlotCount];
 
-			for (short i = 0; i < type.sockets; i++) {
+			for (short i = 0; i < ingredientSlotCount; i++) {
 				ItemStack ingredient = getStackInSlot(ingredientSlot1 + i);
 				if (ingredient == null) {
 					continue;
@@ -157,7 +157,7 @@ public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 				if (doConsume) {
 					decrStackSize(ingredientSlot1 + i, recipe.resource.stackSize);
 				}
-				circuits.add(recipe.circuit);
+				circuits[i] = recipe.circuit;
 			}
 
 			return circuits;
@@ -192,25 +192,33 @@ public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 			}
 
 			EnumCircuitBoardType type = EnumCircuitBoardType.values()[blank.getItemDamage()];
-			Collection<ICircuit> circuits = getCircuits(type, false);
-
-			if (circuits.size() != type.sockets) {
+			if (getCircuitCount() != type.sockets) {
 				return;
 			}
 
-			circuits = getCircuits(type, true);
+			ICircuit[] circuits = getCircuits(true);
 
-			ICircuit[] circuitsArray = circuits.toArray(new ICircuit[circuits.size()]);
-			ItemStack circuitBoard = ItemCircuitBoard.createCircuitboard(type, layouts.getCurrent(), circuitsArray);
+			ItemStack circuitBoard = ItemCircuitBoard.createCircuitboard(type, layouts.getCurrent(), circuits);
 
 			setInventorySlotContents(finishedSlot, circuitBoard);
 			setInventorySlotContents(blankSlot, null);
 		}
 
-		public static int getCount(ICircuit circuit, ArrayList<ICircuit> circuits) {
+		private int getCircuitCount() {
+			ICircuit[] circuits = getCircuits(false);
+			int count = 0;
+			for (ICircuit circuit : circuits) {
+				if (circuit != null) {
+					count++;
+				}
+			}
+			return count;
+		}
+
+		public static int getCount(ICircuit circuit, ICircuit[] circuits) {
 			int count = 0;
 			for (ICircuit other : circuits) {
-				if (other.getUID().equals(circuit.getUID())) {
+				if (other != null && other.getUID().equals(circuit.getUID())) {
 					count++;
 				}
 			}
@@ -242,8 +250,8 @@ public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 				if (circuitCount != type.sockets) {
 					errorStates.add(EnumErrorCode.CIRCUITMISMATCH);
 				} else {
-					Collection<ICircuit> circuits = getCircuits(type, false);
-					if (circuits.size() != type.sockets) {
+					int count = getCircuitCount();
+					if (count != type.sockets) {
 						errorStates.add(EnumErrorCode.NOCIRCUITLAYOUT);
 					}
 				}

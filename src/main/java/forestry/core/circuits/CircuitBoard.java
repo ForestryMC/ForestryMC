@@ -83,11 +83,7 @@ public class CircuitBoard<T> implements ICircuitBoard {
 			ChipsetManager.circuitRegistry.getDefaultLayout();
 		}
 
-		List<ICircuit> readcircuits = new ArrayList<ICircuit>();
-
-		if (circuits != null) {
-			return;
-		}
+		circuits = new ICircuit[4];
 
 		for (int i = 0; i < 4; i++) {
 			if (!nbttagcompound.hasKey("CA.I" + i)) {
@@ -95,10 +91,9 @@ public class CircuitBoard<T> implements ICircuitBoard {
 			}
 			ICircuit circuit = ChipsetManager.circuitRegistry.getCircuit(nbttagcompound.getString("CA.I" + i));
 			if (circuit != null) {
-				readcircuits.add(circuit);
+				circuits[i] = circuit;
 			}
 		}
-		circuits = readcircuits.toArray(new ICircuit[readcircuits.size()]);
 	}
 
 	@Override
