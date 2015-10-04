@@ -25,6 +25,7 @@ import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.registry.GameData;
 
 import forestry.api.circuits.ChipsetManager;
+import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.fuels.EngineBronzeFuel;
 import forestry.api.fuels.FuelManager;
@@ -169,7 +170,7 @@ public class PluginIC2 extends ForestryPlugin {
 
 		Circuit.farmRubberManual = new CircuitFarmLogic("manualRubber", FarmLogicRubber.class);
 
-		ICircuitLayout layoutEngineTin = new CircuitLayout("engine.tin");
+		ICircuitLayout layoutEngineTin = new CircuitLayout("engine.tin", CircuitSocketType.ELECTRIC_ENGINE);
 		ChipsetManager.circuitRegistry.registerLayout(layoutEngineTin);
 	}
 

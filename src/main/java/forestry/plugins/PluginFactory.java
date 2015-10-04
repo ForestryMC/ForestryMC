@@ -23,6 +23,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import cpw.mods.fml.common.network.IGuiHandler;
 
 import forestry.api.circuits.ChipsetManager;
+import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.blocks.BlockBase;
@@ -234,7 +235,7 @@ public class PluginFactory extends ForestryPlugin {
 						'C', "chestWood"))
 				.setFaces(0, 1, 2, 3, 4, 4));
 
-		ICircuitLayout layoutMachineUpgrade = new CircuitLayout("machine.upgrade");
+		ICircuitLayout layoutMachineUpgrade = new CircuitLayout("machine.upgrade", CircuitSocketType.MACHINE);
 		ChipsetManager.circuitRegistry.registerLayout(layoutMachineUpgrade);
 
 	}

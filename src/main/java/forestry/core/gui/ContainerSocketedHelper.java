@@ -14,6 +14,8 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
+import forestry.api.circuits.ChipsetManager;
+import forestry.api.circuits.ICircuitBoard;
 import forestry.core.circuits.ISocketable;
 import forestry.core.network.PacketId;
 import forestry.core.network.PacketSlotClick;
@@ -39,6 +41,23 @@ public class ContainerSocketedHelper<T extends TileEntity & ISocketable> impleme
 	public void handleChipsetClickServer(int slot, EntityPlayerMP player, ItemStack itemstack) {
 		if (tile.getSocket(slot) != null) {
 			return;
+		}
+
+		if (!ChipsetManager.circuitRegistry.isChipset(itemstack)) {
+			return;
+		}
+
+		ICircuitBoard circuitBoard = ChipsetManager.circuitRegistry.getCircuitboard(itemstack);
+		if (circuitBoard == null) {
+			return;
+		}
+
+		try {
+			if (!tile.getSocketType().equals(circuitBoard.getSocketType())) {
+				return;
+			}
+		} catch (Throwable ignored) {
+			// older circuitBoards don't have getSocketType()
 		}
 
 		ItemStack toSocket = itemstack.copy();

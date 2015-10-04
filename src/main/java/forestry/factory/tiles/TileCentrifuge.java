@@ -35,7 +35,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 import cpw.mods.fml.common.Optional;
 
 import forestry.api.circuits.ChipsetManager;
+import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitBoard;
+import forestry.api.circuits.ICircuitSocketType;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorLogic;
 import forestry.api.recipes.ICentrifugeManager;
@@ -280,6 +282,11 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 		if (chipset != null) {
 			chipset.onInsertion(this);
 		}
+	}
+
+	@Override
+	public ICircuitSocketType getSocketType() {
+		return CircuitSocketType.MACHINE;
 	}
 
 	/* RECIPE MANAGEMENT */

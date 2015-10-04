@@ -18,7 +18,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 import forestry.api.circuits.ChipsetManager;
+import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitBoard;
+import forestry.api.circuits.ICircuitSocketType;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorLogic;
 import forestry.core.circuits.ISocketable;
@@ -307,6 +309,11 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 		if (chipset != null) {
 			chipset.onInsertion(this);
 		}
+	}
+
+	@Override
+	public ICircuitSocketType getSocketType() {
+		return CircuitSocketType.ELECTRIC_ENGINE;
 	}
 
 	private static class EngineTinInventoryAdapter extends TileInventoryAdapter<TileEngineElectric> {

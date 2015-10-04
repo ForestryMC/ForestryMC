@@ -12,10 +12,14 @@ package forestry.core.circuits;
 
 import net.minecraft.item.ItemStack;
 
+import forestry.api.circuits.ICircuitSocketType;
+
 public interface ISocketable {
 	int getSocketCount();
 
 	ItemStack getSocket(int slot);
 
 	void setSocket(int slot, ItemStack stack);
+
+	ICircuitSocketType getSocketType();
 }

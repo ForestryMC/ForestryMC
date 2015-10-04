@@ -32,6 +32,7 @@ import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 import forestry.api.circuits.ChipsetManager;
+import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.farming.Farmables;
 import forestry.api.farming.IFarmable;
@@ -135,9 +136,9 @@ public class PluginFarming extends ForestryPlugin {
 		proxy.initializeRendering();
 
 		// Layouts
-		ICircuitLayout layoutManaged = new CircuitLayout("farms.managed");
+		ICircuitLayout layoutManaged = new CircuitLayout("farms.managed", CircuitSocketType.FARM);
 		ChipsetManager.circuitRegistry.registerLayout(layoutManaged);
-		ICircuitLayout layoutManual = new CircuitLayout("farms.manual");
+		ICircuitLayout layoutManual = new CircuitLayout("farms.manual", CircuitSocketType.FARM);
 		ChipsetManager.circuitRegistry.registerLayout(layoutManual);
 	}
 

@@ -17,6 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
+import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitBoard;
 import forestry.api.circuits.ICircuitLayout;
@@ -26,7 +27,7 @@ import forestry.core.config.ForestryItem;
 
 public class CircuitRegistry implements ICircuitRegistry {
 
-	public static final ICircuitLayout DUMMY_LAYOUT = new CircuitLayout("dummy");
+	public static final ICircuitLayout DUMMY_LAYOUT = new CircuitLayout("dummy", CircuitSocketType.NONE);
 	private static final Map<String, ICircuitLayout> DUMMY_MAP = new LinkedHashMap<String, ICircuitLayout>();
 	private final Map<String, ICircuitLayout> layoutMap = new LinkedHashMap<String, ICircuitLayout>();
 	private final Map<String, ICircuit> circuitMap = new LinkedHashMap<String, ICircuit>();

@@ -33,7 +33,9 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
 import forestry.api.circuits.ChipsetManager;
+import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitBoard;
+import forestry.api.circuits.ICircuitSocketType;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorLogic;
 import forestry.api.recipes.ISqueezerManager;
@@ -313,6 +315,11 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 		if (chipset != null) {
 			chipset.onInsertion(this);
 		}
+	}
+
+	@Override
+	public ICircuitSocketType getSocketType() {
+		return CircuitSocketType.MACHINE;
 	}
 
 	public static class SqueezerInventory extends TileInventoryAdapter<TileSqueezer> {

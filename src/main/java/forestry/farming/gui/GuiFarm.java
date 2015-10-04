@@ -42,8 +42,8 @@ public class GuiFarm extends GuiForestry<ContainerFarm, TileFarm> {
 
 		widgetManager.add(new FarmLogicSlot(widgetManager, 69, 22, FarmDirection.NORTH));
 		widgetManager.add(new FarmLogicSlot(widgetManager, 69, 58, FarmDirection.SOUTH));
-		widgetManager.add(new FarmLogicSlot(widgetManager, 51, 40, FarmDirection.EAST));
-		widgetManager.add(new FarmLogicSlot(widgetManager, 87, 40, FarmDirection.WEST));
+		widgetManager.add(new FarmLogicSlot(widgetManager, 51, 40, FarmDirection.WEST));
+		widgetManager.add(new FarmLogicSlot(widgetManager, 87, 40, FarmDirection.EAST));
 
 		this.xSize = 216;
 		this.ySize = 220;

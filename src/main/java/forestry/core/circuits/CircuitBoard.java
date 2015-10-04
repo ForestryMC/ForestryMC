@@ -20,6 +20,7 @@ import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitBoard;
 import forestry.api.circuits.ICircuitLayout;
+import forestry.api.circuits.ICircuitSocketType;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
 
@@ -169,5 +170,10 @@ public class CircuitBoard<T> implements ICircuitBoard {
 	@Override
 	public ICircuit[] getCircuits() {
 		return circuits;
+	}
+
+	@Override
+	public ICircuitSocketType getSocketType() {
+		return layout.getSocketType();
 	}
 }

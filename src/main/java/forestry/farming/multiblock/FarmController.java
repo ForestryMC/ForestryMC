@@ -35,7 +35,9 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.circuits.ChipsetManager;
+import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitBoard;
+import forestry.api.circuits.ICircuitSocketType;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.IErrorLogic;
@@ -848,4 +850,8 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		}
 	}
 
+	@Override
+	public ICircuitSocketType getSocketType() {
+		return CircuitSocketType.FARM;
+	}
 }

@@ -18,6 +18,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.StatCollector;
 
+import forestry.api.circuits.ICircuitSocketType;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorLogicSource;
@@ -176,6 +177,11 @@ public abstract class TileFarm extends RectangularMultiblockTileEntityBase imple
 	@Override
 	public void setSocket(int slot, ItemStack stack) {
 		getFarmController().setSocket(slot, stack);
+	}
+
+	@Override
+	public ICircuitSocketType getSocketType() {
+		return getFarmController().getSocketType();
 	}
 
 	/* IStreamableGui */

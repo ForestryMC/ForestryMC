@@ -19,6 +19,8 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.fluids.FluidStack;
 
+import forestry.api.circuits.CircuitSocketType;
+import forestry.api.circuits.ICircuitSocketType;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.IErrorLogic;
@@ -150,6 +152,11 @@ public class FakeFarmController implements IFarmController {
 	@Override
 	public void setSocket(int slot, ItemStack stack) {
 
+	}
+
+	@Override
+	public ICircuitSocketType getSocketType() {
+		return CircuitSocketType.NONE;
 	}
 
 	@Override
