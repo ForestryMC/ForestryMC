@@ -31,7 +31,7 @@ Beware of ugly code.
 
 Bugfixes are generally welcome. If you want to contribute something which changes game mechanics, please talk to someone with commit privileges first. Nothing is more frustrating than putting a lot of work and effort into a new game mechanic and then having the PR rejected because it doesn’t fit gameplay-wise.
 
-**If you submit a PR you must accept the [Contributor License Agreement](https://www.clahub.com/agreements/ForestryMC/ForestryMC). There is no way around that, since otherwise changing the license later - even to something more permissive! - , becomes close to impossible.**
+**If you submit a PR you must accept the [Contributor License Agreement](https://cla-assistant.io/ForestryMC/ForestryMC). There is no way around that, since otherwise changing the license later - even to something more permissive! - , becomes close to impossible.**
 
 ### License & Copyright
 
