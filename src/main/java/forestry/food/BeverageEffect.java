@@ -23,7 +23,7 @@ public abstract class BeverageEffect implements IBeverageEffect {
 	private final int id;
 	protected String description;
 
-	public BeverageEffect(int id) {
+	protected BeverageEffect(int id) {
 		this.id = id;
 
 		if (BeverageManager.effectList[id] != null) {
@@ -34,11 +34,12 @@ public abstract class BeverageEffect implements IBeverageEffect {
 		}
 	}
 
+	@Override
 	public int getId() {
 		return this.id;
 	}
 
-	public String getLevel() {
+	protected String getLevel() {
 		return null;
 	}
 

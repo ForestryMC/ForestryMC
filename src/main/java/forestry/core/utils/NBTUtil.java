@@ -28,7 +28,6 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagLong;
 import net.minecraft.nbt.NBTTagShort;
 import net.minecraft.nbt.NBTTagString;
-
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 /**
@@ -53,7 +52,7 @@ public class NBTUtil {
 		public static final EnumNBTType[] VALUES = values();
 		public final Class<? extends NBTBase> classObject;
 
-		private EnumNBTType(Class<? extends NBTBase> c) {
+		EnumNBTType(Class<? extends NBTBase> c) {
 			this.classObject = c;
 		}
 
@@ -80,7 +79,7 @@ public class NBTUtil {
 
 		public NBTList(NBTTagList nbtList) {
 			this.nbtList = nbtList;
-			backingList = ObfuscationReflectionHelper.getPrivateValue(NBTTagList.class, nbtList, 0);
+			this.backingList = ObfuscationReflectionHelper.getPrivateValue(NBTTagList.class, nbtList, 1);
 		}
 
 		@Override

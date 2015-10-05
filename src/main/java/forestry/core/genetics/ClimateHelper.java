@@ -21,6 +21,7 @@ import forestry.core.utils.StringUtil;
 
 public class ClimateHelper implements IClimateHelper {
 
+	@Override
 	public boolean isWithinLimits(EnumTemperature temperature, EnumHumidity humidity,
 			EnumTemperature baseTemp, EnumTolerance tolTemp,
 			EnumHumidity baseHumid, EnumTolerance tolHumid) {
@@ -31,14 +32,17 @@ public class ClimateHelper implements IClimateHelper {
 		return getToleratedHumidity(baseHumid, tolHumid).contains(humidity);
 	}
 
+	@Override
 	public boolean isWithinLimits(EnumTemperature temperature, EnumTemperature baseTemp, EnumTolerance tolTemp) {
 		return getToleratedTemperature(baseTemp, tolTemp).contains(temperature);
 	}
 
+	@Override
 	public boolean isWithinLimits(EnumHumidity humidity, EnumHumidity baseHumid, EnumTolerance tolHumid) {
 		return getToleratedHumidity(baseHumid, tolHumid).contains(humidity);
 	}
 	
+	@Override
 	public ArrayList<EnumHumidity> getToleratedHumidity(EnumHumidity prefered, EnumTolerance tolerance) {
 
 		ArrayList<EnumHumidity> tolerated = new ArrayList<EnumHumidity>();
@@ -97,6 +101,7 @@ public class ClimateHelper implements IClimateHelper {
 
 	}
 
+	@Override
 	public ArrayList<EnumTemperature> getToleratedTemperature(EnumTemperature prefered, EnumTolerance tolerance) {
 
 		ArrayList<EnumTemperature> tolerated = new ArrayList<EnumTemperature>();
@@ -190,10 +195,12 @@ public class ClimateHelper implements IClimateHelper {
 		}
 	}
 
+	@Override
 	public String toDisplay(EnumTemperature temperature) {
 		return StringUtil.localize("gui." + temperature.toString().toLowerCase(Locale.ENGLISH));
 	}
 
+	@Override
 	public String toDisplay(EnumHumidity humidity) {
 		return StringUtil.localize("gui." + humidity.toString().toLowerCase(Locale.ENGLISH));
 	}

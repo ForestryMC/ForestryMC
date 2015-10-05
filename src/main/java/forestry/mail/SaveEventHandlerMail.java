@@ -13,7 +13,6 @@ package forestry.mail;
 import net.minecraft.world.World;
 
 import forestry.core.interfaces.ISaveEventHandler;
-import forestry.plugins.PluginMail;
 
 public class SaveEventHandlerMail implements ISaveEventHandler {
 
@@ -22,7 +21,6 @@ public class SaveEventHandlerMail implements ISaveEventHandler {
 		PostRegistry.cachedPostOffice = null;
 		PostRegistry.cachedPOBoxes.clear();
 		PostRegistry.cachedTradeStations.clear();
-		PluginMail.proxy.clearMailboxInfo();
 	}
 
 	@Override

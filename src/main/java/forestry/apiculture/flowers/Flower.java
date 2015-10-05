@@ -10,7 +10,11 @@
  ******************************************************************************/
 package forestry.apiculture.flowers;
 
+import com.google.common.base.Objects;
+
 import net.minecraft.block.Block;
+
+import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.api.genetics.IFlower;
 
@@ -26,24 +30,30 @@ final class Flower implements IFlower {
 		this.weight = weight;
 	}
 
+	@Override
 	public boolean isPlantable() {
 		return this.weight != 0.0;
 	}
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof Flower)) {
+		if (!(obj instanceof IFlower)) {
 			return false;
 		}
 
-		Flower flower = (Flower) obj;
+		IFlower flower = (IFlower) obj;
 
-		return Block.isEqualTo(this.block, flower.block) && this.meta == flower.meta;
+		return Block.isEqualTo(this.block, flower.getBlock()) && (this.meta == OreDictionary.WILDCARD_VALUE || flower.getMeta() == OreDictionary.WILDCARD_VALUE || this.meta == flower.getMeta());
 	}
 
 	@Override
 	public int compareTo(IFlower other) {
 		return this.weight.compareTo(other.getWeight());
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(block);
 	}
 
 	@Override
@@ -65,4 +75,10 @@ final class Flower implements IFlower {
 	public void setWeight(double weight) {
 		this.weight = weight;
 	}
+
+	@Override
+	public String toString() {
+		return Objects.toStringHelper(this).add("block", block).add("meta", meta).add("weight", weight).toString();
+	}
+
 }

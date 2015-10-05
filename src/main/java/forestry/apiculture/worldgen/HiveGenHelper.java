@@ -17,7 +17,7 @@ import forestry.api.apiculture.hives.IHiveGenHelper;
 
 public class HiveGenHelper implements IHiveGenHelper {
 
-	private static IHiveGen treeGen = new HiveGenTree();
+	private static final IHiveGen treeGen = new HiveGenTree();
 
 	@Override
 	public IHiveGen ground(Block... validGroundBlocks) {

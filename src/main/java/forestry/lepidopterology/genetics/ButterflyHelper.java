@@ -15,7 +15,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map.Entry;
 
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -44,7 +43,7 @@ import forestry.plugins.PluginLepidopterology;
 
 public class ButterflyHelper extends SpeciesRoot implements IButterflyRoot {
 
-	public static int butterflySpeciesCount = -1;
+	private static int butterflySpeciesCount = -1;
 	public static final String UID = "rootButterflies";
 
 	@Override
@@ -148,8 +147,8 @@ public class ButterflyHelper extends SpeciesRoot implements IButterflyRoot {
 	}
 
 	@Override
-	public EntityLiving spawnButterflyInWorld(World world, IButterfly butterfly, double x, double y, double z) {
-		return (EntityButterfly) Utils.spawnEntity(world, new EntityButterfly(world, butterfly), x, y, z);
+	public EntityButterfly spawnButterflyInWorld(World world, IButterfly butterfly, double x, double y, double z) {
+		return Utils.spawnEntity(world, new EntityButterfly(world, butterfly), x, y, z);
 	}
 
 	@Override
@@ -184,7 +183,7 @@ public class ButterflyHelper extends SpeciesRoot implements IButterflyRoot {
 	}
 
 	/* TEMPLATES */
-	public static final ArrayList<IButterfly> butterflyTemplates = new ArrayList<IButterfly>();
+	private static final ArrayList<IButterfly> butterflyTemplates = new ArrayList<IButterfly>();
 
 	@Override
 	public ArrayList<IButterfly> getIndividualTemplates() {

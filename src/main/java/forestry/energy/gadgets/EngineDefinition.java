@@ -13,10 +13,10 @@ package forestry.energy.gadgets;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.core.gadgets.Engine;
 import forestry.core.gadgets.MachineDefinition;
@@ -28,27 +28,26 @@ public class EngineDefinition extends MachineDefinition {
 	public EngineDefinition(int meta, String teIdent, Class<? extends TileEntity> teClass, IBlockRenderer renderer, IRecipe... recipes) {
 		super(meta, teIdent, teClass, renderer, recipes);
 	}
-
+	
 	@Override
-	public boolean isSolidOnSide(IBlockAccess world, int x, int y, int z, int side) {
-		TileEntity tile = world.getTileEntity(x, y, z);
+	public boolean isSolidOnSide(IBlockAccess world, BlockPos pos, EnumFacing side) {
+		TileEntity tile = world.getTileEntity(pos);
 		if (tile instanceof Engine) {
-			return ((Engine) tile).getOrientation().getOpposite().ordinal() == side;
+			return ((Engine) tile).getOrientation().getOpposite() == side;
 		}
 		return false;
 	}
-
+	
 	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float fXplayerClick, float fY, float fZ) {
-
+	public boolean onBlockActivated(World world, BlockPos pos, EntityPlayer player, EnumFacing side) {
 		if (player.isSneaking()) {
 			return false;
 		}
 
-		Engine tile = (Engine) world.getTileEntity(x, y, z);
-		if (Utils.canWrench(player, x, y, z)) {
+		Engine tile = (Engine) world.getTileEntity(pos);
+		if (Utils.canWrench(player, pos)) {
 			tile.rotateEngine();
-			Utils.useWrench(player, x, y, z);
+			Utils.useWrench(player, pos);
 			return true;
 		}
 
@@ -56,8 +55,8 @@ public class EngineDefinition extends MachineDefinition {
 	}
 
 	@Override
-	public boolean rotateBlock(World world, int x, int y, int z, ForgeDirection axis) {
-		Engine tile = (Engine) world.getTileEntity(x, y, z);
+	public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis) {
+		Engine tile = (Engine) world.getTileEntity(pos);
 		tile.rotateEngine();
 		return true;
 	}

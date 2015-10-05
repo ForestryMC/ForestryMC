@@ -1,0 +1,13 @@
+{
+    "parent": "forestry:block/machine",
+	"textures": {
+        "machine": "forestry:blocks/generator_inventory"
+    },
+    "display": {
+        "thirdperson": {
+            "rotation": [ -80, -45, 170 ],
+            "translation": [ 0, 1.5, -2.75 ],
+            "scale": [ 0.375, 0.375, 0.375 ]
+        }
+    }
+}

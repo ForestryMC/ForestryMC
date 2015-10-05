@@ -10,18 +10,15 @@
  ******************************************************************************/
 package forestry.plugins;
 
+import java.util.Collections;
+
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-
 import net.minecraftforge.fml.common.network.IGuiHandler;
-
 import forestry.api.food.BeverageManager;
-import forestry.api.food.IBeverageEffect;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;
 import forestry.core.fluids.Fluids;
-import forestry.core.interfaces.IOreDictionaryHandler;
-import forestry.core.interfaces.ISaveEventHandler;
 import forestry.core.items.ItemForestryFood;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.LiquidHelper;
@@ -36,8 +33,8 @@ import forestry.food.items.ItemInfuser;
 public class PluginFood extends ForestryPlugin {
 
 	@Override
-	public void preInit() {
-		super.preInit();
+	protected void setupAPI() {
+		super.setupAPI();
 
 		// Init seasoner
 		BeverageManager.infuserManager = new ItemInfuser.MixtureManager();
@@ -67,13 +64,9 @@ public class PluginFood extends ForestryPlugin {
 
 		// Mead
 		ItemStack meadBottle = ForestryItem.beverage.getItemStack();
-		((ItemBeverage) ForestryItem.beverage.item()).beverages[0].saveEffects(meadBottle, new IBeverageEffect[]{BeverageEffect.weakAlcoholic});
+		BeverageInfo.saveEffects(meadBottle, Collections.singletonList(BeverageEffect.weakAlcoholic));
 
 		LiquidHelper.injectLiquidContainer(Fluids.SHORT_MEAD, Defaults.BUCKET_VOLUME, meadBottle, new ItemStack(Items.glass_bottle));
-	}
-
-	@Override
-	protected void registerBackpackItems() {
 	}
 
 	@Override
@@ -81,26 +74,12 @@ public class PluginFood extends ForestryPlugin {
 		// INFUSER
 		Proxies.common.addRecipe(ForestryItem.infuser.getItemStack(),
 				"X", "#", "X",
-				'#', Items.iron_ingot,
+				'#', "ingotIron",
 				'X', "ingotBronze");
-	}
-
-	@Override
-	protected void registerCrates() {
 	}
 
 	@Override
 	public IGuiHandler getGuiHandler() {
 		return new GuiHandlerFood();
-	}
-
-	@Override
-	public ISaveEventHandler getSaveEventHandler() {
-		return null;
-	}
-
-	@Override
-	public IOreDictionaryHandler getDictionaryHandler() {
-		return null;
 	}
 }

@@ -10,83 +10,39 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
-import forestry.core.gadgets.TileForestry;
-import forestry.core.interfaces.ISocketable;
-import forestry.core.network.PacketIds;
-import forestry.core.network.PacketPayload;
-import forestry.core.network.PacketSocketUpdate;
-import forestry.core.network.PacketUpdate;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.StackUtils;
+import forestry.core.circuits.ISocketable;
 
-public class ContainerSocketed extends ContainerForestry {
+public abstract class ContainerSocketed<T extends TileEntity & ISocketable> extends ContainerTile<T> implements IContainerSocketed {
 
-	private final ISocketable tile;
+	private final ContainerSocketedHelper<T> helper;
 
-	public ContainerSocketed(TileForestry inventory, ISocketable tile) {
-		super(inventory);
-		this.tile = tile;
+	protected ContainerSocketed(T tile, InventoryPlayer playerInventory, int xInv, int yInv) {
+		super(tile, playerInventory, xInv, yInv);
+		this.helper = new ContainerSocketedHelper<T>(tile);
 	}
 
-	public void handleChipsetClick(int slot, EntityPlayer player, ItemStack itemstack) {
-		if (!Proxies.common.isSimulating(player.worldObj)) {
-			PacketPayload payload = new PacketPayload(1, 0, 0);
-			payload.intPayload[0] = slot;
-			Proxies.net.sendToServer(new PacketUpdate(PacketIds.CHIPSET_CLICK, payload));
-			player.inventory.setItemStack(null);
-			return;
-		}
-
-		ItemStack toSocket = itemstack.copy();
-		toSocket.stackSize = 1;
-		tile.setSocket(slot, toSocket);
-
-		if (Proxies.common.isSimulating(player.worldObj)) {
-			ItemStack stack = player.inventory.getItemStack();
-			stack.stackSize--;
-			if (stack.stackSize <= 0) {
-				player.inventory.setItemStack(null);
-			}
-			Proxies.net.inventoryChangeNotify(player);
-			
-			TileEntity te = (TileEntity) tile;
-			Proxies.net.sendToPlayer(new PacketSocketUpdate(PacketIds.SOCKET_UPDATE, te.xCoord, te.yCoord, te.zCoord, tile), player);
-		}
-
+	@Override
+	public void handleChipsetClick(int slot) {
+		helper.handleChipsetClick(slot);
 	}
 
-	public void handleSolderingIronClick(int slot, EntityPlayer player, ItemStack itemstack) {
-		if (!Proxies.common.isSimulating(player.worldObj)) {
-			PacketPayload payload = new PacketPayload(1, 0, 0);
-			payload.intPayload[0] = slot;
-			Proxies.net.sendToServer(new PacketUpdate(PacketIds.SOLDERING_IRON_CLICK, payload));
-			return;
-		}
-
-		ItemStack socket = tile.getSocket(slot);
-		if (socket == null) {
-			return;
-		}
-
-		StackUtils.stowInInventory(socket, player.inventory, true);
-		// Not sufficient space in player's inventory. failed to stow.
-		if (socket.stackSize > 0) {
-			return;
-		}
-
-		tile.setSocket(slot, null);
-		itemstack.damageItem(1, player);
-		if (itemstack.stackSize <= 0) {
-			player.inventory.setItemStack(null);
-		}
-
-		TileEntity te = (TileEntity) tile;
-		Proxies.net.sendToPlayer(new PacketSocketUpdate(PacketIds.SOCKET_UPDATE, te.xCoord, te.yCoord, te.zCoord, tile), player);
-
+	@Override
+	public void handleChipsetClickServer(int slot, EntityPlayerMP player, ItemStack itemstack) {
+		helper.handleChipsetClickServer(slot, player, itemstack);
 	}
 
+	@Override
+	public void handleSolderingIronClick(int slot) {
+		helper.handleSolderingIronClick(slot);
+	}
+
+	@Override
+	public void handleSolderingIronClickServer(int slot, EntityPlayerMP player, ItemStack itemstack) {
+		helper.handleSolderingIronClickServer(slot, player, itemstack);
+	}
 }

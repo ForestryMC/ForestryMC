@@ -10,34 +10,35 @@
  ******************************************************************************/
 package forestry.core.proxy;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.renderer.block.statemap.IStateMapper;
+import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
-
 import forestry.core.config.Config;
+import forestry.core.fluids.Fluids;
 import forestry.core.gadgets.MachineDefinition;
 import forestry.core.interfaces.IBlockRenderer;
-import forestry.core.render.BlockRenderingHandler;
-import forestry.core.render.EntitySnowFX;
+import forestry.core.render.RenderingHandler;
+import forestry.core.render.BlockModelIndex;
+import forestry.core.render.ModelManager;
 import forestry.core.render.RenderEscritoire;
 import forestry.core.render.RenderMachine;
 import forestry.core.render.RenderMill;
 import forestry.core.render.TextureManager;
-import forestry.core.render.TileRendererIndex;
 import forestry.core.utils.ForestryResource;
 
 public class ClientProxyRender extends ProxyRender {
-
-	@Override
-	public int getNextAvailableRenderId() {
-		return RenderingRegistry.getNextAvailableRenderId();
-	}
 
 	@Override
 	public boolean fancyGraphicsEnabled() {
@@ -48,13 +49,12 @@ public class ClientProxyRender extends ProxyRender {
 	public boolean hasRendering() {
 		return true;
 	}
-
+	
 	@Override
 	public void registerTESR(MachineDefinition definition) {
-		BlockRenderingHandler.byBlockRenderer.put(new TileRendererIndex(definition.block, definition.meta), definition.renderer);
 		ClientRegistry.bindTileEntitySpecialRenderer(definition.teClass, (TileEntitySpecialRenderer) definition.renderer);
 	}
-
+	
 	@Override
 	public IBlockRenderer getRenderDefaultMachine(String gfxBase) {
 		return new RenderMachine(gfxBase);
@@ -74,52 +74,85 @@ public class ClientProxyRender extends ProxyRender {
 	public IBlockRenderer getRenderEscritoire() {
 		return new RenderEscritoire();
 	}
+	
+	@Override
+	public void registerBlockModel(final BlockModelIndex index) {
+		RenderingHandler.byBlockModelRenderer.add(index);
+		StateMapperBase ignoreState = new StateMapperBase() {
+			@Override
+			protected ModelResourceLocation getModelResourceLocation(IBlockState iBlockState) {
+			     return index.blockModelLocation;
+			}
+		};
+		ModelLoader.setCustomStateMapper(index.block, ignoreState);
+	}
+	
+	@Override
+	public void registerFluidStateMapper(Block block, final Fluids forestryFluid) {
+		final ModelResourceLocation fluidLocation = new ModelResourceLocation("forestry:blockforestryfluid", forestryFluid.getTag());
+		StateMapperBase ignoreState = new StateMapperBase() {
+			@Override
+			protected ModelResourceLocation getModelResourceLocation(IBlockState iBlockState) {
+			     return fluidLocation;
+			}
+		};
+		ModelLoader.setCustomStateMapper(block, ignoreState);
+        ModelLoader.setCustomMeshDefinition(Item.getItemFromBlock(block), new ItemMeshDefinition()
+        {
+            @Override
+			public ModelResourceLocation getModelLocation(ItemStack stack)
+            {
+                return fluidLocation;
+            }
+        });
+	}
+	
+	@Override
+	public void registerStateMapper(Block block, IStateMapper mapper){
+		ModelLoader.setCustomStateMapper(block, mapper);
+	}
 
-	private boolean shouldSpawnParticle(World world, boolean canDisable) {
-		if (canDisable && !Config.enableParticleFX) {
+	public static boolean shouldSpawnParticle(World world) {
+		if (!Config.enableParticleFX) {
 			return false;
 		}
+
 		Minecraft mc = FMLClientHandler.instance().getClient();
 		int particleSetting = mc.gameSettings.particleSetting;
-		if (!canDisable && particleSetting > 1) {
-			particleSetting = 1;
+
+		// minimal
+		if (particleSetting == 2) {
+			return world.rand.nextInt(10) == 0;
 		}
-		if (particleSetting == 1 && world.rand.nextInt(3) == 0) {
-			particleSetting = 2;
+
+		// decreased
+		if (particleSetting == 1) {
+			return world.rand.nextInt(3) != 0;
 		}
-		if (particleSetting > 1) {
-			return false;
-		}
+
+		// all
 		return true;
 	}
 
 	@Override
-	public void addSnowFX(World world, double xCoord, double yCoord, double zCoord, int color, int areaX, int areaY, int areaZ) {
-		if (!shouldSpawnParticle(world, true)) {
-			return;
-		}
-
-		double spawnX = xCoord + world.rand.nextInt(areaX * 2) - areaX;
-		double spawnY = yCoord + world.rand.nextInt(areaY);
-		double spawnZ = zCoord + world.rand.nextInt(areaZ * 2) - areaZ;
-
-		Proxies.common.getClientInstance().effectRenderer.addEffect(new EntitySnowFX(world, spawnX, spawnY, spawnZ, 0.0f, 0.0f, 0.0f));
-	}
-
-	@Override
-	public short registerItemTexUID(IIconRegister register, short uid, String ident) {
-		TextureManager.getInstance().registerTexUID(register, uid, ident);
+	public short registerItemTexUID(String modifier, short uid, String ident) {
+		TextureManager.getInstance().registerTexUID(uid, modifier, ident);
 		return uid;
 	}
 
 	@Override
-	public short registerTerrainTexUID(IIconRegister register, short uid, String ident) {
-		TextureManager.getInstance().registerTexUID(register, uid, ident);
+	public short registerTerrainTexUID(String modifier, short uid, String ident) {
+		TextureManager.getInstance().registerTexUID(uid, modifier, ident);
 		return uid;
 	}
 
 	@Override
 	public void registerVillagerSkin(int villagerId, String texturePath) {
 		VillagerRegistry.instance().registerVillagerSkin(villagerId, new ForestryResource(texturePath));
+	}
+	
+	@Override
+	public void initModels(){
+		ModelManager.registerModels();
 	}
 }

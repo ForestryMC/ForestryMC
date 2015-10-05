@@ -13,18 +13,13 @@ package forestry.core.items;
 import java.awt.Color;
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
+import forestry.api.core.IModelManager;
 import forestry.core.config.Config;
-import forestry.core.render.TextureManager;
-import forestry.core.utils.StringUtil;
 
 public class ItemOverlay extends ItemForestry {
 
@@ -86,41 +81,6 @@ public class ItemOverlay extends ItemForestry {
 		}
 	}
 
-	/* ICONS */
-	@SideOnly(Side.CLIENT)
-	private IIcon primaryIcon;
-	@SideOnly(Side.CLIENT)
-	private IIcon secondaryIcon;
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerIcons(IIconRegister register) {
-		primaryIcon = TextureManager.getInstance().registerTex(register, StringUtil.cleanItemName(this) + ".0");
-		if (overlays[0].secondaryColor != 0) {
-			secondaryIcon = TextureManager.getInstance().registerTex(register, StringUtil.cleanItemName(this) + ".1");
-		}
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIconFromDamageForRenderPass(int i, int j) {
-		if (j > 0 && overlays[i].secondaryColor != 0) {
-			return secondaryIcon;
-		} else {
-			return primaryIcon;
-		}
-	}
-
-	@Override
-	public int getRenderPasses(int metadata) {
-		return overlays[metadata].secondaryColor != 0 ? 2 : 1;
-	}
-
-	@Override
-	public boolean requiresMultipleRenderPasses() {
-		return true;
-	}
-
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {
 		if (stack.getItemDamage() < 0 || stack.getItemDamage() >= overlays.length) {
@@ -137,6 +97,15 @@ public class ItemOverlay extends ItemForestry {
 			return overlays[itemstack.getItemDamage()].primaryColor;
 		} else {
 			return overlays[itemstack.getItemDamage()].secondaryColor;
+		}
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void registerModel(Item item, IModelManager manager) {
+		for(int i = 0; i < overlays.length;i++)	
+		{
+			manager.registerItemModel(item, i, "");
 		}
 	}
 

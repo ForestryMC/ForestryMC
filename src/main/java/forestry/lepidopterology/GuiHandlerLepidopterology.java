@@ -12,6 +12,7 @@ package forestry.lepidopterology;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.core.GuiHandlerBase;
@@ -42,7 +43,7 @@ public class GuiHandlerLepidopterology extends GuiHandlerBase {
 				return new ContainerAlyzer(new FlutterlyzerInventory(player, equipped), player);
 
 			case LepidopteristChestGUI:
-				return getNaturalistChestContainer(ButterflyHelper.UID, player, world, x, y, z, guiData);
+				return getNaturalistChestContainer(ButterflyHelper.UID, player, world, new BlockPos(x, y, z), guiData);
 
 			default:
 				return null;
@@ -69,7 +70,7 @@ public class GuiHandlerLepidopterology extends GuiHandlerBase {
 				return new GuiFlutterlyzer(player, new FlutterlyzerInventory(player, equipped));
 
 			case LepidopteristChestGUI:
-				return getNaturalistChestGui(ButterflyHelper.UID, player, world, x, y, z, guiData);
+				return getNaturalistChestGui(ButterflyHelper.UID, player, world, new BlockPos(x, y, z), guiData);
 
 			default:
 				return null;

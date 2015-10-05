@@ -19,10 +19,6 @@ import forestry.core.interfaces.IInventoriedItem;
 
 public abstract class ItemInventoried extends ItemForestry implements IInventoriedItem {
 
-	public ItemInventoried() {
-		super();
-	}
-
 	@Override
 	public boolean onDroppedByPlayer(ItemStack itemstack, EntityPlayer player) {
 		if (itemstack != null &&

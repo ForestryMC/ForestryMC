@@ -17,7 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-
+import net.minecraft.util.IChatComponent;
 import forestry.api.core.INBTTagable;
 import forestry.api.mail.ILetter;
 import forestry.api.mail.IMailAddress;
@@ -237,15 +237,15 @@ public class Letter implements ILetter, INBTTagable {
 
 	@Override
 	public String getRecipientString() {
-		String recipientString = "";
+		StringBuilder recipientString = new StringBuilder();
 		for (IMailAddress address : recipient) {
 			if (recipientString.length() > 0) {
-				recipientString += ", ";
+				recipientString.append(", ");
 			}
-			recipientString += address.getName();
+			recipientString.append(address.getName());
 		}
 
-		return recipientString;
+		return recipientString.toString();
 	}
 
 	@Override
@@ -295,8 +295,8 @@ public class Letter implements ILetter, INBTTagable {
 	}
 
 	@Override
-	public String getInventoryName() {
-		return inventory.getInventoryName();
+	public String getCommandSenderName() {
+		return inventory.getCommandSenderName();
 	}
 
 	@Override
@@ -315,22 +315,47 @@ public class Letter implements ILetter, INBTTagable {
 	}
 
 	@Override
-	public void openInventory() {
-		inventory.openInventory();
+	public void openInventory(EntityPlayer player) {
+		inventory.openInventory(player);
 	}
 
 	@Override
-	public void closeInventory() {
-		inventory.closeInventory();
+	public void closeInventory(EntityPlayer player) {
+		inventory.closeInventory(player);
 	}
 
 	@Override
-	public boolean hasCustomInventoryName() {
-		return inventory.hasCustomInventoryName();
+	public boolean hasCustomName() {
+		return inventory.hasCustomName();
 	}
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		return inventory.isItemValidForSlot(i, itemstack);
+	}
+
+	@Override
+	public int getField(int id) {
+		return inventory.getField(id);
+	}
+
+	@Override
+	public void setField(int id, int value) {
+		inventory.setField(id, value);
+	}
+
+	@Override
+	public int getFieldCount() {
+		return inventory.getFieldCount();
+	}
+
+	@Override
+	public void clear() {
+		inventory.clear();
+	}
+
+	@Override
+	public IChatComponent getDisplayName() {
+		return inventory.getDisplayName();
 	}
 }

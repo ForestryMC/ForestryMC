@@ -14,8 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumChatFormatting;
 
 import forestry.api.circuits.ChipsetManager;
@@ -25,7 +23,7 @@ import forestry.api.circuits.ICircuitLayout;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
 
-public class CircuitBoard implements ICircuitBoard {
+public class CircuitBoard<T> implements ICircuitBoard {
 
 	private EnumCircuitBoardType type;
 	private ICircuitLayout layout;
@@ -84,35 +82,8 @@ public class CircuitBoard implements ICircuitBoard {
 			ChipsetManager.circuitRegistry.getDefaultLayout();
 		}
 
-		ArrayList<ICircuit> readcircuits = new ArrayList<ICircuit>();
+		List<ICircuit> readcircuits = new ArrayList<ICircuit>();
 
-		// FIXME: Legacy I
-		if (nbttagcompound.hasKey("CS")) {
-
-			NBTTagList nbttaglist = nbttagcompound.getTagList("CS", 10);
-			for (int i = 0; i < nbttaglist.tagCount(); i++) {
-				NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
-				readcircuits.add(ChipsetManager.circuitRegistry.getFromLegacyMap(nbttagcompound1.getInteger("I")));
-			}
-
-			circuits = readcircuits.toArray(new ICircuit[readcircuits.size()]);
-			return;
-
-		}
-
-		// FIXME: Legacy II
-		if (nbttagcompound.hasKey("CL")) {
-			NBTTagList nbttaglist = nbttagcompound.getTagList("CL", 10);
-			for (int i = 0; i < nbttaglist.tagCount(); i++) {
-				NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
-				readcircuits.add(ChipsetManager.circuitRegistry.getCircuit(nbttagcompound1.getString("I")));
-			}
-
-			circuits = readcircuits.toArray(new ICircuit[readcircuits.size()]);
-			return;
-		}
-
-		// New
 		if (circuits != null) {
 			return;
 		}
@@ -152,42 +123,46 @@ public class CircuitBoard implements ICircuitBoard {
 	}
 
 	@Override
-	public void onInsertion(TileEntity tile) {
+	public void onInsertion(Object tile) {
 		for (int i = 0; i < circuits.length; i++) {
-			if (circuits[i] == null) {
+			ICircuit circuit = circuits[i];
+			if (circuit == null) {
 				continue;
 			}
-			circuits[i].onInsertion(i, tile);
+			circuit.onInsertion(i, tile);
 		}
 	}
 
 	@Override
-	public void onLoad(TileEntity tile) {
+	public void onLoad(Object tile) {
 		for (int i = 0; i < circuits.length; i++) {
-			if (circuits[i] == null) {
+			ICircuit circuit = circuits[i];
+			if (circuit == null) {
 				continue;
 			}
-			circuits[i].onLoad(i, tile);
+			circuit.onLoad(i, tile);
 		}
 	}
 
 	@Override
-	public void onRemoval(TileEntity tile) {
+	public void onRemoval(Object tile) {
 		for (int i = 0; i < circuits.length; i++) {
-			if (circuits[i] == null) {
+			ICircuit circuit = circuits[i];
+			if (circuit == null) {
 				continue;
 			}
-			circuits[i].onRemoval(i, tile);
+			circuit.onRemoval(i, tile);
 		}
 	}
 
 	@Override
-	public void onTick(TileEntity tile) {
+	public void onTick(Object tile) {
 		for (int i = 0; i < circuits.length; i++) {
-			if (circuits[i] == null) {
+			ICircuit circuit = circuits[i];
+			if (circuit == null) {
 				continue;
 			}
-			circuits[i].onTick(i, tile);
+			circuit.onTick(i, tile);
 		}
 	}
 

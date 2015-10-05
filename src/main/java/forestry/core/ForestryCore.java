@@ -23,7 +23,6 @@ import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-
 import forestry.api.core.ForestryAPI;
 import forestry.api.fuels.EngineBronzeFuel;
 import forestry.api.fuels.EngineCopperFuel;
@@ -34,11 +33,8 @@ import forestry.api.fuels.RainSubstrate;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;
-import forestry.core.config.Version;
 import forestry.core.fluids.Fluids;
-import forestry.core.gadgets.TileEngine;
-import forestry.core.gadgets.TileMachine;
-import forestry.core.gadgets.TileMill;
+import forestry.core.multiblock.MultiblockEventHandler;
 import forestry.core.proxy.Proxies;
 import forestry.plugins.PluginManager;
 
@@ -47,21 +43,22 @@ public class ForestryCore {
 	public void preInit(File modLocation, Object basemod) {
 		ForestryAPI.instance = basemod;
 		ForestryAPI.forestryConstants = new ForestryConstants();
+		ForestryAPI.errorStateRegistry = new ErrorStateRegistry();
 
 		// Register event handler
 		MinecraftForge.EVENT_BUS.register(new EventHandlerCore());
+		MinecraftForge.EVENT_BUS.register(new MultiblockEventHandler());
 
 		Config.load();
-		if (!Config.disableVersionCheck) {
-			Version.versionCheck();
-		}
-		
+
 		EnumErrorCode.init();
 
+		PluginManager.runSetup();
 		PluginManager.runPreInit();
 	}
 
 	public void init(Object basemod) {
+		
 		// Set fuels and resources for the fermenter
 		FuelManager.fermenterFuel.put(ForestryItem.fertilizerCompound.getItemStack(), new FermenterFuel(ForestryItem.fertilizerCompound.getItemStack(),
 				GameMode.getGameMode().getIntegerSetting("fermenter.value.fertilizer"), GameMode.getGameMode().getIntegerSetting("fermenter.cycles.fertilizer")));
@@ -104,12 +101,10 @@ public class ForestryCore {
 		// Register gui handler
 		NetworkRegistry.INSTANCE.registerGuiHandler(basemod, new GuiHandler());
 
-		// Register machines
-		GameRegistry.registerTileEntity(TileMill.class, "forestry.Grower");
-		GameRegistry.registerTileEntity(TileEngine.class, "forestry.Engine");
-		GameRegistry.registerTileEntity(TileMachine.class, "forestry.Machine");
-
 		PluginManager.runInit();
+		
+		//Init Models
+		Proxies.render.initModels();
 	}
 
 	public void postInit() {
@@ -134,7 +129,4 @@ public class ForestryCore {
 		PluginManager.processIMCMessages(messages);
 	}
 
-	public String getPriorities() {
-		return "after:mod_IC2;after:mod_BuildCraftCore;after:mod_BuildCraftEnergy;after:mod_BuildCraftFactory;after:mod_BuildCraftSilicon;after:mod_BuildCraftTransport;after:mod_RedPowerWorld";
-	}
 }

@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
@@ -31,11 +32,12 @@ public class VanillaFertilizeGrowthRule implements IFlowerGrowthRule {
 
 	@Override
 	public boolean growFlower(IFlowerRegistry fr, String flowerType, World world, IIndividual individual, BlockPos pos) {
-		Block ground = world.getBlockState(pos).getBlock();
+		IBlockState state = world.getBlockState(pos);
+		Block ground = state.getBlock();
 		int groundMeta;
 		for (Block b : this.allowedItems) {
 			if (b == ground) {
-				groundMeta = world.getBlockMetadata(x, y, z);
+				groundMeta = ground.getMetaFromState(state);
 				if (groundMeta > 6) {
 					return false;
 				}
@@ -45,7 +47,7 @@ public class VanillaFertilizeGrowthRule implements IFlowerGrowthRule {
 					groundMeta = 7;
 				}
 
-				return world.setBlockMetadataWithNotify(x, y, z, groundMeta, 2);
+				return world.setBlockState(pos, ground.getStateFromMeta(groundMeta), 2);
 			}
 		}
 

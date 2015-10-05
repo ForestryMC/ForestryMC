@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.factory.gadgets;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -24,14 +25,14 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fml.common.Optional;
 
 import forestry.api.core.ForestryAPI;
+import forestry.api.core.IErrorLogic;
 import forestry.api.fuels.FuelManager;
 import forestry.api.recipes.IFermenterManager;
 import forestry.api.recipes.IVariableFermentable;
@@ -43,11 +44,12 @@ import forestry.core.fluids.Fluids;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.fluids.tanks.StandardTank;
-import forestry.core.gadgets.TileBase;
 import forestry.core.gadgets.TilePowered;
 import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.TileInventoryAdapter;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
 import forestry.core.utils.EnumTankLevel;
 import forestry.core.utils.StackUtils;
@@ -95,39 +97,11 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 		}
 
 		public boolean matches(ItemStack res, FluidStack liqu) {
-			// No recipe without resource!
-			if (res == null) {
+			if (!StackUtils.isCraftingEquivalent(resource, res)) {
 				return false;
 			}
 
-			if (resource.getItem() != res.getItem()) {
-				return false;
-			}
-			if (resource.getItemDamage() != Defaults.WILDCARD && resource.getItemDamage() != res.getItemDamage()) {
-				return false;
-			}
-
-			// No liquid required
-			if (liquid == null) {
-				return true;
-			}
-
-			// Liquid required but none given
-			if (liqu == null) {
-				return false;
-			}
-
-			// Wrong liquid
-			if (!liquid.isFluidEqual(liqu)) {
-				return false;
-			}
-
-			// Enough liquid
-			if (liquid.amount <= liqu.amount) {
-				return true;
-			}
-
-			return false;
+			return liqu != null && liqu.containsFluid(liquid);
 		}
 	}
 
@@ -175,17 +149,6 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 			return false;
 		}
 
-		public static boolean isLiquidResource(FluidStack liquid) {
-			if (liquid == null) {
-				return false;
-			}
-			return recipeFluidInputs.contains(liquid.getFluid());
-		}
-
-		public static boolean isLiquidProduct(FluidStack liquid) {
-			return recipeFluidOutputs.contains(liquid.getFluid());
-		}
-
 		@Override
 		public Map<Object[], Object[]> getRecipes() {
 			HashMap<Object[], Object[]> recipeList = new HashMap<Object[], Object[]>();
@@ -198,42 +161,22 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 		}
 	}
 
-	public final FilteredTank resourceTank;
-	public final FilteredTank productTank;
+	private final FilteredTank resourceTank;
+	private final FilteredTank productTank;
 
 	private final TankManager tankManager;
 
 	private Recipe currentRecipe;
 	private float currentResourceModifier;
-	public int fermentationTime = 0;
-	public int fermentationTotalTime = 0;
-	public int fuelBurnTime = 0;
-	public int fuelTotalTime = 0;
-	public int fuelCurrentFerment = 0;
+	private int fermentationTime = 0;
+	private int fermentationTotalTime = 0;
+	private int fuelBurnTime = 0;
+	private int fuelTotalTime = 0;
+	private int fuelCurrentFerment = 0;
 
 	public MachineFermenter() {
-		super(2000, 150, 8000);
-		setInternalInventory(new TileInventoryAdapter(this, 5, "Items") {
-			@Override
-			public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-				if (slotIndex == SLOT_RESOURCE) {
-					return RecipeManager.isResource(itemStack);
-				} else if (slotIndex == SLOT_INPUT) {
-					Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
-					return resourceTank.accepts(fluid);
-				} else if (slotIndex == SLOT_CAN_INPUT) {
-					return FluidHelper.isEmptyContainer(itemStack);
-				} else if (slotIndex == SLOT_FUEL) {
-					return FuelManager.fermenterFuel.containsKey(itemStack);
-				}
-				return false;
-			}
-
-			@Override
-			public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
-				return slotIndex == SLOT_CAN_OUTPUT;
-			}
-		});
+		super(2000, 8000, 600);
+		setInternalInventory(new FermenterInventoryAdapter(this));
 		setHints(Config.hints.get("fermenter"));
 		resourceTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, RecipeManager.recipeFluidInputs);
 		resourceTank.tankMode = StandardTank.TankMode.INPUT;
@@ -243,8 +186,8 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 	}
 
 	@Override
-	public void openGui(EntityPlayer player, TileBase tile) {
-		player.openGui(ForestryAPI.instance, GuiId.FermenterGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
+	public void openGui(EntityPlayer player) {
+		player.openGui(ForestryAPI.instance, GuiId.FermenterGUI.ordinal(), player.worldObj, pos.getX(), pos.getY(), pos.getZ());
 	}
 
 	@Override
@@ -275,7 +218,20 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 	}
 
 	@Override
+	public void writeData(DataOutputStreamForestry data) throws IOException {
+		super.writeData(data);
+		tankManager.writePacketData(data);
+	}
+
+	@Override
+	public void readData(DataInputStreamForestry data) throws IOException {
+		super.readData(data);
+		tankManager.readPacketData(data);
+	}
+
+	@Override
 	public void updateServerSide() {
+		super.updateServerSide();
 
 		if (!updateOnInterval(20)) {
 			return;
@@ -295,19 +251,16 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 			}
 		}
 
-		if (RecipeManager.findMatchingRecipe(inventory.getStackInSlot(SLOT_RESOURCE), resourceTank.getFluid()) != null) {
-			if (resourceTank.getFluidAmount() < fuelCurrentFerment) {
-				setErrorState(EnumErrorCode.NORESOURCE);
-			} else {
-				setErrorState(EnumErrorCode.OK);
-			}
-		} else if (inventory.getStackInSlot(SLOT_FUEL) == null && fuelBurnTime <= 0) {
-			setErrorState(EnumErrorCode.NOFUEL);
-		} else if (energyManager.getTotalEnergyStored() == 0) {
-			setErrorState(EnumErrorCode.NOPOWER);
-		} else {
-			setErrorState(EnumErrorCode.NORECIPE);
-		}
+		IErrorLogic errorLogic = getErrorLogic();
+
+		boolean hasRecipe = RecipeManager.findMatchingRecipe(inventory.getStackInSlot(SLOT_RESOURCE), resourceTank.getFluid()) != null;
+		errorLogic.setCondition(!hasRecipe, EnumErrorCode.NORECIPE);
+
+		boolean hasResource = resourceTank.getFluidAmount() >= fuelCurrentFerment;
+		errorLogic.setCondition(!hasResource, EnumErrorCode.NORESOURCE);
+
+		boolean hasFuel = inventory.getStackInSlot(SLOT_FUEL) != null || fuelBurnTime > 0;
+		errorLogic.setCondition(!hasFuel, EnumErrorCode.NOFUEL);
 	}
 
 	@Override
@@ -407,7 +360,7 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 	/**
 	 * Returns the burnTime an item of the passed ItemStack provides
 	 */
-	private int determineFuelValue(ItemStack item) {
+	private static int determineFuelValue(ItemStack item) {
 		if (item == null) {
 			return 0;
 		}
@@ -419,7 +372,7 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 		}
 	}
 
-	private int determineFermentPerCycle(ItemStack item) {
+	private static int determineFermentPerCycle(ItemStack item) {
 		if (item == null) {
 			return 0;
 		}
@@ -431,7 +384,7 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 		}
 	}
 
-	private float determineResourceMod(ItemStack itemstack) {
+	private static float determineResourceMod(ItemStack itemstack) {
 		if (!(itemstack.getItem() instanceof IVariableFermentable)) {
 			return 1.0f;
 		}
@@ -439,19 +392,7 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 		return ((IVariableFermentable) itemstack.getItem()).getFermentationModifier(itemstack);
 	}
 
-	@Override
-	public boolean isWorking() {
-		IInventoryAdapter inventory = getInternalInventory();
-		if (currentRecipe == null
-				&& RecipeManager.findMatchingRecipe(inventory.getStackInSlot(SLOT_RESOURCE), resourceTank.getFluid()) == null) {
-			return false;
-		}
-		if (fuelBurnTime > 0) {
-			return resourceTank.getFluidAmount() > 0 && productTank.getFluidAmount() < Defaults.PROCESSOR_TANK_CAPACITY;
-		} else {
-			return determineFuelValue(getFuelStack()) > 0;
-		}
-	}
+
 
 	@Override
 	public boolean hasResourcesMin(float percentage) {
@@ -473,32 +414,23 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 
 	@Override
 	public boolean hasWork() {
-		IInventoryAdapter inventory = getInternalInventory();
-		if (this.getFuelStack() == null && fuelBurnTime <= 0) {
+		if (currentRecipe == null && RecipeManager.findMatchingRecipe(getStackInSlot(SLOT_RESOURCE), resourceTank.getFluid()) == null) {
 			return false;
-		} else if (fuelBurnTime <= 0) {
-			if (RecipeManager.findMatchingRecipe(inventory.getStackInSlot(SLOT_RESOURCE), resourceTank.getFluid()) == null) {
-				return false;
-			}
 		}
 
-		if (this.getFermentationStack() == null && fermentationTime <= 0) {
+		if (fuelBurnTime <= 0 && determineFuelValue(getFuelStack()) <= 0) {
 			return false;
-		} else if (fermentationTime <= 0) {
-			if (RecipeManager.findMatchingRecipe(inventory.getStackInSlot(SLOT_RESOURCE), resourceTank.getFluid()) == null) {
-				return false;
-			}
+		}
+
+		if (fermentationTime <= 0 && this.getFermentationStack() == null) {
+			return false;
 		}
 
 		if (resourceTank.getFluidAmount() <= fuelCurrentFerment) {
 			return false;
 		}
 
-		if (productTank.getFluidAmount() >= productTank.getCapacity()) {
-			return false;
-		}
-
-		return true;
+		return productTank.getFluidAmount() < productTank.getCapacity();
 	}
 
 	public int getBurnTimeRemainingScaled(int i) {
@@ -535,11 +467,11 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 		return Utils.rateTankLevel(getProductScaled(100));
 	}
 
-	public ItemStack getFermentationStack() {
+	private ItemStack getFermentationStack() {
 		return getInternalInventory().getStackInSlot(SLOT_RESOURCE);
 	}
 
-	public ItemStack getFuelStack() {
+	private ItemStack getFuelStack() {
 		return getInternalInventory().getStackInSlot(SLOT_FUEL);
 	}
 
@@ -571,27 +503,27 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 
 	/* ILiquidTankContainer */
 	@Override
-	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+	public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
 		return resourceTank.fill(resource, doFill);
 	}
 
 	@Override
-	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+	public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
 		return tankManager.drain(from, resource, doDrain);
 	}
 
 	@Override
-	public FluidStack drain(ForgeDirection from, int quantityMax, boolean doEmpty) {
+	public FluidStack drain(EnumFacing from, int quantityMax, boolean doEmpty) {
 		return productTank.drain(quantityMax, doEmpty);
 	}
 
 	@Override
-	public boolean canFill(ForgeDirection from, Fluid fluid) {
+	public boolean canFill(EnumFacing from, Fluid fluid) {
 		return tankManager.canFill(from, fluid);
 	}
 
 	@Override
-	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+	public boolean canDrain(EnumFacing from, Fluid fluid) {
 		return tankManager.canDrain(from, fluid);
 	}
 
@@ -601,17 +533,43 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 	}
 
 	@Override
-	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+	public FluidTankInfo[] getTankInfo(EnumFacing from) {
 		return tankManager.getTankInfo(from);
 	}
 
 	/* ITRIGGERPROVIDER */
 	@Optional.Method(modid = "BuildCraftAPI|statements")
 	@Override
-	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
+	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
 		LinkedList<ITriggerExternal> res = new LinkedList<ITriggerExternal>();
 		res.add(FactoryTriggers.lowResource25);
 		res.add(FactoryTriggers.lowResource10);
 		return res;
+	}
+
+	private static class FermenterInventoryAdapter extends TileInventoryAdapter<MachineFermenter> {
+		public FermenterInventoryAdapter(MachineFermenter fermenter) {
+			super(fermenter, 5, "Items");
+		}
+
+		@Override
+		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+			if (slotIndex == SLOT_RESOURCE) {
+				return RecipeManager.isResource(itemStack);
+			} else if (slotIndex == SLOT_INPUT) {
+				Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
+				return tile.resourceTank.accepts(fluid);
+			} else if (slotIndex == SLOT_CAN_INPUT) {
+				return FluidHelper.isEmptyContainer(itemStack);
+			} else if (slotIndex == SLOT_FUEL) {
+				return FuelManager.fermenterFuel.containsKey(itemStack);
+			}
+			return false;
+		}
+
+		@Override
+		public boolean canExtractItem(int slotIndex, ItemStack itemstack, EnumFacing side) {
+			return slotIndex == SLOT_CAN_OUTPUT;
+		}
 	}
 }

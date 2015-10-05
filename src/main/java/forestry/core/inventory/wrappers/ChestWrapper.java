@@ -14,6 +14,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.util.IChatComponent;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -74,8 +75,8 @@ public class ChestWrapper implements IInventory {
 	 * Returns the name of the inventory.
 	 */
 	@Override
-	public String getInventoryName() {
-		return "";
+	public String getCommandSenderName() {
+		return null;
 	}
 
 	/**
@@ -84,7 +85,7 @@ public class ChestWrapper implements IInventory {
 	 * used directly.
 	 */
 	@Override
-	public boolean hasCustomInventoryName() {
+	public boolean hasCustomName() {
 		return false;
 	}
 
@@ -171,18 +172,18 @@ public class ChestWrapper implements IInventory {
 	}
 
 	@Override
-	public void openInventory() {
-		this.upperChest.openInventory();
+	public void openInventory(EntityPlayer player) {
+		this.upperChest.openInventory(player);
 		if (lowerChest != null) {
-			lowerChest.openInventory();
+			lowerChest.openInventory(player);
 		}
 	}
 
 	@Override
-	public void closeInventory() {
-		this.upperChest.closeInventory();
+	public void closeInventory(EntityPlayer player) {
+		this.upperChest.closeInventory(player);
 		if (lowerChest != null) {
-			lowerChest.closeInventory();
+			lowerChest.closeInventory(player);
 		}
 	}
 
@@ -193,6 +194,31 @@ public class ChestWrapper implements IInventory {
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
 		return true;
+	}
+
+	@Override
+	public IChatComponent getDisplayName() {
+		return null;
+	}
+
+	@Override
+	public int getField(int id) {
+		return 0;
+	}
+
+	@Override
+	public void setField(int id, int value) {
+		
+	}
+
+	@Override
+	public int getFieldCount() {
+		return 0;
+	}
+
+	@Override
+	public void clear() {
+		
 	}
 
 }

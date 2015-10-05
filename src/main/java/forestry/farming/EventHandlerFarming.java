@@ -15,7 +15,6 @@ import net.minecraft.block.Block;
 import net.minecraftforge.event.entity.player.BonemealEvent;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
 import forestry.core.config.ForestryBlock;
 import forestry.core.proxy.Proxies;
 import forestry.farming.gadgets.BlockMushroom;
@@ -29,12 +28,12 @@ public class EventHandlerFarming {
 			return;
 		}
 
-		Block block = event.world.getBlock(event.x, event.y, event.z);
+		Block block = event.world.getBlockState(event.pos).getBlock();
 		if (!ForestryBlock.mushroom.isBlockEqual(block)) {
 			return;
 		}
 
-		((BlockMushroom) ForestryBlock.mushroom.block()).func_149878_d(event.world, event.x, event.y, event.z, event.world.rand);
+		((BlockMushroom) ForestryBlock.mushroom.block()).generateTree(event.world, event.pos, event.world.getBlockState(event.pos), event.world.rand);
 		event.setResult(Result.ALLOW);
 	}
 }

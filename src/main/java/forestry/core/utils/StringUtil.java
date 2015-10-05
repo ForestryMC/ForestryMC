@@ -68,13 +68,6 @@ public class StringUtil {
 		return cleanTags(block.getUnlocalizedName());
 	}
 
-	public static String capitalize(String s) {
-		if (s.length() == 0) {
-			return s;
-		}
-		return s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
-	}
-
 	public static String append(String delim, String source, String appendix) {
 		if (source.length() <= 0) {
 			return appendix;
@@ -102,7 +95,7 @@ public class StringUtil {
 	public static String line(int length) {
 		StringBuilder line = new StringBuilder();
 		for (int i = 0; i < length; i++) {
-			line.append("-");
+			line.append('-');
 		}
 
 		return line.toString();

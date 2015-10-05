@@ -15,7 +15,7 @@ import net.minecraft.item.ItemStack;
 
 public interface ICrafter {
 
-	ItemStack takenFromSlot(int slotIndex, boolean consumeRecipe, EntityPlayer player);
+	ItemStack takenFromSlot(int slotIndex, EntityPlayer player);
 
 	ItemStack getResult();
 

@@ -18,28 +18,31 @@ import net.minecraft.world.World;
 
 public final class VectUtil {
 	public static boolean isAirBlock(World world, IVect position) {
-		return world.isAirBlock(position.toBlockPos());
+		return world.isAirBlock(position.getPos());
 	}
 
 	public static boolean isWoodBlock(World world, IVect position) {
 		Block block = getBlock(world, position);
-		return block.isWood(world, position.toBlockPos());
+		return block.isWood(world, position.getPos());
 	}
 
 	public static TileEntity getTile(World world, IVect position) {
-		return world.getTileEntity(position.toBlockPos());
+		return world.getTileEntity(position.getPos());
 	}
 
 	public static IBlockState getBlockState(World world, IVect position) {
-		return world.getBlockState(position.toBlockPos());
+		return world.getBlockState(position.getPos());
 	}
-
+	
 	public static Block getBlock(World world, IVect position) {
 		return getBlockState(world, position).getBlock();
 	}
 
+	public static int getBlockMeta(World world, IVect position) {
+		return getBlock(world, position).getMetaFromState(getBlockState(world, position));
+	}
+
 	public static ItemStack getAsItemStack(World world, IVect position) {
-		IBlockState state = getBlockState(world, position);
-		return new ItemStack(state.getBlock(), 1, state.getBlock().getMetaFromState(state));
+		return new ItemStack(getBlock(world, position), 1, getBlockMeta(world, position));
 	}
 }

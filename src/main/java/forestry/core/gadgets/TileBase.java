@@ -13,61 +13,19 @@ package forestry.core.gadgets;
 import net.minecraft.entity.player.EntityPlayer;
 
 import forestry.core.interfaces.IHintSource;
-import forestry.core.network.PacketPayload;
-import forestry.core.proxy.Proxies;
 
 public abstract class TileBase extends TileForestry implements IHintSource {
 
-	@Override
-	public boolean isOwnable() {
-		return true;
-	}
-
-	/* UPDATING */
-	@Override
-	public void initialize() {
-	}
-
-	@Override
-	public void updateEntity() {
-
-		super.updateEntity();
-
-		if (!Proxies.common.isSimulating(worldObj)) {
-			updateClientSide();
-		} else {
-			updateServerSide();
-		}
-	}
-
-	protected void updateClientSide() {
-	}
-
-	protected void updateServerSide() {
-	}
-
-	/* NETWORK */
-	@Override
-	public PacketPayload getPacketPayload() {
-		return null;
-	}
-
-	@Override
-	public void fromPacketPayload(PacketPayload payload) {
-	}
-
-	/* INTERACTION */
-	public void openGui(EntityPlayer player, TileBase tile) {
-	}
+	public abstract void openGui(EntityPlayer player);
 
 	public boolean canDrainWithBucket() {
 		return false;
 	}
 
-	/* IHINTSOURCE */
+	/* IHintSource */
 	private String[] hints;
 
-	public void setHints(String[] hints) {
+	protected void setHints(String[] hints) {
 		this.hints = hints;
 	}
 

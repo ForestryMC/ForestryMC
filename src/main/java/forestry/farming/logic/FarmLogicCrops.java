@@ -21,9 +21,9 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
+import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
@@ -36,13 +36,11 @@ import forestry.core.vect.VectUtil;
 
 public abstract class FarmLogicCrops extends FarmLogicWatered {
 
-	private final IFarmable[] seeds;
+	private final Iterable<IFarmable> seeds;
 	private static final ItemStack farmland = new ItemStack(Blocks.farmland, 1, Defaults.WILDCARD);
 
-	public FarmLogicCrops(IFarmHousing housing, IFarmable[] seeds) {
-		super(housing,
-				new ItemStack[]{new ItemStack(Blocks.dirt)},
-				new ItemStack(Blocks.farmland));
+	protected FarmLogicCrops(IFarmHousing housing, Iterable<IFarmable> seeds) {
+		super(housing, new ItemStack(Blocks.dirt), new ItemStack(Blocks.farmland));
 
 		this.seeds = seeds;
 	}
@@ -62,7 +60,7 @@ public abstract class FarmLogicCrops extends FarmLogicWatered {
 		return false;
 	}
 
-	public boolean isWindfall(ItemStack itemstack) {
+	private boolean isWindfall(ItemStack itemstack) {
 		for (IFarmable germling : seeds) {
 			if (germling.isWindfall(itemstack)) {
 				return true;
@@ -85,7 +83,7 @@ public abstract class FarmLogicCrops extends FarmLogicWatered {
 		Vect min = coords.add(offset);
 		Vect max = min.add(area);
 
-		AxisAlignedBB harvestBox = AxisAlignedBB.fromBounds(min.x, min.y, min.z, max.x, max.y, max.z);
+		AxisAlignedBB harvestBox = AxisAlignedBB.fromBounds(min.getX(), min.getY(), min.getZ(), max.getX(), max.getY(), max.getZ());
 		List<Entity> list = housing.getWorld().getEntitiesWithinAABB(Entity.class, harvestBox);
 
 		int i;
@@ -108,13 +106,13 @@ public abstract class FarmLogicCrops extends FarmLogicWatered {
 	}
 
 	@Override
-	protected boolean maintainCrops(BlockPos pos, EnumFacing direction, int extent) {
+	protected boolean maintainCrops(BlockPos pos, FarmDirection direction, int extent) {
 
 		World world = getWorld();
 
 		for (int i = 0; i < extent; i++) {
 			Vect position = translateWithOffset(pos, direction, i);
-			if (!VectUtil.isAirBlock(world, position) && !Utils.isReplaceableBlock(getWorld(), position.x, position.y, position.z)) {
+			if (!VectUtil.isAirBlock(world, position) && !Utils.isReplaceableBlock(getWorld(), position.getPos())) {
 				continue;
 			}
 
@@ -136,7 +134,7 @@ public abstract class FarmLogicCrops extends FarmLogicWatered {
 		World world = getWorld();
 
 		for (IFarmable candidate : seeds) {
-			if (housing.plantGermling(candidate, world, position.toBlockPos())) {
+			if (housing.plantGermling(candidate, world, position.getPos())) {
 				return true;
 			}
 		}
@@ -145,14 +143,14 @@ public abstract class FarmLogicCrops extends FarmLogicWatered {
 	}
 
 	@Override
-	public Collection<ICrop> harvest(BlockPos pos, EnumFacing direction, int extent) {
+	public Collection<ICrop> harvest(BlockPos pos, FarmDirection direction, int extent) {
 		World world = getWorld();
 
 		Stack<ICrop> crops = new Stack<ICrop>();
 		for (int i = 0; i < extent; i++) {
-			Vect position = translateWithOffset(pos.up(), direction, i);
+			Vect position = translateWithOffset(pos, direction, i);
 			for (IFarmable seed : seeds) {
-				ICrop crop = seed.getCropAt(world, position.toBlockPos());
+				ICrop crop = seed.getCropAt(world, pos);
 				if (crop != null) {
 					crops.push(crop);
 				}

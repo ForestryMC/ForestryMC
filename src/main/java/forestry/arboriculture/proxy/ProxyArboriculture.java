@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.arboriculture.proxy;
 
-import net.minecraft.world.World;
-
 public class ProxyArboriculture {
 
 	public void initializeRendering() {
@@ -29,7 +27,4 @@ public class ProxyArboriculture {
 		return 6396257;
 	}
 
-	public int getBiomeFoliageColour(World world, int x, int z) {
-		return getFoliageColorBasic();
-	}
 }

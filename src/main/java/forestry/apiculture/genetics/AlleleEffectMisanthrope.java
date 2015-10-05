@@ -15,29 +15,24 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
-
+import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
-import forestry.apiculture.items.ItemArmorApiarist;
 import forestry.core.utils.DamageSourceForestry;
 
 public class AlleleEffectMisanthrope extends AlleleEffectThrottled {
 
-	public static final DamageSource damageSourceBeeEnd = new DamageSourceForestry("bee.end");
+	private static final DamageSource damageSourceBeeEnd = new DamageSourceForestry("bee.end");
 
-	public AlleleEffectMisanthrope(String uid) {
-		super(uid, "misanthrope", true, 20, false, false);
+	public AlleleEffectMisanthrope() {
+		super("misanthrope", true, 20, false, false);
 	}
 
 	@Override
-	public IEffectData doEffect(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
+	public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
 
-		if (isHalted(storedData, housing)) {
-			return storedData;
-		}
-
-		AxisAlignedBB beatifyBox = getBounding(genome, housing, 1.0f);
+		AxisAlignedBB beatifyBox = getBounding(genome, housing);
 		@SuppressWarnings("rawtypes")
 		List list = housing.getWorld().getEntitiesWithinAABB(EntityPlayer.class, beatifyBox);
 
@@ -48,7 +43,7 @@ public class AlleleEffectMisanthrope extends AlleleEffectThrottled {
 
 			// Players are not attacked if they wear a full set of apiarist's
 			// armor.
-			int count = ItemArmorApiarist.wearsItems(player, getUID(), true);
+			int count = BeeManager.armorApiaristHelper.wearsItems(player, getUID(), true);
 			// Full set, no damage/effect
 			if (count > 3) {
 				continue;

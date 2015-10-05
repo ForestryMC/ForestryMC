@@ -13,7 +13,7 @@ package forestry.apiculture.render;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureUtil;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 public class TextureHabitatLocator extends TextureAtlasSprite {
@@ -24,18 +24,18 @@ public class TextureHabitatLocator extends TextureAtlasSprite {
 		return instance;
 	}
 
-	private ChunkCoordinates targetBiome;
+	private BlockPos targetBiome;
 	private boolean targetBiomeFound;
 
-	public double currentAngle;
-	public double angleDelta;
+	private double currentAngle;
+	private double angleDelta;
 
-	public TextureHabitatLocator() {
-		super("biomefinder");
+	public TextureHabitatLocator(String iconName) {
+		super(iconName);
 		instance = this;
 	}
 
-	public void setTargetCoordinates(ChunkCoordinates coordinates) {
+	public void setTargetCoordinates(BlockPos coordinates) {
 		this.targetBiome = coordinates;
 		this.targetBiomeFound = false;
 	}
@@ -45,13 +45,13 @@ public class TextureHabitatLocator extends TextureAtlasSprite {
 		Minecraft minecraft = Minecraft.getMinecraft();
 
 		if (minecraft.theWorld != null && minecraft.thePlayer != null) {
-			updateCompass(minecraft.theWorld, minecraft.thePlayer.posX, minecraft.thePlayer.posZ, minecraft.thePlayer.rotationYaw, false, true);
+			updateCompass(minecraft.theWorld, minecraft.thePlayer.posX, minecraft.thePlayer.posZ, minecraft.thePlayer.rotationYaw);
 		} else {
-			updateCompass(null, 0.0d, 0.0d, 0.0d, true, true);
+			updateCompass(null, 0.0d, 0.0d, 0.0d);
 		}
 	}
 
-	public void updateCompass(World world, double playerX, double playerZ, double playerYaw, boolean par8, boolean hasSpin) {
+	private void updateCompass(World world, double playerX, double playerZ, double playerYaw) {
 
 		double targetAngle;
 
@@ -59,8 +59,8 @@ public class TextureHabitatLocator extends TextureAtlasSprite {
 			// No target has the locator spinning wildly.
 			targetAngle = Math.random() * Math.PI * 2.0d;
 		} else {
-			double xPart = targetBiome.posX - playerX;
-			double zPart = targetBiome.posZ - playerZ;
+			double xPart = targetBiome.getX() - playerX;
+			double zPart = targetBiome.getZ() - playerZ;
 
 			if (Math.abs(xPart) + Math.abs(zPart) < 10 || targetBiomeFound) {
 				// spin steadily when the biome is found
@@ -72,36 +72,30 @@ public class TextureHabitatLocator extends TextureAtlasSprite {
 			}
 		}
 
-		if (!hasSpin) {
-			currentAngle = targetAngle;
-		} else {
-			double angleChange;
-
-			for (angleChange = targetAngle - currentAngle; angleChange < -Math.PI; angleChange += (Math.PI * 2D)) {
-				;
-			}
-
-			while (angleChange >= Math.PI) {
-				angleChange -= (Math.PI * 2D);
-			}
-
-			if (angleChange < -1.0D) {
-				angleChange = -1.0D;
-			}
-
-			if (angleChange > 1.0D) {
-				angleChange = 1.0D;
-			}
-
-			this.angleDelta += angleChange * 0.1D;
-			this.angleDelta *= 0.8D;
-			this.currentAngle += this.angleDelta;
+		double angleChange = targetAngle - currentAngle;
+		while (angleChange < -Math.PI) {
+			angleChange += (Math.PI * 2D);
 		}
 
-		int i;
+		while (angleChange >= Math.PI) {
+			angleChange -= (Math.PI * 2D);
+		}
 
-		for (i = (int) ((this.currentAngle / (Math.PI * 2D) + 1.0d) * this.framesTextureData.size()) % this.framesTextureData.size(); i < 0; i = (i + this.framesTextureData.size()) % this.framesTextureData.size()) {
-			;
+		if (angleChange < -1.0D) {
+			angleChange = -1.0D;
+		}
+
+		if (angleChange > 1.0D) {
+			angleChange = 1.0D;
+		}
+
+		this.angleDelta += angleChange * 0.1D;
+		this.angleDelta *= 0.8D;
+		this.currentAngle += this.angleDelta;
+
+		int i = (int) ((this.currentAngle / (Math.PI * 2D) + 1.0d) * this.framesTextureData.size()) % this.framesTextureData.size();
+		while (i < 0) {
+			i = (i + this.framesTextureData.size()) % this.framesTextureData.size();
 		}
 
 		if (i != this.frameCounter) {

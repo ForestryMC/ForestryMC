@@ -13,21 +13,30 @@ package forestry.core.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import forestry.core.config.Defaults;
+import forestry.plugins.PluginManager;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.ICrashCallable;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.relauncher.Side;
 
-import forestry.core.config.Defaults;
-import forestry.plugins.PluginManager;
-
+/**
+ * ICrashCallable for highlighting certain mods and listing disabled modules for crash reports.
+ **/
 public class ForestryModEnvWarningCallable implements ICrashCallable {
 
 	private final List<String> modIDs;
 	private final List<String> disabledModules;
 
-	public ForestryModEnvWarningCallable() {
+	public static void register() {
+		ForestryModEnvWarningCallable callable = new ForestryModEnvWarningCallable();
+		if (callable.modIDs.size() > 0 || callable.disabledModules.size() > 0) {
+			FMLCommonHandler.instance().registerCrashCallable(callable);
+		}
+	}
+
+	private ForestryModEnvWarningCallable() {
 		this.modIDs = new ArrayList<String>();
 
 		if (FMLCommonHandler.instance().getSide() == Side.CLIENT && FMLClientHandler.instance().hasOptifine()) {
@@ -39,20 +48,17 @@ public class ForestryModEnvWarningCallable implements ICrashCallable {
 		}
 
 		try {
-			@SuppressWarnings("unused")
 			Class<?> c = Class.forName("org.bukkit.Bukkit");
-			modIDs.add("Bukkit, Cauldron, or other Bukkit replacement");
+			if (c != null) {
+				modIDs.add("Bukkit, Cauldron, or other Bukkit replacement");
+			}
 		} catch (Throwable ignored) {
-		} // No need to do anything.
-
+			// No need to do anything.
+		}
 
 		this.disabledModules = new ArrayList<String>();
 		for (PluginManager.Module module : PluginManager.configDisabledModules) {
 			disabledModules.add(module.configName());
-		}
-
-		if (modIDs.size() > 0 || disabledModules.size() > 0) {
-			FMLCommonHandler.instance().registerCrashCallable(this);
 		}
 	}
 

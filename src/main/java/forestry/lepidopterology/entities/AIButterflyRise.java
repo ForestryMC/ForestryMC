@@ -56,7 +56,7 @@ public class AIButterflyRise extends AIButterflyMovement {
 		}
 
 		// Continue if we have not yet reached the destination.
-		if (entity.getDestination().getDistanceSquared((int) entity.posX, (int) entity.posY, (int) entity.posZ) > 2.0f) {
+		if (getDistanceSquared(entity.getDestination(), entity.getPosition()) > 2.0f) {
 			return true;
 		}
 

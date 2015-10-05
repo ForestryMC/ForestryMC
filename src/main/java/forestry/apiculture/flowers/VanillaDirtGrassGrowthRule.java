@@ -29,13 +29,13 @@ public class VanillaDirtGrassGrowthRule implements IFlowerGrowthRule {
 			return false;
 		}
 
-		Block ground = world.getBlockState(pos.down()).getBlock();
+		Block ground = world.getBlockState(new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ())).getBlock();
 		if (ground != Blocks.dirt && ground != Blocks.grass) {
 			return false;
 		}
 
 		IFlower flower = flowerRegistry.getRandomPlantableFlower(flowerType, world.rand);
-		return world.setBlockState(pos, flower.getBlock(), flower.getMeta(), Defaults.FLAG_BLOCK_SYNCH);
+		return world.setBlockState(pos, flower.getBlock().getStateFromMeta(flower.getMeta()), Defaults.FLAG_BLOCK_SYNCH);
 	}
 
 }

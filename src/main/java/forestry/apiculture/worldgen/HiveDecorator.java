@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
@@ -30,57 +31,44 @@ import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.plugins.PluginApiculture;
 
-/**
- * @author CovertJaguar <http://www.railcraft.info/>
- */
-public class HiveDecorator {
+public abstract class HiveDecorator {
 
 	@SuppressWarnings("rawtypes")
-	public static final EventType EVENT_TYPE = EnumHelper.addEnum(EventType.class, "FORESTRY_HIVES", new Class[0], new Object[0]);
-	private static HiveDecorator instance;
+	private static final EventType EVENT_TYPE = EnumHelper.addEnum(EventType.class, "FORESTRY_HIVES", new Class[0], new Object[0]);
 
-	public static HiveDecorator instance() {
-		if (instance == null) {
-			instance = new HiveDecorator();
-		}
-		return instance;
-	}
-
-	private HiveDecorator() {
-	}
-
-	public void decorateHives(IChunkProvider chunkProvider, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated) {
-		if (!TerrainGen.populate(chunkProvider, world, rand, chunkX, chunkZ, hasVillageGenerated, EVENT_TYPE)) {
+	public static void decorateHives(IChunkProvider chunkProvider, World world, Random rand, BlockPos pos, boolean hasVillageGenerated) {
+		if (!TerrainGen.populate(chunkProvider, world, rand, pos.getX(), pos.getZ(), hasVillageGenerated, EVENT_TYPE)) {
 			return;
 		}
 
-		decorateHives(world, rand, chunkX, chunkZ);
+		decorateHives(world, rand, new BlockPos(pos.getX(), 0, pos.getZ()));
 	}
 
-	public void decorateHives(World world, Random rand, int chunkX, int chunkZ) {
+	public static void decorateHives(World world, Random rand, BlockPos posChunk) {
 		List<Hive> hives = PluginApiculture.hiveRegistry.getHives();
 
 		if (Config.generateBeehivesDebug) {
-			decorateHivesDebug(world, chunkX, chunkZ, hives);
+			decorateHivesDebug(world, posChunk, hives);
 			return;
 		}
 
 		Collections.shuffle(hives, rand);
 		for (Hive hive : hives) {
-			if (genHive(world, rand, chunkX, chunkZ, hive)) {
+			if (genHive(world, rand, posChunk, hive)) {
 				return;
 			}
 		}
 	}
 
-	public boolean genHive(World world, Random rand, int chunkX, int chunkZ, Hive hive) {
-		if (hive.genChance() * Config.getBeehivesRate() < rand.nextFloat() * 100.0f) {
+	public static boolean genHive(World world, Random rand, BlockPos posChunk, Hive hive) {
+		if (hive.genChance() * Config.getBeehivesAmount() < rand.nextFloat() * 100.0f) {
 			return false;
 		}
 
-		BlockPos pos = new BlockPos(chunkX * 16, 0, chunkZ * 16);
+		int worldX = posChunk.getX() * 16;
+		int worldZ = posChunk.getZ() * 16;
 
-		BiomeGenBase biome = world.getBiomeGenForCoords(pos);
+		BiomeGenBase biome = world.getBiomeGenForCoords(new BlockPos(worldX, 0, worldZ));
 		EnumHumidity humidity = EnumHumidity.getFromValue(biome.rainfall);
 
 		if (!hive.isGoodBiome(biome) || !hive.isGoodHumidity(humidity)) {
@@ -88,9 +76,10 @@ public class HiveDecorator {
 		}
 
 		for (int tries = 0; tries < 4; tries++) {
-			BlockPos pos1 = pos.add(rand.nextInt(16), 0, rand.nextInt(16));
+			int x = worldX + rand.nextInt(16);
+			int z = worldZ + rand.nextInt(16);
 
-			if (tryGenHive(world, pos1, hive)) {
+			if (tryGenHive(world, new BlockPos(x, 0, z), hive)) {
 				return true;
 			}
 		}
@@ -98,9 +87,10 @@ public class HiveDecorator {
 		return false;
 	}
 
-	private void decorateHivesDebug(World world, int chunkX, int chunkZ, List<Hive> hives) {
-		BlockPos pos = new BlockPos(chunkX * 16, 0, chunkZ * 16);
-		BiomeGenBase biome = world.getBiomeGenForCoords(pos);
+	private static void decorateHivesDebug(World world, BlockPos posChunk, List<Hive> hives) {
+		int worldX = posChunk.getX() * 16;
+		int worldZ = posChunk.getZ() * 16;
+		BiomeGenBase biome = world.getBiomeGenForCoords(new BlockPos(worldX, 0, worldZ));
 		EnumHumidity humidity = EnumHumidity.getFromValue(biome.rainfall);
 
 		for (int x = 0; x < 16; x++) {
@@ -111,40 +101,41 @@ public class HiveDecorator {
 						continue;
 					}
 
-					tryGenHive(world, pos.add(x, 0, z), hive);
+					tryGenHive(world, new BlockPos(worldX + x, 0, worldZ + z), hive);
 				}
 			}
 		}
 	}
 
-	private boolean tryGenHive(World world, BlockPos pos, Hive hive) {
+	private static boolean tryGenHive(World world, BlockPos posChunk, Hive hive) {
 
-		pos = hive.getYForHive(world, pos);
+		int y = hive.getYForHive(world, posChunk);
 
-		if (pos.getY() < 0) {
+		if (y < 0) {
 			return false;
 		}
 
-		if (!hive.canReplace(world, pos)) {
+		BlockPos pos = new BlockPos(posChunk.getX(), y, posChunk.getZ());
+		if (!hive.canReplace(world, posChunk)) {
 			return false;
 		}
 
 		BiomeGenBase biome = world.getBiomeGenForCoords(pos);
-		EnumTemperature temperature = EnumTemperature.getFromValue(biome.getFloatTemperature(pos));
+		EnumTemperature temperature = EnumTemperature.getFromValue(biome.getFloatTemperature(posChunk));
 		if (!hive.isGoodTemperature(temperature)) {
 			return false;
 		}
 
-		if (!hive.isValidLocation(world, pos)) {
+		if (!hive.isValidLocation(world, posChunk)) {
 			return false;
 		}
 
 		return setHive(world, pos, hive);
 	}
 
-	protected boolean setHive(World world, BlockPos pos, Hive hive) {
+	private static boolean setHive(World world, BlockPos pos, Hive hive) {
 		Block hiveBlock = hive.getHiveBlock();
-		boolean placed = world.setBlockState(pos, hiveBlock, hive.getHiveMeta(), Defaults.FLAG_BLOCK_SYNCH);
+		boolean placed = world.setBlockState(pos, hiveBlock.getStateFromMeta(hive.getHiveMeta()), Defaults.FLAG_BLOCK_SYNCH);
 		if (!placed) {
 			return false;
 		}
@@ -153,8 +144,9 @@ public class HiveDecorator {
 		if (!Block.isEqualTo(hiveBlock, placedBlock)) {
 			return false;
 		}
-
-		hiveBlock.onBlockAdded(world, pos);
+		
+		IBlockState state = world.getBlockState(pos);
+		hiveBlock.onBlockAdded(world, pos, state);
 		world.markBlockForUpdate(pos);
 
 		if (!Config.generateBeehivesDebug) {

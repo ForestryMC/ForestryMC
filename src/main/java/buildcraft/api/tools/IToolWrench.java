@@ -21,8 +21,7 @@ public interface IToolWrench {
 	 *
 	 * @param player
 	 *            - The player doing the wrenching
-	 * @param x
-	 *            ,y,z - The coordinates for the block being wrenched
+	 * @param pos - The coordinates for the block being wrenched
 	 *
 	 * @return true if wrenching is allowed, false if not
 	 */
@@ -34,8 +33,7 @@ public interface IToolWrench {
 	 *
 	 * @param player
 	 *            - The player doing the wrenching
-	 * @param x
-	 *            ,y,z - The coordinates of the block being wrenched
+	 * @param pos - The coordinates of the block being wrenched
 	 */
 	void wrenchUsed(EntityPlayer player, BlockPos pos);
 }

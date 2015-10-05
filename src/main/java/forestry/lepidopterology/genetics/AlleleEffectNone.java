@@ -13,12 +13,12 @@ package forestry.lepidopterology.genetics;
 import forestry.api.genetics.IEffectData;
 import forestry.api.lepidopterology.IAlleleButterflyEffect;
 import forestry.api.lepidopterology.IEntityButterfly;
-import forestry.core.genetics.Allele;
+import forestry.core.genetics.alleles.AlleleCategorized;
 
-public class AlleleEffectNone extends Allele implements IAlleleButterflyEffect {
+public class AlleleEffectNone extends AlleleCategorized implements IAlleleButterflyEffect {
 
-	public AlleleEffectNone(String uid, boolean isDominant) {
-		super(uid, isDominant, false);
+	public AlleleEffectNone() {
+		super("forestry", "bf", "none", false);
 	}
 
 	@Override
@@ -33,7 +33,7 @@ public class AlleleEffectNone extends Allele implements IAlleleButterflyEffect {
 
 	@Override
 	public String getUnlocalizedName() {
-		return "lepidopterology.effect.none";
+		return "for.lepidopterology.effect.none";
 	}
 
 	@Override

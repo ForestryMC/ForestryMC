@@ -10,35 +10,10 @@
  ******************************************************************************/
 package forestry.apiculture;
 
-import java.util.List;
-import java.util.Random;
+@Deprecated
+public class VillageHandlerApiculture {
 
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
-import net.minecraft.village.MerchantRecipe;
-import net.minecraft.village.MerchantRecipeList;
-import net.minecraft.world.gen.structure.MapGenStructureIO;
-import net.minecraft.world.gen.structure.StructureVillagePieces;
-
-import net.minecraftforge.fml.common.registry.VillagerRegistry.IVillageCreationHandler;
-import net.minecraftforge.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
-
-import forestry.api.apiculture.EnumBeeType;
-import forestry.apiculture.genetics.BeeTemplates;
-import forestry.apiculture.items.ItemHoneycomb;
-import forestry.apiculture.worldgen.ComponentVillageBeeHouse;
-import forestry.core.config.Defaults;
-import forestry.core.config.ForestryBlock;
-import forestry.core.config.ForestryItem;
-import forestry.core.proxy.Proxies;
-import forestry.plugins.PluginApiculture;
-
-public class VillageHandlerApiculture implements IVillageCreationHandler, IVillageTradeHandler {
-
-	public static void registerVillageComponents() {
+	/*public static void registerVillageComponents() {
 		try {
 			MapGenStructureIO.func_143031_a(ComponentVillageBeeHouse.class, "Forestry:BeeHouse");
 		} catch (Throwable e) {
@@ -53,10 +28,7 @@ public class VillageHandlerApiculture implements IVillageCreationHandler, IVilla
 		recipeList.add(new MerchantRecipe(new ItemStack(Items.wheat, 2), ItemHoneycomb.getRandomComb(1, random, false)));
 		recipeList.add(new MerchantRecipe(new ItemStack(Blocks.log, 24, Defaults.WILDCARD), ForestryBlock.apiculture.getItemStack(1, Defaults.DEFINITION_APIARY_META)));
 		recipeList.add(new MerchantRecipe(new ItemStack(Items.emerald, 1), ForestryItem.frameProven.getItemStack(6)));
-		recipeList.add(new MerchantRecipe(new ItemStack(Items.emerald, 12), ForestryItem.beePrincessGE.getItemStack(1, Defaults.WILDCARD),
-				PluginApiculture.beeInterface.getMemberStack(
-						PluginApiculture.beeInterface.getBee(villager.worldObj, PluginApiculture.beeInterface.templateAsGenome(BeeTemplates.getMonasticTemplate())),
-						EnumBeeType.DRONE.ordinal())));
+		recipeList.add(new MerchantRecipe(new ItemStack(Items.emerald, 12), ForestryItem.beePrincessGE.getItemStack(1, Defaults.WILDCARD), BeeDefinition.MONASTIC.getMemberStack(EnumBeeType.DRONE)));
 	}
 
 	@Override
@@ -74,5 +46,5 @@ public class VillageHandlerApiculture implements IVillageCreationHandler, IVilla
 	public Object buildComponent(StructureVillagePieces.PieceWeight villagePiece, StructureVillagePieces.Start startPiece, List pieces, Random random, int p1, int p2,
 			int p3, int p4, int p5) {
 		return ComponentVillageBeeHouse.buildComponent(startPiece, pieces, random, p1, p2, p3, p4, p5);
-	}
+	}*/
 }

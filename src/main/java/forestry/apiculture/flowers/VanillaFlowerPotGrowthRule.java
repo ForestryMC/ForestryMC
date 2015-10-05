@@ -12,6 +12,7 @@ package forestry.apiculture.flowers;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFlowerPot;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFlowerPot;
 import net.minecraft.util.BlockPos;
@@ -26,7 +27,7 @@ public class VanillaFlowerPotGrowthRule implements IFlowerGrowthRule {
 
 	@Override
 	public boolean growFlower(IFlowerRegistry fr, String flowerType, World world, IIndividual individual, BlockPos pos) {
-
+		IBlockState state = world.getBlockState(pos);
 		TileEntity tile = world.getTileEntity(pos);
 		if (!(tile instanceof TileEntityFlowerPot)) {
 			return false;
@@ -37,7 +38,7 @@ public class VanillaFlowerPotGrowthRule implements IFlowerGrowthRule {
 			return false;
 		}
 
-		Block block = world.getBlockState(pos).getBlock();
+		Block block = state.getBlock();
 		if (!(block instanceof BlockFlowerPot)) {
 			return false;
 		}
@@ -62,7 +63,7 @@ public class VanillaFlowerPotGrowthRule implements IFlowerGrowthRule {
 		flowerPotTile.setFlowerPotData(newTile.getFlowerPotItem(), newTile.getFlowerPotData());
 		flowerPotTile.markDirty();
 
-		if (!world.setBlockMetadataWithNotify(x, y, z, 1, 2)) {
+		if (!world.setBlockState(pos, block.getStateFromMeta(1), 2)) {
 			world.markBlockForUpdate(pos);
 		}
 

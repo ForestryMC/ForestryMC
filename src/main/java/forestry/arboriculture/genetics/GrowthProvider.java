@@ -11,6 +11,7 @@
 package forestry.arboriculture.genetics;
 
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
@@ -26,15 +27,21 @@ import forestry.core.vect.Vect;
 public class GrowthProvider implements IGrowthProvider {
 
 	@Override
-	public boolean canGrow(ITreeGenome genome, World world, int xPos, int yPos, int zPos, int expectedGirth, int expectedHeight) {
-		return hasRoom(genome, world, xPos, yPos, zPos, expectedGirth, expectedHeight)
-				&& getGrowthConditions(genome, world, xPos, yPos, zPos) != EnumGrowthConditions.HOSTILE
-				&& hasSufficientSaplings(genome, world, xPos, yPos, zPos, expectedGirth);
+	public boolean canGrow(ITreeGenome genome, World world, BlockPos pos, int expectedGirth, int expectedHeight) {
+		if (!hasRoom(world, pos, expectedGirth, expectedHeight)) {
+			return false;
+		}
+
+		if (getGrowthConditions(genome, world, pos) == EnumGrowthConditions.HOSTILE) {
+			return false;
+		}
+
+		return hasSufficientSaplings(genome, world, pos, expectedGirth);
 	}
 
 	@Override
-	public EnumGrowthConditions getGrowthConditions(ITreeGenome genome, World world, int xPos, int yPos, int zPos) {
-		return getConditionFromLight(world, xPos, yPos, zPos);
+	public EnumGrowthConditions getGrowthConditions(ITreeGenome genome, World world, BlockPos pos) {
+		return getConditionFromLight(world, pos);
 	}
 
 	@Override
@@ -47,9 +54,9 @@ public class GrowthProvider implements IGrowthProvider {
 		return new String[0];
 	}
 
-	protected EnumGrowthConditions getConditionsFromRainfall(World world, int xPos, int yPos, int zPos, float min, float max) {
+	protected static EnumGrowthConditions getConditionsFromRainfall(World world, BlockPos pos, float min, float max) {
 
-		BiomeGenBase biome = world.getWorldChunkManager().getBiomeGenAt(xPos, zPos);
+		BiomeGenBase biome = world.getWorldChunkManager().getBiomeGenerator(pos);
 		if (biome.rainfall < min || biome.rainfall > max) {
 			return EnumGrowthConditions.HOSTILE;
 		}
@@ -57,18 +64,19 @@ public class GrowthProvider implements IGrowthProvider {
 		return EnumGrowthConditions.EXCELLENT;
 	}
 
-	protected EnumGrowthConditions getConditionsFromTemperature(World world, int xPos, int yPos, int zPos, float min, float max) {
+	protected static EnumGrowthConditions getConditionsFromTemperature(World world, BlockPos pos, float min, float max) {
 
-		BiomeGenBase biome = world.getWorldChunkManager().getBiomeGenAt(xPos, zPos);
-		if (biome.temperature < min || biome.temperature > max) {
+		BiomeGenBase biome = world.getWorldChunkManager().getBiomeGenerator(pos);
+		float biomeTemperature = biome.getFloatTemperature(pos);
+		if (biomeTemperature < min || biomeTemperature > max) {
 			return EnumGrowthConditions.HOSTILE;
 		}
 
 		return EnumGrowthConditions.EXCELLENT;
 	}
 
-	protected EnumGrowthConditions getConditionFromLight(World world, int xPos, int yPos, int zPos) {
-		int lightvalue = world.getBlockLightValue(xPos, yPos + 1, zPos);
+	protected static EnumGrowthConditions getConditionFromLight(World world, BlockPos pos) {
+		int lightvalue = world.getLightFromNeighbors(new BlockPos(pos.getX(), pos.getY() + 1, pos.getZ()));
 
 		if (lightvalue > 13) {
 			return EnumGrowthConditions.EXCELLENT;
@@ -83,31 +91,22 @@ public class GrowthProvider implements IGrowthProvider {
 		}
 	}
 
-	/*
-	 * protected EnumGrowthConditions getConditionFromGround(World world, int xPos, int yPos, int zPos) { Block block = Block.blocksList[world.getBlock(xPos,
-	 * yPos - 1, zPos)]; if(block == null) return EnumGrowthConditions.HOSTILE;
-	 * 
-	 * for(EnumPlantType type : this.validPlantTypes) { this.plantType = type; if(block.canSustainPlant(world, xPos, yPos - 1, zPos, ForgeDirection.UP, this))
-	 * return EnumGrowthConditions.EXCELLENT; }
-	 * 
-	 * return EnumGrowthConditions.HOSTILE; }
-	 */
-
-	protected boolean hasRoom(ITreeGenome genome, World world, int xPos, int yPos, int zPos, int expectedGirth, int expectedHeight) {
+	private static boolean hasRoom(World world, BlockPos pos, int expectedGirth, int expectedHeight) {
 
 		int offset = (expectedGirth - 1) / 2;
 		// if(offset <= 0)
 		// offset = 1;
+		Vect start = new Vect(pos.getX() - offset, pos.getX() + 1, pos.getZ() + offset);
+		Vect area = new Vect(-offset + expectedGirth, expectedHeight + 1, -offset + expectedGirth);
 
-		return checkArea(world, new Vect(xPos - offset, yPos + 1, zPos + offset),
-				new Vect(-offset + expectedGirth, expectedHeight + 1, -offset + expectedGirth));
+		return checkArea(world, start, area);
 	}
 
-	protected final boolean checkArea(World world, Vect start, Vect area) {
-		for (int x = start.x; x < start.x + area.x; x++) {
-			for (int y = start.y; y < start.y + area.y; y++) {
-				for (int z = start.z; z < start.z + area.z; z++) {
-					if (!world.isAirBlock(x, y, z) && !Utils.isReplaceableBlock(world, x, y, z)) {
+	private static boolean checkArea(World world, Vect start, Vect area) {
+		for (int x = start.getX(); x < start.getX() + area.getX(); x++) {
+			for (int y = start.getY(); y < start.getY() + area.getY(); y++) {
+				for (int z = start.getZ(); z < start.getZ() + area.getZ(); z++) {
+					if (!world.isAirBlock(new BlockPos(x, y, z)) && !Utils.isReplaceableBlock(world, new BlockPos(x, y, z))) {
 						return false;
 					}
 				}
@@ -116,7 +115,7 @@ public class GrowthProvider implements IGrowthProvider {
 		return true;
 	}
 
-	protected boolean hasSufficientSaplings(ITreeGenome genome, World world, int xPos, int yPos, int zPos, int expectedGirth) {
+	private static boolean hasSufficientSaplings(ITreeGenome genome, World world, BlockPos pos, int expectedGirth) {
 
 		if (expectedGirth == 1) {
 			return true;
@@ -124,14 +123,15 @@ public class GrowthProvider implements IGrowthProvider {
 
 		int offset = (expectedGirth - 1) / 2;
 
-		for (int x = xPos - offset; x < xPos - offset + expectedGirth; x++) {
-			for (int z = zPos - offset; z < zPos - offset + expectedGirth; z++) {
+		for (int x = pos.getX() - offset; x < pos.getX() - offset + expectedGirth; x++) {
+			for (int z = pos.getZ() - offset; z < pos.getZ() - offset + expectedGirth; z++) {
 
-				if (world.isAirBlock(x, yPos, z)) {
+				BlockPos posNEW = new BlockPos(x, pos.getY(), z);
+				if (world.isAirBlock(pos)) {
 					return false;
 				}
 
-				TileEntity tile = world.getTileEntity(x, yPos, z);
+				TileEntity tile = world.getTileEntity(pos);
 				if (!(tile instanceof TileSapling)) {
 					return false;
 				}

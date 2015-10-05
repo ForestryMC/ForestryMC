@@ -11,11 +11,12 @@
 package forestry.apiculture.render;
 
 import net.minecraft.client.particle.EntityFX;
-import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 
 public class EntityBeeFX extends EntityFX {
-	public EntityBeeFX(World world, double x, double y, double z, float motionScaleX, float motionScaleY, float motionScaleZ, int color) {
+	public EntityBeeFX(World world, double x, double y, double z, int color) {
 		super(world, x, y, z, 0.0D, 0.0D, 0.0D);
 
 		particleRed = (color >> 16 & 255) / 255.0F;
@@ -27,9 +28,9 @@ public class EntityBeeFX extends EntityFX {
 		this.particleMaxAge = (int) (20.0D / (Math.random() * 0.8D + 0.2D));
 		this.noClip = true;
 
-		this.motionX *= 0.119999999552965164D;
-		this.motionY *= 0.119999999552965164D;
-		this.motionZ *= 0.119999999552965164D;
+		this.motionX *= 0.2D;
+		this.motionY *= 0.015D;
+		this.motionZ *= 0.2D;
 	}
 
 	/**
@@ -41,17 +42,17 @@ public class EntityBeeFX extends EntityFX {
 		this.prevPosY = this.posY;
 		this.prevPosZ = this.posZ;
 		this.moveEntity(this.motionX, this.motionY, this.motionZ);
-		this.motionX *= 1.08D;
-		this.motionY *= 1.08D;
-		this.motionZ *= 1.08D;
+		this.motionX *= (1 + 0.2D * rand.nextFloat());
+		this.motionY = (this.motionY + 0.2 * (-0.5 + rand.nextFloat())) / 2;
+		this.motionZ *= (1 + 0.2D * rand.nextFloat());
 
-		if (this.particleMaxAge-- <= 0) {
+		if (this.particleAge++ >= this.particleMaxAge) {
 			this.setDead();
 		}
 	}
 
 	@Override
-	public void renderParticle(Tessellator tessellator, float f, float f1, float f2, float f3, float f4, float f5) {
+	public void renderParticle(WorldRenderer worldRenderer, Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
 		float minU = 0;
 		float maxU = 1;
 		float minV = 0;
@@ -69,11 +70,11 @@ public class EntityBeeFX extends EntityFX {
 		float f12 = (float) ((prevPosY + (posY - prevPosY) * f) - interpPosY);
 		float f13 = (float) ((prevPosZ + (posZ - prevPosZ) * f) - interpPosZ);
 
-		tessellator.setColorRGBA_F(particleRed, particleGreen, particleBlue, 1.0F);
-		tessellator.addVertexWithUV(f11 - f1 * f10 - f4 * f10, f12 - f2 * f10, f13 - f3 * f10 - f5 * f10, maxU, maxV);
-		tessellator.addVertexWithUV((f11 - f1 * f10) + f4 * f10, f12 + f2 * f10, (f13 - f3 * f10) + f5 * f10, maxU, minV);
-		tessellator.addVertexWithUV(f11 + f1 * f10 + f4 * f10, f12 + f2 * f10, f13 + f3 * f10 + f5 * f10, minU, minV);
-		tessellator.addVertexWithUV((f11 + f1 * f10) - f4 * f10, f12 - f2 * f10, (f13 + f3 * f10) - f5 * f10, minU, maxV);
+		worldRenderer.setColorRGBA_F(particleRed, particleGreen, particleBlue, 1.0F);
+		worldRenderer.addVertexWithUV(f11 - f1 * f10 - f4 * f10, f12 - f2 * f10, f13 - f3 * f10 - f5 * f10, maxU, maxV);
+		worldRenderer.addVertexWithUV((f11 - f1 * f10) + f4 * f10, f12 + f2 * f10, (f13 - f3 * f10) + f5 * f10, maxU, minV);
+		worldRenderer.addVertexWithUV(f11 + f1 * f10 + f4 * f10, f12 + f2 * f10, f13 + f3 * f10 + f5 * f10, minU, minV);
+		worldRenderer.addVertexWithUV((f11 + f1 * f10) - f4 * f10, f12 - f2 * f10, (f13 + f3 * f10) - f5 * f10, minU, maxV);
 	}
 
 	@Override

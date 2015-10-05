@@ -10,11 +10,13 @@
  ******************************************************************************/
 package forestry.arboriculture.commands;
 
+import forestry.core.commands.SpeciesNotFoundException;
+import forestry.core.commands.TemplateNotFoundException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 
 public interface ITreeSpawner {
 
-	boolean spawn(ICommandSender sender, String treeName, EntityPlayer player);
+	boolean spawn(ICommandSender sender, String treeName, EntityPlayer player) throws SpeciesNotFoundException, TemplateNotFoundException;
 
 }

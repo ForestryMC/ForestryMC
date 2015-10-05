@@ -10,34 +10,20 @@
  ******************************************************************************/
 package forestry.arboriculture.proxy;
 
-import net.minecraft.world.ColorizerFoliage;
-
-import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
-
-import forestry.arboriculture.render.FenceRenderingHandler;
-import forestry.arboriculture.render.FruitPodRenderingHandler;
 import forestry.arboriculture.render.LeavesRenderingHandler;
 import forestry.arboriculture.render.SaplingRenderHandler;
-import forestry.arboriculture.render.StairItemRenderer;
 import forestry.core.config.ForestryBlock;
-import forestry.plugins.PluginArboriculture;
+import forestry.core.proxy.Proxies;
+import forestry.core.render.BlockModelIndex;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.world.ColorizerFoliage;
 
 public class ClientProxyArboriculture extends ProxyArboriculture {
+	
 	@Override
 	public void initializeRendering() {
-		PluginArboriculture.modelIdSaplings = RenderingRegistry.getNextAvailableRenderId();
-		PluginArboriculture.modelIdLeaves = RenderingRegistry.getNextAvailableRenderId();
-		PluginArboriculture.modelIdFences = RenderingRegistry.getNextAvailableRenderId();
-		PluginArboriculture.modelIdPods = RenderingRegistry.getNextAvailableRenderId();
-
-		RenderingRegistry.registerBlockHandler(new SaplingRenderHandler());
-		RenderingRegistry.registerBlockHandler(new LeavesRenderingHandler());
-		RenderingRegistry.registerBlockHandler(new FenceRenderingHandler());
-		RenderingRegistry.registerBlockHandler(new FruitPodRenderingHandler());
-
-		MinecraftForgeClient.registerItemRenderer(ForestryBlock.stairs.item(), new StairItemRenderer());
-		MinecraftForgeClient.registerItemRenderer(ForestryBlock.leaves.item(), new LeavesRenderingHandler());
+		Proxies.render.registerBlockModel(new BlockModelIndex(new ModelResourceLocation("forestry:leaves"), new ModelResourceLocation("forestry:leaves", "inventory"), new LeavesRenderingHandler(), ForestryBlock.leaves.block()));
+		Proxies.render.registerBlockModel(new BlockModelIndex(new ModelResourceLocation("forestry:saplings"), new ModelResourceLocation("forestry:saplings", "inventory"), new SaplingRenderHandler(), ForestryBlock.saplingGE.block()));
 	}
 
 	@Override

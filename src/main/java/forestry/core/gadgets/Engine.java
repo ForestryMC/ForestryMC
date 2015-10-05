@@ -10,83 +10,60 @@
  ******************************************************************************/
 package forestry.core.gadgets;
 
+import java.io.IOException;
+
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 
-import net.minecraftforge.common.util.ForgeDirection;
-
+import forestry.api.core.IErrorLogic;
+import forestry.apiculture.network.PacketActiveUpdate;
+import forestry.core.EnumErrorCode;
 import forestry.core.TemperatureState;
 import forestry.core.config.Defaults;
-import forestry.core.network.PacketPayload;
+import forestry.core.interfaces.IActivatable;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.proxy.Proxies;
 import forestry.core.utils.BlockUtil;
 import forestry.energy.EnergyManager;
 
 import cofh.api.energy.IEnergyConnection;
 
-public abstract class Engine extends TileBase implements IEnergyConnection {
+public abstract class Engine extends TileBase implements IEnergyConnection, IActivatable {
 
-	@Override
-	public PacketPayload getPacketPayload() {
-		PacketPayload payload = new PacketPayload(3, 1, 0);
-
-		if (this.isActive) {
-			payload.intPayload[0] = 1;
-		} else {
-			payload.intPayload[0] = 0;
-		}
-		payload.intPayload[1] = energyManager.toPacketInt();
-		payload.intPayload[2] = heat;
-
-		payload.floatPayload[0] = pistonSpeedServer;
-		return payload;
-	}
-
-	@Override
-	public void fromPacketPayload(PacketPayload payload) {
-
-		isActive = payload.intPayload[0] > 0;
-		energyManager.fromPacketInt(payload.intPayload[1]);
-		heat = payload.intPayload[2];
-
-		pistonSpeedServer = payload.floatPayload[0];
-	}
-
-	public boolean isActive = false; // Used for smp.
+	private boolean active = false; // Used for smp.
 	/**
 	 * Indicates whether the piston is receding from or approaching the
 	 * combustion chamber
 	 */
-	public int stagePiston = 0;
+	private int stagePiston = 0;
 	/**
 	 * Piston speed as supplied by the server
 	 */
-	public float pistonSpeedServer = 0;
+	private float pistonSpeedServer = 0;
+
 	protected int currentOutput = 0;
-	public final int maxEnergy;
-	public final int maxEnergyExtracted;
-	public int heat;
+	protected int heat;
 	protected final int maxHeat;
 	protected boolean forceCooldown = false;
 	public float progress;
 	protected final EnergyManager energyManager;
 
-	public Engine(int maxHeat, int maxEnergy, int maxEnergyExtracted) {
+	protected Engine(int maxHeat, int maxEnergy) {
 		this.maxHeat = maxHeat;
-		this.maxEnergy = maxEnergy;
-		this.maxEnergyExtracted = maxEnergyExtracted;
-		energyManager = new EnergyManager(2000, 100, 1000000);
+		energyManager = new EnergyManager(2000, maxEnergy);
 
 		// allow engines to chain, but not have energy sucked out of them
 		energyManager.setReceiveOnly();
 	}
 
 	@Override
-	public void rotateAfterPlacement(World world, int x, int y, int z, EntityLivingBase entityliving, ItemStack itemstack) {
+	public void rotateAfterPlacement(EntityLivingBase entityLiving) {
 		rotateEngine();
 	}
 
@@ -98,15 +75,15 @@ public abstract class Engine extends TileBase implements IEnergyConnection {
 		}
 	}
 
-	public abstract int dissipateHeat();
+	protected abstract int dissipateHeat();
 
-	public abstract int generateHeat();
+	protected abstract int generateHeat();
 
-	public boolean mayBurn() {
+	protected boolean mayBurn() {
 		return !forceCooldown;
 	}
 
-	public abstract void burn();
+	protected abstract void burn();
 
 	@Override
 	public void updateClientSide() {
@@ -117,13 +94,13 @@ public abstract class Engine extends TileBase implements IEnergyConnection {
 				stagePiston = 0;
 				progress = 0;
 			}
-		} else if (this.isActive) {
+		} else if (this.active) {
 			stagePiston = 1;
 		}
 	}
 
 	@Override
-	public void updateServerSide() {
+	protected void updateServerSide() {
 		TemperatureState energyState = getTemperatureState();
 		if (energyState == TemperatureState.MELTING && heat > 0) {
 			forceCooldown = true;
@@ -131,32 +108,35 @@ public abstract class Engine extends TileBase implements IEnergyConnection {
 			forceCooldown = false;
 		}
 
+		IErrorLogic errorLogic = getErrorLogic();
+		errorLogic.setCondition(forceCooldown, EnumErrorCode.FORCEDCOOLDOWN);
+
+		boolean enabledRedstone = isRedstoneActivated();
+		errorLogic.setCondition(!enabledRedstone, EnumErrorCode.NOREDSTONE);
+
 		// Determine targeted tile
-		TileEntity tile = worldObj.getTileEntity(xCoord + getOrientation().offsetX, yCoord + getOrientation().offsetY, zCoord + getOrientation().offsetZ);
+		TileEntity tile = worldObj.getTileEntity(new BlockPos(pos.getX() + getOrientation().getFrontOffsetX(), pos.getY() + getOrientation().getFrontOffsetY(), pos.getZ() + getOrientation().getFrontOffsetZ()));
 
 		float newPistonSpeed = getPistonSpeed();
 		if (newPistonSpeed != pistonSpeedServer) {
 			pistonSpeedServer = newPistonSpeed;
-			sendNetworkUpdate();
+			setNeedsNetworkUpdate();
 		}
 
 		if (stagePiston != 0) {
 
 			progress += pistonSpeedServer;
 
+			energyManager.sendEnergy(getOrientation(), tile);
+
 			if (progress > 0.25 && stagePiston == 1) {
 				stagePiston = 2;
-
-				energyManager.sendEnergy(getOrientation(), tile);
-
 			} else if (progress >= 0.5) {
 				progress = 0;
 				stagePiston = 0;
 			}
-
-		} else if (canPowerTo(tile)) // If we are not already running, check if
-		{
-			if (energyManager.getEnergyStored(getOrientation()) > 0) {
+		} else if (enabledRedstone && BlockUtil.isEnergyReceiverOrEngine(getOrientation().getOpposite(), tile)) {
+			if (energyManager.canSendEnergy(getOrientation(), tile)) {
 				stagePiston = 1; // If we can transfer energy, start running
 				setActive(true);
 			} else {
@@ -174,34 +154,37 @@ public abstract class Engine extends TileBase implements IEnergyConnection {
 		} else {
 			energyManager.drainEnergy(20);
 		}
-
 	}
 
-	private boolean canPowerTo(TileEntity tile) {
-		return isActivated() && BlockUtil.isEnergyReceiver(getOrientation().getOpposite(), tile);
+	@Override
+	public boolean isActive() {
+		return active;
 	}
 
-	private void setActive(boolean isActive) {
-		if (this.isActive == isActive) {
+	@Override
+	public void setActive(boolean active) {
+		if (this.active == active) {
 			return;
 		}
+		this.active = active;
 
-		this.isActive = isActive;
-		sendNetworkUpdate();
+		if (!worldObj.isRemote) {
+			Proxies.net.sendNetworkPacket(new PacketActiveUpdate(this), worldObj);
+		}
 	}
 
 	/* INTERACTION */
 	public void rotateEngine() {
 
 		for (int i = getOrientation().ordinal() + 1; i <= getOrientation().ordinal() + 6; ++i) {
-			ForgeDirection orient = ForgeDirection.values()[i % 6];
+			EnumFacing orient = EnumFacing.values()[i % 6];
 
-			TileEntity tile = worldObj.getTileEntity(xCoord + orient.offsetX, yCoord + orient.offsetY, zCoord + orient.offsetZ);
+			TileEntity tile = worldObj.getTileEntity(new BlockPos(pos.getX() + getOrientation().getFrontOffsetX(), pos.getY() + getOrientation().getFrontOffsetY(), pos.getZ() + getOrientation().getFrontOffsetZ()));
 
-			if (BlockUtil.isEnergyReceiver(getOrientation().getOpposite(), tile)) {
+			if (BlockUtil.isEnergyReceiverOrEngine(getOrientation().getOpposite(), tile)) {
 				setOrientation(orient);
-				worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, worldObj.getBlock(xCoord, yCoord, zCoord));
-				worldObj.func_147479_m(xCoord, yCoord, zCoord);
+				worldObj.notifyBlockOfStateChange(pos, worldObj.getBlockState(pos).getBlock());
+				worldObj.markBlockRangeForRenderUpdate(pos, pos);
 				break;
 			}
 		}
@@ -212,7 +195,7 @@ public abstract class Engine extends TileBase implements IEnergyConnection {
 		return (double) heat / (double) maxHeat;
 	}
 
-	public abstract boolean isBurning();
+	protected abstract boolean isBurning();
 
 	public int getBurnTimeRemainingScaled(int i) {
 		return 0;
@@ -223,7 +206,7 @@ public abstract class Engine extends TileBase implements IEnergyConnection {
 	}
 
 	public int getCurrentOutput() {
-		if (isBurning() && isActivated()) {
+		if (isBurning() && isRedstoneActivated()) {
 			return currentOutput;
 		} else {
 			return 0;
@@ -238,25 +221,10 @@ public abstract class Engine extends TileBase implements IEnergyConnection {
 	 * Returns the current energy state of the engine
 	 */
 	public TemperatureState getTemperatureState() {
-		// double scaledStorage = (double)storedEnergy / (double)maxEnergy;
-		double scaledHeat = (double) heat / (double) maxHeat;
-
-		if (scaledHeat < 0.20) {
-			return TemperatureState.COOL;
-		} else if (scaledHeat < 0.45) {
-			return TemperatureState.WARMED_UP;
-		} else if (scaledHeat < 0.65) {
-			return TemperatureState.OPERATING_TEMPERATURE;
-		} else if (scaledHeat < 0.85) {
-			return TemperatureState.RUNNING_HOT;
-		} else if (scaledHeat < 1.0) {
-			return TemperatureState.OVERHEATING;
-		} else {
-			return TemperatureState.MELTING;
-		}
+		return TemperatureState.getState(heat, maxHeat);
 	}
 
-	public float getPistonSpeed() {
+	protected float getPistonSpeed() {
 		switch (getTemperatureState()) {
 			case COOL:
 				return 0.03f;
@@ -297,13 +265,32 @@ public abstract class Engine extends TileBase implements IEnergyConnection {
 		nbt.setBoolean("ForceCooldown", forceCooldown);
 	}
 
+	/* NETWORK */
+	@Override
+	public void writeData(DataOutputStreamForestry data) throws IOException {
+		super.writeData(data);
+		data.writeBoolean(active);
+		data.writeInt(heat);
+		data.writeFloat(pistonSpeedServer);
+		energyManager.writeData(data);
+	}
+
+	@Override
+	public void readData(DataInputStreamForestry data) throws IOException {
+		super.readData(data);
+		active = data.readBoolean();
+		heat = data.readInt();
+		pistonSpeedServer = data.readFloat();
+		energyManager.readData(data);
+	}
+
 	/* SMP GUI */
 	public abstract void getGUINetworkData(int i, int j);
 
 	public abstract void sendGUINetworkData(Container containerEngine, ICrafting iCrafting);
 
 	@Override
-	public boolean canConnectEnergy(ForgeDirection from) {
+	public boolean canConnectEnergy(EnumFacing from) {
 		return energyManager.canConnectEnergy(from);
 	}
 

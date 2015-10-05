@@ -22,7 +22,7 @@ import forestry.plugins.PluginLepidopterology;
 public class MatingRecipe implements IRecipe {
 
 	private final ItemStack unknown;
-	ItemStack cached;
+	private ItemStack cached;
 	
 	public MatingRecipe() {
 		unknown = PluginLepidopterology.butterflyInterface.getMemberStack(PluginLepidopterology.butterflyInterface.getIndividualTemplates().get(0), EnumFlutterType.BUTTERFLY.ordinal());
@@ -81,5 +81,19 @@ public class MatingRecipe implements IRecipe {
 	public int getRecipeSize() {
 		return 2;
 	}
+	
+    @Override
+	public ItemStack[] getRemainingItems(InventoryCrafting p_179532_1_)
+    {
+        ItemStack[] aitemstack = new ItemStack[p_179532_1_.getSizeInventory()];
+
+        for (int i = 0; i < aitemstack.length; ++i)
+        {
+            ItemStack itemstack = p_179532_1_.getStackInSlot(i);
+            aitemstack[i] = net.minecraftforge.common.ForgeHooks.getContainerItem(itemstack);
+        }
+
+        return aitemstack;
+    }
 
 }

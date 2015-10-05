@@ -10,20 +10,22 @@
  ******************************************************************************/
 package forestry.energy.gadgets;
 
+import java.io.IOException;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
 import forestry.api.core.ForestryAPI;
+import forestry.api.core.IErrorLogic;
 import forestry.api.fuels.EngineBronzeFuel;
 import forestry.api.fuels.FuelManager;
 import forestry.core.EnumErrorCode;
@@ -35,38 +37,17 @@ import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.gadgets.Engine;
-import forestry.core.gadgets.TileBase;
 import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.TileInventoryAdapter;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
-import forestry.core.network.PacketPayload;
 
 public class EngineBronze extends Engine implements ISidedInventory, ILiquidTankContainer {
 
 	/* CONSTANTS */
 	public static final short SLOT_CAN = 0;
-
-	/* NETWORK */
-	@Override
-	public PacketPayload getPacketPayload() {
-		PacketPayload payload = super.getPacketPayload();
-
-		if (shutdown) {
-			payload.append(new int[]{1});
-		} else {
-			payload.append(new int[]{0});
-		}
-
-		return payload;
-	}
-
-	@Override
-	public void fromPacketPayload(PacketPayload payload) {
-		super.fromPacketPayload(payload);
-
-		shutdown = payload.intPayload[3] > 0;
-	}
 
 	private final FilteredTank fuelTank;
 	private final FilteredTank heatingTank;
@@ -80,23 +61,13 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 	private boolean shutdown;
 
 	public EngineBronze() {
-		super(Defaults.ENGINE_BRONZE_HEAT_MAX, 300000, 5000);
+		super(Defaults.ENGINE_BRONZE_HEAT_MAX, 300000);
 		setHints(Config.hints.get("engine.bronze"));
 
-		setInternalInventory(new TileInventoryAdapter(this, 1, "Items") {
-			@Override
-			public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-				if (slotIndex == SLOT_CAN) {
-					Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
-					return tankManager.accepts(fluid);
-				}
-
-				return false;
-			}
-		});
+		setInternalInventory(new EngineBronzeInventoryAdapter(this));
 
 		fuelTank = new FilteredTank(Defaults.ENGINE_TANK_CAPACITY, FuelManager.bronzeEngineFuel.keySet());
-		fuelTank.tankMode = StandardTank.TankMode.INPUT;
+		fuelTank.tankMode = StandardTank.TankMode.DEFAULT;
 		heatingTank = new FilteredTank(Defaults.ENGINE_TANK_CAPACITY, FluidRegistry.LAVA);
 		heatingTank.tankMode = StandardTank.TankMode.INPUT;
 		this.tankManager = new TankManager(fuelTank, heatingTank);
@@ -108,8 +79,8 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 	}
 
 	@Override
-	public void openGui(EntityPlayer player, TileBase tile) {
-		player.openGui(ForestryAPI.instance, GuiId.EngineBronzeGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
+	public void openGui(EntityPlayer player) {
+		player.openGui(ForestryAPI.instance, GuiId.EngineBronzeGUI.ordinal(), player.worldObj, pos.getX(), pos.getY(), pos.getZ());
 	}
 
 	@Override
@@ -125,13 +96,13 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 			FluidHelper.drainContainers(tankManager, inventory, SLOT_CAN);
 		}
 
-		if (getHeatLevel() <= 0.2 && heatingTank.getFluidAmount() <= 0) {
-			setErrorState(EnumErrorCode.NOHEAT);
-		} else if (burnTime <= 0 && fuelTank.getFluidAmount() <= 0) {
-			setErrorState(EnumErrorCode.NOFUEL);
-		} else {
-			setErrorState(EnumErrorCode.OK);
-		}
+		IErrorLogic errorLogic = getErrorLogic();
+
+		boolean hasHeat = getHeatLevel() > 0.2 || heatingTank.getFluidAmount() > 0;
+		errorLogic.setCondition(!hasHeat, EnumErrorCode.NOHEAT);
+
+		boolean hasFuel = burnTime > 0 || fuelTank.getFluidAmount() > 0;
+		errorLogic.setCondition(!hasFuel, EnumErrorCode.NOFUEL);
 	}
 
 	/**
@@ -142,12 +113,11 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 
 		currentOutput = 0;
 
-		if (isActivated() && (fuelTank.getFluidAmount() >= Defaults.BUCKET_VOLUME || burnTime > 0)) {
+		if (isRedstoneActivated() && (fuelTank.getFluidAmount() >= Defaults.BUCKET_VOLUME || burnTime > 0)) {
 
 			double heatStage = getHeatLevel();
 
-			// If we have reached a safe temperature, we reenable energy
-			// transfer
+			// If we have reached a safe temperature, enable energy transfer
 			if (heatStage > 0.25 && shutdown) {
 				shutdown(false);
 			} else if (shutdown)
@@ -168,7 +138,7 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 					currentOutput = determineFuelValue(FluidRegistry.getFluid(currentFluidId));
 					energyManager.generateEnergy(currentOutput);
 				} else {
-					burnTime = totalTime = this.determineBurnTime(fuelTank.getFluid().getFluid());
+					burnTime = totalTime = determineBurnTime(fuelTank.getFluid().getFluid());
 					currentFluidId = fuelTank.getFluid().getFluid().getID();
 					fuelTank.drain(Defaults.BUCKET_VOLUME, true);
 				}
@@ -221,7 +191,7 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 
 		int generate = 0;
 
-		if (isActivated() && burnTime > 0) {
+		if (isRedstoneActivated() && burnTime > 0) {
 			double heatStage = getHeatLevel();
 			if (heatStage >= 0.75) {
 				generate += Defaults.ENGINE_BRONZE_HEAT_GENERATION_ENERGY * 3;
@@ -240,7 +210,7 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 	/**
 	 * Returns the fuel value (power per cycle) an item of the passed fluid
 	 */
-	private int determineFuelValue(Fluid fluid) {
+	private static int determineFuelValue(Fluid fluid) {
 		if (FuelManager.bronzeEngineFuel.containsKey(fluid)) {
 			return FuelManager.bronzeEngineFuel.get(fluid).powerPerCycle;
 		} else {
@@ -251,7 +221,7 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 	/**
 	 * @return Duration of burn cycle of one bucket
 	 */
-	private int determineBurnTime(Fluid fluid) {
+	private static int determineBurnTime(Fluid fluid) {
 		if (FuelManager.bronzeEngineFuel.containsKey(fluid)) {
 			return FuelManager.bronzeEngineFuel.get(fluid).burnDuration;
 		} else {
@@ -261,7 +231,7 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 
 	// / STATE INFORMATION
 	@Override
-	public boolean isBurning() {
+	protected boolean isBurning() {
 		return mayBurn() && burnTime > 0;
 	}
 
@@ -311,6 +281,21 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 		tankManager.writeTanksToNBT(nbt);
 	}
 
+	/* NETWORK */
+	@Override
+	public void writeData(DataOutputStreamForestry data) throws IOException {
+		super.writeData(data);
+		data.writeBoolean(shutdown);
+		tankManager.writePacketData(data);
+	}
+
+	@Override
+	public void readData(DataInputStreamForestry data) throws IOException {
+		super.readData(data);
+		shutdown = data.readBoolean();
+		tankManager.readPacketData(data);
+	}
+
 	/* GUI */
 	@Override
 	public void getGUINetworkData(int id, int data) {
@@ -327,7 +312,7 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 				currentOutput = data;
 				break;
 			case 3:
-				energyManager.fromPacketInt(data);
+				energyManager.fromGuiInt(data);
 				break;
 			case 4:
 				heat = data;
@@ -344,40 +329,55 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 		iCrafting.sendProgressBarUpdate(containerEngine, i, burnTime);
 		iCrafting.sendProgressBarUpdate(containerEngine, i + 1, totalTime);
 		iCrafting.sendProgressBarUpdate(containerEngine, i + 2, currentOutput);
-		iCrafting.sendProgressBarUpdate(containerEngine, i + 3, energyManager.toPacketInt());
+		iCrafting.sendProgressBarUpdate(containerEngine, i + 3, energyManager.toGuiInt());
 		iCrafting.sendProgressBarUpdate(containerEngine, i + 4, heat);
 		iCrafting.sendProgressBarUpdate(containerEngine, i + 5, currentFluidId);
 	}
 
 	// IFluidHandler
 	@Override
-	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+	public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
 		return tankManager.fill(from, resource, doFill);
 	}
 
 	@Override
-	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+	public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
 		return tankManager.drain(from, resource, doDrain);
 	}
 
 	@Override
-	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+	public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
 		return tankManager.drain(from, maxDrain, doDrain);
 	}
 
 	@Override
-	public boolean canFill(ForgeDirection from, Fluid fluid) {
+	public boolean canFill(EnumFacing from, Fluid fluid) {
 		return tankManager.canFill(from, fluid);
 	}
 
 	@Override
-	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+	public boolean canDrain(EnumFacing from, Fluid fluid) {
 		return tankManager.canDrain(from, fluid);
 	}
 
 	@Override
-	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+	public FluidTankInfo[] getTankInfo(EnumFacing from) {
 		return tankManager.getTankInfo(from);
 	}
 
+	private static class EngineBronzeInventoryAdapter extends TileInventoryAdapter<EngineBronze> {
+		public EngineBronzeInventoryAdapter(EngineBronze engineBronze) {
+			super(engineBronze, 1, "Items");
+		}
+
+		@Override
+		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+			if (slotIndex == SLOT_CAN) {
+				Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
+				return tile.tankManager.accepts(fluid);
+			}
+
+			return false;
+		}
+	}
 }

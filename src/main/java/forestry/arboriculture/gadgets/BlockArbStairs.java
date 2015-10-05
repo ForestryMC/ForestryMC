@@ -15,141 +15,126 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockStairs;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
+import forestry.api.core.IModelManager;
+import forestry.api.core.IModelRegister;
 import forestry.api.core.Tabs;
+import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.WoodType;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.StackUtils;
+import forestry.arboriculture.items.ItemWoodBlock;
+import forestry.arboriculture.items.ItemWoodBlock.WoodMeshDefinition;
 
-public class BlockArbStairs extends BlockStairs {
+public class BlockArbStairs extends BlockStairs implements IWoodTyped, IModelRegister, ITileEntityProvider {
 
-	public BlockArbStairs(Block par2Block, int par3) {
-		super(par2Block, par3);
+	private final boolean fireproof;
+
+	public BlockArbStairs(Block par2Block, boolean fireproof) {
+		super(par2Block.getDefaultState());
+
+		this.fireproof = fireproof;
+
 		setCreativeTab(Tabs.tabArboriculture);
 		setHardness(2.0F);
 		setResistance(5.0F);
+		setHarvestLevel("axe", 0);
+		setDefaultState(this.blockState.getBaseState().withProperty(WoodType.WOODTYPE, WoodType.LARCH).withProperty(FACING, EnumFacing.NORTH).withProperty(HALF, BlockStairs.EnumHalf.BOTTOM).withProperty(SHAPE, BlockStairs.EnumShape.STRAIGHT));
 	}
-
-	public static TileStairs getStairTile(IBlockAccess world, int x, int y, int z) {
-		TileEntity tile = world.getTileEntity(x, y, z);
-		if (!(tile instanceof TileStairs)) {
-			return null;
-		}
-
-		return (TileStairs) tile;
+	
+	@Override
+	protected BlockState createBlockState() {
+		return new BlockState(this, new IProperty[]{WoodType.WOODTYPE, FACING, HALF, SHAPE});
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(Item item, CreativeTabs tab, List list) {
-		for (WoodType type : WoodType.VALUES) {
-			ItemStack stack = new ItemStack(item, 1, 0);
-			NBTTagCompound compound = new NBTTagCompound();
-			type.saveToCompound(compound);
-			stack.setTagCompound(compound);
-			list.add(stack);
+		for (WoodType woodType : WoodType.VALUES) {
+			list.add(woodType.getStairs(fireproof));
 		}
 	}
-
+	
 	@Override
-	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest) {
-		int meta = world.getBlockMetadata(x, y, z);
-		if (Proxies.common.isSimulating(world) && canHarvestBlock(player, meta)) {
-			if (!player.capabilities.isCreativeMode) {
-				// Handle TE'd beehives
-				TileEntity tile = world.getTileEntity(x, y, z);
-
-				if (tile instanceof TileStairs) {
-					TileStairs stairs = (TileStairs) tile;
-
-					ItemStack stack = new ItemStack(this, 1, 0);
-					NBTTagCompound compound = new NBTTagCompound();
-					stairs.getType().saveToCompound(compound);
-					stack.setTagCompound(compound);
-					StackUtils.dropItemStackAsEntity(stack, world, x, y, z);
-				}
-			}
+	public void registerModel(Item item, IModelManager manager) {
+		if(!fireproof)
+		{
+			manager.registerVariant(item, ItemWoodBlock.getVariants(this));
 		}
-
-		return world.setBlockToAir(x, y, z);
+		manager.registerItemModel(item, new WoodMeshDefinition(this));
 	}
-
+	
 	@Override
-	public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
-		world.removeTileEntity(x, y, z);
-		super.breakBlock(world, x, y, z, block, meta);
+	public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+		return BlockWood.blockRemovedByPlayer(this, world, player, pos);
 	}
-
+	
 	@Override
-	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
+	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		return new ArrayList<ItemStack>();
 	}
-
+	
 	@Override
-	public boolean hasTileEntity(int meta) {
-		return true;
-	}
-
-	@Override
-	public TileEntity createTileEntity(World world, int meta) {
-		return new TileStairs();
-	}
-
-	@Override
-	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player) {
-		ItemStack itemStack = super.getPickBlock(target, world, x, y, z, player);
-		NBTTagCompound stairsNBT = getTagCompoundForStairs(world, x, y, z);
+	public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos, EntityPlayer player) {
+		ItemStack itemStack = super.getPickBlock(target, world, pos, player);
+		NBTTagCompound stairsNBT = BlockWood.getTagCompound(world, pos);
 		itemStack.setTagCompound(stairsNBT);
 		return itemStack;
 	}
-
-	private static NBTTagCompound getTagCompoundForStairs(IBlockAccess world, int x, int y, int z) {
-		TileStairs stairs = getStairTile(world, x, y, z);
-
-		NBTTagCompound nbttagcompound = new NBTTagCompound();
-		if (stairs == null || stairs.getType() == null) {
-			return nbttagcompound;
-		}
-
-		stairs.getType().saveToCompound(nbttagcompound);
-		return nbttagcompound;
-	}
-
-	/* ICONS */
-	@SideOnly(Side.CLIENT)
+	
 	@Override
-	public void registerBlockIcons(IIconRegister register) {
-		WoodType.registerIcons(register);
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
-		TileStairs stairs = getStairTile(world, x, y, z);
-		if (stairs != null && stairs.getType() != null) {
-			return stairs.getType().getPlankIcon();
-		} else {
-			return WoodType.LARCH.getPlankIcon();
+	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+		if(placer instanceof EntityPlayer)
+		{
+			state = state.withProperty(WoodType.WOODTYPE, WoodType.getFromCompound(stack.getTagCompound()));
 		}
+	}
+	
+	
+	@Override
+	public final TileEntity createNewTileEntity(World world, int meta) {
+		return new TileWood();
+	}
+	
+	@Override
+	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
+		TileEntity tile = world.getTileEntity(pos);
+		if(tile instanceof TileWood)
+		{
+			TileWood wood = (TileWood) tile;
+			state = state.withProperty(WoodType.WOODTYPE, wood.getWoodType());
+		}
+		return super.getActualState(state, world, pos);
 	}
 
 	@Override
 	public boolean getUseNeighborBrightness() {
 		return true;
+	}
+
+	@Override
+	public String getBlockKind() {
+		return "stairs";
+	}
+
+	@Override
+	public boolean isFireproof() {
+		return fireproof;
 	}
 }

@@ -10,32 +10,37 @@
  ******************************************************************************/
 package forestry.arboriculture.gadgets;
 
-import net.minecraft.entity.player.EntityPlayer;
+import java.io.IOException;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
 import forestry.api.arboriculture.ITree;
+import forestry.api.arboriculture.TreeManager;
+import forestry.api.genetics.IAllele;
 import forestry.arboriculture.genetics.Tree;
-import forestry.core.interfaces.IOwnable;
-import forestry.core.network.ForestryPacket;
-import forestry.core.network.INetworkedEntity;
-import forestry.core.network.PacketIds;
-import forestry.core.network.PacketTileNBT;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.PlayerUtil;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.IStreamable;
+import forestry.core.network.PacketTileStream;
 
 /**
  * This is the base TE class for any block that needs to contain tree genome information.
  *
  * @author SirSengir
  */
-public abstract class TileTreeContainer extends TileEntity implements INetworkedEntity, IOwnable {
+public abstract class TileTreeContainer extends TileEntity implements IStreamable {
 
 	private ITree containedTree;
+	private GameProfile owner;
 
 	/* SAVING & LOADING */
 	@Override
@@ -46,9 +51,8 @@ public abstract class TileTreeContainer extends TileEntity implements INetworked
 			containedTree = new Tree(nbttagcompound.getCompoundTag("ContainedTree"));
 		}
 		if (nbttagcompound.hasKey("owner")) {
-			owner = NBTUtil.func_152459_a(nbttagcompound.getCompoundTag("owner"));
+			owner = NBTUtil.readGameProfileFromNBT(nbttagcompound.getCompoundTag("owner"));
 		}
-
 	}
 
 	@Override
@@ -62,10 +66,34 @@ public abstract class TileTreeContainer extends TileEntity implements INetworked
 		}
 		if (this.owner != null) {
 			NBTTagCompound nbt = new NBTTagCompound();
-			NBTUtil.func_152460_a(nbt, owner);
+			NBTUtil.writeGameProfile(nbt, owner);
 			nbttagcompound.setTag("owner", nbt);
 		}
+	}
 
+	@Override
+	public void writeData(DataOutputStreamForestry data) throws IOException {
+		String speciesUID = "";
+		ITree tree = getTree();
+		if (tree != null) {
+			speciesUID = tree.getIdent();
+		}
+		data.writeUTF(speciesUID);
+	}
+
+	@Override
+	public void readData(DataInputStreamForestry data) throws IOException {
+		String speciesUID = data.readUTF();
+		ITree tree = getTree(speciesUID);
+		setTree(tree);
+	}
+
+	private static ITree getTree(String speciesUID) {
+		IAllele[] treeTemplate = TreeManager.treeRoot.getTemplate(speciesUID);
+		if (treeTemplate == null) {
+			return null;
+		}
+		return TreeManager.treeRoot.templateAsIndividual(treeTemplate);
 	}
 
 	/* CLIENT INFORMATION */
@@ -73,8 +101,8 @@ public abstract class TileTreeContainer extends TileEntity implements INetworked
 	/* CONTAINED TREE */
 	public void setTree(ITree tree) {
 		this.containedTree = tree;
-		if (tree != null) {
-			sendNetworkUpdate();
+		if (worldObj != null && worldObj.isRemote) {
+			worldObj.markBlockRangeForRenderUpdate(pos, pos);
 		}
 	}
 
@@ -82,74 +110,35 @@ public abstract class TileTreeContainer extends TileEntity implements INetworked
 		return this.containedTree;
 	}
 
-	/* UPDATING */
-
-	/**
-	 * This doesn't use normal TE updates
-	 */
-	@Override
-	public boolean canUpdate() {
-		return false;
+	/* Owner */
+	public GameProfile getOwner() {
+		return owner;
 	}
+
+	public void setOwner(GameProfile owner) {
+		this.owner = owner;
+	}
+
+	/* UPDATING */
 
 	/**
 	 * Leaves and saplings will implement their logic here.
 	 */
 	public abstract void onBlockTick();
 
+	/**
+	 * Called from Chunk.setBlockIDWithMetadata, determines if this tile entity should be re-created when the ID, or Metadata changes.
+	 * Use with caution as this will leave straggler TileEntities, or create conflicts with other TileEntities if not used properly.
+	 */
+	@Override
+	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate) {
+		return !Block.isEqualTo(oldState.getBlock(), newSate.getBlock());
+	}
+
 	/* INETWORKEDENTITY */
 	@Override
 	public Packet getDescriptionPacket() {
-		return new PacketTileNBT(PacketIds.TILE_NBT, this).getPacket();
-	}
-
-	@Override
-	public void sendNetworkUpdate() {
-		Proxies.net.sendNetworkPacket(new PacketTileNBT(PacketIds.TILE_NBT, this), xCoord, yCoord, zCoord);
-	}
-
-	@Override
-	public void fromPacket(ForestryPacket packetRaw) {
-		PacketTileNBT packet = (PacketTileNBT) packetRaw;
-		this.readFromNBT(packet.getTagCompound());
-		worldObj.func_147479_m(xCoord, yCoord, zCoord);
-	}
-
-	/* IOWNABLE */
-	public GameProfile owner = null;
-
-	@Override
-	public boolean allowsRemoval(EntityPlayer player) {
-		return true;
-	}
-
-	@Override
-	public boolean isOwnable() {
-		return false;
-	}
-
-	@Override
-	public boolean isOwned() {
-		return owner != null;
-	}
-
-	@Override
-	public GameProfile getOwnerProfile() {
-		return owner;
-	}
-
-	@Override
-	public void setOwner(EntityPlayer player) {
-		this.owner = player.getGameProfile();
-	}
-
-	public void setOwner(GameProfile playername) {
-		this.owner = playername;
-	}
-
-	@Override
-	public boolean isOwner(EntityPlayer player) {
-		return PlayerUtil.isSameGameProfile(owner, player.getGameProfile());
+		return new PacketTileStream(this).getPacket();
 	}
 
 }

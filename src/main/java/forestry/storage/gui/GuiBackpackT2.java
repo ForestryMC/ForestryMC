@@ -10,13 +10,11 @@
  ******************************************************************************/
 package forestry.storage.gui;
 
-
 import forestry.core.config.Defaults;
-import forestry.core.gui.ContainerForestry;
 
 public class GuiBackpackT2 extends GuiBackpack {
 
-	public GuiBackpackT2(ContainerForestry container) {
+	public GuiBackpackT2(ContainerBackpack container) {
 		super(Defaults.TEXTURE_PATH_GUI + "/backpackT2.png", container);
 
 		xSize = 176;

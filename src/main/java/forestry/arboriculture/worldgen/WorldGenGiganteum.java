@@ -15,18 +15,7 @@ import forestry.api.world.ITreeGenData;
 public class WorldGenGiganteum extends WorldGenSequoia {
 
 	public WorldGenGiganteum(ITreeGenData tree) {
-		super(tree);
+		super(tree, 35, 15);
 	}
 
-	@Override
-	public void generate() {
-		super.generate();
-		//generateSupportStems(height, girth, 0.8f, 0.6f);
-	}
-
-	@Override
-	public void preGenerate() {
-		height = determineHeight(35, 15);
-		girth = determineGirth(tree.getGirth(world, startX, startY, startZ));
-	}
 }

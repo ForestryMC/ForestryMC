@@ -12,294 +12,295 @@ package forestry.lepidopterology.genetics;
 
 import forestry.api.genetics.IAllele;
 import forestry.api.lepidopterology.EnumButterflyChromosome;
-import forestry.core.genetics.Allele;
+import forestry.core.genetics.alleles.Allele;
+import forestry.core.genetics.alleles.EnumAllele;
 
 public class ButterflyTemplates {
 
 	public static IAllele[] getDefaultTemplate() {
 		IAllele[] alleles = new IAllele[EnumButterflyChromosome.values().length];
 		
-		alleles[EnumButterflyChromosome.SPECIES.ordinal()] = Allele.lepiCabbageWhite;
-		alleles[EnumButterflyChromosome.SIZE.ordinal()] = Allele.sizeSmall;
-		alleles[EnumButterflyChromosome.SPEED.ordinal()] = Allele.speedSlowest;
-		alleles[EnumButterflyChromosome.LIFESPAN.ordinal()] = Allele.lifespanShorter;
-		alleles[EnumButterflyChromosome.METABOLISM.ordinal()] = Allele.int3;
-		alleles[EnumButterflyChromosome.FERTILITY.ordinal()] = Allele.int3;
-		alleles[EnumButterflyChromosome.TEMPERATURE_TOLERANCE.ordinal()] = Allele.toleranceNone;
-		alleles[EnumButterflyChromosome.HUMIDITY_TOLERANCE.ordinal()] = Allele.toleranceNone;
-		alleles[EnumButterflyChromosome.NOCTURNAL.ordinal()] = Allele.boolFalse;
-		alleles[EnumButterflyChromosome.TOLERANT_FLYER.ordinal()] = Allele.boolFalse;
-		alleles[EnumButterflyChromosome.FIRE_RESIST.ordinal()] = Allele.boolFalse;
-		alleles[EnumButterflyChromosome.FLOWER_PROVIDER.ordinal()] = Allele.flowersVanilla;
-		alleles[EnumButterflyChromosome.EFFECT.ordinal()] = Allele.butterflyNone;
+		Allele.helper.set(alleles, EnumButterflyChromosome.SPECIES, Allele.lepiCabbageWhite);
+		Allele.helper.set(alleles, EnumButterflyChromosome.SIZE, EnumAllele.Size.SMALL);
+		Allele.helper.set(alleles, EnumButterflyChromosome.SPEED, EnumAllele.Speed.SLOWEST);
+		Allele.helper.set(alleles, EnumButterflyChromosome.LIFESPAN, EnumAllele.Lifespan.SHORTER);
+		Allele.helper.set(alleles, EnumButterflyChromosome.METABOLISM, 3);
+		Allele.helper.set(alleles, EnumButterflyChromosome.FERTILITY, 3);
+		Allele.helper.set(alleles, EnumButterflyChromosome.TEMPERATURE_TOLERANCE, EnumAllele.Tolerance.NONE);
+		Allele.helper.set(alleles, EnumButterflyChromosome.HUMIDITY_TOLERANCE, EnumAllele.Tolerance.NONE);
+		Allele.helper.set(alleles, EnumButterflyChromosome.NOCTURNAL, false);
+		Allele.helper.set(alleles, EnumButterflyChromosome.TOLERANT_FLYER, false);
+		Allele.helper.set(alleles, EnumButterflyChromosome.FIRE_RESIST, false);
+		Allele.helper.set(alleles, EnumButterflyChromosome.FLOWER_PROVIDER, EnumAllele.Flowers.VANILLA);
+		Allele.helper.set(alleles, EnumButterflyChromosome.EFFECT, Allele.butterflyNone);
 		
 		return alleles;
 	}
 	
 	public static IAllele[] getCabbageWhiteTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumButterflyChromosome.SIZE.ordinal()] = Allele.sizeAverage;
+		Allele.helper.set(alleles, EnumButterflyChromosome.SIZE, EnumAllele.Size.AVERAGE);
 		return alleles;
 	}
 	
 	public static IAllele[] getGlasswingTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumButterflyChromosome.SPECIES.ordinal()] = Allele.lepiGlasswing;
-		alleles[EnumButterflyChromosome.SIZE.ordinal()] = Allele.sizeSmaller;
-		alleles[EnumButterflyChromosome.LIFESPAN.ordinal()] = Allele.lifespanShort;
-		alleles[EnumButterflyChromosome.FERTILITY.ordinal()] = Allele.int5;
-		alleles[EnumButterflyChromosome.TEMPERATURE_TOLERANCE.ordinal()] = Allele.toleranceDown1;
+		Allele.helper.set(alleles, EnumButterflyChromosome.SPECIES, Allele.lepiGlasswing);
+		Allele.helper.set(alleles, EnumButterflyChromosome.SIZE, EnumAllele.Size.SMALLER);
+		Allele.helper.set(alleles, EnumButterflyChromosome.LIFESPAN, EnumAllele.Lifespan.SHORT);
+		Allele.helper.set(alleles, EnumButterflyChromosome.FERTILITY, 5);
+		Allele.helper.set(alleles, EnumButterflyChromosome.TEMPERATURE_TOLERANCE, EnumAllele.Tolerance.DOWN_1);
 		return alleles;
 	}
 	
 	public static IAllele[] getEmeraldPeacockTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumButterflyChromosome.SPECIES.ordinal()] = Allele.lepiEmeraldPeacock;
-		alleles[EnumButterflyChromosome.SIZE.ordinal()] = Allele.sizeLarge;
-		alleles[EnumButterflyChromosome.LIFESPAN.ordinal()] = Allele.lifespanNormal;
-		alleles[EnumButterflyChromosome.FERTILITY.ordinal()] = Allele.int5;
-		alleles[EnumButterflyChromosome.TEMPERATURE_TOLERANCE.ordinal()] = Allele.toleranceDown1;
-		alleles[EnumButterflyChromosome.HUMIDITY_TOLERANCE.ordinal()] = Allele.toleranceDown1;
+		Allele.helper.set(alleles, EnumButterflyChromosome.SPECIES, Allele.lepiEmeraldPeacock);
+		Allele.helper.set(alleles, EnumButterflyChromosome.SIZE, EnumAllele.Size.LARGE);
+		Allele.helper.set(alleles, EnumButterflyChromosome.LIFESPAN, EnumAllele.Lifespan.NORMAL);
+		Allele.helper.set(alleles, EnumButterflyChromosome.FERTILITY, 5);
+		Allele.helper.set(alleles, EnumButterflyChromosome.TEMPERATURE_TOLERANCE, EnumAllele.Tolerance.DOWN_1);
+		Allele.helper.set(alleles, EnumButterflyChromosome.HUMIDITY_TOLERANCE, EnumAllele.Tolerance.DOWN_1);
 		return alleles;
 	}
 	
 	public static IAllele[] getCitrusSwallowTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumButterflyChromosome.SPECIES.ordinal()] = Allele.lepiCitrusSwallow;
-		alleles[EnumButterflyChromosome.SPEED.ordinal()] = Allele.speedSlower;
-		alleles[EnumButterflyChromosome.SIZE.ordinal()] = Allele.sizeLarge;
-		alleles[EnumButterflyChromosome.FERTILITY.ordinal()] = Allele.int10;
-		alleles[EnumButterflyChromosome.METABOLISM.ordinal()] = Allele.int8;
-		alleles[EnumButterflyChromosome.LIFESPAN.ordinal()] = Allele.lifespanShorter;
-		alleles[EnumButterflyChromosome.TEMPERATURE_TOLERANCE.ordinal()] = Allele.toleranceDown1;
-		alleles[EnumButterflyChromosome.HUMIDITY_TOLERANCE.ordinal()] = Allele.toleranceDown1;
+		Allele.helper.set(alleles, EnumButterflyChromosome.SPECIES, Allele.lepiCitrusSwallow);
+		Allele.helper.set(alleles, EnumButterflyChromosome.SPEED, EnumAllele.Speed.SLOWER);
+		Allele.helper.set(alleles, EnumButterflyChromosome.SIZE, EnumAllele.Size.LARGE);
+		Allele.helper.set(alleles, EnumButterflyChromosome.FERTILITY, 10);
+		Allele.helper.set(alleles, EnumButterflyChromosome.METABOLISM, 8);
+		Allele.helper.set(alleles, EnumButterflyChromosome.LIFESPAN, EnumAllele.Lifespan.SHORTER);
+		Allele.helper.set(alleles, EnumButterflyChromosome.TEMPERATURE_TOLERANCE, EnumAllele.Tolerance.DOWN_1);
+		Allele.helper.set(alleles, EnumButterflyChromosome.HUMIDITY_TOLERANCE, EnumAllele.Tolerance.DOWN_1);
 		return alleles;
 	}
 
 	public static IAllele[] getBlackSwallowTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumButterflyChromosome.SPECIES.ordinal()] = Allele.lepiBlackSwallow;
-		alleles[EnumButterflyChromosome.SPEED.ordinal()] = Allele.speedSlow;
-		alleles[EnumButterflyChromosome.SIZE.ordinal()] = Allele.sizeLarge;
-		alleles[EnumButterflyChromosome.LIFESPAN.ordinal()] = Allele.lifespanShorter;
-		alleles[EnumButterflyChromosome.TEMPERATURE_TOLERANCE.ordinal()] = Allele.toleranceDown1;
-		alleles[EnumButterflyChromosome.HUMIDITY_TOLERANCE.ordinal()] = Allele.toleranceDown1;
+		Allele.helper.set(alleles, EnumButterflyChromosome.SPECIES, Allele.lepiBlackSwallow);
+		Allele.helper.set(alleles, EnumButterflyChromosome.SPEED, EnumAllele.Speed.SLOW);
+		Allele.helper.set(alleles, EnumButterflyChromosome.SIZE, EnumAllele.Size.LARGE);
+		Allele.helper.set(alleles, EnumButterflyChromosome.LIFESPAN, EnumAllele.Lifespan.SHORTER);
+		Allele.helper.set(alleles, EnumButterflyChromosome.TEMPERATURE_TOLERANCE, EnumAllele.Tolerance.DOWN_1);
+		Allele.helper.set(alleles, EnumButterflyChromosome.HUMIDITY_TOLERANCE, EnumAllele.Tolerance.DOWN_1);
 		return alleles;
 	}
 
 	public static IAllele[] getBrimstoneMothTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumButterflyChromosome.SPECIES.ordinal()] = Allele.mothBrimstone;
+		Allele.helper.set(alleles, EnumButterflyChromosome.SPECIES, Allele.mothBrimstone);
 		return alleles;
 	}
 	
 	public static IAllele[] getSpeckledWoodTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumButterflyChromosome.SPECIES.ordinal()] = Allele.lepiSpeckledWood;
-		alleles[EnumButterflyChromosome.FERTILITY.ordinal()] = Allele.int2;
+		Allele.helper.set(alleles, EnumButterflyChromosome.SPECIES, Allele.lepiSpeckledWood);
+		Allele.helper.set(alleles, EnumButterflyChromosome.FERTILITY, 2);
 		return alleles;
 	}
 
 	public static IAllele[] getMadeiranSpeckledWoodTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumButterflyChromosome.SPECIES.ordinal()] = Allele.lepiMadeiranSpeckledWood;
-		alleles[EnumButterflyChromosome.FERTILITY.ordinal()] = Allele.int2;
+		Allele.helper.set(alleles, EnumButterflyChromosome.SPECIES, Allele.lepiMadeiranSpeckledWood);
+		Allele.helper.set(alleles, EnumButterflyChromosome.FERTILITY, 2);
 		return alleles;
 	}
 
 	public static IAllele[] getCanarySpeckledWoodTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumButterflyChromosome.SPECIES.ordinal()] = Allele.lepiCanarySpeckledWood;
-		alleles[EnumButterflyChromosome.FERTILITY.ordinal()] = Allele.int2;
+		Allele.helper.set(alleles, EnumButterflyChromosome.SPECIES, Allele.lepiCanarySpeckledWood);
+		Allele.helper.set(alleles, EnumButterflyChromosome.FERTILITY, 2);
 		return alleles;
 	}
 
 	public static IAllele[] getMenelausBlueMorphoTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumButterflyChromosome.SPECIES.ordinal()] = Allele.lepiMenelausBlueMorpho;
-		alleles[EnumButterflyChromosome.SIZE.ordinal()] = Allele.sizeLarger;
-		alleles[EnumButterflyChromosome.LIFESPAN.ordinal()] = Allele.lifespanShortest;
-		alleles[EnumButterflyChromosome.FERTILITY.ordinal()] = Allele.int2;
+		Allele.helper.set(alleles, EnumButterflyChromosome.SPECIES, Allele.lepiMenelausBlueMorpho);
+		Allele.helper.set(alleles, EnumButterflyChromosome.SIZE, EnumAllele.Size.LARGER);
+		Allele.helper.set(alleles, EnumButterflyChromosome.LIFESPAN, EnumAllele.Lifespan.SHORTEST);
+		Allele.helper.set(alleles, EnumButterflyChromosome.FERTILITY, 2);
 		return alleles;
 	}
 
 	public static IAllele[] getRhetenorBlueMorphoTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumButterflyChromosome.SPECIES.ordinal()] = Allele.lepiRhetenorBlueMorpho;
-		alleles[EnumButterflyChromosome.SIZE.ordinal()] = Allele.sizeLarger;
-		alleles[EnumButterflyChromosome.LIFESPAN.ordinal()] = Allele.lifespanShortest;
-		alleles[EnumButterflyChromosome.FERTILITY.ordinal()] = Allele.int2;
+		Allele.helper.set(alleles, EnumButterflyChromosome.SPECIES, Allele.lepiRhetenorBlueMorpho);
+		Allele.helper.set(alleles, EnumButterflyChromosome.SIZE, EnumAllele.Size.LARGER);
+		Allele.helper.set(alleles, EnumButterflyChromosome.LIFESPAN, EnumAllele.Lifespan.SHORTEST);
+		Allele.helper.set(alleles, EnumButterflyChromosome.FERTILITY, 2);
 		return alleles;
 	}
 
 	public static IAllele[] getPeleidesBlueMorphoTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumButterflyChromosome.SPECIES.ordinal()] = Allele.lepiPeleidesBlueMorpho;
-		alleles[EnumButterflyChromosome.SIZE.ordinal()] = Allele.sizeLarger;
-		alleles[EnumButterflyChromosome.LIFESPAN.ordinal()] = Allele.lifespanShortest;
-		alleles[EnumButterflyChromosome.FERTILITY.ordinal()] = Allele.int2;
+		Allele.helper.set(alleles, EnumButterflyChromosome.SPECIES, Allele.lepiPeleidesBlueMorpho);
+		Allele.helper.set(alleles, EnumButterflyChromosome.SIZE, EnumAllele.Size.LARGER);
+		Allele.helper.set(alleles, EnumButterflyChromosome.LIFESPAN, EnumAllele.Lifespan.SHORTEST);
+		Allele.helper.set(alleles, EnumButterflyChromosome.FERTILITY, 2);
 		return alleles;
 	}
 
 	public static IAllele[] getBrimstoneTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumButterflyChromosome.SPECIES.ordinal()] = Allele.lepiBrimstone;
+		Allele.helper.set(alleles, EnumButterflyChromosome.SPECIES, Allele.lepiBrimstone);
 		return alleles;
 	}
 
 	public static IAllele[] getAuroraTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumButterflyChromosome.SPECIES.ordinal()] = Allele.lepiAurora;
-		alleles[EnumButterflyChromosome.SIZE.ordinal()] = Allele.sizeSmaller;
+		Allele.helper.set(alleles, EnumButterflyChromosome.SPECIES, Allele.lepiAurora);
+		Allele.helper.set(alleles, EnumButterflyChromosome.SIZE, EnumAllele.Size.SMALLER);
 		return alleles;
 	}
 
 	public static IAllele[] getPostillionTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumButterflyChromosome.SPECIES.ordinal()] = Allele.lepiPostillion;
-		alleles[EnumButterflyChromosome.SPEED.ordinal()] = Allele.speedSlow;
+		Allele.helper.set(alleles, EnumButterflyChromosome.SPECIES, Allele.lepiPostillion);
+		Allele.helper.set(alleles, EnumButterflyChromosome.SPEED, EnumAllele.Speed.SLOW);
 		return alleles;
 	}
 
 	public static IAllele[] getPalaenoSulphurTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumButterflyChromosome.SPECIES.ordinal()] = Allele.lepiPalaenoSulphur;
-		alleles[EnumButterflyChromosome.SPEED.ordinal()] = Allele.speedSlower;
+		Allele.helper.set(alleles, EnumButterflyChromosome.SPECIES, Allele.lepiPalaenoSulphur);
+		Allele.helper.set(alleles, EnumButterflyChromosome.SPEED, EnumAllele.Speed.SLOWER);
 		return alleles;
 	}
 
 	public static IAllele[] getResedaTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumButterflyChromosome.SPECIES.ordinal()] = Allele.lepiReseda;
-		alleles[EnumButterflyChromosome.SPEED.ordinal()] = Allele.speedSlower;
+		Allele.helper.set(alleles, EnumButterflyChromosome.SPECIES, Allele.lepiReseda);
+		Allele.helper.set(alleles, EnumButterflyChromosome.SPEED, EnumAllele.Speed.SLOWER);
 		return alleles;
 	}
 
 	public static IAllele[] getSpringAzureTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumButterflyChromosome.SPECIES.ordinal()] = Allele.lepiSpringAzure;
-		alleles[EnumButterflyChromosome.SIZE.ordinal()] = Allele.sizeSmaller;
-		alleles[EnumButterflyChromosome.LIFESPAN.ordinal()] = Allele.lifespanShort;
+		Allele.helper.set(alleles, EnumButterflyChromosome.SPECIES, Allele.lepiSpringAzure);
+		Allele.helper.set(alleles, EnumButterflyChromosome.SIZE, EnumAllele.Size.SMALLER);
+		Allele.helper.set(alleles, EnumButterflyChromosome.LIFESPAN, EnumAllele.Lifespan.SHORT);
 		return alleles;
 	}
 
 	public static IAllele[] getGozoraAzureTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumButterflyChromosome.SPECIES.ordinal()] = Allele.lepiGozoraAzure;
-		alleles[EnumButterflyChromosome.SIZE.ordinal()] = Allele.sizeSmaller;
-		alleles[EnumButterflyChromosome.LIFESPAN.ordinal()] = Allele.lifespanShort;
+		Allele.helper.set(alleles, EnumButterflyChromosome.SPECIES, Allele.lepiGozoraAzure);
+		Allele.helper.set(alleles, EnumButterflyChromosome.SIZE, EnumAllele.Size.SMALLER);
+		Allele.helper.set(alleles, EnumButterflyChromosome.LIFESPAN, EnumAllele.Lifespan.SHORT);
 		return alleles;
 	}
 
 	public static IAllele[] getCommaTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumButterflyChromosome.SPECIES.ordinal()] = Allele.lepiComma;
-		alleles[EnumButterflyChromosome.SPEED.ordinal()] = Allele.speedSlower;
+		Allele.helper.set(alleles, EnumButterflyChromosome.SPECIES, Allele.lepiComma);
+		Allele.helper.set(alleles, EnumButterflyChromosome.SPEED, EnumAllele.Speed.SLOWER);
 		return alleles;
 	}
 
 	public static IAllele[] getBatesiaTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumButterflyChromosome.SPECIES.ordinal()] = Allele.lepiBatesia;
-		alleles[EnumButterflyChromosome.SIZE.ordinal()] = Allele.sizeLarge;
+		Allele.helper.set(alleles, EnumButterflyChromosome.SPECIES, Allele.lepiBatesia);
+		Allele.helper.set(alleles, EnumButterflyChromosome.SIZE, EnumAllele.Size.LARGE);
 		return alleles;
 	}
 
 	public static IAllele[] getBlueWingTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumButterflyChromosome.SPECIES.ordinal()] = Allele.lepiBlueWing;
-		alleles[EnumButterflyChromosome.SIZE.ordinal()] = Allele.sizeAverage;
-		alleles[EnumButterflyChromosome.METABOLISM.ordinal()] = Allele.int5;
+		Allele.helper.set(alleles, EnumButterflyChromosome.SPECIES, Allele.lepiBlueWing);
+		Allele.helper.set(alleles, EnumButterflyChromosome.SIZE, EnumAllele.Size.AVERAGE);
+		Allele.helper.set(alleles, EnumButterflyChromosome.METABOLISM, 5);
 		return alleles;
 	}
 
 	public static IAllele[] getBlueDukeTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumButterflyChromosome.SPECIES.ordinal()] = Allele.lepiBlueDuke;
-		alleles[EnumButterflyChromosome.TEMPERATURE_TOLERANCE.ordinal()] = Allele.toleranceBoth1;
+		Allele.helper.set(alleles, EnumButterflyChromosome.SPECIES, Allele.lepiBlueDuke);
+		Allele.helper.set(alleles, EnumButterflyChromosome.TEMPERATURE_TOLERANCE, EnumAllele.Tolerance.BOTH_1);
 		return alleles;
 	}
 
 	public static IAllele[] getGlassyTigerTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumButterflyChromosome.SPECIES.ordinal()] = Allele.lepiGlassyTiger;
-		alleles[EnumButterflyChromosome.SIZE.ordinal()] = Allele.sizeAverage;
+		Allele.helper.set(alleles, EnumButterflyChromosome.SPECIES, Allele.lepiGlassyTiger);
+		Allele.helper.set(alleles, EnumButterflyChromosome.SIZE, EnumAllele.Size.AVERAGE);
 		return alleles;
 	}
 
 	public static IAllele[] getPostmanTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumButterflyChromosome.SPECIES.ordinal()] = Allele.lepiPostman;
+		Allele.helper.set(alleles, EnumButterflyChromosome.SPECIES, Allele.lepiPostman);
 		return alleles;
 	}
 
 	public static IAllele[] getSpicebushTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumButterflyChromosome.SPECIES.ordinal()] = Allele.lepiSpicebush;
-		alleles[EnumButterflyChromosome.SIZE.ordinal()] = Allele.sizeAverage;
+		Allele.helper.set(alleles, EnumButterflyChromosome.SPECIES, Allele.lepiSpicebush);
+		Allele.helper.set(alleles, EnumButterflyChromosome.SIZE, EnumAllele.Size.AVERAGE);
 		return alleles;
 	}
 
 	public static IAllele[] getMalachiteTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumButterflyChromosome.SPECIES.ordinal()] = Allele.lepiMalachite;
-		alleles[EnumButterflyChromosome.SIZE.ordinal()] = Allele.sizeAverage;
-		alleles[EnumButterflyChromosome.TEMPERATURE_TOLERANCE.ordinal()] = Allele.toleranceDown1;
-		alleles[EnumButterflyChromosome.HUMIDITY_TOLERANCE.ordinal()] = Allele.toleranceDown1;
+		Allele.helper.set(alleles, EnumButterflyChromosome.SPECIES, Allele.lepiMalachite);
+		Allele.helper.set(alleles, EnumButterflyChromosome.SIZE, EnumAllele.Size.AVERAGE);
+		Allele.helper.set(alleles, EnumButterflyChromosome.TEMPERATURE_TOLERANCE, EnumAllele.Tolerance.DOWN_1);
+		Allele.helper.set(alleles, EnumButterflyChromosome.HUMIDITY_TOLERANCE, EnumAllele.Tolerance.DOWN_1);
 		return alleles;
 	}
 
 	public static IAllele[] getLeopardLacewingTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumButterflyChromosome.SPECIES.ordinal()] = Allele.lepiLLacewing;
-		alleles[EnumButterflyChromosome.TEMPERATURE_TOLERANCE.ordinal()] = Allele.toleranceUp1;
-		alleles[EnumButterflyChromosome.HUMIDITY_TOLERANCE.ordinal()] = Allele.toleranceUp1;
+		Allele.helper.set(alleles, EnumButterflyChromosome.SPECIES, Allele.lepiLLacewing);
+		Allele.helper.set(alleles, EnumButterflyChromosome.TEMPERATURE_TOLERANCE, EnumAllele.Tolerance.UP_1);
+		Allele.helper.set(alleles, EnumButterflyChromosome.HUMIDITY_TOLERANCE, EnumAllele.Tolerance.UP_1);
 		return alleles;
 	}
 
 	public static IAllele[] getMonarchTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumButterflyChromosome.SPECIES.ordinal()] = Allele.lepiMonarch;
-		alleles[EnumButterflyChromosome.SIZE.ordinal()] = Allele.sizeAverage;
+		Allele.helper.set(alleles, EnumButterflyChromosome.SPECIES, Allele.lepiMonarch);
+		Allele.helper.set(alleles, EnumButterflyChromosome.SIZE, EnumAllele.Size.AVERAGE);
 		return alleles;
 	}
 
 	public static IAllele[] getThoasSwallowTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumButterflyChromosome.SPECIES.ordinal()] = Allele.lepiThoasSwallow;
-		alleles[EnumButterflyChromosome.SPEED.ordinal()] = Allele.speedSlower;
-		alleles[EnumButterflyChromosome.SIZE.ordinal()] = Allele.sizeLarge;
-		alleles[EnumButterflyChromosome.LIFESPAN.ordinal()] = Allele.lifespanShortest;
+		Allele.helper.set(alleles, EnumButterflyChromosome.SPECIES, Allele.lepiThoasSwallow);
+		Allele.helper.set(alleles, EnumButterflyChromosome.SPEED, EnumAllele.Speed.SLOWER);
+		Allele.helper.set(alleles, EnumButterflyChromosome.SIZE, EnumAllele.Size.LARGE);
+		Allele.helper.set(alleles, EnumButterflyChromosome.LIFESPAN, EnumAllele.Lifespan.SHORTEST);
 		return alleles;
 	}
 
 	public static IAllele[] getZebraSwallowTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumButterflyChromosome.SPECIES.ordinal()] = Allele.lepiZebraSwallow;
-		alleles[EnumButterflyChromosome.SPEED.ordinal()] = Allele.speedSlower;
-		alleles[EnumButterflyChromosome.SIZE.ordinal()] = Allele.sizeAverage;
+		Allele.helper.set(alleles, EnumButterflyChromosome.SPECIES, Allele.lepiZebraSwallow);
+		Allele.helper.set(alleles, EnumButterflyChromosome.SPEED, EnumAllele.Speed.SLOWER);
+		Allele.helper.set(alleles, EnumButterflyChromosome.SIZE, EnumAllele.Size.AVERAGE);
 		return alleles;
 	}
 
 	public static IAllele[] getDianaFritTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumButterflyChromosome.SPECIES.ordinal()] = Allele.lepiDianaFrit;
-		alleles[EnumButterflyChromosome.SPEED.ordinal()] = Allele.speedSlower;
-		alleles[EnumButterflyChromosome.SIZE.ordinal()] = Allele.sizeSmaller;
+		Allele.helper.set(alleles, EnumButterflyChromosome.SPECIES, Allele.lepiDianaFrit);
+		Allele.helper.set(alleles, EnumButterflyChromosome.SPEED, EnumAllele.Speed.SLOWER);
+		Allele.helper.set(alleles, EnumButterflyChromosome.SIZE, EnumAllele.Size.SMALLER);
 		return alleles;
 	}
 
 	public static IAllele[] getLatticedHeathTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumButterflyChromosome.SPECIES.ordinal()] = Allele.mothLatticedHeath;
-		alleles[EnumButterflyChromosome.SIZE.ordinal()] = Allele.sizeSmallest;
+		Allele.helper.set(alleles, EnumButterflyChromosome.SPECIES, Allele.mothLatticedHeath);
+		Allele.helper.set(alleles, EnumButterflyChromosome.SIZE, EnumAllele.Size.SMALLEST);
 		return alleles;
 	}
 
 	public static IAllele[] getAtlasMothTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumButterflyChromosome.SPECIES.ordinal()] = Allele.mothAtlas;
-		alleles[EnumButterflyChromosome.SIZE.ordinal()] = Allele.sizeLargest;
+		Allele.helper.set(alleles, EnumButterflyChromosome.SPECIES, Allele.mothAtlas);
+		Allele.helper.set(alleles, EnumButterflyChromosome.SIZE, EnumAllele.Size.LARGEST);
 		return alleles;
 	}
 

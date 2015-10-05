@@ -11,12 +11,13 @@
 package forestry.factory.gadgets;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.RainSubstrate;
 import forestry.core.gadgets.Mill;
-import forestry.core.gadgets.TileBase;
+import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.proxy.Proxies;
 
 public class MillRainmaker extends Mill {
@@ -26,10 +27,11 @@ public class MillRainmaker extends Mill {
 
 	public MillRainmaker() {
 		speed = 0.01f;
+		setInternalInventory(new InventoryRainmaker(this));
 	}
 
 	@Override
-	public void openGui(EntityPlayer player, TileBase tile) {
+	public void openGui(EntityPlayer player) {
 		if (!Proxies.common.isSimulating(player.worldObj)) {
 			return;
 		}
@@ -71,7 +73,7 @@ public class MillRainmaker extends Mill {
 		nbttagcompound.setBoolean("Reverse", reverse);
 	}
 
-	public void addCharge(RainSubstrate substrate) {
+	private void addCharge(RainSubstrate substrate) {
 		charge = 1;
 		speed = substrate.speed;
 		duration = substrate.duration;
@@ -81,19 +83,19 @@ public class MillRainmaker extends Mill {
 	@Override
 	public void activate() {
 		if (Proxies.render.hasRendering()) {
-			worldObj.playSoundEffect(xCoord, yCoord, zCoord, "ambient.weather.thunder", 4F,
+			worldObj.playSoundEffect(pos.getX(), pos.getY(), pos.getZ(), "ambient.weather.thunder", 4F,
 					(1.0F + (worldObj.rand.nextFloat() - worldObj.rand.nextFloat()) * 0.2F) * 0.7F);
 
-			float f = xCoord + 0.5F;
-			float f1 = yCoord + 0.0F + (worldObj.rand.nextFloat() * 6F) / 16F;
-			float f2 = zCoord + 0.5F;
+			float f = pos.getX() + 0.5F;
+			float f1 = pos.getY() + 0.0F + (worldObj.rand.nextFloat() * 6F) / 16F;
+			float f2 = pos.getZ() + 0.5F;
 			float f3 = 0.52F;
 			float f4 = worldObj.rand.nextFloat() * 0.6F - 0.3F;
 
-			Proxies.common.addEntityExplodeFX(worldObj, (f - f3), f1, (f2 + f4), 0F, 0F, 0F);
-			Proxies.common.addEntityExplodeFX(worldObj, (f + f3), f1, (f2 + f4), 0F, 0F, 0F);
-			Proxies.common.addEntityExplodeFX(worldObj, (f + f4), f1, (f2 - f3), 0F, 0F, 0F);
-			Proxies.common.addEntityExplodeFX(worldObj, (f + f4), f1, (f2 + f3), 0F, 0F, 0F);
+			Proxies.common.addEntityExplodeFX(worldObj, (f - f3), f1, (f2 + f4));
+			Proxies.common.addEntityExplodeFX(worldObj, (f + f3), f1, (f2 + f4));
+			Proxies.common.addEntityExplodeFX(worldObj, (f + f4), f1, (f2 - f3));
+			Proxies.common.addEntityExplodeFX(worldObj, (f + f4), f1, (f2 + f3));
 		}
 
 		if (Proxies.common.isSimulating(worldObj)) {
@@ -110,78 +112,39 @@ public class MillRainmaker extends Mill {
 		}
 	}
 
-	// TODO: Give Rainmaker a real inventory and a GUI with slots
-	//	@Override
-	//	public int addItem(ItemStack stack, boolean doAdd, ForgeDirection from) {
-	//		if (charge != 0)
-	//			return 0;
-	//
-	//		if (!FuelManager.rainSubstrate.containsKey(stack))
-	//			return 0;
-	//
-	//		RainSubstrate substrate = FuelManager.rainSubstrate.get(stack);
-	//		if (!substrate.item.isItemEqual(stack))
-	//			return 0;
-	//
-	//		if (doAdd)
-	//			addCharge(substrate);
-	//		return 1;
-	//	}
-	//
-	//	@Override
-	//	public ItemStack[] extractItem(boolean doRemove, ForgeDirection from, int maxItemCount) {
-	//		return null;
-	//	}
-	//
-	//	@Override
-	//	public int getSizeInventory() {
-	//		return 0;
-	//	}
-	//
-	//	@Override
-	//	public ItemStack getStackInSlot(int var1) {
-	//		return null;
-	//	}
-	//
-	//	@Override
-	//	public ItemStack decrStackSize(int var1, int var2) {
-	//		return null;
-	//	}
-	//
-	//	@Override
-	//	public ItemStack getStackInSlotOnClosing(int var1) {
-	//		return null;
-	//	}
-	//
-	//	@Override
-	//	public void setInventorySlotContents(int var1, ItemStack var2) {
-	//	}
-	//
-	//	@Override
-	//	public int getInventoryStackLimit() {
-	//		return 0;
-	//	}
-	//
-	//	@Override
-	//	public void openInventory() {
-	//	}
-	//
-	//	@Override
-	//	public void closeInventory() {
-	//	}
-	//
-	//	@Override
-	//	public boolean isUseableByPlayer(EntityPlayer player) {
-	//		return Utils.isUseableByPlayer(player, this);
-	//	}
-	//
-	//	@Override
-	//	public boolean hasCustomInventoryName() {
-	//		return false;
-	//	}
-	//
-	//	@Override
-	//	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
-	//		return false;
-	//	}
+	private static class InventoryRainmaker extends TileInventoryAdapter<MillRainmaker> {
+		private static final int SLOT_SUBSTRATE = 0;
+
+		public InventoryRainmaker(MillRainmaker tile) {
+			super(tile, 1, "items");
+		}
+
+		@Override
+		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+			if (slotIndex == SLOT_SUBSTRATE) {
+				if (FuelManager.rainSubstrate.containsKey(itemStack) && tile.charge == 0 && tile.progress == 0) {
+					RainSubstrate substrate = FuelManager.rainSubstrate.get(itemStack);
+					if (tile.worldObj.isRaining() && substrate.reverse) {
+						return true;
+					} else if (!tile.worldObj.isRaining() && !substrate.reverse) {
+						return true;
+					}
+				}
+			}
+
+			return false;
+		}
+
+		@Override
+		public void setInventorySlotContents(int slotIndex, ItemStack itemStack) {
+			if (slotIndex == SLOT_SUBSTRATE) {
+				RainSubstrate substrate = FuelManager.rainSubstrate.get(itemStack);
+				if (substrate != null && substrate.item.isItemEqual(itemStack)) {
+					tile.addCharge(substrate);
+					tile.sendNetworkUpdate();
+				}
+			}
+		}
+	}
+
 }

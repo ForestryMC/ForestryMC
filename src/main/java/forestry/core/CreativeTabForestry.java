@@ -13,9 +13,7 @@ package forestry.core;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-
 import net.minecraftforge.fml.common.registry.GameRegistry;
-
 import forestry.api.core.Tabs;
 import forestry.core.config.ForestryItem;
 import forestry.plugins.PluginManager;
@@ -40,7 +38,7 @@ public class CreativeTabForestry extends CreativeTabs {
 
 	private final int icon;
 
-	public CreativeTabForestry(int icon, String label) {
+	private CreativeTabForestry(int icon, String label) {
 		super(label);
 		this.icon = icon;
 	}

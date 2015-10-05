@@ -10,27 +10,30 @@
  ******************************************************************************/
 package forestry.arboriculture.commands;
 
+import forestry.core.commands.SpeciesNotFoundException;
+import forestry.core.commands.TemplateNotFoundException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
 public class TreeSpawner implements ITreeSpawner {
 
 	@Override
-	public boolean spawn(ICommandSender sender, String treeName, EntityPlayer player) {
+	public boolean spawn(ICommandSender sender, String treeName, EntityPlayer player) throws SpeciesNotFoundException, TemplateNotFoundException {
 		Vec3 look = player.getLookVec();
 
 		int x = (int) Math.round(player.posX + (3 * look.xCoord));
 		int y = (int) Math.round(player.posY);
 		int z = (int) Math.round(player.posZ + (3 * look.zCoord));
 
-		WorldGenerator gen = TreeGenHelper.getWorldGen(treeName, player, x, y, z);
+		WorldGenerator gen = TreeGenHelper.getWorldGen(treeName, player, new BlockPos(x, y, z));
 		if (gen == null) {
 			return false;
 		}
 
-		TreeGenHelper.generateTree(gen, player, x, y, z);
+		TreeGenHelper.generateTree(gen, player, new BlockPos(x, y, z));
 		return true;
 	}
 

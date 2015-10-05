@@ -23,7 +23,9 @@ import java.util.List;
 import java.util.Locale;
 
 import net.minecraft.command.ICommandSender;
+import net.minecraft.command.PlayerNotFoundException;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
@@ -57,12 +59,12 @@ public final class CommandSaveStats extends SubCommand {
 	}
 
 	@Override
-	public List<String> addTabCompletionOptions(ICommandSender sender, String[] parameters) {
+	public List<String> addTabCompletionOptions(ICommandSender sender, String[] parameters, BlockPos pos) {
 		return CommandHelpers.getListOfStringsMatchingLastWord(parameters, CommandHelpers.getPlayers());
 	}
 
 	@Override
-	public void processSubCommand(ICommandSender sender, String[] args) {
+	public void processSubCommand(ICommandSender sender, String[] args) throws PlayerNotFoundException {
 		if (args.length > 1) {
 			printHelp(sender);
 			return;
@@ -115,7 +117,7 @@ public final class CommandSaveStats extends SubCommand {
 			}
 		}
 
-		File file = new File(Proxies.common.getForestryRoot(), "config/" + Defaults.MOD.toLowerCase(Locale.ENGLISH) + "/stats/" + player.getDisplayName() + "-" + saveHelper.getFileSuffix() + ".log");
+		File file = new File(Proxies.common.getForestryRoot(), "config/" + Defaults.MOD.toLowerCase(Locale.ENGLISH) + "/stats/" + player.getDisplayName() + '-' + saveHelper.getFileSuffix() + ".log");
 		try {
 			File folder = file.getParentFile();
 			if (folder != null && !folder.exists()) {
@@ -156,13 +158,13 @@ public final class CommandSaveStats extends SubCommand {
 		CommandHelpers.sendLocalizedChatMessage(sender, "for.chat.command.forestry.stats.save.saved", player.getDisplayName());
 	}
 
-	private String generateSpeciesListHeader() {
+	private static String generateSpeciesListHeader() {
 		String authority = StatCollector.translateToLocal("for.gui.alyzer.authority");
 		String species = StatCollector.translateToLocal("for.gui.species");
 		return speciesListEntry(discoveredSymbol, blacklistedSymbol, notCountedSymbol, "UID", species, authority);
 	}
 
-	private String generateSpeciesListEntry(IAlleleSpecies species, IBreedingTracker tracker) {
+	private static String generateSpeciesListEntry(IAlleleSpecies species, IBreedingTracker tracker) {
 		String discovered = "";
 		if (tracker.isDiscovered(species)) {
 			discovered = discoveredSymbol;
@@ -181,7 +183,7 @@ public final class CommandSaveStats extends SubCommand {
 		return speciesListEntry(discovered, blacklisted, notCounted, species.getUID(), species.getName(), species.getAuthority());
 	}
 
-	private String speciesListEntry(String discovered, String blacklisted, String notCounted, String UID, String speciesName, String authority) {
+	private static String speciesListEntry(String discovered, String blacklisted, String notCounted, String UID, String speciesName, String authority) {
 		return String.format("[ %-2s ] [ %-2s ] [ %-2s ]\t%-40s %-20s %-20s", discovered, blacklisted, notCounted, UID, speciesName, authority);
 	}
 }

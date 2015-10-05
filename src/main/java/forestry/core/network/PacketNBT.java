@@ -10,43 +10,31 @@
  ******************************************************************************/
 package forestry.core.network;
 
-import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
-import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class PacketNBT extends ForestryPacket {
 
-	protected NBTTagCompound nbttagcompound;
+	private NBTTagCompound nbttagcompound;
 
-	public PacketNBT() {
+	public PacketNBT(DataInputStreamForestry data) throws IOException {
+		super(data);
 	}
 
-	public PacketNBT(int id) {
-		super(id);
-	}
-
-	public PacketNBT(int id, NBTTagCompound nbttagcompound) {
+	public PacketNBT(PacketId id, NBTTagCompound nbttagcompound) {
 		super(id);
 		this.nbttagcompound = nbttagcompound;
 	}
 
 	@Override
-	public void writeData(DataOutputStream data) throws IOException {
-		byte[] compressed = CompressedStreamTools.compress(nbttagcompound);
-		data.writeShort(compressed.length);
-		data.write(compressed);
+	public void writeData(DataOutputStreamForestry data) throws IOException {
+		data.writeNBTTagCompound(nbttagcompound);
 	}
 
 	@Override
-	public void readData(DataInputStream data) throws IOException {
-		short length = data.readShort();
-		byte[] compressed = new byte[length];
-		data.readFully(compressed);
-		this.nbttagcompound = CompressedStreamTools.readCompressed(new ByteArrayInputStream(compressed));
+	protected void readData(DataInputStreamForestry data) throws IOException {
+		this.nbttagcompound = data.readNBTTagCompound();
 	}
 
 	public NBTTagCompound getTagCompound() {

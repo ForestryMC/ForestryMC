@@ -10,13 +10,14 @@
  ******************************************************************************/
 package forestry.mail;
 
+import forestry.core.network.ForestryPacket;
+import forestry.core.network.PacketId;
+import forestry.core.proxy.Proxies;
+import forestry.mail.gui.GuiMailboxInfo;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.RenderTickEvent;
-
-import forestry.mail.gui.GuiMailboxInfo;
-import forestry.plugins.PluginMail;
 
 public class TickHandlerMailClient {
 	public TickHandlerMailClient() {
@@ -29,10 +30,10 @@ public class TickHandlerMailClient {
 			return;
 		}
 
-		if (GuiMailboxInfo.instance != null) {
+		if (GuiMailboxInfo.instance.hasPOBoxInfo()) {
 			GuiMailboxInfo.instance.render(0, 0);
 		} else {
-			PluginMail.proxy.resetMailboxInfo();
+			Proxies.net.sendToServer(new ForestryPacket(PacketId.POBOX_INFO_REQUEST));
 		}
 	}
 }

@@ -10,189 +10,51 @@
  ******************************************************************************/
 package forestry.mail.items;
 
+import com.google.common.collect.ImmutableSet;
+
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import forestry.api.core.ForestryAPI;
+import forestry.api.core.IErrorSource;
+import forestry.api.core.IErrorState;
+import forestry.api.core.IModelManager;
 import forestry.api.mail.ILetter;
 import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.ForestryItem;
-import forestry.core.interfaces.IErrorSource;
 import forestry.core.interfaces.IHintSource;
 import forestry.core.inventory.ItemInventory;
 import forestry.core.items.ItemInventoried;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
-import forestry.core.utils.GuiUtil;
 import forestry.core.utils.StringUtil;
+import forestry.core.utils.Utils;
 import forestry.mail.Letter;
 
 public class ItemLetter extends ItemInventoried {
 
-	public static class LetterInventory extends ItemInventory implements IErrorSource, IHintSource {
-
-		ILetter letter;
-
-		public LetterInventory(ItemStack itemstack) {
-			super(ItemLetter.class, 0, itemstack);
-
-			// Set an uid to identify the itemstack on SMP
-			setUID(true);
-
-			readFromNBT(itemstack.getTagCompound());
-		}
-
-		public ILetter getLetter() {
-			return this.letter;
-		}
-
-		@Override
-		public void onGuiSaved(EntityPlayer player) {
-			super.onGuiSaved(player);
-
-			if (parent == null) {
-				return;
-			}
-
-			// Already delivered mails can't be made usable anymore.
-			int state = getState(parent.getItemDamage());
-			if (state >= 2) {
-				if (state == 2 && letter.countAttachments() <= 0) {
-					parent.setItemDamage(encodeMeta(3, getSize(parent.getItemDamage())));
-				}
-				return;
-			}
-
-			int type = getType(letter);
-
-			if (parent != null && letter.isMailable() && letter.isPostPaid()) {
-				parent.setItemDamage(encodeMeta(1, type));
-			} else {
-				parent.setItemDamage(encodeMeta(0, type));
-			}
-		}
-
-		@Override
-		public void readFromNBT(NBTTagCompound nbttagcompound) {
-
-			if (nbttagcompound == null) {
-				return;
-			}
-
-			letter = new Letter(nbttagcompound);
-		}
-
-		@Override
-		public void writeToNBT(NBTTagCompound nbttagcompound) {
-			letter.writeToNBT(nbttagcompound);
-		}
-
-		@Override
-		public ItemStack decrStackSize(int i, int j) {
-			return letter.decrStackSize(i, j);
-		}
-
-		@Override
-		public void setInventorySlotContents(int i, ItemStack itemstack) {
-			letter.setInventorySlotContents(i, itemstack);
-		}
-
-		@Override
-		public ItemStack getStackInSlot(int i) {
-			return letter.getStackInSlot(i);
-		}
-
-		@Override
-		public int getSizeInventory() {
-			return letter.getSizeInventory();
-		}
-
-		@Override
-		public String getInventoryName() {
-			return letter.getInventoryName();
-		}
-
-		@Override
-		public int getInventoryStackLimit() {
-			return letter.getInventoryStackLimit();
-		}
-
-		@Override
-		public void markDirty() {
-			letter.markDirty();
-		}
-
-		@Override
-		public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-			return letter.isUseableByPlayer(entityplayer);
-		}
-
-		@Override
-		public ItemStack getStackInSlotOnClosing(int slot) {
-			return letter.getStackInSlotOnClosing(slot);
-		}
-
-		@Override
-		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-			if (letter.isProcessed()) {
-				return false;
-			} else if (GuiUtil.isIndexInRange(slotIndex, Letter.SLOT_POSTAGE_1, Letter.SLOT_POSTAGE_COUNT)) {
-				Item item = itemStack.getItem();
-				return item instanceof ItemStamps;
-			} else if (GuiUtil.isIndexInRange(slotIndex, Letter.SLOT_ATTACHMENT_1, Letter.SLOT_ATTACHMENT_COUNT)) {
-				return !ForestryItem.letters.isItemEqual(itemStack);
-			}
-			return false;
-		}
-
-		// / IERRORSOURCE
-		@Override
-		public boolean throwsErrors() {
-			return true;
-		}
-
-		@Override
-		public EnumErrorCode getErrorState() {
-
-			if (!letter.hasRecipient()) {
-				return EnumErrorCode.NORECIPIENT;
-			}
-
-			if (!letter.isProcessed() && !letter.isPostPaid()) {
-				return EnumErrorCode.NOTPOSTPAID;
-			}
-
-			return EnumErrorCode.OK;
-		}
-
-		/* IHINTSOURCE */
-		@Override
-		public boolean hasHints() {
-			return Config.hints.get("letter") != null && Config.hints.get("letter").length > 0;
-		}
-
-		@Override
-		public String[] getHints() {
-			return Config.hints.get("letter");
-		}
-
+	private enum LetterState {
+		FRESH, STAMPED, OPENED, EMPTIED
 	}
 
-	public ItemLetter() {
-		super();
+	private enum LetterSize {
+		EMPTY, SMALL, BIG
+	}
+
+	public static ItemStack createStampedLetterStack(ILetter letter) {
+		LetterSize size = getSize(letter);
+		int meta = encodeMeta(LetterState.STAMPED, size);
+		return ForestryItem.letters.getItemStack(1, meta);
 	}
 
 	@Override
@@ -215,43 +77,69 @@ public class ItemLetter extends ItemInventoried {
 
 	/* ICONS */
 	@SideOnly(Side.CLIENT)
-	private IIcon[][] icons;
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerIcons(IIconRegister register) {
-		icons = new IIcon[3][4];
-		for (int i = 0; i < 3; i++) {
-			icons[i][0] = TextureManager.getInstance().registerTex(register, "mail/letter." + i + ".fresh");
-			icons[i][1] = TextureManager.getInstance().registerTex(register, "mail/letter." + i + ".stamped");
-			icons[i][2] = TextureManager.getInstance().registerTex(register, "mail/letter." + i + ".opened");
-			icons[i][3] = TextureManager.getInstance().registerTex(register, "mail/letter." + i + ".emptied");
+	private ModelResourceLocation[][] models;
+	
+	private class LetterMeshDefinition implements ItemMeshDefinition{
+		@Override
+		public ModelResourceLocation getModelLocation(ItemStack stack) {
+			LetterState state = getState(stack.getItemDamage());
+			LetterSize size = getSize(stack.getItemDamage());
+			return models[size.ordinal()][state.ordinal()];
 		}
-
 	}
-
+	
 	@SideOnly(Side.CLIENT)
 	@Override
-	public IIcon getIconFromDamage(int damage) {
-
-		int state = getState(damage);
-		int size = getSize(damage);
-
-		return icons[size][state];
+	public void registerModel(Item item, IModelManager manager) {
+		models = new ModelResourceLocation[3][4];
+		for(int i = 0;i < 3;i++)
+		{
+			models[i][0] = new ModelResourceLocation("forestry:mail/letter." + i + ".fresh" , "inventory");
+			manager.registerVariant(item, "forestry:mail/letter." + i + ".fresh");
+			models[i][1] = new ModelResourceLocation("forestry:mail/letter." + i + ".stamped" , "inventory");
+			manager.registerVariant(item, "forestry:mail/letter." + i + ".stamped");
+			models[i][2] = new ModelResourceLocation("forestry:mail/letter." + i + ".opened" , "inventory");
+			manager.registerVariant(item, "forestry:mail/letter." + i + ".opened");
+			models[i][3] = new ModelResourceLocation("forestry:mail/letter." + i + ".emptied" , "inventory");
+			manager.registerVariant(item, "forestry:mail/letter." + i + ".emptied");
+		}
+		manager.registerItemModel(item, new LetterMeshDefinition());
 	}
 
-	public static int encodeMeta(int state, int size) {
-		int meta = size << 4;
-		meta |= state;
+	private static int encodeMeta(LetterState state, LetterSize size) {
+		int meta = size.ordinal() << 4;
+		meta |= state.ordinal();
 		return meta;
 	}
 
-	public static int getState(int meta) {
-		return meta & 0x0f;
+	private static LetterState getState(int meta) {
+		int ordinal = meta & 0x0f;
+		LetterState[] values = LetterState.values();
+		if (ordinal >= values.length) {
+			ordinal = 0;
+		}
+		return values[ordinal];
 	}
 
-	public static int getSize(int meta) {
-		return meta >> 4;
+	private static LetterSize getSize(int meta) {
+		int ordinal = meta >> 4;
+		LetterSize[] values = LetterSize.values();
+		if (ordinal >= values.length) {
+			ordinal = 0;
+		}
+		return values[ordinal];
+	}
+
+	private static LetterSize getSize(ILetter letter) {
+		int count = letter.countAttachments();
+
+		if (count > 5) {
+			return LetterSize.BIG;
+		} else if (count > 1) {
+			return LetterSize.SMALL;
+		} else {
+			return LetterSize.EMPTY;
+		}
 	}
 
 	@SuppressWarnings({"unchecked", "rawtypes"})
@@ -259,7 +147,7 @@ public class ItemLetter extends ItemInventoried {
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean flag) {
 		NBTTagCompound nbttagcompound = itemstack.getTagCompound();
 		if (nbttagcompound == null) {
-			list.add("<" + StringUtil.localize("gui.blank") + ">");
+			list.add('<' + StringUtil.localize("gui.blank") + '>');
 			return;
 		}
 
@@ -267,16 +155,157 @@ public class ItemLetter extends ItemInventoried {
 		letter.addTooltip(list);
 	}
 
-	public static int getType(ILetter letter) {
-		int count = letter.countAttachments();
+	public static class LetterInventory extends ItemInventory implements IErrorSource, IHintSource {
+		private ILetter letter;
 
-		if (count > 5) {
-			return 2;
-		} else if (count > 1) {
-			return 1;
-		} else {
-			return 0;
+		public LetterInventory(EntityPlayer player, ItemStack itemstack) {
+			super(player, 0, itemstack);
 		}
+
+		public ILetter getLetter() {
+			return letter;
+		}
+
+		public void onContainerClosed() {
+			ItemStack parent = getParent();
+			if (parent == null) {
+				return;
+			}
+
+			LetterState state = getState(parent.getItemDamage());
+			LetterSize size = getSize(parent.getItemDamage());
+
+			switch (state) {
+				case OPENED:
+					if (letter.countAttachments() <= 0) {
+						state = LetterState.EMPTIED;
+					}
+					break;
+				case FRESH:
+				case STAMPED:
+					if (letter.isMailable() && letter.isPostPaid()) {
+						state = LetterState.STAMPED;
+					} else {
+						state = LetterState.FRESH;
+					}
+					size = getSize(letter);
+					break;
+				case EMPTIED:
+			}
+
+			int meta = encodeMeta(state, size);
+			parent.setItemDamage(meta);
+
+			letter.writeToNBT(parent.getTagCompound());
+		}
+
+		public void onLetterOpened() {
+			ItemStack parent = getParent();
+			if (parent != null) {
+				int oldMeta = parent.getItemDamage();
+				LetterState state = getState(oldMeta);
+				if (state == LetterState.FRESH || state == LetterState.STAMPED) {
+					LetterSize size = ItemLetter.getSize(oldMeta);
+					int newMeta = ItemLetter.encodeMeta(LetterState.OPENED, size);
+					parent.setItemDamage(newMeta);
+				}
+			}
+		}
+
+		@Override
+		public void readFromNBT(NBTTagCompound nbttagcompound) {
+
+			if (nbttagcompound == null) {
+				return;
+			}
+
+			letter = new Letter(nbttagcompound);
+		}
+
+		@Override
+		public ItemStack decrStackSize(int i, int j) {
+			ItemStack result = letter.decrStackSize(i, j);
+			letter.writeToNBT(getParent().getTagCompound());
+			return result;
+		}
+
+		@Override
+		public void setInventorySlotContents(int i, ItemStack itemstack) {
+			letter.setInventorySlotContents(i, itemstack);
+			letter.writeToNBT(getParent().getTagCompound());
+		}
+
+		@Override
+		public ItemStack getStackInSlot(int i) {
+			return letter.getStackInSlot(i);
+		}
+
+		@Override
+		public int getSizeInventory() {
+			return letter.getSizeInventory();
+		}
+		
+		@Override
+		public String getCommandSenderName() {
+			return letter.getCommandSenderName();
+		}
+
+		@Override
+		public int getInventoryStackLimit() {
+			return letter.getInventoryStackLimit();
+		}
+
+		@Override
+		public boolean isUseableByPlayer(EntityPlayer entityplayer) {
+			return letter.isUseableByPlayer(entityplayer);
+		}
+
+		@Override
+		public ItemStack getStackInSlotOnClosing(int slot) {
+			return letter.getStackInSlotOnClosing(slot);
+		}
+
+		@Override
+		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+			if (letter.isProcessed()) {
+				return false;
+			} else if (Utils.isIndexInRange(slotIndex, Letter.SLOT_POSTAGE_1, Letter.SLOT_POSTAGE_COUNT)) {
+				Item item = itemStack.getItem();
+				return item instanceof ItemStamps;
+			} else if (Utils.isIndexInRange(slotIndex, Letter.SLOT_ATTACHMENT_1, Letter.SLOT_ATTACHMENT_COUNT)) {
+				return !ForestryItem.letters.isItemEqual(itemStack);
+			}
+			return false;
+		}
+
+		// / IERRORSOURCE
+		@Override
+		public ImmutableSet<IErrorState> getErrorStates() {
+
+			ImmutableSet.Builder<IErrorState> errorStates = ImmutableSet.builder();
+
+			if (!letter.hasRecipient()) {
+				errorStates.add(EnumErrorCode.NORECIPIENT);
+			}
+
+			if (!letter.isProcessed() && !letter.isPostPaid()) {
+				errorStates.add(EnumErrorCode.NOTPOSTPAID);
+			}
+
+			return errorStates.build();
+		}
+
+		/* IHINTSOURCE */
+		@Override
+		public boolean hasHints() {
+			return Config.hints.get("letter") != null && Config.hints.get("letter").length > 0;
+		}
+
+		@Override
+		public String[] getHints() {
+			return Config.hints.get("letter");
+		}
+
 	}
 
 }

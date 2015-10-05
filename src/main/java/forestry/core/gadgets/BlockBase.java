@@ -11,59 +11,100 @@
 package forestry.core.gadgets;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
+import com.google.common.collect.Maps;
+
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.statemap.IStateMapper;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
+import forestry.api.core.IModelManager;
+import forestry.api.core.IModelRegister;
+import forestry.core.circuits.ISocketable;
 import forestry.core.fluids.FluidHelper;
-import forestry.core.interfaces.IOwnable;
+import forestry.core.interfaces.IAccessHandler;
 import forestry.core.items.ItemNBTTile;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.Utils;
 
-public class BlockBase extends BlockForestry {
+public class BlockBase extends BlockForestry implements IModelRegister {
 
+	public static final PropertyEnum META = PropertyEnum.create("meta", MachineDefinitionTypes.class);
+	public static final PropertyEnum FACE = PropertyEnum.create("face", EnumFacing.class, EnumFacing.WEST, EnumFacing.EAST, EnumFacing.NORTH, EnumFacing.SOUTH);
+	
 	private final List<MachineDefinition> definitions = new ArrayList<MachineDefinition>();
 	private final boolean hasTESR;
+	private final int definitionID;
 
-	public BlockBase(Material material) {
-		this(material, false);
+	public BlockBase(Material material, int definitionID) {
+		this(material, false, definitionID);
 	}
 
-	public BlockBase(Material material, boolean hasTESR) {
+	public BlockBase(Material material, boolean hasTESR, int definitionID) {
 		super(material);
-
+		this.definitionID = definitionID;
 		this.hasTESR = hasTESR;
+		setDefaultState(this.blockState.getBaseState().withProperty(META, MachineDefinitionTypes.getType(definitionID, 0)).withProperty(FACE, EnumFacing.WEST));
 	}
 
 	public MachineDefinition addDefinition(MachineDefinition definition) {
 		definition.setBlock(this);
 
-		while (definitions.size() <= definition.meta) {
+		while (definitions.size() <= definition.getMeta()) {
 			definitions.add(null);
 		}
 
-		definitions.set(definition.meta, definition);
+		definitions.set(definition.getMeta(), definition);
 
 		return definition;
+	}
+	
+	public void registerStateMapper()
+	{
+		Proxies.render.registerStateMapper(this, new BaseStateMapper());
+	}
+	
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return ((MachineDefinitionTypes)state.getProperties().get(META)).getMeta();
+	}
+	
+    @Override
+	protected BlockState createBlockState()
+    {
+        return new BlockState(this, new IProperty[] {META, FACE});
+    }
+	
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		return getDefaultState().withProperty(META,  MachineDefinitionTypes.getType(definitionID, meta));
 	}
 
 	@Override
@@ -72,21 +113,20 @@ public class BlockBase extends BlockForestry {
 	}
 
 	@Override
-	public boolean renderAsNormalBlock() {
-		return !hasTESR;
-	}
-
-	@Override
 	public int getRenderType() {
 		if (hasTESR) {
 			return Proxies.common.getByBlockModelId();
 		} else {
-			return 0;
+			return 3;
 		}
 	}
+	
+	public int getDefinitionID() {
+		return definitionID;
+	}
 
-	private MachineDefinition getDefinition(IBlockAccess world, int x, int y, int z) {
-		return getDefinition(world.getBlockMetadata(x, y, z));
+	private MachineDefinition getDefinition(IBlockAccess world, BlockPos pos) {
+		return getDefinition(getMetaFromState(world.getBlockState(pos)));
 	}
 
 	private MachineDefinition getDefinition(int metadata) {
@@ -95,6 +135,17 @@ public class BlockBase extends BlockForestry {
 		}
 
 		return definitions.get(metadata);
+	}
+	
+	@Override
+	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
+		TileEntity tile = world.getTileEntity(pos);
+		if(tile instanceof TileForestry)
+		{
+			TileForestry tileF = (TileForestry) tile;
+			state = state.withProperty(FACE, tileF.getOrientation());
+		}
+		return super.getActualState(state, world, pos);
 	}
 
 	/* CREATIVE INVENTORY */
@@ -112,7 +163,8 @@ public class BlockBase extends BlockForestry {
 
 	/* TILE ENTITY CREATION */
 	@Override
-	public TileEntity createTileEntity(World world, int metadata) {
+	public TileEntity createTileEntity(World world, IBlockState state) {
+		int metadata = getMetaFromState(state);
 		if (metadata >= definitions.size() || definitions.get(metadata) == null) {
 			metadata = 0;
 		}
@@ -126,45 +178,31 @@ public class BlockBase extends BlockForestry {
 
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
-		return createTileEntity(world, meta); // TODO: refactor to just use Block, not BlockContainer
-	}
-
-	/* BLOCK DROPS */
-	@Override
-	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
-		if (getDefinition(metadata).handlesDrops()) {
-			return getDefinition(metadata).getDrops(world, x, y, z, metadata, fortune);
-		} else {
-			return super.getDrops(world, x, y, z, metadata, fortune);
-		}
+		return createTileEntity(world, getStateFromMeta(meta)); // TODO: refactor to just use Block, not BlockContainer
 	}
 
 	/* INTERACTION */
 	@Override
-	public boolean isSideSolid(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
-		MachineDefinition definition = getDefinition(world, x, y, z);
-		return definition != null && definition.isSolidOnSide(world, x, y, z, side.ordinal());
+	public boolean isSideSolid(IBlockAccess world, BlockPos pos, EnumFacing side) {
+		MachineDefinition definition = getDefinition(world, pos);
+		return definition != null && definition.isSolidOnSide(world, pos, side);
 	}
-
+	
 	@Override
-	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityliving, ItemStack stack) {
-		super.onBlockPlacedBy(world, x, y, z, entityliving, stack);
-
-		TileForestry tile = (TileForestry) world.getTileEntity(x, y, z);
+	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase entityLiving, ItemStack stack) {
+		TileForestry tile = (TileForestry) world.getTileEntity(pos);
 
 		if (stack.getItem() instanceof ItemNBTTile && stack.hasTagCompound()) {
 			tile.readFromNBT(stack.getTagCompound());
-			tile.xCoord = x;
-			tile.yCoord = y;
-			tile.zCoord = z;
+			tile.setPos(pos);
 		}
 
-		tile.rotateAfterPlacement(world, x, y, z, entityliving, stack);
+		tile.rotateAfterPlacement(entityLiving);
 	}
-
+	
 	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float par7, float par8, float par9) {
-		if (getDefinition(world, x, y, z).onBlockActivated(world, x, y, z, player, side, par7, par8, par9)) {
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
+		if (getDefinition(world, pos).onBlockActivated(world, pos, player, side)) {
 			return true;
 		}
 
@@ -172,14 +210,16 @@ public class BlockBase extends BlockForestry {
 			return false;
 		}
 
-		TileBase tile = (TileBase) world.getTileEntity(x, y, z);
+		TileBase tile = (TileBase) world.getTileEntity(pos);
 		if (!Utils.isUseableByPlayer(player, tile)) {
 			return false;
 		}
 
+		IAccessHandler access = tile.getAccessHandler();
+
 		ItemStack current = player.getCurrentEquippedItem();
-		if (current != null && current.getItem() != Items.bucket && tile instanceof IFluidHandler && tile.allowsAlteration(player)) {
-			if (FluidHelper.handleRightClick((IFluidHandler) tile, ForgeDirection.getOrientation(side), player, true, tile.canDrainWithBucket())) {
+		if (current != null && current.getItem() != Items.bucket && tile instanceof IFluidHandler && access.allowsAlteration(player)) {
+			if (FluidHelper.handleRightClick((IFluidHandler) tile, side, player, true, tile.canDrainWithBucket())) {
 				return true;
 			}
 		}
@@ -188,91 +228,115 @@ public class BlockBase extends BlockForestry {
 			return true;
 		}
 
-		if (tile.allowsViewing(player)) {
-			tile.openGui(player, tile);
+		if (access.allowsViewing(player)) {
+			tile.openGui(player);
 		} else {
-			player.addChatMessage(new ChatComponentTranslation("for.chat.accesslocked", PlayerUtil.getOwnerName(tile)));
+			player.addChatMessage(new ChatComponentTranslation("for.chat.accesslocked", PlayerUtil.getOwnerName(access)));
 		}
 		return true;
 	}
-
+	
 	@Override
-	public boolean rotateBlock(World world, int x, int y, int z, ForgeDirection axis) {
-		return getDefinition(world, x, y, z).rotateBlock(world, x, y, z, axis);
+	public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis) {
+		return getDefinition(world, pos).rotateBlock(world, pos, axis);
 	}
-
+	
 	@Override
-	public void onBlockAdded(World world, int x, int y, int z) {
-		super.onBlockAdded(world, x, y, z);
-		getDefinition(world, x, y, z).onBlockAdded(world, x, y, z);
-	}
-
-	@Override
-	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest) {
-
-		IOwnable tile = (IOwnable) world.getTileEntity(x, y, z);
-		if (tile == null) {
-			return world.setBlockToAir(x, y, z);
+	public void breakBlock(World world, BlockPos pos, IBlockState state) {
+		
+		if (!Proxies.common.isSimulating(world)) {
+			return;
 		}
 
-		if (tile.isOwnable() && !tile.allowsRemoval(player)) {
-			return false;
-		}
-
-		if (getDefinition(world, x, y, z).removedByPlayer(world, player, x, y, z)) {
-			return world.setBlockToAir(x, y, z);
-		} else {
-			return false;
-		}
-	}
-
-	@Override
-	public boolean canConnectRedstone(IBlockAccess world, int x, int y, int z, int side) {
-		int metadata = world.getBlockMetadata(x, y, z);
-		if (metadata >= definitions.size() || definitions.get(metadata) == null) {
-			metadata = 0;
-		}
-		return definitions.get(metadata).canConnectRedstone(world, x, y, z, side);
-	}
-
-	@Override
-	public int damageDropped(int metadata) {
-		return metadata;
-	}
-
-	/* TEXTURES */
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerBlockIcons(IIconRegister register) {
-		for (MachineDefinition def : definitions) {
-			if (def == null) {
-				continue;
+		TileEntity tile = world.getTileEntity(pos);
+		if (tile instanceof IInventory) {
+			IInventory inventory = (IInventory) tile;
+			Utils.dropInventory(inventory, world, pos);
+			if (tile instanceof TileForestry) {
+				((TileForestry) tile).onRemoval();
 			}
-			def.registerIcons(register);
+			if (tile instanceof ISocketable) {
+				Utils.dropSockets((ISocketable) tile, tile.getWorld(), tile.getPos());
+			}
 		}
+		super.breakBlock(world, pos, state);
 	}
-
-	@SideOnly(Side.CLIENT)
+	
 	@Override
-	public IIcon getIcon(int side, int metadata) {
-		if (metadata >= definitions.size() || definitions.get(metadata) == null) {
-			return null;
-		}
-		return definitions.get(metadata).getBlockTextureFromSideAndMetadata(side, metadata);
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
-		int metadata = world.getBlockMetadata(x, y, z);
-		if (metadata >= definitions.size() || definitions.get(metadata) == null) {
-			metadata = 0;
-		}
-		return definitions.get(metadata).getIcon(world, x, y, z, side, metadata);
+	public int damageDropped(IBlockState state) {
+		return getMetaFromState(state);
 	}
 
 	@Override
 	public boolean getUseNeighborBrightness() {
 		return hasTESR;
 	}
+
+	@Override
+	public void registerModel(Item item, IModelManager manager) {
+		for(int i = 0; i < definitions.size();i++)
+		{
+			if(definitions.get(i) == null)
+				return;
+			MachineDefinitionTypes type = MachineDefinitionTypes.getType(definitionID, i);
+			if(type == null)
+				return;
+			manager.registerItemModel(item, i, "_" + type.getName());
+		}
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public class BaseStateMapper implements IStateMapper{
+
+	    protected Map mapStateModelLocations = Maps.newLinkedHashMap();
+	    
+	    public String getPropertyString(Map p_178131_1_)
+	    {
+	        StringBuilder stringbuilder = new StringBuilder();
+	        Iterator iterator = p_178131_1_.entrySet().iterator();
+
+	        while (iterator.hasNext())
+	        {
+	            Entry entry = (Entry)iterator.next();
+
+	            if (stringbuilder.length() != 0)
+	            {
+	                stringbuilder.append(",");
+	            }
+
+	            IProperty iproperty = (IProperty)entry.getKey();
+	            Comparable comparable = (Comparable)entry.getValue();
+	            stringbuilder.append(iproperty.getName());
+	            stringbuilder.append("=");
+	            stringbuilder.append(iproperty.getName(comparable));
+	        }
+
+	        if (stringbuilder.length() == 0)
+	        {
+	            stringbuilder.append("normal");
+	        }
+
+	        return stringbuilder.toString();
+	    }
+	    
+		@Override
+		public Map putStateModelLocations(Block block) {
+			for(MachineDefinitionTypes definition : MachineDefinitionTypes.values())
+			{
+				if(definition.getDefinitionID() != ((BlockBase)block).getDefinitionID() || ((BlockBase)block).hasTESR)
+					continue;
+				for(EnumFacing facing : EnumFacing.values()){
+					if(facing == EnumFacing.DOWN || facing == EnumFacing.UP)
+						continue;
+					IBlockState state = getDefaultState().withProperty(META, definition).withProperty(FACE, facing);
+					LinkedHashMap linkedhashmap = Maps.newLinkedHashMap(state.getProperties());
+					String s = String.format("%s:%s", ((ResourceLocation)Block.blockRegistry.getNameForObject(block)).getResourceDomain(), ((ResourceLocation)Block.blockRegistry.getNameForObject(block)).getResourcePath() + "_" + META.getName((Comparable)linkedhashmap.remove(META)));;
+					mapStateModelLocations.put(state, new ModelResourceLocation(s, getPropertyString(linkedhashmap)));
+				}
+			}
+			return this.mapStateModelLocations;
+		}
+		
+	}
+	
 }

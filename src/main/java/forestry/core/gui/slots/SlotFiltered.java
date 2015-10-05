@@ -16,11 +16,11 @@ import net.minecraft.item.ItemStack;
 import forestry.core.interfaces.IFilterSlotDelegate;
 
 /**
- * Slot which only takes specific items, specified by the ICustomSlotInventory.
+ * Slot which only takes specific items, specified by the IFilterSlotDelegate.
  */
 public class SlotFiltered extends SlotWatched {
 
-	protected final IFilterSlotDelegate filterSlotDelegate;
+	private final IFilterSlotDelegate filterSlotDelegate;
 
 	public <T extends IInventory & IFilterSlotDelegate> SlotFiltered(T filterSlotDelegateInventory, int slotIndex, int xPos, int yPos) {
 		this(filterSlotDelegateInventory, filterSlotDelegateInventory, slotIndex, xPos, yPos);

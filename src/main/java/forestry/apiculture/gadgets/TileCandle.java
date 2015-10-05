@@ -11,64 +11,60 @@
 package forestry.apiculture.gadgets;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+
+import forestry.apiculture.network.PacketUpdateCandle;
 
 public class TileCandle extends TileEntity {
 	private int colour;
-
-	// This is a non-ticking Tile Entity.
-	@Override
-	public boolean canUpdate() {
-		return false;
-	}
+	private boolean lit;
 
 	@Override
 	public Packet getDescriptionPacket() {
-		NBTTagCompound nbt = new NBTTagCompound();
-		writeToNBT(nbt);
-
-		return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 0, nbt);
+		PacketUpdateCandle updateCandle = new PacketUpdateCandle(this);
+		return updateCandle.getPacket();
 	}
 
-	@Override
-	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
-		readFromNBT(pkt.func_148857_g());
+	public void onPacketUpdate(PacketUpdateCandle updateCandle) {
+		colour = updateCandle.getColour();
+		lit = updateCandle.isLit();
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound tagRoot) {
 		super.readFromNBT(tagRoot);
-		this.setColour(tagRoot.getInteger("colour"));
+		colour = tagRoot.getInteger("colour");
+		lit = tagRoot.getBoolean("lit");
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound tagRoot) {
 		super.writeToNBT(tagRoot);
 		tagRoot.setInteger("colour", this.colour);
+		tagRoot.setBoolean("lit", this.lit);
+	}
+
+	public boolean isLit() {
+		return lit;
+	}
+
+	public void setLit(boolean lit) {
+		this.lit = lit;
 	}
 
 	public int getColour() {
-		return this.colour;
+		return colour;
 	}
 
 	public void setColour(int value) {
 		this.colour = value;
 	}
 
-	public void setColour(int red, int green, int blue) {
-		this.colour = toIntColour(red, green, blue);
-	}
-
-	/*public void setColour(int[] cs) {
-		this.colour = toIntColour(cs[0], cs[1], cs[2]);
-	}*/
-
-	public void addColour(int red, int green, int blue) {
+	public void addColour(int colour2) {
 		int[] myColour = fromIntColour(this.colour);
-		this.colour = toIntColour((red + myColour[0]) / 2, (green + myColour[0]) / 2, (blue + myColour[2]) / 2);
+		int[] addColour = fromIntColour(colour2);
+		this.colour = toIntColour((addColour[0] + myColour[0]) / 2, (addColour[0] + myColour[0]) / 2, (addColour[2] + myColour[2]) / 2);
 	}
 
 	private static int[] fromIntColour(int value) {

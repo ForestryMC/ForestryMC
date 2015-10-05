@@ -10,11 +10,13 @@
  ******************************************************************************/
 package forestry.core.gui;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
@@ -26,23 +28,22 @@ import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.config.Defaults;
-import forestry.core.gadgets.TileForestry;
 import forestry.core.genetics.EnumMutateChance;
 import forestry.core.gui.buttons.GuiBetterButton;
 import forestry.core.gui.buttons.StandardButtonTextureSets;
-import forestry.core.network.PacketIds;
-import forestry.core.network.PacketPayload;
-import forestry.core.network.PacketUpdate;
+import forestry.core.network.ForestryPacket;
+import forestry.core.network.PacketGuiSelect;
+import forestry.core.network.PacketId;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
 
-public class GuiNaturalistInventory extends GuiForestry<TileForestry> {
+public class GuiNaturalistInventory extends GuiForestry<Container, IPagedInventory> {
 	private final ISpeciesRoot speciesRoot;
 	private final IBreedingTracker breedingTracker;
 	private final HashMap<String, ItemStack> iconStacks = new HashMap<String, ItemStack>();
 	private final int pageCurrent, pageMax;
 
-	public GuiNaturalistInventory(ISpeciesRoot speciesRoot, EntityPlayer player, ContainerForestry container, IPagedInventory inventory, int page, int maxPages) {
+	public GuiNaturalistInventory(ISpeciesRoot speciesRoot, EntityPlayer player, Container container, IPagedInventory inventory, int page, int maxPages) {
 		super(Defaults.TEXTURE_PATH_GUI + "/apiaristinventory.png", container, inventory);
 
 		this.speciesRoot = speciesRoot;
@@ -93,15 +94,13 @@ public class GuiNaturalistInventory extends GuiForestry<TileForestry> {
 		buttonList.add(new GuiBetterButton(2, guiLeft + 180, guiTop + 7, StandardButtonTextureSets.RIGHT_BUTTON_SMALL));
 	}
 
-	private void flipPage(int page) {
-		PacketPayload payload = new PacketPayload(1, 0, 0);
-		payload.intPayload[0] = page;
-		PacketUpdate packet = new PacketUpdate(PacketIds.GUI_SELECTION_CHANGE, payload);
+	private static void flipPage(int page) {
+		ForestryPacket packet = new PacketGuiSelect(PacketId.GUI_SELECTION_CHANGE, page, 0);
 		Proxies.net.sendToServer(packet);
 	}
 
 	@Override
-	protected void actionPerformed(GuiButton guibutton) {
+	protected void actionPerformed(GuiButton guibutton) throws IOException {
 		super.actionPerformed(guibutton);
 
 		if (guibutton.id == 1 && pageCurrent > 0) {
@@ -164,7 +163,7 @@ public class GuiNaturalistInventory extends GuiForestry<TileForestry> {
 
 		drawLine(species.getName(), x);
 		RenderHelper.enableGUIStandardItemLighting();
-		drawItemStack(iconStack, adjustToFactor(guiLeft + x + 69), adjustToFactor(guiTop + getLineY() - 2));
+		drawItemStack(iconStack, guiLeft + x + 69, guiTop + getLineY() - 2);
 		RenderHelper.disableStandardItemLighting();
 
 		newLine();
@@ -198,8 +197,7 @@ public class GuiNaturalistInventory extends GuiForestry<TileForestry> {
 	private void drawMutationIcon(IMutation combination, IAlleleSpecies species, int x) {
 
 		RenderHelper.enableGUIStandardItemLighting();
-		drawItemStack(iconStacks.get(combination.getPartner(species).getUID()), adjustToFactor(guiLeft + x),
-				adjustToFactor(guiTop + getLineY()));
+		drawItemStack(iconStacks.get(combination.getPartner(species).getUID()), guiLeft + x, guiTop + getLineY());
 		RenderHelper.disableStandardItemLighting();
 
 		int line = 48;
@@ -226,7 +224,7 @@ public class GuiNaturalistInventory extends GuiForestry<TileForestry> {
 		}
 
 		Proxies.common.bindTexture(textureFile);
-		drawTexturedModalRect(adjustToFactor(guiLeft + x), adjustToFactor(guiTop + getLineY()), column, line, 16, 16);
+		drawTexturedModalRect(guiLeft + x, guiTop + getLineY(), column, line, 16, 16);
 
 	}
 
@@ -257,7 +255,7 @@ public class GuiNaturalistInventory extends GuiForestry<TileForestry> {
 		}
 
 		Proxies.common.bindTexture(textureFile);
-		drawTexturedModalRect(adjustToFactor(guiLeft + x), adjustToFactor(guiTop + getLineY()), column, line, 16, 16);
+		drawTexturedModalRect(guiLeft + x, guiTop + getLineY(), column, line, 16, 16);
 	}
 
 	@Override

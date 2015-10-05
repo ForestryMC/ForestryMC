@@ -11,12 +11,12 @@
 package forestry.arboriculture.items;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
-
-import net.minecraftforge.common.ForgeHooks;
 
 import forestry.api.arboriculture.IToolGrafter;
 import forestry.api.core.Tabs;
@@ -33,23 +33,25 @@ public class ItemGrafter extends ItemForestry implements IToolGrafter {
 		setMaxDamage(maxDamage);
 		setCreativeTab(Tabs.tabArboriculture);
 	}
-
+	
 	@Override
-	public float func_150893_a(ItemStack itemstack, Block block) {
+	public float getStrVsBlock(ItemStack stack, Block block) {
 		return 1.0F;
 	}
-
+	
 	@Override
-	public float getDigSpeed(ItemStack itemstack, Block block, int md) {
-		if (ForgeHooks.isToolEffective(itemstack, block, md)) {
-			return efficiencyOnProperMaterial;
-		}
+	public float getDigSpeed(ItemStack itemstack, IBlockState state) {
+        for (String type : getToolClasses(itemstack))
+        {
+            if (state.getBlock().isToolEffective(type, state))
+                return efficiencyOnProperMaterial;
+        }
 
-		return func_150893_a(itemstack, block);
+		return getStrVsBlock(itemstack, state.getBlock());
 	}
 
 	@Override
-	public boolean onBlockDestroyed(ItemStack itemstack, World world, Block block, int j, int k, int l, EntityLivingBase entityliving) {
+	public boolean onBlockDestroyed(ItemStack itemstack, World world, Block block, BlockPos pos, EntityLivingBase entityliving) {
 		return true;
 	}
 
@@ -64,7 +66,7 @@ public class ItemGrafter extends ItemForestry implements IToolGrafter {
 	}
 
 	@Override
-	public float getSaplingModifier(ItemStack stack, World world, EntityPlayer player, int x, int y, int z) {
+	public float getSaplingModifier(ItemStack stack, World world, EntityPlayer player, BlockPos pos) {
 		return 100f;
 	}
 

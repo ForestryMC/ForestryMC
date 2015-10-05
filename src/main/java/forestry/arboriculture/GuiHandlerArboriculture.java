@@ -12,6 +12,7 @@ package forestry.arboriculture;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.arboriculture.genetics.TreeHelper;
@@ -34,7 +35,7 @@ public class GuiHandlerArboriculture extends GuiHandlerBase {
 		switch (GuiId.values()[cleanId]) {
 
 			case ArboristChestGUI:
-				return this.getNaturalistChestContainer(TreeHelper.UID, player, world, x, y, z, decodeGuiData(id));
+				return this.getNaturalistChestContainer(TreeHelper.UID, player, world, new BlockPos(x, y, z), decodeGuiData(id));
 
 			case TreealyzerGUI:
 				ItemStack equipped = player.getCurrentEquippedItem();
@@ -62,7 +63,7 @@ public class GuiHandlerArboriculture extends GuiHandlerBase {
 		switch (GuiId.values()[cleanId]) {
 
 			case ArboristChestGUI:
-				return this.getNaturalistChestGui(TreeHelper.UID, player, world, x, y, z, decodeGuiData(id));
+				return this.getNaturalistChestGui(TreeHelper.UID, player, world, new BlockPos(x, y, z), decodeGuiData(id));
 
 			case TreealyzerGUI:
 				ItemStack equipped = player.getCurrentEquippedItem();

@@ -1,0 +1,12 @@
+{
+    "parent": "block/cube",
+    "textures": {
+        "particle": "forestry:blocks/apiculture/alveary.right",
+        "down": "forestry:blocks/apiculture/alveary.bottom",
+        "up": "forestry:blocks/apiculture/alveary.bottom",
+        "north": "forestry:blocks/apiculture/alveary.right",
+        "east": "forestry:blocks/apiculture/alveary.left",
+        "south": "forestry:blocks/apiculture/alveary.right",
+        "west": "forestry:blocks/apiculture/alveary.left"
+    }
+}

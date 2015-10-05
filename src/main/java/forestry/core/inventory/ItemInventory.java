@@ -12,35 +12,31 @@ package forestry.core.inventory;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-
-import forestry.api.core.INBTTagable;
+import net.minecraft.util.IChatComponent;
 import forestry.core.interfaces.IFilterSlotDelegate;
-import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
 
-public class ItemInventory implements IInventory, IFilterSlotDelegate, INBTTagable {
+public abstract class ItemInventory implements IInventory, IFilterSlotDelegate {
 
-	public final Class<? extends Item> itemClass;
-	public final boolean isItemInventory;
-	public ItemStack parent;
-	protected ItemStack[] inventoryStacks;
+	private static final String KEY_ITEMS = "Items"; // legacy
+	private static final String KEY_SLOTS = "Slots";
+	private static final String KEY_UID = "UID";
 
-	public ItemInventory(Class<? extends Item> itemClass, int size, ItemStack itemstack) {
-		this.itemClass = itemClass;
+	private final EntityPlayer player;
+	private final ItemStack parent;
+	private final ItemStack[] inventoryStacks;
 
-		inventoryStacks = new ItemStack[size];
+	public ItemInventory(EntityPlayer player, int size, ItemStack parent) {
+		this.player = player;
+		this.parent = parent;
+		this.inventoryStacks = new ItemStack[size];
 
-		parent = itemstack;
-		isItemInventory = true;
+		setUID(); // Set a uid to identify the itemstack on SMP
 
-		// Set an uid to identify the itemstack on SMP
-		setUID(false);
-
-		readFromNBT(itemstack.getTagCompound());
+		readFromNBT(parent.getTagCompound());
 	}
 
 	public static int getOccupiedSlotCount(ItemStack itemStack) {
@@ -49,9 +45,14 @@ public class ItemInventory implements IInventory, IFilterSlotDelegate, INBTTagab
 			return 0;
 		}
 
+		if (nbt.hasKey(KEY_SLOTS)) {
+			NBTTagCompound slotNbt = nbt.getCompoundTag(KEY_SLOTS);
+			return slotNbt.getKeySet().size();
+		}
+
 		int count = 0;
-		if (nbt.hasKey("Items")) {
-			NBTTagList nbttaglist = nbt.getTagList("Items", 10);
+		if (nbt.hasKey(KEY_ITEMS)) { // legacy since Forestry 3.6
+			NBTTagList nbttaglist = nbt.getTagList(KEY_ITEMS, 10);
 			for (int i = 0; i < nbttaglist.tagCount(); i++) {
 				NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
 				ItemStack itemStack1 = ItemStack.loadItemStackFromNBT(nbttagcompound1);
@@ -60,107 +61,175 @@ public class ItemInventory implements IInventory, IFilterSlotDelegate, INBTTagab
 				}
 			}
 		}
+
 		return count;
 	}
 
-	protected void setUID(boolean override) {
+	private void setUID() {
+		ItemStack parent = getParent();
+
 		if (parent.getTagCompound() == null) {
 			parent.setTagCompound(new NBTTagCompound());
 		}
 
 		NBTTagCompound nbt = parent.getTagCompound();
-		if (override || !nbt.hasKey("UID")) {
-			nbt.setInteger("UID", Utils.getUID());
+		if (!nbt.hasKey(KEY_UID)) {
+			nbt.setInteger(KEY_UID, Utils.getUID());
 		}
 	}
 
-	public void onGuiSaved(EntityPlayer player) {
-		parent = findParentInInventory(player);
-		if (parent != null) {
-			save();
-		}
+	public boolean isParentItemInventory(ItemStack itemStack) {
+		ItemStack parent = getParent();
+		return isSameItemInventory(parent, itemStack);
 	}
 
-	public ItemStack findParentInInventory(EntityPlayer player) {
-		for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
-			ItemStack stack = player.inventory.getStackInSlot(i);
-			if (StackUtils.isIdenticalItem(stack, parent)) {
-				return stack;
-			}
+	protected ItemStack getParent() {
+		ItemStack equipped = player.getCurrentEquippedItem();
+		if (isSameItemInventory(equipped, parent)) {
+			return equipped;
 		}
 		return parent;
 	}
 
-	public void save() {
-		NBTTagCompound nbt = parent.getTagCompound();
-		if (nbt == null) {
-			nbt = new NBTTagCompound();
+	private static boolean isSameItemInventory(ItemStack base, ItemStack comparison) {
+		if (base == null || comparison == null) {
+			return false;
 		}
-		writeToNBT(nbt);
-		parent.setTagCompound(nbt);
+
+		if (base.getItem() != comparison.getItem()) {
+			return false;
+		}
+
+		if (!base.hasTagCompound() || !comparison.hasTagCompound()) {
+			return false;
+		}
+
+		String baseUID = base.getTagCompound().getString(KEY_UID);
+		String comparisonUID = comparison.getTagCompound().getString(KEY_UID);
+		return baseUID != null && comparisonUID != null && baseUID.equals(comparisonUID);
 	}
 
-	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 
 		if (nbt == null) {
 			return;
 		}
 
-		if (nbt.hasKey("Items")) {
-			NBTTagList nbttaglist = nbt.getTagList("Items", 10);
-			inventoryStacks = new ItemStack[getSizeInventory()];
-			for (int i = 0; i < nbttaglist.tagCount(); i++) {
-				NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
-				byte byte0 = nbttagcompound1.getByte("Slot");
-				if (byte0 >= 0 && byte0 < inventoryStacks.length) {
-					inventoryStacks[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
+		if (nbt.hasKey(KEY_SLOTS)) {
+			NBTTagCompound nbtSlots = nbt.getCompoundTag(KEY_SLOTS);
+			for (int i = 0; i < inventoryStacks.length; i++) {
+				String slotKey = getSlotNBTKey(i);
+				if (nbtSlots.hasKey(slotKey)) {
+					NBTTagCompound itemNbt = nbtSlots.getCompoundTag(slotKey);
+					ItemStack itemStack = ItemStack.loadItemStackFromNBT(itemNbt);
+					inventoryStacks[i] = itemStack;
+				} else {
+					inventoryStacks[i] = null;
 				}
 			}
-		}
+		} else {
 
-	}
+			// legacy since Forestry 3.6
+			if (nbt.hasKey(KEY_ITEMS)) {
+				for (int i = 0; i < inventoryStacks.length; i++) {
+					inventoryStacks[i] = null;
+				}
 
-	@Override
-	public void writeToNBT(NBTTagCompound nbt) {
+				NBTTagList nbttaglist = nbt.getTagList(KEY_ITEMS, 10);
+				for (int i = 0; i < nbttaglist.tagCount(); i++) {
+					NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
+					byte byte0 = nbttagcompound1.getByte("Slot");
+					if (byte0 >= 0 && byte0 < inventoryStacks.length) {
+						ItemStack itemStack = ItemStack.loadItemStackFromNBT(nbttagcompound1);
+						inventoryStacks[byte0] = itemStack;
+					}
+				}
 
-		NBTTagList nbttaglist = new NBTTagList();
-		for (int i = 0; i < inventoryStacks.length; i++) {
-			if (inventoryStacks[i] != null) {
-				NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-				nbttagcompound1.setByte("Slot", (byte) i);
-				inventoryStacks[i].writeToNBT(nbttagcompound1);
-				nbttaglist.appendTag(nbttagcompound1);
+				writeToParentNBT();
 			}
 		}
-		nbt.setTag("Items", nbttaglist);
+	}
 
+	private void writeToParentNBT() {
+		ItemStack parent = getParent();
+		if (parent == null) {
+			return;
+		}
+
+		NBTTagCompound nbt = parent.getTagCompound();
+		NBTTagCompound slotsNbt = new NBTTagCompound();
+		for (int i = 0; i < getSizeInventory(); i++) {
+			ItemStack itemStack = getStackInSlot(i);
+			if (itemStack != null) {
+				String slotKey = getSlotNBTKey(i);
+				NBTTagCompound itemNbt = new NBTTagCompound();
+				itemStack.writeToNBT(itemNbt);
+				slotsNbt.setTag(slotKey, itemNbt);
+			}
+		}
+
+		nbt.setTag(KEY_SLOTS, slotsNbt);
+		nbt.removeTag(KEY_ITEMS);
+	}
+
+	private static String getSlotNBTKey(int i) {
+		return Integer.toString(i, Character.MAX_RADIX);
+	}
+
+	public void onSlotClick(EntityPlayer player) {
 	}
 
 	@Override
 	public ItemStack decrStackSize(int i, int j) {
-		if (inventoryStacks[i] == null) {
+		ItemStack stack = getStackInSlot(i);
+		if (stack == null) {
 			return null;
 		}
 
-		ItemStack product;
-		if (inventoryStacks[i].stackSize <= j) {
-			product = inventoryStacks[i];
-			inventoryStacks[i] = null;
-			return product;
+		if (stack.stackSize <= j) {
+			setInventorySlotContents(i, null);
+			return stack;
 		} else {
-			product = inventoryStacks[i].splitStack(j);
-			if (inventoryStacks[i].stackSize == 0) {
-				inventoryStacks[i] = null;
-			}
-
+			ItemStack product = stack.splitStack(j);
+			setInventorySlotContents(i, stack);
 			return product;
 		}
 	}
 
 	@Override
 	public void setInventorySlotContents(int i, ItemStack itemstack) {
+		if (itemstack != null && itemstack.stackSize == 0) {
+			itemstack = null;
+		}
+
 		inventoryStacks[i] = itemstack;
+
+		ItemStack parent = getParent();
+
+		NBTTagCompound nbt = parent.getTagCompound();
+		if (nbt == null) {
+			nbt = new NBTTagCompound();
+			parent.setTagCompound(nbt);
+		}
+
+		NBTTagCompound slotNbt;
+		if (!nbt.hasKey(KEY_SLOTS)) {
+			slotNbt = new NBTTagCompound();
+			nbt.setTag(KEY_SLOTS, slotNbt);
+		} else {
+			slotNbt = nbt.getCompoundTag(KEY_SLOTS);
+		}
+
+		String slotKey = getSlotNBTKey(i);
+
+		if (itemstack == null) {
+			slotNbt.removeTag(slotKey);
+		} else {
+			NBTTagCompound itemNbt = new NBTTagCompound();
+			itemstack.writeToNBT(itemNbt);
+
+			slotNbt.setTag(slotKey, itemNbt);
+		}
 	}
 
 	@Override
@@ -174,7 +243,7 @@ public class ItemInventory implements IInventory, IFilterSlotDelegate, INBTTagab
 	}
 
 	@Override
-	public String getInventoryName() {
+	public String getCommandSenderName() {
 		return "BeeBag";
 	}
 
@@ -184,7 +253,8 @@ public class ItemInventory implements IInventory, IFilterSlotDelegate, INBTTagab
 	}
 
 	@Override
-	public void markDirty() {
+	public final void markDirty() {
+		writeToParentNBT();
 	}
 
 	@Override
@@ -193,7 +263,7 @@ public class ItemInventory implements IInventory, IFilterSlotDelegate, INBTTagab
 	}
 
 	@Override
-	public boolean hasCustomInventoryName() {
+	public boolean hasCustomName() {
 		return true;
 	}
 
@@ -203,6 +273,26 @@ public class ItemInventory implements IInventory, IFilterSlotDelegate, INBTTagab
 	}
 
 	@Override
+	public void openInventory(EntityPlayer player) {
+	}
+
+	@Override
+	public void closeInventory(EntityPlayer player) {
+	}
+
+	@Override
+	public ItemStack getStackInSlotOnClosing(int slot) {
+		ItemStack toReturn = getStackInSlot(slot);
+
+		if (toReturn != null) {
+			setInventorySlotContents(slot, null);
+		}
+
+		return toReturn;
+	}
+
+	/* Filter Slot Delegate */
+	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 		return true;
 	}
@@ -211,22 +301,29 @@ public class ItemInventory implements IInventory, IFilterSlotDelegate, INBTTagab
 	public boolean isLocked(int slotIndex) {
 		return false;
 	}
-
+	
 	@Override
-	public void openInventory() {
+	public int getField(int id) {
+		return 0;
 	}
 
 	@Override
-	public void closeInventory() {
+	public void setField(int id, int value) {
+		
 	}
 
 	@Override
-	public ItemStack getStackInSlotOnClosing(int slot) {
-		if (inventoryStacks[slot] == null) {
-			return null;
-		}
-		ItemStack toReturn = inventoryStacks[slot];
-		inventoryStacks[slot] = null;
-		return toReturn;
+	public int getFieldCount() {
+		return 0;
+	}
+
+	@Override
+	public void clear() {
+		
+	}
+
+	@Override
+	public IChatComponent getDisplayName() {
+		return null;
 	}
 }

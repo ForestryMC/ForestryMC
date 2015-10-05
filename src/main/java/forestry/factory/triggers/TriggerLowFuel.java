@@ -11,8 +11,7 @@
 package forestry.factory.triggers;
 
 import net.minecraft.tileentity.TileEntity;
-
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 import forestry.core.gadgets.Engine;
 import forestry.core.gadgets.TilePowered;
@@ -39,7 +38,7 @@ public class TriggerLowFuel extends Trigger {
 	 * Return true if the tile given in parameter activates the trigger, given the parameters.
 	 */
 	@Override
-	public boolean isTriggerActive(TileEntity tile, ForgeDirection side, IStatementContainer source, IStatementParameter[] parameters) {
+	public boolean isTriggerActive(TileEntity tile, EnumFacing side, IStatementContainer source, IStatementParameter[] parameters) {
 
 		if (tile instanceof TilePowered) {
 			return !((TilePowered) tile).hasFuelMin(threshold);
@@ -51,6 +50,11 @@ public class TriggerLowFuel extends Trigger {
 		}
 
 		return false;
+	}
+
+	@Override
+	public int getSheetLocation() {
+		return 0;
 	}
 
 }

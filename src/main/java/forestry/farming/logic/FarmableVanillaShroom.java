@@ -11,6 +11,7 @@
 package forestry.farming.logic;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -18,7 +19,6 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
-import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StackUtils;
@@ -32,13 +32,14 @@ public class FarmableVanillaShroom extends FarmableGenericSapling {
 
 	@Override
 	public ICrop getCropAt(World world, BlockPos pos) {
-		Block block = world.getBlockState(pos).getBlock();
+		IBlockState state = world.getBlockState(pos);
+		Block block = state.getBlock();
 
 		if (block != Blocks.brown_mushroom_block && block != Blocks.red_mushroom_block) {
 			return null;
 		}
 
-		return new CropBlock(world, block, world.getBlockMetadata(x, y, z), new Vect(pos));
+		return new CropBlock(world, block, block.getMetaFromState(state), new Vect(pos));
 	}
 
 	@Override
@@ -48,8 +49,8 @@ public class FarmableVanillaShroom extends FarmableGenericSapling {
 			meta = 1;
 		}
 
-		Proxies.common.addBlockPlaceEffects(world, pos, Blocks.brown_mushroom.getDefaultState());
-		return ForestryBlock.mushroom.setBlock(world, pos, meta, Defaults.FLAG_BLOCK_SYNCH);
+		Proxies.common.addBlockPlaceEffects(world, pos, Blocks.brown_mushroom.getStateFromMeta(0));
+		return ForestryBlock.mushroom.setBlock(world, pos, meta);
 	}
 
 }

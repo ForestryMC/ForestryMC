@@ -11,80 +11,85 @@
 package forestry.farming.gui;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.util.IIcon;
 
 import org.lwjgl.opengl.GL11;
 
+import forestry.api.core.sprite.ISprite;
+import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmLogic;
 import forestry.core.config.Defaults;
 import forestry.core.gui.GuiForestry;
-import forestry.core.gui.Ledger;
-import forestry.core.gui.WidgetManager;
+import forestry.core.gui.ledgers.ClimateLedger;
+import forestry.core.gui.ledgers.OwnerLedger;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.widgets.SocketWidget;
 import forestry.core.gui.widgets.TankWidget;
 import forestry.core.gui.widgets.Widget;
+import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
-import forestry.farming.gadgets.TileFarmPlain;
+import forestry.farming.multiblock.IFarmController;
+import forestry.farming.multiblock.TileFarm;
 
-public class GuiFarm extends GuiForestry<TileFarmPlain> {
+public class GuiFarm extends GuiForestry<ContainerFarm, TileFarm> {
 
-	protected class FarmLedger extends Ledger {
+	public GuiFarm(EntityPlayer player, TileFarm tile) {
+		super(Defaults.TEXTURE_PATH_GUI + "/mfarm.png", new ContainerFarm(player.inventory, tile), tile);
 
-		public FarmLedger() {
-			super(ledgerManager);
-			maxHeight = 118;
-			overlayColor = fontColor.get("ledger.farm.background");
-		}
+		widgetManager.add(new TankWidget(widgetManager, 15, 19, 0).setOverlayOrigin(216, 18));
 
-		@Override
-		public void draw(int x, int y) {
+		widgetManager.add(new SocketWidget(widgetManager, 69, 40, tile, 0));
 
-			// Draw background
-			drawBackground(x, y);
+		widgetManager.add(new FarmLogicSlot(widgetManager, 69, 22, FarmDirection.NORTH));
+		widgetManager.add(new FarmLogicSlot(widgetManager, 69, 58, FarmDirection.SOUTH));
+		widgetManager.add(new FarmLogicSlot(widgetManager, 51, 40, FarmDirection.EAST));
+		widgetManager.add(new FarmLogicSlot(widgetManager, 87, 40, FarmDirection.WEST));
 
-			// Draw icon
-			drawIcon(Items.water_bucket.getIconFromDamage(0), x + 3, y + 4);
+		this.xSize = 216;
+		this.ySize = 220;
+	}
 
-			if (!isFullyOpened()) {
-				return;
-			}
+	@Override
+	protected void initLedgers() {
+		super.initLedgers();
+		IFarmController farmController = inventory.getFarmController();
+		ledgerManager.add(new ClimateLedger(ledgerManager, farmController));
+		ledgerManager.add(new FarmLedger(ledgerManager, farmController.getFarmLedgerDelegate()));
+		ledgerManager.add(new OwnerLedger(ledgerManager, farmController));
+	}
 
-			fontRendererObj.drawStringWithShadow(StringUtil.localize("gui.hydration"), x + 22, y + 8, fontColor.get("ledger.power.header"));
-			fontRendererObj.drawStringWithShadow(StringUtil.localize("gui.hydr.heat") + ":", x + 22, y + 20, fontColor.get("ledger.power.subheader"));
-			fontRendererObj.drawString(StringUtil.floatAsPercent(farm.getHydrationTempModifier()), x + 22, y + 32, fontColor.get("ledger.power.text"));
-			fontRendererObj.drawStringWithShadow(StringUtil.localize("gui.hydr.humid") + ":", x + 22, y + 44, fontColor.get("ledger.power.subheader"));
-			fontRendererObj.drawString(StringUtil.floatAsPercent(farm.getHydrationHumidModifier()), x + 22, y + 56, fontColor.get("ledger.power.text"));
-			fontRendererObj.drawStringWithShadow(StringUtil.localize("gui.hydr.rainfall") + ":", x + 22, y + 68, fontColor.get("ledger.power.subheader"));
-			fontRendererObj.drawString(StringUtil.floatAsPercent(farm.getHydrationRainfallModifier()) + " (" + farm.getDrought() + " d)", x + 22, y + 80,
-					fontColor.get("ledger.power.text"));
-			fontRendererObj.drawStringWithShadow(StringUtil.localize("gui.hydr.overall") + ":", x + 22, y + 92, fontColor.get("ledger.power.subheader"));
-			fontRendererObj.drawString(StringUtil.floatAsPercent(farm.getHydrationModifier()), x + 22, y + 104, fontColor.get("ledger.power.text"));
+	@Override
+	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
+		String title = StringUtil.localize("gui.farm.title");
+		this.fontRendererObj.drawString(title, getCenteredOffset(title), 6, fontColor.get("gui.title"));
+	}
 
-		}
+	@Override
+	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
+		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
-		@Override
-		public String getTooltip() {
-			return StringUtil.floatAsPercent(farm.getHydrationModifier()) + " " + StringUtil.localize("gui.hydration");
+		// Fuel remaining
+		int fertilizerRemain = inventory.getFarmController().getStoredFertilizerScaled(16);
+		if (fertilizerRemain > 0) {
+			drawTexturedModalRect(guiLeft + 81, guiTop + 94 + 17 - fertilizerRemain, xSize, 17 - fertilizerRemain, 4, fertilizerRemain);
 		}
 	}
 
 	private class FarmLogicSlot extends Widget {
 
-		private final int slot;
+		private final FarmDirection farmDirection;
 
-		public FarmLogicSlot(WidgetManager manager, int xPos, int yPos, int slot) {
+		public FarmLogicSlot(WidgetManager manager, int xPos, int yPos, FarmDirection farmDirection) {
 			super(manager, xPos, yPos);
-			this.slot = slot;
+			this.farmDirection = farmDirection;
 		}
 
 		private IFarmLogic getLogic() {
-			return farm.getFarmLogics()[slot];
+			return inventory.getFarmController().getFarmLogic(farmDirection);
 		}
 
-		private IIcon getIconIndex() {
+		private ISprite getIconIndex() {
 			if (getLogic() == null) {
 				return null;
 			}
@@ -99,8 +104,8 @@ public class GuiFarm extends GuiForestry<TileFarmPlain> {
 
 			if (getIconIndex() != null) {
 				GL11.glDisable(GL11.GL_LIGHTING);
-				Proxies.common.bindTexture(getLogic().getSpriteSheet());
-				manager.gui.drawTexturedModelRectFromIcon(startX + xPos, startY + yPos, getIconIndex(), 16, 16);
+				Proxies.common.bindTexture();
+				manager.gui.drawTexturedModelRect(startX + xPos, startY + yPos, getIconIndex(), 16, 16);
 				GL11.glEnable(GL11.GL_LIGHTING);
 			}
 
@@ -120,52 +125,9 @@ public class GuiFarm extends GuiForestry<TileFarmPlain> {
 				}
 				toolTip.add(getLogic().getName());
 				toolTip.add("Fertilizer: " + getLogic().getFertilizerConsumption());
-				toolTip.add("Water: " + getLogic().getWaterConsumption(farm.getHydrationModifier()));
+				toolTip.add("Water: " + getLogic().getWaterConsumption(inventory.getFarmController().getFarmLedgerDelegate().getHydrationModifier()));
 			}
 		};
 	}
 
-	private final TileFarmPlain farm;
-
-	public GuiFarm(EntityPlayer player, TileFarmPlain tile) {
-		super(Defaults.TEXTURE_PATH_GUI + "/mfarm.png", new ContainerFarm(player.inventory, tile), tile);
-
-		widgetManager.add(new TankWidget(widgetManager, 15, 19, 0).setOverlayOrigin(216, 18));
-
-		widgetManager.add(new SocketWidget(widgetManager, 69, 40, tile, 0));
-
-		widgetManager.add(new FarmLogicSlot(widgetManager, 69, 22, 0));
-		widgetManager.add(new FarmLogicSlot(widgetManager, 69, 58, 1));
-		widgetManager.add(new FarmLogicSlot(widgetManager, 51, 40, 2));
-		widgetManager.add(new FarmLogicSlot(widgetManager, 87, 40, 3));
-
-		this.xSize = 216;
-		this.ySize = 220;
-		this.farm = tile;
-	}
-
-	@Override
-	protected void initLedgers(Object inventory) {
-		super.initLedgers(inventory);
-		ledgerManager.insert(new FarmLedger());
-	}
-
-	@Override
-	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-		String title = StringUtil.localize("gui.farm.title");
-		this.fontRendererObj.drawString(title, getCenteredOffset(title), 6, fontColor.get("gui.title"));
-	}
-
-	@Override
-	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
-		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
-
-		// Fuel remaining
-		int fertilizerRemain = tile.getStoredFertilizerScaled(16);
-		if (fertilizerRemain > 0) {
-			drawTexturedModalRect(guiLeft + 81, guiTop + 94 + 17 - fertilizerRemain, xSize, 17 - fertilizerRemain, 4, fertilizerRemain);
-		}
-
-	}
 }

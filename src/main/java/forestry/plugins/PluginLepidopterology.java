@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.plugins;
 
+import java.io.File;
 import java.util.EnumSet;
 import java.util.Locale;
 
@@ -17,11 +18,11 @@ import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.crafting.CraftingManager;
-
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import net.minecraftforge.oredict.RecipeSorter;
 
+import forestry.Forestry;
 import forestry.api.arboriculture.ITreeRoot;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -32,17 +33,17 @@ import forestry.api.genetics.IClassification.EnumClassLevel;
 import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.api.lepidopterology.IButterflyRoot;
 import forestry.api.recipes.RecipeManagers;
-import forestry.core.config.Configuration;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
-import forestry.core.config.Property;
+import forestry.core.config.LocalizedConfiguration;
 import forestry.core.fluids.Fluids;
 import forestry.core.gadgets.BlockBase;
 import forestry.core.gadgets.MachineDefinition;
-import forestry.core.genetics.Allele;
 import forestry.core.genetics.Branch;
+import forestry.core.genetics.alleles.Allele;
 import forestry.core.items.ItemForestryBlock;
+import forestry.core.proxy.Proxies;
 import forestry.core.utils.ShapedRecipeCustom;
 import forestry.core.utils.Utils;
 import forestry.lepidopterology.ButterflySpawner;
@@ -65,28 +66,27 @@ public class PluginLepidopterology extends ForestryPlugin {
 	@SidedProxy(clientSide = "forestry.lepidopterology.proxy.ClientProxyLepidopterology", serverSide = "forestry.lepidopterology.proxy.ProxyLepidopterology")
 	public static ProxyLepidopterology proxy;
 	private static final String CONFIG_CATEGORY = "lepidopterology";
-	private Configuration config;
 	public static int spawnConstraint = 100;
 	public static int entityConstraint = 1000;
-	public static IClassification geometridae;
-	public static IClassification saturniidae;
-	public static IClassification pieridae;
-	public static IClassification nymphalidae;
-	public static IClassification lycaenidae;
-	public static IClassification papilionidae;
-	public static IClassification notchidae;
+	private static boolean allowPollination = true;
 	/**
 	 * See {@link IButterflyRoot} for details.
 	 */
 	public static IButterflyRoot butterflyInterface;
-	public static MachineDefinition definitionChest;
+
+	@Override
+	protected void setupAPI() {
+		super.setupAPI();
+
+		AlleleManager.alleleRegistry.registerSpeciesRoot(PluginLepidopterology.butterflyInterface = new ButterflyHelper());
+	}
 
 	@Override
 	public void preInit() {
-		ForestryBlock.lepidopterology.registerBlock(new BlockBase(Material.iron), ItemForestryBlock.class, "lepidopterology");
+		ForestryBlock.lepidopterology.registerBlock(new BlockBase(Material.iron, Defaults.DEFINITION_LEPIDOPTEROLOGY_ID), ItemForestryBlock.class, "lepidopterology");
 		ForestryBlock.lepidopterology.block().setCreativeTab(Tabs.tabLepidopterology);
+		((BlockBase)ForestryBlock.lepidopterology.block()).registerStateMapper();
 
-		AlleleManager.alleleRegistry.registerSpeciesRoot(PluginLepidopterology.butterflyInterface = new ButterflyHelper());
 		createAlleles();
 	}
 
@@ -99,9 +99,62 @@ public class PluginLepidopterology extends ForestryPlugin {
 
 	@Override
 	public void doInit() {
-		config = new Configuration();
+		final String oldConfig = CONFIG_CATEGORY + ".conf";
+		final String newConfig = CONFIG_CATEGORY + ".cfg";
 
-		Property property = config.get("entities.spawn.limit", CONFIG_CATEGORY, spawnConstraint);
+		File configFile = new File(Forestry.instance.getConfigFolder(), newConfig);
+		File oldConfigFile = new File(Forestry.instance.getConfigFolder(), oldConfig);
+		if (oldConfigFile.exists()) {
+			loadOldConfig();
+
+			final String oldConfigRenamed = CONFIG_CATEGORY + ".conf.old";
+			File oldConfigFileRenamed = new File(Forestry.instance.getConfigFolder(), oldConfigRenamed);
+			if (oldConfigFile.renameTo(oldConfigFileRenamed)) {
+				Proxies.log.info("Migrated " + CONFIG_CATEGORY + " settings to the new file '" + newConfig + "' and renamed '" + oldConfig + "' to '" + oldConfigRenamed + "'.");
+			}
+		}
+
+		loadNewConfig(configFile);
+
+		PluginCore.rootCommand.addChildCommand(new CommandButterfly());
+
+		Utils.registerEntity(EntityButterfly.class, "butterflyGE", 0, 0x000000, 0xffffff, 50, 1, true);
+		proxy.initializeRendering();
+
+		registerTemplates();
+
+		BlockBase lepidopterology = ((BlockBase) ForestryBlock.lepidopterology.block());
+		MachineDefinition definitionChest = lepidopterology.addDefinition((new MachineDefinition(Defaults.DEFINITION_LEPICHEST_META, "forestry.LepiChest", TileLepidopteristChest.class,
+				ShapedRecipeCustom.createShapedRecipe(
+						ForestryBlock.lepidopterology.getItemStack(1, Defaults.DEFINITION_LEPICHEST_META),
+						" # ",
+						"XYX",
+						"XXX",
+						'#', "blockGlass",
+						'X', ForestryItem.butterflyGE.getItemStack(1, Defaults.WILDCARD),
+						'Y', "chestWood"))
+				.setFaces(0, 1, 2, 3, 4, 4, 0, 7)));
+		definitionChest.register();
+
+		((ITreeRoot) AlleleManager.alleleRegistry.getSpeciesRoot("rootTrees")).registerLeafTickHandler(new ButterflySpawner());
+
+		RecipeSorter.register("forestry:lepidopterologymating", MatingRecipe.class, RecipeSorter.Category.SHAPELESS, "before:minecraft:shapeless");
+	}
+
+	private static void loadNewConfig(File configFile) {
+		LocalizedConfiguration config = new LocalizedConfiguration(configFile, "1.0.0");
+
+		spawnConstraint = config.getIntLocalized("butterfly.entities", "spawn.limit", spawnConstraint, 0, 500);
+		entityConstraint = config.getIntLocalized("butterfly.entities", "maximum", entityConstraint, 0, 5000);
+		allowPollination = config.getBooleanLocalized("butterfly.entities", "pollination", allowPollination);
+
+		config.save();
+	}
+
+	private static void loadOldConfig() {
+		forestry.core.config.deprecated.Configuration config = new forestry.core.config.deprecated.Configuration();
+
+		forestry.core.config.deprecated.Property property = config.get("entities.spawn.limit", CONFIG_CATEGORY, spawnConstraint);
 		property.comment = "determines the global butterfly entity count above which natural spawning of butterflies ceases.";
 		spawnConstraint = Integer.parseInt(property.value);
 
@@ -109,30 +162,9 @@ public class PluginLepidopterology extends ForestryPlugin {
 		property.comment = "determines the global butterfly entity count above which butterflies will stay in item form and will not take flight anymore.";
 		entityConstraint = Integer.parseInt(property.value);
 
-		config.save();
-
-		PluginCore.rootCommand.addChildCommand(new CommandButterfly());
-
-		Utils.registerEntity(EntityButterfly.class, "butterflyGE", 0, 0x000000, 0xffffff, 50, 1, true);
-		proxy.initializeRendering();
-		registerTemplates();
-
-		BlockBase lepidopterology = ((BlockBase) ForestryBlock.lepidopterology.block());
-		definitionChest = lepidopterology.addDefinition((new MachineDefinition(Defaults.DEFINITION_LEPICHEST_META, "forestry.LepiChest", TileLepidopteristChest.class,
-				ShapedRecipeCustom.createShapedRecipe(
-						ForestryBlock.lepidopterology.getItemStack(1, Defaults.DEFINITION_LEPICHEST_META),
-						" # ",
-						"XYX",
-						"XXX",
-						'#', Blocks.glass,
-						'X', ForestryItem.butterflyGE.getItemStack(1, Defaults.WILDCARD),
-						'Y', Blocks.chest))
-				.setFaces(0, 1, 2, 3, 4, 4, 0, 7)));
-		definitionChest.register();
-
-		((ITreeRoot) AlleleManager.alleleRegistry.getSpeciesRoot("rootTrees")).registerLeafTickHandler(new ButterflySpawner());
-
-		RecipeSorter.register("forestry:lepidopterologymating", MatingRecipe.class, RecipeSorter.Category.SHAPELESS, "before:minecraft:shapeless");
+		property = config.get("entities.pollination.allowed", CONFIG_CATEGORY, allowPollination);
+		property.comment = "determines whether butterflies can pollinate leaves.";
+		allowPollination = Boolean.parseBoolean(property.value);
 	}
 
 	@Override
@@ -149,42 +181,42 @@ public class PluginLepidopterology extends ForestryPlugin {
 		CraftingManager.getInstance().getRecipeList().add(new MatingRecipe());
 
 		RecipeManagers.carpenterManager.addRecipe(100, Fluids.WATER.getFluid(2000), null, ForestryItem.flutterlyzer.getItemStack(),
-				"X#X", "X#X", "RDR", '#', Blocks.glass_pane, 'X', "ingotBronze", 'R',
-				Items.redstone, 'D', Items.diamond);
+				"X#X", "X#X", "RDR", '#', "paneGlass", 'X', "ingotBronze", 'R',
+				"dustRedstone", 'D', "gemDiamond");
 	}
 
-	private void createAlleles() {
+	private static void createAlleles() {
 
 		IClassification lepidoptera = AlleleManager.alleleRegistry.createAndRegisterClassification(EnumClassLevel.ORDER, "lepidoptera", "Lepidoptera");
 		AlleleManager.alleleRegistry.getClassification("class.insecta").addMemberGroup(lepidoptera);
 
-		geometridae = AlleleManager.alleleRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "geometridae", "Geometridae");
+		IClassification geometridae = AlleleManager.alleleRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "geometridae", "Geometridae");
 		lepidoptera.addMemberGroup(geometridae);
-		saturniidae = AlleleManager.alleleRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "saturniidae", "Saturniidae");
+		IClassification saturniidae = AlleleManager.alleleRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "saturniidae", "Saturniidae");
 		lepidoptera.addMemberGroup(saturniidae);
 
-		pieridae = AlleleManager.alleleRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "pieridae", "Pieridae");
+		IClassification pieridae = AlleleManager.alleleRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "pieridae", "Pieridae");
 		lepidoptera.addMemberGroup(pieridae);
-		nymphalidae = AlleleManager.alleleRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "nymphalidae", "Nymphalidae");
+		IClassification nymphalidae = AlleleManager.alleleRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "nymphalidae", "Nymphalidae");
 		lepidoptera.addMemberGroup(nymphalidae);
-		lycaenidae = AlleleManager.alleleRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "lycaenidae", "Lycaenidae");
+		IClassification lycaenidae = AlleleManager.alleleRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "lycaenidae", "Lycaenidae");
 		lepidoptera.addMemberGroup(lycaenidae);
-		papilionidae = AlleleManager.alleleRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "papilionidae", "Papilionidae");
+		IClassification papilionidae = AlleleManager.alleleRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "papilionidae", "Papilionidae");
 		lepidoptera.addMemberGroup(papilionidae);
-		notchidae = AlleleManager.alleleRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "notchidae", "Notchidae");
+		IClassification notchidae = AlleleManager.alleleRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "notchidae", "Notchidae");
 		lepidoptera.addMemberGroup(notchidae);
 
 		/* GEOMETRIDAE */
 		IClassification opisthograptis = createButterflyBranch(geometridae, "Opisthograptis");
 		IClassification chiasmia = createButterflyBranch(geometridae, "Chiasmia");
 
-		Allele.mothBrimstone = new AlleleButterflySpecies("mothBrimstone", true, "brimstone", opisthograptis, "luteolata", 0xffea40).setNocturnal(true).setRarity(1.0f);
-		Allele.mothLatticedHeath = new AlleleButterflySpecies("mothLatticedHeath", true, "latticedHeath", chiasmia, "clathrata", 0xf2f0be).setNocturnal(true).setRarity(0.5f);
+		Allele.mothBrimstone = new AlleleButterflySpecies("mothBrimstone", true, "brimstone", opisthograptis, "luteolata", 0xffea40).setNocturnal().setRarity(1.0f);
+		Allele.mothLatticedHeath = new AlleleButterflySpecies("mothLatticedHeath", true, "latticedHeath", chiasmia, "clathrata", 0xf2f0be).setNocturnal().setRarity(0.5f);
 
 		/* SATURNIIDAE */
 		IClassification attacus = createButterflyBranch(saturniidae, "Attacus");
 
-		Allele.mothAtlas = new AlleleButterflySpecies("mothAtlas", false, "atlas", attacus, "atlas", 0xd96e3d).setNocturnal(true);
+		Allele.mothAtlas = new AlleleButterflySpecies("mothAtlas", false, "atlas", attacus, "atlas", 0xd96e3d).setNocturnal();
 
 		/* PIERIDAE */
 		IClassification pieris = createButterflyBranch(pieridae, "Pieris");
@@ -209,11 +241,11 @@ public class PluginLepidopterology extends ForestryPlugin {
 		IClassification protographium = createButterflyBranch(papilionidae, "Protographium");
 
 		Allele.lepiCitrusSwallow = new AlleleButterflySpecies("lepiCitrusSwallow", false, "swallowtailC", papilio, "demodocus", 0xeae389).setRarity(1.0f)
-				.setTemperature(EnumTemperature.WARM).setHumidity(EnumHumidity.DAMP);
+				.setTemperatureDeprecated(EnumTemperature.WARM).setHumidityDeprecated(EnumHumidity.DAMP);
 		Allele.lepiEmeraldPeacock = new AlleleButterflySpecies("lepiEmeraldPeacock", true, "emeraldPeacock", papilio, "palinurus", 0x7cfe80)
-				.setTemperature(EnumTemperature.WARM).setHumidity(EnumHumidity.DAMP);
+				.setTemperatureDeprecated(EnumTemperature.WARM).setHumidityDeprecated(EnumHumidity.DAMP);
 		Allele.lepiThoasSwallow = new AlleleButterflySpecies("lepiThoasSwallow", false, "swallowtailT", papilio, "thoas", 0xeac783).setRarity(0.2f)
-				.setTemperature(EnumTemperature.WARM).setHumidity(EnumHumidity.DAMP);
+				.setTemperatureDeprecated(EnumTemperature.WARM).setHumidityDeprecated(EnumHumidity.DAMP);
 		Allele.lepiSpicebush = new AlleleButterflySpecies("lepiSpicebush", true, "swallowtailS", papilio, "troilus", 0xeefeff).setRarity(0.5f);
 		Allele.lepiBlackSwallow = new AlleleButterflySpecies("lepiBlackSwallow", true, "swallowtailB", papilio, "polyxenes", 0xeac783).setRarity(1.0f);
 
@@ -235,39 +267,45 @@ public class PluginLepidopterology extends ForestryPlugin {
 		IClassification speyeria = createButterflyBranch(nymphalidae, "Speyeria");
 
 		Allele.lepiGlasswing = new AlleleButterflySpecies("lepiGlasswing", true, "glasswing", greta, "oto", 0x583732)
-				.setTemperature(EnumTemperature.WARM);
+				.setTemperatureDeprecated(EnumTemperature.WARM);
 
 		Allele.lepiSpeckledWood = new AlleleButterflySpecies("lepiSpeckledWood", true, "speckledWood", pararge, "aegeria", 0x947245).setRarity(1.0f);
 		Allele.lepiMadeiranSpeckledWood = new AlleleButterflySpecies("lepiMSpeckledWood", true, "speckledWoodM", pararge, "xiphia", 0x402919).setRarity(0.5f);
 		Allele.lepiCanarySpeckledWood = new AlleleButterflySpecies("lepiCSpeckledWood", true, "speckledWoodC", pararge, "xiphioides", 0x51372a).setRarity(0.5f);
 
 		Allele.lepiMenelausBlueMorpho = new AlleleButterflySpecies("lepiMBlueMorpho", true, "blueMorphoM", morpho, "menelaus", 0x72e1fd).setRarity(0.5f)
-				.setTemperature(EnumTemperature.WARM).setHumidity(EnumHumidity.DAMP);
+				.setTemperatureDeprecated(EnumTemperature.WARM).setHumidityDeprecated(EnumHumidity.DAMP);
 		Allele.lepiPeleidesBlueMorpho = new AlleleButterflySpecies("lepiPBlueMorpho", true, "blueMorphoP", morpho, "peleides", 0x6ecce8).setRarity(0.25f)
-				.setTemperature(EnumTemperature.WARM).setHumidity(EnumHumidity.DAMP);
+				.setTemperatureDeprecated(EnumTemperature.WARM).setHumidityDeprecated(EnumHumidity.DAMP);
 		Allele.lepiRhetenorBlueMorpho = new AlleleButterflySpecies("lepiRBlueMorpho", true, "blueMorphoR", morpho, "rhetenor", 0x00bef8)
-				.setTemperature(EnumTemperature.WARM).setHumidity(EnumHumidity.DAMP);
+				.setTemperatureDeprecated(EnumTemperature.WARM).setHumidityDeprecated(EnumHumidity.DAMP);
 
 		Allele.lepiComma = new AlleleButterflySpecies("lepiComma", true, "comma", polygonia, "c-album", 0xf89505).setRarity(0.3f);
 		Allele.lepiBatesia = new AlleleButterflySpecies("lepiBatesia", true, "paintedBeauty", batesia, "hypochlora", 0xfe7763).setRarity(0.3f)
-				.setTemperature(EnumTemperature.WARM).setHumidity(EnumHumidity.DAMP);
+				.setTemperatureDeprecated(EnumTemperature.WARM).setHumidityDeprecated(EnumHumidity.DAMP);
 		Allele.lepiBlueWing = new AlleleButterflySpecies("lepiBlueWing", true, "blueWing", myscelia, "ethusa", 0x3a93cc).setRarity(0.3f);
 
 		Allele.lepiMonarch = new AlleleButterflySpecies("lepiMonarch", true, "monarch", danaus, "plexippus", 0xffa722).setRarity(0.2f);
 		Allele.lepiBlueDuke = new AlleleButterflySpecies("lepiBlueDuke", true, "blueDuke", bassarona, "durga", 0x304240).setRarity(0.5f)
-				.setTemperature(EnumTemperature.COLD);
+				.setTemperatureDeprecated(EnumTemperature.COLD);
 		Allele.lepiGlassyTiger = new AlleleButterflySpecies("lepiGlassyTiger", true, "glassyTiger", parantica, "aglea", 0x5b3935).setRarity(0.3f);
 		Allele.lepiPostman = new AlleleButterflySpecies("lepiPostman", true, "postman", heliconius, "melpomene", 0xf7302d).setRarity(0.3f);
 		Allele.lepiMalachite = new AlleleButterflySpecies("lepiMalachite", true, "malachite", siproeta, "stelenes", 0xbdff53).setRarity(0.5f)
-				.setTemperature(EnumTemperature.WARM).setHumidity(EnumHumidity.DAMP);
+				.setTemperatureDeprecated(EnumTemperature.WARM).setHumidityDeprecated(EnumHumidity.DAMP);
 		Allele.lepiLLacewing = new AlleleButterflySpecies("lepiLLacewing", true, "leopardLacewing", cethosia, "cyane", 0xfb8a06).setRarity(0.7f);
 
 		Allele.lepiDianaFrit = new AlleleButterflySpecies("lepiDianaFrit", true, "dianaFritillary", speyeria, "diana", 0xffac05).setRarity(0.6f);
 
-		Allele.butterflyNone = new AlleleEffectNone("bfNone", false);
+		Allele.butterflyNone = new AlleleEffectNone();
 	}
 
-	private void registerTemplates() {
+	private static IClassification createButterflyBranch(IClassification family, String scientific) {
+		IClassification branch = new Branch("moth." + scientific.toLowerCase(Locale.ENGLISH), scientific);
+		branch.setParent(family);
+		return branch;
+	}
+
+	private static void registerTemplates() {
 		butterflyInterface.registerTemplate(ButterflyTemplates.getBrimstoneMothTemplate());
 		butterflyInterface.registerTemplate(ButterflyTemplates.getLatticedHeathTemplate());
 		butterflyInterface.registerTemplate(ButterflyTemplates.getAtlasMothTemplate());
@@ -313,14 +351,12 @@ public class PluginLepidopterology extends ForestryPlugin {
 
 	}
 
-	private IClassification createButterflyBranch(IClassification family, String scientific) {
-		IClassification branch = new Branch("moth." + scientific.toLowerCase(Locale.ENGLISH), scientific);
-		branch.setParent(family);
-		return branch;
-	}
-
 	@Override
 	public IGuiHandler getGuiHandler() {
 		return new GuiHandlerLepidopterology();
+	}
+
+	public static boolean isPollinationAllowed() {
+		return allowPollination;
 	}
 }

@@ -11,36 +11,84 @@
 package forestry.arboriculture.render;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.EntityRenderer;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.util.IIcon;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.IBakedModel;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.client.model.ISmartBlockModel;
+import net.minecraftforge.common.property.IExtendedBlockState;
 
-import net.minecraftforge.fml.client.registry.ISimpleBlockRenderingHandler;
+import java.util.Collections;
+import java.util.List;
 
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
+import forestry.api.core.IModelRenderer;
+import forestry.api.core.sprite.ISprite;
 import forestry.arboriculture.gadgets.BlockSapling;
 import forestry.arboriculture.gadgets.TileSapling;
-import forestry.plugins.PluginArboriculture;
+import forestry.core.gadgets.UnlistedBlockAccess;
+import forestry.core.gadgets.UnlistedBlockPos;
+import forestry.core.render.ModelManager;
 
-public class SaplingRenderHandler implements ISimpleBlockRenderingHandler {
+public class SaplingRenderHandler implements ISmartBlockModel {
 
-	public static int renderLayer = 0;
+	private static int renderLayer = 0;
 	
 	@Override
-	public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer) {
+	public List getFaceQuads(EnumFacing p_177551_1_) {
+		return Collections.emptyList();
 	}
 
 	@Override
-	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
+	public List getGeneralQuads() {
+		return Collections.emptyList();
+	}
 
-		if (modelId != this.getRenderId()) {
-			return false;
-		}
+	@Override
+	public boolean isAmbientOcclusion() {
+		return true;
+	}
 
-		TileSapling tile = BlockSapling.getSaplingTile(world, x, y, z);
+	@Override
+	public boolean isGui3d() {
+		return true;
+	}
+
+	@Override
+	public boolean isBuiltInRenderer() {
+		return false;
+	}
+
+	@Override
+	public TextureAtlasSprite getTexture() {
+		return null;
+	}
+
+	@Override
+	public ItemCameraTransforms getItemCameraTransforms() {
+		return ItemCameraTransforms.DEFAULT;
+	}
+
+	@Override
+	public IBakedModel handleBlockState(IBlockState state) {
+		IExtendedBlockState extend = (IExtendedBlockState) state;
+		IModelRenderer renderer = ModelManager.getInstance().createNewRenderer();
+		Block blk = state.getBlock();
+		IBlockAccess world = extend.getValue(UnlistedBlockAccess.BLOCKACCESS);
+		BlockPos pos = extend.getValue(UnlistedBlockPos.POS);
+		renderer.setRenderBoundsFromBlock( blk );
+		renderInWorld(blk, world, pos, renderer);
+		return renderer.finalizeModel(false);
+	}
+	
+	public boolean renderInWorld(Block block, IBlockAccess world, BlockPos pos, IModelRenderer renderer) {
+
+		TileSapling tile = BlockSapling.getSaplingTile(world, pos);
 
 		if (tile == null || tile.getTree() == null) {
 			return true;
@@ -48,28 +96,16 @@ public class SaplingRenderHandler implements ISimpleBlockRenderingHandler {
 
 		IAlleleTreeSpecies species = tile.getTree().getGenome().getPrimary();
 
-		renderCrossedSquares(species, world, block, x, y, z);
+		renderCrossedSquares(species, world, block, pos, renderer);
 		renderLayer = 1;
-		renderCrossedSquares(species, world, block, x, y, z);
+		renderCrossedSquares(species, world, block, pos, renderer);
 		renderLayer = 0;
 		return true;
 	}
 
-	@Override
-	public boolean shouldRender3DInInventory(int modelId) {
-		return false;
-	}
-
-	@Override
-	public int getRenderId() {
-		return PluginArboriculture.modelIdSaplings;
-	}
-
-	protected boolean renderCrossedSquares(IAlleleTreeSpecies species, IBlockAccess world, Block block, int x, int y, int z) {
-
-		Tessellator tess = Tessellator.instance;
+	private static boolean renderCrossedSquares(IAlleleTreeSpecies species, IBlockAccess world, Block block, BlockPos pos, IModelRenderer renderer) {
 		
-		tess.setBrightness(block.getMixedBrightnessForBlock(world, x, y, z));
+		renderer.setBrightness(block.getMixedBrightnessForBlock(world, pos));
 		int colourMultiplier = species.getGermlingColour(EnumGermlingType.SAPLING, renderLayer);
 		float r = (colourMultiplier >> 16 & 255) / 255.0F;
 		float g = (colourMultiplier >> 8 & 255) / 255.0F;
@@ -82,41 +118,44 @@ public class SaplingRenderHandler implements ISimpleBlockRenderingHandler {
 			b = (r * 30.0F + b * 70.0F) / 100.0F;
 		}
 
-		tess.setColorOpaque_F(r, g, b);
-		drawCrossedSquares(world, species, block, x, y, z, x, y, z, 1.0f);
+		renderer.setColorOpaque_F(r, g, b);
+		drawCrossedSquares(species, 1.0f, renderer);
 		return true;
 	}
 
-	protected void drawCrossedSquares(IBlockAccess world, IAlleleTreeSpecies species, Block block, int x, int y, int z, double par3, double par5, double par7, float mod) {
+	private static void drawCrossedSquares(IAlleleTreeSpecies species, float mod, IModelRenderer renderer){
 
-		Tessellator tess = Tessellator.instance;
-		IIcon icon = species.getGermlingIcon(EnumGermlingType.SAPLING, renderLayer);
+		ISprite icon = species.getGermlingIcon(EnumGermlingType.SAPLING, renderLayer);
 
-		double d3 = (double) icon.getMinU();
-		double d4 = (double) icon.getMinV();
-		double d5 = (double) icon.getMaxU();
-		double d6 = (double) icon.getMaxV();
+		double d3 = icon.getMinU();
+		double d4 = icon.getMinV();
+		double d5 = icon.getMaxU();
+		double d6 = icon.getMaxV();
 		double d7 = 0.45D * mod;
-		double d8 = par3 + 0.5D - d7;
-		double d9 = par3 + 0.5D + d7;
-		double d10 = par7 + 0.5D - d7;
-		double d11 = par7 + 0.5D + d7;
-		tess.addVertexWithUV(d8, par5 + mod, d10, d3, d4);
-		tess.addVertexWithUV(d8, par5 + 0.0D, d10, d3, d6);
-		tess.addVertexWithUV(d9, par5 + 0.0D, d11, d5, d6);
-		tess.addVertexWithUV(d9, par5 + mod, d11, d5, d4);
-		tess.addVertexWithUV(d9, par5 + mod, d11, d3, d4);
-		tess.addVertexWithUV(d9, par5 + 0.0D, d11, d3, d6);
-		tess.addVertexWithUV(d8, par5 + 0.0D, d10, d5, d6);
-		tess.addVertexWithUV(d8, par5 + mod, d10, d5, d4);
-		tess.addVertexWithUV(d8, par5 + mod, d11, d3, d4);
-		tess.addVertexWithUV(d8, par5 + 0.0D, d11, d3, d6);
-		tess.addVertexWithUV(d9, par5 + 0.0D, d10, d5, d6);
-		tess.addVertexWithUV(d9, par5 + mod, d10, d5, d4);
-		tess.addVertexWithUV(d9, par5 + mod, d10, d3, d4);
-		tess.addVertexWithUV(d9, par5 + 0.0D, d10, d3, d6);
-		tess.addVertexWithUV(d8, par5 + 0.0D, d11, d5, d6);
-		tess.addVertexWithUV(d8, par5 + mod, d11, d5, d4);
+		double d8 = 0.5D - d7;
+		double d9 = 0.5D + d7;
+		double d10 = 0.5D - d7;
+		double d11 = 0.5D + d7;
+		
+		renderer.addVertexWithUV(EnumFacing.NORTH, d8, mod, d10, d3, d4);
+		renderer.addVertexWithUV(EnumFacing.NORTH, d8, 0.0D, d10, d3, d6);
+		renderer.addVertexWithUV(EnumFacing.NORTH, d9, 0.0D, d11, d5, d6);
+		renderer.addVertexWithUV(EnumFacing.NORTH, d9, mod, d11, d5, d4);
+		
+		renderer.addVertexWithUV(EnumFacing.SOUTH, d9, mod, d11, d3, d4);
+		renderer.addVertexWithUV(EnumFacing.SOUTH, d9, 0.0D, d11, d3, d6);
+		renderer.addVertexWithUV(EnumFacing.SOUTH, d8, 0.0D, d10, d5, d6);
+		renderer.addVertexWithUV(EnumFacing.SOUTH, d8, mod, d10, d5, d4);
+		
+		renderer.addVertexWithUV(EnumFacing.WEST, d8, mod, d11, d3, d4);
+		renderer.addVertexWithUV(EnumFacing.WEST, d8, 0.0D, d11, d3, d6);
+		renderer.addVertexWithUV(EnumFacing.WEST, d9, 0.0D, d10, d5, d6);
+		renderer.addVertexWithUV(EnumFacing.WEST, d9, mod, d10, d5, d4);
+		
+		renderer.addVertexWithUV(EnumFacing.EAST, d9, mod, d10, d3, d4);
+		renderer.addVertexWithUV(EnumFacing.EAST, d9, 0.0D, d10, d3, d6);
+		renderer.addVertexWithUV(EnumFacing.EAST, d8, 0.0D, d11, d5, d6);
+		renderer.addVertexWithUV(EnumFacing.EAST, d8, mod, d11, d5, d4);
 	}
 
 }

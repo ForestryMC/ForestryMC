@@ -14,8 +14,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IChatComponent;
 
 /**
  * Wrapper class used to bake the side variable into the object itself instead
@@ -26,16 +26,16 @@ import net.minecraftforge.common.util.ForgeDirection;
 public class SidedInventoryMapper implements ISidedInventory {
 
 	private final ISidedInventory inv;
-	private final int side;
+	private final EnumFacing side;
 	private boolean checkItems = true;
 
-	public SidedInventoryMapper(ISidedInventory inv, ForgeDirection side) {
+	public SidedInventoryMapper(ISidedInventory inv, EnumFacing side) {
 		this(inv, side, true);
 	}
 
-	public SidedInventoryMapper(ISidedInventory inv, ForgeDirection side, boolean checkItems) {
+	public SidedInventoryMapper(ISidedInventory inv, EnumFacing side, boolean checkItems) {
 		this.inv = inv;
-		this.side = side.ordinal();
+		this.side = side;
 		this.checkItems = checkItems;
 	}
 
@@ -64,8 +64,8 @@ public class SidedInventoryMapper implements ISidedInventory {
 	}
 
 	@Override
-	public String getInventoryName() {
-		return inv.getInventoryName();
+	public String getCommandSenderName() {
+		return inv.getCommandSenderName();
 	}
 
 	@Override
@@ -84,13 +84,13 @@ public class SidedInventoryMapper implements ISidedInventory {
 	}
 
 	@Override
-	public void openInventory() {
-		inv.openInventory();
+	public void openInventory(EntityPlayer entityplayer) {
+		inv.openInventory(entityplayer);
 	}
 
 	@Override
-	public void closeInventory() {
-		inv.closeInventory();
+	public void closeInventory(EntityPlayer entityplayer) {
+		inv.closeInventory(entityplayer);
 	}
 
 	@Override
@@ -99,28 +99,53 @@ public class SidedInventoryMapper implements ISidedInventory {
 	}
 
 	@Override
-	public boolean hasCustomInventoryName() {
-		return inv.hasCustomInventoryName();
+	public boolean hasCustomName() {
+		return inv.hasCustomName();
 	}
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
 		return !checkItems || inv.isItemValidForSlot(slot, stack);
 	}
-
+	
 	@Override
-	public int[] getAccessibleSlotsFromSide(int s) {
-		return inv.getAccessibleSlotsFromSide(side);
+	public int[] getSlotsForFace(EnumFacing side) {
+		return inv.getSlotsForFace(side);
 	}
 
 	@Override
-	public boolean canInsertItem(int slot, ItemStack stack, int s) {
+	public boolean canInsertItem(int slot, ItemStack stack, EnumFacing s) {
 		return !checkItems || inv.canInsertItem(slot, stack, side);
 	}
 
 	@Override
-	public boolean canExtractItem(int slot, ItemStack stack, int s) {
+	public boolean canExtractItem(int slot, ItemStack stack, EnumFacing s) {
 		return !checkItems || inv.canExtractItem(slot, stack, side);
+	}
+
+	@Override
+	public int getField(int id) {
+		return inv.getField(id);
+	}
+
+	@Override
+	public void setField(int id, int value) {
+		inv.setField(id, value);
+	}
+
+	@Override
+	public int getFieldCount() {
+		return 0;
+	}
+
+	@Override
+	public void clear() {
+		inv.clear();
+	}
+
+	@Override
+	public IChatComponent getDisplayName() {
+		return inv.getDisplayName();
 	}
 
 }

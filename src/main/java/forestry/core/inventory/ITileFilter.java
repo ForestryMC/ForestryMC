@@ -17,6 +17,6 @@ import net.minecraft.tileentity.TileEntity;
  */
 public interface ITileFilter {
 
-	public boolean matches(TileEntity tile);
+	boolean matches(TileEntity tile);
 
 }

@@ -16,7 +16,7 @@ import forestry.core.config.Defaults;
 import forestry.core.gui.GuiForestry;
 import forestry.mail.gadgets.MachinePhilatelist;
 
-public class GuiPhilatelist extends GuiForestry<MachinePhilatelist> {
+public class GuiPhilatelist extends GuiForestry<ContainerPhilatelist, MachinePhilatelist> {
 
 	public GuiPhilatelist(InventoryPlayer player, MachinePhilatelist tile) {
 		super(Defaults.TEXTURE_PATH_GUI + "/philatelist.png", new ContainerPhilatelist(player, tile), tile);

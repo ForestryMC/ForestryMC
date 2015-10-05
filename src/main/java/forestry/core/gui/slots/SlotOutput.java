@@ -10,10 +10,9 @@
  ******************************************************************************/
 package forestry.core.gui.slots;
 
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -30,10 +29,10 @@ public class SlotOutput extends SlotWatched {
 	public boolean isItemValid(ItemStack itemstack) {
 		return false;
 	}
-
+	
 	@SideOnly(Side.CLIENT)
 	@Override
-	public IIcon getBackgroundIconIndex() {
-		return null;
+	public TextureAtlasSprite getBackgroundSprite() {
+		return super.getBackgroundSprite();
 	}
 }

@@ -1,0 +1,91 @@
+{
+	"variants": {
+		//larch
+        "half=bottom,woodtype=larch": { "model": "forestry:arboriculture/slab/larch_half" },
+        "half=top,woodtype=larch": { "model": "forestry:arboriculture/slab/larch_upper" },
+		//teak
+        "half=bottom,woodtype=teak": { "model": "forestry:arboriculture/slab/teak_half" },
+        "half=top,woodtype=teak": { "model": "forestry:arboriculture/slab/teak_upper" },
+		//acacia
+        "half=bottom,woodtype=acacia": { "model": "forestry:arboriculture/slab/acacia_half" },
+        "half=top,woodtype=acacia": { "model": "forestry:arboriculture/slab/acacia_upper" },
+		//lime
+        "half=bottom,woodtype=lime": { "model": "forestry:arboriculture/slab/lime_half" },
+        "half=top,woodtype=lime": { "model": "forestry:arboriculture/slab/lime_upper" },
+		//chestnut
+        "half=bottom,woodtype=chestnut": { "model": "forestry:arboriculture/slab/chestnut_half" },
+        "half=top,woodtype=chestnut": { "model": "forestry:arboriculture/slab/chestnut_upper" },
+		//wenge
+        "half=bottom,woodtype=wenge": { "model": "forestry:arboriculture/slab/wenge_half" },
+        "half=top,woodtype=wenge": { "model": "forestry:arboriculture/slab/wenge_upper" },
+		//baobab
+        "half=bottom,woodtype=baobab": { "model": "forestry:arboriculture/slab/baobab_half" },
+        "half=top,woodtype=baobab": { "model": "forestry:arboriculture/slab/baobab_upper" },
+		//sequoia
+        "half=bottom,woodtype=sequoia": { "model": "forestry:arboriculture/slab/sequoia_half" },
+        "half=top,woodtype=sequoia": { "model": "forestry:arboriculture/slab/sequoia_upper" },
+		//kapok
+        "half=bottom,woodtype=kapok": { "model": "forestry:arboriculture/slab/kapok_half" },
+        "half=top,woodtype=kapok": { "model": "forestry:arboriculture/slab/kapok_upper" },
+		//ebony
+        "half=bottom,woodtype=ebony": { "model": "forestry:arboriculture/slab/ebony_half" },
+        "half=top,woodtype=ebony": { "model": "forestry:arboriculture/slab/ebony_upper" },
+		//mahogany
+        "half=bottom,woodtype=mahogany": { "model": "forestry:arboriculture/slab/mahogany_half" },
+        "half=top,woodtype=mahogany": { "model": "forestry:arboriculture/slab/mahogany_upper" },
+		//balsa
+        "half=bottom,woodtype=balsa": { "model": "forestry:arboriculture/slab/balsa_half" },
+        "half=top,woodtype=balsa": { "model": "forestry:arboriculture/slab/balsa_upper" },
+		//willow
+        "half=bottom,woodtype=willow": { "model": "forestry:arboriculture/slab/willow_half" },
+        "half=top,woodtype=willow": { "model": "forestry:arboriculture/slab/willow_upper" },
+		//walnut
+        "half=bottom,woodtype=walnut": { "model": "forestry:arboriculture/slab/walnut_half" },
+        "half=top,woodtype=walnut": { "model": "forestry:arboriculture/slab/walnut_upper" },
+		//greenheart
+        "half=bottom,woodtype=greenheart": { "model": "forestry:arboriculture/slab/greenheart_half" },
+        "half=top,woodtype=greenheart": { "model": "forestry:arboriculture/slab/greenheart_upper" },
+		//cherry
+        "half=bottom,woodtype=cherry": { "model": "forestry:arboriculture/slab/cherry_half" },
+        "half=top,woodtype=cherry": { "model": "forestry:arboriculture/slab/cherry_upper" },
+		//mahoe
+        "half=bottom,woodtype=mahoe": { "model": "forestry:arboriculture/slab/mahoe_half" },
+        "half=top,woodtype=mahoe": { "model": "forestry:arboriculture/slab/mahoe_upper" },
+		//poplar
+        "half=bottom,woodtype=poplar": { "model": "forestry:arboriculture/slab/poplar_half" },
+        "half=top,woodtype=poplar": { "model": "forestry:arboriculture/slab/poplar_upper" },
+		//palm
+        "half=bottom,woodtype=palm": { "model": "forestry:arboriculture/slab/palm_half" },
+        "half=top,woodtype=palm": { "model": "forestry:arboriculture/slab/palm_upper" },
+		//papaya
+        "half=bottom,woodtype=papaya": { "model": "forestry:arboriculture/slab/papaya_half" },
+        "half=top,woodtype=papaya": { "model": "forestry:arboriculture/slab/papaya_upper" },
+		//pine
+        "half=bottom,woodtype=pine": { "model": "forestry:arboriculture/slab/pine_half" },
+        "half=top,woodtype=pine": { "model": "forestry:arboriculture/slab/pine_upper" },
+		//plum
+        "half=bottom,woodtype=plum": { "model": "forestry:arboriculture/slab/plum_half" },
+        "half=top,woodtype=plum": { "model": "forestry:arboriculture/slab/plum_upper" },
+		//maple
+        "half=bottom,woodtype=maple": { "model": "forestry:arboriculture/slab/maple_half" },
+        "half=top,woodtype=maple": { "model": "forestry:arboriculture/slab/maple_upper" },
+		//citrus
+        "half=bottom,woodtype=citrus": { "model": "forestry:arboriculture/slab/citrus_half" },
+        "half=top,woodtype=citrus": { "model": "forestry:arboriculture/slab/citrus_upper" },
+		//giganteum
+        "half=bottom,woodtype=giganteum": { "model": "forestry:arboriculture/slab/giganteum_half" },
+        "half=top,woodtype=giganteum": { "model": "forestry:arboriculture/slab/giganteum_upper" },
+		//ipe
+        "half=bottom,woodtype=ipe": { "model": "forestry:arboriculture/slab/ipe_half" },
+        "half=top,woodtype=ipe": { "model": "forestry:arboriculture/slab/ipe_upper" },
+		//padauk
+        "half=bottom,woodtype=padauk": { "model": "forestry:arboriculture/slab/padauk_half" },
+        "half=top,woodtype=padauk": { "model": "forestry:arboriculture/slab/padauk_upper" },
+		//cocobolo
+        "half=bottom,woodtype=cocobolo": { "model": "forestry:arboriculture/slab/cocobolo_half" },
+        "half=top,woodtype=cocobolo": { "model": "forestry:arboriculture/slab/cocobolo_upper" },
+		//zebrawood
+        "half=bottom,woodtype=zebrawood": { "model": "forestry:arboriculture/slab/zebrawood_half" },
+        "half=top,woodtype=zebrawood": { "model": "forestry:arboriculture/slab/zebrawood_upper" }		
+    }
+}

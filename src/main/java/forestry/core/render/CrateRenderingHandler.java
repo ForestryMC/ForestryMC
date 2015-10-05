@@ -22,40 +22,23 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.client.IItemRenderer;
 
 import org.lwjgl.opengl.GL11;
 
-import forestry.api.recipes.IGenericCrate;
+import forestry.core.items.ItemCrated;
 
 /**
  * Adapted from RenderTankCartItem by CovertJaguar <http://www.railcraft.info>
  */
-public class CrateRenderingHandler implements IItemRenderer {
+public class CrateRenderingHandler{
 
 	private static final ResourceLocation BLOCK_TEXTURE = TextureMap.locationBlocksTexture;
-	private static final ResourceLocation ITEM_TEXTURE = TextureMap.locationItemsTexture;
 	private static final ResourceLocation GLINT_TEXTURE = new ResourceLocation("textures/misc/enchanted_item_glint.png");
 
-	public static final float PIXEL = 1.0f / 16.0f;
-
-	private final RenderItem renderItem = new RenderItem();
-
-	@Override
-	public boolean handleRenderType(ItemStack stack, ItemRenderType type) {
-		switch (type) {
-			case INVENTORY:
-			case ENTITY:
-			case EQUIPPED:
-			case EQUIPPED_FIRST_PERSON:
-				return true;
-			default:
-				return false;
-		}
-	}
+	private static final float PIXEL = 1.0f / 16.0f;
 
 	@Override
 	public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack stack, ItemRendererHelper helper) {
@@ -105,9 +88,9 @@ public class CrateRenderingHandler implements IItemRenderer {
 
 			if (renderItem.renderWithColor) {
 				int color = stack.getItem().getColorFromItemStack(stack, pass);
-				float c1 = (float) (color >> 16 & 255) / 255.0F;
-				float c2 = (float) (color >> 8 & 255) / 255.0F;
-				float c3 = (float) (color & 255) / 255.0F;
+				float c1 = (color >> 16 & 255) / 255.0F;
+				float c2 = (color >> 8 & 255) / 255.0F;
+				float c3 = (color & 255) / 255.0F;
 
 				GL11.glColor4f(c1, c2, c3, 1.0F);
 			}
@@ -140,8 +123,8 @@ public class CrateRenderingHandler implements IItemRenderer {
 
 		float offsetZ = PIXEL + 0.021875F;
 
-		GL11.glRotatef((((float) entity.age + 1.0F) / 20.0F + entity.hoverStart) * (180F / (float) Math.PI), 0.0F, 1.0F, 0.0F);
-		GL11.glTranslatef(-0.5F, -0.25F, -(offsetZ * (float) iterations / 2.0F));
+		GL11.glRotatef(((entity.getAge() + 1.0F) / 20.0F + entity.hoverStart) * (180F / (float) Math.PI), 0.0F, 1.0F, 0.0F);
+		GL11.glTranslatef(-0.5F, -0.25F, -(offsetZ * iterations / 2.0F));
 
 		for (int count = 0; count < iterations; ++count) {
 			if (count > 0) {
@@ -170,8 +153,8 @@ public class CrateRenderingHandler implements IItemRenderer {
 
 	private void renderIn3D(ItemStack stack) {
 		GL11.glPushMatrix();
-		Tessellator tessellator = Tessellator.instance;
-		if (RenderManager.instance.renderEngine == null) {
+		Tessellator tessellator = Tessellator.getInstance();
+		if (.renderEngine == null) {
 			return;
 		}
 
@@ -184,9 +167,9 @@ public class CrateRenderingHandler implements IItemRenderer {
 
 			if (renderItem.renderWithColor) {
 				int color = stack.getItem().getColorFromItemStack(stack, pass);
-				float c1 = (float) (color >> 16 & 255) / 255.0F;
-				float c2 = (float) (color >> 8 & 255) / 255.0F;
-				float c3 = (float) (color & 255) / 255.0F;
+				float c1 = (color >> 16 & 255) / 255.0F;
+				float c2 = (color >> 8 & 255) / 255.0F;
+				float c3 = (color & 255) / 255.0F;
 
 				GL11.glColor4f(c1, c2, c3, 1.0F);
 			}
@@ -216,14 +199,14 @@ public class CrateRenderingHandler implements IItemRenderer {
 				GL11.glPushMatrix();
 				float f14 = 0.125F;
 				GL11.glScalef(f14, f14, f14);
-				float f15 = (float) (Minecraft.getSystemTime() % 3000L) / 3000.0F * 8.0F;
+				float f15 = Minecraft.getSystemTime() % 3000L / 3000.0F * 8.0F;
 				GL11.glTranslatef(f15, 0.0F, 0.0F);
 				GL11.glRotatef(-50.0F, 0.0F, 0.0F, 1.0F);
 				ItemRenderer.renderItemIn2D(tessellator, 0.0F, 0.0F, 1.0F, 1.0F, 255, 255, PIXEL);
 				GL11.glPopMatrix();
 				GL11.glPushMatrix();
 				GL11.glScalef(f14, f14, f14);
-				f15 = (float) (Minecraft.getSystemTime() % 4873L) / 4873.0F * 8.0F;
+				f15 = Minecraft.getSystemTime() % 4873L / 4873.0F * 8.0F;
 				GL11.glTranslatef(-f15, 0.0F, 0.0F);
 				GL11.glRotatef(10.0F, 0.0F, 0.0F, 1.0F);
 				ItemRenderer.renderItemIn2D(tessellator, 0.0F, 0.0F, 1.0F, 1.0F, 255, 255, PIXEL);
@@ -312,9 +295,9 @@ public class CrateRenderingHandler implements IItemRenderer {
 
 					if (renderItem.renderWithColor) {
 						int color = contained.getItem().getColorFromItemStack(contained, pass);
-						float c1 = (float) (color >> 16 & 255) / 255.0F;
-						float c2 = (float) (color >> 8 & 255) / 255.0F;
-						float c3 = (float) (color & 255) / 255.0F;
+						float c1 = (color >> 16 & 255) / 255.0F;
+						float c2 = (color >> 8 & 255) / 255.0F;
+						float c3 = (color & 255) / 255.0F;
 
 						GL11.glColor4f(c1, c2, c3, 1.0F);
 					}
@@ -334,8 +317,8 @@ public class CrateRenderingHandler implements IItemRenderer {
 		}
 
 		Item crateItem = crate.getItem();
-		if (crateItem instanceof IGenericCrate) {
-			return ((IGenericCrate) crateItem).getContained(crate);
+		if (crateItem instanceof ItemCrated) {
+			return ((ItemCrated) crateItem).getContained();
 		}
 		return null;
 	}

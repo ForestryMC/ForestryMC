@@ -1,57 +1,67 @@
+/*******************************************************************************
+ * Copyright (c) 2011-2014 SirSengir.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the GNU Lesser Public License v3
+ * which accompanies this distribution, and is available at
+ * http://www.gnu.org/licenses/lgpl-3.0.txt
+ *
+ * Various Contributors including, but not limited to:
+ * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ ******************************************************************************/
 package forestry.apiculture.genetics;
 
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
+import forestry.core.vect.IVect;
 
 public class AlleleEffectFertile extends AlleleEffectThrottled {
 	
-	public static final int MAX_BLOCK_FIND_TRIES = 5;
+	private static final int MAX_BLOCK_FIND_TRIES = 5;
 
-	public AlleleEffectFertile(String uid) {
-		super(uid, "fertile", false, 6, true, false);
+	public AlleleEffectFertile() {
+		super("fertile", false, 6, true, false);
 	}
 
 	@Override
-	public IEffectData doEffect(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
-		
-		if (isHalted(storedData, housing)) {
-			return storedData;
-		}
+	public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
 		
 		World world = housing.getWorld();
-		int territorySize[] = getModifiedArea(genome, housing);
+		BlockPos housingCoordinates = housing.getCoordinates();
+		IVect area = getModifiedArea(genome, housing);
 		
-		int blockX = getRandomOffset(world.rand, housing.getXCoord(), territorySize[0]);
-		int blockZ = getRandomOffset(world.rand, housing.getZCoord(), territorySize[2]);
-		int blockMaxY = housing.getYCoord() + territorySize[1] / 2 + 1;
-		int blockMinY = housing.getYCoord() - (territorySize[1] / 2) - 1;
+		int blockX = getRandomOffset(world.rand, housingCoordinates.getX(), area.getX());
+		int blockZ = getRandomOffset(world.rand, housingCoordinates.getZ(), area.getZ());
+		int blockMaxY = housingCoordinates.getY() + (area.getY() / 2) + 1;
+		int blockMinY = housingCoordinates.getY() - (area.getY() / 2) - 1;
 		
 		for (int attempt = 0; attempt < MAX_BLOCK_FIND_TRIES; ++attempt) {
 			if (tryTickColumn(world, blockX, blockZ, blockMaxY, blockMinY)) {
 				break;
 			}
-			blockX = getRandomOffset(world.rand, housing.getXCoord(), territorySize[0]);
-			blockZ = getRandomOffset(world.rand, housing.getZCoord(), territorySize[2]);
+			blockX = getRandomOffset(world.rand, housingCoordinates.getX(), area.getX());
+			blockZ = getRandomOffset(world.rand, housingCoordinates.getZ(), area.getZ());
 		}
 		
 		return storedData;
 	}
 	
-	private int getRandomOffset(Random random, int centrePos, int offset) {
+	private static int getRandomOffset(Random random, int centrePos, int offset) {
 		return centrePos + random.nextInt(offset) - (offset / 2);
 	}
 
-	private boolean tryTickColumn(World world, int x, int z, int maxY, int minY) {
+	private static boolean tryTickColumn(World world, int x, int z, int maxY, int minY) {
 		for (int y = maxY; y >= minY; --y) {
-			if (!world.isAirBlock(x, y, z)) {
-				Block block = world.getBlock(x, y, z);
-				world.scheduleBlockUpdate(x, y, z, block, 5);
+			BlockPos pos = new BlockPos(x, y, z);
+			if (!world.isAirBlock(pos)) {
+				Block block = world.getBlockState(pos).getBlock();
+				world.scheduleUpdate(pos, block, 5);
 				return true;
 			}
 		}

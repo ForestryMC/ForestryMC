@@ -52,34 +52,18 @@ public enum ForestryBlock {
 	mushroom,
 	candle,
 	stump,
-	glass,
-	planks1,
-	planks2,
-	fireproofPlanks1,
-	fireproofPlanks2,
-	slabs1,
-	slabs2,
-	slabs3,
-	slabs4,
-	log1,
-	log2,
-	log3,
-	log4,
-	log5,
-	log6,
-	log7,
-	log8,
-	fireproofLog1,
-	fireproofLog2,
-	fireproofLog3,
-	fireproofLog4,
-	fireproofLog5,
-	fireproofLog6,
-	fireproofLog7,
-	fireproofLog8,
-	fences1,
-	fences2,
+	// wood items
+	planks,
+	slabs,
+	logs,
+	fences,
 	stairs,
+	planksFireproof,
+	slabsFireproof,
+	logsFireproof,
+	fencesFireproof,
+	stairsFireproof,
+	// trees
 	saplingGE,
 	leaves,
 	pods,
@@ -88,6 +72,7 @@ public enum ForestryBlock {
 	farm,
 	core,
 	apiculture,
+	apicultureChest,
 	mail,
 	engine,
 	factoryTESR,
@@ -143,7 +128,7 @@ public enum ForestryBlock {
 		return new ItemStack(block, qty, meta);
 	}
 
-	public boolean setBlock(World world, BlockPos pos, int meta, int flag) {
-		return world.setBlockState(pos, block.getStateFromMeta(meta), flag);
+	public boolean setBlock(World world, BlockPos pos, int meta) {
+		return world.setBlockState(pos, block.getStateFromMeta(meta), Defaults.FLAG_BLOCK_SYNCH_AND_UPDATE);
 	}
 }

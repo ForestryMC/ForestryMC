@@ -30,19 +30,19 @@ public class HiveGenGround extends HiveGen {
 
 	@Override
 	public boolean isValidLocation(World world, BlockPos pos) {
-		Block ground = world.getBlockState(pos.down()).getBlock();
+		Block ground = world.getBlockState(new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ())).getBlock();
 		return groundMaterials.contains(ground.getMaterial());
 	}
 
 	@Override
-	public BlockPos getYForHive(World world, BlockPos pos) {
+	public int getYForHive(World world, BlockPos pos) {
 		pos = world.getHeight(pos);
 
 		// get to the ground
-		while (pos.getY() >= 0 && (world.getBlockState(pos.down()).getBlock().isLeaves(world, pos.down()) || canReplace(world, pos.down()))) {
-			pos = pos.down();
+		while (pos.getY() >= 0 && (world.getBlockState(pos).getBlock().isLeaves(world, pos) || canReplace(world, pos))) {
+			pos = new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ());
 		}
 
-		return pos;
+		return pos.getY();
 	}
 }

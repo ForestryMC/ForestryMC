@@ -21,18 +21,14 @@ import forestry.api.genetics.IEffectData;
 
 public class AlleleEffectExploration extends AlleleEffectThrottled {
 
-	public AlleleEffectExploration(String uid) {
-		super(uid, "exploration", false, 80, true, false);
+	public AlleleEffectExploration() {
+		super("exploration", false, 80, true, false);
 	}
 
 	@Override
-	public IEffectData doEffect(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
+	public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
 
-		if (isHalted(storedData, housing)) {
-			return storedData;
-		}
-
-		AxisAlignedBB beatifyBox = getBounding(genome, housing, 1.0f);
+		AxisAlignedBB beatifyBox = getBounding(genome, housing);
 		@SuppressWarnings("rawtypes")
 		List list = housing.getWorld().getEntitiesWithinAABB(EntityPlayer.class, beatifyBox);
 

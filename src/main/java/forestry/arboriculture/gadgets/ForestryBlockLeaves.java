@@ -10,48 +10,82 @@
  ******************************************************************************/
 package forestry.arboriculture.gadgets;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.BlockNewLeaf;
+import net.minecraft.block.BlockLeavesBase;
+import net.minecraft.block.IGrowable;
 import net.minecraft.block.ITileEntityProvider;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumWorldBlockLayer;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.common.IShearable;
+import net.minecraftforge.common.property.ExtendedBlockState;
+import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import com.mojang.authlib.GameProfile;
 
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.IToolGrafter;
 import forestry.api.arboriculture.ITree;
+import forestry.api.arboriculture.TreeManager;
+import forestry.api.core.IModelManager;
+import forestry.api.core.IModelRegister;
 import forestry.api.core.IToolScoop;
 import forestry.api.core.Tabs;
 import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.api.lepidopterology.IButterfly;
+import forestry.arboriculture.LeafDecayHelper;
+import forestry.arboriculture.genetics.TreeDefinition;
+import forestry.arboriculture.items.ItemLeavesBlock;
+import forestry.core.gadgets.UnlistedBlockAccess;
+import forestry.core.gadgets.UnlistedBlockPos;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
 import forestry.core.utils.StackUtils;
 import forestry.plugins.PluginArboriculture;
 import forestry.plugins.PluginLepidopterology;
 
-public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProvider {
-
+public class ForestryBlockLeaves extends BlockLeavesBase implements ITileEntityProvider, IGrowable, IShearable, IModelRegister {
+	
 	public ForestryBlockLeaves() {
+		super(Material.leaves, false);
 		this.setCreativeTab(Tabs.tabArboriculture);
+		this.setStepSound(soundTypeGrass);
+	}
+	
+	@Override
+	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
+		return ((IExtendedBlockState)super.getExtendedState(state, world, pos )).withProperty(UnlistedBlockPos.POS, pos).withProperty(UnlistedBlockAccess.BLOCKACCESS , world);
+	}
+	
+	@Override
+	protected BlockState createBlockState() {
+		return new ExtendedBlockState(this, new IProperty[0], new IUnlistedProperty[]{UnlistedBlockPos.POS, UnlistedBlockAccess.BLOCKACCESS});
 	}
 
 	/* TILE ENTITY */
@@ -68,30 +102,21 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 		return null;
 	}
 
-	private static NBTTagCompound getTagCompoundForTree(IBlockAccess world, int x, int y, int z) {
-		TileLeaves leaves = getLeafTile(world, x, y, z);
-		ITree tree = leaves.getTree();
-
-		NBTTagCompound nbttagcompound = new NBTTagCompound();
-		if (tree == null) {
-			return nbttagcompound;
-		}
-
-		tree.writeToNBT(nbttagcompound);
-		return nbttagcompound;
-	}
-
 	@SideOnly(Side.CLIENT)
 	@Override
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	public void getSubBlocks(Item item, CreativeTabs tab, List list) {
 
-		for (ITree tree : PluginArboriculture.treeInterface.getIndividualTemplates()) {
-			NBTTagCompound treeNBT = new NBTTagCompound();
-			tree.writeToNBT(treeNBT);
+		for (ITree tree : TreeManager.treeRoot.getIndividualTemplates()) {
+			TileLeaves leaves = new TileLeaves();
+			leaves.setDecorative();
+			leaves.setTree(tree);
+
+			NBTTagCompound leavesNBT = new NBTTagCompound();
+			leaves.writeToNBTDecorative(leavesNBT);
 
 			ItemStack itemStack = new ItemStack(item, 1, 0);
-			itemStack.setTagCompound(treeNBT);
+			itemStack.setTagCompound(leavesNBT);
 
 			list.add(itemStack);
 		}
@@ -100,11 +125,11 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 	/* DROP HANDLING */
 	// Hack: 	When harvesting leaves we need to get the drops in onBlockHarvested,
 	// 			because Mojang destroys the block and tile before calling getDrops.
-	protected ThreadLocal<ArrayList<ItemStack>> drops = new ThreadLocal<ArrayList<ItemStack>>();
-
+	private final ThreadLocal<ArrayList<ItemStack>> drops = new ThreadLocal<ArrayList<ItemStack>>();
+	
 	@Override
-	public void onBlockHarvested(World world, int x, int y, int z, int metadata, EntityPlayer player) {
-		TileLeaves leafTile = getLeafTile(world, x, y, z);
+	public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
+		TileLeaves leafTile = getLeafTile(world, pos);
 		if (leafTile == null || leafTile.isDecorative()) {
 			return;
 		}
@@ -113,101 +138,122 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 		float saplingModifier = 1.0f;
 
 		if (Proxies.common.isSimulating(world)) {
-			if (player != null) {
-				ItemStack held = player.inventory.getCurrentItem();
-				if (held != null && held.getItem() instanceof IToolGrafter) {
-					saplingModifier = ((IToolGrafter) held.getItem()).getSaplingModifier(held, world, player, x, y, z);
-					held.damageItem(1, player);
-					if (held.stackSize <= 0) {
-						player.destroyCurrentEquippedItem();
-					}
+			ItemStack held = player.inventory.getCurrentItem();
+			if (held != null && held.getItem() instanceof IToolGrafter) {
+				saplingModifier = ((IToolGrafter) held.getItem()).getSaplingModifier(held, world, player, pos);
+				held.damageItem(1, player);
+				if (held.stackSize <= 0) {
+					player.destroyCurrentEquippedItem();
 				}
 			}
 		}
-		drops.set(getLeafDrop(world, x, y, z, saplingModifier, fortune));
+		GameProfile playerProfile = player.getGameProfile();
+		ArrayList<ItemStack> leafDrops = getLeafDrop(world, playerProfile, pos, saplingModifier, fortune);
+		drops.set(leafDrops);
 	}
-
+	
 	@Override
-	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
+	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		ArrayList<ItemStack> ret = drops.get();
 		drops.remove();
 
 		// leaves not harvested, get drops normally
 		if (ret == null) {
-			ret = getLeafDrop(world, x, y, z, 1.0f, fortune);
+			ret = getLeafDrop((World) world, null, pos, 1.0f, fortune);
 		}
 
 		return ret;
 	}
 
-	private ArrayList<ItemStack> getLeafDrop(World world, int x, int y, int z, float saplingModifier, int fortune) {
+	private static ArrayList<ItemStack> getLeafDrop(World world, @Nullable GameProfile playerProfile, BlockPos pos, float saplingModifier, int fortune) {
 		ArrayList<ItemStack> prod = new ArrayList<ItemStack>();
 
-		TileLeaves tile = getLeafTile(world, x, y, z);
+		TileLeaves tile = getLeafTile(world, pos);
 		if (tile == null || tile.getTree() == null || tile.isDecorative()) {
 			return prod;
 		}
 
 		// Add saplings
-		ITree[] saplings = tile.getTree().getSaplings(world, x, y, z, saplingModifier);
+		ITree[] saplings = tile.getTree().getSaplings(world, playerProfile, pos, saplingModifier);
+
 		for (ITree sapling : saplings) {
 			if (sapling != null) {
-				prod.add(PluginArboriculture.treeInterface.getMemberStack(sapling, EnumGermlingType.SAPLING.ordinal()));
+				prod.add(TreeManager.treeRoot.getMemberStack(sapling, EnumGermlingType.SAPLING.ordinal()));
 			}
 		}
 
 		// Add fruits
 		if (tile.hasFruit()) {
-			Collections.addAll(prod, tile.getTree().produceStacks(world, x, y, z, tile.getRipeningTime()));
+			Collections.addAll(prod, tile.getTree().produceStacks(world, pos, tile.getRipeningTime()));
 		}
 
 		return prod;
 	}
-
+	
 	@Override
-	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player) {
-
-		ItemStack itemStack = super.getPickBlock(target, world, x, y, z, player);
-		NBTTagCompound treeNBT = getTagCompoundForTree(world, x, y, z);
-		itemStack.setTagCompound(treeNBT);
+	public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos, EntityPlayer player) {
+		ItemStack itemStack = super.getPickBlock(target, world, pos, player);
+		TileLeaves leaves = getLeafTile(world, pos);
+		NBTTagCompound leavesNBT = new NBTTagCompound();
+		leaves.writeToNBTDecorative(leavesNBT);
+		itemStack.setTagCompound(leavesNBT);
 		return itemStack;
 	}
-
+	
 	@Override
-	public boolean isShearable(ItemStack item, IBlockAccess world, int x, int y, int z) {
+	public boolean isShearable(ItemStack item, IBlockAccess world, BlockPos pos) {
 		return true;
 	}
-
+	
 	@Override
-	public ArrayList<ItemStack> onSheared(ItemStack item, IBlockAccess world, int x, int y, int z, int fortune) {
-		ArrayList<ItemStack> ret = super.onSheared(item, world, x, y, z, fortune);
+	public List<ItemStack> onSheared(ItemStack item, IBlockAccess world, BlockPos pos, int fortune) {
+		List<ItemStack> ret =  new ArrayList(Arrays.asList(new ItemStack(this)));
+		
+		TileLeaves leaves = getLeafTile(world, pos);
+		NBTTagCompound shearedLeavesNBT = new NBTTagCompound();
+		leaves.writeToNBTDecorative(shearedLeavesNBT);
 
-		NBTTagCompound treeNBT = getTagCompoundForTree(world, x, y, z);
 		for (ItemStack stack : ret) {
-			stack.setTagCompound(treeNBT);
+			if (stack.getItem() instanceof ItemLeavesBlock) {
+				stack.setTagCompound(shearedLeavesNBT);
+			}
 		}
 
 		return ret;
 	}
-
+	
 	@Override
-	public void beginLeavesDecay(World world, int x, int y, int z) {
-		TileLeaves tile = getLeafTile(world, x, y, z);
+	public void beginLeavesDecay(World world, BlockPos pos) {
+		TileLeaves tile = getLeafTile(world, pos);
 		if (tile == null || tile.isDecorative()) {
 			return;
 		}
-		super.beginLeavesDecay(world, x, y, z);
+		super.beginLeavesDecay(world, pos);
 	}
 	
-
 	@Override
-	public void updateTick(World world, int x, int y, int z, Random random) {
-		TileLeaves tileLeaves = getLeafTile(world, x, y, z);
+	public AxisAlignedBB getCollisionBoundingBox(World world, BlockPos pos, IBlockState state) {
+		TileLeaves tileLeaves = getLeafTile(world, pos);
+		if (tileLeaves != null && TreeDefinition.Willow.getUID().equals(tileLeaves.getSpeciesUID())) {
+			return null;
+		}
+		return super.getCollisionBoundingBox(world, pos, state);
+	}
+	
+	@Override
+	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
+		entity.motionX *= 0.4D;
+		entity.motionZ *= 0.4D;
+	}
+	
+	@Override
+	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
+		TileLeaves tileLeaves = getLeafTile(world, pos);
 		if (tileLeaves == null || tileLeaves.isDecorative()) {
 			return;
 		}
 
-		super.updateTick(world, x, y, z, random);
+		LeafDecayHelper.leafDecay(this, world, pos.getX(), pos.getY(), pos.getZ());
 
 		// check leaves tile again because they can decay in super.updateTick
 		if (tileLeaves.isInvalid()) {
@@ -228,100 +274,104 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 
 	@Override
 	public int getRenderType() {
-		return PluginArboriculture.modelIdLeaves;
+		return 3;
 	}
-
+	
+	@Override
+    @SideOnly(Side.CLIENT)
+	public EnumWorldBlockLayer getBlockLayer()
+	{
+		return EnumWorldBlockLayer.CUTOUT;
+	}
+	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public int colorMultiplier(IBlockAccess world, int x, int y, int z) {
-
-		TileLeaves leaves = getLeafTile(world, x, y, z);
+	public int colorMultiplier(IBlockAccess world, BlockPos pos, int renderPass) {
+		TileLeaves leaves = getLeafTile(world, pos);
 		if (leaves == null) {
-			return super.colorMultiplier(world, x, y, z);
+			return super.colorMultiplier(world, pos);
 		}
 
 		int colour = leaves.getFoliageColour(Proxies.common.getClientInstance().thePlayer);
 		if (colour == PluginArboriculture.proxy.getFoliageColorBasic()) {
-			colour = super.colorMultiplier(world, x, y, z);
+			colour = super.colorMultiplier(world, pos, renderPass);
 		}
 
 		return colour;
 	}
-
+	
 	@Override
-	public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int side) {
+	public boolean shouldSideBeRendered(IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
 		return true;
 	}
-
-	/* ICONS */
-	@SideOnly(Side.CLIENT)
-	private static IIcon defaultIcon;
-
-	@SideOnly(Side.CLIENT)
+	
 	@Override
-	public void registerBlockIcons(IIconRegister register) {
-		defaultIcon = TextureManager.getInstance().registerTex(register, "leaves/deciduous.fancy");
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public IIcon getIcon(int side, int metadata) {
-		return defaultIcon;
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
-		TileLeaves leaves = getLeafTile(world, x, y, z);
-		if (leaves != null) {
-			return leaves.getIcon(Proxies.render.fancyGraphicsEnabled());
-		}
-
-		return defaultIcon;
-	}
-
-	/* LOCALIZATION */
-	@Override
-	public String[] func_150125_e() {
-		return new String[0];
+	public void registerModel(Item item, IModelManager manager) {
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 0, new ModelResourceLocation("forestry:leaves", "inventory"));
 	}
 
 	/* PROPERTIES */
 	@Override
-	public int getFlammability(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
+	public int getFlammability(IBlockAccess world, BlockPos pos, EnumFacing face) {
 		return 60;
 	}
 
 	@Override
-	public boolean isFlammable(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
+	public boolean isFlammable(IBlockAccess world, BlockPos pos, EnumFacing face) {
 		return true;
 	}
 
 	@Override
-	public int getFireSpreadSpeed(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
-		if (face == ForgeDirection.DOWN) {
+	public int getFireSpreadSpeed(IBlockAccess world, BlockPos pos, EnumFacing face) {
+		if (face == EnumFacing.DOWN) {
 			return 20;
-		} else if (face != ForgeDirection.UP) {
+		} else if (face != EnumFacing.UP) {
 			return 10;
 		} else {
 			return 5;
 		}
 	}
-
+	
 	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9) {
-
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
+		
 		ItemStack heldItem = player.getHeldItem();
-		TileEntity tile = world.getTileEntity(x, y, z);
+		TileEntity tile = world.getTileEntity(pos);
 		IButterfly caterpillar = tile instanceof TileLeaves ? ((TileLeaves) tile).getCaterpillar() : null;
 		if (heldItem != null && (heldItem.getItem() instanceof IToolScoop) && caterpillar != null) {
 			ItemStack butterfly = PluginLepidopterology.butterflyInterface.getMemberStack(caterpillar, EnumFlutterType.CATERPILLAR.ordinal());
-			StackUtils.dropItemStackAsEntity(butterfly, world, x, y, z);
+			StackUtils.dropItemStackAsEntity(butterfly, world, pos.getX(), pos.getY(), pos.getZ());
 			((TileLeaves) tile).setCaterpillar(null);
 			return true;
 		}
-
-		return super.onBlockActivated(world, x, y, z, player, par6, par7, par8, par9);
+		
+		return super.onBlockActivated(world, pos, state, player, side, hitX, hitY, hitZ);
 	}
 
+	/* IGrowable */
+
+	@Override
+	// canFertilize
+	public boolean canGrow(World world, BlockPos pos, IBlockState state, boolean isClient) {
+		TileLeaves leafTile = getLeafTile(world, pos);
+		if (leafTile != null) {
+			return leafTile.hasFruit() && leafTile.getRipeness() < 1.0f;
+		}
+		return false;
+	}
+
+	@Override
+	// shouldFertilize
+	public boolean canUseBonemeal(World worldIn, Random rand, BlockPos pos, IBlockState state) {
+		return true;
+	}
+	
+	@Override
+	// fertilize
+	public void grow(World world, Random rand, BlockPos pos, IBlockState state) {
+		TileLeaves leafTile = getLeafTile(world, pos);
+		if (leafTile != null) {
+			leafTile.addRipeness(1.0f);
+		}
+	}
 }

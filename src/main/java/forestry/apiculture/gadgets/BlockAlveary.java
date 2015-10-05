@@ -11,32 +11,195 @@
 package forestry.apiculture.gadgets;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import com.google.common.collect.Maps;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.statemap.StateMapperBase;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
+import forestry.api.core.IModelManager;
 import forestry.api.core.Tabs;
 import forestry.apiculture.MaterialBeehive;
+import forestry.apiculture.multiblock.TileAlveary;
+import forestry.apiculture.multiblock.TileAlvearyClimatiser;
+import forestry.apiculture.multiblock.TileAlvearyFan;
+import forestry.apiculture.multiblock.TileAlvearyHeater;
+import forestry.apiculture.multiblock.TileAlvearyHygroregulator;
+import forestry.apiculture.multiblock.TileAlvearyPlain;
+import forestry.apiculture.multiblock.TileAlvearySieve;
+import forestry.apiculture.multiblock.TileAlvearyStabiliser;
+import forestry.apiculture.multiblock.TileAlvearySwarmer;
 import forestry.core.gadgets.BlockStructure;
-import forestry.core.render.TextureManager;
+import forestry.core.multiblock.MultiblockRegistry;
 
 public class BlockAlveary extends BlockStructure {
-
+	
+	public static final PropertyEnum ALVEARYTYPE = PropertyEnum.create("alveary", AlvearyTypes.class);
+	public static final PropertyEnum STATE = PropertyEnum.create("state", State.class);
+	public static final PropertyEnum TYPE = PropertyEnum.create("type", Type.class);
+	
+	public enum State implements IStringSerializable{
+		ON,
+		OFF;
+		
+		@Override
+		public String getName() {
+			return name().toLowerCase();
+		}
+	}
+	
+	public enum Type implements IStringSerializable{
+		DOWN,
+		MIDDLE,
+		UP;
+		
+		@Override
+		public String getName() {
+			return name().toLowerCase();
+		}
+	}
+	
+	public enum AlvearyTypes implements IStringSerializable{
+		ALVEARY_PLAIN,
+		ALVEARY_ENTRANCE,
+		ALVEARY_SWARMER,
+		ALVEARY_HEATER,
+		ALVEARY_FAN,
+		ALVEARY_HYGRO,
+		ALVEARY_STABILISER,
+		ALVEARY_SIEVE;
+		
+		@Override
+		public String getName() {
+			return name().toLowerCase();
+		}
+	}
+	
 	public BlockAlveary() {
 		super(new MaterialBeehive(false));
 		setHardness(1.0f);
 		setCreativeTab(Tabs.tabApiculture);
+		setDefaultState(this.blockState.getBaseState().withProperty(ALVEARYTYPE, AlvearyTypes.ALVEARY_PLAIN).withProperty(STATE, State.OFF).withProperty(TYPE, Type.MIDDLE));
+	}
+	
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		return getDefaultState().withProperty(ALVEARYTYPE, AlvearyTypes.values()[meta]);
+	}
+	
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return ((AlvearyTypes)state.getValue(ALVEARYTYPE)).ordinal();
+	}
+	
+	@Override
+	protected BlockState createBlockState() {
+		return new BlockState(this, new IProperty[]{ALVEARYTYPE, STATE, TYPE});
+	}
+	
+	@Override
+	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
+		TileEntity tile =world.getTileEntity(pos);
+		if(tile instanceof TileAlveary)
+		{
+			if(tile instanceof TileAlvearyClimatiser)
+			{
+				TileAlvearyClimatiser alveary = (TileAlvearyClimatiser) tile;
+				if(alveary.active)
+				{
+					state = state.withProperty(STATE, State.ON);
+				}
+				else{
+					state = state.withProperty(STATE, State.OFF);
+				}
+			}
+			else if(tile instanceof TileAlvearySwarmer)
+			{
+				TileAlvearySwarmer alveary = (TileAlvearySwarmer) tile;
+				if(alveary.active)
+				{
+					state = state.withProperty(STATE, State.ON);
+				}
+				else{
+					state = state.withProperty(STATE, State.OFF);
+				}
+			}
+		}
+		
+		int meta = ((AlvearyTypes)state.getValue(ALVEARYTYPE)).ordinal();
+		
+		Block blockXP = world.getBlockState(new BlockPos(pos.getX() + 1, pos.getY(), pos.getZ())).getBlock();
+		Block blockXM = world.getBlockState(new BlockPos(pos.getX() - 1, pos.getY(), pos.getZ())).getBlock();
+		
+		state = state.withProperty(TYPE, Type.MIDDLE);
+		
+		if (blockXP == this && blockXM != this) {
+
+			IBlockState stateNeighbor = world.getBlockState(new BlockPos(pos.getX() + 1, pos.getY(), pos.getZ()));
+			if (stateNeighbor.getBlock().getMetaFromState(stateNeighbor) == 1) {
+
+				if (world.getBlockState(new BlockPos(pos.getX(), pos.getY(), pos.getZ() + 1)).getBlock() != this) {
+					switchForSide(42, state, world, pos);
+				} else {
+					switchForSide(41, state, world, pos);
+				}
+
+			}
+		} else if (blockXP != this && blockXM == this) {
+			IBlockState stateNeighbor = world.getBlockState(new BlockPos(pos.getX() - 1, pos.getY(), pos.getZ()));
+			if (stateNeighbor.getBlock().getMetaFromState(stateNeighbor) == 1) {
+
+				if (world.getBlockState(new BlockPos(pos.getX(), pos.getY(), pos.getZ() + 1)).getBlock() != this) {
+					switchForSide(41, state, world, pos);
+				} else {
+					switchForSide(42, state, world, pos);
+				}
+
+			}
+		}
+		
+		
+		return super.getActualState(state, world, pos);
+	}
+	
+	@SideOnly(Side.CLIENT)
+	private void switchForSide(int textureId, IBlockState state, IBlockAccess world, BlockPos pos) {
+
+		Block blockX = world.getBlockState(new BlockPos(pos.getX() + 1, pos.getY(), pos.getZ())).getBlock();
+		Block blockY = world.getBlockState(new BlockPos(pos.getX(), pos.getY() + 1, pos.getZ())).getBlock();
+		if(blockX != this && blockY == this)
+		{
+			state = state.withProperty(TYPE, Type.UP);
+		}
+		else if(blockX == this && blockY == this)
+		{
+			state = state.withProperty(TYPE, Type.DOWN);
+		}
+		else if(blockX == this && blockY != this)
+		{
+			state = state.withProperty(TYPE, Type.UP);
+		}
+		else if(blockX != this && blockY != this)
+		{
+			state = state.withProperty(TYPE, Type.DOWN);
+		}
+
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
@@ -50,45 +213,35 @@ public class BlockAlveary extends BlockStructure {
 			list.add(new ItemStack(item, 1, i));
 		}
 	}
-
+	
 	@Override
-	public int getRenderType() {
-		return 0;
-	}
-
-	@Override
-	public boolean renderAsNormalBlock() {
-		return true;
-	}
-
-	@Override
-	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
+	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		ArrayList<ItemStack> drop = new ArrayList<ItemStack>();
-		drop.add(new ItemStack(this, 1, metadata != 1 ? metadata : 0));
+		drop.add(new ItemStack(this, 1, getMetaFromState(state) != 1 ? getMetaFromState(state) : 0));
 		return drop;
 	}
-
+	
 	@Override
-	public int getDamageValue(World world, int x, int y, int z) {
-		int meta = world.getBlockMetadata(x, y, z);
+	public int getDamageValue(World world, BlockPos pos) {
+		int meta = getMetaFromState(world.getBlockState(pos));
 		return meta != 1 ? meta : 0;
 	}
 
 	/* TILE ENTITY CREATION */
 	@Override
-	public TileEntity createTileEntity(World world, int metadata) {
-		switch (metadata) {
-			case TileAlvearySwarmer.BLOCK_META:
+	public TileEntity createTileEntity(World world, IBlockState state) {
+		switch (getMetaFromState(state)) {
+			case TileAlveary.SWARMER_META:
 				return new TileAlvearySwarmer();
-			case TileAlvearyFan.BLOCK_META:
+			case TileAlveary.FAN_META:
 				return new TileAlvearyFan();
-			case TileAlvearyHeater.BLOCK_META:
+			case TileAlveary.HEATER_META:
 				return new TileAlvearyHeater();
-			case TileAlvearyHygroregulator.BLOCK_META:
+			case TileAlveary.HYGRO_META:
 				return new TileAlvearyHygroregulator();
-			case TileAlvearyStabiliser.BLOCK_META:
+			case TileAlveary.STABILIZER_META:
 				return new TileAlvearyStabiliser();
-			case TileAlvearySieve.BLOCK_META:
+			case TileAlveary.SIEVE_META:
 				return new TileAlvearySieve();
 			default:
 				return new TileAlvearyPlain();
@@ -97,149 +250,49 @@ public class BlockAlveary extends BlockStructure {
 
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
-		return createTileEntity(world, meta);
+		return createTileEntity(world, getStateFromMeta(meta));
 	}
-
-	/* ICONS */
-	public static final int PLAIN = 0;
-	public static final int ENTRANCE = 1;
-	public static final int BOTTOM = 2;
-	public static final int LEFT = 3;
-	public static final int RIGHT = 4;
-	public static final int ALVEARY_SWARMER_OFF = 5;
-	public static final int ALVEARY_SWARMER_ON = 6;
-	public static final int ALVEARY_HEATER_OFF = 7;
-	public static final int ALVEARY_HEATER_ON = 8;
-	public static final int ALVEARY_FAN_OFF = 9;
-	public static final int ALVEARY_FAN_ON = 10;
-	public static final int ALVEARY_HYGRO = 11;
-	public static final int STABILISER = 12;
-	public static final int SIEVE = 13;
-
-	@SideOnly(Side.CLIENT)
-	private IIcon[] icons;
-
+	
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerBlockIcons(IIconRegister register) {
-		icons = new IIcon[14];
-		icons[0] = TextureManager.getInstance().registerTex(register, "apiculture/alveary.plain");
-		icons[1] = TextureManager.getInstance().registerTex(register, "apiculture/alveary.entrance");
-		icons[2] = TextureManager.getInstance().registerTex(register, "apiculture/alveary.bottom");
-		icons[3] = TextureManager.getInstance().registerTex(register, "apiculture/alveary.left");
-		icons[4] = TextureManager.getInstance().registerTex(register, "apiculture/alveary.right");
-		icons[5] = TextureManager.getInstance().registerTex(register, "apiculture/alveary.swarmer.off");
-		icons[6] = TextureManager.getInstance().registerTex(register, "apiculture/alveary.swarmer.on");
-		icons[7] = TextureManager.getInstance().registerTex(register, "apiculture/alveary.heater.off");
-		icons[8] = TextureManager.getInstance().registerTex(register, "apiculture/alveary.heater.on");
-		icons[9] = TextureManager.getInstance().registerTex(register, "apiculture/alveary.fan.off");
-		icons[10] = TextureManager.getInstance().registerTex(register, "apiculture/alveary.fan.on");
-		icons[11] = TextureManager.getInstance().registerTex(register, "apiculture/alveary.valve");
-		icons[12] = TextureManager.getInstance().registerTex(register, "apiculture/alveary.stabiliser");
-		icons[13] = TextureManager.getInstance().registerTex(register, "apiculture/alveary.sieve");
+	public void registerModel(Item item, IModelManager manager) {
+		manager.registerItemModel(item, 0, "apiculture", "alveary.plain");
+		manager.registerItemModel(item, 1, "apiculture", "alveary.entrance");
+		manager.registerItemModel(item, 2, "apiculture", "alveary.swarmer");
+		manager.registerItemModel(item, 3, "apiculture", "alveary.heater");
+		manager.registerItemModel(item, 4, "apiculture", "alveary.fan");
+		manager.registerItemModel(item, 5, "apiculture", "alveary.hygro");
+		manager.registerItemModel(item, 6, "apiculture", "alveary.stabiliser");
+		manager.registerItemModel(item, 7, "apiculture", "alveary.sieve");
 	}
-
-	@SideOnly(Side.CLIENT)
+	
 	@Override
-	public IIcon getIcon(int side, int metadata) {
-		if ((metadata <= 1
-				|| metadata == TileAlvearySieve.BLOCK_META || metadata == TileAlvearySwarmer.BLOCK_META || metadata == TileAlvearyStabiliser.BLOCK_META)
-				&& (side == 1 || side == 0)) {
-			return icons[BOTTOM];
-		}
+	public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block block) {
+		super.onNeighborBlockChange(world, pos, state, block);
+		
+		TileEntity tileEntity = world.getTileEntity(pos);
+		if (tileEntity instanceof TileAlveary) {
+			TileAlveary tileAlveary = (TileAlveary) tileEntity;
 
-		switch (metadata) {
-			case TileAlvearyPlain.BLOCK_META:
-				return icons[PLAIN];
-			case 1:
-				return icons[ENTRANCE];
-			case TileAlvearySwarmer.BLOCK_META:
-				return icons[ALVEARY_SWARMER_OFF];
-			case TileAlvearyFan.BLOCK_META:
-				return icons[ALVEARY_FAN_OFF];
-			case TileAlvearyHeater.BLOCK_META:
-				return icons[ALVEARY_HEATER_OFF];
-			case TileAlvearyHygroregulator.BLOCK_META:
-				return icons[ALVEARY_HYGRO];
-			case TileAlvearyStabiliser.BLOCK_META:
-				return icons[STABILISER];
-			case TileAlvearySieve.BLOCK_META:
-				return icons[SIEVE];
-			default:
-				return null;
+			// We must check that the slabs on top were not removed
+			MultiblockRegistry.addDirtyController(world, tileAlveary.getMultiblockController());
 		}
-
 	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
-		int meta = world.getBlockMetadata(x, y, z);
-
-		if (meta == 1) {
-			return this.getIcon(side, meta);
-		} else if (meta > 1) {
-			return getBlockTextureFromSideAndTile(world, x, y, z, side);
+	
+	public static class AlvearyStateMapper extends StateMapperBase{
+		
+		@Override
+		protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
+			LinkedHashMap linkedhashmap = Maps.newLinkedHashMap(state.getProperties());
+		    if(linkedhashmap.get(ALVEARYTYPE) != AlvearyTypes.ALVEARY_PLAIN){
+		    	linkedhashmap.remove(TYPE);
+		    }
+		    if(linkedhashmap.get(ALVEARYTYPE) == AlvearyTypes.ALVEARY_SIEVE || linkedhashmap.get(ALVEARYTYPE) == AlvearyTypes.ALVEARY_ENTRANCE || linkedhashmap.get(ALVEARYTYPE) == AlvearyTypes.ALVEARY_STABILISER || linkedhashmap.get(ALVEARYTYPE) == AlvearyTypes.ALVEARY_HYGRO || linkedhashmap.get(ALVEARYTYPE) ==  AlvearyTypes.ALVEARY_PLAIN){
+		    	linkedhashmap.remove(STATE);
+		    }
+		    String s = String.format("%s:%s", ((ResourceLocation)Block.blockRegistry.getNameForObject(state.getBlock())).getResourceDomain(), "apiculture/" + ALVEARYTYPE.getName((Comparable)linkedhashmap.remove(ALVEARYTYPE)));;
+			return new ModelResourceLocation(s, this.getPropertyString(linkedhashmap));
 		}
-
-		Block blockXP = world.getBlock(x + 1, y, z);
-		Block blockXM = world.getBlock(x - 1, y, z);
-
-		if (blockXP == this && blockXM != this) {
-
-			if (world.getBlockMetadata(x + 1, y, z) == 1) {
-
-				if (world.getBlock(x, y, z + 1) != this) {
-					return switchForSide(42, side);
-				} else {
-					return switchForSide(41, side);
-				}
-
-			} else {
-				return this.getIcon(side, meta);
-			}
-
-		} else if (blockXP != this && blockXM == this) {
-			if (world.getBlockMetadata(x - 1, y, z) == 1) {
-
-				if (world.getBlock(x, y, z + 1) != this) {
-					return switchForSide(41, side);
-				} else {
-					return switchForSide(42, side);
-				}
-
-			} else {
-				return this.getIcon(side, meta);
-			}
-		}
-
-		return this.getIcon(side, meta);
-	}
-
-	@SideOnly(Side.CLIENT)
-	private IIcon getBlockTextureFromSideAndTile(IBlockAccess world, int x, int y, int z, int side) {
-		TileEntity tile = world.getTileEntity(x, y, z);
-		if (tile == null || !(tile instanceof TileAlveary)) {
-			return getIcon(side, 0);
-		}
-
-		return icons[((TileAlveary) tile).getIcon(side, world.getBlockMetadata(x, y, z))];
-	}
-
-	@SideOnly(Side.CLIENT)
-	private IIcon switchForSide(int textureId, int side) {
-
-		if (side == 4 || side == 5) {
-			if (textureId == 41) {
-				return icons[LEFT];
-			} else {
-				return icons[RIGHT];
-			}
-		} else if (textureId == 41) {
-			return icons[RIGHT];
-		} else {
-			return icons[LEFT];
-		}
-
+		
 	}
 }

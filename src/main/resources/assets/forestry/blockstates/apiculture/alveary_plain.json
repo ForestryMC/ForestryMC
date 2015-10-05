@@ -1,0 +1,7 @@
+{
+    "variants": {
+		"type=down": { "model": "forestry:apiculture/alveary_plain_down" },
+		"type=middle": { "model": "forestry:apiculture/alveary_plain_middle" },
+		"type=up": { "model": "forestry:apiculture/alveary_plain_up" }
+	}
+}

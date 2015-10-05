@@ -18,14 +18,13 @@ import org.lwjgl.opengl.GL11;
 
 import forestry.core.config.Defaults;
 import forestry.core.gui.GuiForestryTitled;
-import forestry.core.gui.WidgetManager;
 import forestry.core.gui.widgets.Widget;
+import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.SpriteSheet;
 import forestry.core.render.TextureManager;
 import forestry.factory.gadgets.TileWorktable;
 
-public class GuiWorktable extends GuiForestryTitled<TileWorktable> {
+public class GuiWorktable extends GuiForestryTitled<ContainerWorktable, TileWorktable> {
 
 	private class MemorizedSlot extends Widget {
 
@@ -39,7 +38,7 @@ public class GuiWorktable extends GuiForestryTitled<TileWorktable> {
 		}
 
 		private ItemStack getOutputStack() {
-			return worktable.getMemory().getRecipeOutput(world, slotNumber);
+			return inventory.getMemory().getRecipeOutput(world, slotNumber);
 		}
 
 		@Override
@@ -54,10 +53,10 @@ public class GuiWorktable extends GuiForestryTitled<TileWorktable> {
 			GL11.glEnable(GL11.GL_BLEND);
 			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-			if (worktable.getMemory().isLocked(slotNumber)) {
+			if (inventory.getMemory().isLocked(slotNumber)) {
 				manager.gui.setZLevel(110f);
-				Proxies.common.bindTexture(SpriteSheet.ITEMS);
-				manager.gui.drawTexturedModelRectFromIcon(startX + xPos, startY + yPos, TextureManager.getInstance().getDefault("slots/locked"), 16, 16);
+				Proxies.common.bindTexture();
+				manager.gui.drawTexturedModelRect(startX + xPos, startY + yPos, TextureManager.getInstance().getDefault("slots/locked"), 16, 16);
 				manager.gui.setZLevel(0f);
 			}
 
@@ -72,11 +71,11 @@ public class GuiWorktable extends GuiForestryTitled<TileWorktable> {
 
 		@Override
 		public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
-			container.sendRecipeClick(mouseButton, slotNumber);
+			ContainerWorktable.sendRecipeClick(mouseButton, slotNumber);
 		}
 	}
 
-	private class ClearWorktable extends Widget {
+	private static class ClearWorktable extends Widget {
 
 		public ClearWorktable(WidgetManager manager, int xPos, int yPos) {
 			super(manager, xPos, yPos);
@@ -90,19 +89,14 @@ public class GuiWorktable extends GuiForestryTitled<TileWorktable> {
 
 		@Override
 		public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
-			container.clearRecipe();
+			ContainerWorktable.clearRecipe();
 		}
 	}
-
-	private final TileWorktable worktable;
-	protected final ContainerWorktable container;
 
 	public GuiWorktable(EntityPlayer player, TileWorktable tile) {
 		super(Defaults.TEXTURE_PATH_GUI + "/worktable2.png", new ContainerWorktable(player, tile), tile);
 
 		ySize = 218;
-		worktable = tile;
-		container = (ContainerWorktable) inventorySlots;
 
 		final int spacing = 18;
 		int slot = 0;

@@ -10,121 +10,155 @@
  ******************************************************************************/
 package forestry.arboriculture.gadgets;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
+import forestry.api.core.IModelManager;
+import forestry.api.core.IModelRegister;
 import forestry.api.core.Tabs;
 import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.WoodType;
+import forestry.arboriculture.items.ItemWoodBlock;
+import forestry.arboriculture.items.ItemWoodBlock.WoodMeshDefinition;
+import forestry.core.config.ForestryBlock;
 
-public class BlockSlab extends net.minecraft.block.BlockSlab implements IWoodTyped {
+public class BlockSlab extends net.minecraft.block.BlockSlab implements IWoodTyped, IModelRegister, ITileEntityProvider {
+	
+	private final boolean fireproof;
 
-	public static enum SlabCat {
-		CAT0, CAT1, CAT2, CAT3
-	}
+	public BlockSlab(boolean fireproof) {
+		super(Material.wood);
 
-	public static final int slabsPerCat = 8;
-	private final SlabCat cat;
+		this.fireproof = fireproof;
+		
+		IBlockState state = this.blockState.getBaseState();;
 
-	public BlockSlab(SlabCat cat) {
-		super(false, Material.wood);
-		this.cat = cat;
 		setCreativeTab(Tabs.tabArboriculture);
 		setLightOpacity(0);
 		setHardness(2.0F);
 		setResistance(5.0F);
 		setStepSound(soundTypeWood);
+		setHarvestLevel("axe", 0);
+		setDefaultState(state.withProperty(WoodType.WOODTYPE, WoodType.LARCH).withProperty(HALF, EnumBlockHalf.BOTTOM));
 	}
-
+	
 	@Override
-	public boolean isOpaqueCube() {
-		return false;
+	protected BlockState createBlockState() {
+		return new BlockState(this, new IProperty[]{HALF, WoodType.WOODTYPE});
+	}
+	
+    @Override
+	public int getMetaFromState(IBlockState state)
+    {
+        return ((EnumBlockHalf)state.getValue(HALF)).ordinal();
+    }
+    
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+    	return getDefaultState().withProperty(HALF, EnumBlockHalf.values()[meta]);
+    }
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void registerModel(Item item, IModelManager manager) {
+		if(!fireproof)
+		{
+			manager.registerVariant(item, ItemWoodBlock.getVariants(this));
+		}
+		manager.registerItemModel(item, new WoodMeshDefinition(this));
 	}
 
 	/* ICONS */
-	@SideOnly(Side.CLIENT)
+	
 	@Override
-	public void registerBlockIcons(IIconRegister register) {
-		WoodType.registerIcons(register);
+	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+		return ForestryBlock.slabs.item();
 	}
-
+	
 	@Override
-	public IIcon getIcon(int side, int meta) {
-		WoodType type = getWoodType(meta);
-		if (type == null) {
-			return null;
-		}
-		return type.getPlankIcon();
-	}
-
-	@Override
-	public Item getItemDropped(int meta, Random random, int par3) {
-		return Item.getItemFromBlock(this);
-	}
-
-	@Override
-	protected ItemStack createStackedBlock(int meta) {
-		return new ItemStack(Blocks.wooden_slab, 2, meta & 7);
-	}
-
-	@Override
-	public String func_150002_b(int var1) {
-		return "SomeSlab";
+	protected ItemStack createStackedBlock(IBlockState state) {
+		return new ItemStack(Blocks.wooden_slab, 2);
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List itemList) {
-		int totalWoods = WoodType.values().length;
-		int count = Math.min(totalWoods - (cat.ordinal() * slabsPerCat), slabsPerCat);
-		for (int i = 0; i < count; i++) {
-			itemList.add(new ItemStack(this, 1, i));
+	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List list) {
+		for (WoodType woodType : WoodType.VALUES) {
+			list.add(woodType.getSlab(fireproof));
 		}
 	}
 
 	/* PROPERTIES */
 	@Override
-	public int getFlammability(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
-		return 20;
+	public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos, EntityPlayer player) {
+		ItemStack itemStack = new ItemStack(ForestryBlock.slabs.item());
+		NBTTagCompound nbt = BlockWood.getTagCompound(world, pos);
+		itemStack.setTagCompound(nbt);
+		return itemStack;
 	}
-
+	
 	@Override
-	public boolean isFlammable(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
-		return true;
+	public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+		return BlockWood.blockRemovedByPlayer(this, world, player, pos);
 	}
-
+	
 	@Override
-	public int getFireSpreadSpeed(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
-		return 5;
+	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+		return new ArrayList<ItemStack>();
 	}
-
+	
 	@Override
-	public WoodType getWoodType(int meta) {
-		int woodOrdinal = (meta % slabsPerCat) + cat.ordinal() * slabsPerCat;
-		if (woodOrdinal < WoodType.VALUES.length) {
-			return WoodType.VALUES[woodOrdinal];
-		} else {
-			return null;
+	public float getBlockHardness(World world, BlockPos pos) {
+		WoodType type = BlockWood.getWoodType(world, pos);
+		if (type == null) {
+			return WoodType.DEFAULT_HARDNESS;
 		}
+		return type.getHardness();
+	}
+
+	@Override
+	public final boolean isFlammable(IBlockAccess world, BlockPos pos, EnumFacing side) {
+		return !isFireproof();
+	}
+
+	@Override
+	public int getFlammability(IBlockAccess world, BlockPos pos, EnumFacing side) {
+		return isFireproof() ? 0 : 20;
+	}
+
+	@Override
+	public int getFireSpreadSpeed(IBlockAccess world, BlockPos pos, EnumFacing side) {
+		return isFireproof() ? 0 : 5;
 	}
 
 	@Override
 	public String getBlockKind() {
 		return "slab";
+	}
+
+	@Override
+	public boolean isFireproof() {
+		return fireproof;
 	}
 
 	@Override
@@ -135,7 +169,43 @@ public class BlockSlab extends net.minecraft.block.BlockSlab implements IWoodTyp
 	// Minecraft's BlockSlab overrides this for their slabs, so we change it back to normal here
 	@Override
 	@SideOnly(Side.CLIENT)
-	public Item getItem(World world, int x, int y, int z) {
+	public Item getItem(World world, BlockPos pos) {
 		return Item.getItemFromBlock(this);
+	}
+
+	@Override
+	public boolean isDouble() {
+		return false;
+	}
+
+	@Override
+	public IProperty getVariantProperty() {
+		return WoodType.WOODTYPE;
+	}
+
+	@Override
+	public Object getVariant(ItemStack stack) {
+		return WoodType.getFromCompound(stack.getTagCompound());
+	}
+
+	@Override
+	public String getUnlocalizedName(int meta) {
+		return "SomeSlab";
+	}
+	
+	@Override
+	public final TileEntity createNewTileEntity(World world, int meta) {
+		return new TileWood();
+	}
+	
+	@Override
+	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
+		TileEntity tile = world.getTileEntity(pos);
+		if(tile instanceof TileWood)
+		{
+			TileWood wood = (TileWood) tile;
+			state = state.withProperty(WoodType.WOODTYPE, wood.getWoodType());
+		}
+		return super.getActualState(state, world, pos);
 	}
 }

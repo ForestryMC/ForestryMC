@@ -10,16 +10,19 @@
  ******************************************************************************/
 package forestry.core.gadgets;
 
-import forestry.core.network.PacketPayload;
+import java.io.IOException;
+
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
 
 public abstract class Mill extends TileBase {
 
+	protected float speed;
+	protected int stage = 0;
 	public int charge = 0;
-	public float speed;
-	public int stage = 0;
 	public float progress;
 
-	public Mill() {
+	protected Mill() {
 		speed = 0.01F;
 	}
 
@@ -34,21 +37,19 @@ public abstract class Mill extends TileBase {
 	}
 
 	@Override
-	public PacketPayload getPacketPayload() {
-		PacketPayload payload = new PacketPayload(2, 1, 0);
-		payload.intPayload[0] = charge;
-		payload.intPayload[1] = stage;
-
-		payload.floatPayload[0] = speed;
-		return payload;
+	public void writeData(DataOutputStreamForestry data) throws IOException {
+		super.writeData(data);
+		data.writeInt(charge);
+		data.writeFloat(speed);
+		data.writeInt(stage);
 	}
 
 	@Override
-	public void fromPacketPayload(PacketPayload payload) {
-		charge = payload.intPayload[0];
-		stage = payload.intPayload[1];
-
-		speed = payload.floatPayload[0];
+	public void readData(DataInputStreamForestry data) throws IOException {
+		super.readData(data);
+		charge = data.readInt();
+		speed = data.readFloat();
+		stage = data.readInt();
 	}
 
 	private void update(boolean isSimulating) {
@@ -78,7 +79,7 @@ public abstract class Mill extends TileBase {
 			stage = 2;
 			if (charge < 7 && isSimulating) {
 				charge++;
-				sendNetworkUpdate();
+				setNeedsNetworkUpdate();
 			}
 		}
 		if (progress > 1) {
