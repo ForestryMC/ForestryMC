@@ -125,6 +125,9 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	private final FarmHydrationManager hydrationManager;
 	private final FarmFertilizerManager fertilizerManager;
 
+	// the number of work ticks that this farm has had no power
+	private int noPowerTime = 0;
+
 	private BiomeGenBase cachedBiome;
 
 	public FarmController(World world) {
@@ -269,10 +272,26 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 			inventory.drainCan(tankManager);
 		}
 
+		boolean hasPower = false;
 		for (Map.Entry<IFarmComponent.Active, Integer> entry : farmActiveComponents.entrySet()) {
 			IFarmComponent.Active farmComponent = entry.getKey();
+			if (farmComponent instanceof TileGearbox) {
+				hasPower |= ((TileGearbox) farmComponent).getEnergyManager().getTotalEnergyStored() > 0;
+			}
+
 			int tickOffset = entry.getValue();
 			farmComponent.updateServer(tickCount + tickOffset);
+		}
+
+		if (hasPower) {
+			noPowerTime = 0;
+			getErrorLogic().setCondition(false, EnumErrorCode.NOPOWER);
+		} else {
+			if (noPowerTime <= 4) {
+				noPowerTime++;
+			} else {
+				getErrorLogic().setCondition(true, EnumErrorCode.NOPOWER);
+			}
 		}
 
 		//FIXME: be smarter about the farm needing to save

@@ -14,9 +14,7 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
-import forestry.api.core.IErrorLogic;
 import forestry.api.farming.IFarmComponent;
-import forestry.core.errors.EnumErrorCode;
 import forestry.core.tiles.IPowerHandler;
 import forestry.energy.EnergyManager;
 import forestry.farming.multiblock.IFarmController;
@@ -57,13 +55,7 @@ public class TileGearbox extends TileFarm implements IPowerHandler, IFarmCompone
 
 	@Override
 	public void updateServer(int tickCount) {
-
-		IFarmController farmController = getFarmController();
-		IErrorLogic errorLogic = farmController.getErrorLogic();
-
-		boolean hasPower = energyManager.getTotalEnergyStored() > 0;
-
-		if (errorLogic.setCondition(!hasPower, EnumErrorCode.NOPOWER)) {
+		if (energyManager.getTotalEnergyStored() <= 0) {
 			return;
 		}
 
@@ -78,6 +70,7 @@ public class TileGearbox extends TileFarm implements IPowerHandler, IFarmCompone
 		}
 
 		if (workCounter >= WORK_CYCLES && (tickCount % 5 == 0)) {
+			IFarmController farmController = getFarmController();
 			if (farmController.doWork()) {
 				workCounter = 0;
 				previousDelays = 0;
