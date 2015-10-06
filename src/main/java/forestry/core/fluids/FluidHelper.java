@@ -151,14 +151,16 @@ public final class FluidHelper {
 			return false;
 		}
 
-		if (!hasRoomForDrainedContainer(input, output, drainedItem, inputSlot, outputSlot)) {
+		// consume forestry containers if there is only one slot
+		if (outputSlot == inputSlot && drainedItem != null) {
 			Item item = drainedItem.getItem();
-			// consume forestry containers if there is no room for them
 			if (ForestryItem.canEmpty.isItemEqual(item) || ForestryItem.waxCapsule.isItemEqual(item) || ForestryItem.refractoryEmpty.isItemEqual(item)) {
 				drainedItem = null;
-			} else {
-				return false;
 			}
+		}
+
+		if (!hasRoomForDrainedContainer(input, output, drainedItem, inputSlot, outputSlot)) {
+			return false;
 		}
 
 		fluidHandler.fill(ForgeDirection.UNKNOWN, fluidInContainer, true);
