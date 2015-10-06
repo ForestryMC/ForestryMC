@@ -53,10 +53,6 @@ public abstract class RecipeHandlerBase extends TemplateRecipeHandler implements
 
 	public abstract String getRecipeID();
 
-	public String getRecipeSubName() {
-		return null;
-	}
-
 	public void changeToGuiTexture() {
 		GuiDraw.changeTexture(this.getGuiTexture());
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -70,9 +66,6 @@ public abstract class RecipeHandlerBase extends TemplateRecipeHandler implements
 	public void drawForeground(int recipe) {
 		super.drawForeground(recipe);
 		this.drawFluidTanks(recipe);
-		if (recipe % this.recipiesPerPage() == 0 && this.getRecipeSubName() != null) {
-			GuiDraw.drawStringC(this.getRecipeSubName(), 83, -2, 0x404040, false);
-		}
 		this.changeToGuiTexture();
 	}
 
