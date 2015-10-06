@@ -20,6 +20,7 @@ import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.IIndividual;
 import forestry.core.utils.GeneticsUtil;
+import forestry.plugins.PluginManager;
 
 public class FarmableVanillaSapling extends FarmableGenericSapling {
 
@@ -29,12 +30,16 @@ public class FarmableVanillaSapling extends FarmableGenericSapling {
 
 	@Override
 	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, int x, int y, int z) {
-		IIndividual tree = GeneticsUtil.getGeneticEquivalent(germling);
-		if (!(tree instanceof ITree)) {
-			return false;
-		}
+		if (PluginManager.Module.ARBORICULTURE.isEnabled()) {
+			IIndividual tree = GeneticsUtil.getGeneticEquivalent(germling);
+			if (!(tree instanceof ITree)) {
+				return false;
+			}
 
-		return TreeManager.treeRoot.plantSapling(world, (ITree) tree, player.getGameProfile(), x, y, z);
+			return TreeManager.treeRoot.plantSapling(world, (ITree) tree, player.getGameProfile(), x, y, z);
+		} else {
+			return germling.copy().tryPlaceItemIntoWorld(player, world, x, y - 1, z, 1, 0, 0, 0);
+		}
 	}
 
 }
