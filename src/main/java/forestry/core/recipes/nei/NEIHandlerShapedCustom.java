@@ -110,6 +110,11 @@ public class NEIHandlerShapedCustom extends RecipeHandlerBase {
 	}
 
 	@Override
+	public String getOverlayIdentifier() {
+		return "crafting";
+	}
+
+	@Override
 	public String getRecipeName() {
 		return NEIUtils.translate("handler.forestry.shaped");
 	}
