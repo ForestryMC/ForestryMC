@@ -27,6 +27,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
+import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorState;
 import forestry.api.genetics.AlleleManager;
@@ -49,6 +50,7 @@ import forestry.core.proxy.Proxies;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.SlotUtil;
+import forestry.plugins.PluginManager;
 
 public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiquidTankTile, IItemStackDisplay {
 
@@ -157,7 +159,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 			}
 		}
 
-		// Look for bees in input slots.
+		// Look for specimens in input slots.
 		IInvSlot slot = getInputSlot();
 
 		boolean noInput = (slot == null);
@@ -167,11 +169,19 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 		}
 
 		ItemStack inputStack = slot.getStackInSlot();
-		ItemStack ersatz = GeneticsUtil.convertSaplingToGeneticEquivalent(inputStack);
-		if (ersatz != null) {
-			inputStack = ersatz;
+
+		if (PluginManager.Module.ARBORICULTURE.isEnabled() && !TreeManager.treeRoot.isMember(inputStack)) {
+			ItemStack ersatz = GeneticsUtil.convertSaplingToGeneticEquivalent(inputStack);
+			if (ersatz != null) {
+				inputStack = ersatz;
+			}
 		}
+
 		IIndividual individual = AlleleManager.alleleRegistry.getIndividual(inputStack);
+		if (individual == null) {
+			return false;
+		}
+
 		if (!individual.isAnalyzed()) {
 			boolean hasHoney = resourceTank.getFluidAmount() >= HONEY_REQUIRED;
 			getErrorLogic().setCondition(!hasHoney, EnumErrorCode.NORESOURCE);
