@@ -51,6 +51,8 @@ import forestry.core.network.PacketItemStackDisplay;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.GuiUtil;
+import forestry.plugins.PluginArboriculture;
+import forestry.plugins.PluginManager;
 
 public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiquidTankContainer, IItemStackDisplay {
 
@@ -159,7 +161,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 			}
 		}
 
-		// Look for bees in input slots.
+		// Look for specimens in input slots.
 		IInvSlot slot = getInputSlot();
 
 		boolean noInput = (slot == null);
@@ -169,11 +171,19 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 		}
 
 		ItemStack inputStack = slot.getStackInSlot();
-		ItemStack ersatz = GeneticsUtil.convertSaplingToGeneticEquivalent(inputStack);
-		if (ersatz != null) {
-			inputStack = ersatz;
+
+		if (PluginManager.Module.ARBORICULTURE.isEnabled() && !PluginArboriculture.treeInterface.isMember(inputStack)) {
+			ItemStack ersatz = GeneticsUtil.convertSaplingToGeneticEquivalent(inputStack);
+			if (ersatz != null) {
+				inputStack = ersatz;
+			}
 		}
+
 		IIndividual individual = AlleleManager.alleleRegistry.getIndividual(inputStack);
+		if (individual == null) {
+			return false;
+		}
+
 		if (!individual.isAnalyzed()) {
 			boolean hasHoney = resourceTank.getFluidAmount() >= HONEY_REQUIRED;
 			setErrorCondition(!hasHoney, EnumErrorCode.NORESOURCE);
