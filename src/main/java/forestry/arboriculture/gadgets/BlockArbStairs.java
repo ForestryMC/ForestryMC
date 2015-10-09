@@ -122,7 +122,7 @@ public class BlockArbStairs extends BlockStairs {
 		TileStairs stairs = getStairTile(world, x, y, z);
 
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
-		if (stairs == null || stairs.getWoodType() == null) {
+		if (stairs == null) {
 			return nbttagcompound;
 		}
 
@@ -141,7 +141,7 @@ public class BlockArbStairs extends BlockStairs {
 	@Override
 	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
 		TileStairs stairs = getStairTile(world, x, y, z);
-		if (stairs != null && stairs.getWoodType() != null) {
+		if (stairs != null) {
 			return stairs.getWoodType().getPlankIcon();
 		} else {
 			return WoodType.LARCH.getPlankIcon();

@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.arboriculture.gadgets;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 
 import net.minecraft.nbt.NBTTagCompound;
@@ -25,13 +26,15 @@ import forestry.core.proxy.Proxies;
 
 public class TileStairs extends TileEntity implements IStreamable {
 
-	private WoodType woodType;
+	@Nonnull
+	private WoodType woodType = WoodType.LARCH;
 
+	@Nonnull
 	public WoodType getWoodType() {
 		return this.woodType;
 	}
 
-	public void setWoodType(WoodType woodType) {
+	public void setWoodType(@Nonnull WoodType woodType) {
 		this.woodType = woodType;
 		sendNetworkUpdate();
 	}
@@ -49,10 +52,7 @@ public class TileStairs extends TileEntity implements IStreamable {
 	@Override
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 		super.writeToNBT(nbttagcompound);
-
-		if (woodType != null) {
-			nbttagcompound.setShort("WT", (short) woodType.ordinal());
-		}
+		nbttagcompound.setShort("WT", (short) woodType.ordinal());
 	}
 
 	/* UPDATING */
