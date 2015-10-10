@@ -56,7 +56,7 @@ public class CraftGuideCentrifuge implements RecipeProvider {
 		for (ICentrifugeRecipe recipe : TileCentrifuge.RecipeManager.recipes) {
 			Object[] array = new Object[11];
 
-			List<Entry<ItemStack, Float>> entries = new ArrayList<Entry<ItemStack, Float>>(recipe.getAllProducts().entrySet());
+			List<Entry<ItemStack, Float>> entries = new ArrayList<>(recipe.getAllProducts().entrySet());
 
 			for (int i = 0; i < Math.min(entries.size(), 9); i++) {
 				Entry<ItemStack, Float> entry = entries.get(i);

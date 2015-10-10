@@ -312,7 +312,7 @@ public class TileTrader extends TileBase {
 	@Optional.Method(modid = "BuildCraftAPI|statements")
 	@Override
 	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
-		LinkedList<ITriggerExternal> res = new LinkedList<ITriggerExternal>();
+		LinkedList<ITriggerExternal> res = new LinkedList<>();
 		res.add(MailTriggers.lowPaper64);
 		res.add(MailTriggers.lowPaper32);
 		res.add(MailTriggers.lowInput25);

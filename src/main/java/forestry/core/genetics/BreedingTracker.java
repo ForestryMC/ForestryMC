@@ -47,9 +47,9 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 
 	public static final String TYPE_KEY = "TYPE";
 
-	private final Set<String> discoveredSpecies = new HashSet<String>();
-	private final Set<String> discoveredMutations = new HashSet<String>();
-	private final Set<String> researchedMutations = new HashSet<String>();
+	private final Set<String> discoveredSpecies = new HashSet<>();
+	private final Set<String> discoveredMutations = new HashSet<>();
+	private final Set<String> researchedMutations = new HashSet<>();
 	private String modeName;
 
 	private final GameProfile username;

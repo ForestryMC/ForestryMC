@@ -89,7 +89,7 @@ public abstract class ItemStackUtil {
 	/**
 	 */
 	public static ItemStack[] condenseStacks(ItemStack[] stacks) {
-		List<ItemStack> condensed = new ArrayList<ItemStack>();
+		List<ItemStack> condensed = new ArrayList<>();
 
 		for (ItemStack stack : stacks) {
 			if (stack == null) {
@@ -313,7 +313,7 @@ public abstract class ItemStackUtil {
 	}
 
 	private static List<ItemStack> getItemStacks(List<Stack> stacks) {
-		List<ItemStack> itemStacks = new ArrayList<ItemStack>(stacks.size());
+		List<ItemStack> itemStacks = new ArrayList<>(stacks.size());
 		for (Stack stack : stacks) {
 			Item item = stack.getItem();
 			if (item != null) {

@@ -49,7 +49,7 @@ public class CropFruit extends Crop {
 	protected Collection<ItemStack> harvestBlock(Vect pos) {
 		TileEntity tile = world.getTileEntity(pos.x, pos.y, pos.z);
 		if (!(tile instanceof IFruitBearer)) {
-			return new ArrayList<ItemStack>();
+			return new ArrayList<>();
 		}
 
 		Proxies.common.sendFXSignal(PacketFXSignal.VisualFXType.BLOCK_DESTROY, PacketFXSignal.SoundFXType.LEAF, world, pos.x, pos.y, pos.z,

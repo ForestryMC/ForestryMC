@@ -49,7 +49,7 @@ public class BlockResourceOre extends Block {
 
 	@Override
 	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
-		ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
+		ArrayList<ItemStack> drops = new ArrayList<>();
 
 		if (metadata == 0) {
 			int fortuneModifier = world.rand.nextInt(fortune + 2) - 1;

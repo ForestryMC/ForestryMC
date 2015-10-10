@@ -36,7 +36,7 @@ public class GuiCatalogue extends GuiForestry<ContainerCatalogue, IInventory> {
 	private GuiButton buttonFilter;
 	private GuiButton buttonUse;
 
-	private final List<ItemStackWidget> tradeInfoWidgets = new ArrayList<ItemStackWidget>();
+	private final List<ItemStackWidget> tradeInfoWidgets = new ArrayList<>();
 
 	public GuiCatalogue(EntityPlayer player) {
 		super(new ResourceLocation("textures/gui/book.png"), new ContainerCatalogue(player), null);

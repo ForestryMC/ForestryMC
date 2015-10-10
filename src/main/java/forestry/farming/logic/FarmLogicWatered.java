@@ -36,7 +36,7 @@ public abstract class FarmLogicWatered extends FarmLogic {
 
 	private static final FluidStack STACK_WATER = Fluids.WATER.getFluid(1000);
 
-	ArrayList<ItemStack> produce = new ArrayList<ItemStack>();
+	ArrayList<ItemStack> produce = new ArrayList<>();
 
 	protected FarmLogicWatered(IFarmHousing housing, ItemStack resource, ItemStack ground) {
 		super(housing);
@@ -66,7 +66,7 @@ public abstract class FarmLogicWatered extends FarmLogic {
 	@Override
 	public Collection<ItemStack> collect() {
 		Collection<ItemStack> products = produce;
-		produce = new ArrayList<ItemStack>();
+		produce = new ArrayList<>();
 		return products;
 	}
 

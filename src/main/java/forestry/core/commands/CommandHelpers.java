@@ -170,7 +170,7 @@ public class CommandHelpers {
 			}
 		}
 
-		List<String> commandNames = new ArrayList<String>();
+		List<String> commandNames = new ArrayList<>();
 		for (SubCommand child : command.getChildren()) {
 			commandNames.add(child.getCommandName());
 		}

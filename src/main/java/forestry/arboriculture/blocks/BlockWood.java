@@ -108,7 +108,7 @@ public abstract class BlockWood extends Block implements ITileEntityProvider, IW
 
 	@Override
 	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
-		return new ArrayList<ItemStack>();
+		return new ArrayList<>();
 	}
 
 	@Override

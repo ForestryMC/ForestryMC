@@ -31,7 +31,7 @@ public abstract class FarmLogicHomogeneous extends FarmLogic {
 	private final ItemStack soilBlock;
 	protected final Iterable<IFarmable> germlings;
 
-	ArrayList<ItemStack> produce = new ArrayList<ItemStack>();
+	ArrayList<ItemStack> produce = new ArrayList<>();
 
 	protected FarmLogicHomogeneous(IFarmHousing housing, ItemStack resource, ItemStack soilBlock, Iterable<IFarmable> germlings) {
 		super(housing);

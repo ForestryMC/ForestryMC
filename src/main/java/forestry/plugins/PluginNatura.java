@@ -79,7 +79,7 @@ public class PluginNatura extends ForestryPlugin {
 		saplingNatura = GameRegistry.findBlock(NATURA, "florasapling");
 		saplingNaturaRare = GameRegistry.findBlock(NATURA, "Rare Sapling");
 
-		ArrayList<String> saplingItemKeys = new ArrayList<String>();
+		ArrayList<String> saplingItemKeys = new ArrayList<>();
 
 		if (saplingNatura != null) {
 			saplingItemKeys.add("florasapling");
@@ -201,7 +201,7 @@ public class PluginNatura extends ForestryPlugin {
 		ItemStack seedBarley = GameRegistry.findItemStack(NATURA, "seedBarley", 1);
 		ItemStack seedCotton = GameRegistry.findItemStack(NATURA, "seedCotton", 1);
 
-		ArrayList<ItemStack> seedList = new ArrayList<ItemStack>();
+		ArrayList<ItemStack> seedList = new ArrayList<>();
 		if (seedBarley != null) {
 			seedList.add(seedBarley);
 			RecipeManagers.moistenerManager.addRecipe(seedBarley, new ItemStack(Blocks.mycelium), 5000);
@@ -219,7 +219,7 @@ public class PluginNatura extends ForestryPlugin {
 		Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(seedBarley, cropBlock, 3));
 		Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(seedCotton, cropBlock, 8));
 		
-		List<ItemStack> berries = new ArrayList<ItemStack>();
+		List<ItemStack> berries = new ArrayList<>();
 		if (berryBlight != null) {
 			berries.add(berryBlight);
 		}

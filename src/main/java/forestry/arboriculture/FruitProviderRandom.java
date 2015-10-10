@@ -28,7 +28,7 @@ import forestry.api.genetics.IFruitFamily;
  */
 public class FruitProviderRandom extends FruitProviderNone {
 
-	private final Map<ItemStack, Float> products = new HashMap<ItemStack, Float>();
+	private final Map<ItemStack, Float> products = new HashMap<>();
 	private int colour = 0xffffff;
 
 	public FruitProviderRandom(String key, IFruitFamily family, ItemStack product, float modifier) {
@@ -48,7 +48,7 @@ public class FruitProviderRandom extends FruitProviderNone {
 
 	@Override
 	public ItemStack[] getFruits(ITreeGenome genome, World world, int x, int y, int z, int ripeningTime) {
-		ArrayList<ItemStack> product = new ArrayList<ItemStack>();
+		ArrayList<ItemStack> product = new ArrayList<>();
 
 		float modeYieldMod = TreeManager.treeRoot.getTreekeepingMode(world).getYieldModifier(genome, 1f);
 

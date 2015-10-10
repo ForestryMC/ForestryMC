@@ -39,7 +39,7 @@ public class CommandBeeGive extends SubCommand {
 		super("give");
 		setPermLevel(PermLevel.ADMIN);
 
-		List<String> beeTypeStrings = new ArrayList<String>();
+		List<String> beeTypeStrings = new ArrayList<>();
 		for (EnumBeeType type : EnumBeeType.values()) {
 			if (type == EnumBeeType.NONE) {
 				continue;
@@ -151,7 +151,7 @@ public class CommandBeeGive extends SubCommand {
 	}
 
 	private static String[] getSpecies() {
-		List<String> species = new ArrayList<String>();
+		List<String> species = new ArrayList<>();
 
 		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
 			if (allele instanceof IAlleleBeeSpecies) {

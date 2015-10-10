@@ -58,7 +58,7 @@ public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 
 	public static class SolderManager implements ISolderManager {
 
-		public static final ArrayList<CircuitRecipe> recipes = new ArrayList<CircuitRecipe>();
+		public static final ArrayList<CircuitRecipe> recipes = new ArrayList<>();
 
 		@Override
 		public void addRecipe(ICircuitLayout layout, ItemStack resource, ICircuit circuit) {
@@ -100,7 +100,7 @@ public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 	// / INVENTORY MANAGMENT
 	public static class SolderingInventory extends ItemInventory implements IErrorSource {
 
-		private final RevolvingList<ICircuitLayout> layouts = new RevolvingList<ICircuitLayout>(ChipsetManager.circuitRegistry.getRegisteredLayouts().values());
+		private final RevolvingList<ICircuitLayout> layouts = new RevolvingList<>(ChipsetManager.circuitRegistry.getRegisteredLayouts().values());
 
 		private static final short blankSlot = 0;
 		private static final short finishedSlot = 1;

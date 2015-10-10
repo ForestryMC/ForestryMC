@@ -24,8 +24,8 @@ import net.minecraft.item.ItemStack;
  */
 public class InventoryConcatenator implements IInventory {
 
-	private final List<Integer> slotMap = new ArrayList<Integer>();
-	private final List<IInventory> invMap = new ArrayList<IInventory>();
+	private final List<Integer> slotMap = new ArrayList<>();
+	private final List<IInventory> invMap = new ArrayList<>();
 
 	private InventoryConcatenator() {
 	}

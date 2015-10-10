@@ -384,9 +384,9 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 
 	public static class RecipeManager implements ISqueezerManager {
 
-		public static final List<ISqueezerRecipe> recipes = new ArrayList<ISqueezerRecipe>();
-		public static final Set<ItemStack> recipeInputs = new HashSet<ItemStack>();
-		public static final ItemStackMap<ISqueezerContainerRecipe> containerRecipes = new ItemStackMap<ISqueezerContainerRecipe>();
+		public static final List<ISqueezerRecipe> recipes = new ArrayList<>();
+		public static final Set<ItemStack> recipeInputs = new HashSet<>();
+		public static final ItemStackMap<ISqueezerContainerRecipe> containerRecipes = new ItemStackMap<>();
 
 		@Override
 		public void addRecipe(int timePerItem, ItemStack[] resources, FluidStack liquid, @Nullable ItemStack remnants, int chance) {
@@ -460,7 +460,7 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 
 		@Override
 		public Map<Object[], Object[]> getRecipes() {
-			HashMap<Object[], Object[]> recipeList = new HashMap<Object[], Object[]>();
+			HashMap<Object[], Object[]> recipeList = new HashMap<>();
 
 			for (ISqueezerRecipe recipe : recipes) {
 				recipeList.put(recipe.getResources(), new Object[]{recipe.getRemnants(), recipe.getFluidOutput()});

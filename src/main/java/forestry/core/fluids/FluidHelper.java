@@ -256,7 +256,7 @@ public final class FluidHelper {
 	}
 
 	public static List<ItemStack> getAllFilledContainers(ItemStack empty) {
-		List<ItemStack> filledContainers = new ArrayList<ItemStack>();
+		List<ItemStack> filledContainers = new ArrayList<>();
 		for (Fluid fluid : FluidRegistry.getRegisteredFluids().values()) {
 			ItemStack filledContainer = getFilledContainer(fluid, empty);
 			if (filledContainer != null) {

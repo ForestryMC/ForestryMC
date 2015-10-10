@@ -33,7 +33,7 @@ public class NEIHandlerStill extends RecipeHandlerBase {
 
 	public class CachedStillRecipe extends CachedBaseRecipe {
 
-		public List<PositionedFluidTank> tanks = new ArrayList<PositionedFluidTank>();
+		public List<PositionedFluidTank> tanks = new ArrayList<>();
 
 		public CachedStillRecipe(TileStill.Recipe recipe) {
 			if (recipe.input != null) {

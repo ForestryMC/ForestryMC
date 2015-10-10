@@ -83,7 +83,7 @@ public class BlockBeehives extends BlockContainer {
 
 	@Override
 	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
-		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+		ArrayList<ItemStack> ret = new ArrayList<>();
 
 		// Handle legacy block
 		if (metadata == 0) {

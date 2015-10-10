@@ -25,7 +25,7 @@ import forestry.api.apiculture.IHiveDrop;
 public class HiveDrop implements IHiveDrop {
 
 	private final IBeeDefinition beeTemplate;
-	private final ArrayList<ItemStack> additional = new ArrayList<ItemStack>();
+	private final ArrayList<ItemStack> additional = new ArrayList<>();
 	private final int chance;
 	private float ignobleShare = 0.0f;
 
@@ -59,7 +59,7 @@ public class HiveDrop implements IHiveDrop {
 
 	@Override
 	public ArrayList<ItemStack> getAdditional(World world, int x, int y, int z, int fortune) {
-		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+		ArrayList<ItemStack> ret = new ArrayList<>();
 		for (ItemStack stack : additional) {
 			ret.add(stack.copy());
 		}

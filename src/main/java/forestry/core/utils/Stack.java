@@ -38,7 +38,7 @@ public class Stack {
 
 	public static List<Stack> parseStackStrings(String[] parts, int missingMetaValue) {
 
-		List<Stack> stacks = new ArrayList<Stack>();
+		List<Stack> stacks = new ArrayList<>();
 
 		for (String itemStackString : parts) {
 			Stack stack = parseStackString(itemStackString, missingMetaValue);

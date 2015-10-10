@@ -22,7 +22,7 @@ import forestry.core.ForestryClient;
 
 public class RenderBlock implements ISimpleBlockRenderingHandler {
 
-	public static final HashMap<TileRendererIndex, IBlockRenderer> byBlockRenderer = new HashMap<TileRendererIndex, IBlockRenderer>();
+	public static final HashMap<TileRendererIndex, IBlockRenderer> byBlockRenderer = new HashMap<>();
 
 	@Override
 	public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer) {

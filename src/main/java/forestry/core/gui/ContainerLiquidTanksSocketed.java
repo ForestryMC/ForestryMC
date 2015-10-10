@@ -29,8 +29,8 @@ public abstract class ContainerLiquidTanksSocketed<T extends TileEntity & ILiqui
 
 	protected ContainerLiquidTanksSocketed(T tile, InventoryPlayer playerInventory, int xInv, int yInv) {
 		super(tile, playerInventory, xInv, yInv);
-		this.socketedHelper = new ContainerSocketedHelper<T>(tile);
-		this.tanksHelper = new ContainerLiquidTanksHelper<T>(tile);
+		this.socketedHelper = new ContainerSocketedHelper<>(tile);
+		this.tanksHelper = new ContainerLiquidTanksHelper<>(tile);
 	}
 
 	/* IContainerLiquidTanks */

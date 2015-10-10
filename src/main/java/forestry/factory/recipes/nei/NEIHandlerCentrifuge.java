@@ -45,7 +45,7 @@ public class NEIHandlerCentrifuge extends RecipeHandlerBase {
 	public class CachedCentrifugeRecipe extends CachedBaseRecipe {
 
 		public PositionedStack inputs;
-		public List<PositionedStack> outputs = new ArrayList<PositionedStack>();
+		public List<PositionedStack> outputs = new ArrayList<>();
 
 		public CachedCentrifugeRecipe(ICentrifugeRecipe recipe, boolean genPerms) {
 			if (recipe.getInput() != null) {
@@ -65,7 +65,7 @@ public class NEIHandlerCentrifuge extends RecipeHandlerBase {
 			if (entrySet.size() == 0) {
 				return;
 			}
-			PriorityQueue<Entry<ItemStack, Float>> sortByChance = new PriorityQueue<Entry<ItemStack, Float>>(entrySet.size(), highestChanceComparator);
+			PriorityQueue<Entry<ItemStack, Float>> sortByChance = new PriorityQueue<>(entrySet.size(), highestChanceComparator);
 			sortByChance.addAll(entrySet);
 
 			int i = 0;

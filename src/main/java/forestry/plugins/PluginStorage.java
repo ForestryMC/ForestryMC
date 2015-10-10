@@ -85,17 +85,17 @@ import forestry.storage.proxy.ProxyStorage;
 @Plugin(pluginID = "Storage", name = "Storage", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.storage.description")
 public class PluginStorage extends ForestryPlugin {
 
-	private static final List<ItemCrated> crates = new ArrayList<ItemCrated>();
+	private static final List<ItemCrated> crates = new ArrayList<>();
 	private static final String CONFIG_CATEGORY = "backpacks";
 
 	@SidedProxy(clientSide = "forestry.storage.proxy.ProxyStorageClient", serverSide = "forestry.storage.proxy.ProxyStorage")
 	public static ProxyStorage proxy;
-	private final ArrayList<ItemStack> minerItems = new ArrayList<ItemStack>();
-	private final ArrayList<ItemStack> diggerItems = new ArrayList<ItemStack>();
-	private final ArrayList<ItemStack> foresterItems = new ArrayList<ItemStack>();
-	private final ArrayList<ItemStack> hunterItems = new ArrayList<ItemStack>();
-	private final ArrayList<ItemStack> adventurerItems = new ArrayList<ItemStack>();
-	private final ArrayList<ItemStack> builderItems = new ArrayList<ItemStack>();
+	private final ArrayList<ItemStack> minerItems = new ArrayList<>();
+	private final ArrayList<ItemStack> diggerItems = new ArrayList<>();
+	private final ArrayList<ItemStack> foresterItems = new ArrayList<>();
+	private final ArrayList<ItemStack> hunterItems = new ArrayList<>();
+	private final ArrayList<ItemStack> adventurerItems = new ArrayList<>();
+	private final ArrayList<ItemStack> builderItems = new ArrayList<>();
 
 	@Override
 	@SuppressWarnings({"unchecked", "rawtypes"})
@@ -261,19 +261,19 @@ public class PluginStorage extends ForestryPlugin {
 		final Pattern foresterOreDictPattern = Pattern.compile("(crop|seed|tree)[A-Z].*");
 		final Pattern builderOreDictPattern = Pattern.compile("(block|paneGlass|slabWood|stainedClay|stainedGlass)[A-Z].*");
 
-		final List<String> minerOreDictNames = new ArrayList<String>();
-		final List<String> diggerOreDictNames = new ArrayList<String>(Arrays.asList(
+		final List<String> minerOreDictNames = new ArrayList<>();
+		final List<String> diggerOreDictNames = new ArrayList<>(Arrays.asList(
 				"cobblestone",
 				"stone",
 				"sand"
 		));
-		final List<String> foresterOreDictNames = new ArrayList<String>(Arrays.asList(
+		final List<String> foresterOreDictNames = new ArrayList<>(Arrays.asList(
 				"logWood",
 				"stickWood",
 				"woodStick",
 				"saplingTree"
 		));
-		final List<String> builderOreDictNames = new ArrayList<String>(Arrays.asList(
+		final List<String> builderOreDictNames = new ArrayList<>(Arrays.asList(
 				"stone",
 				"plankWood",
 				"stairWood",
@@ -419,10 +419,10 @@ public class PluginStorage extends ForestryPlugin {
 		BackpackDefinition backpackDefinition = (BackpackDefinition) BackpackManager.definitions.get(backpackName);
 
 		List<ItemStack> backpackItems;
-		List<String> backpackOreDict = new ArrayList<String>();
+		List<String> backpackOreDict = new ArrayList<>();
 
 		{
-			List<String> validItems = new ArrayList<String>(backpackDefinition.getValidItemStacks());
+			List<String> validItems = new ArrayList<>(backpackDefinition.getValidItemStacks());
 			Collections.sort(validItems);
 			String[] defaultValidItems = validItems.toArray(new String[validItems.size()]);
 
@@ -434,14 +434,14 @@ public class PluginStorage extends ForestryPlugin {
 		}
 
 		{
-			List<Integer> oreIds = new ArrayList<Integer>(backpackDefinition.getValidOreIds());
+			List<Integer> oreIds = new ArrayList<>(backpackDefinition.getValidOreIds());
 			String[] defaultOreNames = new String[oreIds.size()];
 			for (int i = 0; i < oreIds.size(); i++) {
 				int oreId = oreIds.get(i);
 				defaultOreNames[i] = OreDictionary.getOreName(oreId);
 			}
 
-			List<String> defaultOreNamesList = new ArrayList<String>();
+			List<String> defaultOreNamesList = new ArrayList<>();
 			Collections.addAll(defaultOreNamesList, defaultOreNames);
 			Collections.sort(defaultOreNamesList);
 			defaultOreNames = defaultOreNamesList.toArray(new String[defaultOreNamesList.size()]);

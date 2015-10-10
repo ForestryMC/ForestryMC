@@ -39,7 +39,7 @@ import forestry.core.utils.StringUtil;
 public class GuiNaturalistInventory extends GuiForestry<Container, IPagedInventory> {
 	private final ISpeciesRoot speciesRoot;
 	private final IBreedingTracker breedingTracker;
-	private final HashMap<String, ItemStack> iconStacks = new HashMap<String, ItemStack>();
+	private final HashMap<String, ItemStack> iconStacks = new HashMap<>();
 	private final int pageCurrent, pageMax;
 
 	public GuiNaturalistInventory(ISpeciesRoot speciesRoot, EntityPlayer player, Container container, IPagedInventory inventory, int page, int maxPages) {

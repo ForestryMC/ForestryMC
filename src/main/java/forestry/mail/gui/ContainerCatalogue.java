@@ -38,7 +38,7 @@ import forestry.mail.network.PacketLetterInfo;
 public class ContainerCatalogue extends Container implements IGuiSelectable {
 
 	private final EntityPlayer player;
-	private final List<ITradeStation> stations = new ArrayList<ITradeStation>();
+	private final List<ITradeStation> stations = new ArrayList<>();
 
 	private TradeStationInfo currentTrade = null;
 
@@ -51,7 +51,7 @@ public class ContainerCatalogue extends Container implements IGuiSelectable {
 	private int currentFilter = 1;
 
 	private static final String[] FILTER_NAMES = new String[]{"all", "online", "offline"};
-	private static final List<Set<IPostalState>> FILTERS = new ArrayList<Set<IPostalState>>();
+	private static final List<Set<IPostalState>> FILTERS = new ArrayList<>();
 
 	static {
 		EnumSet<EnumStationState> all = EnumSet.allOf(EnumStationState.class);

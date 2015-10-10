@@ -39,7 +39,7 @@ public class GuiBeealyzer extends GuiAlyzer {
 	public GuiBeealyzer(EntityPlayer player, BeealyzerInventory inventory) {
 		super("rootBees", player, new ContainerAlyzer(inventory, player), inventory, "gui.beealyzer");
 
-		ArrayList<ItemStack> beeList = new ArrayList<ItemStack>();
+		ArrayList<ItemStack> beeList = new ArrayList<>();
 		((ItemBeeGE) ForestryItem.beeDroneGE.item()).addCreativeItems(beeList, false);
 		for (ItemStack beeStack : beeList) {
 			IAlleleBeeSpecies species = BeeGenome.getSpecies(beeStack);

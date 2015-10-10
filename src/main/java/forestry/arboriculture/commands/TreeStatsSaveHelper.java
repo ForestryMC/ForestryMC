@@ -38,7 +38,7 @@ public class TreeStatsSaveHelper implements IStatsSaveHelper {
 
 	@Override
 	public Collection<IAlleleSpecies> getSpecies() {
-		Collection<IAlleleSpecies> species = new ArrayList<IAlleleSpecies>();
+		Collection<IAlleleSpecies> species = new ArrayList<>();
 		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
 			if (allele instanceof IAlleleTreeSpecies) {
 				species.add((IAlleleTreeSpecies) allele);

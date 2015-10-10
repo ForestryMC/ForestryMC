@@ -78,7 +78,7 @@ public final class CommandSaveStats extends SubCommand {
 			player = CommandHelpers.getPlayer(sender, sender.getCommandSenderName());
 		}
 
-		Collection<String> statistics = new ArrayList<String>();
+		Collection<String> statistics = new ArrayList<>();
 
 		String date = DateFormat.getInstance().format(new Date());
 		statistics.add(StatCollector.translateToLocalFormatted(saveHelper.getUnlocalizedSaveStatsString(), player.getDisplayName(), date));

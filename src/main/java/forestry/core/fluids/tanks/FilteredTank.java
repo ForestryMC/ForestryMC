@@ -43,7 +43,7 @@ public class FilteredTank extends StandardTank {
 
 	public FilteredTank(int capacity, Collection<Fluid> filters, TileEntity tile) {
 		super(capacity, tile);
-		this.filters = new HashSet<Fluid>(filters);
+		this.filters = new HashSet<>(filters);
 	}
 
 	public void addFilter(Fluid filter) {

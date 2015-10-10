@@ -32,7 +32,7 @@ import forestry.api.genetics.ISpeciesRoot;
 public abstract class SpeciesRoot implements ISpeciesRoot {
 	
 	/* RESEARCH */
-	private final LinkedHashMap<ItemStack, Float> researchCatalysts = new LinkedHashMap<ItemStack, Float>();
+	private final LinkedHashMap<ItemStack, Float> researchCatalysts = new LinkedHashMap<>();
 	
 	@Override
 	public Map<ItemStack, Float> getResearchCatalysts() {
@@ -45,7 +45,7 @@ public abstract class SpeciesRoot implements ISpeciesRoot {
 	}
 
 	/* TEMPLATES */
-	protected final HashMap<String, IAllele[]> speciesTemplates = new HashMap<String, IAllele[]>();
+	protected final HashMap<String, IAllele[]> speciesTemplates = new HashMap<>();
 
 	@Override
 	public Map<String, IAllele[]> getGenomeTemplates() {
@@ -74,7 +74,7 @@ public abstract class SpeciesRoot implements ISpeciesRoot {
 	/* MUTATIONS */
 	@Override
 	public Collection<? extends IMutation> getCombinations(IAllele other) {
-		ArrayList<IMutation> combinations = new ArrayList<IMutation>();
+		ArrayList<IMutation> combinations = new ArrayList<>();
 		for (IMutation mutation : getMutations(false)) {
 			if (mutation.isPartner(other)) {
 				combinations.add(mutation);
@@ -86,7 +86,7 @@ public abstract class SpeciesRoot implements ISpeciesRoot {
 
 	@Override
 	public List<IMutation> getCombinations(IAlleleSpecies parentSpecies0, IAlleleSpecies parentSpecies1, boolean shuffle) {
-		List<IMutation> combinations = new ArrayList<IMutation>();
+		List<IMutation> combinations = new ArrayList<>();
 
 		String parentSpecies1UID = parentSpecies1.getUID();
 		for (IMutation mutation : getMutations(shuffle)) {
@@ -103,7 +103,7 @@ public abstract class SpeciesRoot implements ISpeciesRoot {
 
 	@Override
 	public Collection<? extends IMutation> getPaths(IAllele result, IChromosomeType chromosomeType) {
-		ArrayList<IMutation> paths = new ArrayList<IMutation>();
+		ArrayList<IMutation> paths = new ArrayList<>();
 		for (IMutation mutation : getMutations(false)) {
 			if (mutation.getTemplate()[chromosomeType.ordinal()] == result) {
 				paths.add(mutation);

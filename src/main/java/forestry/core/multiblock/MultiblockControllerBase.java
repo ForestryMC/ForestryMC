@@ -98,7 +98,7 @@ public abstract class MultiblockControllerBase implements ISidedInventory, IRest
 	protected MultiblockControllerBase(World world) {
 		// Multiblock stuff
 		worldObj = world;
-		connectedParts = new HashSet<IMultiblockPart>();
+		connectedParts = new HashSet<>();
 
 		referenceCoord = null;
 		assemblyState = AssemblyState.Disassembled;
@@ -468,7 +468,7 @@ public abstract class MultiblockControllerBase implements ISidedInventory, IRest
 			throw new IllegalArgumentException("The controller with the lowest minimum-coord value must consume the one with the higher coords");
 		}
 
-		Set<IMultiblockPart> partsToAcquire = new HashSet<IMultiblockPart>(other.connectedParts);
+		Set<IMultiblockPart> partsToAcquire = new HashSet<>(other.connectedParts);
 
 		// releases all blocks and references gently so they can be incorporated into another multiblock
 		other._onAssimilated(this);
@@ -805,7 +805,7 @@ public abstract class MultiblockControllerBase implements ISidedInventory, IRest
 	 * Checks all of the parts in the controller. If any are dead or do not exist in the world, they are removed.
 	 */
 	private void auditParts() {
-		HashSet<IMultiblockPart> deadParts = new HashSet<IMultiblockPart>();
+		HashSet<IMultiblockPart> deadParts = new HashSet<>();
 		for (IMultiblockPart part : connectedParts) {
 			if (part.isInvalid() || worldObj.getTileEntity(part.xCoord, part.yCoord, part.zCoord) != part) {
 				onDetachBlock(part);
@@ -838,7 +838,7 @@ public abstract class MultiblockControllerBase implements ISidedInventory, IRest
 		referenceCoord = null;
 		
 		// Reset visitations and find the minimum coordinate
-		Set<IMultiblockPart> deadParts = new HashSet<IMultiblockPart>();
+		Set<IMultiblockPart> deadParts = new HashSet<>();
 		CoordTriplet c;
 		IMultiblockPart referencePart = null;
 
@@ -885,7 +885,7 @@ public abstract class MultiblockControllerBase implements ISidedInventory, IRest
 
 		// Now visit all connected parts, breadth-first, starting from reference coord's part
 		IMultiblockPart part;
-		LinkedList<IMultiblockPart> partsToCheck = new LinkedList<IMultiblockPart>();
+		LinkedList<IMultiblockPart> partsToCheck = new LinkedList<>();
 		int visitedParts = 0;
 
 		partsToCheck.add(referencePart);
@@ -910,7 +910,7 @@ public abstract class MultiblockControllerBase implements ISidedInventory, IRest
 		}
 		
 		// Finally, remove all parts that remain disconnected.
-		Set<IMultiblockPart> removedParts = new HashSet<IMultiblockPart>();
+		Set<IMultiblockPart> removedParts = new HashSet<>();
 		for (IMultiblockPart orphanCandidate : connectedParts) {
 			if (!orphanCandidate.isVisited()) {
 				deadParts.add(orphanCandidate);
@@ -944,7 +944,7 @@ public abstract class MultiblockControllerBase implements ISidedInventory, IRest
 	 */
 	public Set<IMultiblockPart> detachAllBlocks() {
 		if (worldObj == null) {
-			return new HashSet<IMultiblockPart>();
+			return new HashSet<>();
 		}
 		
 		IChunkProvider chunkProvider = worldObj.getChunkProvider();
@@ -955,7 +955,7 @@ public abstract class MultiblockControllerBase implements ISidedInventory, IRest
 		}
 
 		Set<IMultiblockPart> detachedParts = connectedParts;
-		connectedParts = new HashSet<IMultiblockPart>();
+		connectedParts = new HashSet<>();
 		return detachedParts;
 	}
 

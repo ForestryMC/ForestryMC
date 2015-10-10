@@ -86,7 +86,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 
 	public static class RecipeManager implements ICraftingProvider {
 
-		public static final ArrayList<TileBottler.Recipe> recipes = new ArrayList<TileBottler.Recipe>();
+		public static final ArrayList<TileBottler.Recipe> recipes = new ArrayList<>();
 
 		/**
 		 * @return Recipe matching both res and empty, null if none
@@ -126,7 +126,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 
 		@Override
 		public Map<Object[], Object[]> getRecipes() {
-			HashMap<Object[], Object[]> recipeList = new HashMap<Object[], Object[]>();
+			HashMap<Object[], Object[]> recipeList = new HashMap<>();
 
 			for (Recipe recipe : recipes) {
 				recipeList.put(new Object[]{recipe.input, recipe.can}, new Object[]{recipe.bottled});
@@ -359,7 +359,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 	@Optional.Method(modid = "BuildCraftAPI|statements")
 	@Override
 	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
-		LinkedList<ITriggerExternal> res = new LinkedList<ITriggerExternal>();
+		LinkedList<ITriggerExternal> res = new LinkedList<>();
 		res.add(FactoryTriggers.lowResource25);
 		res.add(FactoryTriggers.lowResource10);
 		return res;

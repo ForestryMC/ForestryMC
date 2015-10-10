@@ -76,7 +76,7 @@ public class ItemResearchNote extends ItemForestry {
 		}
 
 		public ArrayList<String> getTooltip(NBTTagCompound compound) {
-			ArrayList<String> tooltips = new ArrayList<String>();
+			ArrayList<String> tooltips = new ArrayList<>();
 
 			if (compound == null || this == NONE) {
 				return tooltips;

@@ -74,7 +74,7 @@ public class FarmLogicPeat extends FarmLogicWatered {
 	public Collection<ICrop> harvest(int x, int y, int z, FarmDirection direction, int extent) {
 		World world = getWorld();
 
-		Stack<ICrop> crops = new Stack<ICrop>();
+		Stack<ICrop> crops = new Stack<>();
 		for (int i = 0; i < extent; i++) {
 			Vect position = translateWithOffset(x, y, z, direction, i);
 			ItemStack occupant = VectUtil.getAsItemStack(world, position);

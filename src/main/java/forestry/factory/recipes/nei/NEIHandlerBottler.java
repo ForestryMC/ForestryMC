@@ -35,7 +35,7 @@ import codechicken.nei.PositionedStack;
 
 public class NEIHandlerBottler extends RecipeHandlerBase {
 
-	private static final List<TileBottler.Recipe> recipes = new ArrayList<TileBottler.Recipe>();
+	private static final List<TileBottler.Recipe> recipes = new ArrayList<>();
 
 	@Override
 	public void prepare() {

@@ -37,10 +37,10 @@ public class GameMode implements IGameMode {
 	private String identifier = "EASY";
 	private final String category;
 
-	private final Map<String, Boolean> booleanSettings = new HashMap<String, Boolean>();
-	private final Map<String, Integer> integerSettings = new HashMap<String, Integer>();
-	private final Map<String, Float> floatSettings = new HashMap<String, Float>();
-	private final Map<String, ItemStack> stackSettings = new HashMap<String, ItemStack>();
+	private final Map<String, Boolean> booleanSettings = new HashMap<>();
+	private final Map<String, Integer> integerSettings = new HashMap<>();
+	private final Map<String, Float> floatSettings = new HashMap<>();
+	private final Map<String, ItemStack> stackSettings = new HashMap<>();
 
 	private static final float ENERGY_DEMAND_MODIFIER = 1.0f;
 	private static final float FUEL_MODIFIER = 1.0f;

@@ -95,7 +95,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 		setHints(Config.hints.get("carpenter"));
 		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, RecipeManager.recipeFluids);
 
-		craftingInventory = new TileInventoryAdapter<TileCarpenter>(this, 10, "CraftItems");
+		craftingInventory = new TileInventoryAdapter<>(this, 10, "CraftItems");
 		craftPreviewInventory = new InventoryCraftResult();
 		setInternalInventory(new CarpenterInventoryAdapter(this));
 
@@ -507,9 +507,9 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 
 	public static class RecipeManager implements ICarpenterManager {
 
-		public static final ArrayList<TileCarpenter.Recipe> recipes = new ArrayList<TileCarpenter.Recipe>();
-		private static final Set<Fluid> recipeFluids = new HashSet<Fluid>();
-		private static final List<ItemStack> boxes = new ArrayList<ItemStack>();
+		public static final ArrayList<TileCarpenter.Recipe> recipes = new ArrayList<>();
+		private static final Set<Fluid> recipeFluids = new HashSet<>();
+		private static final List<ItemStack> boxes = new ArrayList<>();
 
 		public void addCrating(ItemStack itemStack) {
 			ItemStack uncrated = ((forestry.core.items.ItemCrated) itemStack.getItem()).getContained();
@@ -580,7 +580,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 		@Override
 		public Map<Object[], Object[]> getRecipes() {
 
-			HashMap<Object[], Object[]> recipeList = new HashMap<Object[], Object[]>();
+			HashMap<Object[], Object[]> recipeList = new HashMap<>();
 
 			for (Recipe recipe : recipes) {
 				recipeList.put(recipe.internal.getIngredients(), new Object[]{recipe.getCraftingResult()});

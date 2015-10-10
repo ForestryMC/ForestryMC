@@ -53,7 +53,7 @@ public class BeekeepingMode implements IBeekeepingMode {
 
 	@Override
 	public ArrayList<String> getDescription() {
-		ArrayList<String> ret = new ArrayList<String>();
+		ArrayList<String> ret = new ArrayList<>();
 		ret.add("beemode." + name.toLowerCase(Locale.ENGLISH) + ".desc");
 		return ret;
 	}

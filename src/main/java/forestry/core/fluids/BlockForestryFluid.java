@@ -92,7 +92,7 @@ public class BlockForestryFluid extends BlockFluidClassic {
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister iconRegister) {
 
-		this.icons = new ArrayList<IIcon>(2);
+		this.icons = new ArrayList<>(2);
 
 		String still = "liquid/" + fluidName + "_still";
 		this.icons.add(TextureManager.getInstance().registerTex(iconRegister, still));

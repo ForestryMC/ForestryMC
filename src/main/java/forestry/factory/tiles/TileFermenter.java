@@ -108,9 +108,9 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 
 	public static class RecipeManager implements IFermenterManager {
 
-		public static final ArrayList<TileFermenter.Recipe> recipes = new ArrayList<TileFermenter.Recipe>();
-		public static final HashSet<Fluid> recipeFluidInputs = new HashSet<Fluid>();
-		public static final HashSet<Fluid> recipeFluidOutputs = new HashSet<Fluid>();
+		public static final ArrayList<TileFermenter.Recipe> recipes = new ArrayList<>();
+		public static final HashSet<Fluid> recipeFluidInputs = new HashSet<>();
+		public static final HashSet<Fluid> recipeFluidOutputs = new HashSet<>();
 
 		@Override
 		public void addRecipe(ItemStack resource, int fermentationValue, float modifier, FluidStack output, FluidStack liquid) {
@@ -152,7 +152,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 
 		@Override
 		public Map<Object[], Object[]> getRecipes() {
-			HashMap<Object[], Object[]> recipeList = new HashMap<Object[], Object[]>();
+			HashMap<Object[], Object[]> recipeList = new HashMap<>();
 
 			for (Recipe recipe : recipes) {
 				recipeList.put(new Object[]{recipe.resource, recipe.liquid}, new Object[]{recipe.output});
@@ -541,7 +541,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 	@Optional.Method(modid = "BuildCraftAPI|statements")
 	@Override
 	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
-		LinkedList<ITriggerExternal> res = new LinkedList<ITriggerExternal>();
+		LinkedList<ITriggerExternal> res = new LinkedList<>();
 		res.add(FactoryTriggers.lowResource25);
 		res.add(FactoryTriggers.lowResource10);
 		return res;

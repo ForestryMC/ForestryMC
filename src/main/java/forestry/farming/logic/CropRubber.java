@@ -30,7 +30,7 @@ public class CropRubber extends CropBlock {
 
 	@Override
 	protected Collection<ItemStack> harvestBlock(Vect pos) {
-		Collection<ItemStack> harvested = new ArrayList<ItemStack>();
+		Collection<ItemStack> harvested = new ArrayList<>();
 		harvested.add(PluginIC2.resin.copy());
 		Proxies.common.addBlockDestroyEffects(world, pos.x, pos.y, pos.z, block, 0);
 		world.setBlock(pos.x, pos.y, pos.z, block, meta + 6, Constants.FLAG_BLOCK_SYNCH);

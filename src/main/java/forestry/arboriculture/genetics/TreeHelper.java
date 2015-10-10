@@ -63,9 +63,9 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 	public static final String UID = "rootTrees";
 	private static int treeSpeciesCount = -1;
 	private static ITreekeepingMode activeTreekeepingMode;
-	public static final ArrayList<ITree> treeTemplates = new ArrayList<ITree>();
+	public static final ArrayList<ITree> treeTemplates = new ArrayList<>();
 
-	private final ArrayList<ITreekeepingMode> treekeepingModes = new ArrayList<ITreekeepingMode>();
+	private final ArrayList<ITreekeepingMode> treekeepingModes = new ArrayList<>();
 
 	public TreeHelper() {
 		setResearchSuitability(new ItemStack(Blocks.sapling, 1, OreDictionary.WILDCARD_VALUE), 1.0f);
@@ -343,7 +343,7 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 	}
 
 	/* MUTATIONS */
-	private static final List<ITreeMutation> treeMutations = new ArrayList<ITreeMutation>();
+	private static final List<ITreeMutation> treeMutations = new ArrayList<>();
 
 	@Override
 	public List<ITreeMutation> getMutations(boolean shuffle) {
@@ -369,7 +369,7 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 	}
 
 	/* ILEAFTICKHANDLER */
-	private final LinkedList<ILeafTickHandler> leafTickHandlers = new LinkedList<ILeafTickHandler>();
+	private final LinkedList<ILeafTickHandler> leafTickHandlers = new LinkedList<>();
 
 	@Override
 	public void registerLeafTickHandler(ILeafTickHandler handler) {

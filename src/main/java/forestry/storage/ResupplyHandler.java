@@ -31,7 +31,7 @@ import forestry.storage.items.ItemBackpack;
 public class ResupplyHandler implements IResupplyHandler {
 
 	private static List<ItemStack> backpacks(InventoryPlayer playerInventory) {
-		List<ItemStack> backpacks = new ArrayList<ItemStack>();
+		List<ItemStack> backpacks = new ArrayList<>();
 		for (ItemStack itemStack : playerInventory.mainInventory) {
 			if (itemStack != null && itemStack.stackSize > 0 && (itemStack.getItem() instanceof ItemBackpack)) {
 				backpacks.add(itemStack);

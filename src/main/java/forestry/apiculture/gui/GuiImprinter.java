@@ -34,7 +34,7 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter, ImprinterInven
 	private int startX;
 	private int startY;
 
-	private final Map<String, ItemStack> iconStacks = new HashMap<String, ItemStack>();
+	private final Map<String, ItemStack> iconStacks = new HashMap<>();
 
 	public GuiImprinter(InventoryPlayer inventoryplayer, ImprinterInventory inventory) {
 		super(Constants.TEXTURE_PATH_GUI + "/imprinter.png", new ContainerImprinter(inventoryplayer, inventory), inventory);
@@ -42,7 +42,7 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter, ImprinterInven
 		xSize = 176;
 		ySize = 185;
 
-		List<ItemStack> beeList = new ArrayList<ItemStack>();
+		List<ItemStack> beeList = new ArrayList<>();
 		((ItemBeeGE) ForestryItem.beeDroneGE.item()).addCreativeItems(beeList, false);
 		for (ItemStack beeStack : beeList) {
 			IAlleleBeeSpecies species = BeeGenome.getSpecies(beeStack);

@@ -36,8 +36,8 @@ public abstract class Mutation implements IMutationCustom {
 
 	private final IAllele[] template;
 
-	private final List<IMutationCondition> mutationConditions = new ArrayList<IMutationCondition>();
-	private final List<String> specialConditions = new ArrayList<String>();
+	private final List<IMutationCondition> mutationConditions = new ArrayList<>();
+	private final List<String> specialConditions = new ArrayList<>();
 
 	private boolean isSecret = false;
 

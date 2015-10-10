@@ -175,8 +175,8 @@ public class PluginApiculture extends ForestryPlugin {
 	private static MachineDefinition definitionBeehouse;
 	private static MachineDefinition definitionAnalyzer;
 
-	private final Map<String, String[]> defaultAcceptedFlowers = new HashMap<String, String[]>();
-	private final Map<String, String[]> defaultPlantableFlowers = new HashMap<String, String[]>();
+	private final Map<String, String[]> defaultAcceptedFlowers = new HashMap<>();
+	private final Map<String, String[]> defaultPlantableFlowers = new HashMap<>();
 
 	@Override
 	@SuppressWarnings({"unchecked"})
@@ -188,7 +188,7 @@ public class PluginApiculture extends ForestryPlugin {
 
 		FlowerManager.flowerRegistry = new FlowerRegistry();
 
-		BeeManager.villageBees = new ArrayList[]{new ArrayList<IBeeGenome>(), new ArrayList<IBeeGenome>()};
+		BeeManager.villageBees = new ArrayList[]{new ArrayList<>(), new ArrayList<>()};
 
 		BeeManager.beeFactory = new BeeFactory();
 		BeeManager.beeMutationFactory = new BeeMutationFactory();
@@ -436,8 +436,8 @@ public class PluginApiculture extends ForestryPlugin {
 
 		for (String flowerType : FlowerManager.flowerRegistry.getFlowerTypes()) {
 			Set<IFlower> flowers = FlowerManager.flowerRegistry.getAcceptableFlowers(flowerType);
-			List<String> acceptedFlowerNames = new ArrayList<String>();
-			List<String> plantableFlowerNames = new ArrayList<String>();
+			List<String> acceptedFlowerNames = new ArrayList<>();
+			List<String> plantableFlowerNames = new ArrayList<>();
 			if (flowers != null) {
 				for (IFlower flower : flowers) {
 					String name = GameData.getBlockRegistry().getNameForObject(flower.getBlock());
@@ -881,7 +881,7 @@ public class PluginApiculture extends ForestryPlugin {
 	}
 
 	private static IRecipe[] createAlyzerRecipes(Block block, int meta) {
-		ArrayList<IRecipe> recipes = new ArrayList<IRecipe>();
+		ArrayList<IRecipe> recipes = new ArrayList<>();
 		recipes.add(ShapedRecipeCustom.createShapedRecipe(new ItemStack(block, 1, meta), "XTX", " Y ", "X X", 'Y', ForestryItem.sturdyCasing, 'T', ForestryItem.beealyzer, 'X', "ingotBronze"));
 		recipes.add(ShapedRecipeCustom.createShapedRecipe(new ItemStack(block, 1, meta), "XTX", " Y ", "X X", 'Y', ForestryItem.sturdyCasing, 'T', ForestryItem.treealyzer, 'X', "ingotBronze"));
 		return recipes.toArray(new IRecipe[recipes.size()]);

@@ -39,13 +39,13 @@ public class RecipeMemory implements INBTTagable, IStreamable {
 	public static final int capacity = 9;
 
 	private static final Container DUMMY_CONTAINER = new ContainerDummy();
-	private static final List<Class<? extends Item>> memoryBlacklist = new ArrayList<Class<? extends Item>>();
+	private static final List<Class<? extends Item>> memoryBlacklist = new ArrayList<>();
 
 	static {
 		memoryBlacklist.add(ItemMap.class); // almost every ItemMap is unique
 	}
 
-	private LinkedList<Recipe> recipes = new LinkedList<Recipe>();
+	private LinkedList<Recipe> recipes = new LinkedList<>();
 	private long lastUpdate;
 
 	private static boolean isValid(World world, Recipe recipe) {
@@ -61,7 +61,7 @@ public class RecipeMemory implements INBTTagable, IStreamable {
 	}
 
 	public void validate(World world) {
-		LinkedList<Recipe> validRecipes = new LinkedList<Recipe>();
+		LinkedList<Recipe> validRecipes = new LinkedList<>();
 		for (Recipe recipe : recipes) {
 			if (isValid(world, recipe)) {
 				validRecipes.add(recipe);
@@ -165,7 +165,7 @@ public class RecipeMemory implements INBTTagable, IStreamable {
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		recipes = new LinkedList<Recipe>();
+		recipes = new LinkedList<>();
 		if (!nbttagcompound.hasKey("RecipeMemory")) {
 			return;
 		}

@@ -107,7 +107,7 @@ public class ItemHoneycomb extends ItemForestryMultiPass {
 	}
 
 	private int getRandomCombType(Random random, boolean includeSecret) {
-		List<Integer> validCombs = new ArrayList<Integer>(combs.length);
+		List<Integer> validCombs = new ArrayList<>(combs.length);
 		for (int i = 0; i < combs.length; i++) {
 			if (!combs[i].isSecret || includeSecret) {
 				validCombs.add(i);

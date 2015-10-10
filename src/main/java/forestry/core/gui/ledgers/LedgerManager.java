@@ -28,8 +28,8 @@ import forestry.core.proxy.Proxies;
 
 public class LedgerManager {
 
-	private final List<Ledger> ledgers = new ArrayList<Ledger>();
-	private final List<ErrorLedger> errorLedgers = new ArrayList<ErrorLedger>();
+	private final List<Ledger> ledgers = new ArrayList<>();
+	private final List<ErrorLedger> errorLedgers = new ArrayList<>();
 
 	private IErrorSource errorSource;
 

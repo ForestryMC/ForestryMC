@@ -20,16 +20,16 @@ import forestry.api.arboriculture.EnumWoodType;
 import forestry.api.arboriculture.IWoodItemAccess;
 
 public class WoodItemAccess implements IWoodItemAccess {
-	private static final EnumMap<EnumWoodType, ItemStack> logs = new EnumMap<EnumWoodType, ItemStack>(EnumWoodType.class);
-	private static final EnumMap<EnumWoodType, ItemStack> logsFireproof = new EnumMap<EnumWoodType, ItemStack>(EnumWoodType.class);
-	private static final EnumMap<EnumWoodType, ItemStack> planks = new EnumMap<EnumWoodType, ItemStack>(EnumWoodType.class);
-	private static final EnumMap<EnumWoodType, ItemStack> planksFireproof = new EnumMap<EnumWoodType, ItemStack>(EnumWoodType.class);
-	private static final EnumMap<EnumWoodType, ItemStack> slabs = new EnumMap<EnumWoodType, ItemStack>(EnumWoodType.class);
-	private static final EnumMap<EnumWoodType, ItemStack> slabsFireproof = new EnumMap<EnumWoodType, ItemStack>(EnumWoodType.class);
-	private static final EnumMap<EnumWoodType, ItemStack> fences = new EnumMap<EnumWoodType, ItemStack>(EnumWoodType.class);
-	private static final EnumMap<EnumWoodType, ItemStack> fencesFireproof = new EnumMap<EnumWoodType, ItemStack>(EnumWoodType.class);
-	private static final EnumMap<EnumWoodType, ItemStack> stairs = new EnumMap<EnumWoodType, ItemStack>(EnumWoodType.class);
-	private static final EnumMap<EnumWoodType, ItemStack> stairsFireproof = new EnumMap<EnumWoodType, ItemStack>(EnumWoodType.class);
+	private static final EnumMap<EnumWoodType, ItemStack> logs = new EnumMap<>(EnumWoodType.class);
+	private static final EnumMap<EnumWoodType, ItemStack> logsFireproof = new EnumMap<>(EnumWoodType.class);
+	private static final EnumMap<EnumWoodType, ItemStack> planks = new EnumMap<>(EnumWoodType.class);
+	private static final EnumMap<EnumWoodType, ItemStack> planksFireproof = new EnumMap<>(EnumWoodType.class);
+	private static final EnumMap<EnumWoodType, ItemStack> slabs = new EnumMap<>(EnumWoodType.class);
+	private static final EnumMap<EnumWoodType, ItemStack> slabsFireproof = new EnumMap<>(EnumWoodType.class);
+	private static final EnumMap<EnumWoodType, ItemStack> fences = new EnumMap<>(EnumWoodType.class);
+	private static final EnumMap<EnumWoodType, ItemStack> fencesFireproof = new EnumMap<>(EnumWoodType.class);
+	private static final EnumMap<EnumWoodType, ItemStack> stairs = new EnumMap<>(EnumWoodType.class);
+	private static final EnumMap<EnumWoodType, ItemStack> stairsFireproof = new EnumMap<>(EnumWoodType.class);
 
 	private static ItemStack getStack(EnumWoodType woodType, Block block) {
 		NBTTagCompound woodNBT = new NBTTagCompound();

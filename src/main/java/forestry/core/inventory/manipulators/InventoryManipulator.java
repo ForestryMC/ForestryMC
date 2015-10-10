@@ -62,8 +62,8 @@ public class InventoryManipulator {
 			return null;
 		}
 		stack = stack.copy();
-		List<IInvSlot> filledSlots = new ArrayList<IInvSlot>(inv.getSizeInventory());
-		List<IInvSlot> emptySlots = new ArrayList<IInvSlot>(inv.getSizeInventory());
+		List<IInvSlot> filledSlots = new ArrayList<>(inv.getSizeInventory());
+		List<IInvSlot> emptySlots = new ArrayList<>(inv.getSizeInventory());
 		for (IInvSlot slot : InventoryIterator.getIterable(inv)) {
 			if (slot.canPutStackInSlot(stack)) {
 				if (slot.getStackInSlot() == null) {

@@ -34,7 +34,7 @@ import forestry.api.core.IErrorStateRegistry;
 public class ErrorStateRegistry implements IErrorStateRegistry {
 
 	private static final BiMap<Short, IErrorState> states = HashBiMap.create();
-	private static final Map<String, IErrorState> stateNames = new HashMap<String, IErrorState>();
+	private static final Map<String, IErrorState> stateNames = new HashMap<>();
 	private static final Set<IErrorState> stateView = Collections.unmodifiableSet(states.inverse().keySet());
 
 	@Override

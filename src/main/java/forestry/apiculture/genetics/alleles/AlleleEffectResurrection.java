@@ -49,7 +49,7 @@ public class AlleleEffectResurrection extends AlleleEffectThrottled {
 	}
 
 	public static List<Resurrectable> getReanimationList() {
-		ArrayList<Resurrectable> list = new ArrayList<Resurrectable>();
+		ArrayList<Resurrectable> list = new ArrayList<>();
 		list.add(new Resurrectable(new ItemStack(Items.bone), EntitySkeleton.class));
 		list.add(new Resurrectable(new ItemStack(Items.arrow), EntitySkeleton.class));
 		list.add(new Resurrectable(new ItemStack(Items.rotten_flesh), EntityZombie.class));
@@ -58,7 +58,7 @@ public class AlleleEffectResurrection extends AlleleEffectThrottled {
 	}
 
 	public static List<Resurrectable> getResurrectionList() {
-		ArrayList<Resurrectable> list = new ArrayList<Resurrectable>();
+		ArrayList<Resurrectable> list = new ArrayList<>();
 		list.add(new Resurrectable(new ItemStack(Items.gunpowder), EntityCreeper.class));
 		list.add(new Resurrectable(new ItemStack(Items.ender_pearl), EntityEnderman.class));
 		list.add(new Resurrectable(new ItemStack(Items.string), EntitySpider.class));

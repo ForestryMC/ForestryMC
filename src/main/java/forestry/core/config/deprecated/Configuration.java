@@ -25,7 +25,7 @@ import forestry.core.proxy.Proxies;
 @Deprecated
 public class Configuration {
 
-	private final TreeMap<String, ArrayList<Property>> categorized = new TreeMap<String, ArrayList<Property>>();
+	private final TreeMap<String, ArrayList<Property>> categorized = new TreeMap<>();
 
 	public Property get(String key, String category, boolean defaultVal) {
 

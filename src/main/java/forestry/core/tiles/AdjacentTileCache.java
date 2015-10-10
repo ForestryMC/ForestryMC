@@ -32,7 +32,7 @@ public final class AdjacentTileCache {
 	private final TileEntity[] cache = new TileEntity[6];
 	private final int[] delay = new int[6];
 	private final TileEntity source;
-	private final Set<ICacheListener> listeners = new LinkedHashSet<ICacheListener>();
+	private final Set<ICacheListener> listeners = new LinkedHashSet<>();
 
 	public interface ICacheListener {
 

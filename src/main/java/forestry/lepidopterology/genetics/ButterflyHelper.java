@@ -183,7 +183,7 @@ public class ButterflyHelper extends SpeciesRoot implements IButterflyRoot {
 	}
 
 	/* TEMPLATES */
-	private static final ArrayList<IButterfly> butterflyTemplates = new ArrayList<IButterfly>();
+	private static final ArrayList<IButterfly> butterflyTemplates = new ArrayList<>();
 
 	@Override
 	public ArrayList<IButterfly> getIndividualTemplates() {
@@ -202,7 +202,7 @@ public class ButterflyHelper extends SpeciesRoot implements IButterflyRoot {
 	}
 
 	/* MUTATIONS */
-	private static final ArrayList<IButterflyMutation> butterflyMutations = new ArrayList<IButterflyMutation>();
+	private static final ArrayList<IButterflyMutation> butterflyMutations = new ArrayList<>();
 
 	@Override
 	public void registerMutation(IMutation mutation) {

@@ -23,7 +23,7 @@ import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorState;
 
 public class ErrorLogic implements IErrorLogic {
-	private final Set<IErrorState> errorStates = new HashSet<IErrorState>();
+	private final Set<IErrorState> errorStates = new HashSet<>();
 
 	@Override
 	public final boolean setCondition(boolean condition, IErrorState errorState) {

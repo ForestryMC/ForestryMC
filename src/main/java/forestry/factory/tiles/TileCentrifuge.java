@@ -75,7 +75,7 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 	/* MEMBER */
 	private ICentrifugeRecipe currentRecipe;
 
-	private final Stack<ItemStack> pendingProducts = new Stack<ItemStack>();
+	private final Stack<ItemStack> pendingProducts = new Stack<>();
 
 	public TileCentrifuge() {
 		super(800, Constants.MACHINE_MAX_ENERGY, 4200);
@@ -223,7 +223,7 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 	@Optional.Method(modid = "BuildCraftAPI|statements")
 	@Override
 	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
-		LinkedList<ITriggerExternal> res = new LinkedList<ITriggerExternal>();
+		LinkedList<ITriggerExternal> res = new LinkedList<>();
 		res.add(FactoryTriggers.lowResource25);
 		res.add(FactoryTriggers.lowResource10);
 		return res;
@@ -320,7 +320,7 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 
 		@Override
 		public Collection<ItemStack> getProducts(Random random) {
-			List<ItemStack> products = new ArrayList<ItemStack>();
+			List<ItemStack> products = new ArrayList<>();
 
 			for (Map.Entry<ItemStack, Float> entry : this.outputs.entrySet()) {
 				float probability = entry.getValue();
@@ -343,7 +343,7 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 
 	public static class RecipeManager implements ICentrifugeManager {
 
-		public static final List<ICentrifugeRecipe> recipes = new ArrayList<ICentrifugeRecipe>();
+		public static final List<ICentrifugeRecipe> recipes = new ArrayList<>();
 
 		@Override
 		public void addRecipe(ICentrifugeRecipe recipe) {
@@ -372,7 +372,7 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 
 		@Override
 		public Map<Object[], Object[]> getRecipes() {
-			HashMap<Object[], Object[]> recipeList = new HashMap<Object[], Object[]>();
+			HashMap<Object[], Object[]> recipeList = new HashMap<>();
 
 			for (ICentrifugeRecipe recipe : recipes) {
 				Set<ItemStack> productsKeys = recipe.getAllProducts().keySet();

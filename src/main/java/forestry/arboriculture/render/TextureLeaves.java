@@ -21,7 +21,7 @@ import forestry.api.arboriculture.EnumLeafType;
 import forestry.core.render.TextureManager;
 
 public class TextureLeaves {
-	private static final Map<EnumLeafType, TextureLeaves> leafTextures = new EnumMap<EnumLeafType, TextureLeaves>(EnumLeafType.class);
+	private static final Map<EnumLeafType, TextureLeaves> leafTextures = new EnumMap<>(EnumLeafType.class);
 
 	static {
 		for (EnumLeafType leafType : EnumLeafType.values()) {

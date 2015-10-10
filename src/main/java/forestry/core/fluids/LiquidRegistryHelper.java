@@ -30,7 +30,7 @@ import static forestry.core.items.ItemLiquidContainer.EnumContainerType;
 
 public class LiquidRegistryHelper {
 
-	private static final EnumMap<EnumContainerType, ForestryItem> emptyContainers = new EnumMap<EnumContainerType, ForestryItem>(EnumContainerType.class);
+	private static final EnumMap<EnumContainerType, ForestryItem> emptyContainers = new EnumMap<>(EnumContainerType.class);
 
 	static {
 		emptyContainers.put(EnumContainerType.CAN, ForestryItem.canEmpty);

@@ -45,8 +45,8 @@ import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.ItemStackUtil;
 
 public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpeciesCustom {
-	private final Map<ItemStack, Float> productChances = new HashMap<ItemStack, Float>();
-	private final Map<ItemStack, Float> specialtyChances = new HashMap<ItemStack, Float>();
+	private final Map<ItemStack, Float> productChances = new HashMap<>();
+	private final Map<ItemStack, Float> specialtyChances = new HashMap<>();
 
 	private final int primaryColour;
 	private final int secondaryColour;
@@ -137,7 +137,7 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 
 	@Override
 	public ItemStack[] getResearchBounty(World world, GameProfile researcher, IIndividual individual, int bountyLevel) {
-		ArrayList<ItemStack> bounty = new ArrayList<ItemStack>();
+		ArrayList<ItemStack> bounty = new ArrayList<>();
 		Collections.addAll(bounty, super.getResearchBounty(world, researcher, individual, bountyLevel));
 
 		if (bountyLevel > 10) {

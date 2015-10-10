@@ -83,7 +83,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 
 	public static class RecipeManager implements IMoistenerManager {
 
-		public static final ArrayList<TileMoistener.Recipe> recipes = new ArrayList<TileMoistener.Recipe>();
+		public static final ArrayList<TileMoistener.Recipe> recipes = new ArrayList<>();
 
 		@Override
 		public void addRecipe(ItemStack resource, ItemStack product, int timePerItem) {
@@ -115,7 +115,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 
 		@Override
 		public Map<Object[], Object[]> getRecipes() {
-			HashMap<Object[], Object[]> recipeList = new HashMap<Object[], Object[]>();
+			HashMap<Object[], Object[]> recipeList = new HashMap<>();
 
 			for (Recipe recipe : recipes) {
 				recipeList.put(new ItemStack[]{recipe.resource}, new ItemStack[]{recipe.product});
@@ -434,7 +434,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 	}
 
 	private void rotateReservoir() {
-		ArrayList<Integer> slotsToShift = new ArrayList<Integer>();
+		ArrayList<Integer> slotsToShift = new ArrayList<>();
 
 		for (int i = SLOT_RESERVOIR_1; i < SLOT_RESERVOIR_1 + SLOT_RESERVOIR_COUNT; i++) {
 			if (getStackInSlot(i) == null) {

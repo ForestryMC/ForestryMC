@@ -67,7 +67,7 @@ public class FarmLogicInfernal extends FarmLogicHomogeneous {
 	public Collection<ICrop> harvest(int x, int y, int z, FarmDirection direction, int extent) {
 		World world = getWorld();
 
-		Stack<ICrop> crops = new Stack<ICrop>();
+		Stack<ICrop> crops = new Stack<>();
 		for (int i = 0; i < extent; i++) {
 			Vect position = translateWithOffset(x, y + 1, z, direction, i);
 			for (IFarmable farmable : germlings) {

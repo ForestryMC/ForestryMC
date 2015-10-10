@@ -45,12 +45,13 @@ public class FlowerProvider implements IFlowerProvider {
 
 		EnumSet<EnumPlantType> plantTypes = pollinatable.getPlantType();
 
-		if (flowerType.equals(FlowerManager.FlowerTypeNether)) {
-			return plantTypes.contains(EnumPlantType.Nether);
-		} else if (flowerType.equals(FlowerManager.FlowerTypeCacti)) {
-			return plantTypes.contains(EnumPlantType.Desert);
-		} else {
-			return plantTypes.size() > 1 || !plantTypes.contains(EnumPlantType.Nether);
+		switch (flowerType) {
+			case FlowerManager.FlowerTypeNether:
+				return plantTypes.contains(EnumPlantType.Nether);
+			case FlowerManager.FlowerTypeCacti:
+				return plantTypes.contains(EnumPlantType.Desert);
+			default:
+				return plantTypes.size() > 1 || !plantTypes.contains(EnumPlantType.Nether);
 		}
 	}
 

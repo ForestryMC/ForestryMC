@@ -58,7 +58,7 @@ public class BlockMushroom extends BlockSapling implements IItemTyped {
 	// / DROPS
 	@Override
 	public ArrayList<ItemStack> getDrops(World world, int X, int Y, int Z, int metadata, int fortune) {
-		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+		ArrayList<ItemStack> ret = new ArrayList<>();
 
 		MushroomType type = getTypeFromMeta(metadata);
 

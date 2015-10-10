@@ -82,7 +82,7 @@ public class TileFabricator extends TilePowered implements ICrafter, ILiquidTank
 
 	public TileFabricator() {
 		super(1100, 3300, 200);
-		craftingInventory = new TileInventoryAdapter<TileFabricator>(this, SLOT_CRAFTING_COUNT, "CraftItems");
+		craftingInventory = new TileInventoryAdapter<>(this, SLOT_CRAFTING_COUNT, "CraftItems");
 		setInternalInventory(new FabricatorInventoryAdapter(this));
 		moltenTank = new FilteredTank(2 * Constants.BUCKET_VOLUME, Fluids.GLASS.getFluid());
 		moltenTank.tankMode = StandardTank.TankMode.INTERNAL;
@@ -475,8 +475,8 @@ public class TileFabricator extends TilePowered implements ICrafter, ILiquidTank
 
 	public static class RecipeManager implements IFabricatorManager {
 
-		public static final List<IFabricatorRecipe> recipes = new ArrayList<IFabricatorRecipe>();
-		public static final List<Smelting> smeltings = new ArrayList<Smelting>();
+		public static final List<IFabricatorRecipe> recipes = new ArrayList<>();
+		public static final List<Smelting> smeltings = new ArrayList<>();
 
 		@Override
 		public void addRecipe(IFabricatorRecipe recipe) {
@@ -556,7 +556,7 @@ public class TileFabricator extends TilePowered implements ICrafter, ILiquidTank
 
 		@Override
 		public Map<Object[], Object[]> getRecipes() {
-			HashMap<Object[], Object[]> recipeList = new HashMap<Object[], Object[]>();
+			HashMap<Object[], Object[]> recipeList = new HashMap<>();
 
 			for (IFabricatorRecipe recipe : recipes) {
 				recipeList.put(recipe.getIngredients(), new Object[]{recipe.getRecipeOutput()});

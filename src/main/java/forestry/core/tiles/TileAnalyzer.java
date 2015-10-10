@@ -244,7 +244,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 			return true;
 		}
 
-		Set<IErrorState> errors = new HashSet<IErrorState>(getErrorLogic().getErrorStates());
+		Set<IErrorState> errors = new HashSet<>(getErrorLogic().getErrorStates());
 		errors.remove(EnumErrorCode.NOPOWER);
 		return errors.size() == 0;
 	}

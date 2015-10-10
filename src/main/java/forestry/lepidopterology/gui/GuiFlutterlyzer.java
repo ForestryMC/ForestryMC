@@ -38,7 +38,7 @@ public class GuiFlutterlyzer extends GuiAlyzer {
 	public GuiFlutterlyzer(EntityPlayer player, FlutterlyzerInventory inventory) {
 		super("rootButterflies", player, new ContainerAlyzer(inventory, player), inventory, "gui.flutterlyzer");
 
-		ArrayList<ItemStack> butterflyList = new ArrayList<ItemStack>();
+		ArrayList<ItemStack> butterflyList = new ArrayList<>();
 		((ItemButterflyGE) ForestryItem.butterflyGE.item()).addCreativeItems(butterflyList, false);
 		for (ItemStack butterflyStack : butterflyList) {
 			IAlleleButterflySpecies species = ButterflyGenome.getSpecies(butterflyStack);

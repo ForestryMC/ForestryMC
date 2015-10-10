@@ -36,6 +36,10 @@ ext.dirLang = "./lang"
 ext.apiForestry = "./api/forestry"
 ext.apiRedstoneFlux = "./api/redstoneflux"
 
+// java version
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
 minecraft {
 	version = mcversion + "-" + forgeversion
 	runDir = "run"

@@ -343,7 +343,7 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 		EnumHumidity biomeHumidity = EnumHumidity.getFromValue(biome.rainfall);
 
 		// Add bees that can live in this environment
-		List<IBeeGenome> valid = new ArrayList<IBeeGenome>();
+		List<IBeeGenome> valid = new ArrayList<>();
 		for (IBeeGenome genome : candidates) {
 			if (checkBiomeHazard(genome, biomeTemperature, biomeHumidity)) {
 				valid.add(genome);

@@ -40,7 +40,7 @@ public class ClimateUtil implements IClimateHelper {
 	
 	public ArrayList<EnumHumidity> getToleratedHumidity(EnumHumidity prefered, EnumTolerance tolerance) {
 
-		ArrayList<EnumHumidity> tolerated = new ArrayList<EnumHumidity>();
+		ArrayList<EnumHumidity> tolerated = new ArrayList<>();
 		tolerated.add(prefered);
 
 		switch (tolerance) {
@@ -98,7 +98,7 @@ public class ClimateUtil implements IClimateHelper {
 
 	public ArrayList<EnumTemperature> getToleratedTemperature(EnumTemperature prefered, EnumTolerance tolerance) {
 
-		ArrayList<EnumTemperature> tolerated = new ArrayList<EnumTemperature>();
+		ArrayList<EnumTemperature> tolerated = new ArrayList<>();
 		tolerated.add(prefered);
 
 		switch (tolerance) {

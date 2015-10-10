@@ -36,7 +36,7 @@ public class NEIUtils {
 	}
 
 	public static List<ItemStack> getItemVariations(ItemStack base) {
-		List<ItemStack> variations = new ArrayList<ItemStack>();
+		List<ItemStack> variations = new ArrayList<>();
 		base.getItem().getSubItems(base.getItem(), null, variations);
 		Iterator<ItemStack> itr = variations.iterator();
 		ItemStack stack;

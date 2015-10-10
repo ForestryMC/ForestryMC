@@ -25,7 +25,7 @@ public class TreeModeHelper implements ICommandModeHelper {
 	public String[] getModeNames() {
 		ArrayList<ITreekeepingMode> treekeepingModes = TreeManager.treeRoot.getTreekeepingModes();
 		int modeStringCount = treekeepingModes.size();
-		List<String> modeStrings = new ArrayList<String>(modeStringCount);
+		List<String> modeStrings = new ArrayList<>(modeStringCount);
 		for (ITreekeepingMode mode : treekeepingModes) {
 			modeStrings.add(mode.getName());
 		}

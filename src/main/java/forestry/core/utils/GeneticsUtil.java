@@ -48,7 +48,7 @@ public class GeneticsUtil {
 
 	private static Set<Block> getErsatzBlocks() {
 		if (ersatzSpecimenBlocks == null) {
-			ersatzSpecimenBlocks = new HashSet<Block>();
+			ersatzSpecimenBlocks = new HashSet<>();
 			for (ItemStack ersatzSpecimen : AlleleManager.ersatzSpecimen.keySet()) {
 				Block ersatzBlock = ItemStackUtil.getBlock(ersatzSpecimen);
 				if (ersatzBlock != null) {

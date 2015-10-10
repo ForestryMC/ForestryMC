@@ -49,7 +49,7 @@ public class ShapelessRecipeCustom implements IRecipe {
 
 	@Override
 	public boolean matches(InventoryCrafting inventoryCrafting, World world) {
-		ArrayList<ItemStack> arraylist = new ArrayList<ItemStack>(this.ingredients);
+		ArrayList<ItemStack> arraylist = new ArrayList<>(this.ingredients);
 
 		for (int i = 0; i < 3; ++i) {
 			for (int j = 0; j < 3; ++j) {

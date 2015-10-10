@@ -37,11 +37,11 @@ public class TextureManager implements ITextureManager {
 		return instance;
 	}
 
-	private final HashMap<String, IIcon> defaultIcons = new HashMap<String, IIcon>();
+	private final HashMap<String, IIcon> defaultIcons = new HashMap<>();
 
 	private final IIcon[] textures = new IIcon[2048];
 
-	private final ArrayList<IIconProvider> iconProvider = new ArrayList<IIconProvider>();
+	private final ArrayList<IIconProvider> iconProvider = new ArrayList<>();
 
 	private TextureManager() {
 	}

@@ -77,7 +77,7 @@ public final class FlowerRegistry implements IFlowerRegistry {
 		this.registeredBlocks = HashMultimap.create();
 		this.registeredFlowers = HashMultimap.create();
 		this.growthRules = ArrayListMultimap.create();
-		this.chances = new HashMap<String, TreeMap<Double, IFlower>>();
+		this.chances = new HashMap<>();
 
 		registerVanillaGrowthRules();
 	}
@@ -254,12 +254,12 @@ public final class FlowerRegistry implements IFlowerRegistry {
 
 	@Override
 	public Collection<String> getFlowerTypes() {
-		return new ArrayList<String>(Sets.union(defaultFlowerTypes, registeredFlowers.keySet()));
+		return new ArrayList<>(Sets.union(defaultFlowerTypes, registeredFlowers.keySet()));
 	}
 
 	private TreeMap<Double, IFlower> getChancesMap(String flowerType) {
 		if (!this.chances.containsKey(flowerType)) {
-			TreeMap<Double, IFlower> flowerChances = new TreeMap<Double, IFlower>();
+			TreeMap<Double, IFlower> flowerChances = new TreeMap<>();
 			double count = 0.0;
 			for (IFlower flower : this.registeredFlowers.get(flowerType)) {
 				if (flower.isPlantable()) {

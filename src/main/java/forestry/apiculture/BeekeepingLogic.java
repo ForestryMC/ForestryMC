@@ -60,7 +60,7 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 	private int queenWorkCycleThrottle;
 	private IEffectData effectData[] = new IEffectData[2];
 
-	private final Stack<ItemStack> spawn = new Stack<ItemStack>();
+	private final Stack<ItemStack> spawn = new Stack<>();
 
 	private final HasFlowersCache hasFlowersCache = new HasFlowersCache();
 	private final QueenCanWorkCache queenCanWorkCache = new QueenCanWorkCache();
@@ -112,7 +112,7 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 
 		hasFlowersCache.writeToNBT(nbttagcompound);
 
-		Stack<ItemStack> spawnCopy = new Stack<ItemStack>();
+		Stack<ItemStack> spawnCopy = new Stack<>();
 		spawnCopy.addAll(spawn);
 		NBTTagList nbttaglist = new NBTTagList();
 		while (!spawnCopy.isEmpty()) {
@@ -373,7 +373,7 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 
 		World world = beeHousing.getWorld();
 
-		Stack<ItemStack> offspring = new Stack<ItemStack>();
+		Stack<ItemStack> offspring = new Stack<>();
 		IApiaristTracker breedingTracker = BeeManager.beeRoot.getBreedingTracker(world, beeHousing.getOwner());
 
 		// Princess
@@ -399,7 +399,7 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 
 		IBeeHousingInventory beeInventory = beeHousing.getBeeInventory();
 
-		Collection<ItemStack> spawn = new ArrayList<ItemStack>();
+		Collection<ItemStack> spawn = new ArrayList<>();
 
 		while (!offspring.isEmpty()) {
 			ItemStack spawned = offspring.pop();

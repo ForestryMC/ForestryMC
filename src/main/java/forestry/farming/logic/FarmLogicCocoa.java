@@ -81,7 +81,7 @@ public class FarmLogicCocoa extends FarmLogic {
 		return null;
 	}
 
-	private final HashMap<Vect, Integer> lastExtentsCultivation = new HashMap<Vect, Integer>();
+	private final HashMap<Vect, Integer> lastExtentsCultivation = new HashMap<>();
 
 	@Override
 	public boolean cultivate(int x, int y, int z, FarmDirection direction, int extent) {
@@ -105,7 +105,7 @@ public class FarmLogicCocoa extends FarmLogic {
 		return result;
 	}
 
-	private final HashMap<Vect, Integer> lastExtentsHarvest = new HashMap<Vect, Integer>();
+	private final HashMap<Vect, Integer> lastExtentsHarvest = new HashMap<>();
 
 	@Override
 	public Collection<ICrop> harvest(int x, int y, int z, FarmDirection direction, int extent) {
@@ -157,8 +157,8 @@ public class FarmLogicCocoa extends FarmLogic {
 
 	private Collection<ICrop> getHarvestBlocks(Vect position) {
 
-		Set<Vect> seen = new HashSet<Vect>();
-		Stack<ICrop> crops = new Stack<ICrop>();
+		Set<Vect> seen = new HashSet<>();
+		Stack<ICrop> crops = new Stack<>();
 
 		// Determine what type we want to harvest.
 		Block block = VectUtil.getBlock(getWorld(), position);
@@ -176,7 +176,7 @@ public class FarmLogicCocoa extends FarmLogic {
 		}
 
 		ArrayList<Vect> candidates = processHarvestBlock(crops, seen, position, position);
-		ArrayList<Vect> temp = new ArrayList<Vect>();
+		ArrayList<Vect> temp = new ArrayList<>();
 		while (!candidates.isEmpty() && crops.size() < 20) {
 			for (Vect candidate : candidates) {
 				temp.addAll(processHarvestBlock(crops, seen, position, candidate));
@@ -194,7 +194,7 @@ public class FarmLogicCocoa extends FarmLogic {
 
 		World world = getWorld();
 
-		ArrayList<Vect> candidates = new ArrayList<Vect>();
+		ArrayList<Vect> candidates = new ArrayList<>();
 
 		// Get additional candidates to return
 		for (int i = -1; i < 2; i++) {

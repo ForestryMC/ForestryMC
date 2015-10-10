@@ -50,7 +50,7 @@ public class ItemLiquidContainer extends Item {
 		GLASS, JAR, CAN, CAPSULE, REFRACTORY, BUCKET
 	}
 
-	private static final Map<Block, ItemLiquidContainer> buckets = new HashMap<Block, ItemLiquidContainer>();
+	private static final Map<Block, ItemLiquidContainer> buckets = new HashMap<>();
 
 	private boolean isDrink = false;
 	private boolean isAlwaysEdible = false;

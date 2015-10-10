@@ -66,7 +66,7 @@ public abstract class MultiblockTileEntityBase extends IMultiblockPart implement
 				}
 				
 				if (controllers == null) {
-					controllers = new HashSet<MultiblockControllerBase>();
+					controllers = new HashSet<>();
 					bestController = candidate;
 				} else if (!controllers.contains(candidate) && candidate.shouldConsume(bestController)) {
 					bestController = candidate;
@@ -337,7 +337,7 @@ public abstract class MultiblockTileEntityBase extends IMultiblockPart implement
 		};
 
 		TileEntity te;
-		List<IMultiblockPart> neighborParts = new ArrayList<IMultiblockPart>();
+		List<IMultiblockPart> neighborParts = new ArrayList<>();
 		IChunkProvider chunkProvider = worldObj.getChunkProvider();
 		for (CoordTriplet neighbor : neighbors) {
 			if (!chunkProvider.chunkExists(neighbor.getChunkX(), neighbor.getChunkZ())) {

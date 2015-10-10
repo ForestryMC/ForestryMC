@@ -23,7 +23,7 @@ public abstract class ContainerSocketed<T extends TileEntity & ISocketable> exte
 
 	protected ContainerSocketed(T tile, InventoryPlayer playerInventory, int xInv, int yInv) {
 		super(tile, playerInventory, xInv, yInv);
-		this.helper = new ContainerSocketedHelper<T>(tile);
+		this.helper = new ContainerSocketedHelper<>(tile);
 	}
 
 	@Override

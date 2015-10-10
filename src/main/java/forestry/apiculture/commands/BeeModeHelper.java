@@ -25,7 +25,7 @@ public class BeeModeHelper implements ICommandModeHelper {
 	public String[] getModeNames() {
 		ArrayList<IBeekeepingMode> beekeepingModes = BeeManager.beeRoot.getBeekeepingModes();
 		int modeStringCount = beekeepingModes.size();
-		List<String> modeStrings = new ArrayList<String>(modeStringCount);
+		List<String> modeStrings = new ArrayList<>(modeStringCount);
 		for (IBeekeepingMode mode : beekeepingModes) {
 			modeStrings.add(mode.getName());
 		}

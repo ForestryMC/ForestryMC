@@ -55,7 +55,7 @@ public class GuiLetter extends GuiForestry<ContainerLetter, LetterInventory> {
 
 		this.isProcessedLetter = container.getLetter().isProcessed();
 		this.widgetManager.add(new AddresseeSlot(16, 12));
-		this.tradeInfoWidgets = new ArrayList<Widget>();
+		this.tradeInfoWidgets = new ArrayList<>();
 	}
 
 	@Override

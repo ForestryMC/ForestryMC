@@ -133,7 +133,7 @@ public class TileAlvearyPlain extends TileAlveary implements IBeeHousing, IClima
 	@Optional.Method(modid = "BuildCraftAPI|statements")
 	@Override
 	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
-		Collection<ITriggerExternal> res = new ArrayList<ITriggerExternal>();
+		Collection<ITriggerExternal> res = new ArrayList<>();
 		res.add(ApicultureTriggers.missingQueen);
 		res.add(ApicultureTriggers.missingDrone);
 		return res;

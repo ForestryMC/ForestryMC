@@ -50,7 +50,7 @@ import forestry.core.utils.PlayerUtil;
 
 public class BlockBase extends BlockForestry {
 
-	private final List<MachineDefinition> definitions = new ArrayList<MachineDefinition>();
+	private final List<MachineDefinition> definitions = new ArrayList<>();
 	private final boolean hasTESR;
 
 	public BlockBase(Material material) {

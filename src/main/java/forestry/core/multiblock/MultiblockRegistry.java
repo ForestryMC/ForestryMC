@@ -15,7 +15,7 @@ import forestry.core.utils.Log;
  */
 public class MultiblockRegistry {
 	// World > WorldRegistry map
-	private static final Map<World, MultiblockWorldRegistry> registries = new HashMap<World, MultiblockWorldRegistry>();
+	private static final Map<World, MultiblockWorldRegistry> registries = new HashMap<>();
 	
 	/**
 	 * Called before Tile Entities are ticked in the world. Do bookkeeping here.

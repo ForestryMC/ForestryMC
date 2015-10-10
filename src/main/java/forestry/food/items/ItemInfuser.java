@@ -125,7 +125,7 @@ public class ItemInfuser extends ItemForestry {
 	 */
 	public static class MixtureManager implements IInfuserManager {
 
-		private final ArrayList<ItemInfuser.Mixture> mixtures = new ArrayList<Mixture>();
+		private final ArrayList<ItemInfuser.Mixture> mixtures = new ArrayList<>();
 
 		@Override
 		public void addMixture(int meta, ItemStack ingredient, IBeverageEffect effect) {
@@ -149,7 +149,7 @@ public class ItemInfuser extends ItemForestry {
 
 		private Mixture[] getMatchingMixtures(ItemStack[] ingredients) {
 
-			ArrayList<Mixture> matches = new ArrayList<Mixture>();
+			ArrayList<Mixture> matches = new ArrayList<>();
 
 			for (Mixture mixture : mixtures) {
 				if (mixture.matches(ingredients)) {
@@ -168,7 +168,7 @@ public class ItemInfuser extends ItemForestry {
 		@Override
 		public ItemStack[] getRequired(ItemStack[] ingredients) {
 			Mixture[] mixtures = getMatchingMixtures(ingredients);
-			ArrayList<ItemStack> required = new ArrayList<ItemStack>();
+			ArrayList<ItemStack> required = new ArrayList<>();
 
 			for (Mixture mixture : mixtures) {
 				required.addAll(Arrays.asList(mixture.getIngredients()));
@@ -212,7 +212,7 @@ public class ItemInfuser extends ItemForestry {
 
 	public static class IngredientManager implements IIngredientManager {
 
-		private final ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
+		private final ArrayList<Ingredient> ingredients = new ArrayList<>();
 
 		@Override
 		public void addIngredient(ItemStack ingredient, String description) {

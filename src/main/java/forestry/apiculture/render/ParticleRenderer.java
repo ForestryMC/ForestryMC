@@ -159,6 +159,6 @@ public class ParticleRenderer {
 	}
 
 	private boolean lazyAdd = false;
-	private final List<EntityFX> particles = new ArrayList<EntityFX>();
-	private final List<EntityFX> newParticles = new ArrayList<EntityFX>();
+	private final List<EntityFX> particles = new ArrayList<>();
+	private final List<EntityFX> newParticles = new ArrayList<>();
 }

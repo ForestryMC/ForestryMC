@@ -50,14 +50,14 @@ public class MultiblockWorldRegistry {
 	public MultiblockWorldRegistry(World world) {
 		worldObj = world;
 		
-		controllers = new HashSet<MultiblockControllerBase>();
-		deadControllers = new HashSet<MultiblockControllerBase>();
-		dirtyControllers = new HashSet<MultiblockControllerBase>();
+		controllers = new HashSet<>();
+		deadControllers = new HashSet<>();
+		dirtyControllers = new HashSet<>();
 		
-		detachedParts = new HashSet<IMultiblockPart>();
-		orphanedParts = new HashSet<IMultiblockPart>();
+		detachedParts = new HashSet<>();
+		orphanedParts = new HashSet<>();
 
-		partsAwaitingChunkLoad = new HashMap<Long, Set<IMultiblockPart>>();
+		partsAwaitingChunkLoad = new HashMap<>();
 		partsAwaitingChunkLoadMutex = new Object();
 		orphanedPartsMutex = new Object();
 	}
@@ -101,7 +101,7 @@ public class MultiblockWorldRegistry {
 			synchronized (orphanedPartsMutex) {
 				if (orphanedParts.size() > 0) {
 					orphansToProcess = orphanedParts;
-					orphanedParts = new HashSet<IMultiblockPart>();
+					orphanedParts = new HashSet<>();
 				}
 			}
 			
@@ -137,13 +137,13 @@ public class MultiblockWorldRegistry {
 						this.controllers.add(newController);
 					} else if (compatibleControllers.size() > 1) {
 						if (mergePools == null) {
-							mergePools = new ArrayList<Set<MultiblockControllerBase>>();
+							mergePools = new ArrayList<>();
 						}
 
 						// THIS IS THE ONLY PLACE WHERE MERGES ARE DETECTED
 						// Multiple compatible controllers indicates an impending merge.
 						// Locate the appropriate merge pool(s)
-						List<Set<MultiblockControllerBase>> candidatePools = new ArrayList<Set<MultiblockControllerBase>>();
+						List<Set<MultiblockControllerBase>> candidatePools = new ArrayList<>();
 						for (Set<MultiblockControllerBase> candidatePool : mergePools) {
 							if (!Collections.disjoint(candidatePool, compatibleControllers)) {
 								// They share at least one element, so that means they will all touch after the merge
@@ -277,7 +277,7 @@ public class MultiblockWorldRegistry {
 			long chunkHash = worldLocation.getChunkXZHash();
 			synchronized (partsAwaitingChunkLoadMutex) {
 				if (!partsAwaitingChunkLoad.containsKey(chunkHash)) {
-					partSet = new HashSet<IMultiblockPart>();
+					partSet = new HashSet<>();
 					partsAwaitingChunkLoad.put(chunkHash, partSet);
 				} else {
 					partSet = partsAwaitingChunkLoad.get(chunkHash);

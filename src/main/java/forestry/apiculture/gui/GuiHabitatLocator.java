@@ -49,7 +49,7 @@ public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator, Habi
 			new HabitatSlot(9, "Mushroom"),
 			new HabitatSlot(10, "Nether"),
 			new HabitatSlot(11, "End")};
-	private final Map<BiomeDictionary.Type, HabitatSlot> biomeToHabitat = new EnumMap<BiomeDictionary.Type, HabitatSlot>(BiomeDictionary.Type.class);
+	private final Map<BiomeDictionary.Type, HabitatSlot> biomeToHabitat = new EnumMap<>(BiomeDictionary.Type.class);
 
 	private int startX;
 	private int startY;

@@ -52,7 +52,7 @@ import static forestry.core.items.ItemLiquidContainer.EnumContainerType;
 @Plugin(pluginID = "Fluids", name = "Fluids", author = "mezz", url = Constants.URL, unlocalizedDescription = "for.plugin.fluids.description")
 public class PluginFluids extends ForestryPlugin {
 
-	private static final List<Fluids> forestryFluidsWithBlocks = new ArrayList<Fluids>();
+	private static final List<Fluids> forestryFluidsWithBlocks = new ArrayList<>();
 
 	private static void createFluid(Fluids forestryFluid) {
 		if (forestryFluid.getFluid() == null && Config.isFluidEnabled(forestryFluid)) {

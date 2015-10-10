@@ -270,14 +270,14 @@ public abstract class InventoryUtil {
 			return false;
 		}
 
-		List<Map.Entry<ForgeDirection, IPipeTile>> pipes = new ArrayList<Map.Entry<ForgeDirection, IPipeTile>>();
+		List<Map.Entry<ForgeDirection, IPipeTile>> pipes = new ArrayList<>();
 		boolean foundPipe = false;
 		for (ForgeDirection side : directions) {
 			TileEntity tile = tileCache.getTileOnSide(side);
 			if (tile instanceof IPipeTile) {
 				IPipeTile pipe = (IPipeTile) tile;
 				if (pipe.getPipeType() == IPipeTile.PipeType.ITEM && pipe.isPipeConnected(side.getOpposite())) {
-					pipes.add(new AbstractMap.SimpleEntry<ForgeDirection, IPipeTile>(side, pipe));
+					pipes.add(new AbstractMap.SimpleEntry<>(side, pipe));
 					foundPipe = true;
 				}
 			}

@@ -70,7 +70,7 @@ public class Forestry {
 	public static Forestry instance;
 	private File configFolder;
 
-	private static final Map<String, ForestryItem> mappedItems = new HashMap<String, ForestryItem>();
+	private static final Map<String, ForestryItem> mappedItems = new HashMap<>();
 
 	static {
 		mappedItems.put("Forestry:builderBackpack", ForestryItem.builderBackpack);
@@ -87,12 +87,12 @@ public class Forestry {
 	}
 
 	public Forestry() {
-		FuelManager.fermenterFuel = new ItemStackMap<FermenterFuel>();
-		FuelManager.moistenerResource = new ItemStackMap<MoistenerFuel>();
-		FuelManager.rainSubstrate = new ItemStackMap<RainSubstrate>();
-		FuelManager.bronzeEngineFuel = new FluidMap<EngineBronzeFuel>();
-		FuelManager.copperEngineFuel = new ItemStackMap<EngineCopperFuel>();
-		FuelManager.generatorFuel = new FluidMap<GeneratorFuel>();
+		FuelManager.fermenterFuel = new ItemStackMap<>();
+		FuelManager.moistenerResource = new ItemStackMap<>();
+		FuelManager.rainSubstrate = new ItemStackMap<>();
+		FuelManager.bronzeEngineFuel = new FluidMap<>();
+		FuelManager.copperEngineFuel = new ItemStackMap<>();
+		FuelManager.generatorFuel = new FluidMap<>();
 	}
 
 	@SidedProxy(clientSide = "forestry.core.ForestryClient", serverSide = "forestry.core.ForestryCore")

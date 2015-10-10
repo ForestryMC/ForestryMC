@@ -254,7 +254,7 @@ public class ShapedRecipeCustom implements IDescriptiveRecipe {
 			}
 		}
 
-		HashMap<Character, Object> hashmap = new HashMap<Character, Object>();
+		HashMap<Character, Object> hashmap = new HashMap<>();
 		for (; index < materials.length; index += 2) {
 
 			Character character = (Character) materials[index];
@@ -281,8 +281,8 @@ public class ShapedRecipeCustom implements IDescriptiveRecipe {
 		Object ingredients[] = new Object[columns * rows];
 		for (int l = 0; l < columns * rows; l++) {
 			char c = s.charAt(l);
-			if (hashmap.containsKey(Character.valueOf(c))) {
-				ingredients[l] = hashmap.get(Character.valueOf(c));
+			if (hashmap.containsKey(c)) {
+				ingredients[l] = hashmap.get(c);
 			} else {
 				ingredients[l] = null;
 			}

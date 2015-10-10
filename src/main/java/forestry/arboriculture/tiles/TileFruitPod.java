@@ -163,7 +163,7 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 	@Override
 	public Collection<ItemStack> pickFruit(ItemStack tool) {
 		if (allele == null) {
-			return new ArrayList<ItemStack>();
+			return new ArrayList<>();
 		}
 
 		Collection<ItemStack> fruits = Arrays.asList(getDrop());

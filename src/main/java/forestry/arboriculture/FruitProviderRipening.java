@@ -25,7 +25,7 @@ import forestry.api.genetics.IFruitFamily;
 
 public class FruitProviderRipening extends FruitProviderNone {
 
-	private final Map<ItemStack, Float> products = new HashMap<ItemStack, Float>();
+	private final Map<ItemStack, Float> products = new HashMap<>();
 
 	private int colourCallow = 0xffffff;
 
@@ -63,7 +63,7 @@ public class FruitProviderRipening extends FruitProviderNone {
 
 	@Override
 	public ItemStack[] getFruits(ITreeGenome genome, World world, int x, int y, int z, int ripeningTime) {
-		ArrayList<ItemStack> product = new ArrayList<ItemStack>();
+		ArrayList<ItemStack> product = new ArrayList<>();
 
 		float stage = getRipeningStage(ripeningTime);
 		if (stage < 0.5f) {

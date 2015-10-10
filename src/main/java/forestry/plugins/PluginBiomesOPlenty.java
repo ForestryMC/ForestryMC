@@ -76,7 +76,7 @@ public class PluginBiomesOPlenty extends ForestryPlugin {
 	}
 
 	private static void addFarmCrops() {
-		List<String> saplingItemKeys = new ArrayList<String>();
+		List<String> saplingItemKeys = new ArrayList<>();
 
 		if (saplings != null) {
 			saplingItemKeys.add("saplings");

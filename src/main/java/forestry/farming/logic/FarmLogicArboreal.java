@@ -97,7 +97,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 	public Collection<ItemStack> collect() {
 
 		Collection<ItemStack> products = produce;
-		produce = new ArrayList<ItemStack>();
+		produce = new ArrayList<>();
 
 		Vect coords = new Vect(housing.getCoords());
 		Vect area = new Vect(housing.getArea());
@@ -125,7 +125,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 		return products;
 	}
 
-	private final HashMap<Vect, Integer> lastExtentsHarvest = new HashMap<Vect, Integer>();
+	private final HashMap<Vect, Integer> lastExtentsHarvest = new HashMap<>();
 
 	@Override
 	public Collection<ICrop> harvest(int x, int y, int z, FarmDirection direction, int extent) {
@@ -152,8 +152,8 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 
 		World world = getWorld();
 
-		Set<Vect> seen = new HashSet<Vect>();
-		Stack<ICrop> crops = new Stack<ICrop>();
+		Set<Vect> seen = new HashSet<>();
+		Stack<ICrop> crops = new Stack<>();
 
 		// Determine what type we want to harvest.
 		IFarmable germling = null;
@@ -174,7 +174,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 		}
 
 		ArrayList<Vect> candidates = processHarvestBlock(germling, crops, seen, position, position);
-		ArrayList<Vect> temp = new ArrayList<Vect>();
+		ArrayList<Vect> temp = new ArrayList<>();
 		while (!candidates.isEmpty()) {
 			for (Vect candidate : candidates) {
 				temp.addAll(processHarvestBlock(germling, crops, seen, position, candidate));
@@ -193,7 +193,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 
 		World world = getWorld();
 
-		ArrayList<Vect> candidates = new ArrayList<Vect>();
+		ArrayList<Vect> candidates = new ArrayList<>();
 
 		// Get additional candidates to return
 		for (int i = -1; i < 2; i++) {

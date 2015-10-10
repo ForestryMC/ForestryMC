@@ -45,7 +45,7 @@ public class TreekeepingMode implements ITreekeepingMode {
 
 	@Override
 	public ArrayList<String> getDescription() {
-		ArrayList<String> ret = new ArrayList<String>();
+		ArrayList<String> ret = new ArrayList<>();
 		ret.add("treemode." + name.toLowerCase(Locale.ENGLISH) + ".desc");
 		return ret;
 	}

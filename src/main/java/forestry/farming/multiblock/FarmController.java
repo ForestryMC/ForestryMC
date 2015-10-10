@@ -104,20 +104,20 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		return null;
 	}
 
-	private final Map<FarmDirection, List<FarmTarget>> targets = new EnumMap<FarmDirection, List<FarmTarget>>(FarmDirection.class);
+	private final Map<FarmDirection, List<FarmTarget>> targets = new EnumMap<>(FarmDirection.class);
 	private int allowedExtent = 0;
 
 	private IFarmLogic harvestProvider; // The farm logic which supplied the pending crops.
-	private final Stack<ICrop> pendingCrops = new Stack<ICrop>();
-	private final Stack<ItemStack> pendingProduce = new Stack<ItemStack>();
+	private final Stack<ICrop> pendingCrops = new Stack<>();
+	private final Stack<ItemStack> pendingProduce = new Stack<>();
 
 	private Stage stage = Stage.CULTIVATE;
 
 	// active components are stored with a tick offset so they do not all tick together
-	private final Map<IFarmComponent.Active, Integer> farmActiveComponents = new HashMap<IFarmComponent.Active, Integer>();
-	private final Set<IFarmListener> farmListeners = new HashSet<IFarmListener>();
+	private final Map<IFarmComponent.Active, Integer> farmActiveComponents = new HashMap<>();
+	private final Set<IFarmListener> farmListeners = new HashSet<>();
 
-	private final Map<FarmDirection, IFarmLogic> farmLogics = new EnumMap<FarmDirection, IFarmLogic>(FarmDirection.class);
+	private final Map<FarmDirection, IFarmLogic> farmLogics = new EnumMap<>(FarmDirection.class);
 
 	private final InventoryAdapter sockets;
 	private final FarmInventory inventory;
@@ -576,7 +576,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 			}
 			int groundHeight = firstGroundPosition.getY();
 
-			List<FarmTarget> farmSideTargets = new ArrayList<FarmTarget>();
+			List<FarmTarget> farmSideTargets = new ArrayList<>();
 			for (int i = 0; i < allowedExtent; i++) {
 				targetLocation = targetLocation.add(farmSide);
 				Vect groundLocation = new Vect(targetLocation.getX(), groundHeight, targetLocation.getZ());

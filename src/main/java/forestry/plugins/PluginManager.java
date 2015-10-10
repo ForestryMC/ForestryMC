@@ -100,7 +100,7 @@ public class PluginManager {
 		WITCHERY(new PluginWitchery());
 
 		static {
-			ForestryAPI.enabledPlugins = new HashSet<String>();
+			ForestryAPI.enabledPlugins = new HashSet<>();
 		}
 
 		private final ForestryPlugin instance;

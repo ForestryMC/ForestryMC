@@ -12,6 +12,8 @@ package forestry.apiculture.flowers;
 
 import com.google.common.base.Objects;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.block.Block;
 
 import net.minecraftforge.oredict.OreDictionary;
@@ -46,7 +48,7 @@ final class Flower implements IFlower {
 	}
 
 	@Override
-	public int compareTo(IFlower other) {
+	public int compareTo(@Nonnull IFlower other) {
 		return this.weight.compareTo(other.getWeight());
 	}
 

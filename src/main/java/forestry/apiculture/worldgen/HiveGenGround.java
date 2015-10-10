@@ -19,7 +19,7 @@ import net.minecraft.world.World;
 
 public class HiveGenGround extends HiveGen {
 
-	private final Set<Material> groundMaterials = new HashSet<Material>();
+	private final Set<Material> groundMaterials = new HashSet<>();
 
 	public HiveGenGround(Block... groundBlocks) {
 		for (Block block : groundBlocks) {

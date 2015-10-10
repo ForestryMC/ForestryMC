@@ -29,7 +29,7 @@ public class AlleleHelper implements IAlleleHelper {
 
 	private static final String modId = "forestry";
 
-	private final Map<Class, Map<?, ? extends IAllele>> alleleMaps = new HashMap<Class, Map<?, ? extends IAllele>>();
+	private final Map<Class, Map<?, ? extends IAllele>> alleleMaps = new HashMap<>();
 
 	public void init() {
 		if (PluginManager.Module.APICULTURE.isEnabled()) {
@@ -78,14 +78,14 @@ public class AlleleHelper implements IAlleleHelper {
 			createAlleles(EnumAllele.Size.class);
 		}
 
-		Map<Integer, IAlleleInteger> integers = new HashMap<Integer, IAlleleInteger>();
+		Map<Integer, IAlleleInteger> integers = new HashMap<>();
 		for (int i = 1; i <= 10; i++) {
 			IAlleleInteger alleleInteger = new AlleleInteger(modId, "i", i + "d", i, true);
 			integers.put(i, alleleInteger);
 		}
 		alleleMaps.put(Integer.class, integers);
 
-		Map<Boolean, IAlleleBoolean> booleans = new HashMap<Boolean, IAlleleBoolean>();
+		Map<Boolean, IAlleleBoolean> booleans = new HashMap<>();
 		booleans.put(true, new AlleleBoolean(modId, "bool", true, false));
 		booleans.put(false, new AlleleBoolean(modId, "bool", false, false));
 		alleleMaps.put(Boolean.class, booleans);
@@ -133,7 +133,7 @@ public class AlleleHelper implements IAlleleHelper {
 
 	private <K extends Enum<K> & IAlleleValue<V>, V> void createAlleles(Class<K> enumClass) {
 		String category = enumClass.getSimpleName().toLowerCase(Locale.ENGLISH);
-		EnumMap<K, IAllele> map = new EnumMap<K, IAllele>(enumClass);
+		EnumMap<K, IAllele> map = new EnumMap<>(enumClass);
 		for (K enumValue : enumClass.getEnumConstants()) {
 			IAllele allele = createAllele(category, enumValue);
 			map.put(enumValue, allele);

@@ -38,8 +38,8 @@ import forestry.mail.network.PacketPOBoxInfo;
 public class PostRegistry implements IPostRegistry {
 
 	public static PostOffice cachedPostOffice;
-	public static final Map<IMailAddress, POBox> cachedPOBoxes = new HashMap<IMailAddress, POBox>();
-	public static final Map<IMailAddress, ITradeStation> cachedTradeStations = new HashMap<IMailAddress, ITradeStation>();
+	public static final Map<IMailAddress, POBox> cachedPOBoxes = new HashMap<>();
+	public static final Map<IMailAddress, ITradeStation> cachedTradeStations = new HashMap<>();
 
 	/**
 	 * @param world   the Minecraft world the PO box will be in
@@ -185,7 +185,7 @@ public class PostRegistry implements IPostRegistry {
 	}
 
 	/* CARRIER */
-	private final Map<EnumAddressee, IPostalCarrier> carriers = new EnumMap<EnumAddressee, IPostalCarrier>(EnumAddressee.class);
+	private final Map<EnumAddressee, IPostalCarrier> carriers = new EnumMap<>(EnumAddressee.class);
 
 	@Override
 	public Map<EnumAddressee, IPostalCarrier> getRegisteredCarriers() {

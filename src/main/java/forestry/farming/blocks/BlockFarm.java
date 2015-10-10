@@ -108,7 +108,7 @@ public class BlockFarm extends BlockStructure {
 
 	@Override
 	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
-		ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
+		ArrayList<ItemStack> drops = new ArrayList<>();
 		int meta = world.getBlockMetadata(x, y, z);
 		TileEntity tile = world.getTileEntity(x, y, z);
 		if (tile instanceof TileFarm) {

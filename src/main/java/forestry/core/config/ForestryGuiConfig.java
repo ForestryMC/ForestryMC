@@ -29,7 +29,7 @@ public class ForestryGuiConfig extends GuiConfig {
 	}
 
 	private static List<IConfigElement> getConfigCategories() {
-		List<IConfigElement> configElements = new ArrayList<IConfigElement>();
+		List<IConfigElement> configElements = new ArrayList<>();
 
 		List<String> commonCategoryNames = Arrays.asList("crafting", "difficulty", "genetics", "performance", "structures", "tweaks", "world");
 		for (String categoryName : commonCategoryNames) {

@@ -45,16 +45,16 @@ public class NEIHandlerFabricator extends RecipeHandlerBase {
 
 		private final boolean preservesNbt;
 
-		public List<PositionedStack> smeltingInput = new ArrayList<PositionedStack>();
+		public List<PositionedStack> smeltingInput = new ArrayList<>();
 		public PositionedFluidTank tank;
-		public List<PositionedStack> inputs = new ArrayList<PositionedStack>();
+		public List<PositionedStack> inputs = new ArrayList<>();
 		public PositionedStack output;
 
 		public CachedFabricatorRecipe(IFabricatorRecipe recipe, boolean genPerms) {
 			this.preservesNbt = recipe.preservesNbt();
 			if (recipe.getLiquid() != null) {
 				this.tank = new PositionedFluidTank(recipe.getLiquid(), 2000, new Rectangle(21, 37, 16, 16));
-				List<ItemStack> smeltingInput = new ArrayList<ItemStack>();
+				List<ItemStack> smeltingInput = new ArrayList<>();
 				for (TileFabricator.Smelting s : getSmeltingInputs().get(recipe.getLiquid().getFluid())) {
 					smeltingInput.add(s.getResource());
 				}
@@ -253,7 +253,7 @@ public class NEIHandlerFabricator extends RecipeHandlerBase {
 	}
 
 	private static Map<Fluid, List<TileFabricator.Smelting>> getSmeltingInputs() {
-		Map<Fluid, List<TileFabricator.Smelting>> smeltingInputs = new HashMap<Fluid, List<TileFabricator.Smelting>>();
+		Map<Fluid, List<TileFabricator.Smelting>> smeltingInputs = new HashMap<>();
 		for (TileFabricator.Smelting smelting : TileFabricator.RecipeManager.smeltings) {
 			Fluid fluid = smelting.getProduct().getFluid();
 			if (!smeltingInputs.containsKey(fluid)) {

@@ -39,7 +39,7 @@ public class SetRecipeCommandHandler {
 			return;
 		}
 
-		Map<Integer, ItemStack> stmap = new HashMap<Integer, ItemStack>();
+		Map<Integer, ItemStack> stmap = new HashMap<>();
 		for (int i = 0; i < stacks.tagCount(); i++) {
 			NBTTagCompound itemdata = stacks.getCompoundTagAt(i);
 			stmap.put(itemdata.getInteger("slot"), ItemStack.loadItemStackFromNBT(itemdata));

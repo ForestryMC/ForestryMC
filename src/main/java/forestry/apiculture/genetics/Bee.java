@@ -250,7 +250,7 @@ public class Bee extends IndividualLiving implements IBee {
 		World world = housing.getWorld();
 		BiomeGenBase biome = housing.getBiome();
 
-		Set<IErrorState> errorStates = new HashSet<IErrorState>();
+		Set<IErrorState> errorStates = new HashSet<>();
 
 		IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(housing);
 
@@ -315,7 +315,7 @@ public class Bee extends IndividualLiving implements IBee {
 
 	@Override
 	public ArrayList<BiomeGenBase> getSuitableBiomes() {
-		ArrayList<BiomeGenBase> suitableBiomes = new ArrayList<BiomeGenBase>();
+		ArrayList<BiomeGenBase> suitableBiomes = new ArrayList<>();
 		for (BiomeGenBase biome : BiomeGenBase.getBiomeGenArray()) {
 			if (isSuitableBiome(biome)) {
 				suitableBiomes.add(biome);
@@ -401,7 +401,7 @@ public class Bee extends IndividualLiving implements IBee {
 	// / PRODUCTION
 	@Override
 	public ItemStack[] getProduceList() {
-		ArrayList<ItemStack> products = new ArrayList<ItemStack>();
+		ArrayList<ItemStack> products = new ArrayList<>();
 
 		IAlleleBeeSpecies primary = genome.getPrimary();
 		IAlleleBeeSpecies secondary = genome.getSecondary();
@@ -447,7 +447,7 @@ public class Bee extends IndividualLiving implements IBee {
 			return null;
 		}
 
-		List<ItemStack> products = new ArrayList<ItemStack>();
+		List<ItemStack> products = new ArrayList<>();
 
 		IAlleleBeeSpecies primary = genome.getPrimary();
 		IAlleleBeeSpecies secondary = genome.getSecondary();
@@ -517,7 +517,7 @@ public class Bee extends IndividualLiving implements IBee {
 			return null;
 		}
 
-		List<IBee> bees = new ArrayList<IBee>();
+		List<IBee> bees = new ArrayList<>();
 
 		ChunkCoordinates housingCoordinates = housing.getCoordinates();
 		int toCreate = BeeManager.beeRoot.getBeekeepingMode(world).getFinalFertility(this, world, housingCoordinates.posX, housingCoordinates.posY, housingCoordinates.posZ);

@@ -124,7 +124,7 @@ public class TileMailbox extends TileBase implements IMailContainer {
 	@Optional.Method(modid = "BuildCraftAPI|statements")
 	@Override
 	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
-		LinkedList<ITriggerExternal> res = new LinkedList<ITriggerExternal>();
+		LinkedList<ITriggerExternal> res = new LinkedList<>();
 		res.add(MailTriggers.triggerHasMail);
 		return res;
 	}

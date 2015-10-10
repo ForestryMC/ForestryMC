@@ -60,7 +60,7 @@ public abstract class RecipeUtil {
 	 */
 	public static List getOreDictRecipeEquivalents(ItemStack itemStack) {
 		int[] oreDictIds = OreDictionary.getOreIDs(itemStack);
-		List<String> oreDictNames = new ArrayList<String>(oreDictIds.length);
+		List<String> oreDictNames = new ArrayList<>(oreDictIds.length);
 		for (int oreId : oreDictIds) {
 			String oreDictName = OreDictionary.getOreName(oreId);
 			oreDictNames.add(oreDictName);
@@ -178,7 +178,7 @@ public abstract class RecipeUtil {
 			return Collections.singletonList(repairRecipe);
 		}
 
-		List<ItemStack> matchingRecipes = new ArrayList<ItemStack>();
+		List<ItemStack> matchingRecipes = new ArrayList<>();
 
 		for (Object recipe : CraftingManager.getInstance().getRecipeList()) {
 			IRecipe irecipe = (IRecipe) recipe;

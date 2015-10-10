@@ -40,7 +40,7 @@ public class AlleleRegistry implements IAlleleRegistry {
 	private static final int ALLELE_ARRAY_SIZE = 2048;
 
 	/* SPECIES ROOT */
-	private final LinkedHashMap<String, ISpeciesRoot> rootMap = new LinkedHashMap<String, ISpeciesRoot>(16);
+	private final LinkedHashMap<String, ISpeciesRoot> rootMap = new LinkedHashMap<>(16);
 
 	@Override
 	public void registerSpeciesRoot(ISpeciesRoot root) {
@@ -97,15 +97,15 @@ public class AlleleRegistry implements IAlleleRegistry {
 	}
 
 	/* ALLELES */
-	private final LinkedHashMap<String, IAllele> alleleMap = new LinkedHashMap<String, IAllele>(ALLELE_ARRAY_SIZE);
-	private final LinkedHashMap<String, IAllele> deprecatedAlleleMap = new LinkedHashMap<String, IAllele>(32);
-	private final LinkedHashMap<String, IClassification> classificationMap = new LinkedHashMap<String, IClassification>(128);
-	private final LinkedHashMap<String, IFruitFamily> fruitMap = new LinkedHashMap<String, IFruitFamily>(64);
+	private final LinkedHashMap<String, IAllele> alleleMap = new LinkedHashMap<>(ALLELE_ARRAY_SIZE);
+	private final LinkedHashMap<String, IAllele> deprecatedAlleleMap = new LinkedHashMap<>(32);
+	private final LinkedHashMap<String, IClassification> classificationMap = new LinkedHashMap<>(128);
+	private final LinkedHashMap<String, IFruitFamily> fruitMap = new LinkedHashMap<>(64);
 
 	/*
 	 * Internal HashSet of all alleleHandlers, which trigger when an allele or branch is registered
 	 */
-	private final HashSet<IAlleleHandler> alleleHandlers = new HashSet<IAlleleHandler>();
+	private final HashSet<IAlleleHandler> alleleHandlers = new HashSet<>();
 
 	public void initialize() {
 
@@ -234,7 +234,7 @@ public class AlleleRegistry implements IAlleleRegistry {
 	}
 
 	/* BLACKLIST */
-	private final ArrayList<String> blacklist = new ArrayList<String>();
+	private final ArrayList<String> blacklist = new ArrayList<>();
 
 	@Override
 	public void blacklistAllele(String uid) {

@@ -70,7 +70,7 @@ public class TileApiary extends TileAbstractBeeHousing {
 
 	@Override
 	public Collection<IBeeModifier> getBeeModifiers() {
-		List<IBeeModifier> beeModifiers = new ArrayList<IBeeModifier>();
+		List<IBeeModifier> beeModifiers = new ArrayList<>();
 
 		beeModifiers.add(beeModifier);
 
@@ -159,7 +159,7 @@ public class TileApiary extends TileAbstractBeeHousing {
 		}
 
 		public Collection<IHiveFrame> getFrames() {
-			Collection<IHiveFrame> hiveFrames = new ArrayList<IHiveFrame>(SLOT_FRAMES_COUNT);
+			Collection<IHiveFrame> hiveFrames = new ArrayList<>(SLOT_FRAMES_COUNT);
 
 			for (int i = SLOT_FRAMES_1; i < SLOT_FRAMES_1 + SLOT_FRAMES_COUNT; i++) {
 				ItemStack stackInSlot = getStackInSlot(i);
@@ -181,7 +181,7 @@ public class TileApiary extends TileAbstractBeeHousing {
 	@Optional.Method(modid = "BuildCraftAPI|statements")
 	@Override
 	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
-		LinkedList<ITriggerExternal> res = new LinkedList<ITriggerExternal>();
+		LinkedList<ITriggerExternal> res = new LinkedList<>();
 		res.add(ApicultureTriggers.missingQueen);
 		res.add(ApicultureTriggers.missingDrone);
 		res.add(ApicultureTriggers.noFrames);

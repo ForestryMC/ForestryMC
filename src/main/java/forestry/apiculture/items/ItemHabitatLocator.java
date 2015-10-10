@@ -59,7 +59,7 @@ public class ItemHabitatLocator extends ItemInventoried {
 
 	private static final String iconName = "forestry:biomefinder";
 
-	private Set<BiomeGenBase> targetBiomes = new HashSet<BiomeGenBase>();
+	private Set<BiomeGenBase> targetBiomes = new HashSet<>();
 	private boolean biomeFound = false;
 	private int searchRadiusIteration = 0;
 	private int searchAngleIteration = 0;
@@ -108,7 +108,7 @@ public class ItemHabitatLocator extends ItemInventoried {
 
 	private void startBiomeSearch(IBee bee, EntityPlayer player) {
 
-		this.targetBiomes = new HashSet<BiomeGenBase>(bee.getSuitableBiomes());
+		this.targetBiomes = new HashSet<>(bee.getSuitableBiomes());
 		this.searchAngleIteration = 0;
 		this.searchRadiusIteration = 0;
 		this.biomeFound = false;
@@ -237,9 +237,9 @@ public class ItemHabitatLocator extends ItemInventoried {
 		return new ChunkCoordinates(pos.x, pos.y, pos.z);
 	}
 
-	private static final Set<BiomeGenBase> waterBiomes = new HashSet<BiomeGenBase>();
-	private static final Set<BiomeGenBase> netherBiomes = new HashSet<BiomeGenBase>();
-	private static final Set<BiomeGenBase> endBiomes = new HashSet<BiomeGenBase>();
+	private static final Set<BiomeGenBase> waterBiomes = new HashSet<>();
+	private static final Set<BiomeGenBase> netherBiomes = new HashSet<>();
+	private static final Set<BiomeGenBase> endBiomes = new HashSet<>();
 
 	static {
 		Collections.addAll(waterBiomes, BiomeDictionary.getBiomesForType(BiomeDictionary.Type.BEACH));

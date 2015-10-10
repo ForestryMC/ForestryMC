@@ -45,7 +45,7 @@ import forestry.plugins.PluginManager;
 public class FarmLogicOrchard extends FarmLogic {
 
 	private final Collection<IFarmable> farmables;
-	private final HashMap<Vect, Integer> lastExtents = new HashMap<Vect, Integer>();
+	private final HashMap<Vect, Integer> lastExtents = new HashMap<>();
 	private final ImmutableList<Block> traversalBlocks;
 
 	public FarmLogicOrchard(IFarmHousing housing) {
@@ -132,8 +132,8 @@ public class FarmLogicOrchard extends FarmLogic {
 
 	private Collection<ICrop> getHarvestBlocks(Vect position) {
 
-		Set<Vect> seen = new HashSet<Vect>();
-		Stack<ICrop> crops = new Stack<ICrop>();
+		Set<Vect> seen = new HashSet<>();
+		Stack<ICrop> crops = new Stack<>();
 
 		World world = getWorld();
 
@@ -143,7 +143,7 @@ public class FarmLogicOrchard extends FarmLogic {
 		}
 
 		List<Vect> candidates = processHarvestBlock(crops, seen, position, position);
-		List<Vect> temp = new ArrayList<Vect>();
+		List<Vect> temp = new ArrayList<>();
 		while (!candidates.isEmpty() && crops.size() < 20) {
 			for (Vect candidate : candidates) {
 				temp.addAll(processHarvestBlock(crops, seen, position, candidate));
@@ -159,7 +159,7 @@ public class FarmLogicOrchard extends FarmLogic {
 	private List<Vect> processHarvestBlock(Stack<ICrop> crops, Set<Vect> seen, Vect start, Vect position) {
 		World world = getWorld();
 
-		List<Vect> candidates = new ArrayList<Vect>();
+		List<Vect> candidates = new ArrayList<>();
 
 		// Get additional candidates to return
 		for (int i = -2; i < 3; i++) {

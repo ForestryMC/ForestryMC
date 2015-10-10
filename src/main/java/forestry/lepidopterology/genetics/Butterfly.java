@@ -281,7 +281,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 
 	@Override
 	public ItemStack[] getLootDrop(IEntityButterfly entity, boolean playerKill, int lootLevel) {
-		ArrayList<ItemStack> drop = new ArrayList<ItemStack>();
+		ArrayList<ItemStack> drop = new ArrayList<>();
 
 		EntityCreature creature = entity.getEntity();
 		float metabolism = (float) getGenome().getMetabolism() / 10;
@@ -297,7 +297,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 
 	@Override
 	public ItemStack[] getCaterpillarDrop(IButterflyNursery nursery, boolean playerKill, int lootLevel) {
-		ArrayList<ItemStack> drop = new ArrayList<ItemStack>();
+		ArrayList<ItemStack> drop = new ArrayList<>();
 		float metabolism = (float) getGenome().getMetabolism() / 10;
 
 		for (Map.Entry<ItemStack, Float> entry : getGenome().getPrimary().getCaterpillarLoot().entrySet()) {

@@ -27,7 +27,7 @@ public class NEIHandlerShapelessCustom extends RecipeHandlerBase {
 	public class CachedShapelessCustomRecipe extends CachedBaseRecipe implements INBTMatchingCachedRecipe {
 		private final boolean preservesNbt;
 
-		public List<PositionedStack> inputs = new ArrayList<PositionedStack>();
+		public List<PositionedStack> inputs = new ArrayList<>();
 		public PositionedStack output;
 
 		public CachedShapelessCustomRecipe(ShapelessRecipeCustom recipe) {

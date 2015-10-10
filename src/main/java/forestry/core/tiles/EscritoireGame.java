@@ -235,7 +235,7 @@ public class EscritoireGame implements INBTTagable, IStreamable {
 		gameTokens = new GameToken[boardSize];
 
 		ISpeciesRoot root = individual.getGenome().getPrimary().getRoot();
-		ArrayList<ItemStack> pairs = new ArrayList<ItemStack>();
+		ArrayList<ItemStack> pairs = new ArrayList<>();
 		for (int i = 0; i < boardSize / 2; i++) {
 			IIndividual token = root.templateAsIndividual(root.getRandomTemplate(rand));
 			pairs.add(root.getMemberStack(token, 0));
@@ -276,7 +276,7 @@ public class EscritoireGame implements INBTTagable, IStreamable {
 	}
 
 	private int[] getUnrevealedTokens(int count) {
-		ArrayList<Integer> existing = new ArrayList<Integer>();
+		ArrayList<Integer> existing = new ArrayList<>();
 		int remaining = countUnrevealedTokens();
 		int[] unrevealed = new int[count < remaining ? count : remaining];
 
@@ -447,7 +447,7 @@ public class EscritoireGame implements INBTTagable, IStreamable {
 	}
 
 	private Collection<GameToken> getRevealedSingles(GameToken exclude) {
-		ArrayList<GameToken> singles = new ArrayList<GameToken>();
+		ArrayList<GameToken> singles = new ArrayList<>();
 
 		for (GameToken token : gameTokens) {
 			if (!token.isRevealed || token == exclude) {

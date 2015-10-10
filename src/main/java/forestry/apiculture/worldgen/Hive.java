@@ -25,7 +25,7 @@ import forestry.api.core.EnumTemperature;
 public final class Hive {
 
 	private final IHiveDescription hiveDescription;
-	private final List<IHiveDrop> drops = new ArrayList<IHiveDrop>();
+	private final List<IHiveDrop> drops = new ArrayList<>();
 
 	public Hive(IHiveDescription hiveDescription) {
 		if (hiveDescription == null) {

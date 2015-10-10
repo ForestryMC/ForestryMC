@@ -22,7 +22,7 @@ import codechicken.nei.recipe.GuiRecipe;
 
 public class PositionedStackAdv extends PositionedStack {
 
-	private final List<String> tooltip = new ArrayList<String>();
+	private final List<String> tooltip = new ArrayList<>();
 
 	public PositionedStackAdv(Object object, int x, int y) {
 		super(object, x, y);

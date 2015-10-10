@@ -110,7 +110,7 @@ public class PluginArboriculture extends ForestryPlugin {
 	public static int modelIdPods;
 
 	private static MachineDefinition definitionChest;
-	public static final List<Block> validFences = new ArrayList<Block>();
+	public static final List<Block> validFences = new ArrayList<>();
 
 	@Override
 	protected void setupAPI() {

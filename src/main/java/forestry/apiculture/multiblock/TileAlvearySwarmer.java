@@ -40,7 +40,7 @@ import forestry.core.utils.ItemStackUtil;
 public class TileAlvearySwarmer extends TileAlvearyWithGui implements ISidedInventory, IActivatable, IAlvearyComponent.Active {
 
 	private final SwarmerInventory inventory;
-	private final Stack<ItemStack> pendingSpawns = new Stack<ItemStack>();
+	private final Stack<ItemStack> pendingSpawns = new Stack<>();
 	private boolean active;
 
 	public TileAlvearySwarmer() {

@@ -335,7 +335,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 	/* REPRODUCTION */
 	@Override
 	public ITree[] getSaplings(World world, GameProfile playerProfile, int x, int y, int z, float modifier) {
-		ArrayList<ITree> prod = new ArrayList<ITree>();
+		ArrayList<ITree> prod = new ArrayList<>();
 
 		float chance = genome.getFertility() * modifier;
 

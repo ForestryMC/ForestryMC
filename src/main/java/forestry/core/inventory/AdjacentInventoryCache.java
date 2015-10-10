@@ -36,7 +36,7 @@ public final class AdjacentInventoryCache implements AdjacentTileCache.ICacheLis
 
 	private final AdjacentTileCache cache;
 	private boolean changed = true;
-	private final List<IInventory> invs = new LinkedList<IInventory>();
+	private final List<IInventory> invs = new LinkedList<>();
 	private final IInventory[] sides = new IInventory[6];
 	private final Comparator<IInventory> sorter;
 	private final ITileFilter filter;

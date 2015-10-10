@@ -38,7 +38,7 @@ public class ForestryModEnvWarningCallable implements ICrashCallable {
 	}
 
 	private ForestryModEnvWarningCallable() {
-		this.modIDs = new ArrayList<String>();
+		this.modIDs = new ArrayList<>();
 
 		if (FMLCommonHandler.instance().getSide() == Side.CLIENT && FMLClientHandler.instance().hasOptifine()) {
 			modIDs.add("Optifine");
@@ -57,7 +57,7 @@ public class ForestryModEnvWarningCallable implements ICrashCallable {
 			// No need to do anything.
 		}
 
-		this.disabledModules = new ArrayList<String>();
+		this.disabledModules = new ArrayList<>();
 		for (PluginManager.Module module : PluginManager.configDisabledModules) {
 			disabledModules.add(module.configName());
 		}

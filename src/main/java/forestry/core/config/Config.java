@@ -44,9 +44,9 @@ public class Config {
 
 	public static String gameMode;
 
-	private static final Set<String> disabledStructures = new HashSet<String>();
-	private static final Set<String> disabledFluids = new HashSet<String>();
-	private static final Set<String> disabledBlocks = new HashSet<String>();
+	private static final Set<String> disabledStructures = new HashSet<>();
+	private static final Set<String> disabledFluids = new HashSet<>();
+	private static final Set<String> disabledBlocks = new HashSet<>();
 
 	public static boolean isDebug = false;
 
@@ -83,7 +83,7 @@ public class Config {
 	private static boolean craftingBronzeEnabled = true;
 
 	public static boolean craftingStampsEnabled = true;
-	public static final ArrayList<String> collectorStamps = new ArrayList<String>();
+	public static final ArrayList<String> collectorStamps = new ArrayList<>();
 
 	public static int farmSize = 2;
 	public static boolean squareFarms = false;
@@ -98,7 +98,7 @@ public class Config {
 
 	// Hints
 	public static boolean enableHints = true;
-	public static final Map<String, String[]> hints = new HashMap<String, String[]>();
+	public static final Map<String, String[]> hints = new HashMap<>();
 	public static boolean enableEnergyStat = true;
 
 	public static boolean isStructureEnabled(String uid) {

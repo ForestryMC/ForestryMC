@@ -59,11 +59,11 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	private float humidChange = 0.0f;
 
 	// PARTS
-	private final Set<IBeeModifier> beeModifiers = new HashSet<IBeeModifier>();
-	private final Set<IBeeListener> beeListeners = new HashSet<IBeeListener>();
-	private final Set<IAlvearyComponent.Climatiser> climatisers = new HashSet<IAlvearyComponent.Climatiser>();
-	private final Set<IAlvearyComponent.Active> activeComponents = new HashSet<IAlvearyComponent.Active>();
-	private final Set<IAlvearyComponent> allComponents = new HashSet<IAlvearyComponent>();
+	private final Set<IBeeModifier> beeModifiers = new HashSet<>();
+	private final Set<IBeeListener> beeListeners = new HashSet<>();
+	private final Set<IAlvearyComponent.Climatiser> climatisers = new HashSet<>();
+	private final Set<IAlvearyComponent.Active> activeComponents = new HashSet<>();
+	private final Set<IAlvearyComponent> allComponents = new HashSet<>();
 
 	// CLIENT
 	private int breedingProgressPercent = 0;

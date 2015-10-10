@@ -49,9 +49,9 @@ public class NEIHandlerFermenter extends RecipeHandlerBase {
 
 	public class CachedFermenterRecipe extends CachedBaseRecipe implements INBTMatchingCachedRecipe {
 
-		public List<PositionedFluidTank> tanks = new ArrayList<PositionedFluidTank>();
+		public List<PositionedFluidTank> tanks = new ArrayList<>();
 		public PositionedStack resource;
-		public List<PositionedStack> inputItems = new ArrayList<PositionedStack>();
+		public List<PositionedStack> inputItems = new ArrayList<>();
 
 		public CachedFermenterRecipe(TileFermenter.Recipe recipe, ItemStack fermentable, boolean genPerms) {
 			if (recipe.liquid != null) {
@@ -70,7 +70,7 @@ public class NEIHandlerFermenter extends RecipeHandlerBase {
 			}
 
 			this.inputItems.add(new PositionedStack(fermentable, 80, 8));
-			List<ItemStack> fuels = new ArrayList<ItemStack>();
+			List<ItemStack> fuels = new ArrayList<>();
 			for (FermenterFuel fuel : FuelManager.fermenterFuel.values()) {
 				fuels.add(fuel.item);
 			}
@@ -148,7 +148,7 @@ public class NEIHandlerFermenter extends RecipeHandlerBase {
 
 	private List<CachedFermenterRecipe> getCachedRecipes(TileFermenter.Recipe recipe, boolean generatePermutations) {
 		if (recipe.resource != null && recipe.resource.getItem() instanceof IVariableFermentable) {
-			List<CachedFermenterRecipe> crecipes = new ArrayList<CachedFermenterRecipe>();
+			List<CachedFermenterRecipe> crecipes = new ArrayList<>();
 			for (ItemStack stack : NEIUtils.getItemVariations(recipe.resource)) {
 				crecipes.add(new CachedFermenterRecipe(recipe, stack, generatePermutations));
 			}

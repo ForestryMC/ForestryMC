@@ -50,7 +50,7 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 	private final TileInventoryAdapter craftingInventory;
 
 	public TileWorktable() {
-		craftingInventory = new TileInventoryAdapter<TileWorktable>(this, 10, "CraftItems");
+		craftingInventory = new TileInventoryAdapter<>(this, 10, "CraftItems");
 		setInternalInventory(new WorktableInventoryAdapter(this));
 
 		memorized = new RecipeMemory();

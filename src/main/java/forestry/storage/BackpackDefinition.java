@@ -33,10 +33,10 @@ public class BackpackDefinition implements IBackpackDefinition {
 	private final int primaryColor; // - c03384
 	private final int secondaryColor;
 
-	private final Set<String> validItemStacks = new HashSet<String>();
-	private final Set<Integer> validOreIds = new HashSet<Integer>();
-	private final Set<Class> validItemClasses = new HashSet<Class>();
-	private final Set<Class> validBlockClasses = new HashSet<Class>();
+	private final Set<String> validItemStacks = new HashSet<>();
+	private final Set<Integer> validOreIds = new HashSet<>();
+	private final Set<Class> validItemClasses = new HashSet<>();
+	private final Set<Class> validBlockClasses = new HashSet<>();
 
 	public BackpackDefinition(String name, int primaryColor) {
 		this(name, primaryColor, 0xffffff);

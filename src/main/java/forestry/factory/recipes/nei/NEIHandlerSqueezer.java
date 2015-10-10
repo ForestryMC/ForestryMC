@@ -43,7 +43,7 @@ public class NEIHandlerSqueezer extends RecipeHandlerBase {
 
 	public class CachedSqueezerRecipe extends CachedBaseRecipe {
 
-		public List<PositionedStack> inputs = new ArrayList<PositionedStack>();
+		public List<PositionedStack> inputs = new ArrayList<>();
 		public PositionedFluidTank tank;
 		public PositionedStackAdv remnants = null;
 		public int processingTime;
@@ -77,7 +77,7 @@ public class NEIHandlerSqueezer extends RecipeHandlerBase {
 			ItemStack emptyContainer = recipe.getEmptyContainer();
 			List<ItemStack> ingredients = FluidHelper.getAllFilledContainers(emptyContainer);
 			setIngredients(new Object[]{ingredients});
-			List<FluidStack> fluids = new ArrayList<FluidStack>();
+			List<FluidStack> fluids = new ArrayList<>();
 			for (ItemStack ingredient : ingredients) {
 				FluidStack fluidStack = FluidHelper.getFluidStackInContainer(ingredient);
 				fluids.add(fluidStack);

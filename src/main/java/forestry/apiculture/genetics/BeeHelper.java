@@ -208,7 +208,7 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 	}
 
 	/* TEMPLATES */
-	private static final ArrayList<IBee> beeTemplates = new ArrayList<IBee>();
+	private static final ArrayList<IBee> beeTemplates = new ArrayList<>();
 
 	@Override
 	public ArrayList<IBee> getIndividualTemplates() {
@@ -230,7 +230,7 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 	/**
 	 * List of possible mutations on species alleles.
 	 */
-	private static final ArrayList<IBeeMutation> beeMutations = new ArrayList<IBeeMutation>();
+	private static final ArrayList<IBeeMutation> beeMutations = new ArrayList<>();
 
 	@Override
 	public Collection<IBeeMutation> getMutations(boolean shuffle) {
@@ -256,7 +256,7 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 	}
 
 	/* BREEDING MODES */
-	private final ArrayList<IBeekeepingMode> beekeepingModes = new ArrayList<IBeekeepingMode>();
+	private final ArrayList<IBeekeepingMode> beekeepingModes = new ArrayList<>();
 	private static IBeekeepingMode activeBeekeepingMode;
 
 	@Override

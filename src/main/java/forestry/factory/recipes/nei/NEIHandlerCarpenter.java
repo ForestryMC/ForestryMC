@@ -45,7 +45,7 @@ public class NEIHandlerCarpenter extends RecipeHandlerBase {
 
 	public class CachedCarpenterRecipe extends CachedBaseRecipe {
 
-		public List<PositionedStack> inputs = new ArrayList<PositionedStack>();
+		public List<PositionedStack> inputs = new ArrayList<>();
 		public PositionedFluidTank tank;
 		public PositionedStack output;
 

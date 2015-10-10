@@ -46,8 +46,8 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 
 	private final EnumSet<BiomeDictionary.Type> spawnBiomes = EnumSet.noneOf(BiomeDictionary.Type.class);
 
-	private final Map<ItemStack, Float> butterflyLoot = new HashMap<ItemStack, Float>();
-	private final Map<ItemStack, Float> caterpillarLoot = new HashMap<ItemStack, Float>();
+	private final Map<ItemStack, Float> butterflyLoot = new HashMap<>();
+	private final Map<ItemStack, Float> caterpillarLoot = new HashMap<>();
 
 	public AlleleButterflySpecies(String uid, boolean isDominant, String speciesName, IClassification branch, String binomial, int serumColour) {
 		super("forestry." + uid, getUnlocalizedName(speciesName, branch), "Sengir", "for.description." + uid, isDominant, branch, binomial, true);

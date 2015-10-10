@@ -49,9 +49,9 @@ import forestry.core.utils.NBTUtil.NBTList;
 public class TankManager extends ForwardingList<StandardTank> implements ITankManager, List<StandardTank> {
 
 	private static final byte NETWORK_DATA = 3;
-	private final List<StandardTank> tanks = new ArrayList<StandardTank>();
-	private final List<FluidStack> prevFluidStacks = new ArrayList<FluidStack>();
-	private final List<Integer> prevColor = new ArrayList<Integer>();
+	private final List<StandardTank> tanks = new ArrayList<>();
+	private final List<FluidStack> prevFluidStacks = new ArrayList<>();
+	private final List<Integer> prevColor = new ArrayList<>();
 
 	public TankManager() {
 	}

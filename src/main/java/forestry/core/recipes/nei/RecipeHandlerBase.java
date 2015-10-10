@@ -37,7 +37,7 @@ public abstract class RecipeHandlerBase extends TemplateRecipeHandler implements
 	public abstract class CachedBaseRecipe extends CachedRecipe {
 
 		public List<PositionedFluidTank> getFluidTanks() {
-			List<PositionedFluidTank> tanks = new ArrayList<PositionedFluidTank>();
+			List<PositionedFluidTank> tanks = new ArrayList<>();
 			PositionedFluidTank tank = this.getFluidTank();
 			if (tank != null) {
 				tanks.add(tank);

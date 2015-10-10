@@ -70,7 +70,7 @@ public abstract class NBTUtil {
 
 	public static <T extends NBTBase> NBTList<T> getNBTList(NBTTagCompound nbt, String tag, EnumNBTType type) {
 		NBTTagList nbtList = nbt.getTagList(tag, type.ordinal());
-		return new NBTList<T>(nbtList);
+		return new NBTList<>(nbtList);
 	}
 
 	public static class NBTList<T extends NBTBase> extends ForwardingList<T> {

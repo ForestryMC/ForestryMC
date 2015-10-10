@@ -54,7 +54,7 @@ public abstract class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory>
 
 	private final String guiName;
 
-	protected final Map<String, ItemStack> iconStacks = new HashMap<String, ItemStack>();
+	protected final Map<String, ItemStack> iconStacks = new HashMap<>();
 
 	protected GuiAlyzer(String speciesRoot, EntityPlayer player, ContainerAlyzer container, IInventory inventory, String guiName) {
 		super(Constants.TEXTURE_PATH_GUI + "/beealyzer2.png", container, inventory);
@@ -182,7 +182,7 @@ public abstract class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory>
 		drawLine(StringUtil.localize("gui.alyzer.classification") + ":", 12);
 		newLine();
 
-		Stack<IClassification> hierarchy = new Stack<IClassification>();
+		Stack<IClassification> hierarchy = new Stack<>();
 		IClassification classification = individual.getGenome().getPrimary().getBranch();
 		while (classification != null) {
 
@@ -251,7 +251,7 @@ public abstract class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory>
 
 		RenderHelper.enableGUIStandardItemLighting();
 
-		HashMap<IMutation, IAllele> combinations = new HashMap<IMutation, IAllele>();
+		HashMap<IMutation, IAllele> combinations = new HashMap<>();
 
 		for (IMutation mutation : speciesRoot.getCombinations(individual.getGenome().getPrimary())) {
 			combinations.put(mutation, individual.getGenome().getPrimary());

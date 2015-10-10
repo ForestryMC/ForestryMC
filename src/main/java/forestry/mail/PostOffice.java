@@ -73,7 +73,7 @@ public class PostOffice extends WorldSavedData implements IPostOffice {
 	}
 
 	private void refreshActiveTradeStations(World world) {
-		activeTradeStations = new LinkedHashMap<IMailAddress, ITradeStation>();
+		activeTradeStations = new LinkedHashMap<>();
 		if (world == null || world.getSaveHandler() == null) {
 			return;
 		}

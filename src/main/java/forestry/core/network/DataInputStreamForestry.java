@@ -76,7 +76,7 @@ public class DataInputStreamForestry extends DataInputStream {
 
 	public <T extends IStreamable> List<T> readStreamables(Class<T> streamableClass) throws IOException {
 		int length = readVarInt();
-		List<T> streamables = new ArrayList<T>(length);
+		List<T> streamables = new ArrayList<>(length);
 		if (length > 0) {
 			for (int i = 0; i < length; i++) {
 				T streamable = readStreamable(streamableClass);

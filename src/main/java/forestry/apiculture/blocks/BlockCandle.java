@@ -75,7 +75,7 @@ public class BlockCandle extends BlockTorch {
 				.put("dyeBlack", new Color(20, 20, 20).getRGB())
 				.build();
 
-		lightingItems = new HashSet<Item>(Arrays.asList(
+		lightingItems = new HashSet<>(Arrays.asList(
 				Items.flint_and_steel,
 				Items.flint,
 				Item.getItemFromBlock(Blocks.torch)
@@ -233,7 +233,7 @@ public class BlockCandle extends BlockTorch {
 	/* DROP HANDLING */
 	// Hack: 	When harvesting we need to get the drops in onBlockHarvested,
 	// 			because Mojang destroys the block and tile before calling getDrops.
-	private final ThreadLocal<ItemStack> drop = new ThreadLocal<ItemStack>();
+	private final ThreadLocal<ItemStack> drop = new ThreadLocal<>();
 
 	@Override
 	public void onBlockHarvested(World world, int x, int y, int z, int metadata, EntityPlayer player) {
@@ -253,7 +253,7 @@ public class BlockCandle extends BlockTorch {
 			dropStack = getCandleDrop(world, x, y, z);
 		}
 
-		ArrayList<ItemStack> drops = new ArrayList<ItemStack>(1);
+		ArrayList<ItemStack> drops = new ArrayList<>(1);
 		drops.add(dropStack);
 
 		return drops;

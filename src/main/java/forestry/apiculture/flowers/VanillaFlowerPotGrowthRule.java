@@ -44,16 +44,22 @@ public class VanillaFlowerPotGrowthRule implements IFlowerGrowthRule {
 		BlockFlowerPot flowerPot = (BlockFlowerPot) block;
 
 		int flower;
-		if (flowerType.equals(FlowerManager.FlowerTypeVanilla) || flowerType.equals(FlowerManager.FlowerTypeSnow)) {
-			flower = world.rand.nextInt(2) + 1;
-		} else if (flowerType.equals(FlowerManager.FlowerTypeJungle)) {
-			flower = 6;
-		} else if (flowerType.equals(FlowerManager.FlowerTypeCacti)) {
-			flower = world.rand.nextInt(2) + 9;
-		} else if (flowerType.equals(FlowerManager.FlowerTypeMushrooms)) {
-			flower = world.rand.nextInt(2) + 7;
-		} else {
-			return false;
+		switch (flowerType) {
+			case FlowerManager.FlowerTypeVanilla:
+			case FlowerManager.FlowerTypeSnow:
+				flower = world.rand.nextInt(2) + 1;
+				break;
+			case FlowerManager.FlowerTypeJungle:
+				flower = 6;
+				break;
+			case FlowerManager.FlowerTypeCacti:
+				flower = world.rand.nextInt(2) + 9;
+				break;
+			case FlowerManager.FlowerTypeMushrooms:
+				flower = world.rand.nextInt(2) + 7;
+				break;
+			default:
+				return false;
 		}
 
 		TileEntityFlowerPot newTile = (TileEntityFlowerPot) flowerPot.createNewTileEntity(world, flower);

@@ -92,7 +92,7 @@ public class FarmLogicRubber extends FarmLogic {
 		return false;
 	}
 
-	private final HashMap<Vect, Integer> lastExtents = new HashMap<Vect, Integer>();
+	private final HashMap<Vect, Integer> lastExtents = new HashMap<>();
 
 	@Override
 	public Collection<ICrop> harvest(int x, int y, int z, FarmDirection direction, int extent) {
@@ -120,8 +120,8 @@ public class FarmLogicRubber extends FarmLogic {
 
 	private Collection<ICrop> getHarvestBlocks(Vect position) {
 
-		Set<Vect> seen = new HashSet<Vect>();
-		Stack<ICrop> crops = new Stack<ICrop>();
+		Set<Vect> seen = new HashSet<>();
+		Stack<ICrop> crops = new Stack<>();
 
 		World world = getWorld();
 
@@ -137,7 +137,7 @@ public class FarmLogicRubber extends FarmLogic {
 		}
 
 		ArrayList<Vect> candidates = processHarvestBlock(crops, seen, position);
-		ArrayList<Vect> temp = new ArrayList<Vect>();
+		ArrayList<Vect> temp = new ArrayList<>();
 		while (!candidates.isEmpty() && crops.size() < 100) {
 			for (Vect candidate : candidates) {
 				temp.addAll(processHarvestBlock(crops, seen, candidate));
@@ -153,7 +153,7 @@ public class FarmLogicRubber extends FarmLogic {
 	private ArrayList<Vect> processHarvestBlock(Stack<ICrop> crops, Set<Vect> seen, Vect position) {
 		World world = getWorld();
 
-		ArrayList<Vect> candidates = new ArrayList<Vect>();
+		ArrayList<Vect> candidates = new ArrayList<>();
 
 		// Get additional candidates to return
 		for (int j = 0; j < 2; j++) {

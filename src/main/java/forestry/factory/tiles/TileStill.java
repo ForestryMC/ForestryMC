@@ -79,9 +79,9 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 
 	public static class RecipeManager implements IStillManager {
 
-		public static final ArrayList<TileStill.Recipe> recipes = new ArrayList<TileStill.Recipe>();
-		public static final HashSet<Fluid> recipeFluidInputs = new HashSet<Fluid>();
-		public static final HashSet<Fluid> recipeFluidOutputs = new HashSet<Fluid>();
+		public static final ArrayList<TileStill.Recipe> recipes = new ArrayList<>();
+		public static final HashSet<Fluid> recipeFluidInputs = new HashSet<>();
+		public static final HashSet<Fluid> recipeFluidOutputs = new HashSet<>();
 
 		@Override
 		public void addRecipe(int timePerUnit, FluidStack input, FluidStack output) {
@@ -109,7 +109,7 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 
 		@Override
 		public Map<Object[], Object[]> getRecipes() {
-			HashMap<Object[], Object[]> recipeList = new HashMap<Object[], Object[]>();
+			HashMap<Object[], Object[]> recipeList = new HashMap<>();
 
 			for (Recipe recipe : recipes) {
 				recipeList.put(new Object[]{recipe.input}, new Object[]{recipe.output});

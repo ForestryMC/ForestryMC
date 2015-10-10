@@ -41,7 +41,7 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 	private final ITreeGenerator generator;
 	private final IGermlingIconProvider germlingIconProvider;
 	private final ILeafIconProvider leafIconProvider;
-	private final List<IFruitFamily> fruits = new ArrayList<IFruitFamily>();
+	private final List<IFruitFamily> fruits = new ArrayList<>();
 
 	private EnumPlantType nativeType = EnumPlantType.Plains;
 

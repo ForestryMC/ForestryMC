@@ -72,7 +72,7 @@ public class BlockAlveary extends BlockStructure {
 
 	@Override
 	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
-		ArrayList<ItemStack> drop = new ArrayList<ItemStack>();
+		ArrayList<ItemStack> drop = new ArrayList<>();
 		drop.add(new ItemStack(this, 1, metadata != 1 ? metadata : 0));
 		return drop;
 	}

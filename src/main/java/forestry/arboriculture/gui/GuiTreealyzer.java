@@ -47,7 +47,7 @@ public class GuiTreealyzer extends GuiAlyzer {
 	public GuiTreealyzer(EntityPlayer player, TreealyzerInventory inventory) {
 		super("rootTrees", player, new ContainerAlyzer(inventory, player), inventory, "gui.treealyzer");
 
-		ArrayList<ItemStack> treeList = new ArrayList<ItemStack>();
+		ArrayList<ItemStack> treeList = new ArrayList<>();
 		((ItemGermlingGE) ForestryItem.sapling.item()).addCreativeItems(treeList, false);
 		for (ItemStack treeStack : treeList) {
 			IAlleleTreeSpecies species = TreeGenome.getSpecies(treeStack);
@@ -189,12 +189,12 @@ public class GuiTreealyzer extends GuiAlyzer {
 
 		drawLine(StringUtil.localize("gui.tolerated"), COLUMN_0);
 
-		List<EnumPlantType> activeTolerated = new ArrayList<EnumPlantType>(tree.getGenome().getPlantTypes());
+		List<EnumPlantType> activeTolerated = new ArrayList<>(tree.getGenome().getPlantTypes());
 		List<EnumPlantType> inactiveTolerated = Collections.emptyList();
 
 		IAllele inactiveAllelePlant = tree.getGenome().getInactiveAllele(EnumTreeChromosome.PLANT);
 		if (inactiveAllelePlant instanceof AllelePlantType) {
-			inactiveTolerated = new ArrayList<EnumPlantType>(((AllelePlantType) inactiveAllelePlant).getPlantTypes());
+			inactiveTolerated = new ArrayList<>(((AllelePlantType) inactiveAllelePlant).getPlantTypes());
 		}
 
 		int max = Math.max(activeTolerated.size(), inactiveTolerated.size());
@@ -213,8 +213,8 @@ public class GuiTreealyzer extends GuiAlyzer {
 
 		// FRUITS
 		drawLine(StringUtil.localize("gui.supports"), COLUMN_0);
-		List<IFruitFamily> families0 = new ArrayList<IFruitFamily>(tree.getGenome().getPrimary().getSuitableFruit());
-		List<IFruitFamily> families1 = new ArrayList<IFruitFamily>(tree.getGenome().getSecondary().getSuitableFruit());
+		List<IFruitFamily> families0 = new ArrayList<>(tree.getGenome().getPrimary().getSuitableFruit());
+		List<IFruitFamily> families1 = new ArrayList<>(tree.getGenome().getSecondary().getSuitableFruit());
 
 		max = Math.max(families0.size(), families1.size());
 		for (int i = 0; i < max; i++) {

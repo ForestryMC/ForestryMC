@@ -50,7 +50,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 		@Override
 		public int[] getAccessibleSlotsFromSide(int side) {
 
-			ArrayList<Integer> slots = new ArrayList<Integer>();
+			ArrayList<Integer> slots = new ArrayList<>();
 
 			for (int i = SLOT_LETTERS_1; i < SLOT_LETTERS_1 + SLOT_LETTERS_COUNT; i++) {
 				slots.add(i);
@@ -552,7 +552,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	}
 
 	private ItemStack[] getSurplusAttachments(int filled, ItemStack[] attachments) {
-		ArrayList<ItemStack> surplus = new ArrayList<ItemStack>();
+		ArrayList<ItemStack> surplus = new ArrayList<>();
 
 		// Get a copy of the attachments to play with
 		ItemStack[] pool = new ItemStack[attachments.length];

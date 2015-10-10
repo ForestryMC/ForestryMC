@@ -56,7 +56,7 @@ public class CircuitBoard<T> implements ICircuitBoard {
 			list.add(EnumChatFormatting.GOLD + layout.getUsage() + ":");
 		}
 
-		List<String> extendedTooltip = new ArrayList<String>();
+		List<String> extendedTooltip = new ArrayList<>();
 		for (ICircuit circuit : circuits) {
 			if (circuit != null) {
 				circuit.addTooltip(extendedTooltip);

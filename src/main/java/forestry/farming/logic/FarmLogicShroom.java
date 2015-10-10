@@ -58,7 +58,7 @@ public class FarmLogicShroom extends FarmLogicArboreal {
 	@Override
 	public Collection<ItemStack> collect() {
 		Collection<ItemStack> products = produce;
-		produce = new ArrayList<ItemStack>();
+		produce = new ArrayList<>();
 		return products;
 	}
 

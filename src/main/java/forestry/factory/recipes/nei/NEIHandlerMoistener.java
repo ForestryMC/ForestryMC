@@ -37,7 +37,7 @@ public class NEIHandlerMoistener extends RecipeHandlerBase {
 	public class CachedMoistenerRecipe extends CachedBaseRecipe {
 
 		public PositionedFluidTank tank;
-		public List<PositionedStack> fuels = new ArrayList<PositionedStack>();
+		public List<PositionedStack> fuels = new ArrayList<>();
 		public PositionedStack input;
 		public PositionedStack output;
 
