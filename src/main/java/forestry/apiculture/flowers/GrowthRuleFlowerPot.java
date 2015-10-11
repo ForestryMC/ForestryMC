@@ -17,15 +17,24 @@ import net.minecraft.tileentity.TileEntityFlowerPot;
 import net.minecraft.world.World;
 
 import forestry.api.apiculture.FlowerManager;
+import forestry.api.genetics.IFlowerGrowthHelper;
 import forestry.api.genetics.IFlowerGrowthRule;
 import forestry.api.genetics.IFlowerRegistry;
 import forestry.api.genetics.IIndividual;
 
-public class VanillaFlowerPotGrowthRule implements IFlowerGrowthRule {
+public class GrowthRuleFlowerPot implements IFlowerGrowthRule {
 
 	@Override
 	public boolean growFlower(IFlowerRegistry fr, String flowerType, World world, IIndividual individual, int x, int y, int z) {
+		return growFlower(flowerType, world, x, y, z);
+	}
 
+	@Override
+	public boolean growFlower(IFlowerGrowthHelper helper, String flowerType, World world, int x, int y, int z) {
+		return growFlower(flowerType, world, x, y, z);
+	}
+
+	private static boolean growFlower(String flowerType, World world, int x, int y, int z) {
 		TileEntity tile = world.getTileEntity(x, y, z);
 		if (!(tile instanceof TileEntityFlowerPot)) {
 			return false;

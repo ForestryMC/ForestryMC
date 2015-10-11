@@ -16,20 +16,30 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
 
+import forestry.api.genetics.IFlowerGrowthHelper;
 import forestry.api.genetics.IFlowerGrowthRule;
 import forestry.api.genetics.IFlowerRegistry;
 import forestry.api.genetics.IIndividual;
 
-public class VanillaFertilizeGrowthRule implements IFlowerGrowthRule {
+public class GrowthRuleFertilize implements IFlowerGrowthRule {
 
 	private final List<Block> allowedItems;
 
-	public VanillaFertilizeGrowthRule(Block... allowedItems) {
+	public GrowthRuleFertilize(Block... allowedItems) {
 		this.allowedItems = Arrays.asList(allowedItems);
 	}
 
 	@Override
 	public boolean growFlower(IFlowerRegistry fr, String flowerType, World world, IIndividual individual, int x, int y, int z) {
+		return growFlower(world, x, y, z);
+	}
+
+	@Override
+	public boolean growFlower(IFlowerGrowthHelper helper, String flowerType, World world, int x, int y, int z) {
+		return growFlower(world, x, y, z);
+	}
+
+	private boolean growFlower(World world, int x, int y, int z) {
 		Block ground = world.getBlock(x, y, z);
 		int groundMeta;
 		for (Block b : this.allowedItems) {

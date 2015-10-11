@@ -30,6 +30,7 @@ import com.mojang.authlib.GameProfile;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeChromosome;
+import forestry.api.apiculture.FlowerManager;
 import forestry.api.apiculture.IAlleleBeeEffect;
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IApiaristTracker;
@@ -741,7 +742,7 @@ public class Bee extends IndividualLiving implements IBee {
 			Vect randomPos = Vect.getRandomPositionInArea(random, area);
 			Vect posBlock = Vect.add(housingPos, randomPos, offset);
 
-			if (provider.growFlower(world, this, posBlock.x, posBlock.y, posBlock.z)) {
+			if (FlowerManager.flowerRegistry.growFlower(provider.getFlowerType(), world, this, posBlock.x, posBlock.y, posBlock.z)) {
 				break;
 			}
 		}
