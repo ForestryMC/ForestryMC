@@ -40,6 +40,7 @@ public class TileApiaristChest extends TileNaturalistChest {
 
 			checkedForLegacyBlock = true;
 		}
+		super.updateServerSide();
 	}
 
 	private void migrateFromLegacyBlock() {
