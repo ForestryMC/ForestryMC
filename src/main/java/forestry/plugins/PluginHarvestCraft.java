@@ -109,8 +109,8 @@ public class PluginHarvestCraft extends ForestryPlugin {
 
 		ImmutableList<String> spices = ImmutableList.of(
 				"ginger",
-				"spiceleaf",
-				"mustardseed"
+				"spiceleaf"
+				//"mustardseed" Mustard is inconsistent and annoying.
 		);
 
 		ImmutableList<String> vegetables = ImmutableList.of(
@@ -300,6 +300,19 @@ public class PluginHarvestCraft extends ForestryPlugin {
 				Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(genericCropBlock, 7));
 			}
 			plants.add(cropName);
+		}
+		ItemStack mustardCropSeed = GameRegistry.findItemStack(HC,"mustard" + "seedItem",1);
+		Block mustardCropBlock = GameRegistry.findBlock(HC,"pam"+"mustardseeds" + "Crop");
+		ItemStack mustardFruit = GameRegistry.findItemStack(HC,"mustard" + "seedsItem",1);
+		if (mustardCropSeed != null) {
+			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{mustardCropSeed}, Fluids.SEEDOIL.getFluid(seedamount));
+		}
+		if (mustardCropSeed != null && mustardCropBlock != null) {
+			Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(mustardCropSeed, mustardCropBlock, 7));
+			Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(mustardCropBlock, 7));
+		}
+		if (mustardFruit != null) {
+			RecipeUtil.addFermenterRecipes(mustardFruit, GameMode.getGameMode().getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
 		}
 
 		for (String plantName : plants.build()) {
