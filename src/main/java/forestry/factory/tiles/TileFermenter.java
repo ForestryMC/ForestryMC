@@ -114,6 +114,11 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 
 		@Override
 		public void addRecipe(ItemStack resource, int fermentationValue, float modifier, FluidStack output, FluidStack liquid) {
+			// assume that fermenter recipes want to use Forestry's honey and not the legacy "fluid.honey"
+			if (Fluids.LEGACY_HONEY.is(liquid)) {
+				liquid = Fluids.HONEY.getFluid(liquid.amount);
+			}
+			
 			recipes.add(new Recipe(resource, fermentationValue, modifier, output, liquid));
 			if (liquid != null) {
 				recipeFluidInputs.add(liquid.getFluid());
