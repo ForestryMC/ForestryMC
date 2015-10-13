@@ -404,19 +404,14 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 			containerRecipes.put(emptyContainer, new SqueezerContainerRecipe(emptyContainer, timePerItem, remnants, chance));
 		}
 
+		@Nullable
 		public static ISqueezerContainerRecipe findMatchingContainerRecipe(ItemStack filledContainer) {
 			ItemStack emptyContainer = FluidHelper.getEmptyContainer(filledContainer);
 			if (emptyContainer == null) {
 				return null;
 			}
 
-			ISqueezerContainerRecipe containerRecipe = containerRecipes.get(emptyContainer);
-			if (containerRecipe != null) {
-				return containerRecipe;
-			}
-
-			// default recipe for unregistered fluid items, has no remnants
-			return new SqueezerContainerRecipe(emptyContainer, 10, null, 0);
+			return containerRecipes.get(emptyContainer);
 		}
 
 		public static ISqueezerRecipe findMatchingRecipe(ItemStack[] items) {
