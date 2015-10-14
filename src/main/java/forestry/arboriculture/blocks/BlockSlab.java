@@ -17,6 +17,7 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -41,9 +42,11 @@ import forestry.api.core.Tabs;
 import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.render.IconProviderWood;
 import forestry.arboriculture.tiles.TileWood;
+import forestry.core.render.ParticleHelper;
 
 public class BlockSlab extends net.minecraft.block.BlockSlab implements IWoodTyped, ITileEntityProvider {
 
+	private final ParticleHelper.Callback particleCallback;
 	private final boolean fireproof;
 
 	public BlockSlab(boolean fireproof) {
@@ -57,6 +60,8 @@ public class BlockSlab extends net.minecraft.block.BlockSlab implements IWoodTyp
 		setResistance(5.0F);
 		setStepSound(soundTypeWood);
 		setHarvestLevel("axe", 0);
+
+		this.particleCallback = new ParticleHelper.DefaultCallback(this);
 	}
 
 	@Override
@@ -182,5 +187,18 @@ public class BlockSlab extends net.minecraft.block.BlockSlab implements IWoodTyp
 	@SideOnly(Side.CLIENT)
 	public Item getItem(World world, int x, int y, int z) {
 		return Item.getItemFromBlock(this);
+	}
+
+	/* Particles */
+	@SideOnly(Side.CLIENT)
+	@Override
+	public boolean addHitEffects(World worldObj, MovingObjectPosition target, EffectRenderer effectRenderer) {
+		return ParticleHelper.addHitEffects(worldObj, this, target, effectRenderer, particleCallback);
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public boolean addDestroyEffects(World worldObj, int x, int y, int z, int meta, EffectRenderer effectRenderer) {
+		return ParticleHelper.addDestroyEffects(worldObj, this, x, y, z, meta, effectRenderer, particleCallback);
 	}
 }

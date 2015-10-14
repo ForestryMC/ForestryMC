@@ -18,6 +18,7 @@ import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockFenceGate;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -41,10 +42,12 @@ import forestry.api.core.Tabs;
 import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.render.IconProviderWood;
 import forestry.arboriculture.tiles.TileWood;
+import forestry.core.render.ParticleHelper;
 import forestry.plugins.PluginArboriculture;
 
 public class BlockArbFence extends BlockFence implements IWoodTyped, ITileEntityProvider {
 
+	private final ParticleHelper.Callback particleCallback;
 	private final boolean fireproof;
 
 	public BlockArbFence(boolean fireproof) {
@@ -57,6 +60,8 @@ public class BlockArbFence extends BlockFence implements IWoodTyped, ITileEntity
 		setHarvestLevel("axe", 0);
 		setStepSound(soundTypeWood);
 		setCreativeTab(Tabs.tabArboriculture);
+
+		this.particleCallback = new ParticleHelper.DefaultCallback(this);
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
@@ -173,5 +178,18 @@ public class BlockArbFence extends BlockFence implements IWoodTyped, ITileEntity
 	@Override
 	public boolean isFireproof() {
 		return fireproof;
+	}
+
+	/* Particles */
+	@SideOnly(Side.CLIENT)
+	@Override
+	public boolean addHitEffects(World worldObj, MovingObjectPosition target, EffectRenderer effectRenderer) {
+		return ParticleHelper.addHitEffects(worldObj, this, target, effectRenderer, particleCallback);
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public boolean addDestroyEffects(World worldObj, int x, int y, int z, int meta, EffectRenderer effectRenderer) {
+		return ParticleHelper.addDestroyEffects(worldObj, this, x, y, z, meta, effectRenderer, particleCallback);
 	}
 }
