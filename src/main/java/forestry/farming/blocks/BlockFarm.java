@@ -16,7 +16,6 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.particle.EffectRenderer;
-import net.minecraft.client.particle.EntityDiggingFX;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
@@ -47,12 +46,12 @@ import forestry.plugins.PluginFarming;
 
 public class BlockFarm extends BlockStructure {
 
-	private static BlockFarm instance;
+	private final ParticleHelper.Callback particleCallback;
 
 	public BlockFarm() {
 		super(Material.rock);
 		setHardness(1.0f);
-		instance = this;
+		this.particleCallback = new ParticleHelper.DefaultCallback(this);
 	}
 
 	@Override
@@ -162,40 +161,6 @@ public class BlockFarm extends BlockStructure {
 		EnumFarmBlockTexture.registerIcons(register);
 	}
 
-	private static class ParticleCallback implements ParticleHelper.Callback {
-
-		@Override
-		@SideOnly(Side.CLIENT)
-		public void addHitEffects(EntityDiggingFX fx, World world, int x, int y, int z, int meta) {
-			setTexture(fx, world, x, y, z);
-		}
-
-		@Override
-		@SideOnly(Side.CLIENT)
-		public void addDestroyEffects(EntityDiggingFX fx, World world, int x, int y, int z, int meta) {
-			setTexture(fx, world, x, y, z);
-		}
-
-		@SideOnly(Side.CLIENT)
-		private static void setTexture(EntityDiggingFX fx, World world, int x, int y, int z) {
-			fx.setParticleIcon(instance.getIcon(world, x, y, z, 0));
-		}
-	}
-
-	private static final ParticleHelper.Callback callback = new ParticleCallback();
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public boolean addHitEffects(World worldObj, MovingObjectPosition target, EffectRenderer effectRenderer) {
-		return ParticleHelper.addHitEffects(worldObj, instance, target, effectRenderer, callback);
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public boolean addDestroyEffects(World worldObj, int x, int y, int z, int meta, EffectRenderer effectRenderer) {
-		return ParticleHelper.addDestroyEffects(worldObj, instance, x, y, z, meta, effectRenderer, callback);
-	}
-
 	@SideOnly(Side.CLIENT)
 	@Override
 	public IIcon getIcon(int side, int metadata) {
@@ -238,11 +203,6 @@ public class BlockFarm extends BlockStructure {
 	}
 
 	@Override
-	public boolean canConnectRedstone(IBlockAccess world, int x, int y, int z, int side) {
-		return world.getBlockMetadata(x, y, z) == 5;
-	}
-
-	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
 		TileEntity tile = world.getTileEntity(x, y, z);
@@ -258,6 +218,24 @@ public class BlockFarm extends BlockStructure {
 		}
 
 		return block.getIcon(side, base.getItemDamage());
+	}
+
+	/* Particles */
+	@SideOnly(Side.CLIENT)
+	@Override
+	public boolean addHitEffects(World worldObj, MovingObjectPosition target, EffectRenderer effectRenderer) {
+		return ParticleHelper.addHitEffects(worldObj, this, target, effectRenderer, particleCallback);
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public boolean addDestroyEffects(World worldObj, int x, int y, int z, int meta, EffectRenderer effectRenderer) {
+		return ParticleHelper.addDestroyEffects(worldObj, this, x, y, z, meta, effectRenderer, particleCallback);
+	}
+
+	@Override
+	public boolean canConnectRedstone(IBlockAccess world, int x, int y, int z, int side) {
+		return world.getBlockMetadata(x, y, z) == 5;
 	}
 
 }

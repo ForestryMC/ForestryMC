@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -35,10 +36,12 @@ import forestry.api.core.Tabs;
 import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.render.IconProviderWood;
 import forestry.arboriculture.tiles.TileWood;
+import forestry.core.render.ParticleHelper;
 import forestry.core.tiles.TileUtil;
 
 public abstract class BlockWood extends Block implements ITileEntityProvider, IWoodTyped {
 
+	private final ParticleHelper.Callback particleCallback;
 	private final String blockKind;
 	private final boolean fireproof;
 
@@ -49,6 +52,8 @@ public abstract class BlockWood extends Block implements ITileEntityProvider, IW
 
 		setStepSound(soundTypeWood);
 		setCreativeTab(Tabs.tabArboriculture);
+
+		particleCallback = new ParticleHelper.DefaultCallback(this);
 	}
 
 	@Override
@@ -138,4 +143,16 @@ public abstract class BlockWood extends Block implements ITileEntityProvider, IW
 	@SideOnly(Side.CLIENT)
 	public abstract IIcon getIcon(IBlockAccess world, int x, int y, int z, int side);
 
+	/* Particles */
+	@SideOnly(Side.CLIENT)
+	@Override
+	public boolean addHitEffects(World worldObj, MovingObjectPosition target, EffectRenderer effectRenderer) {
+		return ParticleHelper.addHitEffects(worldObj, this, target, effectRenderer, particleCallback);
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public boolean addDestroyEffects(World worldObj, int x, int y, int z, int meta, EffectRenderer effectRenderer) {
+		return ParticleHelper.addDestroyEffects(worldObj, this, x, y, z, meta, effectRenderer, particleCallback);
+	}
 }

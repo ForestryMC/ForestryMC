@@ -16,6 +16,7 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -37,9 +38,11 @@ import forestry.api.core.Tabs;
 import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.render.IconProviderWood;
 import forestry.arboriculture.tiles.TileWood;
+import forestry.core.render.ParticleHelper;
 
 public class BlockArbStairs extends BlockStairs implements IWoodTyped, ITileEntityProvider {
 
+	private final ParticleHelper.Callback particleCallback;
 	private final boolean fireproof;
 
 	public BlockArbStairs(Block par2Block, boolean fireproof) {
@@ -51,6 +54,8 @@ public class BlockArbStairs extends BlockStairs implements IWoodTyped, ITileEnti
 		setHardness(2.0F);
 		setResistance(5.0F);
 		setHarvestLevel("axe", 0);
+
+		this.particleCallback = new ParticleHelper.DefaultCallback(this);
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
@@ -125,5 +130,18 @@ public class BlockArbStairs extends BlockStairs implements IWoodTyped, ITileEnti
 	@Override
 	public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
 		return new TileWood();
+	}
+
+	/* Particles */
+	@SideOnly(Side.CLIENT)
+	@Override
+	public boolean addHitEffects(World worldObj, MovingObjectPosition target, EffectRenderer effectRenderer) {
+		return ParticleHelper.addHitEffects(worldObj, this, target, effectRenderer, particleCallback);
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public boolean addDestroyEffects(World worldObj, int x, int y, int z, int meta, EffectRenderer effectRenderer) {
+		return ParticleHelper.addDestroyEffects(worldObj, this, x, y, z, meta, effectRenderer, particleCallback);
 	}
 }
