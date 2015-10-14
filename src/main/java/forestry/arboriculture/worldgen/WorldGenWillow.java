@@ -22,7 +22,6 @@ public class WorldGenWillow extends WorldGenTree {
 
 	@Override
 	public void generate(World world) {
-
 		generateTreeTrunk(world, height, girth, 0.8f);
 		generateSupportStems(world, height, girth, 0.2f, 0.2f);
 
@@ -35,11 +34,15 @@ public class WorldGenWillow extends WorldGenTree {
 		generateAdjustedCylinder(world, leafSpawn--, 3f, 1, leaf);
 		generateAdjustedCylinder(world, leafSpawn--, 3f, 1, leaf);
 		while (leafSpawn > 2) {
+			// support branches for tall willows, keeps the leaves from decaying immediately
+			if ((leafSpawn - 3) % 6 == 0) {
+				generateBranches(world, leafSpawn, 0, 0, 0, 0, 2, 1);
+			}
 			generateCircle(world, new Vector(0f, leafSpawn--, 0f), 4f, 2, 1, leaf, EnumReplaceMode.NONE);
 		}
 		generateCircle(world, new Vector(0f, leafSpawn--, 0f), 4f, 1, 1, leaf, EnumReplaceMode.NONE);
 		generateCircle(world, new Vector(0f, leafSpawn--, 0f), 4f, 1, 1, leaf, EnumReplaceMode.NONE);
-		generateCircle(world, new Vector(0f, leafSpawn--, 0f), 4f, 1, 1, leaf, 0.4f, EnumReplaceMode.NONE);
+		generateCircle(world, new Vector(0f, leafSpawn, 0f), 4f, 1, 1, leaf, 0.4f, EnumReplaceMode.NONE);
 
 	}
 

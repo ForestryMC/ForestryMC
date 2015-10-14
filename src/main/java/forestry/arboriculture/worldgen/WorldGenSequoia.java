@@ -10,6 +10,10 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 
 import forestry.api.world.ITreeGenData;
@@ -27,10 +31,21 @@ public class WorldGenSequoia extends WorldGenTree {
 	@Override
 	public void generate(World world) {
 		generateTreeTrunk(world, height, girth);
+		generateSupportStems(world, height, girth, 0.4f, 0.4f);
 
-		int topLength = height / 4;
+		int topHeight = (height / 3) + world.rand.nextInt(height / 6);
 
-		int topHeight = height - topLength + world.rand.nextInt(height / 4);
+		List<ChunkCoordinates> branchCoords = new ArrayList<>();
+		for (int yBranch = topHeight; yBranch < height; yBranch++) {
+			int branchLength = Math.round(height - yBranch) / 2;
+			if (branchLength > 4) {
+				branchLength = 4;
+			}
+			branchCoords.addAll(generateBranches(world, yBranch, 0, 0, 0.05f, 0.25f, branchLength, 1, 0.5f));
+		}
+		for (ChunkCoordinates branchEnd : branchCoords) {
+			generateAdjustedCylinder(world, branchEnd.posY, branchEnd.posX, branchEnd.posZ, 1.0f, 1, leaf, EnumReplaceMode.NONE);
+		}
 
 		int leafSpawn = height + 2;
 
@@ -42,20 +57,7 @@ public class WorldGenSequoia extends WorldGenTree {
 			generateAdjustedCylinder(world, leafSpawn--, 1, 1, leaf);
 		}
 
-		generateAdjustedCylinder(world, leafSpawn--, 0, 1, leaf);
-
-		for (int times = 0; times < height / 4; times++) {
-			int h = (height / 3) + world.rand.nextInt(height - (height / 3));
-			if (world.rand.nextBoolean() && h < height / 3) {
-				h = height / 2 + world.rand.nextInt(height / 3);
-			}
-			int x_off = -1 + world.rand.nextInt(3);
-			int y_off = -1 + world.rand.nextInt(3);
-
-			Vector center = new Vector(x_off, h, y_off);
-			int radius = 1 + world.rand.nextInt(2);
-			generateSphere(world, center, radius, leaf, EnumReplaceMode.NONE);
-		}
+		generateAdjustedCylinder(world, leafSpawn, 0, 1, leaf);
 	}
 
 }

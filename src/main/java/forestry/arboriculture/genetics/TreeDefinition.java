@@ -64,7 +64,6 @@ import forestry.arboriculture.worldgen.WorldGenJungle;
 import forestry.arboriculture.worldgen.WorldGenKapok;
 import forestry.arboriculture.worldgen.WorldGenLarch;
 import forestry.arboriculture.worldgen.WorldGenLemon;
-import forestry.arboriculture.worldgen.WorldGenLime;
 import forestry.arboriculture.worldgen.WorldGenMahoe;
 import forestry.arboriculture.worldgen.WorldGenMahogany;
 import forestry.arboriculture.worldgen.WorldGenMaple;
@@ -75,6 +74,7 @@ import forestry.arboriculture.worldgen.WorldGenPine;
 import forestry.arboriculture.worldgen.WorldGenPlum;
 import forestry.arboriculture.worldgen.WorldGenPoplar;
 import forestry.arboriculture.worldgen.WorldGenSequoia;
+import forestry.arboriculture.worldgen.WorldGenSilverLime;
 import forestry.arboriculture.worldgen.WorldGenSpruce;
 import forestry.arboriculture.worldgen.WorldGenTeak;
 import forestry.arboriculture.worldgen.WorldGenWalnut;
@@ -159,7 +159,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 	Lime(TreeBranchDefinition.TILIA, "silverLime", "pendula", true, EnumLeafType.DECIDUOUS, new Color(0x5ea107), new Color(0x5ea107).brighter(), EnumWoodType.LIME) {
 		@Override
 		public WorldGenerator getWorldGenerator(ITreeGenData tree) {
-			return new WorldGenLime(tree);
+			return new WorldGenSilverLime(tree);
 		}
 
 		@Override
@@ -995,6 +995,17 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 		if (woodType == null) {
 			Block vanillaWoodBlock = Block.getBlockFromItem(vanillaWood.getItem());
 			int vanillaWoodMeta = vanillaWood.getItemDamage();
+			switch (facing) {
+				case NORTH:
+				case SOUTH:
+					vanillaWoodMeta |= 2 << 2;
+					break;
+				case EAST:
+				case WEST:
+					vanillaWoodMeta |= 1 << 2;
+					break;
+			}
+
 			world.setBlock(x, y, z, vanillaWoodBlock, vanillaWoodMeta, Constants.FLAG_BLOCK_SYNCH);
 		} else {
 			AlleleBoolean fireproofAllele = (AlleleBoolean) genome.getActiveAllele(EnumTreeChromosome.FIREPROOF);

@@ -10,6 +10,9 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
+import java.util.List;
+
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 
 import forestry.api.world.ITreeGenData;
@@ -35,7 +38,15 @@ public class WorldGenChestnut extends WorldGenTree {
 		if (world.rand.nextBoolean()) {
 			generateAdjustedCylinder(world, leafSpawn--, 2f, 1, leaf);
 		}
-		generateAdjustedCylinder(world, leafSpawn--, 1.5f, 1, leaf);
+
+		int branchRadius = height / 2;
+
+		List<ChunkCoordinates> branchCoords = generateBranches(world, leafSpawn, 0, 0, 0.5f, 0.5f, branchRadius, 2);
+		for (ChunkCoordinates branchEnd : branchCoords) {
+			generateAdjustedCylinder(world, branchEnd.posY, branchEnd.posX, branchEnd.posZ, 1.0f, 2, leaf, EnumReplaceMode.NONE);
+		}
+
+		generateAdjustedCylinder(world, leafSpawn, 1.5f, 1, leaf);
 
 	}
 

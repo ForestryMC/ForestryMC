@@ -26,9 +26,11 @@ public class WorldGenDate extends WorldGenTree {
 
 		int leafSpawn = height + 1;
 
-		generateAdjustedCylinder(world, leafSpawn--, 2f, 1, leaf);
-		generateAdjustedCylinder(world, leafSpawn--, 0.5f, 1, leaf);
-		generateAdjustedCylinder(world, leafSpawn--, 0, 1, leaf);
+		float radiusMultiplier = height / 6f;
+
+		generateAdjustedCylinder(world, leafSpawn--, radiusMultiplier * 2f, 1, leaf);
+		generateAdjustedCylinder(world, leafSpawn--, radiusMultiplier * 0.5f, 1, leaf);
+		generateAdjustedCylinder(world, leafSpawn, 0, 1, leaf);
 
 	}
 

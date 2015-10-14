@@ -27,8 +27,11 @@ public class WorldGenPlum extends WorldGenTree {
 		int yCenter = height - girth;
 		yCenter = yCenter > 2 ? yCenter : 3;
 
-		Vector center = getCenteredAt(yCenter, 0);
-		int radius = 2 + world.rand.nextInt(girth);
+		Vector center = getCenteredAt(yCenter, 0, 0);
+		int radius = Math.round((2 + world.rand.nextInt(girth)) * (height / 4.0f));
+		if (radius > 4) {
+			radius = 4;
+		}
 		generateSphere(world, center, radius, leaf, EnumReplaceMode.NONE);
 	}
 

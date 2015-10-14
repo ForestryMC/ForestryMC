@@ -10,6 +10,9 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
+import java.util.List;
+
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 
 import forestry.api.world.ITreeGenData;
@@ -24,6 +27,12 @@ public class WorldGenZebrawood extends WorldGenTree {
 	public void generate(World world) {
 
 		generateTreeTrunk(world, height, girth);
+		generateSupportStems(world, height, girth, 0.8f, 0.3f);
+
+		List<ChunkCoordinates> branchCoords = generateBranches(world, height - 4, 0, 0, 0, 0.25f, 3, 2, 0.75f);
+		for (ChunkCoordinates branchEnd : branchCoords) {
+			generateAdjustedCylinder(world, branchEnd.posY, branchEnd.posX, branchEnd.posZ, 1.0f, 2, leaf, EnumReplaceMode.NONE);
+		}
 
 		int leafSpawn = height + 1;
 
@@ -35,7 +44,7 @@ public class WorldGenZebrawood extends WorldGenTree {
 		while (leafSpawn > height - 4) {
 			generateAdjustedCylinder(world, leafSpawn--, 2.5f, 1, leaf);
 		}
-		generateAdjustedCylinder(world, leafSpawn--, 1.9f, 1, leaf);
+		generateAdjustedCylinder(world, leafSpawn, 1.9f, 1, leaf);
 
 		// Add some smaller twigs below for flavour
 		for (int times = 0; times < height / 4; times++) {

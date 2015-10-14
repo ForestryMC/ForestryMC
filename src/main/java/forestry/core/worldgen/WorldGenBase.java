@@ -15,6 +15,8 @@ import java.util.Random;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
+import net.minecraftforge.common.util.ForgeDirection;
+
 import forestry.arboriculture.worldgen.ITreeBlockType;
 
 public abstract class WorldGenBase extends WorldGenerator {
@@ -38,6 +40,20 @@ public abstract class WorldGenBase extends WorldGenerator {
 
 		public static double distance(Vector a, Vector b) {
 			return Math.sqrt(Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2) + Math.pow(a.z - b.z, 2));
+		}
+
+		public static ForgeDirection direction(Vector a, Vector b) {
+			int x = (int) Math.abs(a.x - b.x);
+			int y = (int) Math.abs(a.y - b.y);
+			int z = (int) Math.abs(a.z - b.z);
+			int max = Math.max(x, Math.max(y, z));
+			if (max == x) {
+				return ForgeDirection.EAST;
+			} else if (max == z) {
+				return ForgeDirection.SOUTH;
+			} else {
+				return ForgeDirection.UP;
+			}
 		}
 	}
 
@@ -71,7 +87,11 @@ public abstract class WorldGenBase extends WorldGenerator {
 		for (int x = (int) start.x; x < (int) start.x + area.x; x++) {
 			for (int y = (int) start.y; y < (int) start.y + area.y; y++) {
 				for (int z = (int) start.z; z < (int) start.z + area.z; z++) {
-					if (Vector.distance(new Vector(x, y, z), new Vector(center.x, y, center.z)) <= (radius) + 0.01) {
+					Vector position = new Vector(x, y, z);
+					Vector treeCenter = new Vector(center.x, y, center.z);
+					if (Vector.distance(position, treeCenter) <= (radius) + 0.01) {
+						ForgeDirection direction = Vector.direction(position, treeCenter);
+						block.setDirection(direction);
 						addBlock(world, x, y, z, block, replace);
 					}
 				}

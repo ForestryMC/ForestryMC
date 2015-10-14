@@ -10,6 +10,9 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
+import java.util.List;
+
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 
 import forestry.api.world.ITreeGenData;
@@ -22,11 +25,14 @@ public class WorldGenCocobolo extends WorldGenTree {
 	
 	@Override
 	public void generate(World world) {
-		generateTreeTrunk(world, height, girth);
+		List<ChunkCoordinates> treeTops = generateTreeTrunk(world, height, girth);
 
 		int leafSpawn = height;
 
-		addLeaf(world, 0, leafSpawn--, 0, EnumReplaceMode.NONE);
+		for (ChunkCoordinates treeTop : treeTops) {
+			addLeaf(world, treeTop.posX, treeTop.posY + 1, treeTop.posZ, EnumReplaceMode.NONE);
+		}
+		leafSpawn--;
 		generateAdjustedCylinder(world, leafSpawn--, 1, 1, leaf);
 
 		if (height > 10) {
@@ -42,12 +48,12 @@ public class WorldGenCocobolo extends WorldGenTree {
 				if (world.rand.nextBoolean()) {
 					offset = -1;
 				}
-				generateAdjustedCylinder(world, leafSpawn, offset, 2, 1, leaf, EnumReplaceMode.NONE);
+				generateAdjustedCylinder(world, leafSpawn, offset, offset, 2, 1, leaf, EnumReplaceMode.NONE);
 			} else {
 				if (world.rand.nextBoolean()) {
 					offset = -1;
 				}
-				generateAdjustedCylinder(world, leafSpawn, offset, 0, 1, leaf, EnumReplaceMode.NONE);
+				generateAdjustedCylinder(world, leafSpawn, offset, offset, 0, 1, leaf, EnumReplaceMode.NONE);
 			}
 			leafSpawn--;
 		}

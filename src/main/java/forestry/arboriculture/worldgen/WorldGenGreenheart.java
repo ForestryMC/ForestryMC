@@ -24,7 +24,7 @@ public class WorldGenGreenheart extends WorldGenTree {
 	public void generate(World world) {
 
 		generateTreeTrunk(world, height, girth, 0.4f);
-		generateSupportStems(world, height, girth, 0.1f, 0.2f);
+		generateSupportStems(world, height, girth, 0.5f, 0.2f);
 
 		int leafSpawn = height + 1;
 

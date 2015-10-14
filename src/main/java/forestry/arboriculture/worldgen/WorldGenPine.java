@@ -10,6 +10,10 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 
 import forestry.api.world.ITreeGenData;
@@ -24,8 +28,16 @@ public class WorldGenPine extends WorldGenTree {
 	public void generate(World world) {
 		generateTreeTrunk(world, height, girth);
 
+		List<ChunkCoordinates> branchCoords = new ArrayList<>();
+		for (int yBranch = 2; yBranch < height - 2; yBranch++) {
+			branchCoords.addAll(generateBranches(world, yBranch, 0, 0, 0.05f, 0.1f, Math.round((height - yBranch) * 0.25f), 1, 0.25f));
+		}
+		for (ChunkCoordinates branchEnd : branchCoords) {
+			generateAdjustedCylinder(world, branchEnd.posY, branchEnd.posX, branchEnd.posZ, 2, 1, leaf, EnumReplaceMode.NONE);
+		}
+
 		int leafSpawn = height + 1;
-		float diameterchange = (float) 1 / height;
+		float diameterchange = 1.25f / height;
 		int leafSpawned = 2;
 
 		generateAdjustedCylinder(world, leafSpawn--, 0, 1, leaf);

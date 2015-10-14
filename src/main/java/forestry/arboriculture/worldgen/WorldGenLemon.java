@@ -26,8 +26,11 @@ public class WorldGenLemon extends WorldGenTree {
 
 		int yCenter = height - girth;
 		yCenter = yCenter > 2 ? yCenter : 3;
-		generateSphere(world, getCenteredAt(yCenter, 0), 2 + world.rand.nextInt(girth), leaf, EnumReplaceMode.NONE);
-
+		int radius = Math.round((2 + world.rand.nextInt(girth)) * (height / 4.0f));
+		if (radius > 4) {
+			radius = 4;
+		}
+		generateSphere(world, getCenteredAt(yCenter, 0, 0), radius, leaf, EnumReplaceMode.NONE);
 	}
 
 }

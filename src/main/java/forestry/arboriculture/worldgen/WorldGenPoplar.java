@@ -25,9 +25,10 @@ public class WorldGenPoplar extends WorldGenTree {
 		generateTreeTrunk(world, height, girth);
 
 		int leafSpawn = height + 1;
+		float leafRadius = (girth - 1.0f) / 2.0f;
 
 		while (leafSpawn > girth - 1) {
-			generateAdjustedCylinder(world, leafSpawn--, 0, 1, leaf);
+			generateAdjustedCylinder(world, leafSpawn--, leafRadius, 1, leaf);
 		}
 
 	}

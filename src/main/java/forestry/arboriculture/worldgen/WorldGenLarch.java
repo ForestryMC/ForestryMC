@@ -26,12 +26,14 @@ public class WorldGenLarch extends WorldGenTree {
 
 		int leafSpawn = height + 1;
 
+		float sizeMultiplier = Math.max(height / 8, 1.0f);
+
 		generateAdjustedCylinder(world, leafSpawn--, 0, 1, leaf);
-		generateAdjustedCylinder(world, leafSpawn--, 1, 1, leaf);
+		generateAdjustedCylinder(world, leafSpawn--, sizeMultiplier, 1, leaf);
 
 		while (leafSpawn > 2) {
-			generateAdjustedCylinder(world, leafSpawn--, 2, 1, leaf);
-			generateAdjustedCylinder(world, leafSpawn--, 1, 1, leaf);
+			generateAdjustedCylinder(world, leafSpawn--, 2 * sizeMultiplier, 1, leaf);
+			generateAdjustedCylinder(world, leafSpawn--, sizeMultiplier, 1, leaf);
 		}
 
 	}

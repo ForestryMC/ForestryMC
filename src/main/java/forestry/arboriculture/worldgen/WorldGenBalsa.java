@@ -25,18 +25,19 @@ public class WorldGenBalsa extends WorldGenTree {
 		generateTreeTrunk(world, height, girth);
 
 		int leafSpawn = height;
+		float leafRadius = (girth - 1.0f) / 2.0f;
 
 		addLeaf(world, 0, leafSpawn--, 0, EnumReplaceMode.NONE);
-		generateAdjustedCylinder(world, leafSpawn--, 0, 1, leaf);
+		generateAdjustedCylinder(world, leafSpawn--, leafRadius, 1, leaf);
 
 		if (height > 10) {
-			generateAdjustedCylinder(world, leafSpawn--, 0, 1, leaf);
+			generateAdjustedCylinder(world, leafSpawn--, leafRadius, 1, leaf);
 		}
 
 		leafSpawn--;
 
 		while (leafSpawn > 6) {
-			generateAdjustedCylinder(world, leafSpawn, 0, 1, leaf);
+			generateAdjustedCylinder(world, leafSpawn, leafRadius, 1, leaf);
 			leafSpawn--;
 		}
 

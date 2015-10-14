@@ -47,22 +47,27 @@ public abstract class WorldGenTree extends WorldGenArboriculture {
 		generateAdjustedCylinder(world, leafSpawn--, 1.9f, 1, leaf, EnumReplaceMode.NONE);
 	}
 
-	protected Vector getCenteredAt(int yCenter, int offset) {
+	protected Vector getCenteredAt(int yCenter, int xOffset, int zOffset) {
 		float cent = girth % 2 == 0 ? 0.5f : 0f;
-		return new Vector(cent + offset, yCenter, cent + offset);
+		return new Vector(cent + xOffset, yCenter, cent + zOffset);
 	}
 
 	protected void generateAdjustedCylinder(World world, int yCenter, float radius, int height, ITreeBlockType block) {
-		generateAdjustedCylinder(world, yCenter, 0, radius, height, block, EnumReplaceMode.SOFT);
+		generateAdjustedCylinder(world, yCenter, 0, 0, radius, height, block, EnumReplaceMode.SOFT);
 	}
 
 	protected void generateAdjustedCylinder(World world, int yCenter, float radius, int height, ITreeBlockType block, EnumReplaceMode replace) {
-		generateAdjustedCylinder(world, yCenter, 0, radius, height, block, replace);
+		generateAdjustedCylinder(world, yCenter, 0, 0, radius, height, block, replace);
 	}
 
-	protected void generateAdjustedCylinder(World world, int yCenter, int offset, float radius, int height, ITreeBlockType block, EnumReplaceMode replace) {
-		Vector center = getCenteredAt(yCenter, offset);
+	protected void generateAdjustedCylinder(World world, int yCenter, int xOffset, int zOffset, float radius, int height, ITreeBlockType block, EnumReplaceMode replace) {
+		Vector center = getCenteredAt(yCenter, xOffset, zOffset);
 		generateCylinder(world, center, radius + girth, height, block, replace);
+	}
+
+	protected void generateAdjustedCircle(World world, int yCenter, int xOffset, int zOffset, float radius, int width, int height, ITreeBlockType block, float chance, EnumReplaceMode replace) {
+		Vector center = getCenteredAt(yCenter, xOffset, zOffset);
+		generateCircle(world, center, radius, width, height, block, chance, replace);
 	}
 
 	@Override
