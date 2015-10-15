@@ -11,10 +11,11 @@
 package forestry.core.gui;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 
 import forestry.core.gui.slots.SlotFiltered;
-import forestry.core.network.PacketGuiSelect;
+import forestry.core.network.PacketGuiSelectRequest;
 import forestry.core.tiles.TileNaturalistChest;
 
 public class ContainerNaturalistInventory extends ContainerTile<TileNaturalistChest> implements IGuiSelectable {
@@ -32,12 +33,8 @@ public class ContainerNaturalistInventory extends ContainerTile<TileNaturalistCh
 	}
 
 	@Override
-	public void handleSelectionChange(EntityPlayer player, PacketGuiSelect packet) {
+	public void handleSelectionRequest(EntityPlayerMP player, PacketGuiSelectRequest packet) {
 		tile.flipPage(player, packet.getPrimaryIndex());
-	}
-
-	@Override
-	public void setSelection(PacketGuiSelect packet) {
 	}
 
 	public void onContainerClosed(EntityPlayer player) {

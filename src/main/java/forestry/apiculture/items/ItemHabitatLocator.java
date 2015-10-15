@@ -23,6 +23,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChunkCoordinates;
@@ -43,6 +44,7 @@ import forestry.api.core.IErrorSource;
 import forestry.api.core.IErrorState;
 import forestry.api.core.Tabs;
 import forestry.api.genetics.AlleleManager;
+import forestry.apiculture.network.PacketHabitatBiomePointer;
 import forestry.apiculture.render.TextureHabitatLocator;
 import forestry.core.config.Config;
 import forestry.core.config.ForestryItem;
@@ -118,7 +120,7 @@ public class ItemHabitatLocator extends ItemInventoried {
 		removeInvalidBiomes(currentBiome, targetBiomes);
 
 		// reset the locator coordinates
-		Proxies.common.setHabitatLocatorCoordinates(null, null);
+		Proxies.common.setHabitatLocatorTexture(null, null);
 	}
 
 	@Override
@@ -140,8 +142,8 @@ public class ItemHabitatLocator extends ItemInventoried {
 		ChunkCoordinates target = findNearestBiome(player, targetBiomes);
 
 		// send an update if we find the biome
-		if (target != null) {
-			Proxies.common.setHabitatLocatorCoordinates(player, target);
+		if (target != null && player instanceof EntityPlayerMP) {
+			Proxies.net.sendToPlayer(new PacketHabitatBiomePointer(target), (EntityPlayerMP) player);
 			biomeFound = true;
 		}
 	}

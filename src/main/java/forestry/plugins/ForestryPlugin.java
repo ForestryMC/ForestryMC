@@ -24,7 +24,6 @@ import cpw.mods.fml.common.network.IGuiHandler;
 import forestry.core.IPickupHandler;
 import forestry.core.IResupplyHandler;
 import forestry.core.ISaveEventHandler;
-import forestry.core.network.IPacketHandler;
 import forestry.core.utils.Log;
 
 public abstract class ForestryPlugin {
@@ -94,8 +93,8 @@ public abstract class ForestryPlugin {
 	public void populateChunkRetroGen(World world, Random rand, int chunkX, int chunkZ) {
 	}
 
-	public IPacketHandler getPacketHandler() {
-		return null;
+	public void registerPacketHandlers() {
+
 	}
 
 	public IPickupHandler getPickupHandler() {

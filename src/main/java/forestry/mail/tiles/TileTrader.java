@@ -40,7 +40,7 @@ import forestry.core.tiles.TileBase;
 import forestry.core.utils.ItemStackUtil;
 import forestry.mail.MailAddress;
 import forestry.mail.TradeStation;
-import forestry.mail.network.PacketTraderAddress;
+import forestry.mail.network.PacketTraderAddressResponse;
 import forestry.mail.triggers.MailTriggers;
 
 import buildcraft.api.statements.ITriggerExternal;
@@ -255,20 +255,23 @@ public class TileTrader extends TileBase {
 		return address;
 	}
 
-	public void handleSetAddress(String addressName) {
+	public void handleSetAddressRequest(String addressName) {
 		IMailAddress address = PostManager.postRegistry.getMailAddress(addressName);
 		setAddress(address);
 
-		if (!worldObj.isRemote) {
-			IMailAddress newAddress = getAddress();
-			if (newAddress != null) {
-				String newAddressName = newAddress.getName();
-				if (newAddressName != null && newAddressName.equals(addressName)) {
-					PacketTraderAddress packetResponse = new PacketTraderAddress(this, addressName);
-					Proxies.net.sendNetworkPacket(packetResponse, worldObj);
-				}
+		IMailAddress newAddress = getAddress();
+		if (newAddress != null) {
+			String newAddressName = newAddress.getName();
+			if (newAddressName != null && newAddressName.equals(addressName)) {
+				PacketTraderAddressResponse packetResponse = new PacketTraderAddressResponse(this, addressName);
+				Proxies.net.sendNetworkPacket(packetResponse, worldObj);
 			}
 		}
+	}
+
+	public void handleSetAddressResponse(String addressName) {
+		IMailAddress address = PostManager.postRegistry.getMailAddress(addressName);
+		setAddress(address);
 	}
 
 	private void setAddress(IMailAddress address) {

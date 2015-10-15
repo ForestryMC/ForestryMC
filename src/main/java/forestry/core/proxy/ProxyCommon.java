@@ -18,7 +18,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -49,15 +48,12 @@ import cpw.mods.fml.common.versioning.DefaultArtifactVersion;
 import cpw.mods.fml.common.versioning.VersionParser;
 import cpw.mods.fml.common.versioning.VersionRange;
 
-import forestry.Forestry;
 import forestry.core.TickHandlerCoreServer;
 import forestry.core.config.Constants;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
 import forestry.core.multiblock.MultiblockServerTickHandler;
-import forestry.core.network.PacketCoordinates;
 import forestry.core.network.PacketFXSignal;
-import forestry.core.network.PacketId;
 import forestry.core.render.SpriteSheet;
 import forestry.core.utils.Log;
 import forestry.core.utils.StringUtil;
@@ -162,10 +158,7 @@ public class ProxyCommon {
 		player.dropPlayerItemWithRandomChoice(stack, true);
 	}
 
-	public void setHabitatLocatorCoordinates(Entity player, ChunkCoordinates coordinates) {
-		if (coordinates != null) {
-			Forestry.packetHandler.sendPacket(new PacketCoordinates(PacketId.HABITAT_BIOME_POINTER, coordinates).getPacket(), (EntityPlayerMP) player);
-		}
+	public void setHabitatLocatorTexture(Entity player, ChunkCoordinates coordinates) {
 	}
 
 	public void removePotionEffect(EntityPlayer player, Potion effect) {

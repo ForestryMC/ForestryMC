@@ -26,8 +26,7 @@ import org.lwjgl.opengl.GL11;
 import forestry.core.config.Constants;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
-import forestry.core.network.PacketGuiSelect;
-import forestry.core.network.PacketId;
+import forestry.core.network.PacketGuiSelectRequest;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.SpriteSheet;
 import forestry.core.render.TextureManager;
@@ -123,8 +122,7 @@ public class GuiEscritoire extends GuiForestry<ContainerEscritoire, TileEscritoi
 
 		@Override
 		public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
-			PacketGuiSelect packet = new PacketGuiSelect(PacketId.GUI_SELECTION_CHANGE, index, 0);
-			Proxies.net.sendToServer(packet);
+			Proxies.net.sendToServer(new PacketGuiSelectRequest(index, 0));
 		}
 	}
 
@@ -153,8 +151,7 @@ public class GuiEscritoire extends GuiForestry<ContainerEscritoire, TileEscritoi
 		@Override
 		public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
 			pressed = true;
-			PacketGuiSelect packet = new PacketGuiSelect(PacketId.GUI_SELECTION_CHANGE, -1, 0);
-			Proxies.net.sendToServer(packet);
+			Proxies.net.sendToServer(new PacketGuiSelectRequest(-1, 0));
 		}
 
 		@Override

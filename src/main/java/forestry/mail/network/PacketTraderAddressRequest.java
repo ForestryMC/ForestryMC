@@ -12,23 +12,25 @@ package forestry.mail.network;
 
 import java.io.IOException;
 
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.tileentity.TileEntity;
+
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.IForestryPacketServer;
 import forestry.core.network.PacketCoordinates;
-import forestry.core.network.PacketId;
+import forestry.core.network.PacketIdServer;
 import forestry.mail.tiles.TileTrader;
 
-public class PacketTraderAddress extends PacketCoordinates {
+public class PacketTraderAddressRequest extends PacketCoordinates implements IForestryPacketServer {
 
 	private String addressName;
 
-	public PacketTraderAddress(DataInputStreamForestry data) throws IOException {
-		super(data);
+	public PacketTraderAddressRequest() {
 	}
 
-	public PacketTraderAddress(TileTrader tile, String addressName) {
-		super(PacketId.TRADING_ADDRESS_SET, tile);
-
+	public PacketTraderAddressRequest(TileTrader tile, String addressName) {
+		super(PacketIdServer.TRADING_ADDRESS_REQUEST, tile);
 		this.addressName = addressName;
 	}
 
@@ -39,13 +41,16 @@ public class PacketTraderAddress extends PacketCoordinates {
 	}
 
 	@Override
-	protected void readData(DataInputStreamForestry data) throws IOException {
+	public void readData(DataInputStreamForestry data) throws IOException {
 		super.readData(data);
-
 		addressName = data.readUTF();
 	}
 
-	public String getAddressName() {
-		return addressName;
+	@Override
+	public void onPacketData(DataInputStreamForestry data, EntityPlayerMP player) throws IOException {
+		TileEntity tile = getTarget(player.worldObj);
+		if ((tile instanceof TileTrader)) {
+			((TileTrader) tile).handleSetAddressRequest(addressName);
+		}
 	}
 }

@@ -12,21 +12,22 @@ package forestry.core.network;
 
 import java.io.IOException;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
 import forestry.core.circuits.ISocketable;
+import forestry.core.proxy.Proxies;
 
-public class PacketSocketUpdate extends PacketCoordinates {
+public class PacketSocketUpdate extends PacketCoordinates implements IForestryPacketClient {
 
-	public ItemStack[] itemStacks;
+	private ItemStack[] itemStacks;
 
-	public PacketSocketUpdate(DataInputStreamForestry data) throws IOException {
-		super(data);
+	public PacketSocketUpdate() {
 	}
 
 	public <T extends TileEntity & ISocketable> PacketSocketUpdate(T tile) {
-		super(PacketId.SOCKET_UPDATE, tile);
+		super(PacketIdClient.SOCKET_UPDATE, tile);
 
 		itemStacks = new ItemStack[tile.getSocketCount()];
 		for (int i = 0; i < tile.getSocketCount(); i++) {
@@ -37,14 +38,25 @@ public class PacketSocketUpdate extends PacketCoordinates {
 	@Override
 	protected void writeData(DataOutputStreamForestry data) throws IOException {
 		super.writeData(data);
-
 		data.writeItemStacks(itemStacks);
 	}
 
 	@Override
-	protected void readData(DataInputStreamForestry data) throws IOException {
+	public void readData(DataInputStreamForestry data) throws IOException {
 		super.readData(data);
-
 		itemStacks = data.readItemStacks();
+	}
+
+	@Override
+	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
+		TileEntity tile = getTarget(Proxies.common.getRenderWorld());
+		if (!(tile instanceof ISocketable)) {
+			return;
+		}
+
+		ISocketable socketable = (ISocketable) tile;
+		for (int i = 0; i < itemStacks.length; i++) {
+			socketable.setSocket(i, itemStacks[i]);
+		}
 	}
 }

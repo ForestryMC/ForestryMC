@@ -12,29 +12,26 @@ package forestry.apiculture.network;
 
 import java.io.IOException;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.PacketCoordinates;
-import forestry.core.network.PacketId;
+import forestry.core.network.PacketIdClient;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.IActivatable;
 
-public class PacketActiveUpdate extends PacketCoordinates {
+public class PacketActiveUpdate extends PacketCoordinates implements IForestryPacketClient {
 
 	private boolean active;
 
-	public static void onPacketData(DataInputStreamForestry data) throws IOException {
-		new PacketActiveUpdate(data);
-	}
-
-	private PacketActiveUpdate(DataInputStreamForestry data) throws IOException {
-		super(data);
+	public PacketActiveUpdate() {
 	}
 
 	public PacketActiveUpdate(IActivatable tile) {
-		super(PacketId.TILE_FORESTRY_ACTIVE, tile.getCoordinates());
+		super(PacketIdClient.TILE_FORESTRY_ACTIVE, tile.getCoordinates());
 		this.active = tile.isActive();
 	}
 
@@ -45,11 +42,13 @@ public class PacketActiveUpdate extends PacketCoordinates {
 	}
 
 	@Override
-	protected void readData(DataInputStreamForestry data) throws IOException {
+	public void readData(DataInputStreamForestry data) throws IOException {
 		super.readData(data);
-
 		active = data.readBoolean();
+	}
 
+	@Override
+	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) {
 		TileEntity tile = getTarget(Proxies.common.getRenderWorld());
 		if (tile instanceof IActivatable) {
 			((IActivatable) tile).setActive(active);

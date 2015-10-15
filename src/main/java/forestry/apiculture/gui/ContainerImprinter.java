@@ -11,18 +11,20 @@
 package forestry.apiculture.gui;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import forestry.apiculture.items.ItemImprinter.ImprinterInventory;
+import forestry.apiculture.network.PacketImprintSelectionRequest;
+import forestry.apiculture.network.PacketImprintSelectionResponse;
 import forestry.core.gui.ContainerItemInventory;
 import forestry.core.gui.IGuiSelectable;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
-import forestry.core.network.ForestryPacket;
-import forestry.core.network.PacketGuiSelect;
-import forestry.core.network.PacketId;
+import forestry.core.network.IForestryPacketServer;
+import forestry.core.network.PacketGuiSelectRequest;
 import forestry.core.proxy.Proxies;
 
 public class ContainerImprinter extends ContainerItemInventory<ImprinterInventory> implements IGuiSelectable {
@@ -68,38 +70,39 @@ public class ContainerImprinter extends ContainerItemInventory<ImprinterInventor
 	public void updateContainer(World world) {
 		if (!isNetSynced && world.isRemote) {
 			isNetSynced = true;
-			Proxies.net.sendToServer(new ForestryPacket(PacketId.IMPRINT_SELECTION_GET));
+			Proxies.net.sendToServer(new PacketImprintSelectionRequest());
 		}
 	}
 
 	private void sendSelectionChange(int index, int advance) {
-		ForestryPacket packet = new PacketGuiSelect(PacketId.GUI_SELECTION_CHANGE, index, advance);
+		IForestryPacketServer packet = new PacketGuiSelectRequest(index, advance);
 		Proxies.net.sendToServer(packet);
 		isNetSynced = false;
 	}
 
 	@Override
-	public void handleSelectionChange(EntityPlayer player, PacketGuiSelect packet) {
-		if (packet.getSecondaryIndex() == 0) {
-			if (packet.getPrimaryIndex() == 0) {
+	public void handleSelectionRequest(EntityPlayerMP player, PacketGuiSelectRequest packetRequest) {
+		if (packetRequest.getSecondaryIndex() == 0) {
+			if (packetRequest.getPrimaryIndex() == 0) {
 				inventory.advancePrimary();
 			} else {
 				inventory.advanceSecondary();
 			}
-		} else if (packet.getPrimaryIndex() == 0) {
+		} else if (packetRequest.getPrimaryIndex() == 0) {
 			inventory.regressPrimary();
 		} else {
 			inventory.regressSecondary();
 		}
+
+		sendSelection(player);
 	}
 
-	public void sendSelection(EntityPlayer player) {
-		ForestryPacket packet = new PacketGuiSelect(PacketId.GUI_SELECTION_SET, inventory.getPrimaryIndex(), inventory.getSecondaryIndex());
-		Proxies.net.sendToPlayer(packet, player);
+	public void sendSelection(EntityPlayerMP player) {
+		PacketImprintSelectionResponse packetResponse = new PacketImprintSelectionResponse(inventory.getPrimaryIndex(), inventory.getSecondaryIndex());
+		Proxies.net.sendToPlayer(packetResponse, player);
 	}
 
-	@Override
-	public void setSelection(PacketGuiSelect packetPayload) {
+	public void setSelection(PacketImprintSelectionResponse packetPayload) {
 		inventory.setPrimaryIndex(packetPayload.getPrimaryIndex());
 		inventory.setSecondaryIndex(packetPayload.getSecondaryIndex());
 	}

@@ -69,7 +69,7 @@ public class ProxyCommonClient extends ProxyCommon {
 	}
 
 	@Override
-	public void setHabitatLocatorCoordinates(Entity player, ChunkCoordinates coordinates) {
+	public void setHabitatLocatorTexture(Entity player, ChunkCoordinates coordinates) {
 		TextureHabitatLocator.getInstance().setTargetCoordinates(coordinates);
 	}
 

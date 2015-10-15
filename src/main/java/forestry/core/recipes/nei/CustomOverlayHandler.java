@@ -17,8 +17,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
-import forestry.core.network.PacketId;
-import forestry.core.network.PacketNBT;
 import forestry.core.proxy.Proxies;
 
 import codechicken.nei.LayoutManager;
@@ -71,7 +69,7 @@ public class CustomOverlayHandler implements IOverlayHandler {
 			NBTTagCompound data = new NBTTagCompound();
 			data.setTag("stacks", stacksnbt);
 
-			Proxies.net.sendToServer(new PacketNBT(PacketId.WORKTABLE_NEI_SELECT, data));
+			Proxies.net.sendToServer(new PacketWorktableNEISelect(data));
 		} else {
 			IStackPositioner positioner = new OffsetPositioner(xOffs, yOffs);
 			LayoutManager.overlayRenderer = new DefaultOverlayRenderer(ingr, positioner);

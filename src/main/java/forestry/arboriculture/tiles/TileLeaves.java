@@ -52,6 +52,7 @@ import forestry.api.lepidopterology.IButterflyNursery;
 import forestry.api.lepidopterology.IButterflyRoot;
 import forestry.arboriculture.genetics.Tree;
 import forestry.arboriculture.genetics.TreeDefinition;
+import forestry.arboriculture.network.IRipeningPacketReceiver;
 import forestry.arboriculture.network.PacketRipeningUpdate;
 import forestry.core.genetics.alleles.Allele;
 import forestry.core.network.DataInputStreamForestry;
@@ -63,7 +64,7 @@ import forestry.core.utils.ColourUtil;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.Log;
 
-public class TileLeaves extends TileTreeContainer implements IPollinatable, IFruitBearer, IButterflyNursery {
+public class TileLeaves extends TileTreeContainer implements IPollinatable, IFruitBearer, IButterflyNursery, IRipeningPacketReceiver {
 
 	private int colourLeaves;
 	private int colourLeavesPollinated;
@@ -445,6 +446,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		}
 	}
 
+	@Override
 	public void fromRipeningPacket(int newColourFruits) {
 		if (newColourFruits == colourFruits) {
 			return;

@@ -33,7 +33,7 @@ import forestry.core.proxy.Proxies;
 import forestry.core.render.SpriteSheet;
 import forestry.core.utils.StringUtil;
 import forestry.mail.items.ItemLetter.LetterInventory;
-import forestry.mail.network.PacketRequestLetterInfo;
+import forestry.mail.network.PacketLetterInfoRequest;
 
 public class GuiLetter extends GuiForestry<ContainerLetter, LetterInventory> {
 
@@ -239,7 +239,7 @@ public class GuiLetter extends GuiForestry<ContainerLetter, LetterInventory> {
 			return;
 		}
 
-		PacketRequestLetterInfo packet = new PacketRequestLetterInfo(recipientName, type);
+		PacketLetterInfoRequest packet = new PacketLetterInfoRequest(recipientName, type);
 		Proxies.net.sendToServer(packet);
 	}
 

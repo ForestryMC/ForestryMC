@@ -12,22 +12,25 @@ package forestry.mail.network;
 
 import java.io.IOException;
 
+import net.minecraft.entity.player.EntityPlayer;
+
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.ForestryPacket;
-import forestry.core.network.PacketId;
+import forestry.core.network.IForestryPacketClient;
+import forestry.core.network.PacketIdClient;
 import forestry.mail.POBoxInfo;
+import forestry.mail.gui.GuiMailboxInfo;
 
-public class PacketPOBoxInfo extends ForestryPacket {
+public class PacketPOBoxInfoResponse extends ForestryPacket implements IForestryPacketClient {
 
 	public POBoxInfo poboxInfo;
 
-	public PacketPOBoxInfo(DataInputStreamForestry data) throws IOException {
-		super(data);
+	public PacketPOBoxInfoResponse() {
 	}
 
-	public PacketPOBoxInfo(POBoxInfo info) {
-		super(PacketId.POBOX_INFO);
+	public PacketPOBoxInfoResponse(POBoxInfo info) {
+		super(PacketIdClient.POBOX_INFO_RESPONSE);
 		this.poboxInfo = info;
 	}
 
@@ -44,14 +47,18 @@ public class PacketPOBoxInfo extends ForestryPacket {
 	}
 
 	@Override
-	protected void readData(DataInputStreamForestry data) throws IOException {
-
+	public void readData(DataInputStreamForestry data) throws IOException {
 		short isNotNull = data.readShort();
 		if (isNotNull < 0) {
 			return;
 		}
 
 		this.poboxInfo = new POBoxInfo(data.readInt(), data.readInt());
+	}
+
+	@Override
+	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
+		GuiMailboxInfo.instance.setPOBoxInfo(poboxInfo);
 	}
 
 }

@@ -30,13 +30,7 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.GameRegistry.Type;
 
-import forestry.api.fuels.EngineBronzeFuel;
-import forestry.api.fuels.EngineCopperFuel;
-import forestry.api.fuels.FermenterFuel;
 import forestry.api.fuels.FuelManager;
-import forestry.api.fuels.GeneratorFuel;
-import forestry.api.fuels.MoistenerFuel;
-import forestry.api.fuels.RainSubstrate;
 import forestry.core.ForestryCore;
 import forestry.core.config.Constants;
 import forestry.core.config.ForestryItem;

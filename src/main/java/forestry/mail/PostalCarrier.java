@@ -11,6 +11,7 @@
 package forestry.mail;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
@@ -28,7 +29,7 @@ import forestry.api.mail.PostManager;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
-import forestry.mail.network.PacketPOBoxInfo;
+import forestry.mail.network.PacketPOBoxInfoResponse;
 
 public class PostalCarrier implements IPostalCarrier {
 
@@ -85,8 +86,8 @@ public class PostalCarrier implements IPostalCarrier {
 			return EnumDeliveryState.MAILBOX_FULL;
 		} else {
 			EntityPlayer player = Proxies.common.getPlayer(world, recipient.getPlayerProfile());
-			if (player != null) {
-				Proxies.net.sendToPlayer(new PacketPOBoxInfo(pobox.getPOBoxInfo()), player);
+			if (player instanceof EntityPlayerMP) {
+				Proxies.net.sendToPlayer(new PacketPOBoxInfoResponse(pobox.getPOBoxInfo()), (EntityPlayerMP) player);
 			}
 		}
 

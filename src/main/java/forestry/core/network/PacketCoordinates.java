@@ -16,25 +16,24 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 
-public class PacketCoordinates extends ForestryPacket implements ILocatedPacket {
+public abstract class PacketCoordinates extends ForestryPacket implements ILocatedPacket {
 
 	private int posX;
 	private int posY;
 	private int posZ;
 
-	public PacketCoordinates(DataInputStreamForestry data) throws IOException {
-		super(data);
+	public PacketCoordinates() {
 	}
 
-	public PacketCoordinates(PacketId id, TileEntity tileEntity) {
+	protected PacketCoordinates(IPacketId id, TileEntity tileEntity) {
 		this(id, tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord);
 	}
 
-	public PacketCoordinates(PacketId id, ChunkCoordinates coordinates) {
+	protected PacketCoordinates(IPacketId id, ChunkCoordinates coordinates) {
 		this(id, coordinates.posX, coordinates.posY, coordinates.posZ);
 	}
 
-	public PacketCoordinates(PacketId id, int posX, int posY, int posZ) {
+	protected PacketCoordinates(IPacketId id, int posX, int posY, int posZ) {
 		super(id);
 		this.posX = posX;
 		this.posY = posY;
@@ -49,13 +48,13 @@ public class PacketCoordinates extends ForestryPacket implements ILocatedPacket 
 	}
 
 	@Override
-	protected void readData(DataInputStreamForestry data) throws IOException {
+	public void readData(DataInputStreamForestry data) throws IOException {
 		posX = data.readVarInt();
 		posY = data.readVarInt();
 		posZ = data.readVarInt();
 	}
 
-	public final ChunkCoordinates getCoordinates() {
+	protected final ChunkCoordinates getCoordinates() {
 		return new ChunkCoordinates(posX, posY, posZ);
 	}
 

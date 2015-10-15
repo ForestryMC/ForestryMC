@@ -17,9 +17,9 @@ import net.minecraft.tileentity.TileEntity;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuitBoard;
 import forestry.core.circuits.ISocketable;
-import forestry.core.network.PacketId;
-import forestry.core.network.PacketSlotClick;
+import forestry.core.network.PacketChipsetClick;
 import forestry.core.network.PacketSocketUpdate;
+import forestry.core.network.PacketSolderingIronClick;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.InventoryUtil;
 
@@ -33,8 +33,7 @@ public class ContainerSocketedHelper<T extends TileEntity & ISocketable> impleme
 
 	@Override
 	public void handleChipsetClick(int slot) {
-		PacketSlotClick packet = new PacketSlotClick(PacketId.CHIPSET_CLICK, tile, slot);
-		Proxies.net.sendToServer(packet);
+		Proxies.net.sendToServer(new PacketChipsetClick(tile, slot));
 	}
 
 	@Override
@@ -77,8 +76,7 @@ public class ContainerSocketedHelper<T extends TileEntity & ISocketable> impleme
 
 	@Override
 	public void handleSolderingIronClick(int slot) {
-		PacketSlotClick packet = new PacketSlotClick(PacketId.SOLDERING_IRON_CLICK, tile, slot);
-		Proxies.net.sendToServer(packet);
+		Proxies.net.sendToServer(new PacketSolderingIronClick(tile, slot));
 	}
 
 	@Override

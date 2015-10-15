@@ -14,7 +14,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 
-import forestry.apiculture.network.PacketUpdateCandle;
+import forestry.apiculture.network.PacketCandleUpdate;
 
 public class TileCandle extends TileEntity {
 	private int colour;
@@ -28,13 +28,13 @@ public class TileCandle extends TileEntity {
 
 	@Override
 	public Packet getDescriptionPacket() {
-		PacketUpdateCandle updateCandle = new PacketUpdateCandle(this);
+		PacketCandleUpdate updateCandle = new PacketCandleUpdate(this);
 		return updateCandle.getPacket();
 	}
 
-	public void onPacketUpdate(PacketUpdateCandle updateCandle) {
-		colour = updateCandle.getColour();
-		lit = updateCandle.isLit();
+	public void onPacketUpdate(int colour, boolean isLit) {
+		this.colour = colour;
+		this.lit = isLit;
 	}
 
 	@Override

@@ -12,6 +12,7 @@ package forestry.core.network;
 
 import java.io.IOException;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
@@ -19,20 +20,15 @@ import forestry.core.proxy.Proxies;
 import forestry.core.tiles.IItemStackDisplay;
 import forestry.core.tiles.TileForestry;
 
-public class PacketItemStackDisplay extends PacketCoordinates {
+public class PacketItemStackDisplay extends PacketCoordinates implements IForestryPacketClient {
 
 	private ItemStack itemStack;
 
-	public static void onPacketData(DataInputStreamForestry data) throws IOException {
-		new PacketItemStackDisplay(data);
-	}
-
-	private PacketItemStackDisplay(DataInputStreamForestry data) throws IOException {
-		super(data);
+	public PacketItemStackDisplay() {
 	}
 
 	public <T extends TileForestry & IItemStackDisplay> PacketItemStackDisplay(T tile, ItemStack itemStack) {
-		super(PacketId.GUI_ITEMSTACK, tile);
+		super(PacketIdClient.ITEMSTACK_DISPLAY, tile);
 		this.itemStack = itemStack;
 	}
 
@@ -43,10 +39,13 @@ public class PacketItemStackDisplay extends PacketCoordinates {
 	}
 
 	@Override
-	protected void readData(DataInputStreamForestry data) throws IOException {
+	public void readData(DataInputStreamForestry data) throws IOException {
 		super.readData(data);
 		itemStack = data.readItemStack();
+	}
 
+	@Override
+	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
 		TileEntity tile = getTarget(Proxies.common.getRenderWorld());
 		if (tile instanceof IItemStackDisplay) {
 			((IItemStackDisplay) tile).handleItemStackForDisplay(itemStack);

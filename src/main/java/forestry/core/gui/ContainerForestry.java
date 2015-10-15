@@ -17,7 +17,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 import forestry.core.gui.slots.SlotForestry;
-import forestry.core.network.ForestryPacket;
+import forestry.core.network.IForestryPacketClient;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.SlotUtil;
 
@@ -65,7 +65,7 @@ public abstract class ContainerForestry extends Container {
 
 	protected abstract boolean canAccess(EntityPlayer player);
 
-	protected final void sendPacketToCrafters(ForestryPacket packet) {
+	protected final void sendPacketToCrafters(IForestryPacketClient packet) {
 		for (Object crafter : crafters) {
 			if (crafter instanceof EntityPlayer) {
 				Proxies.net.sendToPlayer(packet, (EntityPlayer) crafter);

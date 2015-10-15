@@ -54,7 +54,6 @@ import forestry.Forestry;
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.FlowerManager;
-import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeekeepingMode;
 import forestry.api.apiculture.hives.HiveManager;
 import forestry.api.core.Tabs;
@@ -117,7 +116,12 @@ import forestry.apiculture.multiblock.TileAlvearyPlain;
 import forestry.apiculture.multiblock.TileAlvearySieve;
 import forestry.apiculture.multiblock.TileAlvearyStabiliser;
 import forestry.apiculture.multiblock.TileAlvearySwarmer;
-import forestry.apiculture.network.PacketHandlerApiculture;
+import forestry.apiculture.network.PacketActiveUpdate;
+import forestry.apiculture.network.PacketBeekeepingLogicActive;
+import forestry.apiculture.network.PacketCandleUpdate;
+import forestry.apiculture.network.PacketHabitatBiomePointer;
+import forestry.apiculture.network.PacketImprintSelectionRequest;
+import forestry.apiculture.network.PacketImprintSelectionResponse;
 import forestry.apiculture.proxy.ProxyApiculture;
 import forestry.apiculture.tiles.TileApiaristChest;
 import forestry.apiculture.tiles.TileApiary;
@@ -145,7 +149,8 @@ import forestry.core.items.ItemForestry;
 import forestry.core.items.ItemOverlay;
 import forestry.core.items.ItemOverlay.OverlayInfo;
 import forestry.core.items.ItemScoop;
-import forestry.core.network.IPacketHandler;
+import forestry.core.network.PacketIdClient;
+import forestry.core.network.PacketIdServer;
 import forestry.core.proxy.Proxies;
 import forestry.core.recipes.ShapedRecipeCustom;
 import forestry.core.tiles.MachineDefinition;
@@ -495,8 +500,14 @@ public class PluginApiculture extends ForestryPlugin {
 	}
 
 	@Override
-	public IPacketHandler getPacketHandler() {
-		return new PacketHandlerApiculture();
+	public void registerPacketHandlers() {
+		PacketIdServer.IMPRINT_SELECTION_REQUEST.setPacketHandler(new PacketImprintSelectionRequest());
+
+		PacketIdClient.IMPRINT_SELECTION_RESPONSE.setPacketHandler(new PacketImprintSelectionResponse());
+		PacketIdClient.TILE_FORESTRY_ACTIVE.setPacketHandler(new PacketActiveUpdate());
+		PacketIdClient.BEE_LOGIC_ACTIVE.setPacketHandler(new PacketBeekeepingLogicActive());
+		PacketIdClient.HABITAT_BIOME_POINTER.setPacketHandler(new PacketHabitatBiomePointer());
+		PacketIdClient.CANDLE_UPDATE.setPacketHandler(new PacketCandleUpdate());
 	}
 
 	@Override

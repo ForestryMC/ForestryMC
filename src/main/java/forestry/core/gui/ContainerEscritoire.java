@@ -11,10 +11,11 @@
 package forestry.core.gui;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
-import forestry.core.network.PacketGuiSelect;
+import forestry.core.network.PacketGuiSelectRequest;
 import forestry.core.tiles.TileEscritoire;
 
 public class ContainerEscritoire extends ContainerTile<TileEscritoire> implements IGuiSelectable {
@@ -54,7 +55,7 @@ public class ContainerEscritoire extends ContainerTile<TileEscritoire> implement
 	}
 
 	@Override
-	public void handleSelectionChange(EntityPlayer player, PacketGuiSelect packet) {
+	public void handleSelectionRequest(EntityPlayerMP player, PacketGuiSelectRequest packet) {
 		if (!tile.getGame().isEnded()) {
 			int index = packet.getPrimaryIndex();
 			if (index == -1) {
@@ -64,9 +65,5 @@ public class ContainerEscritoire extends ContainerTile<TileEscritoire> implement
 				tile.processTurnResult(player.getGameProfile());
 			}
 		}
-	}
-
-	@Override
-	public void setSelection(PacketGuiSelect packet) {
 	}
 }

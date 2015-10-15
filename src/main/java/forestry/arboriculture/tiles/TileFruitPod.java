@@ -29,6 +29,7 @@ import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IFruitBearer;
 import forestry.api.genetics.IFruitFamily;
+import forestry.arboriculture.network.IRipeningPacketReceiver;
 import forestry.arboriculture.network.PacketRipeningUpdate;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
@@ -37,7 +38,7 @@ import forestry.core.network.PacketTileStream;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 
-public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamable {
+public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamable, IRipeningPacketReceiver {
 
 	private static final short MAX_MATURITY = 2;
 
@@ -138,6 +139,7 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 		Proxies.net.sendNetworkPacket(new PacketRipeningUpdate(this), worldObj);
 	}
 
+	@Override
 	public void fromRipeningPacket(int newMaturity) {
 		if (newMaturity == maturity) {
 			return;

@@ -12,28 +12,21 @@ package forestry.core.network;
 
 import java.io.IOException;
 
-import net.minecraft.client.entity.EntityClientPlayerMP;
-
-import cpw.mods.fml.client.FMLClientHandler;
+import net.minecraft.entity.player.EntityPlayer;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 
-public class PacketProgressBarUpdate extends ForestryPacket {
+public class PacketProgressBarUpdate extends ForestryPacket implements IForestryPacketClient {
 
 	private int windowId, dataId, value;
 
-	public static void onPacketData(DataInputStreamForestry data) throws IOException {
-		new PacketProgressBarUpdate(data);
-	}
-
-	private PacketProgressBarUpdate(DataInputStreamForestry data) throws IOException {
-		super(data);
+	public PacketProgressBarUpdate() {
 	}
 
 	public PacketProgressBarUpdate(int windowId, int dataId, int value) {
-		super(PacketId.GUI_PROGRESS_BAR);
+		super(PacketIdClient.GUI_PROGRESS_BAR);
 		this.windowId = windowId;
 		this.dataId = dataId;
 		this.value = value;
@@ -47,13 +40,14 @@ public class PacketProgressBarUpdate extends ForestryPacket {
 	}
 
 	@Override
-	protected void readData(DataInputStreamForestry data) throws IOException {
+	public void readData(DataInputStreamForestry data) throws IOException {
 		windowId = data.readByte();
 		dataId = data.readByte();
 		value = data.readInt();
+	}
 
-		EntityClientPlayerMP player = FMLClientHandler.instance().getClient().thePlayer;
-
+	@Override
+	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
 		if (player.openContainer != null && player.openContainer.windowId == windowId) {
 			player.openContainer.updateProgressBar(dataId, value);
 		}

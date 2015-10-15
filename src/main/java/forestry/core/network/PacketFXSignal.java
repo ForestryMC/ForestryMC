@@ -13,12 +13,13 @@ package forestry.core.network;
 import java.io.IOException;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
 
 import cpw.mods.fml.common.registry.GameData;
 
 import forestry.core.proxy.Proxies;
 
-public class PacketFXSignal extends PacketCoordinates {
+public class PacketFXSignal extends PacketCoordinates implements IForestryPacketClient {
 
 	public enum VisualFXType {
 		NONE, BLOCK_DESTROY, SAPLING_PLACE
@@ -44,8 +45,7 @@ public class PacketFXSignal extends PacketCoordinates {
 	private Block block;
 	private int meta;
 
-	public PacketFXSignal(DataInputStreamForestry data) throws IOException {
-		super(data);
+	public PacketFXSignal() {
 	}
 
 	public PacketFXSignal(VisualFXType type, int xCoord, int yCoord, int zCoord, Block block, int meta) {
@@ -57,7 +57,7 @@ public class PacketFXSignal extends PacketCoordinates {
 	}
 
 	public PacketFXSignal(VisualFXType visualFX, SoundFXType soundFX, int xCoord, int yCoord, int zCoord, Block block, int meta) {
-		super(PacketId.FX_SIGNAL, xCoord, yCoord, zCoord);
+		super(PacketIdClient.FX_SIGNAL, xCoord, yCoord, zCoord);
 		this.visualFX = visualFX;
 		this.soundFX = soundFX;
 		this.block = block;
@@ -74,7 +74,7 @@ public class PacketFXSignal extends PacketCoordinates {
 	}
 
 	@Override
-	protected void readData(DataInputStreamForestry data) throws IOException {
+	public void readData(DataInputStreamForestry data) throws IOException {
 		super.readData(data);
 		this.visualFX = VisualFXType.values()[data.readShort()];
 		this.soundFX = SoundFXType.values()[data.readShort()];
@@ -82,7 +82,8 @@ public class PacketFXSignal extends PacketCoordinates {
 		this.meta = data.readInt();
 	}
 
-	public void executeFX() {
+	@Override
+	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
 		if (visualFX != VisualFXType.NONE) {
 			Proxies.common.addBlockDestroyEffects(Proxies.common.getRenderWorld(), getPosX(), getPosY(), getPosZ(), block, meta);
 		}

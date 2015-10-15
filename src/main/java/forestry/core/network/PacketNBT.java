@@ -14,15 +14,14 @@ import java.io.IOException;
 
 import net.minecraft.nbt.NBTTagCompound;
 
-public class PacketNBT extends ForestryPacket {
+public abstract class PacketNBT extends ForestryPacket {
 
 	private NBTTagCompound nbttagcompound;
 
-	public PacketNBT(DataInputStreamForestry data) throws IOException {
-		super(data);
+	protected PacketNBT() {
 	}
 
-	public PacketNBT(PacketId id, NBTTagCompound nbttagcompound) {
+	protected PacketNBT(IPacketId id, NBTTagCompound nbttagcompound) {
 		super(id);
 		this.nbttagcompound = nbttagcompound;
 	}
@@ -33,11 +32,11 @@ public class PacketNBT extends ForestryPacket {
 	}
 
 	@Override
-	protected void readData(DataInputStreamForestry data) throws IOException {
+	public void readData(DataInputStreamForestry data) throws IOException {
 		this.nbttagcompound = data.readNBTTagCompound();
 	}
 
-	public NBTTagCompound getTagCompound() {
+	protected NBTTagCompound getTagCompound() {
 		return this.nbttagcompound;
 	}
 }

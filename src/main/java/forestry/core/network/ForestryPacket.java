@@ -17,17 +17,16 @@ import cpw.mods.fml.common.network.internal.FMLProxyPacket;
 
 import io.netty.buffer.Unpooled;
 
-public class ForestryPacket {
+public class ForestryPacket implements IForestryPacket {
 
 	protected static final String channel = "FOR";
-	private final PacketId id;
 
-	protected ForestryPacket(DataInputStreamForestry data) throws IOException {
-		this.id = PacketId.INVALID;
-		readData(data);
+	private IPacketId id;
+
+	protected ForestryPacket() {
 	}
 
-	public ForestryPacket(PacketId id) {
+	public ForestryPacket(IPacketId id) {
 		this.id = id;
 	}
 
@@ -48,6 +47,6 @@ public class ForestryPacket {
 	protected void writeData(DataOutputStreamForestry data) throws IOException {
 	}
 
-	protected void readData(DataInputStreamForestry data) throws IOException {
+	public void readData(DataInputStreamForestry data) throws IOException {
 	}
 }

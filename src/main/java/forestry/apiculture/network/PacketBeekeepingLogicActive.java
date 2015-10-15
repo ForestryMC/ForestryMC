@@ -12,6 +12,7 @@ package forestry.apiculture.network;
 
 import java.io.IOException;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 
 import forestry.api.apiculture.IBeeHousing;
@@ -19,23 +20,19 @@ import forestry.api.apiculture.IBeekeepingLogic;
 import forestry.apiculture.BeekeepingLogic;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.PacketCoordinates;
-import forestry.core.network.PacketId;
+import forestry.core.network.PacketIdClient;
 import forestry.core.proxy.Proxies;
 
-public class PacketBeekeepingLogicActive extends PacketCoordinates {
+public class PacketBeekeepingLogicActive extends PacketCoordinates implements IForestryPacketClient {
 	private BeekeepingLogic beekeepingLogic;
 
-	public static void onPacketData(DataInputStreamForestry data) throws IOException {
-		new PacketBeekeepingLogicActive(data);
-	}
-
-	private PacketBeekeepingLogicActive(DataInputStreamForestry data) throws IOException {
-		super(data);
+	public PacketBeekeepingLogicActive() {
 	}
 
 	public PacketBeekeepingLogicActive(IBeeHousing tile) {
-		super(PacketId.BEE_LOGIC_ACTIVE, tile.getCoordinates());
+		super(PacketIdClient.BEE_LOGIC_ACTIVE, tile.getCoordinates());
 		this.beekeepingLogic = (BeekeepingLogic) tile.getBeekeepingLogic();
 	}
 
@@ -46,9 +43,7 @@ public class PacketBeekeepingLogicActive extends PacketCoordinates {
 	}
 
 	@Override
-	protected void readData(DataInputStreamForestry data) throws IOException {
-		super.readData(data);
-
+	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
 		TileEntity tile = getTarget(Proxies.common.getRenderWorld());
 		if (tile instanceof IBeeHousing) {
 			IBeeHousing beeHousing = (IBeeHousing) tile;

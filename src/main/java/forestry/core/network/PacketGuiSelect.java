@@ -12,15 +12,14 @@ package forestry.core.network;
 
 import java.io.IOException;
 
-public class PacketGuiSelect extends ForestryPacket {
+public abstract class PacketGuiSelect extends ForestryPacket {
 	private int primaryIndex;
 	private int secondaryIndex;
 
-	public PacketGuiSelect(DataInputStreamForestry data) throws IOException {
-		super(data);
+	protected PacketGuiSelect() {
 	}
 
-	public PacketGuiSelect(PacketId id, int primaryIndex, int secondaryIndex) {
+	protected PacketGuiSelect(IPacketId id, int primaryIndex, int secondaryIndex) {
 		super(id);
 		this.primaryIndex = primaryIndex;
 		this.secondaryIndex = secondaryIndex;
@@ -34,7 +33,7 @@ public class PacketGuiSelect extends ForestryPacket {
 	}
 
 	@Override
-	protected void readData(DataInputStreamForestry data) throws IOException {
+	public void readData(DataInputStreamForestry data) throws IOException {
 		super.readData(data);
 		primaryIndex = data.readInt();
 		secondaryIndex = data.readInt();
@@ -47,4 +46,5 @@ public class PacketGuiSelect extends ForestryPacket {
 	public int getSecondaryIndex() {
 		return secondaryIndex;
 	}
+
 }

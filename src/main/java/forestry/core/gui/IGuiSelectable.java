@@ -10,12 +10,11 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 
-import forestry.core.network.PacketGuiSelect;
+import forestry.core.network.PacketGuiSelectRequest;
 
 public interface IGuiSelectable {
-	void handleSelectionChange(EntityPlayer player, PacketGuiSelect packet);
-
-	void setSelection(PacketGuiSelect packetPayload);
+	// server
+	void handleSelectionRequest(EntityPlayerMP player, PacketGuiSelectRequest packetRequest);
 }

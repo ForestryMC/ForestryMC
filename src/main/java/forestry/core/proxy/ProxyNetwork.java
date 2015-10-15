@@ -19,12 +19,13 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayer;
 
 import forestry.Forestry;
-import forestry.core.network.ForestryPacket;
+import forestry.core.network.IForestryPacketClient;
+import forestry.core.network.IForestryPacketServer;
 import forestry.core.network.ILocatedPacket;
 
 public class ProxyNetwork {
 
-	public <P extends ForestryPacket & ILocatedPacket> void sendNetworkPacket(P packet, World world) {
+	public <P extends IForestryPacketClient & ILocatedPacket> void sendNetworkPacket(P packet, World world) {
 		if (packet == null || !(world instanceof WorldServer)) {
 			return;
 		}
@@ -40,13 +41,13 @@ public class ProxyNetwork {
 				EntityPlayerMP player = (EntityPlayerMP) playerObj;
 
 				if (playerManager.isPlayerWatchingChunk(player, chunkX, chunkZ)) {
-					Forestry.packetHandler.sendPacket(packet.getPacket(), player);
+					sendToPlayer(packet, player);
 				}
 			}
 		}
 	}
 
-	public void sendToPlayer(ForestryPacket packet, EntityPlayer entityplayer) {
+	public void sendToPlayer(IForestryPacketClient packet, EntityPlayer entityplayer) {
 		if (!(entityplayer instanceof EntityPlayerMP) || (entityplayer instanceof FakePlayer)) {
 			return;
 		}
@@ -55,7 +56,7 @@ public class ProxyNetwork {
 		Forestry.packetHandler.sendPacket(packet.getPacket(), player);
 	}
 
-	public void sendToServer(ForestryPacket packet) {
+	public void sendToServer(IForestryPacketServer packet) {
 	}
 
 	public void inventoryChangeNotify(EntityPlayer player) {

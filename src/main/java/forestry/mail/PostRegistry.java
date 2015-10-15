@@ -33,7 +33,7 @@ import forestry.api.mail.PostManager;
 import forestry.core.config.ForestryItem;
 import forestry.core.proxy.Proxies;
 import forestry.mail.items.ItemLetter;
-import forestry.mail.network.PacketPOBoxInfo;
+import forestry.mail.network.PacketPOBoxInfoResponse;
 
 public class PostRegistry implements IPostRegistry {
 
@@ -75,7 +75,7 @@ public class PostRegistry implements IPostRegistry {
 
 			EntityPlayer player = Proxies.common.getPlayer(world, address.getPlayerProfile());
 			if (player != null) {
-				Proxies.net.sendToPlayer(new PacketPOBoxInfo(pobox.getPOBoxInfo()), player);
+				Proxies.net.sendToPlayer(new PacketPOBoxInfoResponse(pobox.getPOBoxInfo()), player);
 			}
 		}
 

@@ -24,8 +24,7 @@ import forestry.core.config.Config;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
-import forestry.core.network.PacketCoordinates;
-import forestry.core.network.PacketId;
+import forestry.core.network.PacketAccessSwitch;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.IRestrictedAccessTile;
 import forestry.core.utils.PlayerUtil;
@@ -96,7 +95,7 @@ public final class AccessHandler implements IAccessHandler, IStreamable, INBTTag
 		access = EnumAccess.values()[ordinal];
 
 		if (player.worldObj.isRemote) {
-			Proxies.net.sendToServer(new PacketCoordinates(PacketId.ACCESS_SWITCH, tile.getCoordinates()));
+			Proxies.net.sendToServer(new PacketAccessSwitch(tile.getCoordinates()));
 		} else {
 			tile.onSwitchAccess(oldAccess, access);
 		}

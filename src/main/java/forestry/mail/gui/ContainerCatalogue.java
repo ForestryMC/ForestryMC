@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 
@@ -29,13 +30,12 @@ import forestry.api.mail.ITradeStation;
 import forestry.api.mail.PostManager;
 import forestry.api.mail.TradeStationInfo;
 import forestry.core.gui.IGuiSelectable;
-import forestry.core.network.PacketGuiSelect;
-import forestry.core.network.PacketId;
+import forestry.core.network.PacketGuiSelectRequest;
 import forestry.core.proxy.Proxies;
 import forestry.mail.EnumStationState;
-import forestry.mail.network.PacketLetterInfo;
+import forestry.mail.network.PacketLetterInfoResponse;
 
-public class ContainerCatalogue extends Container implements IGuiSelectable {
+public class ContainerCatalogue extends Container implements IGuiSelectable, ILetterInfoReceiver {
 
 	private final EntityPlayer player;
 	private final List<ITradeStation> stations = new ArrayList<>();
@@ -131,8 +131,7 @@ public class ContainerCatalogue extends Container implements IGuiSelectable {
 
 	public void cycleFilter() {
 		if (player.worldObj.isRemote) {
-			PacketGuiSelect packet = new PacketGuiSelect(PacketId.GUI_SELECTION_CHANGE, 2, 0);
-			Proxies.net.sendToServer(packet);
+			Proxies.net.sendToServer(new PacketGuiSelectRequest(2, 0));
 			return;
 		}
 
@@ -143,8 +142,7 @@ public class ContainerCatalogue extends Container implements IGuiSelectable {
 
 	private static void sendSelection(boolean advance) {
 		int value = advance ? 0 : 1;
-		PacketGuiSelect packet = new PacketGuiSelect(PacketId.GUI_SELECTION_CHANGE, value, 0);
-		Proxies.net.sendToServer(packet);
+		Proxies.net.sendToServer(new PacketGuiSelectRequest(value, 0));
 	}
 
 	/* Managing Trade info */
@@ -163,7 +161,8 @@ public class ContainerCatalogue extends Container implements IGuiSelectable {
 		needsSynch = true;
 	}
 
-	public void handleTradeInfoUpdate(PacketLetterInfo packet) {
+	@Override
+	public void handleLetterInfoUpdate(PacketLetterInfoResponse packet) {
 		setTradeInfo(packet.tradeInfo);
 	}
 
@@ -187,7 +186,7 @@ public class ContainerCatalogue extends Container implements IGuiSelectable {
 				crafter.sendProgressBarUpdate(this, 2, currentFilter);
 			}
 
-			Proxies.net.sendToPlayer(new PacketLetterInfo(EnumAddressee.TRADER, currentTrade, null), player);
+			Proxies.net.sendToPlayer(new PacketLetterInfoResponse(EnumAddressee.TRADER, currentTrade, null), player);
 			needsSynch = false;
 		}
 	}
@@ -213,7 +212,7 @@ public class ContainerCatalogue extends Container implements IGuiSelectable {
 	}
 
 	@Override
-	public void handleSelectionChange(EntityPlayer player, PacketGuiSelect packet) {
+	public void handleSelectionRequest(EntityPlayerMP player, PacketGuiSelectRequest packet) {
 
 		switch (packet.getPrimaryIndex()) {
 			case 0:
@@ -228,9 +227,5 @@ public class ContainerCatalogue extends Container implements IGuiSelectable {
 		}
 
 		needsSynch = true;
-	}
-
-	@Override
-	public void setSelection(PacketGuiSelect packet) {
 	}
 }

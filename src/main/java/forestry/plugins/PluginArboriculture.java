@@ -73,7 +73,7 @@ import forestry.arboriculture.items.ItemBlockWood;
 import forestry.arboriculture.items.ItemGermlingGE;
 import forestry.arboriculture.items.ItemGrafter;
 import forestry.arboriculture.items.ItemTreealyzer;
-import forestry.arboriculture.network.PacketHandlerArboriculture;
+import forestry.arboriculture.network.PacketRipeningUpdate;
 import forestry.arboriculture.proxy.ProxyArboriculture;
 import forestry.arboriculture.tiles.TileArboristChest;
 import forestry.arboriculture.tiles.TileFruitPod;
@@ -90,7 +90,7 @@ import forestry.core.fluids.Fluids;
 import forestry.core.genetics.alleles.Allele;
 import forestry.core.items.ItemBlockForestry;
 import forestry.core.items.ItemFruit.EnumFruit;
-import forestry.core.network.IPacketHandler;
+import forestry.core.network.PacketIdClient;
 import forestry.core.proxy.Proxies;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.recipes.ShapedRecipeCustom;
@@ -407,8 +407,8 @@ public class PluginArboriculture extends ForestryPlugin {
 	}
 
 	@Override
-	public IPacketHandler getPacketHandler() {
-		return new PacketHandlerArboriculture();
+	public void registerPacketHandlers() {
+		PacketIdClient.RIPENING_UPDATE.setPacketHandler(new PacketRipeningUpdate());
 	}
 
 	@Override

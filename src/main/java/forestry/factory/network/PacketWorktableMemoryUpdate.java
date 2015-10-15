@@ -12,30 +12,27 @@ package forestry.factory.network;
 
 import java.io.IOException;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.PacketCoordinates;
-import forestry.core.network.PacketId;
+import forestry.core.network.PacketIdClient;
 import forestry.core.proxy.Proxies;
 import forestry.factory.recipes.RecipeMemory;
 import forestry.factory.tiles.TileWorktable;
 
-public class PacketWorktableMemoryUpdate extends PacketCoordinates {
+public class PacketWorktableMemoryUpdate extends PacketCoordinates implements IForestryPacketClient {
 
 	private RecipeMemory recipeMemory;
 
-	public static void onPacketData(DataInputStreamForestry data) throws IOException {
-		new PacketWorktableMemoryUpdate(data);
-	}
-
-	private PacketWorktableMemoryUpdate(DataInputStreamForestry data) throws IOException {
-		super(data);
+	public PacketWorktableMemoryUpdate() {
 	}
 
 	public PacketWorktableMemoryUpdate(TileWorktable worktable) {
-		super(PacketId.WORKTABLE_MEMORY_UPDATE, worktable);
+		super(PacketIdClient.WORKTABLE_MEMORY_UPDATE, worktable);
 		this.recipeMemory = worktable.getMemory();
 	}
 
@@ -46,9 +43,7 @@ public class PacketWorktableMemoryUpdate extends PacketCoordinates {
 	}
 
 	@Override
-	protected void readData(DataInputStreamForestry data) throws IOException {
-		super.readData(data);
-
+	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
 		TileEntity tile = getTarget(Proxies.common.getRenderWorld());
 		if (tile instanceof TileWorktable) {
 			((TileWorktable) tile).getMemory().readData(data);

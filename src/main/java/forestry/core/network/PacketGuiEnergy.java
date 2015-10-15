@@ -12,27 +12,20 @@ package forestry.core.network;
 
 import java.io.IOException;
 
-import net.minecraft.client.entity.EntityClientPlayerMP;
-
-import cpw.mods.fml.client.FMLClientHandler;
+import net.minecraft.entity.player.EntityPlayer;
 
 import forestry.core.gui.ContainerTile;
 
-public class PacketGuiEnergy extends ForestryPacket {
+public class PacketGuiEnergy extends ForestryPacket implements IForestryPacketClient {
 
 	private int windowId;
 	private int value;
 
-	public static void onPacketData(DataInputStreamForestry data) throws IOException {
-		new PacketGuiEnergy(data);
-	}
-
-	private PacketGuiEnergy(DataInputStreamForestry data) throws IOException {
-		super(data);
+	public PacketGuiEnergy() {
 	}
 
 	public PacketGuiEnergy(int windowId, int value) {
-		super(PacketId.GUI_ENERGY);
+		super(PacketIdClient.GUI_ENERGY);
 		this.windowId = windowId;
 		this.value = value;
 	}
@@ -44,12 +37,13 @@ public class PacketGuiEnergy extends ForestryPacket {
 	}
 
 	@Override
-	protected void readData(DataInputStreamForestry data) throws IOException {
+	public void readData(DataInputStreamForestry data) throws IOException {
 		windowId = data.readVarInt();
 		value = data.readVarInt();
+	}
 
-		EntityClientPlayerMP player = FMLClientHandler.instance().getClient().thePlayer;
-
+	@Override
+	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
 		if (player.openContainer instanceof ContainerTile && player.openContainer.windowId == windowId) {
 			((ContainerTile) player.openContainer).onGuiEnergy(value);
 		}

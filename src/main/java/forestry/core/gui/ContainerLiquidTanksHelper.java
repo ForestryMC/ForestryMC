@@ -20,8 +20,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 
 import forestry.api.core.IToolPipette;
-import forestry.core.network.PacketId;
-import forestry.core.network.PacketSlotClick;
+import forestry.core.network.PacketPipetteClick;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.ILiquidTankTile;
 
@@ -40,7 +39,7 @@ public class ContainerLiquidTanksHelper<T extends TileEntity & ILiquidTankTile> 
 			return;
 		}
 
-		Proxies.net.sendToServer(new PacketSlotClick(PacketId.PIPETTE_CLICK, tile, slot));
+		Proxies.net.sendToServer(new PacketPipetteClick(tile, slot));
 	}
 
 	@Override

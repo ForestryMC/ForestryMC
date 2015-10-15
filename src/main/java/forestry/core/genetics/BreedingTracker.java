@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.WorldSavedData;
 
@@ -30,8 +31,7 @@ import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.ISpeciesRoot;
-import forestry.core.network.PacketId;
-import forestry.core.network.PacketNBT;
+import forestry.core.network.PacketGenomeTrackerUpdate;
 import forestry.core.proxy.Proxies;
 
 public abstract class BreedingTracker extends WorldSavedData implements IBreedingTracker {
@@ -85,13 +85,15 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 
 	@Override
 	public void synchToPlayer(EntityPlayer player) {
-		IBreedingTracker breedingTracker = getBreedingTracker(player);
-		String modeName = breedingTracker.getModeName();
-		setModeName(modeName);
+		if (player instanceof EntityPlayerMP) {
+			IBreedingTracker breedingTracker = getBreedingTracker(player);
+			String modeName = breedingTracker.getModeName();
+			setModeName(modeName);
 
-		NBTTagCompound nbttagcompound = new NBTTagCompound();
-		encodeToNBT(nbttagcompound);
-		Proxies.net.sendToPlayer(new PacketNBT(PacketId.GENOME_TRACKER_UPDATE, nbttagcompound), player);
+			NBTTagCompound nbttagcompound = new NBTTagCompound();
+			encodeToNBT(nbttagcompound);
+			Proxies.net.sendToPlayer(new PacketGenomeTrackerUpdate(nbttagcompound), (EntityPlayerMP) player);
+		}
 	}
 
 	/* HELPER FUNCTIONS TO PREVENT OBFUSCATION OF INTERFACE METHODS */

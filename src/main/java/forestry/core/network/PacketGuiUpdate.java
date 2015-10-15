@@ -12,24 +12,20 @@ package forestry.core.network;
 
 import java.io.IOException;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 
 import forestry.core.proxy.Proxies;
 
-public class PacketGuiUpdate extends PacketCoordinates {
+public class PacketGuiUpdate extends PacketCoordinates implements IForestryPacketClient {
 
 	private IStreamableGui guiDataTile;
 
-	public static void onPacketData(DataInputStreamForestry data) throws IOException {
-		new PacketGuiUpdate(data);
-	}
-
-	private PacketGuiUpdate(DataInputStreamForestry data) throws IOException {
-		super(data);
+	public PacketGuiUpdate() {
 	}
 
 	public PacketGuiUpdate(IStreamableGui guiDataTile) {
-		super(PacketId.TILE_FORESTRY_GUI_OPENED, guiDataTile.getCoordinates());
+		super(PacketIdClient.GUI_UPDATE, guiDataTile.getCoordinates());
 		this.guiDataTile = guiDataTile;
 	}
 
@@ -40,9 +36,7 @@ public class PacketGuiUpdate extends PacketCoordinates {
 	}
 
 	@Override
-	protected void readData(DataInputStreamForestry data) throws IOException {
-		super.readData(data);
-
+	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
 		TileEntity tile = getTarget(Proxies.common.getRenderWorld());
 		if (tile instanceof IStreamableGui) {
 			((IStreamableGui) tile).readGuiData(data);

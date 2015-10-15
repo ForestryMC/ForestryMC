@@ -28,15 +28,14 @@ import forestry.api.mail.PostManager;
 import forestry.api.mail.TradeStationInfo;
 import forestry.core.gui.ContainerItemInventory;
 import forestry.core.gui.slots.SlotFiltered;
-import forestry.core.network.PacketId;
 import forestry.core.network.PacketString;
 import forestry.core.proxy.Proxies;
 import forestry.mail.Letter;
 import forestry.mail.items.ItemLetter.LetterInventory;
-import forestry.mail.network.PacketLetterInfo;
-import forestry.mail.network.PacketRequestLetterInfo;
+import forestry.mail.network.PacketLetterInfoResponse;
+import forestry.mail.network.PacketLetterTextSet;
 
-public class ContainerLetter extends ContainerItemInventory<LetterInventory> {
+public class ContainerLetter extends ContainerItemInventory<LetterInventory> implements ILetterInfoReceiver {
 
 	private EnumAddressee carrierType = EnumAddressee.PLAYER;
 	private TradeStationInfo tradeInfo = null;
@@ -121,10 +120,7 @@ public class ContainerLetter extends ContainerItemInventory<LetterInventory> {
 		setCarrierType(postal.getType());
 	}
 
-	public void handleRequestLetterInfo(EntityPlayer player, PacketRequestLetterInfo packet) {
-		String recipientName = packet.getRecipientName();
-		EnumAddressee type = packet.getAddressType();
-
+	public void handleRequestLetterInfo(EntityPlayer player, String recipientName, EnumAddressee type) {
 		IMailAddress recipient = getRecipient(recipientName, type);
 
 		getLetter().setRecipient(recipient);
@@ -135,7 +131,7 @@ public class ContainerLetter extends ContainerItemInventory<LetterInventory> {
 		}
 		
 		// Update info on client
-		Proxies.net.sendToPlayer(new PacketLetterInfo(type, tradeInfo, recipient), player);
+		Proxies.net.sendToPlayer(new PacketLetterInfoResponse(type, tradeInfo, recipient), player);
 	}
 
 	private static IMailAddress getRecipient(String recipientName, EnumAddressee type) {
@@ -170,9 +166,7 @@ public class ContainerLetter extends ContainerItemInventory<LetterInventory> {
 	public void setText(String text) {
 		getLetter().setText(text);
 
-		PacketString packet = new PacketString(PacketId.LETTER_TEXT, text);
-		Proxies.net.sendToServer(packet);
-
+		Proxies.net.sendToServer(new PacketLetterTextSet(text));
 	}
 
 	public void handleSetText(PacketString packet) {
@@ -201,7 +195,8 @@ public class ContainerLetter extends ContainerItemInventory<LetterInventory> {
 		setTradeInfo(station.getTradeInfo());
 	}
 
-	public void handleLetterInfoUpdate(PacketLetterInfo packet) {
+	@Override
+	public void handleLetterInfoUpdate(PacketLetterInfoResponse packet) {
 		carrierType = packet.type;
 		if (packet.type == EnumAddressee.PLAYER) {
 			getLetter().setRecipient(packet.address);

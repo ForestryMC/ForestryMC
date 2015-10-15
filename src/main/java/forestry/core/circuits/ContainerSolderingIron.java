@@ -11,6 +11,7 @@
 package forestry.core.circuits;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 
 import forestry.api.circuits.ICircuitLayout;
 import forestry.core.circuits.ItemSolderingIron.SolderingInventory;
@@ -18,9 +19,10 @@ import forestry.core.gui.ContainerItemInventory;
 import forestry.core.gui.IGuiSelectable;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
-import forestry.core.network.PacketGuiSelect;
-import forestry.core.network.PacketId;
-import forestry.core.network.PacketString;
+import forestry.core.network.IForestryPacketClient;
+import forestry.core.network.IForestryPacketServer;
+import forestry.core.network.PacketGuiLayoutSelect;
+import forestry.core.network.PacketGuiSelectRequest;
 import forestry.core.proxy.Proxies;
 
 public class ContainerSolderingIron extends ContainerItemInventory<SolderingInventory> implements IGuiSelectable {
@@ -54,12 +56,12 @@ public class ContainerSolderingIron extends ContainerItemInventory<SolderingInve
 	}
 
 	private static void sendSelectionChange(int index, int advance) {
-		PacketGuiSelect packet = new PacketGuiSelect(PacketId.GUI_SELECTION_CHANGE, index, advance);
+		IForestryPacketServer packet = new PacketGuiSelectRequest(index, advance);
 		Proxies.net.sendToServer(packet);
 	}
 
 	@Override
-	public void handleSelectionChange(EntityPlayer player, PacketGuiSelect packet) {
+	public void handleSelectionRequest(EntityPlayerMP player, PacketGuiSelectRequest packet) {
 
 		if (packet.getSecondaryIndex() == 0) {
 			if (packet.getPrimaryIndex() == 0) {
@@ -69,16 +71,8 @@ public class ContainerSolderingIron extends ContainerItemInventory<SolderingInve
 			inventory.regressLayout();
 		}
 
-		sendSelection(player);
-	}
-
-	private void sendSelection(EntityPlayer player) {
-		PacketString packet = new PacketString(PacketId.GUI_LAYOUT_SELECT, inventory.getLayout().getUID());
-		Proxies.net.sendToPlayer(packet, player);
-	}
-
-	@Override
-	public void setSelection(PacketGuiSelect packet) {
+		IForestryPacketClient packetResponse = new PacketGuiLayoutSelect(inventory.getLayout().getUID());
+		Proxies.net.sendToPlayer(packetResponse, player);
 	}
 
 	public void setLayout(String layoutUID) {

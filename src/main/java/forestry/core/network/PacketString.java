@@ -12,15 +12,14 @@ package forestry.core.network;
 
 import java.io.IOException;
 
-public class PacketString extends ForestryPacket {
+public abstract class PacketString extends ForestryPacket {
 
 	private String string;
 
-	public PacketString(DataInputStreamForestry data) throws IOException {
-		super(data);
+	protected PacketString() {
 	}
 
-	public PacketString(PacketId id, String string) {
+	protected PacketString(IPacketId id, String string) {
 		super(id);
 		this.string = string;
 	}
@@ -32,7 +31,7 @@ public class PacketString extends ForestryPacket {
 	}
 
 	@Override
-	protected void readData(DataInputStreamForestry data) throws IOException {
+	public void readData(DataInputStreamForestry data) throws IOException {
 		super.readData(data);
 		string = data.readUTF();
 	}

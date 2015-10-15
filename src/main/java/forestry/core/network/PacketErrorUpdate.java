@@ -12,26 +12,22 @@ package forestry.core.network;
 
 import java.io.IOException;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorLogicSource;
 import forestry.core.proxy.Proxies;
 
-public class PacketErrorUpdate extends PacketCoordinates {
+public class PacketErrorUpdate extends PacketCoordinates implements IForestryPacketClient {
 
 	private IErrorLogic errorLogic;
 
-	public static void onPacketData(DataInputStreamForestry data) throws IOException {
-		new PacketErrorUpdate(data);
-	}
-
-	private PacketErrorUpdate(DataInputStreamForestry data) throws IOException {
-		super(data);
+	public PacketErrorUpdate() {
 	}
 
 	public PacketErrorUpdate(TileEntity tile, IErrorLogicSource errorLogicSource) {
-		super(PacketId.TILE_FORESTRY_ERROR_UPDATE, tile);
+		super(PacketIdClient.ERROR_UPDATE, tile);
 		this.errorLogic = errorLogicSource.getErrorLogic();
 	}
 
@@ -42,9 +38,7 @@ public class PacketErrorUpdate extends PacketCoordinates {
 	}
 
 	@Override
-	protected void readData(DataInputStreamForestry data) throws IOException {
-		super.readData(data);
-
+	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
 		TileEntity tile = getTarget(Proxies.common.getRenderWorld());
 		if (tile instanceof IErrorLogicSource) {
 			IErrorLogicSource errorSourceTile = (IErrorLogicSource) tile;

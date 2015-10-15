@@ -11,6 +11,7 @@
 package forestry.factory.gui;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.inventory.Slot;
@@ -21,8 +22,7 @@ import forestry.core.gui.IContainerCrafting;
 import forestry.core.gui.IGuiSelectable;
 import forestry.core.gui.slots.SlotCraftMatrix;
 import forestry.core.gui.slots.SlotCrafter;
-import forestry.core.network.PacketGuiSelect;
-import forestry.core.network.PacketId;
+import forestry.core.network.PacketGuiSelectRequest;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.ItemStackUtil;
 import forestry.factory.network.PacketWorktableMemoryUpdate;
@@ -105,12 +105,11 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
 	}
 
 	public static void sendRecipeClick(int mouseButton, int recipeIndex) {
-		PacketGuiSelect packet = new PacketGuiSelect(PacketId.GUI_SELECTION_CHANGE, mouseButton, recipeIndex);
-		Proxies.net.sendToServer(packet);
+		Proxies.net.sendToServer(new PacketGuiSelectRequest(mouseButton, recipeIndex));
 	}
 
 	@Override
-	public void handleSelectionChange(EntityPlayer player, PacketGuiSelect packet) {
+	public void handleSelectionRequest(EntityPlayerMP player, PacketGuiSelectRequest packet) {
 		if (packet.getPrimaryIndex() > 0) {
 			tile.getMemory().toggleLock(player.worldObj, packet.getSecondaryIndex());
 		} else {
@@ -118,9 +117,5 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
 			updateMatrix();
 			updateRecipe();
 		}
-	}
-
-	@Override
-	public void setSelection(PacketGuiSelect packet) {
 	}
 }

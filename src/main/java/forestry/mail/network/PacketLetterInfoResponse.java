@@ -13,6 +13,8 @@ package forestry.mail.network;
 import java.io.IOException;
 import java.util.UUID;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 
 import com.mojang.authlib.GameProfile;
@@ -24,21 +26,22 @@ import forestry.api.mail.TradeStationInfo;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.ForestryPacket;
-import forestry.core.network.PacketId;
+import forestry.core.network.IForestryPacketClient;
+import forestry.core.network.PacketIdClient;
 import forestry.mail.EnumStationState;
+import forestry.mail.gui.ILetterInfoReceiver;
 
-public class PacketLetterInfo extends ForestryPacket {
+public class PacketLetterInfoResponse extends ForestryPacket implements IForestryPacketClient {
 
 	public EnumAddressee type;
 	public TradeStationInfo tradeInfo;
 	public IMailAddress address;
 
-	public PacketLetterInfo(DataInputStreamForestry data) throws IOException {
-		super(data);
+	public PacketLetterInfoResponse() {
 	}
 
-	public PacketLetterInfo(EnumAddressee type, TradeStationInfo info, IMailAddress address) {
-		super(PacketId.LETTER_INFO);
+	public PacketLetterInfoResponse(EnumAddressee type, TradeStationInfo info, IMailAddress address) {
+		super(PacketIdClient.LETTER_INFO_RESPONSE);
 		this.type = type;
 		if (type == EnumAddressee.TRADER) {
 			this.tradeInfo = info;
@@ -126,4 +129,11 @@ public class PacketLetterInfo extends ForestryPacket {
 		}
 	}
 
+	@Override
+	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
+		Container container = player.openContainer;
+		if (container instanceof ILetterInfoReceiver) {
+			((ILetterInfoReceiver) container).handleLetterInfoUpdate(this);
+		}
+	}
 }

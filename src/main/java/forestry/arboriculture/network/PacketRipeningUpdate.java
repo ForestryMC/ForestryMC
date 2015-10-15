@@ -12,35 +12,32 @@ package forestry.arboriculture.network;
 
 import java.io.IOException;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 
 import forestry.arboriculture.tiles.TileFruitPod;
 import forestry.arboriculture.tiles.TileLeaves;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.PacketCoordinates;
-import forestry.core.network.PacketId;
+import forestry.core.network.PacketIdClient;
 import forestry.core.proxy.Proxies;
 
-public class PacketRipeningUpdate extends PacketCoordinates {
+public class PacketRipeningUpdate extends PacketCoordinates implements IForestryPacketClient {
 
 	private int value;
 
-	public static void onPacketData(DataInputStreamForestry data) throws IOException {
-		new PacketRipeningUpdate(data);
-	}
-
-	private PacketRipeningUpdate(DataInputStreamForestry data) throws IOException {
-		super(data);
+	public PacketRipeningUpdate() {
 	}
 
 	public PacketRipeningUpdate(TileFruitPod fruitPod) {
-		super(PacketId.RIPENING_UPDATE, fruitPod);
+		super(PacketIdClient.RIPENING_UPDATE, fruitPod);
 		value = fruitPod.getMaturity();
 	}
 
 	public PacketRipeningUpdate(TileLeaves leaves) {
-		super(PacketId.RIPENING_UPDATE, leaves);
+		super(PacketIdClient.RIPENING_UPDATE, leaves);
 		value = leaves.getFruitColour();
 	}
 
@@ -54,16 +51,13 @@ public class PacketRipeningUpdate extends PacketCoordinates {
 	public void readData(DataInputStreamForestry data) throws IOException {
 		super.readData(data);
 		value = data.readVarInt();
-
-		TileEntity tile = getTarget(Proxies.common.getRenderWorld());
-		if (tile instanceof TileLeaves) {
-			((TileLeaves) tile).fromRipeningPacket(value);
-		} else if (tile instanceof TileFruitPod) {
-			((TileFruitPod) tile).fromRipeningPacket(value);
-		}
 	}
 
-	public int getValue() {
-		return value;
+	@Override
+	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
+		TileEntity tile = getTarget(Proxies.common.getRenderWorld());
+		if (tile instanceof IRipeningPacketReceiver) {
+			((IRipeningPacketReceiver) tile).fromRipeningPacket(value);
+		}
 	}
 }

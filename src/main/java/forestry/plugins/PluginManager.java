@@ -42,7 +42,6 @@ import forestry.api.core.ForestryAPI;
 import forestry.core.IPickupHandler;
 import forestry.core.IResupplyHandler;
 import forestry.core.ISaveEventHandler;
-import forestry.core.network.IPacketHandler;
 import forestry.core.utils.Log;
 
 public class PluginManager {
@@ -51,7 +50,6 @@ public class PluginManager {
 	private static final String CATEGORY_MODULES = "modules";
 
 	public static final ArrayList<IGuiHandler> guiHandlers = Lists.newArrayList();
-	public static final ArrayList<IPacketHandler> packetHandlers = Lists.newArrayList();
 	public static final ArrayList<IPickupHandler> pickupHandlers = Lists.newArrayList();
 	public static final ArrayList<ISaveEventHandler> saveEventHandlers = Lists.newArrayList();
 	public static final ArrayList<IResupplyHandler> resupplyHandlers = Lists.newArrayList();
@@ -151,10 +149,7 @@ public class PluginManager {
 			guiHandlers.add(guiHandler);
 		}
 
-		IPacketHandler packetHandler = plugin.getPacketHandler();
-		if (packetHandler != null) {
-			packetHandlers.add(packetHandler);
-		}
+		plugin.registerPacketHandlers();
 
 		IPickupHandler pickupHandler = plugin.getPickupHandler();
 		if (pickupHandler != null) {

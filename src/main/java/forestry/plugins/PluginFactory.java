@@ -36,17 +36,19 @@ import forestry.core.config.GameMode;
 import forestry.core.fluids.Fluids;
 import forestry.core.items.ItemBlockForestry;
 import forestry.core.items.ItemBlockNBT;
-import forestry.core.network.IPacketHandler;
+import forestry.core.network.PacketIdClient;
+import forestry.core.network.PacketIdServer;
 import forestry.core.proxy.Proxies;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.recipes.ShapedRecipeCustom;
 import forestry.core.recipes.craftguide.CraftGuideIntegration;
+import forestry.core.recipes.nei.PacketWorktableNEISelect;
 import forestry.core.tiles.MachineDefinition;
 import forestry.core.utils.Log;
 import forestry.factory.DummyManagers;
 import forestry.factory.GuiHandlerFactory;
 import forestry.factory.circuits.CircuitSpeedUpgrade;
-import forestry.factory.network.PacketHandlerFactory;
+import forestry.factory.network.PacketWorktableMemoryUpdate;
 import forestry.factory.tiles.TileBottler;
 import forestry.factory.tiles.TileCarpenter;
 import forestry.factory.tiles.TileCentrifuge;
@@ -92,8 +94,10 @@ public class PluginFactory extends ForestryPlugin {
 	}
 
 	@Override
-	public IPacketHandler getPacketHandler() {
-		return new PacketHandlerFactory();
+	public void registerPacketHandlers() {
+		PacketIdServer.WORKTABLE_NEI_SELECT.setPacketHandler(new PacketWorktableNEISelect());
+
+		PacketIdClient.WORKTABLE_MEMORY_UPDATE.setPacketHandler(new PacketWorktableMemoryUpdate());
 	}
 
 	@Override

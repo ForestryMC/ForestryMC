@@ -14,20 +14,19 @@ import java.io.IOException;
 
 import net.minecraft.tileentity.TileEntity;
 
-public class PacketSlotClick extends PacketCoordinates {
+public abstract class PacketSlotClick extends PacketCoordinates {
 	private int slot;
 
-	public PacketSlotClick(DataInputStreamForestry data) throws IOException {
-		super(data);
+	protected PacketSlotClick() {
 	}
 
-	public PacketSlotClick(PacketId id, TileEntity tile, int slot) {
+	protected PacketSlotClick(IPacketId id, TileEntity tile, int slot) {
 		super(id, tile);
 		this.slot = slot;
 	}
 
 	@Override
-	protected void readData(DataInputStreamForestry data) throws IOException {
+	public void readData(DataInputStreamForestry data) throws IOException {
 		super.readData(data);
 		this.slot = data.readVarInt();
 	}
