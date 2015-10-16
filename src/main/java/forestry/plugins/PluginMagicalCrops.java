@@ -140,8 +140,10 @@ public class PluginMagicalCrops extends ForestryPlugin {
 
 		ImmutableList<String> betaSeeds = ImmutableList.of(
 				"Air",
+				"Airshard",
 				"Aluminium",
 				"Alumite",
+				"Amber",
 				"Ardite",
 				"Blaze",
 				"Blizz",
@@ -150,18 +152,25 @@ public class PluginMagicalCrops extends ForestryPlugin {
 				"Chicken",
 				"Coal",
 				"Cobalt",
+				"ConductiveIron",
 				"Copper",
 				"Cow",
 				"Creeper",
+				"DarkSteel",
 				"Diamond",
+				"Draconium",
 				"Dye",
 				"Earth",
+				"Earthshard",
+				"ElectricalSteel",
 				"Electrum",
 				"Emerald",
 				"Enderium",
 				"Enderman",
+				"EnergeticAlloy",
 				"Experience",
 				"Fire",
+				"Fireshard",
 				"Fluix",
 				"Ghast",
 				"Glowstone",
@@ -178,11 +187,15 @@ public class PluginMagicalCrops extends ForestryPlugin {
 				"Nether",
 				"Nickel",
 				"Obsidian",
+				"Ordershard",
 				"Osmium",
 				"Peridot",
 				"Pig",
 				"Platinum",
+				"PulsatingIron",
 				"Quartz",
+				"Quicksilver",
+				"RedstoneAlloy",
 				"Redstone",
 				"Rubber",
 				"Ruby",
@@ -193,12 +206,16 @@ public class PluginMagicalCrops extends ForestryPlugin {
 				"Silver",
 				"Skeleton",
 				"Slime",
+				"Soularium",
 				"Spider",
 				"Steel",
 				"Sulfur",
 				"Terrasteel",
+				"Thaumium",
 				"Tin",
+				"VibrantAlloy",
 				"Water",
+				"Watershard",
 				"Wither",
 				"Yellorite"
 		);
@@ -229,7 +246,8 @@ public class PluginMagicalCrops extends ForestryPlugin {
 			addRecipes("_Seeds", "_Crop", seedName, seedAmount);
 		}
 		for (String seedName : betaSeeds) {
-			addBetaRecipes("Seeds", "Crop", seedName);
+			addBetaRecipes("Seeds", "Crop", seedName, "");
+			addBetaRecipes("Seeds", "Crop", seedName, "magicalcrops_");
 		}
 
 		Item cropProduce = GameRegistry.findItem(MagCrop, MagCrop + "_CropProduce");
@@ -252,9 +270,9 @@ public class PluginMagicalCrops extends ForestryPlugin {
 		}
 	}
 
-	private static void addBetaRecipes(String seedSuffix, String cropSuffix, String name) {
-		ItemStack seed = GameRegistry.findItemStack(MagCrop, MagCrop + "_" + name + seedSuffix, 1);
-		Block crop = GameRegistry.findBlock(MagCrop, MagCrop + "_" + name + cropSuffix);
+	private static void addBetaRecipes(String seedSuffix, String cropSuffix, String name, String middlefix) {
+		ItemStack seed = GameRegistry.findItemStack(MagCrop, middlefix + name + seedSuffix, 1);
+		Block crop = GameRegistry.findBlock(MagCrop, middlefix + name + cropSuffix);
 		if (seed != null && crop != null && Config.isMagicalCropsSupportEnabled()) {
 			Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(seed, crop, 7));
 		}
