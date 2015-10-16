@@ -31,6 +31,7 @@ import forestry.core.network.GuiId;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.tiles.TileBase;
 import forestry.core.utils.InventoryUtil;
+import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.SlotUtil;
 import forestry.factory.recipes.RecipeMemory;
 
@@ -194,11 +195,20 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 				continue;
 			}
 
-			if (!itemStack.getItem().hasContainerItem(itemStack)) {
-				continue;
+			ItemStack container = null;
+
+			if (itemStack.getItem().hasContainerItem(itemStack)) {
+				container = itemStack.getItem().getContainerItem(itemStack);
+			} else if (itemStack.stackSize > 1) {
+				// TerraFirmaCraft's crafting event handler does some tricky stuff with its tools.
+				// It sets the tool's stack size to 2 instead of using a container.
+				container = ItemStackUtil.createSplitStack(itemStack, itemStack.stackSize - 1);
+				itemStack.stackSize = 1;
 			}
 
-			ItemStack container = itemStack.getItem().getContainerItem(itemStack);
+			if (container == null) {
+				continue;
+			}
 
 			if (container != null && container.isItemStackDamageable() && container.getItemDamage() > container.getMaxDamage()) {
 				MinecraftForge.EVENT_BUS.post(new PlayerDestroyItemEvent(player, container));
