@@ -253,8 +253,8 @@ public class PluginMagicalCrops extends ForestryPlugin {
 	}
 
 	private static void addBetaRecipes(String seedSuffix, String cropSuffix, String name) {
-		ItemStack seed = GameRegistry.findItemStack(MagCrop, MagCrop + "_" + name + seedSuffix, 1);
-		Block crop = GameRegistry.findBlock(MagCrop, MagCrop + "_" + name + cropSuffix);
+		ItemStack seed = GameRegistry.findItemStack(MagCrop, name + seedSuffix, 1);
+		Block crop = GameRegistry.findBlock(MagCrop, name + cropSuffix);
 		if (seed != null && crop != null && Config.isMagicalCropsSupportEnabled()) {
 			Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(seed, crop, 7));
 		}
