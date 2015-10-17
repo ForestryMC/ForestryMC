@@ -163,10 +163,10 @@ public class RenderEngine extends TileEntitySpecialRenderer implements IBlockRen
 
 		float factor = (float) (1.0 / 16.0);
 
-		Proxies.common.bindTexture(textures[Textures.BASE.ordinal()]);
+		Proxies.render.bindTexture(textures[Textures.BASE.ordinal()]);
 		boiler.render(factor);
 
-		Proxies.common.bindTexture(textures[Textures.PISTON.ordinal()]);
+		Proxies.render.bindTexture(textures[Textures.PISTON.ordinal()]);
 		GL11.glTranslatef(translate[0] * tfactor, translate[1] * tfactor, translate[2] * tfactor);
 		piston.render(factor);
 		GL11.glTranslatef(-translate[0] * tfactor, -translate[1] * tfactor, -translate[2] * tfactor);
@@ -192,10 +192,10 @@ public class RenderEngine extends TileEntitySpecialRenderer implements IBlockRen
 				break;
 
 		}
-		Proxies.common.bindTexture(texture);
+		Proxies.render.bindTexture(texture);
 		trunk.render(factor);
 
-		Proxies.common.bindTexture(textures[Textures.EXTENSION.ordinal()]);
+		Proxies.render.bindTexture(textures[Textures.EXTENSION.ordinal()]);
 		float chamberf = 2F / 16F;
 
 		if (step > 0) {

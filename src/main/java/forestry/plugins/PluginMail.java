@@ -33,7 +33,7 @@ import forestry.core.fluids.Fluids;
 import forestry.core.items.ItemBlockForestry;
 import forestry.core.network.PacketIdClient;
 import forestry.core.network.PacketIdServer;
-import forestry.core.proxy.Proxies;
+import forestry.core.recipes.RecipeUtil;
 import forestry.core.recipes.ShapedRecipeCustom;
 import forestry.core.tiles.MachineDefinition;
 import forestry.mail.GuiHandlerMail;
@@ -170,10 +170,10 @@ public class PluginMail extends ForestryPlugin {
 
 		Item stampGlue;
 		if (PluginManager.Module.APICULTURE.isEnabled()) {
-			Proxies.common.addShapelessRecipe(ForestryItem.letters.getItemStack(), Items.paper, ForestryItem.propolis.getItemStack(1, OreDictionary.WILDCARD_VALUE));
+			RecipeUtil.addShapelessRecipe(ForestryItem.letters.getItemStack(), Items.paper, ForestryItem.propolis.getItemStack(1, OreDictionary.WILDCARD_VALUE));
 			stampGlue = ForestryItem.honeyDrop.item();
 		} else {
-			Proxies.common.addShapelessRecipe(ForestryItem.letters.getItemStack(), Items.paper, Items.slime_ball);
+			RecipeUtil.addShapelessRecipe(ForestryItem.letters.getItemStack(), Items.paper, Items.slime_ball);
 			stampGlue = Items.slime_ball;
 		}
 
@@ -183,7 +183,7 @@ public class PluginMail extends ForestryPlugin {
 					continue;
 				}
 
-				Proxies.common.addRecipe(ForestryItem.stamps.getItemStack(9, i),
+				RecipeUtil.addRecipe(ForestryItem.stamps.getItemStack(9, i),
 						"XXX", "###", "ZZZ",
 						'X', stampDefinitions[i].getCraftingIngredient(),
 						'#', Items.paper,
@@ -196,12 +196,12 @@ public class PluginMail extends ForestryPlugin {
 		}
 
 		// Recycling
-		Proxies.common.addRecipe(new ItemStack(Items.paper), "###", '#', ForestryItem.letters.getItemStack(1, OreDictionary.WILDCARD_VALUE));
+		RecipeUtil.addRecipe(new ItemStack(Items.paper), "###", '#', ForestryItem.letters.getItemStack(1, OreDictionary.WILDCARD_VALUE));
 
 		// Carpenter
 		RecipeManagers.carpenterManager.addRecipe(10, Fluids.WATER.getFluid(250), null, ForestryItem.letters.getItemStack(), "###", "###", '#', ForestryItem.woodPulp);
 
-		Proxies.common.addShapelessRecipe(ForestryItem.catalogue.getItemStack(), ForestryItem.stamps.getItemStack(1, OreDictionary.WILDCARD_VALUE), new ItemStack(Items.book));
+		RecipeUtil.addShapelessRecipe(ForestryItem.catalogue.getItemStack(), ForestryItem.stamps.getItemStack(1, OreDictionary.WILDCARD_VALUE), new ItemStack(Items.book));
 	}
 
 	@Override

@@ -19,7 +19,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import cpw.mods.fml.common.Optional;
 
 import forestry.core.config.Constants;
-import forestry.core.proxy.Proxies;
+import forestry.core.utils.ModUtil;
 
 import buildcraft.api.statements.IStatementContainer;
 import buildcraft.api.statements.ITriggerExternal;
@@ -33,7 +33,7 @@ public class PluginBuildCraftStatements extends ForestryPlugin implements ITrigg
 
 	@Override
 	public boolean isAvailable() {
-		return Proxies.common.isAPILoaded("buildcraft.api.statements", "[1.0, 2.0)");
+		return ModUtil.isAPILoaded("buildcraft.api.statements", "[1.0, 2.0)");
 	}
 
 	@Override

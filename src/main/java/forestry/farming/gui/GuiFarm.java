@@ -104,7 +104,7 @@ public class GuiFarm extends GuiForestry<ContainerFarm, TileFarm> {
 
 			if (getIconIndex() != null) {
 				GL11.glDisable(GL11.GL_LIGHTING);
-				Proxies.common.bindTexture(getLogic().getSpriteSheet());
+				Proxies.render.bindTexture(getLogic().getSpriteSheet());
 				manager.gui.drawTexturedModelRectFromIcon(startX + xPos, startY + yPos, getIconIndex(), 16, 16);
 				GL11.glEnable(GL11.GL_LIGHTING);
 			}

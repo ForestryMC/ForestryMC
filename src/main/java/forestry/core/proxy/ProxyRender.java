@@ -10,9 +10,14 @@
  ******************************************************************************/
 package forestry.core.proxy;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 
 import forestry.core.render.IBlockRenderer;
+import forestry.core.render.SpriteSheet;
 import forestry.core.tiles.MachineDefinition;
 
 public class ProxyRender {
@@ -52,14 +57,39 @@ public class ProxyRender {
 		return null;
 	}
 
-	public short registerItemTexUID(IIconRegister register, short uid, String ident) {
-		return uid;
-	}
-
-	public short registerTerrainTexUID(IIconRegister register, short uid, String ident) {
-		return uid;
-	}
-
 	public void registerVillagerSkin(int villagerId, String texturePath) {
+	}
+
+	public void setHabitatLocatorTexture(Entity player, ChunkCoordinates coordinates) {
+	}
+
+	public IResourceManager getSelectedTexturePack() {
+		return null;
+	}
+
+	public void bindTexture(ResourceLocation location) {
+	}
+
+	public void bindTexture(SpriteSheet spriteSheet) {
+	}
+
+	/* FX */
+
+	public void addBeeHiveFX(String texture, World world, ChunkCoordinates coordinates, int color) {
+	}
+
+	public void addEntitySwarmFX(World world, double d1, double d2, double d3) {
+	}
+
+	public void addEntityExplodeFX(World world, double d1, double d2, double d3) {
+	}
+
+	public void addEntitySnowFX(World world, double d1, double d2, double d3) {
+	}
+
+	public void addEntityIgnitionFX(World world, double d1, double d2, double d3) {
+	}
+
+	public void addEntityPotionFX(World world, double d1, double d2, double d3, int color) {
 	}
 }

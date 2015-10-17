@@ -14,8 +14,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
 import net.minecraft.world.World;
 
-import forestry.core.proxy.Proxies;
-
 public class BeverageEffectAntidote extends BeverageEffect {
 
 	private float chance = 0.2f;
@@ -33,7 +31,7 @@ public class BeverageEffectAntidote extends BeverageEffect {
 			return;
 		}
 
-		Proxies.common.removePotionEffect(player, Potion.poison);
+		player.removePotionEffect(Potion.poison.getId());
 	}
 
 	@Override

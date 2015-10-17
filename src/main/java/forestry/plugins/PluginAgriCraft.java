@@ -22,7 +22,7 @@ import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Constants;
 import forestry.core.config.GameMode;
 import forestry.core.fluids.Fluids;
-import forestry.core.proxy.Proxies;
+import forestry.core.utils.ModUtil;
 import forestry.farming.logic.FarmableBasicAgricraft;
 
 @Plugin(pluginID = "AgriCraft", name = "AgriCraft", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.plugin.agricraft.description")
@@ -32,7 +32,7 @@ public class PluginAgriCraft extends ForestryPlugin {
 
 	@Override
 	public boolean isAvailable() {
-		return Proxies.common.isModLoaded(AgriCraft);
+		return ModUtil.isModLoaded(AgriCraft);
 	}
 
 	@Override

@@ -19,7 +19,7 @@ import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Constants;
 import forestry.core.config.ForestryItem;
 import forestry.core.fluids.Fluids;
-import forestry.core.proxy.Proxies;
+import forestry.core.utils.ModUtil;
 
 @Plugin(pluginID = "Erebus", name = "Erebus", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.plugin.erebus.description")
 public class PluginErebus extends ForestryPlugin {
@@ -28,7 +28,7 @@ public class PluginErebus extends ForestryPlugin {
 
 	@Override
 	public boolean isAvailable() {
-		return Proxies.common.isModLoaded(EREBUS);
+		return ModUtil.isModLoaded(EREBUS);
 	}
 
 	@Override

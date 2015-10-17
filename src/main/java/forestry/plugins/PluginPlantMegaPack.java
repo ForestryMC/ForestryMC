@@ -26,8 +26,8 @@ import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Constants;
 import forestry.core.config.GameMode;
 import forestry.core.fluids.Fluids;
-import forestry.core.proxy.Proxies;
 import forestry.core.recipes.RecipeUtil;
+import forestry.core.utils.ModUtil;
 import forestry.farming.logic.FarmableBasicFruit;
 import forestry.farming.logic.FarmableGenericCrop;
 import forestry.farming.logic.FarmableStacked;
@@ -39,7 +39,7 @@ public class PluginPlantMegaPack extends ForestryPlugin {
 
 	@Override
 	public boolean isAvailable() {
-		return Proxies.common.isModLoaded(PlantMP);
+		return ModUtil.isModLoaded(PlantMP);
 	}
 
 	@Override

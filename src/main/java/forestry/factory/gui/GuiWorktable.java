@@ -56,7 +56,7 @@ public class GuiWorktable extends GuiForestryTitled<ContainerWorktable, TileWork
 
 			if (inventory.getMemory().isLocked(slotNumber)) {
 				manager.gui.setZLevel(110f);
-				Proxies.common.bindTexture(SpriteSheet.ITEMS);
+				Proxies.render.bindTexture(SpriteSheet.ITEMS);
 				manager.gui.drawTexturedModelRectFromIcon(startX + xPos, startY + yPos, TextureManager.getInstance().getDefault("slots/locked"), 16, 16);
 				manager.gui.setZLevel(0f);
 			}

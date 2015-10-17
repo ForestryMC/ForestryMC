@@ -27,9 +27,9 @@ public class EntityFXBee extends EntityFX {
 		this.particleMaxAge = (int) (20.0D / (Math.random() * 0.8D + 0.2D));
 		this.noClip = true;
 
-		this.motionX *= 0.2D;
+		this.motionX *= 0.1D;
 		this.motionY *= 0.015D;
-		this.motionZ *= 0.2D;
+		this.motionZ *= 0.1D;
 	}
 
 	/**

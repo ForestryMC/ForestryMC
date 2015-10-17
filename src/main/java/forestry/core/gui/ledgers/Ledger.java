@@ -172,7 +172,7 @@ public abstract class Ledger {
 
 		GL11.glColor4f(colorR, colorG, colorB, 1.0F);
 
-		Proxies.common.bindTexture(texture);
+		Proxies.render.bindTexture(texture);
 
 		int height = getHeight();
 		int width = getWidth();
@@ -191,7 +191,7 @@ public abstract class Ledger {
 		if (icon != null) {
 			GL11.glDisable(GL11.GL_LIGHTING);
 			GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
-			Proxies.common.bindTexture(SpriteSheet.ITEMS);
+			Proxies.render.bindTexture(SpriteSheet.ITEMS);
 			manager.gui.drawTexturedModelRectFromIcon(x, y, icon, 16, 16);
 			GL11.glEnable(GL11.GL_LIGHTING);
 		}

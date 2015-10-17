@@ -18,7 +18,7 @@ import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.IEffectData;
-import forestry.core.proxy.Proxies;
+import forestry.core.config.Constants;
 import forestry.core.utils.vect.Vect;
 
 public class AlleleEffectGlacial extends AlleleEffectThrottled {
@@ -61,7 +61,7 @@ public class AlleleEffectGlacial extends AlleleEffectThrottled {
 				continue;
 			}
 
-			Proxies.common.setBlockWithNotify(world, posBlock.x, posBlock.y, posBlock.z, Blocks.ice);
+			world.setBlock(posBlock.x, posBlock.y, posBlock.z, Blocks.ice, 0, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
 		}
 
 		return storedData;

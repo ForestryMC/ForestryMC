@@ -161,10 +161,10 @@ public class RenderMachine extends TileEntitySpecialRenderer implements IBlockRe
 
 		float factor = (float) (1.0 / 16.0);
 
-		Proxies.common.bindTexture(textures[Textures.BASE.ordinal()]);
+		Proxies.render.bindTexture(textures[Textures.BASE.ordinal()]);
 		basefront.render(factor);
 
-		Proxies.common.bindTexture(textures[Textures.BASE.ordinal()]);
+		Proxies.render.bindTexture(textures[Textures.BASE.ordinal()]);
 		baseback.render(factor);
 
 		ResourceLocation texture;
@@ -187,7 +187,7 @@ public class RenderMachine extends TileEntitySpecialRenderer implements IBlockRe
 				texture = textures[Textures.TANK_R_EMPTY.ordinal()];
 				break;
 		}
-		Proxies.common.bindTexture(texture);
+		Proxies.render.bindTexture(texture);
 		resourceTank.render(factor);
 
 		switch (melangeLevel) {
@@ -208,7 +208,7 @@ public class RenderMachine extends TileEntitySpecialRenderer implements IBlockRe
 				texture = textures[Textures.TANK_P_EMPTY.ordinal()];
 				break;
 		}
-		Proxies.common.bindTexture(texture);
+		Proxies.render.bindTexture(texture);
 		productTank.render(factor);
 
 		GL11.glPopMatrix();

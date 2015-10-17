@@ -108,7 +108,7 @@ public class GuiEscritoire extends GuiForestry<ContainerEscritoire, TileEscritoi
 			manager.gui.setZLevel(150f);
 			for (String ident : getToken().getOverlayIcons()) {
 				RenderHelper.enableGUIStandardItemLighting();
-				Proxies.common.bindTexture(SpriteSheet.ITEMS);
+				Proxies.render.bindTexture(SpriteSheet.ITEMS);
 				manager.gui.drawTexturedModelRectFromIcon(startX + xPos + 3, startY + yPos + 3, TextureManager.getInstance().getDefault(ident), 16, 16);
 				RenderHelper.disableStandardItemLighting();
 			}

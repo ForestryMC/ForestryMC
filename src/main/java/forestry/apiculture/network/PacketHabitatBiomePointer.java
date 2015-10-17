@@ -32,6 +32,6 @@ public class PacketHabitatBiomePointer extends PacketCoordinates implements IFor
 
 	@Override
 	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
-		Proxies.common.setHabitatLocatorTexture(player, getCoordinates());
+		Proxies.render.setHabitatLocatorTexture(player, getCoordinates());
 	}
 }

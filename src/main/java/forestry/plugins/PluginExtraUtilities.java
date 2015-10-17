@@ -25,7 +25,7 @@ import forestry.core.circuits.Circuit;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.ForestryItem;
-import forestry.core.proxy.Proxies;
+import forestry.core.utils.ModUtil;
 import forestry.farming.circuits.CircuitFarmLogic;
 import forestry.farming.logic.FarmLogicEnder;
 import forestry.farming.logic.FarmableGenericCrop;
@@ -37,7 +37,7 @@ public class PluginExtraUtilities extends ForestryPlugin {
 
 	@Override
 	public boolean isAvailable() {
-		return Proxies.common.isModLoaded(ExU);
+		return ModUtil.isModLoaded(ExU);
 	}
 
 	@Override

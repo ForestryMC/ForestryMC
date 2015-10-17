@@ -309,7 +309,7 @@ public abstract class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory>
 	}
 
 	private void drawQuestionMark(int x, int y) {
-		Proxies.common.bindTexture(textureFile);
+		Proxies.render.bindTexture(textureFile);
 		drawTexturedModalRect(x, y, 78, 240, 16, 16);
 	}
 
@@ -339,7 +339,7 @@ public abstract class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory>
 		}
 
 		// Probability arrow
-		Proxies.common.bindTexture(textureFile);
+		Proxies.render.bindTexture(textureFile);
 		drawTexturedModalRect(x, y, column, line, 15, 9);
 	}
 
@@ -384,22 +384,22 @@ public abstract class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory>
 	}
 
 	private void drawDownSymbol(int x, int y) {
-		Proxies.common.bindTexture(textureFile);
+		Proxies.render.bindTexture(textureFile);
 		drawTexturedModalRect(guiLeft + x, guiTop + y, 0, 247, 15, 9);
 	}
 
 	private void drawUpSymbol(int x, int y) {
-		Proxies.common.bindTexture(textureFile);
+		Proxies.render.bindTexture(textureFile);
 		drawTexturedModalRect(guiLeft + x, guiTop + y, 15, 247, 15, 9);
 	}
 
 	private void drawBothSymbol(int x, int y) {
-		Proxies.common.bindTexture(textureFile);
+		Proxies.render.bindTexture(textureFile);
 		drawTexturedModalRect(guiLeft + x, guiTop + y, 30, 247, 15, 9);
 	}
 
 	private void drawNoneSymbol(int x, int y) {
-		Proxies.common.bindTexture(textureFile);
+		Proxies.render.bindTexture(textureFile);
 		drawTexturedModalRect(guiLeft + x, guiTop + y, 45, 247, 15, 9);
 	}
 
@@ -411,7 +411,7 @@ public abstract class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory>
 
 		int stringWidth = fontRendererObj.getStringWidth(fertilityString);
 
-		Proxies.common.bindTexture(textureFile);
+		Proxies.render.bindTexture(textureFile);
 		drawTexturedModalRect(guiLeft + x + stringWidth + 2, guiTop + getLineY() - 1, 60, 240 + texOffset, 12, 8);
 
 		drawLine(fertilityString, x, textColor);

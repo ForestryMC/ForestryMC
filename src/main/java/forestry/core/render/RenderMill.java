@@ -173,23 +173,23 @@ public class RenderMill extends TileEntitySpecialRenderer implements IBlockRende
 
 		float factor = (float) (1.0 / 16.0);
 
-		Proxies.common.bindTexture(textures[Textures.PEDESTAL.ordinal()]);
+		Proxies.render.bindTexture(textures[Textures.PEDESTAL.ordinal()]);
 		pedestal.render(factor);
 
-		Proxies.common.bindTexture(textures[Textures.CHARGE.ordinal() + charge]);
+		Proxies.render.bindTexture(textures[Textures.CHARGE.ordinal() + charge]);
 		column.render(factor);
 
-		Proxies.common.bindTexture(textures[Textures.EXTENSION.ordinal()]);
+		Proxies.render.bindTexture(textures[Textures.EXTENSION.ordinal()]);
 		extension.render(factor);
 
-		Proxies.common.bindTexture(textures[Textures.BLADE_1.ordinal()]);
+		Proxies.render.bindTexture(textures[Textures.BLADE_1.ordinal()]);
 		GL11.glTranslatef(translate[0] * tfactor, translate[1] * tfactor, translate[2] * tfactor);
 		blade1.render(factor);
 
 		// Reset
 		GL11.glTranslatef(-translate[0] * tfactor, -translate[1] * tfactor, -translate[2] * tfactor);
 
-		Proxies.common.bindTexture(textures[Textures.BLADE_2.ordinal()]);
+		Proxies.render.bindTexture(textures[Textures.BLADE_2.ordinal()]);
 		GL11.glTranslatef(-translate[0] * tfactor, translate[1] * tfactor, -translate[2] * tfactor);
 		blade2.render(factor);
 

@@ -23,7 +23,7 @@ import forestry.core.config.ForestryItem;
 import forestry.core.fluids.Fluids;
 import forestry.core.fluids.LiquidRegistryHelper;
 import forestry.core.items.ItemForestryFood;
-import forestry.core.proxy.Proxies;
+import forestry.core.recipes.RecipeUtil;
 import forestry.food.BeverageEffect;
 import forestry.food.GuiHandlerFood;
 import forestry.food.items.ItemAmbrosia;
@@ -74,7 +74,7 @@ public class PluginFood extends ForestryPlugin {
 	@Override
 	protected void registerRecipes() {
 		// INFUSER
-		Proxies.common.addRecipe(ForestryItem.infuser.getItemStack(),
+		RecipeUtil.addRecipe(ForestryItem.infuser.getItemStack(),
 				"X", "#", "X",
 				'#', "ingotIron",
 				'X', "ingotBronze");

@@ -43,7 +43,7 @@ public class ReservoirWidget extends TankWidget {
 			squaled = height;
 		}
 
-		Proxies.common.bindTexture(SpriteSheet.BLOCKS);
+		Proxies.render.bindTexture(SpriteSheet.BLOCKS);
 		int start = 0;
 
 		GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);

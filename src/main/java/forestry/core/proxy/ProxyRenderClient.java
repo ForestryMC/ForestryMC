@@ -11,8 +11,14 @@
 package forestry.core.proxy;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.particle.EntityExplodeFX;
+import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.particle.EntitySpellParticleFX;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 import cpw.mods.fml.client.FMLClientHandler;
@@ -20,7 +26,13 @@ import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 
+import forestry.apiculture.entities.EntityFXBee;
+import forestry.apiculture.render.ParticleRenderer;
+import forestry.apiculture.render.TextureHabitatLocator;
 import forestry.core.config.Config;
+import forestry.core.entities.EntityFXHoneydust;
+import forestry.core.entities.EntityFXIgnition;
+import forestry.core.entities.EntityFXSnow;
 import forestry.core.render.ForestryResource;
 import forestry.core.render.IBlockRenderer;
 import forestry.core.render.RenderBlock;
@@ -28,6 +40,7 @@ import forestry.core.render.RenderEscritoire;
 import forestry.core.render.RenderMachine;
 import forestry.core.render.RenderMill;
 import forestry.core.render.RenderNaturalistChest;
+import forestry.core.render.SpriteSheet;
 import forestry.core.render.TextureManager;
 import forestry.core.render.TileRendererIndex;
 import forestry.core.tiles.MachineDefinition;
@@ -80,6 +93,31 @@ public class ProxyRenderClient extends ProxyRender {
 		return new RenderNaturalistChest(textureName);
 	}
 
+	@Override
+	public void registerVillagerSkin(int villagerId, String texturePath) {
+		VillagerRegistry.instance().registerVillagerSkin(villagerId, new ForestryResource(texturePath));
+	}
+
+	@Override
+	public void setHabitatLocatorTexture(Entity player, ChunkCoordinates coordinates) {
+		TextureHabitatLocator.getInstance().setTargetCoordinates(coordinates);
+	}
+
+	@Override
+	public IResourceManager getSelectedTexturePack() {
+		return Proxies.common.getClientInstance().getResourceManager();
+	}
+
+	@Override
+	public void bindTexture(ResourceLocation location) {
+		Proxies.common.getClientInstance().getTextureManager().bindTexture(location);
+	}
+
+	@Override
+	public void bindTexture(SpriteSheet spriteSheet) {
+		bindTexture(spriteSheet.getLocation());
+	}
+
 	public static boolean shouldSpawnParticle(World world) {
 		if (!Config.enableParticleFX) {
 			return false;
@@ -103,19 +141,65 @@ public class ProxyRenderClient extends ProxyRender {
 	}
 
 	@Override
-	public short registerItemTexUID(IIconRegister register, short uid, String ident) {
-		TextureManager.getInstance().registerTexUID(register, uid, ident);
-		return uid;
+	public void addBeeHiveFX(String icon, World world, ChunkCoordinates coordinates, int color) {
+		if (!shouldSpawnParticle(world)) {
+			return;
+		}
+
+		EntityFX fx = new EntityFXBee(world, coordinates.posX + 0.5D, coordinates.posY + 0.5D, coordinates.posZ + 0.5D, color);
+		fx.setParticleIcon(TextureManager.getInstance().getDefault(icon));
+		ParticleRenderer.getInstance().addEffect(fx);
 	}
 
 	@Override
-	public short registerTerrainTexUID(IIconRegister register, short uid, String ident) {
-		TextureManager.getInstance().registerTexUID(register, uid, ident);
-		return uid;
+	public void addEntitySwarmFX(World world, double d1, double d2, double d3) {
+		if (!shouldSpawnParticle(world)) {
+			return;
+		}
+
+		Proxies.common.getClientInstance().effectRenderer.addEffect(new EntityFXHoneydust(world, d1, d2, d3, 0, 0, 0));
 	}
 
 	@Override
-	public void registerVillagerSkin(int villagerId, String texturePath) {
-		VillagerRegistry.instance().registerVillagerSkin(villagerId, new ForestryResource(texturePath));
+	public void addEntityExplodeFX(World world, double d1, double d2, double d3) {
+		if (!shouldSpawnParticle(world)) {
+			return;
+		}
+
+		Proxies.common.getClientInstance().effectRenderer.addEffect(new EntityExplodeFX(world, d1, d2, d3, 0, 0, 0));
+	}
+
+	@Override
+	public void addEntitySnowFX(World world, double d1, double d2, double d3) {
+		if (!shouldSpawnParticle(world)) {
+			return;
+		}
+
+		Proxies.common.getClientInstance().effectRenderer.addEffect(new EntityFXSnow(world, d1 + world.rand.nextGaussian(), d2, d3 + world.rand.nextGaussian()));
+	}
+
+	@Override
+	public void addEntityIgnitionFX(World world, double d1, double d2, double d3) {
+		if (!shouldSpawnParticle(world)) {
+			return;
+		}
+
+		Proxies.common.getClientInstance().effectRenderer.addEffect(new EntityFXIgnition(world, d1, d2, d3));
+	}
+
+	@Override
+	public void addEntityPotionFX(World world, double d1, double d2, double d3, int color) {
+		if (!shouldSpawnParticle(world)) {
+			return;
+		}
+
+		float red = (color >> 16 & 255) / 255.0F;
+		float green = (color >> 8 & 255) / 255.0F;
+		float blue = (color & 255) / 255.0F;
+
+		EntityFX entityfx = new EntitySpellParticleFX(world, d1, d2, d3, 0, 0, 0);
+		entityfx.setRBGColorF(red, green, blue);
+
+		Proxies.common.getClientInstance().effectRenderer.addEffect(entityfx);
 	}
 }

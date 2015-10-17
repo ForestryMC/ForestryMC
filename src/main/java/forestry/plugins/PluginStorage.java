@@ -66,7 +66,7 @@ import forestry.core.config.LocalizedConfiguration;
 import forestry.core.fluids.Fluids;
 import forestry.core.items.ItemCrated;
 import forestry.core.network.GuiId;
-import forestry.core.proxy.Proxies;
+import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.StringUtil;
@@ -565,7 +565,7 @@ public class PluginStorage extends ForestryPlugin {
 
 		if (PluginManager.Module.APICULTURE.isEnabled()) {
 			// Apiarist's Backpack
-			Proxies.common.addRecipe(ForestryItem.apiaristBackpack.getItemStack(),
+			RecipeUtil.addRecipe(ForestryItem.apiaristBackpack.getItemStack(),
 					"X#X",
 					"VYV",
 					"X#X",
@@ -577,7 +577,7 @@ public class PluginStorage extends ForestryPlugin {
 
 		if (PluginManager.Module.LEPIDOPTEROLOGY.isEnabled()) {
 			// Lepidopterist's Backpack
-			Proxies.common.addRecipe(ForestryItem.lepidopteristBackpack.getItemStack(),
+			RecipeUtil.addRecipe(ForestryItem.lepidopteristBackpack.getItemStack(),
 					"X#X",
 					"VYV",
 					"X#X",
@@ -588,25 +588,25 @@ public class PluginStorage extends ForestryPlugin {
 		}
 
 		// Miner's Backpack
-		Proxies.common.addRecipe(ForestryItem.minerBackpack.getItemStack(),
+		RecipeUtil.addRecipe(ForestryItem.minerBackpack.getItemStack(),
 				"X#X", "VYV", "X#X", '#', Blocks.wool, 'X', Items.string, 'V',
 				"ingotIron", 'Y', "chestWood");
 		// Digger's Backpack
-		Proxies.common.addRecipe(ForestryItem.diggerBackpack.getItemStack(),
+		RecipeUtil.addRecipe(ForestryItem.diggerBackpack.getItemStack(),
 				"X#X", "VYV", "X#X", '#', Blocks.wool, 'X', Items.string, 'V',
 				"stone", 'Y', "chestWood");
 		// Forester's Backpack
-		Proxies.common.addRecipe(ForestryItem.foresterBackpack.getItemStack(), "X#X", "VYV", "X#X", '#', Blocks.wool,
+		RecipeUtil.addRecipe(ForestryItem.foresterBackpack.getItemStack(), "X#X", "VYV", "X#X", '#', Blocks.wool,
 				'X', Items.string, 'V', "logWood", 'Y', "chestWood");
 		// Hunter's Backpack
-		Proxies.common.addRecipe(ForestryItem.hunterBackpack.getItemStack(),
+		RecipeUtil.addRecipe(ForestryItem.hunterBackpack.getItemStack(),
 				"X#X", "VYV", "X#X", '#', Blocks.wool, 'X', Items.string, 'V',
 				Items.feather, 'Y', "chestWood");
 		// Adventurer's Backpack
-		Proxies.common.addRecipe(ForestryItem.adventurerBackpack.getItemStack(), "X#X", "VYV", "X#X", '#', Blocks.wool,
+		RecipeUtil.addRecipe(ForestryItem.adventurerBackpack.getItemStack(), "X#X", "VYV", "X#X", '#', Blocks.wool,
 				'X', Items.string, 'V', Items.bone, 'Y', "chestWood");
 		// Builder's Backpack
-		Proxies.common.addRecipe(ForestryItem.builderBackpack.getItemStack(), "X#X", "VYV", "X#X", '#', Blocks.wool,
+		RecipeUtil.addRecipe(ForestryItem.builderBackpack.getItemStack(), "X#X", "VYV", "X#X", '#', Blocks.wool,
 				'X', Items.string, 'V', Items.clay_ball, 'Y', "chestWood");
 
 		if (PluginManager.Module.FACTORY.isEnabled()) {

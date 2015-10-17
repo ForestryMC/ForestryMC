@@ -24,8 +24,8 @@ import forestry.core.config.Constants;
 import forestry.core.config.ForestryItem;
 import forestry.core.config.GameMode;
 import forestry.core.fluids.Fluids;
-import forestry.core.proxy.Proxies;
 import forestry.core.recipes.RecipeUtil;
+import forestry.core.utils.ModUtil;
 import forestry.farming.logic.FarmableBasicGrowthCraft;
 
 @Plugin(pluginID = "Growthcraft", name = "Growthcraft", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.plugin.growthcraft.description")
@@ -35,7 +35,7 @@ public class PluginGrowthCraft extends ForestryPlugin {
 
 	@Override
 	public boolean isAvailable() {
-		return Proxies.common.isModLoaded(GC);
+		return ModUtil.isModLoaded(GC);
 	}
 
 	@Override

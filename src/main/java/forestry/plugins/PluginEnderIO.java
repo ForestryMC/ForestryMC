@@ -9,7 +9,7 @@ import cpw.mods.fml.common.event.FMLInterModComms;
 import forestry.core.config.Constants;
 import forestry.core.config.GameMode;
 import forestry.core.fluids.Fluids;
-import forestry.core.proxy.Proxies;
+import forestry.core.utils.ModUtil;
 
 @Plugin(pluginID = "EnderIO", name = "EnderIO", author = "mezz", url = Constants.URL, unlocalizedDescription = "for.plugin.enderIO.description")
 public class PluginEnderIO extends ForestryPlugin {
@@ -26,7 +26,7 @@ public class PluginEnderIO extends ForestryPlugin {
 
 	@Override
 	public boolean isAvailable() {
-		return Proxies.common.isModLoaded(EnderIO);
+		return ModUtil.isModLoaded(EnderIO);
 	}
 
 	@Override

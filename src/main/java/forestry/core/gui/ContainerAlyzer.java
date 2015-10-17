@@ -5,7 +5,6 @@ import net.minecraft.item.ItemStack;
 
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.items.ItemAlyzer;
-import forestry.core.proxy.Proxies;
 
 public class ContainerAlyzer extends ContainerItemInventory<ItemAlyzer.AlyzerInventory> {
 
@@ -45,7 +44,7 @@ public class ContainerAlyzer extends ContainerItemInventory<ItemAlyzer.AlyzerInv
 				continue;
 			}
 
-			Proxies.common.dropItemPlayer(entityplayer, stack);
+			entityplayer.dropPlayerItemWithRandomChoice(stack, true);
 			inventory.setInventorySlotContents(i, null);
 		}
 	}

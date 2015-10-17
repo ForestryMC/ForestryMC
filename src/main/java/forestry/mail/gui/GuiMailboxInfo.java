@@ -49,7 +49,7 @@ public class GuiMailboxInfo extends Gui {
 		}
 
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		Proxies.common.bindTexture(textureAlert);
+		Proxies.render.bindTexture(textureAlert);
 
 		this.drawTexturedModalRect(x, y, 0, 0, 98, 17);
 

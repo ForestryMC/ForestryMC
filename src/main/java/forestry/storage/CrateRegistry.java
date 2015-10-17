@@ -14,10 +14,12 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import cpw.mods.fml.common.registry.GameRegistry;
+
 import forestry.api.storage.ICrateRegistry;
 import forestry.core.items.ItemCrated;
-import forestry.core.proxy.Proxies;
 import forestry.core.utils.Log;
+import forestry.core.utils.StringUtil;
 import forestry.plugins.PluginStorage;
 
 public class CrateRegistry implements ICrateRegistry {
@@ -35,7 +37,7 @@ public class CrateRegistry implements ICrateRegistry {
 
 		ItemCrated crate = new ItemCrated(stack, useOreDict);
 		crate.setUnlocalizedName(uid);
-		Proxies.common.registerItem(crate);
+		GameRegistry.registerItem(crate, StringUtil.cleanItemName(crate));
 		PluginStorage.registerCrate(crate);
 	}
 

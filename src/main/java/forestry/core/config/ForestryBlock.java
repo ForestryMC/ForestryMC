@@ -20,7 +20,9 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.oredict.OreDictionary;
 
-import forestry.core.proxy.Proxies;
+import cpw.mods.fml.common.registry.GameRegistry;
+
+import forestry.core.utils.StringUtil;
 import forestry.plugins.PluginManager;
 import forestry.plugins.PluginManager.Stage;
 
@@ -85,7 +87,7 @@ public enum ForestryBlock {
 		}
 		this.block = block;
 		block.setBlockName("for." + name);
-		Proxies.common.registerBlock(block, itemClass);
+		GameRegistry.registerBlock(block, itemClass, StringUtil.cleanBlockName(block));
 	}
 
 	public boolean isItemEqual(ItemStack stack) {

@@ -92,10 +92,10 @@ public class TileMillRainmaker extends TileMill {
 			float f3 = 0.52F;
 			float f4 = worldObj.rand.nextFloat() * 0.6F - 0.3F;
 
-			Proxies.common.addEntityExplodeFX(worldObj, (f - f3), f1, (f2 + f4));
-			Proxies.common.addEntityExplodeFX(worldObj, (f + f3), f1, (f2 + f4));
-			Proxies.common.addEntityExplodeFX(worldObj, (f + f4), f1, (f2 - f3));
-			Proxies.common.addEntityExplodeFX(worldObj, (f + f4), f1, (f2 + f3));
+			Proxies.render.addEntityExplodeFX(worldObj, (f - f3), f1, (f2 + f4));
+			Proxies.render.addEntityExplodeFX(worldObj, (f + f3), f1, (f2 + f4));
+			Proxies.render.addEntityExplodeFX(worldObj, (f + f4), f1, (f2 - f3));
+			Proxies.render.addEntityExplodeFX(worldObj, (f + f4), f1, (f2 + f3));
 		}
 
 		if (!worldObj.isRemote) {

@@ -82,7 +82,7 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 		this.inventory = inventory;
 		this.container = container;
 
-		fontColor = new FontColour(Proxies.common.getSelectedTexturePack(Proxies.common.getClientInstance()));
+		fontColor = new FontColour(Proxies.render.getSelectedTexturePack());
 		initLedgers();
 	}
 
@@ -387,7 +387,7 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 
 	protected void bindTexture(ResourceLocation texturePath) {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		Proxies.common.bindTexture(texturePath);
+		Proxies.render.bindTexture(texturePath);
 	}
 
 	public void setZLevel(float level) {

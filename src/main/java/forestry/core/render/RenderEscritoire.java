@@ -85,7 +85,7 @@ public class RenderEscritoire extends TileEntitySpecialRenderer implements IBloc
 				break;
 		}
 
-		Proxies.common.bindTexture(texture);
+		Proxies.render.bindTexture(texture);
 		modelEscritoire.render(null, angle[0], angle[1], angle[2], 0f, 0f, factor);
 
 		GL11.glPopMatrix();

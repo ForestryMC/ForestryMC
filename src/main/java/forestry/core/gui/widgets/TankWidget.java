@@ -76,7 +76,7 @@ public class TankWidget extends Widget {
 		}
 		int squaled = (contents.amount * height) / getTank().getCapacity();
 
-		Proxies.common.bindTexture(SpriteSheet.BLOCKS);
+		Proxies.render.bindTexture(SpriteSheet.BLOCKS);
 		int start = 0;
 
 		GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
@@ -101,7 +101,7 @@ public class TankWidget extends Widget {
 			}
 		}
 
-		Proxies.common.bindTexture(manager.gui.textureFile);
+		Proxies.render.bindTexture(manager.gui.textureFile);
 		manager.gui.drawTexturedModalRect(startX + xPos, startY + yPos, overlayTexX, overlayTexY, 16, 60);
 		GL11.glPopAttrib();
 	}

@@ -17,7 +17,9 @@ import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.oredict.OreDictionary;
 
-import forestry.core.proxy.Proxies;
+import cpw.mods.fml.common.registry.GameRegistry;
+
+import forestry.core.utils.StringUtil;
 import forestry.plugins.PluginManager;
 import forestry.plugins.PluginManager.Stage;
 
@@ -203,7 +205,7 @@ public enum ForestryItem {
 		}
 		this.item = item;
 		item.setUnlocalizedName("for." + name);
-		Proxies.common.registerItem(item);
+		GameRegistry.registerItem(item, StringUtil.cleanItemName(item));
 	}
 
 	public boolean isItemEqual(ItemStack stack) {

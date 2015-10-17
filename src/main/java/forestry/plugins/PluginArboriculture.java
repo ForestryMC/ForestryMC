@@ -273,7 +273,7 @@ public class PluginArboriculture extends ForestryPlugin {
 	@Override
 	protected void registerRecipes() {
 
-		Proxies.common.addSmelting(ForestryBlock.logs.getWildcard(), new ItemStack(Items.coal, 1, 1), 0.15F);
+		RecipeUtil.addSmelting(ForestryBlock.logs.getWildcard(), new ItemStack(Items.coal, 1, 1), 0.15F);
 
 		ShapelessRecipeCustom.buildRecipe(ForestryBlock.planks.getItemStack(4), ForestryBlock.logs.getWildcard()).setPreserveNBT();
 		ShapelessRecipeCustom.buildRecipe(ForestryBlock.planksFireproof.getItemStack(4), ForestryBlock.logsFireproof.getWildcard()).setPreserveNBT();
@@ -341,7 +341,7 @@ public class PluginArboriculture extends ForestryPlugin {
 				'#', ForestryBlock.planksFireproof.getWildcard()).setPreserveNBT();
 
 		// Grafter
-		Proxies.common.addRecipe(ForestryItem.grafter.getItemStack(),
+		RecipeUtil.addRecipe(ForestryItem.grafter.getItemStack(),
 				"  B",
 				" # ",
 				"#  ",

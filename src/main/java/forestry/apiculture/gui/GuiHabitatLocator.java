@@ -172,7 +172,7 @@ public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator, Habi
 					GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 				}
 
-				Proxies.common.bindTexture(SpriteSheet.ITEMS);
+				Proxies.render.bindTexture(SpriteSheet.ITEMS);
 				manager.gui.drawTexturedModelRectFromIcon(startX + xPos, startY + yPos, getIcon(), 16, 16);
 				GL11.glEnable(GL11.GL_LIGHTING);
 			}

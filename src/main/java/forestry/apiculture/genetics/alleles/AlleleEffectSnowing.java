@@ -69,7 +69,7 @@ public class AlleleEffectSnowing extends AlleleEffectThrottled {
 					world.setBlockMetadataWithNotify(posBlock.x, posBlock.y, posBlock.z, meta + 1, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
 				}
 			} else if (block.isReplaceable(world, posBlock.x, posBlock.y, posBlock.z)) {
-				Proxies.common.setBlockWithNotify(world, posBlock.x, posBlock.y, posBlock.z, Blocks.snow_layer);
+				world.setBlock(posBlock.x, posBlock.y, posBlock.z, Blocks.snow_layer, 0, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
 			}
 		}
 
@@ -86,7 +86,7 @@ public class AlleleEffectSnowing extends AlleleEffectThrottled {
 			World world = housing.getWorld();
 
 			Vect spawn = Vect.getRandomPositionInArea(world.rand, area).add(coordinates).add(offset);
-			Proxies.common.addEntitySnowFX(world, spawn.x, spawn.y, spawn.z);
+			Proxies.render.addEntitySnowFX(world, spawn.x, spawn.y, spawn.z);
 			return storedData;
 		} else {
 			return super.doFX(genome, storedData, housing);

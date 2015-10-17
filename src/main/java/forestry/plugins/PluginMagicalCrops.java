@@ -26,8 +26,8 @@ import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.GameMode;
 import forestry.core.fluids.Fluids;
-import forestry.core.proxy.Proxies;
 import forestry.core.recipes.RecipeUtil;
+import forestry.core.utils.ModUtil;
 import forestry.farming.logic.FarmableGenericCrop;
 
 @Plugin(pluginID = "MagicalCrops", name = "MagicalCrops", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.plugin.magicalcrops.description")
@@ -37,7 +37,7 @@ public class PluginMagicalCrops extends ForestryPlugin {
 
 	@Override
 	public boolean isAvailable() {
-		return Proxies.common.isModLoaded(MagCrop);
+		return ModUtil.isModLoaded(MagCrop);
 	}
 
 	@Override

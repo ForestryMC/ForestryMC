@@ -83,7 +83,7 @@ public class ModelAnalyzer extends ModelBase {
 
 		float factor = (float) (1.0 / 16.0);
 
-		Proxies.common.bindTexture(textures[0]);
+		Proxies.render.bindTexture(textures[0]);
 
 		pedestal.rotateAngleX = angle[0];
 		pedestal.rotateAngleY = angle[1];
@@ -98,13 +98,13 @@ public class ModelAnalyzer extends ModelBase {
 		tower1.rotateAngleX = angle[0];
 		tower1.rotateAngleY = angle[1];
 		tower1.rotateAngleZ = angle[2];
-		Proxies.common.bindTexture(textures[1]);
+		Proxies.render.bindTexture(textures[1]);
 		tower1.render(factor);
 
 		tower2.rotateAngleX = angle[0];
 		tower2.rotateAngleY = angle[1];
 		tower2.rotateAngleZ = angle[2];
-		Proxies.common.bindTexture(textures[2]);
+		Proxies.render.bindTexture(textures[2]);
 		tower2.render(factor);
 
 		GL11.glPopMatrix();

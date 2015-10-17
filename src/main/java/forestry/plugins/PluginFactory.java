@@ -45,6 +45,7 @@ import forestry.core.recipes.craftguide.CraftGuideIntegration;
 import forestry.core.recipes.nei.PacketWorktableNEISelect;
 import forestry.core.tiles.MachineDefinition;
 import forestry.core.utils.Log;
+import forestry.core.utils.ModUtil;
 import forestry.factory.DummyManagers;
 import forestry.factory.GuiHandlerFactory;
 import forestry.factory.circuits.CircuitSpeedUpgrade;
@@ -274,7 +275,7 @@ public class PluginFactory extends ForestryPlugin {
 	public void postInit() {
 		super.postInit();
 
-		if (Proxies.common.isModLoaded("craftguide")) {
+		if (ModUtil.isModLoaded("craftguide")) {
 			CraftGuideIntegration.register();
 		} else {
 			Log.info("Skipping CraftGuide integration.");

@@ -26,8 +26,8 @@ import forestry.core.config.Constants;
 import forestry.core.config.ForestryItem;
 import forestry.core.config.GameMode;
 import forestry.core.fluids.Fluids;
-import forestry.core.proxy.Proxies;
 import forestry.core.recipes.RecipeUtil;
+import forestry.core.utils.ModUtil;
 import forestry.farming.logic.FarmableBasicFruit;
 import forestry.farming.logic.FarmableGenericCrop;
 
@@ -38,7 +38,7 @@ public class PluginHarvestCraft extends ForestryPlugin {
 
 	@Override
 	public boolean isAvailable() {
-		return Proxies.common.isModLoaded(HC);
+		return ModUtil.isModLoaded(HC);
 	}
 
 	@Override
@@ -248,7 +248,7 @@ public class PluginHarvestCraft extends ForestryPlugin {
 			ItemStack grainSeed = GameRegistry.findItemStack(HC, grainName + "seedItem", 1);
 			Block grainBlock = GameRegistry.findBlock(HC, "pam" + grainName + "Crop");
 			if (grain != null && wheatamount.stackSize > 0) {
-				Proxies.common.addRecipe(wheatamount, " X ", "X#X", " X ", '#', Blocks.dirt, 'X', grain);
+				RecipeUtil.addRecipe(wheatamount, " X ", "X#X", " X ", '#', Blocks.dirt, 'X', grain);
 				FuelManager.moistenerResource.put(grain, new MoistenerFuel(grain, ForestryItem.mouldyWheat.getItemStack(), 0, 300));
 			}
 			if (grainSeed != null) {
@@ -356,7 +356,7 @@ public class PluginHarvestCraft extends ForestryPlugin {
 
 		ItemStack hcBeeswaxItem = GameRegistry.findItemStack(HC, "beeswaxItem", 1);
 		if (hcBeeswaxItem != null) {
-			Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.capsule"), "XXX ", 'X', hcBeeswaxItem);
+			RecipeUtil.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.capsule"), "XXX ", 'X', hcBeeswaxItem);
 		}
 	}
 

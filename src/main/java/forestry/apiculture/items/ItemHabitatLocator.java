@@ -120,7 +120,7 @@ public class ItemHabitatLocator extends ItemInventoried {
 		removeInvalidBiomes(currentBiome, targetBiomes);
 
 		// reset the locator coordinates
-		Proxies.common.setHabitatLocatorTexture(null, null);
+		Proxies.render.setHabitatLocatorTexture(null, null);
 	}
 
 	@Override

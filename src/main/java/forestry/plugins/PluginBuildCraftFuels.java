@@ -17,7 +17,7 @@ import cpw.mods.fml.common.Optional;
 import forestry.core.config.Constants;
 import forestry.core.config.GameMode;
 import forestry.core.fluids.Fluids;
-import forestry.core.proxy.Proxies;
+import forestry.core.utils.ModUtil;
 
 import buildcraft.api.fuels.BuildcraftFuelRegistry;
 
@@ -26,7 +26,7 @@ public class PluginBuildCraftFuels extends ForestryPlugin {
 
 	@Override
 	public boolean isAvailable() {
-		return Proxies.common.isAPILoaded("buildcraft.api.fuels", "[2.0, 3.0)");
+		return ModUtil.isAPILoaded("buildcraft.api.fuels", "[2.0, 3.0)");
 	}
 
 	@Override

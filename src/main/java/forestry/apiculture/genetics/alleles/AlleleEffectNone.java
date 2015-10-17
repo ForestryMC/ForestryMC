@@ -19,9 +19,9 @@ import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeModifier;
 import forestry.api.genetics.IEffectData;
 import forestry.core.genetics.alleles.AlleleCategorized;
+import forestry.core.proxy.Proxies;
 import forestry.core.utils.vect.MutableVect;
 import forestry.core.utils.vect.Vect;
-import forestry.plugins.PluginApiculture;
 
 public class AlleleEffectNone extends AlleleCategorized implements IAlleleBeeEffect {
 
@@ -46,7 +46,7 @@ public class AlleleEffectNone extends AlleleCategorized implements IAlleleBeeEff
 
 	@Override
 	public IEffectData doFX(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
-		PluginApiculture.proxy.addBeeHiveFX("particles/swarm_bee", housing.getWorld(), housing.getCoordinates(), genome.getPrimary().getIconColour(0));
+		Proxies.render.addBeeHiveFX("particles/swarm_bee", housing.getWorld(), housing.getCoordinates(), genome.getPrimary().getIconColour(0));
 		return storedData;
 	}
 

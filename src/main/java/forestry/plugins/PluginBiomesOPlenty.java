@@ -31,9 +31,9 @@ import forestry.core.config.Constants;
 import forestry.core.config.ForestryItem;
 import forestry.core.config.GameMode;
 import forestry.core.fluids.Fluids;
-import forestry.core.proxy.Proxies;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.Log;
+import forestry.core.utils.ModUtil;
 import forestry.farming.logic.FarmableBasicFruit;
 import forestry.farming.logic.FarmableGenericCrop;
 import forestry.farming.logic.FarmableGenericSapling;
@@ -50,7 +50,7 @@ public class PluginBiomesOPlenty extends ForestryPlugin {
 
 	@Override
 	public boolean isAvailable() {
-		return Proxies.common.isModLoaded(BoP);
+		return ModUtil.isModLoaded(BoP);
 	}
 
 	@Override

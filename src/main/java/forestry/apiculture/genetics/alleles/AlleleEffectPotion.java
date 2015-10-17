@@ -109,7 +109,7 @@ public class AlleleEffectPotion extends AlleleEffectThrottled {
 			super.doFX(genome, storedData, housing);
 		} else {
 			ChunkCoordinates coords = housing.getCoordinates();
-			Proxies.common.addEntityPotionFX(housing.getWorld(), coords.posX + 0.5, coords.posY + 1, coords.posZ + 0.5, potionFXColor);
+			Proxies.render.addEntityPotionFX(housing.getWorld(), coords.posX + 0.5, coords.posY + 1, coords.posZ + 0.5, potionFXColor);
 		}
 		return storedData;
 	}

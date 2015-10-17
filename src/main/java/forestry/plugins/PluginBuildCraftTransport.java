@@ -17,8 +17,9 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 import forestry.core.config.Constants;
 import forestry.core.config.ForestryItem;
-import forestry.core.proxy.Proxies;
+import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.Log;
+import forestry.core.utils.ModUtil;
 
 @Plugin(pluginID = "BC6|Transport", name = "BuildCraft 6 Transport", author = "mezz", url = Constants.URL, unlocalizedDescription = "for.plugin.buildcraft6.description")
 public class PluginBuildCraftTransport extends ForestryPlugin {
@@ -27,7 +28,7 @@ public class PluginBuildCraftTransport extends ForestryPlugin {
 
 	@Override
 	public boolean isAvailable() {
-		return Proxies.common.isModLoaded(BCT);
+		return ModUtil.isModLoaded(BCT);
 	}
 
 	@Override
@@ -41,7 +42,7 @@ public class PluginBuildCraftTransport extends ForestryPlugin {
 		if (beeswax != null) {
 			Item pipeWaterproof = GameRegistry.findItem(BCT, "pipeWaterproof");
 			if (pipeWaterproof != null) {
-				Proxies.common.addShapelessRecipe(new ItemStack(pipeWaterproof), beeswax);
+				RecipeUtil.addShapelessRecipe(new ItemStack(pipeWaterproof), beeswax);
 			} else {
 				Log.fine("No BuildCraft pipe waterproof found.");
 			}

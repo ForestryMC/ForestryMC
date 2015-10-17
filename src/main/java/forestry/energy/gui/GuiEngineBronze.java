@@ -59,7 +59,7 @@ public class GuiEngineBronze extends GuiEngine<ContainerEngineBronze, TileEngine
 				squaled = height;
 			}
 
-			Proxies.common.bindTexture(SpriteSheet.BLOCKS);
+			Proxies.render.bindTexture(SpriteSheet.BLOCKS);
 			int start = 0;
 
 			GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
@@ -83,7 +83,7 @@ public class GuiEngineBronze extends GuiEngine<ContainerEngineBronze, TileEngine
 				}
 			}
 
-			Proxies.common.bindTexture(textureFile);
+			Proxies.render.bindTexture(textureFile);
 		}
 
 		@Override

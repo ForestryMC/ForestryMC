@@ -48,6 +48,7 @@ import forestry.core.recipes.ShapedRecipeCustom;
 import forestry.core.tiles.MachineDefinition;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
+import forestry.core.utils.ModUtil;
 import forestry.energy.circuits.CircuitElectricBoost;
 import forestry.energy.circuits.CircuitElectricChoke;
 import forestry.energy.circuits.CircuitElectricEfficiency;
@@ -98,7 +99,7 @@ public class PluginIC2 extends ForestryPlugin {
 
 	@Override
 	public boolean isAvailable() {
-		return Proxies.common.isModLoaded("IC2");
+		return ModUtil.isModLoaded("IC2");
 	}
 
 	@Override
@@ -299,7 +300,7 @@ public class PluginIC2 extends ForestryPlugin {
 		if (waterCell != null) {
 			ItemStack bogEarthCan = GameMode.getGameMode().getStackSetting("recipe.output.bogearth.can");
 			if (bogEarthCan.stackSize > 0) {
-				Proxies.common.addRecipe(bogEarthCan, "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', waterCell, 'Y', "sand");
+				RecipeUtil.addRecipe(bogEarthCan, "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', waterCell, 'Y', "sand");
 			}
 		}
 

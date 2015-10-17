@@ -15,7 +15,7 @@ import com.google.common.collect.ImmutableList;
 import cpw.mods.fml.common.event.FMLInterModComms;
 
 import forestry.core.config.Constants;
-import forestry.core.proxy.Proxies;
+import forestry.core.utils.ModUtil;
 
 @Plugin(pluginID = "Chisel", name = "Chisel", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.plugin.chisel.description")
 public class PluginChisel extends ForestryPlugin {
@@ -24,7 +24,7 @@ public class PluginChisel extends ForestryPlugin {
 
 	@Override
 	public boolean isAvailable() {
-		return Proxies.common.isModLoaded(Chisel);
+		return ModUtil.isModLoaded(Chisel);
 	}
 
 	@Override

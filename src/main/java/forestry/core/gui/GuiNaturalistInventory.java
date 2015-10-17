@@ -219,7 +219,7 @@ public class GuiNaturalistInventory extends GuiForestry<Container, IPagedInvento
 			column = 196;
 		}
 
-		Proxies.common.bindTexture(textureFile);
+		Proxies.render.bindTexture(textureFile);
 		drawTexturedModalRect(guiLeft + x, guiTop + getLineY(), column, line, 16, 16);
 
 	}
@@ -250,7 +250,7 @@ public class GuiNaturalistInventory extends GuiForestry<Container, IPagedInvento
 			column = 196;
 		}
 
-		Proxies.common.bindTexture(textureFile);
+		Proxies.render.bindTexture(textureFile);
 		drawTexturedModalRect(guiLeft + x, guiTop + getLineY(), column, line, 16, 16);
 	}
 

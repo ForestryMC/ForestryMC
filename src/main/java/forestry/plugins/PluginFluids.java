@@ -44,8 +44,8 @@ import forestry.core.fluids.BlockForestryFluid;
 import forestry.core.fluids.Fluids;
 import forestry.core.fluids.LiquidRegistryHelper;
 import forestry.core.items.ItemLiquidContainer;
-import forestry.core.proxy.Proxies;
 import forestry.core.utils.Log;
+import forestry.core.utils.StringUtil;
 
 import static forestry.core.items.ItemLiquidContainer.EnumContainerType;
 
@@ -74,7 +74,7 @@ public class PluginFluids extends ForestryPlugin {
 				fluidBlock = forestryFluid.makeBlock();
 				if (fluidBlock != null) {
 					fluidBlock.setBlockName("forestry.fluid." + forestryFluid.getTag());
-					Proxies.common.registerBlock(fluidBlock, ItemBlock.class);
+					GameRegistry.registerBlock(fluidBlock, ItemBlock.class, StringUtil.cleanBlockName(fluidBlock));
 					forestryFluidsWithBlocks.add(forestryFluid);
 				}
 			} else {

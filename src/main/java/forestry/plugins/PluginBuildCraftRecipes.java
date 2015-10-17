@@ -14,7 +14,7 @@ import cpw.mods.fml.common.Optional;
 
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
-import forestry.core.proxy.Proxies;
+import forestry.core.utils.ModUtil;
 
 import buildcraft.api.recipes.BuildcraftRecipeRegistry;
 
@@ -23,7 +23,7 @@ public class PluginBuildCraftRecipes extends ForestryPlugin {
 
 	@Override
 	public boolean isAvailable() {
-		return Proxies.common.isAPILoaded("buildcraft.api.recipes", "[2.0, 4.0)");
+		return ModUtil.isAPILoaded("buildcraft.api.recipes", "[2.0, 4.0)");
 	}
 
 	@Override

@@ -264,7 +264,7 @@ public class GuiLetter extends GuiForestry<ContainerLetter, LetterInventory> {
 			IPostalCarrier carrier = PostManager.postRegistry.getCarrier(container.getCarrierType());
 			if (carrier != null) {
 				GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
-				Proxies.common.bindTexture(SpriteSheet.ITEMS);
+				Proxies.render.bindTexture(SpriteSheet.ITEMS);
 				drawTexturedModelRectFromIcon(startX + xPos, startY + yPos - 5, carrier.getIcon(), 26, 26);
 			}
 		}

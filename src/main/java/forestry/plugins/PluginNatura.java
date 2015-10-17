@@ -34,8 +34,8 @@ import forestry.core.config.Constants;
 import forestry.core.config.ForestryItem;
 import forestry.core.config.GameMode;
 import forestry.core.fluids.Fluids;
-import forestry.core.proxy.Proxies;
 import forestry.core.recipes.RecipeUtil;
+import forestry.core.utils.ModUtil;
 import forestry.farming.logic.FarmableGenericCrop;
 
 @Plugin(pluginID = "Natura", name = "Natura", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.natura.description")
@@ -61,7 +61,7 @@ public class PluginNatura extends ForestryPlugin {
 
 	@Override
 	public boolean isAvailable() {
-		return Proxies.common.isModLoaded(NATURA);
+		return ModUtil.isModLoaded(NATURA);
 	}
 
 	@Override
@@ -260,7 +260,7 @@ public class PluginNatura extends ForestryPlugin {
 			RecipeUtil.addFermenterRecipes(itemBarley, GameMode.getGameMode().getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
 			if (GameMode.getGameMode().getStackSetting("recipe.output.compost.wheat").stackSize > 0) {
 				ItemStack compostWheat = GameMode.getGameMode().getStackSetting("recipe.output.compost.wheat");
-				Proxies.common.addRecipe(compostWheat, " X ", "X#X", " X ", '#', Blocks.dirt, 'X', itemBarley);
+				RecipeUtil.addRecipe(compostWheat, " X ", "X#X", " X ", '#', Blocks.dirt, 'X', itemBarley);
 			}
 			FuelManager.moistenerResource.put(itemBarley, new MoistenerFuel(itemBarley, ForestryItem.mouldyWheat.getItemStack(), 0, 300));
 		}
