@@ -42,9 +42,6 @@ public class PacketHandler {
 
 		try {
 			byte packetIdOrdinal = data.readByte();
-			if (packetIdOrdinal >= PacketIdClient.VALUES.length) {
-				return;
-			}
 			PacketIdServer packetId = PacketIdServer.VALUES[packetIdOrdinal];
 			IForestryPacketServer packetHandler = packetId.getPacketHandler();
 			packetHandler.readData(data);
@@ -61,9 +58,6 @@ public class PacketHandler {
 
 		try {
 			byte packetIdOrdinal = data.readByte();
-			if (packetIdOrdinal >= PacketIdClient.VALUES.length) {
-				return;
-			}
 			PacketIdClient packetId = PacketIdClient.VALUES[packetIdOrdinal];
 			IForestryPacketClient packetHandler = packetId.getPacketHandler();
 			packetHandler.readData(data);

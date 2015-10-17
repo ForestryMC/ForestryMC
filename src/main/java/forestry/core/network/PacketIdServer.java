@@ -22,9 +22,6 @@ public enum PacketIdServer implements IPacketId {
 	CHIPSET_CLICK(new PacketChipsetClick()),
 	SOLDERING_IRON_CLICK(new PacketSolderingIronClick()),
 
-	// Apiculture
-	IMPRINT_SELECTION_REQUEST,
-
 	// Factory
 	WORKTABLE_NEI_SELECT,
 

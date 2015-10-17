@@ -12,12 +12,11 @@ package forestry.food.gui;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.item.ItemStack;
 
 import forestry.core.gui.ContainerItemInventory;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
-import forestry.core.proxy.Proxies;
+import forestry.core.utils.InventoryUtil;
 import forestry.food.items.ItemInfuser.InfuserInventory;
 
 public class ContainerInfuser extends ContainerItemInventory<InfuserInventory> {
@@ -40,20 +39,10 @@ public class ContainerInfuser extends ContainerItemInventory<InfuserInventory> {
 
 	@Override
 	public void onContainerClosed(EntityPlayer entityplayer) {
-
 		if (entityplayer.worldObj.isRemote) {
 			return;
 		}
 
-		// Drop everything still in there.
-		for (int i = 0; i < inventory.getSizeInventory(); i++) {
-			ItemStack stack = inventory.getStackInSlot(i);
-			if (stack == null) {
-				continue;
-			}
-
-			Proxies.common.dropItemPlayer(entityplayer, stack);
-			inventory.setInventorySlotContents(i, null);
-		}
+		InventoryUtil.dropInventory(inventory, entityplayer.worldObj, entityplayer.posX, entityplayer.posY, entityplayer.posZ);
 	}
 }

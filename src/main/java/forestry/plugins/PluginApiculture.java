@@ -120,7 +120,6 @@ import forestry.apiculture.network.PacketActiveUpdate;
 import forestry.apiculture.network.PacketBeekeepingLogicActive;
 import forestry.apiculture.network.PacketCandleUpdate;
 import forestry.apiculture.network.PacketHabitatBiomePointer;
-import forestry.apiculture.network.PacketImprintSelectionRequest;
 import forestry.apiculture.network.PacketImprintSelectionResponse;
 import forestry.apiculture.proxy.ProxyApiculture;
 import forestry.apiculture.tiles.TileApiaristChest;
@@ -150,7 +149,6 @@ import forestry.core.items.ItemOverlay;
 import forestry.core.items.ItemOverlay.OverlayInfo;
 import forestry.core.items.ItemScoop;
 import forestry.core.network.PacketIdClient;
-import forestry.core.network.PacketIdServer;
 import forestry.core.proxy.Proxies;
 import forestry.core.recipes.ShapedRecipeCustom;
 import forestry.core.tiles.MachineDefinition;
@@ -501,8 +499,6 @@ public class PluginApiculture extends ForestryPlugin {
 
 	@Override
 	public void registerPacketHandlers() {
-		PacketIdServer.IMPRINT_SELECTION_REQUEST.setPacketHandler(new PacketImprintSelectionRequest());
-
 		PacketIdClient.IMPRINT_SELECTION_RESPONSE.setPacketHandler(new PacketImprintSelectionResponse());
 		PacketIdClient.TILE_FORESTRY_ACTIVE.setPacketHandler(new PacketActiveUpdate());
 		PacketIdClient.BEE_LOGIC_ACTIVE.setPacketHandler(new PacketBeekeepingLogicActive());

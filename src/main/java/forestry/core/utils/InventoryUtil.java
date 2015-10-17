@@ -626,7 +626,7 @@ public abstract class InventoryUtil {
 		}
 	}
 
-	public static void dropInventory(IInventory inventory, World world, int x, int y, int z) {
+	public static void dropInventory(IInventory inventory, World world, double x, double y, double z) {
 		if (inventory == null) {
 			return;
 		}
@@ -639,7 +639,7 @@ public abstract class InventoryUtil {
 		}
 	}
 
-	public static void dropSockets(ISocketable socketable, World world, int x, int y, int z) {
+	public static void dropSockets(ISocketable socketable, World world, double x, double y, double z) {
 		for (int slot = 0; slot < socketable.getSocketCount(); slot++) {
 			ItemStack itemstack = socketable.getSocket(slot);
 			dropItemStackFromInventory(itemstack, world, x, y, z);
@@ -647,7 +647,7 @@ public abstract class InventoryUtil {
 		}
 	}
 
-	public static void dropItemStackFromInventory(ItemStack itemStack, World world, int x, int y, int z) {
+	public static void dropItemStackFromInventory(ItemStack itemStack, World world, double x, double y, double z) {
 		if (itemStack == null) {
 			return;
 		}

@@ -26,6 +26,7 @@ import forestry.apiculture.items.ItemImprinter.ImprinterInventory;
 import forestry.core.config.Constants;
 import forestry.core.config.ForestryItem;
 import forestry.core.gui.GuiForestry;
+import forestry.core.network.PacketGuiSelectRequest;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
 
@@ -54,7 +55,6 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter, ImprinterInven
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
-		container.updateContainer(Proxies.common.getRenderWorld());
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
 		int offset = (138 - fontRendererObj.getStringWidth(StringUtil.localize("gui.imprinter.name"))) / 2;
@@ -106,9 +106,9 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter, ImprinterInven
 		}
 
 		if (k == 0) {
-			container.advanceSelection(slot);
+			advanceSelection(slot);
 		} else {
-			container.regressSelection(slot);
+			regressSelection(slot);
 		}
 	}
 
@@ -118,5 +118,17 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter, ImprinterInven
 
 		startX = (this.width - this.xSize) / 2;
 		startY = (this.height - this.ySize) / 2;
+	}
+
+	private static void advanceSelection(int index) {
+		sendSelectionChange(index, 0);
+	}
+
+	private static void regressSelection(int index) {
+		sendSelectionChange(index, 1);
+	}
+
+	private static void sendSelectionChange(int index, int advance) {
+		Proxies.net.sendToServer(new PacketGuiSelectRequest(index, advance));
 	}
 }
