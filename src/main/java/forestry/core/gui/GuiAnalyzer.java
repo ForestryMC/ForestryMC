@@ -32,24 +32,8 @@ public class GuiAnalyzer extends GuiForestryTitled<ContainerAnalyzer, TileAnalyz
 	}
 
 	private void drawAnalyzeMeter(int x, int y, int height, EnumTankLevel rated) {
-		int i = 176;
+		int i = 176 + rated.getLevelScaled(16);
 		int k = 60;
-		switch (rated) {
-			case EMPTY:
-				break;
-			case LOW:
-				i += 4;
-				break;
-			case MEDIUM:
-				i += 8;
-				break;
-			case HIGH:
-				i += 12;
-				break;
-			case MAXIMUM:
-				i += 16;
-				break;
-		}
 
 		drawTexturedModalRect(x, y + 46 - height, i, k + 46 - height, 4, height);
 	}

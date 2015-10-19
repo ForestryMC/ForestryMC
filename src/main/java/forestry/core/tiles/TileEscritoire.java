@@ -28,7 +28,7 @@ import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
 import forestry.core.network.PacketTileStream;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.EnumTankLevel;
+import forestry.core.render.TankRenderInfo;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.SlotUtil;
@@ -126,13 +126,13 @@ public class TileEscritoire extends TileBase implements ISidedInventory, IRender
 	}
 
 	@Override
-	public EnumTankLevel getPrimaryLevel() {
-		return EnumTankLevel.EMPTY;
+	public TankRenderInfo getResourceTankInfo() {
+		return TankRenderInfo.EMPTY;
 	}
 
 	@Override
-	public EnumTankLevel getSecondaryLevel() {
-		return EnumTankLevel.EMPTY;
+	public TankRenderInfo getProductTankInfo() {
+		return TankRenderInfo.EMPTY;
 	}
 
 	@Override

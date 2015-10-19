@@ -13,8 +13,10 @@ package forestry.core.fluids;
 import java.awt.Color;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Items;
@@ -321,6 +323,14 @@ public enum Fluids {
 
 	public static final Fluids[] forestryFluids = {ETHANOL, BIOMASS, GLASS, HONEY, LEGACY_HONEY, ICE, JUICE, MILK, SEEDOIL, SHORT_MEAD};
 
+	private static final Map<String, Fluids> tagToFluid = new HashMap<>();
+
+	static {
+		for (Fluids fluids : Fluids.values()) {
+			tagToFluid.put(fluids.getTag(), fluids);
+		}
+	}
+
 	private final String tag;
 	private final int density, viscosity;
 	private final Color color;
@@ -403,6 +413,20 @@ public enum Fluids {
 			return false;
 		}
 		return a.isFluidEqual(b);
+	}
+
+	public static Color getFluidColor(FluidStack fluidStack) {
+		if (fluidStack != null) {
+			Fluid fluid = fluidStack.getFluid();
+			if (fluid != null) {
+				Fluids fluids = tagToFluid.get(fluid.getName());
+				if (fluids != null) {
+					return fluids.getColor();
+				}
+			}
+		}
+
+		return Fluids.WATER.getColor();
 	}
 
 	/** FluidBlock and Container registration */

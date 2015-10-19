@@ -47,7 +47,7 @@ import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
-import forestry.core.render.EnumTankLevel;
+import forestry.core.render.TankRenderInfo;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;
 import forestry.core.utils.InventoryUtil;
@@ -294,8 +294,8 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 	}
 
 	@Override
-	public EnumTankLevel getPrimaryLevel() {
-		return EnumTankLevel.rateTankLevel(getResourceScaled(100));
+	public TankRenderInfo getResourceTankInfo() {
+		return new TankRenderInfo(resourceTank, getResourceScaled(100));
 	}
 
 	/* SMP GUI */

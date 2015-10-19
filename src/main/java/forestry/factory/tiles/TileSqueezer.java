@@ -53,7 +53,7 @@ import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.EnumTankLevel;
+import forestry.core.render.TankRenderInfo;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;
 import forestry.core.utils.InventoryUtil;
@@ -223,13 +223,13 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 		return hasResources && hasRecipe && canFill && canAdd;
 	}
 
-	public int getResourceScaled(int i) {
+	public int getProductScaled(int i) {
 		return (productTank.getFluidAmount() * i) / Constants.PROCESSOR_TANK_CAPACITY;
 	}
 
 	@Override
-	public EnumTankLevel getSecondaryLevel() {
-		return EnumTankLevel.rateTankLevel(getResourceScaled(100));
+	public TankRenderInfo getProductTankInfo() {
+		return new TankRenderInfo(productTank, getProductScaled(100));
 	}
 
 	/* ILIQUIDCONTAINER IMPLEMENTATION */

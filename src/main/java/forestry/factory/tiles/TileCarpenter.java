@@ -54,7 +54,7 @@ import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
 import forestry.core.recipes.ShapedRecipeCustom;
-import forestry.core.render.EnumTankLevel;
+import forestry.core.render.TankRenderInfo;
 import forestry.core.tiles.IItemStackDisplay;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;
@@ -355,8 +355,8 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 	}
 
 	@Override
-	public EnumTankLevel getPrimaryLevel() {
-		return EnumTankLevel.rateTankLevel(getResourceScaled(100));
+	public TankRenderInfo getResourceTankInfo() {
+		return new TankRenderInfo(resourceTank, getResourceScaled(100));
 	}
 
 	/* SMP GUI */

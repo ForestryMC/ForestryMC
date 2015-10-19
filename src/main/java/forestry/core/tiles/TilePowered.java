@@ -23,7 +23,7 @@ import forestry.core.circuits.ISpeedUpgradable;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
-import forestry.core.render.EnumTankLevel;
+import forestry.core.render.TankRenderInfo;
 import forestry.energy.EnergyManager;
 
 import buildcraft.api.tiles.IHasWork;
@@ -176,15 +176,15 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
 		workCounter = 0;
 	}
 
-	// / ADDITIONAL LIQUID HANDLING
+	/* IRenderableTile */
 	@Override
-	public EnumTankLevel getPrimaryLevel() {
-		return EnumTankLevel.EMPTY;
+	public TankRenderInfo getResourceTankInfo() {
+		return TankRenderInfo.EMPTY;
 	}
 
 	@Override
-	public EnumTankLevel getSecondaryLevel() {
-		return EnumTankLevel.EMPTY;
+	public TankRenderInfo getProductTankInfo() {
+		return TankRenderInfo.EMPTY;
 	}
 
 	/* IPowerHandler */

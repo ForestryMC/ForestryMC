@@ -44,7 +44,7 @@ import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
-import forestry.core.render.EnumTankLevel;
+import forestry.core.render.TankRenderInfo;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.IRenderableTile;
 import forestry.core.tiles.TileBase;
@@ -547,14 +547,15 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 	}
 
 	/* IRenderableTile */
+
 	@Override
-	public EnumTankLevel getPrimaryLevel() {
-		return EnumTankLevel.rateTankLevel(getResourceScaled(100));
+	public TankRenderInfo getResourceTankInfo() {
+		return new TankRenderInfo(resourceTank, getResourceScaled(100));
 	}
 
 	@Override
-	public EnumTankLevel getSecondaryLevel() {
-		return EnumTankLevel.EMPTY;
+	public TankRenderInfo getProductTankInfo() {
+		return TankRenderInfo.EMPTY;
 	}
 
 	/* ILiquidTankTile */

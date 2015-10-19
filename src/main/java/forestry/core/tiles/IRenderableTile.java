@@ -12,14 +12,13 @@ package forestry.core.tiles;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
-import forestry.core.render.EnumTankLevel;
+import forestry.core.render.TankRenderInfo;
 
 public interface IRenderableTile {
 
 	ForgeDirection getOrientation();
 
-	EnumTankLevel getPrimaryLevel();
+	TankRenderInfo getResourceTankInfo();
 
-	EnumTankLevel getSecondaryLevel();
-
+	TankRenderInfo getProductTankInfo();
 }

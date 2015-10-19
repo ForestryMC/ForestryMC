@@ -12,15 +12,21 @@ package forestry.core.render;
 
 public enum EnumTankLevel {
 
-	EMPTY,
+	EMPTY(0),
+	LOW(25),
+	MEDIUM(50),
+	HIGH(75),
+	MAXIMUM(100);
 
-	LOW,
+	private final int level;
 
-	MEDIUM,
+	EnumTankLevel(int level) {
+		this.level = level;
+	}
 
-	HIGH,
-
-	MAXIMUM;
+	public int getLevelScaled(int scale) {
+		return level * scale / 100;
+	}
 
 	public static EnumTankLevel rateTankLevel(int scaled) {
 

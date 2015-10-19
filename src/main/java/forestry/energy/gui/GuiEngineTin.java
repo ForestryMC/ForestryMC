@@ -31,45 +31,14 @@ public class GuiEngineTin extends GuiEngine<ContainerEngineTin, TileEngineElectr
 		TileEngineElectric engine = inventory;
 		int storageHeight = engine.getStorageScaled(46);
 		int storageMaxHeight = engine.getStorageScaled(100);
-		EnumTankLevel rated = rateLevel(storageMaxHeight);
+		EnumTankLevel rated = EnumTankLevel.rateTankLevel(storageMaxHeight);
 
 		drawHealthMeter(guiLeft + 74, guiTop + 25, storageHeight, rated);
 	}
 
-	private static EnumTankLevel rateLevel(int scaled) {
-
-		if (scaled < 5) {
-			return EnumTankLevel.EMPTY;
-		} else if (scaled < 30) {
-			return EnumTankLevel.LOW;
-		} else if (scaled < 60) {
-			return EnumTankLevel.MEDIUM;
-		} else if (scaled < 90) {
-			return EnumTankLevel.HIGH;
-		} else {
-			return EnumTankLevel.MAXIMUM;
-		}
-	}
-
 	private void drawHealthMeter(int x, int y, int height, EnumTankLevel rated) {
-		int i = 176;
+		int i = 176 + rated.getLevelScaled(16);
 		int k = 0;
-		switch (rated) {
-			case EMPTY:
-				break;
-			case LOW:
-				i += 4;
-				break;
-			case MEDIUM:
-				i += 8;
-				break;
-			case HIGH:
-				i += 12;
-				break;
-			case MAXIMUM:
-				i += 16;
-				break;
-		}
 
 		this.drawTexturedModalRect(x, y + 46 - height, i, k + 46 - height, 4, height);
 	}
