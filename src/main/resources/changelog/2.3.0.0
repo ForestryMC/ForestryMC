@@ -1,6 +1,0 @@
-
-#2.3.0.0
-
-- Updated: Minecraft 1.6.2.
-- Updated: BC API to 4.0.1.
-- Changed: Swarmer bees are gone - in a way. There are now queens of "Ignoble Stock" and "Pristine Stock". Pristine Stock: As before, but cannot be "infected" through mating with other drones. They make up ~ 20 % of the bee population. "Ignoble Stock": These have a low chance to die off. The mortality chance can be reduced via frames. They will never die off in bee houses. Amount of generations lived does not affect the chance to die off anymore.

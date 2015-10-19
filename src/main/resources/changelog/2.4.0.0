@@ -1,4 +1,0 @@
-Bugfix: IC2 item crates are correctly being added if the item exists.
-Bugfix: Naturalist's game should no longer produce AIOOB errors.
-Port to Minecraft 1.7
-
