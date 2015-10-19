@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture;
 
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 
 import forestry.api.apiculture.IBeekeepingLogic;
@@ -33,6 +34,11 @@ public class FakeBeekeepingLogic implements IBeekeepingLogic {
 
 	@Override
 	public void syncToClient() {
+
+	}
+
+	@Override
+	public void syncToClient(EntityPlayerMP player) {
 
 	}
 

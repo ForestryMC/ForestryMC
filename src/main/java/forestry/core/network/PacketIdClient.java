@@ -17,10 +17,14 @@ public enum PacketIdClient implements IPacketId {
 
 	// Core Gui
 	ERROR_UPDATE(new PacketErrorUpdate()),
+	ERROR_UPDATE_ENTITY(new PacketErrorUpdateEntity()),
 	GUI_UPDATE(new PacketGuiUpdate()),
+	GUI_UPDATE_ENTITY(new PacketGuiUpdateEntity()),
 	GUI_LAYOUT_SELECT(new PacketGuiLayoutSelect()),
 	GUI_ENERGY(new PacketGuiEnergy()),
 	SOCKET_UPDATE(new PacketSocketUpdate()),
+	ACCESS_UPDATE(new PacketAccessUpdate()),
+	ACCESS_UPDATE_ENTITY(new PacketAccessUpdateEntity()),
 
 	// Core Tile Entities
 	TILE_FORESTRY_UPDATE(new PacketTileStream()),
@@ -37,6 +41,7 @@ public enum PacketIdClient implements IPacketId {
 	// Apiculture
 	TILE_FORESTRY_ACTIVE,
 	BEE_LOGIC_ACTIVE,
+	BEE_LOGIC_ACTIVE_ENTITY,
 	HABITAT_BIOME_POINTER,
 	CANDLE_UPDATE,
 	IMPRINT_SELECTION_RESPONSE,

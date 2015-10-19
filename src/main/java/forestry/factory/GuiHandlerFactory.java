@@ -15,6 +15,7 @@ import net.minecraft.world.World;
 
 import forestry.core.GuiHandlerBase;
 import forestry.core.network.GuiId;
+import forestry.core.tiles.TileUtil;
 import forestry.factory.gui.ContainerBottler;
 import forestry.factory.gui.ContainerCarpenter;
 import forestry.factory.gui.ContainerCentrifuge;
@@ -58,34 +59,34 @@ public class GuiHandlerFactory extends GuiHandlerBase {
 		switch (GuiId.values()[id]) {
 
 			case BottlerGUI:
-				return new GuiBottler(player.inventory, getTile(world, x, y, z, player, TileBottler.class));
+				return new GuiBottler(player.inventory, TileUtil.getTile(world, x, y, z, TileBottler.class));
 
 			case CarpenterGUI:
-				return new GuiCarpenter(player.inventory, getTile(world, x, y, z, player, TileCarpenter.class));
+				return new GuiCarpenter(player.inventory, TileUtil.getTile(world, x, y, z, TileCarpenter.class));
 
 			case CentrifugeGUI:
-				return new GuiCentrifuge(player.inventory, getTile(world, x, y, z, player, TileCentrifuge.class));
+				return new GuiCentrifuge(player.inventory, TileUtil.getTile(world, x, y, z, TileCentrifuge.class));
 
 			case FabricatorGUI:
-				return new GuiFabricator(player.inventory, getTile(world, x, y, z, player, TileFabricator.class));
+				return new GuiFabricator(player.inventory, TileUtil.getTile(world, x, y, z, TileFabricator.class));
 
 			case FermenterGUI:
-				return new GuiFermenter(player.inventory, getTile(world, x, y, z, player, TileFermenter.class));
+				return new GuiFermenter(player.inventory, TileUtil.getTile(world, x, y, z, TileFermenter.class));
 
 			case MoistenerGUI:
-				return new GuiMoistener(player.inventory, getTile(world, x, y, z, player, TileMoistener.class));
+				return new GuiMoistener(player.inventory, TileUtil.getTile(world, x, y, z, TileMoistener.class));
 
 			case RaintankGUI:
-				return new GuiRaintank(player.inventory, getTile(world, x, y, z, player, TileRaintank.class));
+				return new GuiRaintank(player.inventory, TileUtil.getTile(world, x, y, z, TileRaintank.class));
 
 			case SqueezerGUI:
-				return new GuiSqueezer(player.inventory, getTile(world, x, y, z, player, TileSqueezer.class));
+				return new GuiSqueezer(player.inventory, TileUtil.getTile(world, x, y, z, TileSqueezer.class));
 
 			case StillGUI:
-				return new GuiStill(player.inventory, getTile(world, x, y, z, player, TileStill.class));
+				return new GuiStill(player.inventory, TileUtil.getTile(world, x, y, z, TileStill.class));
 
 			case WorktableGUI:
-				return new GuiWorktable(player, getTile(world, x, y, z, player, TileWorktable.class));
+				return new GuiWorktable(player, TileUtil.getTile(world, x, y, z, TileWorktable.class));
 			
 			default:
 				return null;
@@ -103,34 +104,34 @@ public class GuiHandlerFactory extends GuiHandlerBase {
 		switch (GuiId.values()[id]) {
 
 			case BottlerGUI:
-				return new ContainerBottler(player.inventory, getTile(world, x, y, z, player, TileBottler.class));
+				return new ContainerBottler(player.inventory, TileUtil.getTile(world, x, y, z, TileBottler.class));
 
 			case CarpenterGUI:
-				return new ContainerCarpenter(player.inventory, getTile(world, x, y, z, player, TileCarpenter.class));
+				return new ContainerCarpenter(player.inventory, TileUtil.getTile(world, x, y, z, TileCarpenter.class));
 
 			case CentrifugeGUI:
-				return new ContainerCentrifuge(player.inventory, getTile(world, x, y, z, player, TileCentrifuge.class));
+				return new ContainerCentrifuge(player.inventory, TileUtil.getTile(world, x, y, z, TileCentrifuge.class));
 
 			case FabricatorGUI:
-				return new ContainerFabricator(player.inventory, getTile(world, x, y, z, player, TileFabricator.class));
+				return new ContainerFabricator(player.inventory, TileUtil.getTile(world, x, y, z, TileFabricator.class));
 
 			case FermenterGUI:
-				return new ContainerFermenter(player.inventory, getTile(world, x, y, z, player, TileFermenter.class));
+				return new ContainerFermenter(player.inventory, TileUtil.getTile(world, x, y, z, TileFermenter.class));
 
 			case MoistenerGUI:
-				return new ContainerMoistener(player.inventory, getTile(world, x, y, z, player, TileMoistener.class));
+				return new ContainerMoistener(player.inventory, TileUtil.getTile(world, x, y, z, TileMoistener.class));
 
 			case RaintankGUI:
-				return new ContainerRaintank(player.inventory, getTile(world, x, y, z, player, TileRaintank.class));
+				return new ContainerRaintank(player.inventory, TileUtil.getTile(world, x, y, z, TileRaintank.class));
 
 			case SqueezerGUI:
-				return new ContainerSqueezer(player.inventory, getTile(world, x, y, z, player, TileSqueezer.class));
+				return new ContainerSqueezer(player.inventory, TileUtil.getTile(world, x, y, z, TileSqueezer.class));
 
 			case StillGUI:
-				return new ContainerStill(player.inventory, getTile(world, x, y, z, player, TileStill.class));
+				return new ContainerStill(player.inventory, TileUtil.getTile(world, x, y, z, TileStill.class));
 
 			case WorktableGUI:
-				return new ContainerWorktable(player, getTile(world, x, y, z, player, TileWorktable.class));
+				return new ContainerWorktable(player, TileUtil.getTile(world, x, y, z, TileWorktable.class));
 			
 			default:
 				return null;

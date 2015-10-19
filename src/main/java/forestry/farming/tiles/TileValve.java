@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.farming.tiles;
 
-import net.minecraft.world.World;
-
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -57,10 +55,5 @@ public class TileValve extends TileFarm implements ILiquidTankTile, IFluidHandle
 	@Override
 	public ITankManager getTankManager() {
 		return getFarmController().getTankManager();
-	}
-
-	@Override
-	public World getWorld() {
-		return worldObj;
 	}
 }

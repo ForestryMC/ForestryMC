@@ -10,10 +10,11 @@
  ******************************************************************************/
 package forestry.apiculture.tiles;
 
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
+import java.io.IOException;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
@@ -25,12 +26,16 @@ import forestry.api.apiculture.IBeekeepingLogic;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.apiculture.BeeHousingInventory;
+import forestry.apiculture.gui.IGuiBeeHousingInventory;
 import forestry.core.config.Config;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.IStreamableGui;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.IClimatised;
 import forestry.core.tiles.TileBase;
 
-public abstract class TileAbstractBeeHousing extends TileBase implements IBeeHousing, IClimatised {
+public abstract class TileAbstractBeeHousing extends TileBase implements IBeeHousing, IClimatised, IGuiBeeHousingInventory, IStreamableGui {
 	private final IBeekeepingLogic beeLogic;
 	private BiomeGenBase cachedBiome;
 
@@ -94,20 +99,24 @@ public abstract class TileAbstractBeeHousing extends TileBase implements IBeeHou
 			beeLogic.doBeeFX();
 
 			if (updateOnInterval(50)) {
-				float fxX = xCoord + 0.5F;
-				float fxY = yCoord + 0.25F;
-				float fxZ = zCoord + 0.5F;
-				float distanceFromCenter = 0.6F;
-				float leftRightSpreadFromCenter = distanceFromCenter * (worldObj.rand.nextFloat() - 0.5F);
-				float upSpread = (worldObj.rand.nextFloat() * 6F) / 16F;
-				fxY += upSpread;
-
-				Proxies.render.addEntitySwarmFX(worldObj, (fxX - distanceFromCenter), fxY, (fxZ + leftRightSpreadFromCenter));
-				Proxies.render.addEntitySwarmFX(worldObj, (fxX + distanceFromCenter), fxY, (fxZ + leftRightSpreadFromCenter));
-				Proxies.render.addEntitySwarmFX(worldObj, (fxX + leftRightSpreadFromCenter), fxY, (fxZ - distanceFromCenter));
-				Proxies.render.addEntitySwarmFX(worldObj, (fxX + leftRightSpreadFromCenter), fxY, (fxZ + distanceFromCenter));
+				doPollenFX(worldObj, xCoord, yCoord, zCoord);
 			}
 		}
+	}
+
+	public static void doPollenFX(World world, double xCoord, double yCoord, double zCoord) {
+		double fxX = xCoord + 0.5F;
+		double fxY = yCoord + 0.25F;
+		double fxZ = zCoord + 0.5F;
+		float distanceFromCenter = 0.6F;
+		float leftRightSpreadFromCenter = distanceFromCenter * (world.rand.nextFloat() - 0.5F);
+		float upSpread = (world.rand.nextFloat() * 6F) / 16F;
+		fxY += upSpread;
+
+		Proxies.render.addEntitySwarmFX(world, (fxX - distanceFromCenter), fxY, (fxZ + leftRightSpreadFromCenter));
+		Proxies.render.addEntitySwarmFX(world, (fxX + distanceFromCenter), fxY, (fxZ + leftRightSpreadFromCenter));
+		Proxies.render.addEntitySwarmFX(world, (fxX + leftRightSpreadFromCenter), fxY, (fxZ - distanceFromCenter));
+		Proxies.render.addEntitySwarmFX(world, (fxX + leftRightSpreadFromCenter), fxY, (fxZ + distanceFromCenter));
 	}
 
 	@Override
@@ -117,24 +126,19 @@ public abstract class TileAbstractBeeHousing extends TileBase implements IBeeHou
 		}
 	}
 
-	/**
-	 * Returns scaled queen health or breeding progress
-	 */
+	@Override
 	public int getHealthScaled(int i) {
 		return (breedingProgressPercent * i) / 100;
 	}
 
-	/* SMP */
-	public void getGUINetworkData(int i, int j) {
-		switch (i) {
-			case 0:
-				breedingProgressPercent = j;
-				break;
-		}
+	@Override
+	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
+		data.writeVarInt(beeLogic.getBeeProgressPercent());
 	}
 
-	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
-		iCrafting.sendProgressBarUpdate(container, 0, beeLogic.getBeeProgressPercent());
+	@Override
+	public void readGuiData(DataInputStreamForestry data) throws IOException {
+		breedingProgressPercent = data.readVarInt();
 	}
 
 	// / IBEEHOUSING
@@ -164,6 +168,11 @@ public abstract class TileAbstractBeeHousing extends TileBase implements IBeeHou
 	@Override
 	public World getWorld() {
 		return worldObj;
+	}
+
+	@Override
+	public Vec3 getBeeFXCoordinates() {
+		return Vec3.createVectorHelper(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5);
 	}
 
 	public static class TileBeeHousingInventory extends BeeHousingInventory {

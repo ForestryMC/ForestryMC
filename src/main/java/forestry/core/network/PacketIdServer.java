@@ -19,8 +19,12 @@ public enum PacketIdServer implements IPacketId {
 	GUI_SELECTION_REQUEST(new PacketGuiSelectRequest()),
 	PIPETTE_CLICK(new PacketPipetteClick()),
 	ACCESS_SWITCH(new PacketAccessSwitch()),
+	ACCESS_SWITCH_ENTITY(new PacketAccessSwitchEntity()),
 	CHIPSET_CLICK(new PacketChipsetClick()),
 	SOLDERING_IRON_CLICK(new PacketSolderingIronClick()),
+
+	// Apiculture
+	BEE_LOGIC_ACTIVE_ENTITY_REQUEST,
 
 	// Factory
 	WORKTABLE_NEI_SELECT,

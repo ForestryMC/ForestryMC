@@ -12,8 +12,8 @@ package forestry.apiculture.network;
 
 import java.io.IOException;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
 
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeekeepingLogic;
@@ -21,19 +21,19 @@ import forestry.apiculture.BeekeepingLogic;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IForestryPacketClient;
-import forestry.core.network.PacketCoordinates;
+import forestry.core.network.PacketEntityUpdate;
 import forestry.core.network.PacketIdClient;
 import forestry.core.proxy.Proxies;
 
-public class PacketBeekeepingLogicActive extends PacketCoordinates implements IForestryPacketClient {
+public class PacketBeeLogicActiveEntity extends PacketEntityUpdate implements IForestryPacketClient {
 	private BeekeepingLogic beekeepingLogic;
 
-	public PacketBeekeepingLogicActive() {
+	public PacketBeeLogicActiveEntity() {
 	}
 
-	public PacketBeekeepingLogicActive(IBeeHousing tile) {
-		super(PacketIdClient.BEE_LOGIC_ACTIVE, tile.getCoordinates());
-		this.beekeepingLogic = (BeekeepingLogic) tile.getBeekeepingLogic();
+	public PacketBeeLogicActiveEntity(IBeeHousing housing, Entity entity) {
+		super(PacketIdClient.BEE_LOGIC_ACTIVE_ENTITY, entity);
+		this.beekeepingLogic = (BeekeepingLogic) housing.getBeekeepingLogic();
 	}
 
 	@Override
@@ -44,9 +44,9 @@ public class PacketBeekeepingLogicActive extends PacketCoordinates implements IF
 
 	@Override
 	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
-		TileEntity tile = getTarget(Proxies.common.getRenderWorld());
-		if (tile instanceof IBeeHousing) {
-			IBeeHousing beeHousing = (IBeeHousing) tile;
+		Entity entity = getTarget(Proxies.common.getRenderWorld());
+		if (entity instanceof IBeeHousing) {
+			IBeeHousing beeHousing = (IBeeHousing) entity;
 			IBeekeepingLogic beekeepingLogic = beeHousing.getBeekeepingLogic();
 			if (beekeepingLogic instanceof BeekeepingLogic) {
 				((BeekeepingLogic) beekeepingLogic).readData(data);

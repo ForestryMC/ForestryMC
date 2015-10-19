@@ -41,6 +41,11 @@ public abstract class ContainerForestry extends Container {
 	}
 
 	@Override
+	public Slot addSlotToContainer(Slot p_75146_1_) {
+		return super.addSlotToContainer(p_75146_1_);
+	}
+
+	@Override
 	public ItemStack slotClick(int slotIndex, int button, int modifier, EntityPlayer player) {
 		if (!canAccess(player)) {
 			return null;

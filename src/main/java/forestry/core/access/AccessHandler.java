@@ -11,37 +11,56 @@
 package forestry.core.access;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
+import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
-import forestry.api.core.INBTTagable;
 import forestry.core.config.Config;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
-import forestry.core.network.IStreamable;
 import forestry.core.network.PacketAccessSwitch;
+import forestry.core.network.PacketAccessSwitchEntity;
 import forestry.core.proxy.Proxies;
-import forestry.core.tiles.IRestrictedAccessTile;
+import forestry.core.tiles.ILocatable;
 import forestry.core.utils.PlayerUtil;
 
-public final class AccessHandler implements IAccessHandler, IStreamable, INBTTagable {
-	private final IRestrictedAccessTile tile;
+public final class AccessHandler implements IAccessHandler {
+	private final IRestrictedAccess accessListener;
+	private final List<IAccessOwnerListener> accessOwnerListeners = new ArrayList<>();
+	private final Object target;
 
 	private GameProfile owner = null;
 	private EnumAccess access = EnumAccess.SHARED;
 
-	public AccessHandler(IRestrictedAccessTile tile) {
-		this.tile = tile;
+	public <T extends IRestrictedAccess & ILocatable> AccessHandler(T tile) {
+		this.accessListener = tile;
+		this.target = tile;
+	}
+
+	public <T extends Entity & IRestrictedAccess> AccessHandler(T entity) {
+		this.accessListener = entity;
+		this.target = entity;
+	}
+
+	public void addOwnerListener(IAccessOwnerListener accessListener) {
+		accessOwnerListeners.add(accessListener);
+	}
+
+	public void removeOwnerListener(IAccessOwnerListener accessListener) {
+		accessOwnerListeners.remove(accessListener);
 	}
 
 	@Override
 	public final boolean allowsRemoval(EntityPlayer player) {
-		return !Config.enablePermissions || getAccessType() == EnumAccess.SHARED || !isOwned() || isOwner(player) || Proxies.common.isOp(player);
+		return !Config.enablePermissions || getAccess() == EnumAccess.SHARED || !isOwned() || isOwner(player) || Proxies.common.isOp(player);
 	}
 
 	@Override
@@ -51,7 +70,7 @@ public final class AccessHandler implements IAccessHandler, IStreamable, INBTTag
 
 	@Override
 	public final boolean allowsViewing(EntityPlayer player) {
-		return allowsAlteration(player) || getAccessType() == EnumAccess.VIEWABLE;
+		return allowsAlteration(player) || getAccess() == EnumAccess.VIEWABLE;
 	}
 
 	@Override
@@ -60,7 +79,7 @@ public final class AccessHandler implements IAccessHandler, IStreamable, INBTTag
 	}
 
 	@Override
-	public EnumAccess getAccessType() {
+	public EnumAccess getAccess() {
 		return access;
 	}
 
@@ -77,6 +96,9 @@ public final class AccessHandler implements IAccessHandler, IStreamable, INBTTag
 	@Override
 	public void setOwner(GameProfile owner) {
 		this.owner = owner;
+		for (IAccessOwnerListener listener : accessOwnerListeners) {
+			listener.onOwnerSet(owner);
+		}
 	}
 
 	@Override
@@ -85,22 +107,35 @@ public final class AccessHandler implements IAccessHandler, IStreamable, INBTTag
 	}
 
 	@Override
-	public boolean switchAccessRule(EntityPlayer player) {
+	public boolean switchAccess(EntityPlayer player) {
 		if (!isOwner(player)) {
 			return false;
 		}
 
-		EnumAccess oldAccess = access;
 		int ordinal = (access.ordinal() + 1) % EnumAccess.values().length;
-		access = EnumAccess.values()[ordinal];
-
-		if (player.worldObj.isRemote) {
-			Proxies.net.sendToServer(new PacketAccessSwitch(tile.getCoordinates()));
-		} else {
-			tile.onSwitchAccess(oldAccess, access);
-		}
+		EnumAccess newAccess = EnumAccess.values()[ordinal];
+		setAccess(player.worldObj, newAccess);
 
 		return true;
+	}
+
+	private void setAccess(World world, EnumAccess access) {
+		EnumAccess oldAccess = this.access;
+		if (oldAccess == access) {
+			return;
+		}
+
+		this.access = access;
+
+		if (world.isRemote) {
+			if (target instanceof ILocatable) {
+				Proxies.net.sendToServer(new PacketAccessSwitch((ILocatable) target));
+			} else if (target instanceof Entity) {
+				Proxies.net.sendToServer(new PacketAccessSwitchEntity((Entity) target));
+			}
+		} else {
+			accessListener.onSwitchAccess(oldAccess, access);
+		}
 	}
 
 	@Override
@@ -120,7 +155,8 @@ public final class AccessHandler implements IAccessHandler, IStreamable, INBTTag
 		byte accessOrdinal = data.readByte();
 		if (accessOrdinal >= 0) {
 			access = EnumAccess.values()[accessOrdinal];
-			owner = new GameProfile(new UUID(data.readLong(), data.readLong()), data.readUTF());
+			GameProfile owner = new GameProfile(new UUID(data.readLong(), data.readLong()), data.readUTF());
+			setOwner(owner);
 		}
 	}
 

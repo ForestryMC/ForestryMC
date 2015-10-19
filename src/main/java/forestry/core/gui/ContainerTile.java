@@ -21,11 +21,13 @@ import forestry.api.core.IErrorState;
 import forestry.core.access.EnumAccess;
 import forestry.core.access.FakeAccessHandler;
 import forestry.core.access.IAccessHandler;
+import forestry.core.access.IRestrictedAccess;
+import forestry.core.network.IForestryPacketClient;
+import forestry.core.network.PacketAccessUpdate;
 import forestry.core.network.PacketErrorUpdate;
 import forestry.core.network.PacketGuiEnergy;
 import forestry.core.network.PacketGuiUpdate;
 import forestry.core.tiles.IPowerHandler;
-import forestry.core.tiles.IRestrictedAccessTile;
 import forestry.core.tiles.TilePowered;
 import forestry.core.tiles.TileUtil;
 import forestry.energy.EnergyManager;
@@ -38,8 +40,8 @@ public abstract class ContainerTile<T extends TileEntity> extends ContainerFores
 	protected ContainerTile(T tile) {
 		this.tile = tile;
 
-		if (tile instanceof IRestrictedAccessTile) {
-			accessHandler = ((IRestrictedAccessTile) tile).getAccessHandler();
+		if (tile instanceof IRestrictedAccess) {
+			accessHandler = ((IRestrictedAccess) tile).getAccessHandler();
 		} else {
 			accessHandler = FakeAccessHandler.getInstance();
 		}
@@ -75,7 +77,7 @@ public abstract class ContainerTile<T extends TileEntity> extends ContainerFores
 			IErrorLogicSource errorLogicSource = (IErrorLogicSource) tile;
 			ImmutableSet<IErrorState> errorStates = errorLogicSource.getErrorLogic().getErrorStates();
 
-			if ((previousErrorStates != null) && !errorStates.equals(previousErrorStates)) {
+			if ((previousErrorStates == null) || !errorStates.equals(previousErrorStates)) {
 				PacketErrorUpdate packet = new PacketErrorUpdate(tile, errorLogicSource);
 				sendPacketToCrafters(packet);
 			}
@@ -94,42 +96,38 @@ public abstract class ContainerTile<T extends TileEntity> extends ContainerFores
 			}
 		}
 
-		boolean guiUpdated = false;
-
-		if (!guiUpdated && tile instanceof IRestrictedAccessTile) {
-			IRestrictedAccessTile restrictedAccessTile = (IRestrictedAccessTile) tile;
-			IAccessHandler accessHandler = restrictedAccessTile.getAccessHandler();
-			EnumAccess access = accessHandler.getAccessType();
+		if (tile instanceof IRestrictedAccess) {
+			IRestrictedAccess restrictedAccess = (IRestrictedAccess) tile;
+			IAccessHandler accessHandler = restrictedAccess.getAccessHandler();
+			EnumAccess access = accessHandler.getAccess();
 			if (access != previousAccess) {
-				PacketGuiUpdate packet = new PacketGuiUpdate(restrictedAccessTile);
+				IForestryPacketClient packet = new PacketAccessUpdate(restrictedAccess, tile);
 				sendPacketToCrafters(packet);
 
 				previousAccess = access;
-				guiUpdated = true;
 			}
 		}
 
-		if (!guiUpdated && tile instanceof TilePowered) {
-			TilePowered tilePowered = (TilePowered) tile;
+		if (tile instanceof TilePowered) {
+			boolean guiNeedsUpdate = false;
 
-			boolean changed = false;
+			TilePowered tilePowered = (TilePowered) tile;
 
 			int workCounter = tilePowered.getWorkCounter();
 			if (workCounter != previousWorkCounter) {
-				changed = true;
+				guiNeedsUpdate = true;
 				previousWorkCounter = workCounter;
 			}
 
 			int ticksPerWorkCycle = tilePowered.getTicksPerWorkCycle();
 			if (ticksPerWorkCycle != previousTicksPerWorkCycle) {
-				changed = true;
+				guiNeedsUpdate = true;
 				previousTicksPerWorkCycle = ticksPerWorkCycle;
 			}
 
-			if (changed) {
+			if (guiNeedsUpdate) {
 				PacketGuiUpdate packet = new PacketGuiUpdate(tilePowered);
 				sendPacketToCrafters(packet);
-				guiUpdated = true;
 			}
 		}
 	}

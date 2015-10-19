@@ -10,9 +10,15 @@
  ******************************************************************************/
 package forestry.core.access;
 
+import java.io.IOException;
+
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 
 import com.mojang.authlib.GameProfile;
+
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
 
 public class FakeAccessHandler implements IAccessHandler {
 	private static FakeAccessHandler instance;
@@ -29,12 +35,12 @@ public class FakeAccessHandler implements IAccessHandler {
 	}
 
 	@Override
-	public boolean switchAccessRule(EntityPlayer player) {
+	public boolean switchAccess(EntityPlayer player) {
 		return false;
 	}
 
 	@Override
-	public EnumAccess getAccessType() {
+	public EnumAccess getAccess() {
 		return EnumAccess.SHARED;
 	}
 
@@ -59,6 +65,16 @@ public class FakeAccessHandler implements IAccessHandler {
 	}
 
 	@Override
+	public void addOwnerListener(IAccessOwnerListener accessListener) {
+
+	}
+
+	@Override
+	public void removeOwnerListener(IAccessOwnerListener accessListener) {
+
+	}
+
+	@Override
 	public boolean isOwned() {
 		return false;
 	}
@@ -76,5 +92,25 @@ public class FakeAccessHandler implements IAccessHandler {
 	@Override
 	public boolean isOwner(EntityPlayer player) {
 		return true;
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound nbttagcompound) {
+
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound nbttagcompound) {
+
+	}
+
+	@Override
+	public void writeData(DataOutputStreamForestry data) throws IOException {
+
+	}
+
+	@Override
+	public void readData(DataInputStreamForestry data) throws IOException {
+
 	}
 }

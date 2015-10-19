@@ -3,7 +3,6 @@ package forestry.core.multiblock;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Random;
@@ -27,11 +26,10 @@ import forestry.api.core.IErrorLogicSource;
 import forestry.core.access.AccessHandler;
 import forestry.core.access.IAccessHandler;
 import forestry.core.access.IOwnable;
+import forestry.core.access.IRestrictedAccess;
 import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
-import forestry.core.tiles.IRestrictedAccessTile;
+import forestry.core.tiles.ILocatable;
 import forestry.core.utils.Log;
 import forestry.core.utils.StringUtil;
 
@@ -41,7 +39,7 @@ import forestry.core.utils.StringUtil;
  *
  * Subordinate TileEntities implement the IMultiblockPart class and, generally, should not have an update() loop.
  */
-public abstract class MultiblockControllerBase implements ISidedInventory, IRestrictedAccessTile, IErrorLogicSource {
+public abstract class MultiblockControllerBase implements ISidedInventory, IRestrictedAccess, IErrorLogicSource, ILocatable {
 	public static final short DIMENSION_UNBOUNDED = -1;
 
 	// Multiblock stuff - do not mess with
@@ -224,8 +222,8 @@ public abstract class MultiblockControllerBase implements ISidedInventory, IRest
 
 		Multiset<GameProfile> owners = HashMultiset.create();
 		for (IMultiblockPart part : connectedParts) {
-			if (part instanceof IRestrictedAccessTile) {
-				IAccessHandler accessHandler = ((IRestrictedAccessTile) part).getAccessHandler();
+			if (part instanceof IRestrictedAccess) {
+				IAccessHandler accessHandler = ((IRestrictedAccess) part).getAccessHandler();
 				GameProfile owner = accessHandler.getOwner();
 				if (owner != null) {
 					owners.add(owner);
@@ -1114,17 +1112,5 @@ public abstract class MultiblockControllerBase implements ISidedInventory, IRest
 	@Override
 	public final boolean canExtractItem(int slotIndex, ItemStack itemStack, int side) {
 		return getInternalInventory().canExtractItem(slotIndex, itemStack, side);
-	}
-
-	@Override
-	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
-		accessHandler.writeData(data);
-		errorLogic.writeData(data);
-	}
-
-	@Override
-	public void readGuiData(DataInputStreamForestry data) throws IOException {
-		accessHandler.readData(data);
-		errorLogic.readData(data);
 	}
 }

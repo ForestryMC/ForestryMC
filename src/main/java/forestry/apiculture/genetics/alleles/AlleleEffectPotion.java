@@ -19,7 +19,7 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.potion.PotionHelper;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
 import cpw.mods.fml.relauncher.ReflectionHelper;
@@ -108,8 +108,8 @@ public class AlleleEffectPotion extends AlleleEffectThrottled {
 		if (housing.getWorld().rand.nextBoolean()) {
 			super.doFX(genome, storedData, housing);
 		} else {
-			ChunkCoordinates coords = housing.getCoordinates();
-			Proxies.render.addEntityPotionFX(housing.getWorld(), coords.posX + 0.5, coords.posY + 1, coords.posZ + 0.5, potionFXColor);
+			Vec3 beeFXCoordinates = getFXCoordinates(housing);
+			Proxies.render.addEntityPotionFX(housing.getWorld(), beeFXCoordinates.xCoord, beeFXCoordinates.yCoord + 0.5, beeFXCoordinates.zCoord, potionFXColor);
 		}
 		return storedData;
 	}

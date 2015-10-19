@@ -16,11 +16,14 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 
+import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.FlowerManager;
 import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IBeeHousing;
+import forestry.api.apiculture.IBeeModifier;
 import forestry.api.core.INBTTagable;
 import forestry.api.genetics.IFlowerProvider;
+import forestry.core.utils.vect.Vect;
 import forestry.plugins.PluginApiculture;
 
 public class HasFlowersCache implements INBTTagable {
@@ -42,7 +45,16 @@ public class HasFlowersCache implements INBTTagable {
 				return true;
 			}
 
-			if (FlowerManager.flowerRegistry.isAcceptedFlower(flowerType, world, flowerCoords.posX, flowerCoords.posY, flowerCoords.posZ)) {
+			IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(beeHousing);
+			ChunkCoordinates housingCoords = beeHousing.getCoordinates();
+
+			int[] genomeTerritory = queen.getGenome().getTerritory();
+			float housingModifier = beeModifier.getTerritoryModifier(queen.getGenome(), 1f);
+			Vect area = new Vect(genomeTerritory).multiply(housingModifier * 3.0f);
+			Vect min = new Vect(area).multiply(-0.5f).add(housingCoords);
+			Vect max = new Vect(area).multiply(0.5f).add(housingCoords);
+
+			if (isFlowerValid(world, flowerType, min, max)) {
 				return true;
 			} else {
 				flowerCoords = null;
@@ -58,6 +70,17 @@ public class HasFlowersCache implements INBTTagable {
 		}
 
 		return flowerCoords != null;
+	}
+
+	private boolean isFlowerValid(World world, String flowerType, Vect min, Vect max) {
+		if (!isFlowerCoordInRange(flowerCoords, min, max)) {
+			return false;
+		}
+		return FlowerManager.flowerRegistry.isAcceptedFlower(flowerType, world, flowerCoords.posX, flowerCoords.posY, flowerCoords.posZ);
+	}
+
+	private static boolean isFlowerCoordInRange(ChunkCoordinates flowerCoords, Vect min, Vect max) {
+		return flowerCoords.posX >= min.x && flowerCoords.posX <= max.x && flowerCoords.posY >= min.y && flowerCoords.posY <= max.y && flowerCoords.posZ >= min.z && flowerCoords.posZ <= max.z;
 	}
 
 	@Override

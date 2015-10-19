@@ -12,12 +12,7 @@ package forestry.core.network;
 
 import java.io.IOException;
 
-import net.minecraft.util.ChunkCoordinates;
-
 public interface IStreamableGui {
-	ChunkCoordinates getCoordinates();
-
 	void writeGuiData(DataOutputStreamForestry data) throws IOException;
-
 	void readGuiData(DataInputStreamForestry data) throws IOException;
 }

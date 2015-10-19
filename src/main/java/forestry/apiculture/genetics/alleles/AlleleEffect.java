@@ -11,6 +11,8 @@
 package forestry.apiculture.genetics.alleles;
 
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.Vec3;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IAlleleBeeEffect;
@@ -66,8 +68,19 @@ public abstract class AlleleEffect extends AlleleCategorized implements IAlleleB
 
 	@Override
 	public IEffectData doFX(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
-		Proxies.render.addBeeHiveFX("particles/swarm_bee", housing.getWorld(), housing.getCoordinates(), genome.getPrimary().getIconColour(0));
+		Vec3 beeFXCoordinates = getFXCoordinates(housing);
+		Proxies.render.addBeeHiveFX("particles/swarm_bee", housing.getWorld(), beeFXCoordinates.xCoord, beeFXCoordinates.yCoord, beeFXCoordinates.zCoord, genome.getPrimary().getIconColour(0));
 		return storedData;
+	}
+
+	protected Vec3 getFXCoordinates(IBeeHousing housing) {
+		try {
+			return housing.getBeeFXCoordinates();
+		} catch (Throwable error) {
+			// getBeeFXCoordinates() is only newly added to the API, fall back on getCoordinates()
+			ChunkCoordinates coordinates = housing.getCoordinates();
+			return Vec3.createVectorHelper(coordinates.posX + 0.5D, coordinates.posY + 0.5D, coordinates.posZ + 0.5D);
+		}
 	}
 
 	protected Vect getModifiedArea(IBeeGenome genome, IBeeHousing housing) {

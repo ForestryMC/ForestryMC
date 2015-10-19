@@ -20,6 +20,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
@@ -671,5 +673,33 @@ public abstract class InventoryUtil {
 			entityitem.motionZ = (float) world.rand.nextGaussian() * accel;
 			world.spawnEntityInWorld(entityitem);
 		}
+	}
+
+	/* NBT */
+	public static void readFromNBT(IInventory inventory, NBTTagCompound nbttagcompound) {
+		if (!nbttagcompound.hasKey(inventory.getInventoryName())) {
+			return;
+		}
+
+		NBTTagList nbttaglist = nbttagcompound.getTagList(inventory.getInventoryName(), 10);
+
+		for (int j = 0; j < nbttaglist.tagCount(); ++j) {
+			NBTTagCompound nbttagcompound2 = nbttaglist.getCompoundTagAt(j);
+			int index = nbttagcompound2.getByte("Slot");
+			inventory.setInventorySlotContents(index, ItemStack.loadItemStackFromNBT(nbttagcompound2));
+		}
+	}
+	
+	public static void writeToNBT(IInventory inventory, NBTTagCompound nbttagcompound) {
+		NBTTagList nbttaglist = new NBTTagList();
+		for (int i = 0; i < inventory.getSizeInventory(); i++) {
+			if (inventory.getStackInSlot(i) != null) {
+				NBTTagCompound nbttagcompound2 = new NBTTagCompound();
+				nbttagcompound2.setByte("Slot", (byte) i);
+				inventory.getStackInSlot(i).writeToNBT(nbttagcompound2);
+				nbttaglist.appendTag(nbttagcompound2);
+			}
+		}
+		nbttagcompound.setTag(inventory.getInventoryName(), nbttaglist);
 	}
 }

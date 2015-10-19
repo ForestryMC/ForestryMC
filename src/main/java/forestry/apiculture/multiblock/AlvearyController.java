@@ -18,6 +18,7 @@ import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.StatCollector;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
@@ -46,7 +47,6 @@ import forestry.core.multiblock.MultiblockValidationException;
 import forestry.core.multiblock.rectangular.RectangularMultiblockControllerBase;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
-import forestry.core.network.PacketGuiUpdate;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.BlockUtil;
 
@@ -359,10 +359,13 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	}
 
 	@Override
-	public void onSwitchAccess(EnumAccess oldAccess, EnumAccess newAccess) {
-		PacketGuiUpdate packet = new PacketGuiUpdate(this);
-		Proxies.net.sendNetworkPacket(packet, worldObj);
+	public Vec3 getBeeFXCoordinates() {
+		CoordTriplet coord = getCenterCoord();
+		return Vec3.createVectorHelper(coord.x + 0.5, coord.y + 1.5, coord.z + 0.5);
+	}
 
+	@Override
+	public void onSwitchAccess(EnumAccess oldAccess, EnumAccess newAccess) {
 		if (oldAccess == EnumAccess.SHARED || newAccess == EnumAccess.SHARED) {
 			// pipes connected to this need to update
 			for (IMultiblockPart part : connectedParts) {
@@ -460,7 +463,6 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 
 	@Override
 	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
-		super.writeGuiData(data);
 		data.writeVarInt(beekeepingLogic.getBeeProgressPercent());
 		data.writeVarInt(Math.round(tempChange * 100));
 		data.writeVarInt(Math.round(humidChange * 100));
@@ -468,7 +470,6 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 
 	@Override
 	public void readGuiData(DataInputStreamForestry data) throws IOException {
-		super.readGuiData(data);
 		breedingProgressPercent = data.readVarInt();
 		tempChange = data.readVarInt() / 100.0F;
 		humidChange = data.readVarInt() / 100.0F;

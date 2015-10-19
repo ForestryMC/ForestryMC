@@ -38,11 +38,6 @@ public class ItemFlutterlyzer extends ItemAlyzer {
 
 		/* IHINTSOURCE */
 		@Override
-		public boolean hasHints() {
-			return Config.hints.get("flutterlyzer") != null && Config.hints.get("flutterlyzer").length > 0;
-		}
-
-		@Override
 		public String[] getHints() {
 			return Config.hints.get("flutterlyzer");
 		}

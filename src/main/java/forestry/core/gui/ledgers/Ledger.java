@@ -170,6 +170,10 @@ public abstract class Ledger {
 		return currentWidth >= maxWidth;
 	}
 
+	public void onGuiClosed() {
+
+	}
+
 	protected void drawBackground(int x, int y) {
 
 		float colorR = (overlayColor >> 16 & 255) / 255.0F;

@@ -16,6 +16,7 @@ import net.minecraft.world.World;
 
 import forestry.core.GuiHandlerBase;
 import forestry.core.network.GuiId;
+import forestry.core.tiles.TileUtil;
 import forestry.mail.gui.ContainerCatalogue;
 import forestry.mail.gui.ContainerLetter;
 import forestry.mail.gui.ContainerMailbox;
@@ -70,13 +71,13 @@ public class GuiHandlerMail extends GuiHandlerBase {
 				}
 
 			case MailboxGUI:
-				return new GuiMailbox(player.inventory, getTile(world, x, y, z, player, TileMailbox.class));
+				return new GuiMailbox(player.inventory, TileUtil.getTile(world, x, y, z, TileMailbox.class));
 			case PhilatelistGUI:
-				return new GuiPhilatelist(player.inventory, getTile(world, x, y, z, player, TilePhilatelist.class));
+				return new GuiPhilatelist(player.inventory, TileUtil.getTile(world, x, y, z, TilePhilatelist.class));
 			case TraderGUI:
-				return new GuiTrader(player.inventory, getTile(world, x, y, z, player, TileTrader.class));
+				return new GuiTrader(player.inventory, TileUtil.getTile(world, x, y, z, TileTrader.class));
 			case TraderNameGUI:
-				return new GuiTradeName(getTile(world, x, y, z, player, TileTrader.class));
+				return new GuiTradeName(TileUtil.getTile(world, x, y, z, TileTrader.class));
 			default:
 				return null;
 
@@ -116,13 +117,13 @@ public class GuiHandlerMail extends GuiHandlerBase {
 				}
 
 			case MailboxGUI:
-				return new ContainerMailbox(player.inventory, getTile(world, x, y, z, player, TileMailbox.class));
+				return new ContainerMailbox(player.inventory, TileUtil.getTile(world, x, y, z, TileMailbox.class));
 			case PhilatelistGUI:
-				return new ContainerPhilatelist(player.inventory, getTile(world, x, y, z, player, TilePhilatelist.class));
+				return new ContainerPhilatelist(player.inventory, TileUtil.getTile(world, x, y, z, TilePhilatelist.class));
 			case TraderGUI:
-				return new ContainerTrader(player.inventory, getTile(world, x, y, z, player, TileTrader.class));
+				return new ContainerTrader(player.inventory, TileUtil.getTile(world, x, y, z, TileTrader.class));
 			case TraderNameGUI:
-				return new ContainerTradeName(getTile(world, x, y, z, player, TileTrader.class));
+				return new ContainerTradeName(TileUtil.getTile(world, x, y, z, TileTrader.class));
 			default:
 				return null;
 

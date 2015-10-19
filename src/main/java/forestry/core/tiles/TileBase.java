@@ -30,11 +30,6 @@ public abstract class TileBase extends TileForestry implements IHintSource {
 	}
 
 	@Override
-	public boolean hasHints() {
-		return hints != null && hints.length > 0;
-	}
-
-	@Override
 	public String[] getHints() {
 		return hints;
 	}

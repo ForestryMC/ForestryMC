@@ -25,7 +25,7 @@ import com.mojang.authlib.GameProfile;
 
 import forestry.core.CreativeTabForestry;
 import forestry.core.access.IOwnable;
-import forestry.core.tiles.IRestrictedAccessTile;
+import forestry.core.access.IRestrictedAccess;
 import forestry.core.tiles.TileForestry;
 import forestry.core.utils.Log;
 
@@ -41,8 +41,8 @@ public abstract class BlockForestry extends BlockContainer {
 	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z) {
 		TileEntity tile = world.getTileEntity(x, y, z);
 
-		if (tile instanceof IRestrictedAccessTile) {
-			IRestrictedAccessTile restrictedAccessTile = (IRestrictedAccessTile) tile;
+		if (tile instanceof IRestrictedAccess) {
+			IRestrictedAccess restrictedAccessTile = (IRestrictedAccess) tile;
 			if (!restrictedAccessTile.getAccessHandler().allowsRemoval(player)) {
 				return false;
 			}
@@ -63,8 +63,8 @@ public abstract class BlockForestry extends BlockContainer {
 
 			IOwnable ownable;
 
-			if (tile instanceof IRestrictedAccessTile) {
-				ownable = ((IRestrictedAccessTile) tile).getAccessHandler();
+			if (tile instanceof IRestrictedAccess) {
+				ownable = ((IRestrictedAccess) tile).getAccessHandler();
 			} else if (tile instanceof IOwnable) {
 				ownable = (IOwnable) tile;
 			} else {

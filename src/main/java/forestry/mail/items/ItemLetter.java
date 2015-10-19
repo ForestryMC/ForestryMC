@@ -293,11 +293,6 @@ public class ItemLetter extends ItemInventoried {
 
 		/* IHINTSOURCE */
 		@Override
-		public boolean hasHints() {
-			return Config.hints.get("letter") != null && Config.hints.get("letter").length > 0;
-		}
-
-		@Override
 		public String[] getHints() {
 			return Config.hints.get("letter");
 		}

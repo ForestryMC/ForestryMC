@@ -15,6 +15,7 @@ import java.util.Collections;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
@@ -117,6 +118,11 @@ public class FakeAlvearyController implements IAlvearyController {
 
 	@Override
 	public ChunkCoordinates getCoordinates() {
+		return null;
+	}
+
+	@Override
+	public Vec3 getBeeFXCoordinates() {
 		return null;
 	}
 

@@ -36,6 +36,8 @@ public enum GuiId {
 	BeealyzerGUI,
 
 	BeehouseGUI,
+
+	MinecartBeehouseGUI,
 	
 	BottlerGUI,
 

@@ -75,7 +75,7 @@ public class ProxyRender {
 
 	/* FX */
 
-	public void addBeeHiveFX(String texture, World world, ChunkCoordinates coordinates, int color) {
+	public void addBeeHiveFX(String texture, World world, double d1, double d2, double d3, int color) {
 	}
 
 	public void addEntitySwarmFX(World world, double d1, double d2, double d3) {

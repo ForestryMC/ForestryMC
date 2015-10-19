@@ -23,13 +23,14 @@ import forestry.core.circuits.ISpeedUpgradable;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.IStreamableGui;
 import forestry.core.render.TankRenderInfo;
 import forestry.energy.EnergyManager;
 
 import buildcraft.api.tiles.IHasWork;
 
 @Optional.Interface(iface = "buildcraft.api.tiles.IHasWork", modid = "BuildCraftAPI|tiles")
-public abstract class TilePowered extends TileBase implements IRenderableTile, IPowerHandler, IHasWork, ISpeedUpgradable {
+public abstract class TilePowered extends TileBase implements IRenderableTile, IPowerHandler, IHasWork, ISpeedUpgradable, IStreamableGui {
 
 	private static final int WORK_TICK_INTERVAL = 5; // one Forestry work tick happens every WORK_TICK_INTERVAL game ticks
 
@@ -157,7 +158,6 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
 
 	@Override
 	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
-		super.writeGuiData(data);
 		energyManager.writeData(data);
 		data.writeVarInt(workCounter);
 		data.writeVarInt(getTicksPerWorkCycle());
@@ -165,7 +165,6 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
 
 	@Override
 	public void readGuiData(DataInputStreamForestry data) throws IOException {
-		super.readGuiData(data);
 		energyManager.readData(data);
 		workCounter = data.readVarInt();
 		ticksPerWorkCycle = data.readVarInt();

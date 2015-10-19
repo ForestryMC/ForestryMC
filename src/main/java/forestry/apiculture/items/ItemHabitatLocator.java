@@ -327,11 +327,6 @@ public class ItemHabitatLocator extends ItemInventoried {
 
 		// / IHINTSOURCE
 		@Override
-		public boolean hasHints() {
-			return Config.hints.get("habitatlocator") != null && Config.hints.get("habitatlocator").length > 0;
-		}
-
-		@Override
 		public String[] getHints() {
 			return Config.hints.get("habitatlocator");
 		}

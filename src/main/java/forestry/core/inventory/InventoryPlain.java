@@ -13,8 +13,13 @@ package forestry.core.inventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 
-public class InventoryPlain implements IInventory {
+import forestry.api.core.INBTTagable;
+import forestry.core.utils.InventoryUtil;
+
+public class InventoryPlain implements IInventory, INBTTagable {
 
 	private final ItemStack[] contents;
 	private final String name;
@@ -113,5 +118,16 @@ public class InventoryPlain implements IInventory {
 
 	@Override
 	public void closeInventory() {
+	}
+
+	/* INBTagable */
+	@Override
+	public void readFromNBT(NBTTagCompound nbttagcompound) {
+		InventoryUtil.readFromNBT(this, nbttagcompound);
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound nbttagcompound) {
+		InventoryUtil.writeToNBT(this, nbttagcompound);
 	}
 }

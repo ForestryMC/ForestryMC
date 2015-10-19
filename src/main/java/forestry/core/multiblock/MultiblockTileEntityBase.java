@@ -14,6 +14,8 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 
 import com.mojang.authlib.GameProfile;
@@ -23,6 +25,7 @@ import forestry.core.config.Constants;
 import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.tiles.IFilterSlotDelegate;
+import forestry.core.tiles.ILocatable;
 import forestry.core.utils.Log;
 import forestry.core.utils.PlayerUtil;
 
@@ -30,7 +33,7 @@ import forestry.core.utils.PlayerUtil;
  * Base logic class for Multiblock-connected tile entities. Most multiblock machines
  * should derive from this and implement their game logic in certain abstract methods.
  */
-public abstract class MultiblockTileEntityBase extends IMultiblockPart implements ISidedInventory, IFilterSlotDelegate, IOwnable {
+public abstract class MultiblockTileEntityBase extends IMultiblockPart implements ISidedInventory, IFilterSlotDelegate, IOwnable, ILocatable {
 	private MultiblockControllerBase controller;
 	private boolean visited;
 	
@@ -516,5 +519,16 @@ public abstract class MultiblockTileEntityBase extends IMultiblockPart implement
 
 	public void openGui(EntityPlayer player) {
 
+	}
+
+	/* ILocatable */
+	@Override
+	public ChunkCoordinates getCoordinates() {
+		return getMultiblockController().getCoordinates();
+	}
+
+	@Override
+	public final World getWorld() {
+		return worldObj;
 	}
 }

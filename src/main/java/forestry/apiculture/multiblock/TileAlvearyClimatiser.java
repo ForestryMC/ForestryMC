@@ -11,7 +11,6 @@
 package forestry.apiculture.multiblock;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChunkCoordinates;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -132,11 +131,6 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IEner
 				Proxies.net.sendNetworkPacket(new PacketActiveUpdate(this), worldObj);
 			}
 		}
-	}
-
-	@Override
-	public ChunkCoordinates getCoordinates() {
-		return new ChunkCoordinates(xCoord, yCoord, zCoord);
 	}
 
 	/* IEnergyHandler */

@@ -8,18 +8,9 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.tiles;
+package forestry.core.access;
 
-import net.minecraft.util.ChunkCoordinates;
-
-import forestry.core.access.EnumAccess;
-import forestry.core.access.IAccessHandler;
-import forestry.core.network.IStreamableGui;
-
-public interface IRestrictedAccessTile extends IStreamableGui {
+public interface IRestrictedAccess {
 	IAccessHandler getAccessHandler();
-
-	ChunkCoordinates getCoordinates();
-
 	void onSwitchAccess(EnumAccess oldAccess, EnumAccess newAccess);
 }

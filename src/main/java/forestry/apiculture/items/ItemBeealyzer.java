@@ -51,14 +51,7 @@ public class ItemBeealyzer extends ItemAlyzer {
 			return BeeManager.beeRoot;
 		}
 
-
-
 		// / IHINTSOURCE
-		@Override
-		public boolean hasHints() {
-			return Config.hints.get("beealyzer") != null && Config.hints.get("beealyzer").length > 0;
-		}
-
 		@Override
 		public String[] getHints() {
 			return Config.hints.get("beealyzer");

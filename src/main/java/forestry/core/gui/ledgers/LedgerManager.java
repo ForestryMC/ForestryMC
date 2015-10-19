@@ -61,6 +61,12 @@ public class LedgerManager {
 		}
 	}
 
+	public void onGuiClosed() {
+		for (Ledger ledger : ledgers) {
+			ledger.onGuiClosed();
+		}
+	}
+
 	/**
 	 * Inserts a ledger into the next-to-last position.
 	 */

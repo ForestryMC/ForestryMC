@@ -42,7 +42,7 @@ import buildcraft.api.statements.ITriggerInternal;
 import buildcraft.api.statements.ITriggerProvider;
 
 @Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = "BuildCraftAPI|statements")
-public class TileAlvearyPlain extends TileAlveary implements IClimatised, IHintSource, IStreamableGui, ITitled, ITriggerProvider {
+public class TileAlvearyPlain extends TileAlveary implements IClimatised, IHintSource, ITitled, ITriggerProvider, IStreamableGui {
 
 	@Override
 	public void onMachineAssembled(MultiblockControllerBase controller) {
@@ -86,6 +86,7 @@ public class TileAlvearyPlain extends TileAlveary implements IClimatised, IHintS
 		}
 	}
 
+	/* IStreamableGui */
 	@Override
 	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
 		getAlvearyController().writeGuiData(data);
@@ -98,15 +99,10 @@ public class TileAlvearyPlain extends TileAlveary implements IClimatised, IHintS
 
 	@Override
 	public String getUnlocalizedTitle() {
-		return "alveary.0.name";
+		return "tile.for.alveary.0.name";
 	}
 
 	/* IHintSource */
-	@Override
-	public boolean hasHints() {
-		return Config.hints.get("apiary").length > 0;
-	}
-
 	@Override
 	public String[] getHints() {
 		return Config.hints.get("apiary");

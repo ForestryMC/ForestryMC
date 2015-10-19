@@ -15,7 +15,6 @@ import java.io.IOException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.StatCollector;
 
 import forestry.api.circuits.ICircuitSocketType;
@@ -23,6 +22,9 @@ import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.farming.IFarmComponent;
+import forestry.core.access.EnumAccess;
+import forestry.core.access.IAccessHandler;
+import forestry.core.access.IRestrictedAccess;
 import forestry.core.circuits.ISocketable;
 import forestry.core.config.Config;
 import forestry.core.gui.IHintSource;
@@ -39,7 +41,7 @@ import forestry.farming.multiblock.FarmController;
 import forestry.farming.multiblock.IFarmController;
 import forestry.farming.render.EnumFarmBlockTexture;
 
-public abstract class TileFarm extends RectangularMultiblockTileEntityBase implements IFarmComponent, IHintSource, ISocketable, IStreamableGui, IErrorLogicSource {
+public abstract class TileFarm extends RectangularMultiblockTileEntityBase implements IFarmComponent, IHintSource, ISocketable, IStreamableGui, IErrorLogicSource, IRestrictedAccess {
 
 	public static final int TYPE_PLAIN = 0;
 	public static final int TYPE_REVERSE = 1;
@@ -170,11 +172,6 @@ public abstract class TileFarm extends RectangularMultiblockTileEntityBase imple
 
 	/* IHintSource */
 	@Override
-	public boolean hasHints() {
-		return Config.hints.get("farm").length > 0;
-	}
-
-	@Override
 	public String[] getHints() {
 		return Config.hints.get("farm");
 	}
@@ -202,11 +199,6 @@ public abstract class TileFarm extends RectangularMultiblockTileEntityBase imple
 
 	/* IStreamableGui */
 	@Override
-	public ChunkCoordinates getCoordinates() {
-		return getFarmController().getCoordinates();
-	}
-
-	@Override
 	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
 		getFarmController().writeGuiData(data);
 	}
@@ -220,5 +212,15 @@ public abstract class TileFarm extends RectangularMultiblockTileEntityBase imple
 	@Override
 	public IErrorLogic getErrorLogic() {
 		return getFarmController().getErrorLogic();
+	}
+
+	@Override
+	public IAccessHandler getAccessHandler() {
+		return getFarmController().getAccessHandler();
+	}
+
+	@Override
+	public void onSwitchAccess(EnumAccess oldAccess, EnumAccess newAccess) {
+		getFarmController().onSwitchAccess(oldAccess, newAccess);
 	}
 }

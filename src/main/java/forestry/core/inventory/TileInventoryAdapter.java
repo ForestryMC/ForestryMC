@@ -13,9 +13,9 @@ package forestry.core.inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
-import forestry.core.tiles.IRestrictedAccessTile;
+import forestry.core.access.IRestrictedAccess;
 
-public class TileInventoryAdapter<T extends TileEntity & IRestrictedAccessTile> extends InventoryAdapterRestricted {
+public class TileInventoryAdapter<T extends TileEntity & IRestrictedAccess> extends InventoryAdapterRestricted {
 
 	protected final T tile;
 

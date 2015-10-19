@@ -14,38 +14,26 @@ import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChunkCoordinates;
 
-import forestry.apiculture.multiblock.IAlvearyController;
-import forestry.apiculture.multiblock.TileAlveary;
-import forestry.core.tiles.IRestrictedAccessTile;
-import forestry.farming.multiblock.IFarmController;
-import forestry.farming.tiles.TileFarm;
+import forestry.core.access.IRestrictedAccess;
+import forestry.core.tiles.ILocatable;
 
 public class PacketAccessSwitch extends PacketCoordinates implements IForestryPacketServer {
 
 	public PacketAccessSwitch() {
 	}
 
-	public PacketAccessSwitch(ChunkCoordinates coordinates) {
-		super(PacketIdServer.ACCESS_SWITCH, coordinates);
+	public PacketAccessSwitch(ILocatable tile) {
+		super(PacketIdServer.ACCESS_SWITCH, tile.getCoordinates());
 	}
 
 	@Override
 	public void onPacketData(DataInputStreamForestry data, EntityPlayerMP player) throws IOException {
 		TileEntity tile = getTarget(player.worldObj);
 
-		if (tile instanceof TileAlveary) {
-			TileAlveary tileAlveary = (TileAlveary) tile;
-			IAlvearyController alvearyController = tileAlveary.getAlvearyController();
-			alvearyController.getAccessHandler().switchAccessRule(player);
-		} else if (tile instanceof TileFarm) {
-			TileFarm tileFarm = (TileFarm) tile;
-			IFarmController farmController = tileFarm.getFarmController();
-			farmController.getAccessHandler().switchAccessRule(player);
-		} else if (tile instanceof IRestrictedAccessTile) {
-			IRestrictedAccessTile restrictedAccessTile = (IRestrictedAccessTile) tile;
-			restrictedAccessTile.getAccessHandler().switchAccessRule(player);
+		if (tile instanceof IRestrictedAccess) {
+			IRestrictedAccess restrictedAccessTile = (IRestrictedAccess) tile;
+			restrictedAccessTile.getAccessHandler().switchAccess(player);
 		}
 	}
 }

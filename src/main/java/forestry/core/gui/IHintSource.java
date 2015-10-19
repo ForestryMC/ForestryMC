@@ -11,7 +11,5 @@
 package forestry.core.gui;
 
 public interface IHintSource {
-	boolean hasHints();
-
 	String[] getHints();
 }

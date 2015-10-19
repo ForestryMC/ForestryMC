@@ -141,12 +141,12 @@ public class ProxyRenderClient extends ProxyRender {
 	}
 
 	@Override
-	public void addBeeHiveFX(String icon, World world, ChunkCoordinates coordinates, int color) {
+	public void addBeeHiveFX(String icon, World world, double d1, double d2, double d3, int color) {
 		if (!shouldSpawnParticle(world)) {
 			return;
 		}
 
-		EntityFX fx = new EntityFXBee(world, coordinates.posX + 0.5D, coordinates.posY + 0.5D, coordinates.posZ + 0.5D, color);
+		EntityFX fx = new EntityFXBee(world, d1, d2, d3, color);
 		fx.setParticleIcon(TextureManager.getInstance().getDefault(icon));
 		ParticleRenderer.getInstance().addEffect(fx);
 	}

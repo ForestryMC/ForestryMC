@@ -17,7 +17,7 @@ import cpw.mods.fml.common.network.internal.FMLProxyPacket;
 
 import io.netty.buffer.Unpooled;
 
-public class ForestryPacket implements IForestryPacket {
+public abstract class ForestryPacket implements IForestryPacket {
 
 	protected static final String channel = "FOR";
 

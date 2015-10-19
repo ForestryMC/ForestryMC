@@ -67,8 +67,6 @@ import forestry.core.multiblock.MultiblockValidationException;
 import forestry.core.multiblock.rectangular.RectangularMultiblockControllerBase;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
-import forestry.core.network.PacketGuiUpdate;
-import forestry.core.proxy.Proxies;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.utils.Log;
 import forestry.core.utils.PlayerUtil;
@@ -364,9 +362,6 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 	@Override
 	public void onSwitchAccess(EnumAccess oldAccess, EnumAccess newAccess) {
-		PacketGuiUpdate packet = new PacketGuiUpdate(this);
-		Proxies.net.sendNetworkPacket(packet, worldObj);
-
 		if (oldAccess == EnumAccess.SHARED || newAccess == EnumAccess.SHARED) {
 			// pipes connected to this need to update
 			for (IMultiblockPart part : connectedParts) {
@@ -381,7 +376,6 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 	@Override
 	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
-		super.writeGuiData(data);
 		tankManager.writeData(data);
 		hydrationManager.writeData(data);
 		fertilizerManager.writeData(data);
@@ -389,7 +383,6 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 	@Override
 	public void readGuiData(DataInputStreamForestry data) throws IOException {
-		super.readGuiData(data);
 		tankManager.readData(data);
 		hydrationManager.readData(data);
 		fertilizerManager.readData(data);

@@ -58,19 +58,21 @@ public abstract class PacketCoordinates extends ForestryPacket implements ILocat
 		return new ChunkCoordinates(posX, posY, posZ);
 	}
 
+	@Override
 	public final int getPosX() {
 		return posX;
 	}
 
+	@Override
 	public final int getPosY() {
 		return posY;
 	}
 
+	@Override
 	public final int getPosZ() {
 		return posZ;
 	}
 
-	@Override
 	public final TileEntity getTarget(World world) {
 		return world.getTileEntity(posX, posY, posZ);
 	}

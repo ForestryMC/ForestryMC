@@ -74,6 +74,7 @@ import forestry.apiculture.blocks.BlockBeehives;
 import forestry.apiculture.blocks.BlockCandle;
 import forestry.apiculture.blocks.BlockStump;
 import forestry.apiculture.commands.CommandBee;
+import forestry.apiculture.entities.EntityMinecartBeehouse;
 import forestry.apiculture.flowers.FlowerRegistry;
 import forestry.apiculture.genetics.BeeBranchDefinition;
 import forestry.apiculture.genetics.BeeDefinition;
@@ -107,6 +108,7 @@ import forestry.apiculture.items.ItemHabitatLocator;
 import forestry.apiculture.items.ItemHiveFrame;
 import forestry.apiculture.items.ItemHoneycomb;
 import forestry.apiculture.items.ItemImprinter;
+import forestry.apiculture.items.ItemMinecartBeehouse;
 import forestry.apiculture.items.ItemWaxCast;
 import forestry.apiculture.multiblock.TileAlveary;
 import forestry.apiculture.multiblock.TileAlvearyFan;
@@ -117,7 +119,9 @@ import forestry.apiculture.multiblock.TileAlvearySieve;
 import forestry.apiculture.multiblock.TileAlvearyStabiliser;
 import forestry.apiculture.multiblock.TileAlvearySwarmer;
 import forestry.apiculture.network.PacketActiveUpdate;
-import forestry.apiculture.network.PacketBeekeepingLogicActive;
+import forestry.apiculture.network.PacketBeeLogicActive;
+import forestry.apiculture.network.PacketBeeLogicActiveEntity;
+import forestry.apiculture.network.PacketBeeLogicEntityRequest;
 import forestry.apiculture.network.PacketCandleUpdate;
 import forestry.apiculture.network.PacketHabitatBiomePointer;
 import forestry.apiculture.network.PacketImprintSelectionResponse;
@@ -148,11 +152,13 @@ import forestry.core.items.ItemOverlay;
 import forestry.core.items.ItemOverlay.OverlayInfo;
 import forestry.core.items.ItemScoop;
 import forestry.core.network.PacketIdClient;
+import forestry.core.network.PacketIdServer;
 import forestry.core.proxy.Proxies;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.recipes.ShapedRecipeCustom;
 import forestry.core.tiles.MachineDefinition;
 import forestry.core.tiles.TileAnalyzer;
+import forestry.core.utils.EntityUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.Stack;
@@ -378,6 +384,7 @@ public class PluginApiculture extends ForestryPlugin {
 		GameRegistry.registerTileEntity(TileAlvearySieve.class, "forestry.AlvearySieve");
 		GameRegistry.registerTileEntity(TileCandle.class, "forestry.Candle");
 
+		EntityUtil.registerEntity(EntityMinecartBeehouse.class, "cart.beehouse", 1, 0x000000, 0xffffff, 256, 3, true);
 
 		BeeManager.villageBees[0].add(BeeDefinition.FOREST.getGenome());
 		BeeManager.villageBees[0].add(BeeDefinition.MEADOWS.getGenome());
@@ -501,9 +508,12 @@ public class PluginApiculture extends ForestryPlugin {
 	public void registerPacketHandlers() {
 		PacketIdClient.IMPRINT_SELECTION_RESPONSE.setPacketHandler(new PacketImprintSelectionResponse());
 		PacketIdClient.TILE_FORESTRY_ACTIVE.setPacketHandler(new PacketActiveUpdate());
-		PacketIdClient.BEE_LOGIC_ACTIVE.setPacketHandler(new PacketBeekeepingLogicActive());
+		PacketIdClient.BEE_LOGIC_ACTIVE.setPacketHandler(new PacketBeeLogicActive());
+		PacketIdClient.BEE_LOGIC_ACTIVE_ENTITY.setPacketHandler(new PacketBeeLogicActiveEntity());
 		PacketIdClient.HABITAT_BIOME_POINTER.setPacketHandler(new PacketHabitatBiomePointer());
 		PacketIdClient.CANDLE_UPDATE.setPacketHandler(new PacketCandleUpdate());
+
+		PacketIdServer.BEE_LOGIC_ACTIVE_ENTITY_REQUEST.setPacketHandler(new PacketBeeLogicEntityRequest());
 	}
 
 	@Override
@@ -518,6 +528,8 @@ public class PluginApiculture extends ForestryPlugin {
 		ForestryItem.beealyzer.registerItem((new ItemBeealyzer()), "beealyzer");
 		ForestryItem.habitatLocator.registerItem(new ItemHabitatLocator(), "habitatLocator");
 		ForestryItem.imprinter.registerItem((new ItemImprinter()), "imprinter");
+
+		ForestryItem.minecartBeehouse.registerItem(new ItemMinecartBeehouse(), "cart.beehouse");
 
 		// / COMB FRAMES
 		ForestryItem.frameUntreated.registerItem(new ItemHiveFrame(80, 0.9f), "frameUntreated");
@@ -639,6 +651,11 @@ public class PluginApiculture extends ForestryPlugin {
 				"###", "#S#", "###",
 				'#', ForestryItem.stickImpregnated,
 				'S', Items.string);
+		RecipeUtil.addRecipe(ForestryItem.minecartBeehouse.getItemStack(),
+				"B",
+				"C",
+				'B', ForestryBlock.apiculture.getItemStack(1, Constants.DEFINITION_BEEHOUSE_META),
+				'C', Items.minecart);
 
 		// FOOD STUFF
 		if (ForestryItem.honeyedSlice.item() != null) {

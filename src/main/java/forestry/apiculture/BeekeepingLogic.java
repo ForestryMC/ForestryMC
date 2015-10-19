@@ -17,9 +17,12 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.Stack;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 import forestry.api.apiculture.BeeManager;
@@ -35,7 +38,8 @@ import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorState;
 import forestry.api.genetics.IEffectData;
 import forestry.api.genetics.IIndividual;
-import forestry.apiculture.network.PacketBeekeepingLogicActive;
+import forestry.apiculture.network.PacketBeeLogicActive;
+import forestry.apiculture.network.PacketBeeLogicActiveEntity;
 import forestry.core.config.Constants;
 import forestry.core.config.ForestryItem;
 import forestry.core.errors.EnumErrorCode;
@@ -418,7 +422,23 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 	public void syncToClient() {
 		World world = housing.getWorld();
 		if (world != null && !world.isRemote) {
-			Proxies.net.sendNetworkPacket(new PacketBeekeepingLogicActive(housing), world);
+			if (housing instanceof TileEntity) {
+				Proxies.net.sendNetworkPacket(new PacketBeeLogicActive(housing), world);
+			} else if (housing instanceof Entity) {
+				Proxies.net.sendNetworkPacket(new PacketBeeLogicActiveEntity(housing, (Entity) housing), world);
+			}
+		}
+	}
+
+	@Override
+	public void syncToClient(EntityPlayerMP player) {
+		World world = housing.getWorld();
+		if (world != null && !world.isRemote) {
+			if (housing instanceof TileEntity) {
+				Proxies.net.sendToPlayer(new PacketBeeLogicActive(housing), player);
+			} else if (housing instanceof Entity) {
+				Proxies.net.sendToPlayer(new PacketBeeLogicActiveEntity(housing, (Entity) housing), player);
+			}
 		}
 	}
 

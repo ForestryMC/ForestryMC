@@ -16,6 +16,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 
 import forestry.core.proxy.Proxies;
+import forestry.core.tiles.ILocatable;
 
 public class PacketGuiUpdate extends PacketCoordinates implements IForestryPacketClient {
 
@@ -24,7 +25,7 @@ public class PacketGuiUpdate extends PacketCoordinates implements IForestryPacke
 	public PacketGuiUpdate() {
 	}
 
-	public PacketGuiUpdate(IStreamableGui guiDataTile) {
+	public <T extends IStreamableGui & ILocatable> PacketGuiUpdate(T guiDataTile) {
 		super(PacketIdClient.GUI_UPDATE, guiDataTile.getCoordinates());
 		this.guiDataTile = guiDataTile;
 	}

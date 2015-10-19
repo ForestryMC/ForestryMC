@@ -34,6 +34,7 @@ import forestry.api.core.IErrorLogicSource;
 import forestry.core.access.AccessHandler;
 import forestry.core.access.EnumAccess;
 import forestry.core.access.IAccessHandler;
+import forestry.core.access.IRestrictedAccess;
 import forestry.core.errors.ErrorLogic;
 import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
@@ -49,7 +50,7 @@ import buildcraft.api.statements.ITriggerInternal;
 import buildcraft.api.statements.ITriggerProvider;
 
 @Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = "BuildCraftAPI|statements")
-public abstract class TileForestry extends TileEntity implements IStreamable, IErrorLogicSource, ITriggerProvider, ISidedInventory, IFilterSlotDelegate, IRestrictedAccessTile, ITitled {
+public abstract class TileForestry extends TileEntity implements IStreamable, IErrorLogicSource, ITriggerProvider, ISidedInventory, IFilterSlotDelegate, IRestrictedAccess, ITitled, ILocatable {
 
 	private static final Random rand = new Random();
 
@@ -179,18 +180,6 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 		orientation = ForgeDirection.getOrientation(data.readByte());
 	}
 
-	@Override
-	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
-		accessHandler.writeData(data);
-		errorHandler.writeData(data);
-	}
-
-	@Override
-	public void readGuiData(DataInputStreamForestry data) throws IOException {
-		accessHandler.readData(data);
-		errorHandler.readData(data);
-	}
-
 	public void onRemoval() {
 	}
 
@@ -264,7 +253,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	 */
 	@Override
 	public String getUnlocalizedTitle() {
-		String blockUnlocalizedName = getBlockType().getUnlocalizedName().replace("tile.for.", "");
+		String blockUnlocalizedName = getBlockType().getUnlocalizedName();
 		return blockUnlocalizedName + '.' + getBlockMetadata() + ".name";
 	}
 
@@ -366,7 +355,6 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 		return getInternalInventory().canExtractItem(slotIndex, itemStack, side);
 	}
 
-	@Override
 	public final ChunkCoordinates getCoordinates() {
 		return new ChunkCoordinates(xCoord, yCoord, zCoord);
 	}

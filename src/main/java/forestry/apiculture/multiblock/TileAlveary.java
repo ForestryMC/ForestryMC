@@ -10,9 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.multiblock;
 
-import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.StatCollector;
-import net.minecraft.world.World;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.biome.BiomeGenBase;
 
 import forestry.api.apiculture.IBeeHousing;
@@ -24,11 +23,14 @@ import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.IErrorLogic;
 import forestry.apiculture.blocks.BlockAlveary;
+import forestry.core.access.EnumAccess;
+import forestry.core.access.IAccessHandler;
+import forestry.core.access.IRestrictedAccess;
 import forestry.core.multiblock.MultiblockControllerBase;
 import forestry.core.multiblock.MultiblockValidationException;
 import forestry.core.multiblock.rectangular.RectangularMultiblockTileEntityBase;
 
-public abstract class TileAlveary extends RectangularMultiblockTileEntityBase implements IBeeHousing {
+public abstract class TileAlveary extends RectangularMultiblockTileEntityBase implements IBeeHousing, IRestrictedAccess {
 
 	public static final int PLAIN_META = 0;
 	public static final int ENTRANCE_META = 1;
@@ -112,16 +114,6 @@ public abstract class TileAlveary extends RectangularMultiblockTileEntityBase im
 
 	/* IHousing */
 	@Override
-	public World getWorld() {
-		return getAlvearyController().getWorld();
-	}
-
-	@Override
-	public ChunkCoordinates getCoordinates() {
-		return getAlvearyController().getCoordinates();
-	}
-
-	@Override
 	public BiomeGenBase getBiome() {
 		return getAlvearyController().getBiome();
 	}
@@ -145,6 +137,11 @@ public abstract class TileAlveary extends RectangularMultiblockTileEntityBase im
 	@Override
 	public IBeekeepingLogic getBeekeepingLogic() {
 		return getAlvearyController().getBeekeepingLogic();
+	}
+
+	@Override
+	public Vec3 getBeeFXCoordinates() {
+		return getAlvearyController().getBeeFXCoordinates();
 	}
 
 	/* IClimatised */
@@ -173,4 +170,13 @@ public abstract class TileAlveary extends RectangularMultiblockTileEntityBase im
 		return getAlvearyController().getErrorLogic();
 	}
 
+	@Override
+	public IAccessHandler getAccessHandler() {
+		return getAlvearyController().getAccessHandler();
+	}
+
+	@Override
+	public void onSwitchAccess(EnumAccess oldAccess, EnumAccess newAccess) {
+		getAlvearyController().onSwitchAccess(oldAccess, newAccess);
+	}
 }

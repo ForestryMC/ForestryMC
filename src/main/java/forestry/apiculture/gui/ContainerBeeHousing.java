@@ -11,54 +11,30 @@
 package forestry.apiculture.gui;
 
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ICrafting;
 
-import forestry.apiculture.BeeHousingInventory;
 import forestry.apiculture.tiles.TileAbstractBeeHousing;
-import forestry.apiculture.tiles.TileApiary;
 import forestry.core.gui.ContainerTile;
-import forestry.core.gui.slots.SlotFiltered;
-import forestry.core.gui.slots.SlotOutput;
+import forestry.core.network.IForestryPacketClient;
+import forestry.core.network.PacketGuiUpdate;
 
-public class ContainerBeeHousing extends ContainerTile<TileAbstractBeeHousing> {
+public class ContainerBeeHousing extends ContainerTile<TileAbstractBeeHousing> implements IContainerBeeHousing {
 
 	public ContainerBeeHousing(InventoryPlayer player, TileAbstractBeeHousing tile, boolean hasFrames) {
 		super(tile, player, 8, 108);
-
-		// Queen/Princess
-		this.addSlotToContainer(new SlotFiltered(tile, BeeHousingInventory.SLOT_QUEEN, 29, 39));
-
-		// Drone
-		this.addSlotToContainer(new SlotFiltered(tile, BeeHousingInventory.SLOT_DRONE, 29, 65));
-
-		// Frames
-		if (hasFrames) {
-			final int slotFrames1 = TileApiary.ApiaryInventory.SLOT_FRAMES_1;
-			this.addSlotToContainer(new SlotFiltered(tile, slotFrames1, 66, 23));
-			this.addSlotToContainer(new SlotFiltered(tile, slotFrames1 + 1, 66, 52));
-			this.addSlotToContainer(new SlotFiltered(tile, slotFrames1 + 2, 66, 81));
-		}
-
-		// Product Inventory
-		this.addSlotToContainer(new SlotOutput(tile, 2, 116, 52));
-		this.addSlotToContainer(new SlotOutput(tile, 3, 137, 39));
-		this.addSlotToContainer(new SlotOutput(tile, 4, 137, 65));
-		this.addSlotToContainer(new SlotOutput(tile, 5, 116, 78));
-		this.addSlotToContainer(new SlotOutput(tile, 6, 95, 65));
-		this.addSlotToContainer(new SlotOutput(tile, 7, 95, 39));
-		this.addSlotToContainer(new SlotOutput(tile, 8, 116, 26));
+		ContainerBeeHelper.addSlots(this, tile, hasFrames);
 	}
 
-	@Override
-	public void updateProgressBar(int i, int j) {
-		tile.getGUINetworkData(i, j);
-	}
+	private int beeProgress = 0;
 
 	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
-		for (Object crafter : crafters) {
-			tile.sendGUINetworkData(this, (ICrafting) crafter);
+
+		int beeProgress = tile.getBeekeepingLogic().getBeeProgressPercent();
+		if (this.beeProgress != beeProgress) {
+			this.beeProgress = beeProgress;
+			IForestryPacketClient packet = new PacketGuiUpdate(tile);
+			sendPacketToCrafters(packet);
 		}
 	}
 

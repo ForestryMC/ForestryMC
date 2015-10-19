@@ -11,7 +11,6 @@
 package forestry.core;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 import cpw.mods.fml.common.network.IGuiHandler;
@@ -19,33 +18,19 @@ import cpw.mods.fml.common.network.IGuiHandler;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.gui.ContainerNaturalistInventory;
 import forestry.core.gui.GuiNaturalistInventory;
-import forestry.core.network.IStreamableGui;
-import forestry.core.network.PacketGuiUpdate;
-import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileNaturalistChest;
 import forestry.core.tiles.TileUtil;
 
 public abstract class GuiHandlerBase implements IGuiHandler {
 
-	protected static <T extends TileEntity> T getTile(World world, int x, int y, int z, EntityPlayer player, Class<T> tileClass) {
-		T tileForestry = TileUtil.getTile(world, x, y, z, tileClass);
-
-		if (tileForestry instanceof IStreamableGui && !world.isRemote) {
-			PacketGuiUpdate packet = new PacketGuiUpdate((IStreamableGui) tileForestry);
-			Proxies.net.sendToPlayer(packet, player);
-		}
-
-		return tileForestry;
-	}
-
 	protected GuiNaturalistInventory getNaturalistChestGui(ISpeciesRoot speciesRoot, EntityPlayer player, World world, int x, int y, int z, int page) {
-		TileNaturalistChest tile = getTile(world, x, y, z, player, TileNaturalistChest.class);
+		TileNaturalistChest tile = TileUtil.getTile(world, x, y, z, TileNaturalistChest.class);
 		return new GuiNaturalistInventory(speciesRoot, player, new ContainerNaturalistInventory(player.inventory, tile, page), tile, page, 5);
 	}
 
 	protected ContainerNaturalistInventory getNaturalistChestContainer(ISpeciesRoot speciesRoot, EntityPlayer player, World world, int x, int y, int z, int page) {
 		speciesRoot.getBreedingTracker(world, player.getGameProfile()).synchToPlayer(player);
-		return new ContainerNaturalistInventory(player.inventory, getTile(world, x, y, z, player, TileNaturalistChest.class), page);
+		return new ContainerNaturalistInventory(player.inventory, TileUtil.getTile(world, x, y, z, TileNaturalistChest.class), page);
 	}
 
 	public static int encodeGuiData(int guiId, int data) {

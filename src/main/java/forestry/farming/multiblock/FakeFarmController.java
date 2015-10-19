@@ -14,7 +14,6 @@ import java.io.IOException;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fluids.FluidStack;
@@ -177,11 +176,6 @@ public class FakeFarmController implements IFarmController {
 	@Override
 	public ITankManager getTankManager() {
 		return FakeTankManager.instance;
-	}
-
-	@Override
-	public ChunkCoordinates getCoordinates() {
-		return null;
 	}
 
 	@Override

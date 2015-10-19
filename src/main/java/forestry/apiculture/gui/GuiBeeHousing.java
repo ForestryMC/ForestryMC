@@ -10,26 +10,27 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Container;
 
-import forestry.apiculture.tiles.TileAbstractBeeHousing;
-import forestry.apiculture.tiles.TileApiary;
-import forestry.apiculture.tiles.TileBeehouse;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.render.EnumTankLevel;
 
-public class GuiBeeHousing extends GuiForestryTitled<ContainerBeeHousing, TileAbstractBeeHousing> {
+public class GuiBeeHousing<C extends Container & IContainerBeeHousing> extends GuiForestryTitled<C, IGuiBeeHousingInventory> {
 
-	public GuiBeeHousing(InventoryPlayer inventory, TileApiary tile) {
-		super(Constants.TEXTURE_PATH_GUI + "/apiary.png", new ContainerBeeHousing(inventory, tile, true), tile);
+	public enum Icon {
+		APIARY("/apiary.png"),
+		BEE_HOUSE("/alveary.png");
 
-		ySize = 190;
+		private final String path;
+
+		Icon(String path) {
+			this.path = path;
+		}
 	}
 
-	public GuiBeeHousing(InventoryPlayer inventory, TileBeehouse tile) {
-		super(Constants.TEXTURE_PATH_GUI + "/alveary.png", new ContainerBeeHousing(inventory, tile, false), tile);
-
+	public GuiBeeHousing(IGuiBeeHousingInventory tile, C container, Icon icon) {
+		super(Constants.TEXTURE_PATH_GUI + icon.path, container, tile);
 		ySize = 190;
 	}
 

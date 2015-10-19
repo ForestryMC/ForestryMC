@@ -26,6 +26,7 @@ import forestry.core.gui.GuiEscritoire;
 import forestry.core.network.GuiId;
 import forestry.core.tiles.TileAnalyzer;
 import forestry.core.tiles.TileEscritoire;
+import forestry.core.tiles.TileUtil;
 import forestry.plugins.PluginManager;
 
 public class GuiHandler extends GuiHandlerBase {
@@ -38,10 +39,10 @@ public class GuiHandler extends GuiHandlerBase {
 			switch (GuiId.values()[cleanId]) {
 
 				case AnalyzerGUI:
-					return new GuiAnalyzer(player.inventory, getTile(world, x, y, z, player, TileAnalyzer.class));
+					return new GuiAnalyzer(player.inventory, TileUtil.getTile(world, x, y, z, TileAnalyzer.class));
 
 				case NaturalistBenchGUI:
-					return new GuiEscritoire(player, getTile(world, x, y, z, player, TileEscritoire.class));
+					return new GuiEscritoire(player, TileUtil.getTile(world, x, y, z, TileEscritoire.class));
 
 				case SolderingIronGUI:
 					ItemStack equipped = player.getCurrentEquippedItem();
@@ -73,10 +74,10 @@ public class GuiHandler extends GuiHandlerBase {
 			switch (GuiId.values()[cleanId]) {
 
 				case AnalyzerGUI:
-					return new ContainerAnalyzer(player.inventory, getTile(world, x, y, z, player, TileAnalyzer.class));
+					return new ContainerAnalyzer(player.inventory, TileUtil.getTile(world, x, y, z, TileAnalyzer.class));
 
 				case NaturalistBenchGUI:
-					return new ContainerEscritoire(player, getTile(world, x, y, z, player, TileEscritoire.class));
+					return new ContainerEscritoire(player, TileUtil.getTile(world, x, y, z, TileEscritoire.class));
 
 				case SolderingIronGUI:
 					ItemStack equipped = player.getCurrentEquippedItem();

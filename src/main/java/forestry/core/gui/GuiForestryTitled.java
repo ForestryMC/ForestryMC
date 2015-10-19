@@ -12,9 +12,9 @@ package forestry.core.gui;
 
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.util.StatCollector;
 
 import forestry.core.tiles.ITitled;
-import forestry.core.utils.StringUtil;
 
 public abstract class GuiForestryTitled<C extends Container, I extends ITitled & IInventory> extends GuiForestry<C, I> {
 
@@ -24,7 +24,7 @@ public abstract class GuiForestryTitled<C extends Container, I extends ITitled &
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		String name = StringUtil.localizeTile(inventory.getUnlocalizedTitle());
+		String name = StatCollector.translateToLocal(inventory.getUnlocalizedTitle());
 		this.fontRendererObj.drawString(name, getCenteredOffset(name), 6, fontColor.get("gui.title"));
 		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
 	}

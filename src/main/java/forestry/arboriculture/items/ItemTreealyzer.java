@@ -79,11 +79,6 @@ public class ItemTreealyzer extends ItemAlyzer {
 
 		// / IHINTSOURCE
 		@Override
-		public boolean hasHints() {
-			return Config.hints.get("treealyzer") != null && Config.hints.get("treealyzer").length > 0;
-		}
-
-		@Override
 		public String[] getHints() {
 			return Config.hints.get("treealyzer");
 		}

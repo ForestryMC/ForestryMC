@@ -120,6 +120,7 @@ public enum ForestryItem {
 	frameUntreated,
 	frameImpregnated,
 	frameProven,
+	minecartBeehouse,
 	// Trees
 	sapling,
 	pollenFertile,

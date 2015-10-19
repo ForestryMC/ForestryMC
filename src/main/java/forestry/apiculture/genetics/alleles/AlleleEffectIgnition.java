@@ -15,6 +15,7 @@ import java.util.List;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
 import forestry.api.apiculture.BeeManager;
@@ -80,7 +81,8 @@ public class AlleleEffectIgnition extends AlleleEffectThrottled {
 		if (housing.getWorld().rand.nextInt(2) != 0) {
 			super.doFX(genome, storedData, housing);
 		} else {
-			Proxies.render.addEntityIgnitionFX(housing.getWorld(), housing.getCoordinates().posX + 0.5, housing.getCoordinates().posY + 1, housing.getCoordinates().posZ + 0.5);
+			Vec3 beeFXCoordinates = getFXCoordinates(housing);
+			Proxies.render.addEntityIgnitionFX(housing.getWorld(), beeFXCoordinates.xCoord, beeFXCoordinates.yCoord + 0.5, beeFXCoordinates.zCoord);
 		}
 		return storedData;
 	}

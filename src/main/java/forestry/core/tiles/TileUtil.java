@@ -52,7 +52,7 @@ public abstract class TileUtil {
 	}
 
 	public static IInventory getInventoryFromTile(TileEntity tile, ForgeDirection side) {
-		if (tile == null || !(tile instanceof IInventory)) {
+		if (!(tile instanceof IInventory)) {
 			return null;
 		}
 

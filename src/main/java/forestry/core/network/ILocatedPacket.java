@@ -10,12 +10,7 @@
  ******************************************************************************/
 package forestry.core.network;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-
 public interface ILocatedPacket {
-	TileEntity getTarget(World world);
-
 	int getPosX();
 
 	int getPosY();

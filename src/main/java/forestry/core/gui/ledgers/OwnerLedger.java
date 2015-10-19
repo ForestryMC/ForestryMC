@@ -16,34 +16,30 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.IIcon;
 
+import com.mojang.authlib.GameProfile;
+
 import forestry.core.access.EnumAccess;
 import forestry.core.access.IAccessHandler;
+import forestry.core.access.IAccessOwnerListener;
+import forestry.core.access.IRestrictedAccess;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
-import forestry.core.tiles.IRestrictedAccessTile;
 import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.StringUtil;
 
 /**
  * Ledger displaying ownership information
  */
-public class OwnerLedger extends Ledger {
+public class OwnerLedger extends Ledger implements IAccessOwnerListener {
 
 	private final IAccessHandler accessHandler;
 
-	public OwnerLedger(LedgerManager manager, IRestrictedAccessTile tile) {
+	public OwnerLedger(LedgerManager manager, IRestrictedAccess tile) {
 		super(manager, "owner");
 
 		this.accessHandler = tile.getAccessHandler();
-
-		Minecraft minecraft = Proxies.common.getClientInstance();
-		boolean playerIsOwner = accessHandler.isOwner(minecraft.thePlayer);
-
-		if (playerIsOwner) {
-			maxHeight = 60;
-		} else {
-			maxHeight = 36;
-		}
+		accessHandler.addOwnerListener(this);
+		onOwnerSet(accessHandler.getOwner());
 	}
 
 	private boolean isAccessButton(int mouseX, int mouseY) {
@@ -65,7 +61,7 @@ public class OwnerLedger extends Ledger {
 		drawBackground(x, y);
 
 		// Draw icon
-		EnumAccess accessType = accessHandler.getAccessType();
+		EnumAccess accessType = accessHandler.getAccess();
 		IIcon accessIcon = TextureManager.getInstance().getDefault("misc/access." + accessType.toString().toLowerCase(Locale.ENGLISH));
 		drawIcon(accessIcon, x + 3, y + 4);
 
@@ -100,9 +96,26 @@ public class OwnerLedger extends Ledger {
 			Minecraft minecraft = Proxies.common.getClientInstance();
 			EntityPlayer player = minecraft.thePlayer;
 
-			return accessHandler.switchAccessRule(player);
+			return accessHandler.switchAccess(player);
 		}
 
 		return false;
+	}
+
+	@Override
+	public void onOwnerSet(GameProfile gameProfile) {
+		Minecraft minecraft = Proxies.common.getClientInstance();
+		boolean playerIsOwner = PlayerUtil.isSameGameProfile(minecraft.thePlayer.getGameProfile(), gameProfile);
+		if (playerIsOwner) {
+			maxHeight = 60;
+		} else {
+			maxHeight = 36;
+		}
+	}
+
+	@Override
+	public void onGuiClosed() {
+		super.onGuiClosed();
+		accessHandler.removeOwnerListener(this);
 	}
 }
