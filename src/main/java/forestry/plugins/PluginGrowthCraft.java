@@ -118,6 +118,7 @@ public class PluginGrowthCraft extends ForestryPlugin {
 
 		if (grapes != null) {
 			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{grapes}, Fluids.JUICE.getFluid(juiceAmount));
+			BackpackManager.backpackItems[2].add(grapes);
 		}
 		Block grapeBlock = GameRegistry.findBlock("Growthcraft|Grapes", "grc.grapeBlock");
 		if (grapeBlock != null) {
