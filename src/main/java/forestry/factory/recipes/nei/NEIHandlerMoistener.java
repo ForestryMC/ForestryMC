@@ -24,10 +24,11 @@ import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.MoistenerFuel;
+import forestry.api.recipes.IMoistenerRecipe;
+import forestry.api.recipes.RecipeManagers;
 import forestry.core.recipes.nei.PositionedFluidTank;
 import forestry.core.recipes.nei.RecipeHandlerBase;
 import forestry.factory.gui.GuiMoistener;
-import forestry.factory.tiles.TileMoistener;
 
 import codechicken.nei.NEIServerUtils;
 import codechicken.nei.PositionedStack;
@@ -41,7 +42,7 @@ public class NEIHandlerMoistener extends RecipeHandlerBase {
 		public PositionedStack input;
 		public PositionedStack output;
 
-		public CachedMoistenerRecipe(TileMoistener.Recipe recipe, MoistenerFuel fuel) {
+		public CachedMoistenerRecipe(IMoistenerRecipe recipe, MoistenerFuel fuel) {
 			this.tank = new PositionedFluidTank(FluidRegistry.getFluidStack("water", 10000), 10000, new Rectangle(11, 5, 16, 58), NEIHandlerMoistener.this.getGuiTexture(), new Point(176, 0));
 			this.tank.showAmount = false;
 			if (fuel.item != null) {
@@ -50,11 +51,11 @@ public class NEIHandlerMoistener extends RecipeHandlerBase {
 			if (fuel.product != null) {
 				this.fuels.add(new PositionedStack(fuel.product, 100, 26));
 			}
-			if (recipe.resource != null) {
-				this.input = new PositionedStack(recipe.resource, 138, 8);
+			if (recipe.getResource() != null) {
+				this.input = new PositionedStack(recipe.getResource(), 138, 8);
 			}
-			if (recipe.product != null) {
-				this.output = new PositionedStack(recipe.product, 138, 44);
+			if (recipe.getProduct() != null) {
+				this.output = new PositionedStack(recipe.getProduct(), 138, 44);
 			}
 		}
 
@@ -118,7 +119,7 @@ public class NEIHandlerMoistener extends RecipeHandlerBase {
 
 	@Override
 	public void loadAllRecipes() {
-		for (TileMoistener.Recipe recipe : TileMoistener.RecipeManager.recipes) {
+		for (IMoistenerRecipe recipe : RecipeManagers.moistenerManager.recipes()) {
 			for (MoistenerFuel fuel : FuelManager.moistenerResource.values()) {
 				this.arecipes.add(new CachedMoistenerRecipe(recipe, fuel));
 			}
@@ -127,9 +128,9 @@ public class NEIHandlerMoistener extends RecipeHandlerBase {
 
 	@Override
 	public void loadCraftingRecipes(ItemStack result) {
-		for (TileMoistener.Recipe recipe : TileMoistener.RecipeManager.recipes) {
+		for (IMoistenerRecipe recipe : RecipeManagers.moistenerManager.recipes()) {
 			for (MoistenerFuel fuel : FuelManager.moistenerResource.values()) {
-				if (NEIServerUtils.areStacksSameTypeCrafting(recipe.product, result) || NEIServerUtils.areStacksSameTypeCrafting(fuel.product, result)) {
+				if (NEIServerUtils.areStacksSameTypeCrafting(recipe.getProduct(), result) || NEIServerUtils.areStacksSameTypeCrafting(fuel.product, result)) {
 					this.arecipes.add(new CachedMoistenerRecipe(recipe, fuel));
 				}
 			}
@@ -139,9 +140,9 @@ public class NEIHandlerMoistener extends RecipeHandlerBase {
 	@Override
 	public void loadUsageRecipes(ItemStack ingred) {
 		super.loadUsageRecipes(ingred);
-		for (TileMoistener.Recipe recipe : TileMoistener.RecipeManager.recipes) {
+		for (IMoistenerRecipe recipe : RecipeManagers.moistenerManager.recipes()) {
 			for (MoistenerFuel fuel : FuelManager.moistenerResource.values()) {
-				if (NEIServerUtils.areStacksSameTypeCrafting(recipe.resource, ingred) || NEIServerUtils.areStacksSameTypeCrafting(fuel.item, ingred)) {
+				if (NEIServerUtils.areStacksSameTypeCrafting(recipe.getResource(), ingred) || NEIServerUtils.areStacksSameTypeCrafting(fuel.item, ingred)) {
 					this.arecipes.add(new CachedMoistenerRecipe(recipe, fuel));
 				}
 			}

@@ -12,12 +12,6 @@ package forestry.factory.tiles;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -26,25 +20,20 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.InventoryCraftResult;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
 
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorLogic;
-import forestry.api.recipes.ICarpenterManager;
+import forestry.api.recipes.ICarpenterRecipe;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
-import forestry.core.config.ForestryItem;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.fluids.FluidHelper;
-import forestry.core.fluids.Fluids;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.inventory.IInventoryAdapter;
@@ -53,7 +42,6 @@ import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
-import forestry.core.recipes.ShapedRecipeCustom;
 import forestry.core.render.TankRenderInfo;
 import forestry.core.tiles.IItemStackDisplay;
 import forestry.core.tiles.ILiquidTankTile;
@@ -61,6 +49,7 @@ import forestry.core.tiles.TilePowered;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.SlotUtil;
+import forestry.factory.recipes.CarpenterRecipeManager;
 
 public class TileCarpenter extends TilePowered implements ISidedInventory, ILiquidTankTile, IItemStackDisplay {
 
@@ -81,7 +70,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 	private final InventoryCraftResult craftPreviewInventory;
 
 	@Nullable
-	private TileCarpenter.Recipe currentRecipe;
+	private ICarpenterRecipe currentRecipe;
 	private int packageTime;
 	private int totalTime;
 	private ItemStack pendingProduct;
@@ -93,7 +82,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 	public TileCarpenter() {
 		super(1100, 4000, 200);
 		setHints(Config.hints.get("carpenter"));
-		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, RecipeManager.recipeFluids);
+		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, CarpenterRecipeManager.recipeFluids);
 
 		craftingInventory = new TileInventoryAdapter<>(this, 10, "CraftItems");
 		craftPreviewInventory = new InventoryCraftResult();
@@ -145,7 +134,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 		}
 
 		// Reset recipe according to contents
-		setCurrentRecipe(RecipeManager.findMatchingRecipe(resourceTank.getFluid(), getBoxStack(), craftingInventory, worldObj));
+		setCurrentRecipe(CarpenterRecipeManager.findMatchingRecipe(resourceTank.getFluid(), getBoxStack(), craftingInventory, worldObj));
 	}
 
 	@Override
@@ -164,16 +153,16 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 		if (worldObj.isRemote) {
 			return;
 		}
-		setCurrentRecipe(RecipeManager.findMatchingRecipe(resourceTank.getFluid(), getBoxStack(), craftingInventory, getWorldObj()));
+		setCurrentRecipe(CarpenterRecipeManager.findMatchingRecipe(resourceTank.getFluid(), getBoxStack(), craftingInventory, getWorldObj()));
 	}
 
-	private void setCurrentRecipe(@Nullable TileCarpenter.Recipe currentRecipe) {
+	private void setCurrentRecipe(@Nullable ICarpenterRecipe currentRecipe) {
 		this.currentRecipe = currentRecipe;
 
 		final ItemStack craftingResult;
 
 		if (currentRecipe != null) {
-			craftingResult = currentRecipe.getCraftingResult();
+			craftingResult = currentRecipe.getCraftingGridRecipe().getRecipeOutput();
 		} else {
 			craftingResult = null;
 		}
@@ -199,7 +188,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 		}
 
 		if (currentRecipe == null) {
-			Recipe recipe = TileCarpenter.RecipeManager.findMatchingRecipe(resourceTank.getFluid(), getBoxStack(), craftingInventory, worldObj);
+			ICarpenterRecipe recipe = CarpenterRecipeManager.findMatchingRecipe(resourceTank.getFluid(), getBoxStack(), craftingInventory, worldObj);
 			if (recipe != null) {
 				setCurrentRecipe(recipe);
 			}
@@ -224,7 +213,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 
 			if (packageTime <= 0) {
 
-				pendingProduct = currentRecipe.getCraftingResult();
+				pendingProduct = currentRecipe.getCraftingGridRecipe().getRecipeOutput();
 				totalTime = 0;
 
 				// Remove resources
@@ -247,7 +236,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 			}
 
 			// Enough items available, start the process
-			packageTime = totalTime = currentRecipe.packagingTime;
+			packageTime = totalTime = currentRecipe.getPackagingTime();
 
 			// Update product display
 			resetRecipe();
@@ -264,15 +253,16 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 			return true;
 		}
 		// Check whether liquid is needed and if there is enough available
-		if (currentRecipe.liquid != null) {
-			if (resourceTank.getFluidAmount() < currentRecipe.liquid.amount) {
+		FluidStack fluid = currentRecipe.getFluidResource();
+		if (fluid != null) {
+			if (resourceTank.getFluidAmount() < fluid.amount) {
 				return false;
 			}
 		}
 
 		IInventoryAdapter accessibleInventory = getInternalInventory();
 		// Check whether boxes are available
-		if (currentRecipe.box != null) {
+		if (currentRecipe.getBox() != null) {
 			if (accessibleInventory.getStackInSlot(SLOT_BOX) == null) {
 				return false;
 			}
@@ -285,19 +275,20 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 		return ItemStackUtil.containsSets(set, stock, true, false) > 0;
 	}
 
-	private boolean removeResources(Recipe recipe) {
+	private boolean removeResources(ICarpenterRecipe recipe) {
 
 		// Remove resources
-		if (recipe.liquid != null) {
-			FluidStack amountDrained = resourceTank.drain(recipe.liquid.amount, false);
-			if (amountDrained != null && amountDrained.amount == recipe.liquid.amount) {
-				resourceTank.drain(recipe.liquid.amount, true);
+		FluidStack fluid = recipe.getFluidResource();
+		if (fluid != null) {
+			FluidStack amountDrained = resourceTank.drain(fluid.amount, false);
+			if (amountDrained != null && amountDrained.amount == fluid.amount) {
+				resourceTank.drain(fluid.amount, true);
 			} else {
 				return false;
 			}
 		}
 		// Remove boxes
-		if (recipe.box != null) {
+		if (recipe.getBox() != null) {
 			ItemStack removed = getInternalInventory().decrStackSize(SLOT_BOX, 1);
 			if (removed == null || removed.stackSize == 0) {
 				return false;
@@ -335,7 +326,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 
 		// Stop working if the output slot cannot take more
 		ItemStack product = getStackInSlot(SLOT_PRODUCT);
-		if (product != null && product.getMaxStackSize() - product.stackSize < currentRecipe.getCraftingResult().stackSize) {
+		if (product != null && product.getMaxStackSize() - product.stackSize < currentRecipe.getCraftingGridRecipe().getRecipeOutput().stackSize) {
 			return false;
 		}
 
@@ -443,7 +434,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 				Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
 				return tile.tankManager.accepts(fluid);
 			} else if (slotIndex == SLOT_BOX) {
-				return RecipeManager.isBox(itemStack);
+				return CarpenterRecipeManager.isBox(itemStack);
 			} else if (canSlotAccept(SLOT_CAN_INPUT, itemStack) || canSlotAccept(SLOT_BOX, itemStack)) {
 				return false;
 			}
@@ -454,139 +445,6 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 		@Override
 		public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
 			return slotIndex == SLOT_PRODUCT;
-		}
-	}
-
-	/* RECIPE MANAGMENT */
-	public static class Recipe {
-
-		private final int packagingTime;
-		private final FluidStack liquid;
-		private final ItemStack box;
-		private final ShapedRecipeCustom internal;
-
-		public Recipe(int packagingTime, FluidStack liquid, ItemStack box, ShapedRecipeCustom internal) {
-			this.packagingTime = packagingTime;
-			this.liquid = liquid;
-			this.box = box;
-			this.internal = internal;
-		}
-
-		public ItemStack getCraftingResult() {
-			return internal.getRecipeOutput();
-		}
-
-		public boolean matches(FluidStack resource, ItemStack item, IInventory inventorycrafting, World world) {
-
-			if (liquid != null) {
-				if (resource == null || !resource.containsFluid(liquid)) {
-					return false;
-				}
-			}
-
-			// Check box
-			if (box != null && !ItemStackUtil.isCraftingEquivalent(box, item)) {
-				return false;
-			}
-
-			return internal.matches(inventorycrafting, world);
-		}
-
-		public ItemStack getBox() {
-			return box;
-		}
-
-		public FluidStack getLiquid() {
-			return liquid;
-		}
-
-		public IRecipe asIRecipe() {
-			return internal;
-		}
-	}
-
-	public static class RecipeManager implements ICarpenterManager {
-
-		public static final ArrayList<TileCarpenter.Recipe> recipes = new ArrayList<>();
-		private static final Set<Fluid> recipeFluids = new HashSet<>();
-		private static final List<ItemStack> boxes = new ArrayList<>();
-
-		public void addCrating(ItemStack itemStack) {
-			ItemStack uncrated = ((forestry.core.items.ItemCrated) itemStack.getItem()).getContained();
-			addRecipe(Constants.CARPENTER_CRATING_CYCLES, Fluids.WATER.getFluid(Constants.CARPENTER_CRATING_LIQUID_QUANTITY),
-					ForestryItem.crate.getItemStack(), itemStack, new Object[]{"###", "###", "###", '#', uncrated});
-			addRecipe(null, new ItemStack(uncrated.getItem(), 9, uncrated.getItemDamage()), new Object[]{"#", '#', itemStack});
-		}
-
-		public void addCratingWithOreDict(ItemStack itemStack) {
-			ItemStack uncrated = ((forestry.core.items.ItemCrated) itemStack.getItem()).getContained();
-			int[] oreIds = OreDictionary.getOreIDs(uncrated);
-			for (int oreId : oreIds) {
-				String oreName = OreDictionary.getOreName(oreId);
-				addCrating(oreName, uncrated, itemStack);
-			}
-		}
-
-		public void addCrating(String toCrate, ItemStack unpack, ItemStack crated) {
-			addRecipe(Constants.CARPENTER_CRATING_CYCLES, Fluids.WATER.getFluid(Constants.CARPENTER_CRATING_LIQUID_QUANTITY),
-					ForestryItem.crate.getItemStack(), crated, new Object[]{"###", "###", "###", '#', toCrate});
-			addRecipe(null, new ItemStack(unpack.getItem(), 9, unpack.getItemDamage()), new Object[]{"#", '#', crated});
-		}
-
-		@Override
-		public void addRecipe(ItemStack box, ItemStack product, Object materials[]) {
-			addRecipe(5, null, box, product, materials);
-		}
-
-		@Override
-		public void addRecipe(int packagingTime, ItemStack box, ItemStack product, Object materials[]) {
-			addRecipe(packagingTime, null, box, product, materials);
-		}
-
-		@Override
-		public void addRecipe(int packagingTime, FluidStack liquid, ItemStack box, ItemStack product, Object materials[]) {
-			recipes.add(new Recipe(packagingTime, liquid, box, ShapedRecipeCustom.createShapedRecipe(product, materials)));
-			if (liquid != null) {
-				recipeFluids.add(liquid.getFluid());
-			}
-			if (box != null && !isBox(box)) {
-				boxes.add(box);
-			}
-		}
-
-		public static Recipe findMatchingRecipe(FluidStack liquid, ItemStack item, IInventory inventorycrafting, World world) {
-			for (Recipe recipe : recipes) {
-				if (recipe.matches(liquid, item, inventorycrafting, world)) {
-					return recipe;
-				}
-			}
-			return null;
-		}
-
-		public static boolean isBox(ItemStack resource) {
-			if (resource == null) {
-				return false;
-			}
-
-			for (ItemStack box : boxes) {
-				if (ItemStackUtil.isIdenticalItem(box, resource)) {
-					return true;
-				}
-			}
-
-			return false;
-		}
-
-		@Override
-		public Map<Object[], Object[]> getRecipes() {
-
-			HashMap<Object[], Object[]> recipeList = new HashMap<>();
-
-			for (Recipe recipe : recipes) {
-				recipeList.put(recipe.internal.getIngredients(), new Object[]{recipe.getCraftingResult()});
-			}
-
-			return recipeList;
 		}
 	}
 

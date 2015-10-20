@@ -11,11 +11,13 @@
 package forestry.factory.tiles;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -35,7 +37,6 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import cpw.mods.fml.common.Optional;
 
 import forestry.api.core.ForestryAPI;
-import forestry.api.recipes.ICraftingProvider;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
@@ -64,15 +65,14 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 
 	private static final short CYCLES_FILLING_DEFAULT = 5;
 
-	/* RECIPE MANAGMENT */
-	public static class Recipe {
+	public static class BottlerRecipe {
 
 		public final int cyclesPerUnit;
 		public final FluidStack input;
 		public final ItemStack can;
 		public final ItemStack bottled;
 
-		public Recipe(int cyclesPerUnit, FluidStack input, ItemStack can, ItemStack bottled) {
+		public BottlerRecipe(int cyclesPerUnit, FluidStack input, ItemStack can, ItemStack bottled) {
 			this.cyclesPerUnit = cyclesPerUnit;
 			this.input = input;
 			this.can = can;
@@ -84,20 +84,20 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 		}
 	}
 
-	public static class RecipeManager implements ICraftingProvider {
+	public static class RecipeManager {
 
-		public static final ArrayList<TileBottler.Recipe> recipes = new ArrayList<>();
+		private static final Set<BottlerRecipe> recipes = new HashSet<>();
 
 		/**
 		 * @return Recipe matching both res and empty, null if none
 		 */
-		public static Recipe findMatchingRecipe(FluidStack res, ItemStack empty) {
+		public static BottlerRecipe findMatchingRecipe(FluidStack res, ItemStack empty) {
 			// We need both ingredients
 			if (res == null || empty == null || !FluidHelper.isEmptyContainer(empty)) {
 				return null;
 			}
 
-			for (Recipe recipe : recipes) {
+			for (BottlerRecipe recipe : recipes) {
 				if (recipe.matches(res, empty)) {
 					return recipe;
 				}
@@ -106,7 +106,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 			// No recipe matched. See if the liquid dictionary has anything.
 			ItemStack filled = FluidHelper.getFilledContainer(res, empty);
 			if (filled != null) {
-				Recipe recipe = new Recipe(CYCLES_FILLING_DEFAULT, res, empty, filled);
+				BottlerRecipe recipe = new BottlerRecipe(CYCLES_FILLING_DEFAULT, res, empty, filled);
 				recipes.add(recipe);
 				return recipe;
 			}
@@ -124,11 +124,14 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 			return FluidRegistry.isFluidRegistered(res.getFluid());
 		}
 
-		@Override
-		public Map<Object[], Object[]> getRecipes() {
+		public static Set<BottlerRecipe> recipes() {
+			return Collections.unmodifiableSet(recipes);
+		}
+
+		public static Map<Object[], Object[]> getRecipes() {
 			HashMap<Object[], Object[]> recipeList = new HashMap<>();
 
-			for (Recipe recipe : recipes) {
+			for (BottlerRecipe recipe : recipes) {
 				recipeList.put(new Object[]{recipe.input, recipe.can}, new Object[]{recipe.bottled});
 			}
 
@@ -139,7 +142,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 	private final StandardTank resourceTank;
 	private final TankManager tankManager;
 
-	private Recipe currentRecipe;
+	private BottlerRecipe currentRecipe;
 	private int fillingTime;
 	private int fillingTotalTime;
 
@@ -242,7 +245,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 
 	private void checkRecipe() {
 		ItemStack emptyCan = getStackInSlot(SLOT_INPUT_EMPTY_CAN);
-		Recipe recipe = RecipeManager.findMatchingRecipe(resourceTank.getFluid(), emptyCan);
+		BottlerRecipe recipe = RecipeManager.findMatchingRecipe(resourceTank.getFluid(), emptyCan);
 
 		if (currentRecipe != recipe) {
 			currentRecipe = recipe;

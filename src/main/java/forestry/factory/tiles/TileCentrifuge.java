@@ -10,17 +10,9 @@
  ******************************************************************************/
 package forestry.factory.tiles;
 
-import com.google.common.collect.ImmutableMap;
-
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
 import java.util.Stack;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -40,7 +32,6 @@ import forestry.api.circuits.ICircuitBoard;
 import forestry.api.circuits.ICircuitSocketType;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorLogic;
-import forestry.api.recipes.ICentrifugeManager;
 import forestry.api.recipes.ICentrifugeRecipe;
 import forestry.core.circuits.ISocketable;
 import forestry.core.config.Config;
@@ -54,8 +45,8 @@ import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
 import forestry.core.tiles.TilePowered;
 import forestry.core.utils.InventoryUtil;
-import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.SlotUtil;
+import forestry.factory.recipes.CentrifugeRecipeManager;
 import forestry.factory.triggers.FactoryTriggers;
 
 import buildcraft.api.statements.ITriggerExternal;
@@ -168,7 +159,7 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 
 	private void checkRecipe() {
 		ItemStack resource = getStackInSlot(SLOT_RESOURCE);
-		ICentrifugeRecipe matchingRecipe = RecipeManager.findMatchingRecipe(resource);
+		ICentrifugeRecipe matchingRecipe = CentrifugeRecipeManager.findMatchingRecipe(resource);
 
 		if (currentRecipe != matchingRecipe) {
 			currentRecipe = matchingRecipe;
@@ -236,7 +227,7 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 
 		@Override
 		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-			return slotIndex == SLOT_RESOURCE && RecipeManager.findMatchingRecipe(itemStack) != null;
+			return slotIndex == SLOT_RESOURCE && CentrifugeRecipeManager.findMatchingRecipe(itemStack) != null;
 		}
 
 		@Override
@@ -287,100 +278,6 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 	@Override
 	public ICircuitSocketType getSocketType() {
 		return CircuitSocketType.MACHINE;
-	}
-
-	/* RECIPE MANAGEMENT */
-	public static class CentrifugeRecipe implements ICentrifugeRecipe {
-
-		private final int processingTime;
-		private final ItemStack input;
-		private final Map<ItemStack, Float> outputs;
-
-		public CentrifugeRecipe(int processingTime, ItemStack input, Map<ItemStack, Float> outputs) {
-			this.processingTime = processingTime;
-			this.input = input;
-			this.outputs = outputs;
-
-			for (ItemStack item : outputs.keySet()) {
-				if (item == null) {
-					throw new IllegalArgumentException("Tried to register a null product of " + input);
-				}
-			}
-		}
-
-		@Override
-		public ItemStack getInput() {
-			return input;
-		}
-
-		@Override
-		public int getProcessingTime() {
-			return processingTime;
-		}
-
-		@Override
-		public Collection<ItemStack> getProducts(Random random) {
-			List<ItemStack> products = new ArrayList<>();
-
-			for (Map.Entry<ItemStack, Float> entry : this.outputs.entrySet()) {
-				float probability = entry.getValue();
-
-				if (probability >= 1.0) {
-					products.add(entry.getKey().copy());
-				} else if (random.nextFloat() < probability) {
-					products.add(entry.getKey().copy());
-				}
-			}
-
-			return products;
-		}
-
-		@Override
-		public Map<ItemStack, Float> getAllProducts() {
-			return ImmutableMap.copyOf(outputs);
-		}
-	}
-
-	public static class RecipeManager implements ICentrifugeManager {
-
-		public static final List<ICentrifugeRecipe> recipes = new ArrayList<>();
-
-		@Override
-		public void addRecipe(ICentrifugeRecipe recipe) {
-			recipes.add(recipe);
-		}
-
-		@Override
-		public void addRecipe(int timePerItem, ItemStack resource, Map<ItemStack, Float> products) {
-			ICentrifugeRecipe recipe = new CentrifugeRecipe(timePerItem, resource, products);
-			addRecipe(recipe);
-		}
-
-		public static ICentrifugeRecipe findMatchingRecipe(ItemStack itemStack) {
-			if (itemStack == null) {
-				return null;
-			}
-
-			for (ICentrifugeRecipe recipe : recipes) {
-				ItemStack recipeInput = recipe.getInput();
-				if (ItemStackUtil.isCraftingEquivalent(recipeInput, itemStack)) {
-					return recipe;
-				}
-			}
-			return null;
-		}
-
-		@Override
-		public Map<Object[], Object[]> getRecipes() {
-			HashMap<Object[], Object[]> recipeList = new HashMap<>();
-
-			for (ICentrifugeRecipe recipe : recipes) {
-				Set<ItemStack> productsKeys = recipe.getAllProducts().keySet();
-				recipeList.put(new Object[]{recipe.getInput()}, productsKeys.toArray(new ItemStack[productsKeys.size()]));
-			}
-
-			return recipeList;
-		}
 	}
 
 }

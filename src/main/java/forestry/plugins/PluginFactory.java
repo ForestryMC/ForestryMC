@@ -25,6 +25,7 @@ import cpw.mods.fml.common.network.IGuiHandler;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitLayout;
+import forestry.api.recipes.ICraftingProvider;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.blocks.BlockBase;
 import forestry.core.circuits.Circuit;
@@ -50,6 +51,13 @@ import forestry.factory.DummyManagers;
 import forestry.factory.GuiHandlerFactory;
 import forestry.factory.circuits.CircuitSpeedUpgrade;
 import forestry.factory.network.PacketWorktableMemoryUpdate;
+import forestry.factory.recipes.CarpenterRecipeManager;
+import forestry.factory.recipes.CentrifugeRecipeManager;
+import forestry.factory.recipes.FabricatorRecipeManager;
+import forestry.factory.recipes.FermenterRecipeManager;
+import forestry.factory.recipes.MoistenerRecipeManager;
+import forestry.factory.recipes.SqueezerRecipeManager;
+import forestry.factory.recipes.StillRecipeManager;
 import forestry.factory.tiles.TileBottler;
 import forestry.factory.tiles.TileCarpenter;
 import forestry.factory.tiles.TileCentrifuge;
@@ -62,7 +70,6 @@ import forestry.factory.tiles.TileSqueezer;
 import forestry.factory.tiles.TileStill;
 import forestry.factory.tiles.TileWorktable;
 import forestry.factory.triggers.FactoryTriggers;
-
 
 @Plugin(pluginID = "Factory", name = "Factory", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.factory.description")
 public class PluginFactory extends ForestryPlugin {
@@ -83,14 +90,14 @@ public class PluginFactory extends ForestryPlugin {
 	protected void setupAPI() {
 		super.setupAPI();
 
-		RecipeManagers.craftingProviders = ImmutableList.of(
-				RecipeManagers.carpenterManager = new TileCarpenter.RecipeManager(),
-				RecipeManagers.centrifugeManager = new TileCentrifuge.RecipeManager(),
-				RecipeManagers.fabricatorManager = new TileFabricator.RecipeManager(),
-				RecipeManagers.fermenterManager = new TileFermenter.RecipeManager(),
-				RecipeManagers.moistenerManager = new TileMoistener.RecipeManager(),
-				RecipeManagers.squeezerManager = new TileSqueezer.RecipeManager(),
-				RecipeManagers.stillManager = new TileStill.RecipeManager()
+		RecipeManagers.craftingProviders = ImmutableList.<ICraftingProvider>of(
+				RecipeManagers.carpenterManager = new CarpenterRecipeManager(),
+				RecipeManagers.centrifugeManager = new CentrifugeRecipeManager(),
+				RecipeManagers.fabricatorManager = new FabricatorRecipeManager(),
+				RecipeManagers.fermenterManager = new FermenterRecipeManager(),
+				RecipeManagers.moistenerManager = new MoistenerRecipeManager(),
+				RecipeManagers.squeezerManager = new SqueezerRecipeManager(),
+				RecipeManagers.stillManager = new StillRecipeManager()
 		);
 	}
 
@@ -105,14 +112,14 @@ public class PluginFactory extends ForestryPlugin {
 	protected void disabledSetupAPI() {
 		super.disabledSetupAPI();
 
-		RecipeManagers.craftingProviders = ImmutableList.of(
-				RecipeManagers.carpenterManager = new DummyManagers.CarpenterManager(),
-				RecipeManagers.centrifugeManager = new DummyManagers.CentrifugeManager(),
-				RecipeManagers.fabricatorManager = new DummyManagers.FabricatorManager(),
-				RecipeManagers.fermenterManager = new DummyManagers.FermenterManager(),
-				RecipeManagers.moistenerManager = new DummyManagers.MoistenerManager(),
-				RecipeManagers.squeezerManager = new DummyManagers.SqueezerManager(),
-				RecipeManagers.stillManager = new DummyManagers.StillManager()
+		RecipeManagers.craftingProviders = ImmutableList.<ICraftingProvider>of(
+				RecipeManagers.carpenterManager = new DummyManagers.DummyCarpenterManager(),
+				RecipeManagers.centrifugeManager = new DummyManagers.DummyCentrifugeManager(),
+				RecipeManagers.fabricatorManager = new DummyManagers.DummyFabricatorManager(),
+				RecipeManagers.fermenterManager = new DummyManagers.DummyFermenterManager(),
+				RecipeManagers.moistenerManager = new DummyManagers.DummyMoistenerManager(),
+				RecipeManagers.squeezerManager = new DummyManagers.DummySqueezerManager(),
+				RecipeManagers.stillManager = new DummyManagers.DummyStillManager()
 		);
 	}
 

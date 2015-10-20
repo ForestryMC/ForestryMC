@@ -24,13 +24,15 @@ import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.fuels.FermenterFuel;
 import forestry.api.fuels.FuelManager;
+import forestry.api.recipes.IFermenterRecipe;
 import forestry.api.recipes.IVariableFermentable;
+import forestry.api.recipes.RecipeManagers;
+import forestry.core.config.Constants;
 import forestry.core.recipes.nei.INBTMatchingCachedRecipe;
 import forestry.core.recipes.nei.NEIUtils;
 import forestry.core.recipes.nei.PositionedFluidTank;
 import forestry.core.recipes.nei.RecipeHandlerBase;
 import forestry.factory.gui.GuiFermenter;
-import forestry.factory.tiles.TileFermenter;
 
 import codechicken.lib.gui.GuiDraw;
 import codechicken.nei.NEIServerUtils;
@@ -53,19 +55,18 @@ public class NEIHandlerFermenter extends RecipeHandlerBase {
 		public PositionedStack resource;
 		public List<PositionedStack> inputItems = new ArrayList<>();
 
-		public CachedFermenterRecipe(TileFermenter.Recipe recipe, ItemStack fermentable, boolean genPerms) {
-			if (recipe.liquid != null) {
-				FluidStack input = recipe.liquid.copy();
-				input.amount = recipe.fermentationValue;
+		public CachedFermenterRecipe(IFermenterRecipe recipe, ItemStack fermentable, boolean genPerms) {
+			if (recipe.getFluidResource() != null) {
+				FluidStack input = recipe.getFluidResource().copy();
+				input.amount = recipe.getFermentationValue();
 				this.tanks.add(new PositionedFluidTank(input, 10000, new Rectangle(30, 4, 16, 58), NEIHandlerFermenter.this.getGuiTexture(), new Point(176, 0)));
 			}
-			if (recipe.output != null) {
-				FluidStack output = recipe.output.copy();
+			if (recipe.getOutput() != null) {
+				int amount = Math.round(recipe.getFermentationValue() * recipe.getModifier());
 				if (fermentable.getItem() instanceof IVariableFermentable) {
-					output.amount = (int) (recipe.fermentationValue * recipe.modifier * ((IVariableFermentable) fermentable.getItem()).getFermentationModifier(fermentable));
-				} else {
-					output.amount = (int) (recipe.fermentationValue * recipe.modifier);
+					amount *= ((IVariableFermentable) fermentable.getItem()).getFermentationModifier(fermentable);
 				}
+				FluidStack output = new FluidStack(recipe.getOutput(), amount);
 				this.tanks.add(new PositionedFluidTank(output, 10000, new Rectangle(120, 4, 16, 58), NEIHandlerFermenter.this.getGuiTexture(), new Point(176, 0)));
 			}
 
@@ -146,28 +147,29 @@ public class NEIHandlerFermenter extends RecipeHandlerBase {
 		this.drawProgressBar(93, 31, 176, 78, 4, 18, 80, 11);
 	}
 
-	private List<CachedFermenterRecipe> getCachedRecipes(TileFermenter.Recipe recipe, boolean generatePermutations) {
-		if (recipe.resource != null && recipe.resource.getItem() instanceof IVariableFermentable) {
+	private List<CachedFermenterRecipe> getCachedRecipes(IFermenterRecipe recipe, boolean generatePermutations) {
+		if (recipe.getResource() != null && recipe.getResource().getItem() instanceof IVariableFermentable) {
 			List<CachedFermenterRecipe> crecipes = new ArrayList<>();
-			for (ItemStack stack : NEIUtils.getItemVariations(recipe.resource)) {
+			for (ItemStack stack : NEIUtils.getItemVariations(recipe.getResource())) {
 				crecipes.add(new CachedFermenterRecipe(recipe, stack, generatePermutations));
 			}
 			return crecipes;
 		}
-		return Collections.singletonList(new CachedFermenterRecipe(recipe, recipe.resource, generatePermutations));
+		return Collections.singletonList(new CachedFermenterRecipe(recipe, recipe.getResource(), generatePermutations));
 	}
 
 	@Override
 	public void loadAllRecipes() {
-		for (TileFermenter.Recipe recipe : TileFermenter.RecipeManager.recipes) {
+		for (IFermenterRecipe recipe : RecipeManagers.fermenterManager.recipes()) {
 			this.arecipes.addAll(this.getCachedRecipes(recipe, true));
 		}
 	}
 
 	@Override
 	public void loadCraftingRecipes(FluidStack result) {
-		for (TileFermenter.Recipe recipe : TileFermenter.RecipeManager.recipes) {
-			if (NEIUtils.areFluidsSameType(recipe.output, result)) {
+		for (IFermenterRecipe recipe : RecipeManagers.fermenterManager.recipes()) {
+			FluidStack output = new FluidStack(recipe.getOutput(), Constants.BUCKET_VOLUME);
+			if (NEIUtils.areFluidsSameType(output, result)) {
 				this.arecipes.addAll(this.getCachedRecipes(recipe, true));
 			}
 		}
@@ -176,9 +178,9 @@ public class NEIHandlerFermenter extends RecipeHandlerBase {
 	@Override
 	public void loadUsageRecipes(ItemStack ingred) {
 		super.loadUsageRecipes(ingred);
-		for (TileFermenter.Recipe recipe : TileFermenter.RecipeManager.recipes) {
-			if (recipe.resource != null) {
-				for (ItemStack stack : NEIUtils.getItemVariations(recipe.resource)) {
+		for (IFermenterRecipe recipe : RecipeManagers.fermenterManager.recipes()) {
+			if (recipe.getResource() != null) {
+				for (ItemStack stack : NEIUtils.getItemVariations(recipe.getResource())) {
 					if (stack.hasTagCompound() && NEIServerUtils.areStacksSameType(stack, ingred) || !stack.hasTagCompound() && NEIServerUtils.areStacksSameTypeCrafting(stack, ingred)) {
 						CachedFermenterRecipe crecipe = new CachedFermenterRecipe(recipe, stack, true);
 						NEIUtils.setIngredientPermutationNBT(crecipe, ingred);
@@ -199,8 +201,8 @@ public class NEIHandlerFermenter extends RecipeHandlerBase {
 
 	@Override
 	public void loadUsageRecipes(FluidStack ingred) {
-		for (TileFermenter.Recipe recipe : TileFermenter.RecipeManager.recipes) {
-			if (NEIUtils.areFluidsSameType(recipe.liquid, ingred)) {
+		for (IFermenterRecipe recipe : RecipeManagers.fermenterManager.recipes()) {
+			if (NEIUtils.areFluidsSameType(recipe.getFluidResource(), ingred)) {
 				this.arecipes.addAll(this.getCachedRecipes(recipe, true));
 			}
 		}

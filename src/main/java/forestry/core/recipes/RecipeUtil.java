@@ -31,6 +31,7 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
+import forestry.api.recipes.IDescriptiveRecipe;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;

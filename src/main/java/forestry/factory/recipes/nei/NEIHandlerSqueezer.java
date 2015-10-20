@@ -24,6 +24,8 @@ import net.minecraft.util.StatCollector;
 
 import net.minecraftforge.fluids.FluidStack;
 
+import forestry.api.recipes.ISqueezerRecipe;
+import forestry.api.recipes.RecipeManagers;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.recipes.nei.NEIUtils;
 import forestry.core.recipes.nei.PositionedFluidTank;
@@ -31,8 +33,7 @@ import forestry.core.recipes.nei.PositionedStackAdv;
 import forestry.core.recipes.nei.RecipeHandlerBase;
 import forestry.factory.gui.GuiSqueezer;
 import forestry.factory.recipes.ISqueezerContainerRecipe;
-import forestry.factory.recipes.ISqueezerRecipe;
-import forestry.factory.tiles.TileSqueezer;
+import forestry.factory.recipes.SqueezerRecipeManager;
 
 import codechicken.nei.NEIServerUtils;
 import codechicken.nei.PositionedStack;
@@ -190,22 +191,22 @@ public class NEIHandlerSqueezer extends RecipeHandlerBase {
 
 	@Override
 	public void loadAllRecipes() {
-		for (ISqueezerRecipe recipe : TileSqueezer.RecipeManager.recipes) {
+		for (ISqueezerRecipe recipe : RecipeManagers.squeezerManager.recipes()) {
 			this.arecipes.add(new CachedSqueezerRecipe(recipe, true));
 		}
-		for (ISqueezerContainerRecipe containerRecipe : TileSqueezer.RecipeManager.containerRecipes.values()) {
+		for (ISqueezerContainerRecipe containerRecipe : SqueezerRecipeManager.containerRecipes.values()) {
 			this.arecipes.add(new CachedSqueezerRecipe(containerRecipe, true));
 		}
 	}
 
 	@Override
 	public void loadCraftingRecipes(ItemStack result) {
-		for (ISqueezerRecipe recipe : TileSqueezer.RecipeManager.recipes) {
+		for (ISqueezerRecipe recipe : RecipeManagers.squeezerManager.recipes()) {
 			if (NEIServerUtils.areStacksSameTypeCrafting(recipe.getRemnants(), result)) {
 				this.arecipes.add(new CachedSqueezerRecipe(recipe, true));
 			}
 		}
-		for (ISqueezerContainerRecipe containerRecipe : TileSqueezer.RecipeManager.containerRecipes.values()) {
+		for (ISqueezerContainerRecipe containerRecipe : SqueezerRecipeManager.containerRecipes.values()) {
 			if (NEIServerUtils.areStacksSameTypeCrafting(containerRecipe.getRemnants(), result)) {
 				this.arecipes.add(new CachedSqueezerRecipe(containerRecipe, true));
 			}
@@ -214,12 +215,12 @@ public class NEIHandlerSqueezer extends RecipeHandlerBase {
 
 	@Override
 	public void loadCraftingRecipes(FluidStack result) {
-		for (ISqueezerRecipe recipe : TileSqueezer.RecipeManager.recipes) {
+		for (ISqueezerRecipe recipe : RecipeManagers.squeezerManager.recipes()) {
 			if (NEIUtils.areFluidsSameType(recipe.getFluidOutput(), result)) {
 				this.arecipes.add(new CachedSqueezerRecipe(recipe, true));
 			}
 		}
-		for (ISqueezerContainerRecipe containerRecipe : TileSqueezer.RecipeManager.containerRecipes.values()) {
+		for (ISqueezerContainerRecipe containerRecipe : SqueezerRecipeManager.containerRecipes.values()) {
 			ItemStack emptyContainer = containerRecipe.getEmptyContainer();
 			ItemStack filledContainer = FluidHelper.getFilledContainer(result, emptyContainer);
 			if (filledContainer != null) {
@@ -235,7 +236,7 @@ public class NEIHandlerSqueezer extends RecipeHandlerBase {
 	public void loadUsageRecipes(ItemStack ingred) {
 		ingred.stackSize = 1;
 
-		ISqueezerContainerRecipe containerRecipe = TileSqueezer.RecipeManager.findMatchingContainerRecipe(ingred);
+		ISqueezerContainerRecipe containerRecipe = SqueezerRecipeManager.findMatchingContainerRecipe(ingred);
 		if (containerRecipe != null) {
 			CachedSqueezerRecipe crecipe = new CachedSqueezerRecipe(containerRecipe, true);
 			crecipe.setIngredients(new ItemStack[]{ingred});
@@ -245,7 +246,7 @@ public class NEIHandlerSqueezer extends RecipeHandlerBase {
 			return;
 		}
 
-		ISqueezerRecipe recipe = TileSqueezer.RecipeManager.findMatchingRecipe(new ItemStack[]{ingred});
+		ISqueezerRecipe recipe = SqueezerRecipeManager.findMatchingRecipe(new ItemStack[]{ingred});
 		if (recipe != null) {
 			CachedSqueezerRecipe crecipe = new CachedSqueezerRecipe(recipe);
 			// Override recipe to show the right input in case it's OD

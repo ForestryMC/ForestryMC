@@ -12,18 +12,29 @@ package forestry.factory.recipes;
 
 import net.minecraft.item.ItemStack;
 
-import net.minecraftforge.fluids.FluidStack;
+import forestry.api.recipes.IMoistenerRecipe;
 
-public interface ISqueezerRecipe {
+public class MoistenerRecipe implements IMoistenerRecipe {
 
-	ItemStack[] getResources();
+	private final int timePerItem;
+	private final ItemStack resource;
+	private final ItemStack product;
 
-	int getProcessingTime();
+	public MoistenerRecipe(ItemStack resource, ItemStack product, int timePerItem) {
+		this.timePerItem = timePerItem;
+		this.resource = resource;
+		this.product = product;
+	}
 
-	ItemStack getRemnants();
+	public int getTimePerItem() {
+		return timePerItem;
+	}
 
-	float getRemnantsChance();
+	public ItemStack getResource() {
+		return resource;
+	}
 
-	FluidStack getFluidOutput();
-
+	public ItemStack getProduct() {
+		return product;
+	}
 }

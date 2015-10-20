@@ -20,11 +20,12 @@ import net.minecraft.util.StatCollector;
 
 import net.minecraftforge.fluids.FluidStack;
 
+import forestry.api.recipes.IStillRecipe;
+import forestry.api.recipes.RecipeManagers;
 import forestry.core.recipes.nei.NEIUtils;
 import forestry.core.recipes.nei.PositionedFluidTank;
 import forestry.core.recipes.nei.RecipeHandlerBase;
 import forestry.factory.gui.GuiStill;
-import forestry.factory.tiles.TileStill;
 
 import codechicken.lib.gui.GuiDraw;
 import codechicken.nei.PositionedStack;
@@ -35,12 +36,12 @@ public class NEIHandlerStill extends RecipeHandlerBase {
 
 		public List<PositionedFluidTank> tanks = new ArrayList<>();
 
-		public CachedStillRecipe(TileStill.Recipe recipe) {
-			if (recipe.input != null) {
-				this.tanks.add(new PositionedFluidTank(recipe.input, 10000, new Rectangle(30, 4, 16, 58), NEIHandlerStill.this.getGuiTexture(), new Point(176, 0)));
+		public CachedStillRecipe(IStillRecipe recipe) {
+			if (recipe.getInput() != null) {
+				this.tanks.add(new PositionedFluidTank(recipe.getInput(), 10000, new Rectangle(30, 4, 16, 58), NEIHandlerStill.this.getGuiTexture(), new Point(176, 0)));
 			}
-			if (recipe.output != null) {
-				this.tanks.add(new PositionedFluidTank(recipe.output, 10000, new Rectangle(120, 4, 16, 58), NEIHandlerStill.this.getGuiTexture(), new Point(176, 0)));
+			if (recipe.getOutput() != null) {
+				this.tanks.add(new PositionedFluidTank(recipe.getOutput(), 10000, new Rectangle(120, 4, 16, 58), NEIHandlerStill.this.getGuiTexture(), new Point(176, 0)));
 			}
 		}
 
@@ -95,15 +96,15 @@ public class NEIHandlerStill extends RecipeHandlerBase {
 
 	@Override
 	public void loadAllRecipes() {
-		for (TileStill.Recipe recipe : TileStill.RecipeManager.recipes) {
+		for (IStillRecipe recipe : RecipeManagers.stillManager.recipes()) {
 			this.arecipes.add(new CachedStillRecipe(recipe));
 		}
 	}
 
 	@Override
 	public void loadCraftingRecipes(FluidStack result) {
-		for (TileStill.Recipe recipe : TileStill.RecipeManager.recipes) {
-			if (NEIUtils.areFluidsSameType(recipe.output, result)) {
+		for (IStillRecipe recipe : RecipeManagers.stillManager.recipes()) {
+			if (NEIUtils.areFluidsSameType(recipe.getOutput(), result)) {
 				this.arecipes.add(new CachedStillRecipe(recipe));
 			}
 		}
@@ -111,8 +112,8 @@ public class NEIHandlerStill extends RecipeHandlerBase {
 
 	@Override
 	public void loadUsageRecipes(FluidStack ingred) {
-		for (TileStill.Recipe recipe : TileStill.RecipeManager.recipes) {
-			if (NEIUtils.areFluidsSameType(recipe.input, ingred)) {
+		for (IStillRecipe recipe : RecipeManagers.stillManager.recipes()) {
+			if (NEIUtils.areFluidsSameType(recipe.getInput(), ingred)) {
 				this.arecipes.add(new CachedStillRecipe(recipe));
 			}
 		}

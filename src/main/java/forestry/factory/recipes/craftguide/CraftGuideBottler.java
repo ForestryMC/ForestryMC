@@ -45,7 +45,7 @@ public class CraftGuideBottler implements RecipeProvider {
 		ItemStack machine = ForestryBlock.factoryTESR.getItemStack(1, Constants.DEFINITION_BOTTLER_META);
 		RecipeTemplate template = generator.createRecipeTemplate(slots, machine);
 
-		for (TileBottler.Recipe recipe : TileBottler.RecipeManager.recipes) {
+		for (TileBottler.BottlerRecipe recipe : TileBottler.RecipeManager.recipes()) {
 			Object[] array = new Object[4];
 
 			array[0] = recipe.can;

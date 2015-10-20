@@ -18,9 +18,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.fuels.FuelManager;
+import forestry.api.recipes.IFermenterRecipe;
+import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Constants;
 import forestry.core.config.ForestryBlock;
-import forestry.factory.tiles.TileFermenter;
 
 import uristqwerty.CraftGuide.api.ItemSlot;
 import uristqwerty.CraftGuide.api.LiquidSlot;
@@ -53,15 +54,14 @@ public class CraftGuideFermenter implements RecipeProvider {
 		RecipeTemplate template = generator.createRecipeTemplate(slots, machine);
 		List<Object> fuels = new ArrayList<Object>(FuelManager.fermenterFuel.keySet());
 
-		for (TileFermenter.Recipe recipe : TileFermenter.RecipeManager.recipes) {
+		for (IFermenterRecipe recipe : RecipeManagers.fermenterManager.recipes()) {
 			Object[] array = new Object[5];
 
-			array[0] = recipe.resource;
+			array[0] = recipe.getResource();
 			array[1] = fuels;
-			array[2] = recipe.liquid;
-			FluidStack output = recipe.output.copy();
-			output.amount *= recipe.fermentationValue;
-			output.amount *= recipe.modifier;
+			array[2] = recipe.getFluidResource();
+			int amount = Math.round(recipe.getFermentationValue() * recipe.getModifier());
+			FluidStack output = new FluidStack(recipe.getOutput(), amount);
 			array[3] = output;
 			array[4] = machine;
 			generator.addRecipe(template, array);

@@ -12,10 +12,11 @@ package forestry.factory.recipes.craftguide;
 
 import net.minecraft.item.ItemStack;
 
+import forestry.api.recipes.ICarpenterRecipe;
+import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Constants;
 import forestry.core.config.ForestryBlock;
 import forestry.core.recipes.RecipeUtil;
-import forestry.factory.tiles.TileCarpenter;
 
 import uristqwerty.CraftGuide.api.ItemSlot;
 import uristqwerty.CraftGuide.api.LiquidSlot;
@@ -50,19 +51,19 @@ public class CraftGuideCarpenter implements RecipeProvider {
 		ItemStack machine = ForestryBlock.factoryTESR.getItemStack(1, Constants.DEFINITION_CARPENTER_META);
 		RecipeTemplate template = generator.createRecipeTemplate(slots, machine);
 
-		for (TileCarpenter.Recipe recipe : TileCarpenter.RecipeManager.recipes) {
+		for (ICarpenterRecipe recipe : RecipeManagers.carpenterManager.recipes()) {
 			Object[] array = new Object[12];
 
-			Object[] flattened = RecipeUtil.getCraftingRecipeAsArray(recipe.asIRecipe());
+			Object[] flattened = RecipeUtil.getCraftingRecipeAsArray(recipe.getCraftingGridRecipe());
 			if (flattened == null) {
-				flattened = generator.getCraftingRecipe(recipe.asIRecipe());
+				flattened = generator.getCraftingRecipe(recipe.getCraftingGridRecipe());
 			}
 			if (flattened == null) {
 				continue;
 			}
 			System.arraycopy(flattened, 0, array, 0, flattened.length);
-			if (recipe.getLiquid() != null) {
-				array[10] = recipe.getLiquid();
+			if (recipe.getFluidResource() != null) {
+				array[10] = recipe.getFluidResource();
 			}
 			array[11] = machine;
 			generator.addRecipe(template, array);

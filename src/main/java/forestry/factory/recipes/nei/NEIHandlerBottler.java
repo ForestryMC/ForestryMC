@@ -35,12 +35,12 @@ import codechicken.nei.PositionedStack;
 
 public class NEIHandlerBottler extends RecipeHandlerBase {
 
-	private static final List<TileBottler.Recipe> recipes = new ArrayList<>();
+	private static final List<TileBottler.BottlerRecipe> recipes = new ArrayList<>();
 
 	@Override
 	public void prepare() {
 		for (FluidContainerData container : FluidContainerRegistry.getRegisteredFluidContainerData()) {
-			TileBottler.Recipe recipe = TileBottler.RecipeManager.findMatchingRecipe(container.fluid, container.emptyContainer);
+			TileBottler.BottlerRecipe recipe = TileBottler.RecipeManager.findMatchingRecipe(container.fluid, container.emptyContainer);
 			if (recipe != null) {
 				recipes.add(recipe);
 			}
@@ -53,7 +53,7 @@ public class NEIHandlerBottler extends RecipeHandlerBase {
 		public PositionedStack input;
 		public PositionedStack output;
 
-		public CachedBottlerRecipe(TileBottler.Recipe recipe) {
+		public CachedBottlerRecipe(TileBottler.BottlerRecipe recipe) {
 			if (recipe.input != null) {
 				this.fluid = new PositionedFluidTank(recipe.input, 10000, new Rectangle(48, 6, 16, 58), NEIHandlerBottler.this.getGuiTexture(), new Point(176, 0));
 			}
@@ -120,14 +120,14 @@ public class NEIHandlerBottler extends RecipeHandlerBase {
 
 	@Override
 	public void loadAllRecipes() {
-		for (TileBottler.Recipe recipe : recipes) {
+		for (TileBottler.BottlerRecipe recipe : recipes) {
 			this.arecipes.add(new CachedBottlerRecipe(recipe));
 		}
 	}
 
 	@Override
 	public void loadCraftingRecipes(ItemStack result) {
-		for (TileBottler.Recipe recipe : recipes) {
+		for (TileBottler.BottlerRecipe recipe : recipes) {
 			if (NEIServerUtils.areStacksSameTypeCrafting(recipe.bottled, result)) {
 				this.arecipes.add(new CachedBottlerRecipe(recipe));
 			}
@@ -136,7 +136,7 @@ public class NEIHandlerBottler extends RecipeHandlerBase {
 
 	@Override
 	public void loadUsageRecipes(ItemStack ingred) {
-		for (TileBottler.Recipe recipe : recipes) {
+		for (TileBottler.BottlerRecipe recipe : recipes) {
 			if (NEIServerUtils.areStacksSameTypeCrafting(recipe.can, ingred)) {
 				this.arecipes.add(new CachedBottlerRecipe(recipe));
 			}
@@ -145,7 +145,7 @@ public class NEIHandlerBottler extends RecipeHandlerBase {
 
 	@Override
 	public void loadUsageRecipes(FluidStack ingred) {
-		for (TileBottler.Recipe recipe : recipes) {
+		for (TileBottler.BottlerRecipe recipe : recipes) {
 			if (NEIUtils.areFluidsSameType(recipe.input, ingred)) {
 				this.arecipes.add(new CachedBottlerRecipe(recipe));
 			}

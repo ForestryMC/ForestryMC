@@ -11,10 +11,6 @@
 package forestry.factory.tiles;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -30,7 +26,7 @@ import net.minecraftforge.fluids.FluidTankInfo;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorLogic;
-import forestry.api.recipes.IStillManager;
+import forestry.api.recipes.IStillRecipe;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
@@ -46,6 +42,7 @@ import forestry.core.network.GuiId;
 import forestry.core.render.TankRenderInfo;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;
+import forestry.factory.recipes.StillRecipeManager;
 
 public class TileStill extends TilePowered implements ISidedInventory, ILiquidTankTile {
 
@@ -54,77 +51,12 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 	public static final short SLOT_RESOURCE = 1;
 	public static final short SLOT_CAN = 2;
 
-	public static class Recipe {
-
-		public final int timePerUnit;
-		public final FluidStack input;
-		public final FluidStack output;
-
-		public Recipe(int timePerUnit, FluidStack input, FluidStack output) {
-			this.timePerUnit = timePerUnit;
-			if (input == null) {
-				throw new IllegalArgumentException("Still recipes need an input. Input was null.");
-			}
-			if (output == null) {
-				throw new IllegalArgumentException("Still recipes need an output. Output was null.");
-			}
-			this.input = input;
-			this.output = output;
-		}
-
-		public boolean matches(FluidStack res) {
-			return res != null && res.containsFluid(input);
-		}
-	}
-
-	public static class RecipeManager implements IStillManager {
-
-		public static final ArrayList<TileStill.Recipe> recipes = new ArrayList<>();
-		public static final HashSet<Fluid> recipeFluidInputs = new HashSet<>();
-		public static final HashSet<Fluid> recipeFluidOutputs = new HashSet<>();
-
-		@Override
-		public void addRecipe(int timePerUnit, FluidStack input, FluidStack output) {
-			recipes.add(new TileStill.Recipe(timePerUnit, input, output));
-			if (input != null) {
-				recipeFluidInputs.add(input.getFluid());
-			}
-			if (output != null) {
-				recipeFluidOutputs.add(output.getFluid());
-			}
-		}
-
-		public static Recipe findMatchingRecipe(FluidStack item) {
-			for (Recipe recipe : recipes) {
-				if (recipe.matches(item)) {
-					return recipe;
-				}
-			}
-			return null;
-		}
-
-		public static boolean isInput(FluidStack res) {
-			return recipeFluidInputs.contains(res.getFluid());
-		}
-
-		@Override
-		public Map<Object[], Object[]> getRecipes() {
-			HashMap<Object[], Object[]> recipeList = new HashMap<>();
-
-			for (Recipe recipe : recipes) {
-				recipeList.put(new Object[]{recipe.input}, new Object[]{recipe.output});
-			}
-
-			return recipeList;
-		}
-	}
-
 	/* MEMBER */
 	private final FilteredTank resourceTank;
 	private final FilteredTank productTank;
 	private final TankManager tankManager;
 
-	private Recipe currentRecipe;
+	private IStillRecipe currentRecipe;
 	private FluidStack bufferedLiquid;
 	private int distillationTime = 0;
 	private int distillationTotalTime = 0;
@@ -133,9 +65,9 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 		super(1100, 8000, 200);
 		setInternalInventory(new StillInventoryAdapter(this));
 		setHints(Config.hints.get("still"));
-		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, RecipeManager.recipeFluidInputs);
+		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, StillRecipeManager.recipeFluidInputs);
 		resourceTank.tankMode = StandardTank.TankMode.INPUT;
-		productTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, RecipeManager.recipeFluidOutputs);
+		productTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, StillRecipeManager.recipeFluidOutputs);
 		productTank.tankMode = StandardTank.TankMode.OUTPUT;
 		tankManager = new TankManager(resourceTank, productTank);
 	}
@@ -214,16 +146,16 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 		// Ongoing process
 		if (distillationTime > 0 && !errorLogic.hasErrors()) {
 
-			distillationTime -= currentRecipe.input.amount;
-			productTank.fill(currentRecipe.output, true);
+			distillationTime -= currentRecipe.getInput().amount;
+			productTank.fill(currentRecipe.getOutput(), true);
 
 			return true;
 
 		} else if (currentRecipe != null) {
 
-			int resourceRequired = currentRecipe.timePerUnit * currentRecipe.input.amount;
+			int resourceRequired = currentRecipe.getCyclesPerUnit() * currentRecipe.getInput().amount;
 
-			boolean canFill = productTank.fill(currentRecipe.output, false) == currentRecipe.output.amount;
+			boolean canFill = productTank.fill(currentRecipe.getOutput(), false) == currentRecipe.getOutput().amount;
 			errorLogic.setCondition(!canFill, EnumErrorCode.NOSPACETANK);
 
 			boolean hasResource = resourceTank.getFluidAmount() >= resourceRequired;
@@ -233,7 +165,7 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 				// Start next cycle if enough bio mass is available
 				distillationTime = distillationTotalTime = resourceRequired;
 				resourceTank.drain(resourceRequired, true);
-				bufferedLiquid = new FluidStack(currentRecipe.input, resourceRequired);
+				bufferedLiquid = new FluidStack(currentRecipe.getInput(), resourceRequired);
 
 				return true;
 			}
@@ -244,10 +176,10 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 	}
 
 	private void checkRecipe() {
-		Recipe matchingRecipe = RecipeManager.findMatchingRecipe(resourceTank.getFluid());
+		IStillRecipe matchingRecipe = StillRecipeManager.findMatchingRecipe(resourceTank.getFluid());
 
 		if (matchingRecipe == null && bufferedLiquid != null && distillationTime > 0) {
-			matchingRecipe = RecipeManager.findMatchingRecipe(new FluidStack(bufferedLiquid, distillationTime));
+			matchingRecipe = StillRecipeManager.findMatchingRecipe(new FluidStack(bufferedLiquid, distillationTime));
 		}
 
 		if (currentRecipe != matchingRecipe) {
@@ -263,8 +195,8 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 			return false;
 		}
 
-		return (distillationTime > 0 || resourceTank.getFluidAmount() >= currentRecipe.timePerUnit * currentRecipe.input.amount)
-				&& productTank.getFluidAmount() <= productTank.getCapacity() - currentRecipe.output.amount;
+		return (distillationTime > 0 || resourceTank.getFluidAmount() >= currentRecipe.getCyclesPerUnit() * currentRecipe.getInput().amount)
+				&& productTank.getFluidAmount() <= productTank.getCapacity() - currentRecipe.getOutput().amount;
 	}
 
 	public int getDistillationProgressScaled(int i) {

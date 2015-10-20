@@ -44,6 +44,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.IShearable;
 import net.minecraftforge.common.config.Property;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 import cpw.mods.fml.common.SidedProxy;
@@ -70,7 +71,6 @@ import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.StringUtil;
-import forestry.factory.tiles.TileCarpenter;
 import forestry.storage.BackpackDefinition;
 import forestry.storage.BackpackInterface;
 import forestry.storage.CrateRegistry;
@@ -465,15 +465,31 @@ public class PluginStorage extends ForestryPlugin {
 	}
 
 	public static void createCrateRecipes() {
-		TileCarpenter.RecipeManager carpenterManager = (TileCarpenter.RecipeManager) RecipeManagers.carpenterManager;
 		for (ItemCrated crate : crates) {
-			ItemStack itemStack = new ItemStack(crate);
+			ItemStack crateStack = new ItemStack(crate);
+			ItemStack uncrated = crate.getContained();
 			if (crate.usesOreDict()) {
-				carpenterManager.addCratingWithOreDict(itemStack);
+				int[] oreIds = OreDictionary.getOreIDs(uncrated);
+				for (int oreId : oreIds) {
+					String oreName = OreDictionary.getOreName(oreId);
+					addCrating(crateStack, oreName);
+				}
 			} else {
-				carpenterManager.addCrating(itemStack);
+				addCrating(crateStack, uncrated);
 			}
+			addUncrating(crateStack, uncrated);
 		}
+	}
+
+	private static void addCrating(ItemStack crateStack, Object uncrated) {
+		FluidStack water = Fluids.WATER.getFluid(Constants.CARPENTER_CRATING_LIQUID_QUANTITY);
+		ItemStack box = ForestryItem.crate.getItemStack();
+		RecipeManagers.carpenterManager.addRecipe(Constants.CARPENTER_CRATING_CYCLES, water, box, crateStack, "###", "###", "###", '#', uncrated);
+	}
+
+	private static void addUncrating(ItemStack crateStack, ItemStack uncrated) {
+		ItemStack product = new ItemStack(uncrated.getItem(), 9, uncrated.getItemDamage());
+		RecipeManagers.carpenterManager.addRecipe(Constants.CARPENTER_UNCRATING_CYCLES, null, product, "#", '#', crateStack);
 	}
 
 	@Override

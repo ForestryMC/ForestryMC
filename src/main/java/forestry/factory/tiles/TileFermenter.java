@@ -11,12 +11,8 @@
 package forestry.factory.tiles;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.Map;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -36,13 +32,12 @@ import cpw.mods.fml.common.Optional;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorLogic;
 import forestry.api.fuels.FuelManager;
-import forestry.api.recipes.IFermenterManager;
+import forestry.api.recipes.IFermenterRecipe;
 import forestry.api.recipes.IVariableFermentable;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.fluids.FluidHelper;
-import forestry.core.fluids.Fluids;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.fluids.tanks.StandardTank;
@@ -54,7 +49,7 @@ import forestry.core.network.GuiId;
 import forestry.core.render.TankRenderInfo;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;
-import forestry.core.utils.ItemStackUtil;
+import forestry.factory.recipes.FermenterRecipeManager;
 import forestry.factory.triggers.FactoryTriggers;
 
 import buildcraft.api.statements.ITriggerExternal;
@@ -68,111 +63,12 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 	public static final short SLOT_CAN_INPUT = 3;
 	public static final short SLOT_INPUT = 4;
 
-	// / RECIPE MANAGMENT
-	public static class Recipe {
-
-		public final ItemStack resource;
-		public final int fermentationValue;
-		public final float modifier;
-		public final FluidStack output;
-		public final FluidStack liquid;
-
-		public Recipe(ItemStack resource, int fermentationValue, float modifier, FluidStack output, FluidStack liquid) {
-			this.resource = resource;
-			this.fermentationValue = fermentationValue;
-			this.modifier = modifier;
-			this.output = output;
-			this.liquid = liquid;
-
-			if (resource == null) {
-				throw new NullPointerException("Fermenter Resource cannot be null!");
-			}
-
-			if (output == null) {
-				throw new NullPointerException("Fermenter Output cannot be null!");
-			}
-
-			if (liquid == null) {
-				throw new NullPointerException("Fermenter Liquid cannot be null!");
-			}
-		}
-
-		public boolean matches(ItemStack res, FluidStack liqu) {
-			if (!ItemStackUtil.isCraftingEquivalent(resource, res)) {
-				return false;
-			}
-
-			return liqu != null && liqu.containsFluid(liquid);
-		}
-	}
-
-	public static class RecipeManager implements IFermenterManager {
-
-		public static final ArrayList<TileFermenter.Recipe> recipes = new ArrayList<>();
-		public static final HashSet<Fluid> recipeFluidInputs = new HashSet<>();
-		public static final HashSet<Fluid> recipeFluidOutputs = new HashSet<>();
-
-		@Override
-		public void addRecipe(ItemStack resource, int fermentationValue, float modifier, FluidStack output, FluidStack liquid) {
-			// assume that fermenter recipes want to use Forestry's honey and not the legacy "fluid.honey"
-			if (Fluids.LEGACY_HONEY.is(liquid)) {
-				liquid = Fluids.HONEY.getFluid(liquid.amount);
-			}
-			
-			recipes.add(new Recipe(resource, fermentationValue, modifier, output, liquid));
-			if (liquid != null) {
-				recipeFluidInputs.add(liquid.getFluid());
-			}
-			if (output != null) {
-				recipeFluidOutputs.add(output.getFluid());
-			}
-		}
-
-		@Override
-		public void addRecipe(ItemStack resource, int fermentationValue, float modifier, FluidStack output) {
-			addRecipe(resource, fermentationValue, modifier, output, Fluids.WATER.getFluid(1000));
-		}
-
-		public static Recipe findMatchingRecipe(ItemStack res, FluidStack liqu) {
-			for (Recipe recipe : recipes) {
-				if (recipe.matches(res, liqu)) {
-					return recipe;
-				}
-			}
-			return null;
-		}
-
-		public static boolean isResource(ItemStack resource) {
-			if (resource == null) {
-				return false;
-			}
-
-			for (Recipe recipe : recipes) {
-				if (ItemStackUtil.isCraftingEquivalent(recipe.resource, resource)) {
-					return true;
-				}
-			}
-			return false;
-		}
-
-		@Override
-		public Map<Object[], Object[]> getRecipes() {
-			HashMap<Object[], Object[]> recipeList = new HashMap<>();
-
-			for (Recipe recipe : recipes) {
-				recipeList.put(new Object[]{recipe.resource, recipe.liquid}, new Object[]{recipe.output});
-			}
-
-			return recipeList;
-		}
-	}
-
 	private final FilteredTank resourceTank;
 	private final FilteredTank productTank;
 
 	private final TankManager tankManager;
 
-	private Recipe currentRecipe;
+	private IFermenterRecipe currentRecipe;
 	private float currentResourceModifier;
 	private int fermentationTime = 0;
 	private int fermentationTotalTime = 0;
@@ -184,9 +80,9 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 		super(2000, 8000, 600);
 		setInternalInventory(new FermenterInventoryAdapter(this));
 		setHints(Config.hints.get("fermenter"));
-		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, RecipeManager.recipeFluidInputs);
+		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, FermenterRecipeManager.recipeFluidInputs);
 		resourceTank.tankMode = StandardTank.TankMode.INPUT;
-		productTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, RecipeManager.recipeFluidOutputs);
+		productTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, FermenterRecipeManager.recipeFluidOutputs);
 		productTank.tankMode = StandardTank.TankMode.OUTPUT;
 		tankManager = new TankManager(resourceTank, productTank);
 	}
@@ -259,7 +155,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 
 		IErrorLogic errorLogic = getErrorLogic();
 
-		boolean hasRecipe = RecipeManager.findMatchingRecipe(inventory.getStackInSlot(SLOT_RESOURCE), resourceTank.getFluid()) != null;
+		boolean hasRecipe = FermenterRecipeManager.findMatchingRecipe(inventory.getStackInSlot(SLOT_RESOURCE), resourceTank.getFluid()) != null;
 		errorLogic.setCondition(!hasRecipe, EnumErrorCode.NORECIPE);
 
 		boolean hasResource = resourceTank.getFluidAmount() >= fuelCurrentFerment;
@@ -299,8 +195,8 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 			int fermented = Math.min(fermentationTime, this.fuelCurrentFerment);
 
 			// input are checked, add output if possible
-			if (!addProduct(new FluidStack(currentRecipe.output,
-					Math.round(fermented * currentRecipe.modifier * currentResourceModifier)))) {
+			if (!addProduct(new FluidStack(currentRecipe.getOutput(),
+					Math.round(fermented * currentRecipe.getModifier() * currentResourceModifier)))) {
 				return false; // the output tank is too full, TODO: check/add error code?
 			}
 
@@ -345,7 +241,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 
 	private void checkRecipe() {
 		IInventoryAdapter inventory = getInternalInventory();
-		Recipe sameRec = RecipeManager.findMatchingRecipe(inventory.getStackInSlot(SLOT_RESOURCE), resourceTank.getFluid());
+		IFermenterRecipe sameRec = FermenterRecipeManager.findMatchingRecipe(inventory.getStackInSlot(SLOT_RESOURCE), resourceTank.getFluid());
 
 		if (currentRecipe != sameRec) {
 			currentRecipe = sameRec;
@@ -359,8 +255,8 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 			return;
 		}
 
-		fermentationTime = currentRecipe.fermentationValue;
-		fermentationTotalTime = currentRecipe.fermentationValue;
+		fermentationTime = currentRecipe.getFermentationValue();
+		fermentationTotalTime = currentRecipe.getFermentationValue();
 	}
 
 	/**
@@ -419,7 +315,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 
 	@Override
 	public boolean hasWork() {
-		if (currentRecipe == null && RecipeManager.findMatchingRecipe(getStackInSlot(SLOT_RESOURCE), resourceTank.getFluid()) == null) {
+		if (currentRecipe == null && FermenterRecipeManager.findMatchingRecipe(getStackInSlot(SLOT_RESOURCE), resourceTank.getFluid()) == null) {
 			return false;
 		}
 
@@ -560,7 +456,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 		@Override
 		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 			if (slotIndex == SLOT_RESOURCE) {
-				return RecipeManager.isResource(itemStack);
+				return FermenterRecipeManager.isResource(itemStack);
 			} else if (slotIndex == SLOT_INPUT) {
 				Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
 				return tile.resourceTank.accepts(fluid);

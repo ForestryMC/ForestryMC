@@ -12,8 +12,6 @@ package forestry.factory.tiles;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -32,7 +30,7 @@ import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorLogic;
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.MoistenerFuel;
-import forestry.api.recipes.IMoistenerManager;
+import forestry.api.recipes.IMoistenerRecipe;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
@@ -51,6 +49,7 @@ import forestry.core.tiles.TileBase;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.SlotUtil;
+import forestry.factory.recipes.MoistenerRecipeManager;
 
 public class TileMoistener extends TileBase implements ISidedInventory, ILiquidTankTile, IRenderableTile {
 
@@ -63,71 +62,9 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 	private static final short SLOT_PRODUCT = 10;
 	private static final short SLOT_RESOURCE = 11;
 
-	/* RECIPE MANAGMENT */
-	public static class Recipe {
-
-		public final int timePerItem;
-		public final ItemStack resource;
-		public final ItemStack product;
-
-		public Recipe(ItemStack resource, ItemStack product, int timePerItem) {
-			this.timePerItem = timePerItem;
-			this.resource = resource;
-			this.product = product;
-		}
-
-		public boolean matches(ItemStack res) {
-			return ItemStackUtil.isCraftingEquivalent(resource, res);
-		}
-	}
-
-	public static class RecipeManager implements IMoistenerManager {
-
-		public static final ArrayList<TileMoistener.Recipe> recipes = new ArrayList<>();
-
-		@Override
-		public void addRecipe(ItemStack resource, ItemStack product, int timePerItem) {
-			recipes.add(new TileMoistener.Recipe(resource, product, timePerItem));
-		}
-
-		public static boolean isResource(ItemStack resource) {
-			if (resource == null) {
-				return false;
-			}
-
-			for (Recipe rec : recipes) {
-				if (ItemStackUtil.isIdenticalItem(resource, rec.resource)) {
-					return true;
-				}
-			}
-
-			return false;
-		}
-
-		public static Recipe findMatchingRecipe(ItemStack item) {
-			for (Recipe recipe : recipes) {
-				if (recipe.matches(item)) {
-					return recipe;
-				}
-			}
-			return null;
-		}
-
-		@Override
-		public Map<Object[], Object[]> getRecipes() {
-			HashMap<Object[], Object[]> recipeList = new HashMap<>();
-
-			for (Recipe recipe : recipes) {
-				recipeList.put(new ItemStack[]{recipe.resource}, new ItemStack[]{recipe.product});
-			}
-
-			return recipeList;
-		}
-	}
-
 	private final FilteredTank resourceTank;
 	private final TankManager tankManager;
-	private TileMoistener.Recipe currentRecipe;
+	private IMoistenerRecipe currentRecipe;
 
 	private int burnTime = 0;
 	private int totalTime = 0;
@@ -305,7 +242,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 	}
 
 	public void checkRecipe() {
-		Recipe sameRec = RecipeManager.findMatchingRecipe(getInternalInventory().getStackInSlot(SLOT_RESOURCE));
+		IMoistenerRecipe sameRec = MoistenerRecipeManager.findMatchingRecipe(getInternalInventory().getStackInSlot(SLOT_RESOURCE));
 		if (currentRecipe != sameRec) {
 			currentRecipe = sameRec;
 			resetRecipe();
@@ -320,9 +257,9 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 			productionTime = 0;
 			timePerItem = 0;
 		} else {
-			currentProduct = currentRecipe.product;
-			productionTime = currentRecipe.timePerItem;
-			timePerItem = currentRecipe.timePerItem;
+			currentProduct = currentRecipe.getProduct();
+			productionTime = currentRecipe.getTimePerItem();
+			timePerItem = currentRecipe.getTimePerItem();
 		}
 	}
 
@@ -632,7 +569,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 		@Override
 		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 			if (slotIndex == SLOT_RESOURCE) {
-				return RecipeManager.isResource(itemStack);
+				return MoistenerRecipeManager.isResource(itemStack);
 			}
 
 			if (SlotUtil.isSlotInRange(slotIndex, SLOT_STASH_1, SLOT_STASH_COUNT)) {
@@ -660,4 +597,5 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 			return false;
 		}
 	}
+
 }

@@ -24,6 +24,7 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.oredict.OreDictionary;
 
+import forestry.api.recipes.IDescriptiveRecipe;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
 

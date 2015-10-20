@@ -12,6 +12,8 @@ package forestry.factory.recipes;
 
 import net.minecraft.item.ItemStack;
 
+import forestry.api.recipes.ISqueezerRecipe;
+
 public interface ISqueezerContainerRecipe {
 	ItemStack getEmptyContainer();
 

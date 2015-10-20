@@ -14,7 +14,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 
-import forestry.core.recipes.IDescriptiveRecipe;
+import forestry.api.recipes.IDescriptiveRecipe;
 import forestry.core.recipes.RecipeUtil;
 
 import uristqwerty.CraftGuide.api.ItemSlot;

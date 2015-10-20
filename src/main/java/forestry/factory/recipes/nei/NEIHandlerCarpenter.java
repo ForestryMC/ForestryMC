@@ -21,12 +21,13 @@ import net.minecraft.util.StatCollector;
 
 import net.minecraftforge.fluids.FluidStack;
 
-import forestry.core.recipes.IDescriptiveRecipe;
+import forestry.api.recipes.ICarpenterRecipe;
+import forestry.api.recipes.IDescriptiveRecipe;
+import forestry.api.recipes.RecipeManagers;
 import forestry.core.recipes.nei.NEIUtils;
 import forestry.core.recipes.nei.PositionedFluidTank;
 import forestry.core.recipes.nei.RecipeHandlerBase;
 import forestry.factory.gui.GuiCarpenter;
-import forestry.factory.tiles.TileCarpenter;
 
 import codechicken.lib.gui.GuiDraw;
 import codechicken.nei.NEIServerUtils;
@@ -49,8 +50,8 @@ public class NEIHandlerCarpenter extends RecipeHandlerBase {
 		public PositionedFluidTank tank;
 		public PositionedStack output;
 
-		public CachedCarpenterRecipe(TileCarpenter.Recipe recipe, boolean genPerms) {
-			IDescriptiveRecipe irecipe = (IDescriptiveRecipe) recipe.asIRecipe();
+		public CachedCarpenterRecipe(ICarpenterRecipe recipe, boolean genPerms) {
+			IDescriptiveRecipe irecipe = recipe.getCraftingGridRecipe();
 			if (irecipe != null) {
 				if (irecipe.getIngredients() != null) {
 					this.setIngredients(irecipe.getWidth(), irecipe.getHeight(), irecipe.getIngredients());
@@ -58,11 +59,11 @@ public class NEIHandlerCarpenter extends RecipeHandlerBase {
 				if (recipe.getBox() != null) {
 					this.inputs.add(new PositionedStack(recipe.getBox(), 78, 6));
 				}
-				if (recipe.getLiquid() != null) {
-					this.tank = new PositionedFluidTank(recipe.getLiquid(), 10000, new Rectangle(145, 3, 16, 58), NEIHandlerCarpenter.this.getGuiTexture(), new Point(176, 0));
+				if (recipe.getFluidResource() != null) {
+					this.tank = new PositionedFluidTank(recipe.getFluidResource(), 10000, new Rectangle(145, 3, 16, 58), NEIHandlerCarpenter.this.getGuiTexture(), new Point(176, 0));
 				}
-				if (recipe.getCraftingResult() != null) {
-					this.output = new PositionedStack(recipe.getCraftingResult(), 75, 37);
+				if (recipe.getCraftingGridRecipe().getRecipeOutput() != null) {
+					this.output = new PositionedStack(recipe.getCraftingGridRecipe().getRecipeOutput(), 75, 37);
 				}
 			}
 
@@ -71,7 +72,7 @@ public class NEIHandlerCarpenter extends RecipeHandlerBase {
 			}
 		}
 
-		public CachedCarpenterRecipe(TileCarpenter.Recipe recipe) {
+		public CachedCarpenterRecipe(ICarpenterRecipe recipe) {
 			this(recipe, false);
 		}
 
@@ -155,15 +156,15 @@ public class NEIHandlerCarpenter extends RecipeHandlerBase {
 
 	@Override
 	public void loadAllRecipes() {
-		for (TileCarpenter.Recipe recipe : TileCarpenter.RecipeManager.recipes) {
+		for (ICarpenterRecipe recipe : RecipeManagers.carpenterManager.recipes()) {
 			this.arecipes.add(new CachedCarpenterRecipe(recipe, true));
 		}
 	}
 
 	@Override
 	public void loadCraftingRecipes(ItemStack result) {
-		for (TileCarpenter.Recipe recipe : TileCarpenter.RecipeManager.recipes) {
-			if (NEIServerUtils.areStacksSameTypeCrafting(recipe.getCraftingResult(), result)) {
+		for (ICarpenterRecipe recipe : RecipeManagers.carpenterManager.recipes()) {
+			if (NEIServerUtils.areStacksSameTypeCrafting(recipe.getCraftingGridRecipe().getRecipeOutput(), result)) {
 				this.arecipes.add(new CachedCarpenterRecipe(recipe, true));
 			}
 		}
@@ -172,7 +173,7 @@ public class NEIHandlerCarpenter extends RecipeHandlerBase {
 	@Override
 	public void loadUsageRecipes(ItemStack ingred) {
 		super.loadUsageRecipes(ingred);
-		for (TileCarpenter.Recipe recipe : TileCarpenter.RecipeManager.recipes) {
+		for (ICarpenterRecipe recipe : RecipeManagers.carpenterManager.recipes()) {
 			CachedCarpenterRecipe crecipe = new CachedCarpenterRecipe(recipe);
 			if (crecipe.inputs != null && crecipe.contains(crecipe.inputs, ingred)) {
 				crecipe.generatePermutations();
@@ -184,8 +185,8 @@ public class NEIHandlerCarpenter extends RecipeHandlerBase {
 
 	@Override
 	public void loadUsageRecipes(FluidStack ingredient) {
-		for (TileCarpenter.Recipe recipe : TileCarpenter.RecipeManager.recipes) {
-			if (NEIUtils.areFluidsSameType(recipe.getLiquid(), ingredient)) {
+		for (ICarpenterRecipe recipe : RecipeManagers.carpenterManager.recipes()) {
+			if (NEIUtils.areFluidsSameType(recipe.getFluidResource(), ingredient)) {
 				this.arecipes.add(new CachedCarpenterRecipe(recipe, true));
 			}
 		}

@@ -14,6 +14,8 @@ import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.fluids.FluidStack;
 
+import forestry.api.recipes.ISqueezerRecipe;
+
 public class SqueezerRecipe implements ISqueezerRecipe {
 
 	private final int processingTime;

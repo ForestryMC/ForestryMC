@@ -14,6 +14,7 @@ import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.fluids.FluidStack;
 
+import forestry.api.recipes.ISqueezerRecipe;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.utils.ItemStackUtil;
 
