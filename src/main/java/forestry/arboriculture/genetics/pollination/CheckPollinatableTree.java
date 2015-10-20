@@ -47,4 +47,8 @@ public class CheckPollinatableTree implements ICheckPollinatable {
 		return !tree.isGeneticEqual(pollen);
 	}
 
+	@Override
+	public boolean isPollinated() {
+		return tree.getMate() != null;
+	}
 }

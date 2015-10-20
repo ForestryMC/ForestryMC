@@ -39,4 +39,9 @@ public class CheckPollinatable implements ICheckPollinatable {
 	public boolean canMateWith(IIndividual pollen) {
 		return pollinatable.canMateWith(pollen);
 	}
+
+	@Override
+	public boolean isPollinated() {
+		return pollinatable.isPollinated();
+	}
 }

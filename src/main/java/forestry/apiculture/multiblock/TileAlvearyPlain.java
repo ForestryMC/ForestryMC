@@ -16,23 +16,12 @@ import java.util.Collection;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
 import cpw.mods.fml.common.Optional;
 
-import forestry.api.apiculture.IBeeHousing;
-import forestry.api.apiculture.IBeeHousingInventory;
-import forestry.api.apiculture.IBeeListener;
-import forestry.api.apiculture.IBeeModifier;
-import forestry.api.apiculture.IBeekeepingLogic;
-import forestry.api.core.EnumHumidity;
-import forestry.api.core.EnumTemperature;
 import forestry.api.core.ForestryAPI;
-import forestry.api.core.IErrorLogic;
 import forestry.apiculture.trigger.ApicultureTriggers;
 import forestry.core.config.Config;
 import forestry.core.gui.IHintSource;
@@ -53,7 +42,7 @@ import buildcraft.api.statements.ITriggerInternal;
 import buildcraft.api.statements.ITriggerProvider;
 
 @Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = "BuildCraftAPI|statements")
-public class TileAlvearyPlain extends TileAlveary implements IBeeHousing, IClimatised, IHintSource, IStreamableGui, ITitled, ITriggerProvider {
+public class TileAlvearyPlain extends TileAlveary implements IClimatised, IHintSource, IStreamableGui, ITitled, ITriggerProvider {
 
 	@Override
 	public void onMachineAssembled(MultiblockControllerBase controller) {
@@ -139,64 +128,7 @@ public class TileAlvearyPlain extends TileAlveary implements IBeeHousing, IClima
 		return res;
 	}
 
-	/* IHousing */
-	@Override
-	public World getWorld() {
-		return getAlvearyController().getWorld();
-	}
-
-	@Override
-	public ChunkCoordinates getCoordinates() {
-		return getAlvearyController().getCoordinates();
-	}
-
-	@Override
-	public BiomeGenBase getBiome() {
-		return getAlvearyController().getBiome();
-	}
-
-	/* IBeeHousing */
-	@Override
-	public Iterable<IBeeModifier> getBeeModifiers() {
-		return getAlvearyController().getBeeModifiers();
-	}
-
-	@Override
-	public Iterable<IBeeListener> getBeeListeners() {
-		return getAlvearyController().getBeeListeners();
-	}
-
-	@Override
-	public IBeeHousingInventory getBeeInventory() {
-		return getAlvearyController().getBeeInventory();
-	}
-
-	@Override
-	public IBeekeepingLogic getBeekeepingLogic() {
-		return getAlvearyController().getBeekeepingLogic();
-	}
-
 	/* IClimatised */
-	@Override
-	public EnumTemperature getTemperature() {
-		return getAlvearyController().getTemperature();
-	}
-
-	@Override
-	public EnumHumidity getHumidity() {
-		return getAlvearyController().getHumidity();
-	}
-
-	@Override
-	public int getBlockLightValue() {
-		return getAlvearyController().getBlockLightValue();
-	}
-
-	@Override
-	public boolean canBlockSeeTheSky() {
-		return getAlvearyController().canBlockSeeTheSky();
-	}
-
 	@Override
 	public float getExactTemperature() {
 		return getAlvearyController().getExactTemperature();
@@ -206,10 +138,4 @@ public class TileAlvearyPlain extends TileAlveary implements IBeeHousing, IClima
 	public float getExactHumidity() {
 		return getAlvearyController().getExactHumidity();
 	}
-
-	@Override
-	public IErrorLogic getErrorLogic() {
-		return getAlvearyController().getErrorLogic();
-	}
-
 }

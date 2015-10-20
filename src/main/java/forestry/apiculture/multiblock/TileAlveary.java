@@ -10,14 +10,25 @@
  ******************************************************************************/
 package forestry.apiculture.multiblock;
 
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.StatCollector;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
 
+import forestry.api.apiculture.IBeeHousing;
+import forestry.api.apiculture.IBeeHousingInventory;
+import forestry.api.apiculture.IBeeListener;
+import forestry.api.apiculture.IBeeModifier;
+import forestry.api.apiculture.IBeekeepingLogic;
+import forestry.api.core.EnumHumidity;
+import forestry.api.core.EnumTemperature;
+import forestry.api.core.IErrorLogic;
 import forestry.apiculture.blocks.BlockAlveary;
 import forestry.core.multiblock.MultiblockControllerBase;
 import forestry.core.multiblock.MultiblockValidationException;
 import forestry.core.multiblock.rectangular.RectangularMultiblockTileEntityBase;
 
-public abstract class TileAlveary extends RectangularMultiblockTileEntityBase {
+public abstract class TileAlveary extends RectangularMultiblockTileEntityBase implements IBeeHousing {
 
 	public static final int PLAIN_META = 0;
 	public static final int ENTRANCE_META = 1;
@@ -93,6 +104,69 @@ public abstract class TileAlveary extends RectangularMultiblockTileEntityBase {
 		if (worldObj.isRemote) {
 			this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 		}
+	}
+
+	/* IHousing */
+	@Override
+	public World getWorld() {
+		return getAlvearyController().getWorld();
+	}
+
+	@Override
+	public ChunkCoordinates getCoordinates() {
+		return getAlvearyController().getCoordinates();
+	}
+
+	@Override
+	public BiomeGenBase getBiome() {
+		return getAlvearyController().getBiome();
+	}
+
+	/* IBeeHousing */
+	@Override
+	public Iterable<IBeeModifier> getBeeModifiers() {
+		return getAlvearyController().getBeeModifiers();
+	}
+
+	@Override
+	public Iterable<IBeeListener> getBeeListeners() {
+		return getAlvearyController().getBeeListeners();
+	}
+
+	@Override
+	public IBeeHousingInventory getBeeInventory() {
+		return getAlvearyController().getBeeInventory();
+	}
+
+	@Override
+	public IBeekeepingLogic getBeekeepingLogic() {
+		return getAlvearyController().getBeekeepingLogic();
+	}
+
+	/* IClimatised */
+	@Override
+	public EnumTemperature getTemperature() {
+		return getAlvearyController().getTemperature();
+	}
+
+	@Override
+	public EnumHumidity getHumidity() {
+		return getAlvearyController().getHumidity();
+	}
+
+	@Override
+	public int getBlockLightValue() {
+		return getAlvearyController().getBlockLightValue();
+	}
+
+	@Override
+	public boolean canBlockSeeTheSky() {
+		return getAlvearyController().canBlockSeeTheSky();
+	}
+
+	@Override
+	public IErrorLogic getErrorLogic() {
+		return getAlvearyController().getErrorLogic();
 	}
 
 }

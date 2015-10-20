@@ -34,4 +34,9 @@ public class FakePollinatable implements IPollinatable {
 	public void mateWith(IIndividual pollen) {
 
 	}
+
+	@Override
+	public boolean isPollinated() {
+		return checkPollinatable.isPollinated();
+	}
 }

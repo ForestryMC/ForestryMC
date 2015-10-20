@@ -38,4 +38,6 @@ public interface ICheckPollinatable {
 	 * @return true if mating is possible, false otherwise.
 	 */
 	boolean canMateWith(IIndividual pollen);
+
+	boolean isPollinated();
 }

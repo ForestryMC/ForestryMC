@@ -258,7 +258,8 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		return damage > tree.getResilience();
 	}
 
-	private boolean isPollinated() {
+	@Override
+	public boolean isPollinated() {
 		ITree tree = getTree();
 		return tree != null && !isDestroyed(tree, damage) && tree.getMate() != null;
 	}
@@ -576,5 +577,4 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		ITree tree = getTree();
 		return !isDecorative && !isDestroyed(tree, damage) && caterpillar == null;
 	}
-
 }

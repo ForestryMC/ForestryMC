@@ -13,6 +13,7 @@ package forestry.arboriculture.tiles;
 import java.io.IOException;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.Packet;
@@ -25,17 +26,19 @@ import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.IAllele;
 import forestry.arboriculture.genetics.Tree;
+import forestry.core.access.IOwnable;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketTileStream;
+import forestry.core.utils.PlayerUtil;
 
 /**
  * This is the base TE class for any block that needs to contain tree genome information.
  *
  * @author SirSengir
  */
-public abstract class TileTreeContainer extends TileEntity implements IStreamable {
+public abstract class TileTreeContainer extends TileEntity implements IStreamable, IOwnable {
 
 	private ITree containedTree;
 	private GameProfile owner;
@@ -108,13 +111,25 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 		return this.containedTree;
 	}
 
-	/* Owner */
+	/* IOwnable */
+	@Override
 	public GameProfile getOwner() {
 		return owner;
 	}
 
+	@Override
 	public void setOwner(GameProfile owner) {
 		this.owner = owner;
+	}
+
+	@Override
+	public boolean isOwned() {
+		return owner != null;
+	}
+
+	@Override
+	public boolean isOwner(EntityPlayer player) {
+		return player != null && PlayerUtil.isSameGameProfile(player.getGameProfile(), owner);
 	}
 
 	/* UPDATING */
