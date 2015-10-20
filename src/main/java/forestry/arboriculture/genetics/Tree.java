@@ -48,10 +48,12 @@ import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IEffectData;
 import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.IMutation;
+import forestry.arboriculture.tiles.TileLeaves;
 import forestry.core.config.Config;
 import forestry.core.genetics.Chromosome;
 import forestry.core.genetics.Individual;
 import forestry.core.genetics.alleles.Allele;
+import forestry.core.tiles.TileUtil;
 import forestry.core.utils.StringUtil;
 
 public class Tree extends Individual implements ITree, IPlantable {
@@ -222,6 +224,10 @@ public class Tree extends Individual implements ITree, IPlantable {
 	@Override
 	public void setLeaves(World world, GameProfile owner, int x, int y, int z) {
 		genome.getPrimary().getGenerator().setLeaves(world, owner, x, y, z, false);
+		TileLeaves leaves = TileUtil.getTile(world, x, y, z, TileLeaves.class);
+		if (leaves != null) {
+			leaves.setTree(this);
+		}
 	}
 
 	@Override
