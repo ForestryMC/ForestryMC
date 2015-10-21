@@ -233,11 +233,14 @@ public final class FluidHelper {
 			IFluidContainerItem containerItem = (IFluidContainerItem) item;
 			containerItem.drain(drained, drainAmount, true);
 			return drained;
-		} else if (FluidContainerRegistry.isContainer(container)) {
-			if (drainAmount < Constants.BUCKET_VOLUME) {
-				return container;
+		} else {
+			int capacity = FluidContainerRegistry.getContainerCapacity(container);
+			if (capacity > 0) {
+				if (drainAmount < capacity) {
+					return container;
+				}
+				return FluidContainerRegistry.drainFluidContainer(container);
 			}
-			return FluidContainerRegistry.drainFluidContainer(container);
 		}
 
 		return null;
