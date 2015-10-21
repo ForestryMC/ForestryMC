@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.food.items;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -71,7 +72,7 @@ public class ItemBeverage extends ItemForestryFood {
 		}
 
 		public static List<IBeverageEffect> loadEffects(ItemStack stack) {
-			List<IBeverageEffect> effectsList = Collections.emptyList();
+			List<IBeverageEffect> effectsList = new ArrayList<>();
 
 			NBTTagCompound nbttagcompound = stack.getTagCompound();
 			if (nbttagcompound == null) {
