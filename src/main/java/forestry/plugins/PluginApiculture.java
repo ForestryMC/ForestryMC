@@ -101,7 +101,6 @@ import forestry.apiculture.genetics.alleles.AlleleEffectSnowing;
 import forestry.apiculture.items.ItemArmorApiarist;
 import forestry.apiculture.items.ItemBeeGE;
 import forestry.apiculture.items.ItemBeealyzer;
-import forestry.apiculture.items.ItemBlockAlveary;
 import forestry.apiculture.items.ItemBlockCandle;
 import forestry.apiculture.items.ItemHabitatLocator;
 import forestry.apiculture.items.ItemHiveFrame;
@@ -267,7 +266,7 @@ public class PluginApiculture extends ForestryPlugin {
 		ForestryBlock.stump.registerBlock(new BlockStump(), ItemBlockForestry.class, "stump");
 
 		// Alveary and Components
-		ForestryBlock.alveary.registerBlock(new BlockAlveary(), ItemBlockAlveary.class, "alveary");
+		ForestryBlock.alveary.registerBlock(new BlockAlveary(), ItemBlockForestry.class, "alveary");
 		ForestryBlock.alveary.block().setHarvestLevel("axe", 0);
 
 		// Add triggers

@@ -17,10 +17,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
-import forestry.core.items.IStructureBlockItem;
 import forestry.farming.render.EnumFarmBlockTexture;
 
-public class ItemBlockFarm extends ItemBlock implements IStructureBlockItem {
+public class ItemBlockFarm extends ItemBlock {
 
 	public ItemBlockFarm(Block block) {
 		super(block);
