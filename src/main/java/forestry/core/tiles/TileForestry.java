@@ -15,7 +15,6 @@ import java.util.Collection;
 import java.util.Random;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -82,9 +81,8 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 		super.validate();
 	}
 
-	public void rotateAfterPlacement(EntityLivingBase entityLiving) {
-
-		int l = MathHelper.floor_double(((entityLiving.rotationYaw * 4F) / 360F) + 0.5D) & 3;
+	public void rotateAfterPlacement(EntityPlayer player, int side) {
+		int l = MathHelper.floor_double(((player.rotationYaw * 4F) / 360F) + 0.5D) & 3;
 		if (l == 0) {
 			setOrientation(ForgeDirection.NORTH);
 		}
@@ -97,7 +95,6 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 		if (l == 3) {
 			setOrientation(ForgeDirection.WEST);
 		}
-
 	}
 
 	// / UPDATING
@@ -219,6 +216,8 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 		}
 		this.orientation = orientation;
 		this.setNeedsNetworkUpdate();
+		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, worldObj.getBlock(xCoord, yCoord, zCoord));
+		worldObj.func_147479_m(xCoord, yCoord, zCoord);
 	}
 
 	protected final void setNeedsNetworkUpdate() {

@@ -12,7 +12,7 @@ package forestry.core.tiles;
 
 import java.io.IOException;
 
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.nbt.NBTTagCompound;
@@ -61,8 +61,14 @@ public abstract class TileEngine extends TileBase implements IEnergyConnection, 
 	}
 
 	@Override
-	public void rotateAfterPlacement(EntityLivingBase entityLiving) {
-		rotateEngine();
+	public void rotateAfterPlacement(EntityPlayer player, int side) {
+		ForgeDirection orientation = ForgeDirection.getOrientation(side).getOpposite();
+		if (isOrientedAtEnergyReciever(orientation)) {
+			setOrientation(orientation);
+		} else {
+			super.rotateAfterPlacement(player, side);
+			rotateEngine();
+		}
 	}
 
 	protected void addHeat(int i) {
@@ -173,19 +179,18 @@ public abstract class TileEngine extends TileBase implements IEnergyConnection, 
 
 	/* INTERACTION */
 	public void rotateEngine() {
-
 		for (int i = getOrientation().ordinal() + 1; i <= getOrientation().ordinal() + 6; ++i) {
-			ForgeDirection orient = ForgeDirection.values()[i % 6];
-
-			TileEntity tile = worldObj.getTileEntity(xCoord + orient.offsetX, yCoord + orient.offsetY, zCoord + orient.offsetZ);
-
-			if (BlockUtil.isEnergyReceiverOrEngine(getOrientation().getOpposite(), tile)) {
-				setOrientation(orient);
-				worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, worldObj.getBlock(xCoord, yCoord, zCoord));
-				worldObj.func_147479_m(xCoord, yCoord, zCoord);
-				break;
+			ForgeDirection orientation = ForgeDirection.values()[i % 6];
+			if (isOrientedAtEnergyReciever(orientation)) {
+				setOrientation(orientation);
+				return;
 			}
 		}
+	}
+
+	private boolean isOrientedAtEnergyReciever(ForgeDirection orientation) {
+		TileEntity tile = worldObj.getTileEntity(xCoord + orientation.offsetX, yCoord + orientation.offsetY, zCoord + orientation.offsetZ);
+		return BlockUtil.isEnergyReceiverOrEngine(getOrientation().getOpposite(), tile);
 	}
 
 	// STATE INFORMATION

@@ -17,7 +17,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
@@ -39,7 +38,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 import forestry.core.access.IAccessHandler;
 import forestry.core.circuits.ISocketable;
 import forestry.core.fluids.FluidHelper;
-import forestry.core.items.ItemBlockNBT;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.MachineDefinition;
 import forestry.core.tiles.TileBase;
@@ -162,22 +160,6 @@ public class BlockBase extends BlockForestry {
 	public boolean isSideSolid(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
 		MachineDefinition definition = getDefinition(world, x, y, z);
 		return definition != null && definition.isSolidOnSide(world, x, y, z, side.ordinal());
-	}
-
-	@Override
-	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityLiving, ItemStack stack) {
-		super.onBlockPlacedBy(world, x, y, z, entityLiving, stack);
-
-		TileForestry tile = (TileForestry) world.getTileEntity(x, y, z);
-
-		if (stack.getItem() instanceof ItemBlockNBT && stack.hasTagCompound()) {
-			tile.readFromNBT(stack.getTagCompound());
-			tile.xCoord = x;
-			tile.yCoord = y;
-			tile.zCoord = z;
-		}
-
-		tile.rotateAfterPlacement(entityLiving);
 	}
 
 	@Override

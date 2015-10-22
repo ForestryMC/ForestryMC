@@ -25,6 +25,7 @@ import forestry.core.items.ItemBlockForestry;
 import forestry.core.recipes.ShapedRecipeCustom;
 import forestry.core.tiles.MachineDefinition;
 import forestry.energy.GuiHandlerEnergy;
+import forestry.energy.blocks.BlockEngine;
 import forestry.energy.proxy.ProxyEnergy;
 import forestry.energy.tiles.EngineDefinition;
 import forestry.energy.tiles.TileEngineBiogas;
@@ -44,7 +45,7 @@ public class PluginEnergy extends ForestryPlugin {
 	public void preInit() {
 		super.preInit();
 
-		ForestryBlock.engine.registerBlock(new BlockBase(Material.iron, true), ItemBlockForestry.class, "engine");
+		ForestryBlock.engine.registerBlock(new BlockEngine(Material.iron), ItemBlockForestry.class, "engine");
 
 		definitionEnginePeat = ((BlockBase) ForestryBlock.engine.block()).addDefinition(new EngineDefinition(Constants.DEFINITION_ENGINE_PEAT_META, "forestry.EngineCopper", TileEnginePeat.class,
 				PluginEnergy.proxy.getRenderDefaultEngine(Constants.TEXTURE_PATH_BLOCKS + "/engine_copper_"), ShapedRecipeCustom.createShapedRecipe(

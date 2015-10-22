@@ -21,7 +21,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.core.inventory.wrappers.ChestWrapper;
 import forestry.core.utils.InventoryUtil;
-import forestry.core.utils.Log;
 
 public abstract class TileUtil {
 
@@ -48,7 +47,6 @@ public abstract class TileUtil {
 		if (tileClass.isInstance(tileEntity)) {
 			return tileClass.cast(tileEntity);
 		} else {
-			Log.warning("Failed to cast a tile entity {" + tileEntity + "} to a {" + tileClass.getName() + "} at " + x + '/' + y + '/' + z);
 			return null;
 		}
 	}
