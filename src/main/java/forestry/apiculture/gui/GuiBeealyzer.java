@@ -129,20 +129,12 @@ public class GuiBeealyzer extends GuiAlyzer {
 		IAlleleInteger secondaryFertility = (IAlleleInteger) bee.getGenome().getInactiveAllele(EnumBeeChromosome.FERTILITY);
 		drawFertilityInfo(primaryFertility.getValue(), COLUMN_1, getColorCoding(primaryFertility.isDominant()), 0);
 		drawFertilityInfo(secondaryFertility.getValue(), COLUMN_2, getColorCoding(secondaryFertility.isDominant()), 0);
-
 		newLine();
 
-		IAlleleArea activeTerritory = (IAlleleArea) bee.getGenome().getActiveAllele(EnumBeeChromosome.TERRITORY);
-		IAlleleArea inactiveTerritory = (IAlleleArea) bee.getGenome().getInactiveAllele(EnumBeeChromosome.TERRITORY);
-		drawRow(StringUtil.localize("gui.area"),
-				new Vect(activeTerritory.getValue()).toString(),
-				new Vect(inactiveTerritory.getValue()).toString(),
-				bee, EnumBeeChromosome.TERRITORY);
-
+		drawChromosomeRow(StringUtil.localize("gui.area"), bee, EnumBeeChromosome.TERRITORY);
 		newLine();
 
 		drawChromosomeRow(StringUtil.localize("gui.effect"), bee, EnumBeeChromosome.EFFECT);
-
 		newLine();
 
 		endPage();
