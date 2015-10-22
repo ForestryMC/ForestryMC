@@ -16,10 +16,16 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.api.arboriculture.EnumWoodType;
 import forestry.arboriculture.IWoodTyped;
+import forestry.arboriculture.blocks.BlockLog;
+import forestry.arboriculture.render.IconProviderWood;
 import forestry.arboriculture.tiles.TileWood;
 import forestry.core.config.Constants;
 import forestry.core.items.ItemBlockForestry;
@@ -98,4 +104,24 @@ public class ItemBlockWood extends ItemBlockForestry {
 		return displayName;
 	}
 
+	@Override
+	@SideOnly(Side.CLIENT)
+	public IIcon getIcon(ItemStack stack, int pass) {
+		EnumWoodType woodType = EnumWoodType.getFromCompound(stack.getTagCompound());
+		if (woodType == null) {
+			return super.getIcon(stack, pass);
+		}
+
+		if (getBlock() instanceof BlockLog) {
+			return IconProviderWood.getBarkIcon(woodType);
+		} else {
+			return IconProviderWood.getPlankIcon(woodType);
+		}
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public IIcon getIconIndex(ItemStack stack) {
+		return getIcon(stack, 0);
+	}
 }

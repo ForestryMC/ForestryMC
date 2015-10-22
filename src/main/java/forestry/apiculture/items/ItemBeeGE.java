@@ -178,10 +178,16 @@ public class ItemBeeGE extends ItemGE {
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
 	@Override
+	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(ItemStack itemstack, int renderPass) {
 		return getIconFromSpecies(BeeGenome.getSpecies(itemstack), renderPass);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public IIcon getIconIndex(ItemStack stack) {
+		return getIcon(stack, 0);
 	}
 
 	@SideOnly(Side.CLIENT)

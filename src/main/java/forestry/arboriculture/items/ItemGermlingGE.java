@@ -144,6 +144,12 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
+	public IIcon getIconIndex(ItemStack stack) {
+		return getIcon(stack, 0);
+	}
+
+	@Override
 	public boolean onItemUse(ItemStack itemstack, EntityPlayer player, World world, int x, int y, int z, int par7, float facingX, float facingY, float facingZ) {
 		ITree tree = TreeManager.treeRoot.getMember(itemstack);
 		if (tree == null) {
