@@ -18,12 +18,12 @@ import net.minecraftforge.fluids.IFluidTank;
 import forestry.core.fluids.Fluids;
 
 public class TankRenderInfo {
-	public static final TankRenderInfo EMPTY = new EmptyTankRenderInfo();
+	public static final TankRenderInfo EMPTY = new TankRenderInfo(Fluids.WATER.getColor(), EnumTankLevel.EMPTY);
 
 	@Nonnull
-	private Color fluidColor;
+	private final Color fluidColor;
 	@Nonnull
-	private EnumTankLevel level;
+	private final EnumTankLevel level;
 
 	public TankRenderInfo(@Nonnull IFluidTank fluidTank, int resourceScaled) {
 		this(Fluids.getFluidColor(fluidTank.getFluid()), EnumTankLevel.rateTankLevel(resourceScaled));
@@ -42,27 +42,5 @@ public class TankRenderInfo {
 	@Nonnull
 	public EnumTankLevel getLevel() {
 		return level;
-	}
-
-	public void setFluidColor(@Nonnull Color fluidColor) {
-		this.fluidColor = fluidColor;
-	}
-
-	public void setLevel(@Nonnull EnumTankLevel level) {
-		this.level = level;
-	}
-
-	private static class EmptyTankRenderInfo extends TankRenderInfo {
-		public EmptyTankRenderInfo() {
-			super(Fluids.WATER.getColor(), EnumTankLevel.EMPTY);
-		}
-
-		@Override
-		public void setFluidColor(@Nonnull Color fluidColor) {
-		}
-
-		@Override
-		public void setLevel(@Nonnull EnumTankLevel level) {
-		}
 	}
 }
