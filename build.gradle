@@ -184,9 +184,6 @@ jar {
 	into ('cofh/api') {
 		from project.apiRedstoneFlux + "/LICENSE - LGPLv3.txt"
 	}
-	into ('buildcraft/api') {
-		from "./src/main/java/buildcraft/LICENSE-API"
-	}
 }
 
 task mainJar(type: Jar, dependsOn: 'reobf') {

@@ -13,7 +13,6 @@ package forestry.core.utils;
 import java.util.UUID;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
@@ -22,8 +21,6 @@ import com.mojang.authlib.GameProfile;
 import net.minecraftforge.common.util.FakePlayerFactory;
 
 import forestry.core.access.IOwnable;
-
-import buildcraft.api.tools.IToolWrench;
 
 public abstract class PlayerUtil {
 
@@ -51,35 +48,6 @@ public abstract class PlayerUtil {
 		} else {
 			return profile.getName();
 		}
-	}
-
-	public static boolean canWrench(EntityPlayer player, int x, int y, int z) {
-		ItemStack itemstack = player.getCurrentEquippedItem();
-		if (itemstack == null) {
-			return false;
-		}
-
-		if (!(itemstack.getItem() instanceof IToolWrench)) {
-			return false;
-		}
-
-		IToolWrench wrench = (IToolWrench) itemstack.getItem();
-		return wrench.canWrench(player, x, y, z);
-	}
-
-	public static void useWrench(EntityPlayer player, int x, int y, int z) {
-		ItemStack itemstack = player.getCurrentEquippedItem();
-
-		if (itemstack == null) {
-			return;
-		}
-
-		if (!(itemstack.getItem() instanceof IToolWrench)) {
-			return;
-		}
-
-		IToolWrench wrench = (IToolWrench) itemstack.getItem();
-		wrench.wrenchUsed(player, x, y, z);
 	}
 
 	/**
