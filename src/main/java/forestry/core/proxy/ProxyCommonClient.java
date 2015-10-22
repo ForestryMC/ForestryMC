@@ -133,9 +133,4 @@ public class ProxyCommonClient extends ProxyCommon {
 	public EntityPlayer getPlayer() {
 		return Minecraft.getMinecraft().thePlayer;
 	}
-
-	@Override
-	public EntityPlayer getPlayer(World world, GameProfile profile) {
-		return super.getPlayer(world, profile);
-	}
 }

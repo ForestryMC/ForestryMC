@@ -26,9 +26,9 @@ import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.TankManager;
 import forestry.core.inventory.InventoryAdapterRestricted;
 import forestry.core.inventory.wrappers.InventoryMapper;
-import forestry.core.proxy.Proxies;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.SlotUtil;
 import forestry.plugins.PluginFarming;
 
@@ -91,7 +91,7 @@ public class FarmInventory extends InventoryAdapterRestricted implements IFarmIn
 
 	@Override
 	public void removeResources(ItemStack[] resources) {
-		EntityPlayer player = Proxies.common.getPlayer(farmController.getWorld(), farmController.getAccessHandler().getOwner());
+		EntityPlayer player = PlayerUtil.getPlayer(farmController.getWorld(), farmController.getAccessHandler().getOwner());
 		InventoryUtil.removeSets(resourcesInventory, 1, resources, player, false, true);
 	}
 

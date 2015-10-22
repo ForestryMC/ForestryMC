@@ -28,6 +28,7 @@ import forestry.api.mail.ITradeStation;
 import forestry.api.mail.PostManager;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
+import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.StringUtil;
 import forestry.mail.network.PacketPOBoxInfoResponse;
 
@@ -85,7 +86,7 @@ public class PostalCarrier implements IPostalCarrier {
 		if (!pobox.storeLetter(letterStack.copy())) {
 			return EnumDeliveryState.MAILBOX_FULL;
 		} else {
-			EntityPlayer player = Proxies.common.getPlayer(world, recipient.getPlayerProfile());
+			EntityPlayer player = PlayerUtil.getPlayer(world, recipient.getPlayerProfile());
 			if (player instanceof EntityPlayerMP) {
 				Proxies.net.sendToPlayer(new PacketPOBoxInfoResponse(pobox.getPOBoxInfo()), (EntityPlayerMP) player);
 			}

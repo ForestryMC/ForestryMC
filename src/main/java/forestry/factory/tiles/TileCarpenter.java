@@ -41,13 +41,13 @@ import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
-import forestry.core.proxy.Proxies;
 import forestry.core.render.TankRenderInfo;
 import forestry.core.tiles.IItemStackDisplay;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.SlotUtil;
 import forestry.factory.recipes.CarpenterRecipeManager;
 
@@ -298,7 +298,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 	}
 
 	private boolean removeSets(int count, ItemStack[] set) {
-		EntityPlayer player = Proxies.common.getPlayer(worldObj, getAccessHandler().getOwner());
+		EntityPlayer player = PlayerUtil.getPlayer(worldObj, getAccessHandler().getOwner());
 		return InventoryUtil.removeSets(getInternalInventory(), count, set, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT, player, true, true);
 	}
 

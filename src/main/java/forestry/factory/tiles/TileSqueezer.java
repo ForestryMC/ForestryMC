@@ -44,12 +44,12 @@ import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
-import forestry.core.proxy.Proxies;
 import forestry.core.render.TankRenderInfo;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.PlayerUtil;
 import forestry.factory.recipes.SqueezerRecipeManager;
 
 public class TileSqueezer extends TilePowered implements ISocketable, ISidedInventory, ILiquidTankTile, ISpeedUpgradable {
@@ -140,7 +140,7 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 
 	@Override
 	public boolean workCycle() {
-		EntityPlayer player = Proxies.common.getPlayer(worldObj, getAccessHandler().getOwner());
+		EntityPlayer player = PlayerUtil.getPlayer(worldObj, getAccessHandler().getOwner());
 		if (!inventory.removeResources(currentRecipe.getResources(), player)) {
 			return false;
 		}

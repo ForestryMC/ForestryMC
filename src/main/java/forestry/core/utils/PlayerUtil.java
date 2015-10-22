@@ -14,8 +14,12 @@ import java.util.UUID;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 
 import com.mojang.authlib.GameProfile;
+
+import net.minecraftforge.common.util.FakePlayerFactory;
 
 import forestry.core.access.IOwnable;
 
@@ -76,5 +80,30 @@ public abstract class PlayerUtil {
 
 		IToolWrench wrench = (IToolWrench) itemstack.getItem();
 		wrench.wrenchUsed(player, x, y, z);
+	}
+
+	/**
+	 * Get a player for a given World and GameProfile.
+	 * If they are not in the World, returns a FakePlayer.
+	 * Do not store references to the return value, to prevent worlds staying in memory.
+	 */
+	public static EntityPlayer getPlayer(World world, GameProfile profile) {
+		if (world == null) {
+			throw new IllegalArgumentException("World cannot be null");
+		}
+
+		if (profile == null || profile.getName() == null) {
+			if (world instanceof WorldServer) {
+				return FakePlayerFactory.getMinecraft((WorldServer) world);
+			} else {
+				return null;
+			}
+		}
+		
+		EntityPlayer player = world.getPlayerEntityByName(profile.getName());
+		if (player == null && world instanceof WorldServer) {
+			player = FakePlayerFactory.get((WorldServer) world, profile);
+		}
+		return player;
 	}
 }

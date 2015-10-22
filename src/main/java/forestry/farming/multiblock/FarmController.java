@@ -68,6 +68,7 @@ import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.PacketGuiUpdate;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Log;
+import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.vect.Vect;
 import forestry.core.utils.vect.VectUtil;
 import forestry.farming.FarmHelper;
@@ -803,7 +804,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 	@Override
 	public boolean plantGermling(IFarmable germling, World world, int x, int y, int z) {
-		EntityPlayer player = Proxies.common.getPlayer(world, getAccessHandler().getOwner());
+		EntityPlayer player = PlayerUtil.getPlayer(world, getAccessHandler().getOwner());
 		return inventory.plantGermling(germling, player, x, y, z);
 	}
 
