@@ -10,35 +10,13 @@
  ******************************************************************************/
 package forestry.lepidopterology.genetics;
 
-import forestry.api.genetics.IEffectData;
-import forestry.api.lepidopterology.IAlleleButterflyEffect;
-import forestry.api.lepidopterology.IEntityButterfly;
-import forestry.core.genetics.alleles.AlleleCategorized;
-
-public class AlleleEffectNone extends AlleleCategorized implements IAlleleButterflyEffect {
-
+public class AlleleEffectNone extends AlleleEffect {
 	public AlleleEffectNone() {
-		super("forestry", "bf", "none", false);
-	}
-
-	@Override
-	public boolean isCombinable() {
-		return true;
-	}
-
-	@Override
-	public IEffectData validateStorage(IEffectData storedData) {
-		return null;
+		super("none", false);
 	}
 
 	@Override
 	public String getUnlocalizedName() {
 		return "for.lepidopterology.effect.none";
 	}
-
-	@Override
-	public IEffectData doEffect(IEntityButterfly butterfly, IEffectData storedData) {
-		return storedData;
-	}
-
 }

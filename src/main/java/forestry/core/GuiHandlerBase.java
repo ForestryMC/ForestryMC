@@ -16,7 +16,6 @@ import net.minecraft.world.World;
 
 import cpw.mods.fml.common.network.IGuiHandler;
 
-import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.gui.ContainerNaturalistInventory;
 import forestry.core.gui.GuiNaturalistInventory;
@@ -39,14 +38,12 @@ public abstract class GuiHandlerBase implements IGuiHandler {
 		return tileForestry;
 	}
 
-	protected GuiNaturalistInventory getNaturalistChestGui(String rootUID, EntityPlayer player, World world, int x, int y, int z, int page) {
+	protected GuiNaturalistInventory getNaturalistChestGui(ISpeciesRoot speciesRoot, EntityPlayer player, World world, int x, int y, int z, int page) {
 		TileNaturalistChest tile = getTile(world, x, y, z, player, TileNaturalistChest.class);
-		ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(rootUID);
 		return new GuiNaturalistInventory(speciesRoot, player, new ContainerNaturalistInventory(player.inventory, tile, page), tile, page, 5);
 	}
 
-	protected ContainerNaturalistInventory getNaturalistChestContainer(String rootUID, EntityPlayer player, World world, int x, int y, int z, int page) {
-		ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(rootUID);
+	protected ContainerNaturalistInventory getNaturalistChestContainer(ISpeciesRoot speciesRoot, EntityPlayer player, World world, int x, int y, int z, int page) {
 		speciesRoot.getBreedingTracker(world, player.getGameProfile()).synchToPlayer(player);
 		return new ContainerNaturalistInventory(player.inventory, getTile(world, x, y, z, player, TileNaturalistChest.class), page);
 	}

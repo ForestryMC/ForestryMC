@@ -52,9 +52,9 @@ import forestry.api.lepidopterology.IButterflyNursery;
 import forestry.api.lepidopterology.IButterflyRoot;
 import forestry.arboriculture.genetics.Tree;
 import forestry.arboriculture.genetics.TreeDefinition;
+import forestry.arboriculture.genetics.alleles.AlleleFruit;
 import forestry.arboriculture.network.IRipeningPacketReceiver;
 import forestry.arboriculture.network.PacketRipeningUpdate;
-import forestry.core.genetics.alleles.Allele;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.PacketTileStream;
@@ -227,7 +227,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 			isFruitLeaf = fruitProvider.markAsFruitLeaf(genome, worldObj, xCoord, yCoord, zCoord);
 			if (isFruitLeaf) {
 				// Hardcoded because vanilla oak trees don't show fruits.
-				if ((species == TreeDefinition.Oak.getGenome().getPrimary()) && (fruitProvider == Allele.fruitApple.getProvider())) {
+				if ((species == TreeDefinition.Oak.getGenome().getPrimary()) && (fruitProvider == AlleleFruit.fruitApple.getProvider())) {
 					textureIndexFruits = -1;
 				} else {
 					textureIndexFruits = fruitProvider.getIconIndex(genome, worldObj, xCoord, yCoord, zCoord, getRipeningTime(), true);

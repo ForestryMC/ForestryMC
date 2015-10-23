@@ -48,6 +48,7 @@ import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.IToolScoop;
 import forestry.api.core.Tabs;
+import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.arboriculture.LeafDecayHelper;
@@ -58,7 +59,6 @@ import forestry.arboriculture.tiles.TileLeaves;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.ItemStackUtil;
 import forestry.plugins.PluginArboriculture;
-import forestry.plugins.PluginLepidopterology;
 
 public class BlockForestryLeaves extends BlockNewLeaf implements ITileEntityProvider, IGrowable {
 
@@ -340,7 +340,7 @@ public class BlockForestryLeaves extends BlockNewLeaf implements ITileEntityProv
 		TileEntity tile = world.getTileEntity(x, y, z);
 		IButterfly caterpillar = tile instanceof TileLeaves ? ((TileLeaves) tile).getCaterpillar() : null;
 		if (heldItem != null && (heldItem.getItem() instanceof IToolScoop) && caterpillar != null) {
-			ItemStack butterfly = PluginLepidopterology.butterflyInterface.getMemberStack(caterpillar, EnumFlutterType.CATERPILLAR.ordinal());
+			ItemStack butterfly = ButterflyManager.butterflyRoot.getMemberStack(caterpillar, EnumFlutterType.CATERPILLAR.ordinal());
 			ItemStackUtil.dropItemStackAsEntity(butterfly, world, x, y, z);
 			((TileLeaves) tile).setCaterpillar(null);
 			return true;

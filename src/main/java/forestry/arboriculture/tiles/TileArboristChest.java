@@ -10,14 +10,13 @@
  ******************************************************************************/
 package forestry.arboriculture.tiles;
 
-import forestry.api.genetics.AlleleManager;
-import forestry.arboriculture.genetics.TreeHelper;
+import forestry.api.arboriculture.TreeManager;
 import forestry.core.network.GuiId;
 import forestry.core.tiles.TileNaturalistChest;
 
 public class TileArboristChest extends TileNaturalistChest {
 	public TileArboristChest() {
-		super(AlleleManager.alleleRegistry.getSpeciesRoot(TreeHelper.UID), GuiId.ArboristChestGUI.ordinal());
+		super(TreeManager.treeRoot, GuiId.ArboristChestGUI.ordinal());
 	}
 
 

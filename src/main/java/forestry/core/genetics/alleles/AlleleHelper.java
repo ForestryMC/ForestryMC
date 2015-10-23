@@ -22,12 +22,14 @@ import forestry.api.genetics.IAlleleBoolean;
 import forestry.api.genetics.IAlleleInteger;
 import forestry.api.genetics.IChromosomeType;
 import forestry.apiculture.flowers.FlowerProvider;
+import forestry.core.config.Constants;
 import forestry.core.utils.vect.IVect;
 import forestry.plugins.PluginManager;
 
 public class AlleleHelper implements IAlleleHelper {
 
-	private static final String modId = "forestry";
+	private static final String modId = Constants.ID;
+	public static AlleleHelper instance;
 
 	private final Map<Class, Map<?, ? extends IAllele>> alleleMaps = new HashMap<>();
 

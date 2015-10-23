@@ -27,6 +27,7 @@ import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
+import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.EnumButterflyChromosome;
 import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.api.lepidopterology.IAlleleButterflySpecies;
@@ -39,7 +40,6 @@ import forestry.core.config.ForestryItem;
 import forestry.core.genetics.SpeciesRoot;
 import forestry.core.utils.EntityUtil;
 import forestry.lepidopterology.entities.EntityButterfly;
-import forestry.plugins.PluginLepidopterology;
 
 public class ButterflyHelper extends SpeciesRoot implements IButterflyRoot {
 
@@ -192,12 +192,12 @@ public class ButterflyHelper extends SpeciesRoot implements IButterflyRoot {
 
 	@Override
 	public IAllele[] getDefaultTemplate() {
-		return ButterflyTemplates.getDefaultTemplate();
+		return MothDefinition.Brimstone.getTemplate();
 	}
 
 	@Override
 	public void registerTemplate(String identifier, IAllele[] template) {
-		butterflyTemplates.add(PluginLepidopterology.butterflyInterface.templateAsIndividual(template));
+		butterflyTemplates.add(ButterflyManager.butterflyRoot.templateAsIndividual(template));
 		speciesTemplates.put(identifier, template);
 	}
 

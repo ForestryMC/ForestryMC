@@ -10,9 +10,9 @@
  ******************************************************************************/
 package forestry.lepidopterology.genetics;
 
+import java.awt.Color;
 import java.util.EnumSet;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 import net.minecraft.init.Items;
@@ -29,17 +29,16 @@ import cpw.mods.fml.relauncher.SideOnly;
 import forestry.api.core.IIconProvider;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IIndividual;
+import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.EnumFlutterType;
-import forestry.api.lepidopterology.IAlleleButterflySpecies;
+import forestry.api.lepidopterology.IAlleleButterflySpeciesCustom;
 import forestry.api.lepidopterology.IButterflyRoot;
-import forestry.core.config.Constants;
 import forestry.core.genetics.alleles.AlleleSpecies;
-import forestry.plugins.PluginLepidopterology;
 
-public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButterflySpecies {
+public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButterflySpeciesCustom {
 
 	private final String texture;
-	private final int serumColour;
+	private final Color serumColour;
 	private float rarity = 0.1f;
 	private float flightDistance = 5.0f;
 	private boolean isActualNocturnal = false;
@@ -49,20 +48,15 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 	private final Map<ItemStack, Float> butterflyLoot = new HashMap<>();
 	private final Map<ItemStack, Float> caterpillarLoot = new HashMap<>();
 
-	public AlleleButterflySpecies(String uid, boolean isDominant, String speciesName, IClassification branch, String binomial, int serumColour) {
-		super("forestry." + uid, getUnlocalizedName(speciesName, branch), "Sengir", "for.description." + uid, isDominant, branch, binomial, true);
+	public AlleleButterflySpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, String texturePath, boolean isDominant, IClassification branch, String binomial, Color serumColour) {
+		super(uid, unlocalizedName, authority, unlocalizedDescription, isDominant, branch, binomial);
 		this.serumColour = serumColour;
-		texture = "forestry:" + Constants.TEXTURE_PATH_ENTITIES + "/butterflies/" + uid + ".png";
-	}
-
-	private static String getUnlocalizedName(String name, IClassification branch) {
-		IClassification parent = branch.getParent();
-		return "for.butterflies.species." + parent.getUID().substring((parent.getLevel().name().toLowerCase(Locale.ENGLISH)).length() + 1) + '.' + name;
+		this.texture = texturePath;
 	}
 
 	@Override
 	public IButterflyRoot getRoot() {
-		return PluginLepidopterology.butterflyInterface;
+		return ButterflyManager.butterflyRoot;
 	}
 
 	public AlleleButterflySpecies setRarity(float rarity) {
@@ -182,6 +176,6 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 		if (renderPass > 0) {
 			return 0xffffff;
 		}
-		return serumColour;
+		return serumColour.getRGB() & 0xffffff;
 	}
 }

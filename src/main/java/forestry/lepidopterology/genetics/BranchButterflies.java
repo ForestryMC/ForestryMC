@@ -8,10 +8,14 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.apiculture.genetics.alleles;
+package forestry.lepidopterology.genetics;
 
-public class AlleleEffectNone extends AlleleEffect {
-	public AlleleEffectNone(String valueName, boolean isDominant) {
-		super(valueName, isDominant);
+import java.util.Locale;
+
+import forestry.core.genetics.Branch;
+
+public class BranchButterflies extends Branch {
+	public BranchButterflies(String scientific) {
+		super("moth." + scientific.toLowerCase(Locale.ENGLISH), scientific);
 	}
 }

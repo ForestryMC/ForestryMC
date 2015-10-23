@@ -8,10 +8,21 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.apiculture.genetics.alleles;
+package forestry.lepidopterology.genetics;
 
-public class AlleleEffectNone extends AlleleEffect {
-	public AlleleEffectNone(String valueName, boolean isDominant) {
-		super(valueName, isDominant);
-	}
+import net.minecraft.item.ItemStack;
+
+import forestry.api.lepidopterology.EnumFlutterType;
+import forestry.api.lepidopterology.IButterfly;
+import forestry.api.lepidopterology.IButterflyGenome;
+import forestry.core.genetics.IGeneticDefinition;
+
+public interface IButterflyDefinition extends IGeneticDefinition {
+	@Override
+	IButterflyGenome getGenome();
+
+	@Override
+	IButterfly getIndividual();
+
+	ItemStack getMemberStack(EnumFlutterType flutterType);
 }

@@ -14,6 +14,7 @@ import net.minecraft.world.World;
 
 import forestry.api.arboriculture.ILeafTickHandler;
 import forestry.api.arboriculture.ITree;
+import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.core.utils.Log;
 import forestry.lepidopterology.entities.EntityButterfly;
@@ -28,7 +29,7 @@ public class ButterflySpawner implements ILeafTickHandler {
 			return false;
 		}
 		
-		IButterfly spawn = PluginLepidopterology.butterflyInterface.getIndividualTemplates().get(world.rand.nextInt(PluginLepidopterology.butterflyInterface.getIndividualTemplates().size()));
+		IButterfly spawn = ButterflyManager.butterflyRoot.getIndividualTemplates().get(world.rand.nextInt(ButterflyManager.butterflyRoot.getIndividualTemplates().size()));
 		if (world.rand.nextFloat() >= spawn.getGenome().getPrimary().getRarity() * 0.5f) {
 			return false;
 		}
@@ -55,7 +56,7 @@ public class ButterflySpawner implements ILeafTickHandler {
 	}
 
 	private static void attemptButterflySpawn(World world, IButterfly butterfly, double x, double y, double z) {
-		if (PluginLepidopterology.butterflyInterface.spawnButterflyInWorld(world, butterfly.copy(), x, y + 0.1f, z) != null) {
+		if (ButterflyManager.butterflyRoot.spawnButterflyInWorld(world, butterfly.copy(), x, y + 0.1f, z) != null) {
 			Log.finest("Spawned a butterfly '%s' at %s/%s/%s.", butterfly.getDisplayName(), x, y, z);
 		}
 	}

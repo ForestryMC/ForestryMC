@@ -16,10 +16,10 @@ import com.mojang.authlib.GameProfile;
 
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IIndividual;
+import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.ILepidopteristTracker;
 import forestry.core.genetics.BreedingTracker;
-import forestry.plugins.PluginLepidopterology;
 
 public class LepidopteristTracker extends BreedingTracker implements ILepidopteristTracker {
 
@@ -34,7 +34,7 @@ public class LepidopteristTracker extends BreedingTracker implements ILepidopter
 
 	@Override
 	protected IBreedingTracker getBreedingTracker(EntityPlayer player) {
-		return PluginLepidopterology.butterflyInterface.getBreedingTracker(player.worldObj, player.getGameProfile());
+		return ButterflyManager.butterflyRoot.getBreedingTracker(player.worldObj, player.getGameProfile());
 	}
 
 	@Override

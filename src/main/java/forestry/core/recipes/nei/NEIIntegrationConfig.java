@@ -16,6 +16,7 @@ import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.TreeManager;
+import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.core.utils.Log;
 import forestry.factory.gui.GuiWorktable;
@@ -27,7 +28,6 @@ import forestry.factory.recipes.nei.NEIHandlerFermenter;
 import forestry.factory.recipes.nei.NEIHandlerMoistener;
 import forestry.factory.recipes.nei.NEIHandlerSqueezer;
 import forestry.factory.recipes.nei.NEIHandlerStill;
-import forestry.plugins.PluginLepidopterology;
 
 import codechicken.nei.api.API;
 import codechicken.nei.api.IConfigureNEI;
@@ -59,9 +59,9 @@ public class NEIIntegrationConfig implements IConfigureNEI {
 		API.addSubset("Forestry.Trees.Saplings", new ItemFilterGenetic(TreeManager.treeRoot, EnumGermlingType.SAPLING.ordinal(), true));
 		API.addSubset("Forestry.Trees.Pollen", new ItemFilterGenetic(TreeManager.treeRoot, EnumGermlingType.POLLEN.ordinal(), true));
 
-		API.addSubset("Forestry.Butterflies.Butterflies", new ItemFilterGenetic(PluginLepidopterology.butterflyInterface, EnumFlutterType.BUTTERFLY.ordinal(), true));
-		API.addSubset("Forestry.Butterflies.Caterpillars", new ItemFilterGenetic(PluginLepidopterology.butterflyInterface, EnumFlutterType.CATERPILLAR.ordinal(), true));
-		API.addSubset("Forestry.Butterflies.Serum", new ItemFilterGenetic(PluginLepidopterology.butterflyInterface, EnumFlutterType.SERUM.ordinal(), true));
+		API.addSubset("Forestry.Butterflies.Butterflies", new ItemFilterGenetic(ButterflyManager.butterflyRoot, EnumFlutterType.BUTTERFLY.ordinal(), true));
+		API.addSubset("Forestry.Butterflies.Caterpillars", new ItemFilterGenetic(ButterflyManager.butterflyRoot, EnumFlutterType.CATERPILLAR.ordinal(), true));
+		API.addSubset("Forestry.Butterflies.Serum", new ItemFilterGenetic(ButterflyManager.butterflyRoot, EnumFlutterType.SERUM.ordinal(), true));
 
 		API.addSubset("Forestry.Bees.Combs", OreDictionary.getOres("beeComb"));
 		API.addSubset("Forestry.Blocks", new ItemFilterOther(false));

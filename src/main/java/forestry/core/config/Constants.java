@@ -10,16 +10,12 @@
  ******************************************************************************/
 package forestry.core.config;
 
-import java.util.Locale;
-
-import net.minecraftforge.oredict.OreDictionary;
-
 import forestry.api.core.IForestryConstants;
 
 public class Constants implements IForestryConstants {
 	// System
 	public static final String MOD = "Forestry";
-	public static final String ID = MOD.toLowerCase(Locale.ENGLISH);
+	public static final String ID = "forestry";
 	public static final String URL = "http://forestry.sengir.net/";
 
 	public static final int WORLD_HEIGHT = 256;

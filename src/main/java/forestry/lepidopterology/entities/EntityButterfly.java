@@ -36,10 +36,12 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.api.arboriculture.EnumGermlingType;
+import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.IToolScoop;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IIndividual;
+import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.api.lepidopterology.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.IButterfly;
@@ -47,7 +49,6 @@ import forestry.api.lepidopterology.IEntityButterfly;
 import forestry.core.utils.ItemStackUtil;
 import forestry.lepidopterology.genetics.Butterfly;
 import forestry.lepidopterology.render.RenderButterflyItem;
-import forestry.plugins.PluginLepidopterology;
 
 public class EntityButterfly extends EntityCreature implements IEntityButterfly {
 
@@ -112,7 +113,7 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 	/* CONSTRUCTOR */
 	public EntityButterfly(World world) {
 		super(world);
-		setDefaults(PluginLepidopterology.butterflyInterface.templateAsIndividual(PluginLepidopterology.butterflyInterface.getRandomTemplate(rand)));
+		setDefaults(ButterflyManager.butterflyRoot.templateAsIndividual(ButterflyManager.butterflyRoot.getRandomTemplate(rand)));
 	}
 
 	public EntityButterfly(World world, IButterfly butterfly) {
@@ -164,7 +165,7 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 		setIndividual(contained);
 
 		if (nbttagcompound.hasKey("PLN")) {
-			pollen = AlleleManager.alleleRegistry.getSpeciesRoot("rootTrees").getMember((NBTTagCompound) nbttagcompound.getTag("PLN"));
+			pollen = TreeManager.treeRoot.getMember((NBTTagCompound) nbttagcompound.getTag("PLN"));
 		}
 
 		state = EnumButterflyState.VALUES[nbttagcompound.getByte("STATE")];
@@ -308,7 +309,7 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 		if (butterfly != null) {
 			contained = butterfly;
 		} else {
-			contained = PluginLepidopterology.butterflyInterface.templateAsIndividual(PluginLepidopterology.butterflyInterface.getDefaultTemplate());
+			contained = ButterflyManager.butterflyRoot.templateAsIndividual(ButterflyManager.butterflyRoot.getDefaultTemplate());
 		}
 
 		isImmuneToFire = contained.getGenome().getFireResist();
@@ -408,7 +409,7 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 
 		if (!worldObj.isRemote) {
 			contained.getGenome().getPrimary().getRoot().getBreedingTracker(worldObj, player.getGameProfile()).registerCatch(contained);
-			ItemStackUtil.dropItemStackAsEntity(PluginLepidopterology.butterflyInterface.getMemberStack(contained.copy(), EnumFlutterType.BUTTERFLY.ordinal()), worldObj, posX, posY, posZ);
+			ItemStackUtil.dropItemStackAsEntity(ButterflyManager.butterflyRoot.getMemberStack(contained.copy(), EnumFlutterType.BUTTERFLY.ordinal()), worldObj, posX, posY, posZ);
 			setDead();
 		} else {
 			player.swingItem();

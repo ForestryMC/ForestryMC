@@ -21,10 +21,10 @@ import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.core.proxy.Proxies;
 import forestry.lepidopterology.entities.EntityButterfly;
-import forestry.plugins.PluginLepidopterology;
 
 public class RenderButterflyItem implements IItemRenderer {
 
@@ -75,9 +75,9 @@ public class RenderButterflyItem implements IItemRenderer {
 	}
 	
 	private IButterfly initButterfly(ItemStack item, boolean scaled) {
-		IButterfly butterfly = PluginLepidopterology.butterflyInterface.getMember(item);
+		IButterfly butterfly = ButterflyManager.butterflyRoot.getMember(item);
 		if (butterfly == null) {
-			butterfly = PluginLepidopterology.butterflyInterface.templateAsIndividual(PluginLepidopterology.butterflyInterface.getDefaultTemplate());
+			butterfly = ButterflyManager.butterflyRoot.templateAsIndividual(ButterflyManager.butterflyRoot.getDefaultTemplate());
 		}
 		
 		if (entity == null) {

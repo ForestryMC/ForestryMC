@@ -15,7 +15,7 @@ import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.core.genetics.EffectData;
 
-public abstract class AlleleEffectThrottled extends AlleleEffectNone {
+public abstract class AlleleEffectThrottled extends AlleleEffect {
 
 	private boolean isCombinable = false;
 	private final int throttle;

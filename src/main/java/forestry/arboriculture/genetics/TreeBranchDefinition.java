@@ -21,8 +21,12 @@ import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleRegistry;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IClassification.EnumClassLevel;
+import forestry.arboriculture.genetics.alleles.AlleleFruit;
+import forestry.arboriculture.genetics.alleles.AlleleGrowth;
+import forestry.arboriculture.genetics.alleles.AlleleLeafEffect;
 import forestry.core.genetics.IBranchDefinition;
-import forestry.core.genetics.alleles.Allele;
+import forestry.core.genetics.alleles.AlleleHelper;
+import forestry.core.genetics.alleles.AllelePlantType;
 import forestry.core.genetics.alleles.EnumAllele;
 
 public enum TreeBranchDefinition implements IBranchDefinition {
@@ -81,18 +85,18 @@ public enum TreeBranchDefinition implements IBranchDefinition {
 		if (defaultTemplate == null) {
 			defaultTemplate = new IAllele[EnumTreeChromosome.values().length];
 
-			Allele.helper.set(defaultTemplate, EnumTreeChromosome.FRUITS, Allele.fruitNone);
-			Allele.helper.set(defaultTemplate, EnumTreeChromosome.GROWTH, Allele.growthLightlevel);
-			Allele.helper.set(defaultTemplate, EnumTreeChromosome.HEIGHT, EnumAllele.Height.SMALL);
-			Allele.helper.set(defaultTemplate, EnumTreeChromosome.FERTILITY, EnumAllele.Saplings.LOWER);
-			Allele.helper.set(defaultTemplate, EnumTreeChromosome.YIELD, EnumAllele.Yield.LOWEST);
-			Allele.helper.set(defaultTemplate, EnumTreeChromosome.PLANT, Allele.plantTypeNone);
-			Allele.helper.set(defaultTemplate, EnumTreeChromosome.SAPPINESS, EnumAllele.Sappiness.LOWEST);
-			Allele.helper.set(defaultTemplate, EnumTreeChromosome.TERRITORY, EnumAllele.Territory.AVERAGE);
-			Allele.helper.set(defaultTemplate, EnumTreeChromosome.EFFECT, Allele.leavesNone);
-			Allele.helper.set(defaultTemplate, EnumTreeChromosome.MATURATION, EnumAllele.Maturation.AVERAGE);
-			Allele.helper.set(defaultTemplate, EnumTreeChromosome.GIRTH, 1);
-			Allele.helper.set(defaultTemplate, EnumTreeChromosome.FIREPROOF, EnumAllele.Fireproof.FALSE);
+			AlleleHelper.instance.set(defaultTemplate, EnumTreeChromosome.FRUITS, AlleleFruit.fruitNone);
+			AlleleHelper.instance.set(defaultTemplate, EnumTreeChromosome.GROWTH, AlleleGrowth.growthLightlevel);
+			AlleleHelper.instance.set(defaultTemplate, EnumTreeChromosome.HEIGHT, EnumAllele.Height.SMALL);
+			AlleleHelper.instance.set(defaultTemplate, EnumTreeChromosome.FERTILITY, EnumAllele.Saplings.LOWER);
+			AlleleHelper.instance.set(defaultTemplate, EnumTreeChromosome.YIELD, EnumAllele.Yield.LOWEST);
+			AlleleHelper.instance.set(defaultTemplate, EnumTreeChromosome.PLANT, AllelePlantType.plantTypeNone);
+			AlleleHelper.instance.set(defaultTemplate, EnumTreeChromosome.SAPPINESS, EnumAllele.Sappiness.LOWEST);
+			AlleleHelper.instance.set(defaultTemplate, EnumTreeChromosome.TERRITORY, EnumAllele.Territory.AVERAGE);
+			AlleleHelper.instance.set(defaultTemplate, EnumTreeChromosome.EFFECT, AlleleLeafEffect.leavesNone);
+			AlleleHelper.instance.set(defaultTemplate, EnumTreeChromosome.MATURATION, EnumAllele.Maturation.AVERAGE);
+			AlleleHelper.instance.set(defaultTemplate, EnumTreeChromosome.GIRTH, 1);
+			AlleleHelper.instance.set(defaultTemplate, EnumTreeChromosome.FIREPROOF, EnumAllele.Fireproof.FALSE);
 		}
 		return Arrays.copyOf(defaultTemplate, defaultTemplate.length);
 	}

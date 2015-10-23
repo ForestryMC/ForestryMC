@@ -46,7 +46,7 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 	private EnumPlantType nativeType = EnumPlantType.Plains;
 
 	public AlleleTreeSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, boolean isDominant, IClassification branch, String binomial, ILeafIconProvider leafIconProvider, IGermlingIconProvider germlingIconProvider, ITreeGenerator generator) {
-		super(uid, unlocalizedName, authority, unlocalizedDescription, isDominant, branch, binomial, false);
+		super(uid, unlocalizedName, authority, unlocalizedDescription, isDominant, branch, binomial);
 
 		this.generator = generator;
 		this.germlingIconProvider = germlingIconProvider;

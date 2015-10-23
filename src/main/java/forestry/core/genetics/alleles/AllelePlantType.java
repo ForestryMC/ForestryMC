@@ -19,6 +19,15 @@ import forestry.api.genetics.IAllelePlantType;
 
 public class AllelePlantType extends AlleleCategorized implements IAllelePlantType {
 
+	public static final Allele plantTypeNone = new AllelePlantType("none", EnumSet.noneOf(EnumPlantType.class), true);
+	public static final Allele plantTypePlains = new AllelePlantType(EnumPlantType.Plains);
+	public static final Allele plantTypeDesert = new AllelePlantType(EnumPlantType.Desert);
+	public static final Allele plantTypeBeach = new AllelePlantType(EnumPlantType.Beach);
+	public static final Allele plantTypeCave = new AllelePlantType(EnumPlantType.Cave);
+	public static final Allele plantTypeWater = new AllelePlantType(EnumPlantType.Water);
+	public static final Allele plantTypeNether = new AllelePlantType(EnumPlantType.Nether);
+	public static final Allele plantTypeCrop = new AllelePlantType(EnumPlantType.Crop);
+
 	private final EnumSet<EnumPlantType> types;
 
 	protected AllelePlantType(EnumPlantType type) {

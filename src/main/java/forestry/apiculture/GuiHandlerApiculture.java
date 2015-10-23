@@ -15,7 +15,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import forestry.api.apiculture.BeeManager;
-import forestry.apiculture.genetics.BeeHelper;
 import forestry.apiculture.gui.ContainerAlveary;
 import forestry.apiculture.gui.ContainerAlvearyHygroregulator;
 import forestry.apiculture.gui.ContainerAlvearySieve;
@@ -68,7 +67,7 @@ public class GuiHandlerApiculture extends GuiHandlerBase {
 				return new GuiAlvearySwarmer(player.inventory, getTile(world, x, y, z, player, TileAlvearySwarmer.class));
 
 			case ApiaristChestGUI:
-				return getNaturalistChestGui(BeeHelper.UID, player, world, x, y, z, guiData);
+				return getNaturalistChestGui(BeeManager.beeRoot, player, world, x, y, z, guiData);
 
 			case ApiaryGUI:
 				return new GuiBeeHousing(player.inventory, getTile(world, x, y, z, player, TileApiary.class));
@@ -131,7 +130,7 @@ public class GuiHandlerApiculture extends GuiHandlerBase {
 				return new ContainerAlvearySwarmer(player.inventory, getTile(world, x, y, z, player, TileAlvearySwarmer.class));
 
 			case ApiaristChestGUI:
-				return getNaturalistChestContainer(BeeHelper.UID, player, world, x, y, z, guiData);
+				return getNaturalistChestContainer(BeeManager.beeRoot, player, world, x, y, z, guiData);
 
 			case ApiaryGUI:
 				synchApiaristTracker(world, player);

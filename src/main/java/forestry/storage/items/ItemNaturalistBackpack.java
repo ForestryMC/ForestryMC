@@ -15,9 +15,9 @@ import net.minecraft.item.ItemStack;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.core.ForestryAPI;
+import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.storage.EnumBackpackType;
 import forestry.api.storage.IBackpackDefinition;
-import forestry.plugins.PluginLepidopterology;
 import forestry.storage.BackpackDefinition;
 
 public class ItemNaturalistBackpack extends ItemBackpack {
@@ -42,7 +42,7 @@ public class ItemNaturalistBackpack extends ItemBackpack {
 
 		@Override
 		public boolean isValidItem(ItemStack itemStack) {
-			return PluginLepidopterology.butterflyInterface.isMember(itemStack);
+			return ButterflyManager.butterflyRoot.isMember(itemStack);
 		}
 	}
 

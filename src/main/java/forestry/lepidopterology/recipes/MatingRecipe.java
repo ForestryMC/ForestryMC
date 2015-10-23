@@ -15,9 +15,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
 
+import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.api.lepidopterology.IButterfly;
-import forestry.plugins.PluginLepidopterology;
 
 public class MatingRecipe implements IRecipe {
 
@@ -25,7 +25,7 @@ public class MatingRecipe implements IRecipe {
 	private ItemStack cached;
 	
 	public MatingRecipe() {
-		unknown = PluginLepidopterology.butterflyInterface.getMemberStack(PluginLepidopterology.butterflyInterface.getIndividualTemplates().get(0), EnumFlutterType.BUTTERFLY.ordinal());
+		unknown = ButterflyManager.butterflyRoot.getMemberStack(ButterflyManager.butterflyRoot.getIndividualTemplates().get(0), EnumFlutterType.BUTTERFLY.ordinal());
 	}
 	
 	@Override
@@ -36,11 +36,11 @@ public class MatingRecipe implements IRecipe {
 		int sera = 0;
 		
 		for (int i = 0; i < crafting.getSizeInventory(); i++) {
-			if (PluginLepidopterology.butterflyInterface.isMember(crafting.getStackInSlot(i), EnumFlutterType.BUTTERFLY.ordinal())) {
+			if (ButterflyManager.butterflyRoot.isMember(crafting.getStackInSlot(i), EnumFlutterType.BUTTERFLY.ordinal())) {
 				butterflies++;
-				mated = PluginLepidopterology.butterflyInterface.isMated(crafting.getStackInSlot(i));
+				mated = ButterflyManager.butterflyRoot.isMated(crafting.getStackInSlot(i));
 				cached = crafting.getStackInSlot(i);
-			} else if (PluginLepidopterology.butterflyInterface.isMember(crafting.getStackInSlot(i), EnumFlutterType.SERUM.ordinal())) {
+			} else if (ButterflyManager.butterflyRoot.isMember(crafting.getStackInSlot(i), EnumFlutterType.SERUM.ordinal())) {
 				sera++;
 			}
 		}
@@ -62,10 +62,10 @@ public class MatingRecipe implements IRecipe {
 		IButterfly butterfly = null;
 		IButterfly serum = null;
 		for (int i = 0; i < crafting.getSizeInventory(); i++) {
-			if (PluginLepidopterology.butterflyInterface.isMember(crafting.getStackInSlot(i), EnumFlutterType.BUTTERFLY.ordinal())) {
-				butterfly = PluginLepidopterology.butterflyInterface.getMember(crafting.getStackInSlot(i));
-			} else if (PluginLepidopterology.butterflyInterface.isMember(crafting.getStackInSlot(i), EnumFlutterType.SERUM.ordinal())) {
-				serum = PluginLepidopterology.butterflyInterface.getMember(crafting.getStackInSlot(i));
+			if (ButterflyManager.butterflyRoot.isMember(crafting.getStackInSlot(i), EnumFlutterType.BUTTERFLY.ordinal())) {
+				butterfly = ButterflyManager.butterflyRoot.getMember(crafting.getStackInSlot(i));
+			} else if (ButterflyManager.butterflyRoot.isMember(crafting.getStackInSlot(i), EnumFlutterType.SERUM.ordinal())) {
+				serum = ButterflyManager.butterflyRoot.getMember(crafting.getStackInSlot(i));
 			}
 		}
 		if (butterfly == null || serum == null) {
@@ -74,7 +74,7 @@ public class MatingRecipe implements IRecipe {
 		
 		IButterfly mated = butterfly.copy();
 		mated.mate(serum);
-		return PluginLepidopterology.butterflyInterface.getMemberStack(mated, EnumFlutterType.BUTTERFLY.ordinal());
+		return ButterflyManager.butterflyRoot.getMemberStack(mated, EnumFlutterType.BUTTERFLY.ordinal());
 	}
 
 	@Override

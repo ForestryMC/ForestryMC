@@ -19,6 +19,7 @@ import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleFlowers;
 import forestry.api.genetics.IAlleleInteger;
 import forestry.api.genetics.IAlleleTolerance;
+import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.EnumButterflyChromosome;
 import forestry.api.lepidopterology.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.IButterfly;
@@ -31,7 +32,6 @@ import forestry.core.utils.StringUtil;
 import forestry.lepidopterology.genetics.ButterflyGenome;
 import forestry.lepidopterology.items.ItemButterflyGE;
 import forestry.lepidopterology.items.ItemFlutterlyzer.FlutterlyzerInventory;
-import forestry.plugins.PluginLepidopterology;
 
 public class GuiFlutterlyzer extends GuiAlyzer {
 
@@ -62,7 +62,7 @@ public class GuiFlutterlyzer extends GuiAlyzer {
 			if (inventory.getStackInSlot(k) == null) {
 				continue;
 			}
-			butterfly = PluginLepidopterology.butterflyInterface.getMember(inventory.getStackInSlot(k));
+			butterfly = ButterflyManager.butterflyRoot.getMember(inventory.getStackInSlot(k));
 			if (butterfly == null || !butterfly.isAnalyzed()) {
 				continue;
 			}

@@ -16,6 +16,19 @@ import forestry.core.genetics.alleles.AlleleCategorized;
 
 public class AlleleFruit extends AlleleCategorized implements IAlleleFruit {
 
+	public static IAlleleFruit fruitNone;
+	public static IAlleleFruit fruitApple;
+	public static IAlleleFruit fruitCocoa;
+	public static IAlleleFruit fruitChestnut;
+	public static IAlleleFruit fruitCoconut;
+	public static IAlleleFruit fruitWalnut;
+	public static IAlleleFruit fruitCherry;
+	public static IAlleleFruit fruitDates;
+	public static IAlleleFruit fruitPapaya;
+	public static IAlleleFruit fruitLemon;
+	public static IAlleleFruit fruitPlum;
+	public static IAlleleFruit fruitJujube;
+
 	private final IFruitProvider provider;
 
 	public AlleleFruit(String name, IFruitProvider provider) {

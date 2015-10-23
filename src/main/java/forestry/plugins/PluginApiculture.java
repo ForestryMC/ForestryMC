@@ -83,6 +83,7 @@ import forestry.apiculture.genetics.BeeMutationFactory;
 import forestry.apiculture.genetics.BeekeepingMode;
 import forestry.apiculture.genetics.HiveDrop;
 import forestry.apiculture.genetics.JubilanceFactory;
+import forestry.apiculture.genetics.alleles.AlleleEffect;
 import forestry.apiculture.genetics.alleles.AlleleEffectAggressive;
 import forestry.apiculture.genetics.alleles.AlleleEffectCreeper;
 import forestry.apiculture.genetics.alleles.AlleleEffectExploration;
@@ -141,7 +142,6 @@ import forestry.core.config.GameMode;
 import forestry.core.config.LocalizedConfiguration;
 import forestry.core.entities.EntityFXSnow;
 import forestry.core.fluids.Fluids;
-import forestry.core.genetics.alleles.Allele;
 import forestry.core.items.ItemBlockForestry;
 import forestry.core.items.ItemForestry;
 import forestry.core.items.ItemOverlay;
@@ -987,25 +987,25 @@ public class PluginApiculture extends ForestryPlugin {
 		}
 
 		// / BEES // EFFECTS 1800 - 1899
-		Allele.effectNone = new AlleleEffectNone("none", true);
-		Allele.effectAggressive = new AlleleEffectAggressive();
-		Allele.effectHeroic = new AlleleEffectHeroic();
-		Allele.effectBeatific = new AlleleEffectPotion("beatific", false, Potion.regeneration, 100);
-		Allele.effectMiasmic = new AlleleEffectPotion("miasmic", false, Potion.poison, 600, 100, 0.1f);
-		Allele.effectMisanthrope = new AlleleEffectMisanthrope();
-		Allele.effectGlacial = new AlleleEffectGlacial();
-		Allele.effectRadioactive = new AlleleEffectRadioactive();
-		Allele.effectCreeper = new AlleleEffectCreeper();
-		Allele.effectIgnition = new AlleleEffectIgnition();
-		Allele.effectExploration = new AlleleEffectExploration();
-		Allele.effectFestiveEaster = new AlleleEffectNone("festiveEaster", true);
-		Allele.effectSnowing = new AlleleEffectSnowing();
-		Allele.effectDrunkard = new AlleleEffectPotion("drunkard", false, Potion.confusion, 100);
-		Allele.effectReanimation = new AlleleEffectResurrection("reanimation", AlleleEffectResurrection.getReanimationList());
-		Allele.effectResurrection = new AlleleEffectResurrection("resurrection", AlleleEffectResurrection.getResurrectionList());
-		Allele.effectRepulsion = new AlleleEffectRepulsion();
-		Allele.effectFertile = new AlleleEffectFertile();
-		Allele.effectMycophilic = new AlleleEffectFungification();
+		AlleleEffect.effectNone = new AlleleEffectNone("none", true);
+		AlleleEffect.effectAggressive = new AlleleEffectAggressive();
+		AlleleEffect.effectHeroic = new AlleleEffectHeroic();
+		AlleleEffect.effectBeatific = new AlleleEffectPotion("beatific", false, Potion.regeneration, 100);
+		AlleleEffect.effectMiasmic = new AlleleEffectPotion("miasmic", false, Potion.poison, 600, 100, 0.1f);
+		AlleleEffect.effectMisanthrope = new AlleleEffectMisanthrope();
+		AlleleEffect.effectGlacial = new AlleleEffectGlacial();
+		AlleleEffect.effectRadioactive = new AlleleEffectRadioactive();
+		AlleleEffect.effectCreeper = new AlleleEffectCreeper();
+		AlleleEffect.effectIgnition = new AlleleEffectIgnition();
+		AlleleEffect.effectExploration = new AlleleEffectExploration();
+		AlleleEffect.effectFestiveEaster = new AlleleEffectNone("festiveEaster", true);
+		AlleleEffect.effectSnowing = new AlleleEffectSnowing();
+		AlleleEffect.effectDrunkard = new AlleleEffectPotion("drunkard", false, Potion.confusion, 100);
+		AlleleEffect.effectReanimation = new AlleleEffectResurrection("reanimation", AlleleEffectResurrection.getReanimationList());
+		AlleleEffect.effectResurrection = new AlleleEffectResurrection("resurrection", AlleleEffectResurrection.getResurrectionList());
+		AlleleEffect.effectRepulsion = new AlleleEffectRepulsion();
+		AlleleEffect.effectFertile = new AlleleEffectFertile();
+		AlleleEffect.effectMycophilic = new AlleleEffectFungification();
 	}
 
 	public static double getSecondPrincessChance() {

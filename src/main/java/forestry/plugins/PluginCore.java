@@ -52,7 +52,6 @@ import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
 import forestry.core.config.GameMode;
 import forestry.core.genetics.ItemResearchNote;
-import forestry.core.genetics.alleles.Allele;
 import forestry.core.genetics.alleles.AlleleFactory;
 import forestry.core.genetics.alleles.AlleleHelper;
 import forestry.core.genetics.alleles.AlleleRegistry;
@@ -85,8 +84,6 @@ public class PluginCore extends ForestryPlugin {
 
 	public static final RootCommand rootCommand = new RootCommand();
 
-	private AlleleHelper alleleHelper;
-
 	@Override
 	protected void setupAPI() {
 		super.setupAPI();
@@ -109,7 +106,7 @@ public class PluginCore extends ForestryPlugin {
 		rootCommand.addChildCommand(new CommandVersion());
 		rootCommand.addChildCommand(new CommandPlugins());
 
-		Allele.helper = alleleHelper = new AlleleHelper();
+		AlleleHelper.instance = new AlleleHelper();
 
 		ForestryBlock.core.registerBlock(new BlockBase(Material.iron, true), ItemBlockForestry.class, "core");
 
@@ -145,7 +142,7 @@ public class PluginCore extends ForestryPlugin {
 		definitionEscritoire.register();
 		ForestryModEnvWarningCallable.register();
 
-		alleleHelper.init();
+		AlleleHelper.instance.init();
 
 		RecipeSorter.register("forestry:shapedrecipecustom", ShapedRecipeCustom.class, RecipeSorter.Category.SHAPED, "before:minecraft:shaped");
 		RecipeSorter.register("forestry:shapelessrecipecustom", ShapelessRecipeCustom.class, RecipeSorter.Category.SHAPELESS, "before:minecraft:shapeless");

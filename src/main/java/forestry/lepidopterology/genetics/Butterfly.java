@@ -33,6 +33,7 @@ import forestry.api.genetics.IAlleleTolerance;
 import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IIndividual;
+import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.EnumButterflyChromosome;
 import forestry.api.lepidopterology.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.IButterfly;
@@ -44,7 +45,6 @@ import forestry.core.genetics.Chromosome;
 import forestry.core.genetics.GenericRatings;
 import forestry.core.genetics.IndividualLiving;
 import forestry.core.utils.StringUtil;
-import forestry.plugins.PluginLepidopterology;
 
 public class Butterfly extends IndividualLiving implements IButterfly {
 
@@ -96,7 +96,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 
 		if (nbttagcompound == null) {
-			this.genome = PluginLepidopterology.butterflyInterface.templateAsGenome(PluginLepidopterology.butterflyInterface.getDefaultTemplate());
+			this.genome = ButterflyManager.butterflyRoot.templateAsGenome(ButterflyManager.butterflyRoot.getDefaultTemplate());
 			return;
 		}
 
@@ -105,7 +105,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 		if (nbttagcompound.hasKey("Genome")) {
 			genome = new ButterflyGenome(nbttagcompound.getCompoundTag("Genome"));
 		} else {
-			genome = PluginLepidopterology.butterflyInterface.templateAsGenome(PluginLepidopterology.butterflyInterface.getDefaultTemplate());
+			genome = ButterflyManager.butterflyRoot.templateAsGenome(ButterflyManager.butterflyRoot.getDefaultTemplate());
 		}
 		if (nbttagcompound.hasKey("Mate")) {
 			mate = new ButterflyGenome(nbttagcompound.getCompoundTag("Mate"));
@@ -247,10 +247,10 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 			genome1 = genomeOne;
 		}
 
-		for (IButterflyMutation mutation : PluginLepidopterology.butterflyInterface.getMutations(true)) {
+		for (IButterflyMutation mutation : ButterflyManager.butterflyRoot.getMutations(true)) {
 			float chance = mutation.getChance(nursery, allele0, allele1, genome0, genome1);
 			if (chance > rand.nextFloat() * 100) {
-				return PluginLepidopterology.butterflyInterface.templateAsChromosomes(mutation.getTemplate());
+				return ButterflyManager.butterflyRoot.templateAsChromosomes(mutation.getTemplate());
 			}
 		}
 

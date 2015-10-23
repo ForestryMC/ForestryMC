@@ -67,6 +67,7 @@ import forestry.arboriculture.genetics.TreeMutationFactory;
 import forestry.arboriculture.genetics.TreekeepingMode;
 import forestry.arboriculture.genetics.alleles.AlleleFruit;
 import forestry.arboriculture.genetics.alleles.AlleleGrowth;
+import forestry.arboriculture.genetics.alleles.AlleleLeafEffect;
 import forestry.arboriculture.genetics.alleles.AlleleLeafEffectNone;
 import forestry.arboriculture.items.ItemBlockLeaves;
 import forestry.arboriculture.items.ItemBlockWood;
@@ -87,7 +88,6 @@ import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
 import forestry.core.config.GameMode;
 import forestry.core.fluids.Fluids;
-import forestry.core.genetics.alleles.Allele;
 import forestry.core.items.ItemBlockForestry;
 import forestry.core.items.ItemFruit.EnumFruit;
 import forestry.core.network.PacketIdClient;
@@ -354,29 +354,29 @@ public class PluginArboriculture extends ForestryPlugin {
 		TreeBranchDefinition.createAlleles();
 
 		// FRUITS
-		Allele.fruitNone = new AlleleFruit("none", new FruitProviderNone("none", null));
-		Allele.fruitApple = new AlleleFruit("apple", new FruitProviderRandom("apple", EnumFruitFamily.POMES, new ItemStack(Items.apple), 1.0f).setColour(0xff2e2e).setOverlay("pomes"));
-		Allele.fruitCocoa = new AlleleFruit("cocoa", new FruitProviderPod("cocoa", EnumFruitFamily.JUNGLE, EnumPodType.COCOA));
+		AlleleFruit.fruitNone = new AlleleFruit("none", new FruitProviderNone("none", null));
+		AlleleFruit.fruitApple = new AlleleFruit("apple", new FruitProviderRandom("apple", EnumFruitFamily.POMES, new ItemStack(Items.apple), 1.0f).setColour(0xff2e2e).setOverlay("pomes"));
+		AlleleFruit.fruitCocoa = new AlleleFruit("cocoa", new FruitProviderPod("cocoa", EnumFruitFamily.JUNGLE, EnumPodType.COCOA));
 		// .setColours(0xecdca5, 0xc4d24a), true);
-		Allele.fruitChestnut = new AlleleFruit("chestnut", new FruitProviderRipening("chestnut", EnumFruitFamily.NUX, EnumFruit.CHESTNUT.getStack(), 1.0f).setRipeningPeriod(6).setColours(0x7f333d, 0xc4d24a).setOverlay("nuts"), true);
-		Allele.fruitWalnut = new AlleleFruit("walnut", new FruitProviderRipening("walnut", EnumFruitFamily.NUX, EnumFruit.WALNUT.getStack(), 1.0f).setRipeningPeriod(8).setColours(0xfba248, 0xc4d24a).setOverlay("nuts"), true);
-		Allele.fruitCherry = new AlleleFruit("cherry", new FruitProviderRipening("cherry", EnumFruitFamily.PRUNES, EnumFruit.CHERRY.getStack(), 1.0f).setColours(0xff2e2e, 0xc4d24a).setOverlay("berries"), true);
-		Allele.fruitDates = new AlleleFruit("dates", new FruitProviderPod("dates", EnumFruitFamily.JUNGLE, EnumPodType.DATES, EnumFruit.DATES.getStack(4)));
-		Allele.fruitPapaya = new AlleleFruit("papaya", new FruitProviderPod("papaya", EnumFruitFamily.JUNGLE, EnumPodType.PAPAYA, EnumFruit.PAPAYA.getStack()));
+		AlleleFruit.fruitChestnut = new AlleleFruit("chestnut", new FruitProviderRipening("chestnut", EnumFruitFamily.NUX, EnumFruit.CHESTNUT.getStack(), 1.0f).setRipeningPeriod(6).setColours(0x7f333d, 0xc4d24a).setOverlay("nuts"), true);
+		AlleleFruit.fruitWalnut = new AlleleFruit("walnut", new FruitProviderRipening("walnut", EnumFruitFamily.NUX, EnumFruit.WALNUT.getStack(), 1.0f).setRipeningPeriod(8).setColours(0xfba248, 0xc4d24a).setOverlay("nuts"), true);
+		AlleleFruit.fruitCherry = new AlleleFruit("cherry", new FruitProviderRipening("cherry", EnumFruitFamily.PRUNES, EnumFruit.CHERRY.getStack(), 1.0f).setColours(0xff2e2e, 0xc4d24a).setOverlay("berries"), true);
+		AlleleFruit.fruitDates = new AlleleFruit("dates", new FruitProviderPod("dates", EnumFruitFamily.JUNGLE, EnumPodType.DATES, EnumFruit.DATES.getStack(4)));
+		AlleleFruit.fruitPapaya = new AlleleFruit("papaya", new FruitProviderPod("papaya", EnumFruitFamily.JUNGLE, EnumPodType.PAPAYA, EnumFruit.PAPAYA.getStack()));
 		// Allele.fruitCoconut = new AlleleFruit("fruitCoconut", new
 		// FruitProviderPod("coconut", jungle, EnumPodType.COCONUT, new
 		// ItemStack[] { new ItemStack(
 		// ForestryItem.fruits, 1, EnumFruit.COCONUT.ordinal()) }));
-		Allele.fruitLemon = new AlleleFruit("lemon", new FruitProviderRipening("lemon", EnumFruitFamily.PRUNES, EnumFruit.LEMON.getStack(), 1.0f).setColours(0xeeee00, 0x99ff00).setOverlay("citrus"), true);
-		Allele.fruitPlum = new AlleleFruit("plum", new FruitProviderRipening("plum", EnumFruitFamily.PRUNES, EnumFruit.PLUM.getStack(), 1.0f).setColours(0x663446, 0xeeff1a).setOverlay("plums"), true);
+		AlleleFruit.fruitLemon = new AlleleFruit("lemon", new FruitProviderRipening("lemon", EnumFruitFamily.PRUNES, EnumFruit.LEMON.getStack(), 1.0f).setColours(0xeeee00, 0x99ff00).setOverlay("citrus"), true);
+		AlleleFruit.fruitPlum = new AlleleFruit("plum", new FruitProviderRipening("plum", EnumFruitFamily.PRUNES, EnumFruit.PLUM.getStack(), 1.0f).setColours(0x663446, 0xeeff1a).setOverlay("plums"), true);
 
 		// / TREES // GROWTH PROVIDER 1350 - 1399
-		Allele.growthLightlevel = new AlleleGrowth("lightlevel", new GrowthProvider());
-		Allele.growthAcacia = new AlleleGrowth("acacia", new GrowthProvider());
-		Allele.growthTropical = new AlleleGrowth("tropical", new GrowthProviderTropical());
+		AlleleGrowth.growthLightlevel = new AlleleGrowth("lightlevel", new GrowthProvider());
+		AlleleGrowth.growthAcacia = new AlleleGrowth("acacia", new GrowthProvider());
+		AlleleGrowth.growthTropical = new AlleleGrowth("tropical", new GrowthProviderTropical());
 
 		// / TREES // EFFECTS 1900 - 1999
-		Allele.leavesNone = new AlleleLeafEffectNone();
+		AlleleLeafEffect.leavesNone = new AlleleLeafEffectNone();
 
 	}
 

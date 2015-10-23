@@ -32,10 +32,10 @@ import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleInteger;
 import forestry.api.genetics.IFruitFamily;
 import forestry.arboriculture.genetics.TreeGenome;
+import forestry.arboriculture.genetics.alleles.AlleleFruit;
 import forestry.arboriculture.items.ItemGermlingGE;
 import forestry.arboriculture.items.ItemTreealyzer.TreealyzerInventory;
 import forestry.core.config.ForestryItem;
-import forestry.core.genetics.alleles.Allele;
 import forestry.core.genetics.alleles.AlleleBoolean;
 import forestry.core.genetics.alleles.AllelePlantType;
 import forestry.core.gui.ContainerAlyzer;
@@ -240,14 +240,14 @@ public class GuiTreealyzer extends GuiAlyzer {
 		drawLine(StringUtil.localize("gui.fruits"), COLUMN_0);
 		String strike = "";
 		IAllele fruit0 = tree.getGenome().getActiveAllele(EnumTreeChromosome.FRUITS);
-		if (!tree.canBearFruit() && fruit0 != Allele.fruitNone) {
+		if (!tree.canBearFruit() && fruit0 != AlleleFruit.fruitNone) {
 			strike = EnumChatFormatting.STRIKETHROUGH.toString();
 		}
 		drawLine(strike + StringUtil.localize(tree.getGenome().getFruitProvider().getDescription()), COLUMN_1, fruitDominance0);
 
 		strike = "";
 		IAllele fruit1 = tree.getGenome().getInactiveAllele(EnumTreeChromosome.FRUITS);
-		if (!tree.getGenome().getSecondary().getSuitableFruit().contains(((IAlleleFruit) fruit1).getProvider().getFamily()) && fruit1 != Allele.fruitNone) {
+		if (!tree.getGenome().getSecondary().getSuitableFruit().contains(((IAlleleFruit) fruit1).getProvider().getFamily()) && fruit1 != AlleleFruit.fruitNone) {
 			strike = EnumChatFormatting.STRIKETHROUGH.toString();
 		}
 		drawLine(strike + StringUtil.localize(((IAlleleFruit) fruit1).getProvider().getDescription()), COLUMN_2, fruitDominance1);

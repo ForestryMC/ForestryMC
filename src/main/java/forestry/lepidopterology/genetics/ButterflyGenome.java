@@ -21,6 +21,7 @@ import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IFlowerProvider;
 import forestry.api.genetics.ISpeciesRoot;
+import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.EnumButterflyChromosome;
 import forestry.api.lepidopterology.IAlleleButterflyEffect;
 import forestry.api.lepidopterology.IAlleleButterflySpecies;
@@ -28,7 +29,6 @@ import forestry.api.lepidopterology.IButterflyGenome;
 import forestry.core.genetics.Genome;
 import forestry.core.genetics.alleles.AlleleBoolean;
 import forestry.core.genetics.alleles.AlleleTolerance;
-import forestry.plugins.PluginLepidopterology;
 
 public class ButterflyGenome extends Genome implements IButterflyGenome {
 
@@ -43,7 +43,7 @@ public class ButterflyGenome extends Genome implements IButterflyGenome {
 
 	// NBT RETRIEVAL
 	public static IAlleleButterflySpecies getSpecies(ItemStack itemStack) {
-		if (!PluginLepidopterology.butterflyInterface.isMember(itemStack)) {
+		if (!ButterflyManager.butterflyRoot.isMember(itemStack)) {
 			return null;
 		}
 		
@@ -52,7 +52,7 @@ public class ButterflyGenome extends Genome implements IButterflyGenome {
 			return (IAlleleButterflySpecies) species;
 		}
 
-		return (IAlleleButterflySpecies) getActiveAllele(itemStack, EnumButterflyChromosome.SPECIES, PluginLepidopterology.butterflyInterface);
+		return (IAlleleButterflySpecies) getActiveAllele(itemStack, EnumButterflyChromosome.SPECIES, ButterflyManager.butterflyRoot);
 	}
 
 	/* SPECIES */
@@ -128,7 +128,7 @@ public class ButterflyGenome extends Genome implements IButterflyGenome {
 
 	@Override
 	public ISpeciesRoot getSpeciesRoot() {
-		return PluginLepidopterology.butterflyInterface;
+		return ButterflyManager.butterflyRoot;
 	}
 
 }

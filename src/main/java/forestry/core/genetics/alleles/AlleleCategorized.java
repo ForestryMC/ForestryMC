@@ -13,7 +13,7 @@ import net.minecraft.util.StatCollector;
  * and can fall back on generic names like
  * forestry.allele.fast
  */
-public class AlleleCategorized extends Allele {
+public abstract class AlleleCategorized extends Allele {
 	protected AlleleCategorized(String modId, String category, String valueName, boolean isDominant) {
 		super(getUid(modId, category, valueName), getUnlocalizedName(modId, category, valueName), isDominant, true);
 	}

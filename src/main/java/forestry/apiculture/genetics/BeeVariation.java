@@ -8,7 +8,7 @@ import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.genetics.IAllele;
-import forestry.core.genetics.alleles.Allele;
+import forestry.core.genetics.alleles.AlleleHelper;
 
 public abstract class BeeVariation implements IBeeDefinition {
 
@@ -51,7 +51,7 @@ public abstract class BeeVariation implements IBeeDefinition {
 
 		@Override
 		protected void initializeTemplate(IAllele[] template) {
-			Allele.helper.set(template, EnumBeeChromosome.TOLERANT_FLYER, true);
+			AlleleHelper.instance.set(template, EnumBeeChromosome.TOLERANT_FLYER, true);
 		}
 	}
 }

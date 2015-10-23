@@ -48,11 +48,11 @@ import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IEffectData;
 import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.IMutation;
+import forestry.arboriculture.genetics.alleles.AlleleFruit;
 import forestry.arboriculture.tiles.TileLeaves;
 import forestry.core.config.Config;
 import forestry.core.genetics.Chromosome;
 import forestry.core.genetics.Individual;
-import forestry.core.genetics.alleles.Allele;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.StringUtil;
 
@@ -328,7 +328,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 		}
 
 		IAllele fruit = getGenome().getActiveAllele(EnumTreeChromosome.FRUITS);
-		if (fruit != Allele.fruitNone) {
+		if (fruit != AlleleFruit.fruitNone) {
 			String strike = "";
 			if (!canBearFruit()) {
 				strike = EnumChatFormatting.STRIKETHROUGH.toString();

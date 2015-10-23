@@ -17,11 +17,11 @@ import net.minecraft.world.World;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.Tabs;
 import forestry.api.genetics.ISpeciesRoot;
+import forestry.api.lepidopterology.ButterflyManager;
 import forestry.core.config.Config;
 import forestry.core.gui.IHintSource;
 import forestry.core.items.ItemAlyzer;
 import forestry.core.network.GuiId;
-import forestry.plugins.PluginLepidopterology;
 
 public class ItemFlutterlyzer extends ItemAlyzer {
 
@@ -33,7 +33,7 @@ public class ItemFlutterlyzer extends ItemAlyzer {
 
 		@Override
 		protected ISpeciesRoot getSpeciesRoot() {
-			return PluginLepidopterology.butterflyInterface;
+			return ButterflyManager.butterflyRoot;
 		}
 
 		/* IHINTSOURCE */

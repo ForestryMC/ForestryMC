@@ -14,10 +14,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+import forestry.api.lepidopterology.ButterflyManager;
 import forestry.core.GuiHandlerBase;
 import forestry.core.gui.ContainerAlyzer;
 import forestry.core.network.GuiId;
-import forestry.lepidopterology.genetics.ButterflyHelper;
 import forestry.lepidopterology.gui.GuiFlutterlyzer;
 import forestry.lepidopterology.items.ItemFlutterlyzer.FlutterlyzerInventory;
 
@@ -42,7 +42,7 @@ public class GuiHandlerLepidopterology extends GuiHandlerBase {
 				return new ContainerAlyzer(new FlutterlyzerInventory(player, equipped), player);
 
 			case LepidopteristChestGUI:
-				return getNaturalistChestContainer(ButterflyHelper.UID, player, world, x, y, z, guiData);
+				return getNaturalistChestContainer(ButterflyManager.butterflyRoot, player, world, x, y, z, guiData);
 
 			default:
 				return null;
@@ -69,7 +69,7 @@ public class GuiHandlerLepidopterology extends GuiHandlerBase {
 				return new GuiFlutterlyzer(player, new FlutterlyzerInventory(player, equipped));
 
 			case LepidopteristChestGUI:
-				return getNaturalistChestGui(ButterflyHelper.UID, player, world, x, y, z, guiData);
+				return getNaturalistChestGui(ButterflyManager.butterflyRoot, player, world, x, y, z, guiData);
 
 			default:
 				return null;

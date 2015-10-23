@@ -16,6 +16,10 @@ import forestry.core.genetics.alleles.AlleleCategorized;
 
 public class AlleleGrowth extends AlleleCategorized implements IAlleleGrowth {
 
+	public static IAlleleGrowth growthLightlevel;
+	public static IAlleleGrowth growthAcacia;
+	public static IAlleleGrowth growthTropical;
+
 	private final IGrowthProvider provider;
 
 	public AlleleGrowth(String name, IGrowthProvider provider) {
