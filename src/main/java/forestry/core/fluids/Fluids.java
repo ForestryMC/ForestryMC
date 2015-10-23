@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.fluids;
 
+import javax.annotation.Nonnull;
 import java.awt.Color;
 import java.util.Arrays;
 import java.util.Collections;
@@ -138,7 +139,7 @@ public enum Fluids {
 			}
 		}
 	},
-	LEGACY_HONEY {
+	LEGACY_HONEY(new Color(255, 196, 35)) {
 		@Override
 		public String getTag() {
 			return "honey";
@@ -317,9 +318,8 @@ public enum Fluids {
 		}
 	},
 	// Railcraft
-	CREOSOTE, STEAM,
-	// Thermal Expansion
-	COAL, PYROTHEUM;
+	CREOSOTE(new Color(0x635c03)),
+	STEAM(new Color(0x91938F));
 
 	public static final Fluids[] forestryFluids = {ETHANOL, BIOMASS, GLASS, HONEY, LEGACY_HONEY, ICE, JUICE, MILK, SEEDOIL, SHORT_MEAD};
 
@@ -333,17 +333,14 @@ public enum Fluids {
 
 	private final String tag;
 	private final int density, viscosity;
+	@Nonnull
 	private final Color color;
 
-	Fluids() {
-		this(null);
-	}
-
-	Fluids(Color color) {
+	Fluids(@Nonnull Color color) {
 		this(color, 1000, 1000);
 	}
 
-	Fluids(Color color, int density, int viscosity) {
+	Fluids(@Nonnull Color color, int density, int viscosity) {
 		this.tag = name().toLowerCase(Locale.ENGLISH);
 		this.color = color;
 		this.density = density;
@@ -382,6 +379,7 @@ public enum Fluids {
 		return fluid.getBlock();
 	}
 
+	@Nonnull
 	public final Color getColor() {
 		return color;
 	}
@@ -415,6 +413,7 @@ public enum Fluids {
 		return a.isFluidEqual(b);
 	}
 
+	@Nonnull
 	public static Color getFluidColor(FluidStack fluidStack) {
 		if (fluidStack != null) {
 			Fluid fluid = fluidStack.getFluid();
