@@ -21,8 +21,6 @@ apply plugin: 'forge'
 apply plugin: 'maven'
 apply plugin: 'java'
 
-loadProperties()
-
 version = version_major + '.' + version_minor + '.' + version_patch + '.' + getBuildNumber()
 if (project.hasProperty('buildQualifier')) {
 	version = project.version + '-' + project.buildQualifier
@@ -46,6 +44,8 @@ minecraft {
 
 	replace '@VERSION@', project.version
 	replace '@BUILD_NUMBER@', getBuildNumber()
+
+	srgExtra "PK: chylex/javacheck forestry/shade/javacheck"
 }
 
 sourceSets {
@@ -73,11 +73,17 @@ repositories {
 		name = "chickenbones"
 		url = "http://chickenbones.net/maven/"
 	}
+	maven{
+		name "tterrag Repo"
+		url "http://maven.tterrag.com/"
+	}
 }
 
 configurations {
 	api
 	compile.extendsFrom api
+	shade
+	compile.extendsFrom shade
 }
 
 dependencies {
@@ -91,6 +97,9 @@ dependencies {
 	compile "codechicken:CodeChickenCore:1.7.10-1.0.7.47:dev"
 	compile "codechicken:NotEnoughItems:1.7.10-1.0.5.111:dev"
 	compile "codechicken:NotEnoughItems:1.7.10-1.0.5.111:src"
+
+	// http://maven.tterrag.com/
+	shade "chylex.javacheck:JavaChecker:v1.2-b1"
 
 	testCompile 'junit:junit:4.12'
 }
@@ -134,45 +143,6 @@ debugClient {
 	}
 }
 
-task echoVersion << {
-	printNextVersion()
-}
-
-def saveVersion() {
-	ant.propertyfile(
-		file: "application.properties") {
-		entry( key:"version_major", type:"int", value: version_major)
-		entry( key:"version_minor", type:"int", value: version_minor)
-		entry( key:"version_patch", type:"int", value: version_patch)
-	}
-	project.version = version_major + '.' + version_minor + '.' + version_patch + '.' + getBuildNumber()
-	printNextVersion()
-}
-
-def printNextVersion() {
-	println '*************************************************************'
-	println 'The next build will be version: ' +  project.version
-	println '*************************************************************'
-}
-
-task bumpMajor << {
-	project.version_major = Integer.parseInt(project.version_major) + 1
-	project.version_minor = "0"
-	project.version_patch = "0"
-	saveVersion()
-}
-
-task bumpMinor << {
-	project.version_minor = Integer.parseInt(project.version_minor) + 1
-	project.version_patch = "0"
-	saveVersion()
-}
-
-task bumpPatch << {
-	project.version_patch = Integer.parseInt(project.version_patch) + 1
-	saveVersion()
-}
-
 jar {
 	destinationDir = file("build/tmp")
 	archiveName = "main.jar"
@@ -183,6 +153,12 @@ jar {
 	}
 	into ('cofh/api') {
 		from project.apiRedstoneFlux + "/LICENSE - LGPLv3.txt"
+	}
+
+	configurations.shade.each{ dep ->
+		from(project.zipTree(dep)){
+			exclude 'META-INF', 'META-INF/**', 'mcmod.info'
+		}
 	}
 }
 
@@ -196,6 +172,10 @@ task mainJar(type: Jar, dependsOn: 'reobf') {
 	destinationDir = file(dirDest)
 	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 	includeEmptyDirs = false
+
+	manifest{
+		attributes 'TweakClass': 'forestry.shade.javacheck.Java7Checker'
+	}
 }
 
 task devJar(type: Jar, dependsOn: 'classes') {
@@ -237,19 +217,8 @@ task sourceJar(type: Jar, dependsOn: 'classes') {
 	classifier = 'sources'
 }
 
-task releaseInit << {
-	println '*************************************************************'
-	println 'This build will be version: ' +  rootProject.version
-	println '*************************************************************'
+task release (dependsOn: [mainJar, apiJar, devJar, sourceJar]) {
 }
-
-task release (dependsOn: [releaseInit, mainJar, apiJar, devJar, sourceJar]) {
-}
-
-mainJar.shouldRunAfter releaseInit
-devJar.shouldRunAfter releaseInit
-apiJar.shouldRunAfter releaseInit
-sourceJar.shouldRunAfter releaseInit
 
 artifacts {
 	archives apiJar
@@ -275,19 +244,6 @@ uploadArchives {
 			}
 		} else {
 			println 'Archives upload disabled, gradle.properties is missing.'
-		}
-	}
-}
-
-def loadProperties() {
-	println('loading application.properties')
-
-	file("application.properties").withReader { reader ->
-		def userProps = new Properties()
-		userProps.load(reader)
-
-		for (Map.Entry property in userProps) {
-			project.ext[property.getKey()] = property.getValue()
 		}
 	}
 }
