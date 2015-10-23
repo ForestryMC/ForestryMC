@@ -91,7 +91,7 @@ public class AlleleHelper implements IAlleleHelper {
 		alleleMaps.put(Boolean.class, booleans);
 	}
 
-	private <T extends Enum<T> & IChromosomeType> IAllele get(Object value) {
+	private IAllele get(Object value) {
 		Class<?> valueClass = value.getClass();
 		Map<?, ? extends IAllele> map = alleleMaps.get(valueClass);
 		if (map == null) {
