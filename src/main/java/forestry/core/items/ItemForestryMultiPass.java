@@ -29,8 +29,8 @@ public class ItemForestryMultiPass extends ItemForestry {
 	@Override
 	public void registerIcons(IIconRegister register) {
 		icons = new IIcon[2];
-		icons[0] = TextureManager.getInstance().registerTex(register, StringUtil.cleanItemName(this) + ".0");
-		icons[1] = TextureManager.getInstance().registerTex(register, StringUtil.cleanItemName(this) + ".1");
+		icons[0] = TextureManager.registerTex(register, StringUtil.cleanItemName(this) + ".0");
+		icons[1] = TextureManager.registerTex(register, StringUtil.cleanItemName(this) + ".1");
 	}
 
 	@SideOnly(Side.CLIENT)

@@ -190,7 +190,7 @@ public class MachineDefinition {
 		}
 
 		for (int i = 0; i < 8; i++) {
-			icons[i] = TextureManager.getInstance().registerTex(register, teIdent.replace("forestry.", "").toLowerCase(Locale.ENGLISH) + "." + faceMap[i]);
+			icons[i] = TextureManager.registerTex(register, teIdent.replace("forestry.", "").toLowerCase(Locale.ENGLISH) + "." + faceMap[i]);
 		}
 	}
 

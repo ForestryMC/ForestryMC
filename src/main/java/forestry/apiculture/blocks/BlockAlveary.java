@@ -132,20 +132,20 @@ public class BlockAlveary extends BlockStructure {
 	@Override
 	public void registerBlockIcons(IIconRegister register) {
 		icons = new IIcon[14];
-		icons[0] = TextureManager.getInstance().registerTex(register, "apiculture/alveary.plain");
-		icons[1] = TextureManager.getInstance().registerTex(register, "apiculture/alveary.entrance");
-		icons[2] = TextureManager.getInstance().registerTex(register, "apiculture/alveary.bottom");
-		icons[3] = TextureManager.getInstance().registerTex(register, "apiculture/alveary.left");
-		icons[4] = TextureManager.getInstance().registerTex(register, "apiculture/alveary.right");
-		icons[5] = TextureManager.getInstance().registerTex(register, "apiculture/alveary.swarmer.off");
-		icons[6] = TextureManager.getInstance().registerTex(register, "apiculture/alveary.swarmer.on");
-		icons[7] = TextureManager.getInstance().registerTex(register, "apiculture/alveary.heater.off");
-		icons[8] = TextureManager.getInstance().registerTex(register, "apiculture/alveary.heater.on");
-		icons[9] = TextureManager.getInstance().registerTex(register, "apiculture/alveary.fan.off");
-		icons[10] = TextureManager.getInstance().registerTex(register, "apiculture/alveary.fan.on");
-		icons[11] = TextureManager.getInstance().registerTex(register, "apiculture/alveary.valve");
-		icons[12] = TextureManager.getInstance().registerTex(register, "apiculture/alveary.stabiliser");
-		icons[13] = TextureManager.getInstance().registerTex(register, "apiculture/alveary.sieve");
+		icons[0] = TextureManager.registerTex(register, "apiculture/alveary.plain");
+		icons[1] = TextureManager.registerTex(register, "apiculture/alveary.entrance");
+		icons[2] = TextureManager.registerTex(register, "apiculture/alveary.bottom");
+		icons[3] = TextureManager.registerTex(register, "apiculture/alveary.left");
+		icons[4] = TextureManager.registerTex(register, "apiculture/alveary.right");
+		icons[5] = TextureManager.registerTex(register, "apiculture/alveary.swarmer.off");
+		icons[6] = TextureManager.registerTex(register, "apiculture/alveary.swarmer.on");
+		icons[7] = TextureManager.registerTex(register, "apiculture/alveary.heater.off");
+		icons[8] = TextureManager.registerTex(register, "apiculture/alveary.heater.on");
+		icons[9] = TextureManager.registerTex(register, "apiculture/alveary.fan.off");
+		icons[10] = TextureManager.registerTex(register, "apiculture/alveary.fan.on");
+		icons[11] = TextureManager.registerTex(register, "apiculture/alveary.valve");
+		icons[12] = TextureManager.registerTex(register, "apiculture/alveary.stabiliser");
+		icons[13] = TextureManager.registerTex(register, "apiculture/alveary.sieve");
 	}
 
 	@SideOnly(Side.CLIENT)

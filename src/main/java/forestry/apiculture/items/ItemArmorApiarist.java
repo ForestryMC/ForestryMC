@@ -48,7 +48,7 @@ public class ItemArmorApiarist extends ItemArmor implements IArmorApiarist, IArm
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerIcons(IIconRegister register) {
-		itemIcon = TextureManager.getInstance().registerTex(register, StringUtil.cleanItemName(this));
+		itemIcon = TextureManager.registerTex(register, StringUtil.cleanItemName(this));
 	}
 
 	@SideOnly(Side.CLIENT)

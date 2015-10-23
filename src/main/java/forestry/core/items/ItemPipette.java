@@ -157,8 +157,8 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerIcons(IIconRegister register) {
-		primaryIcon = TextureManager.getInstance().registerTex(register, StringUtil.cleanItemName(this) + ".0");
-		secondaryIcon = TextureManager.getInstance().registerTex(register, StringUtil.cleanItemName(this) + ".1");
+		primaryIcon = TextureManager.registerTex(register, StringUtil.cleanItemName(this) + ".0");
+		secondaryIcon = TextureManager.registerTex(register, StringUtil.cleanItemName(this) + ".1");
 	}
 
 	@SideOnly(Side.CLIENT)

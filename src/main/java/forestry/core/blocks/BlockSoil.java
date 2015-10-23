@@ -251,9 +251,9 @@ public class BlockSoil extends Block implements IItemTyped {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister register) {
-		iconHumus = TextureManager.getInstance().registerTex(register, "soil/humus");
-		iconBogEarth = TextureManager.getInstance().registerTex(register, "soil/bog");
-		iconPeat = TextureManager.getInstance().registerTex(register, "soil/peat");
+		iconHumus = TextureManager.registerTex(register, "soil/humus");
+		iconBogEarth = TextureManager.registerTex(register, "soil/bog");
+		iconPeat = TextureManager.registerTex(register, "soil/peat");
 	}
 
 	@Override

@@ -89,7 +89,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerBlockIcons(IIconRegister register) {
-		defaultIcon = TextureManager.getInstance().registerTex(register, "germlings/sapling.treeBalsa");
+		defaultIcon = TextureManager.registerTex(register, "germlings/sapling.treeBalsa");
 
 		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
 			if (allele instanceof IAlleleTreeSpecies) {

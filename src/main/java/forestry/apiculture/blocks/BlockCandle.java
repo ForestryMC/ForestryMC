@@ -117,11 +117,11 @@ public class BlockCandle extends BlockTorch {
 	@Override
 	public void registerBlockIcons(IIconRegister register) {
 		String fileBase = StringUtil.cleanBlockName(this);
-		this.blockIcon = TextureManager.getInstance().registerTex(register, "stump");
-		this.litStump = TextureManager.getInstance().registerTex(register, fileBase + "StumpLit");
-		this.litTip = TextureManager.getInstance().registerTex(register, fileBase + "TipLit");
-		this.unlitStump = TextureManager.getInstance().registerTex(register, fileBase + "StumpUnlit");
-		this.unlitTip = TextureManager.getInstance().registerTex(register, fileBase + "TipUnlit");
+		this.blockIcon = TextureManager.registerTex(register, "stump");
+		this.litStump = TextureManager.registerTex(register, fileBase + "StumpLit");
+		this.litTip = TextureManager.registerTex(register, fileBase + "TipLit");
+		this.unlitStump = TextureManager.registerTex(register, fileBase + "StumpUnlit");
+		this.unlitTip = TextureManager.registerTex(register, fileBase + "TipUnlit");
 	}
 
 	@Override

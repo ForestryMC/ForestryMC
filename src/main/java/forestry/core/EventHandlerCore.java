@@ -69,7 +69,7 @@ public class EventHandlerCore {
 	public void handleTextureRemap(TextureStitchEvent.Pre event) {
 		if (event.map.getTextureType() == 1) {
 			ErrorStateRegistry.initIcons(event.map);
-			TextureManager.getInstance().initDefaultIcons(event.map);
+			TextureManager.initDefaultIcons(event.map);
 		}
 	}
 

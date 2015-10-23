@@ -323,8 +323,8 @@ public class ItemLiquidContainer extends Item {
 	@Override
 	public void registerIcons(IIconRegister register) {
 		icons = new IIcon[2];
-		icons[0] = TextureManager.getInstance().registerTex(register, "liquids/" + type.toString().toLowerCase(Locale.ENGLISH) + ".bottle");
-		icons[1] = TextureManager.getInstance().registerTex(register, "liquids/" + type.toString().toLowerCase(Locale.ENGLISH) + ".contents");
+		icons[0] = TextureManager.registerTex(register, "liquids/" + type.toString().toLowerCase(Locale.ENGLISH) + ".bottle");
+		icons[1] = TextureManager.registerTex(register, "liquids/" + type.toString().toLowerCase(Locale.ENGLISH) + ".contents");
 	}
 
 	@SideOnly(Side.CLIENT)

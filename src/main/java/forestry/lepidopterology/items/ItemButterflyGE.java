@@ -185,12 +185,12 @@ public class ItemButterflyGE extends ItemGE {
 		icons = new IIcon[2];
 		switch (this.type) {
 			case CATERPILLAR:
-				icons[0] = TextureManager.getInstance().registerTex(register, "caterpillar.body");
-				icons[1] = TextureManager.getInstance().registerTex(register, "caterpillar.body2");
+				icons[0] = TextureManager.registerTex(register, "caterpillar.body");
+				icons[1] = TextureManager.registerTex(register, "caterpillar.body2");
 				break;
 			default:
-				icons[0] = TextureManager.getInstance().registerTex(register, "liquids/jar.contents");
-				icons[1] = TextureManager.getInstance().registerTex(register, "liquids/jar.bottle");
+				icons[0] = TextureManager.registerTex(register, "liquids/jar.contents");
+				icons[1] = TextureManager.registerTex(register, "liquids/jar.bottle");
 		}
 	}
 

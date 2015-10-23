@@ -62,7 +62,7 @@ public class ItemMisc extends ItemForestry {
 
 		icons = new IIcon[definition.length];
 		for (int i = 0; i < definition.length; i++) {
-			icons[i] = TextureManager.getInstance().registerTex(register, definition[i]);
+			icons[i] = TextureManager.registerTex(register, definition[i]);
 		}
 
 	}

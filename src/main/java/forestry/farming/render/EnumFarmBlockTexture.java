@@ -42,16 +42,15 @@ public enum EnumFarmBlockTexture {
 
 	@SideOnly(Side.CLIENT)
 	public static void registerIcons(IIconRegister register) {
-		TextureManager textureManager = TextureManager.getInstance();
 		icons = Arrays.asList(
-				textureManager.registerTex(register, "farm/plain"),
-				textureManager.registerTex(register, "farm/reverse"),
-				textureManager.registerTex(register, "farm/top"),
-				textureManager.registerTex(register, "farm/band"),
-				textureManager.registerTex(register, "farm/gears"),
-				textureManager.registerTex(register, "farm/hatch"),
-				textureManager.registerTex(register, "farm/valve"),
-				textureManager.registerTex(register, "farm/control")
+				TextureManager.registerTex(register, "farm/plain"),
+				TextureManager.registerTex(register, "farm/reverse"),
+				TextureManager.registerTex(register, "farm/top"),
+				TextureManager.registerTex(register, "farm/band"),
+				TextureManager.registerTex(register, "farm/gears"),
+				TextureManager.registerTex(register, "farm/hatch"),
+				TextureManager.registerTex(register, "farm/valve"),
+				TextureManager.registerTex(register, "farm/control")
 		);
 	}
 

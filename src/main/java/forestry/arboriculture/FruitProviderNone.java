@@ -127,7 +127,7 @@ public class FruitProviderNone implements IFruitProvider {
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister register) {
 		if (overlay != null) {
-			TextureManager.getInstance().registerTexUID(register, overlay.texUID, "leaves/fruits." + overlay.ident);
+			TextureManager.registerTexUID(register, overlay.texUID, "leaves/fruits." + overlay.ident);
 		}
 	}
 }

@@ -67,8 +67,8 @@ public class ItemBeverage extends ItemForestryFood {
 
 		@SideOnly(Side.CLIENT)
 		public void registerIcons(IIconRegister register) {
-			iconBottle = TextureManager.getInstance().registerTex(register, "liquids/" + iconType + ".bottle");
-			iconContents = TextureManager.getInstance().registerTex(register, "liquids/" + iconType + ".contents");
+			iconBottle = TextureManager.registerTex(register, "liquids/" + iconType + ".bottle");
+			iconContents = TextureManager.registerTex(register, "liquids/" + iconType + ".contents");
 		}
 
 		public static List<IBeverageEffect> loadEffects(ItemStack stack) {

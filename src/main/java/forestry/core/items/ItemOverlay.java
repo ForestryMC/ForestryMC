@@ -95,9 +95,9 @@ public class ItemOverlay extends ItemForestry {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerIcons(IIconRegister register) {
-		primaryIcon = TextureManager.getInstance().registerTex(register, StringUtil.cleanItemName(this) + ".0");
+		primaryIcon = TextureManager.registerTex(register, StringUtil.cleanItemName(this) + ".0");
 		if (overlays[0].secondaryColor != 0) {
-			secondaryIcon = TextureManager.getInstance().registerTex(register, StringUtil.cleanItemName(this) + ".1");
+			secondaryIcon = TextureManager.registerTex(register, StringUtil.cleanItemName(this) + ".1");
 		}
 	}
 

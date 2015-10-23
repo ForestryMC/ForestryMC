@@ -51,10 +51,10 @@ public class BlockResourceStorage extends Block {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister register) {
-		iconApatite = TextureManager.getInstance().registerTex(register, "storage/apatite");
-		iconCopper = TextureManager.getInstance().registerTex(register, "storage/copper");
-		iconTin = TextureManager.getInstance().registerTex(register, "storage/tin");
-		iconBronze = TextureManager.getInstance().registerTex(register, "storage/bronze");
+		iconApatite = TextureManager.registerTex(register, "storage/apatite");
+		iconCopper = TextureManager.registerTex(register, "storage/copper");
+		iconTin = TextureManager.registerTex(register, "storage/tin");
+		iconBronze = TextureManager.registerTex(register, "storage/bronze");
 	}
 
 	@Override

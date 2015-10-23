@@ -54,6 +54,6 @@ public class ItemForestry extends Item {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerIcons(IIconRegister register) {
-		itemIcon = TextureManager.getInstance().registerTex(register, StringUtil.cleanItemName(this));
+		itemIcon = TextureManager.registerTex(register, StringUtil.cleanItemName(this));
 	}
 }

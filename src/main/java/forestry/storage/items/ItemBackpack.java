@@ -253,12 +253,12 @@ public class ItemBackpack extends ItemInventoried {
 		EnumBackpackType t = type == EnumBackpackType.APIARIST ? EnumBackpackType.T1 : type;
 		String typeTag = "backpacks/" + t.toString().toLowerCase(Locale.ENGLISH);
 
-		icons[0] = TextureManager.getInstance().registerTex(register, typeTag + ".cloth");
-		icons[1] = TextureManager.getInstance().registerTex(register, typeTag + ".outline");
-		icons[2] = TextureManager.getInstance().registerTex(register, "backpacks/neutral");
-		icons[3] = TextureManager.getInstance().registerTex(register, "backpacks/locked");
-		icons[4] = TextureManager.getInstance().registerTex(register, "backpacks/receive");
-		icons[5] = TextureManager.getInstance().registerTex(register, "backpacks/resupply");
+		icons[0] = TextureManager.registerTex(register, typeTag + ".cloth");
+		icons[1] = TextureManager.registerTex(register, typeTag + ".outline");
+		icons[2] = TextureManager.registerTex(register, "backpacks/neutral");
+		icons[3] = TextureManager.registerTex(register, "backpacks/locked");
+		icons[4] = TextureManager.registerTex(register, "backpacks/receive");
+		icons[5] = TextureManager.registerTex(register, "backpacks/resupply");
 	}
 
 	// Return true to enable color overlay - client side only

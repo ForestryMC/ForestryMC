@@ -32,9 +32,9 @@ public abstract class IconProviderWood {
 			EnumWoodType woodType = EnumWoodType.VALUES[i];
 			String woodName = woodType.toString().toLowerCase(Locale.ENGLISH);
 
-			icons[0][i] = TextureManager.getInstance().registerTex(register, "wood/planks." + woodName);
-			icons[1][i] = TextureManager.getInstance().registerTex(register, "wood/bark." + woodName);
-			icons[2][i] = TextureManager.getInstance().registerTex(register, "wood/heart." + woodName);
+			icons[0][i] = TextureManager.registerTex(register, "wood/planks." + woodName);
+			icons[1][i] = TextureManager.registerTex(register, "wood/bark." + woodName);
+			icons[2][i] = TextureManager.registerTex(register, "wood/heart." + woodName);
 		}
 	}
 

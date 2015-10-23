@@ -30,9 +30,7 @@ public class IconProviderGermling implements IGermlingIconProvider {
 
 	@Override
 	public void registerIcons(IIconRegister register) {
-		TextureManager textureManager = TextureManager.getInstance();
-
-		icon = textureManager.registerTex(register, "germlings/sapling." + name);
+		icon = TextureManager.registerTex(register, "germlings/sapling." + name);
 	}
 
 	@Override

@@ -76,7 +76,7 @@ public abstract class Trigger implements ITriggerExternal {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister register) {
-		icon = TextureManager.getInstance().registerTex(register, "triggers/" + unlocalized.replace("trigger.", ""));
+		icon = TextureManager.registerTex(register, "triggers/" + unlocalized.replace("trigger.", ""));
 	}
 
 	@Override

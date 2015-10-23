@@ -85,10 +85,10 @@ public class ItemLetter extends ItemInventoried {
 	public void registerIcons(IIconRegister register) {
 		icons = new IIcon[3][4];
 		for (int i = 0; i < 3; i++) {
-			icons[i][0] = TextureManager.getInstance().registerTex(register, "mail/letter." + i + ".fresh");
-			icons[i][1] = TextureManager.getInstance().registerTex(register, "mail/letter." + i + ".stamped");
-			icons[i][2] = TextureManager.getInstance().registerTex(register, "mail/letter." + i + ".opened");
-			icons[i][3] = TextureManager.getInstance().registerTex(register, "mail/letter." + i + ".emptied");
+			icons[i][0] = TextureManager.registerTex(register, "mail/letter." + i + ".fresh");
+			icons[i][1] = TextureManager.registerTex(register, "mail/letter." + i + ".stamped");
+			icons[i][2] = TextureManager.registerTex(register, "mail/letter." + i + ".opened");
+			icons[i][3] = TextureManager.registerTex(register, "mail/letter." + i + ".emptied");
 		}
 	}
 

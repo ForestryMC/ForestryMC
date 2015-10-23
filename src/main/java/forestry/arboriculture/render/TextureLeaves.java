@@ -50,13 +50,11 @@ public class TextureLeaves {
 	}
 
 	private void registerIcons(IIconRegister register) {
-		TextureManager textureManager = TextureManager.getInstance();
-
 		String ident = leafType.toString().toLowerCase(Locale.ENGLISH);
 
-		plain = textureManager.registerTex(register, "leaves/" + ident + ".plain");
-		pollinated = textureManager.registerTex(register, "leaves/" + ident + ".changed");
-		fancy = textureManager.registerTex(register, "leaves/" + ident + ".fancy");
+		plain = TextureManager.registerTex(register, "leaves/" + ident + ".plain");
+		pollinated = TextureManager.registerTex(register, "leaves/" + ident + ".changed");
+		fancy = TextureManager.registerTex(register, "leaves/" + ident + ".fancy");
 	}
 
 	public IIcon getPlain() {

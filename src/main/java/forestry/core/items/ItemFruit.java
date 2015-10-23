@@ -44,7 +44,7 @@ public class ItemFruit extends ItemForestryFood {
 		public static void registerIcons(IIconRegister register) {
 			icons = new IIcon[VALUES.length];
 			for (int i = 0; i < VALUES.length; i++) {
-				icons[i] = TextureManager.getInstance().registerTex(register, "fruits/" + VALUES[i].toString().toLowerCase(Locale.ENGLISH));
+				icons[i] = TextureManager.registerTex(register, "fruits/" + VALUES[i].toString().toLowerCase(Locale.ENGLISH));
 			}
 		}
 

@@ -46,7 +46,7 @@ public class BlockStump extends BlockTorch {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerBlockIcons(IIconRegister register) {
-		this.blockIcon = TextureManager.getInstance().registerTex(register, StringUtil.cleanBlockName(this));
+		this.blockIcon = TextureManager.registerTex(register, StringUtil.cleanBlockName(this));
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})

@@ -213,8 +213,7 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 		@SideOnly(Side.CLIENT)
 		public void registerIcons(IIconRegister register) {
 			String beeIconDir = "bees/default/";
-			TextureManager textureManager = TextureManager.getInstance();
-			IIcon body1 = textureManager.registerTex(register, beeIconDir + "body1");
+			IIcon body1 = TextureManager.registerTex(register, beeIconDir + "body1");
 
 			for (int i = 0; i < EnumBeeType.values().length; i++) {
 				EnumBeeType beeType = EnumBeeType.values()[i];
@@ -224,13 +223,13 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 
 				String beeTypeNameBase = beeIconDir + beeType.toString().toLowerCase(Locale.ENGLISH);
 
-				icons[i][0] = textureManager.registerTex(register, beeTypeNameBase + ".outline");
+				icons[i][0] = TextureManager.registerTex(register, beeTypeNameBase + ".outline");
 				if (beeType == EnumBeeType.LARVAE) {
-					icons[i][1] = textureManager.registerTex(register, beeTypeNameBase + ".body");
+					icons[i][1] = TextureManager.registerTex(register, beeTypeNameBase + ".body");
 				} else {
 					icons[i][1] = body1;
 				}
-				icons[i][2] = textureManager.registerTex(register, beeTypeNameBase + ".body2");
+				icons[i][2] = TextureManager.registerTex(register, beeTypeNameBase + ".body2");
 			}
 		}
 

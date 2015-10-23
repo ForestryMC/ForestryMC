@@ -98,9 +98,9 @@ public class BlockResourceOre extends Block {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister register) {
-		iconApatite = TextureManager.getInstance().registerTex(register, "ores/apatite");
-		iconCopper = TextureManager.getInstance().registerTex(register, "ores/copper");
-		iconTin = TextureManager.getInstance().registerTex(register, "ores/tin");
+		iconApatite = TextureManager.registerTex(register, "ores/apatite");
+		iconCopper = TextureManager.registerTex(register, "ores/copper");
+		iconTin = TextureManager.registerTex(register, "ores/tin");
 	}
 
 	@Override

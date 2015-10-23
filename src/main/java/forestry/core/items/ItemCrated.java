@@ -89,7 +89,7 @@ public class ItemCrated extends Item {
 	@Override
 	public void registerIcons(IIconRegister register) {
 		String textureName = (contained == null) ? "crate" : "crate-filled";
-		itemIcon = TextureManager.getInstance().registerTex(register, textureName);
+		itemIcon = TextureManager.registerTex(register, textureName);
 	}
 
 }

@@ -185,8 +185,8 @@ public class BlockBeehives extends BlockContainer {
 	public void registerBlockIcons(IIconRegister register) {
 		icons = new IIcon[18];
 		for (int i = 1; i < 9; i++) {
-			icons[i * 2] = TextureManager.getInstance().registerTex(register, "beehives/beehive." + i + ".top");
-			icons[(i * 2) + 1] = TextureManager.getInstance().registerTex(register, "beehives/beehive." + i + ".side");
+			icons[i * 2] = TextureManager.registerTex(register, "beehives/beehive." + i + ".top");
+			icons[(i * 2) + 1] = TextureManager.registerTex(register, "beehives/beehive." + i + ".side");
 		}
 	}
 

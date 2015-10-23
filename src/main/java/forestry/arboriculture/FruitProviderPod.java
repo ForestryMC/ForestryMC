@@ -36,9 +36,20 @@ public class FruitProviderPod extends FruitProviderNone {
 		PAPAYA((short) 2013, (short) 2014, (short) 2015);//, COCONUT((short)2016, (short)2017, (short)2018);
 
 		public final short[] uids;
-
 		EnumPodType(short stage1, short stage2, short stage3) {
 			uids = new short[]{stage1, stage2, stage3};
+		}
+
+		@SideOnly(Side.CLIENT)
+		public void registerIcons(IIconRegister register) {
+			if (this == COCOA) {
+				return;
+			}
+
+			String name = toString().toLowerCase(Locale.ENGLISH);
+			for (int i = 0; i < 3; i++) {
+				TextureManager.registerTexUID(register, uids[i], "pods/" + name + "." + i);
+			}
 		}
 	}
 
@@ -98,13 +109,7 @@ public class FruitProviderPod extends FruitProviderNone {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister register) {
-		if (type == EnumPodType.COCOA) {
-			return;
-		}
-
-		TextureManager.getInstance().registerTexUID(register, type.uids[0], "pods/" + type.toString().toLowerCase(Locale.ENGLISH) + ".0");
-		TextureManager.getInstance().registerTexUID(register, type.uids[1], "pods/" + type.toString().toLowerCase(Locale.ENGLISH) + ".1");
-		TextureManager.getInstance().registerTexUID(register, type.uids[2], "pods/" + type.toString().toLowerCase(Locale.ENGLISH) + ".2");
+		type.registerIcons(register);
 	}
 
 }

@@ -111,7 +111,7 @@ public class BlockFruitPod extends BlockCocoa {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerBlockIcons(IIconRegister register) {
-		defaultIcon = TextureManager.getInstance().registerTex(register, "pods/papaya.2");
+		defaultIcon = TextureManager.registerTex(register, "pods/papaya.2");
 	}
 
 	@SideOnly(Side.CLIENT)

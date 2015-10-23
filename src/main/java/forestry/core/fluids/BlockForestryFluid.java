@@ -95,11 +95,11 @@ public class BlockForestryFluid extends BlockFluidClassic {
 		this.icons = new ArrayList<>(2);
 
 		String still = "liquid/" + fluidName + "_still";
-		this.icons.add(TextureManager.getInstance().registerTex(iconRegister, still));
+		this.icons.add(TextureManager.registerTex(iconRegister, still));
 
 		if (flowTextureExists()) {
 			String flow = "liquid/" + fluidName + "_flow";
-			this.icons.add(TextureManager.getInstance().registerTex(iconRegister, flow));
+			this.icons.add(TextureManager.registerTex(iconRegister, flow));
 		}
 	}
 
