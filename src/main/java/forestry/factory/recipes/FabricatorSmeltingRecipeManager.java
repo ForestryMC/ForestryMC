@@ -42,20 +42,6 @@ public class FabricatorSmeltingRecipeManager implements IFabricatorSmeltingManag
 		return null;
 	}
 
-	public static IFabricatorSmeltingRecipe findMatchingSmelting(FluidStack product) {
-		if (product == null) {
-			return null;
-		}
-
-		for (IFabricatorSmeltingRecipe smelting : recipes) {
-			if (smelting.getProduct().isFluidEqual(product)) {
-				return smelting;
-			}
-		}
-
-		return null;
-	}
-
 	@Override
 	public void addSmelting(ItemStack resource, FluidStack molten, int meltingPoint) {
 		if (resource == null || molten == null) {

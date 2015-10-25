@@ -75,7 +75,7 @@ public class TileFabricator extends TilePowered implements ICrafter, ILiquidTank
 	private final TankManager tankManager;
 	private final FilteredTank moltenTank;
 	private int heat = 0;
-	private int guiMeltingPoint = 0;
+	private int meltingPoint = 0;
 
 	public TileFabricator() {
 		super(1100, 3300, 200);
@@ -152,8 +152,7 @@ public class TileFabricator extends TilePowered implements ICrafter, ILiquidTank
 
 		if (!moltenTank.isEmpty()) {
 			// Remove smelt if we have gone below melting point
-			IFabricatorSmeltingRecipe smelt = FabricatorSmeltingRecipeManager.findMatchingSmelting(moltenTank.getFluid());
-			if (smelt != null && heat < smelt.getMeltingPoint()) {
+			if (heat < (getMeltingPoint() - 100)) {
 				tankManager.drain(new FluidStack(moltenTank.getFluidType(), 5), true);
 			}
 		}
@@ -178,6 +177,7 @@ public class TileFabricator extends TilePowered implements ICrafter, ILiquidTank
 		if (moltenTank.fill(smeltFluid, false) == smeltFluid.amount) {
 			this.decrStackSize(SLOT_METAL, 1);
 			moltenTank.fill(smeltFluid, true);
+			meltingPoint = smelt.getMeltingPoint();
 		}
 	}
 
@@ -315,27 +315,19 @@ public class TileFabricator extends TilePowered implements ICrafter, ILiquidTank
 	}
 
 	private int getMeltingPoint() {
-		if (moltenTank.getFluidAmount() > 0) {
-			IFabricatorSmeltingRecipe smelt = FabricatorSmeltingRecipeManager.findMatchingSmelting(moltenTank.getFluid());
-			if (smelt != null) {
-				return smelt.getMeltingPoint();
-			}
-		} else if (this.getStackInSlot(SLOT_METAL) != null) {
+		if (this.getStackInSlot(SLOT_METAL) != null) {
 			IFabricatorSmeltingRecipe smelt = FabricatorSmeltingRecipeManager.findMatchingSmelting(this.getStackInSlot(SLOT_METAL));
 			if (smelt != null) {
 				return smelt.getMeltingPoint();
 			}
+		} else if (moltenTank.getFluidAmount() > 0) {
+			return meltingPoint;
 		}
 
 		return 0;
 	}
 
 	public int getMeltingPointScaled(int i) {
-		// / For SMP clients
-		if (guiMeltingPoint > 0) {
-			return (guiMeltingPoint * i) / MAX_HEAT;
-		}
-
 		int meltingPoint = getMeltingPoint();
 
 		if (meltingPoint <= 0) {
@@ -353,7 +345,7 @@ public class TileFabricator extends TilePowered implements ICrafter, ILiquidTank
 		if (i == messageId) {
 			heat = j;
 		} else if (i == messageId + 1) {
-			guiMeltingPoint = j;
+			meltingPoint = j;
 		}
 	}
 
