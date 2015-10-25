@@ -54,6 +54,7 @@ import forestry.factory.network.PacketWorktableMemoryUpdate;
 import forestry.factory.recipes.CarpenterRecipeManager;
 import forestry.factory.recipes.CentrifugeRecipeManager;
 import forestry.factory.recipes.FabricatorRecipeManager;
+import forestry.factory.recipes.FabricatorSmeltingRecipeManager;
 import forestry.factory.recipes.FermenterRecipeManager;
 import forestry.factory.recipes.MoistenerRecipeManager;
 import forestry.factory.recipes.SqueezerRecipeManager;
@@ -94,6 +95,7 @@ public class PluginFactory extends ForestryPlugin {
 				RecipeManagers.carpenterManager = new CarpenterRecipeManager(),
 				RecipeManagers.centrifugeManager = new CentrifugeRecipeManager(),
 				RecipeManagers.fabricatorManager = new FabricatorRecipeManager(),
+				RecipeManagers.fabricatorSmeltingManager = new FabricatorSmeltingRecipeManager(),
 				RecipeManagers.fermenterManager = new FermenterRecipeManager(),
 				RecipeManagers.moistenerManager = new MoistenerRecipeManager(),
 				RecipeManagers.squeezerManager = new SqueezerRecipeManager(),
@@ -116,6 +118,7 @@ public class PluginFactory extends ForestryPlugin {
 				RecipeManagers.carpenterManager = new DummyManagers.DummyCarpenterManager(),
 				RecipeManagers.centrifugeManager = new DummyManagers.DummyCentrifugeManager(),
 				RecipeManagers.fabricatorManager = new DummyManagers.DummyFabricatorManager(),
+				RecipeManagers.fabricatorSmeltingManager = new DummyManagers.DummyFabricatorSmeltingManager(),
 				RecipeManagers.fermenterManager = new DummyManagers.DummyFermenterManager(),
 				RecipeManagers.moistenerManager = new DummyManagers.DummyMoistenerManager(),
 				RecipeManagers.squeezerManager = new DummyManagers.DummySqueezerManager(),
@@ -370,9 +373,9 @@ public class PluginFactory extends ForestryPlugin {
 
 		// FABRICATOR
 
-		RecipeManagers.fabricatorManager.addSmelting(new ItemStack(Blocks.glass), Fluids.GLASS.getFluid(1000), 1000);
-		RecipeManagers.fabricatorManager.addSmelting(new ItemStack(Blocks.glass_pane), Fluids.GLASS.getFluid(375), 1000);
-		RecipeManagers.fabricatorManager.addSmelting(new ItemStack(Blocks.sand), Fluids.GLASS.getFluid(1000), 3000);
+		RecipeManagers.fabricatorSmeltingManager.addSmelting(new ItemStack(Blocks.glass), Fluids.GLASS.getFluid(1000), 1000);
+		RecipeManagers.fabricatorSmeltingManager.addSmelting(new ItemStack(Blocks.glass_pane), Fluids.GLASS.getFluid(375), 1000);
+		RecipeManagers.fabricatorSmeltingManager.addSmelting(new ItemStack(Blocks.sand), Fluids.GLASS.getFluid(1000), 3000);
 
 		// / CARPENTER
 		RecipeManagers.carpenterManager.addRecipe(50, Fluids.SEEDOIL.getFluid(250), null, ForestryItem.impregnatedCasing.getItemStack(),

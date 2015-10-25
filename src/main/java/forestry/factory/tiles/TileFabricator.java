@@ -28,6 +28,7 @@ import net.minecraftforge.fluids.FluidTankInfo;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.recipes.IFabricatorRecipe;
+import forestry.api.recipes.IFabricatorSmeltingRecipe;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
 import forestry.core.fluids.TankManager;
@@ -47,7 +48,7 @@ import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.SlotUtil;
 import forestry.factory.recipes.FabricatorRecipeManager;
-import forestry.factory.recipes.FabricatorSmeltingRecipe;
+import forestry.factory.recipes.FabricatorSmeltingRecipeManager;
 
 public class TileFabricator extends TilePowered implements ICrafter, ILiquidTankTile, ISidedInventory {
 
@@ -150,7 +151,7 @@ public class TileFabricator extends TilePowered implements ICrafter, ILiquidTank
 
 		if (!moltenTank.isEmpty()) {
 			// Remove smelt if we have gone below melting point
-			FabricatorSmeltingRecipe smelt = FabricatorRecipeManager.findMatchingSmelting(moltenTank.getFluid());
+			IFabricatorSmeltingRecipe smelt = FabricatorSmeltingRecipeManager.findMatchingSmelting(moltenTank.getFluid());
 			if (smelt != null && heat < smelt.getMeltingPoint()) {
 				moltenTank.drain(5, true);
 			}
@@ -167,7 +168,7 @@ public class TileFabricator extends TilePowered implements ICrafter, ILiquidTank
 			return;
 		}
 
-		FabricatorSmeltingRecipe smelt = FabricatorRecipeManager.findMatchingSmelting(smeltResource);
+		IFabricatorSmeltingRecipe smelt = FabricatorSmeltingRecipeManager.findMatchingSmelting(smeltResource);
 		if (smelt == null || smelt.getMeltingPoint() > heat) {
 			return;
 		}
@@ -297,7 +298,7 @@ public class TileFabricator extends TilePowered implements ICrafter, ILiquidTank
 	public boolean hasWork() {
 		IInventoryAdapter inventory = getInternalInventory();
 		ItemStack itemToMelt = inventory.getStackInSlot(SLOT_METAL);
-		FabricatorSmeltingRecipe smelting = FabricatorRecipeManager.findMatchingSmelting(itemToMelt);
+		IFabricatorSmeltingRecipe smelting = FabricatorSmeltingRecipeManager.findMatchingSmelting(itemToMelt);
 		if (smelting != null && moltenTank.fill(smelting.getProduct(), false) > 0) {
 			return true;
 		}
@@ -314,12 +315,12 @@ public class TileFabricator extends TilePowered implements ICrafter, ILiquidTank
 
 	private int getMeltingPoint() {
 		if (moltenTank.getFluidAmount() > 0) {
-			FabricatorSmeltingRecipe smelt = FabricatorRecipeManager.findMatchingSmelting(moltenTank.getFluid());
+			IFabricatorSmeltingRecipe smelt = FabricatorSmeltingRecipeManager.findMatchingSmelting(moltenTank.getFluid());
 			if (smelt != null) {
 				return smelt.getMeltingPoint();
 			}
 		} else if (this.getStackInSlot(SLOT_METAL) != null) {
-			FabricatorSmeltingRecipe smelt = FabricatorRecipeManager.findMatchingSmelting(this.getStackInSlot(SLOT_METAL));
+			IFabricatorSmeltingRecipe smelt = FabricatorSmeltingRecipeManager.findMatchingSmelting(this.getStackInSlot(SLOT_METAL));
 			if (smelt != null) {
 				return smelt.getMeltingPoint();
 			}
@@ -413,13 +414,13 @@ public class TileFabricator extends TilePowered implements ICrafter, ILiquidTank
 		@Override
 		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 			if (slotIndex == SLOT_METAL) {
-				return FabricatorRecipeManager.findMatchingSmelting(itemStack) != null;
+				return FabricatorSmeltingRecipeManager.findMatchingSmelting(itemStack) != null;
 			} else if (slotIndex == SLOT_PLAN) {
 				return FabricatorRecipeManager.isPlan(itemStack);
 			} else if (SlotUtil.isSlotInRange(slotIndex, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT)) {
 				if (FabricatorRecipeManager.isPlan(itemStack)) {
 					return false;
-				} else if (FabricatorRecipeManager.findMatchingSmelting(itemStack) != null) {
+				} else if (FabricatorSmeltingRecipeManager.findMatchingSmelting(itemStack) != null) {
 					return false;
 				}
 			}

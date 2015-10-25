@@ -22,13 +22,13 @@ import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.recipes.IFabricatorManager;
 import forestry.api.recipes.IFabricatorRecipe;
+import forestry.api.recipes.RecipeManagers;
 import forestry.core.recipes.ShapedRecipeCustom;
 import forestry.core.utils.ItemStackUtil;
 
 public class FabricatorRecipeManager implements IFabricatorManager {
 
 	private static final Set<IFabricatorRecipe> recipes = new HashSet<>();
-	public static final Set<FabricatorSmeltingRecipe> smeltings = new HashSet<>();
 
 	@Override
 	public void addRecipe(ItemStack plan, FluidStack molten, ItemStack result, Object[] pattern) {
@@ -38,10 +38,7 @@ public class FabricatorRecipeManager implements IFabricatorManager {
 
 	@Override
 	public void addSmelting(ItemStack resource, FluidStack molten, int meltingPoint) {
-		if (resource == null || molten == null) {
-			return;
-		}
-		smeltings.add(new FabricatorSmeltingRecipe(resource, molten, meltingPoint));
+		RecipeManagers.fabricatorSmeltingManager.addSmelting(resource, molten, meltingPoint);
 	}
 
 	public static IFabricatorRecipe findMatchingRecipe(ItemStack plan, FluidStack liquid, ItemStack[] resources) {
@@ -71,34 +68,6 @@ public class FabricatorRecipeManager implements IFabricatorManager {
 		}
 
 		return false;
-	}
-
-	public static FabricatorSmeltingRecipe findMatchingSmelting(ItemStack resource) {
-		if (resource == null) {
-			return null;
-		}
-
-		for (FabricatorSmeltingRecipe smelting : smeltings) {
-			if (ItemStackUtil.isCraftingEquivalent(smelting.getResource(), resource)) {
-				return smelting;
-			}
-		}
-
-		return null;
-	}
-
-	public static FabricatorSmeltingRecipe findMatchingSmelting(FluidStack product) {
-		if (product == null) {
-			return null;
-		}
-
-		for (FabricatorSmeltingRecipe smelting : smeltings) {
-			if (smelting.matches(product)) {
-				return smelting;
-			}
-		}
-
-		return null;
 	}
 
 	@Override

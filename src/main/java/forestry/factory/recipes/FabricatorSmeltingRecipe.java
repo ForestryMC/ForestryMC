@@ -14,7 +14,9 @@ import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.fluids.FluidStack;
 
-public class FabricatorSmeltingRecipe {
+import forestry.api.recipes.IFabricatorSmeltingRecipe;
+
+public class FabricatorSmeltingRecipe implements IFabricatorSmeltingRecipe {
 
 	private final ItemStack resource;
 	private final FluidStack product;
@@ -31,10 +33,6 @@ public class FabricatorSmeltingRecipe {
 		this.resource = resource;
 		this.product = molten;
 		this.meltingPoint = meltingPoint;
-	}
-
-	public boolean matches(FluidStack product) {
-		return this.product.isFluidEqual(product);
 	}
 
 	public ItemStack getResource() {

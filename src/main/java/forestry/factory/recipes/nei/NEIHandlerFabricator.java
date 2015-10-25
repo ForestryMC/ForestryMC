@@ -28,14 +28,14 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.recipes.IFabricatorRecipe;
+import forestry.api.recipes.IFabricatorSmeltingRecipe;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.recipes.nei.INBTMatchingCachedRecipe;
 import forestry.core.recipes.nei.NEIUtils;
 import forestry.core.recipes.nei.PositionedFluidTank;
 import forestry.core.recipes.nei.RecipeHandlerBase;
 import forestry.factory.gui.GuiFabricator;
-import forestry.factory.recipes.FabricatorRecipeManager;
-import forestry.factory.recipes.FabricatorSmeltingRecipe;
+import forestry.factory.recipes.FabricatorSmeltingRecipeManager;
 
 import codechicken.nei.NEIServerUtils;
 import codechicken.nei.PositionedStack;
@@ -57,7 +57,7 @@ public class NEIHandlerFabricator extends RecipeHandlerBase {
 			if (recipe.getLiquid() != null) {
 				this.tank = new PositionedFluidTank(recipe.getLiquid(), 2000, new Rectangle(21, 37, 16, 16));
 				List<ItemStack> smeltingInput = new ArrayList<>();
-				for (FabricatorSmeltingRecipe s : getSmeltingInputs().get(recipe.getLiquid().getFluid())) {
+				for (IFabricatorSmeltingRecipe s : getSmeltingInputs().get(recipe.getLiquid().getFluid())) {
 					smeltingInput.add(s.getResource());
 				}
 				if (!smeltingInput.isEmpty()) {
@@ -244,7 +244,7 @@ public class NEIHandlerFabricator extends RecipeHandlerBase {
 		super.provideItemTooltip(guiRecipe, itemStack, currenttip, crecipe, relMouse);
 
 		if (new Rectangle(20, 9, 18, 18).contains(relMouse)) {
-			for (FabricatorSmeltingRecipe smelting : FabricatorRecipeManager.smeltings) {
+			for (IFabricatorSmeltingRecipe smelting : FabricatorSmeltingRecipeManager.recipes) {
 				if (NEIServerUtils.areStacksSameTypeCrafting(smelting.getResource(), itemStack) && smelting.getProduct() != null) {
 					currenttip.add(EnumChatFormatting.GRAY.toString() + NEIUtils.translate("handler.forestry.fabricator.worth") + " " + smelting.getProduct().amount + " mB");
 				}
@@ -254,12 +254,12 @@ public class NEIHandlerFabricator extends RecipeHandlerBase {
 		return currenttip;
 	}
 
-	private static Map<Fluid, List<FabricatorSmeltingRecipe>> getSmeltingInputs() {
-		Map<Fluid, List<FabricatorSmeltingRecipe>> smeltingInputs = new HashMap<>();
-		for (FabricatorSmeltingRecipe smelting : FabricatorRecipeManager.smeltings) {
+	private static Map<Fluid, List<IFabricatorSmeltingRecipe>> getSmeltingInputs() {
+		Map<Fluid, List<IFabricatorSmeltingRecipe>> smeltingInputs = new HashMap<>();
+		for (IFabricatorSmeltingRecipe smelting : FabricatorSmeltingRecipeManager.recipes) {
 			Fluid fluid = smelting.getProduct().getFluid();
 			if (!smeltingInputs.containsKey(fluid)) {
-				smeltingInputs.put(fluid, new ArrayList<FabricatorSmeltingRecipe>());
+				smeltingInputs.put(fluid, new ArrayList<IFabricatorSmeltingRecipe>());
 			}
 			smeltingInputs.get(fluid).add(smelting);
 		}

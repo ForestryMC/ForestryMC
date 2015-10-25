@@ -38,6 +38,7 @@ public class FabricatorRecipe implements IFabricatorRecipe {
 	}
 
 	@Override
+	@Deprecated
 	public boolean matches(@Nullable ItemStack plan, ItemStack[][] resources) {
 		if (this.plan != null && !ItemStackUtil.isCraftingEquivalent(this.plan, plan)) {
 			return false;

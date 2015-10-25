@@ -28,6 +28,8 @@ import forestry.api.recipes.ICentrifugeRecipe;
 import forestry.api.recipes.ICraftingProvider;
 import forestry.api.recipes.IFabricatorManager;
 import forestry.api.recipes.IFabricatorRecipe;
+import forestry.api.recipes.IFabricatorSmeltingManager;
+import forestry.api.recipes.IFabricatorSmeltingRecipe;
 import forestry.api.recipes.IFermenterManager;
 import forestry.api.recipes.IFermenterRecipe;
 import forestry.api.recipes.IForestryRecipe;
@@ -94,6 +96,14 @@ public class DummyManagers {
 		public void addRecipe(ItemStack plan, FluidStack molten, ItemStack result, Object[] pattern) {
 
 		}
+
+		@Override
+		public void addSmelting(ItemStack resource, FluidStack molten, int meltingPoint) {
+
+		}
+	}
+
+	public static class DummyFabricatorSmeltingManager extends DummyCraftingProvider<IFabricatorSmeltingRecipe> implements IFabricatorSmeltingManager {
 
 		@Override
 		public void addSmelting(ItemStack resource, FluidStack molten, int meltingPoint) {
