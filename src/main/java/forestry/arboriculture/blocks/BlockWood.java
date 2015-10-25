@@ -37,7 +37,6 @@ import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.render.IconProviderWood;
 import forestry.arboriculture.tiles.TileWood;
 import forestry.core.render.ParticleHelper;
-import forestry.core.tiles.TileUtil;
 
 public abstract class BlockWood extends Block implements ITileEntityProvider, IWoodTyped {
 
@@ -66,21 +65,6 @@ public abstract class BlockWood extends Block implements ITileEntityProvider, IW
 		return fireproof;
 	}
 
-	public static TileWood getWoodTile(IBlockAccess world, int x, int y, int z) {
-		return TileUtil.getTile(world, x, y, z, TileWood.class);
-	}
-
-	protected static NBTTagCompound getTagCompound(IBlockAccess world, int x, int y, int z) {
-		TileWood wood = getWoodTile(world, x, y, z);
-		NBTTagCompound nbttagcompound = new NBTTagCompound();
-		if (wood == null) {
-			return nbttagcompound;
-		}
-		EnumWoodType woodType = wood.getWoodType();
-		woodType.saveToCompound(nbttagcompound);
-		return nbttagcompound;
-	}
-
 	@SideOnly(Side.CLIENT)
 	@Override
 	public final void registerBlockIcons(IIconRegister register) {
@@ -95,30 +79,37 @@ public abstract class BlockWood extends Block implements ITileEntityProvider, IW
 	@Override
 	public final ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
 		ItemStack itemStack = new ItemStack(this);
-		NBTTagCompound nbt = getTagCompound(world, x, y, z);
+		NBTTagCompound nbt = TileWood.getTagCompound(world, x, y, z);
 		itemStack.setTagCompound(nbt);
 		return itemStack;
 	}
 
-	@Override
-	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z) {
-		return TileWood.blockRemovedByPlayer(this, world, player, x, y, z);
-	}
+	/* DROP HANDLING */
+	// Hack: 	When harvesting we need to get the drops in onBlockHarvested,
+	// 			because Mojang destroys the block and tile before calling getDrops.
+	private final ThreadLocal<ArrayList<ItemStack>> drops = new ThreadLocal<>();
 
 	@Override
-	public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
-		world.removeTileEntity(x, y, z);
-		super.breakBlock(world, x, y, z, block, meta);
+	public void onBlockHarvested(World world, int x, int y, int z, int meta, EntityPlayer playerProfile) {
+		drops.set(TileWood.getDrops(this, world, x, y, z));
 	}
 
 	@Override
 	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
-		return new ArrayList<>();
+		ArrayList<ItemStack> ret = drops.get();
+		drops.remove();
+
+		// not harvested, get drops normally
+		if (ret == null) {
+			ret = TileWood.getDrops(this, world, x, y, z);
+		}
+
+		return ret;
 	}
 
 	@Override
 	public final float getBlockHardness(World world, int x, int y, int z) {
-		TileWood wood = getWoodTile(world, x, y, z);
+		TileWood wood = TileWood.getWoodTile(world, x, y, z);
 		if (wood == null) {
 			return EnumWoodType.DEFAULT_HARDNESS;
 		}

@@ -50,7 +50,7 @@ public class BlockPlanks extends BlockWood {
 
 	@Override
 	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
-		TileWood wood = getWoodTile(world, x, y, z);
+		TileWood wood = TileWood.getWoodTile(world, x, y, z);
 		EnumWoodType woodType = wood.getWoodType();
 		return IconProviderWood.getPlankIcon(woodType);
 	}

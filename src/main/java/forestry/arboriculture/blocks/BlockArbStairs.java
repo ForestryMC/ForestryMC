@@ -67,26 +67,33 @@ public class BlockArbStairs extends BlockStairs implements IWoodTyped, ITileEnti
 		}
 	}
 
-	@Override
-	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z) {
-		return TileWood.blockRemovedByPlayer(this, world, player, x, y, z);
-	}
+	/* DROP HANDLING */
+	// Hack: 	When harvesting we need to get the drops in onBlockHarvested,
+	// 			because Mojang destroys the block and tile before calling getDrops.
+	private final ThreadLocal<ArrayList<ItemStack>> drops = new ThreadLocal<>();
 
 	@Override
-	public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
-		world.removeTileEntity(x, y, z);
-		super.breakBlock(world, x, y, z, block, meta);
+	public void onBlockHarvested(World world, int x, int y, int z, int meta, EntityPlayer playerProfile) {
+		drops.set(TileWood.getDrops(this, world, x, y, z));
 	}
 
 	@Override
 	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
-		return new ArrayList<>();
+		ArrayList<ItemStack> ret = drops.get();
+		drops.remove();
+
+		// not harvested, get drops normally
+		if (ret == null) {
+			ret = TileWood.getDrops(this, world, x, y, z);
+		}
+
+		return ret;
 	}
 
 	@Override
 	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
 		ItemStack itemStack = super.getPickBlock(target, world, x, y, z);
-		NBTTagCompound stairsNBT = BlockWood.getTagCompound(world, x, y, z);
+		NBTTagCompound stairsNBT = TileWood.getTagCompound(world, x, y, z);
 		itemStack.setTagCompound(stairsNBT);
 		return itemStack;
 	}
@@ -107,7 +114,7 @@ public class BlockArbStairs extends BlockStairs implements IWoodTyped, ITileEnti
 
 	@Override
 	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
-		TileWood wood = BlockWood.getWoodTile(world, x, y, z);
+		TileWood wood = TileWood.getWoodTile(world, x, y, z);
 		EnumWoodType woodType = wood.getWoodType();
 		return IconProviderWood.getPlankIcon(woodType);
 	}

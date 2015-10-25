@@ -11,13 +11,14 @@
 package forestry.arboriculture.tiles;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import forestry.api.arboriculture.EnumWoodType;
@@ -26,7 +27,7 @@ import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketTileStream;
-import forestry.core.utils.ItemStackUtil;
+import forestry.core.tiles.TileUtil;
 
 public class TileWood extends TileEntity implements IStreamable {
 	private EnumWoodType woodType;
@@ -84,23 +85,33 @@ public class TileWood extends TileEntity implements IStreamable {
 		}
 	}
 
-	public static <T extends Block & IWoodTyped> boolean blockRemovedByPlayer(T block, World world, EntityPlayer player, int x, int y, int z) {
-		int meta = world.getBlockMetadata(x, y, z);
-		if (!world.isRemote && block.canHarvestBlock(player, meta) && !player.capabilities.isCreativeMode) {
-
-			TileEntity tile = world.getTileEntity(x, y, z);
-			if (tile instanceof TileWood) {
-				TileWood wood = (TileWood) tile;
-
-				ItemStack stack = new ItemStack(block);
-				NBTTagCompound compound = new NBTTagCompound();
-				wood.getWoodType().saveToCompound(compound);
-				stack.setTagCompound(compound);
-				ItemStackUtil.dropItemStackAsEntity(stack, world, x, y, z);
-			}
+	public static NBTTagCompound getTagCompound(IBlockAccess world, int x, int y, int z) {
+		TileWood wood = getWoodTile(world, x, y, z);
+		NBTTagCompound nbttagcompound = new NBTTagCompound();
+		if (wood == null) {
+			return nbttagcompound;
 		}
-
-		return world.setBlockToAir(x, y, z);
+		EnumWoodType woodType = wood.getWoodType();
+		woodType.saveToCompound(nbttagcompound);
+		return nbttagcompound;
 	}
 
+	public static TileWood getWoodTile(IBlockAccess world, int x, int y, int z) {
+		return TileUtil.getTile(world, x, y, z, TileWood.class);
+	}
+
+	public static <T extends Block & IWoodTyped> ArrayList<ItemStack> getDrops(T block, World world, int x, int y, int z) {
+		ArrayList<ItemStack> drops = new ArrayList<>();
+
+		TileWood wood = getWoodTile(world, x, y, z);
+		if (wood != null) {
+			ItemStack stack = new ItemStack(block);
+			NBTTagCompound compound = new NBTTagCompound();
+			wood.getWoodType().saveToCompound(compound);
+			stack.setTagCompound(compound);
+			drops.add(stack);
+		}
+
+		return drops;
+	}
 }

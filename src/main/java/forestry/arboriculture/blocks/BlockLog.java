@@ -45,6 +45,7 @@ public class BlockLog extends BlockWood {
 
 	@Override
 	public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
+		super.breakBlock(world, x, y, z, block, meta);
 
 		byte radius = 4;
 		int boundary = radius + 1;
@@ -101,7 +102,7 @@ public class BlockLog extends BlockWood {
 	@Override
 	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
 		int meta = world.getBlockMetadata(x, y, z);
-		TileWood wood = getWoodTile(world, x, y, z);
+		TileWood wood = TileWood.getWoodTile(world, x, y, z);
 		EnumWoodType type = wood.getWoodType();
 		if (type == null) {
 			return getIcon(side, meta);
