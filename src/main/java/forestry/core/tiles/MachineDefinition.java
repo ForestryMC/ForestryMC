@@ -16,7 +16,6 @@ import java.util.Locale;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
@@ -152,10 +151,6 @@ public class MachineDefinition {
 	/* INTERACTION */
 	public boolean isSolidOnSide(IBlockAccess world, int x, int y, int z, int side) {
 		return true;
-	}
-
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side) {
-		return false;
 	}
 
 	public boolean rotateBlock(World world, int x, int y, int z, ForgeDirection axis) {
