@@ -49,7 +49,7 @@ public class CraftGuideCustomRecipes implements RecipeProvider {
 
 			Object[] array = new Object[10];
 
-			Object[] flattened = RecipeUtil.getCraftingRecipeAsArray(rec);
+			Object[] flattened = RecipeUtil.getCraftingRecipeAsArray((IDescriptiveRecipe) rec);
 			if (flattened == null) {
 				continue;
 			}

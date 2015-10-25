@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.recipes;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import net.minecraft.block.Block;
@@ -19,7 +18,6 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
 import net.minecraftforge.oredict.OreDictionary;
@@ -50,7 +48,8 @@ public class ShapedRecipeCustom implements IDescriptiveRecipe {
 		return this;
 	}
 
-	public boolean preservesNbt() {
+	@Override
+	public boolean preserveNBT() {
 		return preserveNBT;
 	}
 
@@ -76,160 +75,23 @@ public class ShapedRecipeCustom implements IDescriptiveRecipe {
 
 	@Override
 	public boolean matches(InventoryCrafting inventoryCrafting, World world) {
-		if (!matches((IInventory) inventoryCrafting, world)) {
-			return false;
-		}
-
-		if (preserveNBT) {
-			if (RecipeUtil.getCraftingNbt(inventoryCrafting) == null) {
-				return false;
-			}
-		}
-
-		return true;
+		return RecipeUtil.matches(this, inventoryCrafting);
 	}
 
+	@Override
+	@Deprecated
 	public boolean matches(IInventory inventoryCrafting, World world) {
-		ItemStack[][] resources = new ItemStack[3][3];
-		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < 3; j++) {
-				int k = i + j * 3;
-				resources[i][j] = inventoryCrafting.getStackInSlot(k);
-			}
-		}
-
-		return matches(resources);
-	}
-
-	public boolean matches(ItemStack[][] resources) {
-
-		for (int i = 0; i <= 3 - width; i++) {
-			for (int j = 0; j <= 3 - height; j++) {
-				if (checkMatch(resources, i, j, true)) {
-					return true;
-				}
-
-				if (checkMatch(resources, i, j, false)) {
-					return true;
-				}
-			}
-		}
-
-		return false;
-	}
-
-	@SuppressWarnings("unchecked")
-	private boolean checkMatch(ItemStack[][] resources, int xInGrid, int yInGrid, boolean flag) {
-
-		for (int k = 0; k < 3; k++) {
-			for (int l = 0; l < 3; l++) {
-
-				int widthIt = k - xInGrid;
-				int heightIt = l - yInGrid;
-				Object compare = null;
-
-				if (widthIt >= 0 && heightIt >= 0 && widthIt < width && heightIt < height) {
-					if (flag) {
-						compare = ingredients[(width - widthIt - 1) + heightIt * width];
-					} else {
-						compare = ingredients[widthIt + heightIt * width];
-					}
-				}
-				ItemStack resource = resources[k][l];
-
-				if (compare instanceof ItemStack) {
-					if (!checkItemMatch((ItemStack) compare, resource)) {
-						return false;
-					}
-				} else if (compare instanceof ArrayList) {
-					boolean matched = false;
-
-					for (ItemStack item : (ArrayList<ItemStack>) compare) {
-						matched = matched || checkItemMatch(item, resource);
-					}
-
-					if (!matched) {
-						return false;
-					}
-
-				} else if (compare == null && resource != null) {
-					return false;
-				}
-			}
-		}
-
-		return true;
-	}
-
-	private static boolean checkItemMatch(ItemStack compare, ItemStack resource) {
-
-		if (resource == null && compare == null) {
-			return true;
-		}
-
-		if (resource == null || compare == null) {
-			return false;
-		}
-
-		if (compare.getItem() != resource.getItem()) {
-			return false;
-		}
-
-		if (compare.getItemDamage() != OreDictionary.WILDCARD_VALUE && compare.getItemDamage() != resource.getItemDamage()) {
-			return false;
-		}
-
-		return true;
+		return RecipeUtil.matches(this, inventoryCrafting);
 	}
 
 	@Override
 	public ItemStack getCraftingResult(InventoryCrafting inventoryCrafting) {
-		return getCraftingResult((IInventory) inventoryCrafting);
-	}
-
-	public ItemStack getCraftingResult(IInventory inventoryCrafting) {
-		ItemStack result = product.copy();
-
-		if (preserveNBT) {
-			NBTTagCompound craftingNbt = RecipeUtil.getCraftingNbt(inventoryCrafting);
-			if (craftingNbt == null) {
-				return null;
-			}
-
-			result.setTagCompound(craftingNbt);
-		}
-
-		return result;
+		return RecipeUtil.getCraftingResult(this, inventoryCrafting);
 	}
 
 	@Override
 	public int getRecipeSize() {
 		return width * height;
-	}
-
-	/**
-	 * @return true if resource is a valid ingredient in this recipe.
-	 */
-	@SuppressWarnings("unchecked")
-	public boolean isIngredient(ItemStack resource) {
-
-		for (Object ingredient : ingredients) {
-			if (ingredient instanceof ItemStack) {
-				if (checkItemMatch((ItemStack) ingredient, resource)) {
-					return true;
-				}
-
-			} else if (ingredient instanceof ArrayList) {
-				for (ItemStack item : (ArrayList<ItemStack>) ingredient) {
-					if (checkItemMatch(item, resource)) {
-						return true;
-					}
-				}
-			}
-		}
-
-		return false;
-
 	}
 
 	public static ShapedRecipeCustom createShapedRecipe(ItemStack product, Object... materials) {

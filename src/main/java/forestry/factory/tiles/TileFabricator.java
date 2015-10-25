@@ -41,6 +41,7 @@ import forestry.core.items.ICraftingPlan;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
+import forestry.core.recipes.RecipeUtil;
 import forestry.core.tiles.ICrafter;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;
@@ -228,7 +229,7 @@ public class TileFabricator extends TilePowered implements ICrafter, ILiquidTank
 			return null;
 		}
 
-		return myRecipe.getCraftingResult(craftingInventory);
+		return RecipeUtil.getCraftingResult(myRecipe.getRecipeOutput(), myRecipe.preservesNbt(), craftingInventory);
 	}
 
 	@Override

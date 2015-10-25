@@ -98,17 +98,10 @@ public abstract class RecipeUtil {
 		return craftingNbt;
 	}
 
-	public static Object[] getCraftingRecipeAsArray(Object rec) {
+	public static Object[] getCraftingRecipeAsArray(IDescriptiveRecipe recipe) {
 
 		try {
-
-			if (rec instanceof IDescriptiveRecipe) {
-
-				IDescriptiveRecipe recipe = (IDescriptiveRecipe) rec;
-				return getShapedRecipeAsArray(recipe.getWidth(), recipe.getHeight(), recipe.getIngredients(), recipe.getRecipeOutput());
-
-			}
-
+			return getShapedRecipeAsArray(recipe.getWidth(), recipe.getHeight(), recipe.getIngredients(), recipe.getRecipeOutput());
 		} catch (Exception ex) {
 			Log.warning("Exception while trying to parse an ItemStack[10] from an IRecipe:");
 			Log.warning(ex.getMessage());
@@ -267,5 +260,110 @@ public abstract class RecipeUtil {
 			throw new IllegalArgumentException("Tried to register smelting recipe with null output");
 		}
 		GameRegistry.addSmelting(res, prod, xp);
+	}
+
+	public static ItemStack getCraftingResult(IDescriptiveRecipe recipe, IInventory inventoryCrafting) {
+		return getCraftingResult(recipe.getRecipeOutput(), recipe.preserveNBT(), inventoryCrafting);
+	}
+
+	public static ItemStack getCraftingResult(ItemStack result, boolean preserveNBT, IInventory inventoryCrafting) {
+		result = result.copy();
+
+		if (preserveNBT) {
+			NBTTagCompound craftingNbt = getCraftingNbt(inventoryCrafting);
+			if (craftingNbt == null) {
+				return null;
+			}
+
+			result.setTagCompound(craftingNbt);
+		}
+
+		return result;
+	}
+
+	public static boolean matches(IDescriptiveRecipe recipe, IInventory inventoryCrafting) {
+		if (!matches(recipe.getIngredients(), recipe.getWidth(), recipe.getHeight(), inventoryCrafting)) {
+			return false;
+		}
+
+		if (recipe.preserveNBT()) {
+			if (getCraftingNbt(inventoryCrafting) == null) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	public static boolean matches(Object[] ingredients, int width, int height, IInventory inventoryCrafting) {
+		ItemStack[][] resources = new ItemStack[3][3];
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				int k = i + j * 3;
+				resources[i][j] = inventoryCrafting.getStackInSlot(k);
+			}
+		}
+
+		return matches(ingredients, width, height, resources);
+	}
+
+	public static boolean matches(Object[] ingredients, int width, int height, ItemStack[][] resources) {
+		for (int i = 0; i <= 3 - width; i++) {
+			for (int j = 0; j <= 3 - height; j++) {
+				if (checkMatch(ingredients, width, height, resources, i, j, true)) {
+					return true;
+				}
+
+				if (checkMatch(ingredients, width, height, resources, i, j, false)) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	private static boolean checkMatch(Object[] ingredients, int width, int height, ItemStack[][] resources, int xInGrid, int yInGrid, boolean flag) {
+
+		for (int k = 0; k < 3; k++) {
+			for (int l = 0; l < 3; l++) {
+
+				int widthIt = k - xInGrid;
+				int heightIt = l - yInGrid;
+				Object compare = null;
+
+				if (widthIt >= 0 && heightIt >= 0 && widthIt < width && heightIt < height) {
+					if (flag) {
+						compare = ingredients[(width - widthIt - 1) + heightIt * width];
+					} else {
+						compare = ingredients[widthIt + heightIt * width];
+					}
+				}
+				ItemStack resource = resources[k][l];
+
+				if (compare instanceof ItemStack) {
+					if (!ItemStackUtil.isIdenticalItem((ItemStack) compare, resource)) {
+						return false;
+					}
+				} else if (compare instanceof Iterable) {
+					boolean matched = false;
+
+					for (Object item : (Iterable) compare) {
+						if (item instanceof ItemStack) {
+							matched = matched || ItemStackUtil.isIdenticalItem((ItemStack) item, resource);
+						}
+					}
+
+					if (!matched) {
+						return false;
+					}
+
+				} else if (compare == null && resource != null) {
+					return false;
+				}
+			}
+		}
+
+		return true;
 	}
 }

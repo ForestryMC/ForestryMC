@@ -18,6 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.recipes.IFabricatorRecipe;
+import forestry.core.recipes.RecipeUtil;
 import forestry.core.recipes.ShapedRecipeCustom;
 import forestry.core.utils.ItemStackUtil;
 
@@ -44,7 +45,7 @@ public class FabricatorRecipe implements IFabricatorRecipe {
 			return false;
 		}
 
-		return internal.matches(resources);
+		return RecipeUtil.matches(internal.getIngredients(), internal.getWidth(), internal.getHeight(), resources);
 	}
 
 	@Override
@@ -64,7 +65,7 @@ public class FabricatorRecipe implements IFabricatorRecipe {
 
 	@Override
 	public boolean preservesNbt() {
-		return internal.preservesNbt();
+		return internal.preserveNBT();
 	}
 
 	@Override
@@ -80,7 +81,7 @@ public class FabricatorRecipe implements IFabricatorRecipe {
 
 	@Override
 	public ItemStack getCraftingResult(IInventory craftingInventory) {
-		return internal.getCraftingResult(craftingInventory);
+		return RecipeUtil.getCraftingResult(internal, craftingInventory);
 	}
 
 	@Override

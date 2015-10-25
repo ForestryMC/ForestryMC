@@ -37,7 +37,7 @@ public class NEIHandlerShapedCustom extends RecipeHandlerBase {
 				ItemStack output = recipe.getRecipeOutput();
 				this.output = new PositionedStack(output, 119, 24);
 			}
-			this.preservesNbt = recipe.preservesNbt();
+			this.preservesNbt = recipe.preserveNBT();
 		}
 
 		public void setIngredients(int width, int height, Object[] items) {

@@ -26,6 +26,7 @@ import net.minecraftforge.fluids.FluidStack;
 import forestry.api.recipes.ICarpenterManager;
 import forestry.api.recipes.ICarpenterRecipe;
 import forestry.api.recipes.IDescriptiveRecipe;
+import forestry.core.recipes.RecipeUtil;
 import forestry.core.recipes.ShapedRecipeCustom;
 import forestry.core.utils.ItemStackUtil;
 
@@ -73,7 +74,7 @@ public class CarpenterRecipeManager implements ICarpenterManager {
 		}
 
 		IDescriptiveRecipe internal = recipe.getCraftingGridRecipe();
-		return internal.matches(inventoryCrafting, world);
+		return RecipeUtil.matches(internal, inventoryCrafting);
 	}
 
 	public static boolean isBox(ItemStack resource) {

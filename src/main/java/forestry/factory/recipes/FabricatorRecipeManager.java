@@ -23,6 +23,7 @@ import net.minecraftforge.fluids.FluidStack;
 import forestry.api.recipes.IFabricatorManager;
 import forestry.api.recipes.IFabricatorRecipe;
 import forestry.api.recipes.RecipeManagers;
+import forestry.core.recipes.RecipeUtil;
 import forestry.core.recipes.ShapedRecipeCustom;
 import forestry.core.utils.ItemStackUtil;
 
@@ -50,7 +51,11 @@ public class FabricatorRecipeManager implements IFabricatorManager {
 		}
 
 		for (IFabricatorRecipe recipe : recipes) {
-			if (recipe.matches(plan, gridResources)) {
+			if (recipe.getPlan() != null && !ItemStackUtil.isCraftingEquivalent(recipe.getPlan(), plan)) {
+				continue;
+			}
+
+			if (RecipeUtil.matches(recipe.getIngredients(), recipe.getWidth(), recipe.getHeight(), gridResources)) {
 				if (liquid == null || liquid.containsFluid(recipe.getLiquid())) {
 					return recipe;
 				}
