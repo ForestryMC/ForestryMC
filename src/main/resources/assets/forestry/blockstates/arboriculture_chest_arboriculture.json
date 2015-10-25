@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "face=north": { "model": "forestry:arboriculture_chest_arboriculture" },
+		"face=east": { "model": "forestry:arboriculture_chest_arboriculture", "y": 90 },
+		"face=south": { "model": "forestry:arboriculture_chest_arboriculture", "y": 180 },
+		"face=west": { "model": "forestry:arboriculture_chest_arboriculture", "y": -90 }
+	}
+}

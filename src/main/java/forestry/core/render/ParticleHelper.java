@@ -13,11 +13,15 @@ package forestry.core.render;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.particle.EntityDiggingFX;
+import net.minecraft.client.particle.EntityFX;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -29,56 +33,63 @@ public class ParticleHelper {
 	private static final Random rand = new Random();
 
 	@SideOnly(Side.CLIENT)
-	public static boolean addHitEffects(World world, Block block, MovingObjectPosition target, EffectRenderer effectRenderer, ParticleHelperCallback callback) {
-		int x = target.blockX;
-		int y = target.blockY;
-		int z = target.blockZ;
+	public static boolean addHitEffects(World world, Block block, MovingObjectPosition target,
+			EffectRenderer effectRenderer, ParticleHelperCallback callback) {
 
-		int sideHit = target.sideHit;
+		EnumFacing sideHit = target.sideHit;
 
-		if (block != world.getBlock(x, y, z)) {
+		BlockPos pos = target.getBlockPos();
+		if (block != world.getBlockState(pos).getBlock()) {
 			return true;
 		}
 
-		int meta = world.getBlockMetadata(x, y, z);
+		IBlockState state = world.getBlockState(pos);
+		int meta = block.getMetaFromState(state);
 
 		float b = 0.1F;
-		double px = x + rand.nextDouble() * (block.getBlockBoundsMaxX() - block.getBlockBoundsMinX() - (b * 2.0F)) + b + block.getBlockBoundsMinX();
-		double py = y + rand.nextDouble() * (block.getBlockBoundsMaxY() - block.getBlockBoundsMinY() - (b * 2.0F)) + b + block.getBlockBoundsMinY();
-		double pz = z + rand.nextDouble() * (block.getBlockBoundsMaxZ() - block.getBlockBoundsMinZ() - (b * 2.0F)) + b + block.getBlockBoundsMinZ();
+		double px = pos.getX()
+				+ rand.nextDouble() * (block.getBlockBoundsMaxX() - block.getBlockBoundsMinX() - (b * 2.0F)) + b
+				+ block.getBlockBoundsMinX();
+		double py = pos.getY()
+				+ rand.nextDouble() * (block.getBlockBoundsMaxY() - block.getBlockBoundsMinY() - (b * 2.0F)) + b
+				+ block.getBlockBoundsMinY();
+		double pz = pos.getZ()
+				+ rand.nextDouble() * (block.getBlockBoundsMaxZ() - block.getBlockBoundsMinZ() - (b * 2.0F)) + b
+				+ block.getBlockBoundsMinZ();
 
-		if (sideHit == 0) {
-			py = (double) y + block.getBlockBoundsMinY() - (double) b;
+		if (sideHit == EnumFacing.DOWN) {
+			py = pos.getY() + block.getBlockBoundsMinY() - b;
 		}
 
-		if (sideHit == 1) {
-			py = (double) y + block.getBlockBoundsMaxY() + (double) b;
+		if (sideHit == EnumFacing.UP) {
+			py = pos.getY() + block.getBlockBoundsMaxY() + b;
 		}
 
-		if (sideHit == 2) {
-			pz = (double) z + block.getBlockBoundsMinZ() - (double) b;
+		if (sideHit == EnumFacing.NORTH) {
+			pz = pos.getZ() + block.getBlockBoundsMinZ() - b;
 		}
 
-		if (sideHit == 3) {
-			pz = (double) z + block.getBlockBoundsMaxZ() + (double) b;
+		if (sideHit == EnumFacing.SOUTH) {
+			pz = pos.getZ() + block.getBlockBoundsMaxZ() + b;
 		}
 
-		if (sideHit == 4) {
-			px = (double) x + block.getBlockBoundsMinX() - (double) b;
+		if (sideHit == EnumFacing.WEST) {
+			px = pos.getX() + block.getBlockBoundsMinX() - b;
 		}
 
-		if (sideHit == 5) {
-			px = (double) x + block.getBlockBoundsMaxX() + (double) b;
+		if (sideHit == EnumFacing.EAST) {
+			px = pos.getX() + block.getBlockBoundsMaxX() + b;
 		}
 
-		EntityDiggingFX fx = new EntityDiggingFX(world, px, py, pz, 0.0D, 0.0D, 0.0D, block, sideHit, meta);
-		fx.setParticleIcon(block.getIcon(world, x, y, z, 0));
+		EntityFX fx = effectRenderer.spawnEffectParticle(EnumParticleTypes.BLOCK_CRACK.getParticleID(), px, py, pz,
+				px - pos.getX() - 0.5D, py - pos.getY() - 0.5D, pz - pos.getZ() - 0.5D, Block.getIdFromBlock(block));
 
 		if (callback != null) {
-			callback.addHitEffects(fx, world, x, y, z, meta);
+			callback.addHitEffects((EntityDiggingFX) fx, world, pos.getX(), pos.getY(), pos.getZ(), meta);
 		}
 
-		effectRenderer.addEffect(fx.applyColourMultiplier(x, y, z).multiplyVelocity(0.2F).multipleParticleScaleBy(0.6F));
+		effectRenderer.addEffect(
+				((EntityDiggingFX) fx).func_174846_a(pos).multiplyVelocity(0.2F).multipleParticleScaleBy(0.6F));
 
 		return true;
 	}
@@ -89,19 +100,26 @@ public class ParticleHelper {
 	 * your block. So be sure to do proper sanity checks before assuming that
 	 * the location is this block.
 	 *
-	 * @param world          The current world
+	 * @param world
+	 *            The current world
 	 * @param block
-	 * @param x              X position to spawn the particle
-	 * @param y              Y position to spawn the particle
-	 * @param z              Z position to spawn the particle
-	 * @param meta           The metadata for the block before it was destroyed.
-	 * @param effectRenderer A reference to the current effect renderer.
+	 * @param x
+	 *            X position to spawn the particle
+	 * @param y
+	 *            Y position to spawn the particle
+	 * @param z
+	 *            Z position to spawn the particle
+	 * @param meta
+	 *            The metadata for the block before it was destroyed.
+	 * @param effectRenderer
+	 *            A reference to the current effect renderer.
 	 * @param callback
 	 * @return True to prevent vanilla break particles from spawning.
 	 */
 	@SideOnly(Side.CLIENT)
-	public static boolean addDestroyEffects(World world, Block block, int x, int y, int z, int meta, EffectRenderer effectRenderer, ParticleHelperCallback callback) {
-		if (block != world.getBlock(x, y, z)) {
+	public static boolean addDestroyEffects(World world, Block block, BlockPos pos, IBlockState state,
+			EffectRenderer effectRenderer, ParticleHelperCallback callback) {
+		if (block != state.getBlock()) {
 			return true;
 		}
 
@@ -109,19 +127,20 @@ public class ParticleHelper {
 		for (int i = 0; i < iterations; ++i) {
 			for (int j = 0; j < iterations; ++j) {
 				for (int k = 0; k < iterations; ++k) {
-					double px = x + (i + 0.5D) / (double) iterations;
-					double py = y + (j + 0.5D) / (double) iterations;
-					double pz = z + (k + 0.5D) / (double) iterations;
-					int random = rand.nextInt(6);
-
-					EntityDiggingFX fx = new EntityDiggingFX(world, px, py, pz, px - x - 0.5D, py - y - 0.5D, pz - z - 0.5D, block, random, meta);
-					fx.setParticleIcon(block.getIcon(world, x, y, z, 0));
+					double px = pos.getX() + (i + 0.5D) / iterations;
+					double py = pos.getY() + (j + 0.5D) / iterations;
+					double pz = pos.getZ() + (k + 0.5D) / iterations;
+					int random = world.rand.nextInt(6);
+					EntityFX fx = effectRenderer.spawnEffectParticle(EnumParticleTypes.BLOCK_CRACK.getParticleID(), px,
+							py, pz, px - pos.getX() - 0.5D, py - pos.getY() - 0.5D, pz - pos.getZ() - 0.5D,
+							Block.getIdFromBlock(block));
 
 					if (callback != null) {
-						callback.addDestroyEffects(fx, world, x, y, z, meta);
+						callback.addDestroyEffects((EntityDiggingFX) fx, world, pos.getX(), pos.getY(), pos.getZ(),
+								block.getMetaFromState(state));
 					}
 
-					effectRenderer.addEffect(fx.applyColourMultiplier(x, y, z));
+					effectRenderer.addEffect(((EntityDiggingFX) fx).func_174846_a(pos));
 				}
 			}
 		}

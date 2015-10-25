@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.circuits;
 
+import com.google.common.collect.ImmutableSet;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -23,9 +25,9 @@ import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.circuits.ISolderManager;
 import forestry.api.core.ForestryAPI;
+import forestry.api.core.IErrorSource;
 import forestry.api.core.IErrorState;
 import forestry.core.EnumErrorCode;
-import forestry.core.interfaces.IErrorSource;
 import forestry.core.inventory.ItemInventory;
 import forestry.core.items.ItemForestry;
 import forestry.core.network.GuiId;
@@ -99,26 +101,23 @@ public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 	// / INVENTORY MANAGMENT
 	public static class SolderingInventory extends ItemInventory implements IErrorSource {
 
-		private final RevolvingList<ICircuitLayout> layouts = new RevolvingList<ICircuitLayout>(ChipsetManager.circuitRegistry.getRegisteredLayouts().values());
-		private EnumErrorCode errorState;
+		private final RevolvingList<ICircuitLayout> layouts = new RevolvingList<ICircuitLayout>(
+				ChipsetManager.circuitRegistry.getRegisteredLayouts().values());
 
-		private final short blankSlot = 0;
-		private final short finishedSlot = 1;
-		private final short ingredientSlot1 = 2;
-		private final short ingredientSlotCount = 4;
+		private static final short blankSlot = 0;
+		private static final short finishedSlot = 1;
+		private static final short ingredientSlot1 = 2;
+		private static final short ingredientSlotCount = 4;
 
-		public SolderingInventory(ItemStack itemStack) {
-			super(ItemSolderingIron.class, 6, itemStack);
-			init();
+		public SolderingInventory(EntityPlayer player, ItemStack itemStack) {
+			super(player, 6, itemStack);
+
+			layouts.setCurrent(ChipsetManager.circuitRegistry.getDefaultLayout());
 		}
 
 		@Override
 		public int getInventoryStackLimit() {
 			return 1;
-		}
-
-		private void init() {
-			layouts.setCurrent(ChipsetManager.circuitRegistry.getDefaultLayout());
 		}
 
 		public ICircuitLayout getLayout() {
@@ -142,7 +141,7 @@ public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 			ArrayList<ICircuit> circuits = new ArrayList<ICircuit>();
 
 			for (short i = 0; i < type.sockets; i++) {
-				ItemStack ingredient = inventoryStacks[ingredientSlot1 + i];
+				ItemStack ingredient = getStackInSlot(ingredientSlot1 + i);
 				if (ingredient == null) {
 					continue;
 				}
@@ -166,12 +165,13 @@ public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 			return circuits;
 		}
 
-		public void trySolder() {
+		@Override
+		public void onSlotClick(EntityPlayer player) {
 			if (layouts.getCurrent() == CircuitRegistry.DUMMY_LAYOUT) {
 				return;
 			}
 
-			ItemStack blank = inventoryStacks[blankSlot];
+			ItemStack blank = getStackInSlot(blankSlot);
 			// Requires blank slot
 			if (blank == null) {
 				return;
@@ -179,7 +179,7 @@ public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 			if (blank.stackSize > 1) {
 				return;
 			}
-			if (inventoryStacks[finishedSlot] != null) {
+			if (getStackInSlot(finishedSlot) != null) {
 				return;
 			}
 
@@ -196,19 +196,20 @@ public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 			EnumCircuitBoardType type = EnumCircuitBoardType.values()[blank.getItemDamage()];
 			Collection<ICircuit> circuits = getCircuits(type, false);
 
-			if (circuits.size() <= 0) {
-				return;
-			} else if (circuits.size() != type.sockets) {
-				errorState = EnumErrorCode.CIRCUITMISMATCH;
+			if (circuits.size() != type.sockets) {
 				return;
 			}
 
 			circuits = getCircuits(type, true);
-			inventoryStacks[finishedSlot] = ItemCircuitBoard.createCircuitboard(type, layouts.getCurrent(), circuits.toArray(new ICircuit[circuits.size()]));
-			inventoryStacks[blankSlot] = null;
+
+			ICircuit[] circuitsArray = circuits.toArray(new ICircuit[circuits.size()]);
+			ItemStack circuitBoard = ItemCircuitBoard.createCircuitboard(type, layouts.getCurrent(), circuitsArray);
+
+			setInventorySlotContents(finishedSlot, circuitBoard);
+			setInventorySlotContents(blankSlot, null);
 		}
 
-		public int getCount(ICircuit circuit, ArrayList<ICircuit> circuits) {
+		public static int getCount(ICircuit circuit, ArrayList<ICircuit> circuits) {
 			int count = 0;
 			for (ICircuit other : circuits) {
 				if (other.getUID().equals(circuit.getUID())) {
@@ -219,32 +220,38 @@ public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 		}
 
 		@Override
-		public void markDirty() {
-			errorState = EnumErrorCode.OK;
-			trySolder();
-		}
+		public ImmutableSet<IErrorState> getErrorStates() {
+			ImmutableSet.Builder<IErrorState> errorStates = ImmutableSet.builder();
 
-		@Override
-		public boolean throwsErrors() {
-			return true;
-		}
-
-		@Override
-		public IErrorState getErrorState() {
 			if (layouts.getCurrent() == CircuitRegistry.DUMMY_LAYOUT) {
-				return EnumErrorCode.NOCIRCUITLAYOUT;
-			}
-			if (inventoryStacks[blankSlot] == null) {
-				return EnumErrorCode.NOCIRCUITBOARD;
-			}
-			if (inventoryStacks[blankSlot].stackSize > 1) {
-				return EnumErrorCode.WRONGSTACKSIZE;
-			}
-			if (errorState != EnumErrorCode.OK) {
-				return errorState;
+				errorStates.add(EnumErrorCode.NOCIRCUITLAYOUT);
 			}
 
-			return EnumErrorCode.OK;
+			ItemStack blankCircuitBoard = getStackInSlot(blankSlot);
+
+			if (blankCircuitBoard == null) {
+				errorStates.add(EnumErrorCode.NOCIRCUITBOARD);
+			} else {
+				EnumCircuitBoardType type = EnumCircuitBoardType.values()[blankCircuitBoard.getItemDamage()];
+
+				int circuitCount = 0;
+				for (short i = 0; i < type.sockets; i++) {
+					if (getStackInSlot(ingredientSlot1 + i) != null) {
+						circuitCount++;
+					}
+				}
+
+				if (circuitCount != type.sockets) {
+					errorStates.add(EnumErrorCode.CIRCUITMISMATCH);
+				} else {
+					Collection<ICircuit> circuits = getCircuits(type, false);
+					if (circuits.size() != type.sockets) {
+						errorStates.add(EnumErrorCode.NOCIRCUITLAYOUT);
+					}
+				}
+			}
+
+			return errorStates.build();
 		}
 
 		@Override
@@ -278,8 +285,8 @@ public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
 		if (Proxies.common.isSimulating(world)) {
-			entityplayer.openGui(ForestryAPI.instance, GuiId.SolderingIronGUI.ordinal(), world, (int) entityplayer.posX, (int) entityplayer.posY,
-					(int) entityplayer.posZ);
+			entityplayer.openGui(ForestryAPI.instance, GuiId.SolderingIronGUI.ordinal(), world, (int) entityplayer.posX,
+					(int) entityplayer.posY, (int) entityplayer.posZ);
 		}
 
 		return itemstack;

@@ -10,49 +10,52 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
+import net.minecraft.world.World;
+
 import forestry.api.world.ITreeGenData;
 
 public class WorldGenSequoia extends WorldGenTree {
 
 	public WorldGenSequoia(ITreeGenData tree) {
-		super(tree);
+		this(tree, 20, 5);
+	}
+
+	protected WorldGenSequoia(ITreeGenData tree, int baseHeight, int heightVariation) {
+		super(tree, baseHeight, heightVariation);
 	}
 
 	@Override
-	public void generate() {
-		generateTreeTrunk(height, girth);
+	public void generate(World world) {
+		generateTreeTrunk(world, height, girth);
 
 		int topLength = height / 4;
 
-		int topHeight = height - topLength + rand.nextInt(height / 4);
+		int topHeight = height - topLength + world.rand.nextInt(height / 4);
 
 		int leafSpawn = height + 2;
 
-		generateAdjustedCylinder(leafSpawn--, 0, 1, leaf);
-		generateAdjustedCylinder(leafSpawn--, 1, 1, leaf);
-		generateAdjustedCylinder(leafSpawn--, 1, 1, leaf);
+		generateAdjustedCylinder(world, leafSpawn--, 0, 1, leaf);
+		generateAdjustedCylinder(world, leafSpawn--, 1, 1, leaf);
+		generateAdjustedCylinder(world, leafSpawn--, 1, 1, leaf);
 
 		while (leafSpawn > topHeight) {
-			generateAdjustedCylinder(leafSpawn--, 1, 1, leaf);
+			generateAdjustedCylinder(world, leafSpawn--, 1, 1, leaf);
 		}
 
-		generateAdjustedCylinder(leafSpawn--, 0, 1, leaf);
+		generateAdjustedCylinder(world, leafSpawn--, 0, 1, leaf);
 
 		for (int times = 0; times < height / 4; times++) {
-			int h = (height / 3) + rand.nextInt(height - (height / 3));
-			if (rand.nextBoolean() && h < height / 3) {
-				h = height / 2 + rand.nextInt(height / 3);
+			int h = (height / 3) + world.rand.nextInt(height - (height / 3));
+			if (world.rand.nextBoolean() && h < height / 3) {
+				h = height / 2 + world.rand.nextInt(height / 3);
 			}
-			int x_off = -1 + rand.nextInt(3);
-			int y_off = -1 + rand.nextInt(3);
-			generateSphere(new Vector(x_off, h, y_off), 1 + rand.nextInt(2), leaf, EnumReplaceMode.NONE);
+			int x_off = -1 + world.rand.nextInt(3);
+			int y_off = -1 + world.rand.nextInt(3);
+
+			Vector center = new Vector(x_off, h, y_off);
+			int radius = 1 + world.rand.nextInt(2);
+			generateSphere(world, center, radius, leaf, EnumReplaceMode.NONE);
 		}
-
 	}
 
-	@Override
-	public void preGenerate() {
-		height = determineHeight(20, 5);
-		girth = determineGirth(tree.getGirth(world, startX, startY, startZ));
-	}
 }

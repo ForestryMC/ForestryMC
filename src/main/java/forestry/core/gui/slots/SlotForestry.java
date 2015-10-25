@@ -20,11 +20,10 @@ import forestry.core.gui.tooltips.ToolTip;
 
 public class SlotForestry extends Slot implements IToolTipProvider {
 
-	protected boolean isPhantom;
-	protected boolean isInfinite;
-	protected boolean canAdjustPhantom = true;
-	protected boolean canShift = true;
-	protected int stackLimit;
+	private boolean isPhantom;
+	private boolean canAdjustPhantom = true;
+	private boolean canShift = true;
+	private int stackLimit;
 	private ToolTip toolTips;
 
 	public SlotForestry(IInventory inventory, int slotIndex, int xPos, int yPos) {
@@ -33,11 +32,6 @@ public class SlotForestry extends Slot implements IToolTipProvider {
 			throw new IllegalArgumentException("Inventory must not be null");
 		}
 		this.stackLimit = -1;
-	}
-
-	public SlotForestry setInfinite() {
-		this.isInfinite = true;
-		return this;
 	}
 
 	public SlotForestry setPhantom() {
@@ -59,11 +53,6 @@ public class SlotForestry extends Slot implements IToolTipProvider {
 
 	public SlotForestry setCanAdjustPhantom(boolean canAdjust) {
 		this.canAdjustPhantom = canAdjust;
-		return this;
-	}
-
-	public SlotForestry setCanShift(boolean canShift) {
-		this.canShift = canShift;
 		return this;
 	}
 
@@ -98,24 +87,9 @@ public class SlotForestry extends Slot implements IToolTipProvider {
 		}
 	}
 
-	@Override
-	public ItemStack decrStackSize(int i) {
-		if (!isInfinite) {
-			return super.decrStackSize(i);
-		}
-
-		ItemStack stack = inventory.getStackInSlot(getSlotIndex());
-		if (stack == null) {
-			return null;
-		}
-
-		ItemStack result = stack.copy();
-		result.stackSize = i;
-		return result;
-	}
-
 	/**
-	 * @param toolTips the tooltips to set
+	 * @param toolTips
+	 *            the tooltips to set
 	 */
 	public void setToolTips(ToolTip toolTips) {
 		this.toolTips = toolTips;
@@ -136,6 +110,7 @@ public class SlotForestry extends Slot implements IToolTipProvider {
 
 	@Override
 	public boolean isMouseOver(int mouseX, int mouseY) {
-		return mouseX >= xDisplayPosition && mouseX <= xDisplayPosition + 16 && mouseY >= yDisplayPosition && mouseY <= yDisplayPosition + 16;
+		return mouseX >= xDisplayPosition && mouseX <= xDisplayPosition + 16 && mouseY >= yDisplayPosition
+				&& mouseY <= yDisplayPosition + 16;
 	}
 }

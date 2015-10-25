@@ -10,17 +10,14 @@
  ******************************************************************************/
 package forestry.core.proxy;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.world.World;
-
+import forestry.core.fluids.Fluids;
 import forestry.core.gadgets.MachineDefinition;
 import forestry.core.interfaces.IBlockRenderer;
+import forestry.core.render.BlockModelIndex;
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.block.statemap.IStateMapper;
 
 public class ProxyRender {
-
-	public int getNextAvailableRenderId() {
-		return 0;
-	}
 
 	public boolean fancyGraphicsEnabled() {
 		return false;
@@ -49,17 +46,29 @@ public class ProxyRender {
 		return null;
 	}
 
-	public void addSnowFX(World world, double xCoord, double yCoord, double zCoord, int color, int areaX, int areaY, int areaZ) {
+	public void registerBlockModel(BlockModelIndex index) {
 	}
 
-	public short registerItemTexUID(IIconRegister register, short uid, String ident) {
+	public void registerStateMapper(Block block, IStateMapper mapper) {
+	}
+
+	public void registerFluidStateMapper(Block block, Fluids forestryFluid) {
+	}
+
+	public short registerItemTexUID(String modifier, short uid, String ident) {
 		return uid;
 	}
 
-	public short registerTerrainTexUID(IIconRegister register, short uid, String ident) {
+	public short registerTerrainTexUID(String modifier, short uid, String ident) {
 		return uid;
 	}
 
 	public void registerVillagerSkin(int villagerId, String texturePath) {
+	}
+
+	public void preInitModels() {
+	}
+
+	public void initModels() {
 	}
 }

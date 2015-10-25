@@ -12,10 +12,9 @@ package forestry.core;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.common.network.IGuiHandler;
-
 import forestry.core.circuits.ContainerSolderingIron;
 import forestry.core.circuits.GuiSolderingIron;
 import forestry.core.circuits.ItemSolderingIron.SolderingInventory;
@@ -33,32 +32,33 @@ public class GuiHandler extends GuiHandlerBase {
 	@Override
 	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 		int cleanId = decodeGuiID(id);
+		BlockPos pos = new BlockPos(x, y, z);
 
 		if (cleanId < GuiId.values().length) {
 			switch (GuiId.values()[cleanId]) {
 
-				case AnalyzerGUI:
-					return new GuiAnalyzer(player.inventory, (TileAnalyzer) getTileForestry(world, x, y, z));
+			case AnalyzerGUI:
+				return new GuiAnalyzer(player.inventory, getTile(world, pos, player, TileAnalyzer.class));
 
-				case NaturalistBenchGUI:
-					return new GuiEscritoire(player, (TileEscritoire) getTileForestry(world, x, y, z));
+			case NaturalistBenchGUI:
+				return new GuiEscritoire(player, getTile(world, pos, player, TileEscritoire.class));
 
-				case SolderingIronGUI:
-					ItemStack equipped = player.getCurrentEquippedItem();
-					if (equipped == null) {
-						return null;
-					}
-					return new GuiSolderingIron(player.inventory, new SolderingInventory(equipped));
-
-				default:
-					for (IGuiHandler handler : PluginManager.guiHandlers) {
-						Object element = handler.getClientGuiElement(id, player, world, x, y, z);
-						if (element != null) {
-							return element;
-						}
-					}
-
+			case SolderingIronGUI:
+				ItemStack equipped = player.getCurrentEquippedItem();
+				if (equipped == null) {
 					return null;
+				}
+				return new GuiSolderingIron(player, new SolderingInventory(player, equipped));
+
+			default:
+				for (IGuiHandler handler : PluginManager.guiHandlers) {
+					Object element = handler.getClientGuiElement(id, player, world, x, y, z);
+					if (element != null) {
+						return element;
+					}
+				}
+
+				return null;
 			}
 		}
 
@@ -68,32 +68,33 @@ public class GuiHandler extends GuiHandlerBase {
 	@Override
 	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 		int cleanId = decodeGuiID(id);
+		BlockPos pos = new BlockPos(x, y, z);
 
 		if (cleanId < GuiId.values().length) {
 			switch (GuiId.values()[cleanId]) {
 
-				case AnalyzerGUI:
-					return new ContainerAnalyzer(player.inventory, (TileAnalyzer) getTileForestry(world, x, y, z));
+			case AnalyzerGUI:
+				return new ContainerAnalyzer(player.inventory, getTile(world, pos, player, TileAnalyzer.class));
 
-				case NaturalistBenchGUI:
-					return new ContainerEscritoire(player, (TileEscritoire) getTileForestry(world, x, y, z));
+			case NaturalistBenchGUI:
+				return new ContainerEscritoire(player, getTile(world, pos, player, TileEscritoire.class));
 
-				case SolderingIronGUI:
-					ItemStack equipped = player.getCurrentEquippedItem();
-					if (equipped == null) {
-						return null;
-					}
-					return new ContainerSolderingIron(player.inventory, new SolderingInventory(equipped));
-
-				default:
-					for (IGuiHandler handler : PluginManager.guiHandlers) {
-						Object element = handler.getServerGuiElement(id, player, world, x, y, z);
-						if (element != null) {
-							return element;
-						}
-					}
-
+			case SolderingIronGUI:
+				ItemStack equipped = player.getCurrentEquippedItem();
+				if (equipped == null) {
 					return null;
+				}
+				return new ContainerSolderingIron(player, new SolderingInventory(player, equipped));
+
+			default:
+				for (IGuiHandler handler : PluginManager.guiHandlers) {
+					Object element = handler.getServerGuiElement(id, player, world, x, y, z);
+					if (element != null) {
+						return element;
+					}
+				}
+
+				return null;
 
 			}
 		}

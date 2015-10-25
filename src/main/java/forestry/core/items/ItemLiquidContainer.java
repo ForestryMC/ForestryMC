@@ -18,34 +18,33 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.world.World;
 
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
+import forestry.api.core.IModelManager;
+import forestry.api.core.IModelRegister;
 import forestry.core.CreativeTabForestry;
 import forestry.core.fluids.BlockForestryFluid;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
 
-public class ItemLiquidContainer extends Item {
+public class ItemLiquidContainer extends Item implements IModelRegister {
 
-	public static enum EnumContainerType {
+	public enum EnumContainerType {
 		GLASS, JAR, CAN, CAPSULE, REFRACTORY, BUCKET
 	}
 
@@ -77,7 +76,7 @@ public class ItemLiquidContainer extends Item {
 		return buckets.get(contents);
 	}
 
-	private int getMatchingSlot(EntityPlayer player, ItemStack stack) {
+	private static int getMatchingSlot(EntityPlayer player, ItemStack stack) {
 
 		for (int slot = 0; slot < player.inventory.mainInventory.length; slot++) {
 			ItemStack slotStack = player.inventory.getStackInSlot(slot);
@@ -100,17 +99,18 @@ public class ItemLiquidContainer extends Item {
 	}
 
 	@Override
-	public ItemStack onEaten(ItemStack itemstack, World world, EntityPlayer entityplayer) {
+	public ItemStack onItemUseFinish(ItemStack itemstack, World world, EntityPlayer entityplayer) {
 		if (!isDrink) {
 			return itemstack;
 		}
 
 		itemstack.stackSize--;
-		entityplayer.getFoodStats().addStats(this.getHealAmount(), this.getSaturationModifier());
+		entityplayer.getFoodStats().addStats(healAmount, saturationModifier);
 		world.playSoundAtEntity(entityplayer, "random.burp", 0.5F, world.rand.nextFloat() * 0.1F + 0.9F);
 		/*
-		 * if (!world.isRemote && potionId > 0 && world.rand.nextFloat() < potionEffectProbability) entityplayer.addPotionEffect(new PotionEffect(potionId,
-		 * potionDuration * 20, potionAmplifier));
+		 * if (!world.isRemote && potionId > 0 && world.rand.nextFloat() <
+		 * potionEffectProbability) entityplayer.addPotionEffect(new
+		 * PotionEffect(potionId, potionDuration * 20, potionAmplifier));
 		 */
 
 		return itemstack;
@@ -128,9 +128,9 @@ public class ItemLiquidContainer extends Item {
 	@Override
 	public EnumAction getItemUseAction(ItemStack itemstack) {
 		if (isDrink) {
-			return EnumAction.drink;
+			return EnumAction.DRINK;
 		} else {
-			return EnumAction.none;
+			return EnumAction.NONE;
 		}
 	}
 
@@ -153,15 +153,13 @@ public class ItemLiquidContainer extends Item {
 		MovingObjectPosition movingobjectposition = this.getMovingObjectPositionFromPlayer(world, entityplayer, true);
 		if (movingobjectposition != null && movingobjectposition.typeOfHit == MovingObjectType.BLOCK) {
 
-			int x = movingobjectposition.blockX;
-			int y = movingobjectposition.blockY;
-			int z = movingobjectposition.blockZ;
-			Block targetedBlock = world.getBlock(x, y, z);
+			BlockPos pos = movingobjectposition.getBlockPos();
+			Block targetedBlock = world.getBlockState(pos).getBlock();
 
 			FluidStack fluid = null;
 
 			if (targetedBlock instanceof IFluidBlock) {
-				fluid = ((IFluidBlock) targetedBlock).drain(world, x, y, z, false);
+				fluid = ((IFluidBlock) targetedBlock).drain(world, pos, false);
 			} else {
 				if (targetedBlock == Blocks.water || targetedBlock == Blocks.flowing_water) {
 					fluid = new FluidStack(FluidRegistry.WATER, 1000);
@@ -194,9 +192,9 @@ public class ItemLiquidContainer extends Item {
 
 			// Remove consumed liquid block in world
 			if (targetedBlock instanceof IFluidBlock) {
-				((IFluidBlock) targetedBlock).drain(world, x, y, z, true);
+				((IFluidBlock) targetedBlock).drain(world, pos, true);
 			} else {
-				world.setBlockToAir(x, y, z);
+				world.setBlockToAir(pos);
 			}
 
 			// Remove consumed empty container
@@ -212,7 +210,8 @@ public class ItemLiquidContainer extends Item {
 
 	}
 
-	private ItemStack tryPlaceLiquid(ItemStack itemstack, World world, EntityPlayer player, MovingObjectPosition movingobjectposition) {
+	private ItemStack tryPlaceLiquid(ItemStack itemstack, World world, EntityPlayer player,
+			MovingObjectPosition movingobjectposition) {
 
 		if (this.type != EnumContainerType.BUCKET) {
 			return itemstack;
@@ -222,89 +221,84 @@ public class ItemLiquidContainer extends Item {
 			return new ItemStack(Items.bucket);
 		}
 
-		int x = movingobjectposition.blockX;
-		int y = movingobjectposition.blockY;
-		int z = movingobjectposition.blockZ;
+		int x = movingobjectposition.getBlockPos().getX();
+		int y = movingobjectposition.getBlockPos().getY();
+		int z = movingobjectposition.getBlockPos().getZ();
 
 		switch (movingobjectposition.sideHit) {
-			case 0:
-				--y;
-				break;
-			case 1:
-				++y;
-				break;
-			case 2:
-				--z;
-				break;
-			case 3:
-				++z;
-				break;
-			case 4:
-				--x;
-				break;
-			case 5:
-				++x;
-				break;
+		case DOWN:
+			--y;
+			break;
+		case UP:
+			++y;
+			break;
+		case NORTH:
+			--z;
+			break;
+		case SOUTH:
+			++z;
+			break;
+		case WEST:
+			--x;
+			break;
+		case EAST:
+			++x;
+			break;
 		}
 
-		if (!player.canPlayerEdit(x, y, z, movingobjectposition.sideHit, itemstack)) {
+		BlockPos pos = new BlockPos(x, y, z);
+		if (!player.canPlayerEdit(pos, movingobjectposition.sideHit, itemstack)) {
 			return itemstack;
 		}
 
-		if (this.tryPlaceLiquidAtPosition(world, x, y, z) && !player.capabilities.isCreativeMode) {
+		if (this.tryPlaceLiquidAtPosition(world, pos) && !player.capabilities.isCreativeMode) {
 			return new ItemStack(Items.bucket);
 		}
 
 		return itemstack;
 	}
 
-	private boolean tryPlaceLiquidAtPosition(World world, int x, int y, int z) {
+	private boolean tryPlaceLiquidAtPosition(World world, BlockPos pos) {
 		if (this.contents == Blocks.air) {
 			return false;
 		} else {
-			Material material = world.getBlock(x, y, z).getMaterial();
+			Material material = world.getBlockState(pos).getBlock().getMaterial();
 			boolean isLiquid = !material.isSolid();
 
-			if (!world.isAirBlock(x, y, z) && !isLiquid) {
+			if (!world.isAirBlock(pos) && !isLiquid) {
 				return false;
 			} else {
 				// Can't put down liquids in the nether.
 				// Explode if it's flammable, evaporate otherwise.
-				if (world.provider.isHellWorld && this.contents != Blocks.flowing_lava) {
-					int flammability = contents.getFlammability(world, x, y, z, ForgeDirection.UNKNOWN);
+				if (world.provider.doesWaterVaporize() && this.contents != Blocks.flowing_lava) {
+					int flammability = contents.getFlammability(world, pos, null);
 					if (contents instanceof BlockForestryFluid && flammability > 0) {
-						// Explosion size is determined by flammability, up to size 4.
+						// Explosion size is determined by flammability, up to
+						// size 4.
 						float explosionSize = 4F * flammability / 300F;
-						world.newExplosion(null, x, y, z, explosionSize, true, true);
+						world.newExplosion(null, pos.getX(), pos.getY(), pos.getZ(), explosionSize, true, true);
 						return true;
 					} else {
 						Random random = world.rand;
-						world.playSoundEffect(x + 0.5, y + 0.5F, z + 0.5F, "random.fizz", 0.5F, 2.6F + (random.nextFloat() - random.nextFloat()) * 0.8F);
+						world.playSoundEffect(pos.getX() + 0.5, pos.getY() + 0.5F, pos.getZ() + 0.5F, "random.fizz",
+								0.5F, 2.6F + (random.nextFloat() - random.nextFloat()) * 0.8F);
 
 						for (int l = 0; l < 8; ++l) {
-							world.spawnParticle("largesmoke", x + random.nextDouble(), y + random.nextDouble(), z + random.nextDouble(), 0.0, 0.0, 0.0);
+							world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, pos.getX() + random.nextDouble(),
+									pos.getY() + random.nextDouble(), pos.getZ() + random.nextDouble(), 0.0, 0.0, 0.0);
 						}
 					}
 				} else {
 					if (!world.isRemote && isLiquid && !material.isLiquid()) {
-						world.func_147480_a(x, y, z, true);
+						world.destroyBlock(pos, true);
 					}
 
-					world.setBlock(x, y, z, this.contents, 0, 3);
+					return world.setBlockState(pos, this.contents.getDefaultState(), 3);
 				}
 
 				return true;
 			}
 		}
-	}
-
-
-	public int getHealAmount() {
-		return healAmount;
-	}
-
-	public float getSaturationModifier() {
-		return saturationModifier;
 	}
 
 	public ItemLiquidContainer setDrink(int healAmount, float saturationModifier) {
@@ -315,8 +309,9 @@ public class ItemLiquidContainer extends Item {
 	}
 
 	/*
-	 * public ItemLiquidContainer setPotionEffect(int i, int j, int k, float f) { potionId = i; potionDuration = j; potionAmplifier = k; potionEffectProbability
-	 * = f; return this; }
+	 * public ItemLiquidContainer setPotionEffect(int i, int j, int k, float f)
+	 * { potionId = i; potionDuration = j; potionAmplifier = k;
+	 * potionEffectProbability = f; return this; }
 	 */
 	public ItemLiquidContainer setAlwaysEdible() {
 		isAlwaysEdible = true;
@@ -324,31 +319,11 @@ public class ItemLiquidContainer extends Item {
 	}
 
 	/* ICONS */
-	@SideOnly(Side.CLIENT)
-	private IIcon[] icons;
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerIcons(IIconRegister register) {
-		icons = new IIcon[2];
-		icons[0] = TextureManager.getInstance().registerTex(register, "liquids/" + type.toString().toLowerCase(Locale.ENGLISH) + ".bottle");
-		icons[1] = TextureManager.getInstance().registerTex(register, "liquids/" + type.toString().toLowerCase(Locale.ENGLISH) + ".contents");
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public IIcon getIconFromDamageForRenderPass(int i, int j) {
-		if (j > 0 && color != null) {
-			return icons[1];
-		} else {
-			return icons[0];
-		}
-	}
-
-	// Return true to enable color overlay
-	@Override
-	public boolean requiresMultipleRenderPasses() {
-		return true;
+	public void registerModel(Item item, IModelManager manager) {
+		manager.registerItemModel(item, 0, "liquids", type.toString().toLowerCase(Locale.ENGLISH));
 	}
 
 	@Override

@@ -15,11 +15,11 @@ import net.minecraft.inventory.ICrafting;
 
 import net.minecraftforge.fluids.IFluidHandler;
 
-import forestry.core.fluids.TankManager;
+import forestry.core.fluids.ITankManager;
 
 public interface ILiquidTankContainer extends IFluidHandler {
 
-	TankManager getTankManager();
+	ITankManager getTankManager();
 
 	void getGUINetworkData(int messageId, int data);
 

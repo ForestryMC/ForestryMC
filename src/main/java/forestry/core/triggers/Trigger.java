@@ -10,30 +10,29 @@
  ******************************************************************************/
 package forestry.core.triggers;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.util.IIcon;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
+import forestry.api.core.sprite.ISprite;
+import forestry.api.core.sprite.ISpriteRegister;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
-
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import buildcraft.api.core.SheetIcon;
 import buildcraft.api.statements.IStatement;
 import buildcraft.api.statements.IStatementParameter;
 import buildcraft.api.statements.ITriggerExternal;
 import buildcraft.api.statements.StatementManager;
 
-public abstract class Trigger implements ITriggerExternal {
+public abstract class Trigger implements ITriggerExternal, ISpriteRegister {
 
 	private final String uid;
 	private final String unlocalized;
 
-	public Trigger(String uid) {
+	protected Trigger(String uid) {
 		this(uid, uid);
 	}
 
-	public Trigger(String uid, String localization) {
+	protected Trigger(String uid, String localization) {
 		this.uid = "forestry:" + uid;
 		unlocalized = "trigger." + localization;
 		StatementManager.registerStatement(this);
@@ -65,22 +64,27 @@ public abstract class Trigger implements ITriggerExternal {
 	}
 
 	@SideOnly(Side.CLIENT)
-	private IIcon icon;
+	private ISprite sprite;
+	@SideOnly(Side.CLIENT)
+	private ResourceLocation spriteLocation;
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon getIcon() {
-		return icon;
+	public SheetIcon getIcon() {
+		return new SheetIcon(spriteLocation, getSheetLocation() & 15, getSheetLocation() >> 4);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister register) {
-		icon = TextureManager.getInstance().registerTex(register, "triggers/" + unlocalized.replace("trigger.", ""));
+	public void registerSprite() {
+		sprite = TextureManager.getInstance().registerTex("items", "triggers/" + unlocalized.replace("trigger.", ""));
+		spriteLocation = TextureManager.getInstance().getRL("items", "triggers/" + unlocalized.replace("trigger.", ""));
 	}
 
 	@Override
 	public IStatement rotateLeft() {
 		return this;
 	}
+
+	public abstract int getSheetLocation();
 }

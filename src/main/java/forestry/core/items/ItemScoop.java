@@ -19,7 +19,7 @@ import forestry.core.config.ForestryBlock;
 public class ItemScoop extends ItemForestryTool implements IToolScoop {
 
 	public ItemScoop() {
-		super(new Block[]{ForestryBlock.beehives.block()}, null);
+		super(new Block[] { ForestryBlock.beehives.block() }, null);
 		this.maxStackSize = 1;
 		efficiencyOnProperMaterial = 4.0F;
 		setMaxDamage(10);

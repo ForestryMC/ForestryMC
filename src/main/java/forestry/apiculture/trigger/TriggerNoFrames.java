@@ -11,8 +11,7 @@
 package forestry.apiculture.trigger;
 
 import net.minecraft.tileentity.TileEntity;
-
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 import forestry.apiculture.gadgets.TileApiary;
 import forestry.core.triggers.Trigger;
@@ -27,23 +26,27 @@ public class TriggerNoFrames extends Trigger {
 	}
 
 	/**
-	 * Return true if the tile given in parameter activates the trigger, given the parameters.
+	 * Return true if the tile given in parameter activates the trigger, given
+	 * the parameters.
 	 */
 	@Override
-	public boolean isTriggerActive(TileEntity tile, ForgeDirection side, IStatementContainer source, IStatementParameter[] parameters) {
+	public boolean isTriggerActive(TileEntity tile, EnumFacing side, IStatementContainer source,
+			IStatementParameter[] parameters) {
 
 		if (!(tile instanceof TileApiary)) {
 			return false;
 		}
 
-		for (int i = TileApiary.SLOT_FRAMES_1; i < TileApiary.SLOT_FRAMES_1 + TileApiary.SLOT_FRAMES_COUNT; i++) {
-			if (((TileApiary) tile).getStackInSlot(i) != null) {
-				return false;
-			}
-		}
+		TileApiary apiary = (TileApiary) tile;
 
-		return true;
+		TileApiary.ApiaryInventory inventory = (TileApiary.ApiaryInventory) apiary.getInternalInventory();
 
+		return inventory.getFrames().size() == 0;
+	}
+
+	@Override
+	public int getSheetLocation() {
+		return 0;
 	}
 
 }

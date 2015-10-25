@@ -17,17 +17,19 @@ import java.util.List;
 import java.util.Locale;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;
 import forestry.core.items.ItemLiquidContainer;
-
 import static forestry.core.items.ItemLiquidContainer.EnumContainerType;
 
 public enum Fluids {
@@ -46,16 +48,16 @@ public enum Fluids {
 		@Override
 		public ForestryItem getContainerForType(EnumContainerType type) {
 			switch (type) {
-				case BUCKET:
-					return ForestryItem.bucketEthanol;
-				case CAN:
-					return ForestryItem.canEthanol;
-				case CAPSULE:
-					return ForestryItem.waxCapsuleEthanol;
-				case REFRACTORY:
-					return ForestryItem.refractoryEthanol;
-				default:
-					return null;
+			case BUCKET:
+				return ForestryItem.bucketEthanol;
+			case CAN:
+				return ForestryItem.canEthanol;
+			case CAPSULE:
+				return ForestryItem.waxCapsuleEthanol;
+			case REFRACTORY:
+				return ForestryItem.refractoryEthanol;
+			default:
+				return null;
 			}
 		}
 	},
@@ -68,16 +70,16 @@ public enum Fluids {
 		@Override
 		public ForestryItem getContainerForType(EnumContainerType type) {
 			switch (type) {
-				case BUCKET:
-					return ForestryItem.bucketBiomass;
-				case CAN:
-					return ForestryItem.canBiomass;
-				case CAPSULE:
-					return ForestryItem.waxCapsuleBiomass;
-				case REFRACTORY:
-					return ForestryItem.refractoryBiomass;
-				default:
-					return null;
+			case BUCKET:
+				return ForestryItem.bucketBiomass;
+			case CAN:
+				return ForestryItem.canBiomass;
+			case CAPSULE:
+				return ForestryItem.waxCapsuleBiomass;
+			case REFRACTORY:
+				return ForestryItem.refractoryBiomass;
+			default:
+				return null;
 			}
 		}
 	},
@@ -95,10 +97,10 @@ public enum Fluids {
 		@Override
 		public ForestryItem getContainerForType(EnumContainerType type) {
 			switch (type) {
-				case BUCKET:
-					return ForestryItem.bucketGlass;
-				default:
-					return null;
+			case BUCKET:
+				return ForestryItem.bucketGlass;
+			default:
+				return null;
 			}
 		}
 	},
@@ -116,16 +118,16 @@ public enum Fluids {
 		@Override
 		public ForestryItem getContainerForType(EnumContainerType type) {
 			switch (type) {
-				case BUCKET:
-					return ForestryItem.bucketHoney;
-				case CAN:
-					return ForestryItem.canHoney;
-				case CAPSULE:
-					return ForestryItem.waxCapsuleHoney;
-				case REFRACTORY:
-					return ForestryItem.refractoryHoney;
-				default:
-					return null;
+			case BUCKET:
+				return ForestryItem.bucketHoney;
+			case CAN:
+				return ForestryItem.canHoney;
+			case CAPSULE:
+				return ForestryItem.waxCapsuleHoney;
+			case REFRACTORY:
+				return ForestryItem.refractoryHoney;
+			default:
+				return null;
 			}
 		}
 
@@ -156,16 +158,16 @@ public enum Fluids {
 		@Override
 		public ForestryItem getContainerForType(EnumContainerType type) {
 			switch (type) {
-				case BUCKET:
-					return ForestryItem.bucketIce;
-				case CAN:
-					return ForestryItem.canIce;
-				case CAPSULE:
-					return ForestryItem.waxCapsuleIce;
-				case REFRACTORY:
-					return ForestryItem.refractoryIce;
-				default:
-					return null;
+			case BUCKET:
+				return ForestryItem.bucketIce;
+			case CAN:
+				return ForestryItem.canIce;
+			case CAPSULE:
+				return ForestryItem.waxCapsuleIce;
+			case REFRACTORY:
+				return ForestryItem.refractoryIce;
+			default:
+				return null;
 			}
 		}
 	},
@@ -178,16 +180,16 @@ public enum Fluids {
 		@Override
 		public ForestryItem getContainerForType(EnumContainerType type) {
 			switch (type) {
-				case BUCKET:
-					return ForestryItem.bucketJuice;
-				case CAN:
-					return ForestryItem.canJuice;
-				case CAPSULE:
-					return ForestryItem.waxCapsuleJuice;
-				case REFRACTORY:
-					return ForestryItem.refractoryJuice;
-				default:
-					return null;
+			case BUCKET:
+				return ForestryItem.bucketJuice;
+			case CAN:
+				return ForestryItem.canJuice;
+			case CAPSULE:
+				return ForestryItem.waxCapsuleJuice;
+			case REFRACTORY:
+				return ForestryItem.refractoryJuice;
+			default:
+				return null;
 			}
 		}
 
@@ -206,9 +208,7 @@ public enum Fluids {
 
 		@Override
 		public List<ItemStack> getOtherContainers() {
-			return Arrays.asList(
-					new ItemStack(Items.milk_bucket)
-			);
+			return Arrays.asList(new ItemStack(Items.milk_bucket));
 		}
 	},
 	SEEDOIL(new Color(255, 255, 168), 885, 5000) {
@@ -220,16 +220,16 @@ public enum Fluids {
 		@Override
 		public ForestryItem getContainerForType(EnumContainerType type) {
 			switch (type) {
-				case BUCKET:
-					return ForestryItem.bucketSeedoil;
-				case CAN:
-					return ForestryItem.canSeedOil;
-				case CAPSULE:
-					return ForestryItem.waxCapsuleSeedOil;
-				case REFRACTORY:
-					return ForestryItem.refractorySeedOil;
-				default:
-					return null;
+			case BUCKET:
+				return ForestryItem.bucketSeedoil;
+			case CAN:
+				return ForestryItem.canSeedOil;
+			case CAPSULE:
+				return ForestryItem.waxCapsuleSeedOil;
+			case REFRACTORY:
+				return ForestryItem.refractorySeedOil;
+			default:
+				return null;
 			}
 		}
 	},
@@ -247,10 +247,10 @@ public enum Fluids {
 		@Override
 		public ForestryItem getContainerForType(EnumContainerType type) {
 			switch (type) {
-				case BUCKET:
-					return ForestryItem.bucketShortMead;
-				default:
-					return null;
+			case BUCKET:
+				return ForestryItem.bucketShortMead;
+			default:
+				return null;
 			}
 		}
 	},
@@ -259,14 +259,14 @@ public enum Fluids {
 		@Override
 		public ForestryItem getContainerForType(EnumContainerType type) {
 			switch (type) {
-				case CAN:
-					return ForestryItem.canWater;
-				case CAPSULE:
-					return ForestryItem.waxCapsuleWater;
-				case REFRACTORY:
-					return ForestryItem.refractoryWater;
-				default:
-					return null;
+			case CAN:
+				return ForestryItem.canWater;
+			case CAPSULE:
+				return ForestryItem.waxCapsuleWater;
+			case REFRACTORY:
+				return ForestryItem.refractoryWater;
+			default:
+				return null;
 			}
 		}
 	},
@@ -274,12 +274,12 @@ public enum Fluids {
 		@Override
 		public ForestryItem getContainerForType(EnumContainerType type) {
 			switch (type) {
-				case CAN:
-					return ForestryItem.canLava;
-				case REFRACTORY:
-					return ForestryItem.refractoryLava;
-				default:
-					return null;
+			case CAN:
+				return ForestryItem.canLava;
+			case REFRACTORY:
+				return ForestryItem.refractoryLava;
+			default:
+				return null;
 			}
 		}
 	},
@@ -288,14 +288,14 @@ public enum Fluids {
 		@Override
 		public ForestryItem getContainerForType(EnumContainerType type) {
 			switch (type) {
-				case CAN:
-					return ForestryItem.canFuel;
-				case CAPSULE:
-					return ForestryItem.waxCapsuleFuel;
-				case REFRACTORY:
-					return ForestryItem.refractoryFuel;
-				default:
-					return null;
+			case CAN:
+				return ForestryItem.canFuel;
+			case CAPSULE:
+				return ForestryItem.waxCapsuleFuel;
+			case REFRACTORY:
+				return ForestryItem.refractoryFuel;
+			default:
+				return null;
 			}
 		}
 	},
@@ -303,14 +303,14 @@ public enum Fluids {
 		@Override
 		public ForestryItem getContainerForType(EnumContainerType type) {
 			switch (type) {
-				case CAN:
-					return ForestryItem.canOil;
-				case CAPSULE:
-					return ForestryItem.waxCapsuleOil;
-				case REFRACTORY:
-					return ForestryItem.refractoryOil;
-				default:
-					return null;
+			case CAN:
+				return ForestryItem.canOil;
+			case CAPSULE:
+				return ForestryItem.waxCapsuleOil;
+			case REFRACTORY:
+				return ForestryItem.refractoryOil;
+			default:
+				return null;
 			}
 		}
 	},
@@ -319,25 +319,32 @@ public enum Fluids {
 	// Thermal Expansion
 	COAL, PYROTHEUM;
 
-	public static final Fluids[] forestryFluids = {ETHANOL, BIOMASS, GLASS, HONEY, LEGACY_HONEY, ICE, JUICE, MILK, SEEDOIL, SHORT_MEAD};
+	public static final Fluids[] forestryFluids = { ETHANOL, BIOMASS, GLASS, HONEY, LEGACY_HONEY, ICE, JUICE, MILK,
+			SEEDOIL, SHORT_MEAD };
 
 	private final String tag;
 	private final int density, viscosity;
 	private final Color color;
+	private final ResourceLocation[] resources = new ResourceLocation[2];
 
-	private Fluids() {
+	Fluids() {
 		this(null);
 	}
 
-	private Fluids(Color color) {
+	Fluids(Color color) {
 		this(color, 1000, 1000);
 	}
 
-	private Fluids(Color color, int density, int viscosity) {
+	Fluids(Color color, int density, int viscosity) {
 		this.tag = name().toLowerCase(Locale.ENGLISH);
 		this.color = color;
 		this.density = density;
 		this.viscosity = viscosity;
+
+		resources[0] = new ResourceLocation(Defaults.ID, "blocks/liquid/" + getTag() + "_still");
+		if (flowTextureExists()) {
+			resources[1] = new ResourceLocation(Defaults.ID, "blocks/liquid/" + getTag() + "_flow");
+		}
 	}
 
 	public int getTemperature() {
@@ -407,8 +414,8 @@ public enum Fluids {
 
 	/** FluidBlock and Container registration */
 	/**
-	 * Add the filled containers for this fluid.
-	 * They will be automatically created and registered.
+	 * Add the filled containers for this fluid. They will be automatically
+	 * created and registered.
 	 */
 	public ForestryItem getContainerForType(EnumContainerType type) {
 		return null;
@@ -433,5 +440,21 @@ public enum Fluids {
 	 */
 	public void setProperties(ItemLiquidContainer liquidContainer) {
 
+	}
+
+	@SideOnly(Side.CLIENT)
+	public boolean flowTextureExists() {
+		try {
+			ResourceLocation resourceLocation = new ResourceLocation(Defaults.ID,
+					"blocks/liquid/" + getTag() + "_flow");
+			IResourceManager resourceManager = Minecraft.getMinecraft().getResourceManager();
+			return resourceManager.getResource(resourceLocation) != null;
+		} catch (java.lang.Exception e) {
+			return false;
+		}
+	}
+
+	public ResourceLocation[] getResources() {
+		return resources;
 	}
 }

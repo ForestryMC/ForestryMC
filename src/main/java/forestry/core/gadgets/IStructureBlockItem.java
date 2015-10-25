@@ -14,5 +14,5 @@ package forestry.core.gadgets;
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public interface IStructureBlockItem {
-	
+
 }

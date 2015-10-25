@@ -20,7 +20,8 @@ import forestry.api.genetics.IIndividual;
 public class VanillaDefaultGrowthRule implements IFlowerGrowthRule {
 
 	@Override
-	public boolean growFlower(IFlowerRegistry fr, String flowerType, World world, IIndividual individual, BlockPos pos) {
+	public boolean growFlower(IFlowerRegistry fr, String flowerType, World world, IIndividual individual,
+			BlockPos pos) {
 		return true;
 	}
 

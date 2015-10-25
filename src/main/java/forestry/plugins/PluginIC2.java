@@ -10,31 +10,30 @@
  ******************************************************************************/
 package forestry.plugins;
 
+import com.google.common.collect.ImmutableMap;
+
 import java.util.EnumSet;
 
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.registry.GameData;
-
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuitLayout;
+import forestry.api.fuels.EngineBronzeFuel;
 import forestry.api.fuels.FuelManager;
-import forestry.api.fuels.GeneratorFuel;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.BackpackManager;
+import forestry.api.storage.IBackpackDefinition;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
 import forestry.core.GameMode;
 import forestry.core.circuits.Circuit;
-import forestry.core.circuits.CircuitId;
 import forestry.core.circuits.CircuitLayout;
-import forestry.core.config.Config;
-import forestry.core.config.Configuration;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
@@ -64,32 +63,29 @@ import ic2.api.recipe.Recipes;
 public class PluginIC2 extends ForestryPlugin {
 
 	public static PluginIC2 instance;
-	public static Configuration config;
-
-	// Ignore IC2?
-	public static boolean ignore;
 
 	// Forestry stuff
-	public static MachineDefinition definitionGenerator;
-	public static MachineDefinition definitionEngineTin;
+	private static MachineDefinition definitionGenerator;
+	private static MachineDefinition definitionEngineTin;
 
 	// IC2 stuff
-	public static ItemStack plantBall;
-	public static ItemStack compressedPlantBall;
-	public static ItemStack wrench;
-	public static ItemStack treetap;
+	private static ItemStack plantBall;
+	private static ItemStack compressedPlantBall;
+	private static ItemStack wrench;
+	private static ItemStack treetap;
+	private static ItemStack rubbersapling;
+	private static ItemStack rubberleaves;
+	private static ItemStack emptyCell;
+	private static ItemStack lavaCell;
+	private static ItemStack waterCell;
+	private static ItemStack rubber;
+	private static ItemStack scrap;
+	private static ItemStack silver;
+	private static ItemStack brass;
+	private static ItemStack uuMatter;
+
 	public static ItemStack resin;
-	public static ItemStack rubbersapling;
 	public static ItemStack rubberwood;
-	public static ItemStack rubberleaves;
-	public static ItemStack emptyCell;
-	public static ItemStack lavaCell;
-	public static ItemStack waterCell;
-	public static ItemStack rubber;
-	public static ItemStack scrap;
-	public static ItemStack silver;
-	public static ItemStack brass;
-	public static ItemStack uuMatter;
 
 	public PluginIC2() {
 		if (PluginIC2.instance == null) {
@@ -121,26 +117,19 @@ public class PluginIC2 extends ForestryPlugin {
 	public void preInit() {
 		super.preInit();
 
-		definitionEngineTin = ((BlockBase) ForestryBlock.engine.block()).addDefinition(new EngineDefinition(Defaults.DEFINITION_ENGINETIN_META, "forestry.EngineTin", EngineTin.class,
-				PluginEnergy.proxy.getRenderDefaultEngine(Defaults.TEXTURE_PATH_BLOCKS + "/engine_tin_"), ShapedRecipeCustom.createShapedRecipe(
-				ForestryBlock.engine.getItemStack(1, Defaults.DEFINITION_ENGINETIN_META),
-				"###",
-				" X ",
-				"YVY",
-				'#', "ingotTin",
-				'X', Blocks.glass,
-				'Y', "gearTin",
-				'V', Blocks.piston)));
+		definitionEngineTin = ((BlockBase) ForestryBlock.engine.block()).addDefinition(
+				new EngineDefinition(Defaults.DEFINITION_ENGINETIN_META, "forestry.EngineTin", EngineTin.class,
+						PluginEnergy.proxy.getRenderDefaultEngine(Defaults.TEXTURE_PATH_BLOCKS + "/engine_tin_"),
+						ShapedRecipeCustom.createShapedRecipe(
+								ForestryBlock.engine.getItemStack(1, Defaults.DEFINITION_ENGINETIN_META), "###", " X ",
+								"YVY", '#', "ingotTin", 'X', "blockGlass", 'Y', "gearTin", 'V', Blocks.piston)));
 
-		definitionGenerator = ((BlockBase) ForestryBlock.engine.block()).addDefinition(new MachineDefinition(Defaults.DEFINITION_GENERATOR_META, "forestry.Generator", MachineGenerator.class,
-				Proxies.render.getRenderDefaultMachine(Defaults.TEXTURE_PATH_BLOCKS + "/generator_"), ShapedRecipeCustom.createShapedRecipe(
-				ForestryBlock.engine.getItemStack(1, Defaults.DEFINITION_GENERATOR_META),
-				"X#X",
-				"XYX",
-				"X#X",
-				'#', Blocks.glass,
-				'X', Items.gold_ingot,
-				'Y', ForestryItem.sturdyCasing)));
+		definitionGenerator = ((BlockBase) ForestryBlock.engine.block()).addDefinition(
+				new MachineDefinition(Defaults.DEFINITION_GENERATOR_META, "forestry.Generator", MachineGenerator.class,
+						Proxies.render.getRenderDefaultMachine(Defaults.TEXTURE_PATH_BLOCKS + "/generator_"),
+						ShapedRecipeCustom.createShapedRecipe(
+								ForestryBlock.engine.getItemStack(1, Defaults.DEFINITION_GENERATOR_META), "X#X", "XYX",
+								"X#X", '#', "blockGlass", 'X', "ingotGold", 'Y', ForestryItem.sturdyCasing)));
 
 		emptyCell = IC2Items.getItem("cell");
 		if (emptyCell != null) {
@@ -173,20 +162,12 @@ public class PluginIC2 extends ForestryPlugin {
 
 		ICircuitLayout layoutEngineTin = new CircuitLayout("engine.tin");
 		ChipsetManager.circuitRegistry.registerLayout(layoutEngineTin);
-
-		ChipsetManager.circuitRegistry.registerLegacyMapping(CircuitId.ELECTRIC_CHOKE_I, "forestry.energyChoke1");
-		ChipsetManager.circuitRegistry.registerLegacyMapping(CircuitId.FIRE_DAMPENER_I, "forestry.energyDampener1");
-		ChipsetManager.circuitRegistry.registerLegacyMapping(CircuitId.ELECTRIC_EFFICIENCY_I, "forestry.energyEfficiency1");
-		ChipsetManager.circuitRegistry.registerLegacyMapping(CircuitId.ELECTRIC_BOOST_I, "forestry.energyBoost1");
-		ChipsetManager.circuitRegistry.registerLegacyMapping(CircuitId.ELECTRIC_BOOST_II, "forestry.energyBoost2");
 	}
 
 	@Override
 	@Optional.Method(modid = "IC2")
 	public void doInit() {
 		super.doInit();
-
-		config = Config.config;
 
 		// Remove some items from the recycler
 		if (Recipes.recyclerBlacklist != null) {
@@ -201,14 +182,6 @@ public class PluginIC2 extends ForestryPlugin {
 		definitionEngineTin.register();
 		definitionGenerator.register();
 
-		FluidStack ethanol = Fluids.ETHANOL.getFluid(1);
-		GeneratorFuel ethanolFuel = new GeneratorFuel(ethanol, (int) (32 * GameMode.getGameMode().getFloatSetting("fuel.ethanol.generator")), 4);
-		FuelManager.generatorFuel.put(ethanol.getFluid(), ethanolFuel);
-
-		FluidStack biomass = Fluids.BIOMASS.getFluid(1);
-		GeneratorFuel biomassFuel = new GeneratorFuel(biomass, (int) (8 * GameMode.getGameMode().getFloatSetting("fuel.biomass.generator")), 1);
-		FuelManager.generatorFuel.put(biomass.getFluid(), biomassFuel);
-
 		Circuit.energyElectricChoke1 = new CircuitElectricChoke("electric.choke.1");
 		Circuit.energyFireDampener1 = new CircuitFireDampener("dampener.1");
 		Circuit.energyElectricEfficiency1 = new CircuitElectricEfficiency("electric.efficiency.1");
@@ -219,21 +192,23 @@ public class PluginIC2 extends ForestryPlugin {
 	@Override
 	@Optional.Method(modid = "IC2")
 	protected void registerBackpackItems() {
-		if (BackpackManager.backpackItems == null) {
+		if (BackpackManager.definitions == null) {
 			return;
 		}
 
+		IBackpackDefinition forester = BackpackManager.definitions.get("forester");
+
 		if (resin != null) {
-			BackpackManager.definitions.get("forester").addValidItem(resin);
+			forester.addValidItem(resin);
 		}
 		if (rubber != null) {
-			BackpackManager.definitions.get("forester").addValidItem(rubber);
+			forester.addValidItem(rubber);
 		}
 		if (rubbersapling != null) {
-			BackpackManager.definitions.get("forester").addValidItem(rubbersapling);
+			forester.addValidItem(rubbersapling);
 		}
 		if (rubberleaves != null) {
-			BackpackManager.definitions.get("forester").addValidItem(rubberleaves);
+			forester.addValidItem(rubberleaves);
 		}
 	}
 
@@ -266,45 +241,60 @@ public class PluginIC2 extends ForestryPlugin {
 		}
 	}
 
+	@Override
 	@Optional.Method(modid = "IC2")
 	protected void registerRecipes() {
 
 		if (rubber != null) {
 			for (Object rubberOreDict : RecipeUtil.getOreDictRecipeEquivalents(rubber)) {
-				RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), ForestryItem.tubes.getItemStack(4, 8),
-						new Object[]{" X ", "#X#", "XXX", '#', Items.redstone, 'X', rubberOreDict});
+				RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500),
+						ForestryItem.tubes.getItemStack(4, 8),
+						new Object[] { " X ", "#X#", "XXX", '#', "dustRedstone", 'X', rubberOreDict });
 			}
 		}
 
-		if (plantBall != null && compressedPlantBall != null) {
-			RecipeUtil.injectLeveledRecipe(plantBall, GameMode.getGameMode().getIntegerSetting("fermenter.yield.wheat") * 4, Fluids.BIOMASS);
-			RecipeUtil.injectLeveledRecipe(compressedPlantBall, GameMode.getGameMode().getIntegerSetting("fermenter.yield.wheat") * 5, Fluids.BIOMASS);
-		} else {
-			Proxies.log.fine("No IC2 plantballs found.");
+		if (plantBall != null) {
+			RecipeUtil.injectLeveledRecipe(plantBall,
+					GameMode.getGameMode().getIntegerSetting("fermenter.yield.wheat") * 4, Fluids.BIOMASS);
+		}
+		if (compressedPlantBall != null) {
+			RecipeUtil.injectLeveledRecipe(compressedPlantBall,
+					GameMode.getGameMode().getIntegerSetting("fermenter.yield.wheat") * 5, Fluids.BIOMASS);
 		}
 
 		if (resin != null) {
-			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.propolis.getItemStack(), resin);
+			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.propolis.getItemStack(),
+					ImmutableMap.of(resin, 1.0f));
 		} else {
 			Proxies.log.fine("Missing IC2 resin, skipping centrifuge recipe for propolis to resin.");
 		}
 
 		if (rubbersapling != null) {
-			RecipeUtil.injectLeveledRecipe(rubbersapling, GameMode.getGameMode().getIntegerSetting("fermenter.yield.sapling"), Fluids.BIOMASS);
+			RecipeUtil.injectLeveledRecipe(rubbersapling,
+					GameMode.getGameMode().getIntegerSetting("fermenter.yield.sapling"), Fluids.BIOMASS);
 		} else {
-			Proxies.log.fine("Missing IC2 rubber sapling, skipping fermenter recipe for converting rubber sapling to biomass.");
+			Proxies.log.fine(
+					"Missing IC2 rubber sapling, skipping fermenter recipe for converting rubber sapling to biomass.");
 		}
 
 		if (rubbersapling != null && resin != null) {
-			String saplingName = GameData.getBlockRegistry().getNameForObject(StackUtils.getBlock(rubbersapling));
-			String resinName = GameData.getItemRegistry().getNameForObject(resin.getItem());
-			String imc = String.format("farmArboreal@%s.%s.%s.%s",
-					saplingName, rubbersapling.getItemDamage(),
+			String saplingName = GameData.getBlockRegistry().getNameForObject(StackUtils.getBlock(rubbersapling))
+					.toString();
+			String resinName = GameData.getItemRegistry().getNameForObject(resin.getItem()).toString();
+			String imc = String.format("farmArboreal@%s.%s.%s.%s", saplingName, rubbersapling.getItemDamage(),
 					resinName, resin.getItemDamage());
 			Proxies.log.finest("Sending IMC '%s'.", imc);
 			FMLInterModComms.sendMessage(Defaults.MOD, "add-farmable-sapling", imc);
 		}
 
+		FluidStack biogas = FluidRegistry.getFluidStack("ic2biogas", 1000);
+		if (biogas != null && PluginManager.Module.ENERGY.isEnabled()) {
+			FuelManager.bronzeEngineFuel.put(biogas.getFluid(),
+					new EngineBronzeFuel(Fluids.BIOMASS.getFluid(), Defaults.ENGINE_FUEL_VALUE_BIOMASS,
+							(int) ((Defaults.ENGINE_CYCLE_DURATION_BIOMASS
+									* GameMode.getGameMode().getFloatSetting("fuel.biomass.biogas"))),
+							1));
+		}
 		if (lavaCell != null) {
 			LiquidHelper.injectTinContainer(Fluids.LAVA, Defaults.BUCKET_VOLUME, lavaCell, emptyCell);
 		}
@@ -314,17 +304,28 @@ public class PluginIC2 extends ForestryPlugin {
 
 			ItemStack bogEarthCan = GameMode.getGameMode().getStackSetting("recipe.output.bogearth.can");
 			if (bogEarthCan.stackSize > 0) {
-				Proxies.common.addRecipe(bogEarthCan, "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', waterCell, 'Y', Blocks.sand);
+				Proxies.common.addRecipe(bogEarthCan, "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', waterCell, 'Y',
+						"sand");
 			}
 		}
 
 		ICircuitLayout layout = ChipsetManager.circuitRegistry.getLayout("forestry.engine.tin");
 
 		// / Solder Manager
-		ChipsetManager.solderManager.addRecipe(layout, ForestryItem.tubes.getItemStack(1, 0), Circuit.energyElectricChoke1);
-		ChipsetManager.solderManager.addRecipe(layout, ForestryItem.tubes.getItemStack(1, 1), Circuit.energyElectricBoost1);
-		ChipsetManager.solderManager.addRecipe(layout, ForestryItem.tubes.getItemStack(1, 2), Circuit.energyElectricBoost2);
-		ChipsetManager.solderManager.addRecipe(layout, ForestryItem.tubes.getItemStack(1, 3), Circuit.energyElectricEfficiency1);
+		ChipsetManager.solderManager.addRecipe(layout, ForestryItem.tubes.getItemStack(1, 0),
+				Circuit.energyElectricChoke1);
+		ChipsetManager.solderManager.addRecipe(layout, ForestryItem.tubes.getItemStack(1, 1),
+				Circuit.energyElectricBoost1);
+		ChipsetManager.solderManager.addRecipe(layout, ForestryItem.tubes.getItemStack(1, 2),
+				Circuit.energyElectricBoost2);
+		ChipsetManager.solderManager.addRecipe(layout, ForestryItem.tubes.getItemStack(1, 3),
+				Circuit.energyElectricEfficiency1);
+
+		if (PluginManager.Module.FARMING.isEnabled() && resin != null && rubberwood != null) {
+			ICircuitLayout layoutManual = ChipsetManager.circuitRegistry.getLayout("forestry.farms.manual");
+			ChipsetManager.solderManager.addRecipe(layoutManual, ForestryItem.tubes.getItemStack(1, 8),
+					Circuit.farmRubberManual);
+		}
 	}
 
 }

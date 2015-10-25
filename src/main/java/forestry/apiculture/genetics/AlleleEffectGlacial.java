@@ -12,8 +12,8 @@ package forestry.apiculture.genetics;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
 
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
@@ -24,51 +24,45 @@ import forestry.core.vect.Vect;
 
 public class AlleleEffectGlacial extends AlleleEffectThrottled {
 
-	public AlleleEffectGlacial(String uid) {
-		super(uid, "glacial", false, 200, true, false);
+	public AlleleEffectGlacial() {
+		super("glacial", false, 200, true, false);
 	}
 
 	@Override
-	public IEffectData doEffect(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
+	public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
 
 		World world = housing.getWorld();
-
-		if (isHalted(storedData, housing)) {
-			return storedData;
-		}
-
-		EnumTemperature temp = EnumTemperature.getFromValue(BiomeGenBase.getBiome(housing.getBiomeId()).temperature);
+		EnumTemperature temp = housing.getTemperature();
 
 		switch (temp) {
-			case HELLISH:
-			case HOT:
-			case WARM:
-				return storedData;
-			default:
+		case HELLISH:
+		case HOT:
+		case WARM:
+			return storedData;
+		default:
 		}
 
 		int[] areaAr = genome.getTerritory();
-		Vect area = new Vect(areaAr[0], areaAr[1], areaAr[2]);
-		Vect offset = new Vect(-Math.round(area.x / 2), -Math.round(area.y / 2), -Math.round(area.z / 2));
+		Vect area = new Vect(areaAr);
+		Vect offset = area.multiply(-1 / 2.0f);
+		Vect housingCoords = new Vect(housing.getCoordinates());
 
 		for (int i = 0; i < 10; i++) {
 
-			Vect randomPos = new Vect(world.rand.nextInt(area.x), world.rand.nextInt(area.y), world.rand.nextInt(area.z));
-
-			Vect posBlock = randomPos.add(new Vect(housing.getXCoord(), housing.getYCoord(), housing.getZCoord()));
-			posBlock = posBlock.add(offset);
+			Vect randomPos = Vect.getRandomPositionInArea(world.rand, area);
+			Vect posBlock = Vect.add(randomPos, housingCoords, offset);
 
 			// Freeze water
-			Block block = world.getBlock(posBlock.x, posBlock.y, posBlock.z);
+			Block block = world.getBlockState(posBlock.getPos()).getBlock();
 			if (block != Blocks.water) {
 				continue;
 			}
 
-			if (!world.isAirBlock(posBlock.x, posBlock.y + 1, posBlock.z)) {
+			if (!world.isAirBlock(new BlockPos(posBlock.getX(), posBlock.getY() + 1, posBlock.getZ()))) {
 				continue;
 			}
 
-			Proxies.common.setBlockWithNotify(world, posBlock.x, posBlock.y, posBlock.z, Blocks.ice);
+			Proxies.common.setBlockStateWithNotify(world, posBlock.getPos(), Blocks.ice);
 		}
 
 		return storedData;

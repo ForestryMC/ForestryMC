@@ -26,7 +26,8 @@ import forestry.plugins.PluginManager;
 import forestry.plugins.PluginManager.Stage;
 
 /**
- * Allows direct access to Forestry's blocks. Will be populated during BaseMod.load().
+ * Allows direct access to Forestry's blocks. Will be populated during
+ * BaseMod.load().
  *
  * All of this stuff is metadata sensitive which is not reflected here!
  *
@@ -43,56 +44,15 @@ public enum ForestryBlock {
 	/**
 	 * 0 - Apatite Ore 1 - Copper Ore 2 - Tin Ore
 	 */
-	resources,
-	resourceStorage,
+	resources, resourceStorage,
 	/**
 	 * 0 - Legacy 1 - Forest Hive 2 - Meadows Hive
 	 */
-	beehives,
-	mushroom,
-	candle,
-	stump,
-	glass,
-	planks1,
-	planks2,
-	fireproofPlanks1,
-	fireproofPlanks2,
-	slabs1,
-	slabs2,
-	slabs3,
-	slabs4,
-	log1,
-	log2,
-	log3,
-	log4,
-	log5,
-	log6,
-	log7,
-	log8,
-	fireproofLog1,
-	fireproofLog2,
-	fireproofLog3,
-	fireproofLog4,
-	fireproofLog5,
-	fireproofLog6,
-	fireproofLog7,
-	fireproofLog8,
-	fences1,
-	fences2,
-	stairs,
-	saplingGE,
-	leaves,
-	pods,
-	arboriculture,
-	alveary,
-	farm,
-	core,
-	apiculture,
-	mail,
-	engine,
-	factoryTESR,
-	factoryPlain,
-	lepidopterology;
+	beehives, mushroom, candle, stump,
+	// wood items
+	planks, slabs, logs, fences, stairs, planksFireproof, slabsFireproof, logsFireproof, fencesFireproof, stairsFireproof,
+	// trees
+	saplingGE, leaves, pods, arboriculture, alveary, farm, core, apiculture, apicultureChest, mail, engine, factoryTESR, factoryPlain, lepidopterology;
 	private Block block;
 
 	public void registerBlock(Block block, Class<? extends ItemBlock> itemClass, String name) {
@@ -143,7 +103,7 @@ public enum ForestryBlock {
 		return new ItemStack(block, qty, meta);
 	}
 
-	public boolean setBlock(World world, BlockPos pos, int meta, int flag) {
-		return world.setBlockState(pos, block.getStateFromMeta(meta), flag);
+	public boolean setBlock(World world, BlockPos pos, int meta) {
+		return world.setBlockState(pos, block.getStateFromMeta(meta), Defaults.FLAG_BLOCK_SYNCH_AND_UPDATE);
 	}
 }

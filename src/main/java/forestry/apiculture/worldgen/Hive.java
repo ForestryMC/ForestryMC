@@ -79,7 +79,7 @@ public final class Hive {
 		return hiveDescription.getHiveGen().canReplace(world, pos);
 	}
 
-	public BlockPos getYForHive(World world, BlockPos pos) {
+	public int getYForHive(World world, BlockPos pos) {
 		return hiveDescription.getHiveGen().getYForHive(world, pos);
 	}
 }

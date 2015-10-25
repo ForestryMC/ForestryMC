@@ -11,18 +11,20 @@
 package forestry.core.gui;
 
 import java.awt.Color;
+import java.io.IOException;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
@@ -33,16 +35,23 @@ import net.minecraftforge.fml.common.Optional;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import forestry.api.core.IErrorLogicSource;
+import forestry.api.core.IErrorSource;
+import forestry.api.core.sprite.ISprite;
 import forestry.core.config.Config;
 import forestry.core.gadgets.TileForestry;
+import forestry.core.gui.ledgers.ClimateLedger;
+import forestry.core.gui.ledgers.HintLedger;
+import forestry.core.gui.ledgers.LedgerManager;
+import forestry.core.gui.ledgers.OwnerLedger;
+import forestry.core.gui.ledgers.PowerLedger;
 import forestry.core.gui.tooltips.IToolTipProvider;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.tooltips.ToolTipLine;
 import forestry.core.gui.widgets.Widget;
+import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.interfaces.IClimatised;
-import forestry.core.interfaces.IErrorSource;
 import forestry.core.interfaces.IHintSource;
-import forestry.core.interfaces.IOwnable;
 import forestry.core.interfaces.IPowerHandler;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.FontColour;
@@ -52,68 +61,62 @@ import codechicken.nei.api.INEIGuiHandler;
 import codechicken.nei.api.TaggedInventoryArea;
 
 @Optional.Interface(iface = "codechicken.nei.api.INEIGuiHandler", modid = "NotEnoughItems")
-public abstract class GuiForestry<T extends TileForestry> extends GuiContainer implements INEIGuiHandler {
+public abstract class GuiForestry<C extends Container, I extends IInventory> extends GuiContainer
+		implements INEIGuiHandler {
+	protected static final int LINE_HEIGHT = 12;
 
-	/* WIDGETS */
 	protected final WidgetManager widgetManager;
-	/* LEDGERS */
 	protected final LedgerManager ledgerManager;
-	protected final T tile;
+	protected final I inventory;
+	protected final C container;
 	protected final FontColour fontColor;
 	public final ResourceLocation textureFile;
 
-	public GuiForestry(String texture, Container container) {
-		this(new ResourceLocation("forestry", texture), container, null);
-	}
-
-	public GuiForestry(String texture, Container container, Object inventory) {
+	protected GuiForestry(String texture, C container, I inventory) {
 		this(new ResourceLocation("forestry", texture), container, inventory);
 	}
 
-	public GuiForestry(ResourceLocation texture, Container container) {
-		this(texture, container, null);
-	}
-
-	@SuppressWarnings("unchecked")
-	public GuiForestry(ResourceLocation texture, Container container, Object inventory) {
+	protected GuiForestry(ResourceLocation texture, C container, I inventory) {
 		super(container);
 		this.widgetManager = new WidgetManager(this);
 		this.ledgerManager = new LedgerManager(this);
 
 		this.textureFile = texture;
-		this.inventorySlots = container;
 
-		if (inventory instanceof TileForestry) {
-			this.tile = (T) inventory;
-		} else {
-			this.tile = null;
-		}
+		this.inventory = inventory;
+		this.container = container;
 
 		fontColor = new FontColour(Proxies.common.getSelectedTexturePack(Proxies.common.getClientInstance()));
-		initLedgers(inventory);
+		initLedgers();
 	}
 
 	/* LEDGERS */
-	protected void initLedgers(Object inventory) {
+	protected void initLedgers() {
 
-		if (inventory instanceof IErrorSource && ((IErrorSource) inventory).throwsErrors()) {
-			ledgerManager.add(new ErrorLedger(ledgerManager, (IErrorSource) inventory));
+		if (inventory instanceof IErrorSource) {
+			ledgerManager.add((IErrorSource) inventory);
 		}
 
-		if (inventory instanceof IClimatised && ((IClimatised) inventory).isClimatized()) {
+		if (inventory instanceof IErrorLogicSource) {
+			IErrorLogicSource errorLogicSource = (IErrorLogicSource) inventory;
+			ledgerManager.add(errorLogicSource.getErrorLogic());
+		}
+
+		if (inventory instanceof IClimatised) {
 			ledgerManager.add(new ClimateLedger(ledgerManager, (IClimatised) inventory));
 		}
 
-		if (!Config.disableEnergyStat && inventory instanceof IPowerHandler && ((IPowerHandler) inventory).getEnergyManager().getMaxEnergyStored() > 0) {
+		if (Config.enableEnergyStat && inventory instanceof IPowerHandler
+				&& ((IPowerHandler) inventory).getEnergyManager().getMaxEnergyStored() > 0) {
 			ledgerManager.add(new PowerLedger(ledgerManager, (IPowerHandler) inventory));
 		}
 
-		if (!Config.disableHints && inventory instanceof IHintSource && ((IHintSource) inventory).hasHints()) {
+		if (Config.enableHints && inventory instanceof IHintSource && ((IHintSource) inventory).hasHints()) {
 			ledgerManager.add(new HintLedger(ledgerManager, (IHintSource) inventory));
 		}
 
-		if (inventory instanceof IOwnable && ((IOwnable) inventory).isOwnable()) {
-			ledgerManager.add(new OwnerLedger(ledgerManager, (IOwnable) inventory));
+		if (inventory instanceof TileForestry) {
+			ledgerManager.add(new OwnerLedger(ledgerManager, (TileForestry) inventory));
 		}
 
 	}
@@ -123,16 +126,10 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 	protected int column1;
 	protected int column2;
 	private int line;
-	protected float factor = 0.75f;
-
-	protected final void setFactor(float factor) {
-		this.factor = factor;
-	}
 
 	protected final void startPage() {
-		line = 12;
+		line = LINE_HEIGHT;
 		GL11.glPushMatrix();
-		GL11.glScalef(factor, factor, factor);
 	}
 
 	protected final void startPage(int column0, int column1, int column2) {
@@ -144,20 +141,20 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 		startPage();
 	}
 
-	protected final int adjustToFactor(int fixed) {
-		return (int) (fixed * (1 / factor));
-	}
-
 	protected final int getLineY() {
 		return line;
 	}
 
 	protected final void newLine() {
-		line += 12 * factor;
+		line += LINE_HEIGHT;
+	}
+
+	protected final void newLineCompressed() {
+		line += (LINE_HEIGHT - 2);
 	}
 
 	protected final void newLine(int lineHeight) {
-		line += lineHeight * factor;
+		line += lineHeight;
 	}
 
 	protected final void endPage() {
@@ -168,7 +165,6 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 		drawLine(text0, column0, colour0);
 		drawLine(text1, column1, colour1);
 		drawLine(text2, column2, colour2);
-		newLine();
 	}
 
 	protected final void drawLine(String text, int x) {
@@ -184,16 +180,16 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 	}
 
 	protected final void drawCenteredLine(String text, int x, int width, int color) {
-		fontRendererObj.drawString(text, (int) ((guiLeft + x) * (1 / factor)) + (adjustToFactor(width) - fontRendererObj.getStringWidth(text)) / 2,
-				(int) ((guiTop + line) * (1 / factor)), color);
+		fontRendererObj.drawString(text, guiLeft + x + (width - fontRendererObj.getStringWidth(text)) / 2,
+				guiTop + line, color);
 	}
 
 	protected final void drawLine(String text, int x, int color) {
-		fontRendererObj.drawString(text, (int) ((guiLeft + x) * (1 / factor)), (int) ((guiTop + line) * (1 / factor)), color);
+		fontRendererObj.drawString(text, guiLeft + x, guiTop + line, color);
 	}
 
 	protected final void drawSplitLine(String text, int x, int maxWidth, int color) {
-		fontRendererObj.drawSplitString(text, (int) ((guiLeft + x) * (1 / factor)), (int) ((guiTop + line) * (1 / factor)), (int) (maxWidth * (1 / factor)), color);
+		fontRendererObj.drawSplitString(text, guiLeft + x, guiTop + line, maxWidth, color);
 	}
 
 	/* CORE GUI HANDLING */
@@ -206,7 +202,7 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 	}
 
 	@Override
-	protected void mouseClicked(int xPos, int yPos, int mouseButton) {
+	protected void mouseClicked(int xPos, int yPos, int mouseButton) throws IOException {
 		super.mouseClicked(xPos, yPos, mouseButton);
 
 		// / Handle ledger clicks
@@ -215,8 +211,8 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 	}
 
 	@Override
-	protected void mouseMovedOrUp(int mouseX, int mouseY, int eventType) {
-		super.mouseMovedOrUp(mouseX, mouseY, eventType);
+	protected void mouseReleased(int mouseX, int mouseY, int eventType) {
+		super.mouseReleased(mouseX, mouseY, eventType);
 
 		widgetManager.handleMouseRelease(mouseX, mouseY, eventType);
 	}
@@ -229,7 +225,7 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 		super.mouseClickMove(mouseX, mouseY, mouseButton, time);
 	}
 
-	public Slot getSlotAtPosition(int par1, int par2) {
+	protected Slot getSlotAtPosition(int par1, int par2) {
 		for (int k = 0; k < this.inventorySlots.inventorySlots.size(); ++k) {
 			Slot slot = (Slot) this.inventorySlots.inventorySlots.get(k);
 
@@ -241,11 +237,11 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 		return null;
 	}
 
-	public boolean isMouseOverSlot(Slot par1Slot, int par2, int par3) {
-		return this.func_146978_c(par1Slot.xDisplayPosition, par1Slot.yDisplayPosition, 16, 16, par2, par3);
+	private boolean isMouseOverSlot(Slot par1Slot, int par2, int par3) {
+		return this.isPointInRegion(par1Slot.xDisplayPosition, par1Slot.yDisplayPosition, 16, 16, par2, par3);
 	}
 
-	public void drawToolTips(ToolTip toolTips, int mouseX, int mouseY) {
+	private void drawToolTips(ToolTip toolTips, int mouseX, int mouseY) {
 		if (toolTips == null) {
 			return;
 		}
@@ -277,19 +273,23 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 		Color backgroundColor = new Color(16, 0, 16, 240);
 		int backgroundColorInt = backgroundColor.getRGB();
 		this.drawGradientRect(x - 3, y - 4, x + length + 2, y - 3, backgroundColorInt, backgroundColorInt);
-		this.drawGradientRect(x - 3, y + height + 1, x + length + 2, y + height + 2, backgroundColorInt, backgroundColorInt);
+		this.drawGradientRect(x - 3, y + height + 1, x + length + 2, y + height + 2, backgroundColorInt,
+				backgroundColorInt);
 		this.drawGradientRect(x - 3, y - 3, x + length + 2, y + height + 1, backgroundColorInt, backgroundColorInt);
 		this.drawGradientRect(x - 4, y - 3, x - 3, y + height + 1, backgroundColorInt, backgroundColorInt);
-		this.drawGradientRect(x + length + 2, y - 3, x + length + 3, y + height + 1, backgroundColorInt, backgroundColorInt);
+		this.drawGradientRect(x + length + 2, y - 3, x + length + 3, y + height + 1, backgroundColorInt,
+				backgroundColorInt);
 
 		Color borderColorTop = new Color(80, 0, 255, 80);
 		int borderColorTopInt = borderColorTop.getRGB();
 		Color borderColorBottom = new Color((borderColorTopInt & 0xfefefe) >> 1 | borderColorTopInt & -0x1000000, true);
 		int borderColorBottomInt = borderColorBottom.getRGB();
 		this.drawGradientRect(x - 3, y - 3 + 1, x - 3 + 1, y + height, borderColorTopInt, borderColorBottomInt);
-		this.drawGradientRect(x + length + 1, y - 3 + 1, x + length + 2, y + height, borderColorTopInt, borderColorBottomInt);
+		this.drawGradientRect(x + length + 1, y - 3 + 1, x + length + 2, y + height, borderColorTopInt,
+				borderColorBottomInt);
 		this.drawGradientRect(x - 3, y - 3, x + length + 2, y - 3 + 1, borderColorTopInt, borderColorTopInt);
-		this.drawGradientRect(x - 3, y + height, x + length + 2, y + height + 1, borderColorBottomInt, borderColorBottomInt);
+		this.drawGradientRect(x - 3, y + height, x + length + 2, y + height + 1, borderColorBottomInt,
+				borderColorBottomInt);
 
 		boolean firstLine = true;
 		for (ToolTipLine tip : toolTips) {
@@ -328,7 +328,7 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 		InventoryPlayer playerInv = mc.thePlayer.inventory;
 
 		if (playerInv.getItemStack() == null) {
-			drawToolTips(widgetManager.widgets, mouseX, mouseY);
+			drawToolTips(widgetManager.getWidgets(), mouseX, mouseY);
 			drawToolTips(buttonList, mouseX, mouseY);
 			drawToolTips(inventorySlots.inventorySlots, mouseX, mouseY);
 		}
@@ -404,10 +404,6 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 		this.zLevel = level;
 	}
 
-	public static RenderItem getItemRenderer() {
-		return itemRender;
-	}
-
 	public int getSizeX() {
 		return xSize;
 	}
@@ -422,6 +418,10 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 
 	public int getGuiTop() {
 		return guiTop;
+	}
+
+	public FontColour getFontColor() {
+		return fontColor;
 	}
 
 	@Override
@@ -446,8 +446,8 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 		if (font == null) {
 			font = fontRendererObj;
 		}
-		itemRender.renderItemAndEffectIntoGUI(font, this.mc.getTextureManager(), stack, xPos, yPos);
-		itemRender.renderItemOverlayIntoGUI(font, this.mc.getTextureManager(), stack, xPos, yPos);
+		itemRender.renderItemAndEffectIntoGUI(stack, xPos, yPos);
+		itemRender.renderItemOverlayIntoGUI(font, stack, xPos, yPos, null);
 		this.zLevel = 0.0F;
 		itemRender.zLevel = 0.0F;
 
@@ -470,9 +470,11 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 
 		@Override
 		public ToolTip getToolTip() {
-			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+			EntityPlayer player = Proxies.common.getPlayer();
 			ToolTip tip = new ToolTip();
-			tip.add(itemStack.getTooltip(player, false));
+			if (itemStack != null) {
+				tip.add(itemStack.getTooltip(player, false));
+			}
 			return tip;
 		}
 	}
@@ -487,13 +489,13 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 	@Override
 	@Optional.Method(modid = "NotEnoughItems")
 	public Iterable<Integer> getItemSpawnSlots(GuiContainer gui, ItemStack item) {
-		return null;
+		return Collections.emptyList();
 	}
 
 	@Override
 	@Optional.Method(modid = "NotEnoughItems")
 	public List<TaggedInventoryArea> getInventoryAreas(GuiContainer gui) {
-		return null;
+		return Collections.emptyList();
 	}
 
 	@Override
@@ -510,5 +512,13 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 		} else {
 			return false;
 		}
+	}
+
+	public void drawTexturedModelRect(int i, int j, ISprite sprite, int k, int l) {
+		drawTexturedModalRect(i, j, sprite.getSprite(), k, l);
+	}
+
+	public void drawTexturedModelRect(int i, int j, TextureAtlasSprite sprite, int k, int l) {
+		drawTexturedModalRect(i, j, sprite, k, l);
 	}
 }

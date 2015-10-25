@@ -10,59 +10,66 @@
  ******************************************************************************/
 package forestry.core.network;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 public class PacketCoordinates extends ForestryPacket implements ILocatedPacket {
 
-	public int posX;
-	public int posY;
-	public int posZ;
+	private BlockPos pos;
 
-	public PacketCoordinates() {
+	public PacketCoordinates(DataInputStreamForestry data) throws IOException {
+		super(data);
 	}
 
-	public PacketCoordinates(int id, ChunkCoordinates coordinates) {
-		this(id, coordinates.posX, coordinates.posY, coordinates.posZ);
+	public PacketCoordinates(PacketId id, TileEntity tileEntity) {
+		this(id, tileEntity.getPos());
 	}
 
-	public PacketCoordinates(int id, int posX, int posY, int posZ) {
+	public PacketCoordinates(PacketId id, BlockPos pos) {
 		super(id);
-		this.posX = posX;
-		this.posY = posY;
-		this.posZ = posZ;
+		this.pos = pos;
 	}
 
 	@Override
-	public void writeData(DataOutputStream data) throws IOException {
-
-		data.writeInt(posX);
-		data.writeInt(posY);
-		data.writeInt(posZ);
-
+	protected void writeData(DataOutputStreamForestry data) throws IOException {
+		data.writeVarInt(pos.getX());
+		data.writeVarInt(pos.getY());
+		data.writeVarInt(pos.getZ());
 	}
 
 	@Override
-	public void readData(DataInputStream data) throws IOException {
-
-		posX = data.readInt();
-		posY = data.readInt();
-		posZ = data.readInt();
-
-	}
-
-	public ChunkCoordinates getCoordinates() {
-		return new ChunkCoordinates(posX, posY, posZ);
+	protected void readData(DataInputStreamForestry data) throws IOException {
+		int posX = data.readVarInt();
+		int posY = data.readVarInt();
+		int posZ = data.readVarInt();
+		pos = new BlockPos(posX, posY, posZ);
 	}
 
 	@Override
-	public TileEntity getTarget(World world) {
-		return world.getTileEntity(posX, posY, posZ);
+	public final BlockPos getPos() {
+		return pos;
 	}
 
+	@Override
+	public final int getPosX() {
+		return pos.getX();
+	}
+
+	@Override
+	public final int getPosY() {
+		return pos.getY();
+	}
+
+	@Override
+	public final int getPosZ() {
+		return pos.getZ();
+	}
+
+	@Override
+	public final TileEntity getTarget(World world) {
+		return world.getTileEntity(pos);
+	}
 }

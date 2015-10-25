@@ -97,8 +97,13 @@ public class ProxyLog {
 	}
 
 	/* GENERIC */
-	public void log(Level logLevel, String message, Object... params) {
-		LogManager.getLogger(Defaults.MOD).log(logLevel, new MessageFormatMessage(String.format(message, params), params));
+	private void log(Level logLevel, String message) {
+		LogManager.getLogger(Defaults.MOD).log(logLevel, message);
+	}
+
+	private void log(Level logLevel, String message, Object... params) {
+		LogManager.getLogger(Defaults.MOD).log(logLevel,
+				new MessageFormatMessage(String.format(message, params), params));
 	}
 
 	/* EXCEPTIONS */
@@ -127,7 +132,8 @@ public class ProxyLog {
 
 		if (classFile != null) {
 			msg = new StringBuilder(mod);
-			msg.append(" API error: ").append(classFile.getSimpleName()).append(" is loaded from ").append(classFile.getProtectionDomain().getCodeSource().getLocation());
+			msg.append(" API error: ").append(classFile.getSimpleName()).append(" is loaded from ")
+					.append(classFile.getProtectionDomain().getCodeSource().getLocation());
 			log(Level.ERROR, msg.toString());
 		}
 	}

@@ -10,36 +10,33 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
+import net.minecraft.world.World;
+
 import forestry.api.world.ITreeGenData;
 
 public class WorldGenMaple extends WorldGenTree {
 
 	public WorldGenMaple(ITreeGenData tree) {
-		super(tree);
+		super(tree, 7, 5);
 	}
 
 	@Override
-	public void generate() {
-		generateTreeTrunk(height, girth);
+	public void generate(World world) {
+		generateTreeTrunk(world, height, girth);
 
 		int leafSpawn = height + 1;
 		float diameterchange = (float) 1 / height;
 		int leafSpawned = 2;
 
-		generateAdjustedCylinder(leafSpawn--, 0, 1, leaf);
-		generateAdjustedCylinder(leafSpawn--, 1, 1, leaf);
+		generateAdjustedCylinder(world, leafSpawn--, 0, 1, leaf);
+		generateAdjustedCylinder(world, leafSpawn--, 1, 1, leaf);
 
 		while (leafSpawn > 1) {
-			generateAdjustedCylinder(leafSpawn--, 3 * diameterchange * leafSpawned, 1, leaf);
-			generateAdjustedCylinder(leafSpawn--, 2 * diameterchange * leafSpawned, 1, leaf);
+			generateAdjustedCylinder(world, leafSpawn--, 3 * diameterchange * leafSpawned, 1, leaf);
+			generateAdjustedCylinder(world, leafSpawn--, 2 * diameterchange * leafSpawned, 1, leaf);
 			leafSpawned += 2;
 		}
 
 	}
 
-	@Override
-	public void preGenerate() {
-		height = determineHeight(7, 5);
-		girth = determineGirth(tree.getGirth(world, startX, startY, startZ));
-	}
 }

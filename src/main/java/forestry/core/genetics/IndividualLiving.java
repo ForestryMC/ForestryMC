@@ -18,16 +18,16 @@ import forestry.api.genetics.IIndividualLiving;
 
 public abstract class IndividualLiving extends Individual implements IIndividualLiving {
 
-	protected int health;
-	protected int maxHealth;
+	private int health;
+	private int maxHealth;
 
-	public IndividualLiving() {
+	protected IndividualLiving() {
 	}
-	
-	public IndividualLiving(int newHealth) {
+
+	protected IndividualLiving(int newHealth) {
 		health = maxHealth = newHealth;
 	}
-	
+
 	/* SAVING & LOADING */
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
@@ -61,6 +61,7 @@ public abstract class IndividualLiving extends Individual implements IIndividual
 	}
 
 	/* GENERATION */
+	@Override
 	public abstract IGenome getMate();
 
 	@Override
@@ -95,14 +96,12 @@ public abstract class IndividualLiving extends Individual implements IIndividual
 		if (world.rand.nextFloat() < ageModifier) {
 			decreaseHealth();
 		}
-
 	}
 
-	public void decreaseHealth() {
+	private void decreaseHealth() {
 		if (health > 0) {
 			health--;
 		}
 	}
-
 
 }

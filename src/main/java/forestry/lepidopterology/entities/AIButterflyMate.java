@@ -38,18 +38,20 @@ public class AIButterflyMate extends AIButterflyInteract {
 			return false;
 		}
 
-		return GeneticsUtil.canNurse(entity.getButterfly(), entity.worldObj, rest.posX, rest.posY, rest.posZ);
+		return GeneticsUtil.canNurse(entity.getButterfly(), entity.worldObj, rest);
 	}
 
 	@Override
 	public void updateTask() {
 		if (continueExecuting()) {
-			IPollinatable tile = GeneticsUtil.getOrCreatePollinatable(null, entity.worldObj, rest.posX, rest.posY, rest.posZ);
+			IPollinatable tile = GeneticsUtil.getOrCreatePollinatable(null, entity.worldObj, rest);
 			if (tile instanceof IButterflyNursery) {
 				IButterflyNursery nursery = (IButterflyNursery) tile;
 				if (nursery.canNurse(entity.getButterfly())) {
 					nursery.setCaterpillar(entity.getButterfly().spawnCaterpillar(nursery));
-					//				Proxies.log.finest("A butterfly '%s' laid an egg at %s/%s/%s.", entity.getButterfly().getIdent(), rest.posX, rest.posY, rest.posZ);
+					// Proxies.log.finest("A butterfly '%s' laid an egg at
+					// %s/%s/%s.", entity.getButterfly().getIdent(), rest.posX,
+					// rest.posY, rest.posZ);
 					if (entity.getRNG().nextFloat() < 1.0f / entity.getButterfly().getGenome().getFertility()) {
 						entity.setHealth(0);
 					}

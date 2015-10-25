@@ -10,12 +10,8 @@
  ******************************************************************************/
 package forestry.core.gadgets;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -23,37 +19,30 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import forestry.core.interfaces.IBlockRenderer;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
 
 public class MachineDefinition {
 
 	public final Class<? extends TileEntity> teClass;
 
-	public final String teIdent;
-	public Block block;
-	public final int meta;
+	private final String teIdent;
+	private Block block;
+	private final int meta;
+	private boolean legacy;
 
 	public final IBlockRenderer renderer;
 
 	/* CRAFTING */
 	public IRecipe[] recipes;
 
-	public MachineDefinition(int meta, String teIdent, Class<? extends TileEntity> teClass, IRecipe... recipes) {
-		this(meta, teIdent, teClass, null, recipes);
-	}
-
-	public MachineDefinition(int meta, String teIdent, Class<? extends TileEntity> teClass, IBlockRenderer renderer, IRecipe... recipes) {
+	public MachineDefinition(int meta, String teIdent, Class<? extends TileEntity> teClass, IBlockRenderer renderer,
+			IRecipe... recipes) {
 		this.meta = meta;
 		this.teIdent = teIdent;
 		this.teClass = teClass;
@@ -68,8 +57,26 @@ public class MachineDefinition {
 
 	}
 
+	public MachineDefinition(int meta, String teIdent, Class<? extends TileEntity> teClass, IRecipe... recipes) {
+		this(meta, teIdent, teClass, null, recipes);
+
+	}
+
+	public Block getBlock() {
+		return block;
+	}
+
+	public int getMeta() {
+		return meta;
+	}
+
 	public void setBlock(Block block) {
 		this.block = block;
+	}
+
+	public MachineDefinition setLegacy() {
+		legacy = true;
+		return this;
 	}
 
 	public void register() {
@@ -96,6 +103,10 @@ public class MachineDefinition {
 		GameRegistry.registerTileEntity(teClass, teIdent);
 	}
 
+	public String getTeIdent() {
+		return teIdent;
+	}
+
 	public TileEntity createMachine() {
 		try {
 			return teClass.getConstructor().newInstance();
@@ -104,41 +115,24 @@ public class MachineDefinition {
 		}
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void getSubBlocks(Item item, CreativeTabs tab, List list) {
+		if (legacy) {
+			return;
+		}
 		list.add(new ItemStack(item, 1, meta));
 	}
 
-	/* BLOCK DROPS */
-	public boolean handlesDrops() {
-		return false;
-	}
-
-	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
-		return new ArrayList<ItemStack>();
-	}
-
 	/* INTERACTION */
-	public boolean isSolidOnSide(IBlockAccess world, int x, int y, int z, int side) {
+	public boolean isSolidOnSide(IBlockAccess world, BlockPos pos, EnumFacing side) {
 		return true;
 	}
 
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float fXplayerClick, float fY, float fZ) {
+	public boolean onBlockActivated(World world, BlockPos pos, EntityPlayer player, EnumFacing side) {
 		return false;
 	}
 
-	public void onBlockAdded(World world, int x, int y, int z) {
-	}
-
-	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z) {
-		return true;
-	}
-
-	public boolean canConnectRedstone(IBlockAccess world, int x, int y, int z, int side) {
-		return false;
-	}
-
-	public boolean rotateBlock(World world, int x, int y, int z, ForgeDirection axis) {
+	public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis) {
 		return false;
 	}
 
@@ -156,52 +150,5 @@ public class MachineDefinition {
 		}
 
 		return this;
-	}
-
-	@SideOnly(Side.CLIENT)
-	private IIcon[] icons;
-
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister register) {
-		icons = new IIcon[8];
-
-		for (int i = 0; i < 8; i++) {
-			icons[i] = TextureManager.getInstance().registerTex(register, teIdent.replace("forestry.", "").toLowerCase(Locale.ENGLISH) + "." + faceMap[i]);
-		}
-	}
-
-	@SideOnly(Side.CLIENT)
-	public IIcon getBlockTextureFromSideAndMetadata(int side, int metadata) {
-		return icons[side];
-	}
-
-	/**
-	 * 0 - Bottom 1 - Top 2 - Back 3 - Front 4,5 - Sides, 7 - Reversed ?, 8 - Reversed ?
-	 */
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side, int metadata) {
-
-		TileEntity tile = world.getTileEntity(x, y, z);
-		if (!(tile instanceof TileForestry)) {
-			return getBlockTextureFromSideAndMetadata(side, metadata);
-		}
-
-		ForgeDirection dir = ((TileForestry) tile).getOrientation();
-		switch (dir) {
-			case WEST:
-				side = side == 2 ? 4 : side == 3 ? 5 : side == 4 ? 3 : side == 5 ? 2 : side == 0 ? 6 : 7;
-				break;
-			case EAST:
-				side = side == 2 ? 5 : side == 3 ? 4 : side == 4 ? 2 : side == 5 ? 3 : side == 0 ? 6 : 7;
-				break;
-			case SOUTH:
-				break;
-			case NORTH:
-				side = side == 2 ? 3 : side == 3 ? 2 : side == 4 ? 5 : side == 5 ? 4 : side;
-				break;
-			default:
-		}
-
-		return getBlockTextureFromSideAndMetadata(side, metadata);
 	}
 }

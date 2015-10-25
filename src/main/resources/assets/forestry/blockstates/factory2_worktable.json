@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "face=north": { "model": "forestry:factory2_worktable" },
+		"face=east": { "model": "forestry:factory2_worktable", "y": 90 },
+		"face=south": { "model": "forestry:factory2_worktable", "y": 180 },
+		"face=west": { "model": "forestry:factory2_worktable", "y": -90 }
+	}
+}

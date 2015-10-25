@@ -10,30 +10,18 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
+import net.minecraft.entity.player.InventoryPlayer;
 
-import forestry.apiculture.gadgets.TileAlvearyHygroregulator;
+import forestry.apiculture.multiblock.TileAlvearyHygroregulator;
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotFiltered;
 
-public class ContainerAlvearyHygroregulator extends ContainerLiquidTanks {
+public class ContainerAlvearyHygroregulator extends ContainerLiquidTanks<TileAlvearyHygroregulator> {
 
-	public ContainerAlvearyHygroregulator(IInventory playerInventory, TileAlvearyHygroregulator tile) {
-		super(tile);
+	public ContainerAlvearyHygroregulator(InventoryPlayer playerInventory, TileAlvearyHygroregulator tile) {
+		super(tile, playerInventory, 8, 84);
 
-		this.addSlotToContainer(new SlotFiltered(tile, TileAlvearyHygroregulator.SLOT_INPUT, 56, 38));
-
-		for (int i = 0; i < 3; ++i) {
-			for (int var4 = 0; var4 < 9; ++var4) {
-				this.addSlotToContainer(new Slot(playerInventory, var4 + i * 9 + 9, 8 + var4 * 18, 84 + i * 18));
-			}
-		}
-
-		for (int i = 0; i < 9; ++i) {
-			this.addSlotToContainer(new Slot(playerInventory, i, 8 + i * 18, 142));
-		}
-
+		this.addSlotToContainer(new SlotFiltered(tile, TileAlvearyHygroregulator.HygroInventory.SLOT_INPUT, 56, 38));
 	}
 
 }

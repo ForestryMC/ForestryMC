@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.gadgets;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Random;
 
@@ -19,36 +20,33 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.Packet;
+import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IChatComponent;
 import net.minecraft.util.MathHelper;
-import net.minecraft.world.World;
 
-import com.mojang.authlib.GameProfile;
-
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fml.common.Optional;
 
-import forestry.api.core.IErrorState;
-import forestry.core.EnumErrorCode;
-import forestry.core.config.Config;
-import forestry.core.config.Defaults;
-import forestry.core.interfaces.IErrorSource;
+import forestry.api.core.IErrorLogic;
+import forestry.api.core.IErrorLogicSource;
+import forestry.core.delegates.AccessHandler;
+import forestry.core.delegates.ErrorLogic;
+import forestry.core.interfaces.IAccessHandler;
 import forestry.core.interfaces.IFilterSlotDelegate;
-import forestry.core.interfaces.IRestrictedAccess;
+import forestry.core.interfaces.IRestrictedAccessTile;
+import forestry.core.interfaces.ITitled;
 import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
-import forestry.core.network.ForestryPacket;
-import forestry.core.network.INetworkedEntity;
-import forestry.core.network.PacketPayload;
-import forestry.core.network.PacketTileUpdate;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.IStreamable;
+import forestry.core.network.PacketTileStream;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.AdjacentTileCache;
 import forestry.core.utils.EnumAccess;
-import forestry.core.utils.PlayerUtil;
-import forestry.core.utils.Utils;
-import forestry.core.vect.Vect;
 
 import buildcraft.api.statements.IStatementContainer;
 import buildcraft.api.statements.ITriggerExternal;
@@ -56,16 +54,21 @@ import buildcraft.api.statements.ITriggerInternal;
 import buildcraft.api.statements.ITriggerProvider;
 
 @Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = "BuildCraftAPI|statements")
-public abstract class TileForestry extends TileEntity implements INetworkedEntity, IRestrictedAccess, IErrorSource, ITriggerProvider, ISidedInventory, IFilterSlotDelegate {
+public abstract class TileForestry extends TileEntity implements IStreamable, IErrorLogicSource, ITriggerProvider,
+		ISidedInventory, IFilterSlotDelegate, IRestrictedAccessTile, ITitled, IUpdatePlayerListBox {
 
-	private static Random rand = new Random();
+	private static final Random rand = new Random();
 
-	protected final AdjacentTileCache tileCache = new AdjacentTileCache(this);
-	protected boolean isInited = false;
+	private final AccessHandler accessHandler = new AccessHandler(this);
+	private final ErrorLogic errorHandler = new ErrorLogic();
+	private final AdjacentTileCache tileCache = new AdjacentTileCache(this);
 	private IInventoryAdapter inventory = FakeInventoryAdapter.instance();
-	private int tickCount = rand.nextInt(128);
 
-	public AdjacentTileCache getTileCache() {
+	private int tickCount = rand.nextInt(256);
+	private boolean needsNetworkUpdate = false;
+	private EnumFacing orientation = EnumFacing.WEST;
+
+	protected AdjacentTileCache getTileCache() {
 		return tileCache;
 	}
 
@@ -85,46 +88,50 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 		super.validate();
 	}
 
-	public Vect Coords() {
-		return new Vect(xCoord, yCoord, zCoord);
-	}
+	public void rotateAfterPlacement(EntityLivingBase entityLiving) {
 
-	public void openGui(EntityPlayer player) {
-	}
-
-	public void rotateAfterPlacement(World world, int x, int y, int z, EntityLivingBase entityliving, ItemStack stack) {
-
-		int l = MathHelper.floor_double(((entityliving.rotationYaw * 4F) / 360F) + 0.5D) & 3;
+		int l = MathHelper.floor_double(((entityLiving.rotationYaw * 4F) / 360F) + 0.5D) & 3;
 		if (l == 0) {
-			setOrientation(ForgeDirection.NORTH);
+			setOrientation(EnumFacing.NORTH);
 		}
 		if (l == 1) {
-			setOrientation(ForgeDirection.EAST);
+			setOrientation(EnumFacing.EAST);
 		}
 		if (l == 2) {
-			setOrientation(ForgeDirection.SOUTH);
+			setOrientation(EnumFacing.SOUTH);
 		}
 		if (l == 3) {
-			setOrientation(ForgeDirection.WEST);
+			setOrientation(EnumFacing.WEST);
 		}
 
 	}
 
 	// / UPDATING
 	@Override
-	public void updateEntity() {
+	public final void update() {
 		tickCount++;
-		if (!isInited) {
-			initialize();
-			isInited = true;
+
+		if (Proxies.common.isSimulating(worldObj)) {
+			updateServerSide();
+		} else {
+			updateClientSide();
+		}
+
+		if (needsNetworkUpdate) {
+			needsNetworkUpdate = false;
+			sendNetworkUpdate();
 		}
 	}
 
-	public final boolean updateOnInterval(int tickInterval) {
-		return tickCount % tickInterval == 0;
+	protected void updateClientSide() {
 	}
 
-	public abstract void initialize();
+	protected void updateServerSide() {
+	}
+
+	protected final boolean updateOnInterval(int tickInterval) {
+		return tickCount % tickInterval == 0;
+	}
 
 	// / SAVING & LOADING
 	@Override
@@ -132,67 +139,55 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 		super.readFromNBT(data);
 
 		inventory.readFromNBT(data);
-
-		if (data.hasKey("Access")) {
-			access = EnumAccess.values()[data.getInteger("Access")];
-		} else {
-			access = EnumAccess.SHARED;
-		}
-		if (data.hasKey("owner")) {
-			owner = NBTUtil.func_152459_a(data.getCompoundTag("owner"));
-		}
+		accessHandler.readFromNBT(data);
 
 		if (data.hasKey("Orientation")) {
-			orientation = ForgeDirection.values()[data.getInteger("Orientation")];
+			orientation = EnumFacing.values()[data.getInteger("Orientation")];
 		} else {
-			orientation = ForgeDirection.WEST;
+			orientation = EnumFacing.WEST;
 		}
-
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound data) {
 		super.writeToNBT(data);
 		inventory.writeToNBT(data);
-		data.setInteger("Access", access.ordinal());
-		if (this.owner != null) {
-			NBTTagCompound nbt = new NBTTagCompound();
-			NBTUtil.func_152460_a(nbt, owner);
-			data.setTag("owner", nbt);
-		}
-		if (orientation != null) {
-			data.setInteger("Orientation", orientation.ordinal());
-		}
-	}
-
-	// / SMP
-	@Override
-	public void sendNetworkUpdate() {
-		PacketTileUpdate packet = new PacketTileUpdate(this);
-		Proxies.net.sendNetworkPacket(packet, xCoord, yCoord, zCoord);
+		accessHandler.writeToNBT(data);
+		data.setInteger("Orientation", orientation.ordinal());
 	}
 
 	@Override
 	public Packet getDescriptionPacket() {
-		PacketTileUpdate packet = new PacketTileUpdate(this);
+		PacketTileStream packet = new PacketTileStream(this);
 		return packet.getPacket();
 	}
 
-	public abstract PacketPayload getPacketPayload();
-
-	public abstract void fromPacketPayload(PacketPayload payload);
+	/* INetworkedEntity */
+	protected final void sendNetworkUpdate() {
+		PacketTileStream packet = new PacketTileStream(this);
+		Proxies.net.sendNetworkPacket(packet, worldObj);
+	}
 
 	@Override
-	public void fromPacket(ForestryPacket packetRaw) {
-		PacketTileUpdate packet = (PacketTileUpdate) packetRaw;
-		if (orientation != packet.getOrientation()) {
-			orientation = packet.getOrientation();
-			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-		}
-		errorState = packet.getErrorState();
-		owner = packet.getOwner();
-		access = packet.getAccess();
-		fromPacketPayload(packet.payload);
+	public void writeData(DataOutputStreamForestry data) throws IOException {
+		data.writeByte(orientation.ordinal());
+	}
+
+	@Override
+	public void readData(DataInputStreamForestry data) throws IOException {
+		orientation = EnumFacing.getFront(data.readByte());
+	}
+
+	@Override
+	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
+		accessHandler.writeData(data);
+		errorHandler.writeData(data);
+	}
+
+	@Override
+	public void readGuiData(DataInputStreamForestry data) throws IOException {
+		accessHandler.readData(data);
+		errorHandler.readData(data);
 	}
 
 	public void onRemoval() {
@@ -207,143 +202,64 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 
 	@Optional.Method(modid = "BuildCraftAPI|statements")
 	@Override
-	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
+	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
 		return null;
 	}
 
 	// / REDSTONE INFO
-
-	/**
-	 * @return true if tile is activated by redstone current.
-	 */
-	public boolean isActivated() {
-		return worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
+	protected boolean isRedstoneActivated() {
+		return worldObj.isBlockIndirectlyGettingPowered(pos) > 0;
 	}
 
 	// / ORIENTATION
-	private ForgeDirection orientation = ForgeDirection.WEST;
-
-	public ForgeDirection getOrientation() {
+	public EnumFacing getOrientation() {
 		return this.orientation;
 	}
 
-	public void setOrientation(ForgeDirection orientation) {
+	public void setOrientation(EnumFacing orientation) {
+		if (orientation == null) {
+			throw new NullPointerException("Orientation cannot be null");
+		}
 		if (this.orientation == orientation) {
 			return;
 		}
 		this.orientation = orientation;
-		this.sendNetworkUpdate();
+		this.setNeedsNetworkUpdate();
 	}
 
-	// / ERROR HANDLING
-	public IErrorState errorState = EnumErrorCode.OK;
-
-	public void setErrorState(IErrorState state) {
-		if (this.errorState == state) {
-			return;
-		}
-		this.errorState = state;
-		this.sendNetworkUpdate();
+	protected final void setNeedsNetworkUpdate() {
+		needsNetworkUpdate = true;
 	}
 
 	@Override
-	public boolean throwsErrors() {
-		return true;
+	public final IErrorLogic getErrorLogic() {
+		return errorHandler;
 	}
 
 	@Override
-	public IErrorState getErrorState() {
-		return errorState;
-	}
-
-	// / OWNERSHIP
-	private GameProfile owner = null;
-	private EnumAccess access = EnumAccess.SHARED;
-
-	@Override
-	public final boolean allowsRemoval(EntityPlayer player) {
-		return Config.disablePermissions || !isOwnable() || !isOwned() || isOwner(player) || Proxies.common.isOp(player);
+	public final IAccessHandler getAccessHandler() {
+		return accessHandler;
 	}
 
 	@Override
-	public final boolean allowsAlteration(EntityPlayer player) {
-		return allowsRemoval(player) || getAccess() == EnumAccess.SHARED;
-	}
-
-	@Override
-	public final boolean allowsViewing(EntityPlayer player) {
-		return allowsAlteration(player) || getAccess() == EnumAccess.VIEWABLE;
-	}
-
-	private boolean allowsPipeConnections() {
-		return access == EnumAccess.SHARED;
-	}
-
-	@Override
-	public EnumAccess getAccess() {
-		return access;
-	}
-
-	@Override
-	public boolean isOwnable() {
-		return false;
-	}
-
-	@Override
-	public boolean isOwned() {
-		return owner != null;
-	}
-
-	@Override
-	public GameProfile getOwnerProfile() {
-		return owner;
-	}
-
-	@Override
-	public void setOwner(EntityPlayer player) {
-		this.owner = player.getGameProfile();
-	}
-
-	@Override
-	public boolean isOwner(EntityPlayer player) {
-		if (owner != null && player != null) {
-			return PlayerUtil.isSameGameProfile(owner, player.getGameProfile());
-		}
-		return false;
-	}
-
-	@Override
-	public boolean switchAccessRule(EntityPlayer player) {
-		if (!isOwner(player)) {
-			return false;
-		}
-
-		boolean couldPipesConnect = allowsPipeConnections();
-
-		int ordinal = (access.ordinal() + 1) % EnumAccess.values().length;
-		access = EnumAccess.values()[ordinal];
-		if (!this.worldObj.isRemote) {
-			sendNetworkUpdate();
-		}
-
-		boolean canPipesConnect = allowsPipeConnections();
-		if (couldPipesConnect != canPipesConnect) {
+	public void onSwitchAccess(EnumAccess oldAccess, EnumAccess newAccess) {
+		if (oldAccess == EnumAccess.SHARED || newAccess == EnumAccess.SHARED) {
 			// pipes connected to this need to update
-			worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, blockType);
+			worldObj.notifyNeighborsOfStateChange(pos, blockType);
 			markDirty();
 		}
-
-		return true;
 	}
 
 	/* NAME */
 
 	/**
-	 * Gets the tile's unlocalized name, based on the block at the location of this entity (client-only).
+	 * Gets the tile's unlocalized name, based on the block at the location of
+	 * this entity (client-only).
 	 */
-	public String getUnlocalizedName() {
+	@Override
+	public String getUnlocalizedTitle() {
 		String blockUnlocalizedName = getBlockType().getUnlocalizedName().replace("tile.for.", "");
-		return blockUnlocalizedName + "." + getBlockMetadata() + ".name";
+		return blockUnlocalizedName + '.' + getBlockMetadata() + ".name";
 	}
 
 	/* INVENTORY BASICS */
@@ -351,7 +267,7 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 		return inventory;
 	}
 
-	public final void setInternalInventory(IInventoryAdapter inv) {
+	protected final void setInternalInventory(IInventoryAdapter inv) {
 		if (inv == null) {
 			throw new NullPointerException("Inventory cannot be null");
 		}
@@ -370,7 +286,7 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 	}
 
 	@Override
-	public final ItemStack decrStackSize(int slotIndex, int amount) {
+	public ItemStack decrStackSize(int slotIndex, int amount) {
 		return getInternalInventory().decrStackSize(slotIndex, amount);
 	}
 
@@ -380,7 +296,7 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 	}
 
 	@Override
-	public final void setInventorySlotContents(int slotIndex, ItemStack itemstack) {
+	public void setInventorySlotContents(int slotIndex, ItemStack itemstack) {
 		getInternalInventory().setInventorySlotContents(slotIndex, itemstack);
 	}
 
@@ -390,43 +306,32 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 	}
 
 	@Override
-	public final void openInventory() {
-		getInternalInventory().openInventory();
+	public final void openInventory(EntityPlayer player) {
+		getInternalInventory().openInventory(player);
 	}
 
 	@Override
-	public final void closeInventory() {
-		getInternalInventory().closeInventory();
+	public final void closeInventory(EntityPlayer player) {
+		getInternalInventory().closeInventory(player);
 	}
 
 	@Override
-	public final String getInventoryName() {
-		return getUnlocalizedName();
+	public final String getCommandSenderName() {
+		return getUnlocalizedTitle();
 	}
 
 	@Override
 	public final boolean isUseableByPlayer(EntityPlayer player) {
-		if (!Utils.isUseableByPlayer(player, this) || !allowsViewing(player)) {
-			return false;
-		}
 		return getInternalInventory().isUseableByPlayer(player);
 	}
 
 	@Override
-	public final boolean hasCustomInventoryName() {
-		return getInternalInventory().hasCustomInventoryName();
+	public final boolean hasCustomName() {
+		return getInternalInventory().hasCustomName();
 	}
 
 	@Override
 	public final boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
-		if (itemStack == null || !allowsPipeConnections()) {
-			return false;
-		}
-
-		if (!canSlotAccept(slotIndex, itemStack)) {
-			return false;
-		}
-
 		return getInternalInventory().isItemValidForSlot(slotIndex, itemStack);
 	}
 
@@ -441,26 +346,49 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 	}
 
 	@Override
-	public final int[] getAccessibleSlotsFromSide(int side) {
-		if (!allowsPipeConnections()) {
-			return Defaults.SLOTS_NONE;
-		}
-		return getInternalInventory().getAccessibleSlotsFromSide(side);
+	public int[] getSlotsForFace(EnumFacing side) {
+		return getInternalInventory().getSlotsForFace(side);
 	}
 
 	@Override
-	public final boolean canInsertItem(int slotIndex, ItemStack itemStack, int side) {
-		if (itemStack == null || !allowsPipeConnections()) {
-			return false;
-		}
-		return isItemValidForSlot(slotIndex, itemStack);
+	public final boolean canInsertItem(int slotIndex, ItemStack itemStack, EnumFacing side) {
+		return getInternalInventory().canInsertItem(slotIndex, itemStack, side);
 	}
 
 	@Override
-	public final boolean canExtractItem(int slotIndex, ItemStack itemStack, int side) {
-		if (itemStack == null || !allowsPipeConnections()) {
-			return false;
-		}
+	public final boolean canExtractItem(int slotIndex, ItemStack itemStack, EnumFacing side) {
 		return getInternalInventory().canExtractItem(slotIndex, itemStack, side);
+	}
+
+	@Override
+	public BlockPos getCoordinates() {
+		return pos;
+	}
+
+	// Flields
+
+	@Override
+	public int getField(int id) {
+		return 0;
+	}
+
+	@Override
+	public void setField(int id, int value) {
+
+	}
+
+	@Override
+	public int getFieldCount() {
+		return 0;
+	}
+
+	@Override
+	public void clear() {
+
+	}
+
+	@Override
+	public IChatComponent getDisplayName() {
+		return null;
 	}
 }

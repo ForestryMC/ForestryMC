@@ -11,6 +11,7 @@
 package forestry.farming.logic;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -26,22 +27,23 @@ import forestry.core.vect.Vect;
 
 public class FarmableCocoa implements IFarmable {
 
-	public static final Block COCOA_PLANT = Blocks.cocoa;
+	private static final Block COCOA_PLANT = Blocks.cocoa;
 	public static final Item COCOA_SEED = Items.dye;
 	public static final int COCOA_META = 3;
 
 	@Override
 	public boolean isSaplingAt(World world, BlockPos pos) {
-		return world.getBlockState(pos).getBlock() == COCOA_PLANT;
+		return world.getBlockState(pos) == COCOA_PLANT;
 	}
 
 	@Override
 	public ICrop getCropAt(World world, BlockPos pos) {
-		Block block = world.getBlockState(pos).getBlock();
+		IBlockState state = world.getBlockState(pos);
+		Block block = state.getBlock();
 		if (block != COCOA_PLANT) {
 			return null;
 		}
-		int meta = world.getBlockMetadata(pos); //TODO Revisit in BlockState pass
+		int meta = state.getBlock().getMetaFromState(state);
 		if (BlockUtil.getMaturityPod(meta) < 2) {
 			return null;
 		}

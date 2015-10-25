@@ -11,7 +11,7 @@
 package forestry.apiculture.flowers;
 
 import java.util.EnumSet;
-import java.util.List;
+import java.util.Set;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
@@ -37,8 +37,8 @@ public class FlowerProvider implements IFlowerProvider {
 	}
 
 	@Override
-	public boolean isAcceptedFlower(World world, IIndividual individual, BlockPos pos) {
-		return FlowerManager.flowerRegistry.isAcceptedFlower(this.flowerType, world, individual, pos);
+	public String getFlowerType() {
+		return flowerType;
 	}
 
 	@Override
@@ -71,7 +71,7 @@ public class FlowerProvider implements IFlowerProvider {
 	}
 
 	@Override
-	public List<IFlower> getFlowers() {
+	public Set<IFlower> getFlowers() {
 		return FlowerManager.flowerRegistry.getAcceptableFlowers(this.flowerType);
 	}
 

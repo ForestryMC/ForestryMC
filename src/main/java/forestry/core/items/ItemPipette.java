@@ -12,25 +12,23 @@ package forestry.core.items;
 
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
-
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
+import forestry.api.core.IModelManager;
 import forestry.api.core.INBTTagable;
 import forestry.api.core.IToolPipette;
 import forestry.core.config.Defaults;
-import forestry.core.render.TextureManager;
-import forestry.core.utils.StringUtil;
 
 public class ItemPipette extends ItemForestry implements IToolPipette {
 
-	class PipetteContents implements INBTTagable {
+	static class PipetteContents implements INBTTagable {
 
 		FluidStack contents;
 
@@ -52,12 +50,12 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 			}
 		}
 
-		public boolean isFull(int limit) {
+		public boolean isFull() {
 			if (contents == null) {
 				return false;
 			}
 
-			return contents.fluidID > 0 && contents.amount >= limit;
+			return contents.getFluid().getID() > 0 && contents.amount >= 1000;
 		}
 
 		public void addTooltip(List<String> list) {
@@ -79,7 +77,8 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 	}
 
 	/**
-	 * @return true if the item's stackTagCompound needs to be synchronized over SMP.
+	 * @return true if the item's stackTagCompound needs to be synchronized over
+	 *         SMP.
 	 */
 	@Override
 	public boolean getShareTag() {
@@ -89,7 +88,7 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 	@Override
 	public boolean canPipette(ItemStack itemstack) {
 		PipetteContents contained = new PipetteContents(itemstack.getTagCompound());
-		return !contained.isFull(1000);
+		return !contained.isFull();
 	}
 
 	@Override
@@ -107,7 +106,7 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 				filled = liquid.amount;
 			}
 
-			contained.contents = new FluidStack(liquid.fluidID, filled);
+			contained.contents = new FluidStack(liquid, filled);
 			filled = liquid.amount;
 
 		} else {
@@ -140,40 +139,43 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 		return filled;
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean flag) {
 		PipetteContents contained = new PipetteContents(itemstack.getTagCompound());
 		contained.addTooltip(list);
 	}
 
-	/* ICONS */
 	@SideOnly(Side.CLIENT)
-	private IIcon primaryIcon;
-	@SideOnly(Side.CLIENT)
-	private IIcon secondaryIcon;
+	public ModelResourceLocation[] models = new ModelResourceLocation[2];
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerIcons(IIconRegister register) {
-		primaryIcon = TextureManager.getInstance().registerTex(register, StringUtil.cleanItemName(this) + ".0");
-		secondaryIcon = TextureManager.getInstance().registerTex(register, StringUtil.cleanItemName(this) + ".1");
+	public void registerModel(Item item, IModelManager manager) {
+		models[0] = manager.getModelLocation("pipette.0");
+		models[1] = manager.getModelLocation("pipette.1");
+		manager.registerVariant(item, "forestry:pipette.0");
+		manager.registerVariant(item, "forestry:pipette.1");
+		manager.registerItemModel(item, new PippetMeshDefinition());
 	}
 
-	@SideOnly(Side.CLIENT)
-	@Override
-	public IIcon getIconFromDamage(int damage) {
-		if (damage <= 0) {
-			return primaryIcon;
-		} else {
-			return secondaryIcon;
+	public class PippetMeshDefinition implements ItemMeshDefinition {
+
+		@Override
+		public ModelResourceLocation getModelLocation(ItemStack stack) {
+			if (stack.getItemDamage() <= 0) {
+				return models[0];
+			} else {
+				return models[1];
+			}
 		}
+
 	}
 
 	@Override
 	public FluidStack drain(ItemStack pipette, int maxDrain, boolean doDrain) {
 		PipetteContents contained = new PipetteContents(pipette.getTagCompound());
-		if (contained.contents == null || contained.contents.fluidID <= 0) {
+		if (contained.contents == null || contained.contents.getFluid().getID() <= 0) {
 			return null;
 		}
 
@@ -195,7 +197,7 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 			}
 		}
 
-		return new FluidStack(contained.contents.fluidID, drained);
+		return new FluidStack(contained.contents, drained);
 	}
 
 	@Override

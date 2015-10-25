@@ -12,6 +12,7 @@ package forestry.core.commands;
 
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.command.WrongUsageException;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 
@@ -32,7 +33,7 @@ public class CommandPlugins extends SubCommand {
 	}
 
 	@Override
-	public void processSubCommand(ICommandSender sender, String[] args) {
+	public void processSubCommand(ICommandSender sender, String[] args) throws WrongUsageException {
 		if (args.length == 0) {
 			listPluginsForSender(sender);
 		} else {
@@ -40,18 +41,18 @@ public class CommandPlugins extends SubCommand {
 		}
 	}
 
-	private void listPluginsForSender(ICommandSender sender) {
-		String pluginList = "";
+	private static void listPluginsForSender(ICommandSender sender) {
+		StringBuilder pluginList = new StringBuilder();
 		for (PluginManager.Module pluginModule : PluginManager.getLoadedModules()) {
-			if (!pluginList.isEmpty()) {
-				pluginList += ", ";
+			if (pluginList.length() > 0) {
+				pluginList.append(", ");
 			}
-			pluginList += makeListEntry(pluginModule.instance());
+			pluginList.append(makeListEntry(pluginModule.instance()));
 		}
-		CommandHelpers.sendChatMessage(sender, pluginList);
+		CommandHelpers.sendChatMessage(sender, pluginList.toString());
 	}
 
-	private String makeListEntry(ForestryPlugin plugin) {
+	private static String makeListEntry(ForestryPlugin plugin) {
 		String entry = plugin.isAvailable() ? EnumChatFormatting.GREEN.toString() : EnumChatFormatting.RED.toString();
 
 		Plugin info = plugin.getClass().getAnnotation(Plugin.class);
@@ -75,7 +76,7 @@ public class CommandPlugins extends SubCommand {
 		}
 
 		@Override
-		public void processSubCommand(ICommandSender sender, String[] args) {
+		public void processSubCommand(ICommandSender sender, String[] args) throws CommandException {
 			if (args.length == 1) {
 				listPluginInfoForSender(sender, args[0]);
 			} else {
@@ -83,7 +84,7 @@ public class CommandPlugins extends SubCommand {
 			}
 		}
 
-		private void listPluginInfoForSender(ICommandSender sender, String plugin) {
+		private static void listPluginInfoForSender(ICommandSender sender, String plugin) throws CommandException {
 			ForestryPlugin found = null;
 			for (PluginManager.Module pluginModule : PluginManager.getLoadedModules()) {
 				Plugin info = pluginModule.instance().getClass().getAnnotation(Plugin.class);
@@ -116,7 +117,8 @@ public class CommandPlugins extends SubCommand {
 					CommandHelpers.sendChatMessage(sender, EnumChatFormatting.BLUE + "URL: " + info.url());
 				}
 				if (!info.unlocalizedDescription().isEmpty()) {
-					CommandHelpers.sendChatMessage(sender, StatCollector.translateToLocal(info.unlocalizedDescription()));
+					CommandHelpers.sendChatMessage(sender,
+							StatCollector.translateToLocal(info.unlocalizedDescription()));
 				}
 			}
 

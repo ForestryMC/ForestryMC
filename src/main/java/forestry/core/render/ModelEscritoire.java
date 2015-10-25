@@ -16,7 +16,7 @@ import net.minecraft.entity.Entity;
 
 public class ModelEscritoire extends ModelBase {
 
-	//fields
+	// fields
 	private final ModelRenderer desk;
 	private final ModelRenderer standRB;
 	private final ModelRenderer standRF;
@@ -93,67 +93,43 @@ public class ModelEscritoire extends ModelBase {
 		standLowLB.mirror = true;
 		setRotation(standLowLB, 0F, 0F, 0F);
 		/*
-		desk = new ModelRenderer(this, 0, 0);
-		desk.addBox(0F, 0F, 0F, 16, 2, 15);
-		desk.setRotationPoint(-8F, 4F, -7.5F);
-		desk.setTextureSize(64, 32);
-		desk.mirror = true;
-		setRotation(desk, 0.0872665F, 0F, 0F);
-		standRB = new ModelRenderer(this, 38, 18);
-		standRB.addBox(0F, 0F, 0F, 2, 6, 2);
-		standRB.setRotationPoint(5F, 4F, 5F);
-		standRB.setTextureSize(64, 32);
-		standRB.mirror = true;
-		setRotation(standRB, 0F, 0F, 0F);
-		standRF = new ModelRenderer(this, 38, 18);
-		standRF.addBox(0F, 0F, 0F, 2, 6, 2);
-		standRF.setRotationPoint(5F, 4F, -7F);
-		standRF.setTextureSize(64, 32);
-		standRF.mirror = true;
-		setRotation(standRF, 0F, 0F, 0F);
-		standLB = new ModelRenderer(this, 38, 18);
-		standLB.addBox(0F, 0F, 0F, 2, 6, 2);
-		standLB.setRotationPoint(-7F, 4F, 5F);
-		standLB.setTextureSize(64, 32);
-		standLB.mirror = true;
-		setRotation(standLB, 0F, 0F, 0F);
-		standLF = new ModelRenderer(this, 38, 18);
-		standLF.addBox(0F, 0F, 0F, 2, 6, 2);
-		standLF.setRotationPoint(-7F, 4F, -7F);
-		standLF.setTextureSize(64, 32);
-		standLF.mirror = true;
-		setRotation(standLF, 0F, 0F, 0F);
-		drawers = new ModelRenderer(this, 0, 18);
-		drawers.addBox(0F, 0F, 0F, 16, 5, 3);
-		drawers.setRotationPoint(-8F, -2F, 4.5F);
-		drawers.setTextureSize(64, 32);
-		drawers.mirror = true;
-		setRotation(drawers, 0F, 0F, 0F);
-		standLowLF = new ModelRenderer(this, 0, 25);
-		standLowLF.addBox(0F, 0F, 0F, 1, 4, 1);
-		standLowLF.setRotationPoint(-6.5F, 10F, -6.5F);
-		standLowLF.setTextureSize(64, 32);
-		standLowLF.mirror = true;
-		setRotation(standLowLF, 0F, 0F, 0F);
-		standLowRB = new ModelRenderer(this, 0, 25);
-		standLowRB.addBox(0F, 0F, 0F, 1, 4, 1);
-		standLowRB.setRotationPoint(5.5F, 10F, 5.5F);
-		standLowRB.setTextureSize(64, 32);
-		standLowRB.mirror = true;
-		setRotation(standLowRB, 0F, 0F, 0F);
-		standLowRF = new ModelRenderer(this, 0, 25);
-		standLowRF.addBox(0F, 0F, 0F, 1, 4, 1);
-		standLowRF.setRotationPoint(5.5F, 10F, -6.5F);
-		standLowRF.setTextureSize(64, 32);
-		standLowRF.mirror = true;
-		setRotation(standLowRF, 0F, 0F, 0F);
-		standLowLB = new ModelRenderer(this, 0, 25);
-		standLowLB.addBox(0F, 0F, 0F, 1, 4, 1);
-		standLowLB.setRotationPoint(-6.5F, 10F, 5.5F);
-		standLowLB.setTextureSize(64, 32);
-		standLowLB.mirror = true;
-		setRotation(standLowLB, 0F, 0F, 0F);
-		*/
+		 * desk = new ModelRenderer(this, 0, 0); desk.addBox(0F, 0F, 0F, 16, 2,
+		 * 15); desk.setRotationPoint(-8F, 4F, -7.5F); desk.setTextureSize(64,
+		 * 32); desk.mirror = true; setRotation(desk, 0.0872665F, 0F, 0F);
+		 * standRB = new ModelRenderer(this, 38, 18); standRB.addBox(0F, 0F, 0F,
+		 * 2, 6, 2); standRB.setRotationPoint(5F, 4F, 5F);
+		 * standRB.setTextureSize(64, 32); standRB.mirror = true;
+		 * setRotation(standRB, 0F, 0F, 0F); standRF = new ModelRenderer(this,
+		 * 38, 18); standRF.addBox(0F, 0F, 0F, 2, 6, 2);
+		 * standRF.setRotationPoint(5F, 4F, -7F); standRF.setTextureSize(64,
+		 * 32); standRF.mirror = true; setRotation(standRF, 0F, 0F, 0F); standLB
+		 * = new ModelRenderer(this, 38, 18); standLB.addBox(0F, 0F, 0F, 2, 6,
+		 * 2); standLB.setRotationPoint(-7F, 4F, 5F); standLB.setTextureSize(64,
+		 * 32); standLB.mirror = true; setRotation(standLB, 0F, 0F, 0F); standLF
+		 * = new ModelRenderer(this, 38, 18); standLF.addBox(0F, 0F, 0F, 2, 6,
+		 * 2); standLF.setRotationPoint(-7F, 4F, -7F);
+		 * standLF.setTextureSize(64, 32); standLF.mirror = true;
+		 * setRotation(standLF, 0F, 0F, 0F); drawers = new ModelRenderer(this,
+		 * 0, 18); drawers.addBox(0F, 0F, 0F, 16, 5, 3);
+		 * drawers.setRotationPoint(-8F, -2F, 4.5F); drawers.setTextureSize(64,
+		 * 32); drawers.mirror = true; setRotation(drawers, 0F, 0F, 0F);
+		 * standLowLF = new ModelRenderer(this, 0, 25); standLowLF.addBox(0F,
+		 * 0F, 0F, 1, 4, 1); standLowLF.setRotationPoint(-6.5F, 10F, -6.5F);
+		 * standLowLF.setTextureSize(64, 32); standLowLF.mirror = true;
+		 * setRotation(standLowLF, 0F, 0F, 0F); standLowRB = new
+		 * ModelRenderer(this, 0, 25); standLowRB.addBox(0F, 0F, 0F, 1, 4, 1);
+		 * standLowRB.setRotationPoint(5.5F, 10F, 5.5F);
+		 * standLowRB.setTextureSize(64, 32); standLowRB.mirror = true;
+		 * setRotation(standLowRB, 0F, 0F, 0F); standLowRF = new
+		 * ModelRenderer(this, 0, 25); standLowRF.addBox(0F, 0F, 0F, 1, 4, 1);
+		 * standLowRF.setRotationPoint(5.5F, 10F, -6.5F);
+		 * standLowRF.setTextureSize(64, 32); standLowRF.mirror = true;
+		 * setRotation(standLowRF, 0F, 0F, 0F); standLowLB = new
+		 * ModelRenderer(this, 0, 25); standLowLB.addBox(0F, 0F, 0F, 1, 4, 1);
+		 * standLowLB.setRotationPoint(-6.5F, 10F, 5.5F);
+		 * standLowLB.setTextureSize(64, 32); standLowLB.mirror = true;
+		 * setRotation(standLowLB, 0F, 0F, 0F);
+		 */
 	}
 
 	@Override
@@ -172,7 +148,7 @@ public class ModelEscritoire extends ModelBase {
 		standLowLB.render(f5);
 	}
 
-	private void setRotation(ModelRenderer model, float x, float y, float z) {
+	private static void setRotation(ModelRenderer model, float x, float y, float z) {
 		model.rotateAngleX = x;
 		model.rotateAngleY = y;
 		model.rotateAngleZ = z;

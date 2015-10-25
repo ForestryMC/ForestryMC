@@ -32,7 +32,8 @@ public class StringUtil {
 	}
 
 	public static String localizeTile(String key) {
-		return StatCollector.translateToLocal("tile.for." + key).replace("\\n", "\n").replace("@", "%").replace("\\%", "@");
+		return StatCollector.translateToLocal("tile.for." + key).replace("\\n", "\n").replace("@", "%").replace("\\%",
+				"@");
 	}
 
 	public static String localizeAndFormat(String key, Object... args) {
@@ -40,7 +41,8 @@ public class StringUtil {
 	}
 
 	/**
-	 * Same as localizeAndFormat, only without the "for." prefix. Used for specific items.
+	 * Same as localizeAndFormat, only without the "for." prefix. Used for
+	 * specific items.
 	 */
 	public static String localizeAndFormatRaw(String key, Object... args) {
 		String text = StatCollector.translateToLocal(key).replace("\\n", "\n").replace("@", "%").replace("\\%", "@");
@@ -53,7 +55,8 @@ public class StringUtil {
 	}
 
 	public static String cleanTags(String tag) {
-		return tag.replaceAll("[Ff]orestry\\p{Punct}", "").replaceAll("\\.[Ff]or\\p{Punct}", ".").replaceFirst("^tile\\.", "").replaceFirst("^item\\.", "");
+		return tag.replaceAll("[Ff]orestry\\p{Punct}", "").replaceAll("\\.[Ff]or\\p{Punct}", ".")
+				.replaceFirst("^tile\\.", "").replaceFirst("^item\\.", "");
 	}
 
 	public static String cleanItemName(ItemStack stack) {
@@ -66,13 +69,6 @@ public class StringUtil {
 
 	public static String cleanBlockName(Block block) {
 		return cleanTags(block.getUnlocalizedName());
-	}
-
-	public static String capitalize(String s) {
-		if (s.length() == 0) {
-			return s;
-		}
-		return s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
 	}
 
 	public static String append(String delim, String source, String appendix) {
@@ -102,7 +98,7 @@ public class StringUtil {
 	public static String line(int length) {
 		StringBuilder line = new StringBuilder();
 		for (int i = 0; i < length; i++) {
-			line.append("-");
+			line.append('-');
 		}
 
 		return line.toString();

@@ -10,34 +10,37 @@
  ******************************************************************************/
 package forestry.core.genetics;
 
+import net.minecraft.util.StatCollector;
+
 import forestry.core.utils.StringUtil;
 
 public class GenericRatings {
 
 	public static String rateMetabolism(int metabolism) {
 		if (metabolism >= 19) {
-			return StringUtil.localize("gui.highest");
+			return StatCollector.translateToLocal("forestry.allele.highest");
 		} else if (metabolism >= 16) {
-			return StringUtil.localize("gui.higher");
+			return StatCollector.translateToLocal("forestry.allele.higher");
 		} else if (metabolism >= 13) {
-			return StringUtil.localize("gui.high");
+			return StatCollector.translateToLocal("forestry.allele.high");
 		} else if (metabolism >= 10) {
-			return StringUtil.localize("gui.average");
+			return StatCollector.translateToLocal("forestry.allele.average");
 		} else if (metabolism >= 7) {
-			return StringUtil.localize("gui.slow");
+			return StatCollector.translateToLocal("forestry.allele.slow");
 		} else if (metabolism >= 4) {
-			return StringUtil.localize("gui.slower");
+			return StatCollector.translateToLocal("forestry.allele.slower");
 		} else {
-			return StringUtil.localize("gui.slowest");
+			return StatCollector.translateToLocal("forestry.allele.slowest");
 		}
 	}
 
 	public static String rateActivityTime(boolean nocturnalTrait, boolean naturalNocturnal) {
 		String active = naturalNocturnal ? StringUtil.localize("gui.nocturnal") : StringUtil.localize("gui.diurnal");
 		if (nocturnalTrait) {
-			active = StringUtil.append(", ", active, naturalNocturnal ? StringUtil.localize("gui.diurnal") : StringUtil.localize("gui.nocturnal"));
+			active = StringUtil.append(", ", active,
+					naturalNocturnal ? StringUtil.localize("gui.diurnal") : StringUtil.localize("gui.nocturnal"));
 		}
-		
+
 		return active;
 	}
 }

@@ -18,9 +18,7 @@ import net.minecraft.world.World;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.Tabs;
 import forestry.api.lepidopterology.IButterfly;
-import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
-import forestry.core.interfaces.IErrorSource;
 import forestry.core.interfaces.IHintSource;
 import forestry.core.inventory.AlyzerInventory;
 import forestry.core.items.ItemInventoried;
@@ -30,11 +28,10 @@ import forestry.plugins.PluginLepidopterology;
 
 public class ItemFlutterlyzer extends ItemInventoried {
 
-	public static class FlutterlyzerInventory extends AlyzerInventory implements IErrorSource, IHintSource {
+	public static class FlutterlyzerInventory extends AlyzerInventory implements IHintSource {
 
 		public FlutterlyzerInventory(EntityPlayer player, ItemStack itemStack) {
-			super(ItemFlutterlyzer.class, 7, itemStack);
-			this.player = player;
+			super(player, 7, itemStack);
 		}
 
 		@Override
@@ -42,14 +39,8 @@ public class ItemFlutterlyzer extends ItemInventoried {
 			return PluginLepidopterology.butterflyInterface.isMember(itemStack);
 		}
 
-		private void tryAnalyze() {
-
-			// Analyzed slot occupied, abort
-			if (inventoryStacks[SLOT_ANALYZE_1] != null || inventoryStacks[SLOT_ANALYZE_2] != null || inventoryStacks[SLOT_ANALYZE_3] != null
-					|| inventoryStacks[SLOT_ANALYZE_4] != null || inventoryStacks[SLOT_ANALYZE_5] != null) {
-				return;
-			}
-
+		@Override
+		public void onSlotClick(EntityPlayer player) {
 			// Source slot to analyze empty
 			if (getStackInSlot(SLOT_SPECIMEN) == null) {
 				return;
@@ -71,8 +62,12 @@ public class ItemFlutterlyzer extends ItemInventoried {
 
 				butterfly.analyze();
 				if (player != null) {
-					PluginLepidopterology.butterflyInterface.getBreedingTracker(player.worldObj, player.getGameProfile()).registerSpecies(butterfly.getGenome().getPrimary());
-					PluginLepidopterology.butterflyInterface.getBreedingTracker(player.worldObj, player.getGameProfile()).registerSpecies(butterfly.getGenome().getSecondary());
+					PluginLepidopterology.butterflyInterface
+							.getBreedingTracker(player.worldObj, player.getGameProfile())
+							.registerSpecies(butterfly.getGenome().getPrimary());
+					PluginLepidopterology.butterflyInterface
+							.getBreedingTracker(player.worldObj, player.getGameProfile())
+							.registerSpecies(butterfly.getGenome().getSecondary());
 				}
 				NBTTagCompound nbttagcompound = new NBTTagCompound();
 				butterfly.writeToNBT(nbttagcompound);
@@ -86,11 +81,6 @@ public class ItemFlutterlyzer extends ItemInventoried {
 			setInventorySlotContents(SLOT_SPECIMEN, null);
 		}
 
-		@Override
-		public void markDirty() {
-			tryAnalyze();
-		}
-
 		/* IHINTSOURCE */
 		@Override
 		public boolean hasHints() {
@@ -100,21 +90,6 @@ public class ItemFlutterlyzer extends ItemInventoried {
 		@Override
 		public String[] getHints() {
 			return Config.hints.get("flutterlyzer");
-		}
-
-		/* IERRORSOURCE */
-		@Override
-		public boolean throwsErrors() {
-			return true;
-		}
-
-		@Override
-		public EnumErrorCode getErrorState() {
-			if (PluginLepidopterology.butterflyInterface.isMember(inventoryStacks[SLOT_SPECIMEN]) && !isEnergy(getStackInSlot(SLOT_ENERGY))) {
-				return EnumErrorCode.NOHONEY;
-			}
-
-			return EnumErrorCode.OK;
 		}
 	}
 
@@ -127,8 +102,8 @@ public class ItemFlutterlyzer extends ItemInventoried {
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
 		if (Proxies.common.isSimulating(world)) {
-			entityplayer.openGui(ForestryAPI.instance, GuiId.FlutterlyzerGUI.ordinal(), world, (int) entityplayer.posX, (int) entityplayer.posY,
-					(int) entityplayer.posZ);
+			entityplayer.openGui(ForestryAPI.instance, GuiId.FlutterlyzerGUI.ordinal(), world, (int) entityplayer.posX,
+					(int) entityplayer.posY, (int) entityplayer.posZ);
 		}
 
 		return itemstack;

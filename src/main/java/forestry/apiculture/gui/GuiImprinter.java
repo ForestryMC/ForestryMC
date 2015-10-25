@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,15 +26,11 @@ import forestry.apiculture.items.ItemBeeGE;
 import forestry.apiculture.items.ItemImprinter.ImprinterInventory;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;
-import forestry.core.gadgets.TileForestry;
 import forestry.core.gui.GuiForestry;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
 
-public class GuiImprinter extends GuiForestry<TileForestry> {
-
-	private final ImprinterInventory inventory;
-	private final ContainerImprinter container;
+public class GuiImprinter extends GuiForestry<ContainerImprinter, ImprinterInventory> {
 
 	private int startX;
 	private int startY;
@@ -41,10 +38,8 @@ public class GuiImprinter extends GuiForestry<TileForestry> {
 	private final Map<String, ItemStack> iconStacks = new HashMap<String, ItemStack>();
 
 	public GuiImprinter(InventoryPlayer inventoryplayer, ImprinterInventory inventory) {
-		super(Defaults.TEXTURE_PATH_GUI + "/imprinter.png", new ContainerImprinter(inventoryplayer, inventory), inventory);
-
-		this.inventory = inventory;
-		this.container = (ContainerImprinter) inventorySlots;
+		super(Defaults.TEXTURE_PATH_GUI + "/imprinter.png", new ContainerImprinter(inventoryplayer, inventory),
+				inventory);
 
 		xSize = 176;
 		ySize = 185;
@@ -52,9 +47,11 @@ public class GuiImprinter extends GuiForestry<TileForestry> {
 		List<ItemStack> beeList = new ArrayList<ItemStack>();
 		((ItemBeeGE) ForestryItem.beeDroneGE.item()).addCreativeItems(beeList, false);
 		for (ItemStack beeStack : beeList) {
-			iconStacks.put(BeeGenome.getSpecies(beeStack).getUID(), beeStack);
+			IAlleleBeeSpecies species = BeeGenome.getSpecies(beeStack);
+			if (species != null) {
+				iconStacks.put(species.getUID(), beeStack);
+			}
 		}
-
 	}
 
 	@Override
@@ -63,7 +60,8 @@ public class GuiImprinter extends GuiForestry<TileForestry> {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
 		int offset = (138 - fontRendererObj.getStringWidth(StringUtil.localize("gui.imprinter.name"))) / 2;
-		fontRendererObj.drawString(StringUtil.localize("gui.imprinter.name"), startX + 8 + offset, startY + 16, fontColor.get("gui.screen"));
+		fontRendererObj.drawString(StringUtil.localize("gui.imprinter.name"), startX + 8 + offset, startY + 16,
+				fontColor.get("gui.screen"));
 
 		IAlleleBeeSpecies primary = inventory.getPrimary();
 		drawBeeSpeciesIcon(primary, startX + 12, startY + 32);
@@ -85,9 +83,9 @@ public class GuiImprinter extends GuiForestry<TileForestry> {
 		RenderHelper.disableStandardItemLighting();
 	}
 
-	private int getHabitatSlotAtPosition(int i, int j) {
-		int[] xPos = new int[]{12, 12};
-		int[] yPos = new int[]{32, 52};
+	private static int getHabitatSlotAtPosition(int i, int j) {
+		int[] xPos = new int[] { 12, 12 };
+		int[] yPos = new int[] { 32, 52 };
 
 		for (int l = 0; l < xPos.length; l++) {
 			if (i >= xPos[l] && i <= xPos[l] + 16 && j >= yPos[l] && j <= yPos[l] + 16) {
@@ -99,7 +97,7 @@ public class GuiImprinter extends GuiForestry<TileForestry> {
 	}
 
 	@Override
-	protected void mouseClicked(int i, int j, int k) {
+	protected void mouseClicked(int i, int j, int k) throws IOException {
 		super.mouseClicked(i, j, k);
 
 		int cornerX = (width - xSize) / 2;
@@ -111,9 +109,9 @@ public class GuiImprinter extends GuiForestry<TileForestry> {
 		}
 
 		if (k == 0) {
-			container.advanceSelection(slot, Proxies.common.getRenderWorld());
+			container.advanceSelection(slot);
 		} else {
-			container.regressSelection(slot, Proxies.common.getRenderWorld());
+			container.regressSelection(slot);
 		}
 	}
 

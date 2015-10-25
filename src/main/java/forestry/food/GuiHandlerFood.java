@@ -30,15 +30,15 @@ public class GuiHandlerFood extends GuiHandlerBase {
 
 		switch (GuiId.values()[id]) {
 
-			case InfuserGUI:
-				ItemStack infuser = player.getCurrentEquippedItem();
-				if (infuser == null) {
-					return null;
-				}
-				return new GuiInfuser(player.inventory, new InfuserInventory(player, infuser));
-
-			default:
+		case InfuserGUI:
+			ItemStack infuser = player.getCurrentEquippedItem();
+			if (infuser == null) {
 				return null;
+			}
+			return new GuiInfuser(player.inventory, new InfuserInventory(player, infuser));
+
+		default:
+			return null;
 		}
 	}
 
@@ -51,15 +51,15 @@ public class GuiHandlerFood extends GuiHandlerBase {
 
 		switch (GuiId.values()[id]) {
 
-			case InfuserGUI:
-				ItemStack infuser = player.getCurrentEquippedItem();
-				if (infuser == null) {
-					return null;
-				}
-				return new ContainerInfuser(player.inventory, new InfuserInventory(player, infuser));
-
-			default:
+		case InfuserGUI:
+			ItemStack infuser = player.getCurrentEquippedItem();
+			if (infuser == null) {
 				return null;
+			}
+			return new ContainerInfuser(player.inventory, new InfuserInventory(player, infuser));
+
+		default:
+			return null;
 
 		}
 	}

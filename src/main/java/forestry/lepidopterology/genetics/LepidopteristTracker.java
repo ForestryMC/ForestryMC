@@ -23,6 +23,7 @@ import forestry.plugins.PluginLepidopterology;
 
 public class LepidopteristTracker extends BreedingTracker implements ILepidopteristTracker {
 
+	/** Required for creation from map storage */
 	public LepidopteristTracker(String s) {
 		this(s, null);
 	}
@@ -32,12 +33,12 @@ public class LepidopteristTracker extends BreedingTracker implements ILepidopter
 	}
 
 	@Override
-	protected IBreedingTracker getCommonTracker(EntityPlayer player) {
-		return PluginLepidopterology.butterflyInterface.getBreedingTracker(player.worldObj, null);
+	protected IBreedingTracker getBreedingTracker(EntityPlayer player) {
+		return PluginLepidopterology.butterflyInterface.getBreedingTracker(player.worldObj, player.getGameProfile());
 	}
 
 	@Override
-	protected String getPacketTag() {
+	protected String speciesRootUID() {
 		return ButterflyHelper.UID;
 	}
 

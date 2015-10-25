@@ -1,22 +1,16 @@
 package forestry.core.gui;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.inventory.AlyzerInventory;
 import forestry.core.proxy.Proxies;
 
-public class ContainerAlyzer extends ContainerItemInventory {
-
-	private final AlyzerInventory inventory;
+public class ContainerAlyzer extends ContainerItemInventory<AlyzerInventory> {
 
 	public ContainerAlyzer(AlyzerInventory inventory, EntityPlayer player) {
-		super(inventory, player);
-
-		InventoryPlayer inventoryplayer = player.inventory;
-		this.inventory = inventory;
+		super(inventory, player.inventory, 43, 156);
 
 		final int xPosLeftSlots = 223;
 
@@ -32,27 +26,6 @@ public class ContainerAlyzer extends ContainerItemInventory {
 		this.addSlotToContainer(new SlotFiltered(inventory, AlyzerInventory.SLOT_ANALYZE_3, xPosLeftSlots, 93));
 		this.addSlotToContainer(new SlotFiltered(inventory, AlyzerInventory.SLOT_ANALYZE_4, xPosLeftSlots, 111));
 		this.addSlotToContainer(new SlotFiltered(inventory, AlyzerInventory.SLOT_ANALYZE_5, xPosLeftSlots, 129));
-
-		final int xPosPlayerInv = 43;
-		final int xSpacePlayerInv = 18;
-		final int yPosPlayerInv = 156;
-		final int ySpacePlayerInv = 18;
-
-		// Player inventory
-		for (int i1 = 0; i1 < 3; i1++) {
-			for (int l1 = 0; l1 < 9; l1++) {
-				int slot = l1 + i1 * 9 + 9;
-				int x = xPosPlayerInv + (l1 * xSpacePlayerInv);
-				int y = yPosPlayerInv + (i1 * ySpacePlayerInv);
-				addSecuredSlot(inventoryplayer, slot, x, y);
-			}
-		}
-		// Player hotbar
-		for (int j1 = 0; j1 < 9; j1++) {
-			int x = xPosPlayerInv + (j1 * xSpacePlayerInv);
-			addSecuredSlot(inventoryplayer, j1, x, 214);
-		}
-
 	}
 
 	@Override
@@ -75,8 +48,6 @@ public class ContainerAlyzer extends ContainerItemInventory {
 			Proxies.common.dropItemPlayer(entityplayer, stack);
 			inventory.setInventorySlotContents(i, null);
 		}
-
-		inventory.onGuiSaved(entityplayer);
 	}
 
 }

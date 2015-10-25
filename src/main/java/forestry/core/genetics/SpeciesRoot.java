@@ -11,26 +11,29 @@
 package forestry.core.genetics;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
 import net.minecraft.item.ItemStack;
 
 import forestry.api.genetics.IAllele;
+import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.ISpeciesRoot;
 
 public abstract class SpeciesRoot implements ISpeciesRoot {
-	
+
 	/* RESEARCH */
 	private final LinkedHashMap<ItemStack, Float> researchCatalysts = new LinkedHashMap<ItemStack, Float>();
-	
+
 	@Override
 	public Map<ItemStack, Float> getResearchCatalysts() {
 		return Collections.unmodifiableMap(researchCatalysts);
@@ -42,13 +45,13 @@ public abstract class SpeciesRoot implements ISpeciesRoot {
 	}
 
 	/* TEMPLATES */
-	public final HashMap<String, IAllele[]> speciesTemplates = new HashMap<String, IAllele[]>();
+	protected final HashMap<String, IAllele[]> speciesTemplates = new HashMap<String, IAllele[]>();
 
 	@Override
 	public Map<String, IAllele[]> getGenomeTemplates() {
 		return speciesTemplates;
 	}
-	
+
 	@Override
 	public void registerTemplate(IAllele[] template) {
 		registerTemplate(template[0].getUID(), template);
@@ -61,7 +64,11 @@ public abstract class SpeciesRoot implements ISpeciesRoot {
 
 	@Override
 	public IAllele[] getTemplate(String identifier) {
-		return speciesTemplates.get(identifier);
+		IAllele[] template = speciesTemplates.get(identifier);
+		if (template == null) {
+			return null;
+		}
+		return Arrays.copyOf(template, template.length);
 	}
 
 	/* MUTATIONS */
@@ -77,17 +84,22 @@ public abstract class SpeciesRoot implements ISpeciesRoot {
 		return combinations;
 	}
 
-	@Deprecated
 	@Override
-	public Collection<? extends IMutation> getPaths(IAllele result, int chromosomeOrdinal) {
-		ArrayList<IMutation> paths = new ArrayList<IMutation>();
-		for (IMutation mutation : getMutations(false)) {
-			if (mutation.getTemplate()[chromosomeOrdinal] == result) {
-				paths.add(mutation);
+	public List<IMutation> getCombinations(IAlleleSpecies parentSpecies0, IAlleleSpecies parentSpecies1,
+			boolean shuffle) {
+		List<IMutation> combinations = new ArrayList<IMutation>();
+
+		String parentSpecies1UID = parentSpecies1.getUID();
+		for (IMutation mutation : getMutations(shuffle)) {
+			if (mutation.isPartner(parentSpecies0)) {
+				IAllele partner = mutation.getPartner(parentSpecies0);
+				if (partner != null && partner.getUID().equals(parentSpecies1UID)) {
+					combinations.add(mutation);
+				}
 			}
 		}
-		
-		return paths;
+
+		return combinations;
 	}
 
 	@Override

@@ -14,18 +14,17 @@ import java.util.EnumSet;
 import java.util.Random;
 
 import net.minecraft.command.ICommand;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
-
 import net.minecraftforge.fml.common.IFuelHandler;
 import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
 import net.minecraftforge.fml.common.network.IGuiHandler;
-
-import forestry.core.interfaces.IOreDictionaryHandler;
-import forestry.core.interfaces.IPacketHandler;
 import forestry.core.interfaces.IPickupHandler;
 import forestry.core.interfaces.IResupplyHandler;
 import forestry.core.interfaces.ISaveEventHandler;
+import forestry.core.network.IPacketHandler;
+import forestry.core.proxy.Proxies;
 
 public abstract class ForestryPlugin {
 
@@ -41,6 +40,12 @@ public abstract class ForestryPlugin {
 		return EnumSet.of(PluginManager.Module.CORE);
 	}
 
+	protected void setupAPI() {
+	}
+
+	protected void disabledSetupAPI() {
+	}
+
 	protected void preInit() {
 	}
 
@@ -50,11 +55,30 @@ public abstract class ForestryPlugin {
 	protected void postInit() {
 	}
 
-	protected void disabledInit() {
-	}
-
 	public boolean processIMCMessage(IMCMessage message) {
 		return false;
+	}
+
+	protected static String getInvalidIMCMessageText(IMCMessage message) {
+		final Object messageValue;
+		if (message.isItemStackMessage()) {
+			messageValue = message.getItemStackValue().toString();
+		} else if (message.isNBTMessage()) {
+			messageValue = message.getNBTValue();
+		} else if (message.isStringMessage()) {
+			messageValue = message.getStringValue();
+		} else {
+			messageValue = "";
+		}
+
+		return String.format(
+				"Received an invalid '%s' request '%s' from mod '%s'. Please contact the author and report this issue.",
+				message.key, messageValue, message.getSender());
+	}
+
+	protected static void logInvalidIMCMessage(IMCMessage message) {
+		String invalidIMCMessageText = getInvalidIMCMessageText(message);
+		Proxies.log.warning(invalidIMCMessageText);
 	}
 
 	public IGuiHandler getGuiHandler() {
@@ -65,14 +89,11 @@ public abstract class ForestryPlugin {
 		return null;
 	}
 
-	public IOreDictionaryHandler getDictionaryHandler() {
-		return null;
+	public void populateChunk(IChunkProvider chunkProvider, World world, Random rand, BlockPos pos,
+			boolean hasVillageGeneratedZ) {
 	}
 
-	public void populateChunk(IChunkProvider chunkProvider, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGeneratedZ) {
-	}
-
-	public void populateChunkRetroGen(World world, Random rand, int chunkX, int chunkZ) {
+	public void populateChunkRetroGen(World world, Random rand, BlockPos pos) {
 	}
 
 	public IPacketHandler getPacketHandler() {
@@ -90,12 +111,15 @@ public abstract class ForestryPlugin {
 	public ICommand[] getConsoleCommands() {
 		return null;
 	}
-	
+
 	public IFuelHandler getFuelHandler() {
 		return null;
 	}
 
 	protected void registerItems() {
+	}
+
+	protected void registerTriggers() {
 	}
 
 	protected void registerBackpackItems() {

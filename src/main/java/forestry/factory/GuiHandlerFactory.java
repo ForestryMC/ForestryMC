@@ -11,6 +11,7 @@
 package forestry.factory;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.core.GuiHandlerBase;
@@ -50,6 +51,7 @@ public class GuiHandlerFactory extends GuiHandlerBase {
 
 	@Override
 	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
+		BlockPos pos = new BlockPos(x, y, z);
 
 		if (id >= GuiId.values().length) {
 			return null;
@@ -57,44 +59,45 @@ public class GuiHandlerFactory extends GuiHandlerBase {
 
 		switch (GuiId.values()[id]) {
 
-			case BottlerGUI:
-				return new GuiBottler(player.inventory, (MachineBottler) getTileForestry(world, x, y, z));
+		case BottlerGUI:
+			return new GuiBottler(player.inventory, getTile(world, pos, player, MachineBottler.class));
 
-			case CarpenterGUI:
-				return new GuiCarpenter(player.inventory, (MachineCarpenter) getTileForestry(world, x, y, z));
+		case CarpenterGUI:
+			return new GuiCarpenter(player.inventory, getTile(world, pos, player, MachineCarpenter.class));
 
-			case CentrifugeGUI:
-				return new GuiCentrifuge(player.inventory, (MachineCentrifuge) getTileForestry(world, x, y, z));
+		case CentrifugeGUI:
+			return new GuiCentrifuge(player.inventory, getTile(world, pos, player, MachineCentrifuge.class));
 
-			case FabricatorGUI:
-				return new GuiFabricator(player.inventory, (MachineFabricator) getTileForestry(world, x, y, z));
+		case FabricatorGUI:
+			return new GuiFabricator(player.inventory, getTile(world, pos, player, MachineFabricator.class));
 
-			case FermenterGUI:
-				return new GuiFermenter(player.inventory, (MachineFermenter) getTileForestry(world, x, y, z));
+		case FermenterGUI:
+			return new GuiFermenter(player.inventory, getTile(world, pos, player, MachineFermenter.class));
 
-			case MoistenerGUI:
-				return new GuiMoistener(player.inventory, (MachineMoistener) getTileForestry(world, x, y, z));
+		case MoistenerGUI:
+			return new GuiMoistener(player.inventory, getTile(world, pos, player, MachineMoistener.class));
 
-			case RaintankGUI:
-				return new GuiRaintank(player.inventory, (MachineRaintank) getTileForestry(world, x, y, z));
+		case RaintankGUI:
+			return new GuiRaintank(player.inventory, getTile(world, pos, player, MachineRaintank.class));
 
-			case SqueezerGUI:
-				return new GuiSqueezer(player.inventory, (MachineSqueezer) getTileForestry(world, x, y, z));
+		case SqueezerGUI:
+			return new GuiSqueezer(player.inventory, getTile(world, pos, player, MachineSqueezer.class));
 
-			case StillGUI:
-				return new GuiStill(player.inventory, (MachineStill) getTileForestry(world, x, y, z));
+		case StillGUI:
+			return new GuiStill(player.inventory, getTile(world, pos, player, MachineStill.class));
 
-			case WorktableGUI:
-				return new GuiWorktable(player, (TileWorktable) getTileForestry(world, x, y, z));
-			
-			default:
-				return null;
+		case WorktableGUI:
+			return new GuiWorktable(player, getTile(world, pos, player, TileWorktable.class));
+
+		default:
+			return null;
 
 		}
 	}
 
 	@Override
 	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
+		BlockPos pos = new BlockPos(x, y, z);
 
 		if (id >= GuiId.values().length) {
 			return null;
@@ -102,38 +105,38 @@ public class GuiHandlerFactory extends GuiHandlerBase {
 
 		switch (GuiId.values()[id]) {
 
-			case BottlerGUI:
-				return new ContainerBottler(player.inventory, (MachineBottler) getTileForestry(world, x, y, z));
+		case BottlerGUI:
+			return new ContainerBottler(player.inventory, getTile(world, pos, player, MachineBottler.class));
 
-			case CarpenterGUI:
-				return new ContainerCarpenter(player.inventory, (MachineCarpenter) getTileForestry(world, x, y, z));
+		case CarpenterGUI:
+			return new ContainerCarpenter(player.inventory, getTile(world, pos, player, MachineCarpenter.class));
 
-			case CentrifugeGUI:
-				return new ContainerCentrifuge(player.inventory, (MachineCentrifuge) getTileForestry(world, x, y, z));
+		case CentrifugeGUI:
+			return new ContainerCentrifuge(player.inventory, getTile(world, pos, player, MachineCentrifuge.class));
 
-			case FabricatorGUI:
-				return new ContainerFabricator(player.inventory, (MachineFabricator) getTileForestry(world, x, y, z));
+		case FabricatorGUI:
+			return new ContainerFabricator(player.inventory, getTile(world, pos, player, MachineFabricator.class));
 
-			case FermenterGUI:
-				return new ContainerFermenter(player.inventory, (MachineFermenter) getTileForestry(world, x, y, z));
+		case FermenterGUI:
+			return new ContainerFermenter(player.inventory, getTile(world, pos, player, MachineFermenter.class));
 
-			case MoistenerGUI:
-				return new ContainerMoistener(player.inventory, (MachineMoistener) getTileForestry(world, x, y, z));
+		case MoistenerGUI:
+			return new ContainerMoistener(player.inventory, getTile(world, pos, player, MachineMoistener.class));
 
-			case RaintankGUI:
-				return new ContainerRaintank(player.inventory, (MachineRaintank) getTileForestry(world, x, y, z));
+		case RaintankGUI:
+			return new ContainerRaintank(player.inventory, getTile(world, pos, player, MachineRaintank.class));
 
-			case SqueezerGUI:
-				return new ContainerSqueezer(player.inventory, (MachineSqueezer) getTileForestry(world, x, y, z));
+		case SqueezerGUI:
+			return new ContainerSqueezer(player.inventory, getTile(world, pos, player, MachineSqueezer.class));
 
-			case StillGUI:
-				return new ContainerStill(player.inventory, (MachineStill) getTileForestry(world, x, y, z));
+		case StillGUI:
+			return new ContainerStill(player.inventory, getTile(world, pos, player, MachineStill.class));
 
-			case WorktableGUI:
-				return new ContainerWorktable(player, (TileWorktable) getTileForestry(world, x, y, z));
-			
-			default:
-				return null;
+		case WorktableGUI:
+			return new ContainerWorktable(player, getTile(world, pos, player, TileWorktable.class));
+
+		default:
+			return null;
 
 		}
 	}

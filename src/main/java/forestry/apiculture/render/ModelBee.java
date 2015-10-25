@@ -21,7 +21,7 @@ import forestry.api.apiculture.EnumBeeType;
 
 public class ModelBee extends ModelBase {
 
-	//fields
+	// fields
 	private final ModelRenderer snout;
 	private final ModelRenderer torsoWing;
 	private final ModelRenderer rump;
@@ -35,7 +35,7 @@ public class ModelBee extends ModelBase {
 	private final ModelRenderer crownQueen;
 	private final ModelRenderer crownPrincess;
 
-	EnumBeeType type = EnumBeeType.DRONE;
+	private EnumBeeType type = EnumBeeType.DRONE;
 
 	public ModelBee() {
 		textureWidth = 64;
@@ -122,9 +122,10 @@ public class ModelBee extends ModelBase {
 		this.type = type;
 	}
 
+	@Override
 	public void render(Entity entity, float f, float f1, float swing, float f3, float f4, float f5) {
 		super.render(entity, f, f1, swing, f3, f4, f5);
-		//setRotationAngles(f, f1, f2, f3, f4, f5, entity);
+		// setRotationAngles(f, f1, f2, f3, f4, f5, entity);
 
 		wingRight.rotateAngleZ = MathHelper.cos(swing * 1.3F) * (float) Math.PI * 0.25F;
 		wingLeft.rotateAngleZ = -wingRight.rotateAngleZ;
@@ -154,12 +155,13 @@ public class ModelBee extends ModelBase {
 		GL11.glPopMatrix();
 	}
 
-	private void setRotation(ModelRenderer model, float x, float y, float z) {
+	private static void setRotation(ModelRenderer model, float x, float y, float z) {
 		model.rotateAngleX = x;
 		model.rotateAngleY = y;
 		model.rotateAngleZ = z;
 	}
 
+	@Override
 	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
 		super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
 	}

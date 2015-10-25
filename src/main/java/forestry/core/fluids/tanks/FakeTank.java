@@ -19,8 +19,8 @@ import net.minecraftforge.fluids.FluidTankInfo;
 public final class FakeTank extends StandardTank {
 
 	public static final FakeTank INSTANCE = new FakeTank();
-	public static final FakeTank[] ARRAY = new FakeTank[]{INSTANCE};
-	public static final FluidTankInfo[] INFO = new FluidTankInfo[]{INSTANCE.getInfo()};
+	public static final FakeTank[] ARRAY = new FakeTank[] { INSTANCE };
+	public static final FluidTankInfo[] INFO = new FluidTankInfo[] { INSTANCE.getInfo() };
 
 	private FakeTank() {
 		super(1);

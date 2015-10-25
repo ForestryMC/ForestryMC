@@ -37,7 +37,8 @@ public class ItemAssemblyKit extends ItemForestry {
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
 		if (Proxies.common.isSimulating(world)) {
 			itemstack.stackSize--;
-			EntityItem entity = new EntityItem(world, entityplayer.posX, entityplayer.posY, entityplayer.posZ, assembled.copy());
+			EntityItem entity = new EntityItem(world, entityplayer.posX, entityplayer.posY, entityplayer.posZ,
+					assembled.copy());
 
 			if (motionOnOpen) {
 				float f1 = 0.3F;

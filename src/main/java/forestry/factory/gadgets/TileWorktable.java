@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.factory.gadgets;
 
+import java.io.IOException;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
@@ -17,23 +19,24 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.nbt.NBTTagCompound;
 
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
+
 import forestry.api.core.ForestryAPI;
 import forestry.core.gadgets.TileBase;
-import forestry.core.interfaces.ICrafter;
+import forestry.core.interfaces.ICrafterWorktable;
 import forestry.core.inventory.InvTools;
-import forestry.core.inventory.InventoryAdapter;
 import forestry.core.inventory.TileInventoryAdapter;
-import forestry.core.network.ForestryPacket;
+import forestry.core.inventory.wrappers.InventoryMapper;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
-import forestry.core.network.PacketIds;
-import forestry.core.network.PacketTileNBT;
-import forestry.core.network.PacketTileUpdate;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.GuiUtil;
 import forestry.core.utils.RecipeUtil;
+import forestry.core.utils.Utils;
 import forestry.factory.recipes.RecipeMemory;
 
-public class TileWorktable extends TileBase implements ICrafter {
+public class TileWorktable extends TileBase implements ICrafterWorktable {
 
 	/* CONSTANTS */
 	public final static int SLOT_CRAFTING_1 = 0;
@@ -49,20 +52,16 @@ public class TileWorktable extends TileBase implements ICrafter {
 	private final TileInventoryAdapter craftingInventory;
 
 	public TileWorktable() {
-		craftingInventory = new TileInventoryAdapter(this, 10, "CraftItems");
-		setInternalInventory(new TileInventoryAdapter(this, 18, "Items") {
-			@Override
-			public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-				return GuiUtil.isIndexInRange(slotIndex, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
-			}
-		});
+		craftingInventory = new TileInventoryAdapter<TileWorktable>(this, 10, "CraftItems");
+		setInternalInventory(new WorktableInventoryAdapter(this));
 
 		memorized = new RecipeMemory();
 	}
 
 	@Override
-	public void openGui(EntityPlayer player, TileBase tile) {
-		player.openGui(ForestryAPI.instance, GuiId.WorktableGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
+	public void openGui(EntityPlayer player) {
+		player.openGui(ForestryAPI.instance, GuiId.WorktableGUI.ordinal(), player.worldObj, pos.getX(), pos.getY(),
+				pos.getZ());
 	}
 
 	/* LOADING & SAVING */
@@ -71,7 +70,6 @@ public class TileWorktable extends TileBase implements ICrafter {
 		super.writeToNBT(nbttagcompound);
 
 		craftingInventory.writeToNBT(nbttagcompound);
-
 		memorized.writeToNBT(nbttagcompound);
 	}
 
@@ -80,24 +78,24 @@ public class TileWorktable extends TileBase implements ICrafter {
 		super.readFromNBT(nbttagcompound);
 
 		craftingInventory.readFromNBT(nbttagcompound);
-
 		memorized.readFromNBT(nbttagcompound);
 	}
 
 	/* NETWORK */
 	@Override
-	public void fromPacket(ForestryPacket packetRaw) {
-		if (packetRaw instanceof PacketTileUpdate) {
-			super.fromPacket(packetRaw);
-			return;
-		}
+	public void writeData(DataOutputStreamForestry data) throws IOException {
+		super.writeData(data);
 
-		PacketTileNBT packet = (PacketTileNBT) packetRaw;
-		readFromNBT(packet.getTagCompound());
+		craftingInventory.writeData(data);
+		memorized.writeData(data);
 	}
 
-	public void sendAll(EntityPlayer player) {
-		Proxies.net.sendToPlayer(new PacketTileNBT(PacketIds.TILE_NBT, this), player);
+	@Override
+	public void readData(DataInputStreamForestry data) throws IOException {
+		super.readData(data);
+
+		craftingInventory.readData(data);
+		memorized.readData(data);
 	}
 
 	@Override
@@ -112,7 +110,7 @@ public class TileWorktable extends TileBase implements ICrafter {
 	}
 
 	public void chooseRecipe(int recipeIndex) {
-		if (recipeIndex >= memorized.capacity) {
+		if (recipeIndex >= RecipeMemory.capacity) {
 			for (int slot = 0; slot < craftingInventory.getSizeInventory(); slot++) {
 				craftingInventory.setInventorySlotContents(slot, null);
 			}
@@ -167,11 +165,6 @@ public class TileWorktable extends TileBase implements ICrafter {
 		return RecipeUtil.canCraftRecipe(worldObj, recipeItems, recipeOutput, inventory);
 	}
 
-	private boolean removeResources(EntityPlayer player) {
-		ItemStack[] set = InvTools.getStacks(craftingInventory, SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT);
-		return InvTools.removeSets(getInternalInventory(), 1, set, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT, player, true, true, true);
-	}
-
 	@Override
 	public boolean canTakeStack(int slotIndex) {
 		if (slotIndex == SLOT_CRAFTING_RESULT) {
@@ -181,9 +174,42 @@ public class TileWorktable extends TileBase implements ICrafter {
 	}
 
 	@Override
-	public ItemStack takenFromSlot(int slotIndex, boolean consumeRecipe, EntityPlayer player) {
-		if (!removeResources(player)) {
-			return null;
+	public boolean onCraftingStart(EntityPlayer player) {
+		ItemStack[] set = InvTools.getStacks(currentRecipe.getMatrix(), SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT);
+		ItemStack[] removed = InvTools.removeSets(this, 1, set, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT, player, false,
+				true, true);
+
+		for (int i = 0; i < removed.length; i++) {
+			craftingInventory.setInventorySlotContents(i, removed[i]);
+		}
+
+		return removed != null;
+	}
+
+	@Override
+	public void onCraftingComplete(EntityPlayer player) {
+		IInventory craftingInventory = getCraftingInventory();
+		for (int i = 0; i < craftingInventory.getSizeInventory(); ++i) {
+			ItemStack itemStack = craftingInventory.getStackInSlot(i);
+			if (itemStack == null) {
+				continue;
+			}
+
+			if (!itemStack.getItem().hasContainerItem(itemStack)) {
+				continue;
+			}
+
+			ItemStack container = itemStack.getItem().getContainerItem(itemStack);
+
+			if (container != null && container.isItemStackDamageable()
+					&& container.getItemDamage() > container.getMaxDamage()) {
+				MinecraftForge.EVENT_BUS.post(new PlayerDestroyItemEvent(player, container));
+				continue;
+			}
+
+			if (!InvTools.tryAddStack(this, container, true)) {
+				player.dropPlayerItemWithRandomChoice(container, false);
+			}
 		}
 
 		if (Proxies.common.isSimulating(worldObj)) {
@@ -191,7 +217,6 @@ public class TileWorktable extends TileBase implements ICrafter {
 		}
 
 		updateCraftResult();
-		return currentRecipe.getRecipeOutput(worldObj).copy();
 	}
 
 	@Override
@@ -209,7 +234,18 @@ public class TileWorktable extends TileBase implements ICrafter {
 	/**
 	 * @return Inaccessible crafting inventory for the craft grid.
 	 */
-	public InventoryAdapter getCraftingInventory() {
-		return craftingInventory;
+	public IInventory getCraftingInventory() {
+		return new InventoryMapper(craftingInventory, SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT);
+	}
+
+	private static class WorktableInventoryAdapter extends TileInventoryAdapter<TileWorktable> {
+		public WorktableInventoryAdapter(TileWorktable worktable) {
+			super(worktable, 18, "Items");
+		}
+
+		@Override
+		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+			return Utils.isIndexInRange(slotIndex, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
+		}
 	}
 }

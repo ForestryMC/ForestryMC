@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "resource=apatite": { "model": "forestry:ores/apatite" },
+		"resource=copper": { "model": "forestry:ores/copper" },
+		"resource=tin": { "model": "forestry:ores/tin" }
+	}
+}

@@ -13,21 +13,23 @@ package forestry.storage.items;
 import java.util.List;
 import java.util.Locale;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import forestry.api.core.ForestryAPI;
+import forestry.api.core.IModelManager;
 import forestry.api.storage.BackpackStowEvent;
 import forestry.api.storage.EnumBackpackType;
 import forestry.api.storage.IBackpackDefinition;
@@ -41,29 +43,28 @@ import forestry.core.inventory.wrappers.InventoryIterator;
 import forestry.core.items.ItemInventoried;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
 import forestry.storage.BackpackMode;
 
 public class ItemBackpack extends ItemInventoried {
 
-	private final IBackpackDefinition info;
+	private final IBackpackDefinition definition;
 	private final EnumBackpackType type;
 
-	public ItemBackpack(IBackpackDefinition info, EnumBackpackType type) {
+	public ItemBackpack(IBackpackDefinition definition, EnumBackpackType type) {
 		super();
-		this.info = info;
+		this.definition = definition;
 		this.type = type;
 		setMaxStackSize(1);
 	}
 
 	public IBackpackDefinition getDefinition() {
-		return info;
+		return definition;
 	}
 
 	/**
 	 * @return true if the item's stackTagCompound needs to be synchronized over
-	 * SMP.
+	 *         SMP.
 	 */
 	@Override
 	public boolean getShareTag() {
@@ -78,7 +79,7 @@ public class ItemBackpack extends ItemInventoried {
 		}
 
 		if (!player.isSneaking()) {
-			openGui(player, itemstack);
+			openGui(player);
 		} else {
 			switchMode(itemstack);
 		}
@@ -87,13 +88,14 @@ public class ItemBackpack extends ItemInventoried {
 	}
 
 	@Override
-	public boolean onItemUse(ItemStack itemstack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
-		return getInventoryHit(world, x, y, z, side) != null;
+	public boolean onItemUse(ItemStack itemstack, EntityPlayer player, World world, BlockPos pos, EnumFacing side,
+			float hitX, float hitY, float hitZ) {
+		return getInventoryHit(world, pos, side) != null;
 	}
 
 	@Override
-	public boolean onItemUseFirst(ItemStack itemstack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
-
+	public boolean onItemUseFirst(ItemStack itemstack, EntityPlayer player, World world, BlockPos pos, EnumFacing side,
+			float hitX, float hitY, float hitZ) {
 		if (!Proxies.common.isSimulating(world)) {
 			return false;
 		}
@@ -103,13 +105,13 @@ public class ItemBackpack extends ItemInventoried {
 			return false;
 		}
 
-		return evaluateTileHit(itemstack, player, world, x, y, z, side, hitX, hitY, hitZ);
+		return evaluateTileHit(itemstack, player, world, pos, side);
 	}
 
-	public ItemStack tryStowing(EntityPlayer player, ItemStack backpackStack, ItemStack stack) {
+	public static ItemStack tryStowing(EntityPlayer player, ItemStack backpackStack, ItemStack stack) {
 
 		ItemBackpack backpack = ((ItemBackpack) backpackStack.getItem());
-		ItemInventory inventory = new ItemInventoryBackpack(ItemBackpack.class, backpack.getBackpackSize(), backpackStack);
+		ItemInventory inventory = new ItemInventoryBackpack(player, backpack.getBackpackSize(), backpackStack);
 		if (backpackStack.getItemDamage() == 1) {
 			return stack;
 		}
@@ -126,11 +128,10 @@ public class ItemBackpack extends ItemInventoried {
 		ItemStack remainder = InvTools.moveItemStack(stack, inventory);
 		stack.stackSize = remainder == null ? 0 : remainder.stackSize;
 
-		inventory.save();
 		return null;
 	}
 
-	private void switchMode(ItemStack itemstack) {
+	private static void switchMode(ItemStack itemstack) {
 		BackpackMode mode = getMode(itemstack);
 		int nextMode = mode.ordinal() + 1;
 		if (!Config.enableBackpackResupply && nextMode == BackpackMode.RESUPPLY.ordinal()) {
@@ -140,16 +141,16 @@ public class ItemBackpack extends ItemInventoried {
 		itemstack.setItemDamage(nextMode);
 	}
 
-	private IInventory getInventoryHit(World world, int x, int y, int z, int side) {
-		TileEntity targeted = world.getTileEntity(x, y, z);
-		return InvTools.getInventoryFromTile(targeted, ForgeDirection.getOrientation(side));
+	private static IInventory getInventoryHit(World world, BlockPos pos, EnumFacing side) {
+		TileEntity targeted = world.getTileEntity(pos);
+		return InvTools.getInventoryFromTile(targeted, side);
 	}
 
-	private boolean evaluateTileHit(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+	private boolean evaluateTileHit(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side) {
 
 		// Shift right-clicking on an inventory tile will attempt to transfer
 		// items contained in the backpack
-		IInventory inventory = getInventoryHit(world, x, y, z, side);
+		IInventory inventory = getInventoryHit(world, pos, side);
 		// Process only inventories
 		if (inventory != null) {
 
@@ -159,16 +160,14 @@ public class ItemBackpack extends ItemInventoried {
 			}
 
 			// Create our own backpack inventory
-			ItemInventoryBackpack backpackInventory = new ItemInventoryBackpack(ItemBackpack.class, getBackpackSize(), stack);
+			ItemInventoryBackpack backpackInventory = new ItemInventoryBackpack(player, getBackpackSize(), stack);
 
 			BackpackMode mode = getMode(stack);
 			if (mode == BackpackMode.RECEIVE) {
-				tryChestReceive(player, backpackInventory, inventory);
+				tryChestReceive(backpackInventory, inventory);
 			} else {
 				tryChestTransfer(backpackInventory, inventory);
 			}
-
-			backpackInventory.save();
 
 			return true;
 		}
@@ -176,7 +175,7 @@ public class ItemBackpack extends ItemInventoried {
 		return false;
 	}
 
-	private void tryChestTransfer(ItemInventoryBackpack backpackInventory, IInventory target) {
+	private static void tryChestTransfer(ItemInventoryBackpack backpackInventory, IInventory target) {
 
 		for (IInvSlot slot : InventoryIterator.getIterable(backpackInventory)) {
 			ItemStack packStack = slot.getStackInSlot();
@@ -189,7 +188,7 @@ public class ItemBackpack extends ItemInventoried {
 		}
 	}
 
-	private void tryChestReceive(EntityPlayer player, ItemInventoryBackpack backpackInventory, IInventory target) {
+	private void tryChestReceive(ItemInventoryBackpack backpackInventory, IInventory target) {
 
 		for (IInvSlot slot : InventoryIterator.getIterable(target)) {
 			ItemStack targetStack = slot.getStackInSlot();
@@ -197,7 +196,7 @@ public class ItemBackpack extends ItemInventoried {
 				continue;
 			}
 
-			if (!info.isValidItem(player, targetStack)) {
+			if (!definition.isValidItem(targetStack)) {
 				continue;
 			}
 
@@ -207,29 +206,21 @@ public class ItemBackpack extends ItemInventoried {
 
 	}
 
-	public void openGui(EntityPlayer entityplayer, ItemStack itemstack) {
+	protected void openGui(EntityPlayer entityplayer) {
 		if (getBackpackSize() == Defaults.SLOTS_BACKPACK_DEFAULT) {
-			entityplayer.openGui(ForestryAPI.instance, GuiId.BackpackGUI.ordinal(), entityplayer.worldObj, (int) entityplayer.posX, (int) entityplayer.posY,
-					(int) entityplayer.posZ);
+			entityplayer.openGui(ForestryAPI.instance, GuiId.BackpackGUI.ordinal(), entityplayer.worldObj,
+					(int) entityplayer.posX, (int) entityplayer.posY, (int) entityplayer.posZ);
 		} else if (getBackpackSize() == Defaults.SLOTS_BACKPACK_T2) {
-			entityplayer.openGui(ForestryAPI.instance, GuiId.BackpackT2GUI.ordinal(), entityplayer.worldObj, (int) entityplayer.posX, (int) entityplayer.posY,
-					(int) entityplayer.posZ);
+			entityplayer.openGui(ForestryAPI.instance, GuiId.BackpackT2GUI.ordinal(), entityplayer.worldObj,
+					(int) entityplayer.posX, (int) entityplayer.posY, (int) entityplayer.posZ);
 		}
-	}
-
-	public boolean isBackpack(ItemStack stack) {
-		if (stack == null) {
-			return false;
-		}
-
-		return stack.getItem() == this;
 	}
 
 	public int getBackpackSize() {
 		return getSlotsForType(type);
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean flag) {
 		int occupied = ItemInventory.getOccupiedSlotCount(itemstack);
@@ -242,92 +233,76 @@ public class ItemBackpack extends ItemInventoried {
 		} else if (mode == BackpackMode.RESUPPLY) {
 			list.add(StringUtil.localize("storage.backpack.mode.resupply"));
 		}
-		list.add(StringUtil.localize("gui.slots").replaceAll("%USED", String.valueOf(occupied)).replaceAll("%SIZE", String.valueOf(getBackpackSize())));
+		list.add(StringUtil.localize("gui.slots").replaceAll("%USED", String.valueOf(occupied)).replaceAll("%SIZE",
+				String.valueOf(getBackpackSize())));
 
 	}
 
 	@Override
 	public String getItemStackDisplayName(ItemStack itemstack) {
-		try {
-			return info.getName(itemstack);
-		} catch (Error e) {
-			return info.getName();
-		}
+		return definition.getName(itemstack);
 	}
 
 	/* ICONS */
 	@SideOnly(Side.CLIENT)
-	private IIcon[] icons;
+	private ModelResourceLocation[] models;
+
+	@SideOnly(Side.CLIENT)
+	public static int i = 0;
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerIcons(IIconRegister register) {
-		icons = new IIcon[6];
-
+	public void registerModel(Item item, IModelManager manager) {
 		EnumBackpackType t = type == EnumBackpackType.APIARIST ? EnumBackpackType.T1 : type;
 		String typeTag = "backpacks/" + t.toString().toLowerCase(Locale.ENGLISH);
-
-		icons[0] = TextureManager.getInstance().registerTex(register, typeTag + ".cloth");
-		icons[1] = TextureManager.getInstance().registerTex(register, typeTag + ".outline");
-		icons[2] = TextureManager.getInstance().registerTex(register, "backpacks/neutral");
-		icons[3] = TextureManager.getInstance().registerTex(register, "backpacks/locked");
-		icons[4] = TextureManager.getInstance().registerTex(register, "backpacks/receive");
-		icons[5] = TextureManager.getInstance().registerTex(register, "backpacks/resupply");
+		models = new ModelResourceLocation[4];
+		models[0] = new ModelResourceLocation("forestry:" + typeTag + "_neutral", "inventory");
+		models[1] = new ModelResourceLocation("forestry:" + typeTag + "_locked", "inventory");
+		models[2] = new ModelResourceLocation("forestry:" + typeTag + "_receive", "inventory");
+		models[3] = new ModelResourceLocation("forestry:" + typeTag + "_resupply", "inventory");
+		if (i == 0 && (type == EnumBackpackType.T1 || type == EnumBackpackType.APIARIST)
+				|| i == 1 && type == EnumBackpackType.T2) {
+			manager.registerVariant(item, "forestry:" + typeTag + "_neutral");
+			manager.registerVariant(item, "forestry:" + typeTag + "_locked");
+			manager.registerVariant(item, "forestry:" + typeTag + "_receive");
+			manager.registerVariant(item, "forestry:" + typeTag + "_resupply");
+			i++;
+		}
+		manager.registerItemModel(item, new BackpackMeshDefinition());
 	}
 
-	// Return true to enable color overlay - client side only
-	@Override
-	public boolean requiresMultipleRenderPasses() {
-		return true;
-	}
+	@SideOnly(Side.CLIENT)
+	private class BackpackMeshDefinition implements ItemMeshDefinition {
 
-	@Override
-	public int getRenderPasses(int metadata) {
-		return 3;
+		@Override
+		public ModelResourceLocation getModelLocation(ItemStack stack) {
+			EnumBackpackType t = type == EnumBackpackType.APIARIST ? EnumBackpackType.T1 : type;
+			return models[stack.getItemDamage()];
+		}
+
 	}
 
 	@Override
 	public int getColorFromItemStack(ItemStack itemstack, int j) {
 
 		if (j == 0) {
-			return info.getPrimaryColour();
+			return definition.getPrimaryColour();
 		} else if (j == 1) {
-			return info.getSecondaryColour();
+			return definition.getSecondaryColour();
 		} else {
 			return 0xffffff;
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
-	@Override
-	public IIcon getIconFromDamageForRenderPass(int i, int j) {
-		if (j == 0) {
-			return icons[0];
-		}
-		if (j == 1) {
-			return icons[1];
-		}
-
-		if (i > 2) {
-			return icons[5];
-		} else if (i > 1) {
-			return icons[4];
-		} else if (i > 0) {
-			return icons[3];
-		} else {
-			return icons[2];
-		}
-	}
-
-	public static int getSlotsForType(EnumBackpackType type) {
+	private static int getSlotsForType(EnumBackpackType type) {
 		switch (type) {
-			case APIARIST:
-				return Defaults.SLOTS_BACKPACK_APIARIST;
-			case T2:
-				return Defaults.SLOTS_BACKPACK_T2;
-			case T1:
-			default:
-				return Defaults.SLOTS_BACKPACK_DEFAULT;
+		case APIARIST:
+			return Defaults.SLOTS_BACKPACK_APIARIST;
+		case T2:
+			return Defaults.SLOTS_BACKPACK_T2;
+		case T1:
+		default:
+			return Defaults.SLOTS_BACKPACK_DEFAULT;
 		}
 	}
 

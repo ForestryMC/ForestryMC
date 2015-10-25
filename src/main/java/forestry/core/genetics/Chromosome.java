@@ -19,7 +19,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IChromosome;
-import forestry.api.genetics.ILegacyHandler;
 import forestry.core.proxy.Proxies;
 
 public class Chromosome implements IChromosome {
@@ -46,20 +45,6 @@ public class Chromosome implements IChromosome {
 	// / SAVING & LOADING
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
-
-		// Legacy
-		if (nbttagcompound.hasKey("PrimaryId")) {
-			primary = ((ILegacyHandler) AlleleManager.alleleRegistry).getFromLegacyMap(nbttagcompound.getInteger("PrimaryId"));
-			secondary = ((ILegacyHandler) AlleleManager.alleleRegistry).getFromLegacyMap(nbttagcompound.getInteger("SecondaryId"));
-
-			if (primary == null || secondary == null) {
-				throw new RuntimeException("Legacy conversion of chromosome failed. Did one of your bee addons not update? No legacy mapping for ids: "
-						+ nbttagcompound.getInteger("PrimaryId") + " - " + nbttagcompound.getInteger("SecondaryId"));
-			}
-
-			return;
-		}
-
 		primary = AlleleManager.alleleRegistry.getAllele(nbttagcompound.getString(UID0_TAG));
 		secondary = AlleleManager.alleleRegistry.getAllele(nbttagcompound.getString(UID1_TAG));
 	}
@@ -82,6 +67,9 @@ public class Chromosome implements IChromosome {
 
 	@Override
 	public IAllele getActiveAllele() {
+		if (primary == null || secondary == null) {
+			return null;
+		}
 		if (primary.isDominant()) {
 			return primary;
 		}
@@ -131,7 +119,7 @@ public class Chromosome implements IChromosome {
 			primary = template;
 			foundInvalidAlleles = true;
 		}
-		
+
 		if (secondary == null) {
 			Proxies.log.warning("Missing secondary allele: {0}. Setting to: {1}", this, template);
 			secondary = template;
@@ -144,7 +132,7 @@ public class Chromosome implements IChromosome {
 
 		return foundInvalidAlleles;
 	}
-	
+
 	public boolean hasInvalidAlleles(Class<? extends IAllele> chromosomeClass) {
 		if (primary == null) {
 			Proxies.log.severe("Missing primary allele: {0}", this);
@@ -155,17 +143,18 @@ public class Chromosome implements IChromosome {
 			Proxies.log.severe("Wrong primary allele for: {0}. Should be: {1}", this, chromosomeClass.getSimpleName());
 			return true;
 		}
-		
+
 		if (secondary == null) {
 			Proxies.log.severe("Missing secondary allele: {0}", this);
 			return true;
 		}
 
 		if (!chromosomeClass.isInstance(secondary)) {
-			Proxies.log.severe("Wrong secondary allele for: {0}. Should be: {1}", this, chromosomeClass.getSimpleName());
+			Proxies.log.severe("Wrong secondary allele for: {0}. Should be: {1}", this,
+					chromosomeClass.getSimpleName());
 			return true;
 		}
-		
+
 		return false;
 	}
 

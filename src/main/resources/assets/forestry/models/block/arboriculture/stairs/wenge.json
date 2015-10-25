@@ -1,0 +1,8 @@
+{
+  "parent": "block/stairs",
+  "textures": {
+    "side": "forestry:blocks/wood/planks.wenge",
+    "top": "forestry:blocks/wood/planks.wenge",
+    "bottom": "forestry:blocks/wood/planks.wenge"
+  }
+}

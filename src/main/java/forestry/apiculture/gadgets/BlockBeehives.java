@@ -15,8 +15,10 @@ import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,24 +26,23 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import forestry.api.apiculture.IHiveDrop;
+import forestry.api.apiculture.hives.IHiveRegistry.HiveType;
+import forestry.api.core.IModelManager;
+import forestry.api.core.IModelRegister;
 import forestry.api.core.Tabs;
 import forestry.apiculture.MaterialBeehive;
-import forestry.apiculture.worldgen.HiveRegistry;
 import forestry.core.config.Config;
 import forestry.core.inventory.InvTools;
-import forestry.core.render.TextureManager;
 import forestry.core.utils.StackUtils;
 import forestry.plugins.PluginApiculture;
 
-public class BlockBeehives extends BlockContainer {
+public class BlockBeehives extends BlockContainer implements IModelRegister {
+
+	public static final PropertyEnum HIVETYPES = PropertyEnum.create("hive", HiveType.class);
 
 	public BlockBeehives() {
 		super(new MaterialBeehive(true));
@@ -49,6 +50,22 @@ public class BlockBeehives extends BlockContainer {
 		setHardness(1.0f);
 		setCreativeTab(Tabs.tabApiculture);
 		setHarvestLevel("scoop", 0);
+		setDefaultState(this.blockState.getBaseState().withProperty(HIVETYPES, HiveType.FOREST));
+	}
+
+	@Override
+	protected BlockState createBlockState() {
+		return new BlockState(this, new IProperty[] { HIVETYPES });
+	}
+
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return ((HiveType) state.getValue(HIVETYPES)).ordinal() + 1;
+	}
+
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		return getDefaultState().withProperty(HIVETYPES, HiveType.values()[meta - 1]);
 	}
 
 	@Override
@@ -57,54 +74,53 @@ public class BlockBeehives extends BlockContainer {
 	}
 
 	@Override
-	public boolean canEntityDestroy(IBlockAccess world, int x, int y, int z, Entity entity) {
+	public boolean canEntityDestroy(IBlockAccess world, BlockPos pos, Entity entity) {
 		return false;
 	}
 
 	@Override
-	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest) {
-		if (canHarvestBlock(player, world.getBlockMetadata(x, y, z))) {
+	public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+		if (canHarvestBlock(world, pos, player)) {
 			// Handle TE'd beehives
-			TileEntity tile = world.getTileEntity(x, y, z);
+			TileEntity tile = world.getTileEntity(pos);
 
 			if (tile instanceof TileSwarm) {
 				TileSwarm swarm = (TileSwarm) tile;
 				if (swarm.containsBees()) {
 					for (ItemStack beeStack : InvTools.getStacks(swarm.contained)) {
 						if (beeStack != null) {
-							StackUtils.dropItemStackAsEntity(beeStack, world, x, y, z);
+							StackUtils.dropItemStackAsEntity(beeStack, world, pos.getX(), pos.getY(), pos.getZ());
 						}
 					}
 				}
 			}
 		}
 
-		return world.setBlockToAir(x, y, z);
+		return world.setBlockToAir(pos);
 	}
 
 	@Override
-	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState metadata, int fortune) {
-		List<ItemStack> ret = new ArrayList<ItemStack>();
+	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
 
 		// Handle legacy block
-		if (metadata == 0) {
+		if (getMetaFromState(state) == 0) {
 			ret.add(new ItemStack(this));
 			return ret;
 		}
 
-		List<IHiveDrop> dropList = getDropsForHive(metadata);
+		List<IHiveDrop> dropList = getDropsForHive(getMetaFromState(state));
 
 		Collections.shuffle(dropList);
 		// Grab a princess
 		int tries = 0;
 		boolean hasPrincess = false;
-
 		while (tries <= 10 && !hasPrincess) {
 			tries++;
 
 			for (IHiveDrop drop : dropList) {
-				if (RANDOM.nextInt(100) < drop.getChance(world, pos)) {
-					ret.add(drop.getPrincess(world, pos, fortune));
+				if (RANDOM.nextInt(100) < drop.getChance((World) world, pos)) {
+					ret.add(drop.getPrincess((World) world, pos, fortune));
 					hasPrincess = true;
 					break;
 				}
@@ -113,15 +129,15 @@ public class BlockBeehives extends BlockContainer {
 
 		// Grab drones
 		for (IHiveDrop drop : dropList) {
-			if (RANDOM.nextInt(100) < drop.getChance(world, pos)) {
-				ret.addAll(drop.getDrones(world, pos, fortune));
+			if (RANDOM.nextInt(100) < drop.getChance((World) world, pos)) {
+				ret.addAll(drop.getDrones((World) world, pos, fortune));
 				break;
 			}
 		}
 		// Grab anything else on offer
 		for (IHiveDrop drop : dropList) {
-			if (RANDOM.nextInt(100) < drop.getChance(world, pos)) {
-				ret.addAll(drop.getAdditional(world, pos, fortune));
+			if (RANDOM.nextInt(100) < drop.getChance((World) world, pos)) {
+				ret.addAll(drop.getAdditional((World) world, pos, fortune));
 				break;
 			}
 		}
@@ -131,11 +147,11 @@ public class BlockBeehives extends BlockContainer {
 
 	// / CREATIVE INVENTORY
 	@Override
-	public int damageDropped(int meta) {
-		return meta;
+	public int damageDropped(IBlockState state) {
+		return getMetaFromState(state);
 	}
 
-	private List<IHiveDrop> getDropsForHive(int meta) {
+	private static List<IHiveDrop> getDropsForHive(int meta) {
 		String hiveName = getHiveNameForMeta(meta);
 		if (hiveName == null) {
 			return Collections.emptyList();
@@ -143,27 +159,32 @@ public class BlockBeehives extends BlockContainer {
 		return PluginApiculture.hiveRegistry.getDrops(hiveName);
 	}
 
-	private String getHiveNameForMeta(int meta) {
+	private static String getHiveNameForMeta(int meta) {
 		switch (meta) {
-			case 1:
-				return HiveRegistry.forest;
-			case 2:
-				return HiveRegistry.meadows;
-			case 3:
-				return HiveRegistry.desert;
-			case 4:
-				return HiveRegistry.jungle;
-			case 5:
-				return HiveRegistry.end;
-			case 6:
-				return HiveRegistry.snow;
-			case 7:
-				return HiveRegistry.swamp;
+		case 1:
+			return HiveType.FOREST.getHiveName();
+		case 2:
+			return HiveType.MEADOWS.getHiveName();
+		case 3:
+			return HiveType.DESERT.getHiveName();
+		case 4:
+			return HiveType.JUNGLE.getHiveName();
+		case 5:
+			return HiveType.END.getHiveName();
+		case 6:
+			return HiveType.SNOW.getHiveName();
+		case 7:
+			return HiveType.SWAMP.getHiveName();
 		}
 		return null;
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
+	@Override
+	public int getRenderType() {
+		return 3;
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List itemList) {
 		itemList.add(new ItemStack(this, 1, 1));
@@ -178,38 +199,15 @@ public class BlockBeehives extends BlockContainer {
 		// Swarm hive not added
 	}
 
-	/* ICONS */
-	@SideOnly(Side.CLIENT)
-	private IIcon[] icons;
-
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister register) {
-		icons = new IIcon[18];
-		for (int i = 1; i < 9; i++) {
-			icons[i * 2] = TextureManager.getInstance().registerTex(register, "beehives/beehive." + i + ".top");
-			icons[(i * 2) + 1] = TextureManager.getInstance().registerTex(register, "beehives/beehive." + i + ".side");
-		}
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(int i, int j) {
-		if (j == 0 || j > 8) {
-			return null;
-		}
-
-		if (i == 0 || i == 1) {
-			if (j * 2 < icons.length && icons[j * 2] != null) {
-				return icons[j * 2];
-			} else {
-				return icons[2];
-			}
-		} else if (j * 2 + 1 < icons.length && icons[j * 2 + 1] != null) {
-			return icons[j * 2 + 1];
-		} else {
-			return icons[3];
-		}
+	public void registerModel(Item item, IModelManager manager) {
+		manager.registerItemModel(item, 1, "beehives", HiveType.FOREST.getName());
+		manager.registerItemModel(item, 2, "beehives", HiveType.MEADOWS.getName());
+		manager.registerItemModel(item, 3, "beehives", HiveType.DESERT.getName());
+		manager.registerItemModel(item, 4, "beehives", HiveType.JUNGLE.getName());
+		manager.registerItemModel(item, 5, "beehives", HiveType.END.getName());
+		manager.registerItemModel(item, 6, "beehives", HiveType.SNOW.getName());
+		manager.registerItemModel(item, 7, "beehives", HiveType.SWAMP.getName());
 	}
 
 }

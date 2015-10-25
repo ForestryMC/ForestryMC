@@ -14,15 +14,13 @@ import java.util.Collection;
 import java.util.Stack;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
+import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.core.config.ForestryBlock;
@@ -34,8 +32,7 @@ import forestry.core.vect.VectUtil;
 public class FarmLogicPeat extends FarmLogicWatered {
 
 	public FarmLogicPeat(IFarmHousing housing) {
-		super(housing, new ItemStack[]{ForestryBlock.soil.getItemStack(1, 1)},
-				ForestryBlock.soil.getItemStack(1, 1));
+		super(housing, ForestryBlock.soil.getItemStack(1, 1), ForestryBlock.soil.getItemStack(1, 1));
 	}
 
 	@Override
@@ -44,7 +41,7 @@ public class FarmLogicPeat extends FarmLogicWatered {
 			return true;
 		}
 
-		Block block = BlockSoil.getBlockFromItem(itemStack.getItem());
+		Block block = Block.getBlockFromItem(itemStack.getItem());
 		if (block == null || !(block instanceof BlockSoil)) {
 			return false;
 		}
@@ -73,7 +70,7 @@ public class FarmLogicPeat extends FarmLogicWatered {
 	}
 
 	@Override
-	public Collection<ICrop> harvest(BlockPos pos, EnumFacing direction, int extent) {
+	public Collection<ICrop> harvest(BlockPos pos, FarmDirection direction, int extent) {
 		World world = getWorld();
 
 		Stack<ICrop> crops = new Stack<ICrop>();
@@ -102,8 +99,8 @@ public class FarmLogicPeat extends FarmLogicWatered {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon getIcon() {
-		return ForestryItem.peat.item().getIconFromDamage(0);
+	public Item getIconItem() {
+		return ForestryItem.peat.item();
 	}
 
 }

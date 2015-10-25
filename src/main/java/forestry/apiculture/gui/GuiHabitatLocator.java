@@ -11,15 +11,13 @@
 package forestry.apiculture.gui;
 
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.biome.BiomeGenBase;
 
@@ -27,89 +25,42 @@ import net.minecraftforge.common.BiomeDictionary;
 
 import org.lwjgl.opengl.GL11;
 
+import forestry.api.core.sprite.ISprite;
 import forestry.apiculture.items.ItemHabitatLocator.HabitatLocatorInventory;
 import forestry.core.config.Defaults;
-import forestry.core.gadgets.TileForestry;
 import forestry.core.gui.GuiForestry;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.SpriteSheet;
 import forestry.core.render.TextureManager;
 
-public class GuiHabitatLocator extends GuiForestry<TileForestry> {
+public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator, HabitatLocatorInventory> {
 
-	public class HabitatSlot extends Widget {
-
-		private final int slot;
-		private final String name;
-		private final String iconIndex;
-		public boolean isActive = false;
-
-		public HabitatSlot(int slot, String name) {
-			super(widgetManager, 0, 0);
-			this.slot = slot;
-			this.name = name;
-			this.iconIndex = "habitats/" + name.toLowerCase(Locale.ENGLISH);
-		}
-
-		@Override
-		public String getLegacyTooltip(EntityPlayer player) {
-			return name;
-		}
-
-		public IIcon getIcon() {
-			return TextureManager.getInstance().getDefault(iconIndex);
-		}
-
-		public void setPosition(int x, int y) {
-			this.xPos = x;
-			this.yPos = y;
-		}
-
-		@Override
-		public void draw(int startX, int startY) {
-
-			if (getIcon() != null) {
-				GL11.glDisable(GL11.GL_LIGHTING);
-
-				if (!isActive) {
-					GL11.glColor4f(0.2f, 0.2f, 0.2f, 0.2f);
-				} else {
-					GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-				}
-
-				Proxies.common.bindTexture(SpriteSheet.ITEMS);
-				manager.gui.drawTexturedModelRectFromIcon(startX + xPos, startY + yPos, getIcon(), 16, 16);
-				GL11.glEnable(GL11.GL_LIGHTING);
-			}
-		}
-
-	}
-
-	private final HabitatSlot[] habitatSlots = new HabitatSlot[]{
-			new HabitatSlot(0, "Ocean"), // ocean, beach
-			new HabitatSlot(1, "Plains"),
-			new HabitatSlot(2, "Desert"), // desert, desert hills
+	private final HabitatSlot[] habitatSlots = new HabitatSlot[] { new HabitatSlot(0, "Ocean"), // ocean,
+																								// beach
+			new HabitatSlot(1, "Plains"), new HabitatSlot(2, "Desert"), // desert,
+																		// desert
+																		// hills
 			new HabitatSlot(3, "Forest"), // forest, forestHills, river
 			new HabitatSlot(4, "Jungle"), // jungle, jungleHills
 			new HabitatSlot(5, "Taiga"), // taiga, taigaHills
 			new HabitatSlot(6, "Hills"), // extremeHills, extremeHillsEdge
-			new HabitatSlot(7, "Swamp"),
-			new HabitatSlot(8, "Snow"), // Ice plains, mountains, frozen rivers, frozen oceans
-			new HabitatSlot(9, "Mushroom"),
-			new HabitatSlot(10, "Nether"),
-			new HabitatSlot(11, "End")};
-	private final Map<BiomeDictionary.Type, HabitatSlot> biomeToHabitat = new HashMap<BiomeDictionary.Type, HabitatSlot>();
+			new HabitatSlot(7, "Swamp"), new HabitatSlot(8, "Snow"), // Ice
+																		// plains,
+																		// mountains,
+																		// frozen
+																		// rivers,
+																		// frozen
+																		// oceans
+			new HabitatSlot(9, "Mushroom"), new HabitatSlot(10, "Nether"), new HabitatSlot(11, "End") };
+	private final Map<BiomeDictionary.Type, HabitatSlot> biomeToHabitat = new EnumMap<BiomeDictionary.Type, HabitatSlot>(
+			BiomeDictionary.Type.class);
 
 	private int startX;
 	private int startY;
-	private final HabitatLocatorInventory inventory;
 
-	public GuiHabitatLocator(InventoryPlayer inventory, HabitatLocatorInventory item) {
-		super(Defaults.TEXTURE_PATH_GUI + "/biomefinder.png", new ContainerHabitatLocator(inventory, item), item);
+	public GuiHabitatLocator(EntityPlayer player, HabitatLocatorInventory item) {
+		super(Defaults.TEXTURE_PATH_GUI + "/biomefinder.png", new ContainerHabitatLocator(player, item), item);
 
-		this.inventory = item;
-		this.inventory.tryAnalyze();
 		xSize = 176;
 		ySize = 184;
 
@@ -150,16 +101,17 @@ public class GuiHabitatLocator extends GuiForestry<TileForestry> {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
 		String str = StatCollector.translateToLocal("item.for.habitatLocator.name").toUpperCase();
-		fontRendererObj.drawString(str, startX + 8 + getCenteredOffset(str, 138), startY + 16, fontColor.get("gui.screen"));
+		fontRendererObj.drawString(str, startX + 8 + getCenteredOffset(str, 138), startY + 16,
+				fontColor.get("gui.screen"));
 
 		// Set active according to valid biomes.
-		Set<BiomeDictionary.Type> activeBiomeTypes = new HashSet<BiomeDictionary.Type>();
+		Set<BiomeDictionary.Type> activeBiomeTypes = EnumSet.noneOf(BiomeDictionary.Type.class);
 
 		for (HabitatSlot habitatSlot : habitatSlots) {
 			habitatSlot.isActive = false;
 		}
 
-		for (BiomeGenBase biome : inventory.biomesToSearch) {
+		for (BiomeGenBase biome : inventory.getBiomesToSearch()) {
 			Collections.addAll(activeBiomeTypes, BiomeDictionary.getTypesForBiome(biome));
 		}
 
@@ -183,6 +135,54 @@ public class GuiHabitatLocator extends GuiForestry<TileForestry> {
 
 		startX = (this.width - this.xSize) / 2;
 		startY = (this.height - this.ySize) / 2;
+	}
+
+	public class HabitatSlot extends Widget {
+
+		private final int slot;
+		private final String name;
+		private final String iconIndex;
+		public boolean isActive = false;
+
+		public HabitatSlot(int slot, String name) {
+			super(widgetManager, 0, 0);
+			this.slot = slot;
+			this.name = name;
+			this.iconIndex = "habitats/" + name.toLowerCase(Locale.ENGLISH);
+		}
+
+		@Override
+		public String getLegacyTooltip(EntityPlayer player) {
+			return name;
+		}
+
+		public ISprite getIcon() {
+			return TextureManager.getInstance().getDefault(iconIndex);
+		}
+
+		public void setPosition(int x, int y) {
+			this.xPos = x;
+			this.yPos = y;
+		}
+
+		@Override
+		public void draw(int startX, int startY) {
+
+			if (getIcon() != null) {
+				GL11.glDisable(GL11.GL_LIGHTING);
+
+				if (!isActive) {
+					GL11.glColor4f(0.2f, 0.2f, 0.2f, 0.2f);
+				} else {
+					GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+				}
+
+				Proxies.common.bindTexture();
+				manager.gui.drawTexturedModelRect(startX + xPos, startY + yPos, getIcon(), 16, 16);
+				GL11.glEnable(GL11.GL_LIGHTING);
+			}
+		}
+
 	}
 
 }

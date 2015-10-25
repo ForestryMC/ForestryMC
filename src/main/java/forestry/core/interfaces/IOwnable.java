@@ -16,16 +16,12 @@ import com.mojang.authlib.GameProfile;
 
 public interface IOwnable {
 
-	boolean isOwnable();
-
 	boolean isOwned();
 
-	GameProfile getOwnerProfile();
+	GameProfile getOwner();
 
-	void setOwner(EntityPlayer player);
+	void setOwner(GameProfile owner);
 
 	boolean isOwner(EntityPlayer player);
-
-	boolean allowsRemoval(EntityPlayer player);
 
 }

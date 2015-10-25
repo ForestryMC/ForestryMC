@@ -9,7 +9,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * Optional annotation to provide additional information on IPlugins. This information will be available via the "/forestry plugin info $pluginID" command ingame.
+ * Optional annotation to provide additional information on IPlugins. This
+ * information will be available via the "/forestry plugin info $pluginID"
+ * command ingame.
  *
  * @author SirSengir
  */

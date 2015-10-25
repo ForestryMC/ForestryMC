@@ -19,15 +19,10 @@ import forestry.core.interfaces.IInventoriedItem;
 
 public abstract class ItemInventoried extends ItemForestry implements IInventoriedItem {
 
-	public ItemInventoried() {
-		super();
-	}
-
 	@Override
 	public boolean onDroppedByPlayer(ItemStack itemstack, EntityPlayer player) {
-		if (itemstack != null &&
-				player instanceof EntityPlayerMP &&
-				player.openContainer instanceof ContainerItemInventory) {
+		if (itemstack != null && player instanceof EntityPlayerMP
+				&& player.openContainer instanceof ContainerItemInventory) {
 			player.closeScreen();
 		}
 

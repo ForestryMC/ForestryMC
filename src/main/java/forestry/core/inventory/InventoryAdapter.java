@@ -10,24 +10,30 @@
  ******************************************************************************/
 package forestry.core.inventory;
 
+import java.io.IOException;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IChatComponent;
 import forestry.core.config.Defaults;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.IStreamable;
 import forestry.core.utils.PlainInventory;
 
 /**
  * With permission from Krapht.
  */
-public class InventoryAdapter implements IInventoryAdapter {
+public class InventoryAdapter implements IInventoryAdapter, IStreamable {
 
-	protected final IInventory inventory;
+	private final IInventory inventory;
 	private boolean allowAutomation = true;
 
-	//private boolean debug = false;
+	// private boolean debug = false;
 
 	public InventoryAdapter(int size, String name) {
 		this(size, name, 64);
@@ -47,16 +53,17 @@ public class InventoryAdapter implements IInventoryAdapter {
 		return this;
 	}
 
-	//	public InventoryAdapter enableDebug() {
-	//		this.debug = true;
-	//		return this;
-	//	}
+	// public InventoryAdapter enableDebug() {
+	// this.debug = true;
+	// return this;
+	// }
 
 	/**
 	 * @return Copy of this inventory. Stacks are copies.
 	 */
 	public InventoryAdapter copy() {
-		InventoryAdapter copy = new InventoryAdapter(inventory.getSizeInventory(), inventory.getInventoryName(), inventory.getInventoryStackLimit());
+		InventoryAdapter copy = new InventoryAdapter(inventory.getSizeInventory(), inventory.getCommandSenderName(),
+				inventory.getInventoryStackLimit());
 
 		for (int i = 0; i < inventory.getSizeInventory(); i++) {
 			if (inventory.getStackInSlot(i) != null) {
@@ -66,7 +73,6 @@ public class InventoryAdapter implements IInventoryAdapter {
 
 		return copy;
 	}
-
 
 	/* IINVENTORY */
 	@Override
@@ -90,8 +96,8 @@ public class InventoryAdapter implements IInventoryAdapter {
 	}
 
 	@Override
-	public String getInventoryName() {
-		return inventory.getInventoryName();
+	public String getCommandSenderName() {
+		return inventory.getCommandSenderName();
 	}
 
 	@Override
@@ -115,7 +121,7 @@ public class InventoryAdapter implements IInventoryAdapter {
 	}
 
 	@Override
-	public boolean hasCustomInventoryName() {
+	public boolean hasCustomName() {
 		return true;
 	}
 
@@ -135,56 +141,56 @@ public class InventoryAdapter implements IInventoryAdapter {
 	}
 
 	@Override
-	public void openInventory() {
+	public void openInventory(EntityPlayer player) {
 	}
 
 	@Override
-	public void closeInventory() {
+	public void closeInventory(EntityPlayer player) {
 	}
 
 	/* ISIDEDINVENTORY */
 	private int[][] slotMap;
 
 	@Override
-	public int[] getAccessibleSlotsFromSide(int side) {
+	public int[] getSlotsForFace(EnumFacing side) {
 		if (allowAutomation) {
-			return slotMap[side];
+			return slotMap[side.ordinal()];
 		}
 		return Defaults.SLOTS_NONE;
 	}
 
 	private void configureSided() {
 		slotMap = new int[6][0];
-		InvTools.configureSided(this, Defaults.FACINGS, 0, getSizeInventory());
-	}
 
-	@Override
-	public InventoryAdapter configureSided(int[] sides, int[] slots) {
-		for (int side : sides) {
-			slotMap[side] = slots;
+		int count = getSizeInventory();
+		int[] slots = new int[count];
+		for (int i = 0; i < count; i++) {
+			slots[i] = i;
 		}
 
-		return this;
+		for (int side : Defaults.FACINGS) {
+			slotMap[side] = slots;
+		}
 	}
 
 	@Override
-	public boolean canInsertItem(int slot, ItemStack stack, int side) {
+	public boolean canInsertItem(int slot, ItemStack stack, EnumFacing side) {
 		return isItemValidForSlot(slot, stack);
 	}
 
 	@Override
-	public boolean canExtractItem(int slot, ItemStack stack, int side) {
+	public boolean canExtractItem(int slot, ItemStack stack, EnumFacing side) {
 		return false;
 	}
 
 	/* SAVING & LOADING */
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		if (!nbttagcompound.hasKey(inventory.getInventoryName())) {
+		if (!nbttagcompound.hasKey(inventory.getCommandSenderName())) {
 			return;
 		}
 
-		NBTTagList nbttaglist = nbttagcompound.getTagList(inventory.getInventoryName(), 10);
+		NBTTagList nbttaglist = nbttagcompound.getTagList(inventory.getCommandSenderName(), 10);
 
 		for (int j = 0; j < nbttaglist.tagCount(); ++j) {
 			NBTTagCompound nbttagcompound2 = nbttaglist.getCompoundTagAt(j);
@@ -204,6 +210,41 @@ public class InventoryAdapter implements IInventoryAdapter {
 				nbttaglist.appendTag(nbttagcompound2);
 			}
 		}
-		nbttagcompound.setTag(inventory.getInventoryName(), nbttaglist);
+		nbttagcompound.setTag(inventory.getCommandSenderName(), nbttaglist);
+	}
+
+	@Override
+	public void writeData(DataOutputStreamForestry data) throws IOException {
+		data.writeInventory(inventory);
+	}
+
+	@Override
+	public void readData(DataInputStreamForestry data) throws IOException {
+		data.readInventory(inventory);
+	}
+
+	@Override
+	public int getField(int id) {
+		return inventory.getField(id);
+	}
+
+	@Override
+	public void setField(int id, int value) {
+		inventory.setField(id, value);
+	}
+
+	@Override
+	public int getFieldCount() {
+		return inventory.getFieldCount();
+	}
+
+	@Override
+	public void clear() {
+		inventory.clear();
+	}
+
+	@Override
+	public IChatComponent getDisplayName() {
+		return inventory.getDisplayName();
 	}
 }

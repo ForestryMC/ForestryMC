@@ -24,18 +24,20 @@ import forestry.core.config.Defaults;
 public class VanillaDirtGrassGrowthRule implements IFlowerGrowthRule {
 
 	@Override
-	public boolean growFlower(IFlowerRegistry flowerRegistry, String flowerType, World world, IIndividual individual, BlockPos pos) {
+	public boolean growFlower(IFlowerRegistry flowerRegistry, String flowerType, World world, IIndividual individual,
+			BlockPos pos) {
 		if (!world.isAirBlock(pos)) {
 			return false;
 		}
 
-		Block ground = world.getBlockState(pos.down()).getBlock();
+		Block ground = world.getBlockState(new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ())).getBlock();
 		if (ground != Blocks.dirt && ground != Blocks.grass) {
 			return false;
 		}
 
 		IFlower flower = flowerRegistry.getRandomPlantableFlower(flowerType, world.rand);
-		return world.setBlockState(pos, flower.getBlock(), flower.getMeta(), Defaults.FLAG_BLOCK_SYNCH);
+		return world.setBlockState(pos, flower.getBlock().getStateFromMeta(flower.getMeta()),
+				Defaults.FLAG_BLOCK_SYNCH);
 	}
 
 }

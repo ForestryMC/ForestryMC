@@ -6,8 +6,8 @@ import net.minecraft.item.ItemStack;
 import forestry.core.IItemTyped;
 
 /**
- * For blocks whose type depends on metadata.
- * This allows control over which localized name maps to which meta value.
+ * For blocks whose type depends on metadata. This allows control over which
+ * localized name maps to which meta value.
  */
 public class ItemTypedBlock extends ItemForestryBlock {
 
