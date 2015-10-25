@@ -193,6 +193,7 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 
 		if (errorLogic.setCondition(queen == null, EnumErrorCode.NOQUEEN)) {
 			setActive(false);
+			beeProgress = 0;
 			return false;
 		}
 
