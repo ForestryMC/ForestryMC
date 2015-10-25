@@ -37,18 +37,21 @@ public class PowerLedger extends Ledger {
 			return;
 		}
 
+		int xHeader = x + 22;
+		int xBody = x + 12;
+
 		EnergyManager energyManager = tile.getEnergyManager();
 
-		drawHeader(StringUtil.localize("gui.energy"), x + 22, y + 8);
+		drawHeader(StringUtil.localize("gui.energy"), xHeader, y + 8);
 
-		drawSubheader(StringUtil.localize("gui.stored") + ':', x + 22, y + 20);
-		drawText(energyManager.getTotalEnergyStored() + " RF", x + 22, y + 32);
+		drawSubheader(StringUtil.localize("gui.stored") + ':', xBody, y + 20);
+		drawText(energyManager.getTotalEnergyStored() + " RF", xBody, y + 32);
 
-		drawSubheader(StringUtil.localize("gui.maxenergy") + ':', x + 22, y + 44);
-		drawText(energyManager.getMaxEnergyStored() + " RF", x + 22, y + 56);
+		drawSubheader(StringUtil.localize("gui.maxenergy") + ':', xBody, y + 44);
+		drawText(energyManager.getMaxEnergyStored() + " RF", xBody, y + 56);
 
-		drawSubheader(StringUtil.localize("gui.maxenergyreceive") + ':', x + 22, y + 68);
-		drawText(energyManager.getMaxEnergyReceived() + " RF", x + 22, y + 80);
+		drawSubheader(StringUtil.localize("gui.maxenergyreceive") + ':', xBody, y + 68);
+		drawText(energyManager.getMaxEnergyReceived() + " RF", xBody, y + 80);
 	}
 
 	@Override

@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.gui.ledgers;
 
+import java.util.List;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
@@ -27,10 +29,11 @@ import forestry.core.render.SpriteSheet;
  * Side ledger for guis
  */
 public abstract class Ledger {
-	
-	protected static final int maxWidth = 124;
+
 	protected static final int minWidth = 24;
 	public static final int minHeight = 24;
+	protected final int maxWidth;
+	protected final int maxTextWidth;
 	protected int maxHeight = 24;
 
 	private static final ResourceLocation ledgerTextureRight = new ForestryResource(Constants.TEXTURE_PATH_GUI + "/ledger.png");
@@ -69,6 +72,9 @@ public abstract class Ledger {
 		fontColorSubheader = manager.gui.getFontColor().get("ledger." + name + ".subheader");
 		fontColorText = manager.gui.getFontColor().get("ledger." + name + ".text");
 		overlayColor = manager.gui.getFontColor().get("ledger." + name + ".background");
+
+		maxWidth = Math.min(124, manager.getMaxWidth());
+		maxTextWidth = maxWidth - 18;
 	}
 
 	// adjust the update's move amount to match the look of 60 fps (16.67 ms per update)
@@ -197,23 +203,38 @@ public abstract class Ledger {
 		}
 	}
 
-	protected void drawHeader(String string, int x, int y) {
-		Minecraft minecraft = Proxies.common.getClientInstance();
-		minecraft.fontRenderer.drawStringWithShadow(string, x, y, fontColorHeader);
+	protected int drawHeader(String string, int x, int y) {
+		return drawShadowText(string, x, y, fontColorHeader);
 	}
 
-	protected void drawSubheader(String string, int x, int y) {
-		Minecraft minecraft = Proxies.common.getClientInstance();
-		minecraft.fontRenderer.drawStringWithShadow(string, x, y, fontColorSubheader);
+	protected int drawSubheader(String string, int x, int y) {
+		return drawShadowText(string, x, y, fontColorSubheader);
 	}
 
-	protected void drawText(String string, int x, int y) {
+	protected int drawShadowText(String string, int x, int y, int color) {
+		return drawSplitText(string, x, y, maxTextWidth, color, true);
+	}
+
+	protected int drawSplitText(String string, int x, int y, int width) {
+		return drawSplitText(string, x, y, width, fontColorText, false);
+	}
+
+	protected int drawSplitText(String string, int x, int y, int width, int color, boolean shadow) {
+		int originalY = y;
+		Minecraft minecraft = Proxies.common.getClientInstance();
+		List strings = minecraft.fontRenderer.listFormattedStringToWidth(string, width);
+		for (Object obj : strings) {
+			if (obj instanceof String) {
+				minecraft.fontRenderer.drawString((String) obj, x, y, color, shadow);
+				y += minecraft.fontRenderer.FONT_HEIGHT;
+			}
+		}
+		return y - originalY;
+	}
+
+	protected int drawText(String string, int x, int y) {
 		Minecraft minecraft = Proxies.common.getClientInstance();
 		minecraft.fontRenderer.drawString(string, x, y, fontColorText);
-	}
-
-	protected void drawSplitText(String string, int x, int y, int width) {
-		Minecraft minecraft = Proxies.common.getClientInstance();
-		minecraft.fontRenderer.drawSplitString(string, x, y, width, fontColorText);
+		return minecraft.fontRenderer.FONT_HEIGHT;
 	}
 }

@@ -61,12 +61,12 @@ import codechicken.nei.api.TaggedInventoryArea;
 public abstract class GuiForestry<C extends Container, I extends IInventory> extends GuiContainer implements INEIGuiHandler {
 	protected static final int LINE_HEIGHT = 12;
 
-	protected final WidgetManager widgetManager;
-	protected final LedgerManager ledgerManager;
 	protected final I inventory;
 	protected final C container;
 	protected final FontColour fontColor;
 	public final ResourceLocation textureFile;
+	protected WidgetManager widgetManager;
+	protected LedgerManager ledgerManager;
 
 	protected GuiForestry(String texture, C container, I inventory) {
 		this(new ResourceLocation("forestry", texture), container, inventory);
@@ -74,20 +74,24 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 
 	protected GuiForestry(ResourceLocation texture, C container, I inventory) {
 		super(container);
+
 		this.widgetManager = new WidgetManager(this);
-		this.ledgerManager = new LedgerManager(this);
 
 		this.textureFile = texture;
 
 		this.inventory = inventory;
 		this.container = container;
 
-		fontColor = new FontColour(Proxies.render.getSelectedTexturePack());
-		initLedgers();
+		this.fontColor = new FontColour(Proxies.render.getSelectedTexturePack());
 	}
 
 	/* LEDGERS */
-	protected void initLedgers() {
+	@Override
+	public void initGui() {
+		super.initGui();
+
+		int maxLedgerWidth = (this.width - this.xSize) / 2;
+		this.ledgerManager = new LedgerManager(this, maxLedgerWidth);
 
 		if (inventory instanceof IErrorSource) {
 			ledgerManager.add((IErrorSource) inventory);
@@ -113,7 +117,6 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 		if (inventory instanceof TileForestry) {
 			ledgerManager.add(new OwnerLedger(ledgerManager, (TileForestry) inventory));
 		}
-
 	}
 
 	/* TEXT HELPER FUNCTIONS */

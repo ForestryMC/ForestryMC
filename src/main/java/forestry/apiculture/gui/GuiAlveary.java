@@ -43,8 +43,8 @@ public class GuiAlveary extends GuiForestryTitled<ContainerAlveary, TileAlvearyP
 	}
 
 	/* LEDGERS */
-	protected void initLedgers() {
-		super.initLedgers();
+	public void initGui() {
+		super.initGui();
 
 		IAlvearyController alvearyController = inventory.getAlvearyController();
 		ledgerManager.add(new OwnerLedger(ledgerManager, alvearyController));

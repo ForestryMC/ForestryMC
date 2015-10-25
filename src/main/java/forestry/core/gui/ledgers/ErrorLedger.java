@@ -12,11 +12,7 @@ package forestry.core.gui.ledgers;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-
 import forestry.api.core.IErrorState;
-import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
 
 /**
@@ -35,11 +31,8 @@ public class ErrorLedger extends Ledger {
 	public void setState(@Nullable IErrorState state) {
 		this.state = state;
 		if (state != null) {
-			String helpString = StringUtil.localize(state.getHelp());
-			Minecraft minecraft = Proxies.common.getClientInstance();
-			FontRenderer fontRenderer = minecraft.fontRenderer;
-			int lineCount = fontRenderer.listFormattedStringToWidth(helpString, maxWidth - 28).size();
-			maxHeight = (lineCount + 1) * fontRenderer.FONT_HEIGHT + 20;
+			int lineHeight = StringUtil.getLineHeight(maxTextWidth, getTooltip(), StringUtil.localize(state.getHelp()));
+			maxHeight = lineHeight + 20;
 		}
 	}
 
@@ -51,16 +44,23 @@ public class ErrorLedger extends Ledger {
 
 		// Draw background
 		drawBackground(x, y);
+		y += 4;
+
+		int xIcon = x + 5;
+		int xBody = x + 14;
+		int xHeader = x + 24;
 
 		// Draw icon
-		drawIcon(state.getIcon(), x + 5, y + 4);
+		drawIcon(state.getIcon(), xIcon, y);
+		y += 4;
 
 		// Write description if fully opened
 		if (isFullyOpened()) {
-			drawHeader(getTooltip(), x + 24, y + 8);
+			y += drawHeader(getTooltip(), xHeader, y);
+			y += 4;
 
 			String helpString = StringUtil.localize(state.getHelp());
-			drawSplitText(helpString, x + 24, y + 20, maxWidth - 28);
+			drawSplitText(helpString, xBody, y, maxTextWidth);
 		}
 	}
 

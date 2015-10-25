@@ -19,11 +19,12 @@ import forestry.core.utils.StringUtil;
 public class FarmLedger extends Ledger {
 	private final IFarmLedgerDelegate delegate;
 
-
 	public FarmLedger(LedgerManager ledgerManager, IFarmLedgerDelegate delegate) {
 		super(ledgerManager, "farm");
-		this.maxHeight = 118;
 		this.delegate = delegate;
+
+		int titleHeight = StringUtil.getLineHeight(maxTextWidth, getTooltip());
+		this.maxHeight = titleHeight + 110;
 	}
 
 	@Override
@@ -31,31 +32,46 @@ public class FarmLedger extends Ledger {
 
 		// Draw background
 		drawBackground(x, y);
+		y += 4;
+
+		int xIcon = x + 3;
+		int xBody = x + 10;
+		int xHeader = x + 22;
 
 		// Draw icon
-		drawIcon(Items.water_bucket.getIconFromDamage(0), x + 3, y + 4);
+		drawIcon(Items.water_bucket.getIconFromDamage(0), xIcon, y);
+		y += 4;
 
 		if (!isFullyOpened()) {
 			return;
 		}
 
-		drawHeader(StringUtil.localize("gui.hydration"), x + 22, y + 8);
+		y += drawHeader(StringUtil.localize("gui.hydration"), xHeader, y);
+		y += 4;
 
-		drawSubheader(StringUtil.localize("gui.hydr.heat") + ':', x + 22, y + 20);
-		drawText(StringUtil.floatAsPercent(delegate.getHydrationTempModifier()), x + 22, y + 32);
+		y += drawSubheader(StringUtil.localize("gui.hydr.heat") + ':', xBody, y);
+		y += 3;
+		y += drawText(StringUtil.floatAsPercent(delegate.getHydrationTempModifier()), xBody, y);
+		y += 3;
 
-		drawSubheader(StringUtil.localize("gui.hydr.humid") + ':', x + 22, y + 44);
-		drawText(StringUtil.floatAsPercent(delegate.getHydrationHumidModifier()), x + 22, y + 56);
+		y += drawSubheader(StringUtil.localize("gui.hydr.humid") + ':', xBody, y);
+		y += 3;
+		y += drawText(StringUtil.floatAsPercent(delegate.getHydrationHumidModifier()), xBody, y);
+		y += 3;
 
-		drawSubheader(StringUtil.localize("gui.hydr.rainfall") + ':', x + 22, y + 68);
-		drawText(StringUtil.floatAsPercent(delegate.getHydrationRainfallModifier()) + " (" + delegate.getDrought() + " d)", x + 22, y + 80);
+		y += drawSubheader(StringUtil.localize("gui.hydr.rainfall") + ':', xBody, y);
+		y += 3;
+		y += drawText(StringUtil.floatAsPercent(delegate.getHydrationRainfallModifier()) + " (" + delegate.getDrought() + " d)", xBody, y);
+		y += 3;
 
-		drawSubheader(StringUtil.localize("gui.hydr.overall") + ':', x + 22, y + 92);
-		drawText(StringUtil.floatAsPercent(delegate.getHydrationModifier()), x + 22, y + 104);
+		y += drawSubheader(StringUtil.localize("gui.hydr.overall") + ':', xBody, y);
+		y += 3;
+		drawText(StringUtil.floatAsPercent(delegate.getHydrationModifier()), xBody, y);
 	}
 
 	@Override
 	public String getTooltip() {
-		return StringUtil.floatAsPercent(delegate.getHydrationModifier()) + ' ' + StringUtil.localize("gui.hydration");
+		float hydrationModifier = delegate.getHydrationModifier();
+		return StringUtil.floatAsPercent(hydrationModifier) + ' ' + StringUtil.localize("gui.hydration");
 	}
 }

@@ -13,9 +13,13 @@ package forestry.core.utils;
 import java.util.IllegalFormatException;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
+
+import forestry.core.proxy.Proxies;
 
 public class StringUtil {
 
@@ -99,5 +103,17 @@ public class StringUtil {
 		}
 
 		return line.toString();
+	}
+
+	public static int getLineHeight(int maxWidth, String... strings) {
+		Minecraft minecraft = Proxies.common.getClientInstance();
+		FontRenderer fontRenderer = minecraft.fontRenderer;
+
+		int lineCount = 0;
+		for (String string : strings) {
+			lineCount += fontRenderer.listFormattedStringToWidth(string, maxWidth).size();
+		}
+
+		return lineCount * fontRenderer.FONT_HEIGHT;
 	}
 }

@@ -50,8 +50,8 @@ public class GuiFarm extends GuiForestry<ContainerFarm, TileFarm> {
 	}
 
 	@Override
-	protected void initLedgers() {
-		super.initLedgers();
+	public void initGui() {
+		super.initGui();
 		IFarmController farmController = inventory.getFarmController();
 		ledgerManager.add(new ClimateLedger(ledgerManager, farmController));
 		ledgerManager.add(new FarmLedger(ledgerManager, farmController.getFarmLedgerDelegate()));

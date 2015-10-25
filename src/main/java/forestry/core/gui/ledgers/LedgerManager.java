@@ -32,12 +32,14 @@ public class LedgerManager {
 	private final List<ErrorLedger> errorLedgers = new ArrayList<>();
 
 	private IErrorSource errorSource;
+	private final int maxWidth;
 
 	public final GuiForestry gui;
 
-	public LedgerManager(GuiForestry gui) {
+	public LedgerManager(GuiForestry gui, int maxWidth) {
 		this.gui = gui;
 		this.errorSource = FakeErrorSource.instance;
+		this.maxWidth = maxWidth;
 	}
 
 	public void add(IErrorSource errorSource) {
@@ -192,4 +194,7 @@ public class LedgerManager {
 		return getAtPosition(x + width, y + height) != null || getAtPosition(x + width, y) != null || getAtPosition(x, y + height) != null || getAtPosition(x, y) != null;
 	}
 
+	public int getMaxWidth() {
+		return maxWidth;
+	}
 }

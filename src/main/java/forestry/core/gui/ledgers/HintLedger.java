@@ -35,7 +35,7 @@ public class HintLedger extends Ledger {
 
 		Minecraft minecraft = Proxies.common.getClientInstance();
 		FontRenderer fontRenderer = minecraft.fontRenderer;
-		int lineCount = fontRenderer.listFormattedStringToWidth(hintString, maxWidth - 28).size();
+		int lineCount = fontRenderer.listFormattedStringToWidth(hintString, maxTextWidth).size();
 		maxHeight = (lineCount + 1) * fontRenderer.FONT_HEIGHT + 20;
 	}
 
@@ -53,7 +53,7 @@ public class HintLedger extends Ledger {
 		}
 
 		drawHeader(StringUtil.localize("gui.didyouknow") + '?', x + 22, y + 8);
-		drawSplitText(hintString, x + 22, y + 20, maxWidth - 28);
+		drawSplitText(hintString, x + 12, y + 20, maxTextWidth);
 	}
 
 	@Override
