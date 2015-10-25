@@ -16,6 +16,7 @@ import com.google.common.collect.Lists;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Random;
@@ -24,6 +25,7 @@ import java.util.Set;
 import net.minecraft.command.CommandHandler;
 import net.minecraft.command.ICommand;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
@@ -34,72 +36,68 @@ import net.minecraftforge.fml.common.IFuelHandler;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-
 import forestry.Forestry;
-import forestry.core.interfaces.IOreDictionaryHandler;
-import forestry.core.interfaces.IPacketHandler;
+import forestry.api.core.ForestryAPI;
 import forestry.core.interfaces.IPickupHandler;
 import forestry.core.interfaces.IResupplyHandler;
 import forestry.core.interfaces.ISaveEventHandler;
+import forestry.core.network.IPacketHandler;
 import forestry.core.proxy.Proxies;
 
 public class PluginManager {
 
-	public static final String MODULE_CONFIG_FILE_NAME = "modules.cfg";
-	public static final String CATEGORY_MODULES = "modules";
+	private static final String MODULE_CONFIG_FILE_NAME = "modules.cfg";
+	private static final String CATEGORY_MODULES = "modules";
 
 	public static final ArrayList<IGuiHandler> guiHandlers = Lists.newArrayList();
 	public static final ArrayList<IPacketHandler> packetHandlers = Lists.newArrayList();
 	public static final ArrayList<IPickupHandler> pickupHandlers = Lists.newArrayList();
 	public static final ArrayList<ISaveEventHandler> saveEventHandlers = Lists.newArrayList();
 	public static final ArrayList<IResupplyHandler> resupplyHandlers = Lists.newArrayList();
-	public static final ArrayList<IOreDictionaryHandler> dictionaryHandlers = Lists.newArrayList();
 
 	private static final Set<Module> loadedModules = EnumSet.noneOf(Module.class);
 	private static final Set<Module> unloadedModules = EnumSet.allOf(Module.class);
 	private static Stage stage = Stage.SETUP;
 
 	public enum Stage {
-
-		SETUP, PRE_INIT, INIT, POST_INIT, INIT_DISABLED, FINISHED
+		SETUP, SETUP_DISABLED, PRE_INIT, INIT, POST_INIT, FINISHED
 	}
 
 	public enum Module {
 
-		CORE(new PluginCore(), false),
-		FLUIDS(new PluginFluids(), false),
-		APICULTURE(new PluginApiculture()),
-		ARBORICULTURE(new PluginArboriculture()),
-		ENERGY(new PluginEnergy()),
-		FACTORY(new PluginFactory()),
-		FARMING(new PluginFarming()),
-		FOOD(new PluginFood()),
-		LEPIDOPTEROLOGY(new PluginLepidopterology()),
-		MAIL(new PluginMail()),
-		STORAGE(new PluginStorage()),
-		BIOMESOPLENTY(new PluginBiomesOPlenty()),
-		BUILDCRAFT_FUELS(new PluginBuildCraftFuels()),
-		BUILDCRAFT_RECIPES(new PluginBuildCraftRecipes()),
-		BUILDCRAFT_STATEMENTS(new PluginBuildCraftStatements()),
-		BUILDCRAFT_TRANSPORT(new PluginBuildCraftTransport()),
-		PROPOLIS_PIPE(new PluginPropolisPipe()),
-		EXTRAUTILITIES(new PluginExtraUtilities()),
-		EQUIVELENT_EXCHANGE(new PluginEE()),
-		FARM_CRAFTORY(new PluginFarmCraftory()),
-		INDUSTRIALCRAFT(new PluginIC2()),
-		HARVESTCRAFT(new PluginHarvestCraft()),
-		MAGICALCROPS(new PluginMagicalCrops()),
-		NATURA(new PluginNatura()),
-		UNDERGROUND_BIOMES(new PluginUndergroundBiomes());
+		CORE(new PluginCore(), false), FLUIDS(new PluginFluids(), false),
+
+		APICULTURE(new PluginApiculture()), ARBORICULTURE(new PluginArboriculture()), ENERGY(
+				new PluginEnergy()), FACTORY(new PluginFactory()), FARMING(new PluginFarming()), FOOD(
+						new PluginFood()), LEPIDOPTEROLOGY(new PluginLepidopterology()), MAIL(
+								new PluginMail()), STORAGE(new PluginStorage()),
+
+		BUILDCRAFT_FUELS(new PluginBuildCraftFuels()), BUILDCRAFT_RECIPES(
+				new PluginBuildCraftRecipes()), BUILDCRAFT_STATEMENTS(
+						new PluginBuildCraftStatements()), BUILDCRAFT_TRANSPORT(new PluginBuildCraftTransport()),
+
+		AGRICRAFT(new PluginAgriCraft()), BIOMESOPLENTY(new PluginBiomesOPlenty()), CHISEL(new PluginChisel()), ENDERIO(
+				new PluginEnderIO()), EREBUS(new PluginErebus()), EXTRAUTILITIES(
+						new PluginExtraUtilities()), GROWTHCRAFT(new PluginGrowthCraft()), HARVESTCRAFT(
+								new PluginHarvestCraft()), IMMERSIVEENGINEERING(
+										new PluginImmersiveEngineering()), INDUSTRIALCRAFT(
+												new PluginIC2()), MAGICALCROPS(new PluginMagicalCrops()), NATURA(
+														new PluginNatura()), PLANTMEGAPACK(
+																new PluginPlantMegaPack()), WITCHERY(
+																		new PluginWitchery());
+
+		static {
+			ForestryAPI.enabledPlugins = new HashSet<String>();
+		}
 
 		private final ForestryPlugin instance;
 		private final boolean canBeDisabled;
 
-		private Module(ForestryPlugin plugin) {
+		Module(ForestryPlugin plugin) {
 			this(plugin, true);
 		}
 
-		private Module(ForestryPlugin plugin, boolean canBeDisabled) {
+		Module(ForestryPlugin plugin, boolean canBeDisabled) {
 			this.instance = plugin;
 			this.canBeDisabled = canBeDisabled;
 		}
@@ -109,7 +107,7 @@ public class PluginManager {
 		}
 
 		public boolean isEnabled() {
-			return isModuleLoaded(this);
+			return ForestryAPI.enabledPlugins.contains(toString());
 		}
 
 		public boolean canBeDisabled() {
@@ -132,85 +130,7 @@ public class PluginManager {
 		return EnumSet.copyOf(loadedModules);
 	}
 
-	public static boolean isModuleLoaded(Module module) {
-		return loadedModules.contains(module);
-	}
-
-	public static void addPlugin(ForestryPlugin plugin) {
-
-	}
-
-	public static void runPreInit() {
-		stage = Stage.SETUP;
-		Locale locale = Locale.getDefault();
-		Locale.setDefault(Locale.ENGLISH);
-
-		Configuration config = new Configuration(new File(Forestry.instance.getConfigFolder(), MODULE_CONFIG_FILE_NAME));
-
-		config.load();
-		config.addCustomCategoryComment(CATEGORY_MODULES, "Disabling these modules can greatly change how the mod functions.\n"
-				+ "Your mileage may vary, please report any issues.");
-
-		Set<Module> toLoad = EnumSet.allOf(Module.class);
-		Iterator<Module> it = toLoad.iterator();
-		while (it.hasNext()) {
-			Module m = it.next();
-			if (!m.canBeDisabled()) {
-				continue;
-			}
-			if (!isEnabled(config, m)) {
-				it.remove();
-				Proxies.log.info("Module disabled: {0}", m);
-				continue;
-			}
-			ForestryPlugin plugin = m.instance;
-			if (!plugin.isAvailable()) {
-				it.remove();
-				Proxies.log.info("Module {0} failed to load: {1}", plugin, plugin.getFailMessage());
-				continue;
-			}
-		}
-		boolean changed;
-		do {
-			changed = false;
-			it = toLoad.iterator();
-			while (it.hasNext()) {
-				Module m = it.next();
-				Set<Module> deps = m.instance().getDependancies();
-				if (!toLoad.containsAll(deps)) {
-					it.remove();
-					changed = true;
-					Proxies.log.warning("Module {0} is missing dependencies: {1}", m, deps);
-					continue;
-				}
-			}
-		} while (changed);
-
-		unloadedModules.removeAll(toLoad);
-		loadedModules.addAll(toLoad);
-
-		if (config.hasChanged()) {
-			config.save();
-		}
-
-		Locale.setDefault(locale);
-
-		stage = Stage.PRE_INIT;
-		for (Module m : loadedModules) {
-			ForestryPlugin plugin = m.instance;
-			loadPlugin(plugin);
-		}
-
-		for (Module m : loadedModules) {
-			ForestryPlugin plugin = m.instance;
-			Proxies.log.fine("Pre-Init Start: {0}", plugin);
-			plugin.preInit();
-			plugin.registerItems();
-			Proxies.log.fine("Pre-Init Complete: {0}", plugin);
-		}
-	}
-
-	private static void loadPlugin(ForestryPlugin plugin) {
+	private static void registerHandlers(ForestryPlugin plugin) {
 		Proxies.log.fine("Registering Handlers for Plugin: {0}", plugin);
 
 		IGuiHandler guiHandler = plugin.getGuiHandler();
@@ -238,14 +158,110 @@ public class PluginManager {
 			resupplyHandlers.add(resupplyHandler);
 		}
 
-		IOreDictionaryHandler dictionaryHandler = plugin.getDictionaryHandler();
-		if (dictionaryHandler != null) {
-			dictionaryHandlers.add(dictionaryHandler);
-		}
-
 		IFuelHandler fuelHandler = plugin.getFuelHandler();
 		if (fuelHandler != null) {
 			GameRegistry.registerFuelHandler((fuelHandler));
+		}
+	}
+
+	private static void configureModules() {
+		Locale locale = Locale.getDefault();
+		Locale.setDefault(Locale.ENGLISH);
+
+		Configuration config = new Configuration(
+				new File(Forestry.instance.getConfigFolder(), MODULE_CONFIG_FILE_NAME));
+
+		config.load();
+		config.addCustomCategoryComment(CATEGORY_MODULES,
+				"Disabling these modules can greatly change how the mod functions.\n"
+						+ "Your mileage may vary, please report any issues.");
+
+		Set<Module> toLoad = EnumSet.allOf(Module.class);
+		Iterator<Module> it = toLoad.iterator();
+		while (it.hasNext()) {
+			Module m = it.next();
+			if (!m.canBeDisabled()) {
+				continue;
+			}
+			if (!isEnabled(config, m)) {
+				it.remove();
+				Proxies.log.info("Module disabled: {0}", m);
+				continue;
+			}
+			ForestryPlugin plugin = m.instance;
+			if (!plugin.isAvailable()) {
+				it.remove();
+				Proxies.log.info("Module {0} failed to load: {1}", plugin, plugin.getFailMessage());
+				continue;
+			}
+		}
+
+		boolean changed;
+		do {
+			changed = false;
+			it = toLoad.iterator();
+			while (it.hasNext()) {
+				Module m = it.next();
+				Set<Module> deps = m.instance().getDependancies();
+				if (!toLoad.containsAll(deps)) {
+					it.remove();
+					changed = true;
+					Proxies.log.warning("Module {0} is missing dependencies: {1}", m, deps);
+					continue;
+				}
+			}
+		} while (changed);
+
+		unloadedModules.removeAll(toLoad);
+		loadedModules.addAll(toLoad);
+
+		for (Module m : loadedModules) {
+			ForestryAPI.enabledPlugins.add(m.toString());
+		}
+
+		if (config.hasChanged()) {
+			config.save();
+		}
+
+		Locale.setDefault(locale);
+	}
+
+	public static void runSetup() {
+		stage = Stage.SETUP;
+		configureModules();
+
+		for (Module m : loadedModules) {
+			ForestryPlugin plugin = m.instance;
+			Proxies.log.fine("Setup Start: {0}", plugin);
+			plugin.setupAPI();
+			Proxies.log.fine("Setup Complete: {0}", plugin);
+		}
+
+		stage = Stage.SETUP_DISABLED;
+		for (Module m : unloadedModules) {
+			ForestryPlugin plugin = m.instance;
+			Proxies.log.fine("Disabled-Setup Start: {0}", plugin);
+			plugin.disabledSetupAPI();
+			Proxies.log.fine("Disabled-Setup Complete: {0}", plugin);
+		}
+	}
+
+	public static void runPreInit() {
+		stage = Stage.PRE_INIT;
+		for (Module m : loadedModules) {
+			ForestryPlugin plugin = m.instance;
+			Proxies.log.fine("Pre-Init Start: {0}", plugin);
+			registerHandlers(plugin);
+			plugin.preInit();
+			plugin.registerItems();
+			if (Module.BUILDCRAFT_STATEMENTS.isEnabled()) {
+				plugin.registerTriggers();
+			}
+			if (Module.STORAGE.isEnabled()) {
+				plugin.registerBackpackItems();
+				plugin.registerCrates();
+			}
+			Proxies.log.fine("Pre-Init Complete: {0}", plugin);
 		}
 	}
 
@@ -254,13 +270,8 @@ public class PluginManager {
 		for (Module m : loadedModules) {
 			ForestryPlugin plugin = m.instance;
 			Proxies.log.fine("Init Start: {0}", plugin);
-
-			if (Module.STORAGE.isEnabled()) {
-				plugin.registerBackpackItems();
-				plugin.registerCrates();
-			}
-
 			plugin.doInit();
+			plugin.registerRecipes();
 			Proxies.log.fine("Init Complete: {0}", plugin);
 		}
 	}
@@ -270,18 +281,10 @@ public class PluginManager {
 		for (Module m : loadedModules) {
 			ForestryPlugin plugin = m.instance;
 			Proxies.log.fine("Post-Init Start: {0}", plugin);
-			plugin.registerRecipes();
 			plugin.postInit();
 			Proxies.log.fine("Post-Init Complete: {0}", plugin);
 		}
 
-		stage = Stage.INIT_DISABLED;
-		for (Module m : unloadedModules) {
-			ForestryPlugin plugin = m.instance;
-			Proxies.log.fine("Disabled-Init Start: {0}", plugin);
-			plugin.disabledInit();
-			Proxies.log.fine("Disabled-Init Complete: {0}", plugin);
-		}
 		stage = Stage.FINISHED;
 	}
 
@@ -311,17 +314,18 @@ public class PluginManager {
 		}
 	}
 
-	public static void populateChunk(IChunkProvider chunkProvider, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated) {
+	public static void populateChunk(IChunkProvider chunkProvider, World world, Random rand, BlockPos chunkPos,
+			boolean hasVillageGenerated) {
 		for (Module m : loadedModules) {
 			ForestryPlugin plugin = m.instance;
-			plugin.populateChunk(chunkProvider, world, rand, chunkX, chunkZ, hasVillageGenerated);
+			plugin.populateChunk(chunkProvider, world, rand, chunkPos, hasVillageGenerated);
 		}
 	}
 
-	public static void populateChunkRetroGen(World world, Random rand, int chunkX, int chunkZ) {
+	public static void populateChunkRetroGen(World world, Random rand, BlockPos chunkPos) {
 		for (Module m : loadedModules) {
 			ForestryPlugin plugin = m.instance;
-			plugin.populateChunkRetroGen(world, rand, chunkX, chunkZ);
+			plugin.populateChunkRetroGen(world, rand, chunkPos);
 		}
 	}
 

@@ -25,8 +25,8 @@ public class GuiTextBox extends GuiTextField {
 	private int lineScroll = 0;
 	private int maxLines = 0;
 
-	public GuiTextBox(FontRenderer fontRendererObj, int startX, int startY, int width, int height) {
-		super(fontRendererObj, startX, startY, width, height);
+	public GuiTextBox(int ID, FontRenderer fontRendererObj, int startX, int startY, int width, int height) {
+		super(ID, fontRendererObj, startX, startY, width, height);
 		this.fontRendererObj = fontRendererObj;
 		this.startX = startX;
 		this.startY = startY;
@@ -51,7 +51,8 @@ public class GuiTextBox extends GuiTextField {
 	}
 
 	public boolean moreLinesAllowed() {
-		return fontRendererObj.listFormattedStringToWidth(getCursoredText(), width).size() * fontRendererObj.FONT_HEIGHT < height;
+		return fontRendererObj.listFormattedStringToWidth(getCursoredText(), width).size()
+				* fontRendererObj.FONT_HEIGHT < height;
 	}
 
 	private String getCursoredText() {

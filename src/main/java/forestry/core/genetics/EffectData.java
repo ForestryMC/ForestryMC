@@ -16,9 +16,9 @@ import forestry.api.genetics.IEffectData;
 
 public class EffectData implements IEffectData {
 
-	private int[] intData;
+	private final int[] intData;
 	private float[] floatData;
-	private boolean[] boolData;
+	private final boolean[] boolData;
 
 	public EffectData(int intSize, int boolSize) {
 		this.intData = new int[intSize];

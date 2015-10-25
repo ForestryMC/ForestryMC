@@ -14,7 +14,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.util.ResourceLocation;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -27,23 +26,11 @@ import forestry.core.gui.tooltips.ToolTip;
 @SideOnly(Side.CLIENT)
 public class GuiBetterButton extends GuiButton implements IToolTipProvider {
 
-	private static final ResourceLocation TEXTURE = new ResourceLocation("forestry", Defaults.TEXTURE_PATH_GUI + "/buttons.png");
+	private static final ResourceLocation TEXTURE = new ResourceLocation("forestry",
+			Defaults.TEXTURE_PATH_GUI + "/buttons.png");
 	protected IButtonTextureSet texture;
 	private ToolTip toolTip;
 	private boolean useTexWidth = false;
-
-	public GuiBetterButton(int id, int x, int y, String label) {
-		this(id, x, y, 200, StandardButtonTextureSets.LARGE_BUTTON, label);
-	}
-
-	public GuiBetterButton(int id, int x, int y, int width, String label) {
-		this(id, x, y, width, StandardButtonTextureSets.LARGE_BUTTON, label);
-	}
-
-	public GuiBetterButton(int id, int x, int y, int width, IButtonTextureSet texture, String label) {
-		super(id, x, y, width, texture.getHeight(), label);
-		this.texture = texture;
-	}
 
 	public GuiBetterButton(int id, int x, int y, IButtonTextureSet texture) {
 		super(id, x, y, texture.getWidth(), texture.getHeight(), "");
@@ -63,7 +50,7 @@ public class GuiBetterButton extends GuiButton implements IToolTipProvider {
 		return this;
 	}
 
-	public GuiBetterButton setWidth(int width) {
+	public GuiBetterButton setButtonWidth(int width) {
 		this.width = width;
 		useTexWidth = false;
 		return this;
@@ -93,10 +80,11 @@ public class GuiBetterButton extends GuiButton implements IToolTipProvider {
 	}
 
 	public boolean isMouseOverButton(int mouseX, int mouseY) {
-		return mouseX >= xPosition && mouseY >= yPosition && mouseX < xPosition + getWidth() && mouseY < yPosition + getHeight();
+		return mouseX >= xPosition && mouseY >= yPosition && mouseX < xPosition + getWidth()
+				&& mouseY < yPosition + getHeight();
 	}
 
-	protected void bindButtonTextures(Minecraft minecraft) {
+	protected static void bindButtonTextures(Minecraft minecraft) {
 		minecraft.renderEngine.bindTexture(TEXTURE);
 	}
 
@@ -105,7 +93,7 @@ public class GuiBetterButton extends GuiButton implements IToolTipProvider {
 		if (!visible) {
 			return;
 		}
-		FontRenderer fontrenderer = minecraft.fontRenderer;
+		FontRenderer fontrenderer = minecraft.fontRendererObj;
 		bindButtonTextures(minecraft);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		int xOffset = texture.getX();
@@ -118,10 +106,12 @@ public class GuiBetterButton extends GuiButton implements IToolTipProvider {
 			drawTexturedModalRect(xPosition, yPosition, xOffset, yOffset + hoverState * h, w, h);
 		} else {
 			drawTexturedModalRect(xPosition, yPosition, xOffset, yOffset + hoverState * h, width / 2, h);
-			drawTexturedModalRect(xPosition + width / 2, yPosition, xOffset + w - width / 2, yOffset + hoverState * h, width / 2, h);
+			drawTexturedModalRect(xPosition + width / 2, yPosition, xOffset + w - width / 2, yOffset + hoverState * h,
+					width / 2, h);
 		}
 		mouseDragged(minecraft, mouseX, mouseY);
-		drawCenteredString(fontrenderer, displayString, xPosition + getWidth() / 2, yPosition + (h - 8) / 2, getTextColor(mouseOver));
+		drawCenteredString(fontrenderer, displayString, xPosition + getWidth() / 2, yPosition + (h - 8) / 2,
+				getTextColor(mouseOver));
 	}
 
 	@Override

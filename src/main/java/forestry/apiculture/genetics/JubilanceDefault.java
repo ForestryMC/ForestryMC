@@ -10,39 +10,27 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.biome.BiomeGenBase;
-
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
+import forestry.api.apiculture.IJubilanceProvider;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
-import forestry.core.vect.Vect;
 
 public class JubilanceDefault implements IJubilanceProvider {
 
-	@Override
-	public boolean isJubilant(IAlleleBeeSpecies species, IBeeGenome genome, IBeeHousing housing) {
-		BiomeGenBase biome = BiomeGenBase.getBiome(housing.getBiomeId());
+	public static final JubilanceDefault instance = new JubilanceDefault();
 
-		if (EnumTemperature.getFromValue(biome.temperature) != species.getTemperature() ||
-				EnumHumidity.getFromValue(biome.rainfall) != species.getHumidity()) {
-			return false;
-		}
+	protected JubilanceDefault() {
 
-		return true;
 	}
 
-	protected AxisAlignedBB getBounding(IBeeGenome genome, IBeeHousing housing, float modifier) {
-		int[] areaAr = genome.getTerritory();
-		Vect area = new Vect(areaAr[0], areaAr[1], areaAr[2]).multiply(modifier);
-		Vect offset = new Vect(-Math.round(area.x / 2), -Math.round(area.y / 2), -Math.round(area.z / 2));
+	@Override
+	public boolean isJubilant(IAlleleBeeSpecies species, IBeeGenome genome, IBeeHousing housing) {
+		EnumTemperature temperature = housing.getTemperature();
+		EnumHumidity humidity = housing.getHumidity();
 
-		Vect min = new Vect(housing.getXCoord() + offset.x, housing.getYCoord() + offset.y, housing.getZCoord() + offset.z);
-		Vect max = new Vect(housing.getXCoord() + offset.x + area.x, housing.getYCoord() + offset.y + area.y, housing.getZCoord() + offset.z + area.z);
-
-		return AxisAlignedBB.getBoundingBox(min.x, min.y, min.z, max.x, max.y, max.z);
+		return temperature == species.getTemperature() && humidity == species.getHumidity();
 	}
 
 }

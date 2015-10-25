@@ -10,17 +10,15 @@
  ******************************************************************************/
 package forestry.energy.circuits;
 
-import net.minecraft.tileentity.TileEntity;
-
 import forestry.core.circuits.Circuit;
 import forestry.energy.gadgets.EngineTin;
 
 public abstract class CircuitElectricChange extends Circuit {
 
-	int euChange = 7;
-	int rfChange = 20;
+	private int euChange = 7;
+	private int rfChange = 20;
 
-	public CircuitElectricChange(String uid, boolean requiresDiscovery) {
+	protected CircuitElectricChange(String uid, boolean requiresDiscovery) {
 		super(uid, requiresDiscovery);
 	}
 
@@ -30,12 +28,12 @@ public abstract class CircuitElectricChange extends Circuit {
 	}
 
 	@Override
-	public boolean isCircuitable(TileEntity tile) {
+	public boolean isCircuitable(Object tile) {
 		return tile instanceof EngineTin;
 	}
 
 	@Override
-	public void onInsertion(int slot, TileEntity tile) {
+	public void onInsertion(int slot, Object tile) {
 		if (!isCircuitable(tile)) {
 			return;
 		}
@@ -45,12 +43,12 @@ public abstract class CircuitElectricChange extends Circuit {
 	}
 
 	@Override
-	public void onLoad(int slot, TileEntity tile) {
+	public void onLoad(int slot, Object tile) {
 		onInsertion(slot, tile);
 	}
 
 	@Override
-	public void onRemoval(int slot, TileEntity tile) {
+	public void onRemoval(int slot, Object tile) {
 		if (!isCircuitable(tile)) {
 			return;
 		}
@@ -60,6 +58,6 @@ public abstract class CircuitElectricChange extends Circuit {
 	}
 
 	@Override
-	public void onTick(int slot, TileEntity tile) {
+	public void onTick(int slot, Object tile) {
 	}
 }

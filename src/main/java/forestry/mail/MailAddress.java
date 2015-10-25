@@ -28,7 +28,8 @@ public class MailAddress implements INBTTagable, IMailAddress {
 	private static final GameProfile invalidGameProfile = new GameProfile(new UUID(0, 0), "");
 
 	private EnumAddressee type;
-	private GameProfile gameProfile; // gameProfile is a fake GameProfile for traders, and real for players
+	private GameProfile gameProfile; // gameProfile is a fake GameProfile for
+										// traders, and real for players
 
 	public MailAddress() {
 		this.type = EnumAddressee.PLAYER;
@@ -121,7 +122,7 @@ public class MailAddress implements INBTTagable, IMailAddress {
 	public String toString() {
 		String name = getName().toLowerCase(Locale.ENGLISH);
 		if (isPlayer()) {
-			return type + "-" + name + "-" + gameProfile.getId();
+			return type + "-" + name + '-' + gameProfile.getId();
 		} else {
 			return type + "-" + name;
 		}
@@ -140,7 +141,7 @@ public class MailAddress implements INBTTagable, IMailAddress {
 			gameProfile = invalidGameProfile;
 		} else if (nbttagcompound.hasKey("profile")) {
 			NBTTagCompound profileTag = nbttagcompound.getCompoundTag("profile");
-			gameProfile = NBTUtil.func_152459_a(profileTag);
+			gameProfile = NBTUtil.readGameProfileFromNBT(profileTag);
 		}
 	}
 
@@ -150,7 +151,7 @@ public class MailAddress implements INBTTagable, IMailAddress {
 
 		if (gameProfile != null) {
 			NBTTagCompound profileNbt = new NBTTagCompound();
-			NBTUtil.func_152460_a(profileNbt, gameProfile);
+			NBTUtil.writeGameProfile(profileNbt, gameProfile);
 			nbttagcompound.setTag("profile", profileNbt);
 		}
 	}

@@ -23,22 +23,23 @@ public abstract class BeverageEffect implements IBeverageEffect {
 	private final int id;
 	protected String description;
 
-	public BeverageEffect(int id) {
+	protected BeverageEffect(int id) {
 		this.id = id;
 
 		if (BeverageManager.effectList[id] != null) {
-			throw new RuntimeException("Beverage effect slot " + id + " was already occupied by " + BeverageManager.effectList[id].toString()
-					+ " when trying to add " + this.toString());
+			throw new RuntimeException("Beverage effect slot " + id + " was already occupied by "
+					+ BeverageManager.effectList[id].toString() + " when trying to add " + this.toString());
 		} else {
 			BeverageManager.effectList[id] = this;
 		}
 	}
 
+	@Override
 	public int getId() {
 		return this.id;
 	}
 
-	public String getLevel() {
+	protected String getLevel() {
 		return null;
 	}
 

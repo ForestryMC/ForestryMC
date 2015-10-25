@@ -104,7 +104,8 @@ public class InventoryManipulator {
 	}
 
 	/**
-	 * @param available Amount we can move
+	 * @param available
+	 *            Amount we can move
 	 * @return Return the number of items moved.
 	 */
 	private int addToSlot(IInvSlot slot, ItemStack stack, int available, boolean doAdd) {

@@ -1,0 +1,7 @@
+{
+  "parent": "block/column_side",
+  "textures": {
+    "side": "forestry:blocks/wood/bark.giganteum",
+    "end": "forestry:blocks/wood/heart.giganteum"
+  }
+}

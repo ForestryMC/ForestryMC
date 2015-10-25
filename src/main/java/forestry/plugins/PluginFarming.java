@@ -11,6 +11,10 @@
 package forestry.plugins;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.regex.MatchResult;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -18,41 +22,33 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import net.minecraftforge.fml.common.registry.GameData;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.farming.Farmables;
 import forestry.api.farming.IFarmable;
 import forestry.core.circuits.Circuit;
 import forestry.core.circuits.CircuitLayout;
-import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
-import forestry.core.interfaces.IOreDictionaryHandler;
-import forestry.core.interfaces.ISaveEventHandler;
 import forestry.core.items.ItemTypedBlock;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.ShapedRecipeCustom;
 import forestry.farming.EventHandlerFarming;
-import forestry.farming.FarmHelper;
 import forestry.farming.GuiHandlerFarming;
 import forestry.farming.circuits.CircuitFarmLogic;
-import forestry.farming.gadgets.BlockFarm;
 import forestry.farming.gadgets.BlockMushroom;
-import forestry.farming.gadgets.EnumFarmBlock;
-import forestry.farming.gadgets.TileControl;
-import forestry.farming.gadgets.TileFarmPlain;
-import forestry.farming.gadgets.TileGearbox;
-import forestry.farming.gadgets.TileHatch;
-import forestry.farming.gadgets.TileValve;
+import forestry.farming.gui.FarmLedger;
 import forestry.farming.items.ItemFarmBlock;
 import forestry.farming.logic.FarmLogicArboreal;
 import forestry.farming.logic.FarmLogicCereal;
@@ -65,6 +61,7 @@ import forestry.farming.logic.FarmLogicPoale;
 import forestry.farming.logic.FarmLogicShroom;
 import forestry.farming.logic.FarmLogicSucculent;
 import forestry.farming.logic.FarmLogicVegetable;
+import forestry.farming.logic.FarmableBasicFruit;
 import forestry.farming.logic.FarmableGE;
 import forestry.farming.logic.FarmableGenericCrop;
 import forestry.farming.logic.FarmableGenericSapling;
@@ -72,6 +69,13 @@ import forestry.farming.logic.FarmableGourd;
 import forestry.farming.logic.FarmableStacked;
 import forestry.farming.logic.FarmableVanillaSapling;
 import forestry.farming.logic.FarmableVanillaShroom;
+import forestry.farming.multiblock.BlockFarm;
+import forestry.farming.multiblock.EnumFarmBlockTexture;
+import forestry.farming.multiblock.TileControl;
+import forestry.farming.multiblock.TileFarmPlain;
+import forestry.farming.multiblock.TileGearbox;
+import forestry.farming.multiblock.TileHatch;
+import forestry.farming.multiblock.TileValve;
 import forestry.farming.proxy.ProxyFarming;
 import forestry.farming.triggers.FarmingTriggers;
 
@@ -80,14 +84,11 @@ public class PluginFarming extends ForestryPlugin {
 
 	@SidedProxy(clientSide = "forestry.farming.proxy.ClientProxyFarming", serverSide = "forestry.farming.proxy.ProxyFarming")
 	public static ProxyFarming proxy;
-	public static int modelIdFarmBlock;
 	public static ItemStack farmFertilizer;
 
 	@Override
 	public void preInit() {
 		super.preInit();
-
-		Farmables.farmInterface = new FarmHelper();
 
 		ForestryBlock.mushroom.registerBlock(new BlockMushroom(), ItemTypedBlock.class, "mushroom");
 
@@ -96,49 +97,61 @@ public class PluginFarming extends ForestryPlugin {
 		Farmables.farmables.get("farmArboreal").add(new FarmableGE());
 
 		Farmables.farmables.put("farmOrchard", new ArrayList<IFarmable>());
+		Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(Blocks.wheat, 7));
+		Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(Blocks.potatoes, 7));
+		Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(Blocks.carrots, 7));
 
 		Farmables.farmables.put("farmShroom", new ArrayList<IFarmable>());
 		Farmables.farmables.get("farmShroom").add(new FarmableVanillaShroom(Blocks.brown_mushroom, 0));
 		Farmables.farmables.get("farmShroom").add(new FarmableVanillaShroom(Blocks.red_mushroom, 0));
 
 		Farmables.farmables.put("farmWheat", new ArrayList<IFarmable>());
-		Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(new ItemStack(Items.wheat_seeds), Blocks.wheat, 7));
+		Farmables.farmables.get("farmWheat")
+				.add(new FarmableGenericCrop(new ItemStack(Items.wheat_seeds), Blocks.wheat, 7));
 
 		Farmables.farmables.put("farmGourd", new ArrayList<IFarmable>());
-		Farmables.farmables.get("farmGourd").add(
-				new FarmableGourd(new ItemStack(Items.pumpkin_seeds), new ItemStack(Blocks.pumpkin_stem), new ItemStack(Blocks.pumpkin)));
-		Farmables.farmables.get("farmGourd").add(new FarmableGourd(new ItemStack(Items.melon_seeds), new ItemStack(Blocks.melon_stem), new ItemStack(Blocks.melon_block)));
+		Farmables.farmables.get("farmGourd").add(new FarmableGourd(new ItemStack(Items.pumpkin_seeds),
+				new ItemStack(Blocks.pumpkin_stem), new ItemStack(Blocks.pumpkin)));
+		Farmables.farmables.get("farmGourd").add(new FarmableGourd(new ItemStack(Items.melon_seeds),
+				new ItemStack(Blocks.melon_stem), new ItemStack(Blocks.melon_block)));
 
 		Farmables.farmables.put("farmInfernal", new ArrayList<IFarmable>());
-		Farmables.farmables.get("farmInfernal").add(new FarmableGenericCrop(new ItemStack(Items.nether_wart), Blocks.nether_wart, 3));
+		Farmables.farmables.get("farmInfernal")
+				.add(new FarmableGenericCrop(new ItemStack(Items.nether_wart), Blocks.nether_wart, 3));
 
 		Farmables.farmables.put("farmPoales", new ArrayList<IFarmable>());
-		Farmables.farmables.get("farmPoales").add(new FarmableStacked(Blocks.reeds, 3));
+		Farmables.farmables.get("farmPoales").add(new FarmableStacked(Blocks.reeds, 3, 0));
 
 		Farmables.farmables.put("farmSucculentes", new ArrayList<IFarmable>());
-		Farmables.farmables.get("farmSucculentes").add(new FarmableStacked(Blocks.cactus, 3));
+		Farmables.farmables.get("farmSucculentes").add(new FarmableStacked(Blocks.cactus, 3, 0));
 
 		Farmables.farmables.put("farmVegetables", new ArrayList<IFarmable>());
-		Farmables.farmables.get("farmVegetables").add(new FarmableGenericCrop(new ItemStack(Items.potato), Blocks.potatoes, 7));
-		Farmables.farmables.get("farmVegetables").add(new FarmableGenericCrop(new ItemStack(Items.carrot), Blocks.carrots, 7));
+		Farmables.farmables.get("farmVegetables")
+				.add(new FarmableGenericCrop(new ItemStack(Items.potato), Blocks.potatoes, 7));
+		Farmables.farmables.get("farmVegetables")
+				.add(new FarmableGenericCrop(new ItemStack(Items.carrot), Blocks.carrots, 7));
 
 		ForestryBlock.farm.registerBlock(new BlockFarm(), ItemFarmBlock.class, "ffarm");
-		/*Item.itemsList[ForestryBlock.farm] = null;
-		 Item.itemsList[ForestryBlock.farm] = (new ItemFarmBlock(ForestryBlock.farm - 256, "ffarm"));*/
+		/*
+		 * Item.itemsList[ForestryBlock.farm] = null;
+		 * Item.itemsList[ForestryBlock.farm] = (new
+		 * ItemFarmBlock(ForestryBlock.farm - 256, "ffarm"));
+		 */
 		ForestryBlock.farm.block().setHarvestLevel("pickaxe", 0);
 
 		proxy.initializeRendering();
-
-		// Triggers
-		if (PluginManager.Module.BUILDCRAFT_STATEMENTS.isEnabled()) {
-			FarmingTriggers.initialize();
-		}
 
 		// Layouts
 		ICircuitLayout layoutManaged = new CircuitLayout("farms.managed");
 		ChipsetManager.circuitRegistry.registerLayout(layoutManaged);
 		ICircuitLayout layoutManual = new CircuitLayout("farms.manual");
 		ChipsetManager.circuitRegistry.registerLayout(layoutManual);
+		MinecraftForge.EVENT_BUS.register(this);
+	}
+
+	@Override
+	protected void registerTriggers() {
+		FarmingTriggers.initialize();
 	}
 
 	@Override
@@ -183,64 +196,75 @@ public class PluginFarming extends ForestryPlugin {
 
 		if (message.key.equals("add-farmable-sapling")) {
 			String[] tokens = message.getStringValue().split("@");
-			String errormsg = String.format("Received an invalid 'add-farmable-sapling' request '%s' from mod %s", message.getStringValue(),
-					message.getSender());
+			String errormsg = getInvalidIMCMessageText(message);
 			if (tokens.length != 2) {
-				Proxies.log.info(errormsg + ".");
+				Proxies.log.warning(errormsg);
 				return true;
 			}
 
 			if (!Farmables.farmables.containsKey(tokens[0])) {
-				Proxies.log.info("%s for non-existent farm %s.", errormsg, tokens[0]);
+				Proxies.log.warning("%s For non-existent farm %s.", errormsg, tokens[0]);
 				return true;
 			}
 
-			String[] items = tokens[1].split("[\\.]+");
-			if (items.length != 2 && items.length != 4) {
-				Proxies.log.info("%s for farm '%s': id definitions did not match.", errormsg, tokens[0]);
+			Collection<IFarmable> farmables = Farmables.farmables.get(tokens[0]);
+
+			String itemString = tokens[1];
+
+			Matcher matcher = Pattern.compile("(.+?)\\.(-?[0-9][0-9]?)(?:\\.(.+?)\\.(-?[0-9][0-9]?))?")
+					.matcher(itemString);
+			if (!matcher.matches()) {
+				Proxies.log.warning("%s For farm '%s': unable to parse string.", errormsg, tokens[0]);
 				return true;
 			}
+
+			MatchResult matchResult = matcher.toMatchResult();
+			String saplingString = matchResult.group(1);
+			String saplingMetaString = matchResult.group(2);
+			String windfallString = matchResult.group(3);
+			String windfallMetaString = matchResult.group(4);
 
 			try {
-				Block sapling = GameData.getBlockRegistry().getRaw(items[0]);
+				Block sapling = GameData.getBlockRegistry().getRaw(saplingString);
 				if (sapling == null || sapling == Blocks.air) {
-					throw new RuntimeException("can't find block for " + items[0]);
+					throw new RuntimeException("can't find block for " + saplingString);
 				}
+				int saplingMeta = Integer.parseInt(saplingMetaString);
 
-				if (items.length == 2) {
-					Farmables.farmables.get(tokens[0]).add(new FarmableGenericSapling(sapling, Integer.parseInt(items[1])));
+				if (windfallString == null) {
+					farmables.add(new FarmableGenericSapling(sapling, saplingMeta));
 				} else {
-					Item windfall = GameData.getItemRegistry().getRaw(items[2]);
+					Item windfall = GameData.getItemRegistry().getRaw(windfallString);
 					if (windfall == null) {
-						throw new RuntimeException("can't find item for " + items[2]);
+						throw new RuntimeException("can't find item for " + windfallString);
 					}
 
-					Farmables.farmables.get(tokens[0]).add(
-							new FarmableGenericSapling(sapling, Integer.parseInt(items[1]),
-									new ItemStack(windfall, 1, Integer.parseInt(items[3]))));
+					ItemStack windfallStack = new ItemStack(windfall, 1, Integer.parseInt(windfallMetaString));
+
+					farmables.add(new FarmableGenericSapling(sapling, saplingMeta, windfallStack));
 				}
 			} catch (Exception ex) {
-				Proxies.log.info("%s for farm '%s': ", errormsg, tokens[0], ex.getMessage());
+				Proxies.log.warning("%s for farm '%s': %s", errormsg, tokens[0], ex.getMessage());
 			}
 			return true;
 
 		} else if (message.key.equals("add-farmable-crop")) {
 
 			String[] tokens = message.getStringValue().split("@");
-			String errormsg = String.format("Received an invalid 'add-farmable-crop' request '%s' from mod %s", message.getStringValue(), message.getSender());
+			String errormsg = getInvalidIMCMessageText(message);
 			if (tokens.length != 2) {
-				Proxies.log.info(errormsg + ".");
+				Proxies.log.warning(errormsg);
 				return true;
 			}
 
 			if (!Farmables.farmables.containsKey(tokens[0])) {
-				Proxies.log.info("%s for non-existent farm %s.", errormsg, tokens[0]);
+				Proxies.log.warning("%s For non-existent farm %s.", errormsg, tokens[0]);
 				return true;
 			}
 
 			String[] items = tokens[1].split("[\\.]+");
 			if (items.length != 4) {
-				Proxies.log.info("%s for farm '%s': id definitions did not match.", errormsg, tokens[0]);
+				Proxies.log.warning("%s For farm '%s': id definitions did not match.", errormsg, tokens[0]);
 				return true;
 			}
 
@@ -254,12 +278,10 @@ public class PluginFarming extends ForestryPlugin {
 					throw new RuntimeException("can't find block for " + items[2]);
 				}
 
-				Farmables.farmables.get(tokens[0]).add(
-						new FarmableGenericCrop(new ItemStack(seed, 1, Integer.parseInt(items[1])),
-								crop,
-								Integer.parseInt(items[3])));
+				Farmables.farmables.get(tokens[0]).add(new FarmableGenericCrop(
+						new ItemStack(seed, 1, Integer.parseInt(items[1])), crop, Integer.parseInt(items[3])));
 			} catch (Exception ex) {
-				Proxies.log.info("%s for farm '%s': ", errormsg, tokens[0], ex.getMessage());
+				Proxies.log.warning("%s for farm '%s': %s", errormsg, tokens[0], ex.getMessage());
 			}
 
 			return true;
@@ -274,78 +296,74 @@ public class PluginFarming extends ForestryPlugin {
 	}
 
 	@Override
-	public ISaveEventHandler getSaveEventHandler() {
-		return null;
-	}
-
-	@Override
-	public IOreDictionaryHandler getDictionaryHandler() {
-		return null;
-	}
-
-	@Override
-	protected void registerItems() {
-	}
-
-	@Override
-	protected void registerBackpackItems() {
-	}
-
-	@Override
-	protected void registerCrates() {
-	}
-
-	@Override
 	protected void registerRecipes() {
 
 		ItemStack basic = ForestryBlock.farm.getItemStack(1, 0);
-		for (EnumFarmBlock block : EnumFarmBlock.values()) {
+		for (EnumFarmBlockTexture block : EnumFarmBlockTexture.values()) {
 			NBTTagCompound compound = new NBTTagCompound();
 			block.saveToCompound(compound);
 
 			basic.setTagCompound((NBTTagCompound) compound.copy());
-			ShapedRecipeCustom.buildRecipe(basic.copy(), "I#I", "WCW", '#', block.getBase(), 'W', "slabWood", 'C', ForestryItem.tubes.getItemStack(1, 1), 'I', "ingotCopper");
+			ShapedRecipeCustom.buildRecipe(basic.copy(), "I#I", "WCW", '#', block.getBase(), 'W', "slabWood", 'C',
+					ForestryItem.tubes.getItemStack(1, 1), 'I', "ingotCopper");
 		}
 
 		ItemStack gearbox = ForestryBlock.farm.getItemStack(1, 2);
 		ShapedRecipeCustom.buildRecipe(gearbox, " # ", "TTT", '#', basic, 'T', "gearTin").setPreserveNBT();
 
 		ItemStack hatch = ForestryBlock.farm.getItemStack(1, 3);
-		ShapedRecipeCustom.buildRecipe(hatch, " # ", "TDT", '#', basic, 'T', "gearTin", 'D', Blocks.trapdoor).setPreserveNBT();
+		ShapedRecipeCustom.buildRecipe(hatch, " # ", "TDT", '#', basic, 'T', "gearTin", 'D', Blocks.trapdoor)
+				.setPreserveNBT();
 
 		ItemStack valve = ForestryBlock.farm.getItemStack(1, 4);
-		ShapedRecipeCustom.buildRecipe(valve, " # ", "XTX", '#', basic, 'T', "gearTin", 'X', Blocks.glass).setPreserveNBT();
+		ShapedRecipeCustom.buildRecipe(valve, " # ", "XTX", '#', basic, 'T', "gearTin", 'X', "blockGlass")
+				.setPreserveNBT();
 
 		ItemStack control = ForestryBlock.farm.getItemStack(1, 5);
-		ShapedRecipeCustom.buildRecipe(control, " # ", "XTX", '#', basic, 'T', ForestryItem.tubes.getItemStack(1, 4), 'X', Items.redstone).setPreserveNBT();
+		ShapedRecipeCustom.buildRecipe(control, " # ", "XTX", '#', basic, 'T', ForestryItem.tubes.getItemStack(1, 4),
+				'X', "dustRedstone").setPreserveNBT();
 
 		// Circuits
 		ICircuitLayout layoutManaged = ChipsetManager.circuitRegistry.getLayout("forestry.farms.managed");
 		ICircuitLayout layoutManual = ChipsetManager.circuitRegistry.getLayout("forestry.farms.manual");
 
-		ChipsetManager.solderManager.addRecipe(layoutManaged, ForestryItem.tubes.getItemStack(1, 0), Circuit.farmArborealManaged);
-		ChipsetManager.solderManager.addRecipe(layoutManaged, ForestryItem.tubes.getItemStack(1, 1), Circuit.farmPeatManaged);
-		ChipsetManager.solderManager.addRecipe(layoutManaged, ForestryItem.tubes.getItemStack(1, 2), Circuit.farmCerealManaged);
-		ChipsetManager.solderManager.addRecipe(layoutManaged, ForestryItem.tubes.getItemStack(1, 3), Circuit.farmVegetableManaged);
-		ChipsetManager.solderManager.addRecipe(layoutManaged, ForestryItem.tubes.getItemStack(1, 7), Circuit.farmInfernalManaged);
-		ChipsetManager.solderManager.addRecipe(layoutManaged, ForestryItem.tubes.getItemStack(1, 10), Circuit.farmShroomManaged);
+		ChipsetManager.solderManager.addRecipe(layoutManaged, ForestryItem.tubes.getItemStack(1, 0),
+				Circuit.farmArborealManaged);
+		ChipsetManager.solderManager.addRecipe(layoutManaged, ForestryItem.tubes.getItemStack(1, 1),
+				Circuit.farmPeatManaged);
+		ChipsetManager.solderManager.addRecipe(layoutManaged, ForestryItem.tubes.getItemStack(1, 2),
+				Circuit.farmCerealManaged);
+		ChipsetManager.solderManager.addRecipe(layoutManaged, ForestryItem.tubes.getItemStack(1, 3),
+				Circuit.farmVegetableManaged);
+		ChipsetManager.solderManager.addRecipe(layoutManaged, ForestryItem.tubes.getItemStack(1, 7),
+				Circuit.farmInfernalManaged);
+		ChipsetManager.solderManager.addRecipe(layoutManaged, ForestryItem.tubes.getItemStack(1, 10),
+				Circuit.farmShroomManaged);
 
-		ChipsetManager.solderManager.addRecipe(layoutManual, ForestryItem.tubes.getItemStack(1, 0), Circuit.farmOrchardManual);
-		ChipsetManager.solderManager.addRecipe(layoutManual, ForestryItem.tubes.getItemStack(1, 1), Circuit.farmPeatManual);
-		ChipsetManager.solderManager.addRecipe(layoutManual, ForestryItem.tubes.getItemStack(1, 2), Circuit.farmCerealManual);
-		ChipsetManager.solderManager.addRecipe(layoutManual, ForestryItem.tubes.getItemStack(1, 3), Circuit.farmVegetableManual);
-		ChipsetManager.solderManager.addRecipe(layoutManual, ForestryItem.tubes.getItemStack(1, 4), Circuit.farmSucculentManual);
-		ChipsetManager.solderManager.addRecipe(layoutManual, ForestryItem.tubes.getItemStack(1, 5), Circuit.farmPoalesManual);
-		ChipsetManager.solderManager.addRecipe(layoutManual, ForestryItem.tubes.getItemStack(1, 6), Circuit.farmGourdManual);
-		ChipsetManager.solderManager.addRecipe(layoutManual, ForestryItem.tubes.getItemStack(1, 10), Circuit.farmShroomManual);
-		ChipsetManager.solderManager.addRecipe(layoutManual, ForestryItem.tubes.getItemStack(1, 11), Circuit.farmCocoaManual);
+		ChipsetManager.solderManager.addRecipe(layoutManual, ForestryItem.tubes.getItemStack(1, 0),
+				Circuit.farmOrchardManual);
+		ChipsetManager.solderManager.addRecipe(layoutManual, ForestryItem.tubes.getItemStack(1, 1),
+				Circuit.farmPeatManual);
+		ChipsetManager.solderManager.addRecipe(layoutManual, ForestryItem.tubes.getItemStack(1, 2),
+				Circuit.farmCerealManual);
+		ChipsetManager.solderManager.addRecipe(layoutManual, ForestryItem.tubes.getItemStack(1, 3),
+				Circuit.farmVegetableManual);
+		ChipsetManager.solderManager.addRecipe(layoutManual, ForestryItem.tubes.getItemStack(1, 4),
+				Circuit.farmSucculentManual);
+		ChipsetManager.solderManager.addRecipe(layoutManual, ForestryItem.tubes.getItemStack(1, 5),
+				Circuit.farmPoalesManual);
+		ChipsetManager.solderManager.addRecipe(layoutManual, ForestryItem.tubes.getItemStack(1, 6),
+				Circuit.farmGourdManual);
+		ChipsetManager.solderManager.addRecipe(layoutManual, ForestryItem.tubes.getItemStack(1, 10),
+				Circuit.farmShroomManual);
+		ChipsetManager.solderManager.addRecipe(layoutManual, ForestryItem.tubes.getItemStack(1, 11),
+				Circuit.farmCocoaManual);
+	}
 
-		if (PluginIC2.resin != null && PluginIC2.rubberwood != null) {
-			ChipsetManager.solderManager.addRecipe(layoutManual, ForestryItem.tubes.getItemStack(1, 8), Circuit.farmRubberManual);
-		}
-
-		if (PluginExtraUtilities.ExUEnderLilly != null && Config.isExUtilEnderLilyEnabled()) {
-			ChipsetManager.solderManager.addRecipe(layoutManaged, ForestryItem.tubes.getItemStack(1, 12), Circuit.farmEnderManaged);
-		}
+	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
+	public void handleTextureRemap(TextureStitchEvent.Pre event) {
+		FarmLedger.registerSprite();
+		BlockFarm.registerBlockIcons();
 	}
 }

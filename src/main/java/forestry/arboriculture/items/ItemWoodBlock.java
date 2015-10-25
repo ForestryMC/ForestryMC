@@ -10,13 +10,26 @@
  ******************************************************************************/
 package forestry.arboriculture.items;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
+import java.util.ArrayList;
+import java.util.List;
+import javax.annotation.Nullable;
 
-import forestry.arboriculture.IWoodFireproof;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.world.World;
 import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.WoodType;
+import forestry.arboriculture.gadgets.TileWood;
+import forestry.core.config.Defaults;
 import forestry.core.items.ItemForestryBlock;
+import forestry.core.render.ModelManager;
 import forestry.core.utils.StringUtil;
 
 public class ItemWoodBlock extends ItemForestryBlock {
@@ -25,33 +38,102 @@ public class ItemWoodBlock extends ItemForestryBlock {
 		super(block);
 	}
 
+	public static boolean placeWood(ItemStack stack, @Nullable EntityPlayer player, World world, BlockPos pos,
+			IBlockState newState) {
+		WoodType woodType = WoodType.getFromCompound(stack.getTagCompound());
+		Block block = Block.getBlockFromItem(stack.getItem());
+
+		boolean placed = world.setBlockState(pos, newState, Defaults.FLAG_BLOCK_SYNCH_AND_UPDATE);
+		if (!placed) {
+			return false;
+		}
+
+		Block worldBlock = world.getBlockState(pos).getBlock();
+		if (!Block.isEqualTo(block, worldBlock)) {
+			return false;
+		}
+
+		TileEntity tile = world.getTileEntity(pos);
+		if (!(tile instanceof TileWood)) {
+			world.setBlockToAir(pos);
+			return false;
+		}
+
+		if (player != null) {
+			worldBlock.onBlockPlacedBy(world, pos, world.getBlockState(pos), player, stack);
+		}
+
+		((TileWood) tile).setWoodType(woodType);
+		return true;
+	}
+
+	@Override
+	public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side,
+			float hitX, float hitY, float hitZ, IBlockState newState) {
+		return placeWood(stack, player, world, pos, newState);
+	}
+
 	@Override
 	public String getItemStackDisplayName(ItemStack itemstack) {
-		if (this.getBlock() instanceof IWoodTyped) {
-			IWoodTyped block = (IWoodTyped) getBlock();
-			int meta = itemstack.getItemDamage();
-			WoodType woodType = block.getWoodType(meta);
-			if (woodType == null) {
-				return null;
-			}
-
-			String displayName;
-			String customUnlocalizedName = block.getBlockKind() + "." + woodType.ordinal() + ".name";
-			if (StringUtil.canTranslateTile(customUnlocalizedName)) {
-				displayName = StringUtil.localizeTile(customUnlocalizedName);
-			} else {
-				String woodGrammar = StringUtil.localize(block.getBlockKind() + ".grammar");
-				String woodTypeName = StringUtil.localize("trees.woodType." + woodType);
-
-				displayName = woodGrammar.replaceAll("%TYPE", woodTypeName);
-			}
-
-			if (this.getBlock() instanceof IWoodFireproof) {
-				displayName = StringUtil.localizeAndFormatRaw("tile.for.fireproof", displayName);
-			}
-
-			return displayName;
+		Block block = getBlock();
+		if (!(block instanceof IWoodTyped)) {
+			return super.getItemStackDisplayName(itemstack);
 		}
-		return super.getItemStackDisplayName(itemstack);
+
+		WoodType woodType = getWood(itemstack);
+		if (woodType == null) {
+			return super.getItemStackDisplayName(itemstack);
+		}
+
+		IWoodTyped wood = (IWoodTyped) block;
+		String blockKind = wood.getBlockKind();
+
+		String displayName;
+		String customUnlocalizedName = blockKind + "." + woodType.ordinal() + ".name";
+		if (StringUtil.canTranslateTile(customUnlocalizedName)) {
+			displayName = StringUtil.localizeTile(customUnlocalizedName);
+		} else {
+			String woodGrammar = StringUtil.localize(blockKind + ".grammar");
+			String woodTypeName = StringUtil.localize("trees.woodType." + woodType);
+
+			displayName = woodGrammar.replaceAll("%TYPE", woodTypeName);
+		}
+
+		if (wood.isFireproof()) {
+			displayName = StringUtil.localizeAndFormatRaw("tile.for.fireproof", displayName);
+		}
+
+		return displayName;
+	}
+
+	private static WoodType getWood(ItemStack itemStack) {
+		return WoodType.getFromCompound(itemStack.getTagCompound());
+	}
+
+	public static String[] getVariants(IWoodTyped typed) {
+		List variants = new ArrayList<String>();
+		for (WoodType type : WoodType.values())
+			variants.add("forestry:" + typed.getBlockKind() + "/" + type.getName().toLowerCase());
+		return (String[]) variants.toArray(new String[variants.size()]);
+	}
+
+	public static WoodType getWoodType(World world, BlockPos pos) {
+		return (WoodType) world.getBlockState(pos).getValue(WoodType.WOODTYPE);
+	}
+
+	public static class WoodMeshDefinition implements ItemMeshDefinition {
+
+		public String modifier;
+
+		public WoodMeshDefinition(IWoodTyped typed) {
+			this.modifier = typed.getBlockKind();
+		}
+
+		@Override
+		public ModelResourceLocation getModelLocation(ItemStack stack) {
+			WoodType type = getWood(stack);
+			return ModelManager.getInstance().getModelLocation(stack.getItem(), 0, modifier, type.name().toLowerCase());
+		}
+
 	}
 }

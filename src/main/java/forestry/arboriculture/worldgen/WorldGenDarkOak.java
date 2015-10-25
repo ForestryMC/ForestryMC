@@ -10,20 +10,12 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
-import net.minecraft.init.Blocks;
-
 import forestry.api.world.ITreeGenData;
-import forestry.core.worldgen.BlockType;
 
-public class WorldGenDarkOak extends WorldGenTree {
+public class WorldGenDarkOak extends WorldGenTreeVanilla {
 
 	public WorldGenDarkOak(ITreeGenData tree) {
 		super(tree);
-	}
-
-	@Override
-	public BlockType getWood() {
-		return new BlockType(Blocks.log2, 1);
 	}
 
 }

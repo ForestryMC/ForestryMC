@@ -20,5 +20,4 @@ public class TileArboristChest extends TileNaturalistChest {
 		super(AlleleManager.alleleRegistry.getSpeciesRoot(TreeHelper.UID), GuiId.ArboristChestGUI.ordinal());
 	}
 
-
 }

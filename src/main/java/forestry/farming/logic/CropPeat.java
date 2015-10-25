@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -47,7 +48,8 @@ public class CropPeat extends Crop {
 		List<ItemStack> drops = new ArrayList<ItemStack>();
 		drops.add(ForestryItem.peat.getItemStack());
 
-		Proxies.common.addBlockDestroyEffects(world, pos.x, pos.y, pos.z, world.getBlock(pos.x, pos.y, pos.z), 0);
+		IBlockState state = world.getBlockState(pos.pos);
+		Proxies.common.addBlockDestroyEffects(world, pos.pos, state.getBlock().getStateFromMeta(0));
 		setBlock(pos, Blocks.dirt, 0);
 		return drops;
 	}

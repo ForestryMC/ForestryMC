@@ -11,48 +11,33 @@
 package forestry.storage.gui;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
 
 import forestry.core.gui.ContainerItemInventory;
 import forestry.core.gui.IGuiSelectable;
 import forestry.core.gui.slots.SlotFiltered;
-import forestry.core.network.PacketUpdate;
+import forestry.core.network.PacketGuiSelect;
 import forestry.storage.GuiHandlerStorage.PagedBackpackInventory;
 
-public class ContainerNaturalistBackpack extends ContainerItemInventory implements IGuiSelectable {
+public class ContainerNaturalistBackpack extends ContainerItemInventory<PagedBackpackInventory>
+		implements IGuiSelectable {
 
-	private final PagedBackpackInventory inv;
-
-	public ContainerNaturalistBackpack(InventoryPlayer player, PagedBackpackInventory inventory, int page, int pageSize) {
-		super(inventory, player.player);
-
-		this.inv = inventory;
+	public ContainerNaturalistBackpack(EntityPlayer player, PagedBackpackInventory inventory, int page) {
+		super(inventory, player.inventory, 18, 120);
 
 		// Inventory
 		for (int x = 0; x < 5; x++) {
 			for (int y = 0; y < 5; y++) {
-				addSlotToContainer(new SlotFiltered(inventory, y + page * pageSize + x * 5, 100 + y * 18, 21 + x * 18));
+				addSlotToContainer(new SlotFiltered(inventory, y + page * 25 + x * 5, 100 + y * 18, 21 + x * 18));
 			}
-		}
-
-		// Player inventory
-		for (int i1 = 0; i1 < 3; i1++) {
-			for (int l1 = 0; l1 < 9; l1++) {
-				addSecuredSlot(player, l1 + i1 * 9 + 9, 18 + l1 * 18, 120 + i1 * 18);
-			}
-		}
-		// Player hotbar
-		for (int j1 = 0; j1 < 9; j1++) {
-			addSecuredSlot(player, j1, 18 + j1 * 18, 178);
 		}
 	}
 
 	@Override
-	public void handleSelectionChange(EntityPlayer player, PacketUpdate packet) {
-		inv.flipPage(player, packet.payload.intPayload[0]);
+	public void handleSelectionChange(EntityPlayer player, PacketGuiSelect packet) {
+		inventory.flipPage(player, packet.getPrimaryIndex());
 	}
 
 	@Override
-	public void setSelection(PacketUpdate packet) {
+	public void setSelection(PacketGuiSelect packet) {
 	}
 }

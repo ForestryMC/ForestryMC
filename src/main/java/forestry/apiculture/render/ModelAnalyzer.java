@@ -12,9 +12,8 @@ package forestry.apiculture.render;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-
-import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
@@ -32,11 +31,8 @@ public class ModelAnalyzer extends ModelBase {
 
 	public ModelAnalyzer(String gfxBase) {
 
-		textures = new ResourceLocation[]{
-				new ForestryResource(gfxBase + "pedestal.png"),
-				new ForestryResource(gfxBase + "tower1.png"),
-				new ForestryResource(gfxBase + "tower2.png"),
-		};
+		textures = new ResourceLocation[] { new ForestryResource(gfxBase + "pedestal.png"),
+				new ForestryResource(gfxBase + "tower1.png"), new ForestryResource(gfxBase + "tower2.png"), };
 
 		pedestal = new ModelRenderer(this, 0, 0);
 		pedestal.addBox(-8F, -8F, -8F, 16, 1, 16);
@@ -56,30 +52,29 @@ public class ModelAnalyzer extends ModelBase {
 
 	}
 
-	public void render(ForgeDirection orientation, float posX, float posY, float posZ) {
+	public void render(EnumFacing orientation, float posX, float posY, float posZ) {
 
 		GL11.glPushMatrix();
-		GL11.glDisable(GL11.GL_LIGHTING);
 
 		GL11.glTranslatef(posX, posY, posZ);
-		float[] angle = {0, 0, 0};
+		float[] angle = { 0, 0, 0 };
 
 		if (orientation == null) {
-			orientation = ForgeDirection.WEST;
+			orientation = EnumFacing.WEST;
 		}
 		switch (orientation) {
-			case EAST:
-				angle[1] = (float) Math.PI / 2;
-				break;
-			case WEST:
-				angle[1] = -(float) Math.PI / 2;
-				break;
-			case SOUTH:
-				break;
-			case NORTH:
-			default:
-				angle[1] = (float) Math.PI;
-				break;
+		case EAST:
+			angle[1] = (float) Math.PI / 2;
+			break;
+		case WEST:
+			angle[1] = -(float) Math.PI / 2;
+			break;
+		case SOUTH:
+			break;
+		case NORTH:
+		default:
+			angle[1] = (float) Math.PI;
+			break;
 		}
 
 		float factor = (float) (1.0 / 16.0);
@@ -108,7 +103,6 @@ public class ModelAnalyzer extends ModelBase {
 		Proxies.common.bindTexture(textures[2]);
 		tower2.render(factor);
 
-		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glPopMatrix();
 
 	}

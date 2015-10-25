@@ -10,18 +10,15 @@
  ******************************************************************************/
 package forestry.plugins;
 
+import java.util.Collections;
+
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-
 import net.minecraftforge.fml.common.network.IGuiHandler;
-
 import forestry.api.food.BeverageManager;
-import forestry.api.food.IBeverageEffect;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;
 import forestry.core.fluids.Fluids;
-import forestry.core.interfaces.IOreDictionaryHandler;
-import forestry.core.interfaces.ISaveEventHandler;
 import forestry.core.items.ItemForestryFood;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.LiquidHelper;
@@ -36,8 +33,8 @@ import forestry.food.items.ItemInfuser;
 public class PluginFood extends ForestryPlugin {
 
 	@Override
-	public void preInit() {
-		super.preInit();
+	protected void setupAPI() {
+		super.setupAPI();
 
 		// Init seasoner
 		BeverageManager.infuserManager = new ItemInfuser.MixtureManager();
@@ -55,10 +52,11 @@ public class PluginFood extends ForestryPlugin {
 	protected void registerItems() {
 		// / FOOD ITEMS
 		ForestryItem.honeyedSlice.registerItem(new ItemForestryFood(8, 0.6f), "honeyedSlice");
-		ForestryItem.beverage.registerItem(new ItemBeverage(
-						new BeverageInfo("meadShort", "glass", 0xec9a19, 0xffffff, 1, 0.2f, true),
-						new BeverageInfo("meadCurative", "glass", 0xc5feff, 0xffffff, 1, 0.2f, true)),
-				"beverage");
+		ForestryItem.beverage
+				.registerItem(
+						new ItemBeverage(new BeverageInfo("meadShort", "glass", 0xec9a19, 0xffffff, 1, 0.2f, true),
+								new BeverageInfo("meadCurative", "glass", 0xc5feff, 0xffffff, 1, 0.2f, true)),
+						"beverage");
 		ForestryItem.ambrosia.registerItem(new ItemAmbrosia().setIsDrink(), "ambrosia");
 		ForestryItem.honeyPot.registerItem(new ItemForestryFood(2, 0.2f).setIsDrink(), "honeyPot");
 
@@ -67,40 +65,21 @@ public class PluginFood extends ForestryPlugin {
 
 		// Mead
 		ItemStack meadBottle = ForestryItem.beverage.getItemStack();
-		((ItemBeverage) ForestryItem.beverage.item()).beverages[0].saveEffects(meadBottle, new IBeverageEffect[]{BeverageEffect.weakAlcoholic});
+		BeverageInfo.saveEffects(meadBottle, Collections.singletonList(BeverageEffect.weakAlcoholic));
 
-		LiquidHelper.injectLiquidContainer(Fluids.SHORT_MEAD, Defaults.BUCKET_VOLUME, meadBottle, new ItemStack(Items.glass_bottle));
-	}
-
-	@Override
-	protected void registerBackpackItems() {
+		LiquidHelper.injectLiquidContainer(Fluids.SHORT_MEAD, Defaults.BUCKET_VOLUME, meadBottle,
+				new ItemStack(Items.glass_bottle));
 	}
 
 	@Override
 	protected void registerRecipes() {
 		// INFUSER
-		Proxies.common.addRecipe(ForestryItem.infuser.getItemStack(),
-				"X", "#", "X",
-				'#', Items.iron_ingot,
-				'X', "ingotBronze");
-	}
-
-	@Override
-	protected void registerCrates() {
+		Proxies.common.addRecipe(ForestryItem.infuser.getItemStack(), "X", "#", "X", '#', "ingotIron", 'X',
+				"ingotBronze");
 	}
 
 	@Override
 	public IGuiHandler getGuiHandler() {
 		return new GuiHandlerFood();
-	}
-
-	@Override
-	public ISaveEventHandler getSaveEventHandler() {
-		return null;
-	}
-
-	@Override
-	public IOreDictionaryHandler getDictionaryHandler() {
-		return null;
 	}
 }

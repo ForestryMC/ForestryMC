@@ -12,18 +12,14 @@ package forestry.apiculture.genetics;
 
 import forestry.api.genetics.IAlleleFlowers;
 import forestry.api.genetics.IFlowerProvider;
-import forestry.core.genetics.Allele;
+import forestry.core.genetics.alleles.AlleleCategorized;
 
-public class AlleleFlowers extends Allele implements IAlleleFlowers {
+public class AlleleFlowers extends AlleleCategorized implements IAlleleFlowers {
 
 	private final IFlowerProvider provider;
 
-	public AlleleFlowers(String uid, IFlowerProvider provider) {
-		this(uid, provider, false);
-	}
-
-	public AlleleFlowers(String uid, IFlowerProvider provider, boolean isDominant) {
-		super(uid, isDominant);
+	public AlleleFlowers(String modId, String category, String name, IFlowerProvider provider, boolean isDominant) {
+		super(modId, category, name, isDominant);
 		this.provider = provider;
 	}
 
@@ -31,7 +27,7 @@ public class AlleleFlowers extends Allele implements IAlleleFlowers {
 	public IFlowerProvider getProvider() {
 		return provider;
 	}
-	
+
 	@Override
 	public String getName() {
 		return getProvider().getDescription();

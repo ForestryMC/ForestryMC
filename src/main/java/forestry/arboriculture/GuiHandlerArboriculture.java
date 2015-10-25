@@ -12,6 +12,7 @@ package forestry.arboriculture;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.arboriculture.genetics.TreeHelper;
@@ -33,19 +34,20 @@ public class GuiHandlerArboriculture extends GuiHandlerBase {
 
 		switch (GuiId.values()[cleanId]) {
 
-			case ArboristChestGUI:
-				return this.getNaturalistChestContainer(TreeHelper.UID, player, world, x, y, z, decodeGuiData(id));
+		case ArboristChestGUI:
+			return this.getNaturalistChestContainer(TreeHelper.UID, player, world, new BlockPos(x, y, z),
+					decodeGuiData(id));
 
-			case TreealyzerGUI:
-				ItemStack equipped = player.getCurrentEquippedItem();
-				if (equipped == null) {
-					return null;
-				}
-
-				return new ContainerAlyzer(new TreealyzerInventory(player, equipped), player);
-
-			default:
+		case TreealyzerGUI:
+			ItemStack equipped = player.getCurrentEquippedItem();
+			if (equipped == null) {
 				return null;
+			}
+
+			return new ContainerAlyzer(new TreealyzerInventory(player, equipped), player);
+
+		default:
+			return null;
 
 		}
 
@@ -54,26 +56,26 @@ public class GuiHandlerArboriculture extends GuiHandlerBase {
 	@Override
 	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 		int cleanId = decodeGuiID(id);
-		
+
 		if (cleanId >= GuiId.values().length) {
 			return null;
 		}
 
 		switch (GuiId.values()[cleanId]) {
 
-			case ArboristChestGUI:
-				return this.getNaturalistChestGui(TreeHelper.UID, player, world, x, y, z, decodeGuiData(id));
+		case ArboristChestGUI:
+			return this.getNaturalistChestGui(TreeHelper.UID, player, world, new BlockPos(x, y, z), decodeGuiData(id));
 
-			case TreealyzerGUI:
-				ItemStack equipped = player.getCurrentEquippedItem();
-				if (equipped == null) {
-					return null;
-				}
-
-				return new GuiTreealyzer(player, new TreealyzerInventory(player, equipped));
-
-			default:
+		case TreealyzerGUI:
+			ItemStack equipped = player.getCurrentEquippedItem();
+			if (equipped == null) {
 				return null;
+			}
+
+			return new GuiTreealyzer(player, new TreealyzerInventory(player, equipped));
+
+		default:
+			return null;
 
 		}
 

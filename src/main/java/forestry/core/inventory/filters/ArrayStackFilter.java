@@ -37,7 +37,7 @@ public class ArrayStackFilter implements IStackFilter {
 		return stacks;
 	}
 
-	public boolean hasFilter() {
+	private boolean hasFilter() {
 		for (ItemStack filter : stacks) {
 			if (filter != null) {
 				return true;

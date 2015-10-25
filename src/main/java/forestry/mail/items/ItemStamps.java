@@ -69,5 +69,4 @@ public class ItemStamps extends ItemOverlay implements IStamps {
 		return super.getUnlocalizedName(itemstack);
 	}
 
-
 }

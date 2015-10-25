@@ -31,17 +31,13 @@ public class MachinePhilatelist extends TileBase implements IInventory {
 	public static final short SLOT_BUFFER_COUNT = 27;
 
 	public MachinePhilatelist() {
-		setInternalInventory(new TileInventoryAdapter(this, 28, "INV") {
-			@Override
-			public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-				return itemStack.getItem() instanceof IStamps;
-			}
-		});
+		setInternalInventory(new PhilatelistInventoryAdapter(this));
 	}
 
 	@Override
-	public void openGui(EntityPlayer player, TileBase tile) {
-		player.openGui(ForestryAPI.instance, GuiId.PhilatelistGUI.ordinal(), worldObj, xCoord, yCoord, zCoord);
+	public void openGui(EntityPlayer player) {
+		player.openGui(ForestryAPI.instance, GuiId.PhilatelistGUI.ordinal(), worldObj, pos.getX(), pos.getY(),
+				pos.getZ());
 	}
 
 	// / UPDATING
@@ -59,7 +55,8 @@ public class MachinePhilatelist extends TileBase implements IInventory {
 		} else {
 			ItemStack filter = inventory.getStackInSlot(SLOT_FILTER);
 			if (filter.getItem() instanceof IStamps) {
-				stamp = PostManager.postRegistry.getPostOffice(worldObj).getAnyStamp(((IStamps) filter.getItem()).getPostage(filter), 1);
+				stamp = PostManager.postRegistry.getPostOffice(worldObj)
+						.getAnyStamp(((IStamps) filter.getItem()).getPostage(filter), 1);
 			}
 		}
 
@@ -69,5 +66,16 @@ public class MachinePhilatelist extends TileBase implements IInventory {
 
 		// Store it.
 		StackUtils.stowInInventory(stamp, inventory, true, SLOT_BUFFER_1, SLOT_BUFFER_COUNT);
+	}
+
+	private static class PhilatelistInventoryAdapter extends TileInventoryAdapter<MachinePhilatelist> {
+		public PhilatelistInventoryAdapter(MachinePhilatelist tile) {
+			super(tile, 28, "INV");
+		}
+
+		@Override
+		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+			return itemStack.getItem() instanceof IStamps;
+		}
 	}
 }

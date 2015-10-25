@@ -1,0 +1,6 @@
+{
+    "variants": {
+		"state=on": { "model": "forestry:apiculture/alveary_fan_on" },
+		"state=off": { "model": "forestry:apiculture/alveary_fan_off" }
+	}
+}

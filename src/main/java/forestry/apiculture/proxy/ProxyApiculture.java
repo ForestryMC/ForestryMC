@@ -10,12 +10,12 @@
  ******************************************************************************/
 package forestry.apiculture.proxy;
 
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
-
 import forestry.core.interfaces.IBlockRenderer;
 
 public class ProxyApiculture {
-	public void addBeeHiveFX(String texture, World world, double xCoord, double yCoord, double zCoord, int color, int areaX, int areaY, int areaZ) {
+	public void addBeeHiveFX(String texture, World world, BlockPos coordinates, int color) {
 	}
 
 	public void addBeeSwarmFX(String texture, World world, double xCoord, double yCoord, double zCoord, int color) {
@@ -26,6 +26,9 @@ public class ProxyApiculture {
 	}
 
 	public void initializeRendering() {
+	}
+
+	public void preInitializeMapping() {
 	}
 
 }

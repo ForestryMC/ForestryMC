@@ -14,24 +14,24 @@ import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
-import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
 import forestry.core.proxy.Proxies;
 
-public class ItemForestryTool extends ItemForestry {
+public abstract class ItemForestryTool extends ItemForestry {
 
 	private final ItemStack remnants;
 	protected float efficiencyOnProperMaterial;
 	private final List<Block> blocksEffectiveAgainst;
 
-	public ItemForestryTool(Block[] blocksEffectiveAgainst, ItemStack remnants) {
+	protected ItemForestryTool(Block[] blocksEffectiveAgainst, ItemStack remnants) {
 		super();
 		this.blocksEffectiveAgainst = Arrays.asList(blocksEffectiveAgainst);
 		this.maxStackSize = 1;
@@ -41,7 +41,7 @@ public class ItemForestryTool extends ItemForestry {
 	}
 
 	@Override
-	public float func_150893_a(ItemStack itemstack, Block block) {
+	public float getStrVsBlock(ItemStack stack, Block block) {
 		if (blocksEffectiveAgainst.contains(block)) {
 			return efficiencyOnProperMaterial;
 		}
@@ -49,11 +49,12 @@ public class ItemForestryTool extends ItemForestry {
 	}
 
 	@Override
-	public float getDigSpeed(ItemStack itemstack, Block block, int md) {
-		if (ForgeHooks.isToolEffective(itemstack, block, md)) {
-			return efficiencyOnProperMaterial;
+	public float getDigSpeed(ItemStack itemstack, IBlockState state) {
+		for (String type : getToolClasses(itemstack)) {
+			if (state.getBlock().isToolEffective(type, state))
+				return efficiencyOnProperMaterial;
 		}
-		return func_150893_a(itemstack, block);
+		return getStrVsBlock(itemstack, state.getBlock());
 	}
 
 	@SubscribeEvent
@@ -63,14 +64,15 @@ public class ItemForestryTool extends ItemForestry {
 		}
 
 		if (Proxies.common.isSimulating(event.entityPlayer.worldObj) && remnants != null) {
-			EntityItem entity = new EntityItem(event.entityPlayer.worldObj, event.entityPlayer.posX, event.entityPlayer.posY, event.entityPlayer.posZ,
-					remnants.copy());
+			EntityItem entity = new EntityItem(event.entityPlayer.worldObj, event.entityPlayer.posX,
+					event.entityPlayer.posY, event.entityPlayer.posZ, remnants.copy());
 			event.entityPlayer.worldObj.spawnEntityInWorld(entity);
 		}
 	}
 
 	@Override
-	public boolean onBlockDestroyed(ItemStack itemstack, World world, Block block, int j, int k, int l, EntityLivingBase entityliving) {
+	public boolean onBlockDestroyed(ItemStack itemstack, World worldIn, Block blockIn, BlockPos pos,
+			EntityLivingBase entityliving) {
 		itemstack.damageItem(1, entityliving);
 		return true;
 	}

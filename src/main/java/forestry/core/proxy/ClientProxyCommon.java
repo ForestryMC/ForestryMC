@@ -12,18 +12,21 @@ package forestry.core.proxy;
 
 import java.io.File;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.client.particle.EntityExplodeFX;
+import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import com.mojang.authlib.GameProfile;
 
@@ -33,8 +36,10 @@ import forestry.apiculture.render.TextureHabitatLocator;
 import forestry.core.ForestryClient;
 import forestry.core.TickHandlerCoreClient;
 import forestry.core.WorldGenerator;
-import forestry.core.config.Config;
-import forestry.core.render.SpriteSheet;
+import forestry.core.multiblock.MultiblockClientTickHandler;
+import forestry.core.render.EntityHoneydustFX;
+import forestry.core.render.EntityIgnitionFX;
+import forestry.core.render.EntitySnowFX;
 
 public class ClientProxyCommon extends ProxyCommon {
 
@@ -44,15 +49,16 @@ public class ClientProxyCommon extends ProxyCommon {
 	}
 
 	@Override
-	public void bindTexture(SpriteSheet spriteSheet) {
-		bindTexture(spriteSheet.getLocation());
+	public void bindTexture() {
+		bindTexture(TextureMap.locationBlocksTexture);
 	}
 
 	@Override
 	public void registerTickHandlers(WorldGenerator worldGenerator) {
 		super.registerTickHandlers(worldGenerator);
 
-		new TickHandlerCoreClient();
+		FMLCommonHandler.instance().bus().register(new TickHandlerCoreClient());
+		FMLCommonHandler.instance().bus().register(new MultiblockClientTickHandler());
 	}
 
 	@Override
@@ -61,8 +67,8 @@ public class ClientProxyCommon extends ProxyCommon {
 	}
 
 	@Override
-	public void setHabitatLocatorCoordinates(Entity player, ChunkCoordinates coordinates) {
-		TextureHabitatLocator.getInstance().setTargetCoordinates(coordinates);
+	public void setHabitatLocatorCoordinates(Entity player, BlockPos pos) {
+		TextureHabitatLocator.getInstance().setTargetCoordinates(pos);
 	}
 
 	@Override
@@ -76,18 +82,13 @@ public class ClientProxyCommon extends ProxyCommon {
 	}
 
 	@Override
-	public int getBlockModelIdEngine() {
-		return ForestryClient.blockModelIdEngine;
-	}
-
-	@Override
 	public int getByBlockModelId() {
 		return ForestryClient.byBlockModelId;
 	}
 
 	@Override
 	public boolean isOp(EntityPlayer player) {
-		return true;
+		return false;
 	}
 
 	@Override
@@ -130,84 +131,111 @@ public class ClientProxyCommon extends ProxyCommon {
 	}
 
 	@Override
-	public void playSoundFX(World world, int x, int y, int z, Block block) {
+	public void playSoundFX(World world, BlockPos pos, IBlockState state) {
 		if (Proxies.common.isSimulating(world)) {
-			super.playSoundFX(world, x, y, z, block);
+			super.playSoundFX(world, pos, state);
 		} else {
-			playSoundFX(world, x, y, z, block.stepSound.getStepSound(), block.stepSound.getVolume(), block.stepSound.getFrequency());
+			playSoundFX(world, pos.getX(), pos.getY(), pos.getZ(), state.getBlock().stepSound.getStepSound(),
+					state.getBlock().stepSound.getVolume(), state.getBlock().stepSound.getFrequency());
 		}
 	}
 
 	@Override
-	public void playBlockBreakSoundFX(World world, int x, int y, int z, Block block) {
+	public void playBlockBreakSoundFX(World world, BlockPos pos, IBlockState state) {
 		if (Proxies.common.isSimulating(world)) {
-			super.playSoundFX(world, x, y, z, block);
+			super.playSoundFX(world, pos, state);
 		} else {
-			playSoundFX(world, x, y, z, block.stepSound.getBreakSound(), block.stepSound.getVolume() / 4, block.stepSound.getFrequency());
+			playSoundFX(world, pos.getX(), pos.getY(), pos.getZ(), state.getBlock().stepSound.getBreakSound(),
+					state.getBlock().stepSound.getVolume() / 4, state.getBlock().stepSound.getFrequency());
 		}
 	}
 
 	@Override
-	public void playBlockPlaceSoundFX(World world, int x, int y, int z, Block block) {
+	public void playBlockPlaceSoundFX(World world, BlockPos pos, IBlockState state) {
 		if (Proxies.common.isSimulating(world)) {
-			super.playSoundFX(world, x, y, z, block);
+			super.playSoundFX(world, pos, state);
 		} else {
-			playSoundFX(world, x, y, z, block.stepSound.getStepSound(), block.stepSound.getVolume() / 4, block.stepSound.getFrequency());
+			playSoundFX(world, pos.getX(), pos.getY(), pos.getZ(), state.getBlock().stepSound.getStepSound(),
+					state.getBlock().stepSound.getVolume() / 4, state.getBlock().stepSound.getFrequency());
 		}
 	}
 
 	@Override
 	public void playSoundFX(World world, int x, int y, int z, String sound, float volume, float pitch) {
-		world.playSound(x + 0.5, y + 0.5, z + 0.5, sound, volume, (1.0f + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.2f) * 0.7f, false);
+		world.playSound(x + 0.5, y + 0.5, z + 0.5, sound, volume,
+				(1.0f + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.2f) * 0.7f, false);
 	}
 
-	/**
-	 * Renders a EntityBiodustFX on client.
-	 */
-	// FIXME: This is causing crashes.
 	@Override
-	public void addEntityBiodustFX(World world, double d1, double d2, double d3, float f1, float f2, float f3) {
-		if (!Config.enableParticleFX) {
+	public void addEntitySwarmFX(World world, double d1, double d2, double d3) {
+		if (!ClientProxyRender.shouldSpawnParticle(world)) {
 			return;
 		}
 
-		// ModLoader.getMinecraftInstance().effectRenderer.addEffect(new EntityBiodustFX(world, d1, d2, d3, f1, f2, f3));
+		getClientInstance().effectRenderer.addEffect(new EntityHoneydustFX(world, d1, d2, d3, 0, 0, 0));
 	}
 
-	// FIXME: This is causing crashes.
 	@Override
-	public void addEntitySwarmFX(World world, double d1, double d2, double d3, float f1, float f2, float f3) {
-		if (!Config.enableParticleFX) {
+	public void addEntityExplodeFX(World world, double d1, double d2, double d3) {
+		if (!ClientProxyRender.shouldSpawnParticle(world)) {
 			return;
 		}
 
-		// ModLoader.getMinecraftInstance().effectRenderer.addEffect(new EntityHoneydustFX(world, d1, d2, d3, f1, f2, f3));
+		getClientInstance().effectRenderer.addEffect(getClientInstance().effectRenderer
+				.spawnEffectParticle(EnumParticleTypes.EXPLOSION_NORMAL.getParticleID(), d1, d2, d3, 0, 0, 0));
 	}
 
 	@Override
-	public void addEntityExplodeFX(World world, double d1, double d2, double d3, float f1, float f2, float f3) {
-		if (!Config.enableParticleFX) {
+	public void addEntitySnowFX(World world, double d1, double d2, double d3) {
+		if (!ClientProxyRender.shouldSpawnParticle(world)) {
 			return;
 		}
 
-		getClientInstance().effectRenderer.addEffect(new EntityExplodeFX(world, d1, d2, d3, f1, f2, f3));
+		getClientInstance().effectRenderer
+				.addEffect(new EntitySnowFX(world, d1 + world.rand.nextGaussian(), d2, d3 + world.rand.nextGaussian()));
 	}
 
 	@Override
-	public void addBlockDestroyEffects(World world, int xCoord, int yCoord, int zCoord, Block block, int i) {
+	public void addEntityIgnitionFX(World world, double d1, double d2, double d3) {
+		if (!ClientProxyRender.shouldSpawnParticle(world)) {
+			return;
+		}
+
+		getClientInstance().effectRenderer.addEffect(new EntityIgnitionFX(world, d1, d2, d3));
+	}
+
+	@Override
+	public void addEntityPotionFX(World world, double d1, double d2, double d3, int color) {
+		if (!ClientProxyRender.shouldSpawnParticle(world)) {
+			return;
+		}
+
+		float red = (color >> 16 & 255) / 255.0F;
+		float green = (color >> 8 & 255) / 255.0F;
+		float blue = (color & 255) / 255.0F;
+
+		EntityFX entityfx = getClientInstance().effectRenderer
+				.spawnEffectParticle(EnumParticleTypes.SPELL.getParticleID(), d1, d2, d3, 0, 0, 0);
+		entityfx.setRBGColorF(red, green, blue);
+
+		getClientInstance().effectRenderer.addEffect(entityfx);
+	}
+
+	@Override
+	public void addBlockDestroyEffects(World world, BlockPos pos, IBlockState state) {
 		if (!isSimulating(world)) {
-			getClientInstance().effectRenderer.addBlockDestroyEffects(xCoord, yCoord, zCoord, block, i);
+			getClientInstance().effectRenderer.addBlockDestroyEffects(pos, state);
 		} else {
-			super.addBlockDestroyEffects(world, xCoord, yCoord, zCoord, block, i);
+			super.addBlockDestroyEffects(world, pos, state);
 		}
 	}
 
 	@Override
-	public void addBlockPlaceEffects(World world, int xCoord, int yCoord, int zCoord, Block block, int i) {
+	public void addBlockPlaceEffects(World world, BlockPos pos, IBlockState state) {
 		if (!isSimulating(world)) {
-			playBlockPlaceSoundFX(world, xCoord, yCoord, zCoord, block);
+			playBlockPlaceSoundFX(world, pos, state);
 		} else {
-			super.addBlockPlaceEffects(world, xCoord, yCoord, zCoord, block, i);
+			super.addBlockPlaceEffects(world, pos, state);
 		}
 	}
 

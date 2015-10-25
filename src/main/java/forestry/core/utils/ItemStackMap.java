@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.utils;
 
-
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 

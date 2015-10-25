@@ -13,16 +13,18 @@ package forestry.core.utils;
 import java.util.HashMap;
 import java.util.Map;
 
-
 /**
  * Map for fluids and items. Can add things like ore dictionary strings etc.
  *
- * @param <T> The thing this map maps onto
- * @param <P> The stack class (i.e. ItemStack, FluidStack) used for lookups
+ * @param <T>
+ *            The thing this map maps onto
+ * @param
+ * 			<P>
+ *            The stack class (i.e. ItemStack, FluidStack) used for lookups
  * @author Alex Binnie
  */
 public abstract class StackMap<P, T> extends HashMap<P, T> {
-	
+
 	@Override
 	public final T put(P key, T value) {
 		if (isValidKey(key) && key != null && value != null) {
@@ -69,7 +71,7 @@ public abstract class StackMap<P, T> extends HashMap<P, T> {
 	 * @return
 	 */
 	protected abstract boolean areEqual(P a, Object b);
-	
+
 	/**
 	 * Can this key be added to the map
 	 *

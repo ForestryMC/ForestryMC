@@ -33,7 +33,7 @@ public class ItemElectronTube extends ItemOverlay {
 		super(tab, overlays);
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean flag) {
 

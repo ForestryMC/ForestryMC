@@ -1,0 +1,12 @@
+{
+    "parent": "block/cube",
+    "textures": {
+        "particle": "forestry:blocks/apiary.4",
+        "down": "forestry:blocks/apiary.0",
+        "up": "forestry:blocks/apiary.1",
+        "north": "forestry:blocks/apiary.2",
+        "east": "forestry:blocks/apiary.4",
+        "south": "forestry:blocks/apiary.4",
+        "west": "forestry:blocks/apiary.4"
+    }
+}

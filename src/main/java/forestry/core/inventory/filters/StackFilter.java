@@ -40,7 +40,8 @@ public enum StackFilter implements IStackFilter {
 	FEED {
 		@Override
 		public boolean matches(ItemStack stack) {
-			return stack.getItem() instanceof ItemFood || stack.getItem() == Items.wheat || stack.getItem() instanceof ItemSeeds;
+			return stack.getItem() instanceof ItemFood || stack.getItem() == Items.wheat
+					|| stack.getItem() instanceof ItemSeeds;
 		}
 	};
 

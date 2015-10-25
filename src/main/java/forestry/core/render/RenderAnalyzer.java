@@ -10,15 +10,13 @@
  ******************************************************************************/
 package forestry.core.render;
 
-import net.minecraft.client.renderer.entity.RenderItem;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-
-import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
@@ -28,44 +26,22 @@ import forestry.core.interfaces.IBlockRenderer;
 
 public class RenderAnalyzer extends TileEntitySpecialRenderer implements IBlockRenderer {
 
-	private ModelAnalyzer model;
+	private final ModelAnalyzer model;
 	private final EntityItem dummyEntityItem = new EntityItem(null);
-	private final RenderItem customRenderItem;
 	private long lastTick;
 
-	public RenderAnalyzer() {
-		customRenderItem = new RenderItem() {
-			@Override
-			public boolean shouldBob() {
-				return true;
-			}
-
-			@Override
-			public boolean shouldSpreadItems() {
-				return false;
-			}
-		};
-		customRenderItem.setRenderManager(RenderManager.instance);
-	}
-
 	public RenderAnalyzer(String baseTexture) {
-		this();
 		this.model = new ModelAnalyzer(baseTexture);
 	}
 
 	@Override
-	public void inventoryRender(double x, double y, double z, float f, float f1) {
-		render(null, null, ForgeDirection.WEST, x, y, z);
-	}
-
-	@Override
-	public void renderTileEntityAt(TileEntity tile, double d, double d1, double d2, float f) {
+	public void renderTileEntityAt(TileEntity tile, double d, double d1, double d2, float f, int i) {
 
 		TileAnalyzer analyzer = (TileAnalyzer) tile;
-		render(analyzer.getIndividualOnDisplay(), tile.getWorldObj(), analyzer.getOrientation(), d, d1, d2);
+		render(analyzer.getIndividualOnDisplay(), tile.getWorld(), analyzer.getOrientation(), d, d1, d2);
 	}
 
-	private void render(ItemStack itemstack, World world, ForgeDirection orientation, double x, double y, double z) {
+	private void render(ItemStack itemstack, World world, EnumFacing orientation, double x, double y, double z) {
 
 		dummyEntityItem.worldObj = world;
 
@@ -85,7 +61,7 @@ public class RenderAnalyzer extends TileEntitySpecialRenderer implements IBlockR
 			lastTick = world.getTotalWorldTime();
 			dummyEntityItem.onUpdate();
 		}
-		customRenderItem.doRender(dummyEntityItem, 0, 0, 0, 0, 0);
+		Minecraft.getMinecraft().getRenderItem().renderItemModel(dummyEntityItem.getEntityItem());
 		GL11.glPopMatrix();
 
 	}

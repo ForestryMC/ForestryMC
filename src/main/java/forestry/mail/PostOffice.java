@@ -39,7 +39,7 @@ public class PostOffice extends WorldSavedData implements IPostOffice {
 	public PostOffice() {
 		super(SAVE_NAME);
 	}
-	
+
 	public PostOffice(String s) {
 		super(s);
 	}
@@ -124,7 +124,7 @@ public class PostOffice extends WorldSavedData implements IPostOffice {
 
 	@Override
 	public ItemStack getAnyStamp(EnumPostage postage, int max) {
-		return getAnyStamp(new EnumPostage[]{postage}, max);
+		return getAnyStamp(new EnumPostage[] { postage }, max);
 	}
 
 	@Override

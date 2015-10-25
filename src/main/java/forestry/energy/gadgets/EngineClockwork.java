@@ -21,7 +21,6 @@ import net.minecraftforge.common.util.FakePlayer;
 import forestry.core.TemperatureState;
 import forestry.core.config.Defaults;
 import forestry.core.gadgets.Engine;
-import forestry.core.gadgets.TileBase;
 import forestry.core.utils.DamageSourceForestry;
 
 public class EngineClockwork extends Engine {
@@ -29,23 +28,24 @@ public class EngineClockwork extends Engine {
 	private final static float WIND_EXHAUSTION = 0.05f;
 	private final static float WIND_TENSION_BASE = 0.5f;
 	private final static int WIND_DELAY = 10;
-	
+
 	private static final int ENGINE_CLOCKWORK_HEAT_MAX = 300000;
 	private static final int ENGINE_CLOCKWORK_ENERGY_PER_CYCLE = 2;
 	private static final float ENGINE_CLOCKWORK_WIND_MAX = 8f;
 
-	private static final DamageSourceForestry damageSourceEngineClockwork = new DamageSourceForestry("engine.clockwork");
-	
+	private static final DamageSourceForestry damageSourceEngineClockwork = new DamageSourceForestry(
+			"engine.clockwork");
+
 	private float tension = 0.0f;
 	private short delay = 0;
-	
+
 	public EngineClockwork() {
-		super(ENGINE_CLOCKWORK_HEAT_MAX, 10000, 500);
+		super(ENGINE_CLOCKWORK_HEAT_MAX, 10000);
 	}
-	
+
 	@Override
-	public void openGui(EntityPlayer player, TileBase tile) {
-		
+	public void openGui(EntityPlayer player) {
+
 		if (!(player instanceof EntityPlayerMP)) {
 			return;
 		}
@@ -53,22 +53,24 @@ public class EngineClockwork extends Engine {
 		if (player instanceof FakePlayer) {
 			return;
 		}
-		
+
 		if (tension <= 0) {
 			tension = WIND_TENSION_BASE;
 		} else if (tension < ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE) {
-			tension += (ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE - tension) / (ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE) * WIND_TENSION_BASE;
+			tension += (ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE - tension)
+					/ (ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE) * WIND_TENSION_BASE;
 		} else {
 			return;
 		}
-		
+
 		player.addExhaustion(WIND_EXHAUSTION);
 		if (tension > ENGINE_CLOCKWORK_WIND_MAX + (0.1 * WIND_TENSION_BASE)) {
 			player.attackEntityFrom(damageSourceEngineClockwork, 6);
 		}
-		tension = tension > ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE ? ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE : tension;
+		tension = tension > ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE
+				? ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE : tension;
 		delay = WIND_DELAY;
-		sendNetworkUpdate();
+		setNeedsNetworkUpdate();
 	}
 
 	/* LOADING & SAVING */
@@ -77,15 +79,15 @@ public class EngineClockwork extends Engine {
 		super.readFromNBT(nbttagcompound);
 		tension = nbttagcompound.getFloat("Wound");
 	}
-	
+
 	@Override
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 		super.writeToNBT(nbttagcompound);
 		nbttagcompound.setFloat("Wound", tension);
 	}
-	
+
 	@Override
-	public boolean isActivated() {
+	public boolean isRedstoneActivated() {
 		return true;
 	}
 
@@ -106,18 +108,18 @@ public class EngineClockwork extends Engine {
 
 	@Override
 	public void burn() {
-		
+
 		heat = (int) (tension * 10000);
-		
+
 		if (delay > 0) {
 			delay--;
 			return;
 		}
-		
+
 		if (!isBurning()) {
 			return;
 		}
-		
+
 		if (tension > 0.01f) {
 			tension *= 0.9995f;
 		} else {
@@ -127,25 +129,17 @@ public class EngineClockwork extends Engine {
 	}
 
 	@Override
-	public boolean isBurning() {
+	protected boolean isBurning() {
 		return tension > 0;
 	}
 
 	@Override
 	public TemperatureState getTemperatureState() {
-		double scaled = (heat / 10000) / ENGINE_CLOCKWORK_WIND_MAX;
-
-		if (scaled < 0.20) {
-			return TemperatureState.COOL;
-		} else if (scaled < 0.45) {
-			return TemperatureState.WARMED_UP;
-		} else if (scaled < 0.65) {
-			return TemperatureState.OPERATING_TEMPERATURE;
-		} else if (scaled < 0.85) {
-			return TemperatureState.RUNNING_HOT;
-		} else {
-			return TemperatureState.OVERHEATING;
+		TemperatureState state = TemperatureState.getState(heat / 10000, ENGINE_CLOCKWORK_WIND_MAX);
+		if (state == TemperatureState.MELTING) {
+			state = TemperatureState.OVERHEATING;
 		}
+		return state;
 	}
 
 	@Override
@@ -153,11 +147,14 @@ public class EngineClockwork extends Engine {
 		if (delay > 0) {
 			return 0;
 		}
-		
+
 		float fromClockwork = (tension / ENGINE_CLOCKWORK_WIND_MAX) * Defaults.ENGINE_PISTON_SPEED_MAX;
-		return fromClockwork >= 0.01f ? fromClockwork : 0;
+
+		fromClockwork = Math.round(fromClockwork * 100f) / 100f;
+
+		return fromClockwork;
 	}
-	
+
 	@Override
 	public void getGUINetworkData(int i, int j) {
 	}

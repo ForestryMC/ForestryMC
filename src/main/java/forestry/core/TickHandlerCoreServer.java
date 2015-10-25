@@ -19,13 +19,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.ChunkDataEvent;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
-
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.interfaces.IResupplyHandler;
@@ -39,8 +36,6 @@ public class TickHandlerCoreServer {
 
 	public TickHandlerCoreServer(WorldGenerator worldGenerator) {
 		this.worldGenerator = worldGenerator;
-		FMLCommonHandler.instance().bus().register(this);
-		MinecraftForge.EVENT_BUS.register(this);
 	}
 
 	@SubscribeEvent
@@ -60,14 +55,15 @@ public class TickHandlerCoreServer {
 
 		if (Config.doRetrogen) {
 			World world = event.world;
-			int dimensionID = world.provider.dimensionId;
+			int dimensionID = world.provider.getDimensionId();
 			List<ChunkCoords> chunkList = chunkRegenList.get(dimensionID);
 
 			if (chunkList.size() > 0) {
 				ChunkCoords coords = chunkList.get(0);
 				chunkList.remove(0);
 
-				// This bit is from FML's GameRegistry.generateWorld where the seed is constructed.
+				// This bit is from FML's GameRegistry.generateWorld where the
+				// seed is constructed.
 				long worldSeed = world.getSeed();
 				Random random = new Random(worldSeed);
 				long xSeed = random.nextLong() >> 2 + 1L;

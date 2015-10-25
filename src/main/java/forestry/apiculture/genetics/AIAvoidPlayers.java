@@ -55,13 +55,14 @@ public class AIAvoidPlayers extends EntityAIBase {
 		}
 
 		Vec3 randomTarget = RandomPositionGenerator.findRandomTargetBlockAwayFrom(mob, 16, 7,
-				Vec3.createVectorHelper(player.posX, player.posY, player.posZ));
+				new Vec3(player.posX, player.posY, player.posZ));
 
 		if (randomTarget == null) {
 			return false;
 		}
 
-		if (player.getDistanceSq(randomTarget.xCoord, randomTarget.yCoord, randomTarget.zCoord) < player.getDistanceSqToEntity(mob)) {
+		if (player.getDistanceSq(randomTarget.xCoord, randomTarget.yCoord, randomTarget.zCoord) < player
+				.getDistanceSqToEntity(mob)) {
 			return false;
 		}
 

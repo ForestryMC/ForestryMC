@@ -13,11 +13,8 @@ package forestry.apiculture.items;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import forestry.apiculture.gadgets.BlockCandle;
 import forestry.core.items.ItemForestryBlock;
 
@@ -53,23 +50,6 @@ public class ItemCandleBlock extends ItemForestryBlock {
 			value = value + ".stump";
 		}
 		return value;
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIconFromDamageForRenderPass(int meta, int pass) {
-		return ((BlockCandle) this.getBlock()).getTextureFromPassAndMeta((meta != 0) ? 8 : 0, pass);
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public boolean requiresMultipleRenderPasses() {
-		return true;
-	}
-
-	@Override
-	public int getRenderPasses(int metadata) {
-		return 2;
 	}
 
 }

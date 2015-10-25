@@ -15,9 +15,9 @@ import java.util.ArrayList;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
+import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
 import forestry.core.utils.BlockUtil;
@@ -28,26 +28,27 @@ import forestry.farming.gadgets.StructureLogicFarm;
 
 public abstract class FarmLogicHomogeneous extends FarmLogic {
 
-	protected final ItemStack[] resource;
-	protected final ItemStack soilBlock;
-	protected final IFarmable[] germlings;
+	private final ItemStack resource;
+	private final ItemStack soilBlock;
+	protected final Iterable<IFarmable> germlings;
 
 	ArrayList<ItemStack> produce = new ArrayList<ItemStack>();
 
-	public FarmLogicHomogeneous(IFarmHousing housing, ItemStack[] resource, ItemStack soilBlock, IFarmable[] germlings) {
+	protected FarmLogicHomogeneous(IFarmHousing housing, ItemStack resource, ItemStack soilBlock,
+			Iterable<IFarmable> germlings) {
 		super(housing);
 		this.resource = resource;
 		this.soilBlock = soilBlock;
 		this.germlings = germlings;
 	}
 
-	public boolean isAcceptedSoil(ItemStack itemStack) {
+	protected boolean isAcceptedSoil(ItemStack itemStack) {
 		return StackUtils.isIdenticalItem(soilBlock, itemStack);
 	}
 
 	@Override
 	public boolean isAcceptedResource(ItemStack itemstack) {
-		return resource[0].isItemEqual(itemstack);
+		return resource.isItemEqual(itemstack);
 	}
 
 	@Override
@@ -60,7 +61,7 @@ public abstract class FarmLogicHomogeneous extends FarmLogic {
 		return false;
 	}
 
-	public boolean isWindfall(ItemStack itemstack) {
+	protected boolean isWindfall(ItemStack itemstack) {
 		for (IFarmable germling : germlings) {
 			if (germling.isWindfall(itemstack)) {
 				return true;
@@ -70,21 +71,22 @@ public abstract class FarmLogicHomogeneous extends FarmLogic {
 	}
 
 	@Override
-	public boolean cultivate(BlockPos pos, EnumFacing direction, int extent) {
+	public boolean cultivate(BlockPos pos, FarmDirection direction, int extent) {
 
 		if (maintainSoil(pos, direction, extent)) {
 			return true;
 		}
 
-		if (maintainGermlings(pos.up(), direction, extent)) {
+		if (maintainGermlings(new BlockPos(pos.getX(), pos.getY() + 1, pos.getZ()), direction, extent)) {
 			return true;
 		}
 
 		return false;
 	}
 
-	private boolean maintainSoil(BlockPos pos, EnumFacing direction, int extent) {
-		if (!housing.hasResources(resource)) {
+	private boolean maintainSoil(BlockPos pos, FarmDirection direction, int extent) {
+		ItemStack[] resources = new ItemStack[] { resource };
+		if (!housing.getFarmInventory().hasResources(resources)) {
 			return false;
 		}
 
@@ -99,7 +101,7 @@ public abstract class FarmLogicHomogeneous extends FarmLogic {
 			}
 
 			ItemStack soilStack = VectUtil.getAsItemStack(world, position);
-			if (isAcceptedSoil(soilStack) || !canBreakSoil(world, position)) {
+			if (isAcceptedSoil(soilStack)) {
 				continue;
 			}
 
@@ -112,13 +114,13 @@ public abstract class FarmLogicHomogeneous extends FarmLogic {
 
 			produce.addAll(BlockUtil.getBlockDrops(world, position));
 
-			setBlock(position, StackUtils.getBlock(soilBlock).getStateFromMeta(soilBlock.getItemDamage()));
-			housing.removeResources(resource);
+			setBlock(position, StackUtils.getBlock(soilBlock), soilBlock.getItemDamage());
+			housing.getFarmInventory().removeResources(resources);
 			return true;
 		}
 
 		return false;
 	}
 
-	protected abstract boolean maintainGermlings(BlockPos pos, EnumFacing direction, int extent);
+	protected abstract boolean maintainGermlings(BlockPos pos, FarmDirection direction, int extent);
 }

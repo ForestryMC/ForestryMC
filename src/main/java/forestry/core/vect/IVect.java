@@ -13,16 +13,20 @@ package forestry.core.vect;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 
+import forestry.api.farming.FarmDirection;
+
 /**
  * Represents a position or dimensions.
  */
-//TODO Either remove or give a big refactor.
 public interface IVect {
+
 	int getX();
 
 	int getY();
 
 	int getZ();
+
+	BlockPos getPos();
 
 	IVect add(IVect other);
 
@@ -30,5 +34,9 @@ public interface IVect {
 
 	IVect add(EnumFacing direction);
 
-	BlockPos toBlockPos();
+	IVect add(FarmDirection direction);
+
+	IVect add(BlockPos pos);
+
+	int[] toArray();
 }

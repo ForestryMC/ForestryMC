@@ -12,21 +12,16 @@ package forestry.energy.gui;
 
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.Slot;
 
-import forestry.core.gui.ContainerForestry;
+import forestry.core.gui.ContainerTile;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.energy.gadgets.EngineCopper;
 
-public class ContainerEngineCopper extends ContainerForestry {
-
-	protected final EngineCopper engine;
+public class ContainerEngineCopper extends ContainerTile<EngineCopper> {
 
 	public ContainerEngineCopper(InventoryPlayer player, EngineCopper tile) {
-		super(tile);
-
-		this.engine = tile;
+		super(tile, player, 8, 84);
 
 		this.addSlotToContainer(new SlotFiltered(tile, 0, 44, 46));
 
@@ -34,23 +29,12 @@ public class ContainerEngineCopper extends ContainerForestry {
 		this.addSlotToContainer(new SlotOutput(tile, 2, 98, 53));
 		this.addSlotToContainer(new SlotOutput(tile, 3, 116, 35));
 		this.addSlotToContainer(new SlotOutput(tile, 4, 116, 53));
-
-		for (int i = 0; i < 3; ++i) {
-			for (int j = 0; j < 9; ++j) {
-				this.addSlotToContainer(new Slot(player, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
-			}
-		}
-
-		for (int i = 0; i < 9; ++i) {
-			this.addSlotToContainer(new Slot(player, i, 8 + i * 18, 142));
-		}
-
 	}
 
 	@Override
 	public void updateProgressBar(int i, int j) {
-		if (engine != null) {
-			engine.getGUINetworkData(i, j);
+		if (tile != null) {
+			tile.getGUINetworkData(i, j);
 		}
 	}
 
@@ -59,8 +43,7 @@ public class ContainerEngineCopper extends ContainerForestry {
 		super.detectAndSendChanges();
 
 		for (Object crafter : crafters) {
-			engine.sendGUINetworkData(this, (ICrafting) crafter);
+			tile.sendGUINetworkData(this, (ICrafting) crafter);
 		}
 	}
-
 }

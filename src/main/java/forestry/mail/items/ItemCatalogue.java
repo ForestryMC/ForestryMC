@@ -29,12 +29,11 @@ public class ItemCatalogue extends ItemForestry {
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
 		if (Proxies.common.isSimulating(world)) {
-			entityplayer.openGui(ForestryAPI.instance, GuiId.CatalogueGUI.ordinal(), world, (int) entityplayer.posX, (int) entityplayer.posY,
-					(int) entityplayer.posZ);
+			entityplayer.openGui(ForestryAPI.instance, GuiId.CatalogueGUI.ordinal(), world, (int) entityplayer.posX,
+					(int) entityplayer.posY, (int) entityplayer.posZ);
 		}
 
 		return itemstack;
 	}
-
 
 }

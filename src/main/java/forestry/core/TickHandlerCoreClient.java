@@ -10,35 +10,16 @@
  ******************************************************************************/
 package forestry.core;
 
-import java.util.concurrent.ConcurrentLinkedQueue;
-
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumChatFormatting;
-
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
-
-import forestry.core.config.Config;
-import forestry.core.config.Version;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.GeneticsUtil;
 
 public class TickHandlerCoreClient {
 
-	private static final ConcurrentLinkedQueue<String> messages = new ConcurrentLinkedQueue<String>();
-	private boolean naggedVersion, naggedVerify;
-	private boolean hasNaturalistView;
-
-	public TickHandlerCoreClient() {
-		FMLCommonHandler.instance().bus().register(this);
-	}
-
-	public void queueChatMessage(String message) {
-		messages.add(message);
-	}
+	private boolean hasNaturalistEye;
 
 	@SubscribeEvent
 	public void onPlayerTick(PlayerTickEvent event) {
@@ -46,32 +27,13 @@ public class TickHandlerCoreClient {
 			return;
 		}
 
-		EntityPlayer player = Proxies.common.getClientInstance().thePlayer;
+		EntityPlayer player = event.player;
 		boolean hasNaturalistEye = GeneticsUtil.hasNaturalistEye(player);
-		if (hasNaturalistEye != hasNaturalistView) {
-			hasNaturalistView = !hasNaturalistView;
-			Proxies.common.getClientInstance().renderGlobal.markBlockRangeForRenderUpdate(
-					(int) player.posX - 32, (int) player.posY - 32, (int) player.posZ - 32,
-					(int) player.posX + 32, (int) player.posY + 32, (int) player.posZ + 32);
-		}
-
-		if (messages.size() > 0) {
-			String message;
-			while ((message = messages.poll()) != null) {
-				player.addChatMessage(new ChatComponentText(message));
-			}
-		}
-
-		if (!naggedVersion && !Config.disableVersionCheck && Version.needsUpdateNoticeAndMarkAsSeen()) {
-			queueChatMessage(EnumChatFormatting.RED + String.format("New version of Forestry available: %s for Minecraft %s", Version.getRecommendedVersion(),
-					Proxies.common.getMinecraftVersion()));
-			queueChatMessage(EnumChatFormatting.RED + "This message only displays once. Type '/forestry version' to see the changelog.");
-			naggedVersion = true;
-		}
-
-		if (!naggedVerify && Config.invalidFingerprint) {
-			queueChatMessage(EnumChatFormatting.GOLD + "Forestry's jar file was tampered with. Some machines have shut down and beekeeping has grown dangerous. Get a new jar from the official download page to fix that!");
-			naggedVerify = true;
+		if (this.hasNaturalistEye != hasNaturalistEye) {
+			this.hasNaturalistEye = hasNaturalistEye;
+			Proxies.common.getClientInstance().renderGlobal.markBlockRangeForRenderUpdate((int) player.posX - 32,
+					(int) player.posY - 32, (int) player.posZ - 32, (int) player.posX + 32, (int) player.posY + 32,
+					(int) player.posZ + 32);
 		}
 	}
 }

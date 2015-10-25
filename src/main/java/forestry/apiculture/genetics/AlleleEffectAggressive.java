@@ -16,29 +16,23 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
-
+import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
-import forestry.apiculture.items.ItemArmorApiarist;
 import forestry.core.utils.DamageSourceForestry;
 
 public class AlleleEffectAggressive extends AlleleEffectThrottled {
 
-	public static final DamageSource damageSourceBeeAggressive = new DamageSourceForestry("bee.aggressive");
+	private static final DamageSource damageSourceBeeAggressive = new DamageSourceForestry("bee.aggressive");
 
-	public AlleleEffectAggressive(String uid) {
-		super(uid, "aggressive", true, 40, false, false);
+	public AlleleEffectAggressive() {
+		super("aggressive", true, 40, false, false);
 	}
 
 	@Override
-	public IEffectData doEffect(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
-
-		if (isHalted(storedData, housing)) {
-			return storedData;
-		}
-
-		AxisAlignedBB hurtBox = getBounding(genome, housing, 1.0f);
+	public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
+		AxisAlignedBB hurtBox = getBounding(genome, housing);
 		@SuppressWarnings("rawtypes")
 		List list = housing.getWorld().getEntitiesWithinAABB(EntityLivingBase.class, hurtBox);
 
@@ -50,7 +44,7 @@ public class AlleleEffectAggressive extends AlleleEffectThrottled {
 			// Players are not attacked if they wear a full set of apiarist's
 			// armor.
 			if (entity instanceof EntityPlayer) {
-				int count = ItemArmorApiarist.wearsItems((EntityPlayer) entity, getUID(), true);
+				int count = BeeManager.armorApiaristHelper.wearsItems((EntityPlayer) entity, getUID(), true);
 				// Full set, no damage/effect
 				if (count > 3) {
 					continue;

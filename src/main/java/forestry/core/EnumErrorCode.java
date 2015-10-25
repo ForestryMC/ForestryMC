@@ -5,70 +5,62 @@
  ******************************************************************************/
 package forestry.core;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.util.IIcon;
-
+import forestry.api.core.ForestryAPI;
+import forestry.api.core.IErrorState;
+import forestry.api.core.sprite.ISprite;
+import forestry.core.config.Defaults;
+import forestry.core.render.TextureManager;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.api.core.ErrorStateRegistry;
-import forestry.api.core.IErrorState;
-import forestry.core.config.Defaults;
-
 public enum EnumErrorCode implements IErrorState {
 
-	UNKNOWN("unknown"),
-	OK("ok"),
-	INVALIDBIOME("invalidBiome"),
-	ISRAINING("isRaining"),
-	NOTRAINING("notRaining"),
-	NOFUEL("noFuel"), // Biogas & Peat-fired
-	NOHEAT("noHeat"), // Biogas engine
-	NODISPOSAL("noDisposal"),
-	NORESOURCE("noResource"),
-	NOTGLOOMY("notGloomy"),
-	NOTLUCID("notLucid"),
-	NOTDAY("notDay"),
-	NOTNIGHT("notNight"),
-	NOFLOWER("noFlower"),
-	NOQUEEN("noQueen"),
-	NODRONE("noDrone"),
-	NOSKY("noSky"),
-	NOSPACE("noSpace"),
-	NOSPACETANK("noSpaceTank", "noLiquid"),
-	NORECIPE("noRecipe"),
-	NOENERGYNET("noEnergyNet"),
-	NOTHINGANALYZE("noSpecimen"),
-	FORCEDCOOLDOWN("forcedCooldown"),
-	NOHONEY("noHoney"),
-	NOTPOSTPAID("notPostpaid", "noStamps"),
-	NORECIPIENT("noRecipient"),
-	NOTALPHANUMERIC("notAlphaNumeric"),
-	NOTUNIQUE("notUnique"),
-	NOSTAMPS("noStamps"),
-	NOCIRCUITBOARD("noCircuitBoard"),
-	NOCIRCUITLAYOUT("noCircuitLayout"),
-	WRONGSTACKSIZE("wrongStacksize"),
-	NOFERTILIZER("noFertilizer"),
-	NOFARMLAND("noFarmland"),
-	CIRCUITMISMATCH("circuitMismatch"),
-	NOLIQUID("noLiquid"),
-	NOPAPER("noPaper"),
-	NOSTAMPSNOPAPER("noStampsNoPaper", "noStamps"),
-	NOSUPPLIES("noSupplies", "noResource"),
-	NOTRADE("noTrade", "noResource"),
-	NOPOWER("noPower");
+	UNKNOWN("unknown"), INVALIDBIOME("invalidBiome"), ISRAINING("isRaining"), NOTRAINING("notRaining"), NOFUEL(
+			"noFuel"), // Biogas & Peat-fired
+			NOHEAT("noHeat"), // Biogas engine
+			NODISPOSAL("noDisposal"), NORESOURCE("noResource"), NOTGLOOMY("notGloomy"), NOTLUCID("notLucid"), NOTDAY(
+					"notDay"), NOTNIGHT("notNight"), NOFLOWER("noFlower"), NOQUEEN("noQueen"), NODRONE(
+							"noDrone"), NOSKY("noSky"), NOSPACE("noSpace"), NOSPACETANK("noSpaceTank",
+									"noLiquid"), NORECIPE("noRecipe"), NOENERGYNET("noEnergyNet"), NOTHINGANALYZE(
+											"noSpecimen"), FORCEDCOOLDOWN("forcedCooldown"), NOHONEY(
+													"noHoney"), NOTPOSTPAID("notPostpaid",
+															"noStamps"), NORECIPIENT("noRecipient"), NOTALPHANUMERIC(
+																	"notAlphaNumeric"), NOTUNIQUE(
+																			"notUnique"), NOSTAMPS(
+																					"noStamps"), NOCIRCUITBOARD(
+																							"noCircuitBoard"), NOCIRCUITLAYOUT(
+																									"noCircuitLayout"), WRONGSTACKSIZE(
+																											"wrongStacksize"), NOFERTILIZER(
+																													"noFertilizer"), NOFARMLAND(
+																															"noFarmland"), CIRCUITMISMATCH(
+																																	"circuitMismatch"), NOLIQUID(
+																																			"noLiquid"), NOPAPER(
+																																					"noPaper"), NOSUPPLIES(
+																																							"noSupplies",
+																																							"noResource"), NOTRADE(
+																																									"noTrade",
+																																									"noResource"), NOPOWER(
+																																											"noPower"), NOREDSTONE(
+																																													"noRedstone",
+																																													"disabled"), // needs
+																																																	// redstone
+																																																	// signal
+	DISABLED("disabledRedstone", "disabled") // disabled
+												// by
+												// redstone
+												// signal
+	;
 
 	private final String name;
 	private final String iconName;
 	@SideOnly(Side.CLIENT)
-	private IIcon icon;
+	private ISprite icon;
 
-	private EnumErrorCode(String name) {
+	EnumErrorCode(String name) {
 		this(name, name);
 	}
 
-	private EnumErrorCode(String name, String iconName) {
+	EnumErrorCode(String name, String iconName) {
 		this.name = name;
 		this.iconName = iconName;
 	}
@@ -85,13 +77,13 @@ public enum EnumErrorCode implements IErrorState {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerIcons(IIconRegister register) {
-		icon = register.registerIcon("forestry:errors/" + iconName);
+	public void registerSprite() {
+		icon = TextureManager.getInstance().registerTex("items", "errors/" + iconName);
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public IIcon getIcon() {
+	public ISprite getIcon() {
 		return icon;
 	}
 
@@ -107,7 +99,7 @@ public enum EnumErrorCode implements IErrorState {
 
 	public static void init() {
 		for (IErrorState code : values()) {
-			ErrorStateRegistry.registerErrorState(code);
+			ForestryAPI.errorStateRegistry.registerErrorState(code);
 		}
 	}
 }

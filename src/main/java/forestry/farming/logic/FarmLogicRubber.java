@@ -18,17 +18,13 @@ import java.util.Set;
 import java.util.Stack;
 
 import net.minecraft.block.Block;
-import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
+import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.core.proxy.Proxies;
@@ -51,12 +47,8 @@ public class FarmLogicRubber extends FarmLogic {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon getIcon() {
-		if (!inActive) {
-			return PluginIC2.resin.getIconIndex();
-		} else {
-			return Items.gunpowder.getIconFromDamage(0);
-		}
+	public Item getIconItem() {
+		return PluginIC2.resin.getItem();
 	}
 
 	@Override
@@ -90,14 +82,14 @@ public class FarmLogicRubber extends FarmLogic {
 	}
 
 	@Override
-	public boolean cultivate(BlockPos pos, EnumFacing direction, int extent) {
+	public boolean cultivate(BlockPos pos, FarmDirection direction, int extent) {
 		return false;
 	}
 
 	private final HashMap<Vect, Integer> lastExtents = new HashMap<Vect, Integer>();
 
 	@Override
-	public Collection<ICrop> harvest(BlockPos pos, EnumFacing direction, int extent) {
+	public Collection<ICrop> harvest(BlockPos pos, FarmDirection direction, int extent) {
 		if (inActive) {
 			return null;
 		}
@@ -112,7 +104,7 @@ public class FarmLogicRubber extends FarmLogic {
 			lastExtent = 0;
 		}
 
-		Vect position = translateWithOffset(pos.up(), direction, lastExtent);
+		Vect position = translateWithOffset(pos, direction, lastExtent);
 		Collection<ICrop> crops = getHarvestBlocks(position);
 		lastExtent++;
 		lastExtents.put(start, lastExtent);
@@ -159,7 +151,7 @@ public class FarmLogicRubber extends FarmLogic {
 
 		// Get additional candidates to return
 		for (int j = 0; j < 2; j++) {
-			Vect candidate = new Vect(position.x, position.y + j, position.z);
+			Vect candidate = new Vect(position.getX(), position.getY() + j, position.getZ());
 			if (candidate.equals(position)) {
 				continue;
 			}

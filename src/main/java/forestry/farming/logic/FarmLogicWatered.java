@@ -17,11 +17,11 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fluids.FluidStack;
 
+import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmHousing;
 import forestry.core.fluids.Fluids;
 import forestry.core.utils.BlockUtil;
@@ -29,17 +29,18 @@ import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
 import forestry.core.vect.Vect;
 import forestry.core.vect.VectUtil;
+import forestry.farming.gadgets.StructureLogicFarm;
 
 public abstract class FarmLogicWatered extends FarmLogic {
 
 	protected final ItemStack ground;
-	private final ItemStack[] resource;
+	private final ItemStack resource;
 
 	private static final FluidStack STACK_WATER = Fluids.WATER.getFluid(1000);
 
 	ArrayList<ItemStack> produce = new ArrayList<ItemStack>();
 
-	public FarmLogicWatered(IFarmHousing housing, ItemStack[] resource, ItemStack ground) {
+	protected FarmLogicWatered(IFarmHousing housing, ItemStack resource, ItemStack ground) {
 		super(housing);
 		this.ground = ground;
 		this.resource = resource;
@@ -55,13 +56,13 @@ public abstract class FarmLogicWatered extends FarmLogic {
 		return (int) (20 * hydrationModifier);
 	}
 
-	public boolean isAcceptedGround(ItemStack ground) {
+	protected boolean isAcceptedGround(ItemStack ground) {
 		return StackUtils.isIdenticalItem(this.ground, ground);
 	}
 
 	@Override
 	public boolean isAcceptedResource(ItemStack itemstack) {
-		return resource[0].isItemEqual(itemstack);
+		return resource.isItemEqual(itemstack);
 	}
 
 	@Override
@@ -72,7 +73,7 @@ public abstract class FarmLogicWatered extends FarmLogic {
 	}
 
 	@Override
-	public boolean cultivate(BlockPos pos, EnumFacing direction, int extent) {
+	public boolean cultivate(BlockPos pos, FarmDirection direction, int extent) {
 
 		if (maintainSoil(pos, direction, extent)) {
 			return true;
@@ -82,30 +83,37 @@ public abstract class FarmLogicWatered extends FarmLogic {
 			return true;
 		}
 
-		if (maintainCrops(pos.up(), direction, extent)) {
+		if (maintainCrops(new BlockPos(pos.getX(), pos.getY() + 1, pos.getZ()), direction, extent)) {
 			return true;
 		}
 
 		return false;
 	}
 
-	private boolean maintainSoil(BlockPos pos, EnumFacing direction, int extent) {
+	private boolean maintainSoil(BlockPos pos, FarmDirection direction, int extent) {
 
 		World world = getWorld();
+		ItemStack[] resources = new ItemStack[] { resource };
 
 		for (int i = 0; i < extent; i++) {
 			Vect position = translateWithOffset(pos, direction, i);
-			Block block = VectUtil.getBlock(world, position);
-			if (!isAirBlock(block) && !Utils.isReplaceableBlock(block)) {
+			Block soil = VectUtil.getBlock(world, position);
 
-				ItemStack blockStack = VectUtil.getAsItemStack(world, position);
-				if (!isAcceptedGround(blockStack) && housing.hasResources(resource)) {
-					produce.addAll(BlockUtil.getBlockDrops(getWorld(), position));
-					setBlock(position, Blocks.air.getDefaultState());
-					return trySetSoil(position);
-				}
-
+			ItemStack soilStack = VectUtil.getAsItemStack(world, position);
+			if (isAcceptedGround(soilStack) || !housing.getFarmInventory().hasResources(resources)) {
 				continue;
+			}
+
+			Vect platformPosition = position.add(0, -1, 0);
+			Block platformBlock = VectUtil.getBlock(world, platformPosition);
+			if (!StructureLogicFarm.bricks.contains(platformBlock)) {
+				break;
+			}
+
+			if (!isAirBlock(soil) && !Utils.isReplaceableBlock(soil)) {
+				produce.addAll(BlockUtil.getBlockDrops(getWorld(), position));
+				setBlock(position, Blocks.air, 0);
+				return trySetSoil(position);
 			}
 
 			if (isManual || isWaterSourceBlock(world, position)) {
@@ -122,11 +130,17 @@ public abstract class FarmLogicWatered extends FarmLogic {
 		return false;
 	}
 
-	private boolean maintainWater(BlockPos pos, EnumFacing direction, int extent) {
+	private boolean maintainWater(BlockPos pos, FarmDirection direction, int extent) {
 		// Still not done, check water then
 		World world = getWorld();
 		for (int i = 0; i < extent; i++) {
 			Vect position = translateWithOffset(pos, direction, i);
+
+			Vect platformPosition = position.add(0, -1, 0);
+			Block platformBlock = VectUtil.getBlock(world, platformPosition);
+			if (!StructureLogicFarm.bricks.contains(platformBlock)) {
+				break;
+			}
 
 			if (trySetWater(world, position)) {
 				return true;
@@ -136,16 +150,17 @@ public abstract class FarmLogicWatered extends FarmLogic {
 		return false;
 	}
 
-	protected boolean maintainCrops(BlockPos pos, EnumFacing direction, int extent) {
+	protected boolean maintainCrops(BlockPos pos, FarmDirection direction, int extent) {
 		return false;
 	}
 
 	private boolean trySetSoil(Vect position) {
-		if (!housing.hasResources(resource)) {
+		ItemStack[] resources = new ItemStack[] { resource };
+		if (!housing.getFarmInventory().hasResources(resources)) {
 			return false;
 		}
-		setBlock(position, StackUtils.getBlock(ground).getStateFromMeta(ground.getItemDamage()));
-		housing.removeResources(resource);
+		setBlock(position, StackUtils.getBlock(ground), ground.getItemDamage());
+		housing.getFarmInventory().removeResources(resources);
 		return true;
 	}
 
@@ -159,7 +174,7 @@ public abstract class FarmLogicWatered extends FarmLogic {
 		}
 
 		produce.addAll(BlockUtil.getBlockDrops(world, position));
-		setBlock(position, Blocks.water.getDefaultState());
+		setBlock(position, Blocks.water, 0);
 		housing.removeLiquid(STACK_WATER);
 		return true;
 	}

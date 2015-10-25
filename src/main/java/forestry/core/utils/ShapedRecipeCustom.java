@@ -10,10 +10,11 @@
  ******************************************************************************/
 package forestry.core.utils;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -50,6 +51,10 @@ public class ShapedRecipeCustom implements IDescriptiveRecipe {
 		return this;
 	}
 
+	public boolean preservesNbt() {
+		return preserveNBT;
+	}
+
 	@Override
 	public int getWidth() {
 		return width;
@@ -62,7 +67,7 @@ public class ShapedRecipeCustom implements IDescriptiveRecipe {
 
 	@Override
 	public ItemStack getRecipeOutput() {
-		return product;
+		return product.copy();
 	}
 
 	@Override
@@ -71,11 +76,24 @@ public class ShapedRecipeCustom implements IDescriptiveRecipe {
 	}
 
 	@Override
-	public boolean matches(InventoryCrafting inventorycrafting, World world) {
+	public boolean matches(InventoryCrafting inventoryCrafting, World world) {
+		if (!matches((IInventory) inventoryCrafting, world)) {
+			return false;
+		}
+		if (preserveNBT) {
+			if (RecipeUtil.getCraftingNbt(inventoryCrafting) == null) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public boolean matches(IInventory inventoryCrafting, World world) {
 		ItemStack[][] resources = new ItemStack[3][3];
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
-				resources[i][j] = inventorycrafting.getStackInRowAndColumn(i, j);
+				int k = i + j * 3;
+				resources[i][j] = inventoryCrafting.getStackInSlot(k);
 			}
 		}
 
@@ -122,10 +140,10 @@ public class ShapedRecipeCustom implements IDescriptiveRecipe {
 					if (!checkItemMatch((ItemStack) compare, resource)) {
 						return false;
 					}
-				} else if (compare instanceof ArrayList) {
+				} else if (compare instanceof List) {
 					boolean matched = false;
 
-					for (ItemStack item : (ArrayList<ItemStack>) compare) {
+					for (ItemStack item : (List<ItemStack>) compare) {
 						matched = matched || checkItemMatch(item, resource);
 					}
 
@@ -142,7 +160,7 @@ public class ShapedRecipeCustom implements IDescriptiveRecipe {
 		return true;
 	}
 
-	private boolean checkItemMatch(ItemStack compare, ItemStack resource) {
+	private static boolean checkItemMatch(ItemStack compare, ItemStack resource) {
 
 		if (resource == null && compare == null) {
 			return true;
@@ -164,23 +182,23 @@ public class ShapedRecipeCustom implements IDescriptiveRecipe {
 	}
 
 	@Override
-	public ItemStack getCraftingResult(InventoryCrafting inventorycrafting) {
-		if (preserveNBT) {
-			for (int i = 0; i < inventorycrafting.getSizeInventory(); i++) {
-				if (inventorycrafting.getStackInSlot(i) == null) {
-					continue;
-				}
-				if (!inventorycrafting.getStackInSlot(i).hasTagCompound()) {
-					continue;
-				}
+	public ItemStack getCraftingResult(InventoryCrafting inventoryCrafting) {
+		return getCraftingResult((IInventory) inventoryCrafting);
+	}
 
-				ItemStack crafted = product.copy();
-				crafted.setTagCompound((NBTTagCompound) inventorycrafting.getStackInSlot(i).getTagCompound().copy());
-				return crafted;
+	public ItemStack getCraftingResult(IInventory inventoryCrafting) {
+		ItemStack result = product.copy();
+
+		if (preserveNBT) {
+			NBTTagCompound craftingNbt = RecipeUtil.getCraftingNbt(inventoryCrafting);
+			if (craftingNbt == null) {
+				return null;
 			}
+
+			result.setTagCompound(craftingNbt);
 		}
 
-		return product.copy();
+		return result;
 	}
 
 	@Override
@@ -200,8 +218,8 @@ public class ShapedRecipeCustom implements IDescriptiveRecipe {
 					return true;
 				}
 
-			} else if (ingredient instanceof ArrayList) {
-				for (ItemStack item : (ArrayList<ItemStack>) ingredient) {
+			} else if (ingredient instanceof List) {
+				for (ItemStack item : (List<ItemStack>) ingredient) {
 					if (checkItemMatch(item, resource)) {
 						return true;
 					}
@@ -278,5 +296,24 @@ public class ShapedRecipeCustom implements IDescriptiveRecipe {
 		ShapedRecipeCustom recipe = createShapedRecipe(product, materials);
 		CraftingManager.getInstance().getRecipeList().add(recipe);
 		return recipe;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static ShapedRecipeCustom buildPriorityRecipe(ItemStack product, Object... materials) {
+		ShapedRecipeCustom recipe = createShapedRecipe(product, materials);
+		CraftingManager.getInstance().getRecipeList().add(0, recipe);
+		return recipe;
+	}
+
+	@Override
+	public ItemStack[] getRemainingItems(InventoryCrafting p_179532_1_) {
+		ItemStack[] aitemstack = new ItemStack[p_179532_1_.getSizeInventory()];
+
+		for (int i = 0; i < aitemstack.length; ++i) {
+			ItemStack itemstack = p_179532_1_.getStackInSlot(i);
+			aitemstack[i] = net.minecraftforge.common.ForgeHooks.getContainerItem(itemstack);
+		}
+
+		return aitemstack;
 	}
 }

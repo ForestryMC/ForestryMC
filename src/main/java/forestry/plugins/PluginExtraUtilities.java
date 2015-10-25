@@ -14,14 +14,15 @@ import java.util.ArrayList;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
-
 import net.minecraftforge.fml.common.registry.GameRegistry;
-
+import forestry.api.circuits.ChipsetManager;
+import forestry.api.circuits.ICircuitLayout;
 import forestry.api.farming.Farmables;
 import forestry.api.farming.IFarmable;
 import forestry.core.circuits.Circuit;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
+import forestry.core.config.ForestryItem;
 import forestry.core.proxy.Proxies;
 import forestry.farming.circuits.CircuitFarmLogic;
 import forestry.farming.logic.FarmLogicEnder;
@@ -31,8 +32,6 @@ import forestry.farming.logic.FarmableGenericCrop;
 public class PluginExtraUtilities extends ForestryPlugin {
 
 	private static final String ExU = "ExtraUtilities";
-
-	public static Block ExUEnderLilly;
 
 	@Override
 	public boolean isAvailable() {
@@ -48,11 +47,23 @@ public class PluginExtraUtilities extends ForestryPlugin {
 	public void doInit() {
 		super.doInit();
 
-		ExUEnderLilly = GameRegistry.findBlock(ExU, "plant/ender_lilly");
+		Block exUEnderLilly = GameRegistry.findBlock(ExU, "plant/ender_lilly");
 		Farmables.farmables.put("farmEnder", new ArrayList<IFarmable>());
 		if (Config.isExUtilEnderLilyEnabled()) {
 			Circuit.farmEnderManaged = new CircuitFarmLogic("managedEnder", FarmLogicEnder.class);
-			Farmables.farmables.get("farmEnder").add(new FarmableGenericCrop(new ItemStack(ExUEnderLilly, 1, 0), ExUEnderLilly, 7));
+			Farmables.farmables.get("farmEnder")
+					.add(new FarmableGenericCrop(new ItemStack(exUEnderLilly, 1, 0), exUEnderLilly, 7));
+		}
+	}
+
+	@Override
+	protected void registerRecipes() {
+		super.registerRecipes();
+
+		if (PluginManager.Module.FARMING.isEnabled() && Config.isExUtilEnderLilyEnabled()) {
+			ICircuitLayout layoutManaged = ChipsetManager.circuitRegistry.getLayout("forestry.farms.managed");
+			ChipsetManager.solderManager.addRecipe(layoutManaged, ForestryItem.tubes.getItemStack(1, 12),
+					Circuit.farmEnderManaged);
 		}
 	}
 }

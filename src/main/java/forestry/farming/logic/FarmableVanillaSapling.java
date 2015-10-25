@@ -18,14 +18,15 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.arboriculture.ITree;
+import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.IIndividual;
 import forestry.core.utils.GeneticsUtil;
-import forestry.plugins.PluginArboriculture;
 
 public class FarmableVanillaSapling extends FarmableGenericSapling {
 
 	public FarmableVanillaSapling() {
-		super(Blocks.sapling, -1, new ItemStack(Items.apple), new ItemStack(FarmableCocoa.COCOA_SEED, 1, FarmableCocoa.COCOA_META));
+		super(Blocks.sapling, -1, new ItemStack(Items.apple),
+				new ItemStack(FarmableCocoa.COCOA_SEED, 1, FarmableCocoa.COCOA_META));
 	}
 
 	@Override
@@ -35,7 +36,7 @@ public class FarmableVanillaSapling extends FarmableGenericSapling {
 			return false;
 		}
 
-		return PluginArboriculture.treeInterface.plantSapling(world, (ITree) tree, player.getGameProfile(), pos);
+		return TreeManager.treeRoot.plantSapling(world, (ITree) tree, player.getGameProfile(), pos);
 	}
 
 }

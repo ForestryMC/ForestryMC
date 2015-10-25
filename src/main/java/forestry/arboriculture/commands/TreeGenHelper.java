@@ -11,39 +11,42 @@
 package forestry.arboriculture.commands;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.ITreeGenome;
+import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.core.commands.SpeciesNotFoundException;
 import forestry.core.commands.TemplateNotFoundException;
 import forestry.core.worldgen.WorldGenBase;
-import forestry.plugins.PluginArboriculture;
 
 public final class TreeGenHelper {
 
-	public static WorldGenerator getWorldGen(String treeName, EntityPlayer player, int x, int y, int z) {
+	public static WorldGenerator getWorldGen(String treeName, EntityPlayer player, BlockPos pos)
+			throws SpeciesNotFoundException, TemplateNotFoundException {
 		ITreeGenome treeGenome = getTreeGenome(treeName);
 		if (treeGenome == null) {
 			return null;
 		}
 
-		ITree tree = PluginArboriculture.treeInterface.getTree(player.worldObj, treeGenome);
-		return tree.getTreeGenerator(player.worldObj, x, y, z, true);
+		ITree tree = TreeManager.treeRoot.getTree(player.worldObj, treeGenome);
+		return tree.getTreeGenerator(player.worldObj, pos, true);
 	}
 
-	public static void generateTree(WorldGenerator gen, EntityPlayer player, int x, int y, int z) {
+	public static void generateTree(WorldGenerator gen, EntityPlayer player, BlockPos pos) {
 		if (gen instanceof WorldGenBase) {
-			((WorldGenBase) gen).generate(player.worldObj, player.worldObj.rand, x, y, z, true);
+			((WorldGenBase) gen).generate(player.worldObj, pos, true);
 		} else {
-			gen.generate(player.worldObj, player.worldObj.rand, x, y, z);
+			gen.generate(player.worldObj, player.worldObj.rand, pos);
 		}
 	}
 
-	private static ITreeGenome getTreeGenome(String speciesName) {
+	private static ITreeGenome getTreeGenome(String speciesName)
+			throws SpeciesNotFoundException, TemplateNotFoundException {
 		IAlleleTreeSpecies species = null;
 
 		for (String uid : AlleleManager.alleleRegistry.getRegisteredAlleles().keySet()) {
@@ -61,7 +64,8 @@ public final class TreeGenHelper {
 
 		if (species == null) {
 			for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
-				if (allele instanceof IAlleleTreeSpecies && allele.getName().replaceAll("\\s", "").equals(speciesName)) {
+				if (allele instanceof IAlleleTreeSpecies
+						&& allele.getName().replaceAll("\\s", "").equals(speciesName)) {
 					species = (IAlleleTreeSpecies) allele;
 					break;
 				}
@@ -72,12 +76,12 @@ public final class TreeGenHelper {
 			throw new SpeciesNotFoundException(speciesName);
 		}
 
-		IAllele[] template = PluginArboriculture.treeInterface.getTemplate(species.getUID());
+		IAllele[] template = TreeManager.treeRoot.getTemplate(species.getUID());
 
 		if (template == null) {
 			throw new TemplateNotFoundException(species);
 		}
 
-		return PluginArboriculture.treeInterface.templateAsGenome(template);
+		return TreeManager.treeRoot.templateAsGenome(template);
 	}
 }

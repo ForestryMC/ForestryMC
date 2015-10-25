@@ -23,8 +23,7 @@ public abstract class HiveGen implements IHiveGen {
 	public boolean canReplace(World world, BlockPos pos) {
 		Block block = world.getBlockState(pos).getBlock();
 		Material material = block.getMaterial();
-		return (material.isReplaceable() && !material.isLiquid()) ||
-				material == Material.air ||
-				material == Material.plants;
+		return (material.isReplaceable() && !material.isLiquid()) || material == Material.air
+				|| material == Material.plants;
 	}
 }

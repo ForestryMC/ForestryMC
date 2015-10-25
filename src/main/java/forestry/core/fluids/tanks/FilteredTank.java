@@ -65,7 +65,7 @@ public class FilteredTank extends StandardTank {
 		return filters.contains(fluid);
 	}
 
-	public boolean liquidMatchesFilter(FluidStack resource) {
+	private boolean liquidMatchesFilter(FluidStack resource) {
 		if (resource == null || filters == null) {
 			return false;
 		}
@@ -84,7 +84,7 @@ public class FilteredTank extends StandardTank {
 			for (Fluid filter : filters) {
 				EnumRarity rarity = filter.getRarity();
 				if (rarity == null) {
-					rarity = EnumRarity.common;
+					rarity = EnumRarity.COMMON;
 				}
 				FluidStack filterFluidStack = FluidRegistry.getFluidStack(filter.getName(), 0);
 				ToolTipLine name = new ToolTipLine(filter.getLocalizedName(filterFluidStack), rarity.rarityColor, 2);

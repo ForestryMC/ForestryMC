@@ -19,18 +19,17 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
-
-import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fml.common.eventhandler.Event;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
+import forestry.api.fuels.FuelManager;
+import forestry.api.fuels.GeneratorFuel;
+import forestry.core.GameMode;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;
@@ -51,14 +50,18 @@ public class PluginFluids extends ForestryPlugin {
 		if (forestryFluid.getFluid() == null && Config.isFluidEnabled(forestryFluid)) {
 			String fluidName = forestryFluid.getTag();
 			if (!FluidRegistry.isFluidRegistered(fluidName)) {
-				Fluid fluid = new Fluid(fluidName).setDensity(forestryFluid.getDensity()).setViscosity(forestryFluid.getViscosity()).setTemperature(forestryFluid.getTemperature());
+				Fluid fluid = new Fluid(fluidName, forestryFluid.getResources()[0],
+						forestryFluid.flowTextureExists() ? forestryFluid.getResources()[1]
+								: forestryFluid.getResources()[0]).setDensity(forestryFluid.getDensity())
+										.setViscosity(forestryFluid.getViscosity())
+										.setTemperature(forestryFluid.getTemperature());
 				FluidRegistry.registerFluid(fluid);
 				createBlock(forestryFluid);
 			}
 		}
 	}
 
-	private static void createBlock(Fluids forestryFluid) {
+	private static void createBlock(final Fluids forestryFluid) {
 		Fluid fluid = forestryFluid.getFluid();
 		Block fluidBlock = fluid.getBlock();
 
@@ -66,15 +69,18 @@ public class PluginFluids extends ForestryPlugin {
 			if (fluidBlock == null) {
 				fluidBlock = forestryFluid.makeBlock();
 				if (fluidBlock != null) {
-					fluidBlock.setBlockName("forestry.fluid." + forestryFluid.getTag());
+					fluidBlock.setUnlocalizedName("forestry.fluid." + forestryFluid.getTag());
 					Proxies.common.registerBlock(fluidBlock, ItemBlock.class);
+					Proxies.render.registerFluidStateMapper(fluidBlock, forestryFluid);
 					forestryFluidsWithBlocks.add(forestryFluid);
 				}
 			} else {
 				GameRegistry.UniqueIdentifier blockID = GameRegistry.findUniqueIdentifierFor(fluidBlock);
-				Proxies.log.severe("Pre-existing {0} fluid block detected, deferring to {1}:{2}, "
-						+ "this may cause issues if the server/client have different mod load orders, "
-						+ "recommended that you disable all but one instance of {0} fluid blocks via your configs.", fluid.getName(), blockID.modId, blockID.name);
+				Proxies.log.severe(
+						"Pre-existing {0} fluid block detected, deferring to {1}:{2}, "
+								+ "this may cause issues if the server/client have different mod load orders, "
+								+ "recommended that you disable all but one instance of {0} fluid blocks via your configs.",
+						fluid.getName(), blockID.modId, blockID.name);
 			}
 		}
 	}
@@ -84,7 +90,6 @@ public class PluginFluids extends ForestryPlugin {
 		for (Fluids fluidType : Fluids.forestryFluids) {
 			createFluid(fluidType);
 		}
-		MinecraftForge.EVENT_BUS.register(getTextureHook());
 		MinecraftForge.EVENT_BUS.register(getFillBucketHook());
 	}
 
@@ -93,15 +98,15 @@ public class PluginFluids extends ForestryPlugin {
 		for (EnumContainerType type : EnumContainerType.values()) {
 			Item emptyContainer = new ItemLiquidContainer(type, Blocks.air, null);
 			switch (type) {
-				case CAN:
-					ForestryItem.canEmpty.registerItem(emptyContainer, "canEmpty");
-					break;
-				case CAPSULE:
-					ForestryItem.waxCapsule.registerItem(emptyContainer, "waxCapsule");
-					break;
-				case REFRACTORY:
-					ForestryItem.refractoryEmpty.registerItem(emptyContainer, "refractoryEmpty");
-					break;
+			case CAN:
+				ForestryItem.canEmpty.registerItem(emptyContainer, "canEmpty");
+				break;
+			case CAPSULE:
+				ForestryItem.waxCapsule.registerItem(emptyContainer, "waxCapsule");
+				break;
+			case REFRACTORY:
+				ForestryItem.refractoryEmpty.registerItem(emptyContainer, "refractoryEmpty");
+				break;
 			}
 
 			for (Fluids fluidType : Fluids.values()) {
@@ -110,7 +115,8 @@ public class PluginFluids extends ForestryPlugin {
 					continue;
 				}
 
-				ItemLiquidContainer liquidContainer = new ItemLiquidContainer(type, fluidType.getBlock(), fluidType.getColor());
+				ItemLiquidContainer liquidContainer = new ItemLiquidContainer(type, fluidType.getBlock(),
+						fluidType.getColor());
 				fluidType.setProperties(liquidContainer);
 				container.registerItem(liquidContainer, container.toString());
 			}
@@ -137,6 +143,16 @@ public class PluginFluids extends ForestryPlugin {
 				LiquidHelper.injectLiquidContainer(fluidType, filledContainer);
 			}
 		}
+
+		FluidStack ethanol = Fluids.ETHANOL.getFluid(1);
+		GeneratorFuel ethanolFuel = new GeneratorFuel(ethanol,
+				(int) (32 * GameMode.getGameMode().getFloatSetting("fuel.ethanol.generator")), 4);
+		FuelManager.generatorFuel.put(ethanol.getFluid(), ethanolFuel);
+
+		FluidStack biomass = Fluids.BIOMASS.getFluid(1);
+		GeneratorFuel biomassFuel = new GeneratorFuel(biomass,
+				(int) (8 * GameMode.getGameMode().getFloatSetting("fuel.biomass.generator")), 1);
+		FuelManager.generatorFuel.put(biomass.getFluid(), biomassFuel);
 	}
 
 	public static class MissingFluidException extends RuntimeException {
@@ -148,45 +164,25 @@ public class PluginFluids extends ForestryPlugin {
 	@Override
 	public void postInit() {
 		for (Fluids fluidType : Fluids.forestryFluids) {
-			if (fluidType.getFluid() == null) {
+			if (fluidType.getFluid() == null && Config.isFluidEnabled(fluidType)) {
 				throw new MissingFluidException(fluidType.getTag());
 			}
 		}
-	}
-
-	public static class TextureHook {
-		@SubscribeEvent
-		@SideOnly(Side.CLIENT)
-		public void textureHook(TextureStitchEvent.Post event) {
-			if (event.map.getTextureType() == 0) {
-				for (Fluids fluidType : forestryFluidsWithBlocks) {
-					Fluid fluid = fluidType.getFluid();
-					Block fluidBlock = fluidType.getBlock();
-					if (fluid != null && fluidBlock != null) {
-						fluid.setIcons(fluidBlock.getBlockTextureFromSide(1), fluidBlock.getBlockTextureFromSide(2));
-					}
-				}
-			}
-		}
-	}
-
-	private static Object getTextureHook() {
-		return new TextureHook();
 	}
 
 	public static class FillBucketHook {
 		@SubscribeEvent
 		public void fillBucket(FillBucketEvent event) {
 			MovingObjectPosition movingObjectPosition = event.target;
-			int x = movingObjectPosition.blockX;
-			int y = movingObjectPosition.blockY;
-			int z = movingObjectPosition.blockZ;
-			Block targetedBlock = event.world.getBlock(x, y, z);
+			Block targetedBlock = event.world.getBlockState(movingObjectPosition.getBlockPos()).getBlock();
 			if (targetedBlock instanceof BlockForestryFluid) {
 				Item filledBucket = ItemLiquidContainer.getExistingBucket(targetedBlock);
 				if (filledBucket != null) {
 					event.result = new ItemStack(filledBucket);
 					event.setResult(Event.Result.ALLOW);
+					if (!event.world.isRemote) {
+						event.world.setBlockToAir(movingObjectPosition.getBlockPos());
+					}
 				}
 			}
 		}

@@ -8,7 +8,7 @@ import forestry.core.interfaces.IOwnable;
 
 public class PlayerUtil {
 
-	//TODO: use null everywhere instead of an emptyUUID
+	// TODO: use null everywhere instead of an emptyUUID
 	private static final UUID emptyUUID = new UUID(0, 0);
 
 	public static boolean isSameGameProfile(GameProfile player1, GameProfile player2) {
@@ -26,7 +26,7 @@ public class PlayerUtil {
 	}
 
 	public static String getOwnerName(IOwnable ownable) {
-		GameProfile profile = ownable.getOwnerProfile();
+		GameProfile profile = ownable.getOwner();
 		if (profile == null) {
 			return StringUtil.localize("gui.derelict");
 		} else {

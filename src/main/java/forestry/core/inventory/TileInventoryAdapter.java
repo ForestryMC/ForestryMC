@@ -11,19 +11,20 @@
 package forestry.core.inventory;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import forestry.core.interfaces.IRestrictedAccessTile;
 
-import forestry.core.gadgets.TileForestry;
+public class TileInventoryAdapter<T extends TileEntity & IRestrictedAccessTile> extends InventoryAdapterRestricted {
 
-public class TileInventoryAdapter extends InventoryAdapter {
+	protected final T tile;
 
-	private final TileForestry tile;
-
-	public TileInventoryAdapter(TileForestry tile, int size, String name) {
+	public TileInventoryAdapter(T tile, int size, String name) {
 		this(tile, size, name, 64);
 	}
 
-	public TileInventoryAdapter(TileForestry tile, int size, String name, int stackLimit) {
-		super(size, name, stackLimit);
+	public TileInventoryAdapter(T tile, int size, String name, int stackLimit) {
+		super(size, name, stackLimit, tile.getAccessHandler());
 		this.tile = tile;
 	}
 
@@ -34,7 +35,7 @@ public class TileInventoryAdapter extends InventoryAdapter {
 	}
 
 	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack stack, int side) {
+	public boolean canExtractItem(int slotIndex, ItemStack stack, EnumFacing side) {
 		return false;
 	}
 }

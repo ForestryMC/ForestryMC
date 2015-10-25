@@ -18,9 +18,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.entity.EntityLivingBase;
-
+import net.minecraft.entity.Entity;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.WorldEvent;
@@ -51,7 +51,6 @@ public class ParticleRenderer {
 
 	// << singleton getter
 
-
 	public synchronized void addEffect(EntityFX particle) {
 		if (lazyAdd) {
 			newParticles.add(particle);
@@ -59,7 +58,6 @@ public class ParticleRenderer {
 			particles.add(particle);
 		}
 	}
-
 
 	// forge + fml handlers >>
 
@@ -96,7 +94,7 @@ public class ParticleRenderer {
 
 		lazyAdd = true;
 
-		for (Iterator<EntityFX> it = particles.iterator(); it.hasNext(); ) {
+		for (Iterator<EntityFX> it = particles.iterator(); it.hasNext();) {
 			EntityFX particle = it.next();
 
 			particle.onUpdate();
@@ -116,19 +114,19 @@ public class ParticleRenderer {
 	private synchronized void render(float partialTicks) {
 		Minecraft.getMinecraft().mcProfiler.startSection(name + "-render");
 
-		float rotationX = ActiveRenderInfo.rotationX;
-		float rotationZ = ActiveRenderInfo.rotationZ;
-		float rotationYZ = ActiveRenderInfo.rotationYZ;
-		float rotationXY = ActiveRenderInfo.rotationXY;
-		float rotationXZ = ActiveRenderInfo.rotationXZ;
+		float rotationX = ActiveRenderInfo.getRotationX();
+		float rotationZ = ActiveRenderInfo.getRotationZ();
+		float rotationYZ = ActiveRenderInfo.getRotationYZ();
+		float rotationXY = ActiveRenderInfo.getRotationXY();
+		float rotationXZ = ActiveRenderInfo.getRotationXZ();
 
-		EntityLivingBase player = Minecraft.getMinecraft().renderViewEntity;
+		Entity player = Minecraft.getMinecraft().getRenderViewEntity();
 		EntityFX.interpPosX = player.lastTickPosX + (player.posX - player.lastTickPosX) * partialTicks;
 		EntityFX.interpPosY = player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTicks;
 		EntityFX.interpPosZ = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partialTicks;
 
 		// bind the texture
-		Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationItemsTexture);
+		Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
 
 		// save the old gl state
 		GL11.glPushAttrib(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
@@ -140,13 +138,15 @@ public class ParticleRenderer {
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 		GL11.glAlphaFunc(GL11.GL_GREATER, 0.003921569F);
 
-		Tessellator tessellator = Tessellator.instance;
-		tessellator.startDrawingQuads();
+		Tessellator tessellator = Tessellator.getInstance();
+		WorldRenderer worldRenderer = tessellator.getWorldRenderer();
+		worldRenderer.startDrawingQuads();
 
 		for (EntityFX particle : particles) {
-			tessellator.setBrightness(particle.getBrightnessForRender(partialTicks));
+			worldRenderer.setBrightness(particle.getBrightnessForRender(partialTicks));
 
-			particle.renderParticle(tessellator, partialTicks, rotationX, rotationXZ, rotationZ, rotationYZ, rotationXY);
+			particle.renderParticle(worldRenderer, player, partialTicks, rotationX, rotationXZ, rotationZ, rotationYZ,
+					rotationXY);
 		}
 
 		tessellator.draw();

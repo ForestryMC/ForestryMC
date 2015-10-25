@@ -14,9 +14,8 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-
-import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
@@ -30,7 +29,9 @@ public class RenderMill extends TileEntitySpecialRenderer implements IBlockRende
 	private final ModelBase model = new ModelBase() {
 	};
 
-	private static enum Textures {PEDESTAL, EXTENSION, BLADE_1, BLADE_2, CHARGE}
+	private enum Textures {
+		PEDESTAL, EXTENSION, BLADE_1, BLADE_2, CHARGE
+	}
 
 	private ResourceLocation[] textures;
 
@@ -93,21 +94,14 @@ public class RenderMill extends TileEntitySpecialRenderer implements IBlockRende
 	}
 
 	@Override
-	public void inventoryRender(double x, double y, double z, float f, float f1) {
-		byte charge = 0;
-		render(0.0f, charge, ForgeDirection.WEST, x, y, z);
-	}
-
-	@Override
-	public void renderTileEntityAt(TileEntity tileentity, double d, double d1, double d2, float f) {
+	public void renderTileEntityAt(TileEntity tileentity, double d, double d1, double d2, float f, int i) {
 		Mill tile = (Mill) tileentity;
-		render(tile.progress, tile.charge, ForgeDirection.WEST, d, d1, d2);
+		render(tile.progress, tile.charge, EnumFacing.WEST, d, d1, d2);
 	}
 
-	private void render(float progress, int charge, ForgeDirection orientation, double x, double y, double z) {
+	private void render(float progress, int charge, EnumFacing orientation, double x, double y, double z) {
 
 		GL11.glPushMatrix();
-		GL11.glDisable(2896 /* GL_LIGHTING */);
 
 		GL11.glTranslatef((float) x, (float) y, (float) z);
 
@@ -119,43 +113,43 @@ public class RenderMill extends TileEntitySpecialRenderer implements IBlockRende
 			step = progress * 2F * 3.99F;
 		}
 
-		float[] angle = {0, 0, 0};
-		float[] translate = {0, 0, 0};
+		float[] angle = { 0, 0, 0 };
+		float[] translate = { 0, 0, 0 };
 		float tfactor = step / 16;
 
 		if (orientation == null) {
-			orientation = ForgeDirection.WEST;
+			orientation = EnumFacing.WEST;
 		}
 		switch (orientation) {
-			case EAST:
-				// angle [2] = (float) Math.PI / 2;
-				angle[1] = (float) Math.PI;
-				angle[2] = (float) -Math.PI / 2;
-				translate[0] = 1;
-				break;
-			case WEST:
-				// 2, -PI/2
-				angle[2] = (float) Math.PI / 2;
-				translate[0] = -1;
-				break;
-			case UP:
-				translate[1] = 1;
-				break;
-			case DOWN:
-				angle[2] = (float) Math.PI;
-				translate[1] = -1;
-				break;
-			case SOUTH:
-				angle[0] = (float) Math.PI / 2;
-				angle[2] = (float) Math.PI / 2;
-				translate[2] = 1;
-				break;
-			case NORTH:
-			default:
-				angle[0] = (float) -Math.PI / 2;
-				angle[2] = (float) Math.PI / 2;
-				translate[2] = -1;
-				break;
+		case EAST:
+			// angle [2] = (float) Math.PI / 2;
+			angle[1] = (float) Math.PI;
+			angle[2] = (float) -Math.PI / 2;
+			translate[0] = 1;
+			break;
+		case WEST:
+			// 2, -PI/2
+			angle[2] = (float) Math.PI / 2;
+			translate[0] = -1;
+			break;
+		case UP:
+			translate[1] = 1;
+			break;
+		case DOWN:
+			angle[2] = (float) Math.PI;
+			translate[1] = -1;
+			break;
+		case SOUTH:
+			angle[0] = (float) Math.PI / 2;
+			angle[2] = (float) Math.PI / 2;
+			translate[2] = 1;
+			break;
+		case NORTH:
+		default:
+			angle[0] = (float) -Math.PI / 2;
+			angle[2] = (float) Math.PI / 2;
+			translate[2] = -1;
+			break;
 		}
 
 		pedestal.rotateAngleX = angle[0];
@@ -196,7 +190,6 @@ public class RenderMill extends TileEntitySpecialRenderer implements IBlockRende
 		GL11.glTranslatef(-translate[0] * tfactor, translate[1] * tfactor, -translate[2] * tfactor);
 		blade2.render(factor);
 
-		GL11.glEnable(2896 /* GL_LIGHTING */);
 		GL11.glPopMatrix();
 
 	}

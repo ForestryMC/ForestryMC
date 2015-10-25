@@ -14,10 +14,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 import forestry.api.genetics.EnumTolerance;
-import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleFloat;
 import forestry.api.genetics.IAlleleFlowers;
 import forestry.api.genetics.IAlleleInteger;
+import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IFlowerProvider;
 import forestry.api.genetics.ISpeciesRoot;
@@ -25,9 +25,9 @@ import forestry.api.lepidopterology.EnumButterflyChromosome;
 import forestry.api.lepidopterology.IAlleleButterflyEffect;
 import forestry.api.lepidopterology.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.IButterflyGenome;
-import forestry.core.genetics.AlleleBoolean;
-import forestry.core.genetics.AlleleTolerance;
 import forestry.core.genetics.Genome;
+import forestry.core.genetics.alleles.AlleleBoolean;
+import forestry.core.genetics.alleles.AlleleTolerance;
 import forestry.plugins.PluginLepidopterology;
 
 public class ButterflyGenome extends Genome implements IButterflyGenome {
@@ -43,12 +43,17 @@ public class ButterflyGenome extends Genome implements IButterflyGenome {
 
 	// NBT RETRIEVAL
 	public static IAlleleButterflySpecies getSpecies(ItemStack itemStack) {
-		IAllele speciesAllele = Genome.getActiveAllele(itemStack, EnumButterflyChromosome.SPECIES);
-		if (speciesAllele instanceof IAlleleButterflySpecies) {
-			return (IAlleleButterflySpecies) speciesAllele;
-		} else {
+		if (!PluginLepidopterology.butterflyInterface.isMember(itemStack)) {
 			return null;
 		}
+
+		IAlleleSpecies species = getSpeciesDirectly(itemStack);
+		if (species instanceof IAlleleButterflySpecies) {
+			return (IAlleleButterflySpecies) species;
+		}
+
+		return (IAlleleButterflySpecies) getActiveAllele(itemStack, EnumButterflyChromosome.SPECIES,
+				PluginLepidopterology.butterflyInterface);
 	}
 
 	/* SPECIES */
@@ -66,12 +71,12 @@ public class ButterflyGenome extends Genome implements IButterflyGenome {
 	public float getSize() {
 		return ((IAlleleFloat) getActiveAllele(EnumButterflyChromosome.SIZE)).getValue();
 	}
-	
+
 	@Override
 	public int getLifespan() {
 		return ((IAlleleInteger) getActiveAllele(EnumButterflyChromosome.LIFESPAN)).getValue();
 	}
-	
+
 	@Override
 	public float getSpeed() {
 		return ((IAlleleFloat) getActiveAllele(EnumButterflyChromosome.SPEED)).getValue();

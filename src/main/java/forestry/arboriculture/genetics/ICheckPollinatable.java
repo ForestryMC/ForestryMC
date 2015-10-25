@@ -20,12 +20,14 @@ import forestry.api.genetics.IIndividual;
 public interface ICheckPollinatable {
 
 	/**
-	 * @return plant types this pollinatable is classified as. (Can be used by bees to determine whether to interact or not.
+	 * @return plant types this pollinatable is classified as. (Can be used by
+	 *         bees to determine whether to interact or not.
 	 */
 	EnumSet<EnumPlantType> getPlantType();
 
 	/**
-	 * @return IIndividual containing the genetic information of this IPollinatable
+	 * @return IIndividual containing the genetic information of this
+	 *         IPollinatable
 	 */
 	IIndividual getPollen();
 
@@ -34,7 +36,8 @@ public interface ICheckPollinatable {
 	 *
 	 * Must be the one to check genetic equivalency.
 	 *
-	 * @param pollen IIndividual representing the pollen.
+	 * @param pollen
+	 *            IIndividual representing the pollen.
 	 * @return true if mating is possible, false otherwise.
 	 */
 	boolean canMateWith(IIndividual pollen);

@@ -33,7 +33,7 @@ public class StandardTank extends FluidTank {
 	}
 
 	public TankMode tankMode = TankMode.DEFAULT;
-	public static final int DEFAULT_COLOR = 0xFFFFFF;
+	private static final int DEFAULT_COLOR = 0xFFFFFF;
 	public int colorCache = DEFAULT_COLOR;
 	private int tankIndex;
 
@@ -115,20 +115,25 @@ public class StandardTank extends FluidTank {
 
 	public boolean canBeFilledExternally() {
 		switch (tankMode) {
-			case DEFAULT:
-			case INPUT:
-				return true;
+		case DEFAULT:
+		case INPUT:
+			return true;
 		}
 		return false;
 	}
 
 	public boolean canBeDrainedExternally() {
 		switch (tankMode) {
-			case DEFAULT:
-			case OUTPUT:
-				return true;
+		case DEFAULT:
+		case OUTPUT:
+			return true;
 		}
 		return false;
+	}
+
+	public boolean canDrain(int amount) {
+		FluidStack drained = drain(amount, false);
+		return (drained != null) && (drained.amount == amount);
 	}
 
 	@Override
@@ -141,7 +146,9 @@ public class StandardTank extends FluidTank {
 
 	@Override
 	public String toString() {
-		return String.format("Tank: %s, %d/%d", fluid != null && fluid.getFluid() != null ? fluid.getFluid().getName() : "Empty", getFluidAmount(), getCapacity());
+		return String.format("Tank: %s, %d/%d",
+				fluid != null && fluid.getFluid() != null ? fluid.getFluid().getName() : "Empty", getFluidAmount(),
+				getCapacity());
 	}
 
 	public ToolTip getToolTip() {
@@ -160,7 +167,7 @@ public class StandardTank extends FluidTank {
 			Fluid fluidType = getFluidType();
 			EnumRarity rarity = fluidType.getRarity();
 			if (rarity == null) {
-				rarity = EnumRarity.common;
+				rarity = EnumRarity.COMMON;
 			}
 			ToolTipLine fluidName = new ToolTipLine(fluidType.getLocalizedName(getFluid()), rarity.rarityColor, 2);
 			toolTip.add(fluidName);

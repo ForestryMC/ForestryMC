@@ -10,13 +10,11 @@
  ******************************************************************************/
 package forestry.core.network;
 
-import java.io.DataInputStream;
 import java.io.InputStream;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.tileentity.TileEntity;
@@ -29,23 +27,31 @@ import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientCustomPacketE
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ServerCustomPacketEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
-
 import forestry.api.core.ForestryEvent;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.ISpeciesRoot;
+import forestry.apiculture.multiblock.IAlvearyController;
+import forestry.apiculture.multiblock.TileAlveary;
+import forestry.apiculture.network.PacketActiveUpdate;
+import forestry.core.circuits.ContainerSolderingIron;
+import forestry.core.circuits.ISocketable;
 import forestry.core.circuits.ItemCircuitBoard;
-import forestry.core.gadgets.TileForestry;
-import forestry.core.gui.ContainerLiquidTanks;
-import forestry.core.gui.ContainerSocketed;
+import forestry.core.genetics.BreedingTracker;
+import forestry.core.gui.IContainerLiquidTanks;
+import forestry.core.gui.IContainerSocketed;
 import forestry.core.gui.IGuiSelectable;
-import forestry.core.interfaces.ISocketable;
+import forestry.core.interfaces.IRestrictedAccessTile;
 import forestry.core.proxy.Proxies;
+import forestry.farming.multiblock.IFarmController;
+import forestry.farming.multiblock.TileFarm;
 import forestry.plugins.PluginManager;
 
 import io.netty.buffer.ByteBufInputStream;
 
 public class PacketHandler {
+	private final FMLEventChannel channel;
+
 	public PacketHandler() {
 		channel = NetworkRegistry.INSTANCE.newEventDrivenChannel(ForestryPacket.channel);
 		channel.register(this);
@@ -53,125 +59,132 @@ public class PacketHandler {
 
 	@SubscribeEvent
 	public void onPacket(ServerCustomPacketEvent event) {
-		onPacketData(new ByteBufInputStream(event.packet.payload()),
-				((NetHandlerPlayServer) event.handler).playerEntity);
+		onPacketData(event.packet, ((NetHandlerPlayServer) event.handler).playerEntity);
 	}
 
 	@SubscribeEvent
 	public void onPacket(ClientCustomPacketEvent event) {
-		onPacketData(new ByteBufInputStream(event.packet.payload()),
-				null);
+		onPacketData(event.packet, Proxies.common.getPlayer());
 	}
 
-	public void onPacketData(InputStream is, EntityPlayerMP player) {
-		DataInputStream data = new DataInputStream(is);
-		PacketUpdate packetU;
+	/** Returns true if the packet has been handled */
+	private static boolean onPacketData(FMLProxyPacket fmlPacket, EntityPlayer player) {
+		InputStream is = new ByteBufInputStream(fmlPacket.payload());
+		DataInputStreamForestry data = new DataInputStreamForestry(is);
 
 		try {
-
-			int packetId = data.readByte();
+			int packetIdOrdinal = data.readByte();
+			if (packetIdOrdinal >= PacketId.VALUES.length) {
+				return false;
+			}
+			PacketId packetId = PacketId.VALUES[packetIdOrdinal];
 
 			switch (packetId) {
 
-				case PacketIds.TILE_FORESTRY_UPDATE:
-					PacketTileUpdate packetT = new PacketTileUpdate();
-					packetT.readData(data);
-					onTileUpdate(packetT);
-					break;
-				case PacketIds.TILE_UPDATE:
-					PacketUpdate packetUpdate = new PacketUpdate();
-					packetUpdate.readData(data);
-					onTileUpdate(packetUpdate);
-					break;
-				case PacketIds.TILE_NBT:
-					PacketTileNBT packetN = new PacketTileNBT();
-					packetN.readData(data);
-					onTileUpdate(packetN);
-					break;
-				case PacketIds.SOCKET_UPDATE:
-					PacketSocketUpdate packetS = new PacketSocketUpdate();
-					packetS.readData(data);
-					onSocketUpdate(packetS);
-					break;
-				case PacketIds.IINVENTORY_STACK:
-					PacketInventoryStack packetQ = new PacketInventoryStack();
-					packetQ.readData(data);
-					onInventoryStack(packetQ);
-					break;
-				case PacketIds.FX_SIGNAL:
-					PacketFXSignal packetF = new PacketFXSignal();
-					packetF.readData(data);
-					packetF.executeFX();
-					break;
+			case TILE_FORESTRY_UPDATE: {
+				PacketTileStream.onPacketData(data);
+				return true;
+			}
+			case TILE_FORESTRY_ERROR_UPDATE: {
+				PacketErrorUpdate.onPacketData(data);
+				return true;
+			}
+			case TILE_FORESTRY_GUI_OPENED: {
+				PacketGuiUpdate.onPacketData(data);
+				return true;
+			}
+			case TILE_FORESTRY_ACTIVE: {
+				PacketActiveUpdate.onPacketData(data);
+				return true;
+			}
+			case SOCKET_UPDATE: {
+				PacketSocketUpdate packetS = new PacketSocketUpdate(data);
+				onSocketUpdate(packetS);
+				return true;
+			}
+			case FX_SIGNAL: {
+				PacketFXSignal packet = new PacketFXSignal(data);
+				packet.executeFX();
+				return true;
+			}
 
-				case PacketIds.PIPETTE_CLICK:
-					packetU = new PacketUpdate();
-					packetU.readData(data);
-					onPipetteClick(packetU, player);
-					break;
-				case PacketIds.SOLDERING_IRON_CLICK:
-					packetU = new PacketUpdate();
-					packetU.readData(data);
-					onSolderingIronClick(packetU, player);
-					break;
-				case PacketIds.CHIPSET_CLICK:
-					packetU = new PacketUpdate();
-					packetU.readData(data);
-					onChipsetClick(packetU, player);
-					break;
-				case PacketIds.ACCESS_SWITCH:
-					PacketCoordinates packetC = new PacketCoordinates();
-					packetC.readData(data);
-					onAccessSwitch(packetC, player);
-					break;
-				case PacketIds.GUI_SELECTION:
-					PacketUpdate packetI = new PacketUpdate();
-					packetI.readData(data);
-					onGuiSelection(packetI);
-					break;
-				case PacketIds.GUI_SELECTION_CHANGE:
-					PacketUpdate packetZ = new PacketUpdate();
-					packetZ.readData(data);
-					onGuiChange(player, packetZ);
-					break;
-				case PacketIds.GENOME_TRACKER_UPDATE:
-					PacketNBT packetTR = new PacketNBT();
-					packetTR.readData(data);
-					onGenomeTrackerUpdate(packetTR);
-					break;
-				case PacketIds.GUI_INTEGER:
-					PacketGuiInteger packet = new PacketGuiInteger();
-					packet.readData(data);
-					break;
-				default:
-					for (forestry.core.interfaces.IPacketHandler handler : PluginManager.packetHandlers) {
-						handler.onPacketData(packetId, data, player);
+			case PIPETTE_CLICK: {
+				PacketSlotClick packet = new PacketSlotClick(data);
+				onPipetteClick(packet, (EntityPlayerMP) player);
+				return true;
+			}
+			case SOLDERING_IRON_CLICK: {
+				PacketSlotClick packet = new PacketSlotClick(data);
+				onSolderingIronClick(packet, (EntityPlayerMP) player);
+				return true;
+			}
+			case CHIPSET_CLICK: {
+				PacketSlotClick packet = new PacketSlotClick(data);
+				onChipsetClick(packet, (EntityPlayerMP) player);
+				return true;
+			}
+			case ACCESS_SWITCH: {
+				PacketCoordinates packet = new PacketCoordinates(data);
+				onAccessSwitch(packet, player);
+				return true;
+			}
+			case GUI_SELECTION_SET: {
+				PacketGuiSelect packet = new PacketGuiSelect(data);
+				onGuiSelection(packet);
+				return true;
+			}
+			case GUI_SELECTION_CHANGE: {
+				PacketGuiSelect packet = new PacketGuiSelect(data);
+				onGuiChange(player, packet);
+				return true;
+			}
+			case GUI_LAYOUT_SELECT: {
+				PacketString packet = new PacketString(data);
+				onGuiLayoutSelect(packet);
+				return true;
+			}
+			case GENOME_TRACKER_UPDATE: {
+				PacketNBT packet = new PacketNBT(data);
+				onGenomeTrackerUpdate(packet);
+				return true;
+			}
+			case GUI_PROGRESS_BAR: {
+				PacketProgressBarUpdate.onPacketData(data);
+				return true;
+			}
+			case GUI_ITEMSTACK: {
+				PacketItemStackDisplay.onPacketData(data);
+				return true;
+			}
+			case GUI_ENERGY: {
+				PacketGuiEnergy.onPacketData(data);
+				return true;
+			}
+			default: {
+				for (IPacketHandler handler : PluginManager.packetHandlers) {
+					if (handler.onPacketData(packetId, data, player)) {
+						return true;
 					}
+				}
+			}
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 
-	}
-
-	public void sendPacket(FMLProxyPacket packet) {
-		if (FMLCommonHandler.instance().getEffectiveSide().isClient()) {
-			channel.sendToServer(packet);
-		} else {
-			channel.sendToAll(packet);
-		}
+		return false;
 	}
 
 	public void sendPacket(FMLProxyPacket packet, EntityPlayerMP player) {
 		channel.sendTo(packet, player);
 	}
 
-	private void onGenomeTrackerUpdate(PacketNBT packet) {
+	private static void onGenomeTrackerUpdate(PacketNBT packet) {
 		assert FMLCommonHandler.instance().getEffectiveSide().isClient();
 
 		EntityPlayer player = Proxies.common.getPlayer();
 		IBreedingTracker tracker = null;
-		String type = packet.getTagCompound().getString("TYPE");
+		String type = packet.getTagCompound().getString(BreedingTracker.TYPE_KEY);
 
 		ISpeciesRoot root = AlleleManager.alleleRegistry.getSpeciesRoot(type);
 		if (root != null) {
@@ -183,7 +196,7 @@ public class PacketHandler {
 		}
 	}
 
-	private void onGuiChange(EntityPlayer player, PacketUpdate packet) {
+	private static void onGuiChange(EntityPlayer player, PacketGuiSelect packet) {
 		assert FMLCommonHandler.instance().getEffectiveSide().isServer();
 
 		if (!(player.openContainer instanceof IGuiSelectable)) {
@@ -193,7 +206,7 @@ public class PacketHandler {
 		((IGuiSelectable) player.openContainer).handleSelectionChange(player, packet);
 	}
 
-	private void onGuiSelection(PacketUpdate packet) {
+	private static void onGuiSelection(PacketGuiSelect packet) {
 		assert FMLCommonHandler.instance().getEffectiveSide().isClient();
 
 		EntityPlayer player = Proxies.common.getPlayer();
@@ -204,48 +217,39 @@ public class PacketHandler {
 		}
 
 		((IGuiSelectable) container).setSelection(packet);
-
 	}
 
-	private void onSocketUpdate(PacketSocketUpdate packet) {
+	private static void onGuiLayoutSelect(PacketString packet) {
 		assert FMLCommonHandler.instance().getEffectiveSide().isClient();
 
-		TileEntity tile = Proxies.common.getRenderWorld().getTileEntity(packet.posX, packet.posY, packet.posZ);
+		EntityPlayer player = Proxies.common.getPlayer();
+
+		Container container = player.openContainer;
+		if (!(container instanceof ContainerSolderingIron)) {
+			return;
+		}
+
+		((ContainerSolderingIron) container).setLayout(packet.getString());
+	}
+
+	private static void onSocketUpdate(PacketSocketUpdate packet) {
+		assert FMLCommonHandler.instance().getEffectiveSide().isClient();
+
+		TileEntity tile = packet.getTarget(Proxies.common.getRenderWorld());
 		if (!(tile instanceof ISocketable)) {
 			return;
 		}
 
 		ISocketable socketable = (ISocketable) tile;
-		for (int i = 0; i < packet.itemstacks.length; i++) {
-			socketable.setSocket(i, packet.itemstacks[i]);
+		for (int i = 0; i < packet.itemStacks.length; i++) {
+			socketable.setSocket(i, packet.itemStacks[i]);
 		}
 	}
 
-	private void onTileUpdate(ForestryPacket packet) {
-
-		TileEntity tile = ((ILocatedPacket) packet).getTarget(Proxies.common.getRenderWorld());
-		if (tile instanceof INetworkedEntity) {
-			((INetworkedEntity) tile).fromPacket(packet);
-		}
-
-	}
-
-	private void onInventoryStack(PacketInventoryStack packet) {
-
-		TileEntity tile = Proxies.common.getRenderWorld().getTileEntity(packet.posX, packet.posY, packet.posZ);
-		if (tile == null) {
-			return;
-		}
-
-		if (tile instanceof IInventory) {
-			((IInventory) tile).setInventorySlotContents(packet.slotIndex, packet.itemstack);
-		}
-	}
-
-	private void onChipsetClick(PacketUpdate packet, EntityPlayer player) {
+	private static void onChipsetClick(PacketSlotClick packet, EntityPlayerMP player) {
 		assert FMLCommonHandler.instance().getEffectiveSide().isServer();
 
-		if (!(player.openContainer instanceof ContainerSocketed)) {
+		if (!(player.openContainer instanceof IContainerSocketed)) {
 			return;
 		}
 		ItemStack itemstack = player.inventory.getItemStack();
@@ -253,41 +257,45 @@ public class PacketHandler {
 			return;
 		}
 
-		((ContainerSocketed) player.openContainer).handleChipsetClick(packet.payload.intPayload[0], player, itemstack);
-
+		((IContainerSocketed) player.openContainer).handleChipsetClickServer(packet.getSlot(), player, itemstack);
 	}
 
-	private void onSolderingIronClick(PacketUpdate packet, EntityPlayer player) {
+	private static void onSolderingIronClick(PacketSlotClick packet, EntityPlayerMP player) {
 		assert FMLCommonHandler.instance().getEffectiveSide().isServer();
 
-		if (!(player.openContainer instanceof ContainerSocketed)) {
+		if (!(player.openContainer instanceof IContainerSocketed)) {
 			return;
 		}
 		ItemStack itemstack = player.inventory.getItemStack();
 
-		((ContainerSocketed) player.openContainer).handleSolderingIronClick(packet.payload.intPayload[0], player, itemstack);
+		((IContainerSocketed) player.openContainer).handleSolderingIronClickServer(packet.getSlot(), player, itemstack);
 	}
 
-	private void onAccessSwitch(PacketCoordinates packet, EntityPlayer playerEntity) {
+	private static void onAccessSwitch(PacketCoordinates packet, EntityPlayer playerEntity) {
 		assert FMLCommonHandler.instance().getEffectiveSide().isServer();
 
-		TileForestry tile = (TileForestry) playerEntity.worldObj.getTileEntity(packet.posX, packet.posY, packet.posZ);
-		if (tile == null) {
-			return;
-		}
+		TileEntity tile = packet.getTarget(playerEntity.worldObj);
 
-		tile.switchAccessRule(playerEntity);
+		if (tile instanceof TileAlveary) {
+			TileAlveary tileAlveary = (TileAlveary) tile;
+			IAlvearyController alvearyController = tileAlveary.getAlvearyController();
+			alvearyController.getAccessHandler().switchAccessRule(playerEntity);
+		} else if (tile instanceof TileFarm) {
+			TileFarm tileFarm = (TileFarm) tile;
+			IFarmController farmController = tileFarm.getFarmController();
+			farmController.getAccessHandler().switchAccessRule(playerEntity);
+		} else if (tile instanceof IRestrictedAccessTile) {
+			IRestrictedAccessTile restrictedAccessTile = (IRestrictedAccessTile) tile;
+
+			restrictedAccessTile.getAccessHandler().switchAccessRule(playerEntity);
+		}
 	}
 
-	private void onPipetteClick(PacketUpdate packet, EntityPlayerMP player) {
+	private static void onPipetteClick(PacketSlotClick packet, EntityPlayerMP player) {
 		assert FMLCommonHandler.instance().getEffectiveSide().isServer();
 
-		if (!(player.openContainer instanceof ContainerLiquidTanks)) {
-			return;
+		if ((player.openContainer instanceof IContainerLiquidTanks)) {
+			((IContainerLiquidTanks) player.openContainer).handlePipetteClick(packet.getSlot(), player);
 		}
-
-		((ContainerLiquidTanks) player.openContainer).handlePipetteClick(packet.payload.intPayload[0], player);
 	}
-
-	private final FMLEventChannel channel;
 }

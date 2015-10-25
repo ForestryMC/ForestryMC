@@ -23,27 +23,29 @@ import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitBoard;
 import forestry.api.circuits.ICircuitLayout;
+import forestry.api.core.IModelManager;
 import forestry.core.config.ForestryItem;
-import forestry.core.items.ItemForestryMultiPass;
+import forestry.core.items.ItemForestry;
 
-public class ItemCircuitBoard extends ItemForestryMultiPass {
+public class ItemCircuitBoard extends ItemForestry {
 
 	public ItemCircuitBoard() {
 		super();
 		setHasSubtypes(true);
 	}
 
-	@SuppressWarnings({"unchecked", "rawtypes"})
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List itemList) {
-		itemList.add(createCircuitboard(EnumCircuitBoardType.BASIC, null, new ICircuit[]{}));
-		itemList.add(createCircuitboard(EnumCircuitBoardType.ENHANCED, null, new ICircuit[]{}));
-		itemList.add(createCircuitboard(EnumCircuitBoardType.REFINED, null, new ICircuit[]{}));
-		itemList.add(createCircuitboard(EnumCircuitBoardType.INTRICATE, null, new ICircuit[]{}));
+		itemList.add(createCircuitboard(EnumCircuitBoardType.BASIC, null, new ICircuit[] {}));
+		itemList.add(createCircuitboard(EnumCircuitBoardType.ENHANCED, null, new ICircuit[] {}));
+		itemList.add(createCircuitboard(EnumCircuitBoardType.REFINED, null, new ICircuit[] {}));
+		itemList.add(createCircuitboard(EnumCircuitBoardType.INTRICATE, null, new ICircuit[] {}));
 	}
 
 	/**
-	 * @return true if the item's stackTagCompound needs to be synchronized over SMP.
+	 * @return true if the item's stackTagCompound needs to be synchronized over
+	 *         SMP.
 	 */
 	@Override
 	public boolean getShareTag() {
@@ -66,7 +68,7 @@ public class ItemCircuitBoard extends ItemForestryMultiPass {
 		return "item.for.circuitboard." + type.toString().toLowerCase(Locale.ENGLISH);
 	}
 
-	@SuppressWarnings({"unchecked", "rawtypes"})
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean flag) {
 		ICircuitBoard circuitboard = ChipsetManager.circuitRegistry.getCircuitboard(itemstack);
@@ -81,7 +83,7 @@ public class ItemCircuitBoard extends ItemForestryMultiPass {
 		return chipset;
 	}
 
-	public static void saveChipset(ItemStack itemstack, ICircuitBoard circuitboard) {
+	private static void saveChipset(ItemStack itemstack, ICircuitBoard circuitboard) {
 		if (circuitboard == null) {
 			itemstack.setTagCompound(null);
 			return;
@@ -90,6 +92,14 @@ public class ItemCircuitBoard extends ItemForestryMultiPass {
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
 		circuitboard.writeToNBT(nbttagcompound);
 		itemstack.setTagCompound(nbttagcompound);
+	}
+
+	@Override
+	public void registerModel(Item item, IModelManager manager) {
+		manager.registerItemModel(item, 0, "", "chipsets");
+		manager.registerItemModel(item, 1, "", "chipsets");
+		manager.registerItemModel(item, 2, "", "chipsets");
+		manager.registerItemModel(item, 3, "", "chipsets");
 	}
 
 }

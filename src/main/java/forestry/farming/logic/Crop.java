@@ -13,6 +13,7 @@ package forestry.farming.logic;
 import java.util.Collection;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
@@ -25,32 +26,25 @@ public abstract class Crop implements ICrop {
 	protected final World world;
 	protected final Vect position;
 
-	public Crop(World world, Vect position) {
+	protected Crop(World world, Vect position) {
 		this.world = world;
 		this.position = position;
 	}
 
 	protected final void setBlock(Vect position, Block block, int meta) {
-		world.setBlock(position.x, position.y, position.z, block, meta, Defaults.FLAG_BLOCK_SYNCH);
-	}
-
-	protected final void clearBlock(Vect position) {
-		world.setBlockToAir(position.x, position.y, position.z);
-		if (world.getTileEntity(position.x, position.y, position.z) != null) {
-			world.setTileEntity(position.x, position.y, position.z, null);
-		}
+		world.setBlockState(position.pos, block.getStateFromMeta(meta), Defaults.FLAG_BLOCK_SYNCH);
 	}
 
 	protected final Block getBlock(Vect position) {
-		return world.getBlock(position.x, position.y, position.z);
+		return getBlockState(position).getBlock();
+	}
+
+	protected final IBlockState getBlockState(Vect position) {
+		return world.getBlockState(position.pos);
 	}
 
 	protected final int getBlockMeta(Vect position) {
-		return world.getBlockMetadata(position.x, position.y, position.z);
-	}
-
-	protected final ItemStack getAsItemStack(Vect position) {
-		return new ItemStack(getBlock(position), 1, getBlockMeta(position));
+		return getBlock(position).getMetaFromState(getBlockState(position));
 	}
 
 	protected abstract boolean isCrop(Vect pos);

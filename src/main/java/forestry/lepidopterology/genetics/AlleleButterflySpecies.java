@@ -24,20 +24,21 @@ import com.mojang.authlib.GameProfile;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.api.core.IIconProvider;
-import forestry.api.genetics.AlleleManager;
+import forestry.api.core.IModelProvider;
+import forestry.api.core.ITextureManager;
+import forestry.api.core.sprite.ISprite;
+import forestry.api.core.sprite.ISpriteProvider;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IIndividual;
 import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.api.lepidopterology.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.IButterflyRoot;
 import forestry.core.config.Defaults;
-import forestry.core.genetics.AlleleSpecies;
+import forestry.core.genetics.alleles.AlleleSpecies;
+import forestry.core.render.TextureManager;
+import forestry.plugins.PluginLepidopterology;
 
-public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButterflySpecies {
-
-	private final IButterflyRoot root;
+public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButterflySpecies, ISpriteProvider {
 
 	private final String texture;
 	private final int serumColour;
@@ -50,16 +51,24 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 	private final Map<ItemStack, Float> butterflyLoot = new HashMap<ItemStack, Float>();
 	private final Map<ItemStack, Float> caterpillarLoot = new HashMap<ItemStack, Float>();
 
-	public AlleleButterflySpecies(String uid, boolean isDominant, String name, IClassification branch, String binomial, int serumColour) {
-		super(uid, isDominant, "butterflies.species." + branch.getParent().getUID().substring((branch.getParent().getLevel().name().toLowerCase(Locale.ENGLISH)).length() + 1) + "." + name, branch, binomial);
-		this.root = (IButterflyRoot) AlleleManager.alleleRegistry.getSpeciesRoot("rootButterflies");
+	public AlleleButterflySpecies(String uid, boolean isDominant, String speciesName, IClassification branch,
+			String binomial, int serumColour) {
+		super("forestry." + uid, getUnlocalizedName(speciesName, branch), "Sengir", "for.description." + uid,
+				isDominant, branch, binomial, true);
 		this.serumColour = serumColour;
 		texture = "forestry:" + Defaults.TEXTURE_PATH_ENTITIES + "/butterflies/" + uid + ".png";
 	}
 
+	private static String getUnlocalizedName(String name, IClassification branch) {
+		IClassification parent = branch.getParent();
+		return "for.butterflies.species."
+				+ parent.getUID().substring((parent.getLevel().name().toLowerCase(Locale.ENGLISH)).length() + 1) + '.'
+				+ name;
+	}
+
 	@Override
 	public IButterflyRoot getRoot() {
-		return root;
+		return PluginLepidopterology.butterflyInterface;
 	}
 
 	public AlleleButterflySpecies setRarity(float rarity) {
@@ -72,8 +81,8 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 		return this;
 	}
 
-	public AlleleButterflySpecies setNocturnal(boolean isActualNocturnal) {
-		this.isActualNocturnal = isActualNocturnal;
+	public AlleleButterflySpecies setNocturnal() {
+		this.isActualNocturnal = true;
 		return this;
 	}
 
@@ -85,12 +94,6 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 	public AlleleButterflySpecies addSpawnBiome(BiomeDictionary.Type biomeTag) {
 		spawnBiomes.add(biomeTag);
 		return this;
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIconProvider getIconProvider() {
-		return null;
 	}
 
 	@Override
@@ -140,7 +143,7 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 
 	@Override
 	public ItemStack[] getResearchBounty(World world, GameProfile researcher, IIndividual individual, int bountyLevel) {
-		return new ItemStack[]{getRoot().getMemberStack(individual.copy(), EnumFlutterType.SERUM.ordinal())};
+		return new ItemStack[] { getRoot().getMemberStack(individual.copy(), EnumFlutterType.SERUM.ordinal()) };
 	}
 
 	/* OTHER */
@@ -180,5 +183,25 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 			return 0xffffff;
 		}
 		return serumColour;
+	}
+
+	@Override
+	public IModelProvider getModelProvider() {
+		return null;
+	}
+
+	@Override
+	public ISprite getIcon(short texUID) {
+		return null;
+	}
+
+	@Override
+	public void registerIcons(ITextureManager register) {
+		TextureManager.getInstance().registerTex(texture.toString());
+	}
+
+	@Override
+	public ISpriteProvider getSpriteProvider() {
+		return this;
 	}
 }

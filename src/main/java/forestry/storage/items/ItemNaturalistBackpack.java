@@ -13,9 +13,10 @@ package forestry.storage.items;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
+import forestry.api.apiculture.BeeManager;
 import forestry.api.core.ForestryAPI;
 import forestry.api.storage.EnumBackpackType;
-import forestry.plugins.PluginApiculture;
+import forestry.api.storage.IBackpackDefinition;
 import forestry.plugins.PluginLepidopterology;
 import forestry.storage.BackpackDefinition;
 
@@ -23,37 +24,38 @@ public class ItemNaturalistBackpack extends ItemBackpack {
 
 	public static class BackpackDefinitionApiarist extends BackpackDefinition {
 
-		public BackpackDefinitionApiarist(String name, int primaryColor) {
-			super(name, primaryColor);
+		public BackpackDefinitionApiarist(int primaryColor) {
+			super("apiarist", primaryColor);
 		}
 
 		@Override
-		public boolean isValidItem(ItemStack stack) {
-			return PluginApiculture.beeInterface.isMember(stack);
+		public boolean isValidItem(ItemStack itemStack) {
+			return BeeManager.beeRoot.isMember(itemStack);
 		}
 	}
 
 	public static class BackpackDefinitionLepidopterist extends BackpackDefinition {
 
-		public BackpackDefinitionLepidopterist(String name, int primaryColor) {
-			super(name, primaryColor);
+		public BackpackDefinitionLepidopterist(int primaryColor) {
+			super("lepidopterist", primaryColor);
 		}
 
 		@Override
-		public boolean isValidItem(ItemStack stack) {
-			return PluginLepidopterology.butterflyInterface.isMember(stack);
+		public boolean isValidItem(ItemStack itemStack) {
+			return PluginLepidopterology.butterflyInterface.isMember(itemStack);
 		}
 	}
 
 	private final int guiId;
 
-	public ItemNaturalistBackpack(int guiId, BackpackDefinition definition) {
+	public ItemNaturalistBackpack(int guiId, IBackpackDefinition definition) {
 		super(definition, EnumBackpackType.APIARIST);
 		this.guiId = guiId;
 	}
 
 	@Override
-	public void openGui(EntityPlayer player, ItemStack itemstack) {
-		player.openGui(ForestryAPI.instance, guiId, player.worldObj, (int) player.posX, (int) player.posY, (int) player.posZ);
+	public void openGui(EntityPlayer player) {
+		player.openGui(ForestryAPI.instance, guiId, player.worldObj, (int) player.posX, (int) player.posY,
+				(int) player.posZ);
 	}
 }

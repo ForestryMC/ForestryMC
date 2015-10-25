@@ -71,8 +71,9 @@ public class ModelButterfly extends ModelBase {
 	public void render(Entity entity, float f, float f1, float swing, float f3, float f4, float f5) {
 		super.render(entity, f, f1, swing, f3, f4, f5);
 
-		//body.rotateAngleX = ((float)Math.PI / 4F) + MathHelper.cos(swing * 0.1F) * 0.15F;
-		//body.rotateAngleY = 0.0F;
+		// body.rotateAngleX = ((float)Math.PI / 4F) + MathHelper.cos(swing *
+		// 0.1F) * 0.15F;
+		// body.rotateAngleY = 0.0F;
 		wingRight.rotateAngleZ = MathHelper.cos(swing * 1.3F) * (float) Math.PI * 0.25F;
 		wingLeft.rotateAngleZ = -wingRight.rotateAngleZ;
 
@@ -88,7 +89,7 @@ public class ModelButterfly extends ModelBase {
 
 	}
 
-	private void setRotation(ModelRenderer model, float x, float y, float z) {
+	private static void setRotation(ModelRenderer model, float x, float y, float z) {
 		model.rotateAngleX = x;
 		model.rotateAngleY = y;
 		model.rotateAngleZ = z;

@@ -17,13 +17,13 @@ import java.util.Random;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-
+import forestry.api.core.IModelManager;
 import forestry.api.core.Tabs;
 import forestry.core.config.Config;
 import forestry.core.config.ForestryItem;
-import forestry.core.items.ItemForestryMultiPass;
+import forestry.core.items.ItemForestry;
 
-public class ItemHoneycomb extends ItemForestryMultiPass {
+public class ItemHoneycomb extends ItemForestry {
 
 	private static class CombInfo {
 
@@ -44,8 +44,7 @@ public class ItemHoneycomb extends ItemForestryMultiPass {
 		}
 	}
 
-	public final CombInfo[] combs = new CombInfo[]{
-			new CombInfo("honey", 0xe8d56a, 0xffa12b), // 0
+	private final CombInfo[] combs = new CombInfo[] { new CombInfo("honey", 0xe8d56a, 0xffa12b), // 0
 			new CombInfo("cocoa", 0x674016, 0xffb62b).setIsSecret(), // 1
 			new CombInfo("simmering", 0x981919, 0xffb62b), // 2
 			new CombInfo("stringy", 0xc8be67, 0xbda93e), // 3
@@ -96,7 +95,7 @@ public class ItemHoneycomb extends ItemForestryMultiPass {
 		}
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List itemList) {
 		for (int i = 0; i < combs.length; i++) {
@@ -106,12 +105,8 @@ public class ItemHoneycomb extends ItemForestryMultiPass {
 		}
 	}
 
-	public int getCombTypeCount() {
-		return combs.length;
-	}
-
-	public int getRandomCombType(Random random, boolean includeSecret) {
-		List<Integer> validCombs = new ArrayList<Integer>(getCombTypeCount());
+	private int getRandomCombType(Random random, boolean includeSecret) {
+		List<Integer> validCombs = new ArrayList<Integer>(combs.length);
 		for (int i = 0; i < combs.length; i++) {
 			if (!combs[i].isSecret || includeSecret) {
 				validCombs.add(i);
@@ -125,7 +120,15 @@ public class ItemHoneycomb extends ItemForestryMultiPass {
 		}
 	}
 
+	@Override
+	public void registerModel(Item item, IModelManager manager) {
+		for (int i = 0; i < combs.length; i++) {
+			manager.registerItemModel(item, i, "beecombs", combs[i].name);
+		}
+	}
+
 	public static ItemStack getRandomComb(int qty, Random random, boolean includeSecret) {
-		return ForestryItem.beeComb.getItemStack(qty, ((ItemHoneycomb) ForestryItem.beeComb.item()).getRandomCombType(random, includeSecret));
+		return ForestryItem.beeComb.getItemStack(qty,
+				((ItemHoneycomb) ForestryItem.beeComb.item()).getRandomCombType(random, includeSecret));
 	}
 }

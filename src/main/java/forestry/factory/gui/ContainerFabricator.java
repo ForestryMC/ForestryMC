@@ -21,15 +21,16 @@ import forestry.core.gui.slots.SlotOutput;
 import forestry.core.interfaces.IContainerCrafting;
 import forestry.factory.gadgets.MachineFabricator;
 
-public class ContainerFabricator extends ContainerLiquidTanks implements IContainerCrafting {
+public class ContainerFabricator extends ContainerLiquidTanks<MachineFabricator> implements IContainerCrafting {
 
 	public ContainerFabricator(InventoryPlayer playerInventory, MachineFabricator tile) {
-		super(tile);
+		super(tile, playerInventory, 8, 129);
 
 		// Internal inventory
 		for (int i = 0; i < 2; i++) {
 			for (int k = 0; k < 9; k++) {
-				addSlotToContainer(new Slot(tile, MachineFabricator.SLOT_INVENTORY_1 + k + i * 9, 8 + k * 18, 84 + i * 18));
+				addSlotToContainer(
+						new Slot(tile, MachineFabricator.SLOT_INVENTORY_1 + k + i * 9, 8 + k * 18, 84 + i * 18));
 			}
 		}
 
@@ -45,21 +46,10 @@ public class ContainerFabricator extends ContainerLiquidTanks implements IContai
 		// Crafting matrix
 		for (int l = 0; l < 3; l++) {
 			for (int k = 0; k < 3; k++) {
-				addSlotToContainer(new SlotCraftMatrix(this, tile, MachineFabricator.SLOT_CRAFTING_1 + k + l * 3, 67 + k * 18, 17 + l * 18));
+				addSlotToContainer(new SlotCraftMatrix(this, tile.getCraftingInventory(),
+						MachineFabricator.SLOT_CRAFTING_1 + k + l * 3, 67 + k * 18, 17 + l * 18));
 			}
 		}
-
-		// Player inventory
-		for (int i = 0; i < 3; i++) {
-			for (int k = 0; k < 9; k++) {
-				addSlotToContainer(new Slot(playerInventory, k + i * 9 + 9, 8 + k * 18, 129 + i * 18));
-			}
-		}
-		// Player hotbar
-		for (int j = 0; j < 9; j++) {
-			addSlotToContainer(new Slot(playerInventory, j, 8 + j * 18, 187));
-		}
-
 	}
 
 	@Override

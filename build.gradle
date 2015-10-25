@@ -11,13 +11,16 @@ buildscript {
 		}
 	}
 	dependencies {
-		classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+		classpath 'net.minecraftforge.gradle:ForgeGradle:2.0-SNAPSHOT'
 		// https://github.com/ajoberstar/gradle-git
 		classpath 'org.ajoberstar:gradle-git:0.8.0'
 	}
 }
 
-apply plugin: 'forge'
+apply plugin: 'net.minecraftforge.gradle.forge'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.6
 
 loadProperties()
 
@@ -40,7 +43,7 @@ ext.apiRedstoneFlux = "./api/redstoneflux"
 minecraft {
 	version = mcversion + "-" + forgeversion
 	runDir = "run"
-	mappings = mcp_mappings
+	mappings = "snapshot_20150928"
 
 	replace '@VERSION@', project.version
 	replace '@BUILD_NUMBER@', getBuildNumber()
@@ -67,14 +70,18 @@ sourceSets {
 
 repositories {
 	maven {
-		name = "ic2"
-		url = "http://maven.ic2.player.to/"
+		name = "chickenbones"
+		url = "http://chickenbones.net/maven/"
 	}
 }
 
 dependencies {
-	//compile 'net.industrial-craft:industrialcraft-2:2.2.575-experimental:api'
-	//compile 'com.mod-buildcraft:buildcraft:6.3.1:dev'
+	compile "codechicken:CodeChickenLib:1.8-1.1.2.133:dev"
+
+	// http://chickenbones.net/maven
+	compile "codechicken:CodeChickenCore:1.8-1.0.5.36:dev"
+	compile "codechicken:NotEnoughItems:1.8-1.0.5.104:dev"
+	compile "codechicken:NotEnoughItems:1.8-1.0.5.104:src"
 }
 
 processResources {
@@ -99,15 +106,6 @@ processResources {
 }
 
 runClient {
-	if (project.hasProperty('mcUsername')) {
-		args "--username=" + project.mcUsername
-	}
-	if (project.hasProperty('mcPassword')) {
-		args "--password=" + project.mcPassword
-	}
-}
-
-debugClient {
 	if (project.hasProperty('mcUsername')) {
 		args "--username=" + project.mcUsername
 	}

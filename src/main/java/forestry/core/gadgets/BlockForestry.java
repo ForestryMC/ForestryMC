@@ -15,73 +15,84 @@ import org.apache.logging.log4j.Level;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
+import com.mojang.authlib.GameProfile;
+
+import forestry.api.core.IModelRegister;
 import forestry.core.CreativeTabForestry;
 import forestry.core.interfaces.IOwnable;
+import forestry.core.interfaces.IRestrictedAccessTile;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.Utils;
 
-public abstract class BlockForestry extends BlockContainer {
+public abstract class BlockForestry extends BlockContainer implements IModelRegister {
 
-	public BlockForestry(Material material) {
+	protected BlockForestry(Material material) {
 		super(material);
 		setHardness(1.5f);
 		setCreativeTab(CreativeTabForestry.tabForestry);
 	}
 
 	@Override
-	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest) {
-		IOwnable tile = (IOwnable) world.getTileEntity(x, y, z);
-		if (!tile.isOwnable() || tile.allowsRemoval(player)) {
-			return super.removedByPlayer(world, player, x, y, z, willHarvest);
-		} else {
-			return false;
+	public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+		TileEntity tile = world.getTileEntity(pos);
+
+		if (tile instanceof IRestrictedAccessTile) {
+			IRestrictedAccessTile restrictedAccessTile = (IRestrictedAccessTile) tile;
+			if (!restrictedAccessTile.getAccessHandler().allowsRemoval(player)) {
+				return false;
+			}
 		}
+		return super.removedByPlayer(world, pos, player, willHarvest);
 	}
 
 	@Override
-	public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
+	public int getRenderType() {
+		return 3;
+	}
 
+	@Override
+	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase entityLiving,
+			ItemStack stack) {
 		if (!Proxies.common.isSimulating(world)) {
 			return;
 		}
 
-		TileEntity tile = world.getTileEntity(x, y, z);
-		if (tile instanceof TileForestry) {
-			TileForestry tileForestry = (TileForestry) tile;
-			Utils.dropInventory(tileForestry, world, x, y, z);
-			tileForestry.onRemoval();
-		}
-		super.breakBlock(world, x, y, z, block, meta);
-	}
+		if (entityLiving instanceof EntityPlayer) {
+			TileEntity tile = world.getTileEntity(pos);
 
-	@Override
-	public void onBlockPlacedBy(World world, int i, int j, int k, EntityLivingBase entityliving, ItemStack itemstack) {
+			IOwnable ownable;
 
-		if (!Proxies.common.isSimulating(world)) {
-			return;
-		}
+			if (tile instanceof IRestrictedAccessTile) {
+				ownable = ((IRestrictedAccessTile) tile).getAccessHandler();
+			} else if (tile instanceof IOwnable) {
+				ownable = (IOwnable) tile;
+			} else {
+				return;
+			}
 
-		TileForestry tile = (TileForestry) world.getTileEntity(i, j, k);
-		if (entityliving instanceof EntityPlayer) {
-			tile.setOwner(((EntityPlayer) entityliving));
+			EntityPlayer player = (EntityPlayer) entityLiving;
+			GameProfile gameProfile = player.getGameProfile();
+			ownable.setOwner(gameProfile);
 		}
 	}
 
 	@Override
-	public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
+	public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block block) {
 		try {
-			TileEntity tile = world.getTileEntity(x, y, z);
+			TileEntity tile = world.getTileEntity(pos);
 			if (tile instanceof TileForestry) {
 				((TileForestry) tile).onNeighborBlockChange(block);
 			}
 		} catch (StackOverflowError error) {
-			Proxies.log.logThrowable(Level.ERROR, "Stack Overflow Error in BlockMachine.onNeighborBlockChange()", 10, error);
+			Proxies.log.logThrowable(Level.ERROR, "Stack Overflow Error in BlockMachine.onNeighborBlockChange()", 10,
+					error);
 			throw error;
 		}
 	}

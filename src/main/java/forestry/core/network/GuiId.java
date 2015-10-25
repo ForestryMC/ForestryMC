@@ -14,7 +14,7 @@ public enum GuiId {
 	AlvearyGUI,
 
 	AlvearySwarmerGUI,
-	
+
 	AlvearySieveGUI,
 
 	AnalyzerGUI,
@@ -22,7 +22,7 @@ public enum GuiId {
 	ApiaristBackpackGUI,
 
 	ApiaristChestGUI,
-	
+
 	ArboristChestGUI,
 
 	ApiaryGUI,
@@ -36,11 +36,11 @@ public enum GuiId {
 	BeealyzerGUI,
 
 	BeehouseGUI,
-	
+
 	BottlerGUI,
 
 	CatalogueGUI,
-	
+
 	CarpenterGUI,
 
 	CentrifugeGUI,
@@ -58,7 +58,7 @@ public enum GuiId {
 	FermenterGUI,
 
 	FlutterlyzerGUI,
-	
+
 	ForesterGUI,
 
 	GeneratorGUI,
@@ -74,9 +74,9 @@ public enum GuiId {
 	LetterGUI,
 
 	LepidopteristBackpackGUI,
-	
+
 	LepidopteristChestGUI,
-	
+
 	MailboxGUI,
 
 	MoistenerGUI,
@@ -86,7 +86,7 @@ public enum GuiId {
 	MultiFarmGUI,
 
 	NaturalistBenchGUI,
-	
+
 	NetherFarmGUI,
 
 	PeatBogGUI,
@@ -112,7 +112,7 @@ public enum GuiId {
 	TraderNameGUI,
 
 	TreealyzerGUI,
-	
+
 	WorktableGUI,
 
 	Unknown

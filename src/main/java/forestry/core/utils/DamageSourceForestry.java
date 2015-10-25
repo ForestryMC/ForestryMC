@@ -23,15 +23,15 @@ public class DamageSourceForestry extends DamageSource {
 	}
 
 	@Override
-	public IChatComponent func_151519_b(EntityLivingBase living) {
+	public IChatComponent getDeathMessage(EntityLivingBase living) {
 		EntityLivingBase other = living.func_94060_bK();
 		String ssp = "death." + this.damageType;
 		String smp = ssp + ".player";
 
 		if (other != null) {
-			return new ChatComponentTranslation(smp, living.func_145748_c_(), other.func_145748_c_());
+			return new ChatComponentTranslation(smp, living.getCommandSenderName(), other.getCommandSenderName());
 		} else {
-			return new ChatComponentTranslation(ssp, living.func_145748_c_());
+			return new ChatComponentTranslation(ssp, living.getCommandSenderName());
 		}
 	}
 

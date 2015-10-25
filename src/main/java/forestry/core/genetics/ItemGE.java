@@ -12,21 +12,17 @@ package forestry.core.genetics;
 
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
+import forestry.api.core.IModelRegister;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IIndividual;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
 
-public abstract class ItemGE extends Item {
+public abstract class ItemGE extends Item implements IModelRegister {
 
 	protected ItemGE() {
 		super();
@@ -58,12 +54,12 @@ public abstract class ItemGE extends Item {
 	}
 
 	@Override
-	public boolean hasEffect(ItemStack itemstack, int pass) {
+	public boolean hasEffect(ItemStack itemstack) {
 		IAlleleSpecies species = getSpecies(itemstack);
 		return species != null && species.hasEffect();
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean flag) {
 		if (!itemstack.hasTagCompound()) {
@@ -81,13 +77,6 @@ public abstract class ItemGE extends Item {
 		} else {
 			list.add("<" + StringUtil.localize("gui.unknown") + ">");
 		}
-	}
-
-	/* ICONS */
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerIcons(IIconRegister par1IconRegister) {
-		// Need to disable normal registration.
 	}
 
 	@Override

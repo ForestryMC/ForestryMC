@@ -24,14 +24,14 @@ import forestry.mail.POBoxInfo;
 
 public class GuiMailboxInfo extends Gui {
 
-	public static GuiMailboxInfo instance;
+	public final static GuiMailboxInfo instance = new GuiMailboxInfo();
 
 	private final FontRenderer fontRendererObj;
 	private POBoxInfo poInfo;
 	private final ResourceLocation textureAlert = new ForestryResource(Defaults.TEXTURE_PATH_GUI + "/mailalert.png");
 
-	public GuiMailboxInfo() {
-		fontRendererObj = Proxies.common.getClientInstance().fontRenderer;
+	private GuiMailboxInfo() {
+		fontRendererObj = Proxies.common.getClientInstance().fontRendererObj;
 	}
 
 	public void render(int x, int y) {
@@ -56,9 +56,10 @@ public class GuiMailboxInfo extends Gui {
 
 		this.drawTexturedModalRect(x, y, 0, 0, 98, 17);
 
-		fontRendererObj
-				.drawString(Integer.toString(poInfo.playerLetters), x + 27 + getCenteredOffset(Integer.toString(poInfo.playerLetters), 22), y + 5, 0xffffff);
-		fontRendererObj.drawString(Integer.toString(poInfo.tradeLetters), x + 75 + getCenteredOffset(Integer.toString(poInfo.tradeLetters), 22), y + 5, 0xffffff);
+		fontRendererObj.drawString(Integer.toString(poInfo.playerLetters),
+				x + 27 + getCenteredOffset(Integer.toString(poInfo.playerLetters), 22), y + 5, 0xffffff);
+		fontRendererObj.drawString(Integer.toString(poInfo.tradeLetters),
+				x + 75 + getCenteredOffset(Integer.toString(poInfo.tradeLetters), 22), y + 5, 0xffffff);
 
 		GL11.glDisable(32826);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -69,19 +70,25 @@ public class GuiMailboxInfo extends Gui {
 		return (xWidth - fontRendererObj.getStringWidth(string)) / 2;
 	}
 
+	public boolean hasPOBoxInfo() {
+		return poInfo != null;
+	}
+
 	public void setPOBoxInfo(POBoxInfo info) {
 		boolean playJingle = false;
 
 		if (info.hasMail()) {
 			if (this.poInfo == null) {
 				playJingle = true;
-			} else if (this.poInfo.playerLetters != info.playerLetters || this.poInfo.tradeLetters != info.tradeLetters) {
+			} else if (this.poInfo.playerLetters != info.playerLetters
+					|| this.poInfo.tradeLetters != info.tradeLetters) {
 				playJingle = true;
 			}
 		}
 
 		if (playJingle) {
-			Proxies.common.getRenderWorld().playSoundAtEntity(Proxies.common.getClientInstance().thePlayer, "random.levelup", 1.0f, 1.0f);
+			Proxies.common.getRenderWorld().playSoundAtEntity(Proxies.common.getClientInstance().thePlayer,
+					"random.levelup", 1.0f, 1.0f);
 		}
 
 		this.poInfo = info;

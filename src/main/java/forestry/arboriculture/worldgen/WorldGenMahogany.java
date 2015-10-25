@@ -10,35 +10,32 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
+import net.minecraft.world.World;
+
 import forestry.api.world.ITreeGenData;
 
 public class WorldGenMahogany extends WorldGenTree {
 
 	public WorldGenMahogany(ITreeGenData tree) {
-		super(tree);
+		super(tree, 12, 6);
 	}
 
 	@Override
-	public void generate() {
-		generateTreeTrunk(height, girth, 0.6f);
-		generateSupportStems(height, girth, 0.4f, 0.4f);
+	public void generate(World world) {
+		generateTreeTrunk(world, height, girth, 0.6f);
+		generateSupportStems(world, height, girth, 0.4f, 0.4f);
 
 		int leafSpawn = height + 1;
 
-		generateAdjustedCylinder(leafSpawn--, 0, 1, leaf);
+		generateAdjustedCylinder(world, leafSpawn--, 0, 1, leaf);
 
-		generateAdjustedCylinder(leafSpawn--, 1.5f, 1, leaf);
-		generateAdjustedCylinder(leafSpawn--, 2f, 1, leaf);
+		generateAdjustedCylinder(world, leafSpawn--, 1.5f, 1, leaf);
+		generateAdjustedCylinder(world, leafSpawn--, 2f, 1, leaf);
 
-		generateAdjustedCylinder(leafSpawn--, 3f, 1, leaf);
-		generateAdjustedCylinder(leafSpawn--, 3f, 1, leaf);
-		generateAdjustedCylinder(leafSpawn--, 2f, 1, leaf);
+		generateAdjustedCylinder(world, leafSpawn--, 3f, 1, leaf);
+		generateAdjustedCylinder(world, leafSpawn--, 3f, 1, leaf);
+		generateAdjustedCylinder(world, leafSpawn--, 2f, 1, leaf);
 
 	}
 
-	@Override
-	public void preGenerate() {
-		height = determineHeight(12, 6);
-		girth = determineGirth(tree.getGirth(world, startX, startY, startZ));
-	}
 }

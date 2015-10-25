@@ -36,15 +36,18 @@ public class LiquidHelper {
 		} else if (item instanceof ItemLiquidContainer) {
 			ItemLiquidContainer liquidContainer = (ItemLiquidContainer) item;
 			switch (liquidContainer.getType()) {
-				case CAN:
-					LiquidHelper.injectTinContainer(fluid, Defaults.BUCKET_VOLUME, filled, ForestryItem.canEmpty.getItemStack());
-					return;
-				case CAPSULE:
-					LiquidHelper.injectWaxContainer(fluid, Defaults.BUCKET_VOLUME, filled, ForestryItem.waxCapsule.getItemStack());
-					return;
-				case REFRACTORY:
-					LiquidHelper.injectRefractoryContainer(fluid, Defaults.BUCKET_VOLUME, filled, ForestryItem.refractoryEmpty.getItemStack());
-					return;
+			case CAN:
+				LiquidHelper.injectTinContainer(fluid, Defaults.BUCKET_VOLUME, filled,
+						ForestryItem.canEmpty.getItemStack());
+				return;
+			case CAPSULE:
+				LiquidHelper.injectWaxContainer(fluid, Defaults.BUCKET_VOLUME, filled,
+						ForestryItem.waxCapsule.getItemStack());
+				return;
+			case REFRACTORY:
+				LiquidHelper.injectRefractoryContainer(fluid, Defaults.BUCKET_VOLUME, filled,
+						ForestryItem.refractoryEmpty.getItemStack());
+				return;
 			}
 		}
 		Proxies.log.warning("Unable to inject liquid container: " + filled);
@@ -66,10 +69,12 @@ public class LiquidHelper {
 		injectLiquidContainer(fluid, volume, filled, empty, ForestryItem.ingotTin.getItemStack(), 5);
 	}
 
-	public static void injectLiquidContainer(Fluids fluid, int volume, ItemStack filled, ItemStack empty, ItemStack remnant, int chance) {
+	public static void injectLiquidContainer(Fluids fluid, int volume, ItemStack filled, ItemStack empty,
+			ItemStack remnant, int chance) {
 		FluidStack contained = fluid.getFluid(volume);
 		if (contained == null) {
-			throw new IllegalArgumentException(String.format("Attempted to inject a liquid container for the non-existent liquid '%s'.", fluid));
+			throw new IllegalArgumentException(
+					String.format("Attempted to inject a liquid container for the non-existent liquid '%s'.", fluid));
 		}
 
 		FluidContainerData container = new FluidContainerData(contained, filled, empty);
@@ -78,9 +83,11 @@ public class LiquidHelper {
 		if (RecipeManagers.squeezerManager != null) {
 			if (!container.filledContainer.getItem().hasContainerItem(container.filledContainer)) {
 				if (remnant != null) {
-					RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{container.filledContainer}, container.fluid, remnant, chance);
+					RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[] { container.filledContainer },
+							container.fluid, remnant, chance);
 				} else {
-					RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{container.filledContainer}, container.fluid);
+					RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[] { container.filledContainer },
+							container.fluid);
 				}
 			}
 		}

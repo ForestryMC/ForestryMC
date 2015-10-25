@@ -22,8 +22,8 @@ import forestry.plugins.PluginManager;
 import forestry.plugins.PluginManager.Stage;
 
 /**
- * Allows direct access to Forestry's items. Will be populated during
- * preInit and Init.
+ * Allows direct access to Forestry's items. Will be populated during preInit
+ * and Init.
  *
  * Most items with the exception of bees do not care for damage values.
  *
@@ -33,168 +33,59 @@ import forestry.plugins.PluginManager.Stage;
  */
 public enum ForestryItem {
 
-	fertilizerBio,
-	fertilizerCompound,
-	apatite,
+	fertilizerBio, fertilizerCompound, apatite,
 	// Ingots
-	ingotCopper,
-	ingotTin,
-	ingotBronze,
+	ingotCopper, ingotTin, ingotBronze,
 	// Tools
-	wrench,
-	pipette,
-	bucketBiomass,
-	bucketEthanol,
-	bucketGlass,
-	bucketHoney,
-	bucketIce,
-	bucketJuice,
-	bucketSeedoil,
-	bucketShortMead,
+	wrench, pipette, bucketBiomass, bucketEthanol, bucketGlass, bucketHoney, bucketIce, bucketJuice, bucketSeedoil, bucketShortMead,
 	// Crafting
-	impregnatedCasing,
-	sturdyCasing,
-	hardenedCasing,
-	craftingMaterial,
+	impregnatedCasing, sturdyCasing, hardenedCasing, craftingMaterial,
 	// Rainmaker
 	iodineCharge,
 	// Gears
-	gearBronze,
-	gearCopper,
-	gearTin,
+	gearBronze, gearCopper, gearTin,
 	// Chipsets
-	circuitboards,
-	solderingIron,
-	tubes,
+	circuitboards, solderingIron, tubes,
 	// Mail
-	stamps,
-	letters,
-	catalogue,
+	stamps, letters, catalogue,
 	// mailIndicator,
 
 	// Carpenter
-	stickImpregnated,
-	woodPulp,
-	carton,
-	crate,
+	stickImpregnated, woodPulp, carton, crate,
 	// Tools
-	bronzePickaxe,
-	brokenBronzePickaxe,
-	kitPickaxe,
-	bronzeShovel,
-	brokenBronzeShovel,
-	kitShovel,
+	bronzePickaxe, brokenBronzePickaxe, kitPickaxe, bronzeShovel, brokenBronzeShovel, kitShovel,
 	// Do not touch - contagious!
-	tent,
-	habitatLocator,
+	tent, habitatLocator,
 	// Moistener
-	mouldyWheat,
-	decayingWheat,
-	mulch,
+	mouldyWheat, decayingWheat, mulch,
 	// Peat
-	peat,
-	bituminousPeat,
-	ash,
+	peat, bituminousPeat, ash,
 	// Bees
-	beeQueenGE,
-	beeDroneGE,
-	beePrincessGE,
-	beeLarvaeGE,
-	beealyzer,
-	imprinter,
-	honeyDrop,
-	scoop,
-	beeswax,
-	pollenCluster,
-	propolis,
-	honeydew,
-	royalJelly,
-	honeyedSlice,
-	ambrosia,
-	honeyPot,
-	phosphor,
-	refractoryWax,
-	waxCast,
-	frameUntreated,
-	frameImpregnated,
-	frameProven,
+	beeQueenGE, beeDroneGE, beePrincessGE, beeLarvaeGE, beealyzer, imprinter, honeyDrop, scoop, beeswax, pollenCluster, propolis, honeydew, royalJelly, honeyedSlice, ambrosia, honeyPot, phosphor, refractoryWax, waxCast, frameUntreated, frameImpregnated, frameProven,
 	// Trees
-	sapling,
-	pollenFertile,
-	treealyzer,
-	grafter,
-	grafterProven,
+	sapling, pollenFertile, treealyzer, grafter, grafterProven,
 	// Butterflies
-	butterflyGE,
-	flutterlyzer,
-	serumGE,
-	caterpillarGE,
-	researchNote,
+	butterflyGE, flutterlyzer, serumGE, caterpillarGE, researchNote,
 	// Beverages
-	beverage,
-	infuser,
+	beverage, infuser,
 	// Naturalist's Armor
 	naturalistHat,
 	// Apiarist's Armor
-	apiaristHat,
-	apiaristChest,
-	apiaristLegs,
-	apiaristBoots,
+	apiaristHat, apiaristChest, apiaristLegs, apiaristBoots,
 	// Combs
 	beeComb,
 	// Fruits
 	fruits,
 	// Backpacks
-	apiaristBackpack,
-	lepidopteristBackpack,
-	minerBackpack,
-	diggerBackpack,
-	foresterBackpack,
-	hunterBackpack,
-	builderBackpack,
-	adventurerBackpack,
+	apiaristBackpack, lepidopteristBackpack, minerBackpack, diggerBackpack, foresterBackpack, hunterBackpack, builderBackpack, adventurerBackpack,
 	// T2
-	minerBackpackT2,
-	diggerBackpackT2,
-	foresterBackpackT2,
-	hunterBackpackT2,
-	builderBackpackT2,
-	adventurerBackpackT2,
+	minerBackpackT2, diggerBackpackT2, foresterBackpackT2, hunterBackpackT2, builderBackpackT2, adventurerBackpackT2,
 	// Capsules
-	waxCapsule,
-	waxCapsuleWater,
-	waxCapsuleBiomass,
-	waxCapsuleEthanol,
-	waxCapsuleOil,
-	waxCapsuleFuel,
-	waxCapsuleSeedOil,
-	waxCapsuleHoney,
-	waxCapsuleJuice,
-	waxCapsuleIce,
+	waxCapsule, waxCapsuleWater, waxCapsuleBiomass, waxCapsuleEthanol, waxCapsuleOil, waxCapsuleFuel, waxCapsuleSeedOil, waxCapsuleHoney, waxCapsuleJuice, waxCapsuleIce,
 	// Refractory Capsules
-	refractoryEmpty,
-	refractoryWater,
-	refractoryBiomass,
-	refractoryEthanol,
-	refractoryOil,
-	refractoryFuel,
-	refractoryLava,
-	refractorySeedOil,
-	refractoryHoney,
-	refractoryJuice,
-	refractoryIce,
+	refractoryEmpty, refractoryWater, refractoryBiomass, refractoryEthanol, refractoryOil, refractoryFuel, refractoryLava, refractorySeedOil, refractoryHoney, refractoryJuice, refractoryIce,
 	// Cans
-	canWater,
-	canEmpty,
-	canBiomass,
-	canEthanol,
-	canOil,
-	canFuel,
-	canLava,
-	canSeedOil,
-	canHoney,
-	canJuice,
-	canIce;
+	canWater, canEmpty, canBiomass, canEthanol, canOil, canFuel, canLava, canSeedOil, canHoney, canJuice, canIce;
 	private Item item;
 
 	public void registerItem(Item item, String name) {

@@ -35,7 +35,8 @@ public class CommandVersion extends SubCommand {
 			style.setColor(EnumChatFormatting.GREEN);
 		}
 
-		CommandHelpers.sendLocalizedChatMessage(sender, style, "for.chat.version", Version.getVersion(), Proxies.common.getMinecraftVersion(), Version.getRecommendedVersion());
+		CommandHelpers.sendLocalizedChatMessage(sender, style, "for.chat.version", Version.getVersion(),
+				Proxies.common.getMinecraftVersion(), Version.getRecommendedVersion());
 		if (Version.isOutdated()) {
 			for (String updateLine : Version.getChangelog()) {
 				CommandHelpers.sendChatMessage(sender, EnumChatFormatting.BLUE + updateLine);

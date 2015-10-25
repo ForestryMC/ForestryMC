@@ -12,9 +12,7 @@ package forestry.plugins;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.fml.common.Optional;
-
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;
 import forestry.core.proxy.Proxies;
@@ -22,9 +20,11 @@ import forestry.core.proxy.Proxies;
 @Plugin(pluginID = "BC6|Transport", name = "BuildCraft 6 Transport", author = "mezz", url = Defaults.URL, unlocalizedDescription = "for.plugin.buildcraft6.description")
 public class PluginBuildCraftTransport extends ForestryPlugin {
 
+	private static final String BCT = "BuildCraft|Transport";
+
 	@Override
 	public boolean isAvailable() {
-		return Proxies.common.isAPILoaded("buildcraft.api.transport", "[2.0, 4.0)");
+		return Proxies.common.isModLoaded(BCT);
 	}
 
 	@Override
@@ -32,14 +32,16 @@ public class PluginBuildCraftTransport extends ForestryPlugin {
 		return "BuildCraft|Transport not found";
 	}
 
-	@Optional.Method(modid = "BuildCraft|Transport")
 	@Override
 	protected void registerRecipes() {
-		try {
-			Item pipeWaterproof = (Item) Class.forName("buildcraft.BuildCraftTransport").getField("pipeWaterproof").get(null);
-			Proxies.common.addRecipe(new ItemStack(pipeWaterproof), "#", '#', ForestryItem.beeswax);
-		} catch (Exception ex) {
-			Proxies.log.fine("No BuildCraft pipe waterproof found.");
+		Item beeswax = ForestryItem.beeswax.item();
+		if (beeswax != null) {
+			Item pipeWaterproof = GameRegistry.findItem(BCT, "pipeWaterproof");
+			if (pipeWaterproof != null) {
+				Proxies.common.addShapelessRecipe(new ItemStack(pipeWaterproof), beeswax);
+			} else {
+				Proxies.log.fine("No BuildCraft pipe waterproof found.");
+			}
 		}
 	}
 }
