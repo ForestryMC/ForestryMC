@@ -153,7 +153,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 
 		setHints(Config.hints.get("bottler"));
 		resourceTank = new StandardTank(Constants.PROCESSOR_TANK_CAPACITY);
-		tankManager = new TankManager(resourceTank);
+		tankManager = new TankManager(this, resourceTank);
 	}
 
 	@Override
@@ -298,7 +298,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 
 	@Override
 	public TankRenderInfo getResourceTankInfo() {
-		return new TankRenderInfo(resourceTank, getResourceScaled(100));
+		return new TankRenderInfo(resourceTank);
 	}
 
 	/* SMP GUI */

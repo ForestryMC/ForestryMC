@@ -88,7 +88,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 		craftPreviewInventory = new InventoryCraftResult();
 		setInternalInventory(new CarpenterInventoryAdapter(this));
 
-		tankManager = new TankManager(resourceTank);
+		tankManager = new TankManager(this, resourceTank);
 	}
 
 	@Override
@@ -280,9 +280,9 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 		// Remove resources
 		FluidStack fluid = recipe.getFluidResource();
 		if (fluid != null) {
-			FluidStack amountDrained = resourceTank.drain(fluid.amount, false);
+			FluidStack amountDrained = tankManager.drain(fluid, false);
 			if (amountDrained != null && amountDrained.amount == fluid.amount) {
-				resourceTank.drain(fluid.amount, true);
+				tankManager.drain(fluid, true);
 			} else {
 				return false;
 			}
@@ -347,7 +347,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 
 	@Override
 	public TankRenderInfo getResourceTankInfo() {
-		return new TankRenderInfo(resourceTank, getResourceScaled(100));
+		return new TankRenderInfo(resourceTank);
 	}
 
 	/* SMP GUI */

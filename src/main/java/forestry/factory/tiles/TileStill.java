@@ -69,7 +69,7 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 		resourceTank.tankMode = StandardTank.TankMode.INPUT;
 		productTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, StillRecipeManager.recipeFluidOutputs);
 		productTank.tankMode = StandardTank.TankMode.OUTPUT;
-		tankManager = new TankManager(resourceTank, productTank);
+		tankManager = new TankManager(this, resourceTank, productTank);
 	}
 
 	@Override
@@ -164,8 +164,8 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 			if (!errorLogic.hasErrors()) {
 				// Start next cycle if enough bio mass is available
 				distillationTime = distillationTotalTime = resourceRequired;
-				resourceTank.drain(resourceRequired, true);
 				bufferedLiquid = new FluidStack(currentRecipe.getInput(), resourceRequired);
+				tankManager.drain(bufferedLiquid, true);
 
 				return true;
 			}
@@ -217,12 +217,12 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 
 	@Override
 	public TankRenderInfo getResourceTankInfo() {
-		return new TankRenderInfo(resourceTank, getResourceScaled(100));
+		return new TankRenderInfo(resourceTank);
 	}
 
 	@Override
 	public TankRenderInfo getProductTankInfo() {
-		return new TankRenderInfo(productTank, getProductScaled(100));
+		return new TankRenderInfo(productTank);
 	}
 
 	/* SMP GUI */

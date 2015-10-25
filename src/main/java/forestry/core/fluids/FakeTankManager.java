@@ -52,6 +52,11 @@ public class FakeTankManager implements ITankManager {
 	}
 
 	@Override
+	public void processTankUpdate(int tankIndex, FluidStack contents) {
+
+	}
+
+	@Override
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
 		return FakeTank.INSTANCE.fill(resource, doFill);
 	}

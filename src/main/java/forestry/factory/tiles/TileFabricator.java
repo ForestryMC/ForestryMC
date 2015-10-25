@@ -154,7 +154,7 @@ public class TileFabricator extends TilePowered implements ICrafter, ILiquidTank
 			// Remove smelt if we have gone below melting point
 			IFabricatorSmeltingRecipe smelt = FabricatorSmeltingRecipeManager.findMatchingSmelting(moltenTank.getFluid());
 			if (smelt != null && heat < smelt.getMeltingPoint()) {
-				moltenTank.drain(5, true);
+				tankManager.drain(new FluidStack(moltenTank.getFluidType(), 5), true);
 			}
 		}
 
@@ -266,13 +266,13 @@ public class TileFabricator extends TilePowered implements ICrafter, ILiquidTank
 			return;
 		}
 
-		FluidStack canDrain = moltenTank.drain(liquid.amount, false);
+		FluidStack canDrain = tankManager.drain(liquid, false);
 		if (canDrain == null || !canDrain.isFluidStackIdentical(liquid)) {
 			return;
 		}
 
 		removeFromInventory(crafting, player, true);
-		moltenTank.drain(liquid.amount, true);
+		tankManager.drain(liquid, true);
 
 		// Damage plan
 		if (inventory.getStackInSlot(SLOT_PLAN) != null) {

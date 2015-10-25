@@ -23,6 +23,7 @@ import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -182,6 +183,10 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	}
 
 	public void onRemoval() {
+	}
+
+	public World getWorld() {
+		return worldObj;
 	}
 
 	/* ITriggerProvider */

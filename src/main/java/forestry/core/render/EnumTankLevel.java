@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.render;
 
+import net.minecraftforge.fluids.IFluidTank;
+
 public enum EnumTankLevel {
 
 	EMPTY(0),
@@ -26,6 +28,10 @@ public enum EnumTankLevel {
 
 	public int getLevelScaled(int scale) {
 		return level * scale / 100;
+	}
+
+	public static EnumTankLevel rateTankLevel(IFluidTank tank) {
+		return rateTankLevel(100 * tank.getFluidAmount() / tank.getCapacity());
 	}
 
 	public static EnumTankLevel rateTankLevel(int scaled) {

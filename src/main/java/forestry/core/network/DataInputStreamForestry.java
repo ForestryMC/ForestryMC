@@ -13,6 +13,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+
 import cpw.mods.fml.common.registry.GameData;
 
 import forestry.core.utils.Log;
@@ -117,5 +121,16 @@ public class DataInputStreamForestry extends DataInputStream {
 			readFully(compressed);
 			return CompressedStreamTools.readCompressed(new ByteArrayInputStream(compressed));
 		}
+	}
+
+	public FluidStack readFluidStack() throws IOException {
+		int fluidId = readVarInt();
+		Fluid fluid = FluidRegistry.getFluid(fluidId);
+		if (fluid == null) {
+			return null;
+		}
+
+		int amount = readVarInt();
+		return new FluidStack(fluid, amount);
 	}
 }

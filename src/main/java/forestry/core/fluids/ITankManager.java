@@ -16,6 +16,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.fluids.IFluidTank;
 
@@ -27,5 +28,9 @@ public interface ITankManager extends IFluidHandler {
 	void processGuiUpdate(int messageId, int data);
 
 	IFluidTank getTank(int tankIndex);
-}
 
+	/**
+	 * For updating tanks on the client
+	 */
+	void processTankUpdate(int tankIndex, FluidStack contents);
+}

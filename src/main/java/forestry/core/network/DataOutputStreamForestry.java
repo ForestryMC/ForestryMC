@@ -10,6 +10,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 
+import net.minecraftforge.fluids.FluidStack;
+
 import cpw.mods.fml.common.registry.GameData;
 
 public class DataOutputStreamForestry extends DataOutputStream {
@@ -91,6 +93,15 @@ public class DataOutputStreamForestry extends DataOutputStream {
 			byte[] compressed = CompressedStreamTools.compress(nbttagcompound);
 			writeVarInt((short) compressed.length);
 			write(compressed);
+		}
+	}
+
+	public void writeFluidStack(FluidStack fluidStack) throws IOException {
+		if (fluidStack == null) {
+			writeVarInt(-1);
+		} else {
+			writeVarInt(fluidStack.getFluidID());
+			writeVarInt(fluidStack.amount);
 		}
 	}
 }

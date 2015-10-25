@@ -12,6 +12,7 @@ package forestry.farming.tiles;
 
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
+import net.minecraft.world.World;
 
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
@@ -65,5 +66,10 @@ public class TileValve extends TileFarm implements ILiquidTankTile {
 
 	@Override
 	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
+	}
+
+	@Override
+	public World getWorld() {
+		return worldObj;
 	}
 }

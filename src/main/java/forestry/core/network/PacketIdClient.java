@@ -27,6 +27,7 @@ public enum PacketIdClient implements IPacketId {
 	TILE_FORESTRY_UPDATE(new PacketTileStream()),
 	ITEMSTACK_DISPLAY(new PacketItemStackDisplay()),
 	FX_SIGNAL(new PacketFXSignal()),
+	TANK_LEVEL_UPDATE(new PacketTankLevelUpdate()),
 
 	// Core Genome
 	GENOME_TRACKER_UPDATE(new PacketGenomeTrackerUpdate()),

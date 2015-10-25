@@ -73,7 +73,7 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 		setHints(Config.hints.get("squeezer"));
 		this.productTank = new StandardTank(Constants.PROCESSOR_TANK_CAPACITY);
 		this.productTank.tankMode = StandardTank.TankMode.OUTPUT;
-		this.tankManager = new TankManager(productTank);
+		this.tankManager = new TankManager(this, productTank);
 	}
 
 	@Override
@@ -217,7 +217,7 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 
 	@Override
 	public TankRenderInfo getProductTankInfo() {
-		return new TankRenderInfo(productTank, getProductScaled(100));
+		return new TankRenderInfo(productTank);
 	}
 
 	/* ILIQUIDCONTAINER IMPLEMENTATION */

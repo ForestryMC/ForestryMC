@@ -12,6 +12,8 @@ package forestry.core.tiles;
 
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
+import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.world.World;
 
 import net.minecraftforge.fluids.IFluidHandler;
 
@@ -25,4 +27,7 @@ public interface ILiquidTankTile extends IFluidHandler {
 
 	void sendGUINetworkData(Container container, ICrafting iCrafting);
 
+	ChunkCoordinates getCoordinates();
+
+	World getWorld();
 }

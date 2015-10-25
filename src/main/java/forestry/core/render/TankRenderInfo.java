@@ -25,8 +25,8 @@ public class TankRenderInfo {
 	@Nonnull
 	private final EnumTankLevel level;
 
-	public TankRenderInfo(@Nonnull IFluidTank fluidTank, int resourceScaled) {
-		this(Fluids.getFluidColor(fluidTank.getFluid()), EnumTankLevel.rateTankLevel(resourceScaled));
+	public TankRenderInfo(@Nonnull IFluidTank fluidTank) {
+		this(Fluids.getFluidColor(fluidTank.getFluid()), EnumTankLevel.rateTankLevel(fluidTank));
 	}
 
 	public TankRenderInfo(@Nonnull Color fluidColor, @Nonnull EnumTankLevel level) {

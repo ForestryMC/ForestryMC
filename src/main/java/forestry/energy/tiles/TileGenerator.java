@@ -67,7 +67,7 @@ public class TileGenerator extends TileBase implements ISidedInventory, ILiquidT
 		setInternalInventory(new GeneratorInventoryAdapter(this));
 
 		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, FuelManager.generatorFuel.keySet());
-		tankManager = new TankManager(resourceTank);
+		tankManager = new TankManager(this, resourceTank);
 
 		if (PluginIC2.instance.isAvailable()) {
 			ic2EnergySource = new BasicSource(this, maxEnergy, 1);
@@ -161,7 +161,7 @@ public class TileGenerator extends TileBase implements ISidedInventory, ILiquidT
 
 				if (tickCount >= fuel.rate) {
 					tickCount = 0;
-					resourceTank.drain(fuel.fuelConsumed.amount, true);
+					tankManager.drain(fuel.fuelConsumed, true);
 				}
 			}
 
@@ -189,7 +189,7 @@ public class TileGenerator extends TileBase implements ISidedInventory, ILiquidT
 
 	@Override
 	public TankRenderInfo getResourceTankInfo() {
-		return new TankRenderInfo(resourceTank, getResourceScaled(100));
+		return new TankRenderInfo(resourceTank);
 	}
 
 	@Override

@@ -794,7 +794,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 	@Override
 	public boolean hasLiquid(FluidStack liquid) {
-		return tankManager.get(0).getFluidAmount() >= liquid.amount;
+		return tankManager.getFluidAmount(0) >= liquid.amount;
 	}
 
 	@Override

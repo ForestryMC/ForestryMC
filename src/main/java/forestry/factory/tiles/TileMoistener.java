@@ -77,7 +77,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 		setInternalInventory(new MoistenerInventoryAdapter(this));
 		setHints(Config.hints.get("moistener"));
 		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, FluidRegistry.WATER);
-		tankManager = new TankManager(resourceTank);
+		tankManager = new TankManager(this, resourceTank);
 	}
 
 	@Override
@@ -190,7 +190,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 				return;
 			}
 
-			resourceTank.drain(1, true);
+			tankManager.drain(new FluidStack(resourceTank.getFluidType(), 1), true);
 			burnTime -= speed;
 			productionTime -= speed;
 
@@ -487,7 +487,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 
 	@Override
 	public TankRenderInfo getResourceTankInfo() {
-		return new TankRenderInfo(resourceTank, getResourceScaled(100));
+		return new TankRenderInfo(resourceTank);
 	}
 
 	@Override

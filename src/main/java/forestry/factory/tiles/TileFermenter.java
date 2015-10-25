@@ -84,7 +84,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 		resourceTank.tankMode = StandardTank.TankMode.INPUT;
 		productTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, FermenterRecipeManager.recipeFluidOutputs);
 		productTank.tankMode = StandardTank.TankMode.OUTPUT;
-		tankManager = new TankManager(resourceTank, productTank);
+		tankManager = new TankManager(this, resourceTank, productTank);
 	}
 
 	@Override
@@ -201,7 +201,8 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 			}
 
 			fuelBurnTime--;
-			resourceTank.drain(fuelCurrentFerment, true);
+			FluidStack drainResource = new FluidStack(resourceTank.getFluidType(), fuelCurrentFerment);
+			tankManager.drain(drainResource, true);
 			fermentationTime -= this.fuelCurrentFerment;
 
 			// Not done yet
@@ -360,12 +361,12 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 
 	@Override
 	public TankRenderInfo getResourceTankInfo() {
-		return new TankRenderInfo(resourceTank, getResourceScaled(100));
+		return new TankRenderInfo(resourceTank);
 	}
 
 	@Override
 	public TankRenderInfo getProductTankInfo() {
-		return new TankRenderInfo(productTank, getProductScaled(100));
+		return new TankRenderInfo(productTank);
 	}
 
 	private ItemStack getFermentationStack() {
@@ -415,7 +416,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 
 	@Override
 	public FluidStack drain(ForgeDirection from, int quantityMax, boolean doEmpty) {
-		return productTank.drain(quantityMax, doEmpty);
+		return tankManager.drain(new FluidStack(productTank.getFluidType(), quantityMax), doEmpty);
 	}
 
 	@Override
