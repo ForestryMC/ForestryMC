@@ -67,7 +67,7 @@ public abstract class TileEngine extends TileBase implements IEnergyConnection, 
 			setOrientation(orientation);
 		} else {
 			super.rotateAfterPlacement(player, side);
-			rotateEngine();
+			rotate();
 		}
 	}
 
@@ -178,7 +178,15 @@ public abstract class TileEngine extends TileBase implements IEnergyConnection, 
 	}
 
 	/* INTERACTION */
-	public void rotateEngine() {
+	@Override
+	public boolean rotate(ForgeDirection axis) {
+		rotate();
+
+		// it would be irritating if the wrench opened the engine gui when it failed to rotate, so always return true
+		return true;
+	}
+
+	private void rotate() {
 		for (int i = getOrientation().ordinal() + 1; i <= getOrientation().ordinal() + 6; ++i) {
 			ForgeDirection orientation = ForgeDirection.values()[i % 6];
 			if (isOrientedAtEnergyReciever(orientation)) {

@@ -98,6 +98,15 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 		}
 	}
 
+	public boolean rotate(ForgeDirection axis) {
+		if (axis == ForgeDirection.DOWN || axis == ForgeDirection.UP) {
+			ForgeDirection orientation = getOrientation().getRotation(axis);
+			setOrientation(orientation);
+			return true;
+		}
+		return false;
+	}
+
 	// / UPDATING
 	@Override
 	public final void updateEntity() {

@@ -23,6 +23,8 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -35,10 +37,11 @@ import cpw.mods.fml.relauncher.SideOnly;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.IBlockRenderer;
 import forestry.core.render.TextureManager;
+import forestry.core.utils.BlockUtil;
 
 public class MachineDefinition {
 
-	public final Class<? extends TileEntity> teClass;
+	public final Class<? extends TileForestry> teClass;
 
 	private final String teIdent;
 	private Block block;
@@ -52,11 +55,11 @@ public class MachineDefinition {
 	/* CRAFTING */
 	public IRecipe[] recipes;
 
-	public MachineDefinition(int meta, String teIdent, Class<? extends TileEntity> teClass, IRecipe... recipes) {
+	public MachineDefinition(int meta, String teIdent, Class<? extends TileForestry> teClass, IRecipe... recipes) {
 		this(meta, teIdent, teClass, null, recipes);
 	}
 
-	public MachineDefinition(int meta, String teIdent, Class<? extends TileEntity> teClass, IBlockRenderer renderer, IRecipe... recipes) {
+	public MachineDefinition(int meta, String teIdent, Class<? extends TileForestry> teClass, IBlockRenderer renderer, IRecipe... recipes) {
 		this.meta = meta;
 		this.teIdent = teIdent;
 		this.teClass = teClass;
@@ -158,7 +161,12 @@ public class MachineDefinition {
 	}
 
 	public boolean rotateBlock(World world, int x, int y, int z, ForgeDirection axis) {
-		return false;
+		TileForestry tile = TileUtil.getTile(world, x, y, z, teClass);
+		if (tile == null) {
+			return false;
+		}
+
+		return tile.rotate(axis);
 	}
 
 	/* TEXTURES */
