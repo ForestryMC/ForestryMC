@@ -125,6 +125,10 @@ public class MachineDefinition {
 		return AxisAlignedBB.getBoundingBox(x + minX, y + minY, z + minZ, x + maxX, y + maxY, z + maxZ);
 	}
 
+	public MovingObjectPosition collisionRayTrace(World world, int x, int y, int z, Vec3 startVec, Vec3 endVec) {
+		return BlockUtil.collisionRayTrace(world, x, y, z, startVec, endVec, minX, minY, minZ, maxX, maxY, maxZ);
+	}
+
 	/**
 	 * Registers the tile entity with MC.
 	 */

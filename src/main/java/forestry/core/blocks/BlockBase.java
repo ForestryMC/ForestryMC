@@ -26,6 +26,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -123,6 +125,16 @@ public class BlockBase extends BlockForestry {
 			return super.getCollisionBoundingBoxFromPool(world, x, y, z);
 		}
 		return definition.getBoundingBox(x, y, z);
+	}
+
+	@Override
+	public MovingObjectPosition collisionRayTrace(World world, int x, int y, int z, Vec3 startVec, Vec3 endVec) {
+		MachineDefinition definition = definitions.get(world.getBlockMetadata(x, y, z));
+		if (definition == null) {
+			return super.collisionRayTrace(world, x, y, z, startVec, endVec);
+		} else {
+			return definition.collisionRayTrace(world, x, y, z, startVec, endVec);
+		}
 	}
 
 	/* CREATIVE INVENTORY */
