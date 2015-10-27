@@ -59,7 +59,7 @@ public class FermenterRecipeManager implements IFermenterManager {
 		}
 
 		FluidStack fluid = recipe.getFluidResource();
-		return liqu != null && liqu.containsFluid(fluid);
+		return liqu != null && liqu.isFluidEqual(fluid);
 	}
 
 	public static boolean isResource(ItemStack resource) {
