@@ -27,7 +27,6 @@ public class FarmLogicShroom extends FarmLogicArboreal {
 
 	public FarmLogicShroom(IFarmHousing housing) {
 		super(housing, new ItemStack(Blocks.mycelium), new ItemStack(Blocks.mycelium), Farmables.farmables.get("farmShroom"));
-		yOffset = -1;
 	}
 
 	@Override

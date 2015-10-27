@@ -187,8 +187,6 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 		return crops;
 	}
 
-	protected int yOffset = 0;
-
 	private ArrayList<Vect> processHarvestBlock(IFarmable germling, Stack<ICrop> crops, Set<Vect> seen, Vect start, Vect position) {
 
 		World world = getWorld();
@@ -196,17 +194,17 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 		ArrayList<Vect> candidates = new ArrayList<>();
 
 		// Get additional candidates to return
-		for (int i = -1; i < 2; i++) {
-			for (int j = yOffset; j < 2; j++) {
-				for (int k = -1; k < 2; k++) {
-					Vect candidate = position.add(i, j, k);
+		for (int x = -1; x < 2; x++) {
+			for (int y = -1; y < 2; y++) {
+				for (int z = -1; z < 2; z++) {
+					Vect candidate = position.add(x, y, z);
 					if (candidate.equals(position)) {
 						continue;
 					}
-					if (Math.abs(candidate.x - start.x) > 5) {
+					if (Math.abs(candidate.x - start.x) > 10) {
 						continue;
 					}
-					if (Math.abs(candidate.z - start.z) > 5) {
+					if (Math.abs(candidate.z - start.z) > 10) {
 						continue;
 					}
 
