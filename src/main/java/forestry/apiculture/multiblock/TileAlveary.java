@@ -94,6 +94,8 @@ public abstract class TileAlveary extends RectangularMultiblockTileEntityBase im
 		if (worldObj.isRemote) {
 			this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 		}
+		notifyNeighborsOfBlockChange();
+		markDirty();
 	}
 
 	@Override
@@ -104,6 +106,8 @@ public abstract class TileAlveary extends RectangularMultiblockTileEntityBase im
 		if (worldObj.isRemote) {
 			this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 		}
+		notifyNeighborsOfBlockChange();
+		markDirty();
 	}
 
 	/* IHousing */

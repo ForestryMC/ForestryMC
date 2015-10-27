@@ -55,6 +55,7 @@ import forestry.core.errors.EnumErrorCode;
 import forestry.core.fluids.Fluids;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
+import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.multiblock.CoordTriplet;
@@ -152,7 +153,11 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 	@Override
 	public IInventoryAdapter getInternalInventory() {
-		return inventory;
+		if (isAssembled()) {
+			return inventory;
+		} else {
+			return FakeInventoryAdapter.instance();
+		}
 	}
 
 	@Override

@@ -60,6 +60,22 @@ public abstract class TileFarm extends RectangularMultiblockTileEntityBase imple
 	}
 
 	@Override
+	public void onMachineAssembled(MultiblockControllerBase controller) {
+		super.onMachineAssembled(controller);
+
+		notifyNeighborsOfBlockChange();
+		markDirty();
+	}
+
+	@Override
+	public void onMachineBroken() {
+		super.onMachineBroken();
+
+		notifyNeighborsOfBlockChange();
+		markDirty();
+	}
+
+	@Override
 	public IInventoryAdapter getInternalInventory() {
 		return getFarmController().getInternalInventory();
 	}

@@ -36,6 +36,7 @@ import forestry.api.core.EnumTemperature;
 import forestry.api.core.IClimateControlled;
 import forestry.apiculture.BeeHousingInventory;
 import forestry.core.access.EnumAccess;
+import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.multiblock.CoordTriplet;
 import forestry.core.multiblock.IMultiblockPart;
@@ -88,7 +89,11 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 
 	@Override
 	public IInventoryAdapter getInternalInventory() {
-		return inventory;
+		if (isAssembled()) {
+			return inventory;
+		} else {
+			return FakeInventoryAdapter.instance();
+		}
 	}
 
 	@Override

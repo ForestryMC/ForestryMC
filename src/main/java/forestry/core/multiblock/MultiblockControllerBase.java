@@ -428,11 +428,12 @@ public abstract class MultiblockControllerBase implements ISidedInventory, IRest
 	 * Calls onMachineAssembled on all attached parts.
 	 */
 	private void assembleMachine(AssemblyState oldState) {
+		this.assemblyState = AssemblyState.Assembled;
+
 		for (IMultiblockPart part : connectedParts) {
 			part.onMachineAssembled(this);
 		}
-		
-		this.assemblyState = AssemblyState.Assembled;
+
 		if (oldState == AssemblyState.Paused) {
 			onMachineRestored();
 		} else {
@@ -447,11 +448,12 @@ public abstract class MultiblockControllerBase implements ISidedInventory, IRest
 	 * Calls onMachineBroken on all attached parts.
 	 */
 	private void disassembleMachine() {
+		this.assemblyState = AssemblyState.Disassembled;
+
 		for (IMultiblockPart part : connectedParts) {
 			part.onMachineBroken();
 		}
-		
-		this.assemblyState = AssemblyState.Disassembled;
+
 		onMachineDisassembled();
 	}
 	
