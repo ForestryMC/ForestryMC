@@ -201,8 +201,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 			}
 
 			fuelBurnTime--;
-			FluidStack drainResource = new FluidStack(resourceTank.getFluidType(), fuelCurrentFerment);
-			tankManager.drain(drainResource, true);
+			tankManager.drain(resourceTank.getFluidType(), fuelCurrentFerment, true);
 			fermentationTime -= this.fuelCurrentFerment;
 
 			// Not done yet
@@ -416,7 +415,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 
 	@Override
 	public FluidStack drain(ForgeDirection from, int quantityMax, boolean doEmpty) {
-		return tankManager.drain(new FluidStack(productTank.getFluidType(), quantityMax), doEmpty);
+		return tankManager.drain(productTank.getFluidType(), quantityMax, doEmpty);
 	}
 
 	@Override

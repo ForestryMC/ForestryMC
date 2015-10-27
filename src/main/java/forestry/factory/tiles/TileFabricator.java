@@ -153,7 +153,7 @@ public class TileFabricator extends TilePowered implements ICrafter, ILiquidTank
 		if (!moltenTank.isEmpty()) {
 			// Remove smelt if we have gone below melting point
 			if (heat < (getMeltingPoint() - 100)) {
-				tankManager.drain(new FluidStack(moltenTank.getFluidType(), 5), true);
+				tankManager.drain(moltenTank.getFluidType(), 5, true);
 			}
 		}
 

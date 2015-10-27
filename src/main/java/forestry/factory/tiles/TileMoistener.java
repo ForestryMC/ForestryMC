@@ -190,7 +190,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 				return;
 			}
 
-			tankManager.drain(new FluidStack(resourceTank.getFluidType(), 1), true);
+			tankManager.drain(resourceTank.getFluidType(), 1, true);
 			burnTime -= speed;
 			productionTime -= speed;
 

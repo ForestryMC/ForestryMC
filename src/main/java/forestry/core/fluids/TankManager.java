@@ -351,6 +351,13 @@ public class TankManager implements ITankManager {
 		return drained;
 	}
 
+	public FluidStack drain(Fluid resource, int amount, boolean doDrain) {
+		if (resource == null) {
+			return null;
+		}
+		return drain(new FluidStack(resource, amount), false, doDrain);
+	}
+
 	public FluidStack drain(FluidStack resource, boolean doDrain) {
 		return drain(resource, false, doDrain);
 	}
