@@ -40,7 +40,7 @@ public class NEIHandlerBottler extends RecipeHandlerBase {
 	@Override
 	public void prepare() {
 		for (FluidContainerData container : FluidContainerRegistry.getRegisteredFluidContainerData()) {
-			TileBottler.BottlerRecipe recipe = TileBottler.RecipeManager.findMatchingRecipe(container.fluid, container.emptyContainer);
+			TileBottler.BottlerRecipe recipe = TileBottler.BottlerRecipe.getRecipe(container.fluid, container.emptyContainer);
 			if (recipe != null) {
 				recipes.add(recipe);
 			}
@@ -57,11 +57,11 @@ public class NEIHandlerBottler extends RecipeHandlerBase {
 			if (recipe.input != null) {
 				this.fluid = new PositionedFluidTank(recipe.input, 10000, new Rectangle(48, 6, 16, 58), NEIHandlerBottler.this.getGuiTexture(), new Point(176, 0));
 			}
-			if (recipe.can != null) {
-				this.input = new PositionedStack(recipe.can, 111, 8);
+			if (recipe.empty != null) {
+				this.input = new PositionedStack(recipe.empty, 111, 8);
 			}
-			if (recipe.bottled != null) {
-				this.output = new PositionedStack(recipe.bottled, 111, 44);
+			if (recipe.filled != null) {
+				this.output = new PositionedStack(recipe.filled, 111, 44);
 			}
 		}
 
@@ -128,7 +128,7 @@ public class NEIHandlerBottler extends RecipeHandlerBase {
 	@Override
 	public void loadCraftingRecipes(ItemStack result) {
 		for (TileBottler.BottlerRecipe recipe : recipes) {
-			if (NEIServerUtils.areStacksSameTypeCrafting(recipe.bottled, result)) {
+			if (NEIServerUtils.areStacksSameTypeCrafting(recipe.filled, result)) {
 				this.arecipes.add(new CachedBottlerRecipe(recipe));
 			}
 		}
@@ -137,7 +137,7 @@ public class NEIHandlerBottler extends RecipeHandlerBase {
 	@Override
 	public void loadUsageRecipes(ItemStack ingred) {
 		for (TileBottler.BottlerRecipe recipe : recipes) {
-			if (NEIServerUtils.areStacksSameTypeCrafting(recipe.can, ingred)) {
+			if (NEIServerUtils.areStacksSameTypeCrafting(recipe.empty, ingred)) {
 				this.arecipes.add(new CachedBottlerRecipe(recipe));
 			}
 		}

@@ -12,6 +12,8 @@ package forestry.factory.recipes.craftguide;
 
 import net.minecraft.item.ItemStack;
 
+import net.minecraftforge.fluids.FluidContainerRegistry;
+
 import forestry.core.config.Constants;
 import forestry.core.config.ForestryBlock;
 import forestry.factory.tiles.TileBottler;
@@ -45,14 +47,17 @@ public class CraftGuideBottler implements RecipeProvider {
 		ItemStack machine = ForestryBlock.factoryTESR.getItemStack(1, Constants.DEFINITION_BOTTLER_META);
 		RecipeTemplate template = generator.createRecipeTemplate(slots, machine);
 
-		for (TileBottler.BottlerRecipe recipe : TileBottler.RecipeManager.recipes()) {
-			Object[] array = new Object[4];
-
-			array[0] = recipe.can;
-			array[1] = recipe.input;
-			array[2] = recipe.bottled;
-			array[3] = machine;
-			generator.addRecipe(template, array);
+		for (FluidContainerRegistry.FluidContainerData container : FluidContainerRegistry.getRegisteredFluidContainerData()) {
+			TileBottler.BottlerRecipe recipe = TileBottler.BottlerRecipe.getRecipe(container.fluid, container.emptyContainer);
+			if (recipe != null) {
+				Object[] array = new Object[4];
+				
+				array[0] = recipe.empty;
+				array[1] = recipe.input;
+				array[2] = recipe.filled;
+				array[3] = machine;
+				generator.addRecipe(template, array);
+			}
 		}
 	}
 }

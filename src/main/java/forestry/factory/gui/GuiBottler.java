@@ -19,6 +19,8 @@ import forestry.factory.tiles.TileBottler;
 
 public class GuiBottler extends GuiForestryTitled<ContainerBottler, TileBottler> {
 
+	private static final int PROGRESS_SIZE = 24;
+
 	public GuiBottler(InventoryPlayer inventory, TileBottler processor) {
 		super(Constants.TEXTURE_PATH_GUI + "/bottler.png", new ContainerBottler(inventory, processor), processor);
 		widgetManager.add(new TankWidget(this.widgetManager, 53, 17, 0));
@@ -29,7 +31,7 @@ public class GuiBottler extends GuiForestryTitled<ContainerBottler, TileBottler>
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 		TileBottler bottler = inventory;
 
-		int i1 = bottler.getFillProgressScaled(24);
-		drawTexturedModalRect(guiLeft + 80, guiTop + 39, 176, 74, i1, 16);
+		int i1 = bottler.getProgressScaled(PROGRESS_SIZE);
+		drawTexturedModalRect(guiLeft + 80, guiTop + 39, 176, 74, PROGRESS_SIZE - i1, 16);
 	}
 }

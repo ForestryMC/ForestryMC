@@ -143,26 +143,23 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 		}
 
 		if (!isFilling()) {
-			tryToStartFillling();
+			FluidHelper.FillStatus canFill = FluidHelper.fillContainers(tankManager, this, SLOT_RESOURCE, SLOT_PRODUCT, Fluids.WATER.getFluid(), false);
+			if (canFill == FluidHelper.FillStatus.SUCCESS) {
+				fillingTime = Constants.RAINTANK_FILLING_TIME;
+			}
 		} else {
 			fillingTime--;
-			if (fillingTime <= 0 && FluidHelper.fillContainers(tankManager, this, SLOT_RESOURCE, SLOT_PRODUCT, Fluids.WATER.getFluid())) {
-				fillingTime = 0;
+			if (fillingTime <= 0) {
+				FluidHelper.FillStatus filled = FluidHelper.fillContainers(tankManager, this, SLOT_RESOURCE, SLOT_PRODUCT, Fluids.WATER.getFluid());
+				if (filled == FluidHelper.FillStatus.SUCCESS) {
+					fillingTime = 0;
+				}
 			}
 		}
 	}
 
 	public boolean isFilling() {
 		return fillingTime > 0;
-	}
-
-	private void tryToStartFillling() {
-		// Nothing to do if no empty cans are available
-		if (!FluidHelper.fillContainers(tankManager, getInternalInventory(), SLOT_RESOURCE, SLOT_PRODUCT, Fluids.WATER.getFluid(), false)) {
-			return;
-		}
-
-		fillingTime = Constants.RAINTANK_FILLING_TIME;
 	}
 
 	public int getFillProgressScaled(int i) {
