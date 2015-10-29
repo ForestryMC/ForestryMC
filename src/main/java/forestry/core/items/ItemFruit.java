@@ -33,7 +33,7 @@ public class ItemFruit extends ItemForestryFood {
 		CHERRY("cropCherry"), WALNUT("cropWalnut"), CHESTNUT("cropChestnut"), LEMON("cropLemon"), PLUM("cropPlum"), DATES("cropDate"), PAPAYA("cropPapaya");//, COCONUT("cropCoconut");
 		public static final EnumFruit[] VALUES = values();
 
-		final String oreDict;
+		private final String oreDict;
 
 		EnumFruit(String oreDict) {
 			this.oreDict = oreDict;
@@ -59,19 +59,16 @@ public class ItemFruit extends ItemForestryFood {
 		public ItemStack getStack(int qty) {
 			return ForestryItem.fruits.getItemStack(qty, ordinal());
 		}
+
+		public String getOreDict() {
+			return oreDict;
+		}
 	}
 
 	public ItemFruit() {
 		super(1, 0.2f);
 		setMaxDamage(0);
 		setHasSubtypes(true);
-		registerOreDictionary();
-	}
-
-	private void registerOreDictionary() {
-		for (EnumFruit def : EnumFruit.values()) {
-			OreDictionary.registerOre(def.oreDict, new ItemStack(this, 1, def.ordinal()));
-		}
 	}
 
 	@Override

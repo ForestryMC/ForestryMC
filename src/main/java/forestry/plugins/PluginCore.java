@@ -282,6 +282,9 @@ public class PluginCore extends ForestryPlugin {
 
 		// FRUITS
 		ForestryItem.fruits.registerItem(new ItemFruit(), "fruits");
+		for (ItemFruit.EnumFruit def : ItemFruit.EnumFruit.values()) {
+			OreDictionary.registerOre(def.getOreDict(), def.getStack());
+		}
 	}
 
 	@Override
