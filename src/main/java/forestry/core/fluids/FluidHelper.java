@@ -111,6 +111,9 @@ public final class FluidHelper {
 		}
 
 		ItemStack input = inv.getStackInSlot(inputSlot);
+		if (input == null) {
+			return FillStatus.INVALID_INPUT;
+		}
 		ItemStack output = inv.getStackInSlot(outputSlot);
 
 		int containerCapacity = getFluidCapacity(fluidToFill, input);
@@ -374,6 +377,9 @@ public final class FluidHelper {
 	}
 
 	public static int getFluidCapacity(Fluid fluid, ItemStack container) {
+		if (container == null) {
+			return 0;
+		}
 		Item item = container.getItem();
 		if (item instanceof IFluidContainerItem) {
 			IFluidContainerItem containerItem = (IFluidContainerItem) item;
