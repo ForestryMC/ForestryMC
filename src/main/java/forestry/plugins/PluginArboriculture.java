@@ -154,10 +154,19 @@ public class PluginArboriculture extends ForestryPlugin {
 		OreDictionary.registerOre("stairWood", ForestryBlock.stairs.getWildcard());
 
 		ForestryBlock.logsFireproof.registerBlock(new BlockLog(true), ItemBlockWood.class, "logsFireproof");
+		OreDictionary.registerOre("logWood", ForestryBlock.logsFireproof.getWildcard());
+
 		ForestryBlock.planksFireproof.registerBlock(new BlockPlanks(true), ItemBlockWood.class, "planksFireproof");
+		OreDictionary.registerOre("plankWood", ForestryBlock.planksFireproof.getWildcard());
+
 		ForestryBlock.slabsFireproof.registerBlock(new BlockSlab(true), ItemBlockWood.class, "slabsFireproof");
+		OreDictionary.registerOre("slabWood", ForestryBlock.slabsFireproof.getWildcard());
+
 		ForestryBlock.fencesFireproof.registerBlock(new BlockArbFence(true), ItemBlockWood.class, "fencesFireproof");
+		OreDictionary.registerOre("fenceWood", ForestryBlock.fencesFireproof.getWildcard());
+
 		ForestryBlock.stairsFireproof.registerBlock(new BlockArbStairs(ForestryBlock.planksFireproof.block(), true), ItemBlockWood.class, "stairsFireproof");
+		OreDictionary.registerOre("stairWood", ForestryBlock.stairsFireproof.getWildcard());
 
 		for (EnumWoodType woodType : EnumWoodType.VALUES) {
 			WoodItemAccess.registerLog(ForestryBlock.logs.block(), woodType, false);
