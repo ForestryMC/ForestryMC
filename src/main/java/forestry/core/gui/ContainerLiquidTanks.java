@@ -43,7 +43,6 @@ public abstract class ContainerLiquidTanks<T extends TileEntity & ILiquidTankTil
 	public void updateProgressBar(int messageId, int data) {
 		super.updateProgressBar(messageId, data);
 
-		tile.getTankManager().processGuiUpdate(messageId, data);
 		tile.getGUINetworkData(messageId, data);
 	}
 
@@ -60,7 +59,13 @@ public abstract class ContainerLiquidTanks<T extends TileEntity & ILiquidTankTil
 	@Override
 	public void addCraftingToCrafters(ICrafting icrafting) {
 		super.addCraftingToCrafters(icrafting);
-		tile.getTankManager().initGuiData(this, icrafting);
+		tile.getTankManager().containerAdded(this, icrafting);
+	}
+
+	@Override
+	public void onContainerClosed(EntityPlayer entityPlayer) {
+		super.onContainerClosed(entityPlayer);
+		tile.getTankManager().containerRemoved(this);
 	}
 
 	public IFluidTank getTank(int slot) {

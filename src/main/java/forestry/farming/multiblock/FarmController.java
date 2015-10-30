@@ -318,7 +318,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		super.writeToNBT(data);
 		sockets.writeToNBT(data);
 		hydrationManager.writeToNBT(data);
-		tankManager.writeTanksToNBT(data);
+		tankManager.writeToNBT(data);
 		fertilizerManager.writeToNBT(data);
 		inventory.writeToNBT(data);
 	}
@@ -328,7 +328,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		super.readFromNBT(data);
 		sockets.readFromNBT(data);
 		hydrationManager.readFromNBT(data);
-		tankManager.readTanksFromNBT(data);
+		tankManager.readFromNBT(data);
 		fertilizerManager.readFromNBT(data);
 		inventory.readFromNBT(data);
 
@@ -339,7 +339,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	public void formatDescriptionPacket(NBTTagCompound data) {
 		sockets.writeToNBT(data);
 		hydrationManager.writeToNBT(data);
-		tankManager.writeTanksToNBT(data);
+		tankManager.writeToNBT(data);
 		fertilizerManager.writeToNBT(data);
 	}
 
@@ -347,7 +347,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	public void decodeDescriptionPacket(NBTTagCompound data) {
 		sockets.readFromNBT(data);
 		hydrationManager.readFromNBT(data);
-		tankManager.readTanksFromNBT(data);
+		tankManager.readFromNBT(data);
 		fertilizerManager.readFromNBT(data);
 
 		refreshFarmLogics();
@@ -379,7 +379,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	@Override
 	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
 		super.writeGuiData(data);
-		tankManager.writePacketData(data);
+		tankManager.writeData(data);
 		hydrationManager.writeData(data);
 		fertilizerManager.writeData(data);
 	}
@@ -387,7 +387,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	@Override
 	public void readGuiData(DataInputStreamForestry data) throws IOException {
 		super.readGuiData(data);
-		tankManager.readPacketData(data);
+		tankManager.readData(data);
 		hydrationManager.readData(data);
 		fertilizerManager.readData(data);
 	}

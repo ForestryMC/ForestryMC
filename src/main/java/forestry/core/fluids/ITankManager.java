@@ -21,11 +21,11 @@ import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.fluids.IFluidTank;
 
 public interface ITankManager extends IFluidHandler {
-	void initGuiData(Container container, ICrafting player);
+	void containerAdded(Container container, ICrafting player);
 
 	void updateGuiData(Container container, List<EntityPlayerMP> crafters);
 
-	void processGuiUpdate(int messageId, int data);
+	void containerRemoved(Container container);
 
 	IFluidTank getTank(int tankIndex);
 

@@ -89,7 +89,7 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 
 		nbttagcompound.setBoolean("IsValidBiome", isValidBiome);
 
-		tankManager.writeTanksToNBT(nbttagcompound);
+		tankManager.writeToNBT(nbttagcompound);
 	}
 
 	@Override
@@ -98,19 +98,19 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 
 		isValidBiome = nbttagcompound.getBoolean("IsValidBiome");
 
-		tankManager.readTanksFromNBT(nbttagcompound);
+		tankManager.readFromNBT(nbttagcompound);
 	}
 
 	@Override
 	public void writeData(DataOutputStreamForestry data) throws IOException {
 		super.writeData(data);
-		tankManager.writePacketData(data);
+		tankManager.writeData(data);
 	}
 
 	@Override
 	public void readData(DataInputStreamForestry data) throws IOException {
 		super.readData(data);
-		tankManager.readPacketData(data);
+		tankManager.readData(data);
 	}
 
 	@Override

@@ -263,7 +263,7 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 			}
 		}
 
-		tankManager.readTanksFromNBT(nbt);
+		tankManager.readFromNBT(nbt);
 
 	}
 
@@ -279,7 +279,7 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 			nbt.setString("currentFluid", fluid.getName());
 		}
 
-		tankManager.writeTanksToNBT(nbt);
+		tankManager.writeToNBT(nbt);
 	}
 
 	/* NETWORK */
@@ -287,14 +287,14 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 	public void writeData(DataOutputStreamForestry data) throws IOException {
 		super.writeData(data);
 		data.writeBoolean(shutdown);
-		tankManager.writePacketData(data);
+		tankManager.writeData(data);
 	}
 
 	@Override
 	public void readData(DataInputStreamForestry data) throws IOException {
 		super.readData(data);
 		shutdown = data.readBoolean();
-		tankManager.readPacketData(data);
+		tankManager.readData(data);
 	}
 
 	/* GUI */

@@ -99,7 +99,7 @@ public class TileFabricator extends TilePowered implements ICrafter, ILiquidTank
 		nbttagcompound.setInteger("Heat", heat);
 
 		// Tank
-		tankManager.writeTanksToNBT(nbttagcompound);
+		tankManager.writeToNBT(nbttagcompound);
 
 		craftingInventory.writeToNBT(nbttagcompound);
 	}
@@ -111,7 +111,7 @@ public class TileFabricator extends TilePowered implements ICrafter, ILiquidTank
 		heat = nbttagcompound.getInteger("Heat");
 
 		// Tank
-		tankManager.readTanksFromNBT(nbttagcompound);
+		tankManager.readFromNBT(nbttagcompound);
 
 		craftingInventory.readFromNBT(nbttagcompound);
 
@@ -132,13 +132,13 @@ public class TileFabricator extends TilePowered implements ICrafter, ILiquidTank
 	@Override
 	public void writeData(DataOutputStreamForestry data) throws IOException {
 		super.writeData(data);
-		tankManager.writePacketData(data);
+		tankManager.writeData(data);
 	}
 
 	@Override
 	public void readData(DataInputStreamForestry data) throws IOException {
 		super.readData(data);
-		tankManager.readPacketData(data);
+		tankManager.readData(data);
 	}
 
 	/* UPDATING */

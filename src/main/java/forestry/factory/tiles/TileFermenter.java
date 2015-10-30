@@ -102,7 +102,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 		nbttagcompound.setInteger("FuelTotalTime", fuelTotalTime);
 		nbttagcompound.setInteger("FuelCurrentFerment", fuelCurrentFerment);
 
-		tankManager.writeTanksToNBT(nbttagcompound);
+		tankManager.writeToNBT(nbttagcompound);
 
 	}
 
@@ -116,19 +116,19 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 		fuelTotalTime = nbttagcompound.getInteger("FuelTotalTime");
 		fuelCurrentFerment = nbttagcompound.getInteger("FuelCurrentFerment");
 
-		tankManager.readTanksFromNBT(nbttagcompound);
+		tankManager.readFromNBT(nbttagcompound);
 	}
 
 	@Override
 	public void writeData(DataOutputStreamForestry data) throws IOException {
 		super.writeData(data);
-		tankManager.writePacketData(data);
+		tankManager.writeData(data);
 	}
 
 	@Override
 	public void readData(DataInputStreamForestry data) throws IOException {
 		super.readData(data);
-		tankManager.readPacketData(data);
+		tankManager.readData(data);
 	}
 
 	@Override

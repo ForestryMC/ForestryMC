@@ -10,14 +10,16 @@
  ******************************************************************************/
 package forestry.core.fluids;
 
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -28,14 +30,17 @@ import net.minecraft.nbt.NBTTagList;
 
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidTank;
 
+import forestry.api.core.INBTTagable;
 import forestry.core.fluids.tanks.FakeTank;
 import forestry.core.fluids.tanks.StandardTank;
-import forestry.core.network.PacketProgressBarUpdate;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.IForestryPacketClient;
+import forestry.core.network.IStreamable;
 import forestry.core.network.PacketTankLevelUpdate;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.EnumTankLevel;
@@ -46,16 +51,18 @@ import forestry.core.utils.NBTUtil.NBTList;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TankManager implements ITankManager {
+public class TankManager implements ITankManager, IStreamable, INBTTagable {
 
 	private static final byte NETWORK_DATA = 3;
 	private final List<StandardTank> tanks = new ArrayList<>();
-	private final List<EnumTankLevel> tankLevels = new ArrayList<>();
-	private final List<FluidStack> prevFluidStacks = new ArrayList<>();
-	private final List<Integer> prevColor = new ArrayList<>();
-	// tank updates
+
+	// for container updates, keeps track of the fluids known to each client (container)
+	private final Table<Container, Integer, FluidStack> prevFluidStacks = HashBasedTable.create();
+
+	// tank tile updates, for blocks that show fluid levels on the outside
 	@Nullable
 	private final ILiquidTankTile tile;
+	private final List<EnumTankLevel> tankLevels = new ArrayList<>();
 
 	public TankManager() {
 		this.tile = null;
@@ -83,8 +90,6 @@ public class TankManager implements ITankManager {
 		int index = tanks.indexOf(tank);
 		tank.setTankIndex(index);
 		tankLevels.add(EnumTankLevel.rateTankLevel(tank));
-		prevFluidStacks.add(tank.getFluid() == null ? null : tank.getFluid().copy());
-		prevColor.add(tank.getColor());
 		return added;
 	}
 
@@ -92,7 +97,8 @@ public class TankManager implements ITankManager {
 		return NETWORK_DATA * tanks.size();
 	}
 
-	public void writeTanksToNBT(NBTTagCompound data) {
+	@Override
+	public void writeToNBT(NBTTagCompound data) {
 		NBTTagList tagList = new NBTTagList();
 		for (byte slot = 0; slot < tanks.size(); slot++) {
 			StandardTank tank = tanks.get(slot);
@@ -106,7 +112,8 @@ public class TankManager implements ITankManager {
 		data.setTag("tanks", tagList);
 	}
 
-	public void readTanksFromNBT(NBTTagCompound data) {
+	@Override
+	public void readFromNBT(NBTTagCompound data) {
 		NBTList<NBTTagCompound> tagList = NBTUtil.getNBTList(data, "tanks", NBTUtil.EnumNBTType.COMPOUND);
 		for (NBTTagCompound tag : tagList) {
 			int slot = tag.getByte("tank");
@@ -118,72 +125,38 @@ public class TankManager implements ITankManager {
 		}
 	}
 
-	public void writePacketData(DataOutputStream data) throws IOException {
-		for (int i = 0; i < tanks.size(); i++) {
-			writePacketData(data, i);
-		}
-	}
-
-	public void writePacketData(DataOutputStream data, int tankIndex) throws IOException {
-		if (tankIndex >= tanks.size()) {
-			return;
-		}
-		StandardTank tank = tanks.get(tankIndex);
-		FluidStack fluidStack = tank.getFluid();
-		if (fluidStack != null) {
-			data.writeShort(fluidStack.getFluid().getID());
-			data.writeInt(fluidStack.amount);
-			data.writeInt(fluidStack.getFluid().getColor(fluidStack));
-		} else {
-			data.writeShort(-1);
-		}
-	}
-
-	public void readPacketData(DataInputStream data) throws IOException {
-		for (int i = 0; i < tanks.size(); i++) {
-			readPacketData(data, i);
-		}
-	}
-
-	public void readPacketData(DataInputStream data, int tankIndex) throws IOException {
-		if (tankIndex >= tanks.size()) {
-			return;
-		}
-		StandardTank tank = tanks.get(tankIndex);
-		int fluidId = data.readShort();
-		Fluid fluid = FluidRegistry.getFluid(fluidId);
-		if (fluid != null) {
-			int amount = data.readInt();
-			FluidStack fluidStack = new FluidStack(fluid, amount);
-			tank.setFluid(fluidStack);
-			tank.colorCache = data.readInt();
-		} else {
-			tank.setFluid(null);
+	@Override
+	public void writeData(DataOutputStreamForestry data) throws IOException {
+		for (StandardTank tank : tanks) {
+			tank.writeData(data);
 		}
 	}
 
 	@Override
-	public void initGuiData(Container container, ICrafting player) {
+	public void readData(DataInputStreamForestry data) throws IOException {
 		for (StandardTank tank : tanks) {
-			initGuiData(container, player, tank.getTankIndex());
+			tank.readData(data);
 		}
 	}
 
-	private void initGuiData(Container container, ICrafting player, int tankIndex) {
-		if (tankIndex >= tanks.size()) {
+	@Override
+	public void containerAdded(Container container, ICrafting player) {
+		if (!(player instanceof EntityPlayerMP)) {
 			return;
 		}
-		FluidStack fluidStack = tanks.get(tankIndex).getFluid();
-		int fluidId = -1;
-		int fluidAmount = 0;
-		if (fluidStack != null && fluidStack.amount > 0) {
-			fluidId = fluidStack.getFluid().getID();
-			fluidAmount = fluidStack.amount;
-		}
 
-		player.sendProgressBarUpdate(container, tankIndex * NETWORK_DATA, fluidId);
-		PacketProgressBarUpdate packet = new PacketProgressBarUpdate(container.windowId, tankIndex * NETWORK_DATA + 1, fluidAmount);
-		Proxies.net.sendToPlayer(packet, (EntityPlayerMP) player);
+		List<EntityPlayerMP> crafters = Collections.singletonList((EntityPlayerMP) player);
+
+		for (StandardTank tank : tanks) {
+			sendTankUpdate(container, tank, crafters);
+		}
+	}
+
+	@Override
+	public void containerRemoved(Container container) {
+		for (StandardTank tank : tanks) {
+			prevFluidStacks.remove(container, tank.getTankIndex());
+		}
 	}
 
 	@Override
@@ -195,70 +168,31 @@ public class TankManager implements ITankManager {
 
 	private void updateGuiData(Container container, List<EntityPlayerMP> crafters, int tankIndex) {
 		StandardTank tank = tanks.get(tankIndex);
-		FluidStack fluidStack = tank.getFluid();
-		FluidStack prev = prevFluidStacks.get(tankIndex);
-		int color = tank.getColor();
-		int pColor = prevColor.get(tankIndex);
-
-		for (EntityPlayerMP player : crafters) {
-			if (fluidStack == null ^ prev == null) {
-				int fluidId = -1;
-				int fluidAmount = 0;
-				if (fluidStack != null) {
-					fluidId = fluidStack.getFluid().getID();
-					fluidAmount = fluidStack.amount;
-				}
-				player.sendProgressBarUpdate(container, tankIndex * NETWORK_DATA, fluidId);
-				PacketProgressBarUpdate packet = new PacketProgressBarUpdate(container.windowId, tankIndex * NETWORK_DATA + 1, fluidAmount);
-				Proxies.net.sendToPlayer(packet, player);
-			} else if (fluidStack != null && prev != null) {
-				if (fluidStack.getFluid() != prev.getFluid()) {
-					player.sendProgressBarUpdate(container, tankIndex * NETWORK_DATA, fluidStack.getFluid().getID());
-				}
-				if (fluidStack.amount != prev.amount) {
-					PacketProgressBarUpdate packet = new PacketProgressBarUpdate(container.windowId, tankIndex * NETWORK_DATA + 1, fluidStack.amount);
-					Proxies.net.sendToPlayer(packet, player);
-				}
-				if (color != pColor) {
-					PacketProgressBarUpdate packet = new PacketProgressBarUpdate(container.windowId, tankIndex * NETWORK_DATA + 2, color);
-					Proxies.net.sendToPlayer(packet, player);
-				}
-			}
-		}
-
-		prevFluidStacks.set(tankIndex, tank.getFluid() == null ? null : tank.getFluid().copy());
-		prevColor.set(tankIndex, color);
-	}
-
-	@Override
-	public void processGuiUpdate(int messageId, int data) {
-		int tankIndex = messageId / NETWORK_DATA;
-
-		if (tankIndex >= tanks.size()) {
+		if (tank == null) {
 			return;
 		}
-		StandardTank tank = tanks.get(tankIndex);
 
-		switch (messageId % NETWORK_DATA) {
-			case 0: {
-				Fluid fluid = FluidRegistry.getFluid(data);
-				if (fluid != null) {
-					FluidStack fluidStack = new FluidStack(fluid, 0);
-					tank.setFluid(fluidStack);
-				}
-				break;
-			}
-			case 1: {
-				FluidStack fluidStack = tank.getFluid();
-				if (fluidStack != null) {
-					fluidStack.amount = data;
-				}
-				break;
-			}
-			case 2: {
-				tank.colorCache = data;
-				break;
-			}
+		FluidStack fluidStack = tank.getFluid();
+		FluidStack prev = prevFluidStacks.get(container, tankIndex);
+		if (FluidHelper.areFluidStacksEqual(fluidStack, prev)) {
+			return;
+		}
+
+		sendTankUpdate(container, tank, crafters);
+	}
+
+	private void sendTankUpdate(Container container, StandardTank tank, Iterable<EntityPlayerMP> crafters) {
+		int tankIndex = tank.getTankIndex();
+		FluidStack fluid = tank.getFluid();
+		IForestryPacketClient packet = new PacketTankLevelUpdate(tile, tankIndex, fluid);
+		for (EntityPlayerMP player : crafters) {
+			Proxies.net.sendToPlayer(packet, player);
+		}
+
+		if (fluid == null) {
+			prevFluidStacks.remove(container, tankIndex);
+		} else {
+			prevFluidStacks.put(container, tankIndex, fluid.copy());
 		}
 	}
 

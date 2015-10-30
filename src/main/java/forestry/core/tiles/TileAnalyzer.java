@@ -98,7 +98,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 
 		nbttagcompound.setInteger("AnalyzeTime", analyzeTime);
 
-		tankManager.writeTanksToNBT(nbttagcompound);
+		tankManager.writeToNBT(nbttagcompound);
 	}
 
 	@Override
@@ -107,7 +107,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 
 		analyzeTime = nbttagcompound.getInteger("AnalyzeTime");
 
-		tankManager.readTanksFromNBT(nbttagcompound);
+		tankManager.readFromNBT(nbttagcompound);
 	}
 
 	@Override
@@ -214,14 +214,14 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 		super.writeData(data);
 		ItemStack displayStack = getIndividualOnDisplay();
 		data.writeItemStack(displayStack);
-		tankManager.writePacketData(data);
+		tankManager.writeData(data);
 	}
 
 	@Override
 	public void readData(DataInputStreamForestry data) throws IOException {
 		super.readData(data);
 		individualOnDisplayClient = data.readItemStack();
-		tankManager.readPacketData(data);
+		tankManager.readData(data);
 	}
 
 	@Override

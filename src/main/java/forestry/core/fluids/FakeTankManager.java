@@ -32,7 +32,7 @@ public class FakeTankManager implements ITankManager {
 	}
 
 	@Override
-	public void initGuiData(Container container, ICrafting player) {
+	public void containerAdded(Container container, ICrafting player) {
 
 	}
 
@@ -42,7 +42,7 @@ public class FakeTankManager implements ITankManager {
 	}
 
 	@Override
-	public void processGuiUpdate(int messageId, int data) {
+	public void containerRemoved(Container container) {
 
 	}
 

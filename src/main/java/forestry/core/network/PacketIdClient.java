@@ -19,7 +19,6 @@ public enum PacketIdClient implements IPacketId {
 	ERROR_UPDATE(new PacketErrorUpdate()),
 	GUI_UPDATE(new PacketGuiUpdate()),
 	GUI_LAYOUT_SELECT(new PacketGuiLayoutSelect()),
-	GUI_PROGRESS_BAR(new PacketProgressBarUpdate()),
 	GUI_ENERGY(new PacketGuiEnergy()),
 	SOCKET_UPDATE(new PacketSocketUpdate()),
 

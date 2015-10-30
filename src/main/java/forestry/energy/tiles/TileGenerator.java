@@ -87,7 +87,7 @@ public class TileGenerator extends TileBase implements ISidedInventory, ILiquidT
 			ic2EnergySource.writeToNBT(nbttagcompound);
 		}
 
-		tankManager.writeTanksToNBT(nbttagcompound);
+		tankManager.writeToNBT(nbttagcompound);
 	}
 
 	@Override
@@ -98,19 +98,19 @@ public class TileGenerator extends TileBase implements ISidedInventory, ILiquidT
 			ic2EnergySource.readFromNBT(nbttagcompound);
 		}
 
-		tankManager.readTanksFromNBT(nbttagcompound);
+		tankManager.readFromNBT(nbttagcompound);
 	}
 
 	@Override
 	public void writeData(DataOutputStreamForestry data) throws IOException {
 		super.writeData(data);
-		tankManager.writePacketData(data);
+		tankManager.writeData(data);
 	}
 
 	@Override
 	public void readData(DataInputStreamForestry data) throws IOException {
 		super.readData(data);
-		tankManager.readPacketData(data);
+		tankManager.readData(data);
 	}
 
 	@Override

@@ -14,7 +14,6 @@ import net.minecraft.entity.player.InventoryPlayer;
 
 import net.minecraftforge.fluids.IFluidTank;
 
-import forestry.core.fluids.ITankManager;
 import forestry.core.gui.ContainerSocketed;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
@@ -59,14 +58,6 @@ public class ContainerFarm extends ContainerSocketed<TileFarm> {
 		addSlotToContainer(new SlotFiltered(tile, FarmInventory.SLOT_FERTILIZER, 63, 95));
 		// Can Slot
 		addSlotToContainer(new SlotFiltered(tile, FarmInventory.SLOT_CAN, 15, 95));
-	}
-
-	@Override
-	public void updateProgressBar(int i, int j) {
-		ITankManager tankManager = tile.getFarmController().getTankManager();
-		if (tankManager != null) {
-			tankManager.processGuiUpdate(i, j);
-		}
 	}
 
 	@Override

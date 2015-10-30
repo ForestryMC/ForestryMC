@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.fluids.tanks;
 
+import java.io.IOException;
 import java.util.Locale;
 
 import net.minecraft.item.EnumRarity;
@@ -21,12 +22,14 @@ import net.minecraftforge.fluids.FluidTank;
 
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.tooltips.ToolTipLine;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.IStreamable;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class StandardTank extends FluidTank {
-
+public class StandardTank extends FluidTank implements IStreamable {
 	// defines how the tank responds to IFluidHandler requests
 	public enum TankMode {
 		DEFAULT, OUTPUT, INPUT, INTERNAL
@@ -34,7 +37,6 @@ public class StandardTank extends FluidTank {
 
 	public TankMode tankMode = TankMode.DEFAULT;
 	private static final int DEFAULT_COLOR = 0xFFFFFF;
-	public int colorCache = DEFAULT_COLOR;
 	private int tankIndex;
 
 	public StandardTank(int capacity) {
@@ -63,12 +65,6 @@ public class StandardTank extends FluidTank {
 
 	public int getTankIndex() {
 		return tankIndex;
-	}
-
-	@Override
-	public void setFluid(FluidStack fluid) {
-		super.setFluid(fluid);
-		colorCache = StandardTank.DEFAULT_COLOR;
 	}
 
 	public int getColor() {
@@ -181,4 +177,15 @@ public class StandardTank extends FluidTank {
 		}
 
 	};
+
+
+	@Override
+	public void writeData(DataOutputStreamForestry data) throws IOException {
+		data.writeFluidStack(fluid);
+	}
+
+	@Override
+	public void readData(DataInputStreamForestry data) throws IOException {
+		fluid = data.readFluidStack();
+	}
 }

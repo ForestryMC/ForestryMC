@@ -104,7 +104,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 		nbttagcompound.setInteger("PackageTime", packageTime);
 		nbttagcompound.setInteger("PackageTotalTime", totalTime);
 
-		tankManager.writeTanksToNBT(nbttagcompound);
+		tankManager.writeToNBT(nbttagcompound);
 
 		craftingInventory.writeToNBT(nbttagcompound);
 
@@ -123,7 +123,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 		packageTime = nbttagcompound.getInteger("PackageTime");
 		totalTime = nbttagcompound.getInteger("PackageTotalTime");
 
-		tankManager.readTanksFromNBT(nbttagcompound);
+		tankManager.readFromNBT(nbttagcompound);
 
 		craftingInventory.readFromNBT(nbttagcompound);
 
@@ -140,13 +140,13 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 	@Override
 	public void writeData(DataOutputStreamForestry data) throws IOException {
 		super.writeData(data);
-		tankManager.writePacketData(data);
+		tankManager.writeData(data);
 	}
 
 	@Override
 	public void readData(DataInputStreamForestry data) throws IOException {
 		super.readData(data);
-		tankManager.readPacketData(data);
+		tankManager.readData(data);
 	}
 
 	public void resetRecipe() {

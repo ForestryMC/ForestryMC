@@ -97,6 +97,14 @@ public final class FluidHelper {
 		return false;
 	}
 
+	public static boolean areFluidStacksEqual(FluidStack fluidStack1, FluidStack fluidStack2) {
+		if (fluidStack1 == null) {
+			return fluidStack2 == null;
+		} else {
+			return fluidStack1.isFluidStackIdentical(fluidStack2);
+		}
+	}
+
 	public enum FillStatus {
 		SUCCESS, INVALID_INPUT, NO_FLUID, NO_SPACE
 	}

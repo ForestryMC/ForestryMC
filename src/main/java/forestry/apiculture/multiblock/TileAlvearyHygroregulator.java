@@ -121,7 +121,7 @@ public class TileAlvearyHygroregulator extends TileAlvearyWithGui implements IIn
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		super.readFromNBT(nbttagcompound);
-		tankManager.readTanksFromNBT(nbttagcompound);
+		tankManager.readFromNBT(nbttagcompound);
 
 		transferTime = nbttagcompound.getInteger("TransferTime");
 
@@ -134,7 +134,7 @@ public class TileAlvearyHygroregulator extends TileAlvearyWithGui implements IIn
 	@Override
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 		super.writeToNBT(nbttagcompound);
-		tankManager.writeTanksToNBT(nbttagcompound);
+		tankManager.writeToNBT(nbttagcompound);
 
 		nbttagcompound.setInteger("TransferTime", transferTime);
 		if (currentRecipe != null) {

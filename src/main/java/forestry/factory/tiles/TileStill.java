@@ -84,7 +84,7 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 		nbttagcompound.setInteger("DistillationTime", distillationTime);
 		nbttagcompound.setInteger("DistillationTotalTime", distillationTotalTime);
 
-		tankManager.writeTanksToNBT(nbttagcompound);
+		tankManager.writeToNBT(nbttagcompound);
 	}
 
 	@Override
@@ -94,7 +94,7 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 		distillationTime = nbttagcompound.getInteger("DistillationTime");
 		distillationTotalTime = nbttagcompound.getInteger("DistillationTotalTime");
 
-		tankManager.readTanksFromNBT(nbttagcompound);
+		tankManager.readFromNBT(nbttagcompound);
 
 		checkRecipe();
 	}
@@ -102,13 +102,13 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 	@Override
 	public void writeData(DataOutputStreamForestry data) throws IOException {
 		super.writeData(data);
-		tankManager.writePacketData(data);
+		tankManager.writeData(data);
 	}
 
 	@Override
 	public void readData(DataInputStreamForestry data) throws IOException {
 		super.readData(data);
-		tankManager.readPacketData(data);
+		tankManager.readData(data);
 	}
 
 	@Override

@@ -94,7 +94,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 		nbttagcompound.setInteger("TotalTime", totalTime);
 		nbttagcompound.setInteger("ProductionTime", productionTime);
 
-		tankManager.writeTanksToNBT(nbttagcompound);
+		tankManager.writeToNBT(nbttagcompound);
 
 		// Write pending product
 		if (pendingProduct != null) {
@@ -117,7 +117,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 		totalTime = nbttagcompound.getInteger("TotalTime");
 		productionTime = nbttagcompound.getInteger("ProductionTime");
 
-		tankManager.readTanksFromNBT(nbttagcompound);
+		tankManager.readFromNBT(nbttagcompound);
 
 		// Load pending product
 		if (nbttagcompound.hasKey("PendingProduct")) {
@@ -135,13 +135,13 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 	@Override
 	public void writeData(DataOutputStreamForestry data) throws IOException {
 		super.writeData(data);
-		tankManager.writePacketData(data);
+		tankManager.writeData(data);
 	}
 
 	@Override
 	public void readData(DataInputStreamForestry data) throws IOException {
 		super.readData(data);
-		tankManager.readPacketData(data);
+		tankManager.readData(data);
 	}
 
 	@Override
