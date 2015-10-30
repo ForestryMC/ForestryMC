@@ -154,6 +154,8 @@ public class Constants implements IForestryConstants {
 	public static final int BOTTLER_FILLING_TIME = 20;
 	public static final int BOTTLER_FUELCAN_VOLUME = 2000;
 
+	public static final float ICE_COOLING_MULTIPLIER = 6f; // multiple of water's cooling value
+
 	// Storage
 	public static final int RAINTANK_TANK_CAPACITY = 30 * BUCKET_VOLUME;
 	public static final int RAINTANK_AMOUNT_PER_UPDATE = 10;

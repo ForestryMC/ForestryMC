@@ -20,6 +20,8 @@ import forestry.core.fluids.Fluids;
 import forestry.core.utils.ModUtil;
 
 import buildcraft.api.fuels.BuildcraftFuelRegistry;
+import buildcraft.api.fuels.ICoolant;
+import buildcraft.api.fuels.ICoolantManager;
 
 @Plugin(pluginID = "BC6|Fuels", name = "BuildCraft 6 Fuels", author = "mezz", url = Constants.URL, unlocalizedDescription = "for.plugin.buildcraft6.description")
 public class PluginBuildCraftFuels extends ForestryPlugin {
@@ -37,7 +39,11 @@ public class PluginBuildCraftFuels extends ForestryPlugin {
 	@Optional.Method(modid = "BuildCraftAPI|fuels")
 	@Override
 	public void doInit() {
-		BuildcraftFuelRegistry.coolant.addCoolant(Fluids.ICE.getFluid(), 10.0f);
+		ICoolantManager coolantManager = BuildcraftFuelRegistry.coolant;
+		ICoolant waterCoolant = coolantManager.getCoolant(Fluids.WATER.getFluid());
+		float waterCooling = waterCoolant.getDegreesCoolingPerMB(100);
+
+		coolantManager.addCoolant(Fluids.ICE.getFluid(), Constants.ICE_COOLING_MULTIPLIER * waterCooling);
 
 		Fluid ethanol = Fluids.ETHANOL.getFluid();
 		if (ethanol != null) {

@@ -24,6 +24,8 @@ public class PluginEnderIO extends ForestryPlugin {
 	private static final String KEY_TOTAL_BURN_TIME = "totalBurnTime";
 	private static final String KEY_COOLING_PER_MB = "coolingPerMb";
 
+	private static final float WATER_COOLING_PER_MB = 0.0023f;
+
 	@Override
 	public boolean isAvailable() {
 		return ModUtil.isModLoaded(EnderIO);
@@ -44,7 +46,7 @@ public class PluginEnderIO extends ForestryPlugin {
 
 		Fluid crushedIce = Fluids.ICE.getFluid();
 		if (crushedIce != null) {
-			addCoolant(crushedIce, 10.0f);
+			addCoolant(crushedIce, Constants.ICE_COOLING_MULTIPLIER);
 		}
 	}
 
@@ -57,7 +59,8 @@ public class PluginEnderIO extends ForestryPlugin {
 		FMLInterModComms.sendMessage(EnderIO, FLUID_FUEL_ADD, fuelTag);
 	}
 
-	private static void addCoolant(Fluid fluid, float coolingPerMb) {
+	private static void addCoolant(Fluid fluid, float coolingMultiplier) {
+		float coolingPerMb = coolingMultiplier * WATER_COOLING_PER_MB;
 		NBTTagCompound coolantTag = new NBTTagCompound();
 		coolantTag.setString(KEY_FLUID_NAME, fluid.getName());
 		coolantTag.setFloat(KEY_COOLING_PER_MB, coolingPerMb);
