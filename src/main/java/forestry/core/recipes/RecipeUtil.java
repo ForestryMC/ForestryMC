@@ -282,7 +282,11 @@ public abstract class RecipeUtil {
 	}
 
 	public static boolean matches(IDescriptiveRecipe recipe, IInventory inventoryCrafting) {
-		if (!matches(recipe.getIngredients(), recipe.getWidth(), recipe.getHeight(), inventoryCrafting)) {
+		ItemStack[][] resources = getResources(inventoryCrafting);
+		Object[] recipeIngredients = recipe.getIngredients();
+		int width = recipe.getWidth();
+		int height = recipe.getHeight();
+		if (!matches(recipeIngredients, width, height, resources)) {
 			return false;
 		}
 
@@ -295,7 +299,7 @@ public abstract class RecipeUtil {
 		return true;
 	}
 
-	public static boolean matches(Object[] ingredients, int width, int height, IInventory inventoryCrafting) {
+	private static ItemStack[][] getResources(IInventory inventoryCrafting) {
 		ItemStack[][] resources = new ItemStack[3][3];
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
@@ -303,18 +307,17 @@ public abstract class RecipeUtil {
 				resources[i][j] = inventoryCrafting.getStackInSlot(k);
 			}
 		}
-
-		return matches(ingredients, width, height, resources);
+		return resources;
 	}
 
-	public static boolean matches(Object[] ingredients, int width, int height, ItemStack[][] resources) {
+	public static boolean matches(Object[] recipeIngredients, int width, int height, ItemStack[][] resources) {
 		for (int i = 0; i <= 3 - width; i++) {
 			for (int j = 0; j <= 3 - height; j++) {
-				if (checkMatch(ingredients, width, height, resources, i, j, true)) {
+				if (checkMatch(recipeIngredients, width, height, resources, i, j, true)) {
 					return true;
 				}
 
-				if (checkMatch(ingredients, width, height, resources, i, j, false)) {
+				if (checkMatch(recipeIngredients, width, height, resources, i, j, false)) {
 					return true;
 				}
 			}
@@ -323,47 +326,46 @@ public abstract class RecipeUtil {
 		return false;
 	}
 
-	private static boolean checkMatch(Object[] ingredients, int width, int height, ItemStack[][] resources, int xInGrid, int yInGrid, boolean flag) {
-
+	private static boolean checkMatch(Object[] recipeIngredients, int width, int height, ItemStack[][] resources, int xInGrid, int yInGrid, boolean mirror) {
 		for (int k = 0; k < 3; k++) {
 			for (int l = 0; l < 3; l++) {
+				ItemStack resource = resources[k][l];
 
 				int widthIt = k - xInGrid;
 				int heightIt = l - yInGrid;
-				Object compare = null;
+				Object recipeIngredient = null;
 
 				if (widthIt >= 0 && heightIt >= 0 && widthIt < width && heightIt < height) {
-					if (flag) {
-						compare = ingredients[(width - widthIt - 1) + heightIt * width];
+					if (mirror) {
+						recipeIngredient = recipeIngredients[(width - widthIt - 1) + heightIt * width];
 					} else {
-						compare = ingredients[widthIt + heightIt * width];
+						recipeIngredient = recipeIngredients[widthIt + heightIt * width];
 					}
 				}
-				ItemStack resource = resources[k][l];
 
-				if (compare instanceof ItemStack) {
-					if (!ItemStackUtil.isIdenticalItem((ItemStack) compare, resource)) {
-						return false;
-					}
-				} else if (compare instanceof Iterable) {
-					boolean matched = false;
-
-					for (Object item : (Iterable) compare) {
-						if (item instanceof ItemStack) {
-							matched = matched || ItemStackUtil.isIdenticalItem((ItemStack) item, resource);
-						}
-					}
-
-					if (!matched) {
-						return false;
-					}
-
-				} else if (compare == null && resource != null) {
+				if (!checkIngredientMatch(recipeIngredient, resource)) {
 					return false;
 				}
 			}
 		}
 
 		return true;
+	}
+
+	private static boolean checkIngredientMatch(Object recipeIngredient, ItemStack resource) {
+		if (recipeIngredient == null && resource == null) {
+			return true;
+		} else if (recipeIngredient instanceof ItemStack) {
+			return ItemStackUtil.isCraftingEquivalent((ItemStack) recipeIngredient, resource);
+		} else if (recipeIngredient instanceof Iterable) {
+			for (Object item : (Iterable) recipeIngredient) {
+				if (checkIngredientMatch(item, resource)) {
+					return true;
+				}
+			}
+			return false;
+		} else {
+			return false;
+		}
 	}
 }
