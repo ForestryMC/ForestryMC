@@ -30,6 +30,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidContainerItem;
+import net.minecraftforge.fluids.IFluidHandler;
 
 import cpw.mods.fml.common.Optional;
 
@@ -53,7 +54,7 @@ import forestry.factory.triggers.FactoryTriggers;
 
 import buildcraft.api.statements.ITriggerExternal;
 
-public class TileBottler extends TilePowered implements ISidedInventory, ILiquidTankTile {
+public class TileBottler extends TilePowered implements ISidedInventory, ILiquidTankTile, IFluidHandler {
 	private static final int TICKS_PER_RECIPE_TIME = 10;
 	private static final int ENERGY_PER_RECIPE_TIME = 750;
 

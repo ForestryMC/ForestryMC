@@ -18,11 +18,12 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 
 import forestry.core.fluids.ITankManager;
 import forestry.core.tiles.ILiquidTankTile;
 
-public class TileValve extends TileFarm implements ILiquidTankTile {
+public class TileValve extends TileFarm implements ILiquidTankTile, IFluidHandler {
 
 	/* ILIQUIDTANKCONTAINER */
 	@Override

@@ -26,6 +26,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.ForestryAPI;
@@ -52,7 +53,7 @@ import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.SlotUtil;
 import forestry.plugins.PluginManager;
 
-public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiquidTankTile, IItemStackDisplay {
+public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiquidTankTile, IFluidHandler, IItemStackDisplay {
 
 	/* CONSTANTS */
 	private static final int TIME_TO_ANALYZE = 125;
@@ -80,7 +81,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 		super(800, Constants.MACHINE_MAX_ENERGY, 160);
 		setInternalInventory(new AnalyzerInventoryAdapter(this));
 		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, Fluids.HONEY.getFluid());
-		tankManager = new TankManager(resourceTank);
+		tankManager = new TankManager(this, resourceTank);
 		invInput = new InventoryMapper(getInternalInventory(), SLOT_INPUT_1, SLOT_INPUT_COUNT);
 		invOutput = new InventoryMapper(getInternalInventory(), SLOT_OUTPUT_1, SLOT_OUTPUT_COUNT);
 	}

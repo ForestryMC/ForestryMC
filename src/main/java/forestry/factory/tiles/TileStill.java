@@ -23,6 +23,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorLogic;
@@ -44,7 +45,7 @@ import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;
 import forestry.factory.recipes.StillRecipeManager;
 
-public class TileStill extends TilePowered implements ISidedInventory, ILiquidTankTile {
+public class TileStill extends TilePowered implements ISidedInventory, ILiquidTankTile, IFluidHandler {
 
 	/* CONSTANTS */
 	public static final short SLOT_PRODUCT = 0;

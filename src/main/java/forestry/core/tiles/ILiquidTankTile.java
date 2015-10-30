@@ -12,22 +12,14 @@ package forestry.core.tiles;
 
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.world.World;
-
-import net.minecraftforge.fluids.IFluidHandler;
 
 import forestry.core.fluids.ITankManager;
 
-public interface ILiquidTankTile extends IFluidHandler {
+public interface ILiquidTankTile extends ILocatable {
 
 	ITankManager getTankManager();
 
 	void getGUINetworkData(int messageId, int data);
 
 	void sendGUINetworkData(Container container, ICrafting iCrafting);
-
-	ChunkCoordinates getCoordinates();
-
-	World getWorld();
 }

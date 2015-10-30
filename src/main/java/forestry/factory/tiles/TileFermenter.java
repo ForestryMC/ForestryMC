@@ -26,6 +26,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 
 import cpw.mods.fml.common.Optional;
 
@@ -54,7 +55,7 @@ import forestry.factory.triggers.FactoryTriggers;
 
 import buildcraft.api.statements.ITriggerExternal;
 
-public class TileFermenter extends TilePowered implements ISidedInventory, ILiquidTankTile {
+public class TileFermenter extends TilePowered implements ISidedInventory, ILiquidTankTile, IFluidHandler {
 
 	// / CONSTANTS
 	public static final short SLOT_RESOURCE = 0;

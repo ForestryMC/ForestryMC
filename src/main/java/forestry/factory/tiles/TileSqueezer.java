@@ -23,6 +23,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
@@ -52,7 +53,7 @@ import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.PlayerUtil;
 import forestry.factory.recipes.SqueezerRecipeManager;
 
-public class TileSqueezer extends TilePowered implements ISocketable, ISidedInventory, ILiquidTankTile, ISpeedUpgradable {
+public class TileSqueezer extends TilePowered implements ISocketable, ISidedInventory, ILiquidTankTile, IFluidHandler, ISpeedUpgradable {
 
 	private static final int TICKS_PER_RECIPE_TIME = 4;
 	private static final int ENERGY_PER_RECIPE_TIME = 200;

@@ -24,6 +24,8 @@ import java.util.Stack;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChunkCoordinates;
@@ -68,6 +70,7 @@ import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.PacketGuiUpdate;
 import forestry.core.proxy.Proxies;
+import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.utils.Log;
 import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.vect.Vect;
@@ -78,7 +81,7 @@ import forestry.farming.gui.IFarmLedgerDelegate;
 import forestry.farming.logic.FarmLogicArboreal;
 import forestry.farming.tiles.TileGearbox;
 
-public class FarmController extends RectangularMultiblockControllerBase implements IFarmController {
+public class FarmController extends RectangularMultiblockControllerBase implements IFarmController, ILiquidTankTile {
 
 	private enum Stage {
 		CULTIVATE, HARVEST;
@@ -136,7 +139,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		super(world);
 
 		FilteredTank liquidTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, FluidRegistry.WATER);
-		this.tankManager = new TankManager(liquidTank);
+		this.tankManager = new TankManager(this, liquidTank);
 
 		this.inventory = new FarmInventory(this);
 		this.sockets = new InventoryAdapter(1, "sockets");
@@ -163,6 +166,16 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	@Override
 	public TankManager getTankManager() {
 		return tankManager;
+	}
+
+	@Override
+	public void getGUINetworkData(int messageId, int data) {
+
+	}
+
+	@Override
+	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
+
 	}
 
 	private BiomeGenBase getBiome() {

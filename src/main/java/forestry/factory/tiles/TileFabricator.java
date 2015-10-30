@@ -25,6 +25,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.recipes.IFabricatorRecipe;
@@ -51,7 +52,7 @@ import forestry.core.utils.SlotUtil;
 import forestry.factory.recipes.FabricatorRecipeManager;
 import forestry.factory.recipes.FabricatorSmeltingRecipeManager;
 
-public class TileFabricator extends TilePowered implements ICrafter, ILiquidTankTile, ISidedInventory {
+public class TileFabricator extends TilePowered implements ICrafter, ILiquidTankTile, IFluidHandler, ISidedInventory {
 
 	/* CONSTANTS */
 	private static final int MAX_HEAT = 5000;
@@ -83,7 +84,7 @@ public class TileFabricator extends TilePowered implements ICrafter, ILiquidTank
 		setInternalInventory(new FabricatorInventoryAdapter(this));
 		moltenTank = new FilteredTank(2 * Constants.BUCKET_VOLUME, Fluids.GLASS.getFluid());
 		moltenTank.tankMode = StandardTank.TankMode.INTERNAL;
-		tankManager = new TankManager(moltenTank);
+		tankManager = new TankManager(this, moltenTank);
 	}
 
 	@Override

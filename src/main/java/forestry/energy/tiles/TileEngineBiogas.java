@@ -24,6 +24,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorLogic;
@@ -45,7 +46,7 @@ import forestry.core.network.GuiId;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TileEngine;
 
-public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILiquidTankTile {
+public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILiquidTankTile, IFluidHandler {
 
 	/* CONSTANTS */
 	public static final short SLOT_CAN = 0;
@@ -71,7 +72,7 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 		fuelTank.tankMode = StandardTank.TankMode.DEFAULT;
 		heatingTank = new FilteredTank(Constants.ENGINE_TANK_CAPACITY, FluidRegistry.LAVA);
 		heatingTank.tankMode = StandardTank.TankMode.INPUT;
-		this.tankManager = new TankManager(fuelTank, heatingTank);
+		this.tankManager = new TankManager(this, fuelTank, heatingTank);
 	}
 
 	@Override

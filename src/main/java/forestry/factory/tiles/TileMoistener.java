@@ -25,6 +25,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorLogic;
@@ -51,7 +52,7 @@ import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.SlotUtil;
 import forestry.factory.recipes.MoistenerRecipeManager;
 
-public class TileMoistener extends TileBase implements ISidedInventory, ILiquidTankTile, IRenderableTile {
+public class TileMoistener extends TileBase implements ISidedInventory, ILiquidTankTile, IFluidHandler, IRenderableTile {
 
 	/* CONSTANTS */
 	private static final short SLOT_STASH_1 = 0;

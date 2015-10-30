@@ -25,6 +25,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 
 import forestry.api.core.BiomeHelper;
 import forestry.api.core.ForestryAPI;
@@ -44,7 +45,7 @@ import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TileBase;
 import forestry.core.utils.ItemStackUtil;
 
-public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTankTile {
+public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTankTile, IFluidHandler {
 
 	/* CONSTANTS */
 	public static final short SLOT_RESOURCE = 0;
@@ -63,7 +64,7 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 		setHints(Config.hints.get("raintank"));
 
 		resourceTank = new FilteredTank(Constants.RAINTANK_TANK_CAPACITY, FluidRegistry.WATER);
-		tankManager = new TankManager(resourceTank);
+		tankManager = new TankManager(this, resourceTank);
 	}
 
 	@Override

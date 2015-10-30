@@ -14,7 +14,6 @@ import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,6 +44,7 @@ import forestry.core.network.PacketTankLevelUpdate;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.EnumTankLevel;
 import forestry.core.tiles.ILiquidTankTile;
+import forestry.core.tiles.IRenderableTile;
 import forestry.core.utils.NBTUtil;
 import forestry.core.utils.NBTUtil.NBTList;
 
@@ -60,7 +60,6 @@ public class TankManager implements ITankManager, IStreamable, INBTTagable {
 	private final Table<Container, Integer, FluidStack> prevFluidStacks = HashBasedTable.create();
 
 	// tank tile updates, for blocks that show fluid levels on the outside
-	@Nullable
 	private final ILiquidTankTile tile;
 	private final List<EnumTankLevel> tankLevels = new ArrayList<>();
 
@@ -68,11 +67,7 @@ public class TankManager implements ITankManager, IStreamable, INBTTagable {
 		this.tile = null;
 	}
 
-	public TankManager(StandardTank... tanks) {
-		this(null, tanks);
-	}
-
-	public TankManager(@Nullable ILiquidTankTile tile, StandardTank... tanks) {
+	public TankManager(ILiquidTankTile tile, StandardTank... tanks) {
 		this.tile = tile;
 		addAll(Arrays.asList(tanks));
 	}
@@ -241,7 +236,7 @@ public class TankManager implements ITankManager, IStreamable, INBTTagable {
 	}
 
 	private void updateTankLevels(StandardTank tank, boolean sendUpdate) {
-		if (tile == null) {
+		if (!(tile instanceof IRenderableTile)) {
 			return;
 		}
 
