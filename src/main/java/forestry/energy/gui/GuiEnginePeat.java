@@ -15,10 +15,10 @@ import net.minecraft.entity.player.InventoryPlayer;
 import forestry.core.config.Constants;
 import forestry.energy.tiles.TileEnginePeat;
 
-public class GuiEngineCopper extends GuiEngine<ContainerEngineCopper, TileEnginePeat> {
+public class GuiEnginePeat extends GuiEngine<ContainerEnginePeat, TileEnginePeat> {
 
-	public GuiEngineCopper(InventoryPlayer inventory, TileEnginePeat tile) {
-		super(Constants.TEXTURE_PATH_GUI + "/peatengine.png", new ContainerEngineCopper(inventory, tile), tile);
+	public GuiEnginePeat(InventoryPlayer inventory, TileEnginePeat tile) {
+		super(Constants.TEXTURE_PATH_GUI + "/peatengine.png", new ContainerEnginePeat(inventory, tile), tile);
 	}
 
 	@Override

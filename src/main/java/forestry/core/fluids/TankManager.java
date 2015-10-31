@@ -53,7 +53,6 @@ import forestry.core.utils.NBTUtil.NBTList;
  */
 public class TankManager implements ITankManager, IStreamable, INBTTagable {
 
-	private static final byte NETWORK_DATA = 3;
 	private final List<StandardTank> tanks = new ArrayList<>();
 
 	// for container updates, keeps track of the fluids known to each client (container)
@@ -86,10 +85,6 @@ public class TankManager implements ITankManager, IStreamable, INBTTagable {
 		tank.setTankIndex(index);
 		tankLevels.add(EnumTankLevel.rateTankLevel(tank));
 		return added;
-	}
-
-	public int maxMessageId() {
-		return NETWORK_DATA * tanks.size();
 	}
 
 	@Override
@@ -209,20 +204,20 @@ public class TankManager implements ITankManager, IStreamable, INBTTagable {
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
 		for (StandardTank tank : tanks) {
 			if (tankAcceptsFluid(tank, resource)) {
-				return fill(tank.getTankIndex(), resource, doFill);
+				return fill(tank.getTankIndex(), resource, doFill, true);
 			}
 		}
 
 		return FakeTank.INSTANCE.fill(resource, doFill);
 	}
 
-	public int fill(int tankIndex, FluidStack resource, boolean doFill) {
+	public int fill(int tankIndex, FluidStack resource, boolean doFill, boolean external) {
 		if (tankIndex < 0 || tankIndex >= tanks.size() || resource == null) {
 			return 0;
 		}
 
 		StandardTank tank = tanks.get(tankIndex);
-		if (!tank.canBeFilledExternally()) {
+		if (external && !tank.canBeFilledExternally()) {
 			return 0;
 		}
 

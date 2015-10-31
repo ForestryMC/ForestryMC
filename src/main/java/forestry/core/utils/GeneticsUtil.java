@@ -176,6 +176,10 @@ public class GeneticsUtil {
 	}
 
 	public static ItemStack convertSaplingToGeneticEquivalent(ItemStack foreign) {
+		if (foreign == null) {
+			return null;
+		}
+
 		IIndividual tree = getGeneticEquivalent(foreign);
 		if (!(tree instanceof ITree)) {
 			return null;

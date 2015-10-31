@@ -39,11 +39,18 @@ public class StillRecipeManager implements IStillManager {
 			return null;
 		}
 		for (IStillRecipe recipe : recipes) {
-			if (item.containsFluid(recipe.getInput())) {
+			if (matches(recipe, item)) {
 				return recipe;
 			}
 		}
 		return null;
+	}
+
+	public static boolean matches(IStillRecipe recipe, FluidStack item) {
+		if (recipe == null || item == null) {
+			return false;
+		}
+		return item.containsFluid(recipe.getInput());
 	}
 
 	@Override

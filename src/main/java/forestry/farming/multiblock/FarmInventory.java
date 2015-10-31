@@ -92,7 +92,7 @@ public class FarmInventory extends InventoryAdapterRestricted implements IFarmIn
 	@Override
 	public void removeResources(ItemStack[] resources) {
 		EntityPlayer player = PlayerUtil.getPlayer(farmController.getWorld(), farmController.getAccessHandler().getOwner());
-		InventoryUtil.removeSets(resourcesInventory, 1, resources, player, false, true);
+		InventoryUtil.removeSets(resourcesInventory, 1, resources, player, false, true, false, true);
 	}
 
 	@Override
@@ -157,9 +157,7 @@ public class FarmInventory extends InventoryAdapterRestricted implements IFarmIn
 	}
 
 	public void drainCan(TankManager tankManager) {
-		if (getStackInSlot(SLOT_CAN) != null) {
-			FluidHelper.drainContainers(tankManager, this, SLOT_CAN);
-		}
+		FluidHelper.drainContainers(tankManager, this, SLOT_CAN);
 	}
 
 	public boolean plantGermling(IFarmable germling, EntityPlayer player, int x, int y, int z) {

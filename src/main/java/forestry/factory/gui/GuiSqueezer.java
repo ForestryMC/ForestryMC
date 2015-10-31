@@ -29,7 +29,7 @@ public class GuiSqueezer extends GuiForestryTitled<ContainerSqueezer, TileSqueez
 	@Override
 	protected void drawWidgets() {
 		int progress = inventory.getProgressScaled(43);
-		drawTexturedModalRect(75, 41, 176, 60, 43 - progress, 18);
+		drawTexturedModalRect(75, 41, 176, 60, progress, 18);
 
 		super.drawWidgets();
 	}

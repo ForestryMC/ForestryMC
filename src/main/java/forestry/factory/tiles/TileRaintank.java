@@ -168,9 +168,7 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 	}
 
 	/* SMP GUI */
-	@Override
 	public void getGUINetworkData(int i, int j) {
-		i -= tankManager.maxMessageId() + 1;
 		switch (i) {
 			case 0:
 				fillingTime = j;
@@ -178,10 +176,8 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 		}
 	}
 
-	@Override
 	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
-		int i = tankManager.maxMessageId() + 1;
-		iCrafting.sendProgressBarUpdate(container, i, fillingTime);
+		iCrafting.sendProgressBarUpdate(container, 0, fillingTime);
 	}
 
 	// / ILIQUIDCONTAINER IMPLEMENTATION

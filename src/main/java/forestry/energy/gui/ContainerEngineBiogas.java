@@ -11,17 +11,34 @@
 package forestry.energy.gui;
 
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.ICrafting;
 
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.energy.tiles.TileEngineBiogas;
 
-public class ContainerEngineBronze extends ContainerLiquidTanks<TileEngineBiogas> {
+public class ContainerEngineBiogas extends ContainerLiquidTanks<TileEngineBiogas> {
 
-	public ContainerEngineBronze(InventoryPlayer player, TileEngineBiogas engine) {
+	public ContainerEngineBiogas(InventoryPlayer player, TileEngineBiogas engine) {
 		super(engine, player, 8, 84);
 
 		this.addSlotToContainer(new SlotFiltered(engine, TileEngineBiogas.SLOT_CAN, 143, 40));
 	}
 
+	@Override
+	public void updateProgressBar(int messageId, int data) {
+		super.updateProgressBar(messageId, data);
+
+		tile.getGUINetworkData(messageId, data);
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public void detectAndSendChanges() {
+		super.detectAndSendChanges();
+
+		for (Object crafter : crafters) {
+			tile.sendGUINetworkData(this, (ICrafting) crafter);
+		}
+	}
 }

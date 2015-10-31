@@ -28,7 +28,7 @@ public class GuiCentrifuge extends GuiForestryTitled<ContainerCentrifuge, TileCe
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
-		int progress = 16 - inventory.getProgressScaled(16);
+		int progress = inventory.getProgressScaled(16);
 		drawTexturedModalRect(guiLeft + 58, guiTop + 36 + 17 - progress, 176, 17 - progress, 4, progress);
 	}
 }

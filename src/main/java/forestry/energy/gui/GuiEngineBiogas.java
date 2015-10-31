@@ -29,7 +29,7 @@ import forestry.core.render.SpriteSheet;
 import forestry.core.utils.StringUtil;
 import forestry.energy.tiles.TileEngineBiogas;
 
-public class GuiEngineBronze extends GuiEngine<ContainerEngineBronze, TileEngineBiogas> {
+public class GuiEngineBiogas extends GuiEngine<ContainerEngineBiogas, TileEngineBiogas> {
 
 	protected class BiogasSlot extends Widget {
 
@@ -97,8 +97,8 @@ public class GuiEngineBronze extends GuiEngine<ContainerEngineBronze, TileEngine
 		}
 	}
 
-	public GuiEngineBronze(InventoryPlayer inventory, TileEngineBiogas tile) {
-		super(Constants.TEXTURE_PATH_GUI + "/bioengine.png", new ContainerEngineBronze(inventory, tile), tile);
+	public GuiEngineBiogas(InventoryPlayer inventory, TileEngineBiogas tile) {
+		super(Constants.TEXTURE_PATH_GUI + "/bioengine.png", new ContainerEngineBiogas(inventory, tile), tile);
 		widgetManager.add(new TankWidget(this.widgetManager, 89, 19, 0));
 		widgetManager.add(new TankWidget(this.widgetManager, 107, 19, 1));
 

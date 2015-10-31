@@ -18,9 +18,9 @@ import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.energy.tiles.TileEnginePeat;
 
-public class ContainerEngineCopper extends ContainerTile<TileEnginePeat> {
+public class ContainerEnginePeat extends ContainerTile<TileEnginePeat> {
 
-	public ContainerEngineCopper(InventoryPlayer player, TileEnginePeat tile) {
+	public ContainerEnginePeat(InventoryPlayer player, TileEnginePeat tile) {
 		super(tile, player, 8, 84);
 
 		this.addSlotToContainer(new SlotFiltered(tile, 0, 44, 46));

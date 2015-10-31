@@ -35,7 +35,6 @@ import forestry.core.errors.EnumErrorCode;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
-import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
@@ -135,12 +134,7 @@ public class TileGenerator extends TileBase implements ISidedInventory, ILiquidT
 	@Override
 	public void updateServerSide() {
 		if (updateOnInterval(20)) {
-			// Check inventory slots for fuel
-			// Check if we have suitable items waiting in the item slot
-			IInventoryAdapter inventory = getInternalInventory();
-			if (inventory.getStackInSlot(SLOT_CAN) != null) {
-				FluidHelper.drainContainers(tankManager, inventory, SLOT_CAN);
-			}
+			FluidHelper.drainContainers(tankManager, this, SLOT_CAN);
 		}
 
 		IErrorLogic errorLogic = getErrorLogic();
@@ -199,21 +193,17 @@ public class TileGenerator extends TileBase implements ISidedInventory, ILiquidT
 	}
 
 	/* SMP GUI */
-	@Override
 	public void getGUINetworkData(int i, int j) {
-		int firstMessageId = tankManager.maxMessageId() + 1;
-		if (i == firstMessageId) {
+		if (i == 0) {
 			if (ic2EnergySource != null) {
 				ic2EnergySource.setEnergyStored(j);
 			}
 		}
 	}
 
-	@Override
 	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
-		int firstMessageId = tankManager.maxMessageId() + 1;
 		if (ic2EnergySource != null) {
-			iCrafting.sendProgressBarUpdate(container, firstMessageId, (short) ic2EnergySource.getEnergyStored());
+			iCrafting.sendProgressBarUpdate(container, 0, (short) ic2EnergySource.getEnergyStored());
 		}
 	}
 

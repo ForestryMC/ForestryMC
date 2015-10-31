@@ -56,7 +56,7 @@ public class ContainerCarpenter extends ContainerLiquidTanks<TileCarpenter> impl
 
 	@Override
 	public void onCraftMatrixChanged(IInventory iinventory, int slot) {
-		tile.resetRecipe();
+		tile.checkRecipe();
 	}
 
 	private ItemStack oldCraftPreview;

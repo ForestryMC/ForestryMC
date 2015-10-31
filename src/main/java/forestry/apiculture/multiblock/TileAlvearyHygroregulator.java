@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.multiblock;
 
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -109,12 +107,8 @@ public class TileAlvearyHygroregulator extends TileAlvearyWithGui implements IIn
 		}
 
 		if (tickCount % 20 == 0) {
-			IInventoryAdapter canInventory = getInternalInventory();
-
 			// Check if we have suitable items waiting in the item slot
-			if (canInventory.getStackInSlot(0) != null) {
-				FluidHelper.drainContainers(tankManager, canInventory, 0);
-			}
+			FluidHelper.drainContainers(tankManager, this, 0);
 		}
 	}
 
@@ -185,14 +179,6 @@ public class TileAlvearyHygroregulator extends TileAlvearyWithGui implements IIn
 	@Override
 	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
 		return tankManager.getTankInfo(from);
-	}
-
-	@Override
-	public void getGUINetworkData(int messageId, int data) {
-	}
-
-	@Override
-	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
 	}
 
 	/* RECIPE MANAGMENT */

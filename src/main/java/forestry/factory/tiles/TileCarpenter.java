@@ -14,8 +14,6 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.InventoryCraftResult;
@@ -37,8 +35,8 @@ import forestry.core.errors.EnumErrorCode;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
-import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.TileInventoryAdapter;
+import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
@@ -47,14 +45,15 @@ import forestry.core.tiles.IItemStackDisplay;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;
 import forestry.core.utils.InventoryUtil;
-import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.SlotUtil;
 import forestry.factory.recipes.CarpenterRecipeManager;
 
 public class TileCarpenter extends TilePowered implements ISidedInventory, ILiquidTankTile, IFluidHandler, IItemStackDisplay {
+	private static final int TICKS_PER_RECIPE_TIME = 1;
+	private static final int ENERGY_PER_WORK_CYCLE = 2040;
+	private static final int ENERGY_PER_RECIPE_TIME = ENERGY_PER_WORK_CYCLE / 10;
 
-	/* CONSTANTS */
 	public final static int SLOT_CRAFTING_1 = 0;
 	public final static int SLOT_CRAFTING_COUNT = 9;
 	public final static int SLOT_BOX = 9;
@@ -72,16 +71,13 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 
 	@Nullable
 	private ICarpenterRecipe currentRecipe;
-	private int packageTime;
-	private int totalTime;
-	private ItemStack pendingProduct;
 
 	private ItemStack getBoxStack() {
 		return getInternalInventory().getStackInSlot(SLOT_BOX);
 	}
 
 	public TileCarpenter() {
-		super(1100, 4000, 200);
+		super(1100, 4000, ENERGY_PER_WORK_CYCLE);
 		setHints(Config.hints.get("carpenter"));
 		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, CarpenterRecipeManager.recipeFluids);
 
@@ -102,40 +98,15 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 		super.writeToNBT(nbttagcompound);
 
-		nbttagcompound.setInteger("PackageTime", packageTime);
-		nbttagcompound.setInteger("PackageTotalTime", totalTime);
-
 		tankManager.writeToNBT(nbttagcompound);
-
 		craftingInventory.writeToNBT(nbttagcompound);
-
-		// Write pending product
-		if (pendingProduct != null) {
-			NBTTagCompound nbttagcompoundP = new NBTTagCompound();
-			pendingProduct.writeToNBT(nbttagcompoundP);
-			nbttagcompound.setTag("PendingProduct", nbttagcompoundP);
-		}
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		super.readFromNBT(nbttagcompound);
-
-		packageTime = nbttagcompound.getInteger("PackageTime");
-		totalTime = nbttagcompound.getInteger("PackageTotalTime");
-
 		tankManager.readFromNBT(nbttagcompound);
-
 		craftingInventory.readFromNBT(nbttagcompound);
-
-		// Load pending product
-		if (nbttagcompound.hasKey("PendingProduct")) {
-			NBTTagCompound nbttagcompoundP = nbttagcompound.getCompoundTag("PendingProduct");
-			pendingProduct = ItemStack.loadItemStackFromNBT(nbttagcompoundP);
-		}
-
-		// Reset recipe according to contents
-		setCurrentRecipe(CarpenterRecipeManager.findMatchingRecipe(resourceTank.getFluid(), getBoxStack(), craftingInventory, worldObj));
 	}
 
 	@Override
@@ -150,226 +121,109 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 		tankManager.readData(data);
 	}
 
-	public void resetRecipe() {
+	public void checkRecipe() {
 		if (worldObj.isRemote) {
 			return;
 		}
-		setCurrentRecipe(CarpenterRecipeManager.findMatchingRecipe(resourceTank.getFluid(), getBoxStack(), craftingInventory, getWorldObj()));
-	}
 
-	private void setCurrentRecipe(@Nullable ICarpenterRecipe currentRecipe) {
-		this.currentRecipe = currentRecipe;
+		if (!CarpenterRecipeManager.matches(currentRecipe, resourceTank.getFluid(), getBoxStack(), craftingInventory)) {
+			currentRecipe = CarpenterRecipeManager.findMatchingRecipe(resourceTank.getFluid(), getBoxStack(), craftingInventory);
 
-		final ItemStack craftingResult;
+			if (currentRecipe != null) {
+				int recipeTime = currentRecipe.getPackagingTime();
+				setTicksPerWorkCycle(recipeTime * TICKS_PER_RECIPE_TIME);
+				setEnergyPerWorkCycle(recipeTime * ENERGY_PER_RECIPE_TIME);
 
-		if (currentRecipe != null) {
-			craftingResult = currentRecipe.getCraftingGridRecipe().getRecipeOutput();
-		} else {
-			craftingResult = null;
+				ItemStack craftingResult = currentRecipe.getCraftingGridRecipe().getRecipeOutput();
+				craftPreviewInventory.setInventorySlotContents(0, craftingResult);
+			} else {
+				craftPreviewInventory.setInventorySlotContents(0, null);
+			}
 		}
-
-		craftPreviewInventory.setInventorySlotContents(0, craftingResult);
 	}
 
 	@Override
 	public void updateServerSide() {
 		super.updateServerSide();
 
-		if (!updateOnInterval(20)) {
-			return;
+		if (updateOnInterval(20)) {
+			FluidHelper.drainContainers(tankManager, this, SLOT_CAN_INPUT);
 		}
-		IInventoryAdapter accessibleInventory = getInternalInventory();
-		// Check if we have suitable items waiting in the item slot
-		if (accessibleInventory.getStackInSlot(SLOT_CAN_INPUT) != null) {
-			FluidHelper.drainContainers(tankManager, accessibleInventory, SLOT_CAN_INPUT);
-		}
-
-		if (!updateOnInterval(40)) {
-			return;
-		}
-
-		if (currentRecipe == null) {
-			ICarpenterRecipe recipe = CarpenterRecipeManager.findMatchingRecipe(resourceTank.getFluid(), getBoxStack(), craftingInventory, worldObj);
-			if (recipe != null) {
-				setCurrentRecipe(recipe);
-			}
-		}
-
-		IErrorLogic errorLogic = getErrorLogic();
-		errorLogic.setCondition(currentRecipe == null, EnumErrorCode.NORECIPE);
-		errorLogic.setCondition(!validateResources(), EnumErrorCode.NORESOURCE);
 	}
 
 	@Override
 	public boolean workCycle() {
-
-		if (packageTime > 0) {
-			packageTime--;
-
-			// Check whether we have become invalid and need to abort production
-			if (currentRecipe == null || !validateResources()) {
-				packageTime = totalTime = 0;
-				return false;
-			}
-
-			if (packageTime <= 0) {
-
-				pendingProduct = currentRecipe.getCraftingGridRecipe().getRecipeOutput();
-				totalTime = 0;
-
-				// Remove resources
-				if (!removeResources(currentRecipe)) {
-					return false;
-				}
-
-				// Update product display
-				resetRecipe();
-
-				return tryAddPending();
-			}
-			return true;
-		} else if (pendingProduct != null) {
-			return tryAddPending();
-		} else if (currentRecipe != null) {
-
-			if (!validateResources()) {
-				return false;
-			}
-
-			// Enough items available, start the process
-			packageTime = totalTime = currentRecipe.getPackagingTime();
-
-			// Update product display
-			resetRecipe();
-
-			return true;
-		} else {
-
+		if (!removeResources(true)) {
 			return false;
 		}
+
+		ItemStack pendingProduct = currentRecipe.getCraftingGridRecipe().getRecipeOutput();
+		InventoryUtil.tryAddStack(this, pendingProduct, SLOT_PRODUCT, SLOT_PRODUCT_COUNT, true);
+
+		return true;
 	}
 
-	private boolean validateResources() {
+	private boolean removeResources(boolean doRemove) {
 		if (currentRecipe == null) {
 			return true;
 		}
-		// Check whether liquid is needed and if there is enough available
+
 		FluidStack fluid = currentRecipe.getFluidResource();
 		if (fluid != null) {
-			if (resourceTank.getFluidAmount() < fluid.amount) {
-				return false;
-			}
-		}
-
-		IInventoryAdapter accessibleInventory = getInternalInventory();
-		// Check whether boxes are available
-		if (currentRecipe.getBox() != null) {
-			if (accessibleInventory.getStackInSlot(SLOT_BOX) == null) {
-				return false;
-			}
-		}
-
-		// Need at least one matched set
-		ItemStack[] set = InventoryUtil.getStacks(craftingInventory, SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT);
-		ItemStack[] stock = InventoryUtil.getStacks(accessibleInventory, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
-
-		return ItemStackUtil.containsSets(set, stock, true, false) > 0;
-	}
-
-	private boolean removeResources(ICarpenterRecipe recipe) {
-
-		// Remove resources
-		FluidStack fluid = recipe.getFluidResource();
-		if (fluid != null) {
 			FluidStack amountDrained = tankManager.drain(fluid, false);
-			if (amountDrained != null && amountDrained.amount == fluid.amount) {
+			if (amountDrained == null || amountDrained.amount != fluid.amount) {
+				return false;
+			}
+			if (doRemove) {
 				tankManager.drain(fluid, true);
-			} else {
-				return false;
 			}
 		}
-		// Remove boxes
-		if (recipe.getBox() != null) {
-			ItemStack removed = getInternalInventory().decrStackSize(SLOT_BOX, 1);
-			if (removed == null || removed.stackSize == 0) {
-				return false;
-			}
-		}
-		return removeSets(1, InventoryUtil.getStacks(craftingInventory, SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT));
-	}
 
-	private boolean removeSets(int count, ItemStack[] set) {
+		if (currentRecipe.getBox() != null) {
+			ItemStack box = getStackInSlot(SLOT_BOX);
+			if (box == null || box.stackSize == 0) {
+				return false;
+			}
+			if (doRemove) {
+				decrStackSize(SLOT_BOX, 1);
+			}
+		}
+
 		EntityPlayer player = PlayerUtil.getPlayer(worldObj, getAccessHandler().getOwner());
-		return InventoryUtil.removeSets(getInternalInventory(), count, set, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT, player, true, true);
-	}
-
-	private boolean tryAddPending() {
-		if (pendingProduct == null) {
-			return false;
-		}
-
-		boolean added = InventoryUtil.tryAddStack(this, pendingProduct, SLOT_PRODUCT, SLOT_PRODUCT_COUNT, true);
-
-		if (added) {
-			pendingProduct = null;
-		}
-
-		getErrorLogic().setCondition(!added, EnumErrorCode.NOSPACE);
-		return added;
+		ItemStack[] craftingSets = InventoryUtil.getStacks(craftingInventory, SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT);
+		IInventory inventory = new InventoryMapper(getInternalInventory(), SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
+		return InventoryUtil.removeSets(inventory, 1, craftingSets, player, true, true, false, doRemove);
 	}
 
 	/* STATE INFORMATION */
 	@Override
 	public boolean hasWork() {
-		if (currentRecipe == null) {
-			return false;
+		if (updateOnInterval(20)) {
+			checkRecipe();
 		}
 
-		// Stop working if the output slot cannot take more
-		ItemStack product = getStackInSlot(SLOT_PRODUCT);
-		if (product != null && product.getMaxStackSize() - product.stackSize < currentRecipe.getCraftingGridRecipe().getRecipeOutput().stackSize) {
-			return false;
+		boolean hasRecipe = (currentRecipe != null);
+		boolean hasResources = true;
+		boolean canAdd = true;
+
+		if (hasRecipe) {
+			hasResources = removeResources(false);
+
+			ItemStack pendingProduct = currentRecipe.getCraftingGridRecipe().getRecipeOutput();
+			canAdd = InventoryUtil.tryAddStack(this, pendingProduct, SLOT_PRODUCT, SLOT_PRODUCT_COUNT, true, false);
 		}
 
-		return validateResources();
-	}
+		IErrorLogic errorLogic = getErrorLogic();
+		errorLogic.setCondition(!hasRecipe, EnumErrorCode.NORECIPE);
+		errorLogic.setCondition(!hasResources, EnumErrorCode.NORESOURCE);
+		errorLogic.setCondition(!canAdd, EnumErrorCode.NOSPACE);
 
-	public int getCraftingProgressScaled(int i) {
-		if (totalTime == 0) {
-			return 0;
-		}
-
-		return ((totalTime - packageTime) * i) / totalTime;
-	}
-
-	public int getResourceScaled(int i) {
-		return (resourceTank.getFluidAmount() * i) / Constants.PROCESSOR_TANK_CAPACITY;
+		return hasRecipe && hasResources && canAdd;
 	}
 
 	@Override
 	public TankRenderInfo getResourceTankInfo() {
 		return new TankRenderInfo(resourceTank);
-	}
-
-	/* SMP GUI */
-	@Override
-	public void getGUINetworkData(int i, int j) {
-		i -= tankManager.maxMessageId() + 1;
-		switch (i) {
-			case 0:
-				packageTime = j;
-				break;
-			case 1:
-				totalTime = j;
-				break;
-		}
-	}
-
-	@Override
-	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
-		int i = tankManager.maxMessageId() + 1;
-		iCrafting.sendProgressBarUpdate(container, i, packageTime);
-		iCrafting.sendProgressBarUpdate(container, i + 1, totalTime);
 	}
 
 	/**

@@ -32,11 +32,10 @@ public class GuiStill extends GuiForestryTitled<ContainerStill, TileStill> {
 
 		drawTexturedModalRect(guiLeft + 81, guiTop + 57, 176, 60, 14, 14);
 
-		int massRemaining = still.getDistillationProgressScaled(16);
-		if (massRemaining > 0) {
-			drawTexturedModalRect(guiLeft + 84, guiTop + 17 + 17 - massRemaining, 176, 74 + 17 - massRemaining, 4, massRemaining);
+		if (still.getWorkCounter() > 0) {
+			int massRemaining = still.getProgressScaled(16);
+			drawTexturedModalRect(guiLeft + 84, guiTop + 17 + massRemaining, 176, 74 + massRemaining, 4, 17 - massRemaining);
 		}
-
 	}
 
 }

@@ -17,8 +17,6 @@ import java.util.Collection;
 import java.util.LinkedList;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -55,8 +53,8 @@ import forestry.factory.triggers.FactoryTriggers;
 import buildcraft.api.statements.ITriggerExternal;
 
 public class TileBottler extends TilePowered implements ISidedInventory, ILiquidTankTile, IFluidHandler {
-	private static final int TICKS_PER_RECIPE_TIME = 10;
-	private static final int ENERGY_PER_RECIPE_TIME = 750;
+	private static final int TICKS_PER_RECIPE_TIME = 5;
+	private static final int ENERGY_PER_RECIPE_TIME = 1000;
 
 	public static final short SLOT_INPUT_EMPTY_CAN = 0;
 	public static final short SLOT_OUTPUT = 1;
@@ -112,11 +110,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 	public void updateServerSide() {
 		super.updateServerSide();
 
-		if (!updateOnInterval(20)) {
-			return;
-		}
-
-		if (getStackInSlot(SLOT_INPUT_FULL_CAN) != null) {
+		if (updateOnInterval(20)) {
 			FluidHelper.drainContainers(tankManager, this, SLOT_INPUT_FULL_CAN);
 		}
 	}
@@ -179,15 +173,6 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 	@Override
 	public TankRenderInfo getResourceTankInfo() {
 		return new TankRenderInfo(resourceTank);
-	}
-
-	/* SMP GUI */
-	@Override
-	public void getGUINetworkData(int i, int j) {
-	}
-
-	@Override
-	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
 	}
 
 	/* ILIQUIDCONTAINER */

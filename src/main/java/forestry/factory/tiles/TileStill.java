@@ -13,8 +13,6 @@ package forestry.factory.tiles;
 import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -35,7 +33,6 @@ import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.fluids.tanks.StandardTank;
-import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
@@ -46,21 +43,18 @@ import forestry.core.tiles.TilePowered;
 import forestry.factory.recipes.StillRecipeManager;
 
 public class TileStill extends TilePowered implements ISidedInventory, ILiquidTankTile, IFluidHandler {
+	private static final int ENERGY_PER_RECIPE_TIME = 200;
 
-	/* CONSTANTS */
 	public static final short SLOT_PRODUCT = 0;
 	public static final short SLOT_RESOURCE = 1;
 	public static final short SLOT_CAN = 2;
 
-	/* MEMBER */
 	private final FilteredTank resourceTank;
 	private final FilteredTank productTank;
 	private final TankManager tankManager;
 
 	private IStillRecipe currentRecipe;
 	private FluidStack bufferedLiquid;
-	private int distillationTime = 0;
-	private int distillationTotalTime = 0;
 
 	public TileStill() {
 		super(1100, 8000, 200);
@@ -81,23 +75,25 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 	@Override
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 		super.writeToNBT(nbttagcompound);
-
-		nbttagcompound.setInteger("DistillationTime", distillationTime);
-		nbttagcompound.setInteger("DistillationTotalTime", distillationTotalTime);
-
 		tankManager.writeToNBT(nbttagcompound);
+
+		if (bufferedLiquid != null) {
+			NBTTagCompound buffer = new NBTTagCompound();
+			bufferedLiquid.writeToNBT(buffer);
+			nbttagcompound.setTag("Buffer", buffer);
+		}
+
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		super.readFromNBT(nbttagcompound);
-
-		distillationTime = nbttagcompound.getInteger("DistillationTime");
-		distillationTotalTime = nbttagcompound.getInteger("DistillationTotalTime");
-
 		tankManager.readFromNBT(nbttagcompound);
 
-		checkRecipe();
+		if (nbttagcompound.hasKey("Buffer")) {
+			NBTTagCompound buffer = nbttagcompound.getCompoundTag("Buffer");
+			bufferedLiquid = FluidStack.loadFluidStackFromNBT(buffer);
+		}
 	}
 
 	@Override
@@ -116,104 +112,69 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 	public void updateServerSide() {
 		super.updateServerSide();
 
-		if (!updateOnInterval(20)) {
-			return;
-		}
+		if (updateOnInterval(20)) {
+			FluidHelper.drainContainers(tankManager, this, SLOT_CAN);
 
-		IInventoryAdapter inventory = getInternalInventory();
-		// Check if we have suitable items waiting in the item slot
-		if (inventory.getStackInSlot(SLOT_CAN) != null) {
-			FluidHelper.drainContainers(tankManager, inventory, SLOT_CAN);
-		}
-
-		// Can product liquid if possible
-		if (inventory.getStackInSlot(SLOT_RESOURCE) != null) {
 			FluidStack fluidStack = productTank.getFluid();
 			if (fluidStack != null) {
-				FluidHelper.fillContainers(tankManager, inventory, SLOT_RESOURCE, SLOT_PRODUCT, fluidStack.getFluid());
+				FluidHelper.fillContainers(tankManager, this, SLOT_RESOURCE, SLOT_PRODUCT, fluidStack.getFluid());
 			}
 		}
-
-		checkRecipe();
 	}
 
 	@Override
 	public boolean workCycle() {
 
-		IErrorLogic errorLogic = getErrorLogic();
+		int cycles = currentRecipe.getCyclesPerUnit();
+		FluidStack output = currentRecipe.getOutput();
 
-		checkRecipe();
-
-		// Ongoing process
-		if (distillationTime > 0 && !errorLogic.hasErrors()) {
-
-			distillationTime -= currentRecipe.getInput().amount;
-			productTank.fill(currentRecipe.getOutput(), true);
-
-			return true;
-
-		} else if (currentRecipe != null) {
-
-			int resourceRequired = currentRecipe.getCyclesPerUnit() * currentRecipe.getInput().amount;
-
-			boolean canFill = productTank.fill(currentRecipe.getOutput(), false) == currentRecipe.getOutput().amount;
-			errorLogic.setCondition(!canFill, EnumErrorCode.NOSPACETANK);
-
-			boolean hasResource = resourceTank.getFluidAmount() >= resourceRequired;
-			errorLogic.setCondition(!hasResource, EnumErrorCode.NORESOURCE);
-
-			if (!errorLogic.hasErrors()) {
-				// Start next cycle if enough bio mass is available
-				distillationTime = distillationTotalTime = resourceRequired;
-				bufferedLiquid = new FluidStack(currentRecipe.getInput(), resourceRequired);
-				tankManager.drain(bufferedLiquid, true);
-
-				return true;
-			}
-		}
+		FluidStack drain = new FluidStack(output, output.amount * cycles);
+		tankManager.fill(productTank.getTankIndex(), drain, true, false);
 
 		bufferedLiquid = null;
-		return false;
+
+		return true;
 	}
 
 	private void checkRecipe() {
-		IStillRecipe matchingRecipe = StillRecipeManager.findMatchingRecipe(resourceTank.getFluid());
+		FluidStack recipeLiquid = bufferedLiquid != null ? bufferedLiquid : resourceTank.getFluid();
 
-		if (matchingRecipe == null && bufferedLiquid != null && distillationTime > 0) {
-			matchingRecipe = StillRecipeManager.findMatchingRecipe(new FluidStack(bufferedLiquid, distillationTime));
+		if (!StillRecipeManager.matches(currentRecipe, recipeLiquid)) {
+			currentRecipe = StillRecipeManager.findMatchingRecipe(recipeLiquid);
+
+			int recipeTime = currentRecipe == null ? 0 : currentRecipe.getCyclesPerUnit();
+			setEnergyPerWorkCycle(ENERGY_PER_RECIPE_TIME * recipeTime);
+			setTicksPerWorkCycle(recipeTime);
 		}
-
-		if (currentRecipe != matchingRecipe) {
-			currentRecipe = matchingRecipe;
-		}
-
-		getErrorLogic().setCondition(currentRecipe == null, EnumErrorCode.NORECIPE);
 	}
 
 	@Override
 	public boolean hasWork() {
-		if (currentRecipe == null) {
-			return false;
+		checkRecipe();
+
+		boolean hasRecipe = (currentRecipe != null);
+		boolean hasTankSpace = true;
+		boolean hasFluidResource = true;
+
+		if (hasRecipe) {
+			hasTankSpace = productTank.canFill(currentRecipe.getOutput());
+			if (bufferedLiquid == null) {
+				int cycles = currentRecipe.getCyclesPerUnit();
+				FluidStack input = currentRecipe.getInput();
+				hasFluidResource = resourceTank.canDrain(cycles * input.amount);
+				if (hasFluidResource) {
+					bufferedLiquid = new FluidStack(input, cycles * input.amount);
+					tankManager.drain(bufferedLiquid, true);
+				}
+			}
 		}
 
-		return (distillationTime > 0 || resourceTank.getFluidAmount() >= currentRecipe.getCyclesPerUnit() * currentRecipe.getInput().amount)
-				&& productTank.getFluidAmount() <= productTank.getCapacity() - currentRecipe.getOutput().amount;
-	}
+		IErrorLogic errorLogic = getErrorLogic();
+		errorLogic.setCondition(!hasRecipe, EnumErrorCode.NORECIPE);
+		errorLogic.setCondition(!hasTankSpace, EnumErrorCode.NOSPACETANK);
+		errorLogic.setCondition(!hasFluidResource, EnumErrorCode.NORESOURCE);
 
-	public int getDistillationProgressScaled(int i) {
-		if (distillationTotalTime == 0) {
-			return i;
-		}
-
-		return (distillationTime * i) / distillationTotalTime;
-	}
-
-	public int getResourceScaled(int i) {
-		return (resourceTank.getFluidAmount() * i) / Constants.PROCESSOR_TANK_CAPACITY;
-	}
-
-	public int getProductScaled(int i) {
-		return (productTank.getFluidAmount() * i) / Constants.PROCESSOR_TANK_CAPACITY;
+		return hasRecipe && hasFluidResource && hasTankSpace;
 	}
 
 	@Override
@@ -224,27 +185,6 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 	@Override
 	public TankRenderInfo getProductTankInfo() {
 		return new TankRenderInfo(productTank);
-	}
-
-	/* SMP GUI */
-	@Override
-	public void getGUINetworkData(int i, int j) {
-		i -= tankManager.maxMessageId() + 1;
-		switch (i) {
-			case 0:
-				distillationTime = j;
-				break;
-			case 1:
-				distillationTotalTime = j;
-				break;
-		}
-	}
-
-	@Override
-	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
-		int i = tankManager.maxMessageId() + 1;
-		iCrafting.sendProgressBarUpdate(container, i, distillationTime);
-		iCrafting.sendProgressBarUpdate(container, i + 1, distillationTotalTime);
 	}
 
 	/* IFluidHandler */

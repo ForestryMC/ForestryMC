@@ -148,10 +148,9 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 	@Override
 	public void updateServerSide() {
 
-		IInventoryAdapter inventory = getInternalInventory();
-		// Check if we have suitable water container waiting in the item slot
-		if (inventory.getStackInSlot(SLOT_PRODUCT) != null) {
-			FluidHelper.drainContainers(tankManager, inventory, SLOT_PRODUCT);
+		if (updateOnInterval(20)) {
+			// Check if we have suitable water container waiting in the item slot
+			FluidHelper.drainContainers(tankManager, this, SLOT_PRODUCT);
 		}
 
 		// Let's get to work
@@ -211,12 +210,12 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 				checkRecipe();
 
 				// Let's see if we have a valid resource in the working slot
-				if (inventory.getStackInSlot(SLOT_WORKING) == null) {
+				if (getStackInSlot(SLOT_WORKING) == null) {
 					return;
 				}
 
-				if (FuelManager.moistenerResource.containsKey(inventory.getStackInSlot(SLOT_WORKING))) {
-					MoistenerFuel res = FuelManager.moistenerResource.get(inventory.getStackInSlot(SLOT_WORKING));
+				if (FuelManager.moistenerResource.containsKey(getStackInSlot(SLOT_WORKING))) {
+					MoistenerFuel res = FuelManager.moistenerResource.get(getStackInSlot(SLOT_WORKING));
 					burnTime = totalTime = res.moistenerValue;
 				}
 			} else {
@@ -533,10 +532,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 	}
 
 	/* SMP GUI */
-	@Override
 	public void getGUINetworkData(int i, int j) {
-		i -= tankManager.maxMessageId() + 1;
-
 		switch (i) {
 			case 0:
 				burnTime = j;
@@ -553,13 +549,11 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 		}
 	}
 
-	@Override
 	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
-		int i = tankManager.maxMessageId() + 1;
-		iCrafting.sendProgressBarUpdate(container, i, burnTime);
-		iCrafting.sendProgressBarUpdate(container, i + 1, totalTime);
-		iCrafting.sendProgressBarUpdate(container, i + 2, productionTime);
-		iCrafting.sendProgressBarUpdate(container, i + 3, timePerItem);
+		iCrafting.sendProgressBarUpdate(container, 0, burnTime);
+		iCrafting.sendProgressBarUpdate(container, 1, totalTime);
+		iCrafting.sendProgressBarUpdate(container, 2, productionTime);
+		iCrafting.sendProgressBarUpdate(container, 3, timePerItem);
 	}
 
 	private static class MoistenerInventoryAdapter extends TileInventoryAdapter<TileMoistener> {

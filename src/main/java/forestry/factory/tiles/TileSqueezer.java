@@ -13,8 +13,7 @@ package forestry.factory.tiles;
 import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -42,6 +41,7 @@ import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.inventory.TileInventoryAdapter;
+import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
@@ -55,8 +55,9 @@ import forestry.factory.recipes.SqueezerRecipeManager;
 
 public class TileSqueezer extends TilePowered implements ISocketable, ISidedInventory, ILiquidTankTile, IFluidHandler, ISpeedUpgradable {
 
-	private static final int TICKS_PER_RECIPE_TIME = 4;
-	private static final int ENERGY_PER_RECIPE_TIME = 200;
+	private static final int TICKS_PER_RECIPE_TIME = 1;
+	private static final int ENERGY_PER_WORK_CYCLE = 2000;
+	private static final int ENERGY_PER_RECIPE_TIME = ENERGY_PER_WORK_CYCLE / 10;
 
 	private final InventoryAdapter sockets = new InventoryAdapter(1, "sockets");
 
@@ -68,7 +69,7 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 	private ISqueezerRecipe currentRecipe;
 
 	public TileSqueezer() {
-		super(1100, 4000, 2000);
+		super(1100, Constants.MACHINE_MAX_ENERGY, ENERGY_PER_WORK_CYCLE);
 		this.inventory = new SqueezerInventory(this);
 		setInternalInventory(this.inventory);
 		setHints(Config.hints.get("squeezer"));
@@ -212,10 +213,6 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 		return hasResources && hasRecipe && canFill && canAdd;
 	}
 
-	public int getProductScaled(int i) {
-		return (productTank.getFluidAmount() * i) / Constants.PROCESSOR_TANK_CAPACITY;
-	}
-
 	@Override
 	public TankRenderInfo getProductTankInfo() {
 		return new TankRenderInfo(productTank);
@@ -225,16 +222,6 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 	@Override
 	public TankManager getTankManager() {
 		return tankManager;
-	}
-
-	@Override
-	public void getGUINetworkData(int messageId, int data) {
-
-	}
-
-	@Override
-	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
-
 	}
 
 	@Override
@@ -356,7 +343,8 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 		}
 
 		public boolean removeResources(ItemStack[] stacks, EntityPlayer player) {
-			return InventoryUtil.removeSets(this, 1, stacks, SLOT_RESOURCE_1, SLOTS_RESOURCE_COUNT, player, false, true);
+			IInventory inventory = new InventoryMapper(this, SLOT_RESOURCE_1, SLOTS_RESOURCE_COUNT);
+			return InventoryUtil.removeSets(inventory, 1, stacks, player, false, true, false, true);
 		}
 
 		public boolean addRemnant(ItemStack remnant, boolean doAdd) {

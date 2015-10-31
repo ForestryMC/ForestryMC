@@ -31,6 +31,8 @@ import buildcraft.api.tiles.IHasWork;
 @Optional.Interface(iface = "buildcraft.api.tiles.IHasWork", modid = "BuildCraftAPI|tiles")
 public abstract class TilePowered extends TileBase implements IRenderableTile, IPowerHandler, IHasWork, ISpeedUpgradable {
 
+	private static final int WORK_TICK_INTERVAL = 5; // one Forestry work tick happens every WORK_TICK_INTERVAL game ticks
+
 	private final EnergyManager energyManager;
 
 	private int workCounter;
@@ -90,8 +92,7 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
 	protected void updateServerSide() {
 		super.updateServerSide();
 
-		// one Forestry work tick happens every 5 game ticks
-		if (!updateOnInterval(5)) {
+		if (!updateOnInterval(WORK_TICK_INTERVAL)) {
 			return;
 		}
 
@@ -122,7 +123,9 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
 					errorLogic.setCondition(true, EnumErrorCode.NOPOWER);
 				}
 			}
-		} else {
+		}
+
+		if (workCounter >= ticksPerWorkCycle) {
 			if (workCycle()) {
 				workCounter = 0;
 			}
@@ -134,10 +137,10 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
 	public int getProgressScaled(int i) {
 		int ticksPerWorkCycle = getTicksPerWorkCycle();
 		if (ticksPerWorkCycle == 0) {
-			return i;
+			return 0;
 		}
 
-		return ((ticksPerWorkCycle - workCounter) * i) / ticksPerWorkCycle;
+		return (workCounter * i) / ticksPerWorkCycle;
 	}
 
 	@Override

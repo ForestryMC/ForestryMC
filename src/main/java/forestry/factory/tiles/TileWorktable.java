@@ -173,8 +173,10 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 
 	@Override
 	public boolean onCraftingStart(EntityPlayer player) {
-		ItemStack[] set = InventoryUtil.getStacks(currentRecipe.getMatrix(), SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT);
-		ItemStack[] removed = InventoryUtil.removeSets(this, 1, set, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT, player, false, true, true);
+		ItemStack[] set = InventoryUtil.getStacks(currentRecipe.getMatrix());
+
+		IInventory inventory = new InventoryMapper(this, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
+		ItemStack[] removed = InventoryUtil.removeSets(inventory, 1, set, player, false, true, true);
 
 		if (removed == null) {
 			return false;

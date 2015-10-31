@@ -17,10 +17,10 @@ import forestry.core.gui.widgets.SocketWidget;
 import forestry.core.render.EnumTankLevel;
 import forestry.energy.tiles.TileEngineElectric;
 
-public class GuiEngineTin extends GuiEngine<ContainerEngineTin, TileEngineElectric> {
+public class GuiEngineElectric extends GuiEngine<ContainerEngineElectric, TileEngineElectric> {
 
-	public GuiEngineTin(InventoryPlayer inventory, TileEngineElectric tile) {
-		super(Constants.TEXTURE_PATH_GUI + "/electricalengine.png", new ContainerEngineTin(inventory, tile), tile);
+	public GuiEngineElectric(InventoryPlayer inventory, TileEngineElectric tile) {
+		super(Constants.TEXTURE_PATH_GUI + "/electricalengine.png", new ContainerEngineElectric(inventory, tile), tile);
 		widgetManager.add(new SocketWidget(this.widgetManager, 30, 40, tile, 0));
 	}
 

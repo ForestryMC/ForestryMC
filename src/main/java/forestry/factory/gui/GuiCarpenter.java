@@ -29,7 +29,7 @@ public class GuiCarpenter extends GuiForestryTitled<ContainerCarpenter, TileCarp
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
-		int progressScaled = inventory.getCraftingProgressScaled(16);
+		int progressScaled = inventory.getProgressScaled(16);
 		drawTexturedModalRect(guiLeft + 98, guiTop + 51 + 16 - progressScaled, 176, 60 + 16 - progressScaled, 4, progressScaled);
 	}
 

@@ -11,12 +11,8 @@
 package forestry.core.tiles;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -30,7 +26,6 @@ import net.minecraftforge.fluids.IFluidHandler;
 
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.ForestryAPI;
-import forestry.api.core.IErrorState;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IIndividual;
 import forestry.core.config.Constants;
@@ -58,6 +53,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	/* CONSTANTS */
 	private static final int TIME_TO_ANALYZE = 125;
 	private static final int HONEY_REQUIRED = 100;
+	private static final int ENERGY_PER_WORK_CYCLE = 20320;
 
 	public static final short SLOT_ANALYZE = 0;
 	public static final short SLOT_CAN = 1;
@@ -67,18 +63,17 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	public static final short SLOT_OUTPUT_COUNT = 4;
 
 	/* MEMBER */
-	private int analyzeTime;
-
 	private final FilteredTank resourceTank;
 	private final TankManager tankManager;
 	private final IInventory invInput;
 	private final IInventory invOutput;
 
+	private IIndividual specimenToAnalyze;
 	private ItemStack individualOnDisplayClient;
 
 	/* CONSTRUCTOR */
 	public TileAnalyzer() {
-		super(800, Constants.MACHINE_MAX_ENERGY, 160);
+		super(800, Constants.MACHINE_MAX_ENERGY, ENERGY_PER_WORK_CYCLE);
 		setInternalInventory(new AnalyzerInventoryAdapter(this));
 		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, Fluids.HONEY.getFluid());
 		tankManager = new TankManager(this, resourceTank);
@@ -96,19 +91,18 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	@Override
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 		super.writeToNBT(nbttagcompound);
-
-		nbttagcompound.setInteger("AnalyzeTime", analyzeTime);
-
 		tankManager.writeToNBT(nbttagcompound);
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		super.readFromNBT(nbttagcompound);
-
-		analyzeTime = nbttagcompound.getInteger("AnalyzeTime");
-
 		tankManager.readFromNBT(nbttagcompound);
+
+		ItemStack stackToAnalyze = getStackInSlot(SLOT_ANALYZE);
+		if (stackToAnalyze != null) {
+			specimenToAnalyze = AlleleManager.alleleRegistry.getIndividual(stackToAnalyze);
+		}
 	}
 
 	@Override
@@ -125,84 +119,39 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	@Override
 	public boolean workCycle() {
 		ItemStack stackToAnalyze = getStackInSlot(SLOT_ANALYZE);
-
-		if (stackToAnalyze != null) {
-			IIndividual individual = AlleleManager.alleleRegistry.getIndividual(stackToAnalyze);
-
-			if (individual == null) {
-				return false;
-			}
-
-			if (analyzeTime > 0) {
-				analyzeTime--;
-				return true;
-			} else {
-				// Analysis complete.
-				if (!individual.isAnalyzed()) {
-					individual.analyze();
-
-					NBTTagCompound nbttagcompound = new NBTTagCompound();
-					individual.writeToNBT(nbttagcompound);
-					stackToAnalyze.setTagCompound(nbttagcompound);
-				}
-
-				boolean added = InventoryUtil.tryAddStack(invOutput, stackToAnalyze, true);
-
-				if (added) {
-					setInventorySlotContents(SLOT_ANALYZE, null);
-					PacketItemStackDisplay packet = new PacketItemStackDisplay(this, getIndividualOnDisplay());
-					Proxies.net.sendNetworkPacket(packet, worldObj);
-				}
-
-				getErrorLogic().setCondition(!added, EnumErrorCode.NOSPACE);
-
-				return added;
-			}
-		}
-
-		// Look for specimens in input slots.
-		IInvSlot slot = getInputSlot();
-
-		boolean noInput = (slot == null);
-		getErrorLogic().setCondition(noInput, EnumErrorCode.NOTHINGANALYZE);
-		if (noInput) {
+		if (stackToAnalyze == null) {
 			return false;
 		}
 
-		ItemStack inputStack = slot.getStackInSlot();
-
-		if (PluginManager.Module.ARBORICULTURE.isEnabled() && !TreeManager.treeRoot.isMember(inputStack)) {
-			ItemStack ersatz = GeneticsUtil.convertSaplingToGeneticEquivalent(inputStack);
-			if (ersatz != null) {
-				inputStack = ersatz;
-			}
-		}
-
-		IIndividual individual = AlleleManager.alleleRegistry.getIndividual(inputStack);
-		if (individual == null) {
-			return false;
-		}
-
-		if (!individual.isAnalyzed()) {
-			boolean hasHoney = resourceTank.getFluidAmount() >= HONEY_REQUIRED;
-			getErrorLogic().setCondition(!hasHoney, EnumErrorCode.NORESOURCE);
-			if (!hasHoney) {
+		if (!specimenToAnalyze.isAnalyzed()) {
+			if (!resourceTank.canDrain(HONEY_REQUIRED)) {
 				return false;
 			}
 			resourceTank.drain(HONEY_REQUIRED, true);
-			analyzeTime = TIME_TO_ANALYZE;
+
+			specimenToAnalyze.analyze();
+
+			NBTTagCompound nbttagcompound = new NBTTagCompound();
+			specimenToAnalyze.writeToNBT(nbttagcompound);
+			stackToAnalyze.setTagCompound(nbttagcompound);
 		}
-		setInventorySlotContents(SLOT_ANALYZE, inputStack);
-		slot.setStackInSlot(null);
+
+		boolean added = InventoryUtil.tryAddStack(invOutput, stackToAnalyze, true);
+		if (!added) {
+			return false;
+		}
+
+		setInventorySlotContents(SLOT_ANALYZE, null);
 		PacketItemStackDisplay packet = new PacketItemStackDisplay(this, getIndividualOnDisplay());
 		Proxies.net.sendNetworkPacket(packet, worldObj);
+
 		return true;
 	}
 
 	private IInvSlot getInputSlot() {
 		for (IInvSlot slot : InventoryIterator.getIterable(invInput)) {
 			ItemStack inputStack = slot.getStackInSlot();
-			if (inputStack != null && (AlleleManager.alleleRegistry.isIndividual(inputStack) || GeneticsUtil.getGeneticEquivalent(inputStack) != null)) {
+			if (AlleleManager.alleleRegistry.isIndividual(inputStack)) {
 				return slot;
 			}
 		}
@@ -236,22 +185,67 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	/* STATE INFORMATION */
 	@Override
 	public boolean hasWork() {
-		ItemStack stackToAnalyze = getStackInSlot(SLOT_ANALYZE);
-		if (stackToAnalyze != null) {
-			return true;
+		moveSpecimenToAnalyzeSlot();
+
+		ItemStack specimen = getStackInSlot(SLOT_ANALYZE);
+
+		boolean hasSpecimen = (specimen != null);
+		boolean hasResource = true;
+		boolean hasSpace = true;
+
+		if (hasSpecimen) {
+			hasSpace = InventoryUtil.tryAddStack(invOutput, specimen, true, false);
+
+			if (!specimenToAnalyze.isAnalyzed()) {
+				hasResource = resourceTank.canDrain(HONEY_REQUIRED);
+			}
 		}
 
-		if (getInputSlot() != null) {
-			return true;
-		}
+		getErrorLogic().setCondition(!hasSpecimen, EnumErrorCode.NOTHINGANALYZE);
+		getErrorLogic().setCondition(!hasResource, EnumErrorCode.NORESOURCE);
+		getErrorLogic().setCondition(!hasSpace, EnumErrorCode.NOSPACE);
 
-		Set<IErrorState> errors = new HashSet<>(getErrorLogic().getErrorStates());
-		errors.remove(EnumErrorCode.NOPOWER);
-		return errors.size() == 0;
+		return hasSpecimen && hasResource && hasSpace;
 	}
 
-	public int getProgressScaled(int i) {
-		return (analyzeTime * i) / TIME_TO_ANALYZE;
+	private void moveSpecimenToAnalyzeSlot() {
+		if (getStackInSlot(SLOT_ANALYZE) != null) {
+			return;
+		}
+
+		IInvSlot slot = getInputSlot();
+		if (slot == null) {
+			return;
+		}
+
+		ItemStack inputStack = slot.getStackInSlot();
+		if (inputStack == null) {
+			return;
+		}
+
+		if (PluginManager.Module.ARBORICULTURE.isEnabled() && !TreeManager.treeRoot.isMember(inputStack)) {
+			ItemStack ersatz = GeneticsUtil.convertSaplingToGeneticEquivalent(inputStack);
+			if (ersatz != null) {
+				inputStack = ersatz;
+			}
+		}
+
+		specimenToAnalyze = AlleleManager.alleleRegistry.getIndividual(inputStack);
+		if (specimenToAnalyze == null) {
+			return;
+		}
+
+		setInventorySlotContents(SLOT_ANALYZE, inputStack);
+		slot.setStackInSlot(null);
+
+		if (specimenToAnalyze.isAnalyzed()) {
+			setTicksPerWorkCycle(1);
+		} else {
+			setTicksPerWorkCycle(TIME_TO_ANALYZE);
+		}
+
+		PacketItemStackDisplay packet = new PacketItemStackDisplay(this, getIndividualOnDisplay());
+		Proxies.net.sendNetworkPacket(packet, worldObj);
 	}
 
 	public ItemStack getIndividualOnDisplay() {
@@ -262,23 +256,6 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	}
 
 	/* ILiquidTankTile */
-	@Override
-	public void getGUINetworkData(int i, int j) {
-		i -= tankManager.maxMessageId() + 1;
-		switch (i) {
-			case 0:
-				analyzeTime = j;
-				break;
-		}
-	}
-
-	@Override
-	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
-		int i = tankManager.maxMessageId() + 1;
-		iCrafting.sendProgressBarUpdate(container, i, analyzeTime);
-
-	}
-
 	@Override
 	public TankManager getTankManager() {
 		return tankManager;
@@ -335,6 +312,18 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 		@Override
 		public boolean canExtractItem(int slotIndex, ItemStack stack, int side) {
 			return SlotUtil.isSlotInRange(slotIndex, SLOT_OUTPUT_1, SLOT_OUTPUT_COUNT);
+		}
+
+		@Override
+		public void setInventorySlotContents(int slotId, ItemStack itemStack) {
+			if (PluginManager.Module.ARBORICULTURE.isEnabled() && !TreeManager.treeRoot.isMember(itemStack)) {
+				ItemStack ersatz = GeneticsUtil.convertSaplingToGeneticEquivalent(itemStack);
+				if (ersatz != null) {
+					itemStack = ersatz;
+				}
+			}
+
+			super.setInventorySlotContents(slotId, itemStack);
 		}
 	}
 }

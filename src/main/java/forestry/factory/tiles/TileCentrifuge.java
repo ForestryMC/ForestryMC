@@ -53,8 +53,9 @@ import buildcraft.api.statements.ITriggerExternal;
 
 public class TileCentrifuge extends TilePowered implements ISocketable, ISidedInventory {
 
-	private static final int TICKS_PER_RECIPE_TIME = 4;
-	private static final int ENERGY_PER_RECIPE_TIME = 210;
+	private static final int TICKS_PER_RECIPE_TIME = 1;
+	private static final int ENERGY_PER_WORK_CYCLE = 3200;
+	private static final int ENERGY_PER_RECIPE_TIME = ENERGY_PER_WORK_CYCLE / 20;
 
 	private final InventoryAdapter sockets = new InventoryAdapter(1, "sockets");
 
@@ -69,7 +70,7 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 	private final Stack<ItemStack> pendingProducts = new Stack<>();
 
 	public TileCentrifuge() {
-		super(800, Constants.MACHINE_MAX_ENERGY, 4200);
+		super(800, Constants.MACHINE_MAX_ENERGY, ENERGY_PER_WORK_CYCLE);
 		setInternalInventory(new CentrifugeInventoryAdapter(this));
 		setHints(Config.hints.get("centrifuge"));
 	}

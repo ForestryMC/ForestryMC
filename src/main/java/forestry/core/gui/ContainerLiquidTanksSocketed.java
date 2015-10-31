@@ -45,20 +45,10 @@ public abstract class ContainerLiquidTanksSocketed<T extends TileEntity & ILiqui
 	}
 
 	@Override
-	public void updateProgressBar(int messageId, int data) {
-		super.updateProgressBar(messageId, data);
-
-		tile.getGUINetworkData(messageId, data);
-	}
-
-	@Override
 	@SuppressWarnings("unchecked")
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
 		tile.getTankManager().updateGuiData(this, crafters);
-		for (Object crafter : crafters) {
-			tile.sendGUINetworkData(this, (ICrafting) crafter);
-		}
 	}
 
 	@Override

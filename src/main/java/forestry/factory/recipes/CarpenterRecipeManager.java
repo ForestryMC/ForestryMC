@@ -18,7 +18,6 @@ import java.util.Set;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -51,16 +50,20 @@ public class CarpenterRecipeManager implements ICarpenterManager {
 		addRecipe(recipe);
 	}
 
-	public static ICarpenterRecipe findMatchingRecipe(FluidStack liquid, ItemStack item, IInventory inventorycrafting, World world) {
+	public static ICarpenterRecipe findMatchingRecipe(FluidStack liquid, ItemStack item, IInventory inventorycrafting) {
 		for (ICarpenterRecipe recipe : recipes) {
-			if (matches(recipe, liquid, item, inventorycrafting, world)) {
+			if (matches(recipe, liquid, item, inventorycrafting)) {
 				return recipe;
 			}
 		}
 		return null;
 	}
 
-	public static boolean matches(ICarpenterRecipe recipe, FluidStack resource, ItemStack item, IInventory inventoryCrafting, World world) {
+	public static boolean matches(ICarpenterRecipe recipe, FluidStack resource, ItemStack item, IInventory inventoryCrafting) {
+		if (recipe == null) {
+			return false;
+		}
+
 		FluidStack liquid = recipe.getFluidResource();
 		if (liquid != null) {
 			if (resource == null || !resource.containsFluid(liquid)) {

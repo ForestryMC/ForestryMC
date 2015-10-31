@@ -62,6 +62,10 @@ public class AlleleRegistry implements IAlleleRegistry {
 
 	@Override
 	public ISpeciesRoot getSpeciesRoot(ItemStack stack) {
+		if (stack == null) {
+			return null;
+		}
+
 		for (ISpeciesRoot root : rootMap.values()) {
 			if (root.isMember(stack)) {
 				return root;
@@ -83,6 +87,9 @@ public class AlleleRegistry implements IAlleleRegistry {
 	/* INDIVIDUALS */
 	@Override
 	public boolean isIndividual(ItemStack stack) {
+		if (stack == null) {
+			return false;
+		}
 		return getSpeciesRoot(stack) != null;
 	}
 

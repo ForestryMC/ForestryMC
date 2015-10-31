@@ -11,6 +11,7 @@
 package forestry.factory.gui;
 
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.ICrafting;
 
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotFiltered;
@@ -27,5 +28,22 @@ public class ContainerFermenter extends ContainerLiquidTanks<TileFermenter> {
 		this.addSlotToContainer(new SlotOutput(fermenter, TileFermenter.SLOT_CAN_OUTPUT, 150, 58));
 		this.addSlotToContainer(new SlotFiltered(fermenter, TileFermenter.SLOT_CAN_INPUT, 150, 22));
 		this.addSlotToContainer(new SlotFiltered(fermenter, TileFermenter.SLOT_INPUT, 10, 40));
+	}
+
+	@Override
+	public void updateProgressBar(int messageId, int data) {
+		super.updateProgressBar(messageId, data);
+
+		tile.getGUINetworkData(messageId, data);
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public void detectAndSendChanges() {
+		super.detectAndSendChanges();
+
+		for (Object crafter : crafters) {
+			tile.sendGUINetworkData(this, (ICrafting) crafter);
+		}
 	}
 }

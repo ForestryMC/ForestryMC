@@ -86,7 +86,7 @@ public class RenderMachine extends TileEntitySpecialRenderer implements IBlockRe
 
 	@Override
 	public void inventoryRender(double x, double y, double z) {
-		render(TankRenderInfo.EMPTY, TankRenderInfo.EMPTY, ForgeDirection.EAST, x, y, z);
+		render(TankRenderInfo.EMPTY, TankRenderInfo.EMPTY, ForgeDirection.SOUTH, x, y, z);
 	}
 
 	@Override

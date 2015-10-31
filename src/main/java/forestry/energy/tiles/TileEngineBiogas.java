@@ -38,7 +38,6 @@ import forestry.core.fluids.Fluids;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.fluids.tanks.StandardTank;
-import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
@@ -92,11 +91,8 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 			return;
 		}
 
-		IInventoryAdapter inventory = getInternalInventory();
 		// Check if we have suitable items waiting in the item slot
-		if (inventory.getStackInSlot(SLOT_CAN) != null) {
-			FluidHelper.drainContainers(tankManager, inventory, SLOT_CAN);
-		}
+		FluidHelper.drainContainers(tankManager, this, SLOT_CAN);
 
 		IErrorLogic errorLogic = getErrorLogic();
 
@@ -301,8 +297,6 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 	/* GUI */
 	@Override
 	public void getGUINetworkData(int id, int data) {
-		id -= tankManager.maxMessageId() + 1;
-
 		switch (id) {
 			case 0:
 				burnTime = data;
@@ -327,13 +321,12 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 
 	@Override
 	public void sendGUINetworkData(Container containerEngine, ICrafting iCrafting) {
-		int i = tankManager.maxMessageId() + 1;
-		iCrafting.sendProgressBarUpdate(containerEngine, i, burnTime);
-		iCrafting.sendProgressBarUpdate(containerEngine, i + 1, totalTime);
-		iCrafting.sendProgressBarUpdate(containerEngine, i + 2, currentOutput);
-		iCrafting.sendProgressBarUpdate(containerEngine, i + 3, energyManager.toGuiInt());
-		iCrafting.sendProgressBarUpdate(containerEngine, i + 4, heat);
-		iCrafting.sendProgressBarUpdate(containerEngine, i + 5, currentFluidId);
+		iCrafting.sendProgressBarUpdate(containerEngine, 0, burnTime);
+		iCrafting.sendProgressBarUpdate(containerEngine, 1, totalTime);
+		iCrafting.sendProgressBarUpdate(containerEngine, 2, currentOutput);
+		iCrafting.sendProgressBarUpdate(containerEngine, 3, energyManager.toGuiInt());
+		iCrafting.sendProgressBarUpdate(containerEngine, 4, heat);
+		iCrafting.sendProgressBarUpdate(containerEngine, 5, currentFluidId);
 	}
 
 	// IFluidHandler

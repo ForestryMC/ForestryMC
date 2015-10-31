@@ -38,6 +38,7 @@ import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.inventory.TileInventoryAdapter;
+import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.items.ICraftingPlan;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
@@ -47,7 +48,6 @@ import forestry.core.tiles.ICrafter;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;
 import forestry.core.utils.InventoryUtil;
-import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.SlotUtil;
 import forestry.factory.recipes.FabricatorRecipeManager;
 import forestry.factory.recipes.FabricatorSmeltingRecipeManager;
@@ -287,13 +287,8 @@ public class TileFabricator extends TilePowered implements ICrafter, ILiquidTank
 	}
 
 	private boolean removeFromInventory(ItemStack[] set, EntityPlayer player, boolean doRemove) {
-		IInventoryAdapter inventory = getInternalInventory();
-		if (doRemove) {
-			return InventoryUtil.removeSets(inventory, 1, set, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT, player, true, true);
-		} else {
-			ItemStack[] stock = InventoryUtil.getStacks(inventory, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
-			return ItemStackUtil.containsSets(set, stock) >= 1;
-		}
+		IInventory inventory = new InventoryMapper(this, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
+		return InventoryUtil.removeSets(inventory, 1, set, player, true, true, false, doRemove);
 	}
 
 	@Override
@@ -339,22 +334,17 @@ public class TileFabricator extends TilePowered implements ICrafter, ILiquidTank
 	}
 
 	/* SMP */
-	@Override
 	public void getGUINetworkData(int i, int j) {
-		int messageId = tankManager.maxMessageId() + 1;
-
-		if (i == messageId) {
+		if (i == 0) {
 			heat = j;
-		} else if (i == messageId + 1) {
+		} else if (i == 1) {
 			meltingPoint = j;
 		}
 	}
 
-	@Override
 	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
-		int messageId = tankManager.maxMessageId() + 1;
-		iCrafting.sendProgressBarUpdate(container, messageId, heat);
-		iCrafting.sendProgressBarUpdate(container, messageId + 1, getMeltingPoint());
+		iCrafting.sendProgressBarUpdate(container, 0, heat);
+		iCrafting.sendProgressBarUpdate(container, 1, getMeltingPoint());
 	}
 
 	/**

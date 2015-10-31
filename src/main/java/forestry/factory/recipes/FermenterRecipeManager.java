@@ -52,7 +52,7 @@ public class FermenterRecipeManager implements IFermenterManager {
 		return null;
 	}
 
-	private static boolean matches(IFermenterRecipe recipe, ItemStack res, FluidStack liqu) {
+	public static boolean matches(IFermenterRecipe recipe, ItemStack res, FluidStack liqu) {
 		ItemStack resource = recipe.getResource();
 		if (!ItemStackUtil.isCraftingEquivalent(resource, res)) {
 			return false;

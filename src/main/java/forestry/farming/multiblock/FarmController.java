@@ -24,8 +24,6 @@ import java.util.Stack;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChunkCoordinates;
@@ -166,16 +164,6 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	@Override
 	public TankManager getTankManager() {
 		return tankManager;
-	}
-
-	@Override
-	public void getGUINetworkData(int messageId, int data) {
-
-	}
-
-	@Override
-	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
-
 	}
 
 	private BiomeGenBase getBiome() {

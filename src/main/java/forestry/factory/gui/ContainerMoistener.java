@@ -11,6 +11,7 @@
 package forestry.factory.gui;
 
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.IInventory;
 
 import forestry.core.gui.ContainerLiquidTanks;
@@ -51,4 +52,20 @@ public class ContainerMoistener extends ContainerLiquidTanks<TileMoistener> impl
 		tile.checkRecipe();
 	}
 
+	@Override
+	public void updateProgressBar(int messageId, int data) {
+		super.updateProgressBar(messageId, data);
+
+		tile.getGUINetworkData(messageId, data);
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public void detectAndSendChanges() {
+		super.detectAndSendChanges();
+
+		for (Object crafter : crafters) {
+			tile.sendGUINetworkData(this, (ICrafting) crafter);
+		}
+	}
 }

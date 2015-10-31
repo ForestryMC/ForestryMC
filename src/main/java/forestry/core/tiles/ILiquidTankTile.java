@@ -10,16 +10,10 @@
  ******************************************************************************/
 package forestry.core.tiles;
 
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
-
 import forestry.core.fluids.ITankManager;
 
 public interface ILiquidTankTile extends ILocatable {
 
 	ITankManager getTankManager();
 
-	void getGUINetworkData(int messageId, int data);
-
-	void sendGUINetworkData(Container container, ICrafting iCrafting);
 }
