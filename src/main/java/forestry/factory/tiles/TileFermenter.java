@@ -159,7 +159,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 			productTank.fill(new FluidStack(currentRecipe.getOutput(), productAmount), true);
 
 			fuelBurnTime--;
-			tankManager.drain(resourceTank.getFluidType(), fuelCurrentFerment, true);
+			resourceTank.drain(fuelCurrentFerment, true);
 			fermentationTime -= this.fuelCurrentFerment;
 
 			// Not done yet
@@ -353,7 +353,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 
 	@Override
 	public FluidStack drain(ForgeDirection from, int quantityMax, boolean doEmpty) {
-		return tankManager.drain(productTank.getFluidType(), quantityMax, doEmpty);
+		return tankManager.drain(from, quantityMax, doEmpty);
 	}
 
 	@Override
@@ -399,7 +399,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 				Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
 				return tile.resourceTank.accepts(fluid);
 			} else if (slotIndex == SLOT_CAN_INPUT) {
-				return FluidHelper.isEmptyContainer(itemStack);
+				return FluidHelper.isFillableContainer(itemStack);
 			} else if (slotIndex == SLOT_FUEL) {
 				return FuelManager.fermenterFuel.containsKey(itemStack);
 			}

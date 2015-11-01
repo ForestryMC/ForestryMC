@@ -240,8 +240,10 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 
 		if (specimenToAnalyze.isAnalyzed()) {
 			setTicksPerWorkCycle(1);
+			setEnergyPerWorkCycle(0);
 		} else {
 			setTicksPerWorkCycle(TIME_TO_ANALYZE);
+			setEnergyPerWorkCycle(ENERGY_PER_WORK_CYCLE);
 		}
 
 		PacketItemStackDisplay packet = new PacketItemStackDisplay(this, getIndividualOnDisplay());

@@ -148,15 +148,13 @@ public class TileGenerator extends TileBase implements ISidedInventory, ILiquidT
 
 		if (resourceTank.getFluidAmount() > 0) {
 			GeneratorFuel fuel = FuelManager.generatorFuel.get(resourceTank.getFluid().getFluid());
-
-			if (resourceTank.getFluidAmount() >= fuel.fuelConsumed.amount
-					&& ic2EnergySource.getFreeCapacity() >= fuel.eu) {
+			if (resourceTank.canDrain(fuel.fuelConsumed) && ic2EnergySource.getFreeCapacity() >= fuel.eu) {
 				ic2EnergySource.addEnergy(fuel.eu);
 				this.tickCount++;
 
 				if (tickCount >= fuel.rate) {
 					tickCount = 0;
-					tankManager.drain(fuel.fuelConsumed, true);
+					resourceTank.drain(fuel.fuelConsumed.amount, true);
 				}
 			}
 

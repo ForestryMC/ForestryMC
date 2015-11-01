@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.fluids.tanks;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.Locale;
 
@@ -20,6 +21,9 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 
+import forestry.core.fluids.FakeTankUpdateHandler;
+import forestry.core.fluids.ITankUpdateHandler;
+import forestry.core.fluids.TankManager;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.tooltips.ToolTipLine;
 import forestry.core.network.DataInputStreamForestry;
@@ -37,6 +41,8 @@ public class StandardTank extends FluidTank implements IStreamable {
 
 	public TankMode tankMode = TankMode.DEFAULT;
 	private static final int DEFAULT_COLOR = 0xFFFFFF;
+	@Nonnull
+	private ITankUpdateHandler tankUpdateHandler = FakeTankUpdateHandler.instance;
 	private int tankIndex;
 
 	public StandardTank(int capacity) {
@@ -61,6 +67,10 @@ public class StandardTank extends FluidTank implements IStreamable {
 
 	public void setTankIndex(int index) {
 		this.tankIndex = index;
+	}
+
+	public void setTankUpdateHandler(@Nonnull TankManager tankUpdateHandler) {
+		this.tankUpdateHandler = tankUpdateHandler;
 	}
 
 	public int getTankIndex() {
@@ -102,7 +112,11 @@ public class StandardTank extends FluidTank implements IStreamable {
 		if (!accepts(resource.getFluid())) {
 			return 0;
 		}
-		return super.fill(resource, doFill);
+		int filled = super.fill(resource, doFill);
+		if (doFill && filled > 0) {
+			tankUpdateHandler.updateTankLevels(this);
+		}
+		return filled;
 	}
 
 	public boolean accepts(Fluid fluid) {
@@ -144,12 +158,21 @@ public class StandardTank extends FluidTank implements IStreamable {
 		return (drained != null) && (drained.amount == amount);
 	}
 
+	public boolean canDrain(FluidStack toDrain) {
+		FluidStack drained = drain(toDrain.amount, false);
+		return drained.isFluidStackIdentical(toDrain);
+	}
+
 	@Override
 	public FluidStack drain(int maxDrain, boolean doDrain) {
 		if (maxDrain <= 0) {
 			return null;
 		}
-		return super.drain(maxDrain, doDrain);
+		FluidStack drained = super.drain(maxDrain, doDrain);
+		if (doDrain && drained != null && drained.amount > 0) {
+			tankUpdateHandler.updateTankLevels(this);
+		}
+		return drained;
 	}
 
 	@Override

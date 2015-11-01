@@ -144,7 +144,11 @@ public final class FluidHelper {
 			return FillStatus.NO_FLUID; // standard containers will not fill if there isn't enough fluid
 		}
 
-		boolean moveToOutput = (getFluidStackInContainer(filled).amount >= containerCapacity);
+		FluidStack fluidInContainer = getFluidStackInContainer(filled);
+		if (fluidInContainer == null) {
+			return FillStatus.INVALID_INPUT;
+		}
+		boolean moveToOutput = (fluidInContainer.amount >= containerCapacity);
 		if (moveToOutput) {
 			if ((output != null) && (output.stackSize >= output.getMaxStackSize() || !InventoryUtil.isItemEqual(filled, output))) {
 				return FillStatus.NO_SPACE;

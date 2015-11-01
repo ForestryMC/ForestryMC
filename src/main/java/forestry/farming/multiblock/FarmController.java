@@ -55,6 +55,7 @@ import forestry.core.errors.EnumErrorCode;
 import forestry.core.fluids.Fluids;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
+import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.InventoryAdapter;
@@ -125,6 +126,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	private final InventoryAdapter sockets;
 	private final FarmInventory inventory;
 	private final TankManager tankManager;
+	private final StandardTank resourceTank;
 	private final FarmHydrationManager hydrationManager;
 	private final FarmFertilizerManager fertilizerManager;
 
@@ -136,8 +138,8 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	public FarmController(World world) {
 		super(world);
 
-		FilteredTank liquidTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, FluidRegistry.WATER);
-		this.tankManager = new TankManager(this, liquidTank);
+		this.resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, FluidRegistry.WATER);
+		this.tankManager = new TankManager(this, resourceTank);
 
 		this.inventory = new FarmInventory(this);
 		this.sockets = new InventoryAdapter(1, "sockets");
@@ -800,12 +802,12 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 	@Override
 	public boolean hasLiquid(FluidStack liquid) {
-		return tankManager.getFluidAmount(0) >= liquid.amount;
+		return resourceTank.canDrain(liquid);
 	}
 
 	@Override
 	public void removeLiquid(FluidStack liquid) {
-		tankManager.drain(liquid, true);
+		resourceTank.drain(liquid.amount, true);
 	}
 
 	@Override
