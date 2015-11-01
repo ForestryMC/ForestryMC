@@ -32,6 +32,7 @@ import cpw.mods.fml.common.Optional;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorLogic;
+import forestry.api.fuels.FermenterFuel;
 import forestry.api.fuels.FuelManager;
 import forestry.api.recipes.IFermenterRecipe;
 import forestry.api.recipes.IVariableFermentable;
@@ -146,42 +147,21 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 
 	@Override
 	public boolean workCycle() {
-		if (fuelBurnTime <= 0) {
-			ItemStack fuel = getFuelStack();
-			fuelBurnTime = fuelTotalTime = determineFuelValue(fuel);
+		int fermented = Math.min(fermentationTime, fuelCurrentFerment);
+		int productAmount = Math.round(fermented * currentRecipe.getModifier() * currentResourceModifier);
+		productTank.fill(new FluidStack(currentRecipe.getOutput(), productAmount), true);
 
-			fuelCurrentFerment = determineFermentPerCycle(fuel);
-			decrStackSize(SLOT_FUEL, 1);
-			return false;
-		} else {
-			int fermented = Math.min(fermentationTime, fuelCurrentFerment);
-			int productAmount = Math.round(fermented * currentRecipe.getModifier() * currentResourceModifier);
-			productTank.fill(new FluidStack(currentRecipe.getOutput(), productAmount), true);
+		fuelBurnTime--;
+		resourceTank.drain(fuelCurrentFerment, true);
+		fermentationTime -= this.fuelCurrentFerment;
 
-			fuelBurnTime--;
-			resourceTank.drain(fuelCurrentFerment, true);
-			fermentationTime -= this.fuelCurrentFerment;
-
-			// Not done yet
-			if (fermentationTime > 0) {
-				return false;
-			}
-
-			currentRecipe = null;
-			return true;
-		}
-	}
-
-	private boolean addProduct(FluidStack output) {
-		int amount = productTank.fill(output, false);
-
-		if (amount == output.amount) {
-			productTank.fill(output, true);
-
-			return true;
-		} else {
+		// Not done yet
+		if (fermentationTime > 0) {
 			return false;
 		}
+
+		currentRecipe = null;
+		return true;
 	}
 
 	private void checkRecipe() {
@@ -202,31 +182,25 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 		}
 	}
 
-	/**
-	 * Returns the burnTime an item of the passed ItemStack provides
-	 */
-	private static int determineFuelValue(ItemStack item) {
-		if (item == null) {
-			return 0;
+	private void checkFuel() {
+		if (fuelBurnTime > 0) {
+			return;
 		}
 
-		if (FuelManager.fermenterFuel.containsKey(item)) {
-			return FuelManager.fermenterFuel.get(item).burnDuration;
-		} else {
-			return 0;
-		}
-	}
-
-	private static int determineFermentPerCycle(ItemStack item) {
-		if (item == null) {
-			return 0;
+		ItemStack fuel = getStackInSlot(SLOT_FUEL);
+		if (fuel == null) {
+			return;
 		}
 
-		if (FuelManager.fermenterFuel.containsKey(item)) {
-			return FuelManager.fermenterFuel.get(item).fermentPerCycle;
-		} else {
-			return 0;
+		FermenterFuel fermenterFuel = FuelManager.fermenterFuel.get(fuel);
+		if (fermenterFuel == null) {
+			return;
 		}
+
+		fuelBurnTime = fuelTotalTime = fermenterFuel.burnDuration;
+		fuelCurrentFerment = fermenterFuel.fermentPerCycle;
+
+		decrStackSize(SLOT_FUEL, 1);
 	}
 
 	private static float determineResourceMod(ItemStack itemstack) {
@@ -240,29 +214,32 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 
 	@Override
 	public boolean hasResourcesMin(float percentage) {
-		if (this.getFermentationStack() == null) {
+		ItemStack fermentationStack = getStackInSlot(SLOT_RESOURCE);
+		if (fermentationStack == null) {
 			return false;
 		}
 
-		return ((float) getFermentationStack().stackSize / (float) getFermentationStack().getMaxStackSize()) > percentage;
+		return ((float) fermentationStack.stackSize / (float) fermentationStack.getMaxStackSize()) > percentage;
 	}
 
 	@Override
 	public boolean hasFuelMin(float percentage) {
-		if (this.getFuelStack() == null) {
+		ItemStack fuelStack = getStackInSlot(SLOT_FUEL);
+		if (fuelStack == null) {
 			return false;
 		}
 
-		return ((float) getFuelStack().stackSize / (float) getFuelStack().getMaxStackSize()) > percentage;
+		return ((float) fuelStack.stackSize / (float) fuelStack.getMaxStackSize()) > percentage;
 	}
 
 	@Override
 	public boolean hasWork() {
 		checkRecipe();
+		checkFuel();
 
 		boolean hasRecipe = (currentRecipe != null);
-		boolean hasFuel = fuelBurnTime > 0 || determineFuelValue(getFuelStack()) > 0;
-		boolean hasResource = fermentationTime > 0 || getFermentationStack() != null;
+		boolean hasFuel = fuelBurnTime > 0;
+		boolean hasResource = fermentationTime > 0 || getStackInSlot(SLOT_RESOURCE) != null;
 		boolean hasFluidResource = resourceTank.canDrain(fuelCurrentFerment);
 		boolean hasFluidSpace = true;
 
@@ -305,14 +282,6 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 	@Override
 	public TankRenderInfo getProductTankInfo() {
 		return new TankRenderInfo(productTank);
-	}
-
-	private ItemStack getFermentationStack() {
-		return getStackInSlot(SLOT_RESOURCE);
-	}
-
-	private ItemStack getFuelStack() {
-		return getStackInSlot(SLOT_FUEL);
 	}
 
 	/* SMP GUI */
