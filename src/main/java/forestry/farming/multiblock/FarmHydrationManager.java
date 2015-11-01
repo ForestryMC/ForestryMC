@@ -14,7 +14,9 @@ import java.io.IOException;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
 
+import forestry.api.core.BiomeHelper;
 import forestry.api.core.INBTTagable;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
@@ -35,8 +37,8 @@ public class FarmHydrationManager implements IFarmLedgerDelegate, INBTTagable, I
 		this.climatised = climatised;
 	}
 
-	public void updateServer(World world) {
-		if (world.isRaining()) {
+	public void updateServer(World world, BiomeGenBase biome) {
+		if (world.isRaining() && BiomeHelper.canRainOrSnow(biome)) {
 			if (hydrationDelay > 0) {
 				hydrationDelay--;
 			} else {
