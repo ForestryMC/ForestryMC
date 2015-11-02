@@ -22,6 +22,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 
 import forestry.core.fluids.FakeTankUpdateHandler;
+import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.ITankUpdateHandler;
 import forestry.core.fluids.TankManager;
 import forestry.core.gui.tooltips.ToolTip;
@@ -160,7 +161,7 @@ public class StandardTank extends FluidTank implements IStreamable {
 
 	public boolean canDrain(FluidStack toDrain) {
 		FluidStack drained = drain(toDrain.amount, false);
-		return drained.isFluidStackIdentical(toDrain);
+		return FluidHelper.areFluidStacksEqual(drained, toDrain);
 	}
 
 	@Override
