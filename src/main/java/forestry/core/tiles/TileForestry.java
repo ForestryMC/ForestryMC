@@ -83,19 +83,17 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	}
 
 	public void rotateAfterPlacement(EntityPlayer player, int side) {
-		int l = MathHelper.floor_double(((player.rotationYaw * 4F) / 360F) + 0.5D) & 3;
-		if (l == 0) {
-			setOrientation(ForgeDirection.NORTH);
+		int rotations = MathHelper.floor_double(((player.rotationYaw * 4F) / 360F) + 0.5D) & 3;
+		if (rotations == 0) {
+			return;
 		}
-		if (l == 1) {
-			setOrientation(ForgeDirection.EAST);
+
+		ForgeDirection orientation = getOrientation();
+		for (int i = 0; i < rotations; i++) {
+			orientation = orientation.getRotation(ForgeDirection.UP);
 		}
-		if (l == 2) {
-			setOrientation(ForgeDirection.SOUTH);
-		}
-		if (l == 3) {
-			setOrientation(ForgeDirection.WEST);
-		}
+
+		setOrientation(orientation);
 	}
 
 	public boolean rotate(ForgeDirection axis) {
@@ -230,8 +228,10 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 		}
 		this.orientation = orientation;
 		this.setNeedsNetworkUpdate();
-		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, worldObj.getBlock(xCoord, yCoord, zCoord));
-		worldObj.func_147479_m(xCoord, yCoord, zCoord);
+		if (worldObj != null) {
+			worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, worldObj.getBlock(xCoord, yCoord, zCoord));
+			worldObj.func_147479_m(xCoord, yCoord, zCoord);
+		}
 	}
 
 	protected final void setNeedsNetworkUpdate() {

@@ -91,7 +91,7 @@ public class RenderMill extends TileEntitySpecialRenderer implements IBlockRende
 	}
 
 	@Override
-	public void inventoryRender(double x, double y, double z) {
+	public void inventoryRender(int meta, double x, double y, double z) {
 		byte charge = 0;
 		render(0.0f, charge, ForgeDirection.WEST, x, y, z);
 	}

@@ -47,6 +47,7 @@ public class MachineDefinition {
 	private Block block;
 	private final int meta;
 	private boolean legacy;
+	private ForgeDirection defaultOrientation = ForgeDirection.NORTH;
 
 	public final IBlockRenderer renderer;
 	
@@ -107,6 +108,14 @@ public class MachineDefinition {
 		return this;
 	}
 
+	public void setDefaultOrientation(ForgeDirection defaultOrientation) {
+		this.defaultOrientation = defaultOrientation;
+	}
+
+	public ForgeDirection getDefaultOrientation() {
+		return defaultOrientation;
+	}
+
 	public void register() {
 		registerTileEntity();
 		registerCrafting();
@@ -140,11 +149,17 @@ public class MachineDefinition {
 	}
 
 	public TileEntity createMachine() {
+		TileForestry tile;
 		try {
-			return teClass.getConstructor().newInstance();
+			tile = teClass.getConstructor().newInstance();
 		} catch (Exception ex) {
 			throw new RuntimeException("Failed to instantiate tile entity of class " + teClass.getName());
 		}
+
+		if (tile != null) {
+			tile.setOrientation(defaultOrientation);
+		}
+		return tile;
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})

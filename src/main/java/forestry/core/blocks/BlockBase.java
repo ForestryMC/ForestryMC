@@ -96,11 +96,11 @@ public class BlockBase extends BlockForestry {
 		}
 	}
 
-	private MachineDefinition getDefinition(IBlockAccess world, int x, int y, int z) {
+	public MachineDefinition getDefinition(IBlockAccess world, int x, int y, int z) {
 		return getDefinition(world.getBlockMetadata(x, y, z));
 	}
 
-	private MachineDefinition getDefinition(int metadata) {
+	public MachineDefinition getDefinition(int metadata) {
 		if (metadata >= definitions.size() || definitions.get(metadata) == null) {
 			return definitions.get(0);
 		}

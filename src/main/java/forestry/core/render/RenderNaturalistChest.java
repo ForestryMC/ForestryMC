@@ -32,7 +32,7 @@ public class RenderNaturalistChest extends TileEntitySpecialRenderer implements 
 	}
 
 	@Override
-	public void inventoryRender(double x, double y, double z) {
+	public void inventoryRender(int meta, double x, double y, double z) {
 		render(ForgeDirection.EAST, 0, 0, x, y, z, 0);
 	}
 

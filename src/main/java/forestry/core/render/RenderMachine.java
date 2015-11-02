@@ -24,6 +24,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
+import forestry.core.blocks.BlockBase;
+import forestry.core.config.Constants;
+import forestry.core.config.ForestryBlock;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.IRenderableTile;
 
@@ -85,8 +88,13 @@ public class RenderMachine extends TileEntitySpecialRenderer implements IBlockRe
 	}
 
 	@Override
-	public void inventoryRender(double x, double y, double z) {
-		render(TankRenderInfo.EMPTY, TankRenderInfo.EMPTY, ForgeDirection.SOUTH, x, y, z);
+	public void inventoryRender(int meta, double x, double y, double z) {
+		BlockBase factoryTESR = ((BlockBase) ForestryBlock.factoryTESR.block());
+		ForgeDirection orientation = factoryTESR.getDefinition(meta).getDefaultOrientation();
+
+		orientation = orientation.getRotation(ForgeDirection.UP).getRotation(ForgeDirection.UP);
+
+		render(TankRenderInfo.EMPTY, TankRenderInfo.EMPTY, orientation, x, y, z);
 	}
 
 	@Override

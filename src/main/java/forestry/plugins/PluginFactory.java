@@ -12,11 +12,14 @@ package forestry.plugins;
 
 import com.google.common.collect.ImmutableList;
 
+import java.util.Map;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
@@ -164,6 +167,7 @@ public class PluginFactory extends ForestryPlugin {
 				'#', "blockGlass",
 				'X', "ingotCopper",
 				'Y', ForestryItem.sturdyCasing.getItemStack())));
+		definitionCentrifuge.setDefaultOrientation(ForgeDirection.UP);
 
 		definitionFermenter = factoryTESR.addDefinition(new MachineDefinition(Constants.DEFINITION_FERMENTER_META, "forestry.Fermenter", TileFermenter.class,
 				Proxies.render.getRenderDefaultMachine(Constants.TEXTURE_PATH_BLOCKS + "/fermenter_"), ShapedRecipeCustom.createShapedRecipe(

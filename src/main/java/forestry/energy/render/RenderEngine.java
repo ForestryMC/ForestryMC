@@ -94,7 +94,7 @@ public class RenderEngine extends TileEntitySpecialRenderer implements IBlockRen
 	}
 
 	@Override
-	public void inventoryRender(double x, double y, double z) {
+	public void inventoryRender(int meta, double x, double y, double z) {
 		render(TemperatureState.COOL, 0.25F, ForgeDirection.UP, x, y, z);
 	}
 
