@@ -31,7 +31,6 @@ import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 
-import forestry.api.arboriculture.EnumFruitFamily;
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.EnumWoodType;
 import forestry.api.arboriculture.TreeManager;
@@ -40,11 +39,6 @@ import forestry.api.genetics.AlleleManager;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
-import forestry.arboriculture.FruitProviderNone;
-import forestry.arboriculture.FruitProviderPod;
-import forestry.arboriculture.FruitProviderPod.EnumPodType;
-import forestry.arboriculture.FruitProviderRandom;
-import forestry.arboriculture.FruitProviderRipening;
 import forestry.arboriculture.GuiHandlerArboriculture;
 import forestry.arboriculture.VillageHandlerArboriculture;
 import forestry.arboriculture.WoodItemAccess;
@@ -57,8 +51,6 @@ import forestry.arboriculture.blocks.BlockPlanks;
 import forestry.arboriculture.blocks.BlockSapling;
 import forestry.arboriculture.blocks.BlockSlab;
 import forestry.arboriculture.commands.CommandTree;
-import forestry.arboriculture.genetics.GrowthProvider;
-import forestry.arboriculture.genetics.GrowthProviderTropical;
 import forestry.arboriculture.genetics.TreeBranchDefinition;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.genetics.TreeFactory;
@@ -68,7 +60,6 @@ import forestry.arboriculture.genetics.TreekeepingMode;
 import forestry.arboriculture.genetics.alleles.AlleleFruit;
 import forestry.arboriculture.genetics.alleles.AlleleGrowth;
 import forestry.arboriculture.genetics.alleles.AlleleLeafEffect;
-import forestry.arboriculture.genetics.alleles.AlleleLeafEffectNone;
 import forestry.arboriculture.items.ItemBlockLeaves;
 import forestry.arboriculture.items.ItemBlockWood;
 import forestry.arboriculture.items.ItemGermlingGE;
@@ -88,6 +79,7 @@ import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
 import forestry.core.config.GameMode;
 import forestry.core.fluids.Fluids;
+import forestry.core.genetics.alleles.AllelePlantType;
 import forestry.core.items.ItemBlockForestry;
 import forestry.core.items.ItemFruit.EnumFruit;
 import forestry.core.network.PacketIdClient;
@@ -362,31 +354,10 @@ public class PluginArboriculture extends ForestryPlugin {
 
 		TreeBranchDefinition.createAlleles();
 
-		// FRUITS
-		AlleleFruit.fruitNone = new AlleleFruit("none", new FruitProviderNone("none", null));
-		AlleleFruit.fruitApple = new AlleleFruit("apple", new FruitProviderRandom("apple", EnumFruitFamily.POMES, new ItemStack(Items.apple), 1.0f).setColour(0xff2e2e).setOverlay("pomes"));
-		AlleleFruit.fruitCocoa = new AlleleFruit("cocoa", new FruitProviderPod("cocoa", EnumFruitFamily.JUNGLE, EnumPodType.COCOA));
-		// .setColours(0xecdca5, 0xc4d24a), true);
-		AlleleFruit.fruitChestnut = new AlleleFruit("chestnut", new FruitProviderRipening("chestnut", EnumFruitFamily.NUX, EnumFruit.CHESTNUT.getStack(), 1.0f).setRipeningPeriod(6).setColours(0x7f333d, 0xc4d24a).setOverlay("nuts"), true);
-		AlleleFruit.fruitWalnut = new AlleleFruit("walnut", new FruitProviderRipening("walnut", EnumFruitFamily.NUX, EnumFruit.WALNUT.getStack(), 1.0f).setRipeningPeriod(8).setColours(0xfba248, 0xc4d24a).setOverlay("nuts"), true);
-		AlleleFruit.fruitCherry = new AlleleFruit("cherry", new FruitProviderRipening("cherry", EnumFruitFamily.PRUNES, EnumFruit.CHERRY.getStack(), 1.0f).setColours(0xff2e2e, 0xc4d24a).setOverlay("berries"), true);
-		AlleleFruit.fruitDates = new AlleleFruit("dates", new FruitProviderPod("dates", EnumFruitFamily.JUNGLE, EnumPodType.DATES, EnumFruit.DATES.getStack(4)));
-		AlleleFruit.fruitPapaya = new AlleleFruit("papaya", new FruitProviderPod("papaya", EnumFruitFamily.JUNGLE, EnumPodType.PAPAYA, EnumFruit.PAPAYA.getStack()));
-		// Allele.fruitCoconut = new AlleleFruit("fruitCoconut", new
-		// FruitProviderPod("coconut", jungle, EnumPodType.COCONUT, new
-		// ItemStack[] { new ItemStack(
-		// ForestryItem.fruits, 1, EnumFruit.COCONUT.ordinal()) }));
-		AlleleFruit.fruitLemon = new AlleleFruit("lemon", new FruitProviderRipening("lemon", EnumFruitFamily.PRUNES, EnumFruit.LEMON.getStack(), 1.0f).setColours(0xeeee00, 0x99ff00).setOverlay("citrus"), true);
-		AlleleFruit.fruitPlum = new AlleleFruit("plum", new FruitProviderRipening("plum", EnumFruitFamily.PRUNES, EnumFruit.PLUM.getStack(), 1.0f).setColours(0x663446, 0xeeff1a).setOverlay("plums"), true);
-
-		// / TREES // GROWTH PROVIDER 1350 - 1399
-		AlleleGrowth.growthLightlevel = new AlleleGrowth("lightlevel", new GrowthProvider());
-		AlleleGrowth.growthAcacia = new AlleleGrowth("acacia", new GrowthProvider());
-		AlleleGrowth.growthTropical = new AlleleGrowth("tropical", new GrowthProviderTropical());
-
-		// / TREES // EFFECTS 1900 - 1999
-		AlleleLeafEffect.leavesNone = new AlleleLeafEffectNone();
-
+		AlleleFruit.createAlleles();
+		AlleleGrowth.createAlleles();
+		AlleleLeafEffect.createAlleles();
+		AllelePlantType.createAlleles();
 	}
 
 	private static void registerErsatzGenomes() {

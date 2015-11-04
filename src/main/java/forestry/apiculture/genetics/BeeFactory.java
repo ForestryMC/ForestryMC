@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
+import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.IAlleleBeeSpeciesCustom;
 import forestry.api.apiculture.IBeeFactory;
 import forestry.api.genetics.AlleleManager;
@@ -20,7 +21,7 @@ public class BeeFactory implements IBeeFactory {
 	@Override
 	public IAlleleBeeSpeciesCustom createSpecies(String uid, boolean dominant, String authority, String unlocalizedName, String unlocalizedDescription, IClassification branch, String binomial, int primaryColor, int secondaryColor) {
 		IAlleleBeeSpeciesCustom species = new AlleleBeeSpecies(uid, unlocalizedName, authority, unlocalizedDescription, dominant, branch, binomial, primaryColor, secondaryColor);
-		AlleleManager.alleleRegistry.registerAllele(species);
+		AlleleManager.alleleRegistry.registerAllele(species, EnumBeeChromosome.SPECIES);
 		return species;
 	}
 

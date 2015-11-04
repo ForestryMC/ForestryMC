@@ -10,15 +10,34 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics.alleles;
 
+import java.util.Arrays;
+import java.util.List;
+
+import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleGrowth;
 import forestry.api.arboriculture.IGrowthProvider;
+import forestry.api.genetics.AlleleManager;
+import forestry.arboriculture.genetics.GrowthProvider;
+import forestry.arboriculture.genetics.GrowthProviderTropical;
 import forestry.core.genetics.alleles.AlleleCategorized;
 
 public class AlleleGrowth extends AlleleCategorized implements IAlleleGrowth {
 
-	public static IAlleleGrowth growthLightlevel;
+	public static IAlleleGrowth growthLightLevel;
 	public static IAlleleGrowth growthAcacia;
 	public static IAlleleGrowth growthTropical;
+
+	public static void createAlleles() {
+		List<IAlleleGrowth> growthAlleles = Arrays.asList(
+				growthLightLevel = new AlleleGrowth("lightlevel", new GrowthProvider()),
+				growthAcacia = new AlleleGrowth("acacia", new GrowthProvider()),
+				growthTropical = new AlleleGrowth("tropical", new GrowthProviderTropical())
+		);
+
+		for (IAlleleGrowth alleleGrowth : growthAlleles) {
+			AlleleManager.alleleRegistry.registerAllele(alleleGrowth, EnumTreeChromosome.GROWTH);
+		}
+	}
 
 	private final IGrowthProvider provider;
 

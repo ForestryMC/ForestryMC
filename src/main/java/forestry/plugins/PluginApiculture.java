@@ -27,7 +27,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.potion.Potion;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.world.World;
@@ -85,21 +84,6 @@ import forestry.apiculture.genetics.BeekeepingMode;
 import forestry.apiculture.genetics.HiveDrop;
 import forestry.apiculture.genetics.JubilanceFactory;
 import forestry.apiculture.genetics.alleles.AlleleEffect;
-import forestry.apiculture.genetics.alleles.AlleleEffectAggressive;
-import forestry.apiculture.genetics.alleles.AlleleEffectCreeper;
-import forestry.apiculture.genetics.alleles.AlleleEffectExploration;
-import forestry.apiculture.genetics.alleles.AlleleEffectFertile;
-import forestry.apiculture.genetics.alleles.AlleleEffectFungification;
-import forestry.apiculture.genetics.alleles.AlleleEffectGlacial;
-import forestry.apiculture.genetics.alleles.AlleleEffectHeroic;
-import forestry.apiculture.genetics.alleles.AlleleEffectIgnition;
-import forestry.apiculture.genetics.alleles.AlleleEffectMisanthrope;
-import forestry.apiculture.genetics.alleles.AlleleEffectNone;
-import forestry.apiculture.genetics.alleles.AlleleEffectPotion;
-import forestry.apiculture.genetics.alleles.AlleleEffectRadioactive;
-import forestry.apiculture.genetics.alleles.AlleleEffectRepulsion;
-import forestry.apiculture.genetics.alleles.AlleleEffectResurrection;
-import forestry.apiculture.genetics.alleles.AlleleEffectSnowing;
 import forestry.apiculture.items.ItemArmorApiarist;
 import forestry.apiculture.items.ItemBeeGE;
 import forestry.apiculture.items.ItemBeealyzer;
@@ -159,7 +143,6 @@ import forestry.core.recipes.ShapedRecipeCustom;
 import forestry.core.tiles.MachineDefinition;
 import forestry.core.tiles.TileAnalyzer;
 import forestry.core.utils.EntityUtil;
-import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.Stack;
 import forestry.core.utils.StringUtil;
@@ -1003,35 +986,11 @@ public class PluginApiculture extends ForestryPlugin {
 			apidae.addMemberGroup(beeBranch.getBranch());
 		}
 
-		// / BEES // EFFECTS 1800 - 1899
-		AlleleEffect.effectNone = new AlleleEffectNone("none", true);
-		AlleleEffect.effectAggressive = new AlleleEffectAggressive();
-		AlleleEffect.effectHeroic = new AlleleEffectHeroic();
-		AlleleEffect.effectBeatific = new AlleleEffectPotion("beatific", false, Potion.regeneration, 100);
-		AlleleEffect.effectMiasmic = new AlleleEffectPotion("miasmic", false, Potion.poison, 600, 100, 0.1f);
-		AlleleEffect.effectMisanthrope = new AlleleEffectMisanthrope();
-		AlleleEffect.effectGlacial = new AlleleEffectGlacial();
-		AlleleEffect.effectRadioactive = new AlleleEffectRadioactive();
-		AlleleEffect.effectCreeper = new AlleleEffectCreeper();
-		AlleleEffect.effectIgnition = new AlleleEffectIgnition();
-		AlleleEffect.effectExploration = new AlleleEffectExploration();
-		AlleleEffect.effectFestiveEaster = new AlleleEffectNone("festiveEaster", true);
-		AlleleEffect.effectSnowing = new AlleleEffectSnowing();
-		AlleleEffect.effectDrunkard = new AlleleEffectPotion("drunkard", false, Potion.confusion, 100);
-		AlleleEffect.effectReanimation = new AlleleEffectResurrection("reanimation", AlleleEffectResurrection.getReanimationList());
-		AlleleEffect.effectResurrection = new AlleleEffectResurrection("resurrection", AlleleEffectResurrection.getResurrectionList());
-		AlleleEffect.effectRepulsion = new AlleleEffectRepulsion();
-		AlleleEffect.effectFertile = new AlleleEffectFertile();
-		AlleleEffect.effectMycophilic = new AlleleEffectFungification();
+		AlleleEffect.createAlleles();
 	}
 
 	public static double getSecondPrincessChance() {
 		return secondPrincessChance;
-	}
-
-	private static void parseAdditionalFlowers(String list, ArrayList<ItemStack> target) {
-		List<ItemStack> flowers = ItemStackUtil.parseItemStackStrings(list, 0);
-		target.addAll(flowers);
 	}
 
 	private static void parseBeeBlacklist(String list) {

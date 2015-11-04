@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.genetics.alleles;
 
+import com.google.common.collect.HashMultimap;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -25,6 +27,7 @@ import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleHandler;
 import forestry.api.genetics.IAlleleRegistry;
 import forestry.api.genetics.IAlleleSpecies;
+import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IClassification.EnumClassLevel;
 import forestry.api.genetics.IFruitFamily;
@@ -105,6 +108,8 @@ public class AlleleRegistry implements IAlleleRegistry {
 
 	/* ALLELES */
 	private final LinkedHashMap<String, IAllele> alleleMap = new LinkedHashMap<>(ALLELE_ARRAY_SIZE);
+	private final HashMultimap<IChromosomeType, IAllele> allelesByType = HashMultimap.create();
+	private final HashMultimap<IAllele, IChromosomeType> typesByAllele = HashMultimap.create();
 	private final LinkedHashMap<String, IAllele> deprecatedAlleleMap = new LinkedHashMap<>(32);
 	private final LinkedHashMap<String, IClassification> classificationMap = new LinkedHashMap<>(128);
 	private final LinkedHashMap<String, IFruitFamily> fruitMap = new LinkedHashMap<>(64);
@@ -157,6 +162,18 @@ public class AlleleRegistry implements IAlleleRegistry {
 	}
 
 	@Override
+	public void registerAllele(IAllele allele, IChromosomeType... chromosomeTypes) {
+		for (IChromosomeType chromosomeType : chromosomeTypes) {
+			if (!chromosomeType.getAlleleClass().isAssignableFrom(allele.getClass())) {
+				throw new IllegalArgumentException("Allele class (" + allele.getClass() + ") does not match chromosome type (" + chromosomeType.getAlleleClass() + ").");
+			}
+			allelesByType.put(chromosomeType, allele);
+			typesByAllele.put(allele, chromosomeType);
+		}
+		registerAllele(allele);
+	}
+
+	@Override
 	public void registerDeprecatedAlleleReplacement(String deprecatedUID, IAllele replacementAllele) {
 		if (deprecatedAlleleMap.containsKey(deprecatedUID)) {
 			return;
@@ -174,6 +191,16 @@ public class AlleleRegistry implements IAlleleRegistry {
 		}
 
 		return allele;
+	}
+
+	@Override
+	public Collection<IAllele> getRegisteredAlleles(IChromosomeType type) {
+		return Collections.unmodifiableSet(allelesByType.get(type));
+	}
+
+	// This method is not useful until all mod addon alleles are registered with their valid IChromosomeTypes
+	public Collection<IChromosomeType> getChromosomeTypes(IAllele allele) {
+		return Collections.unmodifiableSet(typesByAllele.get(allele));
 	}
 
 	/* CLASSIFICATIONS */

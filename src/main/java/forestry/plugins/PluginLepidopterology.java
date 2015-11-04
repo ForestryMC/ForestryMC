@@ -45,8 +45,7 @@ import forestry.lepidopterology.ButterflySpawner;
 import forestry.lepidopterology.GuiHandlerLepidopterology;
 import forestry.lepidopterology.commands.CommandButterfly;
 import forestry.lepidopterology.entities.EntityButterfly;
-import forestry.lepidopterology.genetics.AlleleEffect;
-import forestry.lepidopterology.genetics.AlleleEffectNone;
+import forestry.lepidopterology.genetics.AlleleButterflyEffect;
 import forestry.lepidopterology.genetics.ButterflyBranchDefinition;
 import forestry.lepidopterology.genetics.ButterflyDefinition;
 import forestry.lepidopterology.genetics.ButterflyFactory;
@@ -84,7 +83,7 @@ public class PluginLepidopterology extends ForestryPlugin {
 		ForestryBlock.lepidopterology.block().setCreativeTab(Tabs.tabLepidopterology);
 
 		ButterflyBranchDefinition.createAlleles();
-		AlleleEffect.butterflyNone = new AlleleEffectNone();
+		AlleleButterflyEffect.createAlleles();
 	}
 
 	@Override

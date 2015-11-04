@@ -13,8 +13,10 @@ package forestry.arboriculture.genetics.alleles;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 
+import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleLeafEffect;
 import forestry.api.arboriculture.ITreeGenome;
+import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IEffectData;
 import forestry.core.genetics.alleles.Allele;
 import forestry.core.genetics.alleles.AlleleCategorized;
@@ -24,6 +26,11 @@ public class AlleleLeafEffect extends AlleleCategorized implements IAlleleLeafEf
 	private static final int[] DEFAULT_EFFECT_AREA = new int[]{12, 12, 12};
 
 	public static Allele leavesNone;
+
+	public static void createAlleles() {
+		leavesNone = new AlleleLeafEffectNone();
+		AlleleManager.alleleRegistry.registerAllele(leavesNone, EnumTreeChromosome.EFFECT);
+	}
 
 	protected AlleleLeafEffect(String valueName, boolean isDominant) {
 		super("forestry", "leaves", valueName, isDominant);

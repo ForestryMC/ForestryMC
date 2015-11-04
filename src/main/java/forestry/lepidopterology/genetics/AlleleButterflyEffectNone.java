@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.lepidopterology.genetics;
 
-public class AlleleEffectNone extends AlleleEffect {
-	public AlleleEffectNone() {
+public class AlleleButterflyEffectNone extends AlleleButterflyEffect {
+	public AlleleButterflyEffectNone() {
 		super("none", false);
 	}
 

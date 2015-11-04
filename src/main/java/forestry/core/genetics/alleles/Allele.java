@@ -12,7 +12,6 @@ package forestry.core.genetics.alleles;
 
 import net.minecraft.util.StatCollector;
 
-import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 
 public abstract class Allele implements IAllele {
@@ -22,17 +21,9 @@ public abstract class Allele implements IAllele {
 	private final String unlocalizedName;
 
 	protected Allele(String uid, String unlocalizedName, boolean isDominant) {
-		this(uid, unlocalizedName, isDominant, true);
-	}
-
-	protected Allele(String uid, String unlocalizedName, boolean isDominant, boolean doRegister) {
 		this.uid = uid;
 		this.isDominant = isDominant;
 		this.unlocalizedName = unlocalizedName;
-		
-		if (doRegister) {
-			AlleleManager.alleleRegistry.registerAllele(this);
-		}
 	}
 
 	@Override

@@ -13,6 +13,7 @@ package forestry.arboriculture.genetics;
 import java.awt.Color;
 
 import forestry.api.arboriculture.EnumLeafType;
+import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleTreeSpeciesCustom;
 import forestry.api.arboriculture.IGermlingIconProvider;
 import forestry.api.arboriculture.ILeafIconProvider;
@@ -27,7 +28,7 @@ public class TreeFactory implements ITreeFactory {
 	@Override
 	public IAlleleTreeSpeciesCustom createSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, boolean dominant, IClassification branch, String binomial, ILeafIconProvider leafIconProvider, IGermlingIconProvider germlingIconProvider, ITreeGenerator generator) {
 		IAlleleTreeSpeciesCustom treeSpecies = new AlleleTreeSpecies(uid, unlocalizedName, authority, unlocalizedDescription, dominant, branch, binomial, leafIconProvider, germlingIconProvider, generator);
-		AlleleManager.alleleRegistry.registerAllele(treeSpecies);
+		AlleleManager.alleleRegistry.registerAllele(treeSpecies, EnumTreeChromosome.SPECIES);
 		return treeSpecies;
 	}
 

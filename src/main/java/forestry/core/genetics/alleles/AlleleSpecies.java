@@ -47,7 +47,7 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesCust
 	private EnumHumidity humidity = EnumHumidity.NORMAL;
 
 	protected AlleleSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, boolean isDominant, IClassification branch, String binomial) {
-		super(uid, unlocalizedName, isDominant, false);
+		super(uid, unlocalizedName, isDominant);
 
 		this.branch = branch;
 		this.binomial = binomial;

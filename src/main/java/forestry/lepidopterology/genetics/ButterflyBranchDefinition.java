@@ -71,7 +71,7 @@ public enum ButterflyBranchDefinition implements IBranchDefinition {
 			AlleleHelper.instance.set(defaultTemplate, EnumButterflyChromosome.TOLERANT_FLYER, false);
 			AlleleHelper.instance.set(defaultTemplate, EnumButterflyChromosome.FIRE_RESIST, false);
 			AlleleHelper.instance.set(defaultTemplate, EnumButterflyChromosome.FLOWER_PROVIDER, EnumAllele.Flowers.VANILLA);
-			AlleleHelper.instance.set(defaultTemplate, EnumButterflyChromosome.EFFECT, AlleleEffect.butterflyNone);
+			AlleleHelper.instance.set(defaultTemplate, EnumButterflyChromosome.EFFECT, AlleleButterflyEffect.butterflyNone);
 		}
 		return Arrays.copyOf(defaultTemplate, defaultTemplate.length);
 	}

@@ -10,17 +10,23 @@
  ******************************************************************************/
 package forestry.lepidopterology.genetics;
 
+import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IEffectData;
+import forestry.api.lepidopterology.EnumButterflyChromosome;
 import forestry.api.lepidopterology.IAlleleButterflyEffect;
 import forestry.api.lepidopterology.IEntityButterfly;
-import forestry.core.genetics.alleles.Allele;
 import forestry.core.genetics.alleles.AlleleCategorized;
 
-public class AlleleEffect extends AlleleCategorized implements IAlleleButterflyEffect {
+public class AlleleButterflyEffect extends AlleleCategorized implements IAlleleButterflyEffect {
 
-	public static Allele butterflyNone;
+	public static IAlleleButterflyEffect butterflyNone;
 
-	public AlleleEffect(String valueName, boolean isDominant) {
+	public static void createAlleles() {
+		butterflyNone = new AlleleButterflyEffectNone();
+		AlleleManager.alleleRegistry.registerAllele(butterflyNone, EnumButterflyChromosome.EFFECT);
+	}
+
+	protected AlleleButterflyEffect(String valueName, boolean isDominant) {
 		super("forestry", "bf", valueName, isDominant);
 	}
 
