@@ -248,8 +248,8 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 		public final ItemStack empty;
 		public final ItemStack filled;
 
-		private BottlerRecipe(ItemStack empty, ItemStack filled) {
-			this.input = FluidHelper.getFluidStackInContainer(filled);
+		private BottlerRecipe(ItemStack empty, FluidStack input, ItemStack filled) {
+			this.input = input;
 			if (empty.getItem() instanceof IFluidContainerItem) {
 				FluidStack emptyFluid = FluidHelper.getFluidStackInContainer(empty);
 				if (emptyFluid != null) {
@@ -285,7 +285,12 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 				return null;
 			}
 
-			return new BottlerRecipe(empty, filled);
+			FluidStack input = FluidHelper.getFluidStackInContainer(filled);
+			if (input == null) {
+				return null;
+			}
+
+			return new BottlerRecipe(empty, input, filled);
 		}
 
 		@Override
