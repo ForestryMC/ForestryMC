@@ -104,7 +104,7 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 
 	@Override
 	public int getIconColour(int renderPass) {
-		return 0xffffff;
+		return leafIconProvider.getColor(false);
 	}
 
 	@Override

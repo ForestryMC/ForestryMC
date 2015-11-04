@@ -10,11 +10,6 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ListMultimap;
-
-import java.util.List;
-
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -24,195 +19,62 @@ import net.minecraft.util.EnumChatFormatting;
 import org.lwjgl.opengl.GL11;
 
 import forestry.core.config.Constants;
+import forestry.core.gui.widgets.GameTokenWidget;
+import forestry.core.gui.widgets.ProbeButton;
 import forestry.core.gui.widgets.Widget;
-import forestry.core.gui.widgets.WidgetManager;
-import forestry.core.network.PacketGuiSelectRequest;
-import forestry.core.proxy.Proxies;
-import forestry.core.render.SpriteSheet;
-import forestry.core.render.TextureManager;
 import forestry.core.tiles.EscritoireGame;
-import forestry.core.tiles.EscritoireGame.GameToken;
+import forestry.core.tiles.EscritoireTextSource;
 import forestry.core.tiles.TileEscritoire;
-import forestry.core.utils.StringUtil;
 
 public class GuiEscritoire extends GuiForestry<ContainerEscritoire, TileEscritoire> {
-
-	private enum Notes {
-		level1, level2, level3, level4, success, failure
-	}
-
-	private static final ListMultimap<Notes, String> researchNotes;
-
-	static {
-		researchNotes = ArrayListMultimap.create();
-		for (Notes notesLevel : Notes.values()) {
-			int levelCount = Integer.valueOf(StringUtil.localize("gui.escritoire.notes." + notesLevel + ".count"));
-			for (int i = 1; i <= levelCount; i++) {
-				String note = StringUtil.localize("gui.escritoire.notes." + notesLevel + '.' + i);
-				researchNotes.put(notesLevel, note);
-			}
-		}
-	}
-
-	private class TokenSlot extends Widget {
-
-		private final ItemStack HIDDEN_TOKEN;
-		private final int index;
-
-		public TokenSlot(WidgetManager manager, int xPos, int yPos, int index) {
-			super(manager, xPos, yPos);
-			this.index = index;
-
-			HIDDEN_TOKEN = new ItemStack(Items.book);
-		}
-
-		private boolean hasToken() {
-			return inventory.getGame().getToken(index) != null;
-		}
-
-		private GameToken getToken() {
-			return inventory.getGame().getToken(index);
-		}
-
-		@Override
-		public void draw(int startX, int startY) {
-
-			if (!hasToken()) {
-				return;
-			}
-
-			int tokenColour = getToken().getTokenColour();
-
-			float colorR = (tokenColour >> 16 & 255) / 255.0F;
-			float colorG = (tokenColour >> 8 & 255) / 255.0F;
-			float colorB = (tokenColour & 255) / 255.0F;
-
-			manager.gui.bindTexture(manager.gui.textureFile);
-			GL11.glColor4f(colorR, colorG, colorB, 1.0F);
-			manager.gui.drawTexturedModalRect(startX + xPos, startY + yPos, 228, 0, 22, 22);
-			GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
-
-			ItemStack tokenStack = HIDDEN_TOKEN;
-			if (getToken().isVisible()) {
-				tokenStack = getToken().tokenStack;
-			}
-
-
-			GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
-			GL11.glEnable(GL11.GL_DEPTH_TEST);
-			RenderHelper.enableGUIStandardItemLighting();
-			manager.gui.drawItemStack(tokenStack, startX + xPos + 3, startY + yPos + 3);
-			RenderHelper.disableStandardItemLighting();
-			GL11.glPopAttrib();
-
-			manager.gui.setZLevel(150f);
-			for (String ident : getToken().getOverlayIcons()) {
-				RenderHelper.enableGUIStandardItemLighting();
-				Proxies.render.bindTexture(SpriteSheet.ITEMS);
-				manager.gui.drawTexturedModelRectFromIcon(startX + xPos + 3, startY + yPos + 3, TextureManager.getInstance().getDefault(ident), 16, 16);
-				RenderHelper.disableStandardItemLighting();
-			}
-			manager.gui.setZLevel(0f);
-		}
-
-		@Override
-		protected String getLegacyTooltip(EntityPlayer player) {
-			return hasToken() && getToken().isVisible() ? getToken().getTooltip() : null;
-		}
-
-		@Override
-		public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
-			Proxies.net.sendToServer(new PacketGuiSelectRequest(index, 0));
-		}
-	}
-
-	private class ProbeButton extends Widget {
-
-		private boolean pressed;
-
-		public ProbeButton(WidgetManager manager, int xPos, int yPos) {
-			super(manager, xPos, yPos);
-			width = 22;
-			height = 25;
-		}
-
-		@Override
-		public void draw(int startX, int startY) {
-			manager.gui.bindTexture(manager.gui.textureFile);
-			GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
-			manager.gui.drawTexturedModalRect(startX + xPos, startY + yPos, 228, pressed ? 47 : 22, width, height);
-		}
-
-		@Override
-		protected String getLegacyTooltip(EntityPlayer player) {
-			return StringUtil.localize("gui.escritoire.probe");
-		}
-
-		@Override
-		public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
-			pressed = true;
-			Proxies.net.sendToServer(new PacketGuiSelectRequest(-1, 0));
-		}
-
-		@Override
-		public void handleMouseRelease(int mouseX, int mouseY, int eventType) {
-			if (pressed) {
-				pressed = false;
-			}
-		}
-
-		@Override
-		public void handleMouseMove(int mouseX, int mouseY, int mouseButton, long time) {
-			if (widgetManager.getAtPosition(mouseX - getGuiLeft(), mouseY - getGuiTop()) != this) {
-				pressed = false;
-			}
-		}
-	}
-
-	private final ItemStack LEVEL_ITEM;
-	private String researchNote = "";
-	private long lastUpdate;
+	private final ItemStack LEVEL_ITEM = new ItemStack(Items.paper);
+	private final EscritoireTextSource textSource = new EscritoireTextSource();
 
 	public GuiEscritoire(EntityPlayer player, TileEscritoire tile) {
 		super(Constants.TEXTURE_PATH_GUI + "/escritoire.png", new ContainerEscritoire(player, tile), tile);
 
-		LEVEL_ITEM = new ItemStack(Items.paper);
-
 		xSize = 228;
 		ySize = 235;
 
-		widgetManager.add(new ProbeButton(widgetManager, 14, 16));
+		widgetManager.add(new ProbeButton(this, widgetManager, 14, 16));
+
+		EscritoireGame game = tile.getGame();
 
 		// Inner ring
-		widgetManager.add(new TokenSlot(widgetManager, 115, 51, 0));
-		widgetManager.add(new TokenSlot(widgetManager, 115, 77, 1));
-		widgetManager.add(new TokenSlot(widgetManager, 94, 90, 2));
-		widgetManager.add(new TokenSlot(widgetManager, 73, 77, 3));
-		widgetManager.add(new TokenSlot(widgetManager, 73, 51, 4));
-		widgetManager.add(new TokenSlot(widgetManager, 94, 38, 5));
+		addTokenWidget(game, 115, 51, 0);
+		addTokenWidget(game, 115, 77, 1);
+		addTokenWidget(game, 94, 90, 2);
+		addTokenWidget(game, 73, 77, 3);
+		addTokenWidget(game, 73, 51, 4);
+		addTokenWidget(game, 94, 38, 5);
 
 		// Outer ring
-		widgetManager.add(new TokenSlot(widgetManager, 115, 25, 6));
-		widgetManager.add(new TokenSlot(widgetManager, 136, 38, 7));
-		widgetManager.add(new TokenSlot(widgetManager, 136, 64, 8));
+		addTokenWidget(game, 115, 25, 6);
+		addTokenWidget(game, 136, 38, 7);
+		addTokenWidget(game, 136, 64, 8);
 
-		widgetManager.add(new TokenSlot(widgetManager, 136, 90, 9));
-		widgetManager.add(new TokenSlot(widgetManager, 115, 103, 10));
-		widgetManager.add(new TokenSlot(widgetManager, 94, 116, 11));
+		addTokenWidget(game, 136, 90, 9);
+		addTokenWidget(game, 115, 103, 10);
+		addTokenWidget(game, 94, 116, 11);
 
-		widgetManager.add(new TokenSlot(widgetManager, 73, 103, 12));
-		widgetManager.add(new TokenSlot(widgetManager, 52, 90, 13));
-		widgetManager.add(new TokenSlot(widgetManager, 52, 64, 14));
+		addTokenWidget(game, 73, 103, 12);
+		addTokenWidget(game, 52, 90, 13);
+		addTokenWidget(game, 52, 64, 14);
 
-		widgetManager.add(new TokenSlot(widgetManager, 52, 38, 15));
-		widgetManager.add(new TokenSlot(widgetManager, 73, 25, 16));
-		widgetManager.add(new TokenSlot(widgetManager, 94, 12, 17));
+		addTokenWidget(game, 52, 38, 15);
+		addTokenWidget(game, 73, 25, 16);
+		addTokenWidget(game, 94, 12, 17);
 
 		// Corners
-		widgetManager.add(new TokenSlot(widgetManager, 52, 12, 18));
-		widgetManager.add(new TokenSlot(widgetManager, 136, 12, 19));
-		widgetManager.add(new TokenSlot(widgetManager, 52, 116, 20));
-		widgetManager.add(new TokenSlot(widgetManager, 136, 116, 21));
+		addTokenWidget(game, 52, 12, 18);
+		addTokenWidget(game, 136, 12, 19);
+		addTokenWidget(game, 52, 116, 20);
+		addTokenWidget(game, 136, 116, 21);
+	}
+
+	private void addTokenWidget(EscritoireGame game, int x, int y, int index) {
+		Widget gameTokenWidget = new GameTokenWidget(game, widgetManager, x, y, index);
+		widgetManager.add(gameTokenWidget);
 	}
 
 	@Override
@@ -227,53 +89,20 @@ public class GuiEscritoire extends GuiForestry<ContainerEscritoire, TileEscritoi
 
 		startPage();
 		GL11.glPushMatrix();
-		GL11.glScaled(0.5, 0.5, 0.5);
-		GL11.glTranslated(guiLeft + 170, guiTop + 10, 0.0);
+		{
+			GL11.glScaled(0.5, 0.5, 0.5);
+			GL11.glTranslated(guiLeft + 170, guiTop + 10, 0.0);
 
-		newLine();
-		newLine();
-		String format = EnumChatFormatting.UNDERLINE + EnumChatFormatting.ITALIC.toString();
-		drawLine(format + "Attempt No. " + (EscritoireGame.BOUNTY_MAX - inventory.getGame().getBountyLevel()), 170, fontColor.get("gui.mail.lettertext"));
-		newLine();
-		drawSplitLine(getResearchNote(), 170, 90, fontColor.get("gui.mail.lettertext"));
-
+			newLine();
+			newLine();
+			String format = EnumChatFormatting.UNDERLINE + EnumChatFormatting.ITALIC.toString();
+			int attemptNo = EscritoireGame.BOUNTY_MAX - inventory.getGame().getBountyLevel();
+			drawLine(format + "Attempt No. " + attemptNo, 170, fontColor.get("gui.mail.lettertext"));
+			newLine();
+			String escritoireText = textSource.getText(inventory.getGame());
+			drawSplitLine(escritoireText, 170, 90, fontColor.get("gui.mail.lettertext"));
+		}
 		GL11.glPopMatrix();
-
 		endPage();
-	}
-
-	private String getResearchNote() {
-		if (lastUpdate == inventory.getGame().getLastUpdate()) {
-			return researchNote;
-		}
-
-		if (!inventory.getGame().isInited()) {
-			researchNote = StringUtil.localize("gui.escritoire.instructions");
-		} else {
-			if (inventory.getGame().isWon()) {
-				researchNote = getRandomNote(researchNotes.get(Notes.success));
-			} else if (inventory.getGame().isEnded()) {
-				researchNote = getRandomNote(researchNotes.get(Notes.failure));
-			} else {
-				int bounty = inventory.getGame().getBountyLevel();
-				if (bounty >= EscritoireGame.BOUNTY_MAX) {
-					researchNote = getRandomNote(researchNotes.get(Notes.level1));
-				} else if (bounty > EscritoireGame.BOUNTY_MAX / 2) {
-					researchNote = getRandomNote(researchNotes.get(Notes.level2));
-				} else if (bounty > EscritoireGame.BOUNTY_MAX / 4) {
-					researchNote = getRandomNote(researchNotes.get(Notes.level3));
-				} else {
-					researchNote = getRandomNote(researchNotes.get(Notes.level4));
-				}
-			}
-		}
-
-		lastUpdate = inventory.getGame().getLastUpdate();
-		return researchNote;
-	}
-
-	private String getRandomNote(List<String> candidates) {
-		int index = mc.theWorld.rand.nextInt(candidates.size());
-		return candidates.get(index);
 	}
 }

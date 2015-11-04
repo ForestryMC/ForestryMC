@@ -16,6 +16,9 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.core.network.PacketGuiSelectRequest;
+import forestry.core.network.PacketGuiUpdate;
+import forestry.core.proxy.Proxies;
+import forestry.core.tiles.EscritoireGame;
 import forestry.core.tiles.TileEscritoire;
 
 public class ContainerEscritoire extends ContainerTile<TileEscritoire> implements IGuiSelectable {
@@ -46,24 +49,26 @@ public class ContainerEscritoire extends ContainerTile<TileEscritoire> implement
 	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
-		if (lastUpdate == tile.getGame().getLastUpdate()) {
-			return;
-		}
 
-		lastUpdate = tile.getGame().getLastUpdate();
-		tile.sendBoard(player);
+		long gameLastUpdate = tile.getGame().getLastUpdate();
+		if (lastUpdate != gameLastUpdate) {
+			lastUpdate = gameLastUpdate;
+			Proxies.net.sendToPlayer(new PacketGuiUpdate(tile), player);
+		}
 	}
 
 	@Override
 	public void handleSelectionRequest(EntityPlayerMP player, PacketGuiSelectRequest packet) {
-		if (!tile.getGame().isEnded()) {
-			int index = packet.getPrimaryIndex();
-			if (index == -1) {
-				tile.probe();
-			} else {
-				tile.getGame().choose(index);
-				tile.processTurnResult(player.getGameProfile());
-			}
+		EscritoireGame.Status status = tile.getGame().getStatus();
+		if (status != EscritoireGame.Status.PLAYING) {
+			return;
+		}
+
+		int index = packet.getPrimaryIndex();
+		if (index == -1) {
+			tile.probe();
+		} else {
+			tile.choose(player.getGameProfile(), index);
 		}
 	}
 }

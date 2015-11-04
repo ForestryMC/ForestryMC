@@ -21,19 +21,19 @@ import com.mojang.authlib.GameProfile;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IIndividual;
 import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
-import forestry.core.network.PacketTileStream;
-import forestry.core.proxy.Proxies;
+import forestry.core.network.IStreamableGui;
 import forestry.core.render.TankRenderInfo;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.SlotUtil;
 
-public class TileEscritoire extends TileBase implements ISidedInventory, IRenderableTile, ICrafter {
+public class TileEscritoire extends TileBase implements ISidedInventory, IRenderableTile, ICrafter, IStreamableGui {
 
 	public static final short SLOT_ANALYZE = 0;
 	public static final short SLOT_RESULTS_1 = 1;
@@ -74,26 +74,32 @@ public class TileEscritoire extends TileBase implements ISidedInventory, IRender
 		return game;
 	}
 
-	public void processTurnResult(GameProfile gameProfile) {
-		if (!game.isWon()) {
+	public void choose(GameProfile gameProfile, int index) {
+		game.choose(index);
+		processTurnResult(gameProfile);
+	}
+
+	private void processTurnResult(GameProfile gameProfile) {
+		if (getGame().getStatus() != EscritoireGame.Status.SUCCESS) {
 			return;
 		}
 
-		IIndividual individual = AlleleManager.alleleRegistry.getIndividual(getInternalInventory().getStackInSlot(SLOT_ANALYZE));
+		IIndividual individual = AlleleManager.alleleRegistry.getIndividual(getStackInSlot(SLOT_ANALYZE));
 		if (individual == null) {
 			return;
 		}
 
-		for (ItemStack itemstack : individual.getGenome().getPrimary().getResearchBounty(worldObj, gameProfile, individual, game.getBountyLevel())) {
+		IAlleleSpecies species = individual.getGenome().getPrimary();
+		for (ItemStack itemstack : species.getResearchBounty(worldObj, gameProfile, individual, game.getBountyLevel())) {
 			InventoryUtil.addStack(getInternalInventory(), itemstack, SLOT_RESULTS_1, SLOTS_RESULTS_COUNT, true);
 		}
 	}
 
 	private boolean areProbeSlotsFilled() {
 		int filledSlots = 0;
-		int required = game.getSampleSize() < SLOTS_INPUT_COUNT ? game.getSampleSize() : SLOTS_INPUT_COUNT;
+		int required = game.getSampleSize(SLOTS_INPUT_COUNT);
 		for (int i = SLOT_INPUT_1; i < SLOT_INPUT_1 + required; i++) {
-			if (getInternalInventory().getStackInSlot(i) != null) {
+			if (getStackInSlot(i) != null) {
 				filledSlots++;
 			}
 		}
@@ -102,27 +108,26 @@ public class TileEscritoire extends TileBase implements ISidedInventory, IRender
 	}
 
 	public void probe() {
-		if (!worldObj.isRemote && getInternalInventory().getStackInSlot(SLOT_ANALYZE) != null && areProbeSlotsFilled()) {
-			game.probe(getInternalInventory().getStackInSlot(SLOT_ANALYZE), this, SLOT_INPUT_1, SLOTS_INPUT_COUNT);
+		if (worldObj.isRemote) {
+			return;
+		}
+
+		ItemStack analyze = getStackInSlot(SLOT_ANALYZE);
+
+		if (analyze != null && areProbeSlotsFilled()) {
+			game.probe(analyze, this, SLOT_INPUT_1, SLOTS_INPUT_COUNT);
 		}
 	}
 
 	/* NETWORK */
-
 	@Override
-	public void writeData(DataOutputStreamForestry data) throws IOException {
-		super.writeData(data);
+	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
 		game.writeData(data);
 	}
 
 	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
-		super.readData(data);
+	public void readGuiData(DataInputStreamForestry data) throws IOException {
 		game.readData(data);
-	}
-
-	public void sendBoard(EntityPlayer player) {
-		Proxies.net.sendToPlayer(new PacketTileStream(this), player);
 	}
 
 	@Override
@@ -160,7 +165,7 @@ public class TileEscritoire extends TileBase implements ISidedInventory, IRender
 
 		@Override
 		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-			if (slotIndex >= SLOT_INPUT_1 && slotIndex < SLOT_INPUT_1 + Math.min(tile.game.getSampleSize(), SLOTS_INPUT_COUNT)) {
+			if (slotIndex >= SLOT_INPUT_1 && slotIndex < SLOT_INPUT_1 + tile.game.getSampleSize(SLOTS_INPUT_COUNT)) {
 				ItemStack specimen = getStackInSlot(SLOT_ANALYZE);
 				if (specimen == null) {
 					return false;
@@ -187,7 +192,7 @@ public class TileEscritoire extends TileBase implements ISidedInventory, IRender
 			}
 
 			if (SlotUtil.isSlotInRange(slotIndex, SLOT_INPUT_1, SLOTS_INPUT_COUNT)) {
-				if (slotIndex >= SLOT_INPUT_1 + tile.game.getSampleSize()) {
+				if (slotIndex >= SLOT_INPUT_1 + tile.game.getSampleSize(SLOTS_INPUT_COUNT)) {
 					return true;
 				}
 			}

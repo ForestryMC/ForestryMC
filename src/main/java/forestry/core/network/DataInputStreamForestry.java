@@ -4,7 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.inventory.IInventory;
@@ -78,16 +77,15 @@ public class DataInputStreamForestry extends DataInputStream {
 		return null;
 	}
 
-	public <T extends IStreamable> List<T> readStreamables(Class<T> streamableClass) throws IOException {
+	public <T extends IStreamable> void readStreamables(List<T> outputList, Class<T> streamableClass) throws IOException {
+		outputList.clear();
 		int length = readVarInt();
-		List<T> streamables = new ArrayList<>(length);
 		if (length > 0) {
 			for (int i = 0; i < length; i++) {
 				T streamable = readStreamable(streamableClass);
-				streamables.add(streamable);
+				outputList.add(streamable);
 			}
 		}
-		return streamables;
 	}
 
 	/**
@@ -109,6 +107,11 @@ public class DataInputStreamForestry extends DataInputStream {
 		} while ((b0 & 128) == 128);
 
 		return varInt;
+	}
+
+	public <T extends Enum<T>> T readEnum(Class<T> enumClass) throws IOException {
+		int ordinal = readVarInt();
+		return enumClass.getEnumConstants()[ordinal];
 	}
 
 	public NBTTagCompound readNBTTagCompound() throws IOException {

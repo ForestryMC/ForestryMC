@@ -53,7 +53,7 @@ public class TextureManager implements ITextureManager {
 				"analyzer/anything", "analyzer/bee", "analyzer/cave", "analyzer/closed", "analyzer/drone", "analyzer/flyer",
 				"analyzer/item", "analyzer/nocturnal", "analyzer/princess", "analyzer/pure_breed", "analyzer/pure_cave",
 				"analyzer/pure_flyer", "analyzer/pure_nocturnal", "analyzer/queen",
-				"particles/swarm_bee", "errors/errored",
+				"particles/swarm_bee", "errors/errored", "errors/unknown",
 				"slots/blocked", "slots/blocked_2", "slots/liquid", "slots/container", "slots/locked",
 				"mail/carrier.player", "mail/carrier.trader"};
 		for (String str : defaultIconNames) {

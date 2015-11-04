@@ -197,9 +197,7 @@ public class RecipeMemory implements INBTTagable, IStreamable {
 
 	@Override
 	public void readData(DataInputStreamForestry data) throws IOException {
-		recipes.clear();
-		List<Recipe> newRecipes = data.readStreamables(Recipe.class);
-		recipes.addAll(newRecipes);
+		data.readStreamables(recipes, Recipe.class);
 	}
 
 	public static final class Recipe implements INBTTagable, IStreamable {
@@ -209,8 +207,9 @@ public class RecipeMemory implements INBTTagable, IStreamable {
 		private boolean locked;
 		private ItemStack cachedRecipeOutput;
 
+		@SuppressWarnings("unused")
 		public Recipe() {
-			// required for serialization
+			// required for IStreamable serialization
 		}
 
 		public Recipe(InventoryCrafting crafting) {
