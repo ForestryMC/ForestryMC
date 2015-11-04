@@ -422,10 +422,10 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 	public void syncToClient() {
 		World world = housing.getWorld();
 		if (world != null && !world.isRemote) {
-			if (housing instanceof TileEntity) {
-				Proxies.net.sendNetworkPacket(new PacketBeeLogicActive(housing), world);
-			} else if (housing instanceof Entity) {
+			if (housing instanceof Entity) {
 				Proxies.net.sendNetworkPacket(new PacketBeeLogicActiveEntity(housing, (Entity) housing), world);
+			} else {
+				Proxies.net.sendNetworkPacket(new PacketBeeLogicActive(housing), world);
 			}
 		}
 	}
