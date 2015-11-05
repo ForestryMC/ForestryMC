@@ -14,9 +14,11 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
 import forestry.api.core.EnumTemperature;
+import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IMutationCondition;
+import forestry.core.utils.StringUtil;
 
 public class MutationConditionTemperature implements IMutationCondition {
 
@@ -41,10 +43,13 @@ public class MutationConditionTemperature implements IMutationCondition {
 
 	@Override
 	public String getDescription() {
+		String minString = AlleleManager.climateHelper.toDisplay(minTemperature);
+
 		if (minTemperature != maxTemperature) {
-			return String.format("Temperature between %s and %s.", minTemperature, maxTemperature);
+			String maxString = AlleleManager.climateHelper.toDisplay(maxTemperature);
+			return StringUtil.localize("mutation.condition.temperature.range").replace("%LOW", minString).replace("%HIGH", maxString);
 		} else {
-			return String.format("Temperature %s required.", minTemperature);
+			return StringUtil.localizeAndFormat("mutation.condition.temperature.single", minString);
 		}
 	}
 }

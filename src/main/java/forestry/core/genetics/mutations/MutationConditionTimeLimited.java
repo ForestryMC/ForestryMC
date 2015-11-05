@@ -18,6 +18,7 @@ import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IMutationCondition;
 import forestry.core.utils.DayMonth;
+import forestry.core.utils.StringUtil;
 
 public class MutationConditionTimeLimited implements IMutationCondition {
 
@@ -54,6 +55,6 @@ public class MutationConditionTimeLimited implements IMutationCondition {
 
 	@Override
 	public String getDescription() {
-		return "Between " + start + " and " + end + '.';
+		return StringUtil.localize("mutation.condition.date").replace("%START", start.toString()).replace("%END", end.toString());
 	}
 }

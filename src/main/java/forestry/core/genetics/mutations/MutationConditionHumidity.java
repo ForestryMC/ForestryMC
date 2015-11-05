@@ -14,9 +14,11 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
 import forestry.api.core.EnumHumidity;
+import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IMutationCondition;
+import forestry.core.utils.StringUtil;
 
 public class MutationConditionHumidity implements IMutationCondition {
 	private final EnumHumidity minHumidity;
@@ -40,10 +42,13 @@ public class MutationConditionHumidity implements IMutationCondition {
 
 	@Override
 	public String getDescription() {
+		String minHumidityString = AlleleManager.climateHelper.toDisplay(minHumidity);
+
 		if (minHumidity != maxHumidity) {
-			return String.format("Humidity between %s and %s.", minHumidity, maxHumidity);
+			String maxHumidityString = AlleleManager.climateHelper.toDisplay(maxHumidity);
+			return StringUtil.localize("mutation.condition.humidity.range").replace("%LOW", minHumidityString).replace("%HIGH", maxHumidityString);
 		} else {
-			return String.format("Humidity %s required.", minHumidity);
+			return StringUtil.localizeAndFormat("mutation.condition.humidity.single", minHumidityString);
 		}
 	}
 }

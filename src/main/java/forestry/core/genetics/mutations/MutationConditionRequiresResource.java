@@ -18,6 +18,7 @@ import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IMutationCondition;
 import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.StringUtil;
 
 public class MutationConditionRequiresResource implements IMutationCondition {
 
@@ -36,6 +37,6 @@ public class MutationConditionRequiresResource implements IMutationCondition {
 
 	@Override
 	public String getDescription() {
-		return String.format("Must be placed on:%s", blockRequired.getDisplayName());
+		return StringUtil.localizeAndFormat("mutation.condition.resource", blockRequired.getDisplayName());
 	}
 }

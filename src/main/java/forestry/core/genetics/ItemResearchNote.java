@@ -93,10 +93,16 @@ public class ItemResearchNote extends ItemForestry {
 					return tooltips;
 				}
 
+				String species1 = encoded.getAllele0().getName();
+				String species2 = encoded.getAllele1().getName();
+				String mutationChanceKey = EnumMutateChance.rateChance(encoded.getBaseChance()).toString().toLowerCase(Locale.ENGLISH);
+				String mutationChance = StringUtil.localize("researchNote.chance." + mutationChanceKey);
+				String speciesResult = encoded.getTemplate()[root.getKaryotypeKey().ordinal()].getName();
+
 				tooltips.add(StringUtil.localize("researchNote.discovery.0"));
-				tooltips.add(StringUtil.localize("researchNote.discovery.1").replace("%SPEC1", encoded.getAllele0().getName()).replace("%SPEC2", encoded.getAllele1().getName()));
-				tooltips.add(StringUtil.localizeAndFormat("researchNote.discovery.2", StringUtil.localize("researchNote.chance." + EnumMutateChance.rateChance(encoded.getBaseChance()).toString().toLowerCase(Locale.ENGLISH))));
-				tooltips.add(StringUtil.localizeAndFormat("researchNote.discovery.3", (encoded.getTemplate()[root.getKaryotypeKey().ordinal()].getName())));
+				tooltips.add(StringUtil.localize("researchNote.discovery.1").replace("%SPEC1", species1).replace("%SPEC2", species2));
+				tooltips.add(StringUtil.localizeAndFormat("researchNote.discovery.2", mutationChance));
+				tooltips.add(StringUtil.localizeAndFormat("researchNote.discovery.3", speciesResult));
 
 				if (encoded.getSpecialConditions() != null && encoded.getSpecialConditions().size() > 0) {
 					for (String line : encoded.getSpecialConditions()) {

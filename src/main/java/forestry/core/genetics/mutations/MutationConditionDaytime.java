@@ -15,6 +15,7 @@ import net.minecraft.world.World;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IMutationCondition;
+import forestry.core.utils.StringUtil;
 
 public class MutationConditionDaytime implements IMutationCondition {
 
@@ -35,9 +36,9 @@ public class MutationConditionDaytime implements IMutationCondition {
 	@Override
 	public String getDescription() {
 		if (daytime) {
-			return "Can only occur during the day.";
+			return StringUtil.localize("mutation.condition.daytime.day");
 		} else {
-			return "Can only occur during the night.";
+			return StringUtil.localize("mutation.condition.daytime.night");
 		}
 	}
 }

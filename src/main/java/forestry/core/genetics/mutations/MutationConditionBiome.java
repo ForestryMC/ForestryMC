@@ -12,6 +12,7 @@ package forestry.core.genetics.mutations;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
@@ -21,6 +22,7 @@ import net.minecraftforge.common.BiomeDictionary;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IMutationCondition;
+import forestry.core.utils.StringUtil;
 
 public class MutationConditionBiome implements IMutationCondition {
 
@@ -45,11 +47,11 @@ public class MutationConditionBiome implements IMutationCondition {
 	@Override
 	public String getDescription() {
 		if (validBiomeTypes.size() > 1) {
-			String biomeTypes = Arrays.toString(validBiomeTypes.toArray());
-			return String.format("Is restricted to biomes like: %s", biomeTypes);
+			String biomeTypes = Arrays.toString(validBiomeTypes.toArray()).toLowerCase(Locale.ENGLISH);
+			return StringUtil.localizeAndFormat("mutation.condition.biome.multiple", biomeTypes);
 		} else {
-			String biomeType = validBiomeTypes.get(0).toString();
-			return String.format("Is restricted to %s-like biomes.", biomeType);
+			String biomeType = validBiomeTypes.get(0).toString().toLowerCase(Locale.ENGLISH);
+			return StringUtil.localizeAndFormat("mutation.condition.biome.single", biomeType);
 		}
 	}
 }

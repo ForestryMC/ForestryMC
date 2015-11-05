@@ -153,7 +153,7 @@ public class EntityMinecartBeehouse extends EntityMinecartContainer implements I
 
 	@Override
 	public EnumTemperature getTemperature() {
-		return EnumTemperature.getFromBiome(getBiome());
+		return EnumTemperature.getFromBiome(getBiome(), (int) posX, (int) posY, (int) posZ);
 	}
 
 	@Override
