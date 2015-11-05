@@ -42,12 +42,12 @@ public class CircuitBoard<T> implements ICircuitBoard {
 
 	@Override
 	public int getPrimaryColor() {
-		return type.primaryColor;
+		return type.getPrimaryColor();
 	}
 
 	@Override
 	public int getSecondaryColor() {
-		return type.secondaryColor;
+		return type.getSecondaryColor();
 	}
 
 	@Override

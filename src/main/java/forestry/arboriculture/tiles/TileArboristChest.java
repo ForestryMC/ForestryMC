@@ -16,8 +16,6 @@ import forestry.core.tiles.TileNaturalistChest;
 
 public class TileArboristChest extends TileNaturalistChest {
 	public TileArboristChest() {
-		super(TreeManager.treeRoot, GuiId.ArboristChestGUI.ordinal());
+		super(TreeManager.treeRoot, GuiId.ArboristChestGUI);
 	}
-
-
 }

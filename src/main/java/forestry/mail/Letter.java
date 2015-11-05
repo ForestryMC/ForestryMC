@@ -18,7 +18,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-import forestry.api.core.INBTTagable;
 import forestry.api.mail.ILetter;
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.IStamps;
@@ -26,9 +25,7 @@ import forestry.core.inventory.InventoryAdapter;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.StringUtil;
 
-public class Letter implements ILetter, INBTTagable {
-
-	// CONSTANTS
+public class Letter implements ILetter {
 	public static final short SLOT_ATTACHMENT_1 = 0;
 	public static final short SLOT_ATTACHMENT_COUNT = 18;
 	public static final short SLOT_POSTAGE_1 = 18;
@@ -68,7 +65,6 @@ public class Letter implements ILetter, INBTTagable {
 		this.text = nbttagcompound.getString("TXT");
 
 		this.inventory.readFromNBT(nbttagcompound);
-
 	}
 
 	@Override
@@ -104,7 +100,6 @@ public class Letter implements ILetter, INBTTagable {
 
 	@Override
 	public int countAttachments() {
-
 		int count = 0;
 		for (ItemStack stack : getAttachments()) {
 			if (stack != null) {
@@ -113,7 +108,6 @@ public class Letter implements ILetter, INBTTagable {
 		}
 
 		return count;
-
 	}
 
 	@Override
@@ -200,11 +194,7 @@ public class Letter implements ILetter, INBTTagable {
 			return false;
 		}
 
-		if (StringUtils.isBlank(recipient.getName())) {
-			return false;
-		}
-
-		return true;
+		return !StringUtils.isBlank(recipient.getName());
 	}
 
 	@Override
@@ -215,10 +205,6 @@ public class Letter implements ILetter, INBTTagable {
 	@Override
 	public IMailAddress getSender() {
 		return sender;
-	}
-
-	public void setRecipients(IMailAddress[] recipients) {
-		this.recipient = recipients;
 	}
 
 	@Override

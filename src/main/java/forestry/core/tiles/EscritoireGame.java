@@ -30,7 +30,8 @@ public class EscritoireGame implements INBTTagable, IStreamable {
 	public static final int BOUNTY_MAX = 16;
 
 	public enum Status {
-		EMPTY, PLAYING, FAILURE, SUCCESS
+		EMPTY, PLAYING, FAILURE, SUCCESS;
+		public static final Status[] VALUES = values();
 	}
 
 	private final EscritoireGameBoard gameBoard = new EscritoireGameBoard();
@@ -79,14 +80,14 @@ public class EscritoireGame implements INBTTagable, IStreamable {
 	public void writeData(DataOutputStreamForestry data) throws IOException {
 		data.writeInt(bountyLevel);
 		gameBoard.writeData(data);
-		data.writeEnum(status);
+		data.writeEnum(status, Status.VALUES);
 	}
 
 	@Override
 	public void readData(DataInputStreamForestry data) throws IOException {
 		bountyLevel = data.readInt();
 		gameBoard.readData(data);
-		status = data.readEnum(Status.class);
+		status = data.readEnum(Status.VALUES);
 	}
 
 	/* INTERACTION */

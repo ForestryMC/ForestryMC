@@ -12,11 +12,9 @@ package forestry.energy.tiles;
 
 import java.io.IOException;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 import net.minecraftforge.common.util.ForgeDirection;
@@ -25,17 +23,14 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 
-import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorLogic;
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.GeneratorFuel;
-import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
-import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
@@ -43,16 +38,13 @@ import forestry.core.render.TankRenderInfo;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.IRenderableTile;
 import forestry.core.tiles.TileBase;
+import forestry.energy.inventory.InventoryGenerator;
 import forestry.plugins.PluginIC2;
 
 import ic2.api.energy.prefab.BasicSource;
 
 public class TileGenerator extends TileBase implements ISidedInventory, ILiquidTankTile, IFluidHandler, IRenderableTile {
-
-	// / CONSTANTS
 	private static final int maxEnergy = 30000;
-
-	public static final short SLOT_CAN = 0;
 
 	private final TankManager tankManager;
 	private final FilteredTank resourceTank;
@@ -62,9 +54,9 @@ public class TileGenerator extends TileBase implements ISidedInventory, ILiquidT
 	private BasicSource ic2EnergySource;
 
 	public TileGenerator() {
-		setHints(Config.hints.get("generator"));
+		super(GuiId.GeneratorGUI, "generator");
 
-		setInternalInventory(new GeneratorInventoryAdapter(this));
+		setInternalInventory(new InventoryGenerator(this));
 
 		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, FuelManager.generatorFuel.keySet());
 		tankManager = new TankManager(this, resourceTank);
@@ -72,11 +64,6 @@ public class TileGenerator extends TileBase implements ISidedInventory, ILiquidT
 		if (PluginIC2.instance.isAvailable()) {
 			ic2EnergySource = new BasicSource(this, maxEnergy, 1);
 		}
-	}
-
-	@Override
-	public void openGui(EntityPlayer player) {
-		player.openGui(ForestryAPI.instance, GuiId.GeneratorGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
 	}
 
 	@Override
@@ -134,7 +121,7 @@ public class TileGenerator extends TileBase implements ISidedInventory, ILiquidT
 	@Override
 	public void updateServerSide() {
 		if (updateOnInterval(20)) {
-			FluidHelper.drainContainers(tankManager, this, SLOT_CAN);
+			FluidHelper.drainContainers(tankManager, this, InventoryGenerator.SLOT_CAN);
 		}
 
 		IErrorLogic errorLogic = getErrorLogic();
@@ -239,21 +226,5 @@ public class TileGenerator extends TileBase implements ISidedInventory, ILiquidT
 	@Override
 	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
 		return tankManager.getTankInfo(from);
-	}
-
-	private static class GeneratorInventoryAdapter extends TileInventoryAdapter<TileGenerator> {
-		public GeneratorInventoryAdapter(TileGenerator generator) {
-			super(generator, 1, "Items");
-		}
-
-		@Override
-		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-			if (slotIndex == SLOT_CAN) {
-				Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
-				return tile.tankManager.accepts(fluid);
-			}
-
-			return false;
-		}
 	}
 }

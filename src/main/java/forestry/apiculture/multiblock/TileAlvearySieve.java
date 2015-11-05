@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.multiblock;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
 import forestry.api.apiculture.DefaultBeeListener;
@@ -21,26 +20,28 @@ import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.apiculture.blocks.BlockAlveary;
-import forestry.core.config.ForestryItem;
+import forestry.apiculture.inventory.InventoryAlvearySieve;
 import forestry.core.inventory.IInventoryAdapter;
-import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.GuiId;
 import forestry.core.tiles.ICrafter;
-import forestry.core.utils.ItemStackUtil;
 
-public class TileAlvearySieve extends TileAlvearyWithGui implements ICrafter, IAlvearyComponent.BeeListener {
+public class TileAlvearySieve extends TileAlvearyWithGui implements IAlvearyComponent.BeeListener {
 
 	private final IBeeListener beeListener;
-	private final AlvearySieveInventory inventory;
+	private final InventoryAlvearySieve inventory;
 
 	public TileAlvearySieve() {
 		super(TileAlveary.SIEVE_META, GuiId.AlvearySieveGUI);
-		this.inventory = new AlvearySieveInventory(this);
-		this.beeListener = new AlvearySieveBeeListener(this);
+		this.inventory = new InventoryAlvearySieve(this);
+		this.beeListener = new AlvearySieveBeeListener(inventory);
 	}
 
 	@Override
 	public IInventoryAdapter getInternalInventory() {
+		return inventory;
+	}
+
+	public ICrafter getCrafter() {
 		return inventory;
 	}
 
@@ -49,7 +50,6 @@ public class TileAlvearySieve extends TileAlvearyWithGui implements ICrafter, IA
 		return beeListener;
 	}
 	
-	/* TEXTURES & INTERNAL */
 	@Override
 	public int getIcon(int side) {
 		if (side == 0 || side == 1) {
@@ -58,32 +58,16 @@ public class TileAlvearySieve extends TileAlvearyWithGui implements ICrafter, IA
 		return BlockAlveary.SIEVE;
 	}
 
-	/* ICRAFTER */
-	@Override
-	public boolean canTakeStack(int slotIndex) {
-		return true;
-	}
+	static class AlvearySieveBeeListener extends DefaultBeeListener {
+		private final InventoryAlvearySieve inventory;
 
-	@Override
-	public ItemStack takenFromSlot(int slotIndex, EntityPlayer player) {
-		return inventory.takenFromSlot(slotIndex);
-	}
-
-	@Override
-	public ItemStack getResult() {
-		return null;
-	}
-
-	private static class AlvearySieveBeeListener extends DefaultBeeListener {
-		private final TileAlvearySieve tile;
-
-		public AlvearySieveBeeListener(TileAlvearySieve tile) {
-			this.tile = tile;
+		public AlvearySieveBeeListener(InventoryAlvearySieve inventory) {
+			this.inventory = inventory;
 		}
 
 		@Override
 		public boolean onPollenRetrieved(IIndividual pollen) {
-			if (!tile.inventory.canStorePollen()) {
+			if (!inventory.canStorePollen()) {
 				return false;
 			}
 
@@ -91,61 +75,10 @@ public class TileAlvearySieve extends TileAlvearyWithGui implements ICrafter, IA
 
 			ItemStack pollenStack = speciesRoot.getMemberStack(pollen, EnumGermlingType.POLLEN.ordinal());
 			if (pollenStack != null) {
-				tile.inventory.storePollenStack(pollenStack);
+				inventory.storePollenStack(pollenStack);
 				return true;
 			}
 			return false;
 		}
 	}
-
-	public static class AlvearySieveInventory extends TileInventoryAdapter<TileAlvearySieve> {
-		public static final int SLOT_POLLEN_1 = 0;
-		public static final int SLOTS_POLLEN_COUNT = 4;
-		public static final int SLOT_SIEVE = 4;
-
-		public AlvearySieveInventory(TileAlvearySieve alvearySieve) {
-			super(alvearySieve, 5, "Items", 1);
-		}
-
-		@Override
-		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-			return ItemStackUtil.isIdenticalItem(ForestryItem.craftingMaterial.getItemStack(1, 3), itemStack);
-		}
-
-		private boolean canStorePollen() {
-			if (getStackInSlot(SLOT_SIEVE) == null) {
-				return false;
-			}
-
-			for (int i = SLOT_POLLEN_1; i < SLOT_POLLEN_1 + SLOTS_POLLEN_COUNT; i++) {
-				if (getStackInSlot(i) == null) {
-					return true;
-				}
-			}
-
-			return false;
-		}
-
-		private void storePollenStack(ItemStack itemstack) {
-			for (int i = SLOT_POLLEN_1; i < SLOT_POLLEN_1 + SLOTS_POLLEN_COUNT; i++) {
-				if (getStackInSlot(i) == null) {
-					setInventorySlotContents(i, itemstack);
-					return;
-				}
-			}
-		}
-
-		public ItemStack takenFromSlot(int slotIndex) {
-			if (slotIndex == SLOT_SIEVE) {
-				for (int i = SLOT_POLLEN_1; i < SLOT_POLLEN_1 + SLOTS_POLLEN_COUNT; i++) {
-					setInventorySlotContents(i, null);
-				}
-				return getStackInSlot(SLOT_SIEVE);
-			} else {
-				setInventorySlotContents(SLOT_SIEVE, null);
-				return getStackInSlot(slotIndex);
-			}
-		}
-	}
-
 }

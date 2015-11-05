@@ -31,7 +31,6 @@ public abstract class ItemForestryTool extends ItemForestry {
 	private final List<Block> blocksEffectiveAgainst;
 
 	protected ItemForestryTool(Block[] blocksEffectiveAgainst, ItemStack remnants) {
-		super();
 		this.blocksEffectiveAgainst = Arrays.asList(blocksEffectiveAgainst);
 		this.maxStackSize = 1;
 		efficiencyOnProperMaterial = 6F;

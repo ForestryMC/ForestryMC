@@ -41,11 +41,11 @@ public class GuiEngineBiogas extends GuiEngine<ContainerEngineBiogas, TileEngine
 		@Override
 		public void draw(int startX, int startY) {
 
-			if (inventory == null || inventory.totalTime <= 0) {
+			if (inventory == null || inventory.getTotalTime() <= 0) {
 				return;
 			}
 
-			Fluid fluid = FluidRegistry.getFluid(inventory.currentFluidId);
+			Fluid fluid = FluidRegistry.getFluid(inventory.getCurrentFluidId());
 			if (fluid == null) {
 				return;
 			}
@@ -54,7 +54,7 @@ public class GuiEngineBiogas extends GuiEngine<ContainerEngineBiogas, TileEngine
 				return;
 			}
 
-			int squaled = (inventory.burnTime * height) / inventory.totalTime;
+			int squaled = (inventory.getBurnTime() * height) / inventory.getTotalTime();
 			if (squaled > height) {
 				squaled = height;
 			}
@@ -88,7 +88,7 @@ public class GuiEngineBiogas extends GuiEngine<ContainerEngineBiogas, TileEngine
 
 		@Override
 		public String getLegacyTooltip(EntityPlayer player) {
-			Fluid fluid = FluidRegistry.getFluid(inventory.currentFluidId);
+			Fluid fluid = FluidRegistry.getFluid(inventory.getCurrentFluidId());
 			if (fluid == null) {
 				return StringUtil.localize("gui.empty");
 			}

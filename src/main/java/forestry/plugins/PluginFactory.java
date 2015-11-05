@@ -26,6 +26,13 @@ import cpw.mods.fml.common.network.IGuiHandler;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitLayout;
+import forestry.api.core.ForestryAPI;
+import forestry.api.fuels.EngineBronzeFuel;
+import forestry.api.fuels.EngineCopperFuel;
+import forestry.api.fuels.FermenterFuel;
+import forestry.api.fuels.FuelManager;
+import forestry.api.fuels.MoistenerFuel;
+import forestry.api.fuels.RainSubstrate;
 import forestry.api.recipes.ICraftingProvider;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.blocks.BlockBase;
@@ -34,7 +41,6 @@ import forestry.core.circuits.CircuitLayout;
 import forestry.core.config.Constants;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
-import forestry.core.config.GameMode;
 import forestry.core.fluids.Fluids;
 import forestry.core.items.ItemBlockForestry;
 import forestry.core.items.ItemBlockNBT;
@@ -48,6 +54,8 @@ import forestry.core.recipes.nei.PacketWorktableNEISelect;
 import forestry.core.tiles.MachineDefinition;
 import forestry.core.utils.Log;
 import forestry.core.utils.ModUtil;
+import forestry.core.utils.datastructures.FluidMap;
+import forestry.core.utils.datastructures.ItemStackMap;
 import forestry.factory.DummyManagers;
 import forestry.factory.GuiHandlerFactory;
 import forestry.factory.circuits.CircuitSpeedUpgrade;
@@ -102,13 +110,8 @@ public class PluginFactory extends ForestryPlugin {
 				RecipeManagers.squeezerManager = new SqueezerRecipeManager(),
 				RecipeManagers.stillManager = new StillRecipeManager()
 		);
-	}
 
-	@Override
-	public void registerPacketHandlers() {
-		PacketIdServer.WORKTABLE_NEI_SELECT.setPacketHandler(new PacketWorktableNEISelect());
-
-		PacketIdClient.WORKTABLE_MEMORY_UPDATE.setPacketHandler(new PacketWorktableMemoryUpdate());
+		setupFuelManager();
 	}
 
 	@Override
@@ -125,13 +128,75 @@ public class PluginFactory extends ForestryPlugin {
 				RecipeManagers.squeezerManager = new DummyManagers.DummySqueezerManager(),
 				RecipeManagers.stillManager = new DummyManagers.DummyStillManager()
 		);
+
+		setupFuelManager();
+	}
+
+	private static void setupFuelManager() {
+		FuelManager.fermenterFuel = new ItemStackMap<>();
+		FuelManager.moistenerResource = new ItemStackMap<>();
+		FuelManager.rainSubstrate = new ItemStackMap<>();
+		FuelManager.bronzeEngineFuel = new FluidMap<>();
+		FuelManager.copperEngineFuel = new ItemStackMap<>();
+		FuelManager.generatorFuel = new FluidMap<>();
+	}
+
+	@Override
+	protected void registerItemsAndBlocks() {
+		super.registerItemsAndBlocks();
+
+		ForestryBlock.factoryTESR.registerBlock(new BlockBase(Material.iron, true), ItemBlockForestry.class, "factory");
+		ForestryBlock.factoryPlain.registerBlock(new BlockBase(Material.iron), ItemBlockNBT.class, "factory2");
+	}
+
+	@Override
+	public void registerPacketHandlers() {
+		PacketIdServer.WORKTABLE_NEI_SELECT.setPacketHandler(new PacketWorktableNEISelect());
+
+		PacketIdClient.WORKTABLE_MEMORY_UPDATE.setPacketHandler(new PacketWorktableMemoryUpdate());
 	}
 
 	@Override
 	public void preInit() {
 		super.preInit();
 
-		ForestryBlock.factoryTESR.registerBlock(new BlockBase(Material.iron, true), ItemBlockForestry.class, "factory");
+		// Set fuels and resources for the fermenter
+		FuelManager.fermenterFuel.put(ForestryItem.fertilizerCompound.getItemStack(), new FermenterFuel(ForestryItem.fertilizerCompound.getItemStack(),
+				ForestryAPI.activeMode.getIntegerSetting("fermenter.value.fertilizer"), ForestryAPI.activeMode.getIntegerSetting("fermenter.cycles.fertilizer")));
+		FuelManager.fermenterFuel.put(ForestryItem.fertilizerBio.getItemStack(), new FermenterFuel(ForestryItem.fertilizerBio.getItemStack(), ForestryAPI.activeMode.getIntegerSetting("fermenter.value.compost"), ForestryAPI.activeMode.getIntegerSetting("fermenter.cycles.compost")));
+		FuelManager.fermenterFuel.put(ForestryItem.mulch.getItemStack(), new FermenterFuel(ForestryItem.mulch.getItemStack(), ForestryAPI.activeMode
+				.getIntegerSetting("fermenter.value.compost"), ForestryAPI.activeMode.getIntegerSetting("fermenter.cycles.compost")));
+
+		// Add moistener resources
+		FuelManager.moistenerResource.put(new ItemStack(Items.wheat), new MoistenerFuel(new ItemStack(Items.wheat), ForestryItem.mouldyWheat.getItemStack(), 0,
+				300));
+		FuelManager.moistenerResource.put(ForestryItem.mouldyWheat.getItemStack(), new MoistenerFuel(ForestryItem.mouldyWheat.getItemStack(), ForestryItem.decayingWheat.getItemStack(), 1, 600));
+		FuelManager.moistenerResource.put(ForestryItem.decayingWheat.getItemStack(), new MoistenerFuel(ForestryItem.decayingWheat.getItemStack(),
+				ForestryItem.mulch.getItemStack(), 2, 900));
+
+		// Set fuels for our own engines
+		FuelManager.copperEngineFuel.put(ForestryItem.peat.getItemStack(), new EngineCopperFuel(ForestryItem.peat.getItemStack(),
+				Constants.ENGINE_COPPER_FUEL_VALUE_PEAT, Constants.ENGINE_COPPER_CYCLE_DURATION_PEAT));
+		FuelManager.copperEngineFuel.put(ForestryItem.bituminousPeat.getItemStack(), new EngineCopperFuel(ForestryItem.bituminousPeat.getItemStack(),
+				Constants.ENGINE_COPPER_FUEL_VALUE_BITUMINOUS_PEAT, Constants.ENGINE_COPPER_CYCLE_DURATION_BITUMINOUS_PEAT));
+
+		FuelManager.bronzeEngineFuel.put(Fluids.BIOMASS.getFluid(), new EngineBronzeFuel(Fluids.BIOMASS.getFluid(),
+				Constants.ENGINE_FUEL_VALUE_BIOMASS, (int) (Constants.ENGINE_CYCLE_DURATION_BIOMASS * ForestryAPI.activeMode.getFloatSetting("fuel.biomass.biogas")), 1));
+		FuelManager.bronzeEngineFuel.put(Fluids.WATER.getFluid(), new EngineBronzeFuel(Fluids.WATER.getFluid(),
+				Constants.ENGINE_FUEL_VALUE_WATER, Constants.ENGINE_CYCLE_DURATION_WATER, 3));
+		FuelManager.bronzeEngineFuel.put(Fluids.MILK.getFluid(), new EngineBronzeFuel(Fluids.MILK.getFluid(),
+				Constants.ENGINE_FUEL_VALUE_MILK, Constants.ENGINE_CYCLE_DURATION_MILK, 3));
+		FuelManager.bronzeEngineFuel.put(Fluids.SEEDOIL.getFluid(), new EngineBronzeFuel(Fluids.SEEDOIL.getFluid(),
+				Constants.ENGINE_FUEL_VALUE_SEED_OIL, Constants.ENGINE_CYCLE_DURATION_SEED_OIL, 1));
+		FuelManager.bronzeEngineFuel.put(Fluids.HONEY.getFluid(), new EngineBronzeFuel(Fluids.HONEY.getFluid(),
+				Constants.ENGINE_FUEL_VALUE_HONEY, Constants.ENGINE_CYCLE_DURATION_HONEY, 1));
+		FuelManager.bronzeEngineFuel.put(Fluids.JUICE.getFluid(), new EngineBronzeFuel(Fluids.JUICE.getFluid(),
+				Constants.ENGINE_FUEL_VALUE_JUICE, Constants.ENGINE_CYCLE_DURATION_JUICE, 1));
+
+		// Set rain substrates
+		FuelManager.rainSubstrate.put(ForestryItem.iodineCharge.getItemStack(), new RainSubstrate(ForestryItem.iodineCharge.getItemStack(),
+				Constants.RAINMAKER_RAIN_DURATION_IODINE, 0.01f));
+		FuelManager.rainSubstrate.put(ForestryItem.craftingMaterial.getItemStack(1, 4), new RainSubstrate(ForestryItem.craftingMaterial.getItemStack(1, 4), 0.075f));
 
 		BlockBase factoryTESR = ((BlockBase) ForestryBlock.factoryTESR.block());
 
@@ -214,8 +279,6 @@ public class PluginFactory extends ForestryPlugin {
 				'#', "blockGlass",
 				'X', "gearTin",
 				'Y', ForestryItem.hardenedCasing)));
-
-		ForestryBlock.factoryPlain.registerBlock(new BlockBase(Material.iron), ItemBlockNBT.class, "factory2");
 
 		BlockBase factoryPlain = ((BlockBase) ForestryBlock.factoryPlain.block());
 
@@ -335,12 +398,12 @@ public class PluginFactory extends ForestryPlugin {
 		}
 
 		// / SQUEEZER
-		int appleMulchAmount = GameMode.getGameMode().getIntegerSetting("squeezer.mulch.apple");
-		int appleJuiceAmount = GameMode.getGameMode().getIntegerSetting("squeezer.liquid.apple");
+		int appleMulchAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.mulch.apple");
+		int appleJuiceAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.apple");
 		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Items.apple)}, Fluids.JUICE.getFluid(appleJuiceAmount),
 				ForestryItem.mulch.getItemStack(), appleMulchAmount);
 
-		int seedOilAmount = GameMode.getGameMode().getIntegerSetting("squeezer.liquid.seed");
+		int seedOilAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed");
 		FluidStack seedOil = Fluids.SEEDOIL.getFluid(seedOilAmount);
 		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Items.wheat_seeds)}, seedOil);
 		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Items.pumpkin_seeds)}, seedOil);
@@ -365,14 +428,14 @@ public class PluginFactory extends ForestryPlugin {
 
 		// FERMENTER
 		for (int i = 0; i < 6; i++) {
-			RecipeUtil.addFermenterRecipes(new ItemStack(Blocks.sapling, 1, i), GameMode.getGameMode().getIntegerSetting("fermenter.yield.sapling"), Fluids.BIOMASS);
+			RecipeUtil.addFermenterRecipes(new ItemStack(Blocks.sapling, 1, i), ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.sapling"), Fluids.BIOMASS);
 		}
 
-		RecipeUtil.addFermenterRecipes(new ItemStack(Blocks.cactus), GameMode.getGameMode().getIntegerSetting("fermenter.yield.cactus"), Fluids.BIOMASS);
-		RecipeUtil.addFermenterRecipes(new ItemStack(Items.wheat), GameMode.getGameMode().getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
-		RecipeUtil.addFermenterRecipes(new ItemStack(Items.reeds), GameMode.getGameMode().getIntegerSetting("fermenter.yield.cane"), Fluids.BIOMASS);
-		RecipeUtil.addFermenterRecipes(new ItemStack(Blocks.brown_mushroom), GameMode.getGameMode().getIntegerSetting("fermenter.yield.mushroom"), Fluids.BIOMASS);
-		RecipeUtil.addFermenterRecipes(new ItemStack(Blocks.red_mushroom), GameMode.getGameMode().getIntegerSetting("fermenter.yield.mushroom"), Fluids.BIOMASS);
+		RecipeUtil.addFermenterRecipes(new ItemStack(Blocks.cactus), ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.cactus"), Fluids.BIOMASS);
+		RecipeUtil.addFermenterRecipes(new ItemStack(Items.wheat), ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
+		RecipeUtil.addFermenterRecipes(new ItemStack(Items.reeds), ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.cane"), Fluids.BIOMASS);
+		RecipeUtil.addFermenterRecipes(new ItemStack(Blocks.brown_mushroom), ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.mushroom"), Fluids.BIOMASS);
+		RecipeUtil.addFermenterRecipes(new ItemStack(Blocks.red_mushroom), ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.mushroom"), Fluids.BIOMASS);
 
 		// FABRICATOR
 
@@ -440,7 +503,6 @@ public class PluginFactory extends ForestryPlugin {
 				"R#R", "R#R", "R#R", '#', "ingotGold", 'R', "dustRedstone");
 		RecipeManagers.carpenterManager.addRecipe(40, Fluids.WATER.getFluid(1000), null, ForestryItem.solderingIron.getItemStack(),
 				" # ", "# #", "  B", '#', "ingotIron", 'B', "ingotBronze");
-		// ForestryCore.oreHandler.registerCarpenterRecipe(solderingIron);
 
 		// RAIN SUBSTRATES
 		if (PluginManager.Module.APICULTURE.isEnabled()) {
@@ -452,7 +514,6 @@ public class PluginFactory extends ForestryPlugin {
 					'X', Items.gunpowder,
 					'Y', ForestryItem.canEmpty,
 					'Z', ForestryItem.honeyDrop);
-			// ForestryCore.oreHandler.registerCarpenterRecipe(iodineCapsule);
 			RecipeManagers.carpenterManager.addRecipe(5, Fluids.WATER.getFluid(1000), null, ForestryItem.craftingMaterial.getItemStack(1, 4),
 					"Z#Z",
 					"#Y#",
@@ -461,7 +522,6 @@ public class PluginFactory extends ForestryPlugin {
 					'X', Items.gunpowder,
 					'Y', ForestryItem.canEmpty,
 					'Z', ForestryItem.honeydew);
-			// ForestryCore.oreHandler.registerCarpenterRecipe(dissipationCharge);
 		}
 
 		// Ender pearl

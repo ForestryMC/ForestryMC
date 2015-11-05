@@ -33,7 +33,6 @@ import forestry.api.mail.PostManager;
 import forestry.core.config.ForestryItem;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.PlayerUtil;
-import forestry.mail.items.ItemLetter;
 import forestry.mail.network.PacketPOBoxInfoResponse;
 
 public class PostRegistry implements IPostRegistry {
@@ -214,7 +213,7 @@ public class PostRegistry implements IPostRegistry {
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
 		letter.writeToNBT(nbttagcompound);
 
-		ItemStack letterStack = ItemLetter.createStampedLetterStack(letter);
+		ItemStack letterStack = LetterProperties.createStampedLetterStack(letter);
 		letterStack.setTagCompound(nbttagcompound);
 
 		return letterStack;

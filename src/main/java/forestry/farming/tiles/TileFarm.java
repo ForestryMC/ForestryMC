@@ -11,6 +11,7 @@
 package forestry.farming.tiles;
 
 import java.io.IOException;
+import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -172,7 +173,7 @@ public abstract class TileFarm extends RectangularMultiblockTileEntityBase imple
 
 	/* IHintSource */
 	@Override
-	public String[] getHints() {
+	public List<String> getHints() {
 		return Config.hints.get("farm");
 	}
 

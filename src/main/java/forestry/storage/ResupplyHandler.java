@@ -25,7 +25,7 @@ import cpw.mods.fml.common.eventhandler.Event;
 import forestry.api.storage.BackpackResupplyEvent;
 import forestry.core.IResupplyHandler;
 import forestry.core.inventory.ItemInventory;
-import forestry.core.inventory.ItemInventoryBackpack;
+import forestry.storage.inventory.ItemInventoryBackpack;
 import forestry.storage.items.ItemBackpack;
 
 public class ResupplyHandler implements IResupplyHandler {

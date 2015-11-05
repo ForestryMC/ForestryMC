@@ -22,8 +22,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 
-import forestry.api.core.ForestryAPI;
-import forestry.core.inventory.TileInventoryAdapter;
+import forestry.core.inventory.InventoryAdapterTile;
 import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
@@ -32,34 +31,21 @@ import forestry.core.recipes.RecipeUtil;
 import forestry.core.tiles.TileBase;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.SlotUtil;
+import forestry.factory.inventory.InventoryWorktable;
 import forestry.factory.recipes.RecipeMemory;
 
 public class TileWorktable extends TileBase implements ICrafterWorktable {
-
-	/* CONSTANTS */
-	public final static int SLOT_CRAFTING_1 = 0;
-	public final static int SLOT_CRAFTING_COUNT = 9;
-	public final static int SLOT_CRAFTING_RESULT = 9;
-	public final static short SLOT_INVENTORY_1 = 0;
-	public final static short SLOT_INVENTORY_COUNT = 18;
-
-	/* MEMBERS */
 	private RecipeMemory.Recipe currentRecipe;
 	private InventoryCrafting currentCrafting;
 	private final RecipeMemory memorized;
-	private final TileInventoryAdapter craftingInventory;
+	private final InventoryAdapterTile craftingInventory;
 
 	public TileWorktable() {
-		craftingInventory = new TileInventoryAdapter<>(this, 10, "CraftItems");
-		setInternalInventory(new WorktableInventoryAdapter(this));
+		super(GuiId.WorktableGUI, "worktable");
+		craftingInventory = new InventoryAdapterTile<>(this, 10, "CraftItems");
+		setInternalInventory(new InventoryWorktable(this));
 
 		memorized = new RecipeMemory();
-	}
-
-	@Override
-	public void openGui(EntityPlayer player) {
-		player.openGui(ForestryAPI.instance, GuiId.WorktableGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
 	}
 
 	/* LOADING & SAVING */
@@ -143,12 +129,12 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 		if (currentRecipe != null) {
 			ItemStack result = currentRecipe.getRecipeOutput(worldObj);
 			if (result != null) {
-				craftingInventory.setInventorySlotContents(SLOT_CRAFTING_RESULT, result.copy());
+				craftingInventory.setInventorySlotContents(InventoryWorktable.SLOT_CRAFTING_RESULT, result.copy());
 				return;
 			}
 		}
 
-		craftingInventory.setInventorySlotContents(SLOT_CRAFTING_RESULT, null);
+		craftingInventory.setInventorySlotContents(InventoryWorktable.SLOT_CRAFTING_RESULT, null);
 	}
 
 	private boolean canCraftCurrentRecipe() {
@@ -156,8 +142,8 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 			return false;
 		}
 
-		ItemStack[] recipeItems = InventoryUtil.getStacks(craftingInventory, SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT);
-		ItemStack[] inventory = InventoryUtil.getStacks(getInternalInventory(), SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
+		ItemStack[] recipeItems = InventoryUtil.getStacks(craftingInventory, InventoryWorktable.SLOT_CRAFTING_1, InventoryWorktable.SLOT_CRAFTING_COUNT);
+		ItemStack[] inventory = InventoryUtil.getStacks(getInternalInventory(), InventoryWorktable.SLOT_INVENTORY_1, InventoryWorktable.SLOT_INVENTORY_COUNT);
 		ItemStack recipeOutput = currentRecipe.getRecipeOutput(worldObj);
 
 		return RecipeUtil.canCraftRecipe(worldObj, recipeItems, recipeOutput, inventory);
@@ -165,7 +151,7 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 
 	@Override
 	public boolean canTakeStack(int slotIndex) {
-		if (slotIndex == SLOT_CRAFTING_RESULT) {
+		if (slotIndex == InventoryWorktable.SLOT_CRAFTING_RESULT) {
 			return canCraftCurrentRecipe();
 		}
 		return true;
@@ -175,7 +161,7 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 	public boolean onCraftingStart(EntityPlayer player) {
 		ItemStack[] set = InventoryUtil.getStacks(currentRecipe.getMatrix());
 
-		IInventory inventory = new InventoryMapper(this, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
+		IInventory inventory = new InventoryMapper(this, InventoryWorktable.SLOT_INVENTORY_1, InventoryWorktable.SLOT_INVENTORY_COUNT);
 		ItemStack[] removed = InventoryUtil.removeSets(inventory, 1, set, player, false, true, true);
 
 		if (removed == null) {
@@ -245,17 +231,6 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 	 * @return Inaccessible crafting inventory for the craft grid.
 	 */
 	public IInventory getCraftingInventory() {
-		return new InventoryMapper(craftingInventory, SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT);
-	}
-
-	private static class WorktableInventoryAdapter extends TileInventoryAdapter<TileWorktable> {
-		public WorktableInventoryAdapter(TileWorktable worktable) {
-			super(worktable, 18, "Items");
-		}
-
-		@Override
-		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-			return SlotUtil.isSlotInRange(slotIndex, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
-		}
+		return new InventoryMapper(craftingInventory, InventoryWorktable.SLOT_CRAFTING_1, InventoryWorktable.SLOT_CRAFTING_COUNT);
 	}
 }

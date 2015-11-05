@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.core.config;
 
-import java.util.EnumSet;
-
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -82,8 +80,8 @@ public enum ForestryBlock {
 	private Block block;
 
 	public void registerBlock(Block block, Class<? extends ItemBlock> itemClass, String name) {
-		if (!EnumSet.of(Stage.PRE_INIT).contains(PluginManager.getStage())) {
-			throw new RuntimeException("Tried to register Block outside of Pre-Init");
+		if (PluginManager.getStage() != Stage.SETUP) {
+			throw new RuntimeException("Tried to register Block outside of Setup");
 		}
 		this.block = block;
 		block.setBlockName("for." + name);

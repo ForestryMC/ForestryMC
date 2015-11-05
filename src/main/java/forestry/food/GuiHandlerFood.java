@@ -18,7 +18,7 @@ import forestry.core.GuiHandlerBase;
 import forestry.core.network.GuiId;
 import forestry.food.gui.ContainerInfuser;
 import forestry.food.gui.GuiInfuser;
-import forestry.food.items.ItemInfuser.InfuserInventory;
+import forestry.food.inventory.ItemInventoryInfuser;
 
 public class GuiHandlerFood extends GuiHandlerBase {
 	@Override
@@ -35,7 +35,7 @@ public class GuiHandlerFood extends GuiHandlerBase {
 				if (infuser == null) {
 					return null;
 				}
-				return new GuiInfuser(player.inventory, new InfuserInventory(player, infuser));
+				return new GuiInfuser(player.inventory, new ItemInventoryInfuser(player, infuser));
 
 			default:
 				return null;
@@ -56,7 +56,7 @@ public class GuiHandlerFood extends GuiHandlerBase {
 				if (infuser == null) {
 					return null;
 				}
-				return new ContainerInfuser(player.inventory, new InfuserInventory(player, infuser));
+				return new ContainerInfuser(player.inventory, new ItemInventoryInfuser(player, infuser));
 
 			default:
 				return null;

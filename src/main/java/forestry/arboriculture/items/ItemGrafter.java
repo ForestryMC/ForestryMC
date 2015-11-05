@@ -23,11 +23,9 @@ import forestry.api.core.Tabs;
 import forestry.core.items.ItemForestry;
 
 public class ItemGrafter extends ItemForestry implements IToolGrafter {
-
 	private final float efficiencyOnProperMaterial;
 
 	public ItemGrafter(int maxDamage) {
-		super();
 		setMaxStackSize(1);
 		efficiencyOnProperMaterial = 4.0F;
 		setMaxDamage(maxDamage);
@@ -53,11 +51,6 @@ public class ItemGrafter extends ItemForestry implements IToolGrafter {
 		return true;
 	}
 
-	/*@Override
-	public float getDamageVsEntity(Entity entity, ItemStack itemstack) {
-		return 1;
-	}*/
-
 	@Override
 	public boolean isFull3D() {
 		return true;
@@ -67,5 +60,4 @@ public class ItemGrafter extends ItemForestry implements IToolGrafter {
 	public float getSaplingModifier(ItemStack stack, World world, EntityPlayer player, int x, int y, int z) {
 		return 100f;
 	}
-
 }

@@ -32,10 +32,10 @@ import forestry.core.gui.widgets.Widget;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.SpriteSheet;
 import forestry.core.utils.StringUtil;
-import forestry.mail.items.ItemLetter.LetterInventory;
+import forestry.mail.inventory.ItemInventoryLetter;
 import forestry.mail.network.PacketLetterInfoRequest;
 
-public class GuiLetter extends GuiForestry<ContainerLetter, LetterInventory> {
+public class GuiLetter extends GuiForestry<ContainerLetter, ItemInventoryLetter> {
 
 	private final boolean isProcessedLetter;
 	private boolean checkedSessionVars;
@@ -48,7 +48,7 @@ public class GuiLetter extends GuiForestry<ContainerLetter, LetterInventory> {
 
 	private final ArrayList<Widget> tradeInfoWidgets;
 
-	public GuiLetter(EntityPlayer player, LetterInventory inventory) {
+	public GuiLetter(EntityPlayer player, ItemInventoryLetter inventory) {
 		super(Constants.TEXTURE_PATH_GUI + "/letter.png", new ContainerLetter(player, inventory), inventory);
 		this.xSize = 194;
 		this.ySize = 227;

@@ -65,7 +65,7 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 	protected final C container;
 	protected final FontColour fontColor;
 	public final ResourceLocation textureFile;
-	protected WidgetManager widgetManager;
+	protected final WidgetManager widgetManager;
 	protected LedgerManager ledgerManager;
 
 	protected GuiForestry(String texture, C container, I inventory) {
@@ -112,8 +112,8 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 
 		if (Config.enableHints && inventory instanceof IHintSource) {
 			IHintSource hintSource = (IHintSource) inventory;
-			String[] hints = hintSource.getHints();
-			if (hints != null && hints.length > 0) {
+			List<String> hints = hintSource.getHints();
+			if (hints != null && hints.size() > 0) {
 				ledgerManager.add(new HintLedger(ledgerManager, hintSource));
 			}
 		}

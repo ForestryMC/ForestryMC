@@ -16,7 +16,7 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 
 import forestry.core.config.Constants;
 import forestry.core.config.ForestryBlock;
-import forestry.factory.tiles.TileBottler;
+import forestry.factory.recipes.BottlerRecipe;
 
 import uristqwerty.CraftGuide.api.ItemSlot;
 import uristqwerty.CraftGuide.api.LiquidSlot;
@@ -48,7 +48,7 @@ public class CraftGuideBottler implements RecipeProvider {
 		RecipeTemplate template = generator.createRecipeTemplate(slots, machine);
 
 		for (FluidContainerRegistry.FluidContainerData container : FluidContainerRegistry.getRegisteredFluidContainerData()) {
-			TileBottler.BottlerRecipe recipe = TileBottler.BottlerRecipe.getRecipe(container.fluid, container.emptyContainer);
+			BottlerRecipe recipe = BottlerRecipe.getRecipe(container.fluid, container.emptyContainer);
 			if (recipe != null) {
 				Object[] array = new Object[4];
 				

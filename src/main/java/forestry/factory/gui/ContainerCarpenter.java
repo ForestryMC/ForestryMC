@@ -22,6 +22,7 @@ import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotLocked;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.core.network.PacketItemStackDisplay;
+import forestry.factory.inventory.InventoryCarpenter;
 import forestry.factory.tiles.TileCarpenter;
 
 public class ContainerCarpenter extends ContainerLiquidTanks<TileCarpenter> implements IContainerCrafting {
@@ -32,16 +33,16 @@ public class ContainerCarpenter extends ContainerLiquidTanks<TileCarpenter> impl
 		// Internal inventory
 		for (int i = 0; i < 2; i++) {
 			for (int k = 0; k < 9; k++) {
-				addSlotToContainer(new Slot(tile, TileCarpenter.SLOT_INVENTORY_1 + k + i * 9, 8 + k * 18, 90 + i * 18));
+				addSlotToContainer(new Slot(tile, InventoryCarpenter.SLOT_INVENTORY_1 + k + i * 9, 8 + k * 18, 90 + i * 18));
 			}
 		}
 
 		// Liquid Input
-		this.addSlotToContainer(new SlotFiltered(tile, TileCarpenter.SLOT_CAN_INPUT, 120, 20));
+		this.addSlotToContainer(new SlotFiltered(tile, InventoryCarpenter.SLOT_CAN_INPUT, 120, 20));
 		// Boxes
-		this.addSlotToContainer(new SlotFiltered(tile, TileCarpenter.SLOT_BOX, 83, 20));
+		this.addSlotToContainer(new SlotFiltered(tile, InventoryCarpenter.SLOT_BOX, 83, 20));
 		// Product
-		this.addSlotToContainer(new SlotOutput(tile, TileCarpenter.SLOT_PRODUCT, 120, 56));
+		this.addSlotToContainer(new SlotOutput(tile, InventoryCarpenter.SLOT_PRODUCT, 120, 56));
 
 		// Craft Preview display
 		addSlotToContainer(new SlotLocked(tile.getCraftPreviewInventory(), 0, 80, 51));

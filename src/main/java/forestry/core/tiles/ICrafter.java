@@ -14,11 +14,5 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
 public interface ICrafter {
-
 	ItemStack takenFromSlot(int slotIndex, EntityPlayer player);
-
-	ItemStack getResult();
-
-	boolean canTakeStack(int slotIndex);
-
 }

@@ -13,6 +13,7 @@ package forestry.core.gui;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.ICrafting;
 
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.network.PacketGuiSelectRequest;
@@ -22,7 +23,6 @@ public class ContainerNaturalistInventory extends ContainerTile<TileNaturalistCh
 
 	public ContainerNaturalistInventory(InventoryPlayer player, TileNaturalistChest tile, int page) {
 		super(tile, player, 18, 120);
-		tile.openInventory();
 
 		// Inventory
 		for (int x = 0; x < 5; x++) {
@@ -37,8 +37,14 @@ public class ContainerNaturalistInventory extends ContainerTile<TileNaturalistCh
 		tile.flipPage(player, packet.getPrimaryIndex());
 	}
 
+	@Override
+	public void addCraftingToCrafters(ICrafting p_75132_1_) {
+		super.addCraftingToCrafters(p_75132_1_);
+		tile.increaseNumPlayersUsing();
+	}
+
 	public void onContainerClosed(EntityPlayer player) {
 		super.onContainerClosed(player);
-		tile.closeInventory();
+		tile.decreaseNumPlayersUsing();
 	}
 }

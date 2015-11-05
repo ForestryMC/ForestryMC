@@ -20,11 +20,11 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
+import forestry.api.core.ForestryAPI;
 import forestry.api.farming.Farmables;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
-import forestry.core.config.GameMode;
 import forestry.core.fluids.Fluids;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.ModUtil;
@@ -220,7 +220,7 @@ public class PluginMagicalCrops extends ForestryPlugin {
 				"Yellorite"
 		);
 
-		int seedAmount = GameMode.getGameMode().getIntegerSetting("squeezer.liquid.seed");
+		int seedAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed");
 
 		for (String magicSeedName : magicSeeds) {
 			addRecipes("_MagicSeeds", "_MagicCrop", magicSeedName, seedAmount);
@@ -252,9 +252,9 @@ public class PluginMagicalCrops extends ForestryPlugin {
 
 		Item cropProduce = GameRegistry.findItem(MagCrop, MagCrop + "_CropProduce");
 		if (cropProduce != null) {
-			int juiceAmount = GameMode.getGameMode().getIntegerSetting("squeezer.liquid.apple");
+			int juiceAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.apple");
 			ItemStack produce = new ItemStack(GameRegistry.findItem(MagCrop, MagCrop + "_CropProduce"), 1, OreDictionary.WILDCARD_VALUE);
-			RecipeUtil.addFermenterRecipes(produce, GameMode.getGameMode().getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
+			RecipeUtil.addFermenterRecipes(produce, ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
 			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{produce}, Fluids.JUICE.getFluid(juiceAmount));
 		}
 	}

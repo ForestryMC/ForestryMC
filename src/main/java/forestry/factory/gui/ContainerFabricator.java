@@ -20,6 +20,7 @@ import forestry.core.gui.IContainerCrafting;
 import forestry.core.gui.slots.SlotCraftMatrix;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
+import forestry.factory.inventory.InventoryFabricator;
 import forestry.factory.tiles.TileFabricator;
 
 public class ContainerFabricator extends ContainerLiquidTanks<TileFabricator> implements IContainerCrafting {
@@ -30,23 +31,23 @@ public class ContainerFabricator extends ContainerLiquidTanks<TileFabricator> im
 		// Internal inventory
 		for (int i = 0; i < 2; i++) {
 			for (int k = 0; k < 9; k++) {
-				addSlotToContainer(new Slot(tile, TileFabricator.SLOT_INVENTORY_1 + k + i * 9, 8 + k * 18, 84 + i * 18));
+				addSlotToContainer(new Slot(tile, InventoryFabricator.SLOT_INVENTORY_1 + k + i * 9, 8 + k * 18, 84 + i * 18));
 			}
 		}
 
 		// Molten resource
-		this.addSlotToContainer(new SlotFiltered(tile, TileFabricator.SLOT_METAL, 26, 21));
+		this.addSlotToContainer(new SlotFiltered(tile, InventoryFabricator.SLOT_METAL, 26, 21));
 
 		// Plan
-		this.addSlotToContainer(new SlotFiltered(tile, TileFabricator.SLOT_PLAN, 139, 17));
+		this.addSlotToContainer(new SlotFiltered(tile, InventoryFabricator.SLOT_PLAN, 139, 17));
 
 		// Result
-		this.addSlotToContainer(new SlotOutput(tile, TileFabricator.SLOT_RESULT, 139, 53));
+		this.addSlotToContainer(new SlotOutput(tile, InventoryFabricator.SLOT_RESULT, 139, 53));
 
 		// Crafting matrix
 		for (int l = 0; l < 3; l++) {
 			for (int k = 0; k < 3; k++) {
-				addSlotToContainer(new SlotCraftMatrix(this, tile.getCraftingInventory(), TileFabricator.SLOT_CRAFTING_1 + k + l * 3, 67 + k * 18, 17 + l * 18));
+				addSlotToContainer(new SlotCraftMatrix(this, tile.getCraftingInventory(), InventoryFabricator.SLOT_CRAFTING_1 + k + l * 3, 67 + k * 18, 17 + l * 18));
 			}
 		}
 	}

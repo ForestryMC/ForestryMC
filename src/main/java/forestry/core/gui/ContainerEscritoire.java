@@ -15,6 +15,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
+import forestry.core.inventory.InventoryEscritoire;
 import forestry.core.network.PacketGuiSelectRequest;
 import forestry.core.network.PacketGuiUpdate;
 import forestry.core.proxy.Proxies;
@@ -33,15 +34,15 @@ public class ContainerEscritoire extends ContainerTile<TileEscritoire> implement
 		this.player = player;
 
 		// Analyze slot
-		addSlotToContainer(new SlotFiltered(this.tile, TileEscritoire.SLOT_ANALYZE, 97, 67).setCrafter(this.tile).setStackLimit(1));
+		addSlotToContainer(new SlotFiltered(this.tile, InventoryEscritoire.SLOT_ANALYZE, 97, 67).setCrafter(this.tile).setStackLimit(1));
 
-		for (int i = 0; i < TileEscritoire.SLOTS_INPUT_COUNT; i++) {
-			addSlotToContainer(new SlotFiltered(this.tile, TileEscritoire.SLOT_INPUT_1 + i, 17, 49 + i * 18).setBlockedTexture("slots/blocked_2"));
+		for (int i = 0; i < InventoryEscritoire.SLOTS_INPUT_COUNT; i++) {
+			addSlotToContainer(new SlotFiltered(this.tile, InventoryEscritoire.SLOT_INPUT_1 + i, 17, 49 + i * 18).setBlockedTexture("slots/blocked_2"));
 		}
 
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 2; j++) {
-				addSlotToContainer(new SlotOutput(this.tile, TileEscritoire.SLOT_RESULTS_1 + (i * 2) + j, 177 + j * 18, 85 + i * 18));
+				addSlotToContainer(new SlotOutput(this.tile, InventoryEscritoire.SLOT_RESULTS_1 + (i * 2) + j, 177 + j * 18, 85 + i * 18));
 			}
 		}
 	}

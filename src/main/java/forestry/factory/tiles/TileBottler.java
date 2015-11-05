@@ -10,13 +10,10 @@
  ******************************************************************************/
 package forestry.factory.tiles;
 
-import com.google.common.base.Objects;
-
 import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -24,30 +21,27 @@ import net.minecraft.tileentity.TileEntity;
 
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidContainerItem;
 import net.minecraftforge.fluids.IFluidHandler;
 
 import cpw.mods.fml.common.Optional;
 
-import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorLogic;
-import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.inventory.IInventoryAdapter;
-import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
 import forestry.core.render.TankRenderInfo;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;
+import forestry.factory.inventory.InventoryBottler;
+import forestry.factory.recipes.BottlerRecipe;
 import forestry.factory.triggers.FactoryTriggers;
 
 import buildcraft.api.statements.ITriggerExternal;
@@ -56,28 +50,18 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 	private static final int TICKS_PER_RECIPE_TIME = 5;
 	private static final int ENERGY_PER_RECIPE_TIME = 1000;
 
-	public static final short SLOT_INPUT_EMPTY_CAN = 0;
-	public static final short SLOT_OUTPUT = 1;
-	public static final short SLOT_INPUT_FULL_CAN = 2;
-
 	private final StandardTank resourceTank;
 	private final TankManager tankManager;
 
 	private BottlerRecipe currentRecipe;
 
 	public TileBottler() {
-		super(1100, 4000, 200);
+		super(GuiId.BottlerGUI, "bottler", 1100, 4000);
 
-		setInternalInventory(new BottlerInventoryAdapter(this));
+		setInternalInventory(new InventoryBottler(this));
 
-		setHints(Config.hints.get("bottler"));
 		resourceTank = new StandardTank(Constants.PROCESSOR_TANK_CAPACITY);
 		tankManager = new TankManager(this, resourceTank);
-	}
-
-	@Override
-	public void openGui(EntityPlayer player) {
-		player.openGui(ForestryAPI.instance, GuiId.BottlerGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
 	}
 
 	/* SAVING & LOADING */
@@ -111,18 +95,18 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 		super.updateServerSide();
 
 		if (updateOnInterval(20)) {
-			FluidHelper.drainContainers(tankManager, this, SLOT_INPUT_FULL_CAN);
+			FluidHelper.drainContainers(tankManager, this, InventoryBottler.SLOT_INPUT_FULL_CAN);
 		}
 	}
 
 	@Override
 	public boolean workCycle() {
-		FluidHelper.FillStatus status = FluidHelper.fillContainers(tankManager, this, SLOT_INPUT_EMPTY_CAN, SLOT_OUTPUT, currentRecipe.input.getFluid());
+		FluidHelper.FillStatus status = FluidHelper.fillContainers(tankManager, this, InventoryBottler.SLOT_INPUT_EMPTY_CAN, InventoryBottler.SLOT_OUTPUT, currentRecipe.input.getFluid());
 		return status == FluidHelper.FillStatus.SUCCESS;
 	}
 
 	private void checkRecipe() {
-		ItemStack emptyCan = getStackInSlot(SLOT_INPUT_EMPTY_CAN);
+		ItemStack emptyCan = getStackInSlot(InventoryBottler.SLOT_INPUT_EMPTY_CAN);
 		FluidStack resource = resourceTank.getFluid();
 
 		if (currentRecipe == null || !currentRecipe.matches(emptyCan, resource)) {
@@ -144,11 +128,11 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 	@Override
 	public boolean hasResourcesMin(float percentage) {
 		IInventoryAdapter inventory = getInternalInventory();
-		if (inventory.getStackInSlot(SLOT_INPUT_EMPTY_CAN) == null) {
+		if (inventory.getStackInSlot(InventoryBottler.SLOT_INPUT_EMPTY_CAN) == null) {
 			return false;
 		}
 
-		return ((float) inventory.getStackInSlot(SLOT_INPUT_EMPTY_CAN).stackSize / (float) inventory.getStackInSlot(SLOT_INPUT_EMPTY_CAN).getMaxStackSize()) > percentage;
+		return ((float) inventory.getStackInSlot(InventoryBottler.SLOT_INPUT_EMPTY_CAN).stackSize / (float) inventory.getStackInSlot(InventoryBottler.SLOT_INPUT_EMPTY_CAN).getMaxStackSize()) > percentage;
 	}
 
 	@Override
@@ -162,7 +146,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 		if (errorLogic.setCondition(currentRecipe == null, EnumErrorCode.NORECIPE)) {
 			status = FluidHelper.FillStatus.SUCCESS;
 		} else {
-			status = FluidHelper.fillContainers(tankManager, this, SLOT_INPUT_EMPTY_CAN, SLOT_OUTPUT, currentRecipe.input.getFluid(), false);
+			status = FluidHelper.fillContainers(tankManager, this, InventoryBottler.SLOT_INPUT_EMPTY_CAN, InventoryBottler.SLOT_OUTPUT, currentRecipe.input.getFluid(), false);
 		}
 
 		errorLogic.setCondition(status == FluidHelper.FillStatus.NO_FLUID, EnumErrorCode.NORESOURCE);
@@ -219,88 +203,6 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 		res.add(FactoryTriggers.lowResource25);
 		res.add(FactoryTriggers.lowResource10);
 		return res;
-	}
-
-	private static class BottlerInventoryAdapter extends TileInventoryAdapter<TileBottler> {
-		public BottlerInventoryAdapter(TileBottler tileBottler) {
-			super(tileBottler, 3, "Items");
-		}
-
-		@Override
-		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-			if (slotIndex == SLOT_INPUT_EMPTY_CAN) {
-				return FluidHelper.isFillableContainer(itemStack);
-			} else if (slotIndex == SLOT_INPUT_FULL_CAN) {
-				FluidStack fluidStack = FluidHelper.getFluidStackInContainer(itemStack);
-				return fluidStack != null && FluidRegistry.isFluidRegistered(fluidStack.getFluid());
-			}
-			return false;
-		}
-
-		@Override
-		public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
-			return slotIndex == SLOT_OUTPUT;
-		}
-	}
-
-	public static class BottlerRecipe {
-		public final FluidStack input;
-		public final ItemStack empty;
-		public final ItemStack filled;
-
-		private BottlerRecipe(ItemStack empty, FluidStack input, ItemStack filled) {
-			this.input = input;
-			if (empty.getItem() instanceof IFluidContainerItem) {
-				FluidStack emptyFluid = FluidHelper.getFluidStackInContainer(empty);
-				if (emptyFluid != null) {
-					this.input.amount -= emptyFluid.amount;
-				}
-				if (this.input.amount > Constants.BUCKET_VOLUME) {
-					this.input.amount = Constants.BUCKET_VOLUME;
-				}
-			}
-			this.empty = empty;
-			this.filled = filled;
-		}
-
-		public boolean matches(ItemStack emptyCan, FluidStack resource) {
-			if (emptyCan == null || resource == null || !emptyCan.isItemEqual(empty)) {
-				return false;
-			}
-
-			if (empty.getItem() instanceof IFluidContainerItem) {
-				return true;
-			} else {
-				return resource.containsFluid(input);
-			}
-		}
-
-		public static BottlerRecipe getRecipe(FluidStack res, ItemStack empty) {
-			if (res == null || empty == null) {
-				return null;
-			}
-
-			ItemStack filled = FluidHelper.getFilledContainer(res.getFluid(), empty);
-			if (filled == null) {
-				return null;
-			}
-
-			FluidStack input = FluidHelper.getFluidStackInContainer(filled);
-			if (input == null) {
-				return null;
-			}
-
-			return new BottlerRecipe(empty, input, filled);
-		}
-
-		@Override
-		public String toString() {
-			return Objects.toStringHelper(this)
-					.addValue(input.amount).addValue(input.getLocalizedName())
-					.add("empty", empty)
-					.add("filled", filled)
-					.toString();
-		}
 	}
 
 }

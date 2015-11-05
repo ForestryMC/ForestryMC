@@ -40,6 +40,7 @@ import forestry.core.tiles.TileBase;
 import forestry.core.utils.ItemStackUtil;
 import forestry.mail.MailAddress;
 import forestry.mail.TradeStation;
+import forestry.mail.inventory.InventoryTradeStation;
 import forestry.mail.network.PacketTraderAddressResponse;
 import forestry.mail.triggers.MailTriggers;
 
@@ -50,14 +51,15 @@ public class TileTrader extends TileBase {
 	private IMailAddress address;
 
 	public TileTrader() {
+		super(GuiId.TraderGUI, "trade.station");
 		address = new MailAddress();
-		setInternalInventory(new TradeStation.TradeStationInventory());
+		setInternalInventory(new InventoryTradeStation());
 	}
 
 	@Override
 	public void openGui(EntityPlayer player) {
 		if (isLinked()) {
-			player.openGui(ForestryAPI.instance, GuiId.TraderGUI.ordinal(), worldObj, xCoord, yCoord, zCoord);
+			super.openGui(player);
 		} else {
 			player.openGui(ForestryAPI.instance, GuiId.TraderNameGUI.ordinal(), worldObj, xCoord, yCoord, zCoord);
 		}

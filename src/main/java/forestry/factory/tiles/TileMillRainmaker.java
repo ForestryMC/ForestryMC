@@ -11,21 +11,20 @@
 package forestry.factory.tiles;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.RainSubstrate;
-import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileMill;
+import forestry.factory.inventory.InventoryRainmaker;
 
 public class TileMillRainmaker extends TileMill {
-
 	private int duration;
 	private boolean reverse;
 
 	public TileMillRainmaker() {
+		super(null, null);
 		speed = 0.01f;
 		setInternalInventory(new InventoryRainmaker(this));
 	}
@@ -73,11 +72,12 @@ public class TileMillRainmaker extends TileMill {
 		nbttagcompound.setBoolean("Reverse", reverse);
 	}
 
-	private void addCharge(RainSubstrate substrate) {
+	public void addCharge(RainSubstrate substrate) {
 		charge = 1;
 		speed = substrate.speed;
 		duration = substrate.duration;
 		reverse = substrate.reverse;
+		sendNetworkUpdate();
 	}
 
 	@Override
@@ -109,41 +109,6 @@ public class TileMillRainmaker extends TileMill {
 			duration = 0;
 			reverse = false;
 			sendNetworkUpdate();
-		}
-	}
-
-	private static class InventoryRainmaker extends TileInventoryAdapter<TileMillRainmaker> {
-		private static final int SLOT_SUBSTRATE = 0;
-
-		public InventoryRainmaker(TileMillRainmaker tile) {
-			super(tile, 1, "items");
-		}
-
-		@Override
-		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-			if (slotIndex == SLOT_SUBSTRATE) {
-				if (FuelManager.rainSubstrate.containsKey(itemStack) && tile.charge == 0 && tile.progress == 0) {
-					RainSubstrate substrate = FuelManager.rainSubstrate.get(itemStack);
-					if (tile.worldObj.isRaining() && substrate.reverse) {
-						return true;
-					} else if (!tile.worldObj.isRaining() && !substrate.reverse) {
-						return true;
-					}
-				}
-			}
-
-			return false;
-		}
-
-		@Override
-		public void setInventorySlotContents(int slotIndex, ItemStack itemStack) {
-			if (slotIndex == SLOT_SUBSTRATE) {
-				RainSubstrate substrate = FuelManager.rainSubstrate.get(itemStack);
-				if (substrate != null && substrate.item.isItemEqual(itemStack)) {
-					tile.addCharge(substrate);
-					tile.sendNetworkUpdate();
-				}
-			}
 		}
 	}
 

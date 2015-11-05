@@ -20,15 +20,14 @@ import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.circuits.ICircuitSocketType;
 import forestry.api.farming.FarmDirection;
-import forestry.core.circuits.ItemSolderingIron.CircuitRecipe;
-import forestry.core.circuits.ItemSolderingIron.SolderingInventory;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
+import forestry.core.inventory.ItemInventorySolderingIron;
 import forestry.core.utils.StringUtil;
 
-public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron, SolderingInventory> {
+public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron, ItemInventorySolderingIron> {
 
-	public GuiSolderingIron(EntityPlayer player, SolderingInventory inventory) {
+	public GuiSolderingIron(EntityPlayer player, ItemInventorySolderingIron inventory) {
 		super(Constants.TEXTURE_PATH_GUI + "/solder.png", new ContainerSolderingIron(player, inventory), inventory);
 
 		xSize = 176;
@@ -46,11 +45,11 @@ public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron, Solder
 		for (int i = 0; i < 4; i++) {
 			String description;
 			ItemStack tube = inventory.getStackInSlot(i + 2);
-			CircuitRecipe recipe = ItemSolderingIron.SolderManager.getMatchingRecipe(layout, tube);
+			CircuitRecipe recipe = SolderManager.getMatchingRecipe(layout, tube);
 			if (recipe == null) {
 				description = "(" + StringUtil.localize("gui.noeffect") + ")";
 			} else {
-				description = StringUtil.localize(recipe.circuit.getName()) + " (" + recipe.circuit.getLimit() + ")";
+				description = StringUtil.localize(recipe.getCircuit().getName()) + " (" + recipe.getCircuit().getLimit() + ")";
 			}
 
 			int row = i * 20;

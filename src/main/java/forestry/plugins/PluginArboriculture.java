@@ -17,6 +17,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.WeightedRandomChestContent;
 
@@ -34,6 +35,7 @@ import cpw.mods.fml.common.registry.VillagerRegistry;
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.EnumWoodType;
 import forestry.api.arboriculture.TreeManager;
+import forestry.api.core.ForestryAPI;
 import forestry.api.core.Tabs;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.recipes.RecipeManagers;
@@ -64,7 +66,6 @@ import forestry.arboriculture.items.ItemBlockLeaves;
 import forestry.arboriculture.items.ItemBlockWood;
 import forestry.arboriculture.items.ItemGermlingGE;
 import forestry.arboriculture.items.ItemGrafter;
-import forestry.arboriculture.items.ItemTreealyzer;
 import forestry.arboriculture.network.PacketRipeningUpdate;
 import forestry.arboriculture.proxy.ProxyArboriculture;
 import forestry.arboriculture.tiles.TileArboristChest;
@@ -77,11 +78,12 @@ import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
-import forestry.core.config.GameMode;
 import forestry.core.fluids.Fluids;
 import forestry.core.genetics.alleles.AllelePlantType;
 import forestry.core.items.ItemBlockForestry;
 import forestry.core.items.ItemFruit.EnumFruit;
+import forestry.core.items.ItemWithGui;
+import forestry.core.network.GuiId;
 import forestry.core.network.PacketIdClient;
 import forestry.core.proxy.Proxies;
 import forestry.core.recipes.RecipeUtil;
@@ -126,8 +128,19 @@ public class PluginArboriculture extends ForestryPlugin {
 	}
 
 	@Override
-	public void preInit() {
-		super.preInit();
+	protected void registerItemsAndBlocks() {
+
+		ForestryItem.sapling.registerItem(new ItemGermlingGE(EnumGermlingType.SAPLING), "sapling");
+		OreDictionary.registerOre("treeSapling", ForestryItem.sapling.getWildcard());
+
+		if (PluginManager.Module.APICULTURE.isEnabled()) {
+			ForestryItem.pollenFertile.registerItem(new ItemGermlingGE(EnumGermlingType.POLLEN), "pollenFertile");
+			Item treealyzer = new ItemWithGui(GuiId.TreealyzerGUI).setCreativeTab(Tabs.tabArboriculture);
+			ForestryItem.treealyzer.registerItem(treealyzer, "treealyzer");
+		}
+
+		ForestryItem.grafter.registerItem(new ItemGrafter(4), "grafter");
+		ForestryItem.grafterProven.registerItem(new ItemGrafter(149), "grafterProven");
 
 		// Wood blocks
 		ForestryBlock.logs.registerBlock(new BlockLog(false), ItemBlockWood.class, "logs");
@@ -160,20 +173,6 @@ public class PluginArboriculture extends ForestryPlugin {
 		ForestryBlock.stairsFireproof.registerBlock(new BlockArbStairs(ForestryBlock.planksFireproof.block(), true), ItemBlockWood.class, "stairsFireproof");
 		OreDictionary.registerOre("stairWood", ForestryBlock.stairsFireproof.getWildcard());
 
-		for (EnumWoodType woodType : EnumWoodType.VALUES) {
-			WoodItemAccess.registerLog(ForestryBlock.logs.block(), woodType, false);
-			WoodItemAccess.registerPlanks(ForestryBlock.planks.block(), woodType, false);
-			WoodItemAccess.registerSlab(ForestryBlock.slabs.block(), woodType, false);
-			WoodItemAccess.registerFence(ForestryBlock.fences.block(), woodType, false);
-			WoodItemAccess.registerStairs(ForestryBlock.stairs.block(), woodType, false);
-
-			WoodItemAccess.registerLog(ForestryBlock.logsFireproof.block(), woodType, true);
-			WoodItemAccess.registerPlanks(ForestryBlock.planksFireproof.block(), woodType, true);
-			WoodItemAccess.registerSlab(ForestryBlock.slabsFireproof.block(), woodType, true);
-			WoodItemAccess.registerFence(ForestryBlock.fencesFireproof.block(), woodType, true);
-			WoodItemAccess.registerStairs(ForestryBlock.stairsFireproof.block(), woodType, true);
-		}
-
 		// Saplings
 		ForestryBlock.saplingGE.registerBlock(new BlockSapling(), ItemBlockForestry.class, "saplingGE");
 		OreDictionary.registerOre("treeSapling", ForestryBlock.saplingGE.getWildcard());
@@ -188,6 +187,25 @@ public class PluginArboriculture extends ForestryPlugin {
 		// Machines
 		ForestryBlock.arboriculture.registerBlock(new BlockBase(Material.iron, true), ItemBlockForestry.class, "arboriculture");
 		ForestryBlock.arboriculture.block().setCreativeTab(Tabs.tabArboriculture);
+	}
+
+	@Override
+	public void preInit() {
+		super.preInit();
+
+		for (EnumWoodType woodType : EnumWoodType.VALUES) {
+			WoodItemAccess.registerLog(ForestryBlock.logs.block(), woodType, false);
+			WoodItemAccess.registerPlanks(ForestryBlock.planks.block(), woodType, false);
+			WoodItemAccess.registerSlab(ForestryBlock.slabs.block(), woodType, false);
+			WoodItemAccess.registerFence(ForestryBlock.fences.block(), woodType, false);
+			WoodItemAccess.registerStairs(ForestryBlock.stairs.block(), woodType, false);
+
+			WoodItemAccess.registerLog(ForestryBlock.logsFireproof.block(), woodType, true);
+			WoodItemAccess.registerPlanks(ForestryBlock.planksFireproof.block(), woodType, true);
+			WoodItemAccess.registerSlab(ForestryBlock.slabsFireproof.block(), woodType, true);
+			WoodItemAccess.registerFence(ForestryBlock.fencesFireproof.block(), woodType, true);
+			WoodItemAccess.registerStairs(ForestryBlock.stairsFireproof.block(), woodType, true);
+		}
 
 		definitionChest = ((BlockBase) ForestryBlock.arboriculture.block()).addDefinition(new MachineDefinition(Constants.DEFINITION_ARBCHEST_META,
 				"forestry.ArbChest", TileArboristChest.class, Proxies.render.getRenderChest("arbchest"),
@@ -240,23 +258,6 @@ public class PluginArboriculture extends ForestryPlugin {
 	public void postInit() {
 		super.postInit();
 		registerDungeonLoot();
-
-	}
-
-	@Override
-	protected void registerItems() {
-
-		ForestryItem.sapling.registerItem(new ItemGermlingGE(EnumGermlingType.SAPLING), "sapling");
-		OreDictionary.registerOre("treeSapling", ForestryItem.sapling.getWildcard());
-
-		if (PluginManager.Module.APICULTURE.isEnabled()) {
-			ForestryItem.pollenFertile.registerItem(new ItemGermlingGE(EnumGermlingType.POLLEN), "pollenFertile");
-			ForestryItem.treealyzer.registerItem(new ItemTreealyzer(), "treealyzer");
-		}
-
-		ForestryItem.grafter.registerItem(new ItemGrafter(4), "grafter");
-		ForestryItem.grafterProven.registerItem(new ItemGrafter(149), "grafterProven");
-
 	}
 
 	@Override
@@ -314,9 +315,9 @@ public class PluginArboriculture extends ForestryPlugin {
 					'D', "gemDiamond");
 
 			// SQUEEZER RECIPES
-			int seedOilMultiplier = GameMode.getGameMode().getIntegerSetting("squeezer.liquid.seed");
-			int juiceMultiplier = GameMode.getGameMode().getIntegerSetting("squeezer.liquid.apple");
-			int mulchMultiplier = GameMode.getGameMode().getIntegerSetting("squeezer.mulch.apple");
+			int seedOilMultiplier = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed");
+			int juiceMultiplier = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.apple");
+			int mulchMultiplier = ForestryAPI.activeMode.getIntegerSetting("squeezer.mulch.apple");
 			RecipeManagers.squeezerManager.addRecipe(20, new ItemStack[]{EnumFruit.CHERRY.getStack()}, Fluids.SEEDOIL.getFluid(5 * seedOilMultiplier), ForestryItem.mulch.getItemStack(), 5);
 			RecipeManagers.squeezerManager.addRecipe(60, new ItemStack[]{EnumFruit.WALNUT.getStack()}, Fluids.SEEDOIL.getFluid(18 * seedOilMultiplier), ForestryItem.mulch.getItemStack(), 5);
 			RecipeManagers.squeezerManager.addRecipe(70, new ItemStack[]{EnumFruit.CHESTNUT.getStack()}, Fluids.SEEDOIL.getFluid(22 * seedOilMultiplier), ForestryItem.mulch.getItemStack(), 2);
@@ -325,7 +326,7 @@ public class PluginArboriculture extends ForestryPlugin {
 			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{EnumFruit.PAPAYA.getStack()}, Fluids.JUICE.getFluid(juiceMultiplier * 3), ForestryItem.mulch.getItemStack(), (int) Math.floor(mulchMultiplier * 0.5f));
 			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{EnumFruit.DATES.getStack()}, Fluids.JUICE.getFluid((int) Math.floor(juiceMultiplier * 0.25)), ForestryItem.mulch.getItemStack(), mulchMultiplier);
 
-			RecipeUtil.addFermenterRecipes(ForestryItem.sapling.getItemStack(), GameMode.getGameMode().getIntegerSetting("fermenter.yield.sapling"), Fluids.BIOMASS);
+			RecipeUtil.addFermenterRecipes(ForestryItem.sapling.getItemStack(), ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.sapling"), Fluids.BIOMASS);
 		}
 
 		// Stairs

@@ -39,6 +39,7 @@ import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IFlower;
+import forestry.apiculture.inventory.InventoryApiary;
 import forestry.apiculture.tiles.TileApiary;
 import forestry.arboriculture.worldgen.BlockTypeLog;
 import forestry.arboriculture.worldgen.BlockTypeVanillaStairs;
@@ -303,7 +304,7 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 		ItemStack randomVillageDrone = getRandomVillageBeeStack(world, xCoord, yCoord, zCoord, EnumBeeType.DRONE);
 		apiary.getBeeInventory().setDrone(randomVillageDrone);
 
-		for (int i = TileApiary.ApiaryInventory.SLOT_FRAMES_1; i < TileApiary.ApiaryInventory.SLOT_FRAMES_1 + TileApiary.ApiaryInventory.SLOT_FRAMES_COUNT; i++) {
+		for (int i = InventoryApiary.SLOT_FRAMES_1; i < InventoryApiary.SLOT_FRAMES_1 + InventoryApiary.SLOT_FRAMES_COUNT; i++) {
 			ItemStack randomFrame = getRandomFrame(world.rand);
 			apiary.setInventorySlotContents(i, randomFrame);
 		}

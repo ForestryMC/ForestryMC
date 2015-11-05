@@ -15,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import forestry.core.GuiHandlerBase;
+import forestry.core.config.ForestryItem;
 import forestry.core.network.GuiId;
 import forestry.core.tiles.TileUtil;
 import forestry.mail.gui.ContainerCatalogue;
@@ -29,9 +30,8 @@ import forestry.mail.gui.GuiMailbox;
 import forestry.mail.gui.GuiPhilatelist;
 import forestry.mail.gui.GuiTradeName;
 import forestry.mail.gui.GuiTrader;
-import forestry.mail.items.ItemCatalogue;
+import forestry.mail.inventory.ItemInventoryLetter;
 import forestry.mail.items.ItemLetter;
-import forestry.mail.items.ItemLetter.LetterInventory;
 import forestry.mail.tiles.TileMailbox;
 import forestry.mail.tiles.TilePhilatelist;
 import forestry.mail.tiles.TileTrader;
@@ -52,7 +52,7 @@ public class GuiHandlerMail extends GuiHandlerBase {
 					return null;
 				}
 
-				if (cata.getItem() instanceof ItemCatalogue) {
+				if (ForestryItem.catalogue.isItemEqual(cata)) {
 					return new GuiCatalogue(player);
 				} else {
 					return null;
@@ -65,7 +65,7 @@ public class GuiHandlerMail extends GuiHandlerBase {
 				}
 
 				if (equipped.getItem() instanceof ItemLetter) {
-					return new GuiLetter(player, new LetterInventory(player, equipped));
+					return new GuiLetter(player, new ItemInventoryLetter(player, equipped));
 				} else {
 					return null;
 				}
@@ -98,7 +98,7 @@ public class GuiHandlerMail extends GuiHandlerBase {
 					return null;
 				}
 
-				if (cata.getItem() instanceof ItemCatalogue) {
+				if (ForestryItem.catalogue.isItemEqual(cata)) {
 					return new ContainerCatalogue(player);
 				} else {
 					return null;
@@ -111,7 +111,7 @@ public class GuiHandlerMail extends GuiHandlerBase {
 				}
 
 				if (equipped.getItem() instanceof ItemLetter) {
-					return new ContainerLetter(player, new LetterInventory(player, equipped));
+					return new ContainerLetter(player, new ItemInventoryLetter(player, equipped));
 				} else {
 					return null;
 				}

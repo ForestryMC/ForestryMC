@@ -15,7 +15,6 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Stack;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -30,54 +29,38 @@ import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitBoard;
 import forestry.api.circuits.ICircuitSocketType;
-import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorLogic;
 import forestry.api.recipes.ICentrifugeRecipe;
 import forestry.core.circuits.ISocketable;
-import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.InventoryAdapter;
-import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
 import forestry.core.tiles.TilePowered;
 import forestry.core.utils.InventoryUtil;
-import forestry.core.utils.SlotUtil;
+import forestry.factory.inventory.InventoryCentrifuge;
 import forestry.factory.recipes.CentrifugeRecipeManager;
 import forestry.factory.triggers.FactoryTriggers;
 
 import buildcraft.api.statements.ITriggerExternal;
 
 public class TileCentrifuge extends TilePowered implements ISocketable, ISidedInventory {
-
 	private static final int TICKS_PER_RECIPE_TIME = 1;
 	private static final int ENERGY_PER_WORK_CYCLE = 3200;
 	private static final int ENERGY_PER_RECIPE_TIME = ENERGY_PER_WORK_CYCLE / 20;
 
 	private final InventoryAdapter sockets = new InventoryAdapter(1, "sockets");
 
-	/* CONSTANTS */
-	public static final int SLOT_RESOURCE = 0;
-	public static final int SLOT_PRODUCT_1 = 1;
-	public static final int SLOT_PRODUCT_COUNT = 9;
-
-	/* MEMBER */
 	private ICentrifugeRecipe currentRecipe;
 
 	private final Stack<ItemStack> pendingProducts = new Stack<>();
 
 	public TileCentrifuge() {
-		super(800, Constants.MACHINE_MAX_ENERGY, ENERGY_PER_WORK_CYCLE);
-		setInternalInventory(new CentrifugeInventoryAdapter(this));
-		setHints(Config.hints.get("centrifuge"));
-	}
-
-	@Override
-	public void openGui(EntityPlayer player) {
-		player.openGui(ForestryAPI.instance, GuiId.CentrifugeGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
+		super(GuiId.CentrifugeGUI, "centrifuge", 800, Constants.MACHINE_MAX_ENERGY);
+		setInternalInventory(new InventoryCentrifuge(this));
 	}
 
 	/* LOADING & SAVING */
@@ -152,14 +135,14 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 		Collection<ItemStack> products = currentRecipe.getProducts(worldObj.rand);
 		pendingProducts.addAll(products);
 
-		getInternalInventory().decrStackSize(SLOT_RESOURCE, 1);
+		getInternalInventory().decrStackSize(InventoryCentrifuge.SLOT_RESOURCE, 1);
 
 		tryAddPending();
 		return true;
 	}
 
 	private void checkRecipe() {
-		ItemStack resource = getStackInSlot(SLOT_RESOURCE);
+		ItemStack resource = getStackInSlot(InventoryCentrifuge.SLOT_RESOURCE);
 		ICentrifugeRecipe matchingRecipe = CentrifugeRecipeManager.findMatchingRecipe(resource);
 
 		if (currentRecipe != matchingRecipe) {
@@ -179,7 +162,7 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 
 		ItemStack next = pendingProducts.peek();
 
-		boolean added = InventoryUtil.tryAddStack(this, next, SLOT_PRODUCT_1, SLOT_PRODUCT_COUNT, true);
+		boolean added = InventoryUtil.tryAddStack(this, next, InventoryCentrifuge.SLOT_PRODUCT_1, InventoryCentrifuge.SLOT_PRODUCT_COUNT, true);
 
 		if (added) {
 			pendingProducts.pop();
@@ -192,18 +175,18 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 	@Override
 	public boolean hasResourcesMin(float percentage) {
 		IInventoryAdapter inventory = getInternalInventory();
-		if (inventory.getStackInSlot(SLOT_RESOURCE) == null) {
+		if (inventory.getStackInSlot(InventoryCentrifuge.SLOT_RESOURCE) == null) {
 			return false;
 		}
 
-		return ((float) inventory.getStackInSlot(SLOT_RESOURCE).stackSize / (float) inventory.getStackInSlot(SLOT_RESOURCE).getMaxStackSize()) > percentage;
+		return ((float) inventory.getStackInSlot(InventoryCentrifuge.SLOT_RESOURCE).stackSize / (float) inventory.getStackInSlot(InventoryCentrifuge.SLOT_RESOURCE).getMaxStackSize()) > percentage;
 	}
 
 	@Override
 	public boolean hasWork() {
 		checkRecipe();
 
-		boolean hasResource = getStackInSlot(SLOT_RESOURCE) != null;
+		boolean hasResource = getStackInSlot(InventoryCentrifuge.SLOT_RESOURCE) != null;
 
 		IErrorLogic errorLogic = getErrorLogic();
 		errorLogic.setCondition(!hasResource, EnumErrorCode.NORESOURCE);
@@ -219,22 +202,6 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 		res.add(FactoryTriggers.lowResource25);
 		res.add(FactoryTriggers.lowResource10);
 		return res;
-	}
-
-	private static class CentrifugeInventoryAdapter extends TileInventoryAdapter<TileCentrifuge> {
-		public CentrifugeInventoryAdapter(TileCentrifuge centrifuge) {
-			super(centrifuge, 10, "Items");
-		}
-
-		@Override
-		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-			return slotIndex == SLOT_RESOURCE && CentrifugeRecipeManager.findMatchingRecipe(itemStack) != null;
-		}
-
-		@Override
-		public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
-			return SlotUtil.isSlotInRange(slotIndex, SLOT_PRODUCT_1, SLOT_PRODUCT_COUNT);
-		}
 	}
 
 	/* ISocketable */

@@ -15,6 +15,7 @@ import net.minecraft.inventory.ICrafting;
 
 import forestry.core.gui.ContainerSocketed;
 import forestry.core.gui.slots.SlotFiltered;
+import forestry.energy.tiles.InventoryEngineElectric;
 import forestry.energy.tiles.TileEngineElectric;
 
 public class ContainerEngineElectric extends ContainerSocketed<TileEngineElectric> {
@@ -22,7 +23,7 @@ public class ContainerEngineElectric extends ContainerSocketed<TileEngineElectri
 	public ContainerEngineElectric(InventoryPlayer player, TileEngineElectric tile) {
 		super(tile, player, 8, 84);
 
-		this.addSlotToContainer(new SlotFiltered(tile, TileEngineElectric.SLOT_BATTERY, 84, 53));
+		this.addSlotToContainer(new SlotFiltered(tile, InventoryEngineElectric.SLOT_BATTERY, 84, 53));
 	}
 
 	@Override

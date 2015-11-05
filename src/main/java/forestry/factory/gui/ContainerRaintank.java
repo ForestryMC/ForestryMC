@@ -16,6 +16,7 @@ import net.minecraft.inventory.ICrafting;
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
+import forestry.factory.inventory.InventoryRaintank;
 import forestry.factory.tiles.TileRaintank;
 
 public class ContainerRaintank extends ContainerLiquidTanks<TileRaintank> {
@@ -23,8 +24,8 @@ public class ContainerRaintank extends ContainerLiquidTanks<TileRaintank> {
 	public ContainerRaintank(InventoryPlayer player, TileRaintank tile) {
 		super(tile, player, 8, 84);
 
-		this.addSlotToContainer(new SlotFiltered(tile, TileRaintank.SLOT_RESOURCE, 116, 19));
-		this.addSlotToContainer(new SlotOutput(tile, TileRaintank.SLOT_PRODUCT, 116, 55));
+		this.addSlotToContainer(new SlotFiltered(tile, InventoryRaintank.SLOT_RESOURCE, 116, 19));
+		this.addSlotToContainer(new SlotOutput(tile, InventoryRaintank.SLOT_PRODUCT, 116, 55));
 	}
 
 	@Override

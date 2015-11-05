@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.gui.ledgers;
 
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.client.Minecraft;
@@ -27,11 +28,12 @@ public class HintLedger extends Ledger {
 
 	public HintLedger(LedgerManager manager, IHintSource tile) {
 		super(manager, "hint");
-		String[] hints = tile.getHints();
-		int position = new Random().nextInt(hints.length);
+		List<String> hints = tile.getHints();
+		int position = new Random().nextInt(hints.size());
+		String hint = hints.get(position);
 
-		hintString = StringUtil.localize("hints." + hints[position] + ".desc");
-		hintTooltip = StringUtil.localize("hints." + hints[position] + ".tag");
+		hintString = StringUtil.localize("hints." + hint + ".desc");
+		hintTooltip = StringUtil.localize("hints." + hint + ".tag");
 
 		Minecraft minecraft = Proxies.common.getClientInstance();
 		FontRenderer fontRenderer = minecraft.fontRenderer;

@@ -21,10 +21,10 @@ import net.minecraft.item.ItemStack;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 import forestry.api.apiculture.FlowerManager;
+import forestry.api.core.ForestryAPI;
 import forestry.api.farming.Farmables;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Constants;
-import forestry.core.config.GameMode;
 import forestry.core.fluids.Fluids;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.ModUtil;
@@ -355,14 +355,14 @@ public class PluginPlantMegaPack extends ForestryPlugin {
 				.put("jungleShellflower", FlowerManager.FlowerTypeJungle)
 				.build();
 
-		int seedamount = GameMode.getGameMode().getIntegerSetting("squeezer.liquid.seed");
-		int juiceAmount = GameMode.getGameMode().getIntegerSetting("squeezer.liquid.apple");
+		int seedamount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed");
+		int juiceAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.apple");
 
 		for (String reedLike : reedLikePlant) {
 			Block reedBlock = GameRegistry.findBlock(PlantMP, reedLike);
 			ItemStack reedStack = GameRegistry.findItemStack(PlantMP, reedLike, 1);
 			if (reedBlock != null && reedStack != null) {
-				RecipeUtil.addFermenterRecipes(reedStack, GameMode.getGameMode().getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
+				RecipeUtil.addFermenterRecipes(reedStack, ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
 				Farmables.farmables.get("farmPoales").add(new FarmableStacked(reedBlock, 14, 4));
 			}
 		}
@@ -399,7 +399,7 @@ public class PluginPlantMegaPack extends ForestryPlugin {
 			}
 		}
 
-		juiceAmount = GameMode.getGameMode().getIntegerSetting("squeezer.liquid.apple") / 25;
+		juiceAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.apple") / 25;
 		juiceAmount = Math.max(juiceAmount, 1); // Produce at least 1 mb of juice.
 
 		for (Map.Entry<String, Integer> berryBushCrop : berryBushPlant.entrySet()) {
@@ -433,7 +433,7 @@ public class PluginPlantMegaPack extends ForestryPlugin {
 		for (String wPlant : waterPlant) {
 			ItemStack waterPlantStack = GameRegistry.findItemStack(PlantMP, wPlant, 1);
 			if (waterPlantStack != null) {
-				RecipeUtil.addFermenterRecipes(waterPlantStack, GameMode.getGameMode().getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
+				RecipeUtil.addFermenterRecipes(waterPlantStack, ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
 			}
 		}
 	}

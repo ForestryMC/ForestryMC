@@ -12,7 +12,6 @@ package forestry.core.tiles;
 
 import java.io.IOException;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -25,7 +24,6 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 
 import forestry.api.arboriculture.TreeManager;
-import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IIndividual;
 import forestry.core.config.Constants;
@@ -34,7 +32,7 @@ import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.Fluids;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
-import forestry.core.inventory.TileInventoryAdapter;
+import forestry.core.inventory.InventoryAnalyzer;
 import forestry.core.inventory.wrappers.IInvSlot;
 import forestry.core.inventory.wrappers.InventoryIterator;
 import forestry.core.inventory.wrappers.InventoryMapper;
@@ -45,24 +43,13 @@ import forestry.core.network.PacketItemStackDisplay;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.InventoryUtil;
-import forestry.core.utils.SlotUtil;
 import forestry.plugins.PluginManager;
 
 public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiquidTankTile, IFluidHandler, IItemStackDisplay {
-
-	/* CONSTANTS */
 	private static final int TIME_TO_ANALYZE = 125;
 	private static final int HONEY_REQUIRED = 100;
 	private static final int ENERGY_PER_WORK_CYCLE = 20320;
 
-	public static final short SLOT_ANALYZE = 0;
-	public static final short SLOT_CAN = 1;
-	public static final short SLOT_INPUT_1 = 2;
-	public static final short SLOT_INPUT_COUNT = 6;
-	public static final short SLOT_OUTPUT_1 = 8;
-	public static final short SLOT_OUTPUT_COUNT = 4;
-
-	/* MEMBER */
 	private final FilteredTank resourceTank;
 	private final TankManager tankManager;
 	private final IInventory invInput;
@@ -73,18 +60,12 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 
 	/* CONSTRUCTOR */
 	public TileAnalyzer() {
-		super(800, Constants.MACHINE_MAX_ENERGY, ENERGY_PER_WORK_CYCLE);
-		setInternalInventory(new AnalyzerInventoryAdapter(this));
+		super(GuiId.AnalyzerGUI, "analyzer", 800, Constants.MACHINE_MAX_ENERGY);
+		setInternalInventory(new InventoryAnalyzer(this));
 		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, Fluids.HONEY.getFluid());
 		tankManager = new TankManager(this, resourceTank);
-		invInput = new InventoryMapper(getInternalInventory(), SLOT_INPUT_1, SLOT_INPUT_COUNT);
-		invOutput = new InventoryMapper(getInternalInventory(), SLOT_OUTPUT_1, SLOT_OUTPUT_COUNT);
-	}
-
-	/* GUI */
-	@Override
-	public void openGui(EntityPlayer player) {
-		player.openGui(ForestryAPI.instance, GuiId.AnalyzerGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
+		invInput = new InventoryMapper(getInternalInventory(), InventoryAnalyzer.SLOT_INPUT_1, InventoryAnalyzer.SLOT_INPUT_COUNT);
+		invOutput = new InventoryMapper(getInternalInventory(), InventoryAnalyzer.SLOT_OUTPUT_1, InventoryAnalyzer.SLOT_OUTPUT_COUNT);
 	}
 
 	/* SAVING & LOADING */
@@ -99,7 +80,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 		super.readFromNBT(nbttagcompound);
 		tankManager.readFromNBT(nbttagcompound);
 
-		ItemStack stackToAnalyze = getStackInSlot(SLOT_ANALYZE);
+		ItemStack stackToAnalyze = getStackInSlot(InventoryAnalyzer.SLOT_ANALYZE);
 		if (stackToAnalyze != null) {
 			specimenToAnalyze = AlleleManager.alleleRegistry.getIndividual(stackToAnalyze);
 		}
@@ -111,14 +92,14 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 
 		if (updateOnInterval(20)) {
 			// Check if we have suitable items waiting in the can slot
-			FluidHelper.drainContainers(tankManager, this, SLOT_CAN);
+			FluidHelper.drainContainers(tankManager, this, InventoryAnalyzer.SLOT_CAN);
 		}
 	}
 
 	/* WORKING */
 	@Override
 	public boolean workCycle() {
-		ItemStack stackToAnalyze = getStackInSlot(SLOT_ANALYZE);
+		ItemStack stackToAnalyze = getStackInSlot(InventoryAnalyzer.SLOT_ANALYZE);
 		if (stackToAnalyze == null) {
 			return false;
 		}
@@ -141,7 +122,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 			return false;
 		}
 
-		setInventorySlotContents(SLOT_ANALYZE, null);
+		setInventorySlotContents(InventoryAnalyzer.SLOT_ANALYZE, null);
 		PacketItemStackDisplay packet = new PacketItemStackDisplay(this, getIndividualOnDisplay());
 		Proxies.net.sendNetworkPacket(packet, worldObj);
 
@@ -187,7 +168,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	public boolean hasWork() {
 		moveSpecimenToAnalyzeSlot();
 
-		ItemStack specimen = getStackInSlot(SLOT_ANALYZE);
+		ItemStack specimen = getStackInSlot(InventoryAnalyzer.SLOT_ANALYZE);
 
 		boolean hasSpecimen = (specimen != null);
 		boolean hasResource = true;
@@ -209,7 +190,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	}
 
 	private void moveSpecimenToAnalyzeSlot() {
-		if (getStackInSlot(SLOT_ANALYZE) != null) {
+		if (getStackInSlot(InventoryAnalyzer.SLOT_ANALYZE) != null) {
 			return;
 		}
 
@@ -235,7 +216,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 			return;
 		}
 
-		setInventorySlotContents(SLOT_ANALYZE, inputStack);
+		setInventorySlotContents(InventoryAnalyzer.SLOT_ANALYZE, inputStack);
 		slot.setStackInSlot(null);
 
 		if (specimenToAnalyze.isAnalyzed()) {
@@ -254,7 +235,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 		if (worldObj.isRemote) {
 			return individualOnDisplayClient;
 		}
-		return getStackInSlot(SLOT_ANALYZE);
+		return getStackInSlot(InventoryAnalyzer.SLOT_ANALYZE);
 	}
 
 	/* ILiquidTankTile */
@@ -294,38 +275,4 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 		return tankManager.getTankInfo(from);
 	}
 
-	private static class AnalyzerInventoryAdapter extends TileInventoryAdapter<TileAnalyzer> {
-		public AnalyzerInventoryAdapter(TileAnalyzer analyzer) {
-			super(analyzer, 12, "Items");
-		}
-
-		@Override
-		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-			if (SlotUtil.isSlotInRange(slotIndex, SLOT_INPUT_1, SLOT_INPUT_COUNT)) {
-				return AlleleManager.alleleRegistry.isIndividual(itemStack) || GeneticsUtil.getGeneticEquivalent(itemStack) != null;
-			} else if (slotIndex == SLOT_CAN) {
-				Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
-				return tile.resourceTank.accepts(fluid);
-			}
-
-			return false;
-		}
-
-		@Override
-		public boolean canExtractItem(int slotIndex, ItemStack stack, int side) {
-			return SlotUtil.isSlotInRange(slotIndex, SLOT_OUTPUT_1, SLOT_OUTPUT_COUNT);
-		}
-
-		@Override
-		public void setInventorySlotContents(int slotId, ItemStack itemStack) {
-			if (PluginManager.Module.ARBORICULTURE.isEnabled() && !TreeManager.treeRoot.isMember(itemStack)) {
-				ItemStack ersatz = GeneticsUtil.convertSaplingToGeneticEquivalent(itemStack);
-				if (ersatz != null) {
-					itemStack = ersatz;
-				}
-			}
-
-			super.setInventorySlotContents(slotId, itemStack);
-		}
-	}
 }

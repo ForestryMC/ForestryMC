@@ -13,7 +13,6 @@ package forestry.factory.tiles;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.ISidedInventory;
@@ -27,19 +26,16 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 
-import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorLogic;
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.MoistenerFuel;
 import forestry.api.recipes.IMoistenerRecipe;
-import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.inventory.IInventoryAdapter;
-import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
@@ -49,20 +45,10 @@ import forestry.core.tiles.IRenderableTile;
 import forestry.core.tiles.TileBase;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.SlotUtil;
+import forestry.factory.inventory.InventoryMoistener;
 import forestry.factory.recipes.MoistenerRecipeManager;
 
 public class TileMoistener extends TileBase implements ISidedInventory, ILiquidTankTile, IFluidHandler, IRenderableTile {
-
-	/* CONSTANTS */
-	private static final short SLOT_STASH_1 = 0;
-	private static final short SLOT_STASH_COUNT = 6;
-	private static final short SLOT_RESERVOIR_1 = 6;
-	private static final short SLOT_RESERVOIR_COUNT = 3;
-	private static final short SLOT_WORKING = 9;
-	private static final short SLOT_PRODUCT = 10;
-	private static final short SLOT_RESOURCE = 11;
-
 	private final FilteredTank resourceTank;
 	private final TankManager tankManager;
 	private IMoistenerRecipe currentRecipe;
@@ -75,15 +61,10 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 	private ItemStack pendingProduct;
 
 	public TileMoistener() {
-		setInternalInventory(new MoistenerInventoryAdapter(this));
-		setHints(Config.hints.get("moistener"));
+		super(GuiId.MoistenerGUI, "moistener");
+		setInternalInventory(new InventoryMoistener(this));
 		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, FluidRegistry.WATER);
 		tankManager = new TankManager(this, resourceTank);
-	}
-
-	@Override
-	public void openGui(EntityPlayer player) {
-		player.openGui(ForestryAPI.instance, GuiId.MoistenerGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
 	}
 
 	/* LOADING & SAVING */
@@ -150,7 +131,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 
 		if (updateOnInterval(20)) {
 			// Check if we have suitable water container waiting in the item slot
-			FluidHelper.drainContainers(tankManager, this, SLOT_PRODUCT);
+			FluidHelper.drainContainers(tankManager, this, InventoryMoistener.SLOT_PRODUCT);
 		}
 
 		// Let's get to work
@@ -196,7 +177,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 
 			if (productionTime <= 0) {
 				pendingProduct = currentProduct;
-				decrStackSize(SLOT_RESOURCE, 1);
+				decrStackSize(InventoryMoistener.SLOT_RESOURCE, 1);
 				resetRecipe();
 				tryAddPending();
 			}
@@ -210,12 +191,12 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 				checkRecipe();
 
 				// Let's see if we have a valid resource in the working slot
-				if (getStackInSlot(SLOT_WORKING) == null) {
+				if (getStackInSlot(InventoryMoistener.SLOT_WORKING) == null) {
 					return;
 				}
 
-				if (FuelManager.moistenerResource.containsKey(getStackInSlot(SLOT_WORKING))) {
-					MoistenerFuel res = FuelManager.moistenerResource.get(getStackInSlot(SLOT_WORKING));
+				if (FuelManager.moistenerResource.containsKey(getStackInSlot(InventoryMoistener.SLOT_WORKING))) {
+					MoistenerFuel res = FuelManager.moistenerResource.get(getStackInSlot(InventoryMoistener.SLOT_WORKING));
 					burnTime = totalTime = res.moistenerValue;
 				}
 			} else {
@@ -231,7 +212,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 			return false;
 		}
 
-		boolean added = InventoryUtil.tryAddStack(this, pendingProduct, SLOT_PRODUCT, 1, true);
+		boolean added = InventoryUtil.tryAddStack(this, pendingProduct, InventoryMoistener.SLOT_PRODUCT, 1, true);
 		getErrorLogic().setCondition(!added, EnumErrorCode.NOSPACE);
 
 		if (added) {
@@ -242,7 +223,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 	}
 
 	public void checkRecipe() {
-		IMoistenerRecipe sameRec = MoistenerRecipeManager.findMatchingRecipe(getInternalInventory().getStackInSlot(SLOT_RESOURCE));
+		IMoistenerRecipe sameRec = MoistenerRecipeManager.findMatchingRecipe(getInternalInventory().getStackInSlot(InventoryMoistener.SLOT_RESOURCE));
 		if (currentRecipe != sameRec) {
 			currentRecipe = sameRec;
 			resetRecipe();
@@ -292,11 +273,11 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 	}
 
 	private int getFreeStashSlot(ItemStack deposit, boolean emptyOnly) {
-		return getFreeSlot(deposit, 0, SLOT_RESERVOIR_1, emptyOnly);
+		return getFreeSlot(deposit, 0, InventoryMoistener.SLOT_RESERVOIR_1, emptyOnly);
 	}
 
 	private int getFreeReservoirSlot(ItemStack deposit) {
-		return getFreeSlot(deposit, SLOT_RESERVOIR_1, SLOT_RESERVOIR_1 + SLOT_RESERVOIR_COUNT, false);
+		return getFreeSlot(deposit, InventoryMoistener.SLOT_RESERVOIR_1, InventoryMoistener.SLOT_RESERVOIR_1 + InventoryMoistener.SLOT_RESERVOIR_COUNT, false);
 
 	}
 
@@ -330,14 +311,14 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 		IErrorLogic errorLogic = getErrorLogic();
 
 		// Put working slot contents into inventory if space is available
-		if (getStackInSlot(SLOT_WORKING) != null) {
+		if (getStackInSlot(InventoryMoistener.SLOT_WORKING) != null) {
 			// Get the result of the consumed item in the working slot
 			ItemStack deposit;
-			if (FuelManager.moistenerResource.containsKey(getStackInSlot(SLOT_WORKING))) {
-				MoistenerFuel res = FuelManager.moistenerResource.get(getStackInSlot(SLOT_WORKING));
+			if (FuelManager.moistenerResource.containsKey(getStackInSlot(InventoryMoistener.SLOT_WORKING))) {
+				MoistenerFuel res = FuelManager.moistenerResource.get(getStackInSlot(InventoryMoistener.SLOT_WORKING));
 				deposit = res.product.copy();
 			} else {
-				deposit = getStackInSlot(SLOT_WORKING).copy();
+				deposit = getStackInSlot(InventoryMoistener.SLOT_WORKING).copy();
 			}
 
 			int targetSlot = getFreeReservoirSlot(deposit);
@@ -352,28 +333,28 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 				getStackInSlot(targetSlot).stackSize++;
 			}
 
-			decrStackSize(SLOT_WORKING, 1);
+			decrStackSize(InventoryMoistener.SLOT_WORKING, 1);
 		}
 
-		if (getStackInSlot(SLOT_WORKING) != null) {
+		if (getStackInSlot(InventoryMoistener.SLOT_WORKING) != null) {
 			return true;
 		}
 
 		// Let's look for a new resource to put into the working slot.
-		int resourceSlot = getNextResourceSlot(SLOT_RESERVOIR_1, SLOT_RESERVOIR_1 + SLOT_RESERVOIR_COUNT);
+		int resourceSlot = getNextResourceSlot(InventoryMoistener.SLOT_RESERVOIR_1, InventoryMoistener.SLOT_RESERVOIR_1 + InventoryMoistener.SLOT_RESERVOIR_COUNT);
 		// Nothing found, stop.
 		if (errorLogic.setCondition(resourceSlot < 0, EnumErrorCode.NORESOURCE)) {
 			return false;
 		}
 
-		setInventorySlotContents(SLOT_WORKING, decrStackSize(resourceSlot, 1));
+		setInventorySlotContents(InventoryMoistener.SLOT_WORKING, decrStackSize(resourceSlot, 1));
 		return true;
 	}
 
 	private void rotateReservoir() {
 		ArrayList<Integer> slotsToShift = new ArrayList<>();
 
-		for (int i = SLOT_RESERVOIR_1; i < SLOT_RESERVOIR_1 + SLOT_RESERVOIR_COUNT; i++) {
+		for (int i = InventoryMoistener.SLOT_RESERVOIR_1; i < InventoryMoistener.SLOT_RESERVOIR_1 + InventoryMoistener.SLOT_RESERVOIR_COUNT; i++) {
 			if (getStackInSlot(i) == null) {
 				continue;
 			}
@@ -399,7 +380,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 
 		// Grab new items from stash
 		for (int i = 0; i < (slotsToShift.size() > 0 ? shiftedSlots : 2); i++) {
-			int resourceSlot = getNextResourceSlot(0, SLOT_RESERVOIR_1);
+			int resourceSlot = getNextResourceSlot(0, InventoryMoistener.SLOT_RESERVOIR_1);
 			// Stop if no resources are available
 			if (resourceSlot < 0) {
 				break;
@@ -431,7 +412,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 		int avail = 0;
 		IInventoryAdapter inventory = getInternalInventory();
 
-		for (int i = SLOT_STASH_1; i < SLOT_RESERVOIR_1; i++) {
+		for (int i = InventoryMoistener.SLOT_STASH_1; i < InventoryMoistener.SLOT_RESERVOIR_1; i++) {
 			if (inventory.getStackInSlot(i) == null) {
 				max += 64;
 				continue;
@@ -450,11 +431,11 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 
 	public boolean hasResourcesMin(float percentage) {
 		IInventoryAdapter inventory = getInternalInventory();
-		if (inventory.getStackInSlot(SLOT_RESOURCE) == null) {
+		if (inventory.getStackInSlot(InventoryMoistener.SLOT_RESOURCE) == null) {
 			return false;
 		}
 
-		return ((float) inventory.getStackInSlot(SLOT_RESOURCE).stackSize / (float) inventory.getStackInSlot(SLOT_RESOURCE).getMaxStackSize()) > percentage;
+		return ((float) inventory.getStackInSlot(InventoryMoistener.SLOT_RESOURCE).stackSize / (float) inventory.getStackInSlot(InventoryMoistener.SLOT_RESOURCE).getMaxStackSize()) > percentage;
 	}
 
 	public boolean isProducing() {
@@ -484,7 +465,6 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 	}
 
 	/* IRenderableTile */
-
 	@Override
 	public TankRenderInfo getResourceTankInfo() {
 		return new TankRenderInfo(resourceTank);
@@ -555,42 +535,4 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 		iCrafting.sendProgressBarUpdate(container, 2, productionTime);
 		iCrafting.sendProgressBarUpdate(container, 3, timePerItem);
 	}
-
-	private static class MoistenerInventoryAdapter extends TileInventoryAdapter<TileMoistener> {
-		public MoistenerInventoryAdapter(TileMoistener moistener) {
-			super(moistener, 12, "Items");
-		}
-
-		@Override
-		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-			if (slotIndex == SLOT_RESOURCE) {
-				return MoistenerRecipeManager.isResource(itemStack);
-			}
-
-			if (SlotUtil.isSlotInRange(slotIndex, SLOT_STASH_1, SLOT_STASH_COUNT)) {
-				return FuelManager.moistenerResource.containsKey(itemStack);
-			}
-
-			if (slotIndex == SLOT_PRODUCT) {
-				Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
-				return tile.resourceTank.accepts(fluid);
-			}
-
-			return false;
-		}
-
-		@Override
-		public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
-			if (slotIndex == SLOT_PRODUCT) {
-				return true;
-			}
-
-			if (SlotUtil.isSlotInRange(slotIndex, SLOT_STASH_1, (SLOT_STASH_COUNT + SLOT_RESERVOIR_COUNT))) {
-				return !FuelManager.moistenerResource.containsKey(itemstack);
-			}
-
-			return false;
-		}
-	}
-
 }

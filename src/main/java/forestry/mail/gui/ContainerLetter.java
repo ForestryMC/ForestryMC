@@ -31,16 +31,16 @@ import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.network.PacketString;
 import forestry.core.proxy.Proxies;
 import forestry.mail.Letter;
-import forestry.mail.items.ItemLetter.LetterInventory;
+import forestry.mail.inventory.ItemInventoryLetter;
 import forestry.mail.network.PacketLetterInfoResponse;
 import forestry.mail.network.PacketLetterTextSet;
 
-public class ContainerLetter extends ContainerItemInventory<LetterInventory> implements ILetterInfoReceiver {
+public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter> implements ILetterInfoReceiver {
 
 	private EnumAddressee carrierType = EnumAddressee.PLAYER;
 	private TradeStationInfo tradeInfo = null;
 
-	public ContainerLetter(EntityPlayer player, LetterInventory inventory) {
+	public ContainerLetter(EntityPlayer player, ItemInventoryLetter inventory) {
 		super(inventory, player.inventory, 17, 145);
 
 		// Init slots
@@ -85,7 +85,7 @@ public class ContainerLetter extends ContainerItemInventory<LetterInventory> imp
 			}
 		}
 
-		inventory.onContainerClosed();
+		inventory.onLetterClosed();
 
 		super.onContainerClosed(entityplayer);
 	}

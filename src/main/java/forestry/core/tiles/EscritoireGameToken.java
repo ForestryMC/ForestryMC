@@ -30,7 +30,8 @@ public class EscritoireGameToken implements INBTTagable, IStreamable {
 		PROBED,    // shown by escritoire probe action
 		SELECTED,  // selected by the user as the first half of a match
 		MATCHED,   // successfully matched
-		FAILED     // failed to match
+		FAILED;    // failed to match
+		public static final State[] VALUES = values();
 	}
 
 	private static final String[] OVERLAY_NONE = new String[0];
@@ -153,13 +154,13 @@ public class EscritoireGameToken implements INBTTagable, IStreamable {
 	/* IStreamable */
 	@Override
 	public void writeData(DataOutputStreamForestry data) throws IOException {
-		data.writeEnum(state);
+		data.writeEnum(state, State.VALUES);
 		data.writeItemStack(tokenStack);
 	}
 
 	@Override
 	public void readData(DataInputStreamForestry data) throws IOException {
-		state = data.readEnum(State.class);
+		state = data.readEnum(State.VALUES);
 		tokenStack = data.readItemStack();
 	}
 }

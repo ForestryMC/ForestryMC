@@ -122,7 +122,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	private final Map<FarmDirection, IFarmLogic> farmLogics = new EnumMap<>(FarmDirection.class);
 
 	private final InventoryAdapter sockets;
-	private final FarmInventory inventory;
+	private final InventoryFarm inventory;
 	private final TankManager tankManager;
 	private final StandardTank resourceTank;
 	private final FarmHydrationManager hydrationManager;
@@ -139,7 +139,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		this.resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, FluidRegistry.WATER);
 		this.tankManager = new TankManager(this, resourceTank);
 
-		this.inventory = new FarmInventory(this);
+		this.inventory = new InventoryFarm(this);
 		this.sockets = new InventoryAdapter(1, "sockets");
 		this.hydrationManager = new FarmHydrationManager(this);
 		this.fertilizerManager = new FarmFertilizerManager();

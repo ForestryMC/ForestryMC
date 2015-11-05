@@ -10,36 +10,23 @@
  ******************************************************************************/
 package forestry.mail.tiles;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
-import forestry.api.core.ForestryAPI;
 import forestry.api.mail.IStamps;
 import forestry.api.mail.PostManager;
 import forestry.core.inventory.IInventoryAdapter;
-import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.GuiId;
 import forestry.core.tiles.TileBase;
 import forestry.core.utils.InventoryUtil;
+import forestry.mail.inventory.InventoryPhilatelist;
 
 public class TilePhilatelist extends TileBase implements IInventory {
-
-	// / CONSTANTS
-	public static final short SLOT_FILTER = 0;
-	public static final short SLOT_BUFFER_1 = 1;
-	public static final short SLOT_BUFFER_COUNT = 27;
-
 	public TilePhilatelist() {
-		setInternalInventory(new PhilatelistInventoryAdapter(this));
+		super(GuiId.PhilatelistGUI, "philatelist");
+		setInternalInventory(new InventoryPhilatelist(this));
 	}
 
-	@Override
-	public void openGui(EntityPlayer player) {
-		player.openGui(ForestryAPI.instance, GuiId.PhilatelistGUI.ordinal(), worldObj, xCoord, yCoord, zCoord);
-	}
-
-	// / UPDATING
 	@Override
 	public void updateServerSide() {
 		if (!updateOnInterval(20)) {
@@ -49,10 +36,10 @@ public class TilePhilatelist extends TileBase implements IInventory {
 		ItemStack stamp = null;
 
 		IInventoryAdapter inventory = getInternalInventory();
-		if (inventory.getStackInSlot(SLOT_FILTER) == null) {
+		if (inventory.getStackInSlot(InventoryPhilatelist.SLOT_FILTER) == null) {
 			stamp = PostManager.postRegistry.getPostOffice(worldObj).getAnyStamp(1);
 		} else {
-			ItemStack filter = inventory.getStackInSlot(SLOT_FILTER);
+			ItemStack filter = inventory.getStackInSlot(InventoryPhilatelist.SLOT_FILTER);
 			if (filter.getItem() instanceof IStamps) {
 				stamp = PostManager.postRegistry.getPostOffice(worldObj).getAnyStamp(((IStamps) filter.getItem()).getPostage(filter), 1);
 			}
@@ -63,17 +50,6 @@ public class TilePhilatelist extends TileBase implements IInventory {
 		}
 
 		// Store it.
-		InventoryUtil.stowInInventory(stamp, inventory, true, SLOT_BUFFER_1, SLOT_BUFFER_COUNT);
-	}
-
-	private static class PhilatelistInventoryAdapter extends TileInventoryAdapter<TilePhilatelist> {
-		public PhilatelistInventoryAdapter(TilePhilatelist tile) {
-			super(tile, 28, "INV");
-		}
-
-		@Override
-		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-			return itemStack.getItem() instanceof IStamps;
-		}
+		InventoryUtil.stowInInventory(stamp, inventory, true, InventoryPhilatelist.SLOT_BUFFER_1, InventoryPhilatelist.SLOT_BUFFER_COUNT);
 	}
 }

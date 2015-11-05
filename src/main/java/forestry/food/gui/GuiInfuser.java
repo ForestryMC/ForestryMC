@@ -15,14 +15,14 @@ import net.minecraft.entity.player.InventoryPlayer;
 import forestry.api.food.BeverageManager;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
-import forestry.food.items.ItemInfuser.InfuserInventory;
+import forestry.food.inventory.ItemInventoryInfuser;
 
-public class GuiInfuser extends GuiForestry<ContainerInfuser, InfuserInventory> {
+public class GuiInfuser extends GuiForestry<ContainerInfuser, ItemInventoryInfuser> {
 
 	private int startX;
 	private int startY;
 
-	public GuiInfuser(InventoryPlayer inventoryplayer, InfuserInventory inventory) {
+	public GuiInfuser(InventoryPlayer inventoryplayer, ItemInventoryInfuser inventory) {
 		super(Constants.TEXTURE_PATH_GUI + "/infuser.png", new ContainerInfuser(inventoryplayer, inventory), inventory);
 
 		xSize = 176;

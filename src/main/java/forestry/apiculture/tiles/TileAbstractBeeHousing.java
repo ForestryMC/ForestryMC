@@ -25,11 +25,10 @@ import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeekeepingLogic;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
-import forestry.apiculture.BeeHousingInventory;
 import forestry.apiculture.gui.IGuiBeeHousingInventory;
-import forestry.core.config.Config;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.GuiId;
 import forestry.core.network.IStreamableGui;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.IClimatised;
@@ -42,8 +41,8 @@ public abstract class TileAbstractBeeHousing extends TileBase implements IBeeHou
 	// CLIENT
 	private int breedingProgressPercent = 0;
 
-	protected TileAbstractBeeHousing() {
-		setHints(Config.hints.get("apiary"));
+	protected TileAbstractBeeHousing(GuiId guiId, String hintKey) {
+		super(guiId, hintKey);
 		this.beeLogic = BeeManager.beeRoot.createBeekeepingLogic(this);
 	}
 
@@ -173,21 +172,6 @@ public abstract class TileAbstractBeeHousing extends TileBase implements IBeeHou
 	@Override
 	public Vec3 getBeeFXCoordinates() {
 		return Vec3.createVectorHelper(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5);
-	}
-
-	public static class TileBeeHousingInventory extends BeeHousingInventory {
-		private final TileAbstractBeeHousing tile;
-
-		public TileBeeHousingInventory(TileAbstractBeeHousing tile, int size, String name) {
-			super(size, name, tile.getAccessHandler());
-			this.tile = tile;
-		}
-
-		@Override
-		public void markDirty() {
-			super.markDirty();
-			tile.markDirty();
-		}
 	}
 
 }

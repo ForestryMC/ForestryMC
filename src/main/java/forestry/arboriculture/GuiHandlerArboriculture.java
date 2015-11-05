@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 
 import forestry.api.arboriculture.TreeManager;
 import forestry.arboriculture.gui.GuiTreealyzer;
-import forestry.arboriculture.items.ItemTreealyzer.TreealyzerInventory;
+import forestry.arboriculture.inventory.ItemInventoryTreealyzer;
 import forestry.core.GuiHandlerBase;
 import forestry.core.gui.ContainerAlyzer;
 import forestry.core.network.GuiId;
@@ -42,7 +42,7 @@ public class GuiHandlerArboriculture extends GuiHandlerBase {
 					return null;
 				}
 
-				return new ContainerAlyzer(new TreealyzerInventory(player, equipped), player);
+				return new ContainerAlyzer(new ItemInventoryTreealyzer(player, equipped), player);
 
 			default:
 				return null;
@@ -70,7 +70,7 @@ public class GuiHandlerArboriculture extends GuiHandlerBase {
 					return null;
 				}
 
-				return new GuiTreealyzer(player, new TreealyzerInventory(player, equipped));
+				return new GuiTreealyzer(player, new ItemInventoryTreealyzer(player, equipped));
 
 			default:
 				return null;

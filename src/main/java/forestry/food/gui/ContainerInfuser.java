@@ -10,18 +10,16 @@
  ******************************************************************************/
 package forestry.food.gui;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 
 import forestry.core.gui.ContainerItemInventory;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
-import forestry.core.utils.InventoryUtil;
-import forestry.food.items.ItemInfuser.InfuserInventory;
+import forestry.food.inventory.ItemInventoryInfuser;
 
-public class ContainerInfuser extends ContainerItemInventory<InfuserInventory> {
+public class ContainerInfuser extends ContainerItemInventory<ItemInventoryInfuser> {
 
-	public ContainerInfuser(InventoryPlayer inventoryplayer, InfuserInventory inventory) {
+	public ContainerInfuser(InventoryPlayer inventoryplayer, ItemInventoryInfuser inventory) {
 		super(inventory, inventoryplayer, 8, 103);
 
 		// Input
@@ -35,14 +33,5 @@ public class ContainerInfuser extends ContainerItemInventory<InfuserInventory> {
 		this.addSlotToContainer(new SlotFiltered(inventory, 3, 12, 32));
 		this.addSlotToContainer(new SlotFiltered(inventory, 4, 12, 52));
 		this.addSlotToContainer(new SlotFiltered(inventory, 5, 12, 72));
-	}
-
-	@Override
-	public void onContainerClosed(EntityPlayer entityplayer) {
-		if (entityplayer.worldObj.isRemote) {
-			return;
-		}
-
-		InventoryUtil.dropInventory(inventory, entityplayer.worldObj, entityplayer.posX, entityplayer.posY, entityplayer.posZ);
 	}
 }

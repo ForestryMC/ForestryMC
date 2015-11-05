@@ -39,7 +39,6 @@ public abstract class MultiblockTileEntityBase extends IMultiblockPart implement
 	
 	private boolean saveMultiblockData;
 	private NBTTagCompound cachedMultiblockData;
-	private boolean paused;
 
 	private GameProfile owner;
 
@@ -48,7 +47,6 @@ public abstract class MultiblockTileEntityBase extends IMultiblockPart implement
 		controller = null;
 		visited = false;
 		saveMultiblockData = false;
-		paused = false;
 		cachedMultiblockData = null;
 	}
 

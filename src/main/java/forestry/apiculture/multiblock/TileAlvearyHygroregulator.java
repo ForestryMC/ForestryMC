@@ -11,7 +11,6 @@
 package forestry.apiculture.multiblock;
 
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 import net.minecraftforge.common.util.ForgeDirection;
@@ -23,21 +22,19 @@ import net.minecraftforge.fluids.IFluidHandler;
 import forestry.api.apiculture.IAlvearyComponent;
 import forestry.api.core.IClimateControlled;
 import forestry.apiculture.blocks.BlockAlveary;
+import forestry.apiculture.inventory.InventoryHygroregulator;
 import forestry.core.config.Constants;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.Fluids;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.inventory.IInventoryAdapter;
-import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.GuiId;
 import forestry.core.tiles.ILiquidTankTile;
 
 public class TileAlvearyHygroregulator extends TileAlvearyWithGui implements IInventory, ILiquidTankTile, IFluidHandler, IAlvearyComponent.Climatiser {
-
 	private final HygroregulatorRecipe[] recipes;
 
-	/* MEMBERS */
 	private final TankManager tankManager;
 	private final FilteredTank liquidTank;
 	private final IInventoryAdapter inventory;
@@ -48,7 +45,7 @@ public class TileAlvearyHygroregulator extends TileAlvearyWithGui implements IIn
 	public TileAlvearyHygroregulator() {
 		super(TileAlveary.HYGRO_META, GuiId.HygroregulatorGUI);
 
-		this.inventory = new HygroInventory(this);
+		this.inventory = new InventoryHygroregulator(this);
 
 		Fluid water = Fluids.WATER.getFluid();
 		Fluid lava = Fluids.LAVA.getFluid();
@@ -181,9 +178,7 @@ public class TileAlvearyHygroregulator extends TileAlvearyWithGui implements IIn
 		return tankManager.getTankInfo(from);
 	}
 
-	/* RECIPE MANAGMENT */
 	private static class HygroregulatorRecipe {
-
 		public final FluidStack liquid;
 		public final int transferTime;
 		public final float humidChange;
@@ -194,23 +189,6 @@ public class TileAlvearyHygroregulator extends TileAlvearyWithGui implements IIn
 			this.transferTime = transferTime;
 			this.humidChange = humidChange;
 			this.tempChange = tempChange;
-		}
-	}
-
-	public static class HygroInventory extends TileInventoryAdapter<TileAlvearyHygroregulator> {
-		public static final short SLOT_INPUT = 0;
-
-		public HygroInventory(TileAlvearyHygroregulator alvearyHygroregulator) {
-			super(alvearyHygroregulator, 1, "CanInv");
-		}
-
-		@Override
-		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-			if (slotIndex == SLOT_INPUT) {
-				Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
-				return tile.liquidTank.accepts(fluid);
-			}
-			return false;
 		}
 	}
 }

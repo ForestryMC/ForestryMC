@@ -23,7 +23,7 @@ import net.minecraft.util.EnumChatFormatting;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitLayout;
-import forestry.core.circuits.ItemSolderingIron;
+import forestry.core.circuits.SolderManager;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
 
@@ -39,7 +39,7 @@ public class ItemElectronTube extends ItemOverlay {
 
 		Multimap<ICircuitLayout, ICircuit> circuits = ArrayListMultimap.create();
 		for (ICircuitLayout circuitLayout : ChipsetManager.circuitRegistry.getRegisteredLayouts().values()) {
-			ICircuit circuit = ItemSolderingIron.SolderManager.getCircuit(circuitLayout, itemstack);
+			ICircuit circuit = SolderManager.getCircuit(circuitLayout, itemstack);
 			if (circuit != null) {
 				circuits.put(circuitLayout, circuit);
 			}

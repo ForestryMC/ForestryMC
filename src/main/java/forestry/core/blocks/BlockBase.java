@@ -40,7 +40,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import forestry.core.access.IAccessHandler;
 import forestry.core.circuits.ISocketable;
 import forestry.core.fluids.FluidHelper;
-import forestry.core.proxy.Proxies;
+import forestry.core.proxy.ProxyRenderClient;
 import forestry.core.tiles.MachineDefinition;
 import forestry.core.tiles.TileBase;
 import forestry.core.tiles.TileForestry;
@@ -90,7 +90,7 @@ public class BlockBase extends BlockForestry {
 	@Override
 	public int getRenderType() {
 		if (hasTESR) {
-			return Proxies.common.getByBlockModelId();
+			return ProxyRenderClient.getByBlockModelRenderId();
 		} else {
 			return 0;
 		}

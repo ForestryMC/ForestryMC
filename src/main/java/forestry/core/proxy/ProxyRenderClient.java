@@ -28,6 +28,7 @@ import cpw.mods.fml.common.registry.VillagerRegistry;
 
 import forestry.apiculture.entities.EntityFXBee;
 import forestry.apiculture.render.ParticleRenderer;
+import forestry.apiculture.render.RenderCandleBlock;
 import forestry.apiculture.render.TextureHabitatLocator;
 import forestry.core.config.Config;
 import forestry.core.entities.EntityFXHoneydust;
@@ -47,9 +48,25 @@ import forestry.core.tiles.MachineDefinition;
 
 public class ProxyRenderClient extends ProxyRender {
 
+	private static int byBlockModelId;
+	private static int candleRenderId;
+
+	public static int getCandleRenderId() {
+		return candleRenderId;
+	}
+
+	public static int getByBlockModelRenderId() {
+		return byBlockModelId;
+	}
+
 	@Override
-	public int getNextAvailableRenderId() {
-		return RenderingRegistry.getNextAvailableRenderId();
+	public void init() {
+		byBlockModelId = RenderingRegistry.getNextAvailableRenderId();
+		candleRenderId = RenderingRegistry.getNextAvailableRenderId();
+
+		RenderBlock renderHandler = new RenderBlock();
+		RenderingRegistry.registerBlockHandler(byBlockModelId, renderHandler);
+		RenderingRegistry.registerBlockHandler(candleRenderId, new RenderCandleBlock());
 	}
 
 	@Override

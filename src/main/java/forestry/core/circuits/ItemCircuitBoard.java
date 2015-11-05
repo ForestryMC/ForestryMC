@@ -54,9 +54,9 @@ public class ItemCircuitBoard extends ItemForestryMultiPass {
 	public int getColorFromItemStack(ItemStack itemstack, int pass) {
 		EnumCircuitBoardType type = EnumCircuitBoardType.values()[itemstack.getItemDamage()];
 		if (pass == 0) {
-			return type.primaryColor;
+			return type.getPrimaryColor();
 		} else {
-			return type.secondaryColor;
+			return type.getSecondaryColor();
 		}
 	}
 

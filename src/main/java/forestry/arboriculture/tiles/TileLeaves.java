@@ -46,10 +46,10 @@ import forestry.api.genetics.IFruitBearer;
 import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IPollinatable;
+import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IButterflyGenome;
 import forestry.api.lepidopterology.IButterflyNursery;
-import forestry.api.lepidopterology.IButterflyRoot;
 import forestry.arboriculture.genetics.Tree;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.genetics.alleles.AlleleFruit;
@@ -113,7 +113,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 			if (nbttagcompound.hasKey("CATER")) {
 				maturationTime = nbttagcompound.getInteger("CATMAT");
-				caterpillar = (IButterfly) AlleleManager.alleleRegistry.getSpeciesRoot("rootButterflies").getMember(nbttagcompound.getCompoundTag("CATER"));
+				caterpillar = ButterflyManager.butterflyRoot.getMember(nbttagcompound.getCompoundTag("CATER"));
 			}
 
 			if (nbttagcompound.hasKey("Decorative")) { //legacy
@@ -541,8 +541,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	}
 
 	private static void attemptButterflySpawn(World world, IButterfly butterfly, double x, double y, double z) {
-		IButterflyRoot butterflyRoot = (IButterflyRoot) AlleleManager.alleleRegistry.getSpeciesRoot("rootButterflies");
-		if (butterflyRoot.spawnButterflyInWorld(world, butterfly.copy(), x, y + 0.1f, z) != null) {
+		if (ButterflyManager.butterflyRoot.spawnButterflyInWorld(world, butterfly.copy(), x, y + 0.1f, z) != null) {
 			Log.finest("A caterpillar '%s' hatched at %s/%s/%s.", butterfly.getDisplayName(), x, y, z);
 		}
 	}

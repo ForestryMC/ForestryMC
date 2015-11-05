@@ -17,12 +17,12 @@ import net.minecraft.item.ItemStack;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
+import forestry.api.core.ForestryAPI;
 import forestry.api.farming.Farmables;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.BackpackManager;
 import forestry.core.config.Constants;
 import forestry.core.config.ForestryItem;
-import forestry.core.config.GameMode;
 import forestry.core.fluids.Fluids;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.ModUtil;
@@ -43,11 +43,12 @@ public class PluginGrowthCraft extends ForestryPlugin {
 		return "GrowthCraft not found";
 	}
 
+	@Override
 	protected void registerRecipes() {
 
-		int saplingYield = GameMode.getGameMode().getIntegerSetting("fermenter.yield.sapling");
-		int juiceAmount = GameMode.getGameMode().getIntegerSetting("squeezer.liquid.apple");
-		int seedamount = GameMode.getGameMode().getIntegerSetting("squeezer.liquid.seed");
+		int saplingYield = ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.sapling");
+		int juiceAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.apple");
+		int seedamount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed");
 
 		ItemStack appleSeed = GameRegistry.findItemStack("Growthcraft|Apples", "grc.appleSeeds", 1);
 		ItemStack grapeSeed = GameRegistry.findItemStack("Growthcraft|Grapes", "grc.grapeSeeds", 1);

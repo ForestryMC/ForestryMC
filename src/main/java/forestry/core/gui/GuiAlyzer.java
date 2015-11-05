@@ -56,7 +56,7 @@ public abstract class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory>
 
 	protected final Map<String, ItemStack> iconStacks = new HashMap<>();
 
-	protected GuiAlyzer(String speciesRoot, EntityPlayer player, ContainerAlyzer container, IInventory inventory, String guiName) {
+	protected GuiAlyzer(ISpeciesRoot speciesRoot, EntityPlayer player, ContainerAlyzer container, IInventory inventory, String guiName) {
 		super(Constants.TEXTURE_PATH_GUI + "/beealyzer2.png", container, inventory);
 
 		this.xSize = 246;
@@ -64,7 +64,7 @@ public abstract class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory>
 
 		this.guiName = guiName;
 
-		this.speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(speciesRoot);
+		this.speciesRoot = speciesRoot;
 		this.breedingTracker = this.speciesRoot.getBreedingTracker(player.worldObj, player.getGameProfile());
 	}
 

@@ -59,7 +59,12 @@ public class PluginManager {
 	private static Stage stage = Stage.SETUP;
 
 	public enum Stage {
-		SETUP, SETUP_DISABLED, PRE_INIT, INIT, POST_INIT, FINISHED
+		SETUP, // setup API to make it functional, register basic blocks and items. GameMode Configs are not yet accessible
+		SETUP_DISABLED, // setup fallback API to avoid crashes
+		PRE_INIT, // register handlers, triggers, definitions, backpacks, crates, and anything that depends on basic items
+		INIT, // anything that depends on PreInit stages, recipe registration
+		POST_INIT, // stubborn mod integration, dungeon loot, and finalization of things that take input from mods
+		FINISHED
 	}
 
 	public enum Module {
@@ -240,6 +245,7 @@ public class PluginManager {
 			ForestryPlugin plugin = m.instance;
 			Log.fine("Setup Start: {0}", plugin);
 			plugin.setupAPI();
+			plugin.registerItemsAndBlocks();
 			Log.fine("Setup Complete: {0}", plugin);
 		}
 
@@ -259,7 +265,6 @@ public class PluginManager {
 			Log.fine("Pre-Init Start: {0}", plugin);
 			registerHandlers(plugin);
 			plugin.preInit();
-			plugin.registerItems();
 			if (Module.BUILDCRAFT_STATEMENTS.isEnabled()) {
 				plugin.registerTriggers();
 			}

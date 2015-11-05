@@ -16,7 +16,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -36,11 +35,9 @@ import forestry.api.apiculture.IBeeListener;
 import forestry.api.apiculture.IBeeModifier;
 import forestry.api.apiculture.IBeekeepingMode;
 import forestry.api.apiculture.IHiveFrame;
-import forestry.api.core.ForestryAPI;
+import forestry.apiculture.inventory.InventoryApiary;
 import forestry.apiculture.trigger.ApicultureTriggers;
-import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.network.GuiId;
-import forestry.core.utils.SlotUtil;
 
 import buildcraft.api.statements.ITriggerExternal;
 
@@ -48,12 +45,13 @@ public class TileApiary extends TileAbstractBeeHousing {
 	private static final IBeeModifier beeModifier = new ApiaryBeeModifier();
 
 	private final IBeeListener beeListener;
-	private final ApiaryInventory inventory;
+	private final InventoryApiary inventory;
 
 	public TileApiary() {
+		super(GuiId.ApiaryGUI, "apiary");
 		this.beeListener = new ApiaryBeeListener(this);
 
-		ApiaryInventory apiaryInventory = new ApiaryInventory(this, 12, "Items");
+		InventoryApiary apiaryInventory = new InventoryApiary(this);
 		this.inventory = apiaryInventory;
 		setInternalInventory(apiaryInventory);
 	}
@@ -61,11 +59,6 @@ public class TileApiary extends TileAbstractBeeHousing {
 	@Override
 	public IBeeHousingInventory getBeeInventory() {
 		return inventory;
-	}
-
-	@Override
-	public void openGui(EntityPlayer player) {
-		player.openGui(ForestryAPI.instance, GuiId.ApiaryGUI.ordinal(), worldObj, xCoord, yCoord, zCoord);
 	}
 
 	@Override
@@ -125,55 +118,6 @@ public class TileApiary extends TileAbstractBeeHousing {
 
 				framesInventory.setInventorySlotContents(i, usedFrame);
 			}
-		}
-	}
-
-	public static class ApiaryInventory extends TileBeeHousingInventory {
-		public static final int SLOT_FRAMES_1 = 9;
-		public static final int SLOT_FRAMES_COUNT = 3;
-
-		public ApiaryInventory(TileApiary tile, int size, String name) {
-			super(tile, size, name);
-		}
-
-		@Override
-		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-			if (SlotUtil.isSlotInRange(slotIndex, SLOT_FRAMES_1, SLOT_FRAMES_COUNT)) {
-				return (itemStack.getItem() instanceof IHiveFrame) && (getStackInSlot(slotIndex) == null);
-			}
-
-			return super.canSlotAccept(slotIndex, itemStack);
-		}
-
-		// override for pipe automation
-		@Override
-		public boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
-			if (SlotUtil.isSlotInRange(slotIndex, SLOT_FRAMES_1, SLOT_FRAMES_COUNT)) {
-				return false;
-			}
-			return super.isItemValidForSlot(slotIndex, itemStack);
-		}
-
-		public IInventory getFrameInventory() {
-			return new InventoryMapper(this, SLOT_FRAMES_1, SLOT_FRAMES_COUNT);
-		}
-
-		public Collection<IHiveFrame> getFrames() {
-			Collection<IHiveFrame> hiveFrames = new ArrayList<>(SLOT_FRAMES_COUNT);
-
-			for (int i = SLOT_FRAMES_1; i < SLOT_FRAMES_1 + SLOT_FRAMES_COUNT; i++) {
-				ItemStack stackInSlot = getStackInSlot(i);
-				if (stackInSlot == null) {
-					continue;
-				}
-
-				Item itemInSlot = stackInSlot.getItem();
-				if (itemInSlot instanceof IHiveFrame) {
-					hiveFrames.add((IHiveFrame) itemInSlot);
-				}
-			}
-
-			return hiveFrames;
 		}
 	}
 

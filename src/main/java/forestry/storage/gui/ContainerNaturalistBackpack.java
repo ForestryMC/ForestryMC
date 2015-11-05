@@ -17,11 +17,11 @@ import forestry.core.gui.ContainerItemInventory;
 import forestry.core.gui.IGuiSelectable;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.network.PacketGuiSelectRequest;
-import forestry.storage.GuiHandlerStorage.PagedBackpackInventory;
+import forestry.storage.inventory.ItemInventoryBackpackPaged;
 
-public class ContainerNaturalistBackpack extends ContainerItemInventory<PagedBackpackInventory> implements IGuiSelectable {
+public class ContainerNaturalistBackpack extends ContainerItemInventory<ItemInventoryBackpackPaged> implements IGuiSelectable {
 
-	public ContainerNaturalistBackpack(EntityPlayer player, PagedBackpackInventory inventory, int page) {
+	public ContainerNaturalistBackpack(EntityPlayer player, ItemInventoryBackpackPaged inventory, int page) {
 		super(inventory, player.inventory, 18, 120);
 
 		// Inventory

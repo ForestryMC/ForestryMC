@@ -12,14 +12,14 @@ package forestry.apiculture.gui;
 
 import net.minecraft.entity.player.EntityPlayer;
 
-import forestry.apiculture.items.ItemHabitatLocator.HabitatLocatorInventory;
+import forestry.apiculture.inventory.ItemInventoryHabitatLocator;
 import forestry.core.gui.ContainerItemInventory;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
 
-public class ContainerHabitatLocator extends ContainerItemInventory<HabitatLocatorInventory> {
+public class ContainerHabitatLocator extends ContainerItemInventory<ItemInventoryHabitatLocator> {
 
-	public ContainerHabitatLocator(EntityPlayer player, HabitatLocatorInventory inventory) {
+	public ContainerHabitatLocator(EntityPlayer player, ItemInventoryHabitatLocator inventory) {
 		super(inventory, player.inventory, 8, 102);
 
 		// Energy

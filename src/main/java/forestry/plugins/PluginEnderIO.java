@@ -6,8 +6,8 @@ import net.minecraftforge.fluids.Fluid;
 
 import cpw.mods.fml.common.event.FMLInterModComms;
 
+import forestry.api.core.ForestryAPI;
 import forestry.core.config.Constants;
-import forestry.core.config.GameMode;
 import forestry.core.fluids.Fluids;
 import forestry.core.utils.ModUtil;
 
@@ -40,7 +40,7 @@ public class PluginEnderIO extends ForestryPlugin {
 	public void doInit() {
 		Fluid ethanol = Fluids.ETHANOL.getFluid();
 		if (ethanol != null) {
-			int ethanolBurnTime = Math.round(Constants.ENGINE_CYCLE_DURATION_ETHANOL * GameMode.getGameMode().getFloatSetting("fuel.ethanol.combustion"));
+			int ethanolBurnTime = Math.round(Constants.ENGINE_CYCLE_DURATION_ETHANOL * ForestryAPI.activeMode.getFloatSetting("fuel.ethanol.combustion"));
 			addFuel(ethanol, 40, ethanolBurnTime);
 		}
 

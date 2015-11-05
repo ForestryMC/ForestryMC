@@ -21,23 +21,21 @@ import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IBee;
 import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAlleleArea;
 import forestry.api.genetics.IAlleleInteger;
 import forestry.api.genetics.IAlleleTolerance;
 import forestry.apiculture.genetics.BeeGenome;
+import forestry.apiculture.inventory.ItemInventoryBeealyzer;
 import forestry.apiculture.items.ItemBeeGE;
-import forestry.apiculture.items.ItemBeealyzer.BeealyzerInventory;
 import forestry.core.config.ForestryItem;
 import forestry.core.genetics.alleles.AlleleBoolean;
 import forestry.core.gui.ContainerAlyzer;
 import forestry.core.gui.GuiAlyzer;
 import forestry.core.utils.StringUtil;
-import forestry.core.utils.vect.Vect;
 
 public class GuiBeealyzer extends GuiAlyzer {
 
-	public GuiBeealyzer(EntityPlayer player, BeealyzerInventory inventory) {
-		super("rootBees", player, new ContainerAlyzer(inventory, player), inventory, "gui.beealyzer");
+	public GuiBeealyzer(EntityPlayer player, ItemInventoryBeealyzer inventory) {
+		super(BeeManager.beeRoot, player, new ContainerAlyzer(inventory, player), inventory, "gui.beealyzer");
 
 		ArrayList<ItemStack> beeList = new ArrayList<>();
 		((ItemBeeGE) ForestryItem.beeDroneGE.item()).addCreativeItems(beeList, false);
@@ -57,8 +55,8 @@ public class GuiBeealyzer extends GuiAlyzer {
 		IBee bee = null;
 		EnumBeeType beeType = EnumBeeType.DRONE;
 
-		for (int k = BeealyzerInventory.SLOT_SPECIMEN; k <= BeealyzerInventory.SLOT_ANALYZE_5; k++) {
-			if (k == BeealyzerInventory.SLOT_ENERGY) {
+		for (int k = ItemInventoryBeealyzer.SLOT_SPECIMEN; k <= ItemInventoryBeealyzer.SLOT_ANALYZE_5; k++) {
+			if (k == ItemInventoryBeealyzer.SLOT_ENERGY) {
 				continue;
 			}
 

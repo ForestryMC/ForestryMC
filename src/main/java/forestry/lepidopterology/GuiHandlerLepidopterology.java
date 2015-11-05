@@ -19,7 +19,7 @@ import forestry.core.GuiHandlerBase;
 import forestry.core.gui.ContainerAlyzer;
 import forestry.core.network.GuiId;
 import forestry.lepidopterology.gui.GuiFlutterlyzer;
-import forestry.lepidopterology.items.ItemFlutterlyzer.FlutterlyzerInventory;
+import forestry.lepidopterology.inventory.ItemInventoryFlutterlyzer;
 
 public class GuiHandlerLepidopterology extends GuiHandlerBase {
 
@@ -39,7 +39,7 @@ public class GuiHandlerLepidopterology extends GuiHandlerBase {
 					return null;
 				}
 
-				return new ContainerAlyzer(new FlutterlyzerInventory(player, equipped), player);
+				return new ContainerAlyzer(new ItemInventoryFlutterlyzer(player, equipped), player);
 
 			case LepidopteristChestGUI:
 				return getNaturalistChestContainer(ButterflyManager.butterflyRoot, player, world, x, y, z, guiData);
@@ -66,7 +66,7 @@ public class GuiHandlerLepidopterology extends GuiHandlerBase {
 					return null;
 				}
 
-				return new GuiFlutterlyzer(player, new FlutterlyzerInventory(player, equipped));
+				return new GuiFlutterlyzer(player, new ItemInventoryFlutterlyzer(player, equipped));
 
 			case LepidopteristChestGUI:
 				return getNaturalistChestGui(ButterflyManager.butterflyRoot, player, world, x, y, z, guiData);

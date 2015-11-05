@@ -33,13 +33,13 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+import forestry.api.core.ForestryAPI;
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.GeneratorFuel;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.ForestryItem;
-import forestry.core.config.GameMode;
 import forestry.core.fluids.BlockForestryFluid;
 import forestry.core.fluids.Fluids;
 import forestry.core.fluids.LiquidRegistryHelper;
@@ -87,16 +87,11 @@ public class PluginFluids extends ForestryPlugin {
 	}
 
 	@Override
-	public void preInit() {
+	public void registerItemsAndBlocks() {
 		for (Fluids fluidType : Fluids.forestryFluids) {
 			createFluid(fluidType);
 		}
-		MinecraftForge.EVENT_BUS.register(getTextureHook());
-		MinecraftForge.EVENT_BUS.register(getFillBucketHook());
-	}
 
-	@Override
-	public void registerItems() {
 		for (EnumContainerType type : EnumContainerType.values()) {
 			Item emptyContainer = new ItemLiquidContainer(type, Blocks.air, null);
 			switch (type) {
@@ -122,6 +117,12 @@ public class PluginFluids extends ForestryPlugin {
 				container.registerItem(liquidContainer, container.toString());
 			}
 		}
+	}
+
+	@Override
+	public void preInit() {
+		MinecraftForge.EVENT_BUS.register(getTextureHook());
+		MinecraftForge.EVENT_BUS.register(getFillBucketHook());
 	}
 
 	@Override
@@ -152,11 +153,11 @@ public class PluginFluids extends ForestryPlugin {
 		}
 
 		FluidStack ethanol = Fluids.ETHANOL.getFluid(1);
-		GeneratorFuel ethanolFuel = new GeneratorFuel(ethanol, (int) (32 * GameMode.getGameMode().getFloatSetting("fuel.ethanol.generator")), 4);
+		GeneratorFuel ethanolFuel = new GeneratorFuel(ethanol, (int) (32 * ForestryAPI.activeMode.getFloatSetting("fuel.ethanol.generator")), 4);
 		FuelManager.generatorFuel.put(ethanol.getFluid(), ethanolFuel);
 
 		FluidStack biomass = Fluids.BIOMASS.getFluid(1);
-		GeneratorFuel biomassFuel = new GeneratorFuel(biomass, (int) (8 * GameMode.getGameMode().getFloatSetting("fuel.biomass.generator")), 1);
+		GeneratorFuel biomassFuel = new GeneratorFuel(biomass, (int) (8 * ForestryAPI.activeMode.getFloatSetting("fuel.biomass.generator")), 1);
 		FuelManager.generatorFuel.put(biomass.getFluid(), biomassFuel);
 	}
 

@@ -22,8 +22,7 @@ import forestry.core.tiles.MachineDefinition;
 
 public class ProxyRender {
 
-	public int getNextAvailableRenderId() {
-		return 0;
+	public void init() {
 	}
 
 	public boolean fancyGraphicsEnabled() {

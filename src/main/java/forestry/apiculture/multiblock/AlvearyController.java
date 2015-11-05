@@ -35,7 +35,7 @@ import forestry.api.apiculture.IBeekeepingLogic;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.IClimateControlled;
-import forestry.apiculture.BeeHousingInventory;
+import forestry.apiculture.InventoryBeeHousing;
 import forestry.core.access.EnumAccess;
 import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
@@ -52,7 +52,7 @@ import forestry.core.utils.BlockUtil;
 
 public class AlvearyController extends RectangularMultiblockControllerBase implements IAlvearyController, IClimateControlled {
 
-	private final BeeHousingInventory inventory;
+	private final InventoryBeeHousing inventory;
 	private final IBeekeepingLogic beekeepingLogic;
 
 	private BiomeGenBase cachedBiome;
@@ -71,7 +71,7 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 
 	public AlvearyController(World world) {
 		super(world);
-		this.inventory = new BeeHousingInventory(9, "Items", getAccessHandler());
+		this.inventory = new InventoryBeeHousing(9, "Items", getAccessHandler());
 		this.beekeepingLogic = BeeManager.beeRoot.createBeekeepingLogic(this);
 
 		this.beeModifiers.add(new AlvearyBeeModifier());

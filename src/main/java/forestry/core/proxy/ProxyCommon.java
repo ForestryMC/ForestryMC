@@ -18,12 +18,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
-
-import com.mojang.authlib.GameProfile;
 
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.FakePlayerFactory;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -54,10 +50,6 @@ public class ProxyCommon {
 
 	public File getForestryRoot() {
 		return new File(".");
-	}
-
-	public int getByBlockModelId() {
-		return 0;
 	}
 
 	public boolean isOp(EntityPlayer player) {

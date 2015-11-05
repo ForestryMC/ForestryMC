@@ -26,10 +26,10 @@ import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 import forestry.api.apiculture.FlowerManager;
+import forestry.api.core.ForestryAPI;
 import forestry.api.farming.Farmables;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Constants;
-import forestry.core.config.GameMode;
 import forestry.core.fluids.Fluids;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.ModUtil;
@@ -71,11 +71,11 @@ public class PluginWitchery extends ForestryPlugin {
 		ImmutableList<String> cropDirect = ImmutableList.of(
 				"garlic" //meta 5
 		);
-		int seedamount = GameMode.getGameMode().getIntegerSetting("squeezer.liquid.seed");
+		int seedamount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed");
 
 		Item saplingItem = GameRegistry.findItem(Witch, "witchsapling");
 		ItemStack saplingStack = new ItemStack(saplingItem, 1, OreDictionary.WILDCARD_VALUE);
-		RecipeUtil.addFermenterRecipes(saplingStack, GameMode.getGameMode().getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
+		RecipeUtil.addFermenterRecipes(saplingStack, ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
 		String saplingName = GameData.getItemRegistry().getNameForObject(saplingItem);
 		FMLInterModComms.sendMessage(Constants.MOD, "add-farmable-sapling", String.format("farmArboreal@%s.-1", saplingName));
 

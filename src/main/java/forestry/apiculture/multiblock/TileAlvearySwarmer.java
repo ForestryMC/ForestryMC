@@ -23,13 +23,13 @@ import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IAlvearyComponent;
 import forestry.api.apiculture.IBee;
 import forestry.apiculture.blocks.BlockAlveary;
+import forestry.apiculture.inventory.InventorySwarmer;
 import forestry.apiculture.network.PacketActiveUpdate;
 import forestry.apiculture.worldgen.Hive;
 import forestry.apiculture.worldgen.HiveDecorator;
 import forestry.apiculture.worldgen.HiveDescriptionSwarmer;
 import forestry.core.access.EnumAccess;
 import forestry.core.inventory.IInventoryAdapter;
-import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.inventory.wrappers.IInvSlot;
 import forestry.core.inventory.wrappers.InventoryIterator;
 import forestry.core.network.GuiId;
@@ -39,13 +39,13 @@ import forestry.core.utils.ItemStackUtil;
 
 public class TileAlvearySwarmer extends TileAlvearyWithGui implements ISidedInventory, IActivatable, IAlvearyComponent.Active {
 
-	private final SwarmerInventory inventory;
+	private final InventorySwarmer inventory;
 	private final Stack<ItemStack> pendingSpawns = new Stack<>();
 	private boolean active;
 
 	public TileAlvearySwarmer() {
 		super(TileAlveary.SWARMER_META, GuiId.AlvearySwarmerGUI);
-		this.inventory = new SwarmerInventory(this);
+		this.inventory = new InventorySwarmer(this);
 	}
 
 	@Override
@@ -225,17 +225,6 @@ public class TileAlvearySwarmer extends TileAlvearyWithGui implements ISidedInve
 
 		if (!worldObj.isRemote) {
 			Proxies.net.sendNetworkPacket(new PacketActiveUpdate(this), worldObj);
-		}
-	}
-
-	private static class SwarmerInventory extends TileInventoryAdapter<TileAlvearySwarmer> {
-		public SwarmerInventory(TileAlvearySwarmer alvearySwarmer) {
-			super(alvearySwarmer, 4, "SwarmInv");
-		}
-
-		@Override
-		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-			return ItemStackUtil.containsItemStack(BeeManager.inducers.keySet(), itemStack);
 		}
 	}
 }

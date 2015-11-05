@@ -46,10 +46,25 @@ public abstract class ForestryPlugin {
 	protected void disabledSetupAPI() {
 	}
 
+	protected void registerItemsAndBlocks() {
+	}
+
 	protected void preInit() {
 	}
 
+	protected void registerTriggers() {
+	}
+
+	protected void registerBackpackItems() {
+	}
+
+	protected void registerCrates() {
+	}
+
 	protected void doInit() {
+	}
+
+	protected void registerRecipes() {
 	}
 
 	protected void postInit() {
@@ -111,21 +126,6 @@ public abstract class ForestryPlugin {
 	
 	public IFuelHandler getFuelHandler() {
 		return null;
-	}
-
-	protected void registerItems() {
-	}
-
-	protected void registerTriggers() {
-	}
-
-	protected void registerBackpackItems() {
-	}
-
-	protected void registerCrates() {
-	}
-
-	protected void registerRecipes() {
 	}
 
 	@Override

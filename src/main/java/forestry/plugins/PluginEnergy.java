@@ -17,10 +17,10 @@ import net.minecraft.init.Items;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.network.IGuiHandler;
 
+import forestry.api.core.ForestryAPI;
 import forestry.core.blocks.BlockBase;
 import forestry.core.config.Constants;
 import forestry.core.config.ForestryBlock;
-import forestry.core.config.GameMode;
 import forestry.core.items.ItemBlockForestry;
 import forestry.core.recipes.ShapedRecipeCustom;
 import forestry.core.tiles.MachineDefinition;
@@ -42,10 +42,15 @@ public class PluginEnergy extends ForestryPlugin {
 	private static MachineDefinition definitionEngineClockwork;
 
 	@Override
-	public void preInit() {
-		super.preInit();
+	protected void registerItemsAndBlocks() {
+		super.registerItemsAndBlocks();
 
 		ForestryBlock.engine.registerBlock(new BlockEngine(Material.iron), ItemBlockForestry.class, "engine");
+	}
+
+	@Override
+	public void preInit() {
+		super.preInit();
 
 		definitionEnginePeat = ((BlockBase) ForestryBlock.engine.block()).addDefinition(new EngineDefinition(Constants.DEFINITION_ENGINE_PEAT_META, "forestry.EngineCopper", TileEnginePeat.class,
 				PluginEnergy.proxy.getRenderDefaultEngine(Constants.TEXTURE_PATH_BLOCKS + "/engine_copper_"), ShapedRecipeCustom.createShapedRecipe(
@@ -69,7 +74,7 @@ public class PluginEnergy extends ForestryPlugin {
 				'V', Blocks.piston)));
 
 		ShapedRecipeCustom clockworkRecipe = null;
-		if (GameMode.getGameMode().getBooleanSetting("energy.engine.clockwork")) {
+		if (ForestryAPI.activeMode.getBooleanSetting("energy.engine.clockwork")) {
 			clockworkRecipe = ShapedRecipeCustom.createShapedRecipe(
 					ForestryBlock.engine.getItemStack(1, Constants.DEFINITION_ENGINE_CLOCKWORK_META),
 					"###",

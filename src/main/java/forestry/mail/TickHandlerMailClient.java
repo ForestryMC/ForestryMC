@@ -10,22 +10,20 @@
  ******************************************************************************/
 package forestry.mail;
 
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
-import cpw.mods.fml.common.gameevent.TickEvent.RenderTickEvent;
 
 import forestry.core.proxy.Proxies;
 import forestry.mail.gui.GuiMailboxInfo;
 import forestry.mail.network.PacketPOBoxInfoRequest;
 
 public class TickHandlerMailClient {
-	public TickHandlerMailClient() {
-		FMLCommonHandler.instance().bus().register(this);
-	}
+	private static final int THROTTLE_TIME_MS = 10000;
+	private long lastInfoRequestTime;
 
 	@SubscribeEvent
-	public void onRenderTick(RenderTickEvent event) {
+	public void onRenderTick(TickEvent.RenderTickEvent event) {
 		if (event.phase != Phase.END) {
 			return;
 		}
@@ -33,7 +31,11 @@ public class TickHandlerMailClient {
 		if (GuiMailboxInfo.instance.hasPOBoxInfo()) {
 			GuiMailboxInfo.instance.render(0, 0);
 		} else {
-			Proxies.net.sendToServer(new PacketPOBoxInfoRequest());
+			long time = System.currentTimeMillis();
+			if (time - lastInfoRequestTime > THROTTLE_TIME_MS) {
+				Proxies.net.sendToServer(new PacketPOBoxInfoRequest());
+				lastInfoRequestTime = time;
+			}
 		}
 	}
 }

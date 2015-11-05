@@ -18,13 +18,13 @@ import net.minecraft.item.ItemStack;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
+import forestry.api.core.ForestryAPI;
 import forestry.api.farming.Farmables;
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.MoistenerFuel;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Constants;
 import forestry.core.config.ForestryItem;
-import forestry.core.config.GameMode;
 import forestry.core.fluids.Fluids;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.ModUtil;
@@ -184,9 +184,9 @@ public class PluginHarvestCraft extends ForestryPlugin {
 
 		ImmutableList.Builder<String> plants = ImmutableList.builder();
 
-		int juiceAmount = GameMode.getGameMode().getIntegerSetting("squeezer.liquid.apple") / 25;
-		int seedamount = GameMode.getGameMode().getIntegerSetting("squeezer.liquid.seed");
-		ItemStack wheatamount = GameMode.getGameMode().getStackSetting("recipe.output.compost.wheat");
+		int juiceAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.apple") / 25;
+		int seedamount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed");
+		ItemStack wheatamount = ForestryAPI.activeMode.getStackSetting("recipe.output.compost.wheat");
 
 		juiceAmount = Math.max(juiceAmount, 1); // Produce at least 1 mb of juice.
 		for (String berryName : berries) {
@@ -206,7 +206,7 @@ public class PluginHarvestCraft extends ForestryPlugin {
 			plants.add(berryName);
 		}
 
-		juiceAmount = GameMode.getGameMode().getIntegerSetting("squeezer.liquid.apple");
+		juiceAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.apple");
 		for (String fruitName : fruits) {
 			ItemStack fruit = GameRegistry.findItemStack(HC, fruitName + "Item", 1);
 			ItemStack fruitSeed = GameRegistry.findItemStack(HC, fruitName + "seedItem", 1);
@@ -224,7 +224,7 @@ public class PluginHarvestCraft extends ForestryPlugin {
 			plants.add(fruitName);
 		}
 
-		juiceAmount = GameMode.getGameMode().getIntegerSetting("squeezer.liquid.apple") / 2; // vegetables produce less juice
+		juiceAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.apple") / 2; // vegetables produce less juice
 		juiceAmount = Math.max(juiceAmount, 1); // Produce at least 1 mb of juice.
 		for (String vegetableName : vegetables) {
 			ItemStack vegetable = GameRegistry.findItemStack(HC, vegetableName + "Item", 1);
@@ -312,13 +312,13 @@ public class PluginHarvestCraft extends ForestryPlugin {
 			Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(mustardCropBlock, 7));
 		}
 		if (mustardFruit != null) {
-			RecipeUtil.addFermenterRecipes(mustardFruit, GameMode.getGameMode().getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
+			RecipeUtil.addFermenterRecipes(mustardFruit, ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
 		}
 
 		for (String plantName : plants.build()) {
 			ItemStack plant = GameRegistry.findItemStack(HC, plantName + "Item", 1);
 			if (plant != null) {
-				RecipeUtil.addFermenterRecipes(plant, GameMode.getGameMode().getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
+				RecipeUtil.addFermenterRecipes(plant, ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
 			}
 		}
 
@@ -356,7 +356,7 @@ public class PluginHarvestCraft extends ForestryPlugin {
 
 		ItemStack hcBeeswaxItem = GameRegistry.findItemStack(HC, "beeswaxItem", 1);
 		if (hcBeeswaxItem != null) {
-			RecipeUtil.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.capsule"), "XXX ", 'X', hcBeeswaxItem);
+			RecipeUtil.addRecipe(ForestryAPI.activeMode.getStackSetting("recipe.output.capsule"), "XXX ", 'X', hcBeeswaxItem);
 		}
 	}
 

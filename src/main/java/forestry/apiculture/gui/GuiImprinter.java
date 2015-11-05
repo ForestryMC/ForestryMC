@@ -21,8 +21,8 @@ import net.minecraft.item.ItemStack;
 
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.apiculture.genetics.BeeGenome;
+import forestry.apiculture.inventory.ItemInventoryImprinter;
 import forestry.apiculture.items.ItemBeeGE;
-import forestry.apiculture.items.ItemImprinter.ImprinterInventory;
 import forestry.core.config.Constants;
 import forestry.core.config.ForestryItem;
 import forestry.core.gui.GuiForestry;
@@ -30,14 +30,14 @@ import forestry.core.network.PacketGuiSelectRequest;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
 
-public class GuiImprinter extends GuiForestry<ContainerImprinter, ImprinterInventory> {
+public class GuiImprinter extends GuiForestry<ContainerImprinter, ItemInventoryImprinter> {
 
 	private int startX;
 	private int startY;
 
 	private final Map<String, ItemStack> iconStacks = new HashMap<>();
 
-	public GuiImprinter(InventoryPlayer inventoryplayer, ImprinterInventory inventory) {
+	public GuiImprinter(InventoryPlayer inventoryplayer, ItemInventoryImprinter inventory) {
 		super(Constants.TEXTURE_PATH_GUI + "/imprinter.png", new ContainerImprinter(inventoryplayer, inventory), inventory);
 
 		xSize = 176;

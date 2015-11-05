@@ -15,10 +15,10 @@ import net.minecraft.item.ItemStack;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
+import forestry.api.core.ForestryAPI;
 import forestry.api.farming.Farmables;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Constants;
-import forestry.core.config.GameMode;
 import forestry.core.fluids.Fluids;
 import forestry.core.utils.ModUtil;
 import forestry.farming.logic.FarmableGenericCrop;
@@ -44,7 +44,7 @@ public class PluginImmersiveEngineering extends ForestryPlugin {
 		ItemStack hempSeed = GameRegistry.findItemStack(ImEng, "seed", 1);
 		Block hempCrop = GameRegistry.findBlock(ImEng, "hemp");
 		ItemStack hempFiber = new ItemStack(GameRegistry.findItem(ImEng, "material"), 1, 3);
-		int seedAmount = GameMode.getGameMode().getIntegerSetting("squeezer.liquid.seed");
+		int seedAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed");
 		if (hempSeed != null && hempCrop != null) {
 			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{hempSeed}, Fluids.SEEDOIL.getFluid(seedAmount));
 			Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(hempSeed, hempCrop, 4, hempFiber));

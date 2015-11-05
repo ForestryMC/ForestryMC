@@ -14,20 +14,20 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 
 import forestry.api.circuits.ICircuitLayout;
-import forestry.core.circuits.ItemSolderingIron.SolderingInventory;
 import forestry.core.gui.ContainerItemInventory;
 import forestry.core.gui.IGuiSelectable;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
+import forestry.core.inventory.ItemInventorySolderingIron;
 import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.IForestryPacketServer;
 import forestry.core.network.PacketGuiLayoutSelect;
 import forestry.core.network.PacketGuiSelectRequest;
 import forestry.core.proxy.Proxies;
 
-public class ContainerSolderingIron extends ContainerItemInventory<SolderingInventory> implements IGuiSelectable {
+public class ContainerSolderingIron extends ContainerItemInventory<ItemInventorySolderingIron> implements IGuiSelectable {
 
-	public ContainerSolderingIron(EntityPlayer player, SolderingInventory inventory) {
+	public ContainerSolderingIron(EntityPlayer player, ItemInventorySolderingIron inventory) {
 		super(inventory, player.inventory, 8, 123);
 
 		// Input

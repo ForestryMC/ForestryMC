@@ -17,6 +17,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.command.ICommand;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.common.MinecraftForge;
@@ -27,6 +28,7 @@ import cpw.mods.fml.common.IFuelHandler;
 import cpw.mods.fml.common.network.IGuiHandler;
 
 import forestry.api.circuits.ChipsetManager;
+import forestry.api.core.ForestryAPI;
 import forestry.api.core.Tabs;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.storage.ICrateRegistry;
@@ -42,7 +44,7 @@ import forestry.core.blocks.BlockResourceStorage;
 import forestry.core.blocks.BlockSoil;
 import forestry.core.circuits.CircuitRegistry;
 import forestry.core.circuits.ItemCircuitBoard;
-import forestry.core.circuits.ItemSolderingIron;
+import forestry.core.circuits.SolderManager;
 import forestry.core.commands.CommandPlugins;
 import forestry.core.commands.CommandVersion;
 import forestry.core.commands.RootCommand;
@@ -50,7 +52,6 @@ import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
-import forestry.core.config.GameMode;
 import forestry.core.genetics.ItemResearchNote;
 import forestry.core.genetics.alleles.AlleleFactory;
 import forestry.core.genetics.alleles.AlleleHelper;
@@ -61,13 +62,16 @@ import forestry.core.items.ItemBlockForestry;
 import forestry.core.items.ItemBlockTyped;
 import forestry.core.items.ItemElectronTube;
 import forestry.core.items.ItemForestry;
+import forestry.core.items.ItemForestryBonemeal;
 import forestry.core.items.ItemForestryPickaxe;
 import forestry.core.items.ItemForestryShovel;
 import forestry.core.items.ItemFruit;
 import forestry.core.items.ItemMisc;
 import forestry.core.items.ItemOverlay.OverlayInfo;
 import forestry.core.items.ItemPipette;
+import forestry.core.items.ItemWithGui;
 import forestry.core.items.ItemWrench;
+import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.recipes.ShapedRecipeCustom;
@@ -88,7 +92,7 @@ public class PluginCore extends ForestryPlugin {
 	protected void setupAPI() {
 		super.setupAPI();
 
-		ChipsetManager.solderManager = new ItemSolderingIron.SolderManager();
+		ChipsetManager.solderManager = new SolderManager();
 
 		ChipsetManager.circuitRegistry = new CircuitRegistry();
 
@@ -97,80 +101,18 @@ public class PluginCore extends ForestryPlugin {
 		AlleleManager.climateHelper = new ClimateUtil();
 		AlleleManager.alleleFactory = new AlleleFactory();
 		alleleRegistry.initialize();
-	}
-
-	@Override
-	public void preInit() {
-		super.preInit();
-
-		rootCommand.addChildCommand(new CommandVersion());
-		rootCommand.addChildCommand(new CommandPlugins());
 
 		AlleleHelper.instance = new AlleleHelper();
-
-		ForestryBlock.core.registerBlock(new BlockBase(Material.iron, true), ItemBlockForestry.class, "core");
-
-		definitionEscritoire = ((BlockBase) ForestryBlock.core.block()).addDefinition(new MachineDefinition(Constants.DEFINITION_ESCRITOIRE_META, "forestry.Escritoire", TileEscritoire.class,
-				Proxies.render.getRenderEscritoire()));
-
-		ForestryBlock.soil.registerBlock(new BlockSoil(), ItemBlockTyped.class, "soil");
-		ForestryBlock.soil.block().setHarvestLevel("shovel", 0, 0);
-		ForestryBlock.soil.block().setHarvestLevel("shovel", 0, 1);
-
-		ForestryBlock.resources.registerBlock(new BlockResourceOre(), ItemBlockForestry.class, "resources");
-		ForestryBlock.resources.block().setHarvestLevel("pickaxe", 1);
-
-		OreDictionary.registerOre("oreApatite", ForestryBlock.resources.getItemStack(1, 0));
-		OreDictionary.registerOre("oreCopper", ForestryBlock.resources.getItemStack(1, 1));
-		OreDictionary.registerOre("oreTin", ForestryBlock.resources.getItemStack(1, 2));
-
-		ForestryBlock.resourceStorage.registerBlock(new BlockResourceStorage(), ItemBlockForestry.class, "resourceStorage");
-		ForestryBlock.resourceStorage.block().setHarvestLevel("pickaxe", 0);
-
-		OreDictionary.registerOre("blockApatite", ForestryBlock.resourceStorage.getItemStack(1, 0));
-		OreDictionary.registerOre("blockCopper", ForestryBlock.resourceStorage.getItemStack(1, 1));
-		OreDictionary.registerOre("blockTin", ForestryBlock.resourceStorage.getItemStack(1, 2));
-		OreDictionary.registerOre("blockBronze", ForestryBlock.resourceStorage.getItemStack(1, 3));
-		OreDictionary.registerOre("chestWood", Blocks.chest);
-		OreDictionary.registerOre("craftingTableWood", Blocks.crafting_table);
 	}
 
 	@Override
-	public void doInit() {
-		super.doInit();
-
-		definitionEscritoire.register();
-		ForestryModEnvWarningCallable.register();
-
-		AlleleHelper.instance.init();
-
-		RecipeSorter.register("forestry:shapedrecipecustom", ShapedRecipeCustom.class, RecipeSorter.Category.SHAPED, "before:minecraft:shaped");
-		RecipeSorter.register("forestry:shapelessrecipecustom", ShapelessRecipeCustom.class, RecipeSorter.Category.SHAPELESS, "before:minecraft:shapeless");
-	}
-
-	@Override
-	public boolean isAvailable() {
-		return true;
-	}
-
-	@Override
-	public IGuiHandler getGuiHandler() {
-		return null;
-	}
-
-	@Override
-	public ISaveEventHandler getSaveEventHandler() {
-		return new SaveEventHandlerCore();
-	}
-
-	@Override
-	protected void registerItems() {
+	protected void registerItemsAndBlocks() {
 		// / FERTILIZERS
-		ForestryItem.fertilizerBio.registerItem((new ItemForestry()), "fertilizerBio");
-		ForestryItem.fertilizerCompound.registerItem((new ItemForestry()).setBonemeal(), "fertilizerCompound");
+		ForestryItem.fertilizerBio.registerItem(new ItemForestry(), "fertilizerBio");
+		ForestryItem.fertilizerCompound.registerItem(new ItemForestryBonemeal(), "fertilizerCompound");
 
 		// / GEMS
-		ForestryItem.apatite.registerItem((new ItemForestry()), "apatite");
+		ForestryItem.apatite.registerItem(new ItemForestry(), "apatite");
 		OreDictionary.registerOre("gemApatite", ForestryItem.apatite.getItemStack());
 
 		ForestryItem.researchNote.registerItem(new ItemResearchNote(), "researchNote");
@@ -218,7 +160,8 @@ public class PluginCore extends ForestryPlugin {
 
 		// / CIRCUIT BOARDS
 		ForestryItem.circuitboards.registerItem(new ItemCircuitBoard(), "chipsets");
-		ForestryItem.solderingIron.registerItem(new ItemSolderingIron(), "solderingIron");
+		Item solderingIron = new ItemWithGui(GuiId.SolderingIronGUI).setMaxDamage(5).setFull3D();
+		ForestryItem.solderingIron.registerItem(solderingIron, "solderingIron");
 
 		Color tubeCoverNormal = Color.WHITE;
 		Color tubeCoverGold = new Color(0xFFF87E);
@@ -285,6 +228,69 @@ public class PluginCore extends ForestryPlugin {
 		for (ItemFruit.EnumFruit def : ItemFruit.EnumFruit.values()) {
 			OreDictionary.registerOre(def.getOreDict(), def.getStack());
 		}
+
+		ForestryBlock.core.registerBlock(new BlockBase(Material.iron, true), ItemBlockForestry.class, "core");
+
+		ForestryBlock.soil.registerBlock(new BlockSoil(), ItemBlockTyped.class, "soil");
+		ForestryBlock.soil.block().setHarvestLevel("shovel", 0, 0);
+		ForestryBlock.soil.block().setHarvestLevel("shovel", 0, 1);
+
+		ForestryBlock.resources.registerBlock(new BlockResourceOre(), ItemBlockForestry.class, "resources");
+		ForestryBlock.resources.block().setHarvestLevel("pickaxe", 1);
+		OreDictionary.registerOre("oreApatite", ForestryBlock.resources.getItemStack(1, 0));
+		OreDictionary.registerOre("oreCopper", ForestryBlock.resources.getItemStack(1, 1));
+		OreDictionary.registerOre("oreTin", ForestryBlock.resources.getItemStack(1, 2));
+
+		ForestryBlock.resourceStorage.registerBlock(new BlockResourceStorage(), ItemBlockForestry.class, "resourceStorage");
+		ForestryBlock.resourceStorage.block().setHarvestLevel("pickaxe", 0);
+		OreDictionary.registerOre("blockApatite", ForestryBlock.resourceStorage.getItemStack(1, 0));
+		OreDictionary.registerOre("blockCopper", ForestryBlock.resourceStorage.getItemStack(1, 1));
+		OreDictionary.registerOre("blockTin", ForestryBlock.resourceStorage.getItemStack(1, 2));
+		OreDictionary.registerOre("blockBronze", ForestryBlock.resourceStorage.getItemStack(1, 3));
+
+		OreDictionary.registerOre("chestWood", Blocks.chest);
+		OreDictionary.registerOre("craftingTableWood", Blocks.crafting_table);
+	}
+
+	@Override
+	public void preInit() {
+		super.preInit();
+
+		rootCommand.addChildCommand(new CommandVersion());
+		rootCommand.addChildCommand(new CommandPlugins());
+
+		definitionEscritoire = ((BlockBase) ForestryBlock.core.block()).addDefinition(new MachineDefinition(Constants.DEFINITION_ESCRITOIRE_META, "forestry.Escritoire", TileEscritoire.class,
+				Proxies.render.getRenderEscritoire()));
+	}
+
+	@Override
+	public void doInit() {
+		super.doInit();
+
+		Proxies.render.init();
+
+		definitionEscritoire.register();
+		ForestryModEnvWarningCallable.register();
+
+		AlleleHelper.instance.init();
+
+		RecipeSorter.register("forestry:shapedrecipecustom", ShapedRecipeCustom.class, RecipeSorter.Category.SHAPED, "before:minecraft:shaped");
+		RecipeSorter.register("forestry:shapelessrecipecustom", ShapelessRecipeCustom.class, RecipeSorter.Category.SHAPELESS, "before:minecraft:shapeless");
+	}
+
+	@Override
+	public boolean isAvailable() {
+		return true;
+	}
+
+	@Override
+	public IGuiHandler getGuiHandler() {
+		return null;
+	}
+
+	@Override
+	public ISaveEventHandler getSaveEventHandler() {
+		return new SaveEventHandlerCore();
 	}
 
 	@Override
@@ -362,7 +368,7 @@ public class PluginCore extends ForestryPlugin {
 		RecipeUtil.addRecipe(ForestryItem.sturdyCasing.getItemStack(), "###", "# #", "###", '#', "ingotBronze");
 
 		// / EMPTY CANS
-		RecipeUtil.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.can"), " # ", "# #", '#', "ingotTin");
+		RecipeUtil.addRecipe(ForestryAPI.activeMode.getStackSetting("recipe.output.can"), " # ", "# #", '#', "ingotTin");
 
 		// / GEARS
 		ArrayList<ItemStack> stoneGear = OreDictionary.getOres("gearStone");
@@ -389,36 +395,36 @@ public class PluginCore extends ForestryPlugin {
 		RecipeUtil.addRecipe(ForestryItem.wrench.getItemStack(), "# #", " # ", " # ", '#', "ingotBronze");
 
 		// Manure and Fertilizer
-		if (GameMode.getGameMode().getStackSetting("recipe.output.compost.wheat").stackSize > 0) {
-			RecipeUtil.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.compost.wheat"), " X ", "X#X", " X ", '#', Blocks.dirt, 'X', "cropWheat");
+		if (ForestryAPI.activeMode.getStackSetting("recipe.output.compost.wheat").stackSize > 0) {
+			RecipeUtil.addRecipe(ForestryAPI.activeMode.getStackSetting("recipe.output.compost.wheat"), " X ", "X#X", " X ", '#', Blocks.dirt, 'X', "cropWheat");
 		}
-		if (GameMode.getGameMode().getStackSetting("recipe.output.compost.ash").stackSize > 0) {
-			RecipeUtil.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.compost.ash"), " X ", "X#X", " X ", '#', Blocks.dirt, 'X', "dustAsh");
+		if (ForestryAPI.activeMode.getStackSetting("recipe.output.compost.ash").stackSize > 0) {
+			RecipeUtil.addRecipe(ForestryAPI.activeMode.getStackSetting("recipe.output.compost.ash"), " X ", "X#X", " X ", '#', Blocks.dirt, 'X', "dustAsh");
 		}
-		if (GameMode.getGameMode().getStackSetting("recipe.output.fertilizer.apatite").stackSize > 0) {
-			RecipeUtil.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.fertilizer.apatite"), " # ", " X ", " # ", '#', "sand", 'X', "gemApatite");
+		if (ForestryAPI.activeMode.getStackSetting("recipe.output.fertilizer.apatite").stackSize > 0) {
+			RecipeUtil.addRecipe(ForestryAPI.activeMode.getStackSetting("recipe.output.fertilizer.apatite"), " # ", " X ", " # ", '#', "sand", 'X', "gemApatite");
 		}
-		if (GameMode.getGameMode().getStackSetting("recipe.output.fertilizer.ash").stackSize > 0) {
-			RecipeUtil.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.fertilizer.ash"), "###", "#X#", "###", '#', "dustAsh", 'X', "gemApatite");
+		if (ForestryAPI.activeMode.getStackSetting("recipe.output.fertilizer.ash").stackSize > 0) {
+			RecipeUtil.addRecipe(ForestryAPI.activeMode.getStackSetting("recipe.output.fertilizer.ash"), "###", "#X#", "###", '#', "dustAsh", 'X', "gemApatite");
 		}
 
 		// Humus
-		if (GameMode.getGameMode().getStackSetting("recipe.output.humus.compost").stackSize > 0) {
-			RecipeUtil.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.humus.compost"), "###", "#X#", "###", '#', Blocks.dirt, 'X', ForestryItem.fertilizerBio);
+		if (ForestryAPI.activeMode.getStackSetting("recipe.output.humus.compost").stackSize > 0) {
+			RecipeUtil.addRecipe(ForestryAPI.activeMode.getStackSetting("recipe.output.humus.compost"), "###", "#X#", "###", '#', Blocks.dirt, 'X', ForestryItem.fertilizerBio);
 		}
-		if (GameMode.getGameMode().getStackSetting("recipe.output.humus.fertilizer").stackSize > 0) {
-			RecipeUtil.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.humus.fertilizer"), "###", "#X#", "###", '#', Blocks.dirt, 'X', ForestryItem.fertilizerCompound);
+		if (ForestryAPI.activeMode.getStackSetting("recipe.output.humus.fertilizer").stackSize > 0) {
+			RecipeUtil.addRecipe(ForestryAPI.activeMode.getStackSetting("recipe.output.humus.fertilizer"), "###", "#X#", "###", '#', Blocks.dirt, 'X', ForestryItem.fertilizerCompound);
 		}
 
 		// Bog earth
-		if (GameMode.getGameMode().getStackSetting("recipe.output.bogearth.bucket").stackSize > 0) {
-			RecipeUtil.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.bogearth.bucket"), "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', Items.water_bucket, 'Y', "sand");
+		if (ForestryAPI.activeMode.getStackSetting("recipe.output.bogearth.bucket").stackSize > 0) {
+			RecipeUtil.addRecipe(ForestryAPI.activeMode.getStackSetting("recipe.output.bogearth.bucket"), "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', Items.water_bucket, 'Y', "sand");
 		}
 
-		if (GameMode.getGameMode().getStackSetting("recipe.output.bogearth.can").stackSize > 0) {
-			RecipeUtil.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.bogearth.can"), "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', ForestryItem.canWater, 'Y', "sand");
-			RecipeUtil.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.bogearth.can"), "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', ForestryItem.waxCapsuleWater, 'Y', "sand");
-			RecipeUtil.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.bogearth.can"), "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', ForestryItem.refractoryWater, 'Y', "sand");
+		if (ForestryAPI.activeMode.getStackSetting("recipe.output.bogearth.can").stackSize > 0) {
+			RecipeUtil.addRecipe(ForestryAPI.activeMode.getStackSetting("recipe.output.bogearth.can"), "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', ForestryItem.canWater, 'Y', "sand");
+			RecipeUtil.addRecipe(ForestryAPI.activeMode.getStackSetting("recipe.output.bogearth.can"), "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', ForestryItem.waxCapsuleWater, 'Y', "sand");
+			RecipeUtil.addRecipe(ForestryAPI.activeMode.getStackSetting("recipe.output.bogearth.can"), "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', ForestryItem.refractoryWater, 'Y', "sand");
 		}
 
 		// Crafting Material

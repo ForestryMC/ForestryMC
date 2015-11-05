@@ -27,6 +27,7 @@ import cpw.mods.fml.common.registry.GameData;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitLayout;
+import forestry.api.core.ForestryAPI;
 import forestry.api.fuels.EngineBronzeFuel;
 import forestry.api.fuels.FuelManager;
 import forestry.api.recipes.RecipeManagers;
@@ -40,7 +41,6 @@ import forestry.core.circuits.CircuitLayout;
 import forestry.core.config.Constants;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
-import forestry.core.config.GameMode;
 import forestry.core.fluids.Fluids;
 import forestry.core.proxy.Proxies;
 import forestry.core.recipes.RecipeUtil;
@@ -52,7 +52,6 @@ import forestry.core.utils.ModUtil;
 import forestry.energy.circuits.CircuitElectricBoost;
 import forestry.energy.circuits.CircuitElectricChoke;
 import forestry.energy.circuits.CircuitElectricEfficiency;
-import forestry.energy.circuits.CircuitFireDampener;
 import forestry.energy.tiles.EngineDefinition;
 import forestry.energy.tiles.TileEngineElectric;
 import forestry.energy.tiles.TileGenerator;
@@ -194,7 +193,6 @@ public class PluginIC2 extends ForestryPlugin {
 		definitionGenerator.register();
 
 		Circuit.energyElectricChoke1 = new CircuitElectricChoke("electric.choke.1");
-		Circuit.energyFireDampener1 = new CircuitFireDampener("dampener.1");
 		Circuit.energyElectricEfficiency1 = new CircuitElectricEfficiency("electric.efficiency.1");
 		Circuit.energyElectricBoost1 = new CircuitElectricBoost("electric.boost.1", 2, 7, 20);
 		Circuit.energyElectricBoost2 = new CircuitElectricBoost("electric.boost.2", 2, 15, 40);
@@ -263,10 +261,10 @@ public class PluginIC2 extends ForestryPlugin {
 		}
 
 		if (plantBall != null) {
-			RecipeUtil.addFermenterRecipes(plantBall, GameMode.getGameMode().getIntegerSetting("fermenter.yield.wheat") * 9, Fluids.BIOMASS);
+			RecipeUtil.addFermenterRecipes(plantBall, ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.wheat") * 9, Fluids.BIOMASS);
 		}
 		if (compressedPlantBall != null) {
-			RecipeUtil.addFermenterRecipes(compressedPlantBall, GameMode.getGameMode().getIntegerSetting("fermenter.yield.wheat") * 9, Fluids.BIOMASS);
+			RecipeUtil.addFermenterRecipes(compressedPlantBall, ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.wheat") * 9, Fluids.BIOMASS);
 		}
 
 		if (resin != null) {
@@ -276,7 +274,7 @@ public class PluginIC2 extends ForestryPlugin {
 		}
 
 		if (rubbersapling != null) {
-			RecipeUtil.addFermenterRecipes(rubbersapling, GameMode.getGameMode().getIntegerSetting("fermenter.yield.sapling"), Fluids.BIOMASS);
+			RecipeUtil.addFermenterRecipes(rubbersapling, ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.sapling"), Fluids.BIOMASS);
 		} else {
 			Log.fine("Missing IC2 rubber sapling, skipping fermenter recipe for converting rubber sapling to biomass.");
 		}
@@ -294,11 +292,11 @@ public class PluginIC2 extends ForestryPlugin {
 		FluidStack biogas = FluidRegistry.getFluidStack("ic2biogas", 1000);
 		if (biogas != null && PluginManager.Module.ENERGY.isEnabled()) {
 			FuelManager.bronzeEngineFuel.put(biogas.getFluid(), new EngineBronzeFuel(Fluids.BIOMASS.getFluid(),
-					Constants.ENGINE_FUEL_VALUE_BIOMASS, (int) ((Constants.ENGINE_CYCLE_DURATION_BIOMASS * GameMode.getGameMode().getFloatSetting("fuel.biomass.biogas"))), 1));
+					Constants.ENGINE_FUEL_VALUE_BIOMASS, (int) ((Constants.ENGINE_CYCLE_DURATION_BIOMASS * ForestryAPI.activeMode.getFloatSetting("fuel.biomass.biogas"))), 1));
 		}
 
 		if (waterCell != null) {
-			ItemStack bogEarthCan = GameMode.getGameMode().getStackSetting("recipe.output.bogearth.can");
+			ItemStack bogEarthCan = ForestryAPI.activeMode.getStackSetting("recipe.output.bogearth.can");
 			if (bogEarthCan.stackSize > 0) {
 				RecipeUtil.addRecipe(bogEarthCan, "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', waterCell, 'Y', "sand");
 			}

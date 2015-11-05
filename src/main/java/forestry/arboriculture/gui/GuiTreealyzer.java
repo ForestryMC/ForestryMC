@@ -33,8 +33,8 @@ import forestry.api.genetics.IAlleleInteger;
 import forestry.api.genetics.IFruitFamily;
 import forestry.arboriculture.genetics.TreeGenome;
 import forestry.arboriculture.genetics.alleles.AlleleFruit;
+import forestry.arboriculture.inventory.ItemInventoryTreealyzer;
 import forestry.arboriculture.items.ItemGermlingGE;
-import forestry.arboriculture.items.ItemTreealyzer.TreealyzerInventory;
 import forestry.core.config.ForestryItem;
 import forestry.core.genetics.alleles.AlleleBoolean;
 import forestry.core.genetics.alleles.AllelePlantType;
@@ -44,8 +44,8 @@ import forestry.core.utils.StringUtil;
 
 public class GuiTreealyzer extends GuiAlyzer {
 
-	public GuiTreealyzer(EntityPlayer player, TreealyzerInventory inventory) {
-		super("rootTrees", player, new ContainerAlyzer(inventory, player), inventory, "gui.treealyzer");
+	public GuiTreealyzer(EntityPlayer player, ItemInventoryTreealyzer inventory) {
+		super(TreeManager.treeRoot, player, new ContainerAlyzer(inventory, player), inventory, "gui.treealyzer");
 
 		ArrayList<ItemStack> treeList = new ArrayList<>();
 		((ItemGermlingGE) ForestryItem.sapling.item()).addCreativeItems(treeList, false);
@@ -64,8 +64,8 @@ public class GuiTreealyzer extends GuiAlyzer {
 		int page = 0;
 		ITree tree = null;
 		EnumGermlingType treeType = EnumGermlingType.SAPLING;
-		for (int k = 1; k < TreealyzerInventory.SLOT_ANALYZE_5 + 1; k++) {
-			if (k == TreealyzerInventory.SLOT_ENERGY) {
+		for (int k = 1; k < ItemInventoryTreealyzer.SLOT_ANALYZE_5 + 1; k++) {
+			if (k == ItemInventoryTreealyzer.SLOT_ENERGY) {
 				continue;
 			}
 

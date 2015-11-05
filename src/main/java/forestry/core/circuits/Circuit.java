@@ -70,7 +70,6 @@ public abstract class Circuit implements ICircuit {
 	}
 
 	public static ICircuit energyElectricChoke1;
-	public static ICircuit energyFireDampener1;
 	public static ICircuit energyElectricEfficiency1;
 	public static ICircuit energyElectricBoost1;
 	public static ICircuit energyElectricBoost2;

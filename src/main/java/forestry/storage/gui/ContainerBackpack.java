@@ -15,7 +15,7 @@ import net.minecraft.item.ItemStack;
 
 import forestry.core.gui.ContainerItemInventory;
 import forestry.core.gui.slots.SlotFiltered;
-import forestry.core.inventory.ItemInventoryBackpack;
+import forestry.storage.inventory.ItemInventoryBackpack;
 
 public class ContainerBackpack extends ContainerItemInventory<ItemInventoryBackpack> {
 

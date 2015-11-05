@@ -12,11 +12,9 @@ package forestry.energy.tiles;
 
 import java.io.IOException;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 import net.minecraftforge.common.util.ForgeDirection;
@@ -26,11 +24,9 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 
-import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorLogic;
 import forestry.api.fuels.EngineBronzeFuel;
 import forestry.api.fuels.FuelManager;
-import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.fluids.FluidHelper;
@@ -38,34 +34,27 @@ import forestry.core.fluids.Fluids;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.fluids.tanks.StandardTank;
-import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TileEngine;
+import forestry.energy.inventory.InventoryEngineBiogas;
 
 public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILiquidTankTile, IFluidHandler {
-
-	/* CONSTANTS */
-	public static final short SLOT_CAN = 0;
-
 	private final FilteredTank fuelTank;
 	private final FilteredTank heatingTank;
 	private final TankManager tankManager;
-	public int burnTime;
-	public int totalTime;
-	public int currentFluidId = -1;
-	/**
-	 * true if the engine is too cold and needs to warm itself up.
-	 */
-	private boolean shutdown;
+
+	private int burnTime;
+	private int totalTime;
+	private int currentFluidId = -1;
+	private boolean shutdown; // true if the engine is too cold and needs to warm itself up.
 
 	public TileEngineBiogas() {
-		super(Constants.ENGINE_BRONZE_HEAT_MAX, 300000);
-		setHints(Config.hints.get("engine.bronze"));
+		super(GuiId.EngineBiogasGUI, "engine.bronze", Constants.ENGINE_BRONZE_HEAT_MAX, 300000);
 
-		setInternalInventory(new EngineBronzeInventoryAdapter(this));
+		setInternalInventory(new InventoryEngineBiogas(this));
 
 		fuelTank = new FilteredTank(Constants.ENGINE_TANK_CAPACITY, FuelManager.bronzeEngineFuel.keySet());
 		fuelTank.tankMode = StandardTank.TankMode.DEFAULT;
@@ -74,14 +63,21 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 		this.tankManager = new TankManager(this, fuelTank, heatingTank);
 	}
 
-	@Override
-	public TankManager getTankManager() {
-		return tankManager;
+	public int getBurnTime() {
+		return burnTime;
+	}
+
+	public int getTotalTime() {
+		return totalTime;
+	}
+
+	public int getCurrentFluidId() {
+		return currentFluidId;
 	}
 
 	@Override
-	public void openGui(EntityPlayer player) {
-		player.openGui(ForestryAPI.instance, GuiId.EngineBiogasGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
+	public TankManager getTankManager() {
+		return tankManager;
 	}
 
 	@Override
@@ -92,7 +88,7 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 		}
 
 		// Check if we have suitable items waiting in the item slot
-		FluidHelper.drainContainers(tankManager, this, SLOT_CAN);
+		FluidHelper.drainContainers(tankManager, this, InventoryEngineBiogas.SLOT_CAN);
 
 		IErrorLogic errorLogic = getErrorLogic();
 
@@ -358,21 +354,5 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 	@Override
 	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
 		return tankManager.getTankInfo(from);
-	}
-
-	private static class EngineBronzeInventoryAdapter extends TileInventoryAdapter<TileEngineBiogas> {
-		public EngineBronzeInventoryAdapter(TileEngineBiogas engineBronze) {
-			super(engineBronze, 1, "Items");
-		}
-
-		@Override
-		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-			if (slotIndex == SLOT_CAN) {
-				Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
-				return tile.tankManager.accepts(fluid);
-			}
-
-			return false;
-		}
 	}
 }

@@ -30,13 +30,13 @@ import forestry.core.gui.ContainerAlyzer;
 import forestry.core.gui.GuiAlyzer;
 import forestry.core.utils.StringUtil;
 import forestry.lepidopterology.genetics.ButterflyGenome;
+import forestry.lepidopterology.inventory.ItemInventoryFlutterlyzer;
 import forestry.lepidopterology.items.ItemButterflyGE;
-import forestry.lepidopterology.items.ItemFlutterlyzer.FlutterlyzerInventory;
 
 public class GuiFlutterlyzer extends GuiAlyzer {
 
-	public GuiFlutterlyzer(EntityPlayer player, FlutterlyzerInventory inventory) {
-		super("rootButterflies", player, new ContainerAlyzer(inventory, player), inventory, "gui.flutterlyzer");
+	public GuiFlutterlyzer(EntityPlayer player, ItemInventoryFlutterlyzer inventory) {
+		super(ButterflyManager.butterflyRoot, player, new ContainerAlyzer(inventory, player), inventory, "gui.flutterlyzer");
 
 		ArrayList<ItemStack> butterflyList = new ArrayList<>();
 		((ItemButterflyGE) ForestryItem.butterflyGE.item()).addCreativeItems(butterflyList, false);
@@ -54,8 +54,8 @@ public class GuiFlutterlyzer extends GuiAlyzer {
 
 		int page = 0;
 		IButterfly butterfly = null;
-		for (int k = 1; k < FlutterlyzerInventory.SLOT_ANALYZE_5 + 1; k++) {
-			if (k == FlutterlyzerInventory.SLOT_ENERGY) {
+		for (int k = 1; k < ItemInventoryFlutterlyzer.SLOT_ANALYZE_5 + 1; k++) {
+			if (k == ItemInventoryFlutterlyzer.SLOT_ENERGY) {
 				continue;
 			}
 

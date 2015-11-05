@@ -15,6 +15,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import forestry.core.gui.ContainerTile;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
+import forestry.mail.inventory.InventoryPhilatelist;
 import forestry.mail.tiles.TilePhilatelist;
 
 public class ContainerPhilatelist extends ContainerTile<TilePhilatelist> {
@@ -23,12 +24,12 @@ public class ContainerPhilatelist extends ContainerTile<TilePhilatelist> {
 		super(tile, player, 8, 111);
 
 		// Filter
-		addSlotToContainer(new SlotFiltered(tile, TilePhilatelist.SLOT_FILTER, 80, 19));
+		addSlotToContainer(new SlotFiltered(tile, InventoryPhilatelist.SLOT_FILTER, 80, 19));
 
 		// Collected Stamps
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 9; j++) {
-				addSlotToContainer(new SlotOutput(tile, j + i * 9 + TilePhilatelist.SLOT_BUFFER_1, 8 + j * 18, 46 + i * 18));
+				addSlotToContainer(new SlotOutput(tile, j + i * 9 + InventoryPhilatelist.SLOT_BUFFER_1, 8 + j * 18, 46 + i * 18));
 			}
 		}
 	}

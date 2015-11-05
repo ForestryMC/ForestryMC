@@ -24,6 +24,7 @@ import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.common.registry.GameRegistry;
 
+import forestry.api.core.ForestryAPI;
 import forestry.api.farming.Farmables;
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.MoistenerFuel;
@@ -32,7 +33,6 @@ import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
 import forestry.core.config.Constants;
 import forestry.core.config.ForestryItem;
-import forestry.core.config.GameMode;
 import forestry.core.fluids.Fluids;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.ModUtil;
@@ -92,7 +92,7 @@ public class PluginNatura extends ForestryPlugin {
 			Item saplingItem = GameRegistry.findItem(NATURA, key);
 
 			ItemStack saplingWild = new ItemStack(saplingItem, 1, OreDictionary.WILDCARD_VALUE);
-			RecipeUtil.addFermenterRecipes(saplingWild, GameMode.getGameMode().getIntegerSetting("fermenter.yield.sapling"), Fluids.BIOMASS);
+			RecipeUtil.addFermenterRecipes(saplingWild, ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.sapling"), Fluids.BIOMASS);
 
 			String saplingName = GameData.getItemRegistry().getNameForObject(saplingItem);
 			FMLInterModComms.sendMessage(Constants.MOD, "add-farmable-sapling", String.format("farmArboreal@%s.-1", saplingName));
@@ -210,7 +210,7 @@ public class PluginNatura extends ForestryPlugin {
 			seedList.add(seedCotton);
 		}
 
-		int amount = GameMode.getGameMode().getIntegerSetting("squeezer.liquid.seed");
+		int amount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed");
 		for (ItemStack aSeedList : seedList) {
 			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{aSeedList}, Fluids.SEEDOIL.getFluid(amount));
 		}
@@ -245,11 +245,11 @@ public class PluginNatura extends ForestryPlugin {
 			berries.add(berryMalo);
 		}
 
-		amount = GameMode.getGameMode().getIntegerSetting("squeezer.liquid.apple") / 2;
+		amount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.apple") / 2;
 		amount = Math.max(amount, 1); // Produce at least 1 mb of juice.
-		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(GameRegistry.findItem(NATURA, "Natura.netherfood"), 1, 0)}, Fluids.JUICE.getFluid(amount), ForestryItem.mulch.getItemStack(), GameMode.getGameMode().getIntegerSetting("squeezer.mulch.apple"));
+		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(GameRegistry.findItem(NATURA, "Natura.netherfood"), 1, 0)}, Fluids.JUICE.getFluid(amount), ForestryItem.mulch.getItemStack(), ForestryAPI.activeMode.getIntegerSetting("squeezer.mulch.apple"));
 
-		amount = GameMode.getGameMode().getIntegerSetting("squeezer.liquid.apple") / 25;
+		amount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.apple") / 25;
 		amount = Math.max(amount, 1); // Produce at least 1 mb of juice.
 
 		for (ItemStack berry : berries) {
@@ -257,9 +257,9 @@ public class PluginNatura extends ForestryPlugin {
 		}
 
 		if (itemBarley != null) {
-			RecipeUtil.addFermenterRecipes(itemBarley, GameMode.getGameMode().getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
-			if (GameMode.getGameMode().getStackSetting("recipe.output.compost.wheat").stackSize > 0) {
-				ItemStack compostWheat = GameMode.getGameMode().getStackSetting("recipe.output.compost.wheat");
+			RecipeUtil.addFermenterRecipes(itemBarley, ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
+			if (ForestryAPI.activeMode.getStackSetting("recipe.output.compost.wheat").stackSize > 0) {
+				ItemStack compostWheat = ForestryAPI.activeMode.getStackSetting("recipe.output.compost.wheat");
 				RecipeUtil.addRecipe(compostWheat, " X ", "X#X", " X ", '#', Blocks.dirt, 'X', itemBarley);
 			}
 			FuelManager.moistenerResource.put(itemBarley, new MoistenerFuel(itemBarley, ForestryItem.mouldyWheat.getItemStack(), 0, 300));

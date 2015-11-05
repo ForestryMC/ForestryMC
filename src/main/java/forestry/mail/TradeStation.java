@@ -14,7 +14,6 @@ import java.util.ArrayList;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
@@ -36,75 +35,9 @@ import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.SlotUtil;
-import forestry.mail.items.ItemLetter;
+import forestry.mail.inventory.InventoryTradeStation;
 
 public class TradeStation extends WorldSavedData implements ITradeStation, IInventoryAdapter {
-
-	public static class TradeStationInventory extends InventoryAdapter {
-
-		public TradeStationInventory() {
-			super(TradeStation.SLOT_SIZE, "INV");
-		}
-
-		@Override
-		public int[] getAccessibleSlotsFromSide(int side) {
-
-			ArrayList<Integer> slots = new ArrayList<>();
-
-			for (int i = SLOT_LETTERS_1; i < SLOT_LETTERS_1 + SLOT_LETTERS_COUNT; i++) {
-				slots.add(i);
-			}
-			for (int i = SLOT_STAMPS_1; i < SLOT_STAMPS_1 + SLOT_STAMPS_COUNT; i++) {
-				slots.add(i);
-			}
-			for (int i = SLOT_RECEIVE_BUFFER; i < SLOT_RECEIVE_BUFFER + SLOT_RECEIVE_BUFFER_COUNT; i++) {
-				slots.add(i);
-			}
-			for (int i = SLOT_SEND_BUFFER; i < SLOT_SEND_BUFFER + SLOT_SEND_BUFFER_COUNT; i++) {
-				slots.add(i);
-			}
-
-			int[] slotsInt = new int[slots.size()];
-			for (int i = 0; i < slots.size(); i++) {
-				slotsInt[i] = slots.get(i);
-			}
-
-			return slotsInt;
-		}
-
-		@Override
-		public boolean canExtractItem(int slot, ItemStack itemStack, int side) {
-			return SlotUtil.isSlotInRange(slot, SLOT_RECEIVE_BUFFER, SLOT_RECEIVE_BUFFER_COUNT);
-		}
-
-		@Override
-		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-			if (SlotUtil.isSlotInRange(slotIndex, SLOT_SEND_BUFFER, SLOT_SEND_BUFFER_COUNT)) {
-				for (int i = 0; i < SLOT_TRADEGOOD_COUNT; i++) {
-					ItemStack tradeGood = getStackInSlot(SLOT_TRADEGOOD + i);
-					if (ItemStackUtil.isIdenticalItem(tradeGood, itemStack)) {
-						return true;
-					}
-				}
-				return false;
-			} else if (SlotUtil.isSlotInRange(slotIndex, SLOT_LETTERS_1, SLOT_LETTERS_COUNT)) {
-				Item item = itemStack.getItem();
-				return item == Items.paper;
-			} else if (SlotUtil.isSlotInRange(slotIndex, SLOT_STAMPS_1, SLOT_STAMPS_COUNT)) {
-				Item item = itemStack.getItem();
-				return item instanceof IStamps;
-			}
-
-			return false;
-		}
-		@Override
-		public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-			return canSlotAccept(i, itemstack);
-		}
-	}
-
-	// / CONSTANTS
 	public static final String SAVE_NAME = "TradePO_";
 	public static final short SLOT_TRADEGOOD = 0;
 	public static final short SLOT_TRADEGOOD_COUNT = 1;
@@ -120,14 +53,12 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	public static final short SLOT_SEND_BUFFER_COUNT = 10;
 	public static final int SLOT_SIZE = SLOT_TRADEGOOD_COUNT + SLOT_EXCHANGE_COUNT + SLOT_LETTERS_COUNT + SLOT_STAMPS_COUNT + SLOT_RECEIVE_BUFFER_COUNT + SLOT_SEND_BUFFER_COUNT;
 
-	// / MEMBER
 	private GameProfile owner;
 	private IMailAddress address;
 	private boolean isVirtual = false;
 	private boolean isInvalid = false;
-	private final InventoryAdapter inventory = new TradeStationInventory();
+	private final InventoryAdapter inventory = new InventoryTradeStation();
 
-	// / CONSTRUCTORS
 	public TradeStation(GameProfile owner, IMailAddress address) {
 		super(SAVE_NAME + address);
 		if (!address.isTrader()) {
@@ -137,6 +68,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 		this.address = address;
 	}
 
+	@SuppressWarnings("unused") // required for WorldSavedData
 	public TradeStation(String savename) {
 		super(savename);
 	}
@@ -301,7 +233,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
 		mail.writeToNBT(nbttagcompound);
 
-		ItemStack mailstack = ItemLetter.createStampedLetterStack(mail);
+		ItemStack mailstack = LetterProperties.createStampedLetterStack(mail);
 		mailstack.setTagCompound(nbttagcompound);
 
 		IPostalState responseState = PostManager.postRegistry.getPostOffice(world).lodgeLetter(world, mailstack, doLodge);
@@ -335,7 +267,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 			confirm.addStamps(ForestryItem.stamps.getItemStack(1, EnumPostage.P_1.ordinal() - 1));
 			confirm.writeToNBT(nbttagcompound);
 
-			ItemStack confirmstack = ItemLetter.createStampedLetterStack(confirm);
+			ItemStack confirmstack = LetterProperties.createStampedLetterStack(confirm);
 			confirmstack.setTagCompound(nbttagcompound);
 
 			PostManager.postRegistry.getPostOffice(world).lodgeLetter(world, confirmstack, doLodge);

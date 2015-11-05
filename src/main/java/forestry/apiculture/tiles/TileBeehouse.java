@@ -12,15 +12,13 @@ package forestry.apiculture.tiles;
 
 import java.util.Collections;
 
-import net.minecraft.entity.player.EntityPlayer;
-
 import forestry.api.apiculture.DefaultBeeListener;
 import forestry.api.apiculture.DefaultBeeModifier;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousingInventory;
 import forestry.api.apiculture.IBeeListener;
 import forestry.api.apiculture.IBeeModifier;
-import forestry.api.core.ForestryAPI;
+import forestry.apiculture.inventory.InventoryTileBeeHousing;
 import forestry.core.network.GuiId;
 
 public class TileBeehouse extends TileAbstractBeeHousing {
@@ -30,9 +28,10 @@ public class TileBeehouse extends TileAbstractBeeHousing {
 	private final IBeeHousingInventory beeInventory;
 
 	public TileBeehouse() {
+		super(GuiId.BeehouseGUI, "bee.house");
 		this.beeListener = new DefaultBeeListener();
 
-		TileBeeHousingInventory beeHousingInventory = new TileBeeHousingInventory(this, 12, "Items");
+		InventoryTileBeeHousing beeHousingInventory = new InventoryTileBeeHousing(this, 12, "Items");
 		beeHousingInventory.disableAutomation();
 
 		this.beeInventory = beeHousingInventory;
@@ -42,11 +41,6 @@ public class TileBeehouse extends TileAbstractBeeHousing {
 	@Override
 	public IBeeHousingInventory getBeeInventory() {
 		return beeInventory;
-	}
-
-	@Override
-	public void openGui(EntityPlayer player) {
-		player.openGui(ForestryAPI.instance, GuiId.BeehouseGUI.ordinal(), worldObj, xCoord, yCoord, zCoord);
 	}
 
 	@Override

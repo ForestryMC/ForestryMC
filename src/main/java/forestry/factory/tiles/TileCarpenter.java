@@ -26,16 +26,14 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 
-import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorLogic;
 import forestry.api.recipes.ICarpenterRecipe;
-import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
-import forestry.core.inventory.TileInventoryAdapter;
+import forestry.core.inventory.InventoryAdapterTile;
 import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
@@ -46,7 +44,7 @@ import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.PlayerUtil;
-import forestry.core.utils.SlotUtil;
+import forestry.factory.inventory.InventoryCarpenter;
 import forestry.factory.recipes.CarpenterRecipeManager;
 
 public class TileCarpenter extends TilePowered implements ISidedInventory, ILiquidTankTile, IFluidHandler, IItemStackDisplay {
@@ -54,43 +52,28 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 	private static final int ENERGY_PER_WORK_CYCLE = 2040;
 	private static final int ENERGY_PER_RECIPE_TIME = ENERGY_PER_WORK_CYCLE / 10;
 
-	public final static int SLOT_CRAFTING_1 = 0;
-	public final static int SLOT_CRAFTING_COUNT = 9;
-	public final static int SLOT_BOX = 9;
-	public final static int SLOT_PRODUCT = 10;
-	public final static int SLOT_PRODUCT_COUNT = 1;
-	public final static int SLOT_CAN_INPUT = 11;
-	public final static short SLOT_INVENTORY_1 = 12;
-	public final static short SLOT_INVENTORY_COUNT = 18;
-
-	/* MEMBER */
 	private final FilteredTank resourceTank;
 	private final TankManager tankManager;
-	private final TileInventoryAdapter craftingInventory;
+	private final InventoryAdapterTile craftingInventory;
 	private final InventoryCraftResult craftPreviewInventory;
 
 	@Nullable
 	private ICarpenterRecipe currentRecipe;
 
 	private ItemStack getBoxStack() {
-		return getInternalInventory().getStackInSlot(SLOT_BOX);
+		return getInternalInventory().getStackInSlot(InventoryCarpenter.SLOT_BOX);
 	}
 
 	public TileCarpenter() {
-		super(1100, 4000, ENERGY_PER_WORK_CYCLE);
-		setHints(Config.hints.get("carpenter"));
+		super(GuiId.CarpenterGUI, "carpenter", 1100, 4000);
+		setEnergyPerWorkCycle(ENERGY_PER_WORK_CYCLE);
 		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, CarpenterRecipeManager.recipeFluids);
 
-		craftingInventory = new TileInventoryAdapter<>(this, 10, "CraftItems");
+		craftingInventory = new InventoryAdapterTile<>(this, 10, "CraftItems");
 		craftPreviewInventory = new InventoryCraftResult();
-		setInternalInventory(new CarpenterInventoryAdapter(this));
+		setInternalInventory(new InventoryCarpenter(this));
 
 		tankManager = new TankManager(this, resourceTank);
-	}
-
-	@Override
-	public void openGui(EntityPlayer player) {
-		player.openGui(ForestryAPI.instance, GuiId.CarpenterGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
 	}
 
 	/* LOADING & SAVING */
@@ -147,7 +130,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 		super.updateServerSide();
 
 		if (updateOnInterval(20)) {
-			FluidHelper.drainContainers(tankManager, this, SLOT_CAN_INPUT);
+			FluidHelper.drainContainers(tankManager, this, InventoryCarpenter.SLOT_CAN_INPUT);
 		}
 	}
 
@@ -158,7 +141,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 		}
 
 		ItemStack pendingProduct = currentRecipe.getCraftingGridRecipe().getRecipeOutput();
-		InventoryUtil.tryAddStack(this, pendingProduct, SLOT_PRODUCT, SLOT_PRODUCT_COUNT, true);
+		InventoryUtil.tryAddStack(this, pendingProduct, InventoryCarpenter.SLOT_PRODUCT, InventoryCarpenter.SLOT_PRODUCT_COUNT, true);
 
 		return true;
 	}
@@ -179,18 +162,18 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 		}
 
 		if (currentRecipe.getBox() != null) {
-			ItemStack box = getStackInSlot(SLOT_BOX);
+			ItemStack box = getStackInSlot(InventoryCarpenter.SLOT_BOX);
 			if (box == null || box.stackSize == 0) {
 				return false;
 			}
 			if (doRemove) {
-				decrStackSize(SLOT_BOX, 1);
+				decrStackSize(InventoryCarpenter.SLOT_BOX, 1);
 			}
 		}
 
 		EntityPlayer player = PlayerUtil.getPlayer(worldObj, getAccessHandler().getOwner());
-		ItemStack[] craftingSets = InventoryUtil.getStacks(craftingInventory, SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT);
-		IInventory inventory = new InventoryMapper(getInternalInventory(), SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
+		ItemStack[] craftingSets = InventoryUtil.getStacks(craftingInventory, InventoryCarpenter.SLOT_CRAFTING_1, InventoryCarpenter.SLOT_CRAFTING_COUNT);
+		IInventory inventory = new InventoryMapper(getInternalInventory(), InventoryCarpenter.SLOT_INVENTORY_1, InventoryCarpenter.SLOT_INVENTORY_COUNT);
 		return InventoryUtil.removeSets(inventory, 1, craftingSets, player, true, true, false, doRemove);
 	}
 
@@ -209,7 +192,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 			hasResources = removeResources(false);
 
 			ItemStack pendingProduct = currentRecipe.getCraftingGridRecipe().getRecipeOutput();
-			canAdd = InventoryUtil.tryAddStack(this, pendingProduct, SLOT_PRODUCT, SLOT_PRODUCT_COUNT, true, false);
+			canAdd = InventoryUtil.tryAddStack(this, pendingProduct, InventoryCarpenter.SLOT_PRODUCT, InventoryCarpenter.SLOT_PRODUCT_COUNT, true, false);
 		}
 
 		IErrorLogic errorLogic = getErrorLogic();
@@ -276,30 +259,4 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
 		return tankManager.getTankInfo(from);
 	}
-
-	private static class CarpenterInventoryAdapter extends TileInventoryAdapter<TileCarpenter> {
-		public CarpenterInventoryAdapter(TileCarpenter carpenter) {
-			super(carpenter, 30, "Items");
-		}
-
-		@Override
-		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-			if (slotIndex == SLOT_CAN_INPUT) {
-				Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
-				return tile.tankManager.accepts(fluid);
-			} else if (slotIndex == SLOT_BOX) {
-				return CarpenterRecipeManager.isBox(itemStack);
-			} else if (canSlotAccept(SLOT_CAN_INPUT, itemStack) || canSlotAccept(SLOT_BOX, itemStack)) {
-				return false;
-			}
-
-			return SlotUtil.isSlotInRange(slotIndex, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
-		}
-
-		@Override
-		public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
-			return slotIndex == SLOT_PRODUCT;
-		}
-	}
-
 }

@@ -22,6 +22,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 
 import forestry.core.config.Constants;
+import forestry.core.inventory.InventoryEscritoire;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileEscritoire;
 
@@ -56,7 +57,7 @@ public class RenderEscritoire extends TileEntitySpecialRenderer implements IBloc
 	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
 		TileEscritoire tile = (TileEscritoire) tileentity;
-		render(tile.getStackInSlot(TileEscritoire.SLOT_ANALYZE), tile.getOrientation(), x, y, z);
+		render(tile.getStackInSlot(InventoryEscritoire.SLOT_ANALYZE), tile.getOrientation(), x, y, z);
 	}
 
 	private void render(ItemStack itemstack, ForgeDirection orientation, double x, double y, double z) {

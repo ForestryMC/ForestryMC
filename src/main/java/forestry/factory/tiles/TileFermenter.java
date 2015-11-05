@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.ISidedInventory;
@@ -30,42 +29,32 @@ import net.minecraftforge.fluids.IFluidHandler;
 
 import cpw.mods.fml.common.Optional;
 
-import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorLogic;
 import forestry.api.fuels.FermenterFuel;
 import forestry.api.fuels.FuelManager;
 import forestry.api.recipes.IFermenterRecipe;
 import forestry.api.recipes.IVariableFermentable;
-import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.fluids.tanks.StandardTank;
-import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
 import forestry.core.render.TankRenderInfo;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;
+import forestry.factory.inventory.InventoryFermenter;
 import forestry.factory.recipes.FermenterRecipeManager;
 import forestry.factory.triggers.FactoryTriggers;
 
 import buildcraft.api.statements.ITriggerExternal;
 
 public class TileFermenter extends TilePowered implements ISidedInventory, ILiquidTankTile, IFluidHandler {
-
-	public static final short SLOT_RESOURCE = 0;
-	public static final short SLOT_FUEL = 1;
-	public static final short SLOT_CAN_OUTPUT = 2;
-	public static final short SLOT_CAN_INPUT = 3;
-	public static final short SLOT_INPUT = 4;
-
 	private final FilteredTank resourceTank;
 	private final FilteredTank productTank;
-
 	private final TankManager tankManager;
 
 	private IFermenterRecipe currentRecipe;
@@ -77,19 +66,14 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 	private int fuelCurrentFerment = 0;
 
 	public TileFermenter() {
-		super(2000, 8000, 4200);
-		setInternalInventory(new FermenterInventoryAdapter(this));
-		setHints(Config.hints.get("fermenter"));
+		super(GuiId.FermenterGUI, "fermenter", 2000, 8000);
+		setEnergyPerWorkCycle(4200);
+		setInternalInventory(new InventoryFermenter(this));
 		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, FermenterRecipeManager.recipeFluidInputs);
 		resourceTank.tankMode = StandardTank.TankMode.INPUT;
 		productTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, FermenterRecipeManager.recipeFluidOutputs);
 		productTank.tankMode = StandardTank.TankMode.OUTPUT;
 		tankManager = new TankManager(this, resourceTank, productTank);
-	}
-
-	@Override
-	public void openGui(EntityPlayer player) {
-		player.openGui(ForestryAPI.instance, GuiId.FermenterGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
 	}
 
 	@Override
@@ -103,7 +87,6 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 		nbttagcompound.setInteger("FuelCurrentFerment", fuelCurrentFerment);
 
 		tankManager.writeToNBT(nbttagcompound);
-
 	}
 
 	@Override
@@ -136,11 +119,11 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 		super.updateServerSide();
 
 		if (updateOnInterval(20)) {
-			FluidHelper.drainContainers(tankManager, this, SLOT_INPUT);
+			FluidHelper.drainContainers(tankManager, this, InventoryFermenter.SLOT_INPUT);
 
 			FluidStack fluidStack = productTank.getFluid();
 			if (fluidStack != null) {
-				FluidHelper.fillContainers(tankManager, this, SLOT_CAN_INPUT, SLOT_CAN_OUTPUT, fluidStack.getFluid());
+				FluidHelper.fillContainers(tankManager, this, InventoryFermenter.SLOT_CAN_INPUT, InventoryFermenter.SLOT_CAN_OUTPUT, fluidStack.getFluid());
 			}
 		}
 	}
@@ -169,7 +152,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 			return;
 		}
 
-		ItemStack resource = getStackInSlot(SLOT_RESOURCE);
+		ItemStack resource = getStackInSlot(InventoryFermenter.SLOT_RESOURCE);
 		FluidStack fluid = resourceTank.getFluid();
 
 		currentRecipe = FermenterRecipeManager.findMatchingRecipe(resource, fluid);
@@ -178,7 +161,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 
 		if (currentRecipe != null) {
 			currentResourceModifier = determineResourceMod(resource);
-			decrStackSize(SLOT_RESOURCE, 1);
+			decrStackSize(InventoryFermenter.SLOT_RESOURCE, 1);
 		}
 	}
 
@@ -187,7 +170,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 			return;
 		}
 
-		ItemStack fuel = getStackInSlot(SLOT_FUEL);
+		ItemStack fuel = getStackInSlot(InventoryFermenter.SLOT_FUEL);
 		if (fuel == null) {
 			return;
 		}
@@ -200,7 +183,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 		fuelBurnTime = fuelTotalTime = fermenterFuel.burnDuration;
 		fuelCurrentFerment = fermenterFuel.fermentPerCycle;
 
-		decrStackSize(SLOT_FUEL, 1);
+		decrStackSize(InventoryFermenter.SLOT_FUEL, 1);
 	}
 
 	private static float determineResourceMod(ItemStack itemstack) {
@@ -214,7 +197,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 
 	@Override
 	public boolean hasResourcesMin(float percentage) {
-		ItemStack fermentationStack = getStackInSlot(SLOT_RESOURCE);
+		ItemStack fermentationStack = getStackInSlot(InventoryFermenter.SLOT_RESOURCE);
 		if (fermentationStack == null) {
 			return false;
 		}
@@ -224,7 +207,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 
 	@Override
 	public boolean hasFuelMin(float percentage) {
-		ItemStack fuelStack = getStackInSlot(SLOT_FUEL);
+		ItemStack fuelStack = getStackInSlot(InventoryFermenter.SLOT_FUEL);
 		if (fuelStack == null) {
 			return false;
 		}
@@ -239,7 +222,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 
 		boolean hasRecipe = (currentRecipe != null);
 		boolean hasFuel = fuelBurnTime > 0;
-		boolean hasResource = fermentationTime > 0 || getStackInSlot(SLOT_RESOURCE) != null;
+		boolean hasResource = fermentationTime > 0 || getStackInSlot(InventoryFermenter.SLOT_RESOURCE) != null;
 		boolean hasFluidResource = resourceTank.canDrain(fuelCurrentFerment);
 		boolean hasFluidSpace = true;
 
@@ -353,31 +336,5 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 		res.add(FactoryTriggers.lowResource25);
 		res.add(FactoryTriggers.lowResource10);
 		return res;
-	}
-
-	private static class FermenterInventoryAdapter extends TileInventoryAdapter<TileFermenter> {
-		public FermenterInventoryAdapter(TileFermenter fermenter) {
-			super(fermenter, 5, "Items");
-		}
-
-		@Override
-		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-			if (slotIndex == SLOT_RESOURCE) {
-				return FermenterRecipeManager.isResource(itemStack);
-			} else if (slotIndex == SLOT_INPUT) {
-				Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
-				return tile.resourceTank.accepts(fluid);
-			} else if (slotIndex == SLOT_CAN_INPUT) {
-				return FluidHelper.isFillableContainer(itemStack);
-			} else if (slotIndex == SLOT_FUEL) {
-				return FuelManager.fermenterFuel.containsKey(itemStack);
-			}
-			return false;
-		}
-
-		@Override
-		public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
-			return slotIndex == SLOT_CAN_OUTPUT;
-		}
 	}
 }

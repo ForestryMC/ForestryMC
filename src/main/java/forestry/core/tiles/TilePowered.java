@@ -20,9 +20,11 @@ import cpw.mods.fml.common.Optional;
 
 import forestry.api.core.IErrorLogic;
 import forestry.core.circuits.ISpeedUpgradable;
+import forestry.core.config.Config;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.GuiId;
 import forestry.core.network.IStreamableGui;
 import forestry.core.render.TankRenderInfo;
 import forestry.energy.EnergyManager;
@@ -31,7 +33,6 @@ import buildcraft.api.tiles.IHasWork;
 
 @Optional.Interface(iface = "buildcraft.api.tiles.IHasWork", modid = "BuildCraftAPI|tiles")
 public abstract class TilePowered extends TileBase implements IRenderableTile, IPowerHandler, IHasWork, ISpeedUpgradable, IStreamableGui {
-
 	private static final int WORK_TICK_INTERVAL = 5; // one Forestry work tick happens every WORK_TICK_INTERVAL game ticks
 
 	private final EnergyManager energyManager;
@@ -46,12 +47,14 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
 	// the number of work ticks that this tile has had no power
 	private int noPowerTime = 0;
 
-	protected TilePowered(int maxTransfer, int capacity, int energyPerWorkCycle) {
+	protected TilePowered(GuiId guiId, String hintKey, int maxTransfer, int capacity) {
+		super(guiId, hintKey);
 		this.energyManager = new EnergyManager(maxTransfer, capacity);
 		this.energyManager.setReceiveOnly();
 
-		setEnergyPerWorkCycle(energyPerWorkCycle);
 		this.ticksPerWorkCycle = 4;
+
+		hints.addAll(Config.hints.get("powered.machine"));
 	}
 
 	public int getWorkCounter() {

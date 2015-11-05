@@ -11,11 +11,7 @@
 package forestry.core.items;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemDye;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -25,30 +21,8 @@ import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
 
 public class ItemForestry extends Item {
-
-	private boolean isBonemeal = false;
-
 	public ItemForestry() {
 		setCreativeTab(CreativeTabForestry.tabForestry);
-	}
-
-	public ItemForestry setBonemeal() {
-		this.isBonemeal = true;
-		return this;
-	}
-
-	@Override
-	public boolean onItemUse(ItemStack itemstack, EntityPlayer player, World world, int x, int y, int z, int par7, float par8, float par9, float par10) {
-		if (isBonemeal) {
-			if (ItemDye.applyBonemeal(itemstack, world, x, y, z, player)) {
-				if (!world.isRemote) {
-					world.playAuxSFX(2005, x, y, z, 0);
-				}
-
-				return true;
-			}
-		}
-		return super.onItemUse(itemstack, player, world, x, y, z, par7, par8, par9, par10);
 	}
 
 	@SideOnly(Side.CLIENT)

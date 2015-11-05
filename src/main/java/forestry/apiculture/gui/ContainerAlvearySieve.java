@@ -12,21 +12,25 @@ package forestry.apiculture.gui;
 
 import net.minecraft.entity.player.InventoryPlayer;
 
+import forestry.apiculture.inventory.InventoryAlvearySieve;
 import forestry.apiculture.multiblock.TileAlvearySieve;
 import forestry.core.gui.ContainerTile;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
+import forestry.core.tiles.ICrafter;
 
 public class ContainerAlvearySieve extends ContainerTile<TileAlvearySieve> {
 
 	public ContainerAlvearySieve(InventoryPlayer player, TileAlvearySieve tile) {
 		super(tile, player, 8, 87);
 
-		addSlotToContainer(new SlotOutput(tile, 0, 94, 52).setCrafter(tile));
-		addSlotToContainer(new SlotOutput(tile, 1, 115, 39).setCrafter(tile));
-		addSlotToContainer(new SlotOutput(tile, 2, 73, 39).setCrafter(tile));
-		addSlotToContainer(new SlotOutput(tile, 3, 94, 26).setCrafter(tile));
+		ICrafter crafter = tile.getCrafter();
 
-		addSlotToContainer(new SlotFiltered(tile, TileAlvearySieve.AlvearySieveInventory.SLOT_SIEVE, 43, 39).setCrafter(tile));
+		addSlotToContainer(new SlotOutput(tile, 0, 94, 52).setCrafter(crafter));
+		addSlotToContainer(new SlotOutput(tile, 1, 115, 39).setCrafter(crafter));
+		addSlotToContainer(new SlotOutput(tile, 2, 73, 39).setCrafter(crafter));
+		addSlotToContainer(new SlotOutput(tile, 3, 94, 26).setCrafter(crafter));
+
+		addSlotToContainer(new SlotFiltered(tile, InventoryAlvearySieve.SLOT_SIEVE, 43, 39).setCrafter(crafter));
 	}
 }

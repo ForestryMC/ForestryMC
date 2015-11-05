@@ -26,12 +26,10 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import cpw.mods.fml.common.Optional;
 
-import forestry.api.core.ForestryAPI;
 import forestry.api.mail.ILetter;
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.IPostalState;
 import forestry.api.mail.PostManager;
-import forestry.core.config.Config;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.network.GuiId;
 import forestry.core.tiles.TileBase;
@@ -47,14 +45,13 @@ public class TileMailbox extends TileBase implements IMailContainer {
 	private boolean isLinked = false;
 
 	public TileMailbox() {
-		setHints(Config.hints.get("mailbox"));
+		super(GuiId.MailboxGUI, "mailbox");
 		setInternalInventory(new InventoryAdapter(POBox.SLOT_SIZE, "Letters").disableAutomation());
 	}
 
 	/* GUI */
 	@Override
 	public void openGui(EntityPlayer player) {
-
 		if (worldObj.isRemote) {
 			return;
 		}
@@ -70,7 +67,7 @@ public class TileMailbox extends TileBase implements IMailContainer {
 				held.stackSize--;
 			}
 		} else {
-			player.openGui(ForestryAPI.instance, GuiId.MailboxGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
+			super.openGui(player);
 		}
 	}
 

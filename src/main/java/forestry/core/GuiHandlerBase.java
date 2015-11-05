@@ -18,6 +18,7 @@ import cpw.mods.fml.common.network.IGuiHandler;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.gui.ContainerNaturalistInventory;
 import forestry.core.gui.GuiNaturalistInventory;
+import forestry.core.network.GuiId;
 import forestry.core.tiles.TileNaturalistChest;
 import forestry.core.tiles.TileUtil;
 
@@ -33,8 +34,8 @@ public abstract class GuiHandlerBase implements IGuiHandler {
 		return new ContainerNaturalistInventory(player.inventory, TileUtil.getTile(world, x, y, z, TileNaturalistChest.class), page);
 	}
 
-	public static int encodeGuiData(int guiId, int data) {
-		return data << 8 | guiId;
+	public static int encodeGuiData(GuiId guiId, int data) {
+		return data << 8 | guiId.ordinal();
 	}
 
 	protected static int decodeGuiID(int guiId) {

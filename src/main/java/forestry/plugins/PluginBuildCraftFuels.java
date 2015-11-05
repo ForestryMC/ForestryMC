@@ -14,8 +14,8 @@ import net.minecraftforge.fluids.Fluid;
 
 import cpw.mods.fml.common.Optional;
 
+import forestry.api.core.ForestryAPI;
 import forestry.core.config.Constants;
-import forestry.core.config.GameMode;
 import forestry.core.fluids.Fluids;
 import forestry.core.utils.ModUtil;
 
@@ -48,7 +48,7 @@ public class PluginBuildCraftFuels extends ForestryPlugin {
 		Fluid ethanol = Fluids.ETHANOL.getFluid();
 		if (ethanol != null) {
 			int ethanolPower = 40;
-			int ethanolBurnTime = Math.round(Constants.ENGINE_CYCLE_DURATION_ETHANOL * GameMode.getGameMode().getFloatSetting("fuel.ethanol.combustion"));
+			int ethanolBurnTime = Math.round(Constants.ENGINE_CYCLE_DURATION_ETHANOL * ForestryAPI.activeMode.getFloatSetting("fuel.ethanol.combustion"));
 			BuildcraftFuelRegistry.fuel.addFuel(ethanol, ethanolPower, ethanolBurnTime);
 		}
 	}

@@ -12,7 +12,6 @@ package forestry.factory.tiles;
 
 import java.io.IOException;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.ISidedInventory;
@@ -28,31 +27,24 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 
 import forestry.api.core.BiomeHelper;
-import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorLogic;
-import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.Fluids;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
-import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TileBase;
 import forestry.core.utils.ItemStackUtil;
+import forestry.factory.inventory.InventoryRaintank;
 
 public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTankTile, IFluidHandler {
-
-	/* CONSTANTS */
-	public static final short SLOT_RESOURCE = 0;
-	public static final short SLOT_PRODUCT = 1;
 	private static final FluidStack STACK_WATER = Fluids.WATER.getFluid(Constants.RAINTANK_AMOUNT_PER_UPDATE);
 
-	/* MEMBER */
 	private final FilteredTank resourceTank;
 	private final TankManager tankManager;
 	private boolean isValidBiome = true;
@@ -60,8 +52,8 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 	private ItemStack usedEmpty;
 
 	public TileRaintank() {
-		setInternalInventory(new RaintankInventoryAdapter(this));
-		setHints(Config.hints.get("raintank"));
+		super(GuiId.RaintankGUI, "raintank");
+		setInternalInventory(new InventoryRaintank(this));
 
 		resourceTank = new FilteredTank(Constants.RAINTANK_TANK_CAPACITY, FluidRegistry.WATER);
 		tankManager = new TankManager(this, resourceTank);
@@ -77,11 +69,6 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 		}
 
 		super.validate();
-	}
-
-	@Override
-	public void openGui(EntityPlayer player) {
-		player.openGui(ForestryAPI.instance, GuiId.RaintankGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
 	}
 
 	@Override
@@ -134,24 +121,24 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 			resourceTank.fill(STACK_WATER, true);
 		}
 		
-		if (!ItemStackUtil.isIdenticalItem(usedEmpty, getStackInSlot(SLOT_RESOURCE))) {
+		if (!ItemStackUtil.isIdenticalItem(usedEmpty, getStackInSlot(InventoryRaintank.SLOT_RESOURCE))) {
 			fillingTime = 0;
 			usedEmpty = null;
 		}
 
 		if (usedEmpty == null) {
-			usedEmpty = getStackInSlot(SLOT_RESOURCE);
+			usedEmpty = getStackInSlot(InventoryRaintank.SLOT_RESOURCE);
 		}
 
 		if (!isFilling()) {
-			FluidHelper.FillStatus canFill = FluidHelper.fillContainers(tankManager, this, SLOT_RESOURCE, SLOT_PRODUCT, Fluids.WATER.getFluid(), false);
+			FluidHelper.FillStatus canFill = FluidHelper.fillContainers(tankManager, this, InventoryRaintank.SLOT_RESOURCE, InventoryRaintank.SLOT_PRODUCT, Fluids.WATER.getFluid(), false);
 			if (canFill == FluidHelper.FillStatus.SUCCESS) {
 				fillingTime = Constants.RAINTANK_FILLING_TIME;
 			}
 		} else {
 			fillingTime--;
 			if (fillingTime <= 0) {
-				FluidHelper.FillStatus filled = FluidHelper.fillContainers(tankManager, this, SLOT_RESOURCE, SLOT_PRODUCT, Fluids.WATER.getFluid());
+				FluidHelper.FillStatus filled = FluidHelper.fillContainers(tankManager, this, InventoryRaintank.SLOT_RESOURCE, InventoryRaintank.SLOT_PRODUCT, Fluids.WATER.getFluid());
 				if (filled == FluidHelper.FillStatus.SUCCESS) {
 					fillingTime = 0;
 				}
@@ -214,24 +201,5 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 	@Override
 	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
 		return tankManager.getTankInfo(from);
-	}
-
-	private static class RaintankInventoryAdapter extends TileInventoryAdapter<TileRaintank> {
-		public RaintankInventoryAdapter(TileRaintank raintank) {
-			super(raintank, 3, "Items");
-		}
-
-		@Override
-		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-			if (slotIndex == SLOT_RESOURCE) {
-				return FluidHelper.getFilledContainer(Fluids.WATER.getFluid(1000), itemStack) != null;
-			}
-			return false;
-		}
-
-		@Override
-		public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
-			return slotIndex == SLOT_PRODUCT;
-		}
 	}
 }

@@ -13,6 +13,7 @@ package forestry.apiculture.entities;
 import com.google.common.collect.ImmutableList;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -77,31 +78,24 @@ public class EntityMinecartBeehouse extends EntityMinecartContainer implements I
 	private static final Iterable<IBeeModifier> beeModifiers = ImmutableList.<IBeeModifier>of(new TileBeehouse.BeehouseBeeModifier());
 	private static final Iterable<IBeeListener> beeListeners = ImmutableList.<IBeeListener>of(new DefaultBeeListener());
 
-	private final IBeekeepingLogic beeLogic;
-	private final IErrorLogic errorLogic;
-	private final BeeCartInventory beeInventory;
-	private final AccessHandler accessHandler;
+	private final IBeekeepingLogic beeLogic = BeeManager.beeRoot.createBeekeepingLogic(this);
+	private final IErrorLogic errorLogic = ForestryAPI.errorStateRegistry.createErrorLogic();
+	private final BeeCartInventory beeInventory = new BeeCartInventory(this);
+	private final AccessHandler accessHandler = new AccessHandler(this);
 
 	// CLIENT
 	private int breedingProgressPercent = 0;
 	private boolean needsActiveUpdate = true;
 
+	@SuppressWarnings("unused")
 	public EntityMinecartBeehouse(World world) {
 		super(world);
 		setHasDisplayTile(true);
-		this.beeLogic = BeeManager.beeRoot.createBeekeepingLogic(this);
-		this.errorLogic = ForestryAPI.errorStateRegistry.createErrorLogic();
-		this.beeInventory = new BeeCartInventory(this);
-		this.accessHandler = new AccessHandler(this);
 	}
 
 	public EntityMinecartBeehouse(World world, double posX, double posY, double posZ) {
 		super(world, posX, posY, posZ);
 		setHasDisplayTile(true);
-		this.beeLogic = BeeManager.beeRoot.createBeekeepingLogic(this);
-		this.errorLogic = ForestryAPI.errorStateRegistry.createErrorLogic();
-		this.beeInventory = new BeeCartInventory(this);
-		this.accessHandler = new AccessHandler(this);
 	}
 
 	@Override
@@ -348,8 +342,8 @@ public class EntityMinecartBeehouse extends EntityMinecartContainer implements I
 	}
 
 	@Override
-	public String[] getHints() {
-		return Config.hints.get("apiary");
+	public List<String> getHints() {
+		return Config.hints.get("bee.house");
 	}
 
 	private static class BeeCartInventory implements IBeeHousingInventory {

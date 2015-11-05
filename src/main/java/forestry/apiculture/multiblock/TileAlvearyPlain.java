@@ -13,6 +13,7 @@ package forestry.apiculture.multiblock;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -104,7 +105,7 @@ public class TileAlvearyPlain extends TileAlveary implements IClimatised, IHintS
 
 	/* IHintSource */
 	@Override
-	public String[] getHints() {
+	public List<String> getHints() {
 		return Config.hints.get("apiary");
 	}
 

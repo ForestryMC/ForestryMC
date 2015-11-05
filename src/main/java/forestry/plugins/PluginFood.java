@@ -13,6 +13,7 @@ package forestry.plugins;
 import java.util.Collections;
 
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import cpw.mods.fml.common.network.IGuiHandler;
@@ -23,13 +24,16 @@ import forestry.core.config.ForestryItem;
 import forestry.core.fluids.Fluids;
 import forestry.core.fluids.LiquidRegistryHelper;
 import forestry.core.items.ItemForestryFood;
+import forestry.core.items.ItemWithGui;
+import forestry.core.network.GuiId;
 import forestry.core.recipes.RecipeUtil;
 import forestry.food.BeverageEffect;
 import forestry.food.GuiHandlerFood;
+import forestry.food.InfuserIngredientManager;
+import forestry.food.InfuserMixtureManager;
 import forestry.food.items.ItemAmbrosia;
 import forestry.food.items.ItemBeverage;
 import forestry.food.items.ItemBeverage.BeverageInfo;
-import forestry.food.items.ItemInfuser;
 
 @Plugin(pluginID = "Food", name = "Food", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.food.description")
 public class PluginFood extends ForestryPlugin {
@@ -39,19 +43,12 @@ public class PluginFood extends ForestryPlugin {
 		super.setupAPI();
 
 		// Init seasoner
-		BeverageManager.infuserManager = new ItemInfuser.MixtureManager();
-		BeverageManager.ingredientManager = new ItemInfuser.IngredientManager();
+		BeverageManager.infuserManager = new InfuserMixtureManager();
+		BeverageManager.ingredientManager = new InfuserIngredientManager();
 	}
 
 	@Override
-	public void postInit() {
-		super.postInit();
-
-		ItemInfuser.initialize();
-	}
-
-	@Override
-	protected void registerItems() {
+	protected void registerItemsAndBlocks() {
 		// / FOOD ITEMS
 		ForestryItem.honeyedSlice.registerItem(new ItemForestryFood(8, 0.6f), "honeyedSlice");
 		ForestryItem.beverage.registerItem(new ItemBeverage(
@@ -62,13 +59,26 @@ public class PluginFood extends ForestryPlugin {
 		ForestryItem.honeyPot.registerItem(new ItemForestryFood(2, 0.2f).setIsDrink(), "honeyPot");
 
 		// / SEASONER
-		ForestryItem.infuser.registerItem(new ItemInfuser(), "infuser");
+		Item infuser = new ItemWithGui(GuiId.InfuserGUI);
+		ForestryItem.infuser.registerItem(infuser, "infuser");
 
 		// Mead
 		ItemStack meadBottle = ForestryItem.beverage.getItemStack();
 		BeverageInfo.saveEffects(meadBottle, Collections.singletonList(BeverageEffect.weakAlcoholic));
+	}
 
-		LiquidRegistryHelper.registerLiquidContainer(Fluids.SHORT_MEAD, Constants.BUCKET_VOLUME, meadBottle, new ItemStack(Items.glass_bottle));
+	@Override
+	protected void preInit() {
+		super.preInit();
+
+		LiquidRegistryHelper.registerLiquidContainer(Fluids.SHORT_MEAD, Constants.BUCKET_VOLUME, ForestryItem.beverage.getItemStack(), new ItemStack(Items.glass_bottle));
+
+		if (PluginManager.Module.APICULTURE.isEnabled()) {
+			BeverageManager.ingredientManager.addIngredient(ForestryItem.pollenCluster.getItemStack(1, 0), "Strong Curative");
+			BeverageManager.ingredientManager.addIngredient(ForestryItem.pollenCluster.getItemStack(1, 1), "Weak Curative");
+			BeverageManager.infuserManager.addMixture(1, ForestryItem.pollenCluster.getItemStack(1, 0), BeverageEffect.strongAntidote);
+			BeverageManager.infuserManager.addMixture(1, ForestryItem.pollenCluster.getItemStack(1, 1), BeverageEffect.weakAntidote);
+		}
 	}
 
 	@Override

@@ -28,24 +28,6 @@ public abstract class SlotWatched extends SlotForestry {
 	}
 
 	@Override
-	public boolean getHasStack() {
-		if (crafter != null && !crafter.canTakeStack(getSlotIndex())) {
-			return false;
-		} else {
-			return super.getHasStack();
-		}
-	}
-
-	@Override
-	public ItemStack decrStackSize(int i) {
-		if (crafter != null && !crafter.canTakeStack(getSlotIndex())) {
-			return null;
-		} else {
-			return super.decrStackSize(i);
-		}
-	}
-
-	@Override
 	public void onPickupFromSlot(EntityPlayer player, ItemStack itemStack) {
 		if (crafter != null) {
 			crafter.takenFromSlot(getSlotIndex(), player);

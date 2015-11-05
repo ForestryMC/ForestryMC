@@ -18,21 +18,10 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 import forestry.Forestry;
-import forestry.api.core.ForestryAPI;
 import forestry.api.core.IGameMode;
 import forestry.core.utils.Log;
 
 public class GameMode implements IGameMode {
-
-	public static IGameMode getGameMode() {
-
-		if (ForestryAPI.activeMode == null) {
-			ForestryAPI.activeMode = new GameMode(Config.gameMode);
-		}
-
-		return ForestryAPI.activeMode;
-	}
-
 	private static final String GAMEMODE_KEY = "gamemode";
 	private String identifier = "EASY";
 	private final String category;
@@ -83,21 +72,9 @@ public class GameMode implements IGameMode {
 		this.identifier = identifier;
 		this.category = "gamemodes/" + identifier;
 
-		final String oldConfig = category + ".conf";
-		final String newConfig = category + ".cfg";
-		File newConfigFile = new File(Forestry.instance.getConfigFolder(), newConfig);
-		File oldConfigFile = new File(Forestry.instance.getConfigFolder(), oldConfig);
-		if (oldConfigFile.exists()) {
-			loadOldConfig();
+		File configFile = new File(Forestry.instance.getConfigFolder(), category + ".cfg");
 
-			final String oldConfigRenamed = category + ".conf.old";
-			File oldConfigFileRenamed = new File(Forestry.instance.getConfigFolder(), oldConfigRenamed);
-			if (oldConfigFile.renameTo(oldConfigFileRenamed)) {
-				Log.info("Migrated " + category + " settings to the new file '" + newConfig + "' and renamed '" + oldConfig + "' to '" + oldConfigRenamed + "'.");
-			}
-		}
-
-		LocalizedConfiguration config = new LocalizedConfiguration(newConfigFile, "1.0.0");
+		LocalizedConfiguration config = new LocalizedConfiguration(configFile, "1.0.0");
 
 		initSettingFloat(config, "energy", "demand.modifier", ENERGY_DEMAND_MODIFIER);
 		initSettingBoolean(config, "energy", "engine.clockwork", true);
@@ -141,138 +118,30 @@ public class GameMode implements IGameMode {
 		config.save();
 	}
 
-	private void loadOldConfig() {
-		initSettingFloat_old("energy.demand.modifier", ENERGY_DEMAND_MODIFIER, -1, "modifies the energy required to activate machines, as well as the max amount of energy stored and accepted.");
-		initSettingInt_old("farms.fertilizer.value", FARM_FERTILIZER_VALUE, -1, "modifies the time a piece of fertilizer lasts in a farm.");
-
-		initSettingFloat_old("fuel.ethanol.generator", FUEL_MODIFIER, -1, "modifies the energy provided by ethanol in a Bio Generator.");
-		initSettingFloat_old("fuel.ethanol.combustion", FUEL_MODIFIER, -1, "modifies the energy provided by ethanol in Buildcraft Combustion Engines.");
-		initSettingFloat_old("fuel.biomass.generator", FUEL_MODIFIER, -1, "modifies the energy provided by Biomass in a Bio Generator.");
-		initSettingFloat_old("fuel.biomass.biogas", FUEL_MODIFIER, -1, "modifies the energy provided by Biomass in Biogas Engines.");
-
-		initSettingStack_old("recipe.output.fertilizer.apatite", recipeFertilizerOutputApatite, "amount of fertilizer yielded by the recipe using apatite.");
-		initSettingStack_old("recipe.output.fertilizer.ash", recipeFertilizerOutputAsh, "amount of fertilizer yielded by the recipe using ash.");
-		initSettingStack_old("recipe.output.compost.wheat", recipeCompostOutputWheat, "amount of compost yielded by the recipe using wheat.");
-		initSettingStack_old("recipe.output.compost.ash", recipeCompostOutputAsh, "amount of compost yielded by the recipe using ash.");
-		initSettingStack_old("recipe.output.humus.fertilizer", recipeHumusOutputFertilizer, "amount of humus yielded by the recipe using fertilizer.");
-		initSettingStack_old("recipe.output.humus.compost", recipeHumusOutputCompost, "amount of humus yielded by the recipe using compost.");
-		initSettingStack_old("recipe.output.bogearth.bucket", recipeBogEarthOutputBucket, "amount of bog earth yielded by the recipe using buckets.");
-		initSettingStack_old("recipe.output.bogearth.can", recipeBogEarthOutputCans, "amount of bog earth yielded by the recipes using cans, cells or capsules.");
-
-		initSettingStack_old("recipe.output.can", recipeCanOutput, "amount yielded by the recipe for tin cans.");
-		initSettingStack_old("recipe.output.capsule", recipeCapsuleOutput, "amount yielded by the recipe for wax capsules.");
-		initSettingStack_old("recipe.output.refractory", recipeRefractoryOutput, "amount yielded by the recipe for refractory capsules.");
-
-		initSettingInt_old("fermenter.cycles.fertilizer", FERMENTATION_DURATION_FERTILIZER, -1, "modifies the amount of cycles fertilizer can keep a fermenter going.");
-		initSettingInt_old("fermenter.cycles.compost", FERMENTATION_DURATION_COMPOST, -1, "modifies the amount of cycles compost can keep a fermenter going.");
-
-		initSettingInt_old("fermenter.value.fertilizer", FERMENTED_CYCLE_FERTILIZER, -1, "modifies the amount of biomass per cycle a fermenter will produce using fertilizer.");
-		initSettingInt_old("fermenter.value.compost", FERMENTED_CYCLE_COMPOST, -1, "modifies the amount of biomass per cycle a fermenter will produce using compost.");
-
-		initSettingInt_old("fermenter.yield.sapling", FERMENTED_SAPLING, FERMENTED_SAPLING * 8, "modifies the base amount of biomass a sapling will yield in a fermenter, affected by sappiness trait.");
-		initSettingInt_old("fermenter.yield.cactus", FERMENTED_CACTI, FERMENTED_CACTI * 8, "modifies the amount of biomass a piece of cactus will yield in a fermenter.");
-		initSettingInt_old("fermenter.yield.wheat", FERMENTED_WHEAT, FERMENTED_WHEAT * 8, "modifies the amount of biomass a piece of wheat will yield in a fermenter.");
-		initSettingInt_old("fermenter.yield.cane", FERMENTED_CANE, FERMENTED_CANE * 8, "modifies the amount of biomass a piece of sugar cane will yield in a fermenter.");
-		initSettingInt_old("fermenter.yield.mushroom", FERMENTED_MUSHROOM, FERMENTED_MUSHROOM * 8, "modifies the amount of biomass a mushroom will yield in a fermenter.");
-
-		initSettingInt_old("squeezer.liquid.seed", SQUEEZED_LIQUID_SEED, SQUEEZED_LIQUID_SEED * 8, "modifies the amount of seed oil squeezed from a single seed. other sources are based off this.");
-		initSettingInt_old("squeezer.liquid.apple", SQUEEZED_LIQUID_APPLE, SQUEEZED_LIQUID_APPLE * 8, "modifies the amount of juice squeezed from a single apple. other sources are based off this.");
-		initSettingInt_old("squeezer.mulch.apple", SQUEEZED_MULCH_APPLE, SQUEEZED_MULCH_APPLE * 8, "modifies the chance of mulch per squeezed apple.");
-		initSettingBoolean_old("energy.engine.clockwork", true, "set to false to disable the clockwork engine.");
-	}
-
-	private void initSettingFloat(LocalizedConfiguration config, String category, String name, float def) {
+	private void initSettingFloat(LocalizedConfiguration config, String category, String name, float defaultValue) {
 		String fullName = category + '.' + name;
-		// legacy conversion of old format to new format
-		{
-			Float oldSetting = floatSettings.get(fullName);
-			if (oldSetting != null) {
-				def = oldSetting;
-			}
-		}
-		float floatValue = config.getFloatLocalized(GAMEMODE_KEY + '.' + category, name, def, 0.0f, 10.0f);
+		float floatValue = config.getFloatLocalized(GAMEMODE_KEY + '.' + category, name, defaultValue, 0.0f, 10.0f);
 		floatSettings.put(fullName, floatValue);
 	}
 
-	private void initSettingInt(LocalizedConfiguration config, String category, String key, int def) {
+	private void initSettingInt(LocalizedConfiguration config, String category, String key, int defaultValue) {
 		String fullKey = category + '.' + key;
-		// legacy conversion of old format to new format
-		{
-			Integer oldSetting = integerSettings.get(fullKey);
-			if (oldSetting != null) {
-				def = oldSetting;
-			}
-		}
-		int intValue = config.getIntLocalized(GAMEMODE_KEY + '.' + category, key, def, 0, 2000);
+		int intValue = config.getIntLocalized(GAMEMODE_KEY + '.' + category, key, defaultValue, 0, 2000);
 		integerSettings.put(fullKey, intValue);
 	}
 
-	private void initSettingStack(LocalizedConfiguration config, String category, String key, ItemStack def) {
+	private void initSettingStack(LocalizedConfiguration config, String category, String key, ItemStack defaultValue) {
 		String fullKey = category + '.' + key;
-		// legacy conversion of old format to new format
-		{
-			ItemStack oldSetting = stackSettings.get(fullKey);
-			if (oldSetting != null) {
-				def = oldSetting;
-			}
-		}
-		int stackSize = config.getIntLocalized(GAMEMODE_KEY + '.' + category, key, def.stackSize, 0, 64);
-		ItemStack changed = def.copy();
+		int stackSize = config.getIntLocalized(GAMEMODE_KEY + '.' + category, key, defaultValue.stackSize, 0, 64);
+		ItemStack changed = defaultValue.copy();
 		changed.stackSize = stackSize;
 		stackSettings.put(fullKey, changed);
 	}
 
-	private void initSettingBoolean(LocalizedConfiguration config, String category, String key, boolean def) {
+	private void initSettingBoolean(LocalizedConfiguration config, String category, String key, boolean defaultValue) {
 		String fullKey = category + '.' + key;
-		// legacy conversion of old format to new format
-		{
-			Boolean oldSetting = booleanSettings.get(fullKey);
-			if (oldSetting != null) {
-				def = oldSetting;
-			}
-		}
-		boolean booleanValue = config.getBooleanLocalized(GAMEMODE_KEY + '.' + category, key, def);
+		boolean booleanValue = config.getBooleanLocalized(GAMEMODE_KEY + '.' + category, key, defaultValue);
 		booleanSettings.put(fullKey, booleanValue);
-	}
-
-	private void initSettingStack_old(String ident, ItemStack def, String comment) {
-		forestry.core.config.deprecated.Property property = Config.configOld.get(ident, category, def.stackSize);
-		property.comment = comment;
-		ItemStack changed = def.copy();
-		changed.stackSize = Integer.parseInt(property.value);
-		stackSettings.put(ident, changed);
-	}
-
-	private void initSettingInt_old(String ident, int def, int max, String comment) {
-		forestry.core.config.deprecated.Property property = Config.configOld.get(ident, category, def);
-		if (max < 0) {
-			property.comment = comment;
-			integerSettings.put(ident, Integer.parseInt(property.value));
-		} else {
-			property.comment = comment + " (max: " + max + ")";
-			integerSettings.put(ident, Math.min(Integer.parseInt(property.value), max));
-		}
-		Config.configOld.set(ident, category, integerSettings.get(ident));
-
-	}
-
-	private void initSettingFloat_old(String ident, float def, float max, String comment) {
-		forestry.core.config.deprecated.Property property = Config.configOld.get(ident, category, def);
-		if (max < 0) {
-			property.comment = comment;
-			floatSettings.put(ident, Float.parseFloat(property.value));
-		} else {
-			property.comment = comment + " (max: " + max + ")";
-			floatSettings.put(ident, Math.min(Float.parseFloat(property.value), max));
-		}
-		Config.configOld.set(ident, category, floatSettings.get(ident));
-	}
-
-	private void initSettingBoolean_old(String ident, boolean def, String comment) {
-		forestry.core.config.deprecated.Property property = Config.configOld.get(ident, category, def);
-		property.comment = comment;
-		booleanSettings.put(ident, Boolean.parseBoolean(property.value));
-		Config.configOld.set(ident, category, booleanSettings.get(ident));
 	}
 
 	@Override

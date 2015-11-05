@@ -26,7 +26,7 @@ import net.minecraftforge.common.BiomeDictionary;
 
 import org.lwjgl.opengl.GL11;
 
-import forestry.apiculture.items.ItemHabitatLocator.HabitatLocatorInventory;
+import forestry.apiculture.inventory.ItemInventoryHabitatLocator;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
 import forestry.core.gui.widgets.Widget;
@@ -34,7 +34,7 @@ import forestry.core.proxy.Proxies;
 import forestry.core.render.SpriteSheet;
 import forestry.core.render.TextureManager;
 
-public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator, HabitatLocatorInventory> {
+public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator, ItemInventoryHabitatLocator> {
 
 	private final HabitatSlot[] habitatSlots = new HabitatSlot[]{
 			new HabitatSlot(0, "Ocean"), // ocean, beach
@@ -54,7 +54,7 @@ public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator, Habi
 	private int startX;
 	private int startY;
 
-	public GuiHabitatLocator(EntityPlayer player, HabitatLocatorInventory item) {
+	public GuiHabitatLocator(EntityPlayer player, ItemInventoryHabitatLocator item) {
 		super(Constants.TEXTURE_PATH_GUI + "/biomefinder.png", new ContainerHabitatLocator(player, item), item);
 
 		xSize = 176;

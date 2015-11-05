@@ -17,10 +17,10 @@ import net.minecraft.item.ItemStack;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
+import forestry.api.core.ForestryAPI;
 import forestry.api.farming.Farmables;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Constants;
-import forestry.core.config.GameMode;
 import forestry.core.fluids.Fluids;
 import forestry.core.utils.ModUtil;
 import forestry.farming.logic.FarmableBasicAgricraft;
@@ -79,7 +79,7 @@ public class PluginAgriCraft extends ForestryPlugin {
 
 
 		);
-		int seedamount = GameMode.getGameMode().getIntegerSetting("squeezer.liquid.seed");
+		int seedamount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed");
 		for (String seedName : seeds) {
 			ItemStack seed = GameRegistry.findItemStack(AgriCraft, "seed" + seedName, 1);
 			if (seed != null) {

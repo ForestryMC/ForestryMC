@@ -17,6 +17,7 @@ import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.oredict.OreDictionary;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.IGuiHandler;
 
 import forestry.api.mail.EnumAddressee;
@@ -31,6 +32,8 @@ import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
 import forestry.core.fluids.Fluids;
 import forestry.core.items.ItemBlockForestry;
+import forestry.core.items.ItemWithGui;
+import forestry.core.network.GuiId;
 import forestry.core.network.PacketIdClient;
 import forestry.core.network.PacketIdServer;
 import forestry.core.recipes.RecipeUtil;
@@ -42,7 +45,6 @@ import forestry.mail.PostalCarrier;
 import forestry.mail.SaveEventHandlerMail;
 import forestry.mail.TickHandlerMailClient;
 import forestry.mail.commands.CommandMail;
-import forestry.mail.items.ItemCatalogue;
 import forestry.mail.items.ItemLetter;
 import forestry.mail.items.ItemStamps;
 import forestry.mail.items.ItemStamps.StampInfo;
@@ -76,14 +78,40 @@ public class PluginMail extends ForestryPlugin {
 	}
 
 	@Override
+	protected void registerItemsAndBlocks() {
+
+		stampDefinitions = new StampInfo[]{
+				new StampInfo("1n", EnumPostage.P_1, ForestryItem.apatite, 0x4a8ca7, 0xffffff),
+				new StampInfo("2n", EnumPostage.P_2, "ingotCopper", 0xe8c814, 0xffffff),
+				new StampInfo("5n", EnumPostage.P_5, "ingotTin", 0x9c0707, 0xffffff),
+				new StampInfo("10n", EnumPostage.P_10, Items.gold_ingot, 0x7bd1b8, 0xffffff),
+				new StampInfo("20n", EnumPostage.P_20, Items.diamond, 0xff9031, 0xfff7dd),
+				new StampInfo("50n", EnumPostage.P_50, Items.emerald, 0x6431d7, 0xfff7dd),
+				new StampInfo("100n", EnumPostage.P_100, Items.nether_star, 0xd731ba, 0xfff7dd)}; //new StampInfo("200n", EnumPostage.P_200, Item.netherStar, 0xcd9831, 0xfff7dd)};
+
+		/* STAMPS */
+		ForestryItem.stamps.registerItem(new ItemStamps(stampDefinitions), "stamps");
+
+		/* LETTER */
+		ForestryItem.letters.registerItem(new ItemLetter(), "letters");
+
+		/* CATALOGUE */
+		Item itemCatalogue = new ItemWithGui(GuiId.CatalogueGUI).setMaxStackSize(1);
+		ForestryItem.catalogue.registerItem(itemCatalogue, "catalogue");
+
+		ForestryBlock.mail.registerBlock(new BlockBase(Material.iron), ItemBlockForestry.class, "mail");
+
+	}
+
+	@Override
 	public void preInit() {
 		super.preInit();
 		
 		PluginCore.rootCommand.addChildCommand(new CommandMail());
 
-		new TickHandlerMailClient();
-
-		ForestryBlock.mail.registerBlock(new BlockBase(Material.iron), ItemBlockForestry.class, "mail");
+		if (Config.mailAlertEnabled) {
+			FMLCommonHandler.instance().bus().register(new TickHandlerMailClient());
+		}
 
 		ShapedRecipeCustom recipe = ShapedRecipeCustom.createShapedRecipe(ForestryBlock.mail.getItemStack(1, Constants.DEFINITION_MAILBOX_META),
 				" # ", "#Y#", "XXX",
@@ -140,28 +168,6 @@ public class PluginMail extends ForestryPlugin {
 		PacketIdClient.LETTER_INFO_RESPONSE.setPacketHandler(new PacketLetterInfoResponse());
 		PacketIdClient.TRADING_ADDRESS_RESPONSE.setPacketHandler(new PacketTraderAddressResponse());
 		PacketIdClient.POBOX_INFO_RESPONSE.setPacketHandler(new PacketPOBoxInfoResponse());
-	}
-
-	@Override
-	protected void registerItems() {
-
-		stampDefinitions = new StampInfo[]{
-				new StampInfo("1n", EnumPostage.P_1, ForestryItem.apatite, 0x4a8ca7, 0xffffff),
-				new StampInfo("2n", EnumPostage.P_2, "ingotCopper", 0xe8c814, 0xffffff),
-				new StampInfo("5n", EnumPostage.P_5, "ingotTin", 0x9c0707, 0xffffff),
-				new StampInfo("10n", EnumPostage.P_10, Items.gold_ingot, 0x7bd1b8, 0xffffff),
-				new StampInfo("20n", EnumPostage.P_20, Items.diamond, 0xff9031, 0xfff7dd),
-				new StampInfo("50n", EnumPostage.P_50, Items.emerald, 0x6431d7, 0xfff7dd),
-				new StampInfo("100n", EnumPostage.P_100, Items.nether_star, 0xd731ba, 0xfff7dd)}; //new StampInfo("200n", EnumPostage.P_200, Item.netherStar, 0xcd9831, 0xfff7dd)};
-
-		/* STAMPS */
-		ForestryItem.stamps.registerItem(new ItemStamps(stampDefinitions), "stamps");
-
-		/* LETTER */
-		ForestryItem.letters.registerItem(new ItemLetter(), "letters");
-
-		/* CATALOGUE */
-		ForestryItem.catalogue.registerItem(new ItemCatalogue(), "catalogue");
 	}
 
 	@Override

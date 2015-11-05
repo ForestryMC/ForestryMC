@@ -24,6 +24,8 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import cpw.mods.fml.common.registry.GameData;
 
+import forestry.api.apiculture.BeeManager;
+import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.storage.IBackpackDefinition;
 
 public class BackpackDefinition implements IBackpackDefinition {
@@ -217,4 +219,27 @@ public class BackpackDefinition implements IBackpackDefinition {
 		return false;
 	}
 
+	public static class BackpackDefinitionApiarist extends BackpackDefinition {
+
+		public BackpackDefinitionApiarist(int primaryColor) {
+			super("apiarist", primaryColor);
+		}
+
+		@Override
+		public boolean isValidItem(ItemStack itemStack) {
+			return BeeManager.beeRoot.isMember(itemStack);
+		}
+	}
+
+	public static class BackpackDefinitionLepidopterist extends BackpackDefinition {
+
+		public BackpackDefinitionLepidopterist(int primaryColor) {
+			super("lepidopterist", primaryColor);
+		}
+
+		@Override
+		public boolean isValidItem(ItemStack itemStack) {
+			return ButterflyManager.butterflyRoot.isMember(itemStack);
+		}
+	}
 }

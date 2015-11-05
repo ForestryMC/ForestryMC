@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.energy.tiles;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.IInventory;
@@ -21,21 +20,17 @@ import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitBoard;
 import forestry.api.circuits.ICircuitSocketType;
-import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorLogic;
 import forestry.core.circuits.ISocketable;
-import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.inventory.InventoryAdapter;
-import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.GuiId;
 import forestry.core.tiles.TemperatureState;
 import forestry.core.tiles.TileEngine;
 import forestry.plugins.PluginIC2;
 
 import ic2.api.energy.prefab.BasicSink;
-import ic2.api.item.ElectricItem;
 
 public class TileEngineElectric extends TileEngine implements ISocketable, IInventory {
 
@@ -52,26 +47,19 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 		}
 	}
 
-	public static final short SLOT_BATTERY = 0;
 	private final InventoryAdapter sockets = new InventoryAdapter(1, "sockets");
 	private final EuConfig euConfig = new EuConfig();
 
 	private BasicSink ic2EnergySink;
 
 	public TileEngineElectric() {
-		super(Constants.ENGINE_ELECTRIC_HEAT_MAX, 100000);
-		setHints(Config.hints.get("engine.tin"));
+		super(GuiId.EngineElectricGUI, "engine.tin", Constants.ENGINE_ELECTRIC_HEAT_MAX, 100000);
 
-		setInternalInventory(new EngineTinInventoryAdapter(this));
+		setInternalInventory(new InventoryEngineElectric(this));
 
 		if (PluginIC2.instance.isAvailable()) {
 			ic2EnergySink = new BasicSink(this, euConfig.euStorage, 3);
 		}
-	}
-
-	@Override
-	public void openGui(EntityPlayer player) {
-		player.openGui(ForestryAPI.instance, GuiId.EngineElectricGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
 	}
 
 	// / SAVING / LOADING
@@ -176,8 +164,8 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 			return;
 		}
 
-		if (getInternalInventory().getStackInSlot(SLOT_BATTERY) != null) {
-			replenishFromBattery(SLOT_BATTERY);
+		if (getStackInSlot(InventoryEngineElectric.SLOT_BATTERY) != null) {
+			replenishFromBattery(InventoryEngineElectric.SLOT_BATTERY);
 		}
 
 		// Updating of gui delayed to prevent it from going crazy
@@ -210,7 +198,7 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 			return;
 		}
 
-		ic2EnergySink.discharge(getInternalInventory().getStackInSlot(slot), euConfig.euForCycle * 3);
+		ic2EnergySink.discharge(getStackInSlot(slot), euConfig.euForCycle * 3);
 	}
 
 	// / STATE INFORMATION
@@ -314,19 +302,5 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 	@Override
 	public ICircuitSocketType getSocketType() {
 		return CircuitSocketType.ELECTRIC_ENGINE;
-	}
-
-	private static class EngineTinInventoryAdapter extends TileInventoryAdapter<TileEngineElectric> {
-		public EngineTinInventoryAdapter(TileEngineElectric engineTin) {
-			super(engineTin, 1, "electrical");
-		}
-
-		@Override
-		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-			if (slotIndex == SLOT_BATTERY) {
-				return ElectricItem.manager.getCharge(itemStack) > 0;
-			}
-			return false;
-		}
 	}
 }

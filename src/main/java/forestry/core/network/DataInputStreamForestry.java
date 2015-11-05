@@ -109,9 +109,14 @@ public class DataInputStreamForestry extends DataInputStream {
 		return varInt;
 	}
 
-	public <T extends Enum<T>> T readEnum(Class<T> enumClass) throws IOException {
-		int ordinal = readVarInt();
-		return enumClass.getEnumConstants()[ordinal];
+	public <T extends Enum<T>> T readEnum(T[] enumValues) throws IOException {
+		int ordinal;
+		if (enumValues.length <= 256) {
+			ordinal = readByte();
+		} else {
+			ordinal = readVarInt();
+		}
+		return enumValues[ordinal];
 	}
 
 	public NBTTagCompound readNBTTagCompound() throws IOException {

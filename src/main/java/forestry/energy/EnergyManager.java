@@ -7,7 +7,7 @@ import net.minecraft.tileentity.TileEntity;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
-import forestry.core.config.GameMode;
+import forestry.api.core.ForestryAPI;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
@@ -31,7 +31,7 @@ public class EnergyManager implements IEnergyHandler, IStreamable {
 	}
 
 	public static int scaleForDifficulty(int energyPerUse) {
-		return Math.round(energyPerUse * GameMode.getGameMode().getFloatSetting("energy.demand.modifier"));
+		return Math.round(energyPerUse * ForestryAPI.activeMode.getFloatSetting("energy.demand.modifier"));
 	}
 
 	public void setExtractOnly() {

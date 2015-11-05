@@ -19,13 +19,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import com.mojang.authlib.GameProfile;
-
 import cpw.mods.fml.common.FMLCommonHandler;
 
 import org.lwjgl.input.Keyboard;
 
-import forestry.core.ForestryClient;
 import forestry.core.TickHandlerCoreClient;
 import forestry.core.multiblock.MultiblockClientTickHandler;
 import forestry.core.worldgen.WorldGenerator;
@@ -48,11 +45,6 @@ public class ProxyCommonClient extends ProxyCommon {
 	@Override
 	public World getRenderWorld() {
 		return getClientInstance().theWorld;
-	}
-
-	@Override
-	public int getByBlockModelId() {
-		return ForestryClient.byBlockModelId;
 	}
 
 	@Override

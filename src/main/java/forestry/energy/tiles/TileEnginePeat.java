@@ -13,7 +13,6 @@ package forestry.energy.tiles;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.IInventory;
@@ -28,33 +27,23 @@ import net.minecraftforge.common.util.ForgeDirection;
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.registry.GameData;
 
-import forestry.api.core.ForestryAPI;
 import forestry.api.fuels.FuelManager;
-import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.ForestryItem;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.inventory.AdjacentInventoryCache;
 import forestry.core.inventory.IInventoryAdapter;
-import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.network.GuiId;
 import forestry.core.tiles.TemperatureState;
 import forestry.core.tiles.TileEngine;
 import forestry.core.utils.InventoryUtil;
-import forestry.core.utils.SlotUtil;
+import forestry.energy.inventory.InventoryEnginePeat;
 import forestry.factory.triggers.FactoryTriggers;
 
 import buildcraft.api.statements.ITriggerExternal;
 
 public class TileEnginePeat extends TileEngine implements ISidedInventory {
-
-	/* CONSTANTS */
-	public static final short SLOT_FUEL = 0;
-	public static final short SLOT_WASTE_1 = 1;
-	public static final short SLOT_WASTE_COUNT = 4;
-
-	/* MEMBERS */
 	private Item fuelItem;
 	private int fuelItemMeta;
 	private int burnTime;
@@ -64,26 +53,20 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 	private final AdjacentInventoryCache inventoryCache = new AdjacentInventoryCache(this, getTileCache());
 
 	public TileEnginePeat() {
-		super(Constants.ENGINE_COPPER_HEAT_MAX, 200000);
-		setHints(Config.hints.get("engine.copper"));
+		super(GuiId.EnginePeatGUI, "engine.copper", Constants.ENGINE_COPPER_HEAT_MAX, 200000);
 
 		ashForItem = Constants.ENGINE_COPPER_ASH_FOR_ITEM;
-		setInternalInventory(new EngineCopperInventoryAdapter(this));
-	}
-
-	@Override
-	public void openGui(EntityPlayer player) {
-		player.openGui(ForestryAPI.instance, GuiId.EnginePeatGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
+		setInternalInventory(new InventoryEnginePeat(this));
 	}
 
 	private int getFuelSlot() {
 		IInventoryAdapter inventory = getInternalInventory();
-		if (inventory.getStackInSlot(SLOT_FUEL) == null) {
+		if (inventory.getStackInSlot(InventoryEnginePeat.SLOT_FUEL) == null) {
 			return -1;
 		}
 
-		if (determineFuelValue(inventory.getStackInSlot(SLOT_FUEL)) > 0) {
-			return SLOT_FUEL;
+		if (determineFuelValue(inventory.getStackInSlot(InventoryEnginePeat.SLOT_FUEL)) > 0) {
+			return InventoryEnginePeat.SLOT_FUEL;
 		}
 
 		return -1;
@@ -91,7 +74,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 
 	private int getFreeWasteSlot() {
 		IInventoryAdapter inventory = getInternalInventory();
-		for (int i = SLOT_WASTE_1; i <= SLOT_WASTE_COUNT; i++) {
+		for (int i = InventoryEnginePeat.SLOT_WASTE_1; i <= InventoryEnginePeat.SLOT_WASTE_COUNT; i++) {
 			if (inventory.getStackInSlot(i) == null) {
 				return i;
 			}
@@ -239,7 +222,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 			return null;
 		}
 
-		return new InventoryMapper(inventory, SLOT_WASTE_1, SLOT_WASTE_COUNT);
+		return new InventoryMapper(inventory, InventoryEnginePeat.SLOT_WASTE_1, InventoryEnginePeat.SLOT_WASTE_COUNT);
 	}
 
 	private void dumpStash() {
@@ -352,21 +335,5 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 		res.add(FactoryTriggers.lowFuel25);
 		res.add(FactoryTriggers.lowFuel10);
 		return res;
-	}
-
-	private static class EngineCopperInventoryAdapter extends TileInventoryAdapter<TileEnginePeat> {
-		public EngineCopperInventoryAdapter(TileEnginePeat engineCopper) {
-			super(engineCopper, 5, "Items");
-		}
-
-		@Override
-		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-			return slotIndex == SLOT_FUEL && FuelManager.copperEngineFuel.containsKey(itemStack);
-		}
-
-		@Override
-		public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
-			return SlotUtil.isSlotInRange(slotIndex, SLOT_WASTE_1, SLOT_WASTE_COUNT);
-		}
 	}
 }

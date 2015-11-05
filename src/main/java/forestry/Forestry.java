@@ -17,29 +17,39 @@ import java.util.Map;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 
+import net.minecraftforge.common.MinecraftForge;
+
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.event.FMLInterModComms.IMCEvent;
 import cpw.mods.fml.common.event.FMLMissingMappingsEvent;
 import cpw.mods.fml.common.event.FMLMissingMappingsEvent.MissingMapping;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.GameRegistry.Type;
 
-import forestry.api.fuels.FuelManager;
-import forestry.core.ForestryCore;
+import forestry.api.core.ForestryAPI;
+import forestry.core.EventHandlerCore;
+import forestry.core.GuiHandler;
+import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.ForestryItem;
+import forestry.core.config.GameMode;
 import forestry.core.config.Version;
+import forestry.core.errors.EnumErrorCode;
+import forestry.core.errors.ErrorStateRegistry;
+import forestry.core.multiblock.MultiblockEventHandler;
 import forestry.core.network.PacketHandler;
+import forestry.core.proxy.Proxies;
 import forestry.core.utils.Log;
 import forestry.core.utils.StringUtil;
-import forestry.core.utils.datastructures.FluidMap;
-import forestry.core.utils.datastructures.ItemStackMap;
+import forestry.core.worldgen.WorldGenerator;
+import forestry.plugins.PluginManager;
 
 /**
  * Forestry Minecraft Mod
@@ -81,56 +91,67 @@ public class Forestry {
 	}
 
 	public Forestry() {
-		FuelManager.fermenterFuel = new ItemStackMap<>();
-		FuelManager.moistenerResource = new ItemStackMap<>();
-		FuelManager.rainSubstrate = new ItemStackMap<>();
-		FuelManager.bronzeEngineFuel = new FluidMap<>();
-		FuelManager.copperEngineFuel = new ItemStackMap<>();
-		FuelManager.generatorFuel = new FluidMap<>();
+		ForestryAPI.instance = this;
+		ForestryAPI.forestryConstants = new Constants();
+		ForestryAPI.errorStateRegistry = new ErrorStateRegistry();
+		EnumErrorCode.init();
 	}
 
-	@SidedProxy(clientSide = "forestry.core.ForestryClient", serverSide = "forestry.core.ForestryCore")
-	public static ForestryCore core = new ForestryCore();
 	public static PacketHandler packetHandler;
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		packetHandler = new PacketHandler();
-		
-		configFolder = new File(event.getModConfigurationDirectory(), "forestry");
 
-		core.preInit(event.getSourceFile(), this);
+		// Register event handler
+		MinecraftForge.EVENT_BUS.register(new EventHandlerCore());
+		MinecraftForge.EVENT_BUS.register(new MultiblockEventHandler());
+
+		configFolder = new File(event.getModConfigurationDirectory(), "forestry");
+		Config.load();
+
+		PluginManager.runSetup();
+
+		ForestryAPI.activeMode = new GameMode(Config.gameMode);
+
+		PluginManager.runPreInit();
 	}
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
-		core.init(this);
+		// Register gui handler
+		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
+
+		PluginManager.runInit();
 	}
 
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
-		core.postInit();
+		PluginManager.runPostInit();
+
+		// Register world generator
+		WorldGenerator worldGenerator = new WorldGenerator();
+		GameRegistry.registerWorldGenerator(worldGenerator, 0);
+
+		// Register tick handlers
+		Proxies.common.registerTickHandlers(worldGenerator);
+
+		// Handle IMC messages.
+		PluginManager.processIMCMessages(FMLInterModComms.fetchRuntimeMessages(ForestryAPI.instance));
 	}
 
 	@EventHandler
 	public void serverStarting(FMLServerStartingEvent event) {
-		core.serverStarting(event.getServer());
+		PluginManager.serverStarting(event.getServer());
 	}
 
 	public File getConfigFolder() {
 		return configFolder;
 	}
-	/*@EventHandler
-	 public void fingerprintWarning(FMLFingerprintViolationEvent event) {
-	 Log.info("Fingerprint of the mod jar is invalid. The jar file was tampered with.");
-	 FMLInterModComms.sendMessage("Railcraft", "securityViolation", "Fingerprint of jar file did not match.");
-	 FMLInterModComms.sendMessage("Thaumcraft", "securityViolation", "Fingerprint of jar file did not match.");
-	 FMLInterModComms.sendMessage("IC2", "securityViolation", "Fingerprint of jar file did not match.");
-	 }*/
 
 	@EventHandler
 	public void processIMCMessages(IMCEvent event) {
-		core.processIMCMessages(event.getMessages());
+		PluginManager.processIMCMessages(event.getMessages());
 	}
 
 	@EventHandler

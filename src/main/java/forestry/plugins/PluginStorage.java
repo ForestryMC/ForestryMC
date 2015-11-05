@@ -72,14 +72,14 @@ import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.StringUtil;
 import forestry.storage.BackpackDefinition;
+import forestry.storage.BackpackDefinition.BackpackDefinitionApiarist;
+import forestry.storage.BackpackDefinition.BackpackDefinitionLepidopterist;
 import forestry.storage.BackpackInterface;
 import forestry.storage.CrateRegistry;
 import forestry.storage.GuiHandlerStorage;
 import forestry.storage.PickupHandlerStorage;
 import forestry.storage.ResupplyHandler;
-import forestry.storage.items.ItemNaturalistBackpack;
-import forestry.storage.items.ItemNaturalistBackpack.BackpackDefinitionApiarist;
-import forestry.storage.items.ItemNaturalistBackpack.BackpackDefinitionLepidopterist;
+import forestry.storage.items.ItemBackpack;
 import forestry.storage.proxy.ProxyStorage;
 
 @Plugin(pluginID = "Storage", name = "Storage", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.storage.description")
@@ -147,24 +147,57 @@ public class PluginStorage extends ForestryPlugin {
 	}
 
 	@Override
+	protected void registerItemsAndBlocks() {
+		// CRATE
+		ForestryItem.crate.registerItem((new ItemCrated(null, false)), "crate");
+
+		// BACKPACKS
+		IBackpackDefinition definition;
+
+		if (PluginManager.Module.APICULTURE.isEnabled()) {
+			definition = BackpackManager.definitions.get("apiarist");
+			Item backpack = new ItemBackpack(GuiId.ApiaristBackpackGUI, definition, EnumBackpackType.APIARIST).setCreativeTab(Tabs.tabApiculture);
+			ForestryItem.apiaristBackpack.registerItem(backpack, "apiaristBag");
+		}
+
+		if (PluginManager.Module.LEPIDOPTEROLOGY.isEnabled()) {
+			definition = BackpackManager.definitions.get("lepidopterist");
+			Item backpack = new ItemBackpack(GuiId.LepidopteristBackpackGUI, definition, EnumBackpackType.APIARIST).setCreativeTab(Tabs.tabLepidopterology);
+			ForestryItem.lepidopteristBackpack.registerItem(backpack, "lepidopteristBag");
+		}
+
+		definition = BackpackManager.definitions.get("miner");
+		ForestryItem.minerBackpack.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T1), "minerBag");
+		ForestryItem.minerBackpackT2.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T2), "minerBagT2");
+
+		definition = BackpackManager.definitions.get("digger");
+		ForestryItem.diggerBackpack.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T1), "diggerBag");
+		ForestryItem.diggerBackpackT2.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T2), "diggerBagT2");
+
+		definition = BackpackManager.definitions.get("forester");
+		ForestryItem.foresterBackpack.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T1), "foresterBag");
+		ForestryItem.foresterBackpackT2.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T2), "foresterBagT2");
+
+		definition = BackpackManager.definitions.get("hunter");
+		ForestryItem.hunterBackpack.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T1), "hunterBag");
+		ForestryItem.hunterBackpackT2.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T2), "hunterBagT2");
+
+		definition = BackpackManager.definitions.get("adventurer");
+		ForestryItem.adventurerBackpack.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T1), "adventurerBag");
+		ForestryItem.adventurerBackpackT2.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T2), "adventurerBagT2");
+
+		definition = BackpackManager.definitions.get("builder");
+		ForestryItem.builderBackpack.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T1), "builderBag");
+		ForestryItem.builderBackpackT2.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T2), "builderBagT2");
+	}
+
+	@Override
 	public void postInit() {
-		final String oldConfig = CONFIG_CATEGORY + ".conf";
 		final String newConfig = CONFIG_CATEGORY + ".cfg";
 
 		File configFile = new File(Forestry.instance.getConfigFolder(), newConfig);
 		if (!configFile.exists()) {
 			setDefaultsForConfig();
-		}
-
-		File oldConfigFile = new File(Forestry.instance.getConfigFolder(), oldConfig);
-		if (oldConfigFile.exists()) {
-			loadOldConfig();
-
-			final String oldConfigRenamed = CONFIG_CATEGORY + ".conf.old";
-			File oldConfigFileRenamed = new File(Forestry.instance.getConfigFolder(), oldConfigRenamed);
-			if (oldConfigFile.renameTo(oldConfigFileRenamed)) {
-				Log.info("Migrated " + CONFIG_CATEGORY + " settings to the new file '" + newConfig + "' and renamed '" + oldConfig + "' to '" + oldConfigRenamed + "'.");
-			}
 		}
 
 		LocalizedConfiguration config = new LocalizedConfiguration(configFile, "1.0.0");
@@ -209,35 +242,6 @@ public class PluginStorage extends ForestryPlugin {
 				BlockSlab.class
 		));
 		builder.addValidItemClass(ItemDoor.class);
-	}
-
-	private static void loadOldConfig() {
-
-		final forestry.core.config.deprecated.Configuration config = new forestry.core.config.deprecated.Configuration();
-
-		forestry.core.config.deprecated.Property backpackConf = config.get("backpacks.miner.items", CONFIG_CATEGORY, "");
-		backpackConf.comment = "add additional blocks and items for the miner's backpack here in the format modid:name:meta. separate blocks and items using ';'. wildcard for metadata: '*'";
-		old_parseBackpackItems(backpackConf.value, BackpackManager.definitions.get("miner"));
-		backpackConf = config.get("backpacks.digger.items", CONFIG_CATEGORY, "");
-		backpackConf.comment = "add additional blocks and items for the digger's backpack here in the format modid:name:meta. separate blocks and items using ';'. wildcard for metadata: '*'";
-		old_parseBackpackItems(backpackConf.value, BackpackManager.definitions.get("digger"));
-		backpackConf = config.get("backpacks.forester.items", CONFIG_CATEGORY, "");
-		backpackConf.comment = "add additional blocks and items for the forester's backpack here in the format modid:name:meta. separate blocks and items using ';'. wildcard for metadata: '*'";
-		old_parseBackpackItems(backpackConf.value, BackpackManager.definitions.get("forester"));
-		backpackConf = config.get("backpacks.hunter.items", CONFIG_CATEGORY, "");
-		backpackConf.comment = "add additional blocks and items for the hunter's backpack here in the format modid:name:meta. separate blocks and items using ';'. wildcard for metadata: '*'";
-		old_parseBackpackItems(backpackConf.value, BackpackManager.definitions.get("hunter"));
-		backpackConf = config.get("backpacks.adventurer.items", CONFIG_CATEGORY, "");
-		backpackConf.comment = "add blocks and items for the adventurer's backpack here in the format modid:name:meta. separate blocks and items using ';'. wildcard for metadata: '*'";
-		old_parseBackpackItems(backpackConf.value, BackpackManager.definitions.get("adventurer"));
-		backpackConf = config.get("backpacks.builder.items", CONFIG_CATEGORY, "");
-		backpackConf.comment = "add blocks and items for the builder's backpack here in the format modid:name:meta. separate blocks and items using ';'. wildcard for metadata: '*'";
-		old_parseBackpackItems(backpackConf.value, BackpackManager.definitions.get("builder"));
-	}
-
-	private static void old_parseBackpackItems(String list, IBackpackDefinition backpackDefinition) {
-		List<ItemStack> backpackItems = ItemStackUtil.parseItemStackStrings(list, 0);
-		backpackDefinition.addValidItems(backpackItems);
 	}
 
 	private void setDefaultsForConfig() {
@@ -529,51 +533,6 @@ public class PluginStorage extends ForestryPlugin {
 	@Override
 	public IResupplyHandler getResupplyHandler() {
 		return new ResupplyHandler();
-	}
-
-	@Override
-	protected void registerItems() {
-		// CRATE
-		ForestryItem.crate.registerItem((new ItemCrated(null, false)), "crate");
-
-		// BACKPACKS
-		IBackpackDefinition definition;
-
-		if (PluginManager.Module.APICULTURE.isEnabled()) {
-			definition = BackpackManager.definitions.get("apiarist");
-			Item backpack = new ItemNaturalistBackpack(GuiId.ApiaristBackpackGUI.ordinal(), definition).setCreativeTab(Tabs.tabApiculture);
-			ForestryItem.apiaristBackpack.registerItem(backpack, "apiaristBag");
-		}
-
-		if (PluginManager.Module.LEPIDOPTEROLOGY.isEnabled()) {
-			definition = BackpackManager.definitions.get("lepidopterist");
-			Item backpack = new ItemNaturalistBackpack(GuiId.LepidopteristBackpackGUI.ordinal(), definition).setCreativeTab(Tabs.tabLepidopterology);
-			ForestryItem.lepidopteristBackpack.registerItem(backpack, "lepidopteristBag");
-		}
-
-		definition = BackpackManager.definitions.get("miner");
-		ForestryItem.minerBackpack.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T1), "minerBag");
-		ForestryItem.minerBackpackT2.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T2), "minerBagT2");
-
-		definition = BackpackManager.definitions.get("digger");
-		ForestryItem.diggerBackpack.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T1), "diggerBag");
-		ForestryItem.diggerBackpackT2.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T2), "diggerBagT2");
-
-		definition = BackpackManager.definitions.get("forester");
-		ForestryItem.foresterBackpack.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T1), "foresterBag");
-		ForestryItem.foresterBackpackT2.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T2), "foresterBagT2");
-
-		definition = BackpackManager.definitions.get("hunter");
-		ForestryItem.hunterBackpack.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T1), "hunterBag");
-		ForestryItem.hunterBackpackT2.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T2), "hunterBagT2");
-
-		definition = BackpackManager.definitions.get("adventurer");
-		ForestryItem.adventurerBackpack.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T1), "adventurerBag");
-		ForestryItem.adventurerBackpackT2.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T2), "adventurerBagT2");
-
-		definition = BackpackManager.definitions.get("builder");
-		ForestryItem.builderBackpack.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T1), "builderBag");
-		ForestryItem.builderBackpackT2.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T2), "builderBagT2");
 	}
 
 	@Override

@@ -21,7 +21,6 @@ import net.minecraft.nbt.NBTTagList;
 import forestry.core.tiles.IFilterSlotDelegate;
 
 public abstract class ItemInventory implements IInventory, IFilterSlotDelegate {
-
 	private static final String KEY_ITEMS = "Items"; // legacy
 	private static final String KEY_SLOTS = "Slots";
 	private static final String KEY_UID = "UID";
@@ -293,7 +292,7 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate {
 		return toReturn;
 	}
 
-	/* Filter Slot Delegate */
+	/* IFilterSlotDelegate */
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 		return true;

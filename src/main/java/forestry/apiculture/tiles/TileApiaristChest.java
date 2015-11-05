@@ -27,7 +27,7 @@ public class TileApiaristChest extends TileNaturalistChest {
 	private boolean checkedForLegacyBlock = false;
 
 	public TileApiaristChest() {
-		super(BeeManager.beeRoot, GuiId.ApiaristChestGUI.ordinal());
+		super(BeeManager.beeRoot, GuiId.ApiaristChestGUI);
 	}
 
 	@Override

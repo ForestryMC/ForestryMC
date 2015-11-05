@@ -10,27 +10,39 @@
  ******************************************************************************/
 package forestry.core.tiles;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayer;
 
+import forestry.api.core.ForestryAPI;
+import forestry.core.config.Config;
 import forestry.core.gui.IHintSource;
+import forestry.core.network.GuiId;
 
 public abstract class TileBase extends TileForestry implements IHintSource {
 
-	public abstract void openGui(EntityPlayer player);
+	protected final GuiId guiId;
+	protected final List<String> hints;
+
+	protected TileBase(GuiId guiId, String hintKey) {
+		this.guiId = guiId;
+		this.hints = new ArrayList<>(Config.hints.get(hintKey));
+	}
+
+	public void openGui(EntityPlayer player) {
+		if (guiId != null) {
+			player.openGui(ForestryAPI.instance, guiId.ordinal(), worldObj, xCoord, yCoord, zCoord);
+		}
+	}
 
 	public boolean canDrainWithBucket() {
 		return false;
 	}
 
 	/* IHintSource */
-	private String[] hints;
-
-	protected void setHints(String[] hints) {
-		this.hints = hints;
-	}
-
 	@Override
-	public String[] getHints() {
+	public final List<String> getHints() {
 		return hints;
 	}
 }

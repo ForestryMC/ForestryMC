@@ -10,14 +10,12 @@
  ******************************************************************************/
 package forestry.lepidopterology.tiles;
 
-import forestry.api.genetics.AlleleManager;
+import forestry.api.lepidopterology.ButterflyManager;
 import forestry.core.network.GuiId;
 import forestry.core.tiles.TileNaturalistChest;
 
 public class TileLepidopteristChest extends TileNaturalistChest {
-
 	public TileLepidopteristChest() {
-		super(AlleleManager.alleleRegistry.getSpeciesRoot("rootButterflies"), GuiId.LepidopteristChestGUI.ordinal());
+		super(ButterflyManager.butterflyRoot, GuiId.LepidopteristChestGUI);
 	}
-
 }

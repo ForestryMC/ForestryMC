@@ -24,12 +24,12 @@ import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 import forestry.api.apiculture.FlowerManager;
+import forestry.api.core.ForestryAPI;
 import forestry.api.farming.Farmables;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.BackpackManager;
 import forestry.core.config.Constants;
 import forestry.core.config.ForestryItem;
-import forestry.core.config.GameMode;
 import forestry.core.fluids.Fluids;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.Log;
@@ -71,6 +71,12 @@ public class PluginBiomesOPlenty extends ForestryPlugin {
 
 		addFlowers();
 		addFarmCrops();
+	}
+
+	@Override
+	protected void registerRecipes() {
+		super.registerRecipes();
+
 		addFermenterRecipes();
 		addSqueezerRecipes();
 	}
@@ -107,7 +113,7 @@ public class PluginBiomesOPlenty extends ForestryPlugin {
 	}
 
 	private static void addFermenterRecipes() {
-		int saplingYield = GameMode.getGameMode().getIntegerSetting("fermenter.yield.sapling");
+		int saplingYield = ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.sapling");
 
 		if (saplings != null) {
 			RecipeUtil.addFermenterRecipes(new ItemStack(saplings, 1, OreDictionary.WILDCARD_VALUE), saplingYield, Fluids.BIOMASS);

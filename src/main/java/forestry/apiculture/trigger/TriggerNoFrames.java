@@ -14,6 +14,7 @@ import net.minecraft.tileentity.TileEntity;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
+import forestry.apiculture.inventory.InventoryApiary;
 import forestry.apiculture.tiles.TileApiary;
 import forestry.core.triggers.Trigger;
 
@@ -38,7 +39,7 @@ public class TriggerNoFrames extends Trigger {
 
 		TileApiary apiary = (TileApiary) tile;
 
-		TileApiary.ApiaryInventory inventory = (TileApiary.ApiaryInventory) apiary.getInternalInventory();
+		InventoryApiary inventory = (InventoryApiary) apiary.getInternalInventory();
 
 		return inventory.getFrames().size() == 0;
 	}

@@ -51,7 +51,7 @@ import buildcraft.api.statements.ITriggerProvider;
 
 @Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = "BuildCraftAPI|statements")
 public abstract class TileForestry extends TileEntity implements IStreamable, IErrorLogicSource, ITriggerProvider, ISidedInventory, IFilterSlotDelegate, IRestrictedAccess, ITitled, ILocatable {
-
+	private static final ForgeDirection[] forgeDirections = ForgeDirection.values();
 	private static final Random rand = new Random();
 
 	private final AccessHandler accessHandler = new AccessHandler(this);
@@ -170,14 +170,15 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 		Proxies.net.sendNetworkPacket(packet, worldObj);
 	}
 
+	/* IStreamable */
 	@Override
 	public void writeData(DataOutputStreamForestry data) throws IOException {
-		data.writeByte(orientation.ordinal());
+		data.writeEnum(orientation, forgeDirections);
 	}
 
 	@Override
 	public void readData(DataInputStreamForestry data) throws IOException {
-		orientation = ForgeDirection.getOrientation(data.readByte());
+		orientation = data.readEnum(forgeDirections);
 	}
 
 	public void onRemoval() {
