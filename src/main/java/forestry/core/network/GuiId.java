@@ -36,8 +36,6 @@ public enum GuiId {
 	BeealyzerGUI,
 
 	BeehouseGUI,
-
-	MinecartBeehouseGUI,
 	
 	BottlerGUI,
 
@@ -80,6 +78,10 @@ public enum GuiId {
 	LepidopteristChestGUI,
 	
 	MailboxGUI,
+
+	MinecartBeehouseGUI,
+
+	MinecartApiaryGUI,
 
 	MoistenerGUI,
 

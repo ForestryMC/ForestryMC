@@ -75,6 +75,7 @@ import forestry.apiculture.blocks.BlockBeehives;
 import forestry.apiculture.blocks.BlockCandle;
 import forestry.apiculture.blocks.BlockStump;
 import forestry.apiculture.commands.CommandBee;
+import forestry.apiculture.entities.EntityMinecartApiary;
 import forestry.apiculture.entities.EntityMinecartBeehouse;
 import forestry.apiculture.flowers.FlowerRegistry;
 import forestry.apiculture.genetics.BeeBranchDefinition;
@@ -420,6 +421,7 @@ public class PluginApiculture extends ForestryPlugin {
 		GameRegistry.registerTileEntity(TileCandle.class, "forestry.Candle");
 
 		EntityUtil.registerEntity(EntityMinecartBeehouse.class, "cart.beehouse", 1, 0x000000, 0xffffff, 256, 3, true);
+		EntityUtil.registerEntity(EntityMinecartApiary.class, "cart.apiary", 2, 0x000000, 0xffffff, 256, 3, true);
 
 		BeeManager.villageBees[0].add(BeeDefinition.FOREST.getGenome());
 		BeeManager.villageBees[0].add(BeeDefinition.MEADOWS.getGenome());
@@ -601,10 +603,15 @@ public class PluginApiculture extends ForestryPlugin {
 				"###", "#S#", "###",
 				'#', ForestryItem.stickImpregnated,
 				'S', Items.string);
-		RecipeUtil.addRecipe(ForestryItem.minecartBeehouse.getItemStack(),
+		RecipeUtil.addRecipe(ForestryItem.minecartBeehouse.getItemStack(1, 0),
 				"B",
 				"C",
 				'B', ForestryBlock.apiculture.getItemStack(1, Constants.DEFINITION_BEEHOUSE_META),
+				'C', Items.minecart);
+		RecipeUtil.addRecipe(ForestryItem.minecartBeehouse.getItemStack(1, 1),
+				"B",
+				"C",
+				'B', ForestryBlock.apiculture.getItemStack(1, Constants.DEFINITION_APIARY_META),
 				'C', Items.minecart);
 
 		// FOOD STUFF

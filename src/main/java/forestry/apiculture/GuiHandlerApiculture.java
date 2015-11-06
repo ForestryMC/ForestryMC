@@ -18,6 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import forestry.api.apiculture.BeeManager;
+import forestry.apiculture.entities.EntityMinecartApiary;
 import forestry.apiculture.entities.EntityMinecartBeehouse;
 import forestry.apiculture.gui.ContainerAlveary;
 import forestry.apiculture.gui.ContainerAlvearyHygroregulator;
@@ -106,6 +107,17 @@ public class GuiHandlerApiculture extends GuiHandlerBase {
 				return new GuiBeeHousing<>(beeCart, container, GuiBeeHousing.Icon.BEE_HOUSE);
 			}
 
+			case MinecartApiaryGUI: {
+				Entity entity = world.getEntityByID(x);
+				if (!(entity instanceof EntityMinecartApiary)) {
+					return null;
+				}
+
+				EntityMinecartApiary beeCart = (EntityMinecartApiary) entity;
+				ContainerMinecartBeehouse container = new ContainerMinecartBeehouse(player.inventory, beeCart, true);
+				return new GuiBeeHousing<>(beeCart, container, GuiBeeHousing.Icon.APIARY);
+			}
+
 			case HabitatLocatorGUI:
 				equipped = player.getCurrentEquippedItem();
 				if (equipped == null) {
@@ -180,6 +192,16 @@ public class GuiHandlerApiculture extends GuiHandlerBase {
 
 				synchApiaristTracker(world, player);
 				return new ContainerMinecartBeehouse(player.inventory, (EntityMinecartBeehouse) entity, false);
+			}
+
+			case MinecartApiaryGUI: {
+				Entity entity = world.getEntityByID(x);
+				if (!(entity instanceof EntityMinecartApiary)) {
+					return null;
+				}
+
+				synchApiaristTracker(world, player);
+				return new ContainerMinecartBeehouse(player.inventory, (EntityMinecartApiary) entity, true);
 			}
 
 			case HabitatLocatorGUI:

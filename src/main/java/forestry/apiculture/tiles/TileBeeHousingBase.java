@@ -34,14 +34,14 @@ import forestry.core.proxy.Proxies;
 import forestry.core.tiles.IClimatised;
 import forestry.core.tiles.TileBase;
 
-public abstract class TileAbstractBeeHousing extends TileBase implements IBeeHousing, IClimatised, IGuiBeeHousingInventory, IStreamableGui {
+public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing, IClimatised, IGuiBeeHousingInventory, IStreamableGui {
 	private final IBeekeepingLogic beeLogic;
 	private BiomeGenBase cachedBiome;
 
 	// CLIENT
 	private int breedingProgressPercent = 0;
 
-	protected TileAbstractBeeHousing(GuiId guiId, String hintKey) {
+	protected TileBeeHousingBase(GuiId guiId, String hintKey) {
 		super(guiId, hintKey);
 		this.beeLogic = BeeManager.beeRoot.createBeekeepingLogic(this);
 	}

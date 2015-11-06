@@ -8,22 +8,14 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.apiculture.inventory;
+package forestry.apiculture;
 
-import forestry.apiculture.InventoryBeeHousing;
-import forestry.apiculture.tiles.TileAbstractBeeHousing;
+import forestry.api.apiculture.DefaultBeeModifier;
+import forestry.api.apiculture.IBeeGenome;
 
-public class InventoryTileBeeHousing extends InventoryBeeHousing {
-	private final TileAbstractBeeHousing tile;
-
-	public InventoryTileBeeHousing(TileAbstractBeeHousing tile, int size, String name) {
-		super(size, name, tile.getAccessHandler());
-		this.tile = tile;
-	}
-
+public class ApiaryBeeModifier extends DefaultBeeModifier {
 	@Override
-	public void markDirty() {
-		super.markDirty();
-		tile.markDirty();
+	public float getProductionModifier(IBeeGenome genome, float currentModifier) {
+		return 0.1f;
 	}
 }

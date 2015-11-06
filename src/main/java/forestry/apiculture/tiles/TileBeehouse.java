@@ -13,29 +13,26 @@ package forestry.apiculture.tiles;
 import java.util.Collections;
 
 import forestry.api.apiculture.DefaultBeeListener;
-import forestry.api.apiculture.DefaultBeeModifier;
-import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousingInventory;
 import forestry.api.apiculture.IBeeListener;
 import forestry.api.apiculture.IBeeModifier;
-import forestry.apiculture.inventory.InventoryTileBeeHousing;
+import forestry.apiculture.BeehouseBeeModifier;
+import forestry.apiculture.InventoryBeeHousing;
 import forestry.core.network.GuiId;
 
-public class TileBeehouse extends TileAbstractBeeHousing {
+public class TileBeehouse extends TileBeeHousingBase {
 	private static final IBeeModifier beeModifier = new BeehouseBeeModifier();
 
 	private final IBeeListener beeListener;
-	private final IBeeHousingInventory beeInventory;
+	private final InventoryBeeHousing beeInventory;
 
 	public TileBeehouse() {
 		super(GuiId.BeehouseGUI, "bee.house");
 		this.beeListener = new DefaultBeeListener();
 
-		InventoryTileBeeHousing beeHousingInventory = new InventoryTileBeeHousing(this, 12, "Items");
-		beeHousingInventory.disableAutomation();
-
-		this.beeInventory = beeHousingInventory;
-		setInternalInventory(beeHousingInventory);
+		beeInventory = new InventoryBeeHousing(12, "Items", getAccessHandler());
+		beeInventory.disableAutomation();
+		setInternalInventory(beeInventory);
 	}
 
 	@Override
@@ -51,37 +48,5 @@ public class TileBeehouse extends TileAbstractBeeHousing {
 	@Override
 	public Iterable<IBeeListener> getBeeListeners() {
 		return Collections.singleton(beeListener);
-	}
-
-	public static class BeehouseBeeModifier extends DefaultBeeModifier {
-		@Override
-		public float getTerritoryModifier(IBeeGenome genome, float currentModifier) {
-			return 1.0f;
-		}
-
-		@Override
-		public float getProductionModifier(IBeeGenome genome, float currentModifier) {
-			return 0.25f;
-		}
-
-		@Override
-		public float getMutationModifier(IBeeGenome genome, IBeeGenome mate, float currentModifier) {
-			return 0.0f;
-		}
-
-		@Override
-		public float getLifespanModifier(IBeeGenome genome, IBeeGenome mate, float currentModifier) {
-			return 3.0f;
-		}
-
-		@Override
-		public float getFloweringModifier(IBeeGenome genome, float currentModifier) {
-			return 3.0f;
-		}
-
-		@Override
-		public float getGeneticDecay(IBeeGenome genome, float currentModifier) {
-			return 0.0f;
-		}
 	}
 }

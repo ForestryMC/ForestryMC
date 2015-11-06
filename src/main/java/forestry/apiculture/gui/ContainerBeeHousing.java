@@ -12,14 +12,14 @@ package forestry.apiculture.gui;
 
 import net.minecraft.entity.player.InventoryPlayer;
 
-import forestry.apiculture.tiles.TileAbstractBeeHousing;
+import forestry.apiculture.tiles.TileBeeHousingBase;
 import forestry.core.gui.ContainerTile;
 import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.PacketGuiUpdate;
 
-public class ContainerBeeHousing extends ContainerTile<TileAbstractBeeHousing> implements IContainerBeeHousing {
+public class ContainerBeeHousing extends ContainerTile<TileBeeHousingBase> implements IContainerBeeHousing {
 
-	public ContainerBeeHousing(InventoryPlayer player, TileAbstractBeeHousing tile, boolean hasFrames) {
+	public ContainerBeeHousing(InventoryPlayer player, TileBeeHousingBase tile, boolean hasFrames) {
 		super(tile, player, 8, 108);
 		ContainerBeeHelper.addSlots(this, tile, hasFrames);
 	}
