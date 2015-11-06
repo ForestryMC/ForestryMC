@@ -215,11 +215,15 @@ public class EntityMinecartBeehouse extends EntityMinecartContainer implements I
 		breedingProgressPercent = data.readVarInt();
 	}
 
-	/**
-	 * Returns scaled queen health or breeding progress
-	 */
+	@Override
 	public int getHealthScaled(int i) {
 		return (breedingProgressPercent * i) / 100;
+	}
+
+	// fix cart contents rendering as black in the End dimension
+	@Override
+	public float getBrightness(float p_70013_1_) {
+		return 1.0f;
 	}
 
 	@Override
