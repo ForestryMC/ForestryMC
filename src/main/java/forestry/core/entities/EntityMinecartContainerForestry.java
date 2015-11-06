@@ -125,7 +125,7 @@ public abstract class EntityMinecartContainerForestry extends EntityMinecartFore
 
 	@Override
 	public final boolean hasCustomInventoryName() {
-		return getInternalInventory().hasCustomInventoryName();
+		return false; // stop RailCraft from rendering a halo text of the inventory name
 	}
 
 	@Override
