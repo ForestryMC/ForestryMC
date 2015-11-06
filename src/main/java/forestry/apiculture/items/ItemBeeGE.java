@@ -112,27 +112,21 @@ public class ItemBeeGE extends ItemGE {
 	@SuppressWarnings("rawtypes")
 	@Override
 	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List itemList) {
-		if (type == EnumBeeType.QUEEN) {
-			return;
-		}
-
 		addCreativeItems(itemList, true);
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	public void addCreativeItems(List itemList, boolean hideSecrets) {
-
-		for (IIndividual individual : BeeManager.beeRoot.getIndividualTemplates()) {
+		for (IBee bee : BeeManager.beeRoot.getIndividualTemplates()) {
 			// Don't show secret bees unless ordered to.
-			if (hideSecrets && individual.isSecret() && !Config.isDebug) {
+			if (hideSecrets && bee.isSecret() && !Config.isDebug) {
 				continue;
 			}
 
-			NBTTagCompound nbttagcompound = new NBTTagCompound();
-			ItemStack someStack = new ItemStack(this);
-			individual.writeToNBT(nbttagcompound);
-			someStack.setTagCompound(nbttagcompound);
-			itemList.add(someStack);
+			ItemStack beeStack = BeeManager.beeRoot.getMemberStack(bee, type.ordinal());
+			if (beeStack != null) {
+				itemList.add(beeStack);
+			}
 		}
 	}
 

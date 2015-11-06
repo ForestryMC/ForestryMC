@@ -98,15 +98,20 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 	}
 
 	@Override
-	public ItemStack getMemberStack(IIndividual bee, int type) {
-		if (!isMember(bee)) {
+	public ItemStack getMemberStack(IIndividual individual, int type) {
+		if (!isMember(individual)) {
 			return null;
 		}
+		IBee bee = (IBee) individual;
 
 		Item beeItem;
 		switch (EnumBeeType.VALUES[type]) {
 			case QUEEN:
 				beeItem = ForestryItem.beeQueenGE.item();
+				// ensure a queen is always mated
+				if (bee.getMate() == null) {
+					bee.mate(bee);
+				}
 				break;
 			case PRINCESS:
 				beeItem = ForestryItem.beePrincessGE.item();
