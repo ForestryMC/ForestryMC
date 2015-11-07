@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemMinecart;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
@@ -28,17 +29,15 @@ import cpw.mods.fml.relauncher.SideOnly;
 import forestry.apiculture.entities.EntityMinecartApiary;
 import forestry.apiculture.entities.EntityMinecartBeeHousingBase;
 import forestry.apiculture.entities.EntityMinecartBeehouse;
-import forestry.core.items.ItemForestry;
 import forestry.core.render.TextureManager;
 
-public class ItemMinecartBeehouse extends ItemForestry {
+public class ItemMinecartBeehouse extends ItemMinecart {
 	private final String[] definition = new String[]{"cart.beehouse", "cart.apiary"};
 
 	public ItemMinecartBeehouse() {
-		maxStackSize = 1;
+		super(0);
 		setMaxDamage(0);
 		setHasSubtypes(true);
-		setNoRepair();
 		BlockDispenser.dispenseBehaviorRegistry.putObject(this, null);
 	}
 
