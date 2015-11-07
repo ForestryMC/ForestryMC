@@ -16,6 +16,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
@@ -111,10 +112,16 @@ public abstract class EntityMinecartForestry extends EntityMinecart implements I
 		return 1.0f;
 	}
 
+	@Override
+	public String getCommandSenderName() {
+		return StatCollector.translateToLocal(getUnlocalizedTitle());
+	}
+
 	/* ITitled */
 	@Override
 	public String getUnlocalizedTitle() {
-		return "entity." + getEntityString() + ".name";
+		ItemStack cartItem = getCartItem();
+		return cartItem.getUnlocalizedName() + ".name";
 	}
 
 	/* IRestrictedAccess */
