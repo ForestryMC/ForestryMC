@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.core.entities;
 
-import java.io.IOException;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -31,13 +29,10 @@ import forestry.core.access.EnumAccess;
 import forestry.core.access.IAccessHandler;
 import forestry.core.access.IRestrictedAccess;
 import forestry.core.gui.IHintSource;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
-import forestry.core.network.IStreamableGui;
 import forestry.core.tiles.ITitled;
 
-public abstract class EntityMinecartForestry extends EntityMinecart implements IStreamableGui, ITitled, IRestrictedAccess, IHintSource {
+public abstract class EntityMinecartForestry extends EntityMinecart implements ITitled, IRestrictedAccess, IHintSource {
 	private final AccessHandler accessHandler = new AccessHandler(this);
 
 	@SuppressWarnings("unused")
@@ -72,16 +67,6 @@ public abstract class EntityMinecartForestry extends EntityMinecart implements I
 	@Override
 	public int getMinecartType() {
 		return -1;
-	}
-
-	@Override
-	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
-
-	}
-
-	@Override
-	public void readGuiData(DataInputStreamForestry data) throws IOException {
-
 	}
 
 	@Override
