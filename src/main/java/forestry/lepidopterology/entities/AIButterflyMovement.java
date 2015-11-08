@@ -10,14 +10,14 @@
  ******************************************************************************/
 package forestry.lepidopterology.entities;
 
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.Vec3;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public abstract class AIButterflyMovement extends AIButterflyBase {
 
-	protected ChunkCoordinates flightTarget;
+	protected Vec3 flightTarget;
 
 	protected AIButterflyMovement(EntityButterfly entity) {
 		super(entity);
@@ -25,7 +25,7 @@ public abstract class AIButterflyMovement extends AIButterflyBase {
 
 	@Override
 	public boolean continueExecuting() {
-		if (entity.getState() != EntityButterfly.EnumButterflyState.FLYING) {
+		if (entity.getState() != EnumButterflyState.FLYING) {
 			return false;
 		}
 		if (flightTarget == null) {
@@ -37,7 +37,7 @@ public abstract class AIButterflyMovement extends AIButterflyBase {
 		}
 
 		// Continue if we have not yet reached the destination.
-		if (entity.getDestination().getDistanceSquared((int) entity.posX, (int) entity.posY, (int) entity.posZ) > 2.0f) {
+		if (entity.getDestination().squareDistanceTo(entity.posX, entity.posY, entity.posZ) > 2.0f) {
 			return true;
 		}
 

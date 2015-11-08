@@ -31,7 +31,7 @@ public class RenderButterflyEntity extends RenderLiving {
 			return;
 		}
 
-		butterflyModel.setScale(entity.getScale());
+		butterflyModel.setScale(entity.getSize());
 		super.doRender(entity, x, y, z, light, partialTickTime);
 	}
 

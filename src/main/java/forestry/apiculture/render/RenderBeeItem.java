@@ -80,7 +80,7 @@ public class RenderBeeItem implements IItemRenderer {
 		if(scaled)
 			entity.setScale(butterfly.getSize());
 		else
-			entity.setScale(EntityButterfly.DEFAULT_BUTTERFLY_SCALE);
+			entity.setScale(EntityButterfly.DEFAULT_BUTTERFLY_SIZE);
 		 */
 
 		return bee;

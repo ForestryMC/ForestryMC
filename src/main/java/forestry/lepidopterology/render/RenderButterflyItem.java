@@ -74,20 +74,16 @@ public class RenderButterflyItem implements IItemRenderer {
 		return flap < 0.5 ? 0.75f + flap : 1.75f - flap;
 	}
 	
-	private IButterfly initButterfly(ItemStack item, boolean scaled) {
+	private IButterfly initButterfly(ItemStack item) {
 		IButterfly butterfly = ButterflyManager.butterflyRoot.getMember(item);
 		if (butterfly == null) {
 			butterfly = ButterflyManager.butterflyRoot.templateAsIndividual(ButterflyManager.butterflyRoot.getDefaultTemplate());
 		}
 		
 		if (entity == null) {
-			entity = new EntityButterfly(Proxies.common.getClientInstance().theWorld);
-		}
-		entity.setSpecies(butterfly.getGenome().getPrimary());
-		if (scaled) {
-			entity.setScale(butterfly.getSize());
+			entity = new EntityButterfly(Proxies.common.getRenderWorld(), butterfly);
 		} else {
-			entity.setScale(EntityButterfly.DEFAULT_BUTTERFLY_SCALE);
+			entity.setIndividual(butterfly);
 		}
 		
 		return butterfly;
@@ -157,7 +153,7 @@ public class RenderButterflyItem implements IItemRenderer {
 		RenderHelper.enableStandardItemLighting();
 		GL11.glPushMatrix();
 
-		GL11.glTranslatef(0f, -0.75f, 0f);
+		GL11.glTranslatef(0f, -0.25f, 0f);
 		GL11.glScalef(-2.0f, 2.0f, 2.0f);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		GL11.glRotatef(135.0F, 0.0F, 1.0F, 0.0F);
@@ -210,16 +206,16 @@ public class RenderButterflyItem implements IItemRenderer {
 
 		switch (type) {
 			case ENTITY:
-				renderButterflyItem(initButterfly(item, true), 0f, -1.0f, 0f);
+				renderButterflyItem(initButterfly(item), 0f, -0.5f, 0f);
 				break;
 			case EQUIPPED:
-				renderButterflyItem(initButterfly(item, true), 0.5f, -0.9f, 1.0f);
+				renderButterflyItem(initButterfly(item), 0.5f, -0.9f, 1.0f);
 				break;
 			case EQUIPPED_FIRST_PERSON:
-				renderButterflyItem(initButterfly(item, true), 0.5f, -0.9f, 1.0f);
+				renderButterflyItem(initButterfly(item), 0.5f, -0.9f, 1.0f);
 				break;
 			case INVENTORY:
-				renderButterflyInInventory(initButterfly(item, false));
+				renderButterflyInInventory(initButterfly(item));
 				break;
 			default:
 		}

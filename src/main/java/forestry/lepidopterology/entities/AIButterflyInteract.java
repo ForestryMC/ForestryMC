@@ -12,8 +12,6 @@ package forestry.lepidopterology.entities;
 
 import net.minecraft.util.ChunkCoordinates;
 
-import forestry.lepidopterology.entities.EntityButterfly.EnumButterflyState;
-
 public abstract class AIButterflyInteract extends AIButterflyBase {
 
 	protected ChunkCoordinates rest;

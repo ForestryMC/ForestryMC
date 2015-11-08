@@ -19,8 +19,6 @@ import net.minecraft.block.material.Material;
 
 import net.minecraftforge.common.IPlantable;
 
-import forestry.lepidopterology.entities.EntityButterfly.EnumButterflyState;
-
 public class AIButterflyRest extends AIButterflyBase {
 
 	public AIButterflyRest(EntityButterfly entity) {

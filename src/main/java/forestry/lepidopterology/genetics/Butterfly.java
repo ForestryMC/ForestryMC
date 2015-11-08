@@ -262,7 +262,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 			return true;
 		}
 
-		return isDayTime ? !getGenome().getPrimary().isNocturnal() : getGenome().getPrimary().isNocturnal();
+		return isDayTime != getGenome().getPrimary().isNocturnal();
 	}
 
 	@Override
