@@ -97,12 +97,16 @@ public class BlockBase extends BlockForestry {
 	}
 
 	private MachineDefinition getDefinition(IBlockAccess world, int x, int y, int z) {
-		return getDefinition(world.getBlockMetadata(x, y, z));
+		if (!(world.getBlock(x, y, z) instanceof BlockBase)) {
+			return null;
+		}
+		int meta = world.getBlockMetadata(x, y, z);
+		return getDefinition(meta);
 	}
 
 	private MachineDefinition getDefinition(int metadata) {
-		if (metadata >= definitions.size() || definitions.get(metadata) == null) {
-			return definitions.get(0);
+		if (metadata < 0 || metadata >= definitions.size()) {
+			return null;
 		}
 
 		return definitions.get(metadata);
@@ -110,7 +114,7 @@ public class BlockBase extends BlockForestry {
 
 	@Override
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
-		MachineDefinition definition = definitions.get(world.getBlockMetadata(x, y, z));
+		MachineDefinition definition = getDefinition(world, x, y, z);
 		if (definition == null) {
 			return super.getCollisionBoundingBoxFromPool(world, x, y, z);
 		}
@@ -120,7 +124,7 @@ public class BlockBase extends BlockForestry {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z) {
-		MachineDefinition definition = definitions.get(world.getBlockMetadata(x, y, z));
+		MachineDefinition definition = getDefinition(world, x, y, z);
 		if (definition == null) {
 			return super.getCollisionBoundingBoxFromPool(world, x, y, z);
 		}
@@ -129,7 +133,7 @@ public class BlockBase extends BlockForestry {
 
 	@Override
 	public MovingObjectPosition collisionRayTrace(World world, int x, int y, int z, Vec3 startVec, Vec3 endVec) {
-		MachineDefinition definition = definitions.get(world.getBlockMetadata(x, y, z));
+		MachineDefinition definition = getDefinition(world, x, y, z);
 		if (definition == null) {
 			return super.collisionRayTrace(world, x, y, z, startVec, endVec);
 		} else {
@@ -153,11 +157,7 @@ public class BlockBase extends BlockForestry {
 	/* TILE ENTITY CREATION */
 	@Override
 	public TileEntity createTileEntity(World world, int metadata) {
-		if (metadata >= definitions.size() || definitions.get(metadata) == null) {
-			metadata = 0;
-		}
-
-		MachineDefinition definition = definitions.get(metadata);
+		MachineDefinition definition = getDefinition(metadata);
 		if (definition == null) {
 			return null;
 		}
@@ -210,7 +210,11 @@ public class BlockBase extends BlockForestry {
 
 	@Override
 	public boolean rotateBlock(World world, int x, int y, int z, ForgeDirection axis) {
-		return getDefinition(world, x, y, z).rotateBlock(world, x, y, z, axis);
+		MachineDefinition definition = getDefinition(world, x, y, z);
+		if (definition == null) {
+			return super.rotateBlock(world, x, y, z, axis);
+		}
+		return definition.rotateBlock(world, x, y, z, axis);
 	}
 
 	@Override
