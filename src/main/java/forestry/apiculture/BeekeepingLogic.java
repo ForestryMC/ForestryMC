@@ -166,14 +166,14 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 		IBeeHousingInventory beeInventory = housing.getBeeInventory();
 
 		boolean hasSpace = addPendingProducts(beeInventory, spawn);
-		errorLogic.setCondition(!hasSpace, EnumErrorCode.NOSPACE);
+		errorLogic.setCondition(!hasSpace, EnumErrorCode.NO_SPACE_INVENTORY);
 
 		ItemStack queenStack = beeInventory.getQueen();
 
 		// check if we're breeding
 		if (ForestryItem.beePrincessGE.isItemEqual(queenStack)) {
 			boolean hasDrone = BeeManager.beeRoot.isDrone(beeInventory.getDrone());
-			errorLogic.setCondition(!hasDrone, EnumErrorCode.NODRONE);
+			errorLogic.setCondition(!hasDrone, EnumErrorCode.NO_DRONE);
 
 			setActive(false); // not active (no bee FX) when we are breeding
 			return !errorLogic.hasErrors();
@@ -195,7 +195,7 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 			this.queenStack = queenStack;
 		}
 
-		if (errorLogic.setCondition(queen == null, EnumErrorCode.NOQUEEN)) {
+		if (errorLogic.setCondition(queen == null, EnumErrorCode.NO_QUEEN)) {
 			setActive(false);
 			beeProgress = 0;
 			return false;
@@ -207,7 +207,7 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 		}
 
 		boolean hasFlowers = hasFlowersCache.hasFlowers(queen, housing);
-		errorLogic.setCondition(!hasFlowers, EnumErrorCode.NOFLOWER);
+		errorLogic.setCondition(!hasFlowers, EnumErrorCode.NO_FLOWER);
 
 		boolean canWork = !errorLogic.hasErrors();
 		setActive(canWork);

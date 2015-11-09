@@ -103,7 +103,7 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
 		IErrorLogic errorLogic = getErrorLogic();
 
 		boolean disabled = isRedstoneActivated();
-		errorLogic.setCondition(disabled, EnumErrorCode.DISABLED);
+		errorLogic.setCondition(disabled, EnumErrorCode.DISABLED_BY_REDSTONE);
 		if (disabled) {
 			return;
 		}
@@ -118,13 +118,13 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
 			int energyPerWorkCycle = getEnergyPerWorkCycle();
 			boolean consumedEnergy = energyManager.consumeEnergyToDoWork(ticksPerWorkCycle, energyPerWorkCycle);
 			if (consumedEnergy) {
-				errorLogic.setCondition(false, EnumErrorCode.NOPOWER);
+				errorLogic.setCondition(false, EnumErrorCode.NO_POWER);
 				workCounter++;
 				noPowerTime = 0;
 			} else {
 				noPowerTime++;
 				if (noPowerTime > 4) {
-					errorLogic.setCondition(true, EnumErrorCode.NOPOWER);
+					errorLogic.setCondition(true, EnumErrorCode.NO_POWER);
 				}
 			}
 		}

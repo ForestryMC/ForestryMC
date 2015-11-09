@@ -38,7 +38,7 @@ public class TriggerMissingDrone extends Trigger {
 		}
 
 		IErrorLogicSource apiary = (IErrorLogicSource) tile;
-		return apiary.getErrorLogic().contains(EnumErrorCode.NODRONE);
+		return apiary.getErrorLogic().contains(EnumErrorCode.NO_DRONE);
 	}
 
 }

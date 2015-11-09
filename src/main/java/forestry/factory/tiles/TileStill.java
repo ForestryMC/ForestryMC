@@ -140,7 +140,7 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 
 		boolean hasRecipe = (currentRecipe != null);
 		boolean hasTankSpace = true;
-		boolean hasFluidResource = true;
+		boolean hasLiquidResource = true;
 
 		if (hasRecipe) {
 			hasTankSpace = productTank.canFill(currentRecipe.getOutput());
@@ -148,8 +148,8 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 				int cycles = currentRecipe.getCyclesPerUnit();
 				FluidStack input = currentRecipe.getInput();
 				int drainAmount = cycles * input.amount;
-				hasFluidResource = resourceTank.canDrain(drainAmount);
-				if (hasFluidResource) {
+				hasLiquidResource = resourceTank.canDrain(drainAmount);
+				if (hasLiquidResource) {
 					bufferedLiquid = new FluidStack(input, drainAmount);
 					resourceTank.drain(drainAmount, true);
 				}
@@ -157,11 +157,11 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 		}
 
 		IErrorLogic errorLogic = getErrorLogic();
-		errorLogic.setCondition(!hasRecipe, EnumErrorCode.NORECIPE);
-		errorLogic.setCondition(!hasTankSpace, EnumErrorCode.NOSPACETANK);
-		errorLogic.setCondition(!hasFluidResource, EnumErrorCode.NORESOURCE);
+		errorLogic.setCondition(!hasRecipe, EnumErrorCode.NO_RECIPE);
+		errorLogic.setCondition(!hasTankSpace, EnumErrorCode.NO_SPACE_TANK);
+		errorLogic.setCondition(!hasLiquidResource, EnumErrorCode.NO_RESOURCE_LIQUID);
 
-		return hasRecipe && hasFluidResource && hasTankSpace;
+		return hasRecipe && hasLiquidResource && hasTankSpace;
 	}
 
 	@Override

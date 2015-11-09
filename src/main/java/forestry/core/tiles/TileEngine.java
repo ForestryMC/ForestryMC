@@ -118,10 +118,10 @@ public abstract class TileEngine extends TileBase implements IEnergyConnection, 
 		}
 
 		IErrorLogic errorLogic = getErrorLogic();
-		errorLogic.setCondition(forceCooldown, EnumErrorCode.FORCEDCOOLDOWN);
+		errorLogic.setCondition(forceCooldown, EnumErrorCode.FORCED_COOLDOWN);
 
 		boolean enabledRedstone = isRedstoneActivated();
-		errorLogic.setCondition(!enabledRedstone, EnumErrorCode.NOREDSTONE);
+		errorLogic.setCondition(!enabledRedstone, EnumErrorCode.NO_REDSTONE);
 
 		// Determine targeted tile
 		TileEntity tile = worldObj.getTileEntity(xCoord + getOrientation().offsetX, yCoord + getOrientation().offsetY, zCoord + getOrientation().offsetZ);

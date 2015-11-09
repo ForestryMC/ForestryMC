@@ -141,7 +141,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 
 		// Not working in broad daylight
 		boolean gloomy = lightvalue <= 11;
-		if (errorLogic.setCondition(!gloomy, EnumErrorCode.NOTGLOOMY)) {
+		if (errorLogic.setCondition(!gloomy, EnumErrorCode.NOT_DARK)) {
 			return;
 		}
 
@@ -161,7 +161,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 		if (burnTime > 0 && pendingProduct == null) {
 			// Not working if there is no water available.
 			boolean hasLiquid = resourceTank.getFluidAmount() > 0;
-			if (errorLogic.setCondition(!hasLiquid, EnumErrorCode.NORESOURCE)) {
+			if (errorLogic.setCondition(!hasLiquid, EnumErrorCode.NO_RESOURCE_LIQUID)) {
 				return;
 			}
 
@@ -204,7 +204,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 			}
 		}
 
-		errorLogic.setCondition(currentRecipe == null, EnumErrorCode.NORECIPE);
+		errorLogic.setCondition(currentRecipe == null, EnumErrorCode.NO_RECIPE);
 	}
 
 	private boolean tryAddPending() {
@@ -213,7 +213,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 		}
 
 		boolean added = InventoryUtil.tryAddStack(this, pendingProduct, InventoryMoistener.SLOT_PRODUCT, 1, true);
-		getErrorLogic().setCondition(!added, EnumErrorCode.NOSPACE);
+		getErrorLogic().setCondition(!added, EnumErrorCode.NO_SPACE_INVENTORY);
 
 		if (added) {
 			pendingProduct = null;
@@ -229,7 +229,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 			resetRecipe();
 		}
 
-		getErrorLogic().setCondition(currentRecipe == null, EnumErrorCode.NORECIPE);
+		getErrorLogic().setCondition(currentRecipe == null, EnumErrorCode.NO_RECIPE);
 	}
 
 	private void resetRecipe() {
@@ -323,7 +323,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 
 			int targetSlot = getFreeReservoirSlot(deposit);
 			// We stop the whole thing, if we don't have any room anymore.
-			if (errorLogic.setCondition(targetSlot < 0, EnumErrorCode.NOSPACE)) {
+			if (errorLogic.setCondition(targetSlot < 0, EnumErrorCode.NO_SPACE_INVENTORY)) {
 				return false;
 			}
 
@@ -343,7 +343,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 		// Let's look for a new resource to put into the working slot.
 		int resourceSlot = getNextResourceSlot(InventoryMoistener.SLOT_RESERVOIR_1, InventoryMoistener.SLOT_RESERVOIR_1 + InventoryMoistener.SLOT_RESERVOIR_COUNT);
 		// Nothing found, stop.
-		if (errorLogic.setCondition(resourceSlot < 0, EnumErrorCode.NORESOURCE)) {
+		if (errorLogic.setCondition(resourceSlot < 0, EnumErrorCode.NO_RESOURCE)) {
 			return false;
 		}
 

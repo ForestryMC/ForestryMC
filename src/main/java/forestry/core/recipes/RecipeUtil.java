@@ -37,6 +37,7 @@ import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
 import forestry.core.fluids.Fluids;
 import forestry.core.gui.ContainerDummy;
+import forestry.core.inventory.InventoryPlain;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 

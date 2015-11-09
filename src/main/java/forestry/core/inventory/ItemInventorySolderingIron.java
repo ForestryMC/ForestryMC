@@ -165,13 +165,13 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 		ImmutableSet.Builder<IErrorState> errorStates = ImmutableSet.builder();
 
 		if (layouts.getCurrent() == CircuitRegistry.DUMMY_LAYOUT) {
-			errorStates.add(EnumErrorCode.NOCIRCUITLAYOUT);
+			errorStates.add(EnumErrorCode.NO_CIRCUIT_LAYOUT);
 		}
 
 		ItemStack blankCircuitBoard = getStackInSlot(blankSlot);
 
 		if (blankCircuitBoard == null) {
-			errorStates.add(EnumErrorCode.NOCIRCUITBOARD);
+			errorStates.add(EnumErrorCode.NO_CIRCUIT_BOARD);
 		} else {
 			EnumCircuitBoardType type = EnumCircuitBoardType.values()[blankCircuitBoard.getItemDamage()];
 
@@ -183,11 +183,11 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 			}
 
 			if (circuitCount != type.getSockets()) {
-				errorStates.add(EnumErrorCode.CIRCUITMISMATCH);
+				errorStates.add(EnumErrorCode.CIRCUIT_MISMATCH);
 			} else {
 				int count = getCircuitCount();
 				if (count != type.getSockets()) {
-					errorStates.add(EnumErrorCode.NOCIRCUITLAYOUT);
+					errorStates.add(EnumErrorCode.NO_CIRCUIT_LAYOUT);
 				}
 			}
 		}

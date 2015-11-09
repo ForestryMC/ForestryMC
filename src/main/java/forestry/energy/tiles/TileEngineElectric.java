@@ -152,7 +152,7 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 		IErrorLogic errorLogic = getErrorLogic();
 
 		// No work to be done if IC2 is unavailable.
-		if (errorLogic.setCondition(ic2EnergySink == null, EnumErrorCode.NOENERGYNET)) {
+		if (errorLogic.setCondition(ic2EnergySink == null, EnumErrorCode.NO_ENERGY_NET)) {
 			return;
 		}
 
@@ -174,7 +174,7 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 		}
 
 		boolean canUseEnergy = ic2EnergySink.canUseEnergy(euConfig.euForCycle);
-		errorLogic.setCondition(!canUseEnergy, EnumErrorCode.NOFUEL);
+		errorLogic.setCondition(!canUseEnergy, EnumErrorCode.NO_FUEL);
 	}
 
 	@Override

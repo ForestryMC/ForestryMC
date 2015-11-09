@@ -45,6 +45,7 @@ import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.IErrorState;
 import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleTolerance;
 import forestry.api.genetics.IChromosome;
@@ -256,46 +257,85 @@ public class Bee extends IndividualLiving implements IBee {
 		IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(housing);
 
 		// / Rain needs tolerant flyers
-		if (world.isRaining() && !genome.getTolerantFlyer() && BiomeHelper.canRainOrSnow(biome) && !beeModifier.isSealed()) {
-			errorStates.add(EnumErrorCode.ISRAINING);
+		if (world.isRaining() && BiomeHelper.canRainOrSnow(biome) && !canFlyInRain(beeModifier)) {
+			errorStates.add(EnumErrorCode.IS_RAINING);
 		}
 
 		// / Night or darkness requires nocturnal species
 		if (world.isDaytime()) {
 			if (!canWorkDuringDay()) {
-				errorStates.add(EnumErrorCode.NOTNIGHT);
+				errorStates.add(EnumErrorCode.NOT_NIGHT);
 			}
-		} else if (!canWorkAtNight() && !beeModifier.isSelfLighted()) {
-			errorStates.add(EnumErrorCode.NOTDAY);
+		} else {
+			if (!canWorkAtNight(beeModifier)) {
+				errorStates.add(EnumErrorCode.NOT_DAY);
+			}
 		}
 
 		if (housing.getBlockLightValue() > Constants.APIARY_MIN_LEVEL_LIGHT) {
 			if (!canWorkDuringDay()) {
-				errorStates.add(EnumErrorCode.NOTGLOOMY);
+				errorStates.add(EnumErrorCode.NOT_GLOOMY);
 			}
-		} else if (!canWorkAtNight() && !beeModifier.isSelfLighted()) {
-			errorStates.add(EnumErrorCode.NOTLUCID);
+		} else {
+			if (!canWorkAtNight(beeModifier)) {
+				errorStates.add(EnumErrorCode.NOT_BRIGHT);
+			}
 		}
 
-		// / No sky, except if in hell
-		if (biome != null && !BiomeHelper.isBiomeHellish(biome) && !housing.canBlockSeeTheSky() && !genome.getCaveDwelling() && !beeModifier.isSunlightSimulated()) {
-			errorStates.add(EnumErrorCode.NOSKY);
+		// / Check for the sky, except if in hell
+		if (biome != null && !BiomeHelper.isBiomeHellish(biome)) {
+			if (!housing.canBlockSeeTheSky() && !canWorkUnderground(beeModifier)) {
+				errorStates.add(EnumErrorCode.NO_SKY);
+			}
 		}
 
 		// / And finally climate check
-		if (!isSuitableClimate(housing.getTemperature(), housing.getHumidity())) {
-			errorStates.add(EnumErrorCode.INVALIDBIOME);
+		IAlleleBeeSpecies species = genome.getPrimary();
+		{
+			EnumTemperature actualTemperature = housing.getTemperature();
+			EnumTemperature beeBaseTemperature = species.getTemperature();
+			EnumTolerance beeToleranceTemperature = genome.getToleranceTemp();
+
+			if (!AlleleManager.climateHelper.isWithinLimits(actualTemperature, beeBaseTemperature, beeToleranceTemperature)) {
+				if (beeBaseTemperature.ordinal() > actualTemperature.ordinal()) {
+					errorStates.add(EnumErrorCode.TOO_COLD);
+				} else {
+					errorStates.add(EnumErrorCode.TOO_HOT);
+				}
+			}
+		}
+
+		{
+			EnumHumidity actualHumidity = housing.getHumidity();
+			EnumHumidity beeBaseHumidity = species.getHumidity();
+			EnumTolerance beeToleranceHumidity = genome.getToleranceHumid();
+
+			if (!AlleleManager.climateHelper.isWithinLimits(actualHumidity, beeBaseHumidity, beeToleranceHumidity)) {
+				if (beeBaseHumidity.ordinal() > actualHumidity.ordinal()) {
+					errorStates.add(EnumErrorCode.TOO_ARID);
+				} else {
+					errorStates.add(EnumErrorCode.TOO_HUMID);
+				}
+			}
 		}
 
 		return errorStates;
 	}
 
-	private boolean canWorkAtNight() {
-		return genome.getPrimary().isNocturnal() || genome.getNocturnal();
+	private boolean canWorkAtNight(IBeeModifier beeModifier) {
+		return genome.getPrimary().isNocturnal() || genome.getNocturnal() || beeModifier.isSelfLighted();
 	}
 
 	private boolean canWorkDuringDay() {
 		return !genome.getPrimary().isNocturnal() || genome.getNocturnal();
+	}
+
+	private boolean canWorkUnderground(IBeeModifier beeModifier) {
+		return genome.getCaveDwelling() || beeModifier.isSunlightSimulated();
+	}
+
+	private boolean canFlyInRain(IBeeModifier beeModifier) {
+		return genome.getTolerantFlyer() || beeModifier.isSealed();
 	}
 
 	private boolean isSuitableBiome(BiomeGenBase biome) {

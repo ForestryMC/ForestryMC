@@ -143,15 +143,15 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 
 		FluidHelper.FillStatus status;
 
-		if (errorLogic.setCondition(currentRecipe == null, EnumErrorCode.NORECIPE)) {
-			status = FluidHelper.FillStatus.SUCCESS;
+		if (currentRecipe == null) {
+			status = FluidHelper.FillStatus.NO_FLUID;
 		} else {
 			status = FluidHelper.fillContainers(tankManager, this, InventoryBottler.SLOT_INPUT_EMPTY_CAN, InventoryBottler.SLOT_OUTPUT, currentRecipe.input.getFluid(), false);
 		}
 
-		errorLogic.setCondition(status == FluidHelper.FillStatus.NO_FLUID, EnumErrorCode.NORESOURCE);
-		errorLogic.setCondition(status == FluidHelper.FillStatus.NO_SPACE, EnumErrorCode.NOSPACE);
-		return currentRecipe != null && status == FluidHelper.FillStatus.SUCCESS;
+		errorLogic.setCondition(status == FluidHelper.FillStatus.NO_FLUID, EnumErrorCode.NO_RESOURCE_LIQUID);
+		errorLogic.setCondition(status == FluidHelper.FillStatus.NO_SPACE, EnumErrorCode.NO_SPACE_INVENTORY);
+		return status == FluidHelper.FillStatus.SUCCESS;
 	}
 
 	@Override

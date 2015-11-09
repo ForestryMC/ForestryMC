@@ -127,7 +127,7 @@ public class TileGenerator extends TileBase implements ISidedInventory, ILiquidT
 		IErrorLogic errorLogic = getErrorLogic();
 
 		// No work to be done if IC2 is unavailable.
-		if (errorLogic.setCondition(ic2EnergySource == null, EnumErrorCode.NOENERGYNET)) {
+		if (errorLogic.setCondition(ic2EnergySource == null, EnumErrorCode.NO_ENERGY_NET)) {
 			return;
 		}
 
@@ -148,7 +148,7 @@ public class TileGenerator extends TileBase implements ISidedInventory, ILiquidT
 		}
 
 		boolean hasFuel = resourceTank.getFluidAmount() > 0;
-		errorLogic.setCondition(!hasFuel, EnumErrorCode.NOFUEL);
+		errorLogic.setCondition(!hasFuel, EnumErrorCode.NO_FUEL);
 	}
 
 	public boolean isWorking() {

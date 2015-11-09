@@ -182,9 +182,9 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 			}
 		}
 
-		getErrorLogic().setCondition(!hasSpecimen, EnumErrorCode.NOTHINGANALYZE);
-		getErrorLogic().setCondition(!hasResource, EnumErrorCode.NORESOURCE);
-		getErrorLogic().setCondition(!hasSpace, EnumErrorCode.NOSPACE);
+		getErrorLogic().setCondition(!hasSpecimen, EnumErrorCode.NO_SPECIMEN);
+		getErrorLogic().setCondition(!hasResource, EnumErrorCode.NO_RESOURCE_LIQUID);
+		getErrorLogic().setCondition(!hasSpace, EnumErrorCode.NO_SPACE_INVENTORY);
 
 		return hasSpecimen && hasResource && hasSpace;
 	}

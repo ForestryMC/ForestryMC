@@ -292,12 +292,12 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 		if (hasPower) {
 			noPowerTime = 0;
-			getErrorLogic().setCondition(false, EnumErrorCode.NOPOWER);
+			getErrorLogic().setCondition(false, EnumErrorCode.NO_POWER);
 		} else {
 			if (noPowerTime <= 4) {
 				noPowerTime++;
 			} else {
-				getErrorLogic().setCondition(true, EnumErrorCode.NOPOWER);
+				getErrorLogic().setCondition(true, EnumErrorCode.NO_POWER);
 			}
 		}
 
@@ -469,12 +469,12 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 		if (!pendingProduce.isEmpty()) {
 			boolean added = inventory.tryAddPendingProduce(pendingProduce);
-			errorLogic.setCondition(!added, EnumErrorCode.NOSPACE);
+			errorLogic.setCondition(!added, EnumErrorCode.NO_SPACE_INVENTORY);
 			return added;
 		}
 
 		boolean hasFertilizer = fertilizerManager.maintainFertilizer(inventory);
-		if (errorLogic.setCondition(!hasFertilizer, EnumErrorCode.NOFERTILIZER)) {
+		if (errorLogic.setCondition(!hasFertilizer, EnumErrorCode.NO_FERTILIZER)) {
 			return false;
 		}
 
@@ -527,9 +527,9 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		}
 
 		if (stage == Stage.CULTIVATE) {
-			errorLogic.setCondition(!farmWorkStatus.hasFarmland, EnumErrorCode.NOFARMLAND);
-			errorLogic.setCondition(!farmWorkStatus.hasFertilizer, EnumErrorCode.NOFERTILIZER);
-			errorLogic.setCondition(!farmWorkStatus.hasLiquid, EnumErrorCode.NOLIQUID);
+			errorLogic.setCondition(!farmWorkStatus.hasFarmland, EnumErrorCode.NO_FARMLAND);
+			errorLogic.setCondition(!farmWorkStatus.hasFertilizer, EnumErrorCode.NO_FERTILIZER);
+			errorLogic.setCondition(!farmWorkStatus.hasLiquid, EnumErrorCode.NO_LIQUID_FARM);
 		}
 
 		// alternate between cultivation and harvest.
@@ -754,7 +754,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 		// Check fertilizer
 		Boolean hasFertilizer = fertilizerManager.hasFertilizer(fertilizerConsumption);
-		if (errorLogic.setCondition(!hasFertilizer, EnumErrorCode.NOFERTILIZER)) {
+		if (errorLogic.setCondition(!hasFertilizer, EnumErrorCode.NO_FERTILIZER)) {
 			return false;
 		}
 
@@ -764,7 +764,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		FluidStack requiredLiquid = Fluids.WATER.getFluid(waterConsumption);
 		boolean hasLiquid = requiredLiquid.amount == 0 || hasLiquid(requiredLiquid);
 
-		if (errorLogic.setCondition(!hasLiquid, EnumErrorCode.NOLIQUID)) {
+		if (errorLogic.setCondition(!hasLiquid, EnumErrorCode.NO_LIQUID_FARM)) {
 			return false;
 		}
 

@@ -38,6 +38,6 @@ public class TriggerMissingQueen extends Trigger {
 		}
 
 		IErrorLogicSource apiary = (IErrorLogicSource) tile;
-		return apiary.getErrorLogic().contains(EnumErrorCode.NOQUEEN);
+		return apiary.getErrorLogic().contains(EnumErrorCode.NO_QUEEN);
 	}
 }

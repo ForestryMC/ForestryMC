@@ -65,7 +65,7 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 		if (worldObj != null) {
 			BiomeGenBase biome = worldObj.getBiomeGenForCoordsBody(xCoord, zCoord);
 			isValidBiome = BiomeHelper.canRainOrSnow(biome);
-			getErrorLogic().setCondition(!isValidBiome, EnumErrorCode.INVALIDBIOME);
+			getErrorLogic().setCondition(!isValidBiome, EnumErrorCode.NO_RAIN_BIOME);
 		}
 
 		super.validate();
@@ -110,12 +110,12 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 
 		IErrorLogic errorLogic = getErrorLogic();
 
-		errorLogic.setCondition(!isValidBiome, EnumErrorCode.INVALIDBIOME);
+		errorLogic.setCondition(!isValidBiome, EnumErrorCode.NO_RAIN_BIOME);
 
 		boolean hasSky = worldObj.canBlockSeeTheSky(xCoord, yCoord + 1, zCoord);
-		errorLogic.setCondition(!hasSky, EnumErrorCode.NOSKY);
+		errorLogic.setCondition(!hasSky, EnumErrorCode.NO_SKY_RAIN_TANK);
 
-		errorLogic.setCondition(!worldObj.isRaining(), EnumErrorCode.NOTRAINING);
+		errorLogic.setCondition(!worldObj.isRaining(), EnumErrorCode.NOT_RAINING);
 
 		if (!errorLogic.hasErrors()) {
 			resourceTank.fill(STACK_WATER, true);

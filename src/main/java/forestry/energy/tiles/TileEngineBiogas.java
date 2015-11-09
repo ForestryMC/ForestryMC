@@ -93,10 +93,10 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 		IErrorLogic errorLogic = getErrorLogic();
 
 		boolean hasHeat = getHeatLevel() > 0.2 || heatingTank.getFluidAmount() > 0;
-		errorLogic.setCondition(!hasHeat, EnumErrorCode.NOHEAT);
+		errorLogic.setCondition(!hasHeat, EnumErrorCode.NO_HEAT);
 
 		boolean hasFuel = burnTime > 0 || fuelTank.getFluidAmount() > 0;
-		errorLogic.setCondition(!hasFuel, EnumErrorCode.NOFUEL);
+		errorLogic.setCondition(!hasFuel, EnumErrorCode.NO_FUEL);
 	}
 
 	/**

@@ -12,6 +12,7 @@ package forestry.factory.tiles;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
+import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -136,7 +137,10 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 
 	@Override
 	public boolean workCycle() {
-		if (!removeResources(true)) {
+		if (!removeLiquidResources(true)) {
+			return false;
+		}
+		if (!removeItemResources(true)) {
 			return false;
 		}
 
@@ -146,7 +150,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 		return true;
 	}
 
-	private boolean removeResources(boolean doRemove) {
+	private boolean removeLiquidResources(boolean doRemove) {
 		if (currentRecipe == null) {
 			return true;
 		}
@@ -159,6 +163,14 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 			if (doRemove) {
 				resourceTank.drain(fluid.amount, true);
 			}
+		}
+
+		return true;
+	}
+
+	private boolean removeItemResources(boolean doRemove) {
+		if (currentRecipe == null) {
+			return true;
 		}
 
 		if (currentRecipe.getBox() != null) {
@@ -185,22 +197,25 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 		}
 
 		boolean hasRecipe = (currentRecipe != null);
-		boolean hasResources = true;
+		boolean hasLiquidResources = true;
+		boolean hasItemResources = true;
 		boolean canAdd = true;
 
 		if (hasRecipe) {
-			hasResources = removeResources(false);
+			hasLiquidResources = removeLiquidResources(false);
+			hasItemResources = removeItemResources(false);
 
 			ItemStack pendingProduct = currentRecipe.getCraftingGridRecipe().getRecipeOutput();
 			canAdd = InventoryUtil.tryAddStack(this, pendingProduct, InventoryCarpenter.SLOT_PRODUCT, InventoryCarpenter.SLOT_PRODUCT_COUNT, true, false);
 		}
 
 		IErrorLogic errorLogic = getErrorLogic();
-		errorLogic.setCondition(!hasRecipe, EnumErrorCode.NORECIPE);
-		errorLogic.setCondition(!hasResources, EnumErrorCode.NORESOURCE);
-		errorLogic.setCondition(!canAdd, EnumErrorCode.NOSPACE);
+		errorLogic.setCondition(!hasRecipe, EnumErrorCode.NO_RECIPE);
+		errorLogic.setCondition(!hasLiquidResources, EnumErrorCode.NO_RESOURCE_LIQUID);
+		errorLogic.setCondition(!hasItemResources, EnumErrorCode.NO_RESOURCE_INVENTORY);
+		errorLogic.setCondition(!canAdd, EnumErrorCode.NO_SPACE_INVENTORY);
 
-		return hasRecipe && hasResources && canAdd;
+		return hasRecipe && hasItemResources && hasLiquidResources && canAdd;
 	}
 
 	@Override

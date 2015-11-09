@@ -133,11 +133,11 @@ public class ItemInventoryLetter extends ItemInventory implements IErrorSource, 
 		ImmutableSet.Builder<IErrorState> errorStates = ImmutableSet.builder();
 
 		if (!letter.hasRecipient()) {
-			errorStates.add(EnumErrorCode.NORECIPIENT);
+			errorStates.add(EnumErrorCode.NO_RECIPIENT);
 		}
 
 		if (!letter.isProcessed() && !letter.isPostPaid()) {
-			errorStates.add(EnumErrorCode.NOTPOSTPAID);
+			errorStates.add(EnumErrorCode.NOT_POST_PAID);
 		}
 
 		return errorStates.build();

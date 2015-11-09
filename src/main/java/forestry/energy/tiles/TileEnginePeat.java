@@ -102,7 +102,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 
 		int fuelSlot = getFuelSlot();
 		boolean hasFuel = fuelSlot >= 0 && determineBurnDuration(getInternalInventory().getStackInSlot(fuelSlot)) > 0;
-		getErrorLogic().setCondition(!hasFuel, EnumErrorCode.NOFUEL);
+		getErrorLogic().setCondition(!hasFuel, EnumErrorCode.NO_FUEL);
 	}
 
 	@Override

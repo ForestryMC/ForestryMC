@@ -109,11 +109,11 @@ public abstract class ItemInventoryAlyzer extends ItemInventory implements IErro
 		ImmutableSet.Builder<IErrorState> errorStates = ImmutableSet.builder();
 
 		if (!hasSpecimen()) {
-			errorStates.add(EnumErrorCode.NOTHINGANALYZE);
+			errorStates.add(EnumErrorCode.NO_SPECIMEN);
 		}
 
 		if (!isEnergy(getStackInSlot(SLOT_ENERGY))) {
-			errorStates.add(EnumErrorCode.NOHONEY);
+			errorStates.add(EnumErrorCode.NO_HONEY);
 		}
 
 		return errorStates.build();

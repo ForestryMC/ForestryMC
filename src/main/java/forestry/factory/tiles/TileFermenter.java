@@ -233,10 +233,11 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 		}
 
 		IErrorLogic errorLogic = getErrorLogic();
-		errorLogic.setCondition(!hasRecipe, EnumErrorCode.NORECIPE);
-		errorLogic.setCondition(!hasFuel, EnumErrorCode.NOFUEL);
-		errorLogic.setCondition(!hasResource || !hasFluidResource, EnumErrorCode.NORESOURCE);
-		errorLogic.setCondition(!hasFluidSpace, EnumErrorCode.NOSPACETANK);
+		errorLogic.setCondition(!hasRecipe, EnumErrorCode.NO_RECIPE);
+		errorLogic.setCondition(!hasFuel, EnumErrorCode.NO_FUEL);
+		errorLogic.setCondition(!hasResource, EnumErrorCode.NO_RESOURCE);
+		errorLogic.setCondition(!hasFluidResource, EnumErrorCode.NO_RESOURCE_LIQUID);
+		errorLogic.setCondition(!hasFluidSpace, EnumErrorCode.NO_SPACE_TANK);
 
 		return hasRecipe && hasFuel && hasResource && hasFluidResource && hasFluidSpace;
 	}

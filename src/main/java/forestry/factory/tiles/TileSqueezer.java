@@ -165,7 +165,7 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 			}
 		}
 
-		getErrorLogic().setCondition(currentRecipe == null, EnumErrorCode.NORECIPE);
+		getErrorLogic().setCondition(currentRecipe == null, EnumErrorCode.NO_RECIPE);
 		return currentRecipe != null;
 	}
 
@@ -191,10 +191,10 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 		}
 
 		IErrorLogic errorLogic = getErrorLogic();
-		errorLogic.setCondition(!hasResources, EnumErrorCode.NORESOURCE);
-		errorLogic.setCondition(!hasRecipe, EnumErrorCode.NORECIPE);
-		errorLogic.setCondition(!canFill, EnumErrorCode.NOSPACETANK);
-		errorLogic.setCondition(!canAdd, EnumErrorCode.NOSPACE);
+		errorLogic.setCondition(!hasResources, EnumErrorCode.NO_RESOURCE);
+		errorLogic.setCondition(!hasRecipe, EnumErrorCode.NO_RECIPE);
+		errorLogic.setCondition(!canFill, EnumErrorCode.NO_SPACE_TANK);
+		errorLogic.setCondition(!canAdd, EnumErrorCode.NO_SPACE_INVENTORY);
 
 		return hasResources && hasRecipe && canFill && canAdd;
 	}

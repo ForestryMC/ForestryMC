@@ -132,24 +132,24 @@ public class TileTrader extends TileBase {
 
 		IErrorLogic errorLogic = getErrorLogic();
 
-		errorLogic.setCondition(!hasPostageMin(3), EnumErrorCode.NOSTAMPS);
-		errorLogic.setCondition(!hasPaperMin(2), EnumErrorCode.NOPAPER);
+		errorLogic.setCondition(!hasPostageMin(3), EnumErrorCode.NO_STAMPS);
+		errorLogic.setCondition(!hasPaperMin(2), EnumErrorCode.NO_PAPER);
 
 		IInventory inventory = getInternalInventory();
 		ItemStack tradeGood = inventory.getStackInSlot(TradeStation.SLOT_TRADEGOOD);
-		errorLogic.setCondition(tradeGood == null, EnumErrorCode.NOTRADE);
+		errorLogic.setCondition(tradeGood == null, EnumErrorCode.NO_TRADE);
 
 		boolean hasRequest = hasItemCount(TradeStation.SLOT_EXCHANGE_1, TradeStation.SLOT_EXCHANGE_COUNT, null, 1);
-		errorLogic.setCondition(!hasRequest, EnumErrorCode.NOTRADE);
+		errorLogic.setCondition(!hasRequest, EnumErrorCode.NO_TRADE);
 
 		if (tradeGood != null) {
 			boolean hasSupplies = hasItemCount(TradeStation.SLOT_SEND_BUFFER, TradeStation.SLOT_SEND_BUFFER_COUNT, tradeGood, tradeGood.stackSize);
-			errorLogic.setCondition(!hasSupplies, EnumErrorCode.NOSUPPLIES);
+			errorLogic.setCondition(!hasSupplies, EnumErrorCode.NO_SUPPLIES);
 		}
 
 		if (inventory instanceof TradeStation && updateOnInterval(200)) {
 			boolean canReceivePayment = ((TradeStation) inventory).canReceivePayment();
-			errorLogic.setCondition(!canReceivePayment, EnumErrorCode.NOSPACE);
+			errorLogic.setCondition(!canReceivePayment, EnumErrorCode.NO_SPACE_INVENTORY);
 		}
 	}
 
@@ -161,7 +161,7 @@ public class TileTrader extends TileBase {
 
 		IErrorLogic errorLogic = getErrorLogic();
 
-		return !errorLogic.contains(EnumErrorCode.NOTALPHANUMERIC) && !errorLogic.contains(EnumErrorCode.NOTUNIQUE);
+		return !errorLogic.contains(EnumErrorCode.NOT_ALPHANUMERIC) && !errorLogic.contains(EnumErrorCode.NOT_UNIQUE);
 	}
 
 	/**
@@ -289,10 +289,10 @@ public class TileTrader extends TileBase {
 			IErrorLogic errorLogic = getErrorLogic();
 
 			boolean hasValidTradeAddress = PostManager.postRegistry.isValidTradeAddress(worldObj, address);
-			errorLogic.setCondition(!hasValidTradeAddress, EnumErrorCode.NOTALPHANUMERIC);
+			errorLogic.setCondition(!hasValidTradeAddress, EnumErrorCode.NOT_ALPHANUMERIC);
 
 			boolean hasUniqueTradeAddress = PostManager.postRegistry.isAvailableTradeAddress(worldObj, address);
-			errorLogic.setCondition(!hasUniqueTradeAddress, EnumErrorCode.NOTUNIQUE);
+			errorLogic.setCondition(!hasUniqueTradeAddress, EnumErrorCode.NOT_UNIQUE);
 
 			if (hasValidTradeAddress & hasUniqueTradeAddress) {
 				this.address = address;

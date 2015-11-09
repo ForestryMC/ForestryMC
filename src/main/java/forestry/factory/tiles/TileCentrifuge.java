@@ -168,7 +168,7 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 			pendingProducts.pop();
 		}
 
-		getErrorLogic().setCondition(!added, EnumErrorCode.NOSPACE);
+		getErrorLogic().setCondition(!added, EnumErrorCode.NO_SPACE_INVENTORY);
 		return added;
 	}
 
@@ -189,7 +189,7 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 		boolean hasResource = getStackInSlot(InventoryCentrifuge.SLOT_RESOURCE) != null;
 
 		IErrorLogic errorLogic = getErrorLogic();
-		errorLogic.setCondition(!hasResource, EnumErrorCode.NORESOURCE);
+		errorLogic.setCondition(!hasResource, EnumErrorCode.NO_RESOURCE);
 
 		return hasResource;
 	}

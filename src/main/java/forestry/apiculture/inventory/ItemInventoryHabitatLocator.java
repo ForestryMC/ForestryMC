@@ -105,11 +105,11 @@ public class ItemInventoryHabitatLocator extends ItemInventory implements IError
 
 		ItemStack specimen = getStackInSlot(SLOT_SPECIMEN);
 		if (!BeeManager.beeRoot.isMember(specimen)) {
-			errorStates.add(EnumErrorCode.NOTHINGANALYZE);
+			errorStates.add(EnumErrorCode.NO_SPECIMEN);
 		}
 
 		if (!isEnergy(getStackInSlot(SLOT_ENERGY))) {
-			errorStates.add(EnumErrorCode.NOHONEY);
+			errorStates.add(EnumErrorCode.NO_HONEY);
 		}
 
 		return errorStates.build();
