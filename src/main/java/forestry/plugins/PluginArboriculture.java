@@ -27,7 +27,6 @@ import net.minecraftforge.oredict.OreDictionary;
 import cpw.mods.fml.common.IFuelHandler;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
-import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry;
@@ -73,6 +72,7 @@ import forestry.arboriculture.tiles.TileFruitPod;
 import forestry.arboriculture.tiles.TileLeaves;
 import forestry.arboriculture.tiles.TileSapling;
 import forestry.arboriculture.tiles.TileWood;
+import forestry.core.GuiHandlerBase;
 import forestry.core.blocks.BlockBase;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
@@ -378,7 +378,7 @@ public class PluginArboriculture extends ForestryPlugin {
 	}
 
 	@Override
-	public IGuiHandler getGuiHandler() {
+	public GuiHandlerBase getGuiHandler() {
 		return new GuiHandlerArboriculture();
 	}
 

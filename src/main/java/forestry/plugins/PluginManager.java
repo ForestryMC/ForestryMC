@@ -34,11 +34,11 @@ import net.minecraftforge.common.config.Property;
 
 import cpw.mods.fml.common.IFuelHandler;
 import cpw.mods.fml.common.event.FMLInterModComms;
-import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 import forestry.Forestry;
 import forestry.api.core.ForestryAPI;
+import forestry.core.GuiHandlerBase;
 import forestry.core.IPickupHandler;
 import forestry.core.IResupplyHandler;
 import forestry.core.ISaveEventHandler;
@@ -49,7 +49,7 @@ public class PluginManager {
 	private static final String MODULE_CONFIG_FILE_NAME = "modules.cfg";
 	private static final String CATEGORY_MODULES = "modules";
 
-	public static final ArrayList<IGuiHandler> guiHandlers = Lists.newArrayList();
+	public static final ArrayList<GuiHandlerBase> guiHandlers = Lists.newArrayList();
 	public static final ArrayList<IPickupHandler> pickupHandlers = Lists.newArrayList();
 	public static final ArrayList<ISaveEventHandler> saveEventHandlers = Lists.newArrayList();
 	public static final ArrayList<IResupplyHandler> resupplyHandlers = Lists.newArrayList();
@@ -149,7 +149,7 @@ public class PluginManager {
 	private static void registerHandlers(ForestryPlugin plugin) {
 		Log.fine("Registering Handlers for Plugin: {0}", plugin);
 
-		IGuiHandler guiHandler = plugin.getGuiHandler();
+		GuiHandlerBase guiHandler = plugin.getGuiHandler();
 		if (guiHandler != null) {
 			guiHandlers.add(guiHandler);
 		}

@@ -10,9 +10,14 @@
  ******************************************************************************/
 package forestry.lepidopterology;
 
+import net.minecraft.client.gui.Gui;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.core.GuiHandlerBase;
@@ -24,7 +29,7 @@ import forestry.lepidopterology.inventory.ItemInventoryFlutterlyzer;
 public class GuiHandlerLepidopterology extends GuiHandlerBase {
 
 	@Override
-	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
+	public Container getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 		int cleanId = decodeGuiID(id);
 		int guiData = decodeGuiData(id);
 
@@ -50,8 +55,9 @@ public class GuiHandlerLepidopterology extends GuiHandlerBase {
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
-	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
+	public Gui getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 		int cleanId = decodeGuiID(id);
 		int guiData = decodeGuiData(id);
 

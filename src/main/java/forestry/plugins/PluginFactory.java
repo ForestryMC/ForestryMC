@@ -21,8 +21,6 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 
-import cpw.mods.fml.common.network.IGuiHandler;
-
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitLayout;
@@ -35,6 +33,7 @@ import forestry.api.fuels.MoistenerFuel;
 import forestry.api.fuels.RainSubstrate;
 import forestry.api.recipes.ICraftingProvider;
 import forestry.api.recipes.RecipeManagers;
+import forestry.core.GuiHandlerBase;
 import forestry.core.blocks.BlockBase;
 import forestry.core.circuits.Circuit;
 import forestry.core.circuits.CircuitLayout;
@@ -564,7 +563,7 @@ public class PluginFactory extends ForestryPlugin {
 	}
 
 	@Override
-	public IGuiHandler getGuiHandler() {
+	public GuiHandlerBase getGuiHandler() {
 		return new GuiHandlerFactory();
 	}
 

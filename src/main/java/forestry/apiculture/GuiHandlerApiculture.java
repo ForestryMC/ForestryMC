@@ -17,6 +17,9 @@ import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import forestry.api.apiculture.BeeManager;
 import forestry.apiculture.entities.EntityMinecartApiary;
 import forestry.apiculture.entities.EntityMinecartBeehouse;
@@ -52,6 +55,7 @@ import forestry.core.tiles.TileUtil;
 
 public class GuiHandlerApiculture extends GuiHandlerBase {
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public Gui getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 		int cleanId = decodeGuiID(id);

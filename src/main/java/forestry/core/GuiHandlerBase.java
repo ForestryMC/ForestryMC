@@ -10,10 +10,14 @@
  ******************************************************************************/
 package forestry.core;
 
+import net.minecraft.client.gui.Gui;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.world.World;
 
 import cpw.mods.fml.common.network.IGuiHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.gui.ContainerNaturalistInventory;
@@ -23,6 +27,13 @@ import forestry.core.tiles.TileNaturalistChest;
 import forestry.core.tiles.TileUtil;
 
 public abstract class GuiHandlerBase implements IGuiHandler {
+
+	@Override
+	public abstract Container getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z);
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public abstract Gui getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z);
 
 	protected GuiNaturalistInventory getNaturalistChestGui(ISpeciesRoot speciesRoot, EntityPlayer player, World world, int x, int y, int z, int page) {
 		TileNaturalistChest tile = TileUtil.getTile(world, x, y, z, TileNaturalistChest.class);

@@ -18,12 +18,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.network.IGuiHandler;
 
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.EnumPostage;
 import forestry.api.mail.PostManager;
 import forestry.api.recipes.RecipeManagers;
+import forestry.core.GuiHandlerBase;
 import forestry.core.ISaveEventHandler;
 import forestry.core.blocks.BlockBase;
 import forestry.core.config.Config;
@@ -154,7 +154,7 @@ public class PluginMail extends ForestryPlugin {
 	}
 
 	@Override
-	public IGuiHandler getGuiHandler() {
+	public GuiHandlerBase getGuiHandler() {
 		return new GuiHandlerMail();
 	}
 

@@ -49,7 +49,6 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
-import cpw.mods.fml.common.network.IGuiHandler;
 
 import forestry.Forestry;
 import forestry.api.core.Tabs;
@@ -58,6 +57,7 @@ import forestry.api.storage.BackpackManager;
 import forestry.api.storage.EnumBackpackType;
 import forestry.api.storage.IBackpackDefinition;
 import forestry.api.storage.StorageManager;
+import forestry.core.GuiHandlerBase;
 import forestry.core.IPickupHandler;
 import forestry.core.IResupplyHandler;
 import forestry.core.config.Constants;
@@ -526,7 +526,7 @@ public class PluginStorage extends ForestryPlugin {
 	}
 
 	@Override
-	public IGuiHandler getGuiHandler() {
+	public GuiHandlerBase getGuiHandler() {
 		return new GuiHandlerStorage();
 	}
 

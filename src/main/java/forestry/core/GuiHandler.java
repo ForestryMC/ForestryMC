@@ -10,11 +10,14 @@
  ******************************************************************************/
 package forestry.core;
 
+import net.minecraft.client.gui.Gui;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import cpw.mods.fml.common.network.IGuiHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.core.circuits.ContainerSolderingIron;
 import forestry.core.circuits.GuiSolderingIron;
@@ -31,8 +34,9 @@ import forestry.plugins.PluginManager;
 
 public class GuiHandler extends GuiHandlerBase {
 
+	@SideOnly(Side.CLIENT)
 	@Override
-	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
+	public Gui getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 		int cleanId = decodeGuiID(id);
 
 		if (cleanId < GuiId.values().length) {
@@ -52,8 +56,8 @@ public class GuiHandler extends GuiHandlerBase {
 					return new GuiSolderingIron(player, new ItemInventorySolderingIron(player, equipped));
 
 				default:
-					for (IGuiHandler handler : PluginManager.guiHandlers) {
-						Object element = handler.getClientGuiElement(id, player, world, x, y, z);
+					for (GuiHandlerBase handler : PluginManager.guiHandlers) {
+						Gui element = handler.getClientGuiElement(id, player, world, x, y, z);
 						if (element != null) {
 							return element;
 						}
@@ -67,7 +71,7 @@ public class GuiHandler extends GuiHandlerBase {
 	}
 
 	@Override
-	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
+	public Container getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 		int cleanId = decodeGuiID(id);
 
 		if (cleanId < GuiId.values().length) {
@@ -87,8 +91,8 @@ public class GuiHandler extends GuiHandlerBase {
 					return new ContainerSolderingIron(player, new ItemInventorySolderingIron(player, equipped));
 
 				default:
-					for (IGuiHandler handler : PluginManager.guiHandlers) {
-						Object element = handler.getServerGuiElement(id, player, world, x, y, z);
+					for (GuiHandlerBase handler : PluginManager.guiHandlers) {
+						Container element = handler.getServerGuiElement(id, player, world, x, y, z);
 						if (element != null) {
 							return element;
 						}

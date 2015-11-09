@@ -25,7 +25,6 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
 
 import cpw.mods.fml.common.IFuelHandler;
-import cpw.mods.fml.common.network.IGuiHandler;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.core.ForestryAPI;
@@ -34,6 +33,7 @@ import forestry.api.genetics.AlleleManager;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
 import forestry.core.CreativeTabForestry;
+import forestry.core.GuiHandlerBase;
 import forestry.core.IPickupHandler;
 import forestry.core.ISaveEventHandler;
 import forestry.core.PickupHandlerCore;
@@ -284,7 +284,7 @@ public class PluginCore extends ForestryPlugin {
 	}
 
 	@Override
-	public IGuiHandler getGuiHandler() {
+	public GuiHandlerBase getGuiHandler() {
 		return null;
 	}
 

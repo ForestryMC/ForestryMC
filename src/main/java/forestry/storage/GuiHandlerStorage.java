@@ -16,6 +16,9 @@ import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import forestry.api.apiculture.BeeManager;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.api.lepidopterology.ButterflyManager;
@@ -32,6 +35,7 @@ import forestry.storage.items.ItemBackpack;
 
 public class GuiHandlerStorage extends GuiHandlerBase {
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public Gui getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 		int cleanId = decodeGuiID(id);
@@ -71,6 +75,7 @@ public class GuiHandlerStorage extends GuiHandlerBase {
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
 	private static Gui getNaturalistGui(ISpeciesRoot root, EntityPlayer player, GuiId guiId, int guiData) {
 		ItemStack equipped = getBackpackItem(player);
 		if (equipped == null) {

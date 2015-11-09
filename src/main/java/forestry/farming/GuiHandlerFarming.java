@@ -10,8 +10,13 @@
  ******************************************************************************/
 package forestry.farming;
 
+import net.minecraft.client.gui.Gui;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.world.World;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.core.GuiHandlerBase;
 import forestry.core.network.GuiId;
@@ -25,7 +30,7 @@ import forestry.farming.tiles.TileFarm;
 public class GuiHandlerFarming extends GuiHandlerBase {
 
 	@Override
-	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
+	public Container getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 
 		if (id >= GuiId.values().length) {
 			return null;
@@ -42,8 +47,9 @@ public class GuiHandlerFarming extends GuiHandlerBase {
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
-	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
+	public Gui getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 		if (id >= GuiId.values().length) {
 			return null;
 		}

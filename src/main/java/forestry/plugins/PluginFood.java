@@ -16,9 +16,8 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import cpw.mods.fml.common.network.IGuiHandler;
-
 import forestry.api.food.BeverageManager;
+import forestry.core.GuiHandlerBase;
 import forestry.core.config.Constants;
 import forestry.core.config.ForestryItem;
 import forestry.core.fluids.Fluids;
@@ -91,7 +90,7 @@ public class PluginFood extends ForestryPlugin {
 	}
 
 	@Override
-	public IGuiHandler getGuiHandler() {
+	public GuiHandlerBase getGuiHandler() {
 		return new GuiHandlerFood();
 	}
 }

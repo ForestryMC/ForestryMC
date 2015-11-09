@@ -15,9 +15,9 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 
 import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.network.IGuiHandler;
 
 import forestry.api.core.ForestryAPI;
+import forestry.core.GuiHandlerBase;
 import forestry.core.blocks.BlockBase;
 import forestry.core.config.Constants;
 import forestry.core.config.ForestryBlock;
@@ -101,7 +101,7 @@ public class PluginEnergy extends ForestryPlugin {
 	}
 
 	@Override
-	public IGuiHandler getGuiHandler() {
+	public GuiHandlerBase getGuiHandler() {
 		return new GuiHandlerEnergy();
 	}
 }
