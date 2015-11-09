@@ -21,7 +21,7 @@ import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 
 import forestry.apiculture.blocks.BlockCandle;
 import forestry.apiculture.tiles.TileCandle;
-import forestry.core.proxy.ProxyRenderClient;
+import forestry.core.proxy.Proxies;
 
 public class RenderCandleBlock implements ISimpleBlockRenderingHandler {
 
@@ -32,7 +32,7 @@ public class RenderCandleBlock implements ISimpleBlockRenderingHandler {
 
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
-		if (block.getRenderType() == ProxyRenderClient.getCandleRenderId()) {
+		if (block.getRenderType() == Proxies.render.getCandleRenderId()) {
 			renderBlockCandle(world, x, y, z, (BlockCandle) block);
 		}
 		return true;
@@ -45,7 +45,7 @@ public class RenderCandleBlock implements ISimpleBlockRenderingHandler {
 
 	@Override
 	public int getRenderId() {
-		return ProxyRenderClient.getCandleRenderId();
+		return Proxies.render.getCandleRenderId();
 	}
 
 	private static boolean renderBlockCandle(IBlockAccess world, int x, int y, int z, BlockCandle block) {

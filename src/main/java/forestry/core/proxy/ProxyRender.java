@@ -25,6 +25,14 @@ public class ProxyRender {
 	public void init() {
 	}
 
+	public int getCandleRenderId() {
+		return 0;
+	}
+
+	public int getByBlockModelRenderId() {
+		return 0;
+	}
+
 	public boolean fancyGraphicsEnabled() {
 		return false;
 	}

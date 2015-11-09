@@ -48,16 +48,8 @@ import forestry.core.tiles.MachineDefinition;
 
 public class ProxyRenderClient extends ProxyRender {
 
-	private static int byBlockModelId;
-	private static int candleRenderId;
-
-	public static int getCandleRenderId() {
-		return candleRenderId;
-	}
-
-	public static int getByBlockModelRenderId() {
-		return byBlockModelId;
-	}
+	private int byBlockModelId;
+	private int candleRenderId;
 
 	@Override
 	public void init() {
@@ -67,6 +59,16 @@ public class ProxyRenderClient extends ProxyRender {
 		RenderBlock renderHandler = new RenderBlock();
 		RenderingRegistry.registerBlockHandler(byBlockModelId, renderHandler);
 		RenderingRegistry.registerBlockHandler(candleRenderId, new RenderCandleBlock());
+	}
+
+	@Override
+	public int getCandleRenderId() {
+		return candleRenderId;
+	}
+
+	@Override
+	public int getByBlockModelRenderId() {
+		return byBlockModelId;
 	}
 
 	@Override

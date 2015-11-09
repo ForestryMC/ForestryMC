@@ -18,7 +18,7 @@ import net.minecraft.world.IBlockAccess;
 
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 
-import forestry.core.proxy.ProxyRenderClient;
+import forestry.core.proxy.Proxies;
 
 public class RenderBlock implements ISimpleBlockRenderingHandler {
 
@@ -27,7 +27,7 @@ public class RenderBlock implements ISimpleBlockRenderingHandler {
 	@Override
 	public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer) {
 
-		if (block.getRenderType() == ProxyRenderClient.getByBlockModelRenderId()) {
+		if (block.getRenderType() == Proxies.render.getByBlockModelRenderId()) {
 			TileRendererIndex index = new TileRendererIndex(block, metadata);
 			if (byBlockRenderer.containsKey(index)) {
 				byBlockRenderer.get(index).inventoryRender(-0.5, -0.5, -0.5);
@@ -48,7 +48,7 @@ public class RenderBlock implements ISimpleBlockRenderingHandler {
 
 	@Override
 	public int getRenderId() {
-		return ProxyRenderClient.getByBlockModelRenderId();
+		return Proxies.render.getByBlockModelRenderId();
 	}
 
 }

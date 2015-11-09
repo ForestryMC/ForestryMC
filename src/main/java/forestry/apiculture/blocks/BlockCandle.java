@@ -44,7 +44,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.api.core.Tabs;
 import forestry.apiculture.tiles.TileCandle;
-import forestry.core.proxy.ProxyRenderClient;
+import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.StringUtil;
@@ -110,7 +110,7 @@ public class BlockCandle extends BlockTorch {
 
 	@Override
 	public int getRenderType() {
-		return ProxyRenderClient.getCandleRenderId();
+		return Proxies.render.getCandleRenderId();
 	}
 
 	@SideOnly(Side.CLIENT)
