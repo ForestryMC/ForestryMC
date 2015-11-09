@@ -60,7 +60,6 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
 
 		// Update crafting matrix with current contents of tileentity.
 		updateMatrix();
-		updateRecipe();
 	}
 
 	@Override
@@ -77,6 +76,11 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
 	}
 
 	@Override
+	public void onCraftMatrixChanged(IInventory iinventory) {
+		updateRecipe();
+	}
+
+	@Override
 	public void onCraftMatrixChanged(IInventory iinventory, int slot) {
 		if (slot >= craftMatrix.getSizeInventory()) {
 			return;
@@ -87,7 +91,6 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
 
 		if (!ItemStackUtil.isIdenticalItem(stack, currentStack)) {
 			craftMatrix.setInventorySlotContents(slot, stack);
-			updateRecipe();
 		}
 	}
 
