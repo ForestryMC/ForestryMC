@@ -317,7 +317,7 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 	@Override
 	public String getCommandSenderName() {
 		if (species == null) {
-			return null;
+			return super.getCommandSenderName();
 		}
 		return species.getName();
 	}
