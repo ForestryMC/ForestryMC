@@ -17,9 +17,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.api.farming.IFarmInventory;
+import forestry.api.multiblock.IFarmController;
 import forestry.core.triggers.Trigger;
 import forestry.core.utils.InventoryUtil;
-import forestry.farming.multiblock.IFarmController;
 import forestry.farming.tiles.TileHatch;
 
 import buildcraft.api.statements.IStatementContainer;
@@ -65,7 +65,7 @@ public class TriggerLowSoil extends Trigger {
 		}
 
 		TileHatch tileHatch = (TileHatch) tile;
-		IFarmController farmController = tileHatch.getFarmController();
+		IFarmController farmController = tileHatch.getMultiblockLogic().getController();
 		IFarmInventory farmInventory = farmController.getFarmInventory();
 
 		if (parameter == null || parameter.getItemStack() == null) {

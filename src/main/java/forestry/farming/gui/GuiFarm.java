@@ -28,7 +28,7 @@ import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
-import forestry.farming.multiblock.IFarmController;
+import forestry.farming.multiblock.IFarmControllerInternal;
 import forestry.farming.tiles.TileFarm;
 
 public class GuiFarm extends GuiForestry<ContainerFarm, TileFarm> {
@@ -52,7 +52,7 @@ public class GuiFarm extends GuiForestry<ContainerFarm, TileFarm> {
 	@Override
 	public void initGui() {
 		super.initGui();
-		IFarmController farmController = inventory.getFarmController();
+		IFarmControllerInternal farmController = inventory.getMultiblockLogic().getController();
 		ledgerManager.add(new ClimateLedger(ledgerManager, farmController));
 		ledgerManager.add(new FarmLedger(ledgerManager, farmController.getFarmLedgerDelegate()));
 		ledgerManager.add(new OwnerLedger(ledgerManager, farmController));
@@ -70,7 +70,7 @@ public class GuiFarm extends GuiForestry<ContainerFarm, TileFarm> {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
 		// Fuel remaining
-		int fertilizerRemain = inventory.getFarmController().getStoredFertilizerScaled(16);
+		int fertilizerRemain = inventory.getMultiblockLogic().getController().getStoredFertilizerScaled(16);
 		if (fertilizerRemain > 0) {
 			drawTexturedModalRect(guiLeft + 81, guiTop + 94 + 17 - fertilizerRemain, xSize, 17 - fertilizerRemain, 4, fertilizerRemain);
 		}
@@ -86,7 +86,7 @@ public class GuiFarm extends GuiForestry<ContainerFarm, TileFarm> {
 		}
 
 		private IFarmLogic getLogic() {
-			return inventory.getFarmController().getFarmLogic(farmDirection);
+			return inventory.getMultiblockLogic().getController().getFarmLogic(farmDirection);
 		}
 
 		private IIcon getIconIndex() {
@@ -125,7 +125,7 @@ public class GuiFarm extends GuiForestry<ContainerFarm, TileFarm> {
 				}
 				toolTip.add(getLogic().getName());
 				toolTip.add("Fertilizer: " + getLogic().getFertilizerConsumption());
-				toolTip.add("Water: " + getLogic().getWaterConsumption(inventory.getFarmController().getFarmLedgerDelegate().getHydrationModifier()));
+				toolTip.add("Water: " + getLogic().getWaterConsumption(inventory.getMultiblockLogic().getController().getFarmLedgerDelegate().getHydrationModifier()));
 			}
 		};
 	}

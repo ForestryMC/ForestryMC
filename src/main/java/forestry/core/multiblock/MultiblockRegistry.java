@@ -6,6 +6,7 @@ import java.util.Set;
 
 import net.minecraft.world.World;
 
+import forestry.api.multiblock.IMultiblockComponent;
 import forestry.core.utils.Log;
 
 /**
@@ -46,7 +47,7 @@ public class MultiblockRegistry {
 	 * @param world The world into which this part is loading.
 	 * @param part The part being loaded.
 	 */
-	public static void onPartAdded(World world, IMultiblockPart part) {
+	public static void onPartAdded(World world, IMultiblockComponent part) {
 		MultiblockWorldRegistry registry = getOrCreateRegistry(world);
 		registry.onPartAdded(part);
 	}
@@ -56,7 +57,7 @@ public class MultiblockRegistry {
 	 * @param world The world from which a multiblock part is being removed.
 	 * @param part The part being removed.
 	 */
-	public static void onPartRemovedFromWorld(World world, IMultiblockPart part) {
+	public static void onPartRemovedFromWorld(World world, IMultiblockComponent part) {
 		if (registries.containsKey(world)) {
 			registries.get(world).onPartRemovedFromWorld(part);
 		}
@@ -81,7 +82,7 @@ public class MultiblockRegistry {
 	 * @param world The world containing the multiblock
 	 * @param controller The dirty controller 
 	 */
-	public static void addDirtyController(World world, MultiblockControllerBase controller) {
+	public static void addDirtyController(World world, IMultiblockControllerInternal controller) {
 		if (registries.containsKey(world)) {
 			registries.get(world).addDirtyController(controller);
 		} else {
@@ -95,7 +96,7 @@ public class MultiblockRegistry {
 	 * @param world The world formerly containing the multiblock
 	 * @param controller The dead controller
 	 */
-	public static void addDeadController(World world, MultiblockControllerBase controller) {
+	public static void addDeadController(World world, IMultiblockControllerInternal controller) {
 		if (registries.containsKey(world)) {
 			registries.get(world).addDeadController(controller);
 		} else {
@@ -107,7 +108,7 @@ public class MultiblockRegistry {
 	 * @param world The world whose controllers you wish to retrieve.
 	 * @return An unmodifiable set of controllers active in the given world, or null if there are none.
 	 */
-	public static Set<MultiblockControllerBase> getControllersFromWorld(World world) {
+	public static Set<IMultiblockControllerInternal> getControllersFromWorld(World world) {
 		if (registries.containsKey(world)) {
 			return registries.get(world).getControllers();
 		}

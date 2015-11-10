@@ -68,7 +68,7 @@ public class ContainerFarm extends ContainerSocketed<TileFarm> {
 	}
 
 	public IFluidTank getTank(int slot) {
-		return tile.getFarmController().getTankManager().getTank(slot);
+		return tile.getMultiblockLogic().getController().getTankManager().getTank(slot);
 	}
 
 }

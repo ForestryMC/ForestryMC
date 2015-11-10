@@ -96,7 +96,7 @@ public abstract class EntityMinecartForestry extends EntityMinecart implements I
 	@Override
 	public abstract int getDisplayTileData();
 
-	// cart contents itemStack
+	// cart itemStack
 	@Override
 	public abstract ItemStack getCartItem();
 

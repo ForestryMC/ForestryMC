@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.multiblock;
 
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.biome.BiomeGenBase;
 
@@ -22,16 +22,15 @@ import forestry.api.apiculture.IBeekeepingLogic;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.IErrorLogic;
+import forestry.api.multiblock.IAlvearyComponent;
+import forestry.api.multiblock.IMultiblockController;
 import forestry.apiculture.blocks.BlockAlveary;
 import forestry.core.access.EnumAccess;
 import forestry.core.access.IAccessHandler;
 import forestry.core.access.IRestrictedAccess;
-import forestry.core.multiblock.MultiblockControllerBase;
-import forestry.core.multiblock.MultiblockValidationException;
-import forestry.core.multiblock.rectangular.RectangularMultiblockTileEntityBase;
+import forestry.core.multiblock.MultiblockTileEntityForestry;
 
-public abstract class TileAlveary extends RectangularMultiblockTileEntityBase implements IBeeHousing, IRestrictedAccess {
-
+public abstract class TileAlveary extends MultiblockTileEntityForestry<MultiblockLogicAlveary> implements IBeeHousing, IRestrictedAccess, IAlvearyComponent {
 	public static final int PLAIN_META = 0;
 	public static final int ENTRANCE_META = 1;
 	public static final int SWARMER_META = 2;
@@ -41,142 +40,100 @@ public abstract class TileAlveary extends RectangularMultiblockTileEntityBase im
 	public static final int STABILIZER_META = 6;
 	public static final int SIEVE_META = 7;
 
+	protected TileAlveary() {
+		super(new MultiblockLogicAlveary());
+	}
+
 	/* TEXTURES */
 	public int getIcon(int side) {
 		return BlockAlveary.PLAIN;
 	}
 
 	@Override
-	public void isGoodForExteriorLevel(int level) throws MultiblockValidationException {
-		if (level == 2 && !(this instanceof TileAlvearyPlain)) {
-			throw new MultiblockValidationException(StatCollector.translateToLocal("for.multiblock.alveary.error.needPlainOnTop"));
-		}
-	}
-
-	@Override
-	public void isGoodForInterior() throws MultiblockValidationException {
-		if (!(this instanceof TileAlvearyPlain)) {
-			throw new MultiblockValidationException(StatCollector.translateToLocal("for.multiblock.alveary.error.needPlainInterior"));
-		}
-	}
-
-	@Override
-	public void onMachineActivated() {
-
-	}
-
-	@Override
-	public void onMachineDeactivated() {
-
-	}
-
-	@Override
-	public MultiblockControllerBase createNewMultiblock() {
-		return new AlvearyController(worldObj);
-	}
-
-	@Override
-	public Class<? extends MultiblockControllerBase> getMultiblockControllerType() {
-		return AlvearyController.class;
-	}
-
-	public IAlvearyController getAlvearyController() {
-		if (isConnected()) {
-			return (IAlvearyController) getMultiblockController();
-		} else {
-			return FakeAlvearyController.instance;
-		}
-	}
-
-	@Override
-	public void onMachineAssembled(MultiblockControllerBase controller) {
-		super.onMachineAssembled(controller);
-
+	public void onMachineAssembled(IMultiblockController multiblockController, ChunkCoordinates minCoord, ChunkCoordinates maxCoord) {
 		// Re-render this block on the client
 		if (worldObj.isRemote) {
 			this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 		}
-		notifyNeighborsOfBlockChange();
+		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, getBlockType());
 		markDirty();
 	}
 
 	@Override
 	public void onMachineBroken() {
-		super.onMachineBroken();
-
 		// Re-render this block on the client
 		if (worldObj.isRemote) {
 			this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 		}
-		notifyNeighborsOfBlockChange();
+		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, getBlockType());
 		markDirty();
 	}
 
 	/* IHousing */
 	@Override
 	public BiomeGenBase getBiome() {
-		return getAlvearyController().getBiome();
+		return getMultiblockLogic().getController().getBiome();
 	}
 
 	/* IBeeHousing */
 	@Override
 	public Iterable<IBeeModifier> getBeeModifiers() {
-		return getAlvearyController().getBeeModifiers();
+		return getMultiblockLogic().getController().getBeeModifiers();
 	}
 
 	@Override
 	public Iterable<IBeeListener> getBeeListeners() {
-		return getAlvearyController().getBeeListeners();
+		return getMultiblockLogic().getController().getBeeListeners();
 	}
 
 	@Override
 	public IBeeHousingInventory getBeeInventory() {
-		return getAlvearyController().getBeeInventory();
+		return getMultiblockLogic().getController().getBeeInventory();
 	}
 
 	@Override
 	public IBeekeepingLogic getBeekeepingLogic() {
-		return getAlvearyController().getBeekeepingLogic();
+		return getMultiblockLogic().getController().getBeekeepingLogic();
 	}
 
 	@Override
 	public Vec3 getBeeFXCoordinates() {
-		return getAlvearyController().getBeeFXCoordinates();
+		return getMultiblockLogic().getController().getBeeFXCoordinates();
 	}
 
 	/* IClimatised */
 	@Override
 	public EnumTemperature getTemperature() {
-		return getAlvearyController().getTemperature();
+		return getMultiblockLogic().getController().getTemperature();
 	}
 
 	@Override
 	public EnumHumidity getHumidity() {
-		return getAlvearyController().getHumidity();
+		return getMultiblockLogic().getController().getHumidity();
 	}
 
 	@Override
 	public int getBlockLightValue() {
-		return getAlvearyController().getBlockLightValue();
+		return getMultiblockLogic().getController().getBlockLightValue();
 	}
 
 	@Override
 	public boolean canBlockSeeTheSky() {
-		return getAlvearyController().canBlockSeeTheSky();
+		return getMultiblockLogic().getController().canBlockSeeTheSky();
 	}
 
 	@Override
 	public IErrorLogic getErrorLogic() {
-		return getAlvearyController().getErrorLogic();
+		return getMultiblockLogic().getController().getErrorLogic();
 	}
 
 	@Override
 	public IAccessHandler getAccessHandler() {
-		return getAlvearyController().getAccessHandler();
+		return getMultiblockLogic().getController().getAccessHandler();
 	}
 
 	@Override
 	public void onSwitchAccess(EnumAccess oldAccess, EnumAccess newAccess) {
-		getAlvearyController().onSwitchAccess(oldAccess, newAccess);
+		getMultiblockLogic().getController().onSwitchAccess(oldAccess, newAccess);
 	}
 }

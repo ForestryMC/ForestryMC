@@ -12,7 +12,6 @@ package forestry.apiculture.multiblock;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChunkCoordinates;
 
 import forestry.api.core.ForestryAPI;
 import forestry.core.access.AccessHandler;
@@ -37,11 +36,6 @@ public abstract class TileAlvearyWithGui extends TileAlveary implements ITitled,
 	@Override
 	public final IAccessHandler getAccessHandler() {
 		return accessHandler;
-	}
-
-	@Override
-	public final ChunkCoordinates getCoordinates() {
-		return new ChunkCoordinates(xCoord, yCoord, zCoord);
 	}
 
 	@Override

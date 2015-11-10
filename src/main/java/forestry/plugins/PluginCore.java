@@ -30,6 +30,7 @@ import forestry.api.circuits.ChipsetManager;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.Tabs;
 import forestry.api.genetics.AlleleManager;
+import forestry.api.multiblock.MultiblockManager;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
 import forestry.core.CreativeTabForestry;
@@ -71,6 +72,7 @@ import forestry.core.items.ItemOverlay.OverlayInfo;
 import forestry.core.items.ItemPipette;
 import forestry.core.items.ItemWithGui;
 import forestry.core.items.ItemWrench;
+import forestry.core.multiblock.MultiblockLogicFactory;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
 import forestry.core.recipes.RecipeUtil;
@@ -103,6 +105,8 @@ public class PluginCore extends ForestryPlugin {
 		alleleRegistry.initialize();
 
 		AlleleHelper.instance = new AlleleHelper();
+
+		MultiblockManager.logicFactory = new MultiblockLogicFactory();
 	}
 
 	@Override

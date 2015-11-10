@@ -16,6 +16,7 @@ import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.StatCollector;
 import net.minecraft.util.Vec3;
@@ -25,9 +26,6 @@ import net.minecraft.world.biome.BiomeGenBase;
 import com.mojang.authlib.GameProfile;
 
 import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.DefaultBeeModifier;
-import forestry.api.apiculture.IAlvearyComponent;
-import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousingInventory;
 import forestry.api.apiculture.IBeeListener;
 import forestry.api.apiculture.IBeeModifier;
@@ -35,22 +33,22 @@ import forestry.api.apiculture.IBeekeepingLogic;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.IClimateControlled;
+import forestry.api.multiblock.IAlvearyComponent;
+import forestry.api.multiblock.IMultiblockComponent;
+import forestry.apiculture.AlvearyBeeModifier;
 import forestry.apiculture.InventoryBeeHousing;
 import forestry.core.access.EnumAccess;
 import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
-import forestry.core.multiblock.CoordTriplet;
-import forestry.core.multiblock.IMultiblockPart;
-import forestry.core.multiblock.MultiblockControllerBase;
-import forestry.core.multiblock.MultiblockTileEntityBase;
+import forestry.core.multiblock.IMultiblockControllerInternal;
 import forestry.core.multiblock.MultiblockValidationException;
-import forestry.core.multiblock.rectangular.RectangularMultiblockControllerBase;
+import forestry.core.multiblock.RectangularMultiblockControllerBase;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.BlockUtil;
 
-public class AlvearyController extends RectangularMultiblockControllerBase implements IAlvearyController, IClimateControlled {
+public class AlvearyController extends RectangularMultiblockControllerBase implements IAlvearyControllerInternal, IClimateControlled {
 
 	private final InventoryBeeHousing inventory;
 	private final IBeekeepingLogic beekeepingLogic;
@@ -64,13 +62,12 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	private final Set<IBeeListener> beeListeners = new HashSet<>();
 	private final Set<IAlvearyComponent.Climatiser> climatisers = new HashSet<>();
 	private final Set<IAlvearyComponent.Active> activeComponents = new HashSet<>();
-	private final Set<IAlvearyComponent> allComponents = new HashSet<>();
 
 	// CLIENT
 	private int breedingProgressPercent = 0;
 
 	public AlvearyController(World world) {
-		super(world);
+		super(world, AlvearyMultiblockSizeLimits.instance);
 		this.inventory = new InventoryBeeHousing(9, "Items", getAccessHandler());
 		this.beekeepingLogic = BeeManager.beeRoot.createBeekeepingLogic(this);
 
@@ -107,20 +104,13 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	}
 
 	@Override
-	public Iterable<IAlvearyComponent> getComponents() {
-		return allComponents;
-	}
-
-	@Override
-	public void onAttachedPartWithMultiblockData(IMultiblockPart part, NBTTagCompound data) {
+	public void onAttachedPartWithMultiblockData(IMultiblockComponent part, NBTTagCompound data) {
 		this.readFromNBT(data);
 	}
 
 	@Override
-	protected void onBlockAdded(IMultiblockPart newPart) {
+	protected void onBlockAdded(IMultiblockComponent newPart) {
 		if (newPart instanceof IAlvearyComponent) {
-			allComponents.add((IAlvearyComponent) newPart);
-
 			if (newPart instanceof IAlvearyComponent.BeeModifier) {
 				IAlvearyComponent.BeeModifier alvearyBeeModifier = (IAlvearyComponent.BeeModifier) newPart;
 				IBeeModifier beeModifier = alvearyBeeModifier.getBeeModifier();
@@ -144,10 +134,8 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	}
 
 	@Override
-	protected void onBlockRemoved(IMultiblockPart oldPart) {
+	protected void onBlockRemoved(IMultiblockComponent oldPart) {
 		if (oldPart instanceof IAlvearyComponent) {
-			allComponents.remove(oldPart);
-
 			if (oldPart instanceof IAlvearyComponent.BeeModifier) {
 				IAlvearyComponent.BeeModifier alvearyBeeModifier = (IAlvearyComponent.BeeModifier) oldPart;
 				IBeeModifier beeModifier = alvearyBeeModifier.getBeeModifier();
@@ -174,14 +162,14 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	protected void isMachineWhole() throws MultiblockValidationException {
 		super.isMachineWhole();
 
-		final CoordTriplet maximumCoord = getMaximumCoord();
-		final CoordTriplet minimumCoord = getMinimumCoord();
+		final ChunkCoordinates maximumCoord = getMaximumCoord();
+		final ChunkCoordinates minimumCoord = getMinimumCoord();
 
 		// check that the top is covered in wood slabs
 
-		final int slabY = maximumCoord.y + 1;
-		for (int slabX = minimumCoord.x; slabX <= maximumCoord.x; slabX++) {
-			for (int slabZ = minimumCoord.z; slabZ <= maximumCoord.z; slabZ++) {
+		final int slabY = maximumCoord.posY + 1;
+		for (int slabX = minimumCoord.posX; slabX <= maximumCoord.posX; slabX++) {
+			for (int slabZ = minimumCoord.posZ; slabZ <= maximumCoord.posZ; slabZ++) {
 				Block block = worldObj.getBlock(slabX, slabY, slabZ);
 				if (!BlockUtil.isWoodSlabBlock(block)) {
 					throw new MultiblockValidationException(StatCollector.translateToLocal("for.multiblock.alveary.error.needSlabs"));
@@ -196,9 +184,9 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 
 		// check that there is space all around the alveary entrances
 
-		int airY = maximumCoord.y;
-		for (int airX = minimumCoord.x - 1; airX <= maximumCoord.x + 1; airX++) {
-			for (int airZ = minimumCoord.z - 1; airZ <= maximumCoord.z + 1; airZ++) {
+		int airY = maximumCoord.posY;
+		for (int airX = minimumCoord.posX - 1; airX <= maximumCoord.posX + 1; airX++) {
+			for (int airZ = minimumCoord.posZ - 1; airZ <= maximumCoord.posZ + 1; airZ++) {
 				if (isCoordInMultiblock(airX, airY, airZ)) {
 					continue;
 				}
@@ -211,47 +199,26 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	}
 
 	@Override
-	protected int getMinimumNumberOfBlocksForAssembledMachine() {
-		return 27;
+	protected void isGoodForExteriorLevel(IMultiblockComponent part, int level) throws MultiblockValidationException {
+		if (level == 2 && !(part instanceof TileAlvearyPlain)) {
+			throw new MultiblockValidationException(StatCollector.translateToLocal("for.multiblock.alveary.error.needPlainOnTop"));
+		}
 	}
 
 	@Override
-	protected int getMaximumXSize() {
-		return 3;
+	protected void isGoodForInterior(IMultiblockComponent part) throws MultiblockValidationException {
+		if (!(part instanceof TileAlvearyPlain)) {
+			throw new MultiblockValidationException(StatCollector.translateToLocal("for.multiblock.alveary.error.needPlainInterior"));
+		}
 	}
 
 	@Override
-	protected int getMaximumZSize() {
-		return 3;
-	}
-
-	@Override
-	protected int getMaximumYSize() {
-		return 3;
-	}
-
-	@Override
-	protected int getMinimumXSize() {
-		return 3;
-	}
-
-	@Override
-	protected int getMinimumYSize() {
-		return 3;
-	}
-
-	@Override
-	protected int getMinimumZSize() {
-		return 3;
-	}
-
-	@Override
-	protected void onAssimilate(MultiblockControllerBase assimilated) {
+	protected void onAssimilate(IMultiblockControllerInternal assimilated) {
 
 	}
 
 	@Override
-	protected void onAssimilated(MultiblockControllerBase assimilator) {
+	public void onAssimilated(IMultiblockControllerInternal assimilator) {
 
 	}
 
@@ -298,10 +265,10 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 			beekeepingLogic.doBeeFX();
 
 			if (updateOnInterval(50)) {
-				CoordTriplet center = getCenterCoord();
-				float fxX = center.x + 0.5F;
-				float fxY = center.y + 1.0F;
-				float fxZ = center.z + 0.5F;
+				ChunkCoordinates center = getCenterCoord();
+				float fxX = center.posX + 0.5F;
+				float fxY = center.posY + 1.0F;
+				float fxZ = center.posZ + 0.5F;
 				float distanceFromCenter = 1.6F;
 
 				float leftRightSpreadFromCenter = distanceFromCenter * (worldObj.rand.nextFloat() - 0.5F);
@@ -354,24 +321,24 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 
 	@Override
 	public ChunkCoordinates getCoordinates() {
-		CoordTriplet coord = getCenterCoord();
-		return new ChunkCoordinates(coord.x, coord.y + 1, coord.z);
+		ChunkCoordinates coord = getCenterCoord();
+		return new ChunkCoordinates(coord.posX, coord.posY + 1, coord.posZ);
 	}
 
 	@Override
 	public Vec3 getBeeFXCoordinates() {
-		CoordTriplet coord = getCenterCoord();
-		return Vec3.createVectorHelper(coord.x + 0.5, coord.y + 1.5, coord.z + 0.5);
+		ChunkCoordinates coord = getCenterCoord();
+		return Vec3.createVectorHelper(coord.posX + 0.5, coord.posY + 1.5, coord.posZ + 0.5);
 	}
 
 	@Override
 	public void onSwitchAccess(EnumAccess oldAccess, EnumAccess newAccess) {
 		if (oldAccess == EnumAccess.SHARED || newAccess == EnumAccess.SHARED) {
 			// pipes connected to this need to update
-			for (IMultiblockPart part : connectedParts) {
-				if (part instanceof MultiblockTileEntityBase) {
-					MultiblockTileEntityBase tile = (MultiblockTileEntityBase) part;
-					tile.notifyNeighborsOfBlockChange();
+			for (IMultiblockComponent part : connectedParts) {
+				if (part instanceof TileEntity) {
+					TileEntity tile = (TileEntity) part;
+					worldObj.notifyBlocksOfNeighborChange(tile.xCoord, tile.yCoord, tile.zCoord, tile.getBlockType());
 				}
 			}
 			markDirty();
@@ -380,8 +347,8 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 
 	@Override
 	public float getExactTemperature() {
-		CoordTriplet coords = getReferenceCoord();
-		return getBiome().getFloatTemperature(coords.x, coords.y, coords.z) + tempChange;
+		ChunkCoordinates coords = getReferenceCoord();
+		return getBiome().getFloatTemperature(coords.posX, coords.posY, coords.posZ) + tempChange;
 	}
 
 	@Override
@@ -417,22 +384,22 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	@Override
 	public BiomeGenBase getBiome() {
 		if (cachedBiome == null) {
-			CoordTriplet coords = getReferenceCoord();
-			cachedBiome = worldObj.getBiomeGenForCoords(coords.x, coords.z);
+			ChunkCoordinates coords = getReferenceCoord();
+			cachedBiome = worldObj.getBiomeGenForCoords(coords.posX, coords.posZ);
 		}
 		return cachedBiome;
 	}
 
 	@Override
 	public int getBlockLightValue() {
-		CoordTriplet topCenter = getTopCenterCoord();
-		return worldObj.getBlockLightValue(topCenter.x, topCenter.y + 1, topCenter.z);
+		ChunkCoordinates topCenter = getTopCenterCoord();
+		return worldObj.getBlockLightValue(topCenter.posX, topCenter.posY + 1, topCenter.posZ);
 	}
 
 	@Override
 	public boolean canBlockSeeTheSky() {
-		CoordTriplet topCenter = getTopCenterCoord();
-		return worldObj.canBlockSeeTheSky(topCenter.x, topCenter.y + 2, topCenter.z);
+		ChunkCoordinates topCenter = getTopCenterCoord();
+		return worldObj.canBlockSeeTheSky(topCenter.posX, topCenter.posY + 2, topCenter.posZ);
 	}
 
 	@Override
@@ -474,12 +441,4 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 		tempChange = data.readVarInt() / 100.0F;
 		humidChange = data.readVarInt() / 100.0F;
 	}
-
-	private static class AlvearyBeeModifier extends DefaultBeeModifier {
-		@Override
-		public float getTerritoryModifier(IBeeGenome genome, float currentModifier) {
-			return 2.0f;
-		}
-	}
-
 }

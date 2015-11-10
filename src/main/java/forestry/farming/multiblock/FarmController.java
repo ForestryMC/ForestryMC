@@ -26,6 +26,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
@@ -43,11 +44,12 @@ import forestry.api.core.EnumTemperature;
 import forestry.api.core.IErrorLogic;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
-import forestry.api.farming.IFarmComponent;
 import forestry.api.farming.IFarmInventory;
 import forestry.api.farming.IFarmListener;
 import forestry.api.farming.IFarmLogic;
 import forestry.api.farming.IFarmable;
+import forestry.api.multiblock.IFarmComponent;
+import forestry.api.multiblock.IMultiblockComponent;
 import forestry.core.access.EnumAccess;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
@@ -59,12 +61,9 @@ import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.InventoryAdapter;
-import forestry.core.multiblock.CoordTriplet;
-import forestry.core.multiblock.IMultiblockPart;
-import forestry.core.multiblock.MultiblockControllerBase;
-import forestry.core.multiblock.MultiblockTileEntityBase;
+import forestry.core.multiblock.IMultiblockControllerInternal;
 import forestry.core.multiblock.MultiblockValidationException;
-import forestry.core.multiblock.rectangular.RectangularMultiblockControllerBase;
+import forestry.core.multiblock.RectangularMultiblockControllerBase;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.tiles.ILiquidTankTile;
@@ -76,9 +75,10 @@ import forestry.farming.FarmHelper;
 import forestry.farming.FarmTarget;
 import forestry.farming.gui.IFarmLedgerDelegate;
 import forestry.farming.logic.FarmLogicArboreal;
+import forestry.farming.tiles.TileFarmPlain;
 import forestry.farming.tiles.TileGearbox;
 
-public class FarmController extends RectangularMultiblockControllerBase implements IFarmController, ILiquidTankTile {
+public class FarmController extends RectangularMultiblockControllerBase implements IFarmControllerInternal, ILiquidTankTile {
 
 	private enum Stage {
 		CULTIVATE, HARVEST;
@@ -134,7 +134,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	private BiomeGenBase cachedBiome;
 
 	public FarmController(World world) {
-		super(world);
+		super(world, FarmMultiblockSizeLimits.instance);
 
 		this.resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, FluidRegistry.WATER);
 		this.tankManager = new TankManager(this, resourceTank);
@@ -168,19 +168,19 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 	private BiomeGenBase getBiome() {
 		if (cachedBiome == null) {
-			CoordTriplet coords = getReferenceCoord();
-			cachedBiome = worldObj.getBiomeGenForCoords(coords.x, coords.z);
+			ChunkCoordinates coords = getReferenceCoord();
+			cachedBiome = worldObj.getBiomeGenForCoords(coords.posX, coords.posZ);
 		}
 		return cachedBiome;
 	}
 
 	@Override
-	public void onAttachedPartWithMultiblockData(IMultiblockPart part, NBTTagCompound data) {
+	public void onAttachedPartWithMultiblockData(IMultiblockComponent part, NBTTagCompound data) {
 		this.readFromNBT(data);
 	}
 
 	@Override
-	protected void onBlockAdded(IMultiblockPart newPart) {
+	protected void onBlockAdded(IMultiblockComponent newPart) {
 		if (newPart instanceof IFarmComponent.Listener) {
 			IFarmComponent.Listener listenerPart = (IFarmComponent.Listener) newPart;
 			farmListeners.add(listenerPart.getFarmListener());
@@ -192,7 +192,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	}
 
 	@Override
-	protected void onBlockRemoved(IMultiblockPart oldPart) {
+	protected void onBlockRemoved(IMultiblockComponent oldPart) {
 		if (oldPart instanceof IFarmComponent.Listener) {
 			IFarmComponent.Listener listenerPart = (IFarmComponent.Listener) oldPart;
 			farmListeners.remove(listenerPart.getFarmListener());
@@ -208,7 +208,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		super.isMachineWhole();
 
 		boolean hasGearbox = false;
-		for (IMultiblockPart part : connectedParts) {
+		for (IMultiblockComponent part : connectedParts) {
 			if (part instanceof TileGearbox) {
 				hasGearbox = true;
 				break;
@@ -227,47 +227,26 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	}
 
 	@Override
-	protected int getMinimumNumberOfBlocksForAssembledMachine() {
-		return 3 * 3 * 4;
+	public void isGoodForExteriorLevel(IMultiblockComponent part, int level) throws MultiblockValidationException {
+		if (level == 2 && !(part instanceof TileFarmPlain)) {
+			throw new MultiblockValidationException(StatCollector.translateToLocal("for.multiblock.farm.error.needPlainBand"));
+		}
 	}
 
 	@Override
-	protected int getMaximumXSize() {
-		return 5;
+	public void isGoodForInterior(IMultiblockComponent part) throws MultiblockValidationException {
+		if (!(part instanceof TileFarmPlain)) {
+			throw new MultiblockValidationException(StatCollector.translateToLocal("for.multiblock.farm.error.needPlainInterior"));
+		}
 	}
 
 	@Override
-	protected int getMaximumZSize() {
-		return 5;
-	}
-
-	@Override
-	protected int getMaximumYSize() {
-		return 4;
-	}
-
-	@Override
-	protected int getMinimumXSize() {
-		return 3;
-	}
-
-	@Override
-	protected int getMinimumZSize() {
-		return 3;
-	}
-
-	@Override
-	protected int getMinimumYSize() {
-		return 4;
-	}
-
-	@Override
-	protected void onAssimilate(MultiblockControllerBase assimilated) {
+	public void onAssimilate(IMultiblockControllerInternal assimilated) {
 
 	}
 
 	@Override
-	protected void onAssimilated(MultiblockControllerBase assimilator) {
+	public void onAssimilated(IMultiblockControllerInternal assimilator) {
 
 	}
 
@@ -356,18 +335,18 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 	@Override
 	public ChunkCoordinates getCoordinates() {
-		CoordTriplet coord = getReferenceCoord();
-		return new ChunkCoordinates(coord.x, coord.y, coord.z);
+		ChunkCoordinates coord = getReferenceCoord();
+		return new ChunkCoordinates(coord);
 	}
 
 	@Override
 	public void onSwitchAccess(EnumAccess oldAccess, EnumAccess newAccess) {
 		if (oldAccess == EnumAccess.SHARED || newAccess == EnumAccess.SHARED) {
 			// pipes connected to this need to update
-			for (IMultiblockPart part : connectedParts) {
-				if (part instanceof MultiblockTileEntityBase) {
-					MultiblockTileEntityBase tile = (MultiblockTileEntityBase) part;
-					tile.notifyNeighborsOfBlockChange();
+			for (IMultiblockComponent part : connectedParts) {
+				if (part instanceof TileEntity) {
+					TileEntity tile = (TileEntity) part;
+					tile.getWorldObj().notifyBlocksOfNeighborChange(tile.xCoord, tile.yCoord, tile.zCoord, tile.getBlockType());
 				}
 			}
 			markDirty();
@@ -405,8 +384,8 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 	@Override
 	public EnumTemperature getTemperature() {
-		CoordTriplet coords = getReferenceCoord();
-		return EnumTemperature.getFromBiome(getBiome(), coords.x, coords.y, coords.z);
+		ChunkCoordinates coords = getReferenceCoord();
+		return EnumTemperature.getFromBiome(getBiome(), coords.posX, coords.posY, coords.posZ);
 	}
 
 	@Override
@@ -416,8 +395,8 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 	@Override
 	public float getExactTemperature() {
-		CoordTriplet coords = getReferenceCoord();
-		return getBiome().getFloatTemperature(coords.x, coords.y, coords.z);
+		ChunkCoordinates coords = getReferenceCoord();
+		return getBiome().getFloatTemperature(coords.posX, coords.posY, coords.posZ);
 	}
 
 	@Override
@@ -432,8 +411,8 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	@Override
 	public int[] getCoords() {
 		if (coords == null) {
-			CoordTriplet centerCoord = getCenterCoord();
-			coords = new int[]{centerCoord.x, centerCoord.y, centerCoord.z};
+			ChunkCoordinates centerCoord = getCenterCoord();
+			coords = new int[]{centerCoord.posX, centerCoord.posY, centerCoord.posZ};
 		}
 		return coords;
 	}
@@ -541,11 +520,11 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	private void setUpFarmlandTargets() {
 		Vect targetStart = new Vect(getCoords());
 
-		CoordTriplet max = getMaximumCoord();
-		CoordTriplet min = getMinimumCoord();
+		ChunkCoordinates max = getMaximumCoord();
+		ChunkCoordinates min = getMinimumCoord();
 
-		int sizeNorthSouth = Math.abs(max.z - min.z) + 1;
-		int sizeEastWest = Math.abs(max.x - min.x) + 1;
+		int sizeNorthSouth = Math.abs(max.posZ - min.posZ) + 1;
+		int sizeEastWest = Math.abs(max.posX - min.posX) + 1;
 
 		// Set the maximum allowed extent.
 		allowedExtent = Math.max(sizeNorthSouth, sizeEastWest) * Config.farmSize + 1;
@@ -770,7 +749,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 		Collection<ItemStack> harvested = crop.harvest();
 		if (harvested == null) {
-			Log.fine("Failed to harvest crop: " + crop.toString());
+			Log.fine("Failed to harvest crop: " + crop);
 			return true;
 		}
 

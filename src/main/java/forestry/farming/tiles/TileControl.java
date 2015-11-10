@@ -16,9 +16,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.api.farming.DefaultFarmListener;
 import forestry.api.farming.FarmDirection;
-import forestry.api.farming.IFarmComponent;
 import forestry.api.farming.IFarmListener;
 import forestry.api.farming.IFarmLogic;
+import forestry.api.multiblock.IFarmComponent;
 import forestry.core.utils.vect.Vect;
 
 public class TileControl extends TileFarm implements IFarmComponent.Listener {

@@ -47,7 +47,7 @@ public class TriggerLowLiquid extends Trigger {
 		}
 
 		TileHatch tileHatch = (TileHatch) tile;
-		ITankManager tankManager = tileHatch.getFarmController().getTankManager();
+		ITankManager tankManager = tileHatch.getMultiblockLogic().getController().getTankManager();
 
 		IFluidTank tank = tankManager.getTank(0);
 		if (tank.getCapacity() == 0) {

@@ -14,8 +14,8 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
-import forestry.api.apiculture.IAlvearyComponent;
 import forestry.api.core.IClimateControlled;
+import forestry.api.multiblock.IAlvearyComponent;
 import forestry.apiculture.network.PacketActiveUpdate;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.IActivatable;

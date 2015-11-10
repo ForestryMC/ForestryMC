@@ -19,8 +19,8 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 
-import forestry.api.apiculture.IAlvearyComponent;
 import forestry.api.core.IClimateControlled;
+import forestry.api.multiblock.IAlvearyComponent;
 import forestry.apiculture.blocks.BlockAlveary;
 import forestry.apiculture.inventory.InventoryHygroregulator;
 import forestry.core.config.Constants;

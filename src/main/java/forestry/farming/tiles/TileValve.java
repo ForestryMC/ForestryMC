@@ -54,6 +54,6 @@ public class TileValve extends TileFarm implements ILiquidTankTile, IFluidHandle
 
 	@Override
 	public ITankManager getTankManager() {
-		return getFarmController().getTankManager();
+		return getMultiblockLogic().getController().getTankManager();
 	}
 }

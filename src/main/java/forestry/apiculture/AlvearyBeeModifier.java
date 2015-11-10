@@ -8,19 +8,14 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.apiculture.multiblock;
+package forestry.apiculture;
 
-import forestry.api.apiculture.IAlvearyComponent;
-import forestry.api.apiculture.IBeeHousing;
-import forestry.core.access.IRestrictedAccess;
-import forestry.core.inventory.IInventoryAdapter;
-import forestry.core.network.IStreamableGui;
-import forestry.core.tiles.IClimatised;
+import forestry.api.apiculture.DefaultBeeModifier;
+import forestry.api.apiculture.IBeeGenome;
 
-public interface IAlvearyController extends IBeeHousing, IClimatised, IRestrictedAccess, IStreamableGui {
-	IInventoryAdapter getInternalInventory();
-
-	Iterable<IAlvearyComponent> getComponents();
-
-	int getHealthScaled(int i);
+public class AlvearyBeeModifier extends DefaultBeeModifier {
+	@Override
+	public float getTerritoryModifier(IBeeGenome genome, float currentModifier) {
+		return 2.0f;
+	}
 }

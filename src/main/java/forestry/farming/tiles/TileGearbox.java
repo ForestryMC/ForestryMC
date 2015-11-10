@@ -14,10 +14,10 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
-import forestry.api.farming.IFarmComponent;
+import forestry.api.multiblock.IFarmComponent;
+import forestry.api.multiblock.IFarmController;
 import forestry.core.tiles.IPowerHandler;
 import forestry.energy.EnergyManager;
-import forestry.farming.multiblock.IFarmController;
 
 public class TileGearbox extends TileFarm implements IPowerHandler, IFarmComponent.Active {
 
@@ -70,7 +70,7 @@ public class TileGearbox extends TileFarm implements IPowerHandler, IFarmCompone
 		}
 
 		if (workCounter >= WORK_CYCLES && (tickCount % 5 == 0)) {
-			IFarmController farmController = getFarmController();
+			IFarmController farmController = getMultiblockLogic().getController();
 			if (farmController.doWork()) {
 				workCounter = 0;
 				previousDelays = 0;

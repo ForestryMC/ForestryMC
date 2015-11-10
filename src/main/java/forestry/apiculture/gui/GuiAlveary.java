@@ -12,7 +12,7 @@ package forestry.apiculture.gui;
 
 import net.minecraft.entity.player.InventoryPlayer;
 
-import forestry.apiculture.multiblock.IAlvearyController;
+import forestry.apiculture.multiblock.IAlvearyControllerInternal;
 import forestry.apiculture.multiblock.TileAlvearyPlain;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
@@ -31,7 +31,7 @@ public class GuiAlveary extends GuiForestryTitled<ContainerAlveary, TileAlvearyP
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
-		IAlvearyController alvearyController = inventory.getAlvearyController();
+		IAlvearyControllerInternal alvearyController = inventory.getMultiblockLogic().getController();
 		drawHealthMeter(guiLeft + 20, guiTop + 37, alvearyController.getHealthScaled(46), EnumTankLevel.rateTankLevel(alvearyController.getHealthScaled(100)));
 	}
 
@@ -46,7 +46,7 @@ public class GuiAlveary extends GuiForestryTitled<ContainerAlveary, TileAlvearyP
 	public void initGui() {
 		super.initGui();
 
-		IAlvearyController alvearyController = inventory.getAlvearyController();
+		IAlvearyControllerInternal alvearyController = inventory.getMultiblockLogic().getController();
 		ledgerManager.add(new OwnerLedger(ledgerManager, alvearyController));
 	}
 

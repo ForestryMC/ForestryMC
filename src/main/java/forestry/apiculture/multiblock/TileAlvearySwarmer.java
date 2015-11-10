@@ -20,8 +20,8 @@ import net.minecraft.nbt.NBTTagList;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
-import forestry.api.apiculture.IAlvearyComponent;
 import forestry.api.apiculture.IBee;
+import forestry.api.multiblock.IAlvearyComponent;
 import forestry.apiculture.blocks.BlockAlveary;
 import forestry.apiculture.inventory.InventorySwarmer;
 import forestry.apiculture.network.PacketActiveUpdate;
@@ -101,7 +101,7 @@ public class TileAlvearySwarmer extends TileAlvearyWithGui implements ISidedInve
 	}
 
 	private ItemStack getPrincessStack() {
-		ItemStack princessStack = getAlvearyController().getBeeInventory().getQueen();
+		ItemStack princessStack = getMultiblockLogic().getController().getBeeInventory().getQueen();
 
 		if (BeeManager.beeRoot.isMated(princessStack)) {
 			return princessStack;

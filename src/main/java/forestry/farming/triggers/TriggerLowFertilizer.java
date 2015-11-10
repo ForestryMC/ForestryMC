@@ -43,7 +43,7 @@ public class TriggerLowFertilizer extends Trigger {
 		}
 
 		TileHatch tileHatch = (TileHatch) tile;
-		IInventory fertilizerInventory = tileHatch.getFarmController().getFarmInventory().getFertilizerInventory();
+		IInventory fertilizerInventory = tileHatch.getMultiblockLogic().getController().getFarmInventory().getFertilizerInventory();
 		return InventoryUtil.containsPercent(fertilizerInventory, threshold);
 	}
 }

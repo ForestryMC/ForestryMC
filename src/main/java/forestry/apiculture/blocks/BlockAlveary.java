@@ -37,7 +37,6 @@ import forestry.apiculture.multiblock.TileAlvearySieve;
 import forestry.apiculture.multiblock.TileAlvearyStabiliser;
 import forestry.apiculture.multiblock.TileAlvearySwarmer;
 import forestry.core.blocks.BlockStructure;
-import forestry.core.multiblock.MultiblockRegistry;
 import forestry.core.render.TextureManager;
 
 public class BlockAlveary extends BlockStructure {
@@ -228,7 +227,7 @@ public class BlockAlveary extends BlockStructure {
 	@SideOnly(Side.CLIENT)
 	private IIcon getBlockTextureFromSideAndTile(IBlockAccess world, int x, int y, int z, int side) {
 		TileEntity tile = world.getTileEntity(x, y, z);
-		if (tile == null || !(tile instanceof TileAlveary)) {
+		if (!(tile instanceof TileAlveary)) {
 			return getIcon(side, 0);
 		}
 
@@ -261,7 +260,7 @@ public class BlockAlveary extends BlockStructure {
 			TileAlveary tileAlveary = (TileAlveary) tileEntity;
 
 			// We must check that the slabs on top were not removed
-			MultiblockRegistry.addDirtyController(world, tileAlveary.getMultiblockController());
+			tileAlveary.getMultiblockLogic().getController().reassemble();
 		}
 	}
 }

@@ -21,7 +21,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import cpw.mods.fml.common.Optional;
 
-import forestry.api.farming.IFarmComponent;
+import forestry.api.multiblock.IFarmComponent;
 import forestry.core.inventory.AdjacentInventoryCache;
 import forestry.core.tiles.AdjacentTileCache;
 import forestry.core.utils.InventoryUtil;
@@ -58,7 +58,7 @@ public class TileHatch extends TileFarm implements ISidedInventory, IFarmCompone
 	@Override
 	public void updateServer(int tickCount) {
 		if (tickCount % 40 == 0) {
-			IInventory productInventory = getFarmController().getFarmInventory().getProductInventory();
+			IInventory productInventory = getMultiblockLogic().getController().getFarmInventory().getProductInventory();
 
 			if (!InventoryUtil.moveOneItemToPipe(productInventory, tileCache, dumpDirections)) {
 				InventoryUtil.moveItemStack(productInventory, inventoryCache.getAdjacentInventories());
@@ -81,7 +81,7 @@ public class TileHatch extends TileFarm implements ISidedInventory, IFarmCompone
 	@Optional.Method(modid = "BuildCraftAPI|statements")
 	@Override
 	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
-		if (!isConnected()) {
+		if (!getMultiblockLogic().isConnected()) {
 			return Collections.emptyList();
 		}
 

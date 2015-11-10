@@ -35,13 +35,14 @@ import forestry.core.fluids.FakeTankManager;
 import forestry.core.fluids.ITankManager;
 import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
+import forestry.core.multiblock.FakeMultiblockController;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.farming.gui.IFarmLedgerDelegate;
 
 import io.netty.util.internal.EmptyArrays;
 
-public class FakeFarmController implements IFarmController {
+public class FakeFarmController extends FakeMultiblockController implements IFarmControllerInternal {
 	public static final FakeFarmController instance = new FakeFarmController();
 
 	private FakeFarmController() {
@@ -81,11 +82,6 @@ public class FakeFarmController implements IFarmController {
 	@Override
 	public int[] getOffset() {
 		return EmptyArrays.EMPTY_INTS;
-	}
-
-	@Override
-	public World getWorld() {
-		return null;
 	}
 
 	@Override

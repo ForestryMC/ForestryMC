@@ -16,12 +16,10 @@ import java.util.Collections;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.Vec3;
-import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
 import com.mojang.authlib.GameProfile;
 
-import forestry.api.apiculture.IAlvearyComponent;
 import forestry.api.apiculture.IBeeHousingInventory;
 import forestry.api.apiculture.IBeeListener;
 import forestry.api.apiculture.IBeeModifier;
@@ -36,10 +34,11 @@ import forestry.core.access.IAccessHandler;
 import forestry.core.errors.FakeErrorLogic;
 import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
+import forestry.core.multiblock.FakeMultiblockController;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 
-public class FakeAlvearyController implements IAlvearyController {
+public class FakeAlvearyController extends FakeMultiblockController implements IAlvearyControllerInternal {
 	public static final FakeAlvearyController instance = new FakeAlvearyController();
 
 	private FakeAlvearyController() {
@@ -53,11 +52,6 @@ public class FakeAlvearyController implements IAlvearyController {
 
 	@Override
 	public Iterable<IBeeListener> getBeeListeners() {
-		return Collections.emptyList();
-	}
-
-	@Override
-	public Iterable<IAlvearyComponent> getComponents() {
 		return Collections.emptyList();
 	}
 
@@ -109,11 +103,6 @@ public class FakeAlvearyController implements IAlvearyController {
 	@Override
 	public IErrorLogic getErrorLogic() {
 		return FakeErrorLogic.instance;
-	}
-
-	@Override
-	public World getWorld() {
-		return null;
 	}
 
 	@Override

@@ -13,12 +13,12 @@ package forestry.apiculture.multiblock;
 import net.minecraft.item.ItemStack;
 
 import forestry.api.apiculture.DefaultBeeListener;
-import forestry.api.apiculture.IAlvearyComponent;
 import forestry.api.apiculture.IBeeListener;
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.ISpeciesRoot;
+import forestry.api.multiblock.IAlvearyComponent;
 import forestry.apiculture.blocks.BlockAlveary;
 import forestry.apiculture.inventory.InventoryAlvearySieve;
 import forestry.core.inventory.IInventoryAdapter;

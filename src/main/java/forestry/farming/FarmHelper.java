@@ -19,7 +19,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.api.farming.FarmDirection;
-import forestry.api.farming.IFarmComponent;
+import forestry.api.multiblock.IFarmComponent;
 import forestry.core.utils.vect.MutableVect;
 import forestry.core.utils.vect.Vect;
 import forestry.core.utils.vect.VectUtil;
