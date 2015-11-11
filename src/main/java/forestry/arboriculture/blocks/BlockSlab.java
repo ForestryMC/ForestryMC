@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.particle.EffectRenderer;
@@ -24,7 +23,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
@@ -121,10 +119,7 @@ public class BlockSlab extends net.minecraft.block.BlockSlab implements IWoodTyp
 	/* PROPERTIES */
 	@Override
 	public final ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
-		ItemStack itemStack = new ItemStack(this);
-		NBTTagCompound nbt = TileWood.getTagCompound(world, x, y, z);
-		itemStack.setTagCompound(nbt);
-		return itemStack;
+		return TileWood.getPickBlock(this, world, x, y, z);
 	}
 
 	/* DROP HANDLING */

@@ -21,6 +21,7 @@ import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;
 
 import forestry.api.arboriculture.EnumWoodType;
+import forestry.arboriculture.items.ItemBlockWood;
 
 public class RenderFenceItem implements IItemRenderer {
 	@Override
@@ -61,7 +62,7 @@ public class RenderFenceItem implements IItemRenderer {
 	private static void renderItem(RenderBlocks renderer, ItemStack itemStack, float x, float y, float z) {
 		Tessellator tess = Tessellator.instance;
 
-		EnumWoodType woodType = EnumWoodType.getFromCompound(itemStack.getTagCompound());
+		EnumWoodType woodType = ItemBlockWood.getWoodType(itemStack);
 		IIcon plankIcon = IconProviderWood.getPlankIcon(woodType);
 		Block block = Block.getBlockFromItem(itemStack.getItem());
 

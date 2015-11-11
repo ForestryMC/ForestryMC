@@ -277,34 +277,91 @@ public class PluginArboriculture extends ForestryPlugin {
 
 		RecipeUtil.addSmelting(ForestryBlock.logs.getWildcard(), new ItemStack(Items.coal, 1, 1), 0.15F);
 
-		ShapelessRecipeCustom.buildRecipe(ForestryBlock.planks.getItemStack(4), ForestryBlock.logs.getWildcard()).setPreserveNBT();
-		ShapelessRecipeCustom.buildRecipe(ForestryBlock.planksFireproof.getItemStack(4), ForestryBlock.logsFireproof.getWildcard()).setPreserveNBT();
+		for (EnumWoodType woodType : EnumWoodType.VALUES) {
 
-		// Fabricator recipes
-		if (PluginManager.Module.FACTORY.isEnabled() && PluginManager.Module.APICULTURE.isEnabled()) {
+			ItemStack planks = TreeManager.woodItemAccess.getPlanks(woodType, false);
+			ItemStack logs = TreeManager.woodItemAccess.getLog(woodType, false);
+			ItemStack slabs = TreeManager.woodItemAccess.getSlab(woodType, false);
+			ItemStack fences = TreeManager.woodItemAccess.getFence(woodType, false);
+			ItemStack stairs = TreeManager.woodItemAccess.getStairs(woodType, false);
 
-			// Fireproof log recipe
-			RecipeManagers.fabricatorManager.addRecipe(new FabricatorRecipe(null, Fluids.GLASS.getFluid(500), ForestryBlock.logsFireproof.getItemStack(), new Object[]{
-					" # ",
+			ItemStack fireproofPlanks = TreeManager.woodItemAccess.getPlanks(woodType, true);
+			ItemStack fireproofLogs = TreeManager.woodItemAccess.getLog(woodType, true);
+			ItemStack fireproofSlabs = TreeManager.woodItemAccess.getSlab(woodType, true);
+			ItemStack fireproofFences = TreeManager.woodItemAccess.getFence(woodType, true);
+			ItemStack fireproofStairs = TreeManager.woodItemAccess.getStairs(woodType, true);
+
+			planks.stackSize = 4;
+			logs.stackSize = 1;
+			ShapelessRecipeCustom.buildRecipe(planks.copy(), logs.copy());
+
+			fireproofPlanks.stackSize = 4;
+			fireproofLogs.stackSize = 1;
+			ShapelessRecipeCustom.buildRecipe(fireproofPlanks.copy(), fireproofLogs.copy());
+
+			slabs.stackSize = 6;
+			planks.stackSize = 1;
+			ShapedRecipeCustom.buildPriorityRecipe(slabs.copy(),
+					"###",
+					'#', planks.copy());
+
+			fireproofSlabs.stackSize = 6;
+			fireproofPlanks.stackSize = 1;
+			ShapedRecipeCustom.buildPriorityRecipe(fireproofSlabs.copy(),
+					"###",
+					'#', fireproofPlanks.copy());
+
+			fences.stackSize = 3;
+			planks.stackSize = 1;
+			ShapedRecipeCustom.buildRecipe(fences.copy(),
 					"#X#",
-					" # ",
-					'#', ForestryItem.refractoryWax,
-					'X', ForestryBlock.logs.getWildcard()}).setPreserveNBT());
-
-			// Fireproof plank recipe
-			RecipeManagers.fabricatorManager.addRecipe(new FabricatorRecipe(null, Fluids.GLASS.getFluid(500), ForestryBlock.planksFireproof.getItemStack(5), new Object[]{
-					"X#X",
 					"#X#",
-					"X#X",
-					'#', ForestryItem.refractoryWax,
-					'X', ForestryBlock.planks.getWildcard()}).setPreserveNBT());
+					'#', planks.copy(), 'X', "stickWood");
+
+			fireproofFences.stackSize = 3;
+			fireproofPlanks.stackSize = 1;
+			ShapedRecipeCustom.buildRecipe(fireproofFences.copy(),
+					"#X#",
+					"#X#",
+					'#', fireproofPlanks.copy(), 'X', "stickWood");
+
+			stairs.stackSize = 4;
+			planks.stackSize = 1;
+			ShapedRecipeCustom.buildPriorityRecipe(stairs.copy(),
+					"#  ",
+					"## ",
+					"###",
+					'#', planks.copy());
+
+			fireproofStairs.stackSize = 4;
+			fireproofPlanks.stackSize = 1;
+			ShapedRecipeCustom.buildPriorityRecipe(fireproofStairs.copy(),
+					"#  ",
+					"## ",
+					"###",
+					'#', fireproofPlanks.copy());
+
+			// Fabricator recipes
+			if (PluginManager.Module.FACTORY.isEnabled() && PluginManager.Module.APICULTURE.isEnabled()) {
+				logs.stackSize = 1;
+				fireproofLogs.stackSize = 1;
+				RecipeManagers.fabricatorManager.addRecipe(new FabricatorRecipe(null, Fluids.GLASS.getFluid(500), fireproofLogs.copy(), new Object[]{
+						" # ",
+						"#X#",
+						" # ",
+						'#', ForestryItem.refractoryWax,
+						'X', logs.copy()}));
+
+				planks.stackSize = 1;
+				fireproofPlanks.stackSize = 5;
+				RecipeManagers.fabricatorManager.addRecipe(new FabricatorRecipe(null, Fluids.GLASS.getFluid(500), fireproofPlanks.copy(), new Object[]{
+						"X#X",
+						"#X#",
+						"X#X",
+						'#', ForestryItem.refractoryWax,
+						'X', planks.copy()}));
+			}
 		}
-
-		ShapedRecipeCustom.buildPriorityRecipe(ForestryBlock.slabs.getItemStack(6), "###", '#', ForestryBlock.planks.getWildcard()).setPreserveNBT();
-		ShapedRecipeCustom.buildPriorityRecipe(ForestryBlock.slabsFireproof.getItemStack(6), "###", '#', ForestryBlock.planksFireproof.getWildcard()).setPreserveNBT();
-
-		ShapedRecipeCustom.buildRecipe(ForestryBlock.fences.getItemStack(3), "#X#", "#X#", '#', ForestryBlock.planks.getWildcard(), 'X', "stickWood").setPreserveNBT();
-		ShapedRecipeCustom.buildRecipe(ForestryBlock.fencesFireproof.getItemStack(3), "#X#", "#X#", '#', ForestryBlock.planksFireproof.getWildcard(), 'X', "stickWood").setPreserveNBT();
 
 		if (PluginManager.Module.FACTORY.isEnabled()) {
 			// Treealyzer
@@ -328,19 +385,6 @@ public class PluginArboriculture extends ForestryPlugin {
 
 			RecipeUtil.addFermenterRecipes(ForestryItem.sapling.getItemStack(), ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.sapling"), Fluids.BIOMASS);
 		}
-
-		// Stairs
-		ShapedRecipeCustom.buildPriorityRecipe(ForestryBlock.stairs.getItemStack(4),
-				"#  ",
-				"## ",
-				"###",
-				'#', ForestryBlock.planks.getWildcard()).setPreserveNBT();
-
-		ShapedRecipeCustom.buildPriorityRecipe(ForestryBlock.stairsFireproof.getItemStack(4),
-				"#  ",
-				"## ",
-				"###",
-				'#', ForestryBlock.planksFireproof.getWildcard()).setPreserveNBT();
 
 		// Grafter
 		RecipeUtil.addRecipe(ForestryItem.grafter.getItemStack(),

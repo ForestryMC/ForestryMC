@@ -8,7 +8,6 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
 import net.minecraftforge.oredict.OreDictionary;
@@ -31,20 +30,10 @@ public class ShapelessRecipeCustom implements IRecipe {
 
 	private final List<ItemStack> ingredients;
 	private final ItemStack product;
-	private boolean preservesNbt = false;
 
 	private ShapelessRecipeCustom(ItemStack product, ItemStack... ingredients) {
 		this.ingredients = Arrays.asList(ingredients);
 		this.product = product;
-	}
-
-	public ShapelessRecipeCustom setPreserveNBT() {
-		this.preservesNbt = true;
-		return this;
-	}
-
-	public boolean preservesNbt() {
-		return preservesNbt;
 	}
 
 	@Override
@@ -73,33 +62,12 @@ public class ShapelessRecipeCustom implements IRecipe {
 			}
 		}
 
-		if (!arraylist.isEmpty()) {
-			return false;
-		}
-
-		if (preservesNbt) {
-			if (RecipeUtil.getCraftingNbt(inventoryCrafting) == null) {
-				return false;
-			}
-		}
-
-		return true;
+		return arraylist.isEmpty();
 	}
 
 	@Override
 	public ItemStack getCraftingResult(InventoryCrafting inventoryCrafting) {
-		ItemStack result = product.copy();
-
-		if (preservesNbt) {
-			NBTTagCompound craftingNbt = RecipeUtil.getCraftingNbt(inventoryCrafting);
-			if (craftingNbt == null) {
-				return null;
-			}
-
-			result.setTagCompound(craftingNbt);
-		}
-
-		return result;
+		return product.copy();
 	}
 
 	@Override

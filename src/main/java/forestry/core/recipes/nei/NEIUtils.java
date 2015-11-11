@@ -17,7 +17,6 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
 
 import net.minecraftforge.fluids.Fluid;
@@ -25,9 +24,6 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fluids.IFluidContainerItem;
-
-import codechicken.nei.NEIServerUtils;
-import codechicken.nei.PositionedStack;
 
 public class NEIUtils {
 
@@ -78,46 +74,4 @@ public class NEIUtils {
 		}
 		return fluidStack1.getFluid() == fluidStack2.getFluid();
 	}
-
-	public static void setIngredientPermutationNBT(INBTMatchingCachedRecipe recipe, ItemStack ingredient) {
-		Iterable<PositionedStack> ingredients = recipe.getIngredients();
-		for (PositionedStack stack : ingredients) {
-			for (int i = 0; i < stack.items.length; i++) {
-				if (NEIServerUtils.areStacksSameTypeCrafting(ingredient, stack.items[i])) {
-					stack.item = stack.items[i];
-					stack.item.setItemDamage(ingredient.getItemDamage());
-
-					if (ingredient.hasTagCompound()) {
-						NBTTagCompound ingredientNbt = (NBTTagCompound) ingredient.getTagCompound().copy();
-						stack.item.setTagCompound(ingredientNbt);
-						if (recipe.preservesNBT()) {
-							recipe.getResult().item.setTagCompound(ingredientNbt);
-						}
-					}
-
-					stack.items = new ItemStack[]{stack.item};
-					stack.setPermutationToRender(0);
-					break;
-				}
-			}
-		}
-	}
-
-	public static void setResultPermutationNBT(INBTMatchingCachedRecipe recipe, ItemStack result) {
-		PositionedStack recipeResult = recipe.getResult();
-		if (recipe.preservesNBT()) {
-			NBTTagCompound resultNbt = result.getTagCompound();
-			recipeResult.item.setTagCompound((NBTTagCompound) resultNbt.copy());
-			Iterable<PositionedStack> ingredients = recipe.getIngredients();
-			for (PositionedStack stack : ingredients) {
-				if (stack.item.hasTagCompound()) {
-					stack.item.setTagCompound((NBTTagCompound) resultNbt.copy());
-				}
-
-				stack.items = new ItemStack[]{stack.item};
-				stack.setPermutationToRender(0);
-			}
-		}
-	}
-
 }

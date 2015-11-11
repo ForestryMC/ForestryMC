@@ -16,11 +16,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 
@@ -30,7 +28,6 @@ import net.minecraftforge.fluids.FluidStack;
 import forestry.api.recipes.IFabricatorRecipe;
 import forestry.api.recipes.IFabricatorSmeltingRecipe;
 import forestry.api.recipes.RecipeManagers;
-import forestry.core.recipes.nei.INBTMatchingCachedRecipe;
 import forestry.core.recipes.nei.NEIUtils;
 import forestry.core.recipes.nei.PositionedFluidTank;
 import forestry.core.recipes.nei.RecipeHandlerBase;
@@ -43,17 +40,13 @@ import codechicken.nei.recipe.GuiRecipe;
 
 public class NEIHandlerFabricator extends RecipeHandlerBase {
 
-	public class CachedFabricatorRecipe extends CachedBaseRecipe implements INBTMatchingCachedRecipe {
-
-		private final boolean preservesNbt;
-
+	public class CachedFabricatorRecipe extends CachedBaseRecipe {
 		public List<PositionedStack> smeltingInput = new ArrayList<>();
 		public PositionedFluidTank tank;
 		public List<PositionedStack> inputs = new ArrayList<>();
 		public PositionedStack output;
 
 		public CachedFabricatorRecipe(IFabricatorRecipe recipe, boolean genPerms) {
-			this.preservesNbt = recipe.preservesNbt();
 			if (recipe.getLiquid() != null) {
 				this.tank = new PositionedFluidTank(recipe.getLiquid(), 2000, new Rectangle(21, 37, 16, 16));
 				List<ItemStack> smeltingInput = new ArrayList<>();
@@ -104,35 +97,6 @@ public class NEIHandlerFabricator extends RecipeHandlerBase {
 					this.inputs.add(stack);
 				}
 			}
-		}
-
-		@Override
-		public List<PositionedStack> getCycledIngredients(int cycle, List<PositionedStack> ingredients) {
-			if (preservesNbt) {
-				// cycle ingredients and output together
-				Random random = new Random(cycle);
-				cycle = Math.abs(random.nextInt());
-				NBTTagCompound nbt = null;
-				for (PositionedStack ingredient : ingredients) {
-					ingredient.setPermutationToRender(cycle % ingredient.items.length);
-					if (ingredient.item.hasTagCompound()) {
-						nbt = ingredient.item.getTagCompound();
-					}
-				}
-				output.setPermutationToRender(cycle % output.items.length);
-				if (nbt != null) {
-					output.item.setTagCompound((NBTTagCompound) nbt.copy());
-				}
-			} else {
-				return super.getCycledIngredients(cycle, ingredients);
-			}
-
-			return ingredients;
-		}
-
-		@Override
-		public boolean preservesNBT() {
-			return preservesNbt;
 		}
 
 		@Override
@@ -210,7 +174,6 @@ public class NEIHandlerFabricator extends RecipeHandlerBase {
 		for (IFabricatorRecipe recipe : RecipeManagers.fabricatorManager.recipes()) {
 			if (NEIServerUtils.areStacksSameTypeCrafting(recipe.getRecipeOutput(), result)) {
 				CachedFabricatorRecipe crecipe = new CachedFabricatorRecipe(recipe, true);
-				NEIUtils.setResultPermutationNBT(crecipe, result);
 				this.arecipes.add(crecipe);
 			}
 		}
@@ -223,7 +186,6 @@ public class NEIHandlerFabricator extends RecipeHandlerBase {
 			CachedFabricatorRecipe crecipe = new CachedFabricatorRecipe(recipe);
 			if (crecipe.inputs != null && crecipe.contains(crecipe.inputs, ingred) || crecipe.smeltingInput != null && crecipe.contains(crecipe.smeltingInput, ingred)) {
 				crecipe.generatePermutations();
-				NEIUtils.setIngredientPermutationNBT(crecipe, ingred);
 				crecipe.setIngredientPermutation(crecipe.smeltingInput, ingred);
 				this.arecipes.add(crecipe);
 			}
@@ -246,7 +208,7 @@ public class NEIHandlerFabricator extends RecipeHandlerBase {
 		if (new Rectangle(20, 9, 18, 18).contains(relMouse)) {
 			for (IFabricatorSmeltingRecipe smelting : FabricatorSmeltingRecipeManager.recipes) {
 				if (NEIServerUtils.areStacksSameTypeCrafting(smelting.getResource(), itemStack) && smelting.getProduct() != null) {
-					currenttip.add(EnumChatFormatting.GRAY.toString() + NEIUtils.translate("handler.forestry.fabricator.worth") + " " + smelting.getProduct().amount + " mB");
+					currenttip.add(EnumChatFormatting.GRAY + NEIUtils.translate("handler.forestry.fabricator.worth") + " " + smelting.getProduct().amount + " mB");
 				}
 			}
 		}

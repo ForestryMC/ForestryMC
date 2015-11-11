@@ -68,7 +68,7 @@ public class RenderPlankItem implements IItemRenderer {
 			return;
 		}
 
-		EnumWoodType woodType = EnumWoodType.getFromCompound(itemStack.getTagCompound());
+		EnumWoodType woodType = ItemBlockWood.getWoodType(itemStack);
 
 		IIcon plankIcon = IconProviderWood.getPlankIcon(woodType);
 		if (plankIcon == null) {

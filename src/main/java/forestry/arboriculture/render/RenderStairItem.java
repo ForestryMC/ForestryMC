@@ -70,7 +70,7 @@ public class RenderStairItem implements IItemRenderer {
 			return;
 		}
 
-		EnumWoodType woodType = EnumWoodType.getFromCompound(itemStack.getTagCompound());
+		EnumWoodType woodType = ItemBlockWood.getWoodType(itemStack);
 		IIcon texture = IconProviderWood.getPlankIcon(woodType);
 
 		for (int i = 0; i < 2; ++i) {

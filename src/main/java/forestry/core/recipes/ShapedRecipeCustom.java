@@ -34,23 +34,11 @@ public class ShapedRecipeCustom implements IDescriptiveRecipe {
 	private final Object[] ingredients;
 	private final ItemStack product;
 
-	private boolean preserveNBT = false;
-
 	public ShapedRecipeCustom(int width, int height, Object[] ingredients, ItemStack product) {
 		this.width = width;
 		this.height = height;
 		this.ingredients = ingredients;
 		this.product = product;
-	}
-
-	public ShapedRecipeCustom setPreserveNBT() {
-		this.preserveNBT = true;
-		return this;
-	}
-
-	@Override
-	public boolean preserveNBT() {
-		return preserveNBT;
 	}
 
 	@Override
@@ -74,6 +62,11 @@ public class ShapedRecipeCustom implements IDescriptiveRecipe {
 	}
 
 	@Override
+	public boolean preserveNBT() {
+		return false;
+	}
+
+	@Override
 	public boolean matches(InventoryCrafting inventoryCrafting, World world) {
 		return RecipeUtil.matches(this, inventoryCrafting);
 	}
@@ -86,7 +79,7 @@ public class ShapedRecipeCustom implements IDescriptiveRecipe {
 
 	@Override
 	public ItemStack getCraftingResult(InventoryCrafting inventoryCrafting) {
-		return RecipeUtil.getCraftingResult(this, inventoryCrafting);
+		return getRecipeOutput().copy();
 	}
 
 	@Override

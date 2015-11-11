@@ -24,9 +24,7 @@ import codechicken.nei.PositionedStack;
 public class NEIHandlerShapelessCustom extends RecipeHandlerBase {
 	private static final int[][] OUTPUTS = new int[][]{{0, 0}, {1, 0}, {2, 0}, {0, 1}, {1, 1}, {2, 1}, {0, 2}, {1, 2}, {2, 2}};
 
-	public class CachedShapelessCustomRecipe extends CachedBaseRecipe implements INBTMatchingCachedRecipe {
-		private final boolean preservesNbt;
-
+	public class CachedShapelessCustomRecipe extends CachedBaseRecipe {
 		public List<PositionedStack> inputs = new ArrayList<>();
 		public PositionedStack output;
 
@@ -38,7 +36,6 @@ public class NEIHandlerShapelessCustom extends RecipeHandlerBase {
 				ItemStack output = recipe.getRecipeOutput();
 				this.output = new PositionedStack(output, 119, 24);
 			}
-			this.preservesNbt = recipe.preservesNbt();
 		}
 
 		public void setIngredients(List<ItemStack> items) {
@@ -60,11 +57,6 @@ public class NEIHandlerShapelessCustom extends RecipeHandlerBase {
 		}
 
 		@Override
-		public boolean preservesNBT() {
-			return preservesNbt;
-		}
-
-		@Override
 		public PositionedStack getResult() {
 			return this.output;
 		}
@@ -76,7 +68,6 @@ public class NEIHandlerShapelessCustom extends RecipeHandlerBase {
 		for (Object recipe : CraftingManager.getInstance().getRecipeList()) {
 			if (recipe instanceof ShapelessRecipeCustom && NEIServerUtils.areStacksSameTypeCrafting(((ShapelessRecipeCustom) recipe).getRecipeOutput(), result)) {
 				CachedShapelessCustomRecipe crecipe = new CachedShapelessCustomRecipe((ShapelessRecipeCustom) recipe);
-				NEIUtils.setResultPermutationNBT(crecipe, result);
 				this.arecipes.add(crecipe);
 			}
 		}
@@ -88,7 +79,6 @@ public class NEIHandlerShapelessCustom extends RecipeHandlerBase {
 			if (recipe instanceof ShapelessRecipeCustom) {
 				CachedShapelessCustomRecipe crecipe = new CachedShapelessCustomRecipe((ShapelessRecipeCustom) recipe);
 				if (crecipe.inputs != null && crecipe.contains(crecipe.inputs, ingredient)) {
-					NEIUtils.setIngredientPermutationNBT(crecipe, ingredient);
 					this.arecipes.add(crecipe);
 				}
 			}

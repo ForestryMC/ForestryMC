@@ -28,7 +28,6 @@ import forestry.api.recipes.IFermenterRecipe;
 import forestry.api.recipes.IVariableFermentable;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Constants;
-import forestry.core.recipes.nei.INBTMatchingCachedRecipe;
 import forestry.core.recipes.nei.NEIUtils;
 import forestry.core.recipes.nei.PositionedFluidTank;
 import forestry.core.recipes.nei.RecipeHandlerBase;
@@ -49,7 +48,7 @@ public class NEIHandlerFermenter extends RecipeHandlerBase {
 		API.setGuiOffset(guiClass, 5, 15);
 	}
 
-	public class CachedFermenterRecipe extends CachedBaseRecipe implements INBTMatchingCachedRecipe {
+	public class CachedFermenterRecipe extends CachedBaseRecipe {
 
 		public List<PositionedFluidTank> tanks = new ArrayList<>();
 		public PositionedStack resource;
@@ -85,11 +84,6 @@ public class NEIHandlerFermenter extends RecipeHandlerBase {
 		@Override
 		public List<PositionedStack> getIngredients() {
 			return this.getCycledIngredients(NEIHandlerFermenter.this.cycleticks / 40, this.inputItems);
-		}
-
-		@Override
-		public boolean preservesNBT() {
-			return false;
 		}
 
 		@Override
@@ -183,7 +177,6 @@ public class NEIHandlerFermenter extends RecipeHandlerBase {
 				for (ItemStack stack : NEIUtils.getItemVariations(recipe.getResource())) {
 					if (stack.hasTagCompound() && NEIServerUtils.areStacksSameType(stack, ingred) || !stack.hasTagCompound() && NEIServerUtils.areStacksSameTypeCrafting(stack, ingred)) {
 						CachedFermenterRecipe crecipe = new CachedFermenterRecipe(recipe, stack, true);
-						NEIUtils.setIngredientPermutationNBT(crecipe, ingred);
 						this.arecipes.add(crecipe);
 					}
 				}

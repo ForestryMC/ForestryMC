@@ -23,9 +23,7 @@ import codechicken.nei.PositionedStack;
 
 public class NEIHandlerShapedCustom extends RecipeHandlerBase {
 
-	public class CachedShapedCustomRecipe extends CachedBaseRecipe implements INBTMatchingCachedRecipe {
-		private final boolean preservesNbt;
-
+	public class CachedShapedCustomRecipe extends CachedBaseRecipe {
 		public List<PositionedStack> inputs = new ArrayList<>();
 		public PositionedStack output;
 
@@ -37,7 +35,6 @@ public class NEIHandlerShapedCustom extends RecipeHandlerBase {
 				ItemStack output = recipe.getRecipeOutput();
 				this.output = new PositionedStack(output, 119, 24);
 			}
-			this.preservesNbt = recipe.preserveNBT();
 		}
 
 		public void setIngredients(int width, int height, Object[] items) {
@@ -69,11 +66,6 @@ public class NEIHandlerShapedCustom extends RecipeHandlerBase {
 		}
 
 		@Override
-		public boolean preservesNBT() {
-			return preservesNbt;
-		}
-
-		@Override
 		public PositionedStack getResult() {
 			return this.output;
 		}
@@ -85,7 +77,6 @@ public class NEIHandlerShapedCustom extends RecipeHandlerBase {
 		for (Object recipe : CraftingManager.getInstance().getRecipeList()) {
 			if (recipe instanceof ShapedRecipeCustom && NEIServerUtils.areStacksSameTypeCrafting(((ShapedRecipeCustom) recipe).getRecipeOutput(), result)) {
 				CachedShapedCustomRecipe crecipe = new CachedShapedCustomRecipe((ShapedRecipeCustom) recipe);
-				NEIUtils.setResultPermutationNBT(crecipe, result);
 				this.arecipes.add(crecipe);
 			}
 		}
@@ -97,7 +88,6 @@ public class NEIHandlerShapedCustom extends RecipeHandlerBase {
 			if (recipe instanceof ShapedRecipeCustom) {
 				CachedShapedCustomRecipe crecipe = new CachedShapedCustomRecipe((ShapedRecipeCustom) recipe);
 				if (crecipe.inputs != null && crecipe.contains(crecipe.inputs, ingredient)) {
-					NEIUtils.setIngredientPermutationNBT(crecipe, ingredient);
 					this.arecipes.add(crecipe);
 				}
 			}

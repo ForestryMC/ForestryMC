@@ -22,7 +22,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
@@ -92,10 +91,7 @@ public class BlockArbStairs extends BlockStairs implements IWoodTyped, ITileEnti
 
 	@Override
 	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
-		ItemStack itemStack = super.getPickBlock(target, world, x, y, z);
-		NBTTagCompound stairsNBT = TileWood.getTagCompound(world, x, y, z);
-		itemStack.setTagCompound(stairsNBT);
-		return itemStack;
+		return TileWood.getPickBlock(this, world, x, y, z);
 	}
 
 	/* ICONS */

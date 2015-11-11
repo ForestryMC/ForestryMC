@@ -14,10 +14,10 @@ import java.util.EnumMap;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 
 import forestry.api.arboriculture.EnumWoodType;
 import forestry.api.arboriculture.IWoodItemAccess;
+import forestry.arboriculture.items.ItemBlockWood;
 
 public class WoodItemAccess implements IWoodItemAccess {
 	private static final EnumMap<EnumWoodType, ItemStack> logs = new EnumMap<>(EnumWoodType.class);
@@ -32,11 +32,8 @@ public class WoodItemAccess implements IWoodItemAccess {
 	private static final EnumMap<EnumWoodType, ItemStack> stairsFireproof = new EnumMap<>(EnumWoodType.class);
 
 	private static ItemStack getStack(EnumWoodType woodType, Block block) {
-		NBTTagCompound woodNBT = new NBTTagCompound();
-		woodType.saveToCompound(woodNBT);
-
 		ItemStack itemStack = new ItemStack(block);
-		itemStack.setTagCompound(woodNBT);
+		ItemBlockWood.saveToItemStack(woodType, itemStack);
 		return itemStack;
 	}
 

@@ -292,28 +292,23 @@ public class PluginFarming extends ForestryPlugin {
 	protected void registerRecipes() {
 
 		ItemStack basic = ForestryBlock.farm.getItemStack(1, 0);
+		ItemStack gearbox = ForestryBlock.farm.getItemStack(1, 2);
+		ItemStack hatch = ForestryBlock.farm.getItemStack(1, 3);
+		ItemStack valve = ForestryBlock.farm.getItemStack(1, 4);
+		ItemStack control = ForestryBlock.farm.getItemStack(1, 5);
+
 		for (EnumFarmBlockTexture block : EnumFarmBlockTexture.values()) {
 			NBTTagCompound compound = new NBTTagCompound();
 			block.saveToCompound(compound);
 
 			basic.setTagCompound((NBTTagCompound) compound.copy());
 			ShapedRecipeCustom.buildRecipe(basic.copy(), "I#I", "WCW", '#', block.getBase(), 'W', "slabWood", 'C', ForestryItem.tubes.getItemStack(1, 1), 'I', "ingotCopper");
+
+			ShapedRecipeCustom.buildRecipe(gearbox, " # ", "TTT", '#', basic, 'T', "gearTin");
+			ShapedRecipeCustom.buildRecipe(hatch, " # ", "TDT", '#', basic, 'T', "gearTin", 'D', Blocks.trapdoor);
+			ShapedRecipeCustom.buildRecipe(valve, " # ", "XTX", '#', basic, 'T', "gearTin", 'X', "blockGlass");
+			ShapedRecipeCustom.buildRecipe(control, " # ", "XTX", '#', basic, 'T', ForestryItem.tubes.getItemStack(1, 4), 'X', "dustRedstone");
 		}
-
-		// use wildcard (null) NBT for the basic ingredient so that any basic type can be used
-		ItemStack basicWildcard = ForestryBlock.farm.getItemStack(1, 0);
-
-		ItemStack gearbox = ForestryBlock.farm.getItemStack(1, 2);
-		ShapedRecipeCustom.buildRecipe(gearbox, " # ", "TTT", '#', basicWildcard, 'T', "gearTin").setPreserveNBT();
-
-		ItemStack hatch = ForestryBlock.farm.getItemStack(1, 3);
-		ShapedRecipeCustom.buildRecipe(hatch, " # ", "TDT", '#', basicWildcard, 'T', "gearTin", 'D', Blocks.trapdoor).setPreserveNBT();
-
-		ItemStack valve = ForestryBlock.farm.getItemStack(1, 4);
-		ShapedRecipeCustom.buildRecipe(valve, " # ", "XTX", '#', basicWildcard, 'T', "gearTin", 'X', "blockGlass").setPreserveNBT();
-
-		ItemStack control = ForestryBlock.farm.getItemStack(1, 5);
-		ShapedRecipeCustom.buildRecipe(control, " # ", "XTX", '#', basicWildcard, 'T', ForestryItem.tubes.getItemStack(1, 4), 'X', "dustRedstone").setPreserveNBT();
 
 		// Circuits
 		ICircuitLayout layoutManaged = ChipsetManager.circuitRegistry.getLayout("forestry.farms.managed");

@@ -21,7 +21,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fluids.FluidRegistry;
@@ -37,7 +36,6 @@ import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
 import forestry.core.fluids.Fluids;
 import forestry.core.gui.ContainerDummy;
-import forestry.core.inventory.InventoryPlain;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 
@@ -77,26 +75,6 @@ public abstract class RecipeUtil {
 			return Collections.singletonList(itemStack);
 		}
 		return oreDictNames;
-	}
-
-	public static NBTTagCompound getCraftingNbt(IInventory inventoryCrafting) {
-		NBTTagCompound craftingNbt = null;
-		for (int i = 0; i < inventoryCrafting.getSizeInventory(); i++) {
-			ItemStack stackInSlot = inventoryCrafting.getStackInSlot(i);
-			if (stackInSlot == null || !stackInSlot.hasTagCompound()) {
-				continue;
-			}
-
-			NBTTagCompound tagCompound = stackInSlot.getTagCompound();
-			// if there are multiple NBT they must all match
-			if (craftingNbt != null && !craftingNbt.equals(tagCompound)) {
-				return null;
-			} else {
-				craftingNbt = tagCompound;
-			}
-		}
-
-		return craftingNbt;
 	}
 
 	public static Object[] getCraftingRecipeAsArray(IDescriptiveRecipe recipe) {
@@ -263,41 +241,12 @@ public abstract class RecipeUtil {
 		GameRegistry.addSmelting(res, prod, xp);
 	}
 
-	public static ItemStack getCraftingResult(IDescriptiveRecipe recipe, IInventory inventoryCrafting) {
-		return getCraftingResult(recipe.getRecipeOutput(), recipe.preserveNBT(), inventoryCrafting);
-	}
-
-	public static ItemStack getCraftingResult(ItemStack result, boolean preserveNBT, IInventory inventoryCrafting) {
-		result = result.copy();
-
-		if (preserveNBT) {
-			NBTTagCompound craftingNbt = getCraftingNbt(inventoryCrafting);
-			if (craftingNbt == null) {
-				return null;
-			}
-
-			result.setTagCompound(craftingNbt);
-		}
-
-		return result;
-	}
-
 	public static boolean matches(IDescriptiveRecipe recipe, IInventory inventoryCrafting) {
 		ItemStack[][] resources = getResources(inventoryCrafting);
 		Object[] recipeIngredients = recipe.getIngredients();
 		int width = recipe.getWidth();
 		int height = recipe.getHeight();
-		if (!matches(recipeIngredients, width, height, resources)) {
-			return false;
-		}
-
-		if (recipe.preserveNBT()) {
-			if (getCraftingNbt(inventoryCrafting) == null) {
-				return false;
-			}
-		}
-
-		return true;
+		return matches(recipeIngredients, width, height, resources);
 	}
 
 	private static ItemStack[][] getResources(IInventory inventoryCrafting) {

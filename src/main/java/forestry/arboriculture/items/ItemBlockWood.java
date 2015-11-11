@@ -13,8 +13,10 @@ package forestry.arboriculture.items;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
@@ -32,13 +34,14 @@ import forestry.core.items.ItemBlockForestry;
 import forestry.core.utils.StringUtil;
 
 public class ItemBlockWood extends ItemBlockForestry {
+	private static final String LEGACY_WOOD_TYPE_KEY = "WoodType";
 
 	public ItemBlockWood(Block block) {
 		super(block);
 	}
 
 	public static boolean placeWood(ItemStack stack, @Nullable EntityPlayer player, World world, int x, int y, int z, int metadata) {
-		EnumWoodType woodType = EnumWoodType.getFromCompound(stack.getTagCompound());
+		EnumWoodType woodType = getWoodType(stack);
 		Block block = Block.getBlockFromItem(stack.getItem());
 
 		boolean placed = world.setBlock(x, y, z, block, metadata, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
@@ -66,6 +69,56 @@ public class ItemBlockWood extends ItemBlockForestry {
 		return true;
 	}
 
+	public static void saveToItemStack(EnumWoodType woodType, ItemStack itemStack) {
+		itemStack.setItemDamage(woodType.ordinal());
+	}
+
+	public static EnumWoodType getWoodType(ItemStack stack) {
+		EnumWoodType woodType = convertLegacyWood(stack);
+		if (woodType == null) {
+			int typeOrdinal = stack.getItemDamage();
+			woodType = getFromOrdinal(typeOrdinal);
+		}
+
+		return woodType;
+	}
+
+	// legacy handling of wood that has wood type saved to NBT
+	private static EnumWoodType convertLegacyWood(ItemStack itemStack) {
+		if (!itemStack.hasTagCompound()) {
+			return null;
+		}
+
+		NBTTagCompound compound = itemStack.getTagCompound();
+		if (!compound.hasKey(LEGACY_WOOD_TYPE_KEY)) {
+			return null;
+		}
+
+		int typeOrdinal = compound.getInteger(LEGACY_WOOD_TYPE_KEY);
+		EnumWoodType woodType = getFromOrdinal(typeOrdinal);
+		if (woodType != null) {
+			compound.removeTag(LEGACY_WOOD_TYPE_KEY);
+			if (compound.hasNoTags()) {
+				itemStack.setTagCompound(null);
+			}
+			saveToItemStack(woodType, itemStack);
+		}
+		return woodType;
+	}
+
+	@Override
+	public void onUpdate(ItemStack stack, World world, Entity player, int p_77663_4_, boolean p_77663_5_) {
+		super.onUpdate(stack, world, player, p_77663_4_, p_77663_5_);
+		convertLegacyWood(stack);
+	}
+
+	private static EnumWoodType getFromOrdinal(int ordinal) {
+		if (ordinal >= 0 && ordinal < EnumWoodType.VALUES.length) {
+			return EnumWoodType.VALUES[ordinal];
+		}
+		return null;
+	}
+
 	@Override
 	public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int metadata) {
 		return placeWood(stack, player, world, x, y, z, metadata);
@@ -78,7 +131,7 @@ public class ItemBlockWood extends ItemBlockForestry {
 			return super.getItemStackDisplayName(itemstack);
 		}
 
-		EnumWoodType woodType = EnumWoodType.getFromCompound(itemstack.getTagCompound());
+		EnumWoodType woodType = getWoodType(itemstack);
 		if (woodType == null) {
 			return super.getItemStackDisplayName(itemstack);
 		}
@@ -107,7 +160,7 @@ public class ItemBlockWood extends ItemBlockForestry {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(ItemStack stack, int pass) {
-		EnumWoodType woodType = EnumWoodType.getFromCompound(stack.getTagCompound());
+		EnumWoodType woodType = getWoodType(stack);
 		if (woodType == null) {
 			return super.getIcon(stack, pass);
 		}

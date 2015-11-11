@@ -65,7 +65,7 @@ public class FabricatorRecipe implements IFabricatorRecipe {
 
 	@Override
 	public boolean preservesNbt() {
-		return internal.preserveNBT();
+		return false;
 	}
 
 	@Override
@@ -81,17 +81,11 @@ public class FabricatorRecipe implements IFabricatorRecipe {
 
 	@Override
 	public ItemStack getCraftingResult(IInventory craftingInventory) {
-		return RecipeUtil.getCraftingResult(internal, craftingInventory);
+		return internal.getRecipeOutput().copy();
 	}
 
 	@Override
 	public ItemStack getRecipeOutput() {
 		return internal.getRecipeOutput();
 	}
-
-	public FabricatorRecipe setPreserveNBT() {
-		internal.setPreserveNBT();
-		return this;
-	}
-
 }
