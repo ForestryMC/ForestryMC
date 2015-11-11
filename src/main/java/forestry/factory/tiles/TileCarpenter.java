@@ -12,7 +12,6 @@ package forestry.factory.tiles;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
-import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -68,7 +67,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 	public TileCarpenter() {
 		super(GuiId.CarpenterGUI, "carpenter", 1100, 4000);
 		setEnergyPerWorkCycle(ENERGY_PER_WORK_CYCLE);
-		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, CarpenterRecipeManager.recipeFluids);
+		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, CarpenterRecipeManager.getRecipeFluids());
 
 		craftingInventory = new InventoryAdapterTile<>(this, 10, "CraftItems");
 		craftPreviewInventory = new InventoryCraftResult();

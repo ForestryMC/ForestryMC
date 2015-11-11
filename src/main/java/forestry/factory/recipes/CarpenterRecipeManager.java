@@ -32,7 +32,7 @@ import forestry.core.utils.ItemStackUtil;
 public class CarpenterRecipeManager implements ICarpenterManager {
 
 	private static final Set<ICarpenterRecipe> recipes = new HashSet<>();
-	public static final Set<Fluid> recipeFluids = new HashSet<>();
+	private static final Set<Fluid> recipeFluids = new HashSet<>();
 
 	@Override
 	public void addRecipe(ItemStack box, ItemStack product, Object materials[]) {
@@ -97,11 +97,6 @@ public class CarpenterRecipeManager implements ICarpenterManager {
 
 	@Override
 	public boolean addRecipe(ICarpenterRecipe recipe) {
-		FluidStack fluidStack = recipe.getFluidResource();
-		if (fluidStack != null) {
-			recipeFluids.add(fluidStack.getFluid());
-		}
-
 		return recipes.add(recipe);
 	}
 
@@ -109,12 +104,21 @@ public class CarpenterRecipeManager implements ICarpenterManager {
 	public boolean removeRecipe(ICarpenterRecipe recipe) {
 		boolean removed = recipes.remove(recipe);
 		if (removed) {
-			FluidStack fluidStack = recipe.getFluidResource();
-			if (fluidStack != null) {
-				recipeFluids.remove(fluidStack.getFluid());
-			}
+			recipeFluids.clear();
 		}
 		return removed;
+	}
+
+	public static Set<Fluid> getRecipeFluids() {
+		if (recipeFluids.isEmpty()) {
+			for (ICarpenterRecipe recipe : recipes) {
+				FluidStack fluidStack = recipe.getFluidResource();
+				if (fluidStack != null) {
+					recipeFluids.add(fluidStack.getFluid());
+				}
+			}
+		}
+		return Collections.unmodifiableSet(recipeFluids);
 	}
 
 	@Override

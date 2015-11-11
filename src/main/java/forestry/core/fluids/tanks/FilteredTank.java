@@ -32,7 +32,7 @@ import forestry.core.utils.StringUtil;
  */
 public class FilteredTank extends StandardTank {
 
-	private final Set<Integer> filters; // FluidIDs
+	private final Set<Integer> filters = new HashSet<>(); // FluidIDs
 
 	public FilteredTank(int capacity, Fluid... filters) {
 		this(capacity, Arrays.asList(filters), null);
@@ -44,15 +44,13 @@ public class FilteredTank extends StandardTank {
 
 	public FilteredTank(int capacity, Collection<Fluid> filters, TileEntity tile) {
 		super(capacity, tile);
-		this.filters = new HashSet<>();
-		for (Fluid fluid : filters) {
-			addFilter(fluid);
-		}
+		setFilters(filters);
 	}
 
-	public void addFilter(Fluid filter) {
-		if (!accepts(filter)) {
-			filters.add(filter.getID());
+	public void setFilters(Collection<Fluid> filters) {
+		this.filters.clear();
+		for (Fluid fluid : filters) {
+			this.filters.add(fluid.getID());
 		}
 	}
 
