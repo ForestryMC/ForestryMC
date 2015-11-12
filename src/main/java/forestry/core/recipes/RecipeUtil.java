@@ -242,14 +242,18 @@ public abstract class RecipeUtil {
 	}
 
 	public static boolean matches(IDescriptiveRecipe recipe, IInventory inventoryCrafting) {
-		ItemStack[][] resources = getResources(inventoryCrafting);
 		Object[] recipeIngredients = recipe.getIngredients();
 		int width = recipe.getWidth();
 		int height = recipe.getHeight();
+		return matches(recipeIngredients, width, height, inventoryCrafting);
+	}
+
+	public static boolean matches(Object[] recipeIngredients, int width, int height, IInventory inventoryCrafting) {
+		ItemStack[][] resources = getResources(inventoryCrafting);
 		return matches(recipeIngredients, width, height, resources);
 	}
 
-	private static ItemStack[][] getResources(IInventory inventoryCrafting) {
+	public static ItemStack[][] getResources(IInventory inventoryCrafting) {
 		ItemStack[][] resources = new ItemStack[3][3];
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {

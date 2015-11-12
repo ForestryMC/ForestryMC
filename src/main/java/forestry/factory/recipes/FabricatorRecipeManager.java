@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.fluids.FluidStack;
@@ -42,23 +43,15 @@ public class FabricatorRecipeManager implements IFabricatorManager {
 		RecipeManagers.fabricatorSmeltingManager.addSmelting(resource, molten, meltingPoint);
 	}
 
-	public static IFabricatorRecipe findMatchingRecipe(ItemStack plan, FluidStack liquid, ItemStack[] resources) {
-		ItemStack[][] gridResources = new ItemStack[3][3];
-		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < 3; j++) {
-				gridResources[j][i] = resources[i * 3 + j];
-			}
-		}
+	public static IFabricatorRecipe findMatchingRecipe(ItemStack plan, IInventory resources) {
+		ItemStack[][] gridResources = RecipeUtil.getResources(resources);
 
 		for (IFabricatorRecipe recipe : recipes) {
 			if (recipe.getPlan() != null && !ItemStackUtil.isCraftingEquivalent(recipe.getPlan(), plan)) {
 				continue;
 			}
-
 			if (RecipeUtil.matches(recipe.getIngredients(), recipe.getWidth(), recipe.getHeight(), gridResources)) {
-				if (liquid == null || liquid.containsFluid(recipe.getLiquid())) {
-					return recipe;
-				}
+				return recipe;
 			}
 		}
 
