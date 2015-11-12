@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
@@ -120,7 +121,7 @@ public class MultiblockWorldRegistry {
 					}
 
 					// This can occur on slow machines.
-					if (orphan.isInvalid()) {
+					if (orphan instanceof TileEntity && ((TileEntity) orphan).isInvalid()) {
 						continue;
 					}
 

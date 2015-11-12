@@ -349,7 +349,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 		
 		for (IMultiblockComponent acquiredPart : partsToAcquire) {
 			// By definition, none of these can be the minimum block.
-			if (acquiredPart.isInvalid()) {
+			if (isInvalid(acquiredPart)) {
 				continue;
 			}
 			
@@ -653,7 +653,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 		HashSet<IMultiblockComponent> deadParts = new HashSet<>();
 		for (IMultiblockComponent part : connectedParts) {
 			ChunkCoordinates partCoord = part.getCoordinates();
-			if (part.isInvalid() || worldObj.getTileEntity(partCoord.posX, partCoord.posY, partCoord.posZ) != part) {
+			if (isInvalid(part) || worldObj.getTileEntity(partCoord.posX, partCoord.posY, partCoord.posZ) != part) {
 				onDetachBlock(part);
 				deadParts.add(part);
 			}
@@ -690,7 +690,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 		for (IMultiblockComponent part : connectedParts) {
 			// This happens during chunk unload.
 			ChunkCoordinates partCoord = part.getCoordinates();
-			if (!chunkProvider.chunkExists(partCoord.posX >> 4, partCoord.posZ >> 4) || part.isInvalid()) {
+			if (!chunkProvider.chunkExists(partCoord.posX >> 4, partCoord.posZ >> 4) || isInvalid(part)) {
 				deadParts.add(part);
 				onDetachBlock(part);
 				continue;
@@ -818,7 +818,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 
 		for (IMultiblockComponent part : connectedParts) {
 			ChunkCoordinates partCoord = part.getCoordinates();
-			if (part.isInvalid() || !chunkProvider.chunkExists(partCoord.posX >> 4, partCoord.posZ >> 4)) {
+			if (isInvalid(part) || !chunkProvider.chunkExists(partCoord.posX >> 4, partCoord.posZ >> 4)) {
 				// Chunk is unloading, skip this coord to prevent chunk thrashing
 				continue;
 			}
@@ -874,5 +874,9 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 
 		TileEntity saveTe = worldObj.getTileEntity(referenceCoord.posX, referenceCoord.posY, referenceCoord.posZ);
 		worldObj.markTileEntityChunkModified(referenceCoord.posX, referenceCoord.posY, referenceCoord.posZ, saveTe);
+	}
+
+	private static boolean isInvalid(IMultiblockComponent part) {
+		return part instanceof TileEntity && ((TileEntity) part).isInvalid();
 	}
 }
