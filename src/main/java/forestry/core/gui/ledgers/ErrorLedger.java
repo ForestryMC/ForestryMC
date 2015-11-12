@@ -71,7 +71,7 @@ public class ErrorLedger extends Ledger {
 
 	@Override
 	public String getTooltip() {
-		if (state == null) {
+		if (!isVisible()) {
 			return "";
 		}
 		return StringUtil.localize(state.getDescription());

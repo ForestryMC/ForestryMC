@@ -130,15 +130,16 @@ public class LedgerManager {
 			yPos += ledger.getHeight();
 		}
 
-		ImmutableSet<IErrorState> errorStates = errorSource.getErrorStates();
+		List<IErrorState> errorStates = new ArrayList<>(errorSource.getErrorStates());
 
 		yPos = 8;
 		int index = 0;
-		for (IErrorState errorState : errorStates) {
-			if (index >= errorLedgers.size()) {
-				break;
+		for (ErrorLedger errorLedger : errorLedgers) {
+			if (index >= errorStates.size()) {
+				errorLedger.setState(null);
+				continue;
 			}
-			ErrorLedger errorLedger = errorLedgers.get(index++);
+			IErrorState errorState = errorStates.get(index++);
 			errorLedger.setState(errorState);
 
 			errorLedger.update();
