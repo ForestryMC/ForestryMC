@@ -40,6 +40,7 @@ import forestry.api.genetics.IMutation;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.config.Constants;
 import forestry.core.genetics.mutations.EnumMutateChance;
+import forestry.core.gui.widgets.ItemStackWidget;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
 
@@ -290,13 +291,13 @@ public abstract class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory>
 	protected void drawMutationInfo(IMutation combination, IAllele species, int x) {
 
 		ItemStack partnerBee = iconStacks.get(combination.getPartner(species).getUID());
-		widgetManager.add(new ItemStackWidget(x, getLineY(), partnerBee));
+		widgetManager.add(new ItemStackWidget(widgetManager, x, getLineY(), partnerBee));
 
 		drawProbabilityArrow(combination.getBaseChance(), guiLeft + x + 18, guiTop + getLineY() + 4);
 
 		IAllele result = combination.getTemplate()[EnumBeeChromosome.SPECIES.ordinal()];
 		ItemStack resultBee = iconStacks.get(result.getUID());
-		widgetManager.add(new ItemStackWidget(x + 33, getLineY(), resultBee));
+		widgetManager.add(new ItemStackWidget(widgetManager, x + 33, getLineY(), resultBee));
 	}
 
 	private void drawUnknownMutation(IMutation combination, int x) {

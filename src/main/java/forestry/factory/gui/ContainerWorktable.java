@@ -13,7 +13,6 @@ package forestry.factory.gui;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
@@ -27,19 +26,19 @@ import forestry.core.proxy.Proxies;
 import forestry.core.utils.ItemStackUtil;
 import forestry.factory.inventory.InventoryGhostCrafting;
 import forestry.factory.inventory.InventoryWorktable;
+import forestry.factory.inventory.InventoryWorktableCrafting;
 import forestry.factory.network.PacketWorktableMemoryUpdate;
-import forestry.factory.recipes.RecipeMemory;
 import forestry.factory.tiles.TileWorktable;
 
 public class ContainerWorktable extends ContainerTile<TileWorktable> implements IContainerCrafting, IGuiSelectable {
 
-	private final InventoryCrafting craftMatrix = new InventoryCrafting(this, 3, 3);
+	private final InventoryWorktableCrafting craftMatrix = new InventoryWorktableCrafting(this);
 	private long lastUpdate;
 
 	public ContainerWorktable(EntityPlayer player, TileWorktable tile) {
 		super(tile, player.inventory, 8, 136);
 
-		IInventory craftingInventory = tile.getCraftingInventory();
+		IInventory craftingDisplay = tile.getCraftingDisplay();
 		IInventory internalInventory = tile.getInternalInventory();
 
 		// Internal inventory
@@ -52,15 +51,15 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
 		// Crafting matrix
 		for (int l = 0; l < 3; l++) {
 			for (int k1 = 0; k1 < 3; k1++) {
-				addSlotToContainer(new SlotCraftMatrix(this, craftingInventory, k1 + l * 3, 11 + k1 * 18, 20 + l * 18));
+				addSlotToContainer(new SlotCraftMatrix(this, craftingDisplay, k1 + l * 3, 11 + k1 * 18, 20 + l * 18));
 			}
 		}
 
 		// CraftResult display
-		addSlotToContainer(new SlotCrafter(player, craftingInventory, tile, InventoryGhostCrafting.SLOT_CRAFTING_RESULT, 77, 38));
+		addSlotToContainer(new SlotCrafter(player, craftingDisplay, tile, InventoryGhostCrafting.SLOT_CRAFTING_RESULT, 77, 38));
 
 		// Update crafting matrix with current contents of tileentity.
-		updateMatrix();
+		updateCraftMatrix();
 	}
 
 	@Override
@@ -95,9 +94,9 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
 		}
 	}
 
-	private void updateMatrix() {
+	private void updateCraftMatrix() {
 		for (int i = 0; i < craftMatrix.getSizeInventory(); i++) {
-			craftMatrix.setInventorySlotContents(i, tile.getCraftingInventory().getStackInSlot(i));
+			craftMatrix.setInventorySlotContents(i, tile.getCraftingDisplay().getStackInSlot(i));
 		}
 	}
 
@@ -106,7 +105,7 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
 	}
 
 	public static void clearRecipe() {
-		sendRecipeClick(0, RecipeMemory.capacity);
+		sendRecipeClick(-1, -1);
 	}
 
 	public static void sendRecipeClick(int mouseButton, int recipeIndex) {
@@ -115,12 +114,17 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
 
 	@Override
 	public void handleSelectionRequest(EntityPlayerMP player, PacketGuiSelectRequest packet) {
-		if (packet.getPrimaryIndex() > 0) {
-			tile.getMemory().toggleLock(player.worldObj, packet.getSecondaryIndex());
-		} else {
-			tile.chooseRecipe(packet.getSecondaryIndex());
-			updateMatrix();
+		int mouseButton = packet.getPrimaryIndex();
+		int secondary = packet.getSecondaryIndex();
+
+		if (mouseButton < 0) {
+			tile.clearCraftMatrix();
+		} else if (mouseButton == 0) {
+			tile.chooseRecipe(secondary);
+			updateCraftMatrix();
 			updateRecipe();
+		} else {
+			tile.getMemory().toggleLock(player.worldObj.getTotalWorldTime(), secondary);
 		}
 	}
 }

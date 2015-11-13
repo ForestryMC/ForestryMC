@@ -30,6 +30,7 @@ import forestry.core.config.ForestryItem;
 import forestry.core.genetics.alleles.AlleleBoolean;
 import forestry.core.gui.ContainerAlyzer;
 import forestry.core.gui.GuiAlyzer;
+import forestry.core.gui.widgets.ItemStackWidget;
 import forestry.core.utils.StringUtil;
 
 public class GuiBeealyzer extends GuiAlyzer {
@@ -243,7 +244,7 @@ public class GuiBeealyzer extends GuiAlyzer {
 
 		int x = COLUMN_0;
 		for (ItemStack stack : bee.getProduceList()) {
-			widgetManager.add(new ItemStackWidget(x, getLineY(), stack));
+			widgetManager.add(new ItemStackWidget(widgetManager, x, getLineY(), stack));
 
 			x += 18;
 			if (x > 148) {
@@ -262,7 +263,7 @@ public class GuiBeealyzer extends GuiAlyzer {
 
 		x = COLUMN_0;
 		for (ItemStack stack : bee.getSpecialtyList()) {
-			widgetManager.add(new ItemStackWidget(x, getLineY(), stack));
+			widgetManager.add(new ItemStackWidget(widgetManager, x, getLineY(), stack));
 
 			x += 18;
 			if (x > 148) {

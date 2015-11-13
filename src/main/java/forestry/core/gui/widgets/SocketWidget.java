@@ -10,8 +10,7 @@
  ******************************************************************************/
 package forestry.core.gui.widgets;
 
-import java.util.List;
-
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -57,9 +56,8 @@ public class SocketWidget extends Widget {
 			toolTip.clear();
 			ItemStack stack = tile.getSocket(slot);
 			if (stack != null) {
-				for (String line : (List<String>) stack.getTooltip(Proxies.common.getClientInstance().thePlayer, false)) {
-					toolTip.add(line);
-				}
+				EntityPlayer player = Proxies.common.getClientInstance().thePlayer;
+				toolTip.add(stack.getTooltip(player, false));
 				toolTip.add(EnumChatFormatting.ITALIC + StringUtil.localize("gui.socket.remove"));
 			} else {
 				toolTip.add(StringUtil.localize("gui.emptysocket"));

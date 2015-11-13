@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InvalidObjectException;
 import java.util.List;
 
 import net.minecraft.inventory.IInventory;
@@ -102,7 +103,7 @@ public class DataInputStreamForestry extends DataInputStream {
 			varInt |= (b0 & 127) << size++ * 7;
 
 			if (size > 5) {
-				throw new RuntimeException("VarInt too big");
+				throw new InvalidObjectException("VarInt too big");
 			}
 		} while ((b0 & 128) == 128);
 

@@ -20,7 +20,6 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderItem;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
@@ -46,7 +45,6 @@ import forestry.core.gui.ledgers.PowerLedger;
 import forestry.core.gui.tooltips.IToolTipProvider;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.tooltips.ToolTipLine;
-import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.FontColour;
@@ -460,30 +458,6 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 
 		RenderHelper.disableStandardItemLighting();
 		GL11.glPopAttrib();
-	}
-
-	protected class ItemStackWidget extends Widget {
-		private final ItemStack itemStack;
-
-		public ItemStackWidget(int xPos, int yPos, ItemStack itemStack) {
-			super(widgetManager, xPos, yPos);
-			this.itemStack = itemStack;
-		}
-
-		@Override
-		public void draw(int startX, int startY) {
-			drawItemStack(itemStack, xPos + startX, yPos + startY);
-		}
-
-		@Override
-		public ToolTip getToolTip() {
-			EntityPlayer player = Proxies.common.getPlayer();
-			ToolTip tip = new ToolTip();
-			if (itemStack != null) {
-				tip.add(itemStack.getTooltip(player, false));
-			}
-			return tip;
-		}
 	}
 
 	/* NEI */

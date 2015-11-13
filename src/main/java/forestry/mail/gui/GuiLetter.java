@@ -28,6 +28,7 @@ import forestry.core.config.Constants;
 import forestry.core.config.SessionVars;
 import forestry.core.gui.GuiForestry;
 import forestry.core.gui.GuiTextBox;
+import forestry.core.gui.widgets.ItemStackWidget;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.SpriteSheet;
@@ -178,13 +179,13 @@ public class GuiLetter extends GuiForestry<ContainerLetter, ItemInventoryLetter>
 
 		fontRendererObj.drawString(StringUtil.localize("gui.mail.pleasesend"), guiLeft + x, guiTop + y, fontColor.get("gui.mail.lettertext"));
 
-		addTradeInfoWidget(new ItemStackWidget(x, y + 10, container.getTradeInfo().tradegood));
+		addTradeInfoWidget(new ItemStackWidget(widgetManager, x, y + 10, container.getTradeInfo().tradegood));
 
 		GL11.glDisable(GL11.GL_LIGHTING);
 		fontRendererObj.drawString(StringUtil.localize("gui.mail.foreveryattached"), guiLeft + x, guiTop + y + 28, fontColor.get("gui.mail.lettertext"));
 		GL11.glEnable(GL11.GL_LIGHTING);
 		for (int i = 0; i < container.getTradeInfo().required.length; i++) {
-			addTradeInfoWidget(new ItemStackWidget(x + i * 18, y + 38, container.getTradeInfo().required[i]));
+			addTradeInfoWidget(new ItemStackWidget(widgetManager, x + i * 18, y + 38, container.getTradeInfo().required[i]));
 		}
 	}
 

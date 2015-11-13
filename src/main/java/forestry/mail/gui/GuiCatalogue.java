@@ -26,6 +26,7 @@ import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.TradeStationInfo;
 import forestry.core.config.SessionVars;
 import forestry.core.gui.GuiForestry;
+import forestry.core.gui.widgets.ItemStackWidget;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.utils.StringUtil;
 
@@ -99,13 +100,13 @@ public class GuiCatalogue extends GuiForestry<ContainerCatalogue, IInventory> {
 
 		fontRendererObj.drawString(String.format(StringUtil.localize("gui.mail.willtrade"), tradeInfo.owner.getName()), x, y + 18, fontColor.get("gui.book"));
 
-		addTradeInfoWidget(new ItemStackWidget(x - guiLeft, y - guiTop + 28, tradeInfo.tradegood));
+		addTradeInfoWidget(new ItemStackWidget(widgetManager, x - guiLeft, y - guiTop + 28, tradeInfo.tradegood));
 
 		fontRendererObj.drawString(StringUtil.localize("gui.mail.tradefor"), x, y + 46, fontColor.get("gui.book"));
 
 		for (int i = 0; i < tradeInfo.required.length; i++) {
 			ItemStack itemStack = tradeInfo.required[i];
-			addTradeInfoWidget(new ItemStackWidget(x - guiLeft + i * 18, y - guiTop + 56, itemStack));
+			addTradeInfoWidget(new ItemStackWidget(widgetManager, x - guiLeft + i * 18, y - guiTop + 56, itemStack));
 		}
 
 		if (tradeInfo.state.isOk()) {

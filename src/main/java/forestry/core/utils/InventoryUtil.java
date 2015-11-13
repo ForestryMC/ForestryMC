@@ -630,6 +630,23 @@ public abstract class InventoryUtil {
 		}
 	}
 
+	public static void deepCopyInventoryContents(IInventory source, IInventory destination) {
+		if (source == null || destination == null) {
+			throw new IllegalArgumentException("Inventory can't be null. Source: " + source + ", Destination: " + destination);
+		}
+		if (source.getSizeInventory() != destination.getSizeInventory()) {
+			throw new IllegalArgumentException("Inventory sizes do not match. Source: " + source + ", Destination: " + destination);
+		}
+
+		for (int i = 0; i < source.getSizeInventory(); i++) {
+			ItemStack stack = source.getStackInSlot(i);
+			if (stack != null) {
+				stack = stack.copy();
+			}
+			destination.setInventorySlotContents(i, stack);
+		}
+	}
+
 	public static void dropInventory(IInventory inventory, World world, double x, double y, double z) {
 		if (inventory == null) {
 			return;

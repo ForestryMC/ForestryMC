@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
@@ -40,8 +39,6 @@ import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 
 public abstract class RecipeUtil {
-
-	private static final Container DUMMY_CONTAINER = new ContainerDummy();
 
 	public static void addFermenterRecipes(ItemStack resource, int fermentationValue, Fluids output) {
 		if (RecipeManagers.fermenterManager == null) {
@@ -115,7 +112,7 @@ public abstract class RecipeUtil {
 		// Create a fake crafting inventory using items we have in availableItems
 		// in place of the ones in the saved crafting inventory.
 		// Check that the recipe it makes is the same as the currentRecipe.
-		InventoryCrafting crafting = new InventoryCrafting(DUMMY_CONTAINER, 3, 3);
+		InventoryCrafting crafting = new InventoryCrafting(ContainerDummy.instance, 3, 3);
 		ItemStack[] stockCopy = ItemStackUtil.condenseStacks(availableItems);
 
 		for (int slot = 0; slot < recipeItems.length; slot++) {

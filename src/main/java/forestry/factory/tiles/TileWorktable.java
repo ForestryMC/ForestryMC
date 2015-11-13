@@ -14,7 +14,6 @@ import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.nbt.NBTTagCompound;
@@ -33,20 +32,21 @@ import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.factory.inventory.InventoryGhostCrafting;
 import forestry.factory.inventory.InventoryWorktable;
+import forestry.factory.inventory.InventoryWorktableCrafting;
+import forestry.factory.recipes.MemorizedRecipe;
 import forestry.factory.recipes.RecipeMemory;
 
 public class TileWorktable extends TileBase implements ICrafterWorktable {
-	private RecipeMemory.Recipe currentRecipe;
-	private InventoryCrafting currentCrafting;
-	private final RecipeMemory memorized;
-	private final InventoryAdapterTile craftingInventory;
+	private final RecipeMemory recipeMemory;
+	private final InventoryAdapterTile craftingDisplay;
+	private MemorizedRecipe currentRecipe;
 
 	public TileWorktable() {
 		super(GuiId.WorktableGUI, "worktable");
-		craftingInventory = new InventoryGhostCrafting<>(this, 10);
 		setInternalInventory(new InventoryWorktable(this));
 
-		memorized = new RecipeMemory();
+		craftingDisplay = new InventoryGhostCrafting<>(this, 10);
+		recipeMemory = new RecipeMemory();
 	}
 
 	/* LOADING & SAVING */
@@ -54,16 +54,16 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 		super.writeToNBT(nbttagcompound);
 
-		craftingInventory.writeToNBT(nbttagcompound);
-		memorized.writeToNBT(nbttagcompound);
+		craftingDisplay.writeToNBT(nbttagcompound);
+		recipeMemory.writeToNBT(nbttagcompound);
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		super.readFromNBT(nbttagcompound);
 
-		craftingInventory.readFromNBT(nbttagcompound);
-		memorized.readFromNBT(nbttagcompound);
+		craftingDisplay.readFromNBT(nbttagcompound);
+		recipeMemory.readFromNBT(nbttagcompound);
 	}
 
 	/* NETWORK */
@@ -71,70 +71,67 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 	public void writeData(DataOutputStreamForestry data) throws IOException {
 		super.writeData(data);
 
-		craftingInventory.writeData(data);
-		memorized.writeData(data);
+		craftingDisplay.writeData(data);
+		recipeMemory.writeData(data);
 	}
 
 	@Override
 	public void readData(DataInputStreamForestry data) throws IOException {
 		super.readData(data);
 
-		craftingInventory.readData(data);
-		memorized.readData(data);
+		craftingDisplay.readData(data);
+		recipeMemory.readData(data);
 	}
 
 	@Override
 	public void validate() {
 		super.validate();
-		memorized.validate(worldObj);
+		recipeMemory.validate(worldObj);
 	}
 
 	/* RECIPE SELECTION */
 	public RecipeMemory getMemory() {
-		return memorized;
+		return recipeMemory;
+	}
+
+	public void clearCraftMatrix() {
+		for (int slot = 0; slot < craftingDisplay.getSizeInventory(); slot++) {
+			craftingDisplay.setInventorySlotContents(slot, null);
+		}
 	}
 
 	public void chooseRecipe(int recipeIndex) {
-		if (recipeIndex >= RecipeMemory.capacity) {
-			for (int slot = 0; slot < craftingInventory.getSizeInventory(); slot++) {
-				craftingInventory.setInventorySlotContents(slot, null);
-			}
+		IInventory craftMatrix = recipeMemory.getRecipeCraftMatrix(recipeIndex);
+		if (craftMatrix == null) {
 			return;
 		}
 
-		IInventory matrix = memorized.getRecipeMatrix(recipeIndex);
-		if (matrix == null) {
-			return;
-		}
-
-		for (int slot = 0; slot < matrix.getSizeInventory(); slot++) {
-			craftingInventory.setInventorySlotContents(slot, matrix.getStackInSlot(slot));
+		for (int slot = 0; slot < craftMatrix.getSizeInventory(); slot++) {
+			craftingDisplay.setInventorySlotContents(slot, craftMatrix.getStackInSlot(slot));
 		}
 	}
 
 	/* CRAFTING */
-	public void setRecipe(InventoryCrafting crafting) {
+	public void setRecipe(InventoryWorktableCrafting crafting) {
 		ItemStack recipeOutput = CraftingManager.getInstance().findMatchingRecipe(crafting, worldObj);
 		if (recipeOutput == null) {
 			currentRecipe = null;
-			currentCrafting = null;
 		} else {
-			currentRecipe = new RecipeMemory.Recipe(crafting);
-			currentCrafting = crafting;
+			currentRecipe = new MemorizedRecipe(crafting, recipeOutput);
 		}
 		updateCraftResult();
 	}
 
 	private void updateCraftResult() {
 		if (currentRecipe != null) {
-			ItemStack result = currentRecipe.getRecipeOutput(worldObj);
+			ItemStack result = currentRecipe.getRecipeOutput();
 			if (result != null) {
-				craftingInventory.setInventorySlotContents(InventoryGhostCrafting.SLOT_CRAFTING_RESULT, result.copy());
+				craftingDisplay.setInventorySlotContents(InventoryGhostCrafting.SLOT_CRAFTING_RESULT, result.copy());
 				return;
 			}
 		}
 
-		craftingInventory.setInventorySlotContents(InventoryGhostCrafting.SLOT_CRAFTING_RESULT, null);
+		craftingDisplay.setInventorySlotContents(InventoryGhostCrafting.SLOT_CRAFTING_RESULT, null);
 	}
 
 	private boolean canCraftCurrentRecipe() {
@@ -142,9 +139,9 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 			return false;
 		}
 
-		ItemStack[] recipeItems = InventoryUtil.getStacks(craftingInventory, InventoryGhostCrafting.SLOT_CRAFTING_1, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
-		ItemStack[] inventory = InventoryUtil.getStacks(getInternalInventory(), InventoryWorktable.SLOT_INVENTORY_1, InventoryWorktable.SLOT_INVENTORY_COUNT);
-		ItemStack recipeOutput = currentRecipe.getRecipeOutput(worldObj);
+		ItemStack[] recipeItems = InventoryUtil.getStacks(craftingDisplay, InventoryGhostCrafting.SLOT_CRAFTING_1, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
+		ItemStack[] inventory = InventoryUtil.getStacks(this);
+		ItemStack recipeOutput = currentRecipe.getRecipeOutput();
 
 		return RecipeUtil.canCraftRecipe(worldObj, recipeItems, recipeOutput, inventory);
 	}
@@ -159,7 +156,7 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 
 	@Override
 	public boolean onCraftingStart(EntityPlayer player) {
-		ItemStack[] set = InventoryUtil.getStacks(currentRecipe.getMatrix());
+		ItemStack[] set = InventoryUtil.getStacks(currentRecipe.getCraftMatrix());
 
 		IInventory inventory = new InventoryMapper(this, InventoryWorktable.SLOT_INVENTORY_1, InventoryWorktable.SLOT_INVENTORY_COUNT);
 		ItemStack[] removed = InventoryUtil.removeSets(inventory, 1, set, player, false, true, true);
@@ -169,14 +166,14 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 		}
 
 		for (int i = 0; i < removed.length; i++) {
-			craftingInventory.setInventorySlotContents(i, removed[i]);
+			craftingDisplay.setInventorySlotContents(i, removed[i]);
 		}
 		return true;
 	}
 
 	@Override
 	public void onCraftingComplete(EntityPlayer player) {
-		IInventory craftingInventory = getCraftingInventory();
+		IInventory craftingInventory = getCraftingDisplay();
 		for (int i = 0; i < craftingInventory.getSizeInventory(); ++i) {
 			ItemStack itemStack = craftingInventory.getStackInSlot(i);
 			if (itemStack == null) {
@@ -209,7 +206,7 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 		}
 		
 		if (!worldObj.isRemote) {
-			memorized.memorizeRecipe(worldObj, currentRecipe, currentCrafting);
+			recipeMemory.memorizeRecipe(worldObj.getTotalWorldTime(), currentRecipe);
 		}
 
 		updateCraftResult();
@@ -221,16 +218,14 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 			return null;
 		}
 
-		if (currentRecipe.getRecipeOutput(worldObj) != null) {
-			return currentRecipe.getRecipeOutput(worldObj).copy();
+		ItemStack result = currentRecipe.getRecipeOutput();
+		if (result != null) {
+			result = result.copy();
 		}
-		return null;
+		return result;
 	}
 
-	/**
-	 * @return Inaccessible crafting inventory for the craft grid.
-	 */
-	public IInventory getCraftingInventory() {
-		return new InventoryMapper(craftingInventory, InventoryGhostCrafting.SLOT_CRAFTING_1, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
+	public IInventory getCraftingDisplay() {
+		return new InventoryMapper(craftingDisplay, InventoryGhostCrafting.SLOT_CRAFTING_1, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
 	}
 }
