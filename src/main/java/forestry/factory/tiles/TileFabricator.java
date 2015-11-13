@@ -49,6 +49,7 @@ import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;
 import forestry.core.utils.InventoryUtil;
 import forestry.factory.inventory.InventoryFabricator;
+import forestry.factory.inventory.InventoryGhostCrafting;
 import forestry.factory.recipes.FabricatorRecipeManager;
 import forestry.factory.recipes.FabricatorSmeltingRecipeManager;
 
@@ -64,7 +65,7 @@ public class TileFabricator extends TilePowered implements ICrafter, ILiquidTank
 	public TileFabricator() {
 		super(GuiId.FabricatorGUI, "fabricator", 1100, 3300);
 		setEnergyPerWorkCycle(200);
-		craftingInventory = new InventoryAdapterTile<>(this, InventoryFabricator.SLOT_CRAFTING_COUNT, "CraftItems");
+		craftingInventory = new InventoryGhostCrafting<>(this, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
 		setInternalInventory(new InventoryFabricator(this));
 		moltenTank = new FilteredTank(2 * Constants.BUCKET_VOLUME, Fluids.GLASS.getFluid());
 		moltenTank.tankMode = StandardTank.TankMode.INTERNAL;
@@ -222,7 +223,7 @@ public class TileFabricator extends TilePowered implements ICrafter, ILiquidTank
 		FluidStack liquid = myRecipe.getLiquid();
 
 		// Remove resources
-		ItemStack[] crafting = InventoryUtil.getStacks(craftingInventory, InventoryFabricator.SLOT_CRAFTING_1, InventoryFabricator.SLOT_CRAFTING_COUNT);
+		ItemStack[] crafting = InventoryUtil.getStacks(craftingInventory, InventoryGhostCrafting.SLOT_CRAFTING_1, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
 		if (!removeFromInventory(crafting, null, false)) {
 			return;
 		}
@@ -259,7 +260,7 @@ public class TileFabricator extends TilePowered implements ICrafter, ILiquidTank
 		ItemStack plan = getStackInSlot(InventoryFabricator.SLOT_PLAN);
 		IFabricatorRecipe recipe = FabricatorRecipeManager.findMatchingRecipe(plan, craftingInventory);
 		if (recipe != null) {
-			ItemStack[] crafting = InventoryUtil.getStacks(craftingInventory, InventoryFabricator.SLOT_CRAFTING_1, InventoryFabricator.SLOT_CRAFTING_COUNT);
+			ItemStack[] crafting = InventoryUtil.getStacks(craftingInventory, InventoryGhostCrafting.SLOT_CRAFTING_1, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
 			hasResources = removeFromInventory(crafting, null, false);
 			hasLiquidResources = moltenTank.canDrain(recipe.getLiquid());
 		} else {

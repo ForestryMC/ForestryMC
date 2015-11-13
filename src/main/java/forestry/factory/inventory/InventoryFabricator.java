@@ -29,8 +29,6 @@ public class InventoryFabricator extends InventoryAdapterTile<TileFabricator> {
 	public static final short SLOT_INVENTORY_1 = 12;
 	public static final short SLOT_INVENTORY_COUNT = 18;
 	public static final short SLOT_COUNT = 30;
-	public static final short SLOT_CRAFTING_1 = 0;
-	public static final short SLOT_CRAFTING_COUNT = 9;
 
 	public InventoryFabricator(TileFabricator fabricator) {
 		super(fabricator, SLOT_COUNT, "Items");

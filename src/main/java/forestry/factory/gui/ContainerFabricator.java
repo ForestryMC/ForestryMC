@@ -21,6 +21,7 @@ import forestry.core.gui.slots.SlotCraftMatrix;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.factory.inventory.InventoryFabricator;
+import forestry.factory.inventory.InventoryGhostCrafting;
 import forestry.factory.tiles.TileFabricator;
 
 public class ContainerFabricator extends ContainerLiquidTanks<TileFabricator> implements IContainerCrafting {
@@ -47,7 +48,7 @@ public class ContainerFabricator extends ContainerLiquidTanks<TileFabricator> im
 		// Crafting matrix
 		for (int l = 0; l < 3; l++) {
 			for (int k = 0; k < 3; k++) {
-				addSlotToContainer(new SlotCraftMatrix(this, tile.getCraftingInventory(), InventoryFabricator.SLOT_CRAFTING_1 + k + l * 3, 67 + k * 18, 17 + l * 18));
+				addSlotToContainer(new SlotCraftMatrix(this, tile.getCraftingInventory(), InventoryGhostCrafting.SLOT_CRAFTING_1 + k + l * 3, 67 + k * 18, 17 + l * 18));
 			}
 		}
 	}

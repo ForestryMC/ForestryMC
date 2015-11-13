@@ -45,6 +45,7 @@ import forestry.core.tiles.TilePowered;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.PlayerUtil;
 import forestry.factory.inventory.InventoryCarpenter;
+import forestry.factory.inventory.InventoryGhostCrafting;
 import forestry.factory.recipes.CarpenterRecipeManager;
 
 public class TileCarpenter extends TilePowered implements ISidedInventory, ILiquidTankTile, IFluidHandler, IItemStackDisplay {
@@ -69,7 +70,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 		setEnergyPerWorkCycle(ENERGY_PER_WORK_CYCLE);
 		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, CarpenterRecipeManager.getRecipeFluids());
 
-		craftingInventory = new InventoryAdapterTile<>(this, 10, "CraftItems");
+		craftingInventory = new InventoryGhostCrafting<>(this, 10);
 		craftPreviewInventory = new InventoryCraftResult();
 		setInternalInventory(new InventoryCarpenter(this));
 
@@ -183,7 +184,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 		}
 
 		EntityPlayer player = PlayerUtil.getPlayer(worldObj, getAccessHandler().getOwner());
-		ItemStack[] craftingSets = InventoryUtil.getStacks(craftingInventory, InventoryCarpenter.SLOT_CRAFTING_1, InventoryCarpenter.SLOT_CRAFTING_COUNT);
+		ItemStack[] craftingSets = InventoryUtil.getStacks(craftingInventory, InventoryGhostCrafting.SLOT_CRAFTING_1, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
 		IInventory inventory = new InventoryMapper(getInternalInventory(), InventoryCarpenter.SLOT_INVENTORY_1, InventoryCarpenter.SLOT_INVENTORY_COUNT);
 		return InventoryUtil.removeSets(inventory, 1, craftingSets, player, true, true, false, doRemove);
 	}

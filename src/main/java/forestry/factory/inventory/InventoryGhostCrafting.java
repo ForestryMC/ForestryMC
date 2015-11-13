@@ -10,22 +10,17 @@
  ******************************************************************************/
 package forestry.factory.inventory;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 
+import forestry.core.access.IRestrictedAccess;
 import forestry.core.inventory.InventoryAdapterTile;
-import forestry.core.utils.SlotUtil;
-import forestry.factory.tiles.TileWorktable;
 
-public class InventoryWorktable extends InventoryAdapterTile<TileWorktable> {
-	public final static short SLOT_INVENTORY_1 = 0;
-	public final static short SLOT_INVENTORY_COUNT = 18;
+public class InventoryGhostCrafting<T extends TileEntity & IRestrictedAccess> extends InventoryAdapterTile<T> {
+	public final static int SLOT_CRAFTING_1 = 0;
+	public final static int SLOT_CRAFTING_COUNT = 9;
+	public final static int SLOT_CRAFTING_RESULT = 9;
 
-	public InventoryWorktable(TileWorktable worktable) {
-		super(worktable, 18, "Items");
-	}
-
-	@Override
-	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-		return SlotUtil.isSlotInRange(slotIndex, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
+	public InventoryGhostCrafting(T tile, int size) {
+		super(tile, size, "CraftItems");
 	}
 }

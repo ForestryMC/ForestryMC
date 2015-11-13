@@ -25,6 +25,7 @@ import forestry.core.gui.slots.SlotCrafter;
 import forestry.core.network.PacketGuiSelectRequest;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.ItemStackUtil;
+import forestry.factory.inventory.InventoryGhostCrafting;
 import forestry.factory.inventory.InventoryWorktable;
 import forestry.factory.network.PacketWorktableMemoryUpdate;
 import forestry.factory.recipes.RecipeMemory;
@@ -56,7 +57,7 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
 		}
 
 		// CraftResult display
-		addSlotToContainer(new SlotCrafter(player, craftingInventory, tile, InventoryWorktable.SLOT_CRAFTING_RESULT, 77, 38));
+		addSlotToContainer(new SlotCrafter(player, craftingInventory, tile, InventoryGhostCrafting.SLOT_CRAFTING_RESULT, 77, 38));
 
 		// Update crafting matrix with current contents of tileentity.
 		updateMatrix();

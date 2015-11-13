@@ -21,8 +21,6 @@ import forestry.factory.recipes.CarpenterRecipeManager;
 import forestry.factory.tiles.TileCarpenter;
 
 public class InventoryCarpenter extends InventoryAdapterTile<TileCarpenter> {
-	public final static int SLOT_CRAFTING_1 = 0;
-	public final static int SLOT_CRAFTING_COUNT = 9;
 	public final static int SLOT_BOX = 9;
 	public final static int SLOT_PRODUCT = 10;
 	public final static int SLOT_PRODUCT_COUNT = 1;

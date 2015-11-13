@@ -31,6 +31,7 @@ import forestry.core.recipes.RecipeUtil;
 import forestry.core.tiles.TileBase;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.ItemStackUtil;
+import forestry.factory.inventory.InventoryGhostCrafting;
 import forestry.factory.inventory.InventoryWorktable;
 import forestry.factory.recipes.RecipeMemory;
 
@@ -42,7 +43,7 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 
 	public TileWorktable() {
 		super(GuiId.WorktableGUI, "worktable");
-		craftingInventory = new InventoryAdapterTile<>(this, 10, "CraftItems");
+		craftingInventory = new InventoryGhostCrafting<>(this, 10);
 		setInternalInventory(new InventoryWorktable(this));
 
 		memorized = new RecipeMemory();
@@ -113,7 +114,6 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 
 	/* CRAFTING */
 	public void setRecipe(InventoryCrafting crafting) {
-
 		ItemStack recipeOutput = CraftingManager.getInstance().findMatchingRecipe(crafting, worldObj);
 		if (recipeOutput == null) {
 			currentRecipe = null;
@@ -129,12 +129,12 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 		if (currentRecipe != null) {
 			ItemStack result = currentRecipe.getRecipeOutput(worldObj);
 			if (result != null) {
-				craftingInventory.setInventorySlotContents(InventoryWorktable.SLOT_CRAFTING_RESULT, result.copy());
+				craftingInventory.setInventorySlotContents(InventoryGhostCrafting.SLOT_CRAFTING_RESULT, result.copy());
 				return;
 			}
 		}
 
-		craftingInventory.setInventorySlotContents(InventoryWorktable.SLOT_CRAFTING_RESULT, null);
+		craftingInventory.setInventorySlotContents(InventoryGhostCrafting.SLOT_CRAFTING_RESULT, null);
 	}
 
 	private boolean canCraftCurrentRecipe() {
@@ -142,7 +142,7 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 			return false;
 		}
 
-		ItemStack[] recipeItems = InventoryUtil.getStacks(craftingInventory, InventoryWorktable.SLOT_CRAFTING_1, InventoryWorktable.SLOT_CRAFTING_COUNT);
+		ItemStack[] recipeItems = InventoryUtil.getStacks(craftingInventory, InventoryGhostCrafting.SLOT_CRAFTING_1, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
 		ItemStack[] inventory = InventoryUtil.getStacks(getInternalInventory(), InventoryWorktable.SLOT_INVENTORY_1, InventoryWorktable.SLOT_INVENTORY_COUNT);
 		ItemStack recipeOutput = currentRecipe.getRecipeOutput(worldObj);
 
@@ -151,7 +151,7 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 
 	@Override
 	public boolean canTakeStack(int slotIndex) {
-		if (slotIndex == InventoryWorktable.SLOT_CRAFTING_RESULT) {
+		if (slotIndex == InventoryGhostCrafting.SLOT_CRAFTING_RESULT) {
 			return canCraftCurrentRecipe();
 		}
 		return true;
@@ -231,6 +231,6 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 	 * @return Inaccessible crafting inventory for the craft grid.
 	 */
 	public IInventory getCraftingInventory() {
-		return new InventoryMapper(craftingInventory, InventoryWorktable.SLOT_CRAFTING_1, InventoryWorktable.SLOT_CRAFTING_COUNT);
+		return new InventoryMapper(craftingInventory, InventoryGhostCrafting.SLOT_CRAFTING_1, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
 	}
 }
