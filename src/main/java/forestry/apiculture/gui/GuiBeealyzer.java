@@ -98,81 +98,81 @@ public class GuiBeealyzer extends GuiAlyzer {
 
 	private void drawAnalyticsPage1(IBee bee, EnumBeeType type) {
 
-		startPage(COLUMN_0, COLUMN_1, COLUMN_2);
+		textLayout.startPage(COLUMN_0, COLUMN_1, COLUMN_2);
 
-		drawLine(StringUtil.localize("gui.active"), COLUMN_1);
-		drawLine(StringUtil.localize("gui.inactive"), COLUMN_2);
+		textLayout.drawLine(StringUtil.localize("gui.active"), COLUMN_1);
+		textLayout.drawLine(StringUtil.localize("gui.inactive"), COLUMN_2);
 
-		newLine();
-		newLine();
+		textLayout.newLine();
+		textLayout.newLine();
 
 		{
 			String customPrimaryBeeKey = "bees.custom.beealyzer." + type.getName() + "." + bee.getGenome().getPrimary().getUnlocalizedName().replace("bees.species.", "");
 			String customSecondaryBeeKey = "bees.custom.beealyzer." + type.getName() + "." + bee.getGenome().getSecondary().getUnlocalizedName().replace("bees.species.", "");
 
 			drawSpeciesRow(StringUtil.localize("gui.species"), bee, EnumBeeChromosome.SPECIES, checkCustomName(customPrimaryBeeKey), checkCustomName(customSecondaryBeeKey));
-			newLine();
+			textLayout.newLine();
 		}
 
 		drawChromosomeRow(StringUtil.localize("gui.lifespan"), bee, EnumBeeChromosome.LIFESPAN);
-		newLine();
+		textLayout.newLine();
 		drawChromosomeRow(StringUtil.localize("gui.speed"), bee, EnumBeeChromosome.SPEED);
-		newLine();
+		textLayout.newLine();
 		drawChromosomeRow(StringUtil.localize("gui.pollination"), bee, EnumBeeChromosome.FLOWERING);
-		newLine();
+		textLayout.newLine();
 		drawChromosomeRow(StringUtil.localize("gui.flowers"), bee, EnumBeeChromosome.FLOWER_PROVIDER);
-		newLine();
+		textLayout.newLine();
 
-		drawLine(StringUtil.localize("gui.fertility"), COLUMN_0);
+		textLayout.drawLine(StringUtil.localize("gui.fertility"), COLUMN_0);
 		IAlleleInteger primaryFertility = (IAlleleInteger) bee.getGenome().getActiveAllele(EnumBeeChromosome.FERTILITY);
 		IAlleleInteger secondaryFertility = (IAlleleInteger) bee.getGenome().getInactiveAllele(EnumBeeChromosome.FERTILITY);
 		drawFertilityInfo(primaryFertility.getValue(), COLUMN_1, getColorCoding(primaryFertility.isDominant()), 0);
 		drawFertilityInfo(secondaryFertility.getValue(), COLUMN_2, getColorCoding(secondaryFertility.isDominant()), 0);
-		newLine();
+		textLayout.newLine();
 
 		drawChromosomeRow(StringUtil.localize("gui.area"), bee, EnumBeeChromosome.TERRITORY);
-		newLine();
+		textLayout.newLine();
 
 		drawChromosomeRow(StringUtil.localize("gui.effect"), bee, EnumBeeChromosome.EFFECT);
-		newLine();
+		textLayout.newLine();
 
-		endPage();
+		textLayout.endPage();
 	}
 
 	private void drawAnalyticsPage2(IBee bee, EnumBeeType type) {
 
-		startPage(COLUMN_0, COLUMN_1, COLUMN_2);
+		textLayout.startPage(COLUMN_0, COLUMN_1, COLUMN_2);
 
-		drawLine(StringUtil.localize("gui.active"), COLUMN_1);
-		drawLine(StringUtil.localize("gui.inactive"), COLUMN_2);
+		textLayout.drawLine(StringUtil.localize("gui.active"), COLUMN_1);
+		textLayout.drawLine(StringUtil.localize("gui.inactive"), COLUMN_2);
 
-		newLine();
+		textLayout.newLine();
 
 		drawRow(StringUtil.localize("gui.climate"), AlleleManager.climateHelper.toDisplay(bee.getGenome().getPrimary().getTemperature()),
 				AlleleManager.climateHelper.toDisplay(bee.getGenome().getSecondary().getTemperature()), bee, EnumBeeChromosome.SPECIES);
 
-		newLine();
+		textLayout.newLine();
 
 		IAlleleTolerance tempToleranceActive = (IAlleleTolerance) bee.getGenome().getActiveAllele(EnumBeeChromosome.TEMPERATURE_TOLERANCE);
 		IAlleleTolerance tempToleranceInactive = (IAlleleTolerance) bee.getGenome().getInactiveAllele(EnumBeeChromosome.TEMPERATURE_TOLERANCE);
-		drawLine("  " + StringUtil.localize("gui.tolerance"), COLUMN_0);
+		textLayout.drawLine("  " + StringUtil.localize("gui.tolerance"), COLUMN_0);
 		drawToleranceInfo(tempToleranceActive, COLUMN_1);
 		drawToleranceInfo(tempToleranceInactive, COLUMN_2);
 
-		newLine(16);
+		textLayout.newLine(16);
 
 		drawRow(StringUtil.localize("gui.humidity"), AlleleManager.climateHelper.toDisplay(bee.getGenome().getPrimary().getHumidity()),
 				AlleleManager.climateHelper.toDisplay(bee.getGenome().getSecondary().getHumidity()), bee, EnumBeeChromosome.SPECIES);
 
-		newLine();
+		textLayout.newLine();
 
 		IAlleleTolerance humidToleranceActive = (IAlleleTolerance) bee.getGenome().getActiveAllele(EnumBeeChromosome.HUMIDITY_TOLERANCE);
 		IAlleleTolerance humidToleranceInactive = (IAlleleTolerance) bee.getGenome().getInactiveAllele(EnumBeeChromosome.HUMIDITY_TOLERANCE);
-		drawLine("  " + StringUtil.localize("gui.tolerance"), COLUMN_0);
+		textLayout.drawLine("  " + StringUtil.localize("gui.tolerance"), COLUMN_0);
 		drawToleranceInfo(humidToleranceActive, COLUMN_1);
 		drawToleranceInfo(humidToleranceInactive, COLUMN_2);
 
-		newLine(16);
+		textLayout.newLine(16);
 
 		String yes = StringUtil.localize("yes");
 		String no = StringUtil.localize("no");
@@ -191,29 +191,29 @@ public class GuiBeealyzer extends GuiAlyzer {
 			diurnal1 = !bee.getGenome().getSecondary().isNocturnal() ? yes : no;
 		}
 
-		drawLine(StringUtil.localize("gui.diurnal"), COLUMN_0);
-		drawLine(diurnal0, COLUMN_1, getColorCoding(false));
-		drawLine(diurnal1, COLUMN_2, getColorCoding(false));
-		newLineCompressed();
+		textLayout.drawLine(StringUtil.localize("gui.diurnal"), COLUMN_0);
+		textLayout.drawLine(diurnal0, COLUMN_1, getColorCoding(false));
+		textLayout.drawLine(diurnal1, COLUMN_2, getColorCoding(false));
+		textLayout.newLineCompressed();
 
-		drawLine(StringUtil.localize("gui.nocturnal"), COLUMN_0);
-		drawLine(nocturnal0, COLUMN_1, getColorCoding(false));
-		drawLine(nocturnal1, COLUMN_2, getColorCoding(false));
-		newLineCompressed();
+		textLayout.drawLine(StringUtil.localize("gui.nocturnal"), COLUMN_0);
+		textLayout.drawLine(nocturnal0, COLUMN_1, getColorCoding(false));
+		textLayout.drawLine(nocturnal1, COLUMN_2, getColorCoding(false));
+		textLayout.newLineCompressed();
 
 		String primary = StringUtil.readableBoolean(bee.getGenome().getTolerantFlyer(), yes, no);
 		String secondary = StringUtil.readableBoolean(((AlleleBoolean) bee.getGenome().getInactiveAllele(EnumBeeChromosome.TOLERANT_FLYER)).getValue(), yes, no);
 
 		drawRow(StringUtil.localize("gui.flyer"), primary, secondary, bee, EnumBeeChromosome.TOLERANT_FLYER);
 
-		newLineCompressed();
+		textLayout.newLineCompressed();
 
 		primary = StringUtil.readableBoolean(bee.getGenome().getCaveDwelling(), yes, no);
 		secondary = StringUtil.readableBoolean(((AlleleBoolean) bee.getGenome().getInactiveAllele(EnumBeeChromosome.CAVE_DWELLING)).getValue(), yes, no);
 
 		drawRow(StringUtil.localize("gui.cave"), primary, secondary, bee, EnumBeeChromosome.CAVE_DWELLING);
 
-		newLine();
+		textLayout.newLine();
 
 		String displayText;
 		if (type == EnumBeeType.PRINCESS || type == EnumBeeType.QUEEN) {
@@ -222,57 +222,57 @@ public class GuiBeealyzer extends GuiAlyzer {
 				displayText = "bees.stock.ignoble";
 			}
 			displayText = StringUtil.localize(displayText);
-			drawCenteredLine(displayText, 8, 208, fontColor.get("gui.beealyzer.binomial"));
+			textLayout.drawCenteredLine(displayText, 8, 208, fontColor.get("gui.beealyzer.binomial"));
 		}
 
 		if (bee.getGeneration() >= 0) {
-			newLineCompressed();
+			textLayout.newLineCompressed();
 			displayText = StringUtil.localizeAndFormat("gui.beealyzer.generations", bee.getGeneration());
-			drawCenteredLine(displayText, 8, 208, fontColor.get("gui.beealyzer.binomial"));
+			textLayout.drawCenteredLine(displayText, 8, 208, fontColor.get("gui.beealyzer.binomial"));
 		}
 
-		endPage();
+		textLayout.endPage();
 	}
 
 	private void drawAnalyticsPage3(IBee bee) {
 
-		startPage(COLUMN_0, COLUMN_1, COLUMN_2);
+		textLayout.startPage(COLUMN_0, COLUMN_1, COLUMN_2);
 
-		drawLine(StringUtil.localize("gui.beealyzer.produce") + ":", COLUMN_0);
+		textLayout.drawLine(StringUtil.localize("gui.beealyzer.produce") + ":", COLUMN_0);
 
-		newLine();
+		textLayout.newLine();
 
 		int x = COLUMN_0;
 		for (ItemStack stack : bee.getProduceList()) {
-			widgetManager.add(new ItemStackWidget(widgetManager, x, getLineY(), stack));
+			widgetManager.add(new ItemStackWidget(widgetManager, x, textLayout.getLineY(), stack));
 
 			x += 18;
 			if (x > 148) {
 				x = COLUMN_0;
-				newLine();
+				textLayout.newLine();
 			}
 		}
 
-		newLine();
-		newLine();
-		newLine();
-		newLine();
+		textLayout.newLine();
+		textLayout.newLine();
+		textLayout.newLine();
+		textLayout.newLine();
 
-		drawLine(StringUtil.localize("gui.beealyzer.specialty") + ":", COLUMN_0);
-		newLine();
+		textLayout.drawLine(StringUtil.localize("gui.beealyzer.specialty") + ":", COLUMN_0);
+		textLayout.newLine();
 
 		x = COLUMN_0;
 		for (ItemStack stack : bee.getSpecialtyList()) {
-			widgetManager.add(new ItemStackWidget(widgetManager, x, getLineY(), stack));
+			widgetManager.add(new ItemStackWidget(widgetManager, x, textLayout.getLineY(), stack));
 
 			x += 18;
 			if (x > 148) {
 				x = COLUMN_0;
-				newLine();
+				textLayout.newLine();
 			}
 		}
 
-		endPage();
+		textLayout.endPage();
 	}
 
 }

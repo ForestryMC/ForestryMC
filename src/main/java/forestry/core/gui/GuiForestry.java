@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -57,14 +58,14 @@ import codechicken.nei.api.TaggedInventoryArea;
 
 @Optional.Interface(iface = "codechicken.nei.api.INEIGuiHandler", modid = "NotEnoughItems")
 public abstract class GuiForestry<C extends Container, I extends IInventory> extends GuiContainer implements INEIGuiHandler {
-	protected static final int LINE_HEIGHT = 12;
-
 	protected final I inventory;
 	protected final C container;
-	protected final FontColour fontColor;
+
 	public final ResourceLocation textureFile;
 	protected final WidgetManager widgetManager;
 	protected LedgerManager ledgerManager;
+	protected TextLayoutHelper textLayout;
+	protected FontColour fontColor;
 
 	protected GuiForestry(String texture, C container, I inventory) {
 		this(new ResourceLocation("forestry", texture), container, inventory);
@@ -81,6 +82,13 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 		this.container = container;
 
 		this.fontColor = new FontColour(Proxies.render.getSelectedTexturePack());
+		this.textLayout = new TextLayoutHelper(this, this.fontColor);
+	}
+
+	@Override
+	public void setWorldAndResolution(Minecraft minecraft, int width, int height) {
+		super.setWorldAndResolution(minecraft, width, height);
+		textLayout.setFontRendererObj(fontRendererObj);
 	}
 
 	/* LEDGERS */
@@ -127,83 +135,8 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 		ledgerManager.onGuiClosed();
 	}
 
-	/* TEXT HELPER FUNCTIONS */
-	protected int column0;
-	protected int column1;
-	protected int column2;
-	private int line;
-
-	protected final void startPage() {
-		line = LINE_HEIGHT;
-		GL11.glPushMatrix();
-	}
-
-	protected final void startPage(int column0, int column1, int column2) {
-
-		this.column0 = column0;
-		this.column1 = column1;
-		this.column2 = column2;
-
-		startPage();
-	}
-
-	protected final int getLineY() {
-		return line;
-	}
-
-	protected final void newLine() {
-		line += LINE_HEIGHT;
-	}
-
-	protected final void newLineCompressed() {
-		line += (LINE_HEIGHT - 2);
-	}
-
-	protected final void newLine(int lineHeight) {
-		line += lineHeight;
-	}
-
-	protected final void endPage() {
-		GL11.glPopMatrix();
-	}
-
-	protected final void drawRow(String text0, String text1, String text2, int colour0, int colour1, int colour2) {
-		drawLine(text0, column0, colour0);
-		drawLine(text1, column1, colour1);
-		drawLine(text2, column2, colour2);
-	}
-
-	protected final void drawLine(String text, int x) {
-		drawLine(text, x, fontColor.get("gui.screen"));
-	}
-
-	protected final void drawSplitLine(String text, int x, int maxWidth) {
-		drawSplitLine(text, x, maxWidth, fontColor.get("gui.screen"));
-	}
-
-	protected final void drawCenteredLine(String text, int x, int width) {
-		drawCenteredLine(text, x, width, fontColor.get("gui.screen"));
-	}
-
-	protected final void drawCenteredLine(String text, int x, int width, int color) {
-		fontRendererObj.drawString(text, guiLeft + x + (width - fontRendererObj.getStringWidth(text)) / 2, guiTop + line, color);
-	}
-
-	protected final void drawLine(String text, int x, int color) {
-		fontRendererObj.drawString(text, guiLeft + x, guiTop + line, color);
-	}
-
-	protected final void drawSplitLine(String text, int x, int maxWidth, int color) {
-		fontRendererObj.drawSplitString(text, guiLeft + x, guiTop + line, maxWidth, color);
-	}
-
-	/* CORE GUI HANDLING */
-	protected int getCenteredOffset(String string) {
-		return getCenteredOffset(string, xSize);
-	}
-
-	protected int getCenteredOffset(String string, int xWidth) {
-		return (xWidth - fontRendererObj.getStringWidth(string)) / 2;
+	public FontColour getFontColor() {
+		return fontColor;
 	}
 
 	@Override
@@ -423,10 +356,6 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 
 	public int getGuiTop() {
 		return guiTop;
-	}
-
-	public FontColour getFontColor() {
-		return fontColor;
 	}
 
 	@Override

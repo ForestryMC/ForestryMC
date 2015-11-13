@@ -97,7 +97,7 @@ public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator, Item
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
 		String str = StatCollector.translateToLocal("item.for.habitatLocator.name").toUpperCase();
-		fontRendererObj.drawString(str, startX + 8 + getCenteredOffset(str, 138), startY + 16, fontColor.get("gui.screen"));
+		fontRendererObj.drawString(str, startX + 8 + textLayout.getCenteredOffset(str, 138), startY + 16, fontColor.get("gui.screen"));
 
 		// Set active according to valid biomes.
 		Set<BiomeDictionary.Type> activeBiomeTypes = EnumSet.noneOf(BiomeDictionary.Type.class);

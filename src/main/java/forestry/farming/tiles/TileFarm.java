@@ -36,10 +36,11 @@ import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
 import forestry.core.network.IStreamableGui;
+import forestry.core.tiles.ITitled;
 import forestry.farming.multiblock.MultiblockLogicFarm;
 import forestry.farming.render.EnumFarmBlockTexture;
 
-public abstract class TileFarm extends MultiblockTileEntityForestry<MultiblockLogicFarm> implements IFarmComponent, IHintSource, ISocketable, IStreamableGui, IErrorLogicSource, IRestrictedAccess {
+public abstract class TileFarm extends MultiblockTileEntityForestry<MultiblockLogicFarm> implements IFarmComponent, IHintSource, ISocketable, IStreamableGui, IErrorLogicSource, IRestrictedAccess, ITitled {
 
 	public static final int TYPE_PLAIN = 0;
 	public static final int TYPE_REVERSE = 1;
@@ -176,5 +177,11 @@ public abstract class TileFarm extends MultiblockTileEntityForestry<MultiblockLo
 	@Override
 	public void onSwitchAccess(EnumAccess oldAccess, EnumAccess newAccess) {
 		getMultiblockLogic().getController().onSwitchAccess(oldAccess, newAccess);
+	}
+
+	/* ITitled */
+	@Override
+	public String getUnlocalizedTitle() {
+		return "for.gui.farm.title";
 	}
 }

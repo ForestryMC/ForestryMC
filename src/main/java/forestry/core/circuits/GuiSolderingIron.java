@@ -40,7 +40,7 @@ public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron, ItemIn
 
 		ICircuitLayout layout = ((ContainerSolderingIron) inventorySlots).getLayout();
 		String title = layout.getName();
-		fontRendererObj.drawString(title, guiLeft + 8 + getCenteredOffset(title, 138), guiTop + 16, fontColor.get("gui.screen"));
+		fontRendererObj.drawString(title, guiLeft + 8 + textLayout.getCenteredOffset(title, 138), guiTop + 16, fontColor.get("gui.screen"));
 
 		for (int i = 0; i < 4; i++) {
 			String description;

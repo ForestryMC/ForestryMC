@@ -71,7 +71,10 @@ public class GuiTradeName extends GuiForestry<ContainerTradeName, TileTrader> {
 		super.drawGuiContainerBackgroundLayer(var1, var2, var3);
 
 		String prompt = StringUtil.localize("gui.mail.nametrader");
-		fontRendererObj.drawString(prompt, guiLeft + this.getCenteredOffset(prompt), guiTop + 16, fontColor.get("gui.mail.text"));
+		textLayout.startPage();
+		textLayout.newLine();
+		textLayout.drawCenteredLine(prompt, 0, fontColor.get("gui.mail.text"));
+		textLayout.endPage();
 		addressNameField.drawTextBox();
 	}
 

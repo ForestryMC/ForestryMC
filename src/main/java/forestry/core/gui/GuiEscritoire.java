@@ -87,22 +87,22 @@ public class GuiEscritoire extends GuiForestry<ContainerEscritoire, TileEscritoi
 			RenderHelper.disableStandardItemLighting();
 		}
 
-		startPage();
+		textLayout.startPage();
 		GL11.glPushMatrix();
 		{
 			GL11.glScaled(0.5, 0.5, 0.5);
 			GL11.glTranslated(guiLeft + 170, guiTop + 10, 0.0);
 
-			newLine();
-			newLine();
+			textLayout.newLine();
+			textLayout.newLine();
 			String format = EnumChatFormatting.UNDERLINE + EnumChatFormatting.ITALIC.toString();
 			int attemptNo = EscritoireGame.BOUNTY_MAX - inventory.getGame().getBountyLevel();
-			drawLine(format + "Attempt No. " + attemptNo, 170, fontColor.get("gui.mail.lettertext"));
-			newLine();
+			textLayout.drawLine(format + "Attempt No. " + attemptNo, 170, fontColor.get("gui.mail.lettertext"));
+			textLayout.newLine();
 			String escritoireText = textSource.getText(inventory.getGame());
-			drawSplitLine(escritoireText, 170, 90, fontColor.get("gui.mail.lettertext"));
+			textLayout.drawSplitLine(escritoireText, 170, 90, fontColor.get("gui.mail.lettertext"));
 		}
 		GL11.glPopMatrix();
-		endPage();
+		textLayout.endPage();
 	}
 }

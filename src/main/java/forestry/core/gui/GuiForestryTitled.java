@@ -23,9 +23,11 @@ public abstract class GuiForestryTitled<C extends Container, I extends ITitled &
 	}
 
 	@Override
-	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+	protected void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY) {
+		super.drawGuiContainerBackgroundLayer(f, mouseX, mouseY);
+
 		String name = StatCollector.translateToLocal(inventory.getUnlocalizedTitle());
-		this.fontRendererObj.drawString(name, getCenteredOffset(name), 6, fontColor.get("gui.title"));
-		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
+		textLayout.line = 6;
+		textLayout.drawCenteredLine(name, 0, fontColor.get("gui.title"));
 	}
 }

@@ -18,7 +18,7 @@ import org.lwjgl.opengl.GL11;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmLogic;
 import forestry.core.config.Constants;
-import forestry.core.gui.GuiForestry;
+import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.ledgers.ClimateLedger;
 import forestry.core.gui.ledgers.OwnerLedger;
 import forestry.core.gui.tooltips.ToolTip;
@@ -27,11 +27,10 @@ import forestry.core.gui.widgets.TankWidget;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.StringUtil;
 import forestry.farming.multiblock.IFarmControllerInternal;
 import forestry.farming.tiles.TileFarm;
 
-public class GuiFarm extends GuiForestry<ContainerFarm, TileFarm> {
+public class GuiFarm extends GuiForestryTitled<ContainerFarm, TileFarm> {
 
 	public GuiFarm(EntityPlayer player, TileFarm tile) {
 		super(Constants.TEXTURE_PATH_GUI + "/mfarm.png", new ContainerFarm(player.inventory, tile), tile);
@@ -56,13 +55,6 @@ public class GuiFarm extends GuiForestry<ContainerFarm, TileFarm> {
 		ledgerManager.add(new ClimateLedger(ledgerManager, farmController));
 		ledgerManager.add(new FarmLedger(ledgerManager, farmController.getFarmLedgerDelegate()));
 		ledgerManager.add(new OwnerLedger(ledgerManager, farmController));
-	}
-
-	@Override
-	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-		String title = StringUtil.localize("gui.farm.title");
-		this.fontRendererObj.drawString(title, getCenteredOffset(title), 6, fontColor.get("gui.title"));
 	}
 
 	@Override
