@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import java.awt.Color;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -26,7 +24,6 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 
 import cpw.mods.fml.common.Optional;
@@ -43,9 +40,6 @@ import forestry.core.gui.ledgers.HintLedger;
 import forestry.core.gui.ledgers.LedgerManager;
 import forestry.core.gui.ledgers.OwnerLedger;
 import forestry.core.gui.ledgers.PowerLedger;
-import forestry.core.gui.tooltips.IToolTipProvider;
-import forestry.core.gui.tooltips.ToolTip;
-import forestry.core.gui.tooltips.ToolTipLine;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.FontColour;
@@ -139,6 +133,10 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 		return fontColor;
 	}
 
+	public FontRenderer getFontRenderer() {
+		return fontRendererObj;
+	}
+
 	@Override
 	protected void mouseClicked(int xPos, int yPos, int mouseButton) {
 		super.mouseClicked(xPos, yPos, mouseButton);
@@ -179,146 +177,55 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 		return this.func_146978_c(par1Slot.xDisplayPosition, par1Slot.yDisplayPosition, 16, 16, par2, par3);
 	}
 
-	private void drawToolTips(ToolTip toolTips, int mouseX, int mouseY) {
-		if (toolTips == null) {
-			return;
-		}
-		if (toolTips.isEmpty()) {
-			return;
-		}
-
-		int left = this.guiLeft;
-		int top = this.guiTop;
-		int length = 0;
-		int height = 0;
-		int x;
-		int y;
-
-		for (ToolTipLine tip : toolTips) {
-			y = this.fontRendererObj.getStringWidth(tip.toString());
-
-			height += 10 + tip.getSpacing();
-			if (y > length) {
-				length = y;
-			}
-		}
-
-		x = mouseX - left + 12;
-		y = mouseY - top - 12;
-
-		this.zLevel = 300.0F;
-		itemRender.zLevel = 300.0F;
-		Color backgroundColor = new Color(16, 0, 16, 240);
-		int backgroundColorInt = backgroundColor.getRGB();
-		this.drawGradientRect(x - 3, y - 4, x + length + 2, y - 3, backgroundColorInt, backgroundColorInt);
-		this.drawGradientRect(x - 3, y + height + 1, x + length + 2, y + height + 2, backgroundColorInt, backgroundColorInt);
-		this.drawGradientRect(x - 3, y - 3, x + length + 2, y + height + 1, backgroundColorInt, backgroundColorInt);
-		this.drawGradientRect(x - 4, y - 3, x - 3, y + height + 1, backgroundColorInt, backgroundColorInt);
-		this.drawGradientRect(x + length + 2, y - 3, x + length + 3, y + height + 1, backgroundColorInt, backgroundColorInt);
-
-		Color borderColorTop = new Color(80, 0, 255, 80);
-		int borderColorTopInt = borderColorTop.getRGB();
-		Color borderColorBottom = new Color((borderColorTopInt & 0xfefefe) >> 1 | borderColorTopInt & -0x1000000, true);
-		int borderColorBottomInt = borderColorBottom.getRGB();
-		this.drawGradientRect(x - 3, y - 3 + 1, x - 3 + 1, y + height, borderColorTopInt, borderColorBottomInt);
-		this.drawGradientRect(x + length + 1, y - 3 + 1, x + length + 2, y + height, borderColorTopInt, borderColorBottomInt);
-		this.drawGradientRect(x - 3, y - 3, x + length + 2, y - 3 + 1, borderColorTopInt, borderColorTopInt);
-		this.drawGradientRect(x - 3, y + height, x + length + 2, y + height + 1, borderColorBottomInt, borderColorBottomInt);
-
-		boolean firstLine = true;
-		for (ToolTipLine tip : toolTips) {
-			String line = tip.toString();
-
-			if (!firstLine) {
-				line = EnumChatFormatting.GRAY + line;
-			}
-
-			this.fontRendererObj.drawStringWithShadow(line, x, y, -1);
-
-			y += 10 + tip.getSpacing();
-
-			firstLine = false;
-		}
-
-		this.zLevel = 0.0F;
-		itemRender.zLevel = 0.0F;
-	}
-
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
-		RenderHelper.enableGUIStandardItemLighting();
-		GL11.glDisable(GL11.GL_LIGHTING);
-		GL11.glDisable(GL11.GL_DEPTH_TEST);
-		GL11.glPushMatrix();
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		{
+			RenderHelper.enableGUIStandardItemLighting();
+			GL11.glDisable(GL11.GL_LIGHTING);
+			GL11.glDisable(GL11.GL_DEPTH_TEST);
+			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240 / 1.0F, 240 / 1.0F);
+			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240 / 1.0F, 240 / 1.0F);
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			ledgerManager.drawTooltips(mouseX, mouseY);
 
-		ledgerManager.drawTooltips(mouseX, mouseY);
+			InventoryPlayer playerInv = mc.thePlayer.inventory;
 
-		InventoryPlayer playerInv = mc.thePlayer.inventory;
-
-		if (playerInv.getItemStack() == null) {
-			drawToolTips(widgetManager.getWidgets(), mouseX, mouseY);
-			drawToolTips(buttonList, mouseX, mouseY);
-			drawToolTips(inventorySlots.inventorySlots, mouseX, mouseY);
+			if (playerInv.getItemStack() == null) {
+				GuiUtil.drawToolTips(this, widgetManager.getWidgets(), mouseX, mouseY);
+				GuiUtil.drawToolTips(this, buttonList, mouseX, mouseY);
+				GuiUtil.drawToolTips(this, inventorySlots.inventorySlots, mouseX, mouseY);
+			}
 		}
-
-		GL11.glPopMatrix();
 		GL11.glPopAttrib();
-	}
-
-	private void drawToolTips(Collection<?> objects, int mouseX, int mouseY) {
-		for (Object obj : objects) {
-			if (!(obj instanceof IToolTipProvider)) {
-				continue;
-			}
-			IToolTipProvider provider = (IToolTipProvider) obj;
-			if (!provider.isToolTipVisible()) {
-				continue;
-			}
-			ToolTip tips = provider.getToolTip();
-			if (tips == null) {
-				continue;
-			}
-			boolean mouseOver = provider.isMouseOver(mouseX - guiLeft, mouseY - guiTop);
-			tips.onTick(mouseOver);
-			if (mouseOver && tips.isReady()) {
-				tips.refresh();
-				drawToolTips(tips, mouseX, mouseY);
-			}
-		}
 	}
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY) {
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		bindTexture(textureFile);
+
 		int x = (width - xSize) / 2;
 		int y = (height - ySize) / 2;
 		drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
 
-		int left = this.guiLeft;
-		int top = this.guiTop;
-
 		GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
-		RenderHelper.enableGUIStandardItemLighting();
-		GL11.glDisable(GL11.GL_LIGHTING);
-		GL11.glDisable(GL11.GL_DEPTH_TEST);
-		GL11.glPushMatrix();
-		GL11.glTranslatef(left, top, 0.0F);
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		{
+			RenderHelper.enableGUIStandardItemLighting();
+			GL11.glDisable(GL11.GL_LIGHTING);
+			GL11.glDisable(GL11.GL_DEPTH_TEST);
+			GL11.glPushMatrix();
+			{
+				GL11.glTranslatef(guiLeft, guiTop, 0.0F);
+				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240 / 1.0F, 240 / 1.0F);
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+				GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+				OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240 / 1.0F, 240 / 1.0F);
+				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-		drawWidgets();
-
-		GL11.glPopMatrix();
+				drawWidgets();
+			}
+			GL11.glPopMatrix();
+		}
 		GL11.glPopAttrib();
 
 		bindTexture(textureFile);
@@ -361,32 +268,6 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 	@Override
 	public void drawGradientRect(int par1, int par2, int par3, int par4, int par5, int par6) {
 		super.drawGradientRect(par1, par2, par3, par4, par5, par6);
-	}
-
-	public void drawItemStack(ItemStack stack, int xPos, int yPos) {
-		GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
-		GL11.glEnable(GL11.GL_DEPTH_TEST);
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		RenderHelper.enableGUIStandardItemLighting();
-
-		GL11.glTranslatef(0.0F, 0.0F, 32.0F);
-		this.zLevel = 100.0F;
-		itemRender.zLevel = 100.0F;
-		FontRenderer font = null;
-		if (stack != null) {
-			font = stack.getItem().getFontRenderer(stack);
-		}
-		if (font == null) {
-			font = fontRendererObj;
-		}
-		itemRender.renderItemAndEffectIntoGUI(font, this.mc.getTextureManager(), stack, xPos, yPos);
-		itemRender.renderItemOverlayIntoGUI(font, this.mc.getTextureManager(), stack, xPos, yPos);
-		this.zLevel = 0.0F;
-		itemRender.zLevel = 0.0F;
-
-		RenderHelper.disableStandardItemLighting();
-		GL11.glPopAttrib();
 	}
 
 	/* NEI */

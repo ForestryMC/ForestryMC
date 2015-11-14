@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -82,13 +81,10 @@ public class GuiEscritoire extends GuiForestry<ContainerEscritoire, TileEscritoi
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
 		for (int i = 0; i <= inventory.getGame().getBountyLevel() / 4; i++) {
-			RenderHelper.enableGUIStandardItemLighting();
-			GuiForestry.itemRender.renderItemAndEffectIntoGUI(mc.fontRenderer, mc.renderEngine, LEVEL_ITEM, guiLeft + 170 + i * 8, guiTop + 7);
-			RenderHelper.disableStandardItemLighting();
+			GuiUtil.drawItemStack(this, LEVEL_ITEM, guiLeft + 170 + i * 8, guiTop + 7);
 		}
 
 		textLayout.startPage();
-		GL11.glPushMatrix();
 		{
 			GL11.glScaled(0.5, 0.5, 0.5);
 			GL11.glTranslated(guiLeft + 170, guiTop + 10, 0.0);
@@ -102,7 +98,6 @@ public class GuiEscritoire extends GuiForestry<ContainerEscritoire, TileEscritoi
 			String escritoireText = textSource.getText(inventory.getGame());
 			textLayout.drawSplitLine(escritoireText, 170, 90, fontColor.get("gui.mail.lettertext"));
 		}
-		GL11.glPopMatrix();
 		textLayout.endPage();
 	}
 }

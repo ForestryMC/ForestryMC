@@ -45,7 +45,7 @@ public class SocketWidget extends Widget {
 	}
 
 	@Override
-	public ToolTip getToolTip() {
+	public ToolTip getToolTip(int mouseX, int mouseY) {
 		return toolTip;
 	}
 

@@ -158,9 +158,7 @@ public class GuiNaturalistInventory extends GuiForestry<Container, IPagedInvento
 		}
 
 		textLayout.drawLine(species.getName(), x);
-		RenderHelper.enableGUIStandardItemLighting();
-		drawItemStack(iconStack, guiLeft + x + 69, guiTop + textLayout.getLineY() - 2);
-		RenderHelper.disableStandardItemLighting();
+		GuiUtil.drawItemStack(this, iconStack, guiLeft + x + 69, guiTop + textLayout.getLineY() - 2);
 
 		textLayout.newLine();
 
@@ -191,10 +189,7 @@ public class GuiNaturalistInventory extends GuiForestry<Container, IPagedInvento
 	}
 
 	private void drawMutationIcon(IMutation combination, IAlleleSpecies species, int x) {
-
-		RenderHelper.enableGUIStandardItemLighting();
-		drawItemStack(iconStacks.get(combination.getPartner(species).getUID()), guiLeft + x, guiTop + textLayout.getLineY());
-		RenderHelper.disableStandardItemLighting();
+		GuiUtil.drawItemStack(this, iconStacks.get(combination.getPartner(species).getUID()), guiLeft + x, guiTop + textLayout.getLineY());
 
 		int line = 48;
 		int column;

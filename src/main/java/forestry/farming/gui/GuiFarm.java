@@ -11,22 +11,15 @@
 package forestry.farming.gui;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.IIcon;
-
-import org.lwjgl.opengl.GL11;
 
 import forestry.api.farming.FarmDirection;
-import forestry.api.farming.IFarmLogic;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.ledgers.ClimateLedger;
 import forestry.core.gui.ledgers.OwnerLedger;
-import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.widgets.SocketWidget;
 import forestry.core.gui.widgets.TankWidget;
-import forestry.core.gui.widgets.Widget;
-import forestry.core.gui.widgets.WidgetManager;
-import forestry.core.proxy.Proxies;
+import forestry.farming.gui.widgets.FarmLogicSlot;
 import forestry.farming.multiblock.IFarmControllerInternal;
 import forestry.farming.tiles.TileFarm;
 
@@ -39,10 +32,12 @@ public class GuiFarm extends GuiForestryTitled<ContainerFarm, TileFarm> {
 
 		widgetManager.add(new SocketWidget(widgetManager, 69, 40, tile, 0));
 
-		widgetManager.add(new FarmLogicSlot(widgetManager, 69, 22, FarmDirection.NORTH));
-		widgetManager.add(new FarmLogicSlot(widgetManager, 69, 58, FarmDirection.SOUTH));
-		widgetManager.add(new FarmLogicSlot(widgetManager, 51, 40, FarmDirection.WEST));
-		widgetManager.add(new FarmLogicSlot(widgetManager, 87, 40, FarmDirection.EAST));
+		IFarmControllerInternal farmController = inventory.getMultiblockLogic().getController();
+
+		widgetManager.add(new FarmLogicSlot(farmController, widgetManager, 69, 22, FarmDirection.NORTH));
+		widgetManager.add(new FarmLogicSlot(farmController, widgetManager, 69, 58, FarmDirection.SOUTH));
+		widgetManager.add(new FarmLogicSlot(farmController, widgetManager, 51, 40, FarmDirection.WEST));
+		widgetManager.add(new FarmLogicSlot(farmController, widgetManager, 87, 40, FarmDirection.EAST));
 
 		this.xSize = 216;
 		this.ySize = 220;
@@ -66,60 +61,6 @@ public class GuiFarm extends GuiForestryTitled<ContainerFarm, TileFarm> {
 		if (fertilizerRemain > 0) {
 			drawTexturedModalRect(guiLeft + 81, guiTop + 94 + 17 - fertilizerRemain, xSize, 17 - fertilizerRemain, 4, fertilizerRemain);
 		}
-	}
-
-	private class FarmLogicSlot extends Widget {
-
-		private final FarmDirection farmDirection;
-
-		public FarmLogicSlot(WidgetManager manager, int xPos, int yPos, FarmDirection farmDirection) {
-			super(manager, xPos, yPos);
-			this.farmDirection = farmDirection;
-		}
-
-		private IFarmLogic getLogic() {
-			return inventory.getMultiblockLogic().getController().getFarmLogic(farmDirection);
-		}
-
-		private IIcon getIconIndex() {
-			if (getLogic() == null) {
-				return null;
-			}
-			return getLogic().getIcon();
-		}
-
-		@Override
-		public void draw(int startX, int startY) {
-			if (getLogic() == null) {
-				return;
-			}
-
-			if (getIconIndex() != null) {
-				GL11.glDisable(GL11.GL_LIGHTING);
-				Proxies.render.bindTexture(getLogic().getSpriteSheet());
-				manager.gui.drawTexturedModelRectFromIcon(startX + xPos, startY + yPos, getIconIndex(), 16, 16);
-				GL11.glEnable(GL11.GL_LIGHTING);
-			}
-
-		}
-
-		@Override
-		public ToolTip getToolTip() {
-			return toolTip;
-		}
-
-		protected final ToolTip toolTip = new ToolTip(250) {
-			@Override
-			public void refresh() {
-				toolTip.clear();
-				if (getLogic() == null) {
-					return;
-				}
-				toolTip.add(getLogic().getName());
-				toolTip.add("Fertilizer: " + getLogic().getFertilizerConsumption());
-				toolTip.add("Water: " + getLogic().getWaterConsumption(inventory.getMultiblockLogic().getController().getFarmLedgerDelegate().getHydrationModifier()));
-			}
-		};
 	}
 
 }

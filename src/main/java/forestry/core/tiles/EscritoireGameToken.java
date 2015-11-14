@@ -17,6 +17,7 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import forestry.api.core.INBTTagable;
 import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.IIndividual;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
@@ -99,7 +100,8 @@ public class EscritoireGameToken implements INBTTagable, IStreamable {
 			return 0xffffff;
 		}
 
-		int iconColor = AlleleManager.alleleRegistry.getIndividual(tokenStack).getGenome().getPrimary().getIconColour(0);
+		IIndividual individual = AlleleManager.alleleRegistry.getIndividual(tokenStack);
+		int iconColor = individual.getGenome().getPrimary().getIconColour(0);
 
 		if (state == State.MATCHED) {
 			return ColourUtil.multiplyRGBComponents(iconColor, 0.7f);

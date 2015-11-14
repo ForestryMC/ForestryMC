@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.gui.widgets;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -36,6 +37,7 @@ public class TankWidget extends Widget {
 	private int overlayTexX = 176;
 	private int overlayTexY = 0;
 	private int slot = 0;
+	protected boolean drawOverlay = true;
 
 	public TankWidget(WidgetManager manager, int xPos, int yPos, int slot) {
 		super(manager, xPos, yPos);
@@ -62,7 +64,7 @@ public class TankWidget extends Widget {
 	@Override
 	public void draw(int startX, int startY) {
 		IFluidTank tank = getTank();
-		if (tank == null) {
+		if (tank == null || tank.getCapacity() <= 0) {
 			return;
 		}
 
@@ -70,44 +72,49 @@ public class TankWidget extends Widget {
 		if (contents == null || contents.amount <= 0 || contents.getFluid() == null) {
 			return;
 		}
+
 		IIcon liquidIcon = contents.getFluid().getIcon(contents);
 		if (liquidIcon == null) {
 			return;
 		}
-		int squaled = (contents.amount * height) / getTank().getCapacity();
 
-		Proxies.render.bindTexture(SpriteSheet.BLOCKS);
-		int start = 0;
-
-		GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
-		GL11.glDisable(GL11.GL_LIGHTING);
-		GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
-		while (true) {
-			int x;
-
-			if (squaled > 16) {
-				x = 16;
-				squaled -= 16;
-			} else {
-				x = squaled;
-				squaled = 0;
-			}
-
-			manager.gui.drawTexturedModelRectFromIcon(startX + xPos, startY + yPos + height - x - start, liquidIcon, 16, 16 - (16 - x));
-			start = start + 16;
-
-			if (x == 0 || squaled == 0) {
-				break;
-			}
+		int scaledLiquid = (contents.amount * height) / tank.getCapacity();
+		if (scaledLiquid > height) {
+			scaledLiquid = height;
 		}
 
-		Proxies.render.bindTexture(manager.gui.textureFile);
-		manager.gui.drawTexturedModalRect(startX + xPos, startY + yPos, overlayTexX, overlayTexY, 16, 60);
+		Proxies.render.bindTexture(SpriteSheet.BLOCKS);
+		GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
+		{
+			GL11.glDisable(GL11.GL_LIGHTING);
+			GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
+
+			int start = 0;
+			while (scaledLiquid > 0) {
+				int x;
+
+				if (scaledLiquid > 16) {
+					x = 16;
+					scaledLiquid -= 16;
+				} else {
+					x = scaledLiquid;
+					scaledLiquid = 0;
+				}
+
+				manager.gui.drawTexturedModelRectFromIcon(startX + xPos, startY + yPos + height - x - start, liquidIcon, 16, x);
+				start += 16;
+			}
+
+			if (drawOverlay) {
+				Proxies.render.bindTexture(manager.gui.textureFile);
+				manager.gui.drawTexturedModalRect(startX + xPos, startY + yPos, overlayTexX, overlayTexY, 16, 60);
+			}
+		}
 		GL11.glPopAttrib();
 	}
 
 	@Override
-	public ToolTip getToolTip() {
+	public ToolTip getToolTip(int mouseX, int mouseY) {
 		IFluidTank tank = getTank();
 		if (!(tank instanceof StandardTank)) {
 			return null;
@@ -117,14 +124,16 @@ public class TankWidget extends Widget {
 
 	@Override
 	public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
-		ItemStack itemstack = manager.minecraft.thePlayer.inventory.getItemStack();
+		EntityPlayer player = manager.minecraft.thePlayer;
+		ItemStack itemstack = player.inventory.getItemStack();
 		if (itemstack == null) {
 			return;
 		}
 
 		Item held = itemstack.getItem();
-		if (held instanceof IToolPipette && manager.gui.inventorySlots instanceof IContainerLiquidTanks) {
-			((IContainerLiquidTanks) manager.gui.inventorySlots).handlePipetteClickClient(slot, manager.minecraft.thePlayer);
+		Container container = manager.gui.inventorySlots;
+		if (held instanceof IToolPipette && container instanceof IContainerLiquidTanks) {
+			((IContainerLiquidTanks) container).handlePipetteClickClient(slot, player);
 		}
 	}
 }

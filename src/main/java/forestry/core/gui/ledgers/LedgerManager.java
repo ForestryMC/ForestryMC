@@ -10,12 +10,8 @@
  ******************************************************************************/
 package forestry.core.gui.ledgers;
 
-import com.google.common.collect.ImmutableSet;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import net.minecraft.client.Minecraft;
 
 import org.lwjgl.opengl.GL11;
 
@@ -24,10 +20,10 @@ import forestry.api.core.IErrorState;
 import forestry.core.config.SessionVars;
 import forestry.core.errors.FakeErrorSource;
 import forestry.core.gui.GuiForestry;
-import forestry.core.proxy.Proxies;
+import forestry.core.gui.GuiUtil;
+import forestry.core.gui.tooltips.ToolTip;
 
 public class LedgerManager {
-
 	private final List<Ledger> ledgers = new ArrayList<>();
 	private final List<ErrorLedger> errorLedgers = new ArrayList<>();
 
@@ -75,7 +71,6 @@ public class LedgerManager {
 	}
 
 	private Ledger getAtPosition(int mX, int mY) {
-
 		if (ledgers.size() > 0) {
 			final int xShift = ((gui.width - gui.getSizeX()) / 2) + gui.getSizeX();
 			int yShift = ((gui.height - gui.getSizeY()) / 2) + 8;
@@ -116,7 +111,6 @@ public class LedgerManager {
 	}
 
 	public void drawLedgers() {
-
 		int yPos = 8;
 		for (Ledger ledger : ledgers) {
 
@@ -154,19 +148,12 @@ public class LedgerManager {
 	}
 
 	public void drawTooltips(int mouseX, int mouseY) {
-
 		Ledger ledger = getAtPosition(mouseX, mouseY);
 		if (ledger != null) {
-			int startX = mouseX - ((gui.width - gui.getSizeX()) / 2) + 12;
-			int startY = mouseY - ((gui.height - gui.getSizeY()) / 2) - 12;
-
-			String tooltip = ledger.getTooltip();
-			Minecraft minecraft = Proxies.common.getClientInstance();
-			int textWidth = minecraft.fontRenderer.getStringWidth(tooltip);
-			gui.drawGradientRect(startX - 3, startY - 3, startX + textWidth + 3, startY + 8 + 3, 0xc0000000, 0xc0000000);
-			minecraft.fontRenderer.drawStringWithShadow(tooltip, startX, startY, -1);
+			ToolTip toolTip = new ToolTip();
+			toolTip.add(ledger.getTooltip());
+			GuiUtil.drawToolTips(gui, toolTip, mouseX, mouseY);
 		}
-
 	}
 
 	public void handleMouseClicked(int x, int y, int mouseButton) {

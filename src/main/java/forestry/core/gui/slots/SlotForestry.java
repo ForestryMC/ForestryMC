@@ -96,9 +96,11 @@ public class SlotForestry extends Slot implements IToolTipProvider {
 
 	/**
 	 * @return the toolTips
+	 * @param mouseX
+	 * @param mouseY
 	 */
 	@Override
-	public ToolTip getToolTip() {
+	public ToolTip getToolTip(int mouseX, int mouseY) {
 		return toolTips;
 	}
 

@@ -44,11 +44,9 @@ import forestry.energy.inventory.InventoryEngineBiogas;
 public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILiquidTankTile, IFluidHandler {
 	private final FilteredTank fuelTank;
 	private final FilteredTank heatingTank;
+	private final StandardTank burnTank;
 	private final TankManager tankManager;
 
-	private int burnTime;
-	private int totalTime;
-	private int currentFluidId = -1;
 	private boolean shutdown; // true if the engine is too cold and needs to warm itself up.
 
 	public TileEngineBiogas() {
@@ -60,24 +58,18 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 		fuelTank.tankMode = StandardTank.TankMode.DEFAULT;
 		heatingTank = new FilteredTank(Constants.ENGINE_TANK_CAPACITY, FluidRegistry.LAVA);
 		heatingTank.tankMode = StandardTank.TankMode.INPUT;
-		this.tankManager = new TankManager(this, fuelTank, heatingTank);
-	}
-
-	public int getBurnTime() {
-		return burnTime;
-	}
-
-	public int getTotalTime() {
-		return totalTime;
-	}
-
-	public int getCurrentFluidId() {
-		return currentFluidId;
+		burnTank = new StandardTank(Constants.BUCKET_VOLUME);
+		burnTank.tankMode = StandardTank.TankMode.INTERNAL;
+		this.tankManager = new TankManager(this, fuelTank, heatingTank, burnTank);
 	}
 
 	@Override
 	public TankManager getTankManager() {
 		return tankManager;
+	}
+
+	public Fluid getBurnTankFluidType() {
+		return burnTank.getFluidType();
 	}
 
 	@Override
@@ -95,7 +87,7 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 		boolean hasHeat = getHeatLevel() > 0.2 || heatingTank.getFluidAmount() > 0;
 		errorLogic.setCondition(!hasHeat, EnumErrorCode.NO_HEAT);
 
-		boolean hasFuel = burnTime > 0 || fuelTank.getFluidAmount() > 0;
+		boolean hasFuel = burnTank.getFluidAmount() > 0 || fuelTank.getFluidAmount() > 0;
 		errorLogic.setCondition(!hasFuel, EnumErrorCode.NO_FUEL);
 	}
 
@@ -107,7 +99,7 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 
 		currentOutput = 0;
 
-		if (isRedstoneActivated() && (fuelTank.getFluidAmount() >= Constants.BUCKET_VOLUME || burnTime > 0)) {
+		if (isRedstoneActivated() && (fuelTank.getFluidAmount() >= Constants.BUCKET_VOLUME || burnTank.getFluidAmount() > 0)) {
 
 			double heatStage = getHeatLevel();
 
@@ -124,25 +116,21 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 			}
 
 			// We need a minimum temperature to generate energy
-			if (heatStage > 0.2)
-
-			{
-				if (burnTime > 0) {
-					burnTime--;
-					currentOutput = determineFuelValue(FluidRegistry.getFluid(currentFluidId));
+			if (heatStage > 0.2) {
+				if (burnTank.getFluidAmount() > 0) {
+					FluidStack drained = burnTank.drain(1, true);
+					currentOutput = determineFuelValue(drained.getFluid());
 					energyManager.generateEnergy(currentOutput);
 				} else {
-					burnTime = totalTime = determineBurnTime(fuelTank.getFluid().getFluid());
-					currentFluidId = fuelTank.getFluid().getFluid().getID();
-					fuelTank.drain(Constants.BUCKET_VOLUME, true);
+					FluidStack fuel = fuelTank.drain(Constants.BUCKET_VOLUME, true);
+					int burnTime = determineBurnTime(fuel.getFluid());
+					fuel.amount = burnTime;
+					burnTank.setCapacity(burnTime);
+					burnTank.setFluid(fuel);
 				}
 			} else {
 				shutdown(true);
 			}
-		}
-
-		if (burnTime <= 0) {
-			currentFluidId = -1;
 		}
 	}
 
@@ -185,7 +173,7 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 
 		int generate = 0;
 
-		if (isRedstoneActivated() && burnTime > 0) {
+		if (isRedstoneActivated() && burnTank.getFluidAmount() > 0) {
 			double heatStage = getHeatLevel();
 			if (heatStage >= 0.75) {
 				generate += Constants.ENGINE_BRONZE_HEAT_GENERATION_ENERGY * 3;
@@ -226,16 +214,16 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 	// / STATE INFORMATION
 	@Override
 	protected boolean isBurning() {
-		return mayBurn() && burnTime > 0;
+		return mayBurn() && burnTank.getFluidAmount() > 0;
 	}
 
 	@Override
 	public int getBurnTimeRemainingScaled(int i) {
-		if (totalTime == 0) {
+		if (burnTank.getCapacity() == 0) {
 			return 0;
 		}
 
-		return (burnTime * i) / totalTime;
+		return (burnTank.getFluidAmount() * i) / burnTank.getCapacity();
 	}
 
 	public int getOperatingTemperatureScaled(int i) {
@@ -246,32 +234,29 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
 
-		burnTime = nbt.getInteger("EngineBurnTime");
-		totalTime = nbt.getInteger("EngineTotalTime");
-
-		if (nbt.hasKey("currentFluid")) {
-			Fluid fluid = FluidRegistry.getFluid(nbt.getString("currentFluid"));
-			if (fluid != null) {
-				currentFluidId = fluid.getID();
+		//legacy
+		{
+			if (nbt.hasKey("currentFluid")) {
+				Fluid fluid = FluidRegistry.getFluid(nbt.getString("currentFluid"));
+				if (fluid != null) {
+					int burnTime = nbt.getInteger("EngineBurnTime");
+					int totalTime = nbt.getInteger("EngineTotalTime");
+					burnTank.setCapacity(totalTime);
+					burnTank.setFluid(new FluidStack(fluid, burnTime));
+				}
 			}
 		}
 
+		if (nbt.hasKey("shutdown")) {
+			shutdown = nbt.getBoolean("shutdown");
+		}
 		tankManager.readFromNBT(nbt);
-
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
-
-		nbt.setInteger("EngineBurnTime", burnTime);
-		nbt.setInteger("EngineTotalTime", totalTime);
-
-		Fluid fluid = FluidRegistry.getFluid(currentFluidId);
-		if (fluid != null) {
-			nbt.setString("currentFluid", fluid.getName());
-		}
-
+		nbt.setBoolean("shutdown", shutdown);
 		tankManager.writeToNBT(nbt);
 	}
 
@@ -295,34 +280,26 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 	public void getGUINetworkData(int id, int data) {
 		switch (id) {
 			case 0:
-				burnTime = data;
-				break;
-			case 1:
-				totalTime = data;
-				break;
-			case 2:
 				currentOutput = data;
 				break;
-			case 3:
+			case 1:
 				energyManager.fromGuiInt(data);
 				break;
-			case 4:
+			case 2:
 				heat = data;
 				break;
-			case 5:
-				currentFluidId = data;
+			case 3:
+				burnTank.setCapacity(data);
 				break;
 		}
 	}
 
 	@Override
 	public void sendGUINetworkData(Container containerEngine, ICrafting iCrafting) {
-		iCrafting.sendProgressBarUpdate(containerEngine, 0, burnTime);
-		iCrafting.sendProgressBarUpdate(containerEngine, 1, totalTime);
-		iCrafting.sendProgressBarUpdate(containerEngine, 2, currentOutput);
-		iCrafting.sendProgressBarUpdate(containerEngine, 3, energyManager.toGuiInt());
-		iCrafting.sendProgressBarUpdate(containerEngine, 4, heat);
-		iCrafting.sendProgressBarUpdate(containerEngine, 5, currentFluidId);
+		iCrafting.sendProgressBarUpdate(containerEngine, 0, currentOutput);
+		iCrafting.sendProgressBarUpdate(containerEngine, 1, energyManager.toGuiInt());
+		iCrafting.sendProgressBarUpdate(containerEngine, 2, heat);
+		iCrafting.sendProgressBarUpdate(containerEngine, 3, burnTank.getCapacity());
 	}
 
 	// IFluidHandler

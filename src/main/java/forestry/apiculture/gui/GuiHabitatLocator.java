@@ -10,15 +10,17 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
+import com.google.common.collect.LinkedListMultimap;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
-import java.util.EnumMap;
 import java.util.EnumSet;
-import java.util.Locale;
-import java.util.Map;
+import java.util.List;
 import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.biome.BiomeGenBase;
 
@@ -26,30 +28,30 @@ import net.minecraftforge.common.BiomeDictionary;
 
 import org.lwjgl.opengl.GL11;
 
+import forestry.apiculture.gui.widgets.HabitatSlot;
 import forestry.apiculture.inventory.ItemInventoryHabitatLocator;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
-import forestry.core.gui.widgets.Widget;
-import forestry.core.proxy.Proxies;
-import forestry.core.render.SpriteSheet;
-import forestry.core.render.TextureManager;
 
 public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator, ItemInventoryHabitatLocator> {
+	private static final LinkedListMultimap<String, BiomeDictionary.Type> habitats = LinkedListMultimap.create();
 
-	private final HabitatSlot[] habitatSlots = new HabitatSlot[]{
-			new HabitatSlot(0, "Ocean"), // ocean, beach
-			new HabitatSlot(1, "Plains"),
-			new HabitatSlot(2, "Desert"), // desert, desert hills
-			new HabitatSlot(3, "Forest"), // forest, forestHills, river
-			new HabitatSlot(4, "Jungle"), // jungle, jungleHills
-			new HabitatSlot(5, "Taiga"), // taiga, taigaHills
-			new HabitatSlot(6, "Hills"), // extremeHills, extremeHillsEdge
-			new HabitatSlot(7, "Swamp"),
-			new HabitatSlot(8, "Snow"), // Ice plains, mountains, frozen rivers, frozen oceans
-			new HabitatSlot(9, "Mushroom"),
-			new HabitatSlot(10, "Nether"),
-			new HabitatSlot(11, "End")};
-	private final Map<BiomeDictionary.Type, HabitatSlot> biomeToHabitat = new EnumMap<>(BiomeDictionary.Type.class);
+	static {
+		habitats.putAll("Ocean", Arrays.asList(BiomeDictionary.Type.OCEAN, BiomeDictionary.Type.BEACH));
+		habitats.put("Plains", BiomeDictionary.Type.PLAINS);
+		habitats.put("Desert", BiomeDictionary.Type.SANDY);
+		habitats.putAll("Forest", Arrays.asList(BiomeDictionary.Type.FOREST, BiomeDictionary.Type.RIVER));
+		habitats.put("Jungle", BiomeDictionary.Type.JUNGLE);
+		habitats.put("Taiga", BiomeDictionary.Type.CONIFEROUS);
+		habitats.put("Hills", BiomeDictionary.Type.MOUNTAIN);
+		habitats.put("Swamp", BiomeDictionary.Type.SWAMP);
+		habitats.put("Snow", BiomeDictionary.Type.SNOWY);
+		habitats.put("Mushroom", BiomeDictionary.Type.MUSHROOM);
+		habitats.put("Nether", BiomeDictionary.Type.NETHER);
+		habitats.put("End", BiomeDictionary.Type.END);
+	}
+
+	private final List<HabitatSlot> habitatSlots = new ArrayList<>(habitats.size());
 
 	private int startX;
 	private int startY;
@@ -60,36 +62,23 @@ public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator, Item
 		xSize = 176;
 		ySize = 184;
 
-		int x;
-		int y;
-		for (HabitatSlot slot : habitatSlots) {
-
-			if (slot.slot > 5) {
-				x = 18 + (slot.slot - 6) * 20;
+		int slot = 0;
+		for (String habitatName : habitats.keySet()) {
+			int x;
+			int y;
+			if (slot > 5) {
+				x = 18 + (slot - 6) * 20;
 				y = 50;
 			} else {
-				x = 18 + slot.slot * 20;
+				x = 18 + slot * 20;
 				y = 32;
 			}
-
-			slot.setPosition(x, y);
-			this.widgetManager.add(slot);
+			Collection<BiomeDictionary.Type> biomes = habitats.get(habitatName);
+			HabitatSlot habitatSlot = new HabitatSlot(widgetManager, x, y, habitatName, biomes);
+			habitatSlots.add(habitatSlot);
+			widgetManager.add(habitatSlot);
+			slot++;
 		}
-
-		biomeToHabitat.put(BiomeDictionary.Type.OCEAN, habitatSlots[0]);
-		biomeToHabitat.put(BiomeDictionary.Type.BEACH, habitatSlots[0]);
-		biomeToHabitat.put(BiomeDictionary.Type.PLAINS, habitatSlots[1]);
-		biomeToHabitat.put(BiomeDictionary.Type.SANDY, habitatSlots[2]);
-		biomeToHabitat.put(BiomeDictionary.Type.FOREST, habitatSlots[3]);
-		biomeToHabitat.put(BiomeDictionary.Type.RIVER, habitatSlots[3]);
-		biomeToHabitat.put(BiomeDictionary.Type.JUNGLE, habitatSlots[4]);
-		biomeToHabitat.put(BiomeDictionary.Type.CONIFEROUS, habitatSlots[5]);
-		biomeToHabitat.put(BiomeDictionary.Type.MOUNTAIN, habitatSlots[6]);
-		biomeToHabitat.put(BiomeDictionary.Type.SWAMP, habitatSlots[7]);
-		biomeToHabitat.put(BiomeDictionary.Type.SNOWY, habitatSlots[8]);
-		biomeToHabitat.put(BiomeDictionary.Type.MUSHROOM, habitatSlots[9]);
-		biomeToHabitat.put(BiomeDictionary.Type.NETHER, habitatSlots[10]);
-		biomeToHabitat.put(BiomeDictionary.Type.END, habitatSlots[11]);
 	}
 
 	@Override
@@ -101,27 +90,18 @@ public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator, Item
 
 		// Set active according to valid biomes.
 		Set<BiomeDictionary.Type> activeBiomeTypes = EnumSet.noneOf(BiomeDictionary.Type.class);
-
-		for (HabitatSlot habitatSlot : habitatSlots) {
-			habitatSlot.isActive = false;
-		}
-
 		for (BiomeGenBase biome : inventory.getBiomesToSearch()) {
 			Collections.addAll(activeBiomeTypes, BiomeDictionary.getTypesForBiome(biome));
 		}
 
-		for (BiomeDictionary.Type biomeType : activeBiomeTypes) {
-			HabitatSlot habitatSlot = biomeToHabitat.get(biomeType);
-			if (habitatSlot != null) {
-				habitatSlot.isActive = true;
-			}
+		for (HabitatSlot habitatSlot : habitatSlots) {
+			habitatSlot.setActive(activeBiomeTypes);
 		}
 
 		for (HabitatSlot slot : habitatSlots) {
 			slot.draw(startX, startY);
 		}
 		GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f); // Reset afterwards.
-
 	}
 
 	@Override
@@ -131,53 +111,4 @@ public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator, Item
 		startX = (this.width - this.xSize) / 2;
 		startY = (this.height - this.ySize) / 2;
 	}
-
-	public class HabitatSlot extends Widget {
-
-		private final int slot;
-		private final String name;
-		private final String iconIndex;
-		public boolean isActive = false;
-
-		public HabitatSlot(int slot, String name) {
-			super(widgetManager, 0, 0);
-			this.slot = slot;
-			this.name = name;
-			this.iconIndex = "habitats/" + name.toLowerCase(Locale.ENGLISH);
-		}
-
-		@Override
-		public String getLegacyTooltip(EntityPlayer player) {
-			return name;
-		}
-
-		public IIcon getIcon() {
-			return TextureManager.getInstance().getDefault(iconIndex);
-		}
-
-		public void setPosition(int x, int y) {
-			this.xPos = x;
-			this.yPos = y;
-		}
-
-		@Override
-		public void draw(int startX, int startY) {
-
-			if (getIcon() != null) {
-				GL11.glDisable(GL11.GL_LIGHTING);
-
-				if (!isActive) {
-					GL11.glColor4f(0.2f, 0.2f, 0.2f, 0.2f);
-				} else {
-					GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-				}
-
-				Proxies.render.bindTexture(SpriteSheet.ITEMS);
-				manager.gui.drawTexturedModelRectFromIcon(startX + xPos, startY + yPos, getIcon(), 16, 16);
-				GL11.glEnable(GL11.GL_LIGHTING);
-			}
-		}
-
-	}
-
 }

@@ -169,7 +169,6 @@ public class RenderCrateItem implements IItemRenderer {
 	}
 
 	private void renderIn3D(ItemStack stack) {
-		GL11.glPushMatrix();
 		Tessellator tessellator = Tessellator.instance;
 		if (RenderManager.instance.renderEngine == null) {
 			return;
@@ -205,37 +204,45 @@ public class RenderCrateItem implements IItemRenderer {
 			ItemRenderer.renderItemIn2D(tessellator, maxU, minV, minU, maxV, icon.getIconWidth(), icon.getIconHeight(), PIXEL);
 
 			if (stack.hasEffect(pass)) {
-				GL11.glDepthFunc(GL11.GL_EQUAL);
-				GL11.glDisable(GL11.GL_LIGHTING);
-				RenderManager.instance.renderEngine.bindTexture(GLINT_TEXTURE);
-				GL11.glEnable(GL11.GL_BLEND);
-				GL11.glBlendFunc(GL11.GL_SRC_COLOR, GL11.GL_ONE);
-				float f13 = 0.76F;
-				GL11.glColor4f(0.5F * f13, 0.25F * f13, 0.8F * f13, 1.0F);
-				GL11.glMatrixMode(GL11.GL_TEXTURE);
-				GL11.glPushMatrix();
-				float f14 = 0.125F;
-				GL11.glScalef(f14, f14, f14);
-				float f15 = (float) (Minecraft.getSystemTime() % 3000L) / 3000.0F * 8.0F;
-				GL11.glTranslatef(f15, 0.0F, 0.0F);
-				GL11.glRotatef(-50.0F, 0.0F, 0.0F, 1.0F);
-				ItemRenderer.renderItemIn2D(tessellator, 0.0F, 0.0F, 1.0F, 1.0F, 255, 255, PIXEL);
-				GL11.glPopMatrix();
-				GL11.glPushMatrix();
-				GL11.glScalef(f14, f14, f14);
-				f15 = (float) (Minecraft.getSystemTime() % 4873L) / 4873.0F * 8.0F;
-				GL11.glTranslatef(-f15, 0.0F, 0.0F);
-				GL11.glRotatef(10.0F, 0.0F, 0.0F, 1.0F);
-				ItemRenderer.renderItemIn2D(tessellator, 0.0F, 0.0F, 1.0F, 1.0F, 255, 255, PIXEL);
-				GL11.glPopMatrix();
-				GL11.glMatrixMode(GL11.GL_MODELVIEW);
-				GL11.glDisable(GL11.GL_BLEND);
-				GL11.glEnable(GL11.GL_LIGHTING);
-				GL11.glDepthFunc(GL11.GL_LEQUAL);
+				GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
+				{
+					GL11.glDepthFunc(GL11.GL_EQUAL);
+					GL11.glDisable(GL11.GL_LIGHTING);
+					RenderManager.instance.renderEngine.bindTexture(GLINT_TEXTURE);
+					GL11.glEnable(GL11.GL_BLEND);
+					GL11.glBlendFunc(GL11.GL_SRC_COLOR, GL11.GL_ONE);
+
+					float f13 = 0.76F;
+					float f14 = 0.125F;
+					float f15 = (float) (Minecraft.getSystemTime() % 3000L) / 3000.0F * 8.0F;
+					GL11.glColor4f(0.5F * f13, 0.25F * f13, 0.8F * f13, 1.0F);
+
+					GL11.glMatrixMode(GL11.GL_TEXTURE);
+
+					GL11.glPushMatrix();
+					{
+						GL11.glScalef(f14, f14, f14);
+						GL11.glTranslatef(f15, 0.0F, 0.0F);
+						GL11.glRotatef(-50.0F, 0.0F, 0.0F, 1.0F);
+						ItemRenderer.renderItemIn2D(tessellator, 0.0F, 0.0F, 1.0F, 1.0F, 255, 255, PIXEL);
+					}
+					GL11.glPopMatrix();
+
+					GL11.glPushMatrix();
+					{
+						GL11.glScalef(f14, f14, f14);
+						f15 = (float) (Minecraft.getSystemTime() % 4873L) / 4873.0F * 8.0F;
+						GL11.glTranslatef(-f15, 0.0F, 0.0F);
+						GL11.glRotatef(10.0F, 0.0F, 0.0F, 1.0F);
+						ItemRenderer.renderItemIn2D(tessellator, 0.0F, 0.0F, 1.0F, 1.0F, 255, 255, PIXEL);
+					}
+					GL11.glPopMatrix();
+
+					GL11.glMatrixMode(GL11.GL_MODELVIEW);
+				}
+				GL11.glPopAttrib();
 			}
 		}
-
-		GL11.glPopMatrix();
 	}
 
 	private void renderAsEntityFlat(ItemStack stack) {

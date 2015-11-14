@@ -112,7 +112,7 @@ public class GuiBetterButton extends GuiButton implements IToolTipProvider {
 	}
 
 	@Override
-	public ToolTip getToolTip() {
+	public ToolTip getToolTip(int mouseX, int mouseY) {
 		return toolTip;
 	}
 

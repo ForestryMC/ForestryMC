@@ -107,7 +107,6 @@ public class RenderBeeItem implements IItemRenderer {
 		float pitch = 1;
 
 		GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
-		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glEnable(GL11.GL_COLOR_MATERIAL);
 
@@ -152,7 +151,6 @@ public class RenderBeeItem implements IItemRenderer {
 		 */
 
 		GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
-		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glEnable(GL11.GL_COLOR_MATERIAL);
 		RenderHelper.enableStandardItemLighting();

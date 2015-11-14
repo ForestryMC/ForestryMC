@@ -29,5 +29,6 @@ public abstract class GuiForestryTitled<C extends Container, I extends ITitled &
 		String name = StatCollector.translateToLocal(inventory.getUnlocalizedTitle());
 		textLayout.line = 6;
 		textLayout.drawCenteredLine(name, 0, fontColor.get("gui.title"));
+		bindTexture(textureFile);
 	}
 }

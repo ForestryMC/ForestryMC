@@ -13,6 +13,7 @@ package forestry.core.gui.widgets;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
+import forestry.core.gui.GuiUtil;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.proxy.Proxies;
 
@@ -27,12 +28,12 @@ public abstract class ItemStackWidgetBase extends Widget {
 	public void draw(int startX, int startY) {
 		ItemStack itemStack = getItemStack();
 		if (itemStack != null) {
-			manager.gui.drawItemStack(itemStack, xPos + startX, yPos + startY);
+			GuiUtil.drawItemStack(manager.gui, itemStack, xPos + startX, yPos + startY);
 		}
 	}
 
 	@Override
-	public ToolTip getToolTip() {
+	public ToolTip getToolTip(int mouseX, int mouseY) {
 		EntityPlayer player = Proxies.common.getPlayer();
 		ItemStack itemStack = getItemStack();
 		ToolTip tip = new ToolTip();

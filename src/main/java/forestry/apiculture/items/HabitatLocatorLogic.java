@@ -33,6 +33,7 @@ public class HabitatLocatorLogic {
 	private static final int maxChecksPerTick = 100;
 	private static final int maxSearchRadiusIterations = 500;
 	private static final int spacing = 20;
+	private static final int minBiomeRadius = 8;
 
 	private static final Set<BiomeGenBase> waterBiomes = new HashSet<>();
 	private static final Set<BiomeGenBase> netherBiomes = new HashSet<>();
@@ -151,10 +152,6 @@ public class HabitatLocatorLogic {
 	}
 
 	private static ChunkCoordinates getChunkCoordinates(Vect pos, World world, Collection<BiomeGenBase> biomesToSearch) {
-
-		// to avoid reporting very tiny patches, check around the point want
-		final int minBiomeRadius = 8;
-
 		BiomeGenBase biome;
 
 		biome = world.getBiomeGenForCoords(pos.x, pos.z);

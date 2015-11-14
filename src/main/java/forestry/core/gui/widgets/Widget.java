@@ -20,10 +20,9 @@ import forestry.core.proxy.Proxies;
  * Basic non-ItemStack slot
  */
 public abstract class Widget implements IToolTipProvider {
-
 	protected final WidgetManager manager;
-	protected int xPos;
-	protected int yPos;
+	protected final int xPos;
+	protected final int yPos;
 	protected int width = 16;
 	protected int height = 16;
 
@@ -44,7 +43,7 @@ public abstract class Widget implements IToolTipProvider {
 	public abstract void draw(int startX, int startY);
 
 	@Override
-	public ToolTip getToolTip() {
+	public ToolTip getToolTip(int mouseX, int mouseY) {
 		String line = getLegacyTooltip(Proxies.common.getClientInstance().thePlayer);
 		if (line != null && !line.isEmpty()) {
 			ToolTip tip = new ToolTip();

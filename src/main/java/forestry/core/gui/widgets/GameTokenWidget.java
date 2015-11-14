@@ -14,9 +14,11 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
 
 import org.lwjgl.opengl.GL11;
 
+import forestry.core.gui.GuiUtil;
 import forestry.core.network.PacketGuiSelectRequest;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.SpriteSheet;
@@ -65,18 +67,14 @@ public class GameTokenWidget extends Widget {
 			tokenStack = token.getTokenStack();
 		}
 
-		GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
-		GL11.glEnable(GL11.GL_DEPTH_TEST);
-		RenderHelper.enableGUIStandardItemLighting();
-		manager.gui.drawItemStack(tokenStack, startX + xPos + 3, startY + yPos + 3);
-		RenderHelper.disableStandardItemLighting();
-		GL11.glPopAttrib();
+		GuiUtil.drawItemStack(manager.gui, tokenStack, startX + xPos + 3, startY + yPos + 3);
 
 		manager.gui.setZLevel(150f);
 		for (String ident : getToken().getOverlayIcons()) {
 			RenderHelper.enableGUIStandardItemLighting();
 			Proxies.render.bindTexture(SpriteSheet.ITEMS);
-			manager.gui.drawTexturedModelRectFromIcon(startX + xPos + 3, startY + yPos + 3, TextureManager.getInstance().getDefault(ident), 16, 16);
+			IIcon icon = TextureManager.getInstance().getDefault(ident);
+			manager.gui.drawTexturedModelRectFromIcon(startX + xPos + 3, startY + yPos + 3, icon, 16, 16);
 			RenderHelper.disableStandardItemLighting();
 		}
 		manager.gui.setZLevel(0f);
