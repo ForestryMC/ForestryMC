@@ -23,6 +23,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.feature.WorldGenBigMushroom;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
 import cpw.mods.fml.relauncher.Side;
@@ -30,7 +31,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.core.blocks.IItemTyped;
 import forestry.core.config.Constants;
-import forestry.farming.worldgen.WorldGenBigMushroom;
 
 public class BlockMushroom extends BlockSapling implements IItemTyped {
 
@@ -44,7 +44,7 @@ public class BlockMushroom extends BlockSapling implements IItemTyped {
 	public BlockMushroom() {
 		super();
 		setHardness(0.0f);
-		this.generators = new WorldGenerator[]{new WorldGenBigMushroom(Blocks.brown_mushroom_block), new WorldGenBigMushroom(Blocks.red_mushroom_block)};
+		this.generators = new WorldGenerator[]{new WorldGenBigMushroom(MushroomType.BROWN.ordinal()), new WorldGenBigMushroom(MushroomType.RED.ordinal())};
 		this.drops = new ItemStack[]{new ItemStack(Blocks.brown_mushroom), new ItemStack(Blocks.red_mushroom)};
 		setCreativeTab(null);
 		setTickRandomly(true);

@@ -68,7 +68,7 @@ import forestry.farming.logic.FarmableGenericSapling;
 import forestry.farming.logic.FarmableGourd;
 import forestry.farming.logic.FarmableStacked;
 import forestry.farming.logic.FarmableVanillaSapling;
-import forestry.farming.logic.FarmableVanillaShroom;
+import forestry.farming.logic.FarmableVanillaMushroom;
 import forestry.farming.proxy.ProxyFarming;
 import forestry.farming.render.EnumFarmBlockTexture;
 import forestry.farming.tiles.TileControl;
@@ -112,8 +112,8 @@ public class PluginFarming extends ForestryPlugin {
 		Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(Blocks.carrots, 7));
 
 		Farmables.farmables.put("farmShroom", new ArrayList<IFarmable>());
-		Farmables.farmables.get("farmShroom").add(new FarmableVanillaShroom(Blocks.brown_mushroom, 0));
-		Farmables.farmables.get("farmShroom").add(new FarmableVanillaShroom(Blocks.red_mushroom, 0));
+		Farmables.farmables.get("farmShroom").add(new FarmableVanillaMushroom(Blocks.brown_mushroom, 0));
+		Farmables.farmables.get("farmShroom").add(new FarmableVanillaMushroom(Blocks.red_mushroom, 0));
 
 		Farmables.farmables.put("farmWheat", new ArrayList<IFarmable>());
 		Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(new ItemStack(Items.wheat_seeds), Blocks.wheat, 7));

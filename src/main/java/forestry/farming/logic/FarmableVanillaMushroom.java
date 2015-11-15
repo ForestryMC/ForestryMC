@@ -22,9 +22,9 @@ import forestry.core.proxy.Proxies;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.vect.Vect;
 
-public class FarmableVanillaShroom extends FarmableGenericSapling {
+public class FarmableVanillaMushroom extends FarmableGenericSapling {
 
-	public FarmableVanillaShroom(Block sapling, int saplingMeta) {
+	public FarmableVanillaMushroom(Block sapling, int saplingMeta) {
 		super(sapling, saplingMeta);
 	}
 
