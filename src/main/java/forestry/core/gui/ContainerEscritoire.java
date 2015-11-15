@@ -34,7 +34,7 @@ public class ContainerEscritoire extends ContainerTile<TileEscritoire> implement
 		this.player = player;
 
 		// Analyze slot
-		addSlotToContainer(new SlotFiltered(this.tile, InventoryEscritoire.SLOT_ANALYZE, 97, 67).setCrafter(this.tile).setStackLimit(1));
+		addSlotToContainer(new SlotFiltered(this.tile, InventoryEscritoire.SLOT_ANALYZE, 97, 67).setPickupWatcher(this.tile).setStackLimit(1));
 
 		for (int i = 0; i < InventoryEscritoire.SLOTS_INPUT_COUNT; i++) {
 			addSlotToContainer(new SlotFiltered(this.tile, InventoryEscritoire.SLOT_INPUT_1 + i, 17, 49 + i * 18).setBlockedTexture("slots/blocked_2"));

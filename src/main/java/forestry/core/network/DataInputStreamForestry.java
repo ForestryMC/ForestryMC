@@ -5,6 +5,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InvalidObjectException;
+import java.util.Collection;
 import java.util.List;
 
 import net.minecraft.inventory.IInventory;
@@ -18,8 +19,6 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import cpw.mods.fml.common.registry.GameData;
-
-import forestry.core.utils.Log;
 
 public class DataInputStreamForestry extends DataInputStream {
 
@@ -56,6 +55,15 @@ public class DataInputStreamForestry extends DataInputStream {
 		return itemStacks;
 	}
 
+	public void readItemStacks(Collection<ItemStack> itemStacks) throws IOException {
+		itemStacks.clear();
+
+		int stackCount = readVarInt();
+		for (int i = 0; i < stackCount; i++) {
+			itemStacks.add(readItemStack());
+		}
+	}
+
 	public void readInventory(IInventory inventory) throws IOException {
 		int size = readVarInt();
 
@@ -72,7 +80,7 @@ public class DataInputStreamForestry extends DataInputStream {
 				streamable.readData(this);
 				return streamable;
 			} catch (ReflectiveOperationException e) {
-				Log.severe("Failed to read Streamable for class " + streamableClass + " with error " + e);
+				throw new InvalidObjectException("Failed to read Streamable for class " + streamableClass + " with error " + e);
 			}
 		}
 		return null;

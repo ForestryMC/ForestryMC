@@ -15,6 +15,7 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.SlotCrafting;
 import net.minecraft.item.ItemStack;
 
 import forestry.core.gui.slots.SlotForestry;
@@ -25,7 +26,7 @@ public abstract class SlotUtil {
 		return (slotIndex >= start) && (slotIndex < start + count);
 	}
 
-	public static ItemStack slotClickPhantom(Slot slot, int mouseButton, int modifier, EntityPlayer player) {
+	public static ItemStack slotClickPhantom(SlotForestry slot, int mouseButton, int modifier, EntityPlayer player) {
 		ItemStack stack = null;
 
 		ItemStack stackSlot = slot.getStack();
@@ -69,11 +70,13 @@ public abstract class SlotUtil {
 			return null;
 		}
 
+		boolean fromCraftingSlot = (slot instanceof SlotCrafting);
+
 		int numSlots = inventorySlots.size();
 		ItemStack stackInSlot = slot.getStack();
 		ItemStack originalStack = stackInSlot.copy();
 
-		if (!shiftItemStack(inventorySlots, stackInSlot, slotIndex, numSlots)) {
+		if (!shiftItemStack(inventorySlots, stackInSlot, slotIndex, numSlots, fromCraftingSlot)) {
 			return null;
 		}
 
@@ -92,7 +95,7 @@ public abstract class SlotUtil {
 		return originalStack;
 	}
 
-	private static boolean shiftItemStack(List inventorySlots, ItemStack stackInSlot, int slotIndex, int numSlots) {
+	private static boolean shiftItemStack(List inventorySlots, ItemStack stackInSlot, int slotIndex, int numSlots, boolean fromCraftingSlot) {
 		if (isInPlayerInventory(slotIndex)) {
 			if (shiftToMachineInventory(inventorySlots, stackInSlot, numSlots)) {
 				return true;
@@ -104,12 +107,17 @@ public abstract class SlotUtil {
 				return shiftToHotbar(inventorySlots, stackInSlot);
 			}
 		} else {
+			if (fromCraftingSlot) {
+				if (shiftToMachineInventory(inventorySlots, stackInSlot, numSlots)) {
+					return true;
+				}
+			}
 			return shiftToPlayerInventory(inventorySlots, stackInSlot);
 		}
 	}
 
-	private static void adjustPhantomSlot(Slot slot, int mouseButton, int modifier) {
-		if (!((SlotForestry) slot).canAdjustPhantom()) {
+	private static void adjustPhantomSlot(SlotForestry slot, int mouseButton, int modifier) {
+		if (!slot.canAdjustPhantom()) {
 			return;
 		}
 		ItemStack stackSlot = slot.getStack();
@@ -133,8 +141,8 @@ public abstract class SlotUtil {
 		slot.putStack(stackSlot);
 	}
 
-	private static void fillPhantomSlot(Slot slot, ItemStack stackHeld, int mouseButton) {
-		if (!((SlotForestry) slot).canAdjustPhantom()) {
+	private static void fillPhantomSlot(SlotForestry slot, ItemStack stackHeld, int mouseButton) {
+		if (!slot.canAdjustPhantom()) {
 			return;
 		}
 

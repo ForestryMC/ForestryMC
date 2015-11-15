@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemMap;
 import net.minecraft.item.ItemStack;
@@ -57,7 +56,7 @@ public class RecipeMemory implements INBTTagable, IStreamable {
 		LinkedList<MemorizedRecipe> validRecipes = new LinkedList<>();
 		for (MemorizedRecipe recipe : memorizedRecipes) {
 			if (recipe != null) {
-				recipe.updateRecipeOutputLegacy(world);
+				recipe.calculateRecipeOutput(world);
 				if (isValid(recipe)) {
 					validRecipes.add(recipe);
 				}
@@ -77,6 +76,10 @@ public class RecipeMemory implements INBTTagable, IStreamable {
 
 		lastUpdate = worldTime;
 		recipe.updateLastUse(lastUpdate);
+
+		if (recipe.hasRecipeConflict()) {
+			recipe.removeRecipeConflicts();
+		}
 
 		// update existing matching recipes
 		MemorizedRecipe memory = getExistingMemorizedRecipe(recipe.getRecipeOutput());
@@ -119,23 +122,14 @@ public class RecipeMemory implements INBTTagable, IStreamable {
 		return oldest;
 	}
 
-	private MemorizedRecipe getRecipe(int recipeIndex) {
+	public MemorizedRecipe getRecipe(int recipeIndex) {
 		if (recipeIndex < 0 || recipeIndex >= memorizedRecipes.size()) {
 			return null;
 		}
 		return memorizedRecipes.get(recipeIndex);
-
 	}
 
-	public IInventory getRecipeCraftMatrix(int recipeIndex) {
-		MemorizedRecipe recipe = getRecipe(recipeIndex);
-		if (recipe == null) {
-			return null;
-		}
-		return recipe.getCraftMatrix();
-	}
-
-	public ItemStack getRecipeOutput(int recipeIndex) {
+	public ItemStack getRecipeDisplayOutput(int recipeIndex) {
 		MemorizedRecipe recipe = getRecipe(recipeIndex);
 		if (recipe == null) {
 			return null;
@@ -160,8 +154,7 @@ public class RecipeMemory implements INBTTagable, IStreamable {
 
 	private MemorizedRecipe getExistingMemorizedRecipe(ItemStack craftingRecipeOutput) {
 		for (MemorizedRecipe memorizedRecipe : memorizedRecipes) {
-			ItemStack memorizedRecipeOutput = memorizedRecipe.getRecipeOutput();
-			if (ItemStack.areItemStacksEqual(memorizedRecipeOutput, craftingRecipeOutput)) {
+			if (memorizedRecipe.hasRecipeOutput(craftingRecipeOutput)) {
 				return memorizedRecipe;
 			}
 		}

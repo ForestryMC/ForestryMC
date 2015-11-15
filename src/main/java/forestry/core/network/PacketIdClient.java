@@ -37,6 +37,7 @@ public enum PacketIdClient implements IPacketId {
 
 	// Factory
 	WORKTABLE_MEMORY_UPDATE,
+	WORKTABLE_CRAFTING_UPDATE,
 
 	// Apiculture
 	TILE_FORESTRY_ACTIVE,

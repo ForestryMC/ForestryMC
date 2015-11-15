@@ -11,9 +11,10 @@
 package forestry.factory.recipes;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
@@ -21,12 +22,15 @@ import forestry.api.core.INBTTagable;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
+import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.InventoryUtil;
-import forestry.factory.inventory.InventoryWorktableCrafting;
+import forestry.core.utils.ItemStackUtil;
+import forestry.factory.inventory.InventoryCraftingForestry;
 
 public final class MemorizedRecipe implements INBTTagable, IStreamable {
-	private final InventoryWorktableCrafting craftMatrix = new InventoryWorktableCrafting();
-	private ItemStack recipeOutput;
+	private final InventoryCraftingForestry craftMatrix = new InventoryCraftingForestry();
+	private final List<ItemStack> recipeOutputs = new ArrayList<>();
+	private int selectedRecipe;
 	private long lastUsed;
 	private boolean locked;
 
@@ -34,28 +38,62 @@ public final class MemorizedRecipe implements INBTTagable, IStreamable {
 		// required for IStreamable serialization
 	}
 
-	public MemorizedRecipe(InventoryWorktableCrafting craftMatrix, ItemStack recipeOutput) {
+	public MemorizedRecipe(InventoryCraftingForestry craftMatrix, List<ItemStack> recipeOutputs) {
 		InventoryUtil.deepCopyInventoryContents(craftMatrix, this.craftMatrix);
-		this.recipeOutput = recipeOutput;
+		this.recipeOutputs.addAll(recipeOutputs);
 	}
 
-	public InventoryWorktableCrafting getCraftMatrix() {
+	public InventoryCraftingForestry getCraftMatrix() {
 		return craftMatrix;
 	}
 
-	/**
-	 * Calculate the recipe output.
-	 * For older memorized recipes that were not created with an output.
-	 * @since Forestry 4.2
-	 */
-	public void updateRecipeOutputLegacy(World world) {
-		if (recipeOutput == null) {
-			recipeOutput = CraftingManager.getInstance().findMatchingRecipe(craftMatrix, world);
+	public void calculateRecipeOutput(World world) {
+		recipeOutputs.clear();
+		List<ItemStack> matching = RecipeUtil.findMatchingRecipes(craftMatrix, world);
+		recipeOutputs.addAll(matching);
+		if (selectedRecipe >= recipeOutputs.size()) {
+			selectedRecipe = 0;
+		}
+		if (hasRecipeConflict()) {
+			removeRecipeConflicts();
 		}
 	}
 
+	public void incrementRecipe() {
+		selectedRecipe++;
+		if (selectedRecipe >= recipeOutputs.size()) {
+			selectedRecipe = 0;
+		}
+	}
+
+	public void decrementRecipe() {
+		selectedRecipe--;
+		if (selectedRecipe < 0) {
+			selectedRecipe = recipeOutputs.size() - 1;
+		}
+	}
+
+	public boolean hasRecipeConflict() {
+		return recipeOutputs.size() > 1;
+	}
+
+	public void removeRecipeConflicts() {
+		ItemStack recipeOutput = getRecipeOutput();
+		recipeOutputs.clear();
+		recipeOutputs.add(recipeOutput);
+		selectedRecipe = 0;
+	}
+
 	public ItemStack getRecipeOutput() {
-		return recipeOutput;
+		if (recipeOutputs.size() == 0) {
+			return null;
+		} else {
+			return recipeOutputs.get(selectedRecipe);
+		}
+	}
+
+	public boolean hasRecipeOutput(ItemStack output) {
+		return ItemStackUtil.containsItemStack(recipeOutputs, output);
 	}
 
 	public void updateLastUse(long lastUsed) {
@@ -81,9 +119,8 @@ public final class MemorizedRecipe implements INBTTagable, IStreamable {
 		lastUsed = nbttagcompound.getLong("LastUsed");
 		locked = nbttagcompound.getBoolean("Locked");
 
-		if (nbttagcompound.hasKey("Output")) {
-			NBTTagCompound recipeOutputNbt = nbttagcompound.getCompoundTag("Output");
-			recipeOutput = ItemStack.loadItemStackFromNBT(recipeOutputNbt);
+		if (nbttagcompound.hasKey("SelectedRecipe")) {
+			selectedRecipe = nbttagcompound.getInteger("SelectedRecipe");
 		}
 	}
 
@@ -92,26 +129,23 @@ public final class MemorizedRecipe implements INBTTagable, IStreamable {
 		InventoryUtil.writeToNBT(craftMatrix, nbttagcompound);
 		nbttagcompound.setLong("LastUsed", lastUsed);
 		nbttagcompound.setBoolean("Locked", locked);
-
-		NBTTagCompound recipeOutputNbt = new NBTTagCompound();
-		recipeOutput.writeToNBT(recipeOutputNbt);
-		nbttagcompound.setTag("Output", recipeOutputNbt);
+		nbttagcompound.setInteger("SelectedRecipe", selectedRecipe);
 	}
 
 	/* IStreamable */
 	@Override
 	public void writeData(DataOutputStreamForestry data) throws IOException {
 		data.writeInventory(craftMatrix);
-		data.writeItemStack(recipeOutput);
-		data.writeLong(lastUsed);
 		data.writeBoolean(locked);
+		data.writeItemStacks(recipeOutputs);
+		data.writeVarInt(selectedRecipe);
 	}
 
 	@Override
 	public void readData(DataInputStreamForestry data) throws IOException {
 		data.readInventory(craftMatrix);
-		recipeOutput = data.readItemStack();
-		lastUsed = data.readLong();
 		locked = data.readBoolean();
+		data.readItemStacks(recipeOutputs);
+		selectedRecipe = data.readVarInt();
 	}
 }

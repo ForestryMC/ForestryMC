@@ -33,6 +33,10 @@ public abstract class ItemStackUtil {
 	 * Compares item id, damage and NBT. Accepts wildcard damage.
 	 */
 	public static boolean isIdenticalItem(ItemStack lhs, ItemStack rhs) {
+		if (lhs == rhs) {
+			return true;
+		}
+
 		if (lhs == null || rhs == null) {
 			return false;
 		}
@@ -162,6 +166,28 @@ public abstract class ItemStackUtil {
 		}
 
 		return totalSets;
+	}
+
+	public static boolean equalSets(ItemStack[] set1, ItemStack[] set2) {
+		if (set1 == set2) {
+			return true;
+		}
+
+		if (set1 == null || set2 == null) {
+			return false;
+		}
+
+		if (set1.length != set2.length) {
+			return false;
+		}
+
+		for (int i = 0; i < set1.length; i++) {
+			if (!isIdenticalItem(set1[i], set2[i])) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	/**

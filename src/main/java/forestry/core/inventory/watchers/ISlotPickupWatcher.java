@@ -8,11 +8,10 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.tiles;
+package forestry.core.inventory.watchers;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 
-public interface ICrafter {
-	ItemStack takenFromSlot(int slotIndex, EntityPlayer player);
+public interface ISlotPickupWatcher {
+	void onPickupFromSlot(int slotIndex, EntityPlayer player);
 }

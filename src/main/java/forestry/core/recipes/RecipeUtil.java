@@ -34,9 +34,9 @@ import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
 import forestry.core.fluids.Fluids;
-import forestry.core.gui.ContainerDummy;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
+import forestry.factory.inventory.InventoryCraftingForestry;
 
 public abstract class RecipeUtil {
 
@@ -97,10 +97,10 @@ public abstract class RecipeUtil {
 		return result;
 	}
 
-	public static boolean canCraftRecipe(World world, ItemStack[] recipeItems, ItemStack recipeOutput, ItemStack[] availableItems) {
+	public static InventoryCraftingForestry getCraftRecipe(ItemStack[] recipeItems, ItemStack[] availableItems, World world, ItemStack recipeOutput) {
 		// Need at least one matched set
 		if (ItemStackUtil.containsSets(recipeItems, availableItems, true, true) == 0) {
-			return false;
+			return null;
 		}
 
 		// Check that it doesn't make a different recipe.
@@ -112,7 +112,7 @@ public abstract class RecipeUtil {
 		// Create a fake crafting inventory using items we have in availableItems
 		// in place of the ones in the saved crafting inventory.
 		// Check that the recipe it makes is the same as the currentRecipe.
-		InventoryCrafting crafting = new InventoryCrafting(ContainerDummy.instance, 3, 3);
+		InventoryCraftingForestry crafting = new InventoryCraftingForestry();
 		ItemStack[] stockCopy = ItemStackUtil.condenseStacks(availableItems);
 
 		for (int slot = 0; slot < recipeItems.length; slot++) {
@@ -143,9 +143,12 @@ public abstract class RecipeUtil {
 				}
 			}
 		}
-		ItemStack output = CraftingManager.getInstance().findMatchingRecipe(crafting, world);
 
-		return ItemStack.areItemStacksEqual(output, recipeOutput);
+		List<ItemStack> outputs = findMatchingRecipes(crafting, world);
+		if (!ItemStackUtil.containsItemStack(outputs, recipeOutput)) {
+			return null;
+		}
+		return crafting;
 	}
 
 	public static List<ItemStack> findMatchingRecipes(InventoryCrafting inventory, World world) {
@@ -161,7 +164,9 @@ public abstract class RecipeUtil {
 
 			if (irecipe.matches(inventory, world)) {
 				ItemStack result = irecipe.getCraftingResult(inventory);
-				matchingRecipes.add(result);
+				if (!ItemStackUtil.containsItemStack(matchingRecipes, result)) {
+					matchingRecipes.add(result);
+				}
 			}
 		}
 

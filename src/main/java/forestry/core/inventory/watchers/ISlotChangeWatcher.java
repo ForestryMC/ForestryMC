@@ -8,19 +8,10 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.factory.inventory;
+package forestry.core.inventory.watchers;
 
-import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.inventory.IInventory;
 
-import forestry.core.gui.ContainerDummy;
-import forestry.factory.gui.ContainerWorktable;
-
-public class InventoryWorktableCrafting extends InventoryCrafting {
-	public InventoryWorktableCrafting(ContainerWorktable containerWorktable) {
-		super(containerWorktable, 3, 3);
-	}
-
-	public InventoryWorktableCrafting() {
-		super(ContainerDummy.instance, 3, 3);
-	}
+public interface ISlotChangeWatcher {
+	void onSlotChanged(IInventory inventory, int slot);
 }

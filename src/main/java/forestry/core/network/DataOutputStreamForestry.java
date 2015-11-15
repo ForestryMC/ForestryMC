@@ -3,6 +3,7 @@ package forestry.core.network;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Collection;
 import java.util.List;
 
 import net.minecraft.inventory.IInventory;
@@ -36,6 +37,13 @@ public class DataOutputStreamForestry extends DataOutputStream {
 
 	public void writeItemStacks(ItemStack[] itemStacks) throws IOException {
 		writeVarInt(itemStacks.length);
+		for (ItemStack itemstack : itemStacks) {
+			writeItemStack(itemstack);
+		}
+	}
+
+	public void writeItemStacks(Collection<ItemStack> itemStacks) throws IOException {
+		writeVarInt(itemStacks.size());
 		for (ItemStack itemstack : itemStacks) {
 			writeItemStack(itemstack);
 		}

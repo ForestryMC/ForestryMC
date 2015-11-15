@@ -15,13 +15,13 @@ import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.IInventory;
 
 import forestry.core.gui.ContainerLiquidTanks;
-import forestry.core.gui.IContainerCrafting;
-import forestry.core.gui.slots.SlotCraftAuto;
 import forestry.core.gui.slots.SlotFiltered;
+import forestry.core.gui.slots.SlotWatched;
 import forestry.core.gui.slots.SlotWorking;
+import forestry.core.inventory.watchers.ISlotChangeWatcher;
 import forestry.factory.tiles.TileMoistener;
 
-public class ContainerMoistener extends ContainerLiquidTanks<TileMoistener> implements IContainerCrafting {
+public class ContainerMoistener extends ContainerLiquidTanks<TileMoistener> implements ISlotChangeWatcher {
 
 	public ContainerMoistener(InventoryPlayer player, TileMoistener tile) {
 		super(tile, player, 8, 84);
@@ -43,12 +43,12 @@ public class ContainerMoistener extends ContainerLiquidTanks<TileMoistener> impl
 		// Product slot
 		this.addSlotToContainer(new SlotFiltered(tile, 10, 143, 55));
 		// Boxes
-		this.addSlotToContainer(new SlotCraftAuto(this, tile, 11, 143, 19));
+		this.addSlotToContainer(new SlotWatched(tile, 11, 143, 19).setChangeWatcher(this));
 	}
 
 	@Override
-	public void onCraftMatrixChanged(IInventory iinventory, int slot) {
-		tile.setInventorySlotContents(slot, iinventory.getStackInSlot(slot));
+	public void onSlotChanged(IInventory inventory, int slot) {
+		tile.setInventorySlotContents(slot, inventory.getStackInSlot(slot));
 		tile.checkRecipe();
 	}
 

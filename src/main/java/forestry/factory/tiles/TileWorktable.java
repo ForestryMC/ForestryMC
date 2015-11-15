@@ -11,11 +11,11 @@
 package forestry.factory.tiles;
 
 import java.io.IOException;
+import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.nbt.NBTTagCompound;
 
 import net.minecraftforge.common.MinecraftForge;
@@ -30,9 +30,9 @@ import forestry.core.recipes.RecipeUtil;
 import forestry.core.tiles.TileBase;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.ItemStackUtil;
+import forestry.factory.inventory.InventoryCraftingForestry;
 import forestry.factory.inventory.InventoryGhostCrafting;
 import forestry.factory.inventory.InventoryWorktable;
-import forestry.factory.inventory.InventoryWorktableCrafting;
 import forestry.factory.recipes.MemorizedRecipe;
 import forestry.factory.recipes.RecipeMemory;
 
@@ -89,49 +89,30 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 		recipeMemory.validate(worldObj);
 	}
 
-	/* RECIPE SELECTION */
-	public RecipeMemory getMemory() {
-		return recipeMemory;
+	/* Recipe Conflicts */
+	public boolean hasRecipeConflict() {
+		return currentRecipe != null && currentRecipe.hasRecipeConflict();
 	}
 
-	public void clearCraftMatrix() {
-		for (int slot = 0; slot < craftingDisplay.getSizeInventory(); slot++) {
-			craftingDisplay.setInventorySlotContents(slot, null);
-		}
-	}
-
-	public void chooseRecipe(int recipeIndex) {
-		IInventory craftMatrix = recipeMemory.getRecipeCraftMatrix(recipeIndex);
-		if (craftMatrix == null) {
-			return;
-		}
-
-		for (int slot = 0; slot < craftMatrix.getSizeInventory(); slot++) {
-			craftingDisplay.setInventorySlotContents(slot, craftMatrix.getStackInSlot(slot));
-		}
-	}
-
-	/* CRAFTING */
-	public void setRecipe(InventoryWorktableCrafting crafting) {
-		ItemStack recipeOutput = CraftingManager.getInstance().findMatchingRecipe(crafting, worldObj);
-		if (recipeOutput == null) {
-			currentRecipe = null;
-		} else {
-			currentRecipe = new MemorizedRecipe(crafting, recipeOutput);
-		}
-		updateCraftResult();
-	}
-
-	private void updateCraftResult() {
+	public void chooseNextConflictRecipe() {
 		if (currentRecipe != null) {
-			ItemStack result = currentRecipe.getRecipeOutput();
-			if (result != null) {
-				craftingDisplay.setInventorySlotContents(InventoryGhostCrafting.SLOT_CRAFTING_RESULT, result.copy());
-				return;
-			}
+			currentRecipe.incrementRecipe();
 		}
+	}
 
-		craftingDisplay.setInventorySlotContents(InventoryGhostCrafting.SLOT_CRAFTING_RESULT, null);
+	public void choosePreviousConflictRecipe() {
+		if (currentRecipe != null) {
+			currentRecipe.decrementRecipe();
+		}
+	}
+
+	/* ICrafterWorktable */
+	@Override
+	public boolean canTakeStack(int craftingSlotIndex) {
+		if (craftingSlotIndex == InventoryGhostCrafting.SLOT_CRAFTING_RESULT) {
+			return canCraftCurrentRecipe();
+		}
+		return true;
 	}
 
 	private boolean canCraftCurrentRecipe() {
@@ -139,35 +120,35 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 			return false;
 		}
 
-		ItemStack[] recipeItems = InventoryUtil.getStacks(craftingDisplay, InventoryGhostCrafting.SLOT_CRAFTING_1, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
+		ItemStack[] recipeItems = InventoryUtil.getStacks(currentRecipe.getCraftMatrix());
 		ItemStack[] inventory = InventoryUtil.getStacks(this);
-		ItemStack recipeOutput = currentRecipe.getRecipeOutput();
-
-		return RecipeUtil.canCraftRecipe(worldObj, recipeItems, recipeOutput, inventory);
-	}
-
-	@Override
-	public boolean canTakeStack(int slotIndex) {
-		if (slotIndex == InventoryGhostCrafting.SLOT_CRAFTING_RESULT) {
-			return canCraftCurrentRecipe();
-		}
-		return true;
+		InventoryCraftingForestry crafting = RecipeUtil.getCraftRecipe(recipeItems, inventory, worldObj, currentRecipe.getRecipeOutput());
+		return crafting != null;
 	}
 
 	@Override
 	public boolean onCraftingStart(EntityPlayer player) {
-		ItemStack[] set = InventoryUtil.getStacks(currentRecipe.getCraftMatrix());
+		if (currentRecipe == null) {
+			return false;
+		}
 
-		IInventory inventory = new InventoryMapper(this, InventoryWorktable.SLOT_INVENTORY_1, InventoryWorktable.SLOT_INVENTORY_COUNT);
-		ItemStack[] removed = InventoryUtil.removeSets(inventory, 1, set, player, false, true, true);
+		ItemStack[] recipeItems = InventoryUtil.getStacks(currentRecipe.getCraftMatrix());
+		ItemStack[] inventory = InventoryUtil.getStacks(this);
+		InventoryCraftingForestry crafting = RecipeUtil.getCraftRecipe(recipeItems, inventory, worldObj, currentRecipe.getRecipeOutput());
+		if (crafting == null) {
+			return false;
+		}
 
+		recipeItems = InventoryUtil.getStacks(crafting);
+
+		// craft recipe should exactly match ingredients here, so no oreDict or tool matching
+		ItemStack[] removed = InventoryUtil.removeSets(this, 1, recipeItems, player, false, false, false);
 		if (removed == null) {
 			return false;
 		}
 
-		for (int i = 0; i < removed.length; i++) {
-			craftingDisplay.setInventorySlotContents(i, removed[i]);
-		}
+		// update crafting display to match the ingredients that were actually used
+		setCraftingDisplay(crafting);
 		return true;
 	}
 
@@ -208,8 +189,6 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 		if (!worldObj.isRemote) {
 			recipeMemory.memorizeRecipe(worldObj.getTotalWorldTime(), currentRecipe);
 		}
-
-		updateCraftResult();
 	}
 
 	@Override
@@ -225,7 +204,62 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 		return result;
 	}
 
+	/* Crafting Container methods */
+	public RecipeMemory getMemory() {
+		return recipeMemory;
+	}
+
+	public void chooseRecipeMemory(int recipeIndex) {
+		MemorizedRecipe recipe = recipeMemory.getRecipe(recipeIndex);
+		setCurrentRecipe(recipe);
+	}
+
+	private void setCraftingDisplay(IInventory craftMatrix) {
+		if (craftMatrix == null) {
+			return;
+		}
+
+		for (int slot = 0; slot < craftMatrix.getSizeInventory(); slot++) {
+			craftingDisplay.setInventorySlotContents(slot, craftMatrix.getStackInSlot(slot));
+		}
+	}
+
 	public IInventory getCraftingDisplay() {
 		return new InventoryMapper(craftingDisplay, InventoryGhostCrafting.SLOT_CRAFTING_1, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
+	}
+
+	public void clearCraftMatrix() {
+		for (int slot = 0; slot < craftingDisplay.getSizeInventory(); slot++) {
+			craftingDisplay.setInventorySlotContents(slot, null);
+		}
+	}
+
+	public void setCurrentRecipe(InventoryCraftingForestry crafting) {
+		List<ItemStack> recipeOutputs = RecipeUtil.findMatchingRecipes(crafting, worldObj);
+		MemorizedRecipe recipe = recipeOutputs.size() == 0 ? null : new MemorizedRecipe(crafting, recipeOutputs);
+
+		if (currentRecipe != null && recipe != null) {
+			if (recipe.hasRecipeOutput(currentRecipe.getRecipeOutput())) {
+				ItemStack[] stacks = InventoryUtil.getStacks(crafting);
+				ItemStack[] currentStacks = InventoryUtil.getStacks(currentRecipe.getCraftMatrix());
+				if (ItemStackUtil.equalSets(stacks, currentStacks)) {
+					return;
+				}
+			}
+		}
+
+		setCurrentRecipe(recipe);
+	}
+
+	/* Network Sync with PacketWorktableRecipeUpdate */
+	public MemorizedRecipe getCurrentRecipe() {
+		return currentRecipe;
+	}
+
+	public void setCurrentRecipe(MemorizedRecipe recipe) {
+		this.currentRecipe = recipe;
+		if (currentRecipe != null) {
+			setCraftingDisplay(currentRecipe.getCraftMatrix());
+		}
 	}
 }

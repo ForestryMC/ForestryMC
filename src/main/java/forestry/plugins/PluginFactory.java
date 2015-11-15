@@ -59,6 +59,7 @@ import forestry.factory.DummyManagers;
 import forestry.factory.GuiHandlerFactory;
 import forestry.factory.circuits.CircuitSpeedUpgrade;
 import forestry.factory.network.PacketWorktableMemoryUpdate;
+import forestry.factory.network.PacketWorktableRecipeUpdate;
 import forestry.factory.recipes.CarpenterRecipeManager;
 import forestry.factory.recipes.CentrifugeRecipeManager;
 import forestry.factory.recipes.FabricatorRecipeManager;
@@ -153,6 +154,7 @@ public class PluginFactory extends ForestryPlugin {
 		PacketIdServer.WORKTABLE_NEI_SELECT.setPacketHandler(new PacketWorktableNEISelect());
 
 		PacketIdClient.WORKTABLE_MEMORY_UPDATE.setPacketHandler(new PacketWorktableMemoryUpdate());
+		PacketIdClient.WORKTABLE_CRAFTING_UPDATE.setPacketHandler(new PacketWorktableRecipeUpdate());
 	}
 
 	@Override

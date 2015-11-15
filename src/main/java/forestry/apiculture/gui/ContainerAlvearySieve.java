@@ -17,20 +17,20 @@ import forestry.apiculture.multiblock.TileAlvearySieve;
 import forestry.core.gui.ContainerTile;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
-import forestry.core.tiles.ICrafter;
+import forestry.core.inventory.watchers.ISlotPickupWatcher;
 
 public class ContainerAlvearySieve extends ContainerTile<TileAlvearySieve> {
 
 	public ContainerAlvearySieve(InventoryPlayer player, TileAlvearySieve tile) {
 		super(tile, player, 8, 87);
 
-		ICrafter crafter = tile.getCrafter();
+		ISlotPickupWatcher crafter = tile.getCrafter();
 
-		addSlotToContainer(new SlotOutput(tile, 0, 94, 52).setCrafter(crafter));
-		addSlotToContainer(new SlotOutput(tile, 1, 115, 39).setCrafter(crafter));
-		addSlotToContainer(new SlotOutput(tile, 2, 73, 39).setCrafter(crafter));
-		addSlotToContainer(new SlotOutput(tile, 3, 94, 26).setCrafter(crafter));
+		addSlotToContainer(new SlotOutput(tile, 0, 94, 52).setPickupWatcher(crafter));
+		addSlotToContainer(new SlotOutput(tile, 1, 115, 39).setPickupWatcher(crafter));
+		addSlotToContainer(new SlotOutput(tile, 2, 73, 39).setPickupWatcher(crafter));
+		addSlotToContainer(new SlotOutput(tile, 3, 94, 26).setPickupWatcher(crafter));
 
-		addSlotToContainer(new SlotFiltered(tile, InventoryAlvearySieve.SLOT_SIEVE, 43, 39).setCrafter(crafter));
+		addSlotToContainer(new SlotFiltered(tile, InventoryAlvearySieve.SLOT_SIEVE, 43, 39).setPickupWatcher(crafter));
 	}
 }

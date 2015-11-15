@@ -23,13 +23,14 @@ import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IIndividual;
 import forestry.core.inventory.InventoryEscritoire;
+import forestry.core.inventory.watchers.ISlotPickupWatcher;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
 import forestry.core.network.IStreamableGui;
 import forestry.core.utils.InventoryUtil;
 
-public class TileEscritoire extends TileBase implements ISidedInventory, ICrafter, IStreamableGui {
+public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPickupWatcher, IStreamableGui {
 
 	private final EscritoireGame game = new EscritoireGame();
 
@@ -112,23 +113,11 @@ public class TileEscritoire extends TileBase implements ISidedInventory, ICrafte
 		game.readData(data);
 	}
 
-	//	@Override
-	//	public TankRenderInfo getResourceTankInfo() {
-	//		return TankRenderInfo.EMPTY;
-	//	}
-	//
-	//	@Override
-	//	public TankRenderInfo getProductTankInfo() {
-	//		return TankRenderInfo.EMPTY;
-	//	}
-
-	/* ICrafter */
+	/* ISlotPickupWatcher */
 	@Override
-	public ItemStack takenFromSlot(int slotIndex, EntityPlayer player) {
+	public void onPickupFromSlot(int slotIndex, EntityPlayer player) {
 		if (slotIndex == InventoryEscritoire.SLOT_ANALYZE) {
 			game.reset();
 		}
-		return null;
 	}
-
 }

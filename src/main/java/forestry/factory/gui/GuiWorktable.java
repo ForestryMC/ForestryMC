@@ -10,10 +10,15 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
+import forestry.core.gui.buttons.GuiBetterButton;
+import forestry.core.gui.buttons.StandardButtonTextureSets;
+import forestry.core.network.PacketGuiSelectRequest;
+import forestry.core.proxy.Proxies;
 import forestry.factory.gui.widgets.ClearWorktable;
 import forestry.factory.gui.widgets.MemorizedRecipeSlot;
 import forestry.factory.recipes.RecipeMemory;
@@ -21,6 +26,7 @@ import forestry.factory.tiles.TileWorktable;
 
 public class GuiWorktable extends GuiForestryTitled<ContainerWorktable, TileWorktable> {
 	private static final int SPACING = 18;
+	private boolean hasRecipeConflict = false;
 
 	public GuiWorktable(EntityPlayer player, TileWorktable tile) {
 		super(Constants.TEXTURE_PATH_GUI + "/worktable2.png", new ContainerWorktable(player, tile), tile);
@@ -40,5 +46,31 @@ public class GuiWorktable extends GuiForestryTitled<ContainerWorktable, TileWork
 		}
 
 		widgetManager.add(new ClearWorktable(widgetManager, 66, 19));
+	}
+
+	@Override
+	public void updateScreen() {
+		super.updateScreen();
+
+		if (hasRecipeConflict != inventory.hasRecipeConflict()) {
+			hasRecipeConflict = inventory.hasRecipeConflict();
+			if (hasRecipeConflict) {
+				addButtons();
+			} else {
+				buttonList.clear();
+			}
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private void addButtons() {
+		buttonList.add(new GuiBetterButton(0, guiLeft + 76, guiTop + 56, StandardButtonTextureSets.LEFT_BUTTON_SMALL));
+		buttonList.add(new GuiBetterButton(1, guiLeft + 85, guiTop + 56, StandardButtonTextureSets.RIGHT_BUTTON_SMALL));
+	}
+
+	@Override
+	protected void actionPerformed(GuiButton button) {
+		int id = 100 + button.id;
+		Proxies.net.sendToServer(new PacketGuiSelectRequest(id, 0));
 	}
 }

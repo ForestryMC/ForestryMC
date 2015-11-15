@@ -22,8 +22,8 @@ import forestry.api.multiblock.IAlvearyComponent;
 import forestry.apiculture.blocks.BlockAlveary;
 import forestry.apiculture.inventory.InventoryAlvearySieve;
 import forestry.core.inventory.IInventoryAdapter;
+import forestry.core.inventory.watchers.ISlotPickupWatcher;
 import forestry.core.network.GuiId;
-import forestry.core.tiles.ICrafter;
 
 public class TileAlvearySieve extends TileAlvearyWithGui implements IAlvearyComponent.BeeListener {
 
@@ -41,7 +41,7 @@ public class TileAlvearySieve extends TileAlvearyWithGui implements IAlvearyComp
 		return inventory;
 	}
 
-	public ICrafter getCrafter() {
+	public ISlotPickupWatcher getCrafter() {
 		return inventory;
 	}
 

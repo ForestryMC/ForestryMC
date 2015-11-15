@@ -36,7 +36,7 @@ public class MemorizedRecipeSlot extends ItemStackWidgetBase {
 
 	@Override
 	public ItemStack getItemStack() {
-		return recipeMemory.getRecipeOutput(slotNumber);
+		return recipeMemory.getRecipeDisplayOutput(slotNumber);
 	}
 
 	@Override

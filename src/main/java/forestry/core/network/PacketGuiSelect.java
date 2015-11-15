@@ -28,15 +28,15 @@ public abstract class PacketGuiSelect extends ForestryPacket {
 	@Override
 	public void writeData(DataOutputStreamForestry data) throws IOException {
 		super.writeData(data);
-		data.writeInt(primaryIndex);
-		data.writeInt(secondaryIndex);
+		data.writeVarInt(primaryIndex);
+		data.writeVarInt(secondaryIndex);
 	}
 
 	@Override
 	public void readData(DataInputStreamForestry data) throws IOException {
 		super.readData(data);
-		primaryIndex = data.readInt();
-		secondaryIndex = data.readInt();
+		primaryIndex = data.readVarInt();
+		secondaryIndex = data.readVarInt();
 	}
 
 	public int getPrimaryIndex() {

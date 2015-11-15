@@ -39,12 +39,12 @@ import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.inventory.InventoryAdapterTile;
+import forestry.core.inventory.watchers.ISlotPickupWatcher;
 import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.items.ICraftingPlan;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
-import forestry.core.tiles.ICrafter;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;
 import forestry.core.utils.InventoryUtil;
@@ -53,7 +53,7 @@ import forestry.factory.inventory.InventoryGhostCrafting;
 import forestry.factory.recipes.FabricatorRecipeManager;
 import forestry.factory.recipes.FabricatorSmeltingRecipeManager;
 
-public class TileFabricator extends TilePowered implements ICrafter, ILiquidTankTile, IFluidHandler, ISidedInventory {
+public class TileFabricator extends TilePowered implements ISlotPickupWatcher, ILiquidTankTile, IFluidHandler, ISidedInventory {
 	private static final int MAX_HEAT = 5000;
 
 	private final InventoryAdapterTile craftingInventory;
@@ -193,14 +193,12 @@ public class TileFabricator extends TilePowered implements ICrafter, ILiquidTank
 		return myRecipe.getRecipeOutput().copy();
 	}
 
-	/* ICrafter */
+	/* ISlotPickupWatcher */
 	@Override
-	public ItemStack takenFromSlot(int slotIndex, EntityPlayer player) {
-		if (slotIndex != InventoryFabricator.SLOT_RESULT) {
-			return null;
+	public void onPickupFromSlot(int slotIndex, EntityPlayer player) {
+		if (slotIndex == InventoryFabricator.SLOT_RESULT) {
+			decrStackSize(InventoryFabricator.SLOT_RESULT, 1);
 		}
-
-		return getInternalInventory().decrStackSize(InventoryFabricator.SLOT_RESULT, 1);
 	}
 
 	private void craftResult() {
@@ -214,9 +212,7 @@ public class TileFabricator extends TilePowered implements ICrafter, ILiquidTank
 			return;
 		}
 
-		IInventoryAdapter inventory = getInternalInventory();
-
-		if (inventory.getStackInSlot(InventoryFabricator.SLOT_RESULT) != null) {
+		if (getStackInSlot(InventoryFabricator.SLOT_RESULT) != null) {
 			return;
 		}
 
@@ -236,14 +232,14 @@ public class TileFabricator extends TilePowered implements ICrafter, ILiquidTank
 		moltenTank.drain(liquid.amount, true);
 
 		// Damage plan
-		if (inventory.getStackInSlot(InventoryFabricator.SLOT_PLAN) != null) {
-			Item planItem = inventory.getStackInSlot(InventoryFabricator.SLOT_PLAN).getItem();
+		if (getStackInSlot(InventoryFabricator.SLOT_PLAN) != null) {
+			Item planItem = getStackInSlot(InventoryFabricator.SLOT_PLAN).getItem();
 			if (planItem instanceof ICraftingPlan) {
-				inventory.setInventorySlotContents(InventoryFabricator.SLOT_PLAN, ((ICraftingPlan) planItem).planUsed(inventory.getStackInSlot(InventoryFabricator.SLOT_PLAN), result));
+				setInventorySlotContents(InventoryFabricator.SLOT_PLAN, ((ICraftingPlan) planItem).planUsed(getStackInSlot(InventoryFabricator.SLOT_PLAN), result));
 			}
 		}
 
-		inventory.setInventorySlotContents(InventoryFabricator.SLOT_RESULT, result);
+		setInventorySlotContents(InventoryFabricator.SLOT_RESULT, result);
 	}
 
 	private boolean removeFromInventory(ItemStack[] set, EntityPlayer player, boolean doRemove) {
