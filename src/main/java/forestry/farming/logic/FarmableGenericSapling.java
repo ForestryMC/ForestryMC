@@ -22,7 +22,7 @@ import forestry.core.utils.vect.Vect;
 
 public class FarmableGenericSapling implements IFarmable {
 
-	private final Block sapling;
+	protected final Block sapling;
 	private final int saplingMeta;
 	private final ItemStack[] windfall;
 

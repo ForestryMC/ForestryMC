@@ -40,6 +40,11 @@ public class FarmableVanillaMushroom extends FarmableGenericSapling {
 	}
 
 	@Override
+	public boolean isGermling(ItemStack itemstack) {
+		return ItemStackUtil.equals(sapling, itemstack);
+	}
+
+	@Override
 	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, int x, int y, int z) {
 		int meta = 0;
 		if (ItemStackUtil.equals(Blocks.red_mushroom, germling)) {

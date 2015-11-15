@@ -12,6 +12,7 @@ package forestry.farming.logic;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -59,7 +60,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 		}
 
 		Block block = BlockSoil.getBlockFromItem(soil.getItem());
-		if (block == null || !(block instanceof BlockSoil)) {
+		if (!(block instanceof BlockSoil)) {
 			return false;
 		}
 		BlockSoil blockSoil = (BlockSoil) block;
@@ -246,8 +247,8 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 	}
 
 	private boolean plantSapling(Vect position) {
-
 		World world = getWorld();
+		Collections.shuffle(germlings);
 		for (IFarmable candidate : germlings) {
 			if (housing.plantGermling(candidate, world, position.x, position.y, position.z)) {
 				return true;
