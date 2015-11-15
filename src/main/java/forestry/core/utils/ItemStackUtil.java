@@ -288,7 +288,7 @@ public abstract class ItemStackUtil {
 	}
 
 	public static void dropItemStackAsEntity(ItemStack items, World world, double x, double y, double z) {
-		if (items.stackSize <= 0) {
+		if (items.stackSize <= 0 || world.isRemote) {
 			return;
 		}
 
@@ -300,7 +300,6 @@ public abstract class ItemStackUtil {
 		entityitem.delayBeforeCanPickup = 10;
 
 		world.spawnEntityInWorld(entityitem);
-
 	}
 
 	public static ItemStack copyWithRandomSize(ItemStack template, int max, Random rand) {

@@ -20,7 +20,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
 
@@ -64,8 +63,7 @@ import forestry.core.items.ItemBlockTyped;
 import forestry.core.items.ItemElectronTube;
 import forestry.core.items.ItemForestry;
 import forestry.core.items.ItemForestryBonemeal;
-import forestry.core.items.ItemForestryPickaxe;
-import forestry.core.items.ItemForestryShovel;
+import forestry.core.items.ItemForestryTool;
 import forestry.core.items.ItemFruit;
 import forestry.core.items.ItemMisc;
 import forestry.core.items.ItemOverlay.OverlayInfo;
@@ -200,12 +198,13 @@ public class PluginCore extends ForestryPlugin {
 		ForestryItem.brokenBronzeShovel.registerItem((new ItemForestry()), "brokenBronzeShovel");
 
 		// / TOOLS
-		ForestryItem.bronzePickaxe.registerItem(new ItemForestryPickaxe(ForestryItem.brokenBronzePickaxe.getItemStack()), "bronzePickaxe");
+		final ItemStack remnants = ForestryItem.brokenBronzePickaxe.getItemStack();
+		ForestryItem.bronzePickaxe.registerItem(new ItemForestryTool(remnants), "bronzePickaxe");
 		ForestryItem.bronzePickaxe.item().setHarvestLevel("pickaxe", 3);
-		MinecraftForge.EVENT_BUS.register(ForestryItem.bronzePickaxe.item());
-		ForestryItem.bronzeShovel.registerItem(new ItemForestryShovel(ForestryItem.brokenBronzeShovel.getItemStack()), "bronzeShovel");
+
+		final ItemStack remnants1 = ForestryItem.brokenBronzeShovel.getItemStack();
+		ForestryItem.bronzeShovel.registerItem(new ItemForestryTool(remnants1), "bronzeShovel");
 		ForestryItem.bronzeShovel.item().setHarvestLevel("shovel", 3);
-		MinecraftForge.EVENT_BUS.register(ForestryItem.bronzeShovel.item());
 
 		// / ASSEMBLY KITS
 		ForestryItem.kitShovel.registerItem(new ItemAssemblyKit(ForestryItem.bronzeShovel.getItemStack()), "kitShovel");

@@ -12,7 +12,6 @@ package forestry.arboriculture.blocks;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -86,11 +85,6 @@ public class BlockSlab extends net.minecraft.block.BlockSlab implements IWoodTyp
 		TileWood wood = TileWood.getWoodTile(world, x, y, z);
 		EnumWoodType woodType = wood.getWoodType();
 		return IconProviderWood.getPlankIcon(woodType);
-	}
-
-	@Override
-	public Item getItemDropped(int meta, Random random, int par3) {
-		return Item.getItemFromBlock(this);
 	}
 
 	@Override

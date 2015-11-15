@@ -10,48 +10,50 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import java.util.Arrays;
-import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
-public abstract class ItemForestryTool extends ItemForestry {
+import forestry.core.utils.ItemStackUtil;
 
+public class ItemForestryTool extends ItemForestry {
 	private final ItemStack remnants;
-	protected float efficiencyOnProperMaterial;
-	private final List<Block> blocksEffectiveAgainst;
+	private float efficiencyOnProperMaterial;
 
-	protected ItemForestryTool(Block[] blocksEffectiveAgainst, ItemStack remnants) {
-		this.blocksEffectiveAgainst = Arrays.asList(blocksEffectiveAgainst);
+	public ItemForestryTool(ItemStack remnants) {
 		this.maxStackSize = 1;
 		efficiencyOnProperMaterial = 6F;
 		setMaxDamage(200);
 		this.remnants = remnants;
+		if (remnants != null) {
+			MinecraftForge.EVENT_BUS.register(this);
+		}
+	}
+
+	public void setEfficiencyOnProperMaterial(float efficiencyOnProperMaterial) {
+		this.efficiencyOnProperMaterial = efficiencyOnProperMaterial;
 	}
 
 	@Override
-	public float func_150893_a(ItemStack itemstack, Block block) {
-		if (blocksEffectiveAgainst.contains(block)) {
+	public float getDigSpeed(ItemStack itemstack, Block block, int metadata) {
+		if (ForgeHooks.isToolEffective(itemstack, block, metadata)) {
 			return efficiencyOnProperMaterial;
 		}
-		return 1.0F;
+
+		return super.getDigSpeed(itemstack, block, metadata);
 	}
 
 	@Override
-	public float getDigSpeed(ItemStack itemstack, Block block, int md) {
-		if (ForgeHooks.isToolEffective(itemstack, block, md)) {
-			return efficiencyOnProperMaterial;
-		}
-		return func_150893_a(itemstack, block);
+	public boolean canHarvestBlock(Block block, ItemStack stack) {
+		return ForgeHooks.canToolHarvestBlock(block, 0, stack);
 	}
 
 	@SubscribeEvent
@@ -60,16 +62,19 @@ public abstract class ItemForestryTool extends ItemForestry {
 			return;
 		}
 
-		if (!event.entityPlayer.worldObj.isRemote && remnants != null) {
-			EntityItem entity = new EntityItem(event.entityPlayer.worldObj, event.entityPlayer.posX, event.entityPlayer.posY, event.entityPlayer.posZ,
-					remnants.copy());
-			event.entityPlayer.worldObj.spawnEntityInWorld(entity);
+		EntityPlayer player = event.entityPlayer;
+		World world = player.worldObj;
+
+		if (!world.isRemote && remnants != null) {
+			ItemStackUtil.dropItemStackAsEntity(remnants.copy(), world, player.posX, player.posY, player.posZ);
 		}
 	}
 
 	@Override
-	public boolean onBlockDestroyed(ItemStack itemstack, World world, Block block, int j, int k, int l, EntityLivingBase entityliving) {
-		itemstack.damageItem(1, entityliving);
+	public boolean onBlockDestroyed(ItemStack itemstack, World world, Block block, int x, int y, int z, EntityLivingBase entityliving) {
+		if (block.getBlockHardness(world, x, y, z) != 0) {
+			itemstack.damageItem(1, entityliving);
+		}
 		return true;
 	}
 
@@ -77,5 +82,4 @@ public abstract class ItemForestryTool extends ItemForestry {
 	public boolean isFull3D() {
 		return true;
 	}
-
 }
