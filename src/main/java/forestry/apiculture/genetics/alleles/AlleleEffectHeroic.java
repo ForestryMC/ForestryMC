@@ -13,14 +13,15 @@ package forestry.apiculture.genetics.alleles;
 import java.util.List;
 
 import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
+import forestry.core.utils.DamageSourceForestry;
 
 public class AlleleEffectHeroic extends AlleleEffectThrottled {
+	private static final DamageSource damageSourceBeeHeroic = new DamageSourceForestry("bee.heroic");
 
 	public AlleleEffectHeroic() {
 		super("heroic", false, 40, true, false);
@@ -28,16 +29,11 @@ public class AlleleEffectHeroic extends AlleleEffectThrottled {
 
 	@Override
 	public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
-		AxisAlignedBB hurtBox = getBounding(genome, housing);
-		@SuppressWarnings("rawtypes")
-		List list = housing.getWorld().getEntitiesWithinAABB(EntityMob.class, hurtBox);
-
-		for (Object obj : list) {
-			EntityMob mob = (EntityMob) obj;
-			mob.attackEntityFrom(DamageSource.generic, 2);
+		List<EntityMob> mobs = getEntitiesInRange(genome, housing, EntityMob.class);
+		for (EntityMob mob : mobs) {
+			mob.attackEntityFrom(damageSourceBeeHeroic, 2);
 		}
 
 		return storedData;
 	}
-
 }

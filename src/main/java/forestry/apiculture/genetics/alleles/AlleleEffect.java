@@ -13,6 +13,7 @@ package forestry.apiculture.genetics.alleles;
 import java.util.Arrays;
 import java.util.List;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChunkCoordinates;
@@ -28,6 +29,7 @@ import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IEffectData;
 import forestry.core.genetics.alleles.AlleleCategorized;
 import forestry.core.proxy.Proxies;
+import forestry.core.utils.EntityUtil;
 import forestry.core.utils.vect.MutableVect;
 import forestry.core.utils.vect.Vect;
 
@@ -137,7 +139,7 @@ public abstract class AlleleEffect extends AlleleCategorized implements IAlleleB
 		return new Vect(area);
 	}
 
-	protected AxisAlignedBB getBounding(IBeeGenome genome, IBeeHousing housing) {
+	public static AxisAlignedBB getBounding(IBeeGenome genome, IBeeHousing housing) {
 		IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(housing);
 		float territoryModifier = beeModifier.getTerritoryModifier(genome, 1.0f);
 
@@ -151,4 +153,8 @@ public abstract class AlleleEffect extends AlleleCategorized implements IAlleleB
 		return AxisAlignedBB.getBoundingBox(min.x, min.y, min.z, max.x, max.y, max.z);
 	}
 
+	public static <T extends Entity> List<T> getEntitiesInRange(IBeeGenome genome, IBeeHousing housing, Class<T> entityClass) {
+		AxisAlignedBB boundingBox = getBounding(genome, housing);
+		return EntityUtil.getEntitiesWithinAABB(housing.getWorld(), entityClass, boundingBox);
+	}
 }

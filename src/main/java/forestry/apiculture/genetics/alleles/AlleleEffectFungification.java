@@ -7,7 +7,6 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.passive.EntityMooshroom;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenBigMushroom;
@@ -78,16 +77,10 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 
 	}
 
-	private void doEntityEffect(IBeeGenome genome, IBeeHousing housing) {
-		AxisAlignedBB aabb = this.getBounding(genome, housing);
-		World world = housing.getWorld();
-
-		List entities = world.getEntitiesWithinAABB(EntityCow.class, aabb);
-		for (Object entity : entities) {
-			if (entity instanceof EntityCow && !(entity instanceof EntityMooshroom)) {
-				convertCowToMooshroom((EntityCow) entity);
-				break;
-			}
+	private static void doEntityEffect(IBeeGenome genome, IBeeHousing housing) {
+		List<EntityCow> cows = getEntitiesInRange(genome, housing, EntityCow.class);
+		for (EntityCow cow : cows) {
+			convertCowToMooshroom(cow);
 		}
 	}
 	
@@ -104,6 +97,9 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 	}
 	
 	private static void convertCowToMooshroom(EntityCow cow) {
+		if (cow instanceof EntityMooshroom) {
+			return;
+		}
 		World worldObj = cow.worldObj;
 		cow.setDead();
 		EntityMooshroom mooshroom = new EntityMooshroom(worldObj);

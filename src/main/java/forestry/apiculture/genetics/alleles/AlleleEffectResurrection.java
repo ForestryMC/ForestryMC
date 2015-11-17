@@ -28,7 +28,6 @@ import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
 
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
@@ -79,35 +78,37 @@ public class AlleleEffectResurrection extends AlleleEffectThrottled {
 
 	@Override
 	public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
-
-		AxisAlignedBB bounding = getBounding(genome, housing);
-		@SuppressWarnings("rawtypes")
-		List list = housing.getWorld().getEntitiesWithinAABB(EntityItem.class, bounding);
-
-		if (list.size() > 0) {
-			Collections.shuffle(resurrectables);
+		List<EntityItem> entities = getEntitiesInRange(genome, housing, EntityItem.class);
+		if (entities.size() == 0) {
+			return storedData;
 		}
 
-		for (Object obj : list) {
-			EntityItem item = (EntityItem) obj;
-			if (item.isDead) {
-				continue;
-			}
+		Collections.shuffle(resurrectables);
 
-			ItemStack contained = item.getEntityItem();
-			for (Resurrectable entry : resurrectables) {
-				if (ItemStackUtil.isIdenticalItem(entry.res, contained)) {
-					EntityUtil.spawnEntity(housing.getWorld(), entry.risen, item.posX, item.posY, item.posZ);
-					contained.stackSize--;
-					if (contained.stackSize <= 0) {
-						item.setDead();
-					}
-					break;
-				}
+		for (EntityItem entity : entities) {
+			if (resurrectEntity(entity)) {
+				break;
 			}
 		}
 
 		return storedData;
 	}
 
+	private boolean resurrectEntity(EntityItem entity) {
+		if (entity.isDead) {
+			return false;
+		}
+		ItemStack contained = entity.getEntityItem();
+		for (Resurrectable entry : resurrectables) {
+			if (ItemStackUtil.isIdenticalItem(entry.res, contained)) {
+				EntityUtil.spawnEntity(entity.worldObj, entry.risen, entity.posX, entity.posY, entity.posZ);
+				contained.stackSize--;
+				if (contained.stackSize <= 0) {
+					entity.setDead();
+				}
+				return true;
+			}
+		}
+		return false;
+	}
 }

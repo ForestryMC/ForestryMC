@@ -13,7 +13,6 @@ package forestry.apiculture.genetics.alleles;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.AxisAlignedBB;
 
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
@@ -27,13 +26,8 @@ public class AlleleEffectExploration extends AlleleEffectThrottled {
 
 	@Override
 	public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
-
-		AxisAlignedBB beatifyBox = getBounding(genome, housing);
-		@SuppressWarnings("rawtypes")
-		List list = housing.getWorld().getEntitiesWithinAABB(EntityPlayer.class, beatifyBox);
-
-		for (Object obj : list) {
-			EntityPlayer player = (EntityPlayer) obj;
+		List<EntityPlayer> players = getEntitiesInRange(genome, housing, EntityPlayer.class);
+		for (EntityPlayer player : players) {
 			player.addExperience(2);
 		}
 

@@ -14,11 +14,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.potion.PotionHelper;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
@@ -56,26 +56,17 @@ public class AlleleEffectPotion extends AlleleEffectThrottled {
 
 	@Override
 	public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
-
 		World world = housing.getWorld();
-		AxisAlignedBB effectArea = getBounding(genome, housing);
-		List list = housing.getWorld().getEntitiesWithinAABB(EntityPlayer.class, effectArea);
-
-		for (Object entity : list) {
-			if (!(entity instanceof EntityPlayer)) {
-				continue;
-			}
-
+		List<EntityLivingBase> entities = getEntitiesInRange(genome, housing, EntityLivingBase.class);
+		for (EntityLivingBase entity : entities) {
 			if (world.rand.nextFloat() >= chance) {
 				continue;
 			}
 
-			EntityPlayer player = (EntityPlayer) entity;
-
 			int dur = this.duration;
 			if (isBadEffect) {
-				// Players are not attacked if they wear a full set of apiarist's armor.
-				int count = BeeManager.armorApiaristHelper.wearsItems((EntityPlayer) entity, getUID(), true);
+				// Entities are not attacked if they wear a full set of apiarist's armor.
+				int count = BeeManager.armorApiaristHelper.wearsItems(entity, getUID(), true);
 				if (count >= 4) {
 					continue; // Full set, no damage/effect
 				} else if (count == 3) {
@@ -85,9 +76,14 @@ public class AlleleEffectPotion extends AlleleEffectThrottled {
 				} else if (count == 1) {
 					dur = this.duration * 3 / 4;
 				}
+			} else {
+				// don't apply positive effects to mobs
+				if (entity instanceof IMob) {
+					continue;
+				}
 			}
 
-			player.addPotionEffect(new PotionEffect(potion.getId(), dur, 0));
+			entity.addPotionEffect(new PotionEffect(potion.getId(), dur, 0));
 		}
 
 		return storedData;

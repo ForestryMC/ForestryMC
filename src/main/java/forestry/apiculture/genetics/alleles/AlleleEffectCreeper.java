@@ -13,7 +13,6 @@ package forestry.apiculture.genetics.alleles;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 
@@ -59,24 +58,15 @@ public class AlleleEffectCreeper extends AlleleEffectThrottled {
 			return storedData;
 		}
 
-		AxisAlignedBB infectionBox = getBounding(genome, housing);
-
-		@SuppressWarnings("rawtypes")
-		List list = world.getEntitiesWithinAABB(EntityPlayer.class, infectionBox);
-
-		for (Object obj : list) {
-
-			EntityPlayer player = (EntityPlayer) obj;
-
+		List<EntityPlayer> players = getEntitiesInRange(genome, housing, EntityPlayer.class);
+		for (EntityPlayer player : players) {
 			int chance = explosionChance;
 			storedData.setInteger(indexExplosionForce, defaultForce);
 
-			// Players are not attacked if they wear a full set of apiarist's
-			// armor.
+			// Entities are not attacked if they wear a full set of apiarist's armor.
 			int count = BeeManager.armorApiaristHelper.wearsItems(player, getUID(), true);
-			// Full set, no damage/effect
 			if (count > 3) {
-				continue;
+				continue; // Full set, no damage/effect
 			} else if (count > 2) {
 				chance = 5;
 				storedData.setInteger(indexExplosionForce, 6);
@@ -94,8 +84,7 @@ public class AlleleEffectCreeper extends AlleleEffectThrottled {
 
 			world.playSoundEffect(housingCoords.posX, housingCoords.posY, housingCoords.posZ, "mob.creeper", 4F,
 					(1.0F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.2F) * 0.7F);
-			storedData.setInteger(indexExplosionTimer, 2); // Set explosion
-			// timer
+			storedData.setInteger(indexExplosionTimer, 2); // Set explosion timer
 		}
 
 		return storedData;
