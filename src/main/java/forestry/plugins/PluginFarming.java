@@ -57,7 +57,7 @@ import forestry.farming.logic.FarmLogicGourd;
 import forestry.farming.logic.FarmLogicInfernal;
 import forestry.farming.logic.FarmLogicOrchard;
 import forestry.farming.logic.FarmLogicPeat;
-import forestry.farming.logic.FarmLogicPoale;
+import forestry.farming.logic.FarmLogicReeds;
 import forestry.farming.logic.FarmLogicShroom;
 import forestry.farming.logic.FarmLogicSucculent;
 import forestry.farming.logic.FarmLogicVegetable;
@@ -67,8 +67,8 @@ import forestry.farming.logic.FarmableGenericCrop;
 import forestry.farming.logic.FarmableGenericSapling;
 import forestry.farming.logic.FarmableGourd;
 import forestry.farming.logic.FarmableStacked;
-import forestry.farming.logic.FarmableVanillaSapling;
 import forestry.farming.logic.FarmableVanillaMushroom;
+import forestry.farming.logic.FarmableVanillaSapling;
 import forestry.farming.proxy.ProxyFarming;
 import forestry.farming.render.EnumFarmBlockTexture;
 import forestry.farming.tiles.TileControl;
@@ -174,7 +174,7 @@ public class PluginFarming extends ForestryPlugin {
 		Circuit.farmCerealManual = new CircuitFarmLogic("manualCereal", FarmLogicCereal.class).setManual();
 		Circuit.farmVegetableManual = new CircuitFarmLogic("manualVegetable", FarmLogicVegetable.class).setManual();
 		Circuit.farmSucculentManual = new CircuitFarmLogic("manualSucculent", FarmLogicSucculent.class).setManual();
-		Circuit.farmPoalesManual = new CircuitFarmLogic("manualPoales", FarmLogicPoale.class).setManual();
+		Circuit.farmPoalesManual = new CircuitFarmLogic("manualPoales", FarmLogicReeds.class).setManual();
 		Circuit.farmGourdManual = new CircuitFarmLogic("manualGourd", FarmLogicGourd.class).setManual();
 		Circuit.farmCocoaManual = new CircuitFarmLogic("manualCocoa", FarmLogicCocoa.class).setManual();
 

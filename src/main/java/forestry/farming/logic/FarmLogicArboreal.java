@@ -15,16 +15,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -93,36 +89,10 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 		return (int) (10 * hydrationModifier);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<ItemStack> collect() {
-
 		Collection<ItemStack> products = produce;
-		produce = new ArrayList<>();
-
-		Vect coords = new Vect(housing.getCoords());
-		Vect area = new Vect(housing.getArea());
-		Vect offset = new Vect(housing.getOffset());
-
-		Vect min = coords.add(offset);
-		Vect max = min.add(area);
-
-		AxisAlignedBB harvestBox = AxisAlignedBB.getBoundingBox(min.x, min.y, min.z, max.x, getWorld().getHeight(), max.z);
-		List<Entity> list = getWorld().getEntitiesWithinAABB(Entity.class, harvestBox);
-
-		for (Entity entity : list) {
-			if (entity instanceof EntityItem) {
-				EntityItem item = (EntityItem) entity;
-				if (!item.isDead) {
-					ItemStack contained = item.getEntityItem();
-					if (isAcceptedGermling(contained) || isWindfall(contained)) {
-						produce.add(contained.copy());
-						item.setDead();
-					}
-				}
-			}
-		}
-
+		produce = collectEntityItems(true);
 		return products;
 	}
 

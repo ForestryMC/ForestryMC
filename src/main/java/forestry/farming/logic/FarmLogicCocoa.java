@@ -77,6 +77,11 @@ public class FarmLogicCocoa extends FarmLogic {
 	}
 
 	@Override
+	public boolean isAcceptedWindfall(ItemStack stack) {
+		return false;
+	}
+
+	@Override
 	public Collection<ItemStack> collect() {
 		return null;
 	}

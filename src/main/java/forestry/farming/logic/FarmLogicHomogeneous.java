@@ -32,7 +32,7 @@ public abstract class FarmLogicHomogeneous extends FarmLogic {
 	private final ItemStack soilBlock;
 	protected final List<IFarmable> germlings;
 
-	ArrayList<ItemStack> produce = new ArrayList<>();
+	List<ItemStack> produce = new ArrayList<>();
 
 	protected FarmLogicHomogeneous(IFarmHousing housing, ItemStack resource, ItemStack soilBlock, Iterable<IFarmable> germlings) {
 		super(housing);
@@ -63,7 +63,8 @@ public abstract class FarmLogicHomogeneous extends FarmLogic {
 		return false;
 	}
 
-	protected boolean isWindfall(ItemStack itemstack) {
+	@Override
+	public boolean isAcceptedWindfall(ItemStack itemstack) {
 		for (IFarmable germling : germlings) {
 			if (germling.isWindfall(itemstack)) {
 				return true;

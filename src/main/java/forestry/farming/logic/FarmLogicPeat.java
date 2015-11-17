@@ -43,7 +43,7 @@ public class FarmLogicPeat extends FarmLogicWatered {
 		}
 
 		Block block = BlockSoil.getBlockFromItem(itemStack.getItem());
-		if (block == null || !(block instanceof BlockSoil)) {
+		if (!(block instanceof BlockSoil)) {
 			return false;
 		}
 		BlockSoil blockSoil = (BlockSoil) block;
@@ -71,6 +71,11 @@ public class FarmLogicPeat extends FarmLogicWatered {
 	}
 
 	@Override
+	public boolean isAcceptedWindfall(ItemStack stack) {
+		return false;
+	}
+
+	@Override
 	public Collection<ICrop> harvest(int x, int y, int z, FarmDirection direction, int extent) {
 		World world = getWorld();
 
@@ -84,7 +89,7 @@ public class FarmLogicPeat extends FarmLogicWatered {
 			}
 
 			Block block = Block.getBlockFromItem(occupant.getItem());
-			if (block == null || !(block instanceof BlockSoil)) {
+			if (!(block instanceof BlockSoil)) {
 				continue;
 			}
 

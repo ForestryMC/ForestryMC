@@ -30,11 +30,11 @@ import forestry.api.farming.IFarmable;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.vect.Vect;
 
-public class FarmLogicPoale extends FarmLogic {
+public class FarmLogicReeds extends FarmLogic {
 
 	private final IFarmable[] germlings;
 
-	public FarmLogicPoale(IFarmHousing housing) {
+	public FarmLogicReeds(IFarmHousing housing) {
 		super(housing);
 		Collection<IFarmable> farmables = Farmables.farmables.get("farmPoales");
 		germlings = farmables.toArray(new IFarmable[farmables.size()]);
@@ -81,6 +81,11 @@ public class FarmLogicPoale extends FarmLogic {
 		}
 
 		return itemstack.getItem() == Items.reeds;
+	}
+
+	@Override
+	public boolean isAcceptedWindfall(ItemStack stack) {
+		return false;
 	}
 
 	@Override

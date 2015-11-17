@@ -12,6 +12,7 @@ package forestry.farming.logic;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -36,7 +37,7 @@ public abstract class FarmLogicWatered extends FarmLogic {
 
 	private static final FluidStack STACK_WATER = Fluids.WATER.getFluid(1000);
 
-	ArrayList<ItemStack> produce = new ArrayList<>();
+	List<ItemStack> produce = new ArrayList<>();
 
 	protected FarmLogicWatered(IFarmHousing housing, ItemStack resource, ItemStack ground) {
 		super(housing);
