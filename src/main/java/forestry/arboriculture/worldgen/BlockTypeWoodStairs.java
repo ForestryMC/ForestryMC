@@ -23,16 +23,16 @@ public class BlockTypeWoodStairs extends BlockTypeWood {
 	public void setDirection(ForgeDirection facing) {
 		switch (facing) {
 			case NORTH:
-				itemStack.setItemDamage(3);
+				blockMeta = 3;
 				break;
 			case SOUTH:
-				itemStack.setItemDamage(2);
+				blockMeta = 2;
 				break;
 			case WEST:
-				itemStack.setItemDamage(1);
+				blockMeta = 1;
 				break;
 			default:
-				itemStack.setItemDamage(0);
+				blockMeta = 0;
 				break;
 		}
 	}

@@ -15,7 +15,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class BlockTypeLog extends BlockTypeWood {
-
 	public BlockTypeLog(ItemStack itemStack) {
 		super(itemStack);
 	}
@@ -23,12 +22,11 @@ public class BlockTypeLog extends BlockTypeWood {
 	@Override
 	public void setDirection(ForgeDirection facing) {
 		if (facing.offsetX != 0) {
-			itemStack.setItemDamage(4);
+			blockMeta = 4;
 		} else if (facing.offsetZ != 0) {
-			itemStack.setItemDamage(8);
+			blockMeta = 8;
 		} else {
-			itemStack.setItemDamage(0);
+			blockMeta = 0;
 		}
 	}
-
 }

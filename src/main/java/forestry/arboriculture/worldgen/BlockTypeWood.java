@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
-import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
@@ -23,6 +22,7 @@ import forestry.core.worldgen.IBlockType;
 public class BlockTypeWood implements IBlockType, ITreeBlockType {
 
 	protected final ItemStack itemStack;
+	protected int blockMeta;
 
 	public BlockTypeWood(ItemStack itemStack) {
 		this.itemStack = itemStack;
@@ -35,26 +35,11 @@ public class BlockTypeWood implements IBlockType, ITreeBlockType {
 
 	@Override
 	public void setBlock(World world, int x, int y, int z) {
-		ItemBlockWood.placeWood(itemStack, null, world, x, y, z, itemStack.getItemDamage());
+		ItemBlockWood.placeWood(itemStack, null, world, x, y, z, blockMeta);
 	}
 
 	@Override
 	public void setDirection(ForgeDirection facing) {
 
-	}
-
-	@Override
-	public Block getBlock() {
-		return Block.getBlockFromItem(itemStack.getItem());
-	}
-
-	@Override
-	public int getMeta() {
-		return itemStack.getItemDamage();
-	}
-
-	@Override
-	public ItemStack getItemStack() {
-		return itemStack;
 	}
 }

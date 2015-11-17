@@ -11,7 +11,6 @@
 package forestry.core.worldgen;
 
 import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
@@ -22,7 +21,6 @@ import forestry.core.config.ForestryBlock;
 import forestry.core.tiles.TileForestry;
 
 public class BlockTypeTileForestry implements IBlockType {
-
 	private final Block block;
 	private final int meta;
 	private ForgeDirection direction;
@@ -58,20 +56,5 @@ public class BlockTypeTileForestry implements IBlockType {
 		TileForestry tileForestry = (TileForestry) tile;
 
 		tileForestry.setOrientation(direction);
-	}
-
-	@Override
-	public int getMeta() {
-		return meta;
-	}
-
-	@Override
-	public Block getBlock() {
-		return block;
-	}
-
-	@Override
-	public ItemStack getItemStack() {
-		return new ItemStack(block, 1, meta);
 	}
 }

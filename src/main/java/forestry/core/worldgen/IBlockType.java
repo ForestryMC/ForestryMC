@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.core.worldgen;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.util.ForgeDirection;
@@ -20,10 +18,4 @@ public interface IBlockType {
 	void setDirection(ForgeDirection facing);
 
 	void setBlock(World world, int x, int y, int z);
-
-	int getMeta();
-
-	Block getBlock();
-
-	ItemStack getItemStack();
 }

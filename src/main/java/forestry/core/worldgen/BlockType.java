@@ -11,7 +11,6 @@
 package forestry.core.worldgen;
 
 import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.util.ForgeDirection;
@@ -19,7 +18,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 import forestry.core.config.Constants;
 
 public class BlockType implements IBlockType {
-
 	private final Block block;
 	protected int meta;
 
@@ -36,20 +34,5 @@ public class BlockType implements IBlockType {
 	@Override
 	public void setBlock(World world, int x, int y, int z) {
 		world.setBlock(x, y, z, block, meta, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
-	}
-
-	@Override
-	public int getMeta() {
-		return this.meta;
-	}
-
-	@Override
-	public Block getBlock() {
-		return this.block;
-	}
-
-	@Override
-	public ItemStack getItemStack() {
-		return new ItemStack(block, 1, meta);
 	}
 }

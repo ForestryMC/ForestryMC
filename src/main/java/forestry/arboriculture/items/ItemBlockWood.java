@@ -70,7 +70,8 @@ public class ItemBlockWood extends ItemBlockForestry {
 	}
 
 	public static void saveToItemStack(EnumWoodType woodType, ItemStack itemStack) {
-		itemStack.setItemDamage(woodType.ordinal());
+		int ordinal = woodType.ordinal();
+		itemStack.setItemDamage(ordinal);
 	}
 
 	public static EnumWoodType getWoodType(ItemStack stack) {
