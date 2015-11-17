@@ -68,6 +68,7 @@ import forestry.core.items.ItemFruit;
 import forestry.core.items.ItemMisc;
 import forestry.core.items.ItemOverlay.OverlayInfo;
 import forestry.core.items.ItemPipette;
+import forestry.core.items.ItemSolderingIron;
 import forestry.core.items.ItemWithGui;
 import forestry.core.items.ItemWrench;
 import forestry.core.multiblock.MultiblockLogicFactory;
@@ -162,7 +163,7 @@ public class PluginCore extends ForestryPlugin {
 
 		// / CIRCUIT BOARDS
 		ForestryItem.circuitboards.registerItem(new ItemCircuitBoard(), "chipsets");
-		Item solderingIron = new ItemWithGui(GuiId.SolderingIronGUI).setMaxDamage(5).setFull3D();
+		Item solderingIron = new ItemSolderingIron(GuiId.SolderingIronGUI).setMaxDamage(5).setFull3D();
 		ForestryItem.solderingIron.registerItem(solderingIron, "solderingIron");
 
 		Color tubeCoverNormal = Color.WHITE;
