@@ -16,7 +16,6 @@ import forestry.apiculture.multiblock.IAlvearyControllerInternal;
 import forestry.apiculture.multiblock.TileAlvearyPlain;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
-import forestry.core.gui.ledgers.OwnerLedger;
 import forestry.core.render.EnumTankLevel;
 
 public class GuiAlveary extends GuiForestryTitled<ContainerAlveary, TileAlvearyPlain> {
@@ -41,13 +40,4 @@ public class GuiAlveary extends GuiForestryTitled<ContainerAlveary, TileAlvearyP
 
 		this.drawTexturedModalRect(x, y + 46 - height, i, k + 46 - height, 4, height);
 	}
-
-	/* LEDGERS */
-	public void initGui() {
-		super.initGui();
-
-		IAlvearyControllerInternal alvearyController = inventory.getMultiblockLogic().getController();
-		ledgerManager.add(new OwnerLedger(ledgerManager, alvearyController));
-	}
-
 }

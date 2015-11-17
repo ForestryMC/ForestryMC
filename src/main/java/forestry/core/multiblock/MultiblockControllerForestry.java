@@ -27,7 +27,6 @@ import forestry.api.core.IErrorLogicSource;
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.core.access.AccessHandler;
 import forestry.core.access.IAccessHandler;
-import forestry.core.access.IOwnable;
 import forestry.core.access.IRestrictedAccess;
 import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
@@ -66,18 +65,9 @@ public abstract class MultiblockControllerForestry extends MultiblockControllerB
 
 		Multiset<GameProfile> owners = HashMultiset.create();
 		for (IMultiblockComponent part : connectedParts) {
-			if (part instanceof IRestrictedAccess) {
-				IAccessHandler accessHandler = ((IRestrictedAccess) part).getAccessHandler();
-				GameProfile owner = accessHandler.getOwner();
-				if (owner != null) {
-					owners.add(owner);
-				}
-			} else if (part instanceof IOwnable) {
-				IOwnable ownable = (IOwnable) part;
-				GameProfile owner = ownable.getOwner();
-				if (owner != null) {
-					owners.add(owner);
-				}
+			GameProfile owner = part.getOwner();
+			if (owner != null) {
+				owners.add(owner);
 			}
 		}
 

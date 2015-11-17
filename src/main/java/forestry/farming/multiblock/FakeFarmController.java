@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.farming.multiblock;
 
-import java.io.IOException;
-
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -20,24 +18,15 @@ import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitSocketType;
-import forestry.api.core.EnumHumidity;
-import forestry.api.core.EnumTemperature;
-import forestry.api.core.IErrorLogic;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmInventory;
 import forestry.api.farming.IFarmLogic;
 import forestry.api.farming.IFarmable;
-import forestry.core.access.EnumAccess;
-import forestry.core.access.FakeAccessHandler;
-import forestry.core.access.IAccessHandler;
-import forestry.core.errors.FakeErrorLogic;
 import forestry.core.fluids.FakeTankManager;
 import forestry.core.fluids.ITankManager;
 import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.multiblock.FakeMultiblockController;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
 import forestry.farming.gui.IFarmLedgerDelegate;
 
 import io.netty.util.internal.EmptyArrays;
@@ -47,26 +36,6 @@ public class FakeFarmController extends FakeMultiblockController implements IFar
 
 	private FakeFarmController() {
 
-	}
-
-	@Override
-	public EnumTemperature getTemperature() {
-		return EnumTemperature.NORMAL;
-	}
-
-	@Override
-	public EnumHumidity getHumidity() {
-		return EnumHumidity.NORMAL;
-	}
-
-	@Override
-	public float getExactTemperature() {
-		return 0.5f;
-	}
-
-	@Override
-	public float getExactHumidity() {
-		return 0.5f;
 	}
 
 	@Override
@@ -130,11 +99,6 @@ public class FakeFarmController extends FakeMultiblockController implements IFar
 	}
 
 	@Override
-	public IAccessHandler getAccessHandler() {
-		return FakeAccessHandler.getInstance();
-	}
-
-	@Override
 	public int getSocketCount() {
 		return 0;
 	}
@@ -155,11 +119,6 @@ public class FakeFarmController extends FakeMultiblockController implements IFar
 	}
 
 	@Override
-	public IErrorLogic getErrorLogic() {
-		return FakeErrorLogic.instance;
-	}
-
-	@Override
 	public IFarmLedgerDelegate getFarmLedgerDelegate() {
 		return FakeFarmLedgerDelegate.instance;
 	}
@@ -172,21 +131,6 @@ public class FakeFarmController extends FakeMultiblockController implements IFar
 	@Override
 	public ITankManager getTankManager() {
 		return FakeTankManager.instance;
-	}
-
-	@Override
-	public void onSwitchAccess(EnumAccess oldAccess, EnumAccess newAccess) {
-
-	}
-
-	@Override
-	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
-
-	}
-
-	@Override
-	public void readGuiData(DataInputStreamForestry data) throws IOException {
-
 	}
 
 	private static class FakeFarmInventory implements IFarmInventory {

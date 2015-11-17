@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.multiblock;
 
-import java.io.IOException;
 import java.util.Collections;
 
 import net.minecraft.item.ItemStack;
@@ -24,19 +23,10 @@ import forestry.api.apiculture.IBeeHousingInventory;
 import forestry.api.apiculture.IBeeListener;
 import forestry.api.apiculture.IBeeModifier;
 import forestry.api.apiculture.IBeekeepingLogic;
-import forestry.api.core.EnumHumidity;
-import forestry.api.core.EnumTemperature;
-import forestry.api.core.IErrorLogic;
 import forestry.apiculture.FakeBeekeepingLogic;
-import forestry.core.access.EnumAccess;
-import forestry.core.access.FakeAccessHandler;
-import forestry.core.access.IAccessHandler;
-import forestry.core.errors.FakeErrorLogic;
 import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.multiblock.FakeMultiblockController;
-import forestry.core.network.DataInputStreamForestry;
-import forestry.core.network.DataOutputStreamForestry;
 
 public class FakeAlvearyController extends FakeMultiblockController implements IAlvearyControllerInternal {
 	public static final FakeAlvearyController instance = new FakeAlvearyController();
@@ -66,16 +56,6 @@ public class FakeAlvearyController extends FakeMultiblockController implements I
 	}
 
 	@Override
-	public EnumTemperature getTemperature() {
-		return EnumTemperature.NORMAL;
-	}
-
-	@Override
-	public EnumHumidity getHumidity() {
-		return EnumHumidity.NORMAL;
-	}
-
-	@Override
 	public int getBlockLightValue() {
 		return 0;
 	}
@@ -86,23 +66,8 @@ public class FakeAlvearyController extends FakeMultiblockController implements I
 	}
 
 	@Override
-	public float getExactTemperature() {
-		return 0.5f;
-	}
-
-	@Override
-	public float getExactHumidity() {
-		return 0.5f;
-	}
-
-	@Override
 	public GameProfile getOwner() {
 		return null;
-	}
-
-	@Override
-	public IErrorLogic getErrorLogic() {
-		return FakeErrorLogic.instance;
 	}
 
 	@Override
@@ -116,28 +81,8 @@ public class FakeAlvearyController extends FakeMultiblockController implements I
 	}
 
 	@Override
-	public void onSwitchAccess(EnumAccess oldAccess, EnumAccess newAccess) {
-
-	}
-
-	@Override
-	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
-
-	}
-
-	@Override
-	public void readGuiData(DataInputStreamForestry data) throws IOException {
-
-	}
-
-	@Override
 	public BiomeGenBase getBiome() {
 		return null;
-	}
-
-	@Override
-	public IAccessHandler getAccessHandler() {
-		return FakeAccessHandler.getInstance();
 	}
 
 	@Override

@@ -12,12 +12,16 @@ package forestry.core.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+
+import com.mojang.authlib.GameProfile;
 
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.api.multiblock.IMultiblockController;
@@ -82,6 +86,23 @@ public abstract class BlockStructure extends BlockForestry {
 			part.openGui(player);
 		}
 		return true;
+	}
+
+	@Override
+	public void onBlockPlacedBy(World world, int i, int j, int k, EntityLivingBase entityLiving, ItemStack itemstack) {
+		if (world.isRemote) {
+			return;
+		}
+
+		if (entityLiving instanceof EntityPlayer) {
+			TileEntity tile = world.getTileEntity(i, j, k);
+
+			if (tile instanceof MultiblockTileEntityForestry) {
+				EntityPlayer player = (EntityPlayer) entityLiving;
+				GameProfile gameProfile = player.getGameProfile();
+				((MultiblockTileEntityForestry) tile).setOwner(gameProfile);
+			}
+		}
 	}
 
 	@Override

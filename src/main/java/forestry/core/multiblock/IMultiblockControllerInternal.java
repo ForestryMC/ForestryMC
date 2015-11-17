@@ -17,12 +17,16 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 
+import forestry.api.core.IErrorLogicSource;
 import forestry.api.core.INBTTagable;
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.api.multiblock.IMultiblockController;
+import forestry.core.access.IRestrictedAccess;
+import forestry.core.network.IStreamableGui;
+import forestry.core.tiles.IClimatised;
 
 // internal implementation of IMultiblockController
-public interface IMultiblockControllerInternal extends IMultiblockController, INBTTagable {
+public interface IMultiblockControllerInternal extends IMultiblockController, INBTTagable, IRestrictedAccess, IErrorLogicSource, IClimatised, IStreamableGui {
 	/**
 	 * Attach a new part to this machine.
 	 * @param part The part to add.

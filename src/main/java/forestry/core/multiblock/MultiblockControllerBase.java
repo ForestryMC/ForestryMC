@@ -807,6 +807,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 	/**
 	 * @return True if this multiblock machine is considered assembled and ready to go.
 	 */
+	@Override
 	public boolean isAssembled() {
 		return this.assemblyState == AssemblyState.Assembled;
 	}

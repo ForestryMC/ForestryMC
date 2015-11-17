@@ -16,7 +16,6 @@ import forestry.api.farming.FarmDirection;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.ledgers.ClimateLedger;
-import forestry.core.gui.ledgers.OwnerLedger;
 import forestry.core.gui.widgets.SocketWidget;
 import forestry.core.gui.widgets.TankWidget;
 import forestry.farming.gui.widgets.FarmLogicSlot;
@@ -44,12 +43,11 @@ public class GuiFarm extends GuiForestryTitled<ContainerFarm, TileFarm> {
 	}
 
 	@Override
-	public void initGui() {
-		super.initGui();
+	protected void addLedgers() {
 		IFarmControllerInternal farmController = inventory.getMultiblockLogic().getController();
 		ledgerManager.add(new ClimateLedger(ledgerManager, farmController));
 		ledgerManager.add(new FarmLedger(ledgerManager, farmController.getFarmLedgerDelegate()));
-		ledgerManager.add(new OwnerLedger(ledgerManager, farmController));
+		super.addLedgers();
 	}
 
 	@Override
@@ -62,5 +60,4 @@ public class GuiFarm extends GuiForestryTitled<ContainerFarm, TileFarm> {
 			drawTexturedModalRect(guiLeft + 81, guiTop + 94 + 17 - fertilizerRemain, xSize, 17 - fertilizerRemain, 4, fertilizerRemain);
 		}
 	}
-
 }

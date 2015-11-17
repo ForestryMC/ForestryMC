@@ -93,6 +93,10 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 		int maxLedgerWidth = (this.width - this.xSize) / 2;
 		this.ledgerManager = new LedgerManager(this, maxLedgerWidth);
 
+		addLedgers();
+	}
+
+	protected void addLedgers() {
 		if (inventory instanceof IErrorSource) {
 			ledgerManager.add((IErrorSource) inventory);
 		}
