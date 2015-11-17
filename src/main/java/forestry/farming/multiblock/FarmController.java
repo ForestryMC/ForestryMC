@@ -131,6 +131,9 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	// the number of work ticks that this farm has had no power
 	private int noPowerTime = 0;
 
+	// tick updates can come from multiple gearboxes so keep track of them here
+	private int farmWorkTicks = 0;
+
 	private BiomeGenBase cachedBiome;
 
 	public FarmController(World world) {
@@ -440,7 +443,8 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 	@Override
 	public boolean doWork() {
-		if (targets.isEmpty() || updateOnInterval(400)) {
+		farmWorkTicks++;
+		if (targets.isEmpty() || farmWorkTicks % 20 == 0) {
 			setUpFarmlandTargets();
 		}
 
