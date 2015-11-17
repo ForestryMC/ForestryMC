@@ -12,6 +12,7 @@ package forestry.apiculture.items;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
@@ -70,6 +71,11 @@ public class ItemArmorApiarist extends ItemArmor implements IArmorApiarist, IArm
 	@Override
 	public boolean hasColor(ItemStack itemstack) {
 		return false;
+	}
+
+	@Override
+	public boolean protectEntity(EntityLivingBase entity, ItemStack armor, String cause, boolean doProtect) {
+		return true;
 	}
 
 	@Override
