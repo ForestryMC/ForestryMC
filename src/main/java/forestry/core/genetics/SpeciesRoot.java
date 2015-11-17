@@ -54,12 +54,21 @@ public abstract class SpeciesRoot implements ISpeciesRoot {
 	
 	@Override
 	public void registerTemplate(IAllele[] template) {
+		if (template == null) {
+			throw new IllegalArgumentException("Tried to register null template");
+		}
+		if (template.length == 0) {
+			throw new IllegalArgumentException("Tried to register empty template");
+		}
 		registerTemplate(template[0].getUID(), template);
 	}
 
 	@Override
 	public IAllele[] getRandomTemplate(Random rand) {
-		return speciesTemplates.values().toArray(new IAllele[0][])[rand.nextInt(speciesTemplates.values().size())];
+		Collection<IAllele[]> templates = speciesTemplates.values();
+		int size = templates.size();
+		IAllele[][] templatesArray = templates.toArray(new IAllele[size][]);
+		return templatesArray[rand.nextInt(size)];
 	}
 
 	@Override

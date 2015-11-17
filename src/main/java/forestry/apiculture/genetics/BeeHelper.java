@@ -41,6 +41,7 @@ import forestry.api.apiculture.IBeekeepingLogic;
 import forestry.api.apiculture.IBeekeepingMode;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
+import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
@@ -194,7 +195,8 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 	/* GENOME CONVERSIONS */
 	@Override
 	public IBeeGenome templateAsGenome(IAllele[] template) {
-		return new BeeGenome(templateAsChromosomes(template));
+		IChromosome[] chromosomes = templateAsChromosomes(template);
+		return new BeeGenome(chromosomes);
 	}
 
 	@Override
@@ -222,7 +224,9 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 
 	@Override
 	public void registerTemplate(String identifier, IAllele[] template) {
-		beeTemplates.add(new Bee(BeeManager.beeRoot.templateAsGenome(template)));
+		IBeeGenome beeGenome = BeeManager.beeRoot.templateAsGenome(template);
+		IBee bee = new Bee(beeGenome);
+		beeTemplates.add(bee);
 		speciesTemplates.put(identifier, template);
 	}
 

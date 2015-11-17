@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.core.genetics;
 
-import com.google.common.base.Objects;
-
 import java.util.Random;
 
 import net.minecraft.nbt.NBTTagCompound;
@@ -189,7 +187,7 @@ public class Chromosome implements IChromosome {
 
 	@Override
 	public String toString() {
-		return Objects.toStringHelper(this).add("Primary", primary).add("Secondary", secondary).toString();
+		return "{" + primary + ", " + secondary + "}";
 	}
 
 }
