@@ -25,7 +25,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.WeightedRandomChestContent;
@@ -128,7 +127,6 @@ import forestry.core.proxy.Proxies;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.recipes.ShapedRecipeCustom;
 import forestry.core.tiles.MachineDefinition;
-import forestry.core.tiles.TileAnalyzer;
 import forestry.core.utils.EntityUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.Stack;
@@ -144,7 +142,7 @@ public class PluginApiculture extends ForestryPlugin {
 	private static float secondPrincessChance = 0;
 	public static final int ticksPerBeeWorkCycle = 550;
 	public static boolean fancyRenderedBees = false;
-	
+
 	public static ItemRegistryApiculture items;
 
 	public static HiveRegistry hiveRegistry;
@@ -153,7 +151,6 @@ public class PluginApiculture extends ForestryPlugin {
 	private static MachineDefinition definitionChestLegacy;
 	private static MachineDefinition definitionChest;
 	private static MachineDefinition definitionBeehouse;
-	private static MachineDefinition definitionAnalyzer;
 
 	private final Map<String, String[]> defaultAcceptedFlowers = new HashMap<>();
 	private final Map<String, String[]> defaultPlantableFlowers = new HashMap<>();
@@ -247,9 +244,6 @@ public class PluginApiculture extends ForestryPlugin {
 						'#', "plankWood",
 						'C', "beeComb"))
 				.setFaces(0, 1, 2, 2, 4, 4, 0, 7));
-
-		definitionAnalyzer = ((BlockBase) ForestryBlock.core.block()).addDefinition(new MachineDefinition(Constants.DEFINITION_ANALYZER_META, "forestry.Analyzer", TileAnalyzer.class,
-				PluginApiculture.proxy.getRendererAnalyzer(Constants.TEXTURE_PATH_BLOCKS + "/analyzer_")));
 
 		// Add triggers
 		if (PluginManager.Module.BUILDCRAFT_STATEMENTS.isEnabled()) {
@@ -775,32 +769,18 @@ public class PluginApiculture extends ForestryPlugin {
 		}
 
 		// ANALYZER
-		definitionAnalyzer.recipes = createAlyzerRecipes(ForestryBlock.core.block(), Constants.DEFINITION_ANALYZER_META);
-
-		definitionAnalyzer.register();
-		definitionApiary.register();
-		definitionBeehouse.register();
-		definitionChestLegacy.register();
-		definitionChest.register();
-	}
-
-	private static IRecipe[] createAlyzerRecipes(Block block, int meta) {
-		ArrayList<IRecipe> recipes = new ArrayList<>();
-		recipes.add(ShapedRecipeCustom.createShapedRecipe(new ItemStack(block, 1, meta),
+		PluginCore.definitionAnalyzer.recipes.add(ShapedRecipeCustom.createShapedRecipe(new ItemStack(ForestryBlock.core.block(), 1, Constants.DEFINITION_ANALYZER_META),
 				"XTX",
 				" Y ",
 				"X X",
 				'Y', PluginCore.items.sturdyCasing,
 				'T', items.beealyzer,
 				'X', "ingotBronze"));
-		recipes.add(ShapedRecipeCustom.createShapedRecipe(new ItemStack(block, 1, meta),
-				"XTX",
-				" Y ",
-				"X X",
-				'Y', PluginCore.items.sturdyCasing,
-				'T', ForestryItem.treealyzer,
-				'X', "ingotBronze"));
-		return recipes.toArray(new IRecipe[recipes.size()]);
+
+		definitionApiary.register();
+		definitionBeehouse.register();
+		definitionChestLegacy.register();
+		definitionChest.register();
 	}
 
 	private static void registerBeehiveDrops() {

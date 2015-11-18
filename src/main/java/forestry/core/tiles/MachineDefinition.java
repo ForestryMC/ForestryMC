@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.tiles;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -53,7 +55,7 @@ public class MachineDefinition {
 	private float minX, minY, minZ, maxX, maxY, maxZ;
 
 	/* CRAFTING */
-	public IRecipe[] recipes;
+	public final List<IRecipe> recipes = new ArrayList<>();
 
 	public MachineDefinition(int meta, String teIdent, Class<? extends TileForestry> teClass, IRecipe... recipes) {
 		this(meta, teIdent, teClass, null, recipes);
@@ -65,7 +67,7 @@ public class MachineDefinition {
 		this.teClass = teClass;
 		this.renderer = renderer;
 
-		this.recipes = recipes;
+		this.recipes.addAll(Arrays.asList(recipes));
 
 		this.faceMap = new int[8];
 		for (int i = 0; i < 8; i++) {

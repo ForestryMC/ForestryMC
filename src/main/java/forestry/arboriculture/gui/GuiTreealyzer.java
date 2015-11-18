@@ -34,13 +34,12 @@ import forestry.api.genetics.IFruitFamily;
 import forestry.arboriculture.genetics.TreeGenome;
 import forestry.arboriculture.genetics.alleles.AlleleFruit;
 import forestry.arboriculture.inventory.ItemInventoryTreealyzer;
-import forestry.arboriculture.items.ItemGermlingGE;
-import forestry.core.config.ForestryItem;
 import forestry.core.genetics.alleles.AlleleBoolean;
 import forestry.core.genetics.alleles.AllelePlantType;
 import forestry.core.gui.ContainerAlyzer;
 import forestry.core.gui.GuiAlyzer;
 import forestry.core.utils.StringUtil;
+import forestry.plugins.PluginArboriculture;
 
 public class GuiTreealyzer extends GuiAlyzer {
 
@@ -48,7 +47,7 @@ public class GuiTreealyzer extends GuiAlyzer {
 		super(TreeManager.treeRoot, player, new ContainerAlyzer(inventory, player), inventory, "gui.treealyzer");
 
 		ArrayList<ItemStack> treeList = new ArrayList<>();
-		((ItemGermlingGE) ForestryItem.sapling.item()).addCreativeItems(treeList, false);
+		PluginArboriculture.items.sapling.addCreativeItems(treeList, false);
 		for (ItemStack treeStack : treeList) {
 			IAlleleTreeSpecies species = TreeGenome.getSpecies(treeStack);
 			if (species != null) {

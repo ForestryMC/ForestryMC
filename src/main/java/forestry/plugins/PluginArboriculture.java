@@ -63,8 +63,7 @@ import forestry.arboriculture.genetics.alleles.AlleleGrowth;
 import forestry.arboriculture.genetics.alleles.AlleleLeafEffect;
 import forestry.arboriculture.items.ItemBlockLeaves;
 import forestry.arboriculture.items.ItemBlockWood;
-import forestry.arboriculture.items.ItemGermlingGE;
-import forestry.arboriculture.items.ItemGrafter;
+import forestry.arboriculture.items.ItemRegistryArboriculture;
 import forestry.arboriculture.network.PacketRegistryArboriculture;
 import forestry.arboriculture.proxy.ProxyArboriculture;
 import forestry.arboriculture.tiles.TileArboristChest;
@@ -77,13 +76,10 @@ import forestry.core.blocks.BlockBase;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.ForestryBlock;
-import forestry.core.config.ForestryItem;
 import forestry.core.fluids.Fluids;
 import forestry.core.genetics.alleles.AllelePlantType;
 import forestry.core.items.ItemBlockForestry;
 import forestry.core.items.ItemFruit.EnumFruit;
-import forestry.core.items.ItemWithGui;
-import forestry.core.network.GuiId;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.proxy.Proxies;
 import forestry.core.recipes.RecipeUtil;
@@ -105,6 +101,8 @@ public class PluginArboriculture extends ForestryPlugin {
 
 	private static MachineDefinition definitionChest;
 	public static final List<Block> validFences = new ArrayList<>();
+
+	public static ItemRegistryArboriculture items;
 
 	@Override
 	protected void setupAPI() {
@@ -129,18 +127,7 @@ public class PluginArboriculture extends ForestryPlugin {
 
 	@Override
 	protected void registerItemsAndBlocks() {
-
-		ForestryItem.sapling.registerItem(new ItemGermlingGE(EnumGermlingType.SAPLING), "sapling");
-		OreDictionary.registerOre("treeSapling", ForestryItem.sapling.getWildcard());
-
-		if (PluginManager.Module.APICULTURE.isEnabled()) {
-			ForestryItem.pollenFertile.registerItem(new ItemGermlingGE(EnumGermlingType.POLLEN), "pollenFertile");
-			Item treealyzer = new ItemWithGui(GuiId.TreealyzerGUI).setCreativeTab(Tabs.tabArboriculture);
-			ForestryItem.treealyzer.registerItem(treealyzer, "treealyzer");
-		}
-
-		ForestryItem.grafter.registerItem(new ItemGrafter(4), "grafter");
-		ForestryItem.grafterProven.registerItem(new ItemGrafter(149), "grafterProven");
+		items = new ItemRegistryArboriculture();
 
 		// Wood blocks
 		ForestryBlock.logs.registerBlock(new BlockLog(false), ItemBlockWood.class, "logs");
@@ -365,7 +352,7 @@ public class PluginArboriculture extends ForestryPlugin {
 
 		if (PluginManager.Module.FACTORY.isEnabled()) {
 			// Treealyzer
-			RecipeManagers.carpenterManager.addRecipe(100, Fluids.WATER.getFluid(2000), null, ForestryItem.treealyzer.getItemStack(), "X#X", "X#X", "RDR",
+			RecipeManagers.carpenterManager.addRecipe(100, Fluids.WATER.getFluid(2000), null, items.treealyzer.getItemStack(), "X#X", "X#X", "RDR",
 					'#', "paneGlass",
 					'X', "ingotCopper",
 					'R', "dustRedstone",
@@ -384,16 +371,25 @@ public class PluginArboriculture extends ForestryPlugin {
 			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{EnumFruit.PAPAYA.getStack()}, Fluids.JUICE.getFluid(juiceMultiplier * 3), mulch, (int) Math.floor(mulchMultiplier * 0.5f));
 			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{EnumFruit.DATES.getStack()}, Fluids.JUICE.getFluid((int) Math.floor(juiceMultiplier * 0.25)), mulch, mulchMultiplier);
 
-			RecipeUtil.addFermenterRecipes(ForestryItem.sapling.getItemStack(), ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.sapling"), Fluids.BIOMASS);
+			RecipeUtil.addFermenterRecipes(items.sapling.getItemStack(), ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.sapling"), Fluids.BIOMASS);
 		}
 
 		// Grafter
-		RecipeUtil.addRecipe(ForestryItem.grafter.getItemStack(),
+		RecipeUtil.addRecipe(items.grafter.getItemStack(),
 				"  B",
 				" # ",
 				"#  ",
 				'B', "ingotBronze",
 				'#', "stickWood");
+
+		// ANALYZER
+		PluginCore.definitionAnalyzer.recipes.add(ShapedRecipeCustom.createShapedRecipe(new ItemStack(ForestryBlock.core.block(), 1, Constants.DEFINITION_ANALYZER_META),
+				"XTX",
+				" Y ",
+				"X X",
+				'Y', PluginCore.items.sturdyCasing,
+				'T', items.treealyzer,
+				'X', "ingotBronze"));
 	}
 
 	private static void createAlleles() {
@@ -453,7 +449,7 @@ public class PluginArboriculture extends ForestryPlugin {
 	}
 
 	private static void registerDungeonLoot() {
-		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(ForestryItem.grafter.getItemStack(), 1, 1, 8));
+		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(items.grafter.getItemStack(), 1, 1, 8));
 
 		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Oak.getMemberStack(EnumGermlingType.SAPLING), 2, 3, 6));
 		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Spruce.getMemberStack(EnumGermlingType.SAPLING), 2, 3, 6));
@@ -473,7 +469,9 @@ public class PluginArboriculture extends ForestryPlugin {
 	private static class FuelHandler implements IFuelHandler {
 		@Override
 		public int getBurnTime(ItemStack fuel) {
-			if (ForestryItem.sapling.isItemEqual(fuel)) {
+			Item item = fuel.getItem();
+
+			if (items.sapling == item) {
 				return 100;
 			}
 

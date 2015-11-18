@@ -61,6 +61,7 @@ import forestry.core.recipes.RecipeUtil;
 import forestry.core.recipes.ShapedRecipeCustom;
 import forestry.core.recipes.ShapelessRecipeCustom;
 import forestry.core.tiles.MachineDefinition;
+import forestry.core.tiles.TileAnalyzer;
 import forestry.core.tiles.TileEscritoire;
 import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.ForestryModEnvWarningCallable;
@@ -72,6 +73,7 @@ public class PluginCore extends ForestryPlugin {
 
 	public static final RootCommand rootCommand = new RootCommand();
 	public static ItemRegistryCore items;
+	static MachineDefinition definitionAnalyzer;
 
 	@Override
 	protected void setupAPI() {
@@ -128,6 +130,9 @@ public class PluginCore extends ForestryPlugin {
 
 		definitionEscritoire = ((BlockBase) ForestryBlock.core.block()).addDefinition(new MachineDefinition(Constants.DEFINITION_ESCRITOIRE_META, "forestry.Escritoire", TileEscritoire.class,
 				Proxies.render.getRenderEscritoire()));
+
+		definitionAnalyzer = ((BlockBase) ForestryBlock.core.block()).addDefinition(new MachineDefinition(Constants.DEFINITION_ANALYZER_META, "forestry.Analyzer", TileAnalyzer.class,
+				PluginApiculture.proxy.getRendererAnalyzer(Constants.TEXTURE_PATH_BLOCKS + "/analyzer_")));
 	}
 
 	@Override
@@ -143,6 +148,13 @@ public class PluginCore extends ForestryPlugin {
 
 		RecipeSorter.register("forestry:shapedrecipecustom", ShapedRecipeCustom.class, RecipeSorter.Category.SHAPED, "before:minecraft:shaped");
 		RecipeSorter.register("forestry:shapelessrecipecustom", ShapelessRecipeCustom.class, RecipeSorter.Category.SHAPELESS, "before:minecraft:shapeless");
+	}
+
+	@Override
+	protected void postInit() {
+		super.postInit();
+
+		definitionAnalyzer.register();
 	}
 
 	@Override

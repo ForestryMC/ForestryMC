@@ -49,12 +49,6 @@ public enum ForestryItem {
 	honeyedSlice,
 	ambrosia,
 	honeyPot,
-	// Trees
-	sapling,
-	pollenFertile,
-	treealyzer,
-	grafter,
-	grafterProven,
 	// Butterflies
 	butterflyGE,
 	flutterlyzer,

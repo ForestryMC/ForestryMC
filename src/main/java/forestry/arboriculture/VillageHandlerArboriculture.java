@@ -26,7 +26,7 @@ import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.IAllele;
-import forestry.core.config.ForestryItem;
+import forestry.plugins.PluginArboriculture;
 
 public class VillageHandlerArboriculture implements IVillageTradeHandler {
 
@@ -39,7 +39,7 @@ public class VillageHandlerArboriculture implements IVillageTradeHandler {
 		ItemStack randomTreeStack = TreeManager.treeRoot.getMemberStack(randomTree, EnumGermlingType.SAPLING.ordinal());
 
 		recipeList.add(new MerchantRecipe(new ItemStack(Items.emerald, 8), randomTreeStack));
-		recipeList.add(new MerchantRecipe(new ItemStack(Items.emerald, 2), ForestryItem.grafterProven.getItemStack()));
+		recipeList.add(new MerchantRecipe(new ItemStack(Items.emerald, 2), PluginArboriculture.items.grafterProven.getItemStack()));
 
 		EnumWoodType randomWoodType = EnumWoodType.getRandom(random);
 		ItemStack planks = TreeManager.woodItemAccess.getPlanks(randomWoodType, false);

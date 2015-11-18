@@ -49,9 +49,8 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable {
 	private final EnumGermlingType type;
 
 	public ItemGermlingGE(EnumGermlingType type) {
-		super();
+		super(Tabs.tabArboriculture);
 		this.type = type;
-		setCreativeTab(Tabs.tabArboriculture);
 	}
 
 	@Override

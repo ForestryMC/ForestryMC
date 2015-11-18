@@ -51,8 +51,7 @@ public class ItemButterflyGE extends ItemGE {
 	private final EnumFlutterType type;
 
 	public ItemButterflyGE(EnumFlutterType type) {
-		super();
-		setCreativeTab(Tabs.tabLepidopterology);
+		super(Tabs.tabLepidopterology);
 		this.type = type;
 	}
 
