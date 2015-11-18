@@ -47,10 +47,10 @@ public class ItemBeverage extends ItemForestryFood {
 
 	public final IBeverageInfo[] beverages;
 
-	public ItemBeverage(IBeverageInfo... beverages) {
+	public ItemBeverage() {
 		super(1, 0.2f);
 		setMaxStackSize(1);
-		this.beverages = beverages;
+		this.beverages = EnumBeverage.VALUES;
 	}
 
 	/**
