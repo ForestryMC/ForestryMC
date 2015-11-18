@@ -46,18 +46,12 @@ public enum ForestryItem {
 	catalogue,
 	// Carpenter
 	crate,
-	honeyedSlice,
-	ambrosia,
-	honeyPot,
 	// Butterflies
 	butterflyGE,
 	flutterlyzer,
 	serumGE,
 	caterpillarGE,
 	researchNote,
-	// Beverages
-	beverage,
-	infuser,
 	// Backpacks
 	apiaristBackpack,
 	lepidopteristBackpack,

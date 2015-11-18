@@ -14,8 +14,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
 import forestry.api.food.BeverageManager;
-import forestry.core.config.ForestryItem;
 import forestry.core.inventory.ItemInventory;
+import forestry.plugins.PluginFood;
 
 public class ItemInventoryInfuser extends ItemInventory {
 	private static final short inputSlot = 0;
@@ -42,7 +42,7 @@ public class ItemInventoryInfuser extends ItemInventory {
 		}
 
 		// Need a valid base
-		if (!input.isItemEqual(ForestryItem.beverage.getItemStack())) {
+		if (PluginFood.items.beverage != input.getItem()) {
 			return;
 		}
 
@@ -95,7 +95,7 @@ public class ItemInventoryInfuser extends ItemInventory {
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 		if (slotIndex == inputSlot) {
-			return ForestryItem.beverage.isItemEqual(itemStack);
+			return PluginFood.items.beverage == itemStack.getItem();
 		} else if (slotIndex >= ingredientSlot1 && slotIndex < ingredientSlot1 + ingredientSlotCount) {
 			return BeverageManager.infuserManager.isIngredient(itemStack);
 		}

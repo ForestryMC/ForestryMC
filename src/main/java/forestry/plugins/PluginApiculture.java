@@ -131,6 +131,7 @@ import forestry.core.utils.EntityUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.Stack;
 import forestry.core.utils.StringUtil;
+import forestry.food.items.ItemRegistryFood;
 
 @Plugin(pluginID = "Apiculture", name = "Apiculture", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.apiculture.description")
 public class PluginApiculture extends ForestryPlugin {
@@ -530,20 +531,19 @@ public class PluginApiculture extends ForestryPlugin {
 				'C', Items.minecart);
 
 		// FOOD STUFF
-		if (ForestryItem.honeyedSlice.item() != null) {
-			RecipeUtil.addRecipe(ForestryItem.honeyedSlice.getItemStack(4),
+		ItemRegistryFood foodItems = PluginFood.items;
+		if (foodItems != null) {
+			RecipeUtil.addRecipe(new ItemStack(foodItems.honeyedSlice, 4),
 					"###", "#X#", "###",
 					'#', items.honeyDrop,
 					'X', Items.bread);
-		}
-		if (ForestryItem.honeyPot.item() != null) {
-			RecipeUtil.addRecipe(ForestryItem.honeyPot.getItemStack(1),
+
+			RecipeUtil.addRecipe(foodItems.honeyPot,
 					"# #", " X ", "# #",
 					'#', items.honeyDrop,
 					'X', ForestryItem.waxCapsule);
-		}
-		if (ForestryItem.ambrosia.item() != null) {
-			RecipeUtil.addRecipe(ForestryItem.ambrosia.getItemStack(),
+
+			RecipeUtil.addRecipe(foodItems.ambrosia,
 					"#Y#", "XXX", "###",
 					'#', items.honeydew,
 					'X', items.royalJelly,
