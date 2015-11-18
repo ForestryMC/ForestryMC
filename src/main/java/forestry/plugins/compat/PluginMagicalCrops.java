@@ -8,7 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.plugins;
+package forestry.plugins.compat;
 
 import com.google.common.collect.ImmutableList;
 
@@ -29,6 +29,8 @@ import forestry.core.fluids.Fluids;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.ModUtil;
 import forestry.farming.logic.FarmableGenericCrop;
+import forestry.plugins.ForestryPlugin;
+import forestry.plugins.Plugin;
 
 @Plugin(pluginID = "MagicalCrops", name = "MagicalCrops", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.plugin.magicalcrops.description")
 public class PluginMagicalCrops extends ForestryPlugin {

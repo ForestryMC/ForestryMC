@@ -8,7 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.plugins;
+package forestry.plugins.compat;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -26,6 +26,11 @@ import forestry.core.fluids.Fluids;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.ModUtil;
 import forestry.farming.logic.FarmableBasicGrowthCraft;
+import forestry.plugins.ForestryPlugin;
+import forestry.plugins.Plugin;
+import forestry.plugins.PluginApiculture;
+import forestry.plugins.PluginCore;
+import forestry.plugins.PluginManager;
 
 @Plugin(pluginID = "Growthcraft", name = "Growthcraft", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.plugin.growthcraft.description")
 public class PluginGrowthCraft extends ForestryPlugin {

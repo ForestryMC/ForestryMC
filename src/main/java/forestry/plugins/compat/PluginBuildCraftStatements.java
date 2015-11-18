@@ -8,7 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.plugins;
+package forestry.plugins.compat;
 
 import java.util.Collection;
 
@@ -20,6 +20,8 @@ import cpw.mods.fml.common.Optional;
 
 import forestry.core.config.Constants;
 import forestry.core.utils.ModUtil;
+import forestry.plugins.ForestryPlugin;
+import forestry.plugins.Plugin;
 
 import buildcraft.api.statements.IStatementContainer;
 import buildcraft.api.statements.ITriggerExternal;

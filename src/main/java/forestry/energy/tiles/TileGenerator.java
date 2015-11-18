@@ -39,7 +39,7 @@ import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.IRenderableTile;
 import forestry.core.tiles.TileBase;
 import forestry.energy.inventory.InventoryGenerator;
-import forestry.plugins.PluginIC2;
+import forestry.plugins.compat.PluginIC2;
 
 import ic2.api.energy.prefab.BasicSource;
 

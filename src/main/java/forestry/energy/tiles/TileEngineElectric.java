@@ -28,7 +28,7 @@ import forestry.core.inventory.InventoryAdapter;
 import forestry.core.network.GuiId;
 import forestry.core.tiles.TemperatureState;
 import forestry.core.tiles.TileEngine;
-import forestry.plugins.PluginIC2;
+import forestry.plugins.compat.PluginIC2;
 
 import ic2.api.energy.prefab.BasicSink;
 

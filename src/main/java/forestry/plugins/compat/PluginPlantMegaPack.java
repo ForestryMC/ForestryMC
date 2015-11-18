@@ -8,7 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.plugins;
+package forestry.plugins.compat;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -31,6 +31,8 @@ import forestry.core.utils.ModUtil;
 import forestry.farming.logic.FarmableBasicFruit;
 import forestry.farming.logic.FarmableGenericCrop;
 import forestry.farming.logic.FarmableStacked;
+import forestry.plugins.ForestryPlugin;
+import forestry.plugins.Plugin;
 
 @Plugin(pluginID = "PlantMegaPack", name = "PlantMegaPack", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.plugin.plantmegapack.description")
 public class PluginPlantMegaPack extends ForestryPlugin {

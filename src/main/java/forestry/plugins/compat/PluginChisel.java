@@ -8,7 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.plugins;
+package forestry.plugins.compat;
 
 import com.google.common.collect.ImmutableList;
 
@@ -16,6 +16,8 @@ import cpw.mods.fml.common.event.FMLInterModComms;
 
 import forestry.core.config.Constants;
 import forestry.core.utils.ModUtil;
+import forestry.plugins.ForestryPlugin;
+import forestry.plugins.Plugin;
 
 @Plugin(pluginID = "Chisel", name = "Chisel", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.plugin.chisel.description")
 public class PluginChisel extends ForestryPlugin {

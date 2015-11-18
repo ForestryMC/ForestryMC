@@ -8,7 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.plugins;
+package forestry.plugins.compat;
 
 import java.util.ArrayList;
 
@@ -29,6 +29,10 @@ import forestry.core.utils.ModUtil;
 import forestry.farming.circuits.CircuitFarmLogic;
 import forestry.farming.logic.FarmLogicEnder;
 import forestry.farming.logic.FarmableGenericCrop;
+import forestry.plugins.ForestryPlugin;
+import forestry.plugins.Plugin;
+import forestry.plugins.PluginCore;
+import forestry.plugins.PluginManager;
 
 @Plugin(pluginID = "ExtraUtilities", name = "ExtraUtilities", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.plugin.extrautilities.description")
 public class PluginExtraUtilities extends ForestryPlugin {

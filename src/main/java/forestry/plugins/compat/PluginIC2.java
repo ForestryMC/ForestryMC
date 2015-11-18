@@ -8,7 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.plugins;
+package forestry.plugins.compat;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -59,6 +59,12 @@ import forestry.energy.tiles.TileEngineElectric;
 import forestry.energy.tiles.TileGenerator;
 import forestry.farming.circuits.CircuitFarmLogic;
 import forestry.farming.logic.FarmLogicRubber;
+import forestry.plugins.ForestryPlugin;
+import forestry.plugins.Plugin;
+import forestry.plugins.PluginApiculture;
+import forestry.plugins.PluginCore;
+import forestry.plugins.PluginEnergy;
+import forestry.plugins.PluginManager;
 
 import ic2.api.item.IC2Items;
 import ic2.api.recipe.RecipeInputItemStack;

@@ -8,7 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.plugins;
+package forestry.plugins.compat;
 
 import com.google.common.collect.ImmutableList;
 
@@ -29,6 +29,9 @@ import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.ModUtil;
 import forestry.farming.logic.FarmableBasicFruit;
 import forestry.farming.logic.FarmableGenericCrop;
+import forestry.plugins.ForestryPlugin;
+import forestry.plugins.Plugin;
+import forestry.plugins.PluginCore;
 
 @Plugin(pluginID = "HarvestCraft", name = "HarvestCraft", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.plugin.harvestcraft.description")
 public class PluginHarvestCraft extends ForestryPlugin {

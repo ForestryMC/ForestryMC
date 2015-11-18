@@ -8,7 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.plugins;
+package forestry.plugins.compat;
 
 import com.google.common.collect.ImmutableList;
 
@@ -24,6 +24,9 @@ import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
 import forestry.core.utils.ModUtil;
 import forestry.farming.logic.FarmableBasicAgricraft;
+import forestry.plugins.ForestryPlugin;
+import forestry.plugins.Plugin;
+import forestry.plugins.PluginManager;
 
 @Plugin(pluginID = "AgriCraft", name = "AgriCraft", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.plugin.agricraft.description")
 public class PluginAgriCraft extends ForestryPlugin {

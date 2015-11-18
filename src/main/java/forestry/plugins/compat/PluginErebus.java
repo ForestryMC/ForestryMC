@@ -8,7 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.plugins;
+package forestry.plugins.compat;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -22,6 +22,10 @@ import forestry.apiculture.items.EnumPropolis;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
 import forestry.core.utils.ModUtil;
+import forestry.plugins.ForestryPlugin;
+import forestry.plugins.Plugin;
+import forestry.plugins.PluginApiculture;
+import forestry.plugins.PluginManager;
 
 @Plugin(pluginID = "Erebus", name = "Erebus", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.plugin.erebus.description")
 public class PluginErebus extends ForestryPlugin {

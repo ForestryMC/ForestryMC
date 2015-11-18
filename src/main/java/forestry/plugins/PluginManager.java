@@ -43,6 +43,24 @@ import forestry.core.IPickupHandler;
 import forestry.core.IResupplyHandler;
 import forestry.core.ISaveEventHandler;
 import forestry.core.utils.Log;
+import forestry.plugins.compat.PluginAgriCraft;
+import forestry.plugins.compat.PluginBiomesOPlenty;
+import forestry.plugins.compat.PluginBuildCraftFuels;
+import forestry.plugins.compat.PluginBuildCraftRecipes;
+import forestry.plugins.compat.PluginBuildCraftStatements;
+import forestry.plugins.compat.PluginBuildCraftTransport;
+import forestry.plugins.compat.PluginChisel;
+import forestry.plugins.compat.PluginEnderIO;
+import forestry.plugins.compat.PluginErebus;
+import forestry.plugins.compat.PluginExtraUtilities;
+import forestry.plugins.compat.PluginGrowthCraft;
+import forestry.plugins.compat.PluginHarvestCraft;
+import forestry.plugins.compat.PluginIC2;
+import forestry.plugins.compat.PluginImmersiveEngineering;
+import forestry.plugins.compat.PluginMagicalCrops;
+import forestry.plugins.compat.PluginNatura;
+import forestry.plugins.compat.PluginPlantMegaPack;
+import forestry.plugins.compat.PluginWitchery;
 
 public class PluginManager {
 

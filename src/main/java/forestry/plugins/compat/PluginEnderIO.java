@@ -1,4 +1,4 @@
-package forestry.plugins;
+package forestry.plugins.compat;
 
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -10,6 +10,8 @@ import forestry.api.core.ForestryAPI;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
 import forestry.core.utils.ModUtil;
+import forestry.plugins.ForestryPlugin;
+import forestry.plugins.Plugin;
 
 @Plugin(pluginID = "EnderIO", name = "EnderIO", author = "mezz", url = Constants.URL, unlocalizedDescription = "for.plugin.enderIO.description")
 public class PluginEnderIO extends ForestryPlugin {

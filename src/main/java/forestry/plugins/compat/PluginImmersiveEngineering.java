@@ -8,7 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.plugins;
+package forestry.plugins.compat;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
@@ -22,6 +22,8 @@ import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
 import forestry.core.utils.ModUtil;
 import forestry.farming.logic.FarmableGenericCrop;
+import forestry.plugins.ForestryPlugin;
+import forestry.plugins.Plugin;
 
 @Plugin(pluginID = "ImmersiveEngineering", name = "ImmersiveEngineering", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.plugin.immersiveengineering.description")
 public class PluginImmersiveEngineering extends ForestryPlugin {

@@ -8,7 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.plugins;
+package forestry.plugins.compat;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -19,6 +19,9 @@ import forestry.core.config.Constants;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.ModUtil;
+import forestry.plugins.ForestryPlugin;
+import forestry.plugins.Plugin;
+import forestry.plugins.PluginCore;
 
 @Plugin(pluginID = "BC6|Transport", name = "BuildCraft 6 Transport", author = "mezz", url = Constants.URL, unlocalizedDescription = "for.plugin.buildcraft6.description")
 public class PluginBuildCraftTransport extends ForestryPlugin {
