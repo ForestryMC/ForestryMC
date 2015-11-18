@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.items;
 
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -25,6 +26,11 @@ public class ItemWithGui extends ItemForestry {
 	public ItemWithGui(GuiId guiId) {
 		this.guiId = guiId;
 		setMaxStackSize(1);
+	}
+
+	public ItemWithGui(GuiId guiId, CreativeTabs creativeTabs) {
+		this(guiId);
+		setCreativeTab(creativeTabs);
 	}
 
 	@Override

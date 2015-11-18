@@ -35,12 +35,13 @@ import forestry.api.storage.BackpackManager;
 import forestry.api.storage.IBackpackDefinition;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
+import forestry.apiculture.items.EnumPropolis;
+import forestry.apiculture.items.ItemRegistryApiculture;
 import forestry.core.blocks.BlockBase;
 import forestry.core.circuits.Circuit;
 import forestry.core.circuits.CircuitLayout;
 import forestry.core.config.Constants;
 import forestry.core.config.ForestryBlock;
-import forestry.core.config.ForestryItem;
 import forestry.core.fluids.Fluids;
 import forestry.core.items.EnumElectronTube;
 import forestry.core.proxy.Proxies;
@@ -183,8 +184,9 @@ public class PluginIC2 extends ForestryPlugin {
 		// Remove some items from the recycler
 		if (Recipes.recyclerBlacklist != null) {
 			if (PluginManager.Module.APICULTURE.isEnabled()) {
-				Recipes.recyclerBlacklist.add(new RecipeInputItemStack(ForestryItem.beeQueenGE.getItemStack()));
-				Recipes.recyclerBlacklist.add(new RecipeInputItemStack(ForestryItem.beePrincessGE.getItemStack()));
+				ItemRegistryApiculture beeItems = PluginApiculture.items;
+				Recipes.recyclerBlacklist.add(new RecipeInputItemStack(new ItemStack(beeItems.beeQueenGE)));
+				Recipes.recyclerBlacklist.add(new RecipeInputItemStack(new ItemStack(beeItems.beePrincessGE)));
 			}
 		} else {
 			Log.severe("IC2 Recipes.recyclerBlacklist not found.");
@@ -268,10 +270,13 @@ public class PluginIC2 extends ForestryPlugin {
 			RecipeUtil.addFermenterRecipes(compressedPlantBall, ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.wheat") * 9, Fluids.BIOMASS);
 		}
 
-		if (resin != null) {
-			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.propolis.getItemStack(), ImmutableMap.of(resin, 1.0f));
-		} else {
-			Log.fine("Missing IC2 resin, skipping centrifuge recipe for propolis to resin.");
+		if (PluginManager.Module.APICULTURE.isEnabled()) {
+			if (resin != null) {
+				ItemRegistryApiculture beeItems = PluginApiculture.items;
+				RecipeManagers.centrifugeManager.addRecipe(20, beeItems.propolis.get(EnumPropolis.NORMAL, 1), ImmutableMap.of(resin, 1.0f));
+			} else {
+				Log.fine("Missing IC2 resin, skipping centrifuge recipe for propolis to resin.");
+			}
 		}
 
 		if (rubbersapling != null) {

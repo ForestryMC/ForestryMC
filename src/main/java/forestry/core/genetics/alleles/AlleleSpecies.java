@@ -13,6 +13,7 @@ package forestry.core.genetics.alleles;
 import java.util.Collection;
 import java.util.Map;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
@@ -30,8 +31,10 @@ import forestry.api.genetics.IAlleleSpeciesCustom;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
-import forestry.core.config.ForestryItem;
+import forestry.apiculture.items.ItemRegistryApiculture;
 import forestry.core.utils.ItemStackUtil;
+import forestry.plugins.PluginApiculture;
+import forestry.plugins.PluginManager;
 
 public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesCustom {
 
@@ -66,13 +69,19 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesCust
 			return 0f;
 		}
 
-		if (ForestryItem.honeyDrop.isItemEqual(itemstack)) {
-			return 0.5f;
-		} else if (ForestryItem.honeydew.isItemEqual(itemstack)) {
-			return 0.7f;
-		} else if (ForestryItem.beeComb.isItemEqual(itemstack)) {
-			return 0.4f;
-		} else if (getRoot().isMember(itemstack)) {
+		ItemRegistryApiculture beeItems = PluginApiculture.items;
+		if (beeItems != null) {
+			Item item = itemstack.getItem();
+			if (beeItems.honeyDrop == item) {
+				return 0.5f;
+			} else if (beeItems.honeydew == item) {
+				return 0.7f;
+			} else if (beeItems.beeComb == item) {
+				return 0.4f;
+			}
+		}
+
+		if (getRoot().isMember(itemstack)) {
 			return 1.0f;
 		}
 

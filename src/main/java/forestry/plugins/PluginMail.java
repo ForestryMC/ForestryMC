@@ -164,8 +164,8 @@ public class PluginMail extends ForestryPlugin {
 
 		Item stampGlue;
 		if (PluginManager.Module.APICULTURE.isEnabled()) {
-			RecipeUtil.addShapelessRecipe(ForestryItem.letters.getItemStack(), Items.paper, ForestryItem.propolis.getItemStack(1, OreDictionary.WILDCARD_VALUE));
-			stampGlue = ForestryItem.honeyDrop.item();
+			RecipeUtil.addShapelessRecipe(ForestryItem.letters.getItemStack(), Items.paper, PluginApiculture.items.propolis.getWildcard());
+			stampGlue = PluginApiculture.items.honeyDrop;
 		} else {
 			RecipeUtil.addShapelessRecipe(ForestryItem.letters.getItemStack(), Items.paper, Items.slime_ball);
 			stampGlue = Items.slime_ball;
@@ -173,7 +173,7 @@ public class PluginMail extends ForestryPlugin {
 
 		if (Config.craftingStampsEnabled) {
 			for (int i = 0; i < stampDefinitions.length; i++) {
-				if (Config.collectorStamps.contains(stampDefinitions[i].name)) {
+				if (Config.collectorStamps.contains(stampDefinitions[i].getName())) {
 					continue;
 				}
 

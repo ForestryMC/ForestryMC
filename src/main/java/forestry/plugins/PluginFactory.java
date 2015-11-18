@@ -19,7 +19,6 @@ import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
@@ -33,6 +32,7 @@ import forestry.api.fuels.MoistenerFuel;
 import forestry.api.fuels.RainSubstrate;
 import forestry.api.recipes.ICraftingProvider;
 import forestry.api.recipes.RecipeManagers;
+import forestry.apiculture.items.ItemRegistryApiculture;
 import forestry.core.GuiHandlerBase;
 import forestry.core.blocks.BlockBase;
 import forestry.core.circuits.Circuit;
@@ -401,10 +401,13 @@ public class PluginFactory extends ForestryPlugin {
 				"dyeYellow", "dyeLightBlue", "dyeMagenta", "dyeOrange", "dyeWhite"};
 
 		if (PluginManager.Module.APICULTURE.isEnabled()) {
+			ItemRegistryApiculture beeItems = PluginApiculture.items;
 			FluidStack liquidGlass = Fluids.GLASS.getFluid(Constants.BUCKET_VOLUME);
 			for (int i = 0; i < 16; i++) {
-				RecipeManagers.fabricatorManager.addRecipe(ForestryItem.waxCast.getItemStack(1, OreDictionary.WILDCARD_VALUE), liquidGlass, new ItemStack(Blocks.stained_glass, 4, 15 - i), new Object[]{"#", "X", '#', dyes[i],
-						'X', ForestryItem.propolis.getItemStack(1, OreDictionary.WILDCARD_VALUE)});
+				RecipeManagers.fabricatorManager.addRecipe(beeItems.waxCast.getWildcard(), liquidGlass, new ItemStack(Blocks.stained_glass, 4, 15 - i), new Object[]{
+						"#", "X",
+						'#', dyes[i],
+						'X', beeItems.propolis.getWildcard()});
 			}
 		}
 
@@ -517,23 +520,24 @@ public class PluginFactory extends ForestryPlugin {
 				" # ", "# #", "  B", '#', "ingotIron", 'B', "ingotBronze");
 
 		// RAIN SUBSTRATES
-		if (PluginManager.Module.APICULTURE.isEnabled()) {
+		ItemRegistryApiculture beeItems = PluginApiculture.items;
+		if (beeItems != null) {
 			RecipeManagers.carpenterManager.addRecipe(5, Fluids.WATER.getFluid(1000), null, PluginCore.items.iodineCharge.getItemStack(),
 					"Z#Z",
 					"#Y#",
 					"X#X",
-					'#', ForestryItem.pollenCluster,
+					'#', beeItems.pollenCluster.getWildcard(),
 					'X', Items.gunpowder,
 					'Y', ForestryItem.canEmpty,
-					'Z', ForestryItem.honeyDrop);
+					'Z', beeItems.honeyDrop);
 			RecipeManagers.carpenterManager.addRecipe(5, Fluids.WATER.getFluid(1000), null, PluginCore.items.craftingMaterial.getDissipationCharge(),
 					"Z#Z",
 					"#Y#",
 					"X#X",
-					'#', ForestryItem.royalJelly,
+					'#', beeItems.royalJelly,
 					'X', Items.gunpowder,
 					'Y', ForestryItem.canEmpty,
-					'Z', ForestryItem.honeydew);
+					'Z', beeItems.honeydew);
 		}
 
 		// Ender pearl

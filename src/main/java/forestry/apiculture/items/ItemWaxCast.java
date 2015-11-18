@@ -12,13 +12,14 @@ package forestry.apiculture.items;
 
 import net.minecraft.item.ItemStack;
 
+import forestry.api.core.Tabs;
 import forestry.core.items.ICraftingPlan;
 import forestry.core.items.ItemForestry;
 
 public class ItemWaxCast extends ItemForestry implements ICraftingPlan {
 
 	public ItemWaxCast() {
-		super();
+		super(Tabs.tabApiculture);
 		setMaxStackSize(1);
 		setMaxDamage(10);
 		setNoRepair();

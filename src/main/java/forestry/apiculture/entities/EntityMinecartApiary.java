@@ -31,9 +31,9 @@ import forestry.apiculture.inventory.InventoryApiary;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.ForestryBlock;
-import forestry.core.config.ForestryItem;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.network.GuiId;
+import forestry.plugins.PluginApiculture;
 
 public class EntityMinecartApiary extends EntityMinecartBeeHousingBase implements IApiary {
 	private static final IBeeModifier beeModifier = new ApiaryBeeModifier();
@@ -86,7 +86,7 @@ public class EntityMinecartApiary extends EntityMinecartBeeHousingBase implement
 
 	@Override
 	public ItemStack getCartItem() {
-		return ForestryItem.minecartBeehouse.getItemStack(1, 1);
+		return PluginApiculture.items.minecartBeehouse.getApiaryMinecart();
 	}
 
 	@Override

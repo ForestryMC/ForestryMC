@@ -25,6 +25,7 @@ import net.minecraft.util.EnumChatFormatting;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitLayout;
+import forestry.core.CreativeTabForestry;
 import forestry.core.circuits.SolderManager;
 import forestry.core.config.Config;
 import forestry.core.proxy.Proxies;
@@ -32,8 +33,8 @@ import forestry.core.utils.StringUtil;
 
 public class ItemElectronTube extends ItemOverlay {
 
-	public ItemElectronTube(CreativeTabs tab, OverlayInfo... overlays) {
-		super(tab, overlays);
+	public ItemElectronTube() {
+		super(CreativeTabForestry.tabForestry, EnumElectronTube.VALUES);
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
@@ -61,7 +62,7 @@ public class ItemElectronTube extends ItemOverlay {
 	@Override
 	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List itemList) {
 		for (int i = 0; i < overlays.length; i++) {
-			if (Config.isDebug || !overlays[i].isSecret) {
+			if (Config.isDebug || !overlays[i].isSecret()) {
 				ItemStack itemStack = new ItemStack(this, 1, i);
 				if (Config.isDebug || getCircuits(itemStack).size() > 0) {
 					itemList.add(itemStack);

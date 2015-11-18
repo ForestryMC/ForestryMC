@@ -128,12 +128,12 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable {
 
 	@Override
 	public int getRenderPasses(int metadata) {
-		return 2;//type == EnumGermlingType.SAPLING ? 1 : 2;
+		return type == EnumGermlingType.SAPLING ? 1 : 2;
 	}
 
 	@Override
 	public int getSpriteNumber() {
-		return type == EnumGermlingType.SAPLING ? SpriteSheet.BLOCKS.getSheetOrdinal() : SpriteSheet.ITEMS.getSheetOrdinal();
+		return SpriteSheet.BLOCKS.getSheetOrdinal();
 	}
 
 	@Override

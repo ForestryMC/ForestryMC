@@ -13,11 +13,13 @@ package forestry.plugins;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import net.minecraftforge.fluids.FluidStack;
+
 import cpw.mods.fml.common.registry.GameRegistry;
 
 import forestry.api.recipes.RecipeManagers;
+import forestry.apiculture.items.EnumPropolis;
 import forestry.core.config.Constants;
-import forestry.core.config.ForestryItem;
 import forestry.core.fluids.Fluids;
 import forestry.core.utils.ModUtil;
 
@@ -41,10 +43,13 @@ public class PluginErebus extends ForestryPlugin {
 		super.registerRecipes();
 		Item materials = GameRegistry.findItem(EREBUS, "materials");
 		ItemStack honeyDrip = new ItemStack(materials, 1, 21);
+		FluidStack honeyOutput = Fluids.HONEY.getFluid(Constants.FLUID_PER_HONEY_DROP);
 		if (PluginManager.Module.FACTORY.isEnabled()) {
-			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{honeyDrip}, Fluids.HONEY.getFluid(Constants.FLUID_PER_HONEY_DROP),
-					ForestryItem.propolis.getItemStack(), 5);
-
+			ItemStack remnants = null;
+			if (PluginManager.Module.APICULTURE.isEnabled()) {
+				remnants = PluginApiculture.items.propolis.get(EnumPropolis.NORMAL, 1);
+			}
+			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{honeyDrip}, honeyOutput, remnants, 5);
 		}
 	}
 }

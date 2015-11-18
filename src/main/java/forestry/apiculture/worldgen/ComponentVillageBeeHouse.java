@@ -47,10 +47,10 @@ import forestry.arboriculture.worldgen.BlockTypeWood;
 import forestry.arboriculture.worldgen.BlockTypeWoodStairs;
 import forestry.core.config.Constants;
 import forestry.core.config.ForestryBlock;
-import forestry.core.config.ForestryItem;
 import forestry.core.worldgen.BlockType;
 import forestry.core.worldgen.BlockTypeTileForestry;
 import forestry.core.worldgen.IBlockType;
+import forestry.plugins.PluginApiculture;
 import forestry.plugins.PluginManager;
 
 public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
@@ -313,11 +313,11 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 	private static ItemStack getRandomFrame(Random random) {
 		float roll = random.nextFloat();
 		if (roll < 0.2f) {
-			return ForestryItem.frameUntreated.getItemStack();
+			return PluginApiculture.items.frameUntreated.getItemStack();
 		} else if (roll < 0.4f) {
-			return ForestryItem.frameImpregnated.getItemStack();
+			return PluginApiculture.items.frameImpregnated.getItemStack();
 		} else if (roll < 0.6) {
-			return ForestryItem.frameProven.getItemStack();
+			return PluginApiculture.items.frameProven.getItemStack();
 		} else {
 			return null;
 		}

@@ -19,13 +19,17 @@ import forestry.core.items.ItemOverlay;
 
 public class ItemStamps extends ItemOverlay implements IStamps {
 
-	public static class StampInfo extends OverlayInfo {
-
+	public static class StampInfo implements IOverlayInfo {
+		private final String name;
+		private final int primaryColor;
+		private final int secondaryColor;
 		private final Object craftingIngredient;
 		private final EnumPostage postage;
 
 		public StampInfo(String name, EnumPostage postage, Object crafting, int primaryColor, int secondaryColor) {
-			super(name, primaryColor, secondaryColor);
+			this.name = name;
+			this.primaryColor = primaryColor;
+			this.secondaryColor = secondaryColor;
 			this.craftingIngredient = crafting;
 			this.postage = postage;
 		}
@@ -38,6 +42,25 @@ public class ItemStamps extends ItemOverlay implements IStamps {
 			return this.craftingIngredient;
 		}
 
+		@Override
+		public String getName() {
+			return name;
+		}
+
+		@Override
+		public int getPrimaryColor() {
+			return primaryColor;
+		}
+
+		@Override
+		public int getSecondaryColor() {
+			return secondaryColor;
+		}
+
+		@Override
+		public boolean isSecret() {
+			return false;
+		}
 	}
 
 	private final StampInfo[] stampInfo;

@@ -17,6 +17,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import forestry.api.food.BeverageManager;
+import forestry.apiculture.items.EnumPollenCluster;
 import forestry.core.GuiHandlerBase;
 import forestry.core.config.Constants;
 import forestry.core.config.ForestryItem;
@@ -73,10 +74,13 @@ public class PluginFood extends ForestryPlugin {
 		LiquidRegistryHelper.registerLiquidContainer(Fluids.SHORT_MEAD, Constants.BUCKET_VOLUME, ForestryItem.beverage.getItemStack(), new ItemStack(Items.glass_bottle));
 
 		if (PluginManager.Module.APICULTURE.isEnabled()) {
-			BeverageManager.ingredientManager.addIngredient(ForestryItem.pollenCluster.getItemStack(1, 0), "Strong Curative");
-			BeverageManager.ingredientManager.addIngredient(ForestryItem.pollenCluster.getItemStack(1, 1), "Weak Curative");
-			BeverageManager.infuserManager.addMixture(1, ForestryItem.pollenCluster.getItemStack(1, 0), BeverageEffect.strongAntidote);
-			BeverageManager.infuserManager.addMixture(1, ForestryItem.pollenCluster.getItemStack(1, 1), BeverageEffect.weakAntidote);
+			ItemStack normalPollenCluster = PluginApiculture.items.pollenCluster.get(EnumPollenCluster.NORMAL, 1);
+			ItemStack crystallinePollenCluster = PluginApiculture.items.pollenCluster.get(EnumPollenCluster.CRYSTALLINE, 1);
+
+			BeverageManager.ingredientManager.addIngredient(normalPollenCluster, "Strong Curative");
+			BeverageManager.ingredientManager.addIngredient(crystallinePollenCluster, "Weak Curative");
+			BeverageManager.infuserManager.addMixture(1, normalPollenCluster, BeverageEffect.strongAntidote);
+			BeverageManager.infuserManager.addMixture(1, crystallinePollenCluster, BeverageEffect.weakAntidote);
 		}
 	}
 

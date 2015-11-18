@@ -44,32 +44,11 @@ public enum ForestryItem {
 	stamps,
 	letters,
 	catalogue,
-	// mailIndicator,
-
 	// Carpenter
 	crate,
-	habitatLocator,
-	// Bees
-	beeQueenGE,
-	beeDroneGE,
-	beePrincessGE,
-	beeLarvaeGE,
-	beealyzer,
-	imprinter,
-	honeyDrop,
-	scoop,
-	pollenCluster,
-	propolis,
-	honeydew,
-	royalJelly,
 	honeyedSlice,
 	ambrosia,
 	honeyPot,
-	waxCast,
-	frameUntreated,
-	frameImpregnated,
-	frameProven,
-	minecartBeehouse,
 	// Trees
 	sapling,
 	pollenFertile,
@@ -85,13 +64,6 @@ public enum ForestryItem {
 	// Beverages
 	beverage,
 	infuser,
-	// Apiarist's Armor
-	apiaristHat,
-	apiaristChest,
-	apiaristLegs,
-	apiaristBoots,
-	// Combs
-	beeComb,
 	// Backpacks
 	apiaristBackpack,
 	lepidopteristBackpack,

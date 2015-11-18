@@ -22,7 +22,6 @@ import forestry.api.farming.Farmables;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.BackpackManager;
 import forestry.core.config.Constants;
-import forestry.core.config.ForestryItem;
 import forestry.core.fluids.Fluids;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.ModUtil;
@@ -89,15 +88,18 @@ public class PluginGrowthCraft extends ForestryPlugin {
 		}
 
 		ItemStack emptyComb = new ItemStack(GameRegistry.findItem("Growthcraft|Bees", "grc.honeyComb"), 1, 0);
-		ItemStack fullComb = new ItemStack(GameRegistry.findItem("Growthcraft|Bees", "grc.honeyComb"), 1, 1);
 		RecipeManagers.centrifugeManager.addRecipe(20, emptyComb, ImmutableMap.of(
 				PluginCore.items.beeswax.getItemStack(), 1.0f)
 		);
-		RecipeManagers.centrifugeManager.addRecipe(20, fullComb, ImmutableMap.of(
-				PluginCore.items.beeswax.getItemStack(), 1.0f,
-				ForestryItem.honeyDrop.getItemStack(), 0.9f,
-				ForestryItem.honeydew.getItemStack(), 0.1f)
-		);
+
+		if (PluginManager.Module.APICULTURE.isEnabled()) {
+			ItemStack fullComb = new ItemStack(GameRegistry.findItem("Growthcraft|Bees", "grc.honeyComb"), 1, 1);
+			RecipeManagers.centrifugeManager.addRecipe(20, fullComb, ImmutableMap.of(
+					PluginCore.items.beeswax.getItemStack(), 1.0f,
+					PluginApiculture.items.honeyDrop.getItemStack(), 0.9f,
+					PluginApiculture.items.honeydew.getItemStack(), 0.1f)
+			);
+		}
 
 		ItemStack bamboo = GameRegistry.findItemStack("Growthcraft|Bamboo", "grc.bamboo", 1);
 		ItemStack bambooShoot = GameRegistry.findItemStack("Growthcraft|Bamboo", "grc.bambooShoot", 1);

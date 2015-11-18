@@ -137,7 +137,7 @@ public class ItemRegistryCore extends ItemRegistry {
 		solderingIron.setMaxDamage(5).setFull3D();
 		registerItem(solderingIron, "solderingIron");
 
-		tubes = registerItem(new ItemElectronTube(CreativeTabForestry.tabForestry, EnumElectronTube.getAllOverlayInfo()), "thermionicTubes");
+		tubes = registerItem(new ItemElectronTube(), "thermionicTubes");
 
 		// / CARTONS
 		carton = registerItem(new ItemForestry(), "carton");

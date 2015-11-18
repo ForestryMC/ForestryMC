@@ -17,7 +17,6 @@ import cpw.mods.fml.client.registry.RenderingRegistry;
 import forestry.apiculture.entities.EntityBee;
 import forestry.apiculture.render.RenderBeeEntity;
 import forestry.apiculture.render.RenderBeeItem;
-import forestry.core.config.ForestryItem;
 import forestry.core.render.IBlockRenderer;
 import forestry.core.render.RenderAnalyzer;
 import forestry.plugins.PluginApiculture;
@@ -29,9 +28,9 @@ public class ProxyApicultureClient extends ProxyApiculture {
 		if (PluginApiculture.fancyRenderedBees) {
 			RenderingRegistry.registerEntityRenderingHandler(EntityBee.class, new RenderBeeEntity());
 
-			MinecraftForgeClient.registerItemRenderer(ForestryItem.beeDroneGE.item(), new RenderBeeItem());
-			MinecraftForgeClient.registerItemRenderer(ForestryItem.beePrincessGE.item(), new RenderBeeItem());
-			MinecraftForgeClient.registerItemRenderer(ForestryItem.beeQueenGE.item(), new RenderBeeItem());
+			MinecraftForgeClient.registerItemRenderer(PluginApiculture.items.beeDroneGE, new RenderBeeItem());
+			MinecraftForgeClient.registerItemRenderer(PluginApiculture.items.beePrincessGE, new RenderBeeItem());
+			MinecraftForgeClient.registerItemRenderer(PluginApiculture.items.beeQueenGE, new RenderBeeItem());
 		}
 	}
 
