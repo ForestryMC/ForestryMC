@@ -46,10 +46,11 @@ import forestry.core.commands.RootCommand;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.ForestryBlock;
-import forestry.core.config.ForestryItem;
+import forestry.core.fluids.Fluids;
 import forestry.core.genetics.alleles.AlleleFactory;
 import forestry.core.genetics.alleles.AlleleHelper;
 import forestry.core.genetics.alleles.AlleleRegistry;
+import forestry.core.items.EnumContainerType;
 import forestry.core.items.ItemBlockForestry;
 import forestry.core.items.ItemBlockTyped;
 import forestry.core.items.ItemRegistryCore;
@@ -309,9 +310,12 @@ public class PluginCore extends ForestryPlugin {
 		}
 
 		if (ForestryAPI.activeMode.getStackSetting("recipe.output.bogearth.can").stackSize > 0) {
-			RecipeUtil.addRecipe(ForestryAPI.activeMode.getStackSetting("recipe.output.bogearth.can"), "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', ForestryItem.canWater, 'Y', "sand");
-			RecipeUtil.addRecipe(ForestryAPI.activeMode.getStackSetting("recipe.output.bogearth.can"), "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', ForestryItem.waxCapsuleWater, 'Y', "sand");
-			RecipeUtil.addRecipe(ForestryAPI.activeMode.getStackSetting("recipe.output.bogearth.can"), "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', ForestryItem.refractoryWater, 'Y', "sand");
+			ItemStack canWater = PluginFluids.items.getContainer(EnumContainerType.CAN, Fluids.WATER).getItemStack();
+			ItemStack waxCapsuleWater = PluginFluids.items.getContainer(EnumContainerType.CAPSULE, Fluids.WATER).getItemStack();
+			ItemStack refractoryWater = PluginFluids.items.getContainer(EnumContainerType.REFRACTORY, Fluids.WATER).getItemStack();
+			RecipeUtil.addRecipe(ForestryAPI.activeMode.getStackSetting("recipe.output.bogearth.can"), "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', canWater, 'Y', "sand");
+			RecipeUtil.addRecipe(ForestryAPI.activeMode.getStackSetting("recipe.output.bogearth.can"), "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', waxCapsuleWater, 'Y', "sand");
+			RecipeUtil.addRecipe(ForestryAPI.activeMode.getStackSetting("recipe.output.bogearth.can"), "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', refractoryWater, 'Y', "sand");
 		}
 
 		// Crafting Material

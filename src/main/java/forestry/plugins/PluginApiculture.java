@@ -116,7 +116,6 @@ import forestry.core.blocks.BlockBase;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.ForestryBlock;
-import forestry.core.config.ForestryItem;
 import forestry.core.config.LocalizedConfiguration;
 import forestry.core.entities.EntityFXSnow;
 import forestry.core.fluids.Fluids;
@@ -541,13 +540,13 @@ public class PluginApiculture extends ForestryPlugin {
 			RecipeUtil.addRecipe(foodItems.honeyPot,
 					"# #", " X ", "# #",
 					'#', items.honeyDrop,
-					'X', ForestryItem.waxCapsule);
+					'X', PluginFluids.items.waxCapsuleEmpty);
 
 			RecipeUtil.addRecipe(foodItems.ambrosia,
 					"#Y#", "XXX", "###",
 					'#', items.honeydew,
 					'X', items.royalJelly,
-					'Y', ForestryItem.waxCapsule);
+					'Y', PluginFluids.items.waxCapsuleEmpty);
 		}
 
 		// / CAPSULES

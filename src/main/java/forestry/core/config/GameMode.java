@@ -21,6 +21,7 @@ import forestry.Forestry;
 import forestry.api.core.IGameMode;
 import forestry.core.utils.Log;
 import forestry.plugins.PluginCore;
+import forestry.plugins.PluginFluids;
 
 public class GameMode implements IGameMode {
 	private static final String GAMEMODE_KEY = "gamemode";
@@ -48,9 +49,9 @@ public class GameMode implements IGameMode {
 	private final ItemStack recipeBogEarthOutputBucket = ForestryBlock.soil.getItemStack(6, 1);
 	private final ItemStack recipeBogEarthOutputCans = ForestryBlock.soil.getItemStack(8, 1);
 
-	private final ItemStack recipeCanOutput = ForestryItem.canEmpty.getItemStack(12);
-	private final ItemStack recipeCapsuleOutput = ForestryItem.waxCapsule.getItemStack(4);
-	private final ItemStack recipeRefractoryOutput = ForestryItem.refractoryEmpty.getItemStack(4);
+	private final ItemStack recipeCanOutput = PluginFluids.items.canEmpty.getItemStack(12);
+	private final ItemStack recipeCapsuleOutput = PluginFluids.items.waxCapsuleEmpty.getItemStack(4);
+	private final ItemStack recipeRefractoryOutput = PluginFluids.items.refractoryEmpty.getItemStack(4);
 
 	private static final int FERMENTATION_DURATION_FERTILIZER = 200;
 	private static final int FERMENTATION_DURATION_COMPOST = 250;

@@ -32,14 +32,6 @@ import forestry.plugins.PluginManager.Stage;
  * @author SirSengir
  */
 public enum ForestryItem {
-	bucketBiomass,
-	bucketEthanol,
-	bucketGlass,
-	bucketHoney,
-	bucketIce,
-	bucketJuice,
-	bucketSeedoil,
-	bucketShortMead,
 	// Mail
 	stamps,
 	letters,
@@ -67,42 +59,7 @@ public enum ForestryItem {
 	foresterBackpackT2,
 	hunterBackpackT2,
 	builderBackpackT2,
-	adventurerBackpackT2,
-	// Capsules
-	waxCapsule,
-	waxCapsuleWater,
-	waxCapsuleBiomass,
-	waxCapsuleEthanol,
-	waxCapsuleOil,
-	waxCapsuleFuel,
-	waxCapsuleSeedOil,
-	waxCapsuleHoney,
-	waxCapsuleJuice,
-	waxCapsuleIce,
-	// Refractory Capsules
-	refractoryEmpty,
-	refractoryWater,
-	refractoryBiomass,
-	refractoryEthanol,
-	refractoryOil,
-	refractoryFuel,
-	refractoryLava,
-	refractorySeedOil,
-	refractoryHoney,
-	refractoryJuice,
-	refractoryIce,
-	// Cans
-	canWater,
-	canEmpty,
-	canBiomass,
-	canEthanol,
-	canOil,
-	canFuel,
-	canLava,
-	canSeedOil,
-	canHoney,
-	canJuice,
-	canIce;
+	adventurerBackpackT2;
 	private Item item;
 
 	public void registerItem(Item item, String name) {

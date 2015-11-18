@@ -41,7 +41,6 @@ import forestry.core.circuits.EnumCircuitBoardType;
 import forestry.core.circuits.ItemCircuitBoard;
 import forestry.core.config.Constants;
 import forestry.core.config.ForestryBlock;
-import forestry.core.config.ForestryItem;
 import forestry.core.fluids.Fluids;
 import forestry.core.items.EnumElectronTube;
 import forestry.core.items.ItemBlockForestry;
@@ -217,7 +216,7 @@ public class PluginFactory extends ForestryPlugin {
 				"#Y#",
 				"X#X",
 				'#', "blockGlass",
-				'X', ForestryItem.canEmpty,
+				'X', PluginFluids.items.canEmpty,
 				'Y', coreItems.sturdyCasing)));
 
 		definitionCarpenter = factoryTESR.addDefinition(new MachineDefinition(Constants.DEFINITION_CARPENTER_META, "forestry.Carpenter", TileCarpenter.class,
@@ -528,7 +527,7 @@ public class PluginFactory extends ForestryPlugin {
 					"X#X",
 					'#', beeItems.pollenCluster.getWildcard(),
 					'X', Items.gunpowder,
-					'Y', ForestryItem.canEmpty,
+					'Y', PluginFluids.items.canEmpty,
 					'Z', beeItems.honeyDrop);
 			RecipeManagers.carpenterManager.addRecipe(5, Fluids.WATER.getFluid(1000), null, PluginCore.items.craftingMaterial.getDissipationCharge(),
 					"Z#Z",
@@ -536,7 +535,7 @@ public class PluginFactory extends ForestryPlugin {
 					"X#X",
 					'#', beeItems.royalJelly,
 					'X', Items.gunpowder,
-					'Y', ForestryItem.canEmpty,
+					'Y', PluginFluids.items.canEmpty,
 					'Z', beeItems.honeydew);
 		}
 

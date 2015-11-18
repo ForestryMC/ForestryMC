@@ -23,7 +23,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumAction;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
@@ -44,12 +43,7 @@ import forestry.core.fluids.FluidHelper;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 
-public class ItemLiquidContainer extends Item {
-
-	public enum EnumContainerType {
-		GLASS, JAR, CAN, CAPSULE, REFRACTORY, BUCKET
-	}
-
+public class ItemLiquidContainer extends ItemForestry {
 	private static final Map<Block, ItemLiquidContainer> buckets = new HashMap<>();
 
 	private boolean isDrink = false;
@@ -63,10 +57,10 @@ public class ItemLiquidContainer extends Item {
 	private final Color color;
 
 	public ItemLiquidContainer(EnumContainerType type, Block contents, Color color) {
+		super(CreativeTabForestry.tabForestry);
 		this.type = type;
 		this.contents = contents;
 		this.color = color;
-		setCreativeTab(CreativeTabForestry.tabForestry);
 		if (type == EnumContainerType.BUCKET) {
 			setContainerItem(Items.bucket);
 			this.maxStackSize = 1;

@@ -27,9 +27,9 @@ import net.minecraftforge.fluids.IFluidContainerItem;
 import net.minecraftforge.fluids.IFluidHandler;
 
 import forestry.core.config.Constants;
-import forestry.core.config.ForestryItem;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.ItemStackUtil;
+import forestry.plugins.PluginFluids;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -209,7 +209,7 @@ public final class FluidHelper {
 		// consume forestry containers if there is only one slot
 		if (outputSlot == inputSlot && drainedItem != null) {
 			Item item = drainedItem.getItem();
-			if (ForestryItem.canEmpty.isItemEqual(item) || ForestryItem.waxCapsule.isItemEqual(item) || ForestryItem.refractoryEmpty.isItemEqual(item)) {
+			if (PluginFluids.items.canEmpty == item || PluginFluids.items.waxCapsuleEmpty == item || PluginFluids.items.refractoryEmpty == item) {
 				drainedItem = null;
 			}
 		}
