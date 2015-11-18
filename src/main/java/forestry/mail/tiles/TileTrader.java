@@ -41,7 +41,7 @@ import forestry.core.utils.ItemStackUtil;
 import forestry.mail.MailAddress;
 import forestry.mail.TradeStation;
 import forestry.mail.inventory.InventoryTradeStation;
-import forestry.mail.network.PacketTraderAddressResponse;
+import forestry.mail.network.packets.PacketTraderAddressResponse;
 import forestry.mail.triggers.MailTriggers;
 
 import buildcraft.api.statements.ITriggerExternal;

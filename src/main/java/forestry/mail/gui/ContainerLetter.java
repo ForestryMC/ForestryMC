@@ -28,12 +28,12 @@ import forestry.api.mail.PostManager;
 import forestry.api.mail.TradeStationInfo;
 import forestry.core.gui.ContainerItemInventory;
 import forestry.core.gui.slots.SlotFiltered;
-import forestry.core.network.PacketString;
+import forestry.core.network.packets.PacketString;
 import forestry.core.proxy.Proxies;
 import forestry.mail.Letter;
 import forestry.mail.inventory.ItemInventoryLetter;
-import forestry.mail.network.PacketLetterInfoResponse;
-import forestry.mail.network.PacketLetterTextSet;
+import forestry.mail.network.packets.PacketLetterInfoResponse;
+import forestry.mail.network.packets.PacketLetterTextSet;
 
 public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter> implements ILetterInfoReceiver {
 

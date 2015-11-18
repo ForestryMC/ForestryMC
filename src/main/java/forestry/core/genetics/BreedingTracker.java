@@ -31,7 +31,7 @@ import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.ISpeciesRoot;
-import forestry.core.network.PacketGenomeTrackerUpdate;
+import forestry.core.network.packets.PacketGenomeTrackerUpdate;
 import forestry.core.proxy.Proxies;
 
 public abstract class BreedingTracker extends WorldSavedData implements IBreedingTracker {

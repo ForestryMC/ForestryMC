@@ -20,7 +20,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.core.GuiHandlerBase;
 import forestry.core.network.GuiId;
-import forestry.core.network.PacketSocketUpdate;
+import forestry.core.network.packets.PacketSocketUpdate;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileUtil;
 import forestry.energy.gui.ContainerEngineBiogas;

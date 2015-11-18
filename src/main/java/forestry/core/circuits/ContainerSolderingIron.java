@@ -21,8 +21,8 @@ import forestry.core.gui.slots.SlotOutput;
 import forestry.core.inventory.ItemInventorySolderingIron;
 import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.IForestryPacketServer;
-import forestry.core.network.PacketGuiLayoutSelect;
-import forestry.core.network.PacketGuiSelectRequest;
+import forestry.core.network.packets.PacketGuiLayoutSelect;
+import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.proxy.Proxies;
 
 public class ContainerSolderingIron extends ContainerItemInventory<ItemInventorySolderingIron> implements IGuiSelectable {

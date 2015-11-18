@@ -17,9 +17,9 @@ import net.minecraft.tileentity.TileEntity;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuitBoard;
 import forestry.core.circuits.ISocketable;
-import forestry.core.network.PacketChipsetClick;
-import forestry.core.network.PacketSocketUpdate;
-import forestry.core.network.PacketSolderingIronClick;
+import forestry.core.network.packets.PacketChipsetClick;
+import forestry.core.network.packets.PacketSocketUpdate;
+import forestry.core.network.packets.PacketSolderingIronClick;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.InventoryUtil;
 

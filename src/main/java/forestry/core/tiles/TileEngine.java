@@ -21,7 +21,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.api.core.IErrorLogic;
-import forestry.apiculture.network.PacketActiveUpdate;
+import forestry.apiculture.network.packets.PacketActiveUpdate;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;

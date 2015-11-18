@@ -27,7 +27,7 @@ import cpw.mods.fml.common.Loader;
 
 import forestry.core.TickHandlerCoreServer;
 import forestry.core.multiblock.MultiblockServerTickHandler;
-import forestry.core.network.PacketFXSignal;
+import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.worldgen.WorldGenerator;
 
 public class ProxyCommon {

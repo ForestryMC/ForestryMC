@@ -12,7 +12,7 @@ package forestry.core.gui;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 
-import forestry.core.network.PacketGuiSelectRequest;
+import forestry.core.network.packets.PacketGuiSelectRequest;
 
 public interface IGuiSelectable {
 	// server

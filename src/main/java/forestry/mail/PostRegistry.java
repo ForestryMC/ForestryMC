@@ -33,7 +33,7 @@ import forestry.api.mail.PostManager;
 import forestry.core.config.ForestryItem;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.PlayerUtil;
-import forestry.mail.network.PacketPOBoxInfoResponse;
+import forestry.mail.network.packets.PacketPOBoxInfoResponse;
 
 public class PostRegistry implements IPostRegistry {
 

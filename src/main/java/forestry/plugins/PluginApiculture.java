@@ -102,13 +102,7 @@ import forestry.apiculture.multiblock.TileAlvearyPlain;
 import forestry.apiculture.multiblock.TileAlvearySieve;
 import forestry.apiculture.multiblock.TileAlvearyStabiliser;
 import forestry.apiculture.multiblock.TileAlvearySwarmer;
-import forestry.apiculture.network.PacketActiveUpdate;
-import forestry.apiculture.network.PacketBeeLogicActive;
-import forestry.apiculture.network.PacketBeeLogicActiveEntity;
-import forestry.apiculture.network.PacketBeeLogicEntityRequest;
-import forestry.apiculture.network.PacketCandleUpdate;
-import forestry.apiculture.network.PacketHabitatBiomePointer;
-import forestry.apiculture.network.PacketImprintSelectionResponse;
+import forestry.apiculture.network.PacketRegistryApiculture;
 import forestry.apiculture.proxy.ProxyApiculture;
 import forestry.apiculture.tiles.TileApiaristChest;
 import forestry.apiculture.tiles.TileApiary;
@@ -137,8 +131,7 @@ import forestry.core.items.ItemOverlay.OverlayInfo;
 import forestry.core.items.ItemScoop;
 import forestry.core.items.ItemWithGui;
 import forestry.core.network.GuiId;
-import forestry.core.network.PacketIdClient;
-import forestry.core.network.PacketIdServer;
+import forestry.core.network.IPacketRegistry;
 import forestry.core.proxy.Proxies;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.recipes.ShapedRecipeCustom;
@@ -520,15 +513,8 @@ public class PluginApiculture extends ForestryPlugin {
 	}
 
 	@Override
-	public void registerPacketHandlers() {
-		PacketIdClient.IMPRINT_SELECTION_RESPONSE.setPacketHandler(new PacketImprintSelectionResponse());
-		PacketIdClient.TILE_FORESTRY_ACTIVE.setPacketHandler(new PacketActiveUpdate());
-		PacketIdClient.BEE_LOGIC_ACTIVE.setPacketHandler(new PacketBeeLogicActive());
-		PacketIdClient.BEE_LOGIC_ACTIVE_ENTITY.setPacketHandler(new PacketBeeLogicActiveEntity());
-		PacketIdClient.HABITAT_BIOME_POINTER.setPacketHandler(new PacketHabitatBiomePointer());
-		PacketIdClient.CANDLE_UPDATE.setPacketHandler(new PacketCandleUpdate());
-
-		PacketIdServer.BEE_LOGIC_ACTIVE_ENTITY_REQUEST.setPacketHandler(new PacketBeeLogicEntityRequest());
+	public IPacketRegistry getPacketRegistry() {
+		return new PacketRegistryApiculture();
 	}
 
 	@Override

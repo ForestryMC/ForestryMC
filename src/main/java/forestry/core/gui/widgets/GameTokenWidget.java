@@ -19,7 +19,7 @@ import net.minecraft.util.IIcon;
 import org.lwjgl.opengl.GL11;
 
 import forestry.core.gui.GuiUtil;
-import forestry.core.network.PacketGuiSelectRequest;
+import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.SpriteSheet;
 import forestry.core.render.TextureManager;

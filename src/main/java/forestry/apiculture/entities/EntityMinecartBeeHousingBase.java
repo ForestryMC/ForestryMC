@@ -29,7 +29,7 @@ import forestry.api.core.EnumTemperature;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorLogic;
 import forestry.apiculture.gui.IGuiBeeHousingInventory;
-import forestry.apiculture.network.PacketBeeLogicEntityRequest;
+import forestry.apiculture.network.packets.PacketBeeLogicEntityRequest;
 import forestry.apiculture.tiles.TileBeeHousingBase;
 import forestry.core.entities.EntityMinecartContainerForestry;
 import forestry.core.network.DataInputStreamForestry;

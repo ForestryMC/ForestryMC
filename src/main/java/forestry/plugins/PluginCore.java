@@ -69,10 +69,11 @@ import forestry.core.items.ItemMisc;
 import forestry.core.items.ItemOverlay.OverlayInfo;
 import forestry.core.items.ItemPipette;
 import forestry.core.items.ItemSolderingIron;
-import forestry.core.items.ItemWithGui;
 import forestry.core.items.ItemWrench;
 import forestry.core.multiblock.MultiblockLogicFactory;
 import forestry.core.network.GuiId;
+import forestry.core.network.IPacketRegistry;
+import forestry.core.network.PacketRegistryCore;
 import forestry.core.proxy.Proxies;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.recipes.ShapedRecipeCustom;
@@ -449,6 +450,11 @@ public class PluginCore extends ForestryPlugin {
 
 		RecipeUtil.addRecipe(ForestryBlock.resourceStorage.getItemStack(1, 3), "###", "###", "###", '#', "ingotBronze");
 		RecipeUtil.addShapelessRecipe(ForestryItem.ingotBronze.getItemStack(9), "blockBronze");
+	}
+
+	@Override
+	public IPacketRegistry getPacketRegistry() {
+		return new PacketRegistryCore();
 	}
 
 	@Override

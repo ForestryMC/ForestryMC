@@ -14,7 +14,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 
 import forestry.apiculture.multiblock.TileAlvearyPlain;
 import forestry.core.gui.ContainerTile;
-import forestry.core.network.PacketGuiUpdate;
+import forestry.core.network.packets.PacketGuiUpdate;
 
 public class ContainerAlveary extends ContainerTile<TileAlvearyPlain> {
 

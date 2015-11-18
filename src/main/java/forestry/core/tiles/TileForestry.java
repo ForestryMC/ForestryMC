@@ -41,7 +41,7 @@ import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
-import forestry.core.network.PacketTileStream;
+import forestry.core.network.packets.PacketTileStream;
 import forestry.core.proxy.Proxies;
 
 import buildcraft.api.statements.IStatementContainer;

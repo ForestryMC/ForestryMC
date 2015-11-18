@@ -43,13 +43,11 @@ import forestry.core.config.ForestryItem;
 import forestry.core.fluids.Fluids;
 import forestry.core.items.ItemBlockForestry;
 import forestry.core.items.ItemBlockNBT;
-import forestry.core.network.PacketIdClient;
-import forestry.core.network.PacketIdServer;
+import forestry.core.network.IPacketRegistry;
 import forestry.core.proxy.Proxies;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.recipes.ShapedRecipeCustom;
 import forestry.core.recipes.craftguide.CraftGuideIntegration;
-import forestry.core.recipes.nei.PacketWorktableNEISelect;
 import forestry.core.tiles.MachineDefinition;
 import forestry.core.utils.Log;
 import forestry.core.utils.ModUtil;
@@ -58,8 +56,7 @@ import forestry.core.utils.datastructures.ItemStackMap;
 import forestry.factory.DummyManagers;
 import forestry.factory.GuiHandlerFactory;
 import forestry.factory.circuits.CircuitSpeedUpgrade;
-import forestry.factory.network.PacketWorktableMemoryUpdate;
-import forestry.factory.network.PacketWorktableRecipeUpdate;
+import forestry.factory.network.PacketRegistryFactory;
 import forestry.factory.recipes.CarpenterRecipeManager;
 import forestry.factory.recipes.CentrifugeRecipeManager;
 import forestry.factory.recipes.FabricatorRecipeManager;
@@ -150,11 +147,8 @@ public class PluginFactory extends ForestryPlugin {
 	}
 
 	@Override
-	public void registerPacketHandlers() {
-		PacketIdServer.WORKTABLE_NEI_SELECT.setPacketHandler(new PacketWorktableNEISelect());
-
-		PacketIdClient.WORKTABLE_MEMORY_UPDATE.setPacketHandler(new PacketWorktableMemoryUpdate());
-		PacketIdClient.WORKTABLE_CRAFTING_UPDATE.setPacketHandler(new PacketWorktableRecipeUpdate());
+	public IPacketRegistry getPacketRegistry() {
+		return new PacketRegistryFactory();
 	}
 
 	@Override

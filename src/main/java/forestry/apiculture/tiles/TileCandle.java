@@ -14,7 +14,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 
-import forestry.apiculture.network.PacketCandleUpdate;
+import forestry.apiculture.network.packets.PacketCandleUpdate;
 
 public class TileCandle extends TileEntity {
 	private int colour;

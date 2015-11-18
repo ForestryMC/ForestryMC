@@ -17,7 +17,7 @@ import net.minecraftforge.fluids.IFluidTank;
 import forestry.core.gui.ContainerSocketed;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
-import forestry.core.network.PacketGuiUpdate;
+import forestry.core.network.packets.PacketGuiUpdate;
 import forestry.farming.multiblock.InventoryFarm;
 import forestry.farming.tiles.TileFarm;
 

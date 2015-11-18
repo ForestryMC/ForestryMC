@@ -154,7 +154,7 @@ public class PluginManager {
 			guiHandlers.add(guiHandler);
 		}
 
-		plugin.registerPacketHandlers();
+		plugin.getPacketRegistry().registerPackets();
 
 		IPickupHandler pickupHandler = plugin.getPickupHandler();
 		if (pickupHandler != null) {

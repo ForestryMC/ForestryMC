@@ -18,17 +18,7 @@ import cpw.mods.fml.common.network.internal.FMLProxyPacket;
 import io.netty.buffer.Unpooled;
 
 public abstract class ForestryPacket implements IForestryPacket {
-
-	protected static final String channel = "FOR";
-
-	private IPacketId id;
-
-	protected ForestryPacket() {
-	}
-
-	public ForestryPacket(IPacketId id) {
-		this.id = id;
-	}
+	private final IPacketId id = getPacketId();
 
 	public final FMLProxyPacket getPacket() {
 		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -41,7 +31,7 @@ public abstract class ForestryPacket implements IForestryPacket {
 			e.printStackTrace();
 		}
 
-		return new FMLProxyPacket(Unpooled.wrappedBuffer(bytes.toByteArray()), channel);
+		return new FMLProxyPacket(Unpooled.wrappedBuffer(bytes.toByteArray()), PacketHandler.channelId);
 	}
 
 	protected void writeData(DataOutputStreamForestry data) throws IOException {

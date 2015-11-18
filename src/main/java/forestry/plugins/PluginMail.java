@@ -34,8 +34,7 @@ import forestry.core.fluids.Fluids;
 import forestry.core.items.ItemBlockForestry;
 import forestry.core.items.ItemWithGui;
 import forestry.core.network.GuiId;
-import forestry.core.network.PacketIdClient;
-import forestry.core.network.PacketIdServer;
+import forestry.core.network.IPacketRegistry;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.recipes.ShapedRecipeCustom;
 import forestry.core.tiles.MachineDefinition;
@@ -48,13 +47,7 @@ import forestry.mail.commands.CommandMail;
 import forestry.mail.items.ItemLetter;
 import forestry.mail.items.ItemStamps;
 import forestry.mail.items.ItemStamps.StampInfo;
-import forestry.mail.network.PacketLetterInfoRequest;
-import forestry.mail.network.PacketLetterInfoResponse;
-import forestry.mail.network.PacketLetterTextSet;
-import forestry.mail.network.PacketPOBoxInfoRequest;
-import forestry.mail.network.PacketPOBoxInfoResponse;
-import forestry.mail.network.PacketTraderAddressRequest;
-import forestry.mail.network.PacketTraderAddressResponse;
+import forestry.mail.network.PacketRegistryMail;
 import forestry.mail.tiles.TileMailbox;
 import forestry.mail.tiles.TilePhilatelist;
 import forestry.mail.tiles.TileTrader;
@@ -159,15 +152,8 @@ public class PluginMail extends ForestryPlugin {
 	}
 
 	@Override
-	public void registerPacketHandlers() {
-		PacketIdServer.LETTER_INFO_REQUEST.setPacketHandler(new PacketLetterInfoRequest());
-		PacketIdServer.TRADING_ADDRESS_REQUEST.setPacketHandler(new PacketTraderAddressRequest());
-		PacketIdServer.POBOX_INFO_REQUEST.setPacketHandler(new PacketPOBoxInfoRequest());
-		PacketIdServer.LETTER_TEXT_SET.setPacketHandler(new PacketLetterTextSet());
-
-		PacketIdClient.LETTER_INFO_RESPONSE.setPacketHandler(new PacketLetterInfoResponse());
-		PacketIdClient.TRADING_ADDRESS_RESPONSE.setPacketHandler(new PacketTraderAddressResponse());
-		PacketIdClient.POBOX_INFO_RESPONSE.setPacketHandler(new PacketPOBoxInfoResponse());
+	public IPacketRegistry getPacketRegistry() {
+		return new PacketRegistryMail();
 	}
 
 	@Override

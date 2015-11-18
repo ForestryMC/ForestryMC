@@ -37,7 +37,7 @@ import forestry.arboriculture.genetics.TreeGenome;
 import forestry.arboriculture.genetics.pollination.ICheckPollinatable;
 import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
-import forestry.core.network.PacketFXSignal;
+import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.SpriteSheet;
 import forestry.core.utils.BlockUtil;

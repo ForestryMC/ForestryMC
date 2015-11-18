@@ -24,7 +24,7 @@ import forestry.api.apiculture.IBee;
 import forestry.api.multiblock.IAlvearyComponent;
 import forestry.apiculture.blocks.BlockAlveary;
 import forestry.apiculture.inventory.InventorySwarmer;
-import forestry.apiculture.network.PacketActiveUpdate;
+import forestry.apiculture.network.packets.PacketActiveUpdate;
 import forestry.apiculture.worldgen.Hive;
 import forestry.apiculture.worldgen.HiveDecorator;
 import forestry.apiculture.worldgen.HiveDescriptionSwarmer;

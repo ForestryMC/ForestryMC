@@ -30,7 +30,7 @@ import forestry.core.access.IOwnable;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
-import forestry.core.network.PacketTileStream;
+import forestry.core.network.packets.PacketTileStream;
 import forestry.core.utils.PlayerUtil;
 
 /**

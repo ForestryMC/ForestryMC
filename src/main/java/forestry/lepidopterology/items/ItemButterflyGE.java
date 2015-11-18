@@ -36,7 +36,7 @@ import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IButterflyNursery;
 import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
-import forestry.core.network.PacketFXSignal;
+import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.EntityUtil;

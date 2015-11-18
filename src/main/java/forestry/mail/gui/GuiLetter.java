@@ -18,7 +18,6 @@ import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.entity.player.EntityPlayer;
 
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
 
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.IMailAddress;
@@ -32,7 +31,7 @@ import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
 import forestry.mail.gui.widgets.AddresseeSlot;
 import forestry.mail.inventory.ItemInventoryLetter;
-import forestry.mail.network.PacketLetterInfoRequest;
+import forestry.mail.network.packets.PacketLetterInfoRequest;
 
 public class GuiLetter extends GuiForestry<ContainerLetter, ItemInventoryLetter> {
 

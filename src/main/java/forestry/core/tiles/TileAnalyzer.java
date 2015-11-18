@@ -39,7 +39,7 @@ import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
-import forestry.core.network.PacketItemStackDisplay;
+import forestry.core.network.packets.PacketItemStackDisplay;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.InventoryUtil;

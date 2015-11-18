@@ -30,10 +30,10 @@ import forestry.api.mail.ITradeStation;
 import forestry.api.mail.PostManager;
 import forestry.api.mail.TradeStationInfo;
 import forestry.core.gui.IGuiSelectable;
-import forestry.core.network.PacketGuiSelectRequest;
+import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.proxy.Proxies;
 import forestry.mail.EnumStationState;
-import forestry.mail.network.PacketLetterInfoResponse;
+import forestry.mail.network.packets.PacketLetterInfoResponse;
 
 public class ContainerCatalogue extends Container implements IGuiSelectable, ILetterInfoReceiver {
 

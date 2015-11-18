@@ -21,14 +21,14 @@ import forestry.core.gui.IContainerCrafting;
 import forestry.core.gui.IGuiSelectable;
 import forestry.core.gui.slots.SlotCraftMatrix;
 import forestry.core.gui.slots.SlotCrafter;
-import forestry.core.network.PacketGuiSelectRequest;
+import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.ItemStackUtil;
 import forestry.factory.inventory.InventoryCraftingForestry;
 import forestry.factory.inventory.InventoryGhostCrafting;
 import forestry.factory.inventory.InventoryWorktable;
-import forestry.factory.network.PacketWorktableMemoryUpdate;
-import forestry.factory.network.PacketWorktableRecipeUpdate;
+import forestry.factory.network.packets.PacketWorktableMemoryUpdate;
+import forestry.factory.network.packets.PacketWorktableRecipeUpdate;
 import forestry.factory.recipes.RecipeMemory;
 import forestry.factory.tiles.TileWorktable;
 

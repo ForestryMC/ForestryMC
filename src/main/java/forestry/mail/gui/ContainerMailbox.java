@@ -21,7 +21,7 @@ import forestry.core.proxy.Proxies;
 import forestry.core.utils.SlotUtil;
 import forestry.mail.POBox;
 import forestry.mail.POBoxInfo;
-import forestry.mail.network.PacketPOBoxInfoResponse;
+import forestry.mail.network.packets.PacketPOBoxInfoResponse;
 import forestry.mail.tiles.TileMailbox;
 
 public class ContainerMailbox extends ContainerTile<TileMailbox> {
