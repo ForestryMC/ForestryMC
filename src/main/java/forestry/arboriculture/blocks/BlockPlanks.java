@@ -45,7 +45,10 @@ public class BlockPlanks extends BlockWood {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public IIcon getIcon(int side, int meta) {
-		return IconProviderWood.getPlankIcon(EnumWoodType.LARCH);
+		EnumWoodType woodType = EnumWoodType.LARCH;
+		if (meta > 0 && meta < EnumWoodType.VALUES.length)
+			woodType = EnumWoodType.VALUES[meta];
+		return IconProviderWood.getPlankIcon(woodType);
 	}
 
 	@Override
