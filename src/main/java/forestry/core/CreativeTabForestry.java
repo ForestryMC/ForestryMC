@@ -17,7 +17,7 @@ import net.minecraft.item.ItemStack;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 import forestry.api.core.Tabs;
-import forestry.core.config.ForestryItem;
+import forestry.plugins.PluginCore;
 import forestry.plugins.PluginManager;
 
 public class CreativeTabForestry extends CreativeTabs {
@@ -63,7 +63,7 @@ public class CreativeTabForestry extends CreativeTabs {
 				break;
 		}
 		if (iconItem == null) {
-			iconItem = ForestryItem.wrench.item();
+			iconItem = PluginCore.items.wrench;
 		}
 		return new ItemStack(iconItem);
 	}

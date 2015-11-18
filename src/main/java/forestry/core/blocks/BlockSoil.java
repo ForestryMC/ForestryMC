@@ -35,8 +35,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 import forestry.core.CreativeTabForestry;
 import forestry.core.config.Constants;
 import forestry.core.config.ForestryBlock;
-import forestry.core.config.ForestryItem;
 import forestry.core.render.TextureManager;
+import forestry.plugins.PluginCore;
 
 /**
  * Humus, bog earth, peat
@@ -69,7 +69,7 @@ public class BlockSoil extends Block implements IItemTyped {
 		SoilType type = getTypeFromMeta(metadata);
 
 		if (type == SoilType.PEAT) {
-			ret.add(ForestryItem.peat.getItemStack());
+			ret.add(PluginCore.items.peat.getItemStack());
 			ret.add(new ItemStack(Blocks.dirt));
 		} else if (type == SoilType.HUMUS) {
 			ret.add(new ItemStack(Blocks.dirt));

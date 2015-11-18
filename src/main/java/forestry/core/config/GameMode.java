@@ -20,6 +20,7 @@ import net.minecraft.item.ItemStack;
 import forestry.Forestry;
 import forestry.api.core.IGameMode;
 import forestry.core.utils.Log;
+import forestry.plugins.PluginCore;
 
 public class GameMode implements IGameMode {
 	private static final String GAMEMODE_KEY = "gamemode";
@@ -36,10 +37,10 @@ public class GameMode implements IGameMode {
 
 	private static final int FARM_FERTILIZER_VALUE = 2000;
 
-	private final ItemStack recipeFertilizerOutputApatite = ForestryItem.fertilizerCompound.getItemStack(8);
-	private final ItemStack recipeFertilizerOutputAsh = ForestryItem.fertilizerCompound.getItemStack(16);
-	private final ItemStack recipeCompostOutputWheat = ForestryItem.fertilizerBio.getItemStack(4);
-	private final ItemStack recipeCompostOutputAsh = ForestryItem.fertilizerBio.getItemStack(1);
+	private final ItemStack recipeFertilizerOutputApatite = PluginCore.items.fertilizerCompound.getItemStack(8);
+	private final ItemStack recipeFertilizerOutputAsh = PluginCore.items.fertilizerCompound.getItemStack(16);
+	private final ItemStack recipeCompostOutputWheat = PluginCore.items.fertilizerBio.getItemStack(4);
+	private final ItemStack recipeCompostOutputAsh = PluginCore.items.fertilizerBio.getItemStack(1);
 
 	private final ItemStack recipeHumusOutputFertilizer = ForestryBlock.soil.getItemStack(8);
 	private final ItemStack recipeHumusOutputCompost = ForestryBlock.soil.getItemStack(8);

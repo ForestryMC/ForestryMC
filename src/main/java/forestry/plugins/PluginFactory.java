@@ -37,12 +37,17 @@ import forestry.core.GuiHandlerBase;
 import forestry.core.blocks.BlockBase;
 import forestry.core.circuits.Circuit;
 import forestry.core.circuits.CircuitLayout;
+import forestry.core.circuits.EnumCircuitBoardType;
+import forestry.core.circuits.ItemCircuitBoard;
 import forestry.core.config.Constants;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
 import forestry.core.fluids.Fluids;
+import forestry.core.items.EnumElectronTube;
 import forestry.core.items.ItemBlockForestry;
 import forestry.core.items.ItemBlockNBT;
+import forestry.core.items.ItemElectronTube;
+import forestry.core.items.ItemRegistryCore;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.proxy.Proxies;
 import forestry.core.recipes.RecipeUtil;
@@ -155,25 +160,34 @@ public class PluginFactory extends ForestryPlugin {
 	public void preInit() {
 		super.preInit();
 
+		ItemRegistryCore coreItems = PluginCore.items;
+
 		// Set fuels and resources for the fermenter
-		FuelManager.fermenterFuel.put(ForestryItem.fertilizerCompound.getItemStack(), new FermenterFuel(ForestryItem.fertilizerCompound.getItemStack(),
+		ItemStack fertilizerCompound = coreItems.fertilizerCompound.getItemStack();
+		FuelManager.fermenterFuel.put(fertilizerCompound, new FermenterFuel(fertilizerCompound,
 				ForestryAPI.activeMode.getIntegerSetting("fermenter.value.fertilizer"), ForestryAPI.activeMode.getIntegerSetting("fermenter.cycles.fertilizer")));
-		FuelManager.fermenterFuel.put(ForestryItem.fertilizerBio.getItemStack(), new FermenterFuel(ForestryItem.fertilizerBio.getItemStack(), ForestryAPI.activeMode.getIntegerSetting("fermenter.value.compost"), ForestryAPI.activeMode.getIntegerSetting("fermenter.cycles.compost")));
-		FuelManager.fermenterFuel.put(ForestryItem.mulch.getItemStack(), new FermenterFuel(ForestryItem.mulch.getItemStack(), ForestryAPI.activeMode
-				.getIntegerSetting("fermenter.value.compost"), ForestryAPI.activeMode.getIntegerSetting("fermenter.cycles.compost")));
+
+		int cyclesCompost = ForestryAPI.activeMode.getIntegerSetting("fermenter.cycles.compost");
+		int valueCompost = ForestryAPI.activeMode.getIntegerSetting("fermenter.value.compost");
+		ItemStack fertilizerBio = coreItems.fertilizerBio.getItemStack();
+		ItemStack mulch = coreItems.mulch.getItemStack();
+		FuelManager.fermenterFuel.put(fertilizerBio, new FermenterFuel(fertilizerBio, valueCompost, cyclesCompost));
+		FuelManager.fermenterFuel.put(mulch, new FermenterFuel(mulch, valueCompost, cyclesCompost));
 
 		// Add moistener resources
-		FuelManager.moistenerResource.put(new ItemStack(Items.wheat), new MoistenerFuel(new ItemStack(Items.wheat), ForestryItem.mouldyWheat.getItemStack(), 0,
-				300));
-		FuelManager.moistenerResource.put(ForestryItem.mouldyWheat.getItemStack(), new MoistenerFuel(ForestryItem.mouldyWheat.getItemStack(), ForestryItem.decayingWheat.getItemStack(), 1, 600));
-		FuelManager.moistenerResource.put(ForestryItem.decayingWheat.getItemStack(), new MoistenerFuel(ForestryItem.decayingWheat.getItemStack(),
-				ForestryItem.mulch.getItemStack(), 2, 900));
+		ItemStack wheat = new ItemStack(Items.wheat);
+		ItemStack mouldyWheat = coreItems.mouldyWheat.getItemStack();
+		ItemStack decayingWheat = coreItems.decayingWheat.getItemStack();
+		FuelManager.moistenerResource.put(wheat, new MoistenerFuel(wheat, mouldyWheat, 0, 300));
+		FuelManager.moistenerResource.put(mouldyWheat, new MoistenerFuel(mouldyWheat, decayingWheat, 1, 600));
+		FuelManager.moistenerResource.put(decayingWheat, new MoistenerFuel(decayingWheat, mulch, 2, 900));
 
 		// Set fuels for our own engines
-		FuelManager.copperEngineFuel.put(ForestryItem.peat.getItemStack(), new EngineCopperFuel(ForestryItem.peat.getItemStack(),
-				Constants.ENGINE_COPPER_FUEL_VALUE_PEAT, Constants.ENGINE_COPPER_CYCLE_DURATION_PEAT));
-		FuelManager.copperEngineFuel.put(ForestryItem.bituminousPeat.getItemStack(), new EngineCopperFuel(ForestryItem.bituminousPeat.getItemStack(),
-				Constants.ENGINE_COPPER_FUEL_VALUE_BITUMINOUS_PEAT, Constants.ENGINE_COPPER_CYCLE_DURATION_BITUMINOUS_PEAT));
+		ItemStack peat = coreItems.peat.getItemStack();
+		FuelManager.copperEngineFuel.put(peat, new EngineCopperFuel(peat, Constants.ENGINE_COPPER_FUEL_VALUE_PEAT, Constants.ENGINE_COPPER_CYCLE_DURATION_PEAT));
+
+		ItemStack bituminousPeat = coreItems.peat.getItemStack();
+		FuelManager.copperEngineFuel.put(bituminousPeat, new EngineCopperFuel(bituminousPeat, Constants.ENGINE_COPPER_FUEL_VALUE_BITUMINOUS_PEAT, Constants.ENGINE_COPPER_CYCLE_DURATION_BITUMINOUS_PEAT));
 
 		FuelManager.bronzeEngineFuel.put(Fluids.BIOMASS.getFluid(), new EngineBronzeFuel(Fluids.BIOMASS.getFluid(),
 				Constants.ENGINE_FUEL_VALUE_BIOMASS, (int) (Constants.ENGINE_CYCLE_DURATION_BIOMASS * ForestryAPI.activeMode.getFloatSetting("fuel.biomass.biogas")), 1));
@@ -189,9 +203,10 @@ public class PluginFactory extends ForestryPlugin {
 				Constants.ENGINE_FUEL_VALUE_JUICE, Constants.ENGINE_CYCLE_DURATION_JUICE, 1));
 
 		// Set rain substrates
-		FuelManager.rainSubstrate.put(ForestryItem.iodineCharge.getItemStack(), new RainSubstrate(ForestryItem.iodineCharge.getItemStack(),
-				Constants.RAINMAKER_RAIN_DURATION_IODINE, 0.01f));
-		FuelManager.rainSubstrate.put(ForestryItem.craftingMaterial.getItemStack(1, 4), new RainSubstrate(ForestryItem.craftingMaterial.getItemStack(1, 4), 0.075f));
+		ItemStack iodineCharge = coreItems.iodineCharge.getItemStack();
+		ItemStack dissipationCharge = coreItems.craftingMaterial.getDissipationCharge();
+		FuelManager.rainSubstrate.put(iodineCharge, new RainSubstrate(iodineCharge, Constants.RAINMAKER_RAIN_DURATION_IODINE, 0.01f));
+		FuelManager.rainSubstrate.put(dissipationCharge, new RainSubstrate(dissipationCharge, 0.075f));
 
 		BlockBase factoryTESR = ((BlockBase) ForestryBlock.factoryTESR.block());
 
@@ -203,7 +218,7 @@ public class PluginFactory extends ForestryPlugin {
 				"X#X",
 				'#', "blockGlass",
 				'X', ForestryItem.canEmpty,
-				'Y', ForestryItem.sturdyCasing)));
+				'Y', coreItems.sturdyCasing)));
 
 		definitionCarpenter = factoryTESR.addDefinition(new MachineDefinition(Constants.DEFINITION_CARPENTER_META, "forestry.Carpenter", TileCarpenter.class,
 				Proxies.render.getRenderDefaultMachine(Constants.TEXTURE_PATH_BLOCKS + "/carpenter_"), ShapedRecipeCustom.createShapedRecipe(
@@ -213,7 +228,7 @@ public class PluginFactory extends ForestryPlugin {
 				"X#X",
 				'#', "blockGlass",
 				'X', "ingotBronze",
-				'Y', ForestryItem.sturdyCasing)));
+				'Y', coreItems.sturdyCasing)));
 
 		definitionCentrifuge = factoryTESR.addDefinition(new MachineDefinition(Constants.DEFINITION_CENTRIFUGE_META, "forestry.Centrifuge", TileCentrifuge.class,
 				Proxies.render.getRenderDefaultMachine(Constants.TEXTURE_PATH_BLOCKS + "/centrifuge_"), ShapedRecipeCustom.createShapedRecipe(
@@ -223,7 +238,7 @@ public class PluginFactory extends ForestryPlugin {
 				"X#X",
 				'#', "blockGlass",
 				'X', "ingotCopper",
-				'Y', ForestryItem.sturdyCasing.getItemStack())));
+				'Y', coreItems.sturdyCasing)));
 
 		definitionFermenter = factoryTESR.addDefinition(new MachineDefinition(Constants.DEFINITION_FERMENTER_META, "forestry.Fermenter", TileFermenter.class,
 				Proxies.render.getRenderDefaultMachine(Constants.TEXTURE_PATH_BLOCKS + "/fermenter_"), ShapedRecipeCustom.createShapedRecipe(
@@ -233,7 +248,7 @@ public class PluginFactory extends ForestryPlugin {
 				"X#X",
 				'#', "blockGlass",
 				'X', "gearBronze",
-				'Y', ForestryItem.sturdyCasing)));
+				'Y', coreItems.sturdyCasing)));
 
 		definitionMoistener = factoryTESR.addDefinition(new MachineDefinition(Constants.DEFINITION_MOISTENER_META, "forestry.Moistener", TileMoistener.class,
 				Proxies.render.getRenderDefaultMachine(Constants.TEXTURE_PATH_BLOCKS + "/moistener_"), ShapedRecipeCustom.createShapedRecipe(
@@ -243,7 +258,7 @@ public class PluginFactory extends ForestryPlugin {
 				"X#X",
 				'#', "blockGlass",
 				'X', "gearCopper",
-				'Y', ForestryItem.sturdyCasing)));
+				'Y', coreItems.sturdyCasing)));
 
 		definitionSqueezer = factoryTESR.addDefinition(new MachineDefinition(Constants.DEFINITION_SQUEEZER_META, "forestry.Squeezer", TileSqueezer.class,
 				Proxies.render.getRenderDefaultMachine(Constants.TEXTURE_PATH_BLOCKS + "/squeezer_"), ShapedRecipeCustom.createShapedRecipe(
@@ -253,7 +268,7 @@ public class PluginFactory extends ForestryPlugin {
 				"X#X",
 				'#', "blockGlass",
 				'X', "ingotTin",
-				'Y', ForestryItem.sturdyCasing.getItemStack())));
+				'Y', coreItems.sturdyCasing)));
 
 		definitionStill = factoryTESR.addDefinition(new MachineDefinition(Constants.DEFINITION_STILL_META, "forestry.Still", TileStill.class,
 				Proxies.render.getRenderDefaultMachine(Constants.TEXTURE_PATH_BLOCKS + "/still_"), ShapedRecipeCustom.createShapedRecipe(
@@ -263,7 +278,7 @@ public class PluginFactory extends ForestryPlugin {
 				"X#X",
 				'#', "blockGlass",
 				'X', "dustRedstone",
-				'Y', ForestryItem.sturdyCasing)));
+				'Y', coreItems.sturdyCasing)));
 
 		definitionRainmaker = factoryTESR.addDefinition(new MachineDefinition(Constants.DEFINITION_RAINMAKER_META, "forestry.Rainmaker", TileMillRainmaker.class,
 				Proxies.render.getRenderMill(Constants.TEXTURE_PATH_BLOCKS + "/rainmaker_"), ShapedRecipeCustom.createShapedRecipe(
@@ -273,7 +288,7 @@ public class PluginFactory extends ForestryPlugin {
 				"X#X",
 				'#', "blockGlass",
 				'X', "gearTin",
-				'Y', ForestryItem.hardenedCasing)));
+				'Y', coreItems.hardenedCasing)));
 
 		BlockBase factoryPlain = ((BlockBase) ForestryBlock.factoryPlain.block());
 
@@ -285,7 +300,7 @@ public class PluginFactory extends ForestryPlugin {
 						"XZX",
 						'#', "blockGlass",
 						'X', "ingotGold",
-						'Y', ForestryItem.sturdyCasing,
+						'Y', coreItems.sturdyCasing,
 						'Z', "chestWood"))
 				.setFaces(0, 1, 2, 3, 4, 4));
 
@@ -296,7 +311,7 @@ public class PluginFactory extends ForestryPlugin {
 						"X#X",
 						'#', "blockGlass",
 						'X', "ingotIron",
-						'Y', ForestryItem.sturdyCasing))
+						'Y', coreItems.sturdyCasing))
 				.setFaces(0, 1, 0, 0, 0, 0));
 
 		definitionWorktable = factoryPlain.addDefinition(new MachineDefinition(Constants.DEFINITION_WORKTABLE_META, "forestry.Worktable", TileWorktable.class,
@@ -355,30 +370,31 @@ public class PluginFactory extends ForestryPlugin {
 	protected void registerRecipes() {
 
 		// / FABRICATOR
+		ItemElectronTube electronTube = PluginCore.items.tubes;
 		
-		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), ForestryItem.tubes.getItemStack(4, 0), new Object[]{
+		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), electronTube.get(EnumElectronTube.COPPER, 4), new Object[]{
 				" X ", "#X#", "XXX", '#', "dustRedstone", 'X', "ingotCopper"});
-		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), ForestryItem.tubes.getItemStack(4, 1), new Object[]{
+		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), electronTube.get(EnumElectronTube.TIN, 4), new Object[]{
 				" X ", "#X#", "XXX", '#', "dustRedstone", 'X', "ingotTin"});
-		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), ForestryItem.tubes.getItemStack(4, 2), new Object[]{
+		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), electronTube.get(EnumElectronTube.BRONZE, 4), new Object[]{
 				" X ", "#X#", "XXX", '#', "dustRedstone", 'X', "ingotBronze"});
-		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), ForestryItem.tubes.getItemStack(4, 3), new Object[]{
+		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), electronTube.get(EnumElectronTube.IRON, 4), new Object[]{
 				" X ", "#X#", "XXX", '#', "dustRedstone", 'X', "ingotIron"});
-		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), ForestryItem.tubes.getItemStack(4, 4), new Object[]{
+		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), electronTube.get(EnumElectronTube.GOLD, 4), new Object[]{
 				" X ", "#X#", "XXX", '#', "dustRedstone", 'X', "ingotGold"});
-		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), ForestryItem.tubes.getItemStack(4, 5), new Object[]{
+		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), electronTube.get(EnumElectronTube.DIAMOND, 4), new Object[]{
 				" X ", "#X#", "XXX", '#', "dustRedstone", 'X', "gemDiamond"});
-		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), ForestryItem.tubes.getItemStack(4, 6), new Object[]{
+		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), electronTube.get(EnumElectronTube.OBSIDIAN, 4), new Object[]{
 				" X ", "#X#", "XXX", '#', "dustRedstone", 'X', Blocks.obsidian});
-		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), ForestryItem.tubes.getItemStack(4, 7), new Object[]{
+		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), electronTube.get(EnumElectronTube.BLAZE, 4), new Object[]{
 				" X ", "#X#", "XXX", '#', "dustRedstone", 'X', Items.blaze_powder});
-		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), ForestryItem.tubes.getItemStack(4, 9), new Object[]{
+		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), electronTube.get(EnumElectronTube.EMERALD, 4), new Object[]{
 				" X ", "#X#", "XXX", '#', "dustRedstone", 'X', "gemEmerald"});
-		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), ForestryItem.tubes.getItemStack(4, 10),
+		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), electronTube.get(EnumElectronTube.APATITE, 4),
 				new Object[]{" X ", "#X#", "XXX", '#', "dustRedstone", 'X', "gemApatite"});
-		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), ForestryItem.tubes.getItemStack(4, 11),
+		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), electronTube.get(EnumElectronTube.LAPIS, 4),
 				new Object[]{" X ", "#X#", "XXX", '#', "dustRedstone", 'X', new ItemStack(Items.dye, 1, 4)});
-		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), ForestryItem.tubes.getItemStack(4, 12),
+		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), electronTube.get(EnumElectronTube.ENDER, 4),
 				new Object[]{" X ", "#X#", "XXX", '#', new ItemStack(Items.ender_eye, 1, 0), 'X', new ItemStack(Blocks.end_stone, 1, 0)});
 
 		String[] dyes = {"dyeBlack", "dyeRed", "dyeGreen", "dyeBrown", "dyeBlue", "dyePurple", "dyeCyan", "dyeLightGray", "dyeGray", "dyePink", "dyeLime",
@@ -396,16 +412,16 @@ public class PluginFactory extends ForestryPlugin {
 		int appleMulchAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.mulch.apple");
 		int appleJuiceAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.apple");
 		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Items.apple)}, Fluids.JUICE.getFluid(appleJuiceAmount),
-				ForestryItem.mulch.getItemStack(), appleMulchAmount);
+				PluginCore.items.mulch.getItemStack(), appleMulchAmount);
 
 		int seedOilAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed");
 		FluidStack seedOil = Fluids.SEEDOIL.getFluid(seedOilAmount);
 		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Items.wheat_seeds)}, seedOil);
 		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Items.pumpkin_seeds)}, seedOil);
 		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Items.melon_seeds)}, seedOil);
-		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.phosphor.getItemStack(2), new ItemStack(Blocks.cobblestone)}, Fluids.LAVA.getFluid(1600));
+		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{PluginCore.items.phosphor.getItemStack(2), new ItemStack(Blocks.cobblestone)}, Fluids.LAVA.getFluid(1600));
 		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Blocks.cactus)}, Fluids.WATER.getFluid(500));
-		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Items.snowball), ForestryItem.craftingMaterial.getItemStack(4, 5)}, Fluids.ICE.getFluid(4000));
+		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Items.snowball), PluginCore.items.craftingMaterial.getIceShard(4)}, Fluids.ICE.getFluid(4000));
 
 		// STILL
 		RecipeManagers.stillManager.addRecipe(Constants.STILL_DESTILLATION_DURATION, Fluids.BIOMASS.getFluid(Constants.STILL_DESTILLATION_INPUT),
@@ -439,7 +455,7 @@ public class PluginFactory extends ForestryPlugin {
 		RecipeManagers.fabricatorSmeltingManager.addSmelting(new ItemStack(Blocks.sand), Fluids.GLASS.getFluid(1000), 3000);
 
 		// / CARPENTER
-		RecipeManagers.carpenterManager.addRecipe(50, Fluids.SEEDOIL.getFluid(250), null, ForestryItem.impregnatedCasing.getItemStack(),
+		RecipeManagers.carpenterManager.addRecipe(50, Fluids.SEEDOIL.getFluid(250), null, PluginCore.items.impregnatedCasing.getItemStack(),
 				"###",
 				"# #",
 				"###",
@@ -453,12 +469,12 @@ public class PluginFactory extends ForestryPlugin {
 
 		// RESOURCES
 		RecipeManagers.carpenterManager.addRecipe(10, Fluids.SEEDOIL.getFluid(100), null,
-				ForestryItem.stickImpregnated.getItemStack(2),
+				PluginCore.items.stickImpregnated.getItemStack(2),
 				"#",
 				"#",
 				'#', "logWood");
 		RecipeManagers.carpenterManager.addRecipe(5, Fluids.WATER.getFluid(250), null,
-				ForestryItem.woodPulp.getItemStack(4),
+				PluginCore.items.woodPulp.getItemStack(4),
 				"#",
 				'#', "logWood");
 		RecipeManagers.carpenterManager.addRecipe(5, Fluids.WATER.getFluid(250), null,
@@ -472,36 +488,37 @@ public class PluginFactory extends ForestryPlugin {
 				"#X#",
 				"###",
 				'#', Blocks.dirt,
-				'X', ForestryItem.mulch);
+				'X', PluginCore.items.mulch);
 		RecipeManagers.carpenterManager.addRecipe(5, Fluids.WATER.getFluid(1000), null,
 				ForestryBlock.soil.getItemStack(8, 1),
 				"#X#",
 				"XYX", "#X#",
 				'#', Blocks.dirt,
 				'X', "sand",
-				'Y', ForestryItem.mulch);
-		RecipeManagers.carpenterManager.addRecipe(75, Fluids.WATER.getFluid(5000), null, ForestryItem.hardenedCasing.getItemStack(),
+				'Y', PluginCore.items.mulch);
+		RecipeManagers.carpenterManager.addRecipe(75, Fluids.WATER.getFluid(5000), null, PluginCore.items.hardenedCasing.getItemStack(),
 				"# #",
 				" Y ",
 				"# #",
 				'#', "gemDiamond",
-				'Y', ForestryItem.sturdyCasing);
+				'Y', PluginCore.items.sturdyCasing);
 
 		// / CHIPSETS
-		RecipeManagers.carpenterManager.addRecipe(20, Fluids.WATER.getFluid(1000), null, ForestryItem.circuitboards.getItemStack(1, 0),
+		ItemCircuitBoard circuitBoard = PluginCore.items.circuitboards;
+		RecipeManagers.carpenterManager.addRecipe(20, Fluids.WATER.getFluid(1000), null, circuitBoard.getCircuitboard(EnumCircuitBoardType.BASIC),
 				"R R", "R#R", "R R", '#', "ingotTin", 'R', "dustRedstone");
-		RecipeManagers.carpenterManager.addRecipe(40, Fluids.WATER.getFluid(1000), null, ForestryItem.circuitboards.getItemStack(1, 1),
+		RecipeManagers.carpenterManager.addRecipe(40, Fluids.WATER.getFluid(1000), null, circuitBoard.getCircuitboard(EnumCircuitBoardType.ENHANCED),
 				"R#R", "R#R", "R#R", '#', "ingotBronze", 'R', "dustRedstone");
-		RecipeManagers.carpenterManager.addRecipe(80, Fluids.WATER.getFluid(1000), null, ForestryItem.circuitboards.getItemStack(1, 2),
+		RecipeManagers.carpenterManager.addRecipe(80, Fluids.WATER.getFluid(1000), null, circuitBoard.getCircuitboard(EnumCircuitBoardType.REFINED),
 				"R#R", "R#R", "R#R", '#', "ingotIron", 'R', "dustRedstone");
-		RecipeManagers.carpenterManager.addRecipe(80, Fluids.WATER.getFluid(1000), null, ForestryItem.circuitboards.getItemStack(1, 3),
+		RecipeManagers.carpenterManager.addRecipe(80, Fluids.WATER.getFluid(1000), null, circuitBoard.getCircuitboard(EnumCircuitBoardType.INTRICATE),
 				"R#R", "R#R", "R#R", '#', "ingotGold", 'R', "dustRedstone");
-		RecipeManagers.carpenterManager.addRecipe(40, Fluids.WATER.getFluid(1000), null, ForestryItem.solderingIron.getItemStack(),
+		RecipeManagers.carpenterManager.addRecipe(40, Fluids.WATER.getFluid(1000), null, PluginCore.items.solderingIron.getItemStack(),
 				" # ", "# #", "  B", '#', "ingotIron", 'B', "ingotBronze");
 
 		// RAIN SUBSTRATES
 		if (PluginManager.Module.APICULTURE.isEnabled()) {
-			RecipeManagers.carpenterManager.addRecipe(5, Fluids.WATER.getFluid(1000), null, ForestryItem.iodineCharge.getItemStack(),
+			RecipeManagers.carpenterManager.addRecipe(5, Fluids.WATER.getFluid(1000), null, PluginCore.items.iodineCharge.getItemStack(),
 					"Z#Z",
 					"#Y#",
 					"X#X",
@@ -509,7 +526,7 @@ public class PluginFactory extends ForestryPlugin {
 					'X', Items.gunpowder,
 					'Y', ForestryItem.canEmpty,
 					'Z', ForestryItem.honeyDrop);
-			RecipeManagers.carpenterManager.addRecipe(5, Fluids.WATER.getFluid(1000), null, ForestryItem.craftingMaterial.getItemStack(1, 4),
+			RecipeManagers.carpenterManager.addRecipe(5, Fluids.WATER.getFluid(1000), null, PluginCore.items.craftingMaterial.getDissipationCharge(),
 					"Z#Z",
 					"#Y#",
 					"X#X",
@@ -521,30 +538,30 @@ public class PluginFactory extends ForestryPlugin {
 
 		// Ender pearl
 		RecipeManagers.carpenterManager.addRecipe(100, null, new ItemStack(Items.ender_pearl, 1), " # ", "###", " # ", '#',
-				ForestryItem.craftingMaterial.getItemStack(1, 1));
+				PluginCore.items.craftingMaterial.getPulsatingMesh());
 		// Woven Silk
-		RecipeManagers.carpenterManager.addRecipe(10, Fluids.WATER.getFluid(500), null, ForestryItem.craftingMaterial.getItemStack(1, 3),
-				"###", "###", "###", '#', ForestryItem.craftingMaterial.getItemStack(1, 2));
+		RecipeManagers.carpenterManager.addRecipe(10, Fluids.WATER.getFluid(500), null, PluginCore.items.craftingMaterial.getWovenSilk(),
+				"###", "###", "###", '#', PluginCore.items.craftingMaterial.getSilkWisp());
 
 		// Boxes
-		RecipeManagers.carpenterManager.addRecipe(5, Fluids.WATER.getFluid(1000), null, ForestryItem.carton.getItemStack(2),
+		RecipeManagers.carpenterManager.addRecipe(5, Fluids.WATER.getFluid(1000), null, PluginCore.items.carton.getItemStack(2),
 				" # ", "# #", " # ", '#', "pulpWood");
 
 		// Assembly Kits
-		RecipeManagers.carpenterManager.addRecipe(20, null, ForestryItem.carton.getItemStack(), ForestryItem.kitPickaxe.getItemStack(), new Object[]{
+		RecipeManagers.carpenterManager.addRecipe(20, null, PluginCore.items.carton.getItemStack(), PluginCore.items.kitPickaxe.getItemStack(), new Object[]{
 				"###",
 				" X ",
 				" X ",
 				'#', "ingotBronze",
 				'X', "stickWood"});
 
-		RecipeManagers.carpenterManager.addRecipe(20, null, ForestryItem.carton.getItemStack(), ForestryItem.kitShovel.getItemStack(),
+		RecipeManagers.carpenterManager.addRecipe(20, null, PluginCore.items.carton.getItemStack(), PluginCore.items.kitShovel.getItemStack(),
 				new Object[]{" # ", " X ", " X ", '#', "ingotBronze", 'X', "stickWood"});
 
 		// Reclamation
-		RecipeManagers.carpenterManager.addRecipe(null, ForestryItem.ingotBronze.getItemStack(2, ForestryItem.ingotBronze.item().getMaxDamage()),
-				"#", '#', ForestryItem.brokenBronzePickaxe);
-		RecipeManagers.carpenterManager.addRecipe(null, ForestryItem.ingotBronze.getItemStack(), "#", '#', ForestryItem.brokenBronzeShovel);
+		RecipeManagers.carpenterManager.addRecipe(null, PluginCore.items.ingotBronze.getItemStack(2),
+				"#", '#', PluginCore.items.brokenBronzePickaxe);
+		RecipeManagers.carpenterManager.addRecipe(null, PluginCore.items.ingotBronze.getItemStack(), "#", '#', PluginCore.items.brokenBronzeShovel);
 
 		// Crating and uncrating
 		if (PluginManager.Module.STORAGE.isEnabled()) {
@@ -553,9 +570,9 @@ public class PluginFactory extends ForestryPlugin {
 		ICircuitLayout layout = ChipsetManager.circuitRegistry.getLayout("forestry.machine.upgrade");
 
 		// / Solder Manager
-		ChipsetManager.solderManager.addRecipe(layout, ForestryItem.tubes.getItemStack(1, 9), Circuit.machineSpeedUpgrade1);
-		ChipsetManager.solderManager.addRecipe(layout, ForestryItem.tubes.getItemStack(1, 7), Circuit.machineSpeedUpgrade2);
-		ChipsetManager.solderManager.addRecipe(layout, ForestryItem.tubes.getItemStack(1, 4), Circuit.machineEfficiencyUpgrade1);
+		ChipsetManager.solderManager.addRecipe(layout, PluginCore.items.tubes.get(EnumElectronTube.EMERALD, 1), Circuit.machineSpeedUpgrade1);
+		ChipsetManager.solderManager.addRecipe(layout, PluginCore.items.tubes.get(EnumElectronTube.BLAZE, 1), Circuit.machineSpeedUpgrade2);
+		ChipsetManager.solderManager.addRecipe(layout, PluginCore.items.tubes.get(EnumElectronTube.GOLD, 1), Circuit.machineEfficiencyUpgrade1);
 	}
 
 	@Override

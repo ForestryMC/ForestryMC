@@ -42,6 +42,7 @@ import forestry.core.config.Constants;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
 import forestry.core.fluids.Fluids;
+import forestry.core.items.EnumElectronTube;
 import forestry.core.proxy.Proxies;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.recipes.ShapedRecipeCustom;
@@ -139,7 +140,7 @@ public class PluginIC2 extends ForestryPlugin {
 				"X#X",
 				'#', "blockGlass",
 				'X', "ingotGold",
-				'Y', ForestryItem.sturdyCasing)));
+				'Y', PluginCore.items.sturdyCasing)));
 
 		emptyCell = IC2Items.getItem("cell");
 		if (emptyCell != null) {
@@ -255,7 +256,7 @@ public class PluginIC2 extends ForestryPlugin {
 
 		if (rubber != null) {
 			for (Object rubberOreDict : RecipeUtil.getOreDictRecipeEquivalents(rubber)) {
-				RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), ForestryItem.tubes.getItemStack(4, 8),
+				RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), PluginCore.items.tubes.get(EnumElectronTube.RUBBER, 4),
 						new Object[]{" X ", "#X#", "XXX", '#', "dustRedstone", 'X', rubberOreDict});
 			}
 		}
@@ -305,14 +306,14 @@ public class PluginIC2 extends ForestryPlugin {
 		ICircuitLayout layout = ChipsetManager.circuitRegistry.getLayout("forestry.engine.tin");
 
 		// / Solder Manager
-		ChipsetManager.solderManager.addRecipe(layout, ForestryItem.tubes.getItemStack(1, 0), Circuit.energyElectricChoke1);
-		ChipsetManager.solderManager.addRecipe(layout, ForestryItem.tubes.getItemStack(1, 1), Circuit.energyElectricBoost1);
-		ChipsetManager.solderManager.addRecipe(layout, ForestryItem.tubes.getItemStack(1, 2), Circuit.energyElectricBoost2);
-		ChipsetManager.solderManager.addRecipe(layout, ForestryItem.tubes.getItemStack(1, 3), Circuit.energyElectricEfficiency1);
+		ChipsetManager.solderManager.addRecipe(layout, PluginCore.items.tubes.get(EnumElectronTube.COPPER, 1), Circuit.energyElectricChoke1);
+		ChipsetManager.solderManager.addRecipe(layout, PluginCore.items.tubes.get(EnumElectronTube.TIN, 1), Circuit.energyElectricBoost1);
+		ChipsetManager.solderManager.addRecipe(layout, PluginCore.items.tubes.get(EnumElectronTube.BRONZE, 1), Circuit.energyElectricBoost2);
+		ChipsetManager.solderManager.addRecipe(layout, PluginCore.items.tubes.get(EnumElectronTube.IRON, 1), Circuit.energyElectricEfficiency1);
 		
 		if (PluginManager.Module.FARMING.isEnabled() && resin != null && rubberwood != null) {
 			ICircuitLayout layoutManual = ChipsetManager.circuitRegistry.getLayout("forestry.farms.manual");
-			ChipsetManager.solderManager.addRecipe(layoutManual, ForestryItem.tubes.getItemStack(1, 8), Circuit.farmRubberManual);
+			ChipsetManager.solderManager.addRecipe(layoutManual, PluginCore.items.tubes.get(EnumElectronTube.RUBBER, 1), Circuit.farmRubberManual);
 		}
 	}
 

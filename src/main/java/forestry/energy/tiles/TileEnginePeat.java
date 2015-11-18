@@ -29,7 +29,6 @@ import cpw.mods.fml.common.registry.GameData;
 
 import forestry.api.fuels.FuelManager;
 import forestry.core.config.Constants;
-import forestry.core.config.ForestryItem;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.inventory.AdjacentInventoryCache;
 import forestry.core.inventory.IInventoryAdapter;
@@ -40,6 +39,7 @@ import forestry.core.tiles.TileEngine;
 import forestry.core.utils.InventoryUtil;
 import forestry.energy.inventory.InventoryEnginePeat;
 import forestry.factory.triggers.FactoryTriggers;
+import forestry.plugins.PluginCore;
 
 import buildcraft.api.statements.ITriggerExternal;
 
@@ -75,14 +75,16 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 	private int getFreeWasteSlot() {
 		IInventoryAdapter inventory = getInternalInventory();
 		for (int i = InventoryEnginePeat.SLOT_WASTE_1; i <= InventoryEnginePeat.SLOT_WASTE_COUNT; i++) {
-			if (inventory.getStackInSlot(i) == null) {
+			ItemStack waste = inventory.getStackInSlot(i);
+			if (waste == null) {
 				return i;
 			}
-			if (!ForestryItem.ash.isItemEqual(inventory.getStackInSlot(i))) {
+
+			if (waste.getItem() != PluginCore.items.ash) {
 				continue;
 			}
 
-			if (inventory.getStackInSlot(i).stackSize < 64) {
+			if (waste.stackSize < 64) {
 				return i;
 			}
 		}
@@ -182,7 +184,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 		if (wasteSlot >= 0) {
 			IInventoryAdapter inventory = getInternalInventory();
 			if (inventory.getStackInSlot(wasteSlot) == null) {
-				inventory.setInventorySlotContents(wasteSlot, ForestryItem.ash.getItemStack());
+				inventory.setInventorySlotContents(wasteSlot, PluginCore.items.ash.getItemStack());
 			} else {
 				inventory.getStackInSlot(wasteSlot).stackSize++;
 			}

@@ -32,17 +32,6 @@ import forestry.plugins.PluginManager.Stage;
  * @author SirSengir
  */
 public enum ForestryItem {
-
-	fertilizerBio,
-	fertilizerCompound,
-	apatite,
-	// Ingots
-	ingotCopper,
-	ingotTin,
-	ingotBronze,
-	// Tools
-	wrench,
-	pipette,
 	bucketBiomass,
 	bucketEthanol,
 	bucketGlass,
@@ -51,21 +40,6 @@ public enum ForestryItem {
 	bucketJuice,
 	bucketSeedoil,
 	bucketShortMead,
-	// Crafting
-	impregnatedCasing,
-	sturdyCasing,
-	hardenedCasing,
-	craftingMaterial,
-	// Rainmaker
-	iodineCharge,
-	// Gears
-	gearBronze,
-	gearCopper,
-	gearTin,
-	// Chipsets
-	circuitboards,
-	solderingIron,
-	tubes,
 	// Mail
 	stamps,
 	letters,
@@ -73,28 +47,8 @@ public enum ForestryItem {
 	// mailIndicator,
 
 	// Carpenter
-	stickImpregnated,
-	woodPulp,
-	carton,
 	crate,
-	// Tools
-	bronzePickaxe,
-	brokenBronzePickaxe,
-	kitPickaxe,
-	bronzeShovel,
-	brokenBronzeShovel,
-	kitShovel,
-	// Do not touch - contagious!
-	tent,
 	habitatLocator,
-	// Moistener
-	mouldyWheat,
-	decayingWheat,
-	mulch,
-	// Peat
-	peat,
-	bituminousPeat,
-	ash,
 	// Bees
 	beeQueenGE,
 	beeDroneGE,
@@ -104,7 +58,6 @@ public enum ForestryItem {
 	imprinter,
 	honeyDrop,
 	scoop,
-	beeswax,
 	pollenCluster,
 	propolis,
 	honeydew,
@@ -112,8 +65,6 @@ public enum ForestryItem {
 	honeyedSlice,
 	ambrosia,
 	honeyPot,
-	phosphor,
-	refractoryWax,
 	waxCast,
 	frameUntreated,
 	frameImpregnated,
@@ -134,8 +85,6 @@ public enum ForestryItem {
 	// Beverages
 	beverage,
 	infuser,
-	// Naturalist's Armor
-	naturalistHat,
 	// Apiarist's Armor
 	apiaristHat,
 	apiaristChest,
@@ -143,8 +92,6 @@ public enum ForestryItem {
 	apiaristBoots,
 	// Combs
 	beeComb,
-	// Fruits
-	fruits,
 	// Backpacks
 	apiaristBackpack,
 	lepidopteristBackpack,

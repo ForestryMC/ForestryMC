@@ -23,11 +23,11 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.core.render.TextureManager;
 
-public class ItemMisc extends ItemForestry {
+public class ItemCraftingMaterial extends ItemForestry {
 
 	private final String[] definition = new String[]{"pulsatingDust", "pulsatingMesh", "silkWisp", "wovenSilk", "dissipationCharge", "iceShard", "scentedPaneling"};
 
-	public ItemMisc() {
+	public ItemCraftingMaterial() {
 		super();
 		setMaxDamage(0);
 		setHasSubtypes(true);
@@ -84,4 +84,31 @@ public class ItemMisc extends ItemForestry {
 		}
 	}
 
+	public ItemStack getPulsatingDust() {
+		return new ItemStack(this, 1, 0);
+	}
+
+	public ItemStack getPulsatingMesh() {
+		return new ItemStack(this, 1, 1);
+	}
+
+	public ItemStack getSilkWisp() {
+		return new ItemStack(this, 1, 2);
+	}
+
+	public ItemStack getWovenSilk() {
+		return new ItemStack(this, 1, 3);
+	}
+
+	public ItemStack getDissipationCharge() {
+		return new ItemStack(this, 1, 4);
+	}
+
+	public ItemStack getIceShard(int amount) {
+		return new ItemStack(this, amount, 5);
+	}
+
+	public ItemStack getScentedPaneling() {
+		return new ItemStack(this, 1, 6);
+	}
 }

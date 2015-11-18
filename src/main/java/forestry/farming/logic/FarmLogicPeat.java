@@ -26,9 +26,9 @@ import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.core.blocks.BlockSoil;
 import forestry.core.config.ForestryBlock;
-import forestry.core.config.ForestryItem;
 import forestry.core.utils.vect.Vect;
 import forestry.core.utils.vect.VectUtil;
+import forestry.plugins.PluginCore;
 
 public class FarmLogicPeat extends FarmLogicWatered {
 
@@ -106,7 +106,7 @@ public class FarmLogicPeat extends FarmLogicWatered {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon() {
-		return ForestryItem.peat.item().getIconFromDamage(0);
+		return PluginCore.items.peat.getIconFromDamage(0);
 	}
 
 }

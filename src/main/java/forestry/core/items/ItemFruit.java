@@ -19,13 +19,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
-import net.minecraftforge.oredict.OreDictionary;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-import forestry.core.config.ForestryItem;
 import forestry.core.render.TextureManager;
+import forestry.plugins.PluginCore;
 
 public class ItemFruit extends ItemForestryFood {
 
@@ -57,7 +55,7 @@ public class ItemFruit extends ItemForestryFood {
 		}
 
 		public ItemStack getStack(int qty) {
-			return ForestryItem.fruits.getItemStack(qty, ordinal());
+			return new ItemStack(PluginCore.items.fruits, qty, ordinal());
 		}
 
 		public String getOreDict() {

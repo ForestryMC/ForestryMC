@@ -29,7 +29,6 @@ import forestry.api.farming.Farmables;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.BackpackManager;
 import forestry.core.config.Constants;
-import forestry.core.config.ForestryItem;
 import forestry.core.fluids.Fluids;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.Log;
@@ -125,12 +124,13 @@ public class PluginBiomesOPlenty extends ForestryPlugin {
 	}
 
 	private static void addSqueezerRecipes() {
+		ItemStack mulch = new ItemStack(PluginCore.items.mulch);
 		if (food != null) {
-			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(food)}, Fluids.JUICE.getFluid(50), ForestryItem.mulch.getItemStack(), 5);
+			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(food)}, Fluids.JUICE.getFluid(50), mulch, 5);
 		}
 
 		if (persimmon != null) {
-			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{persimmon}, Fluids.JUICE.getFluid(200), ForestryItem.mulch.getItemStack(), 20);
+			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{persimmon}, Fluids.JUICE.getFluid(200), mulch, 20);
 		}
 	}
 

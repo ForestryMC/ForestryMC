@@ -27,8 +27,8 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.core.CreativeTabForestry;
-import forestry.core.config.ForestryItem;
 import forestry.core.render.TextureManager;
+import forestry.plugins.PluginCore;
 
 public class BlockResourceOre extends Block {
 	public BlockResourceOre() {
@@ -59,7 +59,7 @@ public class BlockResourceOre extends Block {
 
 			int amount = (2 + world.rand.nextInt(5)) * (fortuneModifier + 1);
 			if (amount > 0) {
-				drops.add(ForestryItem.apatite.getItemStack(amount));
+				drops.add(PluginCore.items.apatite.getItemStack(amount));
 			}
 		} else {
 			drops.add(new ItemStack(this, 1, metadata));

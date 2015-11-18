@@ -124,6 +124,7 @@ import forestry.core.config.ForestryItem;
 import forestry.core.config.LocalizedConfiguration;
 import forestry.core.entities.EntityFXSnow;
 import forestry.core.fluids.Fluids;
+import forestry.core.items.EnumElectronTube;
 import forestry.core.items.ItemBlockForestry;
 import forestry.core.items.ItemForestry;
 import forestry.core.items.ItemOverlay;
@@ -290,7 +291,7 @@ public class PluginApiculture extends ForestryPlugin {
 						"###",
 						'X', "slabWood",
 						'#', "plankWood",
-						'C', ForestryItem.impregnatedCasing))
+						'C', PluginCore.items.impregnatedCasing))
 				.setFaces(0, 1, 2, 2, 4, 4, 0, 7));
 
 		definitionChestLegacy = ((BlockBase) ForestryBlock.apiculture.block()).addDefinition(new MachineDefinition(Constants.DEFINITION_APIARISTCHEST_LEGACY_META, "forestry.ApiaristChest", TileApiaristChest.class).setLegacy());
@@ -520,7 +521,7 @@ public class PluginApiculture extends ForestryPlugin {
 	@Override
 	protected void registerCrates() {
 		ICrateRegistry crateRegistry = StorageManager.crateRegistry;
-		crateRegistry.registerCrate(ForestryItem.beeswax.getItemStack(), "cratedBeeswax");
+		crateRegistry.registerCrate(PluginCore.items.beeswax.getItemStack(), "cratedBeeswax");
 		crateRegistry.registerCrate(ForestryItem.pollenCluster.getItemStack(), "cratedPollen");
 		crateRegistry.registerCrate(ForestryItem.propolis.getItemStack(), "cratedPropolis");
 		crateRegistry.registerCrate(ForestryItem.honeydew.getItemStack(), "cratedHoneydew");
@@ -540,25 +541,26 @@ public class PluginApiculture extends ForestryPlugin {
 		crateRegistry.registerCrate(ForestryItem.beeComb.getItemStack(1, 15), "cratedMossyCombs");
 		crateRegistry.registerCrate(ForestryItem.beeComb.getItemStack(1, 16), "cratedMellowCombs");
 
-		crateRegistry.registerCrate(ForestryItem.refractoryWax.getItemStack(), "cratedRefractoryWax");
+		crateRegistry.registerCrate(PluginCore.items.refractoryWax.getItemStack(), "cratedRefractoryWax");
 	}
 
 	@Override
 	protected void registerRecipes() {
 
 		// / APIARIST'S ARMOR
+		ItemStack wovenSilk = PluginCore.items.craftingMaterial.getWovenSilk();
 		RecipeUtil.addRecipe(ForestryItem.apiaristHat.getItemStack(),
 				"###", "# #",
-				'#', ForestryItem.craftingMaterial.getItemStack(1, 3));
+				'#', wovenSilk);
 		RecipeUtil.addRecipe(ForestryItem.apiaristChest.getItemStack(),
 				"# #", "###", "###",
-				'#', ForestryItem.craftingMaterial.getItemStack(1, 3));
+				'#', wovenSilk);
 		RecipeUtil.addRecipe(ForestryItem.apiaristLegs.getItemStack(),
 				"###", "# #", "# #",
-				'#', ForestryItem.craftingMaterial.getItemStack(1, 3));
+				'#', wovenSilk);
 		RecipeUtil.addRecipe(ForestryItem.apiaristBoots.getItemStack(),
 				"# #", "# #",
-				'#', ForestryItem.craftingMaterial.getItemStack(1, 3));
+				'#', wovenSilk);
 
 		// / HABITAT LOCATOR
 		RecipeUtil.addRecipe(ForestryItem.habitatLocator.getItemStack(),
@@ -587,7 +589,7 @@ public class PluginApiculture extends ForestryPlugin {
 				'S', Items.string);
 		RecipeUtil.addRecipe(ForestryItem.frameImpregnated.getItemStack(),
 				"###", "#S#", "###",
-				'#', ForestryItem.stickImpregnated,
+				'#', PluginCore.items.stickImpregnated,
 				'S', Items.string);
 		RecipeUtil.addRecipe(ForestryItem.minecartBeehouse.getItemStack(1, 0),
 				"B",
@@ -622,22 +624,22 @@ public class PluginApiculture extends ForestryPlugin {
 		}
 
 		// / CAPSULES
-		RecipeUtil.addRecipe(ForestryAPI.activeMode.getStackSetting("recipe.output.capsule"), "###", '#', ForestryItem.beeswax);
-		RecipeUtil.addRecipe(ForestryAPI.activeMode.getStackSetting("recipe.output.refractory"), "###", '#', ForestryItem.refractoryWax);
+		RecipeUtil.addRecipe(ForestryAPI.activeMode.getStackSetting("recipe.output.capsule"), "###", '#', PluginCore.items.beeswax);
+		RecipeUtil.addRecipe(ForestryAPI.activeMode.getStackSetting("recipe.output.refractory"), "###", '#', PluginCore.items.refractoryWax);
 
 		// / BITUMINOUS PEAT
-		RecipeUtil.addRecipe(ForestryItem.bituminousPeat.getItemStack(),
+		RecipeUtil.addRecipe(PluginCore.items.bituminousPeat.getItemStack(),
 				" # ", "XYX", " # ",
 				'#', "dustAsh",
-				'X', ForestryItem.peat,
+				'X', PluginCore.items.peat,
 				'Y', ForestryItem.propolis);
 
 		// / TORCHES
 		RecipeUtil.addRecipe(new ItemStack(Blocks.torch, 3),
 				" # ", " # ", " Y ",
-				'#', ForestryItem.beeswax,
+				'#', PluginCore.items.beeswax,
 				'Y', "stickWood");
-		RecipeUtil.addRecipe(ForestryItem.craftingMaterial.getItemStack(1, 1),
+		RecipeUtil.addRecipe(PluginCore.items.craftingMaterial.getPulsatingMesh(),
 				"# #", " # ", "# #",
 				'#', ForestryItem.propolis.getItemStack(1, 2));
 
@@ -646,21 +648,21 @@ public class PluginApiculture extends ForestryPlugin {
 				"###",
 				"# #",
 				"###",
-				'#', ForestryItem.beeswax);
+				'#', PluginCore.items.beeswax);
 
 		// / ALVEARY
 		RecipeUtil.addRecipe(ForestryBlock.alveary.getItemStack(1, TileAlveary.PLAIN_META),
 				"###",
 				"#X#",
 				"###",
-				'X', ForestryItem.impregnatedCasing,
-				'#', ForestryItem.craftingMaterial.getItemStack(1, 6));
+				'X', PluginCore.items.impregnatedCasing,
+				'#', PluginCore.items.craftingMaterial.getScentedPaneling());
 		// SWARMER
 		RecipeUtil.addRecipe(ForestryBlock.alveary.getItemStack(1, TileAlveary.SWARMER_META),
 				"#G#",
 				" X ",
 				"#G#",
-				'#', ForestryItem.tubes.getItemStack(1, 5),
+				'#', PluginCore.items.tubes.get(EnumElectronTube.DIAMOND, 1),
 				'X', ForestryBlock.alveary,
 				'G', "ingotGold");
 		// FAN
@@ -668,7 +670,7 @@ public class PluginApiculture extends ForestryPlugin {
 				"I I",
 				" X ",
 				"I#I",
-				'#', ForestryItem.tubes.getItemStack(1, 4),
+				'#', PluginCore.items.tubes.get(EnumElectronTube.GOLD, 1),
 				'X', ForestryBlock.alveary,
 				'I', "ingotIron");
 		// HEATER
@@ -676,7 +678,7 @@ public class PluginApiculture extends ForestryPlugin {
 				"#I#",
 				" X ",
 				"YYY",
-				'#', ForestryItem.tubes.getItemStack(1, 4),
+				'#', PluginCore.items.tubes.get(EnumElectronTube.GOLD, 1),
 				'X', ForestryBlock.alveary,
 				'I', "ingotIron", 'Y', "stone");
 		// HYGROREGULATOR
@@ -701,16 +703,16 @@ public class PluginApiculture extends ForestryPlugin {
 				"WWW",
 				'X', ForestryBlock.alveary,
 				'I', "ingotIron",
-				'W', ForestryItem.craftingMaterial.getItemStack(1, 3));
+				'W', PluginCore.items.craftingMaterial.getWovenSilk());
 
 		if (PluginManager.Module.FACTORY.isEnabled()) {
 			// / SQUEEZER
 			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.honeyDrop.getItemStack()}, Fluids.HONEY.getFluid(Constants.FLUID_PER_HONEY_DROP),
 					ForestryItem.propolis.getItemStack(), 5);
 			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.honeydew.getItemStack()}, Fluids.HONEY.getFluid(Constants.FLUID_PER_HONEY_DROP));
-			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.phosphor.getItemStack(2), new ItemStack(Blocks.sand)}, Fluids.LAVA.getFluid(2000));
-			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.phosphor.getItemStack(2), new ItemStack(Blocks.sand, 1, 1)}, Fluids.LAVA.getFluid(2000));
-			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.phosphor.getItemStack(2), new ItemStack(Blocks.dirt)}, Fluids.LAVA.getFluid(1600));
+			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{PluginCore.items.phosphor.getItemStack(2), new ItemStack(Blocks.sand)}, Fluids.LAVA.getFluid(2000));
+			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{PluginCore.items.phosphor.getItemStack(2), new ItemStack(Blocks.sand, 1, 1)}, Fluids.LAVA.getFluid(2000));
+			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{PluginCore.items.phosphor.getItemStack(2), new ItemStack(Blocks.dirt)}, Fluids.LAVA.getFluid(1600));
 
 			// / CARPENTER
 			RecipeManagers.carpenterManager.addRecipe(100, Fluids.WATER.getFluid(2000), null, ForestryItem.beealyzer.getItemStack(),
@@ -719,43 +721,43 @@ public class PluginApiculture extends ForestryPlugin {
 					'X', "ingotTin",
 					'R', "dustRedstone",
 					'D', "gemDiamond");
-			RecipeManagers.carpenterManager.addRecipe(50, Fluids.HONEY.getFluid(500), null, ForestryItem.craftingMaterial.getItemStack(1, 6),
+			RecipeManagers.carpenterManager.addRecipe(50, Fluids.HONEY.getFluid(500), null, PluginCore.items.craftingMaterial.getScentedPaneling(),
 					" J ", "###", "WPW",
 					'#', "plankWood",
 					'J', ForestryItem.royalJelly,
-					'W', ForestryItem.beeswax,
+					'W', PluginCore.items.beeswax,
 					'P', ForestryItem.pollenCluster);
 
 			RecipeManagers.carpenterManager.addRecipe(30, Fluids.WATER.getFluid(600), null, ForestryBlock.candle.getItemStack(24),
 					" X ",
 					"###",
 					"###",
-					'#', ForestryItem.beeswax,
+					'#', PluginCore.items.beeswax,
 					'X', Items.string);
 			RecipeManagers.carpenterManager.addRecipe(10, Fluids.WATER.getFluid(200), null, ForestryBlock.candle.getItemStack(6),
 					"#X#",
-					'#', ForestryItem.beeswax,
-					'X', ForestryItem.craftingMaterial.getItemStack(1, 2));
+					'#', PluginCore.items.beeswax,
+					'X', PluginCore.items.craftingMaterial.getSilkWisp());
 			RecipeUtil.addShapelessRecipe(ForestryBlock.candle.getItemStack(), ForestryBlock.candle.getItemStack());
 			RecipeUtil.addShapelessRecipe(ForestryBlock.candle.getItemStack(1, 1), ForestryBlock.candle.getItemStack(1, 1));
 
 			// / CENTRIFUGE
 			// Honey combs
 			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 0), ImmutableMap.of(
-					ForestryItem.beeswax.getItemStack(), 1.0f,
+					PluginCore.items.beeswax.getItemStack(), 1.0f,
 					ForestryItem.honeyDrop.getItemStack(), 0.9f
 			));
 
 			// Cocoa combs
 			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 1), ImmutableMap.of(
-					ForestryItem.beeswax.getItemStack(), 1.0f,
+					PluginCore.items.beeswax.getItemStack(), 1.0f,
 					new ItemStack(Items.dye, 1, 3), 0.5f
 			));
 
 			// Simmering combs
 			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 2), ImmutableMap.of(
-					ForestryItem.refractoryWax.getItemStack(), 1.0f,
-					ForestryItem.phosphor.getItemStack(2), 0.7f
+					PluginCore.items.refractoryWax.getItemStack(), 1.0f,
+					PluginCore.items.phosphor.getItemStack(2), 0.7f
 			));
 
 			// Stringy combs
@@ -772,7 +774,7 @@ public class PluginApiculture extends ForestryPlugin {
 
 			// Frozen combs
 			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 4), ImmutableMap.of(
-					ForestryItem.beeswax.getItemStack(), 0.8f,
+					PluginCore.items.beeswax.getItemStack(), 0.8f,
 					ForestryItem.honeyDrop.getItemStack(), 0.7f,
 					new ItemStack(Items.snowball), 0.4f,
 					ForestryItem.pollenCluster.getItemStack(1, 1), 0.2f
@@ -786,7 +788,7 @@ public class PluginApiculture extends ForestryPlugin {
 
 			// Parched combs
 			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 7), ImmutableMap.of(
-					ForestryItem.beeswax.getItemStack(), 1.0f,
+					PluginCore.items.beeswax.getItemStack(), 1.0f,
 					ForestryItem.honeyDrop.getItemStack(), 0.9f
 			));
 
@@ -803,33 +805,33 @@ public class PluginApiculture extends ForestryPlugin {
 			// Powdery combs
 			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 10), ImmutableMap.of(
 					ForestryItem.honeyDrop.getItemStack(), 0.2f,
-					ForestryItem.beeswax.getItemStack(), 0.2f,
+					PluginCore.items.beeswax.getItemStack(), 0.2f,
 					new ItemStack(Items.gunpowder), 0.9f
 			));
 
 			// Wheaten Combs
 			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 14), ImmutableMap.of(
 					ForestryItem.honeyDrop.getItemStack(), 0.2f,
-					ForestryItem.beeswax.getItemStack(), 0.2f,
+					PluginCore.items.beeswax.getItemStack(), 0.2f,
 					new ItemStack(Items.wheat), 0.8f
 			));
 
 			// Mossy Combs
 			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 15), ImmutableMap.of(
-					ForestryItem.beeswax.getItemStack(), 1.0f,
+					PluginCore.items.beeswax.getItemStack(), 1.0f,
 					ForestryItem.honeyDrop.getItemStack(), 0.9f
 			));
 
 			// Mellow Combs
 			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 16), ImmutableMap.of(
 					ForestryItem.honeydew.getItemStack(), 0.6f,
-					ForestryItem.beeswax.getItemStack(), 0.2f,
+					PluginCore.items.beeswax.getItemStack(), 0.2f,
 					new ItemStack(Items.quartz), 0.3f
 			));
 
 			// Silky Propolis
 			RecipeManagers.centrifugeManager.addRecipe(5, ForestryItem.propolis.getItemStack(1, 3), ImmutableMap.of(
-					ForestryItem.craftingMaterial.getItemStack(1, 2), 0.6f,
+					PluginCore.items.craftingMaterial.getSilkWisp(), 0.6f,
 					ForestryItem.propolis.getItemStack(), 0.1f
 			));
 
@@ -849,8 +851,20 @@ public class PluginApiculture extends ForestryPlugin {
 
 	private static IRecipe[] createAlyzerRecipes(Block block, int meta) {
 		ArrayList<IRecipe> recipes = new ArrayList<>();
-		recipes.add(ShapedRecipeCustom.createShapedRecipe(new ItemStack(block, 1, meta), "XTX", " Y ", "X X", 'Y', ForestryItem.sturdyCasing, 'T', ForestryItem.beealyzer, 'X', "ingotBronze"));
-		recipes.add(ShapedRecipeCustom.createShapedRecipe(new ItemStack(block, 1, meta), "XTX", " Y ", "X X", 'Y', ForestryItem.sturdyCasing, 'T', ForestryItem.treealyzer, 'X', "ingotBronze"));
+		recipes.add(ShapedRecipeCustom.createShapedRecipe(new ItemStack(block, 1, meta),
+				"XTX",
+				" Y ",
+				"X X",
+				'Y', PluginCore.items.sturdyCasing,
+				'T', ForestryItem.beealyzer,
+				'X', "ingotBronze"));
+		recipes.add(ShapedRecipeCustom.createShapedRecipe(new ItemStack(block, 1, meta),
+				"XTX",
+				" Y ",
+				"X X",
+				'Y', PluginCore.items.sturdyCasing,
+				'T', ForestryItem.treealyzer,
+				'X', "ingotBronze"));
 		return recipes.toArray(new IRecipe[recipes.size()]);
 	}
 
@@ -951,11 +965,6 @@ public class PluginApiculture extends ForestryPlugin {
 
 	public static double getSecondPrincessChance() {
 		return secondPrincessChance;
-	}
-
-	private static void parseBeeBlacklist(String list) {
-		String[] items = list.split("[;]+");
-		parseBeeBlacklist(items);
 	}
 
 	private static void parseBeeBlacklist(String[] items) {

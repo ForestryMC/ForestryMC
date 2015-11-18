@@ -26,11 +26,13 @@ import forestry.api.recipes.RecipeManagers;
 import forestry.core.GuiHandlerBase;
 import forestry.core.ISaveEventHandler;
 import forestry.core.blocks.BlockBase;
+import forestry.core.circuits.EnumCircuitBoardType;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
 import forestry.core.fluids.Fluids;
+import forestry.core.items.EnumElectronTube;
 import forestry.core.items.ItemBlockForestry;
 import forestry.core.items.ItemWithGui;
 import forestry.core.network.GuiId;
@@ -74,7 +76,7 @@ public class PluginMail extends ForestryPlugin {
 	protected void registerItemsAndBlocks() {
 
 		stampDefinitions = new StampInfo[]{
-				new StampInfo("1n", EnumPostage.P_1, ForestryItem.apatite, 0x4a8ca7, 0xffffff),
+				new StampInfo("1n", EnumPostage.P_1, PluginCore.items.apatite, 0x4a8ca7, 0xffffff),
 				new StampInfo("2n", EnumPostage.P_2, "ingotCopper", 0xe8c814, 0xffffff),
 				new StampInfo("5n", EnumPostage.P_5, "ingotTin", 0x9c0707, 0xffffff),
 				new StampInfo("10n", EnumPostage.P_10, Items.gold_ingot, 0x7bd1b8, 0xffffff),
@@ -110,7 +112,7 @@ public class PluginMail extends ForestryPlugin {
 				" # ", "#Y#", "XXX",
 				'#', "ingotTin",
 				'X', "chestWood",
-				'Y', ForestryItem.sturdyCasing);
+				'Y', PluginCore.items.sturdyCasing);
 
 		BlockBase mail = ((BlockBase) ForestryBlock.mail.block());
 
@@ -121,11 +123,11 @@ public class PluginMail extends ForestryPlugin {
 				"Z#Z",
 				"#Y#",
 				"XWX",
-				'#', ForestryItem.tubes.getItemStack(1, 2),
+				'#', PluginCore.items.tubes.get(EnumElectronTube.BRONZE, 1),
 				'X', "chestWood",
-				'Y', ForestryItem.sturdyCasing,
-				'Z', ForestryItem.tubes.getItemStack(1, 3),
-				'W', ForestryItem.circuitboards.getItemStack(1, 2));
+				'Y', PluginCore.items.sturdyCasing,
+				'Z', PluginCore.items.tubes.get(EnumElectronTube.IRON, 1),
+				'W', PluginCore.items.circuitboards.getCircuitboard(EnumCircuitBoardType.REFINED));
 		definitionTradestation = mail.addDefinition(new MachineDefinition(Constants.DEFINITION_TRADESTATION_META, "forestry.Tradestation", TileTrader.class, recipe).setFaces(0, 1, 2, 3, 4, 4, 0, 7));
 
 		definitionPhilatelist = mail.addDefinition(new MachineDefinition(Constants.DEFINITION_PHILATELIST_META, "forestry.Philatelist", TilePhilatelist.class)
@@ -191,7 +193,7 @@ public class PluginMail extends ForestryPlugin {
 		RecipeUtil.addRecipe(new ItemStack(Items.paper), "###", '#', ForestryItem.letters.getItemStack(1, OreDictionary.WILDCARD_VALUE));
 
 		// Carpenter
-		RecipeManagers.carpenterManager.addRecipe(10, Fluids.WATER.getFluid(250), null, ForestryItem.letters.getItemStack(), "###", "###", '#', ForestryItem.woodPulp);
+		RecipeManagers.carpenterManager.addRecipe(10, Fluids.WATER.getFluid(250), null, ForestryItem.letters.getItemStack(), "###", "###", '#', PluginCore.items.woodPulp);
 
 		RecipeUtil.addShapelessRecipe(ForestryItem.catalogue.getItemStack(), ForestryItem.stamps.getItemStack(1, OreDictionary.WILDCARD_VALUE), new ItemStack(Items.book));
 	}

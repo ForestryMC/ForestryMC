@@ -32,7 +32,6 @@ import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
 import forestry.core.config.Constants;
-import forestry.core.config.ForestryItem;
 import forestry.core.fluids.Fluids;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.ModUtil;
@@ -247,7 +246,9 @@ public class PluginNatura extends ForestryPlugin {
 
 		amount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.apple") / 2;
 		amount = Math.max(amount, 1); // Produce at least 1 mb of juice.
-		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(GameRegistry.findItem(NATURA, "Natura.netherfood"), 1, 0)}, Fluids.JUICE.getFluid(amount), ForestryItem.mulch.getItemStack(), ForestryAPI.activeMode.getIntegerSetting("squeezer.mulch.apple"));
+		ItemStack netherFood = new ItemStack(GameRegistry.findItem(NATURA, "Natura.netherfood"), 1, 0);
+		ItemStack mulch = PluginCore.items.mulch.getItemStack();
+		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{netherFood}, Fluids.JUICE.getFluid(amount), mulch, ForestryAPI.activeMode.getIntegerSetting("squeezer.mulch.apple"));
 
 		amount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.apple") / 25;
 		amount = Math.max(amount, 1); // Produce at least 1 mb of juice.
@@ -262,7 +263,7 @@ public class PluginNatura extends ForestryPlugin {
 				ItemStack compostWheat = ForestryAPI.activeMode.getStackSetting("recipe.output.compost.wheat");
 				RecipeUtil.addRecipe(compostWheat, " X ", "X#X", " X ", '#', Blocks.dirt, 'X', itemBarley);
 			}
-			FuelManager.moistenerResource.put(itemBarley, new MoistenerFuel(itemBarley, ForestryItem.mouldyWheat.getItemStack(), 0, 300));
+			FuelManager.moistenerResource.put(itemBarley, new MoistenerFuel(itemBarley, PluginCore.items.mouldyWheat.getItemStack(), 0, 300));
 		}
 	}
 

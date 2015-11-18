@@ -147,9 +147,9 @@ public class PluginFluids extends ForestryPlugin {
 		}
 
 		if (RecipeManagers.squeezerManager != null) {
-			RecipeManagers.squeezerManager.addContainerRecipe(10, ForestryItem.canEmpty.getItemStack(), ForestryItem.ingotTin.getItemStack(), 0.05f);
-			RecipeManagers.squeezerManager.addContainerRecipe(10, ForestryItem.waxCapsule.getItemStack(), ForestryItem.beeswax.getItemStack(), 0.10f);
-			RecipeManagers.squeezerManager.addContainerRecipe(10, ForestryItem.refractoryEmpty.getItemStack(), ForestryItem.refractoryWax.getItemStack(), 0.10f);
+			RecipeManagers.squeezerManager.addContainerRecipe(10, ForestryItem.canEmpty.getItemStack(), PluginCore.items.ingotTin.getItemStack(), 0.05f);
+			RecipeManagers.squeezerManager.addContainerRecipe(10, ForestryItem.waxCapsule.getItemStack(), PluginCore.items.beeswax.getItemStack(), 0.10f);
+			RecipeManagers.squeezerManager.addContainerRecipe(10, ForestryItem.refractoryEmpty.getItemStack(), PluginCore.items.refractoryWax.getItemStack(), 0.10f);
 		}
 
 		FluidStack ethanol = Fluids.ETHANOL.getFluid(1);

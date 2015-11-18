@@ -311,9 +311,9 @@ public class PluginStorage extends ForestryPlugin {
 				new ItemStack(Blocks.obsidian),
 				new ItemStack(Blocks.coal_ore),
 				new ItemStack(Items.coal),
-				ForestryItem.bronzePickaxe.getItemStack(),
-				ForestryItem.kitPickaxe.getItemStack(),
-				ForestryItem.brokenBronzePickaxe.getItemStack()
+				PluginCore.items.bronzePickaxe.getItemStack(),
+				PluginCore.items.kitPickaxe.getItemStack(),
+				PluginCore.items.brokenBronzePickaxe.getItemStack()
 		));
 
 		digger.addValidOreDictNames(diggerOreDictNames);
@@ -325,9 +325,9 @@ public class PluginStorage extends ForestryPlugin {
 				new ItemStack(Blocks.sandstone, 1, 0),
 				new ItemStack(Items.clay_ball),
 				new ItemStack(Blocks.soul_sand),
-				ForestryItem.bronzeShovel.getItemStack(),
-				ForestryItem.kitShovel.getItemStack(),
-				ForestryItem.brokenBronzeShovel.getItemStack()
+				PluginCore.items.bronzeShovel.getItemStack(),
+				PluginCore.items.kitShovel.getItemStack(),
+				PluginCore.items.brokenBronzeShovel.getItemStack()
 		));
 
 		forester.addValidOreDictNames(foresterOreDictNames);
@@ -592,25 +592,24 @@ public class PluginStorage extends ForestryPlugin {
 					" # ", "# #", " # ", '#', "logWood");
 
 			// / BACKPACKS T2
-			RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.getFluid(1000), null, ForestryItem.minerBackpackT2.getItemStack(),
-					"WXW", "WTW", "WWW", 'X', "gemDiamond", 'W',
-					ForestryItem.craftingMaterial.getItemStack(1, 3), 'T', ForestryItem.minerBackpack);
-			RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.getFluid(1000), null, ForestryItem.diggerBackpackT2.getItemStack(),
-					"WXW", "WTW", "WWW", 'X', "gemDiamond", 'W',
-					ForestryItem.craftingMaterial.getItemStack(1, 3), 'T', ForestryItem.diggerBackpack);
-			RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.getFluid(1000), null, ForestryItem.foresterBackpackT2.getItemStack(),
-					"WXW", "WTW", "WWW", 'X', "gemDiamond", 'W',
-					ForestryItem.craftingMaterial.getItemStack(1, 3), 'T', ForestryItem.foresterBackpack);
-			RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.getFluid(1000), null, ForestryItem.hunterBackpackT2.getItemStack(),
-					"WXW", "WTW", "WWW", 'X', "gemDiamond", 'W',
-					ForestryItem.craftingMaterial.getItemStack(1, 3), 'T', ForestryItem.hunterBackpack);
-			RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.getFluid(1000), null, ForestryItem.adventurerBackpackT2.getItemStack(),
-					"WXW", "WTW", "WWW", 'X', "gemDiamond", 'W',
-					ForestryItem.craftingMaterial.getItemStack(1, 3), 'T', ForestryItem.adventurerBackpack);
-			RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.getFluid(1000), null, ForestryItem.builderBackpackT2.getItemStack(),
-					"WXW", "WTW", "WWW", 'X', "gemDiamond", 'W',
-					ForestryItem.craftingMaterial.getItemStack(1, 3), 'T', ForestryItem.builderBackpack);
+			addT2BackpackRecipe(ForestryItem.minerBackpack.getItemStack(), ForestryItem.minerBackpackT2.getItemStack());
+			addT2BackpackRecipe(ForestryItem.diggerBackpack.getItemStack(), ForestryItem.diggerBackpackT2.getItemStack());
+			addT2BackpackRecipe(ForestryItem.foresterBackpack.getItemStack(), ForestryItem.foresterBackpackT2.getItemStack());
+			addT2BackpackRecipe(ForestryItem.hunterBackpack.getItemStack(), ForestryItem.hunterBackpackT2.getItemStack());
+			addT2BackpackRecipe(ForestryItem.adventurerBackpack.getItemStack(), ForestryItem.adventurerBackpackT2.getItemStack());
+			addT2BackpackRecipe(ForestryItem.builderBackpack.getItemStack(), ForestryItem.builderBackpackT2.getItemStack());
 		}
+	}
+
+	private static void addT2BackpackRecipe(ItemStack backpackT1, ItemStack backpackT2) {
+		ItemStack wovenSilk = PluginCore.items.craftingMaterial.getWovenSilk();
+		RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.getFluid(1000), null, backpackT2,
+				"WXW",
+				"WTW",
+				"WWW",
+				'X', "gemDiamond",
+				'W', wovenSilk,
+				'T', backpackT1);
 	}
 
 }

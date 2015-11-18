@@ -24,7 +24,7 @@ import forestry.api.farming.IFarmable;
 import forestry.core.circuits.Circuit;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
-import forestry.core.config.ForestryItem;
+import forestry.core.items.EnumElectronTube;
 import forestry.core.utils.ModUtil;
 import forestry.farming.circuits.CircuitFarmLogic;
 import forestry.farming.logic.FarmLogicEnder;
@@ -63,7 +63,7 @@ public class PluginExtraUtilities extends ForestryPlugin {
 
 		if (PluginManager.Module.FARMING.isEnabled() && Config.isExUtilEnderLilyEnabled()) {
 			ICircuitLayout layoutManaged = ChipsetManager.circuitRegistry.getLayout("forestry.farms.managed");
-			ChipsetManager.solderManager.addRecipe(layoutManaged, ForestryItem.tubes.getItemStack(1, 12), Circuit.farmEnderManaged);
+			ChipsetManager.solderManager.addRecipe(layoutManaged, PluginCore.items.tubes.get(EnumElectronTube.ENDER, 1), Circuit.farmEnderManaged);
 		}
 	}
 }

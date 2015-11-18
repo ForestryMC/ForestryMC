@@ -55,7 +55,7 @@ public class ItemOverlay extends ItemForestry {
 		}
 	}
 
-	private final OverlayInfo[] overlays;
+	protected final OverlayInfo[] overlays;
 
 	public ItemOverlay(CreativeTabs tab, OverlayInfo... overlays) {
 		super();

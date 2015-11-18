@@ -12,6 +12,7 @@ package forestry.core.items;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -29,5 +30,13 @@ public class ItemForestry extends Item {
 	@Override
 	public void registerIcons(IIconRegister register) {
 		itemIcon = TextureManager.registerTex(register, StringUtil.cleanItemName(this));
+	}
+
+	public ItemStack getItemStack() {
+		return new ItemStack(this);
+	}
+
+	public ItemStack getItemStack(int amount) {
+		return new ItemStack(this, amount);
 	}
 }

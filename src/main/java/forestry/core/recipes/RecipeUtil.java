@@ -221,16 +221,28 @@ public abstract class RecipeUtil {
 		}
 	}
 
+	public static void addRecipe(Item item, Object... obj) {
+		addRecipe(new ItemStack(item), obj);
+	}
+
 	@SuppressWarnings("unchecked")
 	public static void addRecipe(ItemStack itemstack, Object... obj) {
 		cleanRecipe(obj);
 		CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(itemstack, obj));
 	}
 
+	public static void addShapelessRecipe(Item item, Object... obj) {
+		addShapelessRecipe(new ItemStack(item), obj);
+	}
+
 	@SuppressWarnings("unchecked")
 	public static void addShapelessRecipe(ItemStack itemstack, Object... obj) {
 		cleanRecipe(obj);
 		CraftingManager.getInstance().getRecipeList().add(new ShapelessOreRecipe(itemstack, obj));
+	}
+
+	public static void addSmelting(ItemStack res, Item prod, float xp) {
+		addSmelting(res, new ItemStack(prod), xp);
 	}
 
 	public static void addSmelting(ItemStack res, ItemStack prod, float xp) {
