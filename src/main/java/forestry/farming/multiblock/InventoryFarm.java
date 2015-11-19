@@ -14,6 +14,7 @@ import java.util.Stack;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.fluids.Fluid;
@@ -27,10 +28,9 @@ import forestry.core.fluids.TankManager;
 import forestry.core.inventory.InventoryAdapterRestricted;
 import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.utils.InventoryUtil;
-import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.SlotUtil;
-import forestry.plugins.PluginFarming;
+import forestry.plugins.PluginCore;
 
 public class InventoryFarm extends InventoryAdapterRestricted implements IFarmInventory {
 	public static final int SLOT_RESOURCES_1 = 0;
@@ -133,7 +133,8 @@ public class InventoryFarm extends InventoryAdapterRestricted implements IFarmIn
 			return false;
 		}
 
-		return ItemStackUtil.isIdenticalItem(PluginFarming.farmFertilizer, itemstack);
+		Item item = itemstack.getItem();
+		return PluginCore.items.fertilizerCompound == item;
 	}
 
 	@Override

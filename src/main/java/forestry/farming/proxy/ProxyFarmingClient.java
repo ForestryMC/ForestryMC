@@ -10,12 +10,12 @@
  ******************************************************************************/
 package forestry.farming.proxy;
 
+import net.minecraft.item.Item;
 
 import net.minecraftforge.client.MinecraftForgeClient;
 
 import cpw.mods.fml.client.registry.RenderingRegistry;
 
-import forestry.core.config.ForestryBlock;
 import forestry.farming.render.RenderFarmBlock;
 import forestry.farming.render.RenderFarmItem;
 import forestry.plugins.PluginFarming;
@@ -27,6 +27,6 @@ public class ProxyFarmingClient extends ProxyFarming {
 		PluginFarming.modelIdFarmBlock = RenderingRegistry.getNextAvailableRenderId();
 
 		RenderingRegistry.registerBlockHandler(new RenderFarmBlock());
-		MinecraftForgeClient.registerItemRenderer(ForestryBlock.farm.item(), new RenderFarmItem());
+		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(PluginFarming.blocks.farm), new RenderFarmItem());
 	}
 }

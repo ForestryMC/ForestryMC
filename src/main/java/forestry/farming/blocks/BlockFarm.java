@@ -51,6 +51,7 @@ public class BlockFarm extends BlockStructure {
 	public BlockFarm() {
 		super(Material.rock);
 		setHardness(1.0f);
+		setHarvestLevel("pickaxe", 0);
 		this.particleCallback = new ParticleHelper.DefaultCallback(this);
 	}
 
@@ -179,27 +180,8 @@ public class BlockFarm extends BlockStructure {
 
 	@SideOnly(Side.CLIENT)
 	public static IIcon getOverlayTextureForBlock(int side, int metadata) {
-
-		if (metadata == 0 && side == 2) {
-			return EnumFarmBlockTexture.getIcon(TileFarm.TYPE_REVERSE);
-		} else if (metadata == 0 && (side == 0 || side == 1)) {
-			return EnumFarmBlockTexture.getIcon(TileFarm.TYPE_TOP);
-		}
-
-		switch (metadata) {
-			case 1:
-				return EnumFarmBlockTexture.getIcon(TileFarm.TYPE_BAND);
-			case 2:
-				return EnumFarmBlockTexture.getIcon(TileFarm.TYPE_GEARS);
-			case 3:
-				return EnumFarmBlockTexture.getIcon(TileFarm.TYPE_HATCH);
-			case 4:
-				return EnumFarmBlockTexture.getIcon(TileFarm.TYPE_VALVE);
-			case 5:
-				return EnumFarmBlockTexture.getIcon(TileFarm.TYPE_CONTROL);
-			default:
-				return EnumFarmBlockTexture.getIcon(TileFarm.TYPE_PLAIN);
-		}
+		BlockFarmType type = BlockFarmType.VALUES[metadata];
+		return EnumFarmBlockTexture.getIcon(type, side);
 	}
 
 	@Override
@@ -238,4 +220,7 @@ public class BlockFarm extends BlockStructure {
 		return world.getBlockMetadata(x, y, z) == 5;
 	}
 
+	public ItemStack get(BlockFarmType type, int amount) {
+		return new ItemStack(this, amount, type.ordinal());
+	}
 }

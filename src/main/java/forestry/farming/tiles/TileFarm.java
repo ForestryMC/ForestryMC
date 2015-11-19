@@ -42,15 +42,6 @@ import forestry.farming.render.EnumFarmBlockTexture;
 
 public abstract class TileFarm extends MultiblockTileEntityForestry<MultiblockLogicFarm> implements IFarmComponent, IHintSource, ISocketable, IStreamableGui, IErrorLogicSource, IRestrictedAccess, ITitled {
 
-	public static final int TYPE_PLAIN = 0;
-	public static final int TYPE_REVERSE = 1;
-	public static final int TYPE_TOP = 2;
-	public static final int TYPE_BAND = 3;
-	public static final int TYPE_GEARS = 4;
-	public static final int TYPE_HATCH = 5;
-	public static final int TYPE_VALVE = 6;
-	public static final int TYPE_CONTROL = 7;
-
 	private EnumFarmBlockTexture farmBlockTexture = EnumFarmBlockTexture.BRICK_STONE;
 
 	protected TileFarm() {

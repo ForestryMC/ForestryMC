@@ -15,7 +15,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.api.core.Tabs;
-import forestry.core.CreativeTabForestry;
 import forestry.core.circuits.ItemCircuitBoard;
 import forestry.core.genetics.ItemResearchNote;
 import forestry.core.network.GuiId;
@@ -23,7 +22,7 @@ import forestry.core.network.GuiId;
 public class ItemRegistryCore extends ItemRegistry {
 	/* Fertilizer */
 	public final ItemForestry fertilizerBio;
-	public final ItemForestry fertilizerCompound;
+	public final ItemForestryBonemeal fertilizerCompound;
 
 	/* Gems */
 	public final ItemForestry apatite;

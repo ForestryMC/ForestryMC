@@ -34,8 +34,6 @@ import forestry.plugins.PluginManager.Stage;
  * @author SirSengir
  */
 public enum ForestryBlock {
-	mushroom,
-	farm,
 	mail,
 	engine,
 	factoryTESR,
