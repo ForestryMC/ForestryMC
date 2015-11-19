@@ -994,7 +994,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 	protected abstract void registerMutations();
 
 	@Override
-	public void setLogBlock(World world, int x, int y, int z, ForgeDirection facing) {
+	public void setLogBlock(ITreeGenome genome, World world, int x, int y, int z, ForgeDirection facing) {
 		if (woodType == null) {
 			Block vanillaWoodBlock = Block.getBlockFromItem(vanillaWood.getItem());
 			int vanillaWoodMeta = vanillaWood.getItemDamage();
@@ -1022,7 +1022,12 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 	}
 
 	@Override
-	public void setLeaves(World world, GameProfile owner, int x, int y, int z, boolean decorative) {
+	public void setLogBlock(World world, int x, int y, int z, ForgeDirection facing) {
+		setLogBlock(genome, world, x, y, z, facing);
+	}
+
+	@Override
+	public void setLeaves(ITreeGenome genome, World world, GameProfile owner, int x, int y, int z, boolean decorative) {
 		boolean placed = world.setBlock(x, y, z, PluginArboriculture.blocks.leaves, 0, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
 		if (!placed) {
 			return;
@@ -1044,9 +1049,14 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 		if (decorative) {
 			tileLeaves.setDecorative();
 		}
-		tileLeaves.setTree(getIndividual());
+		tileLeaves.setTree(new Tree(genome));
 
 		world.markBlockForUpdate(x, y, z);
+	}
+
+	@Override
+	public void setLeaves(World world, GameProfile owner, int x, int y, int z, boolean decorative) {
+		setLeaves(genome, world, owner, x, y, z, decorative);
 	}
 
 	public static void initTrees() {

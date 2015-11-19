@@ -49,11 +49,9 @@ import forestry.api.genetics.IEffectData;
 import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.IMutation;
 import forestry.arboriculture.genetics.alleles.AlleleFruit;
-import forestry.arboriculture.tiles.TileLeaves;
 import forestry.core.config.Config;
 import forestry.core.genetics.Chromosome;
 import forestry.core.genetics.Individual;
-import forestry.core.tiles.TileUtil;
 import forestry.core.utils.StringUtil;
 
 public class Tree extends Individual implements ITree, IPlantable {
@@ -223,21 +221,29 @@ public class Tree extends Individual implements ITree, IPlantable {
 
 	@Override
 	public void setLeaves(World world, GameProfile owner, int x, int y, int z) {
-		genome.getPrimary().getGenerator().setLeaves(world, owner, x, y, z, false);
-		TileLeaves leaves = TileUtil.getTile(world, x, y, z, TileLeaves.class);
-		if (leaves != null) {
-			leaves.setTree(this);
+		try {
+			genome.getPrimary().getGenerator().setLeaves(genome, world, owner, x, y, z, false);
+		} catch (Throwable ignored) {
+			genome.getPrimary().getGenerator().setLeaves(world, owner, x, y, z, false);
 		}
 	}
 
 	@Override
 	public void setLeavesDecorative(World world, GameProfile owner, int x, int y, int z) {
-		genome.getPrimary().getGenerator().setLeaves(world, owner, x, y, z, true);
+		try {
+			genome.getPrimary().getGenerator().setLeaves(genome, world, owner, x, y, z, true);
+		} catch (Throwable ignored) {
+			genome.getPrimary().getGenerator().setLeaves(world, owner, x, y, z, true);
+		}
 	}
 
 	@Override
 	public void setLogBlock(World world, int x, int y, int z, ForgeDirection facing) {
-		genome.getPrimary().getGenerator().setLogBlock(world, x, y, z, facing);
+		try {
+			genome.getPrimary().getGenerator().setLogBlock(genome, world, x, y, z, facing);
+		} catch (Throwable ignored) {
+			genome.getPrimary().getGenerator().setLogBlock(world, x, y, z, facing);
+		}
 	}
 
 	@Override
