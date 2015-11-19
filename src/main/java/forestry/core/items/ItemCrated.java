@@ -12,7 +12,6 @@ package forestry.core.items;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
@@ -25,7 +24,7 @@ import forestry.core.render.TextureManager;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.StringUtil;
 
-public class ItemCrated extends Item {
+public class ItemCrated extends ItemForestry {
 
 	private final ItemStack contained;
 	private final boolean usesOreDict;

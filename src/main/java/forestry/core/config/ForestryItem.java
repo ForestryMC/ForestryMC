@@ -36,30 +36,12 @@ public enum ForestryItem {
 	stamps,
 	letters,
 	catalogue,
-	// Carpenter
-	crate,
 	// Butterflies
 	butterflyGE,
 	flutterlyzer,
 	serumGE,
 	caterpillarGE,
-	researchNote,
-	// Backpacks
-	apiaristBackpack,
-	lepidopteristBackpack,
-	minerBackpack,
-	diggerBackpack,
-	foresterBackpack,
-	hunterBackpack,
-	builderBackpack,
-	adventurerBackpack,
-	// T2
-	minerBackpackT2,
-	diggerBackpackT2,
-	foresterBackpackT2,
-	hunterBackpackT2,
-	builderBackpackT2,
-	adventurerBackpackT2;
+	researchNote;
 	private Item item;
 
 	public void registerItem(Item item, String name) {
