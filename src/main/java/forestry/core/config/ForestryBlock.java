@@ -35,8 +35,6 @@ import forestry.plugins.PluginManager.Stage;
  */
 public enum ForestryBlock {
 	engine,
-	factoryTESR,
-	factoryPlain,
 	lepidopterology;
 	private Block block;
 

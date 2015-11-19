@@ -38,14 +38,14 @@ import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IFlower;
-import forestry.apiculture.blocks.BlockApiculture;
+import forestry.apiculture.blocks.BlockApicultureType;
 import forestry.apiculture.inventory.InventoryApiary;
 import forestry.apiculture.tiles.TileApiary;
 import forestry.arboriculture.worldgen.BlockTypeLog;
 import forestry.arboriculture.worldgen.BlockTypeVanillaStairs;
 import forestry.arboriculture.worldgen.BlockTypeWood;
 import forestry.arboriculture.worldgen.BlockTypeWoodStairs;
-import forestry.core.blocks.BlockCore;
+import forestry.core.blocks.BlockCoreType;
 import forestry.core.config.Constants;
 import forestry.core.tiles.TileUtil;
 import forestry.core.worldgen.BlockType;
@@ -182,7 +182,7 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 
 		// Escritoire
 		if (random.nextInt(2) == 0) {
-			IBlockType escritoireBlock = new BlockTypeTileForestry(PluginCore.blocks.core, BlockCore.Type.ESCRITOIRE.ordinal());
+			IBlockType escritoireBlock = new BlockTypeTileForestry(PluginCore.blocks.core, BlockCoreType.ESCRITOIRE.ordinal());
 			escritoireBlock.setDirection(getRotatedDirection(ForgeDirection.EAST));
 			placeBlockAtCurrentPosition(world, escritoireBlock, 1, 1, 3, structBoundingBox);
 		}
@@ -294,7 +294,7 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 			return;
 		}
 
-		world.setBlock(xCoord, yCoord, zCoord, PluginApiculture.blocks.apiculture, BlockApiculture.Type.APIARY.ordinal(), Constants.FLAG_BLOCK_SYNCH);
+		world.setBlock(xCoord, yCoord, zCoord, PluginApiculture.blocks.apiculture, BlockApicultureType.APIARY.ordinal(), Constants.FLAG_BLOCK_SYNCH);
 		PluginApiculture.blocks.apiculture.onBlockAdded(world, xCoord, yCoord, zCoord);
 
 		TileApiary apiary = TileUtil.getTile(world, xCoord, yCoord, zCoord, TileApiary.class);

@@ -55,19 +55,6 @@ public class Constants implements IForestryConstants {
 	public static final int DEFINITION_GENERATOR_META = 3;
 	public static final int DEFINITION_ENGINE_CLOCKWORK_META = 4;
 
-	public static final int DEFINITION_BOTTLER_META = 0;
-	public static final int DEFINITION_CARPENTER_META = 1;
-	public static final int DEFINITION_CENTRIFUGE_META = 2;
-	public static final int DEFINITION_FERMENTER_META = 3;
-	public static final int DEFINITION_MOISTENER_META = 4;
-	public static final int DEFINITION_SQUEEZER_META = 5;
-	public static final int DEFINITION_STILL_META = 6;
-	public static final int DEFINITION_RAINMAKER_META = 7;
-
-	public static final int DEFINITION_FABRICATOR_META = 0;
-	public static final int DEFINITION_RAINTANK_META = 1;
-	public static final int DEFINITION_WORKTABLE_META = 2;
-
 	public static final int DEFINITION_LEPICHEST_META = 0;
 
 	// Item Ids

@@ -14,9 +14,9 @@ import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.fluids.FluidContainerRegistry;
 
-import forestry.core.config.Constants;
-import forestry.core.config.ForestryBlock;
+import forestry.factory.blocks.BlockFactoryTesrType;
 import forestry.factory.recipes.BottlerRecipe;
+import forestry.plugins.PluginFactory;
 
 import uristqwerty.CraftGuide.api.ItemSlot;
 import uristqwerty.CraftGuide.api.LiquidSlot;
@@ -39,12 +39,11 @@ public class CraftGuideBottler implements RecipeProvider {
 
 	@Override
 	public void generateRecipes(RecipeGenerator generator) {
-
-		if (ForestryBlock.factoryTESR.block() == null) {
+		if (PluginFactory.blocks.factoryTESR == null) {
 			return;
 		}
 
-		ItemStack machine = ForestryBlock.factoryTESR.getItemStack(1, Constants.DEFINITION_BOTTLER_META);
+		ItemStack machine = PluginFactory.blocks.factoryTESR.get(BlockFactoryTesrType.BOTTLER);
 		RecipeTemplate template = generator.createRecipeTemplate(slots, machine);
 
 		for (FluidContainerRegistry.FluidContainerData container : FluidContainerRegistry.getRegisteredFluidContainerData()) {

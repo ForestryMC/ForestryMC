@@ -67,7 +67,7 @@ import forestry.apiculture.GuiHandlerApiculture;
 import forestry.apiculture.SaveEventHandlerApiculture;
 import forestry.apiculture.VillageHandlerApiculture;
 import forestry.apiculture.blocks.BlockAlveary;
-import forestry.apiculture.blocks.BlockApiculture;
+import forestry.apiculture.blocks.BlockApicultureType;
 import forestry.apiculture.blocks.BlockCandle;
 import forestry.apiculture.blocks.BlockRegistryApiculture;
 import forestry.apiculture.commands.CommandBee;
@@ -97,8 +97,6 @@ import forestry.apiculture.multiblock.TileAlvearySwarmer;
 import forestry.apiculture.network.PacketRegistryApiculture;
 import forestry.apiculture.proxy.ProxyApiculture;
 import forestry.apiculture.tiles.TileApiaristChest;
-import forestry.apiculture.tiles.TileApiary;
-import forestry.apiculture.tiles.TileBeehouse;
 import forestry.apiculture.tiles.TileCandle;
 import forestry.apiculture.tiles.TileSwarm;
 import forestry.apiculture.trigger.ApicultureTriggers;
@@ -108,7 +106,7 @@ import forestry.apiculture.worldgen.HiveGenHelper;
 import forestry.apiculture.worldgen.HiveRegistry;
 import forestry.core.GuiHandlerBase;
 import forestry.core.ISaveEventHandler;
-import forestry.core.blocks.BlockCore;
+import forestry.core.blocks.BlockCoreType;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
@@ -140,11 +138,6 @@ public class PluginApiculture extends ForestryPlugin {
 	public static BlockRegistryApiculture blocks;
 
 	public static HiveRegistry hiveRegistry;
-
-	private static MachineDefinition definitionApiary;
-	private static MachineDefinition definitionChestLegacy;
-	private static MachineDefinition definitionChest;
-	private static MachineDefinition definitionBeehouse;
 
 	private final Map<String, String[]> defaultAcceptedFlowers = new HashMap<>();
 	private final Map<String, String[]> defaultPlantableFlowers = new HashMap<>();
@@ -190,19 +183,13 @@ public class PluginApiculture extends ForestryPlugin {
 
 		MinecraftForge.EVENT_BUS.register(this);
 
-		definitionApiary = new MachineDefinition(BlockApiculture.Type.APIARY.ordinal(), "forestry.Apiary", TileApiary.class)
-				.setFaces(0, 1, 2, 2, 4, 4, 0, 7);
-		blocks.apiculture.addDefinition(definitionApiary);
+		blocks.apiculture.addDefinitions(
+				new MachineDefinition(BlockApicultureType.APIARY).setFaces(0, 1, 2, 2, 4, 4, 0, 7),
+				new MachineDefinition(BlockApicultureType.APIARIST_CHEST_LEGACY).setLegacy(),
+				new MachineDefinition(BlockApicultureType.BEEHOUSE).setFaces(0, 1, 2, 2, 4, 4, 0, 7)
+		);
 
-		definitionChestLegacy = new MachineDefinition(BlockApiculture.Type.APIARIST_CHEST_LEGACY.ordinal(), "forestry.ApiaristChest", TileApiaristChest.class)
-				.setLegacy();
-		blocks.apiculture.addDefinition(definitionChestLegacy);
-
-		definitionBeehouse = new MachineDefinition(BlockApiculture.Type.BEEHOUSE.ordinal(), "forestry.Beehouse", TileBeehouse.class)
-				.setFaces(0, 1, 2, 2, 4, 4, 0, 7);
-		blocks.apiculture.addDefinition(definitionBeehouse);
-
-		definitionChest = new MachineDefinition(0, "forestry.ApiaristChestNew", TileApiaristChest.class, Proxies.render.getRenderChest("apiaristchest"))
+		MachineDefinition definitionChest = new MachineDefinition(0, "forestry.ApiaristChestNew", TileApiaristChest.class, Proxies.render.getRenderChest("apiaristchest"))
 				.setBoundingBox(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
 		blocks.apicultureChest.addDefinition(definitionChest);
 
@@ -326,10 +313,8 @@ public class PluginApiculture extends ForestryPlugin {
 
 		proxy.initializeRendering();
 
-		definitionApiary.register();
-		definitionBeehouse.register();
-		definitionChestLegacy.register();
-		definitionChest.register();
+		blocks.apiculture.registerDefinitions();
+		blocks.apicultureChest.registerDefinitions();
 	}
 
 	@Override
@@ -487,12 +472,12 @@ public class PluginApiculture extends ForestryPlugin {
 		RecipeUtil.addRecipe(items.minecartBeehouse.getBeeHouseMinecart(),
 				"B",
 				"C",
-				'B', blocks.apiculture.get(BlockApiculture.Type.BEEHOUSE, 1),
+				'B', blocks.apiculture.get(BlockApicultureType.BEEHOUSE, 1),
 				'C', Items.minecart);
 		RecipeUtil.addRecipe(items.minecartBeehouse.getApiaryMinecart(),
 				"B",
 				"C",
-				'B', blocks.apiculture.get(BlockApiculture.Type.APIARY, 1),
+				'B', blocks.apiculture.get(BlockApicultureType.APIARY, 1),
 				'C', Items.minecart);
 
 		// FOOD STUFF
@@ -734,7 +719,7 @@ public class PluginApiculture extends ForestryPlugin {
 		}
 
 		// ANALYZER
-		RecipeUtil.addRecipe(PluginCore.blocks.core.get(BlockCore.Type.ANALYZER, 1),
+		RecipeUtil.addRecipe(PluginCore.blocks.core.get(BlockCoreType.ANALYZER, 1),
 				"XTX",
 				" Y ",
 				"X X",
@@ -742,7 +727,7 @@ public class PluginApiculture extends ForestryPlugin {
 				'T', items.beealyzer,
 				'X', "ingotBronze");
 
-		RecipeUtil.addRecipe(blocks.apiculture.get(BlockApiculture.Type.APIARY, 1),
+		RecipeUtil.addRecipe(blocks.apiculture.get(BlockApicultureType.APIARY, 1),
 				"XXX",
 				"#C#",
 				"###",
@@ -758,7 +743,7 @@ public class PluginApiculture extends ForestryPlugin {
 				'X', "beeComb",
 				'Y', "chestWood");
 
-		RecipeUtil.addRecipe(blocks.apiculture.get(BlockApiculture.Type.BEEHOUSE, 1),
+		RecipeUtil.addRecipe(blocks.apiculture.get(BlockApicultureType.BEEHOUSE, 1),
 				"XXX",
 				"#C#",
 				"###",

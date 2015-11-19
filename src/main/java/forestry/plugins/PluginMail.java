@@ -40,18 +40,10 @@ import forestry.mail.commands.CommandMail;
 import forestry.mail.items.EnumStampDefinition;
 import forestry.mail.items.ItemRegistryMail;
 import forestry.mail.network.PacketRegistryMail;
-import forestry.mail.tiles.TileMailbox;
-import forestry.mail.tiles.TileStampCollector;
-import forestry.mail.tiles.TileTrader;
 import forestry.mail.triggers.MailTriggers;
 
 @Plugin(pluginID = "Mail", name = "Mail", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.mail.description")
 public class PluginMail extends ForestryPlugin {
-
-	private static MachineDefinition definitionMailbox;
-	private static MachineDefinition definitionTradestation;
-	private static MachineDefinition definitionStampColletor;
-
 	public static ItemRegistryMail items;
 	public static BlockRegistryMail blocks;
 
@@ -80,17 +72,11 @@ public class PluginMail extends ForestryPlugin {
 			FMLCommonHandler.instance().bus().register(new TickHandlerMailClient());
 		}
 
-		definitionMailbox = new MachineDefinition(BlockMailType.MAILBOX.ordinal(), "forestry.Mailbox", TileMailbox.class)
-				.setFaces(0, 1, 2, 2, 2, 2, 0, 7);
-		blocks.mail.addDefinition(definitionMailbox);
-
-		definitionTradestation = new MachineDefinition(BlockMailType.TRADE_STATION.ordinal(), "forestry.Tradestation", TileTrader.class)
-				.setFaces(0, 1, 2, 3, 4, 4, 0, 7);
-		blocks.mail.addDefinition(definitionTradestation);
-
-		definitionStampColletor = new MachineDefinition(BlockMailType.STAMP_COLLECTOR.ordinal(), "forestry.Philatelist", TileStampCollector.class)
-				.setFaces(0, 1, 2, 3, 2, 2, 0, 7);
-		blocks.mail.addDefinition(definitionStampColletor);
+		blocks.mail.addDefinitions(
+				new MachineDefinition(BlockMailType.MAILBOX).setFaces(0, 1, 2, 2, 2, 2, 0, 7),
+				new MachineDefinition(BlockMailType.TRADESTATION).setFaces(0, 1, 2, 3, 4, 4, 0, 7),
+				new MachineDefinition(BlockMailType.PHILATELIST).setFaces(0, 1, 2, 3, 2, 2, 0, 7)
+		);
 	}
 
 	@Override
@@ -102,9 +88,7 @@ public class PluginMail extends ForestryPlugin {
 	public void doInit() {
 		super.doInit();
 
-		definitionMailbox.register();
-		definitionTradestation.register();
-		definitionStampColletor.register();
+		blocks.mail.registerDefinitions();
 	}
 
 	@Override
@@ -172,7 +156,7 @@ public class PluginMail extends ForestryPlugin {
 				'X', "chestWood",
 				'Y', PluginCore.items.sturdyCasing);
 
-		RecipeUtil.addRecipe(blocks.mail.get(BlockMailType.TRADE_STATION),
+		RecipeUtil.addRecipe(blocks.mail.get(BlockMailType.TRADESTATION),
 				"Z#Z",
 				"#Y#",
 				"XWX",

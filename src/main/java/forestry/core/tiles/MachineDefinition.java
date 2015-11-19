@@ -32,6 +32,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+import forestry.core.blocks.IMachineProperties;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.IBlockRenderer;
 import forestry.core.render.TextureManager;
@@ -52,6 +53,10 @@ public class MachineDefinition {
 
 	public MachineDefinition(int meta, String teIdent, Class<? extends TileForestry> teClass) {
 		this(meta, teIdent, teClass, null);
+	}
+
+	public MachineDefinition(IMachineProperties properties) {
+		this(properties.getMeta(), properties.getTeIdent(), properties.getTeClass(), Proxies.render.getRenderDefaultMachine(properties.getGfxBase()));
 	}
 
 	public MachineDefinition(int meta, String teIdent, Class<? extends TileForestry> teClass, IBlockRenderer renderer) {

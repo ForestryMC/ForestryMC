@@ -74,11 +74,6 @@ public class PluginIC2 extends ForestryPlugin {
 
 	public static PluginIC2 instance;
 
-	// Forestry stuff
-	private static MachineDefinition definitionGenerator;
-	private static MachineDefinition definitionEngineElectric;
-
-	// IC2 stuff
 	private static ItemStack plantBall;
 	private static ItemStack compressedPlantBall;
 	private static ItemStack wrench;
@@ -127,11 +122,13 @@ public class PluginIC2 extends ForestryPlugin {
 	public void preInit() {
 		super.preInit();
 
-		definitionEngineElectric = ((BlockBase) ForestryBlock.engine.block()).addDefinition(new EngineDefinition(Constants.DEFINITION_ENGINE_ELECTRIC_META, "forestry.EngineTin", TileEngineElectric.class,
-				PluginEnergy.proxy.getRenderDefaultEngine(Constants.TEXTURE_PATH_BLOCKS + "/engine_tin_")));
+		EngineDefinition definitionEngineElectric = new EngineDefinition(Constants.DEFINITION_ENGINE_ELECTRIC_META, "forestry.EngineTin", TileEngineElectric.class,
+				PluginEnergy.proxy.getRenderDefaultEngine(Constants.TEXTURE_PATH_BLOCKS + "/engine_tin_"));
+		((BlockBase) ForestryBlock.engine.block()).addDefinition(definitionEngineElectric);
 
-		definitionGenerator = ((BlockBase) ForestryBlock.engine.block()).addDefinition(new MachineDefinition(Constants.DEFINITION_GENERATOR_META, "forestry.Generator", TileGenerator.class,
-				Proxies.render.getRenderDefaultMachine(Constants.TEXTURE_PATH_BLOCKS + "/generator_")));
+		MachineDefinition definitionGenerator = new MachineDefinition(Constants.DEFINITION_GENERATOR_META, "forestry.Generator", TileGenerator.class,
+				Proxies.render.getRenderDefaultMachine(Constants.TEXTURE_PATH_BLOCKS + "/generator_"));
+		((BlockBase) ForestryBlock.engine.block()).addDefinition(definitionGenerator);
 
 		emptyCell = IC2Items.getItem("cell");
 		if (emptyCell != null) {
@@ -182,8 +179,7 @@ public class PluginIC2 extends ForestryPlugin {
 			Log.severe("IC2 Recipes.recyclerBlacklist not found.");
 		}
 
-		definitionEngineElectric.register();
-		definitionGenerator.register();
+		((BlockBase) ForestryBlock.engine.block()).registerDefinitions();
 
 		Circuit.energyElectricChoke1 = new CircuitElectricChoke("electric.choke.1");
 		Circuit.energyElectricEfficiency1 = new CircuitElectricEfficiency("electric.efficiency.1");

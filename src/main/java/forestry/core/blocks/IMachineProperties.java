@@ -10,16 +10,17 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
-import net.minecraft.block.material.Material;
-import net.minecraft.item.ItemStack;
+import javax.annotation.Nullable;
 
-public class BlockCore extends BlockBase {
+import forestry.core.tiles.TileForestry;
 
-	public BlockCore(Material material, boolean hasTESR) {
-		super(material, hasTESR);
-	}
+public interface IMachineProperties {
+	int getMeta();
 
-	public ItemStack get(BlockCoreType type, int amount) {
-		return new ItemStack(this, amount, type.ordinal());
-	}
+	String getTeIdent();
+
+	Class<? extends TileForestry> getTeClass();
+
+	@Nullable
+	String getGfxBase();
 }

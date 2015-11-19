@@ -23,7 +23,6 @@ import forestry.core.config.Constants;
 import forestry.core.config.ForestryBlock;
 import forestry.core.items.ItemBlockForestry;
 import forestry.core.recipes.RecipeUtil;
-import forestry.core.tiles.MachineDefinition;
 import forestry.energy.GuiHandlerEnergy;
 import forestry.energy.blocks.BlockEngine;
 import forestry.energy.proxy.ProxyEnergy;
@@ -37,9 +36,6 @@ public class PluginEnergy extends ForestryPlugin {
 
 	@SidedProxy(clientSide = "forestry.energy.proxy.ProxyEnergyClient", serverSide = "forestry.energy.proxy.ProxyEnergy")
 	public static ProxyEnergy proxy;
-	private static MachineDefinition definitionEnginePeat;
-	private static MachineDefinition definitionEngineBiogas;
-	private static MachineDefinition definitionEngineClockwork;
 
 	@Override
 	protected void registerItemsAndBlocks() {
@@ -50,23 +46,22 @@ public class PluginEnergy extends ForestryPlugin {
 
 	@Override
 	public void preInit() {
-		super.preInit();
+		EngineDefinition definitionEnginePeat = new EngineDefinition(Constants.DEFINITION_ENGINE_PEAT_META, "forestry.EngineCopper", TileEnginePeat.class,
+				PluginEnergy.proxy.getRenderDefaultEngine(Constants.TEXTURE_PATH_BLOCKS + "/engine_copper_"));
+		((BlockBase) ForestryBlock.engine.block()).addDefinition(definitionEnginePeat);
 
-		definitionEnginePeat = ((BlockBase) ForestryBlock.engine.block()).addDefinition(new EngineDefinition(Constants.DEFINITION_ENGINE_PEAT_META, "forestry.EngineCopper", TileEnginePeat.class,
-				PluginEnergy.proxy.getRenderDefaultEngine(Constants.TEXTURE_PATH_BLOCKS + "/engine_copper_")));
-		definitionEngineBiogas = ((BlockBase) ForestryBlock.engine.block()).addDefinition(new EngineDefinition(Constants.DEFINITION_ENGINE_BIOGAS_META, "forestry.EngineBronze", TileEngineBiogas.class,
-				PluginEnergy.proxy.getRenderDefaultEngine(Constants.TEXTURE_PATH_BLOCKS + "/engine_bronze_")));
-		definitionEngineClockwork = ((BlockBase) ForestryBlock.engine.block()).addDefinition(new EngineDefinition(Constants.DEFINITION_ENGINE_CLOCKWORK_META, "forestry.EngineClockwork", TileEngineClockwork.class,
-				PluginEnergy.proxy.getRenderDefaultEngine(Constants.TEXTURE_PATH_BLOCKS + "/engine_clock_")));
+		EngineDefinition definitionEngineBiogas = new EngineDefinition(Constants.DEFINITION_ENGINE_BIOGAS_META, "forestry.EngineBronze", TileEngineBiogas.class,
+				PluginEnergy.proxy.getRenderDefaultEngine(Constants.TEXTURE_PATH_BLOCKS + "/engine_bronze_"));
+		((BlockBase) ForestryBlock.engine.block()).addDefinition(definitionEngineBiogas);
+
+		EngineDefinition definitionEngineClockwork = new EngineDefinition(Constants.DEFINITION_ENGINE_CLOCKWORK_META, "forestry.EngineClockwork", TileEngineClockwork.class,
+				PluginEnergy.proxy.getRenderDefaultEngine(Constants.TEXTURE_PATH_BLOCKS + "/engine_clock_"));
+		((BlockBase) ForestryBlock.engine.block()).addDefinition(definitionEngineClockwork);
 	}
 
 	@Override
 	public void doInit() {
-		super.doInit();
-
-		definitionEnginePeat.register();
-		definitionEngineBiogas.register();
-		definitionEngineClockwork.register();
+		((BlockBase) ForestryBlock.engine.block()).registerDefinitions();
 	}
 
 	@Override

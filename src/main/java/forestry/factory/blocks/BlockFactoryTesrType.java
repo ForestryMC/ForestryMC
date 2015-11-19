@@ -8,32 +8,45 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.mail.blocks;
+package forestry.factory.blocks;
 
 import java.util.Locale;
 
 import org.apache.commons.lang3.text.WordUtils;
 
 import forestry.core.blocks.IMachineProperties;
+import forestry.core.config.Constants;
 import forestry.core.tiles.TileForestry;
-import forestry.mail.tiles.TileMailbox;
-import forestry.mail.tiles.TileStampCollector;
-import forestry.mail.tiles.TileTrader;
+import forestry.factory.tiles.TileBottler;
+import forestry.factory.tiles.TileCarpenter;
+import forestry.factory.tiles.TileCentrifuge;
+import forestry.factory.tiles.TileFermenter;
+import forestry.factory.tiles.TileMillRainmaker;
+import forestry.factory.tiles.TileMoistener;
+import forestry.factory.tiles.TileSqueezer;
+import forestry.factory.tiles.TileStill;
 
-public enum BlockMailType implements IMachineProperties {
-	MAILBOX(TileMailbox.class),
-	TRADESTATION(TileTrader.class),
-	PHILATELIST(TileStampCollector.class);
+public enum BlockFactoryTesrType implements IMachineProperties {
+	BOTTLER(TileBottler.class),
+	CARPENTER(TileCarpenter.class),
+	CENTRIFUGE(TileCentrifuge.class),
+	FERMENTER(TileFermenter.class),
+	MOISTENER(TileMoistener.class),
+	SQUEEZER(TileSqueezer.class),
+	STILL(TileStill.class),
+	RAINMAKER(TileMillRainmaker.class);
 
-	public static final BlockMailType[] VALUES = values();
+	public static final BlockFactoryTesrType[] VALUES = values();
 
 	private final String teIdent;
 	private final Class<? extends TileForestry> teClass;
+	private final String gfxBase;
 
-	BlockMailType(Class<? extends TileForestry> teClass) {
+	BlockFactoryTesrType(Class<? extends TileForestry> teClass) {
 		String name = toString().toLowerCase(Locale.ENGLISH);
 		this.teIdent = "forestry." + WordUtils.capitalize(name);
 		this.teClass = teClass;
+		this.gfxBase = Constants.TEXTURE_PATH_BLOCKS + "/" + name + "_";
 	}
 
 	@Override
@@ -53,6 +66,6 @@ public enum BlockMailType implements IMachineProperties {
 
 	@Override
 	public String getGfxBase() {
-		return null;
+		return gfxBase;
 	}
 }

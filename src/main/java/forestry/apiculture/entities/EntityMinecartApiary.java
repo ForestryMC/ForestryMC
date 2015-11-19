@@ -26,7 +26,7 @@ import forestry.api.apiculture.IHiveFrame;
 import forestry.apiculture.ApiaryBeeListener;
 import forestry.apiculture.ApiaryBeeModifier;
 import forestry.apiculture.IApiary;
-import forestry.apiculture.blocks.BlockApiculture;
+import forestry.apiculture.blocks.BlockApicultureType;
 import forestry.apiculture.inventory.IApiaryInventory;
 import forestry.apiculture.inventory.InventoryApiary;
 import forestry.core.config.Config;
@@ -80,7 +80,7 @@ public class EntityMinecartApiary extends EntityMinecartBeeHousingBase implement
 
 	@Override
 	public int getDisplayTileData() {
-		return BlockApiculture.Type.APIARY.ordinal();
+		return BlockApicultureType.APIARY.ordinal();
 	}
 
 	@Override

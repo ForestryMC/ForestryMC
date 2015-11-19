@@ -23,7 +23,7 @@ import forestry.api.apiculture.IBeeListener;
 import forestry.api.apiculture.IBeeModifier;
 import forestry.apiculture.BeehouseBeeModifier;
 import forestry.apiculture.InventoryBeeHousing;
-import forestry.apiculture.blocks.BlockApiculture;
+import forestry.apiculture.blocks.BlockApicultureType;
 import forestry.core.config.Config;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.network.GuiId;
@@ -62,7 +62,7 @@ public class EntityMinecartBeehouse extends EntityMinecartBeeHousingBase {
 
 	@Override
 	public int getDisplayTileData() {
-		return BlockApiculture.Type.BEEHOUSE.ordinal();
+		return BlockApicultureType.BEEHOUSE.ordinal();
 	}
 
 	@Override

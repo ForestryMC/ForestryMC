@@ -89,6 +89,9 @@ public class ProxyRenderClient extends ProxyRender {
 
 	@Override
 	public IBlockRenderer getRenderDefaultMachine(String gfxBase) {
+		if (gfxBase == null) {
+			return null;
+		}
 		return new RenderMachine(gfxBase);
 	}
 

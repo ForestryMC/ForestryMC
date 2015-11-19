@@ -8,18 +8,18 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.blocks;
+package forestry.factory.blocks;
 
-import net.minecraft.block.material.Material;
-import net.minecraft.item.ItemStack;
+import forestry.core.blocks.BlockRegistry;
+import forestry.core.items.ItemBlockForestry;
+import forestry.core.items.ItemBlockNBT;
 
-public class BlockCore extends BlockBase {
+public class BlockRegistryFactory extends BlockRegistry {
+	public final BlockFactoryTesr factoryTESR;
+	public final BlockFactoryPlain factoryPlain;
 
-	public BlockCore(Material material, boolean hasTESR) {
-		super(material, hasTESR);
-	}
-
-	public ItemStack get(BlockCoreType type, int amount) {
-		return new ItemStack(this, amount, type.ordinal());
+	public BlockRegistryFactory() {
+		factoryTESR = registerBlock(new BlockFactoryTesr(), ItemBlockForestry.class, "factory");
+		factoryPlain = registerBlock(new BlockFactoryPlain(), ItemBlockNBT.class, "factory2");
 	}
 }

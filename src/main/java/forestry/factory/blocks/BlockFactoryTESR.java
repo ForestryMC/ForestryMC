@@ -8,18 +8,19 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.blocks;
+package forestry.factory.blocks;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
 
-public class BlockCore extends BlockBase {
+import forestry.core.blocks.BlockBase;
 
-	public BlockCore(Material material, boolean hasTESR) {
-		super(material, hasTESR);
+public class BlockFactoryTesr extends BlockBase {
+	public BlockFactoryTesr() {
+		super(Material.iron, true);
 	}
 
-	public ItemStack get(BlockCoreType type, int amount) {
-		return new ItemStack(this, amount, type.ordinal());
+	public ItemStack get(BlockFactoryTesrType type) {
+		return new ItemStack(this, 1, type.ordinal());
 	}
 }

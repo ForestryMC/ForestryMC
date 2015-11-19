@@ -33,7 +33,7 @@ import forestry.core.IPickupHandler;
 import forestry.core.ISaveEventHandler;
 import forestry.core.PickupHandlerCore;
 import forestry.core.SaveEventHandlerCore;
-import forestry.core.blocks.BlockCore;
+import forestry.core.blocks.BlockCoreType;
 import forestry.core.blocks.BlockRegistryCore;
 import forestry.core.blocks.BlockResourceOre;
 import forestry.core.blocks.BlockResourceStorage;
@@ -66,13 +66,9 @@ import forestry.core.utils.ForestryModEnvWarningCallable;
 
 @Plugin(pluginID = "Core", name = "Core", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.core.description")
 public class PluginCore extends ForestryPlugin {
-
-	private static MachineDefinition definitionEscritoire;
-
 	public static final RootCommand rootCommand = new RootCommand();
 	public static ItemRegistryCore items;
 	public static BlockRegistryCore blocks;
-	static MachineDefinition definitionAnalyzer;
 
 	@Override
 	protected void setupAPI() {
@@ -106,11 +102,11 @@ public class PluginCore extends ForestryPlugin {
 		rootCommand.addChildCommand(new CommandVersion());
 		rootCommand.addChildCommand(new CommandPlugins());
 
-		definitionEscritoire = blocks.core.addDefinition(new MachineDefinition(BlockCore.Type.ESCRITOIRE.ordinal(), "forestry.Escritoire", TileEscritoire.class,
-				Proxies.render.getRenderEscritoire()));
-
-		definitionAnalyzer = blocks.core.addDefinition(new MachineDefinition(BlockCore.Type.ANALYZER.ordinal(), "forestry.Analyzer", TileAnalyzer.class,
-				PluginApiculture.proxy.getRendererAnalyzer(Constants.TEXTURE_PATH_BLOCKS + "/analyzer_")));
+		blocks.core.addDefinitions(
+				new MachineDefinition(BlockCoreType.ESCRITOIRE.ordinal(), "forestry.Escritoire", TileEscritoire.class, Proxies.render.getRenderEscritoire()),
+				new MachineDefinition(BlockCoreType.ANALYZER.ordinal(), "forestry.Analyzer", TileAnalyzer.class,
+						PluginApiculture.proxy.getRendererAnalyzer(Constants.TEXTURE_PATH_BLOCKS + "/analyzer_"))
+		);
 	}
 
 	@Override
@@ -119,20 +115,14 @@ public class PluginCore extends ForestryPlugin {
 
 		Proxies.render.init();
 
-		definitionEscritoire.register();
+		blocks.core.registerDefinitions();
+
 		ForestryModEnvWarningCallable.register();
 
 		AlleleHelper.instance.init();
 
 		RecipeSorter.register("forestry:shapedrecipecustom", ShapedRecipeCustom.class, RecipeSorter.Category.SHAPED, "before:minecraft:shaped");
 		RecipeSorter.register("forestry:shapelessrecipecustom", ShapelessRecipeCustom.class, RecipeSorter.Category.SHAPELESS, "before:minecraft:shapeless");
-	}
-
-	@Override
-	protected void postInit() {
-		super.postInit();
-
-		definitionAnalyzer.register();
 	}
 
 	@Override

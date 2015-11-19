@@ -17,11 +17,6 @@ import forestry.api.core.Tabs;
 import forestry.core.blocks.BlockBase;
 
 public class BlockApiculture extends BlockBase {
-	public enum Type {
-		APIARY,
-		APIARIST_CHEST_LEGACY,
-		BEEHOUSE;
-	}
 
 	public BlockApiculture(Material material) {
 		super(material);
@@ -29,7 +24,7 @@ public class BlockApiculture extends BlockBase {
 		setHarvestLevel("axe", 0);
 	}
 
-	public ItemStack get(Type type, int amount) {
+	public ItemStack get(BlockApicultureType type, int amount) {
 		return new ItemStack(this, amount, type.ordinal());
 	}
 }

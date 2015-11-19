@@ -14,8 +14,8 @@ import net.minecraft.item.ItemStack;
 
 import forestry.api.recipes.IStillRecipe;
 import forestry.api.recipes.RecipeManagers;
-import forestry.core.config.Constants;
-import forestry.core.config.ForestryBlock;
+import forestry.factory.blocks.BlockFactoryTesrType;
+import forestry.plugins.PluginFactory;
 
 import uristqwerty.CraftGuide.api.ItemSlot;
 import uristqwerty.CraftGuide.api.LiquidSlot;
@@ -37,12 +37,11 @@ public class CraftGuideStill implements RecipeProvider {
 
 	@Override
 	public void generateRecipes(RecipeGenerator generator) {
-
-		if (ForestryBlock.factoryTESR.block() == null) {
+		if (PluginFactory.blocks.factoryTESR == null) {
 			return;
 		}
 
-		ItemStack machine = ForestryBlock.factoryTESR.getItemStack(1, Constants.DEFINITION_STILL_META);
+		ItemStack machine = PluginFactory.blocks.factoryTESR.get(BlockFactoryTesrType.STILL);
 		RecipeTemplate template = generator.createRecipeTemplate(slots, machine);
 
 		for (IStillRecipe recipe : RecipeManagers.stillManager.recipes()) {

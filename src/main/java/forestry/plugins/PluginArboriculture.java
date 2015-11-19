@@ -62,7 +62,7 @@ import forestry.arboriculture.tiles.TileLeaves;
 import forestry.arboriculture.tiles.TileSapling;
 import forestry.arboriculture.tiles.TileWood;
 import forestry.core.GuiHandlerBase;
-import forestry.core.blocks.BlockCore;
+import forestry.core.blocks.BlockCoreType;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
@@ -87,7 +87,6 @@ public class PluginArboriculture extends ForestryPlugin {
 	public static int modelIdLeaves;
 	public static int modelIdPods;
 
-	private static MachineDefinition definitionChest;
 	public static final List<Block> validFences = new ArrayList<>();
 
 	public static ItemRegistryArboriculture items;
@@ -138,7 +137,7 @@ public class PluginArboriculture extends ForestryPlugin {
 			WoodItemAccess.registerStairs(blocks.stairsFireproof, woodType, true);
 		}
 
-		definitionChest = new MachineDefinition(BlockArboriculture.Type.ARBCHEST.ordinal(),
+		MachineDefinition definitionChest = new MachineDefinition(BlockArboriculture.Type.ARBCHEST.ordinal(),
 				"forestry.ArbChest", TileArboristChest.class, Proxies.render.getRenderChest("arbchest"))
 				.setBoundingBox(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
 		blocks.arboriculture.addDefinition(definitionChest);
@@ -170,7 +169,8 @@ public class PluginArboriculture extends ForestryPlugin {
 		GameRegistry.registerTileEntity(TileLeaves.class, "forestry.Leaves");
 		GameRegistry.registerTileEntity(TileWood.class, "forestry.Wood");
 		GameRegistry.registerTileEntity(TileFruitPod.class, "forestry.Pods");
-		definitionChest.register();
+
+		blocks.arboriculture.registerDefinitions();
 
 		if (Config.enableVillagers) {
 			VillagerRegistry.instance().registerVillagerId(Constants.ID_VILLAGER_LUMBERJACK);
@@ -320,7 +320,7 @@ public class PluginArboriculture extends ForestryPlugin {
 				'#', "stickWood");
 
 		// ANALYZER
-		RecipeUtil.addRecipe(PluginCore.blocks.core.get(BlockCore.Type.ANALYZER, 1),
+		RecipeUtil.addRecipe(PluginCore.blocks.core.get(BlockCoreType.ANALYZER, 1),
 				"XTX",
 				" Y ",
 				"X X",

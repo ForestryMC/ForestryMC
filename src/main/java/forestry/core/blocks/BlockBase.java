@@ -65,7 +65,13 @@ public class BlockBase extends BlockForestry {
 		this.lightOpacity = this.isOpaqueCube() ? 255 : 0;
 	}
 
-	public MachineDefinition addDefinition(MachineDefinition definition) {
+	public void addDefinitions(MachineDefinition... definitions) {
+		for (MachineDefinition definition : definitions) {
+			addDefinition(definition);
+		}
+	}
+
+	public void addDefinition(MachineDefinition definition) {
 		definition.setBlock(this);
 
 		while (definitions.size() <= definition.getMeta()) {
@@ -73,8 +79,6 @@ public class BlockBase extends BlockForestry {
 		}
 
 		definitions.set(definition.getMeta(), definition);
-
-		return definition;
 	}
 
 	@Override
@@ -241,6 +245,12 @@ public class BlockBase extends BlockForestry {
 	@Override
 	public int damageDropped(int metadata) {
 		return metadata;
+	}
+
+	public void registerDefinitions() {
+		for (MachineDefinition def : definitions) {
+			def.register();
+		}
 	}
 
 	/* TEXTURES */

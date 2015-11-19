@@ -88,6 +88,11 @@ public class PluginLepidopterology extends ForestryPlugin {
 	public void preInit() {
 		ButterflyBranchDefinition.createAlleles();
 		AlleleButterflyEffect.createAlleles();
+
+		BlockBase lepidopterology = ((BlockBase) ForestryBlock.lepidopterology.block());
+		MachineDefinition definitionChest = new MachineDefinition(Constants.DEFINITION_LEPICHEST_META, "forestry.LepiChest", TileLepidopteristChest.class, Proxies.render.getRenderChest("lepichest"))
+				.setBoundingBox(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
+		lepidopterology.addDefinition(definitionChest);
 	}
 
 	@Override
@@ -110,10 +115,7 @@ public class PluginLepidopterology extends ForestryPlugin {
 		MothDefinition.initMoths();
 		ButterflyDefinition.initButterflies();
 
-		BlockBase lepidopterology = ((BlockBase) ForestryBlock.lepidopterology.block());
-		MachineDefinition definitionChest = lepidopterology.addDefinition(new MachineDefinition(Constants.DEFINITION_LEPICHEST_META, "forestry.LepiChest", TileLepidopteristChest.class, Proxies.render.getRenderChest("lepichest"))
-				.setBoundingBox(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F));
-		definitionChest.register();
+		((BlockBase) ForestryBlock.lepidopterology.block()).registerDefinitions();
 
 		TreeManager.treeRoot.registerLeafTickHandler(new ButterflySpawner());
 

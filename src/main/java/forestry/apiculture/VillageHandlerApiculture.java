@@ -29,7 +29,7 @@ import cpw.mods.fml.common.registry.VillagerRegistry.IVillageCreationHandler;
 import cpw.mods.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
 
 import forestry.api.apiculture.EnumBeeType;
-import forestry.apiculture.blocks.BlockApiculture;
+import forestry.apiculture.blocks.BlockApicultureType;
 import forestry.apiculture.genetics.BeeDefinition;
 import forestry.apiculture.worldgen.ComponentVillageBeeHouse;
 import forestry.core.utils.Log;
@@ -54,7 +54,7 @@ public class VillageHandlerApiculture implements IVillageCreationHandler, IVilla
 		ItemStack randomComb = PluginApiculture.items.beeComb.getRandomComb(1, random, false);
 		recipeList.add(new MerchantRecipe(new ItemStack(Items.wheat, 2), randomComb));
 
-		ItemStack apiary = PluginApiculture.blocks.apiculture.get(BlockApiculture.Type.APIARY, 1);
+		ItemStack apiary = PluginApiculture.blocks.apiculture.get(BlockApicultureType.APIARY, 1);
 		recipeList.add(new MerchantRecipe(new ItemStack(Blocks.log, 24, OreDictionary.WILDCARD_VALUE), apiary));
 
 		ItemStack provenFrames = PluginApiculture.items.frameProven.getItemStack(6);

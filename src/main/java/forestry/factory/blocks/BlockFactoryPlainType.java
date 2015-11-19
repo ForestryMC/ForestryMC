@@ -8,7 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.mail.blocks;
+package forestry.factory.blocks;
 
 import java.util.Locale;
 
@@ -16,21 +16,21 @@ import org.apache.commons.lang3.text.WordUtils;
 
 import forestry.core.blocks.IMachineProperties;
 import forestry.core.tiles.TileForestry;
-import forestry.mail.tiles.TileMailbox;
-import forestry.mail.tiles.TileStampCollector;
-import forestry.mail.tiles.TileTrader;
+import forestry.factory.tiles.TileFabricator;
+import forestry.factory.tiles.TileRaintank;
+import forestry.factory.tiles.TileWorktable;
 
-public enum BlockMailType implements IMachineProperties {
-	MAILBOX(TileMailbox.class),
-	TRADESTATION(TileTrader.class),
-	PHILATELIST(TileStampCollector.class);
+public enum BlockFactoryPlainType implements IMachineProperties {
+	FABRICATOR(TileFabricator.class),
+	RAINTANK(TileRaintank.class),
+	WORKTABLE(TileWorktable.class);
 
-	public static final BlockMailType[] VALUES = values();
+	public static final BlockFactoryPlainType[] VALUES = values();
 
 	private final String teIdent;
 	private final Class<? extends TileForestry> teClass;
 
-	BlockMailType(Class<? extends TileForestry> teClass) {
+	BlockFactoryPlainType(Class<? extends TileForestry> teClass) {
 		String name = toString().toLowerCase(Locale.ENGLISH);
 		this.teIdent = "forestry." + WordUtils.capitalize(name);
 		this.teClass = teClass;
