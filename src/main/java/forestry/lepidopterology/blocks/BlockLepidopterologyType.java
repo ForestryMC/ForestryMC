@@ -8,30 +8,28 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.arboriculture.blocks;
+package forestry.lepidopterology.blocks;
 
-import javax.annotation.Nullable;
-
-import forestry.arboriculture.tiles.TileArboristChest;
 import forestry.core.blocks.IMachinePropertiesTESR;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.IBlockRenderer;
 import forestry.core.tiles.TileForestry;
+import forestry.lepidopterology.tiles.TileLepidopteristChest;
 
-public enum BlockArboricultureType implements IMachinePropertiesTESR {
-	ARBCHEST(TileArboristChest.class, "ArbChest") {
+public enum BlockLepidopterologyType implements IMachinePropertiesTESR {
+	LEPICHEST(TileLepidopteristChest.class, "LepiChest") {
 		@Override
 		public IBlockRenderer getRenderer() {
-			return Proxies.render.getRenderChest("arbchest");
+			return Proxies.render.getRenderChest("lepichest");
 		}
 	};
 
-	public static final BlockArboricultureType[] VALUES = values();
+	public static final BlockLepidopterologyType[] VALUES = values();
 
 	private final String teIdent;
 	private final Class<? extends TileForestry> teClass;
 
-	BlockArboricultureType(Class<? extends TileForestry> teClass, String teName) {
+	BlockLepidopterologyType(Class<? extends TileForestry> teClass, String teName) {
 		this.teIdent = "forestry." + teName;
 		this.teClass = teClass;
 	}

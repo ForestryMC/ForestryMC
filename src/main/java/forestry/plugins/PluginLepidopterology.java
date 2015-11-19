@@ -23,23 +23,20 @@ import cpw.mods.fml.common.SidedProxy;
 
 import forestry.Forestry;
 import forestry.api.arboriculture.TreeManager;
-import forestry.api.core.Tabs;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.GuiHandlerBase;
-import forestry.core.blocks.BlockBase;
 import forestry.core.config.Constants;
-import forestry.core.config.ForestryBlock;
 import forestry.core.config.LocalizedConfiguration;
 import forestry.core.fluids.Fluids;
-import forestry.core.items.ItemBlockForestry;
-import forestry.core.proxy.Proxies;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.tiles.MachineDefinition;
 import forestry.core.utils.EntityUtil;
 import forestry.lepidopterology.ButterflySpawner;
 import forestry.lepidopterology.GuiHandlerLepidopterology;
+import forestry.lepidopterology.blocks.BlockLepidopterologyType;
+import forestry.lepidopterology.blocks.BlockRegistryLepidopterology;
 import forestry.lepidopterology.commands.CommandButterfly;
 import forestry.lepidopterology.entities.EntityButterfly;
 import forestry.lepidopterology.genetics.AlleleButterflyEffect;
@@ -51,7 +48,6 @@ import forestry.lepidopterology.genetics.MothDefinition;
 import forestry.lepidopterology.items.ItemRegistryLepidopterology;
 import forestry.lepidopterology.proxy.ProxyLepidopterology;
 import forestry.lepidopterology.recipes.MatingRecipe;
-import forestry.lepidopterology.tiles.TileLepidopteristChest;
 
 @Plugin(pluginID = "Lepidopterology", name = "Lepidopterology", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.lepidopterology.description")
 public class PluginLepidopterology extends ForestryPlugin {
@@ -64,6 +60,7 @@ public class PluginLepidopterology extends ForestryPlugin {
 	private static boolean allowPollination = true;
 
 	public static ItemRegistryLepidopterology items;
+	public static BlockRegistryLepidopterology blocks;
 
 	@Override
 	protected void setupAPI() {
@@ -78,9 +75,7 @@ public class PluginLepidopterology extends ForestryPlugin {
 	@Override
 	protected void registerItemsAndBlocks() {
 		items = new ItemRegistryLepidopterology();
-
-		ForestryBlock.lepidopterology.registerBlock(new BlockBase(true), ItemBlockForestry.class, "lepidopterology");
-		ForestryBlock.lepidopterology.block().setCreativeTab(Tabs.tabLepidopterology);
+		blocks = new BlockRegistryLepidopterology();
 	}
 
 	@Override
@@ -88,10 +83,9 @@ public class PluginLepidopterology extends ForestryPlugin {
 		ButterflyBranchDefinition.createAlleles();
 		AlleleButterflyEffect.createAlleles();
 
-		BlockBase lepidopterology = ((BlockBase) ForestryBlock.lepidopterology.block());
-		MachineDefinition definitionChest = new MachineDefinition(Constants.DEFINITION_LEPICHEST_META, "forestry.LepiChest", TileLepidopteristChest.class, Proxies.render.getRenderChest("lepichest"))
+		MachineDefinition definitionChest = new MachineDefinition(BlockLepidopterologyType.LEPICHEST)
 				.setBoundingBox(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
-		lepidopterology.addDefinition(definitionChest);
+		blocks.lepidopterology.addDefinition(definitionChest);
 	}
 
 	@Override
@@ -114,7 +108,7 @@ public class PluginLepidopterology extends ForestryPlugin {
 		MothDefinition.initMoths();
 		ButterflyDefinition.initButterflies();
 
-		((BlockBase) ForestryBlock.lepidopterology.block()).init();
+		blocks.lepidopterology.init();
 
 		TreeManager.treeRoot.registerLeafTickHandler(new ButterflySpawner());
 
@@ -140,7 +134,7 @@ public class PluginLepidopterology extends ForestryPlugin {
 				"X#X", "X#X", "RDR", '#', "paneGlass", 'X', "ingotBronze", 'R',
 				"dustRedstone", 'D', "gemDiamond");
 
-		RecipeUtil.addRecipe(ForestryBlock.lepidopterology.getItemStack(1, Constants.DEFINITION_LEPICHEST_META),
+		RecipeUtil.addRecipe(blocks.lepidopterology.get(BlockLepidopterologyType.LEPICHEST),
 				" # ",
 				"XYX",
 				"XXX",

@@ -71,8 +71,6 @@ import forestry.core.items.ItemFruit.EnumFruit;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.proxy.Proxies;
 import forestry.core.recipes.RecipeUtil;
-import forestry.core.recipes.ShapedRecipeCustom;
-import forestry.core.recipes.ShapelessRecipeCustom;
 import forestry.core.tiles.MachineDefinition;
 import forestry.factory.recipes.FabricatorRecipe;
 
@@ -217,41 +215,41 @@ public class PluginArboriculture extends ForestryPlugin {
 
 			planks.stackSize = 4;
 			logs.stackSize = 1;
-			ShapelessRecipeCustom.buildRecipe(planks.copy(), logs.copy());
+			RecipeUtil.addShapelessRecipe(planks.copy(), logs.copy());
 
 			fireproofPlanks.stackSize = 4;
 			fireproofLogs.stackSize = 1;
-			ShapelessRecipeCustom.buildRecipe(fireproofPlanks.copy(), fireproofLogs.copy());
+			RecipeUtil.addShapelessRecipe(fireproofPlanks.copy(), fireproofLogs.copy());
 
 			slabs.stackSize = 6;
 			planks.stackSize = 1;
-			ShapedRecipeCustom.buildPriorityRecipe(slabs.copy(),
+			RecipeUtil.addPriorityRecipe(slabs.copy(),
 					"###",
 					'#', planks.copy());
 
 			fireproofSlabs.stackSize = 6;
 			fireproofPlanks.stackSize = 1;
-			ShapedRecipeCustom.buildPriorityRecipe(fireproofSlabs.copy(),
+			RecipeUtil.addPriorityRecipe(fireproofSlabs.copy(),
 					"###",
 					'#', fireproofPlanks.copy());
 
 			fences.stackSize = 3;
 			planks.stackSize = 1;
-			ShapedRecipeCustom.buildRecipe(fences.copy(),
+			RecipeUtil.addRecipe(fences.copy(),
 					"#X#",
 					"#X#",
 					'#', planks.copy(), 'X', "stickWood");
 
 			fireproofFences.stackSize = 3;
 			fireproofPlanks.stackSize = 1;
-			ShapedRecipeCustom.buildRecipe(fireproofFences.copy(),
+			RecipeUtil.addRecipe(fireproofFences.copy(),
 					"#X#",
 					"#X#",
 					'#', fireproofPlanks.copy(), 'X', "stickWood");
 
 			stairs.stackSize = 4;
 			planks.stackSize = 1;
-			ShapedRecipeCustom.buildPriorityRecipe(stairs.copy(),
+			RecipeUtil.addPriorityRecipe(stairs.copy(),
 					"#  ",
 					"## ",
 					"###",
@@ -259,7 +257,7 @@ public class PluginArboriculture extends ForestryPlugin {
 
 			fireproofStairs.stackSize = 4;
 			fireproofPlanks.stackSize = 1;
-			ShapedRecipeCustom.buildPriorityRecipe(fireproofStairs.copy(),
+			RecipeUtil.addPriorityRecipe(fireproofStairs.copy(),
 					"#  ",
 					"## ",
 					"###",

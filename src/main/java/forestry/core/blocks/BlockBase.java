@@ -248,7 +248,9 @@ public class BlockBase<T extends IMachineProperties> extends BlockForestry {
 
 	public void init() {
 		for (MachineDefinition def : definitions) {
-			def.register();
+			if (def != null) {
+				def.register();
+			}
 		}
 	}
 

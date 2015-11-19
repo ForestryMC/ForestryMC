@@ -31,7 +31,6 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 import forestry.api.recipes.IDescriptiveRecipe;
 import forestry.api.recipes.RecipeManagers;
-import forestry.core.config.ForestryBlock;
 import forestry.core.fluids.Fluids;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
@@ -210,22 +209,18 @@ public abstract class RecipeUtil {
 		return null;
 	}
 
-	private static void cleanRecipe(Object... obj) {
-		for (int i = 0; i < obj.length; i++) {
-			if (obj[i] instanceof ForestryBlock) {
-				obj[i] = ((ForestryBlock) obj[i]).block();
-			}
-		}
-	}
-
 	public static void addRecipe(Item item, Object... obj) {
 		addRecipe(new ItemStack(item), obj);
 	}
 
 	@SuppressWarnings("unchecked")
 	public static void addRecipe(ItemStack itemstack, Object... obj) {
-		cleanRecipe(obj);
 		CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(itemstack, obj));
+	}
+
+	@SuppressWarnings("unchecked")
+	public static void addPriorityRecipe(ItemStack itemStack, Object... obj) {
+		CraftingManager.getInstance().getRecipeList().add(0, new ShapedOreRecipe(itemStack, obj));
 	}
 
 	public static void addShapelessRecipe(Item item, Object... obj) {
@@ -234,7 +229,6 @@ public abstract class RecipeUtil {
 
 	@SuppressWarnings("unchecked")
 	public static void addShapelessRecipe(ItemStack itemstack, Object... obj) {
-		cleanRecipe(obj);
 		CraftingManager.getInstance().getRecipeList().add(new ShapelessOreRecipe(itemstack, obj));
 	}
 

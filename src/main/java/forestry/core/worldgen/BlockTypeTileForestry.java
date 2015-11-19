@@ -17,17 +17,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.core.config.Constants;
-import forestry.core.config.ForestryBlock;
 import forestry.core.tiles.TileForestry;
 
 public class BlockTypeTileForestry implements IBlockType {
 	private final Block block;
 	private final int meta;
 	private ForgeDirection direction;
-
-	public BlockTypeTileForestry(ForestryBlock forestryBlock, int meta) {
-		this(forestryBlock.block(), meta);
-	}
 
 	public BlockTypeTileForestry(Block block, int meta) {
 		this.block = block;

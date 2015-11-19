@@ -60,7 +60,6 @@ import forestry.core.GuiHandlerBase;
 import forestry.core.IPickupHandler;
 import forestry.core.IResupplyHandler;
 import forestry.core.config.Constants;
-import forestry.core.config.ForestryBlock;
 import forestry.core.config.LocalizedConfiguration;
 import forestry.core.fluids.Fluids;
 import forestry.core.items.ItemCrated;
@@ -68,6 +67,8 @@ import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.StringUtil;
+import forestry.lepidopterology.blocks.BlockLepidopterologyType;
+import forestry.lepidopterology.blocks.BlockRegistryLepidopterology;
 import forestry.storage.BackpackDefinition;
 import forestry.storage.BackpackDefinition.BackpackDefinitionApiarist;
 import forestry.storage.BackpackDefinition.BackpackDefinitionLepidopterist;
@@ -502,8 +503,9 @@ public class PluginStorage extends ForestryPlugin {
 			addBackpackRecipe(items.apiaristBackpack, "stickWood", beeBlocks.apicultureChest);
 		}
 
-		if (items.lepidopteristBackpack != null) {
-			ItemStack chest = ForestryBlock.lepidopterology.getItemStack(1, Constants.DEFINITION_LEPICHEST_META);
+		BlockRegistryLepidopterology butterflyBlocks = PluginLepidopterology.blocks;
+		if (items.lepidopteristBackpack != null && butterflyBlocks != null) {
+			ItemStack chest = butterflyBlocks.lepidopterology.get(BlockLepidopterologyType.LEPICHEST);
 			addBackpackRecipe(items.lepidopteristBackpack, "stickWood", chest);
 		}
 

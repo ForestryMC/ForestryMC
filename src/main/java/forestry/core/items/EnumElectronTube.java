@@ -33,11 +33,11 @@ public enum EnumElectronTube implements ItemOverlay.IOverlayInfo {
 	private final int primaryColor;
 	private final int secondaryColor;
 
-	EnumElectronTube(Color primaryColor) {
-		this(primaryColor, Color.WHITE);
+	EnumElectronTube(Color secondaryColor) {
+		this(secondaryColor, Color.WHITE);
 	}
 
-	EnumElectronTube(Color primaryColor, Color secondaryColor) {
+	EnumElectronTube(Color secondaryColor, Color primaryColor) {
 		this.name = "ex-" + ordinal();
 		this.primaryColor = primaryColor.getRGB();
 		this.secondaryColor = secondaryColor.getRGB();

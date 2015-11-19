@@ -289,7 +289,7 @@ public class PluginFarming extends ForestryPlugin {
 			block.saveToCompound(compound);
 
 			basic.setTagCompound((NBTTagCompound) compound.copy());
-			ShapedRecipeCustom.buildRecipe(basic.copy(),
+			RecipeUtil.addRecipe(basic.copy(),
 					"I#I",
 					"WCW",
 					'#', block.getBase(),

@@ -57,7 +57,6 @@ import forestry.core.network.PacketRegistryCore;
 import forestry.core.proxy.Proxies;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.recipes.ShapedRecipeCustom;
-import forestry.core.recipes.ShapelessRecipeCustom;
 import forestry.core.tiles.MachineDefinition;
 import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.ForestryModEnvWarningCallable;
@@ -117,9 +116,6 @@ public class PluginCore extends ForestryPlugin {
 		ForestryModEnvWarningCallable.register();
 
 		AlleleHelper.instance.init();
-
-		RecipeSorter.register("forestry:shapedrecipecustom", ShapedRecipeCustom.class, RecipeSorter.Category.SHAPED, "before:minecraft:shaped");
-		RecipeSorter.register("forestry:shapelessrecipecustom", ShapelessRecipeCustom.class, RecipeSorter.Category.SHAPELESS, "before:minecraft:shapeless");
 	}
 
 	@Override

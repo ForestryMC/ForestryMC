@@ -52,10 +52,6 @@ public class MachineDefinition {
 	
 	private float minX, minY, minZ, maxX, maxY, maxZ;
 
-	public MachineDefinition(int meta, String teIdent, Class<? extends TileForestry> teClass) {
-		this(meta, teIdent, teClass, null);
-	}
-
 	public MachineDefinition(IMachineProperties properties) {
 		this(properties.getMeta(), properties.getTeIdent(), properties.getTeClass(), null);
 	}

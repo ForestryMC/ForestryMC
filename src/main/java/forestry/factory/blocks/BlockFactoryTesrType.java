@@ -36,19 +36,24 @@ public enum BlockFactoryTesrType implements IMachinePropertiesTESR {
 	MOISTENER(TileMoistener.class),
 	SQUEEZER(TileSqueezer.class),
 	STILL(TileStill.class),
-	RAINMAKER(TileMillRainmaker.class);
+	RAINMAKER(TileMillRainmaker.class) {
+		@Override
+		public IBlockRenderer getRenderer() {
+			return Proxies.render.getRenderMill(Constants.TEXTURE_PATH_BLOCKS + "/rainmaker_");
+		}
+	};
 
 	public static final BlockFactoryTesrType[] VALUES = values();
 
 	private final String teIdent;
 	private final Class<? extends TileForestry> teClass;
-	private final IBlockRenderer renderer;
+	private final String name;
 
 	BlockFactoryTesrType(Class<? extends TileForestry> teClass) {
 		String name = toString().toLowerCase(Locale.ENGLISH);
 		this.teIdent = "forestry." + WordUtils.capitalize(name);
 		this.teClass = teClass;
-		this.renderer = Proxies.render.getRenderDefaultMachine(Constants.TEXTURE_PATH_BLOCKS + "/" + name + "_");
+		this.name = name;
 	}
 
 	@Override
@@ -68,6 +73,6 @@ public enum BlockFactoryTesrType implements IMachinePropertiesTESR {
 
 	@Override
 	public IBlockRenderer getRenderer() {
-		return renderer;
+		return Proxies.render.getRenderDefaultMachine(Constants.TEXTURE_PATH_BLOCKS + "/" + name + "_");
 	}
 }

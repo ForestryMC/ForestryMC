@@ -13,6 +13,7 @@ package forestry.energy.tiles;
 import net.minecraft.world.IBlockAccess;
 
 import forestry.core.blocks.IMachineProperties;
+import forestry.core.blocks.IMachinePropertiesTESR;
 import forestry.core.render.IBlockRenderer;
 import forestry.core.tiles.MachineDefinition;
 import forestry.core.tiles.TileEngine;
@@ -21,12 +22,8 @@ import forestry.core.tiles.TileUtil;
 
 public class EngineDefinition extends MachineDefinition {
 
-	public EngineDefinition(IMachineProperties properties) {
+	public EngineDefinition(IMachinePropertiesTESR properties) {
 		super(properties);
-	}
-
-	public EngineDefinition(int meta, String teIdent, Class<? extends TileForestry> teClass, IBlockRenderer renderer) {
-		super(meta, teIdent, teClass, renderer);
 	}
 
 	@Override
