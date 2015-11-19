@@ -41,7 +41,7 @@ import forestry.api.storage.StorageManager;
 import forestry.arboriculture.GuiHandlerArboriculture;
 import forestry.arboriculture.VillageHandlerArboriculture;
 import forestry.arboriculture.WoodItemAccess;
-import forestry.arboriculture.blocks.BlockArboriculture;
+import forestry.arboriculture.blocks.BlockArboricultureType;
 import forestry.arboriculture.blocks.BlockRegistryArboriculture;
 import forestry.arboriculture.commands.CommandTree;
 import forestry.arboriculture.genetics.TreeBranchDefinition;
@@ -137,7 +137,7 @@ public class PluginArboriculture extends ForestryPlugin {
 			WoodItemAccess.registerStairs(blocks.stairsFireproof, woodType, true);
 		}
 
-		MachineDefinition definitionChest = new MachineDefinition(BlockArboriculture.Type.ARBCHEST.ordinal(),
+		MachineDefinition definitionChest = new MachineDefinition(BlockArboricultureType.ARBCHEST.ordinal(),
 				"forestry.ArbChest", TileArboristChest.class, Proxies.render.getRenderChest("arbchest"))
 				.setBoundingBox(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
 		blocks.arboriculture.addDefinition(definitionChest);
@@ -170,7 +170,7 @@ public class PluginArboriculture extends ForestryPlugin {
 		GameRegistry.registerTileEntity(TileWood.class, "forestry.Wood");
 		GameRegistry.registerTileEntity(TileFruitPod.class, "forestry.Pods");
 
-		blocks.arboriculture.registerDefinitions();
+		blocks.arboriculture.init();
 
 		if (Config.enableVillagers) {
 			VillagerRegistry.instance().registerVillagerId(Constants.ID_VILLAGER_LUMBERJACK);
@@ -328,7 +328,7 @@ public class PluginArboriculture extends ForestryPlugin {
 				'T', items.treealyzer,
 				'X', "ingotBronze");
 
-		RecipeUtil.addRecipe(blocks.arboriculture.get(BlockArboriculture.Type.ARBCHEST, 1),
+		RecipeUtil.addRecipe(blocks.arboriculture.get(BlockArboricultureType.ARBCHEST, 1),
 				" # ",
 				"XYX",
 				"XXX",

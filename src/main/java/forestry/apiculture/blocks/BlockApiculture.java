@@ -10,21 +10,13 @@
  ******************************************************************************/
 package forestry.apiculture.blocks;
 
-import net.minecraft.block.material.Material;
-import net.minecraft.item.ItemStack;
-
 import forestry.api.core.Tabs;
 import forestry.core.blocks.BlockBase;
 
-public class BlockApiculture extends BlockBase {
-
-	public BlockApiculture(Material material) {
-		super(material);
+public class BlockApiculture extends BlockBase<BlockApicultureType> {
+	public BlockApiculture() {
+		super();
 		setCreativeTab(Tabs.tabApiculture);
 		setHarvestLevel("axe", 0);
-	}
-
-	public ItemStack get(BlockApicultureType type, int amount) {
-		return new ItemStack(this, amount, type.ordinal());
 	}
 }

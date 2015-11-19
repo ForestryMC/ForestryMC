@@ -88,7 +88,7 @@ public class PluginMail extends ForestryPlugin {
 	public void doInit() {
 		super.doInit();
 
-		blocks.mail.registerDefinitions();
+		blocks.mail.init();
 	}
 
 	@Override

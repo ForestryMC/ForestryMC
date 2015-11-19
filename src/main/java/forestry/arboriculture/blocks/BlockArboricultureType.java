@@ -8,40 +8,31 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.blocks;
+package forestry.arboriculture.blocks;
 
 import javax.annotation.Nullable;
 
-import forestry.core.config.Constants;
+import forestry.arboriculture.tiles.TileArboristChest;
+import forestry.core.blocks.IMachinePropertiesTESR;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.IBlockRenderer;
-import forestry.core.tiles.TileAnalyzer;
-import forestry.core.tiles.TileEscritoire;
 import forestry.core.tiles.TileForestry;
-import forestry.plugins.PluginApiculture;
 
-public enum BlockCoreType implements IMachinePropertiesTESR {
-	ANALYZER(TileAnalyzer.class, "Analyzer") {
+public enum BlockArboricultureType implements IMachinePropertiesTESR {
+	ARBCHEST(TileArboristChest.class, "ArbChest") {
 		@Nullable
 		@Override
 		public IBlockRenderer getRenderer() {
-			return PluginApiculture.proxy.getRendererAnalyzer(Constants.TEXTURE_PATH_BLOCKS + "/analyzer_");
-		}
-	},
-	ESCRITOIRE(TileEscritoire.class, "Escritoire") {
-		@Nullable
-		@Override
-		public IBlockRenderer getRenderer() {
-			return Proxies.render.getRenderEscritoire();
+			return Proxies.render.getRenderChest("arbchest");
 		}
 	};
 
-	public static final BlockCoreType[] VALUES = values();
+	public static final BlockArboricultureType[] VALUES = values();
 
 	private final String teIdent;
 	private final Class<? extends TileForestry> teClass;
 
-	BlockCoreType(Class<? extends TileForestry> teClass, String teName) {
+	BlockArboricultureType(Class<? extends TileForestry> teClass, String teName) {
 		this.teIdent = "forestry." + teName;
 		this.teClass = teClass;
 	}

@@ -13,7 +13,6 @@ package forestry.plugins;
 import java.io.File;
 import java.util.EnumSet;
 
-import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 
@@ -80,7 +79,7 @@ public class PluginLepidopterology extends ForestryPlugin {
 	protected void registerItemsAndBlocks() {
 		items = new ItemRegistryLepidopterology();
 
-		ForestryBlock.lepidopterology.registerBlock(new BlockBase(Material.iron, true), ItemBlockForestry.class, "lepidopterology");
+		ForestryBlock.lepidopterology.registerBlock(new BlockBase(true), ItemBlockForestry.class, "lepidopterology");
 		ForestryBlock.lepidopterology.block().setCreativeTab(Tabs.tabLepidopterology);
 	}
 
@@ -115,7 +114,7 @@ public class PluginLepidopterology extends ForestryPlugin {
 		MothDefinition.initMoths();
 		ButterflyDefinition.initButterflies();
 
-		((BlockBase) ForestryBlock.lepidopterology.block()).registerDefinitions();
+		((BlockBase) ForestryBlock.lepidopterology.block()).init();
 
 		TreeManager.treeRoot.registerLeafTickHandler(new ButterflySpawner());
 

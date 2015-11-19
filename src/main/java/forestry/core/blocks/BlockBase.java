@@ -48,17 +48,16 @@ import forestry.core.tiles.TileUtil;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.PlayerUtil;
 
-public class BlockBase extends BlockForestry {
-
+public class BlockBase<T extends IMachineProperties> extends BlockForestry {
 	private final List<MachineDefinition> definitions = new ArrayList<>();
 	private final boolean hasTESR;
 
-	public BlockBase(Material material) {
-		this(material, false);
+	public BlockBase() {
+		this(false);
 	}
 
-	public BlockBase(Material material, boolean hasTESR) {
-		super(material);
+	public BlockBase(boolean hasTESR) {
+		super(Material.iron);
 
 		this.hasTESR = hasTESR;
 		this.opaque = this.isOpaqueCube();
@@ -247,7 +246,7 @@ public class BlockBase extends BlockForestry {
 		return metadata;
 	}
 
-	public void registerDefinitions() {
+	public void init() {
 		for (MachineDefinition def : definitions) {
 			def.register();
 		}
@@ -287,5 +286,13 @@ public class BlockBase extends BlockForestry {
 	@Override
 	public boolean getUseNeighborBrightness() {
 		return hasTESR;
+	}
+
+	public final ItemStack get(T type) {
+		return get(type, 1);
+	}
+
+	public final ItemStack get(T type, int amount) {
+		return new ItemStack(this, amount, type.getMeta());
 	}
 }

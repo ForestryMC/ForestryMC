@@ -10,17 +10,10 @@
  ******************************************************************************/
 package forestry.factory.blocks;
 
-import net.minecraft.block.material.Material;
-import net.minecraft.item.ItemStack;
-
 import forestry.core.blocks.BlockBase;
 
-public class BlockFactoryPlain extends BlockBase {
+public class BlockFactoryPlain extends BlockBase<BlockFactoryPlainType> {
 	public BlockFactoryPlain() {
-		super(Material.iron);
-	}
-
-	public ItemStack get(BlockFactoryPlainType type) {
-		return new ItemStack(this, 1, type.ordinal());
+		super();
 	}
 }

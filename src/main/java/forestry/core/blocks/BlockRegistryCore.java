@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
-import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 
 import net.minecraftforge.oredict.OreDictionary;
@@ -25,7 +24,7 @@ public class BlockRegistryCore extends BlockRegistry {
 	public final BlockResourceStorage resourceStorage;
 
 	public BlockRegistryCore() {
-		core = registerBlock(new BlockCore(Material.iron, true), ItemBlockForestry.class, "core");
+		core = registerBlock(new BlockCore(), ItemBlockForestry.class, "core");
 		
 		soil = registerBlock(new BlockSoil(), ItemBlockTyped.class, "soil");
 		soil.setHarvestLevel("shovel", 0, 0);

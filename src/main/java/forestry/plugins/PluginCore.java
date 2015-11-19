@@ -59,8 +59,6 @@ import forestry.core.recipes.RecipeUtil;
 import forestry.core.recipes.ShapedRecipeCustom;
 import forestry.core.recipes.ShapelessRecipeCustom;
 import forestry.core.tiles.MachineDefinition;
-import forestry.core.tiles.TileAnalyzer;
-import forestry.core.tiles.TileEscritoire;
 import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.ForestryModEnvWarningCallable;
 
@@ -103,9 +101,8 @@ public class PluginCore extends ForestryPlugin {
 		rootCommand.addChildCommand(new CommandPlugins());
 
 		blocks.core.addDefinitions(
-				new MachineDefinition(BlockCoreType.ESCRITOIRE.ordinal(), "forestry.Escritoire", TileEscritoire.class, Proxies.render.getRenderEscritoire()),
-				new MachineDefinition(BlockCoreType.ANALYZER.ordinal(), "forestry.Analyzer", TileAnalyzer.class,
-						PluginApiculture.proxy.getRendererAnalyzer(Constants.TEXTURE_PATH_BLOCKS + "/analyzer_"))
+				new MachineDefinition(BlockCoreType.ESCRITOIRE),
+				new MachineDefinition(BlockCoreType.ANALYZER)
 		);
 	}
 
@@ -115,7 +112,7 @@ public class PluginCore extends ForestryPlugin {
 
 		Proxies.render.init();
 
-		blocks.core.registerDefinitions();
+		blocks.core.init();
 
 		ForestryModEnvWarningCallable.register();
 

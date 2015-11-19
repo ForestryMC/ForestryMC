@@ -313,8 +313,8 @@ public class PluginApiculture extends ForestryPlugin {
 
 		proxy.initializeRendering();
 
-		blocks.apiculture.registerDefinitions();
-		blocks.apicultureChest.registerDefinitions();
+		blocks.apiculture.init();
+		blocks.apicultureChest.init();
 	}
 
 	@Override

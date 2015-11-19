@@ -218,8 +218,8 @@ public class PluginFactory extends ForestryPlugin {
 	public void doInit() {
 		super.doInit();
 
-		blocks.factoryTESR.registerDefinitions();
-		blocks.factoryPlain.registerDefinitions();
+		blocks.factoryTESR.init();
+		blocks.factoryPlain.init();
 
 		Circuit.machineSpeedUpgrade1 = new CircuitSpeedUpgrade("machine.speed.boost.1", 0.125f, 0.05f, 4);
 		Circuit.machineSpeedUpgrade2 = new CircuitSpeedUpgrade("machine.speed.boost.2", 0.250f, 0.10f, 4);

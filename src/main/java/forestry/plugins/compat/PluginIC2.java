@@ -37,25 +37,21 @@ import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
 import forestry.apiculture.items.EnumPropolis;
 import forestry.apiculture.items.ItemRegistryApiculture;
-import forestry.core.blocks.BlockBase;
 import forestry.core.circuits.Circuit;
 import forestry.core.circuits.CircuitLayout;
 import forestry.core.config.Constants;
-import forestry.core.config.ForestryBlock;
 import forestry.core.fluids.Fluids;
 import forestry.core.items.EnumElectronTube;
-import forestry.core.proxy.Proxies;
 import forestry.core.recipes.RecipeUtil;
-import forestry.core.tiles.MachineDefinition;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.ModUtil;
+import forestry.energy.blocks.BlockEngineType;
+import forestry.energy.blocks.BlockRegistryEnergy;
 import forestry.energy.circuits.CircuitElectricBoost;
 import forestry.energy.circuits.CircuitElectricChoke;
 import forestry.energy.circuits.CircuitElectricEfficiency;
 import forestry.energy.tiles.EngineDefinition;
-import forestry.energy.tiles.TileEngineElectric;
-import forestry.energy.tiles.TileGenerator;
 import forestry.farming.circuits.CircuitFarmLogic;
 import forestry.farming.logic.FarmLogicRubber;
 import forestry.plugins.ForestryPlugin;
@@ -113,7 +109,6 @@ public class PluginIC2 extends ForestryPlugin {
 		EnumSet<PluginManager.Module> deps = super.getDependancies();
 		deps.add(PluginManager.Module.FARMING);
 		deps.add(PluginManager.Module.FACTORY);
-		deps.add(PluginManager.Module.ENERGY);
 		return deps;
 	}
 
@@ -122,13 +117,13 @@ public class PluginIC2 extends ForestryPlugin {
 	public void preInit() {
 		super.preInit();
 
-		EngineDefinition definitionEngineElectric = new EngineDefinition(Constants.DEFINITION_ENGINE_ELECTRIC_META, "forestry.EngineTin", TileEngineElectric.class,
-				PluginEnergy.proxy.getRenderDefaultEngine(Constants.TEXTURE_PATH_BLOCKS + "/engine_tin_"));
-		((BlockBase) ForestryBlock.engine.block()).addDefinition(definitionEngineElectric);
-
-		MachineDefinition definitionGenerator = new MachineDefinition(Constants.DEFINITION_GENERATOR_META, "forestry.Generator", TileGenerator.class,
-				Proxies.render.getRenderDefaultMachine(Constants.TEXTURE_PATH_BLOCKS + "/generator_"));
-		((BlockBase) ForestryBlock.engine.block()).addDefinition(definitionGenerator);
+		BlockRegistryEnergy energyBlocks = PluginEnergy.blocks;
+		if (energyBlocks != null) {
+			energyBlocks.engine.addDefinitions(
+					new EngineDefinition(BlockEngineType.ELECTRIC),
+					new EngineDefinition(BlockEngineType.GENERATOR)
+			);
+		}
 
 		emptyCell = IC2Items.getItem("cell");
 		if (emptyCell != null) {
@@ -178,8 +173,6 @@ public class PluginIC2 extends ForestryPlugin {
 		} else {
 			Log.severe("IC2 Recipes.recyclerBlacklist not found.");
 		}
-
-		((BlockBase) ForestryBlock.engine.block()).registerDefinitions();
 
 		Circuit.energyElectricChoke1 = new CircuitElectricChoke("electric.choke.1");
 		Circuit.energyElectricEfficiency1 = new CircuitElectricEfficiency("electric.efficiency.1");
@@ -307,21 +300,24 @@ public class PluginIC2 extends ForestryPlugin {
 			ChipsetManager.solderManager.addRecipe(layoutManual, PluginCore.items.tubes.get(EnumElectronTube.RUBBER, 1), Circuit.farmRubberManual);
 		}
 
-		RecipeUtil.addRecipe(ForestryBlock.engine.getItemStack(1, Constants.DEFINITION_GENERATOR_META),
-				"X#X",
-				"XYX",
-				"X#X",
-				'#', "blockGlass",
-				'X', "ingotGold",
-				'Y', PluginCore.items.sturdyCasing);
+		BlockRegistryEnergy energyBlocks = PluginEnergy.blocks;
+		if (energyBlocks != null) {
+			RecipeUtil.addRecipe(energyBlocks.engine.get(BlockEngineType.GENERATOR),
+					"X#X",
+					"XYX",
+					"X#X",
+					'#', "blockGlass",
+					'X', "ingotGold",
+					'Y', PluginCore.items.sturdyCasing);
 
-		RecipeUtil.addRecipe(ForestryBlock.engine.getItemStack(1, Constants.DEFINITION_ENGINE_ELECTRIC_META),
-				"###",
-				" X ",
-				"YVY",
-				'#', "ingotTin",
-				'X', "blockGlass",
-				'Y', "gearTin",
-				'V', Blocks.piston);
+			RecipeUtil.addRecipe(energyBlocks.engine.get(BlockEngineType.ELECTRIC),
+					"###",
+					" X ",
+					"YVY",
+					'#', "ingotTin",
+					'X', "blockGlass",
+					'Y', "gearTin",
+					'V', Blocks.piston);
+		}
 	}
 }

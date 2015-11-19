@@ -8,12 +8,15 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.factory.blocks;
+package forestry.energy.blocks;
 
-import forestry.core.blocks.BlockBase;
+import forestry.core.blocks.BlockRegistry;
+import forestry.core.items.ItemBlockForestry;
 
-public class BlockFactoryTesr extends BlockBase<BlockFactoryTesrType> {
-	public BlockFactoryTesr() {
-		super(true);
+public class BlockRegistryEnergy extends BlockRegistry {
+	public final BlockEngine engine;
+
+	public BlockRegistryEnergy() {
+		engine = registerBlock(new BlockEngine(), ItemBlockForestry.class, "engine");
 	}
 }

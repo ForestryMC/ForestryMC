@@ -8,12 +8,10 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.factory.blocks;
+package forestry.core.blocks;
 
-import forestry.core.blocks.BlockBase;
+import forestry.core.render.IBlockRenderer;
 
-public class BlockFactoryTesr extends BlockBase<BlockFactoryTesrType> {
-	public BlockFactoryTesr() {
-		super(true);
-	}
+public interface IMachinePropertiesTESR extends IMachineProperties {
+	IBlockRenderer getRenderer();
 }

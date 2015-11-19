@@ -10,23 +10,12 @@
  ******************************************************************************/
 package forestry.arboriculture.blocks;
 
-import net.minecraft.block.material.Material;
-import net.minecraft.item.ItemStack;
-
 import forestry.api.core.Tabs;
 import forestry.core.blocks.BlockBase;
 
-public class BlockArboriculture extends BlockBase {
-	public enum Type {
-		ARBCHEST;
-	}
-
+public class BlockArboriculture extends BlockBase<BlockArboricultureType> {
 	public BlockArboriculture() {
-		super(Material.iron, true);
+		super(true);
 		setCreativeTab(Tabs.tabArboriculture);
-	}
-
-	public ItemStack get(Type type, int amount) {
-		return new ItemStack(this, amount, type.ordinal());
 	}
 }

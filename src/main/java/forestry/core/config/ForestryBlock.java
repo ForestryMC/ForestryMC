@@ -34,7 +34,6 @@ import forestry.plugins.PluginManager.Stage;
  * @author SirSengir
  */
 public enum ForestryBlock {
-	engine,
 	lepidopterology;
 	private Block block;
 

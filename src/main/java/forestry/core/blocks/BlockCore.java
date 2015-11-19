@@ -10,16 +10,8 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
-import net.minecraft.block.material.Material;
-import net.minecraft.item.ItemStack;
-
-public class BlockCore extends BlockBase {
-
-	public BlockCore(Material material, boolean hasTESR) {
-		super(material, hasTESR);
-	}
-
-	public ItemStack get(BlockCoreType type, int amount) {
-		return new ItemStack(this, amount, type.ordinal());
+public class BlockCore extends BlockBase<BlockCoreType> {
+	public BlockCore() {
+		super(true);
 	}
 }

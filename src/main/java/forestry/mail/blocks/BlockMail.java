@@ -10,17 +10,10 @@
  ******************************************************************************/
 package forestry.mail.blocks;
 
-import net.minecraft.block.material.Material;
-import net.minecraft.item.ItemStack;
-
 import forestry.core.blocks.BlockBase;
 
-public class BlockMail extends BlockBase {
+public class BlockMail extends BlockBase<BlockMailType> {
 	public BlockMail() {
-		super(Material.iron);
-	}
-
-	public ItemStack get(BlockMailType type) {
-		return new ItemStack(this, 1, type.ordinal());
+		super();
 	}
 }

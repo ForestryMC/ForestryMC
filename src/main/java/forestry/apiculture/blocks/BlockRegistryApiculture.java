@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.blocks;
 
-import net.minecraft.block.material.Material;
-
 import forestry.api.core.Tabs;
 import forestry.apiculture.items.ItemBlockCandle;
 import forestry.core.blocks.BlockBase;
@@ -27,9 +25,9 @@ public class BlockRegistryApiculture extends BlockRegistry {
 	public final BlockAlveary alveary;
 
 	public BlockRegistryApiculture() {
-		apiculture = registerBlock(new BlockApiculture(Material.iron), ItemBlockForestry.class, "apiculture");
+		apiculture = registerBlock(new BlockApiculture(), ItemBlockForestry.class, "apiculture");
 
-		apicultureChest = registerBlock(new BlockBase(Material.iron, true), ItemBlockForestry.class, "apicultureChest");
+		apicultureChest = registerBlock(new BlockBase(true), ItemBlockForestry.class, "apicultureChest");
 		apicultureChest.setCreativeTab(Tabs.tabApiculture);
 		apicultureChest.setHarvestLevel("axe", 0);
 

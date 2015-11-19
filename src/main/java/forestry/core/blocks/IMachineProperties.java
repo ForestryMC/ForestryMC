@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
-import javax.annotation.Nullable;
-
 import forestry.core.tiles.TileForestry;
 
 public interface IMachineProperties {
@@ -20,7 +18,4 @@ public interface IMachineProperties {
 	String getTeIdent();
 
 	Class<? extends TileForestry> getTeClass();
-
-	@Nullable
-	String getGfxBase();
 }

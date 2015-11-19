@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.plugins;
 
-import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 
@@ -18,18 +17,13 @@ import cpw.mods.fml.common.SidedProxy;
 
 import forestry.api.core.ForestryAPI;
 import forestry.core.GuiHandlerBase;
-import forestry.core.blocks.BlockBase;
 import forestry.core.config.Constants;
-import forestry.core.config.ForestryBlock;
-import forestry.core.items.ItemBlockForestry;
 import forestry.core.recipes.RecipeUtil;
 import forestry.energy.GuiHandlerEnergy;
-import forestry.energy.blocks.BlockEngine;
+import forestry.energy.blocks.BlockEngineType;
+import forestry.energy.blocks.BlockRegistryEnergy;
 import forestry.energy.proxy.ProxyEnergy;
 import forestry.energy.tiles.EngineDefinition;
-import forestry.energy.tiles.TileEngineBiogas;
-import forestry.energy.tiles.TileEngineClockwork;
-import forestry.energy.tiles.TileEnginePeat;
 
 @Plugin(pluginID = "Energy", name = "Energy", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.energy.description")
 public class PluginEnergy extends ForestryPlugin {
@@ -37,38 +31,35 @@ public class PluginEnergy extends ForestryPlugin {
 	@SidedProxy(clientSide = "forestry.energy.proxy.ProxyEnergyClient", serverSide = "forestry.energy.proxy.ProxyEnergy")
 	public static ProxyEnergy proxy;
 
+	public static BlockRegistryEnergy blocks;
+
 	@Override
 	protected void registerItemsAndBlocks() {
-		super.registerItemsAndBlocks();
-
-		ForestryBlock.engine.registerBlock(new BlockEngine(Material.iron), ItemBlockForestry.class, "engine");
+		blocks = new BlockRegistryEnergy();
 	}
 
 	@Override
 	public void preInit() {
-		EngineDefinition definitionEnginePeat = new EngineDefinition(Constants.DEFINITION_ENGINE_PEAT_META, "forestry.EngineCopper", TileEnginePeat.class,
-				PluginEnergy.proxy.getRenderDefaultEngine(Constants.TEXTURE_PATH_BLOCKS + "/engine_copper_"));
-		((BlockBase) ForestryBlock.engine.block()).addDefinition(definitionEnginePeat);
+		blocks.engine.addDefinitions(
+				new EngineDefinition(BlockEngineType.PEAT),
+				new EngineDefinition(BlockEngineType.BIOGAS)
+		);
 
-		EngineDefinition definitionEngineBiogas = new EngineDefinition(Constants.DEFINITION_ENGINE_BIOGAS_META, "forestry.EngineBronze", TileEngineBiogas.class,
-				PluginEnergy.proxy.getRenderDefaultEngine(Constants.TEXTURE_PATH_BLOCKS + "/engine_bronze_"));
-		((BlockBase) ForestryBlock.engine.block()).addDefinition(definitionEngineBiogas);
-
-		EngineDefinition definitionEngineClockwork = new EngineDefinition(Constants.DEFINITION_ENGINE_CLOCKWORK_META, "forestry.EngineClockwork", TileEngineClockwork.class,
-				PluginEnergy.proxy.getRenderDefaultEngine(Constants.TEXTURE_PATH_BLOCKS + "/engine_clock_"));
-		((BlockBase) ForestryBlock.engine.block()).addDefinition(definitionEngineClockwork);
+		if (ForestryAPI.activeMode.getBooleanSetting("energy.engine.clockwork")) {
+			blocks.engine.addDefinition(new EngineDefinition(BlockEngineType.CLOCKWORK));
+		}
 	}
 
 	@Override
 	public void doInit() {
-		((BlockBase) ForestryBlock.engine.block()).registerDefinitions();
+		blocks.engine.init();
 	}
 
 	@Override
 	protected void registerRecipes() {
 		super.registerRecipes();
 
-		RecipeUtil.addRecipe(ForestryBlock.engine.getItemStack(1, Constants.DEFINITION_ENGINE_PEAT_META),
+		RecipeUtil.addRecipe(blocks.engine.get(BlockEngineType.PEAT),
 				"###",
 				" X ",
 				"YVY",
@@ -77,7 +68,7 @@ public class PluginEnergy extends ForestryPlugin {
 				'Y', "gearCopper",
 				'V', Blocks.piston);
 
-		RecipeUtil.addRecipe(ForestryBlock.engine.getItemStack(1, Constants.DEFINITION_ENGINE_BIOGAS_META),
+		RecipeUtil.addRecipe(blocks.engine.get(BlockEngineType.BIOGAS),
 				"###",
 				" X ",
 				"YVY",
@@ -87,7 +78,7 @@ public class PluginEnergy extends ForestryPlugin {
 				'V', Blocks.piston);
 
 		if (ForestryAPI.activeMode.getBooleanSetting("energy.engine.clockwork")) {
-			RecipeUtil.addRecipe(ForestryBlock.engine.getItemStack(1, Constants.DEFINITION_ENGINE_CLOCKWORK_META),
+			RecipeUtil.addRecipe(blocks.engine.get(BlockEngineType.CLOCKWORK),
 					"###",
 					" X ",
 					"ZVY",

@@ -50,9 +50,4 @@ public enum BlockMailType implements IMachineProperties {
 	public Class<? extends TileForestry> getTeClass() {
 		return teClass;
 	}
-
-	@Override
-	public String getGfxBase() {
-		return null;
-	}
 }

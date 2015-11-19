@@ -48,13 +48,6 @@ public class Constants implements IForestryConstants {
 	// Village Chest Gen hook
 	public static final String CHEST_GEN_HOOK_NATURALIST_CHEST = "naturalistChest";
 
-	// Definition IDs
-	public static final int DEFINITION_ENGINE_ELECTRIC_META = 0;
-	public static final int DEFINITION_ENGINE_PEAT_META = 1;
-	public static final int DEFINITION_ENGINE_BIOGAS_META = 2;
-	public static final int DEFINITION_GENERATOR_META = 3;
-	public static final int DEFINITION_ENGINE_CLOCKWORK_META = 4;
-
 	public static final int DEFINITION_LEPICHEST_META = 0;
 
 	// Item Ids

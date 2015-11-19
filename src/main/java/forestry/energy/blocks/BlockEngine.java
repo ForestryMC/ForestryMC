@@ -15,7 +15,6 @@ import com.google.common.collect.ImmutableList;
 import java.util.EnumMap;
 import java.util.List;
 
-import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
@@ -28,7 +27,7 @@ import forestry.core.blocks.BlockBase;
 import forestry.core.tiles.TileEngine;
 import forestry.core.tiles.TileUtil;
 
-public class BlockEngine extends BlockBase {
+public class BlockEngine extends BlockBase<BlockEngineType> {
 	private static final EnumMap<ForgeDirection, List<AxisAlignedBB>> boundingBoxesForDirections = new EnumMap<>(ForgeDirection.class);
 
 	static {
@@ -52,8 +51,8 @@ public class BlockEngine extends BlockBase {
 		));
 	}
 
-	public BlockEngine(Material material) {
-		super(material, true);
+	public BlockEngine() {
+		super(true);
 	}
 
 	@Override
