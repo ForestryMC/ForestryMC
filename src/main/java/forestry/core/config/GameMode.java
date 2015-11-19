@@ -19,6 +19,7 @@ import net.minecraft.item.ItemStack;
 
 import forestry.Forestry;
 import forestry.api.core.IGameMode;
+import forestry.core.blocks.BlockSoil;
 import forestry.core.utils.Log;
 import forestry.plugins.PluginCore;
 import forestry.plugins.PluginFluids;
@@ -43,11 +44,11 @@ public class GameMode implements IGameMode {
 	private final ItemStack recipeCompostOutputWheat = PluginCore.items.fertilizerBio.getItemStack(4);
 	private final ItemStack recipeCompostOutputAsh = PluginCore.items.fertilizerBio.getItemStack(1);
 
-	private final ItemStack recipeHumusOutputFertilizer = ForestryBlock.soil.getItemStack(8);
-	private final ItemStack recipeHumusOutputCompost = ForestryBlock.soil.getItemStack(8);
+	private final ItemStack recipeHumusOutputFertilizer = PluginCore.blocks.soil.get(BlockSoil.SoilType.HUMUS, 8);
+	private final ItemStack recipeHumusOutputCompost = PluginCore.blocks.soil.get(BlockSoil.SoilType.HUMUS, 8);
 
-	private final ItemStack recipeBogEarthOutputBucket = ForestryBlock.soil.getItemStack(6, 1);
-	private final ItemStack recipeBogEarthOutputCans = ForestryBlock.soil.getItemStack(8, 1);
+	private final ItemStack recipeBogEarthOutputBucket = PluginCore.blocks.soil.get(BlockSoil.SoilType.BOG_EARTH, 6);
+	private final ItemStack recipeBogEarthOutputCans = PluginCore.blocks.soil.get(BlockSoil.SoilType.BOG_EARTH, 8);
 
 	private final ItemStack recipeCanOutput = PluginFluids.items.canEmpty.getItemStack(12);
 	private final ItemStack recipeCapsuleOutput = PluginFluids.items.waxCapsuleEmpty.getItemStack(4);

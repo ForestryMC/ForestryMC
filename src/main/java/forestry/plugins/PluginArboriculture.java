@@ -73,6 +73,7 @@ import forestry.arboriculture.tiles.TileSapling;
 import forestry.arboriculture.tiles.TileWood;
 import forestry.core.GuiHandlerBase;
 import forestry.core.blocks.BlockBase;
+import forestry.core.blocks.BlockCoreType;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.ForestryBlock;
@@ -383,7 +384,7 @@ public class PluginArboriculture extends ForestryPlugin {
 				'#', "stickWood");
 
 		// ANALYZER
-		PluginCore.definitionAnalyzer.recipes.add(ShapedRecipeCustom.createShapedRecipe(new ItemStack(ForestryBlock.core.block(), 1, Constants.DEFINITION_ANALYZER_META),
+		PluginCore.definitionAnalyzer.recipes.add(ShapedRecipeCustom.createShapedRecipe(PluginCore.blocks.core.get(BlockCore.Type.ANALYZER, 1),
 				"XTX",
 				" Y ",
 				"X X",

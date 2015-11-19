@@ -21,8 +21,9 @@ import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import cpw.mods.fml.common.IWorldGenerator;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
+import forestry.core.blocks.BlockResourceOre;
 import forestry.core.config.Config;
-import forestry.core.config.ForestryBlock;
+import forestry.plugins.PluginCore;
 import forestry.plugins.PluginManager;
 
 public class WorldGenerator implements IWorldGenerator {
@@ -55,9 +56,9 @@ public class WorldGenerator implements IWorldGenerator {
 	private void generateWorld(Random random, int chunkX, int chunkZ, World world) {
 
 		if (apatiteGenerator == null) {
-			apatiteGenerator = new WorldGenMinableMeta(ForestryBlock.resources, 0, 36);
-			copperGenerator = new WorldGenMinableMeta(ForestryBlock.resources, 1, 6);
-			tinGenerator = new WorldGenMinableMeta(ForestryBlock.resources, 2, 6);
+			apatiteGenerator = new WorldGenMinableMeta(PluginCore.blocks.resources, BlockResourceOre.ResourceType.APATITE.ordinal(), 36);
+			copperGenerator = new WorldGenMinableMeta(PluginCore.blocks.resources, BlockResourceOre.ResourceType.COPPER.ordinal(), 6);
+			tinGenerator = new WorldGenMinableMeta(PluginCore.blocks.resources, BlockResourceOre.ResourceType.TIN.ordinal(), 6);
 		}
 
 		// shift to world coordinates

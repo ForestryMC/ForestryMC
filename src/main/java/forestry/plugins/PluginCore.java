@@ -12,7 +12,6 @@ package forestry.plugins;
 
 import java.util.ArrayList;
 
-import net.minecraft.block.material.Material;
 import net.minecraft.command.ICommand;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -34,7 +33,8 @@ import forestry.core.IPickupHandler;
 import forestry.core.ISaveEventHandler;
 import forestry.core.PickupHandlerCore;
 import forestry.core.SaveEventHandlerCore;
-import forestry.core.blocks.BlockBase;
+import forestry.core.blocks.BlockCore;
+import forestry.core.blocks.BlockRegistryCore;
 import forestry.core.blocks.BlockResourceOre;
 import forestry.core.blocks.BlockResourceStorage;
 import forestry.core.blocks.BlockSoil;
@@ -45,14 +45,11 @@ import forestry.core.commands.CommandVersion;
 import forestry.core.commands.RootCommand;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
-import forestry.core.config.ForestryBlock;
 import forestry.core.fluids.Fluids;
 import forestry.core.genetics.alleles.AlleleFactory;
 import forestry.core.genetics.alleles.AlleleHelper;
 import forestry.core.genetics.alleles.AlleleRegistry;
 import forestry.core.items.EnumContainerType;
-import forestry.core.items.ItemBlockForestry;
-import forestry.core.items.ItemBlockTyped;
 import forestry.core.items.ItemRegistryCore;
 import forestry.core.multiblock.MultiblockLogicFactory;
 import forestry.core.network.IPacketRegistry;
@@ -74,6 +71,7 @@ public class PluginCore extends ForestryPlugin {
 
 	public static final RootCommand rootCommand = new RootCommand();
 	public static ItemRegistryCore items;
+	public static BlockRegistryCore blocks;
 	static MachineDefinition definitionAnalyzer;
 
 	@Override
@@ -98,28 +96,7 @@ public class PluginCore extends ForestryPlugin {
 	@Override
 	protected void registerItemsAndBlocks() {
 		items = new ItemRegistryCore();
-
-		ForestryBlock.core.registerBlock(new BlockBase(Material.iron, true), ItemBlockForestry.class, "core");
-
-		ForestryBlock.soil.registerBlock(new BlockSoil(), ItemBlockTyped.class, "soil");
-		ForestryBlock.soil.block().setHarvestLevel("shovel", 0, 0);
-		ForestryBlock.soil.block().setHarvestLevel("shovel", 0, 1);
-
-		ForestryBlock.resources.registerBlock(new BlockResourceOre(), ItemBlockForestry.class, "resources");
-		ForestryBlock.resources.block().setHarvestLevel("pickaxe", 1);
-		OreDictionary.registerOre("oreApatite", ForestryBlock.resources.getItemStack(1, 0));
-		OreDictionary.registerOre("oreCopper", ForestryBlock.resources.getItemStack(1, 1));
-		OreDictionary.registerOre("oreTin", ForestryBlock.resources.getItemStack(1, 2));
-
-		ForestryBlock.resourceStorage.registerBlock(new BlockResourceStorage(), ItemBlockForestry.class, "resourceStorage");
-		ForestryBlock.resourceStorage.block().setHarvestLevel("pickaxe", 0);
-		OreDictionary.registerOre("blockApatite", ForestryBlock.resourceStorage.getItemStack(1, 0));
-		OreDictionary.registerOre("blockCopper", ForestryBlock.resourceStorage.getItemStack(1, 1));
-		OreDictionary.registerOre("blockTin", ForestryBlock.resourceStorage.getItemStack(1, 2));
-		OreDictionary.registerOre("blockBronze", ForestryBlock.resourceStorage.getItemStack(1, 3));
-
-		OreDictionary.registerOre("chestWood", Blocks.chest);
-		OreDictionary.registerOre("craftingTableWood", Blocks.crafting_table);
+		blocks = new BlockRegistryCore();
 	}
 
 	@Override
@@ -129,10 +106,10 @@ public class PluginCore extends ForestryPlugin {
 		rootCommand.addChildCommand(new CommandVersion());
 		rootCommand.addChildCommand(new CommandPlugins());
 
-		definitionEscritoire = ((BlockBase) ForestryBlock.core.block()).addDefinition(new MachineDefinition(Constants.DEFINITION_ESCRITOIRE_META, "forestry.Escritoire", TileEscritoire.class,
+		definitionEscritoire = blocks.core.addDefinition(new MachineDefinition(BlockCore.Type.ESCRITOIRE.ordinal(), "forestry.Escritoire", TileEscritoire.class,
 				Proxies.render.getRenderEscritoire()));
 
-		definitionAnalyzer = ((BlockBase) ForestryBlock.core.block()).addDefinition(new MachineDefinition(Constants.DEFINITION_ANALYZER_META, "forestry.Analyzer", TileAnalyzer.class,
+		definitionAnalyzer = blocks.core.addDefinition(new MachineDefinition(BlockCore.Type.ANALYZER.ordinal(), "forestry.Analyzer", TileAnalyzer.class,
 				PluginApiculture.proxy.getRendererAnalyzer(Constants.TEXTURE_PATH_BLOCKS + "/analyzer_")));
 	}
 
@@ -189,8 +166,8 @@ public class PluginCore extends ForestryPlugin {
 		crateRegistry.registerCrateUsingOreDict(items.ingotBronze, "cratedBronze");
 
 		// forestry blocks
-		crateRegistry.registerCrate(ForestryBlock.soil.getItemStack(1, 0), "cratedHumus");
-		crateRegistry.registerCrate(ForestryBlock.soil.getItemStack(1, 1), "cratedBogearth");
+		crateRegistry.registerCrate(blocks.soil.get(BlockSoil.SoilType.HUMUS, 1), "cratedHumus");
+		crateRegistry.registerCrate(blocks.soil.get(BlockSoil.SoilType.BOG_EARTH, 1), "cratedBogearth");
 
 		// vanilla items
 		crateRegistry.registerCrate(Items.wheat, "cratedWheat");
@@ -242,9 +219,9 @@ public class PluginCore extends ForestryPlugin {
 	protected void registerRecipes() {
 
 		/* SMELTING RECIPES */
-		RecipeUtil.addSmelting(ForestryBlock.resources.getItemStack(1, 0), items.apatite, 0.5f);
-		RecipeUtil.addSmelting(ForestryBlock.resources.getItemStack(1, 1), items.ingotCopper, 0.5f);
-		RecipeUtil.addSmelting(ForestryBlock.resources.getItemStack(1, 2), items.ingotTin, 0.5f);
+		RecipeUtil.addSmelting(blocks.resources.get(BlockResourceOre.ResourceType.APATITE, 1), items.apatite, 0.5f);
+		RecipeUtil.addSmelting(blocks.resources.get(BlockResourceOre.ResourceType.COPPER, 1), items.ingotCopper, 0.5f);
+		RecipeUtil.addSmelting(blocks.resources.get(BlockResourceOre.ResourceType.TIN, 1), items.ingotTin, 0.5f);
 		RecipeUtil.addSmelting(new ItemStack(items.peat), items.ash, 0.0f);
 
 		/* BRONZE INGOTS */
@@ -325,16 +302,16 @@ public class PluginCore extends ForestryPlugin {
 		RecipeUtil.addRecipe(items.pipette, "  #", " X ", "X  ", 'X', "paneGlass", '#', new ItemStack(Blocks.wool, 1, OreDictionary.WILDCARD_VALUE));
 
 		// Storage Blocks
-		RecipeUtil.addRecipe(ForestryBlock.resourceStorage.getItemStack(1, 0), "###", "###", "###", '#', "gemApatite");
+		RecipeUtil.addRecipe(blocks.resourceStorage.get(BlockResourceStorage.ResourceType.APATITE, 1), "###", "###", "###", '#', "gemApatite");
 		RecipeUtil.addShapelessRecipe(new ItemStack(items.apatite, 9), "blockApatite");
 
-		RecipeUtil.addRecipe(ForestryBlock.resourceStorage.getItemStack(1, 1), "###", "###", "###", '#', "ingotCopper");
+		RecipeUtil.addRecipe(blocks.resourceStorage.get(BlockResourceStorage.ResourceType.COPPER, 1), "###", "###", "###", '#', "ingotCopper");
 		RecipeUtil.addShapelessRecipe(new ItemStack(items.ingotCopper, 9), "blockCopper");
 
-		RecipeUtil.addRecipe(ForestryBlock.resourceStorage.getItemStack(1, 2), "###", "###", "###", '#', "ingotTin");
+		RecipeUtil.addRecipe(blocks.resourceStorage.get(BlockResourceStorage.ResourceType.TIN, 1), "###", "###", "###", '#', "ingotTin");
 		RecipeUtil.addShapelessRecipe(new ItemStack(items.ingotTin, 9), "blockTin");
 
-		RecipeUtil.addRecipe(ForestryBlock.resourceStorage.getItemStack(1, 3), "###", "###", "###", '#', "ingotBronze");
+		RecipeUtil.addRecipe(blocks.resourceStorage.get(BlockResourceStorage.ResourceType.BRONZE, 1), "###", "###", "###", '#', "ingotBronze");
 		RecipeUtil.addShapelessRecipe(new ItemStack(items.ingotBronze, 9), "blockBronze");
 	}
 

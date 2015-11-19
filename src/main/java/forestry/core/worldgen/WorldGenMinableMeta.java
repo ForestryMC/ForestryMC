@@ -19,7 +19,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
 import forestry.core.config.Constants;
-import forestry.core.config.ForestryBlock;
 
 public class WorldGenMinableMeta extends WorldGenerator {
 
@@ -27,8 +26,8 @@ public class WorldGenMinableMeta extends WorldGenerator {
 	private final int mineableBlockMeta;
 	private final int numberOfBlocks;
 
-	public WorldGenMinableMeta(ForestryBlock block, int meta, int numberOfBlocks) {
-		mineableBlock = block.block();
+	public WorldGenMinableMeta(Block block, int meta, int numberOfBlocks) {
+		mineableBlock = block;
 		mineableBlockMeta = meta;
 		this.numberOfBlocks = numberOfBlocks;
 	}

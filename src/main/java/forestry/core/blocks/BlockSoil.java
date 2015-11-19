@@ -273,4 +273,7 @@ public class BlockSoil extends Block implements IItemTyped {
 		return null;
 	}
 
+	public ItemStack get(SoilType soilType, int amount) {
+		return new ItemStack(this, amount, soilType.ordinal());
+	}
 }

@@ -35,6 +35,8 @@ import forestry.api.recipes.RecipeManagers;
 import forestry.apiculture.items.ItemRegistryApiculture;
 import forestry.core.GuiHandlerBase;
 import forestry.core.blocks.BlockBase;
+import forestry.core.blocks.BlockCore;
+import forestry.core.blocks.BlockSoil;
 import forestry.core.circuits.Circuit;
 import forestry.core.circuits.CircuitLayout;
 import forestry.core.circuits.EnumCircuitBoardType;
@@ -463,7 +465,7 @@ public class PluginFactory extends ForestryPlugin {
 				"###",
 				'#', "logWood");
 		RecipeManagers.carpenterManager.addRecipe(50, Fluids.SEEDOIL.getFluid(500), null,
-				ForestryBlock.core.getItemStack(1, Constants.DEFINITION_ESCRITOIRE_META),
+				PluginCore.blocks.core.get(BlockCore.Type.ESCRITOIRE, 1),
 				"#  ",
 				"###",
 				"# #",
@@ -485,14 +487,14 @@ public class PluginFactory extends ForestryPlugin {
 				"#",
 				'#', "pulpWood");
 		RecipeManagers.carpenterManager.addRecipe(5, Fluids.WATER.getFluid(1000), null,
-				ForestryBlock.soil.getItemStack(9),
+				PluginCore.blocks.soil.get(BlockSoil.SoilType.HUMUS, 9),
 				"###",
 				"#X#",
 				"###",
 				'#', Blocks.dirt,
 				'X', PluginCore.items.mulch);
 		RecipeManagers.carpenterManager.addRecipe(5, Fluids.WATER.getFluid(1000), null,
-				ForestryBlock.soil.getItemStack(8, 1),
+				PluginCore.blocks.soil.get(BlockSoil.SoilType.BOG_EARTH, 8),
 				"#X#",
 				"XYX", "#X#",
 				'#', Blocks.dirt,

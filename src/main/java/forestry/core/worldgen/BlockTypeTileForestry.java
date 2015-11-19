@@ -26,7 +26,11 @@ public class BlockTypeTileForestry implements IBlockType {
 	private ForgeDirection direction;
 
 	public BlockTypeTileForestry(ForestryBlock forestryBlock, int meta) {
-		this.block = forestryBlock.block();
+		this(forestryBlock.block(), meta);
+	}
+
+	public BlockTypeTileForestry(Block block, int meta) {
+		this.block = block;
 		this.meta = meta;
 	}
 

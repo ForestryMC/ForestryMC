@@ -31,6 +31,17 @@ import forestry.core.render.TextureManager;
 import forestry.plugins.PluginCore;
 
 public class BlockResourceOre extends Block {
+	public enum ResourceType {
+		APATITE,
+		COPPER,
+		TIN;
+
+		public static final ResourceType[] VALUES = values();
+
+		@SideOnly(Side.CLIENT)
+		public IIcon icon;
+	}
+
 	public BlockResourceOre() {
 		super(Material.rock);
 		setHardness(3F);
@@ -51,7 +62,7 @@ public class BlockResourceOre extends Block {
 	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
 		ArrayList<ItemStack> drops = new ArrayList<>();
 
-		if (metadata == 0) {
+		if (metadata == ResourceType.APATITE.ordinal()) {
 			int fortuneModifier = world.rand.nextInt(fortune + 2) - 1;
 			if (fortuneModifier < 0) {
 				fortuneModifier = 0;
@@ -82,39 +93,32 @@ public class BlockResourceOre extends Block {
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List itemList) {
-		itemList.add(new ItemStack(this, 1, 0));
-		itemList.add(new ItemStack(this, 1, 1));
-		itemList.add(new ItemStack(this, 1, 2));
-	}
-
-	/* ICONS */
-	@SideOnly(Side.CLIENT)
-	private IIcon iconApatite;
-	@SideOnly(Side.CLIENT)
-	private IIcon iconCopper;
-	@SideOnly(Side.CLIENT)
-	private IIcon iconTin;
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister register) {
-		iconApatite = TextureManager.registerTex(register, "ores/apatite");
-		iconCopper = TextureManager.registerTex(register, "ores/copper");
-		iconTin = TextureManager.registerTex(register, "ores/tin");
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(int i, int j) {
-		if (j == 0) {
-			return iconApatite;
-		} else if (j == 1) {
-			return iconCopper;
-		} else if (j == 2) {
-			return iconTin;
-		} else {
-			return null;
+		for (ResourceType resourceType : ResourceType.values()) {
+			ItemStack stack = get(resourceType, 1);
+			itemList.add(stack);
 		}
 	}
 
+	/* ICONS */
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void registerBlockIcons(IIconRegister register) {
+		ResourceType.APATITE.icon = TextureManager.registerTex(register, "ores/apatite");
+		ResourceType.COPPER.icon = TextureManager.registerTex(register, "ores/copper");
+		ResourceType.TIN.icon = TextureManager.registerTex(register, "ores/tin");
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public IIcon getIcon(int i, int meta) {
+		if (meta < 0 || meta >= ResourceType.VALUES.length) {
+			return null;
+		}
+
+		return ResourceType.VALUES[meta].icon;
+	}
+
+	public ItemStack get(ResourceType type, int amount) {
+		return new ItemStack(this, amount, type.ordinal());
+	}
 }

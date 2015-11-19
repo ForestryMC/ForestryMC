@@ -45,12 +45,14 @@ import forestry.arboriculture.worldgen.BlockTypeLog;
 import forestry.arboriculture.worldgen.BlockTypeVanillaStairs;
 import forestry.arboriculture.worldgen.BlockTypeWood;
 import forestry.arboriculture.worldgen.BlockTypeWoodStairs;
+import forestry.core.blocks.BlockCore;
 import forestry.core.config.Constants;
 import forestry.core.config.ForestryBlock;
 import forestry.core.worldgen.BlockType;
 import forestry.core.worldgen.BlockTypeTileForestry;
 import forestry.core.worldgen.IBlockType;
 import forestry.plugins.PluginApiculture;
+import forestry.plugins.PluginCore;
 import forestry.plugins.PluginManager;
 
 public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
@@ -180,7 +182,7 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 
 		// Escritoire
 		if (random.nextInt(2) == 0) {
-			IBlockType escritoireBlock = new BlockTypeTileForestry(ForestryBlock.core, Constants.DEFINITION_ESCRITOIRE_META);
+			IBlockType escritoireBlock = new BlockTypeTileForestry(PluginCore.blocks.core, BlockCore.Type.ESCRITOIRE.ordinal());
 			escritoireBlock.setDirection(getRotatedDirection(ForgeDirection.EAST));
 			placeBlockAtCurrentPosition(world, escritoireBlock, 1, 1, 3, structBoundingBox);
 		}

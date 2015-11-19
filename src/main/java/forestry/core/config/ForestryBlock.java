@@ -34,16 +34,6 @@ import forestry.plugins.PluginManager.Stage;
  * @author SirSengir
  */
 public enum ForestryBlock {
-
-	/**
-	 * 0 - Humus 1 - Bog Earth
-	 */
-	soil,
-	/**
-	 * 0 - Apatite Ore 1 - Copper Ore 2 - Tin Ore
-	 */
-	resources,
-	resourceStorage,
 	/**
 	 * 0 - Legacy 1 - Forest Hive 2 - Meadows Hive
 	 */
@@ -69,7 +59,6 @@ public enum ForestryBlock {
 	arboriculture,
 	alveary,
 	farm,
-	core,
 	apiculture,
 	apicultureChest,
 	mail,
