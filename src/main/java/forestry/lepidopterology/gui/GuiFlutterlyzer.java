@@ -23,7 +23,6 @@ import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.EnumButterflyChromosome;
 import forestry.api.lepidopterology.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.IButterfly;
-import forestry.core.config.ForestryItem;
 import forestry.core.genetics.GenericRatings;
 import forestry.core.genetics.alleles.AlleleBoolean;
 import forestry.core.gui.ContainerAlyzer;
@@ -31,7 +30,7 @@ import forestry.core.gui.GuiAlyzer;
 import forestry.core.utils.StringUtil;
 import forestry.lepidopterology.genetics.ButterflyGenome;
 import forestry.lepidopterology.inventory.ItemInventoryFlutterlyzer;
-import forestry.lepidopterology.items.ItemButterflyGE;
+import forestry.plugins.PluginLepidopterology;
 
 public class GuiFlutterlyzer extends GuiAlyzer {
 
@@ -39,7 +38,7 @@ public class GuiFlutterlyzer extends GuiAlyzer {
 		super(ButterflyManager.butterflyRoot, player, new ContainerAlyzer(inventory, player), inventory, "gui.flutterlyzer");
 
 		ArrayList<ItemStack> butterflyList = new ArrayList<>();
-		((ItemButterflyGE) ForestryItem.butterflyGE.item()).addCreativeItems(butterflyList, false);
+		PluginLepidopterology.items.butterflyGE.addCreativeItems(butterflyList, false);
 		for (ItemStack butterflyStack : butterflyList) {
 			IAlleleButterflySpecies species = ButterflyGenome.getSpecies(butterflyStack);
 			if (species != null) {

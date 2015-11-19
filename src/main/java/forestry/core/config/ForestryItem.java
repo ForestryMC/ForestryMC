@@ -32,11 +32,6 @@ import forestry.plugins.PluginManager.Stage;
  * @author SirSengir
  */
 public enum ForestryItem {
-	// Butterflies
-	butterflyGE,
-	flutterlyzer,
-	serumGE,
-	caterpillarGE,
 	researchNote;
 	private Item item;
 
