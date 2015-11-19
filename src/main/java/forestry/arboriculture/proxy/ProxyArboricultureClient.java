@@ -10,8 +10,11 @@
  ******************************************************************************/
 package forestry.arboriculture.proxy;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.world.ColorizerFoliage;
 
+import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.MinecraftForgeClient;
 
 import cpw.mods.fml.client.registry.RenderingRegistry;
@@ -25,7 +28,6 @@ import forestry.arboriculture.render.RenderPlankItem;
 import forestry.arboriculture.render.RenderSaplingBlock;
 import forestry.arboriculture.render.RenderSlabItem;
 import forestry.arboriculture.render.RenderStairItem;
-import forestry.core.config.ForestryBlock;
 import forestry.plugins.PluginArboriculture;
 
 public class ProxyArboricultureClient extends ProxyArboriculture {
@@ -39,22 +41,27 @@ public class ProxyArboricultureClient extends ProxyArboriculture {
 		RenderingRegistry.registerBlockHandler(new RenderLeavesBlock());
 		RenderingRegistry.registerBlockHandler(new RenderFruitPodBlock());
 
-		MinecraftForgeClient.registerItemRenderer(ForestryBlock.logs.item(), new RenderLogItem());
-		MinecraftForgeClient.registerItemRenderer(ForestryBlock.logsFireproof.item(), new RenderLogItem());
+		registerItemRenderer(PluginArboriculture.blocks.logs, new RenderLogItem());
+		registerItemRenderer(PluginArboriculture.blocks.logsFireproof, new RenderLogItem());
 
-		MinecraftForgeClient.registerItemRenderer(ForestryBlock.stairs.item(), new RenderStairItem());
-		MinecraftForgeClient.registerItemRenderer(ForestryBlock.stairsFireproof.item(), new RenderStairItem());
+		registerItemRenderer(PluginArboriculture.blocks.stairs, new RenderStairItem());
+		registerItemRenderer(PluginArboriculture.blocks.stairsFireproof, new RenderStairItem());
 
-		MinecraftForgeClient.registerItemRenderer(ForestryBlock.planks.item(), new RenderPlankItem());
-		MinecraftForgeClient.registerItemRenderer(ForestryBlock.planksFireproof.item(), new RenderPlankItem());
+		registerItemRenderer(PluginArboriculture.blocks.planks, new RenderPlankItem());
+		registerItemRenderer(PluginArboriculture.blocks.planksFireproof, new RenderPlankItem());
 
-		MinecraftForgeClient.registerItemRenderer(ForestryBlock.slabs.item(), new RenderSlabItem());
-		MinecraftForgeClient.registerItemRenderer(ForestryBlock.slabsFireproof.item(), new RenderSlabItem());
+		registerItemRenderer(PluginArboriculture.blocks.slabs, new RenderSlabItem());
+		registerItemRenderer(PluginArboriculture.blocks.slabsFireproof, new RenderSlabItem());
 
-		MinecraftForgeClient.registerItemRenderer(ForestryBlock.fences.item(), new RenderFenceItem());
-		MinecraftForgeClient.registerItemRenderer(ForestryBlock.fencesFireproof.item(), new RenderFenceItem());
+		registerItemRenderer(PluginArboriculture.blocks.fences, new RenderFenceItem());
+		registerItemRenderer(PluginArboriculture.blocks.fencesFireproof, new RenderFenceItem());
 
-		MinecraftForgeClient.registerItemRenderer(ForestryBlock.leaves.item(), new RenderLeavesItem());
+		registerItemRenderer(PluginArboriculture.blocks.leaves, new RenderLeavesItem());
+	}
+
+	private static void registerItemRenderer(Block block, IItemRenderer renderer) {
+		Item item = Item.getItemFromBlock(block);
+		MinecraftForgeClient.registerItemRenderer(item, renderer);
 	}
 
 	@Override

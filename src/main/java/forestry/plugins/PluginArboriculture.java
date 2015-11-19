@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -35,7 +34,6 @@ import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.EnumWoodType;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.ForestryAPI;
-import forestry.api.core.Tabs;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.ICrateRegistry;
@@ -43,14 +41,8 @@ import forestry.api.storage.StorageManager;
 import forestry.arboriculture.GuiHandlerArboriculture;
 import forestry.arboriculture.VillageHandlerArboriculture;
 import forestry.arboriculture.WoodItemAccess;
-import forestry.arboriculture.blocks.BlockArbFence;
-import forestry.arboriculture.blocks.BlockArbStairs;
-import forestry.arboriculture.blocks.BlockForestryLeaves;
-import forestry.arboriculture.blocks.BlockFruitPod;
-import forestry.arboriculture.blocks.BlockLog;
-import forestry.arboriculture.blocks.BlockPlanks;
-import forestry.arboriculture.blocks.BlockSapling;
-import forestry.arboriculture.blocks.BlockSlab;
+import forestry.arboriculture.blocks.BlockArboriculture;
+import forestry.arboriculture.blocks.BlockRegistryArboriculture;
 import forestry.arboriculture.commands.CommandTree;
 import forestry.arboriculture.genetics.TreeBranchDefinition;
 import forestry.arboriculture.genetics.TreeDefinition;
@@ -61,8 +53,6 @@ import forestry.arboriculture.genetics.TreekeepingMode;
 import forestry.arboriculture.genetics.alleles.AlleleFruit;
 import forestry.arboriculture.genetics.alleles.AlleleGrowth;
 import forestry.arboriculture.genetics.alleles.AlleleLeafEffect;
-import forestry.arboriculture.items.ItemBlockLeaves;
-import forestry.arboriculture.items.ItemBlockWood;
 import forestry.arboriculture.items.ItemRegistryArboriculture;
 import forestry.arboriculture.network.PacketRegistryArboriculture;
 import forestry.arboriculture.proxy.ProxyArboriculture;
@@ -72,14 +62,11 @@ import forestry.arboriculture.tiles.TileLeaves;
 import forestry.arboriculture.tiles.TileSapling;
 import forestry.arboriculture.tiles.TileWood;
 import forestry.core.GuiHandlerBase;
-import forestry.core.blocks.BlockBase;
-import forestry.core.blocks.BlockCoreType;
+import forestry.core.blocks.BlockCore;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
-import forestry.core.config.ForestryBlock;
 import forestry.core.fluids.Fluids;
 import forestry.core.genetics.alleles.AllelePlantType;
-import forestry.core.items.ItemBlockForestry;
 import forestry.core.items.ItemFruit.EnumFruit;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.proxy.Proxies;
@@ -104,6 +91,7 @@ public class PluginArboriculture extends ForestryPlugin {
 	public static final List<Block> validFences = new ArrayList<>();
 
 	public static ItemRegistryArboriculture items;
+	public static BlockRegistryArboriculture blocks;
 
 	@Override
 	protected void setupAPI() {
@@ -129,52 +117,7 @@ public class PluginArboriculture extends ForestryPlugin {
 	@Override
 	protected void registerItemsAndBlocks() {
 		items = new ItemRegistryArboriculture();
-
-		// Wood blocks
-		ForestryBlock.logs.registerBlock(new BlockLog(false), ItemBlockWood.class, "logs");
-		OreDictionary.registerOre("logWood", ForestryBlock.logs.getWildcard());
-
-		ForestryBlock.planks.registerBlock(new BlockPlanks(false), ItemBlockWood.class, "planks");
-		OreDictionary.registerOre("plankWood", ForestryBlock.planks.getWildcard());
-
-		ForestryBlock.slabs.registerBlock(new BlockSlab(false), ItemBlockWood.class, "slabs");
-		OreDictionary.registerOre("slabWood", ForestryBlock.slabs.getWildcard());
-
-		ForestryBlock.fences.registerBlock(new BlockArbFence(false), ItemBlockWood.class, "fences");
-		OreDictionary.registerOre("fenceWood", ForestryBlock.fences.getWildcard());
-
-		ForestryBlock.stairs.registerBlock(new BlockArbStairs(ForestryBlock.planks.block(), false), ItemBlockWood.class, "stairs");
-		OreDictionary.registerOre("stairWood", ForestryBlock.stairs.getWildcard());
-
-		ForestryBlock.logsFireproof.registerBlock(new BlockLog(true), ItemBlockWood.class, "logsFireproof");
-		OreDictionary.registerOre("logWood", ForestryBlock.logsFireproof.getWildcard());
-
-		ForestryBlock.planksFireproof.registerBlock(new BlockPlanks(true), ItemBlockWood.class, "planksFireproof");
-		OreDictionary.registerOre("plankWood", ForestryBlock.planksFireproof.getWildcard());
-
-		ForestryBlock.slabsFireproof.registerBlock(new BlockSlab(true), ItemBlockWood.class, "slabsFireproof");
-		OreDictionary.registerOre("slabWood", ForestryBlock.slabsFireproof.getWildcard());
-
-		ForestryBlock.fencesFireproof.registerBlock(new BlockArbFence(true), ItemBlockWood.class, "fencesFireproof");
-		OreDictionary.registerOre("fenceWood", ForestryBlock.fencesFireproof.getWildcard());
-
-		ForestryBlock.stairsFireproof.registerBlock(new BlockArbStairs(ForestryBlock.planksFireproof.block(), true), ItemBlockWood.class, "stairsFireproof");
-		OreDictionary.registerOre("stairWood", ForestryBlock.stairsFireproof.getWildcard());
-
-		// Saplings
-		ForestryBlock.saplingGE.registerBlock(new BlockSapling(), ItemBlockForestry.class, "saplingGE");
-		OreDictionary.registerOre("treeSapling", ForestryBlock.saplingGE.getWildcard());
-
-		// Leaves
-		ForestryBlock.leaves.registerBlock(new BlockForestryLeaves(), ItemBlockLeaves.class, "leaves");
-		OreDictionary.registerOre("treeLeaves", ForestryBlock.leaves.getWildcard());
-
-		// Pods
-		ForestryBlock.pods.registerBlock(new BlockFruitPod(), ItemBlockForestry.class, "pods");
-
-		// Machines
-		ForestryBlock.arboriculture.registerBlock(new BlockBase(Material.iron, true), ItemBlockForestry.class, "arboriculture");
-		ForestryBlock.arboriculture.block().setCreativeTab(Tabs.tabArboriculture);
+		blocks = new BlockRegistryArboriculture();
 	}
 
 	@Override
@@ -182,22 +125,22 @@ public class PluginArboriculture extends ForestryPlugin {
 		super.preInit();
 
 		for (EnumWoodType woodType : EnumWoodType.VALUES) {
-			WoodItemAccess.registerLog(ForestryBlock.logs.block(), woodType, false);
-			WoodItemAccess.registerPlanks(ForestryBlock.planks.block(), woodType, false);
-			WoodItemAccess.registerSlab(ForestryBlock.slabs.block(), woodType, false);
-			WoodItemAccess.registerFence(ForestryBlock.fences.block(), woodType, false);
-			WoodItemAccess.registerStairs(ForestryBlock.stairs.block(), woodType, false);
+			WoodItemAccess.registerLog(blocks.logs, woodType, false);
+			WoodItemAccess.registerPlanks(blocks.planks, woodType, false);
+			WoodItemAccess.registerSlab(blocks.slabs, woodType, false);
+			WoodItemAccess.registerFence(blocks.fences, woodType, false);
+			WoodItemAccess.registerStairs(blocks.stairs, woodType, false);
 
-			WoodItemAccess.registerLog(ForestryBlock.logsFireproof.block(), woodType, true);
-			WoodItemAccess.registerPlanks(ForestryBlock.planksFireproof.block(), woodType, true);
-			WoodItemAccess.registerSlab(ForestryBlock.slabsFireproof.block(), woodType, true);
-			WoodItemAccess.registerFence(ForestryBlock.fencesFireproof.block(), woodType, true);
-			WoodItemAccess.registerStairs(ForestryBlock.stairsFireproof.block(), woodType, true);
+			WoodItemAccess.registerLog(blocks.logsFireproof, woodType, true);
+			WoodItemAccess.registerPlanks(blocks.planksFireproof, woodType, true);
+			WoodItemAccess.registerSlab(blocks.slabsFireproof, woodType, true);
+			WoodItemAccess.registerFence(blocks.fencesFireproof, woodType, true);
+			WoodItemAccess.registerStairs(blocks.stairsFireproof, woodType, true);
 		}
 
-		definitionChest = ((BlockBase) ForestryBlock.arboriculture.block()).addDefinition(new MachineDefinition(Constants.DEFINITION_ARBCHEST_META,
+		definitionChest = blocks.arboriculture.addDefinition(new MachineDefinition(BlockArboriculture.Type.ARBCHEST.ordinal(),
 				"forestry.ArbChest", TileArboristChest.class, Proxies.render.getRenderChest("arbchest"),
-				ShapedRecipeCustom.createShapedRecipe(ForestryBlock.arboriculture.getItemStack(1, Constants.DEFINITION_ARBCHEST_META),
+				ShapedRecipeCustom.createShapedRecipe(blocks.arboriculture.get(BlockArboriculture.Type.ARBCHEST, 1),
 						" # ",
 						"XYX",
 						"XXX",
@@ -210,8 +153,8 @@ public class PluginArboriculture extends ForestryPlugin {
 		proxy.initializeRendering();
 
 		// Register vanilla and forestry fence ids
-		validFences.add(ForestryBlock.fences.block());
-		validFences.add(ForestryBlock.fencesFireproof.block());
+		validFences.add(blocks.fences);
+		validFences.add(blocks.fencesFireproof);
 		validFences.add(Blocks.fence);
 		validFences.add(Blocks.fence_gate);
 		validFences.add(Blocks.nether_brick_fence);
@@ -263,10 +206,9 @@ public class PluginArboriculture extends ForestryPlugin {
 	@Override
 	protected void registerRecipes() {
 
-		RecipeUtil.addSmelting(ForestryBlock.logs.getWildcard(), new ItemStack(Items.coal, 1, 1), 0.15F);
+		RecipeUtil.addSmelting(new ItemStack(blocks.logs, 1, OreDictionary.WILDCARD_VALUE), new ItemStack(Items.coal, 1, 1), 0.15F);
 
 		for (EnumWoodType woodType : EnumWoodType.VALUES) {
-
 			ItemStack planks = TreeManager.woodItemAccess.getPlanks(woodType, false);
 			ItemStack logs = TreeManager.woodItemAccess.getLog(woodType, false);
 			ItemStack slabs = TreeManager.woodItemAccess.getSlab(woodType, false);
@@ -476,7 +418,7 @@ public class PluginArboriculture extends ForestryPlugin {
 				return 100;
 			}
 
-			if (ForestryBlock.slabs.isItemEqual(fuel)) {
+			if (blocks.slabs == Block.getBlockFromItem(item)) {
 				return 150;
 			}
 

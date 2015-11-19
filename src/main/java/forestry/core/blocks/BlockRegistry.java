@@ -12,6 +12,9 @@ package forestry.core.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
+
+import net.minecraftforge.oredict.OreDictionary;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -19,12 +22,16 @@ import forestry.core.utils.StringUtil;
 import forestry.plugins.PluginManager;
 
 public abstract class BlockRegistry {
-	public static <T extends Block> T registerBlock(T block, Class<? extends ItemBlock> itemClass, String name) {
+	protected static <T extends Block> T registerBlock(T block, Class<? extends ItemBlock> itemClass, String name) {
 		if (PluginManager.getStage() != PluginManager.Stage.SETUP) {
 			throw new RuntimeException("Tried to register Block outside of Setup");
 		}
 		block.setBlockName("for." + name);
 		GameRegistry.registerBlock(block, itemClass, StringUtil.cleanBlockName(block));
 		return block;
+	}
+
+	protected static void registerOreDictWildcard(String oreDictName, Block block) {
+		OreDictionary.registerOre(oreDictName, new ItemStack(block, 1, OreDictionary.WILDCARD_VALUE));
 	}
 }
