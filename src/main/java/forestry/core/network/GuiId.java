@@ -95,7 +95,7 @@ public enum GuiId {
 
 	PeatBogGUI,
 
-	PhilatelistGUI,
+	StampCollectorGUI,
 
 	PlantationGUI,
 

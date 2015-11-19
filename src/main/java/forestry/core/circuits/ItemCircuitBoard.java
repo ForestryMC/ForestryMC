@@ -76,7 +76,7 @@ public class ItemCircuitBoard extends ItemForestryMultiPass {
 	}
 
 	public static ItemStack createCircuitboard(EnumCircuitBoardType type, ICircuitLayout layout, ICircuit[] circuits) {
-		ItemStack chipset = PluginCore.items.circuitboards.getCircuitboard(type);
+		ItemStack chipset = PluginCore.items.circuitboards.get(type);
 		saveChipset(chipset, new CircuitBoard(type, layout, circuits));
 		return chipset;
 	}
@@ -92,7 +92,7 @@ public class ItemCircuitBoard extends ItemForestryMultiPass {
 		itemstack.setTagCompound(nbttagcompound);
 	}
 
-	public ItemStack getCircuitboard(EnumCircuitBoardType type) {
+	public ItemStack get(EnumCircuitBoardType type) {
 		return new ItemStack(this, 1, type.ordinal());
 	}
 }

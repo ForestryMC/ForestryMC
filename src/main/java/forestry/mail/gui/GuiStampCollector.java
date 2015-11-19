@@ -14,14 +14,12 @@ import net.minecraft.entity.player.InventoryPlayer;
 
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
-import forestry.mail.tiles.TilePhilatelist;
+import forestry.mail.tiles.TileStampCollector;
 
-public class GuiPhilatelist extends GuiForestry<ContainerPhilatelist, TilePhilatelist> {
-
-	public GuiPhilatelist(InventoryPlayer player, TilePhilatelist tile) {
-		super(Constants.TEXTURE_PATH_GUI + "/philatelist.png", new ContainerPhilatelist(player, tile), tile);
+public class GuiStampCollector extends GuiForestry<ContainerStampCollector, TileStampCollector> {
+	public GuiStampCollector(InventoryPlayer player, TileStampCollector tile) {
+		super(Constants.TEXTURE_PATH_GUI + "/philatelist.png", new ContainerStampCollector(player, tile), tile);
 		this.xSize = 176;
 		this.ySize = 193;
 	}
-
 }

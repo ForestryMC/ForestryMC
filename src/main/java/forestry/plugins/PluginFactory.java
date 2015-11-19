@@ -429,13 +429,13 @@ public class PluginFactory extends ForestryPlugin {
 
 		// / CHIPSETS
 		ItemCircuitBoard circuitBoard = PluginCore.items.circuitboards;
-		RecipeManagers.carpenterManager.addRecipe(20, Fluids.WATER.getFluid(1000), null, circuitBoard.getCircuitboard(EnumCircuitBoardType.BASIC),
+		RecipeManagers.carpenterManager.addRecipe(20, Fluids.WATER.getFluid(1000), null, circuitBoard.get(EnumCircuitBoardType.BASIC),
 				"R R", "R#R", "R R", '#', "ingotTin", 'R', "dustRedstone");
-		RecipeManagers.carpenterManager.addRecipe(40, Fluids.WATER.getFluid(1000), null, circuitBoard.getCircuitboard(EnumCircuitBoardType.ENHANCED),
+		RecipeManagers.carpenterManager.addRecipe(40, Fluids.WATER.getFluid(1000), null, circuitBoard.get(EnumCircuitBoardType.ENHANCED),
 				"R#R", "R#R", "R#R", '#', "ingotBronze", 'R', "dustRedstone");
-		RecipeManagers.carpenterManager.addRecipe(80, Fluids.WATER.getFluid(1000), null, circuitBoard.getCircuitboard(EnumCircuitBoardType.REFINED),
+		RecipeManagers.carpenterManager.addRecipe(80, Fluids.WATER.getFluid(1000), null, circuitBoard.get(EnumCircuitBoardType.REFINED),
 				"R#R", "R#R", "R#R", '#', "ingotIron", 'R', "dustRedstone");
-		RecipeManagers.carpenterManager.addRecipe(80, Fluids.WATER.getFluid(1000), null, circuitBoard.getCircuitboard(EnumCircuitBoardType.INTRICATE),
+		RecipeManagers.carpenterManager.addRecipe(80, Fluids.WATER.getFluid(1000), null, circuitBoard.get(EnumCircuitBoardType.INTRICATE),
 				"R#R", "R#R", "R#R", '#', "ingotGold", 'R', "dustRedstone");
 		RecipeManagers.carpenterManager.addRecipe(40, Fluids.WATER.getFluid(1000), null, PluginCore.items.solderingIron.getItemStack(),
 				" # ", "# #", "  B", '#', "ingotIron", 'B', "ingotBronze");

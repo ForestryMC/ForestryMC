@@ -10,11 +10,8 @@
  ******************************************************************************/
 package forestry.plugins;
 
-import net.minecraft.block.material.Material;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.oredict.OreDictionary;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 
@@ -24,14 +21,11 @@ import forestry.api.recipes.RecipeManagers;
 import forestry.apiculture.items.ItemRegistryApiculture;
 import forestry.core.GuiHandlerBase;
 import forestry.core.ISaveEventHandler;
-import forestry.core.blocks.BlockBase;
 import forestry.core.circuits.EnumCircuitBoardType;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
-import forestry.core.config.ForestryBlock;
 import forestry.core.fluids.Fluids;
 import forestry.core.items.EnumElectronTube;
-import forestry.core.items.ItemBlockForestry;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.tiles.MachineDefinition;
@@ -40,12 +34,14 @@ import forestry.mail.PostRegistry;
 import forestry.mail.PostalCarrier;
 import forestry.mail.SaveEventHandlerMail;
 import forestry.mail.TickHandlerMailClient;
+import forestry.mail.blocks.BlockMailType;
+import forestry.mail.blocks.BlockRegistryMail;
 import forestry.mail.commands.CommandMail;
 import forestry.mail.items.EnumStampDefinition;
 import forestry.mail.items.ItemRegistryMail;
 import forestry.mail.network.PacketRegistryMail;
 import forestry.mail.tiles.TileMailbox;
-import forestry.mail.tiles.TilePhilatelist;
+import forestry.mail.tiles.TileStampCollector;
 import forestry.mail.tiles.TileTrader;
 import forestry.mail.triggers.MailTriggers;
 
@@ -54,9 +50,10 @@ public class PluginMail extends ForestryPlugin {
 
 	private static MachineDefinition definitionMailbox;
 	private static MachineDefinition definitionTradestation;
-	private static MachineDefinition definitionPhilatelist;
+	private static MachineDefinition definitionStampColletor;
 
 	public static ItemRegistryMail items;
+	public static BlockRegistryMail blocks;
 
 	@Override
 	protected void setupAPI() {
@@ -70,8 +67,7 @@ public class PluginMail extends ForestryPlugin {
 	@Override
 	protected void registerItemsAndBlocks() {
 		items = new ItemRegistryMail();
-
-		ForestryBlock.mail.registerBlock(new BlockBase(Material.iron), ItemBlockForestry.class, "mail");
+		blocks = new BlockRegistryMail();
 	}
 
 	@Override
@@ -84,19 +80,17 @@ public class PluginMail extends ForestryPlugin {
 			FMLCommonHandler.instance().bus().register(new TickHandlerMailClient());
 		}
 
-		BlockBase mail = ((BlockBase) ForestryBlock.mail.block());
-
-		definitionMailbox = new MachineDefinition(Constants.DEFINITION_MAILBOX_META, "forestry.Mailbox", TileMailbox.class)
+		definitionMailbox = new MachineDefinition(BlockMailType.MAILBOX.ordinal(), "forestry.Mailbox", TileMailbox.class)
 				.setFaces(0, 1, 2, 2, 2, 2, 0, 7);
-		mail.addDefinition(definitionMailbox);
+		blocks.mail.addDefinition(definitionMailbox);
 
-		definitionTradestation = new MachineDefinition(Constants.DEFINITION_TRADESTATION_META, "forestry.Tradestation", TileTrader.class)
+		definitionTradestation = new MachineDefinition(BlockMailType.TRADE_STATION.ordinal(), "forestry.Tradestation", TileTrader.class)
 				.setFaces(0, 1, 2, 3, 4, 4, 0, 7);
-		mail.addDefinition(definitionTradestation);
+		blocks.mail.addDefinition(definitionTradestation);
 
-		definitionPhilatelist = new MachineDefinition(Constants.DEFINITION_PHILATELIST_META, "forestry.Philatelist", TilePhilatelist.class)
+		definitionStampColletor = new MachineDefinition(BlockMailType.STAMP_COLLECTOR.ordinal(), "forestry.Philatelist", TileStampCollector.class)
 				.setFaces(0, 1, 2, 3, 2, 2, 0, 7);
-		mail.addDefinition(definitionPhilatelist);
+		blocks.mail.addDefinition(definitionStampColletor);
 	}
 
 	@Override
@@ -110,7 +104,7 @@ public class PluginMail extends ForestryPlugin {
 
 		definitionMailbox.register();
 		definitionTradestation.register();
-		definitionPhilatelist.register();
+		definitionStampColletor.register();
 	}
 
 	@Override
@@ -145,27 +139,32 @@ public class PluginMail extends ForestryPlugin {
 					continue;
 				}
 
-				RecipeUtil.addRecipe(items.stamps.get(stampDefinition, 9),
-						"XXX", "###", "ZZZ",
+				ItemStack stamps = items.stamps.get(stampDefinition, 9);
+
+				RecipeUtil.addRecipe(stamps,
+						"XXX",
+						"###",
+						"ZZZ",
 						'X', stampDefinition.getCraftingIngredient(),
 						'#', Items.paper,
 						'Z', stampGlue);
-				RecipeManagers.carpenterManager.addRecipe(10, Fluids.SEEDOIL.getFluid(300), null, items.stamps.get(stampDefinition, 9),
-						"XXX", "###",
+				RecipeManagers.carpenterManager.addRecipe(10, Fluids.SEEDOIL.getFluid(300), null, stamps,
+						"XXX",
+						"###",
 						'X', stampDefinition.getCraftingIngredient(),
 						'#', Items.paper);
 			}
 		}
 
 		// Recycling
-		RecipeUtil.addRecipe(new ItemStack(Items.paper), "###", '#', new ItemStack(items.letters, 1, OreDictionary.WILDCARD_VALUE));
+		RecipeUtil.addRecipe(new ItemStack(Items.paper), "###", '#', items.letters.getWildcard());
 
 		// Carpenter
 		RecipeManagers.carpenterManager.addRecipe(10, Fluids.WATER.getFluid(250), null, items.letters.getItemStack(), "###", "###", '#', PluginCore.items.woodPulp);
 
-		RecipeUtil.addShapelessRecipe(items.catalogue.getItemStack(), new ItemStack(items.stamps, 1, OreDictionary.WILDCARD_VALUE), new ItemStack(Items.book));
+		RecipeUtil.addShapelessRecipe(items.catalogue.getItemStack(), items.stamps.getWildcard(), new ItemStack(Items.book));
 
-		RecipeUtil.addRecipe(ForestryBlock.mail.getItemStack(1, Constants.DEFINITION_MAILBOX_META),
+		RecipeUtil.addRecipe(blocks.mail.get(BlockMailType.MAILBOX),
 				" # ",
 				"#Y#",
 				"XXX",
@@ -173,7 +172,7 @@ public class PluginMail extends ForestryPlugin {
 				'X', "chestWood",
 				'Y', PluginCore.items.sturdyCasing);
 
-		RecipeUtil.addRecipe(ForestryBlock.mail.getItemStack(1, Constants.DEFINITION_TRADESTATION_META),
+		RecipeUtil.addRecipe(blocks.mail.get(BlockMailType.TRADE_STATION),
 				"Z#Z",
 				"#Y#",
 				"XWX",
@@ -181,7 +180,7 @@ public class PluginMail extends ForestryPlugin {
 				'X', "chestWood",
 				'Y', PluginCore.items.sturdyCasing,
 				'Z', PluginCore.items.tubes.get(EnumElectronTube.IRON, 1),
-				'W', PluginCore.items.circuitboards.getCircuitboard(EnumCircuitBoardType.REFINED));
+				'W', PluginCore.items.circuitboards.get(EnumCircuitBoardType.REFINED));
 	}
 
 	@Override

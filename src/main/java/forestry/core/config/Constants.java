@@ -18,8 +18,6 @@ public class Constants implements IForestryConstants {
 	public static final String ID = "forestry";
 	public static final String URL = "http://forestry.sengir.net/";
 
-	public static final int WORLD_HEIGHT = 256;
-
 	public static final int FLAG_BLOCK_UPDATE = 1;
 	public static final int FLAG_BLOCK_SYNCH = 2;
 	public static final int FLAG_BLOCK_SYNCH_AND_UPDATE = FLAG_BLOCK_UPDATE + FLAG_BLOCK_SYNCH;
@@ -56,10 +54,6 @@ public class Constants implements IForestryConstants {
 	public static final int DEFINITION_ENGINE_BIOGAS_META = 2;
 	public static final int DEFINITION_GENERATOR_META = 3;
 	public static final int DEFINITION_ENGINE_CLOCKWORK_META = 4;
-
-	public static final int DEFINITION_MAILBOX_META = 0;
-	public static final int DEFINITION_TRADESTATION_META = 1;
-	public static final int DEFINITION_PHILATELIST_META = 2;
 
 	public static final int DEFINITION_BOTTLER_META = 0;
 	public static final int DEFINITION_CARPENTER_META = 1;

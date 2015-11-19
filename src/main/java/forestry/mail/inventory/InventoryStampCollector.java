@@ -14,14 +14,14 @@ import net.minecraft.item.ItemStack;
 
 import forestry.api.mail.IStamps;
 import forestry.core.inventory.InventoryAdapterTile;
-import forestry.mail.tiles.TilePhilatelist;
+import forestry.mail.tiles.TileStampCollector;
 
-public class InventoryPhilatelist extends InventoryAdapterTile<TilePhilatelist> {
+public class InventoryStampCollector extends InventoryAdapterTile<TileStampCollector> {
 	public static final short SLOT_FILTER = 0;
 	public static final short SLOT_BUFFER_1 = 1;
 	public static final short SLOT_BUFFER_COUNT = 27;
 
-	public InventoryPhilatelist(TilePhilatelist tile) {
+	public InventoryStampCollector(TileStampCollector tile) {
 		super(tile, 28, "INV");
 	}
 

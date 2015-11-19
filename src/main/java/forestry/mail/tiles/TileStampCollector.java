@@ -19,12 +19,12 @@ import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.network.GuiId;
 import forestry.core.tiles.TileBase;
 import forestry.core.utils.InventoryUtil;
-import forestry.mail.inventory.InventoryPhilatelist;
+import forestry.mail.inventory.InventoryStampCollector;
 
-public class TilePhilatelist extends TileBase implements IInventory {
-	public TilePhilatelist() {
-		super(GuiId.PhilatelistGUI, "philatelist");
-		setInternalInventory(new InventoryPhilatelist(this));
+public class TileStampCollector extends TileBase implements IInventory {
+	public TileStampCollector() {
+		super(GuiId.StampCollectorGUI, "philatelist");
+		setInternalInventory(new InventoryStampCollector(this));
 	}
 
 	@Override
@@ -36,10 +36,10 @@ public class TilePhilatelist extends TileBase implements IInventory {
 		ItemStack stamp = null;
 
 		IInventoryAdapter inventory = getInternalInventory();
-		if (inventory.getStackInSlot(InventoryPhilatelist.SLOT_FILTER) == null) {
+		if (inventory.getStackInSlot(InventoryStampCollector.SLOT_FILTER) == null) {
 			stamp = PostManager.postRegistry.getPostOffice(worldObj).getAnyStamp(1);
 		} else {
-			ItemStack filter = inventory.getStackInSlot(InventoryPhilatelist.SLOT_FILTER);
+			ItemStack filter = inventory.getStackInSlot(InventoryStampCollector.SLOT_FILTER);
 			if (filter.getItem() instanceof IStamps) {
 				stamp = PostManager.postRegistry.getPostOffice(worldObj).getAnyStamp(((IStamps) filter.getItem()).getPostage(filter), 1);
 			}
@@ -50,6 +50,6 @@ public class TilePhilatelist extends TileBase implements IInventory {
 		}
 
 		// Store it.
-		InventoryUtil.stowInInventory(stamp, inventory, true, InventoryPhilatelist.SLOT_BUFFER_1, InventoryPhilatelist.SLOT_BUFFER_COUNT);
+		InventoryUtil.stowInInventory(stamp, inventory, true, InventoryStampCollector.SLOT_BUFFER_1, InventoryStampCollector.SLOT_BUFFER_COUNT);
 	}
 }
