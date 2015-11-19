@@ -12,8 +12,8 @@ package forestry.factory.blocks;
 
 import forestry.core.blocks.BlockBase;
 
-public class BlockFactoryTesr extends BlockBase<BlockFactoryTesrType> {
-	public BlockFactoryTesr() {
+public class BlockFactoryTESR extends BlockBase<BlockFactoryTesrType> {
+	public BlockFactoryTESR() {
 		super(true);
 	}
 }

@@ -15,11 +15,11 @@ import forestry.core.items.ItemBlockForestry;
 import forestry.core.items.ItemBlockNBT;
 
 public class BlockRegistryFactory extends BlockRegistry {
-	public final BlockFactoryTesr factoryTESR;
+	public final BlockFactoryTESR factoryTESR;
 	public final BlockFactoryPlain factoryPlain;
 
 	public BlockRegistryFactory() {
-		factoryTESR = registerBlock(new BlockFactoryTesr(), ItemBlockForestry.class, "factory");
+		factoryTESR = registerBlock(new BlockFactoryTESR(), ItemBlockForestry.class, "factory");
 		factoryPlain = registerBlock(new BlockFactoryPlain(), ItemBlockNBT.class, "factory2");
 	}
 }
