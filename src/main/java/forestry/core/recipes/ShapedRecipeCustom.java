@@ -24,7 +24,6 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.api.recipes.IDescriptiveRecipe;
 import forestry.core.config.ForestryBlock;
-import forestry.core.config.ForestryItem;
 
 public class ShapedRecipeCustom implements IDescriptiveRecipe {
 
@@ -118,8 +117,6 @@ public class ShapedRecipeCustom implements IDescriptiveRecipe {
 			// Item
 			if (materials[index + 1] instanceof Item) {
 				hashmap.put(character, new ItemStack((Item) materials[index + 1]));
-			} else if (materials[index + 1] instanceof ForestryItem) {
-				hashmap.put(character, ((ForestryItem) materials[index + 1]).getItemStack());
 			} else if (materials[index + 1] instanceof ForestryBlock) {
 				hashmap.put(character, ((ForestryBlock) materials[index + 1]).getItemStack());
 			} else if (materials[index + 1] instanceof Block) {

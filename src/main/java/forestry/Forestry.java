@@ -149,12 +149,6 @@ public class Forestry {
 				if (block != null) {
 					mapping.remap(Item.getItemFromBlock(block));
 					Log.warning("Remapping item " + mapping.name + " to " + StringUtil.cleanBlockName(block));
-					//				} else {
-					//					ForestryItem mappedItem = mappedItems.get(mapping.name);
-					//					if (mappedItem != null) {
-					//						mapping.remap(mappedItem.item());
-					//						Log.warning("Remapping item " + mapping.name + " to " + mappedItem.name());
-					//					}
 				}
 			}
 		}
