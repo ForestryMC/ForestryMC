@@ -30,12 +30,13 @@ import forestry.api.mail.IStamps;
 import forestry.api.mail.ITradeStation;
 import forestry.api.mail.PostManager;
 import forestry.api.mail.TradeStationInfo;
-import forestry.core.config.ForestryItem;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.mail.inventory.InventoryTradeStation;
+import forestry.mail.items.EnumStampDefinition;
+import forestry.plugins.PluginMail;
 
 public class TradeStation extends WorldSavedData implements ITradeStation, IInventoryAdapter {
 	public static final String SAVE_NAME = "TradePO_";
@@ -224,8 +225,11 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 		// Attach necessary postage
 		int[] stampCount = getPostage(requiredPostage, isVirtual());
 		for (int i = 0; i < stampCount.length; i++) {
-			if (stampCount[i] > 0) {
-				mail.addStamps(ForestryItem.stamps.getItemStack(stampCount[i], EnumPostage.values()[i].ordinal() - 1));
+			int count = stampCount[i];
+			if (count > 0) {
+				EnumPostage postage = EnumPostage.values()[i];
+				EnumStampDefinition stampDefinition = EnumStampDefinition.getFromPostage(postage);
+				mail.addStamps(PluginMail.items.stamps.get(stampDefinition, count));
 			}
 		}
 
@@ -264,7 +268,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 
 			ILetter confirm = new Letter(this.address, new MailAddress(this.owner));
 			confirm.setText(ordersToFill + " order(s) from " + letter.getSender().getName() + " were filled.");
-			confirm.addStamps(ForestryItem.stamps.getItemStack(1, EnumPostage.P_1.ordinal() - 1));
+			confirm.addStamps(PluginMail.items.stamps.get(EnumStampDefinition.P_1, 1));
 			confirm.writeToNBT(nbttagcompound);
 
 			ItemStack confirmstack = LetterProperties.createStampedLetterStack(confirm);

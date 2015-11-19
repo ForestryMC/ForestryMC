@@ -12,7 +12,6 @@ package forestry.plugins;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.oredict.OreDictionary;
@@ -20,9 +19,9 @@ import net.minecraftforge.oredict.OreDictionary;
 import cpw.mods.fml.common.FMLCommonHandler;
 
 import forestry.api.mail.EnumAddressee;
-import forestry.api.mail.EnumPostage;
 import forestry.api.mail.PostManager;
 import forestry.api.recipes.RecipeManagers;
+import forestry.apiculture.items.ItemRegistryApiculture;
 import forestry.core.GuiHandlerBase;
 import forestry.core.ISaveEventHandler;
 import forestry.core.blocks.BlockBase;
@@ -30,12 +29,9 @@ import forestry.core.circuits.EnumCircuitBoardType;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.ForestryBlock;
-import forestry.core.config.ForestryItem;
 import forestry.core.fluids.Fluids;
 import forestry.core.items.EnumElectronTube;
 import forestry.core.items.ItemBlockForestry;
-import forestry.core.items.ItemWithGui;
-import forestry.core.network.GuiId;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.recipes.ShapedRecipeCustom;
@@ -46,9 +42,8 @@ import forestry.mail.PostalCarrier;
 import forestry.mail.SaveEventHandlerMail;
 import forestry.mail.TickHandlerMailClient;
 import forestry.mail.commands.CommandMail;
-import forestry.mail.items.ItemLetter;
-import forestry.mail.items.ItemStamps;
-import forestry.mail.items.ItemStamps.StampInfo;
+import forestry.mail.items.EnumStampDefinition;
+import forestry.mail.items.ItemRegistryMail;
 import forestry.mail.network.PacketRegistryMail;
 import forestry.mail.tiles.TileMailbox;
 import forestry.mail.tiles.TilePhilatelist;
@@ -61,7 +56,8 @@ public class PluginMail extends ForestryPlugin {
 	private static MachineDefinition definitionMailbox;
 	private static MachineDefinition definitionTradestation;
 	private static MachineDefinition definitionPhilatelist;
-	private static StampInfo[] stampDefinitions;
+
+	public static ItemRegistryMail items;
 
 	@Override
 	protected void setupAPI() {
@@ -74,28 +70,9 @@ public class PluginMail extends ForestryPlugin {
 
 	@Override
 	protected void registerItemsAndBlocks() {
-
-		stampDefinitions = new StampInfo[]{
-				new StampInfo("1n", EnumPostage.P_1, PluginCore.items.apatite, 0x4a8ca7, 0xffffff),
-				new StampInfo("2n", EnumPostage.P_2, "ingotCopper", 0xe8c814, 0xffffff),
-				new StampInfo("5n", EnumPostage.P_5, "ingotTin", 0x9c0707, 0xffffff),
-				new StampInfo("10n", EnumPostage.P_10, Items.gold_ingot, 0x7bd1b8, 0xffffff),
-				new StampInfo("20n", EnumPostage.P_20, Items.diamond, 0xff9031, 0xfff7dd),
-				new StampInfo("50n", EnumPostage.P_50, Items.emerald, 0x6431d7, 0xfff7dd),
-				new StampInfo("100n", EnumPostage.P_100, Items.nether_star, 0xd731ba, 0xfff7dd)}; //new StampInfo("200n", EnumPostage.P_200, Item.netherStar, 0xcd9831, 0xfff7dd)};
-
-		/* STAMPS */
-		ForestryItem.stamps.registerItem(new ItemStamps(stampDefinitions), "stamps");
-
-		/* LETTER */
-		ForestryItem.letters.registerItem(new ItemLetter(), "letters");
-
-		/* CATALOGUE */
-		Item itemCatalogue = new ItemWithGui(GuiId.CatalogueGUI).setMaxStackSize(1);
-		ForestryItem.catalogue.registerItem(itemCatalogue, "catalogue");
+		items = new ItemRegistryMail();
 
 		ForestryBlock.mail.registerBlock(new BlockBase(Material.iron), ItemBlockForestry.class, "mail");
-
 	}
 
 	@Override
@@ -160,42 +137,45 @@ public class PluginMail extends ForestryPlugin {
 
 	@Override
 	protected void registerRecipes() {
-		// Letters
+		Object stampGlue;
+		Object letterGlue;
 
-		Item stampGlue;
-		if (PluginManager.Module.APICULTURE.isEnabled()) {
-			RecipeUtil.addShapelessRecipe(ForestryItem.letters.getItemStack(), Items.paper, PluginApiculture.items.propolis.getWildcard());
-			stampGlue = PluginApiculture.items.honeyDrop;
+		ItemRegistryApiculture beeItems = PluginApiculture.items;
+		if (beeItems != null) {
+			stampGlue = beeItems.honeyDrop;
+			letterGlue = beeItems.propolis.getWildcard();
 		} else {
-			RecipeUtil.addShapelessRecipe(ForestryItem.letters.getItemStack(), Items.paper, Items.slime_ball);
 			stampGlue = Items.slime_ball;
+			letterGlue = Items.slime_ball;
 		}
 
+		RecipeUtil.addShapelessRecipe(items.letters.getItemStack(), Items.paper, letterGlue);
+
 		if (Config.craftingStampsEnabled) {
-			for (int i = 0; i < stampDefinitions.length; i++) {
-				if (Config.collectorStamps.contains(stampDefinitions[i].getName())) {
+			for (EnumStampDefinition stampDefinition : EnumStampDefinition.VALUES) {
+				if (Config.collectorStamps.contains(stampDefinition.getName())) {
 					continue;
 				}
 
-				RecipeUtil.addRecipe(ForestryItem.stamps.getItemStack(9, i),
+				RecipeUtil.addRecipe(items.stamps.get(stampDefinition, 9),
 						"XXX", "###", "ZZZ",
-						'X', stampDefinitions[i].getCraftingIngredient(),
+						'X', stampDefinition.getCraftingIngredient(),
 						'#', Items.paper,
 						'Z', stampGlue);
-				RecipeManagers.carpenterManager.addRecipe(10, Fluids.SEEDOIL.getFluid(300), null, ForestryItem.stamps.getItemStack(9, i),
+				RecipeManagers.carpenterManager.addRecipe(10, Fluids.SEEDOIL.getFluid(300), null, items.stamps.get(stampDefinition, 9),
 						"XXX", "###",
-						'X', stampDefinitions[i].getCraftingIngredient(),
+						'X', stampDefinition.getCraftingIngredient(),
 						'#', Items.paper);
 			}
 		}
 
 		// Recycling
-		RecipeUtil.addRecipe(new ItemStack(Items.paper), "###", '#', ForestryItem.letters.getItemStack(1, OreDictionary.WILDCARD_VALUE));
+		RecipeUtil.addRecipe(new ItemStack(Items.paper), "###", '#', new ItemStack(items.letters, 1, OreDictionary.WILDCARD_VALUE));
 
 		// Carpenter
-		RecipeManagers.carpenterManager.addRecipe(10, Fluids.WATER.getFluid(250), null, ForestryItem.letters.getItemStack(), "###", "###", '#', PluginCore.items.woodPulp);
+		RecipeManagers.carpenterManager.addRecipe(10, Fluids.WATER.getFluid(250), null, items.letters.getItemStack(), "###", "###", '#', PluginCore.items.woodPulp);
 
-		RecipeUtil.addShapelessRecipe(ForestryItem.catalogue.getItemStack(), ForestryItem.stamps.getItemStack(1, OreDictionary.WILDCARD_VALUE), new ItemStack(Items.book));
+		RecipeUtil.addShapelessRecipe(items.catalogue.getItemStack(), new ItemStack(items.stamps, 1, OreDictionary.WILDCARD_VALUE), new ItemStack(Items.book));
 	}
 
 	@Override

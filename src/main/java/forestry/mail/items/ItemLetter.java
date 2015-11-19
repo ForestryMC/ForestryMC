@@ -13,7 +13,9 @@ package forestry.mail.items;
 import java.util.List;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentTranslation;
@@ -78,5 +80,10 @@ public class ItemLetter extends ItemWithGui {
 
 		ILetter letter = new Letter(nbttagcompound);
 		letter.addTooltip(list);
+	}
+	
+	@Override
+	public void getSubItems(Item item, CreativeTabs tab, List list) {
+		LetterProperties.getSubItems(item, tab, list);
 	}
 }

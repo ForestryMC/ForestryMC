@@ -32,10 +32,6 @@ import forestry.plugins.PluginManager.Stage;
  * @author SirSengir
  */
 public enum ForestryItem {
-	// Mail
-	stamps,
-	letters,
-	catalogue,
 	// Butterflies
 	butterflyGE,
 	flutterlyzer,

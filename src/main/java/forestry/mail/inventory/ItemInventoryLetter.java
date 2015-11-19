@@ -23,10 +23,10 @@ import forestry.api.core.IErrorSource;
 import forestry.api.core.IErrorState;
 import forestry.api.mail.ILetter;
 import forestry.core.config.Config;
-import forestry.core.config.ForestryItem;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.gui.IHintSource;
 import forestry.core.inventory.ItemInventory;
+import forestry.core.items.ItemWithGui;
 import forestry.core.utils.SlotUtil;
 import forestry.mail.Letter;
 import forestry.mail.LetterProperties;
@@ -121,7 +121,7 @@ public class ItemInventoryLetter extends ItemInventory implements IErrorSource, 
 			Item item = itemStack.getItem();
 			return item instanceof ItemStamps;
 		} else if (SlotUtil.isSlotInRange(slotIndex, Letter.SLOT_ATTACHMENT_1, Letter.SLOT_ATTACHMENT_COUNT)) {
-			return !ForestryItem.letters.isItemEqual(itemStack);
+			return !(itemStack.getItem() instanceof ItemWithGui);
 		}
 		return false;
 	}

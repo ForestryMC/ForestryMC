@@ -13,6 +13,7 @@ package forestry.mail;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
@@ -20,7 +21,6 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.core.GuiHandlerBase;
-import forestry.core.config.ForestryItem;
 import forestry.core.network.GuiId;
 import forestry.core.tiles.TileUtil;
 import forestry.mail.gui.ContainerCatalogue;
@@ -36,10 +36,10 @@ import forestry.mail.gui.GuiPhilatelist;
 import forestry.mail.gui.GuiTradeName;
 import forestry.mail.gui.GuiTrader;
 import forestry.mail.inventory.ItemInventoryLetter;
-import forestry.mail.items.ItemLetter;
 import forestry.mail.tiles.TileMailbox;
 import forestry.mail.tiles.TilePhilatelist;
 import forestry.mail.tiles.TileTrader;
+import forestry.plugins.PluginMail;
 
 public class GuiHandlerMail extends GuiHandlerBase {
 
@@ -58,7 +58,8 @@ public class GuiHandlerMail extends GuiHandlerBase {
 					return null;
 				}
 
-				if (ForestryItem.catalogue.isItemEqual(cata)) {
+				Item cataItem = cata.getItem();
+				if (PluginMail.items.catalogue == cataItem) {
 					return new GuiCatalogue(player);
 				} else {
 					return null;
@@ -70,7 +71,7 @@ public class GuiHandlerMail extends GuiHandlerBase {
 					return null;
 				}
 
-				if (equipped.getItem() instanceof ItemLetter) {
+				if (equipped.getItem() == PluginMail.items.letters) {
 					return new GuiLetter(player, new ItemInventoryLetter(player, equipped));
 				} else {
 					return null;
@@ -104,7 +105,8 @@ public class GuiHandlerMail extends GuiHandlerBase {
 					return null;
 				}
 
-				if (ForestryItem.catalogue.isItemEqual(cata)) {
+				Item cataItem = cata.getItem();
+				if (PluginMail.items.catalogue == cataItem) {
 					return new ContainerCatalogue(player);
 				} else {
 					return null;
@@ -116,7 +118,7 @@ public class GuiHandlerMail extends GuiHandlerBase {
 					return null;
 				}
 
-				if (equipped.getItem() instanceof ItemLetter) {
+				if (equipped.getItem() == PluginMail.items.letters) {
 					return new ContainerLetter(player, new ItemInventoryLetter(player, equipped));
 				} else {
 					return null;

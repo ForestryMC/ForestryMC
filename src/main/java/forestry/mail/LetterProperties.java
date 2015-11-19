@@ -10,7 +10,11 @@
  ******************************************************************************/
 package forestry.mail;
 
+import java.util.List;
+
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
@@ -18,8 +22,8 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.api.mail.ILetter;
-import forestry.core.config.ForestryItem;
 import forestry.core.render.TextureManager;
+import forestry.plugins.PluginMail;
 
 public class LetterProperties {
 	private enum State {
@@ -33,7 +37,7 @@ public class LetterProperties {
 	public static ItemStack createStampedLetterStack(ILetter letter) {
 		Size size = getSize(letter);
 		int meta = encodeMeta(State.STAMPED, size);
-		return ForestryItem.letters.getItemStack(1, meta);
+		return new ItemStack(PluginMail.items.letters, 1, meta);
 	}
 
 	public static void closeLetter(ItemStack parent, ILetter letter) {
@@ -86,6 +90,17 @@ public class LetterProperties {
 			icons[i][1] = TextureManager.registerTex(register, "mail/letter." + i + ".stamped");
 			icons[i][2] = TextureManager.registerTex(register, "mail/letter." + i + ".opened");
 			icons[i][3] = TextureManager.registerTex(register, "mail/letter." + i + ".emptied");
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static void getSubItems(Item item, CreativeTabs tab, List list) {
+		for (State state : State.values()) {
+			for (Size size : Size.values()) {
+				int meta = encodeMeta(state, size);
+				ItemStack letter = new ItemStack(item, 1, meta);
+				list.add(letter);
+			}
 		}
 	}
 

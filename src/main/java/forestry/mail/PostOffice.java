@@ -27,7 +27,8 @@ import forestry.api.mail.IPostalState;
 import forestry.api.mail.IStamps;
 import forestry.api.mail.ITradeStation;
 import forestry.api.mail.PostManager;
-import forestry.core.config.ForestryItem;
+import forestry.mail.items.EnumStampDefinition;
+import forestry.plugins.PluginMail;
 
 public class PostOffice extends WorldSavedData implements IPostOffice {
 
@@ -129,24 +130,13 @@ public class PostOffice extends WorldSavedData implements IPostOffice {
 
 	@Override
 	public ItemStack getAnyStamp(EnumPostage[] postages, int max) {
-
 		for (EnumPostage postage : postages) {
-
-			int collected;
-			if (collectedPostage[postage.ordinal()] <= 0) {
-				continue;
-			}
-
-			if (max >= collectedPostage[postage.ordinal()]) {
-				collected = collectedPostage[postage.ordinal()];
-				collectedPostage[postage.ordinal()] = 0;
-			} else {
-				collected = max;
-				collectedPostage[postage.ordinal()] -= max;
-			}
+			int collected = Math.min(max, collectedPostage[postage.ordinal()]);
+			collectedPostage[postage.ordinal()] -= collected;
 
 			if (collected > 0) {
-				return ForestryItem.stamps.getItemStack(collected, postage.ordinal() - 1);
+				EnumStampDefinition stampDefinition = EnumStampDefinition.getFromPostage(postage);
+				return PluginMail.items.stamps.get(stampDefinition, collected);
 			}
 		}
 
