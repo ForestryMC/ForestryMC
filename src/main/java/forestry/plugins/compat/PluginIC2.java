@@ -46,7 +46,6 @@ import forestry.core.fluids.Fluids;
 import forestry.core.items.EnumElectronTube;
 import forestry.core.proxy.Proxies;
 import forestry.core.recipes.RecipeUtil;
-import forestry.core.recipes.ShapedRecipeCustom;
 import forestry.core.tiles.MachineDefinition;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
@@ -129,25 +128,10 @@ public class PluginIC2 extends ForestryPlugin {
 		super.preInit();
 
 		definitionEngineElectric = ((BlockBase) ForestryBlock.engine.block()).addDefinition(new EngineDefinition(Constants.DEFINITION_ENGINE_ELECTRIC_META, "forestry.EngineTin", TileEngineElectric.class,
-				PluginEnergy.proxy.getRenderDefaultEngine(Constants.TEXTURE_PATH_BLOCKS + "/engine_tin_"), ShapedRecipeCustom.createShapedRecipe(
-				ForestryBlock.engine.getItemStack(1, Constants.DEFINITION_ENGINE_ELECTRIC_META),
-				"###",
-				" X ",
-				"YVY",
-				'#', "ingotTin",
-				'X', "blockGlass",
-				'Y', "gearTin",
-				'V', Blocks.piston)));
+				PluginEnergy.proxy.getRenderDefaultEngine(Constants.TEXTURE_PATH_BLOCKS + "/engine_tin_")));
 
 		definitionGenerator = ((BlockBase) ForestryBlock.engine.block()).addDefinition(new MachineDefinition(Constants.DEFINITION_GENERATOR_META, "forestry.Generator", TileGenerator.class,
-				Proxies.render.getRenderDefaultMachine(Constants.TEXTURE_PATH_BLOCKS + "/generator_"), ShapedRecipeCustom.createShapedRecipe(
-				ForestryBlock.engine.getItemStack(1, Constants.DEFINITION_GENERATOR_META),
-				"X#X",
-				"XYX",
-				"X#X",
-				'#', "blockGlass",
-				'X', "ingotGold",
-				'Y', PluginCore.items.sturdyCasing)));
+				Proxies.render.getRenderDefaultMachine(Constants.TEXTURE_PATH_BLOCKS + "/generator_")));
 
 		emptyCell = IC2Items.getItem("cell");
 		if (emptyCell != null) {
@@ -326,6 +310,22 @@ public class PluginIC2 extends ForestryPlugin {
 			ICircuitLayout layoutManual = ChipsetManager.circuitRegistry.getLayout("forestry.farms.manual");
 			ChipsetManager.solderManager.addRecipe(layoutManual, PluginCore.items.tubes.get(EnumElectronTube.RUBBER, 1), Circuit.farmRubberManual);
 		}
-	}
 
+		RecipeUtil.addRecipe(ForestryBlock.engine.getItemStack(1, Constants.DEFINITION_GENERATOR_META),
+				"X#X",
+				"XYX",
+				"X#X",
+				'#', "blockGlass",
+				'X', "ingotGold",
+				'Y', PluginCore.items.sturdyCasing);
+
+		RecipeUtil.addRecipe(ForestryBlock.engine.getItemStack(1, Constants.DEFINITION_ENGINE_ELECTRIC_META),
+				"###",
+				" X ",
+				"YVY",
+				'#', "ingotTin",
+				'X', "blockGlass",
+				'Y', "gearTin",
+				'V', Blocks.piston);
+	}
 }

@@ -17,7 +17,6 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
@@ -39,6 +38,7 @@ import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IFlower;
+import forestry.apiculture.blocks.BlockApiculture;
 import forestry.apiculture.inventory.InventoryApiary;
 import forestry.apiculture.tiles.TileApiary;
 import forestry.arboriculture.worldgen.BlockTypeLog;
@@ -47,7 +47,7 @@ import forestry.arboriculture.worldgen.BlockTypeWood;
 import forestry.arboriculture.worldgen.BlockTypeWoodStairs;
 import forestry.core.blocks.BlockCore;
 import forestry.core.config.Constants;
-import forestry.core.config.ForestryBlock;
+import forestry.core.tiles.TileUtil;
 import forestry.core.worldgen.BlockType;
 import forestry.core.worldgen.BlockTypeTileForestry;
 import forestry.core.worldgen.IBlockType;
@@ -285,20 +285,22 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 		int yCoord = getYWithOffset(y);
 		int zCoord = getZWithOffset(x, z);
 
-		if (!box.isVecInside(xCoord, yCoord, zCoord) || ForestryBlock.apiculture.isBlockEqual(world, xCoord, yCoord, zCoord)
-				|| !world.blockExists(xCoord, yCoord - 1, zCoord)) {
+		if (!box.isVecInside(xCoord, yCoord, zCoord)) {
 			return;
 		}
 
-		world.setBlock(xCoord, yCoord, zCoord, ForestryBlock.apiculture.block(), Constants.DEFINITION_APIARY_META, Constants.FLAG_BLOCK_SYNCH);
-		ForestryBlock.apiculture.block().onBlockAdded(world, xCoord, yCoord, zCoord);
-
-		TileEntity tile = world.getTileEntity(xCoord, yCoord, zCoord);
-		if (!(tile instanceof TileApiary)) {
+		Block block = world.getBlock(xCoord, yCoord, zCoord);
+		if (PluginApiculture.blocks.apiculture == block || !world.blockExists(xCoord, yCoord - 1, zCoord)) {
 			return;
 		}
 
-		TileApiary apiary = (TileApiary) tile;
+		world.setBlock(xCoord, yCoord, zCoord, PluginApiculture.blocks.apiculture, BlockApiculture.Type.APIARY.ordinal(), Constants.FLAG_BLOCK_SYNCH);
+		PluginApiculture.blocks.apiculture.onBlockAdded(world, xCoord, yCoord, zCoord);
+
+		TileApiary apiary = TileUtil.getTile(world, xCoord, yCoord, zCoord, TileApiary.class);
+		if (apiary == null) {
+			return;
+		}
 
 		ItemStack randomVillagePrincess = getRandomVillageBeeStack(world, xCoord, yCoord, zCoord, EnumBeeType.PRINCESS);
 		apiary.getBeeInventory().setQueen(randomVillagePrincess);

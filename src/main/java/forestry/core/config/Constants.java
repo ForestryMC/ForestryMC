@@ -51,12 +51,6 @@ public class Constants implements IForestryConstants {
 	public static final String CHEST_GEN_HOOK_NATURALIST_CHEST = "naturalistChest";
 
 	// Definition IDs
-	public static final int DEFINITION_APIARY_META = 0;
-	public static final int DEFINITION_APIARISTCHEST_LEGACY_META = 1;
-	public static final int DEFINITION_BEEHOUSE_META = 2;
-
-	public static final int DEFINITION_APIARISTCHEST_META = 0;
-
 	public static final int DEFINITION_ENGINE_ELECTRIC_META = 0;
 	public static final int DEFINITION_ENGINE_PEAT_META = 1;
 	public static final int DEFINITION_ENGINE_BIOGAS_META = 2;
@@ -81,8 +75,6 @@ public class Constants implements IForestryConstants {
 	public static final int DEFINITION_WORKTABLE_META = 2;
 
 	public static final int DEFINITION_LEPICHEST_META = 0;
-
-	public static final int DEFINITION_ARBCHEST_META = 0;
 
 	// Item Ids
 

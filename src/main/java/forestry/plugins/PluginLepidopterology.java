@@ -36,7 +36,7 @@ import forestry.core.config.LocalizedConfiguration;
 import forestry.core.fluids.Fluids;
 import forestry.core.items.ItemBlockForestry;
 import forestry.core.proxy.Proxies;
-import forestry.core.recipes.ShapedRecipeCustom;
+import forestry.core.recipes.RecipeUtil;
 import forestry.core.tiles.MachineDefinition;
 import forestry.core.utils.EntityUtil;
 import forestry.lepidopterology.ButterflySpawner;
@@ -111,15 +111,7 @@ public class PluginLepidopterology extends ForestryPlugin {
 		ButterflyDefinition.initButterflies();
 
 		BlockBase lepidopterology = ((BlockBase) ForestryBlock.lepidopterology.block());
-		MachineDefinition definitionChest = lepidopterology.addDefinition(new MachineDefinition(Constants.DEFINITION_LEPICHEST_META, "forestry.LepiChest", TileLepidopteristChest.class, Proxies.render.getRenderChest("lepichest"),
-				ShapedRecipeCustom.createShapedRecipe(
-						ForestryBlock.lepidopterology.getItemStack(1, Constants.DEFINITION_LEPICHEST_META),
-						" # ",
-						"XYX",
-						"XXX",
-						'#', "blockGlass",
-						'X', new ItemStack(items.butterflyGE, 1, OreDictionary.WILDCARD_VALUE),
-						'Y', "chestWood"))
+		MachineDefinition definitionChest = lepidopterology.addDefinition(new MachineDefinition(Constants.DEFINITION_LEPICHEST_META, "forestry.LepiChest", TileLepidopteristChest.class, Proxies.render.getRenderChest("lepichest"))
 				.setBoundingBox(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F));
 		definitionChest.register();
 
@@ -146,6 +138,14 @@ public class PluginLepidopterology extends ForestryPlugin {
 		RecipeManagers.carpenterManager.addRecipe(100, Fluids.WATER.getFluid(2000), null, items.flutterlyzer.getItemStack(),
 				"X#X", "X#X", "RDR", '#', "paneGlass", 'X', "ingotBronze", 'R',
 				"dustRedstone", 'D', "gemDiamond");
+
+		RecipeUtil.addRecipe(ForestryBlock.lepidopterology.getItemStack(1, Constants.DEFINITION_LEPICHEST_META),
+				" # ",
+				"XYX",
+				"XXX",
+				'#', "blockGlass",
+				'X', new ItemStack(items.butterflyGE, 1, OreDictionary.WILDCARD_VALUE),
+				'Y', "chestWood");
 	}
 
 	@Override

@@ -31,15 +31,6 @@ import forestry.core.access.IRestrictedAccess;
 import forestry.core.multiblock.MultiblockTileEntityForestry;
 
 public abstract class TileAlveary extends MultiblockTileEntityForestry<MultiblockLogicAlveary> implements IBeeHousing, IRestrictedAccess, IAlvearyComponent {
-	public static final int PLAIN_META = 0;
-	public static final int ENTRANCE_META = 1;
-	public static final int SWARMER_META = 2;
-	public static final int FAN_META = 3;
-	public static final int HEATER_META = 4;
-	public static final int HYGRO_META = 5;
-	public static final int STABILIZER_META = 6;
-	public static final int SIEVE_META = 7;
-
 	protected TileAlveary() {
 		super(new MultiblockLogicAlveary());
 	}

@@ -44,7 +44,7 @@ public class TileAlvearySwarmer extends TileAlvearyWithGui implements ISidedInve
 	private boolean active;
 
 	public TileAlvearySwarmer() {
-		super(TileAlveary.SWARMER_META, GuiId.AlvearySwarmerGUI);
+		super(BlockAlveary.Type.SWARMER, GuiId.AlvearySwarmerGUI);
 		this.inventory = new InventorySwarmer(this);
 	}
 

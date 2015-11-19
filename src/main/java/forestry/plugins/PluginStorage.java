@@ -55,6 +55,7 @@ import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.BackpackManager;
 import forestry.api.storage.IBackpackDefinition;
 import forestry.api.storage.StorageManager;
+import forestry.apiculture.blocks.BlockRegistryApiculture;
 import forestry.core.GuiHandlerBase;
 import forestry.core.IPickupHandler;
 import forestry.core.IResupplyHandler;
@@ -371,9 +372,10 @@ public class PluginStorage extends ForestryPlugin {
 				new ItemStack(Items.item_frame)
 		));
 
-		if (PluginManager.Module.APICULTURE.isEnabled()) {
-			builder.addValidItem(ForestryBlock.candle.getWildcard());
-			builder.addValidItem(ForestryBlock.stump.getWildcard());
+		BlockRegistryApiculture beeBlocks = PluginApiculture.blocks;
+		if (beeBlocks != null) {
+			builder.addValidItem(new ItemStack(beeBlocks.candle, 1, OreDictionary.WILDCARD_VALUE));
+			builder.addValidItem(new ItemStack(beeBlocks.stump, 1, OreDictionary.WILDCARD_VALUE));
 		}
 	}
 
@@ -495,9 +497,9 @@ public class PluginStorage extends ForestryPlugin {
 
 	@Override
 	protected void registerRecipes() {
-		if (items.apiaristBackpack != null) {
-			ItemStack chest = ForestryBlock.apicultureChest.getItemStack(1, Constants.DEFINITION_APIARISTCHEST_META);
-			addBackpackRecipe(items.apiaristBackpack, "stickWood", chest);
+		BlockRegistryApiculture beeBlocks = PluginApiculture.blocks;
+		if (items.apiaristBackpack != null && beeBlocks != null) {
+			addBackpackRecipe(items.apiaristBackpack, "stickWood", beeBlocks.apicultureChest);
 		}
 
 		if (items.lepidopteristBackpack != null) {

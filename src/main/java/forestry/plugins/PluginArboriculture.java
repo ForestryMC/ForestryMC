@@ -138,16 +138,10 @@ public class PluginArboriculture extends ForestryPlugin {
 			WoodItemAccess.registerStairs(blocks.stairsFireproof, woodType, true);
 		}
 
-		definitionChest = blocks.arboriculture.addDefinition(new MachineDefinition(BlockArboriculture.Type.ARBCHEST.ordinal(),
-				"forestry.ArbChest", TileArboristChest.class, Proxies.render.getRenderChest("arbchest"),
-				ShapedRecipeCustom.createShapedRecipe(blocks.arboriculture.get(BlockArboriculture.Type.ARBCHEST, 1),
-						" # ",
-						"XYX",
-						"XXX",
-						'#', "blockGlass",
-						'X', "treeSapling",
-						'Y', "chestWood"))
-				.setBoundingBox(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F));
+		definitionChest = new MachineDefinition(BlockArboriculture.Type.ARBCHEST.ordinal(),
+				"forestry.ArbChest", TileArboristChest.class, Proxies.render.getRenderChest("arbchest"))
+				.setBoundingBox(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
+		blocks.arboriculture.addDefinition(definitionChest);
 
 		// Init rendering
 		proxy.initializeRendering();
@@ -326,13 +320,21 @@ public class PluginArboriculture extends ForestryPlugin {
 				'#', "stickWood");
 
 		// ANALYZER
-		PluginCore.definitionAnalyzer.recipes.add(ShapedRecipeCustom.createShapedRecipe(PluginCore.blocks.core.get(BlockCore.Type.ANALYZER, 1),
+		RecipeUtil.addRecipe(PluginCore.blocks.core.get(BlockCore.Type.ANALYZER, 1),
 				"XTX",
 				" Y ",
 				"X X",
 				'Y', PluginCore.items.sturdyCasing,
 				'T', items.treealyzer,
-				'X', "ingotBronze"));
+				'X', "ingotBronze");
+
+		RecipeUtil.addRecipe(blocks.arboriculture.get(BlockArboriculture.Type.ARBCHEST, 1),
+				" # ",
+				"XYX",
+				"XXX",
+				'#', "blockGlass",
+				'X', "treeSapling",
+				'Y', "chestWood");
 	}
 
 	private static void createAlleles() {

@@ -25,6 +25,7 @@ import cpw.mods.fml.common.Optional;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.multiblock.IMultiblockController;
+import forestry.apiculture.blocks.BlockAlveary;
 import forestry.apiculture.trigger.ApicultureTriggers;
 import forestry.core.config.Config;
 import forestry.core.gui.IHintSource;
@@ -52,7 +53,7 @@ public class TileAlvearyPlain extends TileAlveary implements IClimatised, IHintS
 			// set alveary entrance block meta
 			if (yCoord == maxCoord.posY) {
 				if ((xCoord > minCoord.posX && xCoord < maxCoord.posX) || (zCoord > minCoord.posZ && zCoord < maxCoord.posZ)) {
-					this.worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, TileAlveary.ENTRANCE_META, 2);
+					this.worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, BlockAlveary.Type.ENTRANCE.ordinal(), 2);
 				}
 			}
 		}
@@ -64,7 +65,7 @@ public class TileAlvearyPlain extends TileAlveary implements IClimatised, IHintS
 
 		if (!worldObj.isRemote) {
 			// set alveary entrance block meta back to normal
-			this.worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, TileAlveary.PLAIN_META, 2);
+			this.worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, BlockAlveary.Type.PLAIN.ordinal(), 2);
 		}
 	}
 

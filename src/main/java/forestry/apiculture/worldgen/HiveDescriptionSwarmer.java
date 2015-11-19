@@ -22,7 +22,7 @@ import forestry.api.apiculture.hives.IHiveGen;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.apiculture.tiles.TileSwarm;
-import forestry.core.config.ForestryBlock;
+import forestry.plugins.PluginApiculture;
 
 public class HiveDescriptionSwarmer implements IHiveDescription {
 
@@ -39,7 +39,7 @@ public class HiveDescriptionSwarmer implements IHiveDescription {
 
 	@Override
 	public Block getBlock() {
-		return ForestryBlock.beehives.block();
+		return PluginApiculture.blocks.beehives;
 	}
 
 	@Override
@@ -74,5 +74,4 @@ public class HiveDescriptionSwarmer implements IHiveDescription {
 			((TileSwarm) tile).setContained(bees);
 		}
 	}
-
 }

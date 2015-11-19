@@ -16,11 +16,11 @@ import net.minecraft.item.ItemStack;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.core.config.Constants;
-import forestry.core.config.ForestryBlock;
 import forestry.core.inventory.InventoryPlain;
 import forestry.core.network.GuiId;
 import forestry.core.tiles.TileNaturalistChest;
 import forestry.core.tiles.TileUtil;
+import forestry.plugins.PluginApiculture;
 
 public class TileApiaristChest extends TileNaturalistChest {
 
@@ -34,7 +34,7 @@ public class TileApiaristChest extends TileNaturalistChest {
 	protected void updateServerSide() {
 		if (worldObj != null && !checkedForLegacyBlock) {
 			Block block = worldObj.getBlock(xCoord, yCoord, zCoord);
-			if (ForestryBlock.apiculture.isBlockEqual(block)) {
+			if (PluginApiculture.blocks.apiculture == block) {
 				migrateFromLegacyBlock();
 			}
 
@@ -52,7 +52,7 @@ public class TileApiaristChest extends TileNaturalistChest {
 		}
 
 		worldObj.setBlockToAir(xCoord, yCoord, zCoord);
-		worldObj.setBlock(xCoord, yCoord, zCoord, ForestryBlock.apicultureChest.block(), Constants.DEFINITION_APIARISTCHEST_META, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
+		worldObj.setBlock(xCoord, yCoord, zCoord, PluginApiculture.blocks.apicultureChest, 0, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
 
 		TileApiaristChest tile = TileUtil.getTile(worldObj, xCoord, yCoord, zCoord, TileApiaristChest.class);
 		for (int i = 0; i < getSizeInventory(); i++) {

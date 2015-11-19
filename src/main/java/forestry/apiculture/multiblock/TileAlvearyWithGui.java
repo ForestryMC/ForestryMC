@@ -14,6 +14,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
 import forestry.api.core.ForestryAPI;
+import forestry.apiculture.blocks.BlockAlveary;
 import forestry.core.access.AccessHandler;
 import forestry.core.access.EnumAccess;
 import forestry.core.access.IAccessHandler;
@@ -27,9 +28,9 @@ public abstract class TileAlvearyWithGui extends TileAlveary implements ITitled,
 	private final String unlocalizedTitle;
 	private final GuiId guiId;
 
-	protected TileAlvearyWithGui(int meta, GuiId guiId) {
+	protected TileAlvearyWithGui(BlockAlveary.Type type, GuiId guiId) {
 		this.accessHandler = new AccessHandler(this);
-		this.unlocalizedTitle = "tile.for.alveary." + meta + ".name";
+		this.unlocalizedTitle = "tile.for.alveary." + type.ordinal() + ".name";
 		this.guiId = guiId;
 	}
 

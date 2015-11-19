@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.core.tiles;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -20,8 +18,6 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
@@ -54,20 +50,15 @@ public class MachineDefinition {
 	
 	private float minX, minY, minZ, maxX, maxY, maxZ;
 
-	/* CRAFTING */
-	public final List<IRecipe> recipes = new ArrayList<>();
-
-	public MachineDefinition(int meta, String teIdent, Class<? extends TileForestry> teClass, IRecipe... recipes) {
-		this(meta, teIdent, teClass, null, recipes);
+	public MachineDefinition(int meta, String teIdent, Class<? extends TileForestry> teClass) {
+		this(meta, teIdent, teClass, null);
 	}
 
-	public MachineDefinition(int meta, String teIdent, Class<? extends TileForestry> teClass, IBlockRenderer renderer, IRecipe... recipes) {
+	public MachineDefinition(int meta, String teIdent, Class<? extends TileForestry> teClass, IBlockRenderer renderer) {
 		this.meta = meta;
 		this.teIdent = teIdent;
 		this.teClass = teClass;
 		this.renderer = renderer;
-
-		this.recipes.addAll(Arrays.asList(recipes));
 
 		this.faceMap = new int[8];
 		for (int i = 0; i < 8; i++) {
@@ -111,18 +102,8 @@ public class MachineDefinition {
 
 	public void register() {
 		registerTileEntity();
-		registerCrafting();
 		if (renderer != null) {
 			Proxies.render.registerTESR(this);
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	private void registerCrafting() {
-		for (IRecipe recipe : recipes) {
-			if (recipe != null) {
-				CraftingManager.getInstance().getRecipeList().add(recipe);
-			}
 		}
 	}
 	

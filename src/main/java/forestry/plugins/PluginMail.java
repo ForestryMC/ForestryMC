@@ -34,7 +34,6 @@ import forestry.core.items.EnumElectronTube;
 import forestry.core.items.ItemBlockForestry;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.recipes.RecipeUtil;
-import forestry.core.recipes.ShapedRecipeCustom;
 import forestry.core.tiles.MachineDefinition;
 import forestry.mail.GuiHandlerMail;
 import forestry.mail.PostRegistry;
@@ -85,30 +84,19 @@ public class PluginMail extends ForestryPlugin {
 			FMLCommonHandler.instance().bus().register(new TickHandlerMailClient());
 		}
 
-		ShapedRecipeCustom recipe = ShapedRecipeCustom.createShapedRecipe(ForestryBlock.mail.getItemStack(1, Constants.DEFINITION_MAILBOX_META),
-				" # ", "#Y#", "XXX",
-				'#', "ingotTin",
-				'X', "chestWood",
-				'Y', PluginCore.items.sturdyCasing);
-
 		BlockBase mail = ((BlockBase) ForestryBlock.mail.block());
 
-		definitionMailbox = mail.addDefinition(new MachineDefinition(Constants.DEFINITION_MAILBOX_META, "forestry.Mailbox", TileMailbox.class, recipe).setFaces(0, 1, 2, 2, 2, 2, 0, 7));
+		definitionMailbox = new MachineDefinition(Constants.DEFINITION_MAILBOX_META, "forestry.Mailbox", TileMailbox.class)
+				.setFaces(0, 1, 2, 2, 2, 2, 0, 7);
+		mail.addDefinition(definitionMailbox);
 
-		recipe = ShapedRecipeCustom.createShapedRecipe(
-				ForestryBlock.mail.getItemStack(1, Constants.DEFINITION_TRADESTATION_META),
-				"Z#Z",
-				"#Y#",
-				"XWX",
-				'#', PluginCore.items.tubes.get(EnumElectronTube.BRONZE, 1),
-				'X', "chestWood",
-				'Y', PluginCore.items.sturdyCasing,
-				'Z', PluginCore.items.tubes.get(EnumElectronTube.IRON, 1),
-				'W', PluginCore.items.circuitboards.getCircuitboard(EnumCircuitBoardType.REFINED));
-		definitionTradestation = mail.addDefinition(new MachineDefinition(Constants.DEFINITION_TRADESTATION_META, "forestry.Tradestation", TileTrader.class, recipe).setFaces(0, 1, 2, 3, 4, 4, 0, 7));
+		definitionTradestation = new MachineDefinition(Constants.DEFINITION_TRADESTATION_META, "forestry.Tradestation", TileTrader.class)
+				.setFaces(0, 1, 2, 3, 4, 4, 0, 7);
+		mail.addDefinition(definitionTradestation);
 
-		definitionPhilatelist = mail.addDefinition(new MachineDefinition(Constants.DEFINITION_PHILATELIST_META, "forestry.Philatelist", TilePhilatelist.class)
-				.setFaces(0, 1, 2, 3, 2, 2, 0, 7));
+		definitionPhilatelist = new MachineDefinition(Constants.DEFINITION_PHILATELIST_META, "forestry.Philatelist", TilePhilatelist.class)
+				.setFaces(0, 1, 2, 3, 2, 2, 0, 7);
+		mail.addDefinition(definitionPhilatelist);
 	}
 
 	@Override
@@ -176,6 +164,24 @@ public class PluginMail extends ForestryPlugin {
 		RecipeManagers.carpenterManager.addRecipe(10, Fluids.WATER.getFluid(250), null, items.letters.getItemStack(), "###", "###", '#', PluginCore.items.woodPulp);
 
 		RecipeUtil.addShapelessRecipe(items.catalogue.getItemStack(), new ItemStack(items.stamps, 1, OreDictionary.WILDCARD_VALUE), new ItemStack(Items.book));
+
+		RecipeUtil.addRecipe(ForestryBlock.mail.getItemStack(1, Constants.DEFINITION_MAILBOX_META),
+				" # ",
+				"#Y#",
+				"XXX",
+				'#', "ingotTin",
+				'X', "chestWood",
+				'Y', PluginCore.items.sturdyCasing);
+
+		RecipeUtil.addRecipe(ForestryBlock.mail.getItemStack(1, Constants.DEFINITION_TRADESTATION_META),
+				"Z#Z",
+				"#Y#",
+				"XWX",
+				'#', PluginCore.items.tubes.get(EnumElectronTube.BRONZE, 1),
+				'X', "chestWood",
+				'Y', PluginCore.items.sturdyCasing,
+				'Z', PluginCore.items.tubes.get(EnumElectronTube.IRON, 1),
+				'W', PluginCore.items.circuitboards.getCircuitboard(EnumCircuitBoardType.REFINED));
 	}
 
 	@Override

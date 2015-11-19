@@ -52,7 +52,6 @@ import forestry.core.items.ItemRegistryCore;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.proxy.Proxies;
 import forestry.core.recipes.RecipeUtil;
-import forestry.core.recipes.ShapedRecipeCustom;
 import forestry.core.recipes.craftguide.CraftGuideIntegration;
 import forestry.core.tiles.MachineDefinition;
 import forestry.core.utils.Log;
@@ -212,117 +211,38 @@ public class PluginFactory extends ForestryPlugin {
 		BlockBase factoryTESR = ((BlockBase) ForestryBlock.factoryTESR.block());
 
 		definitionBottler = factoryTESR.addDefinition(new MachineDefinition(Constants.DEFINITION_BOTTLER_META, "forestry.Bottler", TileBottler.class,
-				Proxies.render.getRenderDefaultMachine(Constants.TEXTURE_PATH_BLOCKS + "/bottler_"), ShapedRecipeCustom.createShapedRecipe(
-				ForestryBlock.factoryTESR.getItemStack(1, Constants.DEFINITION_BOTTLER_META),
-				"X#X",
-				"#Y#",
-				"X#X",
-				'#', "blockGlass",
-				'X', PluginFluids.items.canEmpty,
-				'Y', coreItems.sturdyCasing)));
+				Proxies.render.getRenderDefaultMachine(Constants.TEXTURE_PATH_BLOCKS + "/bottler_")));
 
 		definitionCarpenter = factoryTESR.addDefinition(new MachineDefinition(Constants.DEFINITION_CARPENTER_META, "forestry.Carpenter", TileCarpenter.class,
-				Proxies.render.getRenderDefaultMachine(Constants.TEXTURE_PATH_BLOCKS + "/carpenter_"), ShapedRecipeCustom.createShapedRecipe(
-				ForestryBlock.factoryTESR.getItemStack(1, Constants.DEFINITION_CARPENTER_META),
-				"X#X",
-				"XYX",
-				"X#X",
-				'#', "blockGlass",
-				'X', "ingotBronze",
-				'Y', coreItems.sturdyCasing)));
+				Proxies.render.getRenderDefaultMachine(Constants.TEXTURE_PATH_BLOCKS + "/carpenter_")));
 
 		definitionCentrifuge = factoryTESR.addDefinition(new MachineDefinition(Constants.DEFINITION_CENTRIFUGE_META, "forestry.Centrifuge", TileCentrifuge.class,
-				Proxies.render.getRenderDefaultMachine(Constants.TEXTURE_PATH_BLOCKS + "/centrifuge_"), ShapedRecipeCustom.createShapedRecipe(
-				ForestryBlock.factoryTESR.getItemStack(1, Constants.DEFINITION_CENTRIFUGE_META),
-				"X#X",
-				"XYX",
-				"X#X",
-				'#', "blockGlass",
-				'X', "ingotCopper",
-				'Y', coreItems.sturdyCasing)));
+				Proxies.render.getRenderDefaultMachine(Constants.TEXTURE_PATH_BLOCKS + "/centrifuge_")));
 
 		definitionFermenter = factoryTESR.addDefinition(new MachineDefinition(Constants.DEFINITION_FERMENTER_META, "forestry.Fermenter", TileFermenter.class,
-				Proxies.render.getRenderDefaultMachine(Constants.TEXTURE_PATH_BLOCKS + "/fermenter_"), ShapedRecipeCustom.createShapedRecipe(
-				ForestryBlock.factoryTESR.getItemStack(1, Constants.DEFINITION_FERMENTER_META),
-				"X#X",
-				"#Y#",
-				"X#X",
-				'#', "blockGlass",
-				'X', "gearBronze",
-				'Y', coreItems.sturdyCasing)));
+				Proxies.render.getRenderDefaultMachine(Constants.TEXTURE_PATH_BLOCKS + "/fermenter_")));
 
 		definitionMoistener = factoryTESR.addDefinition(new MachineDefinition(Constants.DEFINITION_MOISTENER_META, "forestry.Moistener", TileMoistener.class,
-				Proxies.render.getRenderDefaultMachine(Constants.TEXTURE_PATH_BLOCKS + "/moistener_"), ShapedRecipeCustom.createShapedRecipe(
-				ForestryBlock.factoryTESR.getItemStack(1, Constants.DEFINITION_MOISTENER_META),
-				"X#X",
-				"#Y#",
-				"X#X",
-				'#', "blockGlass",
-				'X', "gearCopper",
-				'Y', coreItems.sturdyCasing)));
+				Proxies.render.getRenderDefaultMachine(Constants.TEXTURE_PATH_BLOCKS + "/moistener_")));
 
 		definitionSqueezer = factoryTESR.addDefinition(new MachineDefinition(Constants.DEFINITION_SQUEEZER_META, "forestry.Squeezer", TileSqueezer.class,
-				Proxies.render.getRenderDefaultMachine(Constants.TEXTURE_PATH_BLOCKS + "/squeezer_"), ShapedRecipeCustom.createShapedRecipe(
-				ForestryBlock.factoryTESR.getItemStack(1, Constants.DEFINITION_SQUEEZER_META),
-				"X#X",
-				"XYX",
-				"X#X",
-				'#', "blockGlass",
-				'X', "ingotTin",
-				'Y', coreItems.sturdyCasing)));
+				Proxies.render.getRenderDefaultMachine(Constants.TEXTURE_PATH_BLOCKS + "/squeezer_")));
 
 		definitionStill = factoryTESR.addDefinition(new MachineDefinition(Constants.DEFINITION_STILL_META, "forestry.Still", TileStill.class,
-				Proxies.render.getRenderDefaultMachine(Constants.TEXTURE_PATH_BLOCKS + "/still_"), ShapedRecipeCustom.createShapedRecipe(
-				ForestryBlock.factoryTESR.getItemStack(1, Constants.DEFINITION_STILL_META),
-				"X#X",
-				"#Y#",
-				"X#X",
-				'#', "blockGlass",
-				'X', "dustRedstone",
-				'Y', coreItems.sturdyCasing)));
+				Proxies.render.getRenderDefaultMachine(Constants.TEXTURE_PATH_BLOCKS + "/still_")));
 
 		definitionRainmaker = factoryTESR.addDefinition(new MachineDefinition(Constants.DEFINITION_RAINMAKER_META, "forestry.Rainmaker", TileMillRainmaker.class,
-				Proxies.render.getRenderMill(Constants.TEXTURE_PATH_BLOCKS + "/rainmaker_"), ShapedRecipeCustom.createShapedRecipe(
-				ForestryBlock.factoryTESR.getItemStack(1, Constants.DEFINITION_RAINMAKER_META),
-				"X#X",
-				"#Y#",
-				"X#X",
-				'#', "blockGlass",
-				'X', "gearTin",
-				'Y', coreItems.hardenedCasing)));
+				Proxies.render.getRenderMill(Constants.TEXTURE_PATH_BLOCKS + "/rainmaker_")));
 
 		BlockBase factoryPlain = ((BlockBase) ForestryBlock.factoryPlain.block());
 
-		definitionFabricator = factoryPlain.addDefinition(new MachineDefinition(Constants.DEFINITION_FABRICATOR_META, "forestry.Fabricator", TileFabricator.class,
-				ShapedRecipeCustom.createShapedRecipe(
-						ForestryBlock.factoryPlain.getItemStack(1, Constants.DEFINITION_FABRICATOR_META),
-						"X#X",
-						"#Y#",
-						"XZX",
-						'#', "blockGlass",
-						'X', "ingotGold",
-						'Y', coreItems.sturdyCasing,
-						'Z', "chestWood"))
+		definitionFabricator = factoryPlain.addDefinition(new MachineDefinition(Constants.DEFINITION_FABRICATOR_META, "forestry.Fabricator", TileFabricator.class)
 				.setFaces(0, 1, 2, 3, 4, 4));
 
-		definitionRaintank = factoryPlain.addDefinition(new MachineDefinition(Constants.DEFINITION_RAINTANK_META, "forestry.Raintank", TileRaintank.class,
-				ShapedRecipeCustom.createShapedRecipe(ForestryBlock.factoryPlain.getItemStack(1, Constants.DEFINITION_RAINTANK_META),
-						"X#X",
-						"XYX",
-						"X#X",
-						'#', "blockGlass",
-						'X', "ingotIron",
-						'Y', coreItems.sturdyCasing))
+		definitionRaintank = factoryPlain.addDefinition(new MachineDefinition(Constants.DEFINITION_RAINTANK_META, "forestry.Raintank", TileRaintank.class)
 				.setFaces(0, 1, 0, 0, 0, 0));
 
-		definitionWorktable = factoryPlain.addDefinition(new MachineDefinition(Constants.DEFINITION_WORKTABLE_META, "forestry.Worktable", TileWorktable.class,
-				ShapedRecipeCustom.createShapedRecipe(ForestryBlock.factoryPlain.getItemStack(1, Constants.DEFINITION_WORKTABLE_META),
-						"B",
-						"W",
-						"C",
-						'B', Items.book,
-						'W', "craftingTableWood",
-						'C', "chestWood"))
+		definitionWorktable = factoryPlain.addDefinition(new MachineDefinition(Constants.DEFINITION_WORKTABLE_META, "forestry.Worktable", TileWorktable.class)
 				.setFaces(0, 1, 2, 3, 4, 4));
 
 		ICircuitLayout layoutMachineUpgrade = new CircuitLayout("machine.upgrade", CircuitSocketType.MACHINE);
@@ -578,6 +498,95 @@ public class PluginFactory extends ForestryPlugin {
 		ChipsetManager.solderManager.addRecipe(layout, PluginCore.items.tubes.get(EnumElectronTube.EMERALD, 1), Circuit.machineSpeedUpgrade1);
 		ChipsetManager.solderManager.addRecipe(layout, PluginCore.items.tubes.get(EnumElectronTube.BLAZE, 1), Circuit.machineSpeedUpgrade2);
 		ChipsetManager.solderManager.addRecipe(layout, PluginCore.items.tubes.get(EnumElectronTube.GOLD, 1), Circuit.machineEfficiencyUpgrade1);
+
+		RecipeUtil.addRecipe(ForestryBlock.factoryTESR.getItemStack(1, Constants.DEFINITION_BOTTLER_META),
+				"X#X",
+				"#Y#",
+				"X#X",
+				'#', "blockGlass",
+				'X', PluginFluids.items.canEmpty,
+				'Y', PluginCore.items.sturdyCasing);
+
+		RecipeUtil.addRecipe(ForestryBlock.factoryTESR.getItemStack(1, Constants.DEFINITION_CARPENTER_META),
+				"X#X",
+				"XYX",
+				"X#X",
+				'#', "blockGlass",
+				'X', "ingotBronze",
+				'Y', PluginCore.items.sturdyCasing);
+
+		RecipeUtil.addRecipe(ForestryBlock.factoryTESR.getItemStack(1, Constants.DEFINITION_CENTRIFUGE_META),
+				"X#X",
+				"XYX",
+				"X#X",
+				'#', "blockGlass",
+				'X', "ingotCopper",
+				'Y', PluginCore.items.sturdyCasing);
+
+		RecipeUtil.addRecipe(ForestryBlock.factoryTESR.getItemStack(1, Constants.DEFINITION_FERMENTER_META),
+				"X#X",
+				"#Y#",
+				"X#X",
+				'#', "blockGlass",
+				'X', "gearBronze",
+				'Y', PluginCore.items.sturdyCasing);
+
+		RecipeUtil.addRecipe(ForestryBlock.factoryTESR.getItemStack(1, Constants.DEFINITION_MOISTENER_META),
+				"X#X",
+				"#Y#",
+				"X#X",
+				'#', "blockGlass",
+				'X', "gearCopper",
+				'Y', PluginCore.items.sturdyCasing);
+
+		RecipeUtil.addRecipe(ForestryBlock.factoryTESR.getItemStack(1, Constants.DEFINITION_SQUEEZER_META),
+				"X#X",
+				"XYX",
+				"X#X",
+				'#', "blockGlass",
+				'X', "ingotTin",
+				'Y', PluginCore.items.sturdyCasing);
+
+		RecipeUtil.addRecipe(ForestryBlock.factoryTESR.getItemStack(1, Constants.DEFINITION_STILL_META),
+				"X#X",
+				"#Y#",
+				"X#X",
+				'#', "blockGlass",
+				'X', "dustRedstone",
+				'Y', PluginCore.items.sturdyCasing);
+
+		RecipeUtil.addRecipe(ForestryBlock.factoryTESR.getItemStack(1, Constants.DEFINITION_RAINMAKER_META),
+				"X#X",
+				"#Y#",
+				"X#X",
+				'#', "blockGlass",
+				'X', "gearTin",
+				'Y', PluginCore.items.hardenedCasing);
+
+		RecipeUtil.addRecipe(ForestryBlock.factoryPlain.getItemStack(1, Constants.DEFINITION_FABRICATOR_META),
+				"X#X",
+				"#Y#",
+				"XZX",
+				'#', "blockGlass",
+				'X', "ingotGold",
+				'Y', PluginCore.items.sturdyCasing,
+				'Z', "chestWood");
+
+		RecipeUtil.addRecipe(ForestryBlock.factoryPlain.getItemStack(1, Constants.DEFINITION_RAINTANK_META),
+				"X#X",
+				"XYX",
+				"X#X",
+				'#', "blockGlass",
+				'X', "ingotIron",
+				'Y', PluginCore.items.sturdyCasing);
+
+		RecipeUtil.addRecipe(ForestryBlock.factoryPlain.getItemStack(1, Constants.DEFINITION_WORKTABLE_META),
+				"B",
+				"W",
+				"C",
+				'B', Items.book,
+				'W', "craftingTableWood",
+				'C', "chestWood");
 	}
 
 	@Override

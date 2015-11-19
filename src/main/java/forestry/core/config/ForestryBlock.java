@@ -34,17 +34,8 @@ import forestry.plugins.PluginManager.Stage;
  * @author SirSengir
  */
 public enum ForestryBlock {
-	/**
-	 * 0 - Legacy 1 - Forest Hive 2 - Meadows Hive
-	 */
-	beehives,
 	mushroom,
-	candle,
-	stump,
-	alveary,
 	farm,
-	apiculture,
-	apicultureChest,
 	mail,
 	engine,
 	factoryTESR,

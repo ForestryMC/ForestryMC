@@ -29,10 +29,9 @@ import cpw.mods.fml.common.registry.VillagerRegistry.IVillageCreationHandler;
 import cpw.mods.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
 
 import forestry.api.apiculture.EnumBeeType;
+import forestry.apiculture.blocks.BlockApiculture;
 import forestry.apiculture.genetics.BeeDefinition;
 import forestry.apiculture.worldgen.ComponentVillageBeeHouse;
-import forestry.core.config.Constants;
-import forestry.core.config.ForestryBlock;
 import forestry.core.utils.Log;
 import forestry.plugins.PluginApiculture;
 
@@ -49,11 +48,20 @@ public class VillageHandlerApiculture implements IVillageCreationHandler, IVilla
 	@SuppressWarnings("unchecked")
 	@Override
 	public void manipulateTradesForVillager(EntityVillager villager, MerchantRecipeList recipeList, Random random) {
-		recipeList.add(new MerchantRecipe(new ItemStack(PluginApiculture.items.beePrincessGE, 1, OreDictionary.WILDCARD_VALUE), new ItemStack(Items.emerald, 1)));
-		recipeList.add(new MerchantRecipe(new ItemStack(Items.wheat, 2), PluginApiculture.items.beeComb.getRandomComb(1, random, false)));
-		recipeList.add(new MerchantRecipe(new ItemStack(Blocks.log, 24, OreDictionary.WILDCARD_VALUE), ForestryBlock.apiculture.getItemStack(1, Constants.DEFINITION_APIARY_META)));
-		recipeList.add(new MerchantRecipe(new ItemStack(Items.emerald, 1), PluginApiculture.items.frameProven.getItemStack(6)));
-		recipeList.add(new MerchantRecipe(new ItemStack(Items.emerald, 12), new ItemStack(PluginApiculture.items.beePrincessGE, 1, OreDictionary.WILDCARD_VALUE), BeeDefinition.MONASTIC.getMemberStack(EnumBeeType.DRONE)));
+		ItemStack wildcardPrincess = new ItemStack(PluginApiculture.items.beePrincessGE, 1, OreDictionary.WILDCARD_VALUE);
+		recipeList.add(new MerchantRecipe(wildcardPrincess, new ItemStack(Items.emerald, 1)));
+
+		ItemStack randomComb = PluginApiculture.items.beeComb.getRandomComb(1, random, false);
+		recipeList.add(new MerchantRecipe(new ItemStack(Items.wheat, 2), randomComb));
+
+		ItemStack apiary = PluginApiculture.blocks.apiculture.get(BlockApiculture.Type.APIARY, 1);
+		recipeList.add(new MerchantRecipe(new ItemStack(Blocks.log, 24, OreDictionary.WILDCARD_VALUE), apiary));
+
+		ItemStack provenFrames = PluginApiculture.items.frameProven.getItemStack(6);
+		recipeList.add(new MerchantRecipe(new ItemStack(Items.emerald, 1), provenFrames));
+
+		ItemStack monasticDrone = BeeDefinition.MONASTIC.getMemberStack(EnumBeeType.DRONE);
+		recipeList.add(new MerchantRecipe(new ItemStack(Items.emerald, 12), wildcardPrincess, monasticDrone));
 	}
 
 	@Override

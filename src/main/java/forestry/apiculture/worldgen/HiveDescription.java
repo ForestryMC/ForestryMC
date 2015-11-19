@@ -27,7 +27,7 @@ import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.EnumTolerance;
 import forestry.apiculture.genetics.BeeDefinition;
-import forestry.core.config.ForestryBlock;
+import forestry.plugins.PluginApiculture;
 
 public enum HiveDescription implements IHiveDescription {
 
@@ -70,7 +70,7 @@ public enum HiveDescription implements IHiveDescription {
 
 	@Override
 	public Block getBlock() {
-		return ForestryBlock.beehives.block();
+		return PluginApiculture.blocks.beehives;
 	}
 
 	@Override

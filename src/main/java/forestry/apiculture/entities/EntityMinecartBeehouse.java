@@ -23,9 +23,8 @@ import forestry.api.apiculture.IBeeListener;
 import forestry.api.apiculture.IBeeModifier;
 import forestry.apiculture.BeehouseBeeModifier;
 import forestry.apiculture.InventoryBeeHousing;
+import forestry.apiculture.blocks.BlockApiculture;
 import forestry.core.config.Config;
-import forestry.core.config.Constants;
-import forestry.core.config.ForestryBlock;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.network.GuiId;
 import forestry.plugins.PluginApiculture;
@@ -58,12 +57,12 @@ public class EntityMinecartBeehouse extends EntityMinecartBeeHousingBase {
 
 	@Override
 	public Block func_145820_n() {
-		return ForestryBlock.apiculture.block();
+		return PluginApiculture.blocks.apiculture;
 	}
 
 	@Override
 	public int getDisplayTileData() {
-		return Constants.DEFINITION_BEEHOUSE_META;
+		return BlockApiculture.Type.BEEHOUSE.ordinal();
 	}
 
 	@Override

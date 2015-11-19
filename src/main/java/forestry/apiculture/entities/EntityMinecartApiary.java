@@ -26,11 +26,10 @@ import forestry.api.apiculture.IHiveFrame;
 import forestry.apiculture.ApiaryBeeListener;
 import forestry.apiculture.ApiaryBeeModifier;
 import forestry.apiculture.IApiary;
+import forestry.apiculture.blocks.BlockApiculture;
 import forestry.apiculture.inventory.IApiaryInventory;
 import forestry.apiculture.inventory.InventoryApiary;
 import forestry.core.config.Config;
-import forestry.core.config.Constants;
-import forestry.core.config.ForestryBlock;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.network.GuiId;
 import forestry.plugins.PluginApiculture;
@@ -76,12 +75,12 @@ public class EntityMinecartApiary extends EntityMinecartBeeHousingBase implement
 
 	@Override
 	public Block func_145820_n() {
-		return ForestryBlock.apiculture.block();
+		return PluginApiculture.blocks.apiculture;
 	}
 
 	@Override
 	public int getDisplayTileData() {
-		return Constants.DEFINITION_APIARY_META;
+		return BlockApiculture.Type.APIARY.ordinal();
 	}
 
 	@Override

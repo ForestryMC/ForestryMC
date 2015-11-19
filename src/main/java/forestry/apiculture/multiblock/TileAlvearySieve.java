@@ -31,7 +31,7 @@ public class TileAlvearySieve extends TileAlvearyWithGui implements IAlvearyComp
 	private final InventoryAlvearySieve inventory;
 
 	public TileAlvearySieve() {
-		super(TileAlveary.SIEVE_META, GuiId.AlvearySieveGUI);
+		super(BlockAlveary.Type.SIEVE, GuiId.AlvearySieveGUI);
 		this.inventory = new InventoryAlvearySieve(this);
 		this.beeListener = new AlvearySieveBeeListener(inventory);
 	}
