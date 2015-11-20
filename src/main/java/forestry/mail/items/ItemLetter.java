@@ -43,7 +43,7 @@ public class ItemLetter extends ItemWithGui {
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
 		if (!world.isRemote) {
 			if (itemstack.stackSize == 1) {
-				openGui(world, entityplayer);
+				openGui(entityplayer);
 			} else {
 				entityplayer.addChatMessage(new ChatComponentTranslation("for.chat.mail.wrongstacksize"));
 			}

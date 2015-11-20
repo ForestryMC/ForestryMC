@@ -28,18 +28,16 @@ import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-import forestry.api.core.ForestryAPI;
 import forestry.api.storage.BackpackStowEvent;
 import forestry.api.storage.EnumBackpackType;
 import forestry.api.storage.IBackpackDefinition;
-import forestry.core.GuiHandler;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
+import forestry.core.gui.GuiHandler;
 import forestry.core.inventory.ItemInventory;
 import forestry.core.inventory.wrappers.IInvSlot;
 import forestry.core.inventory.wrappers.InventoryIterator;
 import forestry.core.items.ItemWithGui;
-import forestry.core.network.GuiId;
 import forestry.core.render.TextureManager;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.InventoryUtil;
@@ -69,15 +67,15 @@ public class ItemBackpack extends ItemWithGui {
 	}
 
 	@Override
-	protected void openGui(World world, EntityPlayer entityplayer) {
-		entityplayer.openGui(ForestryAPI.instance, GuiHandler.encodeGuiData(GuiId.ItemGui, type.ordinal()), world, (int) entityplayer.posX, (int) entityplayer.posY, (int) entityplayer.posZ);
+	protected void openGui(EntityPlayer entityplayer) {
+		GuiHandler.openGui(entityplayer, this, (short) type.ordinal());
 	}
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer player) {
 		if (!world.isRemote) {
 			if (!player.isSneaking()) {
-				openGui(world, player);
+				openGui(player);
 			} else {
 				switchMode(itemstack);
 			}

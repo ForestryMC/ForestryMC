@@ -63,11 +63,11 @@ import forestry.farming.logic.FarmableVanillaMushroom;
 import forestry.farming.logic.FarmableVanillaSapling;
 import forestry.farming.proxy.ProxyFarming;
 import forestry.farming.render.EnumFarmBlockTexture;
-import forestry.farming.tiles.TileControl;
+import forestry.farming.tiles.TileFarmControl;
+import forestry.farming.tiles.TileFarmGearbox;
+import forestry.farming.tiles.TileFarmHatch;
 import forestry.farming.tiles.TileFarmPlain;
-import forestry.farming.tiles.TileGearbox;
-import forestry.farming.tiles.TileHatch;
-import forestry.farming.tiles.TileValve;
+import forestry.farming.tiles.TileFarmValve;
 import forestry.farming.triggers.FarmingTriggers;
 
 @Plugin(pluginID = "Farming", name = "Farming", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.farming.description")
@@ -143,10 +143,10 @@ public class PluginFarming extends ForestryPlugin {
 		super.doInit();
 
 		GameRegistry.registerTileEntity(TileFarmPlain.class, "forestry.Farm");
-		GameRegistry.registerTileEntity(TileGearbox.class, "forestry.FarmGearbox");
-		GameRegistry.registerTileEntity(TileHatch.class, "forestry.FarmHatch");
-		GameRegistry.registerTileEntity(TileValve.class, "forestry.FarmValve");
-		GameRegistry.registerTileEntity(TileControl.class, "forestry.FarmControl");
+		GameRegistry.registerTileEntity(TileFarmGearbox.class, "forestry.FarmGearbox");
+		GameRegistry.registerTileEntity(TileFarmHatch.class, "forestry.FarmHatch");
+		GameRegistry.registerTileEntity(TileFarmValve.class, "forestry.FarmValve");
+		GameRegistry.registerTileEntity(TileFarmControl.class, "forestry.FarmControl");
 
 		Circuit.farmArborealManaged = new CircuitFarmLogic("managedArboreal", FarmLogicArboreal.class);
 		Circuit.farmShroomManaged = new CircuitFarmLogic("managedShroom", FarmLogicShroom.class);

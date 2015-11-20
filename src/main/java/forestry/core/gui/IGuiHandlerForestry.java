@@ -8,12 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.network;
+package forestry.core.gui;
 
-import net.minecraft.entity.player.EntityPlayer;
-
-public interface IGuiHandlerEntity {
-	Object getGui(EntityPlayer player, int data);
-
-	Object getContainer(EntityPlayer player, int data);
+public interface IGuiHandlerForestry {
 }

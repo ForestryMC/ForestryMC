@@ -14,16 +14,14 @@ import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
 
-import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.ISpeciesRoot;
-import forestry.core.GuiHandler;
 import forestry.core.gui.ContainerNaturalistInventory;
+import forestry.core.gui.GuiHandler;
 import forestry.core.gui.GuiNaturalistInventory;
 import forestry.core.gui.IPagedInventory;
 import forestry.core.inventory.InventoryNaturalistChest;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
-import forestry.core.network.GuiId;
 
 public abstract class TileNaturalistChest extends TileBase implements IPagedInventory {
 	private static final float lidAngleVariationPerTick = 0.1F;
@@ -91,8 +89,8 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 	}
 
 	@Override
-	public void flipPage(EntityPlayer player, int page) {
-		player.openGui(ForestryAPI.instance, GuiHandler.encodeGuiData(GuiId.TileGui, page), player.worldObj, xCoord, yCoord, zCoord);
+	public void flipPage(EntityPlayer player, short page) {
+		GuiHandler.openGui(player, this, page);
 	}
 
 	/* IStreamable */

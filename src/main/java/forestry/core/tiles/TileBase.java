@@ -15,10 +15,9 @@ import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 
-import forestry.api.core.ForestryAPI;
 import forestry.core.config.Config;
+import forestry.core.gui.GuiHandler;
 import forestry.core.gui.IHintSource;
-import forestry.core.network.GuiId;
 
 public abstract class TileBase extends TileForestry implements IHintSource {
 	protected final List<String> hints;
@@ -28,7 +27,7 @@ public abstract class TileBase extends TileForestry implements IHintSource {
 	}
 
 	public void openGui(EntityPlayer player) {
-		player.openGui(ForestryAPI.instance, GuiId.TileGui.ordinal(), worldObj, xCoord, yCoord, zCoord);
+		GuiHandler.openGui(player, this);
 	}
 
 	public boolean canDrainWithBucket() {

@@ -19,7 +19,7 @@ import net.minecraftforge.fluids.IFluidHandler;
 import forestry.core.fluids.ITankManager;
 import forestry.core.tiles.ILiquidTankTile;
 
-public class TileValve extends TileFarm implements ILiquidTankTile, IFluidHandler {
+public class TileFarmValve extends TileFarm implements ILiquidTankTile, IFluidHandler {
 
 	/* ILIQUIDTANKCONTAINER */
 	@Override

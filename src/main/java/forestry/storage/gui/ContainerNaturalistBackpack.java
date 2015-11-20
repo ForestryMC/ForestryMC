@@ -34,6 +34,6 @@ public class ContainerNaturalistBackpack extends ContainerItemInventory<ItemInve
 
 	@Override
 	public void handleSelectionRequest(EntityPlayerMP player, PacketGuiSelectRequest packet) {
-		inventory.flipPage(player, packet.getPrimaryIndex());
+		inventory.flipPage(player, (short) packet.getPrimaryIndex());
 	}
 }

@@ -19,7 +19,7 @@ import forestry.api.multiblock.IFarmController;
 import forestry.core.tiles.IPowerHandler;
 import forestry.energy.EnergyManager;
 
-public class TileGearbox extends TileFarm implements IPowerHandler, IFarmComponent.Active {
+public class TileFarmGearbox extends TileFarm implements IPowerHandler, IFarmComponent.Active {
 
 	private static final int WORK_CYCLES = 4;
 	private static final int ENERGY_PER_OPERATION = WORK_CYCLES * 50;
@@ -30,7 +30,7 @@ public class TileGearbox extends TileFarm implements IPowerHandler, IFarmCompone
 	private int previousDelays = 0;
 	private int workCounter;
 
-	public TileGearbox() {
+	public TileFarmGearbox() {
 		energyManager = new EnergyManager(200, 10000);
 	}
 

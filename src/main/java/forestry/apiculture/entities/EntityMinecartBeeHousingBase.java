@@ -35,12 +35,11 @@ import forestry.core.entities.EntityMinecartContainerForestry;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IForestryPacketServer;
-import forestry.core.network.IGuiHandlerEntity;
 import forestry.core.network.IStreamableGui;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.IClimatised;
 
-public abstract class EntityMinecartBeeHousingBase extends EntityMinecartContainerForestry implements IBeeHousing, IGuiBeeHousingInventory, IClimatised, IStreamableGui, IGuiHandlerEntity {
+public abstract class EntityMinecartBeeHousingBase extends EntityMinecartContainerForestry implements IBeeHousing, IGuiBeeHousingInventory, IClimatised, IStreamableGui {
 	private static final Random random = new Random();
 	private static final int beeFXInterval = 4;
 	private static final int pollenFXInterval = 50;

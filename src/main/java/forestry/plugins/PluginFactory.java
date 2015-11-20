@@ -69,19 +69,6 @@ import forestry.factory.triggers.FactoryTriggers;
 
 @Plugin(pluginID = "Factory", name = "Factory", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.factory.description")
 public class PluginFactory extends ForestryPlugin {
-
-	private static MachineDefinition definitionBottler;
-	private static MachineDefinition definitionCarpenter;
-	private static MachineDefinition definitionCentrifuge;
-	private static MachineDefinition definitionFermenter;
-	private static MachineDefinition definitionMoistener;
-	private static MachineDefinition definitionSqueezer;
-	private static MachineDefinition definitionStill;
-	private static MachineDefinition definitionRainmaker;
-	private static MachineDefinition definitionFabricator;
-	private static MachineDefinition definitionRaintank;
-	private static MachineDefinition definitionWorktable;
-
 	public static BlockRegistryFactory blocks;
 
 	@Override

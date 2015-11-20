@@ -21,11 +21,11 @@ import forestry.api.farming.IFarmLogic;
 import forestry.api.multiblock.IFarmComponent;
 import forestry.core.utils.vect.Vect;
 
-public class TileControl extends TileFarm implements IFarmComponent.Listener {
+public class TileFarmControl extends TileFarm implements IFarmComponent.Listener {
 
 	private final IFarmListener farmListener;
 
-	public TileControl() {
+	public TileFarmControl() {
 		this.farmListener = new ControlFarmListener(this);
 	}
 
@@ -35,9 +35,9 @@ public class TileControl extends TileFarm implements IFarmComponent.Listener {
 	}
 
 	private static class ControlFarmListener extends DefaultFarmListener {
-		private final TileControl tile;
+		private final TileFarmControl tile;
 
-		public ControlFarmListener(TileControl tile) {
+		public ControlFarmListener(TileFarmControl tile) {
 			this.tile = tile;
 		}
 

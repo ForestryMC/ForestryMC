@@ -36,12 +36,12 @@ import forestry.core.blocks.BlockStructure;
 import forestry.core.render.ParticleHelper;
 import forestry.core.utils.ItemStackUtil;
 import forestry.farming.render.EnumFarmBlockTexture;
-import forestry.farming.tiles.TileControl;
 import forestry.farming.tiles.TileFarm;
+import forestry.farming.tiles.TileFarmControl;
+import forestry.farming.tiles.TileFarmGearbox;
+import forestry.farming.tiles.TileFarmHatch;
 import forestry.farming.tiles.TileFarmPlain;
-import forestry.farming.tiles.TileGearbox;
-import forestry.farming.tiles.TileHatch;
-import forestry.farming.tiles.TileValve;
+import forestry.farming.tiles.TileFarmValve;
 import forestry.plugins.PluginFarming;
 
 public class BlockFarm extends BlockStructure {
@@ -133,13 +133,13 @@ public class BlockFarm extends BlockStructure {
 	public TileEntity createTileEntity(World world, int metadata) {
 		switch (metadata) {
 			case 2:
-				return new TileGearbox();
+				return new TileFarmGearbox();
 			case 3:
-				return new TileHatch();
+				return new TileFarmHatch();
 			case 4:
-				return new TileValve();
+				return new TileFarmValve();
 			case 5:
-				return new TileControl();
+				return new TileFarmControl();
 			default:
 				return new TileFarmPlain();
 		}

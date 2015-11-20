@@ -20,7 +20,7 @@ import forestry.api.farming.IFarmInventory;
 import forestry.api.multiblock.IFarmController;
 import forestry.core.triggers.Trigger;
 import forestry.core.utils.InventoryUtil;
-import forestry.farming.tiles.TileHatch;
+import forestry.farming.tiles.TileFarmHatch;
 
 import buildcraft.api.statements.IStatementContainer;
 import buildcraft.api.statements.IStatementParameter;
@@ -60,11 +60,11 @@ public class TriggerLowSoil extends Trigger {
 			parameter = parameters[0];
 		}
 
-		if (!(tile instanceof TileHatch)) {
+		if (!(tile instanceof TileFarmHatch)) {
 			return false;
 		}
 
-		TileHatch tileHatch = (TileHatch) tile;
+		TileFarmHatch tileHatch = (TileFarmHatch) tile;
 		IFarmController farmController = tileHatch.getMultiblockLogic().getController();
 		IFarmInventory farmInventory = farmController.getFarmInventory();
 

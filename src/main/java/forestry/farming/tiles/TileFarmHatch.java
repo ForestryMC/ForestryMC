@@ -33,14 +33,14 @@ import buildcraft.api.statements.ITriggerInternal;
 import buildcraft.api.statements.ITriggerProvider;
 
 @Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = "BuildCraftAPI|statements")
-public class TileHatch extends TileFarm implements ISidedInventory, IFarmComponent.Active, ITriggerProvider {
+public class TileFarmHatch extends TileFarm implements ISidedInventory, IFarmComponent.Active, ITriggerProvider {
 
 	private static final ForgeDirection[] dumpDirections = new ForgeDirection[]{ForgeDirection.DOWN};
 
 	private final AdjacentTileCache tileCache;
 	private final AdjacentInventoryCache inventoryCache;
 
-	public TileHatch() {
+	public TileFarmHatch() {
 		this.tileCache = new AdjacentTileCache(this);
 		this.inventoryCache = new AdjacentInventoryCache(this, tileCache, new AdjacentInventoryCache.ITileFilter() {
 			@Override

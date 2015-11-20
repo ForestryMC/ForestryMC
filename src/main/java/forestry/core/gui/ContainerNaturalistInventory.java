@@ -34,7 +34,7 @@ public class ContainerNaturalistInventory extends ContainerTile<TileNaturalistCh
 
 	@Override
 	public void handleSelectionRequest(EntityPlayerMP player, PacketGuiSelectRequest packet) {
-		tile.flipPage(player, packet.getPrimaryIndex());
+		tile.flipPage(player, (short) packet.getPrimaryIndex());
 	}
 
 	@Override

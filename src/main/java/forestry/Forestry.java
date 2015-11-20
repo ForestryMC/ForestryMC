@@ -33,13 +33,13 @@ import cpw.mods.fml.common.registry.GameRegistry.Type;
 
 import forestry.api.core.ForestryAPI;
 import forestry.core.EventHandlerCore;
-import forestry.core.GuiHandler;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.GameMode;
 import forestry.core.config.Version;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.errors.ErrorStateRegistry;
+import forestry.core.gui.GuiHandler;
 import forestry.core.multiblock.MultiblockEventHandler;
 import forestry.core.network.PacketHandler;
 import forestry.core.proxy.Proxies;

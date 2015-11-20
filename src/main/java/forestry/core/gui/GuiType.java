@@ -8,10 +8,10 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.network;
+package forestry.core.gui;
 
-public enum GuiId {
-	ItemGui,
-	TileGui,
-	EntityGui;
+public enum GuiType {
+	Item,
+	Tile,
+	Entity;
 }

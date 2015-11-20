@@ -16,10 +16,9 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import forestry.api.core.ForestryAPI;
 import forestry.core.gui.ContainerItemInventory;
-import forestry.core.network.GuiId;
-import forestry.core.network.IGuiHandlerItem;
+import forestry.core.gui.GuiHandler;
+import forestry.core.gui.IGuiHandlerItem;
 
 public abstract class ItemWithGui extends ItemForestry implements IGuiHandlerItem {
 	public ItemWithGui() {
@@ -33,14 +32,14 @@ public abstract class ItemWithGui extends ItemForestry implements IGuiHandlerIte
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
 		if (!world.isRemote) {
-			openGui(world, entityplayer);
+			openGui(entityplayer);
 		}
 
 		return itemstack;
 	}
 
-	protected void openGui(World world, EntityPlayer entityplayer) {
-		entityplayer.openGui(ForestryAPI.instance, GuiId.ItemGui.ordinal(), world, (int) entityplayer.posX, (int) entityplayer.posY, (int) entityplayer.posZ);
+	protected void openGui(EntityPlayer entityplayer) {
+		GuiHandler.openGui(entityplayer, this);
 	}
 
 	@Override
