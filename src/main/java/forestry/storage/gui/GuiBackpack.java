@@ -24,9 +24,4 @@ public class GuiBackpack extends GuiForestry<ContainerBackpack, IInventory> {
 	protected GuiBackpack(String texture, ContainerBackpack container) {
 		super(texture, container, null);
 	}
-
-	@Override
-	protected boolean checkHotbarKeys(int key) {
-		return false;
-	}
 }

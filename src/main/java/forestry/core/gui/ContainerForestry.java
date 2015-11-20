@@ -17,12 +17,12 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 import forestry.core.gui.slots.SlotForestry;
+import forestry.core.gui.slots.SlotLocked;
 import forestry.core.network.IForestryPacketClient;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.SlotUtil;
 
 public abstract class ContainerForestry extends Container {
-
 	protected final void addPlayerInventory(InventoryPlayer playerInventory, int xInv, int yInv) {
 		// Player inventory
 		for (int row = 0; row < 3; row++) {
@@ -51,7 +51,16 @@ public abstract class ContainerForestry extends Container {
 			return null;
 		}
 
-		Slot slot = (slotIndex < 0) ? null : (Slot) this.inventorySlots.get(slotIndex);
+		if (modifier == 2 && button >= 0 && button < 9) {
+			// hotkey used to move item from slot to hotbar
+			int hotbarSlotIndex = 27 + button;
+			Slot hotbarSlot = getSlot(hotbarSlotIndex);
+			if (hotbarSlot instanceof SlotLocked) {
+				return null;
+			}
+		}
+
+		Slot slot = (slotIndex < 0) ? null : getSlot(slotIndex);
 		if (slot instanceof SlotForestry) {
 			SlotForestry slotForestry = (SlotForestry) slot;
 			if (slotForestry.isPhantom()) {

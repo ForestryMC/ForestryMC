@@ -248,9 +248,4 @@ public class GuiNaturalistInventory extends GuiForestry<Container, IPagedInvento
 		Proxies.render.bindTexture(textureFile);
 		drawTexturedModalRect(guiLeft + x, guiTop + textLayout.getLineY(), column, line, 16, 16);
 	}
-
-	@Override
-	protected boolean checkHotbarKeys(int key) {
-		return false;
-	}
 }
