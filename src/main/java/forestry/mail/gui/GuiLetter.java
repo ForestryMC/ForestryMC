@@ -206,11 +206,6 @@ public class GuiLetter extends GuiForestry<ContainerLetter, ItemInventoryLetter>
 		Keyboard.enableRepeatEvents(false);
 		super.onGuiClosed();
 	}
-	
-	@Override
-	protected boolean checkHotbarKeys(int key) {
-		return false;
-	}
 
 	private void setFromSessionVars() {
 		if (SessionVars.getStringVar("mail.letter.recipient") == null) {
