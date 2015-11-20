@@ -30,6 +30,7 @@ import forestry.Forestry;
 import forestry.core.fluids.Fluids;
 import forestry.core.utils.Log;
 import forestry.core.utils.StringUtil;
+import forestry.mail.gui.GuiMailboxInfo;
 
 public class Config {
 
@@ -89,6 +90,8 @@ public class Config {
 
 	// Mail
 	public static boolean mailAlertEnabled = true;
+	public static GuiMailboxInfo.XPosition mailAlertXPosition = GuiMailboxInfo.XPosition.LEFT;
+	public static GuiMailboxInfo.YPosition mailAlertYPosition = GuiMailboxInfo.YPosition.TOP;
 
 	// Gui tabs (Ledger)
 	public static int guiTabSpeed = 8;
@@ -138,7 +141,7 @@ public class Config {
 
 	private static void loadConfigCommon(File configFileCommon) {
 
-		configCommon = new LocalizedConfiguration(configFileCommon, "1.1.0");
+		configCommon = new LocalizedConfiguration(configFileCommon, "1.2.0");
 
 		gameMode = configCommon.getStringLocalized("difficulty", "game.mode", "EASY", new String[]{"OP, EASY, NORMAL, HARD"});
 
@@ -212,7 +215,13 @@ public class Config {
 
 		enableBackpackResupply = configCommon.getBooleanLocalized("performance", "backpacks.resupply", enableBackpackResupply);
 
-		mailAlertEnabled = configCommon.getBooleanLocalized("tweaks.gui", "mail.alert", mailAlertEnabled);
+		// move legacy mail property
+		configCommon.moveProperty("tweaks.gui", "mail.alert", "tweaks.gui.mail.alert");
+		configCommon.renameProperty("tweaks.gui.mail.alert", "mail.alert", "enabled");
+
+		mailAlertEnabled = configCommon.getBooleanLocalized("tweaks.gui.mail.alert", "enabled", mailAlertEnabled);
+		mailAlertXPosition = configCommon.getEnumLocalized("tweaks.gui.mail.alert", "xPosition", mailAlertXPosition, GuiMailboxInfo.XPosition.values());
+		mailAlertYPosition = configCommon.getEnumLocalized("tweaks.gui.mail.alert", "yPosition", mailAlertYPosition, GuiMailboxInfo.YPosition.values());
 
 		guiTabSpeed = configCommon.getIntLocalized("tweaks.gui.tabs", "speed", guiTabSpeed, 1, 50);
 		enableHints = configCommon.getBooleanLocalized("tweaks.gui.tabs", "hints", enableHints);

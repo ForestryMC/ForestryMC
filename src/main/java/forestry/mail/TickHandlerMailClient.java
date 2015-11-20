@@ -29,7 +29,7 @@ public class TickHandlerMailClient {
 		}
 
 		if (GuiMailboxInfo.instance.hasPOBoxInfo()) {
-			GuiMailboxInfo.instance.render(0, 0);
+			GuiMailboxInfo.instance.render();
 		} else {
 			long time = System.currentTimeMillis();
 			if (time - lastInfoRequestTime > THROTTLE_TIME_MS) {

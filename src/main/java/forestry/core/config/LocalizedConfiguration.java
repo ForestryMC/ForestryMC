@@ -70,6 +70,37 @@ public class LocalizedConfiguration extends Configuration {
 		return prop.getString();
 	}
 
+	public <T extends Enum<T>> T getEnumLocalized(String category, String name, T defaultValue, T[] validEnumValues) {
+		String langKey = "for.config." + category + '.' + name;
+		String commentKey = langKey + '.' + "comment";
+		String comment = "";
+		if (StatCollector.canTranslate(commentKey)) {
+			comment = StatCollector.translateToLocal(commentKey);
+		}
+
+		Property prop = this.get(category, name, defaultValue.name());
+
+		String[] validValues = new String[validEnumValues.length];
+		for (int i = 0; i < validEnumValues.length; i++) {
+			T enumValue = validEnumValues[i];
+			validValues[i] = enumValue.name();
+		}
+
+		prop.setValidValues(validValues);
+		prop.setLanguageKey(langKey);
+		prop.comment = comment + " [default: " + defaultValue + "] [valid: " + Arrays.toString(prop.getValidValues()) + "]";
+		String stringValue = prop.getString();
+
+		T enumValue = defaultValue;
+		for (int i = 0; i < validValues.length; i++) {
+			if (stringValue.equals(validValues[i])) {
+				enumValue = validEnumValues[i];
+			}
+		}
+
+		return enumValue;
+	}
+
 	public String[] getStringListLocalized(String category, String name, String[] defaultValue) {
 		String langKey = "for.config." + category + '.' + name;
 		String commentKey = langKey + '.' + "comment";
