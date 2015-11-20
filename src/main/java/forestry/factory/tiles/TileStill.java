@@ -12,6 +12,7 @@ package forestry.factory.tiles;
 
 import java.io.IOException;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -31,10 +32,11 @@ import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
-import forestry.core.network.GuiId;
 import forestry.core.render.TankRenderInfo;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;
+import forestry.factory.gui.ContainerStill;
+import forestry.factory.gui.GuiStill;
 import forestry.factory.inventory.InventoryStill;
 import forestry.factory.recipes.StillRecipeManager;
 
@@ -49,7 +51,7 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 	private FluidStack bufferedLiquid;
 
 	public TileStill() {
-		super(GuiId.StillGUI, "still", 1100, 8000);
+		super("still", 1100, 8000);
 		setInternalInventory(new InventoryStill(this));
 		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, StillRecipeManager.recipeFluidInputs);
 		resourceTank.tankMode = StandardTank.TankMode.INPUT;
@@ -208,5 +210,15 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 	@Override
 	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
 		return tankManager.getTankInfo(from);
+	}
+
+	@Override
+	public Object getGui(EntityPlayer player, int data) {
+		return new GuiStill(player.inventory, this);
+	}
+
+	@Override
+	public Object getContainer(EntityPlayer player, int data) {
+		return new ContainerStill(player.inventory, this);
 	}
 }

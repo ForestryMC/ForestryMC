@@ -37,13 +37,14 @@ import forestry.core.inventory.InventoryAdapterTile;
 import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
-import forestry.core.network.GuiId;
 import forestry.core.render.TankRenderInfo;
 import forestry.core.tiles.IItemStackDisplay;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.PlayerUtil;
+import forestry.factory.gui.ContainerCarpenter;
+import forestry.factory.gui.GuiCarpenter;
 import forestry.factory.inventory.InventoryCarpenter;
 import forestry.factory.inventory.InventoryGhostCrafting;
 import forestry.factory.recipes.CarpenterRecipeManager;
@@ -66,7 +67,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 	}
 
 	public TileCarpenter() {
-		super(GuiId.CarpenterGUI, "carpenter", 1100, 4000);
+		super("carpenter", 1100, 4000);
 		setEnergyPerWorkCycle(ENERGY_PER_WORK_CYCLE);
 		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, CarpenterRecipeManager.getRecipeFluids());
 
@@ -273,5 +274,15 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 	@Override
 	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
 		return tankManager.getTankInfo(from);
+	}
+
+	@Override
+	public Object getGui(EntityPlayer player, int data) {
+		return new GuiCarpenter(player.inventory, this);
+	}
+
+	@Override
+	public Object getContainer(EntityPlayer player, int data) {
+		return new ContainerCarpenter(player.inventory, this);
 	}
 }

@@ -27,14 +27,15 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.api.mail.ILetter;
 import forestry.core.items.ItemWithGui;
-import forestry.core.network.GuiId;
 import forestry.core.utils.StringUtil;
 import forestry.mail.Letter;
 import forestry.mail.LetterProperties;
+import forestry.mail.gui.ContainerLetter;
+import forestry.mail.gui.GuiLetter;
+import forestry.mail.inventory.ItemInventoryLetter;
 
 public class ItemLetter extends ItemWithGui {
 	public ItemLetter() {
-		super(GuiId.LetterGUI);
 		setMaxStackSize(64);
 	}
 
@@ -85,5 +86,15 @@ public class ItemLetter extends ItemWithGui {
 	@Override
 	public void getSubItems(Item item, CreativeTabs tab, List list) {
 		LetterProperties.getSubItems(item, tab, list);
+	}
+
+	@Override
+	public Object getGui(EntityPlayer player, ItemStack heldItem, int data) {
+		return new GuiLetter(player, new ItemInventoryLetter(player, heldItem));
+	}
+
+	@Override
+	public Object getContainer(EntityPlayer player, ItemStack heldItem, int data) {
+		return new ContainerLetter(player, new ItemInventoryLetter(player, heldItem));
 	}
 }

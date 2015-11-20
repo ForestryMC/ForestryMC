@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.ISidedInventory;
@@ -42,10 +43,11 @@ import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
-import forestry.core.network.GuiId;
 import forestry.core.render.TankRenderInfo;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;
+import forestry.factory.gui.ContainerFermenter;
+import forestry.factory.gui.GuiFermenter;
 import forestry.factory.inventory.InventoryFermenter;
 import forestry.factory.recipes.FermenterRecipeManager;
 import forestry.factory.triggers.FactoryTriggers;
@@ -66,7 +68,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 	private int fuelCurrentFerment = 0;
 
 	public TileFermenter() {
-		super(GuiId.FermenterGUI, "fermenter", 2000, 8000);
+		super("fermenter", 2000, 8000);
 		setEnergyPerWorkCycle(4200);
 		setInternalInventory(new InventoryFermenter(this));
 		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, FermenterRecipeManager.recipeFluidInputs);
@@ -337,5 +339,15 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 		res.add(FactoryTriggers.lowResource25);
 		res.add(FactoryTriggers.lowResource10);
 		return res;
+	}
+
+	@Override
+	public Object getGui(EntityPlayer player, int data) {
+		return new GuiFermenter(player.inventory, this);
+	}
+
+	@Override
+	public Object getContainer(EntityPlayer player, int data) {
+		return new ContainerFermenter(player.inventory, this);
 	}
 }

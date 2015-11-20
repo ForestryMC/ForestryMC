@@ -17,7 +17,6 @@ import net.minecraft.item.ItemStack;
 import forestry.api.apiculture.BeeManager;
 import forestry.core.config.Constants;
 import forestry.core.inventory.InventoryPlain;
-import forestry.core.network.GuiId;
 import forestry.core.tiles.TileNaturalistChest;
 import forestry.core.tiles.TileUtil;
 import forestry.plugins.PluginApiculture;
@@ -27,7 +26,7 @@ public class TileApiaristChest extends TileNaturalistChest {
 	private boolean checkedForLegacyBlock = false;
 
 	public TileApiaristChest() {
-		super(BeeManager.beeRoot, GuiId.ApiaristChestGUI);
+		super(BeeManager.beeRoot);
 	}
 
 	@Override

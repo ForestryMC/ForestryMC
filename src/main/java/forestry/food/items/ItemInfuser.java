@@ -8,24 +8,24 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.items;
+package forestry.food.items;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
-import forestry.core.circuits.ContainerSolderingIron;
-import forestry.core.circuits.GuiSolderingIron;
-import forestry.core.circuits.ISolderingIron;
-import forestry.core.inventory.ItemInventorySolderingIron;
+import forestry.core.items.ItemWithGui;
+import forestry.food.gui.ContainerInfuser;
+import forestry.food.gui.GuiInfuser;
+import forestry.food.inventory.ItemInventoryInfuser;
 
-public class ItemSolderingIron extends ItemWithGui implements ISolderingIron {
+public class ItemInfuser extends ItemWithGui {
 	@Override
 	public Object getGui(EntityPlayer player, ItemStack heldItem, int data) {
-		return new GuiSolderingIron(player, new ItemInventorySolderingIron(player, heldItem));
+		return new GuiInfuser(player.inventory, new ItemInventoryInfuser(player, heldItem));
 	}
 
 	@Override
 	public Object getContainer(EntityPlayer player, ItemStack heldItem, int data) {
-		return new ContainerSolderingIron(player, new ItemInventorySolderingIron(player, heldItem));
+		return new ContainerInfuser(player.inventory, new ItemInventoryInfuser(player, heldItem));
 	}
 }

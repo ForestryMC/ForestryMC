@@ -112,4 +112,13 @@ public class TileMillRainmaker extends TileMill {
 		}
 	}
 
+	@Override
+	public Object getGui(EntityPlayer player, int data) {
+		return null;
+	}
+
+	@Override
+	public Object getContainer(EntityPlayer player, int data) {
+		return null;
+	}
 }

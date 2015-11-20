@@ -19,18 +19,15 @@ import net.minecraft.world.World;
 import forestry.api.core.ForestryAPI;
 import forestry.core.gui.ContainerItemInventory;
 import forestry.core.network.GuiId;
+import forestry.core.network.IGuiHandlerItem;
 
-public class ItemWithGui extends ItemForestry {
-	private final GuiId guiId;
+public abstract class ItemWithGui extends ItemForestry implements IGuiHandlerItem {
+	public ItemWithGui() {
 
-	public ItemWithGui(GuiId guiId) {
-		this.guiId = guiId;
-		setMaxStackSize(1);
 	}
 
-	public ItemWithGui(GuiId guiId, CreativeTabs creativeTabs) {
-		this(guiId);
-		setCreativeTab(creativeTabs);
+	public ItemWithGui(CreativeTabs creativeTabs) {
+		super(creativeTabs);
 	}
 
 	@Override
@@ -42,8 +39,8 @@ public class ItemWithGui extends ItemForestry {
 		return itemstack;
 	}
 
-	protected final void openGui(World world, EntityPlayer entityplayer) {
-		entityplayer.openGui(ForestryAPI.instance, guiId.ordinal(), world, (int) entityplayer.posX, (int) entityplayer.posY, (int) entityplayer.posZ);
+	protected void openGui(World world, EntityPlayer entityplayer) {
+		entityplayer.openGui(ForestryAPI.instance, GuiId.ItemGui.ordinal(), world, (int) entityplayer.posX, (int) entityplayer.posY, (int) entityplayer.posZ);
 	}
 
 	@Override

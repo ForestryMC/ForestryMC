@@ -8,18 +8,12 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.mail.items;
+package forestry.core.network;
 
-import forestry.core.items.ItemRegistry;
+import net.minecraft.entity.player.EntityPlayer;
 
-public class ItemRegistryMail extends ItemRegistry {
-	public final ItemStamps stamps;
-	public final ItemLetter letters;
-	public final ItemCatalogue catalogue;
+public interface IGuiHandlerTile {
+	Object getGui(EntityPlayer player, int data);
 
-	public ItemRegistryMail() {
-		stamps = registerItem(new ItemStamps(), "stamps");
-		letters = registerItem(new ItemLetter(), "letters");
-		catalogue = registerItem(new ItemCatalogue(), "catalogue");
-	}
+	Object getContainer(EntityPlayer player, int data);
 }

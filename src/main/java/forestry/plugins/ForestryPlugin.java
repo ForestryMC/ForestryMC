@@ -20,7 +20,6 @@ import net.minecraft.world.chunk.IChunkProvider;
 import cpw.mods.fml.common.IFuelHandler;
 import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
 
-import forestry.core.GuiHandlerBase;
 import forestry.core.IPickupHandler;
 import forestry.core.IResupplyHandler;
 import forestry.core.ISaveEventHandler;
@@ -94,10 +93,6 @@ public abstract class ForestryPlugin {
 	protected static void logInvalidIMCMessage(IMCMessage message) {
 		String invalidIMCMessageText = getInvalidIMCMessageText(message);
 		Log.warning(invalidIMCMessageText);
-	}
-
-	public GuiHandlerBase getGuiHandler() {
-		return null;
 	}
 
 	public ISaveEventHandler getSaveEventHandler() {

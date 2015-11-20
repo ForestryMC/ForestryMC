@@ -10,20 +10,17 @@
  ******************************************************************************/
 package forestry.lepidopterology.items;
 
-import forestry.api.core.Tabs;
 import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.core.items.ItemRegistry;
-import forestry.core.items.ItemWithGui;
-import forestry.core.network.GuiId;
 
 public class ItemRegistryLepidopterology extends ItemRegistry {
-	public final ItemWithGui flutterlyzer;
+	public final ItemFlutterlyzer flutterlyzer;
 	public final ItemButterflyGE butterflyGE;
 	public final ItemButterflyGE serumGE;
 	public final ItemButterflyGE caterpillarGE;
 
 	public ItemRegistryLepidopterology() {
-		flutterlyzer = registerItem(new ItemWithGui(GuiId.FlutterlyzerGUI, Tabs.tabLepidopterology), "flutterlyzer");
+		flutterlyzer = registerItem(new ItemFlutterlyzer(), "flutterlyzer");
 		butterflyGE = registerItem(new ItemButterflyGE(EnumFlutterType.BUTTERFLY), "butterflyGE");
 		serumGE = registerItem(new ItemButterflyGE(EnumFlutterType.SERUM), "serumGE");
 		caterpillarGE = registerItem(new ItemButterflyGE(EnumFlutterType.CATERPILLAR), "caterpillarGE");

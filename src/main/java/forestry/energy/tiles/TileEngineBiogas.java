@@ -12,6 +12,7 @@ package forestry.energy.tiles;
 
 import java.io.IOException;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.ISidedInventory;
@@ -36,9 +37,10 @@ import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
-import forestry.core.network.GuiId;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TileEngine;
+import forestry.energy.gui.ContainerEngineBiogas;
+import forestry.energy.gui.GuiEngineBiogas;
 import forestry.energy.inventory.InventoryEngineBiogas;
 
 public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILiquidTankTile, IFluidHandler {
@@ -50,7 +52,7 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 	private boolean shutdown; // true if the engine is too cold and needs to warm itself up.
 
 	public TileEngineBiogas() {
-		super(GuiId.EngineBiogasGUI, "engine.bronze", Constants.ENGINE_BRONZE_HEAT_MAX, 300000);
+		super("engine.bronze", Constants.ENGINE_BRONZE_HEAT_MAX, 300000);
 
 		setInternalInventory(new InventoryEngineBiogas(this));
 
@@ -331,5 +333,15 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 	@Override
 	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
 		return tankManager.getTankInfo(from);
+	}
+
+	@Override
+	public Object getGui(EntityPlayer player, int data) {
+		return new GuiEngineBiogas(player.inventory, this);
+	}
+
+	@Override
+	public Object getContainer(EntityPlayer player, int data) {
+		return new ContainerEngineBiogas(player.inventory, this);
 	}
 }

@@ -16,12 +16,14 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
 import cpw.mods.fml.common.Optional;
 
+import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeHousingInventory;
 import forestry.api.apiculture.IBeeListener;
 import forestry.api.apiculture.IBeeModifier;
@@ -29,10 +31,11 @@ import forestry.api.apiculture.IHiveFrame;
 import forestry.apiculture.ApiaryBeeListener;
 import forestry.apiculture.ApiaryBeeModifier;
 import forestry.apiculture.IApiary;
+import forestry.apiculture.gui.ContainerBeeHousing;
+import forestry.apiculture.gui.GuiBeeHousing;
 import forestry.apiculture.inventory.IApiaryInventory;
 import forestry.apiculture.inventory.InventoryApiary;
 import forestry.apiculture.trigger.ApicultureTriggers;
-import forestry.core.network.GuiId;
 
 import buildcraft.api.statements.ITriggerExternal;
 
@@ -42,7 +45,7 @@ public class TileApiary extends TileBeeHousingBase implements IApiary {
 	private final InventoryApiary inventory = new InventoryApiary(getAccessHandler());
 
 	public TileApiary() {
-		super(GuiId.ApiaryGUI, "apiary");
+		super("apiary");
 		setInternalInventory(inventory);
 	}
 
@@ -83,5 +86,17 @@ public class TileApiary extends TileBeeHousingBase implements IApiary {
 		res.add(ApicultureTriggers.missingDrone);
 		res.add(ApicultureTriggers.noFrames);
 		return res;
+	}
+
+	@Override
+	public Object getGui(EntityPlayer player, int data) {
+		ContainerBeeHousing container = new ContainerBeeHousing(player.inventory, this, true);
+		return new GuiBeeHousing<>(this, container, GuiBeeHousing.Icon.APIARY);
+	}
+
+	@Override
+	public Object getContainer(EntityPlayer player, int data) {
+		BeeManager.beeRoot.syncBreedingTrackerToPlayer(player);
+		return new ContainerBeeHousing(player.inventory, this, true);
 	}
 }

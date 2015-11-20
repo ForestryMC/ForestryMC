@@ -54,12 +54,10 @@ public abstract class EntityMinecartForestry extends EntityMinecart implements I
 		}
 
 		if (!worldObj.isRemote) {
-			player.openGui(ForestryAPI.instance, getGuiId().ordinal(), worldObj, getEntityId(), -1, 0);
+			player.openGui(ForestryAPI.instance, GuiId.EntityGui.ordinal(), worldObj, getEntityId(), -1, 0);
 		}
 		return true;
 	}
-
-	protected abstract GuiId getGuiId();
 
 	public void setOwner(GameProfile owner) {
 		accessHandler.setOwner(owner);

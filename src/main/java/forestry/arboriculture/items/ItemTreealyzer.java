@@ -8,24 +8,29 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.items;
+package forestry.arboriculture.items;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
-import forestry.core.circuits.ContainerSolderingIron;
-import forestry.core.circuits.GuiSolderingIron;
-import forestry.core.circuits.ISolderingIron;
-import forestry.core.inventory.ItemInventorySolderingIron;
+import forestry.api.core.Tabs;
+import forestry.arboriculture.gui.GuiTreealyzer;
+import forestry.arboriculture.inventory.ItemInventoryTreealyzer;
+import forestry.core.gui.ContainerAlyzer;
+import forestry.core.items.ItemWithGui;
 
-public class ItemSolderingIron extends ItemWithGui implements ISolderingIron {
+public class ItemTreealyzer extends ItemWithGui {
+	public ItemTreealyzer() {
+		super(Tabs.tabArboriculture);
+	}
+
 	@Override
 	public Object getGui(EntityPlayer player, ItemStack heldItem, int data) {
-		return new GuiSolderingIron(player, new ItemInventorySolderingIron(player, heldItem));
+		return new GuiTreealyzer(player, new ItemInventoryTreealyzer(player, heldItem));
 	}
 
 	@Override
 	public Object getContainer(EntityPlayer player, ItemStack heldItem, int data) {
-		return new ContainerSolderingIron(player, new ItemInventorySolderingIron(player, heldItem));
+		return new ContainerAlyzer(new ItemInventoryTreealyzer(player, heldItem), player);
 	}
 }

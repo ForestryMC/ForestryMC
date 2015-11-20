@@ -28,7 +28,6 @@ import forestry.api.core.EnumTemperature;
 import forestry.apiculture.gui.IGuiBeeHousingInventory;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
-import forestry.core.network.GuiId;
 import forestry.core.network.IStreamableGui;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.IClimatised;
@@ -41,8 +40,8 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 	// CLIENT
 	private int breedingProgressPercent = 0;
 
-	protected TileBeeHousingBase(GuiId guiId, String hintKey) {
-		super(guiId, hintKey);
+	protected TileBeeHousingBase(String hintKey) {
+		super(hintKey);
 		this.beeLogic = BeeManager.beeRoot.createBeekeepingLogic(this);
 	}
 

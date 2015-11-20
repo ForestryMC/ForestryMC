@@ -38,7 +38,6 @@ import forestry.api.genetics.AlleleManager;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
-import forestry.arboriculture.GuiHandlerArboriculture;
 import forestry.arboriculture.VillageHandlerArboriculture;
 import forestry.arboriculture.WoodItemAccess;
 import forestry.arboriculture.blocks.BlockArboricultureType;
@@ -61,7 +60,6 @@ import forestry.arboriculture.tiles.TileFruitPod;
 import forestry.arboriculture.tiles.TileLeaves;
 import forestry.arboriculture.tiles.TileSapling;
 import forestry.arboriculture.tiles.TileWood;
-import forestry.core.GuiHandlerBase;
 import forestry.core.blocks.BlockCoreType;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
@@ -359,11 +357,6 @@ public class PluginArboriculture extends ForestryPlugin {
 		AlleleManager.ersatzSaplings.put(new ItemStack(Blocks.sapling, 1, 3), TreeDefinition.Jungle.getIndividual());
 		AlleleManager.ersatzSaplings.put(new ItemStack(Blocks.sapling, 1, 4), TreeDefinition.Acacia.getIndividual());
 		AlleleManager.ersatzSaplings.put(new ItemStack(Blocks.sapling, 1, 5), TreeDefinition.DarkOak.getIndividual());
-	}
-
-	@Override
-	public GuiHandlerBase getGuiHandler() {
-		return new GuiHandlerArboriculture();
 	}
 
 	@Override

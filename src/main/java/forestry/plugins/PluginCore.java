@@ -18,7 +18,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.oredict.RecipeSorter;
 
 import cpw.mods.fml.common.IFuelHandler;
 
@@ -28,7 +27,6 @@ import forestry.api.genetics.AlleleManager;
 import forestry.api.multiblock.MultiblockManager;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
-import forestry.core.GuiHandlerBase;
 import forestry.core.IPickupHandler;
 import forestry.core.ISaveEventHandler;
 import forestry.core.PickupHandlerCore;
@@ -56,7 +54,6 @@ import forestry.core.network.IPacketRegistry;
 import forestry.core.network.PacketRegistryCore;
 import forestry.core.proxy.Proxies;
 import forestry.core.recipes.RecipeUtil;
-import forestry.core.recipes.ShapedRecipeCustom;
 import forestry.core.tiles.MachineDefinition;
 import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.ForestryModEnvWarningCallable;
@@ -121,11 +118,6 @@ public class PluginCore extends ForestryPlugin {
 	@Override
 	public boolean isAvailable() {
 		return true;
-	}
-
-	@Override
-	public GuiHandlerBase getGuiHandler() {
-		return null;
 	}
 
 	@Override

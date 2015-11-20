@@ -17,7 +17,6 @@ import net.minecraftforge.oredict.OreDictionary;
 import forestry.api.core.Tabs;
 import forestry.core.circuits.ItemCircuitBoard;
 import forestry.core.genetics.ItemResearchNote;
-import forestry.core.network.GuiId;
 
 public class ItemRegistryCore extends ItemRegistry {
 	/* Fertilizer */
@@ -132,7 +131,7 @@ public class ItemRegistryCore extends ItemRegistry {
 
 		circuitboards = registerItem(new ItemCircuitBoard(), "chipsets");
 
-		solderingIron = new ItemSolderingIron(GuiId.SolderingIronGUI);
+		solderingIron = new ItemSolderingIron();
 		solderingIron.setMaxDamage(5).setFull3D();
 		registerItem(solderingIron, "solderingIron");
 

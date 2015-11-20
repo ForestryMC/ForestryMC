@@ -8,24 +8,31 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.items;
+package forestry.apiculture.items;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
-import forestry.core.circuits.ContainerSolderingIron;
-import forestry.core.circuits.GuiSolderingIron;
-import forestry.core.circuits.ISolderingIron;
-import forestry.core.inventory.ItemInventorySolderingIron;
+import forestry.api.apiculture.BeeManager;
+import forestry.api.core.Tabs;
+import forestry.apiculture.gui.ContainerImprinter;
+import forestry.apiculture.gui.GuiImprinter;
+import forestry.apiculture.inventory.ItemInventoryImprinter;
+import forestry.core.items.ItemWithGui;
 
-public class ItemSolderingIron extends ItemWithGui implements ISolderingIron {
+public class ItemImprinter extends ItemWithGui {
+	public ItemImprinter() {
+		super(Tabs.tabApiculture);
+	}
+
 	@Override
 	public Object getGui(EntityPlayer player, ItemStack heldItem, int data) {
-		return new GuiSolderingIron(player, new ItemInventorySolderingIron(player, heldItem));
+		return new GuiImprinter(player.inventory, new ItemInventoryImprinter(player, heldItem));
 	}
 
 	@Override
 	public Object getContainer(EntityPlayer player, ItemStack heldItem, int data) {
-		return new ContainerSolderingIron(player, new ItemInventorySolderingIron(player, heldItem));
+		BeeManager.beeRoot.syncBreedingTrackerToPlayer(player);
+		return new ContainerImprinter(player.inventory, new ItemInventoryImprinter(player, heldItem));
 	}
 }

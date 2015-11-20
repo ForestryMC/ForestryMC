@@ -19,7 +19,6 @@ import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.PostManager;
 import forestry.api.recipes.RecipeManagers;
 import forestry.apiculture.items.ItemRegistryApiculture;
-import forestry.core.GuiHandlerBase;
 import forestry.core.ISaveEventHandler;
 import forestry.core.circuits.EnumCircuitBoardType;
 import forestry.core.config.Config;
@@ -29,7 +28,6 @@ import forestry.core.items.EnumElectronTube;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.tiles.MachineDefinition;
-import forestry.mail.GuiHandlerMail;
 import forestry.mail.PostRegistry;
 import forestry.mail.PostalCarrier;
 import forestry.mail.SaveEventHandlerMail;
@@ -89,11 +87,6 @@ public class PluginMail extends ForestryPlugin {
 		super.doInit();
 
 		blocks.mail.init();
-	}
-
-	@Override
-	public GuiHandlerBase getGuiHandler() {
-		return new GuiHandlerMail();
 	}
 
 	@Override

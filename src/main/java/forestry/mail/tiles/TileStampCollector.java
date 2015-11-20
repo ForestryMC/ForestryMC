@@ -10,20 +10,22 @@
  ******************************************************************************/
 package forestry.mail.tiles;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
 import forestry.api.mail.IStamps;
 import forestry.api.mail.PostManager;
 import forestry.core.inventory.IInventoryAdapter;
-import forestry.core.network.GuiId;
 import forestry.core.tiles.TileBase;
 import forestry.core.utils.InventoryUtil;
+import forestry.mail.gui.ContainerStampCollector;
+import forestry.mail.gui.GuiStampCollector;
 import forestry.mail.inventory.InventoryStampCollector;
 
 public class TileStampCollector extends TileBase implements IInventory {
 	public TileStampCollector() {
-		super(GuiId.StampCollectorGUI, "philatelist");
+		super("philatelist");
 		setInternalInventory(new InventoryStampCollector(this));
 	}
 
@@ -51,5 +53,15 @@ public class TileStampCollector extends TileBase implements IInventory {
 
 		// Store it.
 		InventoryUtil.stowInInventory(stamp, inventory, true, InventoryStampCollector.SLOT_BUFFER_1, InventoryStampCollector.SLOT_BUFFER_COUNT);
+	}
+
+	@Override
+	public Object getGui(EntityPlayer player, int data) {
+		return new GuiStampCollector(player.inventory, this);
+	}
+
+	@Override
+	public Object getContainer(EntityPlayer player, int data) {
+		return new ContainerStampCollector(player.inventory, this);
 	}
 }

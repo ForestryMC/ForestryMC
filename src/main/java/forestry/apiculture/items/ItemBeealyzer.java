@@ -8,24 +8,33 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.items;
+package forestry.apiculture.items;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
-import forestry.core.circuits.ContainerSolderingIron;
-import forestry.core.circuits.GuiSolderingIron;
-import forestry.core.circuits.ISolderingIron;
-import forestry.core.inventory.ItemInventorySolderingIron;
+import forestry.api.apiculture.BeeManager;
+import forestry.api.core.Tabs;
+import forestry.apiculture.gui.GuiBeealyzer;
+import forestry.apiculture.inventory.ItemInventoryBeealyzer;
+import forestry.core.gui.ContainerAlyzer;
+import forestry.core.items.ItemWithGui;
 
-public class ItemSolderingIron extends ItemWithGui implements ISolderingIron {
+public class ItemBeealyzer extends ItemWithGui {
+	public ItemBeealyzer() {
+		super(Tabs.tabApiculture);
+	}
+
 	@Override
 	public Object getGui(EntityPlayer player, ItemStack heldItem, int data) {
-		return new GuiSolderingIron(player, new ItemInventorySolderingIron(player, heldItem));
+		ItemInventoryBeealyzer inventory = new ItemInventoryBeealyzer(player, heldItem);
+		return new GuiBeealyzer(player, inventory);
 	}
 
 	@Override
 	public Object getContainer(EntityPlayer player, ItemStack heldItem, int data) {
-		return new ContainerSolderingIron(player, new ItemInventorySolderingIron(player, heldItem));
+		BeeManager.beeRoot.syncBreedingTrackerToPlayer(player);
+		ItemInventoryBeealyzer inventory = new ItemInventoryBeealyzer(player, heldItem);
+		return new ContainerAlyzer(inventory, player);
 	}
 }

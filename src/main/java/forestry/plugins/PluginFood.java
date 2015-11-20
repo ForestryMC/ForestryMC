@@ -16,13 +16,11 @@ import net.minecraft.item.ItemStack;
 import forestry.api.food.BeverageManager;
 import forestry.apiculture.items.EnumPollenCluster;
 import forestry.apiculture.items.ItemRegistryApiculture;
-import forestry.core.GuiHandlerBase;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
 import forestry.core.fluids.LiquidRegistryHelper;
 import forestry.core.recipes.RecipeUtil;
 import forestry.food.BeverageEffect;
-import forestry.food.GuiHandlerFood;
 import forestry.food.InfuserIngredientManager;
 import forestry.food.InfuserMixtureManager;
 import forestry.food.items.EnumBeverage;
@@ -72,10 +70,5 @@ public class PluginFood extends ForestryPlugin {
 				"X", "#", "X",
 				'#', "ingotIron",
 				'X', "ingotBronze");
-	}
-
-	@Override
-	public GuiHandlerBase getGuiHandler() {
-		return new GuiHandlerFood();
 	}
 }

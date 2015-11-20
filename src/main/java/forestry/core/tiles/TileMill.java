@@ -24,7 +24,7 @@ public abstract class TileMill extends TileBase {
 	public float progress;
 
 	protected TileMill(GuiId guiId, String hintKey) {
-		super(guiId, hintKey);
+		super(hintKey);
 		speed = 0.01F;
 	}
 

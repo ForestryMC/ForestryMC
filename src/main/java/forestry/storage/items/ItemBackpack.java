@@ -28,9 +28,11 @@ import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+import forestry.api.core.ForestryAPI;
 import forestry.api.storage.BackpackStowEvent;
 import forestry.api.storage.EnumBackpackType;
 import forestry.api.storage.IBackpackDefinition;
+import forestry.core.GuiHandler;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.inventory.ItemInventory;
@@ -43,14 +45,16 @@ import forestry.core.tiles.TileUtil;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.StringUtil;
 import forestry.storage.BackpackMode;
+import forestry.storage.gui.ContainerBackpack;
+import forestry.storage.gui.GuiBackpack;
+import forestry.storage.gui.GuiBackpackT2;
 import forestry.storage.inventory.ItemInventoryBackpack;
 
 public class ItemBackpack extends ItemWithGui {
 	private final IBackpackDefinition definition;
 	private final EnumBackpackType type;
 
-	public ItemBackpack(GuiId guiId, IBackpackDefinition definition, EnumBackpackType type) {
-		super(guiId);
+	public ItemBackpack(IBackpackDefinition definition, EnumBackpackType type) {
 		this.definition = definition;
 		this.type = type;
 	}
@@ -59,13 +63,14 @@ public class ItemBackpack extends ItemWithGui {
 		return definition;
 	}
 
-	/**
-	 * @return true if the item's stackTagCompound needs to be synchronized over
-	 * SMP.
-	 */
 	@Override
 	public boolean getShareTag() {
 		return true;
+	}
+
+	@Override
+	protected void openGui(World world, EntityPlayer entityplayer) {
+		entityplayer.openGui(ForestryAPI.instance, GuiHandler.encodeGuiData(GuiId.ItemGui, type.ordinal()), world, (int) entityplayer.posX, (int) entityplayer.posY, (int) entityplayer.posZ);
 	}
 
 	@Override
@@ -312,5 +317,35 @@ public class ItemBackpack extends ItemWithGui {
 		} else {
 			return BackpackMode.NORMAL;
 		}
+	}
+
+	@Override
+	public Object getGui(EntityPlayer player, ItemStack heldItem, int data) {
+		if (data > EnumBackpackType.values().length) {
+			return null;
+		}
+		EnumBackpackType type = EnumBackpackType.values()[data];
+		switch (type) {
+			case T1:
+				return new GuiBackpack(new ContainerBackpack(player, ContainerBackpack.Size.DEFAULT, heldItem));
+			case T2:
+				return new GuiBackpackT2(new ContainerBackpack(player, ContainerBackpack.Size.T2, heldItem));
+		}
+		return null;
+	}
+
+	@Override
+	public Object getContainer(EntityPlayer player, ItemStack heldItem, int data) {
+		if (data > EnumBackpackType.values().length) {
+			return null;
+		}
+		EnumBackpackType type = EnumBackpackType.values()[data];
+		switch (type) {
+			case T1:
+				return new ContainerBackpack(player, ContainerBackpack.Size.DEFAULT, heldItem);
+			case T2:
+				return new ContainerBackpack(player, ContainerBackpack.Size.T2, heldItem);
+		}
+		return null;
 	}
 }

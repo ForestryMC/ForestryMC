@@ -12,19 +12,20 @@ package forestry.storage.items;
 
 import net.minecraft.item.Item;
 
+import forestry.api.apiculture.BeeManager;
 import forestry.api.core.Tabs;
+import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.storage.BackpackManager;
 import forestry.api.storage.EnumBackpackType;
 import forestry.api.storage.IBackpackDefinition;
 import forestry.core.items.ItemCrated;
 import forestry.core.items.ItemRegistry;
-import forestry.core.network.GuiId;
 import forestry.plugins.PluginManager;
 
 public class ItemRegistryStorage extends ItemRegistry {
 	public final ItemCrated crate;
-	public final ItemBackpack apiaristBackpack;
-	public final ItemBackpack lepidopteristBackpack;
+	public final ItemBackpackNaturalist apiaristBackpack;
+	public final ItemBackpackNaturalist lepidopteristBackpack;
 	public final Item minerBackpack;
 	public final Item minerBackpackT2;
 	public final Item diggerBackpack;
@@ -47,7 +48,7 @@ public class ItemRegistryStorage extends ItemRegistry {
 		
 		if (PluginManager.Module.APICULTURE.isEnabled()) {
 			definition = BackpackManager.definitions.get("apiarist");
-			apiaristBackpack = new ItemBackpack(GuiId.ApiaristBackpackGUI, definition, EnumBackpackType.APIARIST);
+			apiaristBackpack = new ItemBackpackNaturalist(BeeManager.beeRoot, definition, EnumBackpackType.APIARIST);
 			apiaristBackpack.setCreativeTab(Tabs.tabApiculture);
 			registerItem(apiaristBackpack, "apiaristBag");
 		} else {
@@ -56,7 +57,7 @@ public class ItemRegistryStorage extends ItemRegistry {
 		
 		if (PluginManager.Module.LEPIDOPTEROLOGY.isEnabled()) {
 			definition = BackpackManager.definitions.get("lepidopterist");
-			lepidopteristBackpack = new ItemBackpack(GuiId.LepidopteristBackpackGUI, definition, EnumBackpackType.APIARIST);
+			lepidopteristBackpack = new ItemBackpackNaturalist(ButterflyManager.butterflyRoot, definition, EnumBackpackType.APIARIST);
 			lepidopteristBackpack.setCreativeTab(Tabs.tabLepidopterology);
 			registerItem(lepidopteristBackpack, "lepidopteristBag");
 		} else {

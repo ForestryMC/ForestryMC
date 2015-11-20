@@ -10,99 +10,105 @@
  ******************************************************************************/
 package forestry.core;
 
-import net.minecraft.client.gui.Gui;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import cpw.mods.fml.common.network.IGuiHandler;
 
-import forestry.core.circuits.ContainerSolderingIron;
-import forestry.core.circuits.GuiSolderingIron;
-import forestry.core.gui.ContainerAnalyzer;
-import forestry.core.gui.ContainerEscritoire;
-import forestry.core.gui.GuiAnalyzer;
-import forestry.core.gui.GuiEscritoire;
-import forestry.core.inventory.ItemInventorySolderingIron;
 import forestry.core.network.GuiId;
-import forestry.core.tiles.TileAnalyzer;
-import forestry.core.tiles.TileEscritoire;
-import forestry.core.tiles.TileUtil;
-import forestry.plugins.PluginManager;
+import forestry.core.network.IGuiHandlerEntity;
+import forestry.core.network.IGuiHandlerItem;
+import forestry.core.network.IGuiHandlerTile;
 
-public class GuiHandler extends GuiHandlerBase {
+public class GuiHandler implements IGuiHandler {
 
-	@SideOnly(Side.CLIENT)
+	public static int encodeGuiData(GuiId guiId, int data) {
+		return data << 8 | guiId.ordinal();
+	}
+
+	public static int decodeGuiID(int guiId) {
+		return guiId & 0xFF;
+	}
+
+	public static int decodeGuiData(int guiId) {
+		return guiId >> 8;
+	}
+
 	@Override
-	public Gui getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
+	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 		int cleanId = decodeGuiID(id);
+		int data = decodeGuiData(id);
 
-		if (cleanId < GuiId.values().length) {
-			switch (GuiId.values()[cleanId]) {
-
-				case AnalyzerGUI:
-					return new GuiAnalyzer(player.inventory, TileUtil.getTile(world, x, y, z, TileAnalyzer.class));
-
-				case NaturalistBenchGUI:
-					return new GuiEscritoire(player, TileUtil.getTile(world, x, y, z, TileEscritoire.class));
-
-				case SolderingIronGUI:
-					ItemStack equipped = player.getCurrentEquippedItem();
-					if (equipped == null) {
-						return null;
-					}
-					return new GuiSolderingIron(player, new ItemInventorySolderingIron(player, equipped));
-
-				default:
-					for (GuiHandlerBase handler : PluginManager.guiHandlers) {
-						Gui element = handler.getClientGuiElement(id, player, world, x, y, z);
-						if (element != null) {
-							return element;
-						}
-					}
-
-					return null;
-			}
+		if (cleanId >= GuiId.values().length) {
+			return null;
 		}
 
+		switch (GuiId.values()[cleanId]) {
+			case ItemGui: {
+				ItemStack heldItem = player.getCurrentEquippedItem();
+				if (heldItem != null) {
+					Item item = heldItem.getItem();
+					if (item instanceof IGuiHandlerItem) {
+						return ((IGuiHandlerItem) item).getGui(player, heldItem, data);
+					}
+				}
+				break;
+			}
+			case TileGui: {
+				TileEntity tileEntity = world.getTileEntity(x, y, z);
+				if (tileEntity instanceof IGuiHandlerTile) {
+					return ((IGuiHandlerTile) tileEntity).getGui(player, data);
+				}
+				break;
+			}
+			case EntityGui: {
+				Entity entity = world.getEntityByID(x);
+				if (entity instanceof IGuiHandlerEntity) {
+					return ((IGuiHandlerEntity) entity).getGui(player, data);
+				}
+			}
+		}
 		return null;
 	}
 
 	@Override
-	public Container getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
+	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 		int cleanId = decodeGuiID(id);
+		int data = decodeGuiData(id);
 
-		if (cleanId < GuiId.values().length) {
-			switch (GuiId.values()[cleanId]) {
-
-				case AnalyzerGUI:
-					return new ContainerAnalyzer(player.inventory, TileUtil.getTile(world, x, y, z, TileAnalyzer.class));
-
-				case NaturalistBenchGUI:
-					return new ContainerEscritoire(player, TileUtil.getTile(world, x, y, z, TileEscritoire.class));
-
-				case SolderingIronGUI:
-					ItemStack equipped = player.getCurrentEquippedItem();
-					if (equipped == null) {
-						return null;
-					}
-					return new ContainerSolderingIron(player, new ItemInventorySolderingIron(player, equipped));
-
-				default:
-					for (GuiHandlerBase handler : PluginManager.guiHandlers) {
-						Container element = handler.getServerGuiElement(id, player, world, x, y, z);
-						if (element != null) {
-							return element;
-						}
-					}
-
-					return null;
-
-			}
+		if (cleanId >= GuiId.values().length) {
+			return null;
 		}
 
+		switch (GuiId.values()[cleanId]) {
+			case ItemGui: {
+				ItemStack heldItem = player.getCurrentEquippedItem();
+				if (heldItem != null) {
+					Item item = heldItem.getItem();
+					if (item instanceof IGuiHandlerItem) {
+						return ((IGuiHandlerItem) item).getContainer(player, heldItem, data);
+					}
+				}
+				break;
+			}
+			case TileGui: {
+				TileEntity tileEntity = world.getTileEntity(x, y, z);
+				if (tileEntity instanceof IGuiHandlerTile) {
+					return ((IGuiHandlerTile) tileEntity).getContainer(player, data);
+				}
+				break;
+			}
+			case EntityGui: {
+				Entity entity = world.getEntityByID(x);
+				if (entity instanceof IGuiHandlerEntity) {
+					return ((IGuiHandlerEntity) entity).getContainer(player, data);
+				}
+			}
+		}
 		return null;
 	}
 }

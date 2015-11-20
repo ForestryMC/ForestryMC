@@ -26,7 +26,6 @@ import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.recipes.RecipeManagers;
-import forestry.core.GuiHandlerBase;
 import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
 import forestry.core.fluids.Fluids;
@@ -34,7 +33,6 @@ import forestry.core.recipes.RecipeUtil;
 import forestry.core.tiles.MachineDefinition;
 import forestry.core.utils.EntityUtil;
 import forestry.lepidopterology.ButterflySpawner;
-import forestry.lepidopterology.GuiHandlerLepidopterology;
 import forestry.lepidopterology.blocks.BlockLepidopterologyType;
 import forestry.lepidopterology.blocks.BlockRegistryLepidopterology;
 import forestry.lepidopterology.commands.CommandButterfly;
@@ -141,11 +139,6 @@ public class PluginLepidopterology extends ForestryPlugin {
 				'#', "blockGlass",
 				'X', new ItemStack(items.butterflyGE, 1, OreDictionary.WILDCARD_VALUE),
 				'Y', "chestWood");
-	}
-
-	@Override
-	public GuiHandlerBase getGuiHandler() {
-		return new GuiHandlerLepidopterology();
 	}
 
 	public static boolean isPollinationAllowed() {

@@ -14,9 +14,11 @@ import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.DefaultBeeListener;
 import forestry.api.apiculture.IBeeHousingInventory;
 import forestry.api.apiculture.IBeeListener;
@@ -24,9 +26,10 @@ import forestry.api.apiculture.IBeeModifier;
 import forestry.apiculture.BeehouseBeeModifier;
 import forestry.apiculture.InventoryBeeHousing;
 import forestry.apiculture.blocks.BlockApicultureType;
+import forestry.apiculture.gui.ContainerMinecartBeehouse;
+import forestry.apiculture.gui.GuiBeeHousing;
 import forestry.core.config.Config;
 import forestry.core.inventory.IInventoryAdapter;
-import forestry.core.network.GuiId;
 import forestry.plugins.PluginApiculture;
 
 public class EntityMinecartBeehouse extends EntityMinecartBeeHousingBase {
@@ -43,11 +46,6 @@ public class EntityMinecartBeehouse extends EntityMinecartBeeHousingBase {
 	public EntityMinecartBeehouse(World world, double posX, double posY, double posZ) {
 		super(world, posX, posY, posZ);
 		beeInventory.disableAutomation();
-	}
-
-	@Override
-	protected GuiId getGuiId() {
-		return GuiId.MinecartBeehouseGUI;
 	}
 
 	@Override
@@ -89,5 +87,17 @@ public class EntityMinecartBeehouse extends EntityMinecartBeeHousingBase {
 	@Override
 	protected IInventoryAdapter getInternalInventory() {
 		return beeInventory;
+	}
+
+	@Override
+	public Object getGui(EntityPlayer player, int data) {
+		ContainerMinecartBeehouse container = new ContainerMinecartBeehouse(player.inventory, this, false);
+		return new GuiBeeHousing<>(this, container, GuiBeeHousing.Icon.BEE_HOUSE);
+	}
+
+	@Override
+	public Object getContainer(EntityPlayer player, int data) {
+		BeeManager.beeRoot.syncBreedingTrackerToPlayer(player);
+		return new ContainerMinecartBeehouse(player.inventory, this, false);
 	}
 }

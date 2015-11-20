@@ -33,15 +33,12 @@ import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.farming.Farmables;
 import forestry.api.farming.IFarmable;
-import forestry.core.GuiHandlerBase;
 import forestry.core.circuits.Circuit;
 import forestry.core.circuits.CircuitLayout;
 import forestry.core.config.Constants;
 import forestry.core.items.EnumElectronTube;
 import forestry.core.recipes.RecipeUtil;
-import forestry.core.recipes.ShapedRecipeCustom;
 import forestry.core.utils.Log;
-import forestry.farming.GuiHandlerFarming;
 import forestry.farming.blocks.BlockFarmType;
 import forestry.farming.blocks.BlockRegistryFarming;
 import forestry.farming.circuits.CircuitFarmLogic;
@@ -268,11 +265,6 @@ public class PluginFarming extends ForestryPlugin {
 		}
 
 		return false;
-	}
-
-	@Override
-	public GuiHandlerBase getGuiHandler() {
-		return new GuiHandlerFarming();
 	}
 
 	@Override

@@ -16,10 +16,8 @@ import net.minecraft.init.Items;
 import cpw.mods.fml.common.SidedProxy;
 
 import forestry.api.core.ForestryAPI;
-import forestry.core.GuiHandlerBase;
 import forestry.core.config.Constants;
 import forestry.core.recipes.RecipeUtil;
-import forestry.energy.GuiHandlerEnergy;
 import forestry.energy.blocks.BlockEngineType;
 import forestry.energy.blocks.BlockRegistryEnergy;
 import forestry.energy.proxy.ProxyEnergy;
@@ -88,10 +86,5 @@ public class PluginEnergy extends ForestryPlugin {
 					'Z', "gearCopper",
 					'V', Blocks.piston);
 		}
-	}
-
-	@Override
-	public GuiHandlerBase getGuiHandler() {
-		return new GuiHandlerEnergy();
 	}
 }

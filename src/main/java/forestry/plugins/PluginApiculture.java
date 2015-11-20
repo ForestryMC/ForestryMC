@@ -63,7 +63,6 @@ import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
 import forestry.apiculture.ArmorApiaristHelper;
-import forestry.apiculture.GuiHandlerApiculture;
 import forestry.apiculture.SaveEventHandlerApiculture;
 import forestry.apiculture.VillageHandlerApiculture;
 import forestry.apiculture.blocks.BlockAlveary;
@@ -104,7 +103,6 @@ import forestry.apiculture.worldgen.HiveDecorator;
 import forestry.apiculture.worldgen.HiveDescription;
 import forestry.apiculture.worldgen.HiveGenHelper;
 import forestry.apiculture.worldgen.HiveRegistry;
-import forestry.core.GuiHandlerBase;
 import forestry.core.ISaveEventHandler;
 import forestry.core.blocks.BlockCoreType;
 import forestry.core.config.Config;
@@ -383,11 +381,6 @@ public class PluginApiculture extends ForestryPlugin {
 			String[] plantableFlowerNamesArray = plantableFlowerNames.toArray(new String[plantableFlowerNames.size()]);
 			defaultPlantableFlowers.put(flowerType, plantableFlowerNamesArray);
 		}
-	}
-
-	@Override
-	public GuiHandlerBase getGuiHandler() {
-		return new GuiHandlerApiculture();
 	}
 
 	@Override

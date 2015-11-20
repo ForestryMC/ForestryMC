@@ -25,11 +25,12 @@ import forestry.core.inventory.InventoryAdapterTile;
 import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
-import forestry.core.network.GuiId;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.tiles.TileBase;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.ItemStackUtil;
+import forestry.factory.gui.ContainerWorktable;
+import forestry.factory.gui.GuiWorktable;
 import forestry.factory.inventory.InventoryCraftingForestry;
 import forestry.factory.inventory.InventoryGhostCrafting;
 import forestry.factory.inventory.InventoryWorktable;
@@ -42,7 +43,7 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 	private MemorizedRecipe currentRecipe;
 
 	public TileWorktable() {
-		super(GuiId.WorktableGUI, "worktable");
+		super("worktable");
 		setInternalInventory(new InventoryWorktable(this));
 
 		craftingDisplay = new InventoryGhostCrafting<>(this, 10);
@@ -261,5 +262,15 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 		if (currentRecipe != null) {
 			setCraftingDisplay(currentRecipe.getCraftMatrix());
 		}
+	}
+
+	@Override
+	public Object getGui(EntityPlayer player, int data) {
+		return new GuiWorktable(player, this);
+	}
+
+	@Override
+	public Object getContainer(EntityPlayer player, int data) {
+		return new ContainerWorktable(player, this);
 	}
 }

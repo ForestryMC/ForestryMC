@@ -16,8 +16,6 @@ import net.minecraft.item.ItemStack;
 
 import forestry.core.items.ItemForestryFood;
 import forestry.core.items.ItemRegistry;
-import forestry.core.items.ItemWithGui;
-import forestry.core.network.GuiId;
 import forestry.food.BeverageEffect;
 
 public class ItemRegistryFood extends ItemRegistry {
@@ -25,7 +23,7 @@ public class ItemRegistryFood extends ItemRegistry {
 	public final ItemBeverage beverage;
 	public final ItemForestryFood ambrosia;
 	public final ItemForestryFood honeyPot;
-	public final ItemWithGui infuser;
+	public final ItemInfuser infuser;
 
 	public ItemRegistryFood() {
 		// / FOOD ITEMS
@@ -35,7 +33,7 @@ public class ItemRegistryFood extends ItemRegistry {
 		honeyPot = registerItem(new ItemForestryFood(2, 0.2f).setIsDrink(), "honeyPot");
 
 		// / SEASONER
-		infuser = new ItemWithGui(GuiId.InfuserGUI);
+		infuser = new ItemInfuser();
 		registerItem(infuser, "infuser");
 
 		// Mead

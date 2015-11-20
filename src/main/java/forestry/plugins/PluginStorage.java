@@ -56,7 +56,6 @@ import forestry.api.storage.BackpackManager;
 import forestry.api.storage.IBackpackDefinition;
 import forestry.api.storage.StorageManager;
 import forestry.apiculture.blocks.BlockRegistryApiculture;
-import forestry.core.GuiHandlerBase;
 import forestry.core.IPickupHandler;
 import forestry.core.IResupplyHandler;
 import forestry.core.config.Constants;
@@ -74,7 +73,6 @@ import forestry.storage.BackpackDefinition.BackpackDefinitionApiarist;
 import forestry.storage.BackpackDefinition.BackpackDefinitionLepidopterist;
 import forestry.storage.BackpackInterface;
 import forestry.storage.CrateRegistry;
-import forestry.storage.GuiHandlerStorage;
 import forestry.storage.PickupHandlerStorage;
 import forestry.storage.ResupplyHandler;
 import forestry.storage.items.ItemRegistryStorage;
@@ -484,11 +482,6 @@ public class PluginStorage extends ForestryPlugin {
 	@Override
 	public IPickupHandler getPickupHandler() {
 		return new PickupHandlerStorage();
-	}
-
-	@Override
-	public GuiHandlerBase getGuiHandler() {
-		return new GuiHandlerStorage();
 	}
 
 	@Override

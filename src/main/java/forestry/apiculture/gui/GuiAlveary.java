@@ -13,14 +13,14 @@ package forestry.apiculture.gui;
 import net.minecraft.entity.player.InventoryPlayer;
 
 import forestry.apiculture.multiblock.IAlvearyControllerInternal;
-import forestry.apiculture.multiblock.TileAlvearyPlain;
+import forestry.apiculture.multiblock.TileAlveary;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.render.EnumTankLevel;
 
-public class GuiAlveary extends GuiForestryTitled<ContainerAlveary, TileAlvearyPlain> {
+public class GuiAlveary extends GuiForestryTitled<ContainerAlveary, TileAlveary> {
 
-	public GuiAlveary(InventoryPlayer inventory, TileAlvearyPlain tile) {
+	public GuiAlveary(InventoryPlayer inventory, TileAlveary tile) {
 		super(Constants.TEXTURE_PATH_GUI + "/alveary.png", new ContainerAlveary(inventory, tile), tile);
 
 		ySize = 190;

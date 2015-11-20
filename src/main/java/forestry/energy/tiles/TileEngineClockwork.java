@@ -39,7 +39,7 @@ public class TileEngineClockwork extends TileEngine {
 	private short delay = 0;
 	
 	public TileEngineClockwork() {
-		super(null, null, ENGINE_CLOCKWORK_HEAT_MAX, 10000);
+		super(null, ENGINE_CLOCKWORK_HEAT_MAX, 10000);
 	}
 	
 	@Override
@@ -160,4 +160,13 @@ public class TileEngineClockwork extends TileEngine {
 	public void sendGUINetworkData(Container containerEngine, ICrafting iCrafting) {
 	}
 
+	@Override
+	public Object getGui(EntityPlayer player, int data) {
+		return null;
+	}
+
+	@Override
+	public Object getContainer(EntityPlayer player, int data) {
+		return null;
+	}
 }

@@ -8,24 +8,29 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.items;
+package forestry.lepidopterology.items;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
-import forestry.core.circuits.ContainerSolderingIron;
-import forestry.core.circuits.GuiSolderingIron;
-import forestry.core.circuits.ISolderingIron;
-import forestry.core.inventory.ItemInventorySolderingIron;
+import forestry.api.core.Tabs;
+import forestry.core.gui.ContainerAlyzer;
+import forestry.core.items.ItemWithGui;
+import forestry.lepidopterology.gui.GuiFlutterlyzer;
+import forestry.lepidopterology.inventory.ItemInventoryFlutterlyzer;
 
-public class ItemSolderingIron extends ItemWithGui implements ISolderingIron {
+public class ItemFlutterlyzer extends ItemWithGui {
+	public ItemFlutterlyzer() {
+		super(Tabs.tabLepidopterology);
+	}
+
 	@Override
 	public Object getGui(EntityPlayer player, ItemStack heldItem, int data) {
-		return new GuiSolderingIron(player, new ItemInventorySolderingIron(player, heldItem));
+		return new GuiFlutterlyzer(player, new ItemInventoryFlutterlyzer(player, heldItem));
 	}
 
 	@Override
 	public Object getContainer(EntityPlayer player, ItemStack heldItem, int data) {
-		return new ContainerSolderingIron(player, new ItemInventorySolderingIron(player, heldItem));
+		return new ContainerAlyzer(new ItemInventoryFlutterlyzer(player, heldItem), player);
 	}
 }

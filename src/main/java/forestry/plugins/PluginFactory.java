@@ -32,7 +32,6 @@ import forestry.api.fuels.RainSubstrate;
 import forestry.api.recipes.ICraftingProvider;
 import forestry.api.recipes.RecipeManagers;
 import forestry.apiculture.items.ItemRegistryApiculture;
-import forestry.core.GuiHandlerBase;
 import forestry.core.blocks.BlockCoreType;
 import forestry.core.blocks.BlockSoil;
 import forestry.core.circuits.Circuit;
@@ -53,7 +52,6 @@ import forestry.core.utils.ModUtil;
 import forestry.core.utils.datastructures.FluidMap;
 import forestry.core.utils.datastructures.ItemStackMap;
 import forestry.factory.DummyManagers;
-import forestry.factory.GuiHandlerFactory;
 import forestry.factory.blocks.BlockFactoryPlainType;
 import forestry.factory.blocks.BlockFactoryTesrType;
 import forestry.factory.blocks.BlockRegistryFactory;
@@ -538,10 +536,4 @@ public class PluginFactory extends ForestryPlugin {
 				'W', "craftingTableWood",
 				'C', "chestWood");
 	}
-
-	@Override
-	public GuiHandlerBase getGuiHandler() {
-		return new GuiHandlerFactory();
-	}
-
 }

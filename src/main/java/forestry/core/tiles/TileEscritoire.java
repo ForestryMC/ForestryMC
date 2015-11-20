@@ -22,11 +22,12 @@ import com.mojang.authlib.GameProfile;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IIndividual;
+import forestry.core.gui.ContainerEscritoire;
+import forestry.core.gui.GuiEscritoire;
 import forestry.core.inventory.InventoryEscritoire;
 import forestry.core.inventory.watchers.ISlotPickupWatcher;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
-import forestry.core.network.GuiId;
 import forestry.core.network.IStreamableGui;
 import forestry.core.utils.InventoryUtil;
 
@@ -35,7 +36,7 @@ public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPi
 	private final EscritoireGame game = new EscritoireGame();
 
 	public TileEscritoire() {
-		super(GuiId.NaturalistBenchGUI, "escritoire");
+		super("escritoire");
 		setInternalInventory(new InventoryEscritoire(this));
 	}
 
@@ -119,5 +120,15 @@ public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPi
 		if (slotIndex == InventoryEscritoire.SLOT_ANALYZE) {
 			game.reset();
 		}
+	}
+
+	@Override
+	public Object getGui(EntityPlayer player, int data) {
+		return new GuiEscritoire(player, this);
+	}
+
+	@Override
+	public Object getContainer(EntityPlayer player, int data) {
+		return new ContainerEscritoire(player, this);
 	}
 }

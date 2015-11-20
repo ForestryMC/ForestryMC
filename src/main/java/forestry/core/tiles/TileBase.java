@@ -21,19 +21,14 @@ import forestry.core.gui.IHintSource;
 import forestry.core.network.GuiId;
 
 public abstract class TileBase extends TileForestry implements IHintSource {
-
-	protected final GuiId guiId;
 	protected final List<String> hints;
 
-	protected TileBase(GuiId guiId, String hintKey) {
-		this.guiId = guiId;
+	protected TileBase(String hintKey) {
 		this.hints = new ArrayList<>(Config.hints.get(hintKey));
 	}
 
 	public void openGui(EntityPlayer player) {
-		if (guiId != null) {
-			player.openGui(ForestryAPI.instance, guiId.ordinal(), worldObj, xCoord, yCoord, zCoord);
-		}
+		player.openGui(ForestryAPI.instance, GuiId.TileGui.ordinal(), worldObj, xCoord, yCoord, zCoord);
 	}
 
 	public boolean canDrainWithBucket() {
