@@ -81,9 +81,7 @@ public class GuiHandlerEnergy extends GuiHandlerBase {
 				return new ContainerEnginePeat(player.inventory, TileUtil.getTile(world, x, y, z, TileEnginePeat.class));
 
 			case EngineElectricGUI:
-				TileEngineElectric tile = TileUtil.getTile(world, x, y, z, TileEngineElectric.class);
-				Proxies.net.sendToPlayer(new PacketSocketUpdate(tile), player);
-				return new ContainerEngineElectric(player.inventory, tile);
+				return new ContainerEngineElectric(player.inventory, TileUtil.getTile(world, x, y, z, TileEngineElectric.class));
 
 			case GeneratorGUI:
 				return new ContainerGenerator(player.inventory, TileUtil.getTile(world, x, y, z, TileGenerator.class));
