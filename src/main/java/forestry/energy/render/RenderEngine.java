@@ -26,6 +26,7 @@ import forestry.core.render.ForestryResource;
 import forestry.core.render.IBlockRenderer;
 import forestry.core.tiles.TemperatureState;
 import forestry.core.tiles.TileEngine;
+import forestry.core.utils.Log;
 
 public class RenderEngine extends TileEntitySpecialRenderer implements IBlockRenderer {
 
@@ -100,11 +101,11 @@ public class RenderEngine extends TileEntitySpecialRenderer implements IBlockRen
 
 	@Override
 	public void renderTileEntityAt(TileEntity tile, double d, double d1, double d2, float f) {
-
-		TileEngine tileEngine = (TileEngine) tile;
-
-		if (tileEngine != null) {
+		if (tile instanceof TileEngine) {
+			TileEngine tileEngine = (TileEngine) tile;
 			render(tileEngine.getTemperatureState(), tileEngine.progress, tileEngine.getOrientation(), d, d1, d2);
+		} else {
+			Log.severe("Tried to render a tile entity that is not an engine: " + tile);
 		}
 	}
 
