@@ -112,6 +112,12 @@ public abstract class Mutation implements IMutationCustom {
 	}
 
 	@Override
+	public Mutation requireResource(String oreName) {
+		IMutationCondition mutationCondition = new MutationConditionRequiresResourceOreDict(oreName);
+		return addMutationCondition(mutationCondition);
+	}
+
+	@Override
 	public Mutation addMutationCondition(IMutationCondition mutationCondition) {
 		mutationConditions.add(mutationCondition);
 		specialConditions.add(mutationCondition.getDescription());

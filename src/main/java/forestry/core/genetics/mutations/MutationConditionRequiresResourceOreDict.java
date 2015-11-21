@@ -10,23 +10,34 @@
  ******************************************************************************/
 package forestry.core.genetics.mutations;
 
+import java.util.ArrayList;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
+import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IMutationCondition;
-import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.StringUtil;
 
-public class MutationConditionRequiresResource implements IMutationCondition {
+public class MutationConditionRequiresResourceOreDict implements IMutationCondition {
 
-	private final ItemStack blockRequired;
+	private final int oreDictId;
+	private final String displayName;
 
-	public MutationConditionRequiresResource(Block block, int meta) {
-		blockRequired = new ItemStack(block, meta);
+	public MutationConditionRequiresResourceOreDict(String oreDictName) {
+		this.oreDictId = OreDictionary.getOreID(oreDictName);
+
+		ArrayList<ItemStack> ores = OreDictionary.getOres(oreDictName);
+		if (ores != null && 0 < ores.size()) {
+			this.displayName = ores.get(0).getDisplayName();
+		} else {
+			this.displayName = oreDictName;
+		}
 	}
 
 	@Override
@@ -40,11 +51,17 @@ public class MutationConditionRequiresResource implements IMutationCondition {
 			i++;
 		} while (block instanceof IBeeHousing);
 
-		return ItemStackUtil.equals(block, meta, blockRequired) ? 1 : 0;
+		int[] oreIds = OreDictionary.getOreIDs(new ItemStack(block, 1, meta));
+		for (int oreId : oreIds) {
+			if (oreId == this.oreDictId) {
+				return 1;
+			}
+		}
+		return 0;
 	}
 
 	@Override
 	public String getDescription() {
-		return StringUtil.localizeAndFormat("mutation.condition.resource", blockRequired.getDisplayName());
+		return StringUtil.localizeAndFormat("mutation.condition.resource", displayName);
 	}
 }
