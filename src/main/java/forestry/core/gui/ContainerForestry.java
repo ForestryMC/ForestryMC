@@ -11,6 +11,7 @@
 package forestry.core.gui;
 
 import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimaps;
 
 import java.util.List;
 import java.util.Map;
@@ -125,8 +126,7 @@ public abstract class ContainerForestry extends Container {
 				}
 			}
 		}
-
-		//noinspection unchecked
-		return (Map<ContainerSection, List<Slot>>) (Object) map.asMap();
+		
+		return Multimaps.asMap(map);
 	}
 }
