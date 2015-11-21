@@ -289,7 +289,13 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 
 	/** Checks if a queen is alive. Much faster than reading the whole bee nbt */
 	private static boolean isQueenAlive(ItemStack queenStack) {
+		if (queenStack == null) {
+			return false;
+		}
 		NBTTagCompound nbtTagCompound = queenStack.getTagCompound();
+		if (nbtTagCompound == null) {
+			return false;
+		}
 		int health = nbtTagCompound.getInteger("Health");
 		return health > 0;
 	}
