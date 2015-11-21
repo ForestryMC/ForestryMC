@@ -10,18 +10,28 @@
  ******************************************************************************/
 package forestry.core.gui;
 
+import com.google.common.collect.ArrayListMultimap;
+
+import java.util.List;
+import java.util.Map;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
+import forestry.core.gui.slots.SlotFilteredInventory;
 import forestry.core.gui.slots.SlotForestry;
 import forestry.core.gui.slots.SlotLocked;
 import forestry.core.network.IForestryPacketClient;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.SlotUtil;
 
+import invtweaks.api.container.ContainerSection;
+import invtweaks.api.container.ContainerSectionCallback;
+
+@invtweaks.api.container.ChestContainer
 public abstract class ContainerForestry extends Container {
 	protected final void addPlayerInventory(InventoryPlayer playerInventory, int xInv, int yInv) {
 		// Player inventory
@@ -88,5 +98,35 @@ public abstract class ContainerForestry extends Container {
 				Proxies.net.sendToPlayer(packet, (EntityPlayer) crafter);
 			}
 		}
+	}
+
+	@ContainerSectionCallback
+	public Map<ContainerSection, List<Slot>> getContainerSections() {
+		ArrayListMultimap<ContainerSection, Slot> map = ArrayListMultimap.create();
+
+		for (Object object : inventorySlots) {
+			if (!(object instanceof Slot)) {
+				continue;
+			}
+			Slot slot = (Slot) object;
+
+			if (slot.inventory instanceof InventoryPlayer) {
+				map.put(ContainerSection.INVENTORY, slot);
+				if (slot.slotNumber < 9) {
+					map.put(ContainerSection.INVENTORY_HOTBAR, slot);
+				} else if (slot.slotNumber < 36) {
+					map.put(ContainerSection.INVENTORY_NOT_HOTBAR, slot);
+				} else {
+					map.put(ContainerSection.ARMOR, slot);
+				}
+			} else {
+				if (!(slot instanceof SlotForestry) || slot instanceof SlotFilteredInventory) {
+					map.put(ContainerSection.CHEST, slot);
+				}
+			}
+		}
+
+		//noinspection unchecked
+		return (Map<ContainerSection, List<Slot>>) (Object) map.asMap();
 	}
 }
