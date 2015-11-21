@@ -32,7 +32,7 @@ import forestry.core.utils.SlotUtil;
 import invtweaks.api.container.ContainerSection;
 import invtweaks.api.container.ContainerSectionCallback;
 
-@invtweaks.api.container.ChestContainer
+@invtweaks.api.container.ChestContainer(showButtons = false)
 public abstract class ContainerForestry extends Container {
 	protected final void addPlayerInventory(InventoryPlayer playerInventory, int xInv, int yInv) {
 		// Player inventory
@@ -101,6 +101,7 @@ public abstract class ContainerForestry extends Container {
 		}
 	}
 
+	@SuppressWarnings("unused") // inventory tweaks
 	@ContainerSectionCallback
 	public Map<ContainerSection, List<Slot>> getContainerSections() {
 		ArrayListMultimap<ContainerSection, Slot> map = ArrayListMultimap.create();
