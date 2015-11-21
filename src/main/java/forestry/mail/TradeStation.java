@@ -34,6 +34,7 @@ import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.StringUtil;
 import forestry.mail.inventory.InventoryTradeStation;
 import forestry.mail.items.EnumStampDefinition;
 import forestry.plugins.PluginMail;
@@ -175,44 +176,44 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 			return EnumStationState.INSUFFICIENT_PAPER;
 		}
 
-		int ordersToFill = ItemStackUtil.containsSets(InventoryUtil.getStacks(inventory, SLOT_EXCHANGE_1, SLOT_EXCHANGE_COUNT), letter.getAttachments());
+		int ordersToFillCount = ItemStackUtil.containsSets(InventoryUtil.getStacks(inventory, SLOT_EXCHANGE_1, SLOT_EXCHANGE_COUNT), letter.getAttachments());
 
 		// Not a single match.
-		if (ordersToFill <= 0) {
+		if (ordersToFillCount <= 0) {
 			return EnumStationState.INSUFFICIENT_OFFER;
 		}
 
 		if (!isVirtual()) {
-			int fillable = countFillableOrders(ordersToFill, inventory.getStackInSlot(SLOT_TRADEGOOD));
+			int fillable = countFillableOrders(ordersToFillCount, inventory.getStackInSlot(SLOT_TRADEGOOD));
 
 			// Nothing can be filled.
 			if (fillable <= 0) {
 				return EnumStationState.INSUFFICIENT_TRADE_GOOD;
 			}
 
-			if (fillable < ordersToFill) {
-				ordersToFill = fillable;
+			if (fillable < ordersToFillCount) {
+				ordersToFillCount = fillable;
 			}
 
 			// Check for sufficient output buffer
-			int storable = countStorablePayment(ordersToFill, InventoryUtil.getStacks(inventory, SLOT_EXCHANGE_1, SLOT_EXCHANGE_COUNT));
+			int storable = countStorablePayment(ordersToFillCount, InventoryUtil.getStacks(inventory, SLOT_EXCHANGE_1, SLOT_EXCHANGE_COUNT));
 
 			if (storable <= 0) {
 				return EnumStationState.INSUFFICIENT_BUFFER;
 			}
 
-			if (storable < ordersToFill) {
-				ordersToFill = storable;
+			if (storable < ordersToFillCount) {
+				ordersToFillCount = storable;
 			}
 		}
 
 		// Prepare the letter
 		ILetter mail = new Letter(this.address, letter.getSender());
-		mail.setText("Please find your order attached.");
-		for (int i = 0; i < ordersToFill; i++) {
+		mail.setText(StringUtil.localize("gui.mail.order.attached"));
+		for (int i = 0; i < ordersToFillCount; i++) {
 			mail.addAttachment(inventory.getStackInSlot(SLOT_TRADEGOOD).copy());
 		}
-		mail.addAttachments(getSurplusAttachments(ordersToFill, letter.getAttachments()));
+		mail.addAttachments(getSurplusAttachments(ordersToFillCount, letter.getAttachments()));
 
 		// Check for necessary postage
 		int requiredPostage = mail.requiredPostage();
@@ -247,7 +248,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 		}
 
 		// Store received items
-		for (int i = 0; i < ordersToFill; i++) {
+		for (int i = 0; i < ordersToFillCount; i++) {
 			for (ItemStack stack : InventoryUtil.getStacks(inventory, SLOT_EXCHANGE_1, SLOT_EXCHANGE_COUNT)) {
 				if (stack == null) {
 					continue;
@@ -260,14 +261,25 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 		// Remove resources
 		removePaper();
 		removeStamps(stampCount);
-		removeTradegood(ordersToFill);
+		removeTradegood(ordersToFillCount);
 
 		// Send confirmation message to seller
 		if (sendOwnerNotice) {
 			nbttagcompound = new NBTTagCompound();
 
 			ILetter confirm = new Letter(this.address, new MailAddress(this.owner));
-			confirm.setText(ordersToFill + " order(s) from " + letter.getSender().getName() + " were filled.");
+
+			String orderFilledMessage;
+			if (ordersToFillCount == 1) {
+				orderFilledMessage = StringUtil.localize("gui.mail.order.filled.one");
+			} else {
+				orderFilledMessage = StringUtil.localize("gui.mail.order.filled.multiple");
+				orderFilledMessage = orderFilledMessage.replace("%COUNT", Integer.toString(ordersToFillCount));
+			}
+
+			orderFilledMessage = orderFilledMessage.replace("%SENDER", letter.getSender().getName());
+
+			confirm.setText(orderFilledMessage);
 			confirm.addStamps(PluginMail.items.stamps.get(EnumStampDefinition.P_1, 1));
 			confirm.writeToNBT(nbttagcompound);
 
