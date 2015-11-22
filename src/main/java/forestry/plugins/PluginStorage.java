@@ -145,6 +145,18 @@ public class PluginStorage extends ForestryPlugin {
 	}
 
 	@Override
+	@SuppressWarnings({"unchecked", "rawtypes"})
+	protected void disabledSetupAPI() {
+		BackpackManager.backpackItems = new ArrayList[6];
+		BackpackManager.backpackItems[0] = minerItems;
+		BackpackManager.backpackItems[1] = diggerItems;
+		BackpackManager.backpackItems[2] = foresterItems;
+		BackpackManager.backpackItems[3] = hunterItems;
+		BackpackManager.backpackItems[4] = adventurerItems;
+		BackpackManager.backpackItems[5] = builderItems;
+	}
+
+	@Override
 	protected void registerItemsAndBlocks() {
 		items = new ItemRegistryStorage();
 	}
