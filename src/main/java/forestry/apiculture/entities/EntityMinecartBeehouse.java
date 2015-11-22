@@ -35,7 +35,7 @@ import forestry.plugins.PluginApiculture;
 public class EntityMinecartBeehouse extends EntityMinecartBeeHousingBase {
 	private static final IBeeModifier beeModifier = new BeehouseBeeModifier();
 	private static final IBeeListener beeListener = new DefaultBeeListener();
-	private final InventoryBeeHousing beeInventory = new InventoryBeeHousing(9, "Items", getAccessHandler());
+	private final InventoryBeeHousing beeInventory = new InventoryBeeHousing(9, getAccessHandler());
 
 	@SuppressWarnings("unused")
 	public EntityMinecartBeehouse(World world) {

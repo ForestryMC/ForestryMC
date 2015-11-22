@@ -38,10 +38,10 @@ public class BlockRegistryCore extends BlockRegistry {
 		
 		resourceStorage = registerBlock(new BlockResourceStorage(), ItemBlockForestry.class, "resourceStorage");
 		resourceStorage.setHarvestLevel("pickaxe", 0);
-		OreDictionary.registerOre("blockApatite", resourceStorage.get(BlockResourceStorage.ResourceType.APATITE, 1));
-		OreDictionary.registerOre("blockCopper", resourceStorage.get(BlockResourceStorage.ResourceType.COPPER, 1));
-		OreDictionary.registerOre("blockTin", resourceStorage.get(BlockResourceStorage.ResourceType.TIN, 1));
-		OreDictionary.registerOre("blockBronze", resourceStorage.get(BlockResourceStorage.ResourceType.BRONZE, 1));
+		OreDictionary.registerOre("blockApatite", resourceStorage.get(BlockResourceStorage.ResourceType.APATITE));
+		OreDictionary.registerOre("blockCopper", resourceStorage.get(BlockResourceStorage.ResourceType.COPPER));
+		OreDictionary.registerOre("blockTin", resourceStorage.get(BlockResourceStorage.ResourceType.TIN));
+		OreDictionary.registerOre("blockBronze", resourceStorage.get(BlockResourceStorage.ResourceType.BRONZE));
 
 		// register some common oreDict names for our recipes
 		OreDictionary.registerOre("chestWood", Blocks.chest);

@@ -316,7 +316,7 @@ public class PluginArboriculture extends ForestryPlugin {
 				'#', "stickWood");
 
 		// ANALYZER
-		RecipeUtil.addRecipe(PluginCore.blocks.core.get(BlockCoreType.ANALYZER, 1),
+		RecipeUtil.addRecipe(PluginCore.blocks.core.get(BlockCoreType.ANALYZER),
 				"XTX",
 				" Y ",
 				"X X",
@@ -324,7 +324,7 @@ public class PluginArboriculture extends ForestryPlugin {
 				'T', items.treealyzer,
 				'X', "ingotBronze");
 
-		RecipeUtil.addRecipe(blocks.arboriculture.get(BlockArboricultureType.ARBCHEST, 1),
+		RecipeUtil.addRecipe(blocks.arboriculture.get(BlockArboricultureType.ARBCHEST),
 				" # ",
 				"XYX",
 				"XXX",

@@ -277,16 +277,16 @@ public class PluginCore extends ForestryPlugin {
 		RecipeUtil.addRecipe(items.pipette, "  #", " X ", "X  ", 'X', "paneGlass", '#', new ItemStack(Blocks.wool, 1, OreDictionary.WILDCARD_VALUE));
 
 		// Storage Blocks
-		RecipeUtil.addRecipe(blocks.resourceStorage.get(BlockResourceStorage.ResourceType.APATITE, 1), "###", "###", "###", '#', "gemApatite");
+		RecipeUtil.addRecipe(blocks.resourceStorage.get(BlockResourceStorage.ResourceType.APATITE), "###", "###", "###", '#', "gemApatite");
 		RecipeUtil.addShapelessRecipe(new ItemStack(items.apatite, 9), "blockApatite");
 
-		RecipeUtil.addRecipe(blocks.resourceStorage.get(BlockResourceStorage.ResourceType.COPPER, 1), "###", "###", "###", '#', "ingotCopper");
+		RecipeUtil.addRecipe(blocks.resourceStorage.get(BlockResourceStorage.ResourceType.COPPER), "###", "###", "###", '#', "ingotCopper");
 		RecipeUtil.addShapelessRecipe(new ItemStack(items.ingotCopper, 9), "blockCopper");
 
-		RecipeUtil.addRecipe(blocks.resourceStorage.get(BlockResourceStorage.ResourceType.TIN, 1), "###", "###", "###", '#', "ingotTin");
+		RecipeUtil.addRecipe(blocks.resourceStorage.get(BlockResourceStorage.ResourceType.TIN), "###", "###", "###", '#', "ingotTin");
 		RecipeUtil.addShapelessRecipe(new ItemStack(items.ingotTin, 9), "blockTin");
 
-		RecipeUtil.addRecipe(blocks.resourceStorage.get(BlockResourceStorage.ResourceType.BRONZE, 1), "###", "###", "###", '#', "ingotBronze");
+		RecipeUtil.addRecipe(blocks.resourceStorage.get(BlockResourceStorage.ResourceType.BRONZE), "###", "###", "###", '#', "ingotBronze");
 		RecipeUtil.addShapelessRecipe(new ItemStack(items.ingotBronze, 9), "blockBronze");
 	}
 

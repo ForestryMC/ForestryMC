@@ -465,12 +465,12 @@ public class PluginApiculture extends ForestryPlugin {
 		RecipeUtil.addRecipe(items.minecartBeehouse.getBeeHouseMinecart(),
 				"B",
 				"C",
-				'B', blocks.apiculture.get(BlockApicultureType.BEEHOUSE, 1),
+				'B', blocks.apiculture.get(BlockApicultureType.BEEHOUSE),
 				'C', Items.minecart);
 		RecipeUtil.addRecipe(items.minecartBeehouse.getApiaryMinecart(),
 				"B",
 				"C",
-				'B', blocks.apiculture.get(BlockApicultureType.APIARY, 1),
+				'B', blocks.apiculture.get(BlockApicultureType.APIARY),
 				'C', Items.minecart);
 
 		// FOOD STUFF
@@ -521,14 +521,14 @@ public class PluginApiculture extends ForestryPlugin {
 				'#', PluginCore.items.beeswax);
 
 		// / ALVEARY
-		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.Type.PLAIN, 1),
+		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.Type.PLAIN),
 				"###",
 				"#X#",
 				"###",
 				'X', PluginCore.items.impregnatedCasing,
 				'#', PluginCore.items.craftingMaterial.getScentedPaneling());
 		// SWARMER
-		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.Type.SWARMER, 1),
+		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.Type.SWARMER),
 				"#G#",
 				" X ",
 				"#G#",
@@ -536,7 +536,7 @@ public class PluginApiculture extends ForestryPlugin {
 				'X', blocks.alveary,
 				'G', "ingotGold");
 		// FAN
-		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.Type.FAN, 1),
+		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.Type.FAN),
 				"I I",
 				" X ",
 				"I#I",
@@ -544,7 +544,7 @@ public class PluginApiculture extends ForestryPlugin {
 				'X', blocks.alveary,
 				'I', "ingotIron");
 		// HEATER
-		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.Type.HEATER, 1),
+		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.Type.HEATER),
 				"#I#",
 				" X ",
 				"YYY",
@@ -552,7 +552,7 @@ public class PluginApiculture extends ForestryPlugin {
 				'X', blocks.alveary,
 				'I', "ingotIron", 'Y', "stone");
 		// HYGROREGULATOR
-		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.Type.HYGRO, 1),
+		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.Type.HYGRO),
 				"GIG",
 				"GXG",
 				"GIG",
@@ -560,14 +560,14 @@ public class PluginApiculture extends ForestryPlugin {
 				'I', "ingotIron",
 				'G', "blockGlass");
 		// STABILISER
-		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.Type.STABILIZER, 1),
+		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.Type.STABILIZER),
 				"G G",
 				"GXG",
 				"G G",
 				'X', blocks.alveary,
 				'G', "gemQuartz");
 		// SIEVE
-		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.Type.SIEVE, 1),
+		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.Type.SIEVE),
 				"III",
 				" X ",
 				"WWW",
@@ -712,7 +712,7 @@ public class PluginApiculture extends ForestryPlugin {
 		}
 
 		// ANALYZER
-		RecipeUtil.addRecipe(PluginCore.blocks.core.get(BlockCoreType.ANALYZER, 1),
+		RecipeUtil.addRecipe(PluginCore.blocks.core.get(BlockCoreType.ANALYZER),
 				"XTX",
 				" Y ",
 				"X X",
@@ -720,7 +720,7 @@ public class PluginApiculture extends ForestryPlugin {
 				'T', items.beealyzer,
 				'X', "ingotBronze");
 
-		RecipeUtil.addRecipe(blocks.apiculture.get(BlockApicultureType.APIARY, 1),
+		RecipeUtil.addRecipe(blocks.apiculture.get(BlockApicultureType.APIARY),
 				"XXX",
 				"#C#",
 				"###",
@@ -736,7 +736,7 @@ public class PluginApiculture extends ForestryPlugin {
 				'X', "beeComb",
 				'Y', "chestWood");
 
-		RecipeUtil.addRecipe(blocks.apiculture.get(BlockApicultureType.BEEHOUSE, 1),
+		RecipeUtil.addRecipe(blocks.apiculture.get(BlockApicultureType.BEEHOUSE),
 				"XXX",
 				"#C#",
 				"###",

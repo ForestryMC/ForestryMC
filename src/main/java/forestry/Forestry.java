@@ -145,10 +145,10 @@ public class Forestry {
 					Log.warning("Remapping block " + mapping.name + " to " + StringUtil.cleanBlockName(block));
 				}
 			} else {
-				Block block = GameRegistry.findBlock(Constants.MOD, StringUtil.cleanTags(mapping.name));
-				if (block != null) {
-					mapping.remap(Item.getItemFromBlock(block));
-					Log.warning("Remapping item " + mapping.name + " to " + StringUtil.cleanBlockName(block));
+				Item item = GameRegistry.findItem(Constants.MOD, StringUtil.cleanTags(mapping.name));
+				if (item != null) {
+					mapping.remap(item);
+					Log.warning("Remapping item " + mapping.name + " to " + StringUtil.cleanItemName(item));
 				}
 			}
 		}

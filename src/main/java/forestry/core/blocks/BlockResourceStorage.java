@@ -40,7 +40,7 @@ public class BlockResourceStorage extends Block {
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs creativeTabs, List itemList) {
 		for (ResourceType resourceType : ResourceType.values()) {
-			ItemStack stack = get(resourceType, 1);
+			ItemStack stack = get(resourceType);
 			itemList.add(stack);
 		}
 	}
@@ -69,7 +69,7 @@ public class BlockResourceStorage extends Block {
 		return ResourceType.VALUES[meta].icon;
 	}
 
-	public ItemStack get(ResourceType type, int amount) {
-		return new ItemStack(this, amount, type.ordinal());
+	public ItemStack get(ResourceType type) {
+		return new ItemStack(this, 1, type.ordinal());
 	}
 }

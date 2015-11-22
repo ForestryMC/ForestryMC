@@ -68,7 +68,7 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 
 	public AlvearyController(World world) {
 		super(world, AlvearyMultiblockSizeLimits.instance);
-		this.inventory = new InventoryBeeHousing(9, "Items", getAccessHandler());
+		this.inventory = new InventoryBeeHousing(9, getAccessHandler());
 		this.beekeepingLogic = BeeManager.beeRoot.createBeekeepingLogic(this);
 
 		this.beeModifiers.add(new AlvearyBeeModifier());

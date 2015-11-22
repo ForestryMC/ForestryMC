@@ -291,10 +291,6 @@ public class BlockBase<T extends IMachineProperties> extends BlockForestry {
 	}
 
 	public final ItemStack get(T type) {
-		return get(type, 1);
-	}
-
-	public final ItemStack get(T type, int amount) {
-		return new ItemStack(this, amount, type.getMeta());
+		return new ItemStack(this, 1, type.getMeta());
 	}
 }

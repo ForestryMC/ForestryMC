@@ -34,7 +34,7 @@ public class TileBeehouse extends TileBeeHousingBase {
 		super("bee.house");
 		this.beeListener = new DefaultBeeListener();
 
-		beeInventory = new InventoryBeeHousing(12, "Items", getAccessHandler());
+		beeInventory = new InventoryBeeHousing(12, getAccessHandler());
 		beeInventory.disableAutomation();
 		setInternalInventory(beeInventory);
 	}

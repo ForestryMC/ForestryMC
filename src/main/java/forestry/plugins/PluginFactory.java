@@ -320,7 +320,7 @@ public class PluginFactory extends ForestryPlugin {
 				"###",
 				'#', "logWood");
 		RecipeManagers.carpenterManager.addRecipe(50, Fluids.SEEDOIL.getFluid(500), null,
-				PluginCore.blocks.core.get(BlockCoreType.ESCRITOIRE, 1),
+				PluginCore.blocks.core.get(BlockCoreType.ESCRITOIRE),
 				"#  ",
 				"###",
 				"# #",

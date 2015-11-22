@@ -285,7 +285,7 @@ public class BlockAlveary extends BlockStructure {
 		}
 	}
 
-	public ItemStack get(Type type, int amount) {
-		return new ItemStack(this, amount, type.ordinal());
+	public ItemStack get(Type type) {
+		return new ItemStack(this, 1, type.ordinal());
 	}
 }
