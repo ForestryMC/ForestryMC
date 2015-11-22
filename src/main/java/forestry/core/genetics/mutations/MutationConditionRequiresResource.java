@@ -26,7 +26,7 @@ public class MutationConditionRequiresResource implements IMutationCondition {
 	private final ItemStack blockRequired;
 
 	public MutationConditionRequiresResource(Block block, int meta) {
-		blockRequired = new ItemStack(block, meta);
+		blockRequired = new ItemStack(block, 1, meta);
 	}
 
 	@Override
