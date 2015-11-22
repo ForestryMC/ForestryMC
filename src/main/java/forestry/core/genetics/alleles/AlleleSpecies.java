@@ -32,12 +32,11 @@ import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
 import forestry.apiculture.items.ItemRegistryApiculture;
+import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.plugins.PluginApiculture;
-import forestry.plugins.PluginManager;
 
 public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesCustom {
-
 	private final String binomial;
 	private final String authority;
 	private final String description;
@@ -95,8 +94,12 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesCust
 	}
 
 	@Override
-	public ItemStack[] getResearchBounty(World world, GameProfile researcher, IIndividual individual, int bountyLevel) {
+	public int getComplexity() {
+		return GeneticsUtil.getResearchComplexity(this, getRoot().getKaryotypeKey());
+	}
 
+	@Override
+	public ItemStack[] getResearchBounty(World world, GameProfile researcher, IIndividual individual, int bountyLevel) {
 		ItemStack research = null;
 		if (world.rand.nextFloat() < ((float) 10 / bountyLevel)) {
 			Collection<? extends IMutation> combinations = getRoot().getCombinations(this);
@@ -111,7 +114,6 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesCust
 		} else {
 			return ItemStackUtil.EMPTY_STACK_ARRAY;
 		}
-
 	}
 
 	@Override
@@ -182,20 +184,6 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesCust
 	public IAlleleSpeciesCustom setIsNotCounted() {
 		isCounted = false;
 		return this;
-	}
-
-	@Deprecated
-	@SuppressWarnings("unchecked")
-	public <T extends AlleleSpecies> T setTemperatureDeprecated(EnumTemperature temperature) {
-		climate = temperature;
-		return (T) this;
-	}
-
-	@Deprecated
-	@SuppressWarnings("unchecked")
-	public <T extends AlleleSpecies> T setHumidityDeprecated(EnumHumidity humidity) {
-		this.humidity = humidity;
-		return (T) this;
 	}
 
 	@Override

@@ -36,7 +36,6 @@ import forestry.api.lepidopterology.IButterflyRoot;
 import forestry.core.genetics.alleles.AlleleSpecies;
 
 public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButterflySpeciesCustom {
-
 	private final String texture;
 	private final Color serumColour;
 	private float rarity = 0.1f;

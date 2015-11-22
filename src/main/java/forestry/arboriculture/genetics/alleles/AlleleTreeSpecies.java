@@ -22,7 +22,6 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.api.arboriculture.EnumGermlingType;
-import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleTreeSpeciesCustom;
 import forestry.api.arboriculture.IGermlingIconProvider;
 import forestry.api.arboriculture.ILeafIconProvider;
@@ -34,10 +33,8 @@ import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IFruitFamily;
 import forestry.core.genetics.alleles.AlleleSpecies;
 import forestry.core.render.TextureManager;
-import forestry.core.utils.GeneticsUtil;
 
 public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeciesCustom, IIconProvider {
-
 	private final ITreeGenerator generator;
 	private final IGermlingIconProvider germlingIconProvider;
 	private final ILeafIconProvider leafIconProvider;
@@ -68,12 +65,6 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 	public AlleleTreeSpecies addFruitFamily(IFruitFamily family) {
 		fruits.add(family);
 		return this;
-	}
-
-	/* RESEARCH */
-	@Override
-	public int getComplexity() {
-		return GeneticsUtil.getResearchComplexity(this, EnumTreeChromosome.SPECIES);
 	}
 
 	/* OTHER */

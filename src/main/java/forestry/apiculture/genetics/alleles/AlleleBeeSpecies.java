@@ -26,7 +26,6 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IAlleleBeeSpeciesCustom;
 import forestry.api.apiculture.IBeeGenome;
@@ -42,7 +41,6 @@ import forestry.apiculture.genetics.DefaultBeeIconColourProvider;
 import forestry.apiculture.genetics.DefaultBeeIconProvider;
 import forestry.apiculture.genetics.JubilanceDefault;
 import forestry.core.genetics.alleles.AlleleSpecies;
-import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.ItemStackUtil;
 
 public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpeciesCustom {
@@ -116,11 +114,6 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 	}
 
 	/* RESEARCH */
-	@Override
-	public int getComplexity() {
-		return GeneticsUtil.getResearchComplexity(this, EnumBeeChromosome.SPECIES);
-	}
-
 	@Override
 	public float getResearchSuitability(ItemStack itemstack) {
 		if (itemstack == null) {
