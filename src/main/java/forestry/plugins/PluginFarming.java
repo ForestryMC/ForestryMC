@@ -280,8 +280,13 @@ public class PluginFarming extends ForestryPlugin {
 			NBTTagCompound compound = new NBTTagCompound();
 			block.saveToCompound(compound);
 
-			basic.setTagCompound((NBTTagCompound) compound.copy());
-			RecipeUtil.addRecipe(basic.copy(),
+			basic.setTagCompound(compound);
+			gearbox.setTagCompound(compound);
+			hatch.setTagCompound(compound);
+			valve.setTagCompound(compound);
+			control.setTagCompound(compound);
+
+			RecipeUtil.addRecipe(basic,
 					"I#I",
 					"WCW",
 					'#', block.getBase(),
@@ -289,10 +294,32 @@ public class PluginFarming extends ForestryPlugin {
 					'C', PluginCore.items.tubes.get(EnumElectronTube.TIN, 1),
 					'I', "ingotCopper");
 
-			RecipeUtil.addRecipe(gearbox, " # ", "TTT", '#', basic, 'T', "gearTin");
-			RecipeUtil.addRecipe(hatch, " # ", "TDT", '#', basic, 'T', "gearTin", 'D', Blocks.trapdoor);
-			RecipeUtil.addRecipe(valve, " # ", "XTX", '#', basic, 'T', "gearTin", 'X', "blockGlass");
-			RecipeUtil.addRecipe(control, " # ", "XTX", '#', basic, 'T', PluginCore.items.tubes.get(EnumElectronTube.GOLD, 1), 'X', "dustRedstone");
+			RecipeUtil.addRecipe(gearbox,
+					" # ",
+					"TTT",
+					'#', basic,
+					'T', "gearTin");
+
+			RecipeUtil.addRecipe(hatch,
+					" # ",
+					"TDT",
+					'#', basic,
+					'T', "gearTin",
+					'D', Blocks.trapdoor);
+
+			RecipeUtil.addRecipe(valve,
+					" # ",
+					"XTX",
+					'#', basic,
+					'T', "gearTin",
+					'X', "blockGlass");
+
+			RecipeUtil.addRecipe(control,
+					" # ",
+					"XTX",
+					'#', basic,
+					'T', PluginCore.items.tubes.get(EnumElectronTube.GOLD, 1),
+					'X', "dustRedstone");
 		}
 
 		// Circuits
