@@ -348,14 +348,14 @@ public class PluginArboriculture extends ForestryPlugin {
 		AlleleManager.ersatzSpecimen.put(new ItemStack(Blocks.leaves, 1, 1), TreeDefinition.Spruce.getIndividual());
 		AlleleManager.ersatzSpecimen.put(new ItemStack(Blocks.leaves, 1, 2), TreeDefinition.Birch.getIndividual());
 		AlleleManager.ersatzSpecimen.put(new ItemStack(Blocks.leaves, 1, 3), TreeDefinition.Jungle.getIndividual());
-		AlleleManager.ersatzSpecimen.put(new ItemStack(Blocks.leaves2, 1, 0), TreeDefinition.Acacia.getIndividual());
+		AlleleManager.ersatzSpecimen.put(new ItemStack(Blocks.leaves2, 1, 0), TreeDefinition.AcaciaVanilla.getIndividual());
 		AlleleManager.ersatzSpecimen.put(new ItemStack(Blocks.leaves2, 1, 1), TreeDefinition.DarkOak.getIndividual());
 
 		AlleleManager.ersatzSaplings.put(new ItemStack(Blocks.sapling, 1, 0), TreeDefinition.Oak.getIndividual());
 		AlleleManager.ersatzSaplings.put(new ItemStack(Blocks.sapling, 1, 1), TreeDefinition.Spruce.getIndividual());
 		AlleleManager.ersatzSaplings.put(new ItemStack(Blocks.sapling, 1, 2), TreeDefinition.Birch.getIndividual());
 		AlleleManager.ersatzSaplings.put(new ItemStack(Blocks.sapling, 1, 3), TreeDefinition.Jungle.getIndividual());
-		AlleleManager.ersatzSaplings.put(new ItemStack(Blocks.sapling, 1, 4), TreeDefinition.Acacia.getIndividual());
+		AlleleManager.ersatzSaplings.put(new ItemStack(Blocks.sapling, 1, 4), TreeDefinition.AcaciaVanilla.getIndividual());
 		AlleleManager.ersatzSaplings.put(new ItemStack(Blocks.sapling, 1, 5), TreeDefinition.DarkOak.getIndividual());
 	}
 
