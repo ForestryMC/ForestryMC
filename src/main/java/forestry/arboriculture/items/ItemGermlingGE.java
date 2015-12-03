@@ -127,7 +127,7 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable {
 
 	@Override
 	public int getRenderPasses(int metadata) {
-		return type == EnumGermlingType.SAPLING ? 1 : 2;
+		return 2;
 	}
 
 	@Override
