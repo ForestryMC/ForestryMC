@@ -16,4 +16,7 @@ import net.minecraft.entity.player.EntityPlayer;
 
 public interface IForestryPacketClient extends IForestryPacket {
 	void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException;
+
+	@Override
+	PacketIdClient getPacketId();
 }

@@ -18,8 +18,8 @@ import net.minecraft.item.ItemStack;
 
 import forestry.api.recipes.ICentrifugeRecipe;
 import forestry.api.recipes.RecipeManagers;
-import forestry.core.config.Constants;
-import forestry.core.config.ForestryBlock;
+import forestry.factory.blocks.BlockFactoryTesrType;
+import forestry.plugins.PluginFactory;
 
 import uristqwerty.CraftGuide.api.ChanceSlot;
 import uristqwerty.CraftGuide.api.ItemSlot;
@@ -46,11 +46,11 @@ public class CraftGuideCentrifuge implements RecipeProvider {
 	@Override
 	public void generateRecipes(RecipeGenerator generator) {
 
-		if (ForestryBlock.factoryTESR.block() == null) {
+		if (PluginFactory.blocks.factoryTESR == null) {
 			return;
 		}
 
-		ItemStack machine = ForestryBlock.factoryTESR.getItemStack(1, Constants.DEFINITION_CENTRIFUGE_META);
+		ItemStack machine = PluginFactory.blocks.factoryTESR.get(BlockFactoryTesrType.CENTRIFUGE);
 		RecipeTemplate template = generator.createRecipeTemplate(slots, machine);
 
 		for (ICentrifugeRecipe recipe : RecipeManagers.centrifugeManager.recipes()) {

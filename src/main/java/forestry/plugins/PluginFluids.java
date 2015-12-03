@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -39,20 +38,21 @@ import forestry.api.fuels.GeneratorFuel;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
-import forestry.core.config.ForestryItem;
 import forestry.core.fluids.BlockForestryFluid;
 import forestry.core.fluids.Fluids;
 import forestry.core.fluids.LiquidRegistryHelper;
+import forestry.core.items.EnumContainerType;
 import forestry.core.items.ItemLiquidContainer;
+import forestry.core.items.ItemRegistryFluids;
 import forestry.core.utils.Log;
 import forestry.core.utils.StringUtil;
-
-import static forestry.core.items.ItemLiquidContainer.EnumContainerType;
 
 @Plugin(pluginID = "Fluids", name = "Fluids", author = "mezz", url = Constants.URL, unlocalizedDescription = "for.plugin.fluids.description")
 public class PluginFluids extends ForestryPlugin {
 
 	private static final List<Fluids> forestryFluidsWithBlocks = new ArrayList<>();
+
+	public static ItemRegistryFluids items;
 
 	private static void createFluid(Fluids forestryFluid) {
 		if (forestryFluid.getFluid() == null && Config.isFluidEnabled(forestryFluid)) {
@@ -92,31 +92,7 @@ public class PluginFluids extends ForestryPlugin {
 			createFluid(fluidType);
 		}
 
-		for (EnumContainerType type : EnumContainerType.values()) {
-			Item emptyContainer = new ItemLiquidContainer(type, Blocks.air, null);
-			switch (type) {
-				case CAN:
-					ForestryItem.canEmpty.registerItem(emptyContainer, "canEmpty");
-					break;
-				case CAPSULE:
-					ForestryItem.waxCapsule.registerItem(emptyContainer, "waxCapsule");
-					break;
-				case REFRACTORY:
-					ForestryItem.refractoryEmpty.registerItem(emptyContainer, "refractoryEmpty");
-					break;
-			}
-
-			for (Fluids fluidType : Fluids.values()) {
-				ForestryItem container = fluidType.getContainerForType(type);
-				if (container == null) {
-					continue;
-				}
-
-				ItemLiquidContainer liquidContainer = new ItemLiquidContainer(type, fluidType.getBlock(), fluidType.getColor());
-				fluidType.setProperties(liquidContainer);
-				container.registerItem(liquidContainer, container.toString());
-			}
-		}
+		items = new ItemRegistryFluids();
 	}
 
 	@Override
@@ -133,7 +109,7 @@ public class PluginFluids extends ForestryPlugin {
 			}
 
 			for (EnumContainerType type : EnumContainerType.values()) {
-				ForestryItem container = fluidType.getContainerForType(type);
+				ItemLiquidContainer container = items.getContainer(type, fluidType);
 				if (container == null) {
 					continue;
 				}
@@ -147,9 +123,9 @@ public class PluginFluids extends ForestryPlugin {
 		}
 
 		if (RecipeManagers.squeezerManager != null) {
-			RecipeManagers.squeezerManager.addContainerRecipe(10, ForestryItem.canEmpty.getItemStack(), ForestryItem.ingotTin.getItemStack(), 0.05f);
-			RecipeManagers.squeezerManager.addContainerRecipe(10, ForestryItem.waxCapsule.getItemStack(), ForestryItem.beeswax.getItemStack(), 0.10f);
-			RecipeManagers.squeezerManager.addContainerRecipe(10, ForestryItem.refractoryEmpty.getItemStack(), ForestryItem.refractoryWax.getItemStack(), 0.10f);
+			RecipeManagers.squeezerManager.addContainerRecipe(10, items.canEmpty.getItemStack(), PluginCore.items.ingotTin.getItemStack(), 0.05f);
+			RecipeManagers.squeezerManager.addContainerRecipe(10, items.waxCapsuleEmpty.getItemStack(), PluginCore.items.beeswax.getItemStack(), 0.10f);
+			RecipeManagers.squeezerManager.addContainerRecipe(10, items.refractoryEmpty.getItemStack(), PluginCore.items.refractoryWax.getItemStack(), 0.10f);
 		}
 
 		FluidStack ethanol = Fluids.ETHANOL.getFluid(1);

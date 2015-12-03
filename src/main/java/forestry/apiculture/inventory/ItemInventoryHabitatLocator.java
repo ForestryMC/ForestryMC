@@ -27,10 +27,10 @@ import forestry.api.core.IErrorState;
 import forestry.apiculture.items.HabitatLocatorLogic;
 import forestry.apiculture.items.ItemHabitatLocator;
 import forestry.core.config.Config;
-import forestry.core.config.ForestryItem;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.gui.IHintSource;
 import forestry.core.inventory.ItemInventory;
+import forestry.plugins.PluginApiculture;
 
 public class ItemInventoryHabitatLocator extends ItemInventory implements IErrorSource, IHintSource {
 
@@ -51,7 +51,8 @@ public class ItemInventoryHabitatLocator extends ItemInventory implements IError
 			return false;
 		}
 
-		return ForestryItem.honeyDrop.isItemEqual(itemstack) || ForestryItem.honeydew.isItemEqual(itemstack);
+		Item item = itemstack.getItem();
+		return PluginApiculture.items.honeyDrop == item || PluginApiculture.items.honeydew == item;
 	}
 
 	@Override
@@ -119,8 +120,7 @@ public class ItemInventoryHabitatLocator extends ItemInventory implements IError
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 		if (slotIndex == SLOT_ENERGY) {
-			Item item = itemStack.getItem();
-			return item == ForestryItem.honeydew.item() || item == ForestryItem.honeyDrop.item();
+			return isEnergy(itemStack);
 		} else if (slotIndex == SLOT_SPECIMEN) {
 			return BeeManager.beeRoot.isMember(itemStack);
 		}

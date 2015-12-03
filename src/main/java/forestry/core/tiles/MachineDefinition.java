@@ -18,8 +18,6 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
@@ -34,6 +32,8 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+import forestry.core.blocks.IMachineProperties;
+import forestry.core.blocks.IMachinePropertiesTESR;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.IBlockRenderer;
 import forestry.core.render.TextureManager;
@@ -52,20 +52,19 @@ public class MachineDefinition {
 	
 	private float minX, minY, minZ, maxX, maxY, maxZ;
 
-	/* CRAFTING */
-	public IRecipe[] recipes;
-
-	public MachineDefinition(int meta, String teIdent, Class<? extends TileForestry> teClass, IRecipe... recipes) {
-		this(meta, teIdent, teClass, null, recipes);
+	public MachineDefinition(IMachineProperties properties) {
+		this(properties.getMeta(), properties.getTeIdent(), properties.getTeClass(), null);
 	}
 
-	public MachineDefinition(int meta, String teIdent, Class<? extends TileForestry> teClass, IBlockRenderer renderer, IRecipe... recipes) {
+	public MachineDefinition(IMachinePropertiesTESR properties) {
+		this(properties.getMeta(), properties.getTeIdent(), properties.getTeClass(), properties.getRenderer());
+	}
+
+	public MachineDefinition(int meta, String teIdent, Class<? extends TileForestry> teClass, IBlockRenderer renderer) {
 		this.meta = meta;
 		this.teIdent = teIdent;
 		this.teClass = teClass;
 		this.renderer = renderer;
-
-		this.recipes = recipes;
 
 		this.faceMap = new int[8];
 		for (int i = 0; i < 8; i++) {
@@ -109,18 +108,8 @@ public class MachineDefinition {
 
 	public void register() {
 		registerTileEntity();
-		registerCrafting();
 		if (renderer != null) {
 			Proxies.render.registerTESR(this);
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	private void registerCrafting() {
-		for (IRecipe recipe : recipes) {
-			if (recipe != null) {
-				CraftingManager.getInstance().getRecipeList().add(recipe);
-			}
 		}
 	}
 	

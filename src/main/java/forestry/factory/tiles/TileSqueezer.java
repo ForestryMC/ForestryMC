@@ -38,12 +38,13 @@ import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
-import forestry.core.network.GuiId;
 import forestry.core.render.TankRenderInfo;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.PlayerUtil;
+import forestry.factory.gui.ContainerSqueezer;
+import forestry.factory.gui.GuiSqueezer;
 import forestry.factory.inventory.InventorySqueezer;
 import forestry.factory.recipes.SqueezerRecipeManager;
 
@@ -61,7 +62,7 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 	private ISqueezerRecipe currentRecipe;
 
 	public TileSqueezer() {
-		super(GuiId.SqueezerGUI, "squeezer", 1100, Constants.MACHINE_MAX_ENERGY);
+		super("squeezer", 1100, Constants.MACHINE_MAX_ENERGY);
 		this.inventory = new InventorySqueezer(this);
 		setInternalInventory(this.inventory);
 		this.productTank = new StandardTank(Constants.PROCESSOR_TANK_CAPACITY);
@@ -282,5 +283,15 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 	@Override
 	public ICircuitSocketType getSocketType() {
 		return CircuitSocketType.MACHINE;
+	}
+
+	@Override
+	public Object getGui(EntityPlayer player, int data) {
+		return new GuiSqueezer(player.inventory, this);
+	}
+
+	@Override
+	public Object getContainer(EntityPlayer player, int data) {
+		return new ContainerSqueezer(player.inventory, this);
 	}
 }

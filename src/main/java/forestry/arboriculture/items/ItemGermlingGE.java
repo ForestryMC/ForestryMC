@@ -37,7 +37,7 @@ import forestry.arboriculture.genetics.TreeGenome;
 import forestry.arboriculture.genetics.pollination.ICheckPollinatable;
 import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
-import forestry.core.network.PacketFXSignal;
+import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.SpriteSheet;
 import forestry.core.utils.BlockUtil;
@@ -49,9 +49,8 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable {
 	private final EnumGermlingType type;
 
 	public ItemGermlingGE(EnumGermlingType type) {
-		super();
+		super(Tabs.tabArboriculture);
 		this.type = type;
-		setCreativeTab(Tabs.tabArboriculture);
 	}
 
 	@Override
@@ -128,12 +127,12 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable {
 
 	@Override
 	public int getRenderPasses(int metadata) {
-		return 2;//type == EnumGermlingType.SAPLING ? 1 : 2;
+		return type == EnumGermlingType.SAPLING ? 1 : 2;
 	}
 
 	@Override
 	public int getSpriteNumber() {
-		return type == EnumGermlingType.SAPLING ? SpriteSheet.BLOCKS.getSheetOrdinal() : SpriteSheet.ITEMS.getSheetOrdinal();
+		return SpriteSheet.BLOCKS.getSheetOrdinal();
 	}
 
 	@Override

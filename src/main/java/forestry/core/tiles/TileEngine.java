@@ -21,13 +21,12 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.api.core.IErrorLogic;
-import forestry.apiculture.network.PacketActiveUpdate;
+import forestry.apiculture.network.packets.PacketActiveUpdate;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
-import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.BlockUtil;
 import forestry.energy.EnergyManager;
@@ -54,8 +53,8 @@ public abstract class TileEngine extends TileBase implements IEnergyConnection, 
 	public float progress;
 	protected final EnergyManager energyManager;
 
-	protected TileEngine(GuiId guiId, String hintKey, int maxHeat, int maxEnergy) {
-		super(guiId, hintKey);
+	protected TileEngine(String hintKey, int maxHeat, int maxEnergy) {
+		super(hintKey);
 		this.maxHeat = maxHeat;
 		energyManager = new EnergyManager(2000, maxEnergy);
 

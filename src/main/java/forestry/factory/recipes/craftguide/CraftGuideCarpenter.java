@@ -14,9 +14,9 @@ import net.minecraft.item.ItemStack;
 
 import forestry.api.recipes.ICarpenterRecipe;
 import forestry.api.recipes.RecipeManagers;
-import forestry.core.config.Constants;
-import forestry.core.config.ForestryBlock;
 import forestry.core.recipes.RecipeUtil;
+import forestry.factory.blocks.BlockFactoryTesrType;
+import forestry.plugins.PluginFactory;
 
 import uristqwerty.CraftGuide.api.ItemSlot;
 import uristqwerty.CraftGuide.api.LiquidSlot;
@@ -43,12 +43,11 @@ public class CraftGuideCarpenter implements RecipeProvider {
 
 	@Override
 	public void generateRecipes(RecipeGenerator generator) {
-
-		if (ForestryBlock.factoryTESR.block() == null) {
+		if (PluginFactory.blocks.factoryTESR == null) {
 			return;
 		}
 
-		ItemStack machine = ForestryBlock.factoryTESR.getItemStack(1, Constants.DEFINITION_CARPENTER_META);
+		ItemStack machine = PluginFactory.blocks.factoryTESR.get(BlockFactoryTesrType.CARPENTER);
 		RecipeTemplate template = generator.createRecipeTemplate(slots, machine);
 
 		for (ICarpenterRecipe recipe : RecipeManagers.carpenterManager.recipes()) {

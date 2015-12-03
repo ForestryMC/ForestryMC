@@ -20,9 +20,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import forestry.core.blocks.BlockSoil;
-import forestry.core.config.ForestryItem;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.vect.Vect;
+import forestry.plugins.PluginCore;
 
 public class CropPeat extends Crop {
 
@@ -33,7 +33,7 @@ public class CropPeat extends Crop {
 	@Override
 	protected boolean isCrop(Vect pos) {
 		Block block = getBlock(pos);
-		if (block == null || !(block instanceof BlockSoil)) {
+		if (!(block instanceof BlockSoil)) {
 			return false;
 		}
 
@@ -45,7 +45,7 @@ public class CropPeat extends Crop {
 	@Override
 	protected Collection<ItemStack> harvestBlock(Vect pos) {
 		List<ItemStack> drops = new ArrayList<>();
-		drops.add(ForestryItem.peat.getItemStack());
+		drops.add(PluginCore.items.peat.getItemStack());
 
 		Proxies.common.addBlockDestroyEffects(world, pos.x, pos.y, pos.z, world.getBlock(pos.x, pos.y, pos.z), 0);
 		setBlock(pos, Blocks.dirt, 0);

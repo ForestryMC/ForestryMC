@@ -30,7 +30,7 @@ import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.StringUtil;
-import forestry.mail.network.PacketPOBoxInfoResponse;
+import forestry.mail.network.packets.PacketPOBoxInfoResponse;
 
 public class PostalCarrier implements IPostalCarrier {
 

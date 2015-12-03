@@ -14,26 +14,21 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 
 import forestry.core.gui.ContainerItemInventory;
+import forestry.core.gui.ContainerNaturalistInventory;
 import forestry.core.gui.IGuiSelectable;
-import forestry.core.gui.slots.SlotFiltered;
-import forestry.core.network.PacketGuiSelectRequest;
+import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.storage.inventory.ItemInventoryBackpackPaged;
 
 public class ContainerNaturalistBackpack extends ContainerItemInventory<ItemInventoryBackpackPaged> implements IGuiSelectable {
 
-	public ContainerNaturalistBackpack(EntityPlayer player, ItemInventoryBackpackPaged inventory, int page) {
+	public ContainerNaturalistBackpack(EntityPlayer player, ItemInventoryBackpackPaged inventory, int selectedPage) {
 		super(inventory, player.inventory, 18, 120);
 
-		// Inventory
-		for (int x = 0; x < 5; x++) {
-			for (int y = 0; y < 5; y++) {
-				addSlotToContainer(new SlotFiltered(inventory, y + page * 25 + x * 5, 100 + y * 18, 21 + x * 18));
-			}
-		}
+		ContainerNaturalistInventory.addInventory(this, inventory, selectedPage);
 	}
 
 	@Override
 	public void handleSelectionRequest(EntityPlayerMP player, PacketGuiSelectRequest packet) {
-		inventory.flipPage(player, packet.getPrimaryIndex());
+		inventory.flipPage(player, (short) packet.getPrimaryIndex());
 	}
 }

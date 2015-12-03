@@ -30,10 +30,10 @@ import forestry.api.mail.IPostRegistry;
 import forestry.api.mail.IPostalCarrier;
 import forestry.api.mail.ITradeStation;
 import forestry.api.mail.PostManager;
-import forestry.core.config.ForestryItem;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.PlayerUtil;
-import forestry.mail.network.PacketPOBoxInfoResponse;
+import forestry.mail.network.packets.PacketPOBoxInfoResponse;
+import forestry.plugins.PluginMail;
 
 public class PostRegistry implements IPostRegistry {
 
@@ -238,7 +238,6 @@ public class PostRegistry implements IPostRegistry {
 
 	@Override
 	public boolean isLetter(ItemStack itemstack) {
-		return ForestryItem.letters.isItemEqual(itemstack);
+		return itemstack != null && itemstack.getItem() == PluginMail.items.letters;
 	}
-
 }

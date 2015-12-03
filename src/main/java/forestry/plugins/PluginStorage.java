@@ -51,35 +51,31 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
 
 import forestry.Forestry;
-import forestry.api.core.Tabs;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.BackpackManager;
-import forestry.api.storage.EnumBackpackType;
 import forestry.api.storage.IBackpackDefinition;
 import forestry.api.storage.StorageManager;
-import forestry.core.GuiHandlerBase;
+import forestry.apiculture.blocks.BlockRegistryApiculture;
 import forestry.core.IPickupHandler;
 import forestry.core.IResupplyHandler;
 import forestry.core.config.Constants;
-import forestry.core.config.ForestryBlock;
-import forestry.core.config.ForestryItem;
 import forestry.core.config.LocalizedConfiguration;
 import forestry.core.fluids.Fluids;
 import forestry.core.items.ItemCrated;
-import forestry.core.network.GuiId;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.StringUtil;
+import forestry.lepidopterology.blocks.BlockLepidopterologyType;
+import forestry.lepidopterology.blocks.BlockRegistryLepidopterology;
 import forestry.storage.BackpackDefinition;
 import forestry.storage.BackpackDefinition.BackpackDefinitionApiarist;
 import forestry.storage.BackpackDefinition.BackpackDefinitionLepidopterist;
 import forestry.storage.BackpackInterface;
 import forestry.storage.CrateRegistry;
-import forestry.storage.GuiHandlerStorage;
 import forestry.storage.PickupHandlerStorage;
 import forestry.storage.ResupplyHandler;
-import forestry.storage.items.ItemBackpack;
+import forestry.storage.items.ItemRegistryStorage;
 import forestry.storage.proxy.ProxyStorage;
 
 @Plugin(pluginID = "Storage", name = "Storage", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.storage.description")
@@ -96,6 +92,8 @@ public class PluginStorage extends ForestryPlugin {
 	private final ArrayList<ItemStack> hunterItems = new ArrayList<>();
 	private final ArrayList<ItemStack> adventurerItems = new ArrayList<>();
 	private final ArrayList<ItemStack> builderItems = new ArrayList<>();
+
+	public static ItemRegistryStorage items;
 
 	@Override
 	@SuppressWarnings({"unchecked", "rawtypes"})
@@ -147,48 +145,20 @@ public class PluginStorage extends ForestryPlugin {
 	}
 
 	@Override
+	@SuppressWarnings({"unchecked", "rawtypes"})
+	protected void disabledSetupAPI() {
+		BackpackManager.backpackItems = new ArrayList[6];
+		BackpackManager.backpackItems[0] = minerItems;
+		BackpackManager.backpackItems[1] = diggerItems;
+		BackpackManager.backpackItems[2] = foresterItems;
+		BackpackManager.backpackItems[3] = hunterItems;
+		BackpackManager.backpackItems[4] = adventurerItems;
+		BackpackManager.backpackItems[5] = builderItems;
+	}
+
+	@Override
 	protected void registerItemsAndBlocks() {
-		// CRATE
-		ForestryItem.crate.registerItem((new ItemCrated(null, false)), "crate");
-
-		// BACKPACKS
-		IBackpackDefinition definition;
-
-		if (PluginManager.Module.APICULTURE.isEnabled()) {
-			definition = BackpackManager.definitions.get("apiarist");
-			Item backpack = new ItemBackpack(GuiId.ApiaristBackpackGUI, definition, EnumBackpackType.APIARIST).setCreativeTab(Tabs.tabApiculture);
-			ForestryItem.apiaristBackpack.registerItem(backpack, "apiaristBag");
-		}
-
-		if (PluginManager.Module.LEPIDOPTEROLOGY.isEnabled()) {
-			definition = BackpackManager.definitions.get("lepidopterist");
-			Item backpack = new ItemBackpack(GuiId.LepidopteristBackpackGUI, definition, EnumBackpackType.APIARIST).setCreativeTab(Tabs.tabLepidopterology);
-			ForestryItem.lepidopteristBackpack.registerItem(backpack, "lepidopteristBag");
-		}
-
-		definition = BackpackManager.definitions.get("miner");
-		ForestryItem.minerBackpack.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T1), "minerBag");
-		ForestryItem.minerBackpackT2.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T2), "minerBagT2");
-
-		definition = BackpackManager.definitions.get("digger");
-		ForestryItem.diggerBackpack.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T1), "diggerBag");
-		ForestryItem.diggerBackpackT2.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T2), "diggerBagT2");
-
-		definition = BackpackManager.definitions.get("forester");
-		ForestryItem.foresterBackpack.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T1), "foresterBag");
-		ForestryItem.foresterBackpackT2.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T2), "foresterBagT2");
-
-		definition = BackpackManager.definitions.get("hunter");
-		ForestryItem.hunterBackpack.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T1), "hunterBag");
-		ForestryItem.hunterBackpackT2.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T2), "hunterBagT2");
-
-		definition = BackpackManager.definitions.get("adventurer");
-		ForestryItem.adventurerBackpack.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T1), "adventurerBag");
-		ForestryItem.adventurerBackpackT2.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T2), "adventurerBagT2");
-
-		definition = BackpackManager.definitions.get("builder");
-		ForestryItem.builderBackpack.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T1), "builderBag");
-		ForestryItem.builderBackpackT2.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T2), "builderBagT2");
+		items = new ItemRegistryStorage();
 	}
 
 	@Override
@@ -311,9 +281,9 @@ public class PluginStorage extends ForestryPlugin {
 				new ItemStack(Blocks.obsidian),
 				new ItemStack(Blocks.coal_ore),
 				new ItemStack(Items.coal),
-				ForestryItem.bronzePickaxe.getItemStack(),
-				ForestryItem.kitPickaxe.getItemStack(),
-				ForestryItem.brokenBronzePickaxe.getItemStack()
+				PluginCore.items.bronzePickaxe.getItemStack(),
+				PluginCore.items.kitPickaxe.getItemStack(),
+				PluginCore.items.brokenBronzePickaxe.getItemStack()
 		));
 
 		digger.addValidOreDictNames(diggerOreDictNames);
@@ -325,9 +295,9 @@ public class PluginStorage extends ForestryPlugin {
 				new ItemStack(Blocks.sandstone, 1, 0),
 				new ItemStack(Items.clay_ball),
 				new ItemStack(Blocks.soul_sand),
-				ForestryItem.bronzeShovel.getItemStack(),
-				ForestryItem.kitShovel.getItemStack(),
-				ForestryItem.brokenBronzeShovel.getItemStack()
+				PluginCore.items.bronzeShovel.getItemStack(),
+				PluginCore.items.kitShovel.getItemStack(),
+				PluginCore.items.brokenBronzeShovel.getItemStack()
 		));
 
 		forester.addValidOreDictNames(foresterOreDictNames);
@@ -413,9 +383,10 @@ public class PluginStorage extends ForestryPlugin {
 				new ItemStack(Items.item_frame)
 		));
 
-		if (PluginManager.Module.APICULTURE.isEnabled()) {
-			builder.addValidItem(ForestryBlock.candle.getWildcard());
-			builder.addValidItem(ForestryBlock.stump.getWildcard());
+		BlockRegistryApiculture beeBlocks = PluginApiculture.blocks;
+		if (beeBlocks != null) {
+			builder.addValidItem(new ItemStack(beeBlocks.candle, 1, OreDictionary.WILDCARD_VALUE));
+			builder.addValidItem(new ItemStack(beeBlocks.stump, 1, OreDictionary.WILDCARD_VALUE));
 		}
 	}
 
@@ -487,7 +458,7 @@ public class PluginStorage extends ForestryPlugin {
 
 	private static void addCrating(ItemStack crateStack, Object uncrated) {
 		FluidStack water = Fluids.WATER.getFluid(Constants.CARPENTER_CRATING_LIQUID_QUANTITY);
-		ItemStack box = ForestryItem.crate.getItemStack();
+		ItemStack box = items.crate.getItemStack();
 		RecipeManagers.carpenterManager.addRecipe(Constants.CARPENTER_CRATING_CYCLES, water, box, crateStack, "###", "###", "###", '#', uncrated);
 	}
 
@@ -526,91 +497,69 @@ public class PluginStorage extends ForestryPlugin {
 	}
 
 	@Override
-	public GuiHandlerBase getGuiHandler() {
-		return new GuiHandlerStorage();
-	}
-
-	@Override
 	public IResupplyHandler getResupplyHandler() {
 		return new ResupplyHandler();
 	}
 
 	@Override
 	protected void registerRecipes() {
-
-		if (PluginManager.Module.APICULTURE.isEnabled()) {
-			// Apiarist's Backpack
-			RecipeUtil.addRecipe(ForestryItem.apiaristBackpack.getItemStack(),
-					"X#X",
-					"VYV",
-					"X#X",
-					'#', Blocks.wool,
-					'X', Items.string,
-					'V', "stickWood",
-					'Y', ForestryBlock.apicultureChest.getItemStack(1, Constants.DEFINITION_APIARISTCHEST_META));
+		BlockRegistryApiculture beeBlocks = PluginApiculture.blocks;
+		if (items.apiaristBackpack != null && beeBlocks != null) {
+			addBackpackRecipe(items.apiaristBackpack, "stickWood", beeBlocks.apicultureChest);
 		}
 
-		if (PluginManager.Module.LEPIDOPTEROLOGY.isEnabled()) {
-			// Lepidopterist's Backpack
-			RecipeUtil.addRecipe(ForestryItem.lepidopteristBackpack.getItemStack(),
-					"X#X",
-					"VYV",
-					"X#X",
-					'#', Blocks.wool,
-					'X', Items.string,
-					'V', "stickWood",
-					'Y', ForestryBlock.lepidopterology.getItemStack(1, Constants.DEFINITION_LEPICHEST_META));
+		BlockRegistryLepidopterology butterflyBlocks = PluginLepidopterology.blocks;
+		if (items.lepidopteristBackpack != null && butterflyBlocks != null) {
+			ItemStack chest = butterflyBlocks.lepidopterology.get(BlockLepidopterologyType.LEPICHEST);
+			addBackpackRecipe(items.lepidopteristBackpack, "stickWood", chest);
 		}
 
-		// Miner's Backpack
-		RecipeUtil.addRecipe(ForestryItem.minerBackpack.getItemStack(),
-				"X#X", "VYV", "X#X", '#', Blocks.wool, 'X', Items.string, 'V',
-				"ingotIron", 'Y', "chestWood");
-		// Digger's Backpack
-		RecipeUtil.addRecipe(ForestryItem.diggerBackpack.getItemStack(),
-				"X#X", "VYV", "X#X", '#', Blocks.wool, 'X', Items.string, 'V',
-				"stone", 'Y', "chestWood");
-		// Forester's Backpack
-		RecipeUtil.addRecipe(ForestryItem.foresterBackpack.getItemStack(), "X#X", "VYV", "X#X", '#', Blocks.wool,
-				'X', Items.string, 'V', "logWood", 'Y', "chestWood");
-		// Hunter's Backpack
-		RecipeUtil.addRecipe(ForestryItem.hunterBackpack.getItemStack(),
-				"X#X", "VYV", "X#X", '#', Blocks.wool, 'X', Items.string, 'V',
-				Items.feather, 'Y', "chestWood");
-		// Adventurer's Backpack
-		RecipeUtil.addRecipe(ForestryItem.adventurerBackpack.getItemStack(), "X#X", "VYV", "X#X", '#', Blocks.wool,
-				'X', Items.string, 'V', Items.bone, 'Y', "chestWood");
-		// Builder's Backpack
-		RecipeUtil.addRecipe(ForestryItem.builderBackpack.getItemStack(), "X#X", "VYV", "X#X", '#', Blocks.wool,
-				'X', Items.string, 'V', Items.clay_ball, 'Y', "chestWood");
+		addBackpackRecipe(items.minerBackpack, "ingotIron");
+		addBackpackRecipe(items.diggerBackpack, "stone");
+		addBackpackRecipe(items.foresterBackpack, "logWood");
+		addBackpackRecipe(items.hunterBackpack, Items.feather);
+		addBackpackRecipe(items.adventurerBackpack, Items.bone);
+		addBackpackRecipe(items.builderBackpack, Items.clay_ball);
 
+		// / CARPENTER
 		if (PluginManager.Module.FACTORY.isEnabled()) {
-			// / CARPENTER
-
 			// / CRATES
-			RecipeManagers.carpenterManager.addRecipe(20, Fluids.WATER.getFluid(1000), null, ForestryItem.crate.getItemStack(24),
+			RecipeManagers.carpenterManager.addRecipe(20, Fluids.WATER.getFluid(1000), null, items.crate.getItemStack(24),
 					" # ", "# #", " # ", '#', "logWood");
 
 			// / BACKPACKS T2
-			RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.getFluid(1000), null, ForestryItem.minerBackpackT2.getItemStack(),
-					"WXW", "WTW", "WWW", 'X', "gemDiamond", 'W',
-					ForestryItem.craftingMaterial.getItemStack(1, 3), 'T', ForestryItem.minerBackpack);
-			RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.getFluid(1000), null, ForestryItem.diggerBackpackT2.getItemStack(),
-					"WXW", "WTW", "WWW", 'X', "gemDiamond", 'W',
-					ForestryItem.craftingMaterial.getItemStack(1, 3), 'T', ForestryItem.diggerBackpack);
-			RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.getFluid(1000), null, ForestryItem.foresterBackpackT2.getItemStack(),
-					"WXW", "WTW", "WWW", 'X', "gemDiamond", 'W',
-					ForestryItem.craftingMaterial.getItemStack(1, 3), 'T', ForestryItem.foresterBackpack);
-			RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.getFluid(1000), null, ForestryItem.hunterBackpackT2.getItemStack(),
-					"WXW", "WTW", "WWW", 'X', "gemDiamond", 'W',
-					ForestryItem.craftingMaterial.getItemStack(1, 3), 'T', ForestryItem.hunterBackpack);
-			RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.getFluid(1000), null, ForestryItem.adventurerBackpackT2.getItemStack(),
-					"WXW", "WTW", "WWW", 'X', "gemDiamond", 'W',
-					ForestryItem.craftingMaterial.getItemStack(1, 3), 'T', ForestryItem.adventurerBackpack);
-			RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.getFluid(1000), null, ForestryItem.builderBackpackT2.getItemStack(),
-					"WXW", "WTW", "WWW", 'X', "gemDiamond", 'W',
-					ForestryItem.craftingMaterial.getItemStack(1, 3), 'T', ForestryItem.builderBackpack);
+			addT2BackpackRecipe(items.minerBackpack, items.minerBackpackT2);
+			addT2BackpackRecipe(items.diggerBackpack, items.diggerBackpackT2);
+			addT2BackpackRecipe(items.foresterBackpack, items.foresterBackpackT2);
+			addT2BackpackRecipe(items.hunterBackpack, items.hunterBackpackT2);
+			addT2BackpackRecipe(items.adventurerBackpack, items.adventurerBackpackT2);
+			addT2BackpackRecipe(items.builderBackpack, items.builderBackpackT2);
 		}
 	}
 
+	private static void addBackpackRecipe(Item backpack, Object material) {
+		addBackpackRecipe(backpack, material, "chestWood");
+	}
+
+	private static void addBackpackRecipe(Item backpack, Object material, Object chest) {
+		RecipeUtil.addRecipe(backpack,
+				"X#X",
+				"VYV",
+				"X#X",
+				'#', Blocks.wool,
+				'X', Items.string,
+				'V', material,
+				'Y', chest);
+	}
+
+	private static void addT2BackpackRecipe(Item backpackT1, Item backpackT2) {
+		ItemStack wovenSilk = PluginCore.items.craftingMaterial.getWovenSilk();
+		RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.getFluid(1000), null, new ItemStack(backpackT2),
+				"WXW",
+				"WTW",
+				"WWW",
+				'X', "gemDiamond",
+				'W', wovenSilk,
+				'T', backpackT1);
+	}
 }

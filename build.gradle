@@ -154,6 +154,9 @@ jar {
 	into ('cofh/api') {
 		from project.apiRedstoneFlux + "/LICENSE - LGPLv3.txt"
 	}
+	into ('invtweaks/api') {
+		from "./src/main/java/invtweaks/LICENSE.txt"
+	}
 
 	configurations.shade.each{ dep ->
 		from(project.zipTree(dep)){

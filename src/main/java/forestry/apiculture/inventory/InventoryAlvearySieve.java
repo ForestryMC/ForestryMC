@@ -14,10 +14,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
 import forestry.apiculture.multiblock.TileAlvearySieve;
-import forestry.core.config.ForestryItem;
 import forestry.core.inventory.InventoryAdapterTile;
 import forestry.core.inventory.watchers.ISlotPickupWatcher;
 import forestry.core.utils.ItemStackUtil;
+import forestry.plugins.PluginCore;
 
 public class InventoryAlvearySieve extends InventoryAdapterTile<TileAlvearySieve> implements ISlotPickupWatcher {
 	public static final int SLOT_POLLEN_1 = 0;
@@ -30,7 +30,7 @@ public class InventoryAlvearySieve extends InventoryAdapterTile<TileAlvearySieve
 
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-		return ItemStackUtil.isIdenticalItem(ForestryItem.craftingMaterial.getItemStack(1, 3), itemStack);
+		return ItemStackUtil.isIdenticalItem(PluginCore.items.craftingMaterial.getWovenSilk(), itemStack);
 	}
 
 	public boolean canStorePollen() {

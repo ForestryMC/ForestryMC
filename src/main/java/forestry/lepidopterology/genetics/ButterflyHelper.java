@@ -36,10 +36,10 @@ import forestry.api.lepidopterology.IButterflyGenome;
 import forestry.api.lepidopterology.IButterflyMutation;
 import forestry.api.lepidopterology.IButterflyRoot;
 import forestry.api.lepidopterology.ILepidopteristTracker;
-import forestry.core.config.ForestryItem;
 import forestry.core.genetics.SpeciesRoot;
 import forestry.core.utils.EntityUtil;
 import forestry.lepidopterology.entities.EntityButterfly;
+import forestry.plugins.PluginLepidopterology;
 
 public class ButterflyHelper extends SpeciesRoot implements IButterflyRoot {
 
@@ -83,11 +83,12 @@ public class ButterflyHelper extends SpeciesRoot implements IButterflyRoot {
 			return EnumFlutterType.NONE;
 		}
 
-		if (ForestryItem.butterflyGE.isItemEqual(stack)) {
+		Item item = stack.getItem();
+		if (PluginLepidopterology.items.butterflyGE == item) {
 			return EnumFlutterType.BUTTERFLY;
-		} else if (ForestryItem.serumGE.isItemEqual(stack)) {
+		} else if (PluginLepidopterology.items.serumGE == item) {
 			return EnumFlutterType.SERUM;
-		} else if (ForestryItem.caterpillarGE.isItemEqual(stack)) {
+		} else if (PluginLepidopterology.items.caterpillarGE == item) {
 			return EnumFlutterType.CATERPILLAR;
 		} else {
 			return EnumFlutterType.NONE;
@@ -127,14 +128,14 @@ public class ButterflyHelper extends SpeciesRoot implements IButterflyRoot {
 		Item butterflyItem;
 		switch (EnumFlutterType.VALUES[type]) {
 			case SERUM:
-				butterflyItem = ForestryItem.serumGE.item();
+				butterflyItem = PluginLepidopterology.items.serumGE;
 				break;
 			case CATERPILLAR:
-				butterflyItem = ForestryItem.caterpillarGE.item();
+				butterflyItem = PluginLepidopterology.items.caterpillarGE;
 				break;
 			case BUTTERFLY:
 			default:
-				butterflyItem = ForestryItem.butterflyGE.item();
+				butterflyItem = PluginLepidopterology.items.butterflyGE;
 				break;
 		}
 

@@ -12,28 +12,30 @@ package forestry.core.network;
 
 import javax.annotation.Nonnull;
 
+import forestry.core.network.packets.PacketDummyClient;
+
 public enum PacketIdClient implements IPacketId {
 	INVALID,
 
 	// Core Gui
-	ERROR_UPDATE(new PacketErrorUpdate()),
-	ERROR_UPDATE_ENTITY(new PacketErrorUpdateEntity()),
-	GUI_UPDATE(new PacketGuiUpdate()),
-	GUI_UPDATE_ENTITY(new PacketGuiUpdateEntity()),
-	GUI_LAYOUT_SELECT(new PacketGuiLayoutSelect()),
-	GUI_ENERGY(new PacketGuiEnergy()),
-	SOCKET_UPDATE(new PacketSocketUpdate()),
-	ACCESS_UPDATE(new PacketAccessUpdate()),
-	ACCESS_UPDATE_ENTITY(new PacketAccessUpdateEntity()),
+	ERROR_UPDATE,
+	ERROR_UPDATE_ENTITY,
+	GUI_UPDATE,
+	GUI_UPDATE_ENTITY,
+	GUI_LAYOUT_SELECT,
+	GUI_ENERGY,
+	SOCKET_UPDATE,
+	ACCESS_UPDATE,
+	ACCESS_UPDATE_ENTITY,
 
 	// Core Tile Entities
-	TILE_FORESTRY_UPDATE(new PacketTileStream()),
-	ITEMSTACK_DISPLAY(new PacketItemStackDisplay()),
-	FX_SIGNAL(new PacketFXSignal()),
-	TANK_LEVEL_UPDATE(new PacketTankLevelUpdate()),
+	TILE_FORESTRY_UPDATE,
+	ITEMSTACK_DISPLAY,
+	FX_SIGNAL,
+	TANK_LEVEL_UPDATE,
 
 	// Core Genome
-	GENOME_TRACKER_UPDATE(new PacketGenomeTrackerUpdate()),
+	GENOME_TRACKER_UPDATE,
 
 	// Factory
 	WORKTABLE_MEMORY_UPDATE,
@@ -61,11 +63,7 @@ public enum PacketIdClient implements IPacketId {
 	private IForestryPacketClient packetHandler;
 
 	PacketIdClient() {
-		this.packetHandler = PacketDummy.instance;
-	}
-
-	PacketIdClient(@Nonnull IForestryPacketClient packetHandler) {
-		this.packetHandler = packetHandler;
+		this.packetHandler = PacketDummyClient.instance;
 	}
 
 	public void setPacketHandler(@Nonnull IForestryPacketClient packetHandler) {

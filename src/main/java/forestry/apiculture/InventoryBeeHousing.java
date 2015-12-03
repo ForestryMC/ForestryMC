@@ -26,8 +26,8 @@ public class InventoryBeeHousing extends InventoryAdapterRestricted implements I
 	public static final int SLOT_PRODUCT_1 = 2;
 	public static final int SLOT_PRODUCT_COUNT = 7;
 
-	public InventoryBeeHousing(int size, String name, IAccessHandler accessHandler) {
-		super(size, name, accessHandler);
+	public InventoryBeeHousing(int size, IAccessHandler accessHandler) {
+		super(size, "Items", accessHandler);
 	}
 
 	@Override

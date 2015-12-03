@@ -10,34 +10,36 @@
  ******************************************************************************/
 package forestry.core.items;
 
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import forestry.api.core.ForestryAPI;
 import forestry.core.gui.ContainerItemInventory;
-import forestry.core.network.GuiId;
+import forestry.core.gui.GuiHandler;
+import forestry.core.gui.IGuiHandlerItem;
 
-public class ItemWithGui extends ItemForestry {
-	private final GuiId guiId;
+public abstract class ItemWithGui extends ItemForestry implements IGuiHandlerItem {
+	public ItemWithGui() {
 
-	public ItemWithGui(GuiId guiId) {
-		this.guiId = guiId;
-		setMaxStackSize(1);
+	}
+
+	public ItemWithGui(CreativeTabs creativeTabs) {
+		super(creativeTabs);
 	}
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
 		if (!world.isRemote) {
-			openGui(world, entityplayer);
+			openGui(entityplayer);
 		}
 
 		return itemstack;
 	}
 
-	protected final void openGui(World world, EntityPlayer entityplayer) {
-		entityplayer.openGui(ForestryAPI.instance, guiId.ordinal(), world, (int) entityplayer.posX, (int) entityplayer.posY, (int) entityplayer.posZ);
+	protected void openGui(EntityPlayer entityplayer) {
+		GuiHandler.openGui(entityplayer, this);
 	}
 
 	@Override

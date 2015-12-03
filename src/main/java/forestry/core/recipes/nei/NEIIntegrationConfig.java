@@ -38,8 +38,6 @@ public class NEIIntegrationConfig implements IConfigureNEI {
 	public void loadConfig() {
 		Log.info("Loading: " + getName());
 
-		registerHandler(new NEIHandlerShapedCustom());
-		registerHandler(new NEIHandlerShapelessCustom());
 		registerHandler(new NEIHandlerBottler());
 		registerHandler(new NEIHandlerCarpenter());
 		registerHandler(new NEIHandlerCentrifuge());

@@ -13,6 +13,7 @@ package forestry.apiculture.multiblock;
 import java.util.Map.Entry;
 import java.util.Stack;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -23,28 +24,28 @@ import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IBee;
 import forestry.api.multiblock.IAlvearyComponent;
 import forestry.apiculture.blocks.BlockAlveary;
+import forestry.apiculture.gui.ContainerAlvearySwarmer;
+import forestry.apiculture.gui.GuiAlvearySwarmer;
 import forestry.apiculture.inventory.InventorySwarmer;
-import forestry.apiculture.network.PacketActiveUpdate;
+import forestry.apiculture.network.packets.PacketActiveUpdate;
 import forestry.apiculture.worldgen.Hive;
 import forestry.apiculture.worldgen.HiveDecorator;
 import forestry.apiculture.worldgen.HiveDescriptionSwarmer;
-import forestry.core.access.EnumAccess;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.wrappers.IInvSlot;
 import forestry.core.inventory.wrappers.InventoryIterator;
-import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.IActivatable;
 import forestry.core.utils.ItemStackUtil;
 
-public class TileAlvearySwarmer extends TileAlvearyWithGui implements ISidedInventory, IActivatable, IAlvearyComponent.Active {
+public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, IActivatable, IAlvearyComponent.Active {
 
 	private final InventorySwarmer inventory;
 	private final Stack<ItemStack> pendingSpawns = new Stack<>();
 	private boolean active;
 
 	public TileAlvearySwarmer() {
-		super(TileAlveary.SWARMER_META, GuiId.AlvearySwarmerGUI);
+		super(BlockAlveary.Type.SWARMER);
 		this.inventory = new InventorySwarmer(this);
 	}
 
@@ -202,15 +203,6 @@ public class TileAlvearySwarmer extends TileAlvearyWithGui implements ISidedInve
 	}
 
 	@Override
-	public void onSwitchAccess(EnumAccess oldAccess, EnumAccess newAccess) {
-		if (oldAccess == EnumAccess.SHARED || newAccess == EnumAccess.SHARED) {
-			// pipes connected to this need to update
-			worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, blockType);
-			markDirty();
-		}
-	}
-
-	@Override
 	public boolean isActive() {
 		return active;
 	}
@@ -226,5 +218,15 @@ public class TileAlvearySwarmer extends TileAlvearyWithGui implements ISidedInve
 		if (!worldObj.isRemote) {
 			Proxies.net.sendNetworkPacket(new PacketActiveUpdate(this), worldObj);
 		}
+	}
+
+	@Override
+	public Object getGui(EntityPlayer player, int data) {
+		return new GuiAlvearySwarmer(player.inventory, this);
+	}
+
+	@Override
+	public Object getContainer(EntityPlayer player, int data) {
+		return new ContainerAlvearySwarmer(player.inventory, this);
 	}
 }

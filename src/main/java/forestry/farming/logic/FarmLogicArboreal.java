@@ -34,10 +34,10 @@ import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
 import forestry.core.blocks.BlockSoil;
-import forestry.core.config.ForestryBlock;
 import forestry.core.render.SpriteSheet;
 import forestry.core.utils.vect.Vect;
 import forestry.core.utils.vect.VectUtil;
+import forestry.plugins.PluginCore;
 
 public class FarmLogicArboreal extends FarmLogicHomogeneous {
 
@@ -46,7 +46,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 	}
 
 	public FarmLogicArboreal(IFarmHousing housing) {
-		super(housing, new ItemStack(Blocks.dirt), ForestryBlock.soil.getItemStack(1, 0), Farmables.farmables.get("farmArboreal"));
+		super(housing, new ItemStack(Blocks.dirt), PluginCore.blocks.soil.get(BlockSoil.SoilType.HUMUS, 1), Farmables.farmables.get("farmArboreal"));
 	}
 
 	@Override

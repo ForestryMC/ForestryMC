@@ -11,8 +11,6 @@
 package forestry;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -35,14 +33,13 @@ import cpw.mods.fml.common.registry.GameRegistry.Type;
 
 import forestry.api.core.ForestryAPI;
 import forestry.core.EventHandlerCore;
-import forestry.core.GuiHandler;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
-import forestry.core.config.ForestryItem;
 import forestry.core.config.GameMode;
 import forestry.core.config.Version;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.errors.ErrorStateRegistry;
+import forestry.core.gui.GuiHandler;
 import forestry.core.multiblock.MultiblockEventHandler;
 import forestry.core.network.PacketHandler;
 import forestry.core.proxy.Proxies;
@@ -73,22 +70,6 @@ public class Forestry {
 	@Mod.Instance(Constants.MOD)
 	public static Forestry instance;
 	private File configFolder;
-
-	private static final Map<String, ForestryItem> mappedItems = new HashMap<>();
-
-	static {
-		mappedItems.put("Forestry:builderBackpack", ForestryItem.builderBackpack);
-		mappedItems.put("Forestry:builderBackpackT2", ForestryItem.builderBackpackT2);
-		mappedItems.put("Forestry:adventurerBackpack", ForestryItem.adventurerBackpack);
-		mappedItems.put("Forestry:adventurerBackpackT2", ForestryItem.adventurerBackpackT2);
-		mappedItems.put("Forestry:shortMead", ForestryItem.beverage);
-		mappedItems.put("Forestry:waterCan", ForestryItem.canWater);
-		mappedItems.put("Forestry:biofuelCan", ForestryItem.canEthanol);
-		mappedItems.put("Forestry:biomassCan", ForestryItem.canBiomass);
-		mappedItems.put("Forestry:bucketBiofuel", ForestryItem.bucketEthanol);
-		mappedItems.put("Forestry:refractoryBiofuel", ForestryItem.refractoryEthanol);
-		mappedItems.put("Forestry:waxCapsuleBiofuel", ForestryItem.waxCapsuleEthanol);
-	}
 
 	public Forestry() {
 		ForestryAPI.instance = this;
@@ -164,16 +145,10 @@ public class Forestry {
 					Log.warning("Remapping block " + mapping.name + " to " + StringUtil.cleanBlockName(block));
 				}
 			} else {
-				Block block = GameRegistry.findBlock(Constants.MOD, StringUtil.cleanTags(mapping.name));
-				if (block != null) {
-					mapping.remap(Item.getItemFromBlock(block));
-					Log.warning("Remapping item " + mapping.name + " to " + StringUtil.cleanBlockName(block));
-				} else {
-					ForestryItem mappedItem = mappedItems.get(mapping.name);
-					if (mappedItem != null) {
-						mapping.remap(mappedItem.item());
-						Log.warning("Remapping item " + mapping.name + " to " + mappedItem.name());
-					}
+				Item item = GameRegistry.findItem(Constants.MOD, StringUtil.cleanTags(mapping.name));
+				if (item != null) {
+					mapping.remap(item);
+					Log.warning("Remapping item " + mapping.name + " to " + StringUtil.cleanItemName(item));
 				}
 			}
 		}

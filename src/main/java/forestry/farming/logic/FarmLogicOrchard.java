@@ -37,9 +37,9 @@ import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
 import forestry.api.genetics.IFruitBearer;
-import forestry.core.config.ForestryItem;
 import forestry.core.utils.vect.Vect;
 import forestry.core.utils.vect.VectUtil;
+import forestry.plugins.PluginCore;
 import forestry.plugins.PluginManager;
 
 public class FarmLogicOrchard extends FarmLogic {
@@ -127,7 +127,7 @@ public class FarmLogicOrchard extends FarmLogic {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon() {
-		return ForestryItem.fruits.item().getIconFromDamage(0);
+		return PluginCore.items.fruits.getIconFromDamage(0);
 	}
 
 	@Override

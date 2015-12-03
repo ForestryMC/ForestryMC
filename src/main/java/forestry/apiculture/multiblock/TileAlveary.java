@@ -10,10 +10,15 @@
  ******************************************************************************/
 package forestry.apiculture.multiblock;
 
+import java.io.IOException;
+import java.util.List;
+
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.biome.BiomeGenBase;
 
+import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeHousingInventory;
 import forestry.api.apiculture.IBeeListener;
@@ -25,23 +30,31 @@ import forestry.api.core.IErrorLogic;
 import forestry.api.multiblock.IAlvearyComponent;
 import forestry.api.multiblock.IMultiblockController;
 import forestry.apiculture.blocks.BlockAlveary;
+import forestry.apiculture.gui.ContainerAlveary;
+import forestry.apiculture.gui.GuiAlveary;
 import forestry.core.access.EnumAccess;
 import forestry.core.access.IAccessHandler;
 import forestry.core.access.IRestrictedAccess;
+import forestry.core.config.Config;
+import forestry.core.gui.IHintSource;
+import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.multiblock.MultiblockTileEntityForestry;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.IStreamableGui;
+import forestry.core.tiles.IClimatised;
+import forestry.core.tiles.ITitled;
 
-public abstract class TileAlveary extends MultiblockTileEntityForestry<MultiblockLogicAlveary> implements IBeeHousing, IRestrictedAccess, IAlvearyComponent {
-	public static final int PLAIN_META = 0;
-	public static final int ENTRANCE_META = 1;
-	public static final int SWARMER_META = 2;
-	public static final int FAN_META = 3;
-	public static final int HEATER_META = 4;
-	public static final int HYGRO_META = 5;
-	public static final int STABILIZER_META = 6;
-	public static final int SIEVE_META = 7;
+public abstract class TileAlveary extends MultiblockTileEntityForestry<MultiblockLogicAlveary> implements IBeeHousing, IAlvearyComponent, IRestrictedAccess, IStreamableGui, ITitled, IClimatised, IHintSource {
+	private final String unlocalizedTitle;
 
 	protected TileAlveary() {
+		this(BlockAlveary.Type.PLAIN);
+	}
+
+	protected TileAlveary(BlockAlveary.Type type) {
 		super(new MultiblockLogicAlveary());
+		this.unlocalizedTitle = "tile.for.alveary." + type.ordinal() + ".name";
 	}
 
 	/* TEXTURES */
@@ -135,5 +148,54 @@ public abstract class TileAlveary extends MultiblockTileEntityForestry<Multibloc
 	@Override
 	public void onSwitchAccess(EnumAccess oldAccess, EnumAccess newAccess) {
 		getMultiblockLogic().getController().onSwitchAccess(oldAccess, newAccess);
+	}
+
+	@Override
+	public IInventoryAdapter getInternalInventory() {
+		return getMultiblockLogic().getController().getInternalInventory();
+	}
+
+	@Override
+	public String getUnlocalizedTitle() {
+		return unlocalizedTitle;
+	}
+
+	/* IHintSource */
+	@Override
+	public List<String> getHints() {
+		return Config.hints.get("apiary");
+	}
+
+	/* IClimatised */
+	@Override
+	public float getExactTemperature() {
+		return getMultiblockLogic().getController().getExactTemperature();
+	}
+
+	@Override
+	public float getExactHumidity() {
+		return getMultiblockLogic().getController().getExactHumidity();
+	}
+
+	/* IStreamableGui */
+	@Override
+	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
+		getMultiblockLogic().getController().writeGuiData(data);
+	}
+
+	@Override
+	public void readGuiData(DataInputStreamForestry data) throws IOException {
+		getMultiblockLogic().getController().readGuiData(data);
+	}
+
+	@Override
+	public Object getGui(EntityPlayer player, int data) {
+		return new GuiAlveary(player.inventory, this);
+	}
+
+	@Override
+	public Object getContainer(EntityPlayer player, int data) {
+		BeeManager.beeRoot.syncBreedingTrackerToPlayer(player);
+		return new ContainerAlveary(player.inventory, this);
 	}
 }

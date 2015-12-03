@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.IGrowable;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -34,9 +35,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.core.CreativeTabForestry;
 import forestry.core.config.Constants;
-import forestry.core.config.ForestryBlock;
-import forestry.core.config.ForestryItem;
 import forestry.core.render.TextureManager;
+import forestry.plugins.PluginCore;
 
 /**
  * Humus, bog earth, peat
@@ -69,7 +69,7 @@ public class BlockSoil extends Block implements IItemTyped {
 		SoilType type = getTypeFromMeta(metadata);
 
 		if (type == SoilType.PEAT) {
-			ret.add(ForestryItem.peat.getItemStack());
+			ret.add(PluginCore.items.peat.getItemStack());
 			ret.add(new ItemStack(Blocks.dirt));
 		} else if (type == SoilType.HUMUS) {
 			ret.add(new ItemStack(Blocks.dirt));
@@ -115,14 +115,11 @@ public class BlockSoil extends Block implements IItemTyped {
 	}
 
 	private static boolean isEnrooted(World world, int x, int y, int z) {
-
 		for (int i = -1; i < 2; i++) {
 			for (int j = -1; j < 2; j++) {
 				Block block = world.getBlock(x + i, y + 1, z + j);
-				if (block == Blocks.log || block == Blocks.sapling || block == ForestryBlock.saplingGE.block())
-				// We are not returning true if we are the base of a
-				// sapling.
-				{
+				if (block == Blocks.log || block == Blocks.sapling || block instanceof IGrowable) {
+					// We are not returning true if we are the base of a sapling.
 					return !(i == 0 && j == 0);
 				}
 			}
@@ -273,4 +270,7 @@ public class BlockSoil extends Block implements IItemTyped {
 		return null;
 	}
 
+	public ItemStack get(SoilType soilType, int amount) {
+		return new ItemStack(this, amount, soilType.ordinal());
+	}
 }

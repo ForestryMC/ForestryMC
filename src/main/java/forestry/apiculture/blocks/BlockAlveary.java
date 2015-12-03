@@ -40,11 +40,24 @@ import forestry.core.blocks.BlockStructure;
 import forestry.core.render.TextureManager;
 
 public class BlockAlveary extends BlockStructure {
+	public enum Type {
+		PLAIN,
+		ENTRANCE,
+		SWARMER,
+		FAN,
+		HEATER,
+		HYGRO,
+		STABILIZER,
+		SIEVE;
+
+		public static final Type[] VALUES = values();
+	}
 
 	public BlockAlveary() {
 		super(new MaterialBeehive(false));
 		setHardness(1.0f);
 		setCreativeTab(Tabs.tabApiculture);
+		setHarvestLevel("axe", 0);
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
@@ -85,19 +98,25 @@ public class BlockAlveary extends BlockStructure {
 	/* TILE ENTITY CREATION */
 	@Override
 	public TileEntity createTileEntity(World world, int metadata) {
-		switch (metadata) {
-			case TileAlveary.SWARMER_META:
+		if (metadata < 0 || metadata > Type.VALUES.length) {
+			return null;
+		}
+
+		Type type = Type.VALUES[metadata];
+		switch (type) {
+			case SWARMER:
 				return new TileAlvearySwarmer();
-			case TileAlveary.FAN_META:
+			case FAN:
 				return new TileAlvearyFan();
-			case TileAlveary.HEATER_META:
+			case HEATER:
 				return new TileAlvearyHeater();
-			case TileAlveary.HYGRO_META:
+			case HYGRO:
 				return new TileAlvearyHygroregulator();
-			case TileAlveary.STABILIZER_META:
+			case STABILIZER:
 				return new TileAlvearyStabiliser();
-			case TileAlveary.SIEVE_META:
+			case SIEVE:
 				return new TileAlvearySieve();
+			case PLAIN:
 			default:
 				return new TileAlvearyPlain();
 		}
@@ -151,27 +170,29 @@ public class BlockAlveary extends BlockStructure {
 	@Override
 	public IIcon getIcon(int side, int metadata) {
 		if ((metadata <= 1
-				|| metadata == TileAlveary.SIEVE_META || metadata == TileAlveary.SWARMER_META || metadata == TileAlveary.STABILIZER_META)
+				|| metadata == Type.SIEVE.ordinal() || metadata == Type.SWARMER.ordinal() || metadata == Type.STABILIZER.ordinal())
 				&& (side == 1 || side == 0)) {
 			return icons[BOTTOM];
 		}
 
-		switch (metadata) {
-			case TileAlveary.PLAIN_META:
+		Type type = Type.VALUES[metadata];
+
+		switch (type) {
+			case PLAIN:
 				return icons[PLAIN];
-			case TileAlveary.ENTRANCE_META:
+			case ENTRANCE:
 				return icons[ENTRANCE];
-			case TileAlveary.SWARMER_META:
+			case SWARMER:
 				return icons[ALVEARY_SWARMER_OFF];
-			case TileAlveary.FAN_META:
+			case FAN:
 				return icons[ALVEARY_FAN_OFF];
-			case TileAlveary.HEATER_META:
+			case HEATER:
 				return icons[ALVEARY_HEATER_OFF];
-			case TileAlveary.HYGRO_META:
+			case HYGRO:
 				return icons[ALVEARY_HYGRO];
-			case TileAlveary.STABILIZER_META:
+			case STABILIZER:
 				return icons[STABILISER];
-			case TileAlveary.SIEVE_META:
+			case SIEVE:
 				return icons[SIEVE];
 			default:
 				return null;
@@ -262,5 +283,9 @@ public class BlockAlveary extends BlockStructure {
 			// We must check that the slabs on top were not removed
 			tileAlveary.getMultiblockLogic().getController().reassemble();
 		}
+	}
+
+	public ItemStack get(Type type) {
+		return new ItemStack(this, 1, type.ordinal());
 	}
 }

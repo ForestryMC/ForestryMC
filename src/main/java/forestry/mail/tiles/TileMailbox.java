@@ -31,11 +31,12 @@ import forestry.api.mail.IMailAddress;
 import forestry.api.mail.IPostalState;
 import forestry.api.mail.PostManager;
 import forestry.core.inventory.InventoryAdapter;
-import forestry.core.network.GuiId;
 import forestry.core.tiles.TileBase;
 import forestry.mail.EnumDeliveryState;
 import forestry.mail.POBox;
 import forestry.mail.PostRegistry;
+import forestry.mail.gui.ContainerMailbox;
+import forestry.mail.gui.GuiMailbox;
 import forestry.mail.triggers.MailTriggers;
 
 import buildcraft.api.statements.ITriggerExternal;
@@ -45,7 +46,7 @@ public class TileMailbox extends TileBase implements IMailContainer {
 	private boolean isLinked = false;
 
 	public TileMailbox() {
-		super(GuiId.MailboxGUI, "mailbox");
+		super("mailbox");
 		setInternalInventory(new InventoryAdapter(POBox.SLOT_SIZE, "Letters").disableAutomation());
 	}
 
@@ -124,5 +125,15 @@ public class TileMailbox extends TileBase implements IMailContainer {
 		LinkedList<ITriggerExternal> res = new LinkedList<>();
 		res.add(MailTriggers.triggerHasMail);
 		return res;
+	}
+
+	@Override
+	public Object getGui(EntityPlayer player, int data) {
+		return new GuiMailbox(player.inventory, this);
+	}
+
+	@Override
+	public Object getContainer(EntityPlayer player, int data) {
+		return new ContainerMailbox(player.inventory, this);
 	}
 }

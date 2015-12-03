@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.energy.tiles;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.IInventory;
@@ -25,15 +26,15 @@ import forestry.core.circuits.ISocketable;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.inventory.InventoryAdapter;
-import forestry.core.network.GuiId;
 import forestry.core.tiles.TemperatureState;
 import forestry.core.tiles.TileEngine;
-import forestry.plugins.PluginIC2;
+import forestry.energy.gui.ContainerEngineElectric;
+import forestry.energy.gui.GuiEngineElectric;
+import forestry.plugins.compat.PluginIC2;
 
 import ic2.api.energy.prefab.BasicSink;
 
 public class TileEngineElectric extends TileEngine implements ISocketable, IInventory {
-
 	protected static class EuConfig {
 
 		public int euForCycle;
@@ -53,7 +54,7 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 	private BasicSink ic2EnergySink;
 
 	public TileEngineElectric() {
-		super(GuiId.EngineElectricGUI, "engine.tin", Constants.ENGINE_ELECTRIC_HEAT_MAX, 100000);
+		super("engine.tin", Constants.ENGINE_ELECTRIC_HEAT_MAX, 100000);
 
 		setInternalInventory(new InventoryEngineElectric(this));
 
@@ -302,5 +303,15 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 	@Override
 	public ICircuitSocketType getSocketType() {
 		return CircuitSocketType.ELECTRIC_ENGINE;
+	}
+
+	@Override
+	public Object getGui(EntityPlayer player, int data) {
+		return new GuiEngineElectric(player.inventory, this);
+	}
+
+	@Override
+	public Object getContainer(EntityPlayer player, int data) {
+		return new ContainerEngineElectric(player.inventory, this);
 	}
 }

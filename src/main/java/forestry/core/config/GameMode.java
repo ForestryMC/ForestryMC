@@ -19,7 +19,10 @@ import net.minecraft.item.ItemStack;
 
 import forestry.Forestry;
 import forestry.api.core.IGameMode;
+import forestry.core.blocks.BlockSoil;
 import forestry.core.utils.Log;
+import forestry.plugins.PluginCore;
+import forestry.plugins.PluginFluids;
 
 public class GameMode implements IGameMode {
 	private static final String GAMEMODE_KEY = "gamemode";
@@ -36,20 +39,20 @@ public class GameMode implements IGameMode {
 
 	private static final int FARM_FERTILIZER_VALUE = 2000;
 
-	private final ItemStack recipeFertilizerOutputApatite = ForestryItem.fertilizerCompound.getItemStack(8);
-	private final ItemStack recipeFertilizerOutputAsh = ForestryItem.fertilizerCompound.getItemStack(16);
-	private final ItemStack recipeCompostOutputWheat = ForestryItem.fertilizerBio.getItemStack(4);
-	private final ItemStack recipeCompostOutputAsh = ForestryItem.fertilizerBio.getItemStack(1);
+	private final ItemStack recipeFertilizerOutputApatite = PluginCore.items.fertilizerCompound.getItemStack(8);
+	private final ItemStack recipeFertilizerOutputAsh = PluginCore.items.fertilizerCompound.getItemStack(16);
+	private final ItemStack recipeCompostOutputWheat = PluginCore.items.fertilizerBio.getItemStack(4);
+	private final ItemStack recipeCompostOutputAsh = PluginCore.items.fertilizerBio.getItemStack(1);
 
-	private final ItemStack recipeHumusOutputFertilizer = ForestryBlock.soil.getItemStack(8);
-	private final ItemStack recipeHumusOutputCompost = ForestryBlock.soil.getItemStack(8);
+	private final ItemStack recipeHumusOutputFertilizer = PluginCore.blocks.soil.get(BlockSoil.SoilType.HUMUS, 8);
+	private final ItemStack recipeHumusOutputCompost = PluginCore.blocks.soil.get(BlockSoil.SoilType.HUMUS, 8);
 
-	private final ItemStack recipeBogEarthOutputBucket = ForestryBlock.soil.getItemStack(6, 1);
-	private final ItemStack recipeBogEarthOutputCans = ForestryBlock.soil.getItemStack(8, 1);
+	private final ItemStack recipeBogEarthOutputBucket = PluginCore.blocks.soil.get(BlockSoil.SoilType.BOG_EARTH, 6);
+	private final ItemStack recipeBogEarthOutputCans = PluginCore.blocks.soil.get(BlockSoil.SoilType.BOG_EARTH, 8);
 
-	private final ItemStack recipeCanOutput = ForestryItem.canEmpty.getItemStack(12);
-	private final ItemStack recipeCapsuleOutput = ForestryItem.waxCapsule.getItemStack(4);
-	private final ItemStack recipeRefractoryOutput = ForestryItem.refractoryEmpty.getItemStack(4);
+	private final ItemStack recipeCanOutput = PluginFluids.items.canEmpty.getItemStack(12);
+	private final ItemStack recipeCapsuleOutput = PluginFluids.items.waxCapsuleEmpty.getItemStack(4);
+	private final ItemStack recipeRefractoryOutput = PluginFluids.items.refractoryEmpty.getItemStack(4);
 
 	private static final int FERMENTATION_DURATION_FERTILIZER = 200;
 	private static final int FERMENTATION_DURATION_COMPOST = 250;

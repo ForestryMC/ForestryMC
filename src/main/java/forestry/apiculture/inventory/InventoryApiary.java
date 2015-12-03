@@ -30,7 +30,7 @@ public class InventoryApiary extends InventoryBeeHousing implements IApiaryInven
 	public static final int SLOT_FRAMES_COUNT = 3;
 
 	public InventoryApiary(IAccessHandler accessHandler) {
-		super(12, "Items", accessHandler);
+		super(12, accessHandler);
 	}
 
 	@Override

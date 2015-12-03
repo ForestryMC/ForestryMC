@@ -13,6 +13,7 @@ package forestry.core.inventory;
 import com.google.common.collect.ImmutableSet;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -21,8 +22,10 @@ import forestry.api.core.IErrorState;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.ISpeciesRoot;
-import forestry.core.config.ForestryItem;
+import forestry.apiculture.items.ItemRegistryApiculture;
 import forestry.core.errors.EnumErrorCode;
+import forestry.plugins.PluginApiculture;
+import forestry.plugins.PluginManager;
 
 public abstract class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
 	public static final int SLOT_SPECIMEN = 0;
@@ -80,9 +83,11 @@ public abstract class ItemInventoryAlyzer extends ItemInventory implements IErro
 		// Analyze if necessary
 		if (!individual.isAnalyzed()) {
 
-			// Requires energy
-			if (!isEnergy(getStackInSlot(SLOT_ENERGY))) {
-				return;
+			if (PluginManager.Module.APICULTURE.isEnabled()) {
+				// Requires energy
+				if (!isEnergy(getStackInSlot(SLOT_ENERGY))) {
+					return;
+				}
 			}
 
 			individual.analyze();
@@ -124,7 +129,13 @@ public abstract class ItemInventoryAlyzer extends ItemInventory implements IErro
 			return false;
 		}
 
-		return ForestryItem.honeyDrop.isItemEqual(itemstack) || ForestryItem.honeydew.isItemEqual(itemstack);
+		ItemRegistryApiculture beeItems = PluginApiculture.items;
+		if (beeItems == null) {
+			return false;
+		}
+
+		Item item = itemstack.getItem();
+		return beeItems.honeyDrop == item || beeItems.honeydew == item;
 	}
 
 	private boolean hasSpecimen() {

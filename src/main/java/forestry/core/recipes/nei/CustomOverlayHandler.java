@@ -18,6 +18,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
 import forestry.core.proxy.Proxies;
+import forestry.factory.network.packets.PacketWorktableNEISelect;
 
 import codechicken.nei.LayoutManager;
 import codechicken.nei.OffsetPositioner;

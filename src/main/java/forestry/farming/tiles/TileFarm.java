@@ -19,7 +19,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChunkCoordinates;
 
 import forestry.api.circuits.ICircuitSocketType;
-import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.multiblock.IFarmComponent;
@@ -34,32 +33,19 @@ import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.multiblock.MultiblockTileEntityForestry;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
-import forestry.core.network.GuiId;
 import forestry.core.network.IStreamableGui;
 import forestry.core.tiles.ITitled;
+import forestry.farming.gui.ContainerFarm;
+import forestry.farming.gui.GuiFarm;
 import forestry.farming.multiblock.MultiblockLogicFarm;
 import forestry.farming.render.EnumFarmBlockTexture;
 
 public abstract class TileFarm extends MultiblockTileEntityForestry<MultiblockLogicFarm> implements IFarmComponent, IHintSource, ISocketable, IStreamableGui, IErrorLogicSource, IRestrictedAccess, ITitled {
 
-	public static final int TYPE_PLAIN = 0;
-	public static final int TYPE_REVERSE = 1;
-	public static final int TYPE_TOP = 2;
-	public static final int TYPE_BAND = 3;
-	public static final int TYPE_GEARS = 4;
-	public static final int TYPE_HATCH = 5;
-	public static final int TYPE_VALVE = 6;
-	public static final int TYPE_CONTROL = 7;
-
 	private EnumFarmBlockTexture farmBlockTexture = EnumFarmBlockTexture.BRICK_STONE;
 
 	protected TileFarm() {
 		super(new MultiblockLogicFarm());
-	}
-
-	@Override
-	public void openGui(EntityPlayer player) {
-		player.openGui(ForestryAPI.instance, GuiId.MultiFarmGUI.ordinal(), worldObj, xCoord, yCoord, zCoord);
 	}
 
 	@Override
@@ -183,5 +169,15 @@ public abstract class TileFarm extends MultiblockTileEntityForestry<MultiblockLo
 	@Override
 	public String getUnlocalizedTitle() {
 		return "for.gui.farm.title";
+	}
+
+	@Override
+	public Object getGui(EntityPlayer player, int data) {
+		return new GuiFarm(player, this);
+	}
+
+	@Override
+	public Object getContainer(EntityPlayer player, int data) {
+		return new ContainerFarm(player.inventory, this);
 	}
 }

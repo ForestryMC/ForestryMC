@@ -12,16 +12,18 @@ package forestry.core.network;
 
 import javax.annotation.Nonnull;
 
+import forestry.core.network.packets.PacketDummyServer;
+
 public enum PacketIdServer implements IPacketId {
 	INVALID,
 
 	// Core Gui
-	GUI_SELECTION_REQUEST(new PacketGuiSelectRequest()),
-	PIPETTE_CLICK(new PacketPipetteClick()),
-	ACCESS_SWITCH(new PacketAccessSwitch()),
-	ACCESS_SWITCH_ENTITY(new PacketAccessSwitchEntity()),
-	CHIPSET_CLICK(new PacketChipsetClick()),
-	SOLDERING_IRON_CLICK(new PacketSolderingIronClick()),
+	GUI_SELECTION_REQUEST,
+	PIPETTE_CLICK,
+	ACCESS_SWITCH,
+	ACCESS_SWITCH_ENTITY,
+	CHIPSET_CLICK,
+	SOLDERING_IRON_CLICK,
 
 	// Apiculture
 	BEE_LOGIC_ACTIVE_ENTITY_REQUEST,
@@ -41,11 +43,7 @@ public enum PacketIdServer implements IPacketId {
 	private IForestryPacketServer packetHandler;
 
 	PacketIdServer() {
-		this.packetHandler = PacketDummy.instance;
-	}
-
-	PacketIdServer(@Nonnull IForestryPacketServer packetHandler) {
-		this.packetHandler = packetHandler;
+		this.packetHandler = PacketDummyServer.instance;
 	}
 
 	public void setPacketHandler(@Nonnull IForestryPacketServer packetHandler) {

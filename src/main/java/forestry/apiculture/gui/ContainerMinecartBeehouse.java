@@ -15,7 +15,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import forestry.apiculture.entities.EntityMinecartBeeHousingBase;
 import forestry.core.gui.ContainerEntity;
 import forestry.core.network.IForestryPacketClient;
-import forestry.core.network.PacketGuiUpdateEntity;
+import forestry.core.network.packets.PacketGuiUpdateEntity;
 
 public class ContainerMinecartBeehouse extends ContainerEntity<EntityMinecartBeeHousingBase> implements IContainerBeeHousing {
 	public ContainerMinecartBeehouse(InventoryPlayer player, EntityMinecartBeeHousingBase entity, boolean hasFrames) {

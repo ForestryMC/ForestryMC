@@ -10,8 +10,10 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
@@ -24,7 +26,17 @@ import forestry.mail.POBoxInfo;
 
 public class GuiMailboxInfo extends Gui {
 
-	public final static GuiMailboxInfo instance = new GuiMailboxInfo();
+	public enum XPosition {
+		LEFT, RIGHT;
+	}
+
+	public enum YPosition {
+		TOP, BOTTOM;
+	}
+
+	public static final GuiMailboxInfo instance = new GuiMailboxInfo();
+	private static final int WIDTH = 98;
+	private static final int HEIGHT = 17;
 
 	private final FontRenderer fontRendererObj;
 	private POBoxInfo poInfo;
@@ -34,24 +46,27 @@ public class GuiMailboxInfo extends Gui {
 		fontRendererObj = Proxies.common.getClientInstance().fontRenderer;
 	}
 
-	public void render(int x, int y) {
-		if (poInfo == null) {
+	public void render() {
+		if (poInfo == null || !Config.mailAlertEnabled || !poInfo.hasMail()) {
 			return;
 		}
-		if (Proxies.common.getRenderWorld() == null) {
-			return;
+
+		int x = 0;
+		int y = 0;
+
+		Minecraft minecraft = Minecraft.getMinecraft();
+		ScaledResolution scaledresolution = new ScaledResolution(minecraft, minecraft.displayWidth, minecraft.displayHeight);
+		if (Config.mailAlertXPosition == XPosition.RIGHT) {
+			x = scaledresolution.getScaledWidth() - WIDTH;
 		}
-		if (!Config.mailAlertEnabled) {
-			return;
-		}
-		if (!poInfo.hasMail()) {
-			return;
+		if (Config.mailAlertYPosition == YPosition.BOTTOM) {
+			y = scaledresolution.getScaledHeight() - HEIGHT;
 		}
 
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		Proxies.render.bindTexture(textureAlert);
 
-		this.drawTexturedModalRect(x, y, 0, 0, 98, 17);
+		this.drawTexturedModalRect(x, y, 0, 0, WIDTH, HEIGHT);
 
 		fontRendererObj.drawString(Integer.toString(poInfo.playerLetters), x + 27 + getCenteredOffset(Integer.toString(poInfo.playerLetters), 22), y + 5, 0xffffff);
 		fontRendererObj.drawString(Integer.toString(poInfo.tradeLetters), x + 75 + getCenteredOffset(Integer.toString(poInfo.tradeLetters), 22), y + 5, 0xffffff);

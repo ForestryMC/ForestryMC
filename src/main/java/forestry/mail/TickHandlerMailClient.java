@@ -16,7 +16,7 @@ import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 
 import forestry.core.proxy.Proxies;
 import forestry.mail.gui.GuiMailboxInfo;
-import forestry.mail.network.PacketPOBoxInfoRequest;
+import forestry.mail.network.packets.PacketPOBoxInfoRequest;
 
 public class TickHandlerMailClient {
 	private static final int THROTTLE_TIME_MS = 10000;
@@ -29,7 +29,7 @@ public class TickHandlerMailClient {
 		}
 
 		if (GuiMailboxInfo.instance.hasPOBoxInfo()) {
-			GuiMailboxInfo.instance.render(0, 0);
+			GuiMailboxInfo.instance.render();
 		} else {
 			long time = System.currentTimeMillis();
 			if (time - lastInfoRequestTime > THROTTLE_TIME_MS) {

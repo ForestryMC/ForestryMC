@@ -288,6 +288,10 @@ public abstract class ItemStackUtil {
 	}
 
 	public static void dropItemStackAsEntity(ItemStack items, World world, double x, double y, double z) {
+		dropItemStackAsEntity(items, world, x, y, z, 10);
+	}
+
+	public static void dropItemStackAsEntity(ItemStack items, World world, double x, double y, double z, int delayForPickup) {
 		if (items.stackSize <= 0 || world.isRemote) {
 			return;
 		}
@@ -297,7 +301,7 @@ public abstract class ItemStackUtil {
 		double d1 = (world.rand.nextFloat() * f1) + (1.0F - f1) * 0.5D;
 		double d2 = (world.rand.nextFloat() * f1) + (1.0F - f1) * 0.5D;
 		EntityItem entityitem = new EntityItem(world, x + d, y + d1, z + d2, items);
-		entityitem.delayBeforeCanPickup = 10;
+		entityitem.delayBeforeCanPickup = delayForPickup;
 
 		world.spawnEntityInWorld(entityitem);
 	}

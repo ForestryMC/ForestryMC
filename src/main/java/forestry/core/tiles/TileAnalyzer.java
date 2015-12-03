@@ -12,6 +12,7 @@ package forestry.core.tiles;
 
 import java.io.IOException;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -32,14 +33,15 @@ import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.Fluids;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
+import forestry.core.gui.ContainerAnalyzer;
+import forestry.core.gui.GuiAnalyzer;
 import forestry.core.inventory.InventoryAnalyzer;
 import forestry.core.inventory.wrappers.IInvSlot;
 import forestry.core.inventory.wrappers.InventoryIterator;
 import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
-import forestry.core.network.GuiId;
-import forestry.core.network.PacketItemStackDisplay;
+import forestry.core.network.packets.PacketItemStackDisplay;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.InventoryUtil;
@@ -60,7 +62,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 
 	/* CONSTRUCTOR */
 	public TileAnalyzer() {
-		super(GuiId.AnalyzerGUI, "analyzer", 800, Constants.MACHINE_MAX_ENERGY);
+		super("analyzer", 800, Constants.MACHINE_MAX_ENERGY);
 		setInternalInventory(new InventoryAnalyzer(this));
 		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, Fluids.HONEY.getFluid());
 		tankManager = new TankManager(this, resourceTank);
@@ -275,4 +277,13 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 		return tankManager.getTankInfo(from);
 	}
 
+	@Override
+	public Object getGui(EntityPlayer player, int data) {
+		return new GuiAnalyzer(player.inventory, this);
+	}
+
+	@Override
+	public Object getContainer(EntityPlayer player, int data) {
+		return new ContainerAnalyzer(player.inventory, this);
+	}
 }

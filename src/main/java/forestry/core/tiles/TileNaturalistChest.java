@@ -14,24 +14,26 @@ import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
 
-import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.ISpeciesRoot;
-import forestry.core.GuiHandler;
+import forestry.core.gui.ContainerNaturalistInventory;
+import forestry.core.gui.GuiHandler;
+import forestry.core.gui.GuiNaturalistInventory;
 import forestry.core.gui.IPagedInventory;
 import forestry.core.inventory.InventoryNaturalistChest;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
-import forestry.core.network.GuiId;
 
 public abstract class TileNaturalistChest extends TileBase implements IPagedInventory {
 	private static final float lidAngleVariationPerTick = 0.1F;
 
+	private final ISpeciesRoot speciesRoot;
 	public float lidAngle;
 	public float prevLidAngle;
 	private int numPlayersUsing;
 
-	public TileNaturalistChest(ISpeciesRoot speciesRoot, GuiId guiId) {
-		super(guiId, "naturalist.chest");
+	public TileNaturalistChest(ISpeciesRoot speciesRoot) {
+		super("naturalist.chest");
+		this.speciesRoot = speciesRoot;
 		setInternalInventory(new InventoryNaturalistChest(this, speciesRoot));
 	}
 
@@ -87,8 +89,8 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 	}
 
 	@Override
-	public void flipPage(EntityPlayer player, int page) {
-		player.openGui(ForestryAPI.instance, GuiHandler.encodeGuiData(guiId, page), player.worldObj, xCoord, yCoord, zCoord);
+	public void flipPage(EntityPlayer player, short page) {
+		GuiHandler.openGui(player, this, page);
 	}
 
 	/* IStreamable */
@@ -102,5 +104,17 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 	public void readData(DataInputStreamForestry data) throws IOException {
 		super.readData(data);
 		numPlayersUsing = data.readInt();
+	}
+
+	@Override
+	public Object getGui(EntityPlayer player, int page) {
+		ContainerNaturalistInventory container = new ContainerNaturalistInventory(player.inventory, this, page);
+		return new GuiNaturalistInventory(speciesRoot, player, container, this, page, 5);
+	}
+
+	@Override
+	public Object getContainer(EntityPlayer player, int page) {
+		speciesRoot.syncBreedingTrackerToPlayer(player);
+		return new ContainerNaturalistInventory(player.inventory, this, page);
 	}
 }

@@ -23,6 +23,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.core.render.TextureManager;
+import forestry.farming.blocks.BlockFarmType;
 
 public enum EnumFarmBlockTexture {
 	BRICK_STONE(new ItemStack(Blocks.stonebrick, 1, 0)),
@@ -36,6 +37,15 @@ public enum EnumFarmBlockTexture {
 	QUARTZ(new ItemStack(Blocks.quartz_block, 1, 0)),
 	QUARTZ_CHISELED(new ItemStack(Blocks.quartz_block, 1, 1)),
 	QUARTZ_LINES(new ItemStack(Blocks.quartz_block, 1, 2));
+
+	private static final int TYPE_PLAIN = 0;
+	private static final int TYPE_REVERSE = 1;
+	private static final int TYPE_TOP = 2;
+	private static final int TYPE_BAND = 3;
+	private static final int TYPE_GEARS = 4;
+	private static final int TYPE_HATCH = 5;
+	private static final int TYPE_VALVE = 6;
+	private static final int TYPE_CONTROL = 7;
 
 	@SideOnly(Side.CLIENT)
 	private static List<IIcon> icons;
@@ -61,8 +71,30 @@ public enum EnumFarmBlockTexture {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public static IIcon getIcon(int type) {
-		return icons.get(type);
+	public static IIcon getIcon(BlockFarmType type, int side) {
+		switch (type) {
+			case BASIC: {
+				if (side == 2) {
+					return icons.get(TYPE_REVERSE);
+				} else if (side == 0 || side == 1) {
+					return icons.get(TYPE_TOP);
+				} else {
+					return icons.get(TYPE_PLAIN);
+				}
+			}
+			case BAND:
+				return icons.get(TYPE_BAND);
+			case GEARBOX:
+				return icons.get(TYPE_GEARS);
+			case HATCH:
+				return icons.get(TYPE_HATCH);
+			case VALVE:
+				return icons.get(TYPE_VALVE);
+			case CONTROL:
+				return icons.get(TYPE_CONTROL);
+			default:
+				return icons.get(TYPE_PLAIN);
+		}
 	}
 
 	public void saveToCompound(NBTTagCompound compound) {
@@ -78,7 +110,6 @@ public enum EnumFarmBlockTexture {
 	}
 
 	public static EnumFarmBlockTexture getFromCompound(NBTTagCompound compound) {
-
 		if (compound != null) {
 			int farmBlockOrdinal = compound.getInteger("FarmBlock");
 			if (farmBlockOrdinal < EnumFarmBlockTexture.values().length) {

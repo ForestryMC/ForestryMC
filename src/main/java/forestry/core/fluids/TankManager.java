@@ -40,7 +40,7 @@ import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.IStreamable;
-import forestry.core.network.PacketTankLevelUpdate;
+import forestry.core.network.packets.PacketTankLevelUpdate;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.EnumTankLevel;
 import forestry.core.tiles.ILiquidTankTile;

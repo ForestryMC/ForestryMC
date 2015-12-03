@@ -10,73 +10,73 @@
  ******************************************************************************/
 package forestry.plugins;
 
-import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 
 import cpw.mods.fml.common.SidedProxy;
 
 import forestry.api.core.ForestryAPI;
-import forestry.core.GuiHandlerBase;
-import forestry.core.blocks.BlockBase;
 import forestry.core.config.Constants;
-import forestry.core.config.ForestryBlock;
-import forestry.core.items.ItemBlockForestry;
-import forestry.core.recipes.ShapedRecipeCustom;
-import forestry.core.tiles.MachineDefinition;
-import forestry.energy.GuiHandlerEnergy;
-import forestry.energy.blocks.BlockEngine;
+import forestry.core.recipes.RecipeUtil;
+import forestry.energy.blocks.BlockEngineType;
+import forestry.energy.blocks.BlockRegistryEnergy;
 import forestry.energy.proxy.ProxyEnergy;
 import forestry.energy.tiles.EngineDefinition;
-import forestry.energy.tiles.TileEngineBiogas;
-import forestry.energy.tiles.TileEngineClockwork;
-import forestry.energy.tiles.TileEnginePeat;
 
 @Plugin(pluginID = "Energy", name = "Energy", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.energy.description")
 public class PluginEnergy extends ForestryPlugin {
 
 	@SidedProxy(clientSide = "forestry.energy.proxy.ProxyEnergyClient", serverSide = "forestry.energy.proxy.ProxyEnergy")
 	public static ProxyEnergy proxy;
-	private static MachineDefinition definitionEnginePeat;
-	private static MachineDefinition definitionEngineBiogas;
-	private static MachineDefinition definitionEngineClockwork;
+
+	public static BlockRegistryEnergy blocks;
 
 	@Override
 	protected void registerItemsAndBlocks() {
-		super.registerItemsAndBlocks();
-
-		ForestryBlock.engine.registerBlock(new BlockEngine(Material.iron), ItemBlockForestry.class, "engine");
+		blocks = new BlockRegistryEnergy();
 	}
 
 	@Override
 	public void preInit() {
-		super.preInit();
+		blocks.engine.addDefinitions(
+				new EngineDefinition(BlockEngineType.PEAT),
+				new EngineDefinition(BlockEngineType.BIOGAS)
+		);
 
-		definitionEnginePeat = ((BlockBase) ForestryBlock.engine.block()).addDefinition(new EngineDefinition(Constants.DEFINITION_ENGINE_PEAT_META, "forestry.EngineCopper", TileEnginePeat.class,
-				PluginEnergy.proxy.getRenderDefaultEngine(Constants.TEXTURE_PATH_BLOCKS + "/engine_copper_"), ShapedRecipeCustom.createShapedRecipe(
-				ForestryBlock.engine.getItemStack(1, Constants.DEFINITION_ENGINE_PEAT_META),
+		if (ForestryAPI.activeMode.getBooleanSetting("energy.engine.clockwork")) {
+			blocks.engine.addDefinition(new EngineDefinition(BlockEngineType.CLOCKWORK));
+		}
+	}
+
+	@Override
+	public void doInit() {
+		blocks.engine.init();
+	}
+
+	@Override
+	protected void registerRecipes() {
+		super.registerRecipes();
+
+		RecipeUtil.addRecipe(blocks.engine.get(BlockEngineType.PEAT),
 				"###",
 				" X ",
 				"YVY",
 				'#', "ingotCopper",
 				'X', "blockGlass",
 				'Y', "gearCopper",
-				'V', Blocks.piston)));
-		definitionEngineBiogas = ((BlockBase) ForestryBlock.engine.block()).addDefinition(new EngineDefinition(Constants.DEFINITION_ENGINE_BIOGAS_META, "forestry.EngineBronze", TileEngineBiogas.class,
-				PluginEnergy.proxy.getRenderDefaultEngine(Constants.TEXTURE_PATH_BLOCKS + "/engine_bronze_"), ShapedRecipeCustom.createShapedRecipe(
-				ForestryBlock.engine.getItemStack(1, Constants.DEFINITION_ENGINE_BIOGAS_META),
+				'V', Blocks.piston);
+
+		RecipeUtil.addRecipe(blocks.engine.get(BlockEngineType.BIOGAS),
 				"###",
 				" X ",
 				"YVY",
 				'#', "ingotBronze",
 				'X', "blockGlass",
 				'Y', "gearBronze",
-				'V', Blocks.piston)));
+				'V', Blocks.piston);
 
-		ShapedRecipeCustom clockworkRecipe = null;
 		if (ForestryAPI.activeMode.getBooleanSetting("energy.engine.clockwork")) {
-			clockworkRecipe = ShapedRecipeCustom.createShapedRecipe(
-					ForestryBlock.engine.getItemStack(1, Constants.DEFINITION_ENGINE_CLOCKWORK_META),
+			RecipeUtil.addRecipe(blocks.engine.get(BlockEngineType.CLOCKWORK),
 					"###",
 					" X ",
 					"ZVY",
@@ -86,22 +86,5 @@ public class PluginEnergy extends ForestryPlugin {
 					'Z', "gearCopper",
 					'V', Blocks.piston);
 		}
-
-		definitionEngineClockwork = ((BlockBase) ForestryBlock.engine.block()).addDefinition(new EngineDefinition(Constants.DEFINITION_ENGINE_CLOCKWORK_META, "forestry.EngineClockwork", TileEngineClockwork.class,
-				PluginEnergy.proxy.getRenderDefaultEngine(Constants.TEXTURE_PATH_BLOCKS + "/engine_clock_"), clockworkRecipe));
-	}
-
-	@Override
-	public void doInit() {
-		super.doInit();
-
-		definitionEnginePeat.register();
-		definitionEngineBiogas.register();
-		definitionEngineClockwork.register();
-	}
-
-	@Override
-	public GuiHandlerBase getGuiHandler() {
-		return new GuiHandlerEnergy();
 	}
 }

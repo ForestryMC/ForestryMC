@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.multiblock;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -22,6 +23,8 @@ import net.minecraftforge.fluids.IFluidHandler;
 import forestry.api.core.IClimateControlled;
 import forestry.api.multiblock.IAlvearyComponent;
 import forestry.apiculture.blocks.BlockAlveary;
+import forestry.apiculture.gui.ContainerAlvearyHygroregulator;
+import forestry.apiculture.gui.GuiAlvearyHygroregulator;
 import forestry.apiculture.inventory.InventoryHygroregulator;
 import forestry.core.config.Constants;
 import forestry.core.fluids.FluidHelper;
@@ -29,10 +32,9 @@ import forestry.core.fluids.Fluids;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.inventory.IInventoryAdapter;
-import forestry.core.network.GuiId;
 import forestry.core.tiles.ILiquidTankTile;
 
-public class TileAlvearyHygroregulator extends TileAlvearyWithGui implements IInventory, ILiquidTankTile, IFluidHandler, IAlvearyComponent.Climatiser {
+public class TileAlvearyHygroregulator extends TileAlveary implements IInventory, ILiquidTankTile, IFluidHandler, IAlvearyComponent.Climatiser {
 	private final HygroregulatorRecipe[] recipes;
 
 	private final TankManager tankManager;
@@ -43,7 +45,7 @@ public class TileAlvearyHygroregulator extends TileAlvearyWithGui implements IIn
 	private int transferTime;
 
 	public TileAlvearyHygroregulator() {
-		super(TileAlveary.HYGRO_META, GuiId.HygroregulatorGUI);
+		super(BlockAlveary.Type.HYGRO);
 
 		this.inventory = new InventoryHygroregulator(this);
 
@@ -176,6 +178,16 @@ public class TileAlvearyHygroregulator extends TileAlvearyWithGui implements IIn
 	@Override
 	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
 		return tankManager.getTankInfo(from);
+	}
+
+	@Override
+	public Object getGui(EntityPlayer player, int data) {
+		return new GuiAlvearyHygroregulator(player.inventory, this);
+	}
+
+	@Override
+	public Object getContainer(EntityPlayer player, int data) {
+		return new ContainerAlvearyHygroregulator(player.inventory, this);
 	}
 
 	private static class HygroregulatorRecipe {

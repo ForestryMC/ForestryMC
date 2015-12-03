@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Stack;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -38,9 +39,10 @@ import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
-import forestry.core.network.GuiId;
 import forestry.core.tiles.TilePowered;
 import forestry.core.utils.InventoryUtil;
+import forestry.factory.gui.ContainerCentrifuge;
+import forestry.factory.gui.GuiCentrifuge;
 import forestry.factory.inventory.InventoryCentrifuge;
 import forestry.factory.recipes.CentrifugeRecipeManager;
 import forestry.factory.triggers.FactoryTriggers;
@@ -59,7 +61,7 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 	private final Stack<ItemStack> pendingProducts = new Stack<>();
 
 	public TileCentrifuge() {
-		super(GuiId.CentrifugeGUI, "centrifuge", 800, Constants.MACHINE_MAX_ENERGY);
+		super("centrifuge", 800, Constants.MACHINE_MAX_ENERGY);
 		setInternalInventory(new InventoryCentrifuge(this));
 	}
 
@@ -248,4 +250,13 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 		return CircuitSocketType.MACHINE;
 	}
 
+	@Override
+	public Object getGui(EntityPlayer player, int data) {
+		return new GuiCentrifuge(player.inventory, this);
+	}
+
+	@Override
+	public Object getContainer(EntityPlayer player, int data) {
+		return new ContainerCentrifuge(player.inventory, this);
+	}
 }

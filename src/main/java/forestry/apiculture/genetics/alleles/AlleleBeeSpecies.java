@@ -13,7 +13,6 @@ package forestry.apiculture.genetics.alleles;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -27,39 +26,38 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IAlleleBeeSpeciesCustom;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
+import forestry.api.apiculture.IBeeIconColourProvider;
 import forestry.api.apiculture.IBeeIconProvider;
 import forestry.api.apiculture.IBeeRoot;
 import forestry.api.apiculture.IJubilanceProvider;
 import forestry.api.core.IIconProvider;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IIndividual;
+import forestry.apiculture.genetics.DefaultBeeIconColourProvider;
+import forestry.apiculture.genetics.DefaultBeeIconProvider;
 import forestry.apiculture.genetics.JubilanceDefault;
 import forestry.core.genetics.alleles.AlleleSpecies;
-import forestry.core.render.TextureManager;
-import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.ItemStackUtil;
 
 public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpeciesCustom {
 	private final Map<ItemStack, Float> productChances = new HashMap<>();
 	private final Map<ItemStack, Float> specialtyChances = new HashMap<>();
 
-	private final int primaryColour;
-	private final int secondaryColour;
-
-	private IBeeIconProvider beeIconProvider = DefaultBeeIconProvider.instance;
-	private IJubilanceProvider jubilanceProvider = JubilanceDefault.instance;
+	private IBeeIconProvider beeIconProvider;
+	private IBeeIconColourProvider beeIconColourProvider;
+	private IJubilanceProvider jubilanceProvider;
 	private boolean nocturnal = false;
 
 	public AlleleBeeSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, boolean dominant, IClassification branch, String binomial, int primaryColor, int secondaryColor) {
 		super(uid, unlocalizedName, authority, unlocalizedDescription, dominant, branch, binomial);
 
-		this.primaryColour = primaryColor;
-		this.secondaryColour = secondaryColor;
+		beeIconProvider = DefaultBeeIconProvider.instance;
+		beeIconColourProvider = new DefaultBeeIconColourProvider(primaryColor, secondaryColor);
+		jubilanceProvider = JubilanceDefault.instance;
 	}
 
 	@Override
@@ -109,12 +107,13 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 		return this;
 	}
 
-	/* RESEARCH */
 	@Override
-	public int getComplexity() {
-		return GeneticsUtil.getResearchComplexity(this, EnumBeeChromosome.SPECIES);
+	public IAlleleBeeSpeciesCustom setCustomBeeIconColourProvider(IBeeIconColourProvider beeIconColourProvider) {
+		this.beeIconColourProvider = beeIconColourProvider;
+		return this;
 	}
 
+	/* RESEARCH */
 	@Override
 	public float getResearchSuitability(ItemStack itemstack) {
 		if (itemstack == null) {
@@ -185,59 +184,12 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 
 	@Override
 	public int getIconColour(int renderPass) {
-		if (renderPass == 0) {
-			return primaryColour;
-		}
-		if (renderPass == 1) {
-			return secondaryColour;
-		}
-		return 0xffffff;
+		return beeIconColourProvider.getIconColour(renderPass);
 	}
 
 	@Override
 	public String getEntityTexture() {
 		return null;
-	}
-
-	private static class DefaultBeeIconProvider implements IBeeIconProvider {
-
-		public static final DefaultBeeIconProvider instance = new DefaultBeeIconProvider();
-
-		private DefaultBeeIconProvider() {
-
-		}
-
-		private static final IIcon[][] icons = new IIcon[EnumBeeType.values().length][3];
-
-		@Override
-		@SideOnly(Side.CLIENT)
-		public void registerIcons(IIconRegister register) {
-			String beeIconDir = "bees/default/";
-			IIcon body1 = TextureManager.registerTex(register, beeIconDir + "body1");
-
-			for (int i = 0; i < EnumBeeType.values().length; i++) {
-				EnumBeeType beeType = EnumBeeType.values()[i];
-				if (beeType == EnumBeeType.NONE) {
-					continue;
-				}
-
-				String beeTypeNameBase = beeIconDir + beeType.toString().toLowerCase(Locale.ENGLISH);
-
-				icons[i][0] = TextureManager.registerTex(register, beeTypeNameBase + ".outline");
-				if (beeType == EnumBeeType.LARVAE) {
-					icons[i][1] = TextureManager.registerTex(register, beeTypeNameBase + ".body");
-				} else {
-					icons[i][1] = body1;
-				}
-				icons[i][2] = TextureManager.registerTex(register, beeTypeNameBase + ".body2");
-			}
-		}
-
-		@Override
-		@SideOnly(Side.CLIENT)
-		public IIcon getIcon(EnumBeeType type, int renderPass) {
-			return icons[type.ordinal()][renderPass];
-		}
 	}
 
 	private static class BeeIconProviderWrapper implements IIconProvider {

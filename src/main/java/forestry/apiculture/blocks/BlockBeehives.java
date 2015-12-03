@@ -41,6 +41,11 @@ import forestry.core.utils.ItemStackUtil;
 import forestry.plugins.PluginApiculture;
 
 public class BlockBeehives extends BlockContainer {
+	public enum Type {
+		LEGACY,
+		FOREST,
+		MEADOWS;
+	}
 
 	public BlockBeehives() {
 		super(new MaterialBeehive(true));

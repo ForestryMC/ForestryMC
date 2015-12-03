@@ -13,6 +13,7 @@ package forestry.energy.tiles;
 import java.util.Collection;
 import java.util.LinkedList;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.IInventory;
@@ -29,17 +30,18 @@ import cpw.mods.fml.common.registry.GameData;
 
 import forestry.api.fuels.FuelManager;
 import forestry.core.config.Constants;
-import forestry.core.config.ForestryItem;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.inventory.AdjacentInventoryCache;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.wrappers.InventoryMapper;
-import forestry.core.network.GuiId;
 import forestry.core.tiles.TemperatureState;
 import forestry.core.tiles.TileEngine;
 import forestry.core.utils.InventoryUtil;
+import forestry.energy.gui.ContainerEnginePeat;
+import forestry.energy.gui.GuiEnginePeat;
 import forestry.energy.inventory.InventoryEnginePeat;
 import forestry.factory.triggers.FactoryTriggers;
+import forestry.plugins.PluginCore;
 
 import buildcraft.api.statements.ITriggerExternal;
 
@@ -53,7 +55,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 	private final AdjacentInventoryCache inventoryCache = new AdjacentInventoryCache(this, getTileCache());
 
 	public TileEnginePeat() {
-		super(GuiId.EnginePeatGUI, "engine.copper", Constants.ENGINE_COPPER_HEAT_MAX, 200000);
+		super("engine.copper", Constants.ENGINE_COPPER_HEAT_MAX, 200000);
 
 		ashForItem = Constants.ENGINE_COPPER_ASH_FOR_ITEM;
 		setInternalInventory(new InventoryEnginePeat(this));
@@ -75,14 +77,16 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 	private int getFreeWasteSlot() {
 		IInventoryAdapter inventory = getInternalInventory();
 		for (int i = InventoryEnginePeat.SLOT_WASTE_1; i <= InventoryEnginePeat.SLOT_WASTE_COUNT; i++) {
-			if (inventory.getStackInSlot(i) == null) {
+			ItemStack waste = inventory.getStackInSlot(i);
+			if (waste == null) {
 				return i;
 			}
-			if (!ForestryItem.ash.isItemEqual(inventory.getStackInSlot(i))) {
+
+			if (waste.getItem() != PluginCore.items.ash) {
 				continue;
 			}
 
-			if (inventory.getStackInSlot(i).stackSize < 64) {
+			if (waste.stackSize < 64) {
 				return i;
 			}
 		}
@@ -182,7 +186,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 		if (wasteSlot >= 0) {
 			IInventoryAdapter inventory = getInternalInventory();
 			if (inventory.getStackInSlot(wasteSlot) == null) {
-				inventory.setInventorySlotContents(wasteSlot, ForestryItem.ash.getItemStack());
+				inventory.setInventorySlotContents(wasteSlot, PluginCore.items.ash.getItemStack());
 			} else {
 				inventory.getStackInSlot(wasteSlot).stackSize++;
 			}
@@ -335,5 +339,15 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 		res.add(FactoryTriggers.lowFuel25);
 		res.add(FactoryTriggers.lowFuel10);
 		return res;
+	}
+
+	@Override
+	public Object getGui(EntityPlayer player, int data) {
+		return new GuiEnginePeat(player.inventory, this);
+	}
+
+	@Override
+	public Object getContainer(EntityPlayer player, int data) {
+		return new ContainerEnginePeat(player.inventory, this);
 	}
 }

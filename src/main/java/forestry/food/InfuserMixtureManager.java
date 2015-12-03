@@ -18,7 +18,6 @@ import net.minecraft.item.ItemStack;
 
 import forestry.api.food.IBeverageEffect;
 import forestry.api.food.IInfuserManager;
-import forestry.food.items.ItemBeverage;
 
 /**
  * contains the available mixtures.
@@ -80,7 +79,7 @@ public class InfuserMixtureManager implements IInfuserManager {
 	@Override
 	public ItemStack getSeasoned(ItemStack base, ItemStack[] ingredients) {
 		InfuserMixture[] mixtures = getMatchingMixtures(ingredients);
-		List<IBeverageEffect> effects = ItemBeverage.BeverageInfo.loadEffects(base);
+		List<IBeverageEffect> effects = BeverageEffect.loadEffects(base);
 
 		int weight = 0;
 		int meta = 0;
@@ -94,7 +93,7 @@ public class InfuserMixtureManager implements IInfuserManager {
 
 		ItemStack seasoned = base.copy();
 		seasoned.setItemDamage(meta);
-		ItemBeverage.BeverageInfo.saveEffects(seasoned, effects);
+		BeverageEffect.saveEffects(seasoned, effects);
 		return seasoned;
 	}
 }

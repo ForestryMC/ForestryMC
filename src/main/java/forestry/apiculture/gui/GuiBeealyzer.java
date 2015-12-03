@@ -25,13 +25,12 @@ import forestry.api.genetics.IAlleleInteger;
 import forestry.api.genetics.IAlleleTolerance;
 import forestry.apiculture.genetics.BeeGenome;
 import forestry.apiculture.inventory.ItemInventoryBeealyzer;
-import forestry.apiculture.items.ItemBeeGE;
-import forestry.core.config.ForestryItem;
 import forestry.core.genetics.alleles.AlleleBoolean;
 import forestry.core.gui.ContainerAlyzer;
 import forestry.core.gui.GuiAlyzer;
 import forestry.core.gui.widgets.ItemStackWidget;
 import forestry.core.utils.StringUtil;
+import forestry.plugins.PluginApiculture;
 
 public class GuiBeealyzer extends GuiAlyzer {
 
@@ -39,7 +38,7 @@ public class GuiBeealyzer extends GuiAlyzer {
 		super(BeeManager.beeRoot, player, new ContainerAlyzer(inventory, player), inventory, "gui.beealyzer");
 
 		ArrayList<ItemStack> beeList = new ArrayList<>();
-		((ItemBeeGE) ForestryItem.beeDroneGE.item()).addCreativeItems(beeList, false);
+		PluginApiculture.items.beeDroneGE.addCreativeItems(beeList, false);
 		for (ItemStack beeStack : beeList) {
 			IAlleleBeeSpecies species = BeeGenome.getSpecies(beeStack);
 			if (species != null) {

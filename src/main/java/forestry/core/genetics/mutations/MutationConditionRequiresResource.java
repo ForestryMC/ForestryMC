@@ -14,6 +14,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IMutationCondition;
@@ -25,13 +26,20 @@ public class MutationConditionRequiresResource implements IMutationCondition {
 	private final ItemStack blockRequired;
 
 	public MutationConditionRequiresResource(Block block, int meta) {
-		blockRequired = new ItemStack(block, meta);
+		blockRequired = new ItemStack(block, 1, meta);
 	}
 
 	@Override
 	public float getChance(World world, int x, int y, int z, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1) {
-		Block block = world.getBlock(x, y - 1, z);
-		int meta = world.getBlockMetadata(x, y - 1, z);
+		Block block;
+		int meta;
+		int i = 1;
+		do {
+			block = world.getBlock(x, y - i, z);
+			meta = world.getBlockMetadata(x, y - i, z);
+			i++;
+		} while (block instanceof IBeeHousing);
+
 		return ItemStackUtil.equals(block, meta, blockRequired) ? 1 : 0;
 	}
 

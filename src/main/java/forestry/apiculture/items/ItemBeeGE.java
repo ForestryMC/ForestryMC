@@ -17,7 +17,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
 
@@ -33,7 +32,6 @@ import forestry.api.core.Tabs;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
-import forestry.api.genetics.IIndividual;
 import forestry.apiculture.genetics.BeeGenome;
 import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
@@ -44,9 +42,8 @@ public class ItemBeeGE extends ItemGE {
 	private final EnumBeeType type;
 
 	public ItemBeeGE(EnumBeeType type) {
-		super();
+		super(Tabs.tabApiculture);
 		this.type = type;
-		setCreativeTab(Tabs.tabApiculture);
 		if (type != EnumBeeType.DRONE) {
 			setMaxStackSize(1);
 		}

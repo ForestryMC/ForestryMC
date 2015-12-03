@@ -23,8 +23,8 @@ import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitBoard;
 import forestry.api.circuits.ICircuitLayout;
-import forestry.core.config.ForestryItem;
 import forestry.core.items.ItemForestryMultiPass;
+import forestry.plugins.PluginCore;
 
 public class ItemCircuitBoard extends ItemForestryMultiPass {
 
@@ -76,7 +76,7 @@ public class ItemCircuitBoard extends ItemForestryMultiPass {
 	}
 
 	public static ItemStack createCircuitboard(EnumCircuitBoardType type, ICircuitLayout layout, ICircuit[] circuits) {
-		ItemStack chipset = ForestryItem.circuitboards.getItemStack(1, type.ordinal());
+		ItemStack chipset = PluginCore.items.circuitboards.get(type);
 		saveChipset(chipset, new CircuitBoard(type, layout, circuits));
 		return chipset;
 	}
@@ -92,4 +92,7 @@ public class ItemCircuitBoard extends ItemForestryMultiPass {
 		itemstack.setTagCompound(nbttagcompound);
 	}
 
+	public ItemStack get(EnumCircuitBoardType type) {
+		return new ItemStack(this, 1, type.ordinal());
+	}
 }

@@ -13,6 +13,7 @@ package forestry.core.genetics.alleles;
 import java.util.Collection;
 import java.util.Map;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
@@ -30,11 +31,12 @@ import forestry.api.genetics.IAlleleSpeciesCustom;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
-import forestry.core.config.ForestryItem;
+import forestry.apiculture.items.ItemRegistryApiculture;
+import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.ItemStackUtil;
+import forestry.plugins.PluginApiculture;
 
 public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesCustom {
-
 	private final String binomial;
 	private final String authority;
 	private final String description;
@@ -66,13 +68,19 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesCust
 			return 0f;
 		}
 
-		if (ForestryItem.honeyDrop.isItemEqual(itemstack)) {
-			return 0.5f;
-		} else if (ForestryItem.honeydew.isItemEqual(itemstack)) {
-			return 0.7f;
-		} else if (ForestryItem.beeComb.isItemEqual(itemstack)) {
-			return 0.4f;
-		} else if (getRoot().isMember(itemstack)) {
+		ItemRegistryApiculture beeItems = PluginApiculture.items;
+		if (beeItems != null) {
+			Item item = itemstack.getItem();
+			if (beeItems.honeyDrop == item) {
+				return 0.5f;
+			} else if (beeItems.honeydew == item) {
+				return 0.7f;
+			} else if (beeItems.beeComb == item) {
+				return 0.4f;
+			}
+		}
+
+		if (getRoot().isMember(itemstack)) {
 			return 1.0f;
 		}
 
@@ -86,8 +94,12 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesCust
 	}
 
 	@Override
-	public ItemStack[] getResearchBounty(World world, GameProfile researcher, IIndividual individual, int bountyLevel) {
+	public int getComplexity() {
+		return GeneticsUtil.getResearchComplexity(this, getRoot().getKaryotypeKey());
+	}
 
+	@Override
+	public ItemStack[] getResearchBounty(World world, GameProfile researcher, IIndividual individual, int bountyLevel) {
 		ItemStack research = null;
 		if (world.rand.nextFloat() < ((float) 10 / bountyLevel)) {
 			Collection<? extends IMutation> combinations = getRoot().getCombinations(this);
@@ -102,7 +114,6 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesCust
 		} else {
 			return ItemStackUtil.EMPTY_STACK_ARRAY;
 		}
-
 	}
 
 	@Override
@@ -173,20 +184,6 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesCust
 	public IAlleleSpeciesCustom setIsNotCounted() {
 		isCounted = false;
 		return this;
-	}
-
-	@Deprecated
-	@SuppressWarnings("unchecked")
-	public <T extends AlleleSpecies> T setTemperatureDeprecated(EnumTemperature temperature) {
-		climate = temperature;
-		return (T) this;
-	}
-
-	@Deprecated
-	@SuppressWarnings("unchecked")
-	public <T extends AlleleSpecies> T setHumidityDeprecated(EnumHumidity humidity) {
-		this.humidity = humidity;
-		return (T) this;
 	}
 
 	@Override

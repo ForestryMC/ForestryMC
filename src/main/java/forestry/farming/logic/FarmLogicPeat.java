@@ -25,15 +25,15 @@ import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.core.blocks.BlockSoil;
-import forestry.core.config.ForestryBlock;
-import forestry.core.config.ForestryItem;
 import forestry.core.utils.vect.Vect;
 import forestry.core.utils.vect.VectUtil;
+import forestry.plugins.PluginCore;
 
 public class FarmLogicPeat extends FarmLogicWatered {
+	private static final ItemStack bogEarth = PluginCore.blocks.soil.get(BlockSoil.SoilType.BOG_EARTH, 1);
 
 	public FarmLogicPeat(IFarmHousing housing) {
-		super(housing, ForestryBlock.soil.getItemStack(1, 1), ForestryBlock.soil.getItemStack(1, 1));
+		super(housing, bogEarth, bogEarth);
 	}
 
 	@Override
@@ -106,7 +106,7 @@ public class FarmLogicPeat extends FarmLogicWatered {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon() {
-		return ForestryItem.peat.item().getIconFromDamage(0);
+		return PluginCore.items.peat.getIconFromDamage(0);
 	}
 
 }

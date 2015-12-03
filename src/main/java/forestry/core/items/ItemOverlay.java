@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import java.awt.Color;
 import java.util.List;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -27,38 +26,16 @@ import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
 
 public class ItemOverlay extends ItemForestry {
-
-	public static class OverlayInfo {
-
-		public final String name;
-		public final int primaryColor;
-		public final int secondaryColor;
-		public boolean isSecret = false;
-
-		public OverlayInfo(String name, Color primaryColor, Color secondaryColor) {
-			this(name, primaryColor.getRGB(), secondaryColor.getRGB());
-		}
-
-		public OverlayInfo(String name, int primaryColor, int secondaryColor) {
-			this.name = name;
-			this.primaryColor = primaryColor;
-			this.secondaryColor = secondaryColor;
-		}
-
-		public OverlayInfo(String name, int primaryColor) {
-			this(name, primaryColor, 0);
-		}
-
-		public OverlayInfo setIsSecret() {
-			isSecret = true;
-			return this;
-		}
+	public interface IOverlayInfo {
+		String getName();
+		int getPrimaryColor();
+		int getSecondaryColor();
+		boolean isSecret();
 	}
 
-	private final OverlayInfo[] overlays;
+	protected final IOverlayInfo[] overlays;
 
-	public ItemOverlay(CreativeTabs tab, OverlayInfo... overlays) {
-		super();
+	public ItemOverlay(CreativeTabs tab, IOverlayInfo... overlays) {
 		setMaxDamage(0);
 		setHasSubtypes(true);
 		setCreativeTab(tab);
@@ -80,7 +57,7 @@ public class ItemOverlay extends ItemForestry {
 	@Override
 	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List itemList) {
 		for (int i = 0; i < overlays.length; i++) {
-			if (Config.isDebug || !overlays[i].isSecret) {
+			if (Config.isDebug || !overlays[i].isSecret()) {
 				itemList.add(new ItemStack(this, 1, i));
 			}
 		}
@@ -96,7 +73,7 @@ public class ItemOverlay extends ItemForestry {
 	@Override
 	public void registerIcons(IIconRegister register) {
 		primaryIcon = TextureManager.registerTex(register, StringUtil.cleanItemName(this) + ".0");
-		if (overlays[0].secondaryColor != 0) {
+		if (overlays[0].getSecondaryColor() != 0) {
 			secondaryIcon = TextureManager.registerTex(register, StringUtil.cleanItemName(this) + ".1");
 		}
 	}
@@ -104,7 +81,7 @@ public class ItemOverlay extends ItemForestry {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIconFromDamageForRenderPass(int i, int j) {
-		if (j > 0 && overlays[i].secondaryColor != 0) {
+		if (j > 0 && overlays[i].getSecondaryColor() != 0) {
 			return secondaryIcon;
 		} else {
 			return primaryIcon;
@@ -113,7 +90,7 @@ public class ItemOverlay extends ItemForestry {
 
 	@Override
 	public int getRenderPasses(int metadata) {
-		return overlays[metadata].secondaryColor != 0 ? 2 : 1;
+		return overlays[metadata].getSecondaryColor() != 0 ? 2 : 1;
 	}
 
 	@Override
@@ -127,17 +104,16 @@ public class ItemOverlay extends ItemForestry {
 			return null;
 		}
 
-		return super.getUnlocalizedName(stack) + "." + overlays[stack.getItemDamage()].name;
+		return super.getUnlocalizedName(stack) + "." + overlays[stack.getItemDamage()].getName();
 	}
 
 	@Override
 	public int getColorFromItemStack(ItemStack itemstack, int j) {
-
-		if (j == 0 || overlays[itemstack.getItemDamage()].secondaryColor == 0) {
-			return overlays[itemstack.getItemDamage()].primaryColor;
+		IOverlayInfo overlayInfo = overlays[itemstack.getItemDamage()];
+		if (j == 0 || overlayInfo.getSecondaryColor() == 0) {
+			return overlayInfo.getPrimaryColor();
 		} else {
-			return overlays[itemstack.getItemDamage()].secondaryColor;
+			return overlayInfo.getSecondaryColor();
 		}
 	}
-
 }

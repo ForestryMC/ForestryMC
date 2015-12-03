@@ -326,4 +326,11 @@ public class BlockCandle extends BlockTorch {
 		}
 	}
 
+	public ItemStack getUnlitCandle(int amount) {
+		return new ItemStack(this, amount, 0);
+	}
+
+	public ItemStack getLitCandle(int amount) {
+		return new ItemStack(this, amount, 1);
+	}
 }

@@ -14,7 +14,6 @@ import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.world.IBlockAccess;
 
-import forestry.core.config.ForestryBlock;
 import forestry.core.render.RenderOverlayBlock;
 import forestry.farming.blocks.BlockFarm;
 import forestry.plugins.PluginFarming;
@@ -30,7 +29,7 @@ public class RenderFarmBlock extends RenderOverlayBlock {
 
 		// Render the plain block.
 		renderer.renderStandardBlock(block, x, y, z);
-		renderFarmOverlay(world, (BlockFarm) ForestryBlock.farm.block(), x, y, z, renderer);
+		renderFarmOverlay(world, PluginFarming.blocks.farm, x, y, z, renderer);
 
 		return true;
 	}
@@ -43,7 +42,6 @@ public class RenderFarmBlock extends RenderOverlayBlock {
 		float adjG = 0.5f;
 		float adjB = 0.5f;
 
-		// Bottom
 		renderBottomFace(world, block, x, y, z, renderer, BlockFarm.getOverlayTextureForBlock(0, metadata), mixedBrightness, adjR, adjG, adjB);
 		renderTopFace(world, block, x, y, z, renderer, BlockFarm.getOverlayTextureForBlock(1, metadata), mixedBrightness, adjR, adjG, adjB);
 		renderEastFace(world, block, x, y, z, renderer, BlockFarm.getOverlayTextureForBlock(2, metadata), mixedBrightness, adjR, adjG, adjB);
@@ -61,5 +59,4 @@ public class RenderFarmBlock extends RenderOverlayBlock {
 	public int getRenderId() {
 		return PluginFarming.modelIdFarmBlock;
 	}
-
 }

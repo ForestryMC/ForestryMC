@@ -36,12 +36,12 @@ import forestry.core.blocks.BlockStructure;
 import forestry.core.render.ParticleHelper;
 import forestry.core.utils.ItemStackUtil;
 import forestry.farming.render.EnumFarmBlockTexture;
-import forestry.farming.tiles.TileControl;
 import forestry.farming.tiles.TileFarm;
+import forestry.farming.tiles.TileFarmControl;
+import forestry.farming.tiles.TileFarmGearbox;
+import forestry.farming.tiles.TileFarmHatch;
 import forestry.farming.tiles.TileFarmPlain;
-import forestry.farming.tiles.TileGearbox;
-import forestry.farming.tiles.TileHatch;
-import forestry.farming.tiles.TileValve;
+import forestry.farming.tiles.TileFarmValve;
 import forestry.plugins.PluginFarming;
 
 public class BlockFarm extends BlockStructure {
@@ -51,6 +51,7 @@ public class BlockFarm extends BlockStructure {
 	public BlockFarm() {
 		super(Material.rock);
 		setHardness(1.0f);
+		setHarvestLevel("pickaxe", 0);
 		this.particleCallback = new ParticleHelper.DefaultCallback(this);
 	}
 
@@ -132,13 +133,13 @@ public class BlockFarm extends BlockStructure {
 	public TileEntity createTileEntity(World world, int metadata) {
 		switch (metadata) {
 			case 2:
-				return new TileGearbox();
+				return new TileFarmGearbox();
 			case 3:
-				return new TileHatch();
+				return new TileFarmHatch();
 			case 4:
-				return new TileValve();
+				return new TileFarmValve();
 			case 5:
-				return new TileControl();
+				return new TileFarmControl();
 			default:
 				return new TileFarmPlain();
 		}
@@ -179,27 +180,8 @@ public class BlockFarm extends BlockStructure {
 
 	@SideOnly(Side.CLIENT)
 	public static IIcon getOverlayTextureForBlock(int side, int metadata) {
-
-		if (metadata == 0 && side == 2) {
-			return EnumFarmBlockTexture.getIcon(TileFarm.TYPE_REVERSE);
-		} else if (metadata == 0 && (side == 0 || side == 1)) {
-			return EnumFarmBlockTexture.getIcon(TileFarm.TYPE_TOP);
-		}
-
-		switch (metadata) {
-			case 1:
-				return EnumFarmBlockTexture.getIcon(TileFarm.TYPE_BAND);
-			case 2:
-				return EnumFarmBlockTexture.getIcon(TileFarm.TYPE_GEARS);
-			case 3:
-				return EnumFarmBlockTexture.getIcon(TileFarm.TYPE_HATCH);
-			case 4:
-				return EnumFarmBlockTexture.getIcon(TileFarm.TYPE_VALVE);
-			case 5:
-				return EnumFarmBlockTexture.getIcon(TileFarm.TYPE_CONTROL);
-			default:
-				return EnumFarmBlockTexture.getIcon(TileFarm.TYPE_PLAIN);
-		}
+		BlockFarmType type = BlockFarmType.VALUES[metadata];
+		return EnumFarmBlockTexture.getIcon(type, side);
 	}
 
 	@Override
@@ -238,4 +220,7 @@ public class BlockFarm extends BlockStructure {
 		return world.getBlockMetadata(x, y, z) == 5;
 	}
 
+	public ItemStack get(BlockFarmType type, int amount) {
+		return new ItemStack(this, amount, type.ordinal());
+	}
 }

@@ -14,7 +14,6 @@ import java.io.IOException;
 
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
-import forestry.core.network.GuiId;
 
 public abstract class TileMill extends TileBase {
 
@@ -23,8 +22,8 @@ public abstract class TileMill extends TileBase {
 	public int charge = 0;
 	public float progress;
 
-	protected TileMill(GuiId guiId, String hintKey) {
-		super(guiId, hintKey);
+	protected TileMill(String hintKey) {
+		super(hintKey);
 		speed = 0.01F;
 	}
 

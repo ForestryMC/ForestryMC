@@ -24,7 +24,6 @@ import forestry.core.config.Config;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
-import forestry.core.network.GuiId;
 import forestry.core.network.IStreamableGui;
 import forestry.core.render.TankRenderInfo;
 import forestry.energy.EnergyManager;
@@ -47,8 +46,8 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
 	// the number of work ticks that this tile has had no power
 	private int noPowerTime = 0;
 
-	protected TilePowered(GuiId guiId, String hintKey, int maxTransfer, int capacity) {
-		super(guiId, hintKey);
+	protected TilePowered(String hintKey, int maxTransfer, int capacity) {
+		super(hintKey);
 		this.energyManager = new EnergyManager(maxTransfer, capacity);
 		this.energyManager.setReceiveOnly();
 

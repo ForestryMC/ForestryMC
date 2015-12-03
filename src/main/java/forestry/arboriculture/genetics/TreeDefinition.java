@@ -84,7 +84,6 @@ import forestry.arboriculture.worldgen.WorldGenWenge;
 import forestry.arboriculture.worldgen.WorldGenWillow;
 import forestry.arboriculture.worldgen.WorldGenZebrawood;
 import forestry.core.config.Constants;
-import forestry.core.config.ForestryBlock;
 import forestry.core.genetics.alleles.AlleleBoolean;
 import forestry.core.genetics.alleles.AlleleHelper;
 import forestry.core.genetics.alleles.AllelePlantType;
@@ -958,8 +957,8 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 
 	// vanilla tree constructor
 	TreeDefinition(TreeBranchDefinition branch, String speciesName, String binomial, boolean dominant, EnumLeafType leafType, Color primary, Color secondary, int vanillaMeta, ItemStack vanillaWood) {
-		String uid = "forestry.tree" + this.toString();
-		String unlocalizedDescription = "for.description.tree" + this.toString();
+		String uid = "forestry.tree" + this;
+		String unlocalizedDescription = "for.description.tree" + this;
 		String unlocalizedName = "for.trees.species." + speciesName;
 
 		this.branch = branch;
@@ -974,8 +973,8 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 
 	// forestry tree constructor
 	TreeDefinition(TreeBranchDefinition branch, String speciesName, String binomial, boolean dominant, EnumLeafType leafType, Color primary, Color secondary, EnumWoodType woodType) {
-		String uid = "forestry.tree" + this.toString();
-		String unlocalizedDescription = "for.description.tree" + this.toString();
+		String uid = "forestry.tree" + this;
+		String unlocalizedDescription = "for.description.tree" + this;
 		String unlocalizedName = "for.trees.species." + speciesName;
 
 		this.branch = branch;
@@ -1029,12 +1028,13 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 
 	@Override
 	public void setLeaves(ITreeGenome genome, World world, GameProfile owner, int x, int y, int z, boolean decorative) {
-		boolean placed = world.setBlock(x, y, z, ForestryBlock.leaves.block(), 0, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
+		boolean placed = world.setBlock(x, y, z, PluginArboriculture.blocks.leaves, 0, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
 		if (!placed) {
 			return;
 		}
 
-		if (!ForestryBlock.leaves.isBlockEqual(world, x, y, z)) {
+		Block block = world.getBlock(x, y, z);
+		if (PluginArboriculture.blocks.leaves != block) {
 			world.setBlockToAir(x, y, z);
 			return;
 		}

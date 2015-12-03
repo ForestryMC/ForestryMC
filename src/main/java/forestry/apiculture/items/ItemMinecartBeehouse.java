@@ -105,4 +105,12 @@ public class ItemMinecartBeehouse extends ItemMinecart {
 			itemList.add(new ItemStack(this, 1, i));
 		}
 	}
+
+	public ItemStack getBeeHouseMinecart() {
+		return new ItemStack(this, 1, 0);
+	}
+
+	public ItemStack getApiaryMinecart() {
+		return new ItemStack(this, 1, 1);
+	}
 }

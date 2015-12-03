@@ -17,10 +17,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
-import forestry.core.config.ForestryBlock;
+import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.vect.Vect;
+import forestry.plugins.PluginFarming;
 
 public class FarmableVanillaMushroom extends FarmableGenericSapling {
 
@@ -52,7 +53,6 @@ public class FarmableVanillaMushroom extends FarmableGenericSapling {
 		}
 
 		Proxies.common.addBlockPlaceEffects(world, x, y, z, Blocks.brown_mushroom, 0);
-		return ForestryBlock.mushroom.setBlock(world, x, y, z, meta);
+		return world.setBlock(x, y, z, PluginFarming.blocks.mushroom, meta, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
 	}
-
 }

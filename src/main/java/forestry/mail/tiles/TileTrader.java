@@ -25,23 +25,26 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import cpw.mods.fml.common.Optional;
 
-import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorLogic;
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.IStamps;
 import forestry.api.mail.PostManager;
 import forestry.core.errors.EnumErrorCode;
+import forestry.core.gui.GuiHandler;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
-import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileBase;
 import forestry.core.utils.ItemStackUtil;
 import forestry.mail.MailAddress;
 import forestry.mail.TradeStation;
+import forestry.mail.gui.ContainerTradeName;
+import forestry.mail.gui.ContainerTrader;
+import forestry.mail.gui.GuiTradeName;
+import forestry.mail.gui.GuiTrader;
 import forestry.mail.inventory.InventoryTradeStation;
-import forestry.mail.network.PacketTraderAddressResponse;
+import forestry.mail.network.packets.PacketTraderAddressResponse;
 import forestry.mail.triggers.MailTriggers;
 
 import buildcraft.api.statements.ITriggerExternal;
@@ -51,18 +54,15 @@ public class TileTrader extends TileBase {
 	private IMailAddress address;
 
 	public TileTrader() {
-		super(GuiId.TraderGUI, "trade.station");
+		super("trade.station");
 		address = new MailAddress();
 		setInternalInventory(new InventoryTradeStation());
 	}
 
 	@Override
 	public void openGui(EntityPlayer player) {
-		if (isLinked()) {
-			super.openGui(player);
-		} else {
-			player.openGui(ForestryAPI.instance, GuiId.TraderNameGUI.ordinal(), worldObj, xCoord, yCoord, zCoord);
-		}
+		short data = (short) (isLinked() ? 0 : 1);
+		GuiHandler.openGui(player, this, data);
 	}
 
 	@Override
@@ -327,5 +327,23 @@ public class TileTrader extends TileBase {
 		res.add(MailTriggers.highBuffer90);
 		res.add(MailTriggers.highBuffer75);
 		return res;
+	}
+
+	@Override
+	public Object getGui(EntityPlayer player, int data) {
+		if (data == 0) {
+			return new GuiTrader(player.inventory, this);
+		} else {
+			return new GuiTradeName(this);
+		}
+	}
+
+	@Override
+	public Object getContainer(EntityPlayer player, int data) {
+		if (data == 0) {
+			return new ContainerTrader(player.inventory, this);
+		} else {
+			return new ContainerTradeName(this);
+		}
 	}
 }

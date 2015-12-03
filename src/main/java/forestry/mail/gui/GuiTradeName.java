@@ -20,7 +20,7 @@ import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
-import forestry.mail.network.PacketTraderAddressRequest;
+import forestry.mail.network.packets.PacketTraderAddressRequest;
 import forestry.mail.tiles.TileTrader;
 
 public class GuiTradeName extends GuiForestry<ContainerTradeName, TileTrader> {

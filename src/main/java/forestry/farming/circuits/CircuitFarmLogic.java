@@ -53,7 +53,7 @@ public class CircuitFarmLogic extends Circuit {
 
 		IFarmLogic logic;
 		try {
-			logic = logicClass.getConstructor(new Class[]{IFarmHousing.class}).newInstance(housing);
+			logic = logicClass.getConstructor(IFarmHousing.class).newInstance(housing);
 		} catch (Exception ex) {
 			throw new RuntimeException("Failed to instantiate logic of class " + logicClass.getName() + ": " + ex.getMessage());
 		}

@@ -14,26 +14,28 @@ import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.DefaultBeeListener;
 import forestry.api.apiculture.IBeeHousingInventory;
 import forestry.api.apiculture.IBeeListener;
 import forestry.api.apiculture.IBeeModifier;
 import forestry.apiculture.BeehouseBeeModifier;
 import forestry.apiculture.InventoryBeeHousing;
+import forestry.apiculture.blocks.BlockApicultureType;
+import forestry.apiculture.gui.ContainerMinecartBeehouse;
+import forestry.apiculture.gui.GuiBeeHousing;
 import forestry.core.config.Config;
-import forestry.core.config.Constants;
-import forestry.core.config.ForestryBlock;
-import forestry.core.config.ForestryItem;
 import forestry.core.inventory.IInventoryAdapter;
-import forestry.core.network.GuiId;
+import forestry.plugins.PluginApiculture;
 
 public class EntityMinecartBeehouse extends EntityMinecartBeeHousingBase {
 	private static final IBeeModifier beeModifier = new BeehouseBeeModifier();
 	private static final IBeeListener beeListener = new DefaultBeeListener();
-	private final InventoryBeeHousing beeInventory = new InventoryBeeHousing(9, "Items", getAccessHandler());
+	private final InventoryBeeHousing beeInventory = new InventoryBeeHousing(9, getAccessHandler());
 
 	@SuppressWarnings("unused")
 	public EntityMinecartBeehouse(World world) {
@@ -47,28 +49,23 @@ public class EntityMinecartBeehouse extends EntityMinecartBeeHousingBase {
 	}
 
 	@Override
-	protected GuiId getGuiId() {
-		return GuiId.MinecartBeehouseGUI;
-	}
-
-	@Override
 	public List<String> getHints() {
 		return Config.hints.get("bee.house");
 	}
 
 	@Override
 	public Block func_145820_n() {
-		return ForestryBlock.apiculture.block();
+		return PluginApiculture.blocks.apiculture;
 	}
 
 	@Override
 	public int getDisplayTileData() {
-		return Constants.DEFINITION_BEEHOUSE_META;
+		return BlockApicultureType.BEEHOUSE.ordinal();
 	}
 
 	@Override
 	public ItemStack getCartItem() {
-		return ForestryItem.minecartBeehouse.getItemStack(1, 0);
+		return PluginApiculture.items.minecartBeehouse.getBeeHouseMinecart();
 	}
 
 	/* IBeeHousing */
@@ -90,5 +87,17 @@ public class EntityMinecartBeehouse extends EntityMinecartBeeHousingBase {
 	@Override
 	protected IInventoryAdapter getInternalInventory() {
 		return beeInventory;
+	}
+
+	@Override
+	public Object getGui(EntityPlayer player, int data) {
+		ContainerMinecartBeehouse container = new ContainerMinecartBeehouse(player.inventory, this, false);
+		return new GuiBeeHousing<>(this, container, GuiBeeHousing.Icon.BEE_HOUSE);
+	}
+
+	@Override
+	public Object getContainer(EntityPlayer player, int data) {
+		BeeManager.beeRoot.syncBreedingTrackerToPlayer(player);
+		return new ContainerMinecartBeehouse(player.inventory, this, false);
 	}
 }

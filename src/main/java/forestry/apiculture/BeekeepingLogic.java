@@ -38,10 +38,9 @@ import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorState;
 import forestry.api.genetics.IEffectData;
 import forestry.api.genetics.IIndividual;
-import forestry.apiculture.network.PacketBeeLogicActive;
-import forestry.apiculture.network.PacketBeeLogicActiveEntity;
+import forestry.apiculture.network.packets.PacketBeeLogicActive;
+import forestry.apiculture.network.packets.PacketBeeLogicActiveEntity;
 import forestry.core.config.Constants;
-import forestry.core.config.ForestryItem;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
@@ -169,9 +168,9 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 		errorLogic.setCondition(!hasSpace, EnumErrorCode.NO_SPACE_INVENTORY);
 
 		ItemStack queenStack = beeInventory.getQueen();
-
+		EnumBeeType beeType = BeeManager.beeRoot.getType(queenStack);
 		// check if we're breeding
-		if (ForestryItem.beePrincessGE.isItemEqual(queenStack)) {
+		if (beeType == EnumBeeType.PRINCESS) {
 			boolean hasDrone = BeeManager.beeRoot.isDrone(beeInventory.getDrone());
 			errorLogic.setCondition(!hasDrone, EnumErrorCode.NO_DRONE);
 
@@ -179,7 +178,7 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 			return !errorLogic.hasErrors();
 		}
 
-		if (ForestryItem.beeQueenGE.isItemEqual(queenStack)) {
+		if (beeType == EnumBeeType.QUEEN) {
 			if (!isQueenAlive(queenStack)) {
 				IBee dyingQueen = BeeManager.beeRoot.getMember(queenStack);
 				Collection<ItemStack> spawned = killQueen(dyingQueen, housing, beeListener);
@@ -218,7 +217,8 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 	public void doWork() {
 		IBeeHousingInventory beeInventory = housing.getBeeInventory();
 		ItemStack queenStack = beeInventory.getQueen();
-		if (ForestryItem.beePrincessGE.isItemEqual(queenStack)) {
+		EnumBeeType beeType = BeeManager.beeRoot.getType(queenStack);
+		if (beeType == EnumBeeType.PRINCESS) {
 			tickBreed();
 		} else {
 			queenWorkTick(queen);
@@ -289,7 +289,13 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 
 	/** Checks if a queen is alive. Much faster than reading the whole bee nbt */
 	private static boolean isQueenAlive(ItemStack queenStack) {
+		if (queenStack == null) {
+			return false;
+		}
 		NBTTagCompound nbtTagCompound = queenStack.getTagCompound();
+		if (nbtTagCompound == null) {
+			return false;
+		}
 		int health = nbtTagCompound.getInteger("Health");
 		return health > 0;
 	}
@@ -303,7 +309,9 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 		ItemStack droneStack = beeInventory.getDrone();
 		ItemStack princessStack = beeInventory.getQueen();
 
-		if (!ForestryItem.beeDroneGE.isItemEqual(droneStack) || !ForestryItem.beePrincessGE.isItemEqual(princessStack)) {
+		EnumBeeType droneType = BeeManager.beeRoot.getType(droneStack);
+		EnumBeeType princessType = BeeManager.beeRoot.getType(princessStack);
+		if (droneType != EnumBeeType.DRONE || princessType != EnumBeeType.PRINCESS) {
 			beeProgress = 0;
 			return;
 		}
@@ -322,7 +330,7 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
 		princess.writeToNBT(nbttagcompound);
-		queenStack = ForestryItem.beeQueenGE.getItemStack();
+		queenStack = new ItemStack(PluginApiculture.items.beeQueenGE);
 		queenStack.setTagCompound(nbttagcompound);
 
 		beeInventory.setQueen(queenStack);
@@ -359,7 +367,7 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 		} else {
 			Log.warning("Tried to spawn offspring off an unmated queen. Devolving her to a princess.");
 
-			ItemStack convert = ForestryItem.beePrincessGE.getItemStack();
+			ItemStack convert = new ItemStack(PluginApiculture.items.beePrincessGE);
 			NBTTagCompound nbttagcompound = new NBTTagCompound();
 			queen.writeToNBT(nbttagcompound);
 			convert.setTagCompound(nbttagcompound);

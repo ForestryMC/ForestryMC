@@ -17,30 +17,32 @@ import forestry.core.CreativeTabForestry;
 import forestry.core.render.TextureManager;
 
 public class BlockResourceStorage extends Block {
-	
+	public enum ResourceType {
+		APATITE,
+		COPPER,
+		TIN,
+		BRONZE;
+
+		public static final ResourceType[] VALUES = values();
+
+		@SideOnly(Side.CLIENT)
+		public IIcon icon;
+	}
+
 	public BlockResourceStorage() {
 		super(Material.iron);
 		setHardness(3F);
 		setResistance(5F);
 		setCreativeTab(CreativeTabForestry.tabForestry);
 	}
-
-	@SideOnly(Side.CLIENT)
-	private IIcon iconApatite;
-	@SideOnly(Side.CLIENT)
-	private IIcon iconCopper;
-	@SideOnly(Side.CLIENT)
-	private IIcon iconTin;
-	@SideOnly(Side.CLIENT)
-	private IIcon iconBronze;
 	
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs creativeTabs, List itemList) {
-		itemList.add(new ItemStack(this, 1, 0));
-		itemList.add(new ItemStack(this, 1, 1));
-		itemList.add(new ItemStack(this, 1, 2));
-		itemList.add(new ItemStack(this, 1, 3));
+		for (ResourceType resourceType : ResourceType.values()) {
+			ItemStack stack = get(resourceType);
+			itemList.add(stack);
+		}
 	}
 
 	@Override
@@ -51,27 +53,23 @@ public class BlockResourceStorage extends Block {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister register) {
-		iconApatite = TextureManager.registerTex(register, "storage/apatite");
-		iconCopper = TextureManager.registerTex(register, "storage/copper");
-		iconTin = TextureManager.registerTex(register, "storage/tin");
-		iconBronze = TextureManager.registerTex(register, "storage/bronze");
+		ResourceType.APATITE.icon = TextureManager.registerTex(register, "storage/apatite");
+		ResourceType.COPPER.icon = TextureManager.registerTex(register, "storage/copper");
+		ResourceType.TIN.icon = TextureManager.registerTex(register, "storage/tin");
+		ResourceType.BRONZE.icon = TextureManager.registerTex(register, "storage/bronze");
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int i, int meta) {
-		IIcon icon;
-		if (meta == 0) {
-			icon = iconApatite;
-		} else if (meta == 1) {
-			icon = iconCopper;
-		} else if (meta == 2) {
-			icon = iconTin;
-		} else {
-			icon = iconBronze;
+		if (meta < 0 || meta >= ResourceType.VALUES.length) {
+			return null;
 		}
-		
-		return icon;
+
+		return ResourceType.VALUES[meta].icon;
 	}
 
+	public ItemStack get(ResourceType type) {
+		return new ItemStack(this, 1, type.ordinal());
+	}
 }

@@ -22,20 +22,19 @@ import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.core.config.Constants;
-import forestry.core.config.ForestryItem;
+import forestry.core.items.EnumContainerType;
 import forestry.core.items.ItemLiquidContainer;
 import forestry.core.utils.Log;
-
-import static forestry.core.items.ItemLiquidContainer.EnumContainerType;
+import forestry.plugins.PluginFluids;
 
 public class LiquidRegistryHelper {
 
-	private static final EnumMap<EnumContainerType, ForestryItem> emptyContainers = new EnumMap<>(EnumContainerType.class);
+	private static final EnumMap<EnumContainerType, ItemLiquidContainer> emptyContainers = new EnumMap<>(EnumContainerType.class);
 
 	static {
-		emptyContainers.put(EnumContainerType.CAN, ForestryItem.canEmpty);
-		emptyContainers.put(EnumContainerType.CAPSULE, ForestryItem.waxCapsule);
-		emptyContainers.put(EnumContainerType.REFRACTORY, ForestryItem.refractoryEmpty);
+		emptyContainers.put(EnumContainerType.CAN, PluginFluids.items.canEmpty);
+		emptyContainers.put(EnumContainerType.CAPSULE, PluginFluids.items.waxCapsuleEmpty);
+		emptyContainers.put(EnumContainerType.REFRACTORY, PluginFluids.items.refractoryEmpty);
 	}
 
 	public static void registerLiquidContainer(Fluids fluid, ItemStack filled) {
@@ -47,7 +46,7 @@ public class LiquidRegistryHelper {
 		} else if (item instanceof ItemLiquidContainer) {
 			ItemLiquidContainer liquidContainer = (ItemLiquidContainer) item;
 			EnumContainerType containerType = liquidContainer.getType();
-			ForestryItem emptyContainer = emptyContainers.get(containerType);
+			ItemLiquidContainer emptyContainer = emptyContainers.get(containerType);
 			empty = emptyContainer.getItemStack();
 		}
 

@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map.Entry;
 
+import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -52,8 +53,6 @@ import forestry.arboriculture.blocks.BlockFruitPod;
 import forestry.arboriculture.tiles.TileFruitPod;
 import forestry.arboriculture.tiles.TileSapling;
 import forestry.core.config.Constants;
-import forestry.core.config.ForestryBlock;
-import forestry.core.config.ForestryItem;
 import forestry.core.genetics.SpeciesRoot;
 import forestry.core.utils.BlockUtil;
 import forestry.plugins.PluginArboriculture;
@@ -119,9 +118,11 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 			return EnumGermlingType.NONE;
 		}
 
-		if (ForestryItem.sapling.isItemEqual(stack)) {
+		Item item = stack.getItem();
+
+		if (PluginArboriculture.items.sapling == item) {
 			return EnumGermlingType.SAPLING;
-		} else if (ForestryItem.pollenFertile.isItemEqual(stack)) {
+		} else if (PluginArboriculture.items.pollenFertile == item) {
 			return EnumGermlingType.POLLEN;
 		}
 
@@ -169,10 +170,10 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 		Item germlingItem;
 		switch (EnumGermlingType.VALUES[type]) {
 			case SAPLING:
-				germlingItem = ForestryItem.sapling.item();
+				germlingItem = PluginArboriculture.items.sapling;
 				break;
 			case POLLEN:
-				germlingItem = ForestryItem.pollenFertile.item();
+				germlingItem = PluginArboriculture.items.pollenFertile;
 				break;
 			default:
 				throw new RuntimeException("Cannot instantiate a tree of type " + type);
@@ -191,12 +192,13 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 	@Override
 	public boolean plantSapling(World world, ITree tree, GameProfile owner, int x, int y, int z) {
 
-		boolean placed = world.setBlock(x, y, z, ForestryBlock.saplingGE.block(), 0, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
+		boolean placed = world.setBlock(x, y, z, PluginArboriculture.blocks.saplingGE, 0, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
 		if (!placed) {
 			return false;
 		}
 
-		if (!ForestryBlock.saplingGE.isBlockEqual(world, x, y, z)) {
+		Block block = world.getBlock(x, y, z);
+		if (PluginArboriculture.blocks.saplingGE != block) {
 			return false;
 		}
 
@@ -220,12 +222,14 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 		if (direction < 0) {
 			return false;
 		}
-		boolean placed = ForestryBlock.pods.setBlock(world, x, y, z, direction);
+
+		boolean placed = world.setBlock(x, y, z, PluginArboriculture.blocks.pods, direction, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
 		if (!placed) {
 			return false;
 		}
 
-		if (!ForestryBlock.pods.isBlockEqual(world, x, y, z)) {
+		Block block = world.getBlock(x, y, z);
+		if (PluginArboriculture.blocks.pods != block) {
 			return false;
 		}
 

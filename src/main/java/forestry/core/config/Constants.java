@@ -18,8 +18,6 @@ public class Constants implements IForestryConstants {
 	public static final String ID = "forestry";
 	public static final String URL = "http://forestry.sengir.net/";
 
-	public static final int WORLD_HEIGHT = 256;
-
 	public static final int FLAG_BLOCK_UPDATE = 1;
 	public static final int FLAG_BLOCK_SYNCH = 2;
 	public static final int FLAG_BLOCK_SYNCH_AND_UPDATE = FLAG_BLOCK_UPDATE + FLAG_BLOCK_SYNCH;
@@ -29,6 +27,7 @@ public class Constants implements IForestryConstants {
 
 	public static final int[] FACINGS = {0, 1, 2, 3, 4, 5};
 	public static final int[] SLOTS_NONE = new int[0];
+	public static final String[] EMPTY_STRINGS = new String[0];
 
 	// Textures
 	public static final String TEXTURE_PATH_GUI = "textures/gui";
@@ -48,43 +47,6 @@ public class Constants implements IForestryConstants {
 
 	// Village Chest Gen hook
 	public static final String CHEST_GEN_HOOK_NATURALIST_CHEST = "naturalistChest";
-
-	// Definition IDs
-	public static final int DEFINITION_ANALYZER_META = 0;
-	public static final int DEFINITION_ESCRITOIRE_META = 1;
-
-	public static final int DEFINITION_APIARY_META = 0;
-	public static final int DEFINITION_APIARISTCHEST_LEGACY_META = 1;
-	public static final int DEFINITION_BEEHOUSE_META = 2;
-
-	public static final int DEFINITION_APIARISTCHEST_META = 0;
-
-	public static final int DEFINITION_ENGINE_ELECTRIC_META = 0;
-	public static final int DEFINITION_ENGINE_PEAT_META = 1;
-	public static final int DEFINITION_ENGINE_BIOGAS_META = 2;
-	public static final int DEFINITION_GENERATOR_META = 3;
-	public static final int DEFINITION_ENGINE_CLOCKWORK_META = 4;
-
-	public static final int DEFINITION_MAILBOX_META = 0;
-	public static final int DEFINITION_TRADESTATION_META = 1;
-	public static final int DEFINITION_PHILATELIST_META = 2;
-
-	public static final int DEFINITION_BOTTLER_META = 0;
-	public static final int DEFINITION_CARPENTER_META = 1;
-	public static final int DEFINITION_CENTRIFUGE_META = 2;
-	public static final int DEFINITION_FERMENTER_META = 3;
-	public static final int DEFINITION_MOISTENER_META = 4;
-	public static final int DEFINITION_SQUEEZER_META = 5;
-	public static final int DEFINITION_STILL_META = 6;
-	public static final int DEFINITION_RAINMAKER_META = 7;
-
-	public static final int DEFINITION_FABRICATOR_META = 0;
-	public static final int DEFINITION_RAINTANK_META = 1;
-	public static final int DEFINITION_WORKTABLE_META = 2;
-
-	public static final int DEFINITION_LEPICHEST_META = 0;
-
-	public static final int DEFINITION_ARBCHEST_META = 0;
 
 	// Item Ids
 

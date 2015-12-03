@@ -12,12 +12,14 @@ package forestry.core.fluids;
 
 import javax.annotation.Nonnull;
 import java.awt.Color;
-import java.util.Arrays;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
+import org.apache.commons.lang3.text.WordUtils;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Items;
@@ -28,10 +30,8 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.core.config.Constants;
-import forestry.core.config.ForestryItem;
+import forestry.core.items.EnumContainerType;
 import forestry.core.items.ItemLiquidContainer;
-
-import static forestry.core.items.ItemLiquidContainer.EnumContainerType;
 
 public enum Fluids {
 
@@ -47,19 +47,13 @@ public enum Fluids {
 		}
 
 		@Override
-		public ForestryItem getContainerForType(EnumContainerType type) {
-			switch (type) {
-				case BUCKET:
-					return ForestryItem.bucketEthanol;
-				case CAN:
-					return ForestryItem.canEthanol;
-				case CAPSULE:
-					return ForestryItem.waxCapsuleEthanol;
-				case REFRACTORY:
-					return ForestryItem.refractoryEthanol;
-				default:
-					return null;
-			}
+		public EnumSet<EnumContainerType> getContainerTypes() {
+			return EnumSet.of(
+					EnumContainerType.BUCKET,
+					EnumContainerType.CAN,
+					EnumContainerType.CAPSULE,
+					EnumContainerType.REFRACTORY
+			);
 		}
 	},
 	BIOMASS(new Color(100, 132, 41), 400, 6560) {
@@ -69,19 +63,13 @@ public enum Fluids {
 		}
 
 		@Override
-		public ForestryItem getContainerForType(EnumContainerType type) {
-			switch (type) {
-				case BUCKET:
-					return ForestryItem.bucketBiomass;
-				case CAN:
-					return ForestryItem.canBiomass;
-				case CAPSULE:
-					return ForestryItem.waxCapsuleBiomass;
-				case REFRACTORY:
-					return ForestryItem.refractoryBiomass;
-				default:
-					return null;
-			}
+		public EnumSet<EnumContainerType> getContainerTypes() {
+			return EnumSet.of(
+					EnumContainerType.BUCKET,
+					EnumContainerType.CAN,
+					EnumContainerType.CAPSULE,
+					EnumContainerType.REFRACTORY
+			);
 		}
 	},
 	GLASS(new Color(164, 164, 164), 2400, 10000) {
@@ -96,13 +84,10 @@ public enum Fluids {
 		}
 
 		@Override
-		public ForestryItem getContainerForType(EnumContainerType type) {
-			switch (type) {
-				case BUCKET:
-					return ForestryItem.bucketGlass;
-				default:
-					return null;
-			}
+		public EnumSet<EnumContainerType> getContainerTypes() {
+			return EnumSet.of(
+					EnumContainerType.BUCKET
+			);
 		}
 	},
 	HONEY(new Color(255, 196, 35), 1420, 73600) {
@@ -117,19 +102,13 @@ public enum Fluids {
 		}
 
 		@Override
-		public ForestryItem getContainerForType(EnumContainerType type) {
-			switch (type) {
-				case BUCKET:
-					return ForestryItem.bucketHoney;
-				case CAN:
-					return ForestryItem.canHoney;
-				case CAPSULE:
-					return ForestryItem.waxCapsuleHoney;
-				case REFRACTORY:
-					return ForestryItem.refractoryHoney;
-				default:
-					return null;
-			}
+		public EnumSet<EnumContainerType> getContainerTypes() {
+			return EnumSet.of(
+					EnumContainerType.BUCKET,
+					EnumContainerType.CAN,
+					EnumContainerType.CAPSULE,
+					EnumContainerType.REFRACTORY
+			);
 		}
 
 		@Override
@@ -157,19 +136,13 @@ public enum Fluids {
 		}
 
 		@Override
-		public ForestryItem getContainerForType(EnumContainerType type) {
-			switch (type) {
-				case BUCKET:
-					return ForestryItem.bucketIce;
-				case CAN:
-					return ForestryItem.canIce;
-				case CAPSULE:
-					return ForestryItem.waxCapsuleIce;
-				case REFRACTORY:
-					return ForestryItem.refractoryIce;
-				default:
-					return null;
-			}
+		public EnumSet<EnumContainerType> getContainerTypes() {
+			return EnumSet.of(
+					EnumContainerType.BUCKET,
+					EnumContainerType.CAN,
+					EnumContainerType.CAPSULE,
+					EnumContainerType.REFRACTORY
+			);
 		}
 	},
 	JUICE(new Color(168, 201, 114)) {
@@ -179,19 +152,13 @@ public enum Fluids {
 		}
 
 		@Override
-		public ForestryItem getContainerForType(EnumContainerType type) {
-			switch (type) {
-				case BUCKET:
-					return ForestryItem.bucketJuice;
-				case CAN:
-					return ForestryItem.canJuice;
-				case CAPSULE:
-					return ForestryItem.waxCapsuleJuice;
-				case REFRACTORY:
-					return ForestryItem.refractoryJuice;
-				default:
-					return null;
-			}
+		public EnumSet<EnumContainerType> getContainerTypes() {
+			return EnumSet.of(
+					EnumContainerType.BUCKET,
+					EnumContainerType.CAN,
+					EnumContainerType.CAPSULE,
+					EnumContainerType.REFRACTORY
+			);
 		}
 
 		@Override
@@ -209,34 +176,28 @@ public enum Fluids {
 
 		@Override
 		public List<ItemStack> getOtherContainers() {
-			return Arrays.asList(
+			return Collections.singletonList(
 					new ItemStack(Items.milk_bucket)
 			);
 		}
 	},
-	SEEDOIL(new Color(255, 255, 168), 885, 5000) {
+	SEEDOIL("SeedOil", new Color(255, 255, 168), 885, 5000) {
 		@Override
 		public Block makeBlock() {
 			return new BlockForestryFluid(this, 2, true);
 		}
 
 		@Override
-		public ForestryItem getContainerForType(EnumContainerType type) {
-			switch (type) {
-				case BUCKET:
-					return ForestryItem.bucketSeedoil;
-				case CAN:
-					return ForestryItem.canSeedOil;
-				case CAPSULE:
-					return ForestryItem.waxCapsuleSeedOil;
-				case REFRACTORY:
-					return ForestryItem.refractorySeedOil;
-				default:
-					return null;
-			}
+		public EnumSet<EnumContainerType> getContainerTypes() {
+			return EnumSet.of(
+					EnumContainerType.BUCKET,
+					EnumContainerType.CAN,
+					EnumContainerType.CAPSULE,
+					EnumContainerType.REFRACTORY
+			);
 		}
 	},
-	SHORT_MEAD(new Color(239, 154, 56), 1000, 1200) {
+	SHORT_MEAD("ShortMead", new Color(239, 154, 56), 1000, 1200) {
 		@Override
 		public String getTag() {
 			return "short.mead";
@@ -248,73 +209,51 @@ public enum Fluids {
 		}
 
 		@Override
-		public ForestryItem getContainerForType(EnumContainerType type) {
-			switch (type) {
-				case BUCKET:
-					return ForestryItem.bucketShortMead;
-				default:
-					return null;
-			}
+		public EnumSet<EnumContainerType> getContainerTypes() {
+			return EnumSet.of(
+					EnumContainerType.BUCKET
+			);
 		}
 	},
 	// Vanilla
 	WATER(new Color(0x2432ec)) {
 		@Override
-		public ForestryItem getContainerForType(EnumContainerType type) {
-			switch (type) {
-				case CAN:
-					return ForestryItem.canWater;
-				case CAPSULE:
-					return ForestryItem.waxCapsuleWater;
-				case REFRACTORY:
-					return ForestryItem.refractoryWater;
-				default:
-					return null;
-			}
+		public EnumSet<EnumContainerType> getContainerTypes() {
+			return EnumSet.of(
+					EnumContainerType.CAN,
+					EnumContainerType.CAPSULE,
+					EnumContainerType.REFRACTORY
+			);
 		}
 	},
 	LAVA(new Color(0xfd461f)) {
 		@Override
-		public ForestryItem getContainerForType(EnumContainerType type) {
-			switch (type) {
-				case CAN:
-					return ForestryItem.canLava;
-				case REFRACTORY:
-					return ForestryItem.refractoryLava;
-				default:
-					return null;
-			}
+		public EnumSet<EnumContainerType> getContainerTypes() {
+			return EnumSet.of(
+					EnumContainerType.CAN,
+					EnumContainerType.REFRACTORY
+			);
 		}
 	},
 	// BuildCraft
 	FUEL(new Color(0xffff00)) {
 		@Override
-		public ForestryItem getContainerForType(EnumContainerType type) {
-			switch (type) {
-				case CAN:
-					return ForestryItem.canFuel;
-				case CAPSULE:
-					return ForestryItem.waxCapsuleFuel;
-				case REFRACTORY:
-					return ForestryItem.refractoryFuel;
-				default:
-					return null;
-			}
+		public EnumSet<EnumContainerType> getContainerTypes() {
+			return EnumSet.of(
+					EnumContainerType.CAN,
+					EnumContainerType.CAPSULE,
+					EnumContainerType.REFRACTORY
+			);
 		}
 	},
 	OIL(new Color(0x404040)) {
 		@Override
-		public ForestryItem getContainerForType(EnumContainerType type) {
-			switch (type) {
-				case CAN:
-					return ForestryItem.canOil;
-				case CAPSULE:
-					return ForestryItem.waxCapsuleOil;
-				case REFRACTORY:
-					return ForestryItem.refractoryOil;
-				default:
-					return null;
-			}
+		public EnumSet<EnumContainerType> getContainerTypes() {
+			return EnumSet.of(
+					EnumContainerType.CAN,
+					EnumContainerType.CAPSULE,
+					EnumContainerType.REFRACTORY
+			);
 		}
 	},
 	// Railcraft
@@ -331,16 +270,25 @@ public enum Fluids {
 		}
 	}
 
+	private final String containerNameKey;
 	private final String tag;
 	private final int density, viscosity;
 	@Nonnull
 	private final Color color;
 
 	Fluids(@Nonnull Color color) {
-		this(color, 1000, 1000);
+		this(null, color, 1000, 1000);
 	}
 
 	Fluids(@Nonnull Color color, int density, int viscosity) {
+		this(null, color, density, viscosity);
+	}
+
+	Fluids(String containerNameKey, @Nonnull Color color, int density, int viscosity) {
+		if (containerNameKey == null) {
+			containerNameKey = WordUtils.capitalize(toString().toLowerCase(Locale.ENGLISH));
+		}
+		this.containerNameKey = containerNameKey;
 		this.tag = name().toLowerCase(Locale.ENGLISH);
 		this.color = color;
 		this.density = density;
@@ -429,12 +377,12 @@ public enum Fluids {
 	}
 
 	/** FluidBlock and Container registration */
-	/**
-	 * Add the filled containers for this fluid.
-	 * They will be automatically created and registered.
-	 */
-	public ForestryItem getContainerForType(EnumContainerType type) {
-		return null;
+	public String getContainerNameKey() {
+		return containerNameKey;
+	}
+
+	public EnumSet<EnumContainerType> getContainerTypes() {
+		return EnumSet.noneOf(EnumContainerType.class);
 	}
 
 	/**

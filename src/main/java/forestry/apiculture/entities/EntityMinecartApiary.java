@@ -16,9 +16,11 @@ import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeHousingInventory;
 import forestry.api.apiculture.IBeeListener;
 import forestry.api.apiculture.IBeeModifier;
@@ -26,14 +28,14 @@ import forestry.api.apiculture.IHiveFrame;
 import forestry.apiculture.ApiaryBeeListener;
 import forestry.apiculture.ApiaryBeeModifier;
 import forestry.apiculture.IApiary;
+import forestry.apiculture.blocks.BlockApicultureType;
+import forestry.apiculture.gui.ContainerMinecartBeehouse;
+import forestry.apiculture.gui.GuiBeeHousing;
 import forestry.apiculture.inventory.IApiaryInventory;
 import forestry.apiculture.inventory.InventoryApiary;
 import forestry.core.config.Config;
-import forestry.core.config.Constants;
-import forestry.core.config.ForestryBlock;
-import forestry.core.config.ForestryItem;
 import forestry.core.inventory.IInventoryAdapter;
-import forestry.core.network.GuiId;
+import forestry.plugins.PluginApiculture;
 
 public class EntityMinecartApiary extends EntityMinecartBeeHousingBase implements IApiary {
 	private static final IBeeModifier beeModifier = new ApiaryBeeModifier();
@@ -47,11 +49,6 @@ public class EntityMinecartApiary extends EntityMinecartBeeHousingBase implement
 
 	public EntityMinecartApiary(World world, double posX, double posY, double posZ) {
 		super(world, posX, posY, posZ);
-	}
-
-	@Override
-	protected GuiId getGuiId() {
-		return GuiId.MinecartApiaryGUI;
 	}
 
 	@Override
@@ -76,17 +73,17 @@ public class EntityMinecartApiary extends EntityMinecartBeeHousingBase implement
 
 	@Override
 	public Block func_145820_n() {
-		return ForestryBlock.apiculture.block();
+		return PluginApiculture.blocks.apiculture;
 	}
 
 	@Override
 	public int getDisplayTileData() {
-		return Constants.DEFINITION_APIARY_META;
+		return BlockApicultureType.APIARY.ordinal();
 	}
 
 	@Override
 	public ItemStack getCartItem() {
-		return ForestryItem.minecartBeehouse.getItemStack(1, 1);
+		return PluginApiculture.items.minecartBeehouse.getApiaryMinecart();
 	}
 
 	@Override
@@ -105,5 +102,17 @@ public class EntityMinecartApiary extends EntityMinecartBeeHousingBase implement
 	@Override
 	public Iterable<IBeeListener> getBeeListeners() {
 		return Collections.singleton(beeListener);
+	}
+
+	@Override
+	public Object getGui(EntityPlayer player, int data) {
+		ContainerMinecartBeehouse container = new ContainerMinecartBeehouse(player.inventory, this, true);
+		return new GuiBeeHousing<>(this, container, GuiBeeHousing.Icon.APIARY);
+	}
+
+	@Override
+	public Object getContainer(EntityPlayer player, int data) {
+		BeeManager.beeRoot.syncBreedingTrackerToPlayer(player);
+		return new ContainerMinecartBeehouse(player.inventory, this, true);
 	}
 }

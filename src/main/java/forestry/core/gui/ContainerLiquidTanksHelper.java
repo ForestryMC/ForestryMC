@@ -20,7 +20,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 
 import forestry.api.core.IToolPipette;
-import forestry.core.network.PacketPipetteClick;
+import forestry.core.network.packets.PacketPipetteClick;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.ILiquidTankTile;
 

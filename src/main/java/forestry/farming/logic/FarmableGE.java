@@ -19,8 +19,8 @@ import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
 import forestry.arboriculture.genetics.TreeGenome;
-import forestry.core.config.ForestryBlock;
 import forestry.core.utils.vect.Vect;
+import forestry.plugins.PluginArboriculture;
 
 public class FarmableGE implements IFarmable {
 
@@ -31,7 +31,8 @@ public class FarmableGE implements IFarmable {
 			return false;
 		}
 
-		return ForestryBlock.saplingGE.isBlockEqual(world, x, y, z);
+		Block block = world.getBlock(x, y, z);
+		return PluginArboriculture.blocks.saplingGE == block;
 	}
 
 	@Override

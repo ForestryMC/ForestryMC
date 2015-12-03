@@ -24,8 +24,8 @@ import forestry.core.access.FakeAccessHandler;
 import forestry.core.access.IAccessHandler;
 import forestry.core.access.IRestrictedAccess;
 import forestry.core.network.IForestryPacketClient;
-import forestry.core.network.PacketAccessUpdateEntity;
-import forestry.core.network.PacketErrorUpdateEntity;
+import forestry.core.network.packets.PacketAccessUpdateEntity;
+import forestry.core.network.packets.PacketErrorUpdateEntity;
 
 public class ContainerEntity<T extends Entity & IInventory> extends ContainerForestry {
 	protected final T entity;

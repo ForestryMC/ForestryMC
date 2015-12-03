@@ -12,13 +12,17 @@ package forestry.apiculture.tiles;
 
 import java.util.Collections;
 
+import net.minecraft.entity.player.EntityPlayer;
+
+import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.DefaultBeeListener;
 import forestry.api.apiculture.IBeeHousingInventory;
 import forestry.api.apiculture.IBeeListener;
 import forestry.api.apiculture.IBeeModifier;
 import forestry.apiculture.BeehouseBeeModifier;
 import forestry.apiculture.InventoryBeeHousing;
-import forestry.core.network.GuiId;
+import forestry.apiculture.gui.ContainerBeeHousing;
+import forestry.apiculture.gui.GuiBeeHousing;
 
 public class TileBeehouse extends TileBeeHousingBase {
 	private static final IBeeModifier beeModifier = new BeehouseBeeModifier();
@@ -27,10 +31,10 @@ public class TileBeehouse extends TileBeeHousingBase {
 	private final InventoryBeeHousing beeInventory;
 
 	public TileBeehouse() {
-		super(GuiId.BeehouseGUI, "bee.house");
+		super("bee.house");
 		this.beeListener = new DefaultBeeListener();
 
-		beeInventory = new InventoryBeeHousing(12, "Items", getAccessHandler());
+		beeInventory = new InventoryBeeHousing(12, getAccessHandler());
 		beeInventory.disableAutomation();
 		setInternalInventory(beeInventory);
 	}
@@ -48,5 +52,17 @@ public class TileBeehouse extends TileBeeHousingBase {
 	@Override
 	public Iterable<IBeeListener> getBeeListeners() {
 		return Collections.singleton(beeListener);
+	}
+
+	@Override
+	public Object getGui(EntityPlayer player, int data) {
+		ContainerBeeHousing container = new ContainerBeeHousing(player.inventory, this, false);
+		return new GuiBeeHousing<>(this, container, GuiBeeHousing.Icon.BEE_HOUSE);
+	}
+
+	@Override
+	public Object getContainer(EntityPlayer player, int data) {
+		BeeManager.beeRoot.syncBreedingTrackerToPlayer(player);
+		return new ContainerBeeHousing(player.inventory, this, false);
 	}
 }

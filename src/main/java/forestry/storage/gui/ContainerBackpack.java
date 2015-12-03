@@ -14,7 +14,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
 import forestry.core.gui.ContainerItemInventory;
-import forestry.core.gui.slots.SlotFiltered;
+import forestry.core.gui.slots.SlotFilteredInventory;
 import forestry.storage.inventory.ItemInventoryBackpack;
 
 public class ContainerBackpack extends ContainerItemInventory<ItemInventoryBackpack> {
@@ -47,7 +47,7 @@ public class ContainerBackpack extends ContainerItemInventory<ItemInventoryBackp
 		for (int j = 0; j < size.rows; j++) {
 			for (int k = 0; k < size.columns; k++) {
 				int slot = k + j * size.columns;
-				addSlotToContainer(new SlotFiltered(inventory, slot, size.startX + k * 18, size.startY + j * 18));
+				addSlotToContainer(new SlotFilteredInventory(inventory, slot, size.startX + k * 18, size.startY + j * 18));
 			}
 		}
 	}

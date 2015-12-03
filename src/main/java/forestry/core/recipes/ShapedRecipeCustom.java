@@ -10,35 +10,22 @@
  ******************************************************************************/
 package forestry.core.recipes;
 
-import java.util.HashMap;
-
-import net.minecraft.block.Block;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryCrafting;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.world.World;
 
-import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import forestry.api.recipes.IDescriptiveRecipe;
-import forestry.core.config.ForestryBlock;
-import forestry.core.config.ForestryItem;
 
-public class ShapedRecipeCustom implements IDescriptiveRecipe {
-
+public class ShapedRecipeCustom extends ShapedOreRecipe implements IDescriptiveRecipe {
 	private final int width;
 	private final int height;
 
-	private final Object[] ingredients;
-	private final ItemStack product;
-
-	public ShapedRecipeCustom(int width, int height, Object[] ingredients, ItemStack product) {
+	public ShapedRecipeCustom(int width, int height, ItemStack product, Object... ingredients) {
+		super(product, ingredients);
 		this.width = width;
 		this.height = height;
-		this.ingredients = ingredients;
-		this.product = product;
 	}
 
 	@Override
@@ -52,13 +39,8 @@ public class ShapedRecipeCustom implements IDescriptiveRecipe {
 	}
 
 	@Override
-	public ItemStack getRecipeOutput() {
-		return product.copy();
-	}
-
-	@Override
 	public Object[] getIngredients() {
-		return ingredients;
+		return getInput();
 	}
 
 	@Override
@@ -67,97 +49,29 @@ public class ShapedRecipeCustom implements IDescriptiveRecipe {
 	}
 
 	@Override
-	public boolean matches(InventoryCrafting inventoryCrafting, World world) {
-		return RecipeUtil.matches(this, inventoryCrafting);
-	}
-
-	@Override
 	@Deprecated
 	public boolean matches(IInventory inventoryCrafting, World world) {
-		return RecipeUtil.matches(this, inventoryCrafting);
-	}
-
-	@Override
-	public ItemStack getCraftingResult(InventoryCrafting inventoryCrafting) {
-		return getRecipeOutput().copy();
-	}
-
-	@Override
-	public int getRecipeSize() {
-		return width * height;
+		return false;
 	}
 
 	public static ShapedRecipeCustom createShapedRecipe(ItemStack product, Object... materials) {
-
-		String s = "";
 		int index = 0;
 		int columns = 0;
 		int rows = 0;
 		if (materials[index] instanceof String[]) {
-			String as[] = (String[]) materials[index++];
+			String as[] = (String[]) materials[index];
 			for (String pattern : as) {
 				rows++;
 				columns = pattern.length();
-				s = (new StringBuilder()).append(s).append(pattern).toString();
 			}
-
 		} else {
 			while (materials[index] instanceof String) {
 				String pattern = (String) materials[index++];
 				rows++;
 				columns = pattern.length();
-				s = (new StringBuilder()).append(s).append(pattern).toString();
 			}
 		}
 
-		HashMap<Character, Object> hashmap = new HashMap<>();
-		for (; index < materials.length; index += 2) {
-
-			Character character = (Character) materials[index];
-
-			// Item
-			if (materials[index + 1] instanceof Item) {
-				hashmap.put(character, new ItemStack((Item) materials[index + 1]));
-			} else if (materials[index + 1] instanceof ForestryItem) {
-				hashmap.put(character, ((ForestryItem) materials[index + 1]).getItemStack());
-			} else if (materials[index + 1] instanceof ForestryBlock) {
-				hashmap.put(character, ((ForestryBlock) materials[index + 1]).getItemStack());
-			} else if (materials[index + 1] instanceof Block) {
-				hashmap.put(character, new ItemStack((Block) materials[index + 1], 1, OreDictionary.WILDCARD_VALUE));
-			} else if (materials[index + 1] instanceof ItemStack) {
-				hashmap.put(character, materials[index + 1]);
-			} else if (materials[index + 1] instanceof String) {
-				hashmap.put(character, OreDictionary.getOres((String) materials[index + 1]));
-			} else {
-				throw new RuntimeException("Invalid Recipe Defined!");
-			}
-
-		}
-
-		Object ingredients[] = new Object[columns * rows];
-		for (int l = 0; l < columns * rows; l++) {
-			char c = s.charAt(l);
-			if (hashmap.containsKey(c)) {
-				ingredients[l] = hashmap.get(c);
-			} else {
-				ingredients[l] = null;
-			}
-		}
-
-		return new ShapedRecipeCustom(columns, rows, ingredients, product);
-	}
-
-	@SuppressWarnings("unchecked")
-	public static ShapedRecipeCustom buildRecipe(ItemStack product, Object... materials) {
-		ShapedRecipeCustom recipe = createShapedRecipe(product, materials);
-		CraftingManager.getInstance().getRecipeList().add(recipe);
-		return recipe;
-	}
-
-	@SuppressWarnings("unchecked")
-	public static ShapedRecipeCustom buildPriorityRecipe(ItemStack product, Object... materials) {
-		ShapedRecipeCustom recipe = createShapedRecipe(product, materials);
-		CraftingManager.getInstance().getRecipeList().add(0, recipe);
-		return recipe;
+		return new ShapedRecipeCustom(columns, rows, product, materials);
 	}
 }

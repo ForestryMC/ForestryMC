@@ -13,6 +13,7 @@ package forestry.factory.tiles;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.ISidedInventory;
@@ -38,13 +39,14 @@ import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
-import forestry.core.network.GuiId;
 import forestry.core.render.TankRenderInfo;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.IRenderableTile;
 import forestry.core.tiles.TileBase;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.ItemStackUtil;
+import forestry.factory.gui.ContainerMoistener;
+import forestry.factory.gui.GuiMoistener;
 import forestry.factory.inventory.InventoryMoistener;
 import forestry.factory.recipes.MoistenerRecipeManager;
 
@@ -61,7 +63,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 	private ItemStack pendingProduct;
 
 	public TileMoistener() {
-		super(GuiId.MoistenerGUI, "moistener");
+		super("moistener");
 		setInternalInventory(new InventoryMoistener(this));
 		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, FluidRegistry.WATER);
 		tankManager = new TankManager(this, resourceTank);
@@ -534,5 +536,15 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 		iCrafting.sendProgressBarUpdate(container, 1, totalTime);
 		iCrafting.sendProgressBarUpdate(container, 2, productionTime);
 		iCrafting.sendProgressBarUpdate(container, 3, timePerItem);
+	}
+
+	@Override
+	public Object getGui(EntityPlayer player, int data) {
+		return new GuiMoistener(player.inventory, this);
+	}
+
+	@Override
+	public Object getContainer(EntityPlayer player, int data) {
+		return new ContainerMoistener(player.inventory, this);
 	}
 }

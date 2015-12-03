@@ -28,9 +28,11 @@ import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.Tabs;
 import forestry.api.genetics.AlleleManager;
+import forestry.apiculture.gui.ContainerHabitatLocator;
+import forestry.apiculture.gui.GuiHabitatLocator;
+import forestry.apiculture.inventory.ItemInventoryHabitatLocator;
 import forestry.apiculture.render.TextureHabitatLocator;
 import forestry.core.items.ItemWithGui;
-import forestry.core.network.GuiId;
 import forestry.core.utils.StringUtil;
 
 public class ItemHabitatLocator extends ItemWithGui {
@@ -39,9 +41,8 @@ public class ItemHabitatLocator extends ItemWithGui {
 	private final HabitatLocatorLogic locatorLogic;
 
 	public ItemHabitatLocator() {
-		super(GuiId.HabitatLocatorGUI);
+		super(Tabs.tabApiculture);
 		setMaxStackSize(1);
-		setCreativeTab(Tabs.tabApiculture);
 		locatorLogic = new HabitatLocatorLogic();
 	}
 
@@ -79,5 +80,15 @@ public class ItemHabitatLocator extends ItemWithGui {
 		list.add(StringUtil.localize("gui.currentBiome") + ": " + currentBiome.biomeName);
 		list.add(StringUtil.localize("gui.temperature") + ": " + AlleleManager.climateHelper.toDisplay(temperature));
 		list.add(StringUtil.localize("gui.humidity") + ": " + AlleleManager.climateHelper.toDisplay(humidity));
+	}
+
+	@Override
+	public Object getGui(EntityPlayer player, ItemStack heldItem, int data) {
+		return new GuiHabitatLocator(player, new ItemInventoryHabitatLocator(player, heldItem));
+	}
+
+	@Override
+	public Object getContainer(EntityPlayer player, ItemStack heldItem, int data) {
+		return new ContainerHabitatLocator(player, new ItemInventoryHabitatLocator(player, heldItem));
 	}
 }

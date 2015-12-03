@@ -34,9 +34,9 @@ import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.ISpeciesRoot;
-import forestry.core.config.ForestryItem;
 import forestry.core.genetics.Classification;
 import forestry.core.genetics.ItemResearchNote.EnumNoteType;
+import forestry.plugins.PluginCore;
 
 public class AlleleRegistry implements IAlleleRegistry {
 
@@ -288,12 +288,11 @@ public class AlleleRegistry implements IAlleleRegistry {
 	/* RESEARCH */
 	@Override
 	public ItemStack getSpeciesNoteStack(GameProfile researcher, IAlleleSpecies species) {
-		return EnumNoteType.createSpeciesNoteStack(ForestryItem.researchNote.item(), researcher, species);
+		return EnumNoteType.createSpeciesNoteStack(PluginCore.items.researchNote, researcher, species);
 	}
 
 	@Override
 	public ItemStack getMutationNoteStack(GameProfile researcher, IMutation mutation) {
-		return EnumNoteType.createMutationNoteStack(ForestryItem.researchNote.item(), researcher, mutation);
+		return EnumNoteType.createMutationNoteStack(PluginCore.items.researchNote, researcher, mutation);
 	}
-
 }

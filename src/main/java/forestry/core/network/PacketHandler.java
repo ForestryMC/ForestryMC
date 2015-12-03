@@ -28,10 +28,11 @@ import forestry.core.proxy.Proxies;
 import io.netty.buffer.ByteBufInputStream;
 
 public class PacketHandler {
+	public static final String channelId = "FOR";
 	private final FMLEventChannel channel;
 
 	public PacketHandler() {
-		channel = NetworkRegistry.INSTANCE.newEventDrivenChannel(ForestryPacket.channel);
+		channel = NetworkRegistry.INSTANCE.newEventDrivenChannel(channelId);
 		channel.register(this);
 	}
 

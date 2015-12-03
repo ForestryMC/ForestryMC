@@ -13,21 +13,20 @@ package forestry.storage.inventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
-import forestry.api.core.ForestryAPI;
-import forestry.core.GuiHandlerBase;
+import forestry.core.gui.GuiHandler;
 import forestry.core.gui.IPagedInventory;
-import forestry.core.network.GuiId;
+import forestry.storage.items.ItemBackpackNaturalist;
 
 public class ItemInventoryBackpackPaged extends ItemInventoryBackpack implements IPagedInventory {
-	private final GuiId guiId;
+	private final ItemBackpackNaturalist backpackNaturalist;
 
-	public ItemInventoryBackpackPaged(EntityPlayer player, int size, ItemStack itemstack, GuiId guiId) {
+	public ItemInventoryBackpackPaged(EntityPlayer player, int size, ItemStack itemstack, ItemBackpackNaturalist backpackNaturalist) {
 		super(player, size, itemstack);
-		this.guiId = guiId;
+		this.backpackNaturalist = backpackNaturalist;
 	}
 
 	@Override
-	public void flipPage(EntityPlayer player, int page) {
-		player.openGui(ForestryAPI.instance, GuiHandlerBase.encodeGuiData(guiId, page), player.worldObj, (int) player.posX, (int) player.posY, (int) player.posZ);
+	public void flipPage(EntityPlayer player, short page) {
+		GuiHandler.openGui(player, backpackNaturalist, page);
 	}
 }

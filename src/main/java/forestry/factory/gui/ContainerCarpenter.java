@@ -21,7 +21,7 @@ import forestry.core.gui.slots.SlotCraftMatrix;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotLocked;
 import forestry.core.gui.slots.SlotOutput;
-import forestry.core.network.PacketItemStackDisplay;
+import forestry.core.network.packets.PacketItemStackDisplay;
 import forestry.factory.inventory.InventoryCarpenter;
 import forestry.factory.tiles.TileCarpenter;
 

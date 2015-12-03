@@ -30,11 +30,11 @@ import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IFruitBearer;
 import forestry.api.genetics.IFruitFamily;
 import forestry.arboriculture.network.IRipeningPacketReceiver;
-import forestry.arboriculture.network.PacketRipeningUpdate;
+import forestry.arboriculture.network.packets.PacketRipeningUpdate;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
-import forestry.core.network.PacketTileStream;
+import forestry.core.network.packets.PacketTileStream;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 

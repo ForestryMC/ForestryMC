@@ -24,16 +24,16 @@ import com.mojang.authlib.GameProfile;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
 
-import forestry.api.core.ForestryAPI;
 import forestry.core.access.AccessHandler;
 import forestry.core.access.EnumAccess;
 import forestry.core.access.IAccessHandler;
 import forestry.core.access.IRestrictedAccess;
+import forestry.core.gui.GuiHandler;
+import forestry.core.gui.IGuiHandlerEntity;
 import forestry.core.gui.IHintSource;
-import forestry.core.network.GuiId;
 import forestry.core.tiles.ITitled;
 
-public abstract class EntityMinecartForestry extends EntityMinecart implements ITitled, IRestrictedAccess, IHintSource {
+public abstract class EntityMinecartForestry extends EntityMinecart implements ITitled, IRestrictedAccess, IHintSource, IGuiHandlerEntity {
 	private final AccessHandler accessHandler = new AccessHandler(this);
 
 	@SuppressWarnings("unused")
@@ -54,12 +54,10 @@ public abstract class EntityMinecartForestry extends EntityMinecart implements I
 		}
 
 		if (!worldObj.isRemote) {
-			player.openGui(ForestryAPI.instance, getGuiId().ordinal(), worldObj, getEntityId(), -1, 0);
+			GuiHandler.openGui(player, this);
 		}
 		return true;
 	}
-
-	protected abstract GuiId getGuiId();
 
 	public void setOwner(GameProfile owner) {
 		accessHandler.setOwner(owner);

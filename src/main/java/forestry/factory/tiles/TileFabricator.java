@@ -44,10 +44,11 @@ import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.items.ICraftingPlan;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
-import forestry.core.network.GuiId;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;
 import forestry.core.utils.InventoryUtil;
+import forestry.factory.gui.ContainerFabricator;
+import forestry.factory.gui.GuiFabricator;
 import forestry.factory.inventory.InventoryFabricator;
 import forestry.factory.inventory.InventoryGhostCrafting;
 import forestry.factory.recipes.FabricatorRecipeManager;
@@ -63,7 +64,7 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 	private int meltingPoint = 0;
 
 	public TileFabricator() {
-		super(GuiId.FabricatorGUI, "fabricator", 1100, 3300);
+		super("fabricator", 1100, 3300);
 		setEnergyPerWorkCycle(200);
 		craftingInventory = new InventoryGhostCrafting<>(this, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
 		setInternalInventory(new InventoryFabricator(this));
@@ -353,5 +354,15 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 	@Override
 	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
 		return tankManager.getTankInfo(from);
+	}
+
+	@Override
+	public Object getGui(EntityPlayer player, int data) {
+		return new GuiFabricator(player.inventory, this);
+	}
+
+	@Override
+	public Object getContainer(EntityPlayer player, int data) {
+		return new ContainerFabricator(player.inventory, this);
 	}
 }
