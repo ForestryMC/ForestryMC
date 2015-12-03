@@ -22,10 +22,10 @@ public class ItemRegistryFluids extends ItemRegistry {
 	public final ItemLiquidContainer waxCapsuleEmpty;
 	public final ItemLiquidContainer refractoryEmpty;
 
-	private final Table<EnumContainerType, Integer, ItemLiquidContainer> containers = HashBasedTable.create();
+	private final Table<EnumContainerType, String, ItemLiquidContainer> containers = HashBasedTable.create();
 
 	public ItemLiquidContainer getContainer(EnumContainerType type, Fluids fluid) {
-		return containers.get(type, fluid.getFluid().getID());
+		return containers.get(type, fluid.getFluid().getName());
 	}
 
 	public ItemRegistryFluids() {
@@ -45,7 +45,7 @@ public class ItemRegistryFluids extends ItemRegistry {
 				String name = type.getContainerNameKey() + fluidType.getContainerNameKey();
 				registerItem(liquidContainer, name);
 
-				containers.put(type, fluidType.getFluid().getID(), liquidContainer);
+				containers.put(type, fluidType.getFluid().getName(), liquidContainer);
 			}
 		}
 	}
