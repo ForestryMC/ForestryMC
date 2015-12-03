@@ -156,7 +156,7 @@ public class PluginFactory extends ForestryPlugin {
 		ItemStack peat = coreItems.peat.getItemStack();
 		FuelManager.copperEngineFuel.put(peat, new EngineCopperFuel(peat, Constants.ENGINE_COPPER_FUEL_VALUE_PEAT, Constants.ENGINE_COPPER_CYCLE_DURATION_PEAT));
 
-		ItemStack bituminousPeat = coreItems.peat.getItemStack();
+		ItemStack bituminousPeat = coreItems.bituminousPeat.getItemStack();
 		FuelManager.copperEngineFuel.put(bituminousPeat, new EngineCopperFuel(bituminousPeat, Constants.ENGINE_COPPER_FUEL_VALUE_BITUMINOUS_PEAT, Constants.ENGINE_COPPER_CYCLE_DURATION_BITUMINOUS_PEAT));
 
 		FuelManager.bronzeEngineFuel.put(Fluids.BIOMASS.getFluid(), new EngineBronzeFuel(Fluids.BIOMASS.getFluid(),
