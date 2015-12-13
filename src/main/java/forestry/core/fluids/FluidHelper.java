@@ -49,11 +49,19 @@ public final class FluidHelper {
 			FluidStack liquid = getFluidStackInContainer(current);
 
 			if (fill && liquid != null) {
-				int used = tank.fill(side, liquid, true);
+				int canUseAmount = tank.fill(side, liquid, false);
+				if (canUseAmount == 0) {
+					return false;
+				}
 
-				if (used > 0) {
+				ItemStack drainedContainer = getDrainedContainer(current, canUseAmount);
+				if (ItemStackUtil.isIdenticalItem(current, drainedContainer)) {
+					return false;
+				}
+
+				int usedAmount = tank.fill(side, liquid, true);
+				if (usedAmount > 0) {
 					if (!player.capabilities.isCreativeMode) {
-						ItemStack drainedContainer = getDrainedContainer(current, used);
 						if (current.stackSize > 1) {
 							player.inventory.decrStackSize(player.inventory.currentItem, 1);
 							if (drainedContainer != null && !player.inventory.addItemStackToInventory(drainedContainer)) {
