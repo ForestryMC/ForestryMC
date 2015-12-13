@@ -18,7 +18,7 @@ import forestry.core.network.packets.PacketChipsetClick;
 import forestry.core.network.packets.PacketErrorUpdate;
 import forestry.core.network.packets.PacketErrorUpdateEntity;
 import forestry.core.network.packets.PacketFXSignal;
-import forestry.core.network.packets.PacketGenomeTrackerUpdate;
+import forestry.core.network.packets.PacketGenomeTrackerSync;
 import forestry.core.network.packets.PacketGuiEnergy;
 import forestry.core.network.packets.PacketGuiLayoutSelect;
 import forestry.core.network.packets.PacketGuiSelectRequest;
@@ -47,7 +47,7 @@ public class PacketRegistryCore extends PacketRegistry {
 		registerClientPacket(new PacketItemStackDisplay());
 		registerClientPacket(new PacketFXSignal());
 		registerClientPacket(new PacketTankLevelUpdate());
-		registerClientPacket(new PacketGenomeTrackerUpdate());
+		registerClientPacket(new PacketGenomeTrackerSync());
 
 		registerServerPacket(new PacketGuiSelectRequest());
 		registerServerPacket(new PacketPipetteClick());

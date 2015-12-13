@@ -236,9 +236,12 @@ public class ButterflyHelper extends SpeciesRoot implements IButterflyRoot {
 
 		// Create a tracker if there is none yet.
 		if (tracker == null) {
-			tracker = new LepidopteristTracker(filename, player, world);
+			tracker = new LepidopteristTracker(filename);
 			world.setItemData(filename, tracker);
 		}
+
+		tracker.setUsername(player);
+		tracker.setWorld(world);
 
 		return tracker;
 	}

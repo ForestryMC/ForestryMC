@@ -16,7 +16,6 @@ import java.util.Map;
 import java.util.Stack;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.text.WordUtils;
 
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.EntityPlayer;
@@ -163,14 +162,6 @@ public abstract class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory>
 		textLayout.newLine();
 		textLayout.drawLine("IV : " + StringUtil.localize("gui.evolution"), COLUMN_0 + 4);
 
-		textLayout.newLine();
-
-		String mode = breedingTracker.getModeName();
-		if (mode != null && !mode.isEmpty()) {
-			String rules = StringUtil.localize(guiName + ".behaviour") + ": " + WordUtils.capitalize(mode);
-			textLayout.drawCenteredLine(rules, 8, 208, fontColor.get(guiName + ".binomial"));
-		}
-
 		textLayout.endPage();
 	}
 
@@ -278,7 +269,7 @@ public abstract class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory>
 			x += columnWidth;
 			if (x >= columnWidth * 4) {
 				x = 0;
-				textLayout.newLine();
+				textLayout.newLine(16);
 			}
 		}
 
@@ -290,7 +281,7 @@ public abstract class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory>
 		ItemStack partnerBee = iconStacks.get(combination.getPartner(species).getUID());
 		widgetManager.add(new ItemStackWidget(widgetManager, x, textLayout.getLineY(), partnerBee));
 
-		drawProbabilityArrow(combination.getBaseChance(), guiLeft + x + 18, guiTop + textLayout.getLineY() + 4);
+		drawProbabilityArrow(combination, guiLeft + x + 18, guiTop + textLayout.getLineY() + 4);
 
 		IAllele result = combination.getTemplate()[EnumBeeChromosome.SPECIES.ordinal()];
 		ItemStack resultBee = iconStacks.get(result.getUID());
@@ -301,7 +292,7 @@ public abstract class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory>
 
 		drawQuestionMark(guiLeft + x, guiTop + textLayout.getLineY());
 
-		drawProbabilityArrow(combination.getBaseChance(), guiLeft + x + 18, guiTop + textLayout.getLineY() + 4);
+		drawProbabilityArrow(combination, guiLeft + x + 18, guiTop + textLayout.getLineY() + 4);
 
 		drawQuestionMark(guiLeft + x + 32, guiTop + textLayout.getLineY());
 	}
@@ -311,7 +302,8 @@ public abstract class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory>
 		drawTexturedModalRect(x, y, 78, 240, 16, 16);
 	}
 
-	private void drawProbabilityArrow(float chance, int x, int y) {
+	private void drawProbabilityArrow(IMutation combination, int x, int y) {
+		float chance = combination.getBaseChance();
 		int line = 247;
 		int column = 100;
 		switch (EnumMutateChance.rateChance(chance)) {
@@ -339,6 +331,12 @@ public abstract class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory>
 		// Probability arrow
 		Proxies.render.bindTexture(textureFile);
 		drawTexturedModalRect(x, y, column, line, 15, 9);
+
+		boolean researched = breedingTracker.isResearched(combination);
+		if (researched) {
+			fontRendererObj.drawString("+", x + 9, y + 1, 0);
+			GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+		}
 	}
 
 	protected void drawToleranceInfo(IAlleleTolerance toleranceAllele, int x) {

@@ -272,9 +272,12 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 
 		// Create a tracker if there is none yet.
 		if (tracker == null) {
-			tracker = new ArboristTracker(filename, player, world);
+			tracker = new ArboristTracker(filename);
 			world.setItemData(filename, tracker);
 		}
+
+		tracker.setUsername(player);
+		tracker.setWorld(world);
 
 		return tracker;
 	}
