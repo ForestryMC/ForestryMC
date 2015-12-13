@@ -328,7 +328,7 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 
 		// Create a tracker if there is none yet.
 		if (tracker == null) {
-			tracker = new ApiaristTracker(filename, player);
+			tracker = new ApiaristTracker(filename, player, world);
 			world.setItemData(filename, tracker);
 		}
 

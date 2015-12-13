@@ -18,7 +18,6 @@ import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.biome.BiomeGenBase;
 
-import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeHousingInventory;
 import forestry.api.apiculture.IBeeListener;
@@ -195,7 +194,6 @@ public abstract class TileAlveary extends MultiblockTileEntityForestry<Multibloc
 
 	@Override
 	public Object getContainer(EntityPlayer player, int data) {
-		BeeManager.beeRoot.syncBreedingTrackerToPlayer(player);
 		return new ContainerAlveary(player.inventory, this);
 	}
 }

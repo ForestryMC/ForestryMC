@@ -14,7 +14,6 @@ import java.util.Collections;
 
 import net.minecraft.entity.player.EntityPlayer;
 
-import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.DefaultBeeListener;
 import forestry.api.apiculture.IBeeHousingInventory;
 import forestry.api.apiculture.IBeeListener;
@@ -62,7 +61,6 @@ public class TileBeehouse extends TileBeeHousingBase {
 
 	@Override
 	public Object getContainer(EntityPlayer player, int data) {
-		BeeManager.beeRoot.syncBreedingTrackerToPlayer(player);
 		return new ContainerBeeHousing(player.inventory, this, false);
 	}
 }

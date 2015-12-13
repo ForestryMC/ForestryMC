@@ -11,6 +11,7 @@
 package forestry.lepidopterology.genetics;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
@@ -25,11 +26,11 @@ public class LepidopteristTracker extends BreedingTracker implements ILepidopter
 
 	/** Required for creation from map storage */
 	public LepidopteristTracker(String s) {
-		this(s, null);
+		this(s, null, null);
 	}
 
-	public LepidopteristTracker(String s, GameProfile player) {
-		super(s, player);
+	public LepidopteristTracker(String s, GameProfile player, World world) {
+		super(s, player, world);
 	}
 
 	@Override

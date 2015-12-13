@@ -23,7 +23,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import cpw.mods.fml.common.Optional;
 
-import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeHousingInventory;
 import forestry.api.apiculture.IBeeListener;
 import forestry.api.apiculture.IBeeModifier;
@@ -96,7 +95,6 @@ public class TileApiary extends TileBeeHousingBase implements IApiary {
 
 	@Override
 	public Object getContainer(EntityPlayer player, int data) {
-		BeeManager.beeRoot.syncBreedingTrackerToPlayer(player);
 		return new ContainerBeeHousing(player.inventory, this, true);
 	}
 }

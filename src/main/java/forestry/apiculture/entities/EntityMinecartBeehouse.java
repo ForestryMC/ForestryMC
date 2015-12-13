@@ -18,7 +18,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.DefaultBeeListener;
 import forestry.api.apiculture.IBeeHousingInventory;
 import forestry.api.apiculture.IBeeListener;
@@ -97,7 +96,6 @@ public class EntityMinecartBeehouse extends EntityMinecartBeeHousingBase {
 
 	@Override
 	public Object getContainer(EntityPlayer player, int data) {
-		BeeManager.beeRoot.syncBreedingTrackerToPlayer(player);
 		return new ContainerMinecartBeehouse(player.inventory, this, false);
 	}
 }

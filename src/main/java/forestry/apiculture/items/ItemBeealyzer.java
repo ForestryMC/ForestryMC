@@ -13,7 +13,6 @@ package forestry.apiculture.items;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
-import forestry.api.apiculture.BeeManager;
 import forestry.api.core.Tabs;
 import forestry.apiculture.gui.GuiBeealyzer;
 import forestry.apiculture.inventory.ItemInventoryBeealyzer;
@@ -33,7 +32,6 @@ public class ItemBeealyzer extends ItemWithGui {
 
 	@Override
 	public Object getContainer(EntityPlayer player, ItemStack heldItem, int data) {
-		BeeManager.beeRoot.syncBreedingTrackerToPlayer(player);
 		ItemInventoryBeealyzer inventory = new ItemInventoryBeealyzer(player, heldItem);
 		return new ContainerAlyzer(inventory, player);
 	}
