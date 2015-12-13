@@ -21,11 +21,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.WeightedRandomChestContent;
 
 import net.minecraftforge.common.ChestGenHooks;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.FuelBurnTimeEvent;
 import net.minecraftforge.oredict.OreDictionary;
 
 import cpw.mods.fml.common.IFuelHandler;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
+import cpw.mods.fml.common.eventhandler.Event;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry;
@@ -38,6 +42,7 @@ import forestry.api.genetics.AlleleManager;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
+import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.VillageHandlerArboriculture;
 import forestry.arboriculture.WoodItemAccess;
 import forestry.arboriculture.blocks.BlockArboricultureType;
@@ -118,6 +123,9 @@ public class PluginArboriculture extends ForestryPlugin {
 	@Override
 	public void preInit() {
 		super.preInit();
+
+		// register for FuelBurnTimeEvent
+		MinecraftForge.EVENT_BUS.register(this);
 
 		for (EnumWoodType woodType : EnumWoodType.VALUES) {
 			WoodItemAccess.registerLog(blocks.logs, woodType, false);
@@ -411,11 +419,24 @@ public class PluginArboriculture extends ForestryPlugin {
 				return 100;
 			}
 
-			if (blocks.slabs == Block.getBlockFromItem(item)) {
-				return 150;
-			}
-
 			return 0;
+		}
+	}
+
+	@SubscribeEvent
+	public void fuelBurnTimeEvent(FuelBurnTimeEvent fuelBurnTimeEvent) {
+		Item item = fuelBurnTimeEvent.fuel.getItem();
+		Block block = Block.getBlockFromItem(item);
+
+		if (block instanceof IWoodTyped) {
+			IWoodTyped woodTypedBlock = (IWoodTyped) block;
+			if (woodTypedBlock.isFireproof()) {
+				fuelBurnTimeEvent.burnTime = 0;
+				fuelBurnTimeEvent.setResult(Event.Result.DENY);
+			} else if (blocks.slabs == block) {
+				fuelBurnTimeEvent.burnTime = 150;
+				fuelBurnTimeEvent.setResult(Event.Result.DENY);
+			}
 		}
 	}
 }
