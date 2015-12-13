@@ -10,31 +10,38 @@
  ******************************************************************************/
 package forestry.mail;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
+
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 
 import forestry.core.proxy.Proxies;
 import forestry.mail.gui.GuiMailboxInfo;
-import forestry.mail.network.packets.PacketPOBoxInfoRequest;
+import forestry.mail.network.packets.PacketPOBoxInfoUpdate;
 
-public class TickHandlerMailClient {
-	private static final int THROTTLE_TIME_MS = 10000;
-	private long lastInfoRequestTime;
-
+public class EventHandlerMailAlert {
 	@SubscribeEvent
 	public void onRenderTick(TickEvent.RenderTickEvent event) {
 		if (event.phase != Phase.END) {
 			return;
 		}
 
-		if (GuiMailboxInfo.instance.hasPOBoxInfo()) {
+		if (Minecraft.getMinecraft().theWorld != null && GuiMailboxInfo.instance.hasPOBoxInfo()) {
 			GuiMailboxInfo.instance.render();
-		} else {
-			long time = System.currentTimeMillis();
-			if (time - lastInfoRequestTime > THROTTLE_TIME_MS) {
-				Proxies.net.sendToServer(new PacketPOBoxInfoRequest());
-				lastInfoRequestTime = time;
+		}
+	}
+
+	@SubscribeEvent
+	public void handlePlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
+		EntityPlayer player = event.player;
+		if (player != null) {
+			MailAddress address = new MailAddress(player.getGameProfile());
+			POBox pobox = PostRegistry.getOrCreatePOBox(player.worldObj, address);
+			if (pobox != null) {
+				Proxies.net.sendToPlayer(new PacketPOBoxInfoUpdate(pobox.getPOBoxInfo()), player);
 			}
 		}
 	}
