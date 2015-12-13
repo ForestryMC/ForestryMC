@@ -27,12 +27,12 @@ import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.PacketIdClient;
 import forestry.core.proxy.Proxies;
 
-public class PacketGenomeTrackerUpdate extends PacketNBT implements IForestryPacketClient {
+public class PacketGenomeTrackerSync extends PacketNBT implements IForestryPacketClient {
 
-	public PacketGenomeTrackerUpdate() {
+	public PacketGenomeTrackerSync() {
 	}
 
-	public PacketGenomeTrackerUpdate(NBTTagCompound nbtTagCompound) {
+	public PacketGenomeTrackerSync(NBTTagCompound nbtTagCompound) {
 		super(nbtTagCompound);
 	}
 
