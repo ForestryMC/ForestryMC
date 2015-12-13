@@ -21,7 +21,7 @@ import forestry.core.proxy.Proxies;
 import forestry.core.utils.SlotUtil;
 import forestry.mail.POBox;
 import forestry.mail.POBoxInfo;
-import forestry.mail.network.packets.PacketPOBoxInfoResponse;
+import forestry.mail.network.packets.PacketPOBoxInfoUpdate;
 import forestry.mail.tiles.TileMailbox;
 
 public class ContainerMailbox extends ContainerTile<TileMailbox> {
@@ -55,7 +55,7 @@ public class ContainerMailbox extends ContainerTile<TileMailbox> {
 		if (SlotUtil.isSlotInRange(slotIndex, SLOT_LETTERS, SLOT_LETTERS_COUNT)) {
 			if (!player.worldObj.isRemote && mailInventory != null) {
 				POBoxInfo info = mailInventory.getPOBoxInfo();
-				Proxies.net.sendToPlayer(new PacketPOBoxInfoResponse(info), player);
+				Proxies.net.sendToPlayer(new PacketPOBoxInfoUpdate(info), player);
 			}
 		}
 

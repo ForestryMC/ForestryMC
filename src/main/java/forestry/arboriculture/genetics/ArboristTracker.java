@@ -11,6 +11,7 @@
 package forestry.arboriculture.genetics;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
@@ -24,11 +25,11 @@ public class ArboristTracker extends BreedingTracker implements IArboristTracker
 
 	/** Required for creation from map storage */
 	public ArboristTracker(String s) {
-		this(s, null);
+		this(s, null, null);
 	}
 
-	public ArboristTracker(String s, GameProfile player) {
-		super(s, player);
+	public ArboristTracker(String s, GameProfile player, World world) {
+		super(s, player, world);
 	}
 
 	@Override

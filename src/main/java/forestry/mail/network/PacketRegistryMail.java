@@ -14,8 +14,7 @@ import forestry.core.network.PacketRegistry;
 import forestry.mail.network.packets.PacketLetterInfoRequest;
 import forestry.mail.network.packets.PacketLetterInfoResponse;
 import forestry.mail.network.packets.PacketLetterTextSet;
-import forestry.mail.network.packets.PacketPOBoxInfoRequest;
-import forestry.mail.network.packets.PacketPOBoxInfoResponse;
+import forestry.mail.network.packets.PacketPOBoxInfoUpdate;
 import forestry.mail.network.packets.PacketTraderAddressRequest;
 import forestry.mail.network.packets.PacketTraderAddressResponse;
 
@@ -24,11 +23,10 @@ public class PacketRegistryMail extends PacketRegistry {
 	public void registerPackets() {
 		registerServerPacket(new PacketLetterInfoRequest());
 		registerServerPacket(new PacketTraderAddressRequest());
-		registerServerPacket(new PacketPOBoxInfoRequest());
 		registerServerPacket(new PacketLetterTextSet());
 		
 		registerClientPacket(new PacketLetterInfoResponse());
 		registerClientPacket(new PacketTraderAddressResponse());
-		registerClientPacket(new PacketPOBoxInfoResponse());
+		registerClientPacket(new PacketPOBoxInfoUpdate());
 	}
 }

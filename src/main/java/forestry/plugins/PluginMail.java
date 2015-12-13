@@ -28,10 +28,10 @@ import forestry.core.items.EnumElectronTube;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.tiles.MachineDefinition;
+import forestry.mail.EventHandlerMailAlert;
 import forestry.mail.PostRegistry;
 import forestry.mail.PostalCarrier;
 import forestry.mail.SaveEventHandlerMail;
-import forestry.mail.TickHandlerMailClient;
 import forestry.mail.blocks.BlockMailType;
 import forestry.mail.blocks.BlockRegistryMail;
 import forestry.mail.commands.CommandMail;
@@ -67,7 +67,7 @@ public class PluginMail extends ForestryPlugin {
 		PluginCore.rootCommand.addChildCommand(new CommandMail());
 
 		if (Config.mailAlertEnabled) {
-			FMLCommonHandler.instance().bus().register(new TickHandlerMailClient());
+			FMLCommonHandler.instance().bus().register(new EventHandlerMailAlert());
 		}
 
 		blocks.mail.addDefinitions(

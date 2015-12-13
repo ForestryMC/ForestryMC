@@ -12,6 +12,7 @@ package forestry.apiculture.genetics;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
@@ -26,12 +27,13 @@ import forestry.core.genetics.BreedingTracker;
 public class ApiaristTracker extends BreedingTracker implements IApiaristTracker {
 
 	/** Required for creation from map storage */
+	@SuppressWarnings("unused")
 	public ApiaristTracker(String s) {
-		this(s, null);
+		this(s, null, null);
 	}
 
-	public ApiaristTracker(String s, GameProfile player) {
-		super(s, player);
+	public ApiaristTracker(String s, GameProfile player, World world) {
+		super(s, player, world);
 	}
 
 	private int queensTotal = 0;

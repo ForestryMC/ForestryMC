@@ -59,6 +59,7 @@ import forestry.plugins.compat.PluginImmersiveEngineering;
 import forestry.plugins.compat.PluginMagicalCrops;
 import forestry.plugins.compat.PluginNatura;
 import forestry.plugins.compat.PluginPlantMegaPack;
+import forestry.plugins.compat.PluginRotaryCraft;
 import forestry.plugins.compat.PluginWitchery;
 
 public class PluginManager {
@@ -116,6 +117,7 @@ public class PluginManager {
 		MAGICALCROPS(new PluginMagicalCrops()),
 		NATURA(new PluginNatura()),
 		PLANTMEGAPACK(new PluginPlantMegaPack()),
+		ROTARYCRAFT(new PluginRotaryCraft()),
 		WITCHERY(new PluginWitchery());
 
 		static {

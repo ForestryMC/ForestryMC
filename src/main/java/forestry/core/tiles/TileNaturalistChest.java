@@ -114,7 +114,6 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 
 	@Override
 	public Object getContainer(EntityPlayer player, int page) {
-		speciesRoot.syncBreedingTrackerToPlayer(player);
 		return new ContainerNaturalistInventory(player.inventory, this, page);
 	}
 }

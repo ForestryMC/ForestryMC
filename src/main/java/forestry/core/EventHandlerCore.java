@@ -10,15 +10,23 @@
  ******************************************************************************/
 package forestry.core;
 
+import java.util.Collection;
+
+import net.minecraft.entity.player.EntityPlayer;
+
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.world.WorldEvent;
 
 import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.IBreedingTracker;
+import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.errors.ErrorStateRegistry;
 import forestry.core.render.TextureManager;
 import forestry.plugins.PluginManager;
@@ -39,6 +47,18 @@ public class EventHandlerCore {
 			if (handler.onItemPickup(event.entityPlayer, event.item)) {
 				event.setResult(Result.ALLOW);
 				return;
+			}
+		}
+	}
+
+	@SubscribeEvent
+	public void handlePlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
+		EntityPlayer player = event.player;
+		if (player != null) {
+			Collection<ISpeciesRoot> speciesRoots = AlleleManager.alleleRegistry.getSpeciesRoot().values();
+			for (ISpeciesRoot speciesRoot : speciesRoots) {
+				IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(player.getEntityWorld(), player.getGameProfile());
+				breedingTracker.synchToPlayer(player);
 			}
 		}
 	}

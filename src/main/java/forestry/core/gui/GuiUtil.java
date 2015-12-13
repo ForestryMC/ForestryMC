@@ -28,9 +28,6 @@ import forestry.core.gui.tooltips.ToolTipLine;
 public class GuiUtil {
 	public static void drawItemStack(GuiForestry gui, ItemStack stack, int xPos, int yPos) {
 		GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
-		GL11.glEnable(GL11.GL_DEPTH_TEST);
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		RenderHelper.enableGUIStandardItemLighting();
 
 		RenderItem itemRender = GuiForestry.getItemRenderer();

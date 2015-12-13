@@ -24,7 +24,6 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -215,12 +214,12 @@ public abstract class RecipeUtil {
 
 	@SuppressWarnings("unchecked")
 	public static void addRecipe(ItemStack itemstack, Object... obj) {
-		CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(itemstack, obj));
+		CraftingManager.getInstance().getRecipeList().add(new ShapedRecipeCustom(itemstack, obj));
 	}
 
 	@SuppressWarnings("unchecked")
 	public static void addPriorityRecipe(ItemStack itemStack, Object... obj) {
-		CraftingManager.getInstance().getRecipeList().add(0, new ShapedOreRecipe(itemStack, obj));
+		CraftingManager.getInstance().getRecipeList().add(0, new ShapedRecipeCustom(itemStack, obj));
 	}
 
 	public static void addShapelessRecipe(Item item, Object... obj) {

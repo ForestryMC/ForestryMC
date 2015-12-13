@@ -22,14 +22,14 @@ import forestry.core.network.PacketIdClient;
 import forestry.mail.POBoxInfo;
 import forestry.mail.gui.GuiMailboxInfo;
 
-public class PacketPOBoxInfoResponse extends ForestryPacket implements IForestryPacketClient {
+public class PacketPOBoxInfoUpdate extends ForestryPacket implements IForestryPacketClient {
 
 	public POBoxInfo poboxInfo;
 
-	public PacketPOBoxInfoResponse() {
+	public PacketPOBoxInfoUpdate() {
 	}
 
-	public PacketPOBoxInfoResponse(POBoxInfo info) {
+	public PacketPOBoxInfoUpdate(POBoxInfo info) {
 		this.poboxInfo = info;
 	}
 

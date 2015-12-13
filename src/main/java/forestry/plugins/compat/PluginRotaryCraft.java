@@ -21,35 +21,38 @@ import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
 import forestry.core.utils.ModUtil;
+import forestry.farming.logic.FarmableBasicFruit;
 import forestry.farming.logic.FarmableGenericCrop;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.Plugin;
 
-@Plugin(pluginID = "ImmersiveEngineering", name = "ImmersiveEngineering", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.plugin.immersiveengineering.description")
-public class PluginImmersiveEngineering extends ForestryPlugin {
+@Plugin(pluginID = "RotaryCraft", name = "RotaryCraft", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.plugin.rotarycraft.description")
+public class PluginRotaryCraft extends ForestryPlugin {
 
-	private static final String ImEng = "ImmersiveEngineering";
+	private static final String RC = "RotaryCraft";
 
 	@Override
 	public boolean isAvailable() {
-		return ModUtil.isModLoaded(ImEng);
+		return ModUtil.isModLoaded(RC);
 	}
 
 	@Override
 	public String getFailMessage() {
-		return "Immersive Engineering not found";
+		return "RotaryCraft not found";
 	}
 
 	@Override
-	protected void postInit() {
+	protected void registerRecipes() {
 
-		ItemStack hempSeed = GameRegistry.findItemStack(ImEng, "seed", 1);
-		Block hempCrop = GameRegistry.findBlock(ImEng, "hemp");
-		ItemStack hempFiber = new ItemStack(GameRegistry.findItem(ImEng, "material"), 1, 3);
-		int seedAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed");
-		if (hempSeed != null && hempCrop != null) {
-			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{hempSeed}, Fluids.SEEDOIL.getFluid(seedAmount));
-			Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(hempSeed, hempCrop, 4, hempFiber));
+		ItemStack canolaSeed = GameRegistry.findItemStack(RC, "rotarycraft_item_canola", 1);
+		Block canolaCrop = GameRegistry.findBlock(RC, "rotarycraft_block_canola");
+
+		int seedAmount = (ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed")/16);
+		seedAmount = Math.max(seedAmount, 1); // Produce at least 1 mb.
+		if (canolaSeed != null && canolaCrop != null) {
+			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{canolaSeed}, Fluids.SEEDOIL.getFluid(seedAmount));
+			Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(canolaSeed, canolaCrop, 9));
+			Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(canolaCrop, 9));
 		}
 	}
 

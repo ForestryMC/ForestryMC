@@ -13,7 +13,6 @@ package forestry.apiculture.items;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
-import forestry.api.apiculture.BeeManager;
 import forestry.api.core.Tabs;
 import forestry.apiculture.gui.ContainerImprinter;
 import forestry.apiculture.gui.GuiImprinter;
@@ -32,7 +31,6 @@ public class ItemImprinter extends ItemWithGui {
 
 	@Override
 	public Object getContainer(EntityPlayer player, ItemStack heldItem, int data) {
-		BeeManager.beeRoot.syncBreedingTrackerToPlayer(player);
 		return new ContainerImprinter(player.inventory, new ItemInventoryImprinter(player, heldItem));
 	}
 }
