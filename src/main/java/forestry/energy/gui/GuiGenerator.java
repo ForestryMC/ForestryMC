@@ -12,24 +12,23 @@ package forestry.energy.gui;
 
 import net.minecraft.entity.player.InventoryPlayer;
 
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.widgets.TankWidget;
-import forestry.energy.gadgets.MachineGenerator;
+import forestry.energy.tiles.TileGenerator;
 
-public class GuiGenerator extends GuiForestryTitled<MachineGenerator> {
+public class GuiGenerator extends GuiForestryTitled<ContainerGenerator, TileGenerator> {
 
-	public GuiGenerator(InventoryPlayer inventory, MachineGenerator tile) {
-		super(Defaults.TEXTURE_PATH_GUI + "/generator.png", new ContainerGenerator(inventory, tile), tile);
+	public GuiGenerator(InventoryPlayer inventory, TileGenerator tile) {
+		super(Constants.TEXTURE_PATH_GUI + "/generator.png", new ContainerGenerator(inventory, tile), tile);
 		widgetManager.add(new TankWidget(this.widgetManager, 49, 17, 0));
 	}
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
-		MachineGenerator boiler = tile;
 
-		int progress = boiler.getStoredScaled(49);
+		int progress = inventory.getStoredScaled(49);
 		if (progress > 0) {
 			drawTexturedModalRect(guiLeft + 108, guiTop + 38, 176, 91, progress, 18);
 		}

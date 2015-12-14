@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.energy.proxy;
 
-import forestry.core.interfaces.IBlockRenderer;
+import forestry.core.render.IBlockRenderer;
 
 public class ProxyEnergy {
 	public IBlockRenderer getRenderDefaultEngine(String gfxBase) {

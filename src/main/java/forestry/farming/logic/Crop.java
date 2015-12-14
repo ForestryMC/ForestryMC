@@ -17,28 +17,21 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
-import forestry.core.config.Defaults;
-import forestry.core.vect.Vect;
+import forestry.core.config.Constants;
+import forestry.core.utils.vect.Vect;
 
 public abstract class Crop implements ICrop {
 
 	protected final World world;
 	protected final Vect position;
 
-	public Crop(World world, Vect position) {
+	protected Crop(World world, Vect position) {
 		this.world = world;
 		this.position = position;
 	}
 
 	protected final void setBlock(Vect position, Block block, int meta) {
-		world.setBlock(position.x, position.y, position.z, block, meta, Defaults.FLAG_BLOCK_SYNCH);
-	}
-
-	protected final void clearBlock(Vect position) {
-		world.setBlockToAir(position.x, position.y, position.z);
-		if (world.getTileEntity(position.x, position.y, position.z) != null) {
-			world.setTileEntity(position.x, position.y, position.z, null);
-		}
+		world.setBlock(position.x, position.y, position.z, block, meta, Constants.FLAG_BLOCK_SYNCH);
 	}
 
 	protected final Block getBlock(Vect position) {
@@ -47,10 +40,6 @@ public abstract class Crop implements ICrop {
 
 	protected final int getBlockMeta(Vect position) {
 		return world.getBlockMetadata(position.x, position.y, position.z);
-	}
-
-	protected final ItemStack getAsItemStack(Vect position) {
-		return new ItemStack(getBlock(position), 1, getBlockMeta(position));
 	}
 
 	protected abstract boolean isCrop(Vect pos);

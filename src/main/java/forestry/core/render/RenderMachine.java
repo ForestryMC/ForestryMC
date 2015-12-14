@@ -10,6 +10,10 @@
  ******************************************************************************/
 package forestry.core.render;
 
+import java.awt.Color;
+import java.util.EnumMap;
+import java.util.Locale;
+
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -20,31 +24,24 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
-import forestry.core.interfaces.IBlockRenderer;
-import forestry.core.interfaces.IRenderableMachine;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.EnumTankLevel;
-import forestry.core.utils.ForestryResource;
+import forestry.core.tiles.IRenderableTile;
 
 public class RenderMachine extends TileEntitySpecialRenderer implements IBlockRenderer {
-
-	private final ModelBase model = new ModelBase() {
-	};
 
 	private final ModelRenderer basefront;
 	private final ModelRenderer baseback;
 	private final ModelRenderer resourceTank;
 	private final ModelRenderer productTank;
 
-	private static enum Textures {
-		BASE,
-		TANK_R_EMPTY, TANK_R_LOW, TANK_R_MEDIUM, TANK_R_HIGH, TANK_R_MAXIMUM,
-		TANK_P_EMPTY, TANK_P_LOW, TANK_P_MEDIUM, TANK_P_HIGH, TANK_P_MAXIMUM
-	}
+	private ResourceLocation textureBase;
+	private ResourceLocation textureResourceTank;
+	private ResourceLocation textureProductTank;
 
-	private ResourceLocation[] textures;
+	private final EnumMap<EnumTankLevel, ResourceLocation> texturesTankLevels = new EnumMap<>(EnumTankLevel.class);
 
-	public RenderMachine() {
+	private RenderMachine() {
+		ModelBase model = new RenderModelBase();
 
 		basefront = new ModelRenderer(model, 0, 0);
 		basefront.addBox(-8F, -8F, -8F, 16, 4, 16);
@@ -69,92 +66,65 @@ public class RenderMachine extends TileEntitySpecialRenderer implements IBlockRe
 		productTank.rotationPointX = 8;
 		productTank.rotationPointY = 8;
 		productTank.rotationPointZ = 8;
-
 	}
 
 	public RenderMachine(String baseTexture) {
 		this();
 
-		textures = new ResourceLocation[]{
-				new ForestryResource(baseTexture + "base.png"),
+		textureBase = new ForestryResource(baseTexture + "base.png");
+		textureProductTank = new ForestryResource(baseTexture + "tank_product_empty.png");
+		textureResourceTank = new ForestryResource(baseTexture + "tank_resource_empty.png");
 
-				new ForestryResource(baseTexture + "tank_resource_empty.png"),
-				new ForestryResource(baseTexture + "tank_resource_low.png"),
-				new ForestryResource(baseTexture + "tank_resource_medium.png"),
-				new ForestryResource(baseTexture + "tank_resource_high.png"),
-				new ForestryResource(baseTexture + "tank_resource_maximum.png"),
-
-				new ForestryResource(baseTexture + "tank_product_empty.png"),
-				new ForestryResource(baseTexture + "tank_product_low.png"),
-				new ForestryResource(baseTexture + "tank_product_medium.png"),
-				new ForestryResource(baseTexture + "tank_product_high.png"),
-				new ForestryResource(baseTexture + "tank_product_maximum.png"),
-		};
-
+		for (EnumTankLevel tankLevel : EnumTankLevel.values()) {
+			if (tankLevel == EnumTankLevel.EMPTY) {
+				continue;
+			}
+			String tankLevelString = tankLevel.toString().toLowerCase(Locale.ENGLISH);
+			texturesTankLevels.put(tankLevel, new ForestryResource("textures/blocks/machine_tank_" + tankLevelString + ".png"));
+		}
 	}
 
 	@Override
-	public void inventoryRender(double x, double y, double z, float f, float f1) {
-		render(EnumTankLevel.EMPTY, EnumTankLevel.EMPTY, ForgeDirection.UP, x, y, z);
+	public void inventoryRender(double x, double y, double z) {
+		render(TankRenderInfo.EMPTY, TankRenderInfo.EMPTY, ForgeDirection.SOUTH, x, y, z);
 	}
 
 	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double d, double d1, double d2, float f) {
-		IRenderableMachine generator = (IRenderableMachine) tileentity;
-		render(generator.getPrimaryLevel(), generator.getSecondaryLevel(), generator.getOrientation(), d, d1, d2);
-
+		IRenderableTile generator = (IRenderableTile) tileentity;
+		render(generator.getResourceTankInfo(), generator.getProductTankInfo(), generator.getOrientation(), d, d1, d2);
 	}
 
-	private void render(EnumTankLevel waterLevel, EnumTankLevel melangeLevel, ForgeDirection orientation, double x, double y, double z) {
-		render(waterLevel.ordinal(), melangeLevel.ordinal(), orientation, x, y, z);
-	}
-
-	public void render(int waterLevelInt, int melangeLevelInt, ForgeDirection orientation, double x, double y, double z) {
-
-		EnumTankLevel waterLevel = EnumTankLevel.values()[waterLevelInt];
-		EnumTankLevel melangeLevel = EnumTankLevel.values()[melangeLevelInt];
-
+	private void render(TankRenderInfo resourceTankInfo, TankRenderInfo productTankInfo, ForgeDirection orientation, double x, double y, double z) {
 		GL11.glPushMatrix();
-		// GL11.glDisable(2896 /* GL_LIGHTING */);
-		GL11.glDisable(GL11.GL_LIGHTING);
-
 		GL11.glTranslatef((float) x, (float) y, (float) z);
 
 		float[] angle = {0, 0, 0};
-		float[] translate = {0, 0, 0};
 
 		if (orientation == null) {
 			orientation = ForgeDirection.WEST;
 		}
 		switch (orientation) {
 			case EAST:
-				// angle [2] = (float) Math.PI / 2;
 				angle[1] = (float) Math.PI;
 				angle[2] = (float) -Math.PI / 2;
-				translate[0] = 1;
 				break;
 			case WEST:
-				// 2, -PI/2
 				angle[2] = (float) Math.PI / 2;
-				translate[0] = -1;
 				break;
 			case UP:
-				translate[1] = 1;
 				break;
 			case DOWN:
 				angle[2] = (float) Math.PI;
-				translate[1] = -1;
 				break;
 			case SOUTH:
 				angle[0] = (float) Math.PI / 2;
 				angle[2] = (float) Math.PI / 2;
-				translate[2] = 1;
 				break;
 			case NORTH:
 			default:
 				angle[0] = (float) -Math.PI / 2;
 				angle[2] = (float) Math.PI / 2;
-				translate[2] = -1;
 				break;
 		}
 
@@ -176,58 +146,36 @@ public class RenderMachine extends TileEntitySpecialRenderer implements IBlockRe
 
 		float factor = (float) (1.0 / 16.0);
 
-		Proxies.common.bindTexture(textures[Textures.BASE.ordinal()]);
+		Proxies.render.bindTexture(textureBase);
 		basefront.render(factor);
-
-		Proxies.common.bindTexture(textures[Textures.BASE.ordinal()]);
 		baseback.render(factor);
 
-		ResourceLocation texture;
+		renderTank(resourceTank, textureResourceTank, resourceTankInfo, factor);
+		renderTank(productTank, textureProductTank, productTankInfo, factor);
 
-		switch (waterLevel) {
-			case LOW:
-				texture = textures[Textures.TANK_R_LOW.ordinal()];
-				break;
-			case MEDIUM:
-				texture = textures[Textures.TANK_R_MEDIUM.ordinal()];
-				break;
-			case HIGH:
-				texture = textures[Textures.TANK_R_HIGH.ordinal()];
-				break;
-			case MAXIMUM:
-				texture = textures[Textures.TANK_R_MAXIMUM.ordinal()];
-				break;
-			case EMPTY:
-			default:
-				texture = textures[Textures.TANK_R_EMPTY.ordinal()];
-				break;
-		}
-		Proxies.common.bindTexture(texture);
-		resourceTank.render(factor);
-
-		switch (melangeLevel) {
-			case LOW:
-				texture = textures[Textures.TANK_P_LOW.ordinal()];
-				break;
-			case MEDIUM:
-				texture = textures[Textures.TANK_P_MEDIUM.ordinal()];
-				break;
-			case HIGH:
-				texture = textures[Textures.TANK_P_HIGH.ordinal()];
-				break;
-			case MAXIMUM:
-				texture = textures[Textures.TANK_P_MAXIMUM.ordinal()];
-				break;
-			case EMPTY:
-			default:
-				texture = textures[Textures.TANK_P_EMPTY.ordinal()];
-				break;
-		}
-		Proxies.common.bindTexture(texture);
-		productTank.render(factor);
-
-		// GL11.glEnable(2896 /* GL_LIGHTING */);
-		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glPopMatrix();
+	}
+
+	private void renderTank(ModelRenderer tankModel, ResourceLocation textureBase, TankRenderInfo renderInfo, float factor) {
+		Proxies.render.bindTexture(textureBase);
+		tankModel.render(factor);
+
+		ResourceLocation textureResourceTankLevel = texturesTankLevels.get(renderInfo.getLevel());
+		if (textureResourceTankLevel == null) {
+			return;
+		}
+
+		Color primaryTankColor = renderInfo.getFluidColor();
+		float[] colors = new float[3];
+		primaryTankColor.getRGBColorComponents(colors);
+		GL11.glColor4f(colors[0], colors[1], colors[2], 1.0f);
+
+		Proxies.render.bindTexture(textureResourceTankLevel);
+		tankModel.render(factor);
+
+		GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	}
+
+	private static class RenderModelBase extends ModelBase {
 	}
 }

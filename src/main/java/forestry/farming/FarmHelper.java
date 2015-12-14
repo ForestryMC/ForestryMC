@@ -10,78 +10,49 @@
  ******************************************************************************/
 package forestry.farming;
 
-import net.minecraft.tileentity.TileEntity;
+import com.google.common.collect.ImmutableSet;
+
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
-import forestry.api.core.IStructureLogic;
-import forestry.api.farming.IFarmComponent;
-import forestry.api.farming.IFarmInterface;
-import forestry.core.vect.MutableVect;
-import forestry.core.vect.Vect;
-import forestry.core.vect.VectUtil;
-import forestry.farming.gadgets.StructureLogicFarm;
+import forestry.api.farming.FarmDirection;
+import forestry.api.multiblock.IFarmComponent;
+import forestry.core.utils.BlockPosUtil;
+import forestry.core.utils.vect.MutableVect;
+import forestry.core.utils.vect.Vect;
 
-public class FarmHelper implements IFarmInterface {
+public class FarmHelper {
 
-	@Override
-	public IStructureLogic createFarmStructureLogic(IFarmComponent structure) {
-		return new StructureLogicFarm(structure);
+	public static final ImmutableSet<Block> bricks = ImmutableSet.of(
+			Blocks.brick_block,
+			Blocks.stonebrick,
+			Blocks.sandstone,
+			Blocks.nether_brick,
+			Blocks.quartz_block
+	);
+
+	private static FarmDirection getOpposite(FarmDirection farmDirection) {
+		ForgeDirection forgeDirection = farmDirection.getForgeDirection();
+		ForgeDirection forgeDirectionOpposite = forgeDirection.getOpposite();
+		return FarmDirection.getFarmDirection(forgeDirectionOpposite);
 	}
 
-	public static int getFarmSizeNorthSouth(World world, Vect start) {
-		ForgeDirection farmSide = ForgeDirection.NORTH;
-		ForgeDirection startSide = ForgeDirection.EAST;
-
-		Vect corner = getFarmMultiblockCorner(world, start, farmSide, startSide);
-
-		return getFarmSizeInDirection(world, corner, farmSide, startSide.getOpposite());
+	public static Vect getFarmMultiblockCorner(World world, Vect start, FarmDirection farmSide, FarmDirection layoutDirection) {
+		Vect edge = getFarmMultiblockEdge(world, start, farmSide);
+		return getFarmMultiblockEdge(world, edge, getOpposite(layoutDirection));
 	}
 
-	public static int getFarmSizeEastWest(World world, Vect start) {
-		ForgeDirection farmSide = ForgeDirection.EAST;
-		ForgeDirection startSide = ForgeDirection.NORTH;
-
-		Vect corner = getFarmMultiblockCorner(world, start, farmSide, startSide);
-
-		return getFarmSizeInDirection(world, corner, farmSide, startSide.getOpposite());
-	}
-
-	private static int getFarmSizeInDirection(World world, Vect start, ForgeDirection farmSide, ForgeDirection searchDirection) {
-		int size = 0;
-
-		ForgeDirection toCenter = farmSide.getOpposite();
-
-		Vect target = start.add(farmSide);
-
-		TileEntity farmTile;
-		do {
-			size++;
-
-			target = target.add(searchDirection);
-
-			Vect farmTileLocation = target.add(toCenter);
-			farmTile = VectUtil.getTile(world, farmTileLocation);
-
-		} while (farmTile instanceof IFarmComponent);
-
-		return size;
-	}
-
-	public static Vect getFarmMultiblockCorner(World world, Vect start, ForgeDirection direction1, ForgeDirection direction2) {
-		Vect edge = getFarmMultiblockEdge(world, start, direction1);
-		return getFarmMultiblockEdge(world, edge, direction2);
-	}
-
-	private static Vect getFarmMultiblockEdge(World world, Vect start, ForgeDirection direction) {
+	private static Vect getFarmMultiblockEdge(World world, Vect start, FarmDirection direction) {
 		MutableVect edge = new MutableVect(start);
 
-		while (VectUtil.getTile(world, edge) instanceof IFarmComponent) {
+		while (BlockPosUtil.getTile(world, edge) instanceof IFarmComponent) {
 			edge.add(direction);
 		}
 
-		edge.add(direction.getOpposite());
+		edge.add(getOpposite(direction));
 		return new Vect(edge);
 	}
 

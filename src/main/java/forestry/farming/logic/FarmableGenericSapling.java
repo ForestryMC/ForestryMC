@@ -13,18 +13,16 @@ package forestry.farming.logic;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
-import forestry.core.utils.StackUtils;
-import forestry.core.vect.Vect;
+import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.vect.Vect;
 
 public class FarmableGenericSapling implements IFarmable {
 
-	private final Block sapling;
+	protected final Block sapling;
 	private final int saplingMeta;
 	private final ItemStack[] windfall;
 
@@ -35,13 +33,13 @@ public class FarmableGenericSapling implements IFarmable {
 	}
 
 	@Override
-	public boolean isSaplingAt(World world, BlockPos pos) {
+	public boolean isSaplingAt(World world, int x, int y, int z) {
 
-		if (world.isAirBlock(pos)) {
+		if (world.isAirBlock(x, y, z)) {
 			return false;
 		}
 
-		if (world.getBlockState(pos).getBlock() == sapling) {
+		if (world.getBlock(x, y, z) == sapling) {
 			return true;
 		}
 
@@ -54,19 +52,19 @@ public class FarmableGenericSapling implements IFarmable {
 	}
 
 	@Override
-	public ICrop getCropAt(World world, BlockPos pos) {
-		Block block = world.getBlockState(pos).getBlock();
-		if (!block.isWood(world, pos)) {
+	public ICrop getCropAt(World world, int x, int y, int z) {
+		Block block = world.getBlock(x, y, z);
+		if (!block.isWood(world, x, y, z)) {
 			return null;
 		}
 
-		return new CropBlock(world, block, world.getBlockMetadata(x, y, z), new Vect(pos));
+		return new CropBlock(world, block, world.getBlockMetadata(x, y, z), new Vect(x, y, z));
 	}
 
 	@Override
 	public boolean isGermling(ItemStack itemstack) {
 
-		if (!StackUtils.equals(sapling, itemstack)) {
+		if (!ItemStackUtil.equals(sapling, itemstack)) {
 			return false;
 		}
 
@@ -88,8 +86,8 @@ public class FarmableGenericSapling implements IFarmable {
 	}
 
 	@Override
-	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
-		return germling.copy().onItemUse(player, world, pos.down(), EnumFacing.UP, 0, 0, 0);
+	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, int x, int y, int z) {
+		return germling.copy().tryPlaceItemIntoWorld(player, world, x, y - 1, z, 1, 0, 0, 0);
 	}
 
 }

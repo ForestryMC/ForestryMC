@@ -11,7 +11,7 @@
 package forestry.arboriculture;
 
 public interface IWoodTyped {
-	WoodType getWoodType(int meta);
-
 	String getBlockKind();
+
+	boolean isFireproof();
 }

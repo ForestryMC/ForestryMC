@@ -10,14 +10,15 @@
  ******************************************************************************/
 package forestry.core.fluids;
 
-import com.google.common.collect.ForwardingList;
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -25,71 +26,69 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntity;
-
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.IFluidTank;
 
+import forestry.api.core.INBTTagable;
 import forestry.core.fluids.tanks.FakeTank;
 import forestry.core.fluids.tanks.StandardTank;
-import forestry.core.inventory.ITileFilter;
-import forestry.core.network.PacketGuiInteger;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.IForestryPacketClient;
+import forestry.core.network.IStreamable;
+import forestry.core.network.packets.PacketTankLevelUpdate;
 import forestry.core.proxy.Proxies;
+import forestry.core.render.EnumTankLevel;
+import forestry.core.tiles.ILiquidTankTile;
+import forestry.core.tiles.IRenderableTile;
 import forestry.core.utils.NBTUtil;
 import forestry.core.utils.NBTUtil.NBTList;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TankManager extends ForwardingList<StandardTank> implements IFluidHandler, List<StandardTank> {
+public class TankManager implements ITankManager, ITankUpdateHandler, IStreamable, INBTTagable {
 
-	public static final ITileFilter TANK_FILTER = new ITileFilter() {
-		@Override
-		public boolean matches(TileEntity tile) {
-			return tile instanceof IFluidHandler;
-		}
+	private final List<StandardTank> tanks = new ArrayList<>();
 
-	};
-	private static final byte NETWORK_DATA = 3;
-	private final List<StandardTank> tanks = new ArrayList<StandardTank>();
-	private final List<FluidStack> prevFluidStacks = new ArrayList<FluidStack>();
-	private final List<Integer> prevColor = new ArrayList<Integer>();
+	// for container updates, keeps track of the fluids known to each client (container)
+	private final Table<Container, Integer, FluidStack> prevFluidStacks = HashBasedTable.create();
+
+	// tank tile updates, for blocks that show fluid levels on the outside
+	private final ILiquidTankTile tile;
+	private final List<EnumTankLevel> tankLevels = new ArrayList<>();
 
 	public TankManager() {
+		this.tile = null;
 	}
 
-	public TankManager(StandardTank... tanks) {
+	public TankManager(ILiquidTankTile tile, StandardTank... tanks) {
+		this.tile = tile;
 		addAll(Arrays.asList(tanks));
 	}
 
-	@Override
-	protected List<StandardTank> delegate() {
-		return tanks;
+	public final boolean addAll(@Nonnull Collection<? extends StandardTank> collection) {
+		boolean addedAll = true;
+		for (StandardTank tank : collection) {
+			addedAll &= add(tank);
+		}
+		return addedAll;
 	}
 
-	@Override
-	public final boolean addAll(Collection<? extends StandardTank> collection) {
-		return standardAddAll(collection);
-	}
-
-	@Override
-	public boolean add(StandardTank tank) {
+	public boolean add(@Nonnull StandardTank tank) {
 		boolean added = tanks.add(tank);
 		int index = tanks.indexOf(tank);
+		tank.setTankUpdateHandler(this);
 		tank.setTankIndex(index);
-		prevFluidStacks.add(tank.getFluid() == null ? null : tank.getFluid().copy());
-		prevColor.add(tank.getColor());
+		tankLevels.add(EnumTankLevel.rateTankLevel(tank));
 		return added;
 	}
 
-	public int maxMessageId() {
-		return NETWORK_DATA * tanks.size();
-	}
-
-	public void writeTanksToNBT(NBTTagCompound data) {
+	@Override
+	public void writeToNBT(NBTTagCompound data) {
 		NBTTagList tagList = new NBTTagList();
 		for (byte slot = 0; slot < tanks.size(); slot++) {
 			StandardTank tank = tanks.get(slot);
@@ -103,161 +102,106 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
 		data.setTag("tanks", tagList);
 	}
 
-	public void readTanksFromNBT(NBTTagCompound data) {
+	@Override
+	public void readFromNBT(NBTTagCompound data) {
 		NBTList<NBTTagCompound> tagList = NBTUtil.getNBTList(data, "tanks", NBTUtil.EnumNBTType.COMPOUND);
 		for (NBTTagCompound tag : tagList) {
 			int slot = tag.getByte("tank");
 			if (slot >= 0 && slot < tanks.size()) {
-				tanks.get(slot).readFromNBT(tag);
+				StandardTank tank = tanks.get(slot);
+				tank.readFromNBT(tag);
+				updateTankLevels(tank, false);
 			}
 		}
 	}
 
-	public void writePacketData(DataOutputStream data) throws IOException {
-		for (int i = 0; i < tanks.size(); i++) {
-			writePacketData(data, i);
-		}
-	}
-
-	public void writePacketData(DataOutputStream data, int tankIndex) throws IOException {
-		if (tankIndex >= tanks.size()) {
-			return;
-		}
-		StandardTank tank = tanks.get(tankIndex);
-		FluidStack fluidStack = tank.getFluid();
-		if (fluidStack != null) {
-			data.writeShort(fluidStack.fluidID);
-			data.writeInt(fluidStack.amount);
-			data.writeInt(fluidStack.getFluid().getColor(fluidStack));
-		} else {
-			data.writeShort(-1);
-		}
-	}
-
-	public void readPacketData(DataInputStream data) throws IOException {
-		for (int i = 0; i < tanks.size(); i++) {
-			readPacketData(data, i);
-		}
-	}
-
-	public void readPacketData(DataInputStream data, int tankIndex) throws IOException {
-		if (tankIndex >= tanks.size()) {
-			return;
-		}
-		StandardTank tank = tanks.get(tankIndex);
-		int fluidId = data.readShort();
-		if (fluidId != -1) {
-			tank.setFluid(new FluidStack(fluidId, data.readInt()));
-			tank.colorCache = data.readInt();
-		} else {
-			tank.setFluid(null);
-		}
-	}
-
-	public void initGuiData(Container container, ICrafting player) {
+	@Override
+	public void writeData(DataOutputStreamForestry data) throws IOException {
 		for (StandardTank tank : tanks) {
-			initGuiData(container, player, tank.getTankIndex());
+			tank.writeData(data);
 		}
 	}
 
-	public void initGuiData(Container container, ICrafting player, int tankIndex) {
-		if (tankIndex >= tanks.size()) {
+	@Override
+	public void readData(DataInputStreamForestry data) throws IOException {
+		for (StandardTank tank : tanks) {
+			tank.readData(data);
+		}
+	}
+
+	@Override
+	public void containerAdded(Container container, ICrafting player) {
+		if (!(player instanceof EntityPlayerMP)) {
 			return;
 		}
-		FluidStack fluidStack = tanks.get(tankIndex).getFluid();
-		int fluidId = -1;
-		int fluidAmount = 0;
-		if (fluidStack != null && fluidStack.amount > 0) {
-			fluidId = fluidStack.getFluid().getID();
-			fluidAmount = fluidStack.amount;
-		}
 
-		player.sendProgressBarUpdate(container, tankIndex * NETWORK_DATA, fluidId);
-		PacketGuiInteger packet = new PacketGuiInteger(container.windowId, tankIndex * NETWORK_DATA + 1, fluidAmount);
-		Proxies.net.sendToPlayer(packet, (EntityPlayerMP) player);
+		List<EntityPlayerMP> crafters = Collections.singletonList((EntityPlayerMP) player);
+
+		for (StandardTank tank : tanks) {
+			sendTankUpdate(container, tank, crafters);
+		}
 	}
 
+	@Override
+	public void containerRemoved(Container container) {
+		for (StandardTank tank : tanks) {
+			prevFluidStacks.remove(container, tank.getTankIndex());
+		}
+	}
+
+	@Override
 	public void updateGuiData(Container container, List<EntityPlayerMP> crafters) {
 		for (StandardTank tank : tanks) {
 			updateGuiData(container, crafters, tank.getTankIndex());
 		}
 	}
 
-	public void updateGuiData(Container container, List<EntityPlayerMP> crafters, int tankIndex) {
+	private void updateGuiData(Container container, List<EntityPlayerMP> crafters, int tankIndex) {
 		StandardTank tank = tanks.get(tankIndex);
-		FluidStack fluidStack = tank.getFluid();
-		FluidStack prev = prevFluidStacks.get(tankIndex);
-		int color = tank.getColor();
-		int pColor = prevColor.get(tankIndex);
-
-		for (EntityPlayerMP player : crafters) {
-			if (fluidStack == null ^ prev == null) {
-				int fluidId = -1;
-				int fluidAmount = 0;
-				if (fluidStack != null) {
-					fluidId = fluidStack.fluidID;
-					fluidAmount = fluidStack.amount;
-				}
-				player.sendProgressBarUpdate(container, tankIndex * NETWORK_DATA, fluidId);
-				PacketGuiInteger packet = new PacketGuiInteger(container.windowId, tankIndex * NETWORK_DATA + 1, fluidAmount);
-				Proxies.net.sendToPlayer(packet, player);
-			} else if (fluidStack != null && prev != null) {
-				if (fluidStack.getFluid() != prev.getFluid()) {
-					player.sendProgressBarUpdate(container, tankIndex * NETWORK_DATA, fluidStack.fluidID);
-				}
-				if (fluidStack.amount != prev.amount) {
-					PacketGuiInteger packet = new PacketGuiInteger(container.windowId, tankIndex * NETWORK_DATA + 1, fluidStack.amount);
-					Proxies.net.sendToPlayer(packet, player);
-				}
-				if (color != pColor) {
-					PacketGuiInteger packet = new PacketGuiInteger(container.windowId, tankIndex * NETWORK_DATA + 2, color);
-					Proxies.net.sendToPlayer(packet, player);
-				}
-			}
-		}
-
-		prevFluidStacks.set(tankIndex, tank.getFluid() == null ? null : tank.getFluid().copy());
-		prevColor.set(tankIndex, color);
-	}
-
-	public void processGuiUpdate(int messageId, int data) {
-		int tankIndex = messageId / NETWORK_DATA;
-
-		if (tankIndex >= tanks.size()) {
+		if (tank == null) {
 			return;
 		}
-		StandardTank tank = tanks.get(tankIndex);
+
 		FluidStack fluidStack = tank.getFluid();
-		if (fluidStack == null) {
-			fluidStack = new FluidStack(-1, 0);
-			tank.setFluid(fluidStack);
+		FluidStack prev = prevFluidStacks.get(container, tankIndex);
+		if (FluidHelper.areFluidStacksEqual(fluidStack, prev)) {
+			return;
 		}
-		int fluidId = fluidStack.fluidID;
-		int amount = fluidStack.amount;
-		int color = tank.colorCache;
-		boolean newLiquid = false;
-		switch (messageId % NETWORK_DATA) {
-			case 0:
-				fluidId = data;
-				newLiquid = true;
-				break;
-			case 1:
-				amount = data;
-				break;
-			case 2:
-				color = data;
-				break;
+
+		sendTankUpdate(container, tank, crafters);
+	}
+
+	private void sendTankUpdate(Container container, StandardTank tank, Iterable<EntityPlayerMP> crafters) {
+		int tankIndex = tank.getTankIndex();
+		FluidStack fluid = tank.getFluid();
+		IForestryPacketClient packet = new PacketTankLevelUpdate(tile, tankIndex, fluid);
+		for (EntityPlayerMP player : crafters) {
+			Proxies.net.sendToPlayer(packet, player);
 		}
-		if (newLiquid) {
-			fluidStack = new FluidStack(fluidId, 0);
-			tank.setFluid(fluidStack);
+
+		if (fluid == null) {
+			prevFluidStacks.remove(container, tankIndex);
+		} else {
+			prevFluidStacks.put(container, tankIndex, fluid.copy());
 		}
-		fluidStack.amount = amount;
-		tank.colorCache = color;
 	}
 
 	@Override
-	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+	public void processTankUpdate(int tankIndex, FluidStack contents) {
+		if (tankIndex < 0 || tankIndex > tanks.size()) {
+			return;
+		}
+		StandardTank tank = tanks.get(tankIndex);
+		tank.setFluid(contents);
+	}
+
+	@Override
+	public IFluidTank getTank(int tankIndex) {
+		return tanks.get(tankIndex);
+	}
+
+	@Override
+	public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
 		for (StandardTank tank : tanks) {
 			if (tankAcceptsFluid(tank, resource)) {
 				return fill(tank.getTankIndex(), resource, doFill);
@@ -281,7 +225,28 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
 	}
 
 	@Override
-	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+	public void updateTankLevels(StandardTank tank) {
+		updateTankLevels(tank, true);
+	}
+
+	private void updateTankLevels(StandardTank tank, boolean sendUpdate) {
+		if (!(tile instanceof IRenderableTile)) {
+			return;
+		}
+
+		int tankIndex = tank.getTankIndex();
+		EnumTankLevel tankLevel = EnumTankLevel.rateTankLevel(tank);
+		if (tankLevel != tankLevels.get(tankIndex)) {
+			tankLevels.set(tankIndex, tankLevel);
+			if (sendUpdate) {
+				PacketTankLevelUpdate tankLevelUpdate = new PacketTankLevelUpdate(tile, tankIndex, tank.getFluid());
+				Proxies.net.sendNetworkPacket(tankLevelUpdate, tile.getWorld());
+			}
+		}
+	}
+
+	@Override
+	public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
 		for (StandardTank tank : tanks) {
 			if (tankCanDrain(tank)) {
 				return drain(tank.getTankIndex(), maxDrain, doDrain);
@@ -306,68 +271,50 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
 	public FluidStack drain(FluidStack resource, boolean doDrain) {
 		for (StandardTank tank : tanks) {
 			if (tankCanDrainFluid(tank, resource)) {
-				return tank.drain(resource.amount, doDrain);
+				return drain(tank.getTankIndex(), resource.amount, doDrain);
 			}
 		}
 		return null;
 	}
 
 	@Override
-	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+	public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
 		return drain(resource, doDrain);
 	}
 
 	@Override
-	public boolean canFill(ForgeDirection from, Fluid fluid) {
+	public boolean canFill(EnumFacing from, Fluid fluid) {
 		return true;
 	}
 
 	@Override
-	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+	public boolean canDrain(EnumFacing from, Fluid fluid) {
 		return true;
 	}
 
 	@Override
-	public FluidTankInfo[] getTankInfo(ForgeDirection direction) {
-		FluidTankInfo[] info = new FluidTankInfo[size()];
-		for (int i = 0; i < size(); i++) {
-			info[i] = get(i).getInfo();
+	public FluidTankInfo[] getTankInfo(EnumFacing direction) {
+		FluidTankInfo[] info = new FluidTankInfo[tanks.size()];
+		for (int i = 0; i < tanks.size(); i++) {
+			info[i] = tanks.get(i).getInfo();
 		}
 		return info;
 	}
 
 	public FluidTankInfo[] getTankInfo() {
-		return getTankInfo(ForgeDirection.UNKNOWN);
+		return getTankInfo(null);
 	}
 
 	public FluidTankInfo getTankInfo(int tankIndex) {
-		return get(tankIndex).getInfo();
+		return tanks.get(tankIndex).getInfo();
 	}
 
 	public FluidStack getFluid(int tankIndex) {
-		return get(tankIndex).getFluid();
+		return tanks.get(tankIndex).getFluid();
 	}
 
-	@Override
-	public StandardTank get(int tankIndex) {
-		return tanks.get(tankIndex);
-	}
-
-	public void setCapacity(int tankIndex, int capacity) {
-		StandardTank tank = get(tankIndex);
-		tank.setCapacity(capacity);
-		FluidStack fluidStack = tank.getFluid();
-		if (fluidStack != null && fluidStack.amount > capacity) {
-			fluidStack.amount = capacity;
-		}
-	}
-
-	public static IFluidHandler getTankFromTile(TileEntity tile) {
-		IFluidHandler tank = null;
-		if (tile instanceof IFluidHandler) {
-			tank = (IFluidHandler) tile;
-		}
-		return tank;
+	public int getFluidAmount(int tankIndex) {
+		return tanks.get(tankIndex).getFluidAmount();
 	}
 
 	public boolean accepts(Fluid fluid) {
@@ -384,7 +331,7 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
 		return false;
 	}
 
-	private boolean tankAcceptsFluid(StandardTank tank, FluidStack fluidStack) {
+	private static boolean tankAcceptsFluid(StandardTank tank, FluidStack fluidStack) {
 		if (fluidStack == null) {
 			return false;
 		}
@@ -394,7 +341,7 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
 		return tank.fill(fluidStack, false) > 0;
 	}
 
-	private boolean tankCanDrain(StandardTank tank) {
+	private static boolean tankCanDrain(StandardTank tank) {
 		if (!tank.canBeDrainedExternally()) {
 			return false;
 		}
@@ -402,7 +349,7 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
 		return drained != null && drained.amount > 0;
 	}
 
-	private boolean tankCanDrainFluid(StandardTank tank, FluidStack fluidStack) {
+	private static boolean tankCanDrainFluid(StandardTank tank, FluidStack fluidStack) {
 		if (fluidStack == null) {
 			return false;
 		}

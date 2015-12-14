@@ -14,7 +14,6 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
@@ -22,8 +21,8 @@ import forestry.api.apiculture.hives.IHiveDescription;
 import forestry.api.apiculture.hives.IHiveGen;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
-import forestry.apiculture.gadgets.TileSwarm;
-import forestry.core.config.ForestryBlock;
+import forestry.apiculture.tiles.TileSwarm;
+import forestry.plugins.PluginApiculture;
 
 public class HiveDescriptionSwarmer implements IHiveDescription {
 
@@ -40,7 +39,7 @@ public class HiveDescriptionSwarmer implements IHiveDescription {
 
 	@Override
 	public Block getBlock() {
-		return ForestryBlock.beehives.block();
+		return PluginApiculture.blocks.beehives;
 	}
 
 	@Override
@@ -69,11 +68,10 @@ public class HiveDescriptionSwarmer implements IHiveDescription {
 	}
 
 	@Override
-	public void postGen(World world, BlockPos pos) {
-		TileEntity tile = world.getTileEntity(pos);
+	public void postGen(World world, int x, int y, int z) {
+		TileEntity tile = world.getTileEntity(x, y, z);
 		if (tile instanceof TileSwarm) {
 			((TileSwarm) tile).setContained(bees);
 		}
 	}
-
 }

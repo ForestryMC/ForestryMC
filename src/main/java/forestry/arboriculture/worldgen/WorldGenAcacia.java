@@ -10,42 +10,55 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.world.World;
+
 import forestry.api.world.ITreeGenData;
 
 public class WorldGenAcacia extends WorldGenTree {
 
 	public WorldGenAcacia(ITreeGenData tree) {
-		super(tree);
+		super(tree, 5, 2);
 	}
 
 	@Override
-	public void generate() {
-		generateTreeTrunk(height, girth);
+	public void generate(World world) {
+		Direction leanDirection = Direction.getRandom(world.rand);
+		float leanAmount = height / 4.0f;
 
-		int leafSpawn = height + 1;
-
-		float rnd = world.rand.nextFloat();
-		int offset = 0;
-		if (rnd > 0.6f) {
-			offset = rand.nextInt(girth);
-		} else if (rnd > 0.3) {
-			offset = -rand.nextInt(girth);
+		List<ChunkCoordinates> treeTops = generateTreeTrunk(world, height, girth, 0, leanDirection.forgeDirection, leanAmount);
+		if (height > 5 && world.rand.nextBoolean()) {
+			Direction branchDirection = Direction.getRandomOther(world.rand, leanDirection);
+			List<ChunkCoordinates> treeTops2 = generateTreeTrunk(world, Math.round(height * 0.66f), girth, 0, branchDirection.forgeDirection, leanAmount);
+			treeTops.addAll(treeTops2);
 		}
 
+		List<ChunkCoordinates> branchLocations = new ArrayList<>();
 
-		generateAdjustedCylinder(leafSpawn--, offset, 0, 1, leaf, EnumReplaceMode.NONE);
-		generateAdjustedCylinder(leafSpawn--, offset, 1.5f, 1, leaf, EnumReplaceMode.NONE);
+		for (ChunkCoordinates treeTop : treeTops) {
+			int xOffset = treeTop.posX;
+			int yOffset = treeTop.posY + 1;
+			int zOffset = treeTop.posZ;
+			float canopyMultiplier = (1.5f * height - yOffset + 2) / 4.0f;
+			int canopyThickness = Math.max(1, Math.round(yOffset / 10.0f));
 
-		if (rand.nextBoolean()) {
-			generateAdjustedCylinder(leafSpawn--, offset, 3.9f, 1, leaf, EnumReplaceMode.NONE);
-		} else {
-			generateAdjustedCylinder(leafSpawn--, offset, 2.9f, 1, leaf, EnumReplaceMode.NONE);
+			generateAdjustedCylinder(world, yOffset--, xOffset, zOffset, canopyMultiplier, 1, leaf, EnumReplaceMode.NONE);
+
+			float canopyWidth = world.rand.nextBoolean() ? 3.0f : 2.5f;
+			List<ChunkCoordinates> branches = generateBranches(world, yOffset - canopyThickness, xOffset, zOffset, 0.0f, 0.1f, Math.round(canopyMultiplier * canopyWidth - 4), 2);
+			branchLocations.addAll(branches);
+		}
+
+		for (ChunkCoordinates branchLocation : branchLocations) {
+			int leafSpawn = branchLocation.posY;
+			int canopyThickness = Math.max(1, Math.round(leafSpawn / 10.0f));
+			float canopyMultiplier = (1.5f * height - leafSpawn + 2) / 4.0f;
+			float canopyWidth = world.rand.nextBoolean() ? 1.0f : 1.5f;
+			generateAdjustedCylinder(world, leafSpawn - canopyThickness + 1, branchLocation.posX, branchLocation.posZ, canopyMultiplier * canopyWidth, canopyThickness, leaf, EnumReplaceMode.NONE);
 		}
 	}
 
-	@Override
-	public void preGenerate() {
-		height = determineHeight(5, 2);
-		girth = determineGirth(tree.getGirth(world, startX, startY, startZ));
-	}
 }

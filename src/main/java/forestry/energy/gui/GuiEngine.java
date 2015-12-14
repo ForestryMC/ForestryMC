@@ -8,29 +8,33 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-/**
- *
- */
 package forestry.energy.gui;
 
-import forestry.core.gadgets.Engine;
-import forestry.core.gui.ContainerForestry;
+import net.minecraft.inventory.Container;
+
 import forestry.core.gui.GuiForestryTitled;
-import forestry.core.gui.Ledger;
+import forestry.core.gui.ledgers.Ledger;
 import forestry.core.render.TextureManager;
+import forestry.core.tiles.TileEngine;
 import forestry.core.utils.StringUtil;
 
-public abstract class GuiEngine extends GuiForestryTitled<Engine> {
+public abstract class GuiEngine<C extends Container, I extends TileEngine> extends GuiForestryTitled<C, I> {
+
+	protected GuiEngine(String texture, C container, I tile) {
+		super(texture, container, tile);
+	}
+
+	@Override
+	public void initGui() {
+		super.initGui();
+		ledgerManager.insert(new EngineLedger());
+	}
 
 	protected class EngineLedger extends Ledger {
 
-		private final Engine engine;
-
-		public EngineLedger(Engine engine) {
-			super(ledgerManager);
-			this.engine = engine;
+		public EngineLedger() {
+			super(ledgerManager, "power");
 			maxHeight = 94;
-			overlayColor = fontColor.get("ledger.power.background");
 		}
 
 		@Override
@@ -46,29 +50,22 @@ public abstract class GuiEngine extends GuiForestryTitled<Engine> {
 				return;
 			}
 
-			fontRendererObj.drawStringWithShadow(StringUtil.localize("gui.energy"), x + 22, y + 8, fontColor.get("ledger.power.header"));
-			fontRendererObj.drawStringWithShadow(StringUtil.localize("gui.currentOutput") + ":", x + 22, y + 20, fontColor.get("ledger.power.subheader"));
-			fontRendererObj.drawString(engine.getCurrentOutput() + " RF/t", x + 22, y + 32, fontColor.get("ledger.power.text"));
-			fontRendererObj.drawStringWithShadow(StringUtil.localize("gui.stored") + ":", x + 22, y + 44, fontColor.get("ledger.power.subheader"));
-			fontRendererObj.drawString(engine.getEnergyManager().getEnergyStored(engine.getOrientation()) + " RF", x + 22, y + 56, fontColor.get("ledger.power.text"));
-			fontRendererObj.drawStringWithShadow(StringUtil.localize("gui.heat") + ":", x + 22, y + 68, fontColor.get("ledger.power.subheader"));
-			fontRendererObj.drawString((((double) engine.getHeat() / (double) 10) + 20.0) + " C", x + 22, y + 80, fontColor.get("ledger.power.text"));
+			drawHeader(StringUtil.localize("gui.energy"), x + 22, y + 8);
 
+			drawSubheader(StringUtil.localize("gui.currentOutput") + ':', x + 22, y + 20);
+			drawText(inventory.getCurrentOutput() + " RF/t", x + 22, y + 32);
+
+			drawSubheader(StringUtil.localize("gui.stored") + ':', x + 22, y + 44);
+			drawText(inventory.getEnergyManager().getEnergyStored(inventory.getOrientation()) + " RF", x + 22, y + 56);
+
+			drawSubheader(StringUtil.localize("gui.heat") + ':', x + 22, y + 68);
+			drawText((((double) inventory.getHeat() / (double) 10) + 20.0) + " C", x + 22, y + 80);
 		}
 
 		@Override
 		public String getTooltip() {
-			return engine.getCurrentOutput() + " RF/t";
+			return inventory.getCurrentOutput() + " RF/t";
 		}
 	}
 
-	public GuiEngine(String texture, ContainerForestry container, Engine tile) {
-		super(texture, container, tile);
-	}
-
-	@Override
-	protected void initLedgers(Object inventory) {
-		super.initLedgers(inventory);
-		ledgerManager.insert(new EngineLedger(tile));
-	}
 }

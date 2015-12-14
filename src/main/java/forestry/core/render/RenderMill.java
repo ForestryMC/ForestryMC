@@ -20,17 +20,15 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
-import forestry.core.gadgets.Mill;
-import forestry.core.interfaces.IBlockRenderer;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.ForestryResource;
+import forestry.core.tiles.TileMill;
 
 public class RenderMill extends TileEntitySpecialRenderer implements IBlockRenderer {
 
 	private final ModelBase model = new ModelBase() {
 	};
 
-	private static enum Textures {PEDESTAL, EXTENSION, BLADE_1, BLADE_2, CHARGE}
+	private enum Textures {PEDESTAL, EXTENSION, BLADE_1, BLADE_2, CHARGE}
 
 	private ResourceLocation[] textures;
 
@@ -93,21 +91,20 @@ public class RenderMill extends TileEntitySpecialRenderer implements IBlockRende
 	}
 
 	@Override
-	public void inventoryRender(double x, double y, double z, float f, float f1) {
+	public void inventoryRender(double x, double y, double z) {
 		byte charge = 0;
 		render(0.0f, charge, ForgeDirection.WEST, x, y, z);
 	}
 
 	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double d, double d1, double d2, float f) {
-		Mill tile = (Mill) tileentity;
+		TileMill tile = (TileMill) tileentity;
 		render(tile.progress, tile.charge, ForgeDirection.WEST, d, d1, d2);
 	}
 
 	private void render(float progress, int charge, ForgeDirection orientation, double x, double y, double z) {
 
 		GL11.glPushMatrix();
-		GL11.glDisable(2896 /* GL_LIGHTING */);
 
 		GL11.glTranslatef((float) x, (float) y, (float) z);
 
@@ -176,27 +173,26 @@ public class RenderMill extends TileEntitySpecialRenderer implements IBlockRende
 
 		float factor = (float) (1.0 / 16.0);
 
-		Proxies.common.bindTexture(textures[Textures.PEDESTAL.ordinal()]);
+		Proxies.render.bindTexture(textures[Textures.PEDESTAL.ordinal()]);
 		pedestal.render(factor);
 
-		Proxies.common.bindTexture(textures[Textures.CHARGE.ordinal() + charge]);
+		Proxies.render.bindTexture(textures[Textures.CHARGE.ordinal() + charge]);
 		column.render(factor);
 
-		Proxies.common.bindTexture(textures[Textures.EXTENSION.ordinal()]);
+		Proxies.render.bindTexture(textures[Textures.EXTENSION.ordinal()]);
 		extension.render(factor);
 
-		Proxies.common.bindTexture(textures[Textures.BLADE_1.ordinal()]);
+		Proxies.render.bindTexture(textures[Textures.BLADE_1.ordinal()]);
 		GL11.glTranslatef(translate[0] * tfactor, translate[1] * tfactor, translate[2] * tfactor);
 		blade1.render(factor);
 
 		// Reset
 		GL11.glTranslatef(-translate[0] * tfactor, -translate[1] * tfactor, -translate[2] * tfactor);
 
-		Proxies.common.bindTexture(textures[Textures.BLADE_2.ordinal()]);
+		Proxies.render.bindTexture(textures[Textures.BLADE_2.ordinal()]);
 		GL11.glTranslatef(-translate[0] * tfactor, translate[1] * tfactor, -translate[2] * tfactor);
 		blade2.render(factor);
 
-		GL11.glEnable(2896 /* GL_LIGHTING */);
 		GL11.glPopMatrix();
 
 	}

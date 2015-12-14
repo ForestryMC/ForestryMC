@@ -10,32 +10,38 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
+import java.util.List;
+
+import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.world.World;
+
 import forestry.api.world.ITreeGenData;
 
 public class WorldGenCherry extends WorldGenTree {
 
 	public WorldGenCherry(ITreeGenData tree) {
-		super(tree);
+		super(tree, 4, 4);
 	}
 
 	@Override
-	public void generate() {
-		generateTreeTrunk(height, girth);
+	public void generate(World world) {
+		generateTreeTrunk(world, height, girth);
 
 		int leafSpawn = height + 1;
+		generateAdjustedCylinder(world, leafSpawn--, 0, 1, leaf);
+		generateAdjustedCylinder(world, leafSpawn--, 1, 1, leaf);
 
-		generateAdjustedCylinder(leafSpawn--, 0, 1, leaf);
-		generateAdjustedCylinder(leafSpawn--, 1, 1, leaf);
+		int branchWidth = height / 2;
 		while (leafSpawn > 2) {
-			generateAdjustedCylinder(leafSpawn--, 2, 1, leaf);
-			generateAdjustedCylinder(leafSpawn--, 1, 1, leaf);
+			int leafRadius = Math.min(4, branchWidth);
+			List<ChunkCoordinates> branchCoords = generateBranches(world, leafSpawn, 0, 0, 0.2f, 0.5f, branchWidth, 1);
+			for (ChunkCoordinates branchEnd : branchCoords) {
+				generateAdjustedCircle(world, branchEnd.posY, branchEnd.posX, branchEnd.posZ, leafRadius, 3, 2, leaf, 1.0f, EnumReplaceMode.NONE);
+			}
+			leafSpawn -= 2;
+			branchWidth++;
 		}
 
 	}
 
-	@Override
-	public void preGenerate() {
-		height = determineHeight(4, 4);
-		girth = determineGirth(tree.getGirth(world, startX, startY, startZ));
-	}
 }

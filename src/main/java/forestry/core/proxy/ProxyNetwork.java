@@ -12,36 +12,42 @@ package forestry.core.proxy;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.server.management.PlayerManager;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 
-import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.util.FakePlayer;
 
 import forestry.Forestry;
-import forestry.core.config.Defaults;
-import forestry.core.network.ForestryPacket;
+import forestry.core.network.IForestryPacketClient;
+import forestry.core.network.IForestryPacketServer;
+import forestry.core.network.ILocatedPacket;
 
 public class ProxyNetwork {
 
-	public void sendNetworkPacket(ForestryPacket packet, int x, int y, int z) {
-		if (packet == null) {
+	public <P extends IForestryPacketClient & ILocatedPacket> void sendNetworkPacket(P packet, World world) {
+		if (packet == null || !(world instanceof WorldServer)) {
 			return;
 		}
 
-		World[] worlds = DimensionManager.getWorlds();
-		for (World world : worlds) {
-			for (int j = 0; j < world.playerEntities.size(); j++) {
-				EntityPlayerMP player = (EntityPlayerMP) world.playerEntities.get(j);
+		WorldServer worldServer = (WorldServer) world;
+		PlayerManager playerManager = worldServer.getPlayerManager();
 
-				if (Math.abs(player.posX - x) <= Defaults.NET_MAX_UPDATE_DISTANCE && Math.abs(player.posY - y) <= Defaults.NET_MAX_UPDATE_DISTANCE
-						&& Math.abs(player.posZ - z) <= Defaults.NET_MAX_UPDATE_DISTANCE) {
-					Forestry.packetHandler.sendPacket(packet.getPacket(), player);
+		int chunkX = packet.getPosX() >> 4;
+		int chunkZ = packet.getPosZ() >> 4;
+
+		for (Object playerObj : world.playerEntities) {
+			if (playerObj instanceof EntityPlayerMP) {
+				EntityPlayerMP player = (EntityPlayerMP) playerObj;
+
+				if (playerManager.isPlayerWatchingChunk(player, chunkX, chunkZ)) {
+					sendToPlayer(packet, player);
 				}
 			}
 		}
 	}
 
-	public void sendToPlayer(ForestryPacket packet, EntityPlayer entityplayer) {
+	public void sendToPlayer(IForestryPacketClient packet, EntityPlayer entityplayer) {
 		if (!(entityplayer instanceof EntityPlayerMP) || (entityplayer instanceof FakePlayer)) {
 			return;
 		}
@@ -50,7 +56,7 @@ public class ProxyNetwork {
 		Forestry.packetHandler.sendPacket(packet.getPacket(), player);
 	}
 
-	public void sendToServer(ForestryPacket packet) {
+	public void sendToServer(IForestryPacketServer packet) {
 	}
 
 	public void inventoryChangeNotify(EntityPlayer player) {

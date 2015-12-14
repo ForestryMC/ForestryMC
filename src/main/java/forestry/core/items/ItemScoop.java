@@ -10,26 +10,15 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import net.minecraft.block.Block;
-
 import forestry.api.core.IToolScoop;
 import forestry.api.core.Tabs;
-import forestry.core.config.ForestryBlock;
 
 public class ItemScoop extends ItemForestryTool implements IToolScoop {
-
 	public ItemScoop() {
-		super(new Block[]{ForestryBlock.beehives.block()}, null);
-		this.maxStackSize = 1;
-		efficiencyOnProperMaterial = 4.0F;
+		super(null);
+		setEfficiencyOnProperMaterial(4.0f);
 		setMaxDamage(10);
 		setCreativeTab(Tabs.tabApiculture);
 		setMaxStackSize(1);
 	}
-
-	@Override
-	public boolean isFull3D() {
-		return true;
-	}
-
 }

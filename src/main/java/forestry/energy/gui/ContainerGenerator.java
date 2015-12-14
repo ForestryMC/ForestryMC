@@ -11,32 +11,35 @@
 package forestry.energy.gui;
 
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.ICrafting;
 
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotFiltered;
-import forestry.energy.gadgets.MachineGenerator;
+import forestry.energy.inventory.InventoryGenerator;
+import forestry.energy.tiles.TileGenerator;
 
-public class ContainerGenerator extends ContainerLiquidTanks {
+public class ContainerGenerator extends ContainerLiquidTanks<TileGenerator> {
 
-	protected final MachineGenerator tile;
+	public ContainerGenerator(InventoryPlayer player, TileGenerator tile) {
+		super(tile, player, 8, 84);
 
-	public ContainerGenerator(InventoryPlayer player, MachineGenerator tile) {
-		super(tile);
-
-		this.tile = tile;
-
-		this.addSlotToContainer(new SlotFiltered(tile, MachineGenerator.SLOT_CAN, 22, 38));
-
-		for (int i = 0; i < 3; ++i) {
-			for (int var4 = 0; var4 < 9; ++var4) {
-				this.addSlotToContainer(new Slot(player, var4 + i * 9 + 9, 8 + var4 * 18, 84 + i * 18));
-			}
-		}
-
-		for (int i = 0; i < 9; ++i) {
-			this.addSlotToContainer(new Slot(player, i, 8 + i * 18, 142));
-		}
+		this.addSlotToContainer(new SlotFiltered(tile, InventoryGenerator.SLOT_CAN, 22, 38));
 	}
 
+	@Override
+	public void updateProgressBar(int messageId, int data) {
+		super.updateProgressBar(messageId, data);
+
+		tile.getGUINetworkData(messageId, data);
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public void detectAndSendChanges() {
+		super.detectAndSendChanges();
+
+		for (Object crafter : crafters) {
+			tile.sendGUINetworkData(this, (ICrafting) crafter);
+		}
+	}
 }

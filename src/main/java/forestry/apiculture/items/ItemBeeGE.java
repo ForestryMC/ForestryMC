@@ -17,13 +17,13 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
+import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IAlleleBeeSpecies;
@@ -32,22 +32,18 @@ import forestry.api.core.Tabs;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
-import forestry.api.genetics.IIndividual;
-import forestry.apiculture.genetics.Bee;
 import forestry.apiculture.genetics.BeeGenome;
 import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
 import forestry.core.utils.StringUtil;
-import forestry.plugins.PluginApiculture;
 
 public class ItemBeeGE extends ItemGE {
 
 	private final EnumBeeType type;
 
 	public ItemBeeGE(EnumBeeType type) {
-		super();
+		super(Tabs.tabApiculture);
 		this.type = type;
-		setCreativeTab(Tabs.tabApiculture);
 		if (type != EnumBeeType.DRONE) {
 			setMaxStackSize(1);
 		}
@@ -55,7 +51,7 @@ public class ItemBeeGE extends ItemGE {
 
 	@Override
 	public IBee getIndividual(ItemStack itemstack) {
-		return new Bee(itemstack.getTagCompound());
+		return BeeManager.beeRoot.getMember(itemstack);
 	}
 
 	@Override
@@ -80,7 +76,7 @@ public class ItemBeeGE extends ItemGE {
 			return super.getItemStackDisplayName(itemstack);
 		}
 
-		IBee individual = new Bee(itemstack.getTagCompound());
+		IBee individual = BeeManager.beeRoot.getMember(itemstack);
 		String customBeeKey = "bees.custom." + type.getName() + "." + individual.getGenome().getPrimary().getUnlocalizedName().replace("bees.species.", "");
 		if (StringUtil.canTranslate(customBeeKey)) {
 			return StringUtil.localize(customBeeKey);
@@ -99,7 +95,7 @@ public class ItemBeeGE extends ItemGE {
 		}
 
 		if (type != EnumBeeType.DRONE) {
-			IBee individual = new Bee(itemstack.getTagCompound());
+			IBee individual = BeeManager.beeRoot.getMember(itemstack);
 			if (individual.isNatural()) {
 				list.add(EnumChatFormatting.YELLOW + EnumChatFormatting.ITALIC.toString() + StringUtil.localize("bees.stock.pristine"));
 			} else {
@@ -113,27 +109,21 @@ public class ItemBeeGE extends ItemGE {
 	@SuppressWarnings("rawtypes")
 	@Override
 	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List itemList) {
-		if (type == EnumBeeType.QUEEN) {
-			return;
-		}
-
 		addCreativeItems(itemList, true);
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	public void addCreativeItems(List itemList, boolean hideSecrets) {
-
-		for (IIndividual individual : PluginApiculture.beeInterface.getIndividualTemplates()) {
+		for (IBee bee : BeeManager.beeRoot.getIndividualTemplates()) {
 			// Don't show secret bees unless ordered to.
-			if (hideSecrets && individual.isSecret() && !Config.isDebug) {
+			if (hideSecrets && bee.isSecret() && !Config.isDebug) {
 				continue;
 			}
 
-			NBTTagCompound nbttagcompound = new NBTTagCompound();
-			ItemStack someStack = new ItemStack(this);
-			individual.writeToNBT(nbttagcompound);
-			someStack.setTagCompound(nbttagcompound);
-			itemList.add(someStack);
+			ItemStack beeStack = BeeManager.beeRoot.getMemberStack(bee, type.ordinal());
+			if (beeStack != null) {
+				itemList.add(beeStack);
+			}
 		}
 	}
 
@@ -150,7 +140,7 @@ public class ItemBeeGE extends ItemGE {
 	@Override
 	public int getColourFromSpecies(IAlleleSpecies species, int renderPass) {
 
-		if (species != null && species instanceof IAlleleBeeSpecies) {
+		if (species instanceof IAlleleBeeSpecies) {
 			return species.getIconColour(renderPass);
 		} else {
 			return 0xffffff;
@@ -179,16 +169,22 @@ public class ItemBeeGE extends ItemGE {
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
 	@Override
+	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(ItemStack itemstack, int renderPass) {
 		return getIconFromSpecies(BeeGenome.getSpecies(itemstack), renderPass);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public IIcon getIconIndex(ItemStack stack) {
+		return getIcon(stack, 0);
 	}
 
 	@SideOnly(Side.CLIENT)
 	public IIcon getIconFromSpecies(IAlleleBeeSpecies species, int renderPass) {
 		if (species == null) {
-			species = (IAlleleBeeSpecies) PluginApiculture.beeInterface.getDefaultTemplate()[EnumBeeChromosome.SPECIES.ordinal()];
+			species = (IAlleleBeeSpecies) BeeManager.beeRoot.getDefaultTemplate()[EnumBeeChromosome.SPECIES.ordinal()];
 		}
 
 		return species.getIcon(type, renderPass);

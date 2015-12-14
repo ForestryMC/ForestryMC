@@ -13,47 +13,47 @@ package forestry.farming.logic;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
-import forestry.core.config.Defaults;
-import forestry.core.utils.StackUtils;
-import forestry.core.vect.Vect;
+import forestry.core.config.Constants;
+import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.vect.Vect;
 
 public class FarmableStacked implements IFarmable {
 
 	private final Block block;
 	private final int matureHeight;
+	private final int matureMeta;
 
-	public FarmableStacked(Block block, int matureHeight) {
+	public FarmableStacked(Block block, int matureHeight, int matureMeta) {
 		this.block = block;
 		this.matureHeight = matureHeight;
+		this.matureMeta = matureMeta;
 	}
 
 	@Override
-	public boolean isSaplingAt(World world, BlockPos pos) {
-		return world.getBlockState(pos).getBlock() == block;
+	public boolean isSaplingAt(World world, int x, int y, int z) {
+		return world.getBlock(x, y, z) == block;
 	}
 
 	@Override
-	public ICrop getCropAt(World world, BlockPos pos) {
-		if (world.getBlockState(pos.up(matureHeight - 1)) != block) {
+	public ICrop getCropAt(World world, int x, int y, int z) {
+		if (world.getBlock(x, y + (matureHeight - 1), z) != block) {
 			return null;
 		}
-
-		return new CropBlock(world, block, 0, new Vect(pos.up(matureHeight - 1)));
+		return new CropBlock(world, block, matureMeta, new Vect(x, y + (matureHeight - 1), z));
 	}
 
 	@Override
 	public boolean isGermling(ItemStack itemstack) {
-		return StackUtils.equals(block, itemstack);
+		return ItemStackUtil.equals(block, itemstack);
 	}
 
 	@Override
-	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
-		return world.setBlockState(pos, block.getDefaultState(), Defaults.FLAG_BLOCK_SYNCH);
+	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, int x, int y, int z) {
+		return world.setBlock(x, y, z, block, 0, Constants.FLAG_BLOCK_SYNCH);
 	}
 
 	@Override

@@ -13,14 +13,13 @@ package forestry.farming.logic;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
-import forestry.core.config.Defaults;
-import forestry.core.utils.StackUtils;
-import forestry.core.vect.Vect;
+import forestry.core.config.Constants;
+import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.vect.Vect;
 
 public class FarmableBasicFruit implements IFarmable {
 
@@ -33,29 +32,29 @@ public class FarmableBasicFruit implements IFarmable {
 	}
 
 	@Override
-	public boolean isSaplingAt(World world, BlockPos pos) {
-		return world.getBlockState(pos).getBlock() == block;
+	public boolean isSaplingAt(World world, int x, int y, int z) {
+		return world.getBlock(x, y, z) == block;
 	}
 
 	@Override
-	public ICrop getCropAt(World world, BlockPos pos) {
-		if (world.getBlockState(pos).getBlock() != block) {
+	public ICrop getCropAt(World world, int x, int y, int z) {
+		if (world.getBlock(x, y, z) != block) {
 			return null;
 		}
-		if (world.getBlockMetadata(x, y, z) != matureMeta) { //TODO Revisit in BlockState pass
+		if (world.getBlockMetadata(x, y, z) != matureMeta) {
 			return null;
 		}
-		return new CropBasicFruit(world, block, matureMeta, new Vect(pos));
+		return new CropBasicFruit(world, block, matureMeta, new Vect(x, y, z));
 	}
 
 	@Override
 	public boolean isGermling(ItemStack itemstack) {
-		return StackUtils.equals(block, itemstack);
+		return ItemStackUtil.equals(block, itemstack);
 	}
 
 	@Override
-	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
-		return world.setBlockState(pos, block.getDefaultState(), Defaults.FLAG_BLOCK_SYNCH);
+	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, int x, int y, int z) {
+		return world.setBlock(x, y, z, block, 0, Constants.FLAG_BLOCK_SYNCH);
 	}
 
 	@Override

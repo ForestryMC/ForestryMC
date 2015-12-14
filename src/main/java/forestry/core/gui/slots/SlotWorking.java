@@ -18,7 +18,7 @@ public class SlotWorking extends SlotForestry {
 
 	public SlotWorking(IInventory iinventory, int i, int j, int k) {
 		super(iinventory, i, j, k);
-		setCanShift(false);
+		blockShift();
 	}
 
 	@Override

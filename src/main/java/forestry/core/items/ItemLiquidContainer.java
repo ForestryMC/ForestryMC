@@ -23,7 +23,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumAction;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
@@ -34,8 +33,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidBlock;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.core.CreativeTabForestry;
 import forestry.core.fluids.BlockForestryFluid;
@@ -43,13 +43,8 @@ import forestry.core.fluids.FluidHelper;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 
-public class ItemLiquidContainer extends Item {
-
-	public static enum EnumContainerType {
-		GLASS, JAR, CAN, CAPSULE, REFRACTORY, BUCKET
-	}
-
-	private static final Map<Block, ItemLiquidContainer> buckets = new HashMap<Block, ItemLiquidContainer>();
+public class ItemLiquidContainer extends ItemForestry {
+	private static final Map<Block, ItemLiquidContainer> buckets = new HashMap<>();
 
 	private boolean isDrink = false;
 	private boolean isAlwaysEdible = false;
@@ -62,10 +57,10 @@ public class ItemLiquidContainer extends Item {
 	private final Color color;
 
 	public ItemLiquidContainer(EnumContainerType type, Block contents, Color color) {
+		super(CreativeTabForestry.tabForestry);
 		this.type = type;
 		this.contents = contents;
 		this.color = color;
-		setCreativeTab(CreativeTabForestry.tabForestry);
 		if (type == EnumContainerType.BUCKET) {
 			setContainerItem(Items.bucket);
 			this.maxStackSize = 1;
@@ -77,7 +72,7 @@ public class ItemLiquidContainer extends Item {
 		return buckets.get(contents);
 	}
 
-	private int getMatchingSlot(EntityPlayer player, ItemStack stack) {
+	private static int getMatchingSlot(EntityPlayer player, ItemStack stack) {
 
 		for (int slot = 0; slot < player.inventory.mainInventory.length; slot++) {
 			ItemStack slotStack = player.inventory.getStackInSlot(slot);
@@ -106,7 +101,7 @@ public class ItemLiquidContainer extends Item {
 		}
 
 		itemstack.stackSize--;
-		entityplayer.getFoodStats().addStats(this.getHealAmount(), this.getSaturationModifier());
+		entityplayer.getFoodStats().addStats(healAmount, saturationModifier);
 		world.playSoundAtEntity(entityplayer, "random.burp", 0.5F, world.rand.nextFloat() * 0.1F + 0.9F);
 		/*
 		 * if (!world.isRemote && potionId > 0 && world.rand.nextFloat() < potionEffectProbability) entityplayer.addPotionEffect(new PotionEffect(potionId,
@@ -137,7 +132,7 @@ public class ItemLiquidContainer extends Item {
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
 
-		if (!Proxies.common.isSimulating(world)) {
+		if (world.isRemote) {
 			return itemstack;
 		}
 
@@ -298,15 +293,6 @@ public class ItemLiquidContainer extends Item {
 		}
 	}
 
-
-	public int getHealAmount() {
-		return healAmount;
-	}
-
-	public float getSaturationModifier() {
-		return saturationModifier;
-	}
-
 	public ItemLiquidContainer setDrink(int healAmount, float saturationModifier) {
 		isDrink = true;
 		this.healAmount = healAmount;
@@ -331,8 +317,8 @@ public class ItemLiquidContainer extends Item {
 	@Override
 	public void registerIcons(IIconRegister register) {
 		icons = new IIcon[2];
-		icons[0] = TextureManager.getInstance().registerTex(register, "liquids/" + type.toString().toLowerCase(Locale.ENGLISH) + ".bottle");
-		icons[1] = TextureManager.getInstance().registerTex(register, "liquids/" + type.toString().toLowerCase(Locale.ENGLISH) + ".contents");
+		icons[0] = TextureManager.getSprite(register, "liquids/" + type.toString().toLowerCase(Locale.ENGLISH) + ".bottle");
+		icons[1] = TextureManager.getSprite(register, "liquids/" + type.toString().toLowerCase(Locale.ENGLISH) + ".contents");
 	}
 
 	@SideOnly(Side.CLIENT)

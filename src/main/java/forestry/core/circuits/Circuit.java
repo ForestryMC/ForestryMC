@@ -22,7 +22,7 @@ public abstract class Circuit implements ICircuit {
 	private final boolean requiresDiscovery;
 	private int limit = 1;
 
-	public Circuit(String uid, boolean requiresDiscovery) {
+	protected Circuit(String uid, boolean requiresDiscovery) {
 		this.uid = uid;
 		this.requiresDiscovery = requiresDiscovery;
 
@@ -70,7 +70,6 @@ public abstract class Circuit implements ICircuit {
 	}
 
 	public static ICircuit energyElectricChoke1;
-	public static ICircuit energyFireDampener1;
 	public static ICircuit energyElectricEfficiency1;
 	public static ICircuit energyElectricBoost1;
 	public static ICircuit energyElectricBoost2;
@@ -98,4 +97,8 @@ public abstract class Circuit implements ICircuit {
 	public static ICircuit farmOrchardManual;
 	public static ICircuit farmRubberManual;
 	public static ICircuit farmEnderManaged;
+
+	public static ICircuit machineSpeedUpgrade1;
+	public static ICircuit machineSpeedUpgrade2;
+	public static ICircuit machineEfficiencyUpgrade1;
 }

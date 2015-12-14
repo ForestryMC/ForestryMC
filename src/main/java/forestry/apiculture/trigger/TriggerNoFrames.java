@@ -14,7 +14,8 @@ import net.minecraft.tileentity.TileEntity;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
-import forestry.apiculture.gadgets.TileApiary;
+import forestry.apiculture.inventory.InventoryApiary;
+import forestry.apiculture.tiles.TileApiary;
 import forestry.core.triggers.Trigger;
 
 import buildcraft.api.statements.IStatementContainer;
@@ -36,14 +37,11 @@ public class TriggerNoFrames extends Trigger {
 			return false;
 		}
 
-		for (int i = TileApiary.SLOT_FRAMES_1; i < TileApiary.SLOT_FRAMES_1 + TileApiary.SLOT_FRAMES_COUNT; i++) {
-			if (((TileApiary) tile).getStackInSlot(i) != null) {
-				return false;
-			}
-		}
+		TileApiary apiary = (TileApiary) tile;
 
-		return true;
+		InventoryApiary inventory = (InventoryApiary) apiary.getInternalInventory();
 
+		return inventory.getFrames().size() == 0;
 	}
 
 }

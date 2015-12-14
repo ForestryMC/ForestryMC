@@ -17,10 +17,10 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
-import forestry.core.vect.Vect;
-import forestry.plugins.PluginIC2;
+import forestry.core.utils.vect.Vect;
+import forestry.plugins.compat.PluginIC2;
 
 public class CropRubber extends CropBlock {
 
@@ -30,10 +30,10 @@ public class CropRubber extends CropBlock {
 
 	@Override
 	protected Collection<ItemStack> harvestBlock(Vect pos) {
-		Collection<ItemStack> harvested = new ArrayList<ItemStack>();
+		Collection<ItemStack> harvested = new ArrayList<>();
 		harvested.add(PluginIC2.resin.copy());
 		Proxies.common.addBlockDestroyEffects(world, pos.x, pos.y, pos.z, block, 0);
-		world.setBlock(pos.x, pos.y, pos.z, block, meta + 6, Defaults.FLAG_BLOCK_SYNCH);
+		world.setBlock(pos.x, pos.y, pos.z, block, meta + 6, Constants.FLAG_BLOCK_SYNCH);
 		return harvested;
 	}
 

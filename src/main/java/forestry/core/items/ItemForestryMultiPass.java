@@ -13,8 +13,8 @@ package forestry.core.items;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
@@ -29,8 +29,8 @@ public class ItemForestryMultiPass extends ItemForestry {
 	@Override
 	public void registerIcons(IIconRegister register) {
 		icons = new IIcon[2];
-		icons[0] = TextureManager.getInstance().registerTex(register, StringUtil.cleanItemName(this) + ".0");
-		icons[1] = TextureManager.getInstance().registerTex(register, StringUtil.cleanItemName(this) + ".1");
+		icons[0] = TextureManager.getSprite(register, StringUtil.cleanItemName(this) + ".0");
+		icons[1] = TextureManager.getSprite(register, StringUtil.cleanItemName(this) + ".1");
 	}
 
 	@SideOnly(Side.CLIENT)

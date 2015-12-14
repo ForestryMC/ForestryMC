@@ -11,56 +11,25 @@
 package forestry.factory.gui;
 
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.Slot;
 
-import forestry.core.gui.ContainerForestry;
+import forestry.core.gui.ContainerSocketed;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
-import forestry.factory.gadgets.MachineCentrifuge;
+import forestry.factory.tiles.TileCentrifuge;
 
-public class ContainerCentrifuge extends ContainerForestry {
+public class ContainerCentrifuge extends ContainerSocketed<TileCentrifuge> {
 
-	protected final MachineCentrifuge tile;
-
-	public ContainerCentrifuge(InventoryPlayer player, MachineCentrifuge tile) {
-		super(tile);
-
-		this.tile = tile;
+	public ContainerCentrifuge(InventoryPlayer player, TileCentrifuge tile) {
+		super(tile, player, 8, 84);
 
 		// Resource
-		this.addSlotToContainer(new SlotFiltered(tile, 0, 34, 37));
+		this.addSlotToContainer(new SlotFiltered(tile, 0, 30, 37));
 
 		// Product Inventory
 		for (int l = 0; l < 3; l++) {
 			for (int k = 0; k < 3; k++) {
 				addSlotToContainer(new SlotOutput(tile, 1 + k + l * 3, 98 + k * 18, 19 + l * 18));
 			}
-		}
-
-		// Player inventory
-		for (int i1 = 0; i1 < 3; i1++) {
-			for (int l1 = 0; l1 < 9; l1++) {
-				addSlotToContainer(new Slot(player, l1 + i1 * 9 + 9, 8 + l1 * 18, 84 + i1 * 18));
-			}
-		}
-		// Player hotbar
-		for (int j1 = 0; j1 < 9; j1++) {
-			addSlotToContainer(new Slot(player, j1, 8 + j1 * 18, 142));
-		}
-	}
-
-	@Override
-	public void updateProgressBar(int i, int j) {
-		tile.getGUINetworkData(i, j);
-	}
-
-	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
-
-		for (Object crafter : crafters) {
-			tile.sendGUINetworkData(this, (ICrafting) crafter);
 		}
 	}
 

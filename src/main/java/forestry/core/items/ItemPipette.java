@@ -19,58 +19,17 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.api.core.INBTTagable;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import forestry.api.core.IToolPipette;
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
+import forestry.core.fluids.PipetteContents;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
 
 public class ItemPipette extends ItemForestry implements IToolPipette {
-
-	class PipetteContents implements INBTTagable {
-
-		FluidStack contents;
-
-		public PipetteContents(NBTTagCompound nbttagcompound) {
-			if (nbttagcompound != null) {
-				readFromNBT(nbttagcompound);
-			}
-		}
-
-		@Override
-		public void readFromNBT(NBTTagCompound nbttagcompound) {
-			contents = FluidStack.loadFluidStackFromNBT(nbttagcompound);
-		}
-
-		@Override
-		public void writeToNBT(NBTTagCompound nbttagcompound) {
-			if (contents != null) {
-				contents.writeToNBT(nbttagcompound);
-			}
-		}
-
-		public boolean isFull(int limit) {
-			if (contents == null) {
-				return false;
-			}
-
-			return contents.fluidID > 0 && contents.amount >= limit;
-		}
-
-		public void addTooltip(List<String> list) {
-			if (contents == null) {
-				return;
-			}
-
-			String descr = contents.getFluid().getLocalizedName(contents);
-			descr += " (" + contents.amount + " mb)";
-
-			list.add(descr);
-		}
-	}
 
 	public ItemPipette() {
 		super();
@@ -89,7 +48,7 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 	@Override
 	public boolean canPipette(ItemStack itemstack) {
 		PipetteContents contained = new PipetteContents(itemstack.getTagCompound());
-		return !contained.isFull(1000);
+		return !contained.isFull();
 	}
 
 	@Override
@@ -99,27 +58,24 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 		int limit = getCapacity(itemstack);
 		int filled;
 
-		if (contained.contents == null) {
-
+		if (contained.getContents() == null) {
 			if (liquid.amount > limit) {
 				filled = limit;
 			} else {
 				filled = liquid.amount;
 			}
 
-			contained.contents = new FluidStack(liquid.fluidID, filled);
+			contained.setContents(new FluidStack(liquid, filled));
 			filled = liquid.amount;
-
 		} else {
-
-			if (contained.contents.amount >= limit) {
+			if (contained.getContents().amount >= limit) {
 				return 0;
 			}
-			if (!contained.contents.isFluidEqual(liquid)) {
+			if (!contained.getContents().isFluidEqual(liquid)) {
 				return 0;
 			}
 
-			int space = limit - contained.contents.amount;
+			int space = limit - contained.getContents().amount;
 
 			if (liquid.amount > space) {
 				filled = space;
@@ -127,7 +83,7 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 				filled = liquid.amount;
 			}
 
-			contained.contents.amount += filled;
+			contained.getContents().amount += filled;
 		}
 
 		if (doFill) {
@@ -156,8 +112,8 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerIcons(IIconRegister register) {
-		primaryIcon = TextureManager.getInstance().registerTex(register, StringUtil.cleanItemName(this) + ".0");
-		secondaryIcon = TextureManager.getInstance().registerTex(register, StringUtil.cleanItemName(this) + ".1");
+		primaryIcon = TextureManager.getSprite(register, StringUtil.cleanItemName(this) + ".0");
+		secondaryIcon = TextureManager.getSprite(register, StringUtil.cleanItemName(this) + ".1");
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -173,19 +129,19 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 	@Override
 	public FluidStack drain(ItemStack pipette, int maxDrain, boolean doDrain) {
 		PipetteContents contained = new PipetteContents(pipette.getTagCompound());
-		if (contained.contents == null || contained.contents.fluidID <= 0) {
+		if (contained.getContents() == null || contained.getContents().getFluid().getID() <= 0) {
 			return null;
 		}
 
 		int drained = maxDrain;
-		if (contained.contents.amount < drained) {
-			drained = contained.contents.amount;
+		if (contained.getContents().amount < drained) {
+			drained = contained.getContents().amount;
 		}
 
 		if (doDrain) {
-			contained.contents.amount -= drained;
+			contained.getContents().amount -= drained;
 
-			if (contained.contents.amount <= 0) {
+			if (contained.getContents().amount <= 0) {
 				pipette.setTagCompound(null);
 				pipette.setItemDamage(0);
 			} else {
@@ -195,11 +151,11 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 			}
 		}
 
-		return new FluidStack(contained.contents.fluidID, drained);
+		return new FluidStack(contained.getContents(), drained);
 	}
 
 	@Override
 	public int getCapacity(ItemStack pipette) {
-		return Defaults.BUCKET_VOLUME;
+		return Constants.BUCKET_VOLUME;
 	}
 }

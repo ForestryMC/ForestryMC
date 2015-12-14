@@ -11,14 +11,17 @@
 package forestry.core.circuits;
 
 import forestry.api.circuits.ICircuitLayout;
+import forestry.api.circuits.ICircuitSocketType;
 import forestry.core.utils.StringUtil;
 
 public class CircuitLayout implements ICircuitLayout {
 
 	private final String uid;
+	private final ICircuitSocketType socketType;
 
-	public CircuitLayout(String uid) {
+	public CircuitLayout(String uid, ICircuitSocketType socketType) {
 		this.uid = uid;
+		this.socketType = socketType;
 	}
 
 	@Override
@@ -34,5 +37,10 @@ public class CircuitLayout implements ICircuitLayout {
 	@Override
 	public String getUsage() {
 		return StringUtil.localize("circuit.layout." + this.uid + ".usage");
+	}
+
+	@Override
+	public ICircuitSocketType getSocketType() {
+		return socketType;
 	}
 }

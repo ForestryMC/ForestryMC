@@ -17,32 +17,32 @@ import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.api.core.IArmorNaturalist;
 import forestry.core.CreativeTabForestry;
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
 
 public class ItemArmorNaturalist extends ItemArmor implements IArmorNaturalist {
 
-	public ItemArmorNaturalist(int slot) {
-		super(ArmorMaterial.CLOTH, 0, slot);
+	public ItemArmorNaturalist() {
+		super(ArmorMaterial.CLOTH, 0, 0);
 		this.setMaxDamage(100);
 		setCreativeTab(CreativeTabForestry.tabForestry);
 	}
 
 	@Override
 	public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {
-		return Defaults.ID + ":" + Defaults.TEXTURE_NATURALIST_ARMOR_PRIMARY;
+		return Constants.ID + ":" + Constants.TEXTURE_NATURALIST_ARMOR_PRIMARY;
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerIcons(IIconRegister register) {
-		itemIcon = TextureManager.getInstance().registerTex(register, StringUtil.cleanItemName(this));
+		itemIcon = TextureManager.getSprite(register, StringUtil.cleanItemName(this));
 	}
 
 	@SideOnly(Side.CLIENT)

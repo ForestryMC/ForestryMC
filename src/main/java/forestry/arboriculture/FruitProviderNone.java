@@ -17,8 +17,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.ITreeGenome;
@@ -37,7 +37,7 @@ public class FruitProviderNone implements IFruitProvider {
 		}
 	}
 
-	private static HashMap<String, OverlayType> overlayTypes = new HashMap<String, OverlayType>();
+	private static final HashMap<String, OverlayType> overlayTypes = new HashMap<>();
 
 	static {
 		overlayTypes.put("berries", new OverlayType("berries", (short) 1000));
@@ -50,9 +50,9 @@ public class FruitProviderNone implements IFruitProvider {
 	private final String key;
 	private final IFruitFamily family;
 
-	int ripeningPeriod = 10;
+	protected int ripeningPeriod = 10;
 
-	OverlayType overlay = null;
+	private OverlayType overlay = null;
 
 	public FruitProviderNone(String key, IFruitFamily family) {
 		this.key = key;
@@ -127,7 +127,7 @@ public class FruitProviderNone implements IFruitProvider {
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister register) {
 		if (overlay != null) {
-			TextureManager.getInstance().registerTexUID(register, overlay.texUID, "leaves/fruits." + overlay.ident);
+			TextureManager.registerTexUID(register, overlay.texUID, "leaves/fruits." + overlay.ident);
 		}
 	}
 }

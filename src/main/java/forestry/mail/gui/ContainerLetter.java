@@ -13,8 +13,6 @@ package forestry.mail.gui;
 import java.util.Iterator;
 import java.util.UUID;
 
-import org.apache.commons.lang3.StringUtils;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
@@ -30,31 +28,20 @@ import forestry.api.mail.PostManager;
 import forestry.api.mail.TradeStationInfo;
 import forestry.core.gui.ContainerItemInventory;
 import forestry.core.gui.slots.SlotFiltered;
-import forestry.core.network.PacketIds;
-import forestry.core.network.PacketPayload;
-import forestry.core.network.PacketUpdate;
+import forestry.core.network.packets.PacketString;
 import forestry.core.proxy.Proxies;
 import forestry.mail.Letter;
-import forestry.mail.items.ItemLetter;
-import forestry.mail.items.ItemLetter.LetterInventory;
-import forestry.mail.network.PacketLetterInfo;
+import forestry.mail.inventory.ItemInventoryLetter;
+import forestry.mail.network.packets.PacketLetterInfoResponse;
+import forestry.mail.network.packets.PacketLetterTextSet;
 
-public class ContainerLetter extends ContainerItemInventory {
+public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter> implements ILetterInfoReceiver {
 
-	private final LetterInventory letterInventory;
 	private EnumAddressee carrierType = EnumAddressee.PLAYER;
 	private TradeStationInfo tradeInfo = null;
 
-	public ContainerLetter(EntityPlayer player, LetterInventory inventory) {
-		super(inventory, player);
-
-		letterInventory = inventory;
-
-		// Rip open delivered mails
-		if (Proxies.common.isSimulating(player.worldObj) && letterInventory.getLetter().isProcessed() && inventory.parent != null
-				&& ItemLetter.getState(inventory.parent.getItemDamage()) < 2) {
-			inventory.parent.setItemDamage(ItemLetter.encodeMeta(2, ItemLetter.getSize(inventory.parent.getItemDamage())));
-		}
+	public ContainerLetter(EntityPlayer player, ItemInventoryLetter inventory) {
+		super(inventory, player.inventory, 17, 145);
 
 		// Init slots
 
@@ -70,23 +57,19 @@ public class ContainerLetter extends ContainerItemInventory {
 			}
 		}
 
-		// Player inventory
-		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < 9; j++) {
-				addSecuredSlot(player.inventory, j + i * 9 + 9, 17 + j * 18, 145 + i * 18);
+		// Rip open delivered mails
+		if (!player.worldObj.isRemote) {
+			if (inventory.getLetter().isProcessed()) {
+				inventory.onLetterOpened();
 			}
-		}
-		// Player hotbar
-		for (int i = 0; i < 9; i++) {
-			addSecuredSlot(player.inventory, i, 17 + i * 18, 203);
 		}
 
 		// Set recipient type
-		if (letterInventory.getLetter() != null) {
-			if (letterInventory.getLetter().getRecipients() != null) {
-				if (letterInventory.getLetter().getRecipients().length > 0) {
-					this.carrierType = letterInventory.getLetter().getRecipients()[0].getType();
-				}
+		ILetter letter = inventory.getLetter();
+		if (letter != null) {
+			IMailAddress[] recipients = letter.getRecipients();
+			if (recipients != null && recipients.length > 0) {
+				this.carrierType = recipients[0].getType();
 			}
 		}
 	}
@@ -94,19 +77,21 @@ public class ContainerLetter extends ContainerItemInventory {
 	@Override
 	public void onContainerClosed(EntityPlayer entityplayer) {
 
-		if (Proxies.common.isSimulating(entityplayer.worldObj)) {
-			ILetter letter = letterInventory.getLetter();
+		if (!entityplayer.worldObj.isRemote) {
+			ILetter letter = inventory.getLetter();
 			if (!letter.isProcessed()) {
 				IMailAddress sender = PostManager.postRegistry.getMailAddress(entityplayer.getGameProfile());
 				letter.setSender(sender);
 			}
 		}
 
+		inventory.onLetterClosed();
+
 		super.onContainerClosed(entityplayer);
 	}
 
 	public ILetter getLetter() {
-		return letterInventory.getLetter();
+		return inventory.getLetter();
 	}
 
 	public void setCarrierType(EnumAddressee type) {
@@ -135,37 +120,8 @@ public class ContainerLetter extends ContainerItemInventory {
 		setCarrierType(postal.getType());
 	}
 
-	public void setRecipient(String recipientName, EnumAddressee type) {
-		if (StringUtils.isBlank(recipientName) || type == null) {
-			return;
-		}
-
-		// / Send to server
-		PacketPayload payload = new PacketPayload(0, 0, 2);
-		payload.stringPayload[0] = recipientName;
-		payload.stringPayload[1] = type.toString();
-
-		PacketUpdate packet = new PacketUpdate(PacketIds.LETTER_RECIPIENT, payload);
-		Proxies.net.sendToServer(packet);
-	}
-
-	public void handleSetRecipient(EntityPlayer player, PacketUpdate packet) {
-		String recipientName = packet.payload.stringPayload[0];
-		String typeName = packet.payload.stringPayload[1];
-
-		EnumAddressee type = EnumAddressee.fromString(typeName);
-		IMailAddress recipient;
-		if (type == EnumAddressee.PLAYER) {
-			GameProfile gameProfile = MinecraftServer.getServer().func_152358_ax().func_152655_a(recipientName);
-			if (gameProfile == null) {
-				gameProfile = new GameProfile(new UUID(0, 0), recipientName);
-			}
-			recipient = PostManager.postRegistry.getMailAddress(gameProfile);
-		} else if (type == EnumAddressee.TRADER) {
-			recipient = PostManager.postRegistry.getMailAddress(recipientName);
-		} else {
-			return;
-		}
+	public void handleRequestLetterInfo(EntityPlayer player, String recipientName, EnumAddressee type) {
+		IMailAddress recipient = getRecipient(recipientName, type);
 
 		getLetter().setRecipient(recipient);
 		
@@ -175,7 +131,24 @@ public class ContainerLetter extends ContainerItemInventory {
 		}
 		
 		// Update info on client
-		Proxies.net.sendToPlayer(new PacketLetterInfo(PacketIds.LETTER_INFO, type, tradeInfo, recipient), player);
+		Proxies.net.sendToPlayer(new PacketLetterInfoResponse(type, tradeInfo, recipient), player);
+	}
+
+	private static IMailAddress getRecipient(String recipientName, EnumAddressee type) {
+		switch (type) {
+			case PLAYER: {
+				GameProfile gameProfile = MinecraftServer.getServer().func_152358_ax().func_152655_a(recipientName);
+				if (gameProfile == null) {
+					gameProfile = new GameProfile(new UUID(0, 0), recipientName);
+				}
+				return PostManager.postRegistry.getMailAddress(gameProfile);
+			}
+			case TRADER: {
+				return PostManager.postRegistry.getMailAddress(recipientName);
+			}
+			default:
+				return null;
+		}
 	}
 
 	public IMailAddress getRecipient() {
@@ -193,23 +166,18 @@ public class ContainerLetter extends ContainerItemInventory {
 	public void setText(String text) {
 		getLetter().setText(text);
 
-		// / Send to server
-		PacketPayload payload = new PacketPayload(0, 0, 1);
-		payload.stringPayload[0] = text;
-
-		PacketUpdate packet = new PacketUpdate(PacketIds.LETTER_TEXT, payload);
-		Proxies.net.sendToServer(packet);
-
+		Proxies.net.sendToServer(new PacketLetterTextSet(text));
 	}
 
-	public void handleSetText(PacketUpdate packet) {
-		getLetter().setText(packet.payload.stringPayload[0]);
+	public void handleSetText(PacketString packet) {
+		String text = packet.getString();
+		getLetter().setText(text);
 	}
 
 	/* Managing Trade info */
-	public void updateTradeInfo(World world, IMailAddress address) {
+	private void updateTradeInfo(World world, IMailAddress address) {
 		// Updating is done by the server.
-		if (!Proxies.common.isSimulating(world)) {
+		if (world.isRemote) {
 			return;
 		}
 
@@ -227,7 +195,8 @@ public class ContainerLetter extends ContainerItemInventory {
 		setTradeInfo(station.getTradeInfo());
 	}
 
-	public void handleLetterInfoUpdate(PacketLetterInfo packet) {
+	@Override
+	public void handleLetterInfoUpdate(PacketLetterInfoResponse packet) {
 		carrierType = packet.type;
 		if (packet.type == EnumAddressee.PLAYER) {
 			getLetter().setRecipient(packet.address);

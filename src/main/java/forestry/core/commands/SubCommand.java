@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.commands;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -29,17 +30,17 @@ public abstract class SubCommand implements IForestryCommand {
 		EVERYONE(0), ADMIN(2);
 		public final int permLevel;
 
-		private PermLevel(int permLevel) {
+		PermLevel(int permLevel) {
 			this.permLevel = permLevel;
 		}
 
 	}
 
 	private final String name;
-	private final List<String> aliases = new ArrayList<String>();
+	private final List<String> aliases = new ArrayList<>();
 	private PermLevel permLevel = PermLevel.EVERYONE;
 	private IForestryCommand parent;
-	private final SortedSet<SubCommand> children = new TreeSet<SubCommand>(new Comparator<SubCommand>() {
+	private final SortedSet<SubCommand> children = new TreeSet<>(new Comparator<SubCommand>() {
 
 		@Override
 		public int compare(SubCommand o1, SubCommand o2) {
@@ -136,7 +137,7 @@ public abstract class SubCommand implements IForestryCommand {
 	}
 
 	@Override
-	public int compareTo(Object command) {
+	public int compareTo(@Nonnull Object command) {
 		return this.compareTo((ICommand) command);
 	}
 

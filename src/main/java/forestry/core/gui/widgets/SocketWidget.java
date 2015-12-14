@@ -10,18 +10,18 @@
  ******************************************************************************/
 package forestry.core.gui.widgets;
 
-import java.util.List;
-
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
 
+import forestry.core.circuits.ISocketable;
 import forestry.core.circuits.ISolderingIron;
 import forestry.core.circuits.ItemCircuitBoard;
-import forestry.core.gui.ContainerSocketed;
 import forestry.core.gui.GuiForestry;
-import forestry.core.gui.WidgetManager;
+import forestry.core.gui.IContainerSocketed;
 import forestry.core.gui.tooltips.ToolTip;
-import forestry.core.interfaces.ISocketable;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
 
@@ -40,26 +40,25 @@ public class SocketWidget extends Widget {
 	public void draw(int startX, int startY) {
 		ItemStack socketStack = tile.getSocket(slot);
 		if (socketStack != null) {
-			GuiForestry.getItemRenderer().renderItemIntoGUI(manager.minecraft.fontRenderer, manager.minecraft.renderEngine, socketStack, startX + xPos, startY
-					+ yPos);
+			GuiForestry.getItemRenderer().renderItemIntoGUI(manager.minecraft.fontRenderer, manager.minecraft.renderEngine, socketStack, startX + xPos, startY + yPos);
 		}
 	}
 
 	@Override
-	public ToolTip getToolTip() {
+	public ToolTip getToolTip(int mouseX, int mouseY) {
 		return toolTip;
 	}
 
-	protected final ToolTip toolTip = new ToolTip(500) {
+	private final ToolTip toolTip = new ToolTip(250) {
 		@SuppressWarnings("unchecked")
 		@Override
 		public void refresh() {
 			toolTip.clear();
 			ItemStack stack = tile.getSocket(slot);
 			if (stack != null) {
-				for (String line : (List<String>) stack.getTooltip(Proxies.common.getClientInstance().thePlayer, false)) {
-					toolTip.add(line);
-				}
+				EntityPlayer player = Proxies.common.getClientInstance().thePlayer;
+				toolTip.add(stack.getTooltip(player, false));
+				toolTip.add(EnumChatFormatting.ITALIC + StringUtil.localize("gui.socket.remove"));
 			} else {
 				toolTip.add(StringUtil.localize("gui.emptysocket"));
 			}
@@ -76,11 +75,18 @@ public class SocketWidget extends Widget {
 
 		Item held = itemstack.getItem();
 
+		Container container = manager.gui.inventorySlots;
+		if (!(container instanceof IContainerSocketed)) {
+			return;
+		}
+
+		IContainerSocketed containerSocketed = (IContainerSocketed) container;
+
 		// Insert chipsets
 		if (held instanceof ItemCircuitBoard) {
-			((ContainerSocketed) manager.gui.inventorySlots).handleChipsetClick(slot, manager.minecraft.thePlayer, itemstack);
+			containerSocketed.handleChipsetClick(slot);
 		} else if (held instanceof ISolderingIron) {
-			((ContainerSocketed) manager.gui.inventorySlots).handleSolderingIronClick(slot, manager.minecraft.thePlayer, itemstack);
+			containerSocketed.handleSolderingIronClick(slot);
 		}
 	}
 }

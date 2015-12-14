@@ -20,16 +20,16 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import forestry.api.arboriculture.ITreeGenome;
+import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.IFruitFamily;
-import forestry.plugins.PluginArboriculture;
 
 /**
  * Simple fruit provider which drops from any leaf block according to yield and either marks all leave blocks as fruit leaves or none.
  */
 public class FruitProviderRandom extends FruitProviderNone {
 
-	HashMap<ItemStack, Float> products = new HashMap<ItemStack, Float>();
-	int colour = 0xffffff;
+	private final Map<ItemStack, Float> products = new HashMap<>();
+	private int colour = 0xffffff;
 
 	public FruitProviderRandom(String key, IFruitFamily family, ItemStack product, float modifier) {
 		super(key, family);
@@ -48,9 +48,9 @@ public class FruitProviderRandom extends FruitProviderNone {
 
 	@Override
 	public ItemStack[] getFruits(ITreeGenome genome, World world, int x, int y, int z, int ripeningTime) {
-		ArrayList<ItemStack> product = new ArrayList<ItemStack>();
+		ArrayList<ItemStack> product = new ArrayList<>();
 
-		float modeYieldMod = PluginArboriculture.treeInterface.getTreekeepingMode(world).getYieldModifier(genome, 1f);
+		float modeYieldMod = TreeManager.treeRoot.getTreekeepingMode(world).getYieldModifier(genome, 1f);
 
 		for (Map.Entry<ItemStack, Float> entry : products.entrySet()) {
 			if (world.rand.nextFloat() <= genome.getYield() * modeYieldMod * entry.getValue()) {

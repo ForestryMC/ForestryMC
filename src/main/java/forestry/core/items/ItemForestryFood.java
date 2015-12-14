@@ -15,8 +15,8 @@ import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.core.CreativeTabForestry;
 import forestry.core.render.TextureManager;
@@ -52,7 +52,7 @@ public class ItemForestryFood extends ItemFood {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerIcons(IIconRegister register) {
-		itemIcon = TextureManager.getInstance().registerTex(register, StringUtil.cleanItemName(this));
+		itemIcon = TextureManager.getSprite(register, StringUtil.cleanItemName(this));
 	}
 
 }

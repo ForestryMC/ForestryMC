@@ -15,7 +15,7 @@ package forestry.core.gui.tooltips;
  */
 public interface IToolTipProvider {
 
-	ToolTip getToolTip();
+	ToolTip getToolTip(int mouseX, int mouseY);
 
 	boolean isToolTipVisible();
 

@@ -17,8 +17,11 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
+import cpw.mods.fml.common.Optional;
+
 import buildcraft.api.tools.IToolWrench;
 
+@Optional.Interface(iface = "buildcraft.api.tools.IToolWrench", modid = "BuildCraftAPI|tools")
 public class ItemWrench extends ItemForestry implements IToolWrench {
 
 	public ItemWrench() {

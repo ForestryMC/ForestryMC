@@ -12,14 +12,13 @@ package forestry.farming.logic;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
-import forestry.core.config.Defaults;
-import forestry.core.utils.StackUtils;
-import forestry.core.vect.Vect;
+import forestry.core.config.Constants;
+import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.vect.Vect;
 
 public class FarmableGourd implements IFarmable {
 
@@ -34,21 +33,21 @@ public class FarmableGourd implements IFarmable {
 	}
 
 	@Override
-	public boolean isSaplingAt(World world, BlockPos pos) {
-		if (world.isAirBlock(pos)) {
+	public boolean isSaplingAt(World world, int x, int y, int z) {
+		if (world.isAirBlock(x, y, z)) {
 			return false;
 		}
 
-		return StackUtils.equals(world.getBlockState(pos).getBlock(), stem);
+		return ItemStackUtil.equals(world.getBlock(x, y, z), stem);
 	}
 
 	@Override
-	public ICrop getCropAt(World world, BlockPos pos) {
-		if (world.isAirBlock(pos)) {
+	public ICrop getCropAt(World world, int x, int y, int z) {
+		if (world.isAirBlock(x, y, z)) {
 			return null;
 		}
 
-		if (!StackUtils.equals(world.getBlockState(pos).getBlock(), fruit)) {
+		if (!ItemStackUtil.equals(world.getBlock(x, y, z), fruit)) {
 			return null;
 		}
 
@@ -56,7 +55,7 @@ public class FarmableGourd implements IFarmable {
 			return null;
 		}
 
-		return new CropBlock(world, StackUtils.getBlock(fruit), fruit.getItemDamage(), new Vect(pos));
+		return new CropBlock(world, ItemStackUtil.getBlock(fruit), fruit.getItemDamage(), new Vect(x, y, z));
 	}
 
 	@Override
@@ -70,8 +69,8 @@ public class FarmableGourd implements IFarmable {
 	}
 
 	@Override
-	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
-		return world.setBlockState(pos, StackUtils.getBlock(stem).getDefaultState(), Defaults.FLAG_BLOCK_SYNCH);
+	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, int x, int y, int z) {
+		return world.setBlock(x, y, z, ItemStackUtil.getBlock(stem), 0, Constants.FLAG_BLOCK_SYNCH);
 	}
 
 }

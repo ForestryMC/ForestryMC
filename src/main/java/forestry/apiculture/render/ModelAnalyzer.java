@@ -19,7 +19,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.ForestryResource;
+import forestry.core.render.ForestryResource;
 
 public class ModelAnalyzer extends ModelBase {
 
@@ -59,7 +59,6 @@ public class ModelAnalyzer extends ModelBase {
 	public void render(ForgeDirection orientation, float posX, float posY, float posZ) {
 
 		GL11.glPushMatrix();
-		GL11.glDisable(GL11.GL_LIGHTING);
 
 		GL11.glTranslatef(posX, posY, posZ);
 		float[] angle = {0, 0, 0};
@@ -84,7 +83,7 @@ public class ModelAnalyzer extends ModelBase {
 
 		float factor = (float) (1.0 / 16.0);
 
-		Proxies.common.bindTexture(textures[0]);
+		Proxies.render.bindTexture(textures[0]);
 
 		pedestal.rotateAngleX = angle[0];
 		pedestal.rotateAngleY = angle[1];
@@ -99,16 +98,15 @@ public class ModelAnalyzer extends ModelBase {
 		tower1.rotateAngleX = angle[0];
 		tower1.rotateAngleY = angle[1];
 		tower1.rotateAngleZ = angle[2];
-		Proxies.common.bindTexture(textures[1]);
+		Proxies.render.bindTexture(textures[1]);
 		tower1.render(factor);
 
 		tower2.rotateAngleX = angle[0];
 		tower2.rotateAngleY = angle[1];
 		tower2.rotateAngleZ = angle[2];
-		Proxies.common.bindTexture(textures[2]);
+		Proxies.render.bindTexture(textures[2]);
 		tower2.render(factor);
 
-		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glPopMatrix();
 
 	}

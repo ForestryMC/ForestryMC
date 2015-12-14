@@ -14,6 +14,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
+import forestry.core.utils.InventoryUtil;
+
 /**
  * Creates a deep copy of an existing IInventory.
  *
@@ -30,12 +32,7 @@ public class InventoryCopy implements IInventory {
 	public InventoryCopy(IInventory orignal) {
 		this.orignal = orignal;
 		contents = new ItemStack[orignal.getSizeInventory()];
-		for (int i = 0; i < contents.length; i++) {
-			ItemStack stack = orignal.getStackInSlot(i);
-			if (stack != null) {
-				contents[i] = stack.copy();
-			}
-		}
+		InventoryUtil.deepCopyInventoryContents(orignal, this);
 	}
 
 	@Override

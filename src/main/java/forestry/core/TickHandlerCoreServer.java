@@ -18,18 +18,17 @@ import java.util.Random;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.ChunkDataEvent;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
-import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
+
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.Phase;
+import cpw.mods.fml.common.gameevent.TickEvent.WorldTickEvent;
 
 import forestry.core.config.Config;
-import forestry.core.config.Defaults;
-import forestry.core.interfaces.IResupplyHandler;
-import forestry.core.utils.ChunkCoords;
+import forestry.core.config.Constants;
+import forestry.core.worldgen.WorldGenerator;
 import forestry.plugins.PluginManager;
 
 public class TickHandlerCoreServer {
@@ -39,8 +38,6 @@ public class TickHandlerCoreServer {
 
 	public TickHandlerCoreServer(WorldGenerator worldGenerator) {
 		this.worldGenerator = worldGenerator;
-		FMLCommonHandler.instance().bus().register(this);
-		MinecraftForge.EVENT_BUS.register(this);
 	}
 
 	@SubscribeEvent
@@ -86,17 +83,30 @@ public class TickHandlerCoreServer {
 			tag.setBoolean("retrogen", true);
 		}
 
-		event.getData().setTag(Defaults.MOD, tag);
+		event.getData().setTag(Constants.MOD, tag);
 	}
 
 	@SubscribeEvent
 	public void chunkLoadEventHandler(ChunkDataEvent.Load event) {
 		if (Config.doRetrogen) {
-			NBTTagCompound tag = (NBTTagCompound) event.getData().getTag(Defaults.MOD);
+			NBTTagCompound tag = (NBTTagCompound) event.getData().getTag(Constants.MOD);
 			if (tag == null || !tag.hasKey("retrogen") || Config.forceRetrogen) {
 				ChunkCoords coords = new ChunkCoords(event.getChunk());
 				chunkRegenList.put(coords.dimension, coords);
 			}
 		}
 	}
+
+	private static class ChunkCoords {
+		public final int dimension;
+		public final int xCoord;
+		public final int zCoord;
+
+		public ChunkCoords(Chunk chunk) {
+			this.dimension = chunk.worldObj.provider.dimensionId;
+			this.xCoord = chunk.xPosition;
+			this.zCoord = chunk.zPosition;
+		}
+	}
+
 }

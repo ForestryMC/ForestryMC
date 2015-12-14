@@ -11,35 +11,33 @@
 package forestry.mail.gui;
 
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.util.StatCollector;
 
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
 import forestry.core.utils.StringUtil;
-import forestry.mail.gadgets.MachineTrader;
+import forestry.mail.tiles.TileTrader;
 
-public class GuiTrader extends GuiForestry<MachineTrader> {
+public class GuiTrader extends GuiForestry<ContainerTrader, TileTrader> {
 
-	private final ContainerTrader container;
-
-	public GuiTrader(InventoryPlayer inventoryplayer, MachineTrader tile) {
-		super(Defaults.TEXTURE_PATH_GUI + "/mailtrader2.png", new ContainerTrader(inventoryplayer, tile), tile);
+	public GuiTrader(InventoryPlayer inventoryplayer, TileTrader tile) {
+		super(Constants.TEXTURE_PATH_GUI + "/mailtrader2.png", new ContainerTrader(inventoryplayer, tile), tile);
 		this.xSize = 226;
 		this.ySize = 220;
-
-		this.container = (ContainerTrader) inventorySlots;
 	}
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-		String name = StringUtil.localizeTile(tile.getUnlocalizedName());
-		this.fontRendererObj.drawString(name, getCenteredOffset(name), 6, fontColor.get("gui.mail.text"));
+		String name = StatCollector.translateToLocal(inventory.getUnlocalizedTitle());
+		this.fontRendererObj.drawString(name, textLayout.getCenteredOffset(name), 6, fontColor.get("gui.mail.text"));
 
 		String receive = StringUtil.localize("gui.mail.receive");
-		this.fontRendererObj.drawString(receive, getCenteredOffset(receive, 70) + 51, 45, fontColor.get("gui.mail.text"));
+		this.fontRendererObj.drawString(receive, textLayout.getCenteredOffset(receive, 70) + 51, 45, fontColor.get("gui.mail.text"));
 
 		String send = StringUtil.localize("gui.mail.send");
-		this.fontRendererObj.drawString(send, getCenteredOffset(send, 70) + 51, 99, fontColor.get("gui.mail.text"));
+		this.fontRendererObj.drawString(send, textLayout.getCenteredOffset(send, 70) + 51, 99, fontColor.get("gui.mail.text"));
+
+		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
 	}
 
 	@Override

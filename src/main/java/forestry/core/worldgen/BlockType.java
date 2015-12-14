@@ -11,36 +11,28 @@
 package forestry.core.worldgen;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+import forestry.core.config.Constants;
 
-import forestry.api.world.ITreeGenData;
-import forestry.core.config.Defaults;
-import forestry.core.config.ForestryBlock;
-
-public class BlockType {
-
+public class BlockType implements IBlockType {
 	private final Block block;
-	private final int meta;
+	protected int meta;
 
 	public BlockType(Block block, int meta) {
 		this.block = block;
 		this.meta = meta;
 	}
 
-	public BlockType(ForestryBlock block, int meta) {
-		this.block = block.block();
-		this.meta = meta;
+	@Override
+	public void setDirection(EnumFacing facing) {
+
 	}
 
-	public void setBlock(World world, ITreeGenData tree, int x, int y, int z) {
-		world.setBlock(x, y, z, block, meta, Defaults.FLAG_BLOCK_SYNCH);
-	}
-	
-	public int getMeta() {
-		return this.meta;
-	}
-	
-	public Block getBlock() {
-		return this.block;
+	@Override
+	public void setBlock(World world, BlockPos pos) {
+		world.setBlockState(pos, block.getStateFromMeta(meta), Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
 	}
 }

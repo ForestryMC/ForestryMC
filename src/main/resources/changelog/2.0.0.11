@@ -1,9 +1,0 @@
-
-# 2.0.0.11
-
-- Added: Alternate carpenter recipe for letters using six wood pulp.
-- Added: Alternate carpenter recipe for stamps which omits the honey drops, but requires seed oil.
-- Changed: Reduced fertilizer consumption on peat farms 10 -> 5.
-- Bugfix: Fixed two potential NPEs on farms.
-- Bugfix: Fixed a potential crash when opening letter gui.
-- Bugfix: Fixed habitat locator not working.

@@ -16,37 +16,36 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
 import forestry.core.utils.BlockUtil;
-import forestry.core.vect.Vect;
+import forestry.core.utils.vect.Vect;
 
 public class FarmableCocoa implements IFarmable {
 
-	public static final Block COCOA_PLANT = Blocks.cocoa;
+	private static final Block COCOA_PLANT = Blocks.cocoa;
 	public static final Item COCOA_SEED = Items.dye;
 	public static final int COCOA_META = 3;
 
 	@Override
-	public boolean isSaplingAt(World world, BlockPos pos) {
-		return world.getBlockState(pos).getBlock() == COCOA_PLANT;
+	public boolean isSaplingAt(World world, int x, int y, int z) {
+		return world.getBlock(x, y, z) == COCOA_PLANT;
 	}
 
 	@Override
-	public ICrop getCropAt(World world, BlockPos pos) {
-		Block block = world.getBlockState(pos).getBlock();
+	public ICrop getCropAt(World world, int x, int y, int z) {
+		Block block = world.getBlock(x, y, z);
 		if (block != COCOA_PLANT) {
 			return null;
 		}
-		int meta = world.getBlockMetadata(pos); //TODO Revisit in BlockState pass
+		int meta = world.getBlockMetadata(x, y, z);
 		if (BlockUtil.getMaturityPod(meta) < 2) {
 			return null;
 		}
 
-		return new CropBlock(world, block, meta, new Vect(pos));
+		return new CropBlock(world, block, meta, new Vect(x, y, z));
 	}
 
 	@Override
@@ -60,8 +59,8 @@ public class FarmableCocoa implements IFarmable {
 	}
 
 	@Override
-	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
-		return BlockUtil.tryPlantPot(world, pos, COCOA_PLANT);
+	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, int x, int y, int z) {
+		return BlockUtil.tryPlantPot(world, x, y, z, COCOA_PLANT);
 	}
 
 }

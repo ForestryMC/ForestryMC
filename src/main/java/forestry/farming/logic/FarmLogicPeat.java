@@ -15,27 +15,25 @@ import java.util.Stack;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
+import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
-import forestry.core.config.ForestryBlock;
-import forestry.core.config.ForestryItem;
-import forestry.core.gadgets.BlockSoil;
-import forestry.core.vect.Vect;
-import forestry.core.vect.VectUtil;
+import forestry.core.blocks.BlockSoil;
+import forestry.core.utils.BlockPosUtil;
+import forestry.core.utils.vect.Vect;
+import forestry.plugins.PluginCore;
 
 public class FarmLogicPeat extends FarmLogicWatered {
+	private static final ItemStack bogEarth = PluginCore.blocks.soil.get(BlockSoil.SoilType.BOG_EARTH, 1);
 
 	public FarmLogicPeat(IFarmHousing housing) {
-		super(housing, new ItemStack[]{ForestryBlock.soil.getItemStack(1, 1)},
-				ForestryBlock.soil.getItemStack(1, 1));
+		super(housing, bogEarth, bogEarth);
 	}
 
 	@Override
@@ -45,7 +43,7 @@ public class FarmLogicPeat extends FarmLogicWatered {
 		}
 
 		Block block = BlockSoil.getBlockFromItem(itemStack.getItem());
-		if (block == null || !(block instanceof BlockSoil)) {
+		if (!(block instanceof BlockSoil)) {
 			return false;
 		}
 		BlockSoil blockSoil = (BlockSoil) block;
@@ -73,20 +71,25 @@ public class FarmLogicPeat extends FarmLogicWatered {
 	}
 
 	@Override
-	public Collection<ICrop> harvest(BlockPos pos, EnumFacing direction, int extent) {
+	public boolean isAcceptedWindfall(ItemStack stack) {
+		return false;
+	}
+
+	@Override
+	public Collection<ICrop> harvest(int x, int y, int z, FarmDirection direction, int extent) {
 		World world = getWorld();
 
-		Stack<ICrop> crops = new Stack<ICrop>();
+		Stack<ICrop> crops = new Stack<>();
 		for (int i = 0; i < extent; i++) {
-			Vect position = translateWithOffset(pos, direction, i);
-			ItemStack occupant = VectUtil.getAsItemStack(world, position);
+			Vect position = translateWithOffset(x, y, z, direction, i);
+			ItemStack occupant = BlockPosUtil.getAsItemStack(world, position);
 
 			if (occupant.getItem() == null) {
 				continue;
 			}
 
 			Block block = Block.getBlockFromItem(occupant.getItem());
-			if (block == null || !(block instanceof BlockSoil)) {
+			if (!(block instanceof BlockSoil)) {
 				continue;
 			}
 
@@ -103,7 +106,7 @@ public class FarmLogicPeat extends FarmLogicWatered {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon() {
-		return ForestryItem.peat.item().getIconFromDamage(0);
+		return PluginCore.items.peat.getIconFromDamage(0);
 	}
 
 }

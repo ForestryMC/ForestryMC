@@ -13,94 +13,62 @@ package forestry.plugins;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
-import net.minecraftforge.fml.common.network.IGuiHandler;
-
 import forestry.api.food.BeverageManager;
-import forestry.api.food.IBeverageEffect;
-import forestry.core.config.Defaults;
-import forestry.core.config.ForestryItem;
+import forestry.apiculture.items.EnumPollenCluster;
+import forestry.apiculture.items.ItemRegistryApiculture;
+import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
-import forestry.core.interfaces.IOreDictionaryHandler;
-import forestry.core.interfaces.ISaveEventHandler;
-import forestry.core.items.ItemForestryFood;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.LiquidHelper;
+import forestry.core.fluids.LiquidRegistryHelper;
+import forestry.core.recipes.RecipeUtil;
 import forestry.food.BeverageEffect;
-import forestry.food.GuiHandlerFood;
-import forestry.food.items.ItemAmbrosia;
-import forestry.food.items.ItemBeverage;
-import forestry.food.items.ItemBeverage.BeverageInfo;
-import forestry.food.items.ItemInfuser;
+import forestry.food.InfuserIngredientManager;
+import forestry.food.InfuserMixtureManager;
+import forestry.food.items.EnumBeverage;
+import forestry.food.items.ItemRegistryFood;
 
-@Plugin(pluginID = "Food", name = "Food", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.food.description")
+@Plugin(pluginID = "Food", name = "Food", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.food.description")
 public class PluginFood extends ForestryPlugin {
 
+	public static ItemRegistryFood items;
+
 	@Override
-	public void preInit() {
-		super.preInit();
+	protected void setupAPI() {
+		super.setupAPI();
 
 		// Init seasoner
-		BeverageManager.infuserManager = new ItemInfuser.MixtureManager();
-		BeverageManager.ingredientManager = new ItemInfuser.IngredientManager();
+		BeverageManager.infuserManager = new InfuserMixtureManager();
+		BeverageManager.ingredientManager = new InfuserIngredientManager();
 	}
 
 	@Override
-	public void postInit() {
-		super.postInit();
-
-		ItemInfuser.initialize();
+	protected void registerItemsAndBlocks() {
+		items = new ItemRegistryFood();
 	}
 
 	@Override
-	protected void registerItems() {
-		// / FOOD ITEMS
-		ForestryItem.honeyedSlice.registerItem(new ItemForestryFood(8, 0.6f), "honeyedSlice");
-		ForestryItem.beverage.registerItem(new ItemBeverage(
-						new BeverageInfo("meadShort", "glass", 0xec9a19, 0xffffff, 1, 0.2f, true),
-						new BeverageInfo("meadCurative", "glass", 0xc5feff, 0xffffff, 1, 0.2f, true)),
-				"beverage");
-		ForestryItem.ambrosia.registerItem(new ItemAmbrosia().setIsDrink(), "ambrosia");
-		ForestryItem.honeyPot.registerItem(new ItemForestryFood(2, 0.2f).setIsDrink(), "honeyPot");
+	protected void preInit() {
+		super.preInit();
 
-		// / SEASONER
-		ForestryItem.infuser.registerItem(new ItemInfuser(), "infuser");
+		LiquidRegistryHelper.registerLiquidContainer(Fluids.SHORT_MEAD, Constants.BUCKET_VOLUME, items.beverage.get(EnumBeverage.MEAD_SHORT, 1), new ItemStack(Items.glass_bottle));
 
-		// Mead
-		ItemStack meadBottle = ForestryItem.beverage.getItemStack();
-		((ItemBeverage) ForestryItem.beverage.item()).beverages[0].saveEffects(meadBottle, new IBeverageEffect[]{BeverageEffect.weakAlcoholic});
+		ItemRegistryApiculture beeItems = PluginApiculture.items;
+		if (beeItems != null) {
+			ItemStack normalPollenCluster = beeItems.pollenCluster.get(EnumPollenCluster.NORMAL, 1);
+			ItemStack crystallinePollenCluster = beeItems.pollenCluster.get(EnumPollenCluster.CRYSTALLINE, 1);
 
-		LiquidHelper.injectLiquidContainer(Fluids.SHORT_MEAD, Defaults.BUCKET_VOLUME, meadBottle, new ItemStack(Items.glass_bottle));
-	}
-
-	@Override
-	protected void registerBackpackItems() {
+			BeverageManager.ingredientManager.addIngredient(normalPollenCluster, "Strong Curative");
+			BeverageManager.ingredientManager.addIngredient(crystallinePollenCluster, "Weak Curative");
+			BeverageManager.infuserManager.addMixture(1, normalPollenCluster, BeverageEffect.strongAntidote);
+			BeverageManager.infuserManager.addMixture(1, crystallinePollenCluster, BeverageEffect.weakAntidote);
+		}
 	}
 
 	@Override
 	protected void registerRecipes() {
 		// INFUSER
-		Proxies.common.addRecipe(ForestryItem.infuser.getItemStack(),
+		RecipeUtil.addRecipe(items.infuser.getItemStack(),
 				"X", "#", "X",
-				'#', Items.iron_ingot,
+				'#', "ingotIron",
 				'X', "ingotBronze");
-	}
-
-	@Override
-	protected void registerCrates() {
-	}
-
-	@Override
-	public IGuiHandler getGuiHandler() {
-		return new GuiHandlerFood();
-	}
-
-	@Override
-	public ISaveEventHandler getSaveEventHandler() {
-		return null;
-	}
-
-	@Override
-	public IOreDictionaryHandler getDictionaryHandler() {
-		return null;
 	}
 }

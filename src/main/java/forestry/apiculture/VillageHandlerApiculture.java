@@ -23,17 +23,16 @@ import net.minecraft.village.MerchantRecipeList;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
 
-import net.minecraftforge.fml.common.registry.VillagerRegistry.IVillageCreationHandler;
-import net.minecraftforge.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
+import net.minecraftforge.oredict.OreDictionary;
+
+import cpw.mods.fml.common.registry.VillagerRegistry.IVillageCreationHandler;
+import cpw.mods.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
 
 import forestry.api.apiculture.EnumBeeType;
-import forestry.apiculture.genetics.BeeTemplates;
-import forestry.apiculture.items.ItemHoneycomb;
+import forestry.apiculture.blocks.BlockApicultureType;
+import forestry.apiculture.genetics.BeeDefinition;
 import forestry.apiculture.worldgen.ComponentVillageBeeHouse;
-import forestry.core.config.Defaults;
-import forestry.core.config.ForestryBlock;
-import forestry.core.config.ForestryItem;
-import forestry.core.proxy.Proxies;
+import forestry.core.utils.Log;
 import forestry.plugins.PluginApiculture;
 
 public class VillageHandlerApiculture implements IVillageCreationHandler, IVillageTradeHandler {
@@ -42,21 +41,27 @@ public class VillageHandlerApiculture implements IVillageCreationHandler, IVilla
 		try {
 			MapGenStructureIO.func_143031_a(ComponentVillageBeeHouse.class, "Forestry:BeeHouse");
 		} catch (Throwable e) {
-			Proxies.log.severe("Failed to register village beehouse.");
+			Log.severe("Failed to register village beehouse.");
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public void manipulateTradesForVillager(EntityVillager villager, MerchantRecipeList recipeList, Random random) {
-		recipeList.add(new MerchantRecipe(ForestryItem.beePrincessGE.getItemStack(1, Defaults.WILDCARD), new ItemStack(Items.emerald, 1)));
-		recipeList.add(new MerchantRecipe(new ItemStack(Items.wheat, 2), ItemHoneycomb.getRandomComb(1, random, false)));
-		recipeList.add(new MerchantRecipe(new ItemStack(Blocks.log, 24, Defaults.WILDCARD), ForestryBlock.apiculture.getItemStack(1, Defaults.DEFINITION_APIARY_META)));
-		recipeList.add(new MerchantRecipe(new ItemStack(Items.emerald, 1), ForestryItem.frameProven.getItemStack(6)));
-		recipeList.add(new MerchantRecipe(new ItemStack(Items.emerald, 12), ForestryItem.beePrincessGE.getItemStack(1, Defaults.WILDCARD),
-				PluginApiculture.beeInterface.getMemberStack(
-						PluginApiculture.beeInterface.getBee(villager.worldObj, PluginApiculture.beeInterface.templateAsGenome(BeeTemplates.getMonasticTemplate())),
-						EnumBeeType.DRONE.ordinal())));
+		ItemStack wildcardPrincess = new ItemStack(PluginApiculture.items.beePrincessGE, 1, OreDictionary.WILDCARD_VALUE);
+		recipeList.add(new MerchantRecipe(wildcardPrincess, new ItemStack(Items.emerald, 1)));
+
+		ItemStack randomComb = PluginApiculture.items.beeComb.getRandomComb(1, random, false);
+		recipeList.add(new MerchantRecipe(new ItemStack(Items.wheat, 2), randomComb));
+
+		ItemStack apiary = PluginApiculture.blocks.apiculture.get(BlockApicultureType.APIARY);
+		recipeList.add(new MerchantRecipe(new ItemStack(Blocks.log, 24, OreDictionary.WILDCARD_VALUE), apiary));
+
+		ItemStack provenFrames = PluginApiculture.items.frameProven.getItemStack(6);
+		recipeList.add(new MerchantRecipe(new ItemStack(Items.emerald, 1), provenFrames));
+
+		ItemStack monasticDrone = BeeDefinition.MONASTIC.getMemberStack(EnumBeeType.DRONE);
+		recipeList.add(new MerchantRecipe(new ItemStack(Items.emerald, 12), wildcardPrincess, monasticDrone));
 	}
 
 	@Override

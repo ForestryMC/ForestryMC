@@ -13,8 +13,8 @@ package forestry.core.triggers;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
@@ -29,11 +29,11 @@ public abstract class Trigger implements ITriggerExternal {
 	private final String uid;
 	private final String unlocalized;
 
-	public Trigger(String uid) {
+	protected Trigger(String uid) {
 		this(uid, uid);
 	}
 
-	public Trigger(String uid, String localization) {
+	protected Trigger(String uid, String localization) {
 		this.uid = "forestry:" + uid;
 		unlocalized = "trigger." + localization;
 		StatementManager.registerStatement(this);
@@ -76,7 +76,7 @@ public abstract class Trigger implements ITriggerExternal {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister register) {
-		icon = TextureManager.getInstance().registerTex(register, "triggers/" + unlocalized.replace("trigger.", ""));
+		icon = TextureManager.getSprite(register, "triggers/" + unlocalized.replace("trigger.", ""));
 	}
 
 	@Override

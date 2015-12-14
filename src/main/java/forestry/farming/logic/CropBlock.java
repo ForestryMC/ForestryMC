@@ -17,7 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import forestry.core.proxy.Proxies;
-import forestry.core.vect.Vect;
+import forestry.core.utils.vect.Vect;
 
 public class CropBlock extends Crop {
 

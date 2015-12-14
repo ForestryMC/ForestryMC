@@ -32,12 +32,13 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.core.config.Defaults;
-import forestry.core.render.EntityColoredDropParticleFX;
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import forestry.core.config.Constants;
+import forestry.core.entities.EntityFXColoredDropParticle;
 import forestry.core.render.TextureManager;
 
 public class BlockForestryFluid extends BlockFluidClassic {
@@ -91,21 +92,21 @@ public class BlockForestryFluid extends BlockFluidClassic {
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister iconRegister) {
 
-		this.icons = new ArrayList<IIcon>(2);
+		this.icons = new ArrayList<>(2);
 
 		String still = "liquid/" + fluidName + "_still";
-		this.icons.add(TextureManager.getInstance().registerTex(iconRegister, still));
+		this.icons.add(TextureManager.getSprite(iconRegister, still));
 
 		if (flowTextureExists()) {
 			String flow = "liquid/" + fluidName + "_flow";
-			this.icons.add(TextureManager.getInstance().registerTex(iconRegister, flow));
+			this.icons.add(TextureManager.getSprite(iconRegister, flow));
 		}
 	}
 
 	@SideOnly(Side.CLIENT)
-	public boolean flowTextureExists() {
+	private boolean flowTextureExists() {
 		try {
-			ResourceLocation resourceLocation = new ResourceLocation(Defaults.ID, "textures/blocks/liquid/" + fluidName + "_flow.png");
+			ResourceLocation resourceLocation = new ResourceLocation(Constants.ID, "textures/blocks/liquid/" + fluidName + "_flow.png");
 			IResourceManager resourceManager = Minecraft.getMinecraft().getResourceManager();
 			return resourceManager.getResource(resourceLocation) != null;
 		} catch (java.lang.Exception e) {
@@ -121,7 +122,7 @@ public class BlockForestryFluid extends BlockFluidClassic {
 			double py = (double) y - 1.05D;
 			double pz = (double) ((float) z + rand.nextFloat());
 
-			EntityFX fx = new EntityColoredDropParticleFX(world, px, py, pz, color.getRed(), color.getGreen(), color.getBlue());
+			EntityFX fx = new EntityFXColoredDropParticle(world, px, py, pz, color.getRed(), color.getGreen(), color.getBlue());
 			FMLClientHandler.instance().getClient().effectRenderer.addEffect(fx);
 		}
 	}
@@ -152,8 +153,8 @@ public class BlockForestryFluid extends BlockFluidClassic {
 		return flammability;
 	}
 
-	public boolean isFlammable(IBlockAccess world, int x, int y, int z) {
-		return flammable;
+	private static boolean isFlammable(IBlockAccess world, int x, int y, int z) {
+		return world.getBlock(x, y, z).isFlammable(world, x, y, z, ForgeDirection.UNKNOWN);
 	}
 
 	@Override
@@ -213,7 +214,7 @@ public class BlockForestryFluid extends BlockFluidClassic {
 					x = startX + rand.nextInt(3) - 1;
 					z = startZ + rand.nextInt(3) - 1;
 
-					if (world.isAirBlock(x, y + 1, z) && this.isFlammable(world, x, y, z)) {
+					if (world.isAirBlock(x, y + 1, z) && isFlammable(world, x, y, z)) {
 						world.setBlock(x, y + 1, z, Blocks.fire);
 					}
 				}
@@ -232,7 +233,7 @@ public class BlockForestryFluid extends BlockFluidClassic {
 		}
 	}
 
-	private boolean isNeighborFlammable(World world, int x, int y, int z) {
+	private static boolean isNeighborFlammable(World world, int x, int y, int z) {
 		return isFlammable(world, x - 1, y, z) ||
 				isFlammable(world, x + 1, y, z) ||
 				isFlammable(world, x, y, z - 1) ||
@@ -241,7 +242,7 @@ public class BlockForestryFluid extends BlockFluidClassic {
 				isFlammable(world, x, y + 1, z);
 	}
 
-	private boolean isNearFire(World world, int x, int y, int z) {
+	private static boolean isNearFire(World world, int x, int y, int z) {
 		AxisAlignedBB boundingBox = AxisAlignedBB.getBoundingBox(x - 1, y - 1, z - 1, x + 1, y + 1, z + 1);
 		return world.func_147470_e(boundingBox);
 	}

@@ -10,51 +10,54 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
+import java.util.List;
+
+import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.world.World;
+
 import forestry.api.world.ITreeGenData;
 
 public class WorldGenCocobolo extends WorldGenTree {
 
 	public WorldGenCocobolo(ITreeGenData tree) {
-		super(tree);
+		super(tree, 8, 8);
 	}
 	
 	@Override
-	public void generate() {
-		generateTreeTrunk(height, girth);
+	public void generate(World world) {
+		List<ChunkCoordinates> treeTops = generateTreeTrunk(world, height, girth);
 
 		int leafSpawn = height;
 
-		addLeaf(0, leafSpawn--, 0, EnumReplaceMode.NONE);
-		generateAdjustedCylinder(leafSpawn--, 1, 1, leaf);
+		for (ChunkCoordinates treeTop : treeTops) {
+			addLeaf(world, treeTop.posX, treeTop.posY + 1, treeTop.posZ, EnumReplaceMode.NONE);
+		}
+		leafSpawn--;
+		generateAdjustedCylinder(world, leafSpawn--, 1, 1, leaf);
 
 		if (height > 10) {
-			generateAdjustedCylinder(leafSpawn--, 2, 1, leaf);
+			generateAdjustedCylinder(world, leafSpawn--, 2, 1, leaf);
 		}
-		generateAdjustedCylinder(leafSpawn, 0, 1, leaf);
+		generateAdjustedCylinder(world, leafSpawn, 0, 1, leaf);
 		
 		leafSpawn--;
 		
 		while (leafSpawn > 4) {
 			int offset = 1;
 			if (leafSpawn % 2 == 0) {
-				if (rand.nextBoolean()) {
+				if (world.rand.nextBoolean()) {
 					offset = -1;
 				}
-				generateAdjustedCylinder(leafSpawn, offset, 2, 1, leaf, EnumReplaceMode.NONE);
+				generateAdjustedCylinder(world, leafSpawn, offset, offset, 2, 1, leaf, EnumReplaceMode.NONE);
 			} else {
-				if (rand.nextBoolean()) {
+				if (world.rand.nextBoolean()) {
 					offset = -1;
 				}
-				generateAdjustedCylinder(leafSpawn, offset, 0, 1, leaf, EnumReplaceMode.NONE);
+				generateAdjustedCylinder(world, leafSpawn, offset, offset, 0, 1, leaf, EnumReplaceMode.NONE);
 			}
 			leafSpawn--;
 		}
 
 	}
 
-	@Override
-	public void preGenerate() {
-		height = determineHeight(8, 8);
-		girth = determineGirth(tree.getGirth(world, startX, startY, startZ));
-	}
 }

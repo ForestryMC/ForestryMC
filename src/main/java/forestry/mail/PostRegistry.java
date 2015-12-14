@@ -11,9 +11,11 @@
 package forestry.mail;
 
 import java.io.File;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -28,15 +30,16 @@ import forestry.api.mail.IPostRegistry;
 import forestry.api.mail.IPostalCarrier;
 import forestry.api.mail.ITradeStation;
 import forestry.api.mail.PostManager;
-import forestry.core.config.ForestryItem;
-import forestry.mail.items.ItemLetter;
+import forestry.core.proxy.Proxies;
+import forestry.core.utils.PlayerUtil;
+import forestry.mail.network.packets.PacketPOBoxInfoUpdate;
 import forestry.plugins.PluginMail;
 
 public class PostRegistry implements IPostRegistry {
 
 	public static PostOffice cachedPostOffice;
-	public static final Map<IMailAddress, POBox> cachedPOBoxes = new HashMap<IMailAddress, POBox>();
-	public static final Map<IMailAddress, ITradeStation> cachedTradeStations = new HashMap<IMailAddress, ITradeStation>();
+	public static final Map<IMailAddress, POBox> cachedPOBoxes = new HashMap<>();
+	public static final Map<IMailAddress, ITradeStation> cachedTradeStations = new HashMap<>();
 
 	/**
 	 * @param world   the Minecraft world the PO box will be in
@@ -69,7 +72,11 @@ public class PostRegistry implements IPostRegistry {
 			world.setItemData(POBox.SAVE_NAME + address, pobox);
 			pobox.markDirty();
 			cachedPOBoxes.put(address, pobox);
-			PluginMail.proxy.setPOBoxInfo(world, address, pobox.getPOBoxInfo());
+
+			EntityPlayer player = PlayerUtil.getPlayer(world, address.getPlayerProfile());
+			if (player != null) {
+				Proxies.net.sendToPlayer(new PacketPOBoxInfoUpdate(pobox.getPOBoxInfo()), player);
+			}
 		}
 
 		return pobox;
@@ -82,7 +89,7 @@ public class PostRegistry implements IPostRegistry {
 	 */
 	@Override
 	public boolean isValidTradeAddress(World world, IMailAddress address) {
-		return address.isTrader() && address.getName().matches("^[a-zA-Z0-9]+$");
+		return address != null && address.isTrader() && address.getName().matches("^[a-zA-Z0-9]+$");
 	}
 
 	/**
@@ -92,12 +99,12 @@ public class PostRegistry implements IPostRegistry {
 	 */
 	@Override
 	public boolean isAvailableTradeAddress(World world, IMailAddress address) {
-		return getTradeStation(world, address) == null;
+		return address != null && getTradeStation(world, address) == null;
 	}
 
 	@Override
 	public TradeStation getTradeStation(World world, IMailAddress address) {
-		if (address.getName() == null) {
+		if (address == null || address.getName() == null) {
 			return null;
 		}
 
@@ -178,7 +185,7 @@ public class PostRegistry implements IPostRegistry {
 	}
 
 	/* CARRIER */
-	private final HashMap<EnumAddressee, IPostalCarrier> carriers = new HashMap<EnumAddressee, IPostalCarrier>();
+	private final Map<EnumAddressee, IPostalCarrier> carriers = new EnumMap<>(EnumAddressee.class);
 
 	@Override
 	public Map<EnumAddressee, IPostalCarrier> getRegisteredCarriers() {
@@ -206,10 +213,10 @@ public class PostRegistry implements IPostRegistry {
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
 		letter.writeToNBT(nbttagcompound);
 
-		ItemStack mailstack = ForestryItem.letters.getItemStack(1, ItemLetter.encodeMeta(1, ItemLetter.getType(letter)));
-		mailstack.setTagCompound(nbttagcompound);
+		ItemStack letterStack = LetterProperties.createStampedLetterStack(letter);
+		letterStack.setTagCompound(nbttagcompound);
 
-		return mailstack;
+		return letterStack;
 	}
 
 	@Override
@@ -231,7 +238,6 @@ public class PostRegistry implements IPostRegistry {
 
 	@Override
 	public boolean isLetter(ItemStack itemstack) {
-		return ForestryItem.letters.isItemEqual(itemstack);
+		return itemstack != null && itemstack.getItem() == PluginMail.items.letters;
 	}
-
 }

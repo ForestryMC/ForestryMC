@@ -11,10 +11,9 @@
 package forestry.apiculture.flowers;
 
 import java.util.EnumSet;
-import java.util.List;
+import java.util.Set;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.EnumPlantType;
@@ -37,8 +36,8 @@ public class FlowerProvider implements IFlowerProvider {
 	}
 
 	@Override
-	public boolean isAcceptedFlower(World world, IIndividual individual, BlockPos pos) {
-		return FlowerManager.flowerRegistry.isAcceptedFlower(this.flowerType, world, individual, pos);
+	public String getFlowerType() {
+		return flowerType;
 	}
 
 	@Override
@@ -46,18 +45,19 @@ public class FlowerProvider implements IFlowerProvider {
 
 		EnumSet<EnumPlantType> plantTypes = pollinatable.getPlantType();
 
-		if (flowerType.equals(FlowerManager.FlowerTypeNether)) {
-			return plantTypes.contains(EnumPlantType.Nether);
-		} else if (flowerType.equals(FlowerManager.FlowerTypeCacti)) {
-			return plantTypes.contains(EnumPlantType.Desert);
-		} else {
-			return plantTypes.size() > 1 || !plantTypes.contains(EnumPlantType.Nether);
+		switch (flowerType) {
+			case FlowerManager.FlowerTypeNether:
+				return plantTypes.contains(EnumPlantType.Nether);
+			case FlowerManager.FlowerTypeCacti:
+				return plantTypes.contains(EnumPlantType.Desert);
+			default:
+				return plantTypes.size() > 1 || !plantTypes.contains(EnumPlantType.Nether);
 		}
 	}
 
 	@Override
-	public boolean growFlower(World world, IIndividual individual, BlockPos pos) {
-		return FlowerManager.flowerRegistry.growFlower(this.flowerType, world, individual, pos);
+	public boolean growFlower(World world, IIndividual individual, int x, int y, int z) {
+		return FlowerManager.flowerRegistry.growFlower(this.flowerType, world, individual, x, y, z);
 	}
 
 	@Override
@@ -66,12 +66,12 @@ public class FlowerProvider implements IFlowerProvider {
 	}
 
 	@Override
-	public ItemStack[] affectProducts(World world, IIndividual individual, BlockPos pos, ItemStack[] products) {
+	public ItemStack[] affectProducts(World world, IIndividual individual, int x, int y, int z, ItemStack[] products) {
 		return products;
 	}
 
 	@Override
-	public List<IFlower> getFlowers() {
+	public Set<IFlower> getFlowers() {
 		return FlowerManager.flowerRegistry.getAcceptableFlowers(this.flowerType);
 	}
 

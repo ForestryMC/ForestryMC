@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.lepidopterology.entities;
 
-import forestry.lepidopterology.entities.EntityButterfly.EnumButterflyState;
-
 public class AIButterflyWander extends AIButterflyMovement {
 
 	public AIButterflyWander(EntityButterfly entity) {

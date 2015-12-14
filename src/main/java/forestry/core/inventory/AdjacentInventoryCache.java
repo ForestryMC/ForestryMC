@@ -22,22 +22,31 @@ import net.minecraft.tileentity.TileEntity;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
-import forestry.core.utils.AdjacentTileCache;
+import forestry.core.tiles.AdjacentTileCache;
+import forestry.core.tiles.TileUtil;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public final class AdjacentInventoryCache implements AdjacentTileCache.ICacheListener {
 
+	public interface ITileFilter {
+		boolean matches(TileEntity tile);
+	}
+
 	private final AdjacentTileCache cache;
 	private boolean changed = true;
-	private final List<IInventory> invs = new LinkedList<IInventory>();
+	private final List<IInventory> invs = new LinkedList<>();
 	private final IInventory[] sides = new IInventory[6];
 	private final Comparator<IInventory> sorter;
 	private final ITileFilter filter;
 
 	public AdjacentInventoryCache(TileEntity tile, AdjacentTileCache cache) {
 		this(tile, cache, null, null);
+	}
+
+	public AdjacentInventoryCache(TileEntity tile, AdjacentTileCache cache, ITileFilter filter) {
+		this(tile, cache, filter, null);
 	}
 
 	public AdjacentInventoryCache(TileEntity tile, AdjacentTileCache cache, ITileFilter filter, Comparator<IInventory> sorter) {
@@ -76,7 +85,7 @@ public final class AdjacentInventoryCache implements AdjacentTileCache.ICacheLis
 			for (ForgeDirection side : ForgeDirection.VALID_DIRECTIONS) {
 				TileEntity tile = cache.getTileOnSide(side);
 				if (tile != null && (filter == null || filter.matches(tile))) {
-					IInventory inv = InvTools.getInventoryFromTile(tile, side.getOpposite());
+					IInventory inv = TileUtil.getInventoryFromTile(tile, side.getOpposite());
 					if (inv != null) {
 						sides[side.ordinal()] = inv;
 						invs.add(inv);

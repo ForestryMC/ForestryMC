@@ -10,56 +10,33 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
-import org.apache.commons.lang3.StringUtils;
-
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
 
 import forestry.api.mail.IMailAddress;
-import forestry.api.mail.PostManager;
-import forestry.core.network.PacketIds;
-import forestry.core.network.PacketPayload;
-import forestry.core.network.PacketUpdate;
-import forestry.core.proxy.Proxies;
-import forestry.mail.gadgets.MachineTrader;
+import forestry.core.gui.ContainerTile;
+import forestry.mail.tiles.TileTrader;
 
-public class ContainerTradeName extends Container {
+public class ContainerTradeName extends ContainerTile<TileTrader> {
 
-	protected final MachineTrader machine;
-
-	public ContainerTradeName(InventoryPlayer player, MachineTrader tile) {
-		machine = tile;
+	public ContainerTradeName(TileTrader tile) {
+		super(tile);
 	}
 
 	public IMailAddress getAddress() {
-		return machine.getAddress();
-	}
-
-	public void setAddress(String addressName) {
-
-		if (StringUtils.isBlank(addressName)) {
-			return;
-		}
-
-		PacketPayload payload = new PacketPayload(0, 0, 1);
-		payload.stringPayload[0] = addressName;
-
-		PacketUpdate packet = new PacketUpdate(PacketIds.TRADING_ADDRESS_SET, payload);
-		Proxies.net.sendToServer(packet);
-
-		IMailAddress address = PostManager.postRegistry.getMailAddress(addressName);
-		machine.setAddress(address);
-	}
-
-	public void handleSetAddress(PacketUpdate packet) {
-		String addressName = packet.payload.stringPayload[0];
-		IMailAddress address = PostManager.postRegistry.getMailAddress(addressName);
-		machine.setAddress(address);
+		return tile.getAddress();
 	}
 
 	@Override
-	public boolean canInteractWith(EntityPlayer entityPlayer) {
-		return machine.isOwner(entityPlayer);
+	public void detectAndSendChanges() {
+		super.detectAndSendChanges();
+
+		if (tile.isLinked()) {
+			for (Object crafter : crafters) {
+				if (crafter instanceof EntityPlayer) {
+					EntityPlayer player = (EntityPlayer) crafter;
+					tile.openGui(player);
+				}
+			}
+		}
 	}
 }

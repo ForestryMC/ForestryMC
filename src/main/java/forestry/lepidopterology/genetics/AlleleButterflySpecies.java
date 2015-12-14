@@ -10,9 +10,9 @@
  ******************************************************************************/
 package forestry.lepidopterology.genetics;
 
+import java.awt.Color;
 import java.util.EnumSet;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 import net.minecraft.init.Items;
@@ -22,44 +22,40 @@ import net.minecraft.world.World;
 import com.mojang.authlib.GameProfile;
 
 import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.api.core.IIconProvider;
-import forestry.api.genetics.AlleleManager;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import forestry.api.core.ISpriteProvider;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IIndividual;
+import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.EnumFlutterType;
-import forestry.api.lepidopterology.IAlleleButterflySpecies;
+import forestry.api.lepidopterology.IAlleleButterflySpeciesCustom;
 import forestry.api.lepidopterology.IButterflyRoot;
-import forestry.core.config.Defaults;
-import forestry.core.genetics.AlleleSpecies;
+import forestry.core.genetics.alleles.AlleleSpecies;
 
-public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButterflySpecies {
-
-	private final IButterflyRoot root;
-
+public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButterflySpeciesCustom {
 	private final String texture;
-	private final int serumColour;
+	private final Color serumColour;
 	private float rarity = 0.1f;
 	private float flightDistance = 5.0f;
 	private boolean isActualNocturnal = false;
 
 	private final EnumSet<BiomeDictionary.Type> spawnBiomes = EnumSet.noneOf(BiomeDictionary.Type.class);
 
-	private final Map<ItemStack, Float> butterflyLoot = new HashMap<ItemStack, Float>();
-	private final Map<ItemStack, Float> caterpillarLoot = new HashMap<ItemStack, Float>();
+	private final Map<ItemStack, Float> butterflyLoot = new HashMap<>();
+	private final Map<ItemStack, Float> caterpillarLoot = new HashMap<>();
 
-	public AlleleButterflySpecies(String uid, boolean isDominant, String name, IClassification branch, String binomial, int serumColour) {
-		super(uid, isDominant, "butterflies.species." + branch.getParent().getUID().substring((branch.getParent().getLevel().name().toLowerCase(Locale.ENGLISH)).length() + 1) + "." + name, branch, binomial);
-		this.root = (IButterflyRoot) AlleleManager.alleleRegistry.getSpeciesRoot("rootButterflies");
+	public AlleleButterflySpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, String texturePath, boolean isDominant, IClassification branch, String binomial, Color serumColour) {
+		super(uid, unlocalizedName, authority, unlocalizedDescription, isDominant, branch, binomial);
 		this.serumColour = serumColour;
-		texture = "forestry:" + Defaults.TEXTURE_PATH_ENTITIES + "/butterflies/" + uid + ".png";
+		this.texture = texturePath;
 	}
 
 	@Override
 	public IButterflyRoot getRoot() {
-		return root;
+		return ButterflyManager.butterflyRoot;
 	}
 
 	public AlleleButterflySpecies setRarity(float rarity) {
@@ -72,8 +68,8 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 		return this;
 	}
 
-	public AlleleButterflySpecies setNocturnal(boolean isActualNocturnal) {
-		this.isActualNocturnal = isActualNocturnal;
+	public AlleleButterflySpecies setNocturnal() {
+		this.isActualNocturnal = true;
 		return this;
 	}
 
@@ -89,7 +85,7 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIconProvider getIconProvider() {
+	public ISpriteProvider getIconProvider() {
 		return null;
 	}
 
@@ -179,6 +175,6 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 		if (renderPass > 0) {
 			return 0xffffff;
 		}
-		return serumColour;
+		return serumColour.getRGB() & 0xffffff;
 	}
 }

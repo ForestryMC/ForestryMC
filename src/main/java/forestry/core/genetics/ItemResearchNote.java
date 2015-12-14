@@ -28,8 +28,8 @@ import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
@@ -37,18 +37,19 @@ import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.ISpeciesRoot;
+import forestry.core.genetics.mutations.EnumMutateChance;
 import forestry.core.items.ItemForestry;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
 
 public class ItemResearchNote extends ItemForestry {
 
-	public static enum EnumNoteType {
+	public enum EnumNoteType {
 		NONE, MUTATION, SPECIES;
 
 		public static final EnumNoteType[] VALUES = values();
 
-		private IMutation getEncodedMutation(ISpeciesRoot root, NBTTagCompound compound) {
+		private static IMutation getEncodedMutation(ISpeciesRoot root, NBTTagCompound compound) {
 			IAllele allele0 = AlleleManager.alleleRegistry.getAllele(compound.getString("AL0"));
 			IAllele allele1 = AlleleManager.alleleRegistry.getAllele(compound.getString("AL1"));
 			if (allele0 == null || allele1 == null) {
@@ -75,7 +76,7 @@ public class ItemResearchNote extends ItemForestry {
 		}
 
 		public ArrayList<String> getTooltip(NBTTagCompound compound) {
-			ArrayList<String> tooltips = new ArrayList<String>();
+			ArrayList<String> tooltips = new ArrayList<>();
 
 			if (compound == null || this == NONE) {
 				return tooltips;
@@ -92,10 +93,16 @@ public class ItemResearchNote extends ItemForestry {
 					return tooltips;
 				}
 
+				String species1 = encoded.getAllele0().getName();
+				String species2 = encoded.getAllele1().getName();
+				String mutationChanceKey = EnumMutateChance.rateChance(encoded.getBaseChance()).toString().toLowerCase(Locale.ENGLISH);
+				String mutationChance = StringUtil.localize("researchNote.chance." + mutationChanceKey);
+				String speciesResult = encoded.getTemplate()[root.getKaryotypeKey().ordinal()].getName();
+
 				tooltips.add(StringUtil.localize("researchNote.discovery.0"));
-				tooltips.add(StringUtil.localize("researchNote.discovery.1").replace("%SPEC1", encoded.getAllele0().getName()).replace("%SPEC2", encoded.getAllele1().getName()));
-				tooltips.add(StringUtil.localizeAndFormat("researchNote.discovery.2", StringUtil.localize("researchNote.chance." + EnumMutateChance.rateChance(encoded.getBaseChance()).toString().toLowerCase(Locale.ENGLISH))));
-				tooltips.add(StringUtil.localizeAndFormat("researchNote.discovery.3", (encoded.getTemplate()[root.getKaryotypeKey().ordinal()].getName())));
+				tooltips.add(StringUtil.localize("researchNote.discovery.1").replace("%SPEC1", species1).replace("%SPEC2", species2));
+				tooltips.add(StringUtil.localizeAndFormat("researchNote.discovery.2", mutationChance));
+				tooltips.add(StringUtil.localizeAndFormat("researchNote.discovery.3", speciesResult));
 
 				if (encoded.getSpecialConditions() != null && encoded.getSpecialConditions().size() > 0) {
 					for (String line : encoded.getSpecialConditions()) {
@@ -136,16 +143,27 @@ public class ItemResearchNote extends ItemForestry {
 				}
 
 				IBreedingTracker tracker = encoded.getRoot().getBreedingTracker(world, player.getGameProfile());
-				if (tracker.isDiscovered(encoded)) {
+				if (tracker.isResearched(encoded)) {
 					player.addChatMessage(new ChatComponentTranslation("for.chat.cannotmemorizeagain"));
 					return false;
 				}
 
-				tracker.registerSpecies((IAlleleSpecies) encoded.getAllele0());
-				tracker.registerSpecies((IAlleleSpecies) encoded.getAllele1());
-				tracker.registerSpecies((IAlleleSpecies) encoded.getTemplate()[root.getKaryotypeKey().ordinal()]);
-				tracker.registerMutation(encoded);
+				IAlleleSpecies species0 = encoded.getAllele0();
+				IAlleleSpecies species1 = encoded.getAllele1();
+				IAlleleSpecies speciesResult = (IAlleleSpecies) encoded.getTemplate()[root.getKaryotypeKey().ordinal()];
+
+				tracker.registerSpecies(species0);
+				tracker.registerSpecies(species1);
+				tracker.registerSpecies(speciesResult);
+
+				tracker.researchMutation(encoded);
 				player.addChatMessage(new ChatComponentTranslation("for.chat.memorizednote"));
+
+				player.addChatMessage(new ChatComponentTranslation("for.chat.memorizednote2",
+						EnumChatFormatting.GRAY + species0.getName(),
+						EnumChatFormatting.GRAY + species1.getName(),
+						EnumChatFormatting.GREEN + speciesResult.getName()));
+
 				return true;
 			}
 
@@ -270,7 +288,7 @@ public class ItemResearchNote extends ItemForestry {
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
 
-		if (!Proxies.common.isSimulating(world)) {
+		if (world.isRemote) {
 			return itemstack;
 		}
 

@@ -12,35 +12,25 @@ package forestry.factory.gui;
 
 import net.minecraft.entity.player.InventoryPlayer;
 
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.widgets.TankWidget;
-import forestry.factory.gadgets.MachineCarpenter;
+import forestry.factory.tiles.TileCarpenter;
 
-public class GuiCarpenter extends GuiForestryTitled<MachineCarpenter> {
+public class GuiCarpenter extends GuiForestryTitled<ContainerCarpenter, TileCarpenter> {
 
-	public GuiCarpenter(InventoryPlayer inventory, MachineCarpenter tile) {
-		super(Defaults.TEXTURE_PATH_GUI + "/carpenter.png", new ContainerCarpenter(inventory, tile), tile);
+	public GuiCarpenter(InventoryPlayer inventory, TileCarpenter tile) {
+		super(Constants.TEXTURE_PATH_GUI + "/carpenter.png", new ContainerCarpenter(inventory, tile), tile);
 		this.ySize = 218;
 
 		widgetManager.add(new TankWidget(this.widgetManager, 150, 17, 0));
 	}
 
 	@Override
-	public void onGuiClosed() {
-		super.onGuiClosed();
-		inventorySlots.onContainerClosed(mc.thePlayer);
-	}
-
-	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
-		MachineCarpenter machine = tile;
-
-		if (machine.isWorking()) {
-			int progressScaled = 16 - machine.getCraftingProgressScaled(16);
-			drawTexturedModalRect(guiLeft + 98, guiTop + 51 + 16 - progressScaled, 176, 60 + 16 - progressScaled, 4, progressScaled);
-		}
+		int progressScaled = inventory.getProgressScaled(16);
+		drawTexturedModalRect(guiLeft + 98, guiTop + 51 + 16 - progressScaled, 176, 60 + 16 - progressScaled, 4, progressScaled);
 	}
 
 }

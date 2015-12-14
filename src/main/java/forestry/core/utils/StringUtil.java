@@ -13,9 +13,13 @@ package forestry.core.utils;
 import java.util.IllegalFormatException;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
+
+import forestry.core.proxy.Proxies;
 
 public class StringUtil {
 
@@ -68,13 +72,6 @@ public class StringUtil {
 		return cleanTags(block.getUnlocalizedName());
 	}
 
-	public static String capitalize(String s) {
-		if (s.length() == 0) {
-			return s;
-		}
-		return s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
-	}
-
 	public static String append(String delim, String source, String appendix) {
 		if (source.length() <= 0) {
 			return appendix;
@@ -102,9 +99,21 @@ public class StringUtil {
 	public static String line(int length) {
 		StringBuilder line = new StringBuilder();
 		for (int i = 0; i < length; i++) {
-			line.append("-");
+			line.append('-');
 		}
 
 		return line.toString();
+	}
+
+	public static int getLineHeight(int maxWidth, String... strings) {
+		Minecraft minecraft = Proxies.common.getClientInstance();
+		FontRenderer fontRenderer = minecraft.fontRendererObj;
+
+		int lineCount = 0;
+		for (String string : strings) {
+			lineCount += fontRenderer.listFormattedStringToWidth(string, maxWidth).size();
+		}
+
+		return lineCount * fontRenderer.FONT_HEIGHT;
 	}
 }

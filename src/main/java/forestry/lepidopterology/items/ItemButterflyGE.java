@@ -23,35 +23,35 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.api.core.Tabs;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IIndividual;
+import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IButterflyNursery;
 import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
-import forestry.core.network.PacketFXSignal;
+import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
-import forestry.core.utils.Utils;
+import forestry.core.utils.EntityUtil;
 import forestry.lepidopterology.entities.EntityButterfly;
 import forestry.lepidopterology.genetics.ButterflyGenome;
 import forestry.plugins.PluginLepidopterology;
 
 public class ItemButterflyGE extends ItemGE {
 
-	private static Random rand = new Random();
+	private static final Random rand = new Random();
 
 	private final EnumFlutterType type;
 
 	public ItemButterflyGE(EnumFlutterType type) {
-		super();
-		setCreativeTab(Tabs.tabLepidopterology);
+		super(Tabs.tabLepidopterology);
 		this.type = type;
 	}
 
@@ -67,7 +67,7 @@ public class ItemButterflyGE extends ItemGE {
 
 	@Override
 	public IButterfly getIndividual(ItemStack itemstack) {
-		return PluginLepidopterology.butterflyInterface.getMember(itemstack);
+		return ButterflyManager.butterflyRoot.getMember(itemstack);
 	}
 
 	@Override
@@ -82,7 +82,7 @@ public class ItemButterflyGE extends ItemGE {
 			return "???";
 		}
 
-		IButterfly butterfly = PluginLepidopterology.butterflyInterface.getMember(itemstack);
+		IButterfly butterfly = ButterflyManager.butterflyRoot.getMember(itemstack);
 		if (butterfly == null) {
 			return "???";
 		}
@@ -98,13 +98,13 @@ public class ItemButterflyGE extends ItemGE {
 
 	public void addCreativeItems(List<ItemStack> itemList, boolean hideSecrets) {
 
-		for (IIndividual individual : PluginLepidopterology.butterflyInterface.getIndividualTemplates()) {
+		for (IIndividual individual : ButterflyManager.butterflyRoot.getIndividualTemplates()) {
 			// Don't show secret butterflies unless ordered to.
 			if (hideSecrets && individual.isSecret() && !Config.isDebug) {
 				continue;
 			}
 
-			itemList.add(PluginLepidopterology.butterflyInterface.getMemberStack(individual, type.ordinal()));
+			itemList.add(ButterflyManager.butterflyRoot.getMemberStack(individual, type.ordinal()));
 		}
 	}
 
@@ -113,14 +113,14 @@ public class ItemButterflyGE extends ItemGE {
 		if (type != EnumFlutterType.BUTTERFLY) {
 			return false;
 		}
-		if (!Proxies.common.isSimulating(entityItem.worldObj) || entityItem.ticksExisted < 80) {
+		if (entityItem.worldObj.isRemote || entityItem.ticksExisted < 80) {
 			return false;
 		}
 		if (rand.nextInt(24) != 0) {
 			return false;
 		}
 
-		IButterfly butterfly = PluginLepidopterology.butterflyInterface.getMember(entityItem.getEntityItem());
+		IButterfly butterfly = ButterflyManager.butterflyRoot.getMember(entityItem.getEntityItem());
 		if (butterfly == null) {
 			return false;
 		}
@@ -133,7 +133,7 @@ public class ItemButterflyGE extends ItemGE {
 			return false;
 		}
 
-		if (Utils.spawnEntity(entityItem.worldObj, new EntityButterfly(entityItem.worldObj, butterfly), entityItem.posX, entityItem.posY, entityItem.posZ) != null) {
+		if (EntityUtil.spawnEntity(entityItem.worldObj, new EntityButterfly(entityItem.worldObj, butterfly), entityItem.posX, entityItem.posY, entityItem.posZ) != null) {
 			if (entityItem.getEntityItem().stackSize > 1) {
 				entityItem.getEntityItem().stackSize--;
 			} else {
@@ -185,12 +185,12 @@ public class ItemButterflyGE extends ItemGE {
 		icons = new IIcon[2];
 		switch (this.type) {
 			case CATERPILLAR:
-				icons[0] = TextureManager.getInstance().registerTex(register, "caterpillar.body");
-				icons[1] = TextureManager.getInstance().registerTex(register, "caterpillar.body2");
+				icons[0] = TextureManager.getSprite(register, "caterpillar.body");
+				icons[1] = TextureManager.getSprite(register, "caterpillar.body2");
 				break;
 			default:
-				icons[0] = TextureManager.getInstance().registerTex(register, "liquids/jar.contents");
-				icons[1] = TextureManager.getInstance().registerTex(register, "liquids/jar.bottle");
+				icons[0] = TextureManager.getSprite(register, "liquids/jar.contents");
+				icons[1] = TextureManager.getSprite(register, "liquids/jar.bottle");
 		}
 	}
 
@@ -207,11 +207,11 @@ public class ItemButterflyGE extends ItemGE {
 	@Override
 	public boolean onItemUse(ItemStack itemstack, EntityPlayer player, World world, int x, int y, int z, int par7, float facingX, float facingY, float facingZ) {
 
-		if (!Proxies.common.isSimulating(world)) {
+		if (world.isRemote) {
 			return false;
 		}
 
-		IButterfly flutter = PluginLepidopterology.butterflyInterface.getMember(itemstack);
+		IButterfly flutter = ButterflyManager.butterflyRoot.getMember(itemstack);
 		if (flutter == null) {
 			return false;
 		}

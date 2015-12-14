@@ -11,51 +11,44 @@
 package forestry.storage.gui;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 
-import forestry.core.config.Defaults;
 import forestry.core.gui.ContainerItemInventory;
-import forestry.core.gui.slots.SlotFiltered;
-import forestry.core.inventory.ItemInventoryBackpack;
+import forestry.core.gui.slots.SlotFilteredInventory;
+import forestry.storage.inventory.ItemInventoryBackpack;
 
-public class ContainerBackpack extends ContainerItemInventory {
+public class ContainerBackpack extends ContainerItemInventory<ItemInventoryBackpack> {
 
-	public ContainerBackpack(final EntityPlayer player, ItemInventoryBackpack inventory) {
-		super(inventory, player);
+	public enum Size {
+		DEFAULT(3, 5, 44, 19),
+		T2(5, 9, 8, 8);
 
-		int lines = 0;
-		int columns = 0;
-		int startX = 0;
-		int startY = 0;
-		if (inventory.getSizeInventory() == Defaults.SLOTS_BACKPACK_DEFAULT) {
-			lines = 3;
-			columns = 5;
-			startX = 44;
-			startY = 19;
-		} else if (inventory.getSizeInventory() == Defaults.SLOTS_BACKPACK_T2) {
-			lines = 5;
-			columns = 9;
-			startX = 8;
-			startY = 8;
+		final int rows;
+		final int columns;
+		final int startX;
+		final int startY;
+
+		Size(int rows, int columns, int startX, int startY) {
+			this.rows = rows;
+			this.columns = columns;
+			this.startX = startX;
+			this.startY = startY;
 		}
 
-		// Inventory
-		for (int j = 0; j < lines; j++) {
-			for (int k = 0; k < columns; k++) {
-				int slot = k + j * columns;
-				addSlotToContainer(new SlotFiltered(inventory, slot, startX + k * 18, startY + j * 18));
-			}
-		}
-
-		// Player inventory
-		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < 9; j++) {
-				addSecuredSlot(player.inventory, j + i * 9 + 9, 8 + j * 18, 11 + startY + lines * 18 + i * 18);
-			}
-		}
-		// Player hotbar
-		for (int i = 0; i < 9; i++) {
-			addSecuredSlot(player.inventory, i, 8 + i * 18, 11 + startY + lines * 18 + 58);
+		public int getSize() {
+			return rows * columns;
 		}
 	}
 
+	public ContainerBackpack(EntityPlayer player, Size size, ItemStack parent) {
+		super(new ItemInventoryBackpack(player, size.getSize(), parent), player.inventory, 8, 11 + size.startY + size.rows * 18);
+
+		// Inventory
+		for (int j = 0; j < size.rows; j++) {
+			for (int k = 0; k < size.columns; k++) {
+				int slot = k + j * size.columns;
+				addSlotToContainer(new SlotFilteredInventory(inventory, slot, size.startX + k * 18, size.startY + j * 18));
+			}
+		}
+	}
 }

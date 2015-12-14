@@ -18,8 +18,8 @@ import net.minecraft.client.particle.EntityDiggingFX;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -29,7 +29,7 @@ public class ParticleHelper {
 	private static final Random rand = new Random();
 
 	@SideOnly(Side.CLIENT)
-	public static boolean addHitEffects(World world, Block block, MovingObjectPosition target, EffectRenderer effectRenderer, ParticleHelperCallback callback) {
+	public static boolean addHitEffects(World world, Block block, MovingObjectPosition target, EffectRenderer effectRenderer, Callback callback) {
 		int x = target.blockX;
 		int y = target.blockY;
 		int z = target.blockZ;
@@ -49,35 +49,20 @@ public class ParticleHelper {
 
 		if (sideHit == 0) {
 			py = (double) y + block.getBlockBoundsMinY() - (double) b;
-		}
-
-		if (sideHit == 1) {
+		} else if (sideHit == 1) {
 			py = (double) y + block.getBlockBoundsMaxY() + (double) b;
-		}
-
-		if (sideHit == 2) {
+		} else if (sideHit == 2) {
 			pz = (double) z + block.getBlockBoundsMinZ() - (double) b;
-		}
-
-		if (sideHit == 3) {
+		} else if (sideHit == 3) {
 			pz = (double) z + block.getBlockBoundsMaxZ() + (double) b;
-		}
-
-		if (sideHit == 4) {
+		} else if (sideHit == 4) {
 			px = (double) x + block.getBlockBoundsMinX() - (double) b;
-		}
-
-		if (sideHit == 5) {
+		} else if (sideHit == 5) {
 			px = (double) x + block.getBlockBoundsMaxX() + (double) b;
 		}
 
 		EntityDiggingFX fx = new EntityDiggingFX(world, px, py, pz, 0.0D, 0.0D, 0.0D, block, sideHit, meta);
-		fx.setParticleIcon(block.getIcon(world, x, y, z, 0));
-
-		if (callback != null) {
-			callback.addHitEffects(fx, world, x, y, z, meta);
-		}
-
+		callback.addHitEffects(fx, world, x, y, z, meta, sideHit);
 		effectRenderer.addEffect(fx.applyColourMultiplier(x, y, z).multiplyVelocity(0.2F).multipleParticleScaleBy(0.6F));
 
 		return true;
@@ -90,7 +75,6 @@ public class ParticleHelper {
 	 * the location is this block.
 	 *
 	 * @param world          The current world
-	 * @param block
 	 * @param x              X position to spawn the particle
 	 * @param y              Y position to spawn the particle
 	 * @param z              Z position to spawn the particle
@@ -100,7 +84,7 @@ public class ParticleHelper {
 	 * @return True to prevent vanilla break particles from spawning.
 	 */
 	@SideOnly(Side.CLIENT)
-	public static boolean addDestroyEffects(World world, Block block, int x, int y, int z, int meta, EffectRenderer effectRenderer, ParticleHelperCallback callback) {
+	public static boolean addDestroyEffects(World world, Block block, int x, int y, int z, int meta, EffectRenderer effectRenderer, Callback callback) {
 		if (block != world.getBlock(x, y, z)) {
 			return true;
 		}
@@ -115,12 +99,7 @@ public class ParticleHelper {
 					int random = rand.nextInt(6);
 
 					EntityDiggingFX fx = new EntityDiggingFX(world, px, py, pz, px - x - 0.5D, py - y - 0.5D, pz - z - 0.5D, block, random, meta);
-					fx.setParticleIcon(block.getIcon(world, x, y, z, 0));
-
-					if (callback != null) {
-						callback.addDestroyEffects(fx, world, x, y, z, meta);
-					}
-
+					callback.addDestroyEffects(fx, world, x, y, z, meta);
 					effectRenderer.addEffect(fx.applyColourMultiplier(x, y, z));
 				}
 			}
@@ -129,4 +108,38 @@ public class ParticleHelper {
 		return true;
 	}
 
+	public interface Callback {
+
+		@SideOnly(Side.CLIENT)
+		void addHitEffects(EntityDiggingFX fx, World world, int x, int y, int z, int meta, int side);
+
+		@SideOnly(Side.CLIENT)
+		void addDestroyEffects(EntityDiggingFX fx, World world, int x, int y, int z, int meta);
+	}
+
+	public static class DefaultCallback implements ParticleHelper.Callback {
+
+		private final Block block;
+
+		public DefaultCallback(Block block) {
+			this.block = block;
+		}
+
+		@Override
+		@SideOnly(Side.CLIENT)
+		public void addHitEffects(EntityDiggingFX fx, World world, int x, int y, int z, int meta, int side) {
+			setTexture(fx, world, x, y, z, side);
+		}
+
+		@Override
+		@SideOnly(Side.CLIENT)
+		public void addDestroyEffects(EntityDiggingFX fx, World world, int x, int y, int z, int meta) {
+			setTexture(fx, world, x, y, z, 0);
+		}
+
+		@SideOnly(Side.CLIENT)
+		private void setTexture(EntityDiggingFX fx, World world, int x, int y, int z, int side) {
+			fx.setParticleIcon(block.getIcon(world, x, y, z, side));
+		}
+	}
 }

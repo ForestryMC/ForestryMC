@@ -12,8 +12,6 @@ package forestry.lepidopterology.entities;
 
 import net.minecraft.entity.player.EntityPlayer;
 
-import forestry.lepidopterology.entities.EntityButterfly.EnumButterflyState;
-
 public class AIButterflyFlee extends AIButterflyMovement {
 
 	public AIButterflyFlee(EntityButterfly entity) {
@@ -39,7 +37,7 @@ public class AIButterflyFlee extends AIButterflyMovement {
 			return false;
 		}
 
-		if (player.getDistanceSq(flightTarget.posX, flightTarget.posY, flightTarget.posZ) < player.getDistanceSqToEntity(entity)) {
+		if (player.getDistanceSq(flightTarget.xCoord, flightTarget.yCoord, flightTarget.zCoord) < player.getDistanceSqToEntity(entity)) {
 			return false;
 		}
 

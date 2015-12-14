@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.lepidopterology.entities;
 
-import forestry.lepidopterology.entities.EntityButterfly.EnumButterflyState;
-
 public class AIButterflyRise extends AIButterflyMovement {
 
 	public AIButterflyRise(EntityButterfly entity) {
@@ -44,7 +42,7 @@ public class AIButterflyRise extends AIButterflyMovement {
 
 	@Override
 	public boolean continueExecuting() {
-		if (entity.getState() != EntityButterfly.EnumButterflyState.RISING) {
+		if (entity.getState() != EnumButterflyState.RISING) {
 			return false;
 		}
 		if (flightTarget == null) {
@@ -56,7 +54,7 @@ public class AIButterflyRise extends AIButterflyMovement {
 		}
 
 		// Continue if we have not yet reached the destination.
-		if (entity.getDestination().getDistanceSquared((int) entity.posX, (int) entity.posY, (int) entity.posZ) > 2.0f) {
+		if (entity.getDestination().squareDistanceTo(entity.posX, entity.posY, entity.posZ) > 2.0f) {
 			return true;
 		}
 

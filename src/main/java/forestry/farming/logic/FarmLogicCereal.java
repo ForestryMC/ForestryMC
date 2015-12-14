@@ -13,17 +13,16 @@ package forestry.farming.logic;
 import net.minecraft.init.Items;
 import net.minecraft.util.IIcon;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.api.farming.Farmables;
 import forestry.api.farming.IFarmHousing;
-import forestry.api.farming.IFarmable;
 
 public class FarmLogicCereal extends FarmLogicCrops {
 
 	public FarmLogicCereal(IFarmHousing housing) {
-		super(housing, Farmables.farmables.get("farmWheat").toArray(new IFarmable[0]));
+		super(housing, Farmables.farmables.get("farmWheat"));
 	}
 
 	@Override

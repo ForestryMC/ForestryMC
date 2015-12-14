@@ -13,13 +13,11 @@ package forestry.farming.triggers;
 import net.minecraft.tileentity.TileEntity;
 
 import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidTank;
 
-import forestry.api.core.ITileStructure;
-import forestry.core.fluids.TankManager;
+import forestry.core.fluids.ITankManager;
 import forestry.core.triggers.Trigger;
-import forestry.farming.gadgets.TileFarmPlain;
-import forestry.farming.gadgets.TileHatch;
+import forestry.farming.tiles.TileFarmHatch;
 
 import buildcraft.api.statements.IStatementContainer;
 import buildcraft.api.statements.IStatementParameter;
@@ -44,20 +42,17 @@ public class TriggerLowLiquid extends Trigger {
 	 */
 	@Override
 	public boolean isTriggerActive(TileEntity tile, ForgeDirection side, IStatementContainer source, IStatementParameter[] parameters) {
-		if (!(tile instanceof TileHatch)) {
+		if (!(tile instanceof TileFarmHatch)) {
 			return false;
 		}
 
-		ITileStructure central = ((TileHatch) tile).getCentralTE();
-		if (central == null || !(central instanceof TileFarmPlain)) {
+		TileFarmHatch tileHatch = (TileFarmHatch) tile;
+		ITankManager tankManager = tileHatch.getMultiblockLogic().getController().getTankManager();
+
+		IFluidTank tank = tankManager.getTank(0);
+		if (tank.getCapacity() == 0) {
 			return false;
 		}
-
-		TankManager tankManager = ((TileFarmPlain) central).getTankManager();
-		FluidTankInfo info = tankManager.getTankInfo(0);
-		if (info.fluid == null) {
-			return true;
-		}
-		return ((float) info.fluid.amount / info.capacity) <= threshold;
+		return ((float) tank.getFluidAmount() / tank.getCapacity()) <= threshold;
 	}
 }

@@ -11,46 +11,53 @@
 package forestry.core.gui;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IInventory;
 
-import forestry.core.gadgets.TileNaturalistChest;
-import forestry.core.gui.slots.SlotFiltered;
-import forestry.core.network.PacketUpdate;
+import forestry.core.gui.slots.SlotFilteredInventory;
+import forestry.core.network.packets.PacketGuiSelectRequest;
+import forestry.core.tiles.IFilterSlotDelegate;
+import forestry.core.tiles.TileNaturalistChest;
 
-public class ContainerNaturalistInventory extends ContainerForestry implements IGuiSelectable {
+public class ContainerNaturalistInventory extends ContainerTile<TileNaturalistChest> implements IGuiSelectable {
 
-	private final IPagedInventory inv;
+	public ContainerNaturalistInventory(InventoryPlayer player, TileNaturalistChest tile, int page) {
+		super(tile, player, 18, 120);
 
-	public ContainerNaturalistInventory(InventoryPlayer player, TileNaturalistChest tile, int page, int pageSize) {
-		super(tile);
-		this.inv = tile;
+		addInventory(this, tile, page);
+	}
 
-		// Inventory
-		for (int x = 0; x < 5; x++) {
-			for (int y = 0; y < 5; y++) {
-				addSlotToContainer(new SlotFiltered(tile, y + page * pageSize + x * 5, 100 + y * 18, 21 + x * 18));
+	public static <T extends IInventory & IFilterSlotDelegate> void addInventory(ContainerForestry container, T inventory, int selectedPage) {
+		for (int page = 0; page < 5; page++) {
+			for (int x = 0; x < 5; x++) {
+				for (int y = 0; y < 5; y++) {
+					int slot = y + page * 25 + x * 5;
+					if (page == selectedPage) {
+						container.addSlotToContainer(new SlotFilteredInventory(inventory, slot, 100 + y * 18, 21 + x * 18));
+					} else {
+						container.addSlotToContainer(new SlotFilteredInventory(inventory, slot, -10000, -10000));
+					}
+				}
 			}
-		}
-
-		// Player inventory
-		for (int i1 = 0; i1 < 3; i1++) {
-			for (int l1 = 0; l1 < 9; l1++) {
-				addSlotToContainer(new Slot(player, l1 + i1 * 9 + 9, 18 + l1 * 18, 120 + i1 * 18));
-			}
-		}
-		// Player hotbar
-		for (int j1 = 0; j1 < 9; j1++) {
-			addSlotToContainer(new Slot(player, j1, 18 + j1 * 18, 178));
 		}
 	}
 
 	@Override
-	public void handleSelectionChange(EntityPlayer player, PacketUpdate packet) {
-		inv.flipPage(player, packet.payload.intPayload[0]);
+	public void handleSelectionRequest(EntityPlayerMP player, PacketGuiSelectRequest packet) {
+		tile.flipPage(player, (short) packet.getPrimaryIndex());
 	}
 
 	@Override
-	public void setSelection(PacketUpdate packet) {
+	public void addCraftingToCrafters(ICrafting p_75132_1_) {
+		super.addCraftingToCrafters(p_75132_1_);
+		tile.increaseNumPlayersUsing();
+	}
+
+	@Override
+	public void onContainerClosed(EntityPlayer player) {
+		super.onContainerClosed(player);
+		tile.decreaseNumPlayersUsing();
 	}
 }

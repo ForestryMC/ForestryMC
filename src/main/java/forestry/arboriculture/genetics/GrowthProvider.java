@@ -18,18 +18,24 @@ import forestry.api.arboriculture.EnumGrowthConditions;
 import forestry.api.arboriculture.IGrowthProvider;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.ITreeGenome;
-import forestry.arboriculture.gadgets.TileSapling;
+import forestry.arboriculture.tiles.TileSapling;
+import forestry.core.utils.BlockUtil;
 import forestry.core.utils.StringUtil;
-import forestry.core.utils.Utils;
-import forestry.core.vect.Vect;
+import forestry.core.utils.vect.Vect;
 
 public class GrowthProvider implements IGrowthProvider {
 
 	@Override
 	public boolean canGrow(ITreeGenome genome, World world, int xPos, int yPos, int zPos, int expectedGirth, int expectedHeight) {
-		return hasRoom(genome, world, xPos, yPos, zPos, expectedGirth, expectedHeight)
-				&& getGrowthConditions(genome, world, xPos, yPos, zPos) != EnumGrowthConditions.HOSTILE
-				&& hasSufficientSaplings(genome, world, xPos, yPos, zPos, expectedGirth);
+		if (!hasRoom(world, xPos, yPos, zPos, expectedGirth, expectedHeight)) {
+			return false;
+		}
+
+		if (getGrowthConditions(genome, world, xPos, yPos, zPos) == EnumGrowthConditions.HOSTILE) {
+			return false;
+		}
+
+		return hasSufficientSaplings(genome, world, xPos, yPos, zPos, expectedGirth);
 	}
 
 	@Override
@@ -47,7 +53,7 @@ public class GrowthProvider implements IGrowthProvider {
 		return new String[0];
 	}
 
-	protected EnumGrowthConditions getConditionsFromRainfall(World world, int xPos, int yPos, int zPos, float min, float max) {
+	protected static EnumGrowthConditions getConditionsFromRainfall(World world, int xPos, int yPos, int zPos, float min, float max) {
 
 		BiomeGenBase biome = world.getWorldChunkManager().getBiomeGenAt(xPos, zPos);
 		if (biome.rainfall < min || biome.rainfall > max) {
@@ -57,17 +63,18 @@ public class GrowthProvider implements IGrowthProvider {
 		return EnumGrowthConditions.EXCELLENT;
 	}
 
-	protected EnumGrowthConditions getConditionsFromTemperature(World world, int xPos, int yPos, int zPos, float min, float max) {
+	protected static EnumGrowthConditions getConditionsFromTemperature(World world, int xPos, int yPos, int zPos, float min, float max) {
 
 		BiomeGenBase biome = world.getWorldChunkManager().getBiomeGenAt(xPos, zPos);
-		if (biome.temperature < min || biome.temperature > max) {
+		float biomeTemperature = biome.getFloatTemperature(xPos, yPos, zPos);
+		if (biomeTemperature < min || biomeTemperature > max) {
 			return EnumGrowthConditions.HOSTILE;
 		}
 
 		return EnumGrowthConditions.EXCELLENT;
 	}
 
-	protected EnumGrowthConditions getConditionFromLight(World world, int xPos, int yPos, int zPos) {
+	protected static EnumGrowthConditions getConditionFromLight(World world, int xPos, int yPos, int zPos) {
 		int lightvalue = world.getBlockLightValue(xPos, yPos + 1, zPos);
 
 		if (lightvalue > 13) {
@@ -83,31 +90,22 @@ public class GrowthProvider implements IGrowthProvider {
 		}
 	}
 
-	/*
-	 * protected EnumGrowthConditions getConditionFromGround(World world, int xPos, int yPos, int zPos) { Block block = Block.blocksList[world.getBlock(xPos,
-	 * yPos - 1, zPos)]; if(block == null) return EnumGrowthConditions.HOSTILE;
-	 * 
-	 * for(EnumPlantType type : this.validPlantTypes) { this.plantType = type; if(block.canSustainPlant(world, xPos, yPos - 1, zPos, ForgeDirection.UP, this))
-	 * return EnumGrowthConditions.EXCELLENT; }
-	 * 
-	 * return EnumGrowthConditions.HOSTILE; }
-	 */
-
-	protected boolean hasRoom(ITreeGenome genome, World world, int xPos, int yPos, int zPos, int expectedGirth, int expectedHeight) {
+	private static boolean hasRoom(World world, int xPos, int yPos, int zPos, int expectedGirth, int expectedHeight) {
 
 		int offset = (expectedGirth - 1) / 2;
 		// if(offset <= 0)
 		// offset = 1;
+		Vect start = new Vect(xPos - offset, yPos + 1, zPos + offset);
+		Vect area = new Vect(-offset + expectedGirth, expectedHeight + 1, -offset + expectedGirth);
 
-		return checkArea(world, new Vect(xPos - offset, yPos + 1, zPos + offset),
-				new Vect(-offset + expectedGirth, expectedHeight + 1, -offset + expectedGirth));
+		return checkArea(world, start, area);
 	}
 
-	protected final boolean checkArea(World world, Vect start, Vect area) {
+	private static boolean checkArea(World world, Vect start, Vect area) {
 		for (int x = start.x; x < start.x + area.x; x++) {
 			for (int y = start.y; y < start.y + area.y; y++) {
 				for (int z = start.z; z < start.z + area.z; z++) {
-					if (!world.isAirBlock(x, y, z) && !Utils.isReplaceableBlock(world, x, y, z)) {
+					if (!world.isAirBlock(x, y, z) && !BlockUtil.isReplaceableBlock(world, x, y, z)) {
 						return false;
 					}
 				}
@@ -116,7 +114,7 @@ public class GrowthProvider implements IGrowthProvider {
 		return true;
 	}
 
-	protected boolean hasSufficientSaplings(ITreeGenome genome, World world, int xPos, int yPos, int zPos, int expectedGirth) {
+	private static boolean hasSufficientSaplings(ITreeGenome genome, World world, int xPos, int yPos, int zPos, int expectedGirth) {
 
 		if (expectedGirth == 1) {
 			return true;
