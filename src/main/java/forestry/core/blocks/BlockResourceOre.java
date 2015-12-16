@@ -12,34 +12,42 @@ package forestry.core.blocks;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
+import forestry.api.core.IModelManager;
+import forestry.api.core.IModelRegister;
 import forestry.core.CreativeTabForestry;
 import forestry.core.render.TextureManager;
 import forestry.plugins.PluginCore;
 
-public class BlockResourceOre extends Block {
-	public enum ResourceType {
+public class BlockResourceOre extends Block implements IModelRegister {
+	public static final PropertyEnum RESOURCE = PropertyEnum.create("resource", ResourceType.class);
+	
+	public enum ResourceType implements IStringSerializable {
 		APATITE,
 		COPPER,
 		TIN;
-
+		
 		public static final ResourceType[] VALUES = values();
 
-		@SideOnly(Side.CLIENT)
-		public IIcon icon;
+		@Override
+		public String getName() {
+			return name().toLowerCase(Locale.ENGLISH);
+		}
 	}
 
 	public BlockResourceOre() {
@@ -47,46 +55,66 @@ public class BlockResourceOre extends Block {
 		setHardness(3F);
 		setResistance(5F);
 		setCreativeTab(CreativeTabForestry.tabForestry);
+		setDefaultState(this.blockState.getBaseState().withProperty(RESOURCE, ResourceType.APATITE));
+	}
+	
+
+	@Override
+	protected BlockState createBlockState() {
+		return new BlockState(this, new IProperty[] { RESOURCE });
 	}
 
 	@Override
-	public void dropBlockAsItemWithChance(World world, int x, int y, int z, int metadata, float par6, int par7) {
-		super.dropBlockAsItemWithChance(world, x, y, z, metadata, par6, par7);
+	public int getMetaFromState(IBlockState state) {
+		return ((ResourceType) state.getValue(RESOURCE)).ordinal();
+	}
 
-		if (metadata == 0) {
-			this.dropXpOnBlockBreak(world, x, y, z, MathHelper.getRandomIntegerInRange(world.rand, 1, 4));
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		return getDefaultState().withProperty(RESOURCE, ResourceType.values()[meta]);
+	}
+
+	@Override
+	public void dropBlockAsItemWithChance(World world, BlockPos pos, IBlockState state, float chance, int fortune) {
+		super.dropBlockAsItemWithChance(world, pos, state, chance, fortune);
+		
+
+		if (state.getValue(RESOURCE) == ResourceType.APATITE) {
+			this.dropXpOnBlockBreak(world, pos, MathHelper.getRandomIntegerInRange(world.rand, 1, 4));
 		}
 	}
-
+	
 	@Override
-	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
+	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		ArrayList<ItemStack> drops = new ArrayList<>();
+		
+		ResourceType metadata = state.getValue(RESOURCE);
 
-		if (metadata == ResourceType.APATITE.ordinal()) {
-			int fortuneModifier = world.rand.nextInt(fortune + 2) - 1;
+		if (metadata == ResourceType.APATITE) {
+			int fortuneModifier = RANDOM.nextInt(fortune + 2) - 1;
 			if (fortuneModifier < 0) {
 				fortuneModifier = 0;
 			}
 
-			int amount = (2 + world.rand.nextInt(5)) * (fortuneModifier + 1);
+			int amount = (2 + RANDOM.nextInt(5)) * (fortuneModifier + 1);
 			if (amount > 0) {
 				drops.add(PluginCore.items.apatite.getItemStack(amount));
 			}
 		} else {
-			drops.add(new ItemStack(this, 1, metadata));
+			drops.add(new ItemStack(this, 1, metadata.ordinal()));
 		}
 
 		return drops;
 	}
-
+	
 	@Override
-	public int getDamageValue(World world, int x, int y, int z) {
-		return world.getBlockMetadata(x, y, z);
+	public int getDamageValue(World world, BlockPos pos) {
+		return getMetaFromState(world.getBlockState(pos));
 	}
-
+	
 	@Override
-	public int damageDropped(int meta) {
-		return meta;
+	public int damageDropped(IBlockState state) {
+		return getMetaFromState(state);
 	}
 
 	// / CREATIVE INVENTORY
@@ -98,24 +126,12 @@ public class BlockResourceOre extends Block {
 			itemList.add(stack);
 		}
 	}
-
-	/* ICONS */
+	
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister register) {
-		ResourceType.APATITE.icon = TextureManager.getSprite(register, "ores/apatite");
-		ResourceType.COPPER.icon = TextureManager.getSprite(register, "ores/copper");
-		ResourceType.TIN.icon = TextureManager.getSprite(register, "ores/tin");
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(int i, int meta) {
-		if (meta < 0 || meta >= ResourceType.VALUES.length) {
-			return null;
-		}
-
-		return ResourceType.VALUES[meta].icon;
+	public void registerModel(Item item, IModelManager manager) {
+		manager.registerItemModel(item, 0, "ores", "apatite");
+		manager.registerItemModel(item, 1, "ores", "copper");
+		manager.registerItemModel(item, 2, "ores", "tin");
 	}
 
 	public ItemStack get(ResourceType type, int amount) {

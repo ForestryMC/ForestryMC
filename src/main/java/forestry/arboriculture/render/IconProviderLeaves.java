@@ -15,9 +15,9 @@ import java.awt.Color;
 import net.minecraft.util.IIcon;
 
 import forestry.api.arboriculture.EnumLeafType;
-import forestry.api.arboriculture.ILeafIconProvider;
+import forestry.api.arboriculture.ILeafSpriteProvider;
 
-public class IconProviderLeaves implements ILeafIconProvider {
+public class IconProviderLeaves implements ILeafSpriteProvider {
 
 	private final TextureLeaves leafTexture;
 	private final int color;
@@ -39,7 +39,7 @@ public class IconProviderLeaves implements ILeafIconProvider {
 	}
 
 	@Override
-	public IIcon getIcon(boolean pollinated, boolean fancy) {
+	public IIcon getSprite(boolean pollinated, boolean fancy) {
 		if (pollinated) {
 			return leafTexture.getPollinated();
 		} else if (fancy) {

@@ -10,9 +10,9 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import forestry.api.apiculture.IBeeIconColourProvider;
+import forestry.api.apiculture.IBeeSpriteColourProvider;
 
-public class DefaultBeeIconColourProvider implements IBeeIconColourProvider {
+public class DefaultBeeIconColourProvider implements IBeeSpriteColourProvider {
 	private final int primaryColour;
 	private final int secondaryColour;
 
@@ -22,7 +22,7 @@ public class DefaultBeeIconColourProvider implements IBeeIconColourProvider {
 	}
 
 	@Override
-	public int getIconColour(int renderPass) {
+	public int getSpriteColour(int renderPass) {
 		if (renderPass == 0) {
 			return primaryColour;
 		}

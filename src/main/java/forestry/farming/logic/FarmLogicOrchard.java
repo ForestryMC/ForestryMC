@@ -126,7 +126,7 @@ public class FarmLogicOrchard extends FarmLogic {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon getIcon() {
+	public IIcon getSprite() {
 		return PluginCore.items.fruits.getIconFromDamage(0);
 	}
 

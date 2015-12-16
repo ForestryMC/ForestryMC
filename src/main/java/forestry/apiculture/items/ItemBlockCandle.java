@@ -58,7 +58,7 @@ public class ItemBlockCandle extends ItemBlockForestry {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIconFromDamageForRenderPass(int meta, int pass) {
-		return this.getBlock().getIcon((meta != 0) ? 8 : 0, pass);
+		return this.getBlock().getSprite((meta != 0) ? 8 : 0, pass);
 	}
 
 	@Override

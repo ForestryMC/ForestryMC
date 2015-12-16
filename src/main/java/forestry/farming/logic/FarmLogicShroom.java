@@ -40,7 +40,7 @@ public class FarmLogicShroom extends FarmLogicArboreal {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon getIcon() {
+	public IIcon getSprite() {
 		return Blocks.red_mushroom.getBlockTextureFromSide(0);
 	}
 

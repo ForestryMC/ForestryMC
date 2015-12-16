@@ -164,7 +164,7 @@ public class ItemBeeGE extends ItemGE {
 	public void registerIcons(IIconRegister register) {
 		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
 			if (allele instanceof IAlleleBeeSpecies) {
-				((IAlleleBeeSpecies) allele).getIconProvider().registerIcons(register);
+				((IAlleleBeeSpecies) allele).getSpriteProvider().registerIcons(register);
 			}
 		}
 	}

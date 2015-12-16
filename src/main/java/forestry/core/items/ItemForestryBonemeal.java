@@ -13,18 +13,20 @@ package forestry.core.items;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 public class ItemForestryBonemeal extends ItemForestry {
 	@Override
-	public boolean onItemUse(ItemStack itemstack, EntityPlayer player, World world, int x, int y, int z, int par7, float facingX, float facingY, float facingZ) {
-		if (ItemDye.applyBonemeal(itemstack, world, x, y, z, player)) {
+	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
+		if (ItemDye.applyBonemeal(stack, world, pos, player)) {
 			if (!world.isRemote) {
-				world.playAuxSFX(2005, x, y, z, 0);
+				world.playAuxSFX(2005, pos, 0);
 			}
 
 			return true;
 		}
-		return super.onItemUse(itemstack, player, world, x, y, z, par7, facingX, facingY, facingZ);
+		return super.onItemUse(stack, player, world, pos, side, hitX, hitY, hitZ);
 	}
 }

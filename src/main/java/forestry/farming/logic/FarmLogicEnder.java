@@ -44,7 +44,7 @@ public class FarmLogicEnder extends FarmLogicHomogeneous {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon getIcon() {
+	public IIcon getSprite() {
 		return Items.ender_eye.getIconFromDamage(0);
 	}
 

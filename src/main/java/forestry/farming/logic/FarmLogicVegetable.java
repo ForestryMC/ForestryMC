@@ -27,7 +27,7 @@ public class FarmLogicVegetable extends FarmLogicCrops {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon getIcon() {
+	public IIcon getSprite() {
 		return Items.carrot.getIconFromDamage(0);
 	}
 

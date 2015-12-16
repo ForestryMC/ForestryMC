@@ -47,7 +47,7 @@ public class FarmLogicCocoa extends FarmLogic {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon getIcon() {
+	public IIcon getSprite() {
 		return Items.dye.getIconFromDamage(3);
 	}
 

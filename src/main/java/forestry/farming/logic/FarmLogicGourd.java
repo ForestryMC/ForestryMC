@@ -40,7 +40,7 @@ public class FarmLogicGourd extends FarmLogic {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon getIcon() {
+	public IIcon getSprite() {
 		return Items.melon.getIconFromDamage(0);
 	}
 

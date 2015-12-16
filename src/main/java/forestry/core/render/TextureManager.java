@@ -58,12 +58,12 @@ public class TextureManager implements ITextureManager {
 				"slots/blocked", "slots/blocked_2", "slots/liquid", "slots/container", "slots/locked",
 				"mail/carrier.player", "mail/carrier.trader"};
 		for (String str : defaultIconNames) {
-			TextureAtlasSprite icon = registerTex(str);
+			TextureAtlasSprite icon = registerSprite(str);
 			defaultSprites.put(str, icon);
 		}
 	}
 
-	public static TextureAtlasSprite registerTex(String identifier) {
+	public static TextureAtlasSprite registerSprite(String identifier) {
 		TextureMap map = Minecraft.getMinecraft().getTextureMapBlocks();
 		return map.registerSprite(new ResourceLocation("forestry:" + identifier));
 	}
@@ -83,7 +83,7 @@ public class TextureManager implements ITextureManager {
 	}
 
 	public static TextureAtlasSprite registerTexUID(short uid, String identifier) {
-		TextureAtlasSprite texture = registerTex(identifier);
+		TextureAtlasSprite texture = registerSprite(identifier);
 		defaultIconProvider.addTexture(uid, texture);
 		return texture;
 	}

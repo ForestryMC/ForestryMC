@@ -175,13 +175,13 @@ public class BlockFarm extends BlockStructure {
 			return null;
 		}
 		int damage = type.getBase().getItemDamage();
-		return block.getIcon(side, damage);
+		return block.getSprite(side, damage);
 	}
 
 	@SideOnly(Side.CLIENT)
 	public static IIcon getOverlayTextureForBlock(int side, int metadata) {
 		BlockFarmType type = BlockFarmType.VALUES[metadata];
-		return EnumFarmBlockTexture.getIcon(type, side);
+		return EnumFarmBlockTexture.getSprite(type, side);
 	}
 
 	@Override
@@ -199,7 +199,7 @@ public class BlockFarm extends BlockStructure {
 			return null;
 		}
 
-		return block.getIcon(side, base.getItemDamage());
+		return block.getSprite(side, base.getItemDamage());
 	}
 
 	/* Particles */

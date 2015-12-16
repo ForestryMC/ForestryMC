@@ -10,12 +10,13 @@
  ******************************************************************************/
 package forestry.core.gui.widgets;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
-
+import codechicken.lib.data.MCDataInput;
 import forestry.core.circuits.ISocketable;
 import forestry.core.circuits.ISolderingIron;
 import forestry.core.circuits.ItemCircuitBoard;
@@ -40,7 +41,7 @@ public class SocketWidget extends Widget {
 	public void draw(int startX, int startY) {
 		ItemStack socketStack = tile.getSocket(slot);
 		if (socketStack != null) {
-			GuiForestry.getItemRenderer().renderItemIntoGUI(manager.minecraft.fontRenderer, manager.minecraft.renderEngine, socketStack, startX + xPos, startY + yPos);
+			Minecraft.getMinecraft().getRenderItem().renderItemIntoGUI(socketStack, startX + xPos, startY + yPos);
 		}
 	}
 

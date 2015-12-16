@@ -24,7 +24,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.IAlleleTreeSpeciesCustom;
 import forestry.api.arboriculture.IGermlingIconProvider;
-import forestry.api.arboriculture.ILeafIconProvider;
+import forestry.api.arboriculture.ILeafSpriteProvider;
 import forestry.api.arboriculture.ITreeGenerator;
 import forestry.api.arboriculture.ITreeRoot;
 import forestry.api.arboriculture.TreeManager;
@@ -37,12 +37,12 @@ import forestry.core.render.TextureManager;
 public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeciesCustom, ISpriteProvider {
 	private final ITreeGenerator generator;
 	private final IGermlingIconProvider germlingIconProvider;
-	private final ILeafIconProvider leafIconProvider;
+	private final ILeafSpriteProvider leafIconProvider;
 	private final List<IFruitFamily> fruits = new ArrayList<>();
 
 	private EnumPlantType nativeType = EnumPlantType.Plains;
 
-	public AlleleTreeSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, boolean isDominant, IClassification branch, String binomial, ILeafIconProvider leafIconProvider, IGermlingIconProvider germlingIconProvider, ITreeGenerator generator) {
+	public AlleleTreeSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, boolean isDominant, IClassification branch, String binomial, ILeafSpriteProvider leafIconProvider, IGermlingIconProvider germlingIconProvider, ITreeGenerator generator) {
 		super(uid, unlocalizedName, authority, unlocalizedDescription, isDominant, branch, binomial);
 
 		this.generator = generator;
@@ -85,7 +85,7 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 
 	@Override
 	public IIcon getLeafIcon(boolean pollinated, boolean fancy) {
-		return leafIconProvider.getIcon(pollinated, fancy);
+		return leafIconProvider.getSprite(pollinated, fancy);
 	}
 
 	@Override
@@ -121,7 +121,7 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public ISpriteProvider getIconProvider() {
+	public ISpriteProvider getSpriteProvider() {
 		return this;
 	}
 

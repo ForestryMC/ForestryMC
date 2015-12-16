@@ -45,10 +45,9 @@ import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.IShearable;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
 import net.minecraftforge.oredict.OreDictionary;
-
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
 
 import forestry.Forestry;
 import forestry.api.recipes.RecipeManagers;
@@ -58,10 +57,12 @@ import forestry.api.storage.StorageManager;
 import forestry.apiculture.blocks.BlockRegistryApiculture;
 import forestry.core.IPickupHandler;
 import forestry.core.IResupplyHandler;
+import forestry.core.blocks.BlockRegistry;
 import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
 import forestry.core.fluids.Fluids;
 import forestry.core.items.ItemCrated;
+import forestry.core.items.ItemRegistry;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
@@ -347,7 +348,7 @@ public class PluginStorage extends ForestryPlugin {
 				new ItemStack(Items.magma_cream),
 				new ItemStack(Items.speckled_melon),
 				new ItemStack(Items.fish),
-				new ItemStack(Items.cooked_fished),
+				new ItemStack(Items.cooked_fish),
 				new ItemStack(Items.lead),
 				new ItemStack(Items.fishing_rod),
 				new ItemStack(Items.name_tag),
@@ -561,5 +562,10 @@ public class PluginStorage extends ForestryPlugin {
 				'X', "gemDiamond",
 				'W', wovenSilk,
 				'T', backpackT1);
+	}
+	
+	@Override
+	public ItemRegistry getItemRegistry() {
+		return items;
 	}
 }

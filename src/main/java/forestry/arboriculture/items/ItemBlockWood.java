@@ -163,7 +163,7 @@ public class ItemBlockWood extends ItemBlockForestry {
 	public IIcon getIcon(ItemStack stack, int pass) {
 		EnumWoodType woodType = getWoodType(stack);
 		if (woodType == null) {
-			return super.getIcon(stack, pass);
+			return super.getSprite(stack, pass);
 		}
 
 		if (getBlock() instanceof BlockLog) {

@@ -221,29 +221,17 @@ public class Tree extends Individual implements ITree, IPlantable {
 
 	@Override
 	public void setLeaves(World world, GameProfile owner, int x, int y, int z) {
-		try {
-			genome.getPrimary().getGenerator().setLeaves(genome, world, owner, x, y, z, false);
-		} catch (Throwable ignored) {
-			genome.getPrimary().getGenerator().setLeaves(world, owner, x, y, z, false);
-		}
+		genome.getPrimary().getGenerator().setLeaves(genome, world, owner, x, y, z, false);
 	}
 
 	@Override
 	public void setLeavesDecorative(World world, GameProfile owner, int x, int y, int z) {
-		try {
-			genome.getPrimary().getGenerator().setLeaves(genome, world, owner, x, y, z, true);
-		} catch (Throwable ignored) {
-			genome.getPrimary().getGenerator().setLeaves(world, owner, x, y, z, true);
-		}
+		genome.getPrimary().getGenerator().setLeaves(genome, world, owner, x, y, z, true);
 	}
 
 	@Override
 	public void setLogBlock(World world, int x, int y, int z, ForgeDirection facing) {
-		try {
-			genome.getPrimary().getGenerator().setLogBlock(genome, world, x, y, z, facing);
-		} catch (Throwable ignored) {
-			genome.getPrimary().getGenerator().setLogBlock(world, x, y, z, facing);
-		}
+		genome.getPrimary().getGenerator().setLogBlock(world, x, y, z, facing);
 	}
 
 	@Override

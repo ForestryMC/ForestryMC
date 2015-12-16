@@ -10,15 +10,16 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import forestry.api.core.IModelManager;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.ItemStackUtil;
@@ -70,9 +71,26 @@ public class ItemCrated extends ItemForestry {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerIcons(IIconRegister register) {
+	public void registerModel(Item item, IModelManager manager) {
 		String textureName = (contained == null) ? "crate" : "crate-filled";
-		itemIcon = TextureManager.getSprite(register, textureName);
+		manager.registerItemModel(item, new CreateMeshDefinition(manager));
+	}
+
+	@SideOnly(Side.CLIENT)
+	private class CreateMeshDefinition implements ItemMeshDefinition {
+
+		private IModelManager manager;
+
+		public CreateMeshDefinition(IModelManager manager) {
+			this.manager = manager;
+		}
+
+		@Override
+		public ModelResourceLocation getModelLocation(ItemStack stack) {
+			String textureName = (contained == null) ? "crate" : "crate-filled";
+			return manager.getModelLocation(stack.getItem(), stack.getItemDamage(), textureName);
+		}
+
 	}
 
 }

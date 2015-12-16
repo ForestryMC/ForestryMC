@@ -19,10 +19,10 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.api.apiculture.EnumBeeType;
-import forestry.api.apiculture.IBeeIconProvider;
+import forestry.api.apiculture.IBeeModelProvider;
 import forestry.core.render.TextureManager;
 
-public class DefaultBeeIconProvider implements IBeeIconProvider {
+public class DefaultBeeIconProvider implements IBeeModelProvider {
 
 	public static final DefaultBeeIconProvider instance = new DefaultBeeIconProvider();
 

@@ -30,7 +30,7 @@ import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.EnumWoodType;
 import forestry.api.arboriculture.IAlleleTreeSpeciesCustom;
 import forestry.api.arboriculture.IGermlingIconProvider;
-import forestry.api.arboriculture.ILeafIconProvider;
+import forestry.api.arboriculture.ILeafSpriteProvider;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.ITreeGenerator;
 import forestry.api.arboriculture.ITreeGenome;
@@ -963,7 +963,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 
 		this.branch = branch;
 
-		ILeafIconProvider leafIconProvider = new IconProviderLeaves(leafType, primary, secondary);
+		ILeafSpriteProvider leafIconProvider = new IconProviderLeaves(leafType, primary, secondary);
 		IGermlingIconProvider germlingIconProvider = new IconProviderGermlingVanilla(vanillaMeta);
 
 		this.species = TreeManager.treeFactory.createSpecies(uid, unlocalizedName, "Sengir", unlocalizedDescription, dominant, branch.getBranch(), binomial, leafIconProvider, germlingIconProvider, this);
@@ -979,7 +979,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 
 		this.branch = branch;
 
-		ILeafIconProvider leafIconProvider = new IconProviderLeaves(leafType, primary, secondary);
+		ILeafSpriteProvider leafIconProvider = new IconProviderLeaves(leafType, primary, secondary);
 		IGermlingIconProvider germlingIconProvider = new IconProviderGermling(uid);
 
 		this.species = TreeManager.treeFactory.createSpecies(uid, unlocalizedName, "Sengir", unlocalizedDescription, dominant, branch.getBranch(), binomial, leafIconProvider, germlingIconProvider, this);

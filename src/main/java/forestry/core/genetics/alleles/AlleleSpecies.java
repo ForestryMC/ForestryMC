@@ -188,5 +188,5 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesCust
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public abstract ISpriteProvider getIconProvider();
+	public abstract ISpriteProvider getSpriteProvider();
 }

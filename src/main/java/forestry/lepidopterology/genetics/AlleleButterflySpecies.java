@@ -85,7 +85,7 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public ISpriteProvider getIconProvider() {
+	public ISpriteProvider getSpriteProvider() {
 		return null;
 	}
 

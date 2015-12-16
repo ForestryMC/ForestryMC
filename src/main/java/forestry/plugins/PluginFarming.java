@@ -22,21 +22,22 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
-import cpw.mods.fml.common.registry.GameData;
-import cpw.mods.fml.common.registry.GameRegistry;
-
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
+import net.minecraftforge.fml.common.registry.GameData;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.farming.Farmables;
 import forestry.api.farming.IFarmable;
+import forestry.core.blocks.BlockRegistry;
 import forestry.core.circuits.Circuit;
 import forestry.core.circuits.CircuitLayout;
 import forestry.core.config.Constants;
 import forestry.core.items.EnumElectronTube;
+import forestry.core.items.ItemRegistry;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.Log;
 import forestry.farming.blocks.BlockFarmType;
@@ -200,7 +201,7 @@ public class PluginFarming extends ForestryPlugin {
 			String windfallMetaString = matchResult.group(4);
 
 			try {
-				Block sapling = GameData.getBlockRegistry().getRaw(saplingString);
+				Block sapling = GameData.getBlockRegistry().getRaw(GameData.getBlockRegistry().getId(new ResourceLocation(saplingString)));
 				if (sapling == null || sapling == Blocks.air) {
 					throw new RuntimeException("can't find block for " + saplingString);
 				}
@@ -209,7 +210,7 @@ public class PluginFarming extends ForestryPlugin {
 				if (windfallString == null) {
 					farmables.add(new FarmableGenericSapling(sapling, saplingMeta));
 				} else {
-					Item windfall = GameData.getItemRegistry().getRaw(windfallString);
+					Item windfall = GameData.getItemRegistry().getRaw(GameData.getItemRegistry().getId(new ResourceLocation(windfallString)));
 					if (windfall == null) {
 						throw new RuntimeException("can't find item for " + windfallString);
 					}
@@ -244,11 +245,11 @@ public class PluginFarming extends ForestryPlugin {
 			}
 
 			try {
-				Item seed = GameData.getItemRegistry().getRaw(items[0]);
+				Item seed = GameData.getItemRegistry().getRaw(GameData.getItemRegistry().getId(new ResourceLocation(items[0])));
 				if (seed == null) {
 					throw new RuntimeException("can't find item for " + items[0]);
 				}
-				Block crop = GameData.getBlockRegistry().getRaw(items[2]);
+				Block crop = GameData.getBlockRegistry().getRaw(GameData.getBlockRegistry().getId(new ResourceLocation(items[2])));
 				if (crop == null || crop == Blocks.air) {
 					throw new RuntimeException("can't find block for " + items[2]);
 				}
@@ -342,5 +343,10 @@ public class PluginFarming extends ForestryPlugin {
 		ChipsetManager.solderManager.addRecipe(layoutManual, PluginCore.items.tubes.get(EnumElectronTube.OBSIDIAN, 1), Circuit.farmGourdManual);
 		ChipsetManager.solderManager.addRecipe(layoutManual, PluginCore.items.tubes.get(EnumElectronTube.APATITE, 1), Circuit.farmShroomManual);
 		ChipsetManager.solderManager.addRecipe(layoutManual, PluginCore.items.tubes.get(EnumElectronTube.LAPIS, 1), Circuit.farmCocoaManual);
+	}
+	
+	@Override
+	public BlockRegistry getBlockRegistry() {
+		return blocks;
 	}
 }

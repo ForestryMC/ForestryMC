@@ -33,6 +33,7 @@ import forestry.api.recipes.ICraftingProvider;
 import forestry.api.recipes.RecipeManagers;
 import forestry.apiculture.items.ItemRegistryApiculture;
 import forestry.core.blocks.BlockCoreType;
+import forestry.core.blocks.BlockRegistry;
 import forestry.core.blocks.BlockSoil;
 import forestry.core.circuits.Circuit;
 import forestry.core.circuits.CircuitLayout;
@@ -42,6 +43,7 @@ import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
 import forestry.core.items.EnumElectronTube;
 import forestry.core.items.ItemElectronTube;
+import forestry.core.items.ItemRegistry;
 import forestry.core.items.ItemRegistryCore;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.recipes.RecipeUtil;
@@ -522,5 +524,10 @@ public class PluginFactory extends ForestryPlugin {
 				'B', Items.book,
 				'W', "craftingTableWood",
 				'C', "chestWood");
+	}
+	
+	@Override
+	public BlockRegistry getBlockRegistry() {
+		return blocks;
 	}
 }

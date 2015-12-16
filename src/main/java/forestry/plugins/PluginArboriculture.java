@@ -18,21 +18,20 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.WeightedRandomChestContent;
 
 import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.FuelBurnTimeEvent;
+import net.minecraftforge.fml.common.IFuelHandler;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
+import net.minecraftforge.fml.common.eventhandler.Event;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.GameData;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import net.minecraftforge.oredict.OreDictionary;
-
-import cpw.mods.fml.common.IFuelHandler;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
-import cpw.mods.fml.common.eventhandler.Event;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.registry.GameData;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.registry.VillagerRegistry;
 
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.EnumWoodType;
@@ -124,9 +123,6 @@ public class PluginArboriculture extends ForestryPlugin {
 	public void preInit() {
 		super.preInit();
 
-		// register for FuelBurnTimeEvent
-		MinecraftForge.EVENT_BUS.register(this);
-
 		for (EnumWoodType woodType : EnumWoodType.VALUES) {
 			WoodItemAccess.registerLog(blocks.logs, woodType, false);
 			WoodItemAccess.registerPlanks(blocks.planks, woodType, false);
@@ -152,8 +148,18 @@ public class PluginArboriculture extends ForestryPlugin {
 		// Register vanilla and forestry fence ids
 		validFences.add(blocks.fences);
 		validFences.add(blocks.fencesFireproof);
-		validFences.add(Blocks.fence);
-		validFences.add(Blocks.fence_gate);
+		validFences.add(Blocks.oak_fence);
+		validFences.add(Blocks.spruce_fence);
+		validFences.add(Blocks.birch_fence);
+		validFences.add(Blocks.jungle_fence);
+		validFences.add(Blocks.dark_oak_fence);
+		validFences.add(Blocks.acacia_fence);
+		validFences.add(Blocks.oak_fence_gate);
+		validFences.add(Blocks.spruce_fence_gate);
+		validFences.add(Blocks.birch_fence_gate);
+		validFences.add(Blocks.jungle_fence_gate);
+		validFences.add(Blocks.dark_oak_fence_gate);
+		validFences.add(Blocks.acacia_fence_gate);
 		validFences.add(Blocks.nether_brick_fence);
 
 		// Commands
@@ -176,11 +182,11 @@ public class PluginArboriculture extends ForestryPlugin {
 
 		blocks.arboriculture.init();
 
-		if (Config.enableVillagers) {
+		/*if (Config.enableVillagers) {
 			VillagerRegistry.instance().registerVillagerId(Constants.ID_VILLAGER_LUMBERJACK);
 			Proxies.render.registerVillagerSkin(Constants.ID_VILLAGER_LUMBERJACK, Constants.TEXTURE_SKIN_LUMBERJACK);
 			VillagerRegistry.instance().registerVillageTradeHandler(Constants.ID_VILLAGER_LUMBERJACK, new VillageHandlerArboriculture());
-		}
+		}*/
 	}
 
 	@Override
@@ -380,7 +386,7 @@ public class PluginArboriculture extends ForestryPlugin {
 	@Override
 	public boolean processIMCMessage(IMCMessage message) {
 		if (message.key.equals("add-fence-block") && message.isStringMessage()) {
-			Block block = GameData.getBlockRegistry().getRaw(message.getStringValue());
+			Block block = GameData.getBlockRegistry().getRaw(GameData.getBlockRegistry().getId(new ResourceLocation(message.getStringValue())));
 
 			if (block != null && block != Blocks.air) {
 				validFences.add(block);
@@ -418,25 +424,19 @@ public class PluginArboriculture extends ForestryPlugin {
 			if (items.sapling == item) {
 				return 100;
 			}
+			
+			Block block = Block.getBlockFromItem(item);
+
+			if (block instanceof IWoodTyped) {
+				IWoodTyped woodTypedBlock = (IWoodTyped) block;
+				if (woodTypedBlock.isFireproof()) {
+					return 0;
+				} else if (blocks.slabs == block) {
+					return 150;
+				}
+			}
 
 			return 0;
-		}
-	}
-
-	@SubscribeEvent
-	public void fuelBurnTimeEvent(FuelBurnTimeEvent fuelBurnTimeEvent) {
-		Item item = fuelBurnTimeEvent.fuel.getItem();
-		Block block = Block.getBlockFromItem(item);
-
-		if (block instanceof IWoodTyped) {
-			IWoodTyped woodTypedBlock = (IWoodTyped) block;
-			if (woodTypedBlock.isFireproof()) {
-				fuelBurnTimeEvent.burnTime = 0;
-				fuelBurnTimeEvent.setResult(Event.Result.DENY);
-			} else if (blocks.slabs == block) {
-				fuelBurnTimeEvent.burnTime = 150;
-				fuelBurnTimeEvent.setResult(Event.Result.DENY);
-			}
 		}
 	}
 }

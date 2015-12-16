@@ -30,8 +30,8 @@ import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IAlleleBeeSpeciesCustom;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
-import forestry.api.apiculture.IBeeIconColourProvider;
-import forestry.api.apiculture.IBeeIconProvider;
+import forestry.api.apiculture.IBeeSpriteColourProvider;
+import forestry.api.apiculture.IBeeModelProvider;
 import forestry.api.apiculture.IBeeRoot;
 import forestry.api.apiculture.IJubilanceProvider;
 import forestry.api.core.ISpriteProvider;
@@ -47,8 +47,8 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 	private final Map<ItemStack, Float> productChances = new HashMap<>();
 	private final Map<ItemStack, Float> specialtyChances = new HashMap<>();
 
-	private IBeeIconProvider beeIconProvider;
-	private IBeeIconColourProvider beeIconColourProvider;
+	private IBeeModelProvider beeIconProvider;
+	private IBeeSpriteColourProvider beeIconColourProvider;
 	private IJubilanceProvider jubilanceProvider;
 	private boolean nocturnal = false;
 
@@ -102,13 +102,13 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 	}
 
 	@Override
-	public IAlleleBeeSpeciesCustom setCustomBeeIconProvider(IBeeIconProvider beeIconProvider) {
+	public IAlleleBeeSpeciesCustom setCustomBeeIconProvider(IBeeModelProvider beeIconProvider) {
 		this.beeIconProvider = beeIconProvider;
 		return this;
 	}
 
 	@Override
-	public IAlleleBeeSpeciesCustom setCustomBeeIconColourProvider(IBeeIconColourProvider beeIconColourProvider) {
+	public IAlleleBeeSpeciesCustom setCustomBeeIconColourProvider(IBeeSpriteColourProvider beeIconColourProvider) {
 		this.beeIconColourProvider = beeIconColourProvider;
 		return this;
 	}
@@ -173,18 +173,18 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public ISpriteProvider getIconProvider() {
+	public ISpriteProvider getSpriteProvider() {
 		return new BeeIconProviderWrapper(beeIconProvider);
 	}
 
 	@Override
 	public IIcon getIcon(EnumBeeType type, int renderPass) {
-		return beeIconProvider.getIcon(type, renderPass);
+		return beeIconProvider.getSprite(type, renderPass);
 	}
 
 	@Override
 	public int getIconColour(int renderPass) {
-		return beeIconColourProvider.getIconColour(renderPass);
+		return beeIconColourProvider.getSpriteColour(renderPass);
 	}
 
 	@Override
@@ -194,9 +194,9 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 
 	private static class BeeIconProviderWrapper implements ISpriteProvider {
 
-		private final IBeeIconProvider beeIconProvider;
+		private final IBeeModelProvider beeIconProvider;
 
-		public BeeIconProviderWrapper(IBeeIconProvider beeIconProvider) {
+		public BeeIconProviderWrapper(IBeeModelProvider beeIconProvider) {
 			this.beeIconProvider = beeIconProvider;
 		}
 

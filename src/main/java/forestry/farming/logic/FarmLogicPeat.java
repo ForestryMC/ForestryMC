@@ -105,7 +105,7 @@ public class FarmLogicPeat extends FarmLogicWatered {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon getIcon() {
+	public IIcon getSprite() {
 		return PluginCore.items.peat.getIconFromDamage(0);
 	}
 

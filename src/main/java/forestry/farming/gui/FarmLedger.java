@@ -39,7 +39,7 @@ public class FarmLedger extends Ledger {
 		int xHeader = x + 22;
 
 		// Draw icon
-		drawIcon(Items.water_bucket.getIconFromDamage(0), xIcon, y);
+		drawSprite(Items.water_bucket.getIconFromDamage(0), xIcon, y);
 		y += 4;
 
 		if (!isFullyOpened()) {

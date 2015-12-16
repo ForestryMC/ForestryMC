@@ -51,7 +51,7 @@ public class ErrorLedger extends Ledger {
 		int xHeader = x + 24;
 
 		// Draw icon
-		drawIcon(state.getIcon(), xIcon, y);
+		drawSprite(state.getSprite(), xIcon, y);
 		y += 4;
 
 		// Write description if fully opened

@@ -36,7 +36,7 @@ public class FarmLogicCereal extends FarmLogicCrops {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon getIcon() {
+	public IIcon getSprite() {
 		return Items.wheat.getIconFromDamage(0);
 	}
 

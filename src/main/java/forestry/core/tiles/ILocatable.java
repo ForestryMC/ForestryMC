@@ -10,11 +10,11 @@
  ******************************************************************************/
 package forestry.core.tiles;
 
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 public interface ILocatable {
-	ChunkCoordinates getCoordinates();
+	BlockPos getPos();
 
 	World getWorld();
 }

@@ -141,9 +141,9 @@ public class BlockMushroom extends BlockSapling implements IItemTyped {
 
 		switch (type) {
 			case BROWN:
-				return Blocks.brown_mushroom.getIcon(side, meta);
+				return Blocks.brown_mushroom.getSprite(side, meta);
 			case RED:
-				return Blocks.red_mushroom.getIcon(side, meta);
+				return Blocks.red_mushroom.getSprite(side, meta);
 			default:
 				return null;
 		}

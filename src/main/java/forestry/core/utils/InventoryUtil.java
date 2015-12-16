@@ -23,6 +23,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -637,6 +638,10 @@ public abstract class InventoryUtil {
 			destination.setInventorySlotContents(i, stack);
 		}
 	}
+	
+	public static void dropInventory(IInventory inventory, World world, BlockPos pos) {
+		dropInventory(inventory, world, pos.getX(), pos.getY(), pos.getZ());
+	}
 
 	public static void dropInventory(IInventory inventory, World world, double x, double y, double z) {
 		if (inventory == null) {
@@ -649,6 +654,10 @@ public abstract class InventoryUtil {
 			dropItemStackFromInventory(itemstack, world, x, y, z);
 			inventory.setInventorySlotContents(slot, null);
 		}
+	}
+	
+	public static void dropSockets(ISocketable socketable, World world, BlockPos pos) {
+		dropSockets(socketable, world, pos.getX(), pos.getY(), pos.getZ());
 	}
 
 	public static void dropSockets(ISocketable socketable, World world, double x, double y, double z) {

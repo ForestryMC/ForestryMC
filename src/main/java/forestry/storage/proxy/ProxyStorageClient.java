@@ -21,6 +21,6 @@ public class ProxyStorageClient extends ProxyStorage {
 
 	@Override
 	public void registerCrateForRendering(ItemCrated crate) {
-		MinecraftForgeClient.registerItemRenderer(crate, crateRenderer);
+		//MinecraftForgeClient.registerItemRenderer(crate, crateRenderer);
 	}
 }

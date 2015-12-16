@@ -13,7 +13,7 @@ package forestry.core.gui.ledgers;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.IIcon;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
@@ -196,11 +196,11 @@ public abstract class Ledger {
 		GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
 	}
 
-	protected void drawIcon(IIcon icon, int x, int y) {
+	protected void drawSprite(TextureAtlasSprite icon, int x, int y) {
 		if (icon != null) {
 			GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
 			Proxies.render.bindTexture(SpriteSheet.ITEMS);
-			manager.gui.drawTexturedModelRectFromIcon(x, y, icon, 16, 16);
+			manager.gui.drawTexturedModelRectFromSprite(x, y, icon, 16, 16);
 		}
 	}
 
@@ -223,11 +223,11 @@ public abstract class Ledger {
 	protected int drawSplitText(String string, int x, int y, int width, int color, boolean shadow) {
 		int originalY = y;
 		Minecraft minecraft = Proxies.common.getClientInstance();
-		List strings = minecraft.fontRenderer.listFormattedStringToWidth(string, width);
+		List strings = minecraft.fontRendererObj.listFormattedStringToWidth(string, width);
 		for (Object obj : strings) {
 			if (obj instanceof String) {
-				minecraft.fontRenderer.drawString((String) obj, x, y, color, shadow);
-				y += minecraft.fontRenderer.FONT_HEIGHT;
+				minecraft.fontRendererObj.drawString((String) obj, x, y, color, shadow);
+				y += minecraft.fontRendererObj.FONT_HEIGHT;
 			}
 		}
 		return y - originalY;
@@ -235,7 +235,7 @@ public abstract class Ledger {
 
 	protected int drawText(String string, int x, int y) {
 		Minecraft minecraft = Proxies.common.getClientInstance();
-		minecraft.fontRenderer.drawString(string, x, y, fontColorText);
-		return minecraft.fontRenderer.FONT_HEIGHT;
+		minecraft.fontRendererObj.drawString(string, x, y, fontColorText);
+		return minecraft.fontRendererObj.FONT_HEIGHT;
 	}
 }

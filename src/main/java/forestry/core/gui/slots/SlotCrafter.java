@@ -14,9 +14,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.SlotCrafting;
 import net.minecraft.item.ItemStack;
-
-import cpw.mods.fml.common.FMLCommonHandler;
-
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import forestry.factory.tiles.ICrafterWorktable;
 
 public class SlotCrafter extends SlotCrafting {

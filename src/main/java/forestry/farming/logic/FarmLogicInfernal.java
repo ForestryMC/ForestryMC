@@ -44,7 +44,7 @@ public class FarmLogicInfernal extends FarmLogicHomogeneous {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon getIcon() {
+	public IIcon getSprite() {
 		return Items.nether_wart.getIconFromDamage(0);
 	}
 

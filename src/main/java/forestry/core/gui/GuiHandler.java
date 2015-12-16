@@ -15,11 +15,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
-
-import cpw.mods.fml.common.network.IGuiHandler;
-
+import net.minecraftforge.fml.common.network.IGuiHandler;
 import forestry.api.core.ForestryAPI;
 
 public class GuiHandler implements IGuiHandler {
@@ -47,8 +45,8 @@ public class GuiHandler implements IGuiHandler {
 
 	public static void openGui(EntityPlayer entityplayer, IGuiHandlerTile guiHandler, short data) {
 		int guiData = encodeGuiData(guiHandler, data);
-		ChunkCoordinates coordinates = guiHandler.getCoordinates();
-		entityplayer.openGui(ForestryAPI.instance, guiData, entityplayer.worldObj, coordinates.posX, coordinates.posY, coordinates.posZ);
+		BlockPos pos = guiHandler.getPos();
+		entityplayer.openGui(ForestryAPI.instance, guiData, entityplayer.worldObj, pos.getX(), pos.getY(), pos.getZ());
 	}
 
 	private static int encodeGuiData(IGuiHandlerForestry guiHandler, short data) {
@@ -85,7 +83,7 @@ public class GuiHandler implements IGuiHandler {
 				break;
 			}
 			case Tile: {
-				TileEntity tileEntity = world.getTileEntity(x, y, z);
+				TileEntity tileEntity = world.getTileEntity(new BlockPos(x, y, z));
 				if (guiId.getGuiHandlerClass().isInstance(tileEntity)) {
 					return ((IGuiHandlerTile) tileEntity).getGui(player, data);
 				}
@@ -122,7 +120,7 @@ public class GuiHandler implements IGuiHandler {
 				break;
 			}
 			case Tile: {
-				TileEntity tileEntity = world.getTileEntity(x, y, z);
+				TileEntity tileEntity = world.getTileEntity(new BlockPos(x, y, z));
 				if (guiId.getGuiHandlerClass().isInstance(tileEntity)) {
 					return ((IGuiHandlerTile) tileEntity).getContainer(player, data);
 				}

@@ -11,14 +11,13 @@
 package forestry.core.items;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.core.tiles.TileForestry;
 import forestry.core.tiles.TileUtil;
@@ -36,33 +35,21 @@ public class ItemBlockForestry extends ItemBlock {
 		return i;
 	}
 
-	protected Block getBlock() {
-		return field_150939_a;
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public IIcon getIconFromDamage(int meta) {
-		return this.getBlock().getIcon(1, meta);
-	}
-
 	@Override
 	public String getUnlocalizedName(ItemStack itemstack) {
 		return getBlock().getUnlocalizedName() + "." + itemstack.getItemDamage();
 	}
-
+	
 	@Override
-	public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int metadata) {
-		boolean placed = super.placeBlockAt(stack, player, world, x, y, z, side, hitX, hitY, hitZ, metadata);
+	public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState) {
+		boolean placed = super.placeBlockAt(stack, player, world, pos, side, hitX, hitY, hitZ, newState);
 
-		TileForestry tile = TileUtil.getTile(world, x, y, z, TileForestry.class);
+		TileForestry tile = TileUtil.getTile(world, pos, TileForestry.class);
 
 		if (tile != null) {
 			if (stack.getItem() instanceof ItemBlockNBT && stack.hasTagCompound()) {
 				tile.readFromNBT(stack.getTagCompound());
-				tile.xCoord = x;
-				tile.yCoord = y;
-				tile.zCoord = z;
+				tile.setPos(pos);
 			}
 
 			tile.rotateAfterPlacement(player, side);

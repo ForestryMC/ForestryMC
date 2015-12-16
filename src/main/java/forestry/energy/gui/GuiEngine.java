@@ -44,7 +44,7 @@ public abstract class GuiEngine<C extends Container, I extends TileEngine> exten
 			drawBackground(x, y);
 
 			// Draw icon
-			drawIcon(TextureManager.getInstance().getDefault("misc/energy"), x + 3, y + 4);
+			drawSprite(TextureManager.getInstance().getDefault("misc/energy"), x + 3, y + 4);
 
 			if (!isFullyOpened()) {
 				return;

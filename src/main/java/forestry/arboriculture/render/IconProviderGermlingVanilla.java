@@ -30,7 +30,7 @@ public class IconProviderGermlingVanilla implements IGermlingIconProvider {
 
 	@Override
 	public void registerIcons(IIconRegister register) {
-		icon = Blocks.sapling.getIcon(0, vanillaMap);
+		icon = Blocks.sapling.getSprite(0, vanillaMap);
 		pollenIcons = new IIcon[2];
 		pollenIcons[0] = TextureManager.getSprite(register, "germlings/pollen.0");
 		pollenIcons[1] = TextureManager.getSprite(register, "germlings/pollen.1");

@@ -49,7 +49,7 @@ public class FarmLogicRubber extends FarmLogic {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon getIcon() {
+	public IIcon getSprite() {
 		if (!inActive) {
 			return PluginIC2.resin.getIconIndex();
 		} else {

@@ -20,11 +20,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.MinecraftForge;
-
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Loader;
-
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.Loader;
 import forestry.core.TickHandlerCoreServer;
 import forestry.core.multiblock.MultiblockServerTickHandler;
 import forestry.core.network.packets.PacketFXSignal;
@@ -54,7 +51,7 @@ public class ProxyCommon {
 
 	public boolean isOp(EntityPlayer player) {
 		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
-		return server.getConfigurationManager().func_152596_g(player.getGameProfile());
+		return server.getConfigurationManager().canSendCommands(player.getGameProfile());
 	}
 
 	public double getBlockReachDistance(EntityPlayer entityplayer) {

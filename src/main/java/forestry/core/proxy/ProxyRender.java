@@ -10,12 +10,14 @@
  ******************************************************************************/
 package forestry.core.proxy;
 
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.block.statemap.IStateMapper;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-
+import forestry.core.fluids.Fluids;
 import forestry.core.render.IBlockRenderer;
 import forestry.core.render.SpriteSheet;
 import forestry.core.tiles.MachineDefinition;
@@ -63,11 +65,20 @@ public class ProxyRender {
 	public IBlockRenderer getRenderChest(String textureName) {
 		return null;
 	}
+	
+	public void registerBlockModel(BlockModelIndex index) {
+	}
+
+	public void registerStateMapper(Block block, IStateMapper mapper) {
+	}
+
+	public void registerFluidStateMapper(Block block, Fluids forestryFluid) {
+	}
 
 	public void registerVillagerSkin(int villagerId, String texturePath) {
 	}
 
-	public void setHabitatLocatorTexture(Entity player, ChunkCoordinates coordinates) {
+	public void setHabitatLocatorTexture(Entity player, BlockPos coordinates) {
 	}
 
 	public IResourceManager getSelectedTexturePack() {
@@ -78,6 +89,12 @@ public class ProxyRender {
 	}
 
 	public void bindTexture(SpriteSheet spriteSheet) {
+	}
+	
+	public void preInitModels() {
+	}
+
+	public void initModels() {
 	}
 
 	/* FX */

@@ -13,10 +13,8 @@ package forestry.core.blocks;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
-
-import cpw.mods.fml.common.registry.GameRegistry;
 
 import forestry.core.utils.StringUtil;
 import forestry.plugins.PluginManager;
@@ -26,7 +24,7 @@ public abstract class BlockRegistry {
 		if (PluginManager.getStage() != PluginManager.Stage.SETUP) {
 			throw new RuntimeException("Tried to register Block outside of Setup");
 		}
-		block.setBlockName("for." + name);
+		block.setUnlocalizedName("for." + name);
 		GameRegistry.registerBlock(block, itemClass, StringUtil.cleanBlockName(block));
 		return block;
 	}

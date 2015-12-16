@@ -10,14 +10,15 @@
  ******************************************************************************/
 package forestry.core.tiles;
 
+import net.minecraft.block.state.BlockPistonStructureHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.core.inventory.wrappers.ChestWrapper;
 import forestry.core.utils.InventoryUtil;
@@ -28,25 +29,23 @@ public abstract class TileUtil {
 		if (tile == null) {
 			return false;
 		}
-		int x = tile.xCoord;
-		int y = tile.yCoord;
-		int z = tile.zCoord;
-		World world = tile.getWorldObj();
+		BlockPos pos = tile.getPos();
+		World world = tile.getWorld();
 		
 		if (tile.isInvalid()) {
 			return false;
 		}
 		
-		if (world.getTileEntity(x, y, z) != tile) {
+		if (world.getTileEntity(pos) != tile) {
 			return false;
 		}
 
-		return player.getDistanceSq(x + 0.5D, y + 0.5D, z + 0.5D) <= 64.0D;
+		return player.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <= 64.0D;
 
 	}
 
-	public static <T extends TileEntity> T getTile(IBlockAccess world, int x, int y, int z, Class<T> tileClass) {
-		TileEntity tileEntity = world.getTileEntity(x, y, z);
+	public static <T extends TileEntity> T getTile(IBlockAccess world, BlockPos pos, Class<T> tileClass) {
+		TileEntity tileEntity = world.getTileEntity(pos);
 		if (tileClass.isInstance(tileEntity)) {
 			return tileClass.cast(tileEntity);
 		} else {
@@ -54,7 +53,7 @@ public abstract class TileUtil {
 		}
 	}
 
-	public static IInventory getInventoryFromTile(TileEntity tile, ForgeDirection side) {
+	public static IInventory getInventoryFromTile(TileEntity tile, EnumFacing side) {
 		if (!(tile instanceof IInventory)) {
 			return null;
 		}

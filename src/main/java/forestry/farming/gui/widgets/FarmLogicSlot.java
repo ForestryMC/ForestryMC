@@ -39,7 +39,7 @@ public class FarmLogicSlot extends Widget {
 		if (getLogic() == null) {
 			return null;
 		}
-		return getLogic().getIcon();
+		return getLogic().getSprite();
 	}
 
 	@Override

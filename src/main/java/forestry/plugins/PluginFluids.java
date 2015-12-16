@@ -35,6 +35,7 @@ import forestry.api.core.ForestryAPI;
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.GeneratorFuel;
 import forestry.api.recipes.RecipeManagers;
+import forestry.core.blocks.BlockRegistry;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.fluids.BlockForestryFluid;
@@ -42,6 +43,7 @@ import forestry.core.fluids.Fluids;
 import forestry.core.fluids.LiquidRegistryHelper;
 import forestry.core.items.EnumContainerType;
 import forestry.core.items.ItemLiquidContainer;
+import forestry.core.items.ItemRegistry;
 import forestry.core.items.ItemRegistryFluids;
 import forestry.core.utils.Log;
 import forestry.core.utils.StringUtil;
@@ -172,5 +174,10 @@ public class PluginFluids extends ForestryPlugin {
 
 	private static Object getFillBucketHook() {
 		return new FillBucketHook();
+	}
+	
+	@Override
+	public ItemRegistry getItemRegistry() {
+		return items;
 	}
 }

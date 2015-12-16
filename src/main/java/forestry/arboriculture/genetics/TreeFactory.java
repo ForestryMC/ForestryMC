@@ -16,7 +16,7 @@ import forestry.api.arboriculture.EnumLeafType;
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleTreeSpeciesCustom;
 import forestry.api.arboriculture.IGermlingIconProvider;
-import forestry.api.arboriculture.ILeafIconProvider;
+import forestry.api.arboriculture.ILeafSpriteProvider;
 import forestry.api.arboriculture.ITreeFactory;
 import forestry.api.arboriculture.ITreeGenerator;
 import forestry.api.genetics.AlleleManager;
@@ -26,14 +26,14 @@ import forestry.arboriculture.render.IconProviderLeaves;
 
 public class TreeFactory implements ITreeFactory {
 	@Override
-	public IAlleleTreeSpeciesCustom createSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, boolean dominant, IClassification branch, String binomial, ILeafIconProvider leafIconProvider, IGermlingIconProvider germlingIconProvider, ITreeGenerator generator) {
+	public IAlleleTreeSpeciesCustom createSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, boolean dominant, IClassification branch, String binomial, ILeafSpriteProvider leafIconProvider, IGermlingIconProvider germlingIconProvider, ITreeGenerator generator) {
 		IAlleleTreeSpeciesCustom treeSpecies = new AlleleTreeSpecies(uid, unlocalizedName, authority, unlocalizedDescription, dominant, branch, binomial, leafIconProvider, germlingIconProvider, generator);
 		AlleleManager.alleleRegistry.registerAllele(treeSpecies, EnumTreeChromosome.SPECIES);
 		return treeSpecies;
 	}
 
 	@Override
-	public ILeafIconProvider getLeafIconProvider(EnumLeafType enumLeafType, Color color, Color colorPollinated) {
+	public ILeafSpriteProvider getLeafIconProvider(EnumLeafType enumLeafType, Color color, Color colorPollinated) {
 		return new IconProviderLeaves(enumLeafType, color, colorPollinated);
 	}
 }

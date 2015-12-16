@@ -15,20 +15,20 @@ import java.util.EnumSet;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
-
+import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
-
-import cpw.mods.fml.common.SidedProxy;
 
 import forestry.Forestry;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.recipes.RecipeManagers;
+import forestry.core.blocks.BlockRegistry;
 import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
 import forestry.core.fluids.Fluids;
+import forestry.core.items.ItemRegistry;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.tiles.MachineDefinition;
 import forestry.core.utils.EntityUtil;
@@ -143,5 +143,15 @@ public class PluginLepidopterology extends ForestryPlugin {
 
 	public static boolean isPollinationAllowed() {
 		return allowPollination;
+	}
+	
+	@Override
+	public BlockRegistry getBlockRegistry() {
+		return blocks;
+	}
+	
+	@Override
+	public ItemRegistry getItemRegistry() {
+		return items;
 	}
 }

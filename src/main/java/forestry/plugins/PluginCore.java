@@ -11,15 +11,14 @@
 package forestry.plugins;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.command.ICommand;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-
+import net.minecraftforge.fml.common.IFuelHandler;
 import net.minecraftforge.oredict.OreDictionary;
-
-import cpw.mods.fml.common.IFuelHandler;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.core.ForestryAPI;
@@ -32,6 +31,7 @@ import forestry.core.ISaveEventHandler;
 import forestry.core.PickupHandlerCore;
 import forestry.core.SaveEventHandlerCore;
 import forestry.core.blocks.BlockCoreType;
+import forestry.core.blocks.BlockRegistry;
 import forestry.core.blocks.BlockRegistryCore;
 import forestry.core.blocks.BlockResourceOre;
 import forestry.core.blocks.BlockResourceStorage;
@@ -48,6 +48,7 @@ import forestry.core.genetics.alleles.AlleleFactory;
 import forestry.core.genetics.alleles.AlleleHelper;
 import forestry.core.genetics.alleles.AlleleRegistry;
 import forestry.core.items.EnumContainerType;
+import forestry.core.items.ItemRegistry;
 import forestry.core.items.ItemRegistryCore;
 import forestry.core.multiblock.MultiblockLogicFactory;
 import forestry.core.network.IPacketRegistry;
@@ -211,7 +212,7 @@ public class PluginCore extends ForestryPlugin {
 		RecipeUtil.addRecipe(ForestryAPI.activeMode.getStackSetting("recipe.output.can"), " # ", "# #", '#', "ingotTin");
 
 		// / GEARS
-		ArrayList<ItemStack> stoneGear = OreDictionary.getOres("gearStone");
+		List<ItemStack> stoneGear = OreDictionary.getOres("gearStone");
 		Object gearCenter;
 		if (!stoneGear.isEmpty()) {
 			gearCenter = "gearStone";
@@ -308,6 +309,16 @@ public class PluginCore extends ForestryPlugin {
 	@Override
 	public IFuelHandler getFuelHandler() {
 		return new FuelHandler();
+	}
+	
+	@Override
+	public BlockRegistry getBlockRegistry() {
+		return blocks;
+	}
+	
+	@Override
+	public ItemRegistry getItemRegistry() {
+		return items;
 	}
 
 	private static class FuelHandler implements IFuelHandler {

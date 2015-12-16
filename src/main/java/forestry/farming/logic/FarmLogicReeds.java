@@ -42,7 +42,7 @@ public class FarmLogicReeds extends FarmLogic {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon getIcon() {
+	public IIcon getSprite() {
 		return Items.reeds.getIconFromDamage(0);
 	}
 

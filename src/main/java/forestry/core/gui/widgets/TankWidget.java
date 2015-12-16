@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.gui.widgets;
 
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.Item;
@@ -73,17 +74,13 @@ public class TankWidget extends Widget {
 			return;
 		}
 
-		IIcon liquidIcon = contents.getFluid().getSprite(contents);
-		if (liquidIcon == null) {
-			return;
-		}
+		Proxies.common.bindTexture(contents.getFluid().getStill());
 
 		int scaledLiquid = (contents.amount * height) / tank.getCapacity();
 		if (scaledLiquid > height) {
 			scaledLiquid = height;
 		}
 
-		Proxies.render.bindTexture(SpriteSheet.BLOCKS);
 		GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
 		{
 			GL11.glDisable(GL11.GL_LIGHTING);
@@ -101,7 +98,7 @@ public class TankWidget extends Widget {
 					scaledLiquid = 0;
 				}
 
-				manager.gui.drawTexturedModelRectFromIcon(startX + xPos, startY + yPos + height - x - start, liquidIcon, 16, x);
+				manager.gui.drawTexturedModalRect(startX + xPos, startY + yPos + height - x - start, 0, 0, 16, 16 - (16 - x));
 				start += 16;
 			}
 

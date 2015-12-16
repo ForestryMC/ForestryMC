@@ -70,7 +70,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon getIcon() {
+	public IIcon getSprite() {
 		return Blocks.sapling.getBlockTextureFromSide(0);
 	}
 

@@ -40,6 +40,10 @@ import forestry.core.blocks.BlockStructure;
 import forestry.core.render.TextureManager;
 
 public class BlockAlveary extends BlockStructure {
+	
+	public static final PropertyEnum ALVEARYTYPE = PropertyEnum.create("alveary", AlvearyTypes.class);
+	public static final PropertyEnum STATE = PropertyEnum.create("state", State.class);
+	
 	public enum Type {
 		PLAIN,
 		ENTRANCE,

@@ -93,7 +93,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
 
 		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
 			if (allele instanceof IAlleleTreeSpecies) {
-				((IAlleleTreeSpecies) allele).getIconProvider().registerIcons(register);
+				((IAlleleTreeSpecies) allele).getSpriteProvider().registerIcons(register);
 			}
 			if (allele instanceof IAlleleFruit) {
 				((IAlleleFruit) allele).getProvider().registerIcons(register);

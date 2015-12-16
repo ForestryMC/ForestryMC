@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
+import java.util.Locale;
+
 import javax.annotation.Nullable;
 
 import forestry.core.config.Constants;
@@ -19,8 +21,9 @@ import forestry.core.tiles.TileAnalyzer;
 import forestry.core.tiles.TileEscritoire;
 import forestry.core.tiles.TileForestry;
 import forestry.plugins.PluginApiculture;
+import net.minecraft.util.IStringSerializable;
 
-public enum BlockCoreType implements IMachinePropertiesTESR {
+public enum BlockCoreType implements IMachinePropertiesTESR, IStringSerializable {
 	ANALYZER(TileAnalyzer.class, "Analyzer") {
 		@Nullable
 		@Override
@@ -59,5 +62,10 @@ public enum BlockCoreType implements IMachinePropertiesTESR {
 	@Override
 	public Class<? extends TileForestry> getTeClass() {
 		return teClass;
+	}
+	
+	@Override
+	public String getName() {
+		return getName().toLowerCase(Locale.ENGLISH);
 	}
 }

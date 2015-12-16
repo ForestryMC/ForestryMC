@@ -13,15 +13,12 @@ package forestry.farming.render;
 import java.util.Arrays;
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.core.render.TextureManager;
 import forestry.farming.blocks.BlockFarmType;
 
@@ -48,19 +45,19 @@ public enum EnumFarmBlockTexture {
 	private static final int TYPE_CONTROL = 7;
 
 	@SideOnly(Side.CLIENT)
-	private static List<IIcon> icons;
+	private static List<TextureAtlasSprite> sprites;
 
 	@SideOnly(Side.CLIENT)
-	public static void registerIcons(IIconRegister register) {
-		icons = Arrays.asList(
-				TextureManager.getSprite(register, "farm/plain"),
-				TextureManager.getSprite(register, "farm/reverse"),
-				TextureManager.getSprite(register, "farm/top"),
-				TextureManager.getSprite(register, "farm/band"),
-				TextureManager.getSprite(register, "farm/gears"),
-				TextureManager.getSprite(register, "farm/hatch"),
-				TextureManager.getSprite(register, "farm/valve"),
-				TextureManager.getSprite(register, "farm/control")
+	public static void registerSprites() {
+		sprites = Arrays.asList(
+				TextureManager.registerSprite("farm/plain"),
+				TextureManager.registerSprite("farm/reverse"),
+				TextureManager.registerSprite("farm/top"),
+				TextureManager.registerSprite("farm/band"),
+				TextureManager.registerSprite("farm/gears"),
+				TextureManager.registerSprite("farm/hatch"),
+				TextureManager.registerSprite("farm/valve"),
+				TextureManager.registerSprite("farm/control")
 		);
 	}
 
@@ -71,29 +68,29 @@ public enum EnumFarmBlockTexture {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public static IIcon getIcon(BlockFarmType type, int side) {
+	public static TextureAtlasSprite getSprite(BlockFarmType type, int side) {
 		switch (type) {
 			case BASIC: {
 				if (side == 2) {
-					return icons.get(TYPE_REVERSE);
+					return sprites.get(TYPE_REVERSE);
 				} else if (side == 0 || side == 1) {
-					return icons.get(TYPE_TOP);
+					return sprites.get(TYPE_TOP);
 				} else {
-					return icons.get(TYPE_PLAIN);
+					return sprites.get(TYPE_PLAIN);
 				}
 			}
 			case BAND:
-				return icons.get(TYPE_BAND);
+				return sprites.get(TYPE_BAND);
 			case GEARBOX:
-				return icons.get(TYPE_GEARS);
+				return sprites.get(TYPE_GEARS);
 			case HATCH:
-				return icons.get(TYPE_HATCH);
+				return sprites.get(TYPE_HATCH);
 			case VALVE:
-				return icons.get(TYPE_VALVE);
+				return sprites.get(TYPE_VALVE);
 			case CONTROL:
-				return icons.get(TYPE_CONTROL);
+				return sprites.get(TYPE_CONTROL);
 			default:
-				return icons.get(TYPE_PLAIN);
+				return sprites.get(TYPE_PLAIN);
 		}
 	}
 
