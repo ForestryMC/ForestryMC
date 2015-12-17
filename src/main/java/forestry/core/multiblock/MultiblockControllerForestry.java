@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.multiblock;
 
+import java.io.IOException;
+
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 
@@ -17,19 +19,27 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IChatComponent;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
+import forestry.api.core.EnumHumidity;
+import forestry.api.core.EnumTemperature;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.core.access.AccessHandler;
+import forestry.core.access.EnumAccess;
 import forestry.core.access.IAccessHandler;
 import forestry.core.access.IRestrictedAccess;
 import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.tiles.ILocatable;
 
 public abstract class MultiblockControllerForestry extends MultiblockControllerBase implements ISidedInventory, IRestrictedAccess, IErrorLogicSource, ILocatable {
@@ -136,47 +146,72 @@ public abstract class MultiblockControllerForestry extends MultiblockControllerB
 	}
 
 	@Override
-	public final void openInventory() {
-		getInternalInventory().openInventory();
+	public final void openInventory(EntityPlayer player) {
+		getInternalInventory().openInventory(player);
 	}
 
 	@Override
-	public final void closeInventory() {
-		getInternalInventory().closeInventory();
+	public final void closeInventory(EntityPlayer player) {
+		getInternalInventory().closeInventory(player);
 	}
-
+	
 	@Override
-	public final String getInventoryName() {
-		return getInternalInventory().getInventoryName();
+	public IChatComponent getDisplayName() {
+		return getInternalInventory().getDisplayName();
+	}
+	
+	@Override
+	public String getCommandSenderName() {
+		return getInternalInventory().getCommandSenderName();
 	}
 
 	@Override
 	public final boolean isUseableByPlayer(EntityPlayer player) {
 		return getInternalInventory().isUseableByPlayer(player);
 	}
-
+	
 	@Override
-	public final boolean hasCustomInventoryName() {
-		return getInternalInventory().hasCustomInventoryName();
+	public boolean hasCustomName() {
+		return getInternalInventory().hasCustomName();
 	}
 
 	@Override
 	public final boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
 		return getInternalInventory().isItemValidForSlot(slotIndex, itemStack);
 	}
-
+	
 	@Override
-	public final int[] getAccessibleSlotsFromSide(int side) {
-		return getInternalInventory().getAccessibleSlotsFromSide(side);
+	public int[] getSlotsForFace(EnumFacing side) {
+		return getInternalInventory().getSlotsForFace(side);
 	}
 
 	@Override
-	public final boolean canInsertItem(int slotIndex, ItemStack itemStack, int side) {
+	public final boolean canInsertItem(int slotIndex, ItemStack itemStack, EnumFacing side) {
 		return getInternalInventory().canInsertItem(slotIndex, itemStack, side);
 	}
 
 	@Override
-	public final boolean canExtractItem(int slotIndex, ItemStack itemStack, int side) {
+	public final boolean canExtractItem(int slotIndex, ItemStack itemStack, EnumFacing side) {
 		return getInternalInventory().canExtractItem(slotIndex, itemStack, side);
+	}
+
+	@Override
+	public int getField(int id) {
+		return getInternalInventory().getField(id);
+	}
+
+	@Override
+	public void setField(int id, int value) {
+		getInternalInventory().setField(id, value);
+	}
+
+	@Override
+	public int getFieldCount() {
+		return getInternalInventory().getFieldCount();
+	}
+
+	@Override
+	public void clear() {
+		getInternalInventory().clear();
 	}
 }

@@ -16,7 +16,6 @@ import java.util.Random;
 import net.minecraft.command.ICommand;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
-import net.minecraftforge.event.terraingen.BiomeEvent.GetVillageBlockID;
 import net.minecraftforge.fml.common.IFuelHandler;
 import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
 import forestry.core.IPickupHandler;

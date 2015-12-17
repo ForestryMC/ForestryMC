@@ -15,14 +15,12 @@ import java.io.InputStream;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.NetHandlerPlayServer;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.network.FMLEventChannel;
-import cpw.mods.fml.common.network.FMLNetworkEvent.ClientCustomPacketEvent;
-import cpw.mods.fml.common.network.FMLNetworkEvent.ServerCustomPacketEvent;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.network.internal.FMLProxyPacket;
-
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.network.FMLEventChannel;
+import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientCustomPacketEvent;
+import net.minecraftforge.fml.common.network.FMLNetworkEvent.ServerCustomPacketEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
 import forestry.core.proxy.Proxies;
 
 import io.netty.buffer.ByteBufInputStream;

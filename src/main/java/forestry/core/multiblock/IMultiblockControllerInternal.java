@@ -14,7 +14,7 @@ import javax.annotation.Nonnull;
 import java.util.Set;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.core.IErrorLogicSource;
@@ -82,7 +82,7 @@ public interface IMultiblockControllerInternal extends IMultiblockController, IN
 	/**
 	 * @return The reference coordinate, the block with the lowest x, y, z coordinates, evaluated in that order.
 	 */
-	ChunkCoordinates getReferenceCoord();
+	BlockPos getReferenceCoord();
 
 	/**
 	 * Force this multiblock to recalculate its minimum and maximum coordinates

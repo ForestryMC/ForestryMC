@@ -17,7 +17,7 @@ import java.util.Collections;
 import java.util.Set;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.core.EnumHumidity;
@@ -68,7 +68,7 @@ public abstract class FakeMultiblockController implements IMultiblockControllerI
 	}
 
 	@Override
-	public ChunkCoordinates getReferenceCoord() {
+	public BlockPos getReferenceCoord() {
 		return null;
 	}
 

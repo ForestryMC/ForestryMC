@@ -21,10 +21,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 
-import net.minecraftforge.common.util.ForgeDirection;
-
-import cpw.mods.fml.common.Optional;
+import net.minecraftforge.fml.common.Optional;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
@@ -199,7 +198,7 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 	/* ITRIGGERPROVIDER */
 	@Optional.Method(modid = "BuildCraftAPI|statements")
 	@Override
-	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
+	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
 		LinkedList<ITriggerExternal> res = new LinkedList<>();
 		res.add(FactoryTriggers.lowResource25);
 		res.add(FactoryTriggers.lowResource10);

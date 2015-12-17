@@ -86,7 +86,7 @@ public class ErrorStateRegistry implements IErrorStateRegistry {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public static void initTextures() {
+	public static void initSprites() {
 		for (IErrorState code : states.values()) {
 			code.registerSprites();
 		}

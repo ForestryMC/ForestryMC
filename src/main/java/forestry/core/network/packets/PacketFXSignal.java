@@ -12,11 +12,14 @@ package forestry.core.network.packets;
 
 import java.io.IOException;
 
+import javax.vecmath.GVector;
+
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-
-import cpw.mods.fml.common.registry.GameData;
-
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.registry.GameData;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IForestryPacketClient;
@@ -46,26 +49,24 @@ public class PacketFXSignal extends PacketCoordinates implements IForestryPacket
 	private VisualFXType visualFX;
 	private SoundFXType soundFX;
 
-	private Block block;
-	private int meta;
+	private IBlockState state;
 
 	public PacketFXSignal() {
 	}
 
-	public PacketFXSignal(VisualFXType type, int xCoord, int yCoord, int zCoord, Block block, int meta) {
-		this(type, SoundFXType.NONE, xCoord, yCoord, zCoord, block, meta);
+	public PacketFXSignal(VisualFXType type, BlockPos pos, IBlockState state) {
+		this(type, SoundFXType.NONE, pos, state);
 	}
 
-	public PacketFXSignal(SoundFXType type, int xCoord, int yCoord, int zCoord, Block block, int meta) {
-		this(VisualFXType.NONE, type, xCoord, yCoord, zCoord, block, meta);
+	public PacketFXSignal(SoundFXType type, BlockPos pos, IBlockState state) {
+		this(VisualFXType.NONE, type, pos, state);
 	}
 
-	public PacketFXSignal(VisualFXType visualFX, SoundFXType soundFX, int xCoord, int yCoord, int zCoord, Block block, int meta) {
-		super(xCoord, yCoord, zCoord);
+	public PacketFXSignal(VisualFXType visualFX, SoundFXType soundFX, BlockPos pos, IBlockState state) {
+		super(pos);
 		this.visualFX = visualFX;
 		this.soundFX = soundFX;
-		this.block = block;
-		this.meta = meta;
+		this.state = state;
 	}
 
 	@Override
@@ -73,8 +74,8 @@ public class PacketFXSignal extends PacketCoordinates implements IForestryPacket
 		super.writeData(data);
 		data.writeShort(visualFX.ordinal());
 		data.writeShort(soundFX.ordinal());
-		data.writeUTF(GameData.getBlockRegistry().getNameForObject(block));
-		data.writeInt(meta);
+		data.writeUTF(GameData.getBlockRegistry().getNameForObject(state.getBlock()).toString());
+		data.writeInt(state.getBlock().getMetaFromState(state));
 	}
 
 	@Override
@@ -82,22 +83,21 @@ public class PacketFXSignal extends PacketCoordinates implements IForestryPacket
 		super.readData(data);
 		this.visualFX = VisualFXType.values()[data.readShort()];
 		this.soundFX = SoundFXType.values()[data.readShort()];
-		this.block = GameData.getBlockRegistry().getRaw(data.readUTF());
-		this.meta = data.readInt();
+		this.state = GameData.getBlockRegistry().getRaw(GameData.getBlockRegistry().getId(new ResourceLocation(data.readUTF()))).getStateFromMeta(data.readInt());
 	}
 
 	@Override
 	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
 		if (visualFX != VisualFXType.NONE) {
-			Proxies.common.addBlockDestroyEffects(Proxies.common.getRenderWorld(), getPosX(), getPosY(), getPosZ(), block, meta);
+			Proxies.common.addBlockDestroyEffects(Proxies.common.getRenderWorld(), getPos(), state);
 		}
 		if (soundFX != SoundFXType.NONE) {
 			if (soundFX == SoundFXType.BLOCK_DESTROY) {
-				Proxies.common.playBlockBreakSoundFX(Proxies.common.getRenderWorld(), getPosX(), getPosY(), getPosZ(), block);
+				Proxies.common.playBlockBreakSoundFX(Proxies.common.getRenderWorld(), getPos(), state);
 			} else if (soundFX == SoundFXType.BLOCK_PLACE) {
-				Proxies.common.playBlockPlaceSoundFX(Proxies.common.getRenderWorld(), getPosX(), getPosY(), getPosZ(), block);
+				Proxies.common.playBlockPlaceSoundFX(Proxies.common.getRenderWorld(), getPos(), state);
 			} else {
-				Proxies.common.playSoundFX(Proxies.common.getRenderWorld(), getPosX(), getPosY(), getPosZ(), soundFX.soundFile, soundFX.volume, soundFX.pitch);
+				Proxies.common.playSoundFX(Proxies.common.getRenderWorld(), getPos(), soundFX.soundFile, soundFX.volume, soundFX.pitch);
 			}
 		}
 	}

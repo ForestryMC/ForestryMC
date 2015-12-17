@@ -45,10 +45,10 @@ public abstract class ContainerLiquidTanks<T extends TileEntity & ILiquidTankTil
 		super.detectAndSendChanges();
 		tile.getTankManager().updateGuiData(this, crafters);
 	}
-
+	
 	@Override
-	public void addCraftingToCrafters(ICrafting icrafting) {
-		super.addCraftingToCrafters(icrafting);
+	public void onCraftGuiOpened(ICrafting icrafting) {
+		super.onCraftGuiOpened(icrafting);
 		tile.getTankManager().containerAdded(this, icrafting);
 	}
 

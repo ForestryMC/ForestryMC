@@ -18,13 +18,12 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
-import net.minecraftforge.common.util.ForgeDirection;
-
-import cpw.mods.fml.common.Optional;
+import net.minecraftforge.fml.common.Optional;
 
 import forestry.api.mail.ILetter;
 import forestry.api.mail.IMailAddress;
@@ -121,7 +120,7 @@ public class TileMailbox extends TileBase implements IMailContainer {
 	/* ITRIGGERPROVIDER */
 	@Optional.Method(modid = "BuildCraftAPI|statements")
 	@Override
-	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
+	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
 		LinkedList<ITriggerExternal> res = new LinkedList<>();
 		res.add(MailTriggers.triggerHasMail);
 		return res;

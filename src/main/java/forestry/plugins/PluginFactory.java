@@ -43,7 +43,6 @@ import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
 import forestry.core.items.EnumElectronTube;
 import forestry.core.items.ItemElectronTube;
-import forestry.core.items.ItemRegistry;
 import forestry.core.items.ItemRegistryCore;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.recipes.RecipeUtil;

@@ -26,11 +26,15 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.b3d.B3DLoader;
-
+import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
+import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import forestry.apiculture.entities.EntityFXBee;
 import forestry.apiculture.render.ParticleRenderer;
 import forestry.apiculture.render.RenderCandleBlock;
@@ -41,14 +45,15 @@ import forestry.core.entities.EntityFXHoneydust;
 import forestry.core.entities.EntityFXIgnition;
 import forestry.core.entities.EntityFXSnow;
 import forestry.core.fluids.Fluids;
+import forestry.core.render.BlockModelIndex;
 import forestry.core.render.ForestryResource;
 import forestry.core.render.IBlockRenderer;
+import forestry.core.render.ModelManager;
 import forestry.core.render.RenderBlock;
 import forestry.core.render.RenderEscritoire;
 import forestry.core.render.RenderMachine;
 import forestry.core.render.RenderMill;
 import forestry.core.render.RenderNaturalistChest;
-import forestry.core.render.SpriteSheet;
 import forestry.core.render.TextureManager;
 import forestry.core.render.TileRendererIndex;
 import forestry.core.tiles.MachineDefinition;
@@ -178,11 +183,6 @@ public class ProxyRenderClient extends ProxyRender {
 	public void bindTexture(ResourceLocation location) {
 		Proxies.common.getClientInstance().getTextureManager().bindTexture(location);
 	}
-
-	@Override
-	public void bindTexture(SpriteSheet spriteSheet) {
-		bindTexture(spriteSheet.getLocation());
-	}
 	
 	@Override
 	public void preInitModels() {
@@ -192,7 +192,6 @@ public class ProxyRenderClient extends ProxyRender {
 	@Override
 	public void initModels() {
 		ModelManager.registerModels();
-		TextureManager.registerSprites();
 	}
 
 	public static boolean shouldSpawnParticle(World world) {
@@ -243,7 +242,8 @@ public class ProxyRenderClient extends ProxyRender {
 			return;
 		}
 
-		Proxies.common.getClientInstance().effectRenderer.addEffect(new EntityExplodeFX(world, d1, d2, d3, 0, 0, 0));
+		EntityFX entityfx = Proxies.common.getClientInstance().effectRenderer.spawnEffectParticle(EnumParticleTypes.EXPLOSION_NORMAL.getParticleID(), d1, d2, d3, 0, 0, 0);
+		Proxies.common.getClientInstance().effectRenderer.addEffect(entityfx);
 	}
 
 	@Override
@@ -273,8 +273,8 @@ public class ProxyRenderClient extends ProxyRender {
 		float red = (color >> 16 & 255) / 255.0F;
 		float green = (color >> 8 & 255) / 255.0F;
 		float blue = (color & 255) / 255.0F;
-
-		EntityFX entityfx = new EntitySpellParticleFX(world, d1, d2, d3, 0, 0, 0);
+		
+		EntityFX entityfx = Proxies.common.getClientInstance().effectRenderer.spawnEffectParticle(EnumParticleTypes.SPELL.getParticleID(), d1, d2, d3, 0, 0, 0);
 		entityfx.setRBGColorF(red, green, blue);
 
 		Proxies.common.getClientInstance().effectRenderer.addEffect(entityfx);

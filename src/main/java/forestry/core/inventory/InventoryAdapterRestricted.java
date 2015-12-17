@@ -12,7 +12,7 @@ package forestry.core.inventory;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-
+import net.minecraft.util.EnumFacing;
 import forestry.core.access.IAccessHandler;
 import forestry.core.config.Constants;
 
@@ -42,17 +42,17 @@ public class InventoryAdapterRestricted extends InventoryAdapter {
 
 		return canSlotAccept(slotIndex, itemStack);
 	}
-
+	
 	@Override
-	public int[] getAccessibleSlotsFromSide(int side) {
+	public int[] getSlotsForFace(EnumFacing side) {
 		if (!accessHandler.allowsPipeConnections()) {
 			return Constants.SLOTS_NONE;
 		}
-		return super.getAccessibleSlotsFromSide(side);
+		return super.getSlotsForFace(side);
 	}
 
 	@Override
-	public final boolean canInsertItem(int slotIndex, ItemStack itemStack, int side) {
+	public final boolean canInsertItem(int slotIndex, ItemStack itemStack, EnumFacing side) {
 		if (itemStack == null || !accessHandler.allowsPipeConnections()) {
 			return false;
 		}
@@ -60,7 +60,7 @@ public class InventoryAdapterRestricted extends InventoryAdapter {
 	}
 
 	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack itemStack, int side) {
+	public boolean canExtractItem(int slotIndex, ItemStack itemStack, EnumFacing side) {
 		return itemStack != null && accessHandler.allowsPipeConnections();
 	}
 }

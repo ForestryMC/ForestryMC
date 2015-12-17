@@ -57,7 +57,7 @@ public abstract class EntityUtil {
 
 	@SuppressWarnings("unchecked")
 	public static <T extends Entity> List<T> selectEntitiesWithinAABB(World world, EntitySelector<T> entitySelector, AxisAlignedBB boundingBox) {
-		return world.selectEntitiesWithinAABB(entitySelector.getEntityClass(), boundingBox, entitySelector);
+		return world.getEntitiesWithinAABB(entitySelector.getEntityClass(), boundingBox, entitySelector);
 	}
 
 	private static <E extends EntityLiving> E createEntity(World world, Class<E> entityClass) {

@@ -15,7 +15,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
@@ -27,7 +26,6 @@ import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.gui.IContainerLiquidTanks;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.SpriteSheet;
 import forestry.farming.gui.ContainerFarm;
 
 /**
@@ -74,7 +72,7 @@ public class TankWidget extends Widget {
 			return;
 		}
 
-		Proxies.common.bindTexture(contents.getFluid().getStill());
+		Proxies.render.bindTexture(contents.getFluid().getStill());
 
 		int scaledLiquid = (contents.amount * height) / tank.getCapacity();
 		if (scaledLiquid > height) {

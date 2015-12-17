@@ -10,15 +10,13 @@
  ******************************************************************************/
 package forestry.core.triggers;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.util.IIcon;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
-
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import buildcraft.api.core.SheetIcon;
 import buildcraft.api.statements.IStatement;
 import buildcraft.api.statements.IStatementParameter;
 import buildcraft.api.statements.ITriggerExternal;
@@ -65,18 +63,18 @@ public abstract class Trigger implements ITriggerExternal {
 	}
 
 	@SideOnly(Side.CLIENT)
-	private IIcon icon;
+	private TextureAtlasSprite icon;
+	private ResourceLocation location;
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon() {
-		return icon;
+	public SheetIcon getIcon() {
+		return new SheetIcon(location, icon.getOriginX(), icon.getOriginY());
 	}
 
-	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister register) {
-		icon = TextureManager.getSprite(register, "triggers/" + unlocalized.replace("trigger.", ""));
+	public void registerIcons() {
+		icon = TextureManager.registerSprite("triggers/" + unlocalized.replace("trigger.", ""));
+		location = new ResourceLocation("forestry", "triggers/" + unlocalized.replace("trigger.", ""));
 	}
 
 	@Override

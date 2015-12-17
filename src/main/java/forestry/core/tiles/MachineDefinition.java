@@ -26,7 +26,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import forestry.core.blocks.IMachineProperties;
 import forestry.core.blocks.IMachinePropertiesTESR;
 import forestry.core.proxy.Proxies;
@@ -145,7 +145,7 @@ public class MachineDefinition {
 	}
 
 	public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis) {
-		TileForestry tile = TileUtil.getTile(world, x, y, z, teClass);
+		TileForestry tile = TileUtil.getTile(world, pos, teClass);
 		if (tile == null) {
 			return false;
 		}

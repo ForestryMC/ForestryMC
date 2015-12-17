@@ -14,6 +14,7 @@ import java.util.Iterator;
 
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -29,7 +30,7 @@ public class SidedInventoryIterator implements Iterable<IInvSlot> {
 	@Override
 	public Iterator<IInvSlot> iterator() {
 		return new Iterator<IInvSlot>() {
-			final int[] slots = inv.getAccessibleSlotsFromSide(0);
+			final int[] slots = inv.getSlotsForFace(EnumFacing.DOWN);
 			int index = 0;
 
 			@Override
@@ -70,12 +71,12 @@ public class SidedInventoryIterator implements Iterable<IInvSlot> {
 
 		@Override
 		public boolean canPutStackInSlot(ItemStack stack) {
-			return inv.canInsertItem(slot, stack, 0);
+			return inv.canInsertItem(slot, stack, EnumFacing.DOWN);
 		}
 
 		@Override
 		public boolean canTakeStackFromSlot(ItemStack stack) {
-			return inv.canExtractItem(slot, stack, 0);
+			return inv.canExtractItem(slot, stack, EnumFacing.DOWN);
 		}
 
 		@Override

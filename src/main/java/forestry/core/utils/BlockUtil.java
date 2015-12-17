@@ -229,4 +229,34 @@ public abstract class BlockUtil {
 	private static boolean isVecInsideXYBounds(Vec3 vec, float minX, float minY, float maxX, float maxY) {
 		return vec != null && (vec.xCoord >= minX && vec.xCoord <= maxX && vec.yCoord >= minY && vec.yCoord <= maxY);
 	}
+	
+	public static boolean blockExists(World world, BlockPos pos) {
+		return pos.getY() >= 0 && pos.getY() < 256
+				? world.getChunkProvider().chunkExists(pos.getX() >> 4, pos.getZ() >> 4) : false;
+	}
+	
+	public static boolean checkChunksExist(World world, BlockPos minPos, BlockPos maxPos) {
+		return checkChunksExist(world, minPos.getX(), minPos.getY(), minPos.getZ(), maxPos.getX(), maxPos.getY(), maxPos.getZ());
+	}
+
+	public static boolean checkChunksExist(World world, int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
+		if (maxY >= 0 && minY < 256) {
+			minX >>= 4;
+			minZ >>= 4;
+			maxX >>= 4;
+			maxZ >>= 4;
+
+			for (int k1 = minX; k1 <= maxX; ++k1) {
+				for (int l1 = minZ; l1 <= maxZ; ++l1) {
+					if (!world.getChunkProvider().chunkExists(k1, l1)) {
+						return false;
+					}
+				}
+			}
+
+			return true;
+		} else {
+			return false;
+		}
+	}
 }

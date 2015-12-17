@@ -13,7 +13,9 @@ package forestry.core.inventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IChatComponent;
 import forestry.core.config.Constants;
 
 public class FakeInventoryAdapter implements IInventoryAdapter {
@@ -40,19 +42,19 @@ public class FakeInventoryAdapter implements IInventoryAdapter {
 	public boolean isLocked(int slotIndex) {
 		return false;
 	}
-
+	
 	@Override
-	public int[] getAccessibleSlotsFromSide(int p_94128_1_) {
+	public int[] getSlotsForFace(EnumFacing side) {
 		return Constants.SLOTS_NONE;
 	}
 
 	@Override
-	public boolean canInsertItem(int p_102007_1_, ItemStack p_102007_2_, int p_102007_3_) {
+	public boolean canInsertItem(int p_102007_1_, ItemStack p_102007_2_, EnumFacing p_102007_3_) {
 		return false;
 	}
 
 	@Override
-	public boolean canExtractItem(int p_102008_1_, ItemStack p_102008_2_, int p_102008_3_) {
+	public boolean canExtractItem(int p_102008_1_, ItemStack p_102008_2_, EnumFacing p_102008_3_) {
 		return false;
 	}
 
@@ -82,16 +84,6 @@ public class FakeInventoryAdapter implements IInventoryAdapter {
 	}
 
 	@Override
-	public String getInventoryName() {
-		return null;
-	}
-
-	@Override
-	public boolean hasCustomInventoryName() {
-		return false;
-	}
-
-	@Override
 	public int getInventoryStackLimit() {
 		return 0;
 	}
@@ -107,12 +99,12 @@ public class FakeInventoryAdapter implements IInventoryAdapter {
 	}
 
 	@Override
-	public void openInventory() {
+	public void openInventory(EntityPlayer player) {
 
 	}
 
 	@Override
-	public void closeInventory() {
+	public void closeInventory(EntityPlayer player) {
 
 	}
 
@@ -130,5 +122,36 @@ public class FakeInventoryAdapter implements IInventoryAdapter {
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 
 	}
+	
+	@Override
+	public boolean hasCustomName() {
+		return false;
+	}
+	
+	@Override
+	public IChatComponent getDisplayName() {
+		return null;
+	}
+	
+	@Override
+	public String getCommandSenderName() {
+		return null;
+	}
+
+	/*
+	 * FIELDS
+	 */
+	
+	@Override
+	public int getField(int id) {return 0;}
+
+	@Override
+	public void setField(int id, int value) {}
+
+	@Override
+	public int getFieldCount() {return 0;}
+
+	@Override
+	public void clear() {}
 
 }

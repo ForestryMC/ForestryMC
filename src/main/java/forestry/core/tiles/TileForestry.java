@@ -100,7 +100,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 
 	// / UPDATING
 	@Override
-	public final void update() {
+	public void update() {
 		tickCount++;
 
 		if (!worldObj.isRemote) {
@@ -315,6 +315,11 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	public String getCommandSenderName() {
 		return getInternalInventory().getCommandSenderName();
 	}
+	
+	@Override
+	public boolean hasCustomName() {
+		return getInternalInventory().hasCustomName();
+	}
 
 	@Override
 	public final boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
@@ -344,5 +349,25 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	@Override
 	public final boolean canExtractItem(int slotIndex, ItemStack itemStack, EnumFacing side) {
 		return getInternalInventory().canExtractItem(slotIndex, itemStack, side);
+	}
+	
+	@Override
+	public int getField(int id) {
+		return getInternalInventory().getField(id);
+	}
+
+	@Override
+	public void setField(int id, int value) {
+		setField(id, value);
+	}
+
+	@Override
+	public int getFieldCount() {
+		return getFieldCount();
+	}
+
+	@Override
+	public void clear() {
+		clear();
 	}
 }

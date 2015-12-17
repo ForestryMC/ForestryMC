@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureMap;
 
 import org.lwjgl.opengl.GL11;
 
@@ -59,13 +60,13 @@ public class WidgetManager {
 
 	public void drawWidgets() {
 		gui.setZLevel(100.0F);
-		GuiForestry.getItemRenderer().zLevel = 100.0F;
+		Minecraft.getMinecraft().getRenderItem().zLevel = 100.0F;
 		for (Widget slot : widgets) {
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			slot.draw(0, 0);
 		}
 		gui.setZLevel(0.0F);
-		GuiForestry.getItemRenderer().zLevel = 0.0F;
+		Minecraft.getMinecraft().getRenderItem().zLevel = 0.0F;
 
 	}
 

@@ -18,8 +18,8 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import forestry.core.fluids.Fluids;
+import forestry.core.render.BlockModelIndex;
 import forestry.core.render.IBlockRenderer;
-import forestry.core.render.SpriteSheet;
 import forestry.core.tiles.MachineDefinition;
 
 public class ProxyRender {
@@ -86,9 +86,6 @@ public class ProxyRender {
 	}
 
 	public void bindTexture(ResourceLocation location) {
-	}
-
-	public void bindTexture(SpriteSheet spriteSheet) {
 	}
 	
 	public void preInitModels() {

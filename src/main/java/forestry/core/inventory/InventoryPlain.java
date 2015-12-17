@@ -15,7 +15,8 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.IChatComponent;
 import forestry.api.core.INBTTagable;
 import forestry.core.utils.InventoryUtil;
 
@@ -36,7 +37,7 @@ public class InventoryPlain implements IInventory, INBTTagable {
 	}
 
 	public InventoryPlain(IInventory tocopy) {
-		this(tocopy.getSizeInventory(), tocopy.getInventoryName(), tocopy.getInventoryStackLimit());
+		this(tocopy.getSizeInventory(), tocopy.getDisplayName().getUnformattedText(), tocopy.getInventoryStackLimit());
 		for (int i = 0; i < tocopy.getSizeInventory(); i++) {
 			if (tocopy.getStackInSlot(i) != null) {
 				this.setInventorySlotContents(i, tocopy.getStackInSlot(i).copy());
@@ -79,11 +80,6 @@ public class InventoryPlain implements IInventory, INBTTagable {
 	}
 
 	@Override
-	public String getInventoryName() {
-		return name;
-	}
-
-	@Override
 	public int getInventoryStackLimit() {
 		return stackLimit;
 	}
@@ -101,9 +97,9 @@ public class InventoryPlain implements IInventory, INBTTagable {
 	public ItemStack getStackInSlotOnClosing(int slotIndex) {
 		return this.getStackInSlot(slotIndex);
 	}
-
+	
 	@Override
-	public boolean hasCustomInventoryName() {
+	public boolean hasCustomName() {
 		return true;
 	}
 
@@ -113,11 +109,11 @@ public class InventoryPlain implements IInventory, INBTTagable {
 	}
 
 	@Override
-	public void openInventory() {
+	public void openInventory(EntityPlayer player) {
 	}
 
 	@Override
-	public void closeInventory() {
+	public void closeInventory(EntityPlayer player) {
 	}
 
 	/* INBTagable */
@@ -130,4 +126,31 @@ public class InventoryPlain implements IInventory, INBTTagable {
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 		InventoryUtil.writeToNBT(this, nbttagcompound);
 	}
+
+	@Override
+	public IChatComponent getDisplayName() {
+		return new ChatComponentText(name);
+	}
+	
+	@Override
+	public String getCommandSenderName() {
+		return name;
+	}
+
+	/*
+	 * FIELDS
+	 */
+	
+	@Override
+	public int getField(int id) {return 0;}
+
+	@Override
+	public void setField(int id, int value) {}
+
+	@Override
+	public int getFieldCount() {return 0;}
+
+	@Override
+	public void clear() {}
+	
 }

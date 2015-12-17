@@ -11,7 +11,7 @@
 package forestry.factory.inventory;
 
 import net.minecraft.item.ItemStack;
-
+import net.minecraft.util.EnumFacing;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.Fluids;
 import forestry.core.inventory.InventoryAdapterTile;
@@ -34,7 +34,7 @@ public class InventoryRaintank extends InventoryAdapterTile<TileRaintank> {
 	}
 
 	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
+	public boolean canExtractItem(int slotIndex, ItemStack itemstack, EnumFacing side) {
 		return slotIndex == SLOT_PRODUCT;
 	}
 }

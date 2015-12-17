@@ -13,13 +13,16 @@ package forestry.core.proxy;
 import java.io.File;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 import forestry.core.TickHandlerCoreServer;
@@ -62,31 +65,30 @@ public class ProxyCommon {
 		return false;
 	}
 
-	public void playSoundFX(World world, int x, int y, int z, Block block) {
-		Proxies.net.sendNetworkPacket(new PacketFXSignal(PacketFXSignal.SoundFXType.LEAF, x, y, z, block, 0), world);
+	public void playSoundFX(World world, BlockPos pos, IBlockState state) {
+		Proxies.net.sendNetworkPacket(new PacketFXSignal(PacketFXSignal.SoundFXType.LEAF, pos, state), world);
 	}
 
-	public void playSoundFX(World world, int x, int y, int z, String sound, float volume, float pitch) {
+	public void playSoundFX(World world, BlockPos pos, String sound, float volume, float pitch) {
 	}
 
-	public void addBlockDestroyEffects(World world, int xCoord, int yCoord, int zCoord, Block block, int i) {
-		sendFXSignal(PacketFXSignal.VisualFXType.BLOCK_DESTROY, PacketFXSignal.SoundFXType.BLOCK_DESTROY, world, xCoord, yCoord, zCoord, block, i);
+	public void addBlockDestroyEffects(World world, BlockPos pos, IBlockState state) {
+		sendFXSignal(PacketFXSignal.VisualFXType.BLOCK_DESTROY, PacketFXSignal.SoundFXType.BLOCK_DESTROY, world, pos, state);
 	}
 
-	public void addBlockPlaceEffects(World world, int xCoord, int yCoord, int zCoord, Block block, int i) {
-		sendFXSignal(PacketFXSignal.VisualFXType.NONE, PacketFXSignal.SoundFXType.BLOCK_PLACE, world, xCoord, yCoord, zCoord, block, i);
+	public void addBlockPlaceEffects(World world, BlockPos pos, IBlockState state) {
+		sendFXSignal(PacketFXSignal.VisualFXType.NONE, PacketFXSignal.SoundFXType.BLOCK_PLACE, world, pos, state);
 	}
 
-	public void playBlockBreakSoundFX(World world, int x, int y, int z, Block block) {
+	public void playBlockBreakSoundFX(World world, BlockPos pos, IBlockState state) {
 	}
 
-	public void playBlockPlaceSoundFX(World world, int x, int y, int z, Block block) {
+	public void playBlockPlaceSoundFX(World world, BlockPos pos, IBlockState state) {
 	}
 
-	public void sendFXSignal(PacketFXSignal.VisualFXType visualFX, PacketFXSignal.SoundFXType soundFX, World world, int xCoord, int yCoord, int zCoord,
-			Block block, int i) {
+	public void sendFXSignal(PacketFXSignal.VisualFXType visualFX, PacketFXSignal.SoundFXType soundFX, World world, BlockPos pos, IBlockState state) {
 		if (!world.isRemote) {
-			Proxies.net.sendNetworkPacket(new PacketFXSignal(visualFX, soundFX, xCoord, yCoord, zCoord, block, i), world);
+			Proxies.net.sendNetworkPacket(new PacketFXSignal(visualFX, soundFX, pos, state), world);
 		}
 	}
 

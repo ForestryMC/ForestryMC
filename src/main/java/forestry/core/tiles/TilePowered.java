@@ -13,10 +13,9 @@ package forestry.core.tiles;
 import java.io.IOException;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 
-import net.minecraftforge.common.util.ForgeDirection;
-
-import cpw.mods.fml.common.Optional;
+import net.minecraftforge.fml.common.Optional;
 
 import forestry.api.core.IErrorLogic;
 import forestry.core.circuits.ISpeedUpgradable;
@@ -198,27 +197,27 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
 	}
 
 	@Override
-	public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
+	public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
 		return energyManager.receiveEnergy(from, maxReceive, simulate);
 	}
 
 	@Override
-	public int extractEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
+	public int extractEnergy(EnumFacing from, int maxReceive, boolean simulate) {
 		return energyManager.extractEnergy(from, maxReceive, simulate);
 	}
 
 	@Override
-	public int getEnergyStored(ForgeDirection from) {
+	public int getEnergyStored(EnumFacing from) {
 		return energyManager.getEnergyStored(from);
 	}
 
 	@Override
-	public int getMaxEnergyStored(ForgeDirection from) {
+	public int getMaxEnergyStored(EnumFacing from) {
 		return energyManager.getMaxEnergyStored(from);
 	}
 
 	@Override
-	public boolean canConnectEnergy(ForgeDirection from) {
+	public boolean canConnectEnergy(EnumFacing from) {
 		return energyManager.canConnectEnergy(from);
 	}
 }

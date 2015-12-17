@@ -95,9 +95,9 @@ public class ItemLiquidContainer extends ItemForestry {
 	}
 	
 	@Override
-	public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public ItemStack onItemUseFinish(ItemStack stack, World world, EntityPlayer player) {
 		if (!isDrink) {
-			return false;
+			return stack;
 		}
 
 		stack.stackSize--;
@@ -108,7 +108,7 @@ public class ItemLiquidContainer extends ItemForestry {
 		 * potionDuration * 20, potionAmplifier));
 		 */
 
-		return true;
+		return stack;
 	}
 
 	@Override

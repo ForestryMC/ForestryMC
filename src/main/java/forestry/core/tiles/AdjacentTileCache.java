@@ -16,9 +16,9 @@ import java.util.Set;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-
-import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -54,19 +54,17 @@ public final class AdjacentTileCache {
 		listeners.add(listener);
 	}
 
-	private TileEntity searchSide(ForgeDirection side) {
-		World world = source.getWorldObj();
-		int sx = source.xCoord + side.offsetX;
-		int sy = source.yCoord + side.offsetY;
-		int sz = source.zCoord + side.offsetZ;
-		if (world.blockExists(sx, sy, sz) && world.getBlock(sx, sy, sz) != Blocks.air) {
-			return world.getTileEntity(sx, sy, sz);
+	private TileEntity searchSide(EnumFacing side) {
+		World world = source.getWorld();
+		BlockPos pos = source.getPos().offset(side);
+		if (world.isBlockLoaded(pos) && world.isAirBlock(pos)) {
+			return world.getTileEntity(pos);
 		}
 		return null;
 	}
 
 	public void refresh() {
-		for (ForgeDirection side : ForgeDirection.VALID_DIRECTIONS) {
+		for (EnumFacing side : EnumFacing.values()) {
 			getTileOnSide(side);
 		}
 	}
@@ -100,11 +98,11 @@ public final class AdjacentTileCache {
 		}
 	}
 
-	private boolean areCoordinatesOnSide(ForgeDirection side, TileEntity target) {
-		return source.xCoord + side.offsetX == target.xCoord && source.yCoord + side.offsetY == target.yCoord && source.zCoord + side.offsetZ == target.zCoord;
+	private boolean areCoordinatesOnSide(EnumFacing side, TileEntity target) {
+		return source.getPos().getX() + side.getFrontOffsetX() == target.getPos().getX() && source.getPos().getY() + side.getFrontOffsetY() == target.getPos().getY() && source.getPos().getZ() + side.getFrontOffsetZ() == target.getPos().getZ();
 	}
 
-	public TileEntity getTileOnSide(ForgeDirection side) {
+	public TileEntity getTileOnSide(EnumFacing side) {
 		int s = side.ordinal();
 		if (cache[s] != null) {
 			if (cache[s].isInvalid() || !areCoordinatesOnSide(side, cache[s])) {
@@ -114,7 +112,7 @@ public final class AdjacentTileCache {
 			}
 		}
 
-		if (timer[s].hasTriggered(source.getWorldObj(), delay[s])) {
+		if (timer[s].hasTriggered(source.getWorld(), delay[s])) {
 			setTile(s, searchSide(side));
 			if (cache[s] == null) {
 				incrementDelay(s);

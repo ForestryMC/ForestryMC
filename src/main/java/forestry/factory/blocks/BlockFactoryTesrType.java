@@ -75,4 +75,9 @@ public enum BlockFactoryTesrType implements IMachinePropertiesTESR {
 	public IBlockRenderer getRenderer() {
 		return Proxies.render.getRenderDefaultMachine(Constants.TEXTURE_PATH_BLOCKS + "/" + name + "_");
 	}
+	
+	@Override
+	public String getName() {
+		return name().toLowerCase(Locale.ENGLISH);
+	}
 }

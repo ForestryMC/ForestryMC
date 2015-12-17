@@ -10,12 +10,12 @@
  ******************************************************************************/
 package forestry.core.tiles;
 
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
 
 /* Networked tile entities that have a client side "active" flag */
 public interface IActivatable {
 
-	ChunkCoordinates getCoordinates();
+	BlockPos getCoordinates();
 
 	boolean isActive();
 

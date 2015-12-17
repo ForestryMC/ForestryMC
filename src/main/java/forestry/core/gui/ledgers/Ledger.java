@@ -14,6 +14,7 @@ import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
@@ -23,7 +24,6 @@ import forestry.core.config.Constants;
 import forestry.core.config.SessionVars;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.ForestryResource;
-import forestry.core.render.SpriteSheet;
 
 /**
  * Side ledger for guis
@@ -199,7 +199,7 @@ public abstract class Ledger {
 	protected void drawSprite(TextureAtlasSprite icon, int x, int y) {
 		if (icon != null) {
 			GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
-			Proxies.render.bindTexture(SpriteSheet.ITEMS);
+			Proxies.render.bindTexture(TextureMap.locationBlocksTexture);
 			manager.gui.drawTexturedModelRectFromSprite(x, y, icon, 16, 16);
 		}
 	}

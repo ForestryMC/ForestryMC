@@ -25,7 +25,7 @@ public class ItemAmbrosia extends ItemForestryFood {
 	}
 
 	@Override
-	public boolean hasEffect(ItemStack itemstack, int pass) {
+	public boolean hasEffect(ItemStack itemstack) {
 		return true;
 	}
 

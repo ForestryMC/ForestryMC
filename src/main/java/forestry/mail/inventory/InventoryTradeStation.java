@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-
+import net.minecraft.util.EnumFacing;
 import forestry.api.mail.IStamps;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.utils.ItemStackUtil;
@@ -27,10 +27,9 @@ public class InventoryTradeStation extends InventoryAdapter {
 	public InventoryTradeStation() {
 		super(TradeStation.SLOT_SIZE, "INV");
 	}
-
+	
 	@Override
-	public int[] getAccessibleSlotsFromSide(int side) {
-
+	public int[] getSlotsForFace(EnumFacing side) {
 		ArrayList<Integer> slots = new ArrayList<>();
 
 		for (int i = TradeStation.SLOT_LETTERS_1; i < TradeStation.SLOT_LETTERS_1 + TradeStation.SLOT_LETTERS_COUNT; i++) {
@@ -55,7 +54,7 @@ public class InventoryTradeStation extends InventoryAdapter {
 	}
 
 	@Override
-	public boolean canExtractItem(int slot, ItemStack itemStack, int side) {
+	public boolean canExtractItem(int slot, ItemStack itemStack, EnumFacing side) {
 		return SlotUtil.isSlotInRange(slot, TradeStation.SLOT_RECEIVE_BUFFER, TradeStation.SLOT_RECEIVE_BUFFER_COUNT);
 	}
 

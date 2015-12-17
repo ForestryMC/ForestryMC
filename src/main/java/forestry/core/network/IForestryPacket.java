@@ -12,7 +12,7 @@ package forestry.core.network;
 
 import java.io.IOException;
 
-import cpw.mods.fml.common.network.internal.FMLProxyPacket;
+import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
 
 public interface IForestryPacket {
 	void readData(DataInputStreamForestry data) throws IOException;

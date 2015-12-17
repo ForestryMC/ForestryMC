@@ -33,7 +33,7 @@ import forestry.core.utils.BlockPosUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.vect.Vect;
-import forestry.plugins.compat.PluginIC2;
+import forestry.plugins.compat.deprecated.PluginIC2;
 
 public class FarmLogicRubber extends FarmLogic {
 

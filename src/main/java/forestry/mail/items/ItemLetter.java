@@ -12,19 +12,16 @@ package forestry.mail.items;
 
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import forestry.api.core.IModelManager;
 import forestry.api.mail.ILetter;
 import forestry.core.items.ItemWithGui;
 import forestry.core.utils.StringUtil;
@@ -57,17 +54,11 @@ public class ItemLetter extends ItemWithGui {
 		return true;
 	}
 
-	/* ICONS */
+	/* MODELS */
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerIcons(IIconRegister register) {
-		LetterProperties.registerIcons(register);
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public IIcon getIconFromDamage(int damage) {
-		return LetterProperties.getIconFromDamage(damage);
+	public void registerModel(Item item, IModelManager manager) {
+		LetterProperties.registerModel(item, manager);
 	}
 
 	@SuppressWarnings({"unchecked", "rawtypes"})

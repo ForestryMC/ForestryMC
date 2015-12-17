@@ -37,7 +37,6 @@ import forestry.core.circuits.Circuit;
 import forestry.core.circuits.CircuitLayout;
 import forestry.core.config.Constants;
 import forestry.core.items.EnumElectronTube;
-import forestry.core.items.ItemRegistry;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.Log;
 import forestry.farming.blocks.BlockFarmType;

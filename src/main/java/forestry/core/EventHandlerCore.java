@@ -85,8 +85,8 @@ public class EventHandlerCore {
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public void handleTextureRemap(TextureStitchEvent.Pre event) {
-		ErrorStateRegistry.initIcons(event.map);
-		TextureManager.initDefaultIcons(event.map);
+		ErrorStateRegistry.initSprites();
+		TextureManager.initDefaultSprites();
 	}
 
 }

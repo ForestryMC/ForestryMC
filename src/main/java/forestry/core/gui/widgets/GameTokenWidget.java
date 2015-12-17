@@ -10,8 +10,10 @@
  ******************************************************************************/
 package forestry.core.gui.widgets;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -21,7 +23,6 @@ import org.lwjgl.opengl.GL11;
 import forestry.core.gui.GuiUtil;
 import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.SpriteSheet;
 import forestry.core.render.TextureManager;
 import forestry.core.tiles.EscritoireGame;
 import forestry.core.tiles.EscritoireGameToken;
@@ -72,7 +73,7 @@ public class GameTokenWidget extends Widget {
 		manager.gui.setZLevel(150f);
 		for (String ident : getToken().getOverlayIcons()) {
 			RenderHelper.enableGUIStandardItemLighting();
-			Proxies.render.bindTexture(SpriteSheet.ITEMS);
+			Proxies.render.bindTexture(TextureMap.locationBlocksTexture);
 			TextureAtlasSprite icon = TextureManager.getInstance().getDefault(ident);
 			manager.gui.drawTexturedModelRectFromSprite(startX + xPos + 3, startY + yPos + 3, icon, 16, 16);
 			RenderHelper.disableStandardItemLighting();

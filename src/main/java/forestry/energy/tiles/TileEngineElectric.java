@@ -30,8 +30,7 @@ import forestry.core.tiles.TemperatureState;
 import forestry.core.tiles.TileEngine;
 import forestry.energy.gui.ContainerEngineElectric;
 import forestry.energy.gui.GuiEngineElectric;
-import forestry.plugins.compat.PluginIC2;
-
+import forestry.plugins.compat.deprecated.PluginIC2;
 import ic2.api.energy.prefab.BasicSink;
 
 public class TileEngineElectric extends TileEngine implements ISocketable, IInventory {

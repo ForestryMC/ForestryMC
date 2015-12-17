@@ -57,7 +57,6 @@ import forestry.api.storage.StorageManager;
 import forestry.apiculture.blocks.BlockRegistryApiculture;
 import forestry.core.IPickupHandler;
 import forestry.core.IResupplyHandler;
-import forestry.core.blocks.BlockRegistry;
 import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
 import forestry.core.fluids.Fluids;

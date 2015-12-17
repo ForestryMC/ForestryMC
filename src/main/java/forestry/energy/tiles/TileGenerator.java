@@ -41,8 +41,7 @@ import forestry.core.tiles.TileBase;
 import forestry.energy.gui.ContainerGenerator;
 import forestry.energy.gui.GuiGenerator;
 import forestry.energy.inventory.InventoryGenerator;
-import forestry.plugins.compat.PluginIC2;
-
+import forestry.plugins.compat.deprecated.PluginIC2;
 import ic2.api.energy.prefab.BasicSource;
 
 public class TileGenerator extends TileBase implements ISidedInventory, ILiquidTankTile, IFluidHandler, IRenderableTile {

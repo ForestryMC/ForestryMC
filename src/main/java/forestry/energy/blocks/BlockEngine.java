@@ -102,26 +102,26 @@ public class BlockEngine extends BlockBase<BlockEngineType, BlockEngineType> {
 			}
 		}
 	}
-
+	
 	@Override
-	public MovingObjectPosition collisionRayTrace(World world, int x, int y, int z, Vec3 origin, Vec3 direction) {
-		TileEngine tile = TileUtil.getTile(world, x, y, z, TileEngine.class);
+	public MovingObjectPosition collisionRayTrace(World world, BlockPos pos, Vec3 start, Vec3 end) {
+		TileEngine tile = TileUtil.getTile(world, pos, TileEngine.class);
 		if (tile == null) {
-			return super.collisionRayTrace(world, x, y, z, origin, direction);
+			return super.collisionRayTrace(world, pos, start, end);
 		}
 
-		ForgeDirection orientation = tile.getOrientation();
+		EnumFacing orientation = tile.getOrientation();
 		List<AxisAlignedBB> boundingBoxes = boundingBoxesForDirections.get(orientation);
 		if (boundingBoxes == null) {
-			return super.collisionRayTrace(world, x, y, z, origin, direction);
+			return super.collisionRayTrace(world, pos, start, end);
 		}
 
 		MovingObjectPosition nearestIntersection = null;
 		for (AxisAlignedBB boundingBoxBase : boundingBoxes) {
-			AxisAlignedBB boundingBox = boundingBoxBase.getOffsetBoundingBox(x, y, z);
-			MovingObjectPosition intersection = boundingBox.calculateIntercept(origin, direction);
+			AxisAlignedBB boundingBox = boundingBoxBase.getOffsetBoundingBox(pos);
+			MovingObjectPosition intersection = boundingBox.calculateIntercept(start, end);
 			if (intersection != null) {
-				if (nearestIntersection == null || (intersection.hitVec.distanceTo(origin) < nearestIntersection.hitVec.distanceTo(origin))) {
+				if (nearestIntersection == null || (intersection.hitVec.distanceTo(start) < nearestIntersection.hitVec.distanceTo(start))) {
 					nearestIntersection = intersection;
 				}
 			}

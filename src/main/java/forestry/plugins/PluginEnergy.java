@@ -16,7 +16,6 @@ import net.minecraftforge.fml.common.SidedProxy;
 import forestry.api.core.ForestryAPI;
 import forestry.core.blocks.BlockRegistry;
 import forestry.core.config.Constants;
-import forestry.core.items.ItemRegistry;
 import forestry.core.recipes.RecipeUtil;
 import forestry.energy.blocks.BlockEngineType;
 import forestry.energy.blocks.BlockRegistryEnergy;

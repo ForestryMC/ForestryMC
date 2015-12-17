@@ -16,7 +16,6 @@ import net.minecraft.item.ItemStack;
 import forestry.api.food.BeverageManager;
 import forestry.apiculture.items.EnumPollenCluster;
 import forestry.apiculture.items.ItemRegistryApiculture;
-import forestry.core.blocks.BlockRegistry;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
 import forestry.core.fluids.LiquidRegistryHelper;

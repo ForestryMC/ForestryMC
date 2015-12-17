@@ -31,7 +31,7 @@ public class PacketGuiUpdate extends PacketCoordinates implements IForestryPacke
 	}
 
 	public <T extends IStreamableGui & ILocatable> PacketGuiUpdate(T guiDataTile) {
-		super(guiDataTile.getCoordinates());
+		super(guiDataTile.getPos());
 		this.guiDataTile = guiDataTile;
 	}
 

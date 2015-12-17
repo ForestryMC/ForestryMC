@@ -34,7 +34,7 @@ public class PacketTankLevelUpdate extends PacketCoordinates implements IForestr
 	}
 
 	public PacketTankLevelUpdate(ILiquidTankTile tileEntity, int tankIndex, FluidStack contents) {
-		super(tileEntity.getCoordinates());
+		super(tileEntity.getPos());
 		this.tankIndex = tankIndex;
 		this.contents = contents;
 	}

@@ -11,7 +11,7 @@
 package forestry.core.genetics.alleles;
 
 import forestry.api.genetics.IAlleleArea;
-import forestry.core.utils.vect.Vect;
+import net.minecraft.util.BlockPos;
 
 public class AlleleArea extends AlleleCategorized implements IAlleleArea {
 
@@ -26,7 +26,7 @@ public class AlleleArea extends AlleleCategorized implements IAlleleArea {
 		return area;
 	}
 
-	public Vect getArea() {
-		return new Vect(area);
+	public BlockPos getArea() {
+		return new BlockPos(area[0], area[1], area[2]);
 	}
 }
