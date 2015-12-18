@@ -20,13 +20,17 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.WeightedRandomChestContent;
-
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.ChestGenHooks;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.IFuelHandler;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameData;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.api.arboriculture.EnumGermlingType;
@@ -54,6 +58,7 @@ import forestry.arboriculture.genetics.alleles.AlleleLeafEffect;
 import forestry.arboriculture.items.ItemRegistryArboriculture;
 import forestry.arboriculture.network.PacketRegistryArboriculture;
 import forestry.arboriculture.proxy.ProxyArboriculture;
+import forestry.arboriculture.render.TextureLeaves;
 import forestry.arboriculture.tiles.TileArboristChest;
 import forestry.arboriculture.tiles.TileFruitPod;
 import forestry.arboriculture.tiles.TileLeaves;
@@ -116,6 +121,8 @@ public class PluginArboriculture extends ForestryPlugin {
 	@Override
 	public void preInit() {
 		super.preInit();
+		
+		MinecraftForge.EVENT_BUS.register(this);
 
 		for (EnumWoodType woodType : EnumWoodType.VALUES) {
 			WoodItemAccess.registerLog(blocks.logs, woodType, false);
@@ -408,6 +415,12 @@ public class PluginArboriculture extends ForestryPlugin {
 			ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Larch.getMemberStack(EnumGermlingType.POLLEN), 1, 2, 3));
 			ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Lime.getMemberStack(EnumGermlingType.POLLEN), 1, 2, 3));
 		}
+	}
+	
+	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
+	public void textureHook(TextureStitchEvent.Pre event) {
+		TextureLeaves.registerAllSprites();
 	}
 
 	private static class FuelHandler implements IFuelHandler {

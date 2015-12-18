@@ -90,7 +90,7 @@ public class RenderSaplingBlock implements ISimpleBlockRenderingHandler {
 	private static void drawCrossedSquares(IAlleleTreeSpecies species, double par3, double par5, double par7, float mod) {
 
 		Tessellator tess = Tessellator.instance;
-		IIcon icon = species.getGermlingIcon(EnumGermlingType.SAPLING, renderLayer);
+		IIcon icon = species.getGermlingSprite(EnumGermlingType.SAPLING, renderLayer);
 
 		double d3 = (double) icon.getMinU();
 		double d4 = (double) icon.getMinV();

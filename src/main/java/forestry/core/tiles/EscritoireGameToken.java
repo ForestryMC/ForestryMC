@@ -101,7 +101,7 @@ public class EscritoireGameToken implements INBTTagable, IStreamable {
 		}
 
 		IIndividual individual = AlleleManager.alleleRegistry.getIndividual(tokenStack);
-		int iconColor = individual.getGenome().getPrimary().getIconColour(0);
+		int iconColor = individual.getGenome().getPrimary().getSpriteColour(0);
 
 		if (state == State.MATCHED) {
 			return ColourUtil.multiplyRGBComponents(iconColor, 0.7f);

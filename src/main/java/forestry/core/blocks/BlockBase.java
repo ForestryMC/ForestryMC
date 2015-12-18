@@ -110,7 +110,7 @@ public class BlockBase<T extends IMachineProperties, C extends Enum & IMachinePr
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState().withProperty(META, MachineDefinitionTypes.getType(definitionID, meta));
+		return getDefaultState().withProperty(META, clazz.getEnumConstants()[meta]);
 	}
 	
 	@Override

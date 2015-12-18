@@ -16,21 +16,19 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
 
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
 import net.minecraftforge.common.EnumPlantType;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.IFruitProvider;
@@ -91,9 +89,10 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		// trees from itemStacks will have no coordinates
 		if (nbttagcompound.hasKey("x")) {
-			this.xCoord = nbttagcompound.getInteger("x");
-			this.yCoord = nbttagcompound.getInteger("y");
-			this.zCoord = nbttagcompound.getInteger("z");
+			int xCoord = nbttagcompound.getInteger("x");
+			int yCoord = nbttagcompound.getInteger("y");
+			int zCoord = nbttagcompound.getInteger("z");
+			pos = new BlockPos(xCoord, yCoord, zCoord);
 		}
 
 		if (nbttagcompound.hasKey("species")) {
@@ -105,7 +104,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 			setTree(containedTree);
 		} else {
 			if (nbttagcompound.hasKey("owner")) {
-				setOwner(NBTUtil.func_152459_a(nbttagcompound.getCompoundTag("owner")));
+				setOwner(NBTUtil.readGameProfileFromNBT(nbttagcompound.getCompoundTag("owner")));
 			}
 
 			ripeningTime = nbttagcompound.getShort("RT");
@@ -138,9 +137,9 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	@Override
 	public void writeToNBT(NBTTagCompound nbtTagCompound) {
 		nbtTagCompound.setString("id", "forestry.Leaves");
-		nbtTagCompound.setInteger("x", this.xCoord);
-		nbtTagCompound.setInteger("y", this.yCoord);
-		nbtTagCompound.setInteger("z", this.zCoord);
+		nbtTagCompound.setInteger("x", pos.getX());
+		nbtTagCompound.setInteger("y", pos.getY());
+		nbtTagCompound.setInteger("z", pos.getZ());
 
 		if (isDecorative) {
 			writeToNBTDecorative(nbtTagCompound);
@@ -155,7 +154,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 			GameProfile owner = getOwner();
 			if (owner != null) {
 				NBTTagCompound nbt = new NBTTagCompound();
-				NBTUtil.func_152460_a(nbt, owner);
+				NBTUtil.writeGameProfile(nbt, owner);
 				nbtTagCompound.setTag("owner", nbt);
 			}
 
@@ -183,7 +182,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 		boolean isDestroyed = isDestroyed(tree, damage);
 		for (ILeafTickHandler tickHandler : genome.getPrimary().getRoot().getLeafTickHandlers()) {
-			if (tickHandler.onRandomLeafTick(tree, worldObj, xCoord, yCoord, zCoord, isDestroyed)) {
+			if (tickHandler.onRandomLeafTick(tree, worldObj, getPos(), isDestroyed)) {
 				return;
 			}
 		}
@@ -211,7 +210,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 			matureCaterpillar();
 		}
 
-		effectData = tree.doEffect(effectData, worldObj, xCoord, yCoord, zCoord);
+		effectData = tree.doEffect(effectData, worldObj, getPos());
 	}
 
 	@Override
@@ -224,13 +223,13 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		if (tree.canBearFruit()) {
 			IFruitProvider fruitProvider = genome.getFruitProvider();
 
-			isFruitLeaf = fruitProvider.markAsFruitLeaf(genome, worldObj, xCoord, yCoord, zCoord);
+			isFruitLeaf = fruitProvider.markAsFruitLeaf(genome, worldObj, getPos());
 			if (isFruitLeaf) {
 				// Hardcoded because vanilla oak trees don't show fruits.
 				if ((species == TreeDefinition.Oak.getGenome().getPrimary()) && (fruitProvider == AlleleFruit.fruitApple.getProvider())) {
 					textureIndexFruits = -1;
 				} else {
-					textureIndexFruits = fruitProvider.getIconIndex(genome, worldObj, xCoord, yCoord, zCoord, getRipeningTime(), true);
+					textureIndexFruits = fruitProvider.getIconIndex(genome, worldObj, getPos(), getRipeningTime(), true);
 				}
 
 				ripeningPeriod = (short) tree.getGenome().getFruitProvider().getRipeningPeriod();
@@ -283,19 +282,19 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		ITree tree = getTree();
 		ITreeGenome genome = tree.getGenome();
 		IFruitProvider fruit = genome.getFruitProvider();
-		return fruit.getColour(genome, worldObj, xCoord, yCoord, zCoord, getRipeningTime());
+		return fruit.getColour(genome, worldObj, getPos(), getRipeningTime());
 	}
 
 	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(boolean fancy) {
+	public TextureAtlasSprite getIcon(boolean fancy) {
 		if (species == null) {
-			return TreeDefinition.Oak.getIndividual().getGenome().getPrimary().getLeafIcon(false, fancy);
+			return TreeDefinition.Oak.getIndividual().getGenome().getPrimary().getLeafSprite(false, fancy);
 		}
-		return species.getLeafIcon(isPollinatedState, fancy);
+		return species.getLeafSprite(isPollinatedState, fancy);
 	}
 
 	@SideOnly(Side.CLIENT)
-	public IIcon getFruitTexture() {
+	public TextureAtlasSprite getFruitTexture() {
 		if (textureIndexFruits >= 0) {
 			return TextureManager.getInstance().getSprite(textureIndexFruits);
 		} else {
@@ -347,7 +346,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		}
 
 		getTree().mate((ITree) individual);
-		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		worldObj.markBlockForUpdate(getPos());
 	}
 
 	@Override
@@ -443,7 +442,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 			setTree(tree);
 
-			worldObj.func_147479_m(xCoord, yCoord, zCoord);
+			worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
 		}
 	}
 
@@ -453,7 +452,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 			return;
 		}
 		colourFruits = newColourFruits;
-		worldObj.func_147479_m(xCoord, yCoord, zCoord);
+		worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
 	}
 
 	/* IFRUITBEARER */
@@ -464,7 +463,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 			return Collections.emptyList();
 		}
 
-		ItemStack[] produceStacks = tree.produceStacks(worldObj, xCoord, yCoord, zCoord, getRipeningTime());
+		ItemStack[] produceStacks = tree.produceStacks(worldObj, getPos(), getRipeningTime());
 		ripeningTime = 0;
 		sendNetworkUpdateRipening();
 		return Arrays.asList(produceStacks);
@@ -524,16 +523,20 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		IButterflyGenome caterpillarGenome = caterpillar.getGenome();
 		int caterpillarMatureTime = Math.round((float) caterpillarGenome.getLifespan() / (caterpillarGenome.getFertility() * 2));
 
-		if (maturationTime >= caterpillarMatureTime && caterpillar.canTakeFlight(worldObj, xCoord, yCoord, zCoord)) {
-			if (worldObj.isAirBlock(xCoord - 1, yCoord, zCoord)) {
-				attemptButterflySpawn(worldObj, caterpillar, xCoord - 1, yCoord, zCoord);
-			} else if (worldObj.isAirBlock(xCoord + 1, yCoord, zCoord)) {
-				attemptButterflySpawn(worldObj, caterpillar, xCoord + 1, yCoord, zCoord);
-			} else if (worldObj.isAirBlock(xCoord, yCoord, zCoord - 1)) {
-				attemptButterflySpawn(worldObj, caterpillar, xCoord, yCoord, zCoord - 1);
-			} else if (worldObj.isAirBlock(xCoord, yCoord, zCoord + 1)) {
-				attemptButterflySpawn(worldObj, caterpillar, xCoord, yCoord, zCoord + 1);
+		if (maturationTime >= caterpillarMatureTime && caterpillar.canTakeFlight(worldObj, getPos())) {
+			int x = pos.getX();
+			int y = pos.getY();
+			int z = pos.getZ();
+			if (worldObj.isAirBlock(new BlockPos(x - 1, y, z))) {
+				x--;
+			} else if (worldObj.isAirBlock(new BlockPos(x + 1, y, z))) {
+				x++;
+			} else if (worldObj.isAirBlock(new BlockPos(x, y, z - 1))) {
+				z--;
+			} else if (worldObj.isAirBlock(new BlockPos(x, y, z + 1))) {
+				z++;
 			}
+			attemptButterflySpawn(worldObj, caterpillar, x, y, z);
 			setCaterpillar(null);
 		} else if (!wasDestroyed && isDestroyed(tree, damage)) {
 			sendNetworkUpdate();
@@ -541,14 +544,14 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	}
 
 	private static void attemptButterflySpawn(World world, IButterfly butterfly, double x, double y, double z) {
-		if (ButterflyManager.butterflyRoot.spawnButterflyInWorld(world, butterfly.copy(), x, y + 0.1f, z) != null) {
+		if (ButterflyManager.butterflyRoot.spawnButterflyInWorld(world, butterfly.copy(), new BlockPos(x, y + 0.1f, z)) != null) {
 			Log.finest("A caterpillar '%s' hatched at %s/%s/%s.", butterfly.getDisplayName(), x, y, z);
 		}
 	}
 
 	@Override
-	public ChunkCoordinates getCoordinates() {
-		return new ChunkCoordinates(xCoord, yCoord, zCoord);
+	public BlockPos getCoordinates() {
+		return getPos();
 	}
 
 	@Override

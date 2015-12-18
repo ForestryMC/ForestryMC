@@ -12,7 +12,9 @@ package forestry.core.entities;
 
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.EntityFX;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
@@ -71,10 +73,11 @@ public class EntityFXColoredDropParticle extends EntityFX {
 			this.motionZ *= 0.699999988079071D;
 		}
 
-		Material material = this.worldObj.getBlock(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ)).getMaterial();
-
+		IBlockState state = this.worldObj.getBlockState(new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ)));
+		Material material = state.getBlock().getMaterial();
+				
 		if (material.isLiquid() || material.isSolid()) {
-			double d0 = (double) ((float) (MathHelper.floor_double(this.posY) + 1) - BlockLiquid.getLiquidHeightPercent(this.worldObj.getBlockMetadata(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ))));
+			double d0 = (double) ((float) (MathHelper.floor_double(this.posY) + 1) - BlockLiquid.getLiquidHeightPercent(state.getBlock().getMetaFromState(state)));
 
 			if (this.posY < d0) {
 				this.setDead();

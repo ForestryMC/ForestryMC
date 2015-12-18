@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.world.ITreeGenData;
@@ -30,7 +31,7 @@ public class WorldGenEbony extends WorldGenTree {
 			for (int z = -offset; z < -offset + girth; z++) {
 				if (world.rand.nextFloat() < 0.6f) {
 					for (int i = 0; i < height; i++) {
-						addWood(world, x, i, z, EnumReplaceMode.ALL);
+						addWood(world, new BlockPos(x, i, z), EnumReplaceMode.ALL);
 						if (i > height / 2 && world.rand.nextFloat() < 0.1f * (10 / height)) {
 							break;
 						}
@@ -38,7 +39,7 @@ public class WorldGenEbony extends WorldGenTree {
 					trunksgenerated++;
 				} else {
 					for (int i = 0; i < 1; i++) {
-						clearBlock(world, x, i, z);
+						clearBlock(world, new BlockPos(x, i, z));
 					}
 				}
 			}

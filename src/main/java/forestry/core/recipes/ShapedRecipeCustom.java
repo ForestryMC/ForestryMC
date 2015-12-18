@@ -142,11 +142,11 @@ public class ShapedRecipeCustom extends ShapedOreRecipe implements IDescriptiveR
 	public boolean matches(InventoryCrafting inv, World world) {
 		for (int x = 0; x <= MAX_CRAFT_GRID_WIDTH - width; x++) {
 			for (int y = 0; y <= MAX_CRAFT_GRID_HEIGHT - height; ++y) {
-				if (checkMatch(inv, x, y, false)) {
+				if (checkMatchs(inv, x, y, false)) {
 					return true;
 				}
 
-				if (mirrored && checkMatch(inv, x, y, true)) {
+				if (mirrored && checkMatchs(inv, x, y, true)) {
 					return true;
 				}
 			}
@@ -156,7 +156,7 @@ public class ShapedRecipeCustom extends ShapedOreRecipe implements IDescriptiveR
 	}
 
 	@SuppressWarnings("unchecked")
-	private boolean checkMatch(InventoryCrafting inv, int startX, int startY, boolean mirror) {
+	private boolean checkMatchs(InventoryCrafting inv, int startX, int startY, boolean mirror) {
 		for (int x = 0; x < MAX_CRAFT_GRID_WIDTH; x++) {
 			for (int y = 0; y < MAX_CRAFT_GRID_HEIGHT; y++) {
 				int subX = x - startX;

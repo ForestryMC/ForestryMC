@@ -16,6 +16,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.arboriculture.IToolGrafter;
@@ -39,15 +40,14 @@ public class ItemGrafter extends ItemForestryTool implements IToolGrafter {
 		}
 		return super.canHarvestBlock(block, itemStack);
 	}
-
+	
 	@Override
-	public boolean onBlockDestroyed(ItemStack itemstack, World world, Block block, int j, int k, int l, EntityLivingBase entityliving) {
-		// damage is done by the harvested leaves
+	public boolean onBlockDestroyed(ItemStack stack, World world, Block block, BlockPos pos, EntityLivingBase player) {
 		return true;
 	}
 
 	@Override
-	public float getSaplingModifier(ItemStack stack, World world, EntityPlayer player, int x, int y, int z) {
+	public float getSaplingModifier(ItemStack stack, World world, EntityPlayer player, BlockPos pos) {
 		return 100f;
 	}
 }

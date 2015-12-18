@@ -12,7 +12,7 @@ package forestry.arboriculture.worldgen;
 
 import java.util.List;
 
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.world.ITreeGenData;
@@ -27,9 +27,9 @@ public class WorldGenPapaya extends WorldGenTree {
 	public void generate(World world) {
 		generateTreeTrunk(world, height, girth);
 
-		List<ChunkCoordinates> branchCoords = generateBranches(world, height, 0, 0, 0.15f, 0.25f, height / 4, 1, 0.25f);
-		for (ChunkCoordinates branchEnd : branchCoords) {
-			generateAdjustedCylinder(world, branchEnd.posY, branchEnd.posX, branchEnd.posZ, 1, 1, leaf, EnumReplaceMode.NONE);
+		List<BlockPos> branchCoords = generateBranches(world, height, 0, 0, 0.15f, 0.25f, height / 4, 1, 0.25f);
+		for (BlockPos branchEnd : branchCoords) {
+			generateAdjustedCylinder(world, branchEnd.getY(), branchEnd.getX(), branchEnd.getZ(), 1, 1, leaf, EnumReplaceMode.NONE);
 		}
 
 		int yCenter = height - girth;

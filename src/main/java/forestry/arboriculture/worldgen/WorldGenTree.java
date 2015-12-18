@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
@@ -71,15 +72,15 @@ public abstract class WorldGenTree extends WorldGenArboriculture {
 	}
 
 	@Override
-	public boolean canGrow(World world, int x, int y, int z) {
-		return tree.canGrow(world, x, y, z, girth, height);
+	public boolean canGrow(World world, BlockPos pos) {
+		return tree.canGrow(world, pos, girth, height);
 	}
 
 	@Override
-	public final void preGenerate(World world, int startX, int startY, int startZ) {
-		super.preGenerate(world, startX, startY, startZ);
+	public final void preGenerate(World world, BlockPos pos) {
+		super.preGenerate(world, pos);
 		height = determineHeight(world, baseHeight, heightVariation);
-		girth = tree.getGirth(world, startX, startY, startZ);
+		girth = tree.getGirth(world, pos);
 	}
 
 	protected int modifyByHeight(World world, int val, int min, int max) {

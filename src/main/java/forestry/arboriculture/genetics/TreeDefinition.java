@@ -16,12 +16,12 @@ import java.util.Arrays;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
 import com.mojang.authlib.GameProfile;
-
-import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.api.arboriculture.EnumFruitFamily;
 import forestry.api.arboriculture.EnumGermlingType;
@@ -29,7 +29,8 @@ import forestry.api.arboriculture.EnumLeafType;
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.EnumWoodType;
 import forestry.api.arboriculture.IAlleleTreeSpeciesCustom;
-import forestry.api.arboriculture.IGermlingIconProvider;
+import forestry.api.arboriculture.IGermlingModelProvider;
+import forestry.api.arboriculture.IGermlingSpriteProvider;
 import forestry.api.arboriculture.ILeafSpriteProvider;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.ITreeGenerator;
@@ -43,9 +44,11 @@ import forestry.api.world.ITreeGenData;
 import forestry.arboriculture.blocks.BlockForestryLeaves;
 import forestry.arboriculture.genetics.alleles.AlleleFruit;
 import forestry.arboriculture.genetics.alleles.AlleleGrowth;
-import forestry.arboriculture.render.IconProviderGermling;
-import forestry.arboriculture.render.IconProviderGermlingVanilla;
-import forestry.arboriculture.render.IconProviderLeaves;
+import forestry.arboriculture.render.ModelProviderGermling;
+import forestry.arboriculture.render.ModelProviderGermlingVanilla;
+import forestry.arboriculture.render.SpriteProviderGermling;
+import forestry.arboriculture.render.SpriteProviderGermlingVanilla;
+import forestry.arboriculture.render.SpriteProviderLeaves;
 import forestry.arboriculture.tiles.TileLeaves;
 import forestry.arboriculture.worldgen.BlockTypeLog;
 import forestry.arboriculture.worldgen.WorldGenAcacia;
@@ -963,10 +966,11 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 
 		this.branch = branch;
 
-		ILeafSpriteProvider leafIconProvider = new IconProviderLeaves(leafType, primary, secondary);
-		IGermlingIconProvider germlingIconProvider = new IconProviderGermlingVanilla(vanillaMeta);
+		ILeafSpriteProvider leafIconProvider = new SpriteProviderLeaves(leafType, primary, secondary);
+		IGermlingModelProvider germlingModelProvider = new ModelProviderGermlingVanilla(vanillaMeta);
+		IGermlingSpriteProvider germlingIconProvider = new SpriteProviderGermlingVanilla(vanillaMeta);
 
-		this.species = TreeManager.treeFactory.createSpecies(uid, unlocalizedName, "Sengir", unlocalizedDescription, dominant, branch.getBranch(), binomial, leafIconProvider, germlingIconProvider, this);
+		this.species = TreeManager.treeFactory.createSpecies(uid, unlocalizedName, "Sengir", unlocalizedDescription, dominant, branch.getBranch(), binomial, leafIconProvider, germlingIconProvider, germlingModelProvider, this);
 		this.woodType = null;
 		this.vanillaWood = vanillaWood;
 	}
@@ -979,10 +983,11 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 
 		this.branch = branch;
 
-		ILeafSpriteProvider leafIconProvider = new IconProviderLeaves(leafType, primary, secondary);
-		IGermlingIconProvider germlingIconProvider = new IconProviderGermling(uid);
+		ILeafSpriteProvider leafIconProvider = new SpriteProviderLeaves(leafType, primary, secondary);
+		IGermlingModelProvider germlingModelProvider = new ModelProviderGermling(uid);
+		IGermlingSpriteProvider germlingIconProvider = new SpriteProviderGermling(uid);
 
-		this.species = TreeManager.treeFactory.createSpecies(uid, unlocalizedName, "Sengir", unlocalizedDescription, dominant, branch.getBranch(), binomial, leafIconProvider, germlingIconProvider, this);
+		this.species = TreeManager.treeFactory.createSpecies(uid, unlocalizedName, "Sengir", unlocalizedDescription, dominant, branch.getBranch(), binomial, leafIconProvider, germlingIconProvider, germlingModelProvider, this);
 		this.woodType = woodType;
 		this.vanillaWood = null;
 	}
@@ -994,7 +999,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 	protected abstract void registerMutations();
 
 	@Override
-	public void setLogBlock(ITreeGenome genome, World world, int x, int y, int z, ForgeDirection facing) {
+	public void setLogBlock(ITreeGenome genome, World world, BlockPos pos, EnumFacing facing) {
 		if (woodType == null) {
 			Block vanillaWoodBlock = Block.getBlockFromItem(vanillaWood.getItem());
 			int vanillaWoodMeta = vanillaWood.getItemDamage();
@@ -1009,7 +1014,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 					break;
 			}
 
-			world.setBlock(x, y, z, vanillaWoodBlock, vanillaWoodMeta, Constants.FLAG_BLOCK_SYNCH);
+			world.setBlockState(pos, vanillaWoodBlock.getStateFromMeta(vanillaWoodMeta), Constants.FLAG_BLOCK_SYNCH);
 		} else {
 			AlleleBoolean fireproofAllele = (AlleleBoolean) genome.getActiveAllele(EnumTreeChromosome.FIREPROOF);
 			boolean fireproof = fireproofAllele.getValue();
@@ -1017,31 +1022,26 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 
 			BlockTypeLog logBlock = new BlockTypeLog(log);
 			logBlock.setDirection(facing);
-			logBlock.setBlock(world, x, y, z);
+			logBlock.setBlock(world, pos);
 		}
 	}
 
 	@Override
-	public void setLogBlock(World world, int x, int y, int z, ForgeDirection facing) {
-		setLogBlock(genome, world, x, y, z, facing);
-	}
-
-	@Override
-	public void setLeaves(ITreeGenome genome, World world, GameProfile owner, int x, int y, int z, boolean decorative) {
-		boolean placed = world.setBlock(x, y, z, PluginArboriculture.blocks.leaves, 0, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
+	public void setLeaves(ITreeGenome genome, World world, GameProfile owner, BlockPos pos, boolean decorative) {
+		boolean placed = world.setBlockState(pos, PluginArboriculture.blocks.leaves.getStateFromMeta(0), Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
 		if (!placed) {
 			return;
 		}
 
-		Block block = world.getBlock(x, y, z);
+		Block block = world.getBlockState(pos).getBlock();
 		if (PluginArboriculture.blocks.leaves != block) {
-			world.setBlockToAir(x, y, z);
+			world.setBlockToAir(pos);
 			return;
 		}
 
-		TileLeaves tileLeaves = BlockForestryLeaves.getLeafTile(world, x, y, z);
+		TileLeaves tileLeaves = BlockForestryLeaves.getLeafTile(world, pos);
 		if (tileLeaves == null) {
-			world.setBlockToAir(x, y, z);
+			world.setBlockToAir(pos);
 			return;
 		}
 
@@ -1051,12 +1051,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 		}
 		tileLeaves.setTree(new Tree(genome));
 
-		world.markBlockForUpdate(x, y, z);
-	}
-
-	@Override
-	public void setLeaves(World world, GameProfile owner, int x, int y, int z, boolean decorative) {
-		setLeaves(genome, world, owner, x, y, z, decorative);
+		world.markBlockForUpdate(pos);
 	}
 
 	public static void initTrees() {

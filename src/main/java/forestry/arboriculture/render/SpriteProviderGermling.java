@@ -10,38 +10,30 @@
  ******************************************************************************/
 package forestry.arboriculture.render;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.util.IIcon;
-
 import forestry.api.arboriculture.EnumGermlingType;
-import forestry.api.arboriculture.IGermlingIconProvider;
+import forestry.api.arboriculture.IGermlingSpriteProvider;
 import forestry.core.render.TextureManager;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 
-public class IconProviderGermling implements IGermlingIconProvider {
+public class SpriteProviderGermling implements IGermlingSpriteProvider {
 
 	private final String name;
 
-	private IIcon icon;
-	private IIcon[] pollenIcons;
+	private TextureAtlasSprite sprite;
 
-	public IconProviderGermling(String uid) {
+	public SpriteProviderGermling(String uid) {
 		this.name = uid.substring("forestry.".length());
 	}
 
 	@Override
-	public void registerIcons(IIconRegister register) {
-		icon = TextureManager.getSprite(register, "germlings/sapling." + name);
-		pollenIcons = new IIcon[2];
-		pollenIcons[0] = TextureManager.getSprite(register, "germlings/pollen.0");
-		pollenIcons[1] = TextureManager.getSprite(register, "germlings/pollen.1");
+	public void registerIcons() {
+		TextureManager manager = TextureManager.getInstance();
+
+		sprite = manager.registerSprite("blocks/germlings/sapling." + name);
 	}
 
 	@Override
-	public IIcon getIcon(EnumGermlingType type, int renderPass) {
-		if (type == EnumGermlingType.POLLEN) {
-			return pollenIcons[renderPass];
-		}
-
-		return icon;
+	public TextureAtlasSprite getSprite(EnumGermlingType type, int renderPass) {
+		return sprite;
 	}
 }

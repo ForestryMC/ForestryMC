@@ -171,7 +171,7 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 	}
 
 	@Override
-	public int getIconColour(int renderPass) {
+	public int getSpriteColour(int renderPass) {
 		if (renderPass > 0) {
 			return 0xffffff;
 		}

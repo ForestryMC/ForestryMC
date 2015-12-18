@@ -59,20 +59,20 @@ public abstract class WorldGenBase extends WorldGenerator {
 	
 	@Override
 	public boolean generate(World worldIn, Random rand, BlockPos position) {
-		return generate(worldIn, position.getX(), position.getY(), position.getZ(), false);
+		return generate(worldIn, position, false);
 	}
 
-	public boolean generate(World world, int x, int y, int z, boolean forced) {
+	public boolean generate(World world, BlockPos pos, boolean forced) {
 		return false;
 	}
 
-	protected abstract void addBlock(World world, int x, int y, int z, ITreeBlockType type, EnumReplaceMode replace);
+	protected abstract void addBlock(World world, BlockPos pos, ITreeBlockType type, EnumReplaceMode replace);
 
 	protected final void generateCuboid(World world, Vector start, Vector area, ITreeBlockType block, EnumReplaceMode replace) {
 		for (int x = (int) start.x; x < (int) start.x + area.x; x++) {
 			for (int y = (int) start.y; y < (int) start.y + area.y; y++) {
 				for (int z = (int) start.z; z < (int) start.z + area.z; z++) {
-					addBlock(world, x, y, z, block, replace);
+					addBlock(world, new BlockPos(x, y, z), block, replace);
 				}
 			}
 		}
@@ -92,7 +92,7 @@ public abstract class WorldGenBase extends WorldGenerator {
 					if (Vector.distance(position, treeCenter) <= (radius) + 0.01) {
 						EnumFacing direction = Vector.direction(position, treeCenter);
 						block.setDirection(direction);
-						addBlock(world, x, y, z, block, replace);
+						addBlock(world, new BlockPos(x, y, z), block, replace);
 					}
 				}
 			}
@@ -117,7 +117,7 @@ public abstract class WorldGenBase extends WorldGenerator {
 
 					double distance = Vector.distance(new Vector(x, y, z), new Vector(center.x, y, center.z));
 					if ((radius - width - 0.01 < distance && distance <= (radius) + 0.01)) {
-						addBlock(world, x, y, z, block, replace);
+						addBlock(world, new BlockPos(x, y, z), block, replace);
 					}
 				}
 			}
@@ -131,7 +131,7 @@ public abstract class WorldGenBase extends WorldGenerator {
 			for (int y = (int) start.y; y < (int) start.y + area.y; y++) {
 				for (int z = (int) start.z; z < (int) start.z + area.z; z++) {
 					if (Vector.distance(new Vector(x, y, z), new Vector(center.x, center.y, center.z)) <= (radius) + 0.01) {
-						addBlock(world, x, y, z, block, replace);
+						addBlock(world, new BlockPos(x, y, z), block, replace);
 					}
 				}
 			}

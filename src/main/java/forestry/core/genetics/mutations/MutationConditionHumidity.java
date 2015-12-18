@@ -32,7 +32,7 @@ public class MutationConditionHumidity implements IMutationCondition {
 
 	@Override
 	public float getChance(World world, BlockPos pos, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1) {
-		BiomeGenBase biome = world.getWorldChunkManager().getBiomeGenAt(pos);
+		BiomeGenBase biome = world.getWorldChunkManager().getBiomeGenerator(pos);
 		EnumHumidity biomeHumidity = EnumHumidity.getFromValue(biome.rainfall);
 
 		if (biomeHumidity.ordinal() < minHumidity.ordinal() || biomeHumidity.ordinal() > maxHumidity.ordinal()) {

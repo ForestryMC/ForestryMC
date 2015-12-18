@@ -12,6 +12,7 @@ package forestry.core.gui.slots;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.inventory.SlotCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -22,7 +23,7 @@ public class SlotCrafter extends SlotCrafting {
 	private final IInventory craftMatrix;
 	private final ICrafterWorktable crafter;
 
-	public SlotCrafter(EntityPlayer player, IInventory craftMatrix, ICrafterWorktable crafter, int slot, int xPos, int yPos) {
+	public SlotCrafter(EntityPlayer player, InventoryCrafting craftMatrix, ICrafterWorktable crafter, int slot, int xPos, int yPos) {
 		super(player, craftMatrix, craftMatrix, slot, xPos, yPos);
 		this.craftMatrix = craftMatrix;
 		this.crafter = crafter;

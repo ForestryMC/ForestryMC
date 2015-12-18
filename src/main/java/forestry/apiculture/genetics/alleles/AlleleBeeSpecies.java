@@ -183,7 +183,7 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 	}
 
 	@Override
-	public int getIconColour(int renderPass) {
+	public int getSpriteColour(int renderPass) {
 		return beeIconColourProvider.getSpriteColour(renderPass);
 	}
 

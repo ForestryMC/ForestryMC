@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.world.ITreeGenData;
@@ -27,7 +28,7 @@ public class WorldGenBalsa extends WorldGenTree {
 		int leafSpawn = height;
 		float leafRadius = (girth - 1.0f) / 2.0f;
 
-		addLeaf(world, 0, leafSpawn--, 0, EnumReplaceMode.NONE);
+		addLeaf(world, new BlockPos(0, leafSpawn--, 0), EnumReplaceMode.NONE);
 		generateAdjustedCylinder(world, leafSpawn--, leafRadius, 1, leaf);
 
 		if (height > 10) {

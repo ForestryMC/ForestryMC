@@ -12,18 +12,18 @@ package forestry.arboriculture.render;
 
 import java.awt.Color;
 
-import net.minecraft.util.IIcon;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 
 import forestry.api.arboriculture.EnumLeafType;
 import forestry.api.arboriculture.ILeafSpriteProvider;
 
-public class IconProviderLeaves implements ILeafSpriteProvider {
+public class SpriteProviderLeaves implements ILeafSpriteProvider {
 
 	private final TextureLeaves leafTexture;
 	private final int color;
 	private final int colorPollinated;
 
-	public IconProviderLeaves(EnumLeafType leafType, Color color, Color colorPollinated) {
+	public SpriteProviderLeaves(EnumLeafType leafType, Color color, Color colorPollinated) {
 		this.leafTexture = TextureLeaves.get(leafType);
 		this.color = color.getRGB();
 		this.colorPollinated = colorPollinated.getRGB();
@@ -39,7 +39,7 @@ public class IconProviderLeaves implements ILeafSpriteProvider {
 	}
 
 	@Override
-	public IIcon getSprite(boolean pollinated, boolean fancy) {
+	public TextureAtlasSprite getSprite(boolean pollinated, boolean fancy) {
 		if (pollinated) {
 			return leafTexture.getPollinated();
 		} else if (fancy) {

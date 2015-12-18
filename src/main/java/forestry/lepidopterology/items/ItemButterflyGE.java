@@ -158,7 +158,7 @@ public class ItemButterflyGE extends ItemGE {
 	@Override
 	public int getColourFromSpecies(IAlleleSpecies species, int renderPass) {
 		if (species != null) {
-			return species.getIconColour(renderPass);
+			return species.getSpriteColour(renderPass);
 		} else {
 			return 0xffffff;
 		}

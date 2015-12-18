@@ -10,11 +10,11 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
-
-import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.api.world.ITreeGenData;
 
@@ -27,12 +27,12 @@ public class TreeBlockTypeLeaf implements ITreeBlockType {
 	}
 
 	@Override
-	public void setDirection(ForgeDirection facing) {
+	public void setDirection(EnumFacing facing) {
 
 	}
 
 	@Override
-	public void setBlock(World world, ITreeGenData tree, int x, int y, int z) {
-		tree.setLeaves(world, owner, x, y, z);
+	public void setBlock(World world, ITreeGenData tree, BlockPos pos) {
+		tree.setLeaves(world, owner, pos);
 	}
 }

@@ -16,11 +16,14 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IIcon;
-
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 
@@ -101,11 +104,11 @@ public class PositionedFluidTank {
 		if (this.tank == null || this.tank.getFluid() == null || this.tank.getFluid().getFluid() == null || this.tank.getFluid().amount <= 0) {
 			return;
 		}
-		final IIcon fluidIcon;
-		if (this.flowingTexture && this.tank.getFluid().getFluid().getFlowingIcon() != null) {
-			fluidIcon = this.tank.getFluid().getFluid().getFlowingIcon();
-		} else if (this.tank.getFluid().getFluid().getStillIcon() != null) {
-			fluidIcon = this.tank.getFluid().getFluid().getStillIcon();
+		final ResourceLocation fluidSprite;
+		if (this.flowingTexture && this.tank.getFluid().getFluid().getFlowing() != null) {
+			fluidSprite = this.tank.getFluid().getFluid().getFlowing();
+		} else if (this.tank.getFluid().getFluid().getStill() != null) {
+			fluidSprite = this.tank.getFluid().getFluid().getStill();
 		} else {
 			return;
 		}
@@ -125,17 +128,20 @@ public class PositionedFluidTank {
 				int drawX = this.position.x + i;
 				int drawY = posY + j;
 
-				double minU = fluidIcon.getMinU();
-				double maxU = fluidIcon.getMaxU();
-				double minV = fluidIcon.getMinV();
-				double maxV = fluidIcon.getMaxV();
+				TextureAtlasSprite sprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(fluidSprite.toString());
 
-				Tessellator tessellator = Tessellator.instance;
-				tessellator.startDrawingQuads();
-				tessellator.addVertexWithUV(drawX, drawY + drawHeight, 0, minU, minV + (maxV - minV) * drawHeight / 16F);
-				tessellator.addVertexWithUV(drawX + drawWidth, drawY + drawHeight, 0, minU + (maxU - minU) * drawWidth / 16F, minV + (maxV - minV) * drawHeight / 16F);
-				tessellator.addVertexWithUV(drawX + drawWidth, drawY, 0, minU + (maxU - minU) * drawWidth / 16F, minV);
-				tessellator.addVertexWithUV(drawX, drawY, 0, minU, minV);
+				double minU = sprite.getMinU();
+				double maxU = sprite.getMaxU();
+				double minV = sprite.getMinV();
+				double maxV = sprite.getMaxV();
+
+				Tessellator tessellator = Tessellator.getInstance();
+				WorldRenderer worldRenderer = tessellator.getWorldRenderer();
+		        worldRenderer.func_181668_a(7, DefaultVertexFormats.field_181707_g);
+				worldRenderer.func_181662_b(drawX, drawY + drawHeight, 0).func_181673_a(minU, minV + (maxV - minV) * drawHeight / 16F).func_181675_d();
+				worldRenderer.func_181662_b(drawX + drawWidth, drawY + drawHeight, 0).func_181673_a( minU + (maxU - minU) * drawWidth / 16F, minV + (maxV - minV) * drawHeight / 16F).func_181675_d();
+				worldRenderer.func_181662_b(drawX + drawWidth, drawY, 0).func_181673_a( minU + (maxU - minU) * drawWidth / 16F, minV).func_181675_d();
+				worldRenderer.func_181662_b(drawX, drawY, 0).func_181673_a(minU, minV).func_181675_d();
 				tessellator.draw();
 			}
 		}

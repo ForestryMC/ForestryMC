@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.arboriculture.blocks;
 
+import java.util.Locale;
+
 import javax.annotation.Nullable;
 
 import forestry.arboriculture.tiles.TileArboristChest;
@@ -49,5 +51,10 @@ public enum BlockArboricultureType implements IMachinePropertiesTESR {
 	@Override
 	public Class<? extends TileForestry> getTeClass() {
 		return teClass;
+	}
+	
+	@Override
+	public String getName() {
+		return name().toLowerCase(Locale.ENGLISH);
 	}
 }

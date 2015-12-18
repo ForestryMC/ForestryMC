@@ -120,7 +120,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
 			return defaultIcon;
 		}
 
-		return sapling.getTree().getGenome().getPrimary().getGermlingIcon(EnumGermlingType.SAPLING, 0);
+		return sapling.getTree().getGenome().getPrimary().getGermlingSprite(EnumGermlingType.SAPLING, 0);
 	}
 
 	/* PLANTING */

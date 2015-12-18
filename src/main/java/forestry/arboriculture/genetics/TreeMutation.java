@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.arboriculture.IAlleleTreeSpecies;
@@ -32,8 +33,8 @@ public class TreeMutation extends Mutation implements ITreeMutationCustom {
 	}
 
 	@Override
-	public float getChance(World world, int x, int y, int z, IAlleleTreeSpecies allele0, IAlleleTreeSpecies allele1, ITreeGenome genome0, ITreeGenome genome1) {
-		float processedChance = super.getChance(world, x, y, z, allele0, allele1, genome0, genome1);
+	public float getChance(World world, BlockPos pos, IAlleleTreeSpecies allele0, IAlleleTreeSpecies allele1, ITreeGenome genome0, ITreeGenome genome1) {
+		float processedChance = super.getChance(world, pos, allele0, allele1, genome0, genome1);
 		if (processedChance <= 0) {
 			return 0;
 		}

@@ -11,8 +11,7 @@
 package forestry.arboriculture.worldgen;
 
 import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 public class BlockTypeLog extends BlockTypeWood {
 	public BlockTypeLog(ItemStack itemStack) {
@@ -20,10 +19,10 @@ public class BlockTypeLog extends BlockTypeWood {
 	}
 
 	@Override
-	public void setDirection(ForgeDirection facing) {
-		if (facing.offsetX != 0) {
+	public void setDirection(EnumFacing facing) {
+		if (facing.getFrontOffsetX() != 0) {
 			blockMeta = 4;
-		} else if (facing.offsetZ != 0) {
+		} else if (facing.getFrontOffsetZ() != 0) {
 			blockMeta = 8;
 		} else {
 			blockMeta = 0;

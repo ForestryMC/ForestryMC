@@ -21,6 +21,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import net.minecraftforge.oredict.OreDictionary;
@@ -282,6 +283,10 @@ public abstract class ItemStackUtil {
 			}
 			return base.getItemDamage() == comparison.getItemDamage();
 		}
+	}
+	
+	public static void dropItemStackAsEntity(ItemStack items, World world, BlockPos pos) {
+		dropItemStackAsEntity(items, world, pos.getX(), pos.getY(), pos.getZ(), 10);
 	}
 
 	public static void dropItemStackAsEntity(ItemStack items, World world, double x, double y, double z) {

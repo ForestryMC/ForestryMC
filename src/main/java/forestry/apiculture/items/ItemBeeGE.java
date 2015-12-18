@@ -141,7 +141,7 @@ public class ItemBeeGE extends ItemGE {
 	public int getColourFromSpecies(IAlleleSpecies species, int renderPass) {
 
 		if (species instanceof IAlleleBeeSpecies) {
-			return species.getIconColour(renderPass);
+			return species.getSpriteColour(renderPass);
 		} else {
 			return 0xffffff;
 		}

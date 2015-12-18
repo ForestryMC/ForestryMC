@@ -259,4 +259,17 @@ public abstract class BlockUtil {
 			return false;
 		}
 	}
+	
+	/*
+	 * BLOCK POS
+	 */
+	 
+	public static BlockPos multiply(BlockPos pos, int factor) {
+		return new BlockPos(pos.getX() * factor, pos.getY() * factor, pos.getZ() * factor);
+	}
+
+	public static BlockPos multiply(BlockPos pos, float factor) {
+		return new BlockPos(Math.round(pos.getX() * factor), Math.round(pos.getY() * factor), Math.round(pos.getZ() * factor));
+	}
+	
 }

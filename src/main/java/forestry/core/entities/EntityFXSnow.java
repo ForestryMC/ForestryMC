@@ -58,7 +58,7 @@ public class EntityFXSnow extends EntityFX {
 			maxV = this.particleIcon.getMaxV();
 		}
 
-		worldRenderer.setColorRGBA_F(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha);
+		worldRenderer.func_181666_a(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha);
 
 		for (int i = 0; i < 5; i++) {
 			renderParticle(worldRenderer, x, y, z, rotationX, rotationXZ, rotationZ, rotationYZ, rotationXY, minU, maxU, minV, maxV, scale);

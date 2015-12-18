@@ -65,11 +65,11 @@ public class TileSapling extends TileTreeContainer {
 			return true;
 		}
 
-		WorldGenerator generator = tree.getTreeGenerator(worldObj, xCoord, yCoord, zCoord, true);
+		WorldGenerator generator = tree.getTreeGenerator(worldObj, getPos(), true);
 		if (generator instanceof WorldGenArboriculture) {
 			WorldGenArboriculture arboricultureGenerator = (WorldGenArboriculture) generator;
-			arboricultureGenerator.preGenerate(worldObj, xCoord, yCoord, zCoord);
-			return arboricultureGenerator.canGrow(worldObj, xCoord, yCoord, zCoord);
+			arboricultureGenerator.preGenerate(worldObj, getPos());
+			return arboricultureGenerator.canGrow(worldObj, getPos());
 		} else {
 			return true;
 		}
@@ -91,12 +91,12 @@ public class TileSapling extends TileTreeContainer {
 			return;
 		}
 
-		WorldGenerator generator = tree.getTreeGenerator(worldObj, xCoord, yCoord, zCoord, bonemealed);
+		WorldGenerator generator = tree.getTreeGenerator(worldObj, getPos(), bonemealed);
 		final boolean generated;
 		if (generator instanceof WorldGenBase) {
-			generated = ((WorldGenBase) generator).generate(worldObj, xCoord, yCoord, zCoord, bonemealed);
+			generated = ((WorldGenBase) generator).generate(worldObj, getPos(), bonemealed);
 		} else {
-			generated = generator.generate(worldObj, worldObj.rand, xCoord, yCoord, zCoord);
+			generated = generator.generate(worldObj, worldObj.rand, getPos());
 		}
 
 		if (generated) {

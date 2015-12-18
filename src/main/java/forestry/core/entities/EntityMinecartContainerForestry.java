@@ -10,12 +10,17 @@
  ******************************************************************************/
 package forestry.core.entities;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IChatComponent;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.tiles.IFilterSlotDelegate;
@@ -109,23 +114,28 @@ public abstract class EntityMinecartContainerForestry extends EntityMinecartFore
 	}
 
 	@Override
-	public final void openInventory() {
-		getInternalInventory().openInventory();
+	public final void openInventory(EntityPlayer player) {
+		getInternalInventory().openInventory(player);
 	}
 
 	@Override
-	public final void closeInventory() {
-		getInternalInventory().closeInventory();
+	public final void closeInventory(EntityPlayer player) {
+		getInternalInventory().closeInventory(player);
 	}
-
+	
 	@Override
-	public final String getInventoryName() {
-		return getInternalInventory().getInventoryName();
+	public IChatComponent getDisplayName() {
+		return getInternalInventory().getDisplayName();
 	}
-
+	
 	@Override
-	public final boolean hasCustomInventoryName() {
-		return false; // stop RailCraft from rendering a halo text of the inventory name
+	public String getCommandSenderName() {
+		return getInternalInventory().getCommandSenderName();
+	}
+	
+	@Override
+	public boolean hasCustomName() {
+		return false;
 	}
 
 	@Override
@@ -142,19 +152,19 @@ public abstract class EntityMinecartContainerForestry extends EntityMinecartFore
 	public boolean isLocked(int slotIndex) {
 		return getInternalInventory().isLocked(slotIndex);
 	}
-
+	
 	@Override
-	public int[] getAccessibleSlotsFromSide(int side) {
-		return getInternalInventory().getAccessibleSlotsFromSide(side);
+	public int[] getSlotsForFace(EnumFacing side) {
+		return getInternalInventory().getSlotsForFace(side);
 	}
 
 	@Override
-	public boolean canInsertItem(int slot, ItemStack stack, int side) {
+	public boolean canInsertItem(int slot, ItemStack stack, EnumFacing side) {
 		return getInternalInventory().canInsertItem(slot, stack, side);
 	}
 
 	@Override
-	public boolean canExtractItem(int slot, ItemStack stack, int side) {
+	public boolean canExtractItem(int slot, ItemStack stack, EnumFacing side) {
 		return getInternalInventory().canExtractItem(slot, stack, side);
 	}
 
@@ -164,4 +174,24 @@ public abstract class EntityMinecartContainerForestry extends EntityMinecartFore
 	}
 
 	protected abstract IInventoryAdapter getInternalInventory();
+
+	@Override
+	public int getField(int id) {
+		return getInternalInventory().getField(id);
+	}
+
+	@Override
+	public void setField(int id, int value) {
+		getInternalInventory().setField(id, value);
+	}
+
+	@Override
+	public int getFieldCount() {
+		return getInternalInventory().getFieldCount();
+	}
+
+	@Override
+	public void clear() {
+		getInternalInventory().clear();
+	}
 }

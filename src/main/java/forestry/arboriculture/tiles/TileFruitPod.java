@@ -19,10 +19,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.genetics.AlleleManager;
@@ -89,14 +85,6 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 
 	/* UPDATING */
 
-	/**
-	 * This doesn't use normal TE updates
-	 */
-	@Override
-	public boolean canUpdate() {
-		return false;
-	}
-
 	public void onBlockTick() {
 		if (canMature() && worldObj.rand.nextFloat() <= sappiness) {
 			mature();
@@ -112,21 +100,12 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 		return maturity < MAX_MATURITY;
 	}
 
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon() {
-		if (maturity < indices.length) {
-			return TextureManager.getInstance().getSprite((short) indices[maturity]);
-		} else {
-			return null;
-		}
-	}
-
 	public short getMaturity() {
 		return maturity;
 	}
 
 	public ItemStack[] getDrop() {
-		return allele.getProvider().getFruits(null, worldObj, xCoord, yCoord, zCoord, maturity);
+		return allele.getProvider().getFruits(null, worldObj, getPos(), maturity);
 	}
 
 	/* NETWORK */
@@ -145,7 +124,7 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 			return;
 		}
 		maturity = (short) newMaturity;
-		worldObj.func_147479_m(xCoord, yCoord, zCoord);
+		worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
 	}
 
 	/* IFRUITBEARER */
@@ -203,6 +182,6 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 			indices[i] = data.readInt();
 		}
 
-		worldObj.func_147479_m(xCoord, yCoord, zCoord);
+		worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
 	}
 }
