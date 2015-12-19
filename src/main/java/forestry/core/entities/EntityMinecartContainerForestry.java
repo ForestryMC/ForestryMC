@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.entities;
 
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ISidedInventory;
@@ -19,8 +18,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.world.World;
-
-import java.util.List;
 
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.tiles.IFilterSlotDelegate;
@@ -65,7 +62,7 @@ public abstract class EntityMinecartContainerForestry extends EntityMinecartFore
 	@Override
 	protected void applyDrag() {
 		int redstoneLevel = 15 - Container.calcRedstoneFromInventory(this);
-		double drag = 0.98F + (float) redstoneLevel * 0.001F;
+		double drag = 0.98F + redstoneLevel * 0.001F;
 		this.motionX *= drag;
 		this.motionY *= 0.0D;
 		this.motionZ *= drag;

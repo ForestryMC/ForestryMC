@@ -15,11 +15,6 @@ import java.util.Collection;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import forestry.api.farming.Farmables;
 import forestry.api.farming.IFarmHousing;
 

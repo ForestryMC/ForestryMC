@@ -12,6 +12,7 @@ package forestry.apiculture.genetics.alleles;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.apiculture.IBeeGenome;
@@ -19,7 +20,7 @@ import forestry.api.apiculture.IBeeHousing;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.IEffectData;
 import forestry.core.config.Constants;
-import forestry.core.utils.vect.Vect;
+import forestry.core.utils.BlockUtil;
 
 public class AlleleEffectGlacial extends AlleleEffectThrottled {
 
@@ -42,26 +43,26 @@ public class AlleleEffectGlacial extends AlleleEffectThrottled {
 		}
 
 		int[] areaAr = genome.getTerritory();
-		Vect area = new Vect(areaAr);
-		Vect offset = area.multiply(-1 / 2.0f);
-		Vect housingCoords = new Vect(housing.getCoordinates());
+		BlockPos area = new BlockPos(areaAr[0], areaAr[1], areaAr[2]);
+		BlockPos offset = BlockUtil.multiply(area, -1 / 2.0f);
+		BlockPos housingCoords = new BlockPos(housing.getCoordinates());
 
 		for (int i = 0; i < 10; i++) {
 
-			Vect randomPos = Vect.getRandomPositionInArea(world.rand, area);
-			Vect posBlock = Vect.add(randomPos, housingCoords, offset);
+			BlockPos randomPos = BlockUtil.getRandomPositionInArea(world.rand, area);
+			BlockPos posBlock = BlockUtil.add(randomPos, housingCoords, offset);
 
 			// Freeze water
-			Block block = world.getBlock(posBlock.x, posBlock.y, posBlock.z);
+			Block block = world.getBlockState(posBlock).getBlock();
 			if (block != Blocks.water) {
 				continue;
 			}
 
-			if (!world.isAirBlock(posBlock.x, posBlock.y + 1, posBlock.z)) {
+			if (!world.isAirBlock(posBlock)) {
 				continue;
 			}
 
-			world.setBlock(posBlock.x, posBlock.y, posBlock.z, Blocks.ice, 0, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
+			world.setBlockState(posBlock, Blocks.ice.getStateFromMeta(0), Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
 		}
 
 		return storedData;

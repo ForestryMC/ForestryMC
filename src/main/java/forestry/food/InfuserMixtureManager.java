@@ -36,6 +36,7 @@ public class InfuserMixtureManager implements IInfuserManager {
 		this.mixtures.add(new InfuserMixture(meta, ingredients, effect));
 	}
 
+	@Override
 	public boolean isIngredient(ItemStack itemstack) {
 		for (InfuserMixture ingredient : mixtures) {
 			if (ingredient.isIngredient(itemstack)) {

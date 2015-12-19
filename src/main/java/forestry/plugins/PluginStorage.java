@@ -61,7 +61,6 @@ import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
 import forestry.core.fluids.Fluids;
 import forestry.core.items.ItemCrated;
-import forestry.core.items.ItemRegistry;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
@@ -561,10 +560,5 @@ public class PluginStorage extends ForestryPlugin {
 				'X', "gemDiamond",
 				'W', wovenSilk,
 				'T', backpackT1);
-	}
-	
-	@Override
-	public ItemRegistry getItemRegistry() {
-		return items;
 	}
 }

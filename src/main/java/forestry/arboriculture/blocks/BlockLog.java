@@ -12,76 +12,101 @@ package forestry.arboriculture.blocks;
 
 import java.util.List;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Blocks;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IStringSerializable;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import net.minecraftforge.common.util.ForgeDirection;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import forestry.api.arboriculture.EnumWoodType;
 import forestry.api.arboriculture.TreeManager;
-import forestry.arboriculture.render.IconProviderWood;
-import forestry.arboriculture.tiles.TileWood;
 
 public class BlockLog extends BlockWood {
 
+	public static final PropertyEnum AXIS = PropertyEnum.create("axis", Axis.class);
+
+	public static enum Axis implements IStringSerializable {
+		NORMAL, SIDE, SIDE_90;
+
+		@Override
+		public String getName() {
+			return name().toLowerCase();
+		}
+	}
+	
 	public BlockLog(boolean fireproof) {
 		super("log", fireproof);
 		setResistance(5.0F);
 		setHarvestLevel("axe", 0);
+		setDefaultState(this.blockState.getBaseState().withProperty(AXIS, Axis.NORMAL).withProperty(EnumWoodType.WOODTYPE, EnumWoodType.LARCH));
 	}
 
 	@Override
-	public int getRenderType() {
-		return Blocks.log.getRenderType();
+	public IBlockState getStateFromMeta(int meta) {
+		return getDefaultState().withProperty(AXIS, Axis.values()[meta]);
 	}
 
 	@Override
-	public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
-		super.breakBlock(world, x, y, z, block, meta);
+	public int getMetaFromState(IBlockState state) {
+		return ((Axis) state.getValue(AXIS)).ordinal();
+	}
 
+	
+	@Override
+	protected BlockState createBlockState() {
+		return new BlockState(this, new IProperty[] { EnumWoodType.WOODTYPE, AXIS });
+	}
+	
+	@Override
+	public void breakBlock(World world, BlockPos pos, IBlockState state) {
+		super.breakBlock(world, pos, state);
+		
 		byte radius = 4;
 		int boundary = radius + 1;
+		
+		int x = pos.getX();
+		int y = pos.getY();
+		int z = pos.getZ();
 
-		if (world.checkChunksExist(x - boundary, y - boundary, z - boundary, x + boundary, y + boundary, z + boundary)) {
+		if (world.isAreaLoaded(new BlockPos(x - boundary, y - boundary, z - boundary), new BlockPos(x + boundary, y + boundary, z + boundary))) {
 			for (int i = -radius; i <= radius; ++i) {
 				for (int j = -radius; j <= radius; ++j) {
 					for (int k = -radius; k <= radius; ++k) {
-						Block neighbor = world.getBlock(x + i, y + j, z + k);
+						IBlockState neighbor = world.getBlockState(new BlockPos(x + i, y + j, z + k));
 
-						neighbor.beginLeavesDecay(world, x + i, y + j, z + k);
+						neighbor.getBlock().beginLeavesDecay(world, new BlockPos(x + i, y + j, z + k));
 					}
 				}
 			}
 		}
 	}
-
+	
 	@Override
-	public int onBlockPlaced(World world, int x, int y, int z, int side, float par6, float par7, float par8, int meta) {
+	public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
 		byte b0 = 0;
 
-		switch (side) {
-			case 0:
-			case 1:
+		switch (facing) {
+			case DOWN:
+			case UP:
 				b0 = 0;
 				break;
-			case 2:
-			case 3:
+			case NORTH:
+			case SOUTH:
 				b0 = 8;
 				break;
-			case 4:
-			case 5:
+			case WEST:
+			case EAST:
 				b0 = 4;
 		}
 
-		return meta | b0;
+		return getStateFromMeta(meta | b0);
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
@@ -92,45 +117,27 @@ public class BlockLog extends BlockWood {
 		}
 	}
 
-	/* ICONS */
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(int side, int meta) {
-		return IconProviderWood.getLogIcon(EnumWoodType.LARCH, meta, side);
-	}
-
-	@Override
-	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
-		int meta = world.getBlockMetadata(x, y, z);
-		TileWood wood = TileWood.getWoodTile(world, x, y, z);
-		EnumWoodType type = wood.getWoodType();
-		if (type == null) {
-			return getIcon(side, meta);
-		}
-		return IconProviderWood.getLogIcon(type, meta, side);
-	}
-
 	/* PROPERTIES */
 	@Override
-	public int getFireSpreadSpeed(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
+	public int getFireSpreadSpeed(IBlockAccess world, BlockPos pos, EnumFacing face) {
 		if (isFireproof()) {
 			return 0;
-		} else if (face == ForgeDirection.DOWN) {
+		} else if (face == EnumFacing.DOWN) {
 			return 20;
-		} else if (face != ForgeDirection.UP) {
+		} else if (face != EnumFacing.UP) {
 			return 10;
 		} else {
 			return 5;
 		}
 	}
-
+	
 	@Override
-	public boolean canSustainLeaves(IBlockAccess world, int x, int y, int z) {
+	public boolean canSustainLeaves(IBlockAccess world, BlockPos pos) {
 		return true;
 	}
-
+	
 	@Override
-	public boolean isWood(IBlockAccess world, int x, int y, int z) {
+	public boolean isWood(IBlockAccess world, BlockPos pos) {
 		return true;
 	}
 

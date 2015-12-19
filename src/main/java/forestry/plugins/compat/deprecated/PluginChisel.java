@@ -10,10 +10,7 @@
  ******************************************************************************/
 package forestry.plugins.compat.deprecated;
 
-import com.google.common.collect.ImmutableList;
-
 import forestry.core.config.Constants;
-import forestry.core.utils.ModUtil;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.Plugin;
 

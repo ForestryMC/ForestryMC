@@ -523,7 +523,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		IButterflyGenome caterpillarGenome = caterpillar.getGenome();
 		int caterpillarMatureTime = Math.round((float) caterpillarGenome.getLifespan() / (caterpillarGenome.getFertility() * 2));
 
-		if (maturationTime >= caterpillarMatureTime && caterpillar.canTakeFlight(worldObj, getPos())) {
+		if (maturationTime >= caterpillarMatureTime && caterpillar.canTakeFlight(worldObj, getPos().getX(), getPos().getY(), getPos().getZ())) {
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();
@@ -544,7 +544,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	}
 
 	private static void attemptButterflySpawn(World world, IButterfly butterfly, double x, double y, double z) {
-		if (ButterflyManager.butterflyRoot.spawnButterflyInWorld(world, butterfly.copy(), new BlockPos(x, y + 0.1f, z)) != null) {
+		if (ButterflyManager.butterflyRoot.spawnButterflyInWorld(world, butterfly.copy(), x, y + 0.1f, z) != null) {
 			Log.finest("A caterpillar '%s' hatched at %s/%s/%s.", butterfly.getDisplayName(), x, y, z);
 		}
 	}

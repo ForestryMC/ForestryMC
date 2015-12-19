@@ -15,18 +15,12 @@ import java.util.Stack;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.core.blocks.BlockSoil;
-import forestry.core.utils.BlockPosUtil;
-import forestry.core.utils.vect.Vect;
 import forestry.plugins.PluginCore;
 
 public class FarmLogicPeat extends FarmLogicWatered {
@@ -42,7 +36,7 @@ public class FarmLogicPeat extends FarmLogicWatered {
 			return true;
 		}
 
-		Block block = BlockSoil.getBlockFromItem(itemStack.getItem());
+		Block block = Block.getBlockFromItem(itemStack.getItem());
 		if (!(block instanceof BlockSoil)) {
 			return false;
 		}

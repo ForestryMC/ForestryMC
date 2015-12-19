@@ -30,11 +30,10 @@ import net.minecraft.world.World;
 
 import forestry.api.arboriculture.EnumWoodType;
 import forestry.arboriculture.IWoodTyped;
-import forestry.arboriculture.blocks.BlockLog;
 import forestry.arboriculture.tiles.TileWood;
 import forestry.core.config.Constants;
 import forestry.core.items.ItemBlockForestry;
-import forestry.core.render.ModelManager;
+import forestry.core.render.model.ModelManager;
 import forestry.core.utils.StringUtil;
 
 public class ItemBlockWood extends ItemBlockForestry {

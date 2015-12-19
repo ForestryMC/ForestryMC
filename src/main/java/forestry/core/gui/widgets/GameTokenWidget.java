@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.gui.widgets;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;

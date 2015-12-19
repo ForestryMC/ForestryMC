@@ -158,7 +158,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 	}
 
 	@Override
-	public boolean canStay(World world, BlockPos pos) {
+	public boolean canStay(IBlockAccess world, BlockPos pos) {
 		Block block = world.getBlockState(pos.add(0, -1, 0)).getBlock();
 		if (block == null) {
 			return false;

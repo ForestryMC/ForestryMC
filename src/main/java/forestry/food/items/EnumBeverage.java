@@ -13,7 +13,6 @@ package forestry.food.items;
 import java.awt.Color;
 
 import forestry.api.core.IModelManager;
-import forestry.core.render.TextureManager;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;

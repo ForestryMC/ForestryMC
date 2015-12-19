@@ -13,7 +13,6 @@ package forestry.core.tiles;
 import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ITickable;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.gui.ContainerNaturalistInventory;
 import forestry.core.gui.GuiHandler;

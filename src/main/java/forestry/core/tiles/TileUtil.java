@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.tiles;
 
-import net.minecraft.block.state.BlockPistonStructureHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;

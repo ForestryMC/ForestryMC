@@ -18,13 +18,11 @@ import forestry.api.mail.PostManager;
 import forestry.api.recipes.RecipeManagers;
 import forestry.apiculture.items.ItemRegistryApiculture;
 import forestry.core.ISaveEventHandler;
-import forestry.core.blocks.BlockRegistry;
 import forestry.core.circuits.EnumCircuitBoardType;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
 import forestry.core.items.EnumElectronTube;
-import forestry.core.items.ItemRegistry;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.tiles.MachineDefinition;
@@ -163,15 +161,5 @@ public class PluginMail extends ForestryPlugin {
 	@Override
 	public ISaveEventHandler getSaveEventHandler() {
 		return new SaveEventHandlerMail();
-	}
-	
-	@Override
-	public BlockRegistry getBlockRegistry() {
-		return blocks;
-	}
-	
-	@Override
-	public ItemRegistry getItemRegistry() {
-		return items;
 	}
 }

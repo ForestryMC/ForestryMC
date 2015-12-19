@@ -1,13 +1,6 @@
 package forestry.plugins.compat.deprecated;
 
-import net.minecraft.nbt.NBTTagCompound;
-
-import net.minecraftforge.fluids.Fluid;
-
-import forestry.api.core.ForestryAPI;
 import forestry.core.config.Constants;
-import forestry.core.fluids.Fluids;
-import forestry.core.utils.ModUtil;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.Plugin;
 

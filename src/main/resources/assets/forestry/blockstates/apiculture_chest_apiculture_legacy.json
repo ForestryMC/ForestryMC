@@ -1,0 +1,8 @@
+{
+    "variants": {
+    "face=north": { "model": "forestry:apiculture_chest_apiculture" },
+		"face=east": { "model": "forestry:apiculture_chest_apiculture", "y": 90 },
+		"face=south": { "model": "forestry:apiculture_chest_apiculture", "y": 180 },
+		"face=west": { "model": "forestry:apiculture_chest_apiculture", "y": -90 }
+	}
+}

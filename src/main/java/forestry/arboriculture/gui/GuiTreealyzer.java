@@ -38,6 +38,7 @@ import forestry.core.genetics.alleles.AlleleBoolean;
 import forestry.core.genetics.alleles.AllelePlantType;
 import forestry.core.gui.ContainerAlyzer;
 import forestry.core.gui.GuiAlyzer;
+import forestry.core.inventory.ItemInventoryAlyzer;
 import forestry.core.utils.StringUtil;
 import forestry.plugins.PluginArboriculture;
 
@@ -63,8 +64,8 @@ public class GuiTreealyzer extends GuiAlyzer {
 		int page = 0;
 		ITree tree = null;
 		EnumGermlingType treeType = EnumGermlingType.SAPLING;
-		for (int k = 1; k < ItemInventoryTreealyzer.SLOT_ANALYZE_5 + 1; k++) {
-			if (k == ItemInventoryTreealyzer.SLOT_ENERGY) {
+		for (int k = 1; k < ItemInventoryAlyzer.SLOT_ANALYZE_5 + 1; k++) {
+			if (k == ItemInventoryAlyzer.SLOT_ENERGY) {
 				continue;
 			}
 

@@ -10,26 +10,9 @@
  ******************************************************************************/
 package forestry.plugins.compat.deprecated;
 
-import com.google.common.collect.ImmutableList;
-
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-
-import forestry.api.core.ForestryAPI;
-import forestry.api.farming.Farmables;
-import forestry.api.fuels.FuelManager;
-import forestry.api.fuels.MoistenerFuel;
-import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Constants;
-import forestry.core.fluids.Fluids;
-import forestry.core.recipes.RecipeUtil;
-import forestry.core.utils.ModUtil;
-import forestry.farming.logic.FarmableBasicFruit;
-import forestry.farming.logic.FarmableGenericCrop;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.Plugin;
-import forestry.plugins.PluginCore;
 
 @Plugin(pluginID = "HarvestCraft", name = "HarvestCraft", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.plugin.harvestcraft.description")
 public class PluginHarvestCraft extends ForestryPlugin {

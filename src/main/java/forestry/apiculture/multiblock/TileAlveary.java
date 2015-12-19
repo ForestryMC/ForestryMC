@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.biome.BiomeGenBase;
 

@@ -25,7 +25,6 @@ import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
@@ -41,7 +40,6 @@ import forestry.core.CreativeTabForestry;
 import forestry.core.fluids.BlockForestryFluid;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
 
 public class ItemLiquidContainer extends ItemForestry {
 	private static final Map<Block, ItemLiquidContainer> buckets = new HashMap<>();

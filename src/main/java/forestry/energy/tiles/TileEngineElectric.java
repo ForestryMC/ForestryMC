@@ -31,7 +31,6 @@ import forestry.core.tiles.TileEngine;
 import forestry.energy.gui.ContainerEngineElectric;
 import forestry.energy.gui.GuiEngineElectric;
 import forestry.plugins.compat.deprecated.PluginIC2;
-import ic2.api.energy.prefab.BasicSink;
 
 public class TileEngineElectric extends TileEngine implements ISocketable, IInventory {
 	protected static class EuConfig {

@@ -39,6 +39,7 @@ public class ToolTipLine {
 		return spacing;
 	}
 
+	@Override
 	public String toString() {
 		if (color == null) {
 			return text;

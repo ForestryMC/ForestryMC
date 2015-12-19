@@ -19,8 +19,6 @@ import net.minecraftforge.oredict.OreDictionary;
 import forestry.api.core.IModelManager;
 import forestry.api.core.IModelRegister;
 import forestry.core.CreativeTabForestry;
-import forestry.core.render.TextureManager;
-import forestry.core.utils.StringUtil;
 
 public class ItemForestry extends Item implements IModelRegister {
 	public ItemForestry() {

@@ -12,8 +12,6 @@ package forestry.apiculture.proxy;
 
 import net.minecraftforge.client.MinecraftForgeClient;
 
-import cpw.mods.fml.client.registry.RenderingRegistry;
-
 import forestry.apiculture.entities.EntityBee;
 import forestry.apiculture.render.RenderBeeEntity;
 import forestry.apiculture.render.RenderBeeItem;

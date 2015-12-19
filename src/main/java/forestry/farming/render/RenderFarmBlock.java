@@ -11,7 +11,6 @@
 package forestry.farming.render;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.world.IBlockAccess;
 
 import forestry.core.render.RenderOverlayBlock;

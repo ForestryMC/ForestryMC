@@ -26,14 +26,17 @@ public class MoistenerRecipe implements IMoistenerRecipe {
 		this.product = product;
 	}
 
+	@Override
 	public int getTimePerItem() {
 		return timePerItem;
 	}
 
+	@Override
 	public ItemStack getResource() {
 		return resource;
 	}
 
+	@Override
 	public ItemStack getProduct() {
 		return product;
 	}

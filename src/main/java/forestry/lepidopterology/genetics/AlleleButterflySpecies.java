@@ -22,10 +22,8 @@ import net.minecraft.world.World;
 import com.mojang.authlib.GameProfile;
 
 import net.minecraftforge.common.BiomeDictionary;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.core.ISpriteProvider;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IIndividual;
@@ -58,16 +56,19 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 		return ButterflyManager.butterflyRoot;
 	}
 
+	@Override
 	public AlleleButterflySpecies setRarity(float rarity) {
 		this.rarity = rarity;
 		return this;
 	}
 
+	@Override
 	public AlleleButterflySpecies setFlightDistance(float flightDistance) {
 		this.flightDistance = flightDistance;
 		return this;
 	}
 
+	@Override
 	public AlleleButterflySpecies setNocturnal() {
 		this.isActualNocturnal = true;
 		return this;

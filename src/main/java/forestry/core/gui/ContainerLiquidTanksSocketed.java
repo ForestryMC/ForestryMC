@@ -67,6 +67,7 @@ public abstract class ContainerLiquidTanksSocketed<T extends TileEntity & ILiqui
 		tile.getTankManager().containerRemoved(this);
 	}
 
+	@Override
 	public IFluidTank getTank(int slot) {
 		return tile.getTankManager().getTank(slot);
 	}

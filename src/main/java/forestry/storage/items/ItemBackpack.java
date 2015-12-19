@@ -39,7 +39,6 @@ import forestry.core.inventory.ItemInventory;
 import forestry.core.inventory.wrappers.IInvSlot;
 import forestry.core.inventory.wrappers.InventoryIterator;
 import forestry.core.items.ItemWithGui;
-import forestry.core.render.TextureManager;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.StringUtil;

@@ -20,7 +20,6 @@ import forestry.api.farming.ICrop;
 import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.vect.Vect;
 import forestry.plugins.PluginFarming;
 
 public class FarmableVanillaMushroom extends FarmableGenericSapling {

@@ -18,8 +18,8 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import forestry.core.fluids.Fluids;
-import forestry.core.render.BlockModelIndex;
 import forestry.core.render.IBlockRenderer;
+import forestry.core.render.model.BlockModelIndex;
 import forestry.core.tiles.MachineDefinition;
 
 public class ProxyRender {

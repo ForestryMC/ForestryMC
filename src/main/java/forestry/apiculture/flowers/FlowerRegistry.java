@@ -25,19 +25,15 @@ import java.util.TreeMap;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFlowerPot;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFlowerPot;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
-import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.oredict.OreDictionary;
-
-import cpw.mods.fml.common.registry.GameRegistry;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.FlowerManager;
@@ -52,10 +48,8 @@ import forestry.api.genetics.IFlowerGrowthRule;
 import forestry.api.genetics.IFlowerRegistry;
 import forestry.api.genetics.IIndividual;
 import forestry.core.config.Constants;
+import forestry.core.utils.BlockUtil;
 import forestry.core.utils.Log;
-import forestry.core.utils.vect.MutableVect;
-import forestry.core.utils.vect.Vect;
-import forestry.plugins.PluginManager;
 
 public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelper {
 
@@ -144,14 +138,14 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 		}
 	}
 
-	private static Vect getArea(IBeeGenome genome, IBeeModifier beeModifier) {
+	private static BlockPos getArea(IBeeGenome genome, IBeeModifier beeModifier) {
 		int[] genomeTerritory = genome.getTerritory();
 		float housingModifier = beeModifier.getTerritoryModifier(genome, 1f);
-		return new Vect(genomeTerritory).multiply(housingModifier * 3.0f);
+		return BlockUtil.multiply(new BlockPos(genomeTerritory[0], genomeTerritory[1], genomeTerritory[2]), housingModifier * 3.0f);
 	}
 
 	@Override
-	public ChunkCoordinates getAcceptedFlowerCoordinates(IBeeHousing beeHousing, IBee bee, String flowerType) {
+	public BlockPos getAcceptedFlowerCoordinates(IBeeHousing beeHousing, IBee bee, String flowerType) {
 		if (!this.registeredFlowers.containsKey(flowerType)) {
 			return null;
 		}
@@ -163,22 +157,22 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 
 		IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(beeHousing);
 
-		Vect area = getArea(bee.getGenome(), beeModifier);
-		Vect housingPos = new Vect(beeHousing.getCoordinates()).add(-area.x / 2, -area.y / 2, -area.z / 2);
+		BlockPos area = getArea(bee.getGenome(), beeModifier);
+		BlockPos housingPos = new BlockPos(beeHousing.getCoordinates()).add(-area.getX() / 2, -area.getY() / 2, -area.getZ() / 2);
 
-		MutableVect posCurrent = new MutableVect(0, 0, 0);
-		while (posCurrent.advancePositionInArea(area)) {
+		BlockPos posCurrent = new BlockPos(0, 0, 0);
+		while (BlockUtil.advancePositionInArea(posCurrent, area)) {
 
-			Vect posBlock = Vect.add(housingPos, posCurrent);
+			BlockPos posBlock = BlockUtil.add(housingPos, posCurrent);
 
 			for (IFlowerAcceptableRule acceptableRule : acceptableRules) {
-				if (acceptableRule.isAcceptableFlower(flowerType, world, posBlock.x, posBlock.y, posBlock.z)) {
-					return new ChunkCoordinates(posBlock.x, posBlock.y, posBlock.z);
+				if (acceptableRule.isAcceptableFlower(flowerType, world, posBlock)) {
+					return new BlockPos(posBlock);
 				}
 			}
 
-			if (isAcceptedFlower(flowerType, acceptedBlocks, acceptedFlowers, world, posBlock.x, posBlock.y, posBlock.z)) {
-				return new ChunkCoordinates(posBlock.x, posBlock.y, posBlock.z);
+			if (isAcceptedFlower(flowerType, acceptedBlocks, acceptedFlowers, world, posBlock)) {
+				return new BlockPos(posBlock);
 			}
 		}
 
@@ -186,14 +180,14 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 	}
 
 	@Override
-	public boolean isAcceptedFlower(String flowerType, World world, int x, int y, int z) {
+	public boolean isAcceptedFlower(String flowerType, World world, BlockPos pos) {
 		if (!this.registeredFlowers.containsKey(flowerType)) {
 			return false;
 		}
 
 		Set<IFlowerAcceptableRule> acceptedCustom = this.registeredRules.get(flowerType);
 		for (IFlowerAcceptableRule acceptableFlower : acceptedCustom) {
-			if (acceptableFlower.isAcceptableFlower(flowerType, world, x, y, z)) {
+			if (acceptableFlower.isAcceptableFlower(flowerType, world, pos)) {
 				return true;
 			}
 		}
@@ -201,16 +195,17 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 		Set<Block> acceptedBlocks = this.registeredBlocks.get(flowerType);
 		Set<Flower> acceptedFlowers = this.registeredFlowers.get(flowerType);
 
-		return isAcceptedFlower(flowerType, acceptedBlocks, acceptedFlowers, world, x, y, z);
+		return isAcceptedFlower(flowerType, acceptedBlocks, acceptedFlowers, world, pos);
 	}
 
-	private static boolean isAcceptedFlower(String flowerType, Set<Block> acceptedBlocks, Set<Flower> acceptedFlowers, World world, int x, int y, int z) {
-		Block block = world.getBlock(x, y, z);
+	private static boolean isAcceptedFlower(String flowerType, Set<Block> acceptedBlocks, Set<Flower> acceptedFlowers, World world, BlockPos pos) {
+		IBlockState state = world.getBlockState(pos);
+		Block block = state.getBlock();
 
 		final int meta;
 
 		if (block instanceof BlockFlowerPot) {
-			TileEntity tile = world.getTileEntity(x, y, z);
+			TileEntity tile = world.getTileEntity(pos);
 			TileEntityFlowerPot tileFlowerPot = (TileEntityFlowerPot) tile;
 			Item item = tileFlowerPot.getFlowerPotItem();
 			block = Block.getBlockFromItem(item);
@@ -219,10 +214,10 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 			if (!acceptedBlocks.contains(block)) {
 				return false;
 			}
-			meta = world.getBlockMetadata(x, y, z);
+			meta = block.getMetaFromState(state);
 		}
 
-		if (PluginManager.Module.AGRICRAFT.isEnabled()) {
+		/*if (PluginManager.Module.AGRICRAFT.isEnabled()) {
 			Block cropBlock = GameRegistry.findBlock("AgriCraft", "crops");
 			if (block == cropBlock) {
 				if(block instanceof IPlantable) {
@@ -239,26 +234,21 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 					}
 				}
 			}
-		}
+		}*/
 
 		Flower flower = new Flower(block, meta, 0);
 		return acceptedFlowers.contains(flower);
 	}
 
 	@Override
-	public boolean growFlower(String flowerType, World world, IIndividual individual, int x, int y, int z) {
+	public boolean growFlower(String flowerType, World world, IIndividual individual, BlockPos pos) {
 		if (!this.growthRules.containsKey(flowerType)) {
 			return false;
 		}
 
 		for (IFlowerGrowthRule rule : this.growthRules.get(flowerType)) {
 			boolean success;
-			try {
-				success = rule.growFlower(this, flowerType, world, x, y, z);
-			} catch (Throwable ignored) {
-				// legacy method
-				success = rule.growFlower(this, flowerType, world, individual, x, y, z);
-			}
+			success = rule.growFlower(this, flowerType, world, pos);
 
 			if (success) {
 				return true;
@@ -323,8 +313,8 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 	}
 
 	@Override
-	public boolean plantRandomFlower(String flowerType, World world, int x, int y, int z) {
+	public boolean plantRandomFlower(String flowerType, World world, BlockPos pos) {
 		IFlower flower = getRandomPlantableFlower(flowerType, world.rand);
-		return world.setBlock(x, y, z, flower.getBlock(), flower.getMeta(), Constants.FLAG_BLOCK_SYNCH);
+		return world.setBlockState(pos, flower.getBlock().getStateFromMeta(flower.getMeta()), Constants.FLAG_BLOCK_SYNCH);
 	}
 }

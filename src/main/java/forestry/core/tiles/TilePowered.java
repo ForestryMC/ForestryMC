@@ -88,6 +88,7 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
 		return false;
 	}
 
+	@Override
 	public abstract boolean hasWork();
 
 	@Override

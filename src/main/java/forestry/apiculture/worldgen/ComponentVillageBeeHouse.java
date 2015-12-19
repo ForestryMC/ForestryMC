@@ -24,8 +24,6 @@ import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
 
 import net.minecraftforge.common.ChestGenHooks;
-import net.minecraftforge.common.util.ForgeDirection;
-
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.FlowerManager;

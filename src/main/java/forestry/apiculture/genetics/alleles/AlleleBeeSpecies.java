@@ -15,15 +15,14 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.mojang.authlib.GameProfile;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
@@ -34,11 +33,12 @@ import forestry.api.apiculture.IBeeSpriteColourProvider;
 import forestry.api.apiculture.IBeeModelProvider;
 import forestry.api.apiculture.IBeeRoot;
 import forestry.api.apiculture.IJubilanceProvider;
-import forestry.api.core.ISpriteProvider;
+import forestry.api.core.IModelManager;
+import forestry.api.core.IModelProvider;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IIndividual;
 import forestry.apiculture.genetics.DefaultBeeIconColourProvider;
-import forestry.apiculture.genetics.DefaultBeeIconProvider;
+import forestry.apiculture.genetics.DefaultBeeModelProvider;
 import forestry.apiculture.genetics.JubilanceDefault;
 import forestry.core.genetics.alleles.AlleleSpecies;
 import forestry.core.utils.ItemStackUtil;
@@ -47,16 +47,16 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 	private final Map<ItemStack, Float> productChances = new HashMap<>();
 	private final Map<ItemStack, Float> specialtyChances = new HashMap<>();
 
-	private IBeeModelProvider beeIconProvider;
-	private IBeeSpriteColourProvider beeIconColourProvider;
+	private IBeeModelProvider beeModelProvider;
+	private IBeeSpriteColourProvider beeModelColourProvider;
 	private IJubilanceProvider jubilanceProvider;
 	private boolean nocturnal = false;
 
 	public AlleleBeeSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, boolean dominant, IClassification branch, String binomial, int primaryColor, int secondaryColor) {
 		super(uid, unlocalizedName, authority, unlocalizedDescription, dominant, branch, binomial);
 
-		beeIconProvider = DefaultBeeIconProvider.instance;
-		beeIconColourProvider = new DefaultBeeIconColourProvider(primaryColor, secondaryColor);
+		beeModelProvider = DefaultBeeModelProvider.instance;
+		beeModelColourProvider = new DefaultBeeIconColourProvider(primaryColor, secondaryColor);
 		jubilanceProvider = JubilanceDefault.instance;
 	}
 
@@ -102,14 +102,14 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 	}
 
 	@Override
-	public IAlleleBeeSpeciesCustom setCustomBeeIconProvider(IBeeModelProvider beeIconProvider) {
-		this.beeIconProvider = beeIconProvider;
+	public IAlleleBeeSpeciesCustom setCustomBeeModelProvider(IBeeModelProvider beeIconProvider) {
+		this.beeModelProvider = beeIconProvider;
 		return this;
 	}
 
 	@Override
-	public IAlleleBeeSpeciesCustom setCustomBeeIconColourProvider(IBeeSpriteColourProvider beeIconColourProvider) {
-		this.beeIconColourProvider = beeIconColourProvider;
+	public IAlleleBeeSpeciesCustom setCustomBeeModelColourProvider(IBeeSpriteColourProvider beeIconColourProvider) {
+		this.beeModelColourProvider = beeIconColourProvider;
 		return this;
 	}
 
@@ -173,18 +173,18 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public ISpriteProvider getSpriteProvider() {
-		return new BeeIconProviderWrapper(beeIconProvider);
+	public IModelProvider getModelProvider() {
+		return new BeeModelProviderWrapper(beeModelProvider);
 	}
 
 	@Override
-	public IIcon getIcon(EnumBeeType type, int renderPass) {
-		return beeIconProvider.getSprite(type, renderPass);
+	public ModelResourceLocation getModel(EnumBeeType type) {
+		return beeModelProvider.getModel(type);
 	}
 
 	@Override
 	public int getSpriteColour(int renderPass) {
-		return beeIconColourProvider.getSpriteColour(renderPass);
+		return beeModelColourProvider.getSpriteColour(renderPass);
 	}
 
 	@Override
@@ -192,22 +192,23 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 		return null;
 	}
 
-	private static class BeeIconProviderWrapper implements ISpriteProvider {
+	@SideOnly(Side.CLIENT)
+	private static class BeeModelProviderWrapper implements IModelProvider {
 
-		private final IBeeModelProvider beeIconProvider;
+		private final IBeeModelProvider beeModelProvider;
 
-		public BeeIconProviderWrapper(IBeeModelProvider beeIconProvider) {
-			this.beeIconProvider = beeIconProvider;
+		public BeeModelProviderWrapper(IBeeModelProvider beeModelProvider) {
+			this.beeModelProvider = beeModelProvider;
 		}
 
 		@Override
-		public IIcon getIcon(short texUID) {
+		public ModelResourceLocation getModel() {
 			return null;
 		}
 
 		@Override
-		public void registerIcons(IIconRegister register) {
-			beeIconProvider.registerIcons(register);
+		public void registerModels(Item item, IModelManager manager) {
+			beeModelProvider.registerModels(item, manager);
 		}
 	}
 }

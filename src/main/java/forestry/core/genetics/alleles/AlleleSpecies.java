@@ -17,15 +17,14 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.mojang.authlib.GameProfile;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
-import forestry.api.core.ISpriteProvider;
+import forestry.api.core.IModelProvider;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleSpeciesCustom;
 import forestry.api.genetics.IClassification;
@@ -188,5 +187,5 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesCust
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public abstract ISpriteProvider getSpriteProvider();
+	public abstract IModelProvider getModelProvider();
 }

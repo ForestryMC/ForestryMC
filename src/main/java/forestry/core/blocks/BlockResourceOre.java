@@ -31,7 +31,6 @@ import net.minecraft.world.World;
 import forestry.api.core.IModelManager;
 import forestry.api.core.IModelRegister;
 import forestry.core.CreativeTabForestry;
-import forestry.core.render.TextureManager;
 import forestry.plugins.PluginCore;
 
 public class BlockResourceOre extends Block implements IModelRegister {

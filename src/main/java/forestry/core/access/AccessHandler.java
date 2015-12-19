@@ -50,10 +50,12 @@ public final class AccessHandler implements IAccessHandler {
 		this.target = entity;
 	}
 
+	@Override
 	public void addOwnerListener(IAccessOwnerListener accessListener) {
 		accessOwnerListeners.add(accessListener);
 	}
 
+	@Override
 	public void removeOwnerListener(IAccessOwnerListener accessListener) {
 		accessOwnerListeners.remove(accessListener);
 	}

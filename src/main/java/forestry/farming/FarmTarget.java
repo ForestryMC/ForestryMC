@@ -14,9 +14,6 @@ import net.minecraft.block.Block;
 import net.minecraft.world.World;
 
 import forestry.api.farming.FarmDirection;
-import forestry.core.utils.BlockPosUtil;
-import forestry.core.utils.vect.MutableVect;
-import forestry.core.utils.vect.Vect;
 
 public class FarmTarget {
 

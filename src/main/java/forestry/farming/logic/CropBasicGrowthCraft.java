@@ -19,7 +19,6 @@ import net.minecraft.world.World;
 
 import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.vect.Vect;
 
 public class CropBasicGrowthCraft extends Crop {
 

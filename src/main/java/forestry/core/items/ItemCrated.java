@@ -21,7 +21,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.core.IModelManager;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.StringUtil;
 

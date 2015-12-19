@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -91,7 +92,7 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter, ItemInventoryI
 	}
 
 	@Override
-	protected void mouseClicked(int i, int j, int k) {
+	protected void mouseClicked(int i, int j, int k) throws IOException {
 		super.mouseClicked(i, j, k);
 
 		int cornerX = (width - xSize) / 2;

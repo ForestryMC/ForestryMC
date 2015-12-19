@@ -65,7 +65,7 @@ public abstract class EntityUtil {
 			return null;
 		}
 
-		String entityString = (String) EntityList.classToStringMapping.get(entityClass);
+		String entityString = EntityList.classToStringMapping.get(entityClass);
 		if (entityString == null) {
 			return null;
 		}

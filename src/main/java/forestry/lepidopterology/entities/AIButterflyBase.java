@@ -13,6 +13,7 @@ package forestry.lepidopterology.entities;
 import net.minecraft.block.Block;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.RandomPositionGenerator;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.Vec3;
 
 public abstract class AIButterflyBase extends EntityAIBase {
@@ -29,7 +30,7 @@ public abstract class AIButterflyBase extends EntityAIBase {
 		}
 
 		Vec3 randomTarget = RandomPositionGenerator.findRandomTargetBlockAwayFrom(entity, 16, 7,
-				Vec3.createVectorHelper(entity.posX, entity.posY, entity.posZ));
+				new Vec3(entity.posX, entity.posY, entity.posZ));
 
 		if (randomTarget == null) {
 			return null;
@@ -43,7 +44,7 @@ public abstract class AIButterflyBase extends EntityAIBase {
 	}
 
 	protected Vec3 getRandomDestinationUpwards() {
-		Vec3 destination = Vec3.createVectorHelper(entity.posX, entity.posY + entity.getRNG().nextInt(10) + 2, entity.posZ);
+		Vec3 destination = new Vec3(entity.posX, entity.posY + entity.getRNG().nextInt(10) + 2, entity.posZ);
 		if (validateDestination(destination, true)) {
 			return destination;
 		} else {
@@ -55,12 +56,12 @@ public abstract class AIButterflyBase extends EntityAIBase {
 		if (dest.yCoord < 1) {
 			return false;
 		}
-		Block block = entity.worldObj.getBlock((int) dest.xCoord, (int) dest.yCoord, (int) dest.zCoord);
+		Block block = entity.worldObj.getBlockState(new BlockPos( dest.xCoord,  dest.yCoord,  dest.zCoord)).getBlock();
 		if (!allowFluids && block.getMaterial().isLiquid()) {
 			return false;
 		}
-		// getBlocksMovement is a bad name, getAllowsMovement would be a better name.
-		if (!block.getBlocksMovement(entity.worldObj, (int) dest.xCoord, (int) dest.yCoord, (int) dest.zCoord)) {
+		
+		if (!block.isPassable(entity.worldObj, new BlockPos( dest.xCoord,  dest.yCoord,  dest.zCoord))) {
 			return false;
 		}
 		return entity.getButterfly().isAcceptedEnvironment(entity.worldObj, dest.xCoord, dest.yCoord, dest.zCoord);

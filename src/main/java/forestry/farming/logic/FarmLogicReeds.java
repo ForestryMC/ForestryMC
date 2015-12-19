@@ -16,11 +16,7 @@ import java.util.Stack;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.Farmables;
@@ -28,7 +24,6 @@ import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
 import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.vect.Vect;
 
 public class FarmLogicReeds extends FarmLogic {
 

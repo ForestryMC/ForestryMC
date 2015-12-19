@@ -11,8 +11,6 @@
 package forestry.core.tiles;
 
 import java.util.List;
-import java.util.Locale;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
@@ -31,7 +29,6 @@ import forestry.core.blocks.IMachineProperties;
 import forestry.core.blocks.IMachinePropertiesTESR;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.IBlockRenderer;
-import forestry.core.render.TextureManager;
 import forestry.core.utils.BlockUtil;
 
 public class MachineDefinition {

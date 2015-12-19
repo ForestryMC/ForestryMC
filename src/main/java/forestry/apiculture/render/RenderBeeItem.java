@@ -15,8 +15,6 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.item.ItemStack;
 
-import net.minecraftforge.client.IItemRenderer;
-
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 

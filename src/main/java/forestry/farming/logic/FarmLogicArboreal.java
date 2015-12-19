@@ -21,12 +21,8 @@ import java.util.Stack;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.Farmables;
@@ -34,9 +30,6 @@ import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
 import forestry.core.blocks.BlockSoil;
-import forestry.core.render.SpriteSheet;
-import forestry.core.utils.BlockPosUtil;
-import forestry.core.utils.vect.Vect;
 import forestry.plugins.PluginCore;
 
 public class FarmLogicArboreal extends FarmLogicHomogeneous {
@@ -55,7 +48,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 			return true;
 		}
 
-		Block block = BlockSoil.getBlockFromItem(soil.getItem());
+		Block block = Block.getBlockFromItem(soil.getItem());
 		if (!(block instanceof BlockSoil)) {
 			return false;
 		}

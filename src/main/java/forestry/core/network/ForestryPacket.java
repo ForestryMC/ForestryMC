@@ -20,6 +20,7 @@ import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
 public abstract class ForestryPacket implements IForestryPacket {
 	private final IPacketId id = getPacketId();
 
+	@Override
 	public final FMLProxyPacket getPacket() {
 		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 		DataOutputStreamForestry data = new DataOutputStreamForestry(bytes);
@@ -37,6 +38,7 @@ public abstract class ForestryPacket implements IForestryPacket {
 	protected void writeData(DataOutputStreamForestry data) throws IOException {
 	}
 
+	@Override
 	public void readData(DataInputStreamForestry data) throws IOException {
 	}
 }

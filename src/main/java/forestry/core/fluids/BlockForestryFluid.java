@@ -11,8 +11,6 @@
 package forestry.core.fluids;
 
 import java.awt.Color;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -37,7 +35,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.core.config.Constants;
 import forestry.core.entities.EntityFXColoredDropParticle;
-import forestry.core.render.TextureManager;
 
 public class BlockForestryFluid extends BlockFluidClassic {
 
@@ -89,9 +86,9 @@ public class BlockForestryFluid extends BlockFluidClassic {
 	@SideOnly(Side.CLIENT)
 	public void randomDisplayTick(World world, BlockPos pos, IBlockState state, Random rand) {
 		if (rand.nextInt(10) == 0 && World.doesBlockHaveSolidTopSurface(world, new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ())) && !world.getBlockState(new BlockPos(pos.getX(), pos.getY() - 2, pos.getZ())).getBlock().getMaterial().blocksMovement()) {
-			double px = (double) ((float) pos.getX() + rand.nextFloat());
-			double py = (double) pos.getY() - 1.05D;
-			double pz = (double) ((float) pos.getZ() + rand.nextFloat());
+			double px = pos.getX() + rand.nextFloat();
+			double py = pos.getY() - 1.05D;
+			double pz = pos.getZ() + rand.nextFloat();
 
 			EntityFX fx = new EntityFXColoredDropParticle(world, px, py, pz, color.getRed(), color.getGreen(), color.getBlue());
 			FMLClientHandler.instance().getClient().effectRenderer.addEffect(fx);

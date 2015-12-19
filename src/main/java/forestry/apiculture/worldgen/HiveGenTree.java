@@ -11,33 +11,35 @@
 package forestry.apiculture.worldgen;
 
 import net.minecraft.block.Block;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 public class HiveGenTree extends HiveGen {
 
 	@Override
-	public boolean isValidLocation(World world, int x, int y, int z) {
-		Block blockAbove = world.getBlock(x, y + 1, z);
-		if (!blockAbove.isLeaves(world, x, y + 1, z)) {
+	public boolean isValidLocation(World world, BlockPos pos) {
+		Block blockAbove = world.getBlockState(pos.add(0, 1, 0)).getBlock();
+		if (!blockAbove.isLeaves(world, pos.add(0, 1, 0))) {
 			return false;
 		}
 
 		// not a good location if right on top of something
-		return canReplace(world, x, y - 1, z);
+		return canReplace(world, pos.add(0, -1, 0));
 	}
 
 	@Override
 	public int getYForHive(World world, int x, int z) {
 		// get top leaf block
-		int y = world.getHeightValue(x, z) - 1;
-		if (!world.getBlock(x, y, z).isLeaves(world, x, y, z)) {
+		int y = world.getHeight(new BlockPos(x, 0, z)).getY() - 1;
+		BlockPos pos = new BlockPos(x, y, z);
+		if (!world.getBlockState(pos).getBlock().isLeaves(world, pos)) {
 			return -1;
 		}
 
 		// get to the bottom of the leaves
 		do {
 			y--;
-		} while (world.getBlock(x, y, z).isLeaves(world, x, y, z));
+		} while (world.getBlockState(pos).getBlock().isLeaves(world, pos));
 
 		return y;
 	}

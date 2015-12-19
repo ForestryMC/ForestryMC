@@ -11,8 +11,6 @@
 package forestry.arboriculture.render;
 
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.init.Blocks;
-
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.IGermlingSpriteProvider;
 import forestry.core.render.TextureManager;

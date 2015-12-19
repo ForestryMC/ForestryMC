@@ -12,16 +12,12 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.IStringSerializable;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.core.IModelManager;
 import forestry.api.core.IModelRegister;
 import forestry.core.CreativeTabForestry;
-import forestry.core.blocks.BlockResourceOre.ResourceType;
-import forestry.core.render.TextureManager;
 
 public class BlockResourceStorage extends Block implements IModelRegister {
 	public static final PropertyEnum RESOURCE = PropertyEnum.create("resource", ResourceType.class);

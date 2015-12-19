@@ -11,13 +11,8 @@
 package forestry.arboriculture.render;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-
-import net.minecraftforge.client.IItemRenderer;
-
 import org.lwjgl.opengl.GL11;
 
 import forestry.arboriculture.genetics.TreeHelper;
@@ -92,9 +87,9 @@ public class RenderLeavesItem implements IItemRenderer {
 		}
 		int color = leaves.getFoliageColour(Proxies.common.getPlayer());
 
-		float r1 = (float) (color >> 16 & 255) / 255.0F;
-		float g1 = (float) (color >> 8 & 255) / 255.0F;
-		float b1 = (float) (color & 255) / 255.0F;
+		float r1 = (color >> 16 & 255) / 255.0F;
+		float g1 = (color >> 8 & 255) / 255.0F;
+		float b1 = (color & 255) / 255.0F;
 		GL11.glColor4f(r1, g1, b1, 1.0F);
 
 		GL11.glTranslatef(x, y, z);
@@ -142,9 +137,9 @@ public class RenderLeavesItem implements IItemRenderer {
 		}
 		int fruitColor = leaves.getFruitColour();
 
-		float r2 = (float) (fruitColor >> 16 & 255) / 255.0F;
-		float g2 = (float) (fruitColor >> 8 & 255) / 255.0F;
-		float b2 = (float) (fruitColor & 255) / 255.0F;
+		float r2 = (fruitColor >> 16 & 255) / 255.0F;
+		float g2 = (fruitColor >> 8 & 255) / 255.0F;
+		float b2 = (fruitColor & 255) / 255.0F;
 		GL11.glColor4f(r2, g2, b2, 1.0F);
 
 		block.setBlockBoundsForItemRender();

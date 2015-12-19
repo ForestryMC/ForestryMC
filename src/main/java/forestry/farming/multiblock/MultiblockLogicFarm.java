@@ -29,6 +29,7 @@ public class MultiblockLogicFarm extends MultiblockLogic<IFarmControllerInternal
 		}
 	}
 
+	@Override
 	public IFarmControllerInternal createNewController(World world) {
 		return new FarmController(world);
 	}

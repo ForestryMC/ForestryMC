@@ -1,0 +1,11 @@
+{
+    "variants": {
+        "hive=forest": { "model": "forestry:beehives/forest" },
+		"hive=meadows": { "model": "forestry:beehives/meadows" },
+		"hive=desert": { "model": "forestry:beehives/desert" },
+		"hive=jungle": { "model": "forestry:beehives/jungle" },
+		"hive=end": { "model": "forestry:beehives/end" },
+		"hive=snow": { "model": "forestry:beehives/snow" },
+		"hive=swamp": { "model": "forestry:beehives/swamp" }
+	}
+}

@@ -18,7 +18,6 @@ import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
 import forestry.core.config.Constants;
-import forestry.core.utils.vect.Vect;
 
 public abstract class Crop implements ICrop {
 

@@ -14,8 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureMap;
-
 import org.lwjgl.opengl.GL11;
 
 import forestry.core.gui.GuiForestry;

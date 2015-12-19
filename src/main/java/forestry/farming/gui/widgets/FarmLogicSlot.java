@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.farming.gui.widgets;
 
-import net.minecraft.util.IIcon;
-
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmLogic;
 import forestry.core.gui.tooltips.ToolTip;

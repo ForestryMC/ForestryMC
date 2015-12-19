@@ -14,7 +14,6 @@ import java.io.IOException;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.BlockPos;
 import forestry.core.access.IRestrictedAccess;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.IForestryPacketServer;

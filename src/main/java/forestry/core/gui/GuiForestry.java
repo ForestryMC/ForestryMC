@@ -19,7 +19,6 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -169,7 +168,7 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 
 	protected Slot getSlotAtPosition(int par1, int par2) {
 		for (int k = 0; k < this.inventorySlots.inventorySlots.size(); ++k) {
-			Slot slot = (Slot) this.inventorySlots.inventorySlots.get(k);
+			Slot slot = this.inventorySlots.inventorySlots.get(k);
 
 			if (isMouseOverSlot(slot, par1, par2)) {
 				return slot;

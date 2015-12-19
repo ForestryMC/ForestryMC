@@ -20,10 +20,8 @@ import net.minecraft.world.World;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
-import forestry.core.utils.BlockPosUtil;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.vect.Vect;
 import forestry.farming.FarmHelper;
 
 public abstract class FarmLogicHomogeneous extends FarmLogic {

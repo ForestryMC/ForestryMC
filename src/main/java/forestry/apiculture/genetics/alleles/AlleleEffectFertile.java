@@ -14,7 +14,7 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.IPlantable;
@@ -22,7 +22,6 @@ import net.minecraftforge.common.IPlantable;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
-import forestry.core.utils.vect.IVect;
 
 public class AlleleEffectFertile extends AlleleEffectThrottled {
 	
@@ -36,20 +35,20 @@ public class AlleleEffectFertile extends AlleleEffectThrottled {
 	public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
 		
 		World world = housing.getWorld();
-		ChunkCoordinates housingCoordinates = housing.getCoordinates();
-		IVect area = getModifiedArea(genome, housing);
+		BlockPos housingCoordinates = housing.getCoordinates();
+		BlockPos area = getModifiedArea(genome, housing);
 		
-		int blockX = getRandomOffset(world.rand, housingCoordinates.posX, area.getX());
-		int blockZ = getRandomOffset(world.rand, housingCoordinates.posZ, area.getZ());
-		int blockMaxY = housingCoordinates.posY + (area.getY() / 2) + 1;
-		int blockMinY = housingCoordinates.posY - (area.getY() / 2) - 1;
+		int blockX = getRandomOffset(world.rand, housingCoordinates.getX(), area.getX());
+		int blockZ = getRandomOffset(world.rand, housingCoordinates.getZ(), area.getZ());
+		int blockMaxY = housingCoordinates.getX() + (area.getY() / 2) + 1;
+		int blockMinY = housingCoordinates.getZ() - (area.getY() / 2) - 1;
 		
 		for (int attempt = 0; attempt < MAX_BLOCK_FIND_TRIES; ++attempt) {
 			if (tryTickColumn(world, blockX, blockZ, blockMaxY, blockMinY)) {
 				break;
 			}
-			blockX = getRandomOffset(world.rand, housingCoordinates.posX, area.getX());
-			blockZ = getRandomOffset(world.rand, housingCoordinates.posZ, area.getZ());
+			blockX = getRandomOffset(world.rand, housingCoordinates.getX(), area.getX());
+			blockZ = getRandomOffset(world.rand, housingCoordinates.getZ(), area.getZ());
 		}
 		
 		return storedData;
@@ -61,9 +60,9 @@ public class AlleleEffectFertile extends AlleleEffectThrottled {
 
 	private static boolean tryTickColumn(World world, int x, int z, int maxY, int minY) {
 		for (int y = maxY; y >= minY; --y) {
-			Block block = world.getBlock(x, y, z);
+			Block block = world.getBlockState(new BlockPos(x, y, z)).getBlock();
 			if (block.getTickRandomly() && (block instanceof IGrowable || block instanceof IPlantable)) {
-				world.scheduleBlockUpdate(x, y, z, block, 5);
+				world.scheduleUpdate(new BlockPos(x, y, z), block, 5);
 				return true;
 			}
 		}

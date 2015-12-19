@@ -86,7 +86,7 @@ public class PostalCarrier implements IPostalCarrier {
 		} else {
 			EntityPlayer player = PlayerUtil.getPlayer(world, recipient.getPlayerProfile());
 			if (player instanceof EntityPlayerMP) {
-				Proxies.net.sendToPlayer(new PacketPOBoxInfoUpdate(pobox.getPOBoxInfo()), (EntityPlayerMP) player);
+				Proxies.net.sendToPlayer(new PacketPOBoxInfoUpdate(pobox.getPOBoxInfo()), player);
 			}
 		}
 

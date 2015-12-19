@@ -32,7 +32,6 @@ import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.farming.Farmables;
 import forestry.api.farming.IFarmable;
-import forestry.core.blocks.BlockRegistry;
 import forestry.core.circuits.Circuit;
 import forestry.core.circuits.CircuitLayout;
 import forestry.core.config.Constants;
@@ -342,10 +341,5 @@ public class PluginFarming extends ForestryPlugin {
 		ChipsetManager.solderManager.addRecipe(layoutManual, PluginCore.items.tubes.get(EnumElectronTube.OBSIDIAN, 1), Circuit.farmGourdManual);
 		ChipsetManager.solderManager.addRecipe(layoutManual, PluginCore.items.tubes.get(EnumElectronTube.APATITE, 1), Circuit.farmShroomManual);
 		ChipsetManager.solderManager.addRecipe(layoutManual, PluginCore.items.tubes.get(EnumElectronTube.LAPIS, 1), Circuit.farmCocoaManual);
-	}
-	
-	@Override
-	public BlockRegistry getBlockRegistry() {
-		return blocks;
 	}
 }

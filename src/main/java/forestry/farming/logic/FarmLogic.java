@@ -27,9 +27,7 @@ import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmLogic;
 import forestry.core.config.Constants;
 import forestry.core.entities.EntitySelector;
-import forestry.core.render.SpriteSheet;
 import forestry.core.utils.EntityUtil;
-import forestry.core.utils.vect.Vect;
 
 public abstract class FarmLogic implements IFarmLogic {
 	private final EntitySelectorFarm entitySelectorFarm = new EntitySelectorFarm(this);
@@ -40,6 +38,7 @@ public abstract class FarmLogic implements IFarmLogic {
 		this.housing = housing;
 	}
 
+	@Override
 	public FarmLogic setManual(boolean flag) {
 		isManual = flag;
 		return this;

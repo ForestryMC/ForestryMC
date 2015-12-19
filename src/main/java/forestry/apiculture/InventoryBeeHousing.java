@@ -11,7 +11,7 @@
 package forestry.apiculture;
 
 import net.minecraft.item.ItemStack;
-
+import net.minecraft.util.EnumFacing;
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IBeeHousingInventory;
@@ -43,7 +43,7 @@ public class InventoryBeeHousing extends InventoryAdapterRestricted implements I
 	}
 
 	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
+	public boolean canExtractItem(int slotIndex, ItemStack itemstack, EnumFacing side) {
 		if (!super.canExtractItem(slotIndex, itemstack, side)) {
 			return false;
 		}

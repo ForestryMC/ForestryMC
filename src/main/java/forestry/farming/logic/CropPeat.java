@@ -21,7 +21,6 @@ import net.minecraft.world.World;
 
 import forestry.core.blocks.BlockSoil;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.vect.Vect;
 import forestry.plugins.PluginCore;
 
 public class CropPeat extends Crop {

@@ -10,20 +10,9 @@
  ******************************************************************************/
 package forestry.plugins.compat.deprecated;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.fluids.FluidStack;
-
-import forestry.api.recipes.RecipeManagers;
-import forestry.apiculture.items.EnumPropolis;
 import forestry.core.config.Constants;
-import forestry.core.fluids.Fluids;
-import forestry.core.utils.ModUtil;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.Plugin;
-import forestry.plugins.PluginApiculture;
-import forestry.plugins.PluginManager;
 
 @Plugin(pluginID = "Erebus", name = "Erebus", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.plugin.erebus.description")
 public class PluginErebus extends ForestryPlugin {

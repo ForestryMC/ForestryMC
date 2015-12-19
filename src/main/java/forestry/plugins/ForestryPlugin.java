@@ -21,8 +21,6 @@ import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
 import forestry.core.IPickupHandler;
 import forestry.core.IResupplyHandler;
 import forestry.core.ISaveEventHandler;
-import forestry.core.blocks.BlockRegistry;
-import forestry.core.items.ItemRegistry;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.network.PacketRegistryDummy;
 import forestry.core.utils.Log;
@@ -122,14 +120,6 @@ public abstract class ForestryPlugin {
 	}
 	
 	public IFuelHandler getFuelHandler() {
-		return null;
-	}
-	
-	public ItemRegistry getItemRegistry(){
-		return null;
-	}
-	
-	public BlockRegistry getBlockRegistry(){
 		return null;
 	}
 

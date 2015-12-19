@@ -52,17 +52,17 @@ public class ParticleHelper {
 		double pz = z + rand.nextDouble() * (block.getBlockBoundsMaxZ() - block.getBlockBoundsMinZ() - (b * 2.0F)) + b + block.getBlockBoundsMinZ();
 
 		if (sideHit == EnumFacing.DOWN) {
-			py = (double) y + block.getBlockBoundsMinY() - (double) b;
+			py = y + block.getBlockBoundsMinY() - b;
 		} else if (sideHit == EnumFacing.UP) {
-			py = (double) y + block.getBlockBoundsMaxY() + (double) b;
+			py = y + block.getBlockBoundsMaxY() + b;
 		} else if (sideHit == EnumFacing.NORTH) {
-			pz = (double) z + block.getBlockBoundsMinZ() - (double) b;
+			pz = z + block.getBlockBoundsMinZ() - b;
 		} else if (sideHit == EnumFacing.SOUTH) {
-			pz = (double) z + block.getBlockBoundsMaxZ() + (double) b;
+			pz = z + block.getBlockBoundsMaxZ() + b;
 		} else if (sideHit == EnumFacing.WEST) {
-			px = (double) x + block.getBlockBoundsMinX() - (double) b;
+			px = x + block.getBlockBoundsMinX() - b;
 		} else if (sideHit == EnumFacing.EAST) {
-			px = (double) x + block.getBlockBoundsMaxX() + (double) b;
+			px = x + block.getBlockBoundsMaxX() + b;
 		}
 
 		EntityDiggingFX fx = (EntityDiggingFX) effectRenderer.spawnEffectParticle(EnumParticleTypes.BLOCK_DUST.getParticleID(), px, py, pz, 0.0D, 0.0D, 0.0D, Block.getStateId(state));
@@ -97,9 +97,9 @@ public class ParticleHelper {
 		for (int i = 0; i < iterations; ++i) {
 			for (int j = 0; j < iterations; ++j) {
 				for (int k = 0; k < iterations; ++k) {
-					double px = pos.getX() + (i + 0.5D) / (double) iterations;
-					double py = pos.getY() + (j + 0.5D) / (double) iterations;
-					double pz = pos.getZ() + (k + 0.5D) / (double) iterations;
+					double px = pos.getX() + (i + 0.5D) / iterations;
+					double py = pos.getY() + (j + 0.5D) / iterations;
+					double pz = pos.getZ() + (k + 0.5D) / iterations;
 					int random = rand.nextInt(6);
 
 					EntityDiggingFX fx = (EntityDiggingFX) effectRenderer.spawnEffectParticle(EnumParticleTypes.BLOCK_DUST.getParticleID(), px, py, pz, px - pos.getX() - 0.5D, py - pos.getY() - 0.5D, pz - pos.getZ() - 0.5D, Block.getStateId(state));

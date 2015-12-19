@@ -17,13 +17,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 
-import net.minecraftforge.common.util.ForgeDirection;
-
 import org.lwjgl.opengl.GL11;
 
 import forestry.core.config.Constants;
 import forestry.core.inventory.InventoryEscritoire;
 import forestry.core.proxy.Proxies;
+import forestry.core.render.model.ModelEscritoire;
 import forestry.core.tiles.TileEscritoire;
 
 public class RenderEscritoire extends TileEntitySpecialRenderer implements IBlockRenderer {

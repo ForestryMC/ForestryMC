@@ -19,7 +19,6 @@ import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
 import forestry.core.config.Constants;
 import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.vect.Vect;
 
 public class FarmableBasicFruit implements IFarmable {
 

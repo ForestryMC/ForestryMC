@@ -12,7 +12,6 @@ package forestry.farming.triggers;
 
 import net.minecraft.tileentity.TileEntity;
 
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.IFluidTank;
 
 import forestry.core.fluids.ITankManager;

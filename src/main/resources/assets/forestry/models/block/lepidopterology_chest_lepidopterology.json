@@ -1,0 +1,12 @@
+{
+    "parent": "block/cube",
+    "textures": {
+        "particle": "forestry:blocks/lepichest.4",
+        "down": "forestry:blocks/lepichest.0",
+        "up": "forestry:blocks/lepichest.1",
+        "north": "forestry:blocks/lepichest.3",
+        "east": "forestry:blocks/lepichest.4",
+        "south": "forestry:blocks/lepichest.2",
+        "west": "forestry:blocks/lepichest.4"
+    }
+}

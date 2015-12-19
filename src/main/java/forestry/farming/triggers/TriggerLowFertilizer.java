@@ -13,8 +13,6 @@ package forestry.farming.triggers;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
 
-import net.minecraftforge.common.util.ForgeDirection;
-
 import forestry.core.triggers.Trigger;
 import forestry.core.utils.InventoryUtil;
 import forestry.farming.tiles.TileFarmHatch;

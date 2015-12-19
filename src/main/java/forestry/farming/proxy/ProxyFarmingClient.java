@@ -14,8 +14,6 @@ import net.minecraft.item.Item;
 
 import net.minecraftforge.client.MinecraftForgeClient;
 
-import cpw.mods.fml.client.registry.RenderingRegistry;
-
 import forestry.farming.render.RenderFarmBlock;
 import forestry.farming.render.RenderFarmItem;
 import forestry.plugins.PluginFarming;

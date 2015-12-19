@@ -26,7 +26,6 @@ import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.IModelManager;
 import forestry.api.genetics.IFruitFamily;
-import forestry.core.render.TextureManager;
 import forestry.core.utils.BlockUtil;
 
 public class FruitProviderPod extends FruitProviderNone {

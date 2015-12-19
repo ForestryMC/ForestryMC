@@ -58,6 +58,7 @@ public abstract class ContainerLiquidTanks<T extends TileEntity & ILiquidTankTil
 		tile.getTankManager().containerRemoved(this);
 	}
 
+	@Override
 	public IFluidTank getTank(int slot) {
 		return tile.getTankManager().getTank(slot);
 	}

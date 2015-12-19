@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "resource=apatite": { "model": "forestry:storage/apatite" },
+		"resource=copper": { "model": "forestry:storage/copper" },
+		"resource=tin": { "model": "forestry:storage/tin" },
+		"resource=bronze": { "model": "forestry:storage/bronze" }
+	}
+}

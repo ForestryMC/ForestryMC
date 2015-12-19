@@ -18,7 +18,6 @@ import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.nbt.NBTTagCompound;
 
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
@@ -42,7 +41,6 @@ import forestry.energy.gui.ContainerGenerator;
 import forestry.energy.gui.GuiGenerator;
 import forestry.energy.inventory.InventoryGenerator;
 import forestry.plugins.compat.deprecated.PluginIC2;
-import ic2.api.energy.prefab.BasicSource;
 
 public class TileGenerator extends TileBase implements ISidedInventory, ILiquidTankTile, IFluidHandler, IRenderableTile {
 	private static final int maxEnergy = 30000;

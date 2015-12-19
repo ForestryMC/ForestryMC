@@ -14,8 +14,6 @@ import net.minecraft.item.ItemStack;
 
 import forestry.core.inventory.InventoryAdapterTile;
 
-import ic2.api.item.ElectricItem;
-
 public class InventoryEngineElectric extends InventoryAdapterTile<TileEngineElectric> {
 	public static final short SLOT_BATTERY = 0;
 

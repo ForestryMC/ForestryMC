@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -323,6 +324,11 @@ public abstract class ItemStackUtil {
 		} else {
 			return null;
 		}
+	}
+	
+	public static boolean equals(IBlockState state, ItemStack stack) {
+		Block block = state.getBlock();
+		return block == getBlock(stack) && block.getMetaFromState(state) == stack.getItemDamage();
 	}
 
 	public static boolean equals(Block block, ItemStack stack) {

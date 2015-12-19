@@ -10,52 +10,9 @@
  ******************************************************************************/
 package forestry.plugins.compat.deprecated;
 
-import com.google.common.collect.ImmutableMap;
-
-import java.util.EnumSet;
-
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-
-import forestry.api.circuits.ChipsetManager;
-import forestry.api.circuits.CircuitSocketType;
-import forestry.api.circuits.ICircuitLayout;
-import forestry.api.core.ForestryAPI;
-import forestry.api.fuels.EngineBronzeFuel;
-import forestry.api.fuels.FuelManager;
-import forestry.api.recipes.RecipeManagers;
-import forestry.api.storage.BackpackManager;
-import forestry.api.storage.IBackpackDefinition;
-import forestry.api.storage.ICrateRegistry;
-import forestry.api.storage.StorageManager;
-import forestry.apiculture.items.EnumPropolis;
-import forestry.apiculture.items.ItemRegistryApiculture;
-import forestry.core.circuits.Circuit;
-import forestry.core.circuits.CircuitLayout;
 import forestry.core.config.Constants;
-import forestry.core.fluids.Fluids;
-import forestry.core.items.EnumElectronTube;
-import forestry.core.recipes.RecipeUtil;
-import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.Log;
-import forestry.core.utils.ModUtil;
-import forestry.energy.blocks.BlockEngineType;
-import forestry.energy.blocks.BlockRegistryEnergy;
-import forestry.energy.circuits.CircuitElectricBoost;
-import forestry.energy.circuits.CircuitElectricChoke;
-import forestry.energy.circuits.CircuitElectricEfficiency;
-import forestry.energy.tiles.EngineDefinition;
-import forestry.farming.circuits.CircuitFarmLogic;
-import forestry.farming.logic.FarmLogicRubber;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.Plugin;
-import forestry.plugins.PluginApiculture;
-import forestry.plugins.PluginCore;
-import forestry.plugins.PluginEnergy;
-import forestry.plugins.PluginManager;
 
 @Plugin(pluginID = "IC2", name = "IndustrialCraft2", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.ic2.description")
 public class PluginIC2 extends ForestryPlugin {

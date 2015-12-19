@@ -10,7 +10,6 @@ import forestry.api.core.IErrorState;
 import forestry.core.config.Constants;
 import forestry.core.render.TextureManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 

@@ -20,19 +20,13 @@ import java.util.Stack;
 import net.minecraft.block.Block;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
-import forestry.core.utils.BlockPosUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
-import forestry.core.utils.vect.Vect;
 import forestry.plugins.compat.deprecated.PluginIC2;
 
 public class FarmLogicRubber extends FarmLogic {

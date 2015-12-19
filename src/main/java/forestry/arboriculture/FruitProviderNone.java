@@ -23,7 +23,6 @@ import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.core.IModelManager;
 import forestry.api.genetics.IFruitFamily;
-import forestry.core.render.TextureManager;
 
 public class FruitProviderNone implements IFruitProvider {
 

@@ -10,25 +10,9 @@
  ******************************************************************************/
 package forestry.lepidopterology.render;
 
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.entity.RenderItem;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.item.ItemStack;
+public class RenderButterflyItem /*implements IItemRenderer*/ {
 
-import net.minecraftforge.client.IItemRenderer;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
-import forestry.api.lepidopterology.ButterflyManager;
-import forestry.api.lepidopterology.IButterfly;
-import forestry.core.proxy.Proxies;
-import forestry.lepidopterology.entities.EntityButterfly;
-
-public class RenderButterflyItem implements IItemRenderer {
-
-	private final ModelButterfly model;
+	/*private final ModelButterfly model;
 	private EntityButterfly entity;
 	
 	public RenderButterflyItem() {
@@ -48,7 +32,7 @@ public class RenderButterflyItem implements IItemRenderer {
 		}
 
 		return wingYaw;
-	}
+	}*/
 	
 	public static float getIrregularWingYaw(long flapping, float flap) {
 		long irregular = flapping / 1024;
@@ -73,7 +57,7 @@ public class RenderButterflyItem implements IItemRenderer {
 	private static float getRegularWingYaw(float flap) {
 		return flap < 0.5 ? 0.75f + flap : 1.75f - flap;
 	}
-	
+	/*
 	private IButterfly initButterfly(ItemStack item) {
 		IButterfly butterfly = ButterflyManager.butterflyRoot.getMember(item);
 		if (butterfly == null) {
@@ -219,6 +203,6 @@ public class RenderButterflyItem implements IItemRenderer {
 				break;
 			default:
 		}
-	}
+	}*/
 
 }

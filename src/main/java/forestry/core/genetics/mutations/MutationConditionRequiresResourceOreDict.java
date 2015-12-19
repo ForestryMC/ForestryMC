@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.genetics.mutations;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;

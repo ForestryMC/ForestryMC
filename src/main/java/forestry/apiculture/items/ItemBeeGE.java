@@ -12,22 +12,21 @@ package forestry.apiculture.items;
 
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IIcon;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IBee;
+import forestry.api.core.IModelManager;
 import forestry.api.core.Tabs;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
@@ -148,45 +147,33 @@ public class ItemBeeGE extends ItemGE {
 
 	}
 
-	@Override
-	public boolean requiresMultipleRenderPasses() {
-		return true;
-	}
-
-	@Override
-	public int getRenderPasses(int metadata) {
-		return 3;
-	}
-
-	/* ICONS */
-	@Override
+	/* MODELS */
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister register) {
+	@Override
+	public void registerModel(Item item, IModelManager manager) {
 		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
 			if (allele instanceof IAlleleBeeSpecies) {
-				((IAlleleBeeSpecies) allele).getSpriteProvider().registerIcons(register);
+				((IAlleleBeeSpecies) allele).getModelProvider().registerModels(item, manager);
 			}
 		}
+		manager.registerItemModel(item, new BeeMeshDefinition());
 	}
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(ItemStack itemstack, int renderPass) {
-		return getIconFromSpecies(BeeGenome.getSpecies(itemstack), renderPass);
-	}
+	private class BeeMeshDefinition implements ItemMeshDefinition {
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIconIndex(ItemStack stack) {
-		return getIcon(stack, 0);
-	}
-
-	@SideOnly(Side.CLIENT)
-	public IIcon getIconFromSpecies(IAlleleBeeSpecies species, int renderPass) {
-		if (species == null) {
-			species = (IAlleleBeeSpecies) BeeManager.beeRoot.getDefaultTemplate()[EnumBeeChromosome.SPECIES.ordinal()];
+		@Override
+		public ModelResourceLocation getModelLocation(ItemStack stack) {
+			IAlleleBeeSpecies species = (IAlleleBeeSpecies) getSpecies(stack);
+			if (species == null) {
+				species = (IAlleleBeeSpecies) BeeManager.beeRoot.getDefaultTemplate()[EnumBeeChromosome.SPECIES
+						.ordinal()];
+			}
+			return species.getModel(type);
 		}
 
-		return species.getIcon(type, renderPass);
+	}
+
+	public final EnumBeeType getType() {
+		return type;
 	}
 }

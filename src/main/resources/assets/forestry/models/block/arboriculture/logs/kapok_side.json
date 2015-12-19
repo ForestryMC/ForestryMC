@@ -1,0 +1,7 @@
+{
+  "parent": "block/column_side",
+  "textures": {
+    "side": "forestry:blocks/wood/bark.kapok",
+    "end": "forestry:blocks/wood/heart.kapok"
+  }
+}

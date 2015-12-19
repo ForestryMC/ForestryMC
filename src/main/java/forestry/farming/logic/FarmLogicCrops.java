@@ -23,11 +23,8 @@ import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
-import forestry.core.utils.BlockPosUtil;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.vect.IVect;
-import forestry.core.utils.vect.Vect;
 
 public abstract class FarmLogicCrops extends FarmLogicWatered {
 	private static final ItemStack farmland = new ItemStack(Blocks.farmland, 1, OreDictionary.WILDCARD_VALUE);

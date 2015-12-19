@@ -19,7 +19,6 @@ import net.minecraft.world.World;
 
 import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.vect.Vect;
 import forestry.plugins.compat.deprecated.PluginIC2;
 
 public class CropRubber extends CropBlock {

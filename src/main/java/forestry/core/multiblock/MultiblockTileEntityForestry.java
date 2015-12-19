@@ -15,14 +15,12 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
-import forestry.api.multiblock.IMultiblockController;
 import forestry.api.multiblock.IMultiblockLogic;
 import forestry.api.multiblock.MultiblockTileEntityBase;
 import forestry.core.config.Constants;

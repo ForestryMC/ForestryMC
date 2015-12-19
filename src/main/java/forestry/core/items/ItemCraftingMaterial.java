@@ -18,7 +18,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.core.IModelManager;
-import forestry.core.render.TextureManager;
 
 public class ItemCraftingMaterial extends ItemForestry {
 

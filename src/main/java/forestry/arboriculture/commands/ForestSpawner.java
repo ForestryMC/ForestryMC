@@ -20,6 +20,7 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 
 public class ForestSpawner implements ITreeSpawner {
 
+	@Override
 	public boolean spawn(ICommandSender sender, String treeName, EntityPlayer player) throws SpeciesNotFoundException, TemplateNotFoundException {
 		Vec3 look = player.getLookVec();
 

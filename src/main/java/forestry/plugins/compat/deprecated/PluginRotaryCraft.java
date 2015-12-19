@@ -10,17 +10,7 @@
  ******************************************************************************/
 package forestry.plugins.compat.deprecated;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-
-import forestry.api.core.ForestryAPI;
-import forestry.api.farming.Farmables;
-import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Constants;
-import forestry.core.fluids.Fluids;
-import forestry.core.utils.ModUtil;
-import forestry.farming.logic.FarmableBasicFruit;
-import forestry.farming.logic.FarmableGenericCrop;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.Plugin;
 

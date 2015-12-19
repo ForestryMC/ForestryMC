@@ -13,7 +13,6 @@ package forestry.apiculture.render;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureUtil;
-import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 
 public class TextureHabitatLocator extends TextureAtlasSprite {
@@ -100,7 +99,7 @@ public class TextureHabitatLocator extends TextureAtlasSprite {
 
 		if (i != this.frameCounter) {
 			this.frameCounter = i;
-			TextureUtil.uploadTextureMipmap((int[][]) this.framesTextureData.get(this.frameCounter), this.width, this.height, this.originX, this.originY, false, false);
+			TextureUtil.uploadTextureMipmap(this.framesTextureData.get(this.frameCounter), this.width, this.height, this.originX, this.originY, false, false);
 		}
 
 	}

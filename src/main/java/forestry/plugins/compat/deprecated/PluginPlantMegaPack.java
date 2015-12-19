@@ -10,25 +10,7 @@
  ******************************************************************************/
 package forestry.plugins.compat.deprecated;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-
-import java.util.Map;
-
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-
-import forestry.api.apiculture.FlowerManager;
-import forestry.api.core.ForestryAPI;
-import forestry.api.farming.Farmables;
-import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Constants;
-import forestry.core.fluids.Fluids;
-import forestry.core.recipes.RecipeUtil;
-import forestry.core.utils.ModUtil;
-import forestry.farming.logic.FarmableBasicFruit;
-import forestry.farming.logic.FarmableGenericCrop;
-import forestry.farming.logic.FarmableStacked;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.Plugin;
 

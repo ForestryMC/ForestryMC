@@ -32,7 +32,6 @@ import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
 import forestry.core.network.packets.PacketTileStream;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
 
 public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamable, IRipeningPacketReceiver {
 

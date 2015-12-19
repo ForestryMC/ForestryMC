@@ -49,6 +49,7 @@ public class GuiBetterButton extends GuiButton implements IToolTipProvider {
 		return this;
 	}
 
+	@Override
 	public void setWidth(int width) {
 		this.width = width;
 		useTexWidth = false;

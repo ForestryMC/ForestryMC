@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockCocoa;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockState;
@@ -30,18 +29,15 @@ import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import forestry.api.arboriculture.IAlleleFruit;
-import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.core.IModelManager;
 import forestry.api.core.IModelRegister;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.arboriculture.tiles.TileFruitPod;
-import forestry.core.render.TextureManager;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.UnlistedBlockAccess;
 import forestry.core.utils.UnlistedBlockPos;
-import forestry.plugins.PluginArboriculture;
 
 public class BlockFruitPod extends BlockCocoa implements IModelRegister {
 
@@ -86,6 +82,7 @@ public class BlockFruitPod extends BlockCocoa implements IModelRegister {
 		tile.onBlockTick();
 	}
 	
+	@Override
 	public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
 		if (!world.isRemote) {
 			TileFruitPod tile = getPodTile(world, pos);

@@ -13,7 +13,7 @@ package forestry.apiculture.entities;
 import java.util.Collections;
 import java.util.List;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -51,15 +51,10 @@ public class EntityMinecartBeehouse extends EntityMinecartBeeHousingBase {
 	public List<String> getHints() {
 		return Config.hints.get("bee.house");
 	}
-
+	
 	@Override
-	public Block func_145820_n() {
-		return PluginApiculture.blocks.apiculture;
-	}
-
-	@Override
-	public int getDisplayTileData() {
-		return BlockApicultureType.BEEHOUSE.ordinal();
+	public IBlockState getDisplayTile() {
+		return PluginApiculture.blocks.apiculture.getStateFromMeta(BlockApicultureType.BEEHOUSE.ordinal());
 	}
 
 	@Override

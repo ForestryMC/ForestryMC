@@ -10,27 +10,9 @@
  ******************************************************************************/
 package forestry.plugins.compat.deprecated;
 
-import java.util.ArrayList;
-
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-
-import forestry.api.circuits.ChipsetManager;
-import forestry.api.circuits.ICircuitLayout;
-import forestry.api.farming.Farmables;
-import forestry.api.farming.IFarmable;
-import forestry.core.circuits.Circuit;
-import forestry.core.config.Config;
 import forestry.core.config.Constants;
-import forestry.core.items.EnumElectronTube;
-import forestry.core.utils.ModUtil;
-import forestry.farming.circuits.CircuitFarmLogic;
-import forestry.farming.logic.FarmLogicEnder;
-import forestry.farming.logic.FarmableGenericCrop;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.Plugin;
-import forestry.plugins.PluginCore;
-import forestry.plugins.PluginManager;
 
 @Plugin(pluginID = "ExtraUtilities", name = "ExtraUtilities", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.plugin.extrautilities.description")
 public class PluginExtraUtilities extends ForestryPlugin {

@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.apiculture.BeeManager;
@@ -42,7 +43,7 @@ public class HiveDrop implements IHiveDrop {
 	}
 	
 	@Override
-	public ItemStack getPrincess(World world, int x, int y, int z, int fortune) {
+	public ItemStack getPrincess(World world, BlockPos pos, int fortune) {
 		IBee bee = beeTemplate.getIndividual();
 		if (world.rand.nextFloat() < ignobleShare) {
 			bee.setIsNatural(false);
@@ -52,13 +53,13 @@ public class HiveDrop implements IHiveDrop {
 	}
 
 	@Override
-	public List<ItemStack> getDrones(World world, int x, int y, int z, int fortune) {
+	public List<ItemStack> getDrones(World world, BlockPos pos, int fortune) {
 		ItemStack drone = beeTemplate.getMemberStack(EnumBeeType.DRONE);
 		return Collections.singletonList(drone);
 	}
 
 	@Override
-	public ArrayList<ItemStack> getAdditional(World world, int x, int y, int z, int fortune) {
+	public ArrayList<ItemStack> getAdditional(World world, BlockPos pos, int fortune) {
 		ArrayList<ItemStack> ret = new ArrayList<>();
 		for (ItemStack stack : additional) {
 			ret.add(stack.copy());
@@ -68,7 +69,7 @@ public class HiveDrop implements IHiveDrop {
 	}
 
 	@Override
-	public int getChance(World world, int x, int y, int z) {
+	public int getChance(World world, BlockPos pos) {
 		return chance;
 	}
 

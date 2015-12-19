@@ -1,0 +1,33 @@
+{
+    "variants": {
+        "woodtype=larch":  { "model": "forestry:arboriculture/planks/larch" },
+		"woodtype=teak":  { "model": "forestry:arboriculture/planks/teak" },
+		"woodtype=acacia":  { "model": "forestry:arboriculture/planks/acacia" },
+		"woodtype=lime":  { "model": "forestry:arboriculture/planks/lime" },
+		"woodtype=chestnut":  { "model": "forestry:arboriculture/planks/chestnut" },
+		"woodtype=wenge":  { "model": "forestry:arboriculture/planks/wenge" },
+		"woodtype=baobab":  { "model": "forestry:arboriculture/planks/baobab" },
+	    "woodtype=sequoia":  { "model": "forestry:arboriculture/planks/sequoia" },
+		"woodtype=kapok":  { "model": "forestry:arboriculture/planks/kapok" },
+		"woodtype=ebony":  { "model": "forestry:arboriculture/planks/ebony" },
+		"woodtype=mahogany":  { "model": "forestry:arboriculture/planks/mahogany" },
+		"woodtype=balsa":  { "model": "forestry:arboriculture/planks/balsa" },
+		"woodtype=willow":  { "model": "forestry:arboriculture/planks/willow" },
+		"woodtype=walnut":  { "model": "forestry:arboriculture/planks/walnut" },
+		"woodtype=greenheart":  { "model": "forestry:arboriculture/planks/greenheart" },
+		"woodtype=cherry":  { "model": "forestry:arboriculture/planks/cherry" },
+		"woodtype=mahoe":  { "model": "forestry:arboriculture/planks/mahoe" },
+		"woodtype=poplar":  { "model": "forestry:arboriculture/planks/poplar" },
+		"woodtype=palm":  { "model": "forestry:arboriculture/planks/palm" },
+		"woodtype=papaya":  { "model": "forestry:arboriculture/planks/papaya" },
+		"woodtype=pine":  { "model": "forestry:arboriculture/planks/pine" },
+		"woodtype=plum":  { "model": "forestry:arboriculture/planks/plum" },
+		"woodtype=maple":  { "model": "forestry:arboriculture/planks/maple" },
+		"woodtype=citrus":  { "model": "forestry:arboriculture/planks/citrus" },
+		"woodtype=giganteum":  { "model": "forestry:arboriculture/planks/giganteum" },
+		"woodtype=ipe":  { "model": "forestry:arboriculture/planks/ipe" },
+		"woodtype=padauk":  { "model": "forestry:arboriculture/planks/padauk" },
+		"woodtype=cocobolo":  { "model": "forestry:arboriculture/planks/cocobolo" },
+		"woodtype=zebrawood":  { "model": "forestry:arboriculture/planks/zebrawood" }
+    }
+}

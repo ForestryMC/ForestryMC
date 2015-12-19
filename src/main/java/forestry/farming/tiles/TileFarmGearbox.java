@@ -12,8 +12,6 @@ package forestry.farming.tiles;
 
 import net.minecraft.nbt.NBTTagCompound;
 
-import net.minecraftforge.common.util.ForgeDirection;
-
 import forestry.api.multiblock.IFarmComponent;
 import forestry.api.multiblock.IFarmController;
 import forestry.core.tiles.IPowerHandler;

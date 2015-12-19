@@ -35,14 +35,17 @@ public class FabricatorSmeltingRecipe implements IFabricatorSmeltingRecipe {
 		this.meltingPoint = meltingPoint;
 	}
 
+	@Override
 	public ItemStack getResource() {
 		return resource;
 	}
 
+	@Override
 	public FluidStack getProduct() {
 		return product;
 	}
 
+	@Override
 	public int getMeltingPoint() {
 		return meltingPoint;
 	}

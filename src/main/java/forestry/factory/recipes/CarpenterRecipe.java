@@ -36,6 +36,7 @@ public class CarpenterRecipe implements ICarpenterRecipe {
 		this.internal = internal;
 	}
 
+	@Override
 	public int getPackagingTime() {
 		return packagingTime;
 	}

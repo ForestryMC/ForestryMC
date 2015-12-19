@@ -19,6 +19,7 @@ import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.arboriculture.EnumGermlingType;
+import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.IAlleleTreeSpeciesCustom;
 import forestry.api.arboriculture.IGermlingModelProvider;
 import forestry.api.arboriculture.IGermlingSpriteProvider;
@@ -140,6 +141,16 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 	@SideOnly(Side.CLIENT)
 	public TextureAtlasSprite getSprite(short texUID) {
 		return TextureManager.getInstance().getSprite(texUID);
+	}
+
+	@Override
+	public String getModID() {
+		return "forestry";
+	}
+
+	@Override
+	public int compareTo(IAlleleTreeSpecies o) {
+		return 0;
 	}
 
 }

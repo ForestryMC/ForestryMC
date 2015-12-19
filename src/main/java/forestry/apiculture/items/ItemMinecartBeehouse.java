@@ -14,24 +14,22 @@ import java.util.List;
 
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.block.BlockRailBase;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemMinecart;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
+import forestry.api.core.IModelRegister;
 import forestry.apiculture.entities.EntityMinecartApiary;
 import forestry.apiculture.entities.EntityMinecartBeeHousingBase;
 import forestry.apiculture.entities.EntityMinecartBeehouse;
 import forestry.core.render.TextureManager;
 
-public class ItemMinecartBeehouse extends ItemMinecart {
+public class ItemMinecartBeehouse extends ItemMinecart implements IModelRegister {
 	private final String[] definition = new String[]{"cart.beehouse", "cart.apiary"};
 
 	public ItemMinecartBeehouse() {
@@ -40,30 +38,30 @@ public class ItemMinecartBeehouse extends ItemMinecart {
 		setHasSubtypes(true);
 		BlockDispenser.dispenseBehaviorRegistry.putObject(this, null);
 	}
-
+	
 	@Override
-	public boolean onItemUse(ItemStack itemStack, EntityPlayer player, World world, int x, int y, int z, int side, float facingX, float facingY, float facingZ) {
-		if (!BlockRailBase.func_150051_a(world.getBlock(x, y, z))) {
+	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
+		if (!BlockRailBase.func_150051_a(world.getBlockState(pos).getBlock())) {
 			return false;
 		}
 
 		if (!world.isRemote) {
 			EntityMinecartBeeHousingBase entityMinecart;
-			if (itemStack.getItemDamage() == 0) {
-				entityMinecart = new EntityMinecartBeehouse(world, (double) ((float) x + 0.5F), (double) ((float) y + 0.5F), (double) ((float) z + 0.5F));
+			if (stack.getItemDamage() == 0) {
+				entityMinecart = new EntityMinecartBeehouse(world, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F);
 			} else {
-				entityMinecart = new EntityMinecartApiary(world, (double) ((float) x + 0.5F), (double) ((float) y + 0.5F), (double) ((float) z + 0.5F));
+				entityMinecart = new EntityMinecartApiary(world, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F);
 			}
 			entityMinecart.setOwner(player.getGameProfile());
 
-			if (itemStack.hasDisplayName()) {
-				entityMinecart.setMinecartName(itemStack.getDisplayName());
+			if (stack.hasDisplayName()) {
+				entityMinecart.setMinecartName(stack.getDisplayName());
 			}
 
 			world.spawnEntityInWorld(entityMinecart);
 		}
 
-		--itemStack.stackSize;
+		--stack.stackSize;
 		return true;
 	}
 

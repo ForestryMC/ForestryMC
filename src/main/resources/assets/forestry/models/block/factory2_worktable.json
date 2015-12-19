@@ -1,0 +1,12 @@
+{
+    "parent": "block/cube",
+    "textures": {
+        "particle": "forestry:blocks/worktable.4",
+        "down": "forestry:blocks/worktable.0",
+        "up": "forestry:blocks/worktable.1",
+        "north": "forestry:blocks/worktable.3",
+        "east": "forestry:blocks/worktable.4",
+        "south": "forestry:blocks/worktable.2",
+        "west": "forestry:blocks/worktable.4"
+    }
+}

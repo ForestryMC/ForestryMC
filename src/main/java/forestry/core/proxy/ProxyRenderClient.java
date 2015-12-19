@@ -45,17 +45,17 @@ import forestry.core.entities.EntityFXHoneydust;
 import forestry.core.entities.EntityFXIgnition;
 import forestry.core.entities.EntityFXSnow;
 import forestry.core.fluids.Fluids;
-import forestry.core.render.BlockModelIndex;
 import forestry.core.render.ForestryResource;
 import forestry.core.render.IBlockRenderer;
-import forestry.core.render.ModelManager;
-import forestry.core.render.RenderBlock;
 import forestry.core.render.RenderEscritoire;
 import forestry.core.render.RenderMachine;
 import forestry.core.render.RenderMill;
 import forestry.core.render.RenderNaturalistChest;
 import forestry.core.render.TextureManager;
 import forestry.core.render.TileRendererIndex;
+import forestry.core.render.model.BlockModelIndex;
+import forestry.core.render.model.ModelManager;
+import forestry.core.render.model.RenderHandler;
 import forestry.core.tiles.MachineDefinition;
 
 public class ProxyRenderClient extends ProxyRender {
@@ -65,12 +65,12 @@ public class ProxyRenderClient extends ProxyRender {
 
 	@Override
 	public void init() {
-		byBlockModelId = RenderingRegistry.getNextAvailableRenderId();
+		/*byBlockModelId = RenderingRegistry.getNextAvailableRenderId();
 		candleRenderId = RenderingRegistry.getNextAvailableRenderId();
 
 		RenderBlock renderHandler = new RenderBlock();
 		RenderingRegistry.registerBlockHandler(byBlockModelId, renderHandler);
-		RenderingRegistry.registerBlockHandler(candleRenderId, new RenderCandleBlock());
+		RenderingRegistry.registerBlockHandler(candleRenderId, new RenderCandleBlock());*/
 	}
 
 	@Override

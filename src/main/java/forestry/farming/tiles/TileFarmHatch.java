@@ -17,10 +17,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.tileentity.TileEntity;
 
-import net.minecraftforge.common.util.ForgeDirection;
-
-import cpw.mods.fml.common.Optional;
-
 import forestry.api.multiblock.IFarmComponent;
 import forestry.core.inventory.AdjacentInventoryCache;
 import forestry.core.tiles.AdjacentTileCache;

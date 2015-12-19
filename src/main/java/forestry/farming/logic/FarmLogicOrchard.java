@@ -24,12 +24,7 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.Farmables;
@@ -37,8 +32,6 @@ import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
 import forestry.api.genetics.IFruitBearer;
-import forestry.core.utils.BlockPosUtil;
-import forestry.core.utils.vect.Vect;
 import forestry.plugins.PluginCore;
 import forestry.plugins.PluginManager;
 

@@ -15,10 +15,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.item.Item;
-
 import forestry.api.arboriculture.EnumLeafType;
-import forestry.api.core.IModelManager;
 import forestry.core.render.TextureManager;
 
 public class TextureLeaves {

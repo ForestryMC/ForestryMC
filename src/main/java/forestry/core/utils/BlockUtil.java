@@ -10,12 +10,11 @@
  ******************************************************************************/
 package forestry.core.utils;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCocoa;
-import net.minecraft.block.BlockLog;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -89,7 +88,7 @@ public abstract class BlockUtil {
 	}
 
 	public static int getMaturityPod(IBlockState state) {
-		return ((Integer)state.getValue(BlockCocoa.AGE)).intValue();
+		return state.getValue(BlockCocoa.AGE).intValue();
 	}
 
 	public static boolean isWoodSlabBlock(Block block) {
@@ -117,8 +116,8 @@ public abstract class BlockUtil {
 	 * Ray traces through the blocks collision from start vector to end vector returning a ray trace hit.
 	 */
 	public static MovingObjectPosition collisionRayTrace(World world, BlockPos pos, Vec3 startVec, Vec3 endVec, float minX, float minY, float minZ, float maxX, float maxY, float maxZ) {
-		startVec = startVec.addVector((double) (-pos.getX()), (double) (-pos.getY()), (double) (-pos.getZ()));
-		endVec = endVec.addVector((double) (-pos.getX()), (double) (-pos.getY()), (double) (-pos.getZ()));
+		startVec = startVec.addVector((-pos.getX()), (-pos.getY()), (-pos.getZ()));
+		endVec = endVec.addVector((-pos.getX()), (-pos.getY()), (-pos.getZ()));
 		Vec3 vec32 = startVec.getIntermediateWithXValue(endVec, minX);
 		Vec3 vec33 = startVec.getIntermediateWithXValue(endVec, maxX);
 		Vec3 vec34 = startVec.getIntermediateWithYValue(endVec, minY);
@@ -205,7 +204,7 @@ public abstract class BlockUtil {
 				sideHit = 3;
 			}
 
-			return new MovingObjectPosition(minHit.addVector((double) pos.getX(), (double) pos.getY(), (double) pos.getZ()), EnumFacing.values()[sideHit], pos);
+			return new MovingObjectPosition(minHit.addVector(pos.getX(), pos.getY(), pos.getZ()), EnumFacing.values()[sideHit], pos);
 		}
 	}
 
@@ -270,6 +269,48 @@ public abstract class BlockUtil {
 
 	public static BlockPos multiply(BlockPos pos, float factor) {
 		return new BlockPos(Math.round(pos.getX() * factor), Math.round(pos.getY() * factor), Math.round(pos.getZ() * factor));
+	}
+	
+	public static BlockPos getRandomPositionInArea(Random random, BlockPos area) {
+		int x = random.nextInt(area.getX());
+		int y = random.nextInt(area.getY());
+		int z = random.nextInt(area.getZ());
+		return new BlockPos(x, y, z);
+	}
+
+	public static BlockPos add(BlockPos... vects) {
+		int x = 0;
+		int y = 0;
+		int z = 0;
+		for (BlockPos vect : vects) {
+			x += vect.getX();
+			y += vect.getY();
+			z += vect.getZ();
+		}
+		return new BlockPos(x, y, z);
+	}
+	
+	public static boolean advancePositionInArea(BlockPos pos, BlockPos area) {
+		// Increment z first until end reached
+		if (pos.getZ() < area.getZ() - 1) {
+			pos.add(0, 0, 1);
+		} else {
+			pos = new BlockPos(pos.getX(), pos.getY(), 0);
+
+			if (pos.getX() < area.getX() - 1) {
+				pos.add(1, 0, 0);
+			} else {
+				pos = new BlockPos(0, pos.getY(), 0);
+
+				if (pos.getY() < area.getY() - 1) {
+					pos.add(0, 1, 0);
+				} else {
+					return false;
+				}
+			}
+		}
+
+		return true;
 	}
 	
 }

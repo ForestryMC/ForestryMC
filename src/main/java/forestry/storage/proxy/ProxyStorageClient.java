@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.storage.proxy;
 
-import net.minecraftforge.client.MinecraftForgeClient;
-
 import forestry.core.items.ItemCrated;
 import forestry.core.render.RenderCrateItem;
 

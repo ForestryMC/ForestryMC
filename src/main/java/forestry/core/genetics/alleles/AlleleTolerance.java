@@ -22,6 +22,7 @@ public class AlleleTolerance extends AlleleCategorized implements IAlleleToleran
 		this.value = value;
 	}
 
+	@Override
 	public EnumTolerance getValue() {
 		return value;
 	}

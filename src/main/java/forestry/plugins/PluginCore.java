@@ -30,7 +30,6 @@ import forestry.core.ISaveEventHandler;
 import forestry.core.PickupHandlerCore;
 import forestry.core.SaveEventHandlerCore;
 import forestry.core.blocks.BlockCoreType;
-import forestry.core.blocks.BlockRegistry;
 import forestry.core.blocks.BlockRegistryCore;
 import forestry.core.blocks.BlockResourceOre;
 import forestry.core.blocks.BlockResourceStorage;
@@ -47,7 +46,6 @@ import forestry.core.genetics.alleles.AlleleFactory;
 import forestry.core.genetics.alleles.AlleleHelper;
 import forestry.core.genetics.alleles.AlleleRegistry;
 import forestry.core.items.EnumContainerType;
-import forestry.core.items.ItemRegistry;
 import forestry.core.items.ItemRegistryCore;
 import forestry.core.multiblock.MultiblockLogicFactory;
 import forestry.core.network.IPacketRegistry;
@@ -308,16 +306,6 @@ public class PluginCore extends ForestryPlugin {
 	@Override
 	public IFuelHandler getFuelHandler() {
 		return new FuelHandler();
-	}
-	
-	@Override
-	public BlockRegistry getBlockRegistry() {
-		return blocks;
-	}
-	
-	@Override
-	public ItemRegistry getItemRegistry() {
-		return items;
 	}
 
 	private static class FuelHandler implements IFuelHandler {

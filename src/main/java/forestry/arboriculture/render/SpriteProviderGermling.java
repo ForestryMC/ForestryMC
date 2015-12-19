@@ -29,7 +29,7 @@ public class SpriteProviderGermling implements IGermlingSpriteProvider {
 	public void registerIcons() {
 		TextureManager manager = TextureManager.getInstance();
 
-		sprite = manager.registerSprite("blocks/germlings/sapling." + name);
+		sprite = TextureManager.registerSprite("blocks/germlings/sapling." + name);
 	}
 
 	@Override

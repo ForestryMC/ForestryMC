@@ -15,21 +15,17 @@ import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.block.BlockContainer;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import forestry.api.apiculture.IHiveDrop;
+import forestry.api.apiculture.hives.IHiveRegistry;
 import forestry.api.core.Tabs;
 import forestry.apiculture.MaterialBeehive;
 import forestry.apiculture.tiles.TileSwarm;
@@ -149,19 +145,19 @@ public class BlockBeehives extends BlockContainer {
 	private static String getHiveNameForMeta(int meta) {
 		switch (meta) {
 			case 1:
-				return HiveRegistry.forest;
+				return IHiveRegistry.forest;
 			case 2:
-				return HiveRegistry.meadows;
+				return IHiveRegistry.meadows;
 			case 3:
-				return HiveRegistry.desert;
+				return IHiveRegistry.desert;
 			case 4:
-				return HiveRegistry.jungle;
+				return IHiveRegistry.jungle;
 			case 5:
-				return HiveRegistry.end;
+				return IHiveRegistry.end;
 			case 6:
-				return HiveRegistry.snow;
+				return IHiveRegistry.snow;
 			case 7:
-				return HiveRegistry.swamp;
+				return IHiveRegistry.swamp;
 		}
 		return null;
 	}

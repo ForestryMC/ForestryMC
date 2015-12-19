@@ -12,8 +12,6 @@ package forestry.arboriculture.render;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.EntityRenderer;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 
 import forestry.arboriculture.blocks.BlockForestryLeaves;

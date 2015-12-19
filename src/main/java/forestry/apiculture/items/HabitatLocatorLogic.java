@@ -18,7 +18,6 @@ import java.util.Set;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
@@ -27,7 +26,6 @@ import net.minecraftforge.common.BiomeDictionary;
 import forestry.api.apiculture.IBee;
 import forestry.apiculture.network.packets.PacketHabitatBiomePointer;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.vect.Vect;
 
 public class HabitatLocatorLogic {
 	private static final int maxChecksPerTick = 100;

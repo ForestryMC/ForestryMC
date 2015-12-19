@@ -14,8 +14,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
-import net.minecraftforge.common.util.ForgeDirection;
-
 import forestry.api.farming.IFarmInventory;
 import forestry.api.multiblock.IFarmController;
 import forestry.core.triggers.Trigger;

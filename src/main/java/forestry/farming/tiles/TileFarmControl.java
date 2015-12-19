@@ -12,14 +12,11 @@ package forestry.farming.tiles;
 
 import net.minecraft.world.World;
 
-import net.minecraftforge.common.util.ForgeDirection;
-
 import forestry.api.farming.DefaultFarmListener;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmListener;
 import forestry.api.farming.IFarmLogic;
 import forestry.api.multiblock.IFarmComponent;
-import forestry.core.utils.vect.Vect;
 
 public class TileFarmControl extends TileFarm implements IFarmComponent.Listener {
 

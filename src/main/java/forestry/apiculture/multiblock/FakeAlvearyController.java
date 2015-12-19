@@ -13,7 +13,6 @@ package forestry.apiculture.multiblock;
 import java.util.Collections;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.biome.BiomeGenBase;
 

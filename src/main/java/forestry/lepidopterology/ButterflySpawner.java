@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.lepidopterology;
 
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.arboriculture.ILeafTickHandler;
@@ -23,7 +24,7 @@ import forestry.plugins.PluginLepidopterology;
 public class ButterflySpawner implements ILeafTickHandler {
 
 	@Override
-	public boolean onRandomLeafTick(ITree tree, World world, int x, int y, int z, boolean isDestroyed) {
+	public boolean onRandomLeafTick(ITree tree, World world, BlockPos pos, boolean isDestroyed) {
 		
 		if (world.rand.nextFloat() >= tree.getGenome().getSappiness() * tree.getGenome().getYield()) {
 			return false;
@@ -38,19 +39,25 @@ public class ButterflySpawner implements ILeafTickHandler {
 			return false;
 		}
 		
-		if (!spawn.canSpawn(world, x, y, z)) {
+		if (!spawn.canSpawn(world, pos.getX(), pos.getY(), pos.getZ())) {
 			return false;
 		}
 		
-		if (world.isAirBlock(x - 1, y, z)) {
-			attemptButterflySpawn(world, spawn, x - 1, y, z);
-		} else if (world.isAirBlock(x + 1, y, z)) {
-			attemptButterflySpawn(world, spawn, x + 1, y, z);
-		} else if (world.isAirBlock(x, y, z - 1)) {
-			attemptButterflySpawn(world, spawn, x, y, z - 1);
-		} else if (world.isAirBlock(x, y, z + 1)) {
-			attemptButterflySpawn(world, spawn, x, y, z + 1);
+		int x = pos.getX();
+		int y = pos.getY();
+		int z = pos.getZ();
+		
+		if (world.isAirBlock(pos.add(-1, 0, 0))) {
+			x--;
+		} else if (world.isAirBlock(pos.add(+1, 0, 0))) {
+			x++;
+		} else if (world.isAirBlock(pos.add(0, 0, -1))) {
+			z--;
+		} else if (world.isAirBlock(pos.add(0, 0, +1))) {
+			z++;
 		}
+		
+		attemptButterflySpawn(world, spawn, x, y, z);
 		
 		return false;
 	}

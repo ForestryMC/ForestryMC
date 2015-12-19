@@ -14,16 +14,8 @@ import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.IBlockAccess;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import forestry.api.arboriculture.EnumWoodType;
 import forestry.api.arboriculture.TreeManager;
-import forestry.arboriculture.render.IconProviderWood;
-import forestry.arboriculture.tiles.TileWood;
 
 public class BlockPlanks extends BlockWood {
 
@@ -39,23 +31,6 @@ public class BlockPlanks extends BlockWood {
 		for (EnumWoodType woodType : EnumWoodType.VALUES) {
 			list.add(TreeManager.woodItemAccess.getPlanks(woodType, isFireproof()));
 		}
-	}
-
-	/* ICONS */
-	@SideOnly(Side.CLIENT)
-	@Override
-	public IIcon getIcon(int side, int meta) {
-		EnumWoodType woodType = EnumWoodType.LARCH;
-		if (meta > 0 && meta < EnumWoodType.VALUES.length)
-			woodType = EnumWoodType.VALUES[meta];
-		return IconProviderWood.getPlankIcon(woodType);
-	}
-
-	@Override
-	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
-		TileWood wood = TileWood.getWoodTile(world, x, y, z);
-		EnumWoodType woodType = wood.getWoodType();
-		return IconProviderWood.getPlankIcon(woodType);
 	}
 
 }

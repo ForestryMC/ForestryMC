@@ -19,10 +19,6 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 
-import net.minecraftforge.common.util.ForgeDirection;
-
-import cpw.mods.fml.common.Optional;
-
 import forestry.api.apiculture.IBeeHousingInventory;
 import forestry.api.apiculture.IBeeListener;
 import forestry.api.apiculture.IBeeModifier;

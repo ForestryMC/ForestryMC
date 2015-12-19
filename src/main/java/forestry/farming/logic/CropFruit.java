@@ -20,7 +20,6 @@ import net.minecraft.world.World;
 import forestry.api.genetics.IFruitBearer;
 import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.vect.Vect;
 
 public class CropFruit extends Crop {
 

@@ -1,0 +1,12 @@
+{
+    "parent": "block/cube",
+    "textures": {
+        "particle": "forestry:blocks/beehouse.4",
+        "down": "forestry:blocks/beehouse.0",
+        "up": "forestry:blocks/beehouse.1",
+        "north": "forestry:blocks/beehouse.2",
+        "east": "forestry:blocks/beehouse.4",
+        "south": "forestry:blocks/beehouse.4",
+        "west": "forestry:blocks/beehouse.4"
+    }
+}

@@ -19,7 +19,6 @@ import forestry.apiculture.items.ItemRegistryApiculture;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
 import forestry.core.fluids.LiquidRegistryHelper;
-import forestry.core.items.ItemRegistry;
 import forestry.core.recipes.RecipeUtil;
 import forestry.food.BeverageEffect;
 import forestry.food.InfuserIngredientManager;
@@ -71,10 +70,5 @@ public class PluginFood extends ForestryPlugin {
 				"X", "#", "X",
 				'#', "ingotIron",
 				'X', "ingotBronze");
-	}
-	
-	@Override
-	public ItemRegistry getItemRegistry() {
-		return items;
 	}
 }

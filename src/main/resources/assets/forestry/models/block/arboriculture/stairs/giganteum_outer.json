@@ -1,0 +1,8 @@
+{
+  "parent": "block/outer_stairs",
+  "textures": {
+    "side": "forestry:blocks/wood/planks.giganteum",
+    "top": "forestry:blocks/wood/planks.giganteum",
+    "bottom": "forestry:blocks/wood/planks.giganteum"
+  }
+}
