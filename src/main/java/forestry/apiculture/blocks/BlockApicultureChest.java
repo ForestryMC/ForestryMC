@@ -14,7 +14,7 @@ import net.minecraft.util.IStringSerializable;
 
 public class BlockApicultureChest extends BlockBase<BlockApicultureChestType, BlockApicultureChestType> {
 	public BlockApicultureChest() {
-		super(true, setState(BlockApicultureChestType.class));
+		super(true, BlockApicultureChestType.class);
 		setCreativeTab(Tabs.tabApiculture);
 		setHarvestLevel("axe", 0);
 	}

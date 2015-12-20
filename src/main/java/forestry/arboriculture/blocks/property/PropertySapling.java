@@ -7,6 +7,8 @@ import java.util.List;
 import com.google.common.base.Objects;
 
 import forestry.api.arboriculture.IAlleleTreeSpecies;
+import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.IAllele;
 import net.minecraft.block.properties.IProperty;
 
 public class PropertySapling implements IProperty<IAlleleTreeSpecies> {
@@ -62,7 +64,12 @@ public class PropertySapling implements IProperty<IAlleleTreeSpecies> {
 
 	@Override
 	public Collection<IAlleleTreeSpecies> getAllowedValues() {
-		return null;
+		List<IAlleleTreeSpecies> trees = new ArrayList<>();
+		for(IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()){
+			if(allele instanceof IAlleleTreeSpecies)
+				trees.add((IAlleleTreeSpecies) allele);
+		}
+		return trees;
 	}
 
 	@Override

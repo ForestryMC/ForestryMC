@@ -11,6 +11,7 @@
 package forestry.arboriculture.blocks;
 
 import forestry.api.arboriculture.EventRegisterSapling;
+import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.items.ItemBlockLeaves;
 import forestry.arboriculture.items.ItemBlockWood;
 import forestry.core.blocks.BlockRegistry;
@@ -68,6 +69,7 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 		registerOreDictWildcard("stairWood", stairsFireproof);
 		
 		// Saplings
+		TreeDefinition.preInit();
 		MinecraftForge.EVENT_BUS.post(new EventRegisterSapling());
 		saplingGE = registerBlock(new BlockSapling(), ItemBlockForestry.class, "saplingGE");
 		registerOreDictWildcard("treeSapling", saplingGE);

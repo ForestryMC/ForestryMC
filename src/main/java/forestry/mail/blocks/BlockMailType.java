@@ -53,6 +53,6 @@ public enum BlockMailType implements IMachineProperties {
 	
 	@Override
 	public String getName() {
-		return getName().toLowerCase(Locale.ENGLISH);
+		return name().toLowerCase(Locale.ENGLISH);
 	}
 }

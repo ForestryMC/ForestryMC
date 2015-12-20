@@ -14,6 +14,7 @@ import forestry.api.core.ForestryAPI;
 import forestry.api.core.IModelManager;
 import forestry.api.core.IModelRegister;
 import forestry.api.core.IModelRenderer;
+import forestry.api.core.IStateMapperRegister;
 import forestry.core.utils.StringUtil;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.PluginManager;
@@ -82,6 +83,9 @@ public class ModelManager implements IModelManager {
 				if (block != null) {
 					if (block instanceof IModelRegister) {
 						((IModelRegister) block).registerModel(Item.getItemFromBlock(block), getInstance());
+					}
+					if (block instanceof IStateMapperRegister) {
+						((IStateMapperRegister) block).registerStateMapper();
 					}
 				}
 

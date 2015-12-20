@@ -12,6 +12,6 @@ package forestry.core.blocks;
 
 public class BlockCore extends BlockBase<BlockCoreType, BlockCoreType> {
 	public BlockCore() {
-		super(true, setState(BlockCoreType.class));
+		super(true, BlockCoreType.class);
 	}
 }

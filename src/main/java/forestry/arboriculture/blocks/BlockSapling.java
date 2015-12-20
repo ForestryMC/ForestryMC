@@ -24,6 +24,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.statemap.IStateMapper;
 import net.minecraft.client.resources.model.ModelResourceLocation;
@@ -40,6 +41,7 @@ import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.arboriculture.EnumGermlingType;
+import forestry.api.arboriculture.EnumWoodType;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.AlleleManager;
@@ -64,6 +66,11 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
 		IAlleleTreeSpecies species = sapling.getTree().getGenome().getPrimary();
 		state = state.withProperty(SAPLING, species);
 		return super.getActualState(state, world, pos);
+	}
+	
+	@Override
+	protected BlockState createBlockState() {
+		return new BlockState(this, new IProperty[]{SAPLING});
 	}
 
 	public BlockSapling() {
@@ -139,9 +146,9 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
 		public Map putStateModelLocations(Block block) {
 			for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
 				if (allele instanceof IAlleleTreeSpecies) {
-					IBlockState state = getDefaultState();
+					IBlockState state = getDefaultState().withProperty(SAPLING, (IAlleleTreeSpecies)allele);
 					LinkedHashMap linkedhashmap = Maps.newLinkedHashMap(state.getProperties());
-					String s = String.format("%s:%s",( (IAlleleTreeSpecies) allele).getModID(), "saplings/" + SAPLING.getName((IAlleleTreeSpecies) linkedhashmap.remove(allele)));
+					String s = String.format("%s:%s",( (IAlleleTreeSpecies) allele).getModID(), "saplings/" + SAPLING.getName((IAlleleTreeSpecies) linkedhashmap.remove(SAPLING)));
 					mapStateModelLocations.put(state, new ModelResourceLocation(s, getPropertyString(linkedhashmap)));
 				}
 			}

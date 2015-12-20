@@ -12,13 +12,16 @@ package forestry.arboriculture.blocks;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.block.BlockLeavesBase;
 import net.minecraft.block.BlockNewLeaf;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
@@ -41,6 +44,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
+import net.minecraftforge.common.IShearable;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -68,9 +72,10 @@ import forestry.core.utils.UnlistedBlockAccess;
 import forestry.core.utils.UnlistedBlockPos;
 import forestry.plugins.PluginArboriculture;
 
-public class BlockForestryLeaves extends BlockNewLeaf implements ITileEntityProvider, IGrowable, IModelRegister {
+public class BlockForestryLeaves extends BlockLeavesBase implements ITileEntityProvider, IShearable, IGrowable, IModelRegister {
 
 	public BlockForestryLeaves() {
+		super(Material.leaves, false);
 		this.setCreativeTab(Tabs.tabArboriculture);
 	}
 	
@@ -204,7 +209,7 @@ public class BlockForestryLeaves extends BlockNewLeaf implements ITileEntityProv
 	
 	@Override
 	public List<ItemStack> onSheared(ItemStack item, IBlockAccess world, BlockPos pos, int fortune) {
-		List<ItemStack> ret = super.onSheared(item, world, pos, fortune);
+		List<ItemStack> ret = new ArrayList(Arrays.asList(new ItemStack(this)));
 
 		TileLeaves leaves = getLeafTile(world, pos);
 		NBTTagCompound shearedLeavesNBT = new NBTTagCompound();

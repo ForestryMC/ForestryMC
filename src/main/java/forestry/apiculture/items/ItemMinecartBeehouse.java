@@ -14,7 +14,13 @@ import java.util.List;
 
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.block.BlockRailBase;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
+import net.minecraft.dispenser.IBehaviorDispenseItem;
+import net.minecraft.dispenser.IBlockSource;
+import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemMinecart;
@@ -33,11 +39,21 @@ import forestry.apiculture.entities.EntityMinecartBeehouse;
 public class ItemMinecartBeehouse extends ItemMinecart implements IModelRegister {
 	private final String[] definition = new String[]{"cart.beehouse", "cart.apiary"};
 
+    private static final IBehaviorDispenseItem dispenserMinecartBehavior = new BehaviorDefaultDispenseItem()
+    {
+        private final BehaviorDefaultDispenseItem behaviourDefaultDispenseItem = new BehaviorDefaultDispenseItem();
+        
+        public ItemStack dispenseStack(IBlockSource source, ItemStack stack)
+        {
+            return stack;
+        }
+    };
+	
 	public ItemMinecartBeehouse() {
 		super(null);
 		setMaxDamage(0);
 		setHasSubtypes(true);
-		BlockDispenser.dispenseBehaviorRegistry.putObject(this, null);
+		BlockDispenser.dispenseBehaviorRegistry.putObject(this, dispenserMinecartBehavior);
 	}
 	
 	@Override

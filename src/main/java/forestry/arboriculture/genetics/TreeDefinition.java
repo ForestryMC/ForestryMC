@@ -1049,6 +1049,10 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 		world.markBlockForUpdate(pos);
 	}
 
+	public static void preInit(){
+		
+	}
+	
 	public static void initTrees() {
 		for (TreeDefinition tree : values()) {
 			tree.init();

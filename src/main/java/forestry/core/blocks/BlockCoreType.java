@@ -48,6 +48,6 @@ public enum BlockCoreType implements IMachineProperties, IStringSerializable {
 	
 	@Override
 	public String getName() {
-		return getName().toLowerCase(Locale.ENGLISH);
+		return name().toLowerCase(Locale.ENGLISH);
 	}
 }

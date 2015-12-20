@@ -14,6 +14,6 @@ import forestry.core.blocks.BlockBase;
 
 public class BlockMail extends BlockBase<BlockMailType, BlockMailType> {
 	public BlockMail() {
-		super(setState(BlockMailType.class));
+		super(BlockMailType.class);
 	}
 }

@@ -69,11 +69,12 @@ public class BlockBase<T extends IMachineProperties, C extends Enum & IMachinePr
 	
 	public int ID = 0;
 	
-	public PropertyEnum META;
-	public PropertyEnum FACE;
+	public final PropertyEnum META;
+	public final PropertyEnum FACE;
 	
-	public static PropertyEnum METAS;
-	public static PropertyEnum FACES;
+	public boolean isReady = false;;
+	
+    protected final BlockState blockState;
 
 	public BlockBase(Class<C> clazz) {
 		this(false, clazz);
@@ -84,14 +85,14 @@ public class BlockBase<T extends IMachineProperties, C extends Enum & IMachinePr
 
 		this.hasTESR = hasTESR;
 		this.clazz = clazz;
-		this.META = METAS;
-		this.FACE = FACES;
-	}
-	
-	protected static <C extends Enum & IMachineProperties & IStringSerializable> Class<C> setState(Class<C> clazz){
-		METAS = PropertyEnum.create("meta", clazz);
-		FACES = PropertyEnum.create("face", EnumFacing.class, EnumFacing.WEST, EnumFacing.EAST, EnumFacing.NORTH, EnumFacing.SOUTH);
-		return clazz;
+		
+		isReady = true;
+		
+		META = PropertyEnum.create("meta", clazz);
+		FACE = PropertyEnum.create("face", EnumFacing.class, EnumFacing.WEST, EnumFacing.EAST, EnumFacing.NORTH, EnumFacing.SOUTH);
+		
+        this.blockState = this.createBlockState();
+        this.setDefaultState(this.blockState.getBaseState());
 	}
 	
 	@Override
@@ -106,6 +107,8 @@ public class BlockBase<T extends IMachineProperties, C extends Enum & IMachinePr
 
 	@Override
 	protected BlockState createBlockState() {
+		if(!isReady)
+			return super.createBlockState();
 		return new BlockState(this, new IProperty[] { META, FACE });
 	}
 
@@ -123,6 +126,11 @@ public class BlockBase<T extends IMachineProperties, C extends Enum & IMachinePr
 		}
 		return super.getActualState(state, world, pos);
 	}
+	
+    public BlockState getBlockState()
+    {
+        return this.blockState;
+    }
 
 	public void addDefinitions(MachineDefinition... definitions) {
 		for (MachineDefinition definition : definitions) {
