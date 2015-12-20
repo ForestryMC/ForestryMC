@@ -12,6 +12,7 @@ package forestry.apiculture.render;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
@@ -54,7 +55,7 @@ public class ModelAnalyzer extends ModelBase {
 
 	}
 
-	public void render(ForgeDirection orientation, float posX, float posY, float posZ) {
+	public void render(EnumFacing orientation, float posX, float posY, float posZ) {
 
 		GL11.glPushMatrix();
 
@@ -62,7 +63,7 @@ public class ModelAnalyzer extends ModelBase {
 		float[] angle = {0, 0, 0};
 
 		if (orientation == null) {
-			orientation = ForgeDirection.WEST;
+			orientation = EnumFacing.WEST;
 		}
 		switch (orientation) {
 			case EAST:

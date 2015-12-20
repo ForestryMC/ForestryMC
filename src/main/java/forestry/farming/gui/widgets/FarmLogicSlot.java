@@ -17,6 +17,7 @@ import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.proxy.Proxies;
 import forestry.farming.multiblock.IFarmControllerInternal;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 
 public class FarmLogicSlot extends Widget {
 
@@ -33,7 +34,7 @@ public class FarmLogicSlot extends Widget {
 		return farmController.getFarmLogic(farmDirection);
 	}
 
-	private IIcon getIconIndex() {
+	private TextureAtlasSprite getIconIndex() {
 		if (getLogic() == null) {
 			return null;
 		}
@@ -43,8 +44,8 @@ public class FarmLogicSlot extends Widget {
 	@Override
 	public void draw(int startX, int startY) {
 		if (getIconIndex() != null) {
-			Proxies.render.bindTexture(getLogic().getSpriteSheet());
-			manager.gui.drawTexturedModelRectFromIcon(startX + xPos, startY + yPos, getIconIndex(), 16, 16);
+			Proxies.render.bindTexture(getLogic().getTextureMap());
+			manager.gui.drawTexturedModelRectFromSprite(startX + xPos, startY + yPos, getIconIndex(), 16, 16);
 		}
 	}
 

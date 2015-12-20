@@ -13,19 +13,15 @@ package forestry.apiculture.tiles;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ITickable;
 import net.minecraft.world.EnumSkyBlock;
 
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.utils.InventoryUtil;
 
-public class TileSwarm extends TileEntity {
+public class TileSwarm extends TileEntity implements ITickable {
 
 	public final InventoryAdapter contained = new InventoryAdapter(2, "Contained");
-
-	@Override
-	public boolean canUpdate() {
-		return true;
-	}
 
 	// Hack to make sure that hives glow.
 	// TODO: remove when Mojang fixes this bug: https://bugs.mojang.com/browse/MC-3329
@@ -33,11 +29,10 @@ public class TileSwarm extends TileEntity {
 	private boolean updatedLight;
 
 	@Override
-	public void updateEntity() {
-		super.updateEntity();
+	public void update() {
 
 		if (worldObj.isRemote && !updatedLight && worldObj.getWorldTime() % 20 == 0) {
-			updatedLight = worldObj.updateLightByType(EnumSkyBlock.Block, xCoord, yCoord, zCoord);
+			updatedLight = worldObj.checkLightFor(EnumSkyBlock.BLOCK, getPos());
 		}
 	}
 

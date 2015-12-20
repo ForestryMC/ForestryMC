@@ -99,9 +99,9 @@ public class ItemCircuitBoard extends ItemForestry {
 	
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		manager.registerItemModel(item, 0, "", "chipsets");
-		manager.registerItemModel(item, 1, "", "chipsets");
-		manager.registerItemModel(item, 2, "", "chipsets");
-		manager.registerItemModel(item, 3, "", "chipsets");
+		manager.registerItemModel(item, 0, "chipsets");
+		manager.registerItemModel(item, 1, "chipsets");
+		manager.registerItemModel(item, 2, "chipsets");
+		manager.registerItemModel(item, 3, "chipsets");
 	}
 }

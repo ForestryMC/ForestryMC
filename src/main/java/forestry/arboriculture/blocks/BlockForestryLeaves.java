@@ -48,7 +48,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import com.mojang.authlib.GameProfile;
 
 import forestry.api.arboriculture.EnumGermlingType;
-import forestry.api.arboriculture.EnumLeafType;
 import forestry.api.arboriculture.IToolGrafter;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.TreeManager;
@@ -62,7 +61,6 @@ import forestry.api.lepidopterology.IButterfly;
 import forestry.arboriculture.LeafDecayHelper;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.items.ItemBlockLeaves;
-import forestry.arboriculture.render.TextureLeaves;
 import forestry.arboriculture.tiles.TileLeaves;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.ItemStackUtil;
@@ -269,11 +267,6 @@ public class BlockForestryLeaves extends BlockNewLeaf implements ITileEntityProv
 	@Override
 	public boolean isOpaqueCube() {
 		return !Proxies.render.fancyGraphicsEnabled();
-	}
-
-	@Override
-	public int getRenderType() {
-		return PluginArboriculture.modelIdLeaves;
 	}
 	
 	@SideOnly(Side.CLIENT)

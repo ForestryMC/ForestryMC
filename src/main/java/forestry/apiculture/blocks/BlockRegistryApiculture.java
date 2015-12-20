@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.blocks;
 
-import forestry.api.core.Tabs;
 import forestry.apiculture.items.ItemBlockCandle;
 import forestry.core.blocks.BlockBase;
 import forestry.core.blocks.BlockRegistry;
@@ -27,9 +26,7 @@ public class BlockRegistryApiculture extends BlockRegistry {
 	public BlockRegistryApiculture() {
 		apiculture = registerBlock(new BlockApiculture(), ItemBlockForestry.class, "apiculture");
 
-		apicultureChest = registerBlock(new BlockBase(true), ItemBlockForestry.class, "apicultureChest");
-		apicultureChest.setCreativeTab(Tabs.tabApiculture);
-		apicultureChest.setHarvestLevel("axe", 0);
+		apicultureChest = registerBlock(new BlockApicultureChest(), ItemBlockForestry.class, "apicultureChest");
 
 		beehives = registerBlock(new BlockBeehives(), ItemBlockForestry.class, "beehives");
 

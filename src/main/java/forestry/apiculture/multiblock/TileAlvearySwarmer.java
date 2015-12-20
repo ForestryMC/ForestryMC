@@ -45,7 +45,7 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, 
 	private boolean active;
 
 	public TileAlvearySwarmer() {
-		super(BlockAlveary.Type.SWARMER);
+		super(BlockAlveary.AlvearyType.SWARMER);
 		this.inventory = new InventorySwarmer(this);
 	}
 
@@ -135,8 +135,9 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, 
 		HiveDescriptionSwarmer hiveDescription = new HiveDescriptionSwarmer(toSpawn);
 		Hive hive = new Hive(hiveDescription);
 
-		int chunkX = (xCoord + worldObj.rand.nextInt(40 * 2) - 40) / 16;
-		int chunkZ = (zCoord + worldObj.rand.nextInt(40 * 2) - 40) / 16;
+		int chunkX = (getPos().getX() + worldObj.rand.nextInt(40 * 2) - 40) / 16;
+		int chunkZ = (getPos().getZ()
+				+ worldObj.rand.nextInt(40 * 2) - 40) / 16;
 
 		if (HiveDecorator.genHive(worldObj, worldObj.rand, chunkX, chunkZ, hive)) {
 			pendingSpawns.pop();

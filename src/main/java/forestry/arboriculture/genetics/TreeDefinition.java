@@ -30,7 +30,6 @@ import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.EnumWoodType;
 import forestry.api.arboriculture.IAlleleTreeSpeciesCustom;
 import forestry.api.arboriculture.IGermlingModelProvider;
-import forestry.api.arboriculture.IGermlingSpriteProvider;
 import forestry.api.arboriculture.ILeafSpriteProvider;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.ITreeGenerator;
@@ -46,8 +45,6 @@ import forestry.arboriculture.genetics.alleles.AlleleFruit;
 import forestry.arboriculture.genetics.alleles.AlleleGrowth;
 import forestry.arboriculture.render.ModelProviderGermling;
 import forestry.arboriculture.render.ModelProviderGermlingVanilla;
-import forestry.arboriculture.render.SpriteProviderGermling;
-import forestry.arboriculture.render.SpriteProviderGermlingVanilla;
 import forestry.arboriculture.render.SpriteProviderLeaves;
 import forestry.arboriculture.tiles.TileLeaves;
 import forestry.arboriculture.worldgen.BlockTypeLog;
@@ -968,9 +965,8 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 
 		ILeafSpriteProvider leafIconProvider = new SpriteProviderLeaves(leafType, primary, secondary);
 		IGermlingModelProvider germlingModelProvider = new ModelProviderGermlingVanilla(vanillaMeta);
-		IGermlingSpriteProvider germlingIconProvider = new SpriteProviderGermlingVanilla(vanillaMeta);
 
-		this.species = TreeManager.treeFactory.createSpecies(uid, unlocalizedName, "Sengir", unlocalizedDescription, dominant, branch.getBranch(), binomial, leafIconProvider, germlingIconProvider, germlingModelProvider, this);
+		this.species = TreeManager.treeFactory.createSpecies(uid, unlocalizedName, "Sengir", unlocalizedDescription, dominant, branch.getBranch(), binomial, leafIconProvider, germlingModelProvider, this);
 		this.woodType = null;
 		this.vanillaWood = vanillaWood;
 	}
@@ -985,9 +981,8 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 
 		ILeafSpriteProvider leafIconProvider = new SpriteProviderLeaves(leafType, primary, secondary);
 		IGermlingModelProvider germlingModelProvider = new ModelProviderGermling(uid);
-		IGermlingSpriteProvider germlingIconProvider = new SpriteProviderGermling(uid);
 
-		this.species = TreeManager.treeFactory.createSpecies(uid, unlocalizedName, "Sengir", unlocalizedDescription, dominant, branch.getBranch(), binomial, leafIconProvider, germlingIconProvider, germlingModelProvider, this);
+		this.species = TreeManager.treeFactory.createSpecies(uid, unlocalizedName, "Sengir", unlocalizedDescription, dominant, branch.getBranch(), binomial, leafIconProvider, germlingModelProvider, this);
 		this.woodType = woodType;
 		this.vanillaWood = null;
 	}

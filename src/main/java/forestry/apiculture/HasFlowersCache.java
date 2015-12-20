@@ -76,7 +76,7 @@ public class HasFlowersCache implements INBTTagable {
 		if (!isFlowerCoordInRange(flowerCoords, min, max)) {
 			return false;
 		}
-		return FlowerManager.flowerRegistry.isAcceptedFlower(flowerType, world, flowerCoords.getX(), flowerCoords.getY(), flowerCoords.getZ());
+		return FlowerManager.flowerRegistry.isAcceptedFlower(flowerType, world, flowerCoords);
 	}
 
 	private static boolean isFlowerCoordInRange(BlockPos flowerCoords, BlockPos min, BlockPos max) {

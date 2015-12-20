@@ -14,6 +14,7 @@ import java.io.IOException;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
@@ -72,7 +73,7 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 	/* ICLIMATISED */
 	@Override
 	public EnumTemperature getTemperature() {
-		return EnumTemperature.getFromBiome(getBiome(), xCoord, yCoord, zCoord);
+		return EnumTemperature.getFromBiome(getBiome(), getPos());
 	}
 
 	@Override
@@ -82,7 +83,7 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 
 	@Override
 	public float getExactTemperature() {
-		return getBiome().getFloatTemperature(xCoord, yCoord, zCoord);
+		return getBiome().getFloatTemperature(getPos());
 	}
 
 	@Override
@@ -97,7 +98,7 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 			beeLogic.doBeeFX();
 
 			if (updateOnInterval(50)) {
-				doPollenFX(worldObj, xCoord, yCoord, zCoord);
+				doPollenFX(worldObj, getPos().getX(), getPos().getY(), getPos().getZ());
 			}
 		}
 	}
@@ -143,19 +144,19 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 	@Override
 	public BiomeGenBase getBiome() {
 		if (cachedBiome == null) {
-			cachedBiome = worldObj.getBiomeGenForCoordsBody(xCoord, zCoord);
+			cachedBiome = worldObj.getBiomeGenForCoordsBody(pos);
 		}
 		return cachedBiome;
 	}
 
 	@Override
 	public int getBlockLightValue() {
-		return worldObj.getBlockLightValue(xCoord, yCoord + 1, zCoord);
+		return worldObj.getLight(new BlockPos(pos.getX(), pos.getY() + 1, pos.getZ()));
 	}
 
 	@Override
 	public boolean canBlockSeeTheSky() {
-		return worldObj.canBlockSeeTheSky(xCoord, yCoord + 1, zCoord);
+		return worldObj.canBlockSeeSky(new BlockPos(pos.getX(), pos.getY() + 1, pos.getZ()));
 	}
 
 	@Override
@@ -170,7 +171,12 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 
 	@Override
 	public Vec3 getBeeFXCoordinates() {
-		return Vec3.createVectorHelper(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5);
+		return new Vec3(getCoordinates().getX() + 0.5, getCoordinates().getY() + 0.5, getCoordinates().getZ() + 0.5);
+	}
+	
+	@Override
+	public BlockPos getCoordinates() {
+		return getPos();
 	}
 
 }

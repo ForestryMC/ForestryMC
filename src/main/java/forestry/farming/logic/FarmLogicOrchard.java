@@ -21,31 +21,33 @@ import java.util.Set;
 import java.util.Stack;
 
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
-
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.Farmables;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
 import forestry.api.genetics.IFruitBearer;
+import forestry.core.utils.BlockPosUtil;
 import forestry.plugins.PluginCore;
-import forestry.plugins.PluginManager;
 
 public class FarmLogicOrchard extends FarmLogic {
 
 	private final Collection<IFarmable> farmables;
-	private final HashMap<Vect, Integer> lastExtents = new HashMap<>();
+	private final HashMap<BlockPos, Integer> lastExtents = new HashMap<>();
 	private final ImmutableList<Block> traversalBlocks;
 
 	public FarmLogicOrchard(IFarmHousing housing) {
 		super(housing);
 		this.farmables = Farmables.farmables.get("farmOrchard");
 		ImmutableList.Builder<Block> traversalBlocksBuilder = ImmutableList.builder();
-		if (PluginManager.Module.AGRICRAFT.isEnabled()) {
+		/*if (PluginManager.Module.AGRICRAFT.isEnabled()) {
 			traversalBlocksBuilder.add(Blocks.farmland);
 		}
 		if (PluginManager.Module.GROWTHCRAFT.isEnabled()) {
@@ -56,7 +58,7 @@ public class FarmLogicOrchard extends FarmLogic {
 		}
 		if (PluginManager.Module.PLANTMEGAPACK.isEnabled()) {
 			traversalBlocksBuilder.add(Blocks.water);
-		}
+		}*/
 		traversalBlocksBuilder.build();
 		this.traversalBlocks = traversalBlocksBuilder.build();
 	}
@@ -92,14 +94,14 @@ public class FarmLogicOrchard extends FarmLogic {
 	}
 
 	@Override
-	public boolean cultivate(int x, int y, int z, FarmDirection direction, int extent) {
+	public boolean cultivate(BlockPos pos, FarmDirection direction, int extent) {
 		return false;
 	}
 
 	@Override
 	public Collection<ICrop> harvest(int x, int y, int z, FarmDirection direction, int extent) {
 
-		Vect start = new Vect(x, y, z);
+		BlockPos start = new BlockPos(x, y, z);
 		if (!lastExtents.containsKey(start)) {
 			lastExtents.put(start, 0);
 		}
@@ -109,7 +111,7 @@ public class FarmLogicOrchard extends FarmLogic {
 			lastExtent = 0;
 		}
 
-		Vect position = translateWithOffset(x, y + 1, z, direction, lastExtent);
+		BlockPos position = translateWithOffset(x, y + 1, z, direction, lastExtent);
 		Collection<ICrop> crops = getHarvestBlocks(position);
 		lastExtent++;
 		lastExtents.put(start, lastExtent);
@@ -119,8 +121,8 @@ public class FarmLogicOrchard extends FarmLogic {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon getSprite() {
-		return PluginCore.items.fruits.getIconFromDamage(0);
+	public Item getIconItem() {
+		return PluginCore.items.fruits;
 	}
 
 	@Override
@@ -128,9 +130,9 @@ public class FarmLogicOrchard extends FarmLogic {
 		return "Orchard";
 	}
 
-	private Collection<ICrop> getHarvestBlocks(Vect position) {
+	private Collection<ICrop> getHarvestBlocks(BlockPos position) {
 
-		Set<Vect> seen = new HashSet<>();
+		Set<BlockPos> seen = new HashSet<>();
 		Stack<ICrop> crops = new Stack<>();
 
 		World world = getWorld();
@@ -140,10 +142,10 @@ public class FarmLogicOrchard extends FarmLogic {
 			return crops;
 		}
 
-		List<Vect> candidates = processHarvestBlock(crops, seen, position, position);
-		List<Vect> temp = new ArrayList<>();
+		List<BlockPos> candidates = processHarvestBlock(crops, seen, position, position);
+		List<BlockPos> temp = new ArrayList<>();
 		while (!candidates.isEmpty() && crops.size() < 20) {
-			for (Vect candidate : candidates) {
+			for (BlockPos candidate : candidates) {
 				temp.addAll(processHarvestBlock(crops, seen, position, candidate));
 			}
 			candidates.clear();
@@ -154,20 +156,20 @@ public class FarmLogicOrchard extends FarmLogic {
 		return crops;
 	}
 
-	private List<Vect> processHarvestBlock(Stack<ICrop> crops, Set<Vect> seen, Vect start, Vect position) {
+	private List<BlockPos> processHarvestBlock(Stack<ICrop> crops, Set<BlockPos> seen, BlockPos start, BlockPos position) {
 		World world = getWorld();
 
-		List<Vect> candidates = new ArrayList<>();
+		List<BlockPos> candidates = new ArrayList<>();
 
 		// Get additional candidates to return
 		for (int i = -2; i < 3; i++) {
 			for (int j = 0; j < 2; j++) {
 				for (int k = -1; k < 2; k++) {
-					Vect candidate = position.add(i, j, k);
-					if (Math.abs(candidate.x - start.x) > 5) {
+					BlockPos candidate = position.add(i, j, k);
+					if (Math.abs(candidate.getX() - start.getX()) > 5) {
 						continue;
 					}
-					if (Math.abs(candidate.z - start.z) > 5) {
+					if (Math.abs(candidate.getZ() - start.getZ()) > 5) {
 						continue;
 					}
 
@@ -197,15 +199,15 @@ public class FarmLogicOrchard extends FarmLogic {
 		return candidates;
 	}
 
-	private boolean isFruitBearer(World world, Vect position) {
+	private boolean isFruitBearer(World world, BlockPos position) {
 
-		TileEntity tile = world.getTileEntity(position.x, position.y, position.z);
+		TileEntity tile = world.getTileEntity(position);
 		if (tile instanceof IFruitBearer) {
 			return true;
 		}
 
 		for (IFarmable farmable : farmables) {
-			if (farmable.isSaplingAt(world, position.x, position.y, position.z)) {
+			if (farmable.isSaplingAt(world, position)) {
 				return true;
 			}
 		}
@@ -213,7 +215,7 @@ public class FarmLogicOrchard extends FarmLogic {
 		return false;
 	}
 
-	private static boolean isBlockTraversable(World world, Vect position, ImmutableList<Block> traversalBlocks) {
+	private static boolean isBlockTraversable(World world, BlockPos position, ImmutableList<Block> traversalBlocks) {
 
 		Block candidate = BlockPosUtil.getBlock(world, position);
 		for (Block block : traversalBlocks) {
@@ -224,9 +226,9 @@ public class FarmLogicOrchard extends FarmLogic {
 		return false;
 	}
 
-	private ICrop getCrop(World world, Vect position) {
+	private ICrop getCrop(World world, BlockPos position) {
 
-		TileEntity tile = world.getTileEntity(position.x, position.y, position.z);
+		TileEntity tile = world.getTileEntity(position);
 
 		if (tile instanceof IFruitBearer) {
 			IFruitBearer fruitBearer = (IFruitBearer) tile;
@@ -235,7 +237,7 @@ public class FarmLogicOrchard extends FarmLogic {
 			}
 		} else {
 			for (IFarmable seed : farmables) {
-				ICrop crop = seed.getCropAt(world, position.x, position.y, position.z);
+				ICrop crop = seed.getCropAt(world, position);
 				if (crop != null) {
 					return crop;
 				}

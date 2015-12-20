@@ -21,6 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IChatComponent;
@@ -369,5 +370,10 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	@Override
 	public void clear() {
 		clear();
+	}
+	
+	@Override
+	public BlockPos getCoordinates() {
+		return getPos();
 	}
 }

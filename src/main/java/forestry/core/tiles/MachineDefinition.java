@@ -13,6 +13,7 @@ package forestry.core.tiles;
 import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -28,7 +29,6 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import forestry.core.blocks.IMachineProperties;
 import forestry.core.blocks.IMachinePropertiesTESR;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.IBlockRenderer;
 import forestry.core.utils.BlockUtil;
 
 public class MachineDefinition {
@@ -40,7 +40,7 @@ public class MachineDefinition {
 	private final int meta;
 	private boolean legacy;
 
-	public final IBlockRenderer renderer;
+	public final TileEntitySpecialRenderer renderer;
 	
 	private float minX, minY, minZ, maxX, maxY, maxZ;
 
@@ -52,7 +52,7 @@ public class MachineDefinition {
 		this(properties.getMeta(), properties.getTeIdent(), properties.getTeClass(), properties.getRenderer());
 	}
 
-	public MachineDefinition(int meta, String teIdent, Class<? extends TileForestry> teClass, IBlockRenderer renderer) {
+	public MachineDefinition(int meta, String teIdent, Class<? extends TileForestry> teClass, TileEntitySpecialRenderer renderer) {
 		this.meta = meta;
 		this.teIdent = teIdent;
 		this.teClass = teClass;

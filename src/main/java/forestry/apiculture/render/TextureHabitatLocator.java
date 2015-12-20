@@ -13,6 +13,7 @@ package forestry.apiculture.render;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureUtil;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 public class TextureHabitatLocator extends TextureAtlasSprite {
@@ -23,7 +24,7 @@ public class TextureHabitatLocator extends TextureAtlasSprite {
 		return instance;
 	}
 
-	private ChunkCoordinates targetBiome;
+	private BlockPos targetBiome;
 	private boolean targetBiomeFound;
 
 	private double currentAngle;
@@ -34,7 +35,7 @@ public class TextureHabitatLocator extends TextureAtlasSprite {
 		instance = this;
 	}
 
-	public void setTargetCoordinates(ChunkCoordinates coordinates) {
+	public void setTargetCoordinates(BlockPos coordinates) {
 		this.targetBiome = coordinates;
 		this.targetBiomeFound = false;
 	}
@@ -58,8 +59,8 @@ public class TextureHabitatLocator extends TextureAtlasSprite {
 			// No target has the locator spinning wildly.
 			targetAngle = Math.random() * Math.PI * 2.0d;
 		} else {
-			double xPart = targetBiome.posX - playerX;
-			double zPart = targetBiome.posZ - playerZ;
+			double xPart = targetBiome.getX() - playerX;
+			double zPart = targetBiome.getZ() - playerZ;
 
 			if (Math.abs(xPart) + Math.abs(zPart) < 10 || targetBiomeFound) {
 				// spin steadily when the biome is found

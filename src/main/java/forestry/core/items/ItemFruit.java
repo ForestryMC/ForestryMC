@@ -36,7 +36,7 @@ public class ItemFruit extends ItemForestryFood {
 		public static void registerModel(Item item, IModelManager manager) {
 			for (int i = 0; i < VALUES.length; i++) {
 				EnumFruit fruit = VALUES[i];
-				manager.registerItemModel(item, i, "fruits", fruit.name().toLowerCase(Locale.ENGLISH));
+				manager.registerItemModel(item, i, "fruits/" + fruit.name().toLowerCase(Locale.ENGLISH));
 			}
 		}
 

@@ -19,12 +19,16 @@ import java.util.Stack;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
-
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
+import forestry.core.utils.BlockPosUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.plugins.compat.deprecated.PluginIC2;
@@ -43,11 +47,11 @@ public class FarmLogicRubber extends FarmLogic {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon getSprite() {
+	public Item getIconItem() {
 		if (!inActive) {
-			return PluginIC2.resin.getIconIndex();
+			return PluginIC2.resin.getItem();
 		} else {
-			return Items.gunpowder.getIconFromDamage(0);
+			return Items.gunpowder;
 		}
 	}
 
@@ -87,11 +91,11 @@ public class FarmLogicRubber extends FarmLogic {
 	}
 
 	@Override
-	public boolean cultivate(int x, int y, int z, FarmDirection direction, int extent) {
+	public boolean cultivate(BlockPos pos, FarmDirection direction, int extent) {
 		return false;
 	}
 
-	private final HashMap<Vect, Integer> lastExtents = new HashMap<>();
+	private final HashMap<BlockPos, Integer> lastExtents = new HashMap<>();
 
 	@Override
 	public Collection<ICrop> harvest(int x, int y, int z, FarmDirection direction, int extent) {
@@ -99,7 +103,7 @@ public class FarmLogicRubber extends FarmLogic {
 			return null;
 		}
 
-		Vect start = new Vect(x, y, z);
+		BlockPos start = new BlockPos(x, y, z);
 		if (!lastExtents.containsKey(start)) {
 			lastExtents.put(start, 0);
 		}
@@ -109,7 +113,7 @@ public class FarmLogicRubber extends FarmLogic {
 			lastExtent = 0;
 		}
 
-		Vect position = translateWithOffset(x, y + 1, z, direction, lastExtent);
+		BlockPos position = translateWithOffset(x, y + 1, z, direction, lastExtent);
 		Collection<ICrop> crops = getHarvestBlocks(position);
 		lastExtent++;
 		lastExtents.put(start, lastExtent);
@@ -117,9 +121,9 @@ public class FarmLogicRubber extends FarmLogic {
 		return crops;
 	}
 
-	private Collection<ICrop> getHarvestBlocks(Vect position) {
+	private Collection<ICrop> getHarvestBlocks(BlockPos position) {
 
-		Set<Vect> seen = new HashSet<>();
+		Set<BlockPos> seen = new HashSet<>();
 		Stack<ICrop> crops = new Stack<>();
 
 		World world = getWorld();
@@ -135,10 +139,10 @@ public class FarmLogicRubber extends FarmLogic {
 			crops.push(new CropRubber(getWorld(), block, meta, position));
 		}
 
-		ArrayList<Vect> candidates = processHarvestBlock(crops, seen, position);
-		ArrayList<Vect> temp = new ArrayList<>();
+		ArrayList<BlockPos> candidates = processHarvestBlock(crops, seen, position);
+		ArrayList<BlockPos> temp = new ArrayList<>();
 		while (!candidates.isEmpty() && crops.size() < 100) {
-			for (Vect candidate : candidates) {
+			for (BlockPos candidate : candidates) {
 				temp.addAll(processHarvestBlock(crops, seen, candidate));
 			}
 			candidates.clear();
@@ -149,14 +153,14 @@ public class FarmLogicRubber extends FarmLogic {
 		return crops;
 	}
 
-	private ArrayList<Vect> processHarvestBlock(Stack<ICrop> crops, Set<Vect> seen, Vect position) {
+	private ArrayList<BlockPos> processHarvestBlock(Stack<ICrop> crops, Set<BlockPos> seen, BlockPos position) {
 		World world = getWorld();
 
-		ArrayList<Vect> candidates = new ArrayList<>();
+		ArrayList<BlockPos> candidates = new ArrayList<>();
 
 		// Get additional candidates to return
 		for (int j = 0; j < 2; j++) {
-			Vect candidate = new Vect(position.x, position.y + j, position.z);
+			BlockPos candidate = new BlockPos(position);
 			if (candidate.equals(position)) {
 				continue;
 			}

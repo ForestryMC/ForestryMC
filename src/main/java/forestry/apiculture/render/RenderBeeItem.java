@@ -10,22 +10,9 @@
  ******************************************************************************/
 package forestry.apiculture.render;
 
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.item.ItemStack;
+public class RenderBeeItem /*implements IItemRenderer*/ {
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
-import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.IBee;
-import forestry.apiculture.entities.EntityBee;
-import forestry.core.proxy.Proxies;
-
-public class RenderBeeItem implements IItemRenderer {
-
-	private EntityBee entity;
+	/*private EntityBee entity;
 
 	private static float getWingYaw(IBee bee) {
 		float wingYaw = 1f;
@@ -74,12 +61,12 @@ public class RenderBeeItem implements IItemRenderer {
 		}
 		entity.setSpecies(bee.getGenome().getPrimary());
 		entity.setType(BeeManager.beeRoot.getType(item));
-		/*
+		
 		if(scaled)
 			entity.setScale(butterfly.getSize());
 		else
 			entity.setScale(EntityButterfly.DEFAULT_BUTTERFLY_SIZE);
-		 */
+		 
 
 		return bee;
 	}
@@ -98,7 +85,7 @@ public class RenderBeeItem implements IItemRenderer {
         tessellator.addVertexWithUV((double)(xPos + width), (double)(yPos + 0), 0f, (double)background.getMaxU(), (double)background.getMinV());
         tessellator.addVertexWithUV((double)(xPos + 0), (double)(yPos + 0), 0f, (double)background.getMinU(), (double)background.getMinV());
         tessellator.draw();
-	}*/
+	}
 
 	private void renderBeeItem(IBee bee, float translateX, float translateY, float translateZ) {
 		float yaw = 1;
@@ -146,7 +133,7 @@ public class RenderBeeItem implements IItemRenderer {
         //GL11.glRotatef(-((float) Math.atan((double) (1 / 40.0F))) * 20.0F, 1.0F, 0.0F, 0.0F);
         renderBeeHalo();
         GL11.glPopMatrix();
-		 */
+		 
 
 		GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
@@ -217,6 +204,6 @@ public class RenderBeeItem implements IItemRenderer {
 				break;
 			default:
 		}
-	}
+	}*/
 
 }

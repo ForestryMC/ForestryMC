@@ -32,7 +32,7 @@ public class TileApiaristChest extends TileNaturalistChest {
 	@Override
 	protected void updateServerSide() {
 		if (worldObj != null && !checkedForLegacyBlock) {
-			Block block = worldObj.getBlock(xCoord, yCoord, zCoord);
+			Block block = worldObj.getBlockState(getPos()).getBlock();
 			if (PluginApiculture.blocks.apiculture == block) {
 				migrateFromLegacyBlock();
 			}
@@ -50,10 +50,10 @@ public class TileApiaristChest extends TileNaturalistChest {
 			setInventorySlotContents(i, null);
 		}
 
-		worldObj.setBlockToAir(xCoord, yCoord, zCoord);
-		worldObj.setBlock(xCoord, yCoord, zCoord, PluginApiculture.blocks.apicultureChest, 0, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
+		worldObj.setBlockToAir(getPos());
+		worldObj.setBlockState(getPos(), PluginApiculture.blocks.apicultureChest.getStateFromMeta(0), Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
 
-		TileApiaristChest tile = TileUtil.getTile(worldObj, xCoord, yCoord, zCoord, TileApiaristChest.class);
+		TileApiaristChest tile = TileUtil.getTile(worldObj, getPos(), TileApiaristChest.class);
 		for (int i = 0; i < getSizeInventory(); i++) {
 			ItemStack stack = inventoryCopy.getStackInSlot(i);
 			tile.setInventorySlotContents(i, stack);

@@ -12,13 +12,13 @@ package forestry.core.proxy;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.statemap.IStateMapper;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import forestry.core.fluids.Fluids;
-import forestry.core.render.IBlockRenderer;
 import forestry.core.render.model.BlockModelIndex;
 import forestry.core.tiles.MachineDefinition;
 
@@ -46,23 +46,23 @@ public class ProxyRender {
 	public void registerTESR(MachineDefinition definition) {
 	}
 
-	public IBlockRenderer getRenderDefaultMachine(String gfxBase) {
+	public TileEntitySpecialRenderer getRenderDefaultMachine(String gfxBase) {
 		return null;
 	}
 
-	public IBlockRenderer getRenderMill(String gfxBase) {
+	public TileEntitySpecialRenderer getRenderMill(String gfxBase) {
 		return null;
 	}
 
-	public IBlockRenderer getRenderMill(String gfxBase, byte charges) {
+	public TileEntitySpecialRenderer getRenderMill(String gfxBase, byte charges) {
 		return null;
 	}
 
-	public IBlockRenderer getRenderEscritoire() {
+	public TileEntitySpecialRenderer getRenderEscritoire() {
 		return null;
 	}
 
-	public IBlockRenderer getRenderChest(String textureName) {
+	public TileEntitySpecialRenderer getRenderChest(String textureName) {
 		return null;
 	}
 	

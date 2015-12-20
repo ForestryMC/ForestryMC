@@ -18,15 +18,20 @@ import java.util.Set;
 import java.util.Stack;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockLog;
+import net.minecraft.block.BlockPlanks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
+import forestry.core.utils.BlockPosUtil;
 
 public class FarmLogicCocoa extends FarmLogic {
 
@@ -38,8 +43,8 @@ public class FarmLogicCocoa extends FarmLogic {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon getSprite() {
-		return Items.dye.getIconFromDamage(3);
+	public Item getIconItem() {
+		return Items.dye;
 	}
 
 	@Override
@@ -77,12 +82,12 @@ public class FarmLogicCocoa extends FarmLogic {
 		return null;
 	}
 
-	private final HashMap<Vect, Integer> lastExtentsCultivation = new HashMap<>();
+	private final HashMap<BlockPos, Integer> lastExtentsCultivation = new HashMap<>();
 
 	@Override
-	public boolean cultivate(int x, int y, int z, FarmDirection direction, int extent) {
+	public boolean cultivate(BlockPos pos, FarmDirection direction, int extent) {
 
-		Vect start = new Vect(x, y, z);
+		BlockPos start = new BlockPos(pos);
 		if (!lastExtentsCultivation.containsKey(start)) {
 			lastExtentsCultivation.put(start, 0);
 		}
@@ -92,7 +97,7 @@ public class FarmLogicCocoa extends FarmLogic {
 			lastExtent = 0;
 		}
 
-		Vect position = translateWithOffset(x, y + 1, z, direction, lastExtent);
+		BlockPos position = translateWithOffset(pos.getX(), pos.getY() + 1, pos.getZ(), direction, lastExtent);
 		boolean result = tryPlantingCocoa(position);
 
 		lastExtent++;
@@ -101,12 +106,12 @@ public class FarmLogicCocoa extends FarmLogic {
 		return result;
 	}
 
-	private final HashMap<Vect, Integer> lastExtentsHarvest = new HashMap<>();
+	private final HashMap<BlockPos, Integer> lastExtentsHarvest = new HashMap<>();
 
 	@Override
 	public Collection<ICrop> harvest(int x, int y, int z, FarmDirection direction, int extent) {
 
-		Vect start = new Vect(x, y, z);
+		BlockPos start = new BlockPos(x, y, z);
 		if (!lastExtentsHarvest.containsKey(start)) {
 			lastExtentsHarvest.put(start, 0);
 		}
@@ -116,7 +121,7 @@ public class FarmLogicCocoa extends FarmLogic {
 			lastExtent = 0;
 		}
 
-		Vect position = translateWithOffset(x, y + 1, z, direction, lastExtent);
+		BlockPos position = translateWithOffset(x, y + 1, z, direction, lastExtent);
 		Collection<ICrop> crops = getHarvestBlocks(position);
 		lastExtent++;
 		lastExtentsHarvest.put(start, lastExtent);
@@ -124,26 +129,26 @@ public class FarmLogicCocoa extends FarmLogic {
 		return crops;
 	}
 
-	private boolean tryPlantingCocoa(Vect position) {
+	private boolean tryPlantingCocoa(BlockPos position) {
 
 		World world = getWorld();
 
-		MutableVect current = new MutableVect(position);
-		while (BlockPosUtil.isWoodBlock(world, current) && BlockLog.func_150165_c(BlockPosUtil.getBlockMeta(world, current)) == 3) {
+		BlockPos current = new BlockPos(position);
+		while (BlockPosUtil.isWoodBlock(world, current) && BlockPosUtil.getBlockState(world, current).getValue(BlockPlanks.VARIANT) == BlockPlanks.EnumType.JUNGLE) {
 
-			for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS) {
-				if (direction == ForgeDirection.UP || direction == ForgeDirection.DOWN) {
+			for (EnumFacing direction : EnumFacing.values()) {
+				if (direction == EnumFacing.UP || direction == EnumFacing.DOWN) {
 					continue;
 				}
 
-				Vect candidate = new Vect(current.x + direction.offsetX, current.y, current.z + direction.offsetZ);
+				BlockPos candidate = new BlockPos(current.getX() + direction.getFrontOffsetX(), current.getY(), current.getZ() + direction.getFrontOffsetZ());
 				if (BlockPosUtil.isAirBlock(world, candidate)) {
-					return housing.plantGermling(cocoa, world, candidate.x, candidate.y, candidate.z);
+					return housing.plantGermling(cocoa, world, candidate);
 				}
 			}
 
-			current.y++;
-			if (current.y - position.y > 1) {
+			current = current.add(0, 1, 0);
+			if (current.getY() - position.getY() > 1) {
 				break;
 			}
 		}
@@ -151,17 +156,17 @@ public class FarmLogicCocoa extends FarmLogic {
 		return false;
 	}
 
-	private Collection<ICrop> getHarvestBlocks(Vect position) {
+	private Collection<ICrop> getHarvestBlocks(BlockPos position) {
 
-		Set<Vect> seen = new HashSet<>();
+		Set<BlockPos> seen = new HashSet<>();
 		Stack<ICrop> crops = new Stack<>();
 
 		// Determine what type we want to harvest.
 		Block block = BlockPosUtil.getBlock(getWorld(), position);
 
 		ICrop crop = null;
-		if (!block.isWood(getWorld(), position.x, position.y, position.z)) {
-			crop = cocoa.getCropAt(getWorld(), position.x, position.y, position.z);
+		if (!block.isWood(getWorld(), position)) {
+			crop = cocoa.getCropAt(getWorld(), position);
 			if (crop == null) {
 				return crops;
 			}
@@ -171,10 +176,10 @@ public class FarmLogicCocoa extends FarmLogic {
 			crops.add(crop);
 		}
 
-		ArrayList<Vect> candidates = processHarvestBlock(crops, seen, position, position);
-		ArrayList<Vect> temp = new ArrayList<>();
+		ArrayList<BlockPos> candidates = processHarvestBlock(crops, seen, position, position);
+		ArrayList<BlockPos> temp = new ArrayList<>();
 		while (!candidates.isEmpty() && crops.size() < 20) {
-			for (Vect candidate : candidates) {
+			for (BlockPos candidate : candidates) {
 				temp.addAll(processHarvestBlock(crops, seen, position, candidate));
 			}
 			candidates.clear();
@@ -186,24 +191,24 @@ public class FarmLogicCocoa extends FarmLogic {
 		return crops;
 	}
 
-	private ArrayList<Vect> processHarvestBlock(Stack<ICrop> crops, Set<Vect> seen, Vect start, Vect position) {
+	private ArrayList<BlockPos> processHarvestBlock(Stack<ICrop> crops, Set<BlockPos> seen, BlockPos start, BlockPos position) {
 
 		World world = getWorld();
 
-		ArrayList<Vect> candidates = new ArrayList<>();
+		ArrayList<BlockPos> candidates = new ArrayList<>();
 
 		// Get additional candidates to return
 		for (int i = -1; i < 2; i++) {
 			for (int j = 0; j < 2; j++) {
 				for (int k = -1; k < 2; k++) {
-					Vect candidate = position.add(i, j, k);
+					BlockPos candidate = position.add(i, j, k);
 					if (candidate.equals(position)) {
 						continue;
 					}
-					if (Math.abs(candidate.x - start.x) > 5) {
+					if (Math.abs(candidate.getX() - start.getX()) > 5) {
 						continue;
 					}
-					if (Math.abs(candidate.z - start.z) > 5) {
+					if (Math.abs(candidate.getZ() - start.getZ()) > 5) {
 						continue;
 					}
 
@@ -212,7 +217,7 @@ public class FarmLogicCocoa extends FarmLogic {
 						continue;
 					}
 
-					ICrop crop = cocoa.getCropAt(world, candidate.x, candidate.y, candidate.z);
+					ICrop crop = cocoa.getCropAt(world, candidate);
 					if (crop != null) {
 						crops.push(crop);
 						candidates.add(candidate);

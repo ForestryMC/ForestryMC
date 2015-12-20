@@ -36,7 +36,7 @@ public class FakeTankManager implements ITankManager {
 	}
 
 	@Override
-	public void updateGuiData(Container container, List<EntityPlayerMP> crafters) {
+	public void updateGuiData(Container container, List<ICrafting> crafters) {
 
 	}
 

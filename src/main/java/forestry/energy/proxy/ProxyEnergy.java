@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.energy.proxy;
 
-import forestry.core.render.IBlockRenderer;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 
 public class ProxyEnergy {
-	public IBlockRenderer getRenderDefaultEngine(String gfxBase) {
+	public TileEntitySpecialRenderer getRenderDefaultEngine(String gfxBase) {
 		return null;
 	}
 }

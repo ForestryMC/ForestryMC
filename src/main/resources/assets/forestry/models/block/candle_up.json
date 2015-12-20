@@ -1,0 +1,98 @@
+{
+    "ambientocclusion": false,
+    "textures": {
+        "particle": "#candleStump"
+    },
+    "elements": [
+      {
+        "from": [ 7, 0, 7 ],
+        "to": [ 9, 10, 9 ],
+        "shade": false,
+        "faces": {
+          "down": {
+            "uv": [ 7, 13, 9, 15 ],
+            "texture": "#candleStump"
+          },
+          "up": {
+            "uv": [ 7, 6, 9, 8 ],
+            "texture": "#candleStump"
+          }
+        }
+      },
+      {
+        "from": [ 7, 0, 0 ],
+        "to": [ 9, 16, 16 ],
+        "shade": false,
+        "faces": {
+          "west": {
+            "uv": [ 0, 0, 16, 16 ],
+            "texture": "#candleStump"
+          },
+          "east": {
+            "uv": [ 0, 0, 16, 16 ],
+            "texture": "#candleStump"
+          }
+        }
+      },
+      {
+        "from": [ 0, 0, 7 ],
+        "to": [ 16, 16, 9 ],
+        "shade": false,
+        "faces": {
+          "north": {
+            "uv": [ 0, 0, 16, 16 ],
+            "texture": "#candleStump"
+          },
+          "south": {
+            "uv": [ 0, 0, 16, 16 ],
+            "texture": "#candleStump"
+          }
+        }
+      },
+      {
+              "from": [ 7, 0, 7 ],
+        "to": [ 9, 10, 9 ],
+        "shade": false,
+        "faces": {
+          "down": {
+            "uv": [ 7, 13, 9, 15 ],
+            "texture": "#candleTip"
+          },
+          "up": {
+            "uv": [ 7, 6, 9, 8 ],
+            "texture": "#candleTip"
+          }
+        }
+      },
+      {
+        "from": [ 7, 0, 0 ],
+        "to": [ 9, 16, 16 ],
+        "shade": false,
+        "faces": {
+          "west": {
+            "uv": [ 0, 0, 16, 16 ],
+            "texture": "#candleTip"
+          },
+          "east": {
+            "uv": [ 0, 0, 16, 16 ],
+            "texture": "#candleTip"
+          }
+        }
+      },
+      {
+        "from": [ 0, 0, 7 ],
+        "to": [ 16, 16, 9 ],
+        "shade": false,
+        "faces": {
+          "north": {
+            "uv": [ 0, 0, 16, 16 ],
+            "texture": "#candleTip"
+          },
+          "south": {
+            "uv": [ 0, 0, 16, 16 ],
+            "texture": "#candleTip"
+          }
+        }
+      }
+    ]
+}

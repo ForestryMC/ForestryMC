@@ -45,7 +45,7 @@ public class GuiHandler implements IGuiHandler {
 
 	public static void openGui(EntityPlayer entityplayer, IGuiHandlerTile guiHandler, short data) {
 		int guiData = encodeGuiData(guiHandler, data);
-		BlockPos pos = guiHandler.getPos();
+		BlockPos pos = guiHandler.getCoordinates();
 		entityplayer.openGui(ForestryAPI.instance, guiData, entityplayer.worldObj, pos.getX(), pos.getY(), pos.getZ());
 	}
 

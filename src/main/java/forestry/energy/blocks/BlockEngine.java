@@ -55,31 +55,9 @@ public class BlockEngine extends BlockBase<BlockEngineType, BlockEngineType> {
 	public BlockEngine() {
 		super(true, setState(BlockEngineType.class));
 	}
-
-	@Override
-	@SuppressWarnings("unchecked")
-	public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB mask, List list, Entity colliding) {
-		TileEngine tile = TileUtil.getTile(world, x, y, z, TileEngine.class);
-		if (tile == null) {
-			super.addCollisionBoxesToList(world, x, y, z, mask, list, colliding);
-			return;
-		}
-
-		ForgeDirection orientation = tile.getOrientation();
-		List<AxisAlignedBB> boundingBoxes = boundingBoxesForDirections.get(orientation);
-		if (boundingBoxes == null) {
-			return;
-		}
-
-		for (AxisAlignedBB boundingBoxBase : boundingBoxes) {
-			AxisAlignedBB boundingBox = boundingBoxBase.getOffsetBoundingBox(x, y, z);
-			if (mask.intersectsWith(boundingBox)) {
-				list.add(boundingBox);
-			}
-		}
-	}
 	
 	@Override
+	@SuppressWarnings("unchecked")
 	public void addCollisionBoxesToList(World world, BlockPos pos, IBlockState state, AxisAlignedBB mask, List<AxisAlignedBB> list, Entity collidingEntity) {
 		TileEngine tile = TileUtil.getTile(world, pos, TileEngine.class);
 		if (tile == null) {
@@ -94,7 +72,7 @@ public class BlockEngine extends BlockBase<BlockEngineType, BlockEngineType> {
 		}
 
 		for (AxisAlignedBB boundingBoxBase : boundingBoxes) {
-			AxisAlignedBB boundingBox = boundingBoxBase.getOffsetBoundingBox(pos);
+			AxisAlignedBB boundingBox = boundingBoxBase.offset(pos.getX(), pos.getY(), pos.getZ());
 			if (mask.intersectsWith(boundingBox)) {
 				list.add(boundingBox);
 			}
@@ -116,7 +94,7 @@ public class BlockEngine extends BlockBase<BlockEngineType, BlockEngineType> {
 
 		MovingObjectPosition nearestIntersection = null;
 		for (AxisAlignedBB boundingBoxBase : boundingBoxes) {
-			AxisAlignedBB boundingBox = boundingBoxBase.getOffsetBoundingBox(pos);
+			AxisAlignedBB boundingBox = boundingBoxBase.offset(pos.getX(), pos.getY(), pos.getZ());
 			MovingObjectPosition intersection = boundingBox.calculateIntercept(start, end);
 			if (intersection != null) {
 				if (nearestIntersection == null || (intersection.hitVec.distanceTo(start) < nearestIntersection.hitVec.distanceTo(start))) {
@@ -126,9 +104,11 @@ public class BlockEngine extends BlockBase<BlockEngineType, BlockEngineType> {
 		}
 
 		if (nearestIntersection != null) {
-			nearestIntersection.blockX = x;
-			nearestIntersection.blockY = y;
-			nearestIntersection.blockZ = z;
+			Object hitInfo = nearestIntersection.hitInfo;
+			Entity entityHit = nearestIntersection.entityHit;
+			nearestIntersection = new MovingObjectPosition(nearestIntersection.typeOfHit, nearestIntersection.hitVec, nearestIntersection.sideHit, pos);
+			nearestIntersection.hitInfo = hitInfo;
+			nearestIntersection.entityHit = entityHit;
 		}
 
 		return nearestIntersection;

@@ -14,15 +14,15 @@ import java.util.Locale;
 
 import forestry.core.blocks.IMachinePropertiesTESR;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.IBlockRenderer;
 import forestry.core.tiles.TileForestry;
 import forestry.lepidopterology.tiles.TileLepidopteristChest;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.IStringSerializable;
 
 public enum BlockLepidopterologyType implements IMachinePropertiesTESR, IStringSerializable {
 	LEPICHEST(TileLepidopteristChest.class, "LepiChest") {
 		@Override
-		public IBlockRenderer getRenderer() {
+		public TileEntitySpecialRenderer getRenderer() {
 			return Proxies.render.getRenderChest("lepichest");
 		}
 	};

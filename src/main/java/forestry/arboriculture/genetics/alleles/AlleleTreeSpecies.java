@@ -22,32 +22,28 @@ import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.IAlleleTreeSpeciesCustom;
 import forestry.api.arboriculture.IGermlingModelProvider;
-import forestry.api.arboriculture.IGermlingSpriteProvider;
 import forestry.api.arboriculture.ILeafSpriteProvider;
 import forestry.api.arboriculture.ITreeGenerator;
 import forestry.api.arboriculture.ITreeRoot;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.IModelManager;
-import forestry.api.core.ISpriteProvider;
+import forestry.api.core.IModelProvider;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IFruitFamily;
 import forestry.core.genetics.alleles.AlleleSpecies;
-import forestry.core.render.TextureManager;
 
-public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeciesCustom, ISpriteProvider {
+public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeciesCustom {
 	private final ITreeGenerator generator;
-	private final IGermlingSpriteProvider germlingIconProvider;
 	private final IGermlingModelProvider germlingModelProvider;
 	private final ILeafSpriteProvider leafIconProvider;
 	private final List<IFruitFamily> fruits = new ArrayList<>();
 
 	private EnumPlantType nativeType = EnumPlantType.Plains;
 
-	public AlleleTreeSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, boolean isDominant, IClassification branch, String binomial, ILeafSpriteProvider leafIconProvider, IGermlingSpriteProvider germlingIconProvider, IGermlingModelProvider germlingModelProvider, ITreeGenerator generator) {
+	public AlleleTreeSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, boolean isDominant, IClassification branch, String binomial, ILeafSpriteProvider leafIconProvider, IGermlingModelProvider germlingModelProvider, ITreeGenerator generator) {
 		super(uid, unlocalizedName, authority, unlocalizedDescription, isDominant, branch, binomial);
 
 		this.generator = generator;
-		this.germlingIconProvider = germlingIconProvider;
 		this.germlingModelProvider = germlingModelProvider;
 		this.leafIconProvider = leafIconProvider;
 	}
@@ -101,20 +97,8 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerSprites() {
-		germlingIconProvider.registerIcons();
-	}
-
-	@Override
 	public ModelResourceLocation getGermlingModel(EnumGermlingType type) {
 		return germlingModelProvider.getModel(type);
-	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public TextureAtlasSprite getGermlingSprite(EnumGermlingType type, int renderPass) {
-		return germlingIconProvider.getSprite(type, renderPass);
 	}
 
 	@Override
@@ -125,22 +109,10 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 		}
 		return getLeafColour(false);
 	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public ISpriteProvider getSpriteProvider() {
-		return this;
-	}
 	
 	@Override
 	public void registerModels(IModelManager manager) {
 		germlingModelProvider.registerModels(manager);
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public TextureAtlasSprite getSprite(short texUID) {
-		return TextureManager.getInstance().getSprite(texUID);
 	}
 
 	@Override
@@ -151,6 +123,12 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 	@Override
 	public int compareTo(IAlleleTreeSpecies o) {
 		return 0;
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public IModelProvider getModelProvider() {
+		return null;
 	}
 
 }

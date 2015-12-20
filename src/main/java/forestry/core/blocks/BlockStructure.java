@@ -25,6 +25,7 @@ import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
+import forestry.api.core.IModelRegister;
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.api.multiblock.IMultiblockController;
 import forestry.core.circuits.ISocketable;
@@ -32,7 +33,7 @@ import forestry.core.multiblock.MultiblockTileEntityForestry;
 import forestry.core.multiblock.MultiblockUtil;
 import forestry.core.utils.InventoryUtil;
 
-public abstract class BlockStructure extends BlockForestry {
+public abstract class BlockStructure extends BlockForestry implements IModelRegister {
 
 	protected BlockStructure(Material material) {
 		super(material);

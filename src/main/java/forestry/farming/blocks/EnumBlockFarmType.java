@@ -10,7 +10,11 @@
  ******************************************************************************/
 package forestry.farming.blocks;
 
-public enum BlockFarmType {
+import java.util.Locale;
+
+import net.minecraft.util.IStringSerializable;
+
+public enum EnumBlockFarmType implements IStringSerializable {
 	BASIC,
 	BAND,
 	GEARBOX,
@@ -18,5 +22,10 @@ public enum BlockFarmType {
 	VALVE,
 	CONTROL;
 
-	public static final BlockFarmType[] VALUES = values();
+	public static final EnumBlockFarmType[] VALUES = values();
+	
+	@Override
+	public String getName() {
+		return name().toLowerCase(Locale.ENGLISH);
+	}
 }

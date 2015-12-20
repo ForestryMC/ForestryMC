@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
@@ -25,7 +26,7 @@ import forestry.core.proxy.Proxies;
 import forestry.core.render.model.ModelEscritoire;
 import forestry.core.tiles.TileEscritoire;
 
-public class RenderEscritoire extends TileEntitySpecialRenderer implements IBlockRenderer {
+public class RenderEscritoire extends TileEntitySpecialRenderer {
 
 	private static final ResourceLocation texture = new ForestryResource(Constants.TEXTURE_PATH_BLOCKS + "/escritoire.png");
 	private final ModelEscritoire modelEscritoire;
@@ -33,33 +34,19 @@ public class RenderEscritoire extends TileEntitySpecialRenderer implements IBloc
 	public RenderEscritoire() {
 		modelEscritoire = new ModelEscritoire();
 
-		RenderItem customRenderItem = new RenderItem() {
-			@Override
-			public boolean shouldBob() {
-				return false;
-			}
-
-			@Override
-			public boolean shouldSpreadItems() {
-				return false;
-			}
-		};
-		customRenderItem.setRenderManager(RenderManager.instance);
-
 	}
-
+	
 	@Override
-	public void inventoryRender(double x, double y, double z) {
-		render(null, ForgeDirection.EAST, x, y, z);
+	public void renderTileEntityAt(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage) {
+		if(te == null){
+			render(null, EnumFacing.EAST, x, y, z);
+		}else{
+			TileEscritoire tile = (TileEscritoire) te;
+			render(tile.getStackInSlot(InventoryEscritoire.SLOT_ANALYZE), tile.getOrientation(), x, y, z);
+		}
 	}
 
-	@Override
-	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
-		TileEscritoire tile = (TileEscritoire) tileentity;
-		render(tile.getStackInSlot(InventoryEscritoire.SLOT_ANALYZE), tile.getOrientation(), x, y, z);
-	}
-
-	private void render(ItemStack itemstack, ForgeDirection orientation, double x, double y, double z) {
+	private void render(ItemStack itemstack, EnumFacing orientation, double x, double y, double z) {
 		float factor = (float) (1.0 / 16.0);
 
 		GL11.glPushMatrix();
@@ -68,7 +55,7 @@ public class RenderEscritoire extends TileEntitySpecialRenderer implements IBloc
 		float[] angle = {(float) Math.PI, 0, 0};
 
 		if (orientation == null) {
-			orientation = ForgeDirection.WEST;
+			orientation = EnumFacing.WEST;
 		}
 		switch (orientation) {
 			case EAST:

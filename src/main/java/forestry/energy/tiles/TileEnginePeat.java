@@ -22,7 +22,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.registry.GameData;
+import net.minecraftforge.fml.common.Optional;
 import forestry.api.fuels.FuelManager;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
@@ -269,7 +272,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 		String fuelItemName = nbttagcompound.getString("EngineFuelItem");
 
 		if (!fuelItemName.isEmpty()) {
-			fuelItem = GameData.getItemRegistry().getRaw(fuelItemName);
+			fuelItem = GameData.getItemRegistry().getRaw(GameData.getItemRegistry().getId(new ResourceLocation(fuelItemName)));
 		}
 
 		fuelItemMeta = nbttagcompound.getInteger("EngineFuelMeta");
@@ -285,7 +288,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 		super.writeToNBT(nbttagcompound);
 
 		if (fuelItem != null) {
-			nbttagcompound.setString("EngineFuelItem", GameData.getItemRegistry().getNameForObject(fuelItem));
+			nbttagcompound.setString("EngineFuelItem", GameData.getItemRegistry().getNameForObject(fuelItem).toString());
 		}
 
 		nbttagcompound.setInteger("EngineFuelMeta", fuelItemMeta);
@@ -329,7 +332,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 	/* ITriggerProvider */
 	@Optional.Method(modid = "BuildCraftAPI|statements")
 	@Override
-	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
+	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
 		LinkedList<ITriggerExternal> res = new LinkedList<>();
 		res.add(FactoryTriggers.lowFuel25);
 		res.add(FactoryTriggers.lowFuel10);

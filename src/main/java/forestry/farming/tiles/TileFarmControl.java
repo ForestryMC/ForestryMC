@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.farming.tiles;
 
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 import forestry.api.farming.DefaultFarmListener;
@@ -40,15 +42,15 @@ public class TileFarmControl extends TileFarm implements IFarmComponent.Listener
 
 		@Override
 		public boolean cancelTask(IFarmLogic logic, FarmDirection direction) {
-			return hasRedstoneSignal(direction.getForgeDirection()) || hasRedstoneSignal(ForgeDirection.UP) || hasRedstoneSignal(ForgeDirection.DOWN);
+			return hasRedstoneSignal(direction.getFacing()) || hasRedstoneSignal(EnumFacing.UP) || hasRedstoneSignal(EnumFacing.DOWN);
 		}
 
-		private boolean hasRedstoneSignal(ForgeDirection direction) {
-			Vect side = new Vect(tile).add(direction);
-			int dir = direction.getOpposite().ordinal();
-			World world = tile.getWorldObj();
+		private boolean hasRedstoneSignal(EnumFacing direction) {
+			BlockPos side = new BlockPos(tile.getPos()).offset(direction);
+			EnumFacing dir = direction.getOpposite();
+			World world = tile.getWorld();
 
-			return world.getIndirectPowerLevelTo(side.x, side.y, side.z, dir) > 0 || world.isBlockProvidingPowerTo(side.x, side.y, side.z, dir) > 0;
+			return world.isBlockIndirectlyGettingPowered(side.offset(dir)) > 0 || world.getRedstonePower(side, dir) > 0;
 		}
 	}
 

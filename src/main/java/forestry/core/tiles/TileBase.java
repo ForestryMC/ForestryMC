@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
-
 import forestry.core.config.Config;
 import forestry.core.gui.GuiHandler;
 import forestry.core.gui.IHintSource;

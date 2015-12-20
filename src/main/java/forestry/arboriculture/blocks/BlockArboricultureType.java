@@ -15,13 +15,13 @@ import java.util.Locale;
 import forestry.arboriculture.tiles.TileArboristChest;
 import forestry.core.blocks.IMachinePropertiesTESR;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.IBlockRenderer;
 import forestry.core.tiles.TileForestry;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 
 public enum BlockArboricultureType implements IMachinePropertiesTESR {
 	ARBCHEST(TileArboristChest.class, "ArbChest") {
 		@Override
-		public IBlockRenderer getRenderer() {
+		public TileEntitySpecialRenderer getRenderer() {
 			return Proxies.render.getRenderChest("arbchest");
 		}
 	};

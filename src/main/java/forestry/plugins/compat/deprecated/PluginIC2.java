@@ -13,13 +13,14 @@ package forestry.plugins.compat.deprecated;
 import forestry.core.config.Constants;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.Plugin;
+import net.minecraft.item.ItemStack;
 
 @Plugin(pluginID = "IC2", name = "IndustrialCraft2", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.ic2.description")
 public class PluginIC2 extends ForestryPlugin {
 
-	/*public static PluginIC2 instance;
+	public static PluginIC2 instance;
 
-	private static ItemStack plantBall;
+	/*private static ItemStack plantBall;
 	private static ItemStack compressedPlantBall;
 	private static ItemStack wrench;
 	private static ItemStack treetap;
@@ -32,12 +33,12 @@ public class PluginIC2 extends ForestryPlugin {
 	private static ItemStack scrap;
 	private static ItemStack silver;
 	private static ItemStack brass;
-	private static ItemStack uuMatter;
+	private static ItemStack uuMatter;*/
 
 	public static ItemStack resin;
 	public static ItemStack rubberwood;
 
-	public PluginIC2() {
+	/*public PluginIC2() {
 		if (PluginIC2.instance == null) {
 			PluginIC2.instance = this;
 		}

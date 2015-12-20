@@ -128,9 +128,9 @@ public class BlockResourceOre extends Block implements IModelRegister {
 	
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		manager.registerItemModel(item, 0, "ores", "apatite");
-		manager.registerItemModel(item, 1, "ores", "copper");
-		manager.registerItemModel(item, 2, "ores", "tin");
+		manager.registerItemModel(item, 0, "ores/apatite");
+		manager.registerItemModel(item, 1, "ores/copper");
+		manager.registerItemModel(item, 2, "ores/tin");
 	}
 
 	public ItemStack get(ResourceType type, int amount) {

@@ -11,7 +11,7 @@
 package forestry.apiculture.multiblock;
 
 import net.minecraft.nbt.NBTTagCompound;
-
+import net.minecraft.util.EnumFacing;
 import forestry.api.core.IClimateControlled;
 import forestry.api.multiblock.IAlvearyComponent;
 import forestry.apiculture.network.packets.PacketActiveUpdate;
@@ -124,7 +124,7 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IEner
 
 		if (worldObj != null) {
 			if (worldObj.isRemote) {
-				worldObj.func_147479_m(xCoord, yCoord, zCoord);
+				worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
 			} else {
 				Proxies.net.sendNetworkPacket(new PacketActiveUpdate(this), worldObj);
 			}
@@ -133,27 +133,27 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IEner
 
 	/* IEnergyHandler */
 	@Override
-	public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
+	public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
 		return energyManager.receiveEnergy(from, maxReceive, simulate);
 	}
 
 	@Override
-	public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate) {
+	public int extractEnergy(EnumFacing from, int maxExtract, boolean simulate) {
 		return energyManager.extractEnergy(from, maxExtract, simulate);
 	}
 
 	@Override
-	public int getEnergyStored(ForgeDirection from) {
+	public int getEnergyStored(EnumFacing from) {
 		return energyManager.getEnergyStored(from);
 	}
 
 	@Override
-	public int getMaxEnergyStored(ForgeDirection from) {
+	public int getMaxEnergyStored(EnumFacing from) {
 		return energyManager.getMaxEnergyStored(from);
 	}
 
 	@Override
-	public boolean canConnectEnergy(ForgeDirection from) {
+	public boolean canConnectEnergy(EnumFacing from) {
 		return energyManager.canConnectEnergy(from);
 	}
 

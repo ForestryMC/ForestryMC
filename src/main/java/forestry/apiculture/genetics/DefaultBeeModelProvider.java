@@ -19,7 +19,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IBeeModelProvider;
 import forestry.api.core.IModelManager;
-import forestry.core.render.TextureManager;
+import forestry.apiculture.items.ItemBeeGE;
 
 @SideOnly(Side.CLIENT)
 public class DefaultBeeModelProvider implements IBeeModelProvider {
@@ -35,7 +35,7 @@ public class DefaultBeeModelProvider implements IBeeModelProvider {
 	@Override
 	public void registerModels(Item item, IModelManager manager) {
 		String beeIconDir = "bees/default/";
-		EnumBeeType beeType = ((ItemBeeGE) item).getType();
+		EnumBeeType beeType = ((ItemBeeGE)item).getType();
 		String beeTypeNameBase = beeIconDir + beeType.toString().toLowerCase(Locale.ENGLISH);
 
 		models[beeType.ordinal()] = manager.getModelLocation(beeTypeNameBase);

@@ -16,7 +16,6 @@ import forestry.api.arboriculture.EnumLeafType;
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleTreeSpeciesCustom;
 import forestry.api.arboriculture.IGermlingModelProvider;
-import forestry.api.arboriculture.IGermlingSpriteProvider;
 import forestry.api.arboriculture.ILeafSpriteProvider;
 import forestry.api.arboriculture.ITreeFactory;
 import forestry.api.arboriculture.ITreeGenerator;
@@ -27,8 +26,8 @@ import forestry.arboriculture.render.SpriteProviderLeaves;
 
 public class TreeFactory implements ITreeFactory {
 	@Override
-	public IAlleleTreeSpeciesCustom createSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, boolean dominant, IClassification branch, String binomial, ILeafSpriteProvider leafIconProvider, IGermlingSpriteProvider germlingIconProvider, IGermlingModelProvider germlingModelProvider, ITreeGenerator generator) {
-		IAlleleTreeSpeciesCustom treeSpecies = new AlleleTreeSpecies(uid, unlocalizedName, authority, unlocalizedDescription, dominant, branch, binomial, leafIconProvider, germlingIconProvider, germlingModelProvider, generator);
+	public IAlleleTreeSpeciesCustom createSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, boolean dominant, IClassification branch, String binomial, ILeafSpriteProvider leafIconProvider, IGermlingModelProvider germlingModelProvider, ITreeGenerator generator) {
+		IAlleleTreeSpeciesCustom treeSpecies = new AlleleTreeSpecies(uid, unlocalizedName, authority, unlocalizedDescription, dominant, branch, binomial, leafIconProvider, germlingModelProvider, generator);
 		AlleleManager.alleleRegistry.registerAllele(treeSpecies, EnumTreeChromosome.SPECIES);
 		return treeSpecies;
 	}

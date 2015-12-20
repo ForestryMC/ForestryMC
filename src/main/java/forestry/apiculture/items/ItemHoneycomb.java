@@ -94,7 +94,7 @@ public class ItemHoneycomb extends ItemForestry {
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
 		for (int i = 0; i < EnumHoneyComb.VALUES.length; i++) {
-			manager.registerItemModel(item, i, "beecombs", EnumHoneyComb.VALUES[i].name);
+			manager.registerItemModel(item, i, "beecombs/" + EnumHoneyComb.VALUES[i].name);
 		}
 	}
 

@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.biome.BiomeGenBase;
 
@@ -47,10 +48,10 @@ public abstract class TileAlveary extends MultiblockTileEntityForestry<Multibloc
 	private final String unlocalizedTitle;
 
 	protected TileAlveary() {
-		this(BlockAlveary.Type.PLAIN);
+		this(BlockAlveary.AlvearyType.PLAIN);
 	}
 
-	protected TileAlveary(BlockAlveary.Type type) {
+	protected TileAlveary(BlockAlveary.AlvearyType type) {
 		super(new MultiblockLogicAlveary());
 		this.unlocalizedTitle = "tile.for.alveary." + type.ordinal() + ".name";
 	}
@@ -61,12 +62,12 @@ public abstract class TileAlveary extends MultiblockTileEntityForestry<Multibloc
 	}
 
 	@Override
-	public void onMachineAssembled(IMultiblockController multiblockController, ChunkCoordinates minCoord, ChunkCoordinates maxCoord) {
+	public void onMachineAssembled(IMultiblockController multiblockController, BlockPos minCoord, BlockPos maxCoord) {
 		// Re-render this block on the client
 		if (worldObj.isRemote) {
-			this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+			this.worldObj.markBlockForUpdate(getPos());
 		}
-		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, getBlockType());
+		worldObj.notifyBlockOfStateChange(getPos(), getBlockType());
 		markDirty();
 	}
 
@@ -74,9 +75,9 @@ public abstract class TileAlveary extends MultiblockTileEntityForestry<Multibloc
 	public void onMachineBroken() {
 		// Re-render this block on the client
 		if (worldObj.isRemote) {
-			this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+			this.worldObj.markBlockForUpdate(getPos());
 		}
-		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, getBlockType());
+		worldObj.notifyBlockOfStateChange(getPos(), getBlockType());
 		markDirty();
 	}
 

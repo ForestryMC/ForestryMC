@@ -37,7 +37,6 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import forestry.apiculture.entities.EntityFXBee;
 import forestry.apiculture.render.ParticleRenderer;
-import forestry.apiculture.render.RenderCandleBlock;
 import forestry.apiculture.render.TextureHabitatLocator;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
@@ -46,7 +45,6 @@ import forestry.core.entities.EntityFXIgnition;
 import forestry.core.entities.EntityFXSnow;
 import forestry.core.fluids.Fluids;
 import forestry.core.render.ForestryResource;
-import forestry.core.render.IBlockRenderer;
 import forestry.core.render.RenderEscritoire;
 import forestry.core.render.RenderMachine;
 import forestry.core.render.RenderMill;
@@ -95,12 +93,11 @@ public class ProxyRenderClient extends ProxyRender {
 
 	@Override
 	public void registerTESR(MachineDefinition definition) {
-		RenderBlock.byBlockRenderer.put(new TileRendererIndex(definition.getBlock(), definition.getMeta()), definition.renderer);
-		ClientRegistry.bindTileEntitySpecialRenderer(definition.teClass, (TileEntitySpecialRenderer) definition.renderer);
+		ClientRegistry.bindTileEntitySpecialRenderer(definition.teClass, definition.renderer);
 	}
 
 	@Override
-	public IBlockRenderer getRenderDefaultMachine(String gfxBase) {
+	public TileEntitySpecialRenderer getRenderDefaultMachine(String gfxBase) {
 		if (gfxBase == null) {
 			return null;
 		}
@@ -108,22 +105,22 @@ public class ProxyRenderClient extends ProxyRender {
 	}
 
 	@Override
-	public IBlockRenderer getRenderMill(String gfxBase) {
+	public TileEntitySpecialRenderer getRenderMill(String gfxBase) {
 		return new RenderMill(gfxBase);
 	}
 
 	@Override
-	public IBlockRenderer getRenderMill(String gfxBase, byte charges) {
+	public TileEntitySpecialRenderer getRenderMill(String gfxBase, byte charges) {
 		return new RenderMill(gfxBase, charges);
 	}
 
 	@Override
-	public IBlockRenderer getRenderEscritoire() {
+	public TileEntitySpecialRenderer getRenderEscritoire() {
 		return new RenderEscritoire();
 	}
 
 	@Override
-	public IBlockRenderer getRenderChest(String textureName) {
+	public TileEntitySpecialRenderer getRenderChest(String textureName) {
 		return new RenderNaturalistChest(textureName);
 	}
 	

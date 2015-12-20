@@ -27,6 +27,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
@@ -168,8 +169,8 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 	private BiomeGenBase getBiome() {
 		if (cachedBiome == null) {
-			ChunkCoordinates coords = getReferenceCoord();
-			cachedBiome = worldObj.getBiomeGenForCoords(coords.posX, coords.posZ);
+			BlockPos coords = getReferenceCoord();
+			cachedBiome = worldObj.getBiomeGenForCoords(coords);
 		}
 		return cachedBiome;
 	}
@@ -334,9 +335,9 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	}
 
 	@Override
-	public ChunkCoordinates getCoordinates() {
-		ChunkCoordinates coord = getReferenceCoord();
-		return new ChunkCoordinates(coord);
+	public BlockPos getCoordinates() {
+		BlockPos coord = getReferenceCoord();
+		return new BlockPos(coord);
 	}
 
 	@Override
@@ -346,7 +347,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 			for (IMultiblockComponent part : connectedParts) {
 				if (part instanceof TileEntity) {
 					TileEntity tile = (TileEntity) part;
-					tile.getWorldObj().notifyBlocksOfNeighborChange(tile.xCoord, tile.yCoord, tile.zCoord, tile.getBlockType());
+					tile.getWorld().notifyBlockOfStateChange(tile.getPos(), tile.getBlockType());
 				}
 			}
 			markDirty();
@@ -384,8 +385,8 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 	@Override
 	public EnumTemperature getTemperature() {
-		ChunkCoordinates coords = getReferenceCoord();
-		return EnumTemperature.getFromBiome(getBiome(), coords.posX, coords.posY, coords.posZ);
+		BlockPos coords = getReferenceCoord();
+		return EnumTemperature.getFromBiome(getBiome(), coords);
 	}
 
 	@Override
@@ -395,8 +396,8 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 	@Override
 	public float getExactTemperature() {
-		ChunkCoordinates coords = getReferenceCoord();
-		return getBiome().getFloatTemperature(coords.posX, coords.posY, coords.posZ);
+		BlockPos coords = getReferenceCoord();
+		return getBiome().getFloatTemperature(coords);
 	}
 
 	@Override
@@ -411,8 +412,8 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	@Override
 	public int[] getCoords() {
 		if (coords == null) {
-			ChunkCoordinates centerCoord = getCenterCoord();
-			coords = new int[]{centerCoord.posX, centerCoord.posY, centerCoord.posZ};
+			BlockPos centerCoord = getCenterCoord();
+			coords = new int[]{centerCoord.getX(), centerCoord.getY(), centerCoord.getZ()};
 		}
 		return coords;
 	}
@@ -519,13 +520,13 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	}
 
 	private void setUpFarmlandTargets() {
-		Vect targetStart = new Vect(getCoords());
+		BlockPos targetStart = new BlockPos(getCoords()[0], getCoords()[1], getCoords()[2]);
 
-		ChunkCoordinates max = getMaximumCoord();
-		ChunkCoordinates min = getMinimumCoord();
+		BlockPos max = getMaximumCoord();
+		BlockPos min = getMinimumCoord();
 
-		int sizeNorthSouth = Math.abs(max.posZ - min.posZ) + 1;
-		int sizeEastWest = Math.abs(max.posX - min.posX) + 1;
+		int sizeNorthSouth = Math.abs(max.getZ() - min.getZ()) + 1;
+		int sizeEastWest = Math.abs(max.getX() - min.getX()) + 1;
 
 		// Set the maximum allowed extent.
 		allowedExtent = Math.max(sizeNorthSouth, sizeEastWest) * Config.farmSize + 1;
@@ -534,7 +535,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		setExtents(worldObj, targets);
 	}
 
-	private static void createTargets(World world, Map<FarmDirection, List<FarmTarget>> targets, Vect targetStart, final int allowedExtent, final int farmSizeNorthSouth, final int farmSizeEastWest) {
+	private static void createTargets(World world, Map<FarmDirection, List<FarmTarget>> targets, BlockPos targetStart, final int allowedExtent, final int farmSizeNorthSouth, final int farmSizeEastWest) {
 
 		for (FarmDirection farmSide : FarmDirection.values()) {
 
@@ -550,9 +551,9 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 			FarmDirection layoutDirection = getLayoutDirection(farmSide);
 
-			Vect targetLocation = FarmHelper.getFarmMultiblockCorner(world, targetStart, farmSide, layoutDirection);
-			Vect firstLocation = targetLocation.add(farmSide);
-			Vect firstGroundPosition = getGroundPosition(world, firstLocation);
+			BlockPos targetLocation = FarmHelper.getFarmMultiblockCorner(world, targetStart, farmSide, layoutDirection);
+			BlockPos firstLocation = targetLocation.offset(farmSide.getFacing());
+			BlockPos firstGroundPosition = getGroundPosition(world, firstLocation);
 			if (firstGroundPosition == null) {
 				continue;
 			}
@@ -560,15 +561,15 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 			List<FarmTarget> farmSideTargets = new ArrayList<>();
 			for (int i = 0; i < allowedExtent; i++) {
-				targetLocation = targetLocation.add(farmSide);
-				Vect groundLocation = new Vect(targetLocation.getX(), groundHeight, targetLocation.getZ());
+				targetLocation = targetLocation.offset(farmSide.getFacing());
+				BlockPos groundLocation = new BlockPos(targetLocation.getX(), groundHeight, targetLocation.getZ());
 
 				int targetLimit = targetMaxLimit;
 				if (!Config.squareFarms) {
 					targetLimit = targetMaxLimit - i - 1;
 				}
 
-				Block platform = BlockPosUtil.getBlock(world, groundLocation);
+				Block platform = world.getBlockState(groundLocation).getBlock();
 				if (!FarmHelper.bricks.contains(platform)) {
 					break;
 				}
@@ -581,10 +582,10 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		}
 	}
 
-	private static Vect getGroundPosition(World world, Vect targetPosition) {
+	private static BlockPos getGroundPosition(World world, BlockPos targetPosition) {
 		for (int yOffset = 2; yOffset > -4; yOffset--) {
-			Vect position = targetPosition.add(0, yOffset, 0);
-			Block ground = BlockPosUtil.getBlock(world, position);
+			BlockPos position = targetPosition.add(0, yOffset, 0);
+			Block ground = world.getBlockState(position).getBlock();
 			if (FarmHelper.bricks.contains(ground)) {
 				return position;
 			}
@@ -604,7 +605,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	private static void setExtents(World worldObj, Map<FarmDirection, List<FarmTarget>> targets) {
 		for (List<FarmTarget> targetsList : targets.values()) {
 			if (!targetsList.isEmpty()) {
-				Vect groundPosition = getGroundPosition(worldObj, targetsList.get(0).getStart());
+				BlockPos groundPosition = getGroundPosition(worldObj, targetsList.get(0).getStart());
 
 				for (FarmTarget target : targetsList) {
 					target.setExtentAndYOffset(worldObj, groundPosition);
@@ -661,10 +662,10 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	}
 
 	private static boolean cultivateTarget(FarmTarget target, IFarmLogic logic, Iterable<IFarmListener> farmListeners) {
-		Vect targetPosition = target.getStart().add(0, target.getYOffset(), 0);
-		if (logic.cultivate(targetPosition.x, targetPosition.y, targetPosition.z, target.getDirection(), target.getExtent())) {
+		BlockPos targetPosition = target.getStart().add(0, target.getYOffset(), 0);
+		if (logic.cultivate(targetPosition, target.getDirection(), target.getExtent())) {
 			for (IFarmListener listener : farmListeners) {
-				listener.hasCultivated(logic, targetPosition.x, targetPosition.y, targetPosition.z, target.getDirection(), target.getExtent());
+				listener.hasCultivated(logic, targetPosition, target.getDirection(), target.getExtent());
 			}
 			return true;
 		}
@@ -686,14 +687,14 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	}
 
 	private static Collection<ICrop> harvestTarget(FarmTarget target, IFarmLogic logic, Iterable<IFarmListener> farmListeners) {
-		Collection<ICrop> harvested = logic.harvest(target.getStart().x, target.getStart().y + target.getYOffset(), target.getStart().z, target.getDirection(), target.getExtent());
+		Collection<ICrop> harvested = logic.harvest(target.getStart().getX(), target.getStart().getY() + target.getYOffset(), target.getStart().getZ(), target.getDirection(), target.getExtent());
 		if (harvested == null || harvested.size() == 0) {
 			return Collections.emptyList();
 		}
 
 		// Let event handlers know.
 		for (IFarmListener listener : farmListeners) {
-			listener.hasScheduledHarvest(harvested, logic, target.getStart().x, target.getStart().y + target.getYOffset(), target.getStart().z, target.getDirection(), target.getExtent());
+			listener.hasScheduledHarvest(harvested, logic, target.getStart().getX(), target.getStart().getY() + target.getYOffset(), target.getStart().getZ(), target.getDirection(), target.getExtent());
 		}
 
 		return harvested;
@@ -784,9 +785,9 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	}
 
 	@Override
-	public boolean plantGermling(IFarmable germling, World world, int x, int y, int z) {
+	public boolean plantGermling(IFarmable germling, World world, BlockPos pos) {
 		EntityPlayer player = PlayerUtil.getPlayer(world, getAccessHandler().getOwner());
-		return inventory.plantGermling(germling, player, x, y, z);
+		return inventory.plantGermling(germling, player, pos);
 	}
 
 	@Override

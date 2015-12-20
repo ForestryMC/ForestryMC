@@ -21,6 +21,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
@@ -135,7 +136,7 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 			return;
 		}
 
-		List<EntityPlayerMP> crafters = Collections.singletonList((EntityPlayerMP) player);
+		List<ICrafting> crafters = Collections.singletonList(player);
 
 		for (StandardTank tank : tanks) {
 			sendTankUpdate(container, tank, crafters);
@@ -150,13 +151,13 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 	}
 
 	@Override
-	public void updateGuiData(Container container, List<EntityPlayerMP> crafters) {
+	public void updateGuiData(Container container, List<ICrafting> crafters) {
 		for (StandardTank tank : tanks) {
 			updateGuiData(container, crafters, tank.getTankIndex());
 		}
 	}
 
-	private void updateGuiData(Container container, List<EntityPlayerMP> crafters, int tankIndex) {
+	private void updateGuiData(Container container, List<ICrafting> crafters, int tankIndex) {
 		StandardTank tank = tanks.get(tankIndex);
 		if (tank == null) {
 			return;
@@ -171,12 +172,13 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 		sendTankUpdate(container, tank, crafters);
 	}
 
-	private void sendTankUpdate(Container container, StandardTank tank, Iterable<EntityPlayerMP> crafters) {
+	private void sendTankUpdate(Container container, StandardTank tank, Iterable<ICrafting> crafters) {
 		int tankIndex = tank.getTankIndex();
 		FluidStack fluid = tank.getFluid();
 		IForestryPacketClient packet = new PacketTankLevelUpdate(tile, tankIndex, fluid);
-		for (EntityPlayerMP player : crafters) {
-			Proxies.net.sendToPlayer(packet, player);
+		for (ICrafting crafter : crafters) {
+			if(crafter instanceof EntityPlayerMP)
+				Proxies.net.sendToPlayer(packet, (EntityPlayer) crafter);
 		}
 
 		if (fluid == null) {

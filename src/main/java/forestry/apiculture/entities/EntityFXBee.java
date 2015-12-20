@@ -11,7 +11,8 @@
 package forestry.apiculture.entities;
 
 import net.minecraft.client.particle.EntityFX;
-import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 
 public class EntityFXBee extends EntityFX {
@@ -51,7 +52,7 @@ public class EntityFXBee extends EntityFX {
 	}
 
 	@Override
-	public void renderParticle(Tessellator tessellator, float f, float f1, float f2, float f3, float f4, float f5) {
+	public void renderParticle(WorldRenderer wR, Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
 		float minU = 0;
 		float maxU = 1;
 		float minV = 0;
@@ -69,11 +70,13 @@ public class EntityFXBee extends EntityFX {
 		float f12 = (float) ((prevPosY + (posY - prevPosY) * f) - interpPosY);
 		float f13 = (float) ((prevPosZ + (posZ - prevPosZ) * f) - interpPosZ);
 
-		tessellator.setColorRGBA_F(particleRed, particleGreen, particleBlue, 1.0F);
-		tessellator.addVertexWithUV(f11 - f1 * f10 - f4 * f10, f12 - f2 * f10, f13 - f3 * f10 - f5 * f10, maxU, maxV);
-		tessellator.addVertexWithUV((f11 - f1 * f10) + f4 * f10, f12 + f2 * f10, (f13 - f3 * f10) + f5 * f10, maxU, minV);
-		tessellator.addVertexWithUV(f11 + f1 * f10 + f4 * f10, f12 + f2 * f10, f13 + f3 * f10 + f5 * f10, minU, minV);
-		tessellator.addVertexWithUV((f11 + f1 * f10) - f4 * f10, f12 - f2 * f10, (f13 + f3 * f10) - f5 * f10, minU, maxV);
+        int i = this.getBrightnessForRender(f);
+        int j = i >> 16 & 65535;
+        int k = i & 65535;
+		wR.func_181662_b(f11 - f1 * f10 - f4 * f10, f12 - f2 * f10, f13 - f3 * f10 - f5 * f10).func_181673_a(maxU, maxV).func_181666_a(particleRed, particleGreen, particleBlue, 1.0F).func_181671_a(j, k).func_181675_d();
+		wR.func_181662_b((f11 - f1 * f10) + f4 * f10, f12 + f2 * f10, (f13 - f3 * f10) + f5 * f10).func_181673_a(maxU, minV).func_181666_a(particleRed, particleGreen, particleBlue, 1.0F).func_181671_a(j, k).func_181675_d();
+		wR.func_181662_b(f11 + f1 * f10 + f4 * f10, f12 + f2 * f10, f13 + f3 * f10 + f5 * f10).func_181673_a(minU, minV).func_181666_a(particleRed, particleGreen, particleBlue, 1.0F).func_181671_a(j, k).func_181675_d();
+		wR.func_181662_b((f11 + f1 * f10) - f4 * f10, f12 - f2 * f10, (f13 + f3 * f10) - f5 * f10).func_181673_a(minU, maxV).func_181666_a(particleRed, particleGreen, particleBlue, 1.0F).func_181671_a(j, k).func_181675_d();
 	}
 
 	@Override

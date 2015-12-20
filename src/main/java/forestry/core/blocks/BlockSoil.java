@@ -37,17 +37,18 @@ import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.core.IModelManager;
-import forestry.api.core.IModelRenderer;
+import forestry.api.core.IModelRegister;
 import forestry.core.CreativeTabForestry;
 import forestry.core.blocks.BlockResourceStorage.ResourceType;
 import forestry.core.config.Constants;
 import forestry.core.render.TextureManager;
+import forestry.core.utils.BlockPosUtil;
 import forestry.plugins.PluginCore;
 
 /**
  * Humus, bog earth, peat
  */
-public class BlockSoil extends Block implements IItemTyped, IModelRenderer {
+public class BlockSoil extends Block implements IItemTyped, IModelRegister {
 	public static final PropertyEnum SOIL = PropertyEnum.create("soil", SoilType.class);
 	
 	public enum SoilType implements IStringSerializable {
@@ -113,6 +114,16 @@ public class BlockSoil extends Block implements IItemTyped, IModelRenderer {
 		return (getMetaFromState(world.getBlockState(pos)) & 0x03);
 	}
 	
+	/* MODELS */
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void registerModel(Item item, IModelManager manager) {
+		manager.registerItemModel(item, 0, "/humus");
+		manager.registerItemModel(item, 1, "/bog");
+		manager.registerItemModel(item, 2, "/peat");
+	}
+	
 	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
 		if (world.isRemote) {
@@ -164,7 +175,7 @@ public class BlockSoil extends Block implements IItemTyped, IModelRenderer {
 			return;
 		}
 
-		int meta = world.getBlockMetadata(x, y, z);
+		int meta = BlockPosUtil.getBlockMeta(world, pos);
 
 		// Unpack first
 		int type = meta & 0x03;
@@ -177,18 +188,18 @@ public class BlockSoil extends Block implements IItemTyped, IModelRenderer {
 		meta = (grade << 2 | type);
 
 		if (grade >= degradeDelimiter) {
-			world.setBlock(x, y, z, Blocks.sand, 0, Constants.FLAG_BLOCK_SYNCH);
+			world.setBlockState(pos, Blocks.sand.getStateFromMeta(0), Constants.FLAG_BLOCK_SYNCH);
 		} else {
-			world.setBlockMetadataWithNotify(x, y, z, meta, Constants.FLAG_BLOCK_SYNCH);
+			world.setBlockState(pos, BlockPosUtil.getBlock(world, pos).getStateFromMeta(meta), Constants.FLAG_BLOCK_SYNCH);
 		}
-		world.markBlockForUpdate(x, y, z);
+		world.markBlockForUpdate(pos);
 	}
 
 	private static boolean isMoistened(World world, BlockPos pos) {
 
 		for (int i = -2; i < 3; i++) {
 			for (int j = -2; j < 3; j++) {
-				Block block = world.getBlock(x + i, y, z + j);
+				Block block = world.getBlockState(new BlockPos(pos.getX() + i, pos.getY(), pos.getZ() + j)).getBlock();
 				if (block == Blocks.water || block == Blocks.flowing_water) {
 					return true;
 				}
@@ -204,7 +215,7 @@ public class BlockSoil extends Block implements IItemTyped, IModelRenderer {
 			return;
 		}
 
-		int meta = world.getBlockMetadata(i, j, k);
+		int meta = BlockPosUtil.getBlockMeta(world, pos);
 
 		// Unpack first
 
@@ -219,8 +230,8 @@ public class BlockSoil extends Block implements IItemTyped, IModelRenderer {
 		maturity++;
 
 		meta = (maturity << 2 | type);
-		world.setBlockMetadataWithNotify(i, j, k, meta, Constants.FLAG_BLOCK_SYNCH);
-		world.markBlockForUpdate(i, j, k);
+		world.setBlockState(pos, BlockPosUtil.getBlock(world, pos).getStateFromMeta(meta), Constants.FLAG_BLOCK_SYNCH);
+		world.markBlockForUpdate(pos);
 	}
 	
 	@Override
@@ -247,16 +258,13 @@ public class BlockSoil extends Block implements IItemTyped, IModelRenderer {
 		itemList.add(new ItemStack(this, 1, 0));
 		itemList.add(new ItemStack(this, 1, 1));
 	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerModel(Item item, IModelManager manager) {
-		manager.registerItemModel(item, 0, "/humus");
-		manager.registerItemModel(item, 1, "/bog");
-		manager.registerItemModel(item, 2, "/peat");
-	}
 
 	public ItemStack get(SoilType soilType, int amount) {
 		return new ItemStack(this, amount, soilType.ordinal());
+	}
+
+	@Override
+	public Enum getTypeFromMeta(int meta) {
+		return SoilType.values()[meta];
 	}
 }

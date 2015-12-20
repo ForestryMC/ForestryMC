@@ -53,6 +53,7 @@ import forestry.api.apiculture.FlowerManager;
 import forestry.api.apiculture.IBeekeepingMode;
 import forestry.api.apiculture.hives.HiveManager;
 import forestry.api.apiculture.hives.IHiveRegistry;
+import forestry.api.apiculture.hives.IHiveRegistry.HiveType;
 import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IClassification;
@@ -520,14 +521,14 @@ public class PluginApiculture extends ForestryPlugin {
 				'#', PluginCore.items.beeswax);
 
 		// / ALVEARY
-		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.Type.PLAIN),
+		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.AlvearyType.PLAIN),
 				"###",
 				"#X#",
 				"###",
 				'X', PluginCore.items.impregnatedCasing,
 				'#', PluginCore.items.craftingMaterial.getScentedPaneling());
 		// SWARMER
-		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.Type.SWARMER),
+		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.AlvearyType.SWARMER),
 				"#G#",
 				" X ",
 				"#G#",
@@ -535,7 +536,7 @@ public class PluginApiculture extends ForestryPlugin {
 				'X', blocks.alveary,
 				'G', "ingotGold");
 		// FAN
-		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.Type.FAN),
+		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.AlvearyType.FAN),
 				"I I",
 				" X ",
 				"I#I",
@@ -543,7 +544,7 @@ public class PluginApiculture extends ForestryPlugin {
 				'X', blocks.alveary,
 				'I', "ingotIron");
 		// HEATER
-		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.Type.HEATER),
+		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.AlvearyType.HEATER),
 				"#I#",
 				" X ",
 				"YYY",
@@ -551,7 +552,7 @@ public class PluginApiculture extends ForestryPlugin {
 				'X', blocks.alveary,
 				'I', "ingotIron", 'Y', "stone");
 		// HYGROREGULATOR
-		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.Type.HYGRO),
+		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.AlvearyType.HYGRO),
 				"GIG",
 				"GXG",
 				"GIG",
@@ -559,14 +560,14 @@ public class PluginApiculture extends ForestryPlugin {
 				'I', "ingotIron",
 				'G', "blockGlass");
 		// STABILISER
-		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.Type.STABILIZER),
+		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.AlvearyType.STABILISER),
 				"G G",
 				"GXG",
 				"G G",
 				'X', blocks.alveary,
 				'G', "gemQuartz");
 		// SIEVE
-		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.Type.SIEVE),
+		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.AlvearyType.SIEVE),
 				"III",
 				" X ",
 				"WWW",
@@ -746,42 +747,42 @@ public class PluginApiculture extends ForestryPlugin {
 
 	private static void registerBeehiveDrops() {
 		ItemStack honeyComb = items.beeComb.get(EnumHoneyComb.HONEY, 1);
-		hiveRegistry.addDrops(IHiveRegistry.forest,
+		hiveRegistry.addDrops(HiveType.FOREST.getHiveName(),
 				new HiveDrop(80, BeeDefinition.FOREST, honeyComb).setIgnobleShare(0.7f),
 				new HiveDrop(8, BeeDefinition.FOREST.getRainResist(), honeyComb),
 				new HiveDrop(3, BeeDefinition.VALIANT, honeyComb)
 		);
 
-		hiveRegistry.addDrops(IHiveRegistry.meadows,
+		hiveRegistry.addDrops(HiveType.MEADOWS.getHiveName(),
 				new HiveDrop(80, BeeDefinition.MEADOWS, honeyComb).setIgnobleShare(0.7f),
 				new HiveDrop(3, BeeDefinition.VALIANT, honeyComb)
 		);
 
 		ItemStack parchedComb = items.beeComb.get(EnumHoneyComb.PARCHED, 1);
-		hiveRegistry.addDrops(IHiveRegistry.desert,
+		hiveRegistry.addDrops(HiveType.DESERT.getHiveName(),
 				new HiveDrop(80, BeeDefinition.MODEST, parchedComb).setIgnobleShare(0.7f),
 				new HiveDrop(3, BeeDefinition.VALIANT, parchedComb)
 		);
 
 		ItemStack silkyComb = items.beeComb.get(EnumHoneyComb.SILKY, 1);
-		hiveRegistry.addDrops(IHiveRegistry.jungle,
+		hiveRegistry.addDrops(HiveType.JUNGLE.getHiveName(),
 				new HiveDrop(80, BeeDefinition.TROPICAL, silkyComb).setIgnobleShare(0.7f),
 				new HiveDrop(3, BeeDefinition.VALIANT, silkyComb)
 		);
 
 		ItemStack mysteriousComb = items.beeComb.get(EnumHoneyComb.MYSTERIOUS, 1);
-		hiveRegistry.addDrops(IHiveRegistry.end,
+		hiveRegistry.addDrops(HiveType.END.getHiveName(),
 				new HiveDrop(90, BeeDefinition.ENDED, mysteriousComb)
 		);
 
 		ItemStack frozenComb = items.beeComb.get(EnumHoneyComb.FROZEN, 1);
-		hiveRegistry.addDrops(IHiveRegistry.snow,
+		hiveRegistry.addDrops(HiveType.SNOW.getHiveName(),
 				new HiveDrop(80, BeeDefinition.WINTRY, frozenComb).setIgnobleShare(0.5f),
 				new HiveDrop(3, BeeDefinition.VALIANT, frozenComb)
 		);
 
 		ItemStack mossyComb = items.beeComb.get(EnumHoneyComb.MOSSY, 1);
-		hiveRegistry.addDrops(IHiveRegistry.swamp,
+		hiveRegistry.addDrops(HiveType.SWAMP.getHiveName(),
 				new HiveDrop(80, BeeDefinition.MARSHY, mossyComb).setIgnobleShare(0.4f),
 				new HiveDrop(3, BeeDefinition.VALIANT, mossyComb)
 		);
@@ -815,13 +816,13 @@ public class PluginApiculture extends ForestryPlugin {
 	}
 
 	private static void createHives() {
-		hiveRegistry.registerHive(IHiveRegistry.forest, HiveDescription.FOREST);
-		hiveRegistry.registerHive(IHiveRegistry.meadows, HiveDescription.MEADOWS);
-		hiveRegistry.registerHive(IHiveRegistry.desert, HiveDescription.DESERT);
-		hiveRegistry.registerHive(IHiveRegistry.jungle, HiveDescription.JUNGLE);
-		hiveRegistry.registerHive(IHiveRegistry.end, HiveDescription.END);
-		hiveRegistry.registerHive(IHiveRegistry.snow, HiveDescription.SNOW);
-		hiveRegistry.registerHive(IHiveRegistry.swamp, HiveDescription.SWAMP);
+		hiveRegistry.registerHive(HiveType.FOREST.getHiveName(), HiveDescription.FOREST);
+		hiveRegistry.registerHive(HiveType.MEADOWS.getHiveName(), HiveDescription.MEADOWS);
+		hiveRegistry.registerHive(HiveType.DESERT.getHiveName(), HiveDescription.DESERT);
+		hiveRegistry.registerHive(HiveType.JUNGLE.getHiveName(), HiveDescription.JUNGLE);
+		hiveRegistry.registerHive(HiveType.END.getHiveName(), HiveDescription.END);
+		hiveRegistry.registerHive(HiveType.SNOW.getHiveName(), HiveDescription.SNOW);
+		hiveRegistry.registerHive(HiveType.SWAMP.getHiveName(), HiveDescription.SWAMP);
 	}
 
 	private static void createAlleles() {

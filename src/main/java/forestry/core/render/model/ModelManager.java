@@ -51,10 +51,9 @@ public class ModelManager implements IModelManager {
 	}
 
 	@Override
-	public void registerItemModel(Item item, int meta, String modifier, String identifier) {
-		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, meta,
-				getModelLocation(item, modifier, identifier));
-		registerVariant(item, "forestry:" + modifier + "/" + identifier);
+	public void registerItemModel(Item item, int meta, String modID, String identifier) {
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, meta, getModelLocation(item, modID,  identifier));
+		registerVariant(item, modID + ":" + identifier);
 	}
 
 	@Override
@@ -136,8 +135,8 @@ public class ModelManager implements IModelManager {
 	}
 
 	@Override
-	public ModelResourceLocation getModelLocation(Item item, String modifier, String identifier) {
-		return new ModelResourceLocation("forestry:" + modifier + "/" + identifier, "inventory");
+	public ModelResourceLocation getModelLocation(Item item, String modID, String identifier) {
+		return new ModelResourceLocation(modID + ":" + identifier, "inventory");
 	}
 
 	@Override

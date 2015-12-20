@@ -31,9 +31,9 @@ import forestry.core.items.ItemCrated;
 /**
  * Adapted from RenderTankCartItem by CovertJaguar <http://www.railcraft.info>
  */
-public class RenderCrateItem implements IItemRenderer {
+public class RenderCrateItem /*implements IItemRenderer*/ {
 
-	private static final ResourceLocation BLOCK_TEXTURE = TextureMap.locationBlocksTexture;
+	/*private static final ResourceLocation BLOCK_TEXTURE = TextureMap.locationBlocksTexture;
 	private static final ResourceLocation ITEM_TEXTURE = TextureMap.locationItemsTexture;
 	private static final ResourceLocation GLINT_TEXTURE = new ResourceLocation("textures/misc/enchanted_item_glint.png");
 
@@ -342,6 +342,6 @@ public class RenderCrateItem implements IItemRenderer {
 			return ((ItemCrated) crateItem).getContained();
 		}
 		return null;
-	}
+	}*/
 
 }

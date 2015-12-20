@@ -22,12 +22,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import forestry.api.core.IModelManager;
 import forestry.api.core.IModelRegister;
 import forestry.apiculture.entities.EntityMinecartApiary;
 import forestry.apiculture.entities.EntityMinecartBeeHousingBase;
 import forestry.apiculture.entities.EntityMinecartBeehouse;
-import forestry.core.render.TextureManager;
 
 public class ItemMinecartBeehouse extends ItemMinecart implements IModelRegister {
 	private final String[] definition = new String[]{"cart.beehouse", "cart.apiary"};
@@ -41,7 +42,7 @@ public class ItemMinecartBeehouse extends ItemMinecart implements IModelRegister
 	
 	@Override
 	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (!BlockRailBase.func_150051_a(world.getBlockState(pos).getBlock())) {
+		if (!BlockRailBase.isRailBlock(world.getBlockState(pos))) {
 			return false;
 		}
 
@@ -55,7 +56,7 @@ public class ItemMinecartBeehouse extends ItemMinecart implements IModelRegister
 			entityMinecart.setOwner(player.getGameProfile());
 
 			if (stack.hasDisplayName()) {
-				entityMinecart.setMinecartName(stack.getDisplayName());
+				entityMinecart.setCustomNameTag(stack.getDisplayName());
 			}
 
 			world.spawnEntityInWorld(entityMinecart);
@@ -74,25 +75,12 @@ public class ItemMinecartBeehouse extends ItemMinecart implements IModelRegister
 		}
 	}
 
-	/* ICONS */
-	@SideOnly(Side.CLIENT)
-	private IIcon[] icons;
-
+	/* MODELS */
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerIcons(IIconRegister register) {
-		icons = new IIcon[definition.length];
+	public void registerModel(Item item, IModelManager manager) {
 		for (int i = 0; i < definition.length; i++) {
-			icons[i] = TextureManager.getSprite(register, definition[i]);
-		}
-	}
-
-	@Override
-	public IIcon getIconFromDamage(int damage) {
-		if (damage >= definition.length || damage < 0) {
-			return icons[0];
-		} else {
-			return icons[damage];
+			manager.registerItemModel(item, i, definition[i]);
 		}
 	}
 

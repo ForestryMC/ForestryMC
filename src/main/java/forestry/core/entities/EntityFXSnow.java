@@ -57,18 +57,18 @@ public class EntityFXSnow extends EntityFX {
 			maxV = this.particleIcon.getMaxV();
 		}
 
-		worldRenderer.func_181666_a(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha);
-
 		for (int i = 0; i < 5; i++) {
-			renderParticle(worldRenderer, x, y, z, rotationX, rotationXZ, rotationZ, rotationYZ, rotationXY, minU, maxU, minV, maxV, scale);
+			renderParticle(worldRenderer, x, y, z, rotationX, rotationXZ, rotationZ, rotationYZ, rotationXY, minU, maxU, minV, maxV, scale, timeStep);
 		}
 	}
 
-	private static void renderParticle(WorldRenderer worldRenderer, double x, double y, double z, float rotationX, float rotationXZ, float rotationZ, float rotationYZ, float rotationXY,
-			float minU, float maxU, float minV, float maxV, float scale) {
-		worldRenderer.func_181662_b((x - rotationX * scale - rotationYZ * scale), (y - rotationXZ * scale), (z - rotationZ * scale - rotationXY * scale)).func_181673_a(maxU, maxV).func_181675_d();
-		worldRenderer.func_181662_b((x - rotationX * scale + rotationYZ * scale), (y + rotationXZ * scale), (z - rotationZ * scale + rotationXY * scale)).func_181673_a(maxU, minV).func_181675_d();
-		worldRenderer.func_181662_b((x + rotationX * scale + rotationYZ * scale), (y + rotationXZ * scale), (z + rotationZ * scale + rotationXY * scale)).func_181673_a(minU, minV).func_181675_d();;
-		worldRenderer.func_181662_b((x + rotationX * scale - rotationYZ * scale), (y - rotationXZ * scale), (z + rotationZ * scale - rotationXY * scale)).func_181673_a(minU, maxV).func_181675_d();;
+	private void renderParticle(WorldRenderer worldRenderer, double x, double y, double z, float rotationX, float rotationXZ, float rotationZ, float rotationYZ, float rotationXY, float minU, float maxU, float minV, float maxV, float scale, float timeStep) {
+        int i = this.getBrightnessForRender(timeStep);
+        int j = i >> 16 & 65535;
+        int k = i & 65535;
+		worldRenderer.func_181662_b((x - rotationX * scale - rotationYZ * scale), (y - rotationXZ * scale), (z - rotationZ * scale - rotationXY * scale)).func_181673_a(maxU, maxV).func_181666_a(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).func_181671_a(j, k).func_181675_d();
+		worldRenderer.func_181662_b((x - rotationX * scale + rotationYZ * scale), (y + rotationXZ * scale), (z - rotationZ * scale + rotationXY * scale)).func_181673_a(maxU, minV).func_181666_a(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).func_181671_a(j, k).func_181675_d();
+		worldRenderer.func_181662_b((x + rotationX * scale + rotationYZ * scale), (y + rotationXZ * scale), (z + rotationZ * scale + rotationXY * scale)).func_181673_a(minU, minV).func_181666_a(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).func_181671_a(j, k).func_181675_d();;
+		worldRenderer.func_181662_b((x + rotationX * scale - rotationYZ * scale), (y - rotationXZ * scale), (z + rotationZ * scale - rotationXY * scale)).func_181673_a(minU, maxV).func_181666_a(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).func_181671_a(j, k).func_181675_d();;
 	}
 }

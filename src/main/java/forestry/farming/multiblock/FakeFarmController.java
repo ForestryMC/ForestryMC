@@ -12,6 +12,7 @@ package forestry.farming.multiblock;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fluids.FluidStack;
@@ -69,7 +70,7 @@ public class FakeFarmController extends FakeMultiblockController implements IFar
 	}
 
 	@Override
-	public boolean plantGermling(IFarmable farmable, World world, int x, int y, int z) {
+	public boolean plantGermling(IFarmable farmable, World world, BlockPos pos) {
 		return false;
 	}
 

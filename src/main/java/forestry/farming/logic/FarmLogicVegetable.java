@@ -11,6 +11,9 @@
 package forestry.farming.logic;
 
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.farming.Farmables;
 import forestry.api.farming.IFarmHousing;
 
@@ -22,8 +25,8 @@ public class FarmLogicVegetable extends FarmLogicCrops {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon getSprite() {
-		return Items.carrot.getIconFromDamage(0);
+	public Item getIconItem() {
+		return Items.carrot;
 	}
 
 	@Override

@@ -13,7 +13,7 @@ package forestry.farming.triggers;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-
+import net.minecraft.util.EnumFacing;
 import forestry.api.farming.IFarmInventory;
 import forestry.api.multiblock.IFarmController;
 import forestry.core.triggers.Trigger;
@@ -52,7 +52,7 @@ public class TriggerLowSoil extends Trigger {
 	 * the parameters.
 	 */
 	@Override
-	public boolean isTriggerActive(TileEntity tile, ForgeDirection side, IStatementContainer source, IStatementParameter[] parameters) {
+	public boolean isTriggerActive(TileEntity tile, EnumFacing side, IStatementContainer source, IStatementParameter[] parameters) {
 		IStatementParameter parameter = null;
 		if (parameters.length > 0) {
 			parameter = parameters[0];

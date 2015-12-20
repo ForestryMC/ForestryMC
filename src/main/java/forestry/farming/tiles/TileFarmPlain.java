@@ -11,16 +11,17 @@
 package forestry.farming.tiles;
 
 import forestry.api.multiblock.IMultiblockController;
+import net.minecraft.util.BlockPos;
 
 public class TileFarmPlain extends TileFarm {
 	@Override
-	public void onMachineAssembled(IMultiblockController multiblockController, ChunkCoordinates minCoord, ChunkCoordinates maxCoord) {
+	public void onMachineAssembled(IMultiblockController multiblockController, BlockPos minCoord, BlockPos maxCoord) {
 		super.onMachineAssembled(multiblockController, minCoord, maxCoord);
 
 		// set band block meta
-		int bandY = maxCoord.posY - 1;
-		if (yCoord == bandY) {
-			this.worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 1, 2);
+		int bandY = maxCoord.getY() - 1;
+		if (getPos().getY() == bandY) {
+			this.worldObj.setBlockState(getPos(), blockType.getStateFromMeta(1), 2);
 		}
 	}
 
@@ -29,6 +30,6 @@ public class TileFarmPlain extends TileFarm {
 		super.onMachineBroken();
 
 		// set band block meta back to normal
-		this.worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 0, 2);
+		this.worldObj.setBlockState(getPos(), blockType.getStateFromMeta(0), 2);
 	}
 }

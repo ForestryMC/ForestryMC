@@ -13,6 +13,7 @@ package forestry.core.tiles;
 import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.BlockPos;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.gui.ContainerNaturalistInventory;
 import forestry.core.gui.GuiHandler;
@@ -114,5 +115,10 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 	@Override
 	public Object getContainer(EntityPlayer player, int page) {
 		return new ContainerNaturalistInventory(player.inventory, this, page);
+	}
+	
+	@Override
+	public BlockPos getCoordinates() {
+		return getPos();
 	}
 }

@@ -27,7 +27,7 @@ public class PacketAccessSwitch extends PacketCoordinates implements IForestryPa
 	}
 
 	public PacketAccessSwitch(ILocatable tile) {
-		super(tile.getPos());
+		super(tile.getCoordinates());
 	}
 
 	@Override

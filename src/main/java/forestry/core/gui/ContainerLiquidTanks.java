@@ -18,6 +18,8 @@ import net.minecraft.tileentity.TileEntity;
 
 import net.minecraftforge.fluids.IFluidTank;
 
+import java.util.List;
+
 import forestry.core.tiles.ILiquidTankTile;
 
 public abstract class ContainerLiquidTanks<T extends TileEntity & ILiquidTankTile> extends ContainerTile<T> implements IContainerLiquidTanks {

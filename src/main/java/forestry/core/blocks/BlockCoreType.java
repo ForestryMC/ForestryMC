@@ -16,28 +16,15 @@ import javax.annotation.Nullable;
 
 import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.IBlockRenderer;
 import forestry.core.tiles.TileAnalyzer;
 import forestry.core.tiles.TileEscritoire;
 import forestry.core.tiles.TileForestry;
 import forestry.plugins.PluginApiculture;
 import net.minecraft.util.IStringSerializable;
 
-public enum BlockCoreType implements IMachinePropertiesTESR, IStringSerializable {
-	ANALYZER(TileAnalyzer.class, "Analyzer") {
-		@Nullable
-		@Override
-		public IBlockRenderer getRenderer() {
-			return PluginApiculture.proxy.getRendererAnalyzer(Constants.TEXTURE_PATH_BLOCKS + "/analyzer_");
-		}
-	},
-	ESCRITOIRE(TileEscritoire.class, "Escritoire") {
-		@Nullable
-		@Override
-		public IBlockRenderer getRenderer() {
-			return Proxies.render.getRenderEscritoire();
-		}
-	};
+public enum BlockCoreType implements IMachineProperties, IStringSerializable {
+	ANALYZER(TileAnalyzer.class, "Analyzer"),
+	ESCRITOIRE(TileEscritoire.class, "Escritoire");
 
 	public static final BlockCoreType[] VALUES = values();
 

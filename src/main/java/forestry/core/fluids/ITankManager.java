@@ -23,7 +23,7 @@ import net.minecraftforge.fluids.IFluidTank;
 public interface ITankManager extends IFluidHandler {
 	void containerAdded(Container container, ICrafting player);
 
-	void updateGuiData(Container container, List<EntityPlayerMP> crafters);
+	void updateGuiData(Container container, List<ICrafting> crafters);
 
 	void containerRemoved(Container container);
 

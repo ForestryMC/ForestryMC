@@ -14,14 +14,13 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
-import javax.vecmath.Vector3f;
+import org.lwjgl.util.vector.Vector3f;
 
 import forestry.api.core.IModelRenderer;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.BlockFaceUV;
 import net.minecraft.client.renderer.block.model.BlockPartFace;
-import net.minecraft.client.renderer.block.model.BlockPartRotation;
 import net.minecraft.client.renderer.block.model.FaceBakery;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.block.model.ItemTransformVec3f;
@@ -78,20 +77,20 @@ public class ModelRenderer implements IModelRenderer {
 		}
 
 		public ItemCameraTransforms getTransform() {
-			Vector3f rotation = new Vector3f(getRotation());
-			Vector3f translation = new Vector3f(getTranslation());
+			Vector3f rotation = new Vector3f(getRotation()[0], getRotation()[1], getRotation()[2]);
+			Vector3f translation = new Vector3f(getTranslation()[0], getTranslation()[1], getTranslation()[2]);
 			translation.scale(0.0625F);
 			MathHelper.clamp_double(translation.x, -1.5D, 1.5D);
 			MathHelper.clamp_double(translation.y, -1.5D, 1.5D);
 			MathHelper.clamp_double(translation.z, -1.5D, 1.5D);
-			Vector3f scale = new Vector3f(getScale());
+			Vector3f scale = new Vector3f(getScale()[0], getScale()[1], getScale()[2]);
 			MathHelper.clamp_double(scale.x, -1.5D, 1.5D);
 			MathHelper.clamp_double(scale.y, -1.5D, 1.5D);
 			MathHelper.clamp_double(scale.z, -1.5D, 1.5D);
 
+			new ItemTransformVec3f(rotation, translation, scale);
 			ItemTransformVec3f transformV = new ItemTransformVec3f(rotation, translation, scale);
-			return new ItemCameraTransforms(transformV, ItemCameraTransforms.DEFAULT.firstPerson,
-					ItemCameraTransforms.DEFAULT.head, ItemCameraTransforms.DEFAULT.gui);
+			return new ItemCameraTransforms(transformV, ItemCameraTransforms.DEFAULT.firstPerson, ItemCameraTransforms.DEFAULT.head, ItemCameraTransforms.DEFAULT.gui, ItemCameraTransforms.DEFAULT.field_181699_o, ItemCameraTransforms.DEFAULT.field_181700_p);
 		}
 
 		protected float[] getRotation() {

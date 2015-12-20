@@ -12,7 +12,7 @@ package forestry.farming.triggers;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
-
+import net.minecraft.util.EnumFacing;
 import forestry.core.triggers.Trigger;
 import forestry.core.utils.InventoryUtil;
 import forestry.farming.tiles.TileFarmHatch;
@@ -38,7 +38,7 @@ public class TriggerLowGermlings extends Trigger {
 	 * Return true if the tile given in parameter activates the trigger, given the parameters.
 	 */
 	@Override
-	public boolean isTriggerActive(TileEntity tile, ForgeDirection side, IStatementContainer source, IStatementParameter[] parameters) {
+	public boolean isTriggerActive(TileEntity tile, EnumFacing side, IStatementContainer source, IStatementParameter[] parameters) {
 		if (!(tile instanceof TileFarmHatch)) {
 			return false;
 		}

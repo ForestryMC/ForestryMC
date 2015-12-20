@@ -49,6 +49,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.core.IModelManager;
 import forestry.api.core.IModelRegister;
+import forestry.api.core.IStateMapperRegister;
 import forestry.core.access.IAccessHandler;
 import forestry.core.circuits.ISocketable;
 import forestry.core.fluids.FluidHelper;
@@ -60,7 +61,7 @@ import forestry.core.tiles.TileUtil;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.PlayerUtil;
 
-public class BlockBase<T extends IMachineProperties, C extends Enum & IMachineProperties & IStringSerializable> extends BlockForestry implements IModelRegister {
+public class BlockBase<T extends IMachineProperties, C extends Enum & IMachineProperties & IStringSerializable> extends BlockForestry implements IModelRegister, IStateMapperRegister {
 	
 	private final List<MachineDefinition> definitions = new ArrayList<>();
 	private final boolean hasTESR;
@@ -93,6 +94,7 @@ public class BlockBase<T extends IMachineProperties, C extends Enum & IMachinePr
 		return clazz;
 	}
 	
+	@Override
 	public void registerStateMapper() {
 		Proxies.render.registerStateMapper(this, new BaseStateMapper());
 	}

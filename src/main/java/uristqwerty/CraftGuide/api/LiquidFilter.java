@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Locale;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.ItemStack;
@@ -32,7 +33,7 @@ public class LiquidFilter implements ItemFilter
 
 	public void setLiquid(FluidStack liquid)
 	{
-		String name = liquid.getFluid().getLocalizedName();
+		String name = liquid.getFluid().getLocalizedName(liquid);
 		this.liquid = liquid;
 		liquidName = name.toLowerCase(Locale.ENGLISH);
 		tooltip.clear();
@@ -76,7 +77,7 @@ public class LiquidFilter implements ItemFilter
 			TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
 
 			Fluid fluid = liquid.getFluid();
-			IIcon icon = fluid.getStillIcon();
+			TextureAtlasSprite icon = fluid.getStillIcon();
 
 			if(icon != null)
 			{

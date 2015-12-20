@@ -20,12 +20,6 @@ public class TileCandle extends TileEntity {
 	private int colour;
 	private boolean lit;
 
-	// This is a non-ticking Tile Entity.
-	@Override
-	public boolean canUpdate() {
-		return false;
-	}
-
 	@Override
 	public Packet getDescriptionPacket() {
 		PacketCandleUpdate updateCandle = new PacketCandleUpdate(this);

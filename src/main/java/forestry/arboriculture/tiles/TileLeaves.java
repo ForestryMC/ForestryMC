@@ -286,7 +286,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	}
 
 	@SideOnly(Side.CLIENT)
-	public TextureAtlasSprite getIcon(boolean fancy) {
+	public TextureAtlasSprite getSprite(boolean fancy) {
 		if (species == null) {
 			return TreeDefinition.Oak.getIndividual().getGenome().getPrimary().getLeafSprite(false, fancy);
 		}

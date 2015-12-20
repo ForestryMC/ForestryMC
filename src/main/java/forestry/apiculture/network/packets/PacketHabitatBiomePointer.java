@@ -13,6 +13,7 @@ package forestry.apiculture.network.packets;
 import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.BlockPos;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.PacketIdClient;
@@ -24,7 +25,7 @@ public class PacketHabitatBiomePointer extends PacketCoordinates implements IFor
 	public PacketHabitatBiomePointer() {
 	}
 
-	public PacketHabitatBiomePointer(ChunkCoordinates coordinates) {
+	public PacketHabitatBiomePointer(BlockPos coordinates) {
 		super(coordinates);
 	}
 
@@ -35,6 +36,6 @@ public class PacketHabitatBiomePointer extends PacketCoordinates implements IFor
 
 	@Override
 	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
-		Proxies.render.setHabitatLocatorTexture(player, getCoordinates());
+		Proxies.render.setHabitatLocatorTexture(player, getPos());
 	}
 }

@@ -10,18 +10,19 @@
  ******************************************************************************/
 package forestry.energy.tiles;
 
-import java.io.IOException;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.nbt.NBTTagCompound;
-
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+
+import java.io.IOException;
 
 import forestry.api.core.IErrorLogic;
 import forestry.api.fuels.FuelManager;
@@ -29,6 +30,7 @@ import forestry.api.fuels.GeneratorFuel;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.fluids.FluidHelper;
+import forestry.core.fluids.ITankManager;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.network.DataInputStreamForestry;
@@ -41,8 +43,10 @@ import forestry.energy.gui.ContainerGenerator;
 import forestry.energy.gui.GuiGenerator;
 import forestry.energy.inventory.InventoryGenerator;
 import forestry.plugins.compat.deprecated.PluginIC2;
+import ic2.api.energy.prefab.BasicSource;
 
 public class TileGenerator extends TileBase implements ISidedInventory, ILiquidTankTile, IFluidHandler, IRenderableTile {
+
 	private static final int maxEnergy = 30000;
 
 	private final TankManager tankManager;
@@ -130,7 +134,7 @@ public class TileGenerator extends TileBase implements ISidedInventory, ILiquidT
 			return;
 		}
 
-		ic2EnergySource.updateEntity();
+		ic2EnergySource.update();
 
 		if (resourceTank.getFluidAmount() > 0) {
 			GeneratorFuel fuel = FuelManager.generatorFuel.get(resourceTank.getFluid().getFluid());
@@ -176,7 +180,7 @@ public class TileGenerator extends TileBase implements ISidedInventory, ILiquidT
 		return TankRenderInfo.EMPTY;
 	}
 
-	/* SMP GUI */
+	// SMP GUI 
 	public void getGUINetworkData(int i, int j) {
 		if (i == 0) {
 			if (ic2EnergySource != null) {
@@ -191,9 +195,9 @@ public class TileGenerator extends TileBase implements ISidedInventory, ILiquidT
 		}
 	}
 
-	/* ILiquidTankTile */
+	// ILiquidTankTile
 	@Override
-	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+	public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
 		return tankManager.fill(from, resource, doFill);
 	}
 
@@ -203,27 +207,27 @@ public class TileGenerator extends TileBase implements ISidedInventory, ILiquidT
 	}
 
 	@Override
-	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+	public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
 		return tankManager.drain(from, resource, doDrain);
 	}
 
 	@Override
-	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+	public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
 		return tankManager.drain(from, maxDrain, doDrain);
 	}
 
 	@Override
-	public boolean canFill(ForgeDirection from, Fluid fluid) {
+	public boolean canFill(EnumFacing from, Fluid fluid) {
 		return tankManager.canFill(from, fluid);
 	}
 
 	@Override
-	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+	public boolean canDrain(EnumFacing from, Fluid fluid) {
 		return tankManager.canDrain(from, fluid);
 	}
 
 	@Override
-	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+	public FluidTankInfo[] getTankInfo(EnumFacing from) {
 		return tankManager.getTankInfo(from);
 	}
 

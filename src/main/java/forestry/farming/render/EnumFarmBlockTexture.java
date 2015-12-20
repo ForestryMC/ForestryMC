@@ -20,7 +20,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.core.render.TextureManager;
-import forestry.farming.blocks.BlockFarmType;
+import forestry.farming.blocks.EnumBlockFarmType;
 
 public enum EnumFarmBlockTexture {
 	BRICK_STONE(new ItemStack(Blocks.stonebrick, 1, 0)),
@@ -68,7 +68,7 @@ public enum EnumFarmBlockTexture {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public static TextureAtlasSprite getSprite(BlockFarmType type, int side) {
+	public static TextureAtlasSprite getSprite(EnumBlockFarmType type, int side) {
 		switch (type) {
 			case BASIC: {
 				if (side == 2) {
