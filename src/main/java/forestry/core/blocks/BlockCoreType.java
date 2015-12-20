@@ -12,14 +12,9 @@ package forestry.core.blocks;
 
 import java.util.Locale;
 
-import javax.annotation.Nullable;
-
-import forestry.core.config.Constants;
-import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileAnalyzer;
 import forestry.core.tiles.TileEscritoire;
 import forestry.core.tiles.TileForestry;
-import forestry.plugins.PluginApiculture;
 import net.minecraft.util.IStringSerializable;
 
 public enum BlockCoreType implements IMachineProperties, IStringSerializable {

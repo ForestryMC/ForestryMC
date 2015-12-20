@@ -39,9 +39,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.core.IModelManager;
 import forestry.api.core.IModelRegister;
 import forestry.core.CreativeTabForestry;
-import forestry.core.blocks.BlockResourceStorage.ResourceType;
 import forestry.core.config.Constants;
-import forestry.core.render.TextureManager;
 import forestry.core.utils.BlockPosUtil;
 import forestry.plugins.PluginCore;
 

@@ -12,7 +12,6 @@ package forestry.core.fluids;
 
 import java.util.List;
 
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.util.EnumFacing;

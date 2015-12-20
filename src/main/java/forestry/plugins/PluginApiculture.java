@@ -52,7 +52,6 @@ import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.FlowerManager;
 import forestry.api.apiculture.IBeekeepingMode;
 import forestry.api.apiculture.hives.HiveManager;
-import forestry.api.apiculture.hives.IHiveRegistry;
 import forestry.api.apiculture.hives.IHiveRegistry.HiveType;
 import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
