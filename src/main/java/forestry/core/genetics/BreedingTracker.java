@@ -113,7 +113,7 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 	}
 
 	private void syncToPlayer(Collection<String> discoveredSpecies, Collection<String> discoveredMutations, Collection<String> researchedMutations) {
-		if (world != null && username != null) {
+		if (world != null && username != null && username.getName() != null) {
 			EntityPlayer player = world.getPlayerEntityByName(username.getName());
 			if (player instanceof EntityPlayerMP && !(player instanceof FakePlayer)) {
 				IBreedingTracker breedingTracker = getBreedingTracker(player);
