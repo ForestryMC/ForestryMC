@@ -11,6 +11,7 @@
 package forestry.apiculture.worldgen;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
@@ -31,15 +32,14 @@ public class HiveGenTree extends HiveGen {
 	public int getYForHive(World world, int x, int z) {
 		// get top leaf block
 		int y = world.getHeight(new BlockPos(x, 0, z)).getY() - 1;
-		BlockPos pos = new BlockPos(x, y, z);
-		if (!world.getBlockState(pos).getBlock().isLeaves(world, pos)) {
+		if (!world.getBlockState(new BlockPos(x, y, z)).getBlock().isLeaves(world, new BlockPos(x, y, z))) {
 			return -1;
 		}
 
 		// get to the bottom of the leaves
 		do {
 			y--;
-		} while (world.getBlockState(pos).getBlock().isLeaves(world, pos));
+		} while (world.getBlockState(new BlockPos(x, y, z)).getBlock().isLeaves(world,new BlockPos(x, y, z)));
 
 		return y;
 	}

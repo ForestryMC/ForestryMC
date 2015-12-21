@@ -117,9 +117,9 @@ public class BlockSoil extends Block implements IItemTyped, IModelRegister {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerModel(Item item, IModelManager manager) {
-		manager.registerItemModel(item, 0, "/humus");
-		manager.registerItemModel(item, 1, "/bog");
-		manager.registerItemModel(item, 2, "/peat");
+		manager.registerItemModel(item, 0, "soil/humus");
+		manager.registerItemModel(item, 1, "soil/bog");
+		manager.registerItemModel(item, 2, "soil/peat");
 	}
 	
 	@Override

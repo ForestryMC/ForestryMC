@@ -97,14 +97,18 @@ public class Forestry {
 		ForestryAPI.activeMode = new GameMode(Config.gameMode);
 
 		PluginManager.runPreInit();
+		
+		Proxies.render.preInitModels();
 	}
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
 		// Register gui handler
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
-
+		
 		PluginManager.runInit();
+		
+		Proxies.render.initModels();
 	}
 
 	@EventHandler

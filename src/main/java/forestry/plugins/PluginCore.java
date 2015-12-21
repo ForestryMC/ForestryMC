@@ -16,7 +16,12 @@ import net.minecraft.command.ICommand;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.client.event.ModelBakeEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.IFuelHandler;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.api.circuits.ChipsetManager;
@@ -52,6 +57,7 @@ import forestry.core.network.IPacketRegistry;
 import forestry.core.network.PacketRegistryCore;
 import forestry.core.proxy.Proxies;
 import forestry.core.recipes.RecipeUtil;
+import forestry.core.render.model.RenderHandler;
 import forestry.core.tiles.MachineDefinition;
 import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.ForestryModEnvWarningCallable;
@@ -90,6 +96,8 @@ public class PluginCore extends ForestryPlugin {
 	@Override
 	public void preInit() {
 		super.preInit();
+		
+		MinecraftForge.EVENT_BUS.register(this);
 
 		rootCommand.addChildCommand(new CommandVersion());
 		rootCommand.addChildCommand(new CommandPlugins());
@@ -321,5 +329,11 @@ public class PluginCore extends ForestryPlugin {
 
 			return 0;
 		}
+	}
+	
+	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
+	public void onBakeModel(ModelBakeEvent event) {
+		RenderHandler.registerModels(event);
 	}
 }

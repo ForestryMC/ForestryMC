@@ -56,7 +56,7 @@ public class TextureManager implements ITextureManager {
 				"slots/blocked", "slots/blocked_2", "slots/liquid", "slots/container", "slots/locked",
 				"mail/carrier.player", "mail/carrier.trader"};
 		for (String str : defaultIconNames) {
-			TextureAtlasSprite icon = registerSprite(str);
+			TextureAtlasSprite icon = registerSprite("items/" + str);
 			defaultSprites.put(str, icon);
 		}
 	}

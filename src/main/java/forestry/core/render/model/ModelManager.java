@@ -48,7 +48,7 @@ public class ModelManager implements IModelManager {
 	public void registerItemModel(Item item, int meta, String identifier) {
 		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, meta,
 				getModelLocation(item, identifier));
-		registerVariant(item, "forestry:" + StringUtil.cleanTags(item.getUnlocalizedName()) + identifier);
+		registerVariant(item, "forestry:" + identifier);
 	}
 
 	@Override
@@ -99,6 +99,21 @@ public class ModelManager implements IModelManager {
 			}
 		}
 	}
+	
+	public static void registerStateMappers(){
+		for(Module module : PluginManager.getLoadedModules()){
+			ForestryPlugin plugin = module.instance();
+			
+			for (Block block : GameData.getBlockRegistry()) {
+				if (block != null) {
+					if (block instanceof IStateMapperRegister) {
+						((IStateMapperRegister) block).registerStateMapper();
+					}
+				}
+
+			}
+		}
+	}
 
 	@Override
 	public ModelResourceLocation getModelLocation(String identifier) {
@@ -135,7 +150,7 @@ public class ModelManager implements IModelManager {
 
 	@Override
 	public ModelResourceLocation getModelLocation(Item item, String identifier) {
-		return new ModelResourceLocation("forestry:" + StringUtil.cleanItemName(item) + identifier, "inventory");
+		return new ModelResourceLocation("forestry:" + identifier, "inventory");
 	}
 
 	@Override

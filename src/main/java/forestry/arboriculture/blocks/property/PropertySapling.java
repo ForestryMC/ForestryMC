@@ -74,7 +74,7 @@ public class PropertySapling implements IProperty<IAlleleTreeSpecies> {
 
 	@Override
 	public String getName(IAlleleTreeSpecies value) {
-		return value.getName();
+		return value.getTextureName();
 	}
 	
 }

@@ -86,12 +86,12 @@ public class FarmBlockRenderer extends OverlayRenderingHandler {
 
 	private static TextureAtlasSprite[] getSprites(EnumFarmBlockTexture texture) {
 		TextureAtlasSprite[] textures = new TextureAtlasSprite[6];
-		textures[0] = getSprite(texture, 0);
-		textures[1] = getSprite(texture, 1);
-		textures[2] = getSprite(texture, 2);
-		textures[3] = getSprite(texture, 3);
-		textures[4] = getSprite(texture, 4);
-		textures[5] = getSprite(texture, 5);
+		textures[0] = EnumFarmBlockTexture.getSprite(texture, 0);
+		textures[1] = EnumFarmBlockTexture.getSprite(texture, 1);
+		textures[2] = EnumFarmBlockTexture.getSprite(texture, 2);
+		textures[3] = EnumFarmBlockTexture.getSprite(texture, 3);
+		textures[4] = EnumFarmBlockTexture.getSprite(texture, 4);
+		textures[5] = EnumFarmBlockTexture.getSprite(texture, 5);
 		return textures;
 	}
 
@@ -104,52 +104,6 @@ public class FarmBlockRenderer extends OverlayRenderingHandler {
 		textures[4] = getOverlaySprite(type, 4);
 		textures[5] = getOverlaySprite(type, 5);
 		return textures;
-	}
-
-	private static TextureAtlasSprite getSprite(EnumFarmBlockTexture texture, int side) {
-		TextureManager manager = TextureManager.getInstance();
-		switch (texture) {
-		case BRICK:
-			return manager.getSprite("minecraft", "blocks/brick");
-		case BRICK_STONE:
-			return manager.getSprite("minecraft", "blocks/stonebrick");
-		case BRICK_CHISELED:
-			return manager.getSprite("minecraft", "blocks/stonebrick_carved");
-		case BRICK_CRACKED:
-			return manager.getSprite("minecraft", "blocks/stonebrick_cracked");
-		case BRICK_MOSSY:
-			return manager.getSprite("minecraft", "blocks/stonebrick_mossy");
-		case BRICK_NETHER:
-			return manager.getSprite("minecraft", "blocks/nether_brick");
-		case SANDSTONE_CHISELED:
-			if (side == 0)
-				return manager.getSprite("minecraft", "blocks/sandstone_bottom");
-			else if (side == 1)
-				return manager.getSprite("minecraft", "blocks/sandstone_top");
-			return manager.getSprite("minecraft", "blocks/sandstone_carved");
-		case SANDSTONE_SMOOTH:
-			if (side == 0)
-				return manager.getSprite("minecraft", "blocks/sandstone_bottom");
-			else if (side == 1)
-				return manager.getSprite("minecraft", "blocks/sandstone_top");
-			return manager.getSprite("minecraft", "blocks/sandstone_smooth");
-		case QUARTZ:
-			if (side == 0)
-				return manager.getSprite("minecraft", "blocks/quartz_block_bottom");
-			else if (side == 1)
-				return manager.getSprite("minecraft", "blocks/quartz_block_top");
-			return manager.getSprite("minecraft", "blocks/quartz_block_side");
-		case QUARTZ_CHISELED:
-			if (side == 0 || side == 1)
-				return manager.getSprite("minecraft", "blocks/quartz_block_chiseled_top");
-			return manager.getSprite("minecraft", "blocks/quartz_block_chiseled");
-		case QUARTZ_LINES:
-			if (side == 0 || side == 1)
-				return manager.getSprite("minecraft", "blocks/quartz_block_lines_top");
-			return manager.getSprite("minecraft", "blocks/quartz_block_lines");
-		default:
-			return null;
-		}
 	}
 
 	private static TextureAtlasSprite getOverlaySprite(EnumBlockFarmType texture, int side) {

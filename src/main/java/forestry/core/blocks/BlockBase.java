@@ -356,7 +356,7 @@ public class BlockBase<T extends IMachineProperties, C extends Enum & IMachinePr
 		@Override
 		public Map putStateModelLocations(Block block) {
 			for (C definition : clazz.getEnumConstants()) {
-				if (((BlockBase) block).clazz.getEnumConstants()[definition.getMeta()] != definition || ((BlockBase) block).hasTESR)
+				if (definition instanceof IMachinePropertiesTESR)
 					continue;
 				for (EnumFacing facing : EnumFacing.values()) {
 					if (facing == EnumFacing.DOWN || facing == EnumFacing.UP)

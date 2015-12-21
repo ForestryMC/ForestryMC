@@ -131,5 +131,10 @@ public abstract class BlockStructure extends BlockForestry implements IModelRegi
 		}
 		super.breakBlock(world, pos, state);
 	}
+	
+    public int getRenderType()
+    {
+        return 3;
+    }
 
 }

@@ -54,9 +54,6 @@ import forestry.core.tiles.MachineDefinition;
 
 public class ProxyRenderClient extends ProxyRender {
 
-	private int byBlockModelId;
-	private int candleRenderId;
-
 	@Override
 	public void init() {
 		/*byBlockModelId = RenderingRegistry.getNextAvailableRenderId();
@@ -68,13 +65,8 @@ public class ProxyRenderClient extends ProxyRender {
 	}
 
 	@Override
-	public int getCandleRenderId() {
-		return candleRenderId;
-	}
-
-	@Override
 	public int getByBlockModelRenderId() {
-		return byBlockModelId;
+		return 2;
 	}
 
 	@Override
@@ -120,7 +112,6 @@ public class ProxyRenderClient extends ProxyRender {
 		return new RenderNaturalistChest(textureName);
 	}
 	
-
 	@Override
 	public void registerBlockModel(final BlockModelIndex index) {
 		RenderHandler.byBlockModelRenderer.add(index);
@@ -130,7 +121,7 @@ public class ProxyRenderClient extends ProxyRender {
 				return index.blockModelLocation;
 			}
 		};
-		ModelLoader.setCustomStateMapper(index.block, ignoreState);
+		registerStateMapper(index.block, ignoreState);
 	}
 
 	@Override
@@ -143,7 +134,7 @@ public class ProxyRenderClient extends ProxyRender {
 				return fluidLocation;
 			}
 		};
-		ModelLoader.setCustomStateMapper(block, ignoreState);
+		registerStateMapper(block, ignoreState);
 		ModelLoader.setCustomMeshDefinition(Item.getItemFromBlock(block), new ItemMeshDefinition() {
 			@Override
 			public ModelResourceLocation getModelLocation(ItemStack stack) {
@@ -180,6 +171,7 @@ public class ProxyRenderClient extends ProxyRender {
 	@Override
 	public void preInitModels() {
 		B3DLoader.instance.addDomain(Constants.MOD);
+		ModelManager.registerStateMappers();
 	}
 
 	@Override

@@ -142,7 +142,7 @@ public class ParticleHelper {
 		}
 
 		@SideOnly(Side.CLIENT)
-		private void setTexture(EntityDiggingFX fx, BlockPos pos, IBlockState state) {
+		protected void setTexture(EntityDiggingFX fx, BlockPos pos, IBlockState state) {
 			fx.setParticleIcon(Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getTexture(state));
 		}
 	}

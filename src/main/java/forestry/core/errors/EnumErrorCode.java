@@ -15,15 +15,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public enum EnumErrorCode implements IErrorState {
 
-	@Deprecated
-	UNKNOWN("unknown"), // Congratulations, you found a glitch.
-	@Deprecated
-	WRONGSTACKSIZE("wrongStacksize"), // Only single items can be used here.
-	@Deprecated
-	NODISPOSAL("noDisposal"), // Insufficient space to dispose of waste products.
-	@Deprecated
-	INVALIDBIOME("invalidBiome"), // Machine or inhabitants cannot work in this biome.
-
 	// Bees
 	TOO_HOT("tooHot"), // The bees are melting in the heat here and unable to work. Use the habitat locator to find a cooler climate.
 	TOO_COLD("tooCold"), // The bees are huddled together to survive the freezing cold here. Use the  habitat locator to find a warmer climate.
@@ -118,7 +109,7 @@ public enum EnumErrorCode implements IErrorState {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerSprites() {
-		texture = TextureManager.registerSprite("forestry:errors/" + iconName);
+		texture = TextureManager.registerSprite("items/errors/" + iconName);
 	}
 	
 	@SideOnly(Side.CLIENT)

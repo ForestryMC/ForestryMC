@@ -50,14 +50,14 @@ public enum EnumFarmBlockTexture {
 	@SideOnly(Side.CLIENT)
 	public static void registerSprites() {
 		sprites = Arrays.asList(
-				TextureManager.registerSprite("farm/plain"),
-				TextureManager.registerSprite("farm/reverse"),
-				TextureManager.registerSprite("farm/top"),
-				TextureManager.registerSprite("farm/band"),
-				TextureManager.registerSprite("farm/gears"),
-				TextureManager.registerSprite("farm/hatch"),
-				TextureManager.registerSprite("farm/valve"),
-				TextureManager.registerSprite("farm/control")
+				TextureManager.registerSprite("blocks/farm/plain"),
+				TextureManager.registerSprite("blocks/farm/reverse"),
+				TextureManager.registerSprite("blocks/farm/top"),
+				TextureManager.registerSprite("blocks/farm/band"),
+				TextureManager.registerSprite("blocks/farm/gears"),
+				TextureManager.registerSprite("blocks/farm/hatch"),
+				TextureManager.registerSprite("blocks/farm/valve"),
+				TextureManager.registerSprite("blocks/farm/control")
 		);
 	}
 
@@ -116,4 +116,51 @@ public enum EnumFarmBlockTexture {
 
 		return EnumFarmBlockTexture.BRICK_STONE;
 	}
+	
+	public static TextureAtlasSprite getSprite(EnumFarmBlockTexture texture, int side) {
+		TextureManager manager = TextureManager.getInstance();
+		switch (texture) {
+		case BRICK:
+			return manager.getSprite("minecraft", "blocks/brick");
+		case BRICK_STONE:
+			return manager.getSprite("minecraft", "blocks/stonebrick");
+		case BRICK_CHISELED:
+			return manager.getSprite("minecraft", "blocks/stonebrick_carved");
+		case BRICK_CRACKED:
+			return manager.getSprite("minecraft", "blocks/stonebrick_cracked");
+		case BRICK_MOSSY:
+			return manager.getSprite("minecraft", "blocks/stonebrick_mossy");
+		case BRICK_NETHER:
+			return manager.getSprite("minecraft", "blocks/nether_brick");
+		case SANDSTONE_CHISELED:
+			if (side == 0)
+				return manager.getSprite("minecraft", "blocks/sandstone_bottom");
+			else if (side == 1)
+				return manager.getSprite("minecraft", "blocks/sandstone_top");
+			return manager.getSprite("minecraft", "blocks/sandstone_carved");
+		case SANDSTONE_SMOOTH:
+			if (side == 0)
+				return manager.getSprite("minecraft", "blocks/sandstone_bottom");
+			else if (side == 1)
+				return manager.getSprite("minecraft", "blocks/sandstone_top");
+			return manager.getSprite("minecraft", "blocks/sandstone_smooth");
+		case QUARTZ:
+			if (side == 0)
+				return manager.getSprite("minecraft", "blocks/quartz_block_bottom");
+			else if (side == 1)
+				return manager.getSprite("minecraft", "blocks/quartz_block_top");
+			return manager.getSprite("minecraft", "blocks/quartz_block_side");
+		case QUARTZ_CHISELED:
+			if (side == 0 || side == 1)
+				return manager.getSprite("minecraft", "blocks/quartz_block_chiseled_top");
+			return manager.getSprite("minecraft", "blocks/quartz_block_chiseled");
+		case QUARTZ_LINES:
+			if (side == 0 || side == 1)
+				return manager.getSprite("minecraft", "blocks/quartz_block_lines_top");
+			return manager.getSprite("minecraft", "blocks/quartz_block_lines");
+		default:
+			return null;
+		}
+	}
+	
 }

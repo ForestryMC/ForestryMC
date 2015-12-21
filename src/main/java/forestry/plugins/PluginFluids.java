@@ -40,6 +40,7 @@ import forestry.core.fluids.LiquidRegistryHelper;
 import forestry.core.items.EnumContainerType;
 import forestry.core.items.ItemLiquidContainer;
 import forestry.core.items.ItemRegistryFluids;
+import forestry.core.proxy.Proxies;
 import forestry.core.utils.Log;
 import forestry.core.utils.StringUtil;
 
@@ -74,6 +75,7 @@ public class PluginFluids extends ForestryPlugin {
 					fluidBlock.setUnlocalizedName("forestry.fluid." + forestryFluid.getTag());
 					GameRegistry.registerBlock(fluidBlock, ItemBlock.class, StringUtil.cleanBlockName(fluidBlock));
 					forestryFluidsWithBlocks.add(forestryFluid);
+					Proxies.render.registerFluidStateMapper(fluidBlock, forestryFluid);
 				}
 			} else {
 				GameRegistry.UniqueIdentifier blockID = GameRegistry.findUniqueIdentifierFor(fluidBlock);

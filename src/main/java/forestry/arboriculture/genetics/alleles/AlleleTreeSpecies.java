@@ -37,15 +37,18 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 	private final IGermlingModelProvider germlingModelProvider;
 	private final ILeafSpriteProvider leafIconProvider;
 	private final List<IFruitFamily> fruits = new ArrayList<>();
+	
+	private final String textureName;
 
 	private EnumPlantType nativeType = EnumPlantType.Plains;
 
-	public AlleleTreeSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, boolean isDominant, IClassification branch, String binomial, ILeafSpriteProvider leafIconProvider, IGermlingModelProvider germlingModelProvider, ITreeGenerator generator) {
+	public AlleleTreeSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, boolean isDominant, IClassification branch, String binomial, String textureName, ILeafSpriteProvider leafIconProvider, IGermlingModelProvider germlingModelProvider, ITreeGenerator generator) {
 		super(uid, unlocalizedName, authority, unlocalizedDescription, isDominant, branch, binomial);
 
 		this.generator = generator;
 		this.germlingModelProvider = germlingModelProvider;
 		this.leafIconProvider = leafIconProvider;
+		this.textureName = textureName;
 	}
 
 	@Override
@@ -118,6 +121,11 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 	@Override
 	public String getModID() {
 		return "forestry";
+	}
+	
+	@Override
+	public String getTextureName() {
+		return textureName;
 	}
 
 	@Override

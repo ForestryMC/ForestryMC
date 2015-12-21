@@ -10,14 +10,19 @@
  ******************************************************************************/
 package forestry.arboriculture.proxy;
 
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.world.ColorizerFoliage;
-
+import forestry.arboriculture.render.LeavesRenderingHandler;
+import forestry.core.proxy.Proxies;
+import forestry.core.render.model.BlockModelIndex;
 import forestry.plugins.PluginArboriculture;
 
 public class ProxyArboricultureClient extends ProxyArboriculture {
 	@Override
 	public void initializeRendering() {
-		PluginArboriculture.blocks.saplingGE.registerStateMapper();
+		Proxies.render.registerBlockModel(new BlockModelIndex(new ModelResourceLocation("forestry:leaves"),
+				new ModelResourceLocation("forestry:leaves", "inventory"), new LeavesRenderingHandler(),
+				PluginArboriculture.blocks.leaves));
 	}
 
 	@Override

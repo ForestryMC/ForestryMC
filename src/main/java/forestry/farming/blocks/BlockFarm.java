@@ -13,6 +13,7 @@ package forestry.farming.blocks;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
@@ -20,6 +21,8 @@ import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EffectRenderer;
+import net.minecraft.client.particle.EntityDiggingFX;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
@@ -40,8 +43,12 @@ import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.core.IModelManager;
+import forestry.api.core.IModelRenderer;
 import forestry.core.blocks.BlockStructure;
 import forestry.core.render.ParticleHelper;
+import forestry.core.render.TextureManager;
+import forestry.core.render.ParticleHelper.DefaultCallback;
+import forestry.core.render.model.ModelManager;
 import forestry.core.utils.BlockPosUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.UnlistedBlockAccess;
@@ -64,7 +71,7 @@ public class BlockFarm extends BlockStructure {
 		super(Material.rock);
 		setHardness(1.0f);
 		setHarvestLevel("pickaxe", 0);
-		this.particleCallback = new ParticleHelper.DefaultCallback(this);
+		this.particleCallback = new FarmCallback(this);
 		setDefaultState(blockState.getBaseState().withProperty(META, EnumBlockFarmType.BASIC));
 	}
 	
@@ -222,6 +229,20 @@ public class BlockFarm extends BlockStructure {
 	@Override
 	public boolean addDestroyEffects(World world, BlockPos pos, EffectRenderer effectRenderer) {
 		return ParticleHelper.addDestroyEffects(world, this, world.getBlockState(pos), pos, effectRenderer, particleCallback);
+	}
+	
+	public class FarmCallback extends DefaultCallback{
+
+		public FarmCallback(Block block) {
+			super(block);
+		}
+		
+		@Override
+		protected void setTexture(EntityDiggingFX fx, BlockPos pos, IBlockState state) {
+			IExtendedBlockState extend = (IExtendedBlockState) state;
+			fx.setParticleIcon(EnumFarmBlockTexture.getSprite(EnumFarmBlockTexture.BRICK, 0));
+		}
+		
 	}
 
 	@Override
