@@ -17,5 +17,6 @@ public interface IGuiHandlerEntity extends IGuiHandlerForestry {
 
 	Object getContainer(EntityPlayer player, int data);
 
-	int getEntityId();
+	// can't be named getEntityId() for obfuscation reasons
+	int getIdOfEntity();
 }

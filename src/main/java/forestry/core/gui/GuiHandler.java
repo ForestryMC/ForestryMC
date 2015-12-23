@@ -29,7 +29,7 @@ public class GuiHandler implements IGuiHandler {
 
 	public static void openGui(EntityPlayer entityplayer, IGuiHandlerEntity guiHandler, short data) {
 		int guiData = encodeGuiData(guiHandler, data);
-		entityplayer.openGui(ForestryAPI.instance, guiData, entityplayer.worldObj, guiHandler.getEntityId(), 0, 0);
+		entityplayer.openGui(ForestryAPI.instance, guiData, entityplayer.worldObj, guiHandler.getIdOfEntity(), 0, 0);
 	}
 
 	public static void openGui(EntityPlayer entityplayer, IGuiHandlerItem guiHandler) {
