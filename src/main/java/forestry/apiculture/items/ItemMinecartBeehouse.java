@@ -14,13 +14,10 @@ import java.util.List;
 
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.block.BlockRailBase;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
 import net.minecraft.dispenser.IBehaviorDispenseItem;
 import net.minecraft.dispenser.IBlockSource;
-import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemMinecart;
@@ -43,7 +40,8 @@ public class ItemMinecartBeehouse extends ItemMinecart implements IModelRegister
     {
         private final BehaviorDefaultDispenseItem behaviourDefaultDispenseItem = new BehaviorDefaultDispenseItem();
         
-        public ItemStack dispenseStack(IBlockSource source, ItemStack stack)
+        @Override
+		public ItemStack dispenseStack(IBlockSource source, ItemStack stack)
         {
             return stack;
         }

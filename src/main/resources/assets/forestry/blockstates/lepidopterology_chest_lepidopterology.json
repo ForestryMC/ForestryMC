@@ -1,8 +1,0 @@
-{
-    "variants": {
-        "face=north": { "model": "forestry:lepidopterology_chest_lepidopterology" },
-		"face=east": { "model": "forestry:lepidopterology_chest_lepidopterology", "y": 90 },
-		"face=south": { "model": "forestry:lepidopterology_chest_lepidopterology", "y": 180 },
-		"face=west": { "model": "forestry:lepidopterology_chest_lepidopterology", "y": -90 }
-	}
-}

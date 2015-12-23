@@ -46,7 +46,7 @@ public class ItemArmorApiarist extends ItemArmor implements IArmorApiarist, IMod
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		manager.registerItemModel(item, 0);
+		manager.registerItemModel(item, 0, true);
 	}
 
 	@Override

@@ -256,8 +256,7 @@ public class ItemBackpack extends ItemWithGui {
 		models[1] = new ModelResourceLocation("forestry:" + typeTag + "_locked", "inventory");
 		models[2] = new ModelResourceLocation("forestry:" + typeTag + "_receive", "inventory");
 		models[3] = new ModelResourceLocation("forestry:" + typeTag + "_resupply", "inventory");
-		if (i == 0 && (type == EnumBackpackType.T1 || type == EnumBackpackType.APIARIST)
-				|| i == 1 && type == EnumBackpackType.T2) {
+		if (i == 0 && (type == EnumBackpackType.T1 || type == EnumBackpackType.APIARIST) || i == 1 && type == EnumBackpackType.T2) {
 			manager.registerVariant(item, "forestry:" + typeTag + "_neutral");
 			manager.registerVariant(item, "forestry:" + typeTag + "_locked");
 			manager.registerVariant(item, "forestry:" + typeTag + "_receive");

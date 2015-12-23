@@ -135,4 +135,9 @@ public abstract class EntityMinecartForestry extends EntityMinecart implements I
 	public void onSwitchAccess(EnumAccess oldAccess, EnumAccess newAccess) {
 
 	}
+	
+	@Override
+	public int getIdOfEntity() {
+		return getEntityId();
+	}
 }

@@ -50,7 +50,7 @@ public class ItemForestryFood extends ItemFood implements IModelRegister {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		manager.registerItemModel(item, 0);
+		manager.registerItemModel(item, 0, true);
 	}
 
 }

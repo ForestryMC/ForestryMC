@@ -1,0 +1,16 @@
+{
+    "variants": {
+        "age=0,facing=south": { "model": "forestry:pods/papaya_0" },
+        "age=0,facing=west": { "model": "forestry:pods/papaya_0", "y": 90 },
+        "age=0,facing=north": { "model": "forestry:pods/papaya_0", "y": 180 },
+        "age=0,facing=east": { "model": "forestry:pods/papaya_0", "y": 270 },
+        "age=1,facing=south": { "model": "forestry:pods/papaya_1" },
+        "age=1,facing=west": { "model": "forestry:pods/papaya_1", "y": 90 },
+        "age=1,facing=north": { "model": "forestry:pods/papaya_1", "y": 180 },
+        "age=1,facing=east": { "model": "forestry:pods/papaya_1", "y": 270 },
+        "age=2,facing=south": { "model": "forestry:pods/papaya_2" },
+        "age=2,facing=west": { "model": "forestry:pods/papaya_2", "y": 90 },
+        "age=2,facing=north": { "model": "forestry:pods/papaya_2", "y": 180 },
+        "age=2,facing=east": { "model": "forestry:pods/papaya_2", "y": 270 }
+    }
+}

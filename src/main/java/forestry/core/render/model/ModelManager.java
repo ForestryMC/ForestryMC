@@ -13,7 +13,7 @@ package forestry.core.render.model;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IModelManager;
 import forestry.api.core.IModelRegister;
-import forestry.api.core.IModelRenderer;
+import forestry.api.core.IModelBaker;
 import forestry.api.core.IStateMapperRegister;
 import forestry.core.utils.StringUtil;
 import forestry.plugins.ForestryPlugin;
@@ -58,11 +58,14 @@ public class ModelManager implements IModelManager {
 	}
 
 	@Override
-	public void registerItemModel(Item item, int meta) {
-		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, meta,
-				getModelLocation(item, meta));
-		registerVariant(item,
-				"forestry:" + StringUtil.cleanTags(item.getUnlocalizedName(new ItemStack(item, 1, meta))));
+	public void registerItemModel(Item item, int meta, boolean withMeta) {
+		if(withMeta){
+			Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, meta, getModelLocation(item, meta));
+			registerVariant(item, "forestry:" + StringUtil.cleanItemName(new ItemStack(item, 1, meta)));
+		}else{
+			Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, meta, getModelLocation(item));
+			registerVariant(item, "forestry:" + StringUtil.cleanItemName(item));
+		}
 	}
 
 	@Override
@@ -128,7 +131,7 @@ public class ModelManager implements IModelManager {
 	@Override
 	public ModelResourceLocation getModelLocation(Item item, int meta) {
 		return new ModelResourceLocation(
-				"forestry:" + StringUtil.cleanTags(item.getUnlocalizedName(new ItemStack(item, 1, meta))), "inventory");
+				"forestry:" + StringUtil.cleanItemName(new ItemStack(item, 1, meta)), "inventory");
 	}
 
 	@Override
@@ -159,8 +162,8 @@ public class ModelManager implements IModelManager {
 	}
 
 	@Override
-	public IModelRenderer createNewRenderer() {
-		return new ModelRenderer();
+	public IModelBaker createNewRenderer() {
+		return new ModelBaker();
 	}
 
 }

@@ -1,8 +1,0 @@
-{
-    "variants": {
-        "face=north": { "model": "forestry:apiculture_apairy" },
-		"face=east": { "model": "forestry:apiculture_apairy", "y": 90 },
-		"face=south": { "model": "forestry:apiculture_apairy", "y": 180 },
-		"face=west": { "model": "forestry:apiculture_apairy", "y": -90 }
-	}
-}

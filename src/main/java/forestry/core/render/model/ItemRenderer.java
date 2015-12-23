@@ -13,7 +13,7 @@ package forestry.core.render.model;
 import java.util.Collections;
 import java.util.List;
 
-import forestry.api.core.IModelRenderer;
+import forestry.api.core.IModelBaker;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.IBakedModel;
@@ -60,11 +60,11 @@ public abstract class ItemRenderer implements ISmartItemModel {
 
 	@Override
 	public IBakedModel handleItemState(ItemStack stack) {
-		IModelRenderer renderer = ModelManager.getInstance().createNewRenderer();
+		IModelBaker renderer = ModelManager.getInstance().createNewRenderer();
 		renderItem(stack, renderer);
-		return renderer.finalizeModel(true);
+		return renderer.bakeModel(true);
 	}
 
-	public abstract void renderItem(ItemStack stack, IModelRenderer renderer);
+	public abstract void renderItem(ItemStack stack, IModelBaker renderer);
 
 }

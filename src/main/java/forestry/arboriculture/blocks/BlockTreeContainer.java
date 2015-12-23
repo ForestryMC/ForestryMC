@@ -47,5 +47,10 @@ public abstract class BlockTreeContainer extends BlockContainer {
 	public boolean hasTileEntity(IBlockState state) {
 		return true;
 	}
+	
+	@Override
+	public int getRenderType() {
+		return 3;
+	}
 
 }

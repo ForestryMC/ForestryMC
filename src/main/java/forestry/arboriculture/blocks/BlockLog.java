@@ -31,7 +31,7 @@ import forestry.api.arboriculture.TreeManager;
 public class BlockLog extends BlockWood {
 
 	public static final PropertyEnum AXIS = PropertyEnum.create("axis", Axis.class);
-
+	
 	public static enum Axis implements IStringSerializable {
 		NORMAL, SIDE, SIDE_90;
 
@@ -44,6 +44,13 @@ public class BlockLog extends BlockWood {
 	public BlockLog(boolean fireproof) {
 		super("log", fireproof);
 		setResistance(5.0F);
+		
+		harvestTool = new String[EnumWoodType.values().length];
+		harvestLevel = new int[harvestTool.length];
+		for(int i = 0;i < harvestTool.length;i++){
+			harvestLevel[i] = -1;
+		}
+		
 		setHarvestLevel("axe", 0);
 		setDefaultState(this.blockState.getBaseState().withProperty(AXIS, Axis.NORMAL).withProperty(EnumWoodType.WOODTYPE, EnumWoodType.LARCH));
 	}
@@ -57,7 +64,6 @@ public class BlockLog extends BlockWood {
 	public int getMetaFromState(IBlockState state) {
 		return ((Axis) state.getValue(AXIS)).ordinal();
 	}
-
 	
 	@Override
 	protected BlockState createBlockState() {
@@ -99,14 +105,14 @@ public class BlockLog extends BlockWood {
 				break;
 			case NORTH:
 			case SOUTH:
-				b0 = 8;
+				b0 = 1;
 				break;
 			case WEST:
 			case EAST:
-				b0 = 4;
+				b0 = 2;
 		}
 
-		return getStateFromMeta(meta | b0);
+		return getStateFromMeta(b0);
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})

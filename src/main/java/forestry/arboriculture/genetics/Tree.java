@@ -50,11 +50,13 @@ import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IEffectData;
 import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.IMutation;
+import forestry.arboriculture.blocks.BlockSapling;
 import forestry.arboriculture.genetics.alleles.AlleleFruit;
 import forestry.core.config.Config;
 import forestry.core.genetics.Chromosome;
 import forestry.core.genetics.Individual;
 import forestry.core.utils.StringUtil;
+import forestry.plugins.PluginArboriculture;
 
 public class Tree extends Individual implements ITree, IPlantable {
 
@@ -181,7 +183,10 @@ public class Tree extends Individual implements ITree, IPlantable {
 
 	@Override
 	public IBlockState getPlant(IBlockAccess world, BlockPos pos) {
-		return null;
+		IBlockState state = world.getBlockState(pos);
+		if (state.getBlock() != PluginArboriculture.blocks.saplingGE)
+			state = PluginArboriculture.blocks.saplingGE.getDefaultState().withProperty(BlockSapling.TREE, getGenome().getPrimary());
+		return state;
 	}
 
 	@Override

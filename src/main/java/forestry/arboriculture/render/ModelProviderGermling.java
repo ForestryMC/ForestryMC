@@ -13,6 +13,7 @@ package forestry.arboriculture.render;
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.IGermlingModelProvider;
 import forestry.api.core.IModelManager;
+import forestry.plugins.PluginArboriculture;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 
 public class ModelProviderGermling implements IGermlingModelProvider {
@@ -29,7 +30,9 @@ public class ModelProviderGermling implements IGermlingModelProvider {
 	@Override
 	public void registerModels(IModelManager manager) {
 		model = manager.getModelLocation("germlings/sapling." + name);
+		manager.registerVariant(PluginArboriculture.items.sapling, "forestry:germlings/sapling." + name);
 		pollenModel = manager.getModelLocation("pollen");
+		manager.registerVariant(PluginArboriculture.items.sapling, "forestry:pollen");
 	}
 
 	@Override

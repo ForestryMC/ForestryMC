@@ -25,19 +25,14 @@ import net.minecraftforge.common.property.IExtendedBlockState;
 import java.util.Collections;
 import java.util.List;
 
-import forestry.api.core.IModelRenderer;
+import forestry.api.core.IModelBaker;
 import forestry.core.render.model.ModelManager;
 import forestry.core.utils.UnlistedBlockAccess;
 import forestry.core.utils.UnlistedBlockPos;
 
 public abstract class OverlayRenderingHandler implements ISmartItemModel, ISmartBlockModel {
 
-	private static int determineMixedBrightness(IBlockAccess world, Block block, BlockPos pos, IModelRenderer renderer,
-			int mixedBrightness) {
-		return renderer.getRenderMinY() > 0.0D ? mixedBrightness : block.getMixedBrightnessForBlock(world, pos);
-	}
-
-	protected static void renderBottomFace(IBlockAccess world, Block block, BlockPos pos, IModelRenderer renderer,
+	protected static void renderBottomFace(IBlockAccess world, Block block, BlockPos pos, IModelBaker renderer,
 			TextureAtlasSprite textureIndex, int mixedBrightness, float r, float g, float b) {
 
 		BlockPos posNEW = new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ());
@@ -45,14 +40,12 @@ public abstract class OverlayRenderingHandler implements ISmartItemModel, ISmart
 		if (!block.shouldSideBeRendered(world, posNEW, EnumFacing.DOWN)) {
 			return;
 		}
-
-		renderer.setBrightness(determineMixedBrightness(world, block, posNEW, renderer, mixedBrightness));
-		renderer.setColorOpaque_F(r, g, b);
+		
 		renderer.renderFaceYNeg(pos, textureIndex);
 
 	}
 
-	protected static void renderTopFace(IBlockAccess world, Block block, BlockPos pos, IModelRenderer renderer,
+	protected static void renderTopFace(IBlockAccess world, Block block, BlockPos pos, IModelBaker renderer,
 			TextureAtlasSprite textureIndex, int mixedBrightness, float r, float g, float b) {
 
 		BlockPos posNEW = new BlockPos(pos.getX(), pos.getY() + 1, pos.getZ());
@@ -61,13 +54,12 @@ public abstract class OverlayRenderingHandler implements ISmartItemModel, ISmart
 			return;
 		}
 
-		renderer.setBrightness(determineMixedBrightness(world, block, posNEW, renderer, mixedBrightness));
-		renderer.setColorOpaque_F(r, g, b);
+
 		renderer.renderFaceYPos(pos, textureIndex);
 
 	}
 
-	protected static void renderEastFace(IBlockAccess world, Block block, BlockPos pos, IModelRenderer renderer,
+	protected static void renderEastFace(IBlockAccess world, Block block, BlockPos pos, IModelBaker renderer,
 			TextureAtlasSprite textureIndex, int mixedBrightness, float r, float g, float b) {
 
 		BlockPos posNEW = new BlockPos(pos.getX(), pos.getY(), pos.getZ() - 1);
@@ -76,13 +68,11 @@ public abstract class OverlayRenderingHandler implements ISmartItemModel, ISmart
 			return;
 		}
 
-		renderer.setBrightness(determineMixedBrightness(world, block, posNEW, renderer, mixedBrightness));
-		renderer.setColorOpaque_F(r, g, b);
 		renderer.renderFaceZNeg(pos, textureIndex);
 
 	}
 
-	protected static void renderWestFace(IBlockAccess world, Block block, BlockPos pos, IModelRenderer renderer,
+	protected static void renderWestFace(IBlockAccess world, Block block, BlockPos pos, IModelBaker renderer,
 			TextureAtlasSprite textureIndex, int mixedBrightness, float r, float g, float b) {
 
 		BlockPos posNEW = new BlockPos(pos.getX(), pos.getY(), pos.getZ() + 1);
@@ -91,13 +81,11 @@ public abstract class OverlayRenderingHandler implements ISmartItemModel, ISmart
 			return;
 		}
 
-		renderer.setBrightness(determineMixedBrightness(world, block, posNEW, renderer, mixedBrightness));
-		renderer.setColorOpaque_F(r, g, b);
 		renderer.renderFaceZPos(pos, textureIndex);
 
 	}
 
-	protected static void renderNorthFace(IBlockAccess world, Block block, BlockPos pos, IModelRenderer renderer,
+	protected static void renderNorthFace(IBlockAccess world, Block block, BlockPos pos, IModelBaker renderer,
 			TextureAtlasSprite textureIndex, int mixedBrightness, float r, float g, float b) {
 
 		BlockPos posNEW = new BlockPos(pos.getX() - 1, pos.getY(), pos.getZ());
@@ -106,13 +94,11 @@ public abstract class OverlayRenderingHandler implements ISmartItemModel, ISmart
 			return;
 		}
 
-		renderer.setBrightness(determineMixedBrightness(world, block, posNEW, renderer, mixedBrightness));
-		renderer.setColorOpaque_F(r, g, b);
 		renderer.renderFaceXNeg(pos, textureIndex);
 
 	}
 
-	protected static void renderSouthFace(IBlockAccess world, Block block, BlockPos pos, IModelRenderer renderer,
+	protected static void renderSouthFace(IBlockAccess world, Block block, BlockPos pos, IModelBaker renderer,
 			TextureAtlasSprite textureIndex, int mixedBrightness, float r, float g, float b) {
 
 		BlockPos posNEW = new BlockPos(pos.getX() + 1, pos.getY(), pos.getZ());
@@ -121,8 +107,6 @@ public abstract class OverlayRenderingHandler implements ISmartItemModel, ISmart
 			return;
 		}
 
-		renderer.setBrightness(determineMixedBrightness(world, block, posNEW, renderer, mixedBrightness));
-		renderer.setColorOpaque_F(r, g, b);
 		renderer.renderFaceXPos(pos, textureIndex);
 
 	}
@@ -165,26 +149,26 @@ public abstract class OverlayRenderingHandler implements ISmartItemModel, ISmart
 	@Override
 	public IBakedModel handleBlockState(IBlockState state) {
 		IExtendedBlockState extend = (IExtendedBlockState) state;
-		IModelRenderer renderer = ModelManager.getInstance().createNewRenderer();
+		IModelBaker renderer = ModelManager.getInstance().createNewRenderer();
 		Block blk = state.getBlock();
 		IBlockAccess world = extend.getValue(UnlistedBlockAccess.BLOCKACCESS);
 		BlockPos pos = extend.getValue(UnlistedBlockPos.POS);
 		renderer.setRenderBoundsFromBlock(blk);
 		renderInWorld(blk, world, pos, renderer);
-		return renderer.finalizeModel(false);
+		return renderer.bakeModel(false);
 	}
 
 	@Override
 	public IBakedModel handleItemState(ItemStack stack) {
-		IModelRenderer renderer = ModelManager.getInstance().createNewRenderer();
+		IModelBaker renderer = ModelManager.getInstance().createNewRenderer();
 		Block blk = Block.getBlockFromItem(stack.getItem());
 		renderer.setRenderBoundsFromBlock(blk);
 		renderInventory(blk, stack, renderer);
-		return renderer.finalizeModel(true);
+		return renderer.bakeModel(true);
 	}
 
-	public abstract void renderInventory(Block block, ItemStack item, IModelRenderer renderer);
+	public abstract void renderInventory(Block block, ItemStack item, IModelBaker renderer);
 
-	public abstract boolean renderInWorld(Block block, IBlockAccess world, BlockPos pos, IModelRenderer renderer);
+	public abstract boolean renderInWorld(Block block, IBlockAccess world, BlockPos pos, IModelBaker renderer);
 
 }

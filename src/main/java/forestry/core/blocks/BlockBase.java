@@ -40,6 +40,7 @@ import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -60,8 +61,9 @@ import forestry.core.tiles.TileForestry;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.PlayerUtil;
+import forestry.core.utils.StringUtil;
 
-public class BlockBase<T extends IMachineProperties, C extends Enum & IMachineProperties & IStringSerializable> extends BlockForestry implements IModelRegister, IStateMapperRegister {
+public class BlockBase<C extends Enum<C> & IMachineProperties & IStringSerializable> extends BlockForestry implements IModelRegister, IStateMapperRegister {
 	
 	private final List<MachineDefinition> definitions = new ArrayList<>();
 	private final boolean hasTESR;
@@ -69,12 +71,13 @@ public class BlockBase<T extends IMachineProperties, C extends Enum & IMachinePr
 	
 	public int ID = 0;
 	
-	public final PropertyEnum META;
-	public final PropertyEnum FACE;
-	
-	public boolean isReady = false;;
+	/* PROPERTYS */
+	public final PropertyEnum<C> META;
+	public final PropertyEnum<EnumFacing> FACE;
 	
     protected final BlockState blockState;
+	
+	public boolean isReady = false;;
 
 	public BlockBase(Class<C> clazz) {
 		this(false, clazz);
@@ -89,20 +92,17 @@ public class BlockBase<T extends IMachineProperties, C extends Enum & IMachinePr
 		isReady = true;
 		
 		META = PropertyEnum.create("meta", clazz);
-		FACE = PropertyEnum.create("face", EnumFacing.class, EnumFacing.WEST, EnumFacing.EAST, EnumFacing.NORTH, EnumFacing.SOUTH);
+		FACE = PropertyEnum.create("face", EnumFacing.class);
 		
         this.blockState = this.createBlockState();
         this.setDefaultState(this.blockState.getBaseState());
 	}
 	
+	/* STATES */
+	
 	@Override
 	public void registerStateMapper() {
 		Proxies.render.registerStateMapper(this, new BaseStateMapper());
-	}
-
-	@Override
-	public int getMetaFromState(IBlockState state) {
-		return ((IMachineProperties)state.getProperties().get(META)).getMeta();
 	}
 
 	@Override
@@ -111,10 +111,20 @@ public class BlockBase<T extends IMachineProperties, C extends Enum & IMachinePr
 			return super.createBlockState();
 		return new BlockState(this, new IProperty[] { META, FACE });
 	}
+	
+
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return ((IMachineProperties)state.getProperties().get(META)).getMeta();
+	}
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState().withProperty(META, clazz.getEnumConstants()[meta]);
+		for(C c : clazz.getEnumConstants()){
+			if(c.getMeta() == meta)
+				getDefaultState().withProperty(META, c);
+		}
+		return getDefaultState();
 	}
 	
 	@Override
@@ -127,11 +137,63 @@ public class BlockBase<T extends IMachineProperties, C extends Enum & IMachinePr
 		return super.getActualState(state, world, pos);
 	}
 	
-    public BlockState getBlockState()
+    @Override
+	public BlockState getBlockState()
     {
         return this.blockState;
     }
+    
+    @SideOnly(Side.CLIENT)
+	public class BaseStateMapper implements IStateMapper {
 
+		protected Map mapStateModelLocations = Maps.newLinkedHashMap();
+
+		public String getPropertyString(Map p_178131_1_) {
+			StringBuilder stringbuilder = new StringBuilder();
+			Iterator iterator = p_178131_1_.entrySet().iterator();
+
+			while (iterator.hasNext()) {
+				Entry entry = (Entry) iterator.next();
+
+				if (stringbuilder.length() != 0) {
+					stringbuilder.append(",");
+				}
+
+				IProperty iproperty = (IProperty) entry.getKey();
+				Comparable comparable = (Comparable) entry.getValue();
+				stringbuilder.append(iproperty.getName());
+				stringbuilder.append("=");
+				stringbuilder.append(iproperty.getName(comparable));
+			}
+
+			if (stringbuilder.length() == 0) {
+				stringbuilder.append("normal");
+			}
+
+			return stringbuilder.toString();
+		}
+
+		@Override
+		public Map putStateModelLocations(Block block) {
+			for (C definition : clazz.getEnumConstants()) {
+				if (definition instanceof IMachinePropertiesTESR)
+					continue;
+				for (EnumFacing facing : EnumFacing.values()) {
+					if (facing == EnumFacing.DOWN || facing == EnumFacing.UP)
+						continue;
+					IBlockState state = getDefaultState().withProperty(META, definition).withProperty(FACE, facing);
+					LinkedHashMap linkedhashmap = Maps.newLinkedHashMap(state.getProperties());
+					ResourceLocation RL = Block.blockRegistry.getNameForObject(block);
+					String s = String.format("%s:%s", RL.getResourceDomain(), RL.getResourcePath() + "_" + META.getName((C) linkedhashmap.remove(META)));
+					mapStateModelLocations.put(state, new ModelResourceLocation(s, getPropertyString(linkedhashmap)));
+				}
+			}
+			return this.mapStateModelLocations;
+		}
+
+	}
+    
+    /* DEFINITIONS */
 	public void addDefinitions(MachineDefinition... definitions) {
 		for (MachineDefinition definition : definitions) {
 			addDefinition(definition);
@@ -148,20 +210,6 @@ public class BlockBase<T extends IMachineProperties, C extends Enum & IMachinePr
 		definitions.set(definition.getMeta(), definition);
 	}
 	
-	@Override
-	public boolean isOpaqueCube() {
-		return !hasTESR;
-	}
-
-	@Override
-	public int getRenderType() {
-		if (hasTESR) {
-			return Proxies.render.getByBlockModelRenderId();
-		} else {
-			return 0;
-		}
-	}
-
 	private MachineDefinition getDefinition(IBlockAccess world, BlockPos pos) {
 		IBlockState state = world.getBlockState(pos);
 		if (!(state.getBlock() instanceof BlockBase)) {
@@ -177,6 +225,21 @@ public class BlockBase<T extends IMachineProperties, C extends Enum & IMachinePr
 		}
 
 		return definitions.get(metadata);
+	}
+	
+	/* RENDERING */
+	@Override
+	public boolean isOpaqueCube() {
+		return !hasTESR;
+	}
+
+	@Override
+	public int getRenderType() {
+		if (hasTESR) {
+			return 2;
+		} else {
+			return 3;
+		}
 	}
 	
 	@Override
@@ -313,64 +376,14 @@ public class BlockBase<T extends IMachineProperties, C extends Enum & IMachinePr
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		for (int i = 0; i < definitions.size(); i++) {
-			if (definitions.get(i) == null)
-				return;
-			C type = clazz.getEnumConstants()[i];
+		for (MachineDefinition def : definitions) {
+			if (def == null)
+				continue;
+			C type = clazz.getEnumConstants()[def.getMeta()];
 			if (type == null)
 				return;
-			manager.registerItemModel(item, i, "_" + type.getName());
+			manager.registerItemModel(item, def.getMeta(), StringUtil.cleanItemName(item) + "_" + type.getName());
 		}
-	}
-
-	@SideOnly(Side.CLIENT)
-	public class BaseStateMapper implements IStateMapper {
-
-		protected Map mapStateModelLocations = Maps.newLinkedHashMap();
-
-		public String getPropertyString(Map p_178131_1_) {
-			StringBuilder stringbuilder = new StringBuilder();
-			Iterator iterator = p_178131_1_.entrySet().iterator();
-
-			while (iterator.hasNext()) {
-				Entry entry = (Entry) iterator.next();
-
-				if (stringbuilder.length() != 0) {
-					stringbuilder.append(",");
-				}
-
-				IProperty iproperty = (IProperty) entry.getKey();
-				Comparable comparable = (Comparable) entry.getValue();
-				stringbuilder.append(iproperty.getName());
-				stringbuilder.append("=");
-				stringbuilder.append(iproperty.getName(comparable));
-			}
-
-			if (stringbuilder.length() == 0) {
-				stringbuilder.append("normal");
-			}
-
-			return stringbuilder.toString();
-		}
-
-		@Override
-		public Map putStateModelLocations(Block block) {
-			for (C definition : clazz.getEnumConstants()) {
-				if (definition instanceof IMachinePropertiesTESR)
-					continue;
-				for (EnumFacing facing : EnumFacing.values()) {
-					if (facing == EnumFacing.DOWN || facing == EnumFacing.UP)
-						continue;
-					IBlockState state = getDefaultState().withProperty(META, definition).withProperty(FACE, facing);
-					LinkedHashMap linkedhashmap = Maps.newLinkedHashMap(state.getProperties());
-					String s = String.format("%s:%s", Block.blockRegistry.getNameForObject(block), Block.blockRegistry.getNameForObject(block) + "_" + META.getName((Enum) linkedhashmap.remove(META)));
-					;
-					mapStateModelLocations.put(state, new ModelResourceLocation(s, getPropertyString(linkedhashmap)));
-				}
-			}
-			return this.mapStateModelLocations;
-		}
-
 	}
 
 	@Override
@@ -378,7 +391,7 @@ public class BlockBase<T extends IMachineProperties, C extends Enum & IMachinePr
 		return hasTESR;
 	}
 
-	public final ItemStack get(T type) {
+	public final ItemStack get(C type) {
 		return new ItemStack(this, 1, type.getMeta());
 	}
 }

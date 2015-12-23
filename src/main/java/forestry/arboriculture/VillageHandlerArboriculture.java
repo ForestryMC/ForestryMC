@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.arboriculture;
 
+@Deprecated
 public class VillageHandlerArboriculture/* implements IVillageTradeHandler*/ {
 
 	/*@SuppressWarnings("unchecked")

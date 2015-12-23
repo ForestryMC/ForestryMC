@@ -27,6 +27,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.b3d.B3DLoader;
 import net.minecraftforge.fml.client.FMLClientHandler;
@@ -56,17 +57,6 @@ public class ProxyRenderClient extends ProxyRender {
 
 	@Override
 	public void init() {
-		/*byBlockModelId = RenderingRegistry.getNextAvailableRenderId();
-		candleRenderId = RenderingRegistry.getNextAvailableRenderId();
-
-		RenderBlock renderHandler = new RenderBlock();
-		RenderingRegistry.registerBlockHandler(byBlockModelId, renderHandler);
-		RenderingRegistry.registerBlockHandler(candleRenderId, new RenderCandleBlock());*/
-	}
-
-	@Override
-	public int getByBlockModelRenderId() {
-		return 2;
 	}
 
 	@Override
@@ -82,6 +72,7 @@ public class ProxyRenderClient extends ProxyRender {
 	@Override
 	public void registerTESR(MachineDefinition definition) {
 		ClientRegistry.bindTileEntitySpecialRenderer(definition.teClass, definition.renderer);
+		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(definition.getBlock()), definition.getMeta(), definition.teClass);
 	}
 
 	@Override

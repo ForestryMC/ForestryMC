@@ -12,8 +12,6 @@ package forestry.arboriculture.genetics;
 
 import java.awt.Color;
 import java.util.Arrays;
-import java.util.Locale;
-
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -967,7 +965,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 		ILeafSpriteProvider leafIconProvider = new SpriteProviderLeaves(leafType, primary, secondary);
 		IGermlingModelProvider germlingModelProvider = new ModelProviderGermlingVanilla(vanillaMeta);
 
-		this.species = TreeManager.treeFactory.createSpecies(uid, unlocalizedName, "Sengir", unlocalizedDescription, dominant, branch.getBranch(), binomial, speciesName.toLowerCase(Locale.ENGLISH), leafIconProvider, germlingModelProvider, this);
+		this.species = TreeManager.treeFactory.createSpecies(uid, unlocalizedName, "Sengir", unlocalizedDescription, dominant, branch.getBranch(), binomial, uid.substring("forestry.".length()), leafIconProvider, germlingModelProvider, this);
 		this.woodType = null;
 		this.vanillaWood = vanillaWood;
 	}
@@ -983,7 +981,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 		ILeafSpriteProvider leafIconProvider = new SpriteProviderLeaves(leafType, primary, secondary);
 		IGermlingModelProvider germlingModelProvider = new ModelProviderGermling(uid);
 
-		this.species = TreeManager.treeFactory.createSpecies(uid, unlocalizedName, "Sengir", unlocalizedDescription, dominant, branch.getBranch(), binomial, speciesName.toLowerCase(Locale.ENGLISH), leafIconProvider, germlingModelProvider, this);
+		this.species = TreeManager.treeFactory.createSpecies(uid, unlocalizedName, "Sengir", unlocalizedDescription, dominant, branch.getBranch(), binomial, uid.substring("forestry.".length()), leafIconProvider, germlingModelProvider, this);
 		this.woodType = woodType;
 		this.vanillaWood = null;
 	}

@@ -16,9 +16,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
-import org.lwjgl.opengl.GL11;
-
-import forestry.api.core.IModelRenderer;
+import forestry.api.core.IModelBaker;
 import forestry.arboriculture.blocks.BlockForestryLeaves;
 import forestry.arboriculture.genetics.TreeHelper;
 import forestry.arboriculture.items.ItemBlockLeaves;
@@ -29,7 +27,7 @@ import forestry.core.render.OverlayRenderingHandler;
 public class LeavesRenderingHandler extends OverlayRenderingHandler {
 
 	@Override
-	public void renderInventory(Block block, ItemStack itemStack, IModelRenderer renderer) {
+	public void renderInventory(Block block, ItemStack itemStack, IModelBaker renderer) {
 
 		if (!(itemStack.getItem() instanceof ItemBlockLeaves) || block == null) {
 			return;
@@ -42,32 +40,22 @@ public class LeavesRenderingHandler extends OverlayRenderingHandler {
 			leaves.setTree(TreeHelper.treeTemplates.get(0));
 		}
 
-		GL11.glEnable(GL11.GL_BLEND);
-
 		TextureAtlasSprite leavesIcon = leaves.getSprite(Proxies.render.fancyGraphicsEnabled());
 		if (leavesIcon == null) {
 			return;
 		}
 		int color = leaves.getFoliageColour(Proxies.common.getPlayer());
-
-		float r1 = (color >> 16 & 255) / 255.0F;
-		float g1 = (color >> 8 & 255) / 255.0F;
-		float b1 = (color & 255) / 255.0F;
-		renderer.setColorOpaque_F(r1, g1, b1);
-
-		GL11.glTranslatef(0, 0, 0);
+		renderer.setColor(color);
 
 		block.setBlockBoundsForItemRender();
 		renderer.setRenderBoundsFromBlock(block);
 
-		GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
 		renderer.renderFaceYNeg(null, leavesIcon);
 		renderer.renderFaceYPos(null, leavesIcon);
 		renderer.renderFaceZNeg(null, leavesIcon);
 		renderer.renderFaceZPos(null, leavesIcon);
 		renderer.renderFaceXNeg(null, leavesIcon);
 		renderer.renderFaceXPos(null, leavesIcon);
-		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
 
 		// add fruit
 		if (!leaves.hasFruit()) {
@@ -79,27 +67,21 @@ public class LeavesRenderingHandler extends OverlayRenderingHandler {
 			return;
 		}
 		int fruitColor = leaves.getFruitColour();
-
-		float r2 = (fruitColor >> 16 & 255) / 255.0F;
-		float g2 = (fruitColor >> 8 & 255) / 255.0F;
-		float b2 = (fruitColor & 255) / 255.0F;
-		renderer.setColorOpaque_F(r2, g2, b2);
+		renderer.setColor(fruitColor);
 
 		block.setBlockBoundsForItemRender();
 		renderer.setRenderBoundsFromBlock(block);
 
-		GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
 		renderer.renderFaceYNeg(null, fruitTexture);
 		renderer.renderFaceYPos(null, fruitTexture);
 		renderer.renderFaceZNeg(null, fruitTexture);
 		renderer.renderFaceZPos(null, fruitTexture);
 		renderer.renderFaceXNeg(null, fruitTexture);
 		renderer.renderFaceXPos(null, fruitTexture);
-		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
 	}
 
 	@Override
-	public boolean renderInWorld(Block block, IBlockAccess world, BlockPos pos, IModelRenderer renderer) {
+	public boolean renderInWorld(Block block, IBlockAccess world, BlockPos pos, IModelBaker renderer) {
 
 		TileLeaves tile = BlockForestryLeaves.getLeafTile(world, pos);
 		if (tile == null) {
@@ -120,7 +102,7 @@ public class LeavesRenderingHandler extends OverlayRenderingHandler {
 		return true;
 	}
 
-	private static boolean renderFruitOverlay(IBlockAccess world, Block block, BlockPos pos, IModelRenderer renderer,
+	private static boolean renderFruitOverlay(IBlockAccess world, Block block, BlockPos pos, IModelBaker renderer,
 			TextureAtlasSprite texture, int multiplier) {
 
 		float mR = (multiplier >> 16 & 255) / 255.0F;
@@ -137,7 +119,7 @@ public class LeavesRenderingHandler extends OverlayRenderingHandler {
 	}
 
 	private static boolean renderFruitOverlayWithColorMultiplier(IBlockAccess world, Block block, BlockPos pos, float r,
-			float g, float b, IModelRenderer renderer, TextureAtlasSprite texture) {
+			float g, float b, IModelBaker renderer, TextureAtlasSprite texture) {
 
 		int mixedBrightness = block.getMixedBrightnessForBlock(world, pos);
 

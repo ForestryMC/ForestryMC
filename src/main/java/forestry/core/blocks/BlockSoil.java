@@ -47,7 +47,7 @@ import forestry.plugins.PluginCore;
  * Humus, bog earth, peat
  */
 public class BlockSoil extends Block implements IItemTyped, IModelRegister {
-	public static final PropertyEnum SOIL = PropertyEnum.create("soil", SoilType.class);
+	public static final PropertyEnum<SoilType> SOIL = PropertyEnum.create("soil", SoilType.class);
 	
 	public enum SoilType implements IStringSerializable {
 		HUMUS, BOG_EARTH, PEAT;
@@ -71,7 +71,7 @@ public class BlockSoil extends Block implements IItemTyped, IModelRegister {
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return ((SoilType) state.getValue(SOIL)).ordinal();
+		return state.getValue(SOIL).ordinal();
 	}
 
 	@Override

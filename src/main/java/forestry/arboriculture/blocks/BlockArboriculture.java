@@ -13,7 +13,7 @@ package forestry.arboriculture.blocks;
 import forestry.api.core.Tabs;
 import forestry.core.blocks.BlockBase;
 
-public class BlockArboriculture extends BlockBase<BlockArboricultureType, BlockArboricultureType> {
+public class BlockArboriculture extends BlockBase<BlockArboricultureType> {
 	public BlockArboriculture() {
 		super(true, BlockArboricultureType.class);
 		setCreativeTab(Tabs.tabArboriculture);

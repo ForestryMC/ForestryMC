@@ -2,7 +2,6 @@ package forestry.arboriculture;
 
 import forestry.core.utils.BlockUtil;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockLeavesBase;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockPos;

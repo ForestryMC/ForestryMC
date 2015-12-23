@@ -44,6 +44,7 @@ import forestry.api.storage.StorageManager;
 import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.WoodItemAccess;
 import forestry.arboriculture.blocks.BlockArboricultureType;
+import forestry.arboriculture.blocks.BlockFruitPod;
 import forestry.arboriculture.blocks.BlockRegistryArboriculture;
 import forestry.arboriculture.commands.CommandTree;
 import forestry.arboriculture.genetics.TreeBranchDefinition;
@@ -52,7 +53,6 @@ import forestry.arboriculture.genetics.TreeFactory;
 import forestry.arboriculture.genetics.TreeHelper;
 import forestry.arboriculture.genetics.TreeMutationFactory;
 import forestry.arboriculture.genetics.TreekeepingMode;
-import forestry.arboriculture.genetics.alleles.AlleleFruit;
 import forestry.arboriculture.genetics.alleles.AlleleGrowth;
 import forestry.arboriculture.genetics.alleles.AlleleLeafEffect;
 import forestry.arboriculture.items.ItemRegistryArboriculture;
@@ -348,7 +348,6 @@ public class PluginArboriculture extends ForestryPlugin {
 
 		TreeBranchDefinition.createAlleles();
 
-		AlleleFruit.createAlleles();
 		AlleleGrowth.createAlleles();
 		AlleleLeafEffect.createAlleles();
 		AllelePlantType.createAlleles();
@@ -417,6 +416,7 @@ public class PluginArboriculture extends ForestryPlugin {
 	@SideOnly(Side.CLIENT)
 	public void textureHook(TextureStitchEvent.Pre event) {
 		TextureLeaves.registerAllSprites();
+		BlockFruitPod.registerSprites();
 	}
 
 	private static class FuelHandler implements IFuelHandler {

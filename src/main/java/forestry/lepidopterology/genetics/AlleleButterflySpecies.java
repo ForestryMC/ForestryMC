@@ -167,7 +167,7 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 
 	@Override
 	public int getSpriteColour(int renderPass) {
-		if (renderPass == 0) {
+		if (renderPass > 0) {
 			return serumColour.getRGB() & 0xffffff;
 		}
 		return 0xffffff;

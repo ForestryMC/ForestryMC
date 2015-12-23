@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "forestry:items/letter.2.stamped"
+        "layer0": "forestry:items/mail/letter.2.stamped"
     },
     "display": {
         "thirdperson": {

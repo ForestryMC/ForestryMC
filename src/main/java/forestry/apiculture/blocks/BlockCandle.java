@@ -107,20 +107,17 @@ public class BlockCandle extends BlockTorch implements IModelRegister {
 	protected BlockState createBlockState() {
 		return new BlockState(this, new IProperty[] { FACING, STATE });
 	}
-
-	@Override
-	public int getMetaFromState(IBlockState state) {
-		return ((State) state.getValue(STATE)).ordinal();
-	}
-
-	@Override
-	public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState().withProperty(STATE, State.values()[meta]);
-	}
 	
 	@Override
 	public boolean hasTileEntity(IBlockState state) {
 		return true;
+	}
+	
+	@Override
+	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
+		if(((TileCandle)world.getTileEntity(pos)).isLit())
+			state = state.withProperty(STATE, State.ON);
+		return super.getActualState(state, world, pos);
 	}
 	
 	@Override
@@ -140,8 +137,7 @@ public class BlockCandle extends BlockTorch implements IModelRegister {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		manager.registerItemModel(item, 0, "candle_off");
-		manager.registerItemModel(item, 1, "candle_on");
+		manager.registerItemModel(item, 0, "candle");
 	}
 	
 	@Override

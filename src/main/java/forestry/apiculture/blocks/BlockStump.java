@@ -26,6 +26,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import forestry.api.core.IModelManager;
+import forestry.api.core.IModelRegister;
 import forestry.api.core.Tabs;
 import forestry.apiculture.tiles.TileCandle;
 import forestry.core.config.Constants;
@@ -33,7 +35,7 @@ import forestry.core.utils.BlockPosUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.plugins.PluginApiculture;
 
-public class BlockStump extends BlockTorch {
+public class BlockStump extends BlockTorch implements IModelRegister {
 
 	public BlockStump() {
 		super();
@@ -64,6 +66,12 @@ public class BlockStump extends BlockTorch {
 		}
 
 		return false;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void registerModel(Item item, IModelManager manager) {
+		manager.registerItemModel(item, 0, "stump");
 	}
 
 	@Override

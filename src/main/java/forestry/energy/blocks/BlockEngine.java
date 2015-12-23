@@ -28,7 +28,7 @@ import forestry.core.blocks.BlockBase;
 import forestry.core.tiles.TileEngine;
 import forestry.core.tiles.TileUtil;
 
-public class BlockEngine extends BlockBase<BlockEngineType, BlockEngineType> {
+public class BlockEngine extends BlockBase<BlockEngineType> {
 	private static final EnumMap<EnumFacing, List<AxisAlignedBB>> boundingBoxesForDirections = new EnumMap<>(EnumFacing.class);
 
 	static {

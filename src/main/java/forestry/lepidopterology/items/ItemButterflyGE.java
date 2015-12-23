@@ -166,7 +166,7 @@ public class ItemButterflyGE extends ItemGE {
 	public void registerModel(Item item, IModelManager manager) {
 		switch (this.type) {
 		case CATERPILLAR:
-			manager.registerItemModel(item, 0, "caterpillar.body");
+			manager.registerItemModel(item, 0, "caterpillar");
 			break;
 		default:
 			manager.registerItemModel(item, 0, "liquids/jar");

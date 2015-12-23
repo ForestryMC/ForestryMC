@@ -12,14 +12,31 @@ package forestry.core.blocks;
 
 import java.util.Locale;
 
+import javax.annotation.Nullable;
+
+import forestry.core.config.Constants;
+import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileAnalyzer;
 import forestry.core.tiles.TileEscritoire;
 import forestry.core.tiles.TileForestry;
-import net.minecraft.util.IStringSerializable;
+import forestry.plugins.PluginApiculture;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 
-public enum BlockCoreType implements IMachineProperties, IStringSerializable {
-	ANALYZER(TileAnalyzer.class, "Analyzer"),
-	ESCRITOIRE(TileEscritoire.class, "Escritoire");
+public enum BlockCoreType implements IMachinePropertiesTESR {
+	ANALYZER(TileAnalyzer.class, "Analyzer") {
+		@Nullable
+		@Override
+		public TileEntitySpecialRenderer getRenderer() {
+			return PluginApiculture.proxy.getRendererAnalyzer(Constants.TEXTURE_PATH_BLOCKS + "/analyzer_");
+		}
+	},
+	ESCRITOIRE(TileEscritoire.class, "Escritoire") {
+		@Nullable
+		@Override
+		public TileEntitySpecialRenderer getRenderer() {
+			return Proxies.render.getRenderEscritoire();
+		}
+	};
 
 	public static final BlockCoreType[] VALUES = values();
 

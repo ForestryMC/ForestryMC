@@ -12,6 +12,7 @@ package forestry.arboriculture.blocks;
 
 import forestry.api.arboriculture.EventRegisterSapling;
 import forestry.arboriculture.genetics.TreeDefinition;
+import forestry.arboriculture.genetics.alleles.AlleleFruit;
 import forestry.arboriculture.items.ItemBlockLeaves;
 import forestry.arboriculture.items.ItemBlockWood;
 import forestry.core.blocks.BlockRegistry;
@@ -79,6 +80,7 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 		registerOreDictWildcard("treeLeaves", leaves);
 		
 		// Pods
+		AlleleFruit.createAlleles();
 		pods = registerBlock(new BlockFruitPod(), ItemBlockForestry.class, "pods");
 		
 		// Machines

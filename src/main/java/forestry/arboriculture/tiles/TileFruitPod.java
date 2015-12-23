@@ -139,6 +139,10 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 		}
 		return allele.getProvider().getFamily();
 	}
+	
+	public IAlleleFruit getAllele() {
+		return allele;
+	}
 
 	@Override
 	public Collection<ItemStack> pickFruit(ItemStack tool) {

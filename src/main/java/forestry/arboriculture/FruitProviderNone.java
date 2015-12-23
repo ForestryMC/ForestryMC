@@ -12,7 +12,6 @@ package forestry.arboriculture;
 
 import java.util.HashMap;
 
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -21,8 +20,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.ITreeGenome;
-import forestry.api.core.IModelManager;
 import forestry.api.genetics.IFruitFamily;
+import forestry.core.render.TextureManager;
 
 public class FruitProviderNone implements IFruitProvider {
 
@@ -121,12 +120,22 @@ public class FruitProviderNone implements IFruitProvider {
 			return -1;
 		}
 	}
-
+	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerModels(Item item, IModelManager manager) {
+	public void registerSprites() {
 		if (overlay != null) {
-			manager.registerItemModel(item, 0, "blocks/leaves/fruits." + overlay.ident);
+			TextureManager.registerSpriteUID(overlay.texUID, "blocks/leaves/fruits." + overlay.ident);
 		}
+	}
+	
+	@Override
+	public String getTextureName() {
+		return null;
+	}
+	
+	@Override
+	public String getModID() {
+		return "forestry";
 	}
 }

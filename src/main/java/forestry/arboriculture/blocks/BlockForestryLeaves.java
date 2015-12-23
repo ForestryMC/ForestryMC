@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.BlockLeavesBase;
-import net.minecraft.block.BlockNewLeaf;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;

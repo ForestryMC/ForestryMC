@@ -80,7 +80,7 @@ public class TextureManager implements ITextureManager {
 		return map.getAtlasSprite(new ResourceLocation(modID + ":" + identifier).toString());
 	}
 
-	public static TextureAtlasSprite registerTexUID(short uid, String identifier) {
+	public static TextureAtlasSprite registerSpriteUID(short uid, String identifier) {
 		TextureAtlasSprite texture = registerSprite(identifier);
 		defaultIconProvider.addTexture(uid, texture);
 		return texture;

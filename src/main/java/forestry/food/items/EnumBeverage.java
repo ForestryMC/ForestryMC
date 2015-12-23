@@ -45,7 +45,7 @@ public enum EnumBeverage implements ItemBeverage.IBeverageInfo {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModels(Item item, IModelManager manager) {
-		manager.registerItemModel(item, ordinal(), name);
+		manager.registerItemModel(item, ordinal(), "liquids/" + iconType);
 	}
 
 	@Override

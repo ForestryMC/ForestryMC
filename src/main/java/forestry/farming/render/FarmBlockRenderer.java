@@ -1,8 +1,7 @@
 package forestry.farming.render;
 
-import forestry.api.core.IModelRenderer;
+import forestry.api.core.IModelBaker;
 import forestry.core.render.OverlayRenderingHandler;
-import forestry.core.render.TextureManager;
 import forestry.farming.blocks.BlockFarm;
 import forestry.farming.blocks.EnumBlockFarmType;
 import forestry.farming.tiles.TileFarm;
@@ -16,7 +15,7 @@ import net.minecraft.world.IBlockAccess;
 public class FarmBlockRenderer extends OverlayRenderingHandler {
 
 	@Override
-	public void renderInventory(Block block, ItemStack item, IModelRenderer renderer) {
+	public void renderInventory(Block block, ItemStack item, IModelBaker renderer) {
 		if (block == null) {
 			return;
 		}
@@ -54,7 +53,7 @@ public class FarmBlockRenderer extends OverlayRenderingHandler {
 	}
 
 	@Override
-	public boolean renderInWorld(Block block, IBlockAccess world, BlockPos pos, IModelRenderer renderer) {
+	public boolean renderInWorld(Block block, IBlockAccess world, BlockPos pos, IModelBaker renderer) {
 
 		TileFarm farm = (TileFarm) world.getTileEntity(pos);
 
@@ -68,7 +67,7 @@ public class FarmBlockRenderer extends OverlayRenderingHandler {
 		return true;
 	}
 
-	private static void renderFarmOverlay(IBlockAccess world, BlockFarm block, BlockPos pos, IModelRenderer renderer,
+	private static void renderFarmOverlay(IBlockAccess world, BlockFarm block, BlockPos pos, IModelBaker renderer,
 			TextureAtlasSprite[] texturesOverlay) {
 		int mixedBrightness = block.getMixedBrightnessForBlock(world, pos);
 

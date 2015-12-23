@@ -46,11 +46,20 @@ public abstract class BlockWood extends Block implements ITileEntityProvider, IM
 	private final ParticleHelper.Callback particleCallback;
 	private final String blockKind;
 	private final boolean fireproof;
+	
+	protected String[] harvestTool;
+	protected int[] harvestLevel;
 
 	protected BlockWood(String blockKind, boolean fireproof) {
 		super(Material.wood);
 		this.blockKind = blockKind;
 		this.fireproof = fireproof;
+		
+		harvestTool = new String[EnumWoodType.values().length];
+		harvestLevel = new int[harvestTool.length];
+		for(int i = 0;i < harvestTool.length;i++){
+			harvestLevel[i] = -1;
+		}
 
 		setStepSound(soundTypeWood);
 		setCreativeTab(Tabs.tabArboriculture);
@@ -154,6 +163,26 @@ public abstract class BlockWood extends Block implements ITileEntityProvider, IM
 	public int getFireSpreadSpeed(IBlockAccess world, BlockPos pos, EnumFacing face) {
 		return isFireproof() ? 0 : 5;
 	}
+	
+    @Override
+	public void setHarvestLevel(String toolClass, int level, IBlockState state)
+    {
+        int idx = this.getMetaFromState(state);
+        this.harvestTool[idx] = toolClass;
+        this.harvestLevel[idx] = level;
+    }
+
+    @Override
+	public String getHarvestTool(IBlockState state)
+    {
+        return harvestTool[getMetaFromState(state)];
+    }
+
+    @Override
+	public int getHarvestLevel(IBlockState state)
+    {
+        return harvestLevel[getMetaFromState(state)];
+    }
 
 	/* Particles */
 	@SideOnly(Side.CLIENT)

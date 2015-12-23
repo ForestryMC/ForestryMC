@@ -261,8 +261,8 @@ public class BlockAlveary extends BlockStructure implements IStateMapperRegister
 		manager.registerItemModel(item, 0, "apiculture/alveary.plain");
 		manager.registerItemModel(item, 1, "apiculture/alveary.entrance");
 		manager.registerItemModel(item, 2, "apiculture/alveary.swarmer");
-		manager.registerItemModel(item, 3, "apiculture/alveary.heater");
-		manager.registerItemModel(item, 4, "apiculture/alveary.fan");
+		manager.registerItemModel(item, 3, "apiculture/alveary.fan");
+		manager.registerItemModel(item, 4, "apiculture/alveary.heater");
 		manager.registerItemModel(item, 5, "apiculture/alveary.hygro");
 		manager.registerItemModel(item, 6, "apiculture/alveary.stabiliser");
 		manager.registerItemModel(item, 7, "apiculture/alveary.sieve");
@@ -325,7 +325,7 @@ public class BlockAlveary extends BlockStructure implements IStateMapperRegister
 			}
 			String s = String.format("%s:%s",
 					Block.blockRegistry.getNameForObject(state.getBlock()).getResourceDomain(),
-					"apiculture/" + ALVEARYTYPE.getName((Enum) linkedhashmap.remove(ALVEARYTYPE)));
+					"apiculture/alveary_" + ALVEARYTYPE.getName((Enum) linkedhashmap.remove(ALVEARYTYPE)));
 			;
 			return new ModelResourceLocation(s, this.getPropertyString(linkedhashmap));
 		}

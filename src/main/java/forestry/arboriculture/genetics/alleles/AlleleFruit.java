@@ -83,5 +83,20 @@ public class AlleleFruit extends AlleleCategorized implements IAlleleFruit {
 	public String getName() {
 		return getProvider().getDescription();
 	}
+	
+	@Override
+	public String getTextureName() {
+		return getProvider().getTextureName();
+	}
+	
+	@Override
+	public String getModID() {
+		return getProvider().getModID();
+	}
+
+	@Override
+	public int compareTo(IAlleleFruit o) {
+		return 0;
+	}
 
 }

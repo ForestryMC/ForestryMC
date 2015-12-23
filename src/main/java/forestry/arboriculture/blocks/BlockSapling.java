@@ -29,12 +29,12 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.statemap.IStateMapper;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumWorldBlockLayer;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -42,39 +42,24 @@ import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.arboriculture.EnumGermlingType;
-import forestry.api.arboriculture.EnumWoodType;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.TreeManager;
-import forestry.api.core.IModelManager;
-import forestry.api.core.IModelRegister;
 import forestry.api.core.IStateMapperRegister;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
-import forestry.arboriculture.blocks.property.PropertySapling;
+import forestry.arboriculture.blocks.property.PropertyTree;
 import forestry.arboriculture.tiles.TileSapling;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemStackUtil;
 
 public class BlockSapling extends BlockTreeContainer implements IGrowable, IStateMapperRegister {
-
-	public static final PropertySapling SAPLING = new PropertySapling("sapling");
+	
+	/* PROPERTYS */
+	public static final PropertyTree TREE = new PropertyTree("tree");
 	
 	public static TileSapling getSaplingTile(IBlockAccess world, BlockPos pos) {
 		return TileUtil.getTile(world, pos, TileSapling.class);
-	}
-	
-	@Override
-	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
-		TileSapling sapling = (TileSapling) world.getTileEntity(pos);
-		IAlleleTreeSpecies species = sapling.getTree().getGenome().getPrimary();
-		state = state.withProperty(SAPLING, species);
-		return super.getActualState(state, world, pos);
-	}
-	
-	@Override
-	protected BlockState createBlockState() {
-		return new BlockState(this, new IProperty[]{SAPLING});
 	}
 
 	public BlockSapling() {
@@ -108,10 +93,33 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 	}
 	
 	@Override
+	public EnumWorldBlockLayer getBlockLayer() {
+		return EnumWorldBlockLayer.CUTOUT;
+	}
+	
+	/* STATES */
+	
+	@Override
 	public int getMetaFromState(IBlockState state) {
 		return 0;
 	}
 	
+	@Override
+	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
+		if(world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileSapling){
+			TileSapling sapling = (TileSapling) world.getTileEntity(pos);
+			IAlleleTreeSpecies species = sapling.getTree().getGenome().getPrimary();
+			state = state.withProperty(TREE, species);
+		}
+		return super.getActualState(state, world, pos);
+	}
+	
+	@Override
+	protected BlockState createBlockState() {
+		return new BlockState(this, new IProperty[]{TREE});
+	}
+	
+	@Override
 	public void registerStateMapper() {
 		Proxies.render.registerStateMapper(this, new SplingStateMap());
 	}
@@ -150,9 +158,9 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 		public Map putStateModelLocations(Block block) {
 			for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
 				if (allele instanceof IAlleleTreeSpecies) {
-					IBlockState state = getDefaultState().withProperty(SAPLING, (IAlleleTreeSpecies)allele);
+					IBlockState state = getDefaultState().withProperty(TREE, (IAlleleTreeSpecies)allele);
 					LinkedHashMap linkedhashmap = Maps.newLinkedHashMap(state.getProperties());
-					String s = String.format("%s:%s",( (IAlleleTreeSpecies) allele).getModID(), "saplings/" + SAPLING.getName((IAlleleTreeSpecies) linkedhashmap.remove(SAPLING)));
+					String s = String.format("%s:%s",( (IAlleleTreeSpecies) allele).getModID(), "germlings");
 					mapStateModelLocations.put(state, new ModelResourceLocation(s, getPropertyString(linkedhashmap)));
 				}
 			}
@@ -223,6 +231,8 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 
 	}
 
+	/* GROWNING */
+	
 	@Override
 	public boolean canUseBonemeal(World world, Random rand, BlockPos pos, IBlockState state) {
 		TileSapling saplingTile = getSaplingTile(world, pos);

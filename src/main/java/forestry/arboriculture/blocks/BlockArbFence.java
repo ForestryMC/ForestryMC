@@ -50,12 +50,21 @@ public class BlockArbFence extends BlockFence implements IWoodTyped, IModelRegis
 
 	private final ParticleHelper.Callback particleCallback;
 	private final boolean fireproof;
+	
+	protected String[] harvestTool;
+	protected int[] harvestLevel;
 
 	public BlockArbFence(boolean fireproof) {
 		super(Material.wood);
 
 		this.fireproof = fireproof;
 
+		harvestTool = new String[EnumWoodType.values().length];
+		harvestLevel = new int[harvestTool.length];
+		for(int i = 0;i < harvestTool.length;i++){
+			harvestLevel[i] = -1;
+		}
+		
 		setHardness(2.0F);
 		setResistance(5.0F);
 		setHarvestLevel("axe", 0);
@@ -71,6 +80,16 @@ public class BlockArbFence extends BlockFence implements IWoodTyped, IModelRegis
 	@Override
 	protected BlockState createBlockState() {
 		return new BlockState(this, new IProperty[] { NORTH, SOUTH, WEST, EAST, EnumWoodType.WOODTYPE });
+	}
+	
+	@Override
+	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
+		TileEntity tile = world.getTileEntity(pos);
+		if (tile instanceof TileWood) {
+			TileWood wood = (TileWood) tile;
+			state = state.withProperty(EnumWoodType.WOODTYPE, wood.getWoodType());
+		}
+		return super.getActualState(state, world, pos);
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
@@ -182,6 +201,26 @@ public class BlockArbFence extends BlockFence implements IWoodTyped, IModelRegis
 	public boolean isFireproof() {
 		return fireproof;
 	}
+	
+    @Override
+	public void setHarvestLevel(String toolClass, int level, IBlockState state)
+    {
+        int idx = this.getMetaFromState(state);
+        this.harvestTool[idx] = toolClass;
+        this.harvestLevel[idx] = level;
+    }
+
+    @Override
+	public String getHarvestTool(IBlockState state)
+    {
+        return harvestTool[getMetaFromState(state)];
+    }
+
+    @Override
+	public int getHarvestLevel(IBlockState state)
+    {
+        return harvestLevel[getMetaFromState(state)];
+    }
 
 	/* Particles */
 	@SideOnly(Side.CLIENT)

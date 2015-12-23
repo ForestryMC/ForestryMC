@@ -13,18 +13,14 @@ package forestry.arboriculture;
 import java.util.Locale;
 
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.arboriculture.TreeManager;
-import forestry.api.core.IModelManager;
 import forestry.api.genetics.IFruitFamily;
 import forestry.core.utils.BlockUtil;
 
@@ -38,17 +34,9 @@ public class FruitProviderPod extends FruitProviderNone {
 		EnumPodType(short stage1, short stage2, short stage3) {
 			uids = new short[]{stage1, stage2, stage3};
 		}
-
-		@SideOnly(Side.CLIENT)
-		public void registerModels(Item item, IModelManager manager) {
-			if (this == COCOA) {
-				return;
-			}
-
-			String name = toString().toLowerCase(Locale.ENGLISH);
-			for (int i = 0; i < 3; i++) {
-				manager.registerItemModel(item, i, "blocks/pods/" + name + "." + i);
-			}
+		
+		public String getTextureName(){
+			return toString().toLowerCase(Locale.ENGLISH);
 		}
 	}
 
@@ -104,11 +92,14 @@ public class FruitProviderPod extends FruitProviderNone {
 	public short getIconIndex(ITreeGenome genome, IBlockAccess world, BlockPos pos, int ripeningTime, boolean fancy) {
 		return type.uids[0];
 	}
-
+	
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerModels(Item item, IModelManager manager) {
-		type.registerModels(item, manager);
+	public void registerSprites() {
+	}
+	
+	@Override
+	public String getTextureName() {
+		return type.getTextureName();
 	}
 
 }

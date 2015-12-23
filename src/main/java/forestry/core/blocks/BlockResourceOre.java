@@ -34,7 +34,8 @@ import forestry.core.CreativeTabForestry;
 import forestry.plugins.PluginCore;
 
 public class BlockResourceOre extends Block implements IModelRegister {
-	public static final PropertyEnum RESOURCE = PropertyEnum.create("resource", ResourceType.class);
+	
+	public static final PropertyEnum<ResourceType> RESOURCE = PropertyEnum.create("resource", ResourceType.class);
 	
 	public enum ResourceType implements IStringSerializable {
 		APATITE,
@@ -65,7 +66,7 @@ public class BlockResourceOre extends Block implements IModelRegister {
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return ((ResourceType) state.getValue(RESOURCE)).ordinal();
+		return state.getValue(RESOURCE).ordinal();
 	}
 
 	@Override

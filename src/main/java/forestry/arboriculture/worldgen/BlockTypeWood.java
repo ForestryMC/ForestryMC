@@ -15,7 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-
+import forestry.api.arboriculture.EnumWoodType;
 import forestry.api.world.ITreeGenData;
 import forestry.arboriculture.items.ItemBlockWood;
 import forestry.core.worldgen.IBlockType;
@@ -36,7 +36,7 @@ public class BlockTypeWood implements IBlockType, ITreeBlockType {
 
 	@Override
 	public void setBlock(World world, BlockPos pos) {
-		ItemBlockWood.placeWood(itemStack, null, world, pos, Block.getBlockFromItem(itemStack.getItem()).getStateFromMeta(blockMeta));
+		ItemBlockWood.placeWood(itemStack, null, world, pos, Block.getBlockFromItem(itemStack.getItem()).getDefaultState().withProperty(EnumWoodType.WOODTYPE, EnumWoodType.values()[blockMeta]));
 	}
 
 	@Override

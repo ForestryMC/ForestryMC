@@ -12,7 +12,7 @@ package forestry.factory.blocks;
 
 import forestry.core.blocks.BlockBase;
 
-public class BlockFactoryPlain extends BlockBase<BlockFactoryPlainType, BlockFactoryPlainType> {
+public class BlockFactoryPlain extends BlockBase<BlockFactoryPlainType> {
 	public BlockFactoryPlain() {
 		super(BlockFactoryPlainType.class);
 	}

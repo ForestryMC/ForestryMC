@@ -47,12 +47,21 @@ public class BlockSlab extends net.minecraft.block.BlockSlab implements IWoodTyp
 
 	private final ParticleHelper.Callback particleCallback;
 	private final boolean fireproof;
+	
+	protected String[] harvestTool;
+	protected int[] harvestLevel;
 
 	public BlockSlab(boolean fireproof) {
 		super(Material.wood);
 
 		this.fireproof = fireproof;
 
+		harvestTool = new String[EnumWoodType.values().length];
+		harvestLevel = new int[harvestTool.length];
+		for(int i = 0;i < harvestTool.length;i++){
+			harvestLevel[i] = -1;
+		}
+		
 		setCreativeTab(Tabs.tabArboriculture);
 		setLightOpacity(0);
 		setHardness(2.0F);
@@ -71,12 +80,12 @@ public class BlockSlab extends net.minecraft.block.BlockSlab implements IWoodTyp
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return state.getValue(HALF).ordinal();
+		return state.getValue(EnumWoodType.WOODTYPE).ordinal();
 	}
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState().withProperty(HALF, EnumBlockHalf.values()[meta]);
+		return getDefaultState().withProperty(EnumWoodType.WOODTYPE, EnumWoodType.values()[meta]);
 	}
 
 	@Override
@@ -228,4 +237,24 @@ public class BlockSlab extends net.minecraft.block.BlockSlab implements IWoodTyp
 	public Object getVariant(ItemStack stack) {
 		return ItemBlockWood.getWoodType(stack);
 	}
+	
+    @Override
+	public void setHarvestLevel(String toolClass, int level, IBlockState state)
+    {
+        int idx = this.getMetaFromState(state);
+        this.harvestTool[idx] = toolClass;
+        this.harvestLevel[idx] = level;
+    }
+
+    @Override
+	public String getHarvestTool(IBlockState state)
+    {
+        return harvestTool[getMetaFromState(state)];
+    }
+
+    @Override
+	public int getHarvestLevel(IBlockState state)
+    {
+        return harvestLevel[getMetaFromState(state)];
+    }
 }

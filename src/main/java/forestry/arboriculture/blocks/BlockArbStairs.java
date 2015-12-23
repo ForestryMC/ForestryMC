@@ -26,6 +26,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -46,12 +47,23 @@ public class BlockArbStairs extends BlockStairs implements IWoodTyped, IModelReg
 
 	private final ParticleHelper.Callback particleCallback;
 	private final boolean fireproof;
+	
+	protected String[] harvestTool;
+	protected int[] harvestLevel;
 
 	public BlockArbStairs(Block par2Block, boolean fireproof) {
 		super(par2Block.getStateFromMeta(0));
 
+        this.setDefaultState(this.blockState.getBaseState().withProperty(EnumWoodType.WOODTYPE, EnumWoodType.LARCH).withProperty(FACING, EnumFacing.NORTH).withProperty(HALF, BlockStairs.EnumHalf.BOTTOM).withProperty(SHAPE, BlockStairs.EnumShape.STRAIGHT));
+		
 		this.fireproof = fireproof;
 
+		harvestTool = new String[EnumWoodType.values().length];
+		harvestLevel = new int[harvestTool.length];
+		for(int i = 0;i < harvestTool.length;i++){
+			harvestLevel[i] = -1;
+		}
+		
 		setCreativeTab(Tabs.tabArboriculture);
 		setHardness(2.0F);
 		setResistance(5.0F);
@@ -64,6 +76,16 @@ public class BlockArbStairs extends BlockStairs implements IWoodTyped, IModelReg
 	@Override
 	protected BlockState createBlockState() {
 		return new BlockState(this, new IProperty[] {	EnumWoodType.WOODTYPE, FACING, HALF, SHAPE });
+	}
+	
+	@Override
+	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
+		TileEntity tile = world.getTileEntity(pos);
+		if (tile instanceof TileWood) {
+			TileWood wood = (TileWood) tile;
+			state = state.withProperty(EnumWoodType.WOODTYPE, wood.getWoodType());
+		}
+		return super.getActualState(state, world, pos);
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
@@ -132,6 +154,26 @@ public class BlockArbStairs extends BlockStairs implements IWoodTyped, IModelReg
 	public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
 		return new TileWood();
 	}
+	
+    @Override
+	public void setHarvestLevel(String toolClass, int level, IBlockState state)
+    {
+        int idx = this.getMetaFromState(state);
+        this.harvestTool[idx] = toolClass;
+        this.harvestLevel[idx] = level;
+    }
+
+    @Override
+	public String getHarvestTool(IBlockState state)
+    {
+        return harvestTool[getMetaFromState(state)];
+    }
+
+    @Override
+	public int getHarvestLevel(IBlockState state)
+    {
+        return harvestLevel[getMetaFromState(state)];
+    }
 
 	/* Particles */
 	@SideOnly(Side.CLIENT)

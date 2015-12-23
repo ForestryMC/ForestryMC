@@ -33,7 +33,7 @@ public class TileApiaristChest extends TileNaturalistChest {
 	protected void updateServerSide() {
 		if (worldObj != null && !checkedForLegacyBlock) {
 			Block block = worldObj.getBlockState(getPos()).getBlock();
-			if (PluginApiculture.blocks.apiculture == block) {
+			if (PluginApiculture.blocks.apiculture ==  block) {
 				migrateFromLegacyBlock();
 			}
 

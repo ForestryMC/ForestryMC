@@ -47,7 +47,7 @@ public class ItemBlockWood extends ItemBlockForestry {
 		EnumWoodType woodType = getWoodType(stack);
 		Block block = Block.getBlockFromItem(stack.getItem());
 
-		boolean placed = world.setBlockState(pos, block.getStateFromMeta(state.getBlock().getMetaFromState(state)), Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
+		boolean placed = world.setBlockState(pos, state, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
 		if (!placed) {
 			return false;
 		}
@@ -169,7 +169,7 @@ public class ItemBlockWood extends ItemBlockForestry {
 	}
 
 	public static EnumWoodType getWoodType(World world, BlockPos pos) {
-		return (EnumWoodType) world.getBlockState(pos).getValue(EnumWoodType.WOODTYPE);
+		return world.getBlockState(pos).getValue(EnumWoodType.WOODTYPE);
 	}
 
 	public static class WoodMeshDefinition implements ItemMeshDefinition {
