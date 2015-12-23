@@ -98,4 +98,9 @@ public class EntityMinecartBeehouse extends EntityMinecartBeeHousingBase {
 	public Object getContainer(EntityPlayer player, int data) {
 		return new ContainerMinecartBeehouse(player.inventory, this, false);
 	}
+
+	@Override
+	public int getIdOfEntity() {
+		return getEntityId();
+	}
 }
