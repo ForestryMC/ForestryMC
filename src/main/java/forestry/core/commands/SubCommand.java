@@ -16,8 +16,11 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.command.WrongUsageException;
+import net.minecraft.util.BlockPos;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -29,17 +32,17 @@ public abstract class SubCommand implements IForestryCommand {
 		EVERYONE(0), ADMIN(2);
 		public final int permLevel;
 
-		private PermLevel(int permLevel) {
+		PermLevel(int permLevel) {
 			this.permLevel = permLevel;
 		}
 
 	}
 
 	private final String name;
-	private final List<String> aliases = new ArrayList<String>();
+	private final List<String> aliases = new ArrayList<>();
 	private PermLevel permLevel = PermLevel.EVERYONE;
 	private IForestryCommand parent;
-	private final SortedSet<SubCommand> children = new TreeSet<SubCommand>(new Comparator<SubCommand>() {
+	private final SortedSet<SubCommand> children = new TreeSet<>(new Comparator<SubCommand>() {
 
 		@Override
 		public int compare(SubCommand o1, SubCommand o2) {
@@ -79,20 +82,20 @@ public abstract class SubCommand implements IForestryCommand {
 	public List<String> getCommandAliases() {
 		return aliases;
 	}
-
+	
 	@Override
-	public List<String> addTabCompletionOptions(ICommandSender sender, String[] incomplete) {
-		return CommandHelpers.addStandardTabCompletionOptions(this, sender, incomplete);
+	public List<String> addTabCompletionOptions(ICommandSender sender, String[] incomplete, BlockPos pos) {
+		return CommandHelpers.addStandardTabCompletionOptions(this, sender, incomplete, pos);
 	}
 
 	@Override
-	public final void processCommand(ICommandSender sender, String[] args) {
+	public final void processCommand(ICommandSender sender, String[] args) throws CommandException {
 		if (!CommandHelpers.processStandardCommands(sender, this, args)) {
 			processSubCommand(sender, args);
 		}
 	}
 
-	public void processSubCommand(ICommandSender sender, String[] args) {
+	public void processSubCommand(ICommandSender sender, String[] args) throws WrongUsageException, CommandException {
 		printHelp(sender);
 	}
 
@@ -131,13 +134,9 @@ public abstract class SubCommand implements IForestryCommand {
 		return parent.getFullCommandString() + " " + getCommandName();
 	}
 
+	@Override
 	public int compareTo(ICommand command) {
 		return this.getCommandName().compareTo(command.getCommandName());
-	}
-
-	@Override
-	public int compareTo(Object command) {
-		return this.compareTo((ICommand) command);
 	}
 
 }

@@ -12,66 +12,63 @@ package forestry.arboriculture.worldgen;
 
 import java.util.Random;
 
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.world.World;
+
 import forestry.api.world.ITreeGenData;
 
 public class WorldGenPadauk extends WorldGenTree {
 
 	public WorldGenPadauk(ITreeGenData tree) {
-		super(tree);
-
-		minHeight = 7;
+		super(tree, 6, 6);
 	}
 
 	@Override
-	public void generate() {
-		generateTreeTrunk(height, girth);
-		
+	public void generate(World world) {
+		generateTreeTrunk(world, height, girth);
 
 		int leafSpawn = height + 1;
 
-		generateAdjustedCylinder(leafSpawn--, 0, 1, leaf);
-		generateAdjustedCylinder(leafSpawn--, 1.5f, 1, leaf);
-		generateAdjustedCylinder(leafSpawn--, 3f, 1, leaf);
+		generateAdjustedCylinder(world, leafSpawn--, 0, 1, leaf);
+		generateAdjustedCylinder(world, leafSpawn--, 1.5f, 1, leaf);
+		generateAdjustedCylinder(world, leafSpawn--, 3f, 1, leaf);
 		
 		int count = 0;
 		int max = 3;
 		int min = 1;
-		int canopyHeight = rand.nextInt(max - min + 1) + min;
+		int canopyHeight = world.rand.nextInt(max - min + 1) + min;
 		
 		while (leafSpawn > 3 && count < canopyHeight) {
-			generateAdjustedCylinder(leafSpawn--, 4.5f, 1, leaf);
+			generateAdjustedCylinder(world, leafSpawn--, 4.5f, 1, leaf);
 			count++;
 			//Random Trunk Branches
 			for (int i = 0; i < girth * 4; i++) {
-				if (rand.nextBoolean()) {
+				if (world.rand.nextBoolean()) {
 					
 					int[] offset = {-1, 1};
 					int offsetValue = (offset[new Random().nextInt(offset.length)]);
 					int maxBranchLength = 3;
 					int branchLength = new Random().nextInt(maxBranchLength + 1);
-					char[] direction = {'z', 'x'};
-					char directionValue = (direction[new Random().nextInt(direction.length)]);
+					EnumFacing[] direction = {EnumFacing.NORTH, EnumFacing.EAST};
+					EnumFacing directionValue = (direction[new Random().nextInt(direction.length)]);
 					int branchSpawn = leafSpawn;
 
 					for (int j = 1; j < branchLength + 1; j++) {
-						if (j == branchLength && rand.nextBoolean()) { //Just adding a bit of variation to the ends for character
+						if (j == branchLength && world.rand.nextBoolean()) { //Just adding a bit of variation to the ends for character
 							branchSpawn += 1;
 						}
-						if (directionValue == 'z') {
-							addZWood(0, branchSpawn, j * offsetValue, EnumReplaceMode.ALL);
-						} else if (directionValue == 'x') {
-							addXWood(j * offsetValue, branchSpawn, 0, EnumReplaceMode.ALL);
+
+						wood.setDirection(directionValue);
+						if (directionValue == EnumFacing.NORTH) {
+							addWood(world, new BlockPos(0, branchSpawn, j * offsetValue), EnumReplaceMode.ALL);
+						} else if (directionValue == EnumFacing.EAST) {
+							addWood(world, new BlockPos(j * offsetValue, branchSpawn, 0), EnumReplaceMode.ALL);
 						}
 					}
-					
 				}
 			}
 		}
 	}
 
-	@Override
-	public void preGenerate() {
-		height = determineHeight(6, 6);
-		girth = determineGirth(tree.getGirth(world, startX, startY, startZ));
-	}
 }

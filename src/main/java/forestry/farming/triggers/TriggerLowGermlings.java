@@ -10,14 +10,12 @@
  ******************************************************************************/
 package forestry.farming.triggers;
 
+import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
-import forestry.api.core.ITileStructure;
+import net.minecraft.util.EnumFacing;
 import forestry.core.triggers.Trigger;
-import forestry.farming.gadgets.TileFarmPlain;
-import forestry.farming.gadgets.TileHatch;
+import forestry.core.utils.InventoryUtil;
+import forestry.farming.tiles.TileFarmHatch;
 
 import buildcraft.api.statements.IStatementContainer;
 import buildcraft.api.statements.IStatementParameter;
@@ -40,16 +38,13 @@ public class TriggerLowGermlings extends Trigger {
 	 * Return true if the tile given in parameter activates the trigger, given the parameters.
 	 */
 	@Override
-	public boolean isTriggerActive(TileEntity tile, ForgeDirection side, IStatementContainer source, IStatementParameter[] parameters) {
-		if (!(tile instanceof TileHatch)) {
+	public boolean isTriggerActive(TileEntity tile, EnumFacing side, IStatementContainer source, IStatementParameter[] parameters) {
+		if (!(tile instanceof TileFarmHatch)) {
 			return false;
 		}
 
-		ITileStructure central = ((TileHatch) tile).getCentralTE();
-		if (central == null || !(central instanceof TileFarmPlain)) {
-			return false;
-		}
-
-		return !((TileFarmPlain) central).hasGermlingsPercent(threshold);
+		TileFarmHatch tileHatch = (TileFarmHatch) tile;
+		IInventory germlingsInventory = tileHatch.getMultiblockLogic().getController().getFarmInventory().getGermlingsInventory();
+		return InventoryUtil.containsPercent(germlingsInventory, threshold);
 	}
 }

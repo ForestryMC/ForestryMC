@@ -21,5 +21,5 @@ import net.minecraft.item.ItemStack;
  */
 public interface IStackFilter {
 
-	public boolean matches(ItemStack stack);
+	boolean matches(ItemStack stack);
 }

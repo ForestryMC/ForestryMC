@@ -10,112 +10,67 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 
-import org.lwjgl.opengl.GL11;
-
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
-import forestry.core.gui.WidgetManager;
-import forestry.core.gui.widgets.Widget;
+import forestry.core.gui.buttons.GuiBetterButton;
+import forestry.core.gui.buttons.StandardButtonTextureSets;
+import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.SpriteSheet;
-import forestry.core.render.TextureManager;
-import forestry.factory.gadgets.TileWorktable;
+import forestry.factory.gui.widgets.ClearWorktable;
+import forestry.factory.gui.widgets.MemorizedRecipeSlot;
+import forestry.factory.recipes.RecipeMemory;
+import forestry.factory.tiles.TileWorktable;
 
-public class GuiWorktable extends GuiForestryTitled<TileWorktable> {
-
-	private class MemorizedSlot extends Widget {
-
-		private final int slotNumber;
-		private final World world;
-
-		public MemorizedSlot(World world, WidgetManager manager, int xPos, int yPos, int slot) {
-			super(manager, xPos, yPos);
-			this.slotNumber = slot;
-			this.world = world;
-		}
-
-		private ItemStack getOutputStack() {
-			return worktable.getMemory().getRecipeOutput(world, slotNumber);
-		}
-
-		@Override
-		public void draw(int startX, int startY) {
-			ItemStack output = getOutputStack();
-			if (output != null) {
-				manager.gui.drawItemStack(output, startX + xPos, startY + yPos);
-			}
-
-			GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
-			GL11.glDisable(GL11.GL_DEPTH_TEST);
-			GL11.glEnable(GL11.GL_BLEND);
-			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-
-			if (worktable.getMemory().isLocked(slotNumber)) {
-				manager.gui.setZLevel(110f);
-				Proxies.common.bindTexture(SpriteSheet.ITEMS);
-				manager.gui.drawTexturedModelRectFromIcon(startX + xPos, startY + yPos, TextureManager.getInstance().getDefault("slots/locked"), 16, 16);
-				manager.gui.setZLevel(0f);
-			}
-
-			GL11.glPopAttrib();
-		}
-
-		@Override
-		protected String getLegacyTooltip(EntityPlayer player) {
-			ItemStack output = getOutputStack();
-			return output != null ? output.getDisplayName() : null;
-		}
-
-		@Override
-		public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
-			container.sendRecipeClick(mouseButton, slotNumber);
-		}
-	}
-
-	private class ClearWorktable extends Widget {
-
-		public ClearWorktable(WidgetManager manager, int xPos, int yPos) {
-			super(manager, xPos, yPos);
-			width = 7;
-			height = 7;
-		}
-
-		@Override
-		public void draw(int startX, int startY) {
-		}
-
-		@Override
-		public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
-			container.clearRecipe();
-		}
-	}
-
-	private final TileWorktable worktable;
-	protected final ContainerWorktable container;
+public class GuiWorktable extends GuiForestryTitled<ContainerWorktable, TileWorktable> {
+	private static final int SPACING = 18;
+	private boolean hasRecipeConflict = false;
 
 	public GuiWorktable(EntityPlayer player, TileWorktable tile) {
-		super(Defaults.TEXTURE_PATH_GUI + "/worktable2.png", new ContainerWorktable(player, tile), tile);
+		super(Constants.TEXTURE_PATH_GUI + "/worktable2.png", new ContainerWorktable(player, tile), tile);
 
 		ySize = 218;
-		worktable = tile;
-		container = (ContainerWorktable) inventorySlots;
 
-		final int spacing = 18;
+		RecipeMemory recipeMemory = tile.getMemory();
+
 		int slot = 0;
 		for (int y = 0; y < 3; y++) {
-			int yPos = 20 + (y * spacing);
+			int yPos = 20 + (y * SPACING);
 			for (int x = 0; x < 3; x++) {
-				int xPos = 110 + (x * spacing);
-				widgetManager.add(new MemorizedSlot(player.getEntityWorld(), widgetManager, xPos, yPos, slot));
-				slot += 1;
+				int xPos = 110 + (x * SPACING);
+				MemorizedRecipeSlot memorizedRecipeSlot = new MemorizedRecipeSlot(widgetManager, xPos, yPos, recipeMemory, slot++);
+				widgetManager.add(memorizedRecipeSlot);
 			}
 		}
 
 		widgetManager.add(new ClearWorktable(widgetManager, 66, 19));
 	}
 
+	@Override
+	public void updateScreen() {
+		super.updateScreen();
+
+		if (hasRecipeConflict != inventory.hasRecipeConflict()) {
+			hasRecipeConflict = inventory.hasRecipeConflict();
+			if (hasRecipeConflict) {
+				addButtons();
+			} else {
+				buttonList.clear();
+			}
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private void addButtons() {
+		buttonList.add(new GuiBetterButton(0, guiLeft + 76, guiTop + 56, StandardButtonTextureSets.LEFT_BUTTON_SMALL));
+		buttonList.add(new GuiBetterButton(1, guiLeft + 85, guiTop + 56, StandardButtonTextureSets.RIGHT_BUTTON_SMALL));
+	}
+
+	@Override
+	protected void actionPerformed(GuiButton button) {
+		int id = 100 + button.id;
+		Proxies.net.sendToServer(new PacketGuiSelectRequest(id, 0));
+	}
 }

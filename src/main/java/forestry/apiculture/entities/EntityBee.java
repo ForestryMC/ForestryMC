@@ -14,24 +14,22 @@ import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
+import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IBee;
-import forestry.core.config.Defaults;
-import forestry.core.utils.ForestryResource;
-import forestry.plugins.PluginApiculture;
+import forestry.core.config.Constants;
+import forestry.core.render.ForestryResource;
 
 public class EntityBee extends EntityCreature implements IAnimals {
 
-	private static final String DEFAULT_TEXTURE = Defaults.TEXTURE_PATH_ENTITIES + "/bees/honeyBee.png";
+	private static final String DEFAULT_TEXTURE = Constants.TEXTURE_PATH_ENTITIES + "/bees/honeyBee.png";
 
-	IBee contained;
-	IAlleleBeeSpecies species;
-	EnumBeeType type = EnumBeeType.DRONE;
+	private IBee contained;
+	private IAlleleBeeSpecies species;
+	private EnumBeeType type = EnumBeeType.DRONE;
 
 	private String beeTexture = DEFAULT_TEXTURE;
 	private long lastUpdate;
@@ -48,7 +46,7 @@ public class EntityBee extends EntityCreature implements IAnimals {
 		if (bee != null) {
 			contained = bee;
 		} else {
-			contained = PluginApiculture.beeInterface.templateAsIndividual(PluginApiculture.beeInterface.getDefaultTemplate());
+			contained = BeeManager.beeRoot.templateAsIndividual(BeeManager.beeRoot.getDefaultTemplate());
 		}
 
 		//isImmuneToFire = contained.getGenome().getFireResist();

@@ -10,39 +10,38 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
+import net.minecraft.util.BlockPos;
+import net.minecraft.world.World;
+
 import forestry.api.world.ITreeGenData;
 
 public class WorldGenBalsa extends WorldGenTree {
 
 	public WorldGenBalsa(ITreeGenData tree) {
-		super(tree);
+		super(tree, 6, 6);
 	}
 
 	@Override
-	public void generate() {
-		generateTreeTrunk(height, girth);
+	public void generate(World world) {
+		generateTreeTrunk(world, height, girth);
 
 		int leafSpawn = height;
+		float leafRadius = (girth - 1.0f) / 2.0f;
 
-		addLeaf(0, leafSpawn--, 0, EnumReplaceMode.NONE);
-		generateAdjustedCylinder(leafSpawn--, 0, 1, leaf);
+		addLeaf(world, new BlockPos(0, leafSpawn--, 0), EnumReplaceMode.NONE);
+		generateAdjustedCylinder(world, leafSpawn--, leafRadius, 1, leaf);
 
 		if (height > 10) {
-			generateAdjustedCylinder(leafSpawn--, 0, 1, leaf);
+			generateAdjustedCylinder(world, leafSpawn--, leafRadius, 1, leaf);
 		}
 
 		leafSpawn--;
 
 		while (leafSpawn > 6) {
-			generateAdjustedCylinder(leafSpawn, 0, 1, leaf);
+			generateAdjustedCylinder(world, leafSpawn, leafRadius, 1, leaf);
 			leafSpawn--;
 		}
 
 	}
 
-	@Override
-	public void preGenerate() {
-		height = determineHeight(6, 6);
-		girth = determineGirth(tree.getGirth(world, startX, startY, startZ));
-	}
 }

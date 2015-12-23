@@ -14,20 +14,17 @@ import java.util.Collection;
 import java.util.Stack;
 
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
+import forestry.api.farming.FarmDirection;
 import forestry.api.farming.Farmables;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
-import forestry.core.vect.Vect;
 
 public class FarmLogicGourd extends FarmLogic {
 
@@ -41,8 +38,8 @@ public class FarmLogicGourd extends FarmLogic {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon getIcon() {
-		return Items.melon.getIconFromDamage(0);
+	public Item getIconItem() {
+		return Items.melon;
 	}
 
 	@Override
@@ -71,24 +68,29 @@ public class FarmLogicGourd extends FarmLogic {
 	}
 
 	@Override
+	public boolean isAcceptedWindfall(ItemStack stack) {
+		return false;
+	}
+
+	@Override
 	public Collection<ItemStack> collect() {
 		return null;
 	}
 
 	@Override
-	public boolean cultivate(BlockPos pos, EnumFacing direction, int extent) {
+	public boolean cultivate(BlockPos pos, FarmDirection direction, int extent) {
 		return false;
 	}
 
 	@Override
-	public Collection<ICrop> harvest(BlockPos pos, EnumFacing direction, int extent) {
+	public Collection<ICrop> harvest(int x, int y, int z, FarmDirection direction, int extent) {
 		World world = getWorld();
 
-		Stack<ICrop> crops = new Stack<ICrop>();
+		Stack<ICrop> crops = new Stack<>();
 		for (int i = 0; i < extent; i++) {
-			Vect position = translateWithOffset(pos.up(), direction, i);
+			BlockPos position = translateWithOffset(x, y + 1, z, direction, i);
 			for (IFarmable seed : seeds) {
-				ICrop crop = seed.getCropAt(world, position.toBlockPos());
+				ICrop crop = seed.getCropAt(world, position);
 				if (crop != null) {
 					crops.push(crop);
 				}

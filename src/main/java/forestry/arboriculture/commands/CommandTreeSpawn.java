@@ -18,12 +18,14 @@ import org.apache.commons.lang3.StringUtils;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.PlayerNotFoundException;
 import net.minecraft.entity.player.EntityPlayer;
-
+import net.minecraft.util.BlockPos;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.core.commands.CommandHelpers;
+import forestry.core.commands.SpeciesNotFoundException;
 import forestry.core.commands.SubCommand;
+import forestry.core.commands.TemplateNotFoundException;
 
 public final class CommandTreeSpawn extends SubCommand {
 
@@ -36,7 +38,7 @@ public final class CommandTreeSpawn extends SubCommand {
 	}
 
 	@Override
-	public final void processSubCommand(ICommandSender sender, String[] arguments) {
+	public final void processSubCommand(ICommandSender sender, String[] arguments) throws PlayerNotFoundException, SpeciesNotFoundException, TemplateNotFoundException {
 		if (arguments.length < 1 || arguments.length > 2) {
 			printHelp(sender);
 			return;
@@ -61,7 +63,7 @@ public final class CommandTreeSpawn extends SubCommand {
 	}
 
 	@Override
-	public List<String> addTabCompletionOptions(ICommandSender sender, String[] parameters) {
+	public List<String> addTabCompletionOptions(ICommandSender sender, String[] parameters, BlockPos pos) {
 		if (parameters.length == 1) {
 			List<String> tabCompletion = CommandHelpers.getListOfStringsMatchingLastWord(parameters, getSpecies());
 			tabCompletion.add("help");
@@ -73,7 +75,7 @@ public final class CommandTreeSpawn extends SubCommand {
 	}
 
 	private static String[] getSpecies() {
-		List<String> species = new ArrayList<String>();
+		List<String> species = new ArrayList<>();
 
 		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
 			if (allele instanceof IAlleleTreeSpecies) {

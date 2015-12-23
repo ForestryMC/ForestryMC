@@ -10,35 +10,44 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.util.BlockPos;
+import net.minecraft.world.World;
+
 import forestry.api.world.ITreeGenData;
 
 public class WorldGenMahogany extends WorldGenTree {
 
 	public WorldGenMahogany(ITreeGenData tree) {
-		super(tree);
+		super(tree, 12, 6);
 	}
 
 	@Override
-	public void generate() {
-		generateTreeTrunk(height, girth, 0.6f);
-		generateSupportStems(height, girth, 0.4f, 0.4f);
+	public void generate(World world) {
+		generateTreeTrunk(world, height, girth, 0.6f);
+		generateSupportStems(world, height, girth, 0.4f, 0.4f);
+
+		List<BlockPos> branchCoords = new ArrayList<>();
+		for (int yBranch = height - 4; yBranch < height - 2; yBranch++) {
+			branchCoords.addAll(generateBranches(world, yBranch, 0, 0, 0.15f, 0.25f, Math.round((height - yBranch) * 0.5f), 1, 0.25f));
+		}
+		for (BlockPos branchEnd : branchCoords) {
+			generateAdjustedCylinder(world, branchEnd.getY(), branchEnd.getX(), branchEnd.getZ(), 2, 2, leaf, EnumReplaceMode.NONE);
+		}
 
 		int leafSpawn = height + 1;
 
-		generateAdjustedCylinder(leafSpawn--, 0, 1, leaf);
+		generateAdjustedCylinder(world, leafSpawn--, 0, 1, leaf);
 
-		generateAdjustedCylinder(leafSpawn--, 1.5f, 1, leaf);
-		generateAdjustedCylinder(leafSpawn--, 2f, 1, leaf);
+		generateAdjustedCylinder(world, leafSpawn--, 1.5f, 1, leaf);
+		generateAdjustedCylinder(world, leafSpawn--, 2f, 1, leaf);
 
-		generateAdjustedCylinder(leafSpawn--, 3f, 1, leaf);
-		generateAdjustedCylinder(leafSpawn--, 3f, 1, leaf);
-		generateAdjustedCylinder(leafSpawn--, 2f, 1, leaf);
+		generateAdjustedCylinder(world, leafSpawn--, 3f, 1, leaf);
+		generateAdjustedCylinder(world, leafSpawn--, 3f, 1, leaf);
+		generateAdjustedCylinder(world, leafSpawn--, 2f, 1, leaf);
 
 	}
 
-	@Override
-	public void preGenerate() {
-		height = determineHeight(12, 6);
-		girth = determineGirth(tree.getGirth(world, startX, startY, startZ));
-	}
 }

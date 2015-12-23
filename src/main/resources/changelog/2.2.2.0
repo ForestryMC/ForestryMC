@@ -1,9 +1,0 @@
-
-#2.2.2.0
-
-- Upgraded: Minecraft 1.5.2. (May work on 1.5.1, unsupported.)
-- Added: OP game mode.
-- Changed: Sprite for royal jelly by niel.
-- Changed: Handling grafters differently to re-enable normal leaf drops. A grafter may give an additional sapling now at the usual drop rate.
-- Changed: Boosted proven grafter to 150 uses.
-- Bugfix: Fixed an issue which caused planting in arboretums to become irregular.

@@ -14,13 +14,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.IChatComponent;
 import net.minecraft.world.WorldSavedData;
 
 import forestry.api.mail.ILetter;
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.PostManager;
-import forestry.core.inventory.InvTools;
 import forestry.core.inventory.InventoryAdapter;
+import forestry.core.utils.InventoryUtil;
 
 public class POBox extends WorldSavedData implements IInventory {
 
@@ -72,7 +73,7 @@ public class POBox extends WorldSavedData implements IInventory {
 
 		this.markDirty();
 
-		return InvTools.tryAddStack(letters, letterstack, true);
+		return InventoryUtil.tryAddStack(letters, letterstack, true);
 	}
 
 	public POBoxInfo getPOBoxInfo() {
@@ -125,10 +126,15 @@ public class POBox extends WorldSavedData implements IInventory {
 	public ItemStack getStackInSlotOnClosing(int var1) {
 		return letters.getStackInSlotOnClosing(var1);
 	}
-
+	
 	@Override
-	public String getInventoryName() {
-		return letters.getInventoryName();
+	public IChatComponent getDisplayName() {
+		return letters.getDisplayName();
+	}
+	
+	@Override
+	public String getCommandSenderName() {
+		return letters.getCommandSenderName();
 	}
 
 	@Override
@@ -142,15 +148,15 @@ public class POBox extends WorldSavedData implements IInventory {
 	}
 
 	@Override
-	public void openInventory() {
+	public void openInventory(EntityPlayer player) {
 	}
 
 	@Override
-	public void closeInventory() {
+	public void closeInventory(EntityPlayer player) {
 	}
-
+	
 	@Override
-	public boolean hasCustomInventoryName() {
+	public boolean hasCustomName() {
 		return true;
 	}
 
@@ -159,4 +165,22 @@ public class POBox extends WorldSavedData implements IInventory {
 		return letters.isItemValidForSlot(i, itemstack);
 	}
 
+	@Override
+	public int getField(int id) {
+		return 0;
+	}
+
+	@Override
+	public void setField(int id, int value) {
+	}
+
+	@Override
+	public int getFieldCount() {
+		return 0;
+	}
+
+	@Override
+	public void clear() {
+	}
+	
 }

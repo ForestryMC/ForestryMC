@@ -11,7 +11,7 @@
 package forestry.apiculture.flowers;
 
 import java.util.EnumSet;
-import java.util.List;
+import java.util.Set;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
@@ -37,8 +37,8 @@ public class FlowerProvider implements IFlowerProvider {
 	}
 
 	@Override
-	public boolean isAcceptedFlower(World world, IIndividual individual, BlockPos pos) {
-		return FlowerManager.flowerRegistry.isAcceptedFlower(this.flowerType, world, individual, pos);
+	public String getFlowerType() {
+		return flowerType;
 	}
 
 	@Override
@@ -46,12 +46,13 @@ public class FlowerProvider implements IFlowerProvider {
 
 		EnumSet<EnumPlantType> plantTypes = pollinatable.getPlantType();
 
-		if (flowerType.equals(FlowerManager.FlowerTypeNether)) {
-			return plantTypes.contains(EnumPlantType.Nether);
-		} else if (flowerType.equals(FlowerManager.FlowerTypeCacti)) {
-			return plantTypes.contains(EnumPlantType.Desert);
-		} else {
-			return plantTypes.size() > 1 || !plantTypes.contains(EnumPlantType.Nether);
+		switch (flowerType) {
+			case FlowerManager.FlowerTypeNether:
+				return plantTypes.contains(EnumPlantType.Nether);
+			case FlowerManager.FlowerTypeCacti:
+				return plantTypes.contains(EnumPlantType.Desert);
+			default:
+				return plantTypes.size() > 1 || !plantTypes.contains(EnumPlantType.Nether);
 		}
 	}
 
@@ -71,7 +72,7 @@ public class FlowerProvider implements IFlowerProvider {
 	}
 
 	@Override
-	public List<IFlower> getFlowers() {
+	public Set<IFlower> getFlowers() {
 		return FlowerManager.flowerRegistry.getAcceptableFlowers(this.flowerType);
 	}
 

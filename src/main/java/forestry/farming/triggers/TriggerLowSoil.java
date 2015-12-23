@@ -10,15 +10,15 @@
  ******************************************************************************/
 package forestry.farming.triggers;
 
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
-import forestry.api.core.ITileStructure;
+import net.minecraft.util.EnumFacing;
+import forestry.api.farming.IFarmInventory;
+import forestry.api.multiblock.IFarmController;
 import forestry.core.triggers.Trigger;
-import forestry.farming.gadgets.TileFarmPlain;
-import forestry.farming.gadgets.TileHatch;
+import forestry.core.utils.InventoryUtil;
+import forestry.farming.tiles.TileFarmHatch;
 
 import buildcraft.api.statements.IStatementContainer;
 import buildcraft.api.statements.IStatementParameter;
@@ -52,27 +52,27 @@ public class TriggerLowSoil extends Trigger {
 	 * the parameters.
 	 */
 	@Override
-	public boolean isTriggerActive(TileEntity tile, ForgeDirection side, IStatementContainer source, IStatementParameter[] parameters) {
+	public boolean isTriggerActive(TileEntity tile, EnumFacing side, IStatementContainer source, IStatementParameter[] parameters) {
 		IStatementParameter parameter = null;
 		if (parameters.length > 0) {
 			parameter = parameters[0];
 		}
 
-		if (!(tile instanceof TileHatch)) {
+		if (!(tile instanceof TileFarmHatch)) {
 			return false;
 		}
 
-		ITileStructure central = ((TileHatch) tile).getCentralTE();
-		if (central == null || !(central instanceof TileFarmPlain)) {
-			return false;
-		}
+		TileFarmHatch tileHatch = (TileFarmHatch) tile;
+		IFarmController farmController = tileHatch.getMultiblockLogic().getController();
+		IFarmInventory farmInventory = farmController.getFarmInventory();
 
 		if (parameter == null || parameter.getItemStack() == null) {
-			return !((TileFarmPlain) central).hasResourcesAmount(threshold);
+			IInventory resourcesInventory = farmInventory.getResourcesInventory();
+			return InventoryUtil.containsPercent(resourcesInventory, threshold);
 		} else {
 			ItemStack filter = parameter.getItemStack().copy();
 			filter.stackSize = threshold;
-			return !((TileFarmPlain) central).hasResources(new ItemStack[]{filter});
+			return farmInventory.hasResources(new ItemStack[]{filter});
 		}
 	}
 }

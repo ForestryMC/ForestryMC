@@ -12,8 +12,6 @@ package forestry.core;
 
 import net.minecraft.world.World;
 
-import forestry.core.interfaces.ISaveEventHandler;
-
 public class SaveEventHandlerCore implements ISaveEventHandler {
 
 	@Override

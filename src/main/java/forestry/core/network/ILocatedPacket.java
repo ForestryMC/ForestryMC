@@ -10,9 +10,8 @@
  ******************************************************************************/
 package forestry.core.network;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
+import net.minecraft.util.BlockPos;
 
 public interface ILocatedPacket {
-	TileEntity getTarget(World world);
+	BlockPos getPos();
 }

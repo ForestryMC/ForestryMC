@@ -10,14 +10,12 @@
  ******************************************************************************/
 package forestry.farming.triggers;
 
+import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
-import forestry.api.core.ITileStructure;
+import net.minecraft.util.EnumFacing;
 import forestry.core.triggers.Trigger;
-import forestry.farming.gadgets.TileFarmPlain;
-import forestry.farming.gadgets.TileHatch;
+import forestry.core.utils.InventoryUtil;
+import forestry.farming.tiles.TileFarmHatch;
 
 import buildcraft.api.statements.IStatementContainer;
 import buildcraft.api.statements.IStatementParameter;
@@ -37,16 +35,13 @@ public class TriggerLowFertilizer extends Trigger {
 	}
 
 	@Override
-	public boolean isTriggerActive(TileEntity tile, ForgeDirection side, IStatementContainer source, IStatementParameter[] parameters) {
-		if (!(tile instanceof TileHatch)) {
+	public boolean isTriggerActive(TileEntity tile, EnumFacing side, IStatementContainer source, IStatementParameter[] parameters) {
+		if (!(tile instanceof TileFarmHatch)) {
 			return false;
 		}
 
-		ITileStructure central = ((TileHatch) tile).getCentralTE();
-		if (central == null || !(central instanceof TileFarmPlain)) {
-			return false;
-		}
-
-		return !((TileFarmPlain) central).hasFertilizerPercent(threshold);
+		TileFarmHatch tileHatch = (TileFarmHatch) tile;
+		IInventory fertilizerInventory = tileHatch.getMultiblockLogic().getController().getFarmInventory().getFertilizerInventory();
+		return InventoryUtil.containsPercent(fertilizerInventory, threshold);
 	}
 }

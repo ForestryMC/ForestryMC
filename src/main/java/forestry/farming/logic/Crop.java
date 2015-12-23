@@ -13,49 +13,43 @@ package forestry.farming.logic;
 import java.util.Collection;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
-import forestry.core.config.Defaults;
-import forestry.core.vect.Vect;
+import forestry.core.config.Constants;
 
 public abstract class Crop implements ICrop {
 
 	protected final World world;
-	protected final Vect position;
+	protected final BlockPos position;
 
-	public Crop(World world, Vect position) {
+	protected Crop(World world, BlockPos position) {
 		this.world = world;
 		this.position = position;
 	}
 
-	protected final void setBlock(Vect position, Block block, int meta) {
-		world.setBlock(position.x, position.y, position.z, block, meta, Defaults.FLAG_BLOCK_SYNCH);
+	protected final void setBlock(BlockPos position, Block block, int meta) {
+		world.setBlockState(position, block.getStateFromMeta(meta), Constants.FLAG_BLOCK_SYNCH);
 	}
 
-	protected final void clearBlock(Vect position) {
-		world.setBlockToAir(position.x, position.y, position.z);
-		if (world.getTileEntity(position.x, position.y, position.z) != null) {
-			world.setTileEntity(position.x, position.y, position.z, null);
-		}
+	protected final IBlockState getBlockState(BlockPos position) {
+		return world.getBlockState(position);
+	}
+	
+	protected final Block getBlock(BlockPos position) {
+		return world.getBlockState(position).getBlock();
+	}
+	
+	protected final int getBlockMeta(BlockPos position) {
+		return getBlock(position).getMetaFromState(getBlockState(position));
 	}
 
-	protected final Block getBlock(Vect position) {
-		return world.getBlock(position.x, position.y, position.z);
-	}
+	protected abstract boolean isCrop(BlockPos pos);
 
-	protected final int getBlockMeta(Vect position) {
-		return world.getBlockMetadata(position.x, position.y, position.z);
-	}
-
-	protected final ItemStack getAsItemStack(Vect position) {
-		return new ItemStack(getBlock(position), 1, getBlockMeta(position));
-	}
-
-	protected abstract boolean isCrop(Vect pos);
-
-	protected abstract Collection<ItemStack> harvestBlock(Vect pos);
+	protected abstract Collection<ItemStack> harvestBlock(BlockPos pos);
 
 	@Override
 	public Collection<ItemStack> harvest() {

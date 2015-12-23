@@ -11,36 +11,26 @@
 package forestry.apiculture.gui;
 
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
 
-import forestry.apiculture.gadgets.TileAlvearySieve;
-import forestry.core.gui.ContainerForestry;
+import forestry.apiculture.inventory.InventoryAlvearySieve;
+import forestry.apiculture.multiblock.TileAlvearySieve;
+import forestry.core.gui.ContainerTile;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
+import forestry.core.inventory.watchers.ISlotPickupWatcher;
 
-public class ContainerAlvearySieve extends ContainerForestry {
+public class ContainerAlvearySieve extends ContainerTile<TileAlvearySieve> {
 
 	public ContainerAlvearySieve(InventoryPlayer player, TileAlvearySieve tile) {
-		super(tile);
+		super(tile, player, 8, 87);
 
-		addSlotToContainer(new SlotOutput(tile, 0, 94, 52).setCrafter(tile));
-		addSlotToContainer(new SlotOutput(tile, 1, 115, 39).setCrafter(tile));
-		addSlotToContainer(new SlotOutput(tile, 2, 73, 39).setCrafter(tile));
-		addSlotToContainer(new SlotOutput(tile, 3, 94, 26).setCrafter(tile));
+		ISlotPickupWatcher crafter = tile.getCrafter();
 
-		addSlotToContainer(new SlotFiltered(tile, TileAlvearySieve.SLOT_SIEVE, 43, 39).setCrafter(tile));
+		addSlotToContainer(new SlotOutput(tile, 0, 94, 52).setPickupWatcher(crafter));
+		addSlotToContainer(new SlotOutput(tile, 1, 115, 39).setPickupWatcher(crafter));
+		addSlotToContainer(new SlotOutput(tile, 2, 73, 39).setPickupWatcher(crafter));
+		addSlotToContainer(new SlotOutput(tile, 3, 94, 26).setPickupWatcher(crafter));
 
-		// Player inventory
-		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < 9; j++) {
-				addSlotToContainer(new Slot(player, j + i * 9 + 9, 8 + j * 18, 87 + i * 18));
-			}
-		}
-		// Player hotbar
-		for (int i = 0; i < 9; i++) {
-			addSlotToContainer(new Slot(player, i, 8 + i * 18, 145));
-		}
-
+		addSlotToContainer(new SlotFiltered(tile, InventoryAlvearySieve.SLOT_SIEVE, 43, 39).setPickupWatcher(crafter));
 	}
-
 }

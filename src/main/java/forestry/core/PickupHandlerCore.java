@@ -15,8 +15,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
 import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.IBreedingTracker;
+import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.ISpeciesRoot;
-import forestry.core.interfaces.IPickupHandler;
 
 public class PickupHandlerCore implements IPickupHandler {
 
@@ -29,10 +30,14 @@ public class PickupHandlerCore implements IPickupHandler {
 
 		ISpeciesRoot root = AlleleManager.alleleRegistry.getSpeciesRoot(itemstack);
 		if (root != null) {
-			root.getBreedingTracker(entityitem.worldObj, entityPlayer.getGameProfile()).registerPickup(root.getMember(itemstack));
+			IIndividual individual = root.getMember(itemstack);
+			if (individual != null) {
+				IBreedingTracker tracker = root.getBreedingTracker(entityitem.worldObj, entityPlayer.getGameProfile());
+				tracker.registerPickup(individual);
+			}
 		}
 
-		return true;
+		return false;
 	}
 
 }

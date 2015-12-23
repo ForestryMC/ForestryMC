@@ -18,28 +18,28 @@ public class HiveGenTree extends HiveGen {
 
 	@Override
 	public boolean isValidLocation(World world, BlockPos pos) {
-		Block blockAbove = world.getBlockState(pos.up()).getBlock();
-		if (!blockAbove.isLeaves(world, pos.up())) {
+		Block blockAbove = world.getBlockState(pos.add(0, 1, 0)).getBlock();
+		if (!blockAbove.isLeaves(world, pos.add(0, 1, 0))) {
 			return false;
 		}
 
 		// not a good location if right on top of something
-		return canReplace(world, pos.down());
+		return canReplace(world, pos.add(0, -1, 0));
 	}
 
 	@Override
-	public BlockPos getYForHive(World world, BlockPos pos) {
+	public int getYForHive(World world, int x, int z) {
 		// get top leaf block
-		pos = world.getHeight(pos).down();
-		if (!world.getBlockState(pos).getBlock().isLeaves(world, pos)) {
-			return new BlockPos(pos.getX(), -1, pos.getZ());
+		int y = world.getHeight(new BlockPos(x, 0, z)).getY() - 1;
+		if (!world.getBlockState(new BlockPos(x, y, z)).getBlock().isLeaves(world, new BlockPos(x, y, z))) {
+			return -1;
 		}
 
 		// get to the bottom of the leaves
 		do {
-			pos = pos.down();
-		} while (world.getBlockState(pos).getBlock().isLeaves(world, pos));
+			y--;
+		} while (world.getBlockState(new BlockPos(x, y, z)).getBlock().isLeaves(world,new BlockPos(x, y, z)));
 
-		return pos;
+		return y;
 	}
 }

@@ -10,25 +10,24 @@
  ******************************************************************************/
 package forestry.core.gui.slots;
 
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-
-import forestry.core.interfaces.IFilterSlotDelegate;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import forestry.core.render.TextureManager;
+import forestry.core.tiles.IFilterSlotDelegate;
 
 /**
- * Slot which only takes specific items, specified by the ICustomSlotInventory.
+ * Slot which only takes specific items, specified by the IFilterSlotDelegate.
  */
 public class SlotFiltered extends SlotWatched {
+	private String blockedTexture = "slots/blocked";
+	private final IFilterSlotDelegate filterSlotDelegate;
 
-	protected final IFilterSlotDelegate filterSlotDelegate;
-
-	public <T extends IInventory & IFilterSlotDelegate> SlotFiltered(T filterSlotDelegateInventory, int slotIndex, int xPos, int yPos) {
-		this(filterSlotDelegateInventory, filterSlotDelegateInventory, slotIndex, xPos, yPos);
-	}
-
-	public SlotFiltered(IFilterSlotDelegate filterSlotDelegate, IInventory inventory, int slotIndex, int xPos, int yPos) {
+	public <T extends IInventory & IFilterSlotDelegate> SlotFiltered(T inventory, int slotIndex, int xPos, int yPos) {
 		super(inventory, slotIndex, xPos, yPos);
-		this.filterSlotDelegate = filterSlotDelegate;
+		this.filterSlotDelegate = inventory;
 	}
 
 	@Override
@@ -41,5 +40,21 @@ public class SlotFiltered extends SlotWatched {
 			return filterSlotDelegate.canSlotAccept(slotIndex, itemstack);
 		}
 		return true;
+	}
+
+	public SlotFiltered setBlockedTexture(String ident) {
+		blockedTexture = ident;
+		return this;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public TextureAtlasSprite getBackgroundSprite() {
+		ItemStack stack = getStack();
+		if (!isItemValid(stack)) {
+			return TextureManager.getInstance().getDefault(blockedTexture);
+		} else {
+			return null;
+		}
 	}
 }

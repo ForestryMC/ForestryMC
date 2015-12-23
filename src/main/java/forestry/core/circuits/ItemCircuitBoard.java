@@ -23,10 +23,11 @@ import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitBoard;
 import forestry.api.circuits.ICircuitLayout;
-import forestry.core.config.ForestryItem;
-import forestry.core.items.ItemForestryMultiPass;
+import forestry.api.core.IModelManager;
+import forestry.core.items.ItemForestry;
+import forestry.plugins.PluginCore;
 
-public class ItemCircuitBoard extends ItemForestryMultiPass {
+public class ItemCircuitBoard extends ItemForestry {
 
 	public ItemCircuitBoard() {
 		super();
@@ -54,9 +55,9 @@ public class ItemCircuitBoard extends ItemForestryMultiPass {
 	public int getColorFromItemStack(ItemStack itemstack, int pass) {
 		EnumCircuitBoardType type = EnumCircuitBoardType.values()[itemstack.getItemDamage()];
 		if (pass == 0) {
-			return type.primaryColor;
+			return type.getPrimaryColor();
 		} else {
-			return type.secondaryColor;
+			return type.getSecondaryColor();
 		}
 	}
 
@@ -76,12 +77,12 @@ public class ItemCircuitBoard extends ItemForestryMultiPass {
 	}
 
 	public static ItemStack createCircuitboard(EnumCircuitBoardType type, ICircuitLayout layout, ICircuit[] circuits) {
-		ItemStack chipset = ForestryItem.circuitboards.getItemStack(1, type.ordinal());
+		ItemStack chipset = PluginCore.items.circuitboards.get(type);
 		saveChipset(chipset, new CircuitBoard(type, layout, circuits));
 		return chipset;
 	}
 
-	public static void saveChipset(ItemStack itemstack, ICircuitBoard circuitboard) {
+	private static void saveChipset(ItemStack itemstack, ICircuitBoard circuitboard) {
 		if (circuitboard == null) {
 			itemstack.setTagCompound(null);
 			return;
@@ -92,4 +93,15 @@ public class ItemCircuitBoard extends ItemForestryMultiPass {
 		itemstack.setTagCompound(nbttagcompound);
 	}
 
+	public ItemStack get(EnumCircuitBoardType type) {
+		return new ItemStack(this, 1, type.ordinal());
+	}
+	
+	@Override
+	public void registerModel(Item item, IModelManager manager) {
+		manager.registerItemModel(item, 0, "chipsets");
+		manager.registerItemModel(item, 1, "chipsets");
+		manager.registerItemModel(item, 2, "chipsets");
+		manager.registerItemModel(item, 3, "chipsets");
+	}
 }

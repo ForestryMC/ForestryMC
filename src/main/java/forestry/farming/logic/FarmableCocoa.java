@@ -21,32 +21,32 @@ import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
+import forestry.core.utils.BlockPosUtil;
 import forestry.core.utils.BlockUtil;
-import forestry.core.vect.Vect;
 
 public class FarmableCocoa implements IFarmable {
 
-	public static final Block COCOA_PLANT = Blocks.cocoa;
+	private static final Block COCOA_PLANT = Blocks.cocoa;
 	public static final Item COCOA_SEED = Items.dye;
 	public static final int COCOA_META = 3;
 
 	@Override
 	public boolean isSaplingAt(World world, BlockPos pos) {
-		return world.getBlockState(pos).getBlock() == COCOA_PLANT;
+		return BlockPosUtil.getBlock(world, pos) == COCOA_PLANT;
 	}
 
 	@Override
 	public ICrop getCropAt(World world, BlockPos pos) {
-		Block block = world.getBlockState(pos).getBlock();
+		Block block = BlockPosUtil.getBlock(world, pos);
 		if (block != COCOA_PLANT) {
 			return null;
 		}
-		int meta = world.getBlockMetadata(pos); //TODO Revisit in BlockState pass
-		if (BlockUtil.getMaturityPod(meta) < 2) {
+		int meta = BlockPosUtil.getBlockMeta(world, pos);
+		if (BlockUtil.getMaturityPod(BlockPosUtil.getBlockState(world, pos)) < 2) {
 			return null;
 		}
 
-		return new CropBlock(world, block, meta, new Vect(pos));
+		return new CropBlock(world, block, meta, pos);
 	}
 
 	@Override

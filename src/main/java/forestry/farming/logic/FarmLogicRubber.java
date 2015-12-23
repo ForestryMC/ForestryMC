@@ -19,23 +19,19 @@ import java.util.Stack;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
+import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.StackUtils;
-import forestry.core.vect.Vect;
-import forestry.core.vect.VectUtil;
-import forestry.plugins.PluginIC2;
+import forestry.core.utils.BlockPosUtil;
+import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.Log;
+import forestry.plugins.compat.deprecated.PluginIC2;
 
 public class FarmLogicRubber extends FarmLogic {
 
@@ -44,18 +40,18 @@ public class FarmLogicRubber extends FarmLogic {
 	public FarmLogicRubber(IFarmHousing housing) {
 		super(housing);
 		if (PluginIC2.rubberwood == null || PluginIC2.resin == null) {
-			Proxies.log.warning("Failed to init a farm logic %s since IC2 was not found", getClass().getName());
+			Log.warning("Failed to init a farm logic %s since IC2 was not found", getClass().getName());
 			inActive = true;
 		}
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon getIcon() {
+	public Item getIconItem() {
 		if (!inActive) {
-			return PluginIC2.resin.getIconIndex();
+			return PluginIC2.resin.getItem();
 		} else {
-			return Items.gunpowder.getIconFromDamage(0);
+			return Items.gunpowder;
 		}
 	}
 
@@ -85,24 +81,29 @@ public class FarmLogicRubber extends FarmLogic {
 	}
 
 	@Override
+	public boolean isAcceptedWindfall(ItemStack stack) {
+		return false;
+	}
+
+	@Override
 	public Collection<ItemStack> collect() {
 		return null;
 	}
 
 	@Override
-	public boolean cultivate(BlockPos pos, EnumFacing direction, int extent) {
+	public boolean cultivate(BlockPos pos, FarmDirection direction, int extent) {
 		return false;
 	}
 
-	private final HashMap<Vect, Integer> lastExtents = new HashMap<Vect, Integer>();
+	private final HashMap<BlockPos, Integer> lastExtents = new HashMap<>();
 
 	@Override
-	public Collection<ICrop> harvest(BlockPos pos, EnumFacing direction, int extent) {
+	public Collection<ICrop> harvest(int x, int y, int z, FarmDirection direction, int extent) {
 		if (inActive) {
 			return null;
 		}
 
-		Vect start = new Vect(pos);
+		BlockPos start = new BlockPos(x, y, z);
 		if (!lastExtents.containsKey(start)) {
 			lastExtents.put(start, 0);
 		}
@@ -112,7 +113,7 @@ public class FarmLogicRubber extends FarmLogic {
 			lastExtent = 0;
 		}
 
-		Vect position = translateWithOffset(pos.up(), direction, lastExtent);
+		BlockPos position = translateWithOffset(x, y + 1, z, direction, lastExtent);
 		Collection<ICrop> crops = getHarvestBlocks(position);
 		lastExtent++;
 		lastExtents.put(start, lastExtent);
@@ -120,28 +121,28 @@ public class FarmLogicRubber extends FarmLogic {
 		return crops;
 	}
 
-	private Collection<ICrop> getHarvestBlocks(Vect position) {
+	private Collection<ICrop> getHarvestBlocks(BlockPos position) {
 
-		Set<Vect> seen = new HashSet<Vect>();
-		Stack<ICrop> crops = new Stack<ICrop>();
+		Set<BlockPos> seen = new HashSet<>();
+		Stack<ICrop> crops = new Stack<>();
 
 		World world = getWorld();
 
 		// Determine what type we want to harvest.
-		Block block = VectUtil.getBlock(world, position);
-		if (!StackUtils.equals(block, PluginIC2.rubberwood)) {
+		Block block = BlockPosUtil.getBlock(world, position);
+		if (!ItemStackUtil.equals(block, PluginIC2.rubberwood)) {
 			return crops;
 		}
 
-		int meta = VectUtil.getBlockMeta(world, position);
+		int meta = BlockPosUtil.getBlockMeta(world, position);
 		if (meta >= 2 && meta <= 5) {
 			crops.push(new CropRubber(getWorld(), block, meta, position));
 		}
 
-		ArrayList<Vect> candidates = processHarvestBlock(crops, seen, position);
-		ArrayList<Vect> temp = new ArrayList<Vect>();
+		ArrayList<BlockPos> candidates = processHarvestBlock(crops, seen, position);
+		ArrayList<BlockPos> temp = new ArrayList<>();
 		while (!candidates.isEmpty() && crops.size() < 100) {
-			for (Vect candidate : candidates) {
+			for (BlockPos candidate : candidates) {
 				temp.addAll(processHarvestBlock(crops, seen, candidate));
 			}
 			candidates.clear();
@@ -152,14 +153,14 @@ public class FarmLogicRubber extends FarmLogic {
 		return crops;
 	}
 
-	private ArrayList<Vect> processHarvestBlock(Stack<ICrop> crops, Set<Vect> seen, Vect position) {
+	private ArrayList<BlockPos> processHarvestBlock(Stack<ICrop> crops, Set<BlockPos> seen, BlockPos position) {
 		World world = getWorld();
 
-		ArrayList<Vect> candidates = new ArrayList<Vect>();
+		ArrayList<BlockPos> candidates = new ArrayList<>();
 
 		// Get additional candidates to return
 		for (int j = 0; j < 2; j++) {
-			Vect candidate = new Vect(position.x, position.y + j, position.z);
+			BlockPos candidate = new BlockPos(position);
 			if (candidate.equals(position)) {
 				continue;
 			}
@@ -169,9 +170,9 @@ public class FarmLogicRubber extends FarmLogic {
 				continue;
 			}
 
-			Block block = VectUtil.getBlock(world, candidate);
-			if (StackUtils.equals(block, PluginIC2.rubberwood)) {
-				int meta = VectUtil.getBlockMeta(world, candidate);
+			Block block = BlockPosUtil.getBlock(world, candidate);
+			if (ItemStackUtil.equals(block, PluginIC2.rubberwood)) {
+				int meta = BlockPosUtil.getBlockMeta(world, candidate);
 				if (meta >= 2 && meta <= 5) {
 					crops.push(new CropRubber(world, block, meta, candidate));
 				}

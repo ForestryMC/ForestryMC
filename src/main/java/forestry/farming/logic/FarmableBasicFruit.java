@@ -18,9 +18,9 @@ import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
-import forestry.core.config.Defaults;
-import forestry.core.utils.StackUtils;
-import forestry.core.vect.Vect;
+import forestry.core.config.Constants;
+import forestry.core.utils.BlockPosUtil;
+import forestry.core.utils.ItemStackUtil;
 
 public class FarmableBasicFruit implements IFarmable {
 
@@ -39,23 +39,23 @@ public class FarmableBasicFruit implements IFarmable {
 
 	@Override
 	public ICrop getCropAt(World world, BlockPos pos) {
-		if (world.getBlockState(pos).getBlock() != block) {
+		if (BlockPosUtil.getBlock(world, pos) != block) {
 			return null;
 		}
-		if (world.getBlockMetadata(x, y, z) != matureMeta) { //TODO Revisit in BlockState pass
+		if (BlockPosUtil.getBlockMeta(world, pos) != matureMeta) {
 			return null;
 		}
-		return new CropBasicFruit(world, block, matureMeta, new Vect(pos));
+		return new CropBasicFruit(world, block, matureMeta, pos);
 	}
 
 	@Override
 	public boolean isGermling(ItemStack itemstack) {
-		return StackUtils.equals(block, itemstack);
+		return ItemStackUtil.equals(block, itemstack);
 	}
 
 	@Override
 	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
-		return world.setBlockState(pos, block.getDefaultState(), Defaults.FLAG_BLOCK_SYNCH);
+		return world.setBlockState(pos, block.getStateFromMeta(0), Constants.FLAG_BLOCK_SYNCH);
 	}
 
 	@Override

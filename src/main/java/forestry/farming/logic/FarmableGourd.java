@@ -17,9 +17,9 @@ import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
-import forestry.core.config.Defaults;
-import forestry.core.utils.StackUtils;
-import forestry.core.vect.Vect;
+import forestry.core.config.Constants;
+import forestry.core.utils.BlockPosUtil;
+import forestry.core.utils.ItemStackUtil;
 
 public class FarmableGourd implements IFarmable {
 
@@ -39,7 +39,7 @@ public class FarmableGourd implements IFarmable {
 			return false;
 		}
 
-		return StackUtils.equals(world.getBlockState(pos).getBlock(), stem);
+		return ItemStackUtil.equals(BlockPosUtil.getBlock(world, pos), stem);
 	}
 
 	@Override
@@ -48,15 +48,15 @@ public class FarmableGourd implements IFarmable {
 			return null;
 		}
 
-		if (!StackUtils.equals(world.getBlockState(pos).getBlock(), fruit)) {
+		if (!ItemStackUtil.equals(BlockPosUtil.getBlock(world, pos), fruit)) {
 			return null;
 		}
 
-		if (world.getBlockMetadata(x, y, z) != fruit.getItemDamage()) {
+		if (BlockPosUtil.getBlockMeta(world, pos) != fruit.getItemDamage()) {
 			return null;
 		}
 
-		return new CropBlock(world, StackUtils.getBlock(fruit), fruit.getItemDamage(), new Vect(pos));
+		return new CropBlock(world, ItemStackUtil.getBlock(fruit), fruit.getItemDamage(), pos);
 	}
 
 	@Override
@@ -71,7 +71,7 @@ public class FarmableGourd implements IFarmable {
 
 	@Override
 	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
-		return world.setBlockState(pos, StackUtils.getBlock(stem).getDefaultState(), Defaults.FLAG_BLOCK_SYNCH);
+		return world.setBlockState(pos, ItemStackUtil.getBlock(stem).getStateFromMeta(0), Constants.FLAG_BLOCK_SYNCH);
 	}
 
 }

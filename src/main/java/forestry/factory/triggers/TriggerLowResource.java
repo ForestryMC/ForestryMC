@@ -11,10 +11,9 @@
 package forestry.factory.triggers;
 
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 
-import net.minecraftforge.common.util.ForgeDirection;
-
-import forestry.core.gadgets.TilePowered;
+import forestry.core.tiles.TilePowered;
 import forestry.core.triggers.Trigger;
 
 import buildcraft.api.statements.IStatementContainer;
@@ -38,7 +37,7 @@ public class TriggerLowResource extends Trigger {
 	 * Return true if the tile given in parameter activates the trigger, given the parameters.
 	 */
 	@Override
-	public boolean isTriggerActive(TileEntity tile, ForgeDirection side, IStatementContainer source, IStatementParameter[] parameters) {
+	public boolean isTriggerActive(TileEntity tile, EnumFacing side, IStatementContainer source, IStatementParameter[] parameters) {
 		if (!(tile instanceof TilePowered)) {
 			return false;
 		}

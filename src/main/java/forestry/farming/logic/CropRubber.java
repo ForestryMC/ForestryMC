@@ -15,25 +15,25 @@ import java.util.Collection;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
-import forestry.core.vect.Vect;
-import forestry.plugins.PluginIC2;
+import forestry.plugins.compat.deprecated.PluginIC2;
 
 public class CropRubber extends CropBlock {
 
-	public CropRubber(World world, Block block, int meta, Vect position) {
+	public CropRubber(World world, Block block, int meta, BlockPos position) {
 		super(world, block, meta, position);
 	}
 
 	@Override
-	protected Collection<ItemStack> harvestBlock(Vect pos) {
-		Collection<ItemStack> harvested = new ArrayList<ItemStack>();
+	protected Collection<ItemStack> harvestBlock(BlockPos pos) {
+		Collection<ItemStack> harvested = new ArrayList<>();
 		harvested.add(PluginIC2.resin.copy());
-		Proxies.common.addBlockDestroyEffects(world, pos.x, pos.y, pos.z, block, 0);
-		world.setBlock(pos.x, pos.y, pos.z, block, meta + 6, Defaults.FLAG_BLOCK_SYNCH);
+		Proxies.common.addBlockDestroyEffects(world, pos, block.getStateFromMeta(0));
+		world.setBlockState(pos, block.getStateFromMeta(meta + 6), Constants.FLAG_BLOCK_SYNCH);
 		return harvested;
 	}
 

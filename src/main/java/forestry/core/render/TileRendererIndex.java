@@ -21,16 +21,18 @@ public class TileRendererIndex {
 		this.meta = meta;
 	}
 
+	@Override
 	public int hashCode() {
 		return block.hashCode() + meta;
 	}
 
-	public boolean equals(Object aobj) {
-		if (!(aobj instanceof TileRendererIndex)) {
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof TileRendererIndex)) {
 			return false;
 		}
 
-		TileRendererIndex index = (TileRendererIndex) aobj;
+		TileRendererIndex index = (TileRendererIndex) obj;
 
 		return index.block == block && index.meta == meta;
 	}

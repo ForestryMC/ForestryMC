@@ -78,7 +78,7 @@ public class ModelButterfly extends ModelBase {
 
 		GL11.glPushMatrix();
 		GL11.glScalef(scale, scale, scale);
-		GL11.glTranslatef(0.0F, (12.0f / scale) * f5, 0.0F);
+		GL11.glTranslatef(0.0F, (20.0f / scale) * f5, 0.0F);
 		wingRight.render(f5);
 		eyeRight.render(f5);
 		eyeLeft.render(f5);
@@ -88,7 +88,7 @@ public class ModelButterfly extends ModelBase {
 
 	}
 
-	private void setRotation(ModelRenderer model, float x, float y, float z) {
+	private static void setRotation(ModelRenderer model, float x, float y, float z) {
 		model.rotateAngleX = x;
 		model.rotateAngleY = y;
 		model.rotateAngleZ = z;

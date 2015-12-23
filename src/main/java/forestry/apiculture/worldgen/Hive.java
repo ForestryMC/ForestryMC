@@ -26,7 +26,7 @@ import forestry.api.core.EnumTemperature;
 public final class Hive {
 
 	private final IHiveDescription hiveDescription;
-	private final List<IHiveDrop> drops = new ArrayList<IHiveDrop>();
+	private final List<IHiveDrop> drops = new ArrayList<>();
 
 	public Hive(IHiveDescription hiveDescription) {
 		if (hiveDescription == null) {
@@ -79,7 +79,7 @@ public final class Hive {
 		return hiveDescription.getHiveGen().canReplace(world, pos);
 	}
 
-	public BlockPos getYForHive(World world, BlockPos pos) {
-		return hiveDescription.getHiveGen().getYForHive(world, pos);
+	public int getYForHive(World world, int x, int z) {
+		return hiveDescription.getHiveGen().getYForHive(world, x, z);
 	}
 }

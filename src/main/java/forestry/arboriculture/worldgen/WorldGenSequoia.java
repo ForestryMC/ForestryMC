@@ -10,49 +10,54 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.util.BlockPos;
+import net.minecraft.world.World;
+
 import forestry.api.world.ITreeGenData;
 
 public class WorldGenSequoia extends WorldGenTree {
 
 	public WorldGenSequoia(ITreeGenData tree) {
-		super(tree);
+		this(tree, 20, 5);
+	}
+
+	protected WorldGenSequoia(ITreeGenData tree, int baseHeight, int heightVariation) {
+		super(tree, baseHeight, heightVariation);
 	}
 
 	@Override
-	public void generate() {
-		generateTreeTrunk(height, girth);
+	public void generate(World world) {
+		generateTreeTrunk(world, height, girth);
+		generateSupportStems(world, height, girth, 0.4f, 0.4f);
 
-		int topLength = height / 4;
+		int topHeight = (height / 3) + world.rand.nextInt(height / 6);
 
-		int topHeight = height - topLength + rand.nextInt(height / 4);
+		List<BlockPos> branchCoords = new ArrayList<>();
+		for (int yBranch = topHeight; yBranch < height; yBranch++) {
+			int branchLength = Math.round(height - yBranch) / 2;
+			if (branchLength > 4) {
+				branchLength = 4;
+			}
+			branchCoords.addAll(generateBranches(world, yBranch, 0, 0, 0.05f, 0.25f, branchLength, 1, 0.5f));
+		}
+		for (BlockPos branchEnd : branchCoords) {
+			generateAdjustedCylinder(world, branchEnd.getY(), branchEnd.getX(), branchEnd.getZ(), 1.0f, 1, leaf, EnumReplaceMode.NONE);
+		}
 
 		int leafSpawn = height + 2;
 
-		generateAdjustedCylinder(leafSpawn--, 0, 1, leaf);
-		generateAdjustedCylinder(leafSpawn--, 1, 1, leaf);
-		generateAdjustedCylinder(leafSpawn--, 1, 1, leaf);
+		generateAdjustedCylinder(world, leafSpawn--, 0, 1, leaf);
+		generateAdjustedCylinder(world, leafSpawn--, 1, 1, leaf);
+		generateAdjustedCylinder(world, leafSpawn--, 1, 1, leaf);
 
 		while (leafSpawn > topHeight) {
-			generateAdjustedCylinder(leafSpawn--, 1, 1, leaf);
+			generateAdjustedCylinder(world, leafSpawn--, 1, 1, leaf);
 		}
 
-		generateAdjustedCylinder(leafSpawn--, 0, 1, leaf);
-
-		for (int times = 0; times < height / 4; times++) {
-			int h = (height / 3) + rand.nextInt(height - (height / 3));
-			if (rand.nextBoolean() && h < height / 3) {
-				h = height / 2 + rand.nextInt(height / 3);
-			}
-			int x_off = -1 + rand.nextInt(3);
-			int y_off = -1 + rand.nextInt(3);
-			generateSphere(new Vector(x_off, h, y_off), 1 + rand.nextInt(2), leaf, EnumReplaceMode.NONE);
-		}
-
+		generateAdjustedCylinder(world, leafSpawn, 0, 1, leaf);
 	}
 
-	@Override
-	public void preGenerate() {
-		height = determineHeight(20, 5);
-		girth = determineGirth(tree.getGirth(world, startX, startY, startZ));
-	}
 }

@@ -10,247 +10,124 @@
  ******************************************************************************/
 package forestry.core.gui;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimaps;
+
+import java.util.List;
+import java.util.Map;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-import forestry.core.gadgets.TileForestry;
+import forestry.core.gui.slots.SlotFilteredInventory;
 import forestry.core.gui.slots.SlotForestry;
-import forestry.core.interfaces.IRestrictedAccess;
-import forestry.core.inventory.ItemInventory;
-import forestry.core.utils.StackUtils;
+import forestry.core.gui.slots.SlotLocked;
+import forestry.core.network.IForestryPacketClient;
+import forestry.core.proxy.Proxies;
+import forestry.core.utils.SlotUtil;
 
-public class ContainerForestry extends Container {
+import invtweaks.api.container.ContainerSection;
+import invtweaks.api.container.ContainerSectionCallback;
 
-	protected final IInventory inventoryAccess;
-	protected final IRestrictedAccess restrictedAccess;
-
-	public ContainerForestry(TileForestry tileForestry) {
-		this.inventoryAccess = tileForestry;
-		this.restrictedAccess = tileForestry;
+@invtweaks.api.container.ChestContainer(showButtons = false)
+public abstract class ContainerForestry extends Container {
+	protected final void addPlayerInventory(InventoryPlayer playerInventory, int xInv, int yInv) {
+		// Player inventory
+		for (int row = 0; row < 3; row++) {
+			for (int column = 0; column < 9; column++) {
+				addSlotToContainer(new Slot(playerInventory, column + row * 9 + 9, xInv + column * 18, yInv + row * 18));
+			}
+		}
+		// Player hotbar
+		for (int column = 0; column < 9; column++) {
+			addHotbarSlot(playerInventory, column, xInv + column * 18, yInv + 58);
+		}
 	}
 
-	public ContainerForestry(ItemInventory itemInventory) {
-		this.inventoryAccess = itemInventory;
-		this.restrictedAccess = null;
+	protected void addHotbarSlot(InventoryPlayer playerInventory, int slot, int x, int y) {
+		addSlotToContainer(new Slot(playerInventory, slot, x, y));
+	}
+
+	@Override
+	public Slot addSlotToContainer(Slot p_75146_1_) {
+		return super.addSlotToContainer(p_75146_1_);
 	}
 
 	@Override
 	public ItemStack slotClick(int slotIndex, int button, int modifier, EntityPlayer player) {
-		if (player == null) {
+		if (!canAccess(player)) {
 			return null;
 		}
 
-		if (restrictedAccess != null && !restrictedAccess.allowsAlteration(player)) {
-			return null;
-		}
-
-		Slot slot = slotIndex < 0 ? null : (Slot) this.inventorySlots.get(slotIndex);
-		if (slot instanceof SlotForestry) {
-			if (((SlotForestry) slot).isPhantom()) {
-				return slotClickPhantom(slot, button, modifier, player);
+		if (modifier == 2 && button >= 0 && button < 9) {
+			// hotkey used to move item from slot to hotbar
+			int hotbarSlotIndex = 27 + button;
+			Slot hotbarSlot = getSlot(hotbarSlotIndex);
+			if (hotbarSlot instanceof SlotLocked) {
+				return null;
 			}
 		}
+
+		Slot slot = (slotIndex < 0) ? null : getSlot(slotIndex);
+		if (slot instanceof SlotForestry) {
+			SlotForestry slotForestry = (SlotForestry) slot;
+			if (slotForestry.isPhantom()) {
+				return SlotUtil.slotClickPhantom(slotForestry, button, modifier, player);
+			}
+		}
+
 		return super.slotClick(slotIndex, button, modifier, player);
 	}
 
-	private ItemStack slotClickPhantom(Slot slot, int mouseButton, int modifier, EntityPlayer player) {
-		ItemStack stack = null;
-
-		ItemStack stackSlot = slot.getStack();
-		if (stackSlot != null) {
-			stack = stackSlot.copy();
+	@Override
+	public final ItemStack transferStackInSlot(EntityPlayer player, int slotIndex) {
+		if (!canAccess(player)) {
+			return null;
 		}
 
-		if (mouseButton == 2) {
-			fillPhantomSlot(slot, null, mouseButton, modifier);
-		} else if (mouseButton == 0 || mouseButton == 1) {
-			InventoryPlayer playerInv = player.inventory;
-
-			ItemStack stackHeld = playerInv.getItemStack();
-
-			if (stackSlot == null) {
-				if (stackHeld != null && slot.isItemValid(stackHeld)) {
-					fillPhantomSlot(slot, stackHeld, mouseButton, modifier);
-				}
-			} else if (stackHeld == null) {
-				adjustPhantomSlot(slot, mouseButton, modifier);
-			} else if (slot.isItemValid(stackHeld)) {
-				if (StackUtils.isIdenticalItem(stackSlot, stackHeld)) {
-					adjustPhantomSlot(slot, mouseButton, modifier);
-				} else {
-					fillPhantomSlot(slot, stackHeld, mouseButton, modifier);
-				}
-			}
-		} else if (mouseButton == 5) {
-			InventoryPlayer playerInv = player.inventory;
-			ItemStack stackHeld = playerInv.getItemStack();
-			if (!slot.getHasStack()) {
-				fillPhantomSlot(slot, stackHeld, mouseButton, modifier);
-			}
-		}
-		return stack;
+		return SlotUtil.transferStackInSlot(inventorySlots, player, slotIndex);
 	}
 
-	protected void adjustPhantomSlot(Slot slot, int mouseButton, int modifier) {
-		if (!((SlotForestry) slot).canAdjustPhantom()) {
-			return;
-		}
-		ItemStack stackSlot = slot.getStack();
-		int stackSize;
-		if (modifier == 1) {
-			stackSize = mouseButton == 0 ? (stackSlot.stackSize + 1) / 2 : stackSlot.stackSize * 2;
-		} else {
-			stackSize = mouseButton == 0 ? stackSlot.stackSize - 1 : stackSlot.stackSize + 1;
-		}
+	protected abstract boolean canAccess(EntityPlayer player);
 
-		if (stackSize > slot.getSlotStackLimit()) {
-			stackSize = slot.getSlotStackLimit();
-		}
-
-		stackSlot.stackSize = stackSize;
-
-		if (stackSlot.stackSize <= 0) {
-			stackSlot = null;
-		}
-
-		slot.putStack(stackSlot);
-	}
-
-	protected void fillPhantomSlot(Slot slot, ItemStack stackHeld, int mouseButton, int modifier) {
-		if (!((SlotForestry) slot).canAdjustPhantom()) {
-			return;
-		}
-
-		if (stackHeld == null) {
-			slot.putStack(null);
-			return;
-		}
-
-		int stackSize = mouseButton == 0 ? stackHeld.stackSize : 1;
-		if (stackSize > slot.getSlotStackLimit()) {
-			stackSize = slot.getSlotStackLimit();
-		}
-		ItemStack phantomStack = stackHeld.copy();
-		phantomStack.stackSize = stackSize;
-
-		slot.putStack(phantomStack);
-	}
-
-	protected boolean shiftItemStack(ItemStack stackToShift, int start, int end) {
-		boolean changed = false;
-		if (stackToShift.isStackable()) {
-			for (int slotIndex = start; stackToShift.stackSize > 0 && slotIndex < end; slotIndex++) {
-				Slot slot = (Slot) inventorySlots.get(slotIndex);
-				ItemStack stackInSlot = slot.getStack();
-				if (stackInSlot != null && StackUtils.isIdenticalItem(stackInSlot, stackToShift)) {
-					int resultingStackSize = stackInSlot.stackSize + stackToShift.stackSize;
-					int max = Math.min(stackToShift.getMaxStackSize(), slot.getSlotStackLimit());
-					if (resultingStackSize <= max) {
-						stackToShift.stackSize = 0;
-						stackInSlot.stackSize = resultingStackSize;
-						slot.onSlotChanged();
-						changed = true;
-					} else if (stackInSlot.stackSize < max) {
-						stackToShift.stackSize -= max - stackInSlot.stackSize;
-						stackInSlot.stackSize = max;
-						slot.onSlotChanged();
-						changed = true;
-					}
-				}
+	protected final void sendPacketToCrafters(IForestryPacketClient packet) {
+		for (Object crafter : crafters) {
+			if (crafter instanceof EntityPlayer) {
+				Proxies.net.sendToPlayer(packet, (EntityPlayer) crafter);
 			}
 		}
-		if (stackToShift.stackSize > 0) {
-			for (int slotIndex = start; stackToShift.stackSize > 0 && slotIndex < end; slotIndex++) {
-				Slot slot = (Slot) inventorySlots.get(slotIndex);
-				ItemStack stackInSlot = slot.getStack();
-				if (stackInSlot == null) {
-					int max = Math.min(stackToShift.getMaxStackSize(), slot.getSlotStackLimit());
-					stackInSlot = stackToShift.copy();
-					stackInSlot.stackSize = Math.min(stackToShift.stackSize, max);
-					stackToShift.stackSize -= stackInSlot.stackSize;
-					slot.putStack(stackInSlot);
-					slot.onSlotChanged();
-					changed = true;
-				}
-			}
-		}
-		return changed;
 	}
 
-	private boolean tryShiftItem(ItemStack stackToShift, int numSlots) {
-		for (int machineIndex = 0; machineIndex < numSlots - 9 * 4; machineIndex++) {
-			Slot slot = (Slot) inventorySlots.get(machineIndex);
-			if (slot instanceof SlotForestry) {
-				SlotForestry slotForestry = (SlotForestry) slot;
-				if (!slotForestry.canShift()) {
-					continue;
-				}
-				if (slotForestry.isPhantom()) {
-					continue;
-				}
-			}
-			if (!slot.isItemValid(stackToShift)) {
+	@SuppressWarnings("unused") // inventory tweaks
+	@ContainerSectionCallback
+	public Map<ContainerSection, List<Slot>> getContainerSections() {
+		ArrayListMultimap<ContainerSection, Slot> map = ArrayListMultimap.create();
+
+		for (Object object : inventorySlots) {
+			if (!(object instanceof Slot)) {
 				continue;
 			}
-			if (shiftItemStack(stackToShift, machineIndex, machineIndex + 1)) {
-				return true;
-			}
-		}
-		return false;
-	}
+			Slot slot = (Slot) object;
 
-	@Override
-	public ItemStack transferStackInSlot(EntityPlayer player, int slotIndex) {
-		if (player == null) {
-			return null;
-		}
-
-		if (restrictedAccess != null && !restrictedAccess.allowsAlteration(player)) {
-			return null;
-		}
-
-		ItemStack originalStack = null;
-		Slot slot = (Slot) inventorySlots.get(slotIndex);
-		int numSlots = inventorySlots.size();
-		if (slot != null && slot.getHasStack()) {
-			ItemStack stackInSlot = slot.getStack();
-			originalStack = stackInSlot.copy();
-			if (slotIndex >= numSlots - 9 * 4 && tryShiftItem(stackInSlot, numSlots)) {
-				// NOOP
-			} else if (slotIndex >= numSlots - 9 * 4 && slotIndex < numSlots - 9) {
-				if (!shiftItemStack(stackInSlot, numSlots - 9, numSlots)) {
-					return null;
+			if (slot.inventory instanceof InventoryPlayer) {
+				map.put(ContainerSection.INVENTORY, slot);
+				if (slot.slotNumber < 9) {
+					map.put(ContainerSection.INVENTORY_HOTBAR, slot);
+				} else if (slot.slotNumber < 36) {
+					map.put(ContainerSection.INVENTORY_NOT_HOTBAR, slot);
+				} else {
+					map.put(ContainerSection.ARMOR, slot);
 				}
-			} else if (slotIndex >= numSlots - 9 && slotIndex < numSlots) {
-				if (!shiftItemStack(stackInSlot, numSlots - 9 * 4, numSlots - 9)) {
-					return null;
-				}
-			} else if (!shiftItemStack(stackInSlot, numSlots - 9 * 4, numSlots)) {
-				return null;
-			}
-			slot.onSlotChange(stackInSlot, originalStack);
-			if (stackInSlot.stackSize <= 0) {
-				slot.putStack(null);
 			} else {
-				slot.onSlotChanged();
+				if (!(slot instanceof SlotForestry) || slot instanceof SlotFilteredInventory) {
+					map.put(ContainerSection.CHEST, slot);
+				}
 			}
-			if (stackInSlot.stackSize == originalStack.stackSize) {
-				return null;
-			}
-			slot.onPickupFromSlot(player, stackInSlot);
 		}
-		return originalStack;
-	}
-
-	@Override
-	public final boolean canInteractWith(EntityPlayer entityplayer) {
-		if (inventoryAccess == null) {
-			return true;
-		}
-		return inventoryAccess.isUseableByPlayer(entityplayer);
+		
+		return Multimaps.asMap(map);
 	}
 }

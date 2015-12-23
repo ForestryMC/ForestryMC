@@ -20,7 +20,7 @@ import net.minecraft.world.World;
 
 public class HiveGenGround extends HiveGen {
 
-	private final Set<Material> groundMaterials = new HashSet<Material>();
+	private final Set<Material> groundMaterials = new HashSet<>();
 
 	public HiveGenGround(Block... groundBlocks) {
 		for (Block block : groundBlocks) {
@@ -30,19 +30,19 @@ public class HiveGenGround extends HiveGen {
 
 	@Override
 	public boolean isValidLocation(World world, BlockPos pos) {
-		Block ground = world.getBlockState(pos.down()).getBlock();
+		Block ground = world.getBlockState(pos.add(0, -1, 0)).getBlock();
 		return groundMaterials.contains(ground.getMaterial());
 	}
 
 	@Override
-	public BlockPos getYForHive(World world, BlockPos pos) {
-		pos = world.getHeight(pos);
+	public int getYForHive(World world, int x, int z) {
+		int y = world.getHeight(new BlockPos(x, 0, z)).getY();
 
 		// get to the ground
-		while (pos.getY() >= 0 && (world.getBlockState(pos.down()).getBlock().isLeaves(world, pos.down()) || canReplace(world, pos.down()))) {
-			pos = pos.down();
+		while (y >= 0 && (world.getBlockState(new BlockPos(x, y - 1, z)).getBlock().isLeaves(world, new BlockPos(x, y - 1, z)) || canReplace(world, new BlockPos(x, y - 1, z)))) {
+			y--;
 		}
 
-		return pos;
+		return y;
 	}
 }

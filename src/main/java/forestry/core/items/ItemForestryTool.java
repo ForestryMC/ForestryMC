@@ -10,50 +10,44 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import java.util.Arrays;
-import java.util.List;
-
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
-import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
-import forestry.core.proxy.Proxies;
+import forestry.core.utils.ItemStackUtil;
 
 public class ItemForestryTool extends ItemForestry {
-
 	private final ItemStack remnants;
-	protected float efficiencyOnProperMaterial;
-	private final List<Block> blocksEffectiveAgainst;
+	private float efficiencyOnProperMaterial;
 
-	public ItemForestryTool(Block[] blocksEffectiveAgainst, ItemStack remnants) {
-		super();
-		this.blocksEffectiveAgainst = Arrays.asList(blocksEffectiveAgainst);
+	public ItemForestryTool(ItemStack remnants) {
 		this.maxStackSize = 1;
 		efficiencyOnProperMaterial = 6F;
 		setMaxDamage(200);
 		this.remnants = remnants;
+		if (remnants != null) {
+			MinecraftForge.EVENT_BUS.register(this);
+		}
 	}
 
-	@Override
-	public float func_150893_a(ItemStack itemstack, Block block) {
-		if (blocksEffectiveAgainst.contains(block)) {
-			return efficiencyOnProperMaterial;
-		}
-		return 1.0F;
+	public void setEfficiencyOnProperMaterial(float efficiencyOnProperMaterial) {
+		this.efficiencyOnProperMaterial = efficiencyOnProperMaterial;
 	}
-
+	
 	@Override
-	public float getDigSpeed(ItemStack itemstack, Block block, int md) {
-		if (ForgeHooks.isToolEffective(itemstack, block, md)) {
-			return efficiencyOnProperMaterial;
+	public float getDigSpeed(ItemStack itemstack, IBlockState state) {
+		for (String type : getToolClasses(itemstack)) {
+			if (state.getBlock().isToolEffective(type, state))
+				return efficiencyOnProperMaterial;
 		}
-		return func_150893_a(itemstack, block);
+		return super.getDigSpeed(itemstack, state);
 	}
 
 	@SubscribeEvent
@@ -62,16 +56,19 @@ public class ItemForestryTool extends ItemForestry {
 			return;
 		}
 
-		if (Proxies.common.isSimulating(event.entityPlayer.worldObj) && remnants != null) {
-			EntityItem entity = new EntityItem(event.entityPlayer.worldObj, event.entityPlayer.posX, event.entityPlayer.posY, event.entityPlayer.posZ,
-					remnants.copy());
-			event.entityPlayer.worldObj.spawnEntityInWorld(entity);
+		EntityPlayer player = event.entityPlayer;
+		World world = player.worldObj;
+
+		if (!world.isRemote && remnants != null) {
+			ItemStackUtil.dropItemStackAsEntity(remnants.copy(), world, player.posX, player.posY, player.posZ);
 		}
 	}
-
+	
 	@Override
-	public boolean onBlockDestroyed(ItemStack itemstack, World world, Block block, int j, int k, int l, EntityLivingBase entityliving) {
-		itemstack.damageItem(1, entityliving);
+	public boolean onBlockDestroyed(ItemStack stack, World world, Block block, BlockPos pos, EntityLivingBase player) {
+		if (block.getBlockHardness(world, pos) != 0) {
+			stack.damageItem(1, player);
+		}
 		return true;
 	}
 
@@ -79,5 +76,4 @@ public class ItemForestryTool extends ItemForestry {
 	public boolean isFull3D() {
 		return true;
 	}
-
 }

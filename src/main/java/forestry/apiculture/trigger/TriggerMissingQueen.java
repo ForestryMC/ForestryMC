@@ -11,11 +11,9 @@
 package forestry.apiculture.trigger;
 
 import net.minecraft.tileentity.TileEntity;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
-import forestry.core.EnumErrorCode;
-import forestry.core.interfaces.IErrorSource;
+import net.minecraft.util.EnumFacing;
+import forestry.api.core.IErrorLogicSource;
+import forestry.core.errors.EnumErrorCode;
 import forestry.core.triggers.Trigger;
 
 import buildcraft.api.statements.IStatementContainer;
@@ -31,12 +29,13 @@ public class TriggerMissingQueen extends Trigger {
 	 * Return true if the tile given in parameter activates the trigger, given the parameters.
 	 */
 	@Override
-	public boolean isTriggerActive(TileEntity tile, ForgeDirection side, IStatementContainer source, IStatementParameter[] parameters) {
+	public boolean isTriggerActive(TileEntity tile, EnumFacing side, IStatementContainer source, IStatementParameter[] parameters) {
 
-		if (!(tile instanceof IErrorSource)) {
+		if (!(tile instanceof IErrorLogicSource)) {
 			return false;
 		}
 
-		return ((IErrorSource) tile).getErrorState() == EnumErrorCode.NOQUEEN;
+		IErrorLogicSource apiary = (IErrorLogicSource) tile;
+		return apiary.getErrorLogic().contains(EnumErrorCode.NO_QUEEN);
 	}
 }

@@ -12,8 +12,12 @@ package forestry.core.worldgen;
 
 import java.util.Random;
 
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
+
+import forestry.arboriculture.worldgen.ITreeBlockType;
 
 public abstract class WorldGenBase extends WorldGenerator {
 
@@ -37,36 +41,38 @@ public abstract class WorldGenBase extends WorldGenerator {
 		public static double distance(Vector a, Vector b) {
 			return Math.sqrt(Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2) + Math.pow(a.z - b.z, 2));
 		}
+
+		public static EnumFacing direction(Vector a, Vector b) {
+			int x = (int) Math.abs(a.x - b.x);
+			int y = (int) Math.abs(a.y - b.y);
+			int z = (int) Math.abs(a.z - b.z);
+			int max = Math.max(x, Math.max(y, z));
+			if (max == x) {
+				return EnumFacing.EAST;
+			} else if (max == z) {
+				return EnumFacing.SOUTH;
+			} else {
+				return EnumFacing.UP;
+			}
+		}
 	}
-
-	protected World world;
-	protected Random rand;
-
+	
 	@Override
-	public final boolean generate(World world, Random random, int x, int y, int z) {
-		return generate(world, random, x, y, z, false);
+	public boolean generate(World worldIn, Random rand, BlockPos position) {
+		return generate(worldIn, position, false);
 	}
 
-	public final boolean generate(World world, Random random, int x, int y, int z, boolean forced) {
-		this.world = world;
-		this.rand = random;
-		boolean result = subGenerate(x, y, z, forced);
-		this.world = null;
-		this.rand = null;
-		return result;
-	}
-
-	public boolean subGenerate(int x, int y, int z, boolean forced) {
+	public boolean generate(World world, BlockPos pos, boolean forced) {
 		return false;
 	}
 
-	protected abstract void addBlock(int x, int y, int z, BlockType type, EnumReplaceMode replace);
+	protected abstract void addBlock(World world, BlockPos pos, ITreeBlockType type, EnumReplaceMode replace);
 
-	protected final void generateCuboid(Vector start, Vector area, BlockType block, EnumReplaceMode replace) {
+	protected final void generateCuboid(World world, Vector start, Vector area, ITreeBlockType block, EnumReplaceMode replace) {
 		for (int x = (int) start.x; x < (int) start.x + area.x; x++) {
 			for (int y = (int) start.y; y < (int) start.y + area.y; y++) {
 				for (int z = (int) start.z; z < (int) start.z + area.z; z++) {
-					addBlock(x, y, z, block, replace);
+					addBlock(world, new BlockPos(x, y, z), block, replace);
 				}
 			}
 		}
@@ -75,25 +81,29 @@ public abstract class WorldGenBase extends WorldGenerator {
 	/*
 	 * Center is the bottom middle of the cylinder
 	 */
-	protected final void generateCylinder(Vector center, float radius, int height, BlockType block, EnumReplaceMode replace) {
+	protected final void generateCylinder(World world, Vector center, float radius, int height, ITreeBlockType block, EnumReplaceMode replace) {
 		Vector start = new Vector(center.x - radius, center.y, center.z - radius);
 		Vector area = new Vector(radius * 2 + 1, height, radius * 2 + 1);
 		for (int x = (int) start.x; x < (int) start.x + area.x; x++) {
 			for (int y = (int) start.y; y < (int) start.y + area.y; y++) {
 				for (int z = (int) start.z; z < (int) start.z + area.z; z++) {
-					if (Vector.distance(new Vector(x, y, z), new Vector(center.x, y, center.z)) <= (radius) + 0.01) {
-						addBlock(x, y, z, block, replace);
+					Vector position = new Vector(x, y, z);
+					Vector treeCenter = new Vector(center.x, y, center.z);
+					if (Vector.distance(position, treeCenter) <= (radius) + 0.01) {
+						EnumFacing direction = Vector.direction(position, treeCenter);
+						block.setDirection(direction);
+						addBlock(world, new BlockPos(x, y, z), block, replace);
 					}
 				}
 			}
 		}
 	}
 
-	protected final void generateCircle(Vector center, float radius, int width, int height, BlockType block, EnumReplaceMode replace) {
-		generateCircle(center, radius, width, height, block, 1.0f, replace);
+	protected final void generateCircle(World world, Vector center, float radius, int width, int height, ITreeBlockType block, EnumReplaceMode replace) {
+		generateCircle(world, center, radius, width, height, block, 1.0f, replace);
 	}
 
-	protected final void generateCircle(Vector center, float radius, int width, int height, BlockType block, float chance, EnumReplaceMode replace) {
+	protected final void generateCircle(World world, Vector center, float radius, int width, int height, ITreeBlockType block, float chance, EnumReplaceMode replace) {
 		Vector start = new Vector(center.x - radius, center.y, center.z - radius);
 		Vector area = new Vector(radius * 2 + 1, height, radius * 2 + 1);
 
@@ -101,27 +111,27 @@ public abstract class WorldGenBase extends WorldGenerator {
 			for (int y = (int) start.y; y < (int) start.y + area.y; y++) {
 				for (int z = (int) start.z; z < (int) start.z + area.z; z++) {
 
-					if (rand.nextFloat() > chance) {
+					if (world.rand.nextFloat() > chance) {
 						continue;
 					}
 
 					double distance = Vector.distance(new Vector(x, y, z), new Vector(center.x, y, center.z));
 					if ((radius - width - 0.01 < distance && distance <= (radius) + 0.01)) {
-						addBlock(x, y, z, block, replace);
+						addBlock(world, new BlockPos(x, y, z), block, replace);
 					}
 				}
 			}
 		}
 	}
 
-	protected final void generateSphere(Vector center, int radius, BlockType block, EnumReplaceMode replace) {
+	protected final void generateSphere(World world, Vector center, int radius, ITreeBlockType block, EnumReplaceMode replace) {
 		Vector start = new Vector(center.x - radius, center.y - radius, center.z - radius);
 		Vector area = new Vector(radius * 2 + 1, radius * 2 + 1, radius * 2 + 1);
 		for (int x = (int) start.x; x < (int) start.x + area.x; x++) {
 			for (int y = (int) start.y; y < (int) start.y + area.y; y++) {
 				for (int z = (int) start.z; z < (int) start.z + area.z; z++) {
 					if (Vector.distance(new Vector(x, y, z), new Vector(center.x, center.y, center.z)) <= (radius) + 0.01) {
-						addBlock(x, y, z, block, replace);
+						addBlock(world, new BlockPos(x, y, z), block, replace);
 					}
 				}
 			}

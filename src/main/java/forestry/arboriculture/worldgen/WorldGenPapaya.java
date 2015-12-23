@@ -10,28 +10,31 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
+import java.util.List;
+
+import net.minecraft.util.BlockPos;
+import net.minecraft.world.World;
+
 import forestry.api.world.ITreeGenData;
 
 public class WorldGenPapaya extends WorldGenTree {
 
 	public WorldGenPapaya(ITreeGenData tree) {
-		super(tree);
+		super(tree, 7, 2);
 	}
 
 	@Override
-	public void generate() {
-		generateTreeTrunk(height, girth);
-		
+	public void generate(World world) {
+		generateTreeTrunk(world, height, girth);
+
+		List<BlockPos> branchCoords = generateBranches(world, height, 0, 0, 0.15f, 0.25f, height / 4, 1, 0.25f);
+		for (BlockPos branchEnd : branchCoords) {
+			generateAdjustedCylinder(world, branchEnd.getY(), branchEnd.getX(), branchEnd.getZ(), 1, 1, leaf, EnumReplaceMode.NONE);
+		}
+
 		int yCenter = height - girth;
 		yCenter = yCenter > 3 ? yCenter : 4;
-		generateSphere(getCenteredAt(yCenter, 0), 2 + rand.nextInt(girth), leaf, EnumReplaceMode.NONE);
-
-	}
-
-	@Override
-	public void preGenerate() {
-		height = determineHeight(7, 2);
-		girth = determineGirth(tree.getGirth(world, startX, startY, startZ));
+		generateSphere(world, getCenteredAt(yCenter, 0, 0), Math.round((2 + world.rand.nextInt(girth)) * (height / 8.0f)), leaf, EnumReplaceMode.NONE);
 	}
 
 }

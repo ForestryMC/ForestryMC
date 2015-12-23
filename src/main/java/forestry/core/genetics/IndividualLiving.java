@@ -18,13 +18,13 @@ import forestry.api.genetics.IIndividualLiving;
 
 public abstract class IndividualLiving extends Individual implements IIndividualLiving {
 
-	protected int health;
-	protected int maxHealth;
+	private int health;
+	private int maxHealth;
 
-	public IndividualLiving() {
+	protected IndividualLiving() {
 	}
 	
-	public IndividualLiving(int newHealth) {
+	protected IndividualLiving(int newHealth) {
 		health = maxHealth = newHealth;
 	}
 	
@@ -48,19 +48,20 @@ public abstract class IndividualLiving extends Individual implements IIndividual
 		nbttagcompound.setInteger("MaxH", maxHealth);
 
 		if (getGenome() != null) {
-			NBTTagCompound NBTmachine = new NBTTagCompound();
-			getGenome().writeToNBT(NBTmachine);
-			nbttagcompound.setTag("Genome", NBTmachine);
+			NBTTagCompound nbtGenome = new NBTTagCompound();
+			getGenome().writeToNBT(nbtGenome);
+			nbttagcompound.setTag("Genome", nbtGenome);
 		}
 		if (getMate() != null) {
-			NBTTagCompound NBTmachine = new NBTTagCompound();
-			getMate().writeToNBT(NBTmachine);
-			nbttagcompound.setTag("Mate", NBTmachine);
+			NBTTagCompound nbtMate = new NBTTagCompound();
+			getMate().writeToNBT(nbtMate);
+			nbttagcompound.setTag("Mate", nbtMate);
 		}
 
 	}
 
 	/* GENERATION */
+	@Override
 	public abstract IGenome getMate();
 
 	@Override
@@ -95,14 +96,12 @@ public abstract class IndividualLiving extends Individual implements IIndividual
 		if (world.rand.nextFloat() < ageModifier) {
 			decreaseHealth();
 		}
-
 	}
 
-	public void decreaseHealth() {
+	private void decreaseHealth() {
 		if (health > 0) {
 			health--;
 		}
 	}
-
 
 }

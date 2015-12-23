@@ -16,6 +16,7 @@ import com.google.common.collect.Lists;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Random;
@@ -32,42 +33,45 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.common.IFuelHandler;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
-import net.minecraftforge.fml.common.network.IGuiHandler;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-
 import forestry.Forestry;
-import forestry.core.interfaces.IOreDictionaryHandler;
-import forestry.core.interfaces.IPacketHandler;
-import forestry.core.interfaces.IPickupHandler;
-import forestry.core.interfaces.IResupplyHandler;
-import forestry.core.interfaces.ISaveEventHandler;
-import forestry.core.proxy.Proxies;
+import forestry.api.core.ForestryAPI;
+import forestry.core.IPickupHandler;
+import forestry.core.IResupplyHandler;
+import forestry.core.ISaveEventHandler;
+import forestry.core.utils.Log;
+import forestry.plugins.compat.deprecated.PluginBuildCraftFuels;
+import forestry.plugins.compat.deprecated.PluginBuildCraftRecipes;
+import forestry.plugins.compat.deprecated.PluginBuildCraftStatements;
+import forestry.plugins.compat.deprecated.PluginBuildCraftTransport;
 
 public class PluginManager {
 
-	public static final String MODULE_CONFIG_FILE_NAME = "modules.cfg";
-	public static final String CATEGORY_MODULES = "modules";
+	private static final String MODULE_CONFIG_FILE_NAME = "modules.cfg";
+	private static final String CATEGORY_MODULES = "modules";
 
-	public static final ArrayList<IGuiHandler> guiHandlers = Lists.newArrayList();
-	public static final ArrayList<IPacketHandler> packetHandlers = Lists.newArrayList();
 	public static final ArrayList<IPickupHandler> pickupHandlers = Lists.newArrayList();
 	public static final ArrayList<ISaveEventHandler> saveEventHandlers = Lists.newArrayList();
 	public static final ArrayList<IResupplyHandler> resupplyHandlers = Lists.newArrayList();
-	public static final ArrayList<IOreDictionaryHandler> dictionaryHandlers = Lists.newArrayList();
 
 	private static final Set<Module> loadedModules = EnumSet.noneOf(Module.class);
 	private static final Set<Module> unloadedModules = EnumSet.allOf(Module.class);
 	private static Stage stage = Stage.SETUP;
 
 	public enum Stage {
-
-		SETUP, PRE_INIT, INIT, POST_INIT, INIT_DISABLED, FINISHED
+		SETUP, // setup API to make it functional, register basic blocks and items. GameMode Configs are not yet accessible
+		SETUP_DISABLED, // setup fallback API to avoid crashes
+		PRE_INIT, // register handlers, triggers, definitions, backpacks, crates, and anything that depends on basic items
+		INIT, // anything that depends on PreInit stages, recipe registration
+		POST_INIT, // stubborn mod integration, dungeon loot, and finalization of things that take input from mods
+		FINISHED
 	}
 
 	public enum Module {
 
 		CORE(new PluginCore(), false),
 		FLUIDS(new PluginFluids(), false),
+
 		APICULTURE(new PluginApiculture()),
 		ARBORICULTURE(new PluginArboriculture()),
 		ENERGY(new PluginEnergy()),
@@ -77,29 +81,40 @@ public class PluginManager {
 		LEPIDOPTEROLOGY(new PluginLepidopterology()),
 		MAIL(new PluginMail()),
 		STORAGE(new PluginStorage()),
-		BIOMESOPLENTY(new PluginBiomesOPlenty()),
+
 		BUILDCRAFT_FUELS(new PluginBuildCraftFuels()),
 		BUILDCRAFT_RECIPES(new PluginBuildCraftRecipes()),
 		BUILDCRAFT_STATEMENTS(new PluginBuildCraftStatements()),
 		BUILDCRAFT_TRANSPORT(new PluginBuildCraftTransport()),
-		PROPOLIS_PIPE(new PluginPropolisPipe()),
+		
+		/*AGRICRAFT(new PluginAgriCraft()),
+		BIOMESOPLENTY(new PluginBiomesOPlenty()),
+		CHISEL(new PluginChisel()),
+		ENDERIO(new PluginEnderIO()),
+		EREBUS(new PluginErebus()),
 		EXTRAUTILITIES(new PluginExtraUtilities()),
-		EQUIVELENT_EXCHANGE(new PluginEE()),
-		FARM_CRAFTORY(new PluginFarmCraftory()),
-		INDUSTRIALCRAFT(new PluginIC2()),
+		GROWTHCRAFT(new PluginGrowthCraft()),
 		HARVESTCRAFT(new PluginHarvestCraft()),
+		IMMERSIVEENGINEERING(new PluginImmersiveEngineering()),
+		INDUSTRIALCRAFT(new PluginIC2()),
 		MAGICALCROPS(new PluginMagicalCrops()),
 		NATURA(new PluginNatura()),
-		UNDERGROUND_BIOMES(new PluginUndergroundBiomes());
+		PLANTMEGAPACK(new PluginPlantMegaPack()),
+		ROTARYCRAFT(new PluginRotaryCraft()),
+		WITCHERY(new PluginWitchery())*/;
+
+		static {
+			ForestryAPI.enabledPlugins = new HashSet<>();
+		}
 
 		private final ForestryPlugin instance;
 		private final boolean canBeDisabled;
 
-		private Module(ForestryPlugin plugin) {
+		Module(ForestryPlugin plugin) {
 			this(plugin, true);
 		}
 
-		private Module(ForestryPlugin plugin, boolean canBeDisabled) {
+		Module(ForestryPlugin plugin, boolean canBeDisabled) {
 			this.instance = plugin;
 			this.canBeDisabled = canBeDisabled;
 		}
@@ -109,7 +124,7 @@ public class PluginManager {
 		}
 
 		public boolean isEnabled() {
-			return isModuleLoaded(this);
+			return ForestryAPI.enabledPlugins.contains(toString());
 		}
 
 		public boolean canBeDisabled() {
@@ -132,16 +147,33 @@ public class PluginManager {
 		return EnumSet.copyOf(loadedModules);
 	}
 
-	public static boolean isModuleLoaded(Module module) {
-		return loadedModules.contains(module);
+	private static void registerHandlers(ForestryPlugin plugin) {
+		Log.fine("Registering Handlers for Plugin: {0}", plugin);
+
+		plugin.getPacketRegistry().registerPackets();
+
+		IPickupHandler pickupHandler = plugin.getPickupHandler();
+		if (pickupHandler != null) {
+			pickupHandlers.add(pickupHandler);
+		}
+
+		ISaveEventHandler saveHandler = plugin.getSaveEventHandler();
+		if (saveHandler != null) {
+			saveEventHandlers.add(saveHandler);
+		}
+
+		IResupplyHandler resupplyHandler = plugin.getResupplyHandler();
+		if (resupplyHandler != null) {
+			resupplyHandlers.add(resupplyHandler);
+		}
+
+		IFuelHandler fuelHandler = plugin.getFuelHandler();
+		if (fuelHandler != null) {
+			GameRegistry.registerFuelHandler((fuelHandler));
+		}
 	}
 
-	public static void addPlugin(ForestryPlugin plugin) {
-
-	}
-
-	public static void runPreInit() {
-		stage = Stage.SETUP;
+	private static void configureModules() {
 		Locale locale = Locale.getDefault();
 		Locale.setDefault(Locale.ENGLISH);
 
@@ -160,16 +192,17 @@ public class PluginManager {
 			}
 			if (!isEnabled(config, m)) {
 				it.remove();
-				Proxies.log.info("Module disabled: {0}", m);
+				Log.info("Module disabled: {0}", m);
 				continue;
 			}
 			ForestryPlugin plugin = m.instance;
 			if (!plugin.isAvailable()) {
 				it.remove();
-				Proxies.log.info("Module {0} failed to load: {1}", plugin, plugin.getFailMessage());
+				Log.info("Module {0} failed to load: {1}", plugin, plugin.getFailMessage());
 				continue;
 			}
 		}
+
 		boolean changed;
 		do {
 			changed = false;
@@ -180,7 +213,7 @@ public class PluginManager {
 				if (!toLoad.containsAll(deps)) {
 					it.remove();
 					changed = true;
-					Proxies.log.warning("Module {0} is missing dependencies: {1}", m, deps);
+					Log.warning("Module {0} is missing dependencies: {1}", m, deps);
 					continue;
 				}
 			}
@@ -189,63 +222,53 @@ public class PluginManager {
 		unloadedModules.removeAll(toLoad);
 		loadedModules.addAll(toLoad);
 
+		for (Module m : loadedModules) {
+			ForestryAPI.enabledPlugins.add(m.toString());
+		}
+
 		if (config.hasChanged()) {
 			config.save();
 		}
 
 		Locale.setDefault(locale);
+	}
 
-		stage = Stage.PRE_INIT;
+	public static void runSetup() {
+		stage = Stage.SETUP;
+		configureModules();
+
 		for (Module m : loadedModules) {
 			ForestryPlugin plugin = m.instance;
-			loadPlugin(plugin);
+			Log.fine("Setup Start: {0}", plugin);
+			plugin.setupAPI();
+			plugin.registerItemsAndBlocks();
+			Log.fine("Setup Complete: {0}", plugin);
 		}
 
-		for (Module m : loadedModules) {
+		stage = Stage.SETUP_DISABLED;
+		for (Module m : unloadedModules) {
 			ForestryPlugin plugin = m.instance;
-			Proxies.log.fine("Pre-Init Start: {0}", plugin);
-			plugin.preInit();
-			plugin.registerItems();
-			Proxies.log.fine("Pre-Init Complete: {0}", plugin);
+			Log.fine("Disabled-Setup Start: {0}", plugin);
+			plugin.disabledSetupAPI();
+			Log.fine("Disabled-Setup Complete: {0}", plugin);
 		}
 	}
 
-	private static void loadPlugin(ForestryPlugin plugin) {
-		Proxies.log.fine("Registering Handlers for Plugin: {0}", plugin);
-
-		IGuiHandler guiHandler = plugin.getGuiHandler();
-		if (guiHandler != null) {
-			guiHandlers.add(guiHandler);
-		}
-
-		IPacketHandler packetHandler = plugin.getPacketHandler();
-		if (packetHandler != null) {
-			packetHandlers.add(packetHandler);
-		}
-
-		IPickupHandler pickupHandler = plugin.getPickupHandler();
-		if (pickupHandler != null) {
-			pickupHandlers.add(pickupHandler);
-		}
-
-		ISaveEventHandler saveHandler = plugin.getSaveEventHandler();
-		if (saveHandler != null) {
-			saveEventHandlers.add(saveHandler);
-		}
-
-		IResupplyHandler resupplyHandler = plugin.getResupplyHandler();
-		if (resupplyHandler != null) {
-			resupplyHandlers.add(resupplyHandler);
-		}
-
-		IOreDictionaryHandler dictionaryHandler = plugin.getDictionaryHandler();
-		if (dictionaryHandler != null) {
-			dictionaryHandlers.add(dictionaryHandler);
-		}
-
-		IFuelHandler fuelHandler = plugin.getFuelHandler();
-		if (fuelHandler != null) {
-			GameRegistry.registerFuelHandler((fuelHandler));
+	public static void runPreInit() {
+		stage = Stage.PRE_INIT;
+		for (Module m : loadedModules) {
+			ForestryPlugin plugin = m.instance;
+			Log.fine("Pre-Init Start: {0}", plugin);
+			registerHandlers(plugin);
+			plugin.preInit();
+			if (Module.BUILDCRAFT_STATEMENTS.isEnabled()) {
+				plugin.registerTriggers();
+			}
+			if (Module.STORAGE.isEnabled()) {
+				plugin.registerBackpackItems();
+				plugin.registerCrates();
+			}
+			Log.fine("Pre-Init Complete: {0}", plugin);
 		}
 	}
 
@@ -253,15 +276,10 @@ public class PluginManager {
 		stage = Stage.INIT;
 		for (Module m : loadedModules) {
 			ForestryPlugin plugin = m.instance;
-			Proxies.log.fine("Init Start: {0}", plugin);
-
-			if (Module.STORAGE.isEnabled()) {
-				plugin.registerBackpackItems();
-				plugin.registerCrates();
-			}
-
+			Log.fine("Init Start: {0}", plugin);
 			plugin.doInit();
-			Proxies.log.fine("Init Complete: {0}", plugin);
+			plugin.registerRecipes();
+			Log.fine("Init Complete: {0}", plugin);
 		}
 	}
 
@@ -269,19 +287,11 @@ public class PluginManager {
 		stage = Stage.POST_INIT;
 		for (Module m : loadedModules) {
 			ForestryPlugin plugin = m.instance;
-			Proxies.log.fine("Post-Init Start: {0}", plugin);
-			plugin.registerRecipes();
+			Log.fine("Post-Init Start: {0}", plugin);
 			plugin.postInit();
-			Proxies.log.fine("Post-Init Complete: {0}", plugin);
+			Log.fine("Post-Init Complete: {0}", plugin);
 		}
 
-		stage = Stage.INIT_DISABLED;
-		for (Module m : unloadedModules) {
-			ForestryPlugin plugin = m.instance;
-			Proxies.log.fine("Disabled-Init Start: {0}", plugin);
-			plugin.disabledInit();
-			Proxies.log.fine("Disabled-Init Complete: {0}", plugin);
-		}
 		stage = Stage.FINISHED;
 	}
 

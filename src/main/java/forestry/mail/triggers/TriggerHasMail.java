@@ -11,11 +11,10 @@
 package forestry.mail.triggers;
 
 import net.minecraft.tileentity.TileEntity;
-
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 import forestry.core.triggers.Trigger;
-import forestry.mail.IMailContainer;
+import forestry.mail.tiles.IMailContainer;
 
 import buildcraft.api.statements.IStatementContainer;
 import buildcraft.api.statements.IStatementParameter;
@@ -27,7 +26,7 @@ public class TriggerHasMail extends Trigger {
 	}
 
 	@Override
-	public boolean isTriggerActive(TileEntity tile, ForgeDirection side, IStatementContainer source, IStatementParameter[] parameters) {
+	public boolean isTriggerActive(TileEntity tile, EnumFacing side, IStatementContainer source, IStatementParameter[] parameters) {
 
 		if (!(tile instanceof IMailContainer)) {
 			return false;

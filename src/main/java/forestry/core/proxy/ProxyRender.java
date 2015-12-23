@@ -10,16 +10,21 @@
  ******************************************************************************/
 package forestry.core.proxy;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.block.statemap.IStateMapper;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-
-import forestry.core.gadgets.MachineDefinition;
-import forestry.core.interfaces.IBlockRenderer;
+import forestry.core.fluids.Fluids;
+import forestry.core.render.model.BlockModelIndex;
+import forestry.core.tiles.MachineDefinition;
 
 public class ProxyRender {
 
-	public int getNextAvailableRenderId() {
-		return 0;
+	public void init() {
 	}
 
 	public boolean fancyGraphicsEnabled() {
@@ -33,33 +38,71 @@ public class ProxyRender {
 	public void registerTESR(MachineDefinition definition) {
 	}
 
-	public IBlockRenderer getRenderDefaultMachine(String gfxBase) {
+	public TileEntitySpecialRenderer getRenderDefaultMachine(String gfxBase) {
 		return null;
 	}
 
-	public IBlockRenderer getRenderMill(String gfxBase) {
+	public TileEntitySpecialRenderer getRenderMill(String gfxBase) {
 		return null;
 	}
 
-	public IBlockRenderer getRenderMill(String gfxBase, byte charges) {
+	public TileEntitySpecialRenderer getRenderMill(String gfxBase, byte charges) {
 		return null;
 	}
 
-	public IBlockRenderer getRenderEscritoire() {
+	public TileEntitySpecialRenderer getRenderEscritoire() {
 		return null;
 	}
 
-	public void addSnowFX(World world, double xCoord, double yCoord, double zCoord, int color, int areaX, int areaY, int areaZ) {
+	public TileEntitySpecialRenderer getRenderChest(String textureName) {
+		return null;
+	}
+	
+	public void registerBlockModel(BlockModelIndex index) {
 	}
 
-	public short registerItemTexUID(IIconRegister register, short uid, String ident) {
-		return uid;
+	public void registerStateMapper(Block block, IStateMapper mapper) {
 	}
 
-	public short registerTerrainTexUID(IIconRegister register, short uid, String ident) {
-		return uid;
+	public void registerFluidStateMapper(Block block, Fluids forestryFluid) {
 	}
 
 	public void registerVillagerSkin(int villagerId, String texturePath) {
+	}
+
+	public void setHabitatLocatorTexture(Entity player, BlockPos coordinates) {
+	}
+
+	public IResourceManager getSelectedTexturePack() {
+		return null;
+	}
+
+	public void bindTexture(ResourceLocation location) {
+	}
+	
+	public void preInitModels() {
+	}
+
+	public void initModels() {
+	}
+
+	/* FX */
+
+	public void addBeeHiveFX(String texture, World world, double d1, double d2, double d3, int color) {
+	}
+
+	public void addEntitySwarmFX(World world, double d1, double d2, double d3) {
+	}
+
+	public void addEntityExplodeFX(World world, double d1, double d2, double d3) {
+	}
+
+	public void addEntitySnowFX(World world, double d1, double d2, double d3) {
+	}
+
+	public void addEntityIgnitionFX(World world, double d1, double d2, double d3) {
+	}
+
+	public void addEntityPotionFX(World world, double d1, double d2, double d3, int color) {
 	}
 }

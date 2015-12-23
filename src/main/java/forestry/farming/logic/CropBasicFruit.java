@@ -14,33 +14,33 @@ import java.util.Collection;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
-import forestry.core.vect.Vect;
 
 public class CropBasicFruit extends Crop {
 
-	protected final Block block;
-	protected final int meta;
+	private final Block block;
+	private final int meta;
 
-	public CropBasicFruit(World world, Block block, int meta, Vect position) {
+	public CropBasicFruit(World world, Block block, int meta, BlockPos position) {
 		super(world, position);
 		this.block = block;
 		this.meta = meta;
 	}
 
 	@Override
-	protected boolean isCrop(Vect pos) {
+	protected boolean isCrop(BlockPos pos) {
 		return getBlock(pos) == block && getBlockMeta(pos) == meta;
 	}
 
 	@Override
-	protected Collection<ItemStack> harvestBlock(Vect pos) {
-		Collection<ItemStack> harvested = block.getDrops(world, pos.x, pos.y, pos.z, meta, 0);
-		Proxies.common.addBlockDestroyEffects(world, pos.x, pos.y, pos.z, block, 0);
-		world.setBlock(pos.x, pos.y, pos.z, block, 0, Defaults.FLAG_BLOCK_SYNCH);
+	protected Collection<ItemStack> harvestBlock(BlockPos pos) {
+		Collection<ItemStack> harvested = block.getDrops(world, pos, world.getBlockState(pos), 0);
+		Proxies.common.addBlockDestroyEffects(world, pos, block.getStateFromMeta(0));
+		world.setBlockState(pos, block.getStateFromMeta(0), Constants.FLAG_BLOCK_SYNCH);
 		return harvested;
 	}
 

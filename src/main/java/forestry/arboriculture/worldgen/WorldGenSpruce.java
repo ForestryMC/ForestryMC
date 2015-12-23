@@ -10,33 +10,39 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
+import java.util.List;
+
+import net.minecraft.util.BlockPos;
+import net.minecraft.world.World;
+
 import forestry.api.world.ITreeGenData;
 
 public class WorldGenSpruce extends WorldGenTree {
 
 	public WorldGenSpruce(ITreeGenData tree) {
-		super(tree);
+		super(tree, 5, 3);
 	}
 
 	@Override
-	public void generate() {
-		generateTreeTrunk(height, girth);
+	public void generate(World world) {
+		generateTreeTrunk(world, height, girth);
 
 		int leafSpawn = height + 1;
 
-		generateAdjustedCylinder(leafSpawn--, 0, 1, leaf);
-		generateAdjustedCylinder(leafSpawn--, 1, 1, leaf);
+		generateAdjustedCylinder(world, leafSpawn--, 0, 1, leaf);
+		generateAdjustedCylinder(world, leafSpawn--, 1, 1, leaf);
 
+		int branchWidth = height / 4;
 		while (leafSpawn > 2) {
-			generateAdjustedCylinder(leafSpawn--, 2, 1, leaf);
-			generateAdjustedCylinder(leafSpawn--, 1, 1, leaf);
+			int leafRadius = Math.min(4, branchWidth);
+			List<BlockPos> branchCoords = generateBranches(world, leafSpawn, 0, 0, 0.2f, 0.5f, branchWidth, 1);
+			for (BlockPos branchEnd : branchCoords) {
+				generateAdjustedCircle(world, branchEnd.getY(), branchEnd.getX(), branchEnd.getZ(), leafRadius, 3, 2, leaf, 1.0f, EnumReplaceMode.SOFT);
+			}
+			generateAdjustedCylinder(world, leafSpawn--, 2, 1, leaf);
+			generateAdjustedCylinder(world, leafSpawn--, 1, 1, leaf);
+			branchWidth++;
 		}
-
 	}
 
-	@Override
-	public void preGenerate() {
-		height = determineHeight(5, 3);
-		girth = determineGirth(tree.getGirth(world, startX, startY, startZ));
-	}
 }

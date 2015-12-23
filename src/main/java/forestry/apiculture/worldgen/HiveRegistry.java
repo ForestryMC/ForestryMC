@@ -11,6 +11,7 @@
 package forestry.apiculture.worldgen;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +22,7 @@ import forestry.api.apiculture.hives.IHiveRegistry;
 
 public class HiveRegistry implements IHiveRegistry {
 
-	private final Map<String, Hive> hives = new HashMap<String, Hive>();
+	private final Map<String, Hive> hives = new HashMap<>();
 
 	@Override
 	public void registerHive(String hiveName, IHiveDescription hiveDescription) {
@@ -31,6 +32,11 @@ public class HiveRegistry implements IHiveRegistry {
 
 		Hive hive = new Hive(hiveDescription);
 		hives.put(hiveName, hive);
+	}
+
+	@Override
+	public void addDrops(String hiveName, IHiveDrop... drops) {
+		addDrops(hiveName, Arrays.asList(drops));
 	}
 
 	@Override
@@ -44,7 +50,7 @@ public class HiveRegistry implements IHiveRegistry {
 	}
 
 	public List<Hive> getHives() {
-		return new ArrayList<Hive>(hives.values());
+		return new ArrayList<>(hives.values());
 	}
 
 	public List<IHiveDrop> getDrops(String hiveName) {

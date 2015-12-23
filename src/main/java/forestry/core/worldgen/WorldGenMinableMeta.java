@@ -14,12 +14,11 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
-
-import forestry.core.config.Defaults;
-import forestry.core.config.ForestryBlock;
+import forestry.core.config.Constants;
 
 public class WorldGenMinableMeta extends WorldGenerator {
 
@@ -32,29 +31,29 @@ public class WorldGenMinableMeta extends WorldGenerator {
 		mineableBlockMeta = meta;
 		this.numberOfBlocks = numberOfBlocks;
 	}
-
-	public WorldGenMinableMeta(ForestryBlock block, int meta, int numberOfBlocks) {
-		this(block.block(), meta, numberOfBlocks);
-	}
-
+	
 	@Override
-	public boolean generate(World world, Random random, int i, int j, int k) {
+	public boolean generate(World world, Random rand, BlockPos position) {
 
+		int i = position.getX();
+		int k = position.getY();
+		int j = position.getZ();
+		
 		boolean hasGenerated = false;
 
-		float randomBase = random.nextFloat() * 3.141593F;
+		float randomBase = rand.nextFloat() * 3.141593F;
 		double d = (i + 8) + (MathHelper.sin(randomBase) * numberOfBlocks) / 8F;
 		double d1 = (i + 8) - (MathHelper.sin(randomBase) * numberOfBlocks) / 8F;
 		double d2 = (k + 8) + (MathHelper.cos(randomBase) * numberOfBlocks) / 8F;
 		double d3 = (k + 8) - (MathHelper.cos(randomBase) * numberOfBlocks) / 8F;
-		double d4 = (j + random.nextInt(3)) - 2;
-		double d5 = (j + random.nextInt(3)) - 2;
+		double d4 = (j + rand.nextInt(3)) - 2;
+		double d5 = (j + rand.nextInt(3)) - 2;
 
 		for (int l = 0; l <= numberOfBlocks; l++) {
 			double d6 = d + ((d1 - d) * l) / numberOfBlocks;
 			double d7 = d4 + ((d5 - d4) * l) / numberOfBlocks;
 			double d8 = d2 + ((d3 - d2) * l) / numberOfBlocks;
-			double d9 = (random.nextDouble() * numberOfBlocks) / 16D;
+			double d9 = (rand.nextDouble() * numberOfBlocks) / 16D;
 			double d10 = (MathHelper.sin((l * 3.141593F) / numberOfBlocks) + 1.0F) * d9 + 1.0D;
 			double d11 = (MathHelper.sin((l * 3.141593F) / numberOfBlocks) + 1.0F) * d9 + 1.0D;
 			int xStart = MathHelper.floor_double(d6 - d10 / 2D);
@@ -78,8 +77,8 @@ public class WorldGenMinableMeta extends WorldGenerator {
 
 					for (int targetZ = zStart; targetZ <= zEnd; targetZ++) {
 						double d14 = ((targetZ + 0.5D) - d8) / (d10 / 2D);
-						if (d12 * d12 + d13 * d13 + d14 * d14 < 1.0D && world.getBlock(targetX, targetY, targetZ) == Blocks.stone) {
-							world.setBlock(targetX, targetY, targetZ, mineableBlock, mineableBlockMeta, Defaults.FLAG_BLOCK_SYNCH);
+						if (d12 * d12 + d13 * d13 + d14 * d14 < 1.0D && world.getBlockState(new BlockPos(targetX, targetY, targetZ)).getBlock() == Blocks.stone) {
+							world.setBlockState(new BlockPos(targetX, targetY, targetZ), mineableBlock.getStateFromMeta(mineableBlockMeta), Constants.FLAG_BLOCK_SYNCH);
 							hasGenerated = true;
 						}
 					}
@@ -89,5 +88,5 @@ public class WorldGenMinableMeta extends WorldGenerator {
 
 		return hasGenerated;
 	}
-
+	
 }

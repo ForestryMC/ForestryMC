@@ -11,109 +11,164 @@
 package forestry.core.render;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.util.IIcon;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.IBakedModel;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.client.model.ISmartBlockModel;
+import net.minecraftforge.client.model.ISmartItemModel;
+import net.minecraftforge.common.property.IExtendedBlockState;
+import java.util.Collections;
+import java.util.List;
 
-import net.minecraftforge.fml.client.registry.ISimpleBlockRenderingHandler;
+import forestry.api.core.IModelBaker;
+import forestry.core.render.model.ModelManager;
+import forestry.core.utils.UnlistedBlockAccess;
+import forestry.core.utils.UnlistedBlockPos;
 
-public abstract class OverlayRenderingHandler implements ISimpleBlockRenderingHandler {
+public abstract class OverlayRenderingHandler implements ISmartItemModel, ISmartBlockModel {
 
-	protected static final double OVERLAY_SHIFT = 0.001;
+	protected static void renderBottomFace(IBlockAccess world, Block block, BlockPos pos, IModelBaker renderer,
+			TextureAtlasSprite textureIndex, int mixedBrightness, float r, float g, float b) {
 
-	protected int determineMixedBrightness(IBlockAccess world, Block block, int x, int y, int z, RenderBlocks renderer, int mixedBrightness) {
-		return renderer.renderMinY > 0.0D ? mixedBrightness : block.getMixedBrightnessForBlock(world, x, y, z);
+		BlockPos posNEW = new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ());
+
+		if (!block.shouldSideBeRendered(world, posNEW, EnumFacing.DOWN)) {
+			return;
+		}
+		
+		renderer.renderFaceYNeg(pos, textureIndex);
+
 	}
 
-	protected void renderBottomFace(IBlockAccess world, Block block, int x, int y, int z, RenderBlocks renderer, IIcon textureIndex, int mixedBrightness,
-			float r, float g, float b) {
+	protected static void renderTopFace(IBlockAccess world, Block block, BlockPos pos, IModelBaker renderer,
+			TextureAtlasSprite textureIndex, int mixedBrightness, float r, float g, float b) {
 
-		if (!renderer.renderAllFaces && !block.shouldSideBeRendered(world, x, y - 1, z, 0)) {
+		BlockPos posNEW = new BlockPos(pos.getX(), pos.getY() + 1, pos.getZ());
+
+		if (!block.shouldSideBeRendered(world, posNEW, EnumFacing.UP)) {
 			return;
 		}
 
-		Tessellator tesselator = Tessellator.instance;
 
-		tesselator.setBrightness(determineMixedBrightness(world, block, x, y - 1, z, renderer, mixedBrightness));
-		tesselator.setColorOpaque_F(r, g, b);
-		renderer.renderFaceYNeg(block, x, y - OVERLAY_SHIFT, z, textureIndex);
+		renderer.renderFaceYPos(pos, textureIndex);
 
 	}
 
-	protected void renderTopFace(IBlockAccess world, Block block, int x, int y, int z, RenderBlocks renderer, IIcon textureIndex, int mixedBrightness, float r,
-			float g, float b) {
+	protected static void renderEastFace(IBlockAccess world, Block block, BlockPos pos, IModelBaker renderer,
+			TextureAtlasSprite textureIndex, int mixedBrightness, float r, float g, float b) {
 
-		if (!renderer.renderAllFaces && !block.shouldSideBeRendered(world, x, y + 1, z, 1)) {
+		BlockPos posNEW = new BlockPos(pos.getX(), pos.getY(), pos.getZ() - 1);
+
+		if (!block.shouldSideBeRendered(world, posNEW, EnumFacing.EAST)) {
 			return;
 		}
 
-		Tessellator tesselator = Tessellator.instance;
-
-		tesselator.setBrightness(determineMixedBrightness(world, block, x, y + 1, z, renderer, mixedBrightness));
-		tesselator.setColorOpaque_F(r, g, b);
-		renderer.renderFaceYPos(block, x, y + OVERLAY_SHIFT, z, textureIndex);
+		renderer.renderFaceZNeg(pos, textureIndex);
 
 	}
 
-	protected void renderEastFace(IBlockAccess world, Block block, int x, int y, int z, RenderBlocks renderer, IIcon textureIndex, int mixedBrightness, float r,
-			float g, float b) {
+	protected static void renderWestFace(IBlockAccess world, Block block, BlockPos pos, IModelBaker renderer,
+			TextureAtlasSprite textureIndex, int mixedBrightness, float r, float g, float b) {
 
-		if (!renderer.renderAllFaces && !block.shouldSideBeRendered(world, x, y, z - 1, 2)) {
+		BlockPos posNEW = new BlockPos(pos.getX(), pos.getY(), pos.getZ() + 1);
+
+		if (!block.shouldSideBeRendered(world, posNEW, EnumFacing.WEST)) {
 			return;
 		}
 
-		Tessellator tesselator = Tessellator.instance;
-
-		tesselator.setBrightness(determineMixedBrightness(world, block, x, y, z - 1, renderer, mixedBrightness));
-		tesselator.setColorOpaque_F(r, g, b);
-		renderer.renderFaceZNeg(block, x, y, z - OVERLAY_SHIFT, textureIndex);
+		renderer.renderFaceZPos(pos, textureIndex);
 
 	}
 
-	protected void renderWestFace(IBlockAccess world, Block block, int x, int y, int z, RenderBlocks renderer, IIcon textureIndex, int mixedBrightness, float r,
-			float g, float b) {
+	protected static void renderNorthFace(IBlockAccess world, Block block, BlockPos pos, IModelBaker renderer,
+			TextureAtlasSprite textureIndex, int mixedBrightness, float r, float g, float b) {
 
-		if (!renderer.renderAllFaces && !block.shouldSideBeRendered(world, x, y, z + 1, 3)) {
+		BlockPos posNEW = new BlockPos(pos.getX() - 1, pos.getY(), pos.getZ());
+
+		if (!block.shouldSideBeRendered(world, posNEW, EnumFacing.NORTH)) {
 			return;
 		}
 
-		Tessellator tesselator = Tessellator.instance;
-
-		tesselator.setBrightness(determineMixedBrightness(world, block, x, y, z + 1, renderer, mixedBrightness));
-		tesselator.setColorOpaque_F(r, g, b);
-		renderer.renderFaceZPos(block, x, y, z + OVERLAY_SHIFT, textureIndex);
+		renderer.renderFaceXNeg(pos, textureIndex);
 
 	}
 
-	protected void renderNorthFace(IBlockAccess world, Block block, int x, int y, int z, RenderBlocks renderer, IIcon textureIndex, int mixedBrightness,
-			float r, float g, float b) {
+	protected static void renderSouthFace(IBlockAccess world, Block block, BlockPos pos, IModelBaker renderer,
+			TextureAtlasSprite textureIndex, int mixedBrightness, float r, float g, float b) {
 
-		if (!renderer.renderAllFaces && !block.shouldSideBeRendered(world, x - 1, y, z, 4)) {
+		BlockPos posNEW = new BlockPos(pos.getX() + 1, pos.getY(), pos.getZ());
+
+		if (!block.shouldSideBeRendered(world, posNEW, EnumFacing.SOUTH)) {
 			return;
 		}
 
-		Tessellator tesselator = Tessellator.instance;
-
-		tesselator.setBrightness(determineMixedBrightness(world, block, x - 1, y, z, renderer, mixedBrightness));
-		tesselator.setColorOpaque_F(r, g, b);
-		renderer.renderFaceXNeg(block, x - OVERLAY_SHIFT, y, z, textureIndex);
+		renderer.renderFaceXPos(pos, textureIndex);
 
 	}
 
-	protected void renderSouthFace(IBlockAccess world, Block block, int x, int y, int z, RenderBlocks renderer, IIcon textureIndex, int mixedBrightness,
-			float r, float g, float b) {
-
-		if (!renderer.renderAllFaces && !block.shouldSideBeRendered(world, x + 1, y, z, 5)) {
-			return;
-		}
-
-		Tessellator tesselator = Tessellator.instance;
-
-		tesselator.setBrightness(determineMixedBrightness(world, block, x + 1, y, z, renderer, mixedBrightness));
-		tesselator.setColorOpaque_F(r, g, b);
-		renderer.renderFaceXPos(block, x + OVERLAY_SHIFT, y, z, textureIndex);
-
+	@Override
+	public List getFaceQuads(EnumFacing p_177551_1_) {
+		return Collections.emptyList();
 	}
+
+	@Override
+	public List getGeneralQuads() {
+		return Collections.emptyList();
+	}
+
+	@Override
+	public boolean isAmbientOcclusion() {
+		return true;
+	}
+
+	@Override
+	public boolean isGui3d() {
+		return true;
+	}
+
+	@Override
+	public boolean isBuiltInRenderer() {
+		return false;
+	}
+
+	@Override
+	public TextureAtlasSprite getTexture() {
+		return null;
+	}
+
+	@Override
+	public ItemCameraTransforms getItemCameraTransforms() {
+		return ItemCameraTransforms.DEFAULT;
+	}
+
+	@Override
+	public IBakedModel handleBlockState(IBlockState state) {
+		IExtendedBlockState extend = (IExtendedBlockState) state;
+		IModelBaker renderer = ModelManager.getInstance().createNewRenderer();
+		Block blk = state.getBlock();
+		IBlockAccess world = extend.getValue(UnlistedBlockAccess.BLOCKACCESS);
+		BlockPos pos = extend.getValue(UnlistedBlockPos.POS);
+		renderer.setRenderBoundsFromBlock(blk);
+		renderInWorld(blk, world, pos, renderer);
+		return renderer.bakeModel(false);
+	}
+
+	@Override
+	public IBakedModel handleItemState(ItemStack stack) {
+		IModelBaker renderer = ModelManager.getInstance().createNewRenderer();
+		Block blk = Block.getBlockFromItem(stack.getItem());
+		renderer.setRenderBoundsFromBlock(blk);
+		renderInventory(blk, stack, renderer);
+		return renderer.bakeModel(true);
+	}
+
+	public abstract void renderInventory(Block block, ItemStack item, IModelBaker renderer);
+
+	public abstract boolean renderInWorld(Block block, IBlockAccess world, BlockPos pos, IModelBaker renderer);
 
 }

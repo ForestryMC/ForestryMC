@@ -10,45 +10,41 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.util.BlockPos;
+import net.minecraft.world.World;
+
 import forestry.api.world.ITreeGenData;
 
 public class WorldGenIpe extends WorldGenTree {
 
 	public WorldGenIpe(ITreeGenData tree) {
-		super(tree);
+		super(tree, 6, 4);
 	}
 
 	@Override
-	public void generate() {
-		generateTreeTrunk(height, girth);
+	public void generate(World world) {
+		generateTreeTrunk(world, height, girth);
 
 		int leafSpawn = height + 1;
 		float adjustedGirth = girth * .65f;
 
-		generateAdjustedCylinder(leafSpawn--, 0, 1, leaf);
-		generateAdjustedCylinder(leafSpawn--, 0.2f * adjustedGirth, 1, leaf);
-		generateAdjustedCylinder(leafSpawn--, 0.2f * adjustedGirth, 1, leaf);
-		
-		while (leafSpawn > 7) {
-			generateAdjustedCylinder(leafSpawn, (float) (1.25f * (adjustedGirth * .65)), 1, leaf);
-			leafSpawn--;
-		}
-		
-		generateAdjustedCylinder(leafSpawn--, 1.6f * adjustedGirth, 1, leaf);
-		generateAdjustedCylinder(leafSpawn--, 1.6f * adjustedGirth, 1, leaf);
-		generateAdjustedCylinder(leafSpawn--, 1.6f * adjustedGirth, 1, leaf);
-		
-		if (rand.nextBoolean()) {
-			generateAdjustedCylinder(leafSpawn--, 1.25f * adjustedGirth, 1, leaf);
+		generateAdjustedCylinder(world, leafSpawn--, 0, 1, leaf);
+		generateAdjustedCylinder(world, leafSpawn--, 0.2f * adjustedGirth, 1, leaf);
+		generateAdjustedCylinder(world, leafSpawn--, 0.2f * adjustedGirth, 1, leaf);
+
+		List<BlockPos> branchCoords = new ArrayList<>();
+		while (leafSpawn > 2) {
+			int radius = Math.round(adjustedGirth * (height - leafSpawn) / 1.5f);
+			branchCoords.addAll(generateBranches(world, leafSpawn, 0, 0, 0.25f, 0.25f, radius, 2));
+			leafSpawn -= 2;
 		}
 
-		generateAdjustedCylinder(leafSpawn--, 1f * adjustedGirth, 1, leaf);
-
+		for (BlockPos branchEnd : branchCoords) {
+			generateAdjustedCylinder(world, branchEnd.getY(), branchEnd.getX(), branchEnd.getX(), 2.0f, 2, leaf, EnumReplaceMode.NONE);
+		}
 	}
 
-	@Override
-	public void preGenerate() {
-		height = determineHeight(8, 8);
-		girth = determineGirth(tree.getGirth(world, startX, startY, startZ));
-	}
 }

@@ -13,31 +13,29 @@ package forestry.storage;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import forestry.api.storage.ICrateRegistry;
 import forestry.core.items.ItemCrated;
-import forestry.core.proxy.Proxies;
-import forestry.plugins.PluginManager;
+import forestry.core.utils.Log;
+import forestry.core.utils.StringUtil;
 import forestry.plugins.PluginStorage;
 
 public class CrateRegistry implements ICrateRegistry {
 
-	private void registerCrate(ItemStack stack, String uid, boolean useOreDict) {
-		if (PluginManager.getStage() != PluginManager.Stage.INIT) {
-			throw new RuntimeException("Tried to make a crate outside of Init");
-		}
-
+	private static void registerCrate(ItemStack stack, String uid, boolean useOreDict) {
 		if (stack == null || stack.getItem() == null) {
-			throw new RuntimeException("Tried to make a crate without an item");
+			Log.severe("Tried to make a crate without an item");
+			return;
 		}
 
 		if (uid == null) {
-			throw new RuntimeException("Tried to make a crate without a uid");
+			Log.severe("Tried to make a crate without a uid");
+			return;
 		}
 
 		ItemCrated crate = new ItemCrated(stack, useOreDict);
 		crate.setUnlocalizedName(uid);
-		Proxies.common.registerItem(crate);
+		GameRegistry.registerItem(crate, StringUtil.cleanItemName(crate));
 		PluginStorage.registerCrate(crate);
 	}
 

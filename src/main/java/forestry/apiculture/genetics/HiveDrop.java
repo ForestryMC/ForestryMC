@@ -13,27 +13,25 @@ package forestry.apiculture.genetics;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 
+import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IHiveDrop;
-import forestry.api.genetics.IAllele;
-import forestry.plugins.PluginApiculture;
 
 public class HiveDrop implements IHiveDrop {
 
-	private final IAllele[] template;
-	private final ArrayList<ItemStack> additional = new ArrayList<ItemStack>();
+	private final IBeeDefinition beeTemplate;
+	private final ArrayList<ItemStack> additional = new ArrayList<>();
 	private final int chance;
 	private float ignobleShare = 0.0f;
 
-	public HiveDrop(IAllele[] template, ItemStack[] bonus, int chance) {
-		this.template = template;
+	public HiveDrop(int chance, IBeeDefinition beeTemplate, ItemStack... bonus) {
+		this.beeTemplate = beeTemplate;
 		this.chance = chance;
 
 		Collections.addAll(this.additional, bonus);
@@ -44,30 +42,25 @@ public class HiveDrop implements IHiveDrop {
 		return this;
 	}
 	
-	private IBee createBee(IBlockAccess world) {
-		return PluginApiculture.beeInterface.getBee(world, PluginApiculture.beeInterface.templateAsGenome(template));
-	}
-	
 	@Override
-	public ItemStack getPrincess(IBlockAccess world, BlockPos pos, int fortune) {
-		IBee bee = createBee(world);
-		if (new Random().nextFloat() < ignobleShare) {
+	public ItemStack getPrincess(World world, BlockPos pos, int fortune) {
+		IBee bee = beeTemplate.getIndividual();
+		if (world.rand.nextFloat() < ignobleShare) {
 			bee.setIsNatural(false);
 		}
 
-		return PluginApiculture.beeInterface.getMemberStack(bee, EnumBeeType.PRINCESS.ordinal());
+		return BeeManager.beeRoot.getMemberStack(bee, EnumBeeType.PRINCESS.ordinal());
 	}
 
 	@Override
-	public List<ItemStack> getDrones(IBlockAccess world, BlockPos pos, int fortune) {
-		List<ItemStack> ret = new ArrayList<ItemStack>();
-		ret.add(PluginApiculture.beeInterface.getMemberStack(createBee(world), EnumBeeType.DRONE.ordinal()));
-		return ret;
+	public List<ItemStack> getDrones(World world, BlockPos pos, int fortune) {
+		ItemStack drone = beeTemplate.getMemberStack(EnumBeeType.DRONE);
+		return Collections.singletonList(drone);
 	}
 
 	@Override
-	public List<ItemStack> getAdditional(IBlockAccess world, BlockPos pos, int fortune) {
-		List<ItemStack> ret = new ArrayList<ItemStack>();
+	public ArrayList<ItemStack> getAdditional(World world, BlockPos pos, int fortune) {
+		ArrayList<ItemStack> ret = new ArrayList<>();
 		for (ItemStack stack : additional) {
 			ret.add(stack.copy());
 		}
@@ -76,7 +69,7 @@ public class HiveDrop implements IHiveDrop {
 	}
 
 	@Override
-	public int getChance(IBlockAccess world, BlockPos pos) {
+	public int getChance(World world, BlockPos pos) {
 		return chance;
 	}
 

@@ -16,16 +16,16 @@ import java.util.List;
 import net.minecraft.world.World;
 
 import forestry.api.arboriculture.ITreekeepingMode;
+import forestry.api.arboriculture.TreeManager;
 import forestry.core.commands.ICommandModeHelper;
-import forestry.plugins.PluginArboriculture;
 
 public class TreeModeHelper implements ICommandModeHelper {
 
 	@Override
 	public String[] getModeNames() {
-		ArrayList<ITreekeepingMode> treekeepingModes = PluginArboriculture.treeInterface.getTreekeepingModes();
+		ArrayList<ITreekeepingMode> treekeepingModes = TreeManager.treeRoot.getTreekeepingModes();
 		int modeStringCount = treekeepingModes.size();
-		List<String> modeStrings = new ArrayList<String>(modeStringCount);
+		List<String> modeStrings = new ArrayList<>(modeStringCount);
 		for (ITreekeepingMode mode : treekeepingModes) {
 			modeStrings.add(mode.getName());
 		}
@@ -35,7 +35,7 @@ public class TreeModeHelper implements ICommandModeHelper {
 
 	@Override
 	public String getModeNameMatching(String desired) {
-		ITreekeepingMode mode = PluginArboriculture.treeInterface.getTreekeepingMode(desired);
+		ITreekeepingMode mode = TreeManager.treeRoot.getTreekeepingMode(desired);
 		if (mode == null) {
 			return null;
 		}
@@ -44,17 +44,17 @@ public class TreeModeHelper implements ICommandModeHelper {
 
 	@Override
 	public String getModeName(World world) {
-		return PluginArboriculture.treeInterface.getTreekeepingMode(world).getName();
+		return TreeManager.treeRoot.getTreekeepingMode(world).getName();
 	}
 
 	@Override
 	public void setMode(World world, String modeName) {
-		PluginArboriculture.treeInterface.setTreekeepingMode(world, modeName);
+		TreeManager.treeRoot.setTreekeepingMode(world, modeName);
 	}
 
 	@Override
 	public Iterable<String> getDescription(String modeName) {
-		ITreekeepingMode mode = PluginArboriculture.treeInterface.getTreekeepingMode(modeName);
+		ITreekeepingMode mode = TreeManager.treeRoot.getTreekeepingMode(modeName);
 		return mode.getDescription();
 	}
 

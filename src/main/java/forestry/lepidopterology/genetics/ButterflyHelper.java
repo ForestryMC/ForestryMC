@@ -15,7 +15,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map.Entry;
 
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -28,6 +27,7 @@ import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
+import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.EnumButterflyChromosome;
 import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.api.lepidopterology.IAlleleButterflySpecies;
@@ -36,15 +36,14 @@ import forestry.api.lepidopterology.IButterflyGenome;
 import forestry.api.lepidopterology.IButterflyMutation;
 import forestry.api.lepidopterology.IButterflyRoot;
 import forestry.api.lepidopterology.ILepidopteristTracker;
-import forestry.core.config.ForestryItem;
 import forestry.core.genetics.SpeciesRoot;
-import forestry.core.utils.Utils;
+import forestry.core.utils.EntityUtil;
 import forestry.lepidopterology.entities.EntityButterfly;
 import forestry.plugins.PluginLepidopterology;
 
 public class ButterflyHelper extends SpeciesRoot implements IButterflyRoot {
 
-	public static int butterflySpeciesCount = -1;
+	private static int butterflySpeciesCount = -1;
 	public static final String UID = "rootButterflies";
 
 	@Override
@@ -84,11 +83,12 @@ public class ButterflyHelper extends SpeciesRoot implements IButterflyRoot {
 			return EnumFlutterType.NONE;
 		}
 
-		if (ForestryItem.butterflyGE.isItemEqual(stack)) {
+		Item item = stack.getItem();
+		if (PluginLepidopterology.items.butterflyGE == item) {
 			return EnumFlutterType.BUTTERFLY;
-		} else if (ForestryItem.serumGE.isItemEqual(stack)) {
+		} else if (PluginLepidopterology.items.serumGE == item) {
 			return EnumFlutterType.SERUM;
-		} else if (ForestryItem.caterpillarGE.isItemEqual(stack)) {
+		} else if (PluginLepidopterology.items.caterpillarGE == item) {
 			return EnumFlutterType.CATERPILLAR;
 		} else {
 			return EnumFlutterType.NONE;
@@ -128,14 +128,14 @@ public class ButterflyHelper extends SpeciesRoot implements IButterflyRoot {
 		Item butterflyItem;
 		switch (EnumFlutterType.VALUES[type]) {
 			case SERUM:
-				butterflyItem = ForestryItem.serumGE.item();
+				butterflyItem = PluginLepidopterology.items.serumGE;
 				break;
 			case CATERPILLAR:
-				butterflyItem = ForestryItem.caterpillarGE.item();
+				butterflyItem = PluginLepidopterology.items.caterpillarGE;
 				break;
 			case BUTTERFLY:
 			default:
-				butterflyItem = ForestryItem.butterflyGE.item();
+				butterflyItem = PluginLepidopterology.items.butterflyGE;
 				break;
 		}
 
@@ -148,8 +148,8 @@ public class ButterflyHelper extends SpeciesRoot implements IButterflyRoot {
 	}
 
 	@Override
-	public EntityLiving spawnButterflyInWorld(World world, IButterfly butterfly, double x, double y, double z) {
-		return (EntityButterfly) Utils.spawnEntity(world, new EntityButterfly(world, butterfly), x, y, z);
+	public EntityButterfly spawnButterflyInWorld(World world, IButterfly butterfly, double x, double y, double z) {
+		return EntityUtil.spawnEntity(world, new EntityButterfly(world, butterfly), x, y, z);
 	}
 
 	@Override
@@ -184,7 +184,7 @@ public class ButterflyHelper extends SpeciesRoot implements IButterflyRoot {
 	}
 
 	/* TEMPLATES */
-	public static final ArrayList<IButterfly> butterflyTemplates = new ArrayList<IButterfly>();
+	private static final ArrayList<IButterfly> butterflyTemplates = new ArrayList<>();
 
 	@Override
 	public ArrayList<IButterfly> getIndividualTemplates() {
@@ -193,17 +193,17 @@ public class ButterflyHelper extends SpeciesRoot implements IButterflyRoot {
 
 	@Override
 	public IAllele[] getDefaultTemplate() {
-		return ButterflyTemplates.getDefaultTemplate();
+		return MothDefinition.Brimstone.getTemplate();
 	}
 
 	@Override
 	public void registerTemplate(String identifier, IAllele[] template) {
-		butterflyTemplates.add(PluginLepidopterology.butterflyInterface.templateAsIndividual(template));
+		butterflyTemplates.add(ButterflyManager.butterflyRoot.templateAsIndividual(template));
 		speciesTemplates.put(identifier, template);
 	}
 
 	/* MUTATIONS */
-	private static final ArrayList<IButterflyMutation> butterflyMutations = new ArrayList<IButterflyMutation>();
+	private static final ArrayList<IButterflyMutation> butterflyMutations = new ArrayList<>();
 
 	@Override
 	public void registerMutation(IMutation mutation) {
@@ -236,9 +236,12 @@ public class ButterflyHelper extends SpeciesRoot implements IButterflyRoot {
 
 		// Create a tracker if there is none yet.
 		if (tracker == null) {
-			tracker = new LepidopteristTracker(filename, player);
+			tracker = new LepidopteristTracker(filename);
 			world.setItemData(filename, tracker);
 		}
+
+		tracker.setUsername(player);
+		tracker.setWorld(world);
 
 		return tracker;
 	}

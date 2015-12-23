@@ -13,23 +13,19 @@ package forestry.apiculture.genetics;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
-import com.mojang.authlib.GameProfile;
-
+import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.IApiaristTracker;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IIndividual;
+import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.genetics.BreedingTracker;
-import forestry.plugins.PluginApiculture;
 
 public class ApiaristTracker extends BreedingTracker implements IApiaristTracker {
 
+	/** Required for creation from map storage */
 	public ApiaristTracker(String s) {
-		this(s, null);
-	}
-
-	public ApiaristTracker(String s, GameProfile player) {
-		super(s, player);
+		super(s);
 	}
 
 	private int queensTotal = 0;
@@ -60,13 +56,16 @@ public class ApiaristTracker extends BreedingTracker implements IApiaristTracker
 
 	@Override
 	public void registerPickup(IIndividual individual) {
-		if (!individual.getGenome().getPrimary().getRoot().getUID().equals(BeeHelper.UID)) {
+		ISpeciesRoot speciesRoot = individual.getGenome().getPrimary().getRoot();
+		if (!speciesRoot.getUID().equals(speciesRootUID())) {
 			return;
 		}
+
 		if (!individual.isPureBred(EnumBeeChromosome.SPECIES)) {
 			return;
 		}
-		if (PluginApiculture.beeInterface.getCombinations(individual.getGenome().getPrimary()).size() > 0) {
+
+		if (speciesRoot.getCombinations(individual.getGenome().getPrimary()).size() > 0) {
 			return;
 		}
 
@@ -107,12 +106,12 @@ public class ApiaristTracker extends BreedingTracker implements IApiaristTracker
 	}
 
 	@Override
-	protected IBreedingTracker getCommonTracker(EntityPlayer player) {
-		return PluginApiculture.beeInterface.getBreedingTracker(player.worldObj, null);
+	protected IBreedingTracker getBreedingTracker(EntityPlayer player) {
+		return BeeManager.beeRoot.getBreedingTracker(player.worldObj, player.getGameProfile());
 	}
 
 	@Override
-	protected String getPacketTag() {
+	protected String speciesRootUID() {
 		return BeeHelper.UID;
 	}
 

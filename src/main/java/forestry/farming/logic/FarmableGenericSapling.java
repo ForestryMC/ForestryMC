@@ -19,12 +19,12 @@ import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
-import forestry.core.utils.StackUtils;
-import forestry.core.vect.Vect;
+import forestry.core.utils.BlockPosUtil;
+import forestry.core.utils.ItemStackUtil;
 
 public class FarmableGenericSapling implements IFarmable {
 
-	private final Block sapling;
+	protected final Block sapling;
 	private final int saplingMeta;
 	private final ItemStack[] windfall;
 
@@ -41,12 +41,12 @@ public class FarmableGenericSapling implements IFarmable {
 			return false;
 		}
 
-		if (world.getBlockState(pos).getBlock() == sapling) {
+		if (BlockPosUtil.getBlock(world, pos) == sapling) {
 			return true;
 		}
 
 		if (saplingMeta >= 0) {
-			return world.getBlockMetadata(x, y, z) == saplingMeta;
+			return BlockPosUtil.getBlockMeta(world, pos) == saplingMeta;
 		} else {
 			return true;
 		}
@@ -55,18 +55,18 @@ public class FarmableGenericSapling implements IFarmable {
 
 	@Override
 	public ICrop getCropAt(World world, BlockPos pos) {
-		Block block = world.getBlockState(pos).getBlock();
+		Block block = BlockPosUtil.getBlock(world, pos);
 		if (!block.isWood(world, pos)) {
 			return null;
 		}
 
-		return new CropBlock(world, block, world.getBlockMetadata(x, y, z), new Vect(pos));
+		return new CropBlock(world, block, BlockPosUtil.getBlockMeta(world, pos), pos);
 	}
 
 	@Override
 	public boolean isGermling(ItemStack itemstack) {
 
-		if (!StackUtils.equals(sapling, itemstack)) {
+		if (!ItemStackUtil.equals(sapling, itemstack)) {
 			return false;
 		}
 
@@ -89,7 +89,7 @@ public class FarmableGenericSapling implements IFarmable {
 
 	@Override
 	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
-		return germling.copy().onItemUse(player, world, pos.down(), EnumFacing.UP, 0, 0, 0);
+		return germling.copy().onItemUse(player, world, new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ()), EnumFacing.UP, 0, 0, 0);
 	}
 
 }

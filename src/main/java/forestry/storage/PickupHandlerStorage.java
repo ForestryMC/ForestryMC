@@ -14,7 +14,8 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
-import forestry.core.interfaces.IPickupHandler;
+import forestry.api.storage.IBackpackDefinition;
+import forestry.core.IPickupHandler;
 import forestry.storage.gui.ContainerBackpack;
 import forestry.storage.gui.ContainerNaturalistBackpack;
 import forestry.storage.items.ItemBackpack;
@@ -31,7 +32,7 @@ public class PickupHandlerStorage implements IPickupHandler {
 
 		// Do not pick up if a backpack is open
 		if (player.openContainer instanceof ContainerBackpack || player.openContainer instanceof ContainerNaturalistBackpack) {
-			return true;
+			return false;
 		}
 
 		// Make sure to top off manually placed itemstacks in player inventory first
@@ -52,19 +53,20 @@ public class PickupHandlerStorage implements IPickupHandler {
 			}
 
 			ItemBackpack backpack = ((ItemBackpack) pack.getItem());
-			if (backpack.getDefinition().isValidItem(player, itemstack)) {
-				backpack.tryStowing(player, pack, itemstack);
+			IBackpackDefinition backpackDefinition = backpack.getDefinition();
+			if (backpackDefinition.isValidItem(itemstack)) {
+				ItemBackpack.tryStowing(player, pack, itemstack);
 			}
 		}
 
-		return itemstack.stackSize > 0;
+		return itemstack.stackSize == 0;
 	}
 
 	/**
 	 * This tops off existing stacks in the player's inventory. That way you can keep f.e. a stack of dirt or cobblestone in your inventory which gets refreshed
 	 * constantly by picked up items.
 	 */
-	private void topOffPlayerInventory(EntityPlayer player, ItemStack itemstack) {
+	private static void topOffPlayerInventory(EntityPlayer player, ItemStack itemstack) {
 
 		// Add to player inventory first, if there is an incomplete stack in
 		// there.

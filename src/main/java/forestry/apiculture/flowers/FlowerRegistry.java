@@ -11,48 +11,96 @@
 package forestry.apiculture.flowers;
 
 import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
 
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import java.util.TreeMap;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockFlowerPot;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.Item;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityFlowerPot;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
+import net.minecraftforge.oredict.OreDictionary;
+
+import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.FlowerManager;
+import forestry.api.apiculture.IBee;
+import forestry.api.apiculture.IBeeGenome;
+import forestry.api.apiculture.IBeeHousing;
+import forestry.api.apiculture.IBeeModifier;
 import forestry.api.genetics.IFlower;
+import forestry.api.genetics.IFlowerAcceptableRule;
+import forestry.api.genetics.IFlowerGrowthHelper;
 import forestry.api.genetics.IFlowerGrowthRule;
 import forestry.api.genetics.IFlowerRegistry;
 import forestry.api.genetics.IIndividual;
+import forestry.core.config.Constants;
+import forestry.core.utils.BlockUtil;
+import forestry.core.utils.Log;
 
-public final class FlowerRegistry implements IFlowerRegistry {
+public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelper {
 
-	private final ArrayListMultimap<String, IFlower> registeredFlowers;
+	private final Set<String> defaultFlowerTypes = ImmutableSet.of(
+			FlowerManager.FlowerTypeVanilla,
+			FlowerManager.FlowerTypeNether,
+			FlowerManager.FlowerTypeCacti,
+			FlowerManager.FlowerTypeMushrooms,
+			FlowerManager.FlowerTypeEnd,
+			FlowerManager.FlowerTypeJungle,
+			FlowerManager.FlowerTypeSnow,
+			FlowerManager.FlowerTypeWheat,
+			FlowerManager.FlowerTypeGourd
+	);
+
+	private final HashMultimap<String, IFlowerAcceptableRule> registeredRules; // custom check
+	private final HashMultimap<String, Block> registeredBlocks; // quick first check
+	private final HashMultimap<String, Flower> registeredFlowers; // full check
+
 	private final ArrayListMultimap<String, IFlowerGrowthRule> growthRules;
-	private final Map<String, TreeMap<Double, IFlower>> chances;
-
-	private boolean hasDeprecatedFlowersImported;
+	private final Map<String, TreeMap<Double, Flower>> chances;
 
 	public FlowerRegistry() {
-		this.registeredFlowers = ArrayListMultimap.create();
+		this.registeredRules = HashMultimap.create();
+		this.registeredBlocks = HashMultimap.create();
+		this.registeredFlowers = HashMultimap.create();
 		this.growthRules = ArrayListMultimap.create();
-		this.chances = new HashMap<String, TreeMap<Double, IFlower>>();
+		this.chances = new HashMap<>();
 
-		this.hasDeprecatedFlowersImported = false;
-
-		registerVanillaFlowers();
 		registerVanillaGrowthRules();
 	}
 
 	@Override
+	public void registerAcceptableFlower(Block block, String... flowerTypes) {
+		registerFlower(block, OreDictionary.WILDCARD_VALUE, 0.0, flowerTypes);
+	}
+
+	@Override
 	public void registerAcceptableFlower(Block block, int meta, String... flowerTypes) {
-		registerFlower(block, meta, null, flowerTypes);
+		registerFlower(block, meta, 0.0, flowerTypes);
+	}
+
+	@Override
+	public void registerAcceptableFlowerRule(IFlowerAcceptableRule acceptableFlower, String... flowerTypes) {
+		for (String flowerType : flowerTypes) {
+			if (defaultFlowerTypes.contains(flowerType)) {
+				Log.severe("IFlowerAcceptableRules are too slow to be applied to Forestry's built-in flower type: " + flowerType + ".");
+			} else {
+				registeredRules.put(flowerType, acceptableFlower);
+			}
+		}
 	}
 
 	@Override
@@ -60,14 +108,11 @@ public final class FlowerRegistry implements IFlowerRegistry {
 		registerFlower(block, meta, weight, flowerTypes);
 	}
 
-	private void registerFlower(Block block, int meta, Double weight, String... flowerTypes) {
+	private void registerFlower(Block block, int meta, double weight, String... flowerTypes) {
 		if (block == null) {
 			return;
 		}
-		if (meta == Short.MAX_VALUE || meta == -1) {
-			return;
-		}
-		if (weight == null || weight <= 0.0) {
+		if (weight <= 0.0) {
 			weight = 0.0;
 		}
 		if (weight >= 1.0) {
@@ -75,58 +120,137 @@ public final class FlowerRegistry implements IFlowerRegistry {
 		}
 
 		Flower newFlower = new Flower(block, meta, weight);
-		Integer index;
-		
-		for (String flowerType : flowerTypes) {
-			List<IFlower> flowers = this.registeredFlowers.get(flowerType);
 
-			index = flowers.indexOf(newFlower);
-			if (index == -1) {
-				flowers.add(newFlower);
-			} else if (flowers.get(index).getWeight() > newFlower.getWeight()) {
-				flowers.get(index).setWeight(newFlower.getWeight());
+		for (String flowerType : flowerTypes) {
+			if (flowerType == null) {
+				throw new NullPointerException("Tried to register flower with null type. " + block);
 			}
+
+			Set<Flower> flowers = this.registeredFlowers.get(flowerType);
+			flowers.add(newFlower);
+
+			Set<Block> blocks = this.registeredBlocks.get(flowerType);
+			blocks.add(block);
 
 			if (this.chances.containsKey(flowerType)) {
 				this.chances.remove(flowerType);
 			}
-
-			Collections.sort(this.registeredFlowers.get(flowerType));
 		}
 	}
 
+	private static BlockPos getArea(IBeeGenome genome, IBeeModifier beeModifier) {
+		int[] genomeTerritory = genome.getTerritory();
+		float housingModifier = beeModifier.getTerritoryModifier(genome, 1f);
+		return BlockUtil.multiply(new BlockPos(genomeTerritory[0], genomeTerritory[1], genomeTerritory[2]), housingModifier * 3.0f);
+	}
+
 	@Override
-	public boolean isAcceptedFlower(String flowerType, World world, IIndividual individual, int x, int y, int z) {
-		internalInitialize();
+	public BlockPos getAcceptedFlowerCoordinates(IBeeHousing beeHousing, IBee bee, String flowerType) {
+		if (!this.registeredFlowers.containsKey(flowerType)) {
+			return null;
+		}
+
+		Set<IFlowerAcceptableRule> acceptableRules = this.registeredRules.get(flowerType);
+		Set<Block> acceptedBlocks = this.registeredBlocks.get(flowerType);
+		Set<Flower> acceptedFlowers = this.registeredFlowers.get(flowerType);
+		World world = beeHousing.getWorld();
+
+		IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(beeHousing);
+
+		BlockPos area = getArea(bee.getGenome(), beeModifier);
+		BlockPos housingPos = new BlockPos(beeHousing.getCoordinates()).add(-area.getX() / 2, -area.getY() / 2, -area.getZ() / 2);
+
+		BlockPos posCurrent = new BlockPos(0, 0, 0);
+		while (BlockUtil.advancePositionInArea(posCurrent, area)) {
+
+			BlockPos posBlock = BlockUtil.add(housingPos, posCurrent);
+
+			for (IFlowerAcceptableRule acceptableRule : acceptableRules) {
+				if (acceptableRule.isAcceptableFlower(flowerType, world, posBlock)) {
+					return new BlockPos(posBlock);
+				}
+			}
+
+			if (isAcceptedFlower(flowerType, acceptedBlocks, acceptedFlowers, world, posBlock)) {
+				return new BlockPos(posBlock);
+			}
+		}
+
+		return null;
+	}
+
+	@Override
+	public boolean isAcceptedFlower(String flowerType, World world, BlockPos pos) {
 		if (!this.registeredFlowers.containsKey(flowerType)) {
 			return false;
 		}
 
-		Block block = world.getBlock(x, y, z);
-		int meta = world.getBlockMetadata(x, y, z);
-
-		if (world.isAirBlock(x, y, z) || block.equals(Blocks.bedrock) || block.equals(Blocks.dirt) || block.equals(Blocks.grass)) {
-			return false;
-		}
-
-		for (IFlower flower : this.registeredFlowers.get(flowerType)) {
-			if (Block.isEqualTo(flower.getBlock(), block) && flower.getMeta() == meta) {
+		Set<IFlowerAcceptableRule> acceptedCustom = this.registeredRules.get(flowerType);
+		for (IFlowerAcceptableRule acceptableFlower : acceptedCustom) {
+			if (acceptableFlower.isAcceptableFlower(flowerType, world, pos)) {
 				return true;
 			}
 		}
 
-		return false;
+		Set<Block> acceptedBlocks = this.registeredBlocks.get(flowerType);
+		Set<Flower> acceptedFlowers = this.registeredFlowers.get(flowerType);
+
+		return isAcceptedFlower(flowerType, acceptedBlocks, acceptedFlowers, world, pos);
+	}
+
+	private static boolean isAcceptedFlower(String flowerType, Set<Block> acceptedBlocks, Set<Flower> acceptedFlowers, World world, BlockPos pos) {
+		IBlockState state = world.getBlockState(pos);
+		Block block = state.getBlock();
+
+		final int meta;
+
+		if (block instanceof BlockFlowerPot) {
+			TileEntity tile = world.getTileEntity(pos);
+			TileEntityFlowerPot tileFlowerPot = (TileEntityFlowerPot) tile;
+			Item item = tileFlowerPot.getFlowerPotItem();
+			block = Block.getBlockFromItem(item);
+			meta = tileFlowerPot.getFlowerPotData();
+		} else {
+			if (!acceptedBlocks.contains(block)) {
+				return false;
+			}
+			meta = block.getMetaFromState(state);
+		}
+
+		/*if (PluginManager.Module.AGRICRAFT.isEnabled()) {
+			Block cropBlock = GameRegistry.findBlock("AgriCraft", "crops");
+			if (block == cropBlock) {
+				if(block instanceof IPlantable) {
+					//For agricraft versions which implement IPlantable in the BlockCrop class
+					block = ((IPlantable) block).getPlant(world, x, y, z);
+				} else {
+					//For earlier versions of AgriCraft
+					ArrayList<ItemStack> drops = block.getDrops(world, x, y, z, 7, 0);
+					if (drops.get(1).getItem() == Items.wheat_seeds && flowerType.equals(FlowerManager.FlowerTypeWheat)) {
+						return true;
+					}
+					if (drops.get(1).getItem() == Items.nether_wart && flowerType.equals(FlowerManager.FlowerTypeNether)) {
+						return true;
+					}
+				}
+			}
+		}*/
+
+		Flower flower = new Flower(block, meta, 0);
+		return acceptedFlowers.contains(flower);
 	}
 
 	@Override
 	public boolean growFlower(String flowerType, World world, IIndividual individual, BlockPos pos) {
-		internalInitialize();
 		if (!this.growthRules.containsKey(flowerType)) {
 			return false;
 		}
 
 		for (IFlowerGrowthRule rule : this.growthRules.get(flowerType)) {
-			if (rule.growFlower(this, flowerType, world, individual, pos)) {
+			boolean success;
+			success = rule.growFlower(this, flowerType, world, pos);
+
+			if (success) {
 				return true;
 			}
 		}
@@ -135,10 +259,8 @@ public final class FlowerRegistry implements IFlowerRegistry {
 	}
 
 	@Override
-	public List<IFlower> getAcceptableFlowers(String flowerType) {
-		internalInitialize();
-
-		return this.registeredFlowers.get(flowerType);
+	public Set<IFlower> getAcceptableFlowers(String flowerType) {
+		return ImmutableSet.<IFlower>copyOf(this.registeredFlowers.get(flowerType));
 	}
 
 	@Override
@@ -154,16 +276,21 @@ public final class FlowerRegistry implements IFlowerRegistry {
 
 	@Override
 	public IFlower getRandomPlantableFlower(String flowerType, Random rand) {
-		TreeMap<Double, IFlower> chancesMap = getChancesMap(flowerType);
+		TreeMap<Double, Flower> chancesMap = getChancesMap(flowerType);
 		double maxKey = chancesMap.lastKey() + 1.0;
 		return chancesMap.get(chancesMap.lowerKey(rand.nextDouble() * maxKey));
 	}
 
-	private TreeMap<Double, IFlower> getChancesMap(String flowerType) {
+	@Override
+	public Collection<String> getFlowerTypes() {
+		return new ArrayList<>(Sets.union(defaultFlowerTypes, registeredFlowers.keySet()));
+	}
+
+	private TreeMap<Double, Flower> getChancesMap(String flowerType) {
 		if (!this.chances.containsKey(flowerType)) {
-			TreeMap<Double, IFlower> flowerChances = new TreeMap<Double, IFlower>();
+			TreeMap<Double, Flower> flowerChances = new TreeMap<>();
 			double count = 0.0;
-			for (IFlower flower : this.registeredFlowers.get(flowerType)) {
+			for (Flower flower : this.registeredFlowers.get(flowerType)) {
 				if (flower.isPlantable()) {
 					flowerChances.put(count, flower);
 					count += flower.getWeight();
@@ -174,63 +301,20 @@ public final class FlowerRegistry implements IFlowerRegistry {
 		return this.chances.get(flowerType);
 	}
 
-	/*
-	 * Method to support deprecated FlowerManager.plainFlowers
-	 */
-	@SuppressWarnings("deprecation")
-	private void internalInitialize() {
-		if (!hasDeprecatedFlowersImported) {
-			for (ItemStack plainFlower : FlowerManager.plainFlowers) {
-				Block flowerBlock = Block.getBlockFromItem(plainFlower.getItem());
-				int meta = plainFlower.getItemDamage();
-				registerPlantableFlower(flowerBlock, meta, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
-			}
-
-			hasDeprecatedFlowersImported = true;
-		}
-	}
-
-	private void registerVanillaFlowers() {
-		// Register plantable plants
-		for (int meta = 0; meta <= 8; meta++) {
-			registerPlantableFlower(Blocks.red_flower, meta, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
-		}
-
-		registerPlantableFlower(Blocks.yellow_flower, 0, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
-		registerPlantableFlower(Blocks.brown_mushroom, 0, 1.0, FlowerManager.FlowerTypeMushrooms);
-		registerPlantableFlower(Blocks.red_mushroom, 0, 1.0, FlowerManager.FlowerTypeMushrooms);
-		registerPlantableFlower(Blocks.cactus, 0, 1.0, FlowerManager.FlowerTypeCacti);
-
-		// Register acceptable plants
-		registerAcceptableFlower(Blocks.flower_pot, 1, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
-		registerAcceptableFlower(Blocks.flower_pot, 2, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
-		registerAcceptableFlower(Blocks.flower_pot, 7, FlowerManager.FlowerTypeMushrooms);
-		registerAcceptableFlower(Blocks.flower_pot, 8, FlowerManager.FlowerTypeMushrooms);
-		registerAcceptableFlower(Blocks.flower_pot, 9, FlowerManager.FlowerTypeCacti);
-		registerAcceptableFlower(Blocks.flower_pot, 11, FlowerManager.FlowerTypeJungle);
-
-		registerAcceptableFlower(Blocks.dragon_egg, 0, FlowerManager.FlowerTypeEnd);
-		registerAcceptableFlower(Blocks.vine, 0, FlowerManager.FlowerTypeJungle);
-		registerAcceptableFlower(Blocks.tallgrass, 2, FlowerManager.FlowerTypeJungle);
-		registerAcceptableFlower(Blocks.wheat, 7, FlowerManager.FlowerTypeWheat);
-		registerAcceptableFlower(Blocks.pumpkin_stem, 0, FlowerManager.FlowerTypeGourd);
-		registerAcceptableFlower(Blocks.melon_stem, 0, FlowerManager.FlowerTypeGourd);
-		registerAcceptableFlower(Blocks.nether_wart, 0, FlowerManager.FlowerTypeNether);
-
-		registerAcceptableFlower(Blocks.double_plant, 0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
-		registerAcceptableFlower(Blocks.double_plant, 1, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
-		registerAcceptableFlower(Blocks.double_plant, 4, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
-		registerAcceptableFlower(Blocks.double_plant, 5, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
-	}
-
 	private void registerVanillaGrowthRules() {
-		registerGrowthRule(new VanillaDirtGrassGrowthRule(), FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
-		registerGrowthRule(new VanillaSnowGrowthRule(), FlowerManager.FlowerTypeSnow);
-		registerGrowthRule(new VanillaFlowerPotGrowthRule(), FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow, FlowerManager.FlowerTypeMushrooms, FlowerManager.FlowerTypeCacti,
+		registerGrowthRule(new GrowthRuleDirtGrass(), FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
+		registerGrowthRule(new GrowthRuleSnow(), FlowerManager.FlowerTypeSnow);
+		registerGrowthRule(new GrowthRuleFlowerPot(), FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow, FlowerManager.FlowerTypeMushrooms, FlowerManager.FlowerTypeCacti,
 				FlowerManager.FlowerTypeJungle);
-		registerGrowthRule(new VanillaMyceliumGrowthRule(), FlowerManager.FlowerTypeMushrooms);
-		registerGrowthRule(new VanillaDefaultGrowthRule(), FlowerManager.FlowerTypeEnd);
-		registerGrowthRule(new VanillaFertilizeGrowthRule(Blocks.melon_stem, Blocks.pumpkin_stem), FlowerManager.FlowerTypeGourd);
-		registerGrowthRule(new VanillaFertilizeGrowthRule(Blocks.wheat), FlowerManager.FlowerTypeWheat);
+		registerGrowthRule(new GrowthRuleMycelium(), FlowerManager.FlowerTypeMushrooms);
+		registerGrowthRule(new GrowthRuleNone(), FlowerManager.FlowerTypeEnd);
+		registerGrowthRule(new GrowthRuleFertilize(Blocks.melon_stem, Blocks.pumpkin_stem), FlowerManager.FlowerTypeGourd);
+		registerGrowthRule(new GrowthRuleFertilize(Blocks.wheat), FlowerManager.FlowerTypeWheat);
+	}
+
+	@Override
+	public boolean plantRandomFlower(String flowerType, World world, BlockPos pos) {
+		IFlower flower = getRandomPlantableFlower(flowerType, world.rand);
+		return world.setBlockState(pos, flower.getBlock().getStateFromMeta(flower.getMeta()), Constants.FLAG_BLOCK_SYNCH);
 	}
 }

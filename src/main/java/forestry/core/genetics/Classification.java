@@ -26,8 +26,8 @@ public class Classification implements IClassification {
 
 	private IClassification parent;
 
-	private final ArrayList<IAlleleSpecies> members = new ArrayList<IAlleleSpecies>();
-	private final ArrayList<IClassification> groups = new ArrayList<IClassification>();
+	private final ArrayList<IAlleleSpecies> members = new ArrayList<>();
+	private final ArrayList<IClassification> groups = new ArrayList<>();
 
 	public Classification(EnumClassLevel level, String uid, String scientific) {
 		this.level = level;

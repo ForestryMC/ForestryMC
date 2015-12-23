@@ -10,63 +10,74 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
 import forestry.core.config.Config;
-import forestry.core.config.Defaults;
+import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.ForestryResource;
+import forestry.core.render.ForestryResource;
 import forestry.mail.POBoxInfo;
 
 public class GuiMailboxInfo extends Gui {
 
-	public static GuiMailboxInfo instance;
+	public enum XPosition {
+		LEFT, RIGHT;
+	}
+
+	public enum YPosition {
+		TOP, BOTTOM;
+	}
+
+	public static final GuiMailboxInfo instance = new GuiMailboxInfo();
+	private static final int WIDTH = 98;
+	private static final int HEIGHT = 17;
 
 	private final FontRenderer fontRendererObj;
 	private POBoxInfo poInfo;
-	private final ResourceLocation textureAlert = new ForestryResource(Defaults.TEXTURE_PATH_GUI + "/mailalert.png");
+	private final ResourceLocation textureAlert = new ForestryResource(Constants.TEXTURE_PATH_GUI + "/mailalert.png");
 
-	public GuiMailboxInfo() {
-		fontRendererObj = Proxies.common.getClientInstance().fontRenderer;
+	private GuiMailboxInfo() {
+		fontRendererObj = Proxies.common.getClientInstance().fontRendererObj;
 	}
 
-	public void render(int x, int y) {
-		if (poInfo == null) {
-			return;
-		}
-		if (Proxies.common.getRenderWorld() == null) {
-			return;
-		}
-		if (!Config.mailAlertEnabled) {
-			return;
-		}
-		if (!poInfo.hasMail()) {
+	public void render() {
+		if (poInfo == null || !Config.mailAlertEnabled || !poInfo.hasMail()) {
 			return;
 		}
 
-		GL11.glEnable(3042);
-		GL11.glEnable(32826);
+		int x = 0;
+		int y = 0;
+
+		Minecraft minecraft = Minecraft.getMinecraft();
+		ScaledResolution scaledresolution = new ScaledResolution(minecraft);
+		if (Config.mailAlertXPosition == XPosition.RIGHT) {
+			x = scaledresolution.getScaledWidth() - WIDTH;
+		}
+		if (Config.mailAlertYPosition == YPosition.BOTTOM) {
+			y = scaledresolution.getScaledHeight() - HEIGHT;
+		}
 
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		Proxies.common.bindTexture(textureAlert);
+		Proxies.render.bindTexture(textureAlert);
 
-		this.drawTexturedModalRect(x, y, 0, 0, 98, 17);
+		this.drawTexturedModalRect(x, y, 0, 0, WIDTH, HEIGHT);
 
-		fontRendererObj
-				.drawString(Integer.toString(poInfo.playerLetters), x + 27 + getCenteredOffset(Integer.toString(poInfo.playerLetters), 22), y + 5, 0xffffff);
+		fontRendererObj.drawString(Integer.toString(poInfo.playerLetters), x + 27 + getCenteredOffset(Integer.toString(poInfo.playerLetters), 22), y + 5, 0xffffff);
 		fontRendererObj.drawString(Integer.toString(poInfo.tradeLetters), x + 75 + getCenteredOffset(Integer.toString(poInfo.tradeLetters), 22), y + 5, 0xffffff);
-
-		GL11.glDisable(32826);
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-
 	}
 
 	protected int getCenteredOffset(String string, int xWidth) {
 		return (xWidth - fontRendererObj.getStringWidth(string)) / 2;
+	}
+
+	public boolean hasPOBoxInfo() {
+		return poInfo != null;
 	}
 
 	public void setPOBoxInfo(POBoxInfo info) {

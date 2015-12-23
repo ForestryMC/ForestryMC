@@ -11,38 +11,40 @@
 package forestry.factory.gui;
 
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.ICrafting;
 
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
-import forestry.factory.gadgets.MachineFermenter;
+import forestry.factory.inventory.InventoryFermenter;
+import forestry.factory.tiles.TileFermenter;
 
-public class ContainerFermenter extends ContainerLiquidTanks {
+public class ContainerFermenter extends ContainerLiquidTanks<TileFermenter> {
 
-	protected final MachineFermenter fermenter;
+	public ContainerFermenter(InventoryPlayer player, TileFermenter fermenter) {
+		super(fermenter, player, 8, 84);
 
-	public ContainerFermenter(InventoryPlayer player, MachineFermenter fermenter) {
-		super(fermenter);
-
-		this.fermenter = fermenter;
-
-		this.addSlotToContainer(new SlotFiltered(fermenter, MachineFermenter.SLOT_RESOURCE, 85, 23));
-		this.addSlotToContainer(new SlotFiltered(fermenter, MachineFermenter.SLOT_FUEL, 75, 57));
-		this.addSlotToContainer(new SlotOutput(fermenter, MachineFermenter.SLOT_CAN_OUTPUT, 150, 58));
-		this.addSlotToContainer(new SlotFiltered(fermenter, MachineFermenter.SLOT_CAN_INPUT, 150, 22));
-		this.addSlotToContainer(new SlotFiltered(fermenter, MachineFermenter.SLOT_INPUT, 10, 40));
-
-		for (int i = 0; i < 3; ++i) {
-			for (int var4 = 0; var4 < 9; ++var4) {
-				this.addSlotToContainer(new Slot(player, var4 + i * 9 + 9, 8 + var4 * 18, 84 + i * 18));
-			}
-		}
-
-		for (int i = 0; i < 9; ++i) {
-			this.addSlotToContainer(new Slot(player, i, 8 + i * 18, 142));
-		}
-
+		this.addSlotToContainer(new SlotFiltered(fermenter, InventoryFermenter.SLOT_RESOURCE, 85, 23));
+		this.addSlotToContainer(new SlotFiltered(fermenter, InventoryFermenter.SLOT_FUEL, 75, 57));
+		this.addSlotToContainer(new SlotOutput(fermenter, InventoryFermenter.SLOT_CAN_OUTPUT, 150, 58));
+		this.addSlotToContainer(new SlotFiltered(fermenter, InventoryFermenter.SLOT_CAN_INPUT, 150, 22));
+		this.addSlotToContainer(new SlotFiltered(fermenter, InventoryFermenter.SLOT_INPUT, 10, 40));
 	}
 
+	@Override
+	public void updateProgressBar(int messageId, int data) {
+		super.updateProgressBar(messageId, data);
+
+		tile.getGUINetworkData(messageId, data);
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public void detectAndSendChanges() {
+		super.detectAndSendChanges();
+
+		for (Object crafter : crafters) {
+			tile.sendGUINetworkData(this, (ICrafting) crafter);
+		}
+	}
 }

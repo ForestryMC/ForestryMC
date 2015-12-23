@@ -10,51 +10,40 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
+import net.minecraftforge.oredict.OreDictionary;
+import forestry.api.core.IModelManager;
+import forestry.api.core.IModelRegister;
 import forestry.core.CreativeTabForestry;
-import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
-import forestry.core.utils.StringUtil;
 
-public class ItemForestry extends Item {
-
-	private boolean isBonemeal = false;
-
+public class ItemForestry extends Item implements IModelRegister {
 	public ItemForestry() {
 		setCreativeTab(CreativeTabForestry.tabForestry);
 	}
 
-	public ItemForestry setBonemeal(boolean isBonemeal) {
-		this.isBonemeal = isBonemeal;
-		return this;
-	}
-
-	@Override
-	public boolean onItemUse(ItemStack itemstack, EntityPlayer player, World world, int x, int y, int z, int par7, float par8, float par9, float par10) {
-		if (isBonemeal) {
-			if (ItemDye.applyBonemeal(itemstack, world, x, y, z, player)) {
-				if (Proxies.common.isSimulating(world)) {
-					world.playAuxSFX(2005, x, y, z, 0);
-				}
-
-				return true;
-			}
-		}
-		return super.onItemUse(itemstack, player, world, x, y, z, par7, par8, par9, par10);
+	public ItemForestry(CreativeTabs creativeTab) {
+		setCreativeTab(creativeTab);
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerIcons(IIconRegister register) {
-		itemIcon = TextureManager.getInstance().registerTex(register, StringUtil.cleanItemName(this));
+	public void registerModel(Item item, IModelManager manager) {
+		manager.registerItemModel(item, 0, true);
+	}
+
+	public ItemStack getItemStack() {
+		return new ItemStack(this);
+	}
+
+	public ItemStack getItemStack(int amount) {
+		return new ItemStack(this, amount);
+	}
+
+	public ItemStack getWildcard() {
+		return new ItemStack(this, 1, OreDictionary.WILDCARD_VALUE);
 	}
 }

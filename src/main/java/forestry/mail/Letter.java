@@ -17,18 +17,15 @@ import org.apache.commons.lang3.StringUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-
-import forestry.api.core.INBTTagable;
+import net.minecraft.util.IChatComponent;
 import forestry.api.mail.ILetter;
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.IStamps;
-import forestry.core.inventory.InvTools;
 import forestry.core.inventory.InventoryAdapter;
+import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.StringUtil;
 
-public class Letter implements ILetter, INBTTagable {
-
-	// CONSTANTS
+public class Letter implements ILetter {
 	public static final short SLOT_ATTACHMENT_1 = 0;
 	public static final short SLOT_ATTACHMENT_COUNT = 18;
 	public static final short SLOT_POSTAGE_1 = 18;
@@ -68,7 +65,6 @@ public class Letter implements ILetter, INBTTagable {
 		this.text = nbttagcompound.getString("TXT");
 
 		this.inventory.readFromNBT(nbttagcompound);
-
 	}
 
 	@Override
@@ -94,17 +90,16 @@ public class Letter implements ILetter, INBTTagable {
 
 	@Override
 	public ItemStack[] getPostage() {
-		return InvTools.getStacks(inventory, SLOT_POSTAGE_1, SLOT_POSTAGE_COUNT);
+		return InventoryUtil.getStacks(inventory, SLOT_POSTAGE_1, SLOT_POSTAGE_COUNT);
 	}
 
 	@Override
 	public ItemStack[] getAttachments() {
-		return InvTools.getStacks(inventory, SLOT_ATTACHMENT_1, SLOT_ATTACHMENT_COUNT);
+		return InventoryUtil.getStacks(inventory, SLOT_ATTACHMENT_1, SLOT_ATTACHMENT_COUNT);
 	}
 
 	@Override
 	public int countAttachments() {
-
 		int count = 0;
 		for (ItemStack stack : getAttachments()) {
 			if (stack != null) {
@@ -113,12 +108,11 @@ public class Letter implements ILetter, INBTTagable {
 		}
 
 		return count;
-
 	}
 
 	@Override
 	public void addAttachment(ItemStack itemstack) {
-		InvTools.tryAddStack(inventory, itemstack, false);
+		InventoryUtil.tryAddStack(inventory, itemstack, false);
 	}
 
 	@Override
@@ -186,7 +180,7 @@ public class Letter implements ILetter, INBTTagable {
 
 	@Override
 	public void addStamps(ItemStack stamps) {
-		InvTools.tryAddStack(inventory, stamps, SLOT_POSTAGE_1, 4, false);
+		InventoryUtil.tryAddStack(inventory, stamps, SLOT_POSTAGE_1, 4, false);
 	}
 
 	@Override
@@ -200,11 +194,7 @@ public class Letter implements ILetter, INBTTagable {
 			return false;
 		}
 
-		if (StringUtils.isBlank(recipient.getName())) {
-			return false;
-		}
-
-		return true;
+		return !StringUtils.isBlank(recipient.getName());
 	}
 
 	@Override
@@ -215,10 +205,6 @@ public class Letter implements ILetter, INBTTagable {
 	@Override
 	public IMailAddress getSender() {
 		return sender;
-	}
-
-	public void setRecipients(IMailAddress[] recipients) {
-		this.recipient = recipients;
 	}
 
 	@Override
@@ -237,15 +223,15 @@ public class Letter implements ILetter, INBTTagable {
 
 	@Override
 	public String getRecipientString() {
-		String recipientString = "";
+		StringBuilder recipientString = new StringBuilder();
 		for (IMailAddress address : recipient) {
 			if (recipientString.length() > 0) {
-				recipientString += ", ";
+				recipientString.append(", ");
 			}
-			recipientString += address.getName();
+			recipientString.append(address.getName());
 		}
 
-		return recipientString;
+		return recipientString.toString();
 	}
 
 	@Override
@@ -293,10 +279,15 @@ public class Letter implements ILetter, INBTTagable {
 	public void setInventorySlotContents(int var1, ItemStack var2) {
 		inventory.setInventorySlotContents(var1, var2);
 	}
-
+	
 	@Override
-	public String getInventoryName() {
-		return inventory.getInventoryName();
+	public String getCommandSenderName() {
+		return inventory.getCommandSenderName();
+	}
+	
+	@Override
+	public IChatComponent getDisplayName() {
+		return inventory.getDisplayName();
 	}
 
 	@Override
@@ -315,22 +306,42 @@ public class Letter implements ILetter, INBTTagable {
 	}
 
 	@Override
-	public void openInventory() {
-		inventory.openInventory();
+	public void openInventory(EntityPlayer player) {
+		inventory.openInventory(player);
 	}
 
 	@Override
-	public void closeInventory() {
-		inventory.closeInventory();
+	public void closeInventory(EntityPlayer player) {
+		inventory.closeInventory(player);
 	}
-
+	
 	@Override
-	public boolean hasCustomInventoryName() {
-		return inventory.hasCustomInventoryName();
+	public boolean hasCustomName() {
+		return inventory.hasCustomName();
 	}
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		return inventory.isItemValidForSlot(i, itemstack);
+	}
+
+	@Override
+	public int getField(int id) {
+		return inventory.getField(id);
+	}
+
+	@Override
+	public void setField(int id, int value) {
+		inventory.setField(id, value);
+	}
+
+	@Override
+	public int getFieldCount() {
+		return inventory.getFieldCount();
+	}
+
+	@Override
+	public void clear() {
+		inventory.clear();
 	}
 }

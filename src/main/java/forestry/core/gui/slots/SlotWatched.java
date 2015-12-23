@@ -1,70 +1,54 @@
+/*******************************************************************************
+ * Copyright (c) 2011-2014 SirSengir.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the GNU Lesser Public License v3
+ * which accompanies this distribution, and is available at
+ * http://www.gnu.org/licenses/lgpl-3.0.txt
+ *
+ * Various Contributors including, but not limited to:
+ * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ ******************************************************************************/
 package forestry.core.gui.slots;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.core.interfaces.ICrafter;
-import forestry.core.render.TextureManager;
+import forestry.core.inventory.watchers.FakeSlotChangeWatcher;
+import forestry.core.inventory.watchers.FakeSlotPickupWatcher;
+import forestry.core.inventory.watchers.ISlotChangeWatcher;
+import forestry.core.inventory.watchers.ISlotPickupWatcher;
 
 /**
- * Slot with an ICrafter callback.
+ * Slot with a watcher callbacks.
  */
-public abstract class SlotWatched extends SlotForestry {
-	private ICrafter crafter;
-	private String blockedTexture = "slots/blocked";
+public class SlotWatched extends SlotForestry {
+	private ISlotPickupWatcher pickupWatcher = FakeSlotPickupWatcher.instance;
+	private ISlotChangeWatcher changeWatcher = FakeSlotChangeWatcher.instance;
 
 	public SlotWatched(IInventory inventory, int slotIndex, int xPos, int yPos) {
 		super(inventory, slotIndex, xPos, yPos);
 	}
 
-	public SlotWatched setCrafter(ICrafter crafter) {
-		this.crafter = crafter;
+	public SlotWatched setPickupWatcher(ISlotPickupWatcher pickupWatcher) {
+		this.pickupWatcher = pickupWatcher;
 		return this;
 	}
 
-	@Override
-	public boolean getHasStack() {
-		if (crafter != null && !crafter.canTakeStack(getSlotIndex())) {
-			return false;
-		} else {
-			return super.getHasStack();
-		}
-	}
-
-	@Override
-	public ItemStack decrStackSize(int i) {
-		if (crafter != null && !crafter.canTakeStack(getSlotIndex())) {
-			return null;
-		} else {
-			return super.decrStackSize(i);
-		}
+	public SlotWatched setChangeWatcher(ISlotChangeWatcher changeWatcher) {
+		this.changeWatcher = changeWatcher;
+		return this;
 	}
 
 	@Override
 	public void onPickupFromSlot(EntityPlayer player, ItemStack itemStack) {
-		if (crafter != null) {
-			crafter.takenFromSlot(getSlotIndex(), true, player);
-		}
+		super.onPickupFromSlot(player, itemStack);
+		pickupWatcher.onPickupFromSlot(getSlotIndex(), player);
 	}
 
-	public SlotWatched setBlockedTexture(String ident) {
-		blockedTexture = ident;
-		return this;
-	}
-
-	@SideOnly(Side.CLIENT)
 	@Override
-	public IIcon getBackgroundIconIndex() {
-		ItemStack stack = getStack();
-		if (!isItemValid(stack)) {
-			return TextureManager.getInstance().getDefault(blockedTexture);
-		} else {
-			return null;
-		}
+	public void onSlotChanged() {
+		super.onSlotChanged();
+		changeWatcher.onSlotChanged(inventory, getSlotIndex());
 	}
 }

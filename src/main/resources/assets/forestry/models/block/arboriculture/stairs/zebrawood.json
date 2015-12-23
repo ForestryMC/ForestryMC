@@ -1,0 +1,8 @@
+{
+  "parent": "block/stairs",
+  "textures": {
+    "side": "forestry:blocks/wood/planks.zebrawood",
+    "top": "forestry:blocks/wood/planks.zebrawood",
+    "bottom": "forestry:blocks/wood/planks.zebrawood"
+  }
+}

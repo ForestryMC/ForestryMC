@@ -18,33 +18,8 @@ import forestry.core.CreativeTabForestry;
 import forestry.core.items.ItemOverlay;
 
 public class ItemStamps extends ItemOverlay implements IStamps {
-
-	public static class StampInfo extends OverlayInfo {
-
-		private final Object craftingIngredient;
-		private final EnumPostage postage;
-
-		public StampInfo(String name, EnumPostage postage, Object crafting, int primaryColor, int secondaryColor) {
-			super(name, primaryColor, secondaryColor);
-			this.craftingIngredient = crafting;
-			this.postage = postage;
-		}
-
-		public EnumPostage getPostage() {
-			return this.postage;
-		}
-
-		public Object getCraftingIngredient() {
-			return this.craftingIngredient;
-		}
-
-	}
-
-	private final StampInfo[] stampInfo;
-
-	public ItemStamps(StampInfo[] overlays) {
-		super(CreativeTabForestry.tabForestry, overlays);
-		this.stampInfo = overlays;
+	public ItemStamps() {
+		super(CreativeTabForestry.tabForestry, EnumStampDefinition.VALUES);
 	}
 
 	@Override
@@ -53,21 +28,14 @@ public class ItemStamps extends ItemOverlay implements IStamps {
 			return EnumPostage.P_0;
 		}
 
-		if (itemstack.getItemDamage() < 0 || itemstack.getItemDamage() >= stampInfo.length) {
+		if (itemstack.getItemDamage() < 0 || itemstack.getItemDamage() >= EnumStampDefinition.VALUES.length) {
 			return EnumPostage.P_0;
 		}
 
-		return stampInfo[itemstack.getItemDamage()].getPostage();
+		return EnumStampDefinition.VALUES[itemstack.getItemDamage()].getPostage();
 	}
 
-	@Override
-	public String getUnlocalizedName(ItemStack itemstack) {
-		if (itemstack.getItemDamage() < 0 || itemstack.getItemDamage() >= stampInfo.length) {
-			return null;
-		}
-
-		return super.getUnlocalizedName(itemstack);
+	public ItemStack get(EnumStampDefinition stampInfo, int amount) {
+		return new ItemStack(this, amount, stampInfo.ordinal());
 	}
-
-
 }

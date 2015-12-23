@@ -10,56 +10,43 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import forestry.api.apiculture.IArmorApiarist;
 import forestry.api.core.IArmorNaturalist;
+import forestry.api.core.IModelManager;
+import forestry.api.core.IModelRegister;
 import forestry.api.core.Tabs;
-import forestry.core.config.Defaults;
-import forestry.core.config.ForestryItem;
-import forestry.core.render.TextureManager;
-import forestry.core.utils.StringUtil;
+import forestry.core.config.Constants;
+import forestry.plugins.PluginApiculture;
 
-public class ItemArmorApiarist extends ItemArmor implements IArmorApiarist, IArmorNaturalist {
+public class ItemArmorApiarist extends ItemArmor implements IArmorApiarist, IModelRegister, IArmorNaturalist {
 
 	public ItemArmorApiarist(int slot) {
-		super(ArmorMaterial.CLOTH, 0, slot);
+		super(ArmorMaterial.LEATHER, 0, slot);
 		this.setMaxDamage(100);
 		setCreativeTab(Tabs.tabApiculture);
 	}
 
 	@Override
 	public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {
-		if (ForestryItem.apiaristLegs.isItemEqual(stack)) {
-			return Defaults.ID + ":" + Defaults.TEXTURE_APIARIST_ARMOR_SECONDARY;
+		if (stack != null && stack.getItem() == PluginApiculture.items.apiaristLegs) {
+			return Constants.ID + ":" + Constants.TEXTURE_APIARIST_ARMOR_SECONDARY;
 		} else {
-			return Defaults.ID + ":" + Defaults.TEXTURE_APIARIST_ARMOR_PRIMARY;
+			return Constants.ID + ":" + Constants.TEXTURE_APIARIST_ARMOR_PRIMARY;
 		}
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerIcons(IIconRegister register) {
-		itemIcon = TextureManager.getInstance().registerTex(register, StringUtil.cleanItemName(this));
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public IIcon getIconFromDamageForRenderPass(int par1, int par2) {
-		return itemIcon;
-	}
-
-	@Override
-	public boolean requiresMultipleRenderPasses() {
-		return false;
+	public void registerModel(Item item, IModelManager manager) {
+		manager.registerItemModel(item, 0, true);
 	}
 
 	@Override
@@ -73,6 +60,11 @@ public class ItemArmorApiarist extends ItemArmor implements IArmorApiarist, IArm
 	}
 
 	@Override
+	public boolean protectEntity(EntityLivingBase entity, ItemStack armor, String cause, boolean doProtect) {
+		return true;
+	}
+
+	@Override
 	public boolean protectPlayer(EntityPlayer player, ItemStack armor, String cause, boolean doProtect) {
 		return true;
 	}
@@ -80,49 +72,6 @@ public class ItemArmorApiarist extends ItemArmor implements IArmorApiarist, IArm
 	@Override
 	public boolean canSeePollination(EntityPlayer player, ItemStack armor, boolean doSee) {
 		return armorType == 0;
-	}
-
-	public static boolean wearsHelmet(EntityPlayer player, String cause, boolean protect) {
-		ItemStack armorItem = player.inventory.armorInventory[3];
-		return armorItem != null && armorItem.getItem() instanceof IArmorApiarist
-				&& ((IArmorApiarist) armorItem.getItem()).protectPlayer(player, armorItem, cause, protect);
-	}
-
-	public static boolean wearsChest(EntityPlayer player, String cause, boolean protect) {
-		ItemStack armorItem = player.inventory.armorInventory[2];
-		return armorItem != null && armorItem.getItem() instanceof IArmorApiarist
-				&& ((IArmorApiarist) armorItem.getItem()).protectPlayer(player, armorItem, cause, protect);
-	}
-
-	public static boolean wearsLegs(EntityPlayer player, String cause, boolean protect) {
-		ItemStack armorItem = player.inventory.armorInventory[1];
-		return armorItem != null && armorItem.getItem() instanceof IArmorApiarist
-				&& ((IArmorApiarist) armorItem.getItem()).protectPlayer(player, armorItem, cause, protect);
-	}
-
-	public static boolean wearsBoots(EntityPlayer player, String cause, boolean protect) {
-		ItemStack armorItem = player.inventory.armorInventory[0];
-		return armorItem != null && armorItem.getItem() instanceof IArmorApiarist
-				&& ((IArmorApiarist) armorItem.getItem()).protectPlayer(player, armorItem, cause, protect);
-	}
-
-	public static int wearsItems(EntityPlayer player, String cause, boolean protect) {
-		int count = 0;
-
-		if (wearsHelmet(player, cause, protect)) {
-			count++;
-		}
-		if (wearsChest(player, cause, protect)) {
-			count++;
-		}
-		if (wearsLegs(player, cause, protect)) {
-			count++;
-		}
-		if (wearsBoots(player, cause, protect)) {
-			count++;
-		}
-
-		return count;
 	}
 
 }

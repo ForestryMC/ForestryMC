@@ -13,23 +13,26 @@ package forestry.core.items;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fml.common.Optional;
 
 import buildcraft.api.tools.IToolWrench;
 
+@Optional.Interface(iface = "buildcraft.api.tools.IToolWrench", modid = "BuildCraftAPI|tools")
 public class ItemWrench extends ItemForestry implements IToolWrench {
 
 	public ItemWrench() {
 		super();
 		setHarvestLevel("wrench", 0);
 	}
-
+	
 	@Override
-	public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
-		Block block = world.getBlock(x, y, z);
-		if (block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side))) {
+	public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
+		Block block = world.getBlockState(pos).getBlock();
+		if (block.rotateBlock(world, pos, side)) {
 			player.swingItem();
 			return !world.isRemote;
 		}
@@ -37,12 +40,11 @@ public class ItemWrench extends ItemForestry implements IToolWrench {
 	}
 
 	@Override
-	public boolean canWrench(EntityPlayer player, int x, int y, int z) {
+	public boolean canWrench(EntityPlayer player, BlockPos pos) {
 		return true;
 	}
 
 	@Override
-	public void wrenchUsed(EntityPlayer player, int x, int y, int z) {
-	}
+	public void wrenchUsed(EntityPlayer player, BlockPos pos) {}
 
 }

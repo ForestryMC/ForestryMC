@@ -14,33 +14,33 @@ import java.util.Collection;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.core.proxy.Proxies;
-import forestry.core.vect.Vect;
 
 public class CropBlock extends Crop {
 
 	protected final Block block;
 	protected final int meta;
 
-	public CropBlock(World world, Block block, int meta, Vect position) {
+	public CropBlock(World world, Block block, int meta, BlockPos position) {
 		super(world, position);
 		this.block = block;
 		this.meta = meta;
 	}
 
 	@Override
-	protected boolean isCrop(Vect pos) {
+	protected boolean isCrop(BlockPos pos) {
 		return getBlock(pos) == block && getBlockMeta(pos) == meta;
 	}
 
 	@Override
-	protected Collection<ItemStack> harvestBlock(Vect pos) {
-		Collection<ItemStack> harvested = block.getDrops(world, pos.x, pos.y, pos.z, meta, 0);
-		Proxies.common.addBlockDestroyEffects(world, pos.x, pos.y, pos.z, block, 0);
+	protected Collection<ItemStack> harvestBlock(BlockPos pos) {
+		Collection<ItemStack> harvested = block.getDrops(world, pos, block.getStateFromMeta(meta), 0);
+		Proxies.common.addBlockDestroyEffects(world, pos, block.getStateFromMeta(0));
 		// Block.breakBlock() is called by vanilla itself, removing TEs.
-		world.setBlockToAir(pos.x, pos.y, pos.z);
+		world.setBlockToAir(pos);
 		return harvested;
 	}
 

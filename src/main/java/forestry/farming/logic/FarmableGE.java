@@ -21,8 +21,8 @@ import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
 import forestry.arboriculture.genetics.TreeGenome;
-import forestry.core.config.ForestryBlock;
-import forestry.core.vect.Vect;
+import forestry.core.utils.BlockPosUtil;
+import forestry.plugins.PluginArboriculture;
 
 public class FarmableGE implements IFarmable {
 
@@ -33,23 +33,24 @@ public class FarmableGE implements IFarmable {
 			return false;
 		}
 
-		return ForestryBlock.saplingGE.isBlockEqual(world, pos);
+		Block block = BlockPosUtil.getBlock(world, pos);
+		return PluginArboriculture.blocks.saplingGE == block;
 	}
 
 	@Override
 	public ICrop getCropAt(World world, BlockPos pos) {
-		Block block = world.getBlockState(pos).getBlock();
+		Block block = BlockPosUtil.getBlock(world, pos);
 
 		if (!block.isWood(world, pos)) {
 			return null;
 		}
 
-		return new CropBlock(world, block, world.getBlockMetadata(x, y, z), new Vect(pos));
+		return new CropBlock(world, block,BlockPosUtil.getBlockMeta(world, pos), pos);
 	}
 
 	@Override
 	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
-		return germling.copy().onItemUse(player, world, pos.down(), EnumFacing.UP, 0, 0, 0);
+		return germling.copy().onItemUse(player, world, new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ()), EnumFacing.UP, 0, 0, 0);
 	}
 
 	@Override

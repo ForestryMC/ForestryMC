@@ -10,25 +10,25 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.util.StatCollector;
 
-import forestry.core.gadgets.TileForestry;
-import forestry.core.utils.StringUtil;
+import forestry.core.tiles.ITitled;
 
-public abstract class GuiForestryTitled<T extends TileForestry> extends GuiForestry<T> {
+public abstract class GuiForestryTitled<C extends Container, I extends ITitled & IInventory> extends GuiForestry<C, I> {
 
-	public GuiForestryTitled(String texture, ContainerForestry container, Object inventory) {
-		super(texture, container, inventory);
-	}
-
-	public GuiForestryTitled(ResourceLocation texture, ContainerForestry container, Object inventory) {
+	protected GuiForestryTitled(String texture, C container, I inventory) {
 		super(texture, container, inventory);
 	}
 
 	@Override
-	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		String name = StringUtil.localizeTile(tile.getUnlocalizedName());
-		this.fontRendererObj.drawString(name, getCenteredOffset(name), 6, fontColor.get("gui.title"));
-		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
+	protected void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY) {
+		super.drawGuiContainerBackgroundLayer(f, mouseX, mouseY);
+
+		String name = StatCollector.translateToLocal(inventory.getUnlocalizedTitle());
+		textLayout.line = 6;
+		textLayout.drawCenteredLine(name, 0, fontColor.get("gui.title"));
+		bindTexture(textureFile);
 	}
 }
