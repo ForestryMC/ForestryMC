@@ -36,6 +36,7 @@ public class FruitProviderPod extends FruitProviderNone {
 		PAPAYA((short) 2013, (short) 2014, (short) 2015);//, COCONUT((short)2016, (short)2017, (short)2018);
 
 		public final short[] uids;
+
 		EnumPodType(short stage1, short stage2, short stage3) {
 			uids = new short[]{stage1, stage2, stage3};
 		}

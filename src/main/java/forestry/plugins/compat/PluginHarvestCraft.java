@@ -303,9 +303,9 @@ public class PluginHarvestCraft extends ForestryPlugin {
 			}
 			plants.add(cropName);
 		}
-		ItemStack mustardCropSeed = GameRegistry.findItemStack(HC,"mustard" + "seedItem",1);
-		Block mustardCropBlock = GameRegistry.findBlock(HC,"pam"+"mustardseeds" + "Crop");
-		ItemStack mustardFruit = GameRegistry.findItemStack(HC,"mustard" + "seedsItem",1);
+		ItemStack mustardCropSeed = GameRegistry.findItemStack(HC, "mustard" + "seedItem", 1);
+		Block mustardCropBlock = GameRegistry.findBlock(HC, "pam" + "mustardseeds" + "Crop");
+		ItemStack mustardFruit = GameRegistry.findItemStack(HC, "mustard" + "seedsItem", 1);
 		if (mustardCropSeed != null) {
 			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{mustardCropSeed}, Fluids.SEEDOIL.getFluid(seedamount));
 		}

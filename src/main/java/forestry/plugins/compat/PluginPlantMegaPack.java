@@ -158,7 +158,7 @@ public class PluginPlantMegaPack extends ForestryPlugin {
 				.put("cropRice", 4)
 				.put("cropWaterSpinach", 4)
 				.put("cropWildRice", 4)
-		
+
 				.put("immersedArrowArum", 4)
 				.put("immersedCommonReed", 4)
 				.put("immersedDuckPotato", 4)

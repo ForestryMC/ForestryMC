@@ -12,12 +12,9 @@ package forestry.energy.tiles;
 
 import net.minecraft.world.IBlockAccess;
 
-import forestry.core.blocks.IMachineProperties;
 import forestry.core.blocks.IMachinePropertiesTESR;
-import forestry.core.render.IBlockRenderer;
 import forestry.core.tiles.MachineDefinition;
 import forestry.core.tiles.TileEngine;
-import forestry.core.tiles.TileForestry;
 import forestry.core.tiles.TileUtil;
 
 public class EngineDefinition extends MachineDefinition {

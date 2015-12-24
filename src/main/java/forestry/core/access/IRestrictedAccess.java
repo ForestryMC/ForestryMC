@@ -12,5 +12,6 @@ package forestry.core.access;
 
 public interface IRestrictedAccess {
 	IAccessHandler getAccessHandler();
+
 	void onSwitchAccess(EnumAccess oldAccess, EnumAccess newAccess);
 }

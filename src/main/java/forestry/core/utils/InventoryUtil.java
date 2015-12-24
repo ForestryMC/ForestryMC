@@ -466,7 +466,7 @@ public abstract class InventoryUtil {
 		int added = addStack(inventory, stack, startSlot, slots, false);
 		boolean success = all ? (added == stack.stackSize) : (added > 0);
 
-		if (success	&& doAdd) {
+		if (success && doAdd) {
 			addStack(inventory, stack, startSlot, slots, true);
 		}
 		

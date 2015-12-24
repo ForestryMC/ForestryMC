@@ -28,8 +28,11 @@ import forestry.core.utils.StringUtil;
 public class ItemOverlay extends ItemForestry {
 	public interface IOverlayInfo {
 		String getName();
+
 		int getPrimaryColor();
+
 		int getSecondaryColor();
+
 		boolean isSecret();
 	}
 
