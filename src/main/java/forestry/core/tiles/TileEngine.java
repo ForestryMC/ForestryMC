@@ -34,8 +34,10 @@ import forestry.energy.EnergyManager;
 import cofh.api.energy.IEnergyConnection;
 
 public abstract class TileEngine extends TileBase implements IEnergyConnection, IActivatable {
+	private static final int CANT_SEND_ENERGY_TIME = 20;
 
 	private boolean active = false; // Used for smp.
+	private int cantSendEnergyCountdown = CANT_SEND_ENERGY_TIME;
 	/**
 	 * Indicates whether the piston is receding from or approaching the
 	 * combustion chamber
@@ -147,8 +149,14 @@ public abstract class TileEngine extends TileBase implements IEnergyConnection, 
 			if (energyManager.canSendEnergy(getOrientation(), tile)) {
 				stagePiston = 1; // If we can transfer energy, start running
 				setActive(true);
+				cantSendEnergyCountdown = CANT_SEND_ENERGY_TIME;
 			} else {
-				setActive(false);
+				if (isActive()) {
+					cantSendEnergyCountdown--;
+					if (cantSendEnergyCountdown <= 0) {
+						setActive(false);
+					}
+				}
 			}
 		} else {
 			setActive(false);
