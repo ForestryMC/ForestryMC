@@ -285,8 +285,11 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 							wood.setDirection(branchDirection);
 						}
 					}
-					addWood(world, x, y, z, EnumReplaceMode.SOFT);
-					branchEnds.add(new ChunkCoordinates(x, y, z));
+					if (addWood(world, x, y, z, EnumReplaceMode.SOFT)) {
+						branchEnds.add(new ChunkCoordinates(x, y, z));
+					} else {
+						break;
+					}
 				}
 			}
 		}
@@ -295,28 +298,30 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 	}
 
 	@Override
-	protected void addBlock(World world, int x, int y, int z, ITreeBlockType type, EnumReplaceMode replace) {
+	protected boolean addBlock(World world, int x, int y, int z, ITreeBlockType type, EnumReplaceMode replace) {
 		if (replace == EnumReplaceMode.ALL
 				|| (replace == EnumReplaceMode.SOFT && BlockUtil.isReplaceableBlock(world, startX + x, startY + y, startZ + z))
 				|| world.isAirBlock(startX + x, startY + y, startZ + z)) {
 			type.setBlock(world, tree, startX + x, startY + y, startZ + z);
+			return true;
 		}
+		return false;
 	}
 
 	protected final void clearBlock(World world, int x, int y, int z) {
 		air.setBlock(world, startX + x, startY + y, startZ + z);
 	}
 
-	protected final void addWood(World world, int x, int y, int z, EnumReplaceMode replace) {
-		addBlock(world, x, y, z, wood, replace);
+	protected final boolean addWood(World world, int x, int y, int z, EnumReplaceMode replace) {
+		return addBlock(world, x, y, z, wood, replace);
 	}
 	
-	protected final void addLeaf(World world, int x, int y, int z, EnumReplaceMode replace) {
-		addBlock(world, x, y, z, leaf, replace);
+	protected final boolean addLeaf(World world, int x, int y, int z, EnumReplaceMode replace) {
+		return addBlock(world, x, y, z, leaf, replace);
 	}
 
-	protected final void addVine(World world, int x, int y, int z, ITreeBlockType vine) {
-		addBlock(world, x, y, z, vine, EnumReplaceMode.NONE);
+	protected final boolean addVine(World world, int x, int y, int z, ITreeBlockType vine) {
+		return addBlock(world, x, y, z, vine, EnumReplaceMode.NONE);
 	}
 
 	protected final void addVines(World world, int x, int y, int z, float chance) {

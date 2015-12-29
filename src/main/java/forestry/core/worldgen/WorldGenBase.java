@@ -66,7 +66,7 @@ public abstract class WorldGenBase extends WorldGenerator {
 		return false;
 	}
 
-	protected abstract void addBlock(World world, int x, int y, int z, ITreeBlockType type, EnumReplaceMode replace);
+	protected abstract boolean addBlock(World world, int x, int y, int z, ITreeBlockType type, EnumReplaceMode replace);
 
 	protected final void generateCuboid(World world, Vector start, Vector area, ITreeBlockType block, EnumReplaceMode replace) {
 		for (int x = (int) start.x; x < (int) start.x + area.x; x++) {
