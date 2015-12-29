@@ -41,7 +41,7 @@ public class ItemHabitatLocator extends ItemWithGui {
 	private final HabitatLocatorLogic locatorLogic;
 
 	public ItemHabitatLocator() {
-		super(Tabs.tabApiculture);
+		setCreativeTab(Tabs.tabApiculture);
 		setMaxStackSize(1);
 		locatorLogic = new HabitatLocatorLogic();
 	}

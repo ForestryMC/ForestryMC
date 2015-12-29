@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -22,11 +21,7 @@ import forestry.core.gui.IGuiHandlerItem;
 
 public abstract class ItemWithGui extends ItemForestry implements IGuiHandlerItem {
 	public ItemWithGui() {
-
-	}
-
-	public ItemWithGui(CreativeTabs creativeTabs) {
-		super(creativeTabs);
+		setMaxStackSize(1);
 	}
 
 	@Override

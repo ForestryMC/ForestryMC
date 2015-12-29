@@ -21,7 +21,7 @@ import forestry.core.items.ItemWithGui;
 
 public class ItemBeealyzer extends ItemWithGui {
 	public ItemBeealyzer() {
-		super(Tabs.tabApiculture);
+		setCreativeTab(Tabs.tabApiculture);
 	}
 
 	@Override
