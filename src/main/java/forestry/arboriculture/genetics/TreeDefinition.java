@@ -45,7 +45,6 @@ import forestry.arboriculture.genetics.alleles.AlleleFruit;
 import forestry.arboriculture.genetics.alleles.AlleleGrowth;
 import forestry.arboriculture.render.IconProviderGermling;
 import forestry.arboriculture.render.IconProviderGermlingVanilla;
-import forestry.arboriculture.render.IconProviderLeaves;
 import forestry.arboriculture.tiles.TileLeaves;
 import forestry.arboriculture.worldgen.BlockTypeLog;
 import forestry.arboriculture.worldgen.WorldGenAcacia;
@@ -462,7 +461,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 			// only available by rare villager trade
 		}
 	},
-	Jungle(TreeBranchDefinition.TROPICAL, "jungle", "tectona", false, EnumLeafType.JUNGLE, new Color(4764952), new Color(0x539d12), 3, new ItemStack(Blocks.log, 1, 3)) {
+	Jungle(TreeBranchDefinition.TROPICAL, "jungle", "tectona", false, EnumLeafType.JUNGLE, new Color(4764952), new Color(0x658917), 3, new ItemStack(Blocks.log, 1, 3)) {
 		@Override
 		public WorldGenerator getWorldGenerator(ITreeGenData tree) {
 			return new WorldGenJungle(tree);
@@ -868,7 +867,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 					.restrictHumidity(EnumHumidity.DAMP);
 		}
 	},
-	Papaya(TreeBranchDefinition.CARICA, "papaya", "papaya", true, EnumLeafType.PALM, new Color(0x6d9f58), new Color(0x9ee67f), EnumWoodType.PAPAYA) {
+	Papaya(TreeBranchDefinition.CARICA, "papaya", "papaya", true, EnumLeafType.PALM, new Color(0x6d9f58), new Color(0x75E675), EnumWoodType.PAPAYA) {
 		@Override
 		public WorldGenerator getWorldGenerator(ITreeGenData tree) {
 			return new WorldGenPapaya(tree);
@@ -893,7 +892,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 			registerMutation(Jungle, Cherry, 5);
 		}
 	},
-	Date(TreeBranchDefinition.PHOENIX, "datePalm", "dactylifera", true, EnumLeafType.PALM, new Color(0xcbcd79), new Color(0xf0f38f), EnumWoodType.PALM) {
+	Date(TreeBranchDefinition.PHOENIX, "datePalm", "dactylifera", true, EnumLeafType.PALM, new Color(0xcbcd79), new Color(0xB3F370), EnumWoodType.PALM) {
 		@Override
 		public WorldGenerator getWorldGenerator(ITreeGenData tree) {
 			return new WorldGenDate(tree);
@@ -963,7 +962,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 
 		this.branch = branch;
 
-		ILeafIconProvider leafIconProvider = new IconProviderLeaves(leafType, primary, secondary);
+		ILeafIconProvider leafIconProvider = TreeManager.treeFactory.getLeafIconProvider(leafType, primary, secondary);
 		IGermlingIconProvider germlingIconProvider = new IconProviderGermlingVanilla(vanillaMeta);
 
 		this.species = TreeManager.treeFactory.createSpecies(uid, unlocalizedName, "Sengir", unlocalizedDescription, dominant, branch.getBranch(), binomial, leafIconProvider, germlingIconProvider, this);
@@ -979,7 +978,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 
 		this.branch = branch;
 
-		ILeafIconProvider leafIconProvider = new IconProviderLeaves(leafType, primary, secondary);
+		ILeafIconProvider leafIconProvider = TreeManager.treeFactory.getLeafIconProvider(leafType, primary, secondary);
 		IGermlingIconProvider germlingIconProvider = new IconProviderGermling(uid);
 
 		this.species = TreeManager.treeFactory.createSpecies(uid, unlocalizedName, "Sengir", unlocalizedDescription, dominant, branch.getBranch(), binomial, leafIconProvider, germlingIconProvider, this);

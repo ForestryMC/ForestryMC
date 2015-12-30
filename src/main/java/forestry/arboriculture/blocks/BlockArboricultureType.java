@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.arboriculture.blocks;
 
-import javax.annotation.Nullable;
-
 import forestry.arboriculture.tiles.TileArboristChest;
 import forestry.core.blocks.IMachinePropertiesTESR;
 import forestry.core.proxy.Proxies;

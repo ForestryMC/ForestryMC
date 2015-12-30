@@ -225,7 +225,7 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 		if (PluginManager.Module.AGRICRAFT.isEnabled()) {
 			Block cropBlock = GameRegistry.findBlock("AgriCraft", "crops");
 			if (block == cropBlock) {
-				if(block instanceof IPlantable) {
+				if (block instanceof IPlantable) {
 					//For agricraft versions which implement IPlantable in the BlockCrop class
 					block = ((IPlantable) block).getPlant(world, x, y, z);
 				} else {

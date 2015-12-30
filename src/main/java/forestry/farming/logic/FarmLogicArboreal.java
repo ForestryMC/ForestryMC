@@ -40,6 +40,7 @@ import forestry.core.utils.vect.VectUtil;
 import forestry.plugins.PluginCore;
 
 public class FarmLogicArboreal extends FarmLogicHomogeneous {
+	private static final int BRANCH_RANGE = 20;
 
 	public FarmLogicArboreal(IFarmHousing housing, ItemStack resource, ItemStack ground, Iterable<IFarmable> germlings) {
 		super(housing, resource, ground, germlings);
@@ -172,10 +173,10 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 					if (candidate.equals(position)) {
 						continue;
 					}
-					if (Math.abs(candidate.x - start.x) > 10) {
+					if (Math.abs(candidate.x - start.x) > BRANCH_RANGE) {
 						continue;
 					}
-					if (Math.abs(candidate.z - start.z) > 10) {
+					if (Math.abs(candidate.z - start.z) > BRANCH_RANGE) {
 						continue;
 					}
 

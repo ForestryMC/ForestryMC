@@ -21,7 +21,7 @@ import forestry.core.items.ItemWithGui;
 
 public class ItemImprinter extends ItemWithGui {
 	public ItemImprinter() {
-		super(Tabs.tabApiculture);
+		setCreativeTab(Tabs.tabApiculture);
 	}
 
 	@Override

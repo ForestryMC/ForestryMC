@@ -46,8 +46,8 @@ public class BlockSlab extends net.minecraft.block.BlockSlab implements IWoodTyp
 	private final ParticleHelper.Callback particleCallback;
 	private final boolean fireproof;
 
-	public BlockSlab(boolean fireproof) {
-		super(false, Material.wood);
+	public BlockSlab(boolean doubleSlab, boolean fireproof) {
+		super(doubleSlab, Material.wood);
 
 		this.fireproof = fireproof;
 
@@ -61,9 +61,8 @@ public class BlockSlab extends net.minecraft.block.BlockSlab implements IWoodTyp
 		this.particleCallback = new ParticleHelper.DefaultCallback(this);
 	}
 
-	@Override
-	public boolean isOpaqueCube() {
-		return false;
+	public boolean isDoubleSlab() {
+		return field_150004_a;
 	}
 
 	/* ICONS */
@@ -100,8 +99,10 @@ public class BlockSlab extends net.minecraft.block.BlockSlab implements IWoodTyp
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List list) {
-		for (EnumWoodType woodType : EnumWoodType.VALUES) {
-			list.add(TreeManager.woodItemAccess.getSlab(woodType, fireproof));
+		if (!isDoubleSlab()) {
+			for (EnumWoodType woodType : EnumWoodType.VALUES) {
+				list.add(TreeManager.woodItemAccess.getSlab(woodType, fireproof));
+			}
 		}
 	}
 

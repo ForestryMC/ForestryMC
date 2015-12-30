@@ -14,5 +14,6 @@ import java.io.IOException;
 
 public interface IStreamableGui {
 	void writeGuiData(DataOutputStreamForestry data) throws IOException;
+
 	void readGuiData(DataInputStreamForestry data) throws IOException;
 }

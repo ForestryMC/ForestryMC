@@ -23,12 +23,14 @@ import net.minecraft.world.World;
 
 import forestry.api.arboriculture.EnumWoodType;
 import forestry.arboriculture.IWoodTyped;
+import forestry.arboriculture.blocks.BlockSlab;
 import forestry.arboriculture.items.ItemBlockWood;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
 import forestry.core.network.packets.PacketTileStream;
 import forestry.core.tiles.TileUtil;
+import forestry.plugins.PluginArboriculture;
 
 public class TileWood extends TileEntity implements IStreamable {
 	private EnumWoodType woodType;
@@ -93,7 +95,16 @@ public class TileWood extends TileEntity implements IStreamable {
 		}
 		EnumWoodType woodType = wood.getWoodType();
 
-		ItemStack itemStack = new ItemStack(block);
+		int amount = 1;
+		if (block instanceof BlockSlab) {
+			BlockSlab blockSlab = (BlockSlab) block;
+			if (blockSlab.isDoubleSlab()) {
+				amount = 2;
+				block = PluginArboriculture.blocks.slabs;
+			}
+		}
+
+		ItemStack itemStack = new ItemStack(block, amount);
 		ItemBlockWood.saveToItemStack(woodType, itemStack);
 		return itemStack;
 	}

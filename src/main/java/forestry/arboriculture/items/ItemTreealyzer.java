@@ -21,7 +21,7 @@ import forestry.core.items.ItemWithGui;
 
 public class ItemTreealyzer extends ItemWithGui {
 	public ItemTreealyzer() {
-		super(Tabs.tabArboriculture);
+		setCreativeTab(Tabs.tabArboriculture);
 	}
 
 	@Override

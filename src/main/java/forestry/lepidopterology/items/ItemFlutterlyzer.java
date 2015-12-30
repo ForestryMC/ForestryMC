@@ -21,7 +21,7 @@ import forestry.lepidopterology.inventory.ItemInventoryFlutterlyzer;
 
 public class ItemFlutterlyzer extends ItemWithGui {
 	public ItemFlutterlyzer() {
-		super(Tabs.tabLepidopterology);
+		setCreativeTab(Tabs.tabLepidopterology);
 	}
 
 	@Override

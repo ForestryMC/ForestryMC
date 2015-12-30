@@ -47,7 +47,7 @@ public class PluginRotaryCraft extends ForestryPlugin {
 		ItemStack canolaSeed = GameRegistry.findItemStack(RC, "rotarycraft_item_canola", 1);
 		Block canolaCrop = GameRegistry.findBlock(RC, "rotarycraft_block_canola");
 
-		int seedAmount = (ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed")/16);
+		int seedAmount = (ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed") / 16);
 		seedAmount = Math.max(seedAmount, 1); // Produce at least 1 mb.
 		if (canolaSeed != null && canolaCrop != null) {
 			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{canolaSeed}, Fluids.SEEDOIL.getFluid(seedAmount));
