@@ -121,6 +121,11 @@ public class ItemBlockWood extends ItemBlockForestry {
 	}
 
 	@Override
+	public int getMetadata(int i) {
+		return 0;
+	}
+
+	@Override
 	public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int metadata) {
 		return placeWood(stack, player, world, x, y, z, metadata);
 	}
