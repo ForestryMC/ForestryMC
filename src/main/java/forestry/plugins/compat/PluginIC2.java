@@ -12,11 +12,19 @@ package forestry.plugins.compat;
 
 import com.google.common.collect.ImmutableMap;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumSet;
 
+import cpw.mods.fml.common.registry.GameRegistry;
+import forestry.api.farming.Farmables;
+import forestry.farming.logic.FarmableBasicIC2Crop;
+import ic2.api.crops.ICropTile;
+import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 
+import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -300,6 +308,11 @@ public class PluginIC2 extends ForestryPlugin {
 			ChipsetManager.solderManager.addRecipe(layoutManual, PluginCore.items.tubes.get(EnumElectronTube.RUBBER, 1), Circuit.farmRubberManual);
 		}
 
+		Block ic2Crop = GameRegistry.findBlock("IC2", "blockCrop");
+		if (PluginManager.Module.FARMING.isEnabled() && ic2Crop != null) {
+			Farmables.farmables.get("farmOrchard").add(new FarmableBasicIC2Crop());
+		}
+
 		BlockRegistryEnergy energyBlocks = PluginEnergy.blocks;
 		if (energyBlocks != null) {
 			RecipeUtil.addRecipe(energyBlocks.engine.get(BlockEngineType.GENERATOR),
@@ -319,5 +332,79 @@ public class PluginIC2 extends ForestryPlugin {
 					'Y', "gearTin",
 					'V', Blocks.piston);
 		}
+	}
+
+	/**
+	 * Check if there is an instance of ICropTile.
+	 * @param tileEntity tile entity to be checked.
+	 * @return true if there is an IC2 crop and false otherwise.
+	 */
+	@Optional.Method(modid = "IC2")
+	public boolean isIC2Crop(TileEntity tileEntity) {
+		if (tileEntity != null && tileEntity instanceof ICropTile) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Check if an IC2 crop is ready to be harvested.
+	 * @param tileEntity tile entity to be checked.
+	 * @return true if crop size is optimal for harvest and false otherwise.
+	 */
+	@Optional.Method(modid = "IC2")
+	public boolean canHarvestCrop(TileEntity tileEntity) {
+		if (isIC2Crop(tileEntity)) {
+			ICropTile crop = (ICropTile)tileEntity;
+			if (crop.getCrop() == null) {
+				return false;
+			}
+			if (crop.getSize() == crop.getCrop().getOptimalHavestSize(crop)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Perform some of the actions of the crop-matron.
+	 * @param tileEntity
+	 */
+	@Optional.Method(modid = "IC2")
+	public void babysitCrop(TileEntity tileEntity) {
+		if (isIC2Crop(tileEntity)) {
+			ICropTile crop = (ICropTile)tileEntity;
+			/*
+			This part might be unbalanced until a custom farm logic is added and makes use of weed-ex.
+			if (crop.getCrop() != null) {
+				if (crop.getCrop().isWeed(crop)) {
+					crop.reset();
+				}
+			}*/
+			if (crop.getHydrationStorage() <= 200) {
+				crop.setHydrationStorage(200);
+			}
+			if (crop.getNutrientStorage() <= 100) {
+				crop.setNutrientStorage(crop.getNutrientStorage() + 100);
+			}
+		}
+	}
+
+	/**
+	 * This function takes care of everything related to the harvesting of the
+	 * crop meaning it will calculate the drops and also do setSizeAfterHarvest().
+	 * @param tileEntity tile entity to be checked.
+	 * @return arraylist containing the drops.
+	 */
+	@Optional.Method(modid = "IC2")
+	public ArrayList<ItemStack> getCropDrops(TileEntity tileEntity) {
+		if (isIC2Crop(tileEntity)) {
+			ICropTile crop = (ICropTile)tileEntity;
+			ItemStack[] cropDrops = crop.harvest_automated(true);
+			if (cropDrops != null) {
+				return new ArrayList<>(Arrays.asList(cropDrops));
+			}
+		}
+		return null;
 	}
 }
