@@ -12,6 +12,7 @@ package forestry.arboriculture.blocks;
 
 import forestry.arboriculture.items.ItemBlockLeaves;
 import forestry.arboriculture.items.ItemBlockWood;
+import forestry.arboriculture.items.ItemBlockWoodSlab;
 import forestry.core.blocks.BlockRegistry;
 import forestry.core.items.ItemBlockForestry;
 
@@ -19,11 +20,13 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 	public final BlockLog logs;
 	public final BlockPlanks planks;
 	public final BlockSlab slabs;
+	public final BlockSlab slabsDouble;
 	public final BlockArbFence fences;
 	public final BlockArbStairs stairs;
 	public final BlockLog logsFireproof;
 	public final BlockPlanks planksFireproof;
 	public final BlockSlab slabsFireproof;
+	public final BlockSlab slabsDoubleFireproof;
 	public final BlockArbFence fencesFireproof;
 	public final BlockArbStairs stairsFireproof;
 
@@ -40,9 +43,13 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 		
 		planks = registerBlock(new BlockPlanks(false), ItemBlockWood.class, "planks");
 		registerOreDictWildcard("plankWood", planks);
-		
-		slabs = registerBlock(new BlockSlab(false), ItemBlockWood.class, "slabs");
+
+		BlockSlab blockSlab = new BlockSlab(false, false);
+		BlockSlab blockSlabDouble = new BlockSlab(true, false);
+		slabs = registerBlock(blockSlab, ItemBlockWoodSlab.class, "slabs", blockSlabDouble, blockSlab);
 		registerOreDictWildcard("slabWood", slabs);
+
+		slabsDouble = registerBlock(blockSlabDouble, ItemBlockWoodSlab.class, "slabsDouble", blockSlabDouble, blockSlab);
 		
 		fences = registerBlock(new BlockArbFence(false), ItemBlockWood.class, "fences");
 		registerOreDictWildcard("fenceWood", fences);
@@ -55,9 +62,13 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 		
 		planksFireproof = registerBlock(new BlockPlanks(true), ItemBlockWood.class, "planksFireproof");
 		registerOreDictWildcard("plankWood", planksFireproof);
-		
-		slabsFireproof = registerBlock(new BlockSlab(true), ItemBlockWood.class, "slabsFireproof");
+
+		BlockSlab blockSlabFireproof = new BlockSlab(false, true);
+		BlockSlab blockSlabDoubleFireproof = new BlockSlab(true, true);
+		slabsFireproof = registerBlock(blockSlabFireproof, ItemBlockWoodSlab.class, "slabsFireproof", blockSlabDoubleFireproof, blockSlabFireproof);
 		registerOreDictWildcard("slabWood", slabsFireproof);
+
+		slabsDoubleFireproof = registerBlock(blockSlabDoubleFireproof, ItemBlockWoodSlab.class, "slabsDoubleFireproof", blockSlabDoubleFireproof, blockSlabFireproof);
 		
 		fencesFireproof = registerBlock(new BlockArbFence(true), ItemBlockWood.class, "fencesFireproof");
 		registerOreDictWildcard("fenceWood", fencesFireproof);
