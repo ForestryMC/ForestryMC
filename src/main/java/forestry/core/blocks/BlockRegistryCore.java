@@ -27,8 +27,8 @@ public class BlockRegistryCore extends BlockRegistry {
 		core = registerBlock(new BlockCore(), ItemBlockForestry.class, "core");
 		
 		soil = registerBlock(new BlockSoil(), ItemBlockTyped.class, "soil");
-		soil.setHarvestLevel("shovel", 0, 0);
-		soil.setHarvestLevel("shovel", 0, 1);
+		soil.setHarvestLevel("shovel", 0, soil.getStateFromMeta(0));
+		soil.setHarvestLevel("shovel", 0, soil.getStateFromMeta(1));
 		
 		resources = registerBlock(new BlockResourceOre(), ItemBlockForestry.class, "resources");
 		resources.setHarvestLevel("pickaxe", 1);

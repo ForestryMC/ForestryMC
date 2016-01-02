@@ -10,43 +10,41 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import java.util.ArrayList;
 import java.util.Collection;
-
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.vect.Vect;
 
 public class CropBasicAgriCraft extends Crop {
 
 	private final Block block;
 	private final int meta;
 
-	public CropBasicAgriCraft(World world, Block block, int meta, Vect position) {
+	public CropBasicAgriCraft(World world, Block block, int meta, BlockPos position) {
 		super(world, position);
 		this.block = block;
 		this.meta = meta;
 	}
 
 	@Override
-	protected boolean isCrop(Vect pos) {
+	protected boolean isCrop(BlockPos pos) {
 		return getBlock(pos) == block && getBlockMeta(pos) == meta;
 	}
 
 	@Override
-	protected Collection<ItemStack> harvestBlock(Vect pos) {
-		ArrayList<ItemStack> harvest = block.getDrops(world, pos.x, pos.y, pos.z, meta, 0);
+	protected Collection<ItemStack> harvestBlock(BlockPos pos) {
+		Collection<ItemStack> harvest = block.getDrops(world, pos, world.getBlockState(pos), 0);
 		if (harvest.size() > 1) {
 			harvest.remove(1); //AgriCraft returns cropsticks in 0, seeds in 1 in getDrops, removing since harvesting doesn't return them.
 		}
 		harvest.remove(0);
-		Proxies.common.addBlockDestroyEffects(world, pos.x, pos.y, pos.z, Blocks.melon_block, 0);
-		world.setBlockMetadataWithNotify(pos.x, pos.y, pos.z, 0, Constants.FLAG_BLOCK_SYNCH);
+		Proxies.common.addBlockDestroyEffects(world, pos, Blocks.melon_block.getStateFromMeta(0));
+		world.setBlockState(pos, block.getStateFromMeta(0), Constants.FLAG_BLOCK_SYNCH);
 		return harvest;
 	}
 

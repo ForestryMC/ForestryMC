@@ -45,10 +45,9 @@ import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.IShearable;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
 import net.minecraftforge.oredict.OreDictionary;
-
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
 
 import forestry.Forestry;
 import forestry.api.recipes.RecipeManagers;
@@ -347,7 +346,7 @@ public class PluginStorage extends ForestryPlugin {
 				new ItemStack(Items.magma_cream),
 				new ItemStack(Items.speckled_melon),
 				new ItemStack(Items.fish),
-				new ItemStack(Items.cooked_fished),
+				new ItemStack(Items.cooked_fish),
 				new ItemStack(Items.lead),
 				new ItemStack(Items.fishing_rod),
 				new ItemStack(Items.name_tag),

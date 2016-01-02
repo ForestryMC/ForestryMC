@@ -10,54 +10,10 @@
  ******************************************************************************/
 package forestry.apiculture.worldgen;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+@Deprecated
+public class ComponentVillageBeeHouse /*extends StructureVillagePieces.House1*/ {
 
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraft.world.gen.structure.StructureBoundingBox;
-import net.minecraft.world.gen.structure.StructureComponent;
-import net.minecraft.world.gen.structure.StructureVillagePieces;
-
-import net.minecraftforge.common.ChestGenHooks;
-import net.minecraftforge.common.util.ForgeDirection;
-
-import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.EnumBeeType;
-import forestry.api.apiculture.FlowerManager;
-import forestry.api.apiculture.IAlleleBeeSpecies;
-import forestry.api.apiculture.IBee;
-import forestry.api.apiculture.IBeeGenome;
-import forestry.api.arboriculture.EnumWoodType;
-import forestry.api.arboriculture.TreeManager;
-import forestry.api.core.EnumHumidity;
-import forestry.api.core.EnumTemperature;
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IFlower;
-import forestry.apiculture.blocks.BlockApicultureType;
-import forestry.apiculture.inventory.InventoryApiary;
-import forestry.apiculture.tiles.TileApiary;
-import forestry.arboriculture.worldgen.BlockTypeLog;
-import forestry.arboriculture.worldgen.BlockTypeVanillaStairs;
-import forestry.arboriculture.worldgen.BlockTypeWood;
-import forestry.arboriculture.worldgen.BlockTypeWoodStairs;
-import forestry.core.blocks.BlockCoreType;
-import forestry.core.config.Constants;
-import forestry.core.tiles.TileUtil;
-import forestry.core.worldgen.BlockType;
-import forestry.core.worldgen.BlockTypeTileForestry;
-import forestry.core.worldgen.IBlockType;
-import forestry.plugins.PluginApiculture;
-import forestry.plugins.PluginCore;
-import forestry.plugins.PluginManager;
-
-public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
-
-	private static final Random random = new Random();
+	/*private static final Random random = new Random();
 
 	private int averageGroundLevel = -1;
 	private boolean isInDesert = false;
@@ -97,7 +53,7 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 			logs = new BlockType(Blocks.log, random.nextInt(4));
 			planks = new BlockType(Blocks.planks, roofMeta);
 			stairs = new BlockTypeVanillaStairs(roofMeta);
-			fence = new BlockType(Blocks.fence, 0);
+			fence = new BlockType(Blocks.oak_fence, 0);
 		}
 	}
 
@@ -406,11 +362,11 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 		return getBlockAtCurrentPosition(world, x, y, z, box).isAir(world, x, y, z);
 	}
 
-	/** rotates a direction according to the way the structure is facing **/
+	// rotates a direction according to the way the structure is facing 
 	private ForgeDirection getRotatedDirection(ForgeDirection direction) {
 		int stairDirection = 5 - direction.ordinal();
 		int meta = getMetadataWithOffset(Blocks.oak_stairs, stairDirection);
 		return ForgeDirection.getOrientation(5 - meta);
-	}
+	}*/
 
 }

@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.circuits;
 
+import java.io.IOException;
 import java.util.Locale;
 
 import net.minecraft.client.gui.GuiButton;
@@ -82,7 +83,7 @@ public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron, ItemIn
 	}
 
 	@Override
-	protected void actionPerformed(GuiButton guibutton) {
+	protected void actionPerformed(GuiButton guibutton) throws IOException {
 		super.actionPerformed(guibutton);
 
 		if (guibutton.id == 1) {

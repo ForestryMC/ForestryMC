@@ -16,12 +16,11 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.init.Blocks;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
-
-import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.api.world.ITreeGenData;
 import forestry.arboriculture.tiles.TileTreeContainer;
@@ -34,15 +33,15 @@ import forestry.core.worldgen.WorldGenBase;
 public abstract class WorldGenArboriculture extends WorldGenBase {
 
 	enum Direction {
-		NORTH(ForgeDirection.NORTH),
-		SOUTH(ForgeDirection.SOUTH),
-		WEST(ForgeDirection.WEST),
-		EAST(ForgeDirection.EAST);
+		NORTH(EnumFacing.NORTH),
+		SOUTH(EnumFacing.SOUTH),
+		WEST(EnumFacing.WEST),
+		EAST(EnumFacing.EAST);
 
-		public final ForgeDirection forgeDirection;
+		public final EnumFacing facing;
 
-		Direction(ForgeDirection forgeDirection) {
-			this.forgeDirection = forgeDirection;
+		Direction(EnumFacing forgeDirection) {
+			this.facing = forgeDirection;
 		}
 
 		public static Direction getRandom(Random random) {
@@ -80,13 +79,13 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 	}
 
 	@Override
-	public boolean generate(World world, int x, int y, int z, boolean forced) {
+	public boolean generate(World world, BlockPos pos, boolean forced) {
 		this.spawnPods = tree.allowsFruitBlocks();
-		this.leaf = getLeaf(getOwner(world, x, y, z));
+		this.leaf = getLeaf(getOwner(world, pos));
 		this.wood = getWood();
 
-		preGenerate(world, x, y, z);
-		if (forced || canGrow(world, x, y, z)) {
+		preGenerate(world, pos);
+		if (forced || canGrow(world, pos)) {
 			generate(world);
 			return true;
 		}
@@ -94,48 +93,56 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 		return false;
 	}
 
-	private static GameProfile getOwner(World world, int x, int y, int z) {
-		TileTreeContainer tile = TileUtil.getTile(world, x, y, z, TileTreeContainer.class);
+	private static GameProfile getOwner(World world, BlockPos pos) {
+		TileTreeContainer tile = TileUtil.getTile(world, pos, TileTreeContainer.class);
 		if (tile == null) {
 			return null;
 		}
 		return tile.getOwner();
 	}
 
-	public void preGenerate(World world, int startX, int startY, int startZ) {
-		this.startX = startX;
-		this.startY = startY;
-		this.startZ = startZ;
+	public void preGenerate(World world, BlockPos pos) {
+		this.startX = pos.getX();
+		this.startY = pos.getY();
+		this.startZ = pos.getZ();
 	}
 
 	protected abstract void generate(World world);
-
-	public abstract boolean canGrow(World world, int x, int y, int z);
+	
+	public abstract boolean canGrow(World world, BlockPos pos);
 
 	protected abstract TreeBlockTypeLeaf getLeaf(GameProfile owner);
 
 	protected abstract ITreeBlockType getWood();
 
-	protected List<ChunkCoordinates> generateTreeTrunk(World world, int height, int girth) {
+	protected List<BlockPos> generateTreeTrunk(World world, int height, int girth) {
 		return generateTreeTrunk(world, height, girth, 0);
 	}
 
-	protected List<ChunkCoordinates> generateTreeTrunk(World world, int height, int girth, float vinesChance) {
-		return generateTreeTrunk(world, height, girth, vinesChance, ForgeDirection.UNKNOWN, 0);
+	protected List<BlockPos> generateTreeTrunk(World world, int height, int girth, float vinesChance) {
+		return generateTreeTrunk(world, height, girth, vinesChance, null, 0);
 	}
 
-	protected List<ChunkCoordinates> generateTreeTrunk(World world, int height, int girth, float vinesChance, ForgeDirection leanDirection, float leanAmount) {
+	protected List<BlockPos> generateTreeTrunk(World world, int height, int girth, float vinesChance, EnumFacing leanDirection, float leanAmount) {
 		return generateTreeTrunk(world, height, girth, 0, vinesChance, leanDirection, leanAmount);
 	}
 
 	/** Returns a list of trunk top coordinates */
-	protected List<ChunkCoordinates> generateTreeTrunk(World world, int height, int girth, int yStart, float vinesChance, ForgeDirection leanDirection, float leanAmount) {
-		List<ChunkCoordinates> treeTops = new ArrayList<>();
+	protected List<BlockPos> generateTreeTrunk(World world, int height, int girth, int yStart, float vinesChance, EnumFacing leanDirection, float leanAmount) {
+		List<BlockPos> treeTops = new ArrayList<>();
 
 		final int leanStartY = (int) Math.floor(height * 0.33f);
 		int prevXOffset = 0;
 		int prevZOffset = 0;
-
+		
+		int offsetX = 0;
+		int offsetZ = 0;
+		
+		if(leanDirection != null){
+			offsetX = leanDirection.getFrontOffsetX();
+			offsetZ = leanDirection.getFrontOffsetZ();
+		}
+		
 		int offset = (girth - 1) / 2;
 		for (int x = 0; x < girth; x++) {
 			for (int z = 0; z < girth; z++) {
@@ -146,24 +153,24 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 					} else {
 						lean = leanAmount * (y - leanStartY) / (height - leanStartY);
 					}
-					int xOffset = (int) Math.floor(leanDirection.offsetX * lean - offset);
-					int zOffset = (int) Math.floor(leanDirection.offsetZ * lean - offset);
+					int xOffset = (int) Math.floor(offsetX * lean - offset);
+					int zOffset = (int) Math.floor(offsetZ * lean - offset);
 
 					if (xOffset != prevXOffset || zOffset != prevZOffset) {
 						prevXOffset = xOffset;
 						prevZOffset = zOffset;
 						if (y > 0) {
 							wood.setDirection(leanDirection);
-							addWood(world, x + xOffset, y - 1, z + zOffset, EnumReplaceMode.ALL);
-							wood.setDirection(ForgeDirection.UP);
+							addWood(world, new BlockPos(x + xOffset, y - 1, z + zOffset), EnumReplaceMode.ALL);
+							wood.setDirection(EnumFacing.UP);
 						}
 					}
 
-					addWood(world, x + xOffset, y, z + zOffset, EnumReplaceMode.ALL);
-					addVines(world, x + xOffset, y, z + zOffset, vinesChance);
+					addWood(world, new BlockPos(x + xOffset, y, z + zOffset), EnumReplaceMode.ALL);
+					addVines(world, new BlockPos(x + xOffset, y, z + zOffset), vinesChance);
 
 					if (y + 1 == height) {
-						treeTops.add(new ChunkCoordinates(x + xOffset, y, z + zOffset));
+						treeTops.add(new BlockPos(x + xOffset, y, z + zOffset));
 					}
 				}
 			}
@@ -198,8 +205,8 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 		x += startX;
 		y += startY;
 		z += startZ;
-		if (BlockUtil.isReplaceableBlock(world, x, y, z) || world.isAirBlock(x, y, z)) {
-			tree.trySpawnFruitBlock(world, x, y, z);
+		if (BlockUtil.isReplaceableBlock(world, new BlockPos(x, y, z)) || world.isAirBlock(new BlockPos(x, y, z))) {
+			tree.trySpawnFruitBlock(world, new BlockPos(x, y, z));
 		}
 	}
 
@@ -230,25 +237,34 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 				int stemHeight = world.rand.nextInt(Math.round(height * maxHeight));
 				if (world.rand.nextFloat() < chance) {
 					for (int i = 0; i < stemHeight; i++) {
-						addWood(world, x, i, z, EnumReplaceMode.SOFT);
+						addWood(world, new BlockPos(x, i, z), EnumReplaceMode.SOFT);
 					}
 				}
 			}
 		}
 	}
 
-	protected List<ChunkCoordinates> generateBranches(World world, final int startY, int xOffset, int zOffset, float spreadY, float spreadXZ, int radius, int count) {
+	protected List<BlockPos> generateBranches(World world, final int startY, int xOffset, int zOffset, float spreadY, float spreadXZ, int radius, int count) {
 		return generateBranches(world, startY, xOffset, zOffset, spreadY, spreadXZ, radius, count, 1.0f);
 	}
 
-	protected List<ChunkCoordinates> generateBranches(World world, final int startY, final int xOffset, final int zOffset, final float spreadY, final float spreadXZ, int radius, final int count, final float chance) {
-		List<ChunkCoordinates> branchEnds = new ArrayList<>();
+	protected List<BlockPos> generateBranches(World world, final int startY, final int xOffset, final int zOffset, final float spreadY, final float spreadXZ, int radius, final int count, final float chance) {
+		List<BlockPos> branchEnds = new ArrayList<>();
 		if (radius < 1) {
 			radius = 1;
 		}
 
 		for (Direction cardinalDirection : Direction.values()) {
-			ForgeDirection branchDirection = cardinalDirection.forgeDirection;
+			EnumFacing branchDirection = cardinalDirection.facing;
+			
+			int offsetX = 0;
+			int offsetZ = 0;
+			
+			if(branchDirection != null){
+				offsetX = branchDirection.getFrontOffsetX();
+				offsetZ = branchDirection.getFrontOffsetZ();
+			}
+			
 			wood.setDirection(branchDirection);
 			for (int i = 0; i < count; i++) {
 				if (world.rand.nextFloat() > chance) {
@@ -264,30 +280,31 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 						y++;
 					} else {
 						if (world.rand.nextFloat() < spreadXZ) {
-							if (branchDirection.offsetX == 0) {
+							if (offsetX == 0) {
 								if (world.rand.nextBoolean()) {
 									x++;
 								} else {
 									x--;
 								}
-								wood.setDirection(ForgeDirection.EAST);
-							} else if (branchDirection.offsetZ == 0) {
+								wood.setDirection(EnumFacing.EAST);
+							} else if (offsetZ == 0) {
 								if (world.rand.nextBoolean()) {
 									z++;
 								} else {
 									z--;
 								}
-								wood.setDirection(ForgeDirection.SOUTH);
+								wood.setDirection(EnumFacing.SOUTH);
 							}
 						} else {
-							x += branchDirection.offsetX;
-							z += branchDirection.offsetZ;
+							x += offsetX;
+							z += offsetZ;
 							wood.setDirection(branchDirection);
 						}
 					}
-					if (addWood(world, x, y, z, EnumReplaceMode.SOFT)) {
-						branchEnds.add(new ChunkCoordinates(x, y, z));
-					} else {
+					if (addWood(world, new BlockPos(x, y, z), EnumReplaceMode.SOFT)) {
+						branchEnds.add(new BlockPos(x, y, z));
+					}
+					else{
 						break;
 					}
 				}
@@ -296,51 +313,56 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 
 		return branchEnds;
 	}
-
+	
 	@Override
-	protected boolean addBlock(World world, int x, int y, int z, ITreeBlockType type, EnumReplaceMode replace) {
+	protected boolean addBlock(World world, BlockPos pos, ITreeBlockType type, EnumReplaceMode replace) {
+		BlockPos posN = getPos(pos);
 		if (replace == EnumReplaceMode.ALL
-				|| (replace == EnumReplaceMode.SOFT && BlockUtil.isReplaceableBlock(world, startX + x, startY + y, startZ + z))
-				|| world.isAirBlock(startX + x, startY + y, startZ + z)) {
-			type.setBlock(world, tree, startX + x, startY + y, startZ + z);
+				|| (replace == EnumReplaceMode.SOFT && BlockUtil.isReplaceableBlock(world, posN))
+				|| world.isAirBlock(posN)) {
+			type.setBlock(world, tree, posN);
 			return true;
 		}
 		return false;
 	}
 
-	protected final void clearBlock(World world, int x, int y, int z) {
-		air.setBlock(world, startX + x, startY + y, startZ + z);
+	protected final void clearBlock(World world, BlockPos pos) {
+		air.setBlock(world, getPos(pos));
 	}
 
-	protected final boolean addWood(World world, int x, int y, int z, EnumReplaceMode replace) {
-		return addBlock(world, x, y, z, wood, replace);
+	protected final boolean addWood(World world, BlockPos pos, EnumReplaceMode replace) {
+		return addBlock(world, pos, wood, replace);
 	}
 	
-	protected final boolean addLeaf(World world, int x, int y, int z, EnumReplaceMode replace) {
-		return addBlock(world, x, y, z, leaf, replace);
+	protected final boolean addLeaf(World world, BlockPos pos, EnumReplaceMode replace) {
+		return addBlock(world, pos, leaf, replace);
 	}
 
 	protected final boolean addVine(World world, int x, int y, int z, ITreeBlockType vine) {
-		return addBlock(world, x, y, z, vine, EnumReplaceMode.NONE);
+		return addBlock(world, new BlockPos(x, y, z), vine, EnumReplaceMode.NONE);
 	}
 
-	protected final void addVines(World world, int x, int y, int z, float chance) {
+	protected final void addVines(World world, BlockPos pos, float chance) {
 		if (chance <= 0) {
 			return;
 		}
 
 		if (world.rand.nextFloat() < chance) {
-			addVine(world, x - 1, y, z, vineWest);
+			addVine(world, pos.getX() - 1, pos.getY(), pos.getZ(), vineWest);
 		}
 		if (world.rand.nextFloat() < chance) {
-			addVine(world, x + 1, y, z, vineEast);
+			addVine(world, pos.getX() + 1, pos.getY(), pos.getZ(), vineEast);
 		}
 		if (world.rand.nextFloat() < chance) {
-			addVine(world, x, y, z - 1, vineNorth);
+			addVine(world, pos.getX(), pos.getY(), pos.getZ() - 1, vineNorth);
 		}
 		if (world.rand.nextFloat() < chance) {
-			addVine(world, x, y, z + 1, vineSouth);
+			addVine(world, pos.getX(), pos.getY(), pos.getZ() + 1, vineSouth);
 		}
+	}
+	
+	protected BlockPos getPos(BlockPos pos){
+		return new BlockPos(startX + pos.getX(), startY + pos.getY(), startZ + pos.getZ());
 	}
 
 }

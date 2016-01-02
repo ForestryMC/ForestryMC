@@ -15,21 +15,19 @@ import java.util.Stack;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.Farmables;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
+import forestry.core.utils.BlockPosUtil;
 import forestry.core.utils.BlockUtil;
-import forestry.core.utils.vect.Vect;
-import forestry.core.utils.vect.VectUtil;
 
 public class FarmLogicEnder extends FarmLogicHomogeneous {
 
@@ -44,8 +42,8 @@ public class FarmLogicEnder extends FarmLogicHomogeneous {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon getIcon() {
-		return Items.ender_eye.getIconFromDamage(0);
+	public Item getIconItem() {
+		return Items.ender_eye;
 	}
 
 	@Override
@@ -69,9 +67,9 @@ public class FarmLogicEnder extends FarmLogicHomogeneous {
 
 		Stack<ICrop> crops = new Stack<>();
 		for (int i = 0; i < extent; i++) {
-			Vect position = translateWithOffset(x, y + 1, z, direction, i);
+			BlockPos position = translateWithOffset(x, y + 1, z, direction, i);
 			for (IFarmable farmable : germlings) {
-				ICrop crop = farmable.getCropAt(world, position.x, position.y, position.z);
+				ICrop crop = farmable.getCropAt(world, position);
 				if (crop != null) {
 					crops.push(crop);
 				}
@@ -87,12 +85,12 @@ public class FarmLogicEnder extends FarmLogicHomogeneous {
 		World world = getWorld();
 
 		for (int i = 0; i < extent; i++) {
-			Vect position = translateWithOffset(x, y, z, direction, i);
-			if (!VectUtil.isAirBlock(world, position) && !BlockUtil.isReplaceableBlock(world, position.x, position.y, position.z)) {
+			BlockPos position = translateWithOffset(x, y, z, direction, i);
+			if (!BlockPosUtil.isAirBlock(world, position) && !BlockUtil.isReplaceableBlock(world, position)) {
 				continue;
 			}
 
-			ItemStack below = VectUtil.getAsItemStack(world, position.add(0, -1, 0));
+			ItemStack below = BlockPosUtil.getAsItemStack(world, position.add(0, -1, 0));
 			if (!isAcceptedSoil(below)) {
 				continue;
 			}
@@ -103,11 +101,11 @@ public class FarmLogicEnder extends FarmLogicHomogeneous {
 		return false;
 	}
 
-	private boolean trySetCrop(Vect position) {
+	private boolean trySetCrop(BlockPos position) {
 		World world = getWorld();
 
 		for (IFarmable candidate : germlings) {
-			if (housing.plantGermling(candidate, world, position.x, position.y, position.z)) {
+			if (housing.plantGermling(candidate, world, position)) {
 				return true;
 			}
 		}

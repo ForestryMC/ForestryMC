@@ -17,6 +17,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IChatComponent;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
@@ -136,47 +138,72 @@ public abstract class MultiblockControllerForestry extends MultiblockControllerB
 	}
 
 	@Override
-	public final void openInventory() {
-		getInternalInventory().openInventory();
+	public final void openInventory(EntityPlayer player) {
+		getInternalInventory().openInventory(player);
 	}
 
 	@Override
-	public final void closeInventory() {
-		getInternalInventory().closeInventory();
+	public final void closeInventory(EntityPlayer player) {
+		getInternalInventory().closeInventory(player);
 	}
-
+	
 	@Override
-	public final String getInventoryName() {
-		return getInternalInventory().getInventoryName();
+	public IChatComponent getDisplayName() {
+		return getInternalInventory().getDisplayName();
+	}
+	
+	@Override
+	public String getCommandSenderName() {
+		return getInternalInventory().getCommandSenderName();
 	}
 
 	@Override
 	public final boolean isUseableByPlayer(EntityPlayer player) {
 		return getInternalInventory().isUseableByPlayer(player);
 	}
-
+	
 	@Override
-	public final boolean hasCustomInventoryName() {
-		return getInternalInventory().hasCustomInventoryName();
+	public boolean hasCustomName() {
+		return getInternalInventory().hasCustomName();
 	}
 
 	@Override
 	public final boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
 		return getInternalInventory().isItemValidForSlot(slotIndex, itemStack);
 	}
-
+	
 	@Override
-	public final int[] getAccessibleSlotsFromSide(int side) {
-		return getInternalInventory().getAccessibleSlotsFromSide(side);
+	public int[] getSlotsForFace(EnumFacing side) {
+		return getInternalInventory().getSlotsForFace(side);
 	}
 
 	@Override
-	public final boolean canInsertItem(int slotIndex, ItemStack itemStack, int side) {
+	public final boolean canInsertItem(int slotIndex, ItemStack itemStack, EnumFacing side) {
 		return getInternalInventory().canInsertItem(slotIndex, itemStack, side);
 	}
 
 	@Override
-	public final boolean canExtractItem(int slotIndex, ItemStack itemStack, int side) {
+	public final boolean canExtractItem(int slotIndex, ItemStack itemStack, EnumFacing side) {
 		return getInternalInventory().canExtractItem(slotIndex, itemStack, side);
+	}
+
+	@Override
+	public int getField(int id) {
+		return getInternalInventory().getField(id);
+	}
+
+	@Override
+	public void setField(int id, int value) {
+		getInternalInventory().setField(id, value);
+	}
+
+	@Override
+	public int getFieldCount() {
+		return getInternalInventory().getFieldCount();
+	}
+
+	@Override
+	public void clear() {
+		getInternalInventory().clear();
 	}
 }

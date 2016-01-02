@@ -20,10 +20,9 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 
-import net.minecraftforge.common.util.ForgeDirection;
-
-import cpw.mods.fml.common.Optional;
+import net.minecraftforge.fml.common.Optional;
 
 import forestry.api.core.IErrorLogic;
 import forestry.api.mail.IMailAddress;
@@ -316,7 +315,7 @@ public class TileTrader extends TileBase {
 	/* ITRIGGERPROVIDER */
 	@Optional.Method(modid = "BuildCraftAPI|statements")
 	@Override
-	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
+	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
 		LinkedList<ITriggerExternal> res = new LinkedList<>();
 		res.add(MailTriggers.lowPaper64);
 		res.add(MailTriggers.lowPaper32);

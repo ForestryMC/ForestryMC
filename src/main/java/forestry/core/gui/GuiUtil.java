@@ -13,6 +13,7 @@ package forestry.core.gui;
 import java.awt.Color;
 import java.util.Collection;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderItem;
@@ -30,7 +31,7 @@ public class GuiUtil {
 		GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
 		RenderHelper.enableGUIStandardItemLighting();
 
-		RenderItem itemRender = GuiForestry.getItemRenderer();
+		RenderItem itemRender = Minecraft.getMinecraft().getRenderItem();
 
 		GL11.glTranslatef(0.0F, 0.0F, 32.0F);
 		gui.setZLevel(100.0F);
@@ -42,8 +43,8 @@ public class GuiUtil {
 		if (font == null) {
 			font = gui.getFontRenderer();
 		}
-		itemRender.renderItemAndEffectIntoGUI(font, gui.mc.getTextureManager(), stack, xPos, yPos);
-		itemRender.renderItemOverlayIntoGUI(font, gui.mc.getTextureManager(), stack, xPos, yPos);
+		itemRender.renderItemAndEffectIntoGUI(stack, xPos, yPos);
+		itemRender.renderItemOverlayIntoGUI(font, stack, xPos, yPos, null);
 		gui.setZLevel(0.0F);
 		itemRender.zLevel = 0.0F;
 
@@ -59,7 +60,7 @@ public class GuiUtil {
 			return;
 		}
 
-		RenderItem itemRender = GuiForestry.getItemRenderer();
+		RenderItem itemRender = Minecraft.getMinecraft().getRenderItem();
 		FontRenderer fontRendererObj = gui.getFontRenderer();
 
 		int left = gui.getGuiLeft();

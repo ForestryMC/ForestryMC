@@ -107,7 +107,7 @@ public class StringUtil {
 
 	public static int getLineHeight(int maxWidth, String... strings) {
 		Minecraft minecraft = Proxies.common.getClientInstance();
-		FontRenderer fontRenderer = minecraft.fontRenderer;
+		FontRenderer fontRenderer = minecraft.fontRendererObj;
 
 		int lineCount = 0;
 		for (String string : strings) {

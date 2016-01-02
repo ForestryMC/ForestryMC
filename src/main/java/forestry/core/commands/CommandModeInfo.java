@@ -15,6 +15,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
 import net.minecraft.command.ICommandSender;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
@@ -70,7 +71,7 @@ public class CommandModeInfo extends SubCommand {
 	}
 
 	@Override
-	public List<String> addTabCompletionOptions(ICommandSender sender, String[] incomplete) {
+	public List<String> addTabCompletionOptions(ICommandSender sender, String[] incomplete, BlockPos pos) {
 		return CommandHelpers.getListOfStringsMatchingLastWord(incomplete, modeStringArr);
 	}
 }

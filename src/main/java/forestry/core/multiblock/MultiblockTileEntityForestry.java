@@ -15,6 +15,8 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IChatComponent;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
@@ -48,7 +50,7 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 		super.readFromNBT(data);
 
 		if (data.hasKey("owner")) {
-			owner = NBTUtil.func_152459_a(data.getCompoundTag("owner"));
+			owner = NBTUtil.readGameProfileFromNBT(data.getCompoundTag("owner"));
 		}
 
 		getInternalInventory().readFromNBT(data);
@@ -60,7 +62,7 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 
 		if (this.owner != null) {
 			NBTTagCompound nbt = new NBTTagCompound();
-			NBTUtil.func_152460_a(nbt, owner);
+			NBTUtil.writeGameProfile(nbt, owner);
 			data.setTag("owner", nbt);
 		}
 
@@ -107,46 +109,51 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 	}
 
 	@Override
-	public final void openInventory() {
-		getInternalInventory().openInventory();
+	public final void openInventory(EntityPlayer player) {
+		getInternalInventory().openInventory(player);
 	}
 
 	@Override
-	public final void closeInventory() {
-		getInternalInventory().closeInventory();
+	public final void closeInventory(EntityPlayer player) {
+		getInternalInventory().closeInventory(player);
 	}
-
+	
 	@Override
-	public final String getInventoryName() {
-		return getInternalInventory().getInventoryName();
+	public IChatComponent getDisplayName() {
+		return getInternalInventory().getDisplayName();
+	}
+	
+	@Override
+	public String getCommandSenderName() {
+		return getInternalInventory().getCommandSenderName();
 	}
 
 	@Override
 	public final boolean isUseableByPlayer(EntityPlayer player) {
 		return getInternalInventory().isUseableByPlayer(player);
 	}
-
+	
 	@Override
-	public final boolean hasCustomInventoryName() {
-		return getInternalInventory().hasCustomInventoryName();
+	public boolean hasCustomName() {
+		return getInternalInventory().hasCustomName();
 	}
 
 	@Override
 	public final boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
 		return getInternalInventory().isItemValidForSlot(slotIndex, itemStack);
 	}
-
+	
 	@Override
-	public final int[] getAccessibleSlotsFromSide(int side) {
+	public int[] getSlotsForFace(EnumFacing side) {
 		if (allowsAutomation()) {
-			return getInternalInventory().getAccessibleSlotsFromSide(side);
+			return getInternalInventory().getSlotsForFace(side);
 		} else {
 			return Constants.SLOTS_NONE;
 		}
 	}
 
 	@Override
-	public final boolean canInsertItem(int slotIndex, ItemStack itemStack, int side) {
+	public final boolean canInsertItem(int slotIndex, ItemStack itemStack, EnumFacing side) {
 		if (allowsAutomation()) {
 			return getInternalInventory().canInsertItem(slotIndex, itemStack, side);
 		} else {
@@ -155,7 +162,7 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 	}
 
 	@Override
-	public final boolean canExtractItem(int slotIndex, ItemStack itemStack, int side) {
+	public final boolean canExtractItem(int slotIndex, ItemStack itemStack, EnumFacing side) {
 		if (allowsAutomation()) {
 			return getInternalInventory().canExtractItem(slotIndex, itemStack, side);
 		} else {
@@ -187,5 +194,25 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 
 	public final void setOwner(GameProfile owner) {
 		this.owner = owner;
+	}
+
+	@Override
+	public int getField(int id) {
+		return getInternalInventory().getField(id);
+	}
+
+	@Override
+	public void setField(int id, int value) {
+		getInternalInventory().setField(id, value);
+	}
+
+	@Override
+	public int getFieldCount() {
+		return getInternalInventory().getFieldCount();
+	}
+
+	@Override
+	public void clear() {
+		getInternalInventory().clear();
 	}
 }

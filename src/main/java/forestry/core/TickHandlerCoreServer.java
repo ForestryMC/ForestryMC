@@ -21,11 +21,9 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
 import net.minecraftforge.event.world.ChunkDataEvent;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.Phase;
-import cpw.mods.fml.common.gameevent.TickEvent.WorldTickEvent;
-
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
+import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.worldgen.WorldGenerator;
@@ -57,7 +55,7 @@ public class TickHandlerCoreServer {
 
 		if (Config.doRetrogen) {
 			World world = event.world;
-			int dimensionID = world.provider.dimensionId;
+			int dimensionID = world.provider.getDimensionId();
 			List<ChunkCoords> chunkList = chunkRegenList.get(dimensionID);
 
 			if (chunkList.size() > 0) {
@@ -103,7 +101,7 @@ public class TickHandlerCoreServer {
 		public final int zCoord;
 
 		public ChunkCoords(Chunk chunk) {
-			this.dimension = chunk.worldObj.provider.dimensionId;
+			this.dimension = chunk.getWorld().provider.getDimensionId();
 			this.xCoord = chunk.xPosition;
 			this.zCoord = chunk.zPosition;
 		}

@@ -10,10 +10,8 @@
  ******************************************************************************/
 package forestry.core.network;
 
+import net.minecraft.util.BlockPos;
+
 public interface ILocatedPacket {
-	int getPosX();
-
-	int getPosY();
-
-	int getPosZ();
+	BlockPos getPos();
 }

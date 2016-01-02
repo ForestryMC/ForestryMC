@@ -19,8 +19,9 @@ import forestry.apiculture.tiles.TileApiary;
 import forestry.apiculture.tiles.TileBeehouse;
 import forestry.core.blocks.IMachineProperties;
 import forestry.core.tiles.TileForestry;
+import net.minecraft.util.IStringSerializable;
 
-public enum BlockApicultureType implements IMachineProperties {
+public enum BlockApicultureType implements IMachineProperties, IStringSerializable {
 	APIARY(TileApiary.class),
 	APIARIST_CHEST_LEGACY(TileApiaristChest.class, "ApiaristChest"),
 	BEEHOUSE(TileBeehouse.class);
@@ -54,5 +55,10 @@ public enum BlockApicultureType implements IMachineProperties {
 	@Override
 	public Class<? extends TileForestry> getTeClass() {
 		return teClass;
+	}
+	
+	@Override
+	public String getName() {
+		return toString().toLowerCase(Locale.ENGLISH);
 	}
 }

@@ -15,11 +15,13 @@ import java.util.Map;
 import java.util.Set;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
@@ -82,29 +84,29 @@ public class GeneticsUtil {
 		return armorNaturalist.canSeePollination(player, armorItemStack, true);
 	}
 
-	public static boolean canNurse(IButterfly butterfly, World world, final int x, final int y, final int z) {
-		TileEntity tile = world.getTileEntity(x, y, z);
+	public static boolean canNurse(IButterfly butterfly, World world, final BlockPos pos) {
+		TileEntity tile = world.getTileEntity(pos);
 
 		if (tile instanceof IButterflyNursery) {
 			return ((IButterflyNursery) tile).canNurse(butterfly);
 		}
 
 		// vanilla leaves can always be converted and then nurse
-		return getErsatzPollen(world, x, y, z) != null;
+		return getErsatzPollen(world, pos) != null;
 	}
 
 	/**
 	 * Returns an ICheckPollinatable that can be checked but not mated.
 	 * Used to check for pollination traits without altering the world by changing vanilla leaves to forestry ones.
 	 */
-	public static ICheckPollinatable getCheckPollinatable(World world, final int x, final int y, final int z) {
-		TileEntity tile = world.getTileEntity(x, y, z);
+	public static ICheckPollinatable getCheckPollinatable(World world, final BlockPos pos) {
+		TileEntity tile = world.getTileEntity(pos);
 
 		if (tile instanceof IPollinatable) {
 			return new CheckPollinatable((IPollinatable) tile);
 		}
 
-		ITree pollen = getErsatzPollen(world, x, y, z);
+		ITree pollen = getErsatzPollen(world, pos);
 		if (pollen != null) {
 			return new CheckPollinatableTree(pollen);
 		}
@@ -112,31 +114,32 @@ public class GeneticsUtil {
 		return null;
 	}
 
-	public static IPollinatable getOrCreatePollinatable(GameProfile owner, World world, final int x, final int y, final int z) {
-		TileEntity tile = world.getTileEntity(x, y, z);
+	public static IPollinatable getOrCreatePollinatable(GameProfile owner, World world, final BlockPos pos) {
+		TileEntity tile = world.getTileEntity(pos);
 
 		if (tile instanceof IPollinatable) {
 			return (IPollinatable) tile;
 		}
 
 		if (Config.pollinateVanillaTrees) {
-			ITree pollen = getErsatzPollen(world, x, y, z);
+			ITree pollen = getErsatzPollen(world, pos);
 			if (pollen != null) {
-				pollen.setLeaves(world, owner, x, y, z);
-				return (IPollinatable) world.getTileEntity(x, y, z);
+				pollen.setLeaves(world, owner, pos);
+				return (IPollinatable) world.getTileEntity(pos);
 			}
 		}
 
 		return null;
 	}
 
-	public static ITree getErsatzPollen(World world, final int x, final int y, final int z) {
-		Block block = world.getBlock(x, y, z);
-		if (!isErsatzBlock(block)) {
+	public static ITree getErsatzPollen(World world, final BlockPos pos) {
+		IBlockState state = world.getBlockState(pos);
+		if (!isErsatzBlock(state.getBlock())) {
 			return null;
 		}
 
-		int meta = world.getBlockMetadata(x, y, z);
+		Block block = state.getBlock();
+		int meta = state.getBlock().getMetaFromState(state);
 
 		if (Blocks.leaves == block || Blocks.leaves2 == block) {
 			if ((meta & 4) != 0) {

@@ -14,6 +14,7 @@ import java.util.EnumSet;
 import java.util.Set;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.EnumPlantType;
@@ -56,8 +57,8 @@ public class FlowerProvider implements IFlowerProvider {
 	}
 
 	@Override
-	public boolean growFlower(World world, IIndividual individual, int x, int y, int z) {
-		return FlowerManager.flowerRegistry.growFlower(this.flowerType, world, individual, x, y, z);
+	public boolean growFlower(World world, IIndividual individual, BlockPos pos) {
+		return FlowerManager.flowerRegistry.growFlower(this.flowerType, world, individual, pos);
 	}
 
 	@Override
@@ -66,7 +67,7 @@ public class FlowerProvider implements IFlowerProvider {
 	}
 
 	@Override
-	public ItemStack[] affectProducts(World world, IIndividual individual, int x, int y, int z, ItemStack[] products) {
+	public ItemStack[] affectProducts(World world, IIndividual individual, BlockPos pos, ItemStack[] products) {
 		return products;
 	}
 

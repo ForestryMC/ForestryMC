@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.Random;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
@@ -71,7 +71,7 @@ public abstract class EntityMinecartBeeHousingBase extends EntityMinecartContain
 
 	@Override
 	public EnumTemperature getTemperature() {
-		return EnumTemperature.getFromBiome(getBiome(), (int) posX, (int) posY, (int) posZ);
+		return EnumTemperature.getFromBiome(getBiome(), new BlockPos(posX, posY, posZ));
 	}
 
 	@Override
@@ -91,12 +91,12 @@ public abstract class EntityMinecartBeeHousingBase extends EntityMinecartContain
 
 	@Override
 	public int getBlockLightValue() {
-		return worldObj.getBlockLightValue((int) posX, (int) posY + 1, (int) posZ);
+		return worldObj.getLight(new BlockPos(posX, posY + 1, posZ));
 	}
 
 	@Override
 	public boolean canBlockSeeTheSky() {
-		return worldObj.canBlockSeeTheSky((int) posX, (int) posY + 1, (int) posZ);
+		return worldObj.canBlockSeeSky(new BlockPos(posX, posY + 1, posZ));
 	}
 
 	@Override
@@ -106,7 +106,7 @@ public abstract class EntityMinecartBeeHousingBase extends EntityMinecartContain
 
 	@Override
 	public BiomeGenBase getBiome() {
-		return worldObj.getBiomeGenForCoords((int) posX, (int) posZ);
+		return worldObj.getBiomeGenForCoords(new BlockPos(posX, 0, posZ));
 	}
 
 	@Override
@@ -120,13 +120,13 @@ public abstract class EntityMinecartBeeHousingBase extends EntityMinecartContain
 	}
 
 	@Override
-	public ChunkCoordinates getCoordinates() {
-		return new ChunkCoordinates((int) posX, (int) posY, (int) posZ);
+	public BlockPos getCoordinates() {
+		return new BlockPos((int) posX, (int) posY, (int) posZ);
 	}
 
 	@Override
 	public Vec3 getBeeFXCoordinates() {
-		return Vec3.createVectorHelper(posX, posY + 0.25, posZ);
+		return new Vec3(posX, posY + 0.25, posZ);
 	}
 
 	@Override

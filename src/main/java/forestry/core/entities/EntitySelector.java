@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.core.entities;
 
-import net.minecraft.command.IEntitySelector;
+import com.google.common.base.Predicate;
 import net.minecraft.entity.Entity;
 
-public abstract class EntitySelector<T extends Entity> implements IEntitySelector {
+public abstract class EntitySelector<T extends Entity> implements Predicate<T> {
 	private final Class<T> entityClass;
 
 	protected EntitySelector(Class<T> entityClass) {
@@ -23,11 +23,18 @@ public abstract class EntitySelector<T extends Entity> implements IEntitySelecto
 	public Class<T> getEntityClass() {
 		return entityClass;
 	}
-
+	
 	@Override
-	public final boolean isEntityApplicable(Entity entity) {
+	public boolean apply(Entity entity) {
+		if(entity == null)
+			return false;
 		T castEntity = entityClass.cast(entity);
 		return isEntityApplicableTyped(castEntity);
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		return super.equals(obj);
 	}
 
 	protected abstract boolean isEntityApplicableTyped(T entity);

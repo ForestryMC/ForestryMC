@@ -12,7 +12,6 @@ package forestry.core.fluids;
 
 import java.util.List;
 
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 
@@ -23,7 +22,7 @@ import net.minecraftforge.fluids.IFluidTank;
 public interface ITankManager extends IFluidHandler {
 	void containerAdded(Container container, ICrafting player);
 
-	void updateGuiData(Container container, List<EntityPlayerMP> crafters);
+	void updateGuiData(Container container, List<ICrafting> crafters);
 
 	void containerRemoved(Container container);
 

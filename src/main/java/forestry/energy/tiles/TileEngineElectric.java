@@ -16,7 +16,6 @@ import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitBoard;
@@ -30,11 +29,14 @@ import forestry.core.tiles.TemperatureState;
 import forestry.core.tiles.TileEngine;
 import forestry.energy.gui.ContainerEngineElectric;
 import forestry.energy.gui.GuiEngineElectric;
-import forestry.plugins.compat.PluginIC2;
-
+import forestry.plugins.compat.deprecated.PluginIC2;
 import ic2.api.energy.prefab.BasicSink;
 
 public class TileEngineElectric extends TileEngine implements ISocketable, IInventory {
+
+	protected TileEngineElectric(String hintKey, int maxHeat, int maxEnergy) {
+		super(hintKey, maxHeat, maxEnergy);
+	}
 	protected static class EuConfig {
 
 		public int euForCycle;
@@ -157,7 +159,7 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 			return;
 		}
 
-		ic2EnergySink.updateEntity();
+		ic2EnergySink.update();
 
 		super.updateServerSide();
 
@@ -261,7 +263,7 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 		}
 	}
 
-	/* ISocketable */
+	// ISocketable 
 	@Override
 	public int getSocketCount() {
 		return sockets.getSizeInventory();
@@ -279,7 +281,7 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 			return;
 		}
 
-		// Dispose correctly of old chipsets
+		/* Dispose correctly of old chipsets*/
 		if (sockets.getStackInSlot(slot) != null) {
 			if (ChipsetManager.circuitRegistry.isChipset(sockets.getStackInSlot(slot))) {
 				ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitboard(sockets.getStackInSlot(slot));

@@ -10,15 +10,13 @@
  ******************************************************************************/
 package forestry.mail;
 
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.IPostOffice;
@@ -54,7 +52,7 @@ public class PostalCarrier implements IPostalCarrier {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon getIcon() {
+	public TextureAtlasSprite getIcon() {
 		return TextureManager.getInstance().getDefault(iconID);
 	}
 
@@ -88,7 +86,7 @@ public class PostalCarrier implements IPostalCarrier {
 		} else {
 			EntityPlayer player = PlayerUtil.getPlayer(world, recipient.getPlayerProfile());
 			if (player instanceof EntityPlayerMP) {
-				Proxies.net.sendToPlayer(new PacketPOBoxInfoUpdate(pobox.getPOBoxInfo()), (EntityPlayerMP) player);
+				Proxies.net.sendToPlayer(new PacketPOBoxInfoUpdate(pobox.getPOBoxInfo()), player);
 			}
 		}
 

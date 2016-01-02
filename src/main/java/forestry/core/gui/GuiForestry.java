@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.gui;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
@@ -18,7 +19,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
@@ -26,7 +27,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-import cpw.mods.fml.common.Optional;
+import net.minecraftforge.fml.common.Optional;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -142,19 +143,19 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 	}
 
 	@Override
-	protected void mouseClicked(int xPos, int yPos, int mouseButton) {
+	protected void mouseClicked(int xPos, int yPos, int mouseButton) throws IOException {
 		super.mouseClicked(xPos, yPos, mouseButton);
 
 		// / Handle ledger clicks
 		ledgerManager.handleMouseClicked(xPos, yPos, mouseButton);
 		widgetManager.handleMouseClicked(xPos, yPos, mouseButton);
 	}
-
+	
 	@Override
-	protected void mouseMovedOrUp(int mouseX, int mouseY, int eventType) {
-		super.mouseMovedOrUp(mouseX, mouseY, eventType);
-
-		widgetManager.handleMouseRelease(mouseX, mouseY, eventType);
+	protected void mouseReleased(int mouseX, int mouseY, int state) {
+		super.mouseReleased(mouseX, mouseY, state);
+		
+		widgetManager.handleMouseRelease(mouseX, mouseY, state);
 	}
 
 	@Override
@@ -167,7 +168,7 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 
 	protected Slot getSlotAtPosition(int par1, int par2) {
 		for (int k = 0; k < this.inventorySlots.inventorySlots.size(); ++k) {
-			Slot slot = (Slot) this.inventorySlots.inventorySlots.get(k);
+			Slot slot = this.inventorySlots.inventorySlots.get(k);
 
 			if (isMouseOverSlot(slot, par1, par2)) {
 				return slot;
@@ -178,7 +179,7 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 	}
 
 	private boolean isMouseOverSlot(Slot par1Slot, int par2, int par3) {
-		return this.func_146978_c(par1Slot.xDisplayPosition, par1Slot.yDisplayPosition, 16, 16, par2, par3);
+		return this.isPointInRegion(par1Slot.xDisplayPosition, par1Slot.yDisplayPosition, 16, 16, par2, par3);
 	}
 
 	@Override
@@ -249,10 +250,6 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 		this.zLevel = level;
 	}
 
-	public static RenderItem getItemRenderer() {
-		return itemRender;
-	}
-
 	public int getSizeX() {
 		return xSize;
 	}
@@ -307,5 +304,9 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 		} else {
 			return false;
 		}
+	}
+	
+	public void drawTexturedModelRectFromSprite(int i, int j, TextureAtlasSprite sprite, int k, int l) {
+		drawTexturedModalRect(i, j, sprite, k, l);
 	}
 }

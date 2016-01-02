@@ -18,7 +18,7 @@ import java.util.Set;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
@@ -27,7 +27,6 @@ import net.minecraftforge.common.BiomeDictionary;
 import forestry.api.apiculture.IBee;
 import forestry.apiculture.network.packets.PacketHabitatBiomePointer;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.vect.Vect;
 
 public class HabitatLocatorLogic {
 	private static final int maxChecksPerTick = 100;
@@ -53,7 +52,7 @@ public class HabitatLocatorLogic {
 	private boolean biomeFound = false;
 	private int searchRadiusIteration = 0;
 	private int searchAngleIteration = 0;
-	private Vect searchCenter;
+	private BlockPos searchCenter;
 
 	public boolean isBiomeFound() {
 		return biomeFound;
@@ -68,9 +67,9 @@ public class HabitatLocatorLogic {
 		this.searchAngleIteration = 0;
 		this.searchRadiusIteration = 0;
 		this.biomeFound = false;
-		this.searchCenter = new Vect(player);
+		this.searchCenter = new BlockPos(player);
 
-		BiomeGenBase currentBiome = player.worldObj.getBiomeGenForCoords(searchCenter.x, searchCenter.z);
+		BiomeGenBase currentBiome = player.worldObj.getBiomeGenForCoords(searchCenter);
 		removeInvalidBiomes(currentBiome, targetBiomes);
 
 		// reset the locator coordinates
@@ -91,7 +90,7 @@ public class HabitatLocatorLogic {
 			return;
 		}
 
-		ChunkCoordinates target = findNearestBiome(player, targetBiomes);
+		BlockPos target = findNearestBiome(player, targetBiomes);
 
 		// send an update if we find the biome
 		if (target != null && player instanceof EntityPlayerMP) {
@@ -100,15 +99,15 @@ public class HabitatLocatorLogic {
 		}
 	}
 
-	private ChunkCoordinates findNearestBiome(Entity player, Collection<BiomeGenBase> biomesToSearch) {
-		Vect playerPos = new Vect(player);
+	private BlockPos findNearestBiome(Entity player, Collection<BiomeGenBase> biomesToSearch) {
+		BlockPos playerPos = new BlockPos(player);
 
 		// If we are in a valid spot, we point to ourselves.
-		ChunkCoordinates coordinates = getChunkCoordinates(playerPos, player.worldObj, biomesToSearch);
+		BlockPos coordinates = getChunkCoordinates(playerPos, player.worldObj, biomesToSearch);
 		if (coordinates != null) {
 			searchAngleIteration = 0;
 			searchRadiusIteration = 0;
-			return new ChunkCoordinates(playerPos.x, playerPos.y, playerPos.z);
+			return new BlockPos(playerPos);
 		}
 
 		// check in a circular pattern, starting at the center and increasing radius each step
@@ -138,7 +137,7 @@ public class HabitatLocatorLogic {
 
 			int xOffset = Math.round((float) (radius * Math.cos(angle)));
 			int zOffset = Math.round((float) (radius * Math.sin(angle)));
-			Vect pos = searchCenter.add(xOffset, 0, zOffset);
+			BlockPos pos = searchCenter.add(xOffset, 0, zOffset);
 
 			coordinates = getChunkCoordinates(pos, player.worldObj, biomesToSearch);
 			if (coordinates != null) {
@@ -151,35 +150,35 @@ public class HabitatLocatorLogic {
 		return null;
 	}
 
-	private static ChunkCoordinates getChunkCoordinates(Vect pos, World world, Collection<BiomeGenBase> biomesToSearch) {
+	private static BlockPos getChunkCoordinates(BlockPos pos, World world, Collection<BiomeGenBase> biomesToSearch) {
 		BiomeGenBase biome;
 
-		biome = world.getBiomeGenForCoords(pos.x, pos.z);
+		biome = world.getBiomeGenForCoords(pos);
 		if (!biomesToSearch.contains(biome)) {
 			return null;
 		}
 
-		biome = world.getBiomeGenForCoords(pos.x - minBiomeRadius, pos.z);
+		biome = world.getBiomeGenForCoords(new BlockPos(pos.getX() - minBiomeRadius, pos.getY(), pos.getZ()));
 		if (!biomesToSearch.contains(biome)) {
 			return null;
 		}
 
-		biome = world.getBiomeGenForCoords(pos.x + minBiomeRadius, pos.z);
+		biome = world.getBiomeGenForCoords(new BlockPos(pos.getX() + minBiomeRadius, pos.getY(), pos.getZ()));
 		if (!biomesToSearch.contains(biome)) {
 			return null;
 		}
 
-		biome = world.getBiomeGenForCoords(pos.x, pos.z - minBiomeRadius);
+		biome = world.getBiomeGenForCoords(new BlockPos(pos.getX(), pos.getY(), pos.getZ() - minBiomeRadius));
 		if (!biomesToSearch.contains(biome)) {
 			return null;
 		}
 
-		biome = world.getBiomeGenForCoords(pos.x, pos.z + minBiomeRadius);
+		biome = world.getBiomeGenForCoords(new BlockPos(pos.getX(), pos.getY(), pos.getZ() + minBiomeRadius));
 		if (!biomesToSearch.contains(biome)) {
 			return null;
 		}
 
-		return new ChunkCoordinates(pos.x, pos.y, pos.z);
+		return pos;
 	}
 
 	private static void removeInvalidBiomes(BiomeGenBase currentBiome, Set<BiomeGenBase> biomesToSearch) {

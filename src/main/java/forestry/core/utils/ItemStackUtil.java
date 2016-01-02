@@ -16,11 +16,13 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import net.minecraftforge.oredict.OreDictionary;
@@ -209,7 +211,7 @@ public abstract class ItemStackUtil {
 		}
 
 		// When the base stackTagCompound is null or empty, treat it as a wildcard for crafting
-		if (base.stackTagCompound == null || base.stackTagCompound.hasNoTags()) {
+		if (!base.hasTagCompound() || base.getTagCompound().hasNoTags()) {
 			return true;
 		} else {
 			return ItemStack.areItemStackTagsEqual(base, comparison);
@@ -232,7 +234,7 @@ public abstract class ItemStackUtil {
 			return true;
 		}
 
-		if (base.hasTagCompound() && !base.stackTagCompound.hasNoTags()) {
+		if (base.hasTagCompound() && !base.getTagCompound().hasNoTags()) {
 			if (!ItemStack.areItemStacksEqual(base, comparison)) {
 				return false;
 			}
@@ -267,15 +269,12 @@ public abstract class ItemStackUtil {
 		}
 
 		Item baseItem = base.getItem();
-		if (baseItem.doesContainerItemLeaveCraftingGrid(base)) {
-			return false;
-		}
 
 		if (baseItem != comparison.getItem()) {
 			return false;
 		}
 
-		if (base.stackTagCompound == null || base.stackTagCompound.hasNoTags()) {
+		if (base.getTagCompound() == null || base.getTagCompound().hasNoTags()) {
 			// tool uses meta for damage
 			return true;
 		} else {
@@ -285,6 +284,10 @@ public abstract class ItemStackUtil {
 			}
 			return base.getItemDamage() == comparison.getItemDamage();
 		}
+	}
+	
+	public static void dropItemStackAsEntity(ItemStack items, World world, BlockPos pos) {
+		dropItemStackAsEntity(items, world, pos.getX(), pos.getY(), pos.getZ(), 10);
 	}
 
 	public static void dropItemStackAsEntity(ItemStack items, World world, double x, double y, double z) {
@@ -301,7 +304,7 @@ public abstract class ItemStackUtil {
 		double d1 = (world.rand.nextFloat() * f1) + (1.0F - f1) * 0.5D;
 		double d2 = (world.rand.nextFloat() * f1) + (1.0F - f1) * 0.5D;
 		EntityItem entityitem = new EntityItem(world, x + d, y + d1, z + d2, items);
-		entityitem.delayBeforeCanPickup = delayForPickup;
+		entityitem.setPickupDelay(delayForPickup);
 
 		world.spawnEntityInWorld(entityitem);
 	}
@@ -317,10 +320,15 @@ public abstract class ItemStackUtil {
 		Item item = stack.getItem();
 
 		if (item instanceof ItemBlock) {
-			return ((ItemBlock) item).field_150939_a;
+			return ((ItemBlock) item).getBlock();
 		} else {
 			return null;
 		}
+	}
+	
+	public static boolean equals(IBlockState state, ItemStack stack) {
+		Block block = state.getBlock();
+		return block == getBlock(stack) && block.getMetaFromState(state) == stack.getItemDamage();
 	}
 
 	public static boolean equals(Block block, ItemStack stack) {

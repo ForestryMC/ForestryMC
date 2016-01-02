@@ -42,7 +42,7 @@ public class ItemFilterForestry implements ItemFilter {
 			return false;
 		}
 
-		String itemName = Item.itemRegistry.getNameForObject(item.getItem());
+		String itemName = Item.itemRegistry.getNameForObject(item.getItem()).toString();
 		if (itemName == null) {
 			return false;
 		}

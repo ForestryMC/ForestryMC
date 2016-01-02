@@ -12,7 +12,8 @@ package forestry.food.inventory;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.IChatComponent;
 import forestry.api.food.BeverageManager;
 import forestry.core.inventory.ItemInventory;
 import forestry.plugins.PluginFood;
@@ -86,10 +87,15 @@ public class ItemInventoryInfuser extends ItemInventory {
 		decrStackSize(inputSlot, 1);
 		setInventorySlotContents(outputSlot, seasoned);
 	}
-
+	
 	@Override
-	public String getInventoryName() {
+	public String getCommandSenderName() {
 		return "Infuser";
+	}
+	
+	@Override
+	public IChatComponent getDisplayName() {
+		return new ChatComponentText("Infuser");
 	}
 
 	@Override

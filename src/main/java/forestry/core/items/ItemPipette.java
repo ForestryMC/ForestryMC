@@ -12,22 +12,20 @@ package forestry.core.items;
 
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
 
 import net.minecraftforge.fluids.FluidStack;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import forestry.api.core.IModelManager;
 import forestry.api.core.IToolPipette;
 import forestry.core.config.Constants;
 import forestry.core.fluids.PipetteContents;
-import forestry.core.render.TextureManager;
-import forestry.core.utils.StringUtil;
 
 public class ItemPipette extends ItemForestry implements IToolPipette {
 
@@ -103,27 +101,31 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 		contained.addTooltip(list);
 	}
 
-	/* ICONS */
+	/* Models */
 	@SideOnly(Side.CLIENT)
-	private IIcon primaryIcon;
-	@SideOnly(Side.CLIENT)
-	private IIcon secondaryIcon;
+	public ModelResourceLocation[] models = new ModelResourceLocation[2];
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerIcons(IIconRegister register) {
-		primaryIcon = TextureManager.registerTex(register, StringUtil.cleanItemName(this) + ".0");
-		secondaryIcon = TextureManager.registerTex(register, StringUtil.cleanItemName(this) + ".1");
+	public void registerModel(Item item, IModelManager manager) {
+		models[0] = manager.getModelLocation("pipette.0");
+		models[1] = manager.getModelLocation("pipette.1");
+		manager.registerVariant(item, "forestry:pipette.0");
+		manager.registerVariant(item, "forestry:pipette.1");
+		manager.registerItemModel(item, new PippetMeshDefinition());
 	}
 
-	@SideOnly(Side.CLIENT)
-	@Override
-	public IIcon getIconFromDamage(int damage) {
-		if (damage <= 0) {
-			return primaryIcon;
-		} else {
-			return secondaryIcon;
+	public class PippetMeshDefinition implements ItemMeshDefinition {
+
+		@Override
+		public ModelResourceLocation getModelLocation(ItemStack stack) {
+			if (stack.getItemDamage() <= 0) {
+				return models[0];
+			} else {
+				return models[1];
+			}
 		}
+
 	}
 
 	@Override

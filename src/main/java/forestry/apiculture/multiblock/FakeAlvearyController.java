@@ -13,7 +13,7 @@ package forestry.apiculture.multiblock;
 import java.util.Collections;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.biome.BiomeGenBase;
 
@@ -71,7 +71,7 @@ public class FakeAlvearyController extends FakeMultiblockController implements I
 	}
 
 	@Override
-	public ChunkCoordinates getCoordinates() {
+	public BlockPos getCoordinates() {
 		return null;
 	}
 

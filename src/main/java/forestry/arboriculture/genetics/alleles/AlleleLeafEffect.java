@@ -11,6 +11,7 @@
 package forestry.arboriculture.genetics.alleles;
 
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.arboriculture.EnumTreeChromosome;
@@ -20,7 +21,7 @@ import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IEffectData;
 import forestry.core.genetics.alleles.Allele;
 import forestry.core.genetics.alleles.AlleleCategorized;
-import forestry.core.utils.vect.Vect;
+import forestry.core.utils.BlockUtil;
 
 public class AlleleLeafEffect extends AlleleCategorized implements IAlleleLeafEffect {
 	private static final int[] DEFAULT_EFFECT_AREA = new int[]{12, 12, 12};
@@ -47,18 +48,18 @@ public class AlleleLeafEffect extends AlleleCategorized implements IAlleleLeafEf
 	}
 
 	@Override
-	public IEffectData doEffect(ITreeGenome genome, IEffectData storedData, World world, int x, int y, int z) {
+	public IEffectData doEffect(ITreeGenome genome, IEffectData storedData, World world, BlockPos pos) {
 		return storedData;
 	}
 
 	protected static AxisAlignedBB getBounding(int x, int y, int z, float modifier) {
 		int[] areaAr = DEFAULT_EFFECT_AREA;
-		Vect area = new Vect(areaAr).multiply(modifier);
-		Vect offset = area.multiply(-1 / 2.0f);
+		BlockPos area = BlockUtil.multiply(new BlockPos(areaAr[0], areaAr[1], areaAr[2]), modifier);
+		BlockPos offset = BlockUtil.multiply(area, -1 / 2.0f);
 
-		Vect min = offset.add(x, y, z);
-		Vect max = min.add(area);
+		BlockPos min = offset.add(x, y, z);
+		BlockPos max = min.add(area);
 
-		return AxisAlignedBB.getBoundingBox(min.x, min.y, min.z, max.x, max.y, max.z);
+		return AxisAlignedBB.fromBounds(min.getX(), min.getY(), min.getZ(), max.getX(), max.getY(), max.getZ());
 	}
 }

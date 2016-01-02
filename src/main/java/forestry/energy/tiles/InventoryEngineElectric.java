@@ -13,7 +13,6 @@ package forestry.energy.tiles;
 import net.minecraft.item.ItemStack;
 
 import forestry.core.inventory.InventoryAdapterTile;
-
 import ic2.api.item.ElectricItem;
 
 public class InventoryEngineElectric extends InventoryAdapterTile<TileEngineElectric> {

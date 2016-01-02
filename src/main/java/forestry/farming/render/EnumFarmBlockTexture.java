@@ -13,17 +13,14 @@ package forestry.farming.render;
 import java.util.Arrays;
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.core.render.TextureManager;
-import forestry.farming.blocks.BlockFarmType;
+import forestry.farming.blocks.EnumBlockFarmType;
 
 public enum EnumFarmBlockTexture {
 	BRICK_STONE(new ItemStack(Blocks.stonebrick, 1, 0)),
@@ -48,19 +45,19 @@ public enum EnumFarmBlockTexture {
 	private static final int TYPE_CONTROL = 7;
 
 	@SideOnly(Side.CLIENT)
-	private static List<IIcon> icons;
+	private static List<TextureAtlasSprite> sprites;
 
 	@SideOnly(Side.CLIENT)
-	public static void registerIcons(IIconRegister register) {
-		icons = Arrays.asList(
-				TextureManager.registerTex(register, "farm/plain"),
-				TextureManager.registerTex(register, "farm/reverse"),
-				TextureManager.registerTex(register, "farm/top"),
-				TextureManager.registerTex(register, "farm/band"),
-				TextureManager.registerTex(register, "farm/gears"),
-				TextureManager.registerTex(register, "farm/hatch"),
-				TextureManager.registerTex(register, "farm/valve"),
-				TextureManager.registerTex(register, "farm/control")
+	public static void registerSprites() {
+		sprites = Arrays.asList(
+				TextureManager.registerSprite("blocks/farm/plain"),
+				TextureManager.registerSprite("blocks/farm/reverse"),
+				TextureManager.registerSprite("blocks/farm/top"),
+				TextureManager.registerSprite("blocks/farm/band"),
+				TextureManager.registerSprite("blocks/farm/gears"),
+				TextureManager.registerSprite("blocks/farm/hatch"),
+				TextureManager.registerSprite("blocks/farm/valve"),
+				TextureManager.registerSprite("blocks/farm/control")
 		);
 	}
 
@@ -71,29 +68,29 @@ public enum EnumFarmBlockTexture {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public static IIcon getIcon(BlockFarmType type, int side) {
+	public static TextureAtlasSprite getSprite(EnumBlockFarmType type, int side) {
 		switch (type) {
 			case BASIC: {
 				if (side == 2) {
-					return icons.get(TYPE_REVERSE);
+					return sprites.get(TYPE_REVERSE);
 				} else if (side == 0 || side == 1) {
-					return icons.get(TYPE_TOP);
+					return sprites.get(TYPE_TOP);
 				} else {
-					return icons.get(TYPE_PLAIN);
+					return sprites.get(TYPE_PLAIN);
 				}
 			}
 			case BAND:
-				return icons.get(TYPE_BAND);
+				return sprites.get(TYPE_BAND);
 			case GEARBOX:
-				return icons.get(TYPE_GEARS);
+				return sprites.get(TYPE_GEARS);
 			case HATCH:
-				return icons.get(TYPE_HATCH);
+				return sprites.get(TYPE_HATCH);
 			case VALVE:
-				return icons.get(TYPE_VALVE);
+				return sprites.get(TYPE_VALVE);
 			case CONTROL:
-				return icons.get(TYPE_CONTROL);
+				return sprites.get(TYPE_CONTROL);
 			default:
-				return icons.get(TYPE_PLAIN);
+				return sprites.get(TYPE_PLAIN);
 		}
 	}
 
@@ -119,4 +116,51 @@ public enum EnumFarmBlockTexture {
 
 		return EnumFarmBlockTexture.BRICK_STONE;
 	}
+	
+	public static TextureAtlasSprite getSprite(EnumFarmBlockTexture texture, int side) {
+		TextureManager manager = TextureManager.getInstance();
+		switch (texture) {
+		case BRICK:
+			return manager.getSprite("minecraft", "blocks/brick");
+		case BRICK_STONE:
+			return manager.getSprite("minecraft", "blocks/stonebrick");
+		case BRICK_CHISELED:
+			return manager.getSprite("minecraft", "blocks/stonebrick_carved");
+		case BRICK_CRACKED:
+			return manager.getSprite("minecraft", "blocks/stonebrick_cracked");
+		case BRICK_MOSSY:
+			return manager.getSprite("minecraft", "blocks/stonebrick_mossy");
+		case BRICK_NETHER:
+			return manager.getSprite("minecraft", "blocks/nether_brick");
+		case SANDSTONE_CHISELED:
+			if (side == 0)
+				return manager.getSprite("minecraft", "blocks/sandstone_bottom");
+			else if (side == 1)
+				return manager.getSprite("minecraft", "blocks/sandstone_top");
+			return manager.getSprite("minecraft", "blocks/sandstone_carved");
+		case SANDSTONE_SMOOTH:
+			if (side == 0)
+				return manager.getSprite("minecraft", "blocks/sandstone_bottom");
+			else if (side == 1)
+				return manager.getSprite("minecraft", "blocks/sandstone_top");
+			return manager.getSprite("minecraft", "blocks/sandstone_smooth");
+		case QUARTZ:
+			if (side == 0)
+				return manager.getSprite("minecraft", "blocks/quartz_block_bottom");
+			else if (side == 1)
+				return manager.getSprite("minecraft", "blocks/quartz_block_top");
+			return manager.getSprite("minecraft", "blocks/quartz_block_side");
+		case QUARTZ_CHISELED:
+			if (side == 0 || side == 1)
+				return manager.getSprite("minecraft", "blocks/quartz_block_chiseled_top");
+			return manager.getSprite("minecraft", "blocks/quartz_block_chiseled");
+		case QUARTZ_LINES:
+			if (side == 0 || side == 1)
+				return manager.getSprite("minecraft", "blocks/quartz_block_lines_top");
+			return manager.getSprite("minecraft", "blocks/quartz_block_lines");
+		default:
+			return null;
+		}
+	}
+	
 }

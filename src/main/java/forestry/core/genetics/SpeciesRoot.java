@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
 import forestry.api.genetics.IAllele;
@@ -146,11 +145,5 @@ public abstract class SpeciesRoot implements ISpeciesRoot {
 		}
 
 		return chromosomes;
-	}
-
-	/* BREEDING TRACKER */
-	@Override
-	public void syncBreedingTrackerToPlayer(EntityPlayer player) {
-		getBreedingTracker(player.worldObj, player.getGameProfile()).synchToPlayer(player);
 	}
 }

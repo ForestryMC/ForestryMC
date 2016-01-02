@@ -1,0 +1,8 @@
+{
+  "parent": "forestry:block/arboriculture/planks/mahogany",
+  "textures": {
+    "side": "forestry:blocks/wood/planks.mahogany",
+    "top": "forestry:blocks/wood/planks.mahogany",
+    "bottom": "forestry:blocks/wood/planks.mahogany"
+  }
+}

@@ -21,13 +21,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
@@ -136,7 +136,7 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 			return;
 		}
 
-		List<EntityPlayerMP> crafters = Collections.singletonList((EntityPlayerMP) player);
+		List<ICrafting> crafters = Collections.singletonList(player);
 
 		for (StandardTank tank : tanks) {
 			sendTankUpdate(container, tank, crafters);
@@ -151,13 +151,13 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 	}
 
 	@Override
-	public void updateGuiData(Container container, List<EntityPlayerMP> crafters) {
+	public void updateGuiData(Container container, List<ICrafting> crafters) {
 		for (StandardTank tank : tanks) {
 			updateGuiData(container, crafters, tank.getTankIndex());
 		}
 	}
 
-	private void updateGuiData(Container container, List<EntityPlayerMP> crafters, int tankIndex) {
+	private void updateGuiData(Container container, List<ICrafting> crafters, int tankIndex) {
 		StandardTank tank = tanks.get(tankIndex);
 		if (tank == null) {
 			return;
@@ -172,12 +172,13 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 		sendTankUpdate(container, tank, crafters);
 	}
 
-	private void sendTankUpdate(Container container, StandardTank tank, Iterable<EntityPlayerMP> crafters) {
+	private void sendTankUpdate(Container container, StandardTank tank, Iterable<ICrafting> crafters) {
 		int tankIndex = tank.getTankIndex();
 		FluidStack fluid = tank.getFluid();
 		IForestryPacketClient packet = new PacketTankLevelUpdate(tile, tankIndex, fluid);
-		for (EntityPlayerMP player : crafters) {
-			Proxies.net.sendToPlayer(packet, player);
+		for (ICrafting crafter : crafters) {
+			if(crafter instanceof EntityPlayerMP)
+				Proxies.net.sendToPlayer(packet, (EntityPlayer) crafter);
 		}
 
 		if (fluid == null) {
@@ -202,7 +203,7 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 	}
 
 	@Override
-	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+	public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
 		for (StandardTank tank : tanks) {
 			if (tankAcceptsFluid(tank, resource)) {
 				return fill(tank.getTankIndex(), resource, doFill);
@@ -247,7 +248,7 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 	}
 
 	@Override
-	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+	public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
 		for (StandardTank tank : tanks) {
 			if (tankCanDrain(tank)) {
 				return drain(tank.getTankIndex(), maxDrain, doDrain);
@@ -279,22 +280,22 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 	}
 
 	@Override
-	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+	public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
 		return drain(resource, doDrain);
 	}
 
 	@Override
-	public boolean canFill(ForgeDirection from, Fluid fluid) {
+	public boolean canFill(EnumFacing from, Fluid fluid) {
 		return true;
 	}
 
 	@Override
-	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+	public boolean canDrain(EnumFacing from, Fluid fluid) {
 		return true;
 	}
 
 	@Override
-	public FluidTankInfo[] getTankInfo(ForgeDirection direction) {
+	public FluidTankInfo[] getTankInfo(EnumFacing direction) {
 		FluidTankInfo[] info = new FluidTankInfo[tanks.size()];
 		for (int i = 0; i < tanks.size(); i++) {
 			info[i] = tanks.get(i).getInfo();
@@ -303,7 +304,7 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 	}
 
 	public FluidTankInfo[] getTankInfo() {
-		return getTankInfo(ForgeDirection.UNKNOWN);
+		return getTankInfo(null);
 	}
 
 	public FluidTankInfo getTankInfo(int tankIndex) {

@@ -12,11 +12,9 @@ package forestry.core;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.Phase;
-
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import forestry.core.utils.GeneticsUtil;
 
 public class TickHandlerCoreClient {
@@ -24,14 +22,14 @@ public class TickHandlerCoreClient {
 	private boolean hasNaturalistEye;
 
 	@SubscribeEvent
-	public void onClientTick(TickEvent.ClientTickEvent event) {
+	public void onClientTick(ClientTickEvent event) {
 		if (event.phase != Phase.END) {
 			return;
 		}
 
 		Minecraft minecraft = Minecraft.getMinecraft();
 		EntityPlayer player = minecraft.thePlayer;
-
+		
 		boolean hasNaturalistEye = GeneticsUtil.hasNaturalistEye(player);
 		if (this.hasNaturalistEye != hasNaturalistEye) {
 			this.hasNaturalistEye = hasNaturalistEye;

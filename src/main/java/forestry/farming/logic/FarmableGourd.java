@@ -12,13 +12,14 @@ package forestry.farming.logic;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
 import forestry.core.config.Constants;
+import forestry.core.utils.BlockPosUtil;
 import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.vect.Vect;
 
 public class FarmableGourd implements IFarmable {
 
@@ -33,29 +34,29 @@ public class FarmableGourd implements IFarmable {
 	}
 
 	@Override
-	public boolean isSaplingAt(World world, int x, int y, int z) {
-		if (world.isAirBlock(x, y, z)) {
+	public boolean isSaplingAt(World world, BlockPos pos) {
+		if (world.isAirBlock(pos)) {
 			return false;
 		}
 
-		return ItemStackUtil.equals(world.getBlock(x, y, z), stem);
+		return ItemStackUtil.equals(BlockPosUtil.getBlock(world, pos), stem);
 	}
 
 	@Override
-	public ICrop getCropAt(World world, int x, int y, int z) {
-		if (world.isAirBlock(x, y, z)) {
+	public ICrop getCropAt(World world, BlockPos pos) {
+		if (world.isAirBlock(pos)) {
 			return null;
 		}
 
-		if (!ItemStackUtil.equals(world.getBlock(x, y, z), fruit)) {
+		if (!ItemStackUtil.equals(BlockPosUtil.getBlock(world, pos), fruit)) {
 			return null;
 		}
 
-		if (world.getBlockMetadata(x, y, z) != fruit.getItemDamage()) {
+		if (BlockPosUtil.getBlockMeta(world, pos) != fruit.getItemDamage()) {
 			return null;
 		}
 
-		return new CropBlock(world, ItemStackUtil.getBlock(fruit), fruit.getItemDamage(), new Vect(x, y, z));
+		return new CropBlock(world, ItemStackUtil.getBlock(fruit), fruit.getItemDamage(), pos);
 	}
 
 	@Override
@@ -69,8 +70,8 @@ public class FarmableGourd implements IFarmable {
 	}
 
 	@Override
-	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, int x, int y, int z) {
-		return world.setBlock(x, y, z, ItemStackUtil.getBlock(stem), 0, Constants.FLAG_BLOCK_SYNCH);
+	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
+		return world.setBlockState(pos, ItemStackUtil.getBlock(stem).getStateFromMeta(0), Constants.FLAG_BLOCK_SYNCH);
 	}
 
 }

@@ -5,15 +5,16 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Collection;
 import java.util.List;
+import java.util.zip.GZIPOutputStream;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
-
 import net.minecraftforge.fluids.FluidStack;
-
-import cpw.mods.fml.common.registry.GameData;
+import net.minecraftforge.fml.common.registry.GameData;
 
 public class DataOutputStreamForestry extends DataOutputStream {
 
@@ -25,12 +26,12 @@ public class DataOutputStreamForestry extends DataOutputStream {
 		if (itemstack == null) {
 			writeUTF("");
 		} else {
-			writeUTF(GameData.getItemRegistry().getNameForObject(itemstack.getItem()));
+			writeUTF(GameData.getItemRegistry().getNameForObject(itemstack.getItem()).toString());
 			writeByte(itemstack.stackSize);
 			writeVarInt(itemstack.getItemDamage());
 
 			if (itemstack.getItem().isDamageable() || itemstack.getItem().getShareTag()) {
-				writeNBTTagCompound(itemstack.stackTagCompound);
+				writeNBTTagCompound(itemstack.getTagCompound());
 			}
 		}
 	}
@@ -106,8 +107,21 @@ public class DataOutputStreamForestry extends DataOutputStream {
 		if (nbttagcompound == null) {
 			writeVarInt(-1);
 		} else {
-			byte[] compressed = CompressedStreamTools.compress(nbttagcompound);
-			writeVarInt((short) compressed.length);
+			final ByteBuf buf = Unpooled.buffer(2048);
+			GZIPOutputStream compressFrame = new GZIPOutputStream( new OutputStream()
+			{
+
+				@Override
+				public void write( int value ) throws IOException
+				{
+					buf.writeByte( value );
+				}
+			} );
+
+			CompressedStreamTools.write( nbttagcompound, new DataOutputStream( compressFrame ) );
+			compressFrame.close();
+			byte[] compressed = buf.readBytes(buf.readableBytes()).array();
+			writeVarInt(compressed.length);
 			write(compressed);
 		}
 	}
@@ -116,7 +130,7 @@ public class DataOutputStreamForestry extends DataOutputStream {
 		if (fluidStack == null) {
 			writeVarInt(-1);
 		} else {
-			writeVarInt(fluidStack.getFluidID());
+			writeVarInt(fluidStack.getFluid().getID());
 			writeVarInt(fluidStack.amount);
 		}
 	}

@@ -11,29 +11,27 @@
 package forestry.farming;
 
 import net.minecraft.block.Block;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.farming.FarmDirection;
-import forestry.core.utils.vect.MutableVect;
-import forestry.core.utils.vect.Vect;
-import forestry.core.utils.vect.VectUtil;
 
 public class FarmTarget {
 
-	private final Vect start;
+	private final BlockPos start;
 	private final FarmDirection direction;
 	private final int limit;
 
 	private int yOffset;
 	private int extent;
 
-	public FarmTarget(Vect start, FarmDirection direction, int limit) {
+	public FarmTarget(BlockPos start, FarmDirection direction, int limit) {
 		this.start = start;
 		this.direction = direction;
 		this.limit = limit;
 	}
 
-	public Vect getStart() {
+	public BlockPos getStart() {
 		return start;
 	}
 
@@ -49,19 +47,19 @@ public class FarmTarget {
 		return direction;
 	}
 
-	public void setExtentAndYOffset(World world, Vect platformPosition) {
+	public void setExtentAndYOffset(World world, BlockPos platformPosition) {
 		if (platformPosition == null) {
 			extent = 0;
 			return;
 		}
 
-		MutableVect position = new MutableVect(platformPosition);
+		BlockPos position = new BlockPos(platformPosition);
 		for (extent = 0; extent < limit; extent++) {
-			Block platform = VectUtil.getBlock(world, position);
+			Block platform = world.getBlockState(position).getBlock();
 			if (!FarmHelper.bricks.contains(platform)) {
 				break;
 			}
-			position.add(getDirection().getForgeDirection());
+			position = position.offset(getDirection().getFacing());
 		}
 
 		yOffset = platformPosition.getY() + 1 - getStart().getY();

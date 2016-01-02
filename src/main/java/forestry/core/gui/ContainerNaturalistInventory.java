@@ -15,7 +15,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.IInventory;
-
 import forestry.core.gui.slots.SlotFilteredInventory;
 import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.tiles.IFilterSlotDelegate;
@@ -48,10 +47,10 @@ public class ContainerNaturalistInventory extends ContainerTile<TileNaturalistCh
 	public void handleSelectionRequest(EntityPlayerMP player, PacketGuiSelectRequest packet) {
 		tile.flipPage(player, (short) packet.getPrimaryIndex());
 	}
-
+	
 	@Override
-	public void addCraftingToCrafters(ICrafting p_75132_1_) {
-		super.addCraftingToCrafters(p_75132_1_);
+	public void onCraftGuiOpened(ICrafting listener) {
+		super.onCraftGuiOpened(listener);
 		tile.increaseNumPlayersUsing();
 	}
 

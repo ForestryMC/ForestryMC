@@ -12,17 +12,15 @@ package forestry.mail;
 
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import forestry.api.core.IModelManager;
 import forestry.api.mail.ILetter;
-import forestry.core.render.TextureManager;
 import forestry.plugins.PluginMail;
 
 public class LetterProperties {
@@ -78,19 +76,35 @@ public class LetterProperties {
 		}
 	}
 
-	/* ICONS */
+	/* MODELS */
 	@SideOnly(Side.CLIENT)
-	private static IIcon[][] icons;
+	private static ModelResourceLocation[][] models;
 
 	@SideOnly(Side.CLIENT)
-	public static void registerIcons(IIconRegister register) {
-		icons = new IIcon[3][4];
-		for (int i = 0; i < 3; i++) {
-			icons[i][0] = TextureManager.registerTex(register, "mail/letter." + i + ".fresh");
-			icons[i][1] = TextureManager.registerTex(register, "mail/letter." + i + ".stamped");
-			icons[i][2] = TextureManager.registerTex(register, "mail/letter." + i + ".opened");
-			icons[i][3] = TextureManager.registerTex(register, "mail/letter." + i + ".emptied");
+	private static class LetterMeshDefinition implements ItemMeshDefinition {
+		@Override
+		public ModelResourceLocation getModelLocation(ItemStack stack) {
+			int damage = stack.getItemDamage();
+			State state = getState(damage);
+			Size size = getSize(damage);
+			return models[size.ordinal()][state.ordinal()];
 		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	public static void registerModel(Item item, IModelManager manager) {
+		models = new ModelResourceLocation[3][4];
+		for (int i = 0; i < 3; i++) {
+			models[i][0] = new ModelResourceLocation("forestry:mail/letter." + i + ".fresh", "inventory");
+			manager.registerVariant(item, "forestry:mail/letter." + i + ".fresh");
+			models[i][1] = new ModelResourceLocation("forestry:mail/letter." + i + ".stamped", "inventory");
+			manager.registerVariant(item, "forestry:mail/letter." + i + ".stamped");
+			models[i][2] = new ModelResourceLocation("forestry:mail/letter." + i + ".opened", "inventory");
+			manager.registerVariant(item, "forestry:mail/letter." + i + ".opened");
+			models[i][3] = new ModelResourceLocation("forestry:mail/letter." + i + ".emptied", "inventory");
+			manager.registerVariant(item, "forestry:mail/letter." + i + ".emptied");
+		}
+		manager.registerItemModel(item, new LetterMeshDefinition());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -102,14 +116,6 @@ public class LetterProperties {
 				list.add(letter);
 			}
 		}
-	}
-
-	@SideOnly(Side.CLIENT)
-	public static IIcon getIconFromDamage(int damage) {
-		State state = getState(damage);
-		Size size = getSize(damage);
-
-		return icons[size.ordinal()][state.ordinal()];
 	}
 
 	private static State getState(int meta) {

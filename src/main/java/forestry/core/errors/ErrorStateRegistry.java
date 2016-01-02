@@ -18,14 +18,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorState;
 import forestry.api.core.IErrorStateRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  *
@@ -89,9 +86,9 @@ public class ErrorStateRegistry implements IErrorStateRegistry {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public static void initIcons(IIconRegister register) {
+	public static void initSprites() {
 		for (IErrorState code : states.values()) {
-			code.registerIcons(register);
+			code.registerSprites();
 		}
 	}
 }

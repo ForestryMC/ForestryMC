@@ -11,13 +11,14 @@
 package forestry.core.entities;
 
 import net.minecraft.client.particle.EntityFX;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.util.IIcon;
+import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 
 public class EntityFXSnow extends EntityFX {
 
-	public static IIcon icons[];
+	public static TextureAtlasSprite icons[];
 
 	public EntityFXSnow(World world, double x, double y, double z) {
 		super(world, x, y, z, 0.0D, 0.0D, 0.0D);
@@ -38,7 +39,7 @@ public class EntityFXSnow extends EntityFX {
 	}
 
 	@Override
-	public void renderParticle(Tessellator tess, float timeStep, float rotationX, float rotationXZ, float rotationZ, float rotationYZ, float rotationXY) {
+	public void renderParticle(WorldRenderer worldRenderer, Entity entity, float timeStep, float rotationX, float rotationXZ, float rotationZ, float rotationYZ, float rotationXY) {
 		double x = (this.prevPosX + (this.posX - this.prevPosX) * timeStep - interpPosX);
 		double y = (this.prevPosY + (this.posY - this.prevPosY) * timeStep - interpPosY);
 		double z = (this.prevPosZ + (this.posZ - this.prevPosZ) * timeStep - interpPosZ);
@@ -56,18 +57,18 @@ public class EntityFXSnow extends EntityFX {
 			maxV = this.particleIcon.getMaxV();
 		}
 
-		tess.setColorRGBA_F(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha);
-
 		for (int i = 0; i < 5; i++) {
-			renderParticle(tess, x, y, z, rotationX, rotationXZ, rotationZ, rotationYZ, rotationXY, minU, maxU, minV, maxV, scale);
+			renderParticle(worldRenderer, x, y, z, rotationX, rotationXZ, rotationZ, rotationYZ, rotationXY, minU, maxU, minV, maxV, scale, timeStep);
 		}
 	}
 
-	private static void renderParticle(Tessellator tess, double x, double y, double z, float rotationX, float rotationXZ, float rotationZ, float rotationYZ, float rotationXY,
-			float minU, float maxU, float minV, float maxV, float scale) {
-		tess.addVertexWithUV((x - rotationX * scale - rotationYZ * scale), (y - rotationXZ * scale), (z - rotationZ * scale - rotationXY * scale), maxU, maxV);
-		tess.addVertexWithUV((x - rotationX * scale + rotationYZ * scale), (y + rotationXZ * scale), (z - rotationZ * scale + rotationXY * scale), maxU, minV);
-		tess.addVertexWithUV((x + rotationX * scale + rotationYZ * scale), (y + rotationXZ * scale), (z + rotationZ * scale + rotationXY * scale), minU, minV);
-		tess.addVertexWithUV((x + rotationX * scale - rotationYZ * scale), (y - rotationXZ * scale), (z + rotationZ * scale - rotationXY * scale), minU, maxV);
+	private void renderParticle(WorldRenderer worldRenderer, double x, double y, double z, float rotationX, float rotationXZ, float rotationZ, float rotationYZ, float rotationXY, float minU, float maxU, float minV, float maxV, float scale, float timeStep) {
+        int i = this.getBrightnessForRender(timeStep);
+        int j = i >> 16 & 65535;
+        int k = i & 65535;
+		worldRenderer.func_181662_b((x - rotationX * scale - rotationYZ * scale), (y - rotationXZ * scale), (z - rotationZ * scale - rotationXY * scale)).func_181673_a(maxU, maxV).func_181666_a(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).func_181671_a(j, k).func_181675_d();
+		worldRenderer.func_181662_b((x - rotationX * scale + rotationYZ * scale), (y + rotationXZ * scale), (z - rotationZ * scale + rotationXY * scale)).func_181673_a(maxU, minV).func_181666_a(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).func_181671_a(j, k).func_181675_d();
+		worldRenderer.func_181662_b((x + rotationX * scale + rotationYZ * scale), (y + rotationXZ * scale), (z + rotationZ * scale + rotationXY * scale)).func_181673_a(minU, minV).func_181666_a(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).func_181671_a(j, k).func_181675_d();;
+		worldRenderer.func_181662_b((x + rotationX * scale - rotationYZ * scale), (y - rotationXZ * scale), (z + rotationZ * scale - rotationXY * scale)).func_181673_a(minU, maxV).func_181666_a(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).func_181671_a(j, k).func_181675_d();;
 	}
 }

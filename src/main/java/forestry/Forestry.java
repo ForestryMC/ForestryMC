@@ -16,22 +16,20 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 
 import net.minecraftforge.common.MinecraftForge;
-
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLInterModComms;
-import cpw.mods.fml.common.event.FMLInterModComms.IMCEvent;
-import cpw.mods.fml.common.event.FMLMissingMappingsEvent;
-import cpw.mods.fml.common.event.FMLMissingMappingsEvent.MissingMapping;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.registry.GameRegistry.Type;
-
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLInterModComms;
+import net.minecraftforge.fml.common.event.FMLInterModComms.IMCEvent;
+import net.minecraftforge.fml.common.event.FMLMissingMappingsEvent;
+import net.minecraftforge.fml.common.event.FMLMissingMappingsEvent.MissingMapping;
+import net.minecraftforge.fml.common.registry.GameRegistry.Type;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import forestry.api.core.ForestryAPI;
 import forestry.core.EventHandlerCore;
 import forestry.core.config.Config;
@@ -99,14 +97,18 @@ public class Forestry {
 		ForestryAPI.activeMode = new GameMode(Config.gameMode);
 
 		PluginManager.runPreInit();
+		
+		Proxies.render.preInitModels();
 	}
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
 		// Register gui handler
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
-
+		
 		PluginManager.runInit();
+		
+		Proxies.render.initModels();
 	}
 
 	@EventHandler

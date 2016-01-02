@@ -11,9 +11,9 @@
 package forestry.arboriculture.worldgen;
 
 import net.minecraft.block.Block;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-
-import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.api.world.ITreeGenData;
 import forestry.core.config.Constants;
@@ -29,13 +29,13 @@ public class TreeBlockType implements ITreeBlockType {
 	}
 
 	@Override
-	public void setDirection(ForgeDirection facing) {
+	public void setDirection(EnumFacing facing) {
 
 	}
 
 	@Override
-	public void setBlock(World world, ITreeGenData tree, int x, int y, int z) {
-		world.setBlock(x, y, z, block, meta, Constants.FLAG_BLOCK_SYNCH);
+	public void setBlock(World world, ITreeGenData tree, BlockPos pos) {
+		world.setBlockState(pos, block.getStateFromMeta(meta), Constants.FLAG_BLOCK_SYNCH);
 	}
 
 	public int getMeta() {

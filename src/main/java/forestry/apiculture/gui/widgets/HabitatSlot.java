@@ -14,8 +14,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Locale;
 
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.IIcon;
 
 import net.minecraftforge.common.BiomeDictionary;
 
@@ -24,7 +25,6 @@ import org.lwjgl.opengl.GL11;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.SpriteSheet;
 import forestry.core.render.TextureManager;
 
 public class HabitatSlot extends Widget {
@@ -45,7 +45,7 @@ public class HabitatSlot extends Widget {
 		return name;
 	}
 
-	public IIcon getIcon() {
+	public TextureAtlasSprite getIcon() {
 		return TextureManager.getInstance().getDefault(iconIndex);
 	}
 
@@ -62,8 +62,8 @@ public class HabitatSlot extends Widget {
 				GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 			}
 
-			Proxies.render.bindTexture(SpriteSheet.ITEMS);
-			manager.gui.drawTexturedModelRectFromIcon(startX + xPos, startY + yPos, getIcon(), 16, 16);
+			Proxies.render.bindTexture(TextureMap.locationBlocksTexture);
+			manager.gui.drawTexturedModelRectFromSprite(startX + xPos, startY + yPos, getIcon(), 16, 16);
 		}
 	}
 }

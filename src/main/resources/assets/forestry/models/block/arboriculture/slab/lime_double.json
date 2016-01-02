@@ -1,0 +1,8 @@
+{
+  "parent": "forestry:block/arboriculture/planks/lime",
+  "textures": {
+    "side": "forestry:blocks/wood/planks.lime",
+    "top": "forestry:blocks/wood/planks.lime",
+    "bottom": "forestry:blocks/wood/planks.lime"
+  }
+}

@@ -12,7 +12,7 @@ package forestry.arboriculture.worldgen;
 
 import java.util.List;
 
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.world.ITreeGenData;
@@ -32,9 +32,9 @@ public class WorldGenTeak extends WorldGenTree {
 			leafMultiplier = 2;
 		}
 		int branchWidth = height / 3;
-		List<ChunkCoordinates> branchCoords = generateBranches(world, height - 3, 0, 0, 0.2f, 0.5f, branchWidth, 1);
-		for (ChunkCoordinates branchEnd : branchCoords) {
-			generateAdjustedCircle(world, branchEnd.posY, branchEnd.posX, branchEnd.posZ, 2, Math.round(3 * leafMultiplier), 2, leaf, 1.0f, EnumReplaceMode.NONE);
+		List<BlockPos> branchCoords = generateBranches(world, height - 3, 0, 0, 0.2f, 0.5f, branchWidth, 1);
+		for (BlockPos branchEnd : branchCoords) {
+			generateAdjustedCircle(world, branchEnd.getY(), branchEnd.getX(), branchEnd.getZ(), 2, Math.round(3 * leafMultiplier), 2, leaf, 1.0f, EnumReplaceMode.NONE);
 		}
 
 		int leafSpawn = height + 1;

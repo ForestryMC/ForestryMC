@@ -11,7 +11,7 @@
 package forestry.core.inventory;
 
 import net.minecraft.item.ItemStack;
-
+import net.minecraft.util.EnumFacing;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IIndividual;
 import forestry.core.tiles.TileEscritoire;
@@ -67,7 +67,7 @@ public class InventoryEscritoire extends InventoryAdapterTile<TileEscritoire> {
 	}
 
 	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
+	public boolean canExtractItem(int slotIndex, ItemStack itemstack, EnumFacing side) {
 		return SlotUtil.isSlotInRange(slotIndex, SLOT_RESULTS_1, SLOTS_RESULTS_COUNT);
 	}
 

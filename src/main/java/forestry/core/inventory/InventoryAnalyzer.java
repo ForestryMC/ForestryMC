@@ -11,7 +11,7 @@
 package forestry.core.inventory;
 
 import net.minecraft.item.ItemStack;
-
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.Fluid;
 
 import forestry.api.arboriculture.TreeManager;
@@ -47,7 +47,7 @@ public class InventoryAnalyzer extends InventoryAdapterTile<TileAnalyzer> {
 	}
 
 	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack stack, int side) {
+	public boolean canExtractItem(int slotIndex, ItemStack stack, EnumFacing side) {
 		return SlotUtil.isSlotInRange(slotIndex, SLOT_OUTPUT_1, SLOT_OUTPUT_COUNT);
 	}
 

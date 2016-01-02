@@ -18,9 +18,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-
-import cpw.mods.fml.common.registry.EntityRegistry;
-
+import net.minecraftforge.fml.common.registry.EntityRegistry;
 import forestry.api.core.ForestryAPI;
 import forestry.core.entities.EntitySelector;
 
@@ -41,7 +39,7 @@ public abstract class EntityUtil {
 		living.setLocationAndAngles(x, y, z, MathHelper.wrapAngleTo180_float(world.rand.nextFloat() * 360.0f), 0.0f);
 		living.rotationYawHead = living.rotationYaw;
 		living.renderYawOffset = living.rotationYaw;
-		living.onSpawnWithEgg(null);
+		living.onInitialSpawn(null, null);
 		world.spawnEntityInWorld(living);
 		living.playLivingSound();
 		return living;
@@ -59,7 +57,7 @@ public abstract class EntityUtil {
 
 	@SuppressWarnings("unchecked")
 	public static <T extends Entity> List<T> selectEntitiesWithinAABB(World world, EntitySelector<T> entitySelector, AxisAlignedBB boundingBox) {
-		return world.selectEntitiesWithinAABB(entitySelector.getEntityClass(), boundingBox, entitySelector);
+		return world.getEntitiesWithinAABB(entitySelector.getEntityClass(), boundingBox, entitySelector);
 	}
 
 	private static <E extends EntityLiving> E createEntity(World world, Class<E> entityClass) {
@@ -67,7 +65,7 @@ public abstract class EntityUtil {
 			return null;
 		}
 
-		String entityString = (String) EntityList.classToStringMapping.get(entityClass);
+		String entityString = EntityList.classToStringMapping.get(entityClass);
 		if (entityString == null) {
 			return null;
 		}

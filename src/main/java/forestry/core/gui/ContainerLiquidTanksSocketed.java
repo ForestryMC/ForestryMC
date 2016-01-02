@@ -18,7 +18,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
 import net.minecraftforge.fluids.IFluidTank;
-
 import forestry.core.circuits.ISocketable;
 import forestry.core.tiles.ILiquidTankTile;
 
@@ -50,10 +49,10 @@ public abstract class ContainerLiquidTanksSocketed<T extends TileEntity & ILiqui
 		super.detectAndSendChanges();
 		tile.getTankManager().updateGuiData(this, crafters);
 	}
-
+	
 	@Override
-	public void addCraftingToCrafters(ICrafting icrafting) {
-		super.addCraftingToCrafters(icrafting);
+	public void onCraftGuiOpened(ICrafting icrafting) {
+		super.onCraftGuiOpened(icrafting);
 		tile.getTankManager().containerAdded(this, icrafting);
 	}
 
@@ -63,6 +62,7 @@ public abstract class ContainerLiquidTanksSocketed<T extends TileEntity & ILiqui
 		tile.getTankManager().containerRemoved(this);
 	}
 
+	@Override
 	public IFluidTank getTank(int slot) {
 		return tile.getTankManager().getTank(slot);
 	}

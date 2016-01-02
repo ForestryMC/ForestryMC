@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.core.proxy;
 
-import cpw.mods.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.SidedProxy;
 
 public class Proxies {
 	@SidedProxy(clientSide = "forestry.core.proxy.ProxyCommonClient", serverSide = "forestry.core.proxy.ProxyCommon")

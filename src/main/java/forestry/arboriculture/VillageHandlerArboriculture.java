@@ -10,27 +10,10 @@
  ******************************************************************************/
 package forestry.arboriculture;
 
-import java.util.Random;
+@Deprecated
+public class VillageHandlerArboriculture/* implements IVillageTradeHandler*/ {
 
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.village.MerchantRecipe;
-import net.minecraft.village.MerchantRecipeList;
-
-import cpw.mods.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
-
-import forestry.api.arboriculture.EnumGermlingType;
-import forestry.api.arboriculture.EnumWoodType;
-import forestry.api.arboriculture.ITree;
-import forestry.api.arboriculture.ITreeGenome;
-import forestry.api.arboriculture.TreeManager;
-import forestry.api.genetics.IAllele;
-import forestry.plugins.PluginArboriculture;
-
-public class VillageHandlerArboriculture implements IVillageTradeHandler {
-
-	@SuppressWarnings("unchecked")
+	/*@SuppressWarnings("unchecked")
 	@Override
 	public void manipulateTradesForVillager(EntityVillager villager, MerchantRecipeList recipeList, Random random) {
 		IAllele[] randomTemplate = TreeManager.treeRoot.getRandomTemplate(random);
@@ -46,6 +29,6 @@ public class VillageHandlerArboriculture implements IVillageTradeHandler {
 		planks.stackSize = 32;
 
 		recipeList.add(new MerchantRecipe(new ItemStack(Items.emerald, 1), planks));
-	}
+	}*/
 
 }

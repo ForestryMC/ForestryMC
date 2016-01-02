@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
@@ -91,7 +91,7 @@ public class MultiblockWorldRegistry {
 	 */
 	public void processMultiblockChanges() {
 		IChunkProvider chunkProvider = worldObj.getChunkProvider();
-		ChunkCoordinates coord;
+		BlockPos coord;
 
 		// Merge pools - sets of adjacent machines which should be merged later on in processing
 		List<Set<IMultiblockControllerInternal>> mergePools = null;
@@ -116,7 +116,7 @@ public class MultiblockWorldRegistry {
 				// These are blocks that exist in a valid chunk and require a controller
 				for (IMultiblockComponent orphan : orphansToProcess) {
 					coord = orphan.getCoordinates();
-					if (!chunkProvider.chunkExists(coord.posX >> 4, coord.posZ >> 4)) {
+					if (!chunkProvider.chunkExists(coord.getX() >> 4, coord.getZ() >> 4)) {
 						continue;
 					}
 
@@ -125,7 +125,7 @@ public class MultiblockWorldRegistry {
 						continue;
 					}
 
-					if (worldObj.getTileEntity(coord.posX, coord.posY, coord.posZ) != orphan) {
+					if (worldObj.getTileEntity(coord) != orphan) {
 						// This block has been replaced by another.
 						continue;
 					}
@@ -310,12 +310,12 @@ public class MultiblockWorldRegistry {
 	 * @param part The part which is being added to this world.
 	 */
 	public void onPartAdded(IMultiblockComponent part) {
-		ChunkCoordinates worldLocation = part.getCoordinates();
+		BlockPos worldLocation = part.getCoordinates();
 		
-		if (!worldObj.getChunkProvider().chunkExists(worldLocation.posX >> 4, worldLocation.posZ >> 4)) {
+		if (!worldObj.getChunkProvider().chunkExists(worldLocation.getX() >> 4, worldLocation.getZ() >> 4)) {
 			// Part goes into the waiting-for-chunk-load list
 			Set<IMultiblockComponent> partSet;
-			long chunkHash = ChunkCoordIntPair.chunkXZ2Int(worldLocation.posX >> 4, worldLocation.posZ >> 4);
+			long chunkHash = ChunkCoordIntPair.chunkXZ2Int(worldLocation.getX() >> 4, worldLocation.getZ() >> 4);
 			synchronized (partsAwaitingChunkLoadMutex) {
 				if (!partsAwaitingChunkLoad.containsKey(chunkHash)) {
 					partSet = new HashSet<>();
@@ -338,9 +338,9 @@ public class MultiblockWorldRegistry {
 	 * @param part The part which is being removed.
 	 */
 	public void onPartRemovedFromWorld(IMultiblockComponent part) {
-		ChunkCoordinates coord = part.getCoordinates();
+		BlockPos coord = part.getCoordinates();
 		if (coord != null) {
-			long hash = ChunkCoordIntPair.chunkXZ2Int(coord.posX >> 4, coord.posZ >> 4);
+			long hash = ChunkCoordIntPair.chunkXZ2Int(coord.getX() >> 4, coord.getZ() >> 4);
 			
 			if (partsAwaitingChunkLoad.containsKey(hash)) {
 				synchronized (partsAwaitingChunkLoadMutex) {

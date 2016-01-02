@@ -18,7 +18,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-
+import net.minecraft.util.IChatComponent;
 import forestry.api.core.IErrorSource;
 import forestry.api.core.IErrorState;
 import forestry.api.mail.ILetter;
@@ -92,10 +92,15 @@ public class ItemInventoryLetter extends ItemInventory implements IErrorSource, 
 	public int getSizeInventory() {
 		return letter.getSizeInventory();
 	}
-
+	
 	@Override
-	public String getInventoryName() {
-		return letter.getInventoryName();
+	public String getCommandSenderName() {
+		return letter.getCommandSenderName();
+	}
+	
+	@Override
+	public IChatComponent getDisplayName() {
+		return letter.getDisplayName();
 	}
 
 	@Override

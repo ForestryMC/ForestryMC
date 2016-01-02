@@ -14,6 +14,6 @@ import forestry.core.blocks.BlockBase;
 
 public class BlockFactoryPlain extends BlockBase<BlockFactoryPlainType> {
 	public BlockFactoryPlain() {
-		super();
+		super(BlockFactoryPlainType.class);
 	}
 }

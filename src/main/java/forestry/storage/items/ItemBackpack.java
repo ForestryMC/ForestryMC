@@ -13,21 +13,22 @@ package forestry.storage.items;
 import java.util.List;
 import java.util.Locale;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.ForgeDirection;
-
-import cpw.mods.fml.common.eventhandler.Event;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
+import net.minecraftforge.fml.common.eventhandler.Event;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import forestry.api.core.IModelManager;
 import forestry.api.storage.BackpackStowEvent;
 import forestry.api.storage.EnumBackpackType;
 import forestry.api.storage.IBackpackDefinition;
@@ -38,7 +39,6 @@ import forestry.core.inventory.ItemInventory;
 import forestry.core.inventory.wrappers.IInvSlot;
 import forestry.core.inventory.wrappers.InventoryIterator;
 import forestry.core.items.ItemWithGui;
-import forestry.core.render.TextureManager;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.StringUtil;
@@ -83,15 +83,15 @@ public class ItemBackpack extends ItemWithGui {
 
 		return itemstack;
 	}
-
+	
 	@Override
-	public boolean onItemUse(ItemStack itemstack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
-		return getInventoryHit(world, x, y, z, side) != null;
+	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
+		return getInventoryHit(world, pos, side) != null;
 	}
-
+	
 	@Override
-	public boolean onItemUseFirst(ItemStack itemstack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
-
+	public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
+		
 		if (world.isRemote) {
 			return false;
 		}
@@ -101,7 +101,7 @@ public class ItemBackpack extends ItemWithGui {
 			return false;
 		}
 
-		return evaluateTileHit(itemstack, player, world, x, y, z, side);
+		return evaluateTileHit(stack, player, world, pos, side);
 	}
 
 	public static ItemStack tryStowing(EntityPlayer player, ItemStack backpackStack, ItemStack stack) {
@@ -137,16 +137,16 @@ public class ItemBackpack extends ItemWithGui {
 		itemstack.setItemDamage(nextMode);
 	}
 
-	private static IInventory getInventoryHit(World world, int x, int y, int z, int side) {
-		TileEntity targeted = world.getTileEntity(x, y, z);
-		return TileUtil.getInventoryFromTile(targeted, ForgeDirection.getOrientation(side));
+	private static IInventory getInventoryHit(World world, BlockPos pos, EnumFacing side) {
+		TileEntity targeted = world.getTileEntity(pos);
+		return TileUtil.getInventoryFromTile(targeted, side);
 	}
 
-	private boolean evaluateTileHit(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side) {
+	private boolean evaluateTileHit(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side) {
 
 		// Shift right-clicking on an inventory tile will attempt to transfer
 		// items contained in the backpack
-		IInventory inventory = getInventoryHit(world, x, y, z, side);
+		IInventory inventory = getInventoryHit(world, pos, side);
 		// Process only inventories
 		if (inventory != null) {
 
@@ -227,37 +227,6 @@ public class ItemBackpack extends ItemWithGui {
 		return definition.getName(itemstack);
 	}
 
-	/* ICONS */
-	@SideOnly(Side.CLIENT)
-	private IIcon[] icons;
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerIcons(IIconRegister register) {
-		icons = new IIcon[6];
-
-		EnumBackpackType t = type == EnumBackpackType.APIARIST ? EnumBackpackType.T1 : type;
-		String typeTag = "backpacks/" + t.toString().toLowerCase(Locale.ENGLISH);
-
-		icons[0] = TextureManager.registerTex(register, typeTag + ".cloth");
-		icons[1] = TextureManager.registerTex(register, typeTag + ".outline");
-		icons[2] = TextureManager.registerTex(register, "backpacks/neutral");
-		icons[3] = TextureManager.registerTex(register, "backpacks/locked");
-		icons[4] = TextureManager.registerTex(register, "backpacks/receive");
-		icons[5] = TextureManager.registerTex(register, "backpacks/resupply");
-	}
-
-	// Return true to enable color overlay - client side only
-	@Override
-	public boolean requiresMultipleRenderPasses() {
-		return true;
-	}
-
-	@Override
-	public int getRenderPasses(int metadata) {
-		return 3;
-	}
-
 	@Override
 	public int getColorFromItemStack(ItemStack itemstack, int j) {
 
@@ -269,26 +238,43 @@ public class ItemBackpack extends ItemWithGui {
 			return 0xffffff;
 		}
 	}
+	
+	/* Models */
+	@SideOnly(Side.CLIENT)
+	private ModelResourceLocation[] models;
+
+	@SideOnly(Side.CLIENT)
+	public static int i = 0;
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public IIcon getIconFromDamageForRenderPass(int i, int j) {
-		if (j == 0) {
-			return icons[0];
+	public void registerModel(Item item, IModelManager manager) {
+		EnumBackpackType t = type == EnumBackpackType.APIARIST ? EnumBackpackType.T1 : type;
+		String typeTag = "backpacks/" + t.toString().toLowerCase(Locale.ENGLISH);
+		models = new ModelResourceLocation[4];
+		models[0] = new ModelResourceLocation("forestry:" + typeTag + "_neutral", "inventory");
+		models[1] = new ModelResourceLocation("forestry:" + typeTag + "_locked", "inventory");
+		models[2] = new ModelResourceLocation("forestry:" + typeTag + "_receive", "inventory");
+		models[3] = new ModelResourceLocation("forestry:" + typeTag + "_resupply", "inventory");
+		if (i == 0 && (type == EnumBackpackType.T1 || type == EnumBackpackType.APIARIST) || i == 1 && type == EnumBackpackType.T2) {
+			manager.registerVariant(item, "forestry:" + typeTag + "_neutral");
+			manager.registerVariant(item, "forestry:" + typeTag + "_locked");
+			manager.registerVariant(item, "forestry:" + typeTag + "_receive");
+			manager.registerVariant(item, "forestry:" + typeTag + "_resupply");
+			i++;
 		}
-		if (j == 1) {
-			return icons[1];
+		manager.registerItemModel(item, new BackpackMeshDefinition());
+	}
+
+	@SideOnly(Side.CLIENT)
+	private class BackpackMeshDefinition implements ItemMeshDefinition {
+
+		@Override
+		public ModelResourceLocation getModelLocation(ItemStack stack) {
+			EnumBackpackType t = type == EnumBackpackType.APIARIST ? EnumBackpackType.T1 : type;
+			return models[stack.getItemDamage()];
 		}
 
-		if (i > 2) {
-			return icons[5];
-		} else if (i > 1) {
-			return icons[4];
-		} else if (i > 0) {
-			return icons[3];
-		} else {
-			return icons[2];
-		}
 	}
 
 	private static int getSlotsForType(EnumBackpackType type) {

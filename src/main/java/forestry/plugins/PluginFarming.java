@@ -22,12 +22,16 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
-import cpw.mods.fml.common.registry.GameData;
-import cpw.mods.fml.common.registry.GameRegistry;
-
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.GameData;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitLayout;
@@ -39,7 +43,7 @@ import forestry.core.config.Constants;
 import forestry.core.items.EnumElectronTube;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.Log;
-import forestry.farming.blocks.BlockFarmType;
+import forestry.farming.blocks.EnumBlockFarmType;
 import forestry.farming.blocks.BlockRegistryFarming;
 import forestry.farming.circuits.CircuitFarmLogic;
 import forestry.farming.logic.FarmLogicArboreal;
@@ -88,6 +92,8 @@ public class PluginFarming extends ForestryPlugin {
 	public void preInit() {
 		super.preInit();
 
+		MinecraftForge.EVENT_BUS.register(this);
+		
 		Farmables.farmables.put("farmArboreal", new ArrayList<IFarmable>());
 		Farmables.farmables.get("farmArboreal").add(new FarmableVanillaSapling());
 		if (PluginManager.Module.ARBORICULTURE.isEnabled()) {
@@ -200,7 +206,7 @@ public class PluginFarming extends ForestryPlugin {
 			String windfallMetaString = matchResult.group(4);
 
 			try {
-				Block sapling = GameData.getBlockRegistry().getRaw(saplingString);
+				Block sapling = GameData.getBlockRegistry().getRaw(GameData.getBlockRegistry().getId(new ResourceLocation(saplingString)));
 				if (sapling == null || sapling == Blocks.air) {
 					throw new RuntimeException("can't find block for " + saplingString);
 				}
@@ -209,7 +215,7 @@ public class PluginFarming extends ForestryPlugin {
 				if (windfallString == null) {
 					farmables.add(new FarmableGenericSapling(sapling, saplingMeta));
 				} else {
-					Item windfall = GameData.getItemRegistry().getRaw(windfallString);
+					Item windfall = GameData.getItemRegistry().getRaw(GameData.getItemRegistry().getId(new ResourceLocation(windfallString)));
 					if (windfall == null) {
 						throw new RuntimeException("can't find item for " + windfallString);
 					}
@@ -244,11 +250,11 @@ public class PluginFarming extends ForestryPlugin {
 			}
 
 			try {
-				Item seed = GameData.getItemRegistry().getRaw(items[0]);
+				Item seed = GameData.getItemRegistry().getRaw(GameData.getItemRegistry().getId(new ResourceLocation(items[0])));
 				if (seed == null) {
 					throw new RuntimeException("can't find item for " + items[0]);
 				}
-				Block crop = GameData.getBlockRegistry().getRaw(items[2]);
+				Block crop = GameData.getBlockRegistry().getRaw(GameData.getBlockRegistry().getId(new ResourceLocation(items[2])));
 				if (crop == null || crop == Blocks.air) {
 					throw new RuntimeException("can't find block for " + items[2]);
 				}
@@ -270,11 +276,11 @@ public class PluginFarming extends ForestryPlugin {
 	@Override
 	protected void registerRecipes() {
 
-		ItemStack basic = blocks.farm.get(BlockFarmType.BASIC, 1);
-		ItemStack gearbox = blocks.farm.get(BlockFarmType.GEARBOX, 1);
-		ItemStack hatch = blocks.farm.get(BlockFarmType.HATCH, 1);
-		ItemStack valve = blocks.farm.get(BlockFarmType.VALVE, 1);
-		ItemStack control = blocks.farm.get(BlockFarmType.CONTROL, 1);
+		ItemStack basic = blocks.farm.get(EnumBlockFarmType.BASIC, 1);
+		ItemStack gearbox = blocks.farm.get(EnumBlockFarmType.GEARBOX, 1);
+		ItemStack hatch = blocks.farm.get(EnumBlockFarmType.HATCH, 1);
+		ItemStack valve = blocks.farm.get(EnumBlockFarmType.VALVE, 1);
+		ItemStack control = blocks.farm.get(EnumBlockFarmType.CONTROL, 1);
 
 		for (EnumFarmBlockTexture block : EnumFarmBlockTexture.values()) {
 			NBTTagCompound compound = new NBTTagCompound();
@@ -342,5 +348,11 @@ public class PluginFarming extends ForestryPlugin {
 		ChipsetManager.solderManager.addRecipe(layoutManual, PluginCore.items.tubes.get(EnumElectronTube.OBSIDIAN, 1), Circuit.farmGourdManual);
 		ChipsetManager.solderManager.addRecipe(layoutManual, PluginCore.items.tubes.get(EnumElectronTube.APATITE, 1), Circuit.farmShroomManual);
 		ChipsetManager.solderManager.addRecipe(layoutManual, PluginCore.items.tubes.get(EnumElectronTube.LAPIS, 1), Circuit.farmCocoaManual);
+	}
+	
+	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
+	public void handleTextureRemap(TextureStitchEvent.Pre event) {
+		EnumFarmBlockTexture.registerSprites();
 	}
 }

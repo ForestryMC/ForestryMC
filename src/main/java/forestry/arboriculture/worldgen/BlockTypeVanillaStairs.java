@@ -11,8 +11,7 @@
 package forestry.arboriculture.worldgen;
 
 import net.minecraft.init.Blocks;
-
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 import forestry.core.worldgen.BlockType;
 
@@ -22,7 +21,7 @@ public class BlockTypeVanillaStairs extends BlockType {
 	}
 
 	@Override
-	public void setDirection(ForgeDirection facing) {
+	public void setDirection(EnumFacing facing) {
 		switch (facing) {
 			case NORTH:
 				meta = 3;

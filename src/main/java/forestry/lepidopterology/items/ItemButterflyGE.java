@@ -13,19 +13,16 @@ package forestry.lepidopterology.items;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
+import forestry.api.core.IModelManager;
 import forestry.api.core.Tabs;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleSpecies;
@@ -38,7 +35,6 @@ import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
 import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
 import forestry.core.utils.EntityUtil;
 import forestry.lepidopterology.entities.EntityButterfly;
 import forestry.lepidopterology.genetics.ButterflyGenome;
@@ -158,67 +154,40 @@ public class ItemButterflyGE extends ItemGE {
 	@Override
 	public int getColourFromSpecies(IAlleleSpecies species, int renderPass) {
 		if (species != null) {
-			return species.getIconColour(renderPass);
+			return species.getSpriteColour(renderPass);
 		} else {
 			return 0xffffff;
 		}
 
 	}
 
+	/* MODELS */
 	@Override
-	public boolean requiresMultipleRenderPasses() {
-		return true;
-	}
-
-	@Override
-	public int getRenderPasses(int metadata) {
-		return 2;
-	}
-
-	/* ICONS */
-	@SideOnly(Side.CLIENT)
-	private IIcon[] icons;
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerIcons(IIconRegister register) {
-		icons = new IIcon[2];
+	public void registerModel(Item item, IModelManager manager) {
 		switch (this.type) {
-			case CATERPILLAR:
-				icons[0] = TextureManager.registerTex(register, "caterpillar.body");
-				icons[1] = TextureManager.registerTex(register, "caterpillar.body2");
-				break;
-			default:
-				icons[0] = TextureManager.registerTex(register, "liquids/jar.contents");
-				icons[1] = TextureManager.registerTex(register, "liquids/jar.bottle");
+		case CATERPILLAR:
+			manager.registerItemModel(item, 0, "caterpillar");
+			break;
+		default:
+			manager.registerItemModel(item, 0, "liquids/jar");
 		}
 	}
-
-	@SideOnly(Side.CLIENT)
+	
 	@Override
-	public IIcon getIconFromDamageForRenderPass(int i, int j) {
-		if (j > 0) {
-			return icons[1];
-		} else {
-			return icons[0];
-		}
-	}
-
-	@Override
-	public boolean onItemUse(ItemStack itemstack, EntityPlayer player, World world, int x, int y, int z, int par7, float facingX, float facingY, float facingZ) {
+	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
 
 		if (world.isRemote) {
 			return false;
 		}
 
-		IButterfly flutter = ButterflyManager.butterflyRoot.getMember(itemstack);
+		IButterfly flutter = ButterflyManager.butterflyRoot.getMember(stack);
 		if (flutter == null) {
 			return false;
 		}
 
 		if (type == EnumFlutterType.CATERPILLAR) {
 
-			TileEntity target = world.getTileEntity(x, y, z);
+			TileEntity target = world.getTileEntity(pos);
 			if (!(target instanceof IButterflyNursery)) {
 				return false;
 			}
@@ -229,10 +198,10 @@ public class ItemButterflyGE extends ItemGE {
 			}
 
 			pollinatable.setCaterpillar(flutter);
-			Proxies.common.sendFXSignal(PacketFXSignal.VisualFXType.BLOCK_DESTROY, PacketFXSignal.SoundFXType.LEAF, world, x, y, z,
-					world.getBlock(x, y, z), 0);
+			Proxies.common.sendFXSignal(PacketFXSignal.VisualFXType.BLOCK_DESTROY, PacketFXSignal.SoundFXType.LEAF, world, pos,
+					world.getBlockState(pos));
 			if (!player.capabilities.isCreativeMode) {
-				itemstack.stackSize--;
+				stack.stackSize--;
 			}
 			return true;
 
@@ -240,6 +209,5 @@ public class ItemButterflyGE extends ItemGE {
 			return false;
 		}
 	}
-
 
 }

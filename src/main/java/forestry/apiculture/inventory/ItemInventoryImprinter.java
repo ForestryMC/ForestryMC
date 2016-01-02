@@ -13,7 +13,8 @@ package forestry.apiculture.inventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.IChatComponent;
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IBee;
@@ -122,9 +123,14 @@ public class ItemInventoryImprinter extends ItemInventory {
 		setInventorySlotContents(imprintedSlot, specimen);
 		setInventorySlotContents(specimenSlot, null);
 	}
-
+	
 	@Override
-	public String getInventoryName() {
+	public IChatComponent getDisplayName() {
+		return new ChatComponentText("Imprinter");
+	}
+	
+	@Override
+	public String getCommandSenderName() {
 		return "Imprinter";
 	}
 

@@ -10,28 +10,30 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
+import java.util.Locale;
+
 import javax.annotation.Nullable;
 
 import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.IBlockRenderer;
 import forestry.core.tiles.TileAnalyzer;
 import forestry.core.tiles.TileEscritoire;
 import forestry.core.tiles.TileForestry;
 import forestry.plugins.PluginApiculture;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 
 public enum BlockCoreType implements IMachinePropertiesTESR {
 	ANALYZER(TileAnalyzer.class, "Analyzer") {
 		@Nullable
 		@Override
-		public IBlockRenderer getRenderer() {
+		public TileEntitySpecialRenderer getRenderer() {
 			return PluginApiculture.proxy.getRendererAnalyzer(Constants.TEXTURE_PATH_BLOCKS + "/analyzer_");
 		}
 	},
 	ESCRITOIRE(TileEscritoire.class, "Escritoire") {
 		@Nullable
 		@Override
-		public IBlockRenderer getRenderer() {
+		public TileEntitySpecialRenderer getRenderer() {
 			return Proxies.render.getRenderEscritoire();
 		}
 	};
@@ -59,5 +61,10 @@ public enum BlockCoreType implements IMachinePropertiesTESR {
 	@Override
 	public Class<? extends TileForestry> getTeClass() {
 		return teClass;
+	}
+	
+	@Override
+	public String getName() {
+		return name().toLowerCase(Locale.ENGLISH);
 	}
 }

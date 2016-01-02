@@ -33,7 +33,7 @@ public class TileAlvearySieve extends TileAlveary implements IAlvearyComponent.B
 	private final InventoryAlvearySieve inventory;
 
 	public TileAlvearySieve() {
-		super(BlockAlveary.Type.SIEVE);
+		super(BlockAlveary.AlvearyType.SIEVE);
 		this.inventory = new InventoryAlvearySieve(this);
 		this.beeListener = new AlvearySieveBeeListener(inventory);
 	}

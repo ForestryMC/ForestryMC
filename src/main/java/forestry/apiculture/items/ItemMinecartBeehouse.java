@@ -14,56 +14,69 @@ import java.util.List;
 
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.block.BlockRailBase;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
+import net.minecraft.dispenser.IBehaviorDispenseItem;
+import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemMinecart;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import forestry.api.core.IModelManager;
+import forestry.api.core.IModelRegister;
 import forestry.apiculture.entities.EntityMinecartApiary;
 import forestry.apiculture.entities.EntityMinecartBeeHousingBase;
 import forestry.apiculture.entities.EntityMinecartBeehouse;
-import forestry.core.render.TextureManager;
 
-public class ItemMinecartBeehouse extends ItemMinecart {
+public class ItemMinecartBeehouse extends ItemMinecart implements IModelRegister {
 	private final String[] definition = new String[]{"cart.beehouse", "cart.apiary"};
 
+    private static final IBehaviorDispenseItem dispenserMinecartBehavior = new BehaviorDefaultDispenseItem()
+    {
+        private final BehaviorDefaultDispenseItem behaviourDefaultDispenseItem = new BehaviorDefaultDispenseItem();
+        
+        @Override
+		public ItemStack dispenseStack(IBlockSource source, ItemStack stack)
+        {
+            return stack;
+        }
+    };
+	
 	public ItemMinecartBeehouse() {
-		super(0);
+		super(null);
 		setMaxDamage(0);
 		setHasSubtypes(true);
-		BlockDispenser.dispenseBehaviorRegistry.putObject(this, null);
+		BlockDispenser.dispenseBehaviorRegistry.putObject(this, dispenserMinecartBehavior);
 	}
-
+	
 	@Override
-	public boolean onItemUse(ItemStack itemStack, EntityPlayer player, World world, int x, int y, int z, int side, float facingX, float facingY, float facingZ) {
-		if (!BlockRailBase.func_150051_a(world.getBlock(x, y, z))) {
+	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
+		if (!BlockRailBase.isRailBlock(world.getBlockState(pos))) {
 			return false;
 		}
 
 		if (!world.isRemote) {
 			EntityMinecartBeeHousingBase entityMinecart;
-			if (itemStack.getItemDamage() == 0) {
-				entityMinecart = new EntityMinecartBeehouse(world, (double) ((float) x + 0.5F), (double) ((float) y + 0.5F), (double) ((float) z + 0.5F));
+			if (stack.getItemDamage() == 0) {
+				entityMinecart = new EntityMinecartBeehouse(world, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F);
 			} else {
-				entityMinecart = new EntityMinecartApiary(world, (double) ((float) x + 0.5F), (double) ((float) y + 0.5F), (double) ((float) z + 0.5F));
+				entityMinecart = new EntityMinecartApiary(world, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F);
 			}
 			entityMinecart.setOwner(player.getGameProfile());
 
-			if (itemStack.hasDisplayName()) {
-				entityMinecart.setMinecartName(itemStack.getDisplayName());
+			if (stack.hasDisplayName()) {
+				entityMinecart.setCustomNameTag(stack.getDisplayName());
 			}
 
 			world.spawnEntityInWorld(entityMinecart);
 		}
 
-		--itemStack.stackSize;
+		--stack.stackSize;
 		return true;
 	}
 
@@ -76,25 +89,12 @@ public class ItemMinecartBeehouse extends ItemMinecart {
 		}
 	}
 
-	/* ICONS */
-	@SideOnly(Side.CLIENT)
-	private IIcon[] icons;
-
+	/* MODELS */
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerIcons(IIconRegister register) {
-		icons = new IIcon[definition.length];
+	public void registerModel(Item item, IModelManager manager) {
 		for (int i = 0; i < definition.length; i++) {
-			icons[i] = TextureManager.registerTex(register, definition[i]);
-		}
-	}
-
-	@Override
-	public IIcon getIconFromDamage(int damage) {
-		if (damage >= definition.length || damage < 0) {
-			return icons[0];
-		} else {
-			return icons[damage];
+			manager.registerItemModel(item, i, definition[i]);
 		}
 	}
 

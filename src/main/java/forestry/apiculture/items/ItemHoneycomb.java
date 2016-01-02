@@ -17,12 +17,14 @@ import java.util.Random;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import forestry.api.core.IModelManager;
 import forestry.api.core.Tabs;
 import forestry.core.config.Config;
-import forestry.core.items.ItemForestryMultiPass;
+import forestry.core.items.ItemForestry;
 
-public class ItemHoneycomb extends ItemForestryMultiPass {
+public class ItemHoneycomb extends ItemForestry {
 	public ItemHoneycomb() {
 		super();
 		setMaxDamage(0);
@@ -86,6 +88,14 @@ public class ItemHoneycomb extends ItemForestryMultiPass {
 	public ItemStack getRandomComb(int amount, Random random, boolean includeSecret) {
 		EnumHoneyComb honeyComb = getRandomCombType(random, includeSecret);
 		return get(honeyComb, amount);
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void registerModel(Item item, IModelManager manager) {
+		for (int i = 0; i < EnumHoneyComb.VALUES.length; i++) {
+			manager.registerItemModel(item, i, "beecombs/" + EnumHoneyComb.VALUES[i].name);
+		}
 	}
 
 	public ItemStack get(EnumHoneyComb honeyComb, int amount) {

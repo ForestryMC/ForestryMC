@@ -29,6 +29,7 @@ public class MultiblockLogicAlveary extends MultiblockLogic<IAlvearyControllerIn
 		}
 	}
 
+	@Override
 	public IAlvearyControllerInternal createNewController(World world) {
 		return new AlvearyController(world);
 	}

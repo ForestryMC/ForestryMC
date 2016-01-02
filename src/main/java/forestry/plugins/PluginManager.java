@@ -31,36 +31,19 @@ import net.minecraft.world.chunk.IChunkProvider;
 
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
-
-import cpw.mods.fml.common.IFuelHandler;
-import cpw.mods.fml.common.event.FMLInterModComms;
-import cpw.mods.fml.common.registry.GameRegistry;
-
+import net.minecraftforge.fml.common.IFuelHandler;
+import net.minecraftforge.fml.common.event.FMLInterModComms;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import forestry.Forestry;
 import forestry.api.core.ForestryAPI;
 import forestry.core.IPickupHandler;
 import forestry.core.IResupplyHandler;
 import forestry.core.ISaveEventHandler;
 import forestry.core.utils.Log;
-import forestry.plugins.compat.PluginAgriCraft;
-import forestry.plugins.compat.PluginBiomesOPlenty;
-import forestry.plugins.compat.PluginBuildCraftFuels;
-import forestry.plugins.compat.PluginBuildCraftRecipes;
-import forestry.plugins.compat.PluginBuildCraftStatements;
-import forestry.plugins.compat.PluginBuildCraftTransport;
-import forestry.plugins.compat.PluginChisel;
-import forestry.plugins.compat.PluginEnderIO;
-import forestry.plugins.compat.PluginErebus;
-import forestry.plugins.compat.PluginExtraUtilities;
-import forestry.plugins.compat.PluginGrowthCraft;
-import forestry.plugins.compat.PluginHarvestCraft;
-import forestry.plugins.compat.PluginIC2;
-import forestry.plugins.compat.PluginImmersiveEngineering;
-import forestry.plugins.compat.PluginMagicalCrops;
-import forestry.plugins.compat.PluginNatura;
-import forestry.plugins.compat.PluginPlantMegaPack;
-import forestry.plugins.compat.PluginRotaryCraft;
-import forestry.plugins.compat.PluginWitchery;
+import forestry.plugins.compat.deprecated.PluginBuildCraftFuels;
+import forestry.plugins.compat.deprecated.PluginBuildCraftRecipes;
+import forestry.plugins.compat.deprecated.PluginBuildCraftStatements;
+import forestry.plugins.compat.deprecated.PluginBuildCraftTransport;
 
 public class PluginManager {
 
@@ -104,7 +87,7 @@ public class PluginManager {
 		BUILDCRAFT_STATEMENTS(new PluginBuildCraftStatements()),
 		BUILDCRAFT_TRANSPORT(new PluginBuildCraftTransport()),
 		
-		AGRICRAFT(new PluginAgriCraft()),
+		/*AGRICRAFT(new PluginAgriCraft()),
 		BIOMESOPLENTY(new PluginBiomesOPlenty()),
 		CHISEL(new PluginChisel()),
 		ENDERIO(new PluginEnderIO()),
@@ -118,7 +101,7 @@ public class PluginManager {
 		NATURA(new PluginNatura()),
 		PLANTMEGAPACK(new PluginPlantMegaPack()),
 		ROTARYCRAFT(new PluginRotaryCraft()),
-		WITCHERY(new PluginWitchery());
+		WITCHERY(new PluginWitchery())*/;
 
 		static {
 			ForestryAPI.enabledPlugins = new HashSet<>();

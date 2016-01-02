@@ -11,7 +11,7 @@
 package forestry.core.inventory;
 
 import net.minecraft.item.ItemStack;
-
+import net.minecraft.util.EnumFacing;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.tiles.TileNaturalistChest;
 
@@ -29,7 +29,7 @@ public class InventoryNaturalistChest extends InventoryAdapterTile<TileNaturalis
 	}
 
 	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack stack, int side) {
+	public boolean canExtractItem(int slotIndex, ItemStack stack, EnumFacing side) {
 		return true;
 	}
 }

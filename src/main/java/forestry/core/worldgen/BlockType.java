@@ -11,10 +11,9 @@
 package forestry.core.worldgen;
 
 import net.minecraft.block.Block;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
 import forestry.core.config.Constants;
 
 public class BlockType implements IBlockType {
@@ -27,12 +26,12 @@ public class BlockType implements IBlockType {
 	}
 
 	@Override
-	public void setDirection(ForgeDirection facing) {
+	public void setDirection(EnumFacing facing) {
 
 	}
 
 	@Override
-	public void setBlock(World world, int x, int y, int z) {
-		world.setBlock(x, y, z, block, meta, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
+	public void setBlock(World world, BlockPos pos) {
+		world.setBlockState(pos, block.getStateFromMeta(meta), Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
 	}
 }

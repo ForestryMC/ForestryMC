@@ -16,11 +16,8 @@ import java.util.Collections;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.tileentity.TileEntity;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
-import cpw.mods.fml.common.Optional;
-
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fml.common.Optional;
 import forestry.api.multiblock.IFarmComponent;
 import forestry.core.inventory.AdjacentInventoryCache;
 import forestry.core.tiles.AdjacentTileCache;
@@ -35,7 +32,7 @@ import buildcraft.api.statements.ITriggerProvider;
 @Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = "BuildCraftAPI|statements")
 public class TileFarmHatch extends TileFarm implements ISidedInventory, IFarmComponent.Active, ITriggerProvider {
 
-	private static final ForgeDirection[] dumpDirections = new ForgeDirection[]{ForgeDirection.DOWN};
+	private static final EnumFacing[] dumpDirections = new EnumFacing[]{EnumFacing.DOWN};
 
 	private final AdjacentTileCache tileCache;
 	private final AdjacentInventoryCache inventoryCache;
@@ -45,7 +42,7 @@ public class TileFarmHatch extends TileFarm implements ISidedInventory, IFarmCom
 		this.inventoryCache = new AdjacentInventoryCache(this, tileCache, new AdjacentInventoryCache.ITileFilter() {
 			@Override
 			public boolean matches(TileEntity tile) {
-				return !(tile instanceof TileFarm) && tile.yCoord < yCoord;
+				return !(tile instanceof TileFarm) && tile.getPos().getY() < getPos().getY();
 			}
 		});
 	}
@@ -80,7 +77,7 @@ public class TileFarmHatch extends TileFarm implements ISidedInventory, IFarmCom
 	/* ITRIGGERPROVIDER */
 	@Optional.Method(modid = "BuildCraftAPI|statements")
 	@Override
-	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
+	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
 		if (!getMultiblockLogic().isConnected()) {
 			return Collections.emptyList();
 		}

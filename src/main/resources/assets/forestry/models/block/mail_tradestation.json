@@ -1,0 +1,12 @@
+{
+    "parent": "block/cube",
+    "textures": {
+        "particle": "forestry:blocks/tradestation.4",
+        "down": "forestry:blocks/tradestation.0",
+        "up": "forestry:blocks/tradestation.1",
+        "north": "forestry:blocks/tradestation.3",
+        "east": "forestry:blocks/tradestation.4",
+        "south": "forestry:blocks/tradestation.2",
+        "west": "forestry:blocks/tradestation.4"
+    }
+}

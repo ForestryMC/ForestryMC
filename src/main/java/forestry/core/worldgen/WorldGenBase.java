@@ -12,10 +12,10 @@ package forestry.core.worldgen;
 
 import java.util.Random;
 
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
-
-import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.arboriculture.worldgen.ITreeBlockType;
 
@@ -42,37 +42,37 @@ public abstract class WorldGenBase extends WorldGenerator {
 			return Math.sqrt(Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2) + Math.pow(a.z - b.z, 2));
 		}
 
-		public static ForgeDirection direction(Vector a, Vector b) {
+		public static EnumFacing direction(Vector a, Vector b) {
 			int x = (int) Math.abs(a.x - b.x);
 			int y = (int) Math.abs(a.y - b.y);
 			int z = (int) Math.abs(a.z - b.z);
 			int max = Math.max(x, Math.max(y, z));
 			if (max == x) {
-				return ForgeDirection.EAST;
+				return EnumFacing.EAST;
 			} else if (max == z) {
-				return ForgeDirection.SOUTH;
+				return EnumFacing.SOUTH;
 			} else {
-				return ForgeDirection.UP;
+				return EnumFacing.UP;
 			}
 		}
 	}
-
+	
 	@Override
-	public final boolean generate(World world, Random random, int x, int y, int z) {
-		return generate(world, x, y, z, false);
+	public boolean generate(World worldIn, Random rand, BlockPos position) {
+		return generate(worldIn, position, false);
 	}
 
-	public boolean generate(World world, int x, int y, int z, boolean forced) {
+	public boolean generate(World world, BlockPos pos, boolean forced) {
 		return false;
 	}
 
-	protected abstract boolean addBlock(World world, int x, int y, int z, ITreeBlockType type, EnumReplaceMode replace);
+	protected abstract boolean addBlock(World world, BlockPos pos, ITreeBlockType type, EnumReplaceMode replace);
 
 	protected final void generateCuboid(World world, Vector start, Vector area, ITreeBlockType block, EnumReplaceMode replace) {
 		for (int x = (int) start.x; x < (int) start.x + area.x; x++) {
 			for (int y = (int) start.y; y < (int) start.y + area.y; y++) {
 				for (int z = (int) start.z; z < (int) start.z + area.z; z++) {
-					addBlock(world, x, y, z, block, replace);
+					addBlock(world, new BlockPos(x, y, z), block, replace);
 				}
 			}
 		}
@@ -90,9 +90,9 @@ public abstract class WorldGenBase extends WorldGenerator {
 					Vector position = new Vector(x, y, z);
 					Vector treeCenter = new Vector(center.x, y, center.z);
 					if (Vector.distance(position, treeCenter) <= (radius) + 0.01) {
-						ForgeDirection direction = Vector.direction(position, treeCenter);
+						EnumFacing direction = Vector.direction(position, treeCenter);
 						block.setDirection(direction);
-						addBlock(world, x, y, z, block, replace);
+						addBlock(world, new BlockPos(x, y, z), block, replace);
 					}
 				}
 			}
@@ -117,7 +117,7 @@ public abstract class WorldGenBase extends WorldGenerator {
 
 					double distance = Vector.distance(new Vector(x, y, z), new Vector(center.x, y, center.z));
 					if ((radius - width - 0.01 < distance && distance <= (radius) + 0.01)) {
-						addBlock(world, x, y, z, block, replace);
+						addBlock(world, new BlockPos(x, y, z), block, replace);
 					}
 				}
 			}
@@ -131,7 +131,7 @@ public abstract class WorldGenBase extends WorldGenerator {
 			for (int y = (int) start.y; y < (int) start.y + area.y; y++) {
 				for (int z = (int) start.z; z < (int) start.z + area.z; z++) {
 					if (Vector.distance(new Vector(x, y, z), new Vector(center.x, center.y, center.z)) <= (radius) + 0.01) {
-						addBlock(world, x, y, z, block, replace);
+						addBlock(world, new BlockPos(x, y, z), block, replace);
 					}
 				}
 			}

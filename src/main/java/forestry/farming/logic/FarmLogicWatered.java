@@ -17,6 +17,7 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fluids.FluidStack;
@@ -24,10 +25,9 @@ import net.minecraftforge.fluids.FluidStack;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmHousing;
 import forestry.core.fluids.Fluids;
+import forestry.core.utils.BlockPosUtil;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.vect.Vect;
-import forestry.core.utils.vect.VectUtil;
 import forestry.farming.FarmHelper;
 
 public abstract class FarmLogicWatered extends FarmLogic {
@@ -72,17 +72,17 @@ public abstract class FarmLogicWatered extends FarmLogic {
 	}
 
 	@Override
-	public boolean cultivate(int x, int y, int z, FarmDirection direction, int extent) {
+	public boolean cultivate(BlockPos pos, FarmDirection direction, int extent) {
 
-		if (maintainSoil(x, y, z, direction, extent)) {
+		if (maintainSoil(pos.getX(), pos.getY(), pos.getZ(), direction, extent)) {
 			return true;
 		}
 
-		if (!isManual && maintainWater(x, y, z, direction, extent)) {
+		if (!isManual && maintainWater(pos.getX(), pos.getY(), pos.getZ(), direction, extent)) {
 			return true;
 		}
 
-		if (maintainCrops(x, y + 1, z, direction, extent)) {
+		if (maintainCrops(pos.getX(), pos.getY() + 1, pos.getZ(), direction, extent)) {
 			return true;
 		}
 
@@ -95,16 +95,16 @@ public abstract class FarmLogicWatered extends FarmLogic {
 		ItemStack[] resources = new ItemStack[]{resource};
 
 		for (int i = 0; i < extent; i++) {
-			Vect position = translateWithOffset(x, y, z, direction, i);
-			Block soil = VectUtil.getBlock(world, position);
+			BlockPos position = translateWithOffset(x, y, z, direction, i);
+			Block soil = BlockPosUtil.getBlock(world, position);
 
-			ItemStack soilStack = VectUtil.getAsItemStack(world, position);
+			ItemStack soilStack = BlockPosUtil.getAsItemStack(world, position);
 			if (isAcceptedGround(soilStack) || !housing.getFarmInventory().hasResources(resources)) {
 				continue;
 			}
 
-			Vect platformPosition = position.add(0, -1, 0);
-			Block platformBlock = VectUtil.getBlock(world, platformPosition);
+			BlockPos platformPosition = position.add(0, -1, 0);
+			Block platformBlock = BlockPosUtil.getBlock(world, platformPosition);
 			if (!FarmHelper.bricks.contains(platformBlock)) {
 				break;
 			}
@@ -133,10 +133,10 @@ public abstract class FarmLogicWatered extends FarmLogic {
 		// Still not done, check water then
 		World world = getWorld();
 		for (int i = 0; i < extent; i++) {
-			Vect position = translateWithOffset(x, y, z, direction, i);
+			BlockPos position = translateWithOffset(x, y, z, direction, i);
 
-			Vect platformPosition = position.add(0, -1, 0);
-			Block platformBlock = VectUtil.getBlock(world, platformPosition);
+			BlockPos platformPosition = position.add(0, -1, 0);
+			Block platformBlock = BlockPosUtil.getBlock(world, platformPosition);
 			if (!FarmHelper.bricks.contains(platformBlock)) {
 				break;
 			}
@@ -153,7 +153,7 @@ public abstract class FarmLogicWatered extends FarmLogic {
 		return false;
 	}
 
-	private boolean trySetSoil(Vect position) {
+	private boolean trySetSoil(BlockPos position) {
 		ItemStack[] resources = new ItemStack[]{resource};
 		if (!housing.getFarmInventory().hasResources(resources)) {
 			return false;
@@ -163,7 +163,7 @@ public abstract class FarmLogicWatered extends FarmLogic {
 		return true;
 	}
 
-	private boolean trySetWater(World world, Vect position) {
+	private boolean trySetWater(World world, BlockPos position) {
 		if (isWaterSourceBlock(world, position) || !canPlaceWater(world, position)) {
 			return false;
 		}
@@ -178,11 +178,11 @@ public abstract class FarmLogicWatered extends FarmLogic {
 		return true;
 	}
 
-	private boolean canPlaceWater(World world, Vect position) {
+	private boolean canPlaceWater(World world, BlockPos position) {
 		// don't place water close to other water
 		for (int x = -2; x <= 2; x++) {
 			for (int z = -2; z <= 2; z++) {
-				Vect offsetPosition = position.add(x, 0, z);
+				BlockPos offsetPosition = position.add(x, 0, z);
 				if (isWaterSourceBlock(world, offsetPosition)) {
 					return false;
 				}
@@ -191,14 +191,14 @@ public abstract class FarmLogicWatered extends FarmLogic {
 
 		// don't place water if it can flow into blocks next to it
 		for (int x = -1; x <= 1; x++) {
-			Vect offsetPosition = position.add(x, 0, 0);
-			if (VectUtil.isAirBlock(world, offsetPosition)) {
+			BlockPos offsetPosition = position.add(x, 0, 0);
+			if (BlockPosUtil.isAirBlock(world, offsetPosition)) {
 				return false;
 			}
 		}
 		for (int z = -1; z <= 1; z++) {
-			Vect offsetPosition = position.add(0, 0, z);
-			if (VectUtil.isAirBlock(world, offsetPosition)) {
+			BlockPos offsetPosition = position.add(0, 0, z);
+			if (BlockPosUtil.isAirBlock(world, offsetPosition)) {
 				return false;
 			}
 		}

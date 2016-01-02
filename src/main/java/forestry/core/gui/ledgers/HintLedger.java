@@ -36,7 +36,7 @@ public class HintLedger extends Ledger {
 		hintTooltip = StringUtil.localize("hints." + hint + ".tag");
 
 		Minecraft minecraft = Proxies.common.getClientInstance();
-		FontRenderer fontRenderer = minecraft.fontRenderer;
+		FontRenderer fontRenderer = minecraft.fontRendererObj;
 		int lineCount = fontRenderer.listFormattedStringToWidth(hintString, maxTextWidth).size();
 		maxHeight = (lineCount + 1) * fontRenderer.FONT_HEIGHT + 20;
 	}
@@ -48,7 +48,7 @@ public class HintLedger extends Ledger {
 		drawBackground(x, y);
 
 		// Draw icon
-		drawIcon(TextureManager.getInstance().getDefault("misc/hint"), x + 3, y + 4);
+		drawSprite(TextureManager.getInstance().getDefault("misc/hint"), x + 3, y + 4);
 
 		if (!isFullyOpened()) {
 			return;

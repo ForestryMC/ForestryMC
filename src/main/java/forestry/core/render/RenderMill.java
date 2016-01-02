@@ -14,16 +14,15 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-
-import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileMill;
 
-public class RenderMill extends TileEntitySpecialRenderer implements IBlockRenderer {
+public class RenderMill extends TileEntitySpecialRenderer {
 
 	private final ModelBase model = new ModelBase() {
 	};
@@ -89,20 +88,19 @@ public class RenderMill extends TileEntitySpecialRenderer implements IBlockRende
 	public RenderMill(String baseTexture, byte charges) {
 		this(baseTexture);
 	}
-
+	
 	@Override
-	public void inventoryRender(double x, double y, double z) {
-		byte charge = 0;
-		render(0.0f, charge, ForgeDirection.WEST, x, y, z);
+	public void renderTileEntityAt(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage) {
+		if(te == null){
+			byte charge = 0;
+			render(0.0f, charge, EnumFacing.WEST, x, y, z);
+		}else{
+			TileMill tile = (TileMill) te;
+			render(tile.progress, tile.charge, EnumFacing.WEST, x, y, z);
+		}
 	}
 
-	@Override
-	public void renderTileEntityAt(TileEntity tileentity, double d, double d1, double d2, float f) {
-		TileMill tile = (TileMill) tileentity;
-		render(tile.progress, tile.charge, ForgeDirection.WEST, d, d1, d2);
-	}
-
-	private void render(float progress, int charge, ForgeDirection orientation, double x, double y, double z) {
+	private void render(float progress, int charge, EnumFacing orientation, double x, double y, double z) {
 
 		GL11.glPushMatrix();
 
@@ -121,7 +119,7 @@ public class RenderMill extends TileEntitySpecialRenderer implements IBlockRende
 		float tfactor = step / 16;
 
 		if (orientation == null) {
-			orientation = ForgeDirection.WEST;
+			orientation = EnumFacing.WEST;
 		}
 		switch (orientation) {
 			case EAST:

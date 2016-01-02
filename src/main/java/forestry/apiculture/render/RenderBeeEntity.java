@@ -10,8 +10,10 @@
  ******************************************************************************/
 package forestry.apiculture.render;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.ResourceLocation;
 
 import forestry.apiculture.entities.EntityBee;
@@ -21,7 +23,7 @@ public class RenderBeeEntity extends RenderLiving {
 	private final ModelBee beeModel;
 
 	public RenderBeeEntity() {
-		super(new ModelBee(), 0.15f);
+		super(Minecraft.getMinecraft().getRenderManager(), new ModelBee(), 0.15f);
 		beeModel = (ModelBee) mainModel;
 	}
 
@@ -29,10 +31,10 @@ public class RenderBeeEntity extends RenderLiving {
 		beeModel.setType(entity.getType());
 		this.doRender(entity, posX, posY, posZ, par8, par9);
 	}
-
+	
 	@Override
-	public void doRender(Entity entity, double posX, double posY, double posZ, float par8, float par9) {
-		renderBee((EntityBee) entity, posX, posY, posZ, par8, par9);
+	public void doRender(EntityLiving entity, double posX, double posY, double posZ, float entityYaw, float partialTicks) {
+		renderBee((EntityBee) entity, posX, posY, posZ, entityYaw, partialTicks);
 	}
 
 	@Override

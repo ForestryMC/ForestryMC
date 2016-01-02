@@ -19,8 +19,7 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.InventoryCraftResult;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
@@ -242,7 +241,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 
 	// IFLUIDCONTAINER IMPLEMENTATION
 	@Override
-	public int fill(ForgeDirection direction, FluidStack resource, boolean doFill) {
+	public int fill(EnumFacing direction, FluidStack resource, boolean doFill) {
 		return tankManager.fill(direction, resource, doFill);
 	}
 
@@ -252,27 +251,27 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 	}
 
 	@Override
-	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+	public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
 		return tankManager.drain(from, resource, doDrain);
 	}
 
 	@Override
-	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+	public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
 		return tankManager.drain(from, maxDrain, doDrain);
 	}
 
 	@Override
-	public boolean canFill(ForgeDirection from, Fluid fluid) {
+	public boolean canFill(EnumFacing from, Fluid fluid) {
 		return tankManager.canFill(from, fluid);
 	}
 
 	@Override
-	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+	public boolean canDrain(EnumFacing from, Fluid fluid) {
 		return tankManager.canDrain(from, fluid);
 	}
 
 	@Override
-	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+	public FluidTankInfo[] getTankInfo(EnumFacing from) {
 		return tankManager.getTankInfo(from);
 	}
 

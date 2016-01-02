@@ -10,11 +10,11 @@
  ******************************************************************************/
 package forestry.apiculture.proxy;
 
-import forestry.core.render.IBlockRenderer;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 
 public class ProxyApiculture {
 
-	public IBlockRenderer getRendererAnalyzer(String string) {
+	public TileEntitySpecialRenderer getRendererAnalyzer(String string) {
 		return null;
 	}
 

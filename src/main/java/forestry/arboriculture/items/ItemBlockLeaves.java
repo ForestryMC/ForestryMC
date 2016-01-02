@@ -11,8 +11,11 @@
 package forestry.arboriculture.items;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
@@ -62,16 +65,16 @@ public class ItemBlockLeaves extends ItemBlockForestry {
 
 		return tileLeaves.getFoliageColour(Proxies.common.getPlayer());
 	}
-
+	
 	@Override
-	public boolean placeBlockAt(ItemStack itemStack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int metadata) {
-		if (!itemStack.hasTagCompound()) {
+	public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState) {
+		if (!stack.hasTagCompound()) {
 			return false;
 		}
 
 		TileLeaves tileLeaves = new TileLeaves();
-		tileLeaves.readFromNBT(itemStack.getTagCompound());
-		tileLeaves.getTree().setLeavesDecorative(world, player.getGameProfile(), x, y, z);
+		tileLeaves.readFromNBT(stack.getTagCompound());
+		tileLeaves.getTree().setLeavesDecorative(world, player.getGameProfile(), pos);
 
 		return true;
 	}

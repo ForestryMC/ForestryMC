@@ -1,0 +1,8 @@
+{
+  "parent": "forestry:block/arboriculture/planks/teak",
+  "textures": {
+    "side": "forestry:blocks/wood/planks.teak",
+    "top": "forestry:blocks/wood/planks.teak",
+    "bottom": "forestry:blocks/wood/planks.teak"
+  }
+}

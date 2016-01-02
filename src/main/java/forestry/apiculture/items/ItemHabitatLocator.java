@@ -12,7 +12,6 @@ package forestry.apiculture.items;
 
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.Entity;
@@ -20,10 +19,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.Tabs;
@@ -59,21 +56,21 @@ public class ItemHabitatLocator extends ItemWithGui {
 
 	/* TEXTURES */
 	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerIcons(IIconRegister register) {
-		if (register instanceof TextureMap) {
-			TextureAtlasSprite texture = new TextureHabitatLocator(iconName);
-			((TextureMap) register).setTextureEntry(iconName, texture);
-			itemIcon = texture;
-		}
+	public static TextureAtlasSprite sprite;
+
+	@SideOnly(Side.CLIENT)
+	public static void registerIcon(TextureMap map) {
+		TextureAtlasSprite texture = new TextureHabitatLocator(iconName);
+		map.setTextureEntry("forestry:biomefinder", texture);
+		sprite = texture;
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean flag) {
-		BiomeGenBase currentBiome = player.worldObj.getBiomeGenForCoords((int) player.posX, (int) player.posZ);
+		BiomeGenBase currentBiome = player.worldObj.getBiomeGenForCoords(player.getPosition());
 
-		float temperatureValue = currentBiome.getFloatTemperature((int) player.posX, (int) player.posY, (int) player.posZ);
+		float temperatureValue = currentBiome.getFloatTemperature(player.getPosition());
 		EnumTemperature temperature = EnumTemperature.getFromValue(temperatureValue);
 		EnumHumidity humidity = EnumHumidity.getFromValue(currentBiome.rainfall);
 

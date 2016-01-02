@@ -17,7 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-
+import net.minecraft.util.IChatComponent;
 import forestry.api.mail.ILetter;
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.IStamps;
@@ -279,10 +279,15 @@ public class Letter implements ILetter {
 	public void setInventorySlotContents(int var1, ItemStack var2) {
 		inventory.setInventorySlotContents(var1, var2);
 	}
-
+	
 	@Override
-	public String getInventoryName() {
-		return inventory.getInventoryName();
+	public String getCommandSenderName() {
+		return inventory.getCommandSenderName();
+	}
+	
+	@Override
+	public IChatComponent getDisplayName() {
+		return inventory.getDisplayName();
 	}
 
 	@Override
@@ -301,22 +306,42 @@ public class Letter implements ILetter {
 	}
 
 	@Override
-	public void openInventory() {
-		inventory.openInventory();
+	public void openInventory(EntityPlayer player) {
+		inventory.openInventory(player);
 	}
 
 	@Override
-	public void closeInventory() {
-		inventory.closeInventory();
+	public void closeInventory(EntityPlayer player) {
+		inventory.closeInventory(player);
 	}
-
+	
 	@Override
-	public boolean hasCustomInventoryName() {
-		return inventory.hasCustomInventoryName();
+	public boolean hasCustomName() {
+		return inventory.hasCustomName();
 	}
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		return inventory.isItemValidForSlot(i, itemstack);
+	}
+
+	@Override
+	public int getField(int id) {
+		return inventory.getField(id);
+	}
+
+	@Override
+	public void setField(int id, int value) {
+		inventory.setField(id, value);
+	}
+
+	@Override
+	public int getFieldCount() {
+		return inventory.getFieldCount();
+	}
+
+	@Override
+	public void clear() {
+		inventory.clear();
 	}
 }

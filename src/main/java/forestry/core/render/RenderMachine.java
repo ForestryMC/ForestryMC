@@ -18,16 +18,15 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-
-import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.IRenderableTile;
 
-public class RenderMachine extends TileEntitySpecialRenderer implements IBlockRenderer {
+public class RenderMachine extends TileEntitySpecialRenderer {
 
 	private final ModelRenderer basefront;
 	private final ModelRenderer baseback;
@@ -83,26 +82,25 @@ public class RenderMachine extends TileEntitySpecialRenderer implements IBlockRe
 			texturesTankLevels.put(tankLevel, new ForestryResource("textures/blocks/machine_tank_" + tankLevelString + ".png"));
 		}
 	}
-
+	
 	@Override
-	public void inventoryRender(double x, double y, double z) {
-		render(TankRenderInfo.EMPTY, TankRenderInfo.EMPTY, ForgeDirection.SOUTH, x, y, z);
+	public void renderTileEntityAt(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage) {
+		if(te == null){
+			render(TankRenderInfo.EMPTY, TankRenderInfo.EMPTY, EnumFacing.SOUTH, x, y, z);
+		}else{
+			IRenderableTile generator = (IRenderableTile) te;
+			render(generator.getResourceTankInfo(), generator.getProductTankInfo(), generator.getOrientation(), x, y, z);
+		}
 	}
 
-	@Override
-	public void renderTileEntityAt(TileEntity tileentity, double d, double d1, double d2, float f) {
-		IRenderableTile generator = (IRenderableTile) tileentity;
-		render(generator.getResourceTankInfo(), generator.getProductTankInfo(), generator.getOrientation(), d, d1, d2);
-	}
-
-	private void render(TankRenderInfo resourceTankInfo, TankRenderInfo productTankInfo, ForgeDirection orientation, double x, double y, double z) {
+	private void render(TankRenderInfo resourceTankInfo, TankRenderInfo productTankInfo, EnumFacing orientation, double x, double y, double z) {
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float) x, (float) y, (float) z);
 
 		float[] angle = {0, 0, 0};
 
 		if (orientation == null) {
-			orientation = ForgeDirection.WEST;
+			orientation = EnumFacing.WEST;
 		}
 		switch (orientation) {
 			case EAST:

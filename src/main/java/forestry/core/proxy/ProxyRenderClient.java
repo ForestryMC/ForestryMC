@@ -10,65 +10,53 @@
  ******************************************************************************/
 package forestry.core.proxy;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.EntityExplodeFX;
 import net.minecraft.client.particle.EntityFX;
-import net.minecraft.client.particle.EntitySpellParticleFX;
+import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.renderer.block.statemap.IStateMapper;
+import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.common.registry.VillagerRegistry;
-
+import net.minecraftforge.client.ForgeHooksClient;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.b3d.B3DLoader;
+import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import forestry.apiculture.entities.EntityFXBee;
 import forestry.apiculture.render.ParticleRenderer;
-import forestry.apiculture.render.RenderCandleBlock;
 import forestry.apiculture.render.TextureHabitatLocator;
 import forestry.core.config.Config;
+import forestry.core.config.Constants;
 import forestry.core.entities.EntityFXHoneydust;
 import forestry.core.entities.EntityFXIgnition;
 import forestry.core.entities.EntityFXSnow;
+import forestry.core.fluids.Fluids;
 import forestry.core.render.ForestryResource;
-import forestry.core.render.IBlockRenderer;
-import forestry.core.render.RenderBlock;
 import forestry.core.render.RenderEscritoire;
 import forestry.core.render.RenderMachine;
 import forestry.core.render.RenderMill;
 import forestry.core.render.RenderNaturalistChest;
-import forestry.core.render.SpriteSheet;
 import forestry.core.render.TextureManager;
-import forestry.core.render.TileRendererIndex;
+import forestry.core.render.model.BlockModelIndex;
+import forestry.core.render.model.ModelManager;
+import forestry.core.render.model.RenderHandler;
 import forestry.core.tiles.MachineDefinition;
 
 public class ProxyRenderClient extends ProxyRender {
 
-	private int byBlockModelId;
-	private int candleRenderId;
-
 	@Override
 	public void init() {
-		byBlockModelId = RenderingRegistry.getNextAvailableRenderId();
-		candleRenderId = RenderingRegistry.getNextAvailableRenderId();
-
-		RenderBlock renderHandler = new RenderBlock();
-		RenderingRegistry.registerBlockHandler(byBlockModelId, renderHandler);
-		RenderingRegistry.registerBlockHandler(candleRenderId, new RenderCandleBlock());
-	}
-
-	@Override
-	public int getCandleRenderId() {
-		return candleRenderId;
-	}
-
-	@Override
-	public int getByBlockModelRenderId() {
-		return byBlockModelId;
 	}
 
 	@Override
@@ -83,12 +71,12 @@ public class ProxyRenderClient extends ProxyRender {
 
 	@Override
 	public void registerTESR(MachineDefinition definition) {
-		RenderBlock.byBlockRenderer.put(new TileRendererIndex(definition.getBlock(), definition.getMeta()), definition.renderer);
-		ClientRegistry.bindTileEntitySpecialRenderer(definition.teClass, (TileEntitySpecialRenderer) definition.renderer);
+		ClientRegistry.bindTileEntitySpecialRenderer(definition.teClass, definition.renderer);
+		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(definition.getBlock()), definition.getMeta(), definition.teClass);
 	}
 
 	@Override
-	public IBlockRenderer getRenderDefaultMachine(String gfxBase) {
+	public TileEntitySpecialRenderer getRenderDefaultMachine(String gfxBase) {
 		if (gfxBase == null) {
 			return null;
 		}
@@ -96,23 +84,59 @@ public class ProxyRenderClient extends ProxyRender {
 	}
 
 	@Override
-	public IBlockRenderer getRenderMill(String gfxBase) {
+	public TileEntitySpecialRenderer getRenderMill(String gfxBase) {
 		return new RenderMill(gfxBase);
 	}
 
 	@Override
-	public IBlockRenderer getRenderMill(String gfxBase, byte charges) {
+	public TileEntitySpecialRenderer getRenderMill(String gfxBase, byte charges) {
 		return new RenderMill(gfxBase, charges);
 	}
 
 	@Override
-	public IBlockRenderer getRenderEscritoire() {
+	public TileEntitySpecialRenderer getRenderEscritoire() {
 		return new RenderEscritoire();
 	}
 
 	@Override
-	public IBlockRenderer getRenderChest(String textureName) {
+	public TileEntitySpecialRenderer getRenderChest(String textureName) {
 		return new RenderNaturalistChest(textureName);
+	}
+	
+	@Override
+	public void registerBlockModel(final BlockModelIndex index) {
+		RenderHandler.byBlockModelRenderer.add(index);
+		StateMapperBase ignoreState = new StateMapperBase() {
+			@Override
+			protected ModelResourceLocation getModelResourceLocation(IBlockState iBlockState) {
+				return index.blockModelLocation;
+			}
+		};
+		registerStateMapper(index.block, ignoreState);
+	}
+
+	@Override
+	public void registerFluidStateMapper(Block block, final Fluids forestryFluid) {
+		final ModelResourceLocation fluidLocation = new ModelResourceLocation("forestry:blockforestryfluid",
+				forestryFluid.getTag());
+		StateMapperBase ignoreState = new StateMapperBase() {
+			@Override
+			protected ModelResourceLocation getModelResourceLocation(IBlockState iBlockState) {
+				return fluidLocation;
+			}
+		};
+		registerStateMapper(block, ignoreState);
+		ModelLoader.setCustomMeshDefinition(Item.getItemFromBlock(block), new ItemMeshDefinition() {
+			@Override
+			public ModelResourceLocation getModelLocation(ItemStack stack) {
+				return fluidLocation;
+			}
+		});
+	}
+
+	@Override
+	public void registerStateMapper(Block block, IStateMapper mapper) {
+		ModelLoader.setCustomStateMapper(block, mapper);
 	}
 
 	@Override
@@ -121,7 +145,7 @@ public class ProxyRenderClient extends ProxyRender {
 	}
 
 	@Override
-	public void setHabitatLocatorTexture(Entity player, ChunkCoordinates coordinates) {
+	public void setHabitatLocatorTexture(Entity player, BlockPos coordinates) {
 		TextureHabitatLocator.getInstance().setTargetCoordinates(coordinates);
 	}
 
@@ -134,10 +158,16 @@ public class ProxyRenderClient extends ProxyRender {
 	public void bindTexture(ResourceLocation location) {
 		Proxies.common.getClientInstance().getTextureManager().bindTexture(location);
 	}
+	
+	@Override
+	public void preInitModels() {
+		B3DLoader.instance.addDomain(Constants.MOD);
+		ModelManager.registerStateMappers();
+	}
 
 	@Override
-	public void bindTexture(SpriteSheet spriteSheet) {
-		bindTexture(spriteSheet.getLocation());
+	public void initModels() {
+		ModelManager.registerModels();
 	}
 
 	public static boolean shouldSpawnParticle(World world) {
@@ -188,7 +218,8 @@ public class ProxyRenderClient extends ProxyRender {
 			return;
 		}
 
-		Proxies.common.getClientInstance().effectRenderer.addEffect(new EntityExplodeFX(world, d1, d2, d3, 0, 0, 0));
+		EntityFX entityfx = Proxies.common.getClientInstance().effectRenderer.spawnEffectParticle(EnumParticleTypes.EXPLOSION_NORMAL.getParticleID(), d1, d2, d3, 0, 0, 0);
+		Proxies.common.getClientInstance().effectRenderer.addEffect(entityfx);
 	}
 
 	@Override
@@ -218,8 +249,8 @@ public class ProxyRenderClient extends ProxyRender {
 		float red = (color >> 16 & 255) / 255.0F;
 		float green = (color >> 8 & 255) / 255.0F;
 		float blue = (color & 255) / 255.0F;
-
-		EntityFX entityfx = new EntitySpellParticleFX(world, d1, d2, d3, 0, 0, 0);
+		
+		EntityFX entityfx = Proxies.common.getClientInstance().effectRenderer.spawnEffectParticle(EnumParticleTypes.SPELL.getParticleID(), d1, d2, d3, 0, 0, 0);
 		entityfx.setRBGColorF(red, green, blue);
 
 		Proxies.common.getClientInstance().effectRenderer.addEffect(entityfx);

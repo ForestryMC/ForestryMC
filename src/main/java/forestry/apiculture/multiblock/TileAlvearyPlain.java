@@ -14,12 +14,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChunkCoordinates;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
-import cpw.mods.fml.common.Optional;
-
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fml.common.Optional;
 import forestry.api.multiblock.IMultiblockController;
 import forestry.apiculture.blocks.BlockAlveary;
 import forestry.apiculture.trigger.ApicultureTriggers;
@@ -33,14 +30,14 @@ import buildcraft.api.statements.ITriggerProvider;
 public class TileAlvearyPlain extends TileAlveary implements ITriggerProvider {
 
 	@Override
-	public void onMachineAssembled(IMultiblockController multiblockController, ChunkCoordinates minCoord, ChunkCoordinates maxCoord) {
+	public void onMachineAssembled(IMultiblockController multiblockController, BlockPos minCoord, BlockPos maxCoord) {
 		super.onMachineAssembled(multiblockController, minCoord, maxCoord);
 
 		if (!worldObj.isRemote) {
 			// set alveary entrance block meta
-			if (yCoord == maxCoord.posY) {
-				if ((xCoord > minCoord.posX && xCoord < maxCoord.posX) || (zCoord > minCoord.posZ && zCoord < maxCoord.posZ)) {
-					this.worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, BlockAlveary.Type.ENTRANCE.ordinal(), 2);
+			if (getPos().getX() == maxCoord.getY()) {
+				if ((getPos().getX() > minCoord.getX() && getPos().getX() < maxCoord.getX()) || (getPos().getZ() > minCoord.getZ() && getPos().getZ() < maxCoord.getZ())) {
+					this.worldObj.setBlockState(getPos(), getBlockType().getStateFromMeta(BlockAlveary.AlvearyType.ENTRANCE.ordinal()), 2);
 				}
 			}
 		}
@@ -52,7 +49,7 @@ public class TileAlvearyPlain extends TileAlveary implements ITriggerProvider {
 
 		if (!worldObj.isRemote) {
 			// set alveary entrance block meta back to normal
-			this.worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, BlockAlveary.Type.PLAIN.ordinal(), 2);
+			this.worldObj.setBlockState(getPos(), getBlockType().getStateFromMeta(BlockAlveary.AlvearyType.PLAIN.ordinal()), 2);
 		}
 	}
 
@@ -70,7 +67,7 @@ public class TileAlvearyPlain extends TileAlveary implements ITriggerProvider {
 
 	@Optional.Method(modid = "BuildCraftAPI|statements")
 	@Override
-	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
+	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
 		Collection<ITriggerExternal> res = new ArrayList<>();
 		res.add(ApicultureTriggers.missingQueen);
 		res.add(ApicultureTriggers.missingDrone);

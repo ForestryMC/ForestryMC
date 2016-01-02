@@ -10,11 +10,12 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
+import forestry.api.arboriculture.EnumWoodType;
 import forestry.api.world.ITreeGenData;
 import forestry.arboriculture.items.ItemBlockWood;
 import forestry.core.worldgen.IBlockType;
@@ -29,17 +30,17 @@ public class BlockTypeWood implements IBlockType, ITreeBlockType {
 	}
 
 	@Override
-	public void setBlock(World world, ITreeGenData tree, int x, int y, int z) {
-		setBlock(world, x, y, z);
+	public void setBlock(World world, ITreeGenData tree, BlockPos pos) {
+		setBlock(world, pos);
 	}
 
 	@Override
-	public void setBlock(World world, int x, int y, int z) {
-		ItemBlockWood.placeWood(itemStack, null, world, x, y, z, blockMeta);
+	public void setBlock(World world, BlockPos pos) {
+		ItemBlockWood.placeWood(itemStack, null, world, pos, Block.getBlockFromItem(itemStack.getItem()).getDefaultState().withProperty(EnumWoodType.WOODTYPE, EnumWoodType.values()[blockMeta]));
 	}
 
 	@Override
-	public void setDirection(ForgeDirection facing) {
+	public void setDirection(EnumFacing facing) {
 
 	}
 }

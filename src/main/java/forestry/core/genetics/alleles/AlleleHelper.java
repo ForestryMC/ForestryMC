@@ -27,8 +27,8 @@ import forestry.api.genetics.IChromosomeType;
 import forestry.api.lepidopterology.EnumButterflyChromosome;
 import forestry.apiculture.flowers.FlowerProvider;
 import forestry.core.config.Constants;
-import forestry.core.utils.vect.IVect;
 import forestry.plugins.PluginManager;
+import net.minecraft.util.BlockPos;
 
 public class AlleleHelper implements IAlleleHelper {
 
@@ -196,8 +196,8 @@ public class AlleleHelper implements IAlleleHelper {
 			return AlleleManager.alleleFactory.createFloat(modId, category, name, (Float) value, isDominant, types);
 		} else if (Integer.class.isAssignableFrom(valueClass)) {
 			return AlleleManager.alleleFactory.createInteger(modId, category, name, (Integer) value, isDominant, types);
-		} else if (IVect.class.isAssignableFrom(valueClass)) {
-			IVect area = (IVect) value;
+		} else if (BlockPos.class.isAssignableFrom(valueClass)) {
+			BlockPos area = (BlockPos) value;
 			return AlleleManager.alleleFactory.createArea(modId, category, name, area.getX(), area.getY(), area.getZ(), isDominant, types);
 		} else if (Boolean.class.isAssignableFrom(valueClass)) {
 			return AlleleManager.alleleFactory.createBoolean(modId, category, (Boolean) value, isDominant, types);

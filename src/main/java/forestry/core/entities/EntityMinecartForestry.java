@@ -11,6 +11,7 @@
 package forestry.core.entities;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -64,8 +65,8 @@ public abstract class EntityMinecartForestry extends EntityMinecart implements I
 	}
 
 	@Override
-	public int getMinecartType() {
-		return -1;
+	public EnumMinecartType getMinecartType() {
+		return null;
 	}
 
 	@Override
@@ -85,14 +86,15 @@ public abstract class EntityMinecartForestry extends EntityMinecart implements I
 	public boolean canBeRidden() {
 		return false;
 	}
+	
+	@Override
+	public boolean isPoweredCart() {
+		return false;
+	}
 
 	// cart contents
 	@Override
-	public abstract Block func_145820_n();
-
-	// cart contents meta
-	@Override
-	public abstract int getDisplayTileData();
+	public abstract IBlockState getDisplayTile();
 
 	// cart itemStack
 	@Override
@@ -101,7 +103,8 @@ public abstract class EntityMinecartForestry extends EntityMinecart implements I
 	@Override
 	public void killMinecart(DamageSource damageSource) {
 		super.killMinecart(damageSource);
-		entityDropItem(new ItemStack(func_145820_n(), 1, getDisplayTileData()), 0.0F);
+		Block block = getDisplayTile().getBlock();
+		entityDropItem(new ItemStack(block, 1, block.getMetaFromState(getDisplayTile())), 0.0F);
 	}
 
 	// fix cart contents rendering as black in the End dimension
@@ -131,5 +134,10 @@ public abstract class EntityMinecartForestry extends EntityMinecart implements I
 	@Override
 	public void onSwitchAccess(EnumAccess oldAccess, EnumAccess newAccess) {
 
+	}
+	
+	@Override
+	public int getIdOfEntity() {
+		return getEntityId();
 	}
 }

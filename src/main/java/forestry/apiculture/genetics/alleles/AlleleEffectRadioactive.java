@@ -16,6 +16,7 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
@@ -24,8 +25,8 @@ import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.apiculture.blocks.BlockAlveary;
+import forestry.core.utils.BlockUtil;
 import forestry.core.utils.DamageSourceForestry;
-import forestry.core.utils.vect.Vect;
 
 public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 
@@ -63,44 +64,44 @@ public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 		Random rand = world.rand;
 
 		int[] areaAr = genome.getTerritory();
-		Vect area = new Vect(areaAr).multiply(2);
-		Vect offset = area.multiply(-1 / 2.0f);
-		Vect posHousing = new Vect(housing.getCoordinates());
+		BlockPos area = BlockUtil.multiply(new BlockPos(areaAr[0], areaAr[1], areaAr[2]), 2);
+		BlockPos offset = BlockUtil.multiply(area, -1 / 2.0f);
+		BlockPos posHousing = new BlockPos(housing.getCoordinates());
 
 		for (int i = 0; i < 20; i++) {
-			Vect randomPos = Vect.getRandomPositionInArea(rand, area);
-			Vect posBlock = randomPos.add(posHousing);
+			BlockPos randomPos = BlockUtil.getRandomPositionInArea(rand, area);
+			BlockPos posBlock = randomPos.add(posHousing);
 			posBlock = posBlock.add(offset);
 
-			if (posBlock.y <= 1 || posBlock.y >= housing.getWorld().getActualHeight()) {
+			if (posBlock.getY() <= 1 || posBlock.getY() >= housing.getWorld().getActualHeight()) {
 				continue;
 			}
 
 			// Don't destroy ourselves or blocks below us.
-			if (posBlock.x == posHousing.x && posBlock.z == posHousing.z && posBlock.y <= posHousing.y) {
+			if (posBlock.getX() == posHousing.getX() && posBlock.getZ() == posHousing.getZ() && posBlock.getY() <= posHousing.getY()) {
 				continue;
 			}
 
-			if (world.isAirBlock(posBlock.x, posBlock.y, posBlock.z)) {
+			if (world.isAirBlock(posBlock)) {
 				continue;
 			}
 
-			Block block = world.getBlock(posBlock.x, posBlock.y, posBlock.z);
+			Block block = world.getBlockState(posBlock).getBlock();
 
 			if (block instanceof BlockAlveary) {
 				continue;
 			}
 
-			TileEntity tile = world.getTileEntity(posBlock.x, posBlock.y, posBlock.z);
+			TileEntity tile = world.getTileEntity(posBlock);
 			if (tile instanceof IBeeHousing) {
 				continue;
 			}
 
-			if (block.getBlockHardness(world, posBlock.x, posBlock.y, posBlock.z) < 0) {
+			if (block.getBlockHardness(world, posBlock) < 0) {
 				continue;
 			}
 
-			world.setBlockToAir(posBlock.x, posBlock.y, posBlock.z);
+			world.setBlockToAir(posBlock);
 			break;
 		}
 

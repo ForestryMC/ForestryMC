@@ -14,9 +14,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.util.ResourceLocation;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
 
 import org.lwjgl.opengl.GL11;
 
@@ -50,10 +49,10 @@ public class GuiBetterButton extends GuiButton implements IToolTipProvider {
 		return this;
 	}
 
-	public GuiBetterButton setWidth(int width) {
+	@Override
+	public void setWidth(int width) {
 		this.width = width;
 		useTexWidth = false;
-		return this;
 	}
 
 	public GuiBetterButton setLabel(String label) {
@@ -92,7 +91,7 @@ public class GuiBetterButton extends GuiButton implements IToolTipProvider {
 		if (!visible) {
 			return;
 		}
-		FontRenderer fontrenderer = minecraft.fontRenderer;
+		FontRenderer fontrenderer = minecraft.fontRendererObj;
 		bindButtonTextures(minecraft);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		int xOffset = texture.getX();

@@ -1,9 +1,11 @@
 [submodule "lang"]
 	path = lang
 	url = https://github.com/ForestryMC/Forestry-Localization.git
+    branch = mc-1.8
 [submodule "api/redstoneflux"]
 	path = api/redstoneflux
-	url = https://github.com/CoFH/RedstoneFlux-API.git
+	url = https://github.com/Parker8283/RedstoneFlux-API.git
 [submodule "api/forestry"]
 	path = api/forestry
 	url = https://github.com/ForestryMC/ForestryAPI.git
+    branch = mc-1.8

@@ -13,7 +13,7 @@ package forestry.core.tiles;
 import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
-
+import net.minecraft.util.BlockPos;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.gui.ContainerNaturalistInventory;
 import forestry.core.gui.GuiHandler;
@@ -23,7 +23,7 @@ import forestry.core.inventory.InventoryNaturalistChest;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 
-public abstract class TileNaturalistChest extends TileBase implements IPagedInventory {
+public abstract class TileNaturalistChest extends TileBase implements IPagedInventory{
 	private static final float lidAngleVariationPerTick = 0.1F;
 
 	private final ISpeciesRoot speciesRoot;
@@ -52,15 +52,15 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 
 	@Override
 	protected void updateClientSide() {
-		update();
+		updateC();
 	}
 	
 	@Override
 	protected void updateServerSide() {
-		update();
+		updateC();
 	}
 
-	private void update() {
+	private void updateC() {
 		prevLidAngle = lidAngle;
 
 		if (numPlayersUsing > 0 && lidAngle == 0.0F) {
@@ -85,7 +85,7 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 	}
 
 	private void playLidSound(String sound) {
-		worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, sound, 0.5F, worldObj.rand.nextFloat() * 0.1F + 0.9F);
+		worldObj.playSoundEffect(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, sound, 0.5F, worldObj.rand.nextFloat() * 0.1F + 0.9F);
 	}
 
 	@Override
@@ -115,5 +115,10 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 	@Override
 	public Object getContainer(EntityPlayer player, int page) {
 		return new ContainerNaturalistInventory(player.inventory, this, page);
+	}
+	
+	@Override
+	public BlockPos getCoordinates() {
+		return getPos();
 	}
 }

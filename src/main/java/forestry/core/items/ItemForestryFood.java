@@ -10,19 +10,17 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.EnumAction;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import forestry.api.core.IModelManager;
+import forestry.api.core.IModelRegister;
 import forestry.core.CreativeTabForestry;
-import forestry.core.render.TextureManager;
-import forestry.core.utils.StringUtil;
 
-public class ItemForestryFood extends ItemFood {
+public class ItemForestryFood extends ItemFood implements IModelRegister {
 
 	private boolean isDrink = false;
 
@@ -38,9 +36,9 @@ public class ItemForestryFood extends ItemFood {
 	@Override
 	public EnumAction getItemUseAction(ItemStack itemstack) {
 		if (isDrink) {
-			return EnumAction.drink;
+			return EnumAction.DRINK;
 		} else {
-			return EnumAction.eat;
+			return EnumAction.EAT;
 		}
 	}
 
@@ -51,8 +49,8 @@ public class ItemForestryFood extends ItemFood {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerIcons(IIconRegister register) {
-		itemIcon = TextureManager.registerTex(register, StringUtil.cleanItemName(this));
+	public void registerModel(Item item, IModelManager manager) {
+		manager.registerItemModel(item, 0, true);
 	}
 
 }

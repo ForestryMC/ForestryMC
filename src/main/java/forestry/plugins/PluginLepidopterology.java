@@ -15,11 +15,9 @@ import java.util.EnumSet;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
-
+import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
-
-import cpw.mods.fml.common.SidedProxy;
 
 import forestry.Forestry;
 import forestry.api.arboriculture.TreeManager;

@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Set;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -42,12 +43,12 @@ public class FruitProviderRandom extends FruitProviderNone {
 	}
 
 	@Override
-	public int getColour(ITreeGenome genome, IBlockAccess world, int x, int y, int z, int ripeningTime) {
+	public int getColour(ITreeGenome genome, IBlockAccess world, BlockPos pos, int ripeningTime) {
 		return colour;
 	}
 
 	@Override
-	public ItemStack[] getFruits(ITreeGenome genome, World world, int x, int y, int z, int ripeningTime) {
+	public ItemStack[] getFruits(ITreeGenome genome, World world, BlockPos pos, int ripeningTime) {
 		ArrayList<ItemStack> product = new ArrayList<>();
 
 		float modeYieldMod = TreeManager.treeRoot.getTreekeepingMode(world).getYieldModifier(genome, 1f);
@@ -73,7 +74,7 @@ public class FruitProviderRandom extends FruitProviderNone {
 	}
 
 	@Override
-	public boolean markAsFruitLeaf(ITreeGenome genome, World world, int x, int y, int z) {
+	public boolean markAsFruitLeaf(ITreeGenome genome, World world, BlockPos pos) {
 		return true;
 	}
 

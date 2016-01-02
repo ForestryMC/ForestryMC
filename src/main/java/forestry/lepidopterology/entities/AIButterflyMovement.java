@@ -37,7 +37,7 @@ public abstract class AIButterflyMovement extends AIButterflyBase {
 		}
 
 		// Continue if we have not yet reached the destination.
-		if (entity.getDestination().squareDistanceTo(entity.posX, entity.posY, entity.posZ) > 2.0f) {
+		if (entity.getDestination().squareDistanceTo(new Vec3(entity.posX, entity.posY, entity.posZ)) > 2.0f) {
 			return true;
 		}
 

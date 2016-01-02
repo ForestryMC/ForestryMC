@@ -43,7 +43,7 @@ public class GuiMailboxInfo extends Gui {
 	private final ResourceLocation textureAlert = new ForestryResource(Constants.TEXTURE_PATH_GUI + "/mailalert.png");
 
 	private GuiMailboxInfo() {
-		fontRendererObj = Proxies.common.getClientInstance().fontRenderer;
+		fontRendererObj = Proxies.common.getClientInstance().fontRendererObj;
 	}
 
 	public void render() {
@@ -55,7 +55,7 @@ public class GuiMailboxInfo extends Gui {
 		int y = 0;
 
 		Minecraft minecraft = Minecraft.getMinecraft();
-		ScaledResolution scaledresolution = new ScaledResolution(minecraft, minecraft.displayWidth, minecraft.displayHeight);
+		ScaledResolution scaledresolution = new ScaledResolution(minecraft);
 		if (Config.mailAlertXPosition == XPosition.RIGHT) {
 			x = scaledresolution.getScaledWidth() - WIDTH;
 		}

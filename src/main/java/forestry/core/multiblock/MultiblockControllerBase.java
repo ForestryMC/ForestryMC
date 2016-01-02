@@ -12,12 +12,13 @@ import java.util.Set;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 
 import forestry.api.multiblock.IMultiblockComponent;
+import forestry.core.utils.BlockUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.StringUtil;
 
@@ -50,19 +51,19 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 	 * i.e. If something has a lower X but higher Y/Z coordinates, it will still be the reference.
 	 * If something has the same X but a lower Y coordinate, it will be the reference. Etc.
 	 */
-	private ChunkCoordinates referenceCoord;
+	private BlockPos referenceCoord;
 
 	/**
 	 * Minimum bounding box coordinate. Blocks do not necessarily exist at this coord if your machine
 	 * is not a cube/rectangular prism.
 	 */
-	private ChunkCoordinates minimumCoord;
+	private BlockPos minimumCoord;
 
 	/**
 	 * Maximum bounding box coordinate. Blocks do not necessarily exist at this coord if your machine
 	 * is not a cube/rectangular prism.
 	 */
-	private ChunkCoordinates maximumCoord;
+	private BlockPos maximumCoord;
 	
 	/**
 	 * Set to true whenever a part is removed from this controller.
@@ -103,7 +104,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 
 	@Override
 	public void attachBlock(IMultiblockComponent part) {
-		ChunkCoordinates coord = part.getCoordinates();
+		BlockPos coord = part.getCoordinates();
 
 		if (!connectedParts.add(part)) {
 			Log.warning("[%s] Controller %s is double-adding part %d @ %s. This is unusual. " +
@@ -126,7 +127,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 			referenceCoord = coord;
 			logic.becomeMultiblockSaveDelegate();
 		} else if (coord.compareTo(referenceCoord) < 0) {
-			TileEntity te = this.worldObj.getTileEntity(referenceCoord.posX, referenceCoord.posY, referenceCoord.posZ);
+			TileEntity te = this.worldObj.getTileEntity(referenceCoord);
 			if (te instanceof IMultiblockComponent) {
 				IMultiblockComponent tePart = (IMultiblockComponent) te;
 				MultiblockLogic teLogic = (MultiblockLogic) tePart.getMultiblockLogic();
@@ -140,26 +141,26 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 		}
 
 		if (minimumCoord != null) {
-			if (coord.posX < minimumCoord.posX) {
-				minimumCoord.posX = coord.posX;
+			if (coord.getX() < minimumCoord.getX()) {
+				minimumCoord = minimumCoord.add(coord.getX(), 0, 0);
 			}
-			if (coord.posY < minimumCoord.posY) {
-				minimumCoord.posY = coord.posY;
+			if (coord.getY() < minimumCoord.getY()) {
+				minimumCoord = minimumCoord.add(0, coord.getY(), 0);
 			}
-			if (coord.posZ < minimumCoord.posZ) {
-				minimumCoord.posZ = coord.posZ;
+			if (coord.getZ() < minimumCoord.getZ()) {
+				minimumCoord = minimumCoord.add(0, 0, coord.getZ());
 			}
 		}
 		
 		if (maximumCoord != null) {
-			if (coord.posX > maximumCoord.posX) {
-				maximumCoord.posX = coord.posX;
+			if (coord.getX() > maximumCoord.getX()) {
+				maximumCoord = maximumCoord.add(coord.getX(), 0, 0);
 			}
-			if (coord.posY > maximumCoord.posY) {
-				maximumCoord.posY = coord.posY;
+			if (coord.getY() > maximumCoord.getY()) {
+				maximumCoord = maximumCoord.add(0, coord.getY(), 0);
 			}
-			if (coord.posZ > maximumCoord.posZ) {
-				maximumCoord.posZ = coord.posZ;
+			if (coord.getZ() > maximumCoord.getZ()) {
+				maximumCoord = maximumCoord.add(0, 0, coord.getZ());
 			}
 		}
 		
@@ -239,10 +240,10 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 		// Strip out this part
 		onDetachBlock(part);
 		if (!connectedParts.remove(part)) {
-			ChunkCoordinates partCoords = part.getCoordinates();
+			BlockPos partCoords = part.getCoordinates();
 			Log.warning("[%s] Double-removing part (%d) @ %d, %d, %d, this is unexpected and may cause problems. " +
 							"If you encounter anomalies, please tear down the reactor and rebuild it.",
-					worldObj.isRemote ? "CLIENT" : "SERVER", part.hashCode(), partCoords.posX, partCoords.posY, partCoords.posZ);
+					worldObj.isRemote ? "CLIENT" : "SERVER", part.hashCode(), partCoords.getX(), partCoords.getY(), partCoords.getZ());
 		}
 
 		if (connectedParts.isEmpty()) {
@@ -337,7 +338,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 	
 	@Override
 	public void assimilate(IMultiblockControllerInternal other) {
-		ChunkCoordinates otherReferenceCoord = other.getReferenceCoord();
+		BlockPos otherReferenceCoord = other.getReferenceCoord();
 		if (otherReferenceCoord != null && getReferenceCoord().compareTo(otherReferenceCoord) >= 0) {
 			throw new IllegalArgumentException("The controller with the lowest minimum-coord value must consume the one with the higher coords");
 		}
@@ -371,8 +372,8 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 	@Override
 	public void _onAssimilated(IMultiblockControllerInternal otherController) {
 		if (referenceCoord != null) {
-			if (worldObj.getChunkProvider().chunkExists(referenceCoord.posX >> 4, referenceCoord.posZ >> 4)) {
-				TileEntity te = this.worldObj.getTileEntity(referenceCoord.posX, referenceCoord.posY, referenceCoord.posZ);
+			if (worldObj.getChunkProvider().chunkExists(referenceCoord.getX() >> 4, referenceCoord.getZ() >> 4)) {
+				TileEntity te = this.worldObj.getTileEntity(referenceCoord);
 				if (te instanceof IMultiblockComponent) {
 					IMultiblockComponent part = (IMultiblockComponent) te;
 					MultiblockLogic logic = (MultiblockLogic) part.getMultiblockLogic();
@@ -424,12 +425,11 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 			// If this returns true, the server has changed its internal data. 
 			// If our chunks are loaded (they should be), we must mark our chunks as dirty.
 			if (minimumCoord != null && maximumCoord != null &&
-					this.worldObj.checkChunksExist(minimumCoord.posX, minimumCoord.posY, minimumCoord.posZ,
-							maximumCoord.posX, maximumCoord.posY, maximumCoord.posZ)) {
-				int minChunkX = minimumCoord.posX >> 4;
-				int minChunkZ = minimumCoord.posZ >> 4;
-				int maxChunkX = maximumCoord.posX >> 4;
-				int maxChunkZ = maximumCoord.posZ >> 4;
+					BlockUtil.checkChunksExist(worldObj, minimumCoord, maximumCoord)) {
+				int minChunkX = minimumCoord.getX() >> 4;
+				int minChunkZ = minimumCoord.getZ() >> 4;
+				int maxChunkX = maximumCoord.getX() >> 4;
+				int maxChunkZ = maximumCoord.getZ() >> 4;
 				
 				for (int x = minChunkX; x <= maxChunkX; x++) {
 					for (int z = minChunkZ; z <= maxChunkZ; z++) {
@@ -467,31 +467,27 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 	/**
 	 * @param level the level of the block on the multiblock, starting at 0 for the bottom.
 	 * @param world World object for the world in which this controller is located.
-	 * @param x X coordinate of the block being tested
-	 * @param y Y coordinate of the block being tested
-	 * @param z Z coordinate of the block being tested
+	 * @param pos coordinates of the block being tested
 	 * @throws MultiblockValidationException if the tested block is not allowed on the machine's side faces
 	 */
-	protected void isBlockGoodForExteriorLevel(int level, World world, int x, int y, int z) throws MultiblockValidationException {
-		Block block = world.getBlock(x, y, z);
-		throw new MultiblockValidationException(StringUtil.localizeAndFormatRaw("for.multiblock.error.invalid.interior", x, y, z, block.getLocalizedName()));
+	protected void isBlockGoodForExteriorLevel(int level, World world, BlockPos pos) throws MultiblockValidationException {
+		Block block = world.getBlockState(pos).getBlock();
+		throw new MultiblockValidationException(StringUtil.localizeAndFormatRaw("for.multiblock.error.invalid.interior", pos, block.getLocalizedName()));
 	}
 	
 	/**
 	 * The interior is any block that does not touch blocks outside the machine.
 	 * @param world World object for the world in which this controller is located.
-	 * @param x X coordinate of the block being tested
-	 * @param y Y coordinate of the block being tested
-	 * @param z Z coordinate of the block being tested
+	 * @param pos coordinates of the block being tested
 	 * @throws MultiblockValidationException if the tested block is not allowed in the machine's interior
 	 */
-	protected void isBlockGoodForInterior(World world, int x, int y, int z) throws MultiblockValidationException {
-		Block block = world.getBlock(x, y, z);
-		throw new MultiblockValidationException(StringUtil.localizeAndFormatRaw("for.multiblock.error.invalid.interior", x, y, z, block.getLocalizedName()));
+	protected void isBlockGoodForInterior(World world, BlockPos pos) throws MultiblockValidationException {
+		Block block = world.getBlockState(pos).getBlock();
+		throw new MultiblockValidationException(StringUtil.localizeAndFormatRaw("for.multiblock.error.invalid.interior", pos, block.getLocalizedName()));
 	}
 	
 	@Override
-	public ChunkCoordinates getReferenceCoord() {
+	public BlockPos getReferenceCoord() {
 		if (referenceCoord == null) {
 			selectNewReferenceCoord();
 		}
@@ -507,28 +503,28 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 
 	@Override
 	public void recalculateMinMaxCoords() {
-		minimumCoord = new ChunkCoordinates(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
-		maximumCoord = new ChunkCoordinates(Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE);
+		minimumCoord = new BlockPos(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
+		maximumCoord = new BlockPos(Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE);
 
 		for (IMultiblockComponent part : connectedParts) {
-			ChunkCoordinates partCoords = part.getCoordinates();
-			if (partCoords.posX < minimumCoord.posX) {
-				minimumCoord.posX = partCoords.posX;
+			BlockPos partCoords = part.getCoordinates();
+			if (partCoords.getX() < minimumCoord.getX()) {
+				minimumCoord = minimumCoord.add(partCoords.getX(), 0, 0);
 			}
-			if (partCoords.posX > maximumCoord.posX) {
-				maximumCoord.posX = partCoords.posX;
+			if (partCoords.getX() > maximumCoord.getX()) {
+				maximumCoord = maximumCoord.add(partCoords.getX(), 0, 0);
 			}
-			if (partCoords.posY < minimumCoord.posY) {
-				minimumCoord.posY = partCoords.posY;
+			if (partCoords.getY() < minimumCoord.getY()) {
+				minimumCoord = minimumCoord.add(0, partCoords.getY(), 0);
 			}
-			if (partCoords.posY > maximumCoord.posY) {
-				maximumCoord.posY = partCoords.posY;
+			if (partCoords.getY() > maximumCoord.getY()) {
+				maximumCoord = maximumCoord.add(0, partCoords.getY(), 0);
 			}
-			if (partCoords.posZ < minimumCoord.posZ) {
-				minimumCoord.posZ = partCoords.posZ;
+			if (partCoords.getZ() < minimumCoord.getZ()) {
+				minimumCoord = minimumCoord.add(0, 0, partCoords.getZ());
 			}
-			if (partCoords.posZ > maximumCoord.posZ) {
-				maximumCoord.posZ = partCoords.posZ;
+			if (partCoords.getZ() > maximumCoord.getZ()) {
+				maximumCoord = maximumCoord.add(0, 0, partCoords.getZ());
 			}
 		}
 	}
@@ -536,47 +532,47 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 	/**
 	 * @return The minimum bounding-box coordinate containing this machine's blocks.
 	 */
-	protected ChunkCoordinates getMinimumCoord() {
+	protected BlockPos getMinimumCoord() {
 		if (minimumCoord == null) {
 			recalculateMinMaxCoords();
 		}
-		return new ChunkCoordinates(minimumCoord);
+		return new BlockPos(minimumCoord);
 	}
 
 	/**
 	 * @return The maximum bounding-box coordinate containing this machine's blocks.
 	 */
-	protected ChunkCoordinates getMaximumCoord() {
+	protected BlockPos getMaximumCoord() {
 		if (maximumCoord == null) {
 			recalculateMinMaxCoords();
 		}
-		return new ChunkCoordinates(maximumCoord);
+		return new BlockPos(maximumCoord);
 	}
 
-	protected final ChunkCoordinates getCenterCoord() {
-		ChunkCoordinates minCoord = getMinimumCoord();
-		ChunkCoordinates maxCoord = getMaximumCoord();
+	protected final BlockPos getCenterCoord() {
+		BlockPos minCoord = getMinimumCoord();
+		BlockPos maxCoord = getMaximumCoord();
 
-		return new ChunkCoordinates(
-				(minCoord.posX + maxCoord.posX) / 2,
-				(minCoord.posY + maxCoord.posY) / 2,
-				(minCoord.posZ + maxCoord.posZ) / 2
+		return new BlockPos(
+				(minCoord.getX() + maxCoord.getX()) / 2,
+				(minCoord.getY() + maxCoord.getY()) / 2,
+				(minCoord.getZ() + maxCoord.getZ()) / 2
 		);
 	}
 
-	protected final ChunkCoordinates getTopCenterCoord() {
-		ChunkCoordinates minCoord = getMinimumCoord();
-		ChunkCoordinates maxCoord = getMaximumCoord();
+	protected final BlockPos getTopCenterCoord() {
+		BlockPos minCoord = getMinimumCoord();
+		BlockPos maxCoord = getMaximumCoord();
 
-		return new ChunkCoordinates(
-				(minCoord.posX + maxCoord.posX) / 2,
-				maxCoord.posY,
-				(minCoord.posZ + maxCoord.posZ) / 2
+		return new BlockPos(
+				(minCoord.getX() + maxCoord.getX()) / 2,
+				maxCoord.getY(),
+				(minCoord.getZ() + maxCoord.getZ()) / 2
 		);
 	}
 
 	protected final boolean isCoordInMultiblock(int x, int y, int z) {
-		return (x >= minimumCoord.posX && x <= maximumCoord.posX) && (y >= minimumCoord.posY && y <= maximumCoord.posY) && (z >= minimumCoord.posZ && z <= maximumCoord.posZ);
+		return (x >= minimumCoord.getX() && x <= maximumCoord.getX()) && (y >= minimumCoord.getY() && y <= maximumCoord.getY()) && (z >= minimumCoord.getZ() && z <= maximumCoord.getZ());
 	}
 
 	@Override
@@ -621,8 +617,8 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 	}
 	
 	private int _shouldConsume(IMultiblockControllerInternal otherController) {
-		ChunkCoordinates myCoord = getReferenceCoord();
-		ChunkCoordinates theirCoord = otherController.getReferenceCoord();
+		BlockPos myCoord = getReferenceCoord();
+		BlockPos theirCoord = otherController.getReferenceCoord();
 		
 		// Always consume other controllers if their reference coordinate is null - this means they're empty and can be assimilated on the cheap
 		if (theirCoord == null) {
@@ -640,8 +636,8 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 			if (!first) {
 				sb.append(", ");
 			}
-			ChunkCoordinates partCoord = part.getCoordinates();
-			sb.append(String.format("(%d: %d, %d, %d)", part.hashCode(), partCoord.posX, partCoord.posY, partCoord.posZ));
+			BlockPos partCoord = part.getCoordinates();
+			sb.append(String.format("(%d: %d, %d, %d)", part.hashCode(), partCoord.getX(), partCoord.getY(), partCoord.getX()));
 			first = false;
 		}
 		
@@ -652,8 +648,8 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 	public void auditParts() {
 		HashSet<IMultiblockComponent> deadParts = new HashSet<>();
 		for (IMultiblockComponent part : connectedParts) {
-			ChunkCoordinates partCoord = part.getCoordinates();
-			if (isInvalid(part) || worldObj.getTileEntity(partCoord.posX, partCoord.posY, partCoord.posZ) != part) {
+			BlockPos partCoord = part.getCoordinates();
+			if (isInvalid(part) || worldObj.getTileEntity(partCoord) != part) {
 				onDetachBlock(part);
 				deadParts.add(part);
 			}
@@ -682,21 +678,21 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 		
 		// Reset visitations and find the minimum coordinate
 		Set<IMultiblockComponent> deadParts = new HashSet<>();
-		ChunkCoordinates c;
+		BlockPos pos;
 		IMultiblockComponent referencePart = null;
 
 		int originalSize = connectedParts.size();
 
 		for (IMultiblockComponent part : connectedParts) {
 			// This happens during chunk unload.
-			ChunkCoordinates partCoord = part.getCoordinates();
-			if (!chunkProvider.chunkExists(partCoord.posX >> 4, partCoord.posZ >> 4) || isInvalid(part)) {
+			BlockPos partCoord = part.getCoordinates();
+			if (!chunkProvider.chunkExists(partCoord.getX() >> 4, partCoord.getZ() >> 4) || isInvalid(part)) {
 				deadParts.add(part);
 				onDetachBlock(part);
 				continue;
 			}
 			
-			if (worldObj.getTileEntity(partCoord.posX, partCoord.posY, partCoord.posZ) != part) {
+			if (worldObj.getTileEntity(partCoord) != part) {
 				deadParts.add(part);
 				onDetachBlock(part);
 				continue;
@@ -707,12 +703,12 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 			logic.setUnvisited();
 			logic.forfeitMultiblockSaveDelegate();
 			
-			c = part.getCoordinates();
+			pos = part.getCoordinates();
 			if (referenceCoord == null) {
-				referenceCoord = c;
+				referenceCoord = pos;
 				referencePart = part;
-			} else if (c.compareTo(referenceCoord) < 0) {
-				referenceCoord = c;
+			} else if (pos.compareTo(referenceCoord) < 0) {
+				referenceCoord = pos;
 				referencePart = part;
 			}
 		}
@@ -793,8 +789,8 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 		
 		IChunkProvider chunkProvider = worldObj.getChunkProvider();
 		for (IMultiblockComponent part : connectedParts) {
-			ChunkCoordinates partCoord = part.getCoordinates();
-			if (chunkProvider.chunkExists(partCoord.posX >> 4, partCoord.posZ >> 4)) {
+			BlockPos partCoord = part.getCoordinates();
+			if (chunkProvider.chunkExists(partCoord.getX() >> 4, partCoord.getZ() >> 4)) {
 				onDetachBlock(part);
 			}
 		}
@@ -818,8 +814,8 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 		referenceCoord = null;
 
 		for (IMultiblockComponent part : connectedParts) {
-			ChunkCoordinates partCoord = part.getCoordinates();
-			if (isInvalid(part) || !chunkProvider.chunkExists(partCoord.posX >> 4, partCoord.posZ >> 4)) {
+			BlockPos partCoord = part.getCoordinates();
+			if (isInvalid(part) || !chunkProvider.chunkExists(partCoord.getX() >> 4, partCoord.getZ() >> 4)) {
 				// Chunk is unloading, skip this coord to prevent chunk thrashing
 				continue;
 			}
@@ -847,9 +843,9 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 	 * On the client, this will mark the block for a rendering update.
 	 */
 	protected void markReferenceCoordForUpdate() {
-		ChunkCoordinates rc = getReferenceCoord();
+		BlockPos rc = getReferenceCoord();
 		if (worldObj != null && rc != null) {
-			worldObj.markBlockForUpdate(rc.posX, rc.posY, rc.posZ);
+			worldObj.markBlockForUpdate(rc);
 		}
 	}
 	
@@ -868,13 +864,13 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 			return;
 		}
 
-		ChunkCoordinates referenceCoord = getReferenceCoord();
+		BlockPos referenceCoord = getReferenceCoord();
 		if (referenceCoord == null) {
 			return;
 		}
 
-		TileEntity saveTe = worldObj.getTileEntity(referenceCoord.posX, referenceCoord.posY, referenceCoord.posZ);
-		worldObj.markTileEntityChunkModified(referenceCoord.posX, referenceCoord.posY, referenceCoord.posZ, saveTe);
+		TileEntity saveTe = worldObj.getTileEntity(referenceCoord);
+		worldObj.markChunkDirty(referenceCoord, saveTe);
 	}
 
 	private static boolean isInvalid(IMultiblockComponent part) {

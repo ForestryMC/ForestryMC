@@ -68,7 +68,7 @@ public class Config {
 	public static boolean generateTinOre = true;
 	private static float generateBeehivesAmount = 1.0f;
 	public static boolean generateBeehivesDebug = false;
-	public static boolean enableVillagers = true;
+	//public static boolean enableVillagers = true;
 
 	// Retrogen
 	public static boolean doRetrogen = false;
@@ -189,7 +189,9 @@ public class Config {
 		generateCopperOre = configCommon.getBooleanLocalized("world.generate.ore", "copper", generateCopperOre);
 		generateTinOre = configCommon.getBooleanLocalized("world.generate.ore", "tin", generateTinOre);
 
-		enableVillagers = configCommon.getBooleanLocalized("world.generate", "villagers", enableVillagers);
+		/*
+		 * enableVillagers = configCommon.getBooleanLocalized("world.generate", "villagers", enableVillagers);
+		 */
 
 		craftingBronzeEnabled = configCommon.getBooleanLocalized("crafting", "bronze", craftingBronzeEnabled);
 		craftingStampsEnabled = configCommon.getBooleanLocalized("crafting.stamps", "enabled", true);

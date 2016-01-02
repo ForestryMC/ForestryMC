@@ -23,14 +23,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 import net.minecraftforge.oredict.OreDictionary;
 
-import cpw.mods.fml.common.Optional;
+import net.minecraftforge.fml.common.Optional;
 
 import forestry.core.circuits.ISocketable;
 import forestry.core.inventory.filters.ArrayStackFilter;
@@ -48,7 +48,7 @@ import buildcraft.api.transport.IPipeTile;
 
 public abstract class InventoryUtil {
 
-	public static IInventory getInventory(IInventory inv, ForgeDirection side) {
+	public static IInventory getInventory(IInventory inv, EnumFacing side) {
 		if (inv == null) {
 			return null;
 		}
@@ -105,7 +105,7 @@ public abstract class InventoryUtil {
 		if (a.getItemDamage() != b.getItemDamage()) {
 			return false;
 		}
-		if (a.stackTagCompound != null && !a.stackTagCompound.equals(b.stackTagCompound)) {
+		if (a.hasTagCompound() && !a.getTagCompound().equals(b.getTagCompound())) {
 			return false;
 		}
 		return true;
@@ -250,10 +250,10 @@ public abstract class InventoryUtil {
 	 * @return true if an item was inserted, otherwise false.
 	 */
 	public static boolean moveOneItemToPipe(IInventory source, AdjacentTileCache tileCache) {
-		return moveOneItemToPipe(source, tileCache, ForgeDirection.VALID_DIRECTIONS);
+		return moveOneItemToPipe(source, tileCache, EnumFacing.values());
 	}
 
-	public static boolean moveOneItemToPipe(IInventory source, AdjacentTileCache tileCache, ForgeDirection[] directions) {
+	public static boolean moveOneItemToPipe(IInventory source, AdjacentTileCache tileCache, EnumFacing[] directions) {
 		if (PluginManager.Module.BUILDCRAFT_TRANSPORT.isEnabled()) {
 			return internal_moveOneItemToPipe(source, tileCache, directions);
 		}
@@ -262,7 +262,7 @@ public abstract class InventoryUtil {
 	}
 
 	@Optional.Method(modid = "BuildCraftAPI|transport")
-	private static boolean internal_moveOneItemToPipe(IInventory source, AdjacentTileCache tileCache, ForgeDirection[] directions) {
+	private static boolean internal_moveOneItemToPipe(IInventory source, AdjacentTileCache tileCache, EnumFacing[] directions) {
 		IInventory invClone = new InventoryCopy(source);
 		ItemStack stackToMove = removeOneItem(invClone);
 		if (stackToMove == null) {
@@ -272,9 +272,9 @@ public abstract class InventoryUtil {
 			return false;
 		}
 
-		List<Map.Entry<ForgeDirection, IPipeTile>> pipes = new ArrayList<>();
+		List<Map.Entry<EnumFacing, IPipeTile>> pipes = new ArrayList<>();
 		boolean foundPipe = false;
-		for (ForgeDirection side : directions) {
+		for (EnumFacing side : directions) {
 			TileEntity tile = tileCache.getTileOnSide(side);
 			if (tile instanceof IPipeTile) {
 				IPipeTile pipe = (IPipeTile) tile;
@@ -289,8 +289,8 @@ public abstract class InventoryUtil {
 			return false;
 		}
 
-		int choice = tileCache.getSource().getWorldObj().rand.nextInt(pipes.size());
-		Map.Entry<ForgeDirection, IPipeTile> pipe = pipes.get(choice);
+		int choice = tileCache.getSource().getWorld().rand.nextInt(pipes.size());
+		Map.Entry<EnumFacing, IPipeTile> pipe = pipes.get(choice);
 		if (pipe.getValue().injectItem(stackToMove, false, pipe.getKey().getOpposite(), null) > 0) {
 			if (removeOneItem(source, stackToMove) != null) {
 				pipe.getValue().injectItem(stackToMove, true, pipe.getKey().getOpposite(), null);
@@ -466,7 +466,7 @@ public abstract class InventoryUtil {
 		int added = addStack(inventory, stack, startSlot, slots, false);
 		boolean success = all ? (added == stack.stackSize) : (added > 0);
 
-		if (success && doAdd) {
+		if (success	&& doAdd) {
 			addStack(inventory, stack, startSlot, slots, true);
 		}
 		
@@ -614,17 +614,9 @@ public abstract class InventoryUtil {
 
 		if (container != null) {
 
-			if (itemstack.getItem().doesContainerItemLeaveCraftingGrid(itemstack)) {
-				if (!tryAddStack(stowing, container, true)) {
-					if (player != null && !player.inventory.addItemStackToInventory(container)) {
-						player.dropPlayerItemWithRandomChoice(container, true);
-					}
-				}
-			} else {
-				if (!tryAddStack(stowing, container, slotIndex, 1, true)) {
-					if (!tryAddStack(stowing, container, true) && player != null) {
-						player.dropPlayerItemWithRandomChoice(container, true);
-					}
+			if (!tryAddStack(stowing, container, slotIndex, 1, true)) {
+				if (!tryAddStack(stowing, container, true) && player != null) {
+					player.dropPlayerItemWithRandomChoice(container, true);
 				}
 			}
 		}
@@ -646,6 +638,10 @@ public abstract class InventoryUtil {
 			destination.setInventorySlotContents(i, stack);
 		}
 	}
+	
+	public static void dropInventory(IInventory inventory, World world, BlockPos pos) {
+		dropInventory(inventory, world, pos.getX(), pos.getY(), pos.getZ());
+	}
 
 	public static void dropInventory(IInventory inventory, World world, double x, double y, double z) {
 		if (inventory == null) {
@@ -658,6 +654,10 @@ public abstract class InventoryUtil {
 			dropItemStackFromInventory(itemstack, world, x, y, z);
 			inventory.setInventorySlotContents(slot, null);
 		}
+	}
+	
+	public static void dropSockets(ISocketable socketable, World world, BlockPos pos) {
+		dropSockets(socketable, world, pos.getX(), pos.getY(), pos.getZ());
 	}
 
 	public static void dropSockets(ISocketable socketable, World world, double x, double y, double z) {
@@ -694,11 +694,11 @@ public abstract class InventoryUtil {
 
 	/* NBT */
 	public static void readFromNBT(IInventory inventory, NBTTagCompound nbttagcompound) {
-		if (!nbttagcompound.hasKey(inventory.getInventoryName())) {
+		if (!nbttagcompound.hasKey(inventory.getCommandSenderName())) {
 			return;
 		}
 
-		NBTTagList nbttaglist = nbttagcompound.getTagList(inventory.getInventoryName(), 10);
+		NBTTagList nbttaglist = nbttagcompound.getTagList(inventory.getCommandSenderName(), 10);
 
 		for (int j = 0; j < nbttaglist.tagCount(); ++j) {
 			NBTTagCompound nbttagcompound2 = nbttaglist.getCompoundTagAt(j);
@@ -717,6 +717,6 @@ public abstract class InventoryUtil {
 				nbttaglist.appendTag(nbttagcompound2);
 			}
 		}
-		nbttagcompound.setTag(inventory.getInventoryName(), nbttaglist);
+		nbttagcompound.setTag(inventory.getCommandSenderName(), nbttaglist);
 	}
 }

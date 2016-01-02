@@ -17,17 +17,21 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
-
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.registry.GameData;
 import net.minecraftforge.oredict.OreDictionary;
 
-import cpw.mods.fml.common.registry.GameData;
-
 public class Stack {
-	private final String name;
+	private final ResourceLocation name;
 	private final int meta;
 
-	public Stack(String name, int meta) {
+	public Stack(ResourceLocation name, int meta) {
 		this.name = name;
+		this.meta = meta;
+	}
+	
+	public Stack(String name, int meta) {
+		this.name = new ResourceLocation(name);
 		this.meta = meta;
 	}
 
@@ -85,7 +89,7 @@ public class Stack {
 	}
 
 	public Item getItem() {
-		Item item = GameData.getItemRegistry().getRaw(name);
+		Item item = GameData.getItemRegistry().getRaw(GameData.getItemRegistry().getId(name));
 		if (item == null) {
 			Log.warning("Failed to find item for (" + name + ") in the Forge registry.");
 		}
@@ -93,7 +97,7 @@ public class Stack {
 	}
 
 	public Block getBlock() {
-		Block block = GameData.getBlockRegistry().getRaw(name);
+		Block block = GameData.getBlockRegistry().getRaw(GameData.getBlockRegistry().getId(name));
 		if (block == null) {
 			Log.warning("Failed to find block for (" + name + ") in the Forge registry.");
 		}

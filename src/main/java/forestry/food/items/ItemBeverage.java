@@ -12,18 +12,15 @@ package forestry.food.items;
 
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import forestry.api.core.IModelManager;
 import forestry.api.food.IBeverageEffect;
 import forestry.core.config.Config;
 import forestry.core.items.ItemForestryFood;
@@ -38,11 +35,7 @@ public class ItemBeverage extends ItemForestryFood {
 
 		boolean isAlwaysEdible();
 
-		void registerIcons(IIconRegister register);
-
-		IIcon getIconBottle();
-
-		IIcon getIconContents();
+		void registerModels(Item item, IModelManager manager);
 	}
 
 	public final IBeverageInfo[] beverages;
@@ -60,39 +53,41 @@ public class ItemBeverage extends ItemForestryFood {
 	public boolean getShareTag() {
 		return true;
 	}
-
+	
 	@Override
-	public ItemStack onEaten(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-		List<IBeverageEffect> effects = BeverageEffect.loadEffects(itemstack);
+	public ItemStack onItemUseFinish(ItemStack stack, World world, EntityPlayer player) {
+		List<IBeverageEffect> effects = BeverageEffect.loadEffects(stack);
 
-		itemstack.stackSize--;
-		entityplayer.getFoodStats().func_151686_a(this, itemstack);
-		world.playSoundAtEntity(entityplayer, "random.burp", 0.5F, world.rand.nextFloat() * 0.1F + 0.9F);
+		stack.stackSize--;
+		player.getFoodStats().addStats(this, stack);
+		world.playSoundAtEntity(player, "random.burp", 0.5F, world.rand.nextFloat() * 0.1F + 0.9F);
 
 		if (world.isRemote) {
-			return itemstack;
+			return stack;
 		}
 
 		for (IBeverageEffect effect : effects) {
-			effect.doEffect(world, entityplayer);
+			effect.doEffect(world, player);
 		}
 
-		return itemstack;
+		return stack;
 	}
 
 	@Override
-	public int func_150905_g(ItemStack itemstack) {
+	public int getHealAmount(ItemStack itemstack) {
 		int meta = itemstack.getItemDamage();
 		IBeverageInfo beverage = beverages[meta];
 		return beverage.getHeal();
 	}
 
 	@Override
-	public float func_150906_h(ItemStack itemstack) {
+	public float getSaturationModifier(ItemStack itemstack) {
 		int meta = itemstack.getItemDamage();
 		IBeverageInfo beverage = beverages[meta];
 		return beverage.getSaturation();
 	}
+	
+	
 
 	@Override
 	public int getMaxItemUseDuration(ItemStack itemstack) {
@@ -101,7 +96,7 @@ public class ItemBeverage extends ItemForestryFood {
 
 	@Override
 	public EnumAction getItemUseAction(ItemStack itemstack) {
-		return EnumAction.drink;
+		return EnumAction.DRINK;
 	}
 
 	@Override
@@ -143,35 +138,19 @@ public class ItemBeverage extends ItemForestryFood {
 		return super.getUnlocalizedName(stack) + "." + beverages[stack.getItemDamage()].getName();
 	}
 
-	/* ICONS */
+	/* MODELS */
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerIcons(IIconRegister register) {
+	public void registerModel(Item item, IModelManager manager) {
 		for (IBeverageInfo info : beverages) {
-			info.registerIcons(register);
+			info.registerModels(item, manager);
 		}
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public IIcon getIconFromDamageForRenderPass(int i, int j) {
-		if (j > 0 && beverages[i].getSecondaryColor() != 0) {
-			return beverages[i].getIconBottle();
-		} else {
-			return beverages[i].getIconContents();
-		}
-	}
-
-	// Return true to enable color overlay
-	@Override
-	public boolean requiresMultipleRenderPasses() {
-		return true;
 	}
 
 	@Override
 	public int getColorFromItemStack(ItemStack itemstack, int j) {
 
-		if (j == 0 || beverages[itemstack.getItemDamage()].getSecondaryColor() == 0) {
+		if (j == 1 || beverages[itemstack.getItemDamage()].getSecondaryColor() == 0) {
 			return beverages[itemstack.getItemDamage()].getPrimaryColor();
 		} else {
 			return beverages[itemstack.getItemDamage()].getSecondaryColor();

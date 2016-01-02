@@ -19,10 +19,8 @@ import java.util.ArrayList;
 
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
-
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.versioning.DefaultArtifactVersion;
-
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.versioning.DefaultArtifactVersion;
 import forestry.Forestry;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Log;

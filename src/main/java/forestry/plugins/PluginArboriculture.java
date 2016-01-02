@@ -18,21 +18,20 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.WeightedRandomChestContent;
-
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.FuelBurnTimeEvent;
+import net.minecraftforge.fml.common.IFuelHandler;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.GameData;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
-
-import cpw.mods.fml.common.IFuelHandler;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
-import cpw.mods.fml.common.eventhandler.Event;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.registry.GameData;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.registry.VillagerRegistry;
 
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.EnumWoodType;
@@ -43,9 +42,9 @@ import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
 import forestry.arboriculture.IWoodTyped;
-import forestry.arboriculture.VillageHandlerArboriculture;
 import forestry.arboriculture.WoodItemAccess;
 import forestry.arboriculture.blocks.BlockArboricultureType;
+import forestry.arboriculture.blocks.BlockFruitPod;
 import forestry.arboriculture.blocks.BlockRegistryArboriculture;
 import forestry.arboriculture.commands.CommandTree;
 import forestry.arboriculture.genetics.TreeBranchDefinition;
@@ -54,19 +53,18 @@ import forestry.arboriculture.genetics.TreeFactory;
 import forestry.arboriculture.genetics.TreeHelper;
 import forestry.arboriculture.genetics.TreeMutationFactory;
 import forestry.arboriculture.genetics.TreekeepingMode;
-import forestry.arboriculture.genetics.alleles.AlleleFruit;
 import forestry.arboriculture.genetics.alleles.AlleleGrowth;
 import forestry.arboriculture.genetics.alleles.AlleleLeafEffect;
 import forestry.arboriculture.items.ItemRegistryArboriculture;
 import forestry.arboriculture.network.PacketRegistryArboriculture;
 import forestry.arboriculture.proxy.ProxyArboriculture;
+import forestry.arboriculture.render.TextureLeaves;
 import forestry.arboriculture.tiles.TileArboristChest;
 import forestry.arboriculture.tiles.TileFruitPod;
 import forestry.arboriculture.tiles.TileLeaves;
 import forestry.arboriculture.tiles.TileSapling;
 import forestry.arboriculture.tiles.TileWood;
 import forestry.core.blocks.BlockCoreType;
-import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
 import forestry.core.genetics.alleles.AllelePlantType;
@@ -83,10 +81,6 @@ public class PluginArboriculture extends ForestryPlugin {
 	@SidedProxy(clientSide = "forestry.arboriculture.proxy.ProxyArboricultureClient", serverSide = "forestry.arboriculture.proxy.ProxyArboriculture")
 	public static ProxyArboriculture proxy;
 	public static String treekeepingMode = "NORMAL";
-
-	public static int modelIdSaplings;
-	public static int modelIdLeaves;
-	public static int modelIdPods;
 
 	public static final List<Block> validFences = new ArrayList<>();
 
@@ -123,8 +117,7 @@ public class PluginArboriculture extends ForestryPlugin {
 	@Override
 	public void preInit() {
 		super.preInit();
-
-		// register for FuelBurnTimeEvent
+		
 		MinecraftForge.EVENT_BUS.register(this);
 
 		for (EnumWoodType woodType : EnumWoodType.VALUES) {
@@ -152,8 +145,18 @@ public class PluginArboriculture extends ForestryPlugin {
 		// Register vanilla and forestry fence ids
 		validFences.add(blocks.fences);
 		validFences.add(blocks.fencesFireproof);
-		validFences.add(Blocks.fence);
-		validFences.add(Blocks.fence_gate);
+		validFences.add(Blocks.oak_fence);
+		validFences.add(Blocks.spruce_fence);
+		validFences.add(Blocks.birch_fence);
+		validFences.add(Blocks.jungle_fence);
+		validFences.add(Blocks.dark_oak_fence);
+		validFences.add(Blocks.acacia_fence);
+		validFences.add(Blocks.oak_fence_gate);
+		validFences.add(Blocks.spruce_fence_gate);
+		validFences.add(Blocks.birch_fence_gate);
+		validFences.add(Blocks.jungle_fence_gate);
+		validFences.add(Blocks.dark_oak_fence_gate);
+		validFences.add(Blocks.acacia_fence_gate);
 		validFences.add(Blocks.nether_brick_fence);
 
 		// Commands
@@ -176,11 +179,11 @@ public class PluginArboriculture extends ForestryPlugin {
 
 		blocks.arboriculture.init();
 
-		if (Config.enableVillagers) {
+		/*if (Config.enableVillagers) {
 			VillagerRegistry.instance().registerVillagerId(Constants.ID_VILLAGER_LUMBERJACK);
 			Proxies.render.registerVillagerSkin(Constants.ID_VILLAGER_LUMBERJACK, Constants.TEXTURE_SKIN_LUMBERJACK);
 			VillagerRegistry.instance().registerVillageTradeHandler(Constants.ID_VILLAGER_LUMBERJACK, new VillageHandlerArboriculture());
-		}
+		}*/
 	}
 
 	@Override
@@ -345,7 +348,6 @@ public class PluginArboriculture extends ForestryPlugin {
 
 		TreeBranchDefinition.createAlleles();
 
-		AlleleFruit.createAlleles();
 		AlleleGrowth.createAlleles();
 		AlleleLeafEffect.createAlleles();
 		AllelePlantType.createAlleles();
@@ -380,7 +382,7 @@ public class PluginArboriculture extends ForestryPlugin {
 	@Override
 	public boolean processIMCMessage(IMCMessage message) {
 		if (message.key.equals("add-fence-block") && message.isStringMessage()) {
-			Block block = GameData.getBlockRegistry().getRaw(message.getStringValue());
+			Block block = GameData.getBlockRegistry().getRaw(GameData.getBlockRegistry().getId(new ResourceLocation(message.getStringValue())));
 
 			if (block != null && block != Blocks.air) {
 				validFences.add(block);
@@ -409,6 +411,13 @@ public class PluginArboriculture extends ForestryPlugin {
 			ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Lime.getMemberStack(EnumGermlingType.POLLEN), 1, 2, 3));
 		}
 	}
+	
+	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
+	public void textureHook(TextureStitchEvent.Pre event) {
+		TextureLeaves.registerAllSprites();
+		BlockFruitPod.registerSprites();
+	}
 
 	private static class FuelHandler implements IFuelHandler {
 		@Override
@@ -418,25 +427,19 @@ public class PluginArboriculture extends ForestryPlugin {
 			if (items.sapling == item) {
 				return 100;
 			}
+			
+			Block block = Block.getBlockFromItem(item);
+
+			if (block instanceof IWoodTyped) {
+				IWoodTyped woodTypedBlock = (IWoodTyped) block;
+				if (woodTypedBlock.isFireproof()) {
+					return 0;
+				} else if (blocks.slabs == block) {
+					return 150;
+				}
+			}
 
 			return 0;
-		}
-	}
-
-	@SubscribeEvent
-	public void fuelBurnTimeEvent(FuelBurnTimeEvent fuelBurnTimeEvent) {
-		Item item = fuelBurnTimeEvent.fuel.getItem();
-		Block block = Block.getBlockFromItem(item);
-
-		if (block instanceof IWoodTyped) {
-			IWoodTyped woodTypedBlock = (IWoodTyped) block;
-			if (woodTypedBlock.isFireproof()) {
-				fuelBurnTimeEvent.burnTime = 0;
-				fuelBurnTimeEvent.setResult(Event.Result.DENY);
-			} else if (blocks.slabs == block) {
-				fuelBurnTimeEvent.burnTime = 150;
-				fuelBurnTimeEvent.setResult(Event.Result.DENY);
-			}
 		}
 	}
 }

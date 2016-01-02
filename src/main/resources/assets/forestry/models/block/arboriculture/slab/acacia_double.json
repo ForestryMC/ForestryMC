@@ -1,0 +1,8 @@
+{
+  "parent": "forestry:block/arboriculture/planks/acacia",
+  "textures": {
+    "side": "forestry:blocks/wood/planks.acacia",
+    "top": "forestry:blocks/wood/planks.acacia",
+    "bottom": "forestry:blocks/wood/planks.acacia"
+  }
+}

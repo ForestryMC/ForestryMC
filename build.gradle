@@ -1,6 +1,6 @@
 buildscript {
 	repositories {
-		mavenCentral()
+		jcenter()
 		maven {
 			name = "forge"
 			url = "http://files.minecraftforge.net/maven"
@@ -11,15 +11,17 @@ buildscript {
 		}
 	}
 	dependencies {
-		classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+		classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
 		// https://github.com/ajoberstar/gradle-git
 		classpath 'org.ajoberstar:gradle-git:0.8.0'
 	}
 }
 
-apply plugin: 'forge'
-apply plugin: 'maven'
-apply plugin: 'java'
+plugins {
+    id "net.minecraftforge.gradle.forge" version "2.0.2"
+}
+
+loadProperties()
 
 version = version_major + '.' + version_minor + '.' + version_patch + '.' + getBuildNumber()
 if (project.hasProperty('buildQualifier')) {
@@ -34,21 +36,20 @@ ext.dirLang = "./lang"
 ext.apiForestry = "./api/forestry"
 ext.apiRedstoneFlux = "./api/redstoneflux"
 
-// java version
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
+//ext.CraftGuideRepo = "https://github.com/Uristqwerty/CraftGuide.git" //Until CG has a 1.8 build, this is out.
+//ext.CraftGuideTmp = "build/tmp/CraftGuide"
 
 minecraft {
 	version = mcversion + "-" + forgeversion
 	runDir = "run"
+	mappings = mcp_mappings
 
 	replace '@VERSION@', project.version
 	replace '@BUILD_NUMBER@', getBuildNumber()
-
-	srgExtra "PK: chylex/javacheck forestry/shade/javacheck"
 }
 
 sourceSets {
+	
 	main {
 		java {
 			srcDir project.apiForestry
@@ -62,46 +63,19 @@ sourceSets {
 
 repositories {
 	maven {
-		name = "ic2"
-		url = "http://maven.ic2.player.to/"
-	}
-	ivy {
-		name "BuildCraft"
-		artifactPattern "http://www.mod-buildcraft.com/releases/BuildCraft/[revision]/[module]-[revision]-[classifier].[ext]"
-	}
-	maven {
 		name = "chickenbones"
 		url = "http://chickenbones.net/maven/"
 	}
-	maven{
-		name "tterrag Repo"
-		url "http://maven.tterrag.com/"
-	}
-}
-
-configurations {
-	api
-	compile.extendsFrom api
-	shade
-	compile.extendsFrom shade
 }
 
 dependencies {
-	api 'net.industrial-craft:industrialcraft-2:2.2.790-experimental:api'
-	api name: "buildcraft", version: "7.1.12", classifier: "api"
-
 	// http://files.minecraftforge.net/CodeChickenLib/
-	compile "codechicken:CodeChickenLib:1.7.10-1.1.3.140:dev"
+	compile "codechicken:CodeChickenLib:1.8-1.1.2.139:dev"
 
 	// http://chickenbones.net/maven
-	compile "codechicken:CodeChickenCore:1.7.10-1.0.7.47:dev"
-	compile "codechicken:NotEnoughItems:1.7.10-1.0.5.111:dev"
-	compile "codechicken:NotEnoughItems:1.7.10-1.0.5.111:src"
-
-	// http://maven.tterrag.com/
-	shade "chylex.javacheck:JavaChecker:v1.2-b1"
-
-	testCompile 'junit:junit:4.12'
+	compile "codechicken:CodeChickenCore:1.8-1.0.5.36:dev"
+	compile "codechicken:NotEnoughItems:1.8-1.0.5.104:dev"
+	compile "codechicken:NotEnoughItems:1.8-1.0.5.104:src"
 }
 
 processResources {
@@ -134,14 +108,61 @@ runClient {
 	}
 }
 
-debugClient {
-	if (project.hasProperty('mcUsername')) {
-		args "--username=" + project.mcUsername
-	}
-	if (project.hasProperty('mcPassword')) {
-		args "--password=" + project.mcPassword
-	}
+task echoVersion << {
+	printNextVersion()
 }
+
+def saveVersion() {
+	ant.propertyfile(
+		file: "application.properties") {
+		entry( key:"version_major", type:"int", value: version_major)
+		entry( key:"version_minor", type:"int", value: version_minor)
+		entry( key:"version_patch", type:"int", value: version_patch)
+	}
+	project.version = version_major + '.' + version_minor + '.' + version_patch + '.' + getBuildNumber()
+	printNextVersion()
+}
+
+def printNextVersion() {
+	println '*************************************************************'
+	println 'The next build will be version: ' +  project.version
+	println '*************************************************************'
+}
+
+task bumpMajor << {
+	project.version_major = Integer.parseInt(project.version_major) + 1
+	project.version_minor = "0"
+	project.version_patch = "0"
+	saveVersion()
+}
+
+task bumpMinor << {
+	project.version_minor = Integer.parseInt(project.version_minor) + 1
+	project.version_patch = "0"
+	saveVersion()
+}
+
+task bumpPatch << {
+	project.version_patch = Integer.parseInt(project.version_patch) + 1
+	saveVersion()
+}
+
+//import org.ajoberstar.grgit.Grgit
+
+/*task initCraftGuide << {
+	def localRepo = file(CraftGuideTmp)
+
+	if (localRepo.exists()) {
+		println 'Updating CraftGuide repo'
+		def grgit = Grgit.open(localRepo)
+		grgit.pull()
+		grgit.close()
+	} else {
+		println 'Cloning CraftGuide repo'
+		def grgit = Grgit.clone(dir: localRepo, uri: CraftGuideRepo)
+		grgit.close()
+	}
+}*/
 
 jar {
 	destinationDir = file("build/tmp")
@@ -154,79 +175,129 @@ jar {
 	into ('cofh/api') {
 		from project.apiRedstoneFlux + "/LICENSE - LGPLv3.txt"
 	}
-	into ('invtweaks/api') {
-		from "./src/main/java/invtweaks/LICENSE.txt"
+	into ('buildcraft/api') {
+		from "./src/main/java/buildcraft/LICENSE-API"
+	}
+}
+
+task mainJarSigned ( type: Jar, dependsOn: 'reobf' ) {
+	from (zipTree(jar.getArchivePath())) {
+		exclude '**/api/**'
+		exclude '**/codechicken/**'
+		exclude '**/undergroundBiomes/**'
 	}
 
-	configurations.shade.each{ dep ->
-		from(project.zipTree(dep)){
-			exclude 'META-INF', 'META-INF/**', 'mcmod.info'
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+	destinationDir = file("build/tmp")
+	archiveName = "signed.jar"
+
+	doLast {
+		if (project.hasProperty('signingKeystore')) {
+			ant.signjar(jar: getArchivePath(),
+				alias: signingAlias,
+				keystore: signingKeystore,
+				storepass: signingStorepass)
+		} else {
+			println 'Signing disabled, gradle.properties is missing.'
 		}
 	}
 }
 
-task mainJar(type: Jar, dependsOn: 'reobf') {
+task mainJar ( type: Zip, dependsOn: mainJarSigned ) {
+	from (zipTree(mainJarSigned.getArchivePath())) {
+		include '**'
+	}
+
 	from (zipTree(jar.getArchivePath())) {
 		include '**'
 		exclude '**/codechicken/**'
-		exclude '**/uristqwerty/**'
+		exclude '**/undergroundBiomes/**'
 	}
 
-	destinationDir = file(dirDest)
 	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+	destinationDir = file(dirDest)
 	includeEmptyDirs = false
+	extension = 'jar'
+}
 
-	manifest{
-		attributes 'TweakClass': 'forestry.shade.javacheck.Java7Checker'
+task devJarSigned ( type: Jar, dependsOn: 'classes' ) {
+	from(sourceSets.main.output) {
+		exclude '**/api/**'
+		exclude '**/codechicken/**'
+		exclude '**/undergroundBiomes/**'
+	}
+
+	destinationDir = file("build/tmp")
+	archiveName = "signed-dev.jar"
+
+	doLast {
+		if (project.hasProperty('signingKeystore')) {
+			ant.signjar(jar: getArchivePath(),
+				alias: signingAlias,
+				keystore: signingKeystore,
+				storepass: signingStorepass)
+		} else {
+			println 'Signing disabled, gradle.properties is missing.'
+		}
 	}
 }
 
-task devJar(type: Jar, dependsOn: 'classes') {
-	from (sourceSets.main.output) {
-		exclude '**/codechicken/**'
-		exclude '**/uristqwerty/**'
+task devJar ( type: Zip, dependsOn: devJarSigned ) {
+	from (zipTree(devJarSigned.getArchivePath())) {
+		include '**'
 	}
 
-	destinationDir = file(dirDest)
+	from(sourceSets.main.allSource) {
+		include '**'
+		exclude '**/codechicken/**'
+		exclude '**/undergroundBiomes/**'
+	}
+
+	from(sourceSets.main.output) {
+		include '**'
+		exclude '**/codechicken/**'
+		exclude '**/undergroundBiomes/**'
+	}
+
 	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-	includeEmptyDirs = false
+	destinationDir = file(dirDest)
+	extension = 'jar'
 
 	classifier = 'dev'
 }
 
 task apiJar(type: Jar, dependsOn: 'classes') {
 	from project.apiForestry
-	from(sourceSets.main.output) {
+	
+	from (sourceSets.main.output) {
 		include 'forestry/api/**'
 	}
-
+	
 	destinationDir = file(dirDest)
-	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-	includeEmptyDirs = false
-
+	extension = 'jar'
 	classifier = 'api'
 }
 
-task sourceJar(type: Jar, dependsOn: 'classes') {
-	from (sourceSets.main.allSource) {
-		exclude '**/codechicken/**'
-		exclude '**/uristqwerty/**'
-	}
-
-	destinationDir = file(dirDest)
-	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-	includeEmptyDirs = false
-
-	classifier = 'sources'
+task releaseInit << {
+	println '*************************************************************'
+	println 'This build will be version: ' +  rootProject.version
+	println '*************************************************************'
 }
 
-task release (dependsOn: [mainJar, apiJar, devJar, sourceJar]) {
+task release (dependsOn: [releaseInit, apiJar, devJar, mainJar]) {
 }
+
+mainJar.shouldRunAfter releaseInit
+devJar.shouldRunAfter releaseInit
+apiJar.shouldRunAfter releaseInit
+
+/*afterEvaluate {
+	compileApiJava.dependsOn initCraftGuide
+}*/
 
 artifacts {
 	archives apiJar
 	archives devJar
-	archives sourceJar
 }
 
 uploadArchives {
@@ -241,12 +312,22 @@ uploadArchives {
 				addFilter('dev') { artifact, file ->
 					file == devJar.archivePath
 				}
-				addFilter('source') { artifact, file ->
-					file == sourceJar.archivePath
-				}
 			}
 		} else {
 			println 'Archives upload disabled, gradle.properties is missing.'
+		}
+	}
+}
+
+def loadProperties() {
+	println('loading application.properties')
+
+	file("application.properties").withReader { reader ->
+		def userProps = new Properties()
+		userProps.load(reader)
+
+		for (Map.Entry property in userProps) {
+			project.ext[property.getKey()] = property.getValue()
 		}
 	}
 }

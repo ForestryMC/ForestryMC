@@ -10,25 +10,26 @@
  ******************************************************************************/
 package forestry.core.utils;
 
-import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCocoa;
-import net.minecraft.block.BlockLog;
+import net.minecraft.block.BlockPlanks;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.core.config.Constants;
 import forestry.core.tiles.TileEngine;
-import forestry.core.utils.vect.Vect;
 
 import cofh.api.energy.IEnergyConnection;
 import cofh.api.energy.IEnergyReceiver;
@@ -37,15 +38,14 @@ public abstract class BlockUtil {
 
 	private static final int slabWoodId = OreDictionary.getOreID("slabWood");
 
-	public static ArrayList<ItemStack> getBlockDrops(World world, Vect posBlock) {
-		Block block = world.getBlock(posBlock.x, posBlock.y, posBlock.z);
-		int meta = world.getBlockMetadata(posBlock.x, posBlock.y, posBlock.z);
+	public static List<ItemStack> getBlockDrops(World world, BlockPos pos) {
+		IBlockState state = world.getBlockState(pos);
 
-		return block.getDrops(world, posBlock.x, posBlock.y, posBlock.z, meta, 0);
+		return state.getBlock().getDrops(world, pos, state, 0);
 
 	}
 
-	public static boolean isEnergyReceiverOrEngine(ForgeDirection side, TileEntity tile) {
+	public static boolean isEnergyReceiverOrEngine(EnumFacing side, TileEntity tile) {
 		if (!(tile instanceof IEnergyReceiver) && !(tile instanceof TileEngine)) {
 			return false;
 		}
@@ -54,20 +54,22 @@ public abstract class BlockUtil {
 		return receptor.canConnectEnergy(side);
 	}
 
-	public static boolean tryPlantPot(World world, int x, int y, int z, Block block) {
+	public static boolean tryPlantPot(World world, BlockPos pos, Block block) {
 
-		int direction = getDirectionalMetadata(world, x, y, z);
+		int direction = getDirectionalMetadata(world, pos);
 		if (direction < 0) {
 			return false;
 		}
+		
+		IBlockState state = block.getStateFromMeta(direction);
 
-		world.setBlock(x, y, z, block, direction, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
+		world.setBlockState(pos, state, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
 		return true;
 	}
 
-	public static int getDirectionalMetadata(World world, int x, int y, int z) {
-		for (int i = 0; i < 4; i++) {
-			if (!isValidPot(world, x, y, z, i)) {
+	public static int getDirectionalMetadata(World world, BlockPos pos) {
+		for (int i = 2; i < 4; i++) {
+			if (!isValidPot(world, pos, EnumFacing.values()[i])) {
 				continue;
 			}
 			return i;
@@ -75,19 +77,18 @@ public abstract class BlockUtil {
 		return -1;
 	}
 
-	public static boolean isValidPot(World world, int x, int y, int z, int notchDirection) {
-		x += Direction.offsetX[notchDirection];
-		z += Direction.offsetZ[notchDirection];
-		Block block = world.getBlock(x, y, z);
-		if (block == Blocks.log) {
-			return BlockLog.func_150165_c(world.getBlockMetadata(x, y, z)) == 3;
+	public static boolean isValidPot(World world, BlockPos pos, EnumFacing direction) {
+		pos = pos.offset(direction);
+		IBlockState state = world.getBlockState(pos);
+		if (state.getBlock() == Blocks.log) {
+			return state.getValue(BlockPlanks.VARIANT) == BlockPlanks.EnumType.JUNGLE;
 		} else {
-			return block.isWood(world, x, y, z);
+			return state.getBlock().isWood(world, pos);
 		}
 	}
 
-	public static int getMaturityPod(int metadata) {
-		return BlockCocoa.func_149987_c(metadata);
+	public static int getMaturityPod(IBlockState state) {
+		return state.getValue(BlockCocoa.AGE).intValue();
 	}
 
 	public static boolean isWoodSlabBlock(Block block) {
@@ -101,23 +102,22 @@ public abstract class BlockUtil {
 		return false;
 	}
 
-	public static boolean isReplaceableBlock(World world, int x, int y, int z) {
-		Block block = world.getBlock(x, y, z);
+	public static boolean isReplaceableBlock(World world, BlockPos pos) {
+		IBlockState state = world.getBlockState(pos);
 
-		return isReplaceableBlock(block);
+		return isReplaceableBlock(state.getBlock());
 	}
 
 	public static boolean isReplaceableBlock(Block block) {
-		return block == Blocks.vine || block == Blocks.tallgrass || block == Blocks.deadbush || block == Blocks.snow_layer
-				|| block.getMaterial().isReplaceable();
+		return block == Blocks.vine || block == Blocks.tallgrass || block == Blocks.deadbush || block == Blocks.snow_layer || block.getMaterial().isReplaceable();
 	}
 
 	/**
 	 * Ray traces through the blocks collision from start vector to end vector returning a ray trace hit.
 	 */
-	public static MovingObjectPosition collisionRayTrace(World world, int x, int y, int z, Vec3 startVec, Vec3 endVec, float minX, float minY, float minZ, float maxX, float maxY, float maxZ) {
-		startVec = startVec.addVector((double) (-x), (double) (-y), (double) (-z));
-		endVec = endVec.addVector((double) (-x), (double) (-y), (double) (-z));
+	public static MovingObjectPosition collisionRayTrace(World world, BlockPos pos, Vec3 startVec, Vec3 endVec, float minX, float minY, float minZ, float maxX, float maxY, float maxZ) {
+		startVec = startVec.addVector((-pos.getX()), (-pos.getY()), (-pos.getZ()));
+		endVec = endVec.addVector((-pos.getX()), (-pos.getY()), (-pos.getZ()));
 		Vec3 vec32 = startVec.getIntermediateWithXValue(endVec, minX);
 		Vec3 vec33 = startVec.getIntermediateWithXValue(endVec, maxX);
 		Vec3 vec34 = startVec.getIntermediateWithYValue(endVec, minY);
@@ -204,7 +204,7 @@ public abstract class BlockUtil {
 				sideHit = 3;
 			}
 
-			return new MovingObjectPosition(x, y, z, sideHit, minHit.addVector((double) x, (double) y, (double) z));
+			return new MovingObjectPosition(minHit.addVector(pos.getX(), pos.getY(), pos.getZ()), EnumFacing.values()[sideHit], pos);
 		}
 	}
 
@@ -228,4 +228,89 @@ public abstract class BlockUtil {
 	private static boolean isVecInsideXYBounds(Vec3 vec, float minX, float minY, float maxX, float maxY) {
 		return vec != null && (vec.xCoord >= minX && vec.xCoord <= maxX && vec.yCoord >= minY && vec.yCoord <= maxY);
 	}
+	
+	public static boolean blockExists(World world, BlockPos pos) {
+		return pos.getY() >= 0 && pos.getY() < 256
+				? world.getChunkProvider().chunkExists(pos.getX() >> 4, pos.getZ() >> 4) : false;
+	}
+	
+	public static boolean checkChunksExist(World world, BlockPos minPos, BlockPos maxPos) {
+		return checkChunksExist(world, minPos.getX(), minPos.getY(), minPos.getZ(), maxPos.getX(), maxPos.getY(), maxPos.getZ());
+	}
+
+	public static boolean checkChunksExist(World world, int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
+		if (maxY >= 0 && minY < 256) {
+			minX >>= 4;
+			minZ >>= 4;
+			maxX >>= 4;
+			maxZ >>= 4;
+
+			for (int k1 = minX; k1 <= maxX; ++k1) {
+				for (int l1 = minZ; l1 <= maxZ; ++l1) {
+					if (!world.getChunkProvider().chunkExists(k1, l1)) {
+						return false;
+					}
+				}
+			}
+
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	/*
+	 * BLOCK POS
+	 */
+	 
+	public static BlockPos multiply(BlockPos pos, int factor) {
+		return new BlockPos(pos.getX() * factor, pos.getY() * factor, pos.getZ() * factor);
+	}
+
+	public static BlockPos multiply(BlockPos pos, float factor) {
+		return new BlockPos(Math.round(pos.getX() * factor), Math.round(pos.getY() * factor), Math.round(pos.getZ() * factor));
+	}
+	
+	public static BlockPos getRandomPositionInArea(Random random, BlockPos area) {
+		int x = random.nextInt(area.getX());
+		int y = random.nextInt(area.getY());
+		int z = random.nextInt(area.getZ());
+		return new BlockPos(x, y, z);
+	}
+
+	public static BlockPos add(BlockPos... vects) {
+		int x = 0;
+		int y = 0;
+		int z = 0;
+		for (BlockPos vect : vects) {
+			x += vect.getX();
+			y += vect.getY();
+			z += vect.getZ();
+		}
+		return new BlockPos(x, y, z);
+	}
+	
+	public static boolean advancePositionInArea(BlockPos pos, BlockPos area) {
+		// Increment z first until end reached
+		if (pos.getZ() < area.getZ() - 1) {
+			pos.add(0, 0, 1);
+		} else {
+			pos = new BlockPos(pos.getX(), pos.getY(), 0);
+
+			if (pos.getX() < area.getX() - 1) {
+				pos.add(1, 0, 0);
+			} else {
+				pos = new BlockPos(0, pos.getY(), 0);
+
+				if (pos.getY() < area.getY() - 1) {
+					pos.add(0, 1, 0);
+				} else {
+					return false;
+				}
+			}
+		}
+
+		return true;
+	}
+	
 }

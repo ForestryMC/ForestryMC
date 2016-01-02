@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.lepidopterology.entities;
 
+import net.minecraft.util.Vec3;
+
 public class AIButterflyRise extends AIButterflyMovement {
 
 	public AIButterflyRise(EntityButterfly entity) {
@@ -54,7 +56,7 @@ public class AIButterflyRise extends AIButterflyMovement {
 		}
 
 		// Continue if we have not yet reached the destination.
-		if (entity.getDestination().squareDistanceTo(entity.posX, entity.posY, entity.posZ) > 2.0f) {
+		if (entity.getDestination().squareDistanceTo(new Vec3(entity.posX, entity.posY, entity.posZ)) > 2.0f) {
 			return true;
 		}
 

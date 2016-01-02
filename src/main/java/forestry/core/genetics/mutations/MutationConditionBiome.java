@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
@@ -33,8 +34,8 @@ public class MutationConditionBiome implements IMutationCondition {
 	}
 
 	@Override
-	public float getChance(World world, int x, int y, int z, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1) {
-		BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
+	public float getChance(World world, BlockPos pos, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1) {
+		BiomeGenBase biome = world.getBiomeGenForCoords(pos);
 		for (BiomeDictionary.Type type : validBiomeTypes) {
 			if (BiomeDictionary.isBiomeOfType(biome, type)) {
 				return 1;

@@ -15,7 +15,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -69,15 +69,10 @@ public class EntityMinecartApiary extends EntityMinecartBeeHousingBase implement
 	public IBeeHousingInventory getBeeInventory() {
 		return inventory;
 	}
-
+	
 	@Override
-	public Block func_145820_n() {
-		return PluginApiculture.blocks.apiculture;
-	}
-
-	@Override
-	public int getDisplayTileData() {
-		return BlockApicultureType.APIARY.ordinal();
+	public IBlockState getDisplayTile() {
+		return PluginApiculture.blocks.apiculture.getStateFromMeta(BlockApicultureType.APIARY.ordinal());
 	}
 
 	@Override
@@ -112,10 +107,5 @@ public class EntityMinecartApiary extends EntityMinecartBeeHousingBase implement
 	@Override
 	public Object getContainer(EntityPlayer player, int data) {
 		return new ContainerMinecartBeehouse(player.inventory, this, true);
-	}
-
-	@Override
-	public int getIdOfEntity() {
-		return getEntityId();
 	}
 }

@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 
 import forestry.api.apiculture.BeeManager;
@@ -37,12 +36,8 @@ public class BeeMutation extends Mutation implements IBeeMutationCustom {
 	@Override
 	public float getChance(IBeeHousing housing, IAlleleBeeSpecies allele0, IAlleleBeeSpecies allele1, IBeeGenome genome0, IBeeGenome genome1) {
 		World world = housing.getWorld();
-		ChunkCoordinates housingCoordinates = housing.getCoordinates();
-		int x = housingCoordinates.posX;
-		int y = housingCoordinates.posY;
-		int z = housingCoordinates.posZ;
 
-		float processedChance = super.getChance(world, x, y, z, allele0, allele1, genome0, genome1);
+		float processedChance = super.getChance(world, housing.getCoordinates(), allele0, allele1, genome0, genome1);
 		if (processedChance <= 0) {
 			return 0;
 		}

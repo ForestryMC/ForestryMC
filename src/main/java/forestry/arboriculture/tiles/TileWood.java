@@ -18,9 +18,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-
 import forestry.api.arboriculture.EnumWoodType;
 import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.blocks.BlockSlab;
@@ -48,11 +47,6 @@ public class TileWood extends TileEntity implements IStreamable {
 		return woodType;
 	}
 
-	@Override
-	public boolean canUpdate() {
-		return false;
-	}
-
 	/* NETWORK */
 	@Override
 	public Packet getDescriptionPacket() {
@@ -68,7 +62,7 @@ public class TileWood extends TileEntity implements IStreamable {
 	public void readData(DataInputStreamForestry data) throws IOException {
 		int ordinal = data.readVarInt();
 		woodType = EnumWoodType.VALUES[ordinal];
-		worldObj.func_147479_m(xCoord, yCoord, zCoord);
+		worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
 	}
 
 	@Override
@@ -88,35 +82,34 @@ public class TileWood extends TileEntity implements IStreamable {
 		}
 	}
 
-	public static ItemStack getPickBlock(Block block, IBlockAccess world, int x, int y, int z) {
-		TileWood wood = getWoodTile(world, x, y, z);
+	public static ItemStack getPickBlock(Block block, IBlockAccess world, BlockPos pos) {
+		TileWood wood = getWoodTile(world, pos);
 		if (wood == null) {
 			return null;
 		}
 		EnumWoodType woodType = wood.getWoodType();
 
 		int amount = 1;
-		if (block instanceof BlockSlab) {
+		if(block instanceof BlockSlab){
 			BlockSlab blockSlab = (BlockSlab) block;
-			if (blockSlab.isDoubleSlab()) {
+			if(blockSlab.isDouble()){
 				amount = 2;
 				block = PluginArboriculture.blocks.slabs;
 			}
 		}
-
 		ItemStack itemStack = new ItemStack(block, amount);
 		ItemBlockWood.saveToItemStack(woodType, itemStack);
 		return itemStack;
 	}
 
-	public static TileWood getWoodTile(IBlockAccess world, int x, int y, int z) {
-		return TileUtil.getTile(world, x, y, z, TileWood.class);
+	public static TileWood getWoodTile(IBlockAccess world, BlockPos pos) {
+		return TileUtil.getTile(world, pos, TileWood.class);
 	}
 
-	public static <T extends Block & IWoodTyped> ArrayList<ItemStack> getDrops(T block, World world, int x, int y, int z) {
+	public static <T extends Block & IWoodTyped> ArrayList<ItemStack> getDrops(T block, IBlockAccess world, BlockPos pos) {
 		ArrayList<ItemStack> drops = new ArrayList<>();
 
-		ItemStack stack = getPickBlock(block, world, x, y, z);
+		ItemStack stack = getPickBlock(block, world, pos);
 		if (stack != null) {
 			drops.add(stack);
 		}

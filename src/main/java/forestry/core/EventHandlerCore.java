@@ -17,13 +17,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.world.WorldEvent;
-
-import cpw.mods.fml.common.eventhandler.Event.Result;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
+import net.minecraftforge.fml.common.eventhandler.Event.Result;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.ISpeciesRoot;
@@ -87,10 +85,8 @@ public class EventHandlerCore {
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public void handleTextureRemap(TextureStitchEvent.Pre event) {
-		if (event.map.getTextureType() == 1) {
-			ErrorStateRegistry.initIcons(event.map);
-			TextureManager.initDefaultIcons(event.map);
-		}
+		ErrorStateRegistry.initSprites();
+		TextureManager.initDefaultSprites();
 	}
 
 }

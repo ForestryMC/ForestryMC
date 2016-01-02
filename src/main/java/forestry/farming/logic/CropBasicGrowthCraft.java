@@ -10,16 +10,15 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.vect.Vect;
 
 public class CropBasicGrowthCraft extends Crop {
 
@@ -28,7 +27,7 @@ public class CropBasicGrowthCraft extends Crop {
 	private final boolean isRice;
 	private final boolean isGrape;
 
-	public CropBasicGrowthCraft(World world, Block block, int meta, Vect position, boolean isRice, boolean isGrape) {
+	public CropBasicGrowthCraft(World world, Block block, int meta, BlockPos position, boolean isRice, boolean isGrape) {
 		super(world, position);
 		this.block = block;
 		this.meta = meta;
@@ -37,26 +36,26 @@ public class CropBasicGrowthCraft extends Crop {
 	}
 
 	@Override
-	protected boolean isCrop(Vect pos) {
+	protected boolean isCrop(BlockPos pos) {
 		return getBlock(pos) == block && getBlockMeta(pos) == meta;
 	}
 
 	@Override
-	protected Collection<ItemStack> harvestBlock(Vect pos) {
-		ArrayList<ItemStack> harvest = block.getDrops(world, pos.x, pos.y, pos.z, meta, 0);
+	protected Collection<ItemStack> harvestBlock(BlockPos pos) {
+		Collection<ItemStack> harvest = block.getDrops(world, pos, world.getBlockState(pos), 0);
 		if (harvest.size() > 1) {
 			harvest.remove(0); //Hops have rope as first drop.
 		}
-		Proxies.common.addBlockDestroyEffects(world, pos.x, pos.y, pos.z, block, 0);
+		Proxies.common.addBlockDestroyEffects(world, pos, block.getStateFromMeta(0));
 		if (isGrape) {
-			world.setBlockToAir(pos.x, pos.y, pos.z);
+			world.setBlockToAir(pos);
 
 		} else {
-			world.setBlockMetadataWithNotify(pos.x, pos.y, pos.z, 0, Constants.FLAG_BLOCK_SYNCH);
+			world.setBlockState(pos, block.getStateFromMeta(0), Constants.FLAG_BLOCK_SYNCH);
 		}
 
 		if (isRice) {
-			world.setBlockMetadataWithNotify(pos.x, pos.y - 1, pos.z, 7, Constants.FLAG_BLOCK_SYNCH);
+			world.setBlockState(pos.add(0, -1, 0), block.getStateFromMeta(7), Constants.FLAG_BLOCK_SYNCH);
 		}
 
 		return harvest;

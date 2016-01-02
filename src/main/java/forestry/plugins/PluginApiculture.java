@@ -21,11 +21,12 @@ import java.util.Random;
 import java.util.Set;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
@@ -35,17 +36,15 @@ import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.GameData;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
-
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.registry.GameData;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.registry.VillagerRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.Forestry;
 import forestry.api.apiculture.BeeManager;
@@ -53,6 +52,7 @@ import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.FlowerManager;
 import forestry.api.apiculture.IBeekeepingMode;
 import forestry.api.apiculture.hives.HiveManager;
+import forestry.api.apiculture.hives.IHiveRegistry.HiveType;
 import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IClassification;
@@ -64,7 +64,6 @@ import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
 import forestry.apiculture.ArmorApiaristHelper;
 import forestry.apiculture.SaveEventHandlerApiculture;
-import forestry.apiculture.VillageHandlerApiculture;
 import forestry.apiculture.blocks.BlockAlveary;
 import forestry.apiculture.blocks.BlockApicultureType;
 import forestry.apiculture.blocks.BlockCandle;
@@ -196,10 +195,10 @@ public class PluginApiculture extends ForestryPlugin {
 			ApicultureTriggers.initialize();
 		}
 
-		if (Config.enableVillagers) {
+		/*if (Config.enableVillagers) {
 			// Register village components with the Structure registry.
 			VillageHandlerApiculture.registerVillageComponents();
-		}
+		}*/
 
 		// Commands
 		PluginCore.rootCommand.addChildCommand(new CommandBee());
@@ -300,14 +299,14 @@ public class PluginApiculture extends ForestryPlugin {
 		BeeManager.villageBees[1].add(BeeDefinition.COMMON.getGenome());
 		BeeManager.villageBees[1].add(BeeDefinition.VALIANT.getGenome());
 
-		if (Config.enableVillagers) {
+		/*if (Config.enableVillagers) {
 			// Register villager stuff
 			VillageHandlerApiculture villageHandler = new VillageHandlerApiculture();
 			VillagerRegistry.instance().registerVillageCreationHandler(villageHandler);
 			VillagerRegistry.instance().registerVillagerId(Constants.ID_VILLAGER_BEEKEEPER);
 			Proxies.render.registerVillagerSkin(Constants.ID_VILLAGER_BEEKEEPER, Constants.TEXTURE_SKIN_BEEKPEEPER);
 			VillagerRegistry.instance().registerVillageTradeHandler(Constants.ID_VILLAGER_BEEKEEPER, villageHandler);
-		}
+		}*/
 
 		proxy.initializeRendering();
 
@@ -356,7 +355,7 @@ public class PluginApiculture extends ForestryPlugin {
 			List<String> plantableFlowerNames = new ArrayList<>();
 			if (flowers != null) {
 				for (IFlower flower : flowers) {
-					String name = GameData.getBlockRegistry().getNameForObject(flower.getBlock());
+					String name = GameData.getBlockRegistry().getNameForObject(flower.getBlock()).toString();
 					if (name == null) {
 						Log.severe("Could not find name for flower: " + flower + " with type: " + flowerType);
 						continue;
@@ -521,14 +520,14 @@ public class PluginApiculture extends ForestryPlugin {
 				'#', PluginCore.items.beeswax);
 
 		// / ALVEARY
-		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.Type.PLAIN),
+		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.AlvearyType.PLAIN),
 				"###",
 				"#X#",
 				"###",
 				'X', PluginCore.items.impregnatedCasing,
 				'#', PluginCore.items.craftingMaterial.getScentedPaneling());
 		// SWARMER
-		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.Type.SWARMER),
+		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.AlvearyType.SWARMER),
 				"#G#",
 				" X ",
 				"#G#",
@@ -536,7 +535,7 @@ public class PluginApiculture extends ForestryPlugin {
 				'X', blocks.alveary,
 				'G', "ingotGold");
 		// FAN
-		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.Type.FAN),
+		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.AlvearyType.FAN),
 				"I I",
 				" X ",
 				"I#I",
@@ -544,7 +543,7 @@ public class PluginApiculture extends ForestryPlugin {
 				'X', blocks.alveary,
 				'I', "ingotIron");
 		// HEATER
-		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.Type.HEATER),
+		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.AlvearyType.HEATER),
 				"#I#",
 				" X ",
 				"YYY",
@@ -552,7 +551,7 @@ public class PluginApiculture extends ForestryPlugin {
 				'X', blocks.alveary,
 				'I', "ingotIron", 'Y', "stone");
 		// HYGROREGULATOR
-		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.Type.HYGRO),
+		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.AlvearyType.HYGRO),
 				"GIG",
 				"GXG",
 				"GIG",
@@ -560,14 +559,14 @@ public class PluginApiculture extends ForestryPlugin {
 				'I', "ingotIron",
 				'G', "blockGlass");
 		// STABILISER
-		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.Type.STABILIZER),
+		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.AlvearyType.STABILISER),
 				"G G",
 				"GXG",
 				"G G",
 				'X', blocks.alveary,
 				'G', "gemQuartz");
 		// SIEVE
-		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.Type.SIEVE),
+		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.AlvearyType.SIEVE),
 				"III",
 				" X ",
 				"WWW",
@@ -747,42 +746,42 @@ public class PluginApiculture extends ForestryPlugin {
 
 	private static void registerBeehiveDrops() {
 		ItemStack honeyComb = items.beeComb.get(EnumHoneyComb.HONEY, 1);
-		hiveRegistry.addDrops(HiveRegistry.forest,
+		hiveRegistry.addDrops(HiveType.FOREST.getHiveName(),
 				new HiveDrop(80, BeeDefinition.FOREST, honeyComb).setIgnobleShare(0.7f),
 				new HiveDrop(8, BeeDefinition.FOREST.getRainResist(), honeyComb),
 				new HiveDrop(3, BeeDefinition.VALIANT, honeyComb)
 		);
 
-		hiveRegistry.addDrops(HiveRegistry.meadows,
+		hiveRegistry.addDrops(HiveType.MEADOWS.getHiveName(),
 				new HiveDrop(80, BeeDefinition.MEADOWS, honeyComb).setIgnobleShare(0.7f),
 				new HiveDrop(3, BeeDefinition.VALIANT, honeyComb)
 		);
 
 		ItemStack parchedComb = items.beeComb.get(EnumHoneyComb.PARCHED, 1);
-		hiveRegistry.addDrops(HiveRegistry.desert,
+		hiveRegistry.addDrops(HiveType.DESERT.getHiveName(),
 				new HiveDrop(80, BeeDefinition.MODEST, parchedComb).setIgnobleShare(0.7f),
 				new HiveDrop(3, BeeDefinition.VALIANT, parchedComb)
 		);
 
 		ItemStack silkyComb = items.beeComb.get(EnumHoneyComb.SILKY, 1);
-		hiveRegistry.addDrops(HiveRegistry.jungle,
+		hiveRegistry.addDrops(HiveType.JUNGLE.getHiveName(),
 				new HiveDrop(80, BeeDefinition.TROPICAL, silkyComb).setIgnobleShare(0.7f),
 				new HiveDrop(3, BeeDefinition.VALIANT, silkyComb)
 		);
 
 		ItemStack mysteriousComb = items.beeComb.get(EnumHoneyComb.MYSTERIOUS, 1);
-		hiveRegistry.addDrops(HiveRegistry.end,
+		hiveRegistry.addDrops(HiveType.END.getHiveName(),
 				new HiveDrop(90, BeeDefinition.ENDED, mysteriousComb)
 		);
 
 		ItemStack frozenComb = items.beeComb.get(EnumHoneyComb.FROZEN, 1);
-		hiveRegistry.addDrops(HiveRegistry.snow,
+		hiveRegistry.addDrops(HiveType.SNOW.getHiveName(),
 				new HiveDrop(80, BeeDefinition.WINTRY, frozenComb).setIgnobleShare(0.5f),
 				new HiveDrop(3, BeeDefinition.VALIANT, frozenComb)
 		);
 
 		ItemStack mossyComb = items.beeComb.get(EnumHoneyComb.MOSSY, 1);
-		hiveRegistry.addDrops(HiveRegistry.swamp,
+		hiveRegistry.addDrops(HiveType.SWAMP.getHiveName(),
 				new HiveDrop(80, BeeDefinition.MARSHY, mossyComb).setIgnobleShare(0.4f),
 				new HiveDrop(3, BeeDefinition.VALIANT, mossyComb)
 		);
@@ -816,13 +815,13 @@ public class PluginApiculture extends ForestryPlugin {
 	}
 
 	private static void createHives() {
-		hiveRegistry.registerHive(HiveRegistry.forest, HiveDescription.FOREST);
-		hiveRegistry.registerHive(HiveRegistry.meadows, HiveDescription.MEADOWS);
-		hiveRegistry.registerHive(HiveRegistry.desert, HiveDescription.DESERT);
-		hiveRegistry.registerHive(HiveRegistry.jungle, HiveDescription.JUNGLE);
-		hiveRegistry.registerHive(HiveRegistry.end, HiveDescription.END);
-		hiveRegistry.registerHive(HiveRegistry.snow, HiveDescription.SNOW);
-		hiveRegistry.registerHive(HiveRegistry.swamp, HiveDescription.SWAMP);
+		hiveRegistry.registerHive(HiveType.FOREST.getHiveName(), HiveDescription.FOREST);
+		hiveRegistry.registerHive(HiveType.MEADOWS.getHiveName(), HiveDescription.MEADOWS);
+		hiveRegistry.registerHive(HiveType.DESERT.getHiveName(), HiveDescription.DESERT);
+		hiveRegistry.registerHive(HiveType.JUNGLE.getHiveName(), HiveDescription.JUNGLE);
+		hiveRegistry.registerHive(HiveType.END.getHiveName(), HiveDescription.END);
+		hiveRegistry.registerHive(HiveType.SNOW.getHiveName(), HiveDescription.SNOW);
+		hiveRegistry.registerHive(HiveType.SWAMP.getHiveName(), HiveDescription.SWAMP);
 	}
 
 	private static void createAlleles() {
@@ -926,11 +925,9 @@ public class PluginApiculture extends ForestryPlugin {
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public void textureHook(TextureStitchEvent.Pre event) {
-		if (event.map.getTextureType() == 1) {
-			EntityFXSnow.icons = new IIcon[3];
-			for (int i = 0; i < EntityFXSnow.icons.length; i++) {
-				EntityFXSnow.icons[i] = event.map.registerIcon("forestry:particles/snow." + (i + 1));
-			}
+		EntityFXSnow.icons = new TextureAtlasSprite[3];
+		for (int i = 0; i < EntityFXSnow.icons.length; i++) {
+			EntityFXSnow.icons[i] = event.map.registerSprite(new ResourceLocation("forestry:items/particles/snow." + (i + 1)));
 		}
 	}
 }
