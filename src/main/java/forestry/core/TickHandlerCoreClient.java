@@ -11,6 +11,7 @@
 package forestry.core;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.entity.player.EntityPlayer;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -30,14 +31,24 @@ public class TickHandlerCoreClient {
 		}
 
 		Minecraft minecraft = Minecraft.getMinecraft();
+		if (minecraft == null) {
+			return;
+		}
+
 		EntityPlayer player = minecraft.thePlayer;
+		if (player == null) {
+			return;
+		}
 
 		boolean hasNaturalistEye = GeneticsUtil.hasNaturalistEye(player);
 		if (this.hasNaturalistEye != hasNaturalistEye) {
 			this.hasNaturalistEye = hasNaturalistEye;
-			minecraft.renderGlobal.markBlockRangeForRenderUpdate(
-					(int) player.posX - 32, (int) player.posY - 32, (int) player.posZ - 32,
-					(int) player.posX + 32, (int) player.posY + 32, (int) player.posZ + 32);
+			RenderGlobal renderGlobal = minecraft.renderGlobal;
+			if (renderGlobal != null) {
+				renderGlobal.markBlockRangeForRenderUpdate(
+						(int) player.posX - 32, (int) player.posY - 32, (int) player.posZ - 32,
+						(int) player.posX + 32, (int) player.posY + 32, (int) player.posZ + 32);
+			}
 		}
 	}
 }
