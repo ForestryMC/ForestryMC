@@ -1,25 +1,23 @@
 buildscript {
 	repositories {
-		mavenCentral()
-		maven {
-			name = "forge"
-			url = "http://files.minecraftforge.net/maven"
-		}
-		maven {
+        jcenter()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+				maven {
 			name = "sonatype"
 			url = "https://oss.sonatype.org/content/repositories/snapshots/"
 		}
-	}
+    }
 	dependencies {
-		classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
-		// https://github.com/ajoberstar/gradle-git
-		classpath 'org.ajoberstar:gradle-git:0.8.0'
+		classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
 	}
 }
 
-apply plugin: 'forge'
-apply plugin: 'maven'
-apply plugin: 'java'
+plugins {
+    id "net.minecraftforge.gradle.forge" version "2.0.2"
+}
 
 version = version_major + '.' + version_minor + '.' + version_patch + '.' + getBuildNumber()
 if (project.hasProperty('buildQualifier')) {
@@ -41,11 +39,11 @@ targetCompatibility = 1.7
 minecraft {
 	version = mcversion + "-" + forgeversion
 	runDir = "run"
+	
+	mappings = "stable_20"
 
 	replace '@VERSION@', project.version
 	replace '@BUILD_NUMBER@', getBuildNumber()
-
-	srgExtra "PK: chylex/javacheck forestry/shade/javacheck"
 }
 
 sourceSets {
@@ -61,22 +59,6 @@ sourceSets {
 }
 
 repositories {
-	maven {
-		name = "ic2"
-		url = "http://maven.ic2.player.to/"
-	}
-	ivy {
-		name "BuildCraft"
-		artifactPattern "http://www.mod-buildcraft.com/releases/BuildCraft/[revision]/[module]-[revision]-[classifier].[ext]"
-	}
-	maven {
-		name = "chickenbones"
-		url = "http://chickenbones.net/maven/"
-	}
-	maven{
-		name "tterrag Repo"
-		url "http://maven.tterrag.com/"
-	}
 }
 
 configurations {
@@ -87,21 +69,6 @@ configurations {
 }
 
 dependencies {
-	api 'net.industrial-craft:industrialcraft-2:2.2.790-experimental:api'
-	api name: "buildcraft", version: "7.1.12", classifier: "api"
-
-	// http://files.minecraftforge.net/CodeChickenLib/
-	compile "codechicken:CodeChickenLib:1.7.10-1.1.3.140:dev"
-
-	// http://chickenbones.net/maven
-	compile "codechicken:CodeChickenCore:1.7.10-1.0.7.47:dev"
-	compile "codechicken:NotEnoughItems:1.7.10-1.0.5.111:dev"
-	compile "codechicken:NotEnoughItems:1.7.10-1.0.5.111:src"
-
-	// http://maven.tterrag.com/
-	shade "chylex.javacheck:JavaChecker:v1.2-b1"
-
-	testCompile 'junit:junit:4.12'
 }
 
 processResources {
@@ -126,15 +93,6 @@ processResources {
 }
 
 runClient {
-	if (project.hasProperty('mcUsername')) {
-		args "--username=" + project.mcUsername
-	}
-	if (project.hasProperty('mcPassword')) {
-		args "--password=" + project.mcPassword
-	}
-}
-
-debugClient {
 	if (project.hasProperty('mcUsername')) {
 		args "--username=" + project.mcUsername
 	}
@@ -168,7 +126,6 @@ jar {
 task mainJar(type: Jar, dependsOn: 'reobf') {
 	from (zipTree(jar.getArchivePath())) {
 		include '**'
-		exclude '**/codechicken/**'
 		exclude '**/uristqwerty/**'
 	}
 
@@ -183,7 +140,6 @@ task mainJar(type: Jar, dependsOn: 'reobf') {
 
 task devJar(type: Jar, dependsOn: 'classes') {
 	from (sourceSets.main.output) {
-		exclude '**/codechicken/**'
 		exclude '**/uristqwerty/**'
 	}
 
@@ -207,9 +163,8 @@ task apiJar(type: Jar, dependsOn: 'classes') {
 	classifier = 'api'
 }
 
-task sourceJar(type: Jar, dependsOn: 'classes') {
+task srcJar(type: Jar, dependsOn: 'classes') {
 	from (sourceSets.main.allSource) {
-		exclude '**/codechicken/**'
 		exclude '**/uristqwerty/**'
 	}
 
@@ -220,13 +175,13 @@ task sourceJar(type: Jar, dependsOn: 'classes') {
 	classifier = 'sources'
 }
 
-task release (dependsOn: [mainJar, apiJar, devJar, sourceJar]) {
+task release (dependsOn: [mainJar, apiJar, devJar, srcJar]) {
 }
 
 artifacts {
 	archives apiJar
 	archives devJar
-	archives sourceJar
+	archives srcJar
 }
 
 uploadArchives {
@@ -241,8 +196,8 @@ uploadArchives {
 				addFilter('dev') { artifact, file ->
 					file == devJar.archivePath
 				}
-				addFilter('source') { artifact, file ->
-					file == sourceJar.archivePath
+				addFilter('sources') { artifact, file ->
+					file == srcJar.archivePath
 				}
 			}
 		} else {
