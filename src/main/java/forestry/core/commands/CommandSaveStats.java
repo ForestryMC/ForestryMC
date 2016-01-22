@@ -23,7 +23,9 @@ import java.util.List;
 import java.util.Locale;
 
 import net.minecraft.command.ICommandSender;
+import net.minecraft.command.PlayerNotFoundException;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
@@ -57,12 +59,12 @@ public final class CommandSaveStats extends SubCommand {
 	}
 
 	@Override
-	public List<String> addTabCompletionOptions(ICommandSender sender, String[] parameters) {
+	public List<String> addTabCompletionOptions(ICommandSender sender, String[] parameters, BlockPos pos) {
 		return CommandHelpers.getListOfStringsMatchingLastWord(parameters, CommandHelpers.getPlayers());
 	}
 
 	@Override
-	public void processSubCommand(ICommandSender sender, String[] args) {
+	public void processSubCommand(ICommandSender sender, String[] args) throws PlayerNotFoundException {
 		if (args.length > 1) {
 			printHelp(sender);
 			return;
@@ -75,7 +77,7 @@ public final class CommandSaveStats extends SubCommand {
 		if (args.length > 0) {
 			player = CommandHelpers.getPlayer(sender, args[0]);
 		} else {
-			player = CommandHelpers.getPlayer(sender, sender.getCommandSenderName());
+			player = CommandHelpers.getPlayer(sender, sender.getName());
 		}
 
 		Collection<String> statistics = new ArrayList<>();

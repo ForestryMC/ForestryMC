@@ -40,15 +40,13 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemDoor;
 import net.minecraft.item.ItemStack;
-
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.IShearable;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
 import net.minecraftforge.oredict.OreDictionary;
-
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
 
 import forestry.Forestry;
 import forestry.api.recipes.RecipeManagers;
@@ -83,7 +81,7 @@ public class PluginStorage extends ForestryPlugin {
 
 	private static final List<ItemCrated> crates = new ArrayList<>();
 	private static final String CONFIG_CATEGORY = "backpacks";
-
+	
 	@SidedProxy(clientSide = "forestry.storage.proxy.ProxyStorageClient", serverSide = "forestry.storage.proxy.ProxyStorage")
 	public static ProxyStorage proxy;
 	private final ArrayList<ItemStack> minerItems = new ArrayList<>();
@@ -142,6 +140,8 @@ public class PluginStorage extends ForestryPlugin {
 
 		definition = new BackpackDefinition("builder", new Color(0xdd3a3a).getRGB());
 		BackpackManager.definitions.put(definition.getKey(), definition);
+		
+		proxy.registerCrateModelLoader();
 	}
 
 	@Override
@@ -347,7 +347,7 @@ public class PluginStorage extends ForestryPlugin {
 				new ItemStack(Items.magma_cream),
 				new ItemStack(Items.speckled_melon),
 				new ItemStack(Items.fish),
-				new ItemStack(Items.cooked_fished),
+				new ItemStack(Items.cooked_fish),
 				new ItemStack(Items.lead),
 				new ItemStack(Items.fishing_rod),
 				new ItemStack(Items.name_tag),
@@ -435,7 +435,6 @@ public class PluginStorage extends ForestryPlugin {
 	}
 
 	public static void registerCrate(ItemCrated crate) {
-		proxy.registerCrateForRendering(crate);
 		crates.add(crate);
 	}
 

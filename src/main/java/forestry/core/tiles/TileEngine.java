@@ -17,9 +17,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
+import net.minecraft.util.EnumFacing;
 import forestry.api.core.IErrorLogic;
 import forestry.apiculture.network.packets.PacketActiveUpdate;
 import forestry.core.config.Config;
@@ -67,8 +65,8 @@ public abstract class TileEngine extends TileBase implements IEnergyConnection, 
 	}
 
 	@Override
-	public void rotateAfterPlacement(EntityPlayer player, int side) {
-		ForgeDirection orientation = ForgeDirection.getOrientation(side).getOpposite();
+	public void rotateAfterPlacement(EntityPlayer player, EnumFacing side) {
+		EnumFacing orientation = side.getOpposite();
 		if (isOrientedAtEnergyReciever(orientation)) {
 			setOrientation(orientation);
 		} else {
@@ -125,7 +123,7 @@ public abstract class TileEngine extends TileBase implements IEnergyConnection, 
 		errorLogic.setCondition(!enabledRedstone, EnumErrorCode.NO_REDSTONE);
 
 		// Determine targeted tile
-		TileEntity tile = worldObj.getTileEntity(xCoord + getOrientation().offsetX, yCoord + getOrientation().offsetY, zCoord + getOrientation().offsetZ);
+		TileEntity tile = worldObj.getTileEntity(getPos().offset(getOrientation()));
 
 		float newPistonSpeed = getPistonSpeed();
 		if (newPistonSpeed != pistonSpeedServer) {
@@ -191,7 +189,7 @@ public abstract class TileEngine extends TileBase implements IEnergyConnection, 
 
 	/* INTERACTION */
 	@Override
-	public boolean rotate(ForgeDirection axis) {
+	public boolean rotate(EnumFacing axis) {
 		rotate();
 
 		// it would be irritating if the wrench opened the engine gui when it failed to rotate, so always return true
@@ -200,7 +198,7 @@ public abstract class TileEngine extends TileBase implements IEnergyConnection, 
 
 	private void rotate() {
 		for (int i = getOrientation().ordinal() + 1; i <= getOrientation().ordinal() + 6; ++i) {
-			ForgeDirection orientation = ForgeDirection.values()[i % 6];
+			EnumFacing orientation = EnumFacing.values()[i % 6];
 			if (isOrientedAtEnergyReciever(orientation)) {
 				setOrientation(orientation);
 				return;
@@ -208,8 +206,8 @@ public abstract class TileEngine extends TileBase implements IEnergyConnection, 
 		}
 	}
 
-	private boolean isOrientedAtEnergyReciever(ForgeDirection orientation) {
-		TileEntity tile = worldObj.getTileEntity(xCoord + orientation.offsetX, yCoord + orientation.offsetY, zCoord + orientation.offsetZ);
+	private boolean isOrientedAtEnergyReciever(EnumFacing orientation) {
+		TileEntity tile = worldObj.getTileEntity(getPos().offset(orientation));
 		return BlockUtil.isEnergyReceiverOrEngine(getOrientation().getOpposite(), tile);
 	}
 
@@ -313,7 +311,7 @@ public abstract class TileEngine extends TileBase implements IEnergyConnection, 
 	public abstract void sendGUINetworkData(Container containerEngine, ICrafting iCrafting);
 
 	@Override
-	public boolean canConnectEnergy(ForgeDirection from) {
+	public boolean canConnectEnergy(EnumFacing from) {
 		return energyManager.canConnectEnergy(from);
 	}
 

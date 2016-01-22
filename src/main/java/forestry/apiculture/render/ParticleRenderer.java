@@ -18,19 +18,20 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.EntityLivingBase;
 
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.WorldEvent;
-
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.Phase;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
 
 import org.lwjgl.opengl.GL11;
 
@@ -117,19 +118,19 @@ public class ParticleRenderer {
 	private synchronized void render(float partialTicks) {
 		Minecraft.getMinecraft().mcProfiler.startSection(name + "-render");
 
-		float rotationX = ActiveRenderInfo.rotationX;
-		float rotationZ = ActiveRenderInfo.rotationZ;
-		float rotationYZ = ActiveRenderInfo.rotationYZ;
-		float rotationXY = ActiveRenderInfo.rotationXY;
-		float rotationXZ = ActiveRenderInfo.rotationXZ;
+		float rotationX = ActiveRenderInfo.getRotationX();
+		float rotationZ = ActiveRenderInfo.getRotationZ();
+		float rotationYZ = ActiveRenderInfo.getRotationYZ();
+		float rotationXY = ActiveRenderInfo.getRotationXY();
+		float rotationXZ = ActiveRenderInfo.getRotationXZ();
 
-		EntityLivingBase player = Minecraft.getMinecraft().renderViewEntity;
+		EntityLivingBase player = (EntityLivingBase) Minecraft.getMinecraft().getRenderViewEntity();
 		EntityFX.interpPosX = player.lastTickPosX + (player.posX - player.lastTickPosX) * partialTicks;
 		EntityFX.interpPosY = player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTicks;
 		EntityFX.interpPosZ = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partialTicks;
 
 		// bind the texture
-		Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationItemsTexture);
+		Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
 
 		// save the old gl state
 		GL11.glPushAttrib(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
@@ -141,13 +142,12 @@ public class ParticleRenderer {
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 		GL11.glAlphaFunc(GL11.GL_GREATER, 0.003921569F);
 
-		Tessellator tessellator = Tessellator.instance;
-		tessellator.startDrawingQuads();
+		Tessellator tessellator = Tessellator.getInstance();
+		WorldRenderer worldRenderer = tessellator.getWorldRenderer();
+		worldRenderer.begin(7, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
 
 		for (EntityFX particle : particles) {
-			tessellator.setBrightness(particle.getBrightnessForRender(partialTicks));
-
-			particle.renderParticle(tessellator, partialTicks, rotationX, rotationXZ, rotationZ, rotationYZ, rotationXY);
+			particle.renderParticle(worldRenderer, particle, partialTicks, rotationX, rotationXZ, rotationZ, rotationYZ, rotationXY);
 		}
 
 		tessellator.draw();

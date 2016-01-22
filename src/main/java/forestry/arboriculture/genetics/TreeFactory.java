@@ -15,25 +15,25 @@ import java.awt.Color;
 import forestry.api.arboriculture.EnumLeafType;
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleTreeSpeciesCustom;
-import forestry.api.arboriculture.IGermlingIconProvider;
-import forestry.api.arboriculture.ILeafIconProvider;
+import forestry.api.arboriculture.IGermlingModelProvider;
+import forestry.api.arboriculture.ILeafSpriteProvider;
 import forestry.api.arboriculture.ITreeFactory;
 import forestry.api.arboriculture.ITreeGenerator;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IClassification;
 import forestry.arboriculture.genetics.alleles.AlleleTreeSpecies;
-import forestry.arboriculture.render.IconProviderLeaves;
+import forestry.arboriculture.render.SpriteProviderLeaves;
 
 public class TreeFactory implements ITreeFactory {
 	@Override
-	public IAlleleTreeSpeciesCustom createSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, boolean dominant, IClassification branch, String binomial, ILeafIconProvider leafIconProvider, IGermlingIconProvider germlingIconProvider, ITreeGenerator generator) {
-		IAlleleTreeSpeciesCustom treeSpecies = new AlleleTreeSpecies(uid, unlocalizedName, authority, unlocalizedDescription, dominant, branch, binomial, leafIconProvider, germlingIconProvider, generator);
+	public IAlleleTreeSpeciesCustom createSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, boolean dominant, IClassification branch, String binomial, String modelName, ILeafSpriteProvider leafSpriteProvider, IGermlingModelProvider germlingModelProvider, ITreeGenerator generator) {
+		IAlleleTreeSpeciesCustom treeSpecies = new AlleleTreeSpecies(uid, unlocalizedName, authority, unlocalizedDescription, dominant, branch, binomial, modelName, leafSpriteProvider, germlingModelProvider, generator);
 		AlleleManager.alleleRegistry.registerAllele(treeSpecies, EnumTreeChromosome.SPECIES);
 		return treeSpecies;
 	}
 
 	@Override
-	public ILeafIconProvider getLeafIconProvider(EnumLeafType enumLeafType, Color color, Color colorPollinated) {
-		return new IconProviderLeaves(enumLeafType, color, colorPollinated);
+	public ILeafSpriteProvider getLeafIconProvider(EnumLeafType enumLeafType, Color color, Color colorPollinated) {
+		return new SpriteProviderLeaves(enumLeafType, color, colorPollinated);
 	}
 }

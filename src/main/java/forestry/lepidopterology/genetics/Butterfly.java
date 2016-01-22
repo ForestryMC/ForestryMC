@@ -19,6 +19,7 @@ import java.util.Random;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
@@ -137,7 +138,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 			return false;
 		}
 
-		BiomeGenBase biome = world.getBiomeGenForCoordsBody((int) x, (int) z);
+		BiomeGenBase biome = world.getBiomeGenForCoordsBody(new BlockPos(x, 0, z));
 		if (getGenome().getPrimary().getSpawnBiomes().size() > 0) {
 			boolean noneMatched = true;
 
@@ -184,8 +185,8 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 	}
 
 	private boolean isAcceptedEnvironment(World world, int x, int y, int z) {
-		BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
-		EnumTemperature biomeTemperature = EnumTemperature.getFromBiome(biome, x, y, z);
+		BiomeGenBase biome = world.getBiomeGenForCoords(new BlockPos(x, y, z));
+		EnumTemperature biomeTemperature = EnumTemperature.getFromBiome(biome, new BlockPos(x, y, z));
 		EnumHumidity biomeHumidity = EnumHumidity.getFromValue(biome.rainfall);
 		return AlleleManager.climateHelper.isWithinLimits(biomeTemperature, biomeHumidity,
 				getGenome().getPrimary().getTemperature(), getGenome().getToleranceTemp(),

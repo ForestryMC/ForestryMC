@@ -21,6 +21,7 @@ public class AlleleBoolean extends AlleleCategorized implements IAlleleBoolean {
 		this.value = value;
 	}
 
+	@Override
 	public boolean getValue() {
 		return value;
 	}

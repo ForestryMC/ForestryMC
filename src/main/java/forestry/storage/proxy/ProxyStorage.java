@@ -10,11 +10,9 @@
  ******************************************************************************/
 package forestry.storage.proxy;
 
-import forestry.core.items.ItemCrated;
-
 public class ProxyStorage {
 
-	public void registerCrateForRendering(ItemCrated crate) {
+	public void registerCrateModelLoader() {
 	}
 
 }

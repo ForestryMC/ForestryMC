@@ -12,7 +12,7 @@ package forestry.arboriculture.proxy;
 
 public class ProxyArboriculture {
 
-	public void initializeRendering() {
+	public void initializeModels() {
 	}
 
 	public int getFoliageColorBasic() {

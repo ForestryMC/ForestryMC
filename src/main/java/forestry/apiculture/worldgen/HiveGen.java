@@ -12,15 +12,17 @@ package forestry.apiculture.worldgen;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.apiculture.hives.IHiveGen;
+import forestry.core.utils.BlockUtil;
 
 public abstract class HiveGen implements IHiveGen {
 
 	@Override
-	public boolean canReplace(World world, int x, int y, int z) {
-		Block block = world.getBlock(x, y, z);
+	public boolean canReplace(World world, BlockPos pos) {
+		Block block = BlockUtil.getBlock(world, pos);
 		Material material = block.getMaterial();
 		return (material.isReplaceable() && !material.isLiquid()) ||
 				material == Material.air ||

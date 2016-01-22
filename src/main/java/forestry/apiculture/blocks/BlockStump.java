@@ -14,27 +14,28 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.BlockTorch;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import forestry.api.core.IModelManager;
+import forestry.api.core.IItemModelRegister;
 import forestry.api.core.Tabs;
 import forestry.apiculture.tiles.TileCandle;
 import forestry.core.config.Constants;
-import forestry.core.render.TextureManager;
+import forestry.core.utils.BlockUtil;
 import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.StringUtil;
 import forestry.plugins.PluginApiculture;
 
-public class BlockStump extends BlockTorch {
+public class BlockStump extends BlockTorch implements IItemModelRegister {
 
 	public BlockStump() {
 		super();
@@ -45,8 +46,8 @@ public class BlockStump extends BlockTorch {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerBlockIcons(IIconRegister register) {
-		this.blockIcon = TextureManager.registerTex(register, StringUtil.cleanBlockName(this));
+	public void registerModel(Item item, IModelManager manager) {
+		manager.registerItemModel(item, 0, "stump");
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
@@ -56,17 +57,17 @@ public class BlockStump extends BlockTorch {
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int facing, float facingX, float facingY, float facingZ) {
-
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
+		
 		ItemStack held = player.getCurrentEquippedItem();
 		if (held != null &&
 				(held.getItem() == Items.flint_and_steel ||
 						held.getItem() == Items.flint ||
 						ItemStackUtil.equals(Blocks.torch, held))) {
-			world.setBlock(x, y, z, PluginApiculture.blocks.candle, world.getBlockMetadata(x, y, z) | 0x08, Constants.FLAG_BLOCK_SYNCH);
+			world.setBlockState(pos, PluginApiculture.blocks.candle.getStateFromMeta(BlockUtil.getBlockMetadata(world, pos) | 0x08), Constants.FLAG_BLOCK_SYNCH);
 			TileCandle tc = new TileCandle();
 			tc.setColour(0); // default to white
-			world.setTileEntity(x, y, z, tc);
+			world.setTileEntity(pos, tc);
 			return true;
 		}
 
@@ -75,11 +76,11 @@ public class BlockStump extends BlockTorch {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public int getRenderColor(int par1) {
+	public int getRenderColor(IBlockState state) {
 		return 0xee0000;
 	}
-
+	
 	@Override
-	public void randomDisplayTick(World par1World, int par2, int par3, int par4, Random par5Random) {
+	public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
 	}
 }

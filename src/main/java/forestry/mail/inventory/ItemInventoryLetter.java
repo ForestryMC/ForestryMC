@@ -94,8 +94,8 @@ public class ItemInventoryLetter extends ItemInventory implements IErrorSource, 
 	}
 
 	@Override
-	public String getInventoryName() {
-		return letter.getInventoryName();
+	public String getName() {
+		return letter.getName();
 	}
 
 	@Override
@@ -107,10 +107,10 @@ public class ItemInventoryLetter extends ItemInventory implements IErrorSource, 
 	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
 		return letter.isUseableByPlayer(entityplayer);
 	}
-
+	
 	@Override
-	public ItemStack getStackInSlotOnClosing(int slot) {
-		return letter.getStackInSlotOnClosing(slot);
+	public ItemStack removeStackFromSlot(int slot) {
+		return letter.removeStackFromSlot(slot);
 	}
 
 	@Override

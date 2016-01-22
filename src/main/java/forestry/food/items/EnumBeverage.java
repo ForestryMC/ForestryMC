@@ -12,13 +12,10 @@ package forestry.food.items;
 
 import java.awt.Color;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.util.IIcon;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
-import forestry.core.render.TextureManager;
+import forestry.api.core.IModelManager;
+import net.minecraft.item.Item;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public enum EnumBeverage implements ItemBeverage.IBeverageInfo {
 	MEAD_SHORT("meadShort", "glass", new Color(0xec9a19), new Color(0xffffff), 1, 0.2f, true),
@@ -30,11 +27,6 @@ public enum EnumBeverage implements ItemBeverage.IBeverageInfo {
 	private final String iconType;
 	private final int primaryColor;
 	private final int secondaryColor;
-
-	@SideOnly(Side.CLIENT)
-	private IIcon iconBottle;
-	@SideOnly(Side.CLIENT)
-	private IIcon iconContents;
 
 	private final int heal;
 	private final float saturation;
@@ -51,9 +43,9 @@ public enum EnumBeverage implements ItemBeverage.IBeverageInfo {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister register) {
-		iconBottle = TextureManager.registerTex(register, "liquids/" + iconType + ".bottle");
-		iconContents = TextureManager.registerTex(register, "liquids/" + iconType + ".contents");
+	@Override
+	public void registerModels(Item item, IModelManager manager) {
+		manager.registerItemModel(item, ordinal(), "liquids/" + iconType);
 	}
 
 	@Override
@@ -89,15 +81,5 @@ public enum EnumBeverage implements ItemBeverage.IBeverageInfo {
 	@Override
 	public boolean isSecret() {
 		return false;
-	}
-
-	@Override
-	public IIcon getIconBottle() {
-		return iconBottle;
-	}
-
-	@Override
-	public IIcon getIconContents() {
-		return iconContents;
 	}
 }

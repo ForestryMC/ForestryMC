@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.farming.gui.widgets;
 
-import net.minecraft.util.IIcon;
-
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmLogic;
 import forestry.core.gui.tooltips.ToolTip;
@@ -19,6 +17,8 @@ import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.proxy.Proxies;
 import forestry.farming.multiblock.IFarmControllerInternal;
+import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.item.ItemStack;
 
 public class FarmLogicSlot extends Widget {
 
@@ -34,19 +34,20 @@ public class FarmLogicSlot extends Widget {
 	private IFarmLogic getLogic() {
 		return farmController.getFarmLogic(farmDirection);
 	}
-
-	private IIcon getIconIndex() {
+	
+	private ItemStack getStackIndex() {
 		if (getLogic() == null) {
 			return null;
 		}
-		return getLogic().getIcon();
+		return getLogic().getStack();
 	}
 
 	@Override
 	public void draw(int startX, int startY) {
-		if (getIconIndex() != null) {
-			Proxies.render.bindTexture(getLogic().getSpriteSheet());
-			manager.gui.drawTexturedModelRectFromIcon(startX + xPos, startY + yPos, getIconIndex(), 16, 16);
+		if (getStackIndex() != null) {
+			Proxies.render.bindTexture(getLogic().getTextureMap());
+			RenderItem renderItem = Proxies.common.getClientInstance().getRenderItem();
+			renderItem.renderItemIntoGUI(getStackIndex(), startX + xPos, startY + yPos);
 		}
 	}
 

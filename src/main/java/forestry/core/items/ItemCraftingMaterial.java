@@ -12,16 +12,12 @@ package forestry.core.items;
 
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
-import forestry.core.render.TextureManager;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import forestry.api.core.IModelManager;
 
 public class ItemCraftingMaterial extends ItemForestry {
 
@@ -52,27 +48,12 @@ public class ItemCraftingMaterial extends ItemForestry {
 		}
 	}
 
-	/* ICONS */
-	@SideOnly(Side.CLIENT)
-	private IIcon[] icons;
-
+	/* Models */
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerIcons(IIconRegister register) {
-
-		icons = new IIcon[definition.length];
+	public void registerModel(Item item, IModelManager manager) {
 		for (int i = 0; i < definition.length; i++) {
-			icons[i] = TextureManager.registerTex(register, definition[i]);
-		}
-
-	}
-
-	@Override
-	public IIcon getIconFromDamage(int damage) {
-		if (damage >= definition.length || damage < 0) {
-			return icons[0];
-		} else {
-			return icons[damage];
+			manager.registerItemModel(item, i, definition[i]);
 		}
 	}
 

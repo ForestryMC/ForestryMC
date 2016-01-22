@@ -12,15 +12,14 @@ package forestry.core.genetics;
 
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import forestry.api.core.IModelManager;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IIndividual;
 import forestry.core.items.ItemForestry;
@@ -55,10 +54,10 @@ public abstract class ItemGE extends ItemForestry {
 	public boolean getShareTag() {
 		return true;
 	}
-
+	
 	@Override
-	public boolean hasEffect(ItemStack itemstack, int pass) {
-		IAlleleSpecies species = getSpecies(itemstack);
+	public boolean hasEffect(ItemStack stack) {
+		IAlleleSpecies species = getSpecies(stack);
 		return species != null && species.hasEffect();
 	}
 
@@ -85,7 +84,7 @@ public abstract class ItemGE extends ItemForestry {
 	/* ICONS */
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerIcons(IIconRegister par1IconRegister) {
+	public void registerModel(Item item, IModelManager manager) {
 		// Need to disable normal registration.
 	}
 

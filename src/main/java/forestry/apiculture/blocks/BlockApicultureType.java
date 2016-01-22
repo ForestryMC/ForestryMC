@@ -55,4 +55,9 @@ public enum BlockApicultureType implements IMachineProperties {
 	public Class<? extends TileForestry> getTeClass() {
 		return teClass;
 	}
+	
+	@Override
+	public String getName() {
+		return name().toLowerCase(Locale.ENGLISH);
+	}
 }

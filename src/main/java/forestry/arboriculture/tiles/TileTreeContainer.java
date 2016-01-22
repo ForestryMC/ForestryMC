@@ -13,11 +13,13 @@ package forestry.arboriculture.tiles;
 import java.io.IOException;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
@@ -52,7 +54,7 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 			containedTree = new Tree(nbttagcompound.getCompoundTag("ContainedTree"));
 		}
 		if (nbttagcompound.hasKey("owner")) {
-			owner = NBTUtil.func_152459_a(nbttagcompound.getCompoundTag("owner"));
+			owner = NBTUtil.readGameProfileFromNBT(nbttagcompound.getCompoundTag("owner"));
 		}
 	}
 
@@ -67,7 +69,7 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 		}
 		if (this.owner != null) {
 			NBTTagCompound nbt = new NBTTagCompound();
-			NBTUtil.func_152460_a(nbt, owner);
+			NBTUtil.writeGameProfile(nbt, owner);
 			nbttagcompound.setTag("owner", nbt);
 		}
 	}
@@ -103,7 +105,7 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 	public void setTree(ITree tree) {
 		this.containedTree = tree;
 		if (worldObj != null && worldObj.isRemote) {
-			worldObj.func_147479_m(xCoord, yCoord, zCoord);
+			worldObj.markBlockForUpdate(getPos());
 		}
 	}
 
@@ -133,15 +135,6 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 	}
 
 	/* UPDATING */
-
-	/**
-	 * This doesn't use normal TE updates
-	 */
-	@Override
-	public boolean canUpdate() {
-		return false;
-	}
-
 	/**
 	 * Leaves and saplings will implement their logic here.
 	 */
@@ -152,8 +145,8 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 	 * Use with caution as this will leave straggler TileEntities, or create conflicts with other TileEntities if not used properly.
 	 */
 	@Override
-	public boolean shouldRefresh(Block oldBlock, Block newBlock, int oldMeta, int newMeta, World world, int x, int y, int z) {
-		return !Block.isEqualTo(oldBlock, newBlock);
+	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate) {
+		return !Block.isEqualTo(oldState.getBlock(), newSate.getBlock());
 	}
 
 	/* INETWORKEDENTITY */

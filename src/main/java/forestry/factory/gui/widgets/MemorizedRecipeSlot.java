@@ -10,21 +10,20 @@
  ******************************************************************************/
 package forestry.factory.gui.widgets;
 
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-
 import org.lwjgl.opengl.GL11;
 
 import forestry.core.gui.widgets.ItemStackWidgetBase;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.SpriteSheet;
 import forestry.core.render.TextureManager;
 import forestry.factory.gui.ContainerWorktable;
 import forestry.factory.recipes.RecipeMemory;
 
 public class MemorizedRecipeSlot extends ItemStackWidgetBase {
-	private static final IIcon lockIcon = TextureManager.getInstance().getDefault("slots/locked");
+	private static final TextureAtlasSprite lockIcon = TextureManager.getInstance().getDefault("slots/locked");
 	private final RecipeMemory recipeMemory;
 	private final int slotNumber;
 
@@ -50,8 +49,8 @@ public class MemorizedRecipeSlot extends ItemStackWidgetBase {
 
 		if (recipeMemory.isLocked(slotNumber)) {
 			manager.gui.setZLevel(110f);
-			Proxies.render.bindTexture(SpriteSheet.ITEMS);
-			manager.gui.drawTexturedModelRectFromIcon(startX + xPos, startY + yPos, lockIcon, 16, 16);
+			Proxies.render.bindTexture(TextureMap.locationBlocksTexture);
+			manager.gui.drawTexturedModalRect(startX + xPos, startY + yPos, lockIcon, 16, 16);
 			manager.gui.setZLevel(0f);
 		}
 

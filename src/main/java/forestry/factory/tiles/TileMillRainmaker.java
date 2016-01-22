@@ -83,12 +83,12 @@ public class TileMillRainmaker extends TileMill {
 	@Override
 	public void activate() {
 		if (Proxies.render.hasRendering()) {
-			worldObj.playSoundEffect(xCoord, yCoord, zCoord, "ambient.weather.thunder", 4F,
+			worldObj.playSoundEffect(getPos().getX(), getPos().getY(), getPos().getZ(), "ambient.weather.thunder", 4F,
 					(1.0F + (worldObj.rand.nextFloat() - worldObj.rand.nextFloat()) * 0.2F) * 0.7F);
 
-			float f = xCoord + 0.5F;
-			float f1 = yCoord + 0.0F + (worldObj.rand.nextFloat() * 6F) / 16F;
-			float f2 = zCoord + 0.5F;
+			float f = getPos().getX() + 0.5F;
+			float f1 = getPos().getY() + 0.0F + (worldObj.rand.nextFloat() * 6F) / 16F;
+			float f2 = getPos().getZ() + 0.5F;
 			float f3 = 0.52F;
 			float f4 = worldObj.rand.nextFloat() * 0.6F - 0.3F;
 

@@ -13,42 +13,45 @@ package forestry.farming.logic;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
 import forestry.arboriculture.genetics.TreeGenome;
+import forestry.core.utils.BlockUtil;
 import forestry.core.utils.vect.Vect;
 import forestry.plugins.PluginArboriculture;
 
 public class FarmableGE implements IFarmable {
 
 	@Override
-	public boolean isSaplingAt(World world, int x, int y, int z) {
+	public boolean isSaplingAt(World world, BlockPos pos) {
 
-		if (world.isAirBlock(x, y, z)) {
+		if (world.isAirBlock(pos)) {
 			return false;
 		}
 
-		Block block = world.getBlock(x, y, z);
+		Block block = BlockUtil.getBlock(world, pos);
 		return PluginArboriculture.blocks.saplingGE == block;
 	}
 
 	@Override
-	public ICrop getCropAt(World world, int x, int y, int z) {
-		Block block = world.getBlock(x, y, z);
+	public ICrop getCropAt(World world, BlockPos pos) {
+		Block block = BlockUtil.getBlock(world, pos);
 
-		if (!block.isWood(world, x, y, z)) {
+		if (!block.isWood(world, pos)) {
 			return null;
 		}
 
-		return new CropBlock(world, block, world.getBlockMetadata(x, y, z), new Vect(x, y, z));
+		return new CropBlock(world, block, BlockUtil.getBlockMetadata(world, pos), new Vect(pos));
 	}
 
 	@Override
-	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, int x, int y, int z) {
-		return germling.copy().tryPlaceItemIntoWorld(player, world, x, y - 1, z, 1, 0, 0, 0);
+	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
+		return germling.copy().onItemUse(player, world, pos.add(0, -1, 0), EnumFacing.UP, 0, 0, 0);
 	}
 
 	@Override

@@ -33,8 +33,8 @@ public class ProxyNetwork {
 		WorldServer worldServer = (WorldServer) world;
 		PlayerManager playerManager = worldServer.getPlayerManager();
 
-		int chunkX = packet.getPosX() >> 4;
-		int chunkZ = packet.getPosZ() >> 4;
+		int chunkX = packet.getPos().getX() >> 4;
+		int chunkZ = packet.getPos().getZ() >> 4;
 
 		for (Object playerObj : world.playerEntities) {
 			if (playerObj instanceof EntityPlayerMP) {

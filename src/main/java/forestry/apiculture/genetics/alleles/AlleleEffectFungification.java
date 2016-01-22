@@ -7,7 +7,8 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.passive.EntityMooshroom;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenBigMushroom;
 
@@ -54,25 +55,26 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 
 	private void doBlockEffect(IBeeGenome genome, IBeeHousing housing) {
 		World world = housing.getWorld();
-		ChunkCoordinates housingCoordinates = housing.getCoordinates();
+		BlockPos housingCoordinates = housing.getCoordinates();
 		IVect area = getModifiedArea(genome, housing);
 		
-		int blockX = getRandomOffset(world.rand, housingCoordinates.posX, area.getX());
-		int blockY = getRandomOffset(world.rand, housingCoordinates.posY, area.getY());
-		int blockZ = getRandomOffset(world.rand, housingCoordinates.posZ, area.getZ());
+		int blockX = getRandomOffset(world.rand, housingCoordinates.getX(), area.getX());
+		int blockY = getRandomOffset(world.rand, housingCoordinates.getY(), area.getY());
+		int blockZ = getRandomOffset(world.rand, housingCoordinates.getZ(), area.getZ());
 		
 		for (int attempt = 0; attempt < MAX_BLOCK_FIND_TRIES; ++attempt) {
-			Block block = world.getBlock(blockX, blockY, blockZ);
-			if (isSuitableForMycelium(world, block, blockX, blockY, blockZ)) {
-				world.setBlock(blockX, blockY, blockZ, Blocks.mycelium);
+			BlockPos pos = new BlockPos(blockX, blockY, blockZ);
+			Block block = world.getBlockState(pos).getBlock();
+			if (isSuitableForMycelium(world, block, pos)) {
+				world.setBlockState(pos, Blocks.mycelium.getStateFromMeta(0));
 				break;
 			} else if (isSuitableForGrowth(block)) {
-				doMushroomGrowth(block, world, blockX, blockY, blockZ);
+				doMushroomGrowth(block, world, pos);
 				break;
 			}
-			blockX = getRandomOffset(world.rand, housingCoordinates.posX, area.getX());
-			blockY = getRandomOffset(world.rand, housingCoordinates.posY, area.getY());
-			blockZ = getRandomOffset(world.rand, housingCoordinates.posZ, area.getZ());
+			blockX = getRandomOffset(world.rand, housingCoordinates.getX(), area.getX());
+			blockY = getRandomOffset(world.rand, housingCoordinates.getY(), area.getY());
+			blockZ = getRandomOffset(world.rand, housingCoordinates.getZ(), area.getZ());
 		}
 
 	}
@@ -88,8 +90,8 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 		return centrePos + random.nextInt(offset) - (offset / 2);
 	}
 	
-	private static boolean isSuitableForMycelium(World world, Block block, int blockX, int blockY, int blockZ) {
-		return block == Blocks.grass || (block == Blocks.dirt && world.canBlockSeeTheSky(blockX, blockY, blockZ));
+	private static boolean isSuitableForMycelium(World world, Block block, BlockPos pos) {
+		return block == Blocks.grass || (block == Blocks.dirt && world.canBlockSeeSky(pos));
 	}
 
 	private static boolean isSuitableForGrowth(Block block) {
@@ -107,19 +109,15 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 		mooshroom.setHealth(cow.getHealth());
 		mooshroom.renderYawOffset = cow.renderYawOffset;
 		worldObj.spawnEntityInWorld(mooshroom);
-		worldObj.spawnParticle("largeexplode", cow.posX, cow.posY + (double) (cow.height / 2.0F), cow.posZ, 0.0D, 0.0D, 0.0D);
+		worldObj.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, cow.posX, cow.posY + cow.height / 2.0F, cow.posZ, 0.0D, 0.0D, 0.0D);
 	}
 
-	private static void doMushroomGrowth(Block block, World world, int blockX, int blockY, int blockZ) {
+	private static void doMushroomGrowth(Block block, World world, BlockPos pos) {
 		WorldGenBigMushroom giantMushroomGenerator;
 
-		if (block == Blocks.brown_mushroom) {
-			giantMushroomGenerator = new WorldGenBigMushroom(0);
-		} else {
-			giantMushroomGenerator = new WorldGenBigMushroom(1);
-		}
+		giantMushroomGenerator = new WorldGenBigMushroom(block);
 
-		world.setBlockToAir(blockX, blockY, blockZ);
-		giantMushroomGenerator.generate(world, world.rand, blockX, blockY, blockZ);
+		world.setBlockToAir(pos);
+		giantMushroomGenerator.generate(world, world.rand, pos);
 	}
 }

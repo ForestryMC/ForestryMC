@@ -15,13 +15,12 @@ import java.util.Stack;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.Farmables;
 import forestry.api.farming.ICrop;
@@ -42,8 +41,8 @@ public class FarmLogicReeds extends FarmLogic {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon getIcon() {
-		return Items.reeds.getIconFromDamage(0);
+	public Item getItem() {
+		return Items.reeds;
 	}
 
 	@Override
@@ -94,19 +93,19 @@ public class FarmLogicReeds extends FarmLogic {
 	}
 
 	@Override
-	public boolean cultivate(int x, int y, int z, FarmDirection direction, int extent) {
+	public boolean cultivate(BlockPos pos, FarmDirection direction, int extent) {
 		return false;
 	}
 
 	@Override
-	public Collection<ICrop> harvest(int x, int y, int z, FarmDirection direction, int extent) {
+	public Collection<ICrop> harvest(BlockPos pos, FarmDirection direction, int extent) {
 		World world = getWorld();
 
 		Stack<ICrop> crops = new Stack<>();
 		for (int i = 0; i < extent; i++) {
-			Vect position = translateWithOffset(x, y + 1, z, direction, i);
+			Vect position = translateWithOffset(pos.add(0, 1, 0), direction, i);
 			for (IFarmable seed : germlings) {
-				ICrop crop = seed.getCropAt(world, position.x, position.y, position.z);
+				ICrop crop = seed.getCropAt(world, position);
 				if (crop != null) {
 					crops.push(crop);
 				}

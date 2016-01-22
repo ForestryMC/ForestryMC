@@ -13,7 +13,8 @@ package forestry.core.inventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IChatComponent;
 import forestry.core.config.Constants;
 
 public class FakeInventoryAdapter implements IInventoryAdapter {
@@ -40,19 +41,19 @@ public class FakeInventoryAdapter implements IInventoryAdapter {
 	public boolean isLocked(int slotIndex) {
 		return false;
 	}
-
+	
 	@Override
-	public int[] getAccessibleSlotsFromSide(int p_94128_1_) {
+	public int[] getSlotsForFace(EnumFacing side) {
 		return Constants.SLOTS_NONE;
 	}
-
+	
 	@Override
-	public boolean canInsertItem(int p_102007_1_, ItemStack p_102007_2_, int p_102007_3_) {
+	public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
 		return false;
 	}
-
+	
 	@Override
-	public boolean canExtractItem(int p_102008_1_, ItemStack p_102008_2_, int p_102008_3_) {
+	public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
 		return false;
 	}
 
@@ -70,9 +71,9 @@ public class FakeInventoryAdapter implements IInventoryAdapter {
 	public ItemStack decrStackSize(int p_70298_1_, int p_70298_2_) {
 		return null;
 	}
-
+	
 	@Override
-	public ItemStack getStackInSlotOnClosing(int p_70304_1_) {
+	public ItemStack removeStackFromSlot(int index) {
 		return null;
 	}
 
@@ -80,14 +81,19 @@ public class FakeInventoryAdapter implements IInventoryAdapter {
 	public void setInventorySlotContents(int p_70299_1_, ItemStack p_70299_2_) {
 
 	}
-
+	
 	@Override
-	public String getInventoryName() {
+	public IChatComponent getDisplayName() {
 		return null;
 	}
-
+	
 	@Override
-	public boolean hasCustomInventoryName() {
+	public String getName() {
+		return null;
+	}
+	
+	@Override
+	public boolean hasCustomName() {
 		return false;
 	}
 
@@ -102,17 +108,17 @@ public class FakeInventoryAdapter implements IInventoryAdapter {
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer p_70300_1_) {
+	public boolean isUseableByPlayer(EntityPlayer player) {
 		return false;
 	}
 
 	@Override
-	public void openInventory() {
+	public void openInventory(EntityPlayer player) {
 
 	}
 
 	@Override
-	public void closeInventory() {
+	public void closeInventory(EntityPlayer player) {
 
 	}
 
@@ -129,6 +135,24 @@ public class FakeInventoryAdapter implements IInventoryAdapter {
 	@Override
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 
+	}
+
+	@Override
+	public int getField(int id) {
+		return 0;
+	}
+
+	@Override
+	public void setField(int id, int value) {
+	}
+
+	@Override
+	public int getFieldCount() {
+		return 0;
+	}
+
+	@Override
+	public void clear() {
 	}
 
 }

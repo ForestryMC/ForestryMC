@@ -18,9 +18,9 @@ import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.biome.BiomeGenBase;
 
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -65,7 +65,7 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 	public void validate() {
 		// Raintanks in desert biomes are useless
 		if (worldObj != null) {
-			BiomeGenBase biome = worldObj.getBiomeGenForCoordsBody(xCoord, zCoord);
+			BiomeGenBase biome = worldObj.getBiomeGenForCoordsBody(getPos());
 			isValidBiome = BiomeHelper.canRainOrSnow(biome);
 			getErrorLogic().setCondition(!isValidBiome, EnumErrorCode.NO_RAIN_BIOME);
 		}
@@ -114,7 +114,7 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 
 		errorLogic.setCondition(!isValidBiome, EnumErrorCode.NO_RAIN_BIOME);
 
-		boolean hasSky = worldObj.canBlockSeeTheSky(xCoord, yCoord + 1, zCoord);
+		boolean hasSky = worldObj.canBlockSeeSky(getPos().add(0, 1, 0));
 		errorLogic.setCondition(!hasSky, EnumErrorCode.NO_SKY_RAIN_TANK);
 
 		errorLogic.setCondition(!worldObj.isRaining(), EnumErrorCode.NOT_RAINING);
@@ -171,27 +171,27 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 
 	// / ILIQUIDCONTAINER IMPLEMENTATION
 	@Override
-	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+	public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
 		return tankManager.fill(from, resource, doFill);
 	}
 
 	@Override
-	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+	public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
 		return tankManager.drain(from, resource, doDrain);
 	}
 
 	@Override
-	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+	public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
 		return tankManager.drain(from, maxDrain, doDrain);
 	}
 
 	@Override
-	public boolean canFill(ForgeDirection from, Fluid fluid) {
+	public boolean canFill(EnumFacing from, Fluid fluid) {
 		return tankManager.canFill(from, fluid);
 	}
 
 	@Override
-	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+	public boolean canDrain(EnumFacing from, Fluid fluid) {
 		return tankManager.canDrain(from, fluid);
 	}
 
@@ -201,7 +201,7 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 	}
 
 	@Override
-	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+	public FluidTankInfo[] getTankInfo(EnumFacing from) {
 		return tankManager.getTankInfo(from);
 	}
 

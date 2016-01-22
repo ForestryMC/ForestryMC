@@ -22,7 +22,10 @@ import java.util.Random;
 import java.util.Set;
 
 import net.minecraft.block.BlockTorch;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -32,29 +35,38 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
+import forestry.api.core.IModelManager;
+import forestry.api.core.IItemModelRegister;
 import forestry.api.core.Tabs;
 import forestry.apiculture.tiles.TileCandle;
-import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
 import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.StringUtil;
 
-public class BlockCandle extends BlockTorch {
+public class BlockCandle extends BlockTorch implements IItemModelRegister {
 
 	private static final ImmutableMap<String, Integer> colours;
 	private static final Set<Item> lightingItems;
 	public static final String colourTagName = "colour";
+	
+	private static final PropertyEnum STATE = PropertyEnum.create("state", State.class);
 
+	private enum State implements IStringSerializable {
+		ON, OFF;
+
+		@Override
+		public String getName() {
+			return name();
+		}
+	}
+	
 	static {
 		colours = ImmutableMap.<String, Integer>builder()
 				.put("dyeWhite", new Color(255, 255, 255).getRGB())
@@ -82,74 +94,57 @@ public class BlockCandle extends BlockTorch {
 		));
 	}
 
-	@SideOnly(Side.CLIENT)
-	private IIcon litStump;
-	@SideOnly(Side.CLIENT)
-	private IIcon litTip;
-	@SideOnly(Side.CLIENT)
-	private IIcon unlitStump;
-	@SideOnly(Side.CLIENT)
-	private IIcon unlitTip;
-
 	public BlockCandle() {
 		super();
 		this.setHardness(0.0F);
 		this.setStepSound(soundTypeWood);
 		setCreativeTab(Tabs.tabApiculture);
+		setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.UP).withProperty(STATE, State.OFF));
+	}
+	
+	@Override
+	protected BlockState createBlockState() {
+		return new BlockState(this, new IProperty[] { FACING, STATE });
+	}
+	
+	@Override
+	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
+		if(((TileCandle)world.getTileEntity(pos)).isLit())
+			state = state.withProperty(STATE, State.ON);
+		return super.getActualState(state, world, pos);
 	}
 
 	@Override
-	public boolean hasTileEntity(int metadata) {
+	public boolean hasTileEntity(IBlockState state) {
 		return true;
 	}
 
 	@Override
-	public TileEntity createTileEntity(World world, int metadata) {
+	public TileEntity createTileEntity(World world, IBlockState state) {
 		return new TileCandle();
-	}
-
-	@Override
-	public int getRenderType() {
-		return Proxies.render.getCandleRenderId();
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerBlockIcons(IIconRegister register) {
-		String fileBase = StringUtil.cleanBlockName(this);
-		this.blockIcon = TextureManager.registerTex(register, "stump");
-		this.litStump = TextureManager.registerTex(register, fileBase + "StumpLit");
-		this.litTip = TextureManager.registerTex(register, fileBase + "TipLit");
-		this.unlitStump = TextureManager.registerTex(register, fileBase + "StumpUnlit");
-		this.unlitTip = TextureManager.registerTex(register, fileBase + "TipUnlit");
+	public void registerModel(Item item, IModelManager manager) {
+		manager.registerItemModel(item, 0, "candle");
 	}
 
 	@Override
-	public int getLightValue(IBlockAccess world, int x, int y, int z) {
-		TileEntity tileEntity = world.getTileEntity(x, y, z);
+	public int getLightValue(IBlockAccess world, BlockPos pos) {
+		TileEntity tileEntity = world.getTileEntity(pos);
 		if (tileEntity instanceof TileCandle && ((TileCandle) tileEntity).isLit()) {
 			return 14;
 		}
 		return 0;
 	}
-
-	@SideOnly(Side.CLIENT)
-	public IIcon getTextureFromPassAndLit(int pass, boolean isLit) {
-		IIcon i;
-		if (pass == 0) {
-			if (isLit) {
-				i = this.litTip;
-			} else {
-				i = this.unlitTip;
-			}
-		} else {
-			if (isLit) {
-				i = this.litStump;
-			} else {
-				i = this.unlitStump;
-			}
+	
+	@Override
+	public int colorMultiplier(IBlockAccess worldIn, BlockPos pos, int renderPass) {
+		if(renderPass < 3){
+			return ((TileCandle)worldIn.getTileEntity(pos)).getColour();
 		}
-		return i;
+		return 16777215;
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
@@ -159,8 +154,8 @@ public class BlockCandle extends BlockTorch {
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int facing, float facingX, float facingY, float facingZ) {
-		TileEntity tileEntity = world.getTileEntity(x, y, z);
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
+		TileEntity tileEntity = world.getTileEntity(pos);
 		if (!(tileEntity instanceof TileCandle)) {
 			return false;
 		}
@@ -197,7 +192,7 @@ public class BlockCandle extends BlockTorch {
 			} else {
 				boolean dyed = tryDye(heldItem, isLit, tileCandle);
 				if (dyed) {
-					world.markBlockForUpdate(x, y, z);
+					world.markBlockForUpdate(pos);
 					toggleLitState = false;
 					flag = true;
 				}
@@ -206,7 +201,10 @@ public class BlockCandle extends BlockTorch {
 
 		if (toggleLitState) {
 			tileCandle.setLit(!isLit);
-			world.markBlockForUpdate(x, y, z);
+			world.markBlockForUpdate(pos);
+            world.theProfiler.startSection("checkLight");
+            world.checkLight(pos);
+            world.theProfiler.endSection();
 			flag = true;
 		}
 		return flag;
@@ -236,21 +234,21 @@ public class BlockCandle extends BlockTorch {
 	private final ThreadLocal<ItemStack> drop = new ThreadLocal<>();
 
 	@Override
-	public void onBlockHarvested(World world, int x, int y, int z, int metadata, EntityPlayer player) {
+	public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
 		if (!world.isRemote) {
-			ItemStack itemStack = getCandleDrop(world, x, y, z);
+			ItemStack itemStack = getCandleDrop(world, pos);
 			drop.set(itemStack);
 		}
 	}
-
+	
 	@Override
-	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
+	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		ItemStack dropStack = drop.get();
 		drop.remove();
 
 		// not harvested, get drops normally
 		if (dropStack == null) {
-			dropStack = getCandleDrop(world, x, y, z);
+			dropStack = getCandleDrop(world, pos);
 		}
 
 		ArrayList<ItemStack> drops = new ArrayList<>(1);
@@ -260,12 +258,12 @@ public class BlockCandle extends BlockTorch {
 	}
 
 	@Override
-	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
-		return getCandleDrop(world, x, y, z);
+	public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos, EntityPlayer player) {
+		return getCandleDrop(world, pos);
 	}
 
-	private ItemStack getCandleDrop(World world, int x, int y, int z) {
-		TileEntity tileEntity = world.getTileEntity(x, y, z);
+	private ItemStack getCandleDrop(IBlockAccess world, BlockPos pos) {
+		TileEntity tileEntity = world.getTileEntity(pos);
 		if (!(tileEntity instanceof TileCandle)) {
 			return null;
 		}
@@ -284,20 +282,20 @@ public class BlockCandle extends BlockTorch {
 	}
 
 	@Override
-	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack itemStack) {
-		TileCandle tileCandle = (TileCandle) (world.getTileEntity(x, y, z));
-		int colour = getColourValueFromItemStack(itemStack);
-		boolean isLit = isLit(itemStack);
+	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+		TileCandle tileCandle = (TileCandle) (world.getTileEntity(pos));
+		int colour = getColourValueFromItemStack(stack);
+		boolean isLit = isLit(stack);
 		tileCandle.setColour(colour);
 		tileCandle.setLit(isLit);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void randomDisplayTick(World world, int x, int y, int z, Random random) {
-		TileEntity tileEntity = world.getTileEntity(x, y, z);
+	public void randomDisplayTick(World world, BlockPos pos, IBlockState state, Random rand) {
+		TileEntity tileEntity = world.getTileEntity(pos);
 		if (tileEntity instanceof TileCandle && ((TileCandle) tileEntity).isLit()) {
-			super.randomDisplayTick(world, x, y, z, random);
+			super.randomDisplayTick(world, pos, state, rand);
 		}
 	}
 

@@ -11,8 +11,7 @@
 package forestry.arboriculture.worldgen;
 
 import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 public class BlockTypeWoodStairs extends BlockTypeWood {
 	public BlockTypeWoodStairs(ItemStack itemStack) {
@@ -20,7 +19,7 @@ public class BlockTypeWoodStairs extends BlockTypeWood {
 	}
 
 	@Override
-	public void setDirection(ForgeDirection facing) {
+	public void setDirection(EnumFacing facing) {
 		switch (facing) {
 			case NORTH:
 				blockMeta = 3;

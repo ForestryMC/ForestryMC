@@ -10,10 +10,11 @@
  ******************************************************************************/
 package forestry.core.genetics.mutations;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import net.minecraftforge.oredict.OreDictionary;
@@ -22,6 +23,7 @@ import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IMutationCondition;
+import forestry.core.utils.BlockUtil;
 import forestry.core.utils.StringUtil;
 
 public class MutationConditionRequiresResourceOreDict implements IMutationCondition {
@@ -32,7 +34,7 @@ public class MutationConditionRequiresResourceOreDict implements IMutationCondit
 	public MutationConditionRequiresResourceOreDict(String oreDictName) {
 		this.oreDictId = OreDictionary.getOreID(oreDictName);
 
-		ArrayList<ItemStack> ores = OreDictionary.getOres(oreDictName);
+		List<ItemStack> ores = OreDictionary.getOres(oreDictName);
 		if (ores != null && 0 < ores.size()) {
 			this.displayName = ores.get(0).getDisplayName();
 		} else {
@@ -41,13 +43,14 @@ public class MutationConditionRequiresResourceOreDict implements IMutationCondit
 	}
 
 	@Override
-	public float getChance(World world, int x, int y, int z, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1) {
+	public float getChance(World world, BlockPos pos, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1) {
 		Block block;
 		int meta;
 		int i = 1;
 		do {
-			block = world.getBlock(x, y - i, z);
-			meta = world.getBlockMetadata(x, y - i, z);
+			BlockPos blockPos = new BlockPos(pos.getX(), pos.getY() - i, pos.getY());
+			block = BlockUtil.getBlock(world, blockPos);
+			meta = BlockUtil.getBlockMetadata(world, blockPos);
 			i++;
 		} while (block instanceof IBeeHousing);
 

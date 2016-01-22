@@ -13,11 +13,8 @@ package forestry.plugins.compat;
 import java.util.Collection;
 
 import net.minecraft.tileentity.TileEntity;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
-import cpw.mods.fml.common.Optional;
-
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fml.common.Optional;
 import forestry.core.config.Constants;
 import forestry.core.utils.ModUtil;
 import forestry.plugins.ForestryPlugin;
@@ -65,7 +62,7 @@ public class PluginBuildCraftStatements extends ForestryPlugin implements ITrigg
 
 	@Optional.Method(modid = "BuildCraftAPI|statements")
 	@Override
-	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
+	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
 		if (tile instanceof ITriggerProvider) {
 			return ((ITriggerProvider) tile).getExternalTriggers(side, tile);
 		}

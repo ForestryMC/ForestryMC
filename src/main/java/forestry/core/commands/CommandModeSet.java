@@ -13,6 +13,8 @@ package forestry.core.commands;
 import java.util.List;
 
 import net.minecraft.command.ICommandSender;
+import net.minecraft.command.WrongUsageException;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 public final class CommandModeSet extends SubCommand {
@@ -29,7 +31,7 @@ public final class CommandModeSet extends SubCommand {
 	}
 
 	@Override
-	public void processSubCommand(ICommandSender sender, String[] args) {
+	public void processSubCommand(ICommandSender sender, String[] args) throws WrongUsageException {
 		if (args.length == 0 || args.length > 2) {
 			printHelp(sender);
 			return;
@@ -56,7 +58,7 @@ public final class CommandModeSet extends SubCommand {
 	}
 
 	@Override
-	public List<String> addTabCompletionOptions(ICommandSender sender, String[] incomplete) {
+	public List<String> addTabCompletionOptions(ICommandSender sender, String[] incomplete, BlockPos pos) {
 		return CommandHelpers.getListOfStringsMatchingLastWord(incomplete, modeStringArr);
 	}
 }

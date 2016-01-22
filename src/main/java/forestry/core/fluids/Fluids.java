@@ -22,16 +22,19 @@ import java.util.Map;
 import org.apache.commons.lang3.text.WordUtils;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.core.config.Constants;
 import forestry.core.items.EnumContainerType;
 import forestry.core.items.ItemLiquidContainer;
+import forestry.core.proxy.Proxies;
 
 public enum Fluids {
 
@@ -275,6 +278,8 @@ public enum Fluids {
 	private final int density, viscosity;
 	@Nonnull
 	private final Color color;
+	
+	private final ResourceLocation[] resources = new ResourceLocation[2];
 
 	Fluids(@Nonnull Color color) {
 		this(null, color, 1000, 1000);
@@ -293,6 +298,11 @@ public enum Fluids {
 		this.color = color;
 		this.density = density;
 		this.viscosity = viscosity;
+		
+		resources[0] = new ResourceLocation(Constants.ID, "blocks/liquid/" + getTag() + "_still");
+		if (flowTextureExists()) {
+			resources[1] = new ResourceLocation(Constants.ID, "blocks/liquid/" + getTag() + "_flow");
+		}
 	}
 
 	public int getTemperature() {
@@ -404,5 +414,20 @@ public enum Fluids {
 	 */
 	public void setProperties(ItemLiquidContainer liquidContainer) {
 
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public boolean flowTextureExists() {
+		try {
+			ResourceLocation resourceLocation = new ResourceLocation(Constants.ID, "blocks/liquid/" + getTag() + "_flow");
+			IResourceManager resourceManager = Proxies.common.getClientInstance().getResourceManager();
+			return resourceManager.getResource(resourceLocation) != null;
+		} catch (java.lang.Exception e) {
+			return false;
+		}
+	}
+
+	public ResourceLocation[] getResources() {
+		return resources;
 	}
 }

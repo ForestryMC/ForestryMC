@@ -1,0 +1,8 @@
+{
+  "parent": "forestry:block/arboriculture/planks/larch",
+  "textures": {
+    "side": "forestry:blocks/wood/planks.larch",
+    "top": "forestry:blocks/wood/planks.larch",
+    "bottom": "forestry:blocks/wood/planks.larch"
+  }
+}

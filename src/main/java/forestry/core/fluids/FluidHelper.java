@@ -17,8 +17,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -39,7 +38,7 @@ public final class FluidHelper {
 	private FluidHelper() {
 	}
 
-	public static boolean handleRightClick(IFluidHandler tank, ForgeDirection side, EntityPlayer player, boolean fill, boolean drain) {
+	public static boolean handleRightClick(IFluidHandler tank, EnumFacing side, EntityPlayer player, boolean fill, boolean drain) {
 		if (player == null) {
 			return false;
 		}
@@ -142,7 +141,7 @@ public final class FluidHelper {
 			fillAmount = Math.min(Constants.BUCKET_VOLUME, containerCapacity);
 		}
 
-		FluidStack canDrain = fluidHandler.drain(ForgeDirection.UNKNOWN, new FluidStack(fluidToFill, fillAmount), false);
+		FluidStack canDrain = fluidHandler.drain(null, new FluidStack(fluidToFill, fillAmount), false);
 		if (canDrain == null || canDrain.amount == 0) {
 			return FillStatus.NO_FLUID;
 		}
@@ -168,7 +167,7 @@ public final class FluidHelper {
 		}
 
 		if (doFill) {
-			fluidHandler.drain(ForgeDirection.UNKNOWN, canDrain, true);
+			fluidHandler.drain(null, canDrain, true);
 			if (moveToOutput) {
 				if (output == null) {
 					inv.setInventorySlotContents(outputSlot, filled);
@@ -207,7 +206,7 @@ public final class FluidHelper {
 			}
 		}
 
-		int used = fluidHandler.fill(ForgeDirection.UNKNOWN, fluidInContainer, false);
+		int used = fluidHandler.fill(null, fluidInContainer, false);
 
 		ItemStack drainedItem = getDrainedContainer(input, used);
 		if (ItemStack.areItemStacksEqual(input, drainedItem)) {
@@ -226,7 +225,7 @@ public final class FluidHelper {
 			return false;
 		}
 
-		fluidHandler.fill(ForgeDirection.UNKNOWN, fluidInContainer, true);
+		fluidHandler.fill(null, fluidInContainer, true);
 
 		if (drainedItem != null) {
 			if (outputSlot == inputSlot) {

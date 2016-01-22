@@ -10,17 +10,18 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.resources.model.ModelBakery;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import forestry.api.core.IModelManager;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.StringUtil;
 
@@ -70,9 +71,15 @@ public class ItemCrated extends ItemForestry {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerIcons(IIconRegister register) {
-		String textureName = (contained == null) ? "crate" : "crate-filled";
-		itemIcon = TextureManager.registerTex(register, textureName);
+	public void registerModel(Item item, IModelManager manager) {
+		if(contained == null){
+			manager.registerItemModel(item, 0, false);
+		}else{
+			String modID = ItemStackUtil.getItemNameFromRegistry(item).getResourceDomain();
+			ModelResourceLocation modelLocation = new ModelResourceLocation(modID + ":crates",  StringUtil.cleanItemName(item));
+			ModelLoader.setCustomModelResourceLocation(item, 0, modelLocation);
+			ModelBakery.registerItemVariants(item, modelLocation);
+		}
 	}
 
 }

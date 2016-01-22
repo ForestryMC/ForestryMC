@@ -40,7 +40,7 @@ public class SocketWidget extends Widget {
 	public void draw(int startX, int startY) {
 		ItemStack socketStack = tile.getSocket(slot);
 		if (socketStack != null) {
-			GuiForestry.getItemRenderer().renderItemIntoGUI(manager.minecraft.fontRenderer, manager.minecraft.renderEngine, socketStack, startX + xPos, startY + yPos);
+			GuiForestry.getItemRenderer().renderItemIntoGUI(socketStack, startX + xPos, startY + yPos);
 		}
 	}
 

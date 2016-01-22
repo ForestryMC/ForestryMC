@@ -1,7 +1,7 @@
 package forestry.core.multiblock;
 
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
@@ -26,13 +26,13 @@ public abstract class RectangularMultiblockControllerBase extends MultiblockCont
 			throw new MultiblockValidationException(StatCollector.translateToLocalFormatted("for.multiblock.error.small", minX, minY, minZ));
 		}
 		
-		ChunkCoordinates maximumCoord = getMaximumCoord();
-		ChunkCoordinates minimumCoord = getMinimumCoord();
+		BlockPos maximumCoord = getMaximumCoord();
+		BlockPos minimumCoord = getMinimumCoord();
 		
 		// Quickly check for exceeded dimensions
-		int deltaX = maximumCoord.posX - minimumCoord.posX + 1;
-		int deltaY = maximumCoord.posY - minimumCoord.posY + 1;
-		int deltaZ = maximumCoord.posZ - minimumCoord.posZ + 1;
+		int deltaX = maximumCoord.getX() - minimumCoord.getX() + 1;
+		int deltaY = maximumCoord.getY() - minimumCoord.getY() + 1;
+		int deltaZ = maximumCoord.getZ() - minimumCoord.getZ() + 1;
 		
 		int maxX = sizeLimits.getMaximumXSize();
 		int maxY = sizeLimits.getMaximumYSize();
@@ -63,12 +63,12 @@ public abstract class RectangularMultiblockControllerBase extends MultiblockCont
 		IMultiblockComponent part;
 		Class<? extends RectangularMultiblockControllerBase> myClass = this.getClass();
 
-		for (int x = minimumCoord.posX; x <= maximumCoord.posX; x++) {
-			for (int y = minimumCoord.posY; y <= maximumCoord.posY; y++) {
-				for (int z = minimumCoord.posZ; z <= maximumCoord.posZ; z++) {
+		for (int x = minimumCoord.getX(); x <= maximumCoord.getX(); x++) {
+			for (int y = minimumCoord.getY(); y <= maximumCoord.getY(); y++) {
+				for (int z = minimumCoord.getZ(); z <= maximumCoord.getZ(); z++) {
 					// Okay, figure out what sort of block this should be.
-					
-					te = this.worldObj.getTileEntity(x, y, z);
+					BlockPos pos = new BlockPos(x, y, z);
+					te = this.worldObj.getTileEntity(pos);
 					if (te instanceof IMultiblockComponent) {
 						part = (IMultiblockComponent) te;
 						
@@ -83,39 +83,40 @@ public abstract class RectangularMultiblockControllerBase extends MultiblockCont
 					
 					// Validate block type against both part-level and material-level validators.
 					int extremes = 0;
-					if (x == minimumCoord.posX) {
+
+					if (x == minimumCoord.getX()) {
 						extremes++;
 					}
-					if (y == minimumCoord.posY) {
+					if (y == minimumCoord.getY()) {
 						extremes++;
 					}
-					if (z == minimumCoord.posZ) {
+					if (z == minimumCoord.getZ()) {
 						extremes++;
 					}
 					
-					if (x == maximumCoord.posX) {
+					if (x == maximumCoord.getX()) {
 						extremes++;
 					}
-					if (y == maximumCoord.posY) {
+					if (y == maximumCoord.getY()) {
 						extremes++;
 					}
-					if (z == maximumCoord.posZ) {
+					if (z == maximumCoord.getZ()) {
 						extremes++;
 					}
 					
 					if (extremes >= 1) {
 						// Side
-						int exteriorLevel = y - minimumCoord.posY;
+						int exteriorLevel = y - minimumCoord.getY();
 						if (part != null) {
 							isGoodForExteriorLevel(part, exteriorLevel);
 						} else {
-							isBlockGoodForExteriorLevel(exteriorLevel, this.worldObj, x, y, z);
+							isBlockGoodForExteriorLevel(exteriorLevel, this.worldObj, pos);
 						}
 					} else {
 						if (part != null) {
 							isGoodForInterior(part);
 						} else {
-							isBlockGoodForInterior(this.worldObj, x, y, z);
+							isBlockGoodForInterior(this.worldObj, pos);
 						}
 					}
 				}

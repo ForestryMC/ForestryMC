@@ -12,7 +12,7 @@ package forestry.arboriculture.worldgen;
 
 import java.util.List;
 
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.world.ITreeGenData;
@@ -38,9 +38,9 @@ public class WorldGenWalnut extends WorldGenTree {
 		float branchSize = 2;
 		while (leafSpawn >= 3) {
 			int leafRadius = Math.min(4, (int) branchSize);
-			List<ChunkCoordinates> branchCoords = generateBranches(world, leafSpawn, 0, 0, 0.2f, 0.2f, (int) branchSize, 1, 0.5f);
-			for (ChunkCoordinates branchEnd : branchCoords) {
-				generateAdjustedCircle(world, branchEnd.posY, branchEnd.posX, branchEnd.posZ, leafRadius, 2, 2, leaf, 1.0f, EnumReplaceMode.SOFT);
+			List<BlockPos> branchCoords = generateBranches(world, leafSpawn, 0, 0, 0.2f, 0.2f, (int) branchSize, 1, 0.5f);
+			for (BlockPos branchEnd : branchCoords) {
+				generateAdjustedCircle(world, branchEnd, leafRadius, 2, 2, leaf, 1.0f, EnumReplaceMode.SOFT);
 			}
 			leafSpawn--;
 			branchSize += 0.25f;

@@ -10,10 +10,11 @@
  ******************************************************************************/
 package forestry.energy.blocks;
 
+import java.util.Locale;
+
 import forestry.core.blocks.IMachinePropertiesTESR;
 import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.IBlockRenderer;
 import forestry.core.tiles.TileForestry;
 import forestry.energy.tiles.TileEngineBiogas;
 import forestry.energy.tiles.TileEngineClockwork;
@@ -21,6 +22,7 @@ import forestry.energy.tiles.TileEngineElectric;
 import forestry.energy.tiles.TileEnginePeat;
 import forestry.energy.tiles.TileGenerator;
 import forestry.plugins.PluginEnergy;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 
 public enum BlockEngineType implements IMachinePropertiesTESR {
 	ELECTRIC(TileEngineElectric.class, "EngineTin", "/engine_tin_"),
@@ -28,7 +30,7 @@ public enum BlockEngineType implements IMachinePropertiesTESR {
 	BIOGAS(TileEngineBiogas.class, "EngineBronze", "/engine_bronze_"),
 	GENERATOR(TileGenerator.class, "Generator", "/generator_") {
 		@Override
-		public IBlockRenderer getRenderer() {
+		public TileEntitySpecialRenderer getRenderer() {
 			return Proxies.render.getRenderDefaultMachine(texturePath);
 		}
 	},
@@ -62,7 +64,12 @@ public enum BlockEngineType implements IMachinePropertiesTESR {
 	}
 
 	@Override
-	public IBlockRenderer getRenderer() {
+	public TileEntitySpecialRenderer getRenderer() {
 		return PluginEnergy.proxy.getRenderDefaultEngine(texturePath);
+	}
+	
+	@Override
+	public String getName() {
+		return name().toLowerCase(Locale.ENGLISH);
 	}
 }

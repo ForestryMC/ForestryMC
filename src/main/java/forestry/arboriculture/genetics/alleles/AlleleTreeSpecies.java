@@ -13,41 +13,42 @@ package forestry.arboriculture.genetics.alleles;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.util.IIcon;
-
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraftforge.common.EnumPlantType;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.arboriculture.EnumGermlingType;
+import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.IAlleleTreeSpeciesCustom;
-import forestry.api.arboriculture.IGermlingIconProvider;
-import forestry.api.arboriculture.ILeafIconProvider;
+import forestry.api.arboriculture.IGermlingModelProvider;
+import forestry.api.arboriculture.ILeafSpriteProvider;
 import forestry.api.arboriculture.ITreeGenerator;
 import forestry.api.arboriculture.ITreeRoot;
 import forestry.api.arboriculture.TreeManager;
-import forestry.api.core.IIconProvider;
+import forestry.api.core.IModelManager;
+import forestry.api.core.IModelProvider;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IFruitFamily;
 import forestry.core.genetics.alleles.AlleleSpecies;
-import forestry.core.render.TextureManager;
 
-public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeciesCustom, IIconProvider {
+public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeciesCustom {
 	private final ITreeGenerator generator;
-	private final IGermlingIconProvider germlingIconProvider;
-	private final ILeafIconProvider leafIconProvider;
+	private final IGermlingModelProvider germlingModelProvider;
+	private final ILeafSpriteProvider leafmodelProvider;
 	private final List<IFruitFamily> fruits = new ArrayList<>();
+	
+	private final String mdoelName;
 
 	private EnumPlantType nativeType = EnumPlantType.Plains;
 
-	public AlleleTreeSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, boolean isDominant, IClassification branch, String binomial, ILeafIconProvider leafIconProvider, IGermlingIconProvider germlingIconProvider, ITreeGenerator generator) {
+	public AlleleTreeSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, boolean isDominant, IClassification branch, String binomial, String modelName, ILeafSpriteProvider leafIconProvider, IGermlingModelProvider germlingModelProvider, ITreeGenerator generator) {
 		super(uid, unlocalizedName, authority, unlocalizedDescription, isDominant, branch, binomial);
 
 		this.generator = generator;
-		this.germlingIconProvider = germlingIconProvider;
-		this.leafIconProvider = leafIconProvider;
+		this.germlingModelProvider = germlingModelProvider;
+		this.leafmodelProvider = leafIconProvider;
+		this.mdoelName = modelName;
 	}
 
 	@Override
@@ -84,30 +85,24 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 	}
 
 	@Override
-	public IIcon getLeafIcon(boolean pollinated, boolean fancy) {
-		return leafIconProvider.getIcon(pollinated, fancy);
+	public TextureAtlasSprite getLeafSprite(boolean pollinated, boolean fancy) {
+		return leafmodelProvider.getSprite(pollinated, fancy);
 	}
 
 	@Override
 	public int getLeafColour(boolean pollinated) {
-		return leafIconProvider.getColor(pollinated);
+		return leafmodelProvider.getColor(pollinated);
 	}
 
 	@Override
-	public int getIconColour(int renderPass) {
-		return leafIconProvider.getColor(false);
+	public int getSpriteColour(int renderPass) {
+		return leafmodelProvider.getColor(false);
 	}
-
-	@Override
+	
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister register) {
-		germlingIconProvider.registerIcons(register);
-	}
-
 	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getGermlingIcon(EnumGermlingType type, int renderPass) {
-		return germlingIconProvider.getIcon(type, renderPass);
+	public ModelResourceLocation getGermlingModel(EnumGermlingType type) {
+		return germlingModelProvider.getModel(type);
 	}
 
 	@Override
@@ -118,17 +113,31 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 		}
 		return getLeafColour(false);
 	}
-
+	
 	@Override
-	@SideOnly(Side.CLIENT)
-	public IIconProvider getIconProvider() {
-		return this;
+	public void registerModels(IModelManager manager) {
+		germlingModelProvider.registerModels(manager);
 	}
 
 	@Override
+	public String getModID() {
+		return "forestry";
+	}
+	
+	@Override
+	public String getModelName() {
+		return mdoelName;
+	}
+
+	@Override
+	public int compareTo(IAlleleTreeSpecies o) {
+		return 0;
+	}
+
 	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(short texUID) {
-		return TextureManager.getInstance().getIcon(texUID);
+	@Override
+	public IModelProvider getModelProvider() {
+		return null;
 	}
 
 }

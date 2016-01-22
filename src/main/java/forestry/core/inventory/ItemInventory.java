@@ -17,7 +17,8 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.IChatComponent;
 import forestry.core.tiles.IFilterSlotDelegate;
 
 public abstract class ItemInventory implements IInventory, IFilterSlotDelegate {
@@ -48,7 +49,7 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate {
 
 		if (nbt.hasKey(KEY_SLOTS)) {
 			NBTTagCompound slotNbt = nbt.getCompoundTag(KEY_SLOTS);
-			return slotNbt.func_150296_c().size();
+			return slotNbt.getKeySet().size();
 		}
 
 		int count = 0;
@@ -242,10 +243,15 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate {
 	public int getSizeInventory() {
 		return inventoryStacks.length;
 	}
-
+	
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "BeeBag";
+	}
+	
+	@Override
+	public IChatComponent getDisplayName() {
+		return new ChatComponentText(getName());
 	}
 
 	@Override
@@ -262,9 +268,9 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate {
 	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
 		return true;
 	}
-
+	
 	@Override
-	public boolean hasCustomInventoryName() {
+	public boolean hasCustomName() {
 		return true;
 	}
 
@@ -274,15 +280,15 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate {
 	}
 
 	@Override
-	public void openInventory() {
+	public void openInventory(EntityPlayer player) {
 	}
 
 	@Override
-	public void closeInventory() {
+	public void closeInventory(EntityPlayer player) {
 	}
-
+	
 	@Override
-	public ItemStack getStackInSlotOnClosing(int slot) {
+	public ItemStack removeStackFromSlot(int slot) {
 		ItemStack toReturn = getStackInSlot(slot);
 
 		if (toReturn != null) {
@@ -301,5 +307,24 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate {
 	@Override
 	public boolean isLocked(int slotIndex) {
 		return false;
+	}
+	
+	/* Fields */
+	@Override
+	public int getField(int id) {
+		return 0;
+	}
+	
+	@Override
+	public int getFieldCount() {
+		return 0;
+	}
+	
+	@Override
+	public void clear() {
+	}
+	
+	@Override
+	public void setField(int id, int value) {
 	}
 }

@@ -13,7 +13,7 @@ package forestry.arboriculture.worldgen;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.world.ITreeGenData;
@@ -38,15 +38,15 @@ public class WorldGenJungle extends WorldGenTreeVanilla {
 		generateTreeTrunk(world, height, girth, vinesChance);
 
 		if (height > 10) {
-			List<ChunkCoordinates> branchCoords = new ArrayList<>();
+			List<BlockPos> branchCoords = new ArrayList<>();
 			int branchSpawn = 6;
 			while (branchSpawn < height - 2) {
 				branchCoords.addAll(generateBranches(world, branchSpawn, 0, 0, 0.5f, 0f, 2, 1, 0.25f));
 				branchSpawn += world.rand.nextInt(4);
 			}
 
-			for (ChunkCoordinates branchEnd : branchCoords) {
-				generateAdjustedCylinder(world, branchEnd.posY, branchEnd.posX, branchEnd.posZ, 0f, 1, leaf, EnumReplaceMode.NONE);
+			for (BlockPos branchEnd : branchCoords) {
+				generateAdjustedCylinder(world, branchEnd, 0f, 1, leaf, EnumReplaceMode.NONE);
 			}
 		}
 

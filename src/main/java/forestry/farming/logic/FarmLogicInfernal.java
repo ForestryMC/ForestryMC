@@ -15,13 +15,12 @@ import java.util.Stack;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.Farmables;
 import forestry.api.farming.ICrop;
@@ -44,8 +43,8 @@ public class FarmLogicInfernal extends FarmLogicHomogeneous {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon getIcon() {
-		return Items.nether_wart.getIconFromDamage(0);
+	public Item getItem() {
+		return Items.nether_wart;
 	}
 
 	@Override
@@ -64,14 +63,14 @@ public class FarmLogicInfernal extends FarmLogicHomogeneous {
 	}
 
 	@Override
-	public Collection<ICrop> harvest(int x, int y, int z, FarmDirection direction, int extent) {
+	public Collection<ICrop> harvest(BlockPos pos, FarmDirection direction, int extent) {
 		World world = getWorld();
 
 		Stack<ICrop> crops = new Stack<>();
 		for (int i = 0; i < extent; i++) {
-			Vect position = translateWithOffset(x, y + 1, z, direction, i);
+			Vect position = translateWithOffset(pos.add(0, 1, 0), direction, i);
 			for (IFarmable farmable : germlings) {
-				ICrop crop = farmable.getCropAt(world, position.x, position.y, position.z);
+				ICrop crop = farmable.getCropAt(world, position);
 				if (crop != null) {
 					crops.push(crop);
 				}
@@ -83,12 +82,12 @@ public class FarmLogicInfernal extends FarmLogicHomogeneous {
 	}
 
 	@Override
-	protected boolean maintainGermlings(int x, int y, int z, FarmDirection direction, int extent) {
+	protected boolean maintainGermlings(BlockPos pos, FarmDirection direction, int extent) {
 		World world = getWorld();
 
 		for (int i = 0; i < extent; i++) {
-			Vect position = translateWithOffset(x, y, z, direction, i);
-			if (!VectUtil.isAirBlock(world, position) && !BlockUtil.isReplaceableBlock(world, position.x, position.y, position.z)) {
+			Vect position = translateWithOffset(pos, direction, i);
+			if (!VectUtil.isAirBlock(world, position) && !BlockUtil.isReplaceableBlock(world, position)) {
 				continue;
 			}
 
@@ -107,7 +106,7 @@ public class FarmLogicInfernal extends FarmLogicHomogeneous {
 		World world = getWorld();
 
 		for (IFarmable candidate : germlings) {
-			if (housing.plantGermling(candidate, world, position.x, position.y, position.z)) {
+			if (housing.plantGermling(candidate, world, position)) {
 				return true;
 			}
 		}

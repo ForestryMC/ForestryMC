@@ -10,13 +10,12 @@
  ******************************************************************************/
 package forestry.plugins.compat;
 
-import cpw.mods.fml.common.Optional;
-
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
 import forestry.core.utils.ModUtil;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.Plugin;
+import net.minecraftforge.fml.common.Optional;
 
 import buildcraft.api.recipes.BuildcraftRecipeRegistry;
 

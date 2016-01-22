@@ -14,8 +14,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 
@@ -26,7 +24,6 @@ import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.gui.IContainerLiquidTanks;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.SpriteSheet;
 import forestry.farming.gui.ContainerFarm;
 
 /**
@@ -72,18 +69,17 @@ public class TankWidget extends Widget {
 		if (contents == null || contents.amount <= 0 || contents.getFluid() == null) {
 			return;
 		}
-
-		IIcon liquidIcon = contents.getFluid().getIcon(contents);
-		if (liquidIcon == null) {
+		
+		if (contents.getFluid().getStill() == null) {
 			return;
 		}
 
+		Proxies.render.bindTexture(contents.getFluid().getStill());
 		int scaledLiquid = (contents.amount * height) / tank.getCapacity();
 		if (scaledLiquid > height) {
 			scaledLiquid = height;
 		}
 
-		Proxies.render.bindTexture(SpriteSheet.BLOCKS);
 		GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
 		{
 			GL11.glDisable(GL11.GL_LIGHTING);
@@ -101,7 +97,7 @@ public class TankWidget extends Widget {
 					scaledLiquid = 0;
 				}
 
-				manager.gui.drawTexturedModelRectFromIcon(startX + xPos, startY + yPos + height - x - start, liquidIcon, 16, x);
+				manager.gui.drawTexturedModalRect(startX + xPos, startY + yPos + height - x - start, 0, 0, 16, 16 - (16 - x));
 				start += 16;
 			}
 

@@ -16,7 +16,7 @@ import java.util.List;
 import net.minecraft.entity.Entity;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.Vec3;
 
 import forestry.api.apiculture.BeeManager;
@@ -105,7 +105,7 @@ public abstract class AlleleEffect extends AlleleCategorized implements IAlleleB
 	@Override
 	public IEffectData doFX(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
 		Vec3 beeFXCoordinates = getFXCoordinates(housing);
-		Proxies.render.addBeeHiveFX("particles/swarm_bee", housing.getWorld(), beeFXCoordinates.xCoord, beeFXCoordinates.yCoord, beeFXCoordinates.zCoord, genome.getPrimary().getIconColour(0));
+		Proxies.render.addBeeHiveFX("particles/swarm_bee", housing.getWorld(), beeFXCoordinates.xCoord, beeFXCoordinates.yCoord, beeFXCoordinates.zCoord, genome.getPrimary().getSpriteColour(0));
 		return storedData;
 	}
 
@@ -114,8 +114,8 @@ public abstract class AlleleEffect extends AlleleCategorized implements IAlleleB
 			return housing.getBeeFXCoordinates();
 		} catch (Throwable error) {
 			// getBeeFXCoordinates() is only newly added to the API, fall back on getCoordinates()
-			ChunkCoordinates coordinates = housing.getCoordinates();
-			return Vec3.createVectorHelper(coordinates.posX + 0.5D, coordinates.posY + 0.5D, coordinates.posZ + 0.5D);
+			BlockPos coordinates = housing.getCoordinates();
+			return new Vec3(coordinates.getX() + 0.5D, coordinates.getY() + 0.5D, coordinates.getZ() + 0.5D);
 		}
 	}
 
@@ -150,7 +150,7 @@ public abstract class AlleleEffect extends AlleleCategorized implements IAlleleB
 		Vect min = new Vect(housing.getCoordinates()).add(offset);
 		Vect max = min.add(area);
 
-		return AxisAlignedBB.getBoundingBox(min.x, min.y, min.z, max.x, max.y, max.z);
+		return AxisAlignedBB.fromBounds(min.getX(), min.getY(), min.getZ(), max.getX(), max.getY(), max.getX());
 	}
 
 	public static <T extends Entity> List<T> getEntitiesInRange(IBeeGenome genome, IBeeHousing housing, Class<T> entityClass) {

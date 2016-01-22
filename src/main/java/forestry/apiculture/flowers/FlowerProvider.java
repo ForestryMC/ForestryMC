@@ -11,15 +11,13 @@
 package forestry.apiculture.flowers;
 
 import java.util.EnumSet;
-import java.util.Set;
-
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.EnumPlantType;
 
 import forestry.api.apiculture.FlowerManager;
-import forestry.api.genetics.IFlower;
 import forestry.api.genetics.IFlowerProvider;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IPollinatable;
@@ -56,23 +54,13 @@ public class FlowerProvider implements IFlowerProvider {
 	}
 
 	@Override
-	public boolean growFlower(World world, IIndividual individual, int x, int y, int z) {
-		return FlowerManager.flowerRegistry.growFlower(this.flowerType, world, individual, x, y, z);
-	}
-
-	@Override
 	public String getDescription() {
 		return StringUtil.localize(this.description);
 	}
 
 	@Override
-	public ItemStack[] affectProducts(World world, IIndividual individual, int x, int y, int z, ItemStack[] products) {
+	public ItemStack[] affectProducts(World world, IIndividual individual, BlockPos pos, ItemStack[] products) {
 		return products;
-	}
-
-	@Override
-	public Set<IFlower> getFlowers() {
-		return FlowerManager.flowerRegistry.getAcceptableFlowers(this.flowerType);
 	}
 
 }

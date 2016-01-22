@@ -27,7 +27,7 @@ public class BlockRegistryApiculture extends BlockRegistry {
 	public BlockRegistryApiculture() {
 		apiculture = registerBlock(new BlockApiculture(), ItemBlockForestry.class, "apiculture");
 
-		apicultureChest = registerBlock(new BlockBase(true), ItemBlockForestry.class, "apicultureChest");
+		apicultureChest = registerBlock(new BlockBase(true, BlockApicultureChestType.class), ItemBlockForestry.class, "apicultureChest");
 		apicultureChest.setCreativeTab(Tabs.tabApiculture);
 		apicultureChest.setHarvestLevel("axe", 0);
 

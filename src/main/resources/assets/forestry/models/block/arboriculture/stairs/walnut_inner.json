@@ -1,0 +1,8 @@
+{
+  "parent": "block/inner_stairs",
+  "textures": {
+    "side": "forestry:blocks/wood/planks.walnut",
+    "top": "forestry:blocks/wood/planks.walnut",
+    "bottom": "forestry:blocks/wood/planks.walnut"
+  }
+}

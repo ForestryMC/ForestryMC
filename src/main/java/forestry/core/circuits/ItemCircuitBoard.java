@@ -18,15 +18,17 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitBoard;
 import forestry.api.circuits.ICircuitLayout;
-import forestry.core.items.ItemForestryMultiPass;
+import forestry.api.core.IModelManager;
+import forestry.core.items.ItemForestry;
 import forestry.plugins.PluginCore;
 
-public class ItemCircuitBoard extends ItemForestryMultiPass {
+public class ItemCircuitBoard extends ItemForestry {
 
 	public ItemCircuitBoard() {
 		super();
@@ -40,6 +42,15 @@ public class ItemCircuitBoard extends ItemForestryMultiPass {
 		itemList.add(createCircuitboard(EnumCircuitBoardType.ENHANCED, null, new ICircuit[]{}));
 		itemList.add(createCircuitboard(EnumCircuitBoardType.REFINED, null, new ICircuit[]{}));
 		itemList.add(createCircuitboard(EnumCircuitBoardType.INTRICATE, null, new ICircuit[]{}));
+	}
+	
+	/* MODELS*/
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void registerModel(Item item, IModelManager manager) {
+		for(int i = 0;i < 4;i++){
+			manager.registerItemModel(item, i, "chipsets");
+		}
 	}
 
 	/**

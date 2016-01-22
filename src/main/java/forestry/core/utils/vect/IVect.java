@@ -10,31 +10,39 @@
  ******************************************************************************/
 package forestry.core.utils.vect;
 
-import net.minecraft.util.ChunkCoordinates;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
 import forestry.api.farming.FarmDirection;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 
 /**
  * Represents a position or dimensions.
  */
-public interface IVect {
-	int getX();
+public abstract class IVect extends BlockPos {
+	
+	public IVect(int x, int y, int z) {
+		super(x, y, z);
+	}
+	
+	public IVect(Entity source) {
+		super(source);
+	}
+	
+	public IVect(BlockPos pos) {
+		super(pos);
+	}
+	
+	public IVect(double x, double y, double z) {
+		super(x, y, z);
+	}
 
-	int getY();
+	abstract IVect add(IVect other);
 
-	int getZ();
+	abstract IVect add(EnumFacing direction);
 
-	IVect add(IVect other);
+	abstract IVect add(FarmDirection direction);
 
-	IVect add(int x, int y, int z);
+	abstract IVect add(BlockPos coordinates);
 
-	IVect add(ForgeDirection direction);
-
-	IVect add(FarmDirection direction);
-
-	IVect add(ChunkCoordinates coordinates);
-
-	int[] toArray();
+	abstract int[] toArray();
 }

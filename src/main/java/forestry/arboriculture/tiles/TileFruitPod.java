@@ -15,15 +15,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
@@ -88,15 +86,6 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 	}
 
 	/* UPDATING */
-
-	/**
-	 * This doesn't use normal TE updates
-	 */
-	@Override
-	public boolean canUpdate() {
-		return false;
-	}
-
 	public void onBlockTick() {
 		if (canMature() && worldObj.rand.nextFloat() <= sappiness) {
 			mature();
@@ -113,9 +102,9 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 	}
 
 	@SideOnly(Side.CLIENT)
-	public IIcon getIcon() {
+	public TextureAtlasSprite getSprite() {
 		if (maturity < indices.length) {
-			return TextureManager.getInstance().getIcon((short) indices[maturity]);
+			return TextureManager.getInstance().getSprite((short) indices[maturity]);
 		} else {
 			return null;
 		}
@@ -126,7 +115,7 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 	}
 
 	public ItemStack[] getDrop() {
-		return allele.getProvider().getFruits(null, worldObj, xCoord, yCoord, zCoord, maturity);
+		return allele.getProvider().getFruits(null, worldObj, getPos(), maturity);
 	}
 
 	/* NETWORK */
@@ -145,7 +134,7 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 			return;
 		}
 		maturity = (short) newMaturity;
-		worldObj.func_147479_m(xCoord, yCoord, zCoord);
+		worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
 	}
 
 	/* IFRUITBEARER */
@@ -160,6 +149,10 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 			return null;
 		}
 		return allele.getProvider().getFamily();
+	}
+	
+	public IAlleleFruit getAllele() {
+		return allele;
 	}
 
 	@Override
@@ -203,6 +196,6 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 			indices[i] = data.readInt();
 		}
 
-		worldObj.func_147479_m(xCoord, yCoord, zCoord);
+		worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
 	}
 }

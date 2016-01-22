@@ -22,6 +22,7 @@ public class AlleleArea extends AlleleCategorized implements IAlleleArea {
 		this.area = value;
 	}
 	
+	@Override
 	public int[] getValue() {
 		return area;
 	}

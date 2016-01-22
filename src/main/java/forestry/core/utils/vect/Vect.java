@@ -14,64 +14,44 @@ import java.util.Random;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChunkCoordinates;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import forestry.api.farming.FarmDirection;
 
 /**
  * Represents an unchangeable position or dimensions.
  */
-public class Vect implements IVect {
-	public final int x;
-	public final int y;
-	public final int z;
+public class Vect extends IVect {
 
 	public Vect(int[] dim) {
+		super(dim[0], dim[1], dim[2]);
 		if (dim.length != 3) {
 			throw new RuntimeException("Cannot instantiate a vector with less or more than 3 points.");
 		}
-
-		this.x = dim[0];
-		this.y = dim[1];
-		this.z = dim[2];
 	}
 
 	public Vect(IVect vect) {
-		this.x = vect.getX();
-		this.y = vect.getY();
-		this.z = vect.getZ();
+		super(vect.getX(), vect.getY(), vect.getZ());
 	}
 
-	public Vect(ForgeDirection direction) {
-		this.x = direction.offsetX;
-		this.y = direction.offsetY;
-		this.z = direction.offsetZ;
+	public Vect(EnumFacing direction) {
+		super(direction.getFrontOffsetX(), direction.getFrontOffsetY(), direction.getFrontOffsetZ());
 	}
 
 	public Vect(int x, int y, int z) {
-		this.x = x;
-		this.y = y;
-		this.z = z;
+		super(x, y, z);
 	}
 
-	public Vect(ChunkCoordinates coordinates) {
-		this.x = coordinates.posX;
-		this.y = coordinates.posY;
-		this.z = coordinates.posZ;
+	public Vect(BlockPos pos) {
+		super(pos);
 	}
 
 	public Vect(TileEntity entity) {
-		this.x = entity.xCoord;
-		this.y = entity.yCoord;
-		this.z = entity.zCoord;
+		this(entity.getPos());
 	}
 
 	public Vect(Entity entity) {
-		this.x = (int) Math.round(entity.posX);
-		this.y = (int) Math.round(entity.posY);
-		this.z = (int) Math.round(entity.posZ);
+		super(entity);
 	}
 
 	public static Vect getRandomPositionInArea(Random random, IVect area) {
@@ -95,17 +75,17 @@ public class Vect implements IVect {
 
 	@Override
 	public Vect add(IVect other) {
-		return new Vect(x + other.getX(), y + other.getY(), z + other.getZ());
+		return new Vect(getX() + other.getX(), getY() + other.getY(), getZ() + other.getZ());
 	}
 
 	@Override
 	public Vect add(int x, int y, int z) {
-		return new Vect(this.x + x, this.y + y, this.z + z);
+		return new Vect(getX() + x, getY() + y, getZ() + z);
 	}
 
 	@Override
-	public Vect add(ForgeDirection direction) {
-		return add(direction.offsetX, direction.offsetY, direction.offsetZ);
+	public Vect add(EnumFacing direction) {
+		return add(direction.getFrontOffsetX(), direction.getFrontOffsetY(), direction.getFrontOffsetZ());
 	}
 
 	@Override
@@ -114,35 +94,35 @@ public class Vect implements IVect {
 	}
 
 	@Override
-	public Vect add(ChunkCoordinates coordinates) {
-		return add(coordinates.posX, coordinates.posY, coordinates.posZ);
+	public Vect add(BlockPos pos) {
+		return add(pos);
 	}
 
 	@Override
 	public int[] toArray() {
-		return new int[]{x, y, z};
+		return new int[]{getX(), getY(), getZ()};
 	}
 
 	public Vect multiply(int factor) {
-		return new Vect(x * factor, y * factor, z * factor);
+		return new Vect(getX() * factor, getY() * factor, getZ() * factor);
 	}
 
 	public Vect multiply(float factor) {
-		return new Vect(Math.round(x * factor), Math.round(y * factor), Math.round(z * factor));
+		return new Vect(Math.round(getX() * factor), Math.round(getY() * factor), Math.round(getZ() * factor));
 	}
 
 	@Override
 	public String toString() {
-		return String.format("%sx%sx%s", x, y, z);
+		return String.format("%sx%sx%s", getX(), getY(), getZ());
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + x;
-		result = prime * result + y;
-		result = prime * result + z;
+		result = prime * result + getX();
+		result = prime * result + getY();
+		result = prime * result + getZ();
 		return result;
 	}
 
@@ -155,21 +135,6 @@ public class Vect implements IVect {
 			return false;
 		}
 		Vect other = (Vect) obj;
-		return (x == other.x) && (y == other.y) && (z == other.z);
-	}
-
-	@Override
-	public int getX() {
-		return x;
-	}
-
-	@Override
-	public int getY() {
-		return y;
-	}
-
-	@Override
-	public int getZ() {
-		return z;
+		return (getX() == other.getX()) && (getY() == other.getY()) && (getZ() == other.getZ());
 	}
 }

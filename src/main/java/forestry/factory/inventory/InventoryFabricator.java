@@ -11,7 +11,7 @@
 package forestry.factory.inventory;
 
 import net.minecraft.item.ItemStack;
-
+import net.minecraft.util.EnumFacing;
 import forestry.core.inventory.InventoryAdapterTile;
 import forestry.core.utils.SlotUtil;
 import forestry.factory.recipes.FabricatorRecipeManager;
@@ -51,7 +51,7 @@ public class InventoryFabricator extends InventoryAdapterTile<TileFabricator> {
 	}
 
 	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack stack, int side) {
+	public boolean canExtractItem(int slotIndex, ItemStack stack, EnumFacing side) {
 		return slotIndex == SLOT_RESULT;
 	}
 }

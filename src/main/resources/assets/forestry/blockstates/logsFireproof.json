@@ -1,0 +1,120 @@
+{
+    "variants": {
+		//larch
+        "axis=normal,woodtype=larch":  { "model": "forestry:arboriculture/logs/larch" },
+        "axis=side,woodtype=larch":   { "model": "forestry:arboriculture/logs/larch_side" },
+        "axis=side_90,woodtype=larch":   { "model": "forestry:arboriculture/logs/larch_side", "y": 90 },
+		//teak
+        "axis=normal,woodtype=teak":  { "model": "forestry:arboriculture/logs/teak" },
+        "axis=side,woodtype=teak":   { "model": "forestry:arboriculture/logs/teak_side" },
+        "axis=side_90,woodtype=teak":   { "model": "forestry:arboriculture/logs/teak_side", "y": 90 },
+		//acacia
+        "axis=normal,woodtype=acacia":  { "model": "forestry:arboriculture/logs/acacia" },
+        "axis=side,woodtype=acacia":   { "model": "forestry:arboriculture/logs/acacia_side" },
+        "axis=side_90,woodtype=acacia":   { "model": "forestry:arboriculture/logs/acacia_side", "y": 90 },
+		//lime
+        "axis=normal,woodtype=lime":  { "model": "forestry:arboriculture/logs/lime" },
+        "axis=side,woodtype=lime":   { "model": "forestry:arboriculture/logs/lime_side" },
+        "axis=side_90,woodtype=lime":   { "model": "forestry:arboriculture/logs/lime_side", "y": 90 },
+		//chestnut
+        "axis=normal,woodtype=chestnut":  { "model": "forestry:arboriculture/logs/chestnut" },
+        "axis=side,woodtype=chestnut":   { "model": "forestry:arboriculture/logs/chestnut_side" },
+        "axis=side_90,woodtype=chestnut":   { "model": "forestry:arboriculture/logs/chestnut_side", "y": 90 },
+		//wenge
+        "axis=normal,woodtype=wenge":  { "model": "forestry:arboriculture/logs/wenge" },
+        "axis=side,woodtype=wenge":   { "model": "forestry:arboriculture/logs/wenge_side" },
+        "axis=side_90,woodtype=wenge":   { "model": "forestry:arboriculture/logs/wenge_side", "y": 90 },
+		//baobab
+        "axis=normal,woodtype=baobab":  { "model": "forestry:arboriculture/logs/baobab" },
+        "axis=side,woodtype=baobab":   { "model": "forestry:arboriculture/logs/baobab_side" },
+        "axis=side_90,woodtype=baobab":   { "model": "forestry:arboriculture/logs/baobab_side", "y": 90 },#
+		//sequoia
+        "axis=normal,woodtype=sequoia":  { "model": "forestry:arboriculture/logs/sequoia" },
+        "axis=side,woodtype=sequoia":   { "model": "forestry:arboriculture/logs/sequoia_side" },
+        "axis=side_90,woodtype=sequoia":   { "model": "forestry:arboriculture/logs/sequoia_side", "y": 90 },
+		//kapok
+        "axis=normal,woodtype=kapok":  { "model": "forestry:arboriculture/logs/kapok" },
+        "axis=side,woodtype=kapok":   { "model": "forestry:arboriculture/logs/kapok_side" },
+        "axis=side_90,woodtype=kapok":   { "model": "forestry:arboriculture/logs/kapok_side", "y": 90 },
+		//ebony
+        "axis=normal,woodtype=ebony":  { "model": "forestry:arboriculture/logs/ebony" },
+        "axis=side,woodtype=ebony":   { "model": "forestry:arboriculture/logs/ebony_side" },
+        "axis=side_90,woodtype=ebony":   { "model": "forestry:arboriculture/logs/ebony_side", "y": 90 },
+		//mahogany
+        "axis=normal,woodtype=mahogany":  { "model": "forestry:arboriculture/logs/mahogany" },
+        "axis=side,woodtype=mahogany":   { "model": "forestry:arboriculture/logs/mahogany_side" },
+        "axis=side_90,woodtype=mahogany":   { "model": "forestry:arboriculture/logs/mahogany_side", "y": 90 },
+		//balsa
+        "axis=normal,woodtype=balsa":  { "model": "forestry:arboriculture/logs/balsa" },
+        "axis=side,woodtype=balsa":   { "model": "forestry:arboriculture/logs/balsa_side" },
+        "axis=side_90,woodtype=balsa":   { "model": "forestry:arboriculture/logs/balsa_side", "y": 90 },
+		//willow
+        "axis=normal,woodtype=willow":  { "model": "forestry:arboriculture/logs/willow" },
+        "axis=side,woodtype=willow":   { "model": "forestry:arboriculture/logs/willow_side" },
+        "axis=side_90,woodtype=willow":   { "model": "forestry:arboriculture/logs/willow_side", "y": 90 },
+		//walnut
+        "axis=normal,woodtype=walnut":  { "model": "forestry:arboriculture/logs/walnut" },
+        "axis=side,woodtype=walnut":   { "model": "forestry:arboriculture/logs/walnut_side" },
+        "axis=side_90,woodtype=walnut":   { "model": "forestry:arboriculture/logs/walnut_side", "y": 90 },
+		//greenheart
+        "axis=normal,woodtype=greenheart":  { "model": "forestry:arboriculture/logs/greenheart" },
+        "axis=side,woodtype=greenheart":   { "model": "forestry:arboriculture/logs/greenheart_side" },
+        "axis=side_90,woodtype=greenheart":   { "model": "forestry:arboriculture/logs/greenheart_side", "y": 90 },
+		//cherry
+        "axis=normal,woodtype=cherry":  { "model": "forestry:arboriculture/logs/cherry" },
+        "axis=side,woodtype=cherry":   { "model": "forestry:arboriculture/logs/cherry_side" },
+        "axis=side_90,woodtype=cherry":   { "model": "forestry:arboriculture/logs/cherry_side", "y": 90 },
+		//mahoe
+        "axis=normal,woodtype=mahoe":  { "model": "forestry:arboriculture/logs/mahoe" },
+        "axis=side,woodtype=mahoe":   { "model": "forestry:arboriculture/logs/mahoe_side" },
+        "axis=side_90,woodtype=mahoe":   { "model": "forestry:arboriculture/logs/mahoe_side", "y": 90 },
+		//poplar
+        "axis=normal,woodtype=poplar":  { "model": "forestry:arboriculture/logs/poplar" },
+        "axis=side,woodtype=poplar":   { "model": "forestry:arboriculture/logs/poplar_side" },
+        "axis=side_90,woodtype=poplar":   { "model": "forestry:arboriculture/logs/poplar_side", "y": 90 },
+		//palm
+        "axis=normal,woodtype=palm":  { "model": "forestry:arboriculture/logs/palm" },
+        "axis=side,woodtype=palm":   { "model": "forestry:arboriculture/logs/palm_side" },
+        "axis=side_90,woodtype=palm":   { "model": "forestry:arboriculture/logs/palm_side", "y": 90 },
+		//papaya
+        "axis=normal,woodtype=papaya":  { "model": "forestry:arboriculture/logs/papaya" },
+        "axis=side,woodtype=papaya":   { "model": "forestry:arboriculture/logs/papaya_side" },
+        "axis=side_90,woodtype=papaya":   { "model": "forestry:arboriculture/logs/papaya_side", "y": 90 },
+		//pine
+        "axis=normal,woodtype=pine":  { "model": "forestry:arboriculture/logs/pine" },
+        "axis=side,woodtype=pine":   { "model": "forestry:arboriculture/logs/pine_side" },
+        "axis=side_90,woodtype=pine":   { "model": "forestry:arboriculture/logs/pine_side", "y": 90 },
+		//plum
+        "axis=normal,woodtype=plum":  { "model": "forestry:arboriculture/logs/plum" },
+        "axis=side,woodtype=plum":   { "model": "forestry:arboriculture/logs/plum_side" },
+        "axis=side_90,woodtype=plum":   { "model": "forestry:arboriculture/logs/plum_side", "y": 90 },
+		//maple
+        "axis=normal,woodtype=maple":  { "model": "forestry:arboriculture/logs/maple" },
+        "axis=side,woodtype=maple":   { "model": "forestry:arboriculture/logs/maple_side" },
+        "axis=side_90,woodtype=maple":   { "model": "forestry:arboriculture/logs/maple_side", "y": 90 },
+		//citrus
+        "axis=normal,woodtype=citrus":  { "model": "forestry:arboriculture/logs/citrus" },
+        "axis=side,woodtype=citrus":   { "model": "forestry:arboriculture/logs/citrus_side" },
+        "axis=side_90,woodtype=citrus":   { "model": "forestry:arboriculture/logs/citrus_side", "y": 90 },
+		//giganteum
+        "axis=normal,woodtype=giganteum":  { "model": "forestry:arboriculture/logs/giganteum" },
+        "axis=side,woodtype=giganteum":   { "model": "forestry:arboriculture/logs/giganteum_side" },
+        "axis=side_90,woodtype=giganteum":   { "model": "forestry:arboriculture/logs/giganteum_side", "y": 90 },
+		//ipe
+        "axis=normal,woodtype=ipe":  { "model": "forestry:arboriculture/logs/ipe" },
+        "axis=side,woodtype=ipe":   { "model": "forestry:arboriculture/logs/ipe_side" },
+        "axis=side_90,woodtype=ipe":   { "model": "forestry:arboriculture/logs/ipe_side", "y": 90 },
+		//padauk
+        "axis=normal,woodtype=padauk":  { "model": "forestry:arboriculture/logs/padauk" },
+        "axis=side,woodtype=padauk":   { "model": "forestry:arboriculture/logs/padauk_side" },
+        "axis=side_90,woodtype=padauk":   { "model": "forestry:arboriculture/logs/padauk_side", "y": 90 },
+		//cocobolo
+        "axis=normal,woodtype=cocobolo":  { "model": "forestry:arboriculture/logs/cocobolo" },
+        "axis=side,woodtype=cocobolo":   { "model": "forestry:arboriculture/logs/cocobolo_side" },
+        "axis=side_90,woodtype=cocobolo":   { "model": "forestry:arboriculture/logs/cocobolo_side", "y": 90 },
+		//zebrawood
+        "axis=normal,woodtype=zebrawood":  { "model": "forestry:arboriculture/logs/zebrawood" },
+        "axis=side,woodtype=zebrawood":   { "model": "forestry:arboriculture/logs/zebrawood_side" },
+        "axis=side_90,woodtype=zebrawood":   { "model": "forestry:arboriculture/logs/zebrawood_side", "y": 90 }
+    }
+}

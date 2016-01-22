@@ -12,6 +12,7 @@ package forestry.core.genetics.mutations;
 
 import java.util.Calendar;
 
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.genetics.IAllele;
@@ -31,7 +32,7 @@ public class MutationConditionTimeLimited implements IMutationCondition {
 	}
 
 	@Override
-	public float getChance(World world, int x, int y, int z, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1) {
+	public float getChance(World world, BlockPos pos, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1) {
 		DayMonth now = new DayMonth();
 
 		// If we are equal to start day, return 1.

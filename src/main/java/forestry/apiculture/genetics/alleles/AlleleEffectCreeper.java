@@ -13,7 +13,7 @@ package forestry.apiculture.genetics.alleles;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.apiculture.BeeManager;
@@ -50,11 +50,11 @@ public class AlleleEffectCreeper extends AlleleEffectThrottled {
 	public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
 
 		World world = housing.getWorld();
-		ChunkCoordinates housingCoords = housing.getCoordinates();
+		BlockPos housingCoords = housing.getCoordinates();
 
 		// If we are already triggered, we continue the explosion sequence.
 		if (storedData.getInteger(indexExplosionTimer) > 0) {
-			progressExplosion(storedData, world, housingCoords.posX, housingCoords.posY, housingCoords.posZ);
+			progressExplosion(storedData, world, housingCoords);
 			return storedData;
 		}
 
@@ -82,7 +82,7 @@ public class AlleleEffectCreeper extends AlleleEffectThrottled {
 				continue;
 			}
 
-			world.playSoundEffect(housingCoords.posX, housingCoords.posY, housingCoords.posZ, "mob.creeper", 4F,
+			world.playSoundEffect(housingCoords.getX(), housingCoords.getY(), housingCoords.getZ(), "mob.creeper", 4F,
 					(1.0F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.2F) * 0.7F);
 			storedData.setInteger(indexExplosionTimer, 2); // Set explosion timer
 		}
@@ -90,7 +90,7 @@ public class AlleleEffectCreeper extends AlleleEffectThrottled {
 		return storedData;
 	}
 
-	private static void progressExplosion(IEffectData storedData, World world, int x, int y, int z) {
+	private static void progressExplosion(IEffectData storedData, World world, BlockPos pos) {
 
 		int explosionTimer = storedData.getInteger(indexExplosionTimer);
 		explosionTimer--;
@@ -100,7 +100,7 @@ public class AlleleEffectCreeper extends AlleleEffectThrottled {
 			return;
 		}
 
-		world.createExplosion(null, x, y, z, storedData.getInteger(indexExplosionForce), false);
+		world.createExplosion(null, pos.getX(), pos.getY(), pos.getZ(), storedData.getInteger(indexExplosionForce), false);
 	}
 
 }

@@ -18,49 +18,78 @@ import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockFenceGate;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.EffectRenderer;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.arboriculture.EnumWoodType;
 import forestry.api.arboriculture.TreeManager;
+import forestry.api.core.IModelManager;
+import forestry.api.core.IItemModelRegister;
 import forestry.api.core.Tabs;
 import forestry.arboriculture.IWoodTyped;
-import forestry.arboriculture.render.IconProviderWood;
+import forestry.arboriculture.items.ItemBlockWood;
+import forestry.arboriculture.items.ItemBlockWood.WoodMeshDefinition;
 import forestry.arboriculture.tiles.TileWood;
 import forestry.core.render.ParticleHelper;
 import forestry.plugins.PluginArboriculture;
 
-public class BlockArbFence extends BlockFence implements IWoodTyped, ITileEntityProvider {
+public class BlockArbFence extends BlockFence implements IWoodTyped, IItemModelRegister, ITileEntityProvider {
 
 	private final ParticleHelper.Callback particleCallback;
 	private final boolean fireproof;
+	
+	protected String[] harvestTool;
+	protected int[] harvestLevel;
 
 	public BlockArbFence(boolean fireproof) {
-		super("", Material.wood);
+		super(Material.wood);
 
 		this.fireproof = fireproof;
 
+		harvestTool = new String[EnumWoodType.values().length];
+		harvestLevel = new int[harvestTool.length];
+		for(int i = 0;i < harvestTool.length;i++){
+			harvestLevel[i] = -1;
+		}
+		
 		setHardness(2.0F);
 		setResistance(5.0F);
 		setHarvestLevel("axe", 0);
 		setStepSound(soundTypeWood);
 		setCreativeTab(Tabs.tabArboriculture);
+		setDefaultState(this.blockState.getBaseState().withProperty(NORTH, Boolean.valueOf(false))
+				.withProperty(EAST, Boolean.valueOf(false)).withProperty(SOUTH, Boolean.valueOf(false))
+				.withProperty(WEST, Boolean.valueOf(false)).withProperty(EnumWoodType.WOODTYPE, EnumWoodType.LARCH));
 
 		this.particleCallback = new ParticleHelper.DefaultCallback(this);
+	}
+	
+	@Override
+	protected BlockState createBlockState() {
+		return new BlockState(this, new IProperty[] { NORTH, SOUTH, WEST, EAST, EnumWoodType.WOODTYPE });
+	}
+	
+	@Override
+	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
+		TileEntity tile = world.getTileEntity(pos);
+		if (tile instanceof TileWood) {
+			TileWood wood = (TileWood) tile;
+			state = state.withProperty(EnumWoodType.WOODTYPE, wood.getWoodType());
+		}
+		return super.getActualState(state, world, pos);
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
@@ -72,46 +101,36 @@ public class BlockArbFence extends BlockFence implements IWoodTyped, ITileEntity
 	}
 
 	@Override
-	public boolean canPlaceTorchOnTop(World world, int x, int y, int z) {
+	public boolean canPlaceTorchOnTop(IBlockAccess world, BlockPos pos) {
 		return true;
 	}
-
+	
 	@Override
-	public boolean canConnectFenceTo(IBlockAccess world, int x, int y, int z) {
-		if (!isFence(world, x, y, z)) {
-			Block block = world.getBlock(x, y, z);
+	public boolean canConnectTo(IBlockAccess world, BlockPos pos) {
+		if (!isFence(world, pos)) {
+			Block block = world.getBlockState(pos).getBlock();
 			if (block == this || block instanceof BlockFenceGate) {
 				return true;
 			}
 
-			return block.getMaterial().isOpaque() && block.renderAsNormalBlock() && block.getMaterial() != Material.gourd;
+			return block.getMaterial().isOpaque() && block.isNormalCube() && block.getMaterial() != Material.gourd;
 		} else {
 			return true;
 		}
 	}
 
-	/* ICONS */
+	/* Models */
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerBlockIcons(IIconRegister register) {
-		IconProviderWood.registerIcons(register);
+	public void registerModel(Item item, IModelManager manager) {
+		if (!fireproof) {
+			manager.registerVariant(item, ItemBlockWood.getVariants(this));
+		}
+		manager.registerItemModel(item, new WoodMeshDefinition(this));
 	}
 
-	@SideOnly(Side.CLIENT)
-	@Override
-	public IIcon getIcon(int side, int meta) {
-		return IconProviderWood.getPlankIcon(EnumWoodType.LARCH);
-	}
-
-	@Override
-	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
-		TileWood wood = TileWood.getWoodTile(world, x, y, z);
-		EnumWoodType woodType = wood.getWoodType();
-		return IconProviderWood.getPlankIcon(woodType);
-	}
-
-	private static boolean isFence(IBlockAccess world, int x, int y, int z) {
-		Block block = world.getBlock(x, y, z);
+	private static boolean isFence(IBlockAccess world, BlockPos pos) {
+		Block block = world.getBlockState(pos).getBlock();
 		return PluginArboriculture.validFences.contains(block);
 	}
 
@@ -122,36 +141,36 @@ public class BlockArbFence extends BlockFence implements IWoodTyped, ITileEntity
 
 	/* PROPERTIES */
 	@Override
-	public final ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
-		return TileWood.getPickBlock(this, world, x, y, z);
+	public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos, EntityPlayer player) {
+		return TileWood.getPickBlock(this, world, pos);
 	}
 
 	/* DROP HANDLING */
 	// Hack: 	When harvesting we need to get the drops in onBlockHarvested,
 	// 			because Mojang destroys the block and tile before calling getDrops.
 	private final ThreadLocal<ArrayList<ItemStack>> drops = new ThreadLocal<>();
-
+	
 	@Override
-	public void onBlockHarvested(World world, int x, int y, int z, int meta, EntityPlayer playerProfile) {
-		drops.set(TileWood.getDrops(this, world, x, y, z));
+	public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
+		drops.set(TileWood.getDrops(this, world, pos));
 	}
-
+	
 	@Override
-	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
+	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		ArrayList<ItemStack> ret = drops.get();
 		drops.remove();
 
 		// not harvested, get drops normally
 		if (ret == null) {
-			ret = TileWood.getDrops(this, world, x, y, z);
+			ret = TileWood.getDrops(this, world, pos);
 		}
 
 		return ret;
 	}
-
+	
 	@Override
-	public final float getBlockHardness(World world, int x, int y, int z) {
-		TileWood wood = TileWood.getWoodTile(world, x, y, z);
+	public float getBlockHardness(World world, BlockPos pos) {
+		TileWood wood = TileWood.getWoodTile(world, pos);
 		if (wood == null) {
 			return EnumWoodType.DEFAULT_HARDNESS;
 		}
@@ -159,17 +178,17 @@ public class BlockArbFence extends BlockFence implements IWoodTyped, ITileEntity
 	}
 
 	@Override
-	public final boolean isFlammable(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
+	public final boolean isFlammable(IBlockAccess world, BlockPos pos, EnumFacing face) {
 		return !isFireproof();
 	}
 
 	@Override
-	public int getFlammability(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
+	public int getFlammability(IBlockAccess world, BlockPos pos, EnumFacing face) {
 		return isFireproof() ? 0 : 20;
 	}
 
 	@Override
-	public int getFireSpreadSpeed(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
+	public int getFireSpreadSpeed(IBlockAccess world, BlockPos pos, EnumFacing face) {
 		return isFireproof() ? 0 : 5;
 	}
 
@@ -182,6 +201,26 @@ public class BlockArbFence extends BlockFence implements IWoodTyped, ITileEntity
 	public boolean isFireproof() {
 		return fireproof;
 	}
+	
+    @Override
+	public void setHarvestLevel(String toolClass, int level, IBlockState state)
+    {
+        int idx = this.getMetaFromState(state);
+        this.harvestTool[idx] = toolClass;
+        this.harvestLevel[idx] = level;
+    }
+
+    @Override
+	public String getHarvestTool(IBlockState state)
+    {
+        return harvestTool[getMetaFromState(state)];
+    }
+
+    @Override
+	public int getHarvestLevel(IBlockState state)
+    {
+        return harvestLevel[getMetaFromState(state)];
+    }
 
 	/* Particles */
 	@SideOnly(Side.CLIENT)
@@ -192,7 +231,7 @@ public class BlockArbFence extends BlockFence implements IWoodTyped, ITileEntity
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public boolean addDestroyEffects(World worldObj, int x, int y, int z, int meta, EffectRenderer effectRenderer) {
-		return ParticleHelper.addDestroyEffects(worldObj, this, x, y, z, meta, effectRenderer, particleCallback);
+	public boolean addDestroyEffects(World world, BlockPos pos, EffectRenderer effectRenderer) {
+		return ParticleHelper.addDestroyEffects(world, this, world.getBlockState(pos), pos, effectRenderer, particleCallback);
 	}
 }

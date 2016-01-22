@@ -12,13 +12,11 @@ package forestry.factory.network;
 
 import forestry.core.network.PacketRegistry;
 import forestry.factory.network.packets.PacketWorktableMemoryUpdate;
-import forestry.factory.network.packets.PacketWorktableNEISelect;
 import forestry.factory.network.packets.PacketWorktableRecipeUpdate;
 
 public class PacketRegistryFactory extends PacketRegistry {
 	@Override
 	public void registerPackets() {
-		registerServerPacket(new PacketWorktableNEISelect());
 
 		registerClientPacket(new PacketWorktableMemoryUpdate());
 		registerClientPacket(new PacketWorktableRecipeUpdate());

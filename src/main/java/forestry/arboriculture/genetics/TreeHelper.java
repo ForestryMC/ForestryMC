@@ -24,13 +24,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.oredict.OreDictionary;
-
-import cpw.mods.fml.common.FMLCommonHandler;
 
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.EnumTreeChromosome;
@@ -130,8 +130,8 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 	}
 
 	@Override
-	public ITree getTree(World world, int x, int y, int z) {
-		TileEntity tile = world.getTileEntity(x, y, z);
+	public ITree getTree(World world, BlockPos pos) {
+		TileEntity tile = world.getTileEntity(pos);
 		if (!(tile instanceof TileSapling)) {
 			return null;
 		}
@@ -190,21 +190,21 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 	}
 
 	@Override
-	public boolean plantSapling(World world, ITree tree, GameProfile owner, int x, int y, int z) {
+	public boolean plantSapling(World world, ITree tree, GameProfile owner, BlockPos pos) {
 
-		boolean placed = world.setBlock(x, y, z, PluginArboriculture.blocks.saplingGE, 0, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
+		boolean placed = world.setBlockState(pos, PluginArboriculture.blocks.saplingGE.getStateFromMeta(0), Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
 		if (!placed) {
 			return false;
 		}
 
-		Block block = world.getBlock(x, y, z);
+		Block block = BlockUtil.getBlock(world, pos);
 		if (PluginArboriculture.blocks.saplingGE != block) {
 			return false;
 		}
 
-		TileEntity tile = world.getTileEntity(x, y, z);
+		TileEntity tile = world.getTileEntity(pos);
 		if (!(tile instanceof TileSapling)) {
-			world.setBlockToAir(x, y, z);
+			world.setBlockToAir(pos);
 			return false;
 		}
 
@@ -216,30 +216,30 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 	}
 
 	@Override
-	public boolean setFruitBlock(World world, IAlleleFruit allele, float sappiness, short[] indices, int x, int y, int z) {
+	public boolean setFruitBlock(World world, IAlleleFruit allele, float sappiness, short[] indices, BlockPos pos) {
 
-		int direction = BlockUtil.getDirectionalMetadata(world, x, y, z);
+		int direction = BlockUtil.getDirectionalMetadata(world, pos);
 		if (direction < 0) {
 			return false;
 		}
 
-		boolean placed = world.setBlock(x, y, z, PluginArboriculture.blocks.pods, direction, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
+		boolean placed = world.setBlockState(pos, PluginArboriculture.blocks.pods.getStateFromMeta(direction), Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
 		if (!placed) {
 			return false;
 		}
 
-		Block block = world.getBlock(x, y, z);
+		Block block = BlockUtil.getBlock(world, pos);
 		if (PluginArboriculture.blocks.pods != block) {
 			return false;
 		}
 
-		TileFruitPod pod = BlockFruitPod.getPodTile(world, x, y, z);
+		TileFruitPod pod = BlockFruitPod.getPodTile(world, pos);
 		if (pod == null) {
-			world.setBlockToAir(x, y, z);
+			world.setBlockToAir(pos);
 			return false;
 		}
 		pod.setFruit(allele, sappiness, indices);
-		world.markBlockForUpdate(x, y, z);
+		world.markBlockForUpdate(pos);
 		return true;
 	}
 

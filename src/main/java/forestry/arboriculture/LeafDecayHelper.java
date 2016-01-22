@@ -1,7 +1,10 @@
 package forestry.arboriculture;
 
+import forestry.core.utils.BlockUtil;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockLeaves;
+import net.minecraft.block.BlockLeavesBase;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 /** Based on vanilla leaf decay, but accepts leaves that are connected further from a trunk */
@@ -11,12 +14,13 @@ public abstract class LeafDecayHelper {
 	private static final short IS_LEAVES = -2;
 	private static int[] leafDecayValues;
 
-	public static void leafDecay(BlockLeaves leaves, World world, int x, int y, int z) {
+	public static void leafDecay(BlockLeavesBase leaves, World world, BlockPos pos) {
 		if (world.isRemote) {
 			return;
 		}
+		IBlockState state = world.getBlockState(pos);
 
-		int leafMeta = world.getBlockMetadata(x, y, z);
+		int leafMeta = state.getBlock().getMetaFromState(state);
 
 		if ((leafMeta & 8) != 0 && (leafMeta & 4) == 0) {
 			byte radius = 4;
@@ -29,14 +33,14 @@ public abstract class LeafDecayHelper {
 			}
 
 			int radius1 = radius + 1;
-			if (world.checkChunksExist(x - radius1, y - radius1, z - radius1, x + radius1, y + radius1, z + radius1)) {
+			if (BlockUtil.checkChunksExist(world, pos.getX() - radius1, pos.getY() - radius1, pos.getZ() - radius1, pos.getX() + radius1, pos.getY() + radius1, pos.getZ() + radius1)) {
 				for (int xOffset = -radius; xOffset <= radius; ++xOffset) {
 					for (int yOffset = -radius; yOffset <= radius; ++yOffset) {
 						for (int zOffset = -radius; zOffset <= radius; ++zOffset) {
-							Block block = world.getBlock(x + xOffset, y + yOffset, z + zOffset);
+							Block block = BlockUtil.getBlock(world, pos.add(xOffset, yOffset, zOffset));
 
-							if (!block.canSustainLeaves(world, x + xOffset, y + yOffset, z + zOffset)) {
-								if (block.isLeaves(world, x + xOffset, y + yOffset, z + zOffset)) {
+							if (!block.canSustainLeaves(world, pos.add(xOffset, yOffset, zOffset))) {
+								if (block.isLeaves(world, pos.add(xOffset, yOffset, zOffset))) {
 									leafDecayValues[(xOffset + arrayOffset) * xArrayMult + (yOffset + arrayOffset) * yArrayMult + zOffset + arrayOffset] = IS_LEAVES;
 								} else {
 									leafDecayValues[(xOffset + arrayOffset) * xArrayMult + (yOffset + arrayOffset) * yArrayMult + zOffset + arrayOffset] = NOT_SUSTAINS_LEAVES;
@@ -86,10 +90,10 @@ public abstract class LeafDecayHelper {
 			int sustainValue = leafDecayValues[(arrayOffset * xArrayMult) + (arrayOffset * yArrayMult) + arrayOffset];
 
 			if (sustainValue >= 0) {
-				world.setBlockMetadataWithNotify(x, y, z, leafMeta & -9, 4); // stop trying to decay
+				world.setBlockState(pos, state.getBlock().getStateFromMeta(leafMeta & -9), 4); // stop trying to decay
 			} else {
-				leaves.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
-				world.setBlockToAir(x, y, z);
+				leaves.dropBlockAsItem(world, pos, state, 0);
+				world.setBlockToAir(pos);
 			}
 		}
 	}

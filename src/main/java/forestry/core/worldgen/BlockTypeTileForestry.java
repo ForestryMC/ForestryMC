@@ -12,9 +12,9 @@ package forestry.core.worldgen;
 
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-
-import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.core.config.Constants;
 import forestry.core.tiles.TileForestry;
@@ -22,7 +22,7 @@ import forestry.core.tiles.TileForestry;
 public class BlockTypeTileForestry implements IBlockType {
 	private final Block block;
 	private final int meta;
-	private ForgeDirection direction;
+	private EnumFacing direction;
 
 	public BlockTypeTileForestry(Block block, int meta) {
 		this.block = block;
@@ -30,25 +30,25 @@ public class BlockTypeTileForestry implements IBlockType {
 	}
 
 	@Override
-	public void setDirection(ForgeDirection facing) {
+	public void setDirection(EnumFacing facing) {
 		this.direction = facing;
 	}
 
 	@Override
-	public void setBlock(World world, int x, int y, int z) {
-		boolean placed = world.setBlock(x, y, z, block, meta, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
+	public void setBlock(World world, BlockPos pos) {
+		boolean placed = world.setBlockState(pos, block.getStateFromMeta(meta), Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
 		if (!placed) {
 			return;
 		}
 
-		Block worldBlock = world.getBlock(x, y, z);
+		Block worldBlock = world.getBlockState(pos).getBlock();
 		if (!Block.isEqualTo(block, worldBlock)) {
 			return;
 		}
 
-		TileEntity tile = world.getTileEntity(x, y, z);
+		TileEntity tile = world.getTileEntity(pos);
 		if (!(tile instanceof TileForestry)) {
-			world.setBlockToAir(x, y, z);
+			world.setBlockToAir(pos);
 			return;
 		}
 

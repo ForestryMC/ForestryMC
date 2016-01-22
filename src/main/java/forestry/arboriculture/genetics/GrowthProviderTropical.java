@@ -12,6 +12,7 @@ package forestry.arboriculture.genetics;
 
 import java.util.EnumSet;
 
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
@@ -22,13 +23,13 @@ import forestry.core.utils.StringUtil;
 public class GrowthProviderTropical extends GrowthProvider {
 
 	@Override
-	public EnumGrowthConditions getGrowthConditions(ITreeGenome genome, World world, int xPos, int yPos, int zPos) {
-		EnumGrowthConditions light = getConditionFromLight(world, xPos, yPos, zPos);
-		EnumGrowthConditions moisture = getConditionsFromRainfall(world, xPos, yPos, zPos, BiomeGenBase.jungle.rainfall, 2.0f);
+	public EnumGrowthConditions getGrowthConditions(ITreeGenome genome, World world, BlockPos pos) {
+		EnumGrowthConditions light = getConditionFromLight(world, pos);
+		EnumGrowthConditions moisture = getConditionsFromRainfall(world, pos, BiomeGenBase.jungle.rainfall, 2.0f);
 
-		float jungleTemperature = BiomeGenBase.jungle.getFloatTemperature(xPos, yPos, zPos);
-		float desertTemperature = BiomeGenBase.desert.getFloatTemperature(xPos, yPos, zPos);
-		EnumGrowthConditions temperature = getConditionsFromTemperature(world, xPos, yPos, zPos, jungleTemperature, desertTemperature - 0.1f);
+		float jungleTemperature = BiomeGenBase.jungle.getFloatTemperature(pos);
+		float desertTemperature = BiomeGenBase.desert.getFloatTemperature(pos);
+		EnumGrowthConditions temperature = getConditionsFromTemperature(world, pos, jungleTemperature, desertTemperature - 0.1f);
 
 		EnumSet<EnumGrowthConditions> conditions = EnumSet.of(light, moisture, temperature);
 

@@ -1,0 +1,43 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "forestry:crate",
+    "custom": {
+      "base": "forestry:crates#crate",
+      "layer": "Cutout",
+      "modID": "forestry"
+    },
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "crate": [
+      {
+        "model": "forestry:crate-filled"
+      }
+    ],
+    "cratedstone": [
+      {
+        "custom": {
+          "location": "stone#normal",
+          "uid": "cratedstone"
+        },
+        "transform": {
+          "scale": 0.5,
+          "translation": [ -0.0625, 0, 0 ]
+        }
+      }
+    ],
+    "cratedapples": [
+      {
+        "custom": {
+          "location": "item/apple",
+          "uid": "cratedapples"
+        },
+        "transform": {
+          "scale": 0.5,
+          "translation": [ -0.0625, 0, 0 ]
+        }
+      }
+    ]
+  }
+}

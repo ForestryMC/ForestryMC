@@ -16,7 +16,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IChatComponent;
 import forestry.core.config.Constants;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
@@ -60,7 +61,7 @@ public class InventoryAdapter implements IInventoryAdapter, IStreamable {
 	 * @return Copy of this inventory. Stacks are copies.
 	 */
 	public InventoryAdapter copy() {
-		InventoryAdapter copy = new InventoryAdapter(inventory.getSizeInventory(), inventory.getInventoryName(), inventory.getInventoryStackLimit());
+		InventoryAdapter copy = new InventoryAdapter(inventory.getSizeInventory(), inventory.getName(), inventory.getInventoryStackLimit());
 
 		for (int i = 0; i < inventory.getSizeInventory(); i++) {
 			if (inventory.getStackInSlot(i) != null) {
@@ -94,8 +95,8 @@ public class InventoryAdapter implements IInventoryAdapter, IStreamable {
 	}
 
 	@Override
-	public String getInventoryName() {
-		return inventory.getInventoryName();
+	public String getName() {
+		return inventory.getName();
 	}
 
 	@Override
@@ -107,20 +108,25 @@ public class InventoryAdapter implements IInventoryAdapter, IStreamable {
 	public void markDirty() {
 		inventory.markDirty();
 	}
-
+	
 	@Override
-	public ItemStack getStackInSlotOnClosing(int slotIndex) {
-		return inventory.getStackInSlotOnClosing(slotIndex);
+	public ItemStack removeStackFromSlot(int slotIndex) {
+		return inventory.removeStackFromSlot(slotIndex);
 	}
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
 		return true;
 	}
-
+	
 	@Override
-	public boolean hasCustomInventoryName() {
-		return true;
+	public boolean hasCustomName() {
+		return false;
+	}
+	
+	@Override
+	public IChatComponent getDisplayName() {
+		return null;
 	}
 
 	@Override
@@ -139,20 +145,20 @@ public class InventoryAdapter implements IInventoryAdapter, IStreamable {
 	}
 
 	@Override
-	public void openInventory() {
+	public void openInventory(EntityPlayer player) {
 	}
 
 	@Override
-	public void closeInventory() {
+	public void closeInventory(EntityPlayer player) {
 	}
 
 	/* ISIDEDINVENTORY */
 	private int[][] slotMap;
-
+	
 	@Override
-	public int[] getAccessibleSlotsFromSide(int side) {
+	public int[] getSlotsForFace(EnumFacing side) {
 		if (allowAutomation) {
-			return slotMap[side];
+			return slotMap[side.ordinal()];
 		}
 		return Constants.SLOTS_NONE;
 	}
@@ -172,12 +178,12 @@ public class InventoryAdapter implements IInventoryAdapter, IStreamable {
 	}
 
 	@Override
-	public boolean canInsertItem(int slot, ItemStack stack, int side) {
+	public boolean canInsertItem(int slot, ItemStack stack, EnumFacing side) {
 		return isItemValidForSlot(slot, stack);
 	}
 
 	@Override
-	public boolean canExtractItem(int slot, ItemStack stack, int side) {
+	public boolean canExtractItem(int slot, ItemStack stack, EnumFacing side) {
 		return false;
 	}
 
@@ -200,5 +206,24 @@ public class InventoryAdapter implements IInventoryAdapter, IStreamable {
 	@Override
 	public void readData(DataInputStreamForestry data) throws IOException {
 		data.readInventory(inventory);
+	}
+	
+	/* FIELDS */
+	@Override
+	public int getField(int id) {
+		return 0;
+	}
+	
+	@Override
+	public int getFieldCount() {
+		return 0;
+	}
+	
+	@Override
+	public void setField(int id, int value) {
+	}
+	
+	@Override
+	public void clear() {
 	}
 }

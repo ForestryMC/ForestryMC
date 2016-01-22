@@ -19,9 +19,7 @@ import java.util.List;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
+import net.minecraft.util.EnumFacing;
 import forestry.core.tiles.AdjacentTileCache;
 import forestry.core.tiles.TileUtil;
 
@@ -56,7 +54,7 @@ public final class AdjacentInventoryCache implements AdjacentTileCache.ICacheLis
 		cache.addListener(this);
 	}
 
-	public IInventory getAdjacentInventory(ForgeDirection side) {
+	public IInventory getAdjacentInventory(EnumFacing side) {
 		checkChanged();
 		return sides[side.ordinal()];
 	}
@@ -82,7 +80,7 @@ public final class AdjacentInventoryCache implements AdjacentTileCache.ICacheLis
 		if (changed) {
 			changed = false;
 			purge();
-			for (ForgeDirection side : ForgeDirection.VALID_DIRECTIONS) {
+			for (EnumFacing side : EnumFacing.values()) {
 				TileEntity tile = cache.getTileOnSide(side);
 				if (tile != null && (filter == null || filter.matches(tile))) {
 					IInventory inv = TileUtil.getInventoryFromTile(tile, side.getOpposite());

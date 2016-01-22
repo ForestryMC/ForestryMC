@@ -21,10 +21,12 @@ public class TileRendererIndex {
 		this.meta = meta;
 	}
 
+	@Override
 	public int hashCode() {
 		return block.hashCode() + meta;
 	}
 
+	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof TileRendererIndex)) {
 			return false;

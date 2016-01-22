@@ -10,14 +10,16 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
@@ -45,12 +47,12 @@ public abstract class BlockStructure extends BlockForestry {
 	private long previousMessageTick = 0;
 
 	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9) {
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (player.isSneaking()) {
 			return false;
 		}
 
-		TileEntity tile = world.getTileEntity(x, y, z);
+		TileEntity tile = world.getTileEntity(pos);
 		if (!(tile instanceof MultiblockTileEntityForestry)) {
 			return false;
 		}
@@ -60,16 +62,18 @@ public abstract class BlockStructure extends BlockForestry {
 
 		// If the player's hands are empty and they right-click on a multiblock, they get a
 		// multiblock-debugging message if the machine is not assembled.
-		if (player.getCurrentEquippedItem() == null && !controller.isAssembled()) {
+		if(player.getCurrentEquippedItem() == null){
 			if (controller != null) {
-				String validationError = controller.getLastValidationError();
-				if (validationError != null) {
-					long tick = world.getTotalWorldTime();
-					if (tick > previousMessageTick + 20) {
-						player.addChatMessage(new ChatComponentText(validationError));
-						previousMessageTick = tick;
+				if (!controller.isAssembled()) {
+					String validationError = controller.getLastValidationError();
+					if (validationError != null) {
+						long tick = world.getTotalWorldTime();
+						if (tick > previousMessageTick + 20) {
+							player.addChatMessage(new ChatComponentText(validationError));
+							previousMessageTick = tick;
+						}
+						return true;
 					}
-					return true;
 				}
 			} else {
 				player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("for.multiblock.error.notConnected")));
@@ -89,16 +93,16 @@ public abstract class BlockStructure extends BlockForestry {
 	}
 
 	@Override
-	public void onBlockPlacedBy(World world, int i, int j, int k, EntityLivingBase entityLiving, ItemStack itemstack) {
+	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		if (world.isRemote) {
 			return;
 		}
 
-		if (entityLiving instanceof EntityPlayer) {
-			TileEntity tile = world.getTileEntity(i, j, k);
+		if (placer instanceof EntityPlayer) {
+			TileEntity tile = world.getTileEntity(pos);
 
 			if (tile instanceof MultiblockTileEntityForestry) {
-				EntityPlayer player = (EntityPlayer) entityLiving;
+				EntityPlayer player = (EntityPlayer) placer;
 				GameProfile gameProfile = player.getGameProfile();
 				((MultiblockTileEntityForestry) tile).setOwner(gameProfile);
 			}
@@ -106,27 +110,32 @@ public abstract class BlockStructure extends BlockForestry {
 	}
 
 	@Override
-	public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
-
+	public void breakBlock(World world, BlockPos pos, IBlockState state) {
+		
 		if (world.isRemote) {
 			return;
 		}
 
-		TileEntity tile = world.getTileEntity(x, y, z);
+		TileEntity tile = world.getTileEntity(pos);
 		if (tile instanceof IMultiblockComponent) {
 			IMultiblockComponent part = (IMultiblockComponent) tile;
 
 			// drop inventory if we're the last part remaining
 			if (MultiblockUtil.getNeighboringParts(world, part).size() == 0) {
 				if (tile instanceof IInventory) {
-					InventoryUtil.dropInventory((IInventory) tile, world, x, y, z);
+					InventoryUtil.dropInventory((IInventory) tile, world, pos);
 				}
 				if (tile instanceof ISocketable) {
-					InventoryUtil.dropSockets((ISocketable) tile, world, x, y, z);
+					InventoryUtil.dropSockets((ISocketable) tile, world, pos);
 				}
 			}
 		}
-		super.breakBlock(world, x, y, z, block, meta);
+		super.breakBlock(world, pos, state);
+	}
+	
+	@Override
+	public int getRenderType() {
+		return 3;
 	}
 
 }

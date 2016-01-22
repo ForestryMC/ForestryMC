@@ -14,6 +14,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 import forestry.api.arboriculture.ITree;
@@ -29,16 +31,16 @@ public class FarmableVanillaSapling extends FarmableGenericSapling {
 	}
 
 	@Override
-	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, int x, int y, int z) {
+	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
 		if (PluginManager.Module.ARBORICULTURE.isEnabled()) {
 			IIndividual tree = GeneticsUtil.getGeneticEquivalent(germling);
 			if (!(tree instanceof ITree)) {
 				return false;
 			}
 
-			return TreeManager.treeRoot.plantSapling(world, (ITree) tree, player.getGameProfile(), x, y, z);
+			return TreeManager.treeRoot.plantSapling(world, (ITree) tree, player.getGameProfile(), pos);
 		} else {
-			return germling.copy().tryPlaceItemIntoWorld(player, world, x, y - 1, z, 1, 0, 0, 0);
+			return germling.copy().onItemUse(player, world, pos.add(0, -1, 0), EnumFacing.UP, 0, 0, 0);
 		}
 	}
 

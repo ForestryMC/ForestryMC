@@ -50,10 +50,12 @@ public final class AccessHandler implements IAccessHandler {
 		this.target = entity;
 	}
 
+	@Override
 	public void addOwnerListener(IAccessOwnerListener accessListener) {
 		accessOwnerListeners.add(accessListener);
 	}
 
+	@Override
 	public void removeOwnerListener(IAccessOwnerListener accessListener) {
 		accessOwnerListeners.remove(accessListener);
 	}
@@ -165,7 +167,7 @@ public final class AccessHandler implements IAccessHandler {
 		access = EnumAccess.values()[data.getInteger("Access")];
 
 		if (data.hasKey("owner")) {
-			owner = NBTUtil.func_152459_a(data.getCompoundTag("owner"));
+			owner = NBTUtil.readGameProfileFromNBT(data.getCompoundTag("owner"));
 		}
 	}
 
@@ -175,7 +177,7 @@ public final class AccessHandler implements IAccessHandler {
 
 		if (this.owner != null) {
 			NBTTagCompound nbt = new NBTTagCompound();
-			NBTUtil.func_152460_a(nbt, owner);
+			NBTUtil.writeGameProfile(nbt, owner);
 			data.setTag("owner", nbt);
 		}
 	}

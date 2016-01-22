@@ -10,34 +10,15 @@
  ******************************************************************************/
 package forestry.apiculture;
 
-import java.util.List;
-import java.util.Random;
+import net.minecraftforge.fml.common.registry.VillagerRegistry;
+import net.minecraftforge.fml.common.registry.VillagerRegistry.VillagerProfession;
 
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
-import net.minecraft.village.MerchantRecipe;
-import net.minecraft.village.MerchantRecipeList;
-import net.minecraft.world.gen.structure.MapGenStructureIO;
-import net.minecraft.world.gen.structure.StructureVillagePieces;
+/**
+ * TODO: Make it to a {@link VillagerProfession} when Forge has Fixed the {@link VillagerRegistry}
+ */
+public class VillageHandlerApiculture /*implements IVillageCreationHandler, IVillageTradeHandler*/ {
 
-import net.minecraftforge.oredict.OreDictionary;
-
-import cpw.mods.fml.common.registry.VillagerRegistry.IVillageCreationHandler;
-import cpw.mods.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
-
-import forestry.api.apiculture.EnumBeeType;
-import forestry.apiculture.blocks.BlockApicultureType;
-import forestry.apiculture.genetics.BeeDefinition;
-import forestry.apiculture.worldgen.ComponentVillageBeeHouse;
-import forestry.core.utils.Log;
-import forestry.plugins.PluginApiculture;
-
-public class VillageHandlerApiculture implements IVillageCreationHandler, IVillageTradeHandler {
-
-	public static void registerVillageComponents() {
+	/*public static void registerVillageComponents() {
 		try {
 			MapGenStructureIO.func_143031_a(ComponentVillageBeeHouse.class, "Forestry:BeeHouse");
 		} catch (Throwable e) {
@@ -79,5 +60,5 @@ public class VillageHandlerApiculture implements IVillageCreationHandler, IVilla
 	public Object buildComponent(StructureVillagePieces.PieceWeight villagePiece, StructureVillagePieces.Start startPiece, List pieces, Random random, int p1, int p2,
 			int p3, int p4, int p5) {
 		return ComponentVillageBeeHouse.buildComponent(startPiece, pieces, random, p1, p2, p3, p4, p5);
-	}
+	}*/
 }

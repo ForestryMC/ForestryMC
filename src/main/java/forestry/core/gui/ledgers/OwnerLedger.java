@@ -13,9 +13,8 @@ package forestry.core.gui.ledgers;
 import java.util.Locale;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.IIcon;
-
 import com.mojang.authlib.GameProfile;
 
 import forestry.core.access.EnumAccess;
@@ -62,8 +61,8 @@ public class OwnerLedger extends Ledger implements IAccessOwnerListener {
 
 		// Draw icon
 		EnumAccess accessType = accessHandler.getAccess();
-		IIcon accessIcon = TextureManager.getInstance().getDefault("misc/access." + accessType.toString().toLowerCase(Locale.ENGLISH));
-		drawIcon(accessIcon, x + 3, y + 4);
+		TextureAtlasSprite accessIcon = TextureManager.getInstance().getDefault("misc/access." + accessType.toString().toLowerCase(Locale.ENGLISH));
+		drawSprite(accessIcon, x + 3, y + 4);
 
 		// Draw description
 		if (!isFullyOpened()) {
@@ -79,7 +78,7 @@ public class OwnerLedger extends Ledger implements IAccessOwnerListener {
 		if (playerIsOwner) {
 			drawSubheader(StringUtil.localize("gui.access") + ':', x + 22, y + 32);
 			// Access rules
-			drawIcon(accessIcon, x + 20, y + 40);
+			drawSprite(accessIcon, x + 20, y + 40);
 			drawText(StringUtil.localize(accessType.getName()), x + 38, y + 44);
 		}
 	}

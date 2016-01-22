@@ -12,9 +12,7 @@ package forestry.plugins;
 
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-
-import cpw.mods.fml.common.FMLCommonHandler;
-
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.PostManager;
 import forestry.api.recipes.RecipeManagers;

@@ -11,30 +11,35 @@
 package forestry.core.utils.vect;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 public final class VectUtil {
 	public static boolean isAirBlock(World world, IVect position) {
-		return world.isAirBlock(position.getX(), position.getY(), position.getZ());
+		return world.isAirBlock(position);
 	}
 
 	public static boolean isWoodBlock(World world, IVect position) {
 		Block block = getBlock(world, position);
-		return block.isWood(world, position.getX(), position.getY(), position.getZ());
+		return block.isWood(world, position);
 	}
 
 	public static TileEntity getTile(World world, IVect position) {
-		return world.getTileEntity(position.getX(), position.getY(), position.getZ());
+		return world.getTileEntity(position);
+	}
+	
+	public static IBlockState getBlockState(World world, IVect position) {
+		return world.getBlockState(position);
 	}
 
 	public static Block getBlock(World world, IVect position) {
-		return world.getBlock(position.getX(), position.getY(), position.getZ());
+		return getBlockState(world, position).getBlock();
 	}
 
 	public static int getBlockMeta(World world, IVect position) {
-		return world.getBlockMetadata(position.getX(), position.getY(), position.getZ());
+		return getBlock(world, position).getMetaFromState(getBlockState(world, position));
 	}
 
 	public static ItemStack getAsItemStack(World world, IVect position) {

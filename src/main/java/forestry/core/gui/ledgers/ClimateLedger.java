@@ -37,7 +37,7 @@ public class ClimateLedger extends Ledger {
 		drawBackground(x, y);
 
 		// Draw icon
-		drawIcon(temperature.getIcon(), x + 3, y + 4);
+		drawSprite(temperature.getIcon(), x + 3, y + 4);
 
 		if (!isFullyOpened()) {
 			return;

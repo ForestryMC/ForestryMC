@@ -10,13 +10,11 @@
  ******************************************************************************/
 package forestry.core.gui.slots;
 
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.core.render.TextureManager;
 import forestry.core.tiles.IFilterSlotDelegate;
 
@@ -51,7 +49,7 @@ public class SlotFiltered extends SlotWatched {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public IIcon getBackgroundIconIndex() {
+	public TextureAtlasSprite getBackgroundSprite() {
 		ItemStack stack = getStack();
 		if (!isItemValid(stack)) {
 			return TextureManager.getInstance().getDefault(blockedTexture);

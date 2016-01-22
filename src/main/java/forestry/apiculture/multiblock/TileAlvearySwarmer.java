@@ -135,8 +135,8 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, 
 		HiveDescriptionSwarmer hiveDescription = new HiveDescriptionSwarmer(toSpawn);
 		Hive hive = new Hive(hiveDescription);
 
-		int chunkX = (xCoord + worldObj.rand.nextInt(40 * 2) - 40) / 16;
-		int chunkZ = (zCoord + worldObj.rand.nextInt(40 * 2) - 40) / 16;
+		int chunkX = (getPos().getX() + worldObj.rand.nextInt(40 * 2) - 40) / 16;
+		int chunkZ = (getPos().getZ() + worldObj.rand.nextInt(40 * 2) - 40) / 16;
 
 		if (HiveDecorator.genHive(worldObj, worldObj.rand, chunkX, chunkZ, hive)) {
 			pendingSpawns.pop();
@@ -155,20 +155,6 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, 
 	protected void decodeDescriptionPacket(NBTTagCompound packetData) {
 		super.decodeDescriptionPacket(packetData);
 		setActive(packetData.getBoolean("Active"));
-	}
-
-	/* TEXTURES */
-	@Override
-	public int getIcon(int side) {
-		if (side == 0 || side == 1) {
-			return BlockAlveary.BOTTOM;
-		}
-
-		if (active) {
-			return BlockAlveary.ALVEARY_SWARMER_ON;
-		} else {
-			return BlockAlveary.ALVEARY_SWARMER_OFF;
-		}
 	}
 
 	/* SAVING & LOADING */

@@ -13,9 +13,7 @@ package forestry.storage;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-
-import cpw.mods.fml.common.registry.GameRegistry;
-
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import forestry.api.storage.ICrateRegistry;
 import forestry.core.items.ItemCrated;
 import forestry.core.utils.Log;

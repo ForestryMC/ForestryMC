@@ -38,9 +38,9 @@ public class CropBasicFruit extends Crop {
 
 	@Override
 	protected Collection<ItemStack> harvestBlock(Vect pos) {
-		Collection<ItemStack> harvested = block.getDrops(world, pos.x, pos.y, pos.z, meta, 0);
-		Proxies.common.addBlockDestroyEffects(world, pos.x, pos.y, pos.z, block, 0);
-		world.setBlock(pos.x, pos.y, pos.z, block, 0, Constants.FLAG_BLOCK_SYNCH);
+		Collection<ItemStack> harvested = block.getDrops(world, pos, block.getStateFromMeta(meta), 0);
+		Proxies.common.addBlockDestroyEffects(world, pos, block.getStateFromMeta(0));
+		world.setBlockState(pos, block.getStateFromMeta(0), Constants.FLAG_BLOCK_SYNCH);
 		return harvested;
 	}
 

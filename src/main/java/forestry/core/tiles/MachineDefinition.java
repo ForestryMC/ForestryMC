@@ -11,32 +11,24 @@
 package forestry.core.tiles;
 
 import java.util.List;
-import java.util.Locale;
-
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import forestry.core.blocks.IMachineProperties;
 import forestry.core.blocks.IMachinePropertiesTESR;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.IBlockRenderer;
-import forestry.core.render.TextureManager;
 import forestry.core.utils.BlockUtil;
 
 public class MachineDefinition {
@@ -48,7 +40,7 @@ public class MachineDefinition {
 	private final int meta;
 	private boolean legacy;
 
-	public final IBlockRenderer renderer;
+	public final TileEntitySpecialRenderer renderer;
 	
 	private float minX, minY, minZ, maxX, maxY, maxZ;
 
@@ -60,7 +52,7 @@ public class MachineDefinition {
 		this(properties.getMeta(), properties.getTeIdent(), properties.getTeClass(), properties.getRenderer());
 	}
 
-	public MachineDefinition(int meta, String teIdent, Class<? extends TileForestry> teClass, IBlockRenderer renderer) {
+	public MachineDefinition(int meta, String teIdent, Class<? extends TileForestry> teClass, TileEntitySpecialRenderer renderer) {
 		this.meta = meta;
 		this.teIdent = teIdent;
 		this.teClass = teClass;
@@ -113,12 +105,12 @@ public class MachineDefinition {
 		}
 	}
 	
-	public AxisAlignedBB getBoundingBox(int x, int y, int z) {
-		return AxisAlignedBB.getBoundingBox(x + minX, y + minY, z + minZ, x + maxX, y + maxY, z + maxZ);
+	public AxisAlignedBB getBoundingBox(BlockPos pos, IBlockState state) {
+		return AxisAlignedBB.fromBounds(pos.getX() + minX, pos.getY() + minY, pos.getZ() + minZ, pos.getX() + maxX, pos.getY() + maxY, pos.getZ() + maxZ);
 	}
 
-	public MovingObjectPosition collisionRayTrace(World world, int x, int y, int z, Vec3 startVec, Vec3 endVec) {
-		return BlockUtil.collisionRayTrace(world, x, y, z, startVec, endVec, minX, minY, minZ, maxX, maxY, maxZ);
+	public MovingObjectPosition collisionRayTrace(World world, BlockPos pos, Vec3 startVec, Vec3 endVec) {
+		return BlockUtil.collisionRayTrace(world, pos, startVec, endVec, minX, minY, minZ, maxX, maxY, maxZ);
 	}
 
 	/**
@@ -145,12 +137,12 @@ public class MachineDefinition {
 	}
 
 	/* INTERACTION */
-	public boolean isSolidOnSide(IBlockAccess world, int x, int y, int z, int side) {
+	public boolean isSolidOnSide(IBlockAccess world, BlockPos pos, EnumFacing side) {
 		return true;
 	}
 
-	public boolean rotateBlock(World world, int x, int y, int z, ForgeDirection axis) {
-		TileForestry tile = TileUtil.getTile(world, x, y, z, teClass);
+	public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis) {
+		TileForestry tile = TileUtil.getTile(world, pos, teClass);
 		if (tile == null) {
 			return false;
 		}
@@ -172,56 +164,5 @@ public class MachineDefinition {
 		}
 
 		return this;
-	}
-
-	@SideOnly(Side.CLIENT)
-	private IIcon[] icons;
-
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister register) {
-		icons = new IIcon[8];
-
-		if (legacy) {
-			return;
-		}
-
-		for (int i = 0; i < 8; i++) {
-			icons[i] = TextureManager.registerTex(register, teIdent.replace("forestry.", "").toLowerCase(Locale.ENGLISH) + "." + faceMap[i]);
-		}
-	}
-
-	@SideOnly(Side.CLIENT)
-	public IIcon getBlockTextureForSide(int side) {
-		return icons[side];
-	}
-
-	/**
-	 * 0 - Bottom 1 - Top 2 - Back 3 - Front 4,5 - Sides, 7 - Reversed ?, 8 - Reversed ?
-	 */
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
-
-		TileEntity tile = world.getTileEntity(x, y, z);
-		if (!(tile instanceof TileForestry)) {
-			return getBlockTextureForSide(side);
-		}
-
-		ForgeDirection dir = ((TileForestry) tile).getOrientation();
-		switch (dir) {
-			case WEST:
-				side = side == 2 ? 4 : side == 3 ? 5 : side == 4 ? 3 : side == 5 ? 2 : side == 0 ? 6 : 7;
-				break;
-			case EAST:
-				side = side == 2 ? 5 : side == 3 ? 4 : side == 4 ? 2 : side == 5 ? 3 : side == 0 ? 6 : 7;
-				break;
-			case SOUTH:
-				break;
-			case NORTH:
-				side = side == 2 ? 3 : side == 3 ? 2 : side == 4 ? 5 : side == 5 ? 4 : side;
-				break;
-			default:
-		}
-
-		return getBlockTextureForSide(side);
 	}
 }

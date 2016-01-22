@@ -15,63 +15,64 @@ import com.google.common.collect.ImmutableList;
 import java.util.EnumMap;
 import java.util.List;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-
-import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.core.blocks.BlockBase;
 import forestry.core.tiles.TileEngine;
 import forestry.core.tiles.TileUtil;
 
 public class BlockEngine extends BlockBase<BlockEngineType> {
-	private static final EnumMap<ForgeDirection, List<AxisAlignedBB>> boundingBoxesForDirections = new EnumMap<>(ForgeDirection.class);
+	private static final EnumMap<EnumFacing, List<AxisAlignedBB>> boundingBoxesForDirections = new EnumMap<>(EnumFacing.class);
 
 	static {
-		boundingBoxesForDirections.put(ForgeDirection.DOWN, ImmutableList.of(
-				AxisAlignedBB.getBoundingBox(0.0, 0.5, 0.0, 1.0, 1.0, 1.0), AxisAlignedBB.getBoundingBox(0.25, 0.0, 0.25, 0.75, 0.5, 0.75)
+		boundingBoxesForDirections.put(EnumFacing.DOWN, ImmutableList.of(
+				AxisAlignedBB.fromBounds(0.0, 0.5, 0.0, 1.0, 1.0, 1.0), AxisAlignedBB.fromBounds(0.25, 0.0, 0.25, 0.75, 0.5, 0.75)
 		));
-		boundingBoxesForDirections.put(ForgeDirection.UP, ImmutableList.of(
-				AxisAlignedBB.getBoundingBox(0.0, 0.0, 0.0, 1.0, 0.5, 1.0), AxisAlignedBB.getBoundingBox(0.25, 0.5, 0.25, 0.75, 1.0, 0.75)
+		boundingBoxesForDirections.put(EnumFacing.UP, ImmutableList.of(
+				AxisAlignedBB.fromBounds(0.0, 0.0, 0.0, 1.0, 0.5, 1.0), AxisAlignedBB.fromBounds(0.25, 0.5, 0.25, 0.75, 1.0, 0.75)
 		));
-		boundingBoxesForDirections.put(ForgeDirection.NORTH, ImmutableList.of(
-				AxisAlignedBB.getBoundingBox(0.0, 0.0, 0.5, 1.0, 1.0, 1.0), AxisAlignedBB.getBoundingBox(0.25, 0.25, 0.0, 0.75, 0.75, 0.5)
+		boundingBoxesForDirections.put(EnumFacing.NORTH, ImmutableList.of(
+				AxisAlignedBB.fromBounds(0.0, 0.0, 0.5, 1.0, 1.0, 1.0), AxisAlignedBB.fromBounds(0.25, 0.25, 0.0, 0.75, 0.75, 0.5)
 		));
-		boundingBoxesForDirections.put(ForgeDirection.SOUTH, ImmutableList.of(
-				AxisAlignedBB.getBoundingBox(0.0, 0.0, 0.0, 1.0, 1.0, 0.5), AxisAlignedBB.getBoundingBox(0.25, 0.25, 0.5, 0.75, 0.75, 1.0)
+		boundingBoxesForDirections.put(EnumFacing.SOUTH, ImmutableList.of(
+				AxisAlignedBB.fromBounds(0.0, 0.0, 0.0, 1.0, 1.0, 0.5), AxisAlignedBB.fromBounds(0.25, 0.25, 0.5, 0.75, 0.75, 1.0)
 		));
-		boundingBoxesForDirections.put(ForgeDirection.WEST, ImmutableList.of(
-				AxisAlignedBB.getBoundingBox(0.5, 0.0, 0.0, 1.0, 1.0, 1.0), AxisAlignedBB.getBoundingBox(0.0, 0.25, 0.25, 0.5, 0.75, 0.75)
+		boundingBoxesForDirections.put(EnumFacing.WEST, ImmutableList.of(
+				AxisAlignedBB.fromBounds(0.5, 0.0, 0.0, 1.0, 1.0, 1.0), AxisAlignedBB.fromBounds(0.0, 0.25, 0.25, 0.5, 0.75, 0.75)
 		));
-		boundingBoxesForDirections.put(ForgeDirection.EAST, ImmutableList.of(
-				AxisAlignedBB.getBoundingBox(0.0, 0.0, 0.0, 0.5, 1.0, 1.0), AxisAlignedBB.getBoundingBox(0.5, 0.25, 0.25, 1.0, 0.75, 0.75)
+		boundingBoxesForDirections.put(EnumFacing.EAST, ImmutableList.of(
+				AxisAlignedBB.fromBounds(0.0, 0.0, 0.0, 0.5, 1.0, 1.0), AxisAlignedBB.fromBounds(0.5, 0.25, 0.25, 1.0, 0.75, 0.75)
 		));
 	}
 
 	public BlockEngine() {
-		super(true);
+		super(true, BlockEngineType.class);
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB mask, List list, Entity colliding) {
-		TileEngine tile = TileUtil.getTile(world, x, y, z, TileEngine.class);
+	public void addCollisionBoxesToList(World world, BlockPos pos, IBlockState state, AxisAlignedBB mask, List<AxisAlignedBB> list, Entity collidingEntity) {
+		TileEngine tile = TileUtil.getTile(world, pos, TileEngine.class);
 		if (tile == null) {
-			super.addCollisionBoxesToList(world, x, y, z, mask, list, colliding);
+			super.addCollisionBoxesToList(world, pos, state, mask, list, collidingEntity);
 			return;
 		}
 
-		ForgeDirection orientation = tile.getOrientation();
+		EnumFacing orientation = tile.getOrientation();
 		List<AxisAlignedBB> boundingBoxes = boundingBoxesForDirections.get(orientation);
 		if (boundingBoxes == null) {
 			return;
 		}
 
 		for (AxisAlignedBB boundingBoxBase : boundingBoxes) {
-			AxisAlignedBB boundingBox = boundingBoxBase.getOffsetBoundingBox(x, y, z);
+			AxisAlignedBB boundingBox = boundingBoxBase.offset(pos.getX(), pos.getY(), pos.getZ());
 			if (mask.intersectsWith(boundingBox)) {
 				list.add(boundingBox);
 			}
@@ -79,33 +80,35 @@ public class BlockEngine extends BlockBase<BlockEngineType> {
 	}
 
 	@Override
-	public MovingObjectPosition collisionRayTrace(World world, int x, int y, int z, Vec3 origin, Vec3 direction) {
-		TileEngine tile = TileUtil.getTile(world, x, y, z, TileEngine.class);
+	public MovingObjectPosition collisionRayTrace(World world, BlockPos pos, Vec3 start, Vec3 end) {
+		TileEngine tile = TileUtil.getTile(world, pos, TileEngine.class);
 		if (tile == null) {
-			return super.collisionRayTrace(world, x, y, z, origin, direction);
+			return super.collisionRayTrace(world, pos, start, end);
 		}
 
-		ForgeDirection orientation = tile.getOrientation();
+		EnumFacing orientation = tile.getOrientation();
 		List<AxisAlignedBB> boundingBoxes = boundingBoxesForDirections.get(orientation);
 		if (boundingBoxes == null) {
-			return super.collisionRayTrace(world, x, y, z, origin, direction);
+			return super.collisionRayTrace(world, pos, start, end);
 		}
 
 		MovingObjectPosition nearestIntersection = null;
 		for (AxisAlignedBB boundingBoxBase : boundingBoxes) {
-			AxisAlignedBB boundingBox = boundingBoxBase.getOffsetBoundingBox(x, y, z);
-			MovingObjectPosition intersection = boundingBox.calculateIntercept(origin, direction);
+			AxisAlignedBB boundingBox = boundingBoxBase.offset(pos.getX(), pos.getY(), pos.getZ());
+			MovingObjectPosition intersection = boundingBox.calculateIntercept(start, end);
 			if (intersection != null) {
-				if (nearestIntersection == null || (intersection.hitVec.distanceTo(origin) < nearestIntersection.hitVec.distanceTo(origin))) {
+				if (nearestIntersection == null || (intersection.hitVec.distanceTo(start) < nearestIntersection.hitVec.distanceTo(start))) {
 					nearestIntersection = intersection;
 				}
 			}
 		}
 
 		if (nearestIntersection != null) {
-			nearestIntersection.blockX = x;
-			nearestIntersection.blockY = y;
-			nearestIntersection.blockZ = z;
+			Object hitInfo = nearestIntersection.hitInfo;
+			Entity entityHit = nearestIntersection.entityHit;
+			nearestIntersection = new MovingObjectPosition(nearestIntersection.typeOfHit, nearestIntersection.hitVec, nearestIntersection.sideHit, pos);
+			nearestIntersection.hitInfo = hitInfo;
+			nearestIntersection.entityHit = entityHit;
 		}
 
 		return nearestIntersection;

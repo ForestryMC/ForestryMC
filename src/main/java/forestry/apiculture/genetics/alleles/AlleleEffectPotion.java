@@ -21,9 +21,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.potion.PotionHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-
-import cpw.mods.fml.relauncher.ReflectionHelper;
-
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;

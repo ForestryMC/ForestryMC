@@ -13,6 +13,7 @@ package forestry.core.network.packets;
 import java.io.IOException;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.core.network.DataInputStreamForestry;
@@ -50,17 +51,7 @@ public abstract class PacketEntityUpdate extends ForestryPacket implements ILoca
 	}
 
 	@Override
-	public int getPosX() {
-		return (int) entity.posX;
-	}
-
-	@Override
-	public int getPosY() {
-		return (int) entity.posY;
-	}
-
-	@Override
-	public int getPosZ() {
-		return (int) entity.posZ;
+	public BlockPos getPos() {
+		return entity.getPosition();
 	}
 }

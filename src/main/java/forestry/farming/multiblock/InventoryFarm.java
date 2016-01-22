@@ -16,7 +16,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.Fluid;
 
 import forestry.api.farming.FarmDirection;
@@ -80,7 +81,7 @@ public class InventoryFarm extends InventoryAdapterRestricted implements IFarmIn
 	}
 
 	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack stack, int side) {
+	public boolean canExtractItem(int slotIndex, ItemStack stack, EnumFacing side) {
 		return SlotUtil.isSlotInRange(slotIndex, SLOT_PRODUCTION_1, SLOT_PRODUCTION_COUNT);
 	}
 
@@ -161,14 +162,14 @@ public class InventoryFarm extends InventoryAdapterRestricted implements IFarmIn
 		FluidHelper.drainContainers(tankManager, this, SLOT_CAN);
 	}
 
-	public boolean plantGermling(IFarmable germling, EntityPlayer player, int x, int y, int z) {
+	public boolean plantGermling(IFarmable germling, EntityPlayer player, BlockPos pos) {
 		for (int i = 0; i < germlingsInventory.getSizeInventory(); i++) {
 			ItemStack germlingStack = germlingsInventory.getStackInSlot(i);
 			if (germlingStack == null || !germling.isGermling(germlingStack)) {
 				continue;
 			}
 
-			if (germling.plantSaplingAt(player, germlingStack, player.worldObj, x, y, z)) {
+			if (germling.plantSaplingAt(player, germlingStack, player.worldObj, pos)) {
 				germlingsInventory.decrStackSize(i, 1);
 				return true;
 			}

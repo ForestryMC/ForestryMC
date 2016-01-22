@@ -13,7 +13,7 @@ package forestry.arboriculture.worldgen;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.world.ITreeGenData;
@@ -35,7 +35,7 @@ public class WorldGenSequoia extends WorldGenTree {
 
 		int topHeight = (height / 3) + world.rand.nextInt(height / 6);
 
-		List<ChunkCoordinates> branchCoords = new ArrayList<>();
+		List<BlockPos> branchCoords = new ArrayList<>();
 		for (int yBranch = topHeight; yBranch < height; yBranch++) {
 			int branchLength = Math.round(height - yBranch) / 2;
 			if (branchLength > 4) {
@@ -43,8 +43,8 @@ public class WorldGenSequoia extends WorldGenTree {
 			}
 			branchCoords.addAll(generateBranches(world, yBranch, 0, 0, 0.05f, 0.25f, branchLength, 1, 0.5f));
 		}
-		for (ChunkCoordinates branchEnd : branchCoords) {
-			generateAdjustedCylinder(world, branchEnd.posY, branchEnd.posX, branchEnd.posZ, 1.0f, 1, leaf, EnumReplaceMode.NONE);
+		for (BlockPos branchEnd : branchCoords) {
+			generateAdjustedCylinder(world, branchEnd, 1.0f, 1, leaf, EnumReplaceMode.NONE);
 		}
 
 		int leafSpawn = height + 2;

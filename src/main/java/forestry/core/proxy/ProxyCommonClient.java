@@ -13,13 +13,14 @@ package forestry.core.proxy;
 import java.io.File;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
-
-import cpw.mods.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import org.lwjgl.input.Keyboard;
 
@@ -72,52 +73,58 @@ public class ProxyCommonClient extends ProxyCommon {
 	}
 
 	@Override
-	public void playSoundFX(World world, int x, int y, int z, Block block) {
+	public void playSoundFX(World world, BlockPos pos, IBlockState state) {
+		Block block = state.getBlock();
 		if (!world.isRemote) {
-			super.playSoundFX(world, x, y, z, block);
+			super.playSoundFX(world, pos, state);
 		} else {
-			playSoundFX(world, x, y, z, block.stepSound.getStepResourcePath(), block.stepSound.getVolume(), block.stepSound.getPitch());
+			playSoundFX(world, pos, block.stepSound.getStepSound(), block.stepSound.getVolume(), block.stepSound.getFrequency());
 		}
 	}
 
 	@Override
-	public void playBlockBreakSoundFX(World world, int x, int y, int z, Block block) {
+	public void playBlockBreakSoundFX(World world, BlockPos pos, IBlockState state) {
+		Block block = state.getBlock();
 		if (!world.isRemote) {
-			super.playSoundFX(world, x, y, z, block);
+			super.playSoundFX(world, pos, state);
 		} else {
-			playSoundFX(world, x, y, z, block.stepSound.getBreakSound(), block.stepSound.getVolume() / 4, block.stepSound.getPitch());
+			playSoundFX(world, pos, block.stepSound.getBreakSound(), block.stepSound.getVolume() / 4, block.stepSound.getFrequency());
 		}
 	}
 
 	@Override
-	public void playBlockPlaceSoundFX(World world, int x, int y, int z, Block block) {
+	public void playBlockPlaceSoundFX(World world, BlockPos pos, IBlockState state) {
+		Block block = state.getBlock();
 		if (!world.isRemote) {
-			super.playSoundFX(world, x, y, z, block);
+			super.playSoundFX(world, pos, state);
 		} else {
-			playSoundFX(world, x, y, z, block.stepSound.getStepResourcePath(), block.stepSound.getVolume() / 4, block.stepSound.getPitch());
+			playSoundFX(world, pos, block.stepSound.getStepSound(), block.stepSound.getVolume() / 4, block.stepSound.getFrequency());
 		}
 	}
 
 	@Override
-	public void playSoundFX(World world, int x, int y, int z, String sound, float volume, float pitch) {
+	public void playSoundFX(World world, BlockPos pos, String sound, float volume, float pitch) {
+		int x = pos.getX();
+		int y = pos.getY();
+		int z = pos.getZ();
 		world.playSound(x + 0.5, y + 0.5, z + 0.5, sound, volume, (1.0f + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.2f) * 0.7f, false);
 	}
 
 	@Override
-	public void addBlockDestroyEffects(World world, int xCoord, int yCoord, int zCoord, Block block, int i) {
+	public void addBlockDestroyEffects(World world, BlockPos pos, IBlockState state) {
 		if (world.isRemote) {
-			getClientInstance().effectRenderer.addBlockDestroyEffects(xCoord, yCoord, zCoord, block, i);
+			getClientInstance().effectRenderer.addBlockDestroyEffects(pos, state);
 		} else {
-			super.addBlockDestroyEffects(world, xCoord, yCoord, zCoord, block, i);
+			super.addBlockDestroyEffects(world, pos, state);
 		}
 	}
 
 	@Override
-	public void addBlockPlaceEffects(World world, int xCoord, int yCoord, int zCoord, Block block, int i) {
+	public void addBlockPlaceEffects(World world, BlockPos pos, IBlockState state) {
 		if (world.isRemote) {
-			playBlockPlaceSoundFX(world, xCoord, yCoord, zCoord, block);
+			playBlockPlaceSoundFX(world, pos, state);
 		} else {
-			super.addBlockPlaceEffects(world, xCoord, yCoord, zCoord, block, i);
+			super.addBlockPlaceEffects(world, pos, state);
 		}
 	}
 

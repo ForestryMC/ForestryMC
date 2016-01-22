@@ -21,16 +21,13 @@ import java.util.Set;
 import java.util.Stack;
 
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
-
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.Farmables;
 import forestry.api.farming.ICrop;
@@ -40,7 +37,6 @@ import forestry.api.genetics.IFruitBearer;
 import forestry.core.utils.vect.Vect;
 import forestry.core.utils.vect.VectUtil;
 import forestry.plugins.PluginCore;
-import forestry.plugins.PluginManager;
 
 public class FarmLogicOrchard extends FarmLogic {
 
@@ -52,7 +48,7 @@ public class FarmLogicOrchard extends FarmLogic {
 		super(housing);
 		this.farmables = Farmables.farmables.get("farmOrchard");
 		ImmutableList.Builder<Block> traversalBlocksBuilder = ImmutableList.builder();
-		if (PluginManager.Module.AGRICRAFT.isEnabled()) {
+		/*if (PluginManager.Module.AGRICRAFT.isEnabled()) {
 			traversalBlocksBuilder.add(Blocks.farmland);
 		}
 		if (PluginManager.Module.GROWTHCRAFT.isEnabled()) {
@@ -63,7 +59,7 @@ public class FarmLogicOrchard extends FarmLogic {
 		}
 		if (PluginManager.Module.PLANTMEGAPACK.isEnabled()) {
 			traversalBlocksBuilder.add(Blocks.water);
-		}
+		}*/
 		traversalBlocksBuilder.build();
 		this.traversalBlocks = traversalBlocksBuilder.build();
 	}
@@ -99,14 +95,14 @@ public class FarmLogicOrchard extends FarmLogic {
 	}
 
 	@Override
-	public boolean cultivate(int x, int y, int z, FarmDirection direction, int extent) {
+	public boolean cultivate(BlockPos pos, FarmDirection direction, int extent) {
 		return false;
 	}
 
 	@Override
-	public Collection<ICrop> harvest(int x, int y, int z, FarmDirection direction, int extent) {
+	public Collection<ICrop> harvest(BlockPos pos, FarmDirection direction, int extent) {
 
-		Vect start = new Vect(x, y, z);
+		Vect start = new Vect(pos);
 		if (!lastExtents.containsKey(start)) {
 			lastExtents.put(start, 0);
 		}
@@ -116,7 +112,7 @@ public class FarmLogicOrchard extends FarmLogic {
 			lastExtent = 0;
 		}
 
-		Vect position = translateWithOffset(x, y + 1, z, direction, lastExtent);
+		Vect position = translateWithOffset(pos.add(0, 1, 0), direction, lastExtent);
 		Collection<ICrop> crops = getHarvestBlocks(position);
 		lastExtent++;
 		lastExtents.put(start, lastExtent);
@@ -126,8 +122,8 @@ public class FarmLogicOrchard extends FarmLogic {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon getIcon() {
-		return PluginCore.items.fruits.getIconFromDamage(0);
+	public Item getItem() {
+		return PluginCore.items.fruits;
 	}
 
 	@Override
@@ -171,10 +167,10 @@ public class FarmLogicOrchard extends FarmLogic {
 			for (int j = 0; j < 2; j++) {
 				for (int k = -1; k < 2; k++) {
 					Vect candidate = position.add(i, j, k);
-					if (Math.abs(candidate.x - start.x) > 5) {
+					if (Math.abs(candidate.getX() - start.getX()) > 5) {
 						continue;
 					}
-					if (Math.abs(candidate.z - start.z) > 5) {
+					if (Math.abs(candidate.getZ() - start.getZ()) > 5) {
 						continue;
 					}
 
@@ -206,13 +202,13 @@ public class FarmLogicOrchard extends FarmLogic {
 
 	private boolean isFruitBearer(World world, Vect position) {
 
-		TileEntity tile = world.getTileEntity(position.x, position.y, position.z);
+		TileEntity tile = world.getTileEntity(position);
 		if (tile instanceof IFruitBearer) {
 			return true;
 		}
 
 		for (IFarmable farmable : farmables) {
-			if (farmable.isSaplingAt(world, position.x, position.y, position.z)) {
+			if (farmable.isSaplingAt(world, position)) {
 				return true;
 			}
 		}
@@ -233,7 +229,7 @@ public class FarmLogicOrchard extends FarmLogic {
 
 	private ICrop getCrop(World world, Vect position) {
 
-		TileEntity tile = world.getTileEntity(position.x, position.y, position.z);
+		TileEntity tile = world.getTileEntity(position);
 
 		if (tile instanceof IFruitBearer) {
 			IFruitBearer fruitBearer = (IFruitBearer) tile;
@@ -242,7 +238,7 @@ public class FarmLogicOrchard extends FarmLogic {
 			}
 		} else {
 			for (IFarmable seed : farmables) {
-				ICrop crop = seed.getCropAt(world, position.x, position.y, position.z);
+				ICrop crop = seed.getCropAt(world, position);
 				if (crop != null) {
 					return crop;
 				}

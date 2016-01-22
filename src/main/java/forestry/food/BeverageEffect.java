@@ -42,6 +42,7 @@ public abstract class BeverageEffect implements IBeverageEffect {
 		}
 	}
 
+	@Override
 	public int getId() {
 		return this.id;
 	}

@@ -15,9 +15,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.StatCollector;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
@@ -162,20 +163,22 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	protected void isMachineWhole() throws MultiblockValidationException {
 		super.isMachineWhole();
 
-		final ChunkCoordinates maximumCoord = getMaximumCoord();
-		final ChunkCoordinates minimumCoord = getMinimumCoord();
+		final BlockPos maximumCoord = getMaximumCoord();
+		final BlockPos minimumCoord = getMinimumCoord();
 
 		// check that the top is covered in wood slabs
 
-		final int slabY = maximumCoord.posY + 1;
-		for (int slabX = minimumCoord.posX; slabX <= maximumCoord.posX; slabX++) {
-			for (int slabZ = minimumCoord.posZ; slabZ <= maximumCoord.posZ; slabZ++) {
-				Block block = worldObj.getBlock(slabX, slabY, slabZ);
+		final int slabY = maximumCoord.getY() + 1;
+		for (int slabX = minimumCoord.getX(); slabX <= maximumCoord.getX(); slabX++) {
+			for (int slabZ = minimumCoord.getZ(); slabZ <= maximumCoord.getZ(); slabZ++) {
+				BlockPos pos = new BlockPos(slabX, slabY, slabZ);
+				IBlockState state = worldObj.getBlockState(pos);
+				Block block = state.getBlock();
 				if (!BlockUtil.isWoodSlabBlock(block)) {
 					throw new MultiblockValidationException(StatCollector.translateToLocal("for.multiblock.alveary.error.needSlabs"));
 				}
 
-				int meta = worldObj.getBlockMetadata(slabX, slabY, slabZ);
+				int meta = block.getMetaFromState(state);
 				if ((meta & 8) != 0) {
 					throw new MultiblockValidationException(StatCollector.translateToLocal("for.multiblock.alveary.error.needSlabs"));
 				}
@@ -184,13 +187,13 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 
 		// check that there is space all around the alveary entrances
 
-		int airY = maximumCoord.posY;
-		for (int airX = minimumCoord.posX - 1; airX <= maximumCoord.posX + 1; airX++) {
-			for (int airZ = minimumCoord.posZ - 1; airZ <= maximumCoord.posZ + 1; airZ++) {
+		int airY = maximumCoord.getY();
+		for (int airX = minimumCoord.getX() - 1; airX <= maximumCoord.getX() + 1; airX++) {
+			for (int airZ = minimumCoord.getZ() - 1; airZ <= maximumCoord.getZ() + 1; airZ++) {
 				if (isCoordInMultiblock(airX, airY, airZ)) {
 					continue;
 				}
-				Block block = worldObj.getBlock(airX, airY, airZ);
+				Block block = BlockUtil.getBlock(worldObj, new BlockPos(airX, airY, airZ));
 				if (block.isOpaqueCube()) {
 					throw new MultiblockValidationException(StatCollector.translateToLocal("for.multiblock.alveary.error.needSpace"));
 				}
@@ -265,10 +268,10 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 			beekeepingLogic.doBeeFX();
 
 			if (updateOnInterval(50)) {
-				ChunkCoordinates center = getCenterCoord();
-				float fxX = center.posX + 0.5F;
-				float fxY = center.posY + 1.0F;
-				float fxZ = center.posZ + 0.5F;
+				BlockPos center = getCenterCoord();
+				float fxX = center.getX() + 0.5F;
+				float fxY = center.getY() + 1.0F;
+				float fxZ = center.getZ() + 0.5F;
 				float distanceFromCenter = 1.6F;
 
 				float leftRightSpreadFromCenter = distanceFromCenter * (worldObj.rand.nextFloat() - 0.5F);
@@ -320,15 +323,15 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	/* IActivatable */
 
 	@Override
-	public ChunkCoordinates getCoordinates() {
-		ChunkCoordinates coord = getCenterCoord();
-		return new ChunkCoordinates(coord.posX, coord.posY + 1, coord.posZ);
+	public BlockPos getCoordinates() {
+		BlockPos coord = getCenterCoord();
+		return coord.add(0, +1, 0);
 	}
 
 	@Override
 	public Vec3 getBeeFXCoordinates() {
-		ChunkCoordinates coord = getCenterCoord();
-		return Vec3.createVectorHelper(coord.posX + 0.5, coord.posY + 1.5, coord.posZ + 0.5);
+		BlockPos coord = getCenterCoord();
+		return new Vec3(coord.getX() + 0.5, coord.getY() + 1.5, coord.getZ() + 0.5);
 	}
 
 	@Override
@@ -338,7 +341,7 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 			for (IMultiblockComponent part : connectedParts) {
 				if (part instanceof TileEntity) {
 					TileEntity tile = (TileEntity) part;
-					worldObj.notifyBlocksOfNeighborChange(tile.xCoord, tile.yCoord, tile.zCoord, tile.getBlockType());
+					worldObj.notifyBlockOfStateChange(tile.getPos(), tile.getBlockType());
 				}
 			}
 			markDirty();
@@ -347,8 +350,8 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 
 	@Override
 	public float getExactTemperature() {
-		ChunkCoordinates coords = getReferenceCoord();
-		return getBiome().getFloatTemperature(coords.posX, coords.posY, coords.posZ) + tempChange;
+		BlockPos coords = getReferenceCoord();
+		return getBiome().getFloatTemperature(coords) + tempChange;
 	}
 
 	@Override
@@ -384,29 +387,29 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	@Override
 	public BiomeGenBase getBiome() {
 		if (cachedBiome == null) {
-			ChunkCoordinates coords = getReferenceCoord();
-			cachedBiome = worldObj.getBiomeGenForCoords(coords.posX, coords.posZ);
+			BlockPos coords = getReferenceCoord();
+			cachedBiome = worldObj.getBiomeGenForCoords(coords);
 		}
 		return cachedBiome;
 	}
 
 	@Override
 	public int getBlockLightValue() {
-		ChunkCoordinates topCenter = getTopCenterCoord();
-		return worldObj.getBlockLightValue(topCenter.posX, topCenter.posY + 1, topCenter.posZ);
+		BlockPos topCenter = getTopCenterCoord();
+		return worldObj.getLightFromNeighbors(topCenter.add(0, 1, 0));
 	}
 
 	@Override
 	public boolean canBlockSeeTheSky() {
-		ChunkCoordinates topCenter = getTopCenterCoord();
-		return worldObj.canBlockSeeTheSky(topCenter.posX, topCenter.posY + 2, topCenter.posZ);
+		BlockPos topCenter = getTopCenterCoord();
+		return worldObj.canBlockSeeSky(topCenter.add(0, 2, 0));
 	}
 
 	@Override
 	public void addTemperatureChange(float change, float boundaryDown, float boundaryUp) {
-		ChunkCoordinates coordinates = getCoordinates();
+		BlockPos coordinates = getCoordinates();
 
-		float temperature = getBiome().getFloatTemperature(coordinates.posX, coordinates.posY, coordinates.posZ);
+		float temperature = getBiome().getFloatTemperature(coordinates);
 
 		tempChange += change;
 		tempChange = Math.max(boundaryDown - temperature, tempChange);

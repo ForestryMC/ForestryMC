@@ -21,13 +21,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IChatComponent;
+import net.minecraft.util.ITickable;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-import net.minecraftforge.common.util.ForgeDirection;
-
-import cpw.mods.fml.common.Optional;
+import net.minecraftforge.fml.common.Optional;
 
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorLogicSource;
@@ -44,15 +46,15 @@ import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
 import forestry.core.network.packets.PacketTileStream;
 import forestry.core.proxy.Proxies;
-
+import forestry.core.utils.BlockUtil;
 import buildcraft.api.statements.IStatementContainer;
 import buildcraft.api.statements.ITriggerExternal;
 import buildcraft.api.statements.ITriggerInternal;
 import buildcraft.api.statements.ITriggerProvider;
 
 @Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = "BuildCraftAPI|statements")
-public abstract class TileForestry extends TileEntity implements IStreamable, IErrorLogicSource, ITriggerProvider, ISidedInventory, IFilterSlotDelegate, IRestrictedAccess, ITitled, ILocatable, IGuiHandlerTile {
-	private static final ForgeDirection[] forgeDirections = ForgeDirection.values();
+public abstract class TileForestry extends TileEntity implements IStreamable, IErrorLogicSource, ITriggerProvider, ISidedInventory, IFilterSlotDelegate, IRestrictedAccess, ITitled, ILocatable, IGuiHandlerTile, ITickable {
+	private static final EnumFacing[] forgeDirections = EnumFacing.values();
 	private static final Random rand = new Random();
 
 	private final AccessHandler accessHandler = new AccessHandler(this);
@@ -62,7 +64,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 
 	private int tickCount = rand.nextInt(256);
 	private boolean needsNetworkUpdate = false;
-	private ForgeDirection orientation = ForgeDirection.WEST;
+	private EnumFacing orientation = EnumFacing.WEST;
 
 	protected AdjacentTileCache getTileCache() {
 		return tileCache;
@@ -84,25 +86,25 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 		super.validate();
 	}
 
-	public void rotateAfterPlacement(EntityPlayer player, int side) {
+	public void rotateAfterPlacement(EntityPlayer player, EnumFacing side) {
 		int l = MathHelper.floor_double(((player.rotationYaw * 4F) / 360F) + 0.5D) & 3;
 		if (l == 0) {
-			setOrientation(ForgeDirection.NORTH);
+			setOrientation(EnumFacing.NORTH);
 		}
 		if (l == 1) {
-			setOrientation(ForgeDirection.EAST);
+			setOrientation(EnumFacing.EAST);
 		}
 		if (l == 2) {
-			setOrientation(ForgeDirection.SOUTH);
+			setOrientation(EnumFacing.SOUTH);
 		}
 		if (l == 3) {
-			setOrientation(ForgeDirection.WEST);
+			setOrientation(EnumFacing.WEST);
 		}
 	}
 
-	public boolean rotate(ForgeDirection axis) {
-		if (axis == ForgeDirection.DOWN || axis == ForgeDirection.UP) {
-			ForgeDirection orientation = getOrientation().getRotation(axis);
+	public boolean rotate(EnumFacing axis) {
+		if (axis == EnumFacing.DOWN || axis == EnumFacing.UP) {
+			EnumFacing orientation = getOrientation().rotateAround(axis.getAxis());
 			setOrientation(orientation);
 			return true;
 		}
@@ -111,7 +113,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 
 	// / UPDATING
 	@Override
-	public final void updateEntity() {
+	public final void update() {
 		tickCount++;
 
 		if (!worldObj.isRemote) {
@@ -145,9 +147,9 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 		accessHandler.readFromNBT(data);
 
 		if (data.hasKey("Orientation")) {
-			orientation = ForgeDirection.values()[data.getInteger("Orientation")];
+			orientation = EnumFacing.values()[data.getInteger("Orientation")];
 		} else {
-			orientation = ForgeDirection.WEST;
+			orientation = EnumFacing.WEST;
 		}
 	}
 
@@ -185,6 +187,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	public void onRemoval() {
 	}
 
+	@Override
 	public World getWorld() {
 		return worldObj;
 	}
@@ -198,21 +201,21 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 
 	@Optional.Method(modid = "BuildCraftAPI|statements")
 	@Override
-	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
+	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
 		return null;
 	}
 
 	// / REDSTONE INFO
 	protected boolean isRedstoneActivated() {
-		return worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
+		return worldObj.isBlockIndirectlyGettingPowered(getPos()) > 0;
 	}
 
 	// / ORIENTATION
-	public ForgeDirection getOrientation() {
+	public EnumFacing getOrientation() {
 		return this.orientation;
 	}
 
-	public void setOrientation(ForgeDirection orientation) {
+	public void setOrientation(EnumFacing orientation) {
 		if (orientation == null) {
 			throw new NullPointerException("Orientation cannot be null");
 		}
@@ -221,8 +224,8 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 		}
 		this.orientation = orientation;
 		this.setNeedsNetworkUpdate();
-		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, worldObj.getBlock(xCoord, yCoord, zCoord));
-		worldObj.func_147479_m(xCoord, yCoord, zCoord);
+		worldObj.notifyBlockOfStateChange(getPos(), BlockUtil.getBlock(worldObj, getPos()));
+		worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
 	}
 
 	protected final void setNeedsNetworkUpdate() {
@@ -243,7 +246,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	public void onSwitchAccess(EnumAccess oldAccess, EnumAccess newAccess) {
 		if (oldAccess == EnumAccess.SHARED || newAccess == EnumAccess.SHARED) {
 			// pipes connected to this need to update
-			worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, blockType);
+			worldObj.notifyBlockOfStateChange(getPos(), blockType);
 			markDirty();
 		}
 	}
@@ -286,10 +289,10 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	public ItemStack decrStackSize(int slotIndex, int amount) {
 		return getInternalInventory().decrStackSize(slotIndex, amount);
 	}
-
+	
 	@Override
-	public final ItemStack getStackInSlotOnClosing(int slotIndex) {
-		return getInternalInventory().getStackInSlotOnClosing(slotIndex);
+	public ItemStack removeStackFromSlot(int slotIndex) {
+		return getInternalInventory().removeStackFromSlot(slotIndex);
 	}
 
 	@Override
@@ -303,28 +306,33 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	}
 
 	@Override
-	public final void openInventory() {
-		getInternalInventory().openInventory();
+	public final void openInventory(EntityPlayer player) {
+		getInternalInventory().openInventory(player);
 	}
 
 	@Override
-	public final void closeInventory() {
-		getInternalInventory().closeInventory();
+	public final void closeInventory(EntityPlayer player) {
+		getInternalInventory().closeInventory(player);
 	}
-
+	
 	@Override
-	public final String getInventoryName() {
+	public String getName() {
 		return getUnlocalizedTitle();
 	}
 
 	@Override
+	public IChatComponent getDisplayName() {
+		return new ChatComponentText(getName());
+	}
+	
+	@Override
 	public final boolean isUseableByPlayer(EntityPlayer player) {
 		return getInternalInventory().isUseableByPlayer(player);
 	}
-
+	
 	@Override
-	public final boolean hasCustomInventoryName() {
-		return getInternalInventory().hasCustomInventoryName();
+	public boolean hasCustomName() {
+		return getInternalInventory().hasCustomName();
 	}
 
 	@Override
@@ -341,23 +349,42 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	public boolean isLocked(int slotIndex) {
 		return getInternalInventory().isLocked(slotIndex);
 	}
-
+	
 	@Override
-	public final int[] getAccessibleSlotsFromSide(int side) {
-		return getInternalInventory().getAccessibleSlotsFromSide(side);
+	public int[] getSlotsForFace(EnumFacing side) {
+		return getInternalInventory().getSlotsForFace(side);
 	}
 
 	@Override
-	public final boolean canInsertItem(int slotIndex, ItemStack itemStack, int side) {
+	public final boolean canInsertItem(int slotIndex, ItemStack itemStack, EnumFacing side) {
 		return getInternalInventory().canInsertItem(slotIndex, itemStack, side);
 	}
 
 	@Override
-	public final boolean canExtractItem(int slotIndex, ItemStack itemStack, int side) {
+	public final boolean canExtractItem(int slotIndex, ItemStack itemStack, EnumFacing side) {
 		return getInternalInventory().canExtractItem(slotIndex, itemStack, side);
 	}
 
-	public final ChunkCoordinates getCoordinates() {
-		return new ChunkCoordinates(xCoord, yCoord, zCoord);
+	@Override
+	public final BlockPos getCoordinates() {
+		return getPos();
+	}
+	
+	@Override
+	public int getField(int id) {
+		return 0;
+	}
+	
+	@Override
+	public int getFieldCount() {
+		return 0;
+	}
+	
+	@Override
+	public void setField(int id, int value) {
+	}
+	
+	@Override
+	public void clear() {
 	}
 }

@@ -12,7 +12,7 @@ package forestry.arboriculture.worldgen;
 
 import java.util.List;
 
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.world.ITreeGenData;
@@ -26,9 +26,9 @@ public class WorldGenSilverLime extends WorldGenTree {
 	@Override
 	public void generate(World world) {
 		generateTreeTrunk(world, height, girth);
-		List<ChunkCoordinates> branchCoords = generateBranches(world, 3 + world.rand.nextInt(1), 0, 0, 0.25f, 0.10f, Math.round(height * 0.25f), 2, 0.5f);
-		for (ChunkCoordinates branchEnd : branchCoords) {
-			generateAdjustedCylinder(world, branchEnd.posY, branchEnd.posX, branchEnd.posZ, 0, 1, leaf, EnumReplaceMode.NONE);
+		List<BlockPos> branchCoords = generateBranches(world, 3 + world.rand.nextInt(1), 0, 0, 0.25f, 0.10f, Math.round(height * 0.25f), 2, 0.5f);
+		for (BlockPos branchEnd : branchCoords) {
+			generateAdjustedCylinder(world, branchEnd, 0, 1, leaf, EnumReplaceMode.NONE);
 		}
 
 		int leafSpawn = height + 1;

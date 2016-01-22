@@ -15,19 +15,23 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmLogic;
 import forestry.core.config.Constants;
 import forestry.core.entities.EntitySelector;
-import forestry.core.render.SpriteSheet;
+import forestry.core.utils.BlockUtil;
 import forestry.core.utils.EntityUtil;
 import forestry.core.utils.vect.Vect;
 
@@ -40,6 +44,7 @@ public abstract class FarmLogic implements IFarmLogic {
 		this.housing = housing;
 	}
 
+	@Override
 	public FarmLogic setManual(boolean flag) {
 		isManual = flag;
 		return this;
@@ -48,10 +53,25 @@ public abstract class FarmLogic implements IFarmLogic {
 	protected World getWorld() {
 		return housing.getWorld();
 	}
-
+	
+	@SideOnly(Side.CLIENT)
 	@Override
-	public ResourceLocation getSpriteSheet() {
-		return SpriteSheet.ITEMS.getLocation();
+	public ResourceLocation getTextureMap() {
+		return TextureMap.locationBlocksTexture;
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public ItemStack getStack() {
+		return new ItemStack(getItem(), 1, getMetadata());
+	}
+
+	@SideOnly(Side.CLIENT)
+	public abstract Item getItem();
+
+	@SideOnly(Side.CLIENT)
+	public int getMetadata() {
+		return 0;
 	}
 
 	public abstract boolean isAcceptedWindfall(ItemStack stack);
@@ -61,16 +81,20 @@ public abstract class FarmLogic implements IFarmLogic {
 	}
 
 	protected final boolean isWaterSourceBlock(World world, Vect position) {
-		return world.getBlock(position.x, position.y, position.z) == Blocks.water &&
-				world.getBlockMetadata(position.x, position.y, position.z) == 0;
+		return BlockUtil.getBlock(world, position) == Blocks.water &&
+				BlockUtil.getBlockMetadata(world, position) == 0;
 	}
 
 	protected final Vect translateWithOffset(int x, int y, int z, FarmDirection farmDirection, int step) {
 		return new Vect(farmDirection.getForgeDirection()).multiply(step).add(x, y, z);
 	}
+	
+	protected final Vect translateWithOffset(BlockPos pos, FarmDirection farmDirection, int step) {
+		return new Vect(farmDirection.getForgeDirection()).multiply(step).add(pos);
+	}
 
 	protected final void setBlock(Vect position, Block block, int meta) {
-		getWorld().setBlock(position.x, position.y, position.z, block, meta, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
+		getWorld().setBlockState(position, block.getStateFromMeta(meta), Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
 	}
 
 	private AxisAlignedBB getHarvestBox(IFarmHousing farmHousing, boolean toWorldHeight) {
@@ -81,12 +105,12 @@ public abstract class FarmLogic implements IFarmLogic {
 		Vect min = coords.add(offset);
 		Vect max = min.add(area);
 
-		int maxY = max.y;
+		int maxY = max.getY();
 		if (toWorldHeight) {
 			maxY = getWorld().getHeight();
 		}
 
-		return AxisAlignedBB.getBoundingBox(min.x, min.y, min.z, max.x, maxY, max.z);
+		return AxisAlignedBB.fromBounds(min.getX(), min.getY(), min.getZ(), max.getX(), maxY, max.getZ());
 	}
 
 	protected List<ItemStack> collectEntityItems(boolean toWorldHeight) {

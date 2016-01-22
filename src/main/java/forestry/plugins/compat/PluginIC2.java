@@ -13,25 +13,19 @@ package forestry.plugins.compat;
 import com.google.common.collect.ImmutableMap;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.EnumSet;
 
-import cpw.mods.fml.common.registry.GameRegistry;
 import forestry.api.farming.Farmables;
 import forestry.farming.logic.FarmableBasicIC2Crop;
-import ic2.api.crops.ICropTile;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-
-import cpw.mods.fml.common.Optional;
-import cpw.mods.fml.common.event.FMLInterModComms;
-import cpw.mods.fml.common.registry.GameData;
-
+import net.minecraftforge.fml.common.Optional;
+import net.minecraftforge.fml.common.event.FMLInterModComms;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitLayout;
@@ -68,7 +62,6 @@ import forestry.plugins.PluginApiculture;
 import forestry.plugins.PluginCore;
 import forestry.plugins.PluginEnergy;
 import forestry.plugins.PluginManager;
-
 import ic2.api.item.IC2Items;
 import ic2.api.recipe.RecipeInputItemStack;
 import ic2.api.recipe.Recipes;
@@ -240,6 +233,7 @@ public class PluginIC2 extends ForestryPlugin {
 		}
 	}
 
+	@Override
 	@Optional.Method(modid = "IC2")
 	protected void registerRecipes() {
 
@@ -273,8 +267,8 @@ public class PluginIC2 extends ForestryPlugin {
 		}
 
 		if (rubbersapling != null && resin != null) {
-			String saplingName = GameData.getBlockRegistry().getNameForObject(ItemStackUtil.getBlock(rubbersapling));
-			String resinName = GameData.getItemRegistry().getNameForObject(resin.getItem());
+			String saplingName = ItemStackUtil.getBlockNameFromRegistryAsSting(ItemStackUtil.getBlock(rubbersapling));
+			String resinName = ItemStackUtil.getItemNameFromRegistryAsSting(resin.getItem());
 			String imc = String.format("farmArboreal@%s.%s.%s.%s",
 					saplingName, rubbersapling.getItemDamage(),
 					resinName, resin.getItemDamage());
@@ -339,20 +333,20 @@ public class PluginIC2 extends ForestryPlugin {
 	 * @param tileEntity tile entity to be checked.
 	 * @return true if there is an IC2 crop and false otherwise.
 	 */
-	@Optional.Method(modid = "IC2")
+	/*@Optional.Method(modid = "IC2")
 	public boolean isIC2Crop(TileEntity tileEntity) {
 		if (tileEntity != null && tileEntity instanceof ICropTile) {
 			return true;
 		}
 		return false;
-	}
+	}*/
 
 	/**
 	 * Check if an IC2 crop is ready to be harvested.
 	 * @param tileEntity tile entity to be checked.
 	 * @return true if crop size is optimal for harvest and false otherwise.
 	 */
-	@Optional.Method(modid = "IC2")
+	/*@Optional.Method(modid = "IC2")
 	public boolean canHarvestCrop(TileEntity tileEntity) {
 		if (isIC2Crop(tileEntity)) {
 			ICropTile crop = (ICropTile)tileEntity;
@@ -364,13 +358,13 @@ public class PluginIC2 extends ForestryPlugin {
 			}
 		}
 		return false;
-	}
+	}*/
 
 	/**
 	 * Perform some of the actions of the crop-matron.
 	 * @param tileEntity
 	 */
-	@Optional.Method(modid = "IC2")
+	/*@Optional.Method(modid = "IC2")
 	public void babysitCrop(TileEntity tileEntity) {
 		if (isIC2Crop(tileEntity)) {
 			ICropTile crop = (ICropTile)tileEntity;
@@ -381,14 +375,14 @@ public class PluginIC2 extends ForestryPlugin {
 					crop.reset();
 				}
 			}*/
-			if (crop.getHydrationStorage() <= 200) {
+			/*if (crop.getHydrationStorage() <= 200) {
 				crop.setHydrationStorage(200);
 			}
 			if (crop.getNutrientStorage() <= 100) {
 				crop.setNutrientStorage(crop.getNutrientStorage() + 100);
 			}
 		}
-	}
+	}*/
 
 	/**
 	 * This function takes care of everything related to the harvesting of the
@@ -396,7 +390,7 @@ public class PluginIC2 extends ForestryPlugin {
 	 * @param tileEntity tile entity to be checked.
 	 * @return arraylist containing the drops.
 	 */
-	@Optional.Method(modid = "IC2")
+	/*@Optional.Method(modid = "IC2")
 	public ArrayList<ItemStack> getCropDrops(TileEntity tileEntity) {
 		if (isIC2Crop(tileEntity)) {
 			ICropTile crop = (ICropTile)tileEntity;
@@ -405,6 +399,25 @@ public class PluginIC2 extends ForestryPlugin {
 				return new ArrayList<>(Arrays.asList(cropDrops));
 			}
 		}
+		return null;
+	}*/
+	
+	@Optional.Method(modid = "IC2")
+	public boolean isIC2Crop(TileEntity tileEntity) {
+		return false;
+	}
+	
+	@Optional.Method(modid = "IC2")
+	public boolean canHarvestCrop(TileEntity tileEntity) {
+		return false;
+	}
+
+	@Optional.Method(modid = "IC2")
+	public void babysitCrop(TileEntity tileEntity) {
+	}
+
+	@Optional.Method(modid = "IC2")
+	public ArrayList<ItemStack> getCropDrops(TileEntity tileEntity) {
 		return null;
 	}
 }

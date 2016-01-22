@@ -81,5 +81,17 @@ public class MatingRecipe implements IRecipe {
 	public int getRecipeSize() {
 		return 2;
 	}
+	
+	@Override
+	public ItemStack[] getRemainingItems(InventoryCrafting inv) {
+        ItemStack[] aitemstack = new ItemStack[inv.getSizeInventory()];
+
+        for (int i = 0; i < aitemstack.length; ++i)
+        {
+            ItemStack itemstack = inv.getStackInSlot(i);
+            aitemstack[i] = net.minecraftforge.common.ForgeHooks.getContainerItem(itemstack);
+        }
+        return aitemstack;
+	}
 
 }

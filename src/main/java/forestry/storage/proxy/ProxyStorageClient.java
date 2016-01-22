@@ -10,17 +10,13 @@
  ******************************************************************************/
 package forestry.storage.proxy;
 
-import net.minecraftforge.client.MinecraftForgeClient;
-
-import forestry.core.items.ItemCrated;
-import forestry.core.render.RenderCrateItem;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
+import forestry.core.render.model.ModelCrate;
 
 public class ProxyStorageClient extends ProxyStorage {
 
-	private static final RenderCrateItem crateRenderer = new RenderCrateItem();
-
 	@Override
-	public void registerCrateForRendering(ItemCrated crate) {
-		MinecraftForgeClient.registerItemRenderer(crate, crateRenderer);
+	public void registerCrateModelLoader() {
+		ModelLoaderRegistry.registerLoader(ModelCrate.Loader.instance);
 	}
 }

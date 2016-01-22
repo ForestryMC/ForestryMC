@@ -15,11 +15,14 @@ import java.util.EnumSet;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
-
+import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
-
-import cpw.mods.fml.common.SidedProxy;
 
 import forestry.Forestry;
 import forestry.api.arboriculture.TreeManager;
@@ -43,6 +46,7 @@ import forestry.lepidopterology.genetics.ButterflyDefinition;
 import forestry.lepidopterology.genetics.ButterflyFactory;
 import forestry.lepidopterology.genetics.ButterflyHelper;
 import forestry.lepidopterology.genetics.MothDefinition;
+import forestry.lepidopterology.items.ItemButterflyGE;
 import forestry.lepidopterology.items.ItemRegistryLepidopterology;
 import forestry.lepidopterology.proxy.ProxyLepidopterology;
 import forestry.lepidopterology.recipes.MatingRecipe;
@@ -78,6 +82,8 @@ public class PluginLepidopterology extends ForestryPlugin {
 
 	@Override
 	public void preInit() {
+		MinecraftForge.EVENT_BUS.register(this);
+		
 		ButterflyBranchDefinition.createAlleles();
 		AlleleButterflyEffect.createAlleles();
 
@@ -143,5 +149,11 @@ public class PluginLepidopterology extends ForestryPlugin {
 
 	public static boolean isPollinationAllowed() {
 		return allowPollination;
+	}
+	
+	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
+	public void textureHook(TextureStitchEvent.Pre event) {
+		ItemButterflyGE.registerSprites();
 	}
 }

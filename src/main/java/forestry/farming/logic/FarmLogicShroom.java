@@ -14,12 +14,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.farming.Farmables;
 import forestry.api.farming.IFarmHousing;
 
@@ -40,8 +38,8 @@ public class FarmLogicShroom extends FarmLogicArboreal {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon getIcon() {
-		return Blocks.red_mushroom.getBlockTextureFromSide(0);
+	public Item getItem() {
+		return Item.getItemFromBlock(Blocks.red_mushroom);
 	}
 
 	@Override

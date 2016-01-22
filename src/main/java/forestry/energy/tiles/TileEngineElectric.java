@@ -31,7 +31,6 @@ import forestry.core.tiles.TileEngine;
 import forestry.energy.gui.ContainerEngineElectric;
 import forestry.energy.gui.GuiEngineElectric;
 import forestry.plugins.compat.PluginIC2;
-
 import ic2.api.energy.prefab.BasicSink;
 
 public class TileEngineElectric extends TileEngine implements ISocketable, IInventory {
@@ -157,7 +156,7 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 			return;
 		}
 
-		ic2EnergySink.updateEntity();
+		ic2EnergySink.update();
 
 		super.updateServerSide();
 

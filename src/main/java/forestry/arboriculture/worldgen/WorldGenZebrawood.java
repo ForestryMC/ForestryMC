@@ -12,7 +12,7 @@ package forestry.arboriculture.worldgen;
 
 import java.util.List;
 
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.world.ITreeGenData;
@@ -29,9 +29,9 @@ public class WorldGenZebrawood extends WorldGenTree {
 		generateTreeTrunk(world, height, girth);
 		generateSupportStems(world, height, girth, 0.8f, 0.3f);
 
-		List<ChunkCoordinates> branchCoords = generateBranches(world, height - 4, 0, 0, 0, 0.25f, 3, 2, 0.75f);
-		for (ChunkCoordinates branchEnd : branchCoords) {
-			generateAdjustedCylinder(world, branchEnd.posY, branchEnd.posX, branchEnd.posZ, 1.0f, 2, leaf, EnumReplaceMode.NONE);
+		List<BlockPos> branchCoords = generateBranches(world, height - 4, 0, 0, 0, 0.25f, 3, 2, 0.75f);
+		for (BlockPos branchEnd : branchCoords) {
+			generateAdjustedCylinder(world, branchEnd, 1.0f, 2, leaf, EnumReplaceMode.NONE);
 		}
 
 		int leafSpawn = height + 1;

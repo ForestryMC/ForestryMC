@@ -51,14 +51,6 @@ public class TileAlvearySieve extends TileAlveary implements IAlvearyComponent.B
 	public IBeeListener getBeeListener() {
 		return beeListener;
 	}
-	
-	@Override
-	public int getIcon(int side) {
-		if (side == 0 || side == 1) {
-			return BlockAlveary.BOTTOM;
-		}
-		return BlockAlveary.SIEVE;
-	}
 
 	@Override
 	public Object getGui(EntityPlayer player, int data) {

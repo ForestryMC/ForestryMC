@@ -28,8 +28,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagLong;
 import net.minecraft.nbt.NBTTagShort;
 import net.minecraft.nbt.NBTTagString;
-
-import cpw.mods.fml.common.ObfuscationReflectionHelper;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -80,7 +79,7 @@ public abstract class NBTUtil {
 
 		public NBTList(NBTTagList nbtList) {
 			this.nbtList = nbtList;
-			backingList = ObfuscationReflectionHelper.getPrivateValue(NBTTagList.class, nbtList, 0);
+			backingList = ObfuscationReflectionHelper.getPrivateValue(NBTTagList.class, nbtList, 1);
 		}
 
 		@Override

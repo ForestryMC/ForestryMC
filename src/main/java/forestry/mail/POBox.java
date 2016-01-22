@@ -14,6 +14,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.IChatComponent;
 import net.minecraft.world.WorldSavedData;
 
 import forestry.api.mail.ILetter;
@@ -120,15 +121,15 @@ public class POBox extends WorldSavedData implements IInventory {
 	public ItemStack decrStackSize(int var1, int var2) {
 		return letters.decrStackSize(var1, var2);
 	}
-
+	
 	@Override
-	public ItemStack getStackInSlotOnClosing(int var1) {
-		return letters.getStackInSlotOnClosing(var1);
+	public ItemStack removeStackFromSlot(int index) {
+		return letters.removeStackFromSlot(index);
 	}
 
 	@Override
-	public String getInventoryName() {
-		return letters.getInventoryName();
+	public String getName() {
+		return letters.getName();
 	}
 
 	@Override
@@ -142,21 +143,45 @@ public class POBox extends WorldSavedData implements IInventory {
 	}
 
 	@Override
-	public void openInventory() {
+	public void openInventory(EntityPlayer var1) {
 	}
 
 	@Override
-	public void closeInventory() {
+	public void closeInventory(EntityPlayer var1) {
 	}
 
 	@Override
-	public boolean hasCustomInventoryName() {
+	public boolean hasCustomName() {
 		return true;
 	}
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		return letters.isItemValidForSlot(i, itemstack);
+	}
+
+	@Override
+	public IChatComponent getDisplayName() {
+		return letters.getDisplayName();
+	}
+
+	/* FIELDS */
+	@Override
+	public int getField(int id) {
+		return 0;
+	}
+
+	@Override
+	public void setField(int id, int value) {
+	}
+
+	@Override
+	public int getFieldCount() {
+		return 0;
+	}
+
+	@Override
+	public void clear() {
 	}
 
 }

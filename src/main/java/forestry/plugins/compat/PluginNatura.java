@@ -17,12 +17,9 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-
+import net.minecraftforge.fml.common.event.FMLInterModComms;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
-
-import cpw.mods.fml.common.event.FMLInterModComms;
-import cpw.mods.fml.common.registry.GameData;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.farming.Farmables;
@@ -34,6 +31,7 @@ import forestry.api.storage.StorageManager;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
 import forestry.core.recipes.RecipeUtil;
+import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.ModUtil;
 import forestry.farming.logic.FarmableGenericCrop;
 import forestry.plugins.ForestryPlugin;
@@ -96,19 +94,23 @@ public class PluginNatura extends ForestryPlugin {
 			ItemStack saplingWild = new ItemStack(saplingItem, 1, OreDictionary.WILDCARD_VALUE);
 			RecipeUtil.addFermenterRecipes(saplingWild, ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.sapling"), Fluids.BIOMASS);
 
-			String saplingName = GameData.getItemRegistry().getNameForObject(saplingItem);
+			String saplingName = ItemStackUtil.getItemNameFromRegistryAsSting(saplingItem);
 			FMLInterModComms.sendMessage(Constants.MOD, "add-farmable-sapling", String.format("farmArboreal@%s.-1", saplingName));
 		}
 
-		berryBlight = GameRegistry.findItemStack(NATURA, "berryBlight", 1);
-		berryDusk = GameRegistry.findItemStack(NATURA, "berryDusk", 1);
-		berrySky = GameRegistry.findItemStack(NATURA, "berrySky", 1);
-		berrySting = GameRegistry.findItemStack(NATURA, "berrySting", 1);
-		berryRasp = GameRegistry.findItemStack(NATURA, "berryRasp", 1);
-		berryBlue = GameRegistry.findItemStack(NATURA, "berryBlue", 1);
-		berryBlack = GameRegistry.findItemStack(NATURA, "berryBlack", 1);
-		berryMalo = GameRegistry.findItemStack(NATURA, "berryMalo", 1);
-		itemBarley = GameRegistry.findItemStack(NATURA, "barleyFood", 1);
+		Item netherBerry = GameRegistry.findItem(NATURA, "berry.nether");
+		Item berry = GameRegistry.findItem(NATURA, "berry");
+		Item barley = GameRegistry.findItem(NATURA, "barleyFood");
+		
+		berryBlight = new ItemStack(netherBerry, 1, 0);
+		berryDusk = new ItemStack(netherBerry, 1, 1);
+		berrySky = new ItemStack(netherBerry, 1, 2);
+		berrySting = new ItemStack(netherBerry, 1, 3);
+		berryRasp = new ItemStack(berry, 1, 0);
+		berryBlue = new ItemStack(berry, 1, 1);
+		berryBlack = new ItemStack(berry, 1, 2);
+		berryMalo = new ItemStack(berry, 1, 3);
+		itemBarley = new ItemStack(barley);
 	}
 
 	@Override
@@ -200,8 +202,9 @@ public class PluginNatura extends ForestryPlugin {
 
 	@Override
 	protected void registerRecipes() {
-		ItemStack seedBarley = GameRegistry.findItemStack(NATURA, "seedBarley", 1);
-		ItemStack seedCotton = GameRegistry.findItemStack(NATURA, "seedCotton", 1);
+		Item seed = GameRegistry.findItem(NATURA, "barley.seed");
+		ItemStack seedBarley = new ItemStack(seed, 1, 0);
+		ItemStack seedCotton = new ItemStack(seed, 1, 1);
 
 		ArrayList<ItemStack> seedList = new ArrayList<>();
 		if (seedBarley != null) {

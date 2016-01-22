@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
@@ -43,20 +43,20 @@ public class CropBasicGrowthCraft extends Crop {
 
 	@Override
 	protected Collection<ItemStack> harvestBlock(Vect pos) {
-		ArrayList<ItemStack> harvest = block.getDrops(world, pos.x, pos.y, pos.z, meta, 0);
+		List<ItemStack> harvest = block.getDrops(world, pos, block.getStateFromMeta(meta), 0);
 		if (harvest.size() > 1) {
 			harvest.remove(0); //Hops have rope as first drop.
 		}
-		Proxies.common.addBlockDestroyEffects(world, pos.x, pos.y, pos.z, block, 0);
+		Proxies.common.addBlockDestroyEffects(world, pos, block.getStateFromMeta(0));
 		if (isGrape) {
-			world.setBlockToAir(pos.x, pos.y, pos.z);
+			world.setBlockToAir(pos);
 
 		} else {
-			world.setBlockMetadataWithNotify(pos.x, pos.y, pos.z, 0, Constants.FLAG_BLOCK_SYNCH);
+			world.setBlockState(pos, block.getStateFromMeta(0), Constants.FLAG_BLOCK_SYNCH);
 		}
 
 		if (isRice) {
-			world.setBlockMetadataWithNotify(pos.x, pos.y - 1, pos.z, 7, Constants.FLAG_BLOCK_SYNCH);
+			world.setBlockState(pos.add(0, -1, 0), block.getStateFromMeta(7), Constants.FLAG_BLOCK_SYNCH);
 		}
 
 		return harvest;

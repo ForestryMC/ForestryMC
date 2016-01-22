@@ -1,6 +1,5 @@
 package forestry.core.network;
 
-import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,17 +7,17 @@ import java.io.InvalidObjectException;
 import java.util.Collection;
 import java.util.List;
 
+import forestry.core.utils.ItemStackUtil;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraft.nbt.NBTSizeTracker;
 import net.minecraft.nbt.NBTTagCompound;
 
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-
-import cpw.mods.fml.common.registry.GameData;
 
 public class DataInputStreamForestry extends DataInputStream {
 
@@ -31,13 +30,13 @@ public class DataInputStreamForestry extends DataInputStream {
 		String itemName = readUTF();
 
 		if (!itemName.isEmpty()) {
-			Item item = GameData.getItemRegistry().getRaw(itemName);
+			Item item = ItemStackUtil.getItemFromRegistry(itemName);
 			byte stackSize = readByte();
 			int meta = readVarInt();
 			itemstack = new ItemStack(item, stackSize, meta);
 
 			if (item.isDamageable() || item.getShareTag()) {
-				itemstack.stackTagCompound = readNBTTagCompound();
+				itemstack.setTagCompound(readNBTTagCompound());
 			}
 		}
 
@@ -134,20 +133,21 @@ public class DataInputStreamForestry extends DataInputStream {
 		if (length < 0) {
 			return null;
 		} else {
-			byte[] compressed = new byte[length];
-			readFully(compressed);
-			return CompressedStreamTools.readCompressed(new ByteArrayInputStream(compressed));
+			return CompressedStreamTools.read(this, new NBTSizeTracker(2097152L));
 		}
 	}
 
 	public FluidStack readFluidStack() throws IOException {
-		int fluidId = readVarInt();
-		Fluid fluid = FluidRegistry.getFluid(fluidId);
-		if (fluid == null) {
-			return null;
-		}
-
 		int amount = readVarInt();
-		return new FluidStack(fluid, amount);
+		if(amount > 0){
+			String fluidName = readUTF();
+			Fluid fluid = FluidRegistry.getFluid(fluidName);
+			if (fluid == null) {
+				return null;
+			}
+	
+			return new FluidStack(fluid, amount);
+		}
+		return null;
 	}
 }

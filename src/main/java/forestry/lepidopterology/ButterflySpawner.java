@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.lepidopterology;
 
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.arboriculture.ILeafTickHandler;
@@ -23,7 +24,7 @@ import forestry.plugins.PluginLepidopterology;
 public class ButterflySpawner implements ILeafTickHandler {
 
 	@Override
-	public boolean onRandomLeafTick(ITree tree, World world, int x, int y, int z, boolean isDestroyed) {
+	public boolean onRandomLeafTick(ITree tree, World world, BlockPos pos, boolean isDestroyed) {
 		
 		if (world.rand.nextFloat() >= tree.getGenome().getSappiness() * tree.getGenome().getYield()) {
 			return false;
@@ -38,26 +39,26 @@ public class ButterflySpawner implements ILeafTickHandler {
 			return false;
 		}
 		
-		if (!spawn.canSpawn(world, x, y, z)) {
+		if (!spawn.canSpawn(world, pos.getX(), pos.getY(), pos.getZ())) {
 			return false;
 		}
 		
-		if (world.isAirBlock(x - 1, y, z)) {
-			attemptButterflySpawn(world, spawn, x - 1, y, z);
-		} else if (world.isAirBlock(x + 1, y, z)) {
-			attemptButterflySpawn(world, spawn, x + 1, y, z);
-		} else if (world.isAirBlock(x, y, z - 1)) {
-			attemptButterflySpawn(world, spawn, x, y, z - 1);
-		} else if (world.isAirBlock(x, y, z + 1)) {
-			attemptButterflySpawn(world, spawn, x, y, z + 1);
+		if (world.isAirBlock(pos.add(-1, 0, 0))) {
+			attemptButterflySpawn(world, spawn, pos.add(-1, 0, 0));
+		} else if (world.isAirBlock(pos.add(1, 0, 0))) {
+			attemptButterflySpawn(world, spawn, pos.add(1, 0, 0));
+		} else if (world.isAirBlock(pos.add(0, 0, -1))) {
+			attemptButterflySpawn(world, spawn, pos.add(0, 0, -1));
+		} else if (world.isAirBlock(pos.add(0, 0, 1))) {
+			attemptButterflySpawn(world, spawn, pos.add(0, 0, 1));
 		}
 		
 		return false;
 	}
 
-	private static void attemptButterflySpawn(World world, IButterfly butterfly, double x, double y, double z) {
-		if (ButterflyManager.butterflyRoot.spawnButterflyInWorld(world, butterfly.copy(), x, y + 0.1f, z) != null) {
-			Log.finest("Spawned a butterfly '%s' at %s/%s/%s.", butterfly.getDisplayName(), x, y, z);
+	private static void attemptButterflySpawn(World world, IButterfly butterfly, BlockPos pos) {
+		if (ButterflyManager.butterflyRoot.spawnButterflyInWorld(world, butterfly.copy(), pos.getX(), pos.getY() + 0.1f, pos.getZ()) != null) {
+			Log.finest("Spawned a butterfly '%s' at %s/%s/%s.", butterfly.getDisplayName(), pos.getX(), pos.getY(), pos.getZ());
 		}
 	}
 

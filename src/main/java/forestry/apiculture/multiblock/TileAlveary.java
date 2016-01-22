@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.biome.BiomeGenBase;
 
@@ -56,28 +56,23 @@ public abstract class TileAlveary extends MultiblockTileEntityForestry<Multibloc
 		this.unlocalizedTitle = "tile.for.alveary." + type.ordinal() + ".name";
 	}
 
-	/* TEXTURES */
-	public int getIcon(int side) {
-		return BlockAlveary.PLAIN;
-	}
-
 	@Override
-	public void onMachineAssembled(IMultiblockController multiblockController, ChunkCoordinates minCoord, ChunkCoordinates maxCoord) {
+	public void onMachineAssembled(IMultiblockController multiblockController, BlockPos minCoord, BlockPos maxCoord) {
 		// Re-render this block on the client
 		if (worldObj.isRemote) {
-			this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+			this.worldObj.markBlockForUpdate(getPos());
 		}
-		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, getBlockType());
-		markDirty();
+		worldObj.notifyBlockOfStateChange(getPos(), getBlockType());
+		//markDirty();
 	}
 
 	@Override
 	public void onMachineBroken() {
 		// Re-render this block on the client
 		if (worldObj.isRemote) {
-			this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+			this.worldObj.markBlockForUpdate(getPos());
 		}
-		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, getBlockType());
+		worldObj.notifyBlockOfStateChange(getPos(), getBlockType());
 		markDirty();
 	}
 

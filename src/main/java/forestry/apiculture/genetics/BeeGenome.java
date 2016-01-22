@@ -162,7 +162,7 @@ public class BeeGenome extends Genome implements IBeeGenome {
 	@Override
 	public int[] getTerritory() {
 		Vect area = ((AlleleArea) getActiveAllele(EnumBeeChromosome.TERRITORY)).getArea();
-		return new int[]{area.x, area.y, area.z};
+		return area.toArray();
 	}
 
 	@Override

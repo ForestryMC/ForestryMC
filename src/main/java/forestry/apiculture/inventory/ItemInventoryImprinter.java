@@ -124,7 +124,7 @@ public class ItemInventoryImprinter extends ItemInventory {
 	}
 
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "Imprinter";
 	}
 

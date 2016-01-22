@@ -10,24 +10,9 @@
  ******************************************************************************/
 package forestry.apiculture.render;
 
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.item.ItemStack;
+public class RenderBeeItem/* implements IItemRenderer*/ {
 
-import net.minecraftforge.client.IItemRenderer;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
-import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.IBee;
-import forestry.apiculture.entities.EntityBee;
-import forestry.core.proxy.Proxies;
-
-public class RenderBeeItem implements IItemRenderer {
-
-	private EntityBee entity;
+	/*private EntityBee entity;
 
 	private static float getWingYaw(IBee bee) {
 		float wingYaw = 1f;
@@ -75,7 +60,7 @@ public class RenderBeeItem implements IItemRenderer {
 			entity = new EntityBee(Proxies.common.getClientInstance().theWorld);
 		}
 		entity.setSpecies(bee.getGenome().getPrimary());
-		entity.setType(BeeManager.beeRoot.getType(item));
+		entity.setType(BeeManager.beeRoot.getType(item));*/
 		/*
 		if(scaled)
 			entity.setScale(butterfly.getSize());
@@ -83,8 +68,8 @@ public class RenderBeeItem implements IItemRenderer {
 			entity.setScale(EntityButterfly.DEFAULT_BUTTERFLY_SIZE);
 		 */
 
-		return bee;
-	}
+	/*	return bee;
+	}*/
 
 	/*private void renderBeeHalo() {
 
@@ -102,7 +87,7 @@ public class RenderBeeItem implements IItemRenderer {
         tessellator.draw();
 	}*/
 
-	private void renderBeeItem(IBee bee, float translateX, float translateY, float translateZ) {
+	/*private void renderBeeItem(IBee bee, float translateX, float translateY, float translateZ) {
 		float yaw = 1;
 		float pitch = 1;
 
@@ -136,7 +121,7 @@ public class RenderBeeItem implements IItemRenderer {
 
 	}
 
-	private void renderBeeInInventory(IBee bee) {
+	private void renderBeeInInventory(IBee bee) {*/
 
 		/*
 		GL11.glPushMatrix();
@@ -148,9 +133,9 @@ public class RenderBeeItem implements IItemRenderer {
         //GL11.glRotatef(-((float) Math.atan((double) (1 / 40.0F))) * 20.0F, 1.0F, 0.0F, 0.0F);
         renderBeeHalo();
         GL11.glPopMatrix();
-		 */
+		*/
 
-		GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
+		/*GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glEnable(GL11.GL_COLOR_MATERIAL);
 		RenderHelper.enableStandardItemLighting();
@@ -219,6 +204,6 @@ public class RenderBeeItem implements IItemRenderer {
 				break;
 			default:
 		}
-	}
+	}*/
 
 }

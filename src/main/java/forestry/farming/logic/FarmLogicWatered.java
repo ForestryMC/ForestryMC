@@ -17,6 +17,7 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fluids.FluidStack;
@@ -72,30 +73,30 @@ public abstract class FarmLogicWatered extends FarmLogic {
 	}
 
 	@Override
-	public boolean cultivate(int x, int y, int z, FarmDirection direction, int extent) {
+	public boolean cultivate(BlockPos pos, FarmDirection direction, int extent) {
 
-		if (maintainSoil(x, y, z, direction, extent)) {
+		if (maintainSoil(pos, direction, extent)) {
 			return true;
 		}
 
-		if (!isManual && maintainWater(x, y, z, direction, extent)) {
+		if (!isManual && maintainWater(pos, direction, extent)) {
 			return true;
 		}
 
-		if (maintainCrops(x, y + 1, z, direction, extent)) {
+		if (maintainCrops(pos.add(0, 1, 0), direction, extent)) {
 			return true;
 		}
 
 		return false;
 	}
 
-	private boolean maintainSoil(int x, int y, int z, FarmDirection direction, int extent) {
+	private boolean maintainSoil(BlockPos pos, FarmDirection direction, int extent) {
 
 		World world = getWorld();
 		ItemStack[] resources = new ItemStack[]{resource};
 
 		for (int i = 0; i < extent; i++) {
-			Vect position = translateWithOffset(x, y, z, direction, i);
+			Vect position = translateWithOffset(pos, direction, i);
 			Block soil = VectUtil.getBlock(world, position);
 
 			ItemStack soilStack = VectUtil.getAsItemStack(world, position);
@@ -129,11 +130,11 @@ public abstract class FarmLogicWatered extends FarmLogic {
 		return false;
 	}
 
-	private boolean maintainWater(int x, int y, int z, FarmDirection direction, int extent) {
+	private boolean maintainWater(BlockPos pos, FarmDirection direction, int extent) {
 		// Still not done, check water then
 		World world = getWorld();
 		for (int i = 0; i < extent; i++) {
-			Vect position = translateWithOffset(x, y, z, direction, i);
+			Vect position = translateWithOffset(pos, direction, i);
 
 			Vect platformPosition = position.add(0, -1, 0);
 			Block platformBlock = VectUtil.getBlock(world, platformPosition);
@@ -149,7 +150,7 @@ public abstract class FarmLogicWatered extends FarmLogic {
 		return false;
 	}
 
-	protected boolean maintainCrops(int x, int y, int z, FarmDirection direction, int extent) {
+	protected boolean maintainCrops(BlockPos pos, FarmDirection direction, int extent) {
 		return false;
 	}
 

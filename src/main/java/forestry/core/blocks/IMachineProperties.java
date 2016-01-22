@@ -11,8 +11,9 @@
 package forestry.core.blocks;
 
 import forestry.core.tiles.TileForestry;
+import net.minecraft.util.IStringSerializable;
 
-public interface IMachineProperties {
+public interface IMachineProperties extends IStringSerializable{
 	int getMeta();
 
 	String getTeIdent();

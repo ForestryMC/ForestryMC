@@ -52,15 +52,15 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 
 	@Override
 	protected void updateClientSide() {
-		update();
+		updates();
 	}
 	
 	@Override
 	protected void updateServerSide() {
-		update();
+		updates();
 	}
 
-	private void update() {
+	private void updates() {
 		prevLidAngle = lidAngle;
 
 		if (numPlayersUsing > 0 && lidAngle == 0.0F) {
@@ -85,7 +85,7 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 	}
 
 	private void playLidSound(String sound) {
-		worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, sound, 0.5F, worldObj.rand.nextFloat() * 0.1F + 0.9F);
+		worldObj.playSoundEffect(getPos().getX() + 0.5, getPos().getY() + 0.5, getPos().getZ() + 0.5, sound, 0.5F, worldObj.rand.nextFloat() * 0.1F + 0.9F);
 	}
 
 	@Override

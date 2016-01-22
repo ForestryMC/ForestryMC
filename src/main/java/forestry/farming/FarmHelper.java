@@ -14,9 +14,8 @@ import com.google.common.collect.ImmutableSet;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-
-import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.api.farming.FarmDirection;
 import forestry.api.multiblock.IFarmComponent;
@@ -35,8 +34,8 @@ public class FarmHelper {
 	);
 
 	private static FarmDirection getOpposite(FarmDirection farmDirection) {
-		ForgeDirection forgeDirection = farmDirection.getForgeDirection();
-		ForgeDirection forgeDirectionOpposite = forgeDirection.getOpposite();
+		EnumFacing forgeDirection = farmDirection.getForgeDirection();
+		EnumFacing forgeDirectionOpposite = forgeDirection.getOpposite();
 		return FarmDirection.getFarmDirection(forgeDirectionOpposite);
 	}
 

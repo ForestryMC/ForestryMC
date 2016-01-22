@@ -12,18 +12,13 @@ package forestry.core.items;
 
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import forestry.api.core.IModelManager;
 import forestry.core.config.Config;
-import forestry.core.render.TextureManager;
-import forestry.core.utils.StringUtil;
 
 public class ItemOverlay extends ItemForestry {
 	public interface IOverlayInfo {
@@ -65,40 +60,14 @@ public class ItemOverlay extends ItemForestry {
 			}
 		}
 	}
-
-	/* ICONS */
-	@SideOnly(Side.CLIENT)
-	private IIcon primaryIcon;
-	@SideOnly(Side.CLIENT)
-	private IIcon secondaryIcon;
-
+	
+	/* Models */
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerIcons(IIconRegister register) {
-		primaryIcon = TextureManager.registerTex(register, StringUtil.cleanItemName(this) + ".0");
-		if (overlays[0].getSecondaryColor() != 0) {
-			secondaryIcon = TextureManager.registerTex(register, StringUtil.cleanItemName(this) + ".1");
+	public void registerModel(Item item, IModelManager manager) {
+		for (int i = 0; i < overlays.length; i++) {
+			manager.registerItemModel(item, i, false);
 		}
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIconFromDamageForRenderPass(int i, int j) {
-		if (j > 0 && overlays[i].getSecondaryColor() != 0) {
-			return secondaryIcon;
-		} else {
-			return primaryIcon;
-		}
-	}
-
-	@Override
-	public int getRenderPasses(int metadata) {
-		return overlays[metadata].getSecondaryColor() != 0 ? 2 : 1;
-	}
-
-	@Override
-	public boolean requiresMultipleRenderPasses() {
-		return true;
 	}
 
 	@Override

@@ -13,22 +13,19 @@ package forestry.energy.render;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-
-import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
 import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.ForestryResource;
-import forestry.core.render.IBlockRenderer;
 import forestry.core.tiles.TemperatureState;
 import forestry.core.tiles.TileEngine;
 import forestry.core.utils.Log;
 
-public class RenderEngine extends TileEntitySpecialRenderer implements IBlockRenderer {
+public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
 
 	private final ModelBase model = new ModelBase() {
 	};
@@ -46,12 +43,12 @@ public class RenderEngine extends TileEntitySpecialRenderer implements IBlockRen
 	private static final float[] angleMap = new float[6];
 
 	static {
-		angleMap[ForgeDirection.EAST.ordinal()] = (float) -Math.PI / 2;
-		angleMap[ForgeDirection.WEST.ordinal()] = (float) Math.PI / 2;
-		angleMap[ForgeDirection.UP.ordinal()] = 0;
-		angleMap[ForgeDirection.DOWN.ordinal()] = (float) Math.PI;
-		angleMap[ForgeDirection.SOUTH.ordinal()] = (float) Math.PI / 2;
-		angleMap[ForgeDirection.NORTH.ordinal()] = (float) -Math.PI / 2;
+		angleMap[EnumFacing.EAST.ordinal()] = (float) -Math.PI / 2;
+		angleMap[EnumFacing.WEST.ordinal()] = (float) Math.PI / 2;
+		angleMap[EnumFacing.UP.ordinal()] = 0;
+		angleMap[EnumFacing.DOWN.ordinal()] = (float) Math.PI;
+		angleMap[EnumFacing.SOUTH.ordinal()] = (float) Math.PI / 2;
+		angleMap[EnumFacing.NORTH.ordinal()] = (float) -Math.PI / 2;
 	}
 
 	public RenderEngine() {
@@ -93,23 +90,22 @@ public class RenderEngine extends TileEntitySpecialRenderer implements IBlockRen
 				new ForestryResource(Constants.TEXTURE_PATH_BLOCKS + "/engine_trunk_medium.png"),
 				new ForestryResource(Constants.TEXTURE_PATH_BLOCKS + "/engine_trunk_low.png"),};
 	}
-
+	
 	@Override
-	public void inventoryRender(double x, double y, double z) {
-		render(TemperatureState.COOL, 0.25F, ForgeDirection.UP, x, y, z);
-	}
-
-	@Override
-	public void renderTileEntityAt(TileEntity tile, double d, double d1, double d2, float f) {
-		if (tile instanceof TileEngine) {
-			TileEngine tileEngine = (TileEngine) tile;
-			render(tileEngine.getTemperatureState(), tileEngine.progress, tileEngine.getOrientation(), d, d1, d2);
-		} else {
-			Log.severe("Tried to render a tile entity that is not an engine: " + tile);
+	public void renderTileEntityAt(TileEngine engine, double x, double y, double z, float partialTicks, int destroyStage) {
+		if(engine != null){
+			if (engine instanceof TileEngine) {
+				TileEngine tileEngine = engine;
+				render(tileEngine.getTemperatureState(), tileEngine.progress, tileEngine.getOrientation(), x, y, z);
+			} else {
+				Log.severe("Tried to render a tile entity that is not an engine: " + engine);
+			}
+		}else{
+			render(TemperatureState.COOL, 0.25F, EnumFacing.UP, x, y, z);
 		}
 	}
 
-	private void render(TemperatureState state, float progress, ForgeDirection orientation, double x, double y, double z) {
+	private void render(TemperatureState state, float progress, EnumFacing orientation, double x, double y, double z) {
 
 		GL11.glPushMatrix();
 		GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
@@ -131,7 +127,7 @@ public class RenderEngine extends TileEntitySpecialRenderer implements IBlockRen
 		float tfactor = step / 16;
 
 		float[] angle = {0, 0, 0};
-		float[] translate = {orientation.offsetX, orientation.offsetY, orientation.offsetZ};
+		float[] translate = {orientation.getFrontOffsetX(), orientation.getFrontOffsetY(), orientation.getFrontOffsetZ()};
 
 		switch (orientation) {
 			case EAST:

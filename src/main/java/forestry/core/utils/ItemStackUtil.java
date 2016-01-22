@@ -16,13 +16,17 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-
+import net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry;
+import net.minecraftforge.fml.common.registry.GameData;
 import net.minecraftforge.oredict.OreDictionary;
 
 public abstract class ItemStackUtil {
@@ -52,6 +56,94 @@ public abstract class ItemStackUtil {
 		}
 
 		return ItemStack.areItemStackTagsEqual(lhs, rhs);
+	}
+	
+	/**
+	 * 
+	 * @return The registry name of the item as {@link ResourceLocation}
+	 */
+	public static ResourceLocation getItemNameFromRegistry(Item item){
+		if(item == null){
+			return null;
+		}
+		FMLControlledNamespacedRegistry<Item> itemRegistry = GameData.getItemRegistry();
+		return itemRegistry.getNameForObject(item);
+	}
+	
+	/**
+	 * 
+	 * @return The registry name of the item as {@link String}
+	 */
+	public static String getItemNameFromRegistryAsSting(Item item){
+		return getItemNameFromRegistry(item).toString();
+	}
+	
+	/**
+	 * @return The item from the item registry
+	 * @param itemName The registry name from the item as {@link String}
+	 */
+	public static Item getItemFromRegistry(String itemName){
+		return getItemFromRegistry(new ResourceLocation(itemName));
+	}
+	
+	/**
+	 * @return The item from the item registry
+	 * @param itemName The registry name from the item as {@link ResourceLocation}
+	 */
+	public static Item getItemFromRegistry(ResourceLocation itemName){
+		if(itemName == null){
+			return null;
+		}
+		FMLControlledNamespacedRegistry<Item> itemRegistry = GameData.getItemRegistry();
+		int registryID = itemRegistry.getId(itemName);
+		if(registryID == -1){
+			return null;
+		}
+		return itemRegistry.getRaw(registryID);
+	}
+	
+	/**
+	 * 
+	 * @return The registry name of the block as {@link ResourceLocation}
+	 */
+	public static ResourceLocation getBlockNameFromRegistry(Block block){
+		if(block == null){
+			return null;
+		}
+		FMLControlledNamespacedRegistry<Block> blockRegistry = GameData.getBlockRegistry();
+		return blockRegistry.getNameForObject(block);
+	}
+	
+	/**
+	 * 
+	 * @return The registry name of the block as {@link String}
+	 */
+	public static String getBlockNameFromRegistryAsSting(Block block){
+		return getBlockNameFromRegistry(block).toString();
+	}
+	
+	/**
+	 * @return The block from the block registry
+	 * @param itemName The registry name from the block as {@link String}
+	 */
+	public static Block getBlockFromRegistry(String itemName){
+		return getBlockFromRegistry(new ResourceLocation(itemName));
+	}
+	
+	/**
+	 * @return The block from the block registry
+	 * @param itemName The registry name from the block as {@link ResourceLocation}
+	 */
+	public static Block getBlockFromRegistry(ResourceLocation itemName){
+		if(itemName == null){
+			return null;
+		}
+		FMLControlledNamespacedRegistry<Block> blockRegistry = GameData.getBlockRegistry();
+		int registryID = blockRegistry.getId(itemName);
+		if(registryID == -1){
+			return null;
+		}
+		return blockRegistry.getRaw(registryID);
 	}
 
 	/**
@@ -209,7 +301,7 @@ public abstract class ItemStackUtil {
 		}
 
 		// When the base stackTagCompound is null or empty, treat it as a wildcard for crafting
-		if (base.stackTagCompound == null || base.stackTagCompound.hasNoTags()) {
+		if (!base.hasTagCompound() || base.getTagCompound().hasNoTags()) {
 			return true;
 		} else {
 			return ItemStack.areItemStackTagsEqual(base, comparison);
@@ -232,7 +324,7 @@ public abstract class ItemStackUtil {
 			return true;
 		}
 
-		if (base.hasTagCompound() && !base.stackTagCompound.hasNoTags()) {
+		if (base.hasTagCompound() && !base.getTagCompound().hasNoTags()) {
 			if (!ItemStack.areItemStacksEqual(base, comparison)) {
 				return false;
 			}
@@ -267,15 +359,12 @@ public abstract class ItemStackUtil {
 		}
 
 		Item baseItem = base.getItem();
-		if (baseItem.doesContainerItemLeaveCraftingGrid(base)) {
-			return false;
-		}
 
 		if (baseItem != comparison.getItem()) {
 			return false;
 		}
 
-		if (base.stackTagCompound == null || base.stackTagCompound.hasNoTags()) {
+		if (!base.hasTagCompound() || base.getTagCompound().hasNoTags()) {
 			// tool uses meta for damage
 			return true;
 		} else {
@@ -290,6 +379,10 @@ public abstract class ItemStackUtil {
 	public static void dropItemStackAsEntity(ItemStack items, World world, double x, double y, double z) {
 		dropItemStackAsEntity(items, world, x, y, z, 10);
 	}
+	
+	public static void dropItemStackAsEntity(ItemStack items, World world, BlockPos pos) {
+		dropItemStackAsEntity(items, world, pos.getX(), pos.getY(), pos.getZ(), 10);
+	}
 
 	public static void dropItemStackAsEntity(ItemStack items, World world, double x, double y, double z, int delayForPickup) {
 		if (items.stackSize <= 0 || world.isRemote) {
@@ -301,7 +394,7 @@ public abstract class ItemStackUtil {
 		double d1 = (world.rand.nextFloat() * f1) + (1.0F - f1) * 0.5D;
 		double d2 = (world.rand.nextFloat() * f1) + (1.0F - f1) * 0.5D;
 		EntityItem entityitem = new EntityItem(world, x + d, y + d1, z + d2, items);
-		entityitem.delayBeforeCanPickup = delayForPickup;
+		entityitem.setPickupDelay(delayForPickup);
 
 		world.spawnEntityInWorld(entityitem);
 	}
@@ -317,7 +410,7 @@ public abstract class ItemStackUtil {
 		Item item = stack.getItem();
 
 		if (item instanceof ItemBlock) {
-			return ((ItemBlock) item).field_150939_a;
+			return ((ItemBlock) item).getBlock();
 		} else {
 			return null;
 		}
@@ -325,6 +418,10 @@ public abstract class ItemStackUtil {
 
 	public static boolean equals(Block block, ItemStack stack) {
 		return block == getBlock(stack);
+	}
+	
+	public static boolean equals(IBlockState state, ItemStack stack) {
+		return state.getBlock() == getBlock(stack) && state.getBlock().getMetaFromState(state) == stack.getItemDamage();
 	}
 
 	public static boolean equals(Block block, int meta, ItemStack stack) {

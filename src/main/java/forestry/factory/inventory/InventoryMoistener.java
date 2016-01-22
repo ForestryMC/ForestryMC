@@ -11,7 +11,7 @@
 package forestry.factory.inventory;
 
 import net.minecraft.item.ItemStack;
-
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.Fluid;
 
 import forestry.api.fuels.FuelManager;
@@ -53,7 +53,7 @@ public class InventoryMoistener extends InventoryAdapterTile<TileMoistener> {
 	}
 
 	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
+	public boolean canExtractItem(int slotIndex, ItemStack itemstack, EnumFacing side) {
 		if (slotIndex == SLOT_PRODUCT) {
 			return true;
 		}

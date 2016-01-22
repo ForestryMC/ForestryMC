@@ -13,8 +13,10 @@ package forestry.apiculture.worldgen;
 import java.util.HashSet;
 import java.util.Set;
 
+import forestry.core.utils.BlockUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 public class HiveGenGround extends HiveGen {
@@ -28,17 +30,17 @@ public class HiveGenGround extends HiveGen {
 	}
 
 	@Override
-	public boolean isValidLocation(World world, int x, int y, int z) {
-		Block ground = world.getBlock(x, y - 1, z);
+	public boolean isValidLocation(World world, BlockPos pos) {
+		Block ground = BlockUtil.getBlock(world, pos.add(0, -1, 0));
 		return groundMaterials.contains(ground.getMaterial());
 	}
 
 	@Override
 	public int getYForHive(World world, int x, int z) {
-		int y = world.getHeightValue(x, z);
+		int y = world.getHeight(new BlockPos(x, 0, z)).getY();
 
 		// get to the ground
-		while (y >= 0 && (world.getBlock(x, y - 1, z).isLeaves(world, x, y - 1, z) || canReplace(world, x, y - 1, z))) {
+		while (y >= 0 && (world.getBlockState(new BlockPos(x, y - 1, z)).getBlock().isLeaves(world, new BlockPos(x, y - 1, z)) || canReplace(world, new BlockPos(x, y - 1, z)))) {
 			y--;
 		}
 

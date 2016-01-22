@@ -48,10 +48,11 @@ public class ContainerNaturalistInventory extends ContainerTile<TileNaturalistCh
 	public void handleSelectionRequest(EntityPlayerMP player, PacketGuiSelectRequest packet) {
 		tile.flipPage(player, (short) packet.getPrimaryIndex());
 	}
-
+	
 	@Override
-	public void addCraftingToCrafters(ICrafting p_75132_1_) {
-		super.addCraftingToCrafters(p_75132_1_);
+	public void onCraftGuiOpened(ICrafting listener) {
+		super.onCraftGuiOpened(listener);
+		
 		tile.increaseNumPlayersUsing();
 	}
 

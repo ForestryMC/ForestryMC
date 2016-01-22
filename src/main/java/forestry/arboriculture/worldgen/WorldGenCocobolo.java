@@ -12,7 +12,7 @@ package forestry.arboriculture.worldgen;
 
 import java.util.List;
 
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.world.ITreeGenData;
@@ -25,12 +25,12 @@ public class WorldGenCocobolo extends WorldGenTree {
 	
 	@Override
 	public void generate(World world) {
-		List<ChunkCoordinates> treeTops = generateTreeTrunk(world, height, girth);
+		List<BlockPos> treeTops = generateTreeTrunk(world, height, girth);
 
 		int leafSpawn = height;
 
-		for (ChunkCoordinates treeTop : treeTops) {
-			addLeaf(world, treeTop.posX, treeTop.posY + 1, treeTop.posZ, EnumReplaceMode.NONE);
+		for (BlockPos treeTop : treeTops) {
+			addLeaf(world, treeTop.add(0, 1, 0), EnumReplaceMode.NONE);
 		}
 		leafSpawn--;
 		generateAdjustedCylinder(world, leafSpawn--, 1, 1, leaf);

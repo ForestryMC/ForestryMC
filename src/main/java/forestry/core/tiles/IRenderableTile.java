@@ -10,13 +10,12 @@
  ******************************************************************************/
 package forestry.core.tiles;
 
-import net.minecraftforge.common.util.ForgeDirection;
-
 import forestry.core.render.TankRenderInfo;
+import net.minecraft.util.EnumFacing;
 
 public interface IRenderableTile {
 
-	ForgeDirection getOrientation();
+	EnumFacing getOrientation();
 
 	TankRenderInfo getResourceTankInfo();
 

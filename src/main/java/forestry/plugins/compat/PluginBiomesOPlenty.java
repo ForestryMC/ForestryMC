@@ -16,12 +16,9 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-
+import net.minecraftforge.fml.common.event.FMLInterModComms;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
-
-import cpw.mods.fml.common.event.FMLInterModComms;
-import cpw.mods.fml.common.registry.GameData;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 import forestry.api.apiculture.FlowerManager;
 import forestry.api.core.ForestryAPI;
@@ -31,6 +28,7 @@ import forestry.api.storage.BackpackManager;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
 import forestry.core.recipes.RecipeUtil;
+import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.ModUtil;
 import forestry.farming.logic.FarmableBasicFruit;
@@ -95,7 +93,7 @@ public class PluginBiomesOPlenty extends ForestryPlugin {
 
 		for (String key : saplingItemKeys) {
 			Item saplingItem = GameRegistry.findItem(BoP, key);
-			String saplingName = GameData.getItemRegistry().getNameForObject(saplingItem);
+			String saplingName = ItemStackUtil.getItemNameFromRegistryAsSting(saplingItem);
 			FMLInterModComms.sendMessage(Constants.MOD, "add-farmable-sapling", String.format("farmArboreal@%s.-1", saplingName));
 		}
 

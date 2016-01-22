@@ -1,0 +1,7 @@
+{
+    "parent": "forestry:block/candle",
+    "textures": {
+      "candleStump": "forestry:blocks/candleStumpUnlit",
+      "candleTip":  "forestry:blocks/candleTipUnlit"
+    }
+}

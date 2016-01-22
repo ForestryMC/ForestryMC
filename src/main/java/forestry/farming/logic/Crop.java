@@ -13,11 +13,13 @@ package forestry.farming.logic;
 import java.util.Collection;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
 import forestry.core.config.Constants;
+import forestry.core.utils.BlockUtil;
 import forestry.core.utils.vect.Vect;
 
 public abstract class Crop implements ICrop {
@@ -31,15 +33,19 @@ public abstract class Crop implements ICrop {
 	}
 
 	protected final void setBlock(Vect position, Block block, int meta) {
-		world.setBlock(position.x, position.y, position.z, block, meta, Constants.FLAG_BLOCK_SYNCH);
+		world.setBlockState(position, block.getStateFromMeta(meta), Constants.FLAG_BLOCK_SYNCH);
 	}
 
 	protected final Block getBlock(Vect position) {
-		return world.getBlock(position.x, position.y, position.z);
+		return getBlockState(position).getBlock();
+	}
+	
+	protected final IBlockState getBlockState(Vect position) {
+		return BlockUtil.getBlockState(world, position);
 	}
 
 	protected final int getBlockMeta(Vect position) {
-		return world.getBlockMetadata(position.x, position.y, position.z);
+		return getBlock(position).getMetaFromState(getBlockState(position));
 	}
 
 	protected abstract boolean isCrop(Vect pos);

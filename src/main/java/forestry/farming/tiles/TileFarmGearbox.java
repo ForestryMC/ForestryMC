@@ -11,9 +11,7 @@
 package forestry.farming.tiles;
 
 import net.minecraft.nbt.NBTTagCompound;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
+import net.minecraft.util.EnumFacing;
 import forestry.api.multiblock.IFarmComponent;
 import forestry.api.multiblock.IFarmController;
 import forestry.core.tiles.IPowerHandler;
@@ -94,27 +92,27 @@ public class TileFarmGearbox extends TileFarm implements IPowerHandler, IFarmCom
 	}
 
 	@Override
-	public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
+	public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
 		return energyManager.receiveEnergy(from, maxReceive, simulate);
 	}
 
 	@Override
-	public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate) {
+	public int extractEnergy(EnumFacing from, int maxExtract, boolean simulate) {
 		return energyManager.extractEnergy(from, maxExtract, simulate);
 	}
 
 	@Override
-	public int getEnergyStored(ForgeDirection from) {
+	public int getEnergyStored(EnumFacing from) {
 		return energyManager.getEnergyStored(from);
 	}
 
 	@Override
-	public int getMaxEnergyStored(ForgeDirection from) {
+	public int getMaxEnergyStored(EnumFacing from) {
 		return energyManager.getMaxEnergyStored(from);
 	}
 
 	@Override
-	public boolean canConnectEnergy(ForgeDirection from) {
+	public boolean canConnectEnergy(EnumFacing from) {
 		return energyManager.canConnectEnergy(from);
 	}
 

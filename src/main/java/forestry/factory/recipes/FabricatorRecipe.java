@@ -12,15 +12,12 @@ package forestry.factory.recipes;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.recipes.IFabricatorRecipe;
-import forestry.core.recipes.RecipeUtil;
 import forestry.core.recipes.ShapedRecipeCustom;
-import forestry.core.utils.ItemStackUtil;
 
 public class FabricatorRecipe implements IFabricatorRecipe {
 
@@ -39,16 +36,6 @@ public class FabricatorRecipe implements IFabricatorRecipe {
 	}
 
 	@Override
-	@Deprecated
-	public boolean matches(@Nullable ItemStack plan, ItemStack[][] resources) {
-		if (this.plan != null && !ItemStackUtil.isCraftingEquivalent(this.plan, plan)) {
-			return false;
-		}
-
-		return RecipeUtil.matches(internal.getIngredients(), internal.getWidth(), internal.getHeight(), resources);
-	}
-
-	@Override
 	public Object[] getIngredients() {
 		return internal.getIngredients();
 	}
@@ -64,11 +51,6 @@ public class FabricatorRecipe implements IFabricatorRecipe {
 	}
 
 	@Override
-	public boolean preservesNbt() {
-		return false;
-	}
-
-	@Override
 	@Nullable
 	public ItemStack getPlan() {
 		return plan;
@@ -77,11 +59,6 @@ public class FabricatorRecipe implements IFabricatorRecipe {
 	@Override
 	public FluidStack getLiquid() {
 		return molten;
-	}
-
-	@Override
-	public ItemStack getCraftingResult(IInventory craftingInventory) {
-		return internal.getRecipeOutput().copy();
 	}
 
 	@Override

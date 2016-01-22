@@ -13,11 +13,13 @@ package forestry.farming.logic;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
 import forestry.core.config.Constants;
+import forestry.core.utils.BlockUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.vect.Vect;
 
@@ -32,19 +34,19 @@ public class FarmableBasicFruit implements IFarmable {
 	}
 
 	@Override
-	public boolean isSaplingAt(World world, int x, int y, int z) {
-		return world.getBlock(x, y, z) == block;
+	public boolean isSaplingAt(World world, BlockPos pos) {
+		return BlockUtil.getBlock(world, pos) == block;
 	}
 
 	@Override
-	public ICrop getCropAt(World world, int x, int y, int z) {
-		if (world.getBlock(x, y, z) != block) {
+	public ICrop getCropAt(World world, BlockPos pos) {
+		if (BlockUtil.getBlock(world, pos) != block) {
 			return null;
 		}
-		if (world.getBlockMetadata(x, y, z) != matureMeta) {
+		if (BlockUtil.getBlockMetadata(world, pos) != matureMeta) {
 			return null;
 		}
-		return new CropBasicFruit(world, block, matureMeta, new Vect(x, y, z));
+		return new CropBasicFruit(world, block, matureMeta, new Vect(pos));
 	}
 
 	@Override
@@ -53,8 +55,8 @@ public class FarmableBasicFruit implements IFarmable {
 	}
 
 	@Override
-	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, int x, int y, int z) {
-		return world.setBlock(x, y, z, block, 0, Constants.FLAG_BLOCK_SYNCH);
+	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
+		return world.setBlockState(pos, block.getStateFromMeta(0), Constants.FLAG_BLOCK_SYNCH);
 	}
 
 	@Override

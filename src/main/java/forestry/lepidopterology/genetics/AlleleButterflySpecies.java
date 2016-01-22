@@ -15,6 +15,8 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -22,11 +24,8 @@ import net.minecraft.world.World;
 import com.mojang.authlib.GameProfile;
 
 import net.minecraftforge.common.BiomeDictionary;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
-import forestry.api.core.IIconProvider;
+import forestry.api.core.IModelProvider;
+import forestry.api.core.ISpriteProvider;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IIndividual;
 import forestry.api.lepidopterology.ButterflyManager;
@@ -34,8 +33,9 @@ import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.api.lepidopterology.IAlleleButterflySpeciesCustom;
 import forestry.api.lepidopterology.IButterflyRoot;
 import forestry.core.genetics.alleles.AlleleSpecies;
+import forestry.lepidopterology.render.TextureAtlasButterfly;
 
-public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButterflySpeciesCustom {
+public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButterflySpeciesCustom, ISpriteProvider {
 	private final String texture;
 	private final Color serumColour;
 	private float rarity = 0.1f;
@@ -58,16 +58,19 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 		return ButterflyManager.butterflyRoot;
 	}
 
+	@Override
 	public AlleleButterflySpecies setRarity(float rarity) {
 		this.rarity = rarity;
 		return this;
 	}
 
+	@Override
 	public AlleleButterflySpecies setFlightDistance(float flightDistance) {
 		this.flightDistance = flightDistance;
 		return this;
 	}
 
+	@Override
 	public AlleleButterflySpecies setNocturnal() {
 		this.isActualNocturnal = true;
 		return this;
@@ -81,12 +84,6 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 	public AlleleButterflySpecies addSpawnBiome(BiomeDictionary.Type biomeTag) {
 		spawnBiomes.add(biomeTag);
 		return this;
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIconProvider getIconProvider() {
-		return null;
 	}
 
 	@Override
@@ -171,10 +168,30 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 	}
 
 	@Override
-	public int getIconColour(int renderPass) {
+	public int getSpriteColour(int renderPass) {
 		if (renderPass > 0) {
-			return 0xffffff;
+			return serumColour.getRGB() & 0xffffff;
 		}
-		return serumColour.getRGB() & 0xffffff;
+		return 0xffffff;
+	}
+
+	@Override
+	public IModelProvider getModelProvider() {
+		return null;
+	}
+
+	@Override
+	public ISpriteProvider getSpriteProvider() {
+		return this;
+	}
+	
+	@Override
+	public void registerSprites() {
+		Minecraft.getMinecraft().getTextureMapBlocks().setTextureEntry(texture.replace(".png", "").replace("textures/", ""), new TextureAtlasButterfly(texture.replace(".png", "").replace("textures/", "")));
+	}
+
+	@Override
+	public TextureAtlasSprite getSprite(short texUID) {
+		return null;
 	}
 }

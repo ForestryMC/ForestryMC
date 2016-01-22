@@ -989,6 +989,10 @@ public enum BeeDefinition implements IBeeDefinition {
 			bee.registerMutations();
 		}
 	}
+	
+	public static void preInit(){
+		
+	}
 
 	private void init() {
 		if (!overworldHiveBees.contains(this)) {

@@ -1,0 +1,12 @@
+{
+    "parent": "block/cube",
+    "textures": {
+        "particle": "forestry:blocks/philatelist.2",
+        "down": "forestry:blocks/philatelist.0",
+        "up": "forestry:blocks/philatelist.1",
+        "north": "forestry:blocks/philatelist.3",
+        "east": "forestry:blocks/philatelist.2",
+        "south": "forestry:blocks/philatelist.2",
+        "west": "forestry:blocks/philatelist.2"
+    }
+}

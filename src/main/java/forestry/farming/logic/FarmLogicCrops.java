@@ -15,6 +15,7 @@ import java.util.Stack;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import net.minecraftforge.oredict.OreDictionary;
@@ -72,13 +73,13 @@ public abstract class FarmLogicCrops extends FarmLogicWatered {
 	}
 
 	@Override
-	protected boolean maintainCrops(int x, int y, int z, FarmDirection direction, int extent) {
+	protected boolean maintainCrops(BlockPos pos, FarmDirection direction, int extent) {
 
 		World world = getWorld();
 
 		for (int i = 0; i < extent; i++) {
-			Vect position = translateWithOffset(x, y, z, direction, i);
-			if (!VectUtil.isAirBlock(world, position) && !BlockUtil.isReplaceableBlock(getWorld(), position.x, position.y, position.z)) {
+			Vect position = translateWithOffset(pos, direction, i);
+			if (!VectUtil.isAirBlock(world, position) && !BlockUtil.isReplaceableBlock(getWorld(), position)) {
 				continue;
 			}
 
@@ -100,7 +101,7 @@ public abstract class FarmLogicCrops extends FarmLogicWatered {
 		World world = getWorld();
 
 		for (IFarmable candidate : seeds) {
-			if (housing.plantGermling(candidate, world, position.getX(), position.getY(), position.getZ())) {
+			if (housing.plantGermling(candidate, world, position)) {
 				return true;
 			}
 		}
@@ -109,14 +110,14 @@ public abstract class FarmLogicCrops extends FarmLogicWatered {
 	}
 
 	@Override
-	public Collection<ICrop> harvest(int x, int y, int z, FarmDirection direction, int extent) {
+	public Collection<ICrop> harvest(BlockPos pos, FarmDirection direction, int extent) {
 		World world = getWorld();
 
 		Stack<ICrop> crops = new Stack<>();
 		for (int i = 0; i < extent; i++) {
-			Vect position = translateWithOffset(x, y + 1, z, direction, i);
+			Vect position = translateWithOffset(pos.add(0, 1, 0), direction, i);
 			for (IFarmable seed : seeds) {
-				ICrop crop = seed.getCropAt(world, position.x, position.y, position.z);
+				ICrop crop = seed.getCropAt(world, position);
 				if (crop != null) {
 					crops.push(crop);
 				}

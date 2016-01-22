@@ -5,26 +5,15 @@
  ******************************************************************************/
 package forestry.core.errors;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.util.IIcon;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorState;
 import forestry.core.config.Constants;
+import forestry.core.render.TextureManager;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public enum EnumErrorCode implements IErrorState {
-
-	@Deprecated
-	UNKNOWN("unknown"), // Congratulations, you found a glitch.
-	@Deprecated
-	WRONGSTACKSIZE("wrongStacksize"), // Only single items can be used here.
-	@Deprecated
-	NODISPOSAL("noDisposal"), // Insufficient space to dispose of waste products.
-	@Deprecated
-	INVALIDBIOME("invalidBiome"), // Machine or inhabitants cannot work in this biome.
 
 	// Bees
 	TOO_HOT("tooHot"), // The bees are melting in the heat here and unable to work. Use the habitat locator to find a cooler climate.
@@ -96,7 +85,7 @@ public enum EnumErrorCode implements IErrorState {
 	private final String name;
 	private final String iconName;
 	@SideOnly(Side.CLIENT)
-	private IIcon icon;
+	private TextureAtlasSprite texture;
 
 	EnumErrorCode(String name) {
 		this(name, name);
@@ -119,14 +108,14 @@ public enum EnumErrorCode implements IErrorState {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerIcons(IIconRegister register) {
-		icon = register.registerIcon("forestry:errors/" + iconName);
+	public void registerSprite() {
+		texture = TextureManager.registerSprite("items/errors/" + iconName);
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public IIcon getIcon() {
-		return icon;
+	public TextureAtlasSprite getSprite() {
+		return texture;
 	}
 
 	@Override

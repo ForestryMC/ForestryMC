@@ -10,33 +10,34 @@
  ******************************************************************************/
 package forestry.core.utils.vect;
 
-import net.minecraft.util.ChunkCoordinates;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
 import forestry.api.farming.FarmDirection;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 
 /**
  * Represents changeable positions or dimensions.
  */
-public class MutableVect implements IVect {
+public class MutableVect extends IVect {
 	public int x;
 	public int y;
 	public int z;
 
 	public MutableVect(int x, int y, int z) {
+		super(0, 0, 0);
 		this.x = x;
 		this.y = y;
 		this.z = z;
 	}
 
-	public MutableVect(ForgeDirection direction) {
-		this.x = direction.offsetX;
-		this.y = direction.offsetY;
-		this.z = direction.offsetZ;
+	public MutableVect(EnumFacing direction) {
+		super(0, 0, 0);
+		this.x = direction.getFrontOffsetX();
+		this.y = direction.getFrontOffsetY();
+		this.z = direction.getFrontOffsetZ();
 	}
 
 	public MutableVect(int[] dim) {
+		super(0, 0, 0);
 		if (dim.length != 3) {
 			throw new RuntimeException("Cannot instantiate a vector with less or more than 3 points.");
 		}
@@ -46,18 +47,21 @@ public class MutableVect implements IVect {
 		this.z = dim[2];
 	}
 
-	public MutableVect(ChunkCoordinates coordinates) {
-		this.x = coordinates.posX;
-		this.y = coordinates.posY;
-		this.z = coordinates.posZ;
+	public MutableVect(BlockPos pos) {
+		super(0, 0, 0);
+		this.x = pos.getX();
+		this.y = pos.getY();
+		this.z = pos.getZ();
 	}
 
 	public MutableVect(IVect vect) {
+		super(0, 0, 0);
 		this.x = vect.getX();
 		this.y = vect.getY();
 		this.z = vect.getZ();
 	}
 
+	@Override
 	public MutableVect add(IVect other) {
 		x += other.getX();
 		y += other.getY();
@@ -65,6 +69,7 @@ public class MutableVect implements IVect {
 		return this;
 	}
 
+	@Override
 	public MutableVect add(int x, int y, int z) {
 		this.x += x;
 		this.y += y;
@@ -73,10 +78,10 @@ public class MutableVect implements IVect {
 	}
 
 	@Override
-	public MutableVect add(ForgeDirection direction) {
-		this.x += direction.offsetX;
-		this.y += direction.offsetY;
-		this.z += direction.offsetZ;
+	public MutableVect add(EnumFacing direction) {
+		this.x += direction.getFrontOffsetX();
+		this.y += direction.getFrontOffsetY();
+		this.z += direction.getFrontOffsetZ();
 		return this;
 	}
 
@@ -86,10 +91,10 @@ public class MutableVect implements IVect {
 	}
 
 	@Override
-	public MutableVect add(ChunkCoordinates coordinates) {
-		this.x += coordinates.posX;
-		this.y += coordinates.posY;
-		this.z += coordinates.posZ;
+	public MutableVect add(BlockPos pos) {
+		this.x += pos.getX();
+		this.y += pos.getY();
+		this.z += pos.getZ();
 		return this;
 	}
 
@@ -107,17 +112,17 @@ public class MutableVect implements IVect {
 
 	public boolean advancePositionInArea(Vect area) {
 		// Increment z first until end reached
-		if (z < area.z - 1) {
+		if (z < area.getZ() - 1) {
 			z++;
 		} else {
 			z = 0;
 
-			if (x < area.x - 1) {
+			if (x < area.getX() - 1) {
 				x++;
 			} else {
 				x = 0;
 
-				if (y < area.y - 1) {
+				if (y < area.getY() - 1) {
 					y++;
 				} else {
 					return false;

@@ -11,11 +11,11 @@
 package forestry.apiculture.genetics.alleles;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-
-import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
@@ -57,19 +57,20 @@ public class AlleleEffectSnowing extends AlleleEffectThrottled {
 			posBlock = posBlock.add(offset);
 
 			// Put snow on the ground
-			if (!world.isSideSolid(posBlock.x, posBlock.y - 1, posBlock.z, ForgeDirection.UP, false)) {
+			if (!world.isSideSolid(new BlockPos(posBlock.getX(), posBlock.getY() - 1, posBlock.getZ()), EnumFacing.UP, false)) {
 				continue;
 			}
 
-			Block block = world.getBlock(posBlock.x, posBlock.y, posBlock.z);
+			IBlockState state = world.getBlockState(posBlock);
+			Block block = state.getBlock();
 
 			if (block == Blocks.snow_layer) {
-				int meta = world.getBlockMetadata(posBlock.x, posBlock.y, posBlock.z);
+				int meta = block.getMetaFromState(state);
 				if (meta < 7) {
-					world.setBlockMetadataWithNotify(posBlock.x, posBlock.y, posBlock.z, meta + 1, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
+					world.setBlockState(posBlock, block.getStateFromMeta(meta + 1), Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
 				}
-			} else if (block.isReplaceable(world, posBlock.x, posBlock.y, posBlock.z)) {
-				world.setBlock(posBlock.x, posBlock.y, posBlock.z, Blocks.snow_layer, 0, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
+			} else if (block.isReplaceable(world, posBlock)) {
+				world.setBlockState(posBlock, Blocks.snow_layer.getStateFromMeta(0), Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
 			}
 		}
 
@@ -82,11 +83,11 @@ public class AlleleEffectSnowing extends AlleleEffectThrottled {
 			Vect area = getModifiedArea(genome, housing);
 			Vect offset = area.multiply(-0.5F);
 
-			ChunkCoordinates coordinates = housing.getCoordinates();
+			BlockPos coordinates = housing.getCoordinates();
 			World world = housing.getWorld();
 
 			Vect spawn = Vect.getRandomPositionInArea(world.rand, area).add(coordinates).add(offset);
-			Proxies.render.addEntitySnowFX(world, spawn.x, spawn.y, spawn.z);
+			Proxies.render.addEntitySnowFX(world, spawn.getX(), spawn.getY(), spawn.getZ());
 			return storedData;
 		} else {
 			return super.doFX(genome, storedData, housing);

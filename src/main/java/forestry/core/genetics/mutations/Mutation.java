@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.BiomeDictionary;
@@ -124,10 +125,10 @@ public abstract class Mutation implements IMutationCustom {
 		return this;
 	}
 
-	protected float getChance(World world, int x, int y, int z, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1) {
+	protected float getChance(World world, BlockPos pos, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1) {
 		float mutationChance = chance;
 		for (IMutationCondition mutationCondition : mutationConditions) {
-			mutationChance *= mutationCondition.getChance(world, x, y, z, allele0, allele1, genome0, genome1);
+			mutationChance *= mutationCondition.getChance(world, pos, allele0, allele1, genome0, genome1);
 			if (mutationChance == 0) {
 				return 0;
 			}

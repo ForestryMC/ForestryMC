@@ -13,7 +13,7 @@ package forestry.apiculture;
 import java.util.Random;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.apiculture.BeeManager;
@@ -32,7 +32,7 @@ public class HasFlowersCache implements INBTTagable {
 	private static final int flowerCheckInterval = 128;
 
 	private final int flowerCheckTime = random.nextInt(flowerCheckInterval);
-	private ChunkCoordinates flowerCoords = null;
+	private BlockPos flowerCoords = null;
 	private int cooldown = 0;
 
 	public boolean hasFlowers(IBee queen, IBeeHousing beeHousing) {
@@ -46,7 +46,7 @@ public class HasFlowersCache implements INBTTagable {
 			}
 
 			IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(beeHousing);
-			ChunkCoordinates housingCoords = beeHousing.getCoordinates();
+			BlockPos housingCoords = beeHousing.getCoordinates();
 
 			int[] genomeTerritory = queen.getGenome().getTerritory();
 			float housingModifier = beeModifier.getTerritoryModifier(queen.getGenome(), 1f);
@@ -76,11 +76,11 @@ public class HasFlowersCache implements INBTTagable {
 		if (!isFlowerCoordInRange(flowerCoords, min, max)) {
 			return false;
 		}
-		return FlowerManager.flowerRegistry.isAcceptedFlower(flowerType, world, flowerCoords.posX, flowerCoords.posY, flowerCoords.posZ);
+		return FlowerManager.flowerRegistry.isAcceptedFlower(flowerType, world, flowerCoords);
 	}
 
-	private static boolean isFlowerCoordInRange(ChunkCoordinates flowerCoords, Vect min, Vect max) {
-		return flowerCoords.posX >= min.x && flowerCoords.posX <= max.x && flowerCoords.posY >= min.y && flowerCoords.posY <= max.y && flowerCoords.posZ >= min.z && flowerCoords.posZ <= max.z;
+	private static boolean isFlowerCoordInRange(BlockPos flowerCoords, Vect min, Vect max) {
+		return flowerCoords.getX() >= min.getX() && flowerCoords.getX() <= max.getX() && flowerCoords.getY() >= min.getY() && flowerCoords.getY() <= max.getY() && flowerCoords.getZ() >= min.getZ() && flowerCoords.getZ() <= max.getZ();
 	}
 
 	@Override
@@ -94,7 +94,7 @@ public class HasFlowersCache implements INBTTagable {
 			int x = hasFlowerCacheNBT.getInteger("flowerX");
 			int y = hasFlowerCacheNBT.getInteger("flowerY");
 			int z = hasFlowerCacheNBT.getInteger("flowerZ");
-			flowerCoords = new ChunkCoordinates(x, y, z);
+			flowerCoords = new BlockPos(x, y, z);
 		}
 
 		cooldown = hasFlowerCacheNBT.getInteger("cooldown");
@@ -104,9 +104,9 @@ public class HasFlowersCache implements INBTTagable {
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 		NBTTagCompound hasFlowerCacheNBT = new NBTTagCompound();
 		if (flowerCoords != null) {
-			hasFlowerCacheNBT.setInteger("flowerX", flowerCoords.posX);
-			hasFlowerCacheNBT.setInteger("flowerY", flowerCoords.posY);
-			hasFlowerCacheNBT.setInteger("flowerZ", flowerCoords.posZ);
+			hasFlowerCacheNBT.setInteger("flowerX", flowerCoords.getX());
+			hasFlowerCacheNBT.setInteger("flowerY", flowerCoords.getY());
+			hasFlowerCacheNBT.setInteger("flowerZ", flowerCoords.getZ());
 		}
 		hasFlowerCacheNBT.setInteger("cooldown", cooldown);
 

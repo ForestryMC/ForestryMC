@@ -14,12 +14,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.genetics.IFlowerGrowthHelper;
 import forestry.api.genetics.IFlowerGrowthRule;
-import forestry.api.genetics.IFlowerRegistry;
-import forestry.api.genetics.IIndividual;
 
 public class GrowthRuleFertilize implements IFlowerGrowthRule {
 
@@ -30,21 +30,17 @@ public class GrowthRuleFertilize implements IFlowerGrowthRule {
 	}
 
 	@Override
-	public boolean growFlower(IFlowerRegistry fr, String flowerType, World world, IIndividual individual, int x, int y, int z) {
-		return growFlower(world, x, y, z);
+	public boolean growFlower(IFlowerGrowthHelper helper, String flowerType, World world, BlockPos pos) {
+		return growFlower(world, pos);
 	}
 
-	@Override
-	public boolean growFlower(IFlowerGrowthHelper helper, String flowerType, World world, int x, int y, int z) {
-		return growFlower(world, x, y, z);
-	}
-
-	private boolean growFlower(World world, int x, int y, int z) {
-		Block ground = world.getBlock(x, y, z);
+	private boolean growFlower(World world, BlockPos pos) {
+		IBlockState state = world.getBlockState(pos);
+		Block ground = state.getBlock();
 		int groundMeta;
 		for (Block b : this.allowedItems) {
 			if (b == ground) {
-				groundMeta = world.getBlockMetadata(x, y, z);
+				groundMeta = ground.getMetaFromState(state);
 				if (groundMeta > 6) {
 					return false;
 				}
@@ -54,7 +50,7 @@ public class GrowthRuleFertilize implements IFlowerGrowthRule {
 					groundMeta = 7;
 				}
 
-				return world.setBlockMetadataWithNotify(x, y, z, groundMeta, 2);
+				return world.setBlockState(pos, ground.getStateFromMeta(groundMeta), 2);
 			}
 		}
 

@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
@@ -51,6 +52,11 @@ public abstract class WorldGenTree extends WorldGenArboriculture {
 		float cent = girth % 2 == 0 ? 0.5f : 0f;
 		return new Vector(cent + xOffset, yCenter, cent + zOffset);
 	}
+	
+	protected Vector getCenteredAt(BlockPos centerPos) {
+		float cent = girth % 2 == 0 ? 0.5f : 0f;
+		return new Vector(cent + centerPos.getX(), centerPos.getY(), cent + centerPos.getZ());
+	}
 
 	protected void generateAdjustedCylinder(World world, int yCenter, float radius, int height, ITreeBlockType block) {
 		generateAdjustedCylinder(world, yCenter, 0, 0, radius, height, block, EnumReplaceMode.SOFT);
@@ -64,22 +70,32 @@ public abstract class WorldGenTree extends WorldGenArboriculture {
 		Vector center = getCenteredAt(yCenter, xOffset, zOffset);
 		generateCylinder(world, center, radius + girth, height, block, replace);
 	}
+	
+	protected void generateAdjustedCylinder(World world, BlockPos centerPos, float radius, int height, ITreeBlockType block, EnumReplaceMode replace) {
+		Vector center = getCenteredAt(centerPos);
+		generateCylinder(world, center, radius + girth, height, block, replace);
+	}
 
 	protected void generateAdjustedCircle(World world, int yCenter, int xOffset, int zOffset, float radius, int width, int height, ITreeBlockType block, float chance, EnumReplaceMode replace) {
 		Vector center = getCenteredAt(yCenter, xOffset, zOffset);
 		generateCircle(world, center, radius, width, height, block, chance, replace);
 	}
-
-	@Override
-	public boolean canGrow(World world, int x, int y, int z) {
-		return tree.canGrow(world, x, y, z, girth, height);
+	
+	protected void generateAdjustedCircle(World world, BlockPos centerPos, float radius, int width, int height, ITreeBlockType block, float chance, EnumReplaceMode replace) {
+		Vector center = getCenteredAt(centerPos);
+		generateCircle(world, center, radius, width, height, block, chance, replace);
 	}
 
 	@Override
-	public final void preGenerate(World world, int startX, int startY, int startZ) {
-		super.preGenerate(world, startX, startY, startZ);
+	public boolean canGrow(World world, BlockPos pos) {
+		return tree.canGrow(world, pos, girth, height);
+	}
+
+	@Override
+	public final void preGenerate(World world, BlockPos startPos) {
+		super.preGenerate(world, startPos);
 		height = determineHeight(world, baseHeight, heightVariation);
-		girth = tree.getGirth(world, startX, startY, startZ);
+		girth = tree.getGirth(world, startPos);
 	}
 
 	protected int modifyByHeight(World world, int val, int min, int max) {

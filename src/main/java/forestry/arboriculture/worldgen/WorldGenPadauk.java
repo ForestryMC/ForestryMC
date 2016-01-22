@@ -12,9 +12,9 @@ package forestry.arboriculture.worldgen;
 
 import java.util.Random;
 
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-
-import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.api.world.ITreeGenData;
 
@@ -50,8 +50,8 @@ public class WorldGenPadauk extends WorldGenTree {
 					int offsetValue = (offset[new Random().nextInt(offset.length)]);
 					int maxBranchLength = 3;
 					int branchLength = new Random().nextInt(maxBranchLength + 1);
-					ForgeDirection[] direction = {ForgeDirection.NORTH, ForgeDirection.EAST};
-					ForgeDirection directionValue = (direction[new Random().nextInt(direction.length)]);
+					EnumFacing[] direction = {EnumFacing.NORTH, EnumFacing.EAST};
+					EnumFacing directionValue = (direction[new Random().nextInt(direction.length)]);
 					int branchSpawn = leafSpawn;
 
 					for (int j = 1; j < branchLength + 1; j++) {
@@ -60,10 +60,10 @@ public class WorldGenPadauk extends WorldGenTree {
 						}
 
 						wood.setDirection(directionValue);
-						if (directionValue == ForgeDirection.NORTH) {
-							addWood(world, 0, branchSpawn, j * offsetValue, EnumReplaceMode.ALL);
-						} else if (directionValue == ForgeDirection.EAST) {
-							addWood(world, j * offsetValue, branchSpawn, 0, EnumReplaceMode.ALL);
+						if (directionValue == EnumFacing.NORTH) {
+							addWood(world, new BlockPos(0, branchSpawn, j * offsetValue), EnumReplaceMode.ALL);
+						} else if (directionValue == EnumFacing.EAST) {
+							addWood(world, new BlockPos(j * offsetValue, branchSpawn, 0), EnumReplaceMode.ALL);
 						}
 					}
 				}

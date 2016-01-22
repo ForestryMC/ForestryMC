@@ -1,0 +1,8 @@
+{
+  "parent": "forestry:block/arboriculture/planks/chestnut",
+  "textures": {
+    "side": "forestry:blocks/wood/planks.chestnut",
+    "top": "forestry:blocks/wood/planks.chestnut",
+    "bottom": "forestry:blocks/wood/planks.chestnut"
+  }
+}

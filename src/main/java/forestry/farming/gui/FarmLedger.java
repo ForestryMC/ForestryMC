@@ -10,10 +10,13 @@
  ******************************************************************************/
 package forestry.farming.gui;
 
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.init.Items;
-
+import net.minecraft.item.ItemStack;
 import forestry.core.gui.ledgers.Ledger;
 import forestry.core.gui.ledgers.LedgerManager;
+import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
 
 public class FarmLedger extends Ledger {
@@ -39,7 +42,9 @@ public class FarmLedger extends Ledger {
 		int xHeader = x + 22;
 
 		// Draw icon
-		drawIcon(Items.water_bucket.getIconFromDamage(0), xIcon, y);
+		IBakedModel iBakedModel = Proxies.common.getClientInstance().getRenderItem().getItemModelMesher().getItemModel(new ItemStack(Items.water_bucket));
+		TextureAtlasSprite textureAtlasSprite = Proxies.common.getClientInstance().getTextureMapBlocks().getAtlasSprite(iBakedModel.getParticleTexture().getIconName());
+		drawSprite(textureAtlasSprite, xIcon, y);
 		y += 4;
 
 		if (!isFullyOpened()) {

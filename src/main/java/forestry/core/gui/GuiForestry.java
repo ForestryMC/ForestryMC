@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import java.util.Collections;
+import java.io.IOException;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
@@ -23,10 +23,9 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-import cpw.mods.fml.common.Optional;
+import net.minecraftforge.fml.common.Optional;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -46,12 +45,8 @@ import forestry.core.render.FontColour;
 import forestry.core.tiles.IClimatised;
 import forestry.core.tiles.IPowerHandler;
 
-import codechicken.nei.VisiblityData;
-import codechicken.nei.api.INEIGuiHandler;
-import codechicken.nei.api.TaggedInventoryArea;
-
 @Optional.Interface(iface = "codechicken.nei.api.INEIGuiHandler", modid = "NotEnoughItems")
-public abstract class GuiForestry<C extends Container, I extends IInventory> extends GuiContainer implements INEIGuiHandler {
+public abstract class GuiForestry<C extends Container, I extends IInventory> extends GuiContainer /*implements INEIGuiHandler*/ {
 	protected final I inventory;
 	protected final C container;
 
@@ -142,19 +137,19 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 	}
 
 	@Override
-	protected void mouseClicked(int xPos, int yPos, int mouseButton) {
+	protected void mouseClicked(int xPos, int yPos, int mouseButton) throws IOException {
 		super.mouseClicked(xPos, yPos, mouseButton);
 
 		// / Handle ledger clicks
 		ledgerManager.handleMouseClicked(xPos, yPos, mouseButton);
 		widgetManager.handleMouseClicked(xPos, yPos, mouseButton);
 	}
-
+	
 	@Override
-	protected void mouseMovedOrUp(int mouseX, int mouseY, int eventType) {
-		super.mouseMovedOrUp(mouseX, mouseY, eventType);
-
-		widgetManager.handleMouseRelease(mouseX, mouseY, eventType);
+	protected void mouseReleased(int mouseX, int mouseY, int state) {
+		super.mouseReleased(mouseX, mouseY, state);
+		
+		widgetManager.handleMouseRelease(mouseX, mouseY, state);
 	}
 
 	@Override
@@ -167,7 +162,7 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 
 	protected Slot getSlotAtPosition(int par1, int par2) {
 		for (int k = 0; k < this.inventorySlots.inventorySlots.size(); ++k) {
-			Slot slot = (Slot) this.inventorySlots.inventorySlots.get(k);
+			Slot slot = this.inventorySlots.inventorySlots.get(k);
 
 			if (isMouseOverSlot(slot, par1, par2)) {
 				return slot;
@@ -178,7 +173,7 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 	}
 
 	private boolean isMouseOverSlot(Slot par1Slot, int par2, int par3) {
-		return this.func_146978_c(par1Slot.xDisplayPosition, par1Slot.yDisplayPosition, 16, 16, par2, par3);
+		return isPointInRegion(par1Slot.xDisplayPosition, par1Slot.yDisplayPosition, 16, 16, par2, par3);
 	}
 
 	@Override
@@ -250,7 +245,7 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 	}
 
 	public static RenderItem getItemRenderer() {
-		return itemRender;
+		return Proxies.common.getClientInstance().getRenderItem();
 	}
 
 	public int getSizeX() {
@@ -275,7 +270,7 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 	}
 
 	/* NEI */
-	@Override
+	/*@Override
 	@Optional.Method(modid = "NotEnoughItems")
 	public VisiblityData modifyVisiblity(GuiContainer gui, VisiblityData currentVisibility) {
 		return null;
@@ -307,5 +302,5 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 		} else {
 			return false;
 		}
-	}
+	}*/
 }

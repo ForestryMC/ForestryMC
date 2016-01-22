@@ -19,14 +19,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
-
 import net.minecraftforge.oredict.OreDictionary;
-
-import cpw.mods.fml.common.registry.GameData;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.storage.IBackpackDefinition;
+import forestry.core.utils.ItemStackUtil;
 
 public class BackpackDefinition implements IBackpackDefinition {
 
@@ -60,8 +58,8 @@ public class BackpackDefinition implements IBackpackDefinition {
 		Item item = backpack.getItem();
 		String display = ("" + StatCollector.translateToLocal(item.getUnlocalizedNameInefficiently(backpack) + ".name")).trim();
 
-		if (backpack.stackTagCompound != null && backpack.stackTagCompound.hasKey("display", 10)) {
-			NBTTagCompound nbt = backpack.stackTagCompound.getCompoundTag("display");
+		if (backpack.hasTagCompound() && backpack.getTagCompound().hasKey("display", 10)) {
+			NBTTagCompound nbt = backpack.getTagCompound().getCompoundTag("display");
 
 			if (nbt.hasKey("Name", 8)) {
 				display = nbt.getString("Name");
@@ -92,7 +90,7 @@ public class BackpackDefinition implements IBackpackDefinition {
 			return;
 		}
 
-		String itemStackString = GameData.getItemRegistry().getNameForObject(item);
+		String itemStackString = ItemStackUtil.getItemNameFromRegistryAsSting(item);
 
 		int meta = validItem.getItemDamage();
 		if (meta != OreDictionary.WILDCARD_VALUE) {
@@ -178,7 +176,7 @@ public class BackpackDefinition implements IBackpackDefinition {
 			return false;
 		}
 
-		String itemStackStringWild = GameData.getItemRegistry().getNameForObject(item);
+		String itemStackStringWild = ItemStackUtil.getItemNameFromRegistryAsSting(item);
 		if (validItemStacks.contains(itemStackStringWild)) {
 			return true;
 		}

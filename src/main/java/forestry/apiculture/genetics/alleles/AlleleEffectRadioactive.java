@@ -72,35 +72,35 @@ public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 			Vect posBlock = randomPos.add(posHousing);
 			posBlock = posBlock.add(offset);
 
-			if (posBlock.y <= 1 || posBlock.y >= housing.getWorld().getActualHeight()) {
+			if (posBlock.getY() <= 1 || posBlock.getY() >= housing.getWorld().getActualHeight()) {
 				continue;
 			}
 
 			// Don't destroy ourselves or blocks below us.
-			if (posBlock.x == posHousing.x && posBlock.z == posHousing.z && posBlock.y <= posHousing.y) {
+			if (posBlock.getX() == posHousing.getX() && posBlock.getZ() == posHousing.getZ() && posBlock.getY() <= posHousing.getY()) {
 				continue;
 			}
 
-			if (world.isAirBlock(posBlock.x, posBlock.y, posBlock.z)) {
+			if (world.isAirBlock(posBlock)) {
 				continue;
 			}
 
-			Block block = world.getBlock(posBlock.x, posBlock.y, posBlock.z);
+			Block block = world.getBlockState(posBlock).getBlock();
 
 			if (block instanceof BlockAlveary) {
 				continue;
 			}
 
-			TileEntity tile = world.getTileEntity(posBlock.x, posBlock.y, posBlock.z);
+			TileEntity tile = world.getTileEntity(posBlock);
 			if (tile instanceof IBeeHousing) {
 				continue;
 			}
 
-			if (block.getBlockHardness(world, posBlock.x, posBlock.y, posBlock.z) < 0) {
+			if (block.getBlockHardness(world, posBlock) < 0) {
 				continue;
 			}
 
-			world.setBlockToAir(posBlock.x, posBlock.y, posBlock.z);
+			world.setBlockToAir(posBlock);
 			break;
 		}
 

@@ -88,7 +88,7 @@ public class ItemInventoryInfuser extends ItemInventory {
 	}
 
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "Infuser";
 	}
 

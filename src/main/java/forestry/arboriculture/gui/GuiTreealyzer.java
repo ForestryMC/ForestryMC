@@ -38,6 +38,7 @@ import forestry.core.genetics.alleles.AlleleBoolean;
 import forestry.core.genetics.alleles.AllelePlantType;
 import forestry.core.gui.ContainerAlyzer;
 import forestry.core.gui.GuiAlyzer;
+import forestry.core.inventory.ItemInventoryAlyzer;
 import forestry.core.utils.StringUtil;
 import forestry.plugins.PluginArboriculture;
 
@@ -63,8 +64,8 @@ public class GuiTreealyzer extends GuiAlyzer {
 		int page = 0;
 		ITree tree = null;
 		EnumGermlingType treeType = EnumGermlingType.SAPLING;
-		for (int k = 1; k < ItemInventoryTreealyzer.SLOT_ANALYZE_5 + 1; k++) {
-			if (k == ItemInventoryTreealyzer.SLOT_ENERGY) {
+		for (int k = 1; k < ItemInventoryAlyzer.SLOT_ANALYZE_5 + 1; k++) {
+			if (k == ItemInventoryAlyzer.SLOT_ENERGY) {
 				continue;
 			}
 
@@ -276,7 +277,7 @@ public class GuiTreealyzer extends GuiAlyzer {
 
 		int x = COLUMN_0;
 		for (ItemStack stack : tree.getProduceList()) {
-			itemRender.renderItemIntoGUI(fontRendererObj, mc.renderEngine, stack, guiLeft + x, guiTop + textLayout.getLineY());
+			itemRender.renderItemIntoGUI(stack, guiLeft + x, guiTop + textLayout.getLineY());
 			x += 18;
 			if (x > 148) {
 				x = COLUMN_0;
@@ -294,7 +295,7 @@ public class GuiTreealyzer extends GuiAlyzer {
 
 		x = COLUMN_0;
 		for (ItemStack stack : tree.getSpecialtyList()) {
-			itemRender.renderItemIntoGUI(fontRendererObj, mc.renderEngine, stack, guiLeft + x, guiTop + textLayout.getLineY());
+			itemRender.renderItemIntoGUI(stack, guiLeft + x, guiTop + textLayout.getLineY());
 			x += 18;
 			if (x > 148) {
 				x = COLUMN_0;

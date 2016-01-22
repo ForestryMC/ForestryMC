@@ -14,28 +14,22 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockFlowerPot;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFlowerPot;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.apiculture.FlowerManager;
 import forestry.api.genetics.IFlowerGrowthHelper;
 import forestry.api.genetics.IFlowerGrowthRule;
-import forestry.api.genetics.IFlowerRegistry;
-import forestry.api.genetics.IIndividual;
 
 public class GrowthRuleFlowerPot implements IFlowerGrowthRule {
 
 	@Override
-	public boolean growFlower(IFlowerRegistry fr, String flowerType, World world, IIndividual individual, int x, int y, int z) {
-		return growFlower(flowerType, world, x, y, z);
+	public boolean growFlower(IFlowerGrowthHelper helper, String flowerType, World world, BlockPos pos) {
+		return growFlower(flowerType, world, pos);
 	}
 
-	@Override
-	public boolean growFlower(IFlowerGrowthHelper helper, String flowerType, World world, int x, int y, int z) {
-		return growFlower(flowerType, world, x, y, z);
-	}
-
-	private static boolean growFlower(String flowerType, World world, int x, int y, int z) {
-		TileEntity tile = world.getTileEntity(x, y, z);
+	private static boolean growFlower(String flowerType, World world, BlockPos pos) {
+		TileEntity tile = world.getTileEntity(pos);
 		if (!(tile instanceof TileEntityFlowerPot)) {
 			return false;
 		}
@@ -45,7 +39,7 @@ public class GrowthRuleFlowerPot implements IFlowerGrowthRule {
 			return false;
 		}
 
-		Block block = world.getBlock(x, y, z);
+		Block block = world.getBlockState(pos).getBlock();
 		if (!(block instanceof BlockFlowerPot)) {
 			return false;
 		}
@@ -73,11 +67,11 @@ public class GrowthRuleFlowerPot implements IFlowerGrowthRule {
 
 		TileEntityFlowerPot newTile = (TileEntityFlowerPot) flowerPot.createNewTileEntity(world, flower);
 
-		flowerPotTile.func_145964_a(newTile.getFlowerPotItem(), newTile.getFlowerPotData());
+		flowerPotTile.setFlowerPotData(newTile.getFlowerPotItem(), newTile.getFlowerPotData());
 		flowerPotTile.markDirty();
 
-		if (!world.setBlockMetadataWithNotify(x, y, z, 1, 2)) {
-			world.markBlockForUpdate(x, y, z);
+		if (!world.setBlockState(pos, world.getBlockState(pos).getBlock().getStateFromMeta(1), 2)) {
+			world.markBlockForUpdate(pos);
 		}
 
 		return true;

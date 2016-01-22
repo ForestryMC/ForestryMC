@@ -42,8 +42,8 @@ public class GuiUtil {
 		if (font == null) {
 			font = gui.getFontRenderer();
 		}
-		itemRender.renderItemAndEffectIntoGUI(font, gui.mc.getTextureManager(), stack, xPos, yPos);
-		itemRender.renderItemOverlayIntoGUI(font, gui.mc.getTextureManager(), stack, xPos, yPos);
+		itemRender.renderItemAndEffectIntoGUI(stack, xPos, yPos);
+		itemRender.renderItemOverlayIntoGUI(font, stack, xPos, yPos, "");
 		gui.setZLevel(0.0F);
 		itemRender.zLevel = 0.0F;
 

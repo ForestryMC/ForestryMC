@@ -22,12 +22,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
-import cpw.mods.fml.common.Optional;
-import cpw.mods.fml.common.registry.GameData;
-
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fml.common.Optional;
 import forestry.api.fuels.FuelManager;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
@@ -37,6 +33,7 @@ import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.tiles.TemperatureState;
 import forestry.core.tiles.TileEngine;
 import forestry.core.utils.InventoryUtil;
+import forestry.core.utils.ItemStackUtil;
 import forestry.energy.gui.ContainerEnginePeat;
 import forestry.energy.gui.GuiEnginePeat;
 import forestry.energy.inventory.InventoryEnginePeat;
@@ -274,7 +271,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 		String fuelItemName = nbttagcompound.getString("EngineFuelItem");
 
 		if (!fuelItemName.isEmpty()) {
-			fuelItem = GameData.getItemRegistry().getRaw(fuelItemName);
+			fuelItem = ItemStackUtil.getItemFromRegistry(fuelItemName);
 		}
 
 		fuelItemMeta = nbttagcompound.getInteger("EngineFuelMeta");
@@ -290,7 +287,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 		super.writeToNBT(nbttagcompound);
 
 		if (fuelItem != null) {
-			nbttagcompound.setString("EngineFuelItem", GameData.getItemRegistry().getNameForObject(fuelItem));
+			nbttagcompound.setString("EngineFuelItem",  ItemStackUtil.getItemNameFromRegistryAsSting(fuelItem));
 		}
 
 		nbttagcompound.setInteger("EngineFuelMeta", fuelItemMeta);
@@ -334,7 +331,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 	/* ITriggerProvider */
 	@Optional.Method(modid = "BuildCraftAPI|statements")
 	@Override
-	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
+	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
 		LinkedList<ITriggerExternal> res = new LinkedList<>();
 		res.add(FactoryTriggers.lowFuel25);
 		res.add(FactoryTriggers.lowFuel10);

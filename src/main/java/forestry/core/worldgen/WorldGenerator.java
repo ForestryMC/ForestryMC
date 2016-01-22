@@ -12,15 +12,14 @@ package forestry.core.worldgen;
 
 import java.util.Random;
 
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent;
-
-import cpw.mods.fml.common.IWorldGenerator;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-
+import net.minecraftforge.fml.common.IWorldGenerator;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import forestry.core.blocks.BlockResourceOre;
 import forestry.core.config.Config;
 import forestry.plugins.PluginCore;
@@ -71,7 +70,7 @@ public class WorldGenerator implements IWorldGenerator {
 				int randPosX = chunkX + random.nextInt(16);
 				int randPosY = random.nextInt(world.getActualHeight() - 72) + 56; // Does not generate below y = 64
 				int randPosZ = chunkZ + random.nextInt(16);
-				apatiteGenerator.generate(world, random, randPosX, randPosY, randPosZ);
+				apatiteGenerator.generate(world, random, new BlockPos(randPosX, randPosY, randPosZ));
 			}
 		}
 
@@ -81,7 +80,7 @@ public class WorldGenerator implements IWorldGenerator {
 				int randPosX = chunkX + random.nextInt(16);
 				int randPosY = random.nextInt(76) + 32;
 				int randPosZ = chunkZ + random.nextInt(16);
-				copperGenerator.generate(world, random, randPosX, randPosY, randPosZ);
+				copperGenerator.generate(world, random, new BlockPos(randPosX, randPosY, randPosZ));
 			}
 		}
 
@@ -91,7 +90,7 @@ public class WorldGenerator implements IWorldGenerator {
 				int randPosX = chunkX + random.nextInt(16);
 				int randPosY = random.nextInt(76) + 16;
 				int randPosZ = chunkZ + random.nextInt(16);
-				tinGenerator.generate(world, random, randPosX, randPosY, randPosZ);
+				tinGenerator.generate(world, random, new BlockPos(randPosX, randPosY, randPosZ));
 			}
 		}
 	}

@@ -15,9 +15,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.command.ICommandSender;
+import net.minecraft.command.PlayerNotFoundException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-
+import net.minecraft.util.BlockPos;
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IAlleleBeeSpecies;
@@ -63,7 +64,7 @@ public class CommandBeeGive extends SubCommand {
 	}
 
 	@Override
-	public void processSubCommand(ICommandSender sender, String[] arguments) {
+	public void processSubCommand(ICommandSender sender, String[] arguments) throws SpeciesNotFoundException, TemplateNotFoundException, PlayerNotFoundException {
 		if (arguments.length < 2) {
 			printHelp(sender);
 			return;
@@ -80,7 +81,7 @@ public class CommandBeeGive extends SubCommand {
 		if (arguments.length == 3) {
 			player = CommandHelpers.getPlayer(sender, arguments[2]);
 		} else {
-			player = CommandHelpers.getPlayer(sender, sender.getCommandSenderName());
+			player = CommandHelpers.getPlayer(sender, sender.getName());
 		}
 		if (player == null) {
 			printHelp(sender);
@@ -96,10 +97,10 @@ public class CommandBeeGive extends SubCommand {
 		ItemStack beeStack = BeeManager.beeRoot.getMemberStack(bee, beeType.ordinal());
 		player.dropPlayerItemWithRandomChoice(beeStack, true);
 
-		CommandHelpers.sendLocalizedChatMessage(sender, "for.chat.command.forestry.bee.give.given", player.getCommandSenderName(), bee.getGenome().getPrimary().getName(), beeType.getName());
+		CommandHelpers.sendLocalizedChatMessage(sender, "for.chat.command.forestry.bee.give.given", player.getName(), bee.getGenome().getPrimary().getName(), beeType.getName());
 	}
 
-	private static IBeeGenome getBeeGenome(String speciesName) {
+	private static IBeeGenome getBeeGenome(String speciesName) throws SpeciesNotFoundException, TemplateNotFoundException {
 		IAlleleBeeSpecies species = null;
 
 		for (String uid : AlleleManager.alleleRegistry.getRegisteredAlleles().keySet()) {
@@ -137,7 +138,7 @@ public class CommandBeeGive extends SubCommand {
 	}
 
 	@Override
-	public List<String> addTabCompletionOptions(ICommandSender sender, String[] parameters) {
+	public List<String> addTabCompletionOptions(ICommandSender sender, String[] parameters, BlockPos pos) {
 		if (parameters.length == 1) {
 			List<String> tabCompletion = CommandHelpers.getListOfStringsMatchingLastWord(parameters, getSpecies());
 			tabCompletion.add("help");

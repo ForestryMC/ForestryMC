@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.arboriculture.blocks;
 
+import forestry.arboriculture.genetics.TreeDefinition;
+import forestry.arboriculture.genetics.alleles.AlleleFruit;
 import forestry.arboriculture.items.ItemBlockLeaves;
 import forestry.arboriculture.items.ItemBlockWood;
 import forestry.arboriculture.items.ItemBlockWoodSlab;
@@ -44,8 +46,8 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 		planks = registerBlock(new BlockPlanks(false), ItemBlockWood.class, "planks");
 		registerOreDictWildcard("plankWood", planks);
 
-		BlockSlab blockSlab = new BlockSlab(false, false);
-		BlockSlab blockSlabDouble = new BlockSlab(true, false);
+		BlockSlab blockSlab = new BlockSlab(false);
+		BlockSlab blockSlabDouble = new BlockSlabDouble(false);
 		slabs = registerBlock(blockSlab, ItemBlockWoodSlab.class, "slabs", blockSlabDouble, blockSlab);
 		registerOreDictWildcard("slabWood", slabs);
 
@@ -63,8 +65,8 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 		planksFireproof = registerBlock(new BlockPlanks(true), ItemBlockWood.class, "planksFireproof");
 		registerOreDictWildcard("plankWood", planksFireproof);
 
-		BlockSlab blockSlabFireproof = new BlockSlab(false, true);
-		BlockSlab blockSlabDoubleFireproof = new BlockSlab(true, true);
+		BlockSlab blockSlabFireproof = new BlockSlab(true);
+		BlockSlab blockSlabDoubleFireproof = new BlockSlabDouble(true);
 		slabsFireproof = registerBlock(blockSlabFireproof, ItemBlockWoodSlab.class, "slabsFireproof", blockSlabDoubleFireproof, blockSlabFireproof);
 		registerOreDictWildcard("slabWood", slabsFireproof);
 
@@ -77,6 +79,7 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 		registerOreDictWildcard("stairWood", stairsFireproof);
 		
 		// Saplings
+		TreeDefinition.preInit();
 		saplingGE = registerBlock(new BlockSapling(), ItemBlockForestry.class, "saplingGE");
 		registerOreDictWildcard("treeSapling", saplingGE);
 		
@@ -85,6 +88,7 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 		registerOreDictWildcard("treeLeaves", leaves);
 		
 		// Pods
+		AlleleFruit.createAlleles();
 		pods = registerBlock(new BlockFruitPod(), ItemBlockForestry.class, "pods");
 		
 		// Machines

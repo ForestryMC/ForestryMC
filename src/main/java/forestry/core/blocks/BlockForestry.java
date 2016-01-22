@@ -15,21 +15,24 @@ import org.apache.logging.log4j.Level;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
+import forestry.api.core.IItemModelRegister;
 import forestry.core.CreativeTabForestry;
 import forestry.core.access.IOwnable;
 import forestry.core.access.IRestrictedAccess;
 import forestry.core.tiles.TileForestry;
 import forestry.core.utils.Log;
 
-public abstract class BlockForestry extends BlockContainer {
+public abstract class BlockForestry extends BlockContainer implements IItemModelRegister {
 
 	protected BlockForestry(Material material) {
 		super(material);
@@ -38,8 +41,8 @@ public abstract class BlockForestry extends BlockContainer {
 	}
 
 	@Override
-	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z) {
-		TileEntity tile = world.getTileEntity(x, y, z);
+	public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+		TileEntity tile = world.getTileEntity(pos);
 
 		if (tile instanceof IRestrictedAccess) {
 			IRestrictedAccess restrictedAccessTile = (IRestrictedAccess) tile;
@@ -47,19 +50,18 @@ public abstract class BlockForestry extends BlockContainer {
 				return false;
 			}
 		}
-
-		return super.removedByPlayer(world, player, x, y, z);
+		
+		return super.removedByPlayer(world, pos, player, willHarvest);
 	}
 
 	@Override
-	public void onBlockPlacedBy(World world, int i, int j, int k, EntityLivingBase entityLiving, ItemStack itemstack) {
-
+	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		if (world.isRemote) {
 			return;
 		}
 
-		if (entityLiving instanceof EntityPlayer) {
-			TileEntity tile = world.getTileEntity(i, j, k);
+		if (placer instanceof EntityPlayer) {
+			TileEntity tile = world.getTileEntity(pos);
 
 			IOwnable ownable;
 
@@ -71,18 +73,18 @@ public abstract class BlockForestry extends BlockContainer {
 				return;
 			}
 
-			EntityPlayer player = (EntityPlayer) entityLiving;
+			EntityPlayer player = (EntityPlayer) placer;
 			GameProfile gameProfile = player.getGameProfile();
 			ownable.setOwner(gameProfile);
 		}
 	}
 
 	@Override
-	public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
+	public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block neighborBlock) {
 		try {
-			TileEntity tile = world.getTileEntity(x, y, z);
+			TileEntity tile = world.getTileEntity(pos);
 			if (tile instanceof TileForestry) {
-				((TileForestry) tile).onNeighborBlockChange(block);
+				((TileForestry) tile).onNeighborBlockChange(state.getBlock());
 			}
 		} catch (StackOverflowError error) {
 			Log.logThrowable(Level.ERROR, "Stack Overflow Error in BlockMachine.onNeighborBlockChange()", 10, error);

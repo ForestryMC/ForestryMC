@@ -12,17 +12,15 @@ package forestry.core.render;
 
 import net.minecraft.client.model.ModelChest;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-
-import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
 import forestry.core.config.Constants;
 import forestry.core.tiles.TileNaturalistChest;
 
-public class RenderNaturalistChest extends TileEntitySpecialRenderer implements IBlockRenderer {
+public class RenderNaturalistChest extends TileEntitySpecialRenderer<TileNaturalistChest> {
 
 	private final ModelChest chestModel = new ModelChest();
 	private final ResourceLocation texture;
@@ -30,19 +28,20 @@ public class RenderNaturalistChest extends TileEntitySpecialRenderer implements 
 	public RenderNaturalistChest(String textureName) {
 		texture = new ForestryResource(Constants.TEXTURE_PATH_BLOCKS + "/" + textureName + ".png");
 	}
-
+	
+	/**
+	 * @param chest If it null its render the item else it render the tile entity.
+	 */
 	@Override
-	public void inventoryRender(double x, double y, double z) {
-		render(ForgeDirection.EAST, 0, 0, x, y, z, 0);
+	public void renderTileEntityAt(TileNaturalistChest chest, double x, double y, double z, float partialTicks, int destroyStage) {
+		if(chest != null){
+			render(chest.getOrientation(), chest.prevLidAngle, chest.lidAngle, x, y, z, partialTicks);
+		}else{
+			render(EnumFacing.WEST, 0, 0, x, y, z, 0);
+		}
 	}
 
-	@Override
-	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float partialTick) {
-		TileNaturalistChest chest = (TileNaturalistChest) tileentity;
-		render(chest.getOrientation(), chest.prevLidAngle, chest.lidAngle, x, y, z, partialTick);
-	}
-
-	public void render(ForgeDirection orientation, float prevLidAngle, float lidAngle, double x, double y, double z, float partialTick) {
+	public void render(EnumFacing orientation, float prevLidAngle, float lidAngle, double x, double y, double z, float partialTick) {
 		GL11.glPushMatrix();
 		bindTexture(texture);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);

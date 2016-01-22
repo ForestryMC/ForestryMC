@@ -1,0 +1,8 @@
+{
+  "parent": "forestry:block/arboriculture/planks/greenheart",
+  "textures": {
+    "side": "forestry:blocks/wood/planks.greenheart",
+    "top": "forestry:blocks/wood/planks.greenheart",
+    "bottom": "forestry:blocks/wood/planks.greenheart"
+  }
+}

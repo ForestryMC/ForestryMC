@@ -4,9 +4,7 @@ import java.io.IOException;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
+import net.minecraft.util.EnumFacing;
 import forestry.api.core.ForestryAPI;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
@@ -105,7 +103,7 @@ public class EnergyManager implements IEnergyHandler, IStreamable {
 
 	/* IEnergyHandler */
 	@Override
-	public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
+	public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
 		if (!canReceive()) {
 			return 0;
 		}
@@ -113,7 +111,7 @@ public class EnergyManager implements IEnergyHandler, IStreamable {
 	}
 
 	@Override
-	public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate) {
+	public int extractEnergy(EnumFacing from, int maxExtract, boolean simulate) {
 		if (!canExtract()) {
 			return 0;
 		}
@@ -121,7 +119,7 @@ public class EnergyManager implements IEnergyHandler, IStreamable {
 	}
 
 	@Override
-	public int getEnergyStored(ForgeDirection from) {
+	public int getEnergyStored(EnumFacing from) {
 		return energyStorage.getEnergyStored();
 	}
 
@@ -130,7 +128,7 @@ public class EnergyManager implements IEnergyHandler, IStreamable {
 	}
 
 	@Override
-	public int getMaxEnergyStored(ForgeDirection from) {
+	public int getMaxEnergyStored(EnumFacing from) {
 		return energyStorage.getMaxEnergyStored();
 	}
 
@@ -143,7 +141,7 @@ public class EnergyManager implements IEnergyHandler, IStreamable {
 	}
 
 	@Override
-	public boolean canConnectEnergy(ForgeDirection from) {
+	public boolean canConnectEnergy(EnumFacing from) {
 		return true;
 	}
 
@@ -165,7 +163,7 @@ public class EnergyManager implements IEnergyHandler, IStreamable {
 	/**
 	 * @return whether this can send energy to the target tile
 	 */
-	public boolean canSendEnergy(ForgeDirection orientation, TileEntity tile) {
+	public boolean canSendEnergy(EnumFacing orientation, TileEntity tile) {
 		return sendEnergy(orientation, tile, Integer.MAX_VALUE, true) > 0;
 	}
 
@@ -175,7 +173,7 @@ public class EnergyManager implements IEnergyHandler, IStreamable {
 	 *
 	 * @return amount sent
 	 */
-	public int sendEnergy(ForgeDirection orientation, TileEntity tile) {
+	public int sendEnergy(EnumFacing orientation, TileEntity tile) {
 		return sendEnergy(orientation, tile, Integer.MAX_VALUE, false);
 	}
 
@@ -185,7 +183,7 @@ public class EnergyManager implements IEnergyHandler, IStreamable {
 	 *
 	 * @return amount sent
 	 */
-	public int sendEnergy(ForgeDirection orientation, TileEntity tile, int amount, boolean simulate) {
+	public int sendEnergy(EnumFacing orientation, TileEntity tile, int amount, boolean simulate) {
 		int sent = 0;
 		if (BlockUtil.isEnergyReceiverOrEngine(orientation.getOpposite(), tile)) {
 			int extractable = energyStorage.extractEnergy(amount, true);

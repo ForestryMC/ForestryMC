@@ -12,6 +12,7 @@ package forestry.apiculture.genetics.alleles;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.apiculture.IBeeGenome;
@@ -52,16 +53,16 @@ public class AlleleEffectGlacial extends AlleleEffectThrottled {
 			Vect posBlock = Vect.add(randomPos, housingCoords, offset);
 
 			// Freeze water
-			Block block = world.getBlock(posBlock.x, posBlock.y, posBlock.z);
+			Block block = world.getBlockState(posBlock).getBlock();
 			if (block != Blocks.water) {
 				continue;
 			}
 
-			if (!world.isAirBlock(posBlock.x, posBlock.y + 1, posBlock.z)) {
+			if (!world.isAirBlock(new BlockPos(posBlock.getX(), posBlock.getY() + 1, posBlock.getZ()))) {
 				continue;
 			}
 
-			world.setBlock(posBlock.x, posBlock.y, posBlock.z, Blocks.ice, 0, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
+			world.setBlockState(posBlock, Blocks.ice.getStateFromMeta(0), Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
 		}
 
 		return storedData;

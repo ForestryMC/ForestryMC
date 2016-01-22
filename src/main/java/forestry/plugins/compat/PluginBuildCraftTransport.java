@@ -12,9 +12,7 @@ package forestry.plugins.compat;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-
-import cpw.mods.fml.common.registry.GameRegistry;
-
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import forestry.core.config.Constants;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.Log;

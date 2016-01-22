@@ -10,12 +10,12 @@
  ******************************************************************************/
 package forestry.core.worldgen;
 
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
-import net.minecraftforge.common.util.ForgeDirection;
-
 public interface IBlockType {
-	void setDirection(ForgeDirection facing);
+	void setDirection(EnumFacing facing);
 
-	void setBlock(World world, int x, int y, int z);
+	void setBlock(World world, BlockPos pos);
 }

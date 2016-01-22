@@ -13,7 +13,7 @@ package forestry.arboriculture.worldgen;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.world.ITreeGenData;
@@ -37,15 +37,15 @@ public class WorldGenKapok extends WorldGenTree {
 
 		generateAdjustedCylinder(world, leafSpawn--, 1.9f, 1, leaf);
 
-		List<ChunkCoordinates> branchCoords = new ArrayList<>();
+		List<BlockPos> branchCoords = new ArrayList<>();
 		while (leafSpawn > height - 4) {
 			int radius = Math.round(girth * (height - leafSpawn) / 1.5f) + 6;
 			branchCoords.addAll(generateBranches(world, leafSpawn, 0, 0, 0.3f, 0.25f, radius, 6));
 			leafSpawn -= 2;
 		}
 
-		for (ChunkCoordinates branchEnd : branchCoords) {
-			generateAdjustedCylinder(world, branchEnd.posY + 1, branchEnd.posX, branchEnd.posZ, 2.0f, 2, leaf, EnumReplaceMode.NONE);
+		for (BlockPos branchEnd : branchCoords) {
+			generateAdjustedCylinder(world, branchEnd.getY() + 1, branchEnd.getX(), branchEnd.getZ(), 2.0f, 2, leaf, EnumReplaceMode.NONE);
 		}
 
 		// Add some smaller twigs below for flavour

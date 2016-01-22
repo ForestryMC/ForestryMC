@@ -21,7 +21,7 @@ import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
@@ -141,14 +141,17 @@ public class Bee extends IndividualLiving implements IBee {
 		}
 	}
 
+	@Override
 	public void setIsNatural(boolean flag) {
 		this.isNatural = flag;
 	}
 
+	@Override
 	public boolean isNatural() {
 		return this.isNatural;
 	}
 
+	@Override
 	public int getGeneration() {
 		return generation;
 	}
@@ -385,13 +388,13 @@ public class Bee extends IndividualLiving implements IBee {
 		if (generation > 0) {
 			EnumRarity rarity;
 			if (generation >= 1000) {
-				rarity = EnumRarity.epic;
+				rarity = EnumRarity.EPIC;
 			} else if (generation >= 100) {
-				rarity = EnumRarity.rare;
+				rarity = EnumRarity.RARE;
 			} else if (generation >= 10) {
-				rarity = EnumRarity.uncommon;
+				rarity = EnumRarity.UNCOMMON;
 			} else {
-				rarity = EnumRarity.common;
+				rarity = EnumRarity.COMMON;
 			}
 
 			String generationString = rarity.rarityColor + StringUtil.localizeAndFormat("gui.beealyzer.generations", generation);
@@ -527,8 +530,8 @@ public class Bee extends IndividualLiving implements IBee {
 		}
 
 		ItemStack[] productsArray = products.toArray(new ItemStack[products.size()]);
-		ChunkCoordinates housingCoordinates = housing.getCoordinates();
-		return genome.getFlowerProvider().affectProducts(housing.getWorld(), this, housingCoordinates.posX, housingCoordinates.posY, housingCoordinates.posZ, productsArray);
+		BlockPos housingCoordinates = housing.getCoordinates();
+		return genome.getFlowerProvider().affectProducts(housing.getWorld(), this, housingCoordinates, productsArray);
 	}
 
 	/* REPRODUCTION */
@@ -560,8 +563,8 @@ public class Bee extends IndividualLiving implements IBee {
 
 		List<IBee> bees = new ArrayList<>();
 
-		ChunkCoordinates housingCoordinates = housing.getCoordinates();
-		int toCreate = BeeManager.beeRoot.getBeekeepingMode(world).getFinalFertility(this, world, housingCoordinates.posX, housingCoordinates.posY, housingCoordinates.posZ);
+		BlockPos housingPos = housing.getCoordinates();
+		int toCreate = BeeManager.beeRoot.getBeekeepingMode(world).getFinalFertility(this, world, housingPos);
 
 		if (toCreate <= 0) {
 			toCreate = 1;
@@ -683,7 +686,7 @@ public class Bee extends IndividualLiving implements IBee {
 		}
 
 		Vect area = getArea(genome, beeModifier);
-		Vect offset = new Vect(-area.x / 2, -area.y / 4, -area.z / 2);
+		Vect offset = new Vect(-area.getX()/ 2, -area.getY() / 4, -area.getZ() / 2);
 		Vect housingPos = new Vect(housing.getCoordinates());
 
 		IIndividual pollen = null;
@@ -691,7 +694,7 @@ public class Bee extends IndividualLiving implements IBee {
 		for (int i = 0; i < 20; i++) {
 			Vect randomPos = Vect.getRandomPositionInArea(random, area);
 			Vect blockPos = Vect.add(housingPos, randomPos, offset);
-			TileEntity tile = world.getTileEntity(blockPos.x, blockPos.y, blockPos.z);
+			TileEntity tile = world.getTileEntity(blockPos);
 
 			if (tile instanceof IPollinatable) {
 				IPollinatable pitcher = (IPollinatable) tile;
@@ -699,7 +702,7 @@ public class Bee extends IndividualLiving implements IBee {
 					pollen = pitcher.getPollen();
 				}
 			} else {
-				pollen = GeneticsUtil.getErsatzPollen(world, blockPos.x, blockPos.y, blockPos.z);
+				pollen = GeneticsUtil.getErsatzPollen(world, blockPos);
 			}
 
 			if (pollen != null) {
@@ -726,7 +729,7 @@ public class Bee extends IndividualLiving implements IBee {
 		}
 
 		Vect area = getArea(genome, beeModifier);
-		Vect offset = new Vect(-area.x / 2, -area.y / 4, -area.z / 2);
+		Vect offset = new Vect(-area.getX() / 2, -area.getY() / 4, -area.getZ() / 2);
 		Vect housingPos = new Vect(housing.getCoordinates());
 
 		for (int i = 0; i < 30; i++) {
@@ -734,7 +737,7 @@ public class Bee extends IndividualLiving implements IBee {
 			Vect randomPos = Vect.getRandomPositionInArea(random, area);
 			Vect posBlock = Vect.add(housingPos, randomPos, offset);
 
-			ICheckPollinatable checkPollinatable = GeneticsUtil.getCheckPollinatable(world, posBlock.x, posBlock.y, posBlock.z);
+			ICheckPollinatable checkPollinatable = GeneticsUtil.getCheckPollinatable(world, posBlock);
 			if (checkPollinatable == null) {
 				continue;
 			}
@@ -746,7 +749,7 @@ public class Bee extends IndividualLiving implements IBee {
 				continue;
 			}
 
-			IPollinatable realPollinatable = GeneticsUtil.getOrCreatePollinatable(housing.getOwner(), world, posBlock.x, posBlock.y, posBlock.z);
+			IPollinatable realPollinatable = GeneticsUtil.getOrCreatePollinatable(housing.getOwner(), world, posBlock);
 
 			if (realPollinatable != null) {
 				realPollinatable.mateWith(pollen);
@@ -775,14 +778,14 @@ public class Bee extends IndividualLiving implements IBee {
 		// Gather required info
 		IFlowerProvider provider = genome.getFlowerProvider();
 		Vect area = getArea(genome, beeModifier);
-		Vect offset = new Vect(-area.x / 2, -area.y / 4, -area.z / 2);
+		Vect offset = new Vect(-area.getX() / 2, -area.getY() / 4, -area.getZ() / 2);
 		Vect housingPos = new Vect(housing.getCoordinates());
 
 		for (int i = 0; i < 10; i++) {
 			Vect randomPos = Vect.getRandomPositionInArea(random, area);
 			Vect posBlock = Vect.add(housingPos, randomPos, offset);
 
-			if (FlowerManager.flowerRegistry.growFlower(provider.getFlowerType(), world, this, posBlock.x, posBlock.y, posBlock.z)) {
+			if (FlowerManager.flowerRegistry.growFlower(provider.getFlowerType(), world, this, posBlock)) {
 				break;
 			}
 		}

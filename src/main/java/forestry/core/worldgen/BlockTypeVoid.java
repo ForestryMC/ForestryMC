@@ -11,6 +11,7 @@
 package forestry.core.worldgen;
 
 import net.minecraft.init.Blocks;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 public class BlockTypeVoid extends BlockType {
@@ -20,8 +21,8 @@ public class BlockTypeVoid extends BlockType {
 	}
 
 	@Override
-	public void setBlock(World world, int x, int y, int z) {
-		world.setBlockToAir(x, y, z);
+	public void setBlock(World world, BlockPos pos) {
+		world.setBlockToAir(pos);
 	}
 
 }

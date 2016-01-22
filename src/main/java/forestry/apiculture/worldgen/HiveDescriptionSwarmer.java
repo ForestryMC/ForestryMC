@@ -14,6 +14,7 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
@@ -68,8 +69,8 @@ public class HiveDescriptionSwarmer implements IHiveDescription {
 	}
 
 	@Override
-	public void postGen(World world, int x, int y, int z) {
-		TileEntity tile = world.getTileEntity(x, y, z);
+	public void postGen(World world, BlockPos pos) {
+		TileEntity tile = world.getTileEntity(pos);
 		if (tile instanceof TileSwarm) {
 			((TileSwarm) tile).setContained(bees);
 		}

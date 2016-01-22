@@ -10,8 +10,12 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
-import forestry.core.render.IBlockRenderer;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 
 public interface IMachinePropertiesTESR extends IMachineProperties {
-	IBlockRenderer getRenderer();
+	
+	/**
+	 * @return The renderer from the machine
+	 */
+	TileEntitySpecialRenderer getRenderer();
 }

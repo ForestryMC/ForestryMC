@@ -17,7 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-
+import net.minecraft.util.IChatComponent;
 import forestry.api.mail.ILetter;
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.IStamps;
@@ -269,10 +269,10 @@ public class Letter implements ILetter {
 	public ItemStack decrStackSize(int var1, int var2) {
 		return inventory.decrStackSize(var1, var2);
 	}
-
+	
 	@Override
-	public ItemStack getStackInSlotOnClosing(int var1) {
-		return inventory.getStackInSlotOnClosing(var1);
+	public ItemStack removeStackFromSlot(int index) {
+		return inventory.removeStackFromSlot(index);
 	}
 
 	@Override
@@ -281,8 +281,8 @@ public class Letter implements ILetter {
 	}
 
 	@Override
-	public String getInventoryName() {
-		return inventory.getInventoryName();
+	public String getName() {
+		return inventory.getName();
 	}
 
 	@Override
@@ -301,22 +301,46 @@ public class Letter implements ILetter {
 	}
 
 	@Override
-	public void openInventory() {
-		inventory.openInventory();
+	public void openInventory(EntityPlayer var1) {
+		inventory.openInventory(var1);
 	}
 
 	@Override
-	public void closeInventory() {
-		inventory.closeInventory();
+	public void closeInventory(EntityPlayer var1) {
+		inventory.closeInventory(var1);
 	}
 
 	@Override
-	public boolean hasCustomInventoryName() {
-		return inventory.hasCustomInventoryName();
+	public boolean hasCustomName() {
+		return inventory.hasCustomName();
 	}
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		return inventory.isItemValidForSlot(i, itemstack);
+	}
+
+	/* FIELDS */
+	@Override
+	public int getField(int id) {
+		return 0;
+	}
+
+	@Override
+	public void setField(int id, int value) {
+	}
+
+	@Override
+	public int getFieldCount() {
+		return 0;
+	}
+
+	@Override
+	public void clear() {
+	}
+
+	@Override
+	public IChatComponent getDisplayName() {
+		return inventory.getDisplayName();
 	}
 }

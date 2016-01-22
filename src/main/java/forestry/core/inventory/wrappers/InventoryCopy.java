@@ -13,7 +13,7 @@ package forestry.core.inventory.wrappers;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-
+import net.minecraft.util.IChatComponent;
 import forestry.core.utils.InventoryUtil;
 
 /**
@@ -75,8 +75,13 @@ public class InventoryCopy implements IInventory {
 	}
 
 	@Override
-	public String getInventoryName() {
-		return orignal.getInventoryName();
+	public String getName() {
+		return orignal.getName();
+	}
+	
+	@Override
+	public IChatComponent getDisplayName() {
+		return orignal.getDisplayName();
 	}
 
 	@Override
@@ -94,25 +99,43 @@ public class InventoryCopy implements IInventory {
 	}
 
 	@Override
-	public void openInventory() {
+	public void openInventory(EntityPlayer entityplayer) {
 	}
 
 	@Override
-	public void closeInventory() {
+	public void closeInventory(EntityPlayer entityplayer) {
 	}
-
+	
 	@Override
-	public ItemStack getStackInSlotOnClosing(int slot) {
-		return orignal.getStackInSlotOnClosing(slot);
+	public ItemStack removeStackFromSlot(int slot) {
+		return orignal.removeStackFromSlot(slot);
 	}
-
+	
 	@Override
-	public boolean hasCustomInventoryName() {
-		return orignal.hasCustomInventoryName();
+	public boolean hasCustomName() {
+		return orignal.hasCustomName();
 	}
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
 		return orignal.isItemValidForSlot(slot, stack);
+	}
+	
+	@Override
+	public int getField(int id) {
+		return 0;
+	}
+	
+	@Override
+	public int getFieldCount() {
+		return 0;
+	}
+	
+	@Override
+	public void clear() {
+	}
+	
+	@Override
+	public void setField(int id, int value) {
 	}
 }

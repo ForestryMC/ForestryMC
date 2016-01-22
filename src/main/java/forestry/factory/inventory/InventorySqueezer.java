@@ -13,7 +13,7 @@ package forestry.factory.inventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.core.fluids.FluidHelper;
@@ -56,7 +56,7 @@ public class InventorySqueezer extends InventoryAdapterTile<TileSqueezer> {
 	}
 
 	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
+	public boolean canExtractItem(int slotIndex, ItemStack itemstack, EnumFacing side) {
 		return slotIndex == SLOT_REMNANT || slotIndex == SLOT_CAN_OUTPUT;
 	}
 

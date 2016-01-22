@@ -16,8 +16,7 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChunkCoordinates;
-
+import net.minecraft.util.BlockPos;
 import forestry.api.circuits.ICircuitSocketType;
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorLogicSource;
@@ -49,14 +48,14 @@ public abstract class TileFarm extends MultiblockTileEntityForestry<MultiblockLo
 	}
 
 	@Override
-	public void onMachineAssembled(IMultiblockController multiblockController, ChunkCoordinates minCoord, ChunkCoordinates maxCoord) {
-		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, getBlockType());
+	public void onMachineAssembled(IMultiblockController multiblockController, BlockPos minCoord, BlockPos maxCoord) {
+		worldObj.notifyBlockOfStateChange(getPos(), getBlockType());
 		markDirty();
 	}
 
 	@Override
 	public void onMachineBroken() {
-		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, getBlockType());
+		worldObj.notifyBlockOfStateChange(getPos(), getBlockType());
 		markDirty();
 	}
 
@@ -88,7 +87,7 @@ public abstract class TileFarm extends MultiblockTileEntityForestry<MultiblockLo
 	public void setFarmBlockTexture(EnumFarmBlockTexture farmBlockTexture) {
 		if (this.farmBlockTexture != farmBlockTexture) {
 			this.farmBlockTexture = farmBlockTexture;
-			worldObj.func_147479_m(xCoord, yCoord, zCoord);
+			worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
 		}
 	}
 

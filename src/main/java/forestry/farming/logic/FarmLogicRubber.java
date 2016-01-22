@@ -19,13 +19,12 @@ import java.util.Stack;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
@@ -49,11 +48,11 @@ public class FarmLogicRubber extends FarmLogic {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon getIcon() {
+	public Item getItem() {
 		if (!inActive) {
-			return PluginIC2.resin.getIconIndex();
+			return PluginIC2.resin.getItem();
 		} else {
-			return Items.gunpowder.getIconFromDamage(0);
+			return Items.gunpowder;
 		}
 	}
 
@@ -93,19 +92,19 @@ public class FarmLogicRubber extends FarmLogic {
 	}
 
 	@Override
-	public boolean cultivate(int x, int y, int z, FarmDirection direction, int extent) {
+	public boolean cultivate(BlockPos pos, FarmDirection direction, int extent) {
 		return false;
 	}
 
 	private final HashMap<Vect, Integer> lastExtents = new HashMap<>();
 
 	@Override
-	public Collection<ICrop> harvest(int x, int y, int z, FarmDirection direction, int extent) {
+	public Collection<ICrop> harvest(BlockPos pos, FarmDirection direction, int extent) {
 		if (inActive) {
 			return null;
 		}
 
-		Vect start = new Vect(x, y, z);
+		Vect start = new Vect(pos);
 		if (!lastExtents.containsKey(start)) {
 			lastExtents.put(start, 0);
 		}
@@ -115,7 +114,7 @@ public class FarmLogicRubber extends FarmLogic {
 			lastExtent = 0;
 		}
 
-		Vect position = translateWithOffset(x, y + 1, z, direction, lastExtent);
+		Vect position = translateWithOffset(pos.add(0, 1, 0), direction, lastExtent);
 		Collection<ICrop> crops = getHarvestBlocks(position);
 		lastExtent++;
 		lastExtents.put(start, lastExtent);
@@ -162,7 +161,7 @@ public class FarmLogicRubber extends FarmLogic {
 
 		// Get additional candidates to return
 		for (int j = 0; j < 2; j++) {
-			Vect candidate = new Vect(position.x, position.y + j, position.z);
+			Vect candidate = new Vect(position.getX(), position.getY() + j, position.getZ());
 			if (candidate.equals(position)) {
 				continue;
 			}

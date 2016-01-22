@@ -10,27 +10,33 @@
  ******************************************************************************/
 package forestry.arboriculture.items;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.arboriculture.EnumWoodType;
 import forestry.arboriculture.IWoodTyped;
-import forestry.arboriculture.blocks.BlockLog;
-import forestry.arboriculture.render.IconProviderWood;
 import forestry.arboriculture.tiles.TileWood;
 import forestry.core.config.Constants;
 import forestry.core.items.ItemBlockForestry;
+import forestry.core.render.model.ModelManager;
+import forestry.core.utils.BlockUtil;
 import forestry.core.utils.StringUtil;
 
 public class ItemBlockWood extends ItemBlockForestry {
@@ -40,33 +46,31 @@ public class ItemBlockWood extends ItemBlockForestry {
 		super(block);
 	}
 
-	public static boolean placeWood(ItemStack stack, @Nullable EntityPlayer player, World world, int x, int y, int z, int metadata) {
+	public static boolean placeWood(ItemStack stack, IBlockState newState, @Nullable EntityPlayer player, World world, BlockPos pos) {
 		EnumWoodType woodType = getWoodType(stack);
-		Block block = Block.getBlockFromItem(stack.getItem());
 
-		return placeWood(stack, woodType, block, player, world, x, y, z, metadata);
+		return placeWood(stack, woodType, newState, player, world, pos);
 	}
 
-	public static boolean placeWood(ItemStack stack, EnumWoodType woodType, Block block, @Nullable EntityPlayer player, World world, int x, int y, int z, int metadata) {
-		boolean placed = world.setBlock(x, y, z, block, metadata, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
+	public static boolean placeWood(ItemStack stack, EnumWoodType woodType, IBlockState state, @Nullable EntityPlayer player, World world, BlockPos pos) {
+		boolean placed = world.setBlockState(pos, state, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
 		if (!placed) {
 			return false;
 		}
 
-		Block worldBlock = world.getBlock(x, y, z);
-		if (!Block.isEqualTo(block, worldBlock)) {
+		Block worldBlock = BlockUtil.getBlock(world, pos);
+		if (!Block.isEqualTo(state.getBlock(), worldBlock)) {
 			return false;
 		}
 
-		TileEntity tile = world.getTileEntity(x, y, z);
+		TileEntity tile = world.getTileEntity(pos);
 		if (!(tile instanceof TileWood)) {
-			world.setBlockToAir(x, y, z);
+			world.setBlockToAir(pos);
 			return false;
 		}
 
 		if (player != null) {
-			worldBlock.onBlockPlacedBy(world, x, y, z, player, stack);
-			worldBlock.onPostBlockPlaced(world, x, y, z, metadata);
+			worldBlock.onBlockPlacedBy(world, pos, state, player, stack);
 		}
 
 		((TileWood) tile).setWoodType(woodType);
@@ -121,17 +125,17 @@ public class ItemBlockWood extends ItemBlockForestry {
 		if (ordinal >= 0 && ordinal < EnumWoodType.VALUES.length) {
 			return EnumWoodType.VALUES[ordinal];
 		}
-		return null;
+		return EnumWoodType.LARCH;
 	}
 
 	@Override
 	public int getMetadata(int i) {
 		return 0;
 	}
-
+	
 	@Override
-	public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int metadata) {
-		return placeWood(stack, player, world, x, y, z, metadata);
+	public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState) {
+		return placeWood(stack, newState, player, world, pos);
 	}
 
 	@Override
@@ -166,25 +170,28 @@ public class ItemBlockWood extends ItemBlockForestry {
 
 		return displayName;
 	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(ItemStack stack, int pass) {
-		EnumWoodType woodType = getWoodType(stack);
-		if (woodType == null) {
-			return super.getIcon(stack, pass);
-		}
-
-		if (getBlock() instanceof BlockLog) {
-			return IconProviderWood.getBarkIcon(woodType);
-		} else {
-			return IconProviderWood.getPlankIcon(woodType);
-		}
+	
+	public static ResourceLocation[] getVariants(IWoodTyped typed) {
+		List variants = new ArrayList<String>();
+		for (EnumWoodType type : EnumWoodType.values())
+			variants.add(new ResourceLocation("forestry",  typed.getBlockKind() + "/" + type.getName().toLowerCase()));
+		return (ResourceLocation[]) variants.toArray(new ResourceLocation[variants.size()]);
 	}
-
-	@Override
+	
 	@SideOnly(Side.CLIENT)
-	public IIcon getIconIndex(ItemStack stack) {
-		return getIcon(stack, 0);
+	public static class WoodMeshDefinition implements ItemMeshDefinition {
+
+		public String modifier;
+
+		public WoodMeshDefinition(IWoodTyped typed) {
+			this.modifier = typed.getBlockKind();
+		}
+
+		@Override
+		public ModelResourceLocation getModelLocation(ItemStack stack) {
+			EnumWoodType type = getWoodType(stack);
+			return ModelManager.getInstance().getModelLocation(stack.getItem(), 0, modifier, type.name().toLowerCase());
+		}
+
 	}
 }

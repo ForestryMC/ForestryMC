@@ -1,0 +1,8 @@
+{
+  "parent": "forestry:block/arboriculture/planks/cherry",
+  "textures": {
+    "side": "forestry:blocks/wood/planks.cherry",
+    "top": "forestry:blocks/wood/planks.cherry",
+    "bottom": "forestry:blocks/wood/planks.cherry"
+  }
+}

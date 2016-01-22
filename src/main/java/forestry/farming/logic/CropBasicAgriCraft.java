@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -40,13 +40,13 @@ public class CropBasicAgriCraft extends Crop {
 
 	@Override
 	protected Collection<ItemStack> harvestBlock(Vect pos) {
-		ArrayList<ItemStack> harvest = block.getDrops(world, pos.x, pos.y, pos.z, meta, 0);
+		List<ItemStack> harvest = block.getDrops(world, pos, block.getStateFromMeta(meta), 0);
 		if (harvest.size() > 1) {
 			harvest.remove(1); //AgriCraft returns cropsticks in 0, seeds in 1 in getDrops, removing since harvesting doesn't return them.
 		}
 		harvest.remove(0);
-		Proxies.common.addBlockDestroyEffects(world, pos.x, pos.y, pos.z, Blocks.melon_block, 0);
-		world.setBlockMetadataWithNotify(pos.x, pos.y, pos.z, 0, Constants.FLAG_BLOCK_SYNCH);
+		Proxies.common.addBlockDestroyEffects(world, pos, Blocks.melon_block.getStateFromMeta(0));
+		world.setBlockState(pos, getBlock(pos).getStateFromMeta(0), Constants.FLAG_BLOCK_SYNCH);
 		return harvest;
 	}
 

@@ -1,0 +1,12 @@
+{
+    "parent": "block/cube",
+    "textures": {
+        "particle": "forestry:blocks/raintank.0",
+        "down": "forestry:blocks/raintank.0",
+        "up": "forestry:blocks/raintank.1",
+        "north": "forestry:blocks/raintank.0",
+        "east": "forestry:blocks/raintank.0",
+        "south": "forestry:blocks/raintank.0",
+        "west": "forestry:blocks/raintank.0"
+    }
+}

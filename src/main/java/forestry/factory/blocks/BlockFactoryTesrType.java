@@ -17,7 +17,6 @@ import org.apache.commons.lang3.text.WordUtils;
 import forestry.core.blocks.IMachinePropertiesTESR;
 import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.IBlockRenderer;
 import forestry.core.tiles.TileForestry;
 import forestry.factory.tiles.TileBottler;
 import forestry.factory.tiles.TileCarpenter;
@@ -27,6 +26,7 @@ import forestry.factory.tiles.TileMillRainmaker;
 import forestry.factory.tiles.TileMoistener;
 import forestry.factory.tiles.TileSqueezer;
 import forestry.factory.tiles.TileStill;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 
 public enum BlockFactoryTesrType implements IMachinePropertiesTESR {
 	BOTTLER(TileBottler.class),
@@ -38,7 +38,7 @@ public enum BlockFactoryTesrType implements IMachinePropertiesTESR {
 	STILL(TileStill.class),
 	RAINMAKER(TileMillRainmaker.class) {
 		@Override
-		public IBlockRenderer getRenderer() {
+		public TileEntitySpecialRenderer getRenderer() {
 			return Proxies.render.getRenderMill(Constants.TEXTURE_PATH_BLOCKS + "/rainmaker_");
 		}
 	};
@@ -72,7 +72,12 @@ public enum BlockFactoryTesrType implements IMachinePropertiesTESR {
 	}
 
 	@Override
-	public IBlockRenderer getRenderer() {
+	public TileEntitySpecialRenderer getRenderer() {
 		return Proxies.render.getRenderDefaultMachine(Constants.TEXTURE_PATH_BLOCKS + "/" + name + "_");
+	}
+	
+	@Override
+	public String getName() {
+		return name().toLowerCase(Locale.ENGLISH);
 	}
 }

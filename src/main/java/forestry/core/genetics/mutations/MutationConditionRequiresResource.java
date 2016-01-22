@@ -12,12 +12,14 @@ package forestry.core.genetics.mutations;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IMutationCondition;
+import forestry.core.utils.BlockUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.StringUtil;
 
@@ -30,13 +32,14 @@ public class MutationConditionRequiresResource implements IMutationCondition {
 	}
 
 	@Override
-	public float getChance(World world, int x, int y, int z, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1) {
+	public float getChance(World world, BlockPos pos, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1) {
 		Block block;
 		int meta;
 		int i = 1;
 		do {
-			block = world.getBlock(x, y - i, z);
-			meta = world.getBlockMetadata(x, y - i, z);
+			BlockPos blockPos = new BlockPos(pos.getX(), pos.getY() - i, pos.getY());
+			block = BlockUtil.getBlock(world, blockPos);
+			meta = BlockUtil.getBlockMetadata(world, blockPos);
 			i++;
 		} while (block instanceof IBeeHousing);
 

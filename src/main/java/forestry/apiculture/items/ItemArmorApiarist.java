@@ -10,29 +10,26 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.apiculture.IArmorApiarist;
 import forestry.api.core.IArmorNaturalist;
+import forestry.api.core.IModelManager;
+import forestry.api.core.IItemModelRegister;
 import forestry.api.core.Tabs;
 import forestry.core.config.Constants;
-import forestry.core.render.TextureManager;
-import forestry.core.utils.StringUtil;
 import forestry.plugins.PluginApiculture;
 
-public class ItemArmorApiarist extends ItemArmor implements IArmorApiarist, IArmorNaturalist {
+public class ItemArmorApiarist extends ItemArmor implements IArmorApiarist, IArmorNaturalist, IItemModelRegister {
 
 	public ItemArmorApiarist(int slot) {
-		super(ArmorMaterial.CLOTH, 0, slot);
+		super(ArmorMaterial.LEATHER, 0, slot);
 		this.setMaxDamage(100);
 		setCreativeTab(Tabs.tabApiculture);
 	}
@@ -48,19 +45,8 @@ public class ItemArmorApiarist extends ItemArmor implements IArmorApiarist, IArm
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerIcons(IIconRegister register) {
-		itemIcon = TextureManager.registerTex(register, StringUtil.cleanItemName(this));
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public IIcon getIconFromDamageForRenderPass(int par1, int par2) {
-		return itemIcon;
-	}
-
-	@Override
-	public boolean requiresMultipleRenderPasses() {
-		return false;
+	public void registerModel(Item item, IModelManager manager) {
+		manager.registerItemModel(item, 0, true);
 	}
 
 	@Override
