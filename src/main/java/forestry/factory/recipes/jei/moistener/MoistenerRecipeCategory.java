@@ -34,12 +34,12 @@ public class MoistenerRecipeCategory extends ForestryRecipeCategory {
 	protected final IDrawable tankOverlay;
 	
 	public MoistenerRecipeCategory(IGuiHelper guiHelper) {
-		super(guiHelper.createDrawable(guiTexture, 9, 16, 158, 61), "tile.for.factory.4.name");
+		super(guiHelper.createDrawable(guiTexture, 15, 15, 145, 60), "tile.for.factory.4.name");
 		
 		IDrawableStatic arrowDrawable = guiHelper.createDrawable(guiTexture, 176, 91, 29, 55);
 		this.arrow = guiHelper.createAnimatedDrawable(arrowDrawable, 80, IDrawableAnimated.StartDirection.BOTTOM, false);
 		IDrawableStatic progressBar = guiHelper.createDrawable(guiTexture, 176, 74, 16, 15);
-		this.progressBar = guiHelper.createAnimatedDrawable(progressBar, 160, IDrawableAnimated.StartDirection.BOTTOM, false);
+		this.progressBar = guiHelper.createAnimatedDrawable(progressBar, 160, IDrawableAnimated.StartDirection.LEFT, false);
 		this.tankOverlay = guiHelper.createDrawable(guiTexture, 176, 0, 16, 58);
 	}
 	
@@ -55,8 +55,8 @@ public class MoistenerRecipeCategory extends ForestryRecipeCategory {
 
 	@Override
 	public void drawAnimations(Minecraft minecraft) {
-		arrow.draw(minecraft, 88, 6);
-		progressBar.draw(minecraft, 119, 25);
+		arrow.draw(minecraft, 78, 2);
+		progressBar.draw(minecraft, 109, 22);
 	}
 
 	@Override
@@ -64,13 +64,13 @@ public class MoistenerRecipeCategory extends ForestryRecipeCategory {
 		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
 		IGuiFluidStackGroup guiFluidStacks = recipeLayout.getFluidStacks();
 		
-		guiItemStacks.init(resourceSlot, true, 138, 8);
-		guiItemStacks.init(fuelItemSlot, true, 34, 47);
+		guiItemStacks.init(resourceSlot, true, 127, 3);
+		guiItemStacks.init(fuelItemSlot, true, 23, 42);
 		
-		guiItemStacks.init(productSlot, false, 138, 44);
-		guiItemStacks.init(fuelProductSlot, false, 100, 26);
+		guiItemStacks.init(productSlot, false, 127, 39);
+		guiItemStacks.init(fuelProductSlot, false, 89, 21);
 		
-		guiFluidStacks.init(inputTank, true, 11, 5, 16, 58, 10000, false, tankOverlay);
+		guiFluidStacks.init(inputTank, true, 1, 1, 16, 58, 10000, false, tankOverlay);
 		
 		MoistenerRecipeWrapper wrapper = (MoistenerRecipeWrapper) recipeWrapper;
 		guiItemStacks.set(resourceSlot, wrapper.getRecipe().getResource());

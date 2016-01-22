@@ -1,10 +1,13 @@
 package forestry.factory.recipes.jei.fermenter;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import forestry.api.fuels.FermenterFuel;
+import forestry.api.fuels.FuelManager;
 import forestry.api.recipes.IFermenterRecipe;
 import forestry.api.recipes.IVariableFermentable;
 import forestry.core.recipes.jei.ForestryRecipeWrapper;
@@ -23,7 +26,16 @@ public class FermenterRecipeWrapper extends ForestryRecipeWrapper<IFermenterReci
 	
 	@Override
 	public List getInputs() {
-		return Collections.singletonList(fermentable);
+		List<ItemStack> inputs = new ArrayList<>();
+		for (FermenterFuel fuel : FuelManager.fermenterFuel.values()) {
+			inputs.add(fuel.item);
+		}
+		inputs.add(fermentable);
+		return inputs;
+	}
+	
+	public ItemStack getFermentable() {
+		return fermentable;
 	}
 	
 	@Override

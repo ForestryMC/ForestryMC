@@ -32,9 +32,6 @@ public class FabricatorRecipeHandler implements IRecipeHandler<FabricatorRecipeW
 		if(recipe.getIngredients() == null){
 			return false;
 		}
-		if(recipe.getPlan() == null){
-			return false;
-		}
 		if(recipe.getLiquid() == null){
 			return false;
 		}

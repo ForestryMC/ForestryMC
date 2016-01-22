@@ -59,8 +59,8 @@ public class FermenterRecipeCategory extends ForestryRecipeCategory {
 
 	@Override
 	public void drawAnimations(Minecraft minecraft) {
-		progressBar0.draw(minecraft, 65, 17);
-		progressBar1.draw(minecraft, 89, 31);
+		progressBar0.draw(minecraft, 44, 17);
+		progressBar1.draw(minecraft, 68, 31);
 	}
 
 	@Override
@@ -68,20 +68,20 @@ public class FermenterRecipeCategory extends ForestryRecipeCategory {
 		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
 		IGuiFluidStackGroup guiFluidStacks = recipeLayout.getFluidStacks();
 		
-		guiItemStacks.init(resourceSlot, true, 80, 8);
-		guiItemStacks.init(fuelSlot, true, 70, 42);
+		guiItemStacks.init(resourceSlot, true, 54, 7);
+		guiItemStacks.init(fuelSlot, true, 44, 41);
 		
 		guiFluidStacks.init(inputTank, true, 5, 4, 16, 58, 10000, false, tankOverlay);
 		guiFluidStacks.init(outputTank, false, 95, 4, 16, 58, 10000, false, tankOverlay);
 		
-		guiItemStacks.set(inputTank, recipeWrapper.getInputs());
+		FermenterRecipeWrapper wrapper = (FermenterRecipeWrapper) recipeWrapper;
+		
+		guiItemStacks.set(resourceSlot, wrapper.getFermentable());
 		List<ItemStack> fuels = new ArrayList<>();
 		for (FermenterFuel fuel : FuelManager.fermenterFuel.values()) {
 			fuels.add(fuel.item);
 		}
 		guiItemStacks.set(fuelSlot, fuels);
-		
-		FermenterRecipeWrapper wrapper = (FermenterRecipeWrapper) recipeWrapper;
 		
 		guiFluidStacks.set(inputTank, wrapper.getFluidInputs());
 		guiFluidStacks.set(outputTank, wrapper.getFluidOutputs());

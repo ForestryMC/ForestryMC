@@ -10,32 +10,37 @@ import forestry.core.fluids.FluidHelper;
 import forestry.core.recipes.jei.ForestryRecipeWrapper;
 import forestry.factory.recipes.ISqueezerContainerRecipe;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 public class SqueezerContainerRecipeWrapper extends ForestryRecipeWrapper<ISqueezerContainerRecipe>{
 	
-	public SqueezerContainerRecipeWrapper(@Nonnull ISqueezerContainerRecipe recipe) {
+	@Nonnull
+	private ItemStack filledContainer;
+	
+	public SqueezerContainerRecipeWrapper(@Nonnull ISqueezerContainerRecipe recipe, @Nonnull ItemStack filledContainer) {
 		super(recipe);
+		this.filledContainer = filledContainer;
 	}
 	
 	@Override
 	public List getInputs() {
-		return FluidHelper.getAllFilledContainers(recipe.getEmptyContainer());
+		return Collections.singletonList(filledContainer);
 	}
 	
 	@Override
 	public List<FluidStack> getFluidOutputs() {
-		List<FluidStack> fluids = new ArrayList<>();
-		for (ItemStack ingredient : FluidHelper.getAllFilledContainers(recipe.getEmptyContainer())) {
-			FluidStack fluidStack = FluidHelper.getFluidStackInContainer(ingredient);
-			fluids.add(fluidStack);
-		}
-		return fluids;
+		return Collections.singletonList(FluidContainerRegistry.getFluidForFilledItem(filledContainer));
 	}
 
 	@Override
 	public List getOutputs() {
 		return Collections.singletonList(recipe.getRemnants());
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		return super.equals(obj);
 	}
 
 }

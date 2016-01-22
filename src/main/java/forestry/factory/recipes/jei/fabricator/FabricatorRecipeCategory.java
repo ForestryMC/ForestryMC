@@ -35,14 +35,11 @@ public class FabricatorRecipeCategory extends ForestryRecipeCategory {
 	private final static ResourceLocation guiTexture = new ResourceLocation("forestry", "textures/gui/fabricator.png");
 	@Nonnull
 	private final ICraftingGridHelper craftingGridHelper;
-	@Nonnull
-	protected final IDrawable tankOverlay;
 	
 	public FabricatorRecipeCategory(IGuiHelper guiHelper) {
-		super(guiHelper.createDrawable(guiTexture, 0, 0, 166, 65), "tile.for.factory2.0.name");
+		super(guiHelper.createDrawable(guiTexture, 20, 16, 136, 54), "tile.for.factory2.0.name");
 		
 		craftingGridHelper = guiHelper.createCraftingGridHelper(craftInputSlot, craftOutputSlot);
-		this.tankOverlay = guiHelper.createDrawable(guiTexture, 176, 0, 16, 58);
 	}
 	
 	@Nonnull
@@ -64,20 +61,20 @@ public class FabricatorRecipeCategory extends ForestryRecipeCategory {
 		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
 		IGuiFluidStackGroup guiFluidStacks = recipeLayout.getFluidStacks();
 		
-		guiItemStacks.init(planSlot, true, 134, 6);
+		guiItemStacks.init(planSlot, true, 118, 0);
 		
-		guiItemStacks.init(smeltingInputSlot, true, 21, 10);
+		guiItemStacks.init(smeltingInputSlot, true, 5, 4);
 		
-		guiItemStacks.init(craftOutputSlot, false, 134, 42);
+		guiItemStacks.init(craftOutputSlot, false, 118, 36);
 		
 		for (int y = 0; y < 3; ++y) {
 			for (int x = 0; x < 3; ++x) {
 				int index = craftInputSlot + x + (y * 3);
-				guiItemStacks.init(index, true, 62 + x * 18, 6 + y * 18);
+				guiItemStacks.init(index, true, 46 + x * 18, y * 18);
 			}
 		}
 		
-		guiFluidStacks.init(inputTank, true, 21, 37, 16, 16, 10000, false, tankOverlay);
+		guiFluidStacks.init(inputTank, true, 6, 32, 16, 16, 2000, false, null);
 		
 		FabricatorRecipeWrapper wrapper = (FabricatorRecipeWrapper) recipeWrapper;
 		guiItemStacks.set(planSlot, wrapper.getRecipe().getPlan());

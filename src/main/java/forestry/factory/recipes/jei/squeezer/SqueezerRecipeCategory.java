@@ -1,5 +1,6 @@
 package forestry.factory.recipes.jei.squeezer;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -32,8 +33,6 @@ public class SqueezerRecipeCategory extends ForestryRecipeCategory {
 	
 	private final static ResourceLocation guiTexture = new ResourceLocation("forestry", "textures/gui/squeezersocket.png");
 	@Nonnull
-	private final ICraftingGridHelper craftingGridHelper;
-	@Nonnull
 	protected final IDrawableAnimated arrow;
 	@Nonnull
 	protected final IDrawable tankOverlay;
@@ -41,12 +40,11 @@ public class SqueezerRecipeCategory extends ForestryRecipeCategory {
 	protected final String UID;
 	
 	public SqueezerRecipeCategory(IGuiHelper guiHelper, String UID) {
-		super(guiHelper.createDrawable(guiTexture, 9, 16, 158, 61), "tile.for.factory.5.name");
+		super(guiHelper.createDrawable(guiTexture, 9, 16, 158, 61), "tile.for.factory.5.name", 10);
 		
-		craftingGridHelper = guiHelper.createCraftingGridHelper(craftInputSlot, craftOutputSlot);
-		IDrawableStatic arrowDrawable = guiHelper.createDrawable(guiTexture, 176, 59, 4, 17);
-		this.arrow = guiHelper.createAnimatedDrawable(arrowDrawable, 200, IDrawableAnimated.StartDirection.BOTTOM, false);
-		this.tankOverlay = guiHelper.createDrawable(guiTexture, 176, 60, 43, 18);
+		IDrawableStatic arrowDrawable = guiHelper.createDrawable(guiTexture, 176, 60, 43, 18);
+		this.arrow = guiHelper.createAnimatedDrawable(arrowDrawable, 200, IDrawableAnimated.StartDirection.LEFT, false);
+		this.tankOverlay = guiHelper.createDrawable(guiTexture, 176, 0, 16, 58);
 		this.UID = UID;
 	}
 	
@@ -62,7 +60,7 @@ public class SqueezerRecipeCategory extends ForestryRecipeCategory {
 
 	@Override
 	public void drawAnimations(Minecraft minecraft) {
-		arrow.draw(minecraft, 70, 30);
+		arrow.draw(minecraft, 67, 25);
 	}
 
 	@Override
@@ -80,25 +78,29 @@ public class SqueezerRecipeCategory extends ForestryRecipeCategory {
 			chance = ((ISqueezerContainerRecipe) wrapper.getRecipe()).getRemnantsChance();
 		}
 		
-		guiFluidStacks.init(outputTank, false, 117, 7, 16, 58, 10000, false, tankOverlay);
+		guiFluidStacks.init(outputTank, false, 113, 2, 16, 58, 10000, false, tankOverlay);
 		guiFluidStacks.set(outputTank, recipeWrapper.getFluidOutputs());
 		
-		guiItemStacks.init(craftOutputSlot, false, 92, 49);
-		craftingGridHelper.setOutput(guiItemStacks, recipeWrapper.getOutputs());
+		guiItemStacks.init(craftOutputSlot, false, 87, 43);
+		guiItemStacks.set(craftOutputSlot, recipeWrapper.getOutputs());
+		tooltip.addChanceTooltip(craftOutputSlot, chance);
 		setIngredients(guiItemStacks, recipeWrapper.getInputs(), chance);
 
 		guiItemStacks.addTooltipCallback(tooltip);
 		
 	}
 	
-	public void setIngredients(IGuiItemStackGroup guiItemStacks, List<ItemStack> inputs, float chance) {
+	public void setIngredients(IGuiItemStackGroup guiItemStacks, List<Object> inputs, float chance) {
 		int i = 0;
-		for (ItemStack stack : inputs) {
-			guiItemStacks.init(craftInputSlot + i, true, 12 + INPUTS[i][0] * 18, 10 + INPUTS[i][1] * 18);
-			tooltip.addChanceTooltip(i, chance);
+		for (Object stack : inputs) {
+			guiItemStacks.init(craftInputSlot + i, true, 7 + INPUTS[i][0] * 18, 4 + INPUTS[i][1] * 18);
+			if(stack instanceof ItemStack){
+				guiItemStacks.set(craftInputSlot + i, (ItemStack) stack);
+			}else{
+				guiItemStacks.set(craftInputSlot + i, (Collection<ItemStack>) stack);
+			}
 			i++;
 		}
-		craftingGridHelper.setInput(guiItemStacks, inputs);
 	}
 
 }

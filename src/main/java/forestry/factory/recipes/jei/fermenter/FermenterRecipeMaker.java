@@ -21,8 +21,9 @@ public class FermenterRecipeMaker {
 				for (ItemStack stack : JEIUtils.getItemVariations(recipe.getResource())) {
 					recipes.add(new FermenterRecipeWrapper(recipe, stack));
 				}
+			}else{
+				recipes.add(new FermenterRecipeWrapper(recipe, recipe.getResource()));
 			}
-			recipes.add(new FermenterRecipeWrapper(recipe, recipe.getResource()));
 		}
 		return recipes;
 	}

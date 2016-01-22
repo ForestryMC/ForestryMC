@@ -23,7 +23,7 @@ public class MoistenerRecipeWrapper extends ForestryRecipeWrapper<IMoistenerReci
 	@Override
 	public List getInputs() {
 		List<ItemStack> inputs = new ArrayList<>();
-		inputs.add(recipe.getProduct());
+		inputs.add(recipe.getResource());
 		if(fuel.item != null)
 			inputs.add(fuel.item);
 		return inputs;

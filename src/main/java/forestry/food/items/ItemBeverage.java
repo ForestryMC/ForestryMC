@@ -148,7 +148,7 @@ public class ItemBeverage extends ItemForestryFood {
 	@Override
 	public int getColorFromItemStack(ItemStack itemstack, int j) {
 
-		if (j == 0 || beverages[itemstack.getItemDamage()].getSecondaryColor() == 0) {
+		if (j == 1 || beverages[itemstack.getItemDamage()].getSecondaryColor() == 0) {
 			return beverages[itemstack.getItemDamage()].getPrimaryColor();
 		} else {
 			return beverages[itemstack.getItemDamage()].getSecondaryColor();

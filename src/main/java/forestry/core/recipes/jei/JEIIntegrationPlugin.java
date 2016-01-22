@@ -88,7 +88,7 @@ public class JEIIntegrationPlugin implements IModPlugin{
 		registry.addRecipes(StillRecipeMaker.getStillRecipes());
 		
 		IRecipeTransferRegistry transferTegistry = registry.getRecipeTransferRegistry();
-		transferTegistry.addRecipeTransferHandler(ContainerWorktable.class, VanillaRecipeCategoryUid.CRAFTING, 55, 9, 1, 36);
+		transferTegistry.addRecipeTransferHandler(ContainerWorktable.class, VanillaRecipeCategoryUid.CRAFTING, 19, 9, 1, 36);
 		
 	}
 

@@ -35,15 +35,15 @@ public class CentrifugeRecipeCategory extends ForestryRecipeCategory {
 	private static final int inputSlot = 0;
 	private static final int outputSlot = 1;
 	
-	private final static ResourceLocation guiTexture = new ResourceLocation("forestry", "textures/gui/squeezersocket.png");
+	private final static ResourceLocation guiTexture = new ResourceLocation("forestry", "textures/gui/centrifugesocket.png");
 	@Nonnull
 	protected final IDrawableAnimated arrow;
 	
 	public CentrifugeRecipeCategory(IGuiHelper guiHelper) {
-		super(guiHelper.createDrawable(guiTexture, 5, 14, 166, 65), "tile.for.factory.2.name");
+		super(guiHelper.createDrawable(guiTexture, 5, 14, 166, 65), "tile.for.factory.2.name", 10);
 		
 		IDrawableStatic arrowDrawable = guiHelper.createDrawable(guiTexture, 176, 0, 4, 17);
-		this.arrow = guiHelper.createAnimatedDrawable(arrowDrawable, 200, IDrawableAnimated.StartDirection.LEFT, false);
+		this.arrow = guiHelper.createAnimatedDrawable(arrowDrawable, 80, IDrawableAnimated.StartDirection.BOTTOM, false);
 	}
 	
 	@Nonnull
@@ -58,7 +58,7 @@ public class CentrifugeRecipeCategory extends ForestryRecipeCategory {
 
 	@Override
 	public void drawAnimations(Minecraft minecraft) {
-		arrow.draw(minecraft, 53, 25);
+		arrow.draw(minecraft, 53, 22);
 	}
 
 	@Override
@@ -66,7 +66,7 @@ public class CentrifugeRecipeCategory extends ForestryRecipeCategory {
 		super.setRecipe(recipeLayout, recipeWrapper);
 		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
 		
-		guiItemStacks.init(inputSlot, true, 25, 26);
+		guiItemStacks.init(inputSlot, true, 24, 22);
 		guiItemStacks.set(inputSlot, recipeWrapper.getInputs());
 		CentrifugeRecipeWrapper centrifugeWrapper = (CentrifugeRecipeWrapper) recipeWrapper;
 		setResults(centrifugeWrapper.getRecipe().getAllProducts(), (GuiItemStackGroup) guiItemStacks);
@@ -88,12 +88,12 @@ public class CentrifugeRecipeCategory extends ForestryRecipeCategory {
 			if (i >= OUTPUTS.length) {
 				return;
 			}
-			int x = 3 + OUTPUTS[i][0] * 18;
-			int y = 8 + OUTPUTS[i][1] * 18;
+			int x = 92 + OUTPUTS[i][0] * 18;
+			int y = 4 + OUTPUTS[i][1] * 18;
 			int ID = outputSlot + i;
 			guiItemStacks.init(ID, false, x, y);
 			guiItemStacks.set(ID, stack.getKey());
-			tooltip.addChanceTooltip(ID, stack.getValue());
+			tooltip.addChanceTooltip(ID + 1, stack.getValue());
 			i++;
 		}
 	}
