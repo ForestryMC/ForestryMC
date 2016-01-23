@@ -43,7 +43,7 @@ import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.farming.blocks.BlockRegistryFarming;
-import forestry.farming.blocks.EnumBlockFarmType;
+import forestry.farming.blocks.EnumFarmBlockType;
 import forestry.farming.circuits.CircuitFarmLogic;
 import forestry.farming.logic.FarmLogicArboreal;
 import forestry.farming.logic.FarmLogicCereal;
@@ -64,8 +64,8 @@ import forestry.farming.logic.FarmableGourd;
 import forestry.farming.logic.FarmableStacked;
 import forestry.farming.logic.FarmableVanillaMushroom;
 import forestry.farming.logic.FarmableVanillaSapling;
+import forestry.farming.models.EnumFarmBlockTexture;
 import forestry.farming.proxy.ProxyFarming;
-import forestry.farming.render.EnumFarmBlockTexture;
 import forestry.farming.tiles.TileFarmControl;
 import forestry.farming.tiles.TileFarmGearbox;
 import forestry.farming.tiles.TileFarmHatch;
@@ -275,11 +275,11 @@ public class PluginFarming extends ForestryPlugin {
 	@Override
 	protected void registerRecipes() {
 
-		ItemStack basic = blocks.farm.get(EnumBlockFarmType.BASIC, 1);
-		ItemStack gearbox = blocks.farm.get(EnumBlockFarmType.GEARBOX, 1);
-		ItemStack hatch = blocks.farm.get(EnumBlockFarmType.HATCH, 1);
-		ItemStack valve = blocks.farm.get(EnumBlockFarmType.VALVE, 1);
-		ItemStack control = blocks.farm.get(EnumBlockFarmType.CONTROL, 1);
+		ItemStack basic = blocks.farm.get(EnumFarmBlockType.PLAIN, 1);
+		ItemStack gearbox = blocks.farm.get(EnumFarmBlockType.GEARBOX, 1);
+		ItemStack hatch = blocks.farm.get(EnumFarmBlockType.HATCH, 1);
+		ItemStack valve = blocks.farm.get(EnumFarmBlockType.VALVE, 1);
+		ItemStack control = blocks.farm.get(EnumFarmBlockType.CONTROL, 1);
 
 		for (EnumFarmBlockTexture block : EnumFarmBlockTexture.values()) {
 			NBTTagCompound compound = new NBTTagCompound();
@@ -352,6 +352,6 @@ public class PluginFarming extends ForestryPlugin {
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public void handleTextureRemap(TextureStitchEvent.Pre event) {
-		EnumFarmBlockTexture.registerSprites();
+		EnumFarmBlockType.registerSprites();
 	}
 }

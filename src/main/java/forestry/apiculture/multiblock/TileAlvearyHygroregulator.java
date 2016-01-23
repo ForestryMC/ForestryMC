@@ -44,7 +44,7 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 	private int transferTime;
 
 	public TileAlvearyHygroregulator() {
-		super(BlockAlveary.Type.HYGRO);
+		super(BlockAlveary.AlvearyType.HYGRO);
 
 		this.inventory = new InventoryHygroregulator(this);
 

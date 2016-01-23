@@ -30,8 +30,8 @@ public class ItemBlockCandle extends ItemBlockForestry {
 		int value = 0xffffff;
 		if (pass == 1 && stack.hasTagCompound()) {
 			NBTTagCompound tag = stack.getTagCompound();
-			if (tag.hasKey("colour")) {
-				value = tag.getInteger("colour");
+			if (tag.hasKey(BlockCandle.colourTagName)) {
+				value = tag.getInteger(BlockCandle.colourTagName);
 			}
 		}
 		return value;

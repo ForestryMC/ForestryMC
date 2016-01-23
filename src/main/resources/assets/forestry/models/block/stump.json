@@ -1,0 +1,70 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "forestry:blocks/stump",
+    "stump": "forestry:blocks/stump"
+  },
+    "elements": [
+      {
+        "from": [ -1, 3.5, 7 ],
+        "to": [ 1, 13.5, 9 ],
+        "rotation": {
+          "origin": [ 0, 3.5, 8 ],
+          "axis": "z",
+          "angle": -22.5
+        },
+        "shade": false,
+        "faces": {
+          "down": {
+            "texture": "#stump",
+            "tintindex": 1,
+            "uv": [ 7, 13, 9, 15 ]
+          },
+          "up": {
+            "uv": [ 7, 6, 9, 8 ],
+            "texture": "#stump"
+          }
+        }
+      },
+      {
+        "from": [ -1, 3.5, 0 ],
+        "to": [ 1, 19.5, 16 ],
+        "rotation": {
+          "origin": [ 0, 3.5, 8 ],
+          "axis": "z",
+          "angle": -22.5
+        },
+        "shade": false,
+        "faces": {
+          "west": {
+            "uv": [ 0, 0, 16, 16 ],
+            "texture": "stump"
+          },
+          "east": {
+            "uv": [ 0, 0, 16, 16 ],
+            "texture": "stump"
+          }
+        }
+      },
+      {
+        "from": [ -8, 3.5, 7 ],
+        "to": [ 8, 19.5, 9 ],
+        "rotation": {
+          "origin": [ 0, 3.5, 8 ],
+          "axis": "z",
+          "angle": -22.5
+        },
+        "shade": false,
+        "faces": {
+          "north": {
+            "uv": [ 0, 0, 16, 16 ],
+            "texture": "#stump"
+          },
+          "south": {
+            "uv": [ 0, 0, 16, 16 ],
+            "texture": "#stump"
+          }
+        }
+      }
+    ]
+}

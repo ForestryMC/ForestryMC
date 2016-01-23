@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.arboriculture.render;
 
-import net.minecraft.block.Block;
-import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
@@ -21,13 +19,13 @@ import forestry.arboriculture.blocks.BlockForestryLeaves;
 import forestry.arboriculture.genetics.TreeHelper;
 import forestry.arboriculture.items.ItemBlockLeaves;
 import forestry.arboriculture.tiles.TileLeaves;
+import forestry.core.models.ModelBlockOverlay;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.model.ModelBlockOverlay;
 
-public class ModelLeaves extends ModelBlockOverlay {
+public class ModelLeaves extends ModelBlockOverlay<BlockForestryLeaves> {
 
 	@Override
-	public void renderInventory(Block block, ItemStack itemStack, IModelBaker renderer) {
+	public void renderInventory(BlockForestryLeaves block, ItemStack itemStack, IModelBaker baker) {
 
 		if (!(itemStack.getItem() instanceof ItemBlockLeaves) || block == null) {
 			return;
@@ -40,48 +38,40 @@ public class ModelLeaves extends ModelBlockOverlay {
 			leaves.setTree(TreeHelper.treeTemplates.get(0));
 		}
 
-		TextureAtlasSprite leavesIcon = leaves.getSprite(Proxies.render.fancyGraphicsEnabled());
+		TextureAtlasSprite leavesIcon = leaves.getLeaveSprite(Proxies.render.fancyGraphicsEnabled());
 		if (leavesIcon == null) {
 			return;
 		}
-		int color = leaves.getFoliageColour(Proxies.common.getPlayer());
-		renderer.setColor(color);
+		baker.setColorIndex(0);
 
-		block.setBlockBoundsForItemRender();
-		renderer.setRenderBoundsFromBlock(block);
-
-		renderer.renderFaceYNeg(null, leavesIcon);
-		renderer.renderFaceYPos(null, leavesIcon);
-		renderer.renderFaceZNeg(null, leavesIcon);
-		renderer.renderFaceZPos(null, leavesIcon);
-		renderer.renderFaceXNeg(null, leavesIcon);
-		renderer.renderFaceXPos(null, leavesIcon);
+		baker.renderFaceYNeg(null, leavesIcon);
+		baker.renderFaceYPos(null, leavesIcon);
+		baker.renderFaceZNeg(null, leavesIcon);
+		baker.renderFaceZPos(null, leavesIcon);
+		baker.renderFaceXNeg(null, leavesIcon);
+		baker.renderFaceXPos(null, leavesIcon);
 
 		// add fruit
 		if (!leaves.hasFruit()) {
 			return;
 		}
 
-		TextureAtlasSprite fruitTexture = leaves.getFruitTexture();
+		TextureAtlasSprite fruitTexture = leaves.getFruitSprite();
 		if (fruitTexture == null) {
 			return;
 		}
-		int fruitColor = leaves.getFruitColour();
-		renderer.setColor(fruitColor);
+		baker.setColorIndex(1);
 
-		block.setBlockBoundsForItemRender();
-		renderer.setRenderBoundsFromBlock(block);
-
-		renderer.renderFaceYNeg(null, fruitTexture);
-		renderer.renderFaceYPos(null, fruitTexture);
-		renderer.renderFaceZNeg(null, fruitTexture);
-		renderer.renderFaceZPos(null, fruitTexture);
-		renderer.renderFaceXNeg(null, fruitTexture);
-		renderer.renderFaceXPos(null, fruitTexture);
+		baker.renderFaceYNeg(null, fruitTexture);
+		baker.renderFaceYPos(null, fruitTexture);
+		baker.renderFaceZNeg(null, fruitTexture);
+		baker.renderFaceZPos(null, fruitTexture);
+		baker.renderFaceXNeg(null, fruitTexture);
+		baker.renderFaceXPos(null, fruitTexture);
 	}
 
 	@Override
-	public boolean renderInWorld(Block block, IBlockAccess world, BlockPos pos, IModelBaker renderer) {
+	public boolean renderInWorld(BlockForestryLeaves block, IBlockAccess world, BlockPos pos, IModelBaker baker) {
 
 		TileLeaves tile = BlockForestryLeaves.getLeafTile(world, pos);
 		if (tile == null) {
@@ -89,58 +79,28 @@ public class ModelLeaves extends ModelBlockOverlay {
 		}
 
 		// Render the plain leaf block.
-		renderer.renderStandardBlock(block, pos, tile.getSprite(Proxies.render.fancyGraphicsEnabled()));
+		baker.renderStandardBlock(block, pos, tile.getLeaveSprite(Proxies.render.fancyGraphicsEnabled()));
 
 		// Render overlay for fruit leaves.
-		TextureAtlasSprite fruitIcon = tile.getFruitTexture();
+		TextureAtlasSprite fruitSprite = tile.getFruitSprite();
 
-		if (fruitIcon != null) {
-			int fruitColor = tile.getFruitColour();
-			renderFruitOverlay(world, block, pos, renderer, fruitIcon, fruitColor);
+		if (fruitSprite != null) {
+			renderFruitOverlay(world, block, pos, baker, fruitSprite, 1);
 		}
 
 		return true;
 	}
 
-	private static boolean renderFruitOverlay(IBlockAccess world, Block block, BlockPos pos, IModelBaker renderer,
-			TextureAtlasSprite texture, int multiplier) {
-
-		float mR = (multiplier >> 16 & 255) / 255.0F;
-		float mG = (multiplier >> 8 & 255) / 255.0F;
-		float mB = (multiplier & 255) / 255.0F;
-
-		if (EntityRenderer.anaglyphEnable) {
-			mR = (mR * 30.0F + mG * 59.0F + mB * 11.0F) / 100.0F;
-			mG = (mR * 30.0F + mG * 70.0F) / 100.0F;
-			mB = (mR * 30.0F + mB * 70.0F) / 100.0F;
-		}
-
-		return renderFruitOverlayWithColorMultiplier(world, block, pos, mR, mG, mB, renderer, texture);
-	}
-
-	private static boolean renderFruitOverlayWithColorMultiplier(IBlockAccess world, Block block, BlockPos pos, float r,
-			float g, float b, IModelBaker renderer, TextureAtlasSprite texture) {
-
-		int mixedBrightness = block.getMixedBrightnessForBlock(world, pos);
-
-		float adjR = 0.5f * r;
-		float adjG = 0.5f * g;
-		float adjB = 0.5f * b;
+	private boolean renderFruitOverlay(IBlockAccess world, BlockForestryLeaves block, BlockPos pos, IModelBaker baker, TextureAtlasSprite sprite, int colorIndex) {
 
 		// Bottom
-		renderBottomFace(world, block, pos, renderer, texture, mixedBrightness, adjR, adjG, adjB);
-		renderTopFace(world, block, pos, renderer, texture, mixedBrightness, adjR, adjG, adjB);
-		renderEastFace(world, block, pos, renderer, texture, mixedBrightness, adjR, adjG, adjB);
-		renderWestFace(world, block, pos, renderer, texture, mixedBrightness, adjR, adjG, adjB);
-		renderNorthFace(world, block, pos, renderer, texture, mixedBrightness, adjR, adjG, adjB);
-		renderSouthFace(world, block, pos, renderer, texture, mixedBrightness, adjR, adjG, adjB);
+		renderBottomFace(world, block, pos, baker, sprite, colorIndex);
+		renderTopFace(world, block, pos, baker, sprite, colorIndex);
+		renderEastFace(world, block, pos, baker, sprite, colorIndex);
+		renderWestFace(world, block, pos, baker, sprite, colorIndex);
+		renderNorthFace(world, block, pos, baker, sprite, colorIndex);
+		renderSouthFace(world, block, pos, baker, sprite, colorIndex);
 
 		return true;
-	}
-	
-	@Override
-	public TextureAtlasSprite getParticleTexture() {
-		// TODO Auto-generated method stub
-		return super.getParticleTexture();
 	}
 }

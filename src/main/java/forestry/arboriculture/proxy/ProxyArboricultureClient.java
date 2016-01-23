@@ -14,8 +14,8 @@ import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.world.ColorizerFoliage;
 
 import forestry.arboriculture.render.ModelLeaves;
+import forestry.core.models.BlockModelIndex;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.model.BlockModelIndex;
 import forestry.plugins.PluginArboriculture;
 
 public class ProxyArboricultureClient extends ProxyArboriculture {

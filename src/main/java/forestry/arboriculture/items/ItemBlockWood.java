@@ -35,7 +35,7 @@ import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.tiles.TileWood;
 import forestry.core.config.Constants;
 import forestry.core.items.ItemBlockForestry;
-import forestry.core.render.model.ModelManager;
+import forestry.core.models.ModelManager;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.StringUtil;
 

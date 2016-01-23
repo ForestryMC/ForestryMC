@@ -102,7 +102,7 @@ public class ParticleHelper {
 					double pz = pos.getZ() + (k + 0.5D) / iterations;
 					int random = rand.nextInt(6);
 
-					EntityDiggingFX fx = (EntityDiggingFX) effectRenderer.spawnEffectParticle(EnumParticleTypes.BLOCK_DUST.getParticleID(), px, py, pz, px - pos.getX() - 0.5D, py - pos.getY() - 0.5D, pz - pos.getZ() - 0.5D, Block.getStateId(state));
+					EntityDiggingFX fx = (EntityDiggingFX) effectRenderer.spawnEffectParticle(EnumParticleTypes.BLOCK_CRACK.getParticleID(), px, py, pz, px - pos.getX() - 0.5D, py - pos.getY() - 0.5D, pz - pos.getZ() - 0.5D, Block.getStateId(state));
 					callback.addDestroyEffects(fx, pos, state);
 					effectRenderer.addEffect(fx.func_174846_a(pos));
 				}

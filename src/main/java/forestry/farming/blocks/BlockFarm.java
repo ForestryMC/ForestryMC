@@ -49,7 +49,7 @@ import forestry.core.render.ParticleHelper;
 import forestry.core.render.ParticleHelper.DefaultCallback;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.ItemStackUtil;
-import forestry.farming.render.EnumFarmBlockTexture;
+import forestry.farming.models.EnumFarmBlockTexture;
 import forestry.farming.tiles.TileFarm;
 import forestry.farming.tiles.TileFarmControl;
 import forestry.farming.tiles.TileFarmGearbox;
@@ -61,25 +61,25 @@ public class BlockFarm extends BlockStructure {
 
 	private final ParticleHelper.Callback particleCallback;
 
-	public static final PropertyEnum META = PropertyEnum.create("meta", EnumBlockFarmType.class);
+	public static final PropertyEnum META = PropertyEnum.create("meta", EnumFarmBlockType.class);
 	
 	public BlockFarm() {
 		super(Material.rock);
 		setHardness(1.0f);
 		setHarvestLevel("pickaxe", 0);
 		this.particleCallback = new FarmCallback(this);
-		setDefaultState(blockState.getBaseState().withProperty(META, EnumBlockFarmType.BASIC));
+		setDefaultState(blockState.getBaseState().withProperty(META, EnumFarmBlockType.PLAIN));
 	}
 	
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState().withProperty(META, EnumBlockFarmType.values()[meta]);
+		return getDefaultState().withProperty(META, EnumFarmBlockType.values()[meta]);
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return ((EnumBlockFarmType) state.getValue(META)).ordinal();
+		return ((EnumFarmBlockType) state.getValue(META)).ordinal();
 	}
 
 	@Override
@@ -230,7 +230,9 @@ public class BlockFarm extends BlockStructure {
 		@Override
 		protected void setTexture(EntityDiggingFX fx, BlockPos pos, IBlockState state) {
 			IExtendedBlockState extend = (IExtendedBlockState) state;
-			fx.setParticleIcon(EnumFarmBlockTexture.getSprite(EnumFarmBlockTexture.BRICK, 0));
+			TileFarm farm = (TileFarm) fx.getEntityWorld().getTileEntity(pos);
+			
+			fx.setParticleIcon(EnumFarmBlockTexture.getSprite(farm.getFarmBlockTexture(), 2));
 		}
 		
 	}
@@ -240,7 +242,7 @@ public class BlockFarm extends BlockStructure {
 		return getMetaFromState(world.getBlockState(pos)) == 5;
 	}
 
-	public ItemStack get(EnumBlockFarmType type, int amount) {
+	public ItemStack get(EnumFarmBlockType type, int amount) {
 		return new ItemStack(this, amount, type.ordinal());
 	}
 }

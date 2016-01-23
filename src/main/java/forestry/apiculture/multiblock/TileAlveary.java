@@ -48,10 +48,10 @@ public abstract class TileAlveary extends MultiblockTileEntityForestry<Multibloc
 	private final String unlocalizedTitle;
 
 	protected TileAlveary() {
-		this(BlockAlveary.Type.PLAIN);
+		this(BlockAlveary.AlvearyType.PLAIN);
 	}
 
-	protected TileAlveary(BlockAlveary.Type type) {
+	protected TileAlveary(BlockAlveary.AlvearyType type) {
 		super(new MultiblockLogicAlveary());
 		this.unlocalizedTitle = "tile.for.alveary." + type.ordinal() + ".name";
 	}

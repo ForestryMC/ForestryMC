@@ -12,12 +12,11 @@ package forestry.farming.items;
 
 import java.util.List;
 
+import forestry.farming.models.EnumFarmBlockTexture;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-
-import forestry.farming.render.EnumFarmBlockTexture;
 
 public class ItemBlockFarm extends ItemBlock {
 

@@ -8,7 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.render.model;
+package forestry.core.models;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IModelManager;

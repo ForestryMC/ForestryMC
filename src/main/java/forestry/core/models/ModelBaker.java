@@ -8,7 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.render.model;
+package forestry.core.models;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -69,18 +69,18 @@ public class ModelBaker implements IModelBaker {
 		renderMaxZ = i;
 	}
 
-	protected int color = -1;
+	protected int colorIndex = -1;
 
 	@Override
-	public void setColor(int color) {
-		this.color = color;
+	public void setColorIndex(int colorIndex) {
+		this.colorIndex = colorIndex;
 	}
 	
 	@Override
 	public boolean renderStandardBlock(Block block, BlockPos pos, TextureAtlasSprite[] textures) {
 		setRenderBoundsFromBlock(block);
 
-		setColor(0xffffff);
+		setColorIndex(0);
 
 		renderFaceXNeg(pos, textures[EnumFacing.WEST.ordinal()]);
 		renderFaceXPos(pos, textures[EnumFacing.EAST.ordinal()]);
@@ -96,7 +96,7 @@ public class ModelBaker implements IModelBaker {
 	public boolean renderStandardBlock(Block block, BlockPos pos, TextureAtlasSprite texture) {
 		setRenderBoundsFromBlock(block);
 
-		setColor(0xffffff);
+		setColorIndex(0);
 
 		renderFaceXNeg(pos, texture);
 		renderFaceXPos(pos, texture);
@@ -241,7 +241,7 @@ public class ModelBaker implements IModelBaker {
 	}
 
 	protected void addFace(EnumFacing face, boolean isEdge, Vector3f to, Vector3f from, float[] defUVs2, TextureAtlasSprite texture) {
-		faces.add(new ModelBakerFace(face, isEdge, color, to, from, defUVs2, texture));
+		faces.add(new ModelBakerFace(face, isEdge, colorIndex, to, from, defUVs2, texture));
 	}
 
 	@Override
@@ -256,10 +256,10 @@ public class ModelBaker implements IModelBaker {
 			final float[] uvs = getFaceUvs(myFace, face.from, face.to);
 
 			final BlockFaceUV uv = new BlockFaceUV(uvs, 0);
-			final BlockPartFace bpf = new BlockPartFace(myFace, face.color, "", uv);
+			final BlockPartFace bpf = new BlockPartFace(myFace, face.colorIndex, "", uv);
 
 			BakedQuad bf = faceBakery.makeBakedQuad(face.to, face.from, bpf, face.spite, myFace, mr, null, true, true);
-			bf = new IColoredBakedQuad.ColoredBakedQuad(bf.getVertexData(), face.color, bf.getFace());
+			bf = new IColoredBakedQuad.ColoredBakedQuad(bf.getVertexData(), face.colorIndex, bf.getFace());
 
 			if (face.isEdge)
 				this.generatedModel.getFaceQuads(myFace).add(bf);

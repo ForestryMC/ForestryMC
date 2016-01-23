@@ -8,7 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.render.model;
+package forestry.core.models;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.resources.model.IBakedModel;

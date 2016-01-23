@@ -34,10 +34,11 @@ import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamableGui;
 import forestry.core.tiles.ITitled;
+import forestry.farming.blocks.EnumFarmBlockType;
 import forestry.farming.gui.ContainerFarm;
 import forestry.farming.gui.GuiFarm;
+import forestry.farming.models.EnumFarmBlockTexture;
 import forestry.farming.multiblock.MultiblockLogicFarm;
-import forestry.farming.render.EnumFarmBlockTexture;
 
 public abstract class TileFarm extends MultiblockTileEntityForestry<MultiblockLogicFarm> implements IFarmComponent, IHintSource, ISocketable, IStreamableGui, IErrorLogicSource, IRestrictedAccess, ITitled {
 
@@ -49,13 +50,13 @@ public abstract class TileFarm extends MultiblockTileEntityForestry<MultiblockLo
 
 	@Override
 	public void onMachineAssembled(IMultiblockController multiblockController, BlockPos minCoord, BlockPos maxCoord) {
-		worldObj.notifyBlockOfStateChange(getPos(), getBlockType());
+		worldObj.notifyBlockOfStateChange(getPos(), worldObj.getBlockState(pos).getBlock());
 		markDirty();
 	}
 
 	@Override
 	public void onMachineBroken() {
-		worldObj.notifyBlockOfStateChange(getPos(), getBlockType());
+		worldObj.notifyBlockOfStateChange(getPos(), worldObj.getBlockState(pos).getBlock());
 		markDirty();
 	}
 
@@ -93,6 +94,10 @@ public abstract class TileFarm extends MultiblockTileEntityForestry<MultiblockLo
 
 	public EnumFarmBlockTexture getFarmBlockTexture() {
 		return farmBlockTexture;
+	}
+	
+	public EnumFarmBlockType getFarmBlockType() {
+		return EnumFarmBlockType.VALUES[getBlockMetadata()];
 	}
 
 	/* TILEFORESTRY */

@@ -1,12 +1,10 @@
 package forestry.factory.recipes.jei.squeezer;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import forestry.core.fluids.FluidHelper;
 import forestry.core.recipes.jei.ForestryRecipeWrapper;
 import forestry.factory.recipes.ISqueezerContainerRecipe;
 import net.minecraft.item.ItemStack;

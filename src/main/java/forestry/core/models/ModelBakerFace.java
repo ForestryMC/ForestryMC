@@ -8,7 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.render.model;
+package forestry.core.models;
 
 import org.lwjgl.util.vector.Vector3f;
 
@@ -27,11 +27,11 @@ public class ModelBakerFace {
 
 	public final TextureAtlasSprite spite;
 
-	public final int color;
+	public final int colorIndex;
 
-	public ModelBakerFace(EnumFacing face, boolean isEdge, int color, Vector3f to, Vector3f from, float[] defUVs2,
+	public ModelBakerFace(EnumFacing face, boolean isEdge, int colorIndex, Vector3f to, Vector3f from, float[] defUVs2,
 			TextureAtlasSprite sprite) {
-		this.color = color;
+		this.colorIndex = colorIndex;
 		this.face = face;
 		this.isEdge = isEdge;
 		this.to = to;

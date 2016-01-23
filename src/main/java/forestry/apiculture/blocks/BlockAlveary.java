@@ -50,9 +50,9 @@ import forestry.core.blocks.BlockStructure;
 import forestry.core.proxy.Proxies;
 
 public class BlockAlveary extends BlockStructure implements IStateMapperRegister {
-	private static final PropertyEnum TYPE = PropertyEnum.create("alveary", Type.class);
+	private static final PropertyEnum TYPE = PropertyEnum.create("alveary", AlvearyType.class);
 	private static final PropertyEnum STATE = PropertyEnum.create("state", State.class);
-	private static final PropertyEnum LEVEL = PropertyEnum.create("type", Level.class);
+	private static final PropertyEnum LEVEL = PropertyEnum.create("type", AlvearyLevel.class);
 	
 	private enum State implements IStringSerializable {
 		ON, OFF;
@@ -63,8 +63,8 @@ public class BlockAlveary extends BlockStructure implements IStateMapperRegister
 		}
 	}
 	
-	private enum Level implements IStringSerializable {
-		BOTTOM, LEFT, RIGHT;
+	private enum AlvearyLevel implements IStringSerializable {
+		MIDDLE, LEFT, RIGHT;
 
 		@Override
 		public String getName() {
@@ -72,7 +72,7 @@ public class BlockAlveary extends BlockStructure implements IStateMapperRegister
 		}
 	}
 	
-	public enum Type implements IStringSerializable {
+	public enum AlvearyType implements IStringSerializable {
 		PLAIN,
 		ENTRANCE,
 		SWARMER,
@@ -82,7 +82,7 @@ public class BlockAlveary extends BlockStructure implements IStateMapperRegister
 		STABILISER,
 		SIEVE;
 
-		public static final Type[] VALUES = values();
+		public static final AlvearyType[] VALUES = values();
 		
 		@Override
 		public String getName() {
@@ -95,7 +95,8 @@ public class BlockAlveary extends BlockStructure implements IStateMapperRegister
 		setHardness(1.0f);
 		setCreativeTab(Tabs.tabApiculture);
 		setHarvestLevel("axe", 0);
-		setDefaultState(this.blockState.getBaseState().withProperty(TYPE, Type.PLAIN).withProperty(STATE, State.OFF).withProperty(LEVEL, Level.BOTTOM));
+		setStepSound(soundTypeWood);
+		setDefaultState(this.blockState.getBaseState().withProperty(TYPE, AlvearyType.PLAIN).withProperty(STATE, State.OFF).withProperty(LEVEL, AlvearyLevel.MIDDLE));
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
@@ -137,11 +138,11 @@ public class BlockAlveary extends BlockStructure implements IStateMapperRegister
 	@Override
 	public TileEntity createTileEntity(World world, IBlockState state) {
 		int metadata = getMetaFromState(state);
-		if (metadata < 0 || metadata > Type.VALUES.length) {
+		if (metadata < 0 || metadata > AlvearyType.VALUES.length) {
 			return null;
 		}
 
-		Type type = Type.VALUES[metadata];
+		AlvearyType type = AlvearyType.VALUES[metadata];
 		switch (type) {
 			case SWARMER:
 				return new TileAlvearySwarmer();
@@ -183,12 +184,12 @@ public class BlockAlveary extends BlockStructure implements IStateMapperRegister
 	/* STATES */
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState().withProperty(TYPE, Type.values()[meta]);
+		return getDefaultState().withProperty(TYPE, AlvearyType.values()[meta]);
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return ((Type) state.getValue(TYPE)).ordinal();
+		return ((AlvearyType) state.getValue(TYPE)).ordinal();
 	}
 
 	@Override
@@ -217,55 +218,36 @@ public class BlockAlveary extends BlockStructure implements IStateMapperRegister
 			}
 		}
 
-		int meta = ((Type) state.getValue(TYPE)).ordinal();
+		IBlockState stateXP = world.getBlockState(new BlockPos(pos.getX() + 1, pos.getY(), pos.getZ()));
+		IBlockState stateXM = world.getBlockState(new BlockPos(pos.getX() - 1, pos.getY(), pos.getZ()));
+		Block blockXP = stateXP.getBlock();
+		Block blockXM = stateXM.getBlock();
 
-		Block blockXP = world.getBlockState(new BlockPos(pos.getX() + 1, pos.getY(), pos.getZ())).getBlock();
-		Block blockXM = world.getBlockState(new BlockPos(pos.getX() - 1, pos.getY(), pos.getZ())).getBlock();
-
-		state = state.withProperty(LEVEL, Level.BOTTOM);
+		state = state.withProperty(LEVEL, AlvearyLevel.MIDDLE);
 
 		if (blockXP == this && blockXM != this) {
-
-			IBlockState stateNeighbor = world.getBlockState(new BlockPos(pos.getX() + 1, pos.getY(), pos.getZ()));
-			if (stateNeighbor.getBlock().getMetaFromState(stateNeighbor) == 1) {
+			if (stateXP.getValue(TYPE) == AlvearyType.ENTRANCE) {
 
 				if (world.getBlockState(new BlockPos(pos.getX(), pos.getY(), pos.getZ() + 1)).getBlock() != this) {
-					switchForSide(state, world, pos);
+					state = state.withProperty(LEVEL, AlvearyLevel.RIGHT);
 				} else {
-					switchForSide(state, world, pos);
+					state = state.withProperty(LEVEL, AlvearyLevel.LEFT);
 				}
 
 			}
 		} else if (blockXP != this && blockXM == this) {
-			IBlockState stateNeighbor = world.getBlockState(new BlockPos(pos.getX() - 1, pos.getY(), pos.getZ()));
-			if (stateNeighbor.getBlock().getMetaFromState(stateNeighbor) == 1) {
+			if (stateXM.getValue(TYPE) == AlvearyType.ENTRANCE) {
 
 				if (world.getBlockState(new BlockPos(pos.getX(), pos.getY(), pos.getZ() + 1)).getBlock() != this) {
-					switchForSide(state, world, pos);
+					state = state.withProperty(LEVEL, AlvearyLevel.LEFT);
 				} else {
-					switchForSide(state, world, pos);
+					state = state.withProperty(LEVEL, AlvearyLevel.RIGHT);
 				}
 
 			}
 		}
 
 		return super.getActualState(state, world, pos);
-	}
-	
-	private void switchForSide(IBlockState state, IBlockAccess world, BlockPos pos) {
-
-		Block blockX = world.getBlockState(new BlockPos(pos.getX() + 1, pos.getY(), pos.getZ())).getBlock();
-		Block blockY = world.getBlockState(new BlockPos(pos.getX(), pos.getY() + 1, pos.getZ())).getBlock();
-		if (blockX != this && blockY == this) {
-			state = state.withProperty(LEVEL, Level.LEFT);
-		} else if (blockX == this && blockY == this) {
-			state = state.withProperty(LEVEL, Level.RIGHT);
-		} else if (blockX == this && blockY != this) {
-			state = state.withProperty(LEVEL, Level.LEFT);
-		} else if (blockX != this && blockY != this) {
-			state = state.withProperty(LEVEL, Level.RIGHT);
-		}
-
 	}
 	
 	@Override
@@ -279,14 +261,14 @@ public class BlockAlveary extends BlockStructure implements IStateMapperRegister
 		@Override
 		protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
 			LinkedHashMap linkedhashmap = Maps.newLinkedHashMap(state.getProperties());
-			if (linkedhashmap.get(TYPE) != Type.PLAIN) {
+			if (linkedhashmap.get(TYPE) != AlvearyType.PLAIN) {
 				linkedhashmap.remove(LEVEL);
 			}
-			if (linkedhashmap.get(TYPE) == Type.SIEVE
-					|| linkedhashmap.get(TYPE) == Type.ENTRANCE
-					|| linkedhashmap.get(TYPE) == Type.STABILISER
-					|| linkedhashmap.get(TYPE) == Type.HYGRO
-					|| linkedhashmap.get(TYPE) == Type.PLAIN) {
+			if (linkedhashmap.get(TYPE) == AlvearyType.SIEVE
+					|| linkedhashmap.get(TYPE) == AlvearyType.ENTRANCE
+					|| linkedhashmap.get(TYPE) == AlvearyType.STABILISER
+					|| linkedhashmap.get(TYPE) == AlvearyType.HYGRO
+					|| linkedhashmap.get(TYPE) == AlvearyType.PLAIN) {
 				linkedhashmap.remove(STATE);
 			}
 			String s = String.format("%s:%s",
@@ -311,7 +293,7 @@ public class BlockAlveary extends BlockStructure implements IStateMapperRegister
 		}
 	}
 
-	public ItemStack get(Type type) {
+	public ItemStack get(AlvearyType type) {
 		return new ItemStack(this, 1, type.ordinal());
 	}
 }

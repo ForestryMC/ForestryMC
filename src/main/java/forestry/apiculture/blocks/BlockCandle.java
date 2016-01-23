@@ -128,6 +128,7 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister {
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
 		manager.registerItemModel(item, 0, "candle");
+		manager.registerItemModel(item, 1, "candle");
 	}
 
 	@Override
@@ -141,10 +142,7 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister {
 	
 	@Override
 	public int colorMultiplier(IBlockAccess worldIn, BlockPos pos, int renderPass) {
-		if(renderPass < 3){
-			return ((TileCandle)worldIn.getTileEntity(pos)).getColour();
-		}
-		return 16777215;
+		return ((TileCandle)worldIn.getTileEntity(pos)).getColour();
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})

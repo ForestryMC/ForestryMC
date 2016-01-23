@@ -8,7 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.render.model;
+package forestry.core.models;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -29,10 +29,9 @@ import forestry.api.core.IModelBaker;
 import forestry.core.blocks.propertys.UnlistedBlockAccess;
 import forestry.core.blocks.propertys.UnlistedBlockPos;
 
-public abstract class ModelBlockOverlay implements ISmartItemModel, ISmartBlockModel {
+public abstract class ModelBlockOverlay<B extends Block> implements ISmartItemModel, ISmartBlockModel {
 
-	protected static void renderBottomFace(IBlockAccess world, Block block, BlockPos pos, IModelBaker renderer,
-			TextureAtlasSprite textureIndex, int mixedBrightness, float r, float g, float b) {
+	protected void renderBottomFace(IBlockAccess world, B block, BlockPos pos, IModelBaker baker, TextureAtlasSprite sprite, int colorIndex) {
 
 		BlockPos posNEW = new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ());
 
@@ -40,12 +39,11 @@ public abstract class ModelBlockOverlay implements ISmartItemModel, ISmartBlockM
 			return;
 		}
 		
-		renderer.renderFaceYNeg(pos, textureIndex);
+		baker.renderFaceYNeg(pos, sprite);
 
 	}
 
-	protected static void renderTopFace(IBlockAccess world, Block block, BlockPos pos, IModelBaker renderer,
-			TextureAtlasSprite textureIndex, int mixedBrightness, float r, float g, float b) {
+	protected void renderTopFace(IBlockAccess world, B block, BlockPos pos, IModelBaker baker, TextureAtlasSprite sprite, int colorIndex) {
 
 		BlockPos posNEW = new BlockPos(pos.getX(), pos.getY() + 1, pos.getZ());
 
@@ -54,12 +52,11 @@ public abstract class ModelBlockOverlay implements ISmartItemModel, ISmartBlockM
 		}
 
 
-		renderer.renderFaceYPos(pos, textureIndex);
+		baker.renderFaceYPos(pos, sprite);
 
 	}
 
-	protected static void renderEastFace(IBlockAccess world, Block block, BlockPos pos, IModelBaker renderer,
-			TextureAtlasSprite textureIndex, int mixedBrightness, float r, float g, float b) {
+	protected void renderEastFace(IBlockAccess world, B block, BlockPos pos, IModelBaker baker, TextureAtlasSprite sprite, int colorIndex) {
 
 		BlockPos posNEW = new BlockPos(pos.getX(), pos.getY(), pos.getZ() - 1);
 
@@ -67,12 +64,11 @@ public abstract class ModelBlockOverlay implements ISmartItemModel, ISmartBlockM
 			return;
 		}
 
-		renderer.renderFaceZNeg(pos, textureIndex);
+		baker.renderFaceZNeg(pos, sprite);
 
 	}
 
-	protected static void renderWestFace(IBlockAccess world, Block block, BlockPos pos, IModelBaker renderer,
-			TextureAtlasSprite textureIndex, int mixedBrightness, float r, float g, float b) {
+	protected void renderWestFace(IBlockAccess world, B block, BlockPos pos, IModelBaker baker, TextureAtlasSprite sprite, int colorIndex) {
 
 		BlockPos posNEW = new BlockPos(pos.getX(), pos.getY(), pos.getZ() + 1);
 
@@ -80,12 +76,11 @@ public abstract class ModelBlockOverlay implements ISmartItemModel, ISmartBlockM
 			return;
 		}
 
-		renderer.renderFaceZPos(pos, textureIndex);
+		baker.renderFaceZPos(pos, sprite);
 
 	}
 
-	protected static void renderNorthFace(IBlockAccess world, Block block, BlockPos pos, IModelBaker renderer,
-			TextureAtlasSprite textureIndex, int mixedBrightness, float r, float g, float b) {
+	protected void renderNorthFace(IBlockAccess world, B block, BlockPos pos, IModelBaker baker, TextureAtlasSprite sprite, int colorIndex) {
 
 		BlockPos posNEW = new BlockPos(pos.getX() - 1, pos.getY(), pos.getZ());
 
@@ -93,12 +88,11 @@ public abstract class ModelBlockOverlay implements ISmartItemModel, ISmartBlockM
 			return;
 		}
 
-		renderer.renderFaceXNeg(pos, textureIndex);
+		baker.renderFaceXNeg(pos, sprite);
 
 	}
 
-	protected static void renderSouthFace(IBlockAccess world, Block block, BlockPos pos, IModelBaker renderer,
-			TextureAtlasSprite textureIndex, int mixedBrightness, float r, float g, float b) {
+	protected void renderSouthFace(IBlockAccess world, B block, BlockPos pos, IModelBaker baker, TextureAtlasSprite sprite, int colorIndex) {
 
 		BlockPos posNEW = new BlockPos(pos.getX() + 1, pos.getY(), pos.getZ());
 
@@ -106,12 +100,12 @@ public abstract class ModelBlockOverlay implements ISmartItemModel, ISmartBlockM
 			return;
 		}
 
-		renderer.renderFaceXPos(pos, textureIndex);
+		baker.renderFaceXPos(pos, sprite);
 
 	}
 
 	@Override
-	public List getFaceQuads(EnumFacing p_177551_1_) {
+	public List getFaceQuads(EnumFacing face) {
 		return Collections.emptyList();
 	}
 
@@ -147,27 +141,41 @@ public abstract class ModelBlockOverlay implements ISmartItemModel, ISmartBlockM
 
 	@Override
 	public IBakedModel handleBlockState(IBlockState state) {
-		IExtendedBlockState extend = (IExtendedBlockState) state;
-		IModelBaker renderer = ModelManager.getInstance().createNewRenderer();
-		Block blk = state.getBlock();
-		IBlockAccess world = extend.getValue(UnlistedBlockAccess.BLOCKACCESS);
-		BlockPos pos = extend.getValue(UnlistedBlockPos.POS);
-		renderer.setRenderBoundsFromBlock(blk);
-		renderInWorld(blk, world, pos, renderer);
-		return renderer.bakeModel(false);
+		IModelBaker baker = ModelManager.getInstance().createNewRenderer();
+		IExtendedBlockState stateExtended = (IExtendedBlockState) state;
+		
+		IBlockAccess world = stateExtended.getValue(UnlistedBlockAccess.BLOCKACCESS);
+		BlockPos pos = stateExtended.getValue(UnlistedBlockPos.POS);
+		Block block = state.getBlock();
+		
+		baker.setRenderBoundsFromBlock(block);
+		try{
+			renderInWorld((B) block, world, pos, baker);
+		}catch(Exception e){
+			return null;
+		}
+		
+		return baker.bakeModel(false);
 	}
 
 	@Override
 	public IBakedModel handleItemState(ItemStack stack) {
-		IModelBaker renderer = ModelManager.getInstance().createNewRenderer();
-		Block blk = Block.getBlockFromItem(stack.getItem());
-		renderer.setRenderBoundsFromBlock(blk);
-		renderInventory(blk, stack, renderer);
-		return renderer.bakeModel(true);
+		IModelBaker baker = ModelManager.getInstance().createNewRenderer();
+		Block block = Block.getBlockFromItem(stack.getItem());
+		
+		block.setBlockBoundsForItemRender();
+		baker.setRenderBoundsFromBlock(block);
+		try{
+			renderInventory((B) block, stack, baker);
+		}catch(Exception e){
+			return null;
+		}
+		
+		return baker.bakeModel(true);
 	}
 
-	protected abstract void renderInventory(Block block, ItemStack item, IModelBaker renderer);
+	protected abstract void renderInventory(B block, ItemStack item, IModelBaker renderer);
 
-	protected abstract boolean renderInWorld(Block block, IBlockAccess world, BlockPos pos, IModelBaker renderer);
+	protected abstract boolean renderInWorld(B block, IBlockAccess world, BlockPos pos, IModelBaker renderer);
 
 }

@@ -279,14 +279,18 @@ public class BlockForestryLeaves extends BlockLeavesBase implements ITileEntityP
 
 		TileLeaves leaves = getLeafTile(world,pos);
 		if (leaves == null) {
-			return super.colorMultiplier(world, pos);
+			return super.colorMultiplier(world, pos, 0);
 		}
+		int colour = super.colorMultiplier(world, pos, 0);
+		if(renderPass == 0){
+			colour = leaves.getFoliageColour(Proxies.common.getClientInstance().thePlayer);
+			if (colour == PluginArboriculture.proxy.getFoliageColorBasic()) {
+				return super.colorMultiplier(world, pos, 0);
+			}
 
-		int colour = leaves.getFoliageColour(Proxies.common.getClientInstance().thePlayer);
-		if (colour == PluginArboriculture.proxy.getFoliageColorBasic()) {
-			colour = super.colorMultiplier(world, pos);
+		}else{
+			colour = leaves.getFruitColour();
 		}
-
 		return colour;
 	}
 	

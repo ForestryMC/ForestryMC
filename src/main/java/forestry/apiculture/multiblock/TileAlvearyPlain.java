@@ -37,7 +37,7 @@ public class TileAlvearyPlain extends TileAlveary implements ITriggerProvider {
 			// set alveary entrance block meta
 			if (getPos().getY() == maxCoord.getY()) {
 				if ((getPos().getX() > minCoord.getX() && getPos().getX() < maxCoord.getX()) || (getPos().getZ() > minCoord.getZ() && getPos().getZ() < maxCoord.getZ())) {
-					this.worldObj.setBlockState(getPos(), getBlockType().getStateFromMeta(BlockAlveary.Type.ENTRANCE.ordinal()), 2);
+					this.worldObj.setBlockState(getPos(), getBlockType().getStateFromMeta(BlockAlveary.AlvearyType.ENTRANCE.ordinal()), 2);
 				}
 			}
 		}
@@ -49,7 +49,7 @@ public class TileAlvearyPlain extends TileAlveary implements ITriggerProvider {
 
 		if (!worldObj.isRemote) {
 			// set alveary entrance block meta back to normal
-			this.worldObj.setBlockState(getPos(), getBlockType().getStateFromMeta(BlockAlveary.Type.PLAIN.ordinal()), 2);
+			this.worldObj.setBlockState(getPos(), getBlockType().getStateFromMeta(BlockAlveary.AlvearyType.PLAIN.ordinal()), 2);
 		}
 	}
 

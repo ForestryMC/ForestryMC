@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.storage.proxy;
 
+import forestry.core.models.ModelCrate;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
-import forestry.core.render.model.ModelCrate;
 
 public class ProxyStorageClient extends ProxyStorage {
 

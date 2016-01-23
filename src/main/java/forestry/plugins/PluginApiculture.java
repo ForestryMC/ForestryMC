@@ -520,14 +520,14 @@ public class PluginApiculture extends ForestryPlugin {
 				'#', PluginCore.items.beeswax);
 
 		// / ALVEARY
-		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.Type.PLAIN),
+		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.AlvearyType.PLAIN),
 				"###",
 				"#X#",
 				"###",
 				'X', PluginCore.items.impregnatedCasing,
 				'#', PluginCore.items.craftingMaterial.getScentedPaneling());
 		// SWARMER
-		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.Type.SWARMER),
+		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.AlvearyType.SWARMER),
 				"#G#",
 				" X ",
 				"#G#",
@@ -535,7 +535,7 @@ public class PluginApiculture extends ForestryPlugin {
 				'X', blocks.alveary,
 				'G', "ingotGold");
 		// FAN
-		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.Type.FAN),
+		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.AlvearyType.FAN),
 				"I I",
 				" X ",
 				"I#I",
@@ -543,7 +543,7 @@ public class PluginApiculture extends ForestryPlugin {
 				'X', blocks.alveary,
 				'I', "ingotIron");
 		// HEATER
-		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.Type.HEATER),
+		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.AlvearyType.HEATER),
 				"#I#",
 				" X ",
 				"YYY",
@@ -551,7 +551,7 @@ public class PluginApiculture extends ForestryPlugin {
 				'X', blocks.alveary,
 				'I', "ingotIron", 'Y', "stone");
 		// HYGROREGULATOR
-		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.Type.HYGRO),
+		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.AlvearyType.HYGRO),
 				"GIG",
 				"GXG",
 				"GIG",
@@ -559,14 +559,14 @@ public class PluginApiculture extends ForestryPlugin {
 				'I', "ingotIron",
 				'G', "blockGlass");
 		// STABILISER
-		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.Type.STABILISER),
+		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.AlvearyType.STABILISER),
 				"G G",
 				"GXG",
 				"G G",
 				'X', blocks.alveary,
 				'G', "gemQuartz");
 		// SIEVE
-		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.Type.SIEVE),
+		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.AlvearyType.SIEVE),
 				"III",
 				" X ",
 				"WWW",

@@ -308,6 +308,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 	 */
 	private void assembleMachine(AssemblyState oldState) {
 		this.assemblyState = AssemblyState.Assembled;
+		
 		for (IMultiblockComponent part : connectedParts) {
 			part.onMachineAssembled(this, getMinimumCoord(), getMaximumCoord());
 		}

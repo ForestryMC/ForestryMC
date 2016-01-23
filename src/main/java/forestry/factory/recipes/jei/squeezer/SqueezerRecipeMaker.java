@@ -5,14 +5,9 @@ import java.util.List;
 
 import forestry.api.recipes.ISqueezerRecipe;
 import forestry.api.recipes.RecipeManagers;
-import forestry.core.fluids.FluidHelper;
 import forestry.factory.recipes.ISqueezerContainerRecipe;
 import forestry.factory.recipes.SqueezerRecipeManager;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 
 public class SqueezerRecipeMaker {

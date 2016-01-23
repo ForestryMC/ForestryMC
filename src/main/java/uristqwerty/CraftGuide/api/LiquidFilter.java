@@ -32,7 +32,7 @@ public class LiquidFilter implements ItemFilter
 
 	public void setLiquid(FluidStack liquid)
 	{
-		String name = liquid.getFluid().getLocalizedName();
+		String name = liquid.getFluid().getLocalizedName(liquid);
 		this.liquid = liquid;
 		liquidName = name.toLowerCase(Locale.ENGLISH);
 		tooltip.clear();
