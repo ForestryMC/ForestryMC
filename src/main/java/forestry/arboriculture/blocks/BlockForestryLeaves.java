@@ -76,6 +76,7 @@ public class BlockForestryLeaves extends BlockLeavesBase implements ITileEntityP
 	public BlockForestryLeaves() {
 		super(Material.leaves, false);
 		this.setCreativeTab(Tabs.tabArboriculture);
+		setStepSound(soundTypeGrass);
 	}
 	
 	@Override

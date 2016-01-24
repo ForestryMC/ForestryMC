@@ -53,7 +53,7 @@ public class ModelCrate implements IModelCustomData{
      * @param modID The modId of the creat item
      * @param location The location of the model from the contained item
      */
-    public ModelCrate(ModelResourceLocation baseLocation, EnumWorldBlockLayer containedLayer, String UID, String modID, ResourceLocation location){
+    private ModelCrate(ModelResourceLocation baseLocation, EnumWorldBlockLayer containedLayer, String UID, String modID, ResourceLocation location){
         this.baseLocation = baseLocation;
         this.containedLayer = containedLayer;
         this.containedUID = UID;
@@ -71,6 +71,11 @@ public class ModelCrate implements IModelCustomData{
         return ImmutableList.of();
     }
     
+    /**
+     * 
+     * @param loc The location of the model
+     * @return A model from the {@link ModelLoaderRegistry} 
+     */
     private static IModel getModel(ResourceLocation loc){
         IModel model;
         try{
@@ -83,6 +88,9 @@ public class ModelCrate implements IModelCustomData{
      	return model;
     }
 
+    /**
+     * To bake the base and the contained model
+     */
     private static ImmutableMap<Optional<EnumWorldBlockLayer>, IFlexibleBakedModel> buildModels(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter, IModel crateModel, ModelCrate modelToBake){
         ImmutableMap.Builder<Optional<EnumWorldBlockLayer>, IFlexibleBakedModel> builder = ImmutableMap.builder();
         
@@ -104,7 +112,7 @@ public class ModelCrate implements IModelCustomData{
         IModel missing = ModelLoaderRegistry.getMissingModel();
         IModel creat;
         try {
-			creat = ModelLoaderRegistry.getModel(new ModelResourceLocation(modID + ":" + "crates", containedUID));
+			creat = ModelLoaderRegistry.getModel(new ModelResourceLocation(modID + ":crates", containedUID));
 		} catch (IOException e) {
 			e.printStackTrace();
 			return missing.bake(state, format, bakedTextureGetter);
@@ -125,6 +133,9 @@ public class ModelCrate implements IModelCustomData{
         return TRSRTransformation.identity();
     }
 
+    /**
+     * Create a crate model from the customData
+     */
     @Override
     public IModel process(ImmutableMap<String, String> customData){
         ImmutableMap.Builder<Optional<EnumWorldBlockLayer>, ModelResourceLocation> builder = ImmutableMap.builder();
@@ -156,7 +167,10 @@ public class ModelCrate implements IModelCustomData{
             	}
             }
         }
-        if(baseLocation == null || layer == null || location == null || UID == null || modID == null) {
+        if(modID == null){
+        	modID = "forestry";
+        }
+        if(baseLocation == null || layer == null || location == null || UID == null) {
         	return instance;
         }
         return new ModelCrate(baseLocation, layer, UID, modID, location);
@@ -182,6 +196,9 @@ public class ModelCrate implements IModelCustomData{
         return null;
     }
 
+    /**
+     * The model loader to load crate models from the blockstate file
+     */
     public static enum Loader implements ICustomModelLoader{
         instance;
 

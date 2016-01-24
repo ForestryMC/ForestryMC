@@ -173,7 +173,13 @@ public class PluginCore extends ForestryPlugin {
 		crateRegistry.registerCrate(Blocks.cobblestone, "cratedCobblestone");
 		crateRegistry.registerCrate(new ItemStack(Blocks.dirt, 1, 0), "cratedDirt");
 		crateRegistry.registerCrate(new ItemStack(Blocks.dirt, 1, 2), "cratedPodzol");
-		crateRegistry.registerCrate(Blocks.stone, "cratedStone");
+		crateRegistry.registerCrate(new ItemStack(Blocks.stone, 1, 0), "cratedStone");
+		crateRegistry.registerCrate(new ItemStack(Blocks.stone, 1, 1), "cratedGranite");
+		crateRegistry.registerCrate(new ItemStack(Blocks.stone, 1, 3), "cratedDiorite");
+		crateRegistry.registerCrate(new ItemStack(Blocks.stone, 1, 5), "cratedAndesite");
+		crateRegistry.registerCrate(new ItemStack(Blocks.prismarine, 1, 0), "cratedPrismarine");
+		crateRegistry.registerCrate(new ItemStack(Blocks.prismarine, 1, 1), "cratedPrismarinebrick");
+		crateRegistry.registerCrate(new ItemStack(Blocks.prismarine, 1, 2), "cratedPrismarinedark");
 		crateRegistry.registerCrate(Blocks.brick_block, "cratedBrick");
 		crateRegistry.registerCrate(Blocks.cactus, "cratedCacti");
 		crateRegistry.registerCrate(new ItemStack(Blocks.sand, 1, 0), "cratedSand");

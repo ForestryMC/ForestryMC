@@ -13,7 +13,7 @@ import net.minecraft.world.IBlockAccess;
 public class ModelFarmBlock extends ModelBlockOverlay<BlockFarm> {
 
 	@Override
-	public void renderInventory(BlockFarm blockFarm, ItemStack item, IModelBaker backer) {
+	public void renderInventory(BlockFarm blockFarm, ItemStack item, IModelBaker baker) {
 		if (blockFarm == null) {
 			return;
 		}
@@ -23,29 +23,29 @@ public class ModelFarmBlock extends ModelBlockOverlay<BlockFarm> {
 		TextureAtlasSprite[] sprites = getSprites(type);
 		TextureAtlasSprite[] overlaySprites = getOverlaySprites(EnumFarmBlockType.VALUES[item.getItemDamage()]);
 
-		backer.renderFaceYNeg(null, sprites[0]);
-		backer.renderFaceYNeg(null, overlaySprites[0]);
+		baker.renderFaceYNeg(null, sprites[0]);
+		baker.renderFaceYNeg(null, overlaySprites[0]);
 
-		backer.renderFaceYPos(null, sprites[1]);
-		backer.renderFaceYPos(null, overlaySprites[1]);
+		baker.renderFaceYPos(null, sprites[1]);
+		baker.renderFaceYPos(null, overlaySprites[1]);
 
-		backer.renderFaceZNeg(null, sprites[2]);
-		backer.renderFaceZNeg(null, overlaySprites[2]);
+		baker.renderFaceZNeg(null, sprites[2]);
+		baker.renderFaceZNeg(null, overlaySprites[2]);
 
-		backer.renderFaceZPos(null, sprites[3]);
-		backer.renderFaceZPos(null, overlaySprites[3]);
+		baker.renderFaceZPos(null, sprites[3]);
+		baker.renderFaceZPos(null, overlaySprites[3]);
 
-		backer.renderFaceXNeg(null, sprites[4]);
-		backer.renderFaceXNeg(null, overlaySprites[4]);
+		baker.renderFaceXNeg(null, sprites[4]);
+		baker.renderFaceXNeg(null, overlaySprites[4]);
 
-		backer.renderFaceXPos(null, sprites[5]);
-		backer.renderFaceXPos(null, overlaySprites[5]);
+		baker.renderFaceXPos(null, sprites[5]);
+		baker.renderFaceXPos(null, overlaySprites[5]);
 
 		blockFarm.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
 	}
 
 	@Override
-	public boolean renderInWorld(BlockFarm blockFarm, IBlockAccess world, BlockPos pos, IModelBaker backer) {
+	public boolean renderInWorld(BlockFarm blockFarm, IBlockAccess world, BlockPos pos, IModelBaker baker) {
 
 		TileFarm farm = (TileFarm) world.getTileEntity(pos);
 
@@ -53,8 +53,8 @@ public class ModelFarmBlock extends ModelBlockOverlay<BlockFarm> {
 		TextureAtlasSprite[] texturesOverlay = getOverlaySprites(farm.getFarmBlockType());
 
 		// Render the plain block.
-		backer.renderStandardBlock(blockFarm, pos, textures);
-		renderFarmOverlay(world, blockFarm, pos, backer, texturesOverlay);
+		baker.renderStandardBlock(blockFarm, pos, textures, 0);
+		renderFarmOverlay(world, blockFarm, pos, baker, texturesOverlay);
 
 		return true;
 	}

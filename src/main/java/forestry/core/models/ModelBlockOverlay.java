@@ -29,6 +29,9 @@ import forestry.api.core.IModelBaker;
 import forestry.core.blocks.propertys.UnlistedBlockAccess;
 import forestry.core.blocks.propertys.UnlistedBlockPos;
 
+/**
+ * A ovelay block model to make a block with 2 or more layers
+ */
 public abstract class ModelBlockOverlay<B extends Block> implements ISmartItemModel, ISmartBlockModel {
 
 	protected void renderBottomFace(IBlockAccess world, B block, BlockPos pos, IModelBaker baker, TextureAtlasSprite sprite, int colorIndex) {
@@ -173,9 +176,9 @@ public abstract class ModelBlockOverlay<B extends Block> implements ISmartItemMo
 		
 		return baker.bakeModel(true);
 	}
+	
+	protected abstract void renderInventory(B block, ItemStack item, IModelBaker baker);
 
-	protected abstract void renderInventory(B block, ItemStack item, IModelBaker renderer);
-
-	protected abstract boolean renderInWorld(B block, IBlockAccess world, BlockPos pos, IModelBaker renderer);
+	protected abstract boolean renderInWorld(B block, IBlockAccess world, BlockPos pos, IModelBaker baker);
 
 }

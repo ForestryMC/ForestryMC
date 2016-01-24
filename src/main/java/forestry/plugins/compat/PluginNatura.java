@@ -37,6 +37,7 @@ import forestry.farming.logic.FarmableGenericCrop;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.Plugin;
 import forestry.plugins.PluginCore;
+import forestry.plugins.PluginManager;
 
 @Plugin(pluginID = "Natura", name = "Natura", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.natura.description")
 public class PluginNatura extends ForestryPlugin {
@@ -220,9 +221,11 @@ public class PluginNatura extends ForestryPlugin {
 			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{aSeedList}, Fluids.SEEDOIL.getFluid(amount));
 		}
 
-		Block cropBlock = GameRegistry.findBlock(NATURA, "N Crops");
-		Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(seedBarley, cropBlock, 3));
-		Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(seedCotton, cropBlock, 8));
+		if(PluginManager.Module.FARMING.isEnabled()){
+			Block cropBlock = GameRegistry.findBlock(NATURA, "N Crops");
+			Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(seedBarley, cropBlock, 3));
+			Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(seedCotton, cropBlock, 8));
+		}
 		
 		List<ItemStack> berries = new ArrayList<>();
 		if (berryBlight != null) {

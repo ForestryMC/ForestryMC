@@ -4,8 +4,7 @@
     "model": "forestry:crate",
     "custom": {
       "base": "forestry:crates#crate",
-      "layer": "Cutout",
-      "modID": "forestry"
+      "layer": "Cutout"
     },
     "transform": "forge:default-block"
   },
@@ -13,6 +12,342 @@
     "crate": [
       {
         "model": "forestry:crate-filled"
+      }
+    ],
+    "cratedacaciawood": [
+      {
+        "custom": {
+          "location": "acacia_log#axis=y",
+          "uid": "cratedacaciawood"
+        },
+        "transform": {
+          "scale": 0.5,
+          "translation": [ -0.0625, 0, 0 ]
+        }
+      }
+    ],
+    "cratedandesite": [
+      {
+        "custom": {
+          "location": "andesite#normal",
+          "uid": "cratedandesite"
+        },
+        "transform": {
+          "scale": 0.5,
+          "translation": [ -0.0625, 0, 0 ]
+        }
+      }
+    ],
+    "cratedbirchwood": [
+      {
+        "custom": {
+          "location": "birch_log#axis=y",
+          "uid": "cratedbirchwood"
+        },
+        "transform": {
+          "scale": 0.5,
+          "translation": [ -0.0625, 0, 0 ]
+        }
+      }
+    ],
+    "cratedbogearth": [
+      {
+        "custom": {
+          "location": "forestry:soil#soil=bog_earth",
+          "uid": "cratedbogearth"
+        },
+        "transform": {
+          "scale": 0.5,
+          "translation": [ -0.0625, 0, 0 ]
+        }
+      }
+    ],
+    "cratedbrick": [
+      {
+        "custom": {
+          "location": "brick_block#normal",
+          "uid": "cratedbrick"
+        },
+        "transform": {
+          "scale": 0.5,
+          "translation": [ -0.0625, 0, 0 ]
+        }
+      }
+    ],
+    "cratedcacti": [
+      {
+        "custom": {
+          "location": "cactus#normal",
+          "uid": "cratedcacti"
+        },
+        "transform": {
+          "scale": 0.5,
+          "translation": [ -0.0625, 0, 0 ]
+        }
+      }
+    ],
+    "cratedcobblestone": [
+      {
+        "custom": {
+          "location": "cobblestone#normal",
+          "uid": "cratedcobblestone"
+        },
+        "transform": {
+          "scale": 0.5,
+          "translation": [ -0.0625, 0, 0 ]
+        }
+      }
+    ],
+    "crateddarkoakwood": [
+      {
+        "custom": {
+          "location": "dark_oak_log#axis=y",
+          "uid": "crateddarkoakwood"
+        },
+        "transform": {
+          "scale": 0.5,
+          "translation": [ -0.0625, 0, 0 ]
+        }
+      }
+    ],
+    "crateddiorite": [
+      {
+        "custom": {
+          "location": "diorite#normal",
+          "uid": "crateddiorite"
+        },
+        "transform": {
+          "scale": 0.5,
+          "translation": [ -0.0625, 0, 0 ]
+        }
+      }
+    ],
+    "crateddirt": [
+      {
+        "custom": {
+          "location": "dirt#normal",
+          "uid": "crateddirt"
+        },
+        "transform": {
+          "scale": 0.5,
+          "translation": [ -0.0625, 0, 0 ]
+        }
+      }
+    ],
+    "cratedgranite": [
+      {
+        "custom": {
+          "location": "granite#normal",
+          "uid": "cratedgranite"
+        },
+        "transform": {
+          "scale": 0.5,
+          "translation": [ -0.0625, 0, 0 ]
+        }
+      }
+    ],
+    "cratedgravel": [
+      {
+        "custom": {
+          "location": "gravel#normal",
+          "uid": "cratedgravel"
+        },
+        "transform": {
+          "scale": 0.5,
+          "translation": [ -0.0625, 0, 0 ]
+        }
+      }
+    ],
+    "cratedhumus": [
+      {
+        "custom": {
+          "location": "forestry:soil#soil=humus",
+          "uid": "cratedhumus"
+        },
+        "transform": {
+          "scale": 0.5,
+          "translation": [ -0.0625, 0, 0 ]
+        }
+      }
+    ],
+    "cratedjunglewood": [
+      {
+        "custom": {
+          "location": "jungle_log#axis=y",
+          "uid": "cratedjunglewood"
+        },
+        "transform": {
+          "scale": 0.5,
+          "translation": [ -0.0625, 0, 0 ]
+        }
+      }
+    ],
+    "cratedmycelium": [
+      {
+        "custom": {
+          "location": "mycelium#snowy=false",
+          "uid": "cratedmycelium"
+        },
+        "transform": {
+          "scale": 0.5,
+          "translation": [ -0.0625, 0, 0 ]
+        }
+      }
+    ], /*,
+    "cratedapples": [
+      {
+        "custom": {
+          "location": "item/apple",
+          "uid": "cratedapples"
+        },
+        "transform": {
+          "scale": .5,
+          "translation": [ -0.0625, 0, 0 ]
+        }
+      }
+    ]*/
+    "cratednetherbrick": [
+      {
+        "custom": {
+          "location": "nether_brick#normal",
+          "uid": "cratednetherbrick"
+        },
+        "transform": {
+          "scale": 0.5,
+          "translation": [ -0.0625, 0, 0 ]
+        }
+      }
+    ],
+    "cratednetherrack": [
+      {
+        "custom": {
+          "location": "netherrack#normal",
+          "uid": "cratednetherrack"
+        },
+        "transform": {
+          "scale": 0.5,
+          "translation": [ -0.0625, 0, 0 ]
+        }
+      }
+    ],
+    "cratedobsidian": [
+      {
+        "custom": {
+          "location": "obsidian#normal",
+          "uid": "cratedobsidian"
+        },
+        "transform": {
+          "scale": 0.5,
+          "translation": [ -0.0625, 0, 0 ]
+        }
+      }
+    ],
+    "cratedpodzol": [
+      {
+        "custom": {
+          "location": "podzol#snowy=false",
+          "uid": "cratedpodzol"
+        },
+        "transform": {
+          "scale": 0.5,
+          "translation": [ -0.0625, 0, 0 ]
+        }
+      }
+    ],
+    "cratedprismarine": [
+      {
+        "custom": {
+          "location": "prismarine#normal",
+          "uid": "cratedprismarine"
+        },
+        "transform": {
+          "scale": 0.5,
+          "translation": [ -0.0625, 0, 0 ]
+        }
+      }
+    ],
+    "cratedprismarinebrick": [
+      {
+        "custom": {
+          "location": "prismarine_bricks#normal",
+          "uid": "cratedprismarinebrick"
+        },
+        "transform": {
+          "scale": 0.5,
+          "translation": [ -0.0625, 0, 0 ]
+        }
+      }
+    ],
+    "cratedprismarinedark": [
+      {
+        "custom": {
+          "location": "dark_prismarine#normal",
+          "uid": "cratedprismarinedark"
+        },
+        "transform": {
+          "scale": 0.5,
+          "translation": [ -0.0625, 0, 0 ]
+        }
+      }
+    ],
+    "cratedredsand": [
+      {
+        "custom": {
+          "location": "red_sand#normal",
+          "uid": "cratedredsand"
+        },
+        "transform": {
+          "scale": 0.5,
+          "translation": [ -0.0625, 0, 0 ]
+        }
+      }
+    ],
+    "cratedsand": [
+      {
+        "custom": {
+          "location": "sand#normal",
+          "uid": "cratedsand"
+        },
+        "transform": {
+          "scale": 0.5,
+          "translation": [ -0.0625, 0, 0 ]
+        }
+      }
+    ],
+    "cratedsandstone": [
+      {
+        "custom": {
+          "location": "sandstone#normal",
+          "uid": "cratedsandstone"
+        },
+        "transform": {
+          "scale": 0.5,
+          "translation": [ -0.0625, 0, 0 ]
+        }
+      }
+    ],
+    "cratedsoulsand": [
+      {
+        "custom": {
+          "location": "soul_sand#normal",
+          "uid": "cratedsoulsand"
+        },
+        "transform": {
+          "scale": 0.5,
+          "translation": [ -0.0625, 0, 0 ]
+        }
+      }
+    ],
+    "cratedsprucewood": [
+      {
+        "custom": {
+          "location": "spruce_log#axis=y",
+          "uid": "cratedsprucewood"
+        },
+        "transform": {
+          "scale": 0.5,
+          "translation": [ -0.0625, 0, 0 ]
+        }
       }
     ],
     "cratedstone": [
@@ -27,11 +362,11 @@
         }
       }
     ],
-    "cratedapples": [
+    "cratedwood": [
       {
         "custom": {
-          "location": "item/apple",
-          "uid": "cratedapples"
+          "location": "oak_log#axis=y",
+          "uid": "cratedwood"
         },
         "transform": {
           "scale": 0.5,

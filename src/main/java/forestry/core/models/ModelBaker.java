@@ -29,6 +29,9 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.client.model.IColoredBakedQuad;
 
+/**
+ * A model baker to make custom models in the mod
+ */
 public class ModelBaker implements IModelBaker {
 
 	protected double renderMinX;
@@ -77,10 +80,10 @@ public class ModelBaker implements IModelBaker {
 	}
 	
 	@Override
-	public boolean renderStandardBlock(Block block, BlockPos pos, TextureAtlasSprite[] textures) {
+	public boolean renderStandardBlock(Block block, BlockPos pos, TextureAtlasSprite[] textures, int colorIndex) {
 		setRenderBoundsFromBlock(block);
 
-		setColorIndex(0);
+		setColorIndex(colorIndex);
 
 		renderFaceXNeg(pos, textures[EnumFacing.WEST.ordinal()]);
 		renderFaceXPos(pos, textures[EnumFacing.EAST.ordinal()]);
@@ -93,10 +96,10 @@ public class ModelBaker implements IModelBaker {
 	}
 
 	@Override
-	public boolean renderStandardBlock(Block block, BlockPos pos, TextureAtlasSprite texture) {
+	public boolean renderStandardBlock(Block block, BlockPos pos, TextureAtlasSprite texture, int colorIndex) {
 		setRenderBoundsFromBlock(block);
 
-		setColorIndex(0);
+		setColorIndex(colorIndex);
 
 		renderFaceXNeg(pos, texture);
 		renderFaceXPos(pos, texture);

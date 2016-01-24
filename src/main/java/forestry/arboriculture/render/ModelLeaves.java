@@ -79,7 +79,7 @@ public class ModelLeaves extends ModelBlockOverlay<BlockForestryLeaves> {
 		}
 
 		// Render the plain leaf block.
-		baker.renderStandardBlock(block, pos, tile.getLeaveSprite(Proxies.render.fancyGraphicsEnabled()));
+		baker.renderStandardBlock(block, pos, tile.getLeaveSprite(Proxies.render.fancyGraphicsEnabled()), 0);
 
 		// Render overlay for fruit leaves.
 		TextureAtlasSprite fruitSprite = tile.getFruitSprite();
