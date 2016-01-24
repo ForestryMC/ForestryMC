@@ -344,7 +344,7 @@ public class PluginHarvestCraft extends ForestryPlugin {
 		for (String nutName : nuts) {
 			ItemStack nut = GameRegistry.findItemStack(HC, nutName + "Item", 1);
 			Block nutBlock = GameRegistry.findBlock(HC, "pam" + (Character.toUpperCase(nutName.charAt(0)) + nutName.substring(1)));
-			if (nutBlock != null) {
+			if (PluginManager.Module.FARMING.isEnabled() && nutBlock != null) {
 				Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(nutBlock, 2));
 			}
 			if (nut != null) {
