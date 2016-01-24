@@ -105,9 +105,9 @@ public class PluginBiomesOPlenty extends ForestryPlugin {
 		}
 
 		Block boPTurnip = GameRegistry.findBlock(BoP, "turnip");
-		if (boPTurnip != null) {
+		if (PluginManager.Module.FARMING.isEnabled() && boPTurnip != null) {
 			Item boPTurnipSeeds = GameRegistry.findItem(BoP, "turnipSeeds");
-			if (PluginManager.Module.FARMING.isEnabled() && boPTurnipSeeds != null) {
+			if (boPTurnipSeeds != null) {
 				Farmables.farmables.get("farmVegetables").add(new FarmableGenericCrop(new ItemStack(boPTurnipSeeds, 1, 0), boPTurnip, 7));
 			}
 
