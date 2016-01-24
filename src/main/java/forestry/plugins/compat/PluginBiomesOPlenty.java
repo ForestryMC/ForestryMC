@@ -39,6 +39,7 @@ import forestry.farming.logic.FarmableGenericSapling;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.Plugin;
 import forestry.plugins.PluginCore;
+import forestry.plugins.PluginManager;
 
 @Plugin(pluginID = "BiomesOPlenty", name = "BiomesOPlenty", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.plugin.biomesoplenty.description")
 public class PluginBiomesOPlenty extends ForestryPlugin {
@@ -99,14 +100,14 @@ public class PluginBiomesOPlenty extends ForestryPlugin {
 			FMLInterModComms.sendMessage(Constants.MOD, "add-farmable-sapling", String.format("farmArboreal@%s.-1", saplingName));
 		}
 
-		if (saplings != null && persimmon != null) {
+		if (PluginManager.Module.FARMING.isEnabled() && saplings != null && persimmon != null) {
 			Farmables.farmables.get("farmArboreal").add(new FarmableGenericSapling(saplings, 15, persimmon));
 		}
 
 		Block boPTurnip = GameRegistry.findBlock(BoP, "turnip");
 		if (boPTurnip != null) {
 			Item boPTurnipSeeds = GameRegistry.findItem(BoP, "turnipSeeds");
-			if (boPTurnipSeeds != null) {
+			if (PluginManager.Module.FARMING.isEnabled() && boPTurnipSeeds != null) {
 				Farmables.farmables.get("farmVegetables").add(new FarmableGenericCrop(new ItemStack(boPTurnipSeeds, 1, 0), boPTurnip, 7));
 			}
 
