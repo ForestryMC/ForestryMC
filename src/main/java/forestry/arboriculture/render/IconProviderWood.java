@@ -40,16 +40,25 @@ public abstract class IconProviderWood {
 
 	@SideOnly(Side.CLIENT)
 	public static IIcon getPlankIcon(EnumWoodType woodType) {
+		if (woodType == null) {
+			woodType =  EnumWoodType.LARCH;
+		}
 		return icons[0][woodType.ordinal()];
 	}
 
 	@SideOnly(Side.CLIENT)
 	public static IIcon getBarkIcon(EnumWoodType woodType) {
+		if (woodType == null) {
+			woodType =  EnumWoodType.LARCH;
+		}
 		return icons[1][woodType.ordinal()];
 	}
 
 	@SideOnly(Side.CLIENT)
 	public static IIcon getHeartIcon(EnumWoodType woodType) {
+		if (woodType == null) {
+			woodType =  EnumWoodType.LARCH;
+		}
 		return icons[2][woodType.ordinal()];
 	}
 

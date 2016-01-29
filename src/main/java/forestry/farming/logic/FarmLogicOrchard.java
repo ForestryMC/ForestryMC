@@ -52,7 +52,7 @@ public class FarmLogicOrchard extends FarmLogic {
 		super(housing);
 		this.farmables = Farmables.farmables.get("farmOrchard");
 		ImmutableList.Builder<Block> traversalBlocksBuilder = ImmutableList.builder();
-		if (PluginManager.Module.AGRICRAFT.isEnabled()) {
+		if (PluginManager.Module.AGRICRAFT.isEnabled() || PluginManager.Module.INDUSTRIALCRAFT.isEnabled()) {
 			traversalBlocksBuilder.add(Blocks.farmland);
 		}
 		if (PluginManager.Module.GROWTHCRAFT.isEnabled()) {
@@ -60,6 +60,9 @@ public class FarmLogicOrchard extends FarmLogic {
 			if (grapeVine != null) {
 				traversalBlocksBuilder.add(grapeVine);
 			}
+		}
+		if (PluginManager.Module.INDUSTRIALCRAFT.isEnabled()) {
+		traversalBlocksBuilder.add(Blocks.dirt);
 		}
 		if (PluginManager.Module.PLANTMEGAPACK.isEnabled()) {
 			traversalBlocksBuilder.add(Blocks.water);

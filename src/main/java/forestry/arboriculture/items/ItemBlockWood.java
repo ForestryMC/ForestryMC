@@ -121,7 +121,7 @@ public class ItemBlockWood extends ItemBlockForestry {
 		if (ordinal >= 0 && ordinal < EnumWoodType.VALUES.length) {
 			return EnumWoodType.VALUES[ordinal];
 		}
-		return null;
+		return EnumWoodType.LARCH;
 	}
 
 	@Override
