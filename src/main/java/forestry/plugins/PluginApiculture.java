@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
 
@@ -213,7 +214,7 @@ public class PluginApiculture extends ForestryPlugin {
 		}
 
 		LocalizedConfiguration config = new LocalizedConfiguration(configFile, "2.0.0");
-		if (!config.getLoadedConfigVersion().equals(config.getDefinedConfigVersion())) {
+		if (!Objects.equals(config.getLoadedConfigVersion(), config.getDefinedConfigVersion())) {
 			boolean deleted = configFile.delete();
 			if (deleted) {
 				config = new LocalizedConfiguration(configFile, "2.0.0");
