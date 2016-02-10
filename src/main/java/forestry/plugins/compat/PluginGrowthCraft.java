@@ -93,9 +93,11 @@ public class PluginGrowthCraft extends ForestryPlugin {
 		}
 
 		ItemStack emptyComb = new ItemStack(GameRegistry.findItem("Growthcraft|Bees", "grc.honeyComb"), 1, 0);
-		RecipeManagers.centrifugeManager.addRecipe(20, emptyComb, ImmutableMap.of(
-				PluginCore.items.beeswax.getItemStack(), 1.0f)
-		);
+		if (emptyComb != null) {
+			RecipeManagers.centrifugeManager.addRecipe(20, emptyComb, ImmutableMap.of(
+							PluginCore.items.beeswax.getItemStack(), 1.0f)
+			);
+		}
 
 		if (PluginManager.Module.APICULTURE.isEnabled()) {
 			ItemStack fullComb = new ItemStack(GameRegistry.findItem("Growthcraft|Bees", "grc.honeyComb"), 1, 1);
