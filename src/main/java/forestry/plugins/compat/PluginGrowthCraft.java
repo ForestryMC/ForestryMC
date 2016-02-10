@@ -13,6 +13,7 @@ package forestry.plugins.compat;
 import com.google.common.collect.ImmutableMap;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -92,20 +93,20 @@ public class PluginGrowthCraft extends ForestryPlugin {
 			Farmables.farmables.get("farmOrchard").add(new FarmableBasicGrowthCraft(riceBlock, 7, true, false)); //need to set paddyfield to 7
 		}
 
-		ItemStack emptyComb = new ItemStack(GameRegistry.findItem("Growthcraft|Bees", "grc.honeyComb"), 1, 0);
-		if (emptyComb != null) {
-			RecipeManagers.centrifugeManager.addRecipe(20, emptyComb, ImmutableMap.of(
-							PluginCore.items.beeswax.getItemStack(), 1.0f)
-			);
-		}
-
 		if (PluginManager.Module.APICULTURE.isEnabled()) {
-			ItemStack fullComb = new ItemStack(GameRegistry.findItem("Growthcraft|Bees", "grc.honeyComb"), 1, 1);
-			RecipeManagers.centrifugeManager.addRecipe(20, fullComb, ImmutableMap.of(
-					PluginCore.items.beeswax.getItemStack(), 1.0f,
-					PluginApiculture.items.honeyDrop.getItemStack(), 0.9f,
-					PluginApiculture.items.honeydew.getItemStack(), 0.1f)
-			);
+			Item comb = GameRegistry.findItem("Growthcraft|Bees", "grc.honeyComb");
+			if (comb != null) {
+				ItemStack emptyComb = new ItemStack(comb, 1, 0);
+				RecipeManagers.centrifugeManager.addRecipe(20, emptyComb, ImmutableMap.of(
+								PluginCore.items.beeswax.getItemStack(), 1.0f)
+				);
+				ItemStack fullComb = new ItemStack(comb, 1, 1);
+				RecipeManagers.centrifugeManager.addRecipe(20, fullComb, ImmutableMap.of(
+								PluginCore.items.beeswax.getItemStack(), 1.0f,
+								PluginApiculture.items.honeyDrop.getItemStack(), 0.9f,
+								PluginApiculture.items.honeydew.getItemStack(), 0.1f)
+				);
+			}
 		}
 
 		ItemStack bamboo = GameRegistry.findItemStack("Growthcraft|Bamboo", "grc.bamboo", 1);
@@ -126,7 +127,7 @@ public class PluginGrowthCraft extends ForestryPlugin {
 
 		ItemStack grapes = GameRegistry.findItemStack("Growthcraft|Grapes", "grc.grapes", 1); //squeeze
 
-		if (grapes != null) {
+		if (grapes.getItem() != null) {
 			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{grapes}, Fluids.JUICE.getFluid(juiceAmount));
 			BackpackManager.backpackItems[2].add(grapes);
 		}
