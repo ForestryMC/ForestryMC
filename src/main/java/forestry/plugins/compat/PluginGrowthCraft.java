@@ -40,7 +40,7 @@ public class PluginGrowthCraft extends ForestryPlugin {
 
 	@Override
 	public boolean isAvailable() {
-		return ModUtil.isModLoaded(GC);
+		return ModUtil.isModLoaded(GC, "[1.7.10-1.0.0,1.7.10-2.5.0)");
 	}
 
 	@Override
