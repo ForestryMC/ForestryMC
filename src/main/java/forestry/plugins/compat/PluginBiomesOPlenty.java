@@ -72,16 +72,22 @@ public class PluginBiomesOPlenty extends ForestryPlugin {
 			persimmon = new ItemStack(food, 1, 8);
 		}
 
-		addFlowers();
-		addFarmCrops();
+		if (PluginManager.Module.APICULTURE.isEnabled()) {
+			addFlowers();
+		}
+		if (PluginManager.Module.FARMING.isEnabled()) {
+			addFarmCrops();
+		}
 	}
 
 	@Override
 	protected void registerRecipes() {
 		super.registerRecipes();
 
-		addFermenterRecipes();
-		addSqueezerRecipes();
+		if (PluginManager.Module.FACTORY.isEnabled()) {
+			addFermenterRecipes();
+			addSqueezerRecipes();
+		}
 	}
 
 	private static void addFarmCrops() {
@@ -100,12 +106,12 @@ public class PluginBiomesOPlenty extends ForestryPlugin {
 			FMLInterModComms.sendMessage(Constants.MOD, "add-farmable-sapling", String.format("farmArboreal@%s.-1", saplingName));
 		}
 
-		if (PluginManager.Module.FARMING.isEnabled() && saplings != null && persimmon != null) {
+		if (saplings != null && persimmon != null) {
 			Farmables.farmables.get("farmArboreal").add(new FarmableGenericSapling(saplings, 15, persimmon));
 		}
 
 		Block boPTurnip = GameRegistry.findBlock(BoP, "turnip");
-		if (PluginManager.Module.FARMING.isEnabled() && boPTurnip != null) {
+		if (boPTurnip != null) {
 			Item boPTurnipSeeds = GameRegistry.findItem(BoP, "turnipSeeds");
 			if (boPTurnipSeeds != null) {
 				Farmables.farmables.get("farmVegetables").add(new FarmableGenericCrop(new ItemStack(boPTurnipSeeds, 1, 0), boPTurnip, 7));
