@@ -49,7 +49,9 @@ public class PluginBiomesOPlenty extends ForestryPlugin {
 	private static Block saplings;
 	private static Block colorizedSaplings;
 	private static Item food;
+	private static Item misc;
 	private static ItemStack persimmon;
+	private static int amount;
 
 	@Override
 	public boolean isAvailable() {
@@ -84,6 +86,7 @@ public class PluginBiomesOPlenty extends ForestryPlugin {
 	protected void registerRecipes() {
 		super.registerRecipes();
 
+		amount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed");
 		if (PluginManager.Module.FACTORY.isEnabled()) {
 			addFermenterRecipes();
 			addSqueezerRecipes();
@@ -113,8 +116,12 @@ public class PluginBiomesOPlenty extends ForestryPlugin {
 		Block boPTurnip = GameRegistry.findBlock(BoP, "turnip");
 		if (boPTurnip != null) {
 			Item boPTurnipSeeds = GameRegistry.findItem(BoP, "turnipSeeds");
+			ItemStack boPTurnipSeedStack = new ItemStack(boPTurnipSeeds, 1, 0);
 			if (boPTurnipSeeds != null) {
-				Farmables.farmables.get("farmVegetables").add(new FarmableGenericCrop(new ItemStack(boPTurnipSeeds, 1, 0), boPTurnip, 7));
+				Farmables.farmables.get("farmVegetables").add(new FarmableGenericCrop(boPTurnipSeedStack, boPTurnip, 7));
+				if (PluginManager.Module.FACTORY.isEnabled()) {
+					RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{boPTurnipSeedStack}, Fluids.SEEDOIL.getFluid(amount));
+				}
 			}
 
 			Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(boPTurnip, 7));
@@ -135,6 +142,15 @@ public class PluginBiomesOPlenty extends ForestryPlugin {
 
 	private static void addSqueezerRecipes() {
 		ItemStack mulch = new ItemStack(PluginCore.items.mulch);
+
+		misc = GameRegistry.findItem(BoP, "misc");
+		if (misc != null) {
+			ItemStack pinecone = new ItemStack(misc, 1, 13);
+			if (pinecone != null) {
+				RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{pinecone}, Fluids.SEEDOIL.getFluid(3* amount));
+			}
+		}
+
 		if (food != null) {
 			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(food)}, Fluids.JUICE.getFluid(50), mulch, 5);
 		}
