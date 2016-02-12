@@ -337,7 +337,7 @@ public class PluginHarvestCraft extends ForestryPlugin {
 				Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(cropnutBlock, 7));
 			}
 			if (cropnut != null) {
-				RecipeManagers.squeezerManager.addRecipe(20, new ItemStack[]{cropnut}, Fluids.SEEDOIL.getFluid(3 * seedamount));
+				RecipeManagers.squeezerManager.addRecipe(20, new ItemStack[]{cropnut}, Fluids.SEEDOIL.getFluid(12 * seedamount));
 			}
 		}
 
@@ -348,7 +348,7 @@ public class PluginHarvestCraft extends ForestryPlugin {
 				Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(nutBlock, 2));
 			}
 			if (nut != null) {
-				RecipeManagers.squeezerManager.addRecipe(20, new ItemStack[]{nut}, Fluids.SEEDOIL.getFluid(3 * seedamount));
+				RecipeManagers.squeezerManager.addRecipe(20, new ItemStack[]{nut}, Fluids.SEEDOIL.getFluid(15 * seedamount));
 			}
 		}
 
