@@ -317,6 +317,8 @@ public class PluginFactory extends ForestryPlugin {
 		RecipeManagers.fabricatorSmeltingManager.addSmelting(new ItemStack(Blocks.sand), Fluids.GLASS.getFluid(1000), 3000);
 		RecipeManagers.fabricatorSmeltingManager.addSmelting(new ItemStack(Blocks.sand,1,1), Fluids.GLASS.getFluid(1000), 3000);
 		RecipeManagers.fabricatorSmeltingManager.addSmelting(new ItemStack(Blocks.sandstone), Fluids.GLASS.getFluid(4000), 4800);
+		RecipeManagers.fabricatorSmeltingManager.addSmelting(new ItemStack(Blocks.sandstone,1,1), Fluids.GLASS.getFluid(4000), 4800);
+		RecipeManagers.fabricatorSmeltingManager.addSmelting(new ItemStack(Blocks.sandstone,1,2), Fluids.GLASS.getFluid(4000), 4800);
 
 		// / CARPENTER
 		RecipeManagers.carpenterManager.addRecipe(50, Fluids.SEEDOIL.getFluid(250), null, PluginCore.items.impregnatedCasing.getItemStack(),
