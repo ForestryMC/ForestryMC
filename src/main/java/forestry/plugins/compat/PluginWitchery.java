@@ -84,7 +84,7 @@ public class PluginWitchery extends ForestryPlugin {
 		for (String flowerAcceptName : flowersAccept) {
 			Block flowerBlock = GameRegistry.findBlock(Witch, flowerAcceptName);
 			if (flowerBlock != null) {
-				FlowerManager.flowerRegistry.registerAcceptableFlower(flowerBlock, FlowerManager.FlowerTypeVanilla);
+				FlowerManager.flowerRegistry.registerAcceptableFlower(flowerBlock, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
 			}
 		}
 		for (String cropDirectName : cropDirect) {
