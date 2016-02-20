@@ -47,7 +47,9 @@ public class PluginBiomesOPlenty extends ForestryPlugin {
 	private static Block saplings;
 	private static Block colorizedSaplings;
 	private static Item food;
+	private static Item misc;
 	private static ItemStack persimmon;
+	private static int amount;
 
 	@Override
 	public boolean isAvailable() {
@@ -70,16 +72,23 @@ public class PluginBiomesOPlenty extends ForestryPlugin {
 			persimmon = new ItemStack(food, 1, 8);
 		}
 
-		addFlowers();
-		addFarmCrops();
+		if (PluginManager.Module.APICULTURE.isEnabled()) {
+			addFlowers();
+		}
+		if (PluginManager.Module.FARMING.isEnabled()) {
+			addFarmCrops();
+		}
 	}
 
 	@Override
 	protected void registerRecipes() {
 		super.registerRecipes();
 
-		addFermenterRecipes();
-		addSqueezerRecipes();
+		amount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed");
+		if (PluginManager.Module.FACTORY.isEnabled()) {
+			addFermenterRecipes();
+			addSqueezerRecipes();
+		}
 	}
 
 	private static void addFarmCrops() {
@@ -105,8 +114,12 @@ public class PluginBiomesOPlenty extends ForestryPlugin {
 		Block boPTurnip = GameRegistry.findBlock(BoP, "turnip");
 		if (PluginManager.Module.FARMING.isEnabled() && boPTurnip != null) {
 			Item boPTurnipSeeds = GameRegistry.findItem(BoP, "turnipSeeds");
+			ItemStack boPTurnipSeedStack = new ItemStack(boPTurnipSeeds, 1, 0);
 			if (boPTurnipSeeds != null) {
-				Farmables.farmables.get("farmVegetables").add(new FarmableGenericCrop(new ItemStack(boPTurnipSeeds, 1, 0), boPTurnip, 7));
+				Farmables.farmables.get("farmVegetables").add(new FarmableGenericCrop(boPTurnipSeedStack, boPTurnip, 7));
+				if (PluginManager.Module.FACTORY.isEnabled()) {
+					RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{boPTurnipSeedStack}, Fluids.SEEDOIL.getFluid(amount));
+				}
 			}
 
 			Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(boPTurnip, 7));
@@ -127,6 +140,15 @@ public class PluginBiomesOPlenty extends ForestryPlugin {
 
 	private static void addSqueezerRecipes() {
 		ItemStack mulch = new ItemStack(PluginCore.items.mulch);
+
+		misc = GameRegistry.findItem(BoP, "misc");
+		if (misc != null) {
+			ItemStack pinecone = new ItemStack(misc, 1, 13);
+			if (pinecone != null) {
+				RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{pinecone}, Fluids.SEEDOIL.getFluid(3* amount));
+			}
+		}
+
 		if (food != null) {
 			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(food)}, Fluids.JUICE.getFluid(50), mulch, 5);
 		}
@@ -139,22 +161,22 @@ public class PluginBiomesOPlenty extends ForestryPlugin {
 	private static void addFlowers() {
 		Block flowers = GameRegistry.findBlock(BoP, "flowers");
 		if (flowers != null) {
-			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 0, 1.0, FlowerManager.FlowerTypeVanilla);		//Clover
-			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 1, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeMushrooms);		//Swampflower
+			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 0, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);		//Clover
+			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 1, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow, FlowerManager.FlowerTypeMushrooms);		//Swampflower
 //			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 2, 1.0, FlowerManager.FlowerTypeNether); 		//Deathbloom
-			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 3, 1.0, FlowerManager.FlowerTypeVanilla); 	//GlowFlower
-			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 4, 1.0, FlowerManager.FlowerTypeVanilla);		//Blue Hydrangea
-			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 5, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeJungle);		//Orange Cosmos
-			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 6, 1.0, FlowerManager.FlowerTypeVanilla);		//Pink Daffodil
-			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 7, 1.0, FlowerManager.FlowerTypeVanilla);		//WildFlower
+			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 3, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow); 	//GlowFlower
+			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 4, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);		//Blue Hydrangea
+			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 5, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow, FlowerManager.FlowerTypeJungle);		//Orange Cosmos
+			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 6, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);		//Pink Daffodil
+			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 7, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);		//WildFlower
 			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 8, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);	//Violet
-			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 9, 1.0, FlowerManager.FlowerTypeVanilla);		// White Anemone
-			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 10, 1.0, FlowerManager.FlowerTypeVanilla);	// Waterlily
-			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 11, 1.0, FlowerManager.FlowerTypeVanilla);	//EnderLotus (does not actually spawn in the end)
+			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 9, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);		// White Anemone
+			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 10, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);	// Waterlily
+			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 11, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);	//EnderLotus (does not actually spawn in the end)
 			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 12, 1.0, FlowerManager.FlowerTypeCacti);		//Bromeliad
 			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 13, 1.0, FlowerManager.FlowerTypeNether);		// EyeBulb
 //			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 14, 1.0, FlowerManager.FlowerTypeNether);		// Unlisted top of the eyebulb
-			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 15, 1.0, FlowerManager.FlowerTypeVanilla);	// Dandelion Puff
+			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 15, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);	// Dandelion Puff
 		}
 
 		Block flowers2 = GameRegistry.findBlock(BoP, "flowers2");

@@ -178,6 +178,7 @@ public final class AccessHandler implements IAccessHandler {
 		if (this.owner != null) {
 			NBTTagCompound nbt = new NBTTagCompound();
 			NBTUtil.writeGameProfile(nbt, owner);
+			nbt.removeTag("Properties");
 			data.setTag("owner", nbt);
 		}
 	}

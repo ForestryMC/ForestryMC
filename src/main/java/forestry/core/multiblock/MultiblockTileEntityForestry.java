@@ -62,7 +62,7 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 
 		if (this.owner != null) {
 			NBTTagCompound nbt = new NBTTagCompound();
-			NBTUtil.writeGameProfile(nbt, owner);
+			nbt.removeTag("Properties");
 			data.setTag("owner", nbt);
 		}
 
