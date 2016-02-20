@@ -176,6 +176,7 @@ public final class AccessHandler implements IAccessHandler {
 		if (this.owner != null) {
 			NBTTagCompound nbt = new NBTTagCompound();
 			NBTUtil.func_152460_a(nbt, owner);
+			nbt.removeTag("Properties");
 			data.setTag("owner", nbt);
 		}
 	}
