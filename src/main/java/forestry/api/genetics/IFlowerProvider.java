@@ -5,8 +5,6 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
-import java.util.Set;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;

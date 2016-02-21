@@ -19,7 +19,6 @@ import forestry.core.proxy.Proxies;
 import forestry.core.tiles.IActivatable;
 import forestry.energy.EnergyManager;
 
-import cofh.api.energy.IEnergyHandler;
 import cofh.api.energy.IEnergyReceiver;
 
 public abstract class TileAlvearyClimatiser extends TileAlveary implements IEnergyReceiver, IActivatable, IAlvearyComponent.Climatiser {

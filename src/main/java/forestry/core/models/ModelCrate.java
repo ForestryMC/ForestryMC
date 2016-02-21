@@ -12,6 +12,7 @@ package forestry.core.models;
 
 import java.io.IOException;
 import java.util.Collection;
+import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.client.resources.IResourceManager;
@@ -28,6 +29,7 @@ import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.ModelStateComposition;
 import net.minecraftforge.client.model.MultiLayerModel;
 import net.minecraftforge.client.model.TRSRTransformation;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
@@ -38,32 +40,29 @@ import com.google.gson.JsonParser;
 
 import forestry.core.utils.Log;
 public class ModelCrate implements IModelCustomData<ModelCrate> {
-    public static final ModelCrate instance = new ModelCrate(new ModelResourceLocation("forestry:crates", "crate"), EnumWorldBlockLayer.CUTOUT, "cratedStone", "forestry", new ModelResourceLocation("forestry:crates", "cratedStone"));
+    public static final ModelCrate instance = new ModelCrate("cratedStone", "forestry", new ModelResourceLocation("forestry:crates", "cratedStone"), false);
 
-    private final ModelResourceLocation baseLocation;
     private final String containedUID;
     private final String modID;
     private final ResourceLocation containedLocation;
-    private final EnumWorldBlockLayer containedLayer;
+    private final boolean isContainedItem;
 
     /**
      * @param baseLocation The location of the crate model
-     * @param containedLayer The layer for the rendering from the contained item model
      * @param UID The UID of the crate
      * @param modID The modId of the creat item
-     * @param location The location of the model from the contained item
+     * @param containedLocation The location of the model from the contained item
      */
-    private ModelCrate(ModelResourceLocation baseLocation, EnumWorldBlockLayer containedLayer, String UID, String modID, ResourceLocation location){
-        this.baseLocation = baseLocation;
-        this.containedLayer = containedLayer;
+    private ModelCrate(String UID, String modID, ResourceLocation containedLocation, boolean isContainedItem){
         this.containedUID = UID;
         this.modID = modID;
-        this.containedLocation = location;
+        this.containedLocation = containedLocation;
+        this.isContainedItem = isContainedItem;
     }
 
     @Override
     public Collection<ResourceLocation> getDependencies() {
-        return ImmutableList.<ResourceLocation>of(baseLocation, containedLocation);
+        return ImmutableList.<ResourceLocation>of(new ModelResourceLocation("forestry:crates", "crate"), containedLocation);
     }
 
     @Override
@@ -91,16 +90,28 @@ public class ModelCrate implements IModelCustomData<ModelCrate> {
     /**
      * To bake the base and the contained model
      */
-    private static ImmutableMap<Optional<EnumWorldBlockLayer>, IFlexibleBakedModel> buildModels(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter, IModel crateModel, ModelCrate modelToBake){
+    private static ImmutableMap<Optional<EnumWorldBlockLayer>, IFlexibleBakedModel> buildModels(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter, ModelCrate modelToBake){
         ImmutableMap.Builder<Optional<EnumWorldBlockLayer>, IFlexibleBakedModel> builder = ImmutableMap.builder();
         
-        IModel base = getModel(modelToBake.baseLocation);
+        IModel base = getModel(new ModelResourceLocation("forestry:crates", "crate"));
         IFlexibleBakedModel baseBaked = base.bake(new ModelStateComposition(state, base.getDefaultState()), format, bakedTextureGetter);
+        
+        //Set the crate color index to 100
+        for(BakedQuad quad : baseBaked.getGeneralQuads()){
+      		ObfuscationReflectionHelper.setPrivateValue(BakedQuad.class, quad, 100, 1);
+        }
         builder.put(Optional.<EnumWorldBlockLayer>absent(), baseBaked);
         builder.put(Optional.of(EnumWorldBlockLayer.SOLID), baseBaked);
-        		
+
+
+        
         IModel content = getModel(modelToBake.containedLocation);
-        builder.put(Optional.of(modelToBake.containedLayer), content.bake(new ModelStateComposition(state, crateModel.getDefaultState()), format, bakedTextureGetter));
+        if(modelToBake.isContainedItem){
+        	builder.put(Optional.of(EnumWorldBlockLayer.CUTOUT), new TRSRBakedModel(content.bake(state, format, bakedTextureGetter), -0.0625F, 0, 0.0625F, 0.5F));
+        	builder.put(Optional.of(EnumWorldBlockLayer.CUTOUT_MIPPED), new TRSRBakedModel(content.bake(state, format, bakedTextureGetter), -0.0625F, 0, -0.0625F, 0.5F));
+        }else{
+        	builder.put(Optional.of(EnumWorldBlockLayer.CUTOUT), new TRSRBakedModel(content.bake(state, format, bakedTextureGetter), -0.0625F, 0, 0, 0.5F));
+        }
         return builder.build();
     }
 
@@ -110,18 +121,8 @@ public class ModelCrate implements IModelCustomData<ModelCrate> {
     @Override
     public IFlexibleBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter){
         IModel missing = ModelLoaderRegistry.getMissingModel();
-        IModel creat;
-        try {
-			creat = ModelLoaderRegistry.getModel(new ModelResourceLocation(modID + ":crates", containedUID));
-		} catch (IOException e) {
-			e.printStackTrace();
-			return missing.bake(state, format, bakedTextureGetter);
-		}
-        if(creat == null){
-        	return missing.bake(state, format, bakedTextureGetter);
-        }
         return new MultiLayerModel.MultiLayerBakedModel(
-            buildModels(state, format, bakedTextureGetter, creat, this),
+            buildModels(state, format, bakedTextureGetter, this),
             missing.bake(missing.getDefaultState(), format, bakedTextureGetter),
             format,
             IPerspectiveAwareModel.MapWrapper.getTransforms(state)
@@ -138,17 +139,12 @@ public class ModelCrate implements IModelCustomData<ModelCrate> {
      */
     @Override
     public IModel process(ImmutableMap<String, String> customData){
-        ImmutableMap.Builder<Optional<EnumWorldBlockLayer>, ModelResourceLocation> builder = ImmutableMap.builder();
-        ModelResourceLocation baseLocation = null;
         ResourceLocation location = null;
         String UID = "";
+        boolean isContainedItem = false;
         String modID = "";
-        EnumWorldBlockLayer layer = null;
         for(String key : customData.keySet()){
-            if("base".equals(key)){
-                baseLocation = (ModelResourceLocation) getLocation(customData.get(key));
-            }
-            else if("uid".equals(key)){
+        	if("uid".equals(key)){
             	UID = getString(customData.get(key));
             }
             else if("modID".equals(key)){
@@ -157,23 +153,17 @@ public class ModelCrate implements IModelCustomData<ModelCrate> {
             else if("location".equals(key)){
             	location = getLocation(customData.get(key));
             }
-            else if("layer".equals(key)){
-        		String layerName = getString(customData.get(key));
-            	for(EnumWorldBlockLayer l : EnumWorldBlockLayer.values()){
-            		if(l.toString().equals(layerName)){
-            			layer = l;
-            			break;
-            		}
-            	}
+            else if("isItem".equals(key)){
+            	isContainedItem = getBoolean(customData.get(key));
             }
         }
-        if(modID == null){
+        if(modID == null || modID.equals("")){
         	modID = "forestry";
         }
-        if(baseLocation == null || layer == null || location == null || UID == null) {
+        if(location == null || UID == null || UID.equals("")) {
         	return instance;
         }
-        return new ModelCrate(baseLocation, layer, UID, modID, location);
+        return new ModelCrate(UID, modID, location, isContainedItem);
     }
 
     private ResourceLocation getLocation(String json){
@@ -194,6 +184,14 @@ public class ModelCrate implements IModelCustomData<ModelCrate> {
             return e.getAsString();
         }
         return null;
+    }
+    
+    private boolean getBoolean(String json){
+        JsonElement e = new JsonParser().parse(json);
+        if(e.isJsonPrimitive() && e.getAsJsonPrimitive().isBoolean()){
+            return e.getAsBoolean();
+        }
+        return false;
     }
 
     /**
