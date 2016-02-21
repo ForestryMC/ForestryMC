@@ -20,8 +20,9 @@ import forestry.core.tiles.IActivatable;
 import forestry.energy.EnergyManager;
 
 import cofh.api.energy.IEnergyHandler;
+import cofh.api.energy.IEnergyReceiver;
 
-public abstract class TileAlvearyClimatiser extends TileAlveary implements IEnergyHandler, IActivatable, IAlvearyComponent.Climatiser {
+public abstract class TileAlvearyClimatiser extends TileAlveary implements IEnergyReceiver, IActivatable, IAlvearyComponent.Climatiser {
 
 	private static final int WORK_CYCLES = 1;
 	private static final int ENERGY_PER_OPERATION = 50;
@@ -121,11 +122,6 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IEner
 	@Override
 	public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
 		return energyManager.receiveEnergy(from, maxReceive, simulate);
-	}
-
-	@Override
-	public int extractEnergy(EnumFacing from, int maxExtract, boolean simulate) {
-		return energyManager.extractEnergy(from, maxExtract, simulate);
 	}
 
 	@Override

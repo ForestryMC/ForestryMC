@@ -12,12 +12,15 @@ package forestry.farming.tiles;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+
 import forestry.api.multiblock.IFarmComponent;
 import forestry.api.multiblock.IFarmController;
-import forestry.core.tiles.IPowerHandler;
 import forestry.energy.EnergyManager;
 
-public class TileFarmGearbox extends TileFarm implements IPowerHandler, IFarmComponent.Active {
+import cofh.api.energy.IEnergyHandler;
+import cofh.api.energy.IEnergyReceiver;
+
+public class TileFarmGearbox extends TileFarm implements IEnergyReceiver, IEnergyHandler, IFarmComponent.Active {
 
 	private static final int WORK_CYCLES = 4;
 	private static final int ENERGY_PER_OPERATION = WORK_CYCLES * 50;
@@ -85,20 +88,14 @@ public class TileFarmGearbox extends TileFarm implements IPowerHandler, IFarmCom
 
 	}
 
-	/* IPowerHandler */
-	@Override
-	public EnergyManager getEnergyManager() {
-		return energyManager;
-	}
-
+	/* IEnergyReceiver */
 	@Override
 	public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
 		return energyManager.receiveEnergy(from, maxReceive, simulate);
 	}
 
-	@Override
-	public int extractEnergy(EnumFacing from, int maxExtract, boolean simulate) {
-		return energyManager.extractEnergy(from, maxExtract, simulate);
+	public EnergyManager getEnergyManager() {
+		return energyManager;
 	}
 
 	@Override

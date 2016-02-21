@@ -37,7 +37,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
 import forestry.core.utils.Log;
-public class ModelCrate implements IModelCustomData{
+public class ModelCrate implements IModelCustomData<ModelCrate> {
     public static final ModelCrate instance = new ModelCrate(new ModelResourceLocation("forestry:crates", "crate"), EnumWorldBlockLayer.CUTOUT, "cratedStone", "forestry", new ModelResourceLocation("forestry:crates", "cratedStone"));
 
     private final ModelResourceLocation baseLocation;

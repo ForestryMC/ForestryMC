@@ -12,28 +12,19 @@ package forestry.energy.blocks;
 
 import java.util.Locale;
 
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+
 import forestry.core.blocks.IMachinePropertiesTESR;
 import forestry.core.config.Constants;
-import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileForestry;
 import forestry.energy.tiles.TileEngineBiogas;
 import forestry.energy.tiles.TileEngineClockwork;
-import forestry.energy.tiles.TileEngineElectric;
 import forestry.energy.tiles.TileEnginePeat;
-import forestry.energy.tiles.TileGenerator;
 import forestry.plugins.PluginEnergy;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 
 public enum BlockEngineType implements IMachinePropertiesTESR {
-	ELECTRIC(TileEngineElectric.class, "EngineTin", "/engine_tin_"),
 	PEAT(TileEnginePeat.class, "EngineCopper", "/engine_copper_"),
 	BIOGAS(TileEngineBiogas.class, "EngineBronze", "/engine_bronze_"),
-	GENERATOR(TileGenerator.class, "Generator", "/generator_") {
-		@Override
-		public TileEntitySpecialRenderer getRenderer() {
-			return Proxies.render.getRenderDefaultMachine(texturePath);
-		}
-	},
 	CLOCKWORK(TileEngineClockwork.class, "EngineClockwork", "/engine_clock_");
 
 	public static final BlockEngineType[] VALUES = values();

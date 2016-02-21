@@ -67,7 +67,7 @@ public class ParticleHelper {
 
 		EntityDiggingFX fx = (EntityDiggingFX) effectRenderer.spawnEffectParticle(EnumParticleTypes.BLOCK_DUST.getParticleID(), px, py, pz, 0.0D, 0.0D, 0.0D, Block.getStateId(state));
 		callback.addHitEffects(fx, target.getBlockPos(), state);
-		effectRenderer.addEffect(fx.func_174846_a(new BlockPos(x, y, z)).multiplyVelocity(0.2F).multipleParticleScaleBy(0.6F));
+		effectRenderer.addEffect(fx.setBlockPos(new BlockPos(x, y, z)).multiplyVelocity(0.2F).multipleParticleScaleBy(0.6F));
 
 		return true;
 	}
@@ -78,13 +78,6 @@ public class ParticleHelper {
 	 * your block. So be sure to do proper sanity checks before assuming that
 	 * the location is this block.
 	 *
-	 * @param world          The current world
-	 * @param x              X position to spawn the particle
-	 * @param y              Y position to spawn the particle
-	 * @param z              Z position to spawn the particle
-	 * @param meta           The metadata for the block before it was destroyed.
-	 * @param effectRenderer A reference to the current effect renderer.
-	 * @param callback
 	 * @return True to prevent vanilla break particles from spawning.
 	 */
 	@SideOnly(Side.CLIENT)
@@ -104,7 +97,7 @@ public class ParticleHelper {
 
 					EntityDiggingFX fx = (EntityDiggingFX) effectRenderer.spawnEffectParticle(EnumParticleTypes.BLOCK_CRACK.getParticleID(), px, py, pz, px - pos.getX() - 0.5D, py - pos.getY() - 0.5D, pz - pos.getZ() - 0.5D, Block.getStateId(state));
 					callback.addDestroyEffects(fx, pos, state);
-					effectRenderer.addEffect(fx.func_174846_a(pos));
+					effectRenderer.addEffect(fx.setBlockPos(pos));
 				}
 			}
 		}

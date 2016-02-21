@@ -24,7 +24,7 @@ public class DamageSourceForestry extends DamageSource {
 
 	@Override
 	public IChatComponent getDeathMessage(EntityLivingBase living) {
-		EntityLivingBase other = living.func_94060_bK();
+		EntityLivingBase other = living.getAttackingEntity();
 		String ssp = "death." + this.damageType;
 		String smp = ssp + ".player";
 

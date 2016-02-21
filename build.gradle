@@ -39,8 +39,8 @@ targetCompatibility = 1.7
 minecraft {
 	version = mcversion + "-" + forgeversion
 	runDir = "run"
-	
-	mappings = "stable_20"
+	useDepAts = true
+	mappings = mcp_mappings
 
 	replace '@VERSION@', project.version
 	replace '@BUILD_NUMBER@', getBuildNumber()
@@ -59,6 +59,13 @@ sourceSets {
 }
 
 repositories {
+	maven {
+		url "http://dvs1.progwml6.com/files/maven"
+	}
+}
+
+dependencies {
+	deobfCompile "mezz.jei:jei_${mcversion}:${jei_version}"
 }
 
 configurations {
@@ -66,9 +73,6 @@ configurations {
 	compile.extendsFrom api
 	shade
 	compile.extendsFrom shade
-}
-
-dependencies {
 }
 
 processResources {

@@ -31,9 +31,7 @@ import forestry.core.tiles.TileAnalyzer;
 import forestry.core.tiles.TileEscritoire;
 import forestry.core.tiles.TileNaturalistChest;
 import forestry.energy.tiles.TileEngineBiogas;
-import forestry.energy.tiles.TileEngineElectric;
 import forestry.energy.tiles.TileEnginePeat;
-import forestry.energy.tiles.TileGenerator;
 import forestry.factory.tiles.TileBottler;
 import forestry.factory.tiles.TileCarpenter;
 import forestry.factory.tiles.TileCentrifuge;
@@ -86,9 +84,7 @@ public class GuiIdRegistry {
 				TileFarm.class,
 
 				TileEngineBiogas.class,
-				TileEngineElectric.class,
 				TileEnginePeat.class,
-				TileGenerator.class,
 
 				TileMailbox.class,
 				TileStampCollector.class,

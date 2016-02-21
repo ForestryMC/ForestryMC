@@ -11,6 +11,7 @@
 package forestry.core.items;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
@@ -47,4 +48,11 @@ public class ItemWrench extends ItemForestry implements IToolWrench {
 	@Override
 	public void wrenchUsed(EntityPlayer player, BlockPos pos) {}
 
+	@Override
+	public boolean canWrench(EntityPlayer entityPlayer, Entity entity) {
+		return true;
+	}
+
+	@Override
+	public void wrenchUsed(EntityPlayer entityPlayer, Entity entity) {}
 }

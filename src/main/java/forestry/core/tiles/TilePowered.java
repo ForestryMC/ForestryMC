@@ -27,9 +27,10 @@ import forestry.energy.EnergyManager;
 import net.minecraftforge.fml.common.Optional;
 
 import buildcraft.api.tiles.IHasWork;
+import cofh.api.energy.IEnergyReceiver;
 
 @Optional.Interface(iface = "buildcraft.api.tiles.IHasWork", modid = "BuildCraftAPI|tiles")
-public abstract class TilePowered extends TileBase implements IRenderableTile, IPowerHandler, IHasWork, ISpeedUpgradable, IStreamableGui {
+public abstract class TilePowered extends TileBase implements IRenderableTile, IEnergyReceiver, IPowerHandler, IHasWork, ISpeedUpgradable, IStreamableGui {
 	private static final int WORK_TICK_INTERVAL = 5; // one Forestry work tick happens every WORK_TICK_INTERVAL game ticks
 
 	private final EnergyManager energyManager;
@@ -199,11 +200,6 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
 	@Override
 	public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
 		return energyManager.receiveEnergy(from, maxReceive, simulate);
-	}
-
-	@Override
-	public int extractEnergy(EnumFacing from, int maxReceive, boolean simulate) {
-		return energyManager.extractEnergy(from, maxReceive, simulate);
 	}
 
 	@Override

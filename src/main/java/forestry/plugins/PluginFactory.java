@@ -45,10 +45,7 @@ import forestry.core.items.ItemElectronTube;
 import forestry.core.items.ItemRegistryCore;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.recipes.RecipeUtil;
-import forestry.core.recipes.craftguide.CraftGuideIntegration;
 import forestry.core.tiles.MachineDefinition;
-import forestry.core.utils.Log;
-import forestry.core.utils.ModUtil;
 import forestry.core.utils.datastructures.FluidMap;
 import forestry.core.utils.datastructures.ItemStackMap;
 import forestry.factory.DummyManagers;
@@ -209,17 +206,6 @@ public class PluginFactory extends ForestryPlugin {
 		Circuit.machineSpeedUpgrade1 = new CircuitSpeedUpgrade("machine.speed.boost.1", 0.125f, 0.05f, 4);
 		Circuit.machineSpeedUpgrade2 = new CircuitSpeedUpgrade("machine.speed.boost.2", 0.250f, 0.10f, 4);
 		Circuit.machineEfficiencyUpgrade1 = new CircuitSpeedUpgrade("machine.efficiency.1", 0, -0.10f, 2);
-	}
-
-	@Override
-	public void postInit() {
-		super.postInit();
-
-		if (ModUtil.isModLoaded("craftguide")) {
-			CraftGuideIntegration.register();
-		} else {
-			Log.info("Skipping CraftGuide integration.");
-		}
 	}
 
 	@Override

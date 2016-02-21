@@ -1,5 +1,7 @@
 package forestry.core.recipes.jei;
 
+import javax.annotation.Nonnull;
+
 import forestry.factory.gui.ContainerWorktable;
 import forestry.factory.recipes.jei.bottler.BottlerRecipeCategory;
 import forestry.factory.recipes.jei.bottler.BottlerRecipeHandler;
@@ -27,34 +29,20 @@ import forestry.factory.recipes.jei.squeezer.SqueezerRecipeWrapper;
 import forestry.factory.recipes.jei.still.StillRecipeCategory;
 import forestry.factory.recipes.jei.still.StillRecipeHandler;
 import forestry.factory.recipes.jei.still.StillRecipeMaker;
+
+import mezz.jei.api.BlankModPlugin;
 import mezz.jei.api.IGuiHelper;
-import mezz.jei.api.IItemRegistry;
 import mezz.jei.api.IJeiHelpers;
-import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
-import mezz.jei.api.IRecipeRegistry;
 import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import mezz.jei.api.recipe.transfer.IRecipeTransferRegistry;
 
 @JEIPlugin
-public class JEIIntegrationPlugin implements IModPlugin{
-
-	private IItemRegistry itemRegistry;
-	private IJeiHelpers jeiHelpers;
-	
+public class JEIIntegrationPlugin extends BlankModPlugin {
 	@Override
-	public void onJeiHelpersAvailable(IJeiHelpers jeiHelpers) {
-		this.jeiHelpers = jeiHelpers;
-	}
-
-	@Override
-	public void onItemRegistryAvailable(IItemRegistry itemRegistry) {
-		this.itemRegistry = itemRegistry;
-	}
-
-	@Override
-	public void register(IModRegistry registry) {
+	public void register(@Nonnull IModRegistry registry) {
+		IJeiHelpers jeiHelpers = registry.getJeiHelpers();
 		IGuiHelper guiHelper = jeiHelpers.getGuiHelper();
 		
 		registry.addRecipeCategories(new BottlerRecipeCategory(guiHelper), 
@@ -73,8 +61,8 @@ public class JEIIntegrationPlugin implements IModPlugin{
 				   new FabricatorRecipeHandler(),
 				   new FermenterRecipeHandler(),
 				   new MoistenerRecipeHandler(),
-				   new SqueezerRecipeHandler<SqueezerRecipeWrapper>(SqueezerRecipeWrapper.class, ForestryRecipeCategoryUid.SQUEEZER),
-				   new SqueezerRecipeHandler<SqueezerContainerRecipeWrapper>(SqueezerContainerRecipeWrapper.class, ForestryRecipeCategoryUid.SQUEEZER_CONTAINER),
+				   new SqueezerRecipeHandler<>(SqueezerRecipeWrapper.class, ForestryRecipeCategoryUid.SQUEEZER),
+				   new SqueezerRecipeHandler<>(SqueezerContainerRecipeWrapper.class, ForestryRecipeCategoryUid.SQUEEZER_CONTAINER),
 				   new StillRecipeHandler());
 		
 		registry.addRecipes(BottlerRecipeMaker.getBottlerRecipes());
@@ -87,13 +75,7 @@ public class JEIIntegrationPlugin implements IModPlugin{
 		registry.addRecipes(SqueezerRecipeMaker.getSqueezerContainerRecipes());
 		registry.addRecipes(StillRecipeMaker.getStillRecipes());
 		
-		IRecipeTransferRegistry transferTegistry = registry.getRecipeTransferRegistry();
-		transferTegistry.addRecipeTransferHandler(ContainerWorktable.class, VanillaRecipeCategoryUid.CRAFTING, 19, 9, 1, 36);
-		
+		IRecipeTransferRegistry transferRegistry = registry.getRecipeTransferRegistry();
+		transferRegistry.addRecipeTransferHandler(ContainerWorktable.class, VanillaRecipeCategoryUid.CRAFTING, 19, 9, 1, 36);
 	}
-
-	@Override
-	public void onRecipeRegistryAvailable(IRecipeRegistry recipeRegistry) {
-	}
-
 }
