@@ -1,39 +1,44 @@
 package forestry.factory.recipes.jei.squeezer;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-
-import forestry.api.recipes.ISqueezerRecipe;
-import forestry.core.recipes.jei.ForestryRecipeWrapper;
 import net.minecraft.item.ItemStack;
+
 import net.minecraftforge.fluids.FluidStack;
 
-public class SqueezerRecipeWrapper extends ForestryRecipeWrapper<ISqueezerRecipe>{
+import forestry.api.recipes.ISqueezerRecipe;
+
+public class SqueezerRecipeWrapper extends AbstractSqueezerRecipeWrapper<ISqueezerRecipe> {
 	
 	public SqueezerRecipeWrapper(@Nonnull ISqueezerRecipe recipe) {
 		super(recipe);
 	}
 	
+	@Nonnull
 	@Override
-	public List getInputs() {
+	public List<ItemStack> getInputs() {
 		List<ItemStack> inputs = new ArrayList<>();
-		for(ItemStack ingredient : recipe.getResources()){
-			inputs.add(ingredient);
-		}
+		Collections.addAll(inputs, getRecipe().getResources());
 		return inputs;
 	}
 	
+	@Nonnull
 	@Override
 	public List<FluidStack> getFluidOutputs() {
-		return Collections.singletonList(recipe.getFluidOutput());
+		return Collections.singletonList(getRecipe().getFluidOutput());
+	}
+
+	@Nonnull
+	@Override
+	public List<ItemStack> getOutputs() {
+		return Collections.singletonList(getRecipe().getRemnants());
 	}
 
 	@Override
-	public List getOutputs() {
-		return Collections.singletonList(recipe.getRemnants());
+	public float getRemnantsChance() {
+		return getRecipe().getRemnantsChance();
 	}
-
 }

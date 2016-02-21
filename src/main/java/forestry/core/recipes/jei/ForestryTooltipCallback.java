@@ -1,43 +1,34 @@
 package forestry.core.recipes.jei;
 
+import com.google.common.collect.ArrayListMultimap;
+
 import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.List;
 
-import mezz.jei.api.gui.ITooltipCallback;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 
-public class ForestryTooltipCallback implements ITooltipCallback<ItemStack>{
+import mezz.jei.api.gui.ITooltipCallback;
 
-	private List<String>[] tip;
-	
-	public ForestryTooltipCallback(int slots) {
-		tip = new List[slots];
-		for(int i = 0;i < slots;i++){
-			tip[i] = new ArrayList<String>();
-		}
-	}
+public class ForestryTooltipCallback implements ITooltipCallback<ItemStack> {
+
+	private final ArrayListMultimap<Integer, String> tooltips = ArrayListMultimap.create();
 	
 	public void addToTooltip(int index, List<String> tooltip) {
-		this.tip[index].addAll(tooltip);
+		tooltips.get(index).addAll(tooltip);
 	}
 	
 	public void addToTooltip(int index, String tooltip) {
-		this.tip[index].add(tooltip);
+		tooltips.get(index).add(tooltip);
 	}
 	
 	public List<String> getTooltip(int index) {
-		return tip[index];
-	}
-	
-	public List<String>[] getTooltip() {
-		return tip;
+		return tooltips.get(index);
 	}
 	
 	@Override
-	public void onTooltip(int slotIndex, boolean input, ItemStack ingredient, List<String> tooltip) {
-		List<String> tip = this.tip[slotIndex];
+	public void onTooltip(int index, boolean input, ItemStack ingredient, List<String> tooltip) {
+		List<String> tip = tooltips.get(index);
 		if(!tip.isEmpty()){
 			tooltip.addAll(tip);
 		}
@@ -45,13 +36,13 @@ public class ForestryTooltipCallback implements ITooltipCallback<ItemStack>{
 	
 	public void addChanceTooltip(int index, float chance) {
 		if (chance <= 0.0F) {
-			tip[index].add(EnumChatFormatting.GRAY + String.format(JEIUtils.translate("chance"), JEIUtils.translate("chance.never")));
+			tooltips.get(index).add(EnumChatFormatting.GRAY + String.format(JEIUtils.translate("chance"), JEIUtils.translate("chance.never")));
 		} else if (chance < 0.01F) {
-			tip[index].add(EnumChatFormatting.GRAY + String.format(JEIUtils.translate("chance"), JEIUtils.translate("chance.lessThan1")));
+			tooltips.get(index).add(EnumChatFormatting.GRAY + String.format(JEIUtils.translate("chance"), JEIUtils.translate("chance.lessThan1")));
 		} else if (chance != 1.0F) {
 			NumberFormat percentFormat = NumberFormat.getPercentInstance();
 			percentFormat.setMaximumFractionDigits(2);
-			tip[index].add(EnumChatFormatting.GRAY + String.format(JEIUtils.translate("chance"), String.valueOf(percentFormat.format(chance))));
+			tooltips.get(index).add(EnumChatFormatting.GRAY + String.format(JEIUtils.translate("chance"), String.valueOf(percentFormat.format(chance))));
 		}
 	}
 

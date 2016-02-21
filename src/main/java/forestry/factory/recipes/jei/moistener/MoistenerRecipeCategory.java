@@ -2,8 +2,14 @@ package forestry.factory.recipes.jei.moistener;
 
 import javax.annotation.Nonnull;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.util.ResourceLocation;
+
+import net.minecraftforge.fluids.FluidRegistry;
+
 import forestry.core.recipes.jei.ForestryRecipeCategory;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
+
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IDrawableAnimated;
@@ -12,9 +18,6 @@ import mezz.jei.api.gui.IGuiFluidStackGroup;
 import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.recipe.IRecipeWrapper;
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fluids.FluidRegistry;
 
 public class MoistenerRecipeCategory extends ForestryRecipeCategory {
 
@@ -27,11 +30,11 @@ public class MoistenerRecipeCategory extends ForestryRecipeCategory {
 	
 	private final static ResourceLocation guiTexture = new ResourceLocation("forestry", "textures/gui/moistener.png");
 	@Nonnull
-	protected final IDrawableAnimated arrow;
+	private final IDrawableAnimated arrow;
 	@Nonnull
-	protected final IDrawableAnimated progressBar;
+	private final IDrawableAnimated progressBar;
 	@Nonnull
-	protected final IDrawable tankOverlay;
+	private final IDrawable tankOverlay;
 	
 	public MoistenerRecipeCategory(IGuiHelper guiHelper) {
 		super(guiHelper.createDrawable(guiTexture, 15, 15, 145, 60), "tile.for.factory.4.name");
@@ -50,17 +53,13 @@ public class MoistenerRecipeCategory extends ForestryRecipeCategory {
 	}
 
 	@Override
-	public void drawExtras(Minecraft minecraft) {	
-	}
-
-	@Override
-	public void drawAnimations(Minecraft minecraft) {
+	public void drawAnimations(@Nonnull Minecraft minecraft) {
 		arrow.draw(minecraft, 78, 2);
 		progressBar.draw(minecraft, 109, 22);
 	}
 
 	@Override
-	public void setRecipe(IRecipeLayout recipeLayout, IRecipeWrapper recipeWrapper) {
+	public void setRecipe(@Nonnull IRecipeLayout recipeLayout, @Nonnull IRecipeWrapper recipeWrapper) {
 		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
 		IGuiFluidStackGroup guiFluidStacks = recipeLayout.getFluidStacks();
 		

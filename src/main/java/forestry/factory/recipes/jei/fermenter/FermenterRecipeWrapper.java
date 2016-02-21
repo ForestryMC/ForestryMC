@@ -1,18 +1,19 @@
 package forestry.factory.recipes.jei.fermenter;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.annotation.Nonnull;
+import net.minecraft.item.ItemStack;
+
+import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.fuels.FermenterFuel;
 import forestry.api.fuels.FuelManager;
 import forestry.api.recipes.IFermenterRecipe;
 import forestry.api.recipes.IVariableFermentable;
 import forestry.core.recipes.jei.ForestryRecipeWrapper;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
 
 public class FermenterRecipeWrapper extends ForestryRecipeWrapper<IFermenterRecipe>{
 	
@@ -33,23 +34,25 @@ public class FermenterRecipeWrapper extends ForestryRecipeWrapper<IFermenterReci
 		inputs.add(fermentable);
 		return inputs;
 	}
-	
+
+	@Nonnull
 	public ItemStack getFermentable() {
 		return fermentable;
 	}
 	
 	@Override
 	public List<FluidStack> getFluidInputs() {
-		return Collections.singletonList(recipe.getFluidResource());
+		return Collections.singletonList(getRecipe().getFluidResource());
 	}
-	
+
+	@Nonnull
 	@Override
 	public List<FluidStack> getFluidOutputs() {
-		int amount = Math.round(recipe.getFermentationValue() * recipe.getModifier());
+		int amount = Math.round(getRecipe().getFermentationValue() * getRecipe().getModifier());
 		if (fermentable.getItem() instanceof IVariableFermentable) {
 			amount *= ((IVariableFermentable) fermentable.getItem()).getFermentationModifier(fermentable);
 		}
-		FluidStack output = new FluidStack(recipe.getOutput(), amount);
+		FluidStack output = new FluidStack(getRecipe().getOutput(), amount);
 		return Collections.singletonList(output);
 	}
 

@@ -4,6 +4,7 @@ import javax.annotation.Nonnull;
 
 import forestry.api.recipes.IMoistenerRecipe;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
+
 import mezz.jei.api.recipe.IRecipeHandler;
 import mezz.jei.api.recipe.IRecipeWrapper;
 
@@ -21,13 +22,14 @@ public class MoistenerRecipeHandler implements IRecipeHandler<MoistenerRecipeWra
 		return ForestryRecipeCategoryUid.MOISTENER;
 	}
 
+	@Nonnull
 	@Override
-	public IRecipeWrapper getRecipeWrapper(MoistenerRecipeWrapper recipe) {
+	public IRecipeWrapper getRecipeWrapper(@Nonnull MoistenerRecipeWrapper recipe) {
 		return recipe;
 	}
 
 	@Override
-	public boolean isRecipeValid(MoistenerRecipeWrapper wrapper) {
+	public boolean isRecipeValid(@Nonnull MoistenerRecipeWrapper wrapper) {
 		IMoistenerRecipe recipe = wrapper.getRecipe();
 		if(recipe.getTimePerItem() <= 0){
 			return false;

@@ -4,6 +4,7 @@ import javax.annotation.Nonnull;
 
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
 import forestry.factory.recipes.BottlerRecipe;
+
 import mezz.jei.api.recipe.IRecipeHandler;
 import mezz.jei.api.recipe.IRecipeWrapper;
 
@@ -21,6 +22,7 @@ public class BottlerRecipeHandler implements IRecipeHandler<BottlerRecipeWrapper
 		return ForestryRecipeCategoryUid.BOTTLER;
 	}
 
+	@Nonnull
 	@Override
 	public IRecipeWrapper getRecipeWrapper(@Nonnull BottlerRecipeWrapper recipe) {
 		return recipe;

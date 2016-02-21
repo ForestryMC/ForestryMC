@@ -1,12 +1,16 @@
 package forestry.factory.recipes.jei.carpenter;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-import javax.annotation.Nonnull;
+import net.minecraft.client.Minecraft;
+import net.minecraft.util.ResourceLocation;
 
 import forestry.core.recipes.jei.ForestryRecipeCategory;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
+
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.ICraftingGridHelper;
 import mezz.jei.api.gui.IDrawable;
@@ -16,8 +20,6 @@ import mezz.jei.api.gui.IGuiFluidStackGroup;
 import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.recipe.IRecipeWrapper;
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.ResourceLocation;
 
 public class CarpenterRecipeCategory extends ForestryRecipeCategory {
 
@@ -31,9 +33,9 @@ public class CarpenterRecipeCategory extends ForestryRecipeCategory {
 	@Nonnull
 	private final ICraftingGridHelper craftingGridHelper;
 	@Nonnull
-	protected final IDrawableAnimated arrow;
+	private final IDrawableAnimated arrow;
 	@Nonnull
-	protected final IDrawable tankOverlay;
+	private final IDrawable tankOverlay;
 	
 	public CarpenterRecipeCategory(IGuiHelper guiHelper) {
 		super(guiHelper.createDrawable(guiTexture, 9, 16, 158, 61), "tile.for.factory.1.name");
@@ -51,16 +53,12 @@ public class CarpenterRecipeCategory extends ForestryRecipeCategory {
 	}
 
 	@Override
-	public void drawExtras(Minecraft minecraft) {	
-	}
-
-	@Override
-	public void drawAnimations(Minecraft minecraft) {
+	public void drawAnimations(@Nonnull Minecraft minecraft) {
 		arrow.draw(minecraft, 89, 34);
 	}
 
 	@Override
-	public void setRecipe(IRecipeLayout recipeLayout, IRecipeWrapper recipeWrapper) {
+	public void setRecipe(@Nonnull IRecipeLayout recipeLayout, @Nonnull IRecipeWrapper recipeWrapper) {
 		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
 		IGuiFluidStackGroup guiFluidStacks = recipeLayout.getFluidStacks();
 		
@@ -82,9 +80,7 @@ public class CarpenterRecipeCategory extends ForestryRecipeCategory {
 		
 		craftingGridHelper.setOutput(guiItemStacks, wrapper.getOutputs());
 		List<Object> inputs = new ArrayList<>();
-		for(Object ingredient : wrapper.getRecipe().getCraftingGridRecipe().getIngredients()){
-			inputs.add(ingredient);
-		}
+		Collections.addAll(inputs, wrapper.getRecipe().getCraftingGridRecipe().getIngredients());
 		craftingGridHelper.setInput(guiItemStacks, inputs, wrapper.getRecipe().getCraftingGridRecipe().getWidth(), wrapper.getRecipe().getCraftingGridRecipe().getHeight());
 		
 		guiFluidStacks.set(inputTank, wrapper.getFluidInputs());

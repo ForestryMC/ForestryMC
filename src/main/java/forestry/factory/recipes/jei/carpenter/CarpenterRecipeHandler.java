@@ -4,6 +4,7 @@ import javax.annotation.Nonnull;
 
 import forestry.api.recipes.ICarpenterRecipe;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
+
 import mezz.jei.api.recipe.IRecipeHandler;
 import mezz.jei.api.recipe.IRecipeWrapper;
 
@@ -21,13 +22,14 @@ public class CarpenterRecipeHandler implements IRecipeHandler<CarpenterRecipeWra
 		return ForestryRecipeCategoryUid.CARPENTER;
 	}
 
+	@Nonnull
 	@Override
-	public IRecipeWrapper getRecipeWrapper(CarpenterRecipeWrapper recipe) {
+	public IRecipeWrapper getRecipeWrapper(@Nonnull CarpenterRecipeWrapper recipe) {
 		return recipe;
 	}
 
 	@Override
-	public boolean isRecipeValid(CarpenterRecipeWrapper wrapper) {
+	public boolean isRecipeValid(@Nonnull CarpenterRecipeWrapper wrapper) {
 		ICarpenterRecipe recipe = wrapper.getRecipe();
 		if(recipe.getPackagingTime() <= 0){
 			return false;

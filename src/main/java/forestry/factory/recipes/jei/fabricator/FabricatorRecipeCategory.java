@@ -1,26 +1,28 @@
 package forestry.factory.recipes.jei.fabricator;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+
+import net.minecraftforge.fluids.Fluid;
 
 import forestry.api.recipes.IFabricatorSmeltingRecipe;
 import forestry.core.recipes.jei.ForestryRecipeCategory;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
 import forestry.factory.recipes.FabricatorSmeltingRecipeManager;
+
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.ICraftingGridHelper;
 import mezz.jei.api.gui.IGuiFluidStackGroup;
 import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.recipe.IRecipeWrapper;
-import net.minecraft.client.Minecraft;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fluids.Fluid;
 
 public class FabricatorRecipeCategory extends ForestryRecipeCategory {
 
@@ -48,15 +50,7 @@ public class FabricatorRecipeCategory extends ForestryRecipeCategory {
 	}
 
 	@Override
-	public void drawExtras(Minecraft minecraft) {	
-	}
-
-	@Override
-	public void drawAnimations(Minecraft minecraft) {
-	}
-
-	@Override
-	public void setRecipe(IRecipeLayout recipeLayout, IRecipeWrapper recipeWrapper) {
+	public void setRecipe(@Nonnull IRecipeLayout recipeLayout, @Nonnull IRecipeWrapper recipeWrapper) {
 		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
 		IGuiFluidStackGroup guiFluidStacks = recipeLayout.getFluidStacks();
 		
@@ -88,9 +82,7 @@ public class FabricatorRecipeCategory extends ForestryRecipeCategory {
 		
 		craftingGridHelper.setOutput(guiItemStacks, wrapper.getOutputs());
 		List<Object> inputs = new ArrayList<>();
-		for(Object ingredient : wrapper.getRecipe().getIngredients()){
-			inputs.add(ingredient);
-		}
+		Collections.addAll(inputs, wrapper.getRecipe().getIngredients());
 		craftingGridHelper.setInput(guiItemStacks, inputs, wrapper.getRecipe().getWidth(), wrapper.getRecipe().getHeight());
 		
 		guiFluidStacks.set(inputTank, wrapper.getFluidInputs());

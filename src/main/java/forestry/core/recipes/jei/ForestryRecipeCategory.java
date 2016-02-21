@@ -3,28 +3,23 @@ package forestry.core.recipes.jei;
 import javax.annotation.Nonnull;
 
 import mezz.jei.api.gui.IDrawable;
-import mezz.jei.api.gui.IRecipeLayout;
-import mezz.jei.api.recipe.IRecipeCategory;
-import mezz.jei.api.recipe.IRecipeWrapper;
+import mezz.jei.api.recipe.BlankRecipeCategory;
 import mezz.jei.util.Translator;
 
-public abstract class ForestryRecipeCategory implements IRecipeCategory {
-
-	protected ForestryTooltipCallback tooltip;
+public abstract class ForestryRecipeCategory extends BlankRecipeCategory {
 	@Nonnull
-	protected final IDrawable background;
+	private final IDrawable background;
 	@Nonnull
-	protected final String localizedName;
+	private final String localizedName;
 	
-	public ForestryRecipeCategory(IDrawable background, String unlocalizedName) {
+	public ForestryRecipeCategory(@Nonnull IDrawable background, String unlocalizedName) {
 		this.background = background;
 		this.localizedName = Translator.translateToLocal(unlocalizedName);
 	}
 	
-	public ForestryRecipeCategory(IDrawable background, String unlocalizedName, int slots) {
+	public ForestryRecipeCategory(@Nonnull IDrawable background, String unlocalizedName, int slots) {
 		this.background = background;
 		this.localizedName = Translator.translateToLocal(unlocalizedName);
-		this.tooltip = new ForestryTooltipCallback(slots);
 	}
 
 	@Nonnull
@@ -38,12 +33,4 @@ public abstract class ForestryRecipeCategory implements IRecipeCategory {
 	public IDrawable getBackground() {
 		return background;
 	}
-	
-	@Override
-	public void setRecipe(IRecipeLayout recipeLayout, IRecipeWrapper recipeWrapper) {
-		if(tooltip != null){
-			this.tooltip = new ForestryTooltipCallback(tooltip.getTooltip().length);
-		}
-	}
-
 }

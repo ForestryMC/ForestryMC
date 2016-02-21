@@ -2,8 +2,12 @@ package forestry.factory.recipes.jei.still;
 
 import javax.annotation.Nonnull;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.util.ResourceLocation;
+
 import forestry.core.recipes.jei.ForestryRecipeCategory;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
+
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IDrawableAnimated;
@@ -11,8 +15,6 @@ import mezz.jei.api.gui.IDrawableStatic;
 import mezz.jei.api.gui.IGuiFluidStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.recipe.IRecipeWrapper;
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.ResourceLocation;
 
 public class StillRecipeCategory extends ForestryRecipeCategory {
 	
@@ -22,9 +24,9 @@ public class StillRecipeCategory extends ForestryRecipeCategory {
 	private final static ResourceLocation guiTexture = new ResourceLocation("forestry", "textures/gui/still.png");
 	
 	@Nonnull
-	protected final IDrawable tankOverlay;
+	private final IDrawable tankOverlay;
 	@Nonnull
-	protected final IDrawableAnimated progressBar;
+	private final IDrawableAnimated progressBar;
 	
 	public StillRecipeCategory(IGuiHelper guiHelper) {
 		super(guiHelper.createDrawable(guiTexture, 30, 11, 116, 65), "tile.for.factory.6.name");
@@ -34,31 +36,26 @@ public class StillRecipeCategory extends ForestryRecipeCategory {
 		this.progressBar = guiHelper.createAnimatedDrawable(progressBarDrawable0, 20, IDrawableAnimated.StartDirection.BOTTOM, false);
 	}
 	
+	@Nonnull
 	@Override
 	public String getUid() {
 		return ForestryRecipeCategoryUid.STILL;
 	}
 
 	@Override
-	public void drawExtras(Minecraft minecraft) {	
-	}
-
-	@Override
-	public void drawAnimations(Minecraft minecraft) {
+	public void drawAnimations(@Nonnull Minecraft minecraft) {
 		progressBar.draw(minecraft, 54, 6);
 	}
 
 	@Override
-	public void setRecipe(IRecipeLayout recipeLayout, IRecipeWrapper recipeWrapper) {
+	public void setRecipe(@Nonnull IRecipeLayout recipeLayout, @Nonnull IRecipeWrapper recipeWrapper) {
 		IGuiFluidStackGroup guiFluidStacks = recipeLayout.getFluidStacks();
-		
-		
+
 		guiFluidStacks.init(inputTank, true, 5, 4, 16, 58, 10000, false, tankOverlay);
 		guiFluidStacks.init(outputTank, false, 95, 4, 16, 58, 10000, false, tankOverlay);
 		
 		guiFluidStacks.set(inputTank, recipeWrapper.getFluidInputs());
 		guiFluidStacks.set(outputTank, recipeWrapper.getFluidOutputs());
-		
 	}
 
 }

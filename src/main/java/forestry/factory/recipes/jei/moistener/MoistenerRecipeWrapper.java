@@ -1,43 +1,44 @@
 package forestry.factory.recipes.jei.moistener;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
+import net.minecraft.item.ItemStack;
 
 import forestry.api.fuels.MoistenerFuel;
 import forestry.api.recipes.IMoistenerRecipe;
 import forestry.core.recipes.jei.ForestryRecipeWrapper;
-import net.minecraft.item.ItemStack;
 
 public class MoistenerRecipeWrapper extends ForestryRecipeWrapper<IMoistenerRecipe>{
 	
 	@Nonnull
-	private MoistenerFuel fuel;
+	private final MoistenerFuel fuel;
 	
-	public MoistenerRecipeWrapper(@Nonnull IMoistenerRecipe recipe, MoistenerFuel fuel) {
+	public MoistenerRecipeWrapper(@Nonnull IMoistenerRecipe recipe, @Nonnull MoistenerFuel fuel) {
 		super(recipe);
 		this.fuel = fuel;
 	}
 	
 	@Override
-	public List getInputs() {
+	public List<ItemStack> getInputs() {
 		List<ItemStack> inputs = new ArrayList<>();
-		inputs.add(recipe.getResource());
+		inputs.add(getRecipe().getResource());
 		if(fuel.item != null)
 			inputs.add(fuel.item);
 		return inputs;
 	}
 
 	@Override
-	public List getOutputs() {
+	public List<ItemStack> getOutputs() {
 		List<ItemStack> outputs = new ArrayList<>();
-		outputs.add(recipe.getProduct());
+		outputs.add(getRecipe().getProduct());
 		if(fuel.product != null)
 			outputs.add(fuel.product);
 		return outputs;
 	}
-	
+
+	@Nonnull
 	public MoistenerFuel getFuel() {
 		return fuel;
 	}

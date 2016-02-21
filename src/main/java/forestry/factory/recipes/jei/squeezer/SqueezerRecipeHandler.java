@@ -5,18 +5,19 @@ import javax.annotation.Nonnull;
 import forestry.api.recipes.ISqueezerRecipe;
 import forestry.core.recipes.jei.ForestryRecipeWrapper;
 import forestry.factory.recipes.ISqueezerContainerRecipe;
+
 import mezz.jei.api.recipe.IRecipeHandler;
 import mezz.jei.api.recipe.IRecipeWrapper;
 
 public class SqueezerRecipeHandler<R extends ForestryRecipeWrapper> implements IRecipeHandler<R> {
 	
 	@Nonnull
-	private Class<R> clazz;
+	private final Class<R> clazz;
 	@Nonnull
-	private String UID;
+	private final String UID;
 	
-	public SqueezerRecipeHandler(@Nonnull Class<R> clazz, @Nonnull String UID) {
-		this.clazz = clazz;
+	public SqueezerRecipeHandler(@Nonnull Class<R> recipeClass, @Nonnull String UID) {
+		this.clazz = recipeClass;
 		this.UID = UID;
 	}
 	
@@ -32,13 +33,14 @@ public class SqueezerRecipeHandler<R extends ForestryRecipeWrapper> implements I
 		return UID;
 	}
 
+	@Nonnull
 	@Override
-	public IRecipeWrapper getRecipeWrapper(R recipe) {
+	public IRecipeWrapper getRecipeWrapper(@Nonnull R recipe) {
 		return recipe;
 	}
 
 	@Override
-	public boolean isRecipeValid(R wrapper) {
+	public boolean isRecipeValid(@Nonnull R wrapper) {
 		if(wrapper.getFluidOutputs() == null || wrapper.getFluidOutputs().isEmpty()){
 			return false;
 		}

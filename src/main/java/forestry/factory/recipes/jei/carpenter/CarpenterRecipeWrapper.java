@@ -1,39 +1,42 @@
 package forestry.factory.recipes.jei.carpenter;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.annotation.Nonnull;
+import net.minecraft.item.ItemStack;
+
+import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.recipes.ICarpenterRecipe;
 import forestry.core.recipes.jei.ForestryRecipeWrapper;
-import net.minecraftforge.fluids.FluidStack;
 
 public class CarpenterRecipeWrapper extends ForestryRecipeWrapper<ICarpenterRecipe>{
 	
 	public CarpenterRecipeWrapper(@Nonnull ICarpenterRecipe recipe) {
 		super(recipe);
 	}
-	
+
+	@Nonnull
 	@Override
 	public List getInputs() {
 		List<Object> inputs = new ArrayList<>();
-		for(Object ingredient : recipe.getCraftingGridRecipe().getIngredients()){
-			inputs.add(ingredient);
-		}
-		inputs.add(recipe.getBox());
+		Collections.addAll(inputs, getRecipe().getCraftingGridRecipe().getIngredients());
+		inputs.add(getRecipe().getBox());
 		return inputs;
 	}
-	
+
+	@Nonnull
 	@Override
 	public List<FluidStack> getFluidInputs() {
-		return Collections.singletonList(recipe.getFluidResource());
+		return Collections.singletonList(getRecipe().getFluidResource());
 	}
 
+	@Nonnull
 	@Override
-	public List getOutputs() {
-		return Collections.singletonList(recipe.getCraftingGridRecipe().getRecipeOutput());
+	public List<ItemStack> getOutputs() {
+		return Collections.singletonList(getRecipe().getCraftingGridRecipe().getRecipeOutput());
 	}
 
 }

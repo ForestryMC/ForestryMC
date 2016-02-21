@@ -4,6 +4,7 @@ import javax.annotation.Nonnull;
 
 import forestry.api.recipes.IFabricatorRecipe;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
+
 import mezz.jei.api.recipe.IRecipeHandler;
 import mezz.jei.api.recipe.IRecipeWrapper;
 
@@ -21,13 +22,14 @@ public class FabricatorRecipeHandler implements IRecipeHandler<FabricatorRecipeW
 		return ForestryRecipeCategoryUid.FABRICATOR;
 	}
 
+	@Nonnull
 	@Override
-	public IRecipeWrapper getRecipeWrapper(FabricatorRecipeWrapper recipe) {
+	public IRecipeWrapper getRecipeWrapper(@Nonnull FabricatorRecipeWrapper recipe) {
 		return recipe;
 	}
 
 	@Override
-	public boolean isRecipeValid(FabricatorRecipeWrapper wrapper) {
+	public boolean isRecipeValid(@Nonnull FabricatorRecipeWrapper wrapper) {
 		IFabricatorRecipe recipe = wrapper.getRecipe();
 		if(recipe.getIngredients() == null){
 			return false;

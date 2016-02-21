@@ -12,7 +12,6 @@ public class ForestryRecipeCategoryUid {
 	public static final String FERMENTER = "forestry.fermenter";
 	public static final String MOISTENER = "forestry.moistener";
 	public static final String SQUEEZER = "forestry.squeezer";
-	public static final String SQUEEZER_CONTAINER = "forestry.squeezer.container";
 	public static final String STILL = "forestry.still";
 	
 }

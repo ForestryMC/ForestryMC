@@ -1,15 +1,20 @@
 package forestry.factory.recipes.jei.centrifuge;
 
+import javax.annotation.Nonnull;
 import java.util.Comparator;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.PriorityQueue;
 import java.util.Set;
-import java.util.Map.Entry;
 
-import javax.annotation.Nonnull;
+import net.minecraft.client.Minecraft;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
 import forestry.core.recipes.jei.ForestryRecipeCategory;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
+import forestry.core.recipes.jei.ForestryTooltipCallback;
+
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawableAnimated;
 import mezz.jei.api.gui.IDrawableStatic;
@@ -17,15 +22,12 @@ import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import mezz.jei.gui.ingredients.GuiItemStackGroup;
-import net.minecraft.client.Minecraft;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 
 public class CentrifugeRecipeCategory extends ForestryRecipeCategory {
 
-	public static final int[][] OUTPUTS = new int[][]{{0, 0}, {1, 0}, {2, 0}, {0, 1}, {1, 1}, {2, 1}, {0, 2}, {1, 2}, {2, 2}};
+	private static final int[][] OUTPUTS = new int[][]{{0, 0}, {1, 0}, {2, 0}, {0, 1}, {1, 1}, {2, 1}, {0, 2}, {1, 2}, {2, 2}};
 	
-	public static final Comparator<Entry<ItemStack, Float>> highestChanceComparator = new Comparator<Entry<ItemStack, Float>>() {
+	private static final Comparator<Entry<ItemStack, Float>> highestChanceComparator = new Comparator<Entry<ItemStack, Float>>() {
 		@Override
 		public int compare(Entry<ItemStack, Float> o1, Entry<ItemStack, Float> o2) {
 			return o2.getValue().compareTo(o1.getValue());
@@ -37,7 +39,8 @@ public class CentrifugeRecipeCategory extends ForestryRecipeCategory {
 	
 	private final static ResourceLocation guiTexture = new ResourceLocation("forestry", "textures/gui/centrifugesocket.png");
 	@Nonnull
-	protected final IDrawableAnimated arrow;
+	private final IDrawableAnimated arrow;
+	private final ForestryTooltipCallback tooltip = new ForestryTooltipCallback();
 	
 	public CentrifugeRecipeCategory(IGuiHelper guiHelper) {
 		super(guiHelper.createDrawable(guiTexture, 5, 14, 166, 65), "tile.for.factory.2.name", 10);
@@ -53,21 +56,16 @@ public class CentrifugeRecipeCategory extends ForestryRecipeCategory {
 	}
 
 	@Override
-	public void drawExtras(Minecraft minecraft) {	
-	}
-
-	@Override
-	public void drawAnimations(Minecraft minecraft) {
+	public void drawAnimations(@Nonnull Minecraft minecraft) {
 		arrow.draw(minecraft, 53, 22);
 	}
 
 	@Override
-	public void setRecipe(IRecipeLayout recipeLayout, IRecipeWrapper recipeWrapper) {
-		super.setRecipe(recipeLayout, recipeWrapper);
+	public void setRecipe(@Nonnull IRecipeLayout recipeLayout, @Nonnull IRecipeWrapper recipeWrapper) {
 		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
 		
 		guiItemStacks.init(inputSlot, true, 24, 22);
-		guiItemStacks.set(inputSlot, recipeWrapper.getInputs());
+		guiItemStacks.setFromRecipe(inputSlot, recipeWrapper.getInputs());
 		CentrifugeRecipeWrapper centrifugeWrapper = (CentrifugeRecipeWrapper) recipeWrapper;
 		setResults(centrifugeWrapper.getRecipe().getAllProducts(), (GuiItemStackGroup) guiItemStacks);
 		guiItemStacks.addTooltipCallback(tooltip);
@@ -82,7 +80,6 @@ public class CentrifugeRecipeCategory extends ForestryRecipeCategory {
 		sortByChance.addAll(entrySet);
 
 		int i = 0;
-		float[] chances = new float[sortByChance.size()];
 		while (!sortByChance.isEmpty()) {
 			Entry<ItemStack, Float> stack = sortByChance.poll();
 			if (i >= OUTPUTS.length) {

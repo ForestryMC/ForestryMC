@@ -1,44 +1,46 @@
 package forestry.factory.recipes.jei.squeezer;
 
+import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-
-import forestry.core.recipes.jei.ForestryRecipeWrapper;
-import forestry.factory.recipes.ISqueezerContainerRecipe;
 import net.minecraft.item.ItemStack;
+
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
-public class SqueezerContainerRecipeWrapper extends ForestryRecipeWrapper<ISqueezerContainerRecipe>{
+import forestry.factory.recipes.ISqueezerContainerRecipe;
+
+public class SqueezerContainerRecipeWrapper extends AbstractSqueezerRecipeWrapper<ISqueezerContainerRecipe> {
 	
 	@Nonnull
-	private ItemStack filledContainer;
+	private final ItemStack filledContainer;
 	
 	public SqueezerContainerRecipeWrapper(@Nonnull ISqueezerContainerRecipe recipe, @Nonnull ItemStack filledContainer) {
 		super(recipe);
 		this.filledContainer = filledContainer;
 	}
-	
+
+	@Nonnull
 	@Override
-	public List getInputs() {
+	public List<ItemStack> getInputs() {
 		return Collections.singletonList(filledContainer);
 	}
-	
+
+	@Nonnull
 	@Override
 	public List<FluidStack> getFluidOutputs() {
 		return Collections.singletonList(FluidContainerRegistry.getFluidForFilledItem(filledContainer));
 	}
 
+	@Nonnull
 	@Override
-	public List getOutputs() {
-		return Collections.singletonList(recipe.getRemnants());
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		return super.equals(obj);
+	public List<ItemStack> getOutputs() {
+		return Collections.singletonList(getRecipe().getRemnants());
 	}
 
+	@Override
+	public float getRemnantsChance() {
+		return getRecipe().getRemnantsChance();
+	}
 }

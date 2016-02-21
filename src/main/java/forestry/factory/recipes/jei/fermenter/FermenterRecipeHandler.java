@@ -4,6 +4,7 @@ import javax.annotation.Nonnull;
 
 import forestry.api.recipes.IFermenterRecipe;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
+
 import mezz.jei.api.recipe.IRecipeHandler;
 import mezz.jei.api.recipe.IRecipeWrapper;
 
@@ -21,13 +22,14 @@ public class FermenterRecipeHandler implements IRecipeHandler<FermenterRecipeWra
 		return ForestryRecipeCategoryUid.FERMENTER;
 	}
 
+	@Nonnull
 	@Override
-	public IRecipeWrapper getRecipeWrapper(FermenterRecipeWrapper recipe) {
+	public IRecipeWrapper getRecipeWrapper(@Nonnull FermenterRecipeWrapper recipe) {
 		return recipe;
 	}
 
 	@Override
-	public boolean isRecipeValid(FermenterRecipeWrapper wrapper) {
+	public boolean isRecipeValid(@Nonnull FermenterRecipeWrapper wrapper) {
 		IFermenterRecipe recipe = wrapper.getRecipe();
 		if(recipe.getFermentationValue() <= 0){
 			return false;

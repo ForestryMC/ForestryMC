@@ -1,14 +1,18 @@
 package forestry.factory.recipes.jei.fermenter;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
+import net.minecraft.client.Minecraft;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
 import forestry.api.fuels.FermenterFuel;
 import forestry.api.fuels.FuelManager;
 import forestry.core.recipes.jei.ForestryRecipeCategory;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
+
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IDrawableAnimated;
@@ -17,9 +21,6 @@ import mezz.jei.api.gui.IGuiFluidStackGroup;
 import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.recipe.IRecipeWrapper;
-import net.minecraft.client.Minecraft;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 
 public class FermenterRecipeCategory extends ForestryRecipeCategory {
 
@@ -31,11 +32,11 @@ public class FermenterRecipeCategory extends ForestryRecipeCategory {
 	
 	private final static ResourceLocation guiTexture = new ResourceLocation("forestry", "textures/gui/fermenter.png");
 	@Nonnull
-	protected final IDrawableAnimated progressBar0;
+	private final IDrawableAnimated progressBar0;
 	@Nonnull
-	protected final IDrawableAnimated progressBar1;
+	private final IDrawableAnimated progressBar1;
 	@Nonnull
-	protected final IDrawable tankOverlay;
+	private final IDrawable tankOverlay;
 	
 	public FermenterRecipeCategory(IGuiHelper guiHelper) {
 		super(guiHelper.createDrawable(guiTexture, 30, 15, 116, 65), "tile.for.factory.3.name");
@@ -54,17 +55,13 @@ public class FermenterRecipeCategory extends ForestryRecipeCategory {
 	}
 
 	@Override
-	public void drawExtras(Minecraft minecraft) {	
-	}
-
-	@Override
-	public void drawAnimations(Minecraft minecraft) {
+	public void drawAnimations(@Nonnull Minecraft minecraft) {
 		progressBar0.draw(minecraft, 44, 17);
 		progressBar1.draw(minecraft, 68, 31);
 	}
 
 	@Override
-	public void setRecipe(IRecipeLayout recipeLayout, IRecipeWrapper recipeWrapper) {
+	public void setRecipe(@Nonnull IRecipeLayout recipeLayout, @Nonnull IRecipeWrapper recipeWrapper) {
 		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
 		IGuiFluidStackGroup guiFluidStacks = recipeLayout.getFluidStacks();
 		

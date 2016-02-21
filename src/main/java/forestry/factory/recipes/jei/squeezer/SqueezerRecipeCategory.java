@@ -1,14 +1,15 @@
 package forestry.factory.recipes.jei.squeezer;
 
-import java.util.Collection;
+import javax.annotation.Nonnull;
 import java.util.List;
 
-import javax.annotation.Nonnull;
+import net.minecraft.client.Minecraft;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
-import forestry.api.recipes.ISqueezerRecipe;
 import forestry.core.recipes.jei.ForestryRecipeCategory;
-import forestry.core.recipes.jei.ForestryRecipeWrapper;
-import forestry.factory.recipes.ISqueezerContainerRecipe;
+import forestry.core.recipes.jei.ForestryTooltipCallback;
+
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IDrawableAnimated;
@@ -17,9 +18,6 @@ import mezz.jei.api.gui.IGuiFluidStackGroup;
 import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.recipe.IRecipeWrapper;
-import net.minecraft.client.Minecraft;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 
 public class SqueezerRecipeCategory extends ForestryRecipeCategory {
 	
@@ -32,13 +30,14 @@ public class SqueezerRecipeCategory extends ForestryRecipeCategory {
 	
 	private final static ResourceLocation guiTexture = new ResourceLocation("forestry", "textures/gui/squeezersocket.png");
 	@Nonnull
-	protected final IDrawableAnimated arrow;
+	private final IDrawableAnimated arrow;
 	@Nonnull
-	protected final IDrawable tankOverlay;
+	private final IDrawable tankOverlay;
 	@Nonnull
-	protected final String UID;
+	private final String UID;
+	private final ForestryTooltipCallback tooltip = new ForestryTooltipCallback();
 	
-	public SqueezerRecipeCategory(IGuiHelper guiHelper, String UID) {
+	public SqueezerRecipeCategory(@Nonnull IGuiHelper guiHelper, @Nonnull String UID) {
 		super(guiHelper.createDrawable(guiTexture, 9, 16, 158, 61), "tile.for.factory.5.name", 10);
 		
 		IDrawableStatic arrowDrawable = guiHelper.createDrawable(guiTexture, 176, 60, 43, 18);
@@ -54,50 +53,35 @@ public class SqueezerRecipeCategory extends ForestryRecipeCategory {
 	}
 
 	@Override
-	public void drawExtras(Minecraft minecraft) {	
-	}
-
-	@Override
-	public void drawAnimations(Minecraft minecraft) {
+	public void drawAnimations(@Nonnull Minecraft minecraft) {
 		arrow.draw(minecraft, 67, 25);
 	}
 
 	@Override
-	public void setRecipe(IRecipeLayout recipeLayout, IRecipeWrapper recipeWrapper) {
-		super.setRecipe(recipeLayout, recipeWrapper);
+	public void setRecipe(@Nonnull IRecipeLayout recipeLayout, @Nonnull IRecipeWrapper recipeWrapper) {
 		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
 		IGuiFluidStackGroup guiFluidStacks = recipeLayout.getFluidStacks();
 		
-		ForestryRecipeWrapper wrapper = (ForestryRecipeWrapper) recipeWrapper;
+		AbstractSqueezerRecipeWrapper<?> wrapper = (AbstractSqueezerRecipeWrapper) recipeWrapper;
 		
-		float chance = 0;
-		if(wrapper.getRecipe() instanceof ISqueezerRecipe){
-			chance = ((ISqueezerRecipe) wrapper.getRecipe()).getRemnantsChance();
-		}else if(wrapper.getRecipe() instanceof ISqueezerContainerRecipe){
-			chance = ((ISqueezerContainerRecipe) wrapper.getRecipe()).getRemnantsChance();
-		}
-		
+		float chance = wrapper.getRemnantsChance();
+
 		guiFluidStacks.init(outputTank, false, 113, 2, 16, 58, 10000, false, tankOverlay);
-		guiFluidStacks.set(outputTank, recipeWrapper.getFluidOutputs());
-		
+		guiFluidStacks.set(outputTank, wrapper.getFluidOutputs());
+
 		guiItemStacks.init(craftOutputSlot, false, 87, 43);
-		guiItemStacks.set(craftOutputSlot, recipeWrapper.getOutputs());
+		guiItemStacks.set(craftOutputSlot, wrapper.getOutputs());
 		tooltip.addChanceTooltip(craftOutputSlot, chance);
-		setIngredients(guiItemStacks, recipeWrapper.getInputs(), chance);
+		setIngredients(guiItemStacks, wrapper.getInputs());
 
 		guiItemStacks.addTooltipCallback(tooltip);
-		
 	}
 	
-	public void setIngredients(IGuiItemStackGroup guiItemStacks, List<Object> inputs, float chance) {
+	private static void setIngredients(@Nonnull IGuiItemStackGroup guiItemStacks, @Nonnull List<ItemStack> inputs) {
 		int i = 0;
-		for (Object stack : inputs) {
+		for (ItemStack stack : inputs) {
 			guiItemStacks.init(craftInputSlot + i, true, 7 + INPUTS[i][0] * 18, 4 + INPUTS[i][1] * 18);
-			if(stack instanceof ItemStack){
-				guiItemStacks.set(craftInputSlot + i, (ItemStack) stack);
-			}else{
-				guiItemStacks.set(craftInputSlot + i, (Collection<ItemStack>) stack);
-			}
+			guiItemStacks.set(craftInputSlot + i, stack);
 			i++;
 		}
 	}
