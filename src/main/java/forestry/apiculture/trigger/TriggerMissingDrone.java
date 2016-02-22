@@ -15,7 +15,6 @@ import net.minecraft.util.EnumFacing;
 import forestry.api.core.IErrorLogicSource;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.triggers.Trigger;
-
 import buildcraft.api.statements.IStatementContainer;
 import buildcraft.api.statements.IStatementParameter;
 

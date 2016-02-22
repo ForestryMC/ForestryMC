@@ -81,5 +81,12 @@ public class ItemCrated extends ItemForestry {
 			ModelBakery.registerItemVariants(item, modelLocation);
 		}
 	}
+	
+	@Override
+	public int getColorFromItemStack(ItemStack stack, int renderPass) {
+		if(getContained() == null || renderPass == 100)
+			return super.getColorFromItemStack(stack, renderPass);
+		return getContained().getItem().getColorFromItemStack(getContained(), renderPass);
+	}
 
 }

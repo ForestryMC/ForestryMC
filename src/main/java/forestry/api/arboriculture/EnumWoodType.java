@@ -9,7 +9,6 @@ import java.util.Locale;
 import java.util.Random;
 
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IStringSerializable;
 
 public enum EnumWoodType implements IStringSerializable {
