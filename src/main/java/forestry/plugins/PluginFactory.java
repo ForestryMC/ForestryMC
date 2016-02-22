@@ -259,12 +259,16 @@ public class PluginFactory extends ForestryPlugin {
 		if (PluginManager.Module.APICULTURE.isEnabled()) {
 			ItemRegistryApiculture beeItems = PluginApiculture.items;
 			FluidStack liquidGlass = Fluids.GLASS.getFluid(Constants.BUCKET_VOLUME);
+			FluidStack liquidGlassX4 = Fluids.GLASS.getFluid(Constants.BUCKET_VOLUME * 4);
 			for (int i = 0; i < 16; i++) {
 				RecipeManagers.fabricatorManager.addRecipe(beeItems.waxCast.getWildcard(), liquidGlass, new ItemStack(Blocks.stained_glass, 4, 15 - i), new Object[]{
 						"#", "X",
 						'#', dyes[i],
 						'X', beeItems.propolis.getWildcard()});
 			}
+			RecipeManagers.fabricatorManager.addRecipe(beeItems.waxCast.getWildcard(), liquidGlassX4, new ItemStack(Blocks.glass, 1, 0), new Object[]{
+					"#", "X",
+					'X', beeItems.propolis.getWildcard()});
 		}
 
 		// / SQUEEZER
@@ -315,6 +319,10 @@ public class PluginFactory extends ForestryPlugin {
 		RecipeManagers.fabricatorSmeltingManager.addSmelting(new ItemStack(Blocks.glass), Fluids.GLASS.getFluid(1000), 1000);
 		RecipeManagers.fabricatorSmeltingManager.addSmelting(new ItemStack(Blocks.glass_pane), Fluids.GLASS.getFluid(375), 1000);
 		RecipeManagers.fabricatorSmeltingManager.addSmelting(new ItemStack(Blocks.sand), Fluids.GLASS.getFluid(1000), 3000);
+		RecipeManagers.fabricatorSmeltingManager.addSmelting(new ItemStack(Blocks.sand,1,1), Fluids.GLASS.getFluid(1000), 3000);
+		RecipeManagers.fabricatorSmeltingManager.addSmelting(new ItemStack(Blocks.sandstone), Fluids.GLASS.getFluid(4000), 4800);
+		RecipeManagers.fabricatorSmeltingManager.addSmelting(new ItemStack(Blocks.sandstone,1,1), Fluids.GLASS.getFluid(4000), 4800);
+		RecipeManagers.fabricatorSmeltingManager.addSmelting(new ItemStack(Blocks.sandstone,1,2), Fluids.GLASS.getFluid(4000), 4800);
 
 		// / CARPENTER
 		RecipeManagers.carpenterManager.addRecipe(50, Fluids.SEEDOIL.getFluid(250), null, PluginCore.items.impregnatedCasing.getItemStack(),

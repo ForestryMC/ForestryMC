@@ -424,10 +424,10 @@ public class PluginPlantMegaPack extends ForestryPlugin {
 			}
 		}
 
-		addMetaFlower(desertPlant, FlowerManager.FlowerTypeCacti, false);
-		addMetaFlower(junglePlant, FlowerManager.FlowerTypeJungle, true);
-		addMetaFlower(vanillaPlant, FlowerManager.FlowerTypeVanilla, true);
-		addMetaFlower(fungusPlant, FlowerManager.FlowerTypeMushrooms, true);
+		addMetaFlower(desertPlant, false, FlowerManager.FlowerTypeCacti);
+		addMetaFlower(junglePlant, false, FlowerManager.FlowerTypeJungle);
+		addMetaFlower(vanillaPlant, true, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
+		addMetaFlower(fungusPlant, true, FlowerManager.FlowerTypeMushrooms);
 
 		for (Map.Entry<String, String> special : specialCaseTwoTall.entrySet()) {
 			Block plantBlock = GameRegistry.findBlock(PlantMP, special.getKey());
@@ -449,7 +449,7 @@ public class PluginPlantMegaPack extends ForestryPlugin {
 		}
 	}
 
-	private static void addMetaFlower(ImmutableMap<String, Integer> flowerMap, String flowertype, boolean plantable) {
+	private static void addMetaFlower(ImmutableMap<String, Integer> flowerMap, boolean plantable, String... flowertype) {
 		for (Map.Entry<String, Integer> flower : flowerMap.entrySet()) {
 			Block flowerBlock = GameRegistry.findBlock(PlantMP, flower.getKey());
 			ItemStack flowerStack = GameRegistry.findItemStack(PlantMP, flower.getKey(), 1);

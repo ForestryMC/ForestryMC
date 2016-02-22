@@ -21,12 +21,12 @@ import forestry.core.items.ItemOverlay;
 import forestry.plugins.PluginCore;
 
 public enum EnumStampDefinition implements ItemOverlay.IOverlayInfo {
-	P_1("1n", EnumPostage.P_1, PluginCore.items.apatite, new Color(0x4a8ca7), new Color(0xffffff)),
+	P_1("1n", EnumPostage.P_1, "gemApatite", new Color(0x4a8ca7), new Color(0xffffff)),
 	P_2("2n", EnumPostage.P_2, "ingotCopper", new Color(0xe8c814), new Color(0xffffff)),
 	P_5("5n", EnumPostage.P_5, "ingotTin", new Color(0x9c0707), new Color(0xffffff)),
-	P_10("10n", EnumPostage.P_10, Items.gold_ingot, new Color(0x7bd1b8), new Color(0xffffff)),
-	P_20("20n", EnumPostage.P_20, Items.diamond, new Color(0xff9031), new Color(0xfff7dd)),
-	P_50("50n", EnumPostage.P_50, Items.emerald, new Color(0x6431d7), new Color(0xfff7dd)),
+	P_10("10n", EnumPostage.P_10, "ingotGold", new Color(0x7bd1b8), new Color(0xffffff)),
+	P_20("20n", EnumPostage.P_20, "gemDiamond", new Color(0xff9031), new Color(0xfff7dd)),
+	P_50("50n", EnumPostage.P_50, "gemEmerald", new Color(0x6431d7), new Color(0xfff7dd)),
 	P_100("100n", EnumPostage.P_100, Items.nether_star, new Color(0xd731ba), new Color(0xfff7dd)),
 	//	P_200("200n", EnumPostage.P_200, Items.nether_star, new Color(0xcd9831), new Color(0xfff7dd)),
 	;
