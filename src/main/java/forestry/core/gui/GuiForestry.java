@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.gui;
 
+import javax.annotation.Nonnull;
+import java.awt.Rectangle;
 import java.io.IOException;
 import java.util.List;
 
@@ -269,38 +271,8 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 		super.drawGradientRect(par1, par2, par3, par4, par5, par6);
 	}
 
-	/* NEI */
-	/*@Override
-	@Optional.Method(modid = "NotEnoughItems")
-	public VisiblityData modifyVisiblity(GuiContainer gui, VisiblityData currentVisibility) {
-		return null;
+	@Nonnull
+	public List<Rectangle> getExtraGuiAreas() {
+		return ledgerManager.getLedgerAreas();
 	}
-
-	@Override
-	@Optional.Method(modid = "NotEnoughItems")
-	public Iterable<Integer> getItemSpawnSlots(GuiContainer gui, ItemStack item) {
-		return Collections.emptyList();
-	}
-
-	@Override
-	@Optional.Method(modid = "NotEnoughItems")
-	public List<TaggedInventoryArea> getInventoryAreas(GuiContainer gui) {
-		return Collections.emptyList();
-	}
-
-	@Override
-	@Optional.Method(modid = "NotEnoughItems")
-	public boolean handleDragNDrop(GuiContainer gui, int mousex, int mousey, ItemStack draggedStack, int button) {
-		return false;
-	}
-
-	@Override
-	@Optional.Method(modid = "NotEnoughItems")
-	public boolean hideItemPanelSlot(GuiContainer gui, int x, int y, int w, int h) {
-		if (gui instanceof GuiForestry) {
-			return ((GuiForestry) gui).ledgerManager.ledgerOverlaps(x, y, w, h);
-		} else {
-			return false;
-		}
-	}*/
 }

@@ -23,6 +23,7 @@ import org.lwjgl.opengl.GL11;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.SessionVars;
+import forestry.core.gui.GuiForestry;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.ForestryResource;
 
@@ -54,6 +55,8 @@ public abstract class Ledger {
 
 	protected float currentWidth = minWidth;
 	protected float currentHeight = minHeight;
+	private int x;
+	private int y;
 
 	private final ResourceLocation texture;
 
@@ -76,6 +79,11 @@ public abstract class Ledger {
 
 		maxWidth = Math.min(124, manager.getMaxWidth());
 		maxTextWidth = maxWidth - 18;
+	}
+
+	public Rectangle getArea() {
+		GuiForestry gui = manager.gui;
+		return new Rectangle(gui.getGuiLeft() + x, gui.getGuiTop() + y, (int) currentWidth, (int) currentHeight);
 	}
 
 	// adjust the update's move amount to match the look of 60 fps (16.67 ms per update)
@@ -129,6 +137,15 @@ public abstract class Ledger {
 
 	public int getWidth() {
 		return Math.round(currentWidth);
+	}
+
+	public void setPosition(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
+
+	public final void draw() {
+		draw(x, y);
 	}
 
 	public abstract void draw(int x, int y);

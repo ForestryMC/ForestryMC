@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.gui.ledgers;
 
+import javax.annotation.Nonnull;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -110,6 +112,18 @@ public class LedgerManager {
 		return null;
 	}
 
+	@Nonnull
+	public List<Rectangle> getLedgerAreas() {
+		List<Rectangle> areas = new ArrayList<>();
+		for (Ledger ledger : ledgers) {
+			if (ledger.isVisible()) {
+				Rectangle area = ledger.getArea();
+				areas.add(area);
+			}
+		}
+		return areas;
+	}
+
 	public void drawLedgers() {
 		int yPos = 8;
 		for (Ledger ledger : ledgers) {
@@ -120,7 +134,8 @@ public class LedgerManager {
 			}
 
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			ledger.draw(gui.getSizeX(), yPos);
+			ledger.setPosition(gui.getSizeX(), yPos);
+			ledger.draw();
 			yPos += ledger.getHeight();
 		}
 
@@ -182,10 +197,6 @@ public class LedgerManager {
 			}
 		}
 
-	}
-
-	public boolean ledgerOverlaps(int x, int y, int width, int height) {
-		return getAtPosition(x + width, y + height) != null || getAtPosition(x + width, y) != null || getAtPosition(x, y + height) != null || getAtPosition(x, y) != null;
 	}
 
 	public int getMaxWidth() {
