@@ -4,8 +4,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import com.google.common.collect.Maps;
 
-import forestry.core.blocks.IMachineProperties;
-import forestry.core.blocks.IMachinePropertiesTESR;
+import forestry.core.blocks.IBlockType;
+import forestry.core.blocks.IMachinePropertiesTesr;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
@@ -17,13 +17,11 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class StateMapperMachine<C extends Enum<C> & IMachineProperties & IStringSerializable> extends StateMapperForestry {
+public class StateMapperMachine<C extends Enum<C> & IBlockType & IStringSerializable> extends StateMapperForestry {
 
-	public final Class<C> clazz;
-	
-	/* PROPERTYS */
-	public final PropertyEnum<C> META;
-	public final PropertyEnum<EnumFacing> FACE;
+	private final Class<C> clazz;
+	private final PropertyEnum<C> META;
+	private final PropertyEnum<EnumFacing> FACE;
 	
 	public StateMapperMachine(Class<C> clazz, PropertyEnum<C> META, PropertyEnum<EnumFacing> FACE) {
 		this.clazz = clazz;
@@ -32,9 +30,9 @@ public class StateMapperMachine<C extends Enum<C> & IMachineProperties & IString
 	}
 
 	@Override
-	public Map putStateModelLocations(Block block) {
+	public Map<IBlockState, ModelResourceLocation> putStateModelLocations(Block block) {
 		for (C definition : clazz.getEnumConstants()) {
-			if (definition instanceof IMachinePropertiesTESR)
+			if (definition instanceof IMachinePropertiesTesr)
 				continue;
 			for (EnumFacing facing : EnumFacing.values()) {
 				if (facing == EnumFacing.DOWN || facing == EnumFacing.UP)

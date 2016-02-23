@@ -11,6 +11,7 @@
 package forestry.core.items;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.BlockStateBase;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
@@ -19,6 +20,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
+import forestry.core.blocks.BlockBase;
 import forestry.core.tiles.TileForestry;
 import forestry.core.tiles.TileUtil;
 
@@ -37,7 +39,13 @@ public class ItemBlockForestry extends ItemBlock {
 
 	@Override
 	public String getUnlocalizedName(ItemStack itemstack) {
-		return getBlock().getUnlocalizedName() + "." + itemstack.getItemDamage();
+		Block block = getBlock();
+		if (block instanceof BlockBase) {
+			BlockBase<?> blockBase = (BlockBase) block;
+			int meta = itemstack.getMetadata();
+			return block.getUnlocalizedName() + "." + blockBase.getNameFromMeta(meta);
+		}
+		return block.getUnlocalizedName();
 	}
 	
 	@Override

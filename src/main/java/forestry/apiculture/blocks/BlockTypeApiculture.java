@@ -10,42 +10,36 @@
  ******************************************************************************/
 package forestry.apiculture.blocks;
 
-import java.util.Locale;
+import javax.annotation.Nonnull;
 
-import forestry.apiculture.tiles.TileApiaristChest;
+import forestry.apiculture.tiles.TileApiary;
+import forestry.apiculture.tiles.TileBeeHouse;
+import forestry.core.blocks.IBlockType;
 import forestry.core.blocks.IMachineProperties;
+import forestry.core.blocks.MachineProperties;
 import forestry.core.tiles.TileForestry;
 
-public enum BlockApicultureChestType implements IMachineProperties {
-	APIARIST_CHEST(TileApiaristChest.class, "ApiaristChest");
+public enum BlockTypeApiculture implements IBlockType {
+	APIARY(0, TileApiary.class, "apiary"),
+	BEE_HOUSE(1, TileBeeHouse.class, "bee.house");
 
-	public static final BlockApicultureChestType[] VALUES = values();
+	public static final BlockTypeApiculture[] VALUES = values();
 
-	private final String teIdent;
-	private final Class<? extends TileForestry> teClass;
+	@Nonnull
+	private final IMachineProperties machineProperties;
 
-	BlockApicultureChestType(Class<? extends TileForestry> teClass, String name) {
-		this.teIdent = "forestry." + name;
-		this.teClass = teClass;
+	<T extends TileForestry> BlockTypeApiculture(int meta, @Nonnull Class<T> teClass, @Nonnull String name) {
+		this.machineProperties = new MachineProperties<>(meta, teClass, name);
 	}
 
+	@Nonnull
 	@Override
-	public int getMeta() {
-		return ordinal();
+	public IMachineProperties getMachineProperties() {
+		return machineProperties;
 	}
 
-	@Override
-	public String getTeIdent() {
-		return teIdent;
-	}
-
-	@Override
-	public Class<? extends TileForestry> getTeClass() {
-		return teClass;
-	}
-	
 	@Override
 	public String getName() {
-		return name().toLowerCase(Locale.ENGLISH);
+		return name();
 	}
 }

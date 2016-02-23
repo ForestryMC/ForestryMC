@@ -12,10 +12,12 @@ package forestry.core.blocks;
 
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 
-public interface IMachinePropertiesTESR extends IMachineProperties {
+import forestry.core.tiles.TileForestry;
+
+public interface IMachinePropertiesTesr<T extends TileForestry> extends IMachineProperties<T> {
 	
 	/**
 	 * @return The renderer from the machine
 	 */
-	TileEntitySpecialRenderer getRenderer();
+	TileEntitySpecialRenderer<? super T> getRenderer();
 }

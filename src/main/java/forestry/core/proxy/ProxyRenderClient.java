@@ -27,14 +27,15 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.client.ForgeHooksClient;
+
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
+
 import forestry.apiculture.entities.EntityFXBee;
 import forestry.apiculture.render.ParticleRenderer;
 import forestry.apiculture.render.TextureHabitatLocator;
 import forestry.core.config.Config;
+import forestry.core.config.Constants;
 import forestry.core.entities.EntityFXHoneydust;
 import forestry.core.entities.EntityFXIgnition;
 import forestry.core.entities.EntityFXSnow;
@@ -43,12 +44,14 @@ import forestry.core.models.BlockModelIndex;
 import forestry.core.models.ModelIndex;
 import forestry.core.models.ModelManager;
 import forestry.core.models.RenderHandler;
+import forestry.core.render.RenderAnalyzer;
 import forestry.core.render.RenderEscritoire;
 import forestry.core.render.RenderMachine;
 import forestry.core.render.RenderMill;
 import forestry.core.render.RenderNaturalistChest;
 import forestry.core.render.TextureManager;
-import forestry.core.tiles.MachineDefinition;
+import forestry.core.tiles.TileAnalyzer;
+import forestry.core.tiles.TileBase;
 import forestry.core.tiles.TileEscritoire;
 import forestry.core.tiles.TileMill;
 import forestry.core.tiles.TileNaturalistChest;
@@ -66,14 +69,7 @@ public class ProxyRenderClient extends ProxyRender {
 	}
 
 	@Override
-	public void registerTESR(MachineDefinition definition) {
-		ClientRegistry.bindTileEntitySpecialRenderer(definition.teClass, definition.renderer);
-		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(definition.getBlock()), definition.getMeta(), definition.teClass);
-		
-	}
-
-	@Override
-	public TileEntitySpecialRenderer getRenderDefaultMachine(String gfxBase) {
+	public TileEntitySpecialRenderer<TileBase> getRenderDefaultMachine(String gfxBase) {
 		if (gfxBase == null) {
 			return null;
 		}
@@ -93,6 +89,11 @@ public class ProxyRenderClient extends ProxyRender {
 	@Override
 	public TileEntitySpecialRenderer<TileEscritoire> getRenderEscritoire() {
 		return new RenderEscritoire();
+	}
+
+	@Override
+	public TileEntitySpecialRenderer<TileAnalyzer> getRendererAnalyzer() {
+		return new RenderAnalyzer(Constants.TEXTURE_PATH_BLOCKS + "/analyzer_");
 	}
 
 	@Override

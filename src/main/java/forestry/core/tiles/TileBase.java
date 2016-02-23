@@ -13,8 +13,12 @@ package forestry.core.tiles;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.state.BlockStateBase;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 
+import forestry.core.blocks.BlockBase;
 import forestry.core.config.Config;
 import forestry.core.gui.GuiHandler;
 import forestry.core.gui.IHintSource;
@@ -38,5 +42,16 @@ public abstract class TileBase extends TileForestry implements IHintSource {
 	@Override
 	public final List<String> getHints() {
 		return hints;
+	}
+
+	@Override
+	public String getUnlocalizedTitle() {
+		Block block = getBlockType();
+		if (block instanceof BlockBase) {
+			BlockBase blockBase = (BlockBase) block;
+			int meta = getBlockMetadata();
+			return block.getUnlocalizedName() + "." + blockBase.getNameFromMeta(meta) + ".name";
+		}
+		return super.getUnlocalizedTitle();
 	}
 }

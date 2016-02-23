@@ -21,10 +21,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class StateMapperFluidPod extends StateMapperForestry{
 	
-	protected Map mapStateModelLocations = Maps.newLinkedHashMap();
+	private final Map<IBlockState, ModelResourceLocation> mapStateModelLocations = Maps.newLinkedHashMap();
 
 	@Override
-	public Map putStateModelLocations(Block block) {
+	public Map<IBlockState, ModelResourceLocation> putStateModelLocations(Block block) {
 		for	(EnumFacing facing : EnumFacing.values()){
 			if(facing != EnumFacing.UP && facing != EnumFacing.DOWN){
 				for	(int age = 0;age < BlockCocoa.AGE.getAllowedValues().size();age++){

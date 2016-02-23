@@ -1,24 +1,24 @@
 package forestry.core.render;
 
-import java.util.Iterator;
+import com.google.common.collect.Maps;
+
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.google.common.collect.Maps;
-
 import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.statemap.IStateMapper;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 
 public abstract class StateMapperForestry implements IStateMapper {
 
-	protected Map mapStateModelLocations = Maps.newLinkedHashMap();
+	protected Map<IBlockState, ModelResourceLocation> mapStateModelLocations = Maps.newLinkedHashMap();
 
 	public String getPropertyString(Map p_178131_1_) {
 		StringBuilder stringbuilder = new StringBuilder();
-		Iterator iterator = p_178131_1_.entrySet().iterator();
 
-		while (iterator.hasNext()) {
-			Entry entry = (Entry) iterator.next();
+		for (Object o : p_178131_1_.entrySet()) {
+			Entry entry = (Entry) o;
 
 			if (stringbuilder.length() != 0) {
 				stringbuilder.append(",");

@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.gui.ledgers;
 
+import java.awt.Rectangle;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;

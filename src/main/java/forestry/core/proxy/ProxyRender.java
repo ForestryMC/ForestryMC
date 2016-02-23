@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.proxy;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.statemap.IStateMapper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -18,10 +20,11 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+
 import forestry.core.fluids.Fluids;
 import forestry.core.models.BlockModelIndex;
 import forestry.core.models.ModelIndex;
-import forestry.core.tiles.MachineDefinition;
+import forestry.core.tiles.TileBase;
 import forestry.core.tiles.TileEscritoire;
 import forestry.core.tiles.TileMill;
 import forestry.core.tiles.TileNaturalistChest;
@@ -36,25 +39,32 @@ public class ProxyRender {
 		return false;
 	}
 
-	public void registerTESR(MachineDefinition definition) {
-	}
-
-	public TileEntitySpecialRenderer getRenderDefaultMachine(String gfxBase) {
+	@Nullable
+	public TileEntitySpecialRenderer<TileBase> getRenderDefaultMachine(String gfxBase) {
 		return null;
 	}
 
+	@Nullable
 	public TileEntitySpecialRenderer<TileMill> getRenderMill(String gfxBase) {
 		return null;
 	}
 
+	@Nullable
 	public TileEntitySpecialRenderer<TileMill> getRenderMill(String gfxBase, byte charges) {
 		return null;
 	}
 
+	@Nullable
 	public TileEntitySpecialRenderer<TileEscritoire> getRenderEscritoire() {
 		return null;
 	}
 
+	@Nullable
+	public TileEntitySpecialRenderer getRendererAnalyzer() {
+		return null;
+	}
+
+	@Nullable
 	public TileEntitySpecialRenderer<TileNaturalistChest> getRenderChest(String textureName) {
 		return null;
 	}

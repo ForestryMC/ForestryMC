@@ -34,7 +34,7 @@ import forestry.core.IPickupHandler;
 import forestry.core.ISaveEventHandler;
 import forestry.core.PickupHandlerCore;
 import forestry.core.SaveEventHandlerCore;
-import forestry.core.blocks.BlockCoreType;
+import forestry.core.blocks.BlockTypeCoreTesr;
 import forestry.core.blocks.BlockRegistryCore;
 import forestry.core.blocks.BlockResourceOre;
 import forestry.core.blocks.BlockResourceStorage;
@@ -57,7 +57,6 @@ import forestry.core.multiblock.MultiblockLogicFactory;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.network.PacketRegistryCore;
 import forestry.core.recipes.RecipeUtil;
-import forestry.core.tiles.MachineDefinition;
 import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.ForestryModEnvWarningCallable;
 
@@ -101,10 +100,7 @@ public class PluginCore extends ForestryPlugin {
 		rootCommand.addChildCommand(new CommandVersion());
 		rootCommand.addChildCommand(new CommandPlugins());
 
-		blocks.core.addDefinitions(
-				new MachineDefinition(BlockCoreType.ESCRITOIRE),
-				new MachineDefinition(BlockCoreType.ANALYZER)
-		);
+		blocks.core.addDefinitions(BlockTypeCoreTesr.VALUES);
 	}
 
 	@Override

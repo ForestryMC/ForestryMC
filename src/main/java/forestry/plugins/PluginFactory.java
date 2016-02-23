@@ -32,7 +32,7 @@ import forestry.api.fuels.RainSubstrate;
 import forestry.api.recipes.ICraftingProvider;
 import forestry.api.recipes.RecipeManagers;
 import forestry.apiculture.items.ItemRegistryApiculture;
-import forestry.core.blocks.BlockCoreType;
+import forestry.core.blocks.BlockTypeCoreTesr;
 import forestry.core.blocks.BlockSoil;
 import forestry.core.circuits.Circuit;
 import forestry.core.circuits.CircuitLayout;
@@ -45,12 +45,11 @@ import forestry.core.items.ItemElectronTube;
 import forestry.core.items.ItemRegistryCore;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.recipes.RecipeUtil;
-import forestry.core.tiles.MachineDefinition;
 import forestry.core.utils.datastructures.FluidMap;
 import forestry.core.utils.datastructures.ItemStackMap;
 import forestry.factory.DummyManagers;
-import forestry.factory.blocks.BlockFactoryPlainType;
-import forestry.factory.blocks.BlockFactoryTesrType;
+import forestry.factory.blocks.BlockTypeFactoryPlain;
+import forestry.factory.blocks.BlockTypeFactoryTesr;
 import forestry.factory.blocks.BlockRegistryFactory;
 import forestry.factory.circuits.CircuitSpeedUpgrade;
 import forestry.factory.network.PacketRegistryFactory;
@@ -175,16 +174,8 @@ public class PluginFactory extends ForestryPlugin {
 		FuelManager.rainSubstrate.put(iodineCharge, new RainSubstrate(iodineCharge, Constants.RAINMAKER_RAIN_DURATION_IODINE, 0.01f));
 		FuelManager.rainSubstrate.put(dissipationCharge, new RainSubstrate(dissipationCharge, 0.075f));
 
-		for (BlockFactoryTesrType type : BlockFactoryTesrType.VALUES) {
-			MachineDefinition machineDefinition = new MachineDefinition(type);
-			blocks.factoryTESR.addDefinition(machineDefinition);
-		}
-
-		blocks.factoryPlain.addDefinitions(
-				new MachineDefinition(BlockFactoryPlainType.FABRICATOR).setFaces(0, 1, 2, 3, 4, 4),
-				new MachineDefinition(BlockFactoryPlainType.RAINTANK).setFaces(0, 1, 0, 0, 0, 0),
-				new MachineDefinition(BlockFactoryPlainType.WORKTABLE).setFaces(0, 1, 2, 3, 4, 4)
-		);
+		blocks.factoryTESR.addDefinitions(BlockTypeFactoryTesr.VALUES);
+		blocks.factoryPlain.addDefinitions(BlockTypeFactoryPlain.VALUES);
 
 		ICircuitLayout layoutMachineUpgrade = new CircuitLayout("machine.upgrade", CircuitSocketType.MACHINE);
 		ChipsetManager.circuitRegistry.registerLayout(layoutMachineUpgrade);
@@ -319,7 +310,7 @@ public class PluginFactory extends ForestryPlugin {
 				"###",
 				'#', "logWood");
 		RecipeManagers.carpenterManager.addRecipe(50, Fluids.SEEDOIL.getFluid(500), null,
-				PluginCore.blocks.core.get(BlockCoreType.ESCRITOIRE),
+				PluginCore.blocks.core.get(BlockTypeCoreTesr.ESCRITOIRE),
 				"#  ",
 				"###",
 				"# #",
@@ -433,7 +424,7 @@ public class PluginFactory extends ForestryPlugin {
 		ChipsetManager.solderManager.addRecipe(layout, PluginCore.items.tubes.get(EnumElectronTube.BLAZE, 1), Circuit.machineSpeedUpgrade2);
 		ChipsetManager.solderManager.addRecipe(layout, PluginCore.items.tubes.get(EnumElectronTube.GOLD, 1), Circuit.machineEfficiencyUpgrade1);
 
-		RecipeUtil.addRecipe(blocks.factoryTESR.get(BlockFactoryTesrType.BOTTLER),
+		RecipeUtil.addRecipe(blocks.factoryTESR.get(BlockTypeFactoryTesr.BOTTLER),
 				"X#X",
 				"#Y#",
 				"X#X",
@@ -441,7 +432,7 @@ public class PluginFactory extends ForestryPlugin {
 				'X', PluginFluids.items.canEmpty,
 				'Y', PluginCore.items.sturdyCasing);
 
-		RecipeUtil.addRecipe(blocks.factoryTESR.get(BlockFactoryTesrType.CARPENTER),
+		RecipeUtil.addRecipe(blocks.factoryTESR.get(BlockTypeFactoryTesr.CARPENTER),
 				"X#X",
 				"XYX",
 				"X#X",
@@ -449,7 +440,7 @@ public class PluginFactory extends ForestryPlugin {
 				'X', "ingotBronze",
 				'Y', PluginCore.items.sturdyCasing);
 
-		RecipeUtil.addRecipe(blocks.factoryTESR.get(BlockFactoryTesrType.CENTRIFUGE),
+		RecipeUtil.addRecipe(blocks.factoryTESR.get(BlockTypeFactoryTesr.CENTRIFUGE),
 				"X#X",
 				"XYX",
 				"X#X",
@@ -457,7 +448,7 @@ public class PluginFactory extends ForestryPlugin {
 				'X', "ingotCopper",
 				'Y', PluginCore.items.sturdyCasing);
 
-		RecipeUtil.addRecipe(blocks.factoryTESR.get(BlockFactoryTesrType.FERMENTER),
+		RecipeUtil.addRecipe(blocks.factoryTESR.get(BlockTypeFactoryTesr.FERMENTER),
 				"X#X",
 				"#Y#",
 				"X#X",
@@ -465,7 +456,7 @@ public class PluginFactory extends ForestryPlugin {
 				'X', "gearBronze",
 				'Y', PluginCore.items.sturdyCasing);
 
-		RecipeUtil.addRecipe(blocks.factoryTESR.get(BlockFactoryTesrType.MOISTENER),
+		RecipeUtil.addRecipe(blocks.factoryTESR.get(BlockTypeFactoryTesr.MOISTENER),
 				"X#X",
 				"#Y#",
 				"X#X",
@@ -473,7 +464,7 @@ public class PluginFactory extends ForestryPlugin {
 				'X', "gearCopper",
 				'Y', PluginCore.items.sturdyCasing);
 
-		RecipeUtil.addRecipe(blocks.factoryTESR.get(BlockFactoryTesrType.SQUEEZER),
+		RecipeUtil.addRecipe(blocks.factoryTESR.get(BlockTypeFactoryTesr.SQUEEZER),
 				"X#X",
 				"XYX",
 				"X#X",
@@ -481,7 +472,7 @@ public class PluginFactory extends ForestryPlugin {
 				'X', "ingotTin",
 				'Y', PluginCore.items.sturdyCasing);
 
-		RecipeUtil.addRecipe(blocks.factoryTESR.get(BlockFactoryTesrType.STILL),
+		RecipeUtil.addRecipe(blocks.factoryTESR.get(BlockTypeFactoryTesr.STILL),
 				"X#X",
 				"#Y#",
 				"X#X",
@@ -489,7 +480,7 @@ public class PluginFactory extends ForestryPlugin {
 				'X', "dustRedstone",
 				'Y', PluginCore.items.sturdyCasing);
 
-		RecipeUtil.addRecipe(blocks.factoryTESR.get(BlockFactoryTesrType.RAINMAKER),
+		RecipeUtil.addRecipe(blocks.factoryTESR.get(BlockTypeFactoryTesr.RAINMAKER),
 				"X#X",
 				"#Y#",
 				"X#X",
@@ -497,7 +488,7 @@ public class PluginFactory extends ForestryPlugin {
 				'X', "gearTin",
 				'Y', PluginCore.items.hardenedCasing);
 
-		RecipeUtil.addRecipe(blocks.factoryPlain.get(BlockFactoryPlainType.FABRICATOR),
+		RecipeUtil.addRecipe(blocks.factoryPlain.get(BlockTypeFactoryPlain.FABRICATOR),
 				"X#X",
 				"#Y#",
 				"XZX",
@@ -506,7 +497,7 @@ public class PluginFactory extends ForestryPlugin {
 				'Y', PluginCore.items.sturdyCasing,
 				'Z', "chestWood");
 
-		RecipeUtil.addRecipe(blocks.factoryPlain.get(BlockFactoryPlainType.RAINTANK),
+		RecipeUtil.addRecipe(blocks.factoryPlain.get(BlockTypeFactoryPlain.RAINTANK),
 				"X#X",
 				"XYX",
 				"X#X",
@@ -514,7 +505,7 @@ public class PluginFactory extends ForestryPlugin {
 				'X', "ingotIron",
 				'Y', PluginCore.items.sturdyCasing);
 
-		RecipeUtil.addRecipe(blocks.factoryPlain.get(BlockFactoryPlainType.WORKTABLE),
+		RecipeUtil.addRecipe(blocks.factoryPlain.get(BlockTypeFactoryPlain.WORKTABLE),
 				"B",
 				"W",
 				"C",

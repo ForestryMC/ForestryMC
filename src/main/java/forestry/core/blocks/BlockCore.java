@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
-public class BlockCore extends BlockBase<BlockCoreType> {
+public class BlockCore extends BlockBase<BlockTypeCoreTesr> {
 	public BlockCore() {
-		super(true, BlockCoreType.class);
+		super(true, BlockTypeCoreTesr.class);
 	}
 }

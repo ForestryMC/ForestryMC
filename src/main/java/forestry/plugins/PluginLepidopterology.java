@@ -15,6 +15,7 @@ import java.util.EnumSet;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
+
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -33,11 +34,10 @@ import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
 import forestry.core.fluids.Fluids;
 import forestry.core.recipes.RecipeUtil;
-import forestry.core.tiles.MachineDefinition;
 import forestry.core.utils.EntityUtil;
 import forestry.lepidopterology.ButterflySpawner;
-import forestry.lepidopterology.blocks.BlockLepidopterologyType;
 import forestry.lepidopterology.blocks.BlockRegistryLepidopterology;
+import forestry.lepidopterology.blocks.BlockTypeLepidopterologyTesr;
 import forestry.lepidopterology.commands.CommandButterfly;
 import forestry.lepidopterology.entities.EntityButterfly;
 import forestry.lepidopterology.genetics.AlleleButterflyEffect;
@@ -87,9 +87,7 @@ public class PluginLepidopterology extends ForestryPlugin {
 		ButterflyBranchDefinition.createAlleles();
 		AlleleButterflyEffect.createAlleles();
 
-		MachineDefinition definitionChest = new MachineDefinition(BlockLepidopterologyType.LEPICHEST)
-				.setBoundingBox(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
-		blocks.lepidopterology.addDefinition(definitionChest);
+		blocks.lepidopterology.addDefinitions(BlockTypeLepidopterologyTesr.VALUES);
 	}
 
 	@Override
@@ -138,7 +136,7 @@ public class PluginLepidopterology extends ForestryPlugin {
 				"X#X", "X#X", "RDR", '#', "paneGlass", 'X', "ingotBronze", 'R',
 				"dustRedstone", 'D', "gemDiamond");
 
-		RecipeUtil.addRecipe(blocks.lepidopterology.get(BlockLepidopterologyType.LEPICHEST),
+		RecipeUtil.addRecipe(blocks.lepidopterology.get(BlockTypeLepidopterologyTesr.LEPICHEST),
 				" # ",
 				"XYX",
 				"XXX",

@@ -17,7 +17,6 @@ import java.util.Locale;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 
@@ -25,8 +24,9 @@ import org.lwjgl.opengl.GL11;
 
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.IRenderableTile;
+import forestry.core.tiles.TileBase;
 
-public class RenderMachine extends TileEntitySpecialRenderer {
+public class RenderMachine extends TileEntitySpecialRenderer<TileBase> {
 
 	private final ModelRenderer basefront;
 	private final ModelRenderer baseback;
@@ -87,7 +87,7 @@ public class RenderMachine extends TileEntitySpecialRenderer {
 	 * @param tile If it null its render the item else it render the tile entity.
 	 */
 	@Override
-	public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float partialTicks, int destroyStage) {
+	public void renderTileEntityAt(TileBase tile, double x, double y, double z, float partialTicks, int destroyStage) {
 		if(tile != null){
 			IRenderableTile generator = (IRenderableTile) tile;
 			render(generator.getResourceTankInfo(), generator.getProductTankInfo(), generator.getOrientation(), x, y, z);

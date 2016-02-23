@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.utils;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -19,6 +20,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovingObjectPosition;
@@ -136,10 +138,14 @@ public abstract class BlockUtil {
 				|| block.getMaterial().isReplaceable();
 	}
 
+	public static MovingObjectPosition collisionRayTrace(@Nonnull BlockPos pos, @Nonnull Vec3 startVec, @Nonnull Vec3 endVec, @Nonnull AxisAlignedBB bounds) {
+		return collisionRayTrace(pos, startVec, endVec, bounds.minX, bounds.minY, bounds.minZ, bounds.maxX, bounds.maxY, bounds.maxZ);
+	}
+
 	/**
 	 * Ray traces through the blocks collision from start vector to end vector returning a ray trace hit.
 	 */
-	public static MovingObjectPosition collisionRayTrace(World world, BlockPos pos, Vec3 startVec, Vec3 endVec, float minX, float minY, float minZ, float maxX, float maxY, float maxZ) {
+	public static MovingObjectPosition collisionRayTrace(@Nonnull BlockPos pos, @Nonnull Vec3 startVec, @Nonnull Vec3 endVec, double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
 		startVec = startVec.addVector((-pos.getX()), (-pos.getY()), (-pos.getZ()));
 		endVec = endVec.addVector((-pos.getX()), (-pos.getY()), (-pos.getZ()));
 		Vec3 vec32 = startVec.getIntermediateWithXValue(endVec, minX);
@@ -235,21 +241,21 @@ public abstract class BlockUtil {
 	/**
 	 * Checks if a vector is within the Y and Z bounds of the block.
 	 */
-	private static boolean isVecInsideYZBounds(Vec3 vec, float minY, float minZ, float maxY, float maxZ) {
+	private static boolean isVecInsideYZBounds(Vec3 vec, double minY, double minZ, double maxY, double maxZ) {
 		return vec != null && (vec.yCoord >= minY && vec.yCoord <= maxY && vec.zCoord >= minZ && vec.zCoord <= maxZ);
 	}
 
 	/**
 	 * Checks if a vector is within the X and Z bounds of the block.
 	 */
-	private static boolean isVecInsideXZBounds(Vec3 vec, float minX, float minZ, float maxX, float maxZ) {
+	private static boolean isVecInsideXZBounds(Vec3 vec, double minX, double minZ, double maxX, double maxZ) {
 		return vec != null && (vec.xCoord >= minX && vec.xCoord <= maxX && vec.zCoord >= minZ && vec.zCoord <= maxZ);
 	}
 
 	/**
 	 * Checks if a vector is within the X and Y bounds of the block.
 	 */
-	private static boolean isVecInsideXYBounds(Vec3 vec, float minX, float minY, float maxX, float maxY) {
+	private static boolean isVecInsideXYBounds(Vec3 vec, double minX, double minY, double maxX, double maxY) {
 		return vec != null && (vec.xCoord >= minX && vec.xCoord <= maxX && vec.yCoord >= minY && vec.yCoord <= maxY);
 	}
 	

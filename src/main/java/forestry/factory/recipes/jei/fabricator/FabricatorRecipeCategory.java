@@ -38,7 +38,7 @@ public class FabricatorRecipeCategory extends ForestryRecipeCategory {
 	private final ICraftingGridHelper craftingGridHelper;
 	
 	public FabricatorRecipeCategory(IGuiHelper guiHelper) {
-		super(guiHelper.createDrawable(guiTexture, 20, 16, 136, 54), "tile.for.factory2.0.name");
+		super(guiHelper.createDrawable(guiTexture, 20, 16, 136, 54), "tile.for.factory2.fabricator.name");
 		
 		craftingGridHelper = guiHelper.createCraftingGridHelper(craftInputSlot, craftOutputSlot);
 	}

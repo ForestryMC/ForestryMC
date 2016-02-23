@@ -30,7 +30,7 @@ public class BottlerRecipeCategory extends ForestryRecipeCategory{
 	private final IDrawable tankOverlay;
 	
 	public BottlerRecipeCategory(IGuiHelper guiHelper) {
-		super(guiHelper.createDrawable(guiTexture, 48, 11, 123, 65), "tile.for.factory.0.name");
+		super(guiHelper.createDrawable(guiTexture, 48, 11, 123, 65), "tile.for.factory.bottler.name");
 		
 		IDrawableStatic arrowDrawable = guiHelper.createDrawable(guiTexture, 176, 74, 24, 17);
 		this.arrow = guiHelper.createAnimatedDrawable(arrowDrawable, 200, IDrawableAnimated.StartDirection.LEFT, false);

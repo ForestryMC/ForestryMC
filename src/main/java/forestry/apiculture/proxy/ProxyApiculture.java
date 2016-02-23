@@ -10,13 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.proxy;
 
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-
 public class ProxyApiculture {
-
-	public TileEntitySpecialRenderer getRendererAnalyzer(String string) {
-		return null;
-	}
 
 	public void initializeRendering() {
 	}

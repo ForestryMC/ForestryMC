@@ -39,11 +39,21 @@ public class BlockResourceOre extends Block implements IItemModelRegister {
 	private static final PropertyEnum<ResourceType> RESOURCE = PropertyEnum.create("resource", ResourceType.class);
 	
 	public enum ResourceType implements IStringSerializable {
-		APATITE,
-		COPPER,
-		TIN;
+		APATITE(0),
+		COPPER(1),
+		TIN(2);
 		
 		public static final ResourceType[] VALUES = values();
+
+		private final int meta;
+
+		ResourceType(int meta) {
+			this.meta = meta;
+		}
+
+		public int getMeta() {
+			return meta;
+		}
 
 		@Override
 		public String getName() {
@@ -66,7 +76,7 @@ public class BlockResourceOre extends Block implements IItemModelRegister {
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return state.getValue(RESOURCE).ordinal();
+		return state.getValue(RESOURCE).getMeta();
 	}
 
 	@Override

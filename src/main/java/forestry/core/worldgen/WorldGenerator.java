@@ -55,9 +55,9 @@ public class WorldGenerator implements IWorldGenerator {
 	private void generateWorld(Random random, int chunkX, int chunkZ, World world) {
 
 		if (apatiteGenerator == null) {
-			apatiteGenerator = new WorldGenMinableMeta(PluginCore.blocks.resources, BlockResourceOre.ResourceType.APATITE.ordinal(), 36);
-			copperGenerator = new WorldGenMinableMeta(PluginCore.blocks.resources, BlockResourceOre.ResourceType.COPPER.ordinal(), 6);
-			tinGenerator = new WorldGenMinableMeta(PluginCore.blocks.resources, BlockResourceOre.ResourceType.TIN.ordinal(), 6);
+			apatiteGenerator = new WorldGenMinableMeta(PluginCore.blocks.resources, BlockResourceOre.ResourceType.APATITE.getMeta(), 36);
+			copperGenerator = new WorldGenMinableMeta(PluginCore.blocks.resources, BlockResourceOre.ResourceType.COPPER.getMeta(), 6);
+			tinGenerator = new WorldGenMinableMeta(PluginCore.blocks.resources, BlockResourceOre.ResourceType.TIN.getMeta(), 6);
 		}
 
 		// shift to world coordinates

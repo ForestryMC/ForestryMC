@@ -12,8 +12,8 @@ package forestry.mail.blocks;
 
 import forestry.core.blocks.BlockBase;
 
-public class BlockMail extends BlockBase<BlockMailType> {
+public class BlockMail extends BlockBase<BlockTypeMail> {
 	public BlockMail() {
-		super(BlockMailType.class);
+		super(BlockTypeMail.class);
 	}
 }

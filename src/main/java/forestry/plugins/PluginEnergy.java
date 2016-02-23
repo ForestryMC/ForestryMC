@@ -16,10 +16,9 @@ import net.minecraftforge.fml.common.SidedProxy;
 import forestry.api.core.ForestryAPI;
 import forestry.core.config.Constants;
 import forestry.core.recipes.RecipeUtil;
-import forestry.energy.blocks.BlockEngineType;
+import forestry.energy.blocks.BlockTypeEngine;
 import forestry.energy.blocks.BlockRegistryEnergy;
 import forestry.energy.proxy.ProxyEnergy;
-import forestry.energy.tiles.EngineDefinition;
 
 @Plugin(pluginID = "Energy", name = "Energy", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.energy.description")
 public class PluginEnergy extends ForestryPlugin {
@@ -37,12 +36,12 @@ public class PluginEnergy extends ForestryPlugin {
 	@Override
 	public void preInit() {
 		blocks.engine.addDefinitions(
-				new EngineDefinition(BlockEngineType.PEAT),
-				new EngineDefinition(BlockEngineType.BIOGAS)
+				BlockTypeEngine.PEAT,
+				BlockTypeEngine.BIOGAS
 		);
 
 		if (ForestryAPI.activeMode.getBooleanSetting("energy.engine.clockwork")) {
-			blocks.engine.addDefinition(new EngineDefinition(BlockEngineType.CLOCKWORK));
+			blocks.engine.addDefinitions(BlockTypeEngine.CLOCKWORK);
 		}
 	}
 
@@ -55,7 +54,7 @@ public class PluginEnergy extends ForestryPlugin {
 	protected void registerRecipes() {
 		super.registerRecipes();
 
-		RecipeUtil.addRecipe(blocks.engine.get(BlockEngineType.PEAT),
+		RecipeUtil.addRecipe(blocks.engine.get(BlockTypeEngine.PEAT),
 				"###",
 				" X ",
 				"YVY",
@@ -64,7 +63,7 @@ public class PluginEnergy extends ForestryPlugin {
 				'Y', "gearCopper",
 				'V', Blocks.piston);
 
-		RecipeUtil.addRecipe(blocks.engine.get(BlockEngineType.BIOGAS),
+		RecipeUtil.addRecipe(blocks.engine.get(BlockTypeEngine.BIOGAS),
 				"###",
 				" X ",
 				"YVY",
@@ -74,7 +73,7 @@ public class PluginEnergy extends ForestryPlugin {
 				'V', Blocks.piston);
 
 		if (ForestryAPI.activeMode.getBooleanSetting("energy.engine.clockwork")) {
-			RecipeUtil.addRecipe(blocks.engine.get(BlockEngineType.CLOCKWORK),
+			RecipeUtil.addRecipe(blocks.engine.get(BlockTypeEngine.CLOCKWORK),
 					"###",
 					" X ",
 					"ZVY",

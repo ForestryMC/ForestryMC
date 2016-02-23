@@ -23,13 +23,13 @@ import forestry.apiculture.InventoryBeeHousing;
 import forestry.apiculture.gui.ContainerBeeHousing;
 import forestry.apiculture.gui.GuiBeeHousing;
 
-public class TileBeehouse extends TileBeeHousingBase {
+public class TileBeeHouse extends TileBeeHousingBase {
 	private static final IBeeModifier beeModifier = new BeehouseBeeModifier();
 
 	private final IBeeListener beeListener;
 	private final InventoryBeeHousing beeInventory;
 
-	public TileBeehouse() {
+	public TileBeeHouse() {
 		super("bee.house");
 		this.beeListener = new DefaultBeeListener();
 

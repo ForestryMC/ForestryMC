@@ -10,10 +10,12 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
@@ -37,69 +39,68 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import forestry.api.core.IModelManager;
+
 import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
 import forestry.api.core.IStateMapperRegister;
 import forestry.core.access.IAccessHandler;
 import forestry.core.circuits.ISocketable;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.StateMapperMachine;
-import forestry.core.tiles.MachineDefinition;
 import forestry.core.tiles.TileBase;
 import forestry.core.tiles.TileForestry;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.PlayerUtil;
-import forestry.core.utils.StringUtil;
 
-public class BlockBase<C extends Enum<C> & IMachineProperties & IStringSerializable> extends BlockForestry implements IItemModelRegister, IStateMapperRegister {
-	private final List<MachineDefinition> definitions = new ArrayList<>();
+import jline.internal.Log;
+
+public class BlockBase<C extends Enum<C> & IBlockType & IStringSerializable> extends BlockForestry implements IItemModelRegister, IStateMapperRegister {
+	private final Map<C, IMachineProperties> definitions = new HashMap<>();
 	private final boolean hasTESR;
-	private final Class<C> clazz;
+	private final Class<C> machinePropertiesClass;
 	
-	/* PROPERTYS */
-	private final PropertyEnum<C> META;
+	/* PROPERTIES */
+	private final PropertyEnum<C> TYPE;
 	private final PropertyEnum<EnumFacing> FACE;
 	
     protected final BlockState blockState;
 	
-	public boolean isReady = false;
+	private boolean isReady = false;
 	
-	public BlockBase(Class<C> clazz) {
-		this(false, clazz);
+	public BlockBase(Class<C> machinePropertiesClass) {
+		this(false, machinePropertiesClass);
 	}
 
-	public BlockBase(boolean hasTESR, Class<C> clazz) {
+	public BlockBase(boolean hasTESR, Class<C> machinePropertiesClass) {
 		super(Material.iron);
 
 		this.hasTESR = hasTESR;
 		this.lightOpacity = this.isOpaqueCube() ? 255 : 0;
-		this.clazz = clazz;
+		this.machinePropertiesClass = machinePropertiesClass;
 		
 		isReady = true;
 		
-		META = PropertyEnum.create("meta", clazz);
+		TYPE = PropertyEnum.create("type", machinePropertiesClass);
 		FACE = PropertyEnum.create("face", EnumFacing.class);
 		
         this.blockState = this.createBlockState();
-        this.setDefaultState(this.blockState.getBaseState().withProperty(FACE, EnumFacing.NORTH));
+		IBlockState state = this.blockState.getBaseState().withProperty(FACE, EnumFacing.NORTH);
+		this.setDefaultState(state);
 	}
 
-	public void addDefinitions(MachineDefinition... definitions) {
-		for (MachineDefinition definition : definitions) {
-			addDefinition(definition);
+	@SafeVarargs
+	public final void addDefinitions(C... blockTypes) {
+		for (C blockType : blockTypes) {
+			IMachineProperties<?> machineProperties = blockType.getMachineProperties();
+			if (machineProperties != null) {
+				machineProperties.setBlock(this);
+				this.definitions.put(blockType, machineProperties);
+			} else {
+				Log.error("Null Definition found {}", Arrays.toString(blockTypes));
+			}
 		}
-	}
-
-	public void addDefinition(MachineDefinition definition) {
-		definition.setBlock(this);
-
-		while (definitions.size() <= definition.getMeta()) {
-			definitions.add(null);
-		}
-
-		definitions.set(definition.getMeta(), definition);
 	}
 
 	@Override
@@ -121,26 +122,17 @@ public class BlockBase<C extends Enum<C> & IMachineProperties & IStringSerializa
 		}
 	}
 
-	private MachineDefinition getDefinition(IBlockAccess world, BlockPos pos) {
+	private IMachineProperties getDefinition(IBlockAccess world, BlockPos pos) {
 		IBlockState state = world.getBlockState(pos);
 		if (!(state.getBlock() instanceof BlockBase)) {
 			return null;
 		}
-		IMachineProperties meta = state.getValue(META);
-		return getDefinition(meta.getMeta());
-	}
-	
-	private MachineDefinition getDefinition(int metadata) {
-		if (metadata < 0 || metadata >= definitions.size()) {
-			return null;
-		}
-
-		return definitions.get(metadata);
+		return state.getValue(TYPE).getMachineProperties();
 	}
 
 	@Override
 	public AxisAlignedBB getCollisionBoundingBox(World world, BlockPos pos, IBlockState state) {
-		MachineDefinition definition = getDefinition(world, pos);
+		IMachineProperties definition = getDefinition(world, pos);
 		if (definition == null) {
 			return super.getCollisionBoundingBox(world, pos, state);
 		}
@@ -149,7 +141,7 @@ public class BlockBase<C extends Enum<C> & IMachineProperties & IStringSerializa
 	
 	@Override
 	public MovingObjectPosition collisionRayTrace(World world, BlockPos pos, Vec3 start, Vec3 end) {
-		MachineDefinition definition = getDefinition(world, pos);
+		IMachineProperties definition = getDefinition(world, pos);
 		if (definition == null) {
 			return super.collisionRayTrace(world, pos, start, end);
 		} else {
@@ -158,14 +150,10 @@ public class BlockBase<C extends Enum<C> & IMachineProperties & IStringSerializa
 	}
 
 	/* CREATIVE INVENTORY */
-	@SuppressWarnings("rawtypes")
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs tab, List list) {
-		for (MachineDefinition definition : definitions) {
-			if (definition == null) {
-				continue;
-			}
+	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
+		for (IMachineProperties definition : definitions.values()) {
 			definition.getSubBlocks(item, tab, list);
 		}
 	}
@@ -173,23 +161,23 @@ public class BlockBase<C extends Enum<C> & IMachineProperties & IStringSerializa
 	/* TILE ENTITY CREATION */
 	@Override
 	public TileEntity createTileEntity(World world, IBlockState state) {
-		IMachineProperties definitionP = state.getValue(META);
-		MachineDefinition definition = getDefinition(definitionP.getMeta());
+		IMachineProperties definition = state.getValue(TYPE).getMachineProperties();
 		if (definition == null) {
 			return null;
 		}
-		return definition.createMachine();
+		return definition.createTileEntity();
 	}
 
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
-		return createTileEntity(world, getStateFromMeta(meta)); // TODO: refactor to just use Block, not BlockContainer
+		IBlockState state = getStateFromMeta(meta);
+		return createTileEntity(world, state); // TODO: refactor to just use Block, not BlockContainer
 	}
 
 	/* INTERACTION */
 	@Override
 	public boolean isSideSolid(IBlockAccess world, BlockPos pos, EnumFacing side) {
-		MachineDefinition definition = getDefinition(world, pos);
+		IMachineProperties definition = getDefinition(world, pos);
 		return definition != null && definition.isSolidOnSide(world, pos, side);
 	}
 
@@ -199,7 +187,11 @@ public class BlockBase<C extends Enum<C> & IMachineProperties & IStringSerializa
 			return false;
 		}
 
-		TileBase tile = (TileBase) world.getTileEntity(pos);
+		TileBase tile = TileUtil.getTile(world, pos, TileBase.class);
+		if (tile == null) {
+			return false;
+		}
+
 		if (!TileUtil.isUsableByPlayer(player, tile)) {
 			return false;
 		}
@@ -227,7 +219,7 @@ public class BlockBase<C extends Enum<C> & IMachineProperties & IStringSerializa
 
 	@Override
 	public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis) {
-		MachineDefinition definition = getDefinition(world, pos);
+		IMachineProperties definition = getDefinition(world, pos);
 		if (definition == null) {
 			return super.rotateBlock(world, pos, axis);
 		}
@@ -261,10 +253,8 @@ public class BlockBase<C extends Enum<C> & IMachineProperties & IStringSerializa
 	}
 
 	public void init() {
-		for (MachineDefinition def : definitions) {
-			if (def != null) {
-				def.register();
-			}
+		for (IMachineProperties def : definitions.values()) {
+			def.registerTileEntity();
 		}
 	}
 
@@ -272,51 +262,55 @@ public class BlockBase<C extends Enum<C> & IMachineProperties & IStringSerializa
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		for (MachineDefinition def : definitions) {
-			if (def == null)
-				continue;
-			C type = clazz.getEnumConstants()[def.getMeta()];
-			if (type == null)
-				return;
-			manager.registerItemModel(item, def.getMeta(), StringUtil.cleanItemName(item) + "_" + type.getName());
+		for (IMachineProperties def : definitions.values()) {
+			def.registerModel(item, manager);
 		}
 	}
 	
 	/* STATES */
 	@Override
 	public void registerStateMapper() {
-		Proxies.render.registerStateMapper(this, new StateMapperMachine<C>(clazz, META, FACE));
+		Proxies.render.registerStateMapper(this, new StateMapperMachine<>(machinePropertiesClass, TYPE, FACE));
 	}
 
 	@Override
 	protected BlockState createBlockState() {
 		if(!isReady)
 			return super.createBlockState();
-		return new BlockState(this, new IProperty[] { META, FACE });
+		return new BlockState(this, TYPE, FACE);
 	}
-	
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return ((IMachineProperties)state.getProperties().get(META)).getMeta();
+		IBlockType blockType = (IBlockType) state.getProperties().get(this.TYPE);
+		IMachineProperties machineProperties = blockType.getMachineProperties();
+		return machineProperties.getMeta();
 	}
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		for(C c : clazz.getEnumConstants()){
-			if(c.getMeta() == meta){
-				return getDefaultState().withProperty(META, c);
+		for(Map.Entry<C, IMachineProperties> entry : definitions.entrySet()){
+			IMachineProperties<?> machineProperties = entry.getValue();
+			if (machineProperties.getMeta() == meta){
+				C blockType = entry.getKey();
+				return getDefaultState().withProperty(this.TYPE, blockType);
 			}
 		}
 		return getDefaultState();
 	}
-	
+
+	public String getNameFromMeta(int meta) {
+		IBlockState state = getStateFromMeta(meta);
+		IBlockType blockType = (IBlockType) state.getProperties().get(TYPE);
+		IMachineProperties machineProperties = blockType.getMachineProperties();
+		return machineProperties.getName();
+	}
+
 	@Override
 	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
-		TileEntity tile = world.getTileEntity(pos);
-		if (tile instanceof TileForestry) {
-			TileForestry tileF = (TileForestry) tile;
-			state = state.withProperty(FACE, tileF.getOrientation());
+		TileForestry tile = TileUtil.getTile(world, pos, TileForestry.class);
+		if (tile != null ) {
+			state = state.withProperty(FACE, tile.getOrientation());
 		}
 		return super.getActualState(state, world, pos);
 	}
@@ -333,6 +327,6 @@ public class BlockBase<C extends Enum<C> & IMachineProperties & IStringSerializa
 	}
 
 	public final ItemStack get(C type) {
-		return new ItemStack(this, 1, type.getMeta());
+		return new ItemStack(this, 1, type.getMachineProperties().getMeta());
 	}
 }

@@ -65,9 +65,10 @@ import forestry.api.storage.StorageManager;
 import forestry.apiculture.ArmorApiaristHelper;
 import forestry.apiculture.SaveEventHandlerApiculture;
 import forestry.apiculture.blocks.BlockAlveary;
-import forestry.apiculture.blocks.BlockApicultureType;
+import forestry.apiculture.blocks.BlockTypeApiculture;
 import forestry.apiculture.blocks.BlockCandle;
 import forestry.apiculture.blocks.BlockRegistryApiculture;
+import forestry.apiculture.blocks.BlockTypeApicultureTesr;
 import forestry.apiculture.commands.CommandBee;
 import forestry.apiculture.entities.EntityMinecartApiary;
 import forestry.apiculture.entities.EntityMinecartBeehouse;
@@ -94,7 +95,6 @@ import forestry.apiculture.multiblock.TileAlvearyStabiliser;
 import forestry.apiculture.multiblock.TileAlvearySwarmer;
 import forestry.apiculture.network.PacketRegistryApiculture;
 import forestry.apiculture.proxy.ProxyApiculture;
-import forestry.apiculture.tiles.TileApiaristChest;
 import forestry.apiculture.tiles.TileCandle;
 import forestry.apiculture.tiles.TileSwarm;
 import forestry.apiculture.trigger.ApicultureTriggers;
@@ -103,7 +103,7 @@ import forestry.apiculture.worldgen.HiveDescription;
 import forestry.apiculture.worldgen.HiveGenHelper;
 import forestry.apiculture.worldgen.HiveRegistry;
 import forestry.core.ISaveEventHandler;
-import forestry.core.blocks.BlockCoreType;
+import forestry.core.blocks.BlockTypeCoreTesr;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
@@ -111,9 +111,7 @@ import forestry.core.entities.EntityFXSnow;
 import forestry.core.fluids.Fluids;
 import forestry.core.items.EnumElectronTube;
 import forestry.core.network.IPacketRegistry;
-import forestry.core.proxy.Proxies;
 import forestry.core.recipes.RecipeUtil;
-import forestry.core.tiles.MachineDefinition;
 import forestry.core.utils.EntityUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
@@ -181,15 +179,8 @@ public class PluginApiculture extends ForestryPlugin {
 
 		MinecraftForge.EVENT_BUS.register(this);
 
-		blocks.apiculture.addDefinitions(
-				new MachineDefinition(BlockApicultureType.APIARY).setFaces(0, 1, 2, 2, 4, 4, 0, 7),
-				new MachineDefinition(BlockApicultureType.APIARIST_CHEST_LEGACY).setLegacy(),
-				new MachineDefinition(BlockApicultureType.BEEHOUSE).setFaces(0, 1, 2, 2, 4, 4, 0, 7)
-		);
-
-		MachineDefinition definitionChest = new MachineDefinition(0, "forestry.ApiaristChestNew", TileApiaristChest.class, Proxies.render.getRenderChest("apiaristchest"))
-				.setBoundingBox(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
-		blocks.apicultureChest.addDefinition(definitionChest);
+		blocks.apiculture.addDefinitions(BlockTypeApiculture.VALUES);
+		blocks.apicultureChest.addDefinitions(BlockTypeApicultureTesr.APIARIST_CHEST);
 
 		// Add triggers
 		if (PluginManager.Module.BUILDCRAFT_STATEMENTS.isEnabled()) {
@@ -465,12 +456,12 @@ public class PluginApiculture extends ForestryPlugin {
 		RecipeUtil.addRecipe(items.minecartBeehouse.getBeeHouseMinecart(),
 				"B",
 				"C",
-				'B', blocks.apiculture.get(BlockApicultureType.BEEHOUSE),
+				'B', blocks.apiculture.get(BlockTypeApiculture.BEE_HOUSE),
 				'C', Items.minecart);
 		RecipeUtil.addRecipe(items.minecartBeehouse.getApiaryMinecart(),
 				"B",
 				"C",
-				'B', blocks.apiculture.get(BlockApicultureType.APIARY),
+				'B', blocks.apiculture.get(BlockTypeApiculture.APIARY),
 				'C', Items.minecart);
 
 		// FOOD STUFF
@@ -712,7 +703,7 @@ public class PluginApiculture extends ForestryPlugin {
 		}
 
 		// ANALYZER
-		RecipeUtil.addRecipe(PluginCore.blocks.core.get(BlockCoreType.ANALYZER),
+		RecipeUtil.addRecipe(PluginCore.blocks.core.get(BlockTypeCoreTesr.ANALYZER),
 				"XTX",
 				" Y ",
 				"X X",
@@ -720,7 +711,7 @@ public class PluginApiculture extends ForestryPlugin {
 				'T', items.beealyzer,
 				'X', "ingotBronze");
 
-		RecipeUtil.addRecipe(blocks.apiculture.get(BlockApicultureType.APIARY),
+		RecipeUtil.addRecipe(blocks.apiculture.get(BlockTypeApiculture.APIARY),
 				"XXX",
 				"#C#",
 				"###",
@@ -736,7 +727,7 @@ public class PluginApiculture extends ForestryPlugin {
 				'X', "beeComb",
 				'Y', "chestWood");
 
-		RecipeUtil.addRecipe(blocks.apiculture.get(BlockApicultureType.BEEHOUSE),
+		RecipeUtil.addRecipe(blocks.apiculture.get(BlockTypeApiculture.BEE_HOUSE),
 				"XXX",
 				"#C#",
 				"###",

@@ -10,10 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.proxy;
 
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import forestry.core.render.RenderAnalyzer;
-import forestry.core.tiles.TileAnalyzer;
-
 public class ProxyApicultureClient extends ProxyApiculture {
 
 	@Override
@@ -25,11 +21,6 @@ public class ProxyApicultureClient extends ProxyApiculture {
 			MinecraftForgeClient.registerItemRenderer(PluginApiculture.items.beePrincessGE, new RenderBeeItem());
 			MinecraftForgeClient.registerItemRenderer(PluginApiculture.items.beeQueenGE, new RenderBeeItem());
 		}*/
-	}
-
-	@Override
-	public TileEntitySpecialRenderer<TileAnalyzer> getRendererAnalyzer(String gfxBase) {
-		return new RenderAnalyzer(gfxBase);
 	}
 
 }

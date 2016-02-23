@@ -39,14 +39,14 @@ import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IFlower;
-import forestry.apiculture.blocks.BlockApicultureType;
+import forestry.apiculture.blocks.BlockTypeApiculture;
 import forestry.apiculture.inventory.InventoryApiary;
 import forestry.apiculture.tiles.TileApiary;
 import forestry.arboriculture.worldgen.BlockTypeLog;
 import forestry.arboriculture.worldgen.BlockTypeVanillaStairs;
 import forestry.arboriculture.worldgen.BlockTypeWood;
 import forestry.arboriculture.worldgen.BlockTypeWoodStairs;
-import forestry.core.blocks.BlockCoreType;
+import forestry.core.blocks.BlockTypeCoreTesr;
 import forestry.core.config.Constants;
 import forestry.core.tiles.TileUtil;
 import forestry.core.worldgen.BlockType;
@@ -183,7 +183,7 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 
 		// Escritoire
 		if (random.nextInt(2) == 0) {
-			IBlockType escritoireBlock = new BlockTypeTileForestry(PluginCore.blocks.core, BlockCoreType.ESCRITOIRE.ordinal());
+			IBlockType escritoireBlock = new BlockTypeTileForestry(PluginCore.blocks.core, BlockTypeCoreTesr.ESCRITOIRE.ordinal());
 			escritoireBlock.setDirection(getRotatedDirection(EnumFacing.EAST));
 			placeBlockAtCurrentPosition(world, escritoireBlock, 1, 1, 3, structBoundingBox);
 		}
@@ -296,8 +296,8 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 			return;
 		}
 
-		world.setBlockState(posNew, PluginApiculture.blocks.apiculture.getStateFromMeta(BlockApicultureType.APIARY.ordinal()), Constants.FLAG_BLOCK_SYNCH);
-		PluginApiculture.blocks.apiculture.onBlockAdded(world, posNew, PluginApiculture.blocks.apiculture.getStateFromMeta(BlockApicultureType.APIARY.ordinal()));
+		world.setBlockState(posNew, PluginApiculture.blocks.apiculture.getStateFromMeta(BlockTypeApiculture.APIARY.ordinal()), Constants.FLAG_BLOCK_SYNCH);
+		PluginApiculture.blocks.apiculture.onBlockAdded(world, posNew, PluginApiculture.blocks.apiculture.getStateFromMeta(BlockTypeApiculture.APIARY.ordinal()));
 
 		TileApiary apiary = TileUtil.getTile(world, posNew, TileApiary.class);
 		if (apiary == null) {

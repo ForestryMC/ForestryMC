@@ -24,7 +24,7 @@ import forestry.apiculture.multiblock.TileAlveary;
 import forestry.apiculture.multiblock.TileAlvearyHygroregulator;
 import forestry.apiculture.multiblock.TileAlvearySieve;
 import forestry.apiculture.tiles.TileApiary;
-import forestry.apiculture.tiles.TileBeehouse;
+import forestry.apiculture.tiles.TileBeeHouse;
 import forestry.arboriculture.items.ItemTreealyzer;
 import forestry.core.items.ItemSolderingIron;
 import forestry.core.tiles.TileAnalyzer;
@@ -64,7 +64,7 @@ public class GuiIdRegistry {
 				TileAlvearyHygroregulator.class,
 				TileAlvearySieve.class,
 				TileApiary.class,
-				TileBeehouse.class,
+				TileBeeHouse.class,
 
 				TileAnalyzer.class,
 				TileEscritoire.class,

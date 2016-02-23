@@ -43,7 +43,7 @@ public class CentrifugeRecipeCategory extends ForestryRecipeCategory {
 	private final ForestryTooltipCallback tooltip = new ForestryTooltipCallback();
 	
 	public CentrifugeRecipeCategory(IGuiHelper guiHelper) {
-		super(guiHelper.createDrawable(guiTexture, 5, 14, 166, 65), "tile.for.factory.2.name", 10);
+		super(guiHelper.createDrawable(guiTexture, 5, 14, 166, 65), "tile.for.factory.centrifuge.name", 10);
 		
 		IDrawableStatic arrowDrawable = guiHelper.createDrawable(guiTexture, 176, 0, 4, 17);
 		this.arrow = guiHelper.createAnimatedDrawable(arrowDrawable, 80, IDrawableAnimated.StartDirection.BOTTOM, false);

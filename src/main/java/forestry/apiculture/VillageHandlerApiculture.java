@@ -35,7 +35,7 @@ public class VillageHandlerApiculture /*implements IVillageCreationHandler, IVil
 		ItemStack randomComb = PluginApiculture.items.beeComb.getRandomComb(1, random, false);
 		recipeList.add(new MerchantRecipe(new ItemStack(Items.wheat, 2), randomComb));
 
-		ItemStack apiary = PluginApiculture.blocks.apiculture.get(BlockApicultureType.APIARY);
+		ItemStack apiary = PluginApiculture.blocks.apiculture.get(BlockTypeApiculture.APIARY);
 		recipeList.add(new MerchantRecipe(new ItemStack(Blocks.log, 24, OreDictionary.WILDCARD_VALUE), apiary));
 
 		ItemStack provenFrames = PluginApiculture.items.frameProven.getItemStack(6);

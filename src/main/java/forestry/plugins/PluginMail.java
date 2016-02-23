@@ -25,12 +25,11 @@ import forestry.core.fluids.Fluids;
 import forestry.core.items.EnumElectronTube;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.recipes.RecipeUtil;
-import forestry.core.tiles.MachineDefinition;
 import forestry.mail.EventHandlerMailAlert;
 import forestry.mail.PostRegistry;
 import forestry.mail.PostalCarrier;
 import forestry.mail.SaveEventHandlerMail;
-import forestry.mail.blocks.BlockMailType;
+import forestry.mail.blocks.BlockTypeMail;
 import forestry.mail.blocks.BlockRegistryMail;
 import forestry.mail.commands.CommandMail;
 import forestry.mail.items.EnumStampDefinition;
@@ -68,11 +67,7 @@ public class PluginMail extends ForestryPlugin {
 			FMLCommonHandler.instance().bus().register(new EventHandlerMailAlert());
 		}
 
-		blocks.mail.addDefinitions(
-				new MachineDefinition(BlockMailType.MAILBOX).setFaces(0, 1, 2, 2, 2, 2, 0, 7),
-				new MachineDefinition(BlockMailType.TRADESTATION).setFaces(0, 1, 2, 3, 4, 4, 0, 7),
-				new MachineDefinition(BlockMailType.PHILATELIST).setFaces(0, 1, 2, 3, 2, 2, 0, 7)
-		);
+		blocks.mail.addDefinitions(BlockTypeMail.VALUES);
 	}
 
 	@Override
@@ -139,7 +134,7 @@ public class PluginMail extends ForestryPlugin {
 
 		RecipeUtil.addShapelessRecipe(items.catalogue.getItemStack(), items.stamps.getWildcard(), new ItemStack(Items.book));
 
-		RecipeUtil.addRecipe(blocks.mail.get(BlockMailType.MAILBOX),
+		RecipeUtil.addRecipe(blocks.mail.get(BlockTypeMail.MAILBOX),
 				" # ",
 				"#Y#",
 				"XXX",
@@ -147,7 +142,7 @@ public class PluginMail extends ForestryPlugin {
 				'X', "chestWood",
 				'Y', PluginCore.items.sturdyCasing);
 
-		RecipeUtil.addRecipe(blocks.mail.get(BlockMailType.TRADESTATION),
+		RecipeUtil.addRecipe(blocks.mail.get(BlockTypeMail.TRADE_STATION),
 				"Z#Z",
 				"#Y#",
 				"XWX",

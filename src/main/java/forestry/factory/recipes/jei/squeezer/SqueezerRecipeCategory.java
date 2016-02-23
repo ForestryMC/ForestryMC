@@ -38,7 +38,7 @@ public class SqueezerRecipeCategory extends ForestryRecipeCategory {
 	private final ForestryTooltipCallback tooltip = new ForestryTooltipCallback();
 	
 	public SqueezerRecipeCategory(@Nonnull IGuiHelper guiHelper, @Nonnull String UID) {
-		super(guiHelper.createDrawable(guiTexture, 9, 16, 158, 61), "tile.for.factory.5.name", 10);
+		super(guiHelper.createDrawable(guiTexture, 9, 16, 158, 61), "tile.for.factory.squeezer.name", 10);
 		
 		IDrawableStatic arrowDrawable = guiHelper.createDrawable(guiTexture, 176, 60, 43, 18);
 		this.arrow = guiHelper.createAnimatedDrawable(arrowDrawable, 200, IDrawableAnimated.StartDirection.LEFT, false);

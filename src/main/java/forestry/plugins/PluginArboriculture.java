@@ -41,7 +41,7 @@ import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
 import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.WoodItemAccess;
-import forestry.arboriculture.blocks.BlockArboricultureType;
+import forestry.arboriculture.blocks.BlockTypeArboricultureTesr;
 import forestry.arboriculture.blocks.BlockFruitPod;
 import forestry.arboriculture.blocks.BlockRegistryArboriculture;
 import forestry.arboriculture.commands.CommandTree;
@@ -57,20 +57,17 @@ import forestry.arboriculture.items.ItemRegistryArboriculture;
 import forestry.arboriculture.network.PacketRegistryArboriculture;
 import forestry.arboriculture.proxy.ProxyArboriculture;
 import forestry.arboriculture.render.TextureLeaves;
-import forestry.arboriculture.tiles.TileArboristChest;
 import forestry.arboriculture.tiles.TileFruitPod;
 import forestry.arboriculture.tiles.TileLeaves;
 import forestry.arboriculture.tiles.TileSapling;
 import forestry.arboriculture.tiles.TileWood;
-import forestry.core.blocks.BlockCoreType;
+import forestry.core.blocks.BlockTypeCoreTesr;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
 import forestry.core.genetics.alleles.AllelePlantType;
 import forestry.core.items.ItemFruit.EnumFruit;
 import forestry.core.network.IPacketRegistry;
-import forestry.core.proxy.Proxies;
 import forestry.core.recipes.RecipeUtil;
-import forestry.core.tiles.MachineDefinition;
 import forestry.core.utils.ItemStackUtil;
 import forestry.factory.recipes.FabricatorRecipe;
 
@@ -133,10 +130,7 @@ public class PluginArboriculture extends ForestryPlugin {
 			WoodItemAccess.registerStairs(blocks.stairsFireproof, woodType, true);
 		}
 
-		MachineDefinition definitionChest = new MachineDefinition(BlockArboricultureType.ARBCHEST.ordinal(),
-				"forestry.ArbChest", TileArboristChest.class, Proxies.render.getRenderChest("arbchest"))
-				.setBoundingBox(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
-		blocks.arboriculture.addDefinition(definitionChest);
+		blocks.arboriculture.addDefinitions(BlockTypeArboricultureTesr.ARB_CHEST);
 
 		// Init rendering
 		proxy.initializeModels();
@@ -326,7 +320,7 @@ public class PluginArboriculture extends ForestryPlugin {
 				'#', "stickWood");
 
 		// ANALYZER
-		RecipeUtil.addRecipe(PluginCore.blocks.core.get(BlockCoreType.ANALYZER),
+		RecipeUtil.addRecipe(PluginCore.blocks.core.get(BlockTypeCoreTesr.ANALYZER),
 				"XTX",
 				" Y ",
 				"X X",
@@ -334,7 +328,7 @@ public class PluginArboriculture extends ForestryPlugin {
 				'T', items.treealyzer,
 				'X', "ingotBronze");
 
-		RecipeUtil.addRecipe(blocks.arboriculture.get(BlockArboricultureType.ARBCHEST),
+		RecipeUtil.addRecipe(blocks.arboriculture.get(BlockTypeArboricultureTesr.ARB_CHEST),
 				" # ",
 				"XYX",
 				"XXX",
