@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
+import java.util.Locale;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -41,6 +43,6 @@ public enum BlockTypeCoreTesr implements IBlockTypeTesr {
 
 	@Override
 	public String getName() {
-		return name();
+		return getMachineProperties().getName();
 	}
 }

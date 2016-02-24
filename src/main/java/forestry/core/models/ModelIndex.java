@@ -10,15 +10,15 @@
  ******************************************************************************/
 package forestry.core.models;
 
+import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
-import net.minecraftforge.client.model.IModel;
 
 public class ModelIndex {
 
 	public final ModelResourceLocation modelLocation;
-	public final IModel model;
-
-	public ModelIndex(ModelResourceLocation modelLocation, IModel model) {
+	public final IBakedModel model;
+	
+	public ModelIndex(ModelResourceLocation modelLocation, IBakedModel model) {
 		this.modelLocation = modelLocation;
 		this.model = model;
 	}

@@ -123,9 +123,7 @@ public class BlockArbFence extends BlockFence implements IWoodTyped, IItemModelR
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		if (!fireproof) {
-			manager.registerVariant(item, ItemBlockWood.getVariants(this));
-		}
+		manager.registerVariant(item, ItemBlockWood.getVariants(this));
 		manager.registerItemModel(item, new WoodMeshDefinition(this));
 	}
 

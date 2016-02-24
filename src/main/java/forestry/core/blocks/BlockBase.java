@@ -47,7 +47,7 @@ import forestry.core.access.IAccessHandler;
 import forestry.core.circuits.ISocketable;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.StateMapperMachine;
+import forestry.core.render.MachineStateMapper;
 import forestry.core.tiles.TileBase;
 import forestry.core.tiles.TileForestry;
 import forestry.core.tiles.TileUtil;
@@ -56,24 +56,24 @@ import forestry.core.utils.PlayerUtil;
 
 import jline.internal.Log;
 
-public class BlockBase<C extends Enum<C> & IBlockType & IStringSerializable> extends BlockForestry implements IItemModelRegister, IStateMapperRegister {
-	private final Map<C, IMachineProperties> definitions = new HashMap<>();
+public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> extends BlockForestry implements IItemModelRegister, IStateMapperRegister {
+	private final Map<P, IMachineProperties> properties = new HashMap<>();
 	private final boolean hasTESR;
-	private final Class<C> machinePropertiesClass;
+	private final Class<P> machinePropertiesClass;
 	
 	/* PROPERTIES */
-	private final PropertyEnum<C> TYPE;
+	private final PropertyEnum<P> TYPE;
 	private final PropertyEnum<EnumFacing> FACE;
 	
     protected final BlockState blockState;
 	
 	private boolean isReady = false;
 	
-	public BlockBase(Class<C> machinePropertiesClass) {
+	public BlockBase(Class<P> machinePropertiesClass) {
 		this(false, machinePropertiesClass);
 	}
 
-	public BlockBase(boolean hasTESR, Class<C> machinePropertiesClass) {
+	public BlockBase(boolean hasTESR, Class<P> machinePropertiesClass) {
 		super(Material.iron);
 
 		this.hasTESR = hasTESR;
@@ -91,12 +91,12 @@ public class BlockBase<C extends Enum<C> & IBlockType & IStringSerializable> ext
 	}
 
 	@SafeVarargs
-	public final void addDefinitions(C... blockTypes) {
-		for (C blockType : blockTypes) {
+	public final void addDefinitions(P... blockTypes) {
+		for (P blockType : blockTypes) {
 			IMachineProperties<?> machineProperties = blockType.getMachineProperties();
 			if (machineProperties != null) {
 				machineProperties.setBlock(this);
-				this.definitions.put(blockType, machineProperties);
+				this.properties.put(blockType, machineProperties);
 			} else {
 				Log.error("Null Definition found {}", Arrays.toString(blockTypes));
 			}
@@ -153,7 +153,7 @@ public class BlockBase<C extends Enum<C> & IBlockType & IStringSerializable> ext
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
-		for (IMachineProperties definition : definitions.values()) {
+		for (IMachineProperties definition : properties.values()) {
 			definition.getSubBlocks(item, tab, list);
 		}
 	}
@@ -253,7 +253,7 @@ public class BlockBase<C extends Enum<C> & IBlockType & IStringSerializable> ext
 	}
 
 	public void init() {
-		for (IMachineProperties def : definitions.values()) {
+		for (IMachineProperties def : properties.values()) {
 			def.registerTileEntity();
 		}
 	}
@@ -262,7 +262,7 @@ public class BlockBase<C extends Enum<C> & IBlockType & IStringSerializable> ext
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		for (IMachineProperties def : definitions.values()) {
+		for (IMachineProperties def : properties.values()) {
 			def.registerModel(item, manager);
 		}
 	}
@@ -270,7 +270,7 @@ public class BlockBase<C extends Enum<C> & IBlockType & IStringSerializable> ext
 	/* STATES */
 	@Override
 	public void registerStateMapper() {
-		Proxies.render.registerStateMapper(this, new StateMapperMachine<>(machinePropertiesClass, TYPE, FACE));
+		Proxies.render.registerStateMapper(this, new MachineStateMapper<>(machinePropertiesClass, TYPE, FACE));
 	}
 
 	@Override
@@ -289,10 +289,10 @@ public class BlockBase<C extends Enum<C> & IBlockType & IStringSerializable> ext
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		for(Map.Entry<C, IMachineProperties> entry : definitions.entrySet()){
+		for(Map.Entry<P, IMachineProperties> entry : properties.entrySet()){
 			IMachineProperties<?> machineProperties = entry.getValue();
 			if (machineProperties.getMeta() == meta){
-				C blockType = entry.getKey();
+				P blockType = entry.getKey();
 				return getDefaultState().withProperty(this.TYPE, blockType);
 			}
 		}
@@ -326,7 +326,7 @@ public class BlockBase<C extends Enum<C> & IBlockType & IStringSerializable> ext
 		return hasTESR;
 	}
 
-	public final ItemStack get(C type) {
+	public final ItemStack get(P type) {
 		return new ItemStack(this, 1, type.getMachineProperties().getMeta());
 	}
 }

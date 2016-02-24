@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "mushroom=brown": { "model": "brown_mushroom" },
+		"mushroom=red": { "model": "red_mushroom" }
+    }
+}

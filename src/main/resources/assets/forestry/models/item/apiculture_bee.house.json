@@ -1,5 +1,5 @@
 {
-    "parent": "forestry:block/mail_tradestation",
+    "parent": "forestry:block/apiculture_bee.house",
     "display": {
         "thirdperson": {
             "rotation": [ 10, -45, 170 ],

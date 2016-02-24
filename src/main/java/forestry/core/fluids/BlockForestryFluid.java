@@ -18,6 +18,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
@@ -30,10 +31,12 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
 import forestry.core.entities.EntityFXColoredDropParticle;
 import forestry.core.utils.BlockUtil;
 
-public class BlockForestryFluid extends BlockFluidClassic {
+public class BlockForestryFluid extends BlockFluidClassic implements IItemModelRegister {
 
 	private final boolean flammable;
 	private final int flammability;
@@ -134,6 +137,12 @@ public class BlockForestryFluid extends BlockFluidClassic {
 		} else {
 			return super.getMaterial();
 		}
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void registerModel(Item item, IModelManager manager) {
+		
 	}
 
 	@Override

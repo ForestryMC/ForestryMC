@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.factory.blocks;
 
+import java.util.Locale;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -62,6 +64,6 @@ public enum BlockTypeFactoryTesr implements IBlockTypeTesr {
 
 	@Override
 	public String getName() {
-		return name();
+		return getMachineProperties().getName();
 	}
 }

@@ -83,9 +83,6 @@ public class ModelManager implements IModelManager {
 					if (block instanceof IItemModelRegister) {
 						((IItemModelRegister) block).registerModel(Item.getItemFromBlock(block), getInstance());
 					}
-					if (block instanceof IStateMapperRegister) {
-						((IStateMapperRegister) block).registerStateMapper();
-					}
 				}
 
 			}

@@ -10,7 +10,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.statemap.IStateMapper;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 
-public abstract class StateMapperForestry implements IStateMapper {
+public abstract class ForestryStateMapper implements IStateMapper {
 
 	protected Map<IBlockState, ModelResourceLocation> mapStateModelLocations = Maps.newLinkedHashMap();
 

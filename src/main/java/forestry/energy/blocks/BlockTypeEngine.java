@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.energy.blocks;
 
+import java.util.Locale;
+
 import javax.annotation.Nonnull;
 
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -46,6 +48,6 @@ public enum BlockTypeEngine implements IBlockTypeTesr {
 
 	@Override
 	public String getName() {
-		return name();
+		return getMachineProperties().getName();
 	}
 }

@@ -23,7 +23,6 @@ public class RenderHandler {
 	public static void registerModels(ModelBakeEvent event) {
 		IRegistry registry = event.modelRegistry;
 		for (final BlockModelIndex index : blockModels) {
-			Object o = registry.getObject(index.blockModelLocation);
 			registry.putObject(index.blockModelLocation, index.model);
 			registry.putObject(index.itemModelLocation, index.model);
 		}

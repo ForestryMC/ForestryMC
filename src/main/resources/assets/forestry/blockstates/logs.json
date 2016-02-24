@@ -1,120 +1,646 @@
 {
-    "variants": {
-		//larch
-        "axis=normal,woodtype=larch":  { "model": "forestry:arboriculture/logs/larch" },
-        "axis=side,woodtype=larch":   { "model": "forestry:arboriculture/logs/larch_side" },
-        "axis=side_90,woodtype=larch":   { "model": "forestry:arboriculture/logs/larch_side", "y": 90 },
-		//teak
-        "axis=normal,woodtype=teak":  { "model": "forestry:arboriculture/logs/teak" },
-        "axis=side,woodtype=teak":   { "model": "forestry:arboriculture/logs/teak_side" },
-        "axis=side_90,woodtype=teak":   { "model": "forestry:arboriculture/logs/teak_side", "y": 90 },
-		//acacia
-        "axis=normal,woodtype=acacia":  { "model": "forestry:arboriculture/logs/acacia" },
-        "axis=side,woodtype=acacia":   { "model": "forestry:arboriculture/logs/acacia_side" },
-        "axis=side_90,woodtype=acacia":   { "model": "forestry:arboriculture/logs/acacia_side", "y": 90 },
-		//lime
-        "axis=normal,woodtype=lime":  { "model": "forestry:arboriculture/logs/lime" },
-        "axis=side,woodtype=lime":   { "model": "forestry:arboriculture/logs/lime_side" },
-        "axis=side_90,woodtype=lime":   { "model": "forestry:arboriculture/logs/lime_side", "y": 90 },
-		//chestnut
-        "axis=normal,woodtype=chestnut":  { "model": "forestry:arboriculture/logs/chestnut" },
-        "axis=side,woodtype=chestnut":   { "model": "forestry:arboriculture/logs/chestnut_side" },
-        "axis=side_90,woodtype=chestnut":   { "model": "forestry:arboriculture/logs/chestnut_side", "y": 90 },
-		//wenge
-        "axis=normal,woodtype=wenge":  { "model": "forestry:arboriculture/logs/wenge" },
-        "axis=side,woodtype=wenge":   { "model": "forestry:arboriculture/logs/wenge_side" },
-        "axis=side_90,woodtype=wenge":   { "model": "forestry:arboriculture/logs/wenge_side", "y": 90 },
-		//baobab
-        "axis=normal,woodtype=baobab":  { "model": "forestry:arboriculture/logs/baobab" },
-        "axis=side,woodtype=baobab":   { "model": "forestry:arboriculture/logs/baobab_side" },
-        "axis=side_90,woodtype=baobab":   { "model": "forestry:arboriculture/logs/baobab_side", "y": 90 },#
-		//sequoia
-        "axis=normal,woodtype=sequoia":  { "model": "forestry:arboriculture/logs/sequoia" },
-        "axis=side,woodtype=sequoia":   { "model": "forestry:arboriculture/logs/sequoia_side" },
-        "axis=side_90,woodtype=sequoia":   { "model": "forestry:arboriculture/logs/sequoia_side", "y": 90 },
-		//kapok
-        "axis=normal,woodtype=kapok":  { "model": "forestry:arboriculture/logs/kapok" },
-        "axis=side,woodtype=kapok":   { "model": "forestry:arboriculture/logs/kapok_side" },
-        "axis=side_90,woodtype=kapok":   { "model": "forestry:arboriculture/logs/kapok_side", "y": 90 },
-		//ebony
-        "axis=normal,woodtype=ebony":  { "model": "forestry:arboriculture/logs/ebony" },
-        "axis=side,woodtype=ebony":   { "model": "forestry:arboriculture/logs/ebony_side" },
-        "axis=side_90,woodtype=ebony":   { "model": "forestry:arboriculture/logs/ebony_side", "y": 90 },
-		//mahogany
-        "axis=normal,woodtype=mahogany":  { "model": "forestry:arboriculture/logs/mahogany" },
-        "axis=side,woodtype=mahogany":   { "model": "forestry:arboriculture/logs/mahogany_side" },
-        "axis=side_90,woodtype=mahogany":   { "model": "forestry:arboriculture/logs/mahogany_side", "y": 90 },
-		//balsa
-        "axis=normal,woodtype=balsa":  { "model": "forestry:arboriculture/logs/balsa" },
-        "axis=side,woodtype=balsa":   { "model": "forestry:arboriculture/logs/balsa_side" },
-        "axis=side_90,woodtype=balsa":   { "model": "forestry:arboriculture/logs/balsa_side", "y": 90 },
-		//willow
-        "axis=normal,woodtype=willow":  { "model": "forestry:arboriculture/logs/willow" },
-        "axis=side,woodtype=willow":   { "model": "forestry:arboriculture/logs/willow_side" },
-        "axis=side_90,woodtype=willow":   { "model": "forestry:arboriculture/logs/willow_side", "y": 90 },
-		//walnut
-        "axis=normal,woodtype=walnut":  { "model": "forestry:arboriculture/logs/walnut" },
-        "axis=side,woodtype=walnut":   { "model": "forestry:arboriculture/logs/walnut_side" },
-        "axis=side_90,woodtype=walnut":   { "model": "forestry:arboriculture/logs/walnut_side", "y": 90 },
-		//greenheart
-        "axis=normal,woodtype=greenheart":  { "model": "forestry:arboriculture/logs/greenheart" },
-        "axis=side,woodtype=greenheart":   { "model": "forestry:arboriculture/logs/greenheart_side" },
-        "axis=side_90,woodtype=greenheart":   { "model": "forestry:arboriculture/logs/greenheart_side", "y": 90 },
-		//cherry
-        "axis=normal,woodtype=cherry":  { "model": "forestry:arboriculture/logs/cherry" },
-        "axis=side,woodtype=cherry":   { "model": "forestry:arboriculture/logs/cherry_side" },
-        "axis=side_90,woodtype=cherry":   { "model": "forestry:arboriculture/logs/cherry_side", "y": 90 },
-		//mahoe
-        "axis=normal,woodtype=mahoe":  { "model": "forestry:arboriculture/logs/mahoe" },
-        "axis=side,woodtype=mahoe":   { "model": "forestry:arboriculture/logs/mahoe_side" },
-        "axis=side_90,woodtype=mahoe":   { "model": "forestry:arboriculture/logs/mahoe_side", "y": 90 },
-		//poplar
-        "axis=normal,woodtype=poplar":  { "model": "forestry:arboriculture/logs/poplar" },
-        "axis=side,woodtype=poplar":   { "model": "forestry:arboriculture/logs/poplar_side" },
-        "axis=side_90,woodtype=poplar":   { "model": "forestry:arboriculture/logs/poplar_side", "y": 90 },
-		//palm
-        "axis=normal,woodtype=palm":  { "model": "forestry:arboriculture/logs/palm" },
-        "axis=side,woodtype=palm":   { "model": "forestry:arboriculture/logs/palm_side" },
-        "axis=side_90,woodtype=palm":   { "model": "forestry:arboriculture/logs/palm_side", "y": 90 },
-		//papaya
-        "axis=normal,woodtype=papaya":  { "model": "forestry:arboriculture/logs/papaya" },
-        "axis=side,woodtype=papaya":   { "model": "forestry:arboriculture/logs/papaya_side" },
-        "axis=side_90,woodtype=papaya":   { "model": "forestry:arboriculture/logs/papaya_side", "y": 90 },
-		//pine
-        "axis=normal,woodtype=pine":  { "model": "forestry:arboriculture/logs/pine" },
-        "axis=side,woodtype=pine":   { "model": "forestry:arboriculture/logs/pine_side" },
-        "axis=side_90,woodtype=pine":   { "model": "forestry:arboriculture/logs/pine_side", "y": 90 },
-		//plum
-        "axis=normal,woodtype=plum":  { "model": "forestry:arboriculture/logs/plum" },
-        "axis=side,woodtype=plum":   { "model": "forestry:arboriculture/logs/plum_side" },
-        "axis=side_90,woodtype=plum":   { "model": "forestry:arboriculture/logs/plum_side", "y": 90 },
-		//maple
-        "axis=normal,woodtype=maple":  { "model": "forestry:arboriculture/logs/maple" },
-        "axis=side,woodtype=maple":   { "model": "forestry:arboriculture/logs/maple_side" },
-        "axis=side_90,woodtype=maple":   { "model": "forestry:arboriculture/logs/maple_side", "y": 90 },
-		//citrus
-        "axis=normal,woodtype=citrus":  { "model": "forestry:arboriculture/logs/citrus" },
-        "axis=side,woodtype=citrus":   { "model": "forestry:arboriculture/logs/citrus_side" },
-        "axis=side_90,woodtype=citrus":   { "model": "forestry:arboriculture/logs/citrus_side", "y": 90 },
-		//giganteum
-        "axis=normal,woodtype=giganteum":  { "model": "forestry:arboriculture/logs/giganteum" },
-        "axis=side,woodtype=giganteum":   { "model": "forestry:arboriculture/logs/giganteum_side" },
-        "axis=side_90,woodtype=giganteum":   { "model": "forestry:arboriculture/logs/giganteum_side", "y": 90 },
-		//ipe
-        "axis=normal,woodtype=ipe":  { "model": "forestry:arboriculture/logs/ipe" },
-        "axis=side,woodtype=ipe":   { "model": "forestry:arboriculture/logs/ipe_side" },
-        "axis=side_90,woodtype=ipe":   { "model": "forestry:arboriculture/logs/ipe_side", "y": 90 },
-		//padauk
-        "axis=normal,woodtype=padauk":  { "model": "forestry:arboriculture/logs/padauk" },
-        "axis=side,woodtype=padauk":   { "model": "forestry:arboriculture/logs/padauk_side" },
-        "axis=side_90,woodtype=padauk":   { "model": "forestry:arboriculture/logs/padauk_side", "y": 90 },
-		//cocobolo
-        "axis=normal,woodtype=cocobolo":  { "model": "forestry:arboriculture/logs/cocobolo" },
-        "axis=side,woodtype=cocobolo":   { "model": "forestry:arboriculture/logs/cocobolo_side" },
-        "axis=side_90,woodtype=cocobolo":   { "model": "forestry:arboriculture/logs/cocobolo_side", "y": 90 },
-		//zebrawood
-        "axis=normal,woodtype=zebrawood":  { "model": "forestry:arboriculture/logs/zebrawood" },
-        "axis=side,woodtype=zebrawood":   { "model": "forestry:arboriculture/logs/zebrawood_side" },
-        "axis=side_90,woodtype=zebrawood":   { "model": "forestry:arboriculture/logs/zebrawood_side", "y": 90 }
+  "forge_marker": 1,
+  "defaults": {
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "axis=normal,woodtype=acacia": {
+      "model": "cube_column",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.acacia",
+        "end": "forestry:blocks/wood/heart.acacia"
+      }
+    },
+    "axis=normal,woodtype=balsa": {
+      "model": "cube_column",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.balsa",
+        "end": "forestry:blocks/wood/heart.balsa"
+      }
+    },
+    "axis=normal,woodtype=baobab": {
+      "model": "cube_column",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.baobab",
+        "end": "forestry:blocks/wood/heart.baobab"
+      }
+    },
+    "axis=normal,woodtype=cherry": {
+      "model": "cube_column",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.cherry",
+        "end": "forestry:blocks/wood/heart.cherry"
+      }
+    },
+    "axis=normal,woodtype=chestnut": {
+      "model": "cube_column",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.chestnut",
+        "end": "forestry:blocks/wood/heart.chestnut"
+      }
+    },
+    "axis=normal,woodtype=citrus": {
+      "model": "cube_column",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.citrus",
+        "end": "forestry:blocks/wood/heart.citrus"
+      }
+    },
+    "axis=normal,woodtype=cocobolo": {
+      "model": "cube_column",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.cocobolo",
+        "end": "forestry:blocks/wood/heart.cocobolo"
+      }
+    },
+    "axis=normal,woodtype=ebony": {
+      "model": "cube_column",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.ebony",
+        "end": "forestry:blocks/wood/heart.ebony"
+      }
+    },
+    "axis=normal,woodtype=giganteum": {
+      "model": "cube_column",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.giganteum",
+        "end": "forestry:blocks/wood/heart.giganteum"
+      }
+    },
+    "axis=normal,woodtype=greenheart": {
+      "model": "cube_column",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.greenheart",
+        "end": "forestry:blocks/wood/heart.greenheart"
+      }
+    },
+    "axis=normal,woodtype=ipe": {
+      "model": "cube_column",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.ipe",
+        "end": "forestry:blocks/wood/heart.ipe"
+      }
+    },
+    "axis=normal,woodtype=kapok": {
+      "model": "cube_column",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.kapok",
+        "end": "forestry:blocks/wood/heart.kapok"
+      }
+    },
+    "axis=normal,woodtype=larch": {
+      "model": "cube_column",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.larch",
+        "end": "forestry:blocks/wood/heart.larch"
+      }
+    },
+    "axis=normal,woodtype=lime": {
+      "model": "cube_column",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.lime",
+        "end": "forestry:blocks/wood/heart.lime"
+      }
+    },
+    "axis=normal,woodtype=mahoe": {
+      "model": "cube_column",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.mahoe",
+        "end": "forestry:blocks/wood/heart.mahoe"
+      }
+    },
+    "axis=normal,woodtype=mahogany": {
+      "model": "cube_column",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.mahogany",
+        "end": "forestry:blocks/wood/heart.mahogany"
+      }
+    },
+    "axis=normal,woodtype=maple": {
+      "model": "cube_column",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.maple",
+        "end": "forestry:blocks/wood/heart.maple"
+      }
+    },
+    "axis=normal,woodtype=padauk": {
+      "model": "cube_column",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.padauk",
+        "end": "forestry:blocks/wood/heart.padauk"
+      }
+    },
+    "axis=normal,woodtype=palm": {
+      "model": "cube_column",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.palm",
+        "end": "forestry:blocks/wood/heart.palm"
+      }
+    },
+    "axis=normal,woodtype=papaya": {
+      "model": "cube_column",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.papaya",
+        "end": "forestry:blocks/wood/heart.papaya"
+      }
+    },
+    "axis=normal,woodtype=pine": {
+      "model": "cube_column",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.pine",
+        "end": "forestry:blocks/wood/heart.pine"
+      }
+    },
+    "axis=normal,woodtype=plum": {
+      "model": "cube_column",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.plum",
+        "end": "forestry:blocks/wood/heart.plum"
+      }
+    },
+    "axis=normal,woodtype=poplar": {
+      "model": "cube_column",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.poplar",
+        "end": "forestry:blocks/wood/heart.poplar"
+      }
+    },
+    "axis=normal,woodtype=sequoia": {
+      "model": "cube_column",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.sequoia",
+        "end": "forestry:blocks/wood/heart.sequoia"
+      }
+    },
+    "axis=normal,woodtype=teak": {
+      "model": "cube_column",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.teak",
+        "end": "forestry:blocks/wood/heart.teak"
+      }
+    },
+    "axis=normal,woodtype=walnut": {
+      "model": "cube_column",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.walnut",
+        "end": "forestry:blocks/wood/heart.walnut"
+      }
+    },
+    "axis=normal,woodtype=wenge": {
+      "model": "cube_column",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.wenge",
+        "end": "forestry:blocks/wood/heart.wenge"
+      }
+    },
+    "axis=normal,woodtype=willow": {
+      "model": "cube_column",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.willow",
+        "end": "forestry:blocks/wood/heart.willow"
+      }
+    },
+    "axis=normal,woodtype=zebrawood": {
+      "model": "cube_column",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.zebrawood",
+        "end": "forestry:blocks/wood/heart.zebrawood"
+      }
+    },
+    "axis=side,woodtype=acacia": {
+      "model": "column_side",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.acacia",
+        "end": "forestry:blocks/wood/heart.acacia"
+      }
+    },
+    "axis=side,woodtype=balsa": {
+      "model": "column_side",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.balsa",
+        "end": "forestry:blocks/wood/heart.balsa"
+      }
+    },
+    "axis=side,woodtype=baobab": {
+      "model": "column_side",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.baobab",
+        "end": "forestry:blocks/wood/heart.baobab"
+      }
+    },
+    "axis=side,woodtype=cherry": {
+      "model": "column_side",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.cherry",
+        "end": "forestry:blocks/wood/heart.cherry"
+      }
+    },
+    "axis=side,woodtype=chestnut": {
+      "model": "column_side",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.chestnut",
+        "end": "forestry:blocks/wood/heart.chestnut"
+      }
+    },
+    "axis=side,woodtype=citrus": {
+      "model": "column_side",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.citrus",
+        "end": "forestry:blocks/wood/heart.citrus"
+      }
+    },
+    "axis=side,woodtype=cocobolo": {
+      "model": "column_side",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.cocobolo",
+        "end": "forestry:blocks/wood/heart.cocobolo"
+      }
+    },
+    "axis=side,woodtype=ebony": {
+      "model": "column_side",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.ebony",
+        "end": "forestry:blocks/wood/heart.ebony"
+      }
+    },
+    "axis=side,woodtype=giganteum": {
+      "model": "column_side",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.giganteum",
+        "end": "forestry:blocks/wood/heart.giganteum"
+      }
+    },
+    "axis=side,woodtype=greenheart": {
+      "model": "column_side",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.greenheart",
+        "end": "forestry:blocks/wood/heart.greenheart"
+      }
+    },
+    "axis=side,woodtype=ipe": {
+      "model": "column_side",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.ipe",
+        "end": "forestry:blocks/wood/heart.ipe"
+      }
+    },
+    "axis=side,woodtype=kapok": {
+      "model": "column_side",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.kapok",
+        "end": "forestry:blocks/wood/heart.kapok"
+      }
+    },
+    "axis=side,woodtype=larch": {
+      "model": "column_side",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.larch",
+        "end": "forestry:blocks/wood/heart.larch"
+      }
+    },
+    "axis=side,woodtype=lime": {
+      "model": "column_side",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.lime",
+        "end": "forestry:blocks/wood/heart.lime"
+      }
+    },
+    "axis=side,woodtype=mahoe": {
+      "model": "column_side",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.mahoe",
+        "end": "forestry:blocks/wood/heart.mahoe"
+      }
+    },
+    "axis=side,woodtype=mahogany": {
+      "model": "column_side",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.mahogany",
+        "end": "forestry:blocks/wood/heart.mahogany"
+      }
+    },
+    "axis=side,woodtype=maple": {
+      "model": "column_side",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.maple",
+        "end": "forestry:blocks/wood/heart.maple"
+      }
+    },
+    "axis=side,woodtype=padauk": {
+      "model": "column_side",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.padauk",
+        "end": "forestry:blocks/wood/heart.padauk"
+      }
+    },
+    "axis=side,woodtype=palm": {
+      "model": "column_side",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.palm",
+        "end": "forestry:blocks/wood/heart.palm"
+      }
+    },
+    "axis=side,woodtype=papaya": {
+      "model": "column_side",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.papaya",
+        "end": "forestry:blocks/wood/heart.papaya"
+      }
+    },
+    "axis=side,woodtype=pine": {
+      "model": "column_side",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.pine",
+        "end": "forestry:blocks/wood/heart.pine"
+      }
+    },
+    "axis=side,woodtype=plum": {
+      "model": "column_side",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.plum",
+        "end": "forestry:blocks/wood/heart.plum"
+      }
+    },
+    "axis=side,woodtype=poplar": {
+      "model": "column_side",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.poplar",
+        "end": "forestry:blocks/wood/heart.poplar"
+      }
+    },
+    "axis=side,woodtype=sequoia": {
+      "model": "column_side",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.sequoia",
+        "end": "forestry:blocks/wood/heart.sequoia"
+      }
+    },
+    "axis=side,woodtype=teak": {
+      "model": "column_side",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.teak",
+        "end": "forestry:blocks/wood/heart.teak"
+      }
+    },
+    "axis=side,woodtype=walnut": {
+      "model": "column_side",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.walnut",
+        "end": "forestry:blocks/wood/heart.walnut"
+      }
+    },
+    "axis=side,woodtype=wenge": {
+      "model": "column_side",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.wenge",
+        "end": "forestry:blocks/wood/heart.wenge"
+      }
+    },
+    "axis=side,woodtype=willow": {
+      "model": "column_side",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.willow",
+        "end": "forestry:blocks/wood/heart.willow"
+      }
+    },
+    "axis=side,woodtype=zebrawood": {
+      "model": "column_side",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.zebrawood",
+        "end": "forestry:blocks/wood/heart.zebrawood"
+      }
+    },
+    "axis=side_90,woodtype=acacia": {
+      "model": "column_side",
+      "y": 90,
+      "textures": {
+        "side": "forestry:blocks/wood/bark.acacia",
+        "end": "forestry:blocks/wood/heart.acacia"
+      }
+    },
+    "axis=side_90,woodtype=balsa": {
+      "model": "column_side",
+      "y": 90,
+      "textures": {
+        "side": "forestry:blocks/wood/bark.balsa",
+        "end": "forestry:blocks/wood/heart.balsa"
+      }
+    },
+    "axis=side_90,woodtype=baobab": {
+      "model": "column_side",
+      "y": 90,
+      "textures": {
+        "side": "forestry:blocks/wood/bark.baobab",
+        "end": "forestry:blocks/wood/heart.baobab"
+      }
+    },
+    "axis=side_90,woodtype=cherry": {
+      "model": "column_side",
+      "y": 90,
+      "textures": {
+        "side": "forestry:blocks/wood/bark.cherry",
+        "end": "forestry:blocks/wood/heart.cherry"
+      }
+    },
+    "axis=side_90,woodtype=chestnut": {
+      "model": "column_side",
+      "y": 90,
+      "textures": {
+        "side": "forestry:blocks/wood/bark.chestnut",
+        "end": "forestry:blocks/wood/heart.chestnut"
+      }
+    },
+    "axis=side_90,woodtype=citrus": {
+      "model": "column_side",
+      "y": 90,
+      "textures": {
+        "side": "forestry:blocks/wood/bark.citrus",
+        "end": "forestry:blocks/wood/heart.citrus"
+      }
+    },
+    "axis=side_90,woodtype=cocobolo": {
+      "model": "column_side",
+      "y": 90,
+      "textures": {
+        "side": "forestry:blocks/wood/bark.cocobolo",
+        "end": "forestry:blocks/wood/heart.cocobolo"
+      }
+    },
+    "axis=side_90,woodtype=ebony": {
+      "model": "column_side",
+      "y": 90,
+      "textures": {
+        "side": "forestry:blocks/wood/bark.ebony",
+        "end": "forestry:blocks/wood/heart.ebony"
+      }
+    },
+    "axis=side_90,woodtype=giganteum": {
+      "model": "column_side",
+      "y": 90,
+      "textures": {
+        "side": "forestry:blocks/wood/bark.giganteum",
+        "end": "forestry:blocks/wood/heart.giganteum"
+      }
+    },
+    "axis=side_90,woodtype=greenheart": {
+      "model": "column_side",
+      "y": 90,
+      "textures": {
+        "side": "forestry:blocks/wood/bark.greenheart",
+        "end": "forestry:blocks/wood/heart.greenheart"
+      }
+    },
+    "axis=side_90,woodtype=ipe": {
+      "model": "column_side",
+      "y": 90,
+      "textures": {
+        "side": "forestry:blocks/wood/bark.ipe",
+        "end": "forestry:blocks/wood/heart.ipe"
+      }
+    },
+    "axis=side_90,woodtype=kapok": {
+      "model": "column_side",
+      "y": 90,
+      "textures": {
+        "side": "forestry:blocks/wood/bark.kapok",
+        "end": "forestry:blocks/wood/heart.kapok"
+      }
+    },
+    "axis=side_90,woodtype=larch": {
+      "model": "column_side",
+      "y": 90,
+      "textures": {
+        "side": "forestry:blocks/wood/bark.larch",
+        "end": "forestry:blocks/wood/heart.larch"
+      }
+    },
+    "axis=side_90,woodtype=lime": {
+      "model": "column_side",
+      "y": 90,
+      "textures": {
+        "side": "forestry:blocks/wood/bark.lime",
+        "end": "forestry:blocks/wood/heart.lime"
+      }
+    },
+    "axis=side_90,woodtype=mahoe": {
+      "model": "column_side",
+      "y": 90,
+      "textures": {
+        "side": "forestry:blocks/wood/bark.mahoe",
+        "end": "forestry:blocks/wood/heart.mahoe"
+      }
+    },
+    "axis=side_90,woodtype=mahogany": {
+      "model": "column_side",
+      "y": 90,
+      "textures": {
+        "side": "forestry:blocks/wood/bark.mahogany",
+        "end": "forestry:blocks/wood/heart.mahogany"
+      }
+    },
+    "axis=side_90,woodtype=maple": {
+      "model": "column_side",
+      "y": 90,
+      "textures": {
+        "side": "forestry:blocks/wood/bark.maple",
+        "end": "forestry:blocks/wood/heart.maple"
+      }
+    },
+    "axis=side_90,woodtype=padauk": {
+      "model": "column_side",
+      "y": 90,
+      "textures": {
+        "side": "forestry:blocks/wood/bark.padauk",
+        "end": "forestry:blocks/wood/heart.padauk"
+      }
+    },
+    "axis=side_90,woodtype=palm": {
+      "model": "column_side",
+      "y": 90,
+      "textures": {
+        "side": "forestry:blocks/wood/bark.palm",
+        "end": "forestry:blocks/wood/heart.palm"
+      }
+    },
+    "axis=side_90,woodtype=papaya": {
+      "model": "column_side",
+      "y": 90,
+      "textures": {
+        "side": "forestry:blocks/wood/bark.papaya",
+        "end": "forestry:blocks/wood/heart.papaya"
+      }
+    },
+    "axis=side_90,woodtype=pine": {
+      "model": "column_side",
+      "y": 90,
+      "textures": {
+        "side": "forestry:blocks/wood/bark.pine",
+        "end": "forestry:blocks/wood/heart.pine"
+      }
+    },
+    "axis=side_90,woodtype=plum": {
+      "model": "column_side",
+      "y": 90,
+      "textures": {
+        "side": "forestry:blocks/wood/bark.plum",
+        "end": "forestry:blocks/wood/heart.plum"
+      }
+    },
+    "axis=side_90,woodtype=poplar": {
+      "model": "column_side",
+      "y": 90,
+      "textures": {
+        "side": "forestry:blocks/wood/bark.poplar",
+        "end": "forestry:blocks/wood/heart.poplar"
+      }
+    },
+    "axis=side_90,woodtype=sequoia": {
+      "model": "column_side",
+      "y": 90,
+      "textures": {
+        "side": "forestry:blocks/wood/bark.sequoia",
+        "end": "forestry:blocks/wood/heart.sequoia"
+      }
+    },
+    "axis=side_90,woodtype=teak": {
+      "model": "column_side",
+      "y": 90,
+      "textures": {
+        "side": "forestry:blocks/wood/bark.teak",
+        "end": "forestry:blocks/wood/heart.teak"
+      }
+    },
+    "axis=side_90,woodtype=walnut": {
+      "model": "column_side",
+      "y": 90,
+      "textures": {
+        "side": "forestry:blocks/wood/bark.walnut",
+        "end": "forestry:blocks/wood/heart.walnut"
+      }
+    },
+    "axis=side_90,woodtype=wenge": {
+      "model": "column_side",
+      "y": 90,
+      "textures": {
+        "side": "forestry:blocks/wood/bark.wenge",
+        "end": "forestry:blocks/wood/heart.wenge"
+      }
+    },
+    "axis=side_90,woodtype=willow": {
+      "model": "column_side",
+      "y": 90,
+      "textures": {
+        "side": "forestry:blocks/wood/bark.willow",
+        "end": "forestry:blocks/wood/heart.willow"
+      }
+    },
+    "axis=side_90,woodtype=zebrawood": {
+      "model": "column_side",
+      "textures": {
+        "side": "forestry:blocks/wood/bark.zebrawood",
+        "end": "forestry:blocks/wood/heart.zebrawood"
+      },
+      "y": 90
     }
+  }
 }

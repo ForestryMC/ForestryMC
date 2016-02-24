@@ -33,7 +33,7 @@ import forestry.api.core.IStateMapperRegister;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.arboriculture.blocks.property.PropertyFruit;
-import forestry.arboriculture.render.StateMapperFluidPod;
+import forestry.arboriculture.render.FluidPodStateMapper;
 import forestry.arboriculture.tiles.TileFruitPod;
 import forestry.core.blocks.propertys.UnlistedBlockAccess;
 import forestry.core.blocks.propertys.UnlistedBlockPos;
@@ -137,7 +137,7 @@ public class BlockFruitPod extends BlockCocoa implements IStateMapperRegister {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerStateMapper() {
-		Proxies.render.registerStateMapper(this, new StateMapperFluidPod());
+		Proxies.render.registerStateMapper(this, new FluidPodStateMapper());
 	}
 
 	/* IGrowable */
