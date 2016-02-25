@@ -14,11 +14,14 @@ import java.util.Collection;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+
 import net.minecraftforge.fml.common.Optional;
+
 import forestry.core.config.Constants;
 import forestry.core.utils.ModUtil;
+import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
-import forestry.plugins.Plugin;
+import forestry.plugins.ForestryPluginUids;
 
 import buildcraft.api.statements.IStatementContainer;
 import buildcraft.api.statements.ITriggerExternal;
@@ -26,9 +29,9 @@ import buildcraft.api.statements.ITriggerInternal;
 import buildcraft.api.statements.ITriggerProvider;
 import buildcraft.api.statements.StatementManager;
 
-@Plugin(pluginID = "BC6|Statements", name = "BuildCraft 6 Statements", author = "mezz", url = Constants.URL, unlocalizedDescription = "for.plugin.buildcraft6.description")
+@ForestryPlugin(pluginID = ForestryPluginUids.BUILDCRAFT_STATEMENTS, name = "BuildCraft 6 Statements", author = "mezz", url = Constants.URL, unlocalizedDescription = "for.plugin.buildcraft6.description")
 @Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = "BuildCraftAPI|statements")
-public class PluginBuildCraftStatements extends ForestryPlugin implements ITriggerProvider {
+public class PluginBuildCraftStatements extends BlankForestryPlugin implements ITriggerProvider {
 
 	@Override
 	public boolean isAvailable() {

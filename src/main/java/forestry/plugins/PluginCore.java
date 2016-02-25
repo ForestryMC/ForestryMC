@@ -10,12 +10,16 @@
  ******************************************************************************/
 package forestry.plugins;
 
+import javax.annotation.Nonnull;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import net.minecraft.command.ICommand;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.IFuelHandler;
@@ -34,11 +38,11 @@ import forestry.core.IPickupHandler;
 import forestry.core.ISaveEventHandler;
 import forestry.core.PickupHandlerCore;
 import forestry.core.SaveEventHandlerCore;
-import forestry.core.blocks.BlockTypeCoreTesr;
 import forestry.core.blocks.BlockRegistryCore;
 import forestry.core.blocks.BlockResourceOre;
 import forestry.core.blocks.BlockResourceStorage;
 import forestry.core.blocks.BlockSoil;
+import forestry.core.blocks.BlockTypeCoreTesr;
 import forestry.core.circuits.CircuitRegistry;
 import forestry.core.circuits.SolderManager;
 import forestry.core.commands.CommandPlugins;
@@ -56,21 +60,29 @@ import forestry.core.models.RenderHandler;
 import forestry.core.multiblock.MultiblockLogicFactory;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.network.PacketRegistryCore;
-import forestry.core.proxy.Proxies;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.ForestryModEnvWarningCallable;
 
-@Plugin(pluginID = "Core", name = "Core", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.core.description")
-public class PluginCore extends ForestryPlugin {
+@ForestryPlugin(pluginID = ForestryPluginUids.CORE, name = "Core", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.core.description")
+public class PluginCore extends BlankForestryPlugin {
 	public static final RootCommand rootCommand = new RootCommand();
 	public static ItemRegistryCore items;
 	public static BlockRegistryCore blocks;
 
 	@Override
-	protected void setupAPI() {
-		super.setupAPI();
+	public boolean canBeDisabled() {
+		return false;
+	}
 
+	@Nonnull
+	@Override
+	public Set<String> getDependencyUids() {
+		return Collections.emptySet();
+	}
+
+	@Override
+	public void setupAPI() {
 		ChipsetManager.solderManager = new SolderManager();
 
 		ChipsetManager.circuitRegistry = new CircuitRegistry();
@@ -87,7 +99,7 @@ public class PluginCore extends ForestryPlugin {
 	}
 
 	@Override
-	protected void registerItemsAndBlocks() {
+	public void registerItemsAndBlocks() {
 		items = new ItemRegistryCore();
 		blocks = new BlockRegistryCore();
 	}
@@ -126,7 +138,7 @@ public class PluginCore extends ForestryPlugin {
 	}
 
 	@Override
-	protected void registerCrates() {
+	public void registerCrates() {
 		ICrateRegistry crateRegistry = StorageManager.crateRegistry;
 
 		// forestry items
@@ -197,7 +209,7 @@ public class PluginCore extends ForestryPlugin {
 	}
 
 	@Override
-	protected void registerRecipes() {
+	public void registerRecipes() {
 
 		/* SMELTING RECIPES */
 		RecipeUtil.addSmelting(blocks.resources.get(BlockResourceOre.ResourceType.APATITE, 1), items.apatite, 0.5f);

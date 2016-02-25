@@ -18,7 +18,7 @@ import net.minecraft.util.StatCollector;
 
 import forestry.core.utils.StringUtil;
 import forestry.plugins.ForestryPlugin;
-import forestry.plugins.Plugin;
+import forestry.plugins.IForestryPlugin;
 import forestry.plugins.PluginManager;
 
 /**
@@ -43,19 +43,19 @@ public class CommandPlugins extends SubCommand {
 
 	private static void listPluginsForSender(ICommandSender sender) {
 		StringBuilder pluginList = new StringBuilder();
-		for (PluginManager.Module pluginModule : PluginManager.getLoadedModules()) {
+		for (IForestryPlugin plugin : PluginManager.getLoadedPlugins()) {
 			if (pluginList.length() > 0) {
 				pluginList.append(", ");
 			}
-			pluginList.append(makeListEntry(pluginModule.instance()));
+			pluginList.append(makeListEntry(plugin));
 		}
 		CommandHelpers.sendChatMessage(sender, pluginList.toString());
 	}
 
-	private static String makeListEntry(ForestryPlugin plugin) {
+	private static String makeListEntry(IForestryPlugin plugin) {
 		String entry = plugin.isAvailable() ? EnumChatFormatting.GREEN.toString() : EnumChatFormatting.RED.toString();
 
-		Plugin info = plugin.getClass().getAnnotation(Plugin.class);
+		ForestryPlugin info = plugin.getClass().getAnnotation(ForestryPlugin.class);
 		if (info != null) {
 			entry += info.pluginID();
 			if (!info.version().isEmpty()) {
@@ -84,27 +84,27 @@ public class CommandPlugins extends SubCommand {
 			}
 		}
 
-		private static void listPluginInfoForSender(ICommandSender sender, String plugin) throws CommandException {
-			ForestryPlugin found = null;
-			for (PluginManager.Module pluginModule : PluginManager.getLoadedModules()) {
-				Plugin info = pluginModule.instance().getClass().getAnnotation(Plugin.class);
+		private static void listPluginInfoForSender(ICommandSender sender, String pluginUid) throws CommandException {
+			IForestryPlugin found = null;
+			for (IForestryPlugin plugin : PluginManager.getLoadedPlugins()) {
+				ForestryPlugin info = plugin.getClass().getAnnotation(ForestryPlugin.class);
 				if (info == null) {
 					continue;
 				}
 
-				if ((info.pluginID().equalsIgnoreCase(plugin) || info.name().equalsIgnoreCase(plugin))) {
-					found = pluginModule.instance();
+				if ((info.pluginID().equalsIgnoreCase(pluginUid) || info.name().equalsIgnoreCase(pluginUid))) {
+					found = plugin;
 					break;
 				}
 			}
 
 			if (found == null) {
-				throw new CommandException(StringUtil.localizeAndFormat("chat.plugins.error", plugin));
+				throw new CommandException(StringUtil.localizeAndFormat("chat.plugins.error", pluginUid));
 			}
 
 			EnumChatFormatting formatting = found.isAvailable() ? EnumChatFormatting.GREEN : EnumChatFormatting.RED;
 
-			Plugin info = found.getClass().getAnnotation(Plugin.class);
+			ForestryPlugin info = found.getClass().getAnnotation(ForestryPlugin.class);
 			if (info != null) {
 				CommandHelpers.sendChatMessage(sender, formatting + "Plugin: " + info.name());
 				if (!info.version().isEmpty()) {

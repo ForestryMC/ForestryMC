@@ -12,17 +12,20 @@ package forestry.plugins.compat;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
 import net.minecraftforge.fml.common.registry.GameRegistry;
+
 import forestry.core.config.Constants;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.ModUtil;
+import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
-import forestry.plugins.Plugin;
+import forestry.plugins.ForestryPluginUids;
 import forestry.plugins.PluginCore;
 
-@Plugin(pluginID = "BC6|Transport", name = "BuildCraft 6 Transport", author = "mezz", url = Constants.URL, unlocalizedDescription = "for.plugin.buildcraft6.description")
-public class PluginBuildCraftTransport extends ForestryPlugin {
+@ForestryPlugin(pluginID = ForestryPluginUids.BUILDCRAFT_TRANSPORT, name = "BuildCraft 6 Transport", author = "mezz", url = Constants.URL, unlocalizedDescription = "for.plugin.buildcraft6.description")
+public class PluginBuildCraftTransport extends BlankForestryPlugin {
 
 	private static final String BCT = "BuildCraft|Transport";
 
@@ -37,7 +40,7 @@ public class PluginBuildCraftTransport extends ForestryPlugin {
 	}
 
 	@Override
-	protected void registerRecipes() {
+	public void registerRecipes() {
 		Item beeswax = PluginCore.items.beeswax;
 		Item pipeWaterproof = GameRegistry.findItem(BCT, "pipeWaterproof");
 		if (pipeWaterproof != null) {

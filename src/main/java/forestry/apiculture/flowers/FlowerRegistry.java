@@ -217,7 +217,7 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 			meta = block.getMetaFromState(world.getBlockState(pos));
 		}
 
-		/*if (PluginManager.Module.AGRICRAFT.isEnabled()) {
+		/*if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.AGRICRAFT)) {
 			Block cropBlock = GameRegistry.findBlock("AgriCraft", "crops");
 			if (block == cropBlock) {
 				if (block instanceof IPlantable) {

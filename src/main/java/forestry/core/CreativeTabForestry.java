@@ -13,23 +13,26 @@ package forestry.core;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
 import net.minecraftforge.fml.common.registry.GameRegistry;
+
+import forestry.api.core.ForestryAPI;
 import forestry.api.core.Tabs;
+import forestry.plugins.ForestryPluginUids;
 import forestry.plugins.PluginCore;
-import forestry.plugins.PluginManager;
 
 public class CreativeTabForestry extends CreativeTabs {
 
 	static {
-		if (PluginManager.Module.APICULTURE.isEnabled()) {
+		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.APICULTURE)) {
 			Tabs.tabApiculture = new CreativeTabForestry(1, "apiculture");
 		}
 
-		if (PluginManager.Module.ARBORICULTURE.isEnabled()) {
+		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.ARBORICULTURE)) {
 			Tabs.tabArboriculture = new CreativeTabForestry(2, "arboriculture");
 		}
 
-		if (PluginManager.Module.LEPIDOPTEROLOGY.isEnabled()) {
+		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.LEPIDOPTEROLOGY)) {
 			Tabs.tabLepidopterology = new CreativeTabForestry(3, "lepidopterology");
 		}
 	}

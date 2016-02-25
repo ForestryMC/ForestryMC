@@ -11,6 +11,7 @@
 package forestry.plugins;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -19,6 +20,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.WeightedRandomChestContent;
+
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.MinecraftForge;
@@ -41,9 +43,9 @@ import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
 import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.WoodItemAccess;
-import forestry.arboriculture.blocks.BlockTypeArboricultureTesr;
 import forestry.arboriculture.blocks.BlockFruitPod;
 import forestry.arboriculture.blocks.BlockRegistryArboriculture;
+import forestry.arboriculture.blocks.BlockTypeArboricultureTesr;
 import forestry.arboriculture.commands.CommandTree;
 import forestry.arboriculture.genetics.TreeBranchDefinition;
 import forestry.arboriculture.genetics.TreeDefinition;
@@ -68,11 +70,12 @@ import forestry.core.genetics.alleles.AllelePlantType;
 import forestry.core.items.ItemFruit.EnumFruit;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.recipes.RecipeUtil;
+import forestry.core.utils.IMCUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.factory.recipes.FabricatorRecipe;
 
-@Plugin(pluginID = "Arboriculture", name = "Arboriculture", author = "Binnie & SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.arboriculture.description")
-public class PluginArboriculture extends ForestryPlugin {
+@ForestryPlugin(pluginID = ForestryPluginUids.ARBORICULTURE, name = "Arboriculture", author = "Binnie & SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.arboriculture.description")
+public class PluginArboriculture extends BlankForestryPlugin {
 
 	@SidedProxy(clientSide = "forestry.arboriculture.proxy.ProxyArboricultureClient", serverSide = "forestry.arboriculture.proxy.ProxyArboriculture")
 	public static ProxyArboriculture proxy;
@@ -84,9 +87,7 @@ public class PluginArboriculture extends ForestryPlugin {
 	public static BlockRegistryArboriculture blocks;
 
 	@Override
-	protected void setupAPI() {
-		super.setupAPI();
-
+	public void setupAPI() {
 		TreeManager.treeFactory = new TreeFactory();
 		TreeManager.treeMutationFactory = new TreeMutationFactory();
 
@@ -105,7 +106,7 @@ public class PluginArboriculture extends ForestryPlugin {
 	}
 
 	@Override
-	protected void registerItemsAndBlocks() {
+	public void registerItemsAndBlocks() {
 		items = new ItemRegistryArboriculture();
 		blocks = new BlockRegistryArboriculture();
 	}
@@ -186,7 +187,7 @@ public class PluginArboriculture extends ForestryPlugin {
 	}
 
 	@Override
-	protected void registerCrates() {
+	public void registerCrates() {
 		ICrateRegistry crateRegistry = StorageManager.crateRegistry;
 		crateRegistry.registerCrate(EnumFruit.CHERRY.getStack(), "cratedCherry");
 		crateRegistry.registerCrate(EnumFruit.WALNUT.getStack(), "cratedWalnut");
@@ -198,7 +199,7 @@ public class PluginArboriculture extends ForestryPlugin {
 	}
 
 	@Override
-	protected void registerRecipes() {
+	public void registerRecipes() {
 
 		RecipeUtil.addSmelting(new ItemStack(blocks.logs, 1, OreDictionary.WILDCARD_VALUE), new ItemStack(Items.coal, 1, 1), 0.15F);
 
@@ -266,7 +267,7 @@ public class PluginArboriculture extends ForestryPlugin {
 					'#', fireproofPlanks.copy());
 
 			// Fabricator recipes
-			if (PluginManager.Module.FACTORY.isEnabled() && PluginManager.Module.APICULTURE.isEnabled()) {
+			if (ForestryAPI.enabledPlugins.containsAll(Arrays.asList(ForestryPluginUids.FACTORY, ForestryPluginUids.APICULTURE))) {
 				logs.stackSize = 1;
 				fireproofLogs.stackSize = 1;
 				RecipeManagers.fabricatorManager.addRecipe(new FabricatorRecipe(null, Fluids.GLASS.getFluid(500), fireproofLogs.copy(), new Object[]{
@@ -287,7 +288,7 @@ public class PluginArboriculture extends ForestryPlugin {
 			}
 		}
 
-		if (PluginManager.Module.FACTORY.isEnabled()) {
+		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FACTORY)) {
 			// Treealyzer
 			RecipeManagers.carpenterManager.addRecipe(100, Fluids.WATER.getFluid(2000), null, items.treealyzer.getItemStack(), "X#X", "X#X", "RDR",
 					'#', "paneGlass",
@@ -380,7 +381,7 @@ public class PluginArboriculture extends ForestryPlugin {
 			if (block != null && block != Blocks.air) {
 				validFences.add(block);
 			} else {
-				logInvalidIMCMessage(message);
+				IMCUtil.logInvalidIMCMessage(message);
 			}
 			return true;
 		}
@@ -396,7 +397,7 @@ public class PluginArboriculture extends ForestryPlugin {
 		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Larch.getMemberStack(EnumGermlingType.SAPLING), 1, 2, 4));
 		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Lime.getMemberStack(EnumGermlingType.SAPLING), 1, 2, 4));
 
-		if (PluginManager.Module.APICULTURE.isEnabled()) {
+		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.APICULTURE)) {
 			ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Oak.getMemberStack(EnumGermlingType.POLLEN), 2, 3, 4));
 			ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Spruce.getMemberStack(EnumGermlingType.POLLEN), 2, 3, 4));
 			ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Birch.getMemberStack(EnumGermlingType.POLLEN), 2, 3, 4));

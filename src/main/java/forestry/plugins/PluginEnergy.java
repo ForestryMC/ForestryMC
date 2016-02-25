@@ -12,16 +12,18 @@ package forestry.plugins;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+
 import net.minecraftforge.fml.common.SidedProxy;
+
 import forestry.api.core.ForestryAPI;
 import forestry.core.config.Constants;
 import forestry.core.recipes.RecipeUtil;
-import forestry.energy.blocks.BlockTypeEngine;
 import forestry.energy.blocks.BlockRegistryEnergy;
+import forestry.energy.blocks.BlockTypeEngine;
 import forestry.energy.proxy.ProxyEnergy;
 
-@Plugin(pluginID = "Energy", name = "Energy", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.energy.description")
-public class PluginEnergy extends ForestryPlugin {
+@ForestryPlugin(pluginID = ForestryPluginUids.ENERGY, name = "Energy", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.energy.description")
+public class PluginEnergy extends BlankForestryPlugin {
 
 	@SidedProxy(clientSide = "forestry.energy.proxy.ProxyEnergyClient", serverSide = "forestry.energy.proxy.ProxyEnergy")
 	public static ProxyEnergy proxy;
@@ -29,7 +31,7 @@ public class PluginEnergy extends ForestryPlugin {
 	public static BlockRegistryEnergy blocks;
 
 	@Override
-	protected void registerItemsAndBlocks() {
+	public void registerItemsAndBlocks() {
 		blocks = new BlockRegistryEnergy();
 	}
 
@@ -51,7 +53,7 @@ public class PluginEnergy extends ForestryPlugin {
 	}
 
 	@Override
-	protected void registerRecipes() {
+	public void registerRecipes() {
 		super.registerRecipes();
 
 		RecipeUtil.addRecipe(blocks.engine.get(BlockTypeEngine.PEAT),

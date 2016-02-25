@@ -12,14 +12,16 @@ package forestry.plugins.compat;
 
 import com.google.common.collect.ImmutableList;
 
-import forestry.core.config.Constants;
-import forestry.core.utils.ModUtil;
-import forestry.plugins.ForestryPlugin;
-import forestry.plugins.Plugin;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 
-@Plugin(pluginID = "Chisel", name = "Chisel", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.plugin.chisel.description")
-public class PluginChisel extends ForestryPlugin {
+import forestry.core.config.Constants;
+import forestry.core.utils.ModUtil;
+import forestry.plugins.BlankForestryPlugin;
+import forestry.plugins.ForestryPlugin;
+import forestry.plugins.ForestryPluginUids;
+
+@ForestryPlugin(pluginID = ForestryPluginUids.CHISEL, name = "Chisel", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.plugin.chisel.description")
+public class PluginChisel extends BlankForestryPlugin {
 
 	private static final String Chisel = "chisel";
 
@@ -34,7 +36,7 @@ public class PluginChisel extends ForestryPlugin {
 	}
 
 	@Override
-	protected void registerRecipes() {
+	public void registerRecipes() {
 
 		ImmutableList<String> worldgenBlocks = ImmutableList.of(
 				"granite",

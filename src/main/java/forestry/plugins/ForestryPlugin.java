@@ -1,135 +1,54 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright 2011-2014 SirSengir
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
 package forestry.plugins;
 
-import java.util.EnumSet;
-import java.util.Random;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
-import net.minecraft.command.ICommand;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.IChunkProvider;
-import net.minecraftforge.fml.common.IFuelHandler;
-import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
-import forestry.core.IPickupHandler;
-import forestry.core.IResupplyHandler;
-import forestry.core.ISaveEventHandler;
-import forestry.core.network.IPacketRegistry;
-import forestry.core.network.PacketRegistryDummy;
-import forestry.core.utils.Log;
+/**
+ * Optional annotation to provide additional information on IPlugins. This information will be available via the "/forestry plugin info $pluginID" command ingame.
+ *
+ * @author SirSengir
+ */
+@Retention(RetentionPolicy.RUNTIME)
+public @interface ForestryPlugin {
 
-public abstract class ForestryPlugin {
+	/**
+	 * @return Unique identifier for the plugin, no spaces!
+	 */
+	String pluginID();
 
-	public boolean isAvailable() {
-		return true;
-	}
+	/**
+	 * @return Nice and readable plugin name.
+	 */
+	String name();
 
-	public String getFailMessage() {
-		return "";
-	}
+	/**
+	 * @return ForestryPlugin author's name.
+	 */
+	String author() default "";
 
-	public EnumSet<PluginManager.Module> getDependancies() {
-		return EnumSet.of(PluginManager.Module.CORE);
-	}
+	/**
+	 * @return URL of plugin homepage.
+	 */
+	String url() default "";
 
-	protected void setupAPI() {
-	}
+	/**
+	 * @return Version of the plugin, if any.
+	 */
+	String version() default "";
 
-	protected void disabledSetupAPI() {
-	}
+	/**
+	 * @return Localization key for a short description what the plugin does.
+	 */
+	String unlocalizedDescription() default "";
 
-	protected void registerItemsAndBlocks() {
-	}
-
-	protected void preInit() {
-	}
-
-	protected void registerTriggers() {
-	}
-
-	protected void registerBackpackItems() {
-	}
-
-	protected void registerCrates() {
-	}
-
-	protected void doInit() {
-	}
-
-	protected void registerRecipes() {
-	}
-
-	protected void postInit() {
-	}
-
-	public boolean processIMCMessage(IMCMessage message) {
-		return false;
-	}
-
-	protected static String getInvalidIMCMessageText(IMCMessage message) {
-		final Object messageValue;
-		if (message.isItemStackMessage()) {
-			messageValue = message.getItemStackValue().toString();
-		} else if (message.isNBTMessage()) {
-			messageValue = message.getNBTValue();
-		} else if (message.isStringMessage()) {
-			messageValue = message.getStringValue();
-		} else {
-			messageValue = "";
-		}
-
-		return String.format("Received an invalid '%s' request '%s' from mod '%s'. Please contact the author and report this issue.", message.key, messageValue, message.getSender());
-	}
-
-	protected static void logInvalidIMCMessage(IMCMessage message) {
-		String invalidIMCMessageText = getInvalidIMCMessageText(message);
-		Log.warning(invalidIMCMessageText);
-	}
-
-	public ISaveEventHandler getSaveEventHandler() {
-		return null;
-	}
-
-	public void populateChunk(IChunkProvider chunkProvider, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGeneratedZ) {
-	}
-
-	public void populateChunkRetroGen(World world, Random rand, int chunkX, int chunkZ) {
-	}
-
-	public IPacketRegistry getPacketRegistry() {
-		return PacketRegistryDummy.instance;
-	}
-
-	public IPickupHandler getPickupHandler() {
-		return null;
-	}
-
-	public IResupplyHandler getResupplyHandler() {
-		return null;
-	}
-
-	public ICommand[] getConsoleCommands() {
-		return null;
-	}
-	
-	public IFuelHandler getFuelHandler() {
-		return null;
-	}
-
-	@Override
-	public String toString() {
-		Plugin info = getClass().getAnnotation(Plugin.class);
-		if (info == null) {
-			return getClass().getSimpleName();
-		}
-		return info.name() + " Plugin";
-	}
+	/**
+	 * @return Not used (yet?).
+	 */
+	String help() default "";
 
 }

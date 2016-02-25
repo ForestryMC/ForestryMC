@@ -32,8 +32,8 @@ import forestry.api.fuels.RainSubstrate;
 import forestry.api.recipes.ICraftingProvider;
 import forestry.api.recipes.RecipeManagers;
 import forestry.apiculture.items.ItemRegistryApiculture;
-import forestry.core.blocks.BlockTypeCoreTesr;
 import forestry.core.blocks.BlockSoil;
+import forestry.core.blocks.BlockTypeCoreTesr;
 import forestry.core.circuits.Circuit;
 import forestry.core.circuits.CircuitLayout;
 import forestry.core.circuits.EnumCircuitBoardType;
@@ -48,9 +48,9 @@ import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.datastructures.FluidMap;
 import forestry.core.utils.datastructures.ItemStackMap;
 import forestry.factory.DummyManagers;
+import forestry.factory.blocks.BlockRegistryFactory;
 import forestry.factory.blocks.BlockTypeFactoryPlain;
 import forestry.factory.blocks.BlockTypeFactoryTesr;
-import forestry.factory.blocks.BlockRegistryFactory;
 import forestry.factory.circuits.CircuitSpeedUpgrade;
 import forestry.factory.network.PacketRegistryFactory;
 import forestry.factory.recipes.CarpenterRecipeManager;
@@ -63,14 +63,12 @@ import forestry.factory.recipes.SqueezerRecipeManager;
 import forestry.factory.recipes.StillRecipeManager;
 import forestry.factory.triggers.FactoryTriggers;
 
-@Plugin(pluginID = "Factory", name = "Factory", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.factory.description")
-public class PluginFactory extends ForestryPlugin {
+@ForestryPlugin(pluginID = ForestryPluginUids.FACTORY, name = "Factory", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.factory.description")
+public class PluginFactory extends BlankForestryPlugin {
 	public static BlockRegistryFactory blocks;
 
 	@Override
-	protected void setupAPI() {
-		super.setupAPI();
-
+	public void setupAPI() {
 		RecipeManagers.craftingProviders = ImmutableList.<ICraftingProvider>of(
 				RecipeManagers.carpenterManager = new CarpenterRecipeManager(),
 				RecipeManagers.centrifugeManager = new CentrifugeRecipeManager(),
@@ -86,9 +84,7 @@ public class PluginFactory extends ForestryPlugin {
 	}
 
 	@Override
-	protected void disabledSetupAPI() {
-		super.disabledSetupAPI();
-
+	public void disabledSetupAPI() {
 		RecipeManagers.craftingProviders = ImmutableList.<ICraftingProvider>of(
 				RecipeManagers.carpenterManager = new DummyManagers.DummyCarpenterManager(),
 				RecipeManagers.centrifugeManager = new DummyManagers.DummyCentrifugeManager(),
@@ -113,7 +109,7 @@ public class PluginFactory extends ForestryPlugin {
 	}
 
 	@Override
-	protected void registerItemsAndBlocks() {
+	public void registerItemsAndBlocks() {
 		blocks = new BlockRegistryFactory();
 	}
 
@@ -183,7 +179,7 @@ public class PluginFactory extends ForestryPlugin {
 	}
 
 	@Override
-	protected void registerTriggers() {
+	public void registerTriggers() {
 		FactoryTriggers.initialize();
 	}
 
@@ -200,7 +196,7 @@ public class PluginFactory extends ForestryPlugin {
 	}
 
 	@Override
-	protected void registerRecipes() {
+	public void registerRecipes() {
 
 		// / FABRICATOR
 		ItemElectronTube electronTube = PluginCore.items.tubes;
@@ -233,7 +229,7 @@ public class PluginFactory extends ForestryPlugin {
 		String[] dyes = {"dyeBlack", "dyeRed", "dyeGreen", "dyeBrown", "dyeBlue", "dyePurple", "dyeCyan", "dyeLightGray", "dyeGray", "dyePink", "dyeLime",
 				"dyeYellow", "dyeLightBlue", "dyeMagenta", "dyeOrange", "dyeWhite"};
 
-		if (PluginManager.Module.APICULTURE.isEnabled()) {
+		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.APICULTURE)) {
 			ItemRegistryApiculture beeItems = PluginApiculture.items;
 			FluidStack liquidGlass = Fluids.GLASS.getFluid(Constants.BUCKET_VOLUME);
 			FluidStack liquidGlassX4 = Fluids.GLASS.getFluid(Constants.BUCKET_VOLUME * 4);
@@ -414,7 +410,7 @@ public class PluginFactory extends ForestryPlugin {
 		RecipeManagers.carpenterManager.addRecipe(null, PluginCore.items.ingotBronze.getItemStack(), "#", '#', PluginCore.items.brokenBronzeShovel);
 
 		// Crating and uncrating
-		if (PluginManager.Module.STORAGE.isEnabled()) {
+		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.STORAGE)) {
 			PluginStorage.createCrateRecipes();
 		}
 		ICircuitLayout layout = ChipsetManager.circuitRegistry.getLayout("forestry.machine.upgrade");

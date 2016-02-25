@@ -10,15 +10,6 @@
  ******************************************************************************/
 package forestry.core.models;
 
-import forestry.api.core.ForestryAPI;
-import forestry.api.core.IModelManager;
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelBaker;
-import forestry.api.core.IStateMapperRegister;
-import forestry.core.utils.StringUtil;
-import forestry.plugins.ForestryPlugin;
-import forestry.plugins.PluginManager;
-import forestry.plugins.PluginManager.Module;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.resources.model.ModelBakery;
@@ -26,10 +17,18 @@ import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.core.ForestryAPI;
+import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelBaker;
+import forestry.api.core.IModelManager;
+import forestry.api.core.IStateMapperRegister;
+import forestry.core.utils.StringUtil;
 
 @SideOnly(Side.CLIENT)
 public class ModelManager implements IModelManager {
@@ -75,38 +74,22 @@ public class ModelManager implements IModelManager {
 	}
 
 	public static void registerModels() {
-		for(Module module : PluginManager.getLoadedModules()){
-			ForestryPlugin plugin = module.instance();
-			
-			for (Block block : GameData.getBlockRegistry()) {
-				if (block != null) {
-					if (block instanceof IItemModelRegister) {
-						((IItemModelRegister) block).registerModel(Item.getItemFromBlock(block), getInstance());
-					}
-				}
-
+		for (Block block : GameData.getBlockRegistry()) {
+			if (block instanceof IItemModelRegister) {
+				((IItemModelRegister) block).registerModel(Item.getItemFromBlock(block), getInstance());
 			}
-			for (Item item : GameData.getItemRegistry()) {
-				if (item != null) {
-					if (item instanceof IItemModelRegister) {
-						((IItemModelRegister) item).registerModel(item, getInstance());
-					}
-				}
+		}
+		for (Item item : GameData.getItemRegistry()) {
+			if (item instanceof IItemModelRegister) {
+				((IItemModelRegister) item).registerModel(item, getInstance());
 			}
 		}
 	}
 	
 	public static void registerStateMappers(){
-		for(Module module : PluginManager.getLoadedModules()){
-			ForestryPlugin plugin = module.instance();
-			
-			for (Block block : GameData.getBlockRegistry()) {
-				if (block != null) {
-					if (block instanceof IStateMapperRegister) {
-						((IStateMapperRegister) block).registerStateMapper();
-					}
-				}
-
+		for (Block block : GameData.getBlockRegistry()) {
+			if (block instanceof IStateMapperRegister) {
+				((IStateMapperRegister) block).registerStateMapper();
 			}
 		}
 	}

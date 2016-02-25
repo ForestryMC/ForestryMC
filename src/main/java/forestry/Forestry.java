@@ -30,6 +30,7 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry.Type;
+
 import forestry.api.core.ForestryAPI;
 import forestry.core.EventHandlerCore;
 import forestry.core.config.Config;
@@ -92,7 +93,7 @@ public class Forestry {
 		configFolder = new File(event.getModConfigurationDirectory(), "forestry");
 		Config.load();
 
-		PluginManager.runSetup();
+		PluginManager.runSetup(event);
 
 		ForestryAPI.activeMode = new GameMode(Config.gameMode);
 

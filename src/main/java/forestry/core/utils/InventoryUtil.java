@@ -27,11 +27,12 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
-import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.oredict.OreDictionary;
 
+import forestry.api.core.ForestryAPI;
 import forestry.core.circuits.ISocketable;
 import forestry.core.inventory.filters.ArrayStackFilter;
 import forestry.core.inventory.filters.IStackFilter;
@@ -42,7 +43,7 @@ import forestry.core.inventory.wrappers.InventoryCopy;
 import forestry.core.inventory.wrappers.InventoryIterator;
 import forestry.core.inventory.wrappers.SidedInventoryMapper;
 import forestry.core.tiles.AdjacentTileCache;
-import forestry.plugins.PluginManager;
+import forestry.plugins.ForestryPluginUids;
 
 import buildcraft.api.transport.IPipeTile;
 
@@ -254,7 +255,7 @@ public abstract class InventoryUtil {
 	}
 
 	public static boolean moveOneItemToPipe(IInventory source, AdjacentTileCache tileCache, EnumFacing[] directions) {
-		if (PluginManager.Module.BUILDCRAFT_TRANSPORT.isEnabled()) {
+		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.BUILDCRAFT_TRANSPORT)) {
 			return internal_moveOneItemToPipe(source, tileCache, directions);
 		}
 

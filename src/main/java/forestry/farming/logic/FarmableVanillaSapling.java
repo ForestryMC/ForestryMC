@@ -20,9 +20,10 @@ import net.minecraft.world.World;
 
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.TreeManager;
+import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.IIndividual;
 import forestry.core.utils.GeneticsUtil;
-import forestry.plugins.PluginManager;
+import forestry.plugins.ForestryPluginUids;
 
 public class FarmableVanillaSapling extends FarmableGenericSapling {
 
@@ -32,7 +33,7 @@ public class FarmableVanillaSapling extends FarmableGenericSapling {
 
 	@Override
 	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
-		if (PluginManager.Module.ARBORICULTURE.isEnabled()) {
+		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.ARBORICULTURE)) {
 			IIndividual tree = GeneticsUtil.getGeneticEquivalent(germling);
 			if (!(tree instanceof ITree)) {
 				return false;

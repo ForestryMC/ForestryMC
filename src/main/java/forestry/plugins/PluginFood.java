@@ -26,13 +26,13 @@ import forestry.food.InfuserMixtureManager;
 import forestry.food.items.EnumBeverage;
 import forestry.food.items.ItemRegistryFood;
 
-@Plugin(pluginID = "Food", name = "Food", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.food.description")
-public class PluginFood extends ForestryPlugin {
+@ForestryPlugin(pluginID = ForestryPluginUids.FOOD, name = "Food", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.food.description")
+public class PluginFood extends BlankForestryPlugin {
 
 	public static ItemRegistryFood items;
 
 	@Override
-	protected void setupAPI() {
+	public void setupAPI() {
 		super.setupAPI();
 
 		// Init seasoner
@@ -41,14 +41,12 @@ public class PluginFood extends ForestryPlugin {
 	}
 
 	@Override
-	protected void registerItemsAndBlocks() {
+	public void registerItemsAndBlocks() {
 		items = new ItemRegistryFood();
 	}
 
 	@Override
-	protected void preInit() {
-		super.preInit();
-
+	public void preInit() {
 		LiquidRegistryHelper.registerLiquidContainer(Fluids.SHORT_MEAD, Constants.BUCKET_VOLUME, items.beverage.get(EnumBeverage.MEAD_SHORT, 1), new ItemStack(Items.glass_bottle));
 
 		ItemRegistryApiculture beeItems = PluginApiculture.items;
@@ -64,7 +62,7 @@ public class PluginFood extends ForestryPlugin {
 	}
 
 	@Override
-	protected void registerRecipes() {
+	public void registerRecipes() {
 		// INFUSER
 		RecipeUtil.addRecipe(items.infuser.getItemStack(),
 				"X", "#", "X",

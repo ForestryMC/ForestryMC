@@ -18,12 +18,14 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 
 import forestry.api.arboriculture.TreeManager;
+import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IIndividual;
 import forestry.core.config.Constants;
@@ -44,7 +46,7 @@ import forestry.core.network.packets.PacketItemStackDisplay;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.InventoryUtil;
-import forestry.plugins.PluginManager;
+import forestry.plugins.ForestryPluginUids;
 
 public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiquidTankTile, IFluidHandler, IItemStackDisplay {
 	private static final int TIME_TO_ANALYZE = 125;
@@ -205,7 +207,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 			return;
 		}
 
-		if (PluginManager.Module.ARBORICULTURE.isEnabled() && !TreeManager.treeRoot.isMember(inputStack)) {
+		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.ARBORICULTURE) && !TreeManager.treeRoot.isMember(inputStack)) {
 			ItemStack ersatz = GeneticsUtil.convertSaplingToGeneticEquivalent(inputStack);
 			if (ersatz != null) {
 				inputStack = ersatz;

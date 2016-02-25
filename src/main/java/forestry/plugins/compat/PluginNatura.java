@@ -17,6 +17,7 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
@@ -34,13 +35,13 @@ import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.ModUtil;
 import forestry.farming.logic.FarmableGenericCrop;
+import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
-import forestry.plugins.Plugin;
+import forestry.plugins.ForestryPluginUids;
 import forestry.plugins.PluginCore;
-import forestry.plugins.PluginManager;
 
-@Plugin(pluginID = "Natura", name = "Natura", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.natura.description")
-public class PluginNatura extends ForestryPlugin {
+@ForestryPlugin(pluginID = ForestryPluginUids.NATURA, name = "Natura", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.natura.description")
+public class PluginNatura extends BlankForestryPlugin {
 
 	private static final String NATURA = "Natura";
 
@@ -115,7 +116,7 @@ public class PluginNatura extends ForestryPlugin {
 	}
 
 	@Override
-	protected void registerCrates() {
+	public void registerCrates() {
 		super.registerCrates();
 
 		ICrateRegistry crateRegistry = StorageManager.crateRegistry;
@@ -202,7 +203,7 @@ public class PluginNatura extends ForestryPlugin {
 	}
 
 	@Override
-	protected void registerRecipes() {
+	public void registerRecipes() {
 		Item seed = GameRegistry.findItem(NATURA, "barley.seed");
 		ItemStack seedBarley = new ItemStack(seed, 1, 0);
 		ItemStack seedCotton = new ItemStack(seed, 1, 1);
@@ -221,7 +222,7 @@ public class PluginNatura extends ForestryPlugin {
 			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{aSeedList}, Fluids.SEEDOIL.getFluid(amount));
 		}
 
-		if(PluginManager.Module.FARMING.isEnabled()){
+		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FARMING)) {
 			Block cropBlock = GameRegistry.findBlock(NATURA, "N Crops");
 			Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(seedBarley, cropBlock, 3));
 			Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(seedCotton, cropBlock, 8));

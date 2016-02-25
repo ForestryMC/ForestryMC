@@ -13,6 +13,7 @@ package forestry.storage.items;
 import net.minecraft.item.Item;
 
 import forestry.api.apiculture.BeeManager;
+import forestry.api.core.ForestryAPI;
 import forestry.api.core.Tabs;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.storage.BackpackManager;
@@ -20,7 +21,7 @@ import forestry.api.storage.EnumBackpackType;
 import forestry.api.storage.IBackpackDefinition;
 import forestry.core.items.ItemCrated;
 import forestry.core.items.ItemRegistry;
-import forestry.plugins.PluginManager;
+import forestry.plugins.ForestryPluginUids;
 
 public class ItemRegistryStorage extends ItemRegistry {
 	public final ItemCrated crate;
@@ -46,7 +47,7 @@ public class ItemRegistryStorage extends ItemRegistry {
 		// BACKPACKS
 		IBackpackDefinition definition;
 		
-		if (PluginManager.Module.APICULTURE.isEnabled()) {
+		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.APICULTURE)) {
 			definition = BackpackManager.definitions.get("apiarist");
 			apiaristBackpack = new ItemBackpackNaturalist(BeeManager.beeRoot, definition, EnumBackpackType.APIARIST);
 			apiaristBackpack.setCreativeTab(Tabs.tabApiculture);
@@ -55,7 +56,7 @@ public class ItemRegistryStorage extends ItemRegistry {
 			apiaristBackpack = null;
 		}
 		
-		if (PluginManager.Module.LEPIDOPTEROLOGY.isEnabled()) {
+		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.LEPIDOPTEROLOGY)) {
 			definition = BackpackManager.definitions.get("lepidopterist");
 			lepidopteristBackpack = new ItemBackpackNaturalist(ButterflyManager.butterflyRoot, definition, EnumBackpackType.APIARIST);
 			lepidopteristBackpack.setCreativeTab(Tabs.tabLepidopterology);

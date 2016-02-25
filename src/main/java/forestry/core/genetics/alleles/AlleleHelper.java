@@ -17,6 +17,7 @@ import java.util.Map;
 
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.arboriculture.EnumTreeChromosome;
+import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IAllele;
@@ -28,7 +29,7 @@ import forestry.api.lepidopterology.EnumButterflyChromosome;
 import forestry.apiculture.flowers.FlowerProvider;
 import forestry.core.config.Constants;
 import forestry.core.utils.vect.IVect;
-import forestry.plugins.PluginManager;
+import forestry.plugins.ForestryPluginUids;
 
 public class AlleleHelper implements IAlleleHelper {
 
@@ -38,12 +39,12 @@ public class AlleleHelper implements IAlleleHelper {
 	private final Map<Class, Map<?, ? extends IAllele>> alleleMaps = new HashMap<>();
 
 	public void init() {
-		if (PluginManager.Module.APICULTURE.isEnabled()) {
+		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.APICULTURE)) {
 			createAlleles(EnumAllele.Fertility.class, EnumBeeChromosome.FERTILITY);
 			createAlleles(EnumAllele.Flowering.class, EnumBeeChromosome.FLOWERING);
 		}
 
-		if (PluginManager.Module.APICULTURE.isEnabled() || PluginManager.Module.ARBORICULTURE.isEnabled()) {
+		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.APICULTURE) || ForestryAPI.enabledPlugins.contains(ForestryPluginUids.ARBORICULTURE)) {
 			createAlleles(EnumAllele.Territory.class,
 					EnumBeeChromosome.TERRITORY,
 					EnumTreeChromosome.TERRITORY
@@ -52,7 +53,7 @@ public class AlleleHelper implements IAlleleHelper {
 			AlleleManager.alleleRegistry.registerDeprecatedAlleleReplacement("forestry.territoryDefault", get(EnumAllele.Territory.AVERAGE));
 		}
 
-		if (PluginManager.Module.APICULTURE.isEnabled() || PluginManager.Module.LEPIDOPTEROLOGY.isEnabled()) {
+		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.APICULTURE) || ForestryAPI.enabledPlugins.contains(ForestryPluginUids.LEPIDOPTEROLOGY)) {
 			createAlleles(EnumAllele.Speed.class,
 					EnumBeeChromosome.SPEED,
 					EnumButterflyChromosome.SPEED
@@ -75,7 +76,7 @@ public class AlleleHelper implements IAlleleHelper {
 			AlleleManager.alleleRegistry.registerDeprecatedAlleleReplacement("forestry.speedNorm", get(EnumAllele.Speed.NORMAL));
 		}
 
-		if (PluginManager.Module.ARBORICULTURE.isEnabled()) {
+		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.ARBORICULTURE)) {
 			createAlleles(EnumAllele.Height.class, EnumTreeChromosome.HEIGHT);
 			createAlleles(EnumAllele.Saplings.class, EnumTreeChromosome.FERTILITY);
 			createAlleles(EnumAllele.Yield.class, EnumTreeChromosome.YIELD);
@@ -97,7 +98,7 @@ public class AlleleHelper implements IAlleleHelper {
 			AlleleManager.alleleRegistry.registerDeprecatedAlleleReplacement("forestry.maturityFastest", get(EnumAllele.Maturation.FASTEST));
 		}
 
-		if (PluginManager.Module.LEPIDOPTEROLOGY.isEnabled()) {
+		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.LEPIDOPTEROLOGY)) {
 			createAlleles(EnumAllele.Size.class, EnumButterflyChromosome.SIZE);
 		}
 

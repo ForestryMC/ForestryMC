@@ -65,9 +65,9 @@ import forestry.api.storage.StorageManager;
 import forestry.apiculture.ArmorApiaristHelper;
 import forestry.apiculture.SaveEventHandlerApiculture;
 import forestry.apiculture.blocks.BlockAlveary;
-import forestry.apiculture.blocks.BlockTypeApiculture;
 import forestry.apiculture.blocks.BlockCandle;
 import forestry.apiculture.blocks.BlockRegistryApiculture;
+import forestry.apiculture.blocks.BlockTypeApiculture;
 import forestry.apiculture.blocks.BlockTypeApicultureTesr;
 import forestry.apiculture.commands.CommandBee;
 import forestry.apiculture.entities.EntityMinecartApiary;
@@ -113,14 +113,15 @@ import forestry.core.items.EnumElectronTube;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.EntityUtil;
+import forestry.core.utils.IMCUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.Stack;
 import forestry.core.utils.StringUtil;
 import forestry.food.items.ItemRegistryFood;
 
-@Plugin(pluginID = "Apiculture", name = "Apiculture", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.apiculture.description")
-public class PluginApiculture extends ForestryPlugin {
+@ForestryPlugin(pluginID = ForestryPluginUids.APICULTURE, name = "Apiculture", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.apiculture.description")
+public class PluginApiculture extends BlankForestryPlugin {
 
 	@SidedProxy(clientSide = "forestry.apiculture.proxy.ProxyApicultureClient", serverSide = "forestry.apiculture.proxy.ProxyApiculture")
 	public static ProxyApiculture proxy;
@@ -140,7 +141,7 @@ public class PluginApiculture extends ForestryPlugin {
 
 	@Override
 	@SuppressWarnings({"unchecked"})
-	protected void setupAPI() {
+	public void setupAPI() {
 		super.setupAPI();
 
 		HiveManager.hiveRegistry = hiveRegistry = new HiveRegistry();
@@ -168,7 +169,7 @@ public class PluginApiculture extends ForestryPlugin {
 	}
 
 	@Override
-	protected void registerItemsAndBlocks() {
+	public void registerItemsAndBlocks() {
 		items = new ItemRegistryApiculture();
 		blocks = new BlockRegistryApiculture();
 	}
@@ -182,11 +183,6 @@ public class PluginApiculture extends ForestryPlugin {
 		blocks.apiculture.addDefinitions(BlockTypeApiculture.VALUES);
 		blocks.apicultureChest.addDefinitions(BlockTypeApicultureTesr.APIARIST_CHEST);
 
-		// Add triggers
-		if (PluginManager.Module.BUILDCRAFT_STATEMENTS.isEnabled()) {
-			ApicultureTriggers.initialize();
-		}
-
 		/*if (Config.enableVillagers) {
 			// Register village components with the Structure registry.
 			VillageHandlerApiculture.registerVillageComponents();
@@ -194,6 +190,11 @@ public class PluginApiculture extends ForestryPlugin {
 
 		// Commands
 		PluginCore.rootCommand.addChildCommand(new CommandBee());
+	}
+
+	@Override
+	public void registerTriggers() {
+		ApicultureTriggers.initialize();
 	}
 
 	@Override
@@ -380,7 +381,7 @@ public class PluginApiculture extends ForestryPlugin {
 	}
 
 	@Override
-	protected void registerCrates() {
+	public void registerCrates() {
 		ICrateRegistry crateRegistry = StorageManager.crateRegistry;
 		crateRegistry.registerCrate(PluginCore.items.beeswax.getItemStack(), "cratedBeeswax");
 		crateRegistry.registerCrate(items.pollenCluster.get(EnumPollenCluster.NORMAL, 1), "cratedPollen");
@@ -407,7 +408,7 @@ public class PluginApiculture extends ForestryPlugin {
 	}
 
 	@Override
-	protected void registerRecipes() {
+	public void registerRecipes() {
 
 		// / APIARIST'S ARMOR
 		ItemStack wovenSilk = PluginCore.items.craftingMaterial.getWovenSilk();
@@ -566,7 +567,7 @@ public class PluginApiculture extends ForestryPlugin {
 				'I', "ingotIron",
 				'W', PluginCore.items.craftingMaterial.getWovenSilk());
 
-		if (PluginManager.Module.FACTORY.isEnabled()) {
+		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FACTORY)) {
 			// / SQUEEZER
 			FluidStack honeyDropFluid = Fluids.HONEY.getFluid(Constants.FLUID_PER_HONEY_DROP);
 			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{items.honeyDrop.getItemStack()}, honeyDropFluid, items.propolis.getItemStack(), 5);
@@ -902,7 +903,7 @@ public class PluginApiculture extends ForestryPlugin {
 			if (value != null) {
 				BlockCandle.addItemToLightingList(value.getItem());
 			} else {
-				logInvalidIMCMessage(message);
+				IMCUtil.logInvalidIMCMessage(message);
 			}
 			return true;
 		} else if (message.key.equals("add-alveary-slab") && message.isStringMessage()) {

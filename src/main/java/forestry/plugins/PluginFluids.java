@@ -19,14 +19,15 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
 
-import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+
 import forestry.api.core.ForestryAPI;
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.GeneratorFuel;
@@ -44,8 +45,8 @@ import forestry.core.utils.BlockUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.StringUtil;
 
-@Plugin(pluginID = "Fluids", name = "Fluids", author = "mezz", url = Constants.URL, unlocalizedDescription = "for.plugin.fluids.description")
-public class PluginFluids extends ForestryPlugin {
+@ForestryPlugin(pluginID = ForestryPluginUids.FLUIDS, name = "Fluids", author = "mezz", url = Constants.URL, unlocalizedDescription = "for.plugin.fluids.description")
+public class PluginFluids extends BlankForestryPlugin {
 
 	private static final List<Fluids> forestryFluidsWithBlocks = new ArrayList<>();
 
@@ -84,6 +85,11 @@ public class PluginFluids extends ForestryPlugin {
 						+ "recommended that you disable all but one instance of {0} fluid blocks via your configs.", fluid.getName(), blockID.modId, blockID.name);
 			}
 		}
+	}
+
+	@Override
+	public boolean canBeDisabled() {
+		return false;
 	}
 
 	@Override

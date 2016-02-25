@@ -16,6 +16,7 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
@@ -34,13 +35,13 @@ import forestry.core.utils.ModUtil;
 import forestry.farming.logic.FarmableBasicFruit;
 import forestry.farming.logic.FarmableGenericCrop;
 import forestry.farming.logic.FarmableGenericSapling;
+import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
-import forestry.plugins.Plugin;
+import forestry.plugins.ForestryPluginUids;
 import forestry.plugins.PluginCore;
-import forestry.plugins.PluginManager;
 
-@Plugin(pluginID = "BiomesOPlenty", name = "BiomesOPlenty", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.plugin.biomesoplenty.description")
-public class PluginBiomesOPlenty extends ForestryPlugin {
+@ForestryPlugin(pluginID = ForestryPluginUids.BIOMES_O_PLENTY, name = "BiomesOPlenty", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.plugin.biomesoplenty.description")
+public class PluginBiomesOPlenty extends BlankForestryPlugin {
 
 	private static final String BoP = "BiomesOPlenty";
 
@@ -72,20 +73,20 @@ public class PluginBiomesOPlenty extends ForestryPlugin {
 			persimmon = new ItemStack(food, 1, 8);
 		}
 
-		if (PluginManager.Module.APICULTURE.isEnabled()) {
+		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.APICULTURE)) {
 			addFlowers();
 		}
-		if (PluginManager.Module.FARMING.isEnabled()) {
+		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FARMING)) {
 			addFarmCrops();
 		}
 	}
 
 	@Override
-	protected void registerRecipes() {
+	public void registerRecipes() {
 		super.registerRecipes();
 
 		amount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed");
-		if (PluginManager.Module.FACTORY.isEnabled()) {
+		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FACTORY)) {
 			addFermenterRecipes();
 			addSqueezerRecipes();
 		}
@@ -107,17 +108,17 @@ public class PluginBiomesOPlenty extends ForestryPlugin {
 			FMLInterModComms.sendMessage(Constants.MOD, "add-farmable-sapling", String.format("farmArboreal@%s.-1", saplingName));
 		}
 
-		if (PluginManager.Module.FARMING.isEnabled() && saplings != null && persimmon != null) {
+		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FARMING) && saplings != null && persimmon != null) {
 			Farmables.farmables.get("farmArboreal").add(new FarmableGenericSapling(saplings, 15, persimmon));
 		}
 
 		Block boPTurnip = GameRegistry.findBlock(BoP, "turnip");
-		if (PluginManager.Module.FARMING.isEnabled() && boPTurnip != null) {
+		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FARMING) && boPTurnip != null) {
 			Item boPTurnipSeeds = GameRegistry.findItem(BoP, "turnipSeeds");
 			ItemStack boPTurnipSeedStack = new ItemStack(boPTurnipSeeds, 1, 0);
 			if (boPTurnipSeeds != null) {
 				Farmables.farmables.get("farmVegetables").add(new FarmableGenericCrop(boPTurnipSeedStack, boPTurnip, 7));
-				if (PluginManager.Module.FACTORY.isEnabled()) {
+				if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FACTORY)) {
 					RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{boPTurnipSeedStack}, Fluids.SEEDOIL.getFluid(amount));
 				}
 			}
@@ -204,7 +205,7 @@ public class PluginBiomesOPlenty extends ForestryPlugin {
 	}
 
 	@Override
-	protected void registerBackpackItems() {
+	public void registerBackpackItems() {
 		// most blocks are covered by the oreDictionary
 
 		final int MINER = 0;

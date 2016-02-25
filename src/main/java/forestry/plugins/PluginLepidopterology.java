@@ -10,8 +10,9 @@
  ******************************************************************************/
 package forestry.plugins;
 
+import javax.annotation.Nonnull;
 import java.io.File;
-import java.util.EnumSet;
+import java.util.Set;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
@@ -51,8 +52,8 @@ import forestry.lepidopterology.items.ItemRegistryLepidopterology;
 import forestry.lepidopterology.proxy.ProxyLepidopterology;
 import forestry.lepidopterology.recipes.MatingRecipe;
 
-@Plugin(pluginID = "Lepidopterology", name = "Lepidopterology", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.lepidopterology.description")
-public class PluginLepidopterology extends ForestryPlugin {
+@ForestryPlugin(pluginID = ForestryPluginUids.LEPIDOPTEROLOGY, name = "Lepidopterology", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.lepidopterology.description")
+public class PluginLepidopterology extends BlankForestryPlugin {
 
 	@SidedProxy(clientSide = "forestry.lepidopterology.proxy.ProxyLepidopterologyClient", serverSide = "forestry.lepidopterology.proxy.ProxyLepidopterology")
 	public static ProxyLepidopterology proxy;
@@ -65,9 +66,7 @@ public class PluginLepidopterology extends ForestryPlugin {
 	public static BlockRegistryLepidopterology blocks;
 
 	@Override
-	protected void setupAPI() {
-		super.setupAPI();
-
+	public void setupAPI() {
 		ButterflyManager.butterflyRoot = new ButterflyHelper();
 		AlleleManager.alleleRegistry.registerSpeciesRoot(ButterflyManager.butterflyRoot);
 
@@ -75,7 +74,7 @@ public class PluginLepidopterology extends ForestryPlugin {
 	}
 
 	@Override
-	protected void registerItemsAndBlocks() {
+	public void registerItemsAndBlocks() {
 		items = new ItemRegistryLepidopterology();
 		blocks = new BlockRegistryLepidopterology();
 	}
@@ -90,11 +89,12 @@ public class PluginLepidopterology extends ForestryPlugin {
 		blocks.lepidopterology.addDefinitions(BlockTypeLepidopterologyTesr.VALUES);
 	}
 
+	@Nonnull
 	@Override
-	public EnumSet<PluginManager.Module> getDependancies() {
-		EnumSet<PluginManager.Module> deps = super.getDependancies();
-		deps.add(PluginManager.Module.ARBORICULTURE);
-		return deps;
+	public Set<String> getDependencyUids() {
+		Set<String> dependencyUids = super.getDependencyUids();
+		dependencyUids.add(ForestryPluginUids.ARBORICULTURE);
+		return dependencyUids;
 	}
 
 	@Override
@@ -129,7 +129,7 @@ public class PluginLepidopterology extends ForestryPlugin {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	protected void registerRecipes() {
+	public void registerRecipes() {
 		CraftingManager.getInstance().getRecipeList().add(new MatingRecipe());
 
 		RecipeManagers.carpenterManager.addRecipe(100, Fluids.WATER.getFluid(2000), null, items.flutterlyzer.getItemStack(),

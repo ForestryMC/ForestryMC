@@ -10,17 +10,19 @@
  ******************************************************************************/
 package forestry.plugins.compat;
 
+import net.minecraftforge.fml.common.Optional;
+
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
 import forestry.core.utils.ModUtil;
+import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
-import forestry.plugins.Plugin;
-import net.minecraftforge.fml.common.Optional;
+import forestry.plugins.ForestryPluginUids;
 
 import buildcraft.api.recipes.BuildcraftRecipeRegistry;
 
-@Plugin(pluginID = "BC6|Recipes", name = "BuildCraft 6 Recipes", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.buildcraft6.description")
-public class PluginBuildCraftRecipes extends ForestryPlugin {
+@ForestryPlugin(pluginID = ForestryPluginUids.BUILDCRAFT_RECIPES, name = "BuildCraft 6 Recipes", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.buildcraft6.description")
+public class PluginBuildCraftRecipes extends BlankForestryPlugin {
 
 	@Override
 	public boolean isAvailable() {
@@ -34,7 +36,7 @@ public class PluginBuildCraftRecipes extends ForestryPlugin {
 
 	@Optional.Method(modid = "BuildCraftAPI|recipes")
 	@Override
-	protected void registerRecipes() {
+	public void registerRecipes() {
 		// Add recipe for ethanol
 		BuildcraftRecipeRegistry.refinery.addRecipe("forestry:BiomassToEthanol", Fluids.BIOMASS.getFluid(4), Fluids.ETHANOL.getFluid(1), 100, 1);
 	}

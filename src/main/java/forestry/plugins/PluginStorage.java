@@ -12,7 +12,6 @@ package forestry.plugins;
 
 import java.awt.Color;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -36,7 +35,6 @@ import net.minecraft.block.BlockTrapDoor;
 import net.minecraft.block.BlockWall;
 import net.minecraft.block.BlockWorkbench;
 import net.minecraft.block.IGrowable;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.init.Blocks;
@@ -44,8 +42,8 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemDoor;
 import net.minecraft.item.ItemStack;
+
 import net.minecraftforge.client.event.ModelBakeEvent;
-import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.IShearable;
@@ -60,6 +58,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.Forestry;
+import forestry.api.core.ForestryAPI;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.BackpackManager;
 import forestry.api.storage.IBackpackDefinition;
@@ -72,13 +71,13 @@ import forestry.core.config.LocalizedConfiguration;
 import forestry.core.fluids.Fluids;
 import forestry.core.items.ItemCrated;
 import forestry.core.models.ModelCrate;
-import forestry.core.models.RenderHandler;
 import forestry.core.recipes.RecipeUtil;
+import forestry.core.utils.IMCUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.StringUtil;
-import forestry.lepidopterology.blocks.BlockTypeLepidopterologyTesr;
 import forestry.lepidopterology.blocks.BlockRegistryLepidopterology;
+import forestry.lepidopterology.blocks.BlockTypeLepidopterologyTesr;
 import forestry.storage.BackpackDefinition;
 import forestry.storage.BackpackDefinition.BackpackDefinitionApiarist;
 import forestry.storage.BackpackDefinition.BackpackDefinitionLepidopterist;
@@ -88,8 +87,8 @@ import forestry.storage.PickupHandlerStorage;
 import forestry.storage.ResupplyHandler;
 import forestry.storage.items.ItemRegistryStorage;
 
-@Plugin(pluginID = "Storage", name = "Storage", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.storage.description")
-public class PluginStorage extends ForestryPlugin {
+@ForestryPlugin(pluginID = ForestryPluginUids.STORAGE, name = "Storage", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.storage.description")
+public class PluginStorage extends BlankForestryPlugin {
 
 	private static final List<ItemCrated> crates = new ArrayList<>();
 	private static final String CONFIG_CATEGORY = "backpacks";
@@ -105,7 +104,7 @@ public class PluginStorage extends ForestryPlugin {
 
 	@Override
 	@SuppressWarnings({"unchecked", "rawtypes"})
-	protected void setupAPI() {
+	public void setupAPI() {
 		super.setupAPI();
 
 		StorageManager.crateRegistry = new CrateRegistry();
@@ -123,12 +122,12 @@ public class PluginStorage extends ForestryPlugin {
 
 		BackpackDefinition definition;
 
-		if (PluginManager.Module.APICULTURE.isEnabled()) {
+		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.APICULTURE)) {
 			definition = new BackpackDefinitionApiarist(new Color(0xc4923d).getRGB());
 			BackpackManager.definitions.put(definition.getKey(), definition);
 		}
 
-		if (PluginManager.Module.LEPIDOPTEROLOGY.isEnabled()) {
+		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.LEPIDOPTEROLOGY)) {
 			definition = new BackpackDefinitionLepidopterist(new Color(0x995b31).getRGB());
 			BackpackManager.definitions.put(definition.getKey(), definition);
 		}
@@ -155,7 +154,7 @@ public class PluginStorage extends ForestryPlugin {
 
 	@Override
 	@SuppressWarnings({"unchecked", "rawtypes"})
-	protected void disabledSetupAPI() {
+	public void disabledSetupAPI() {
 		BackpackManager.backpackItems = new ArrayList[6];
 		BackpackManager.backpackItems[0] = minerItems;
 		BackpackManager.backpackItems[1] = diggerItems;
@@ -166,12 +165,12 @@ public class PluginStorage extends ForestryPlugin {
 	}
 
 	@Override
-	protected void registerItemsAndBlocks() {
+	public void registerItemsAndBlocks() {
 		items = new ItemRegistryStorage();
 	}
 	
 	@Override
-	protected void preInit() {
+	public void preInit() {
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 
@@ -485,12 +484,12 @@ public class PluginStorage extends ForestryPlugin {
 		if (message.key.equals("add-backpack-items")) {
 			String[] tokens = message.getStringValue().split("@");
 			if (tokens.length != 2) {
-				logInvalidIMCMessage(message);
+				IMCUtil.logInvalidIMCMessage(message);
 				return true;
 			}
 
 			if (!BackpackManager.definitions.containsKey(tokens[0])) {
-				String errorMessage = getInvalidIMCMessageText(message);
+				String errorMessage = IMCUtil.getInvalidIMCMessageText(message);
 				Log.warning("%s For non-existent backpack %s.", errorMessage, tokens[0]);
 				return true;
 			}
@@ -515,7 +514,7 @@ public class PluginStorage extends ForestryPlugin {
 	}
 
 	@Override
-	protected void registerRecipes() {
+	public void registerRecipes() {
 		BlockRegistryApiculture beeBlocks = PluginApiculture.blocks;
 		if (items.apiaristBackpack != null && beeBlocks != null) {
 			addBackpackRecipe(items.apiaristBackpack, "stickWood", beeBlocks.apicultureChest);
@@ -535,7 +534,7 @@ public class PluginStorage extends ForestryPlugin {
 		addBackpackRecipe(items.builderBackpack, Items.clay_ball);
 
 		// / CARPENTER
-		if (PluginManager.Module.FACTORY.isEnabled()) {
+		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FACTORY)) {
 			// / CRATES
 			RecipeManagers.carpenterManager.addRecipe(20, Fluids.WATER.getFluid(1000), null, items.crate.getItemStack(24),
 					" # ", "# #", " # ", '#', "logWood");

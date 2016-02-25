@@ -13,13 +13,16 @@ package forestry.core.utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import forestry.core.config.Constants;
-import forestry.plugins.PluginManager;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.ICrashCallable;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.relauncher.Side;
+
+import forestry.core.config.Constants;
+import forestry.plugins.ForestryPlugin;
+import forestry.plugins.IForestryPlugin;
+import forestry.plugins.PluginManager;
 
 /**
  * ICrashCallable for highlighting certain mods and listing disabled modules for crash reports.
@@ -57,8 +60,9 @@ public class ForestryModEnvWarningCallable implements ICrashCallable {
 		}
 
 		this.disabledModules = new ArrayList<>();
-		for (PluginManager.Module module : PluginManager.configDisabledModules) {
-			disabledModules.add(module.configName());
+		for (IForestryPlugin plugin : PluginManager.configDisabledPlugins) {
+			ForestryPlugin info = plugin.getClass().getAnnotation(ForestryPlugin.class);
+			disabledModules.add(info.name());
 		}
 	}
 

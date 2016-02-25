@@ -22,6 +22,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -30,9 +31,11 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitLayout;
+import forestry.api.core.ForestryAPI;
 import forestry.api.farming.Farmables;
 import forestry.api.farming.IFarmable;
 import forestry.core.circuits.Circuit;
@@ -40,6 +43,7 @@ import forestry.core.circuits.CircuitLayout;
 import forestry.core.config.Constants;
 import forestry.core.items.EnumElectronTube;
 import forestry.core.recipes.RecipeUtil;
+import forestry.core.utils.IMCUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.farming.blocks.BlockRegistryFarming;
@@ -73,8 +77,8 @@ import forestry.farming.tiles.TileFarmPlain;
 import forestry.farming.tiles.TileFarmValve;
 import forestry.farming.triggers.FarmingTriggers;
 
-@Plugin(pluginID = "Farming", name = "Farming", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.farming.description")
-public class PluginFarming extends ForestryPlugin {
+@ForestryPlugin(pluginID = ForestryPluginUids.FARMING, name = "Farming", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.farming.description")
+public class PluginFarming extends BlankForestryPlugin {
 
 	@SidedProxy(clientSide = "forestry.farming.proxy.ProxyFarmingClient", serverSide = "forestry.farming.proxy.ProxyFarming")
 	public static ProxyFarming proxy;
@@ -83,19 +87,17 @@ public class PluginFarming extends ForestryPlugin {
 	public static BlockRegistryFarming blocks;
 
 	@Override
-	protected void registerItemsAndBlocks() {
+	public void registerItemsAndBlocks() {
 		blocks = new BlockRegistryFarming();
 	}
 
 	@Override
 	public void preInit() {
-		super.preInit();
-		
 		MinecraftForge.EVENT_BUS.register(this);
 
 		Farmables.farmables.put("farmArboreal", new ArrayList<IFarmable>());
 		Farmables.farmables.get("farmArboreal").add(new FarmableVanillaSapling());
-		if (PluginManager.Module.ARBORICULTURE.isEnabled()) {
+		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.ARBORICULTURE)) {
 			Farmables.farmables.get("farmArboreal").add(new FarmableGE());
 		}
 		
@@ -139,7 +141,7 @@ public class PluginFarming extends ForestryPlugin {
 	}
 
 	@Override
-	protected void registerTriggers() {
+	public void registerTriggers() {
 		FarmingTriggers.initialize();
 	}
 
@@ -177,7 +179,7 @@ public class PluginFarming extends ForestryPlugin {
 
 		if (message.key.equals("add-farmable-sapling")) {
 			String[] tokens = message.getStringValue().split("@");
-			String errormsg = getInvalidIMCMessageText(message);
+			String errormsg = IMCUtil.getInvalidIMCMessageText(message);
 			if (tokens.length != 2) {
 				Log.warning(errormsg);
 				return true;
@@ -231,7 +233,7 @@ public class PluginFarming extends ForestryPlugin {
 		} else if (message.key.equals("add-farmable-crop")) {
 
 			String[] tokens = message.getStringValue().split("@");
-			String errormsg = getInvalidIMCMessageText(message);
+			String errormsg = IMCUtil.getInvalidIMCMessageText(message);
 			if (tokens.length != 2) {
 				Log.warning(errormsg);
 				return true;
@@ -273,7 +275,7 @@ public class PluginFarming extends ForestryPlugin {
 	}
 
 	@Override
-	protected void registerRecipes() {
+	public void registerRecipes() {
 
 		ItemStack basic = blocks.farm.get(EnumFarmBlockType.PLAIN, 1);
 		ItemStack gearbox = blocks.farm.get(EnumFarmBlockType.GEARBOX, 1);

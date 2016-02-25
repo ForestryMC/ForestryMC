@@ -12,7 +12,9 @@ package forestry.plugins;
 
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+
 import net.minecraftforge.fml.common.FMLCommonHandler;
+
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.PostManager;
 import forestry.api.recipes.RecipeManagers;
@@ -29,30 +31,28 @@ import forestry.mail.EventHandlerMailAlert;
 import forestry.mail.PostRegistry;
 import forestry.mail.PostalCarrier;
 import forestry.mail.SaveEventHandlerMail;
-import forestry.mail.blocks.BlockTypeMail;
 import forestry.mail.blocks.BlockRegistryMail;
+import forestry.mail.blocks.BlockTypeMail;
 import forestry.mail.commands.CommandMail;
 import forestry.mail.items.EnumStampDefinition;
 import forestry.mail.items.ItemRegistryMail;
 import forestry.mail.network.PacketRegistryMail;
 import forestry.mail.triggers.MailTriggers;
 
-@Plugin(pluginID = "Mail", name = "Mail", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.mail.description")
-public class PluginMail extends ForestryPlugin {
+@ForestryPlugin(pluginID = ForestryPluginUids.MAIL, name = "Mail", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.mail.description")
+public class PluginMail extends BlankForestryPlugin {
 	public static ItemRegistryMail items;
 	public static BlockRegistryMail blocks;
 
 	@Override
-	protected void setupAPI() {
-		super.setupAPI();
-
+	public void setupAPI() {
 		PostManager.postRegistry = new PostRegistry();
 		PostManager.postRegistry.registerCarrier(new PostalCarrier(EnumAddressee.PLAYER));
 		PostManager.postRegistry.registerCarrier(new PostalCarrier(EnumAddressee.TRADER));
 	}
 
 	@Override
-	protected void registerItemsAndBlocks() {
+	public void registerItemsAndBlocks() {
 		items = new ItemRegistryMail();
 		blocks = new BlockRegistryMail();
 	}
@@ -71,7 +71,7 @@ public class PluginMail extends ForestryPlugin {
 	}
 
 	@Override
-	protected void registerTriggers() {
+	public void registerTriggers() {
 		MailTriggers.initialize();
 	}
 
@@ -88,7 +88,7 @@ public class PluginMail extends ForestryPlugin {
 	}
 
 	@Override
-	protected void registerRecipes() {
+	public void registerRecipes() {
 		Object stampGlue;
 		Object letterGlue;
 

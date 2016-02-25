@@ -49,13 +49,13 @@ public class FarmLogicOrchard extends FarmLogic {
 		this.farmables = Farmables.farmables.get("farmOrchard");
 
 		ImmutableList.Builder<Block> traversalBlocksBuilder = ImmutableList.builder();
-//		if (PluginManager.Module.AGRICRAFT.isEnabled() || PluginManager.Module.INDUSTRIALCRAFT.isEnabled()) {
+//		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.AGRICRAFT) || ForestryAPI.enabledPlugins.contains(ForestryPluginUids.INDUSTRIALCRAFT)) {
 //			traversalBlocksBuilder.add(Blocks.farmland);
 //		}
-//		if (PluginManager.Module.INDUSTRIALCRAFT.isEnabled()) {
+//		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.INDUSTRIALCRAFT)) {
 //			traversalBlocksBuilder.add(Blocks.dirt);
 //		}
-//		if (PluginManager.Module.PLANTMEGAPACK.isEnabled()) {
+//		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.PLANTMEGAPACK)) {
 //			traversalBlocksBuilder.add(Blocks.water);
 //		}
 //

@@ -11,21 +11,22 @@
 package forestry.plugins.compat;
 
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fml.common.Optional;
 
 import forestry.api.core.ForestryAPI;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
 import forestry.core.utils.ModUtil;
+import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
-import net.minecraftforge.fml.common.Optional;
-import forestry.plugins.Plugin;
+import forestry.plugins.ForestryPluginUids;
 
 import buildcraft.api.fuels.BuildcraftFuelRegistry;
 import buildcraft.api.fuels.ICoolant;
 import buildcraft.api.fuels.ICoolantManager;
 
-@Plugin(pluginID = "BC6|Fuels", name = "BuildCraft 6 Fuels", author = "mezz", url = Constants.URL, unlocalizedDescription = "for.plugin.buildcraft6.description")
-public class PluginBuildCraftFuels extends ForestryPlugin {
+@ForestryPlugin(pluginID = ForestryPluginUids.BUILDCRAFT_FUELS, name = "BuildCraft 6 Fuels", author = "mezz", url = Constants.URL, unlocalizedDescription = "for.plugin.buildcraft6.description")
+public class PluginBuildCraftFuels extends BlankForestryPlugin {
 
 	@Override
 	public boolean isAvailable() {

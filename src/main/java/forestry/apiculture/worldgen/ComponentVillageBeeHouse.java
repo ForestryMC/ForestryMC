@@ -27,6 +27,7 @@ import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
 
 import net.minecraftforge.common.ChestGenHooks;
+
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.FlowerManager;
@@ -37,6 +38,7 @@ import forestry.api.arboriculture.EnumWoodType;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
+import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IFlower;
 import forestry.apiculture.blocks.BlockTypeApiculture;
@@ -52,9 +54,9 @@ import forestry.core.tiles.TileUtil;
 import forestry.core.worldgen.BlockType;
 import forestry.core.worldgen.BlockTypeTileForestry;
 import forestry.core.worldgen.IBlockType;
+import forestry.plugins.ForestryPluginUids;
 import forestry.plugins.PluginApiculture;
 import forestry.plugins.PluginCore;
-import forestry.plugins.PluginManager;
 
 public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 
@@ -80,7 +82,7 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 	}
 
 	private void createBuildingBlocks(Random random) {
-		if (PluginManager.Module.ARBORICULTURE.isEnabled()) {
+		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.ARBORICULTURE)) {
 
 			boolean fireproof = (random.nextInt(4) == 0);
 
