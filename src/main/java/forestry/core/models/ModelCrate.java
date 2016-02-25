@@ -10,208 +10,275 @@
  ******************************************************************************/
 package forestry.core.models;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Collection;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringReader;
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.IdentityHashMap;
+import java.util.List;
+import java.util.Map;
+
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.block.model.ModelBlock;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.vertex.VertexFormat;
-import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.resources.IResource;
+import net.minecraft.client.resources.model.IBakedModel;
+import net.minecraft.client.resources.model.ModelBakery;
+import net.minecraft.client.resources.model.ModelManager;
 import net.minecraft.client.resources.model.ModelResourceLocation;
-import net.minecraft.util.EnumWorldBlockLayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
+import net.minecraft.network.ServerStatusResponse.MinecraftProtocolVersionIdentifier;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.ICustomModelLoader;
+import net.minecraftforge.client.ItemModelMesherForge;
 import net.minecraftforge.client.model.IFlexibleBakedModel;
 import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.client.model.IModelCustomData;
-import net.minecraftforge.client.model.IModelState;
-import net.minecraftforge.client.model.IPerspectiveAwareModel;
+import net.minecraftforge.client.model.ISmartItemModel;
+import net.minecraftforge.client.model.ItemLayerModel;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
-import net.minecraftforge.client.model.ModelStateComposition;
-import net.minecraftforge.client.model.MultiLayerModel;
-import net.minecraftforge.client.model.TRSRTransformation;
+import net.minecraftforge.client.model.MultiModel;
+import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
+import com.google.common.base.Charsets;
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
+import com.google.common.collect.Maps;
 
-import forestry.core.utils.Log;
-public class ModelCrate implements IModelCustomData<ModelCrate> {
-    public static final ModelCrate instance = new ModelCrate("cratedStone", "forestry", new ModelResourceLocation("forestry:crates", "cratedStone"), false);
-
-    private final String containedUID;
-    private final String modID;
-    private final ResourceLocation containedLocation;
-    private final boolean isContainedItem;
-
+import forestry.core.items.ItemCrated;
+import forestry.core.utils.StringUtil;
+import forestry.plugins.PluginStorage;
+import gnu.trove.map.hash.TIntObjectHashMap;
+public class ModelCrate implements ISmartItemModel {
+	
+	private HashMap<String, MultiModel.Baked> crates = Maps.newHashMap();
+	
+	public static IModel crateModel;
+	private final Function<ResourceLocation, TextureAtlasSprite> textureGetter;
+	public static ModelBlock MODEL_GENERATED;
+	public static ModelBlock MODEL_COMPASS;
+	public static ModelBlock MODEL_CLOCK;
+	public static ModelLoader loader;
+	
+	public ModelCrate() {
+	    textureGetter = new Function<ResourceLocation, TextureAtlasSprite>() {
+	        public TextureAtlasSprite apply(ResourceLocation location) {
+	          return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString());
+	        }
+	      };
+	}
+	
     /**
-     * @param baseLocation The location of the crate model
-     * @param UID The UID of the crate
-     * @param modID The modId of the creat item
-     * @param containedLocation The location of the model from the contained item
+     * To bake the contained model
      */
-    private ModelCrate(String UID, String modID, ResourceLocation containedLocation, boolean isContainedItem){
-        this.containedUID = UID;
-        this.modID = modID;
-        this.containedLocation = containedLocation;
-        this.isContainedItem = isContainedItem;
-    }
+    private ImmutableMap<String, IFlexibleBakedModel> bakeModels(ItemCrated crated){
+    	ImmutableMap.Builder<String, IFlexibleBakedModel> pb = ImmutableMap.builder();
 
-    @Override
-    public Collection<ResourceLocation> getDependencies() {
-        return ImmutableList.<ResourceLocation>of(new ModelResourceLocation("forestry:crates", "crate"), containedLocation);
-    }
-
-    @Override
-    public Collection<ResourceLocation> getTextures(){
-        return ImmutableList.of();
-    }
-    
-    /**
-     * 
-     * @param loc The location of the model
-     * @return A model from the {@link ModelLoaderRegistry} 
-     */
-    private static IModel getModel(ResourceLocation loc){
-        IModel model;
-        try{
-            model = ModelLoaderRegistry.getModel(loc);
-        }
-        catch (IOException e){
-            Log.logThrowable("Couldn't load Crate Model dependency: %s", e, loc);
-            model = ModelLoaderRegistry.getMissingModel();
-        }
-     	return model;
-    }
-
-    /**
-     * To bake the base and the contained model
-     */
-    private static ImmutableMap<Optional<EnumWorldBlockLayer>, IFlexibleBakedModel> buildModels(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter, ModelCrate modelToBake){
-        ImmutableMap.Builder<Optional<EnumWorldBlockLayer>, IFlexibleBakedModel> builder = ImmutableMap.builder();
+        IFlexibleBakedModel flexModel = getModel(crated.getContained());
         
-        IModel base = getModel(new ModelResourceLocation("forestry:crates", "crate"));
-        IFlexibleBakedModel baseBaked = base.bake(new ModelStateComposition(state, base.getDefaultState()), format, bakedTextureGetter);
+        IdentityHashMap<Item, TIntObjectHashMap<ModelResourceLocation>> modelResourceLocations = ObfuscationReflectionHelper.getPrivateValue(ItemModelMesherForge.class, (ItemModelMesherForge)Minecraft.getMinecraft().getRenderItem().getItemModelMesher(), 0);
         
-        //Set the crate color index to 100
-        for(BakedQuad quad : baseBaked.getGeneralQuads()){
-      		ObfuscationReflectionHelper.setPrivateValue(BakedQuad.class, quad, 100, 1);
-        }
-        builder.put(Optional.<EnumWorldBlockLayer>absent(), baseBaked);
-        builder.put(Optional.of(EnumWorldBlockLayer.SOLID), baseBaked);
-
-
+        ModelResourceLocation modelResource = modelResourceLocations.get(crated.getContained().getItem()).get(crated.getContained().getItemDamage());
+        ResourceLocation location = getItemLocation(modelResource);
         
-        IModel content = getModel(modelToBake.containedLocation);
-        if(modelToBake.isContainedItem){
-        	builder.put(Optional.of(EnumWorldBlockLayer.CUTOUT), new TRSRBakedModel(content.bake(state, format, bakedTextureGetter), -0.0625F, 0, 0.0625F, 0.5F));
-        	builder.put(Optional.of(EnumWorldBlockLayer.CUTOUT_MIPPED), new TRSRBakedModel(content.bake(state, format, bakedTextureGetter), -0.0625F, 0, -0.0625F, 0.5F));
+        if(hasItemModel(location)){
+        	pb.put(String.valueOf(0), new TRSRBakedModel(flexModel, -0.0625F, 0, 0.0625F, 0.5F));
+        	pb.put(String.valueOf(1), new TRSRBakedModel(flexModel, -0.0625F, 0, -0.0625F, 0.5F));
         }else{
-        	builder.put(Optional.of(EnumWorldBlockLayer.CUTOUT), new TRSRBakedModel(content.bake(state, format, bakedTextureGetter), -0.0625F, 0, 0, 0.5F));
+        	pb.put(String.valueOf(0), new TRSRBakedModel(flexModel, -0.0625F, 0, 0, 0.5F));
         }
-        return builder.build();
-    }
-
-    /**
-     * Bake the crate model and the content of the crate
-     */
-    @Override
-    public IFlexibleBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter){
-        IModel missing = ModelLoaderRegistry.getMissingModel();
-        return new MultiLayerModel.MultiLayerBakedModel(
-            buildModels(state, format, bakedTextureGetter, this),
-            missing.bake(missing.getDefaultState(), format, bakedTextureGetter),
-            format,
-            IPerspectiveAwareModel.MapWrapper.getTransforms(state)
-        );
-    }
-
-    @Override
-    public IModelState getDefaultState(){
-        return TRSRTransformation.identity();
-    }
-
-    /**
-     * Create a crate model from the customData
-     */
-    @Override
-    public IModel process(ImmutableMap<String, String> customData){
-        ResourceLocation location = null;
-        String UID = "";
-        boolean isContainedItem = false;
-        String modID = "";
-        for(String key : customData.keySet()){
-        	if("uid".equals(key)){
-            	UID = getString(customData.get(key));
-            }
-            else if("modID".equals(key)){
-            	modID = getString(customData.get(key));
-            }
-            else if("location".equals(key)){
-            	location = getLocation(customData.get(key));
-            }
-            else if("isItem".equals(key)){
-            	isContainedItem = getBoolean(customData.get(key));
-            }
-        }
-        if(modID == null || modID.equals("")){
-        	modID = "forestry";
-        }
-        if(location == null || UID == null || UID.equals("")) {
-        	return instance;
-        }
-        return new ModelCrate(UID, modID, location, isContainedItem);
-    }
-
-    private ResourceLocation getLocation(String json){
-        JsonElement e = new JsonParser().parse(json);
-        if(e.isJsonPrimitive() && e.getAsJsonPrimitive().isString()){
-        	if(e.getAsString().contains("#")){
-                return new ModelResourceLocation(e.getAsString());
-        	}else{
-                return new ResourceLocation(e.getAsString());
-        	}
-        }
-        return new ModelResourceLocation("builtin/missing", "missing");
+        return pb.build();
     }
     
-    private String getString(String json){
-        JsonElement e = new JsonParser().parse(json);
-        if(e.isJsonPrimitive() && e.getAsJsonPrimitive().isString()){
-            return e.getAsString();
-        }
-        return null;
+    /**
+     * @return The item model {@link ResourceLocation} from the {@link ModelResourceLocation}
+     */
+    private ResourceLocation getItemLocation(ModelResourceLocation modelResource){
+        ResourceLocation resourcelocation = new ResourceLocation(modelResource.toString().replaceAll("#.*", ""));
+        return new ResourceLocation(resourcelocation.getResourceDomain(), "item/" + resourcelocation.getResourcePath());
     }
     
-    private boolean getBoolean(String json){
-        JsonElement e = new JsonParser().parse(json);
-        if(e.isJsonPrimitive() && e.getAsJsonPrimitive().isBoolean()){
-            return e.getAsBoolean();
-        }
-        return false;
-    }
-
     /**
-     * The model loader to load crate models from the blockstate file
+     * @return Return true, when the model from the {@link ResourceLocation} a item model is
      */
-    public static enum Loader implements ICustomModelLoader{
-        instance;
+    private boolean hasItemModel(ResourceLocation location){
+    	try{
+	    	ModelBlock p_177581_1_ = loadModel(location);
+	        if (p_177581_1_ == null){
+	            return false;
+	        }else{
+	            ModelBlock modelblock = p_177581_1_.getRootModel();
+	            return modelblock == MODEL_GENERATED || modelblock == MODEL_COMPASS || modelblock == MODEL_CLOCK;
+	        }
+    	}catch(Exception e){
+    		return false;
+    	}
+    }
+    
+    protected ModelBlock loadModel(ResourceLocation p_177594_1_) throws IOException
+    {
+        String s = p_177594_1_.getResourcePath();
 
-        @Override
-		public void onResourceManagerReload(IResourceManager resourceManager) {}
-
-        @Override
-		public boolean accepts(ResourceLocation modelLocation){
-            return modelLocation.getResourceDomain().equals("forestry") && 
-                modelLocation.getResourcePath().equals("models/block/crate");
+        if ("builtin/generated".equals(s))
+        {
+            return MODEL_GENERATED;
         }
+        else if ("builtin/compass".equals(s))
+        {
+            return MODEL_COMPASS;
+        }
+        else if ("builtin/clock".equals(s))
+        {
+            return MODEL_CLOCK;
+        }
+        else
+        {
+            Reader reader;
 
-        @Override
-		public IModel loadModel(ResourceLocation modelLocation){
-            return ModelCrate.instance;
+            if (s.startsWith("builtin/"))
+            {
+                String s1 = s.substring("builtin/".length());
+                if(s1.equals("missing")){
+                	reader = new StringReader("{ \"textures\": {   \"particle\": \"missingno\",   \"missingno\": \"missingno\"}, \"elements\": [ {     \"from\": [ 0, 0, 0 ],     \"to\": [ 16, 16, 16 ],     \"faces\": {         \"down\":  { \"uv\": [ 0, 0, 16, 16 ], \"cullface\": \"down\", \"texture\": \"#missingno\" },         \"up\":    { \"uv\": [ 0, 0, 16, 16 ], \"cullface\": \"up\", \"texture\": \"#missingno\" },         \"north\": { \"uv\": [ 0, 0, 16, 16 ], \"cullface\": \"north\", \"texture\": \"#missingno\" },         \"south\": { \"uv\": [ 0, 0, 16, 16 ], \"cullface\": \"south\", \"texture\": \"#missingno\" },         \"west\":  { \"uv\": [ 0, 0, 16, 16 ], \"cullface\": \"west\", \"texture\": \"#missingno\" },         \"east\":  { \"uv\": [ 0, 0, 16, 16 ], \"cullface\": \"east\", \"texture\": \"#missingno\" }    }}]}");
+                }
+                else{
+                	throw new FileNotFoundException(p_177594_1_.toString());
+                }
+            }
+            else
+            {
+                IResource iresource = Minecraft.getMinecraft().getResourceManager().getResource(this.getModelLocation(p_177594_1_));
+                reader = new InputStreamReader(iresource.getInputStream(), Charsets.UTF_8);
+            }
+
+            ModelBlock model;
+
+            try
+            {
+                ModelBlock modelblock = ModelBlock.deserialize(reader);
+                modelblock.name = p_177594_1_.toString();
+                model = modelblock;
+            }
+            finally
+            {
+                reader.close();
+            }
+            
+            if(model != null && model.getParentLocation() != null){
+                if(model.getParentLocation().getResourcePath().equals("builtin/generated"))
+                {
+                    model.parent = MODEL_GENERATED;
+                }
+                else
+                {
+                    try{
+                    	model.parent = loadModel(model.getParentLocation());
+                    }catch (IOException e){
+                    }
+                }
+            }
+
+            return model;
         }
     }
+    
+    protected ResourceLocation getModelLocation(ResourceLocation p_177580_1_)
+    {
+        return new ResourceLocation(p_177580_1_.getResourceDomain(), "models/" + p_177580_1_.getResourcePath() + ".json");
+    }
+    
+    /**
+     * @return The baked model from the filled crate
+     */
+    private IFlexibleBakedModel getModel(ItemStack stack){
+        IBakedModel model = Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getItemModel(stack);
+        if(model == null) {
+          return null;
+        }
+        else if(model instanceof IFlexibleBakedModel) {
+         return (IFlexibleBakedModel) model;
+        }
+        else {
+          return new IFlexibleBakedModel.Wrapper(model, DefaultVertexFormats.ITEM);
+        }
+    }
+    
+    private IFlexibleBakedModel getModelCrate(){
+        IFlexibleBakedModel flexModel;
+        IBakedModel model = Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getItemModel(new ItemStack(PluginStorage.items.crate, 1, 1));
+        if(model == null) {
+          return null;
+        }
+        else if(model instanceof IFlexibleBakedModel) {
+        	flexModel = (IFlexibleBakedModel) model;
+        }
+        else {
+        	 flexModel =  new IFlexibleBakedModel.Wrapper(model, DefaultVertexFormats.ITEM);
+        }
+        return crateModel.bake(crateModel.getDefaultState(), flexModel.getFormat(), textureGetter);
+    }
+
+	@Override
+	public List<BakedQuad> getFaceQuads(EnumFacing facing) {
+		return null;
+	}
+
+	@Override
+	public List<BakedQuad> getGeneralQuads() {
+		return null;
+	}
+
+	@Override
+	public boolean isAmbientOcclusion() {
+		return false;
+	}
+
+	@Override
+	public boolean isGui3d() {
+		return false;
+	}
+
+	@Override
+	public boolean isBuiltInRenderer() {
+		return false;
+	}
+
+	@Override
+	public TextureAtlasSprite getParticleTexture() {
+		return null;
+	}
+
+	@Override
+	public ItemCameraTransforms getItemCameraTransforms() {
+		return null;
+	}
+
+	/**
+	 * Bake the crated model
+	 */
+	@Override
+	public IBakedModel handleItemState(ItemStack stack) {
+		ItemCrated crated = (ItemCrated) stack.getItem();
+		String crateUID = StringUtil.cleanItemName(crated);
+		if(crates.get(crateUID) == null){
+		    IFlexibleBakedModel baseBaked = getModelCrate();
+		        
+		    //Set the crate color index to 100
+		    for(BakedQuad quad : baseBaked.getGeneralQuads()){
+		      	ObfuscationReflectionHelper.setPrivateValue(BakedQuad.class, quad, 100, 1);
+		    }
+		    crates.put(crateUID, new MultiModel.Baked(baseBaked, bakeModels(crated)));
+		}
+		return crates.get(crateUID);
+	}
 }

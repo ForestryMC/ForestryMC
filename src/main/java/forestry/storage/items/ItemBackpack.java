@@ -233,9 +233,6 @@ public class ItemBackpack extends ItemWithGui {
 	private ModelResourceLocation[] models;
 
 	@SideOnly(Side.CLIENT)
-	public static int i = 0;
-
-	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
 		EnumBackpackType t = type == EnumBackpackType.APIARIST ? EnumBackpackType.T1 : type;
@@ -245,13 +242,10 @@ public class ItemBackpack extends ItemWithGui {
 		models[1] = new ModelResourceLocation("forestry:" + typeTag + "_locked", "inventory");
 		models[2] = new ModelResourceLocation("forestry:" + typeTag + "_receive", "inventory");
 		models[3] = new ModelResourceLocation("forestry:" + typeTag + "_resupply", "inventory");
-		if (i == 0 && (type == EnumBackpackType.T1 || type == EnumBackpackType.APIARIST) || i == 1 && type == EnumBackpackType.T2) {
-			manager.registerVariant(item, new ResourceLocation("forestry:" + typeTag + "_neutral"));
-			manager.registerVariant(item, new ResourceLocation("forestry:" + typeTag + "_locked"));
-			manager.registerVariant(item, new ResourceLocation("forestry:" + typeTag + "_receive"));
-			manager.registerVariant(item, new ResourceLocation("forestry:" + typeTag + "_resupply"));
-			i++;
-		}
+		manager.registerVariant(item, new ResourceLocation("forestry:" + typeTag + "_neutral"));
+		manager.registerVariant(item, new ResourceLocation("forestry:" + typeTag + "_locked"));
+		manager.registerVariant(item, new ResourceLocation("forestry:" + typeTag + "_receive"));
+		manager.registerVariant(item, new ResourceLocation("forestry:" + typeTag + "_resupply"));
 		manager.registerItemModel(item, new BackpackMeshDefinition());
 	}
 

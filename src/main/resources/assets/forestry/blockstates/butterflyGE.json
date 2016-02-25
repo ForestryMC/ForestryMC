@@ -4,7 +4,7 @@
         "textures": {
             "#Butterfly2texture": "forestry:texture"
         },
-        "model": "forestry:butterflyGE.b3d"
+        "model": "forestry:butterflyGE.obj"
      },
     "variants": {
         "inventory": [{

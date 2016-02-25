@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.blocks;
 
+import java.util.Locale;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -48,6 +50,6 @@ public enum BlockTypeApicultureTesr implements IBlockTypeTesr {
 
 	@Override
 	public String getName() {
-		return name();
+		return getMachineProperties().getName();
 	}
 }

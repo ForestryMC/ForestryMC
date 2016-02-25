@@ -9,7 +9,7 @@ import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.arboriculture.blocks.BlockSapling;
-import forestry.core.render.StateMapperForestry;
+import forestry.core.render.ForestryStateMapper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.model.ModelResourceLocation;
@@ -17,19 +17,20 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class StateMapperSapling extends StateMapperForestry {
+public class SaplingStateMapper extends ForestryStateMapper {
 	
 	@Override
 	public Map putStateModelLocations(Block block) {
 		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
 			if (allele instanceof IAlleleTreeSpecies) {
-				IBlockState state = block.getDefaultState().withProperty(BlockSapling.TREE, (IAlleleTreeSpecies)allele);
+				IAlleleTreeSpecies tree = (IAlleleTreeSpecies)allele;
+				IBlockState state = block.getDefaultState().withProperty(BlockSapling.TREE, tree);
 				LinkedHashMap linkedhashmap = Maps.newLinkedHashMap(state.getProperties());
-				String modID = ((IAlleleTreeSpecies) allele).getModID();
+				String modID = tree.getModID();
 				if(modID == null){
 					modID = "forestry";
 				}
-				String s = String.format("%s:%s",((IAlleleTreeSpecies) allele).getModID(), "germlings");
+				String s = String.format("%s:%s", modID, "germlings");
 				mapStateModelLocations.put(state, new ModelResourceLocation(s, getPropertyString(linkedhashmap)));
 			}
 		}

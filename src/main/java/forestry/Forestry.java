@@ -98,6 +98,7 @@ public class Forestry {
 
 		PluginManager.runPreInit();
 		
+		Proxies.render.registerLoaders();
 		Proxies.render.registerModels();
 	}
 

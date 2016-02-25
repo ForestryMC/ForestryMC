@@ -1,6 +1,7 @@
 package forestry.core.render;
 
 import java.util.LinkedHashMap;
+import java.util.Locale;
 import java.util.Map;
 import com.google.common.collect.Maps;
 
@@ -17,30 +18,30 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class StateMapperMachine<C extends Enum<C> & IBlockType & IStringSerializable> extends StateMapperForestry {
+public class MachineStateMapper<T extends Enum<T> & IBlockType & IStringSerializable> extends ForestryStateMapper {
 
-	private final Class<C> clazz;
-	private final PropertyEnum<C> META;
+	private final Class<T> machinePropertiesClass;
+	private final PropertyEnum<T> META;
 	private final PropertyEnum<EnumFacing> FACE;
 	
-	public StateMapperMachine(Class<C> clazz, PropertyEnum<C> META, PropertyEnum<EnumFacing> FACE) {
-		this.clazz = clazz;
+	public MachineStateMapper(Class<T> machinePropertiesClass, PropertyEnum<T> META, PropertyEnum<EnumFacing> FACE) {
+		this.machinePropertiesClass = machinePropertiesClass;
 		this.META = META;
 		this.FACE = FACE;
 	}
 
 	@Override
 	public Map<IBlockState, ModelResourceLocation> putStateModelLocations(Block block) {
-		for (C definition : clazz.getEnumConstants()) {
-			if (definition instanceof IMachinePropertiesTesr)
+		for (T type : machinePropertiesClass.getEnumConstants()) {
+			if (type.getMachineProperties() instanceof IMachinePropertiesTesr)
 				continue;
 			for (EnumFacing facing : EnumFacing.values()) {
 				if (facing == EnumFacing.DOWN || facing == EnumFacing.UP)
 					continue;
-				IBlockState state = block.getDefaultState().withProperty(META, definition).withProperty(FACE, facing);
+				IBlockState state = block.getDefaultState().withProperty(META, type).withProperty(FACE, facing);
 				LinkedHashMap linkedhashmap = Maps.newLinkedHashMap(state.getProperties());
-				ResourceLocation RL = Block.blockRegistry.getNameForObject(block);
-				String s = String.format("%s:%s", RL.getResourceDomain(), RL.getResourcePath() + "_" + META.getName((C) linkedhashmap.remove(META)));
+				ResourceLocation blockLocation = Block.blockRegistry.getNameForObject(block);
+				String s = String.format("%s:%s", blockLocation.getResourceDomain(), blockLocation.getResourcePath() + "_" + META.getName((T) linkedhashmap.remove(META)));
 				mapStateModelLocations.put(state, new ModelResourceLocation(s, getPropertyString(linkedhashmap)));
 			}
 		}

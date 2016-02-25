@@ -45,6 +45,6 @@ public enum BlockTypeMail implements IBlockType {
 
 	@Override
 	public String getName() {
-		return name();
+		return getMachineProperties().getName();
 	}
 }

@@ -8,7 +8,7 @@ import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.arboriculture.blocks.BlockFruitPod;
-import forestry.core.render.StateMapperForestry;
+import forestry.core.render.ForestryStateMapper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCocoa;
 import net.minecraft.block.BlockDirectional;
@@ -19,7 +19,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class StateMapperFluidPod extends StateMapperForestry{
+public class FluidPodStateMapper extends ForestryStateMapper{
 	
 	private final Map<IBlockState, ModelResourceLocation> mapStateModelLocations = Maps.newLinkedHashMap();
 
@@ -30,10 +30,11 @@ public class StateMapperFluidPod extends StateMapperForestry{
 				for	(int age = 0;age < BlockCocoa.AGE.getAllowedValues().size();age++){
 					for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
 						if (allele instanceof IAlleleFruit) {
-							if(((IAlleleFruit) allele).getModelName() != null){
-								IBlockState state = block.getDefaultState().withProperty(BlockFruitPod.FRUIT, (IAlleleFruit)allele).withProperty(BlockDirectional.FACING, facing).withProperty(BlockCocoa.AGE, age);
+							IAlleleFruit fruit = (IAlleleFruit) allele;
+							if(fruit.getModelName() != null){
+								IBlockState state = block.getDefaultState().withProperty(BlockFruitPod.FRUIT, fruit).withProperty(BlockDirectional.FACING, facing).withProperty(BlockCocoa.AGE, age);
 								LinkedHashMap linkedhashmap = Maps.newLinkedHashMap(state.getProperties());
-								String modID = ((IAlleleFruit) allele).getModID();
+								String modID = fruit.getModID();
 								if(modID == null){
 									modID = "forestry";
 								}

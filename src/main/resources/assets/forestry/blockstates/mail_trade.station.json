@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "face=north": { "model": "forestry:mail_trade.station" },
+		"face=east": { "model": "forestry:mail_trade.station", "y": 90 },
+		"face=south": { "model": "forestry:mail_trade.station", "y": 180 },
+		"face=west": { "model": "forestry:mail_trade.station", "y": -90 }
+	}
+}

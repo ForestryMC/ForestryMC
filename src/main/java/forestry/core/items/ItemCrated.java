@@ -74,9 +74,9 @@ public class ItemCrated extends ItemForestry {
 	public void registerModel(Item item, IModelManager manager) {
 		if(contained == null){
 			manager.registerItemModel(item, 0, false);
+			manager.registerItemModel(item, 1, "crate-filled");
 		}else{
-			String modID = ItemStackUtil.getItemNameFromRegistry(item).getResourceDomain();
-			ModelResourceLocation modelLocation = new ModelResourceLocation(modID + ":crates",  StringUtil.cleanItemName(item));
+			ModelResourceLocation modelLocation = new ModelResourceLocation("forestry:crate-filled",  StringUtil.cleanItemName(item));
 			ModelLoader.setCustomModelResourceLocation(item, 0, modelLocation);
 			ModelBakery.registerItemVariants(item, modelLocation);
 		}

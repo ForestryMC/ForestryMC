@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.factory.blocks;
 
+import java.util.Locale;
+
 import javax.annotation.Nonnull;
 
 import forestry.core.blocks.IBlockType;
@@ -42,6 +44,6 @@ public enum BlockTypeFactoryPlain implements IBlockType {
 
 	@Override
 	public String getName() {
-		return name();
+		return getMachineProperties().getName();
 	}
 }

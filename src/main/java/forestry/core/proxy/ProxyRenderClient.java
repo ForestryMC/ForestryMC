@@ -19,6 +19,7 @@ import net.minecraft.client.renderer.block.statemap.IStateMapper;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
@@ -29,6 +30,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.b3d.B3DLoader;
+import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.fml.client.FMLClientHandler;
 
 import forestry.apiculture.entities.EntityFXBee;
@@ -150,11 +153,18 @@ public class ProxyRenderClient extends ProxyRender {
 				return fluidLocation;
 			}
 		});
+		ModelBakery.registerItemVariants(Item.getItemFromBlock(block), fluidLocation);
 	}
 
 	@Override
 	public void registerStateMapper(Block block, IStateMapper mapper) {
 		ModelLoader.setCustomStateMapper(block, mapper);
+	}
+	
+	@Override
+	public void registerLoaders(){
+		B3DLoader.instance.addDomain(Constants.ID);
+		OBJLoader.instance.addDomain(Constants.ID);
 	}
 
 	@Override

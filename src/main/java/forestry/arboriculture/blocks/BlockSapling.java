@@ -20,6 +20,7 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
@@ -30,18 +31,22 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.TreeManager;
+import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
 import forestry.api.core.IStateMapperRegister;
 import forestry.arboriculture.blocks.property.PropertyTree;
-import forestry.arboriculture.render.StateMapperSapling;
+import forestry.arboriculture.render.SaplingStateMapper;
 import forestry.arboriculture.tiles.TileSapling;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemStackUtil;
 
-public class BlockSapling extends BlockTreeContainer implements IGrowable, IStateMapperRegister {
+public class BlockSapling extends BlockTreeContainer implements IGrowable, IStateMapperRegister, IItemModelRegister {
 	
 	/* PROPERTYS */
 	public static final PropertyTree TREE = new PropertyTree("tree");
@@ -109,7 +114,14 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 	
 	@Override
 	public void registerStateMapper() {
-		Proxies.render.registerStateMapper(this, new StateMapperSapling());
+		Proxies.render.registerStateMapper(this, new SaplingStateMapper());
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void registerModel(Item item, IModelManager manager) {
+		//To delete the error message
+		manager.registerItemModel(item, 0, "germlings/sapling.treeLarch");
 	}
 
 	/* PLANTING */

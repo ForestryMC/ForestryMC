@@ -18,7 +18,10 @@ import com.google.common.collect.ImmutableMap;
 
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.IButterfly;
+import forestry.core.models.ModelManager;
+import forestry.core.models.TRSRBakedModel;
 import forestry.core.utils.Log;
+import forestry.plugins.PluginLepidopterology;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -37,8 +40,9 @@ public class ModelButterflyItem implements ISmartItemModel {
 	public IRetexturableModel modelButterfly;
 	public ResourceLocation location;
 
-	public ModelButterflyItem(ResourceLocation location) {
-		this.location = location;
+	public ModelButterflyItem() {
+		this.location = new ResourceLocation("forestry:item/butterflyGE.b3d");
+		//this.location = new ResourceLocation("forestry:item/butterflyGE.obj");
 	}
 
 	@Override
@@ -78,20 +82,23 @@ public class ModelButterflyItem implements ISmartItemModel {
 
 	@Override
 	public IBakedModel handleItemState(ItemStack item) {
-		try {
-			modelButterfly = (IRetexturableModel) ModelLoaderRegistry.getModel(location);
-		} catch (IOException e) {
-			Log.warning(
-					"Failed to find Butterfly Model for (" + location.toString() + ") in the Forestry registry.");
+		if(modelButterfly == null){
+			try {
+				modelButterfly = (IRetexturableModel) ModelLoaderRegistry.getModel(location);
+			} catch (IOException e) {
+				Log.warning(
+						"Failed to find Butterfly Model for (" + location.toString() + ") in the Forestry registry.");
+			}
+			if (modelButterfly == null) {
+				return null;
+			}
 		}
 		IButterfly butterfly = ButterflyManager.butterflyRoot.getMember(item);
-		if (modelButterfly == null) {
-			return null;
-		}
 		if (butterfly == null) {
 			butterfly = ButterflyManager.butterflyRoot.templateAsIndividual(ButterflyManager.butterflyRoot.getDefaultTemplate());
 		}
 		return bakeModel(butterfly);
+		//return bakeModel(butterfly);
 	}
 
 	public IBakedModel bakeModel(IButterfly butterfly) {
@@ -103,8 +110,9 @@ public class ModelButterflyItem implements ISmartItemModel {
 		};
 		ImmutableMap.Builder<String, String> textures = ImmutableMap.builder();
 		textures.put("#ButterflyGE", butterfly.getGenome().getSecondary().getEntityTexture().toString().replace(".png", "").replace("textures/", ""));
+		textures.put("Butterfly2texture", butterfly.getGenome().getSecondary().getEntityTexture().toString().replace(".png", "").replace("textures/", ""));
 		modelButterfly = (IRetexturableModel) modelButterfly.retexture(textures.build());
-		return modelButterfly.bake(ModelRotation.X270_Y90, DefaultVertexFormats.ITEM, textureGetter);
+		return new TRSRBakedModel(modelButterfly.bake(ModelRotation.X0_Y0, DefaultVertexFormats.ITEM, textureGetter), -0.5F, -1.5F, 1.5F, 0, (float)Math.PI * 2, 0, 1F);
 	}
 
 	public static float getIrregularWingYaw(long flapping, float flap) {
