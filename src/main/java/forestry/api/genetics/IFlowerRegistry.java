@@ -5,10 +5,6 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
-import java.util.Collection;
-import java.util.Random;
-import java.util.Set;
-
 import net.minecraft.block.Block;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
@@ -69,24 +65,4 @@ public interface IFlowerRegistry {
 	 * Checks a single coordinate to see if it is an accepted flower.
 	 */
 	boolean isAcceptedFlower(String flowerType, World world, BlockPos pos);
-
-	/**
-	 * For use by IFlowerGrowthRule implementations
-	 * @deprecated since Forestry 4.0.8 This will be accessible to IFlowerGrowthRule via IFlowerGrowthHelper
-	 */
-	@Deprecated
-	IFlower getRandomPlantableFlower(String flowerType, Random rand);
-
-	/**
-	 * Returns all known flower types.
-	 * @deprecated since Forestry 4.0.8 This should only be used internally.
-	 */
-	@Deprecated
-	Collection<String> getFlowerTypes();
-
-	/**
-	 * @deprecated since Forestry 4.0.8 This should only be used internally.
-	 */
-	@Deprecated
-	Set<IFlower> getAcceptableFlowers(String flowerType);
 }

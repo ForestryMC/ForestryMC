@@ -57,8 +57,6 @@ import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IClassification.EnumClassLevel;
-import forestry.api.genetics.IFlower;
-import forestry.api.genetics.IFlowerRegistry;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
@@ -72,6 +70,7 @@ import forestry.apiculture.blocks.BlockTypeApicultureTesr;
 import forestry.apiculture.commands.CommandBee;
 import forestry.apiculture.entities.EntityMinecartApiary;
 import forestry.apiculture.entities.EntityMinecartBeehouse;
+import forestry.apiculture.flowers.Flower;
 import forestry.apiculture.flowers.FlowerRegistry;
 import forestry.apiculture.genetics.BeeBranchDefinition;
 import forestry.apiculture.genetics.BeeDefinition;
@@ -227,7 +226,9 @@ public class PluginApiculture extends BlankForestryPlugin {
 		String acceptedFlowerMessage = StringUtil.localize("config.beekeeping.flowers.accepted.comment");
 		String plantableFlowerMessage = StringUtil.localize("config.beekeeping.flowers.plantable.comment");
 
-		for (String flowerType : FlowerManager.flowerRegistry.getFlowerTypes()) {
+		FlowerRegistry flowerRegistry = (FlowerRegistry) FlowerManager.flowerRegistry;
+
+		for (String flowerType : flowerRegistry.getFlowerTypes()) {
 			String[] defaultAccepted = defaultAcceptedFlowers.get(flowerType);
 			if (defaultAccepted == null) {
 				defaultAccepted = Constants.EMPTY_STRINGS;
@@ -244,7 +245,7 @@ public class PluginApiculture extends BlankForestryPlugin {
 			property.comment = plantableFlowerMessage;
 			parsePlantableFlowers(property, flowerType);
 
-			Set<IFlower> acceptableFlowers = FlowerManager.flowerRegistry.getAcceptableFlowers(flowerType);
+			Set<Flower> acceptableFlowers = flowerRegistry.getAcceptableFlowers(flowerType);
 			if (acceptableFlowers == null || acceptableFlowers.size() == 0) {
 				Log.severe("Flower type '" + flowerType + "' has no valid flowers set in apiculture.cfg. Add valid flowers or delete the config to set it to default.");
 			}
@@ -315,7 +316,7 @@ public class PluginApiculture extends BlankForestryPlugin {
 
 	private void setDefaultsForConfig() {
 		
-		IFlowerRegistry flowerRegistry = FlowerManager.flowerRegistry;
+		FlowerRegistry flowerRegistry = (FlowerRegistry) FlowerManager.flowerRegistry;
 
 		// Register acceptable plants
 		flowerRegistry.registerAcceptableFlower(Blocks.dragon_egg, FlowerManager.FlowerTypeEnd);
@@ -342,12 +343,12 @@ public class PluginApiculture extends BlankForestryPlugin {
 		flowerRegistry.registerPlantableFlower(Blocks.red_mushroom, 0, 1.0, FlowerManager.FlowerTypeMushrooms);
 		flowerRegistry.registerPlantableFlower(Blocks.cactus, 0, 1.0, FlowerManager.FlowerTypeCacti);
 
-		for (String flowerType : FlowerManager.flowerRegistry.getFlowerTypes()) {
-			Set<IFlower> flowers = FlowerManager.flowerRegistry.getAcceptableFlowers(flowerType);
+		for (String flowerType : flowerRegistry.getFlowerTypes()) {
+			Set<Flower> flowers = flowerRegistry.getAcceptableFlowers(flowerType);
 			List<String> acceptedFlowerNames = new ArrayList<>();
 			List<String> plantableFlowerNames = new ArrayList<>();
 			if (flowers != null) {
-				for (IFlower flower : flowers) {
+				for (Flower flower : flowers) {
 					String name = ItemStackUtil.getBlockNameFromRegistryAsSting(flower.getBlock());
 					if (name == null) {
 						Log.severe("Could not find name for flower: " + flower + " with type: " + flowerType);

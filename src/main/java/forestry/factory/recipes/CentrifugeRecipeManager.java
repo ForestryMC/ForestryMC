@@ -11,7 +11,6 @@
 package forestry.factory.recipes;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -59,18 +58,5 @@ public class CentrifugeRecipeManager implements ICentrifugeManager {
 	@Override
 	public Set<ICentrifugeRecipe> recipes() {
 		return Collections.unmodifiableSet(recipes);
-	}
-
-	@Override
-	@Deprecated
-	public Map<Object[], Object[]> getRecipes() {
-		HashMap<Object[], Object[]> recipeList = new HashMap<>();
-
-		for (ICentrifugeRecipe recipe : recipes) {
-			Set<ItemStack> productsKeys = recipe.getAllProducts().keySet();
-			recipeList.put(new Object[]{recipe.getInput()}, productsKeys.toArray(new ItemStack[productsKeys.size()]));
-		}
-
-		return recipeList;
 	}
 }

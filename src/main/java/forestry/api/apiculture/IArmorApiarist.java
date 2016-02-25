@@ -6,7 +6,6 @@
 package forestry.api.apiculture;
 
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -23,17 +22,4 @@ public interface IArmorApiarist {
 	 * @return Whether or not the armor should protect the player from that attack
 	 */
 	boolean protectEntity(EntityLivingBase entity, ItemStack armor, String cause, boolean doProtect);
-
-	/**
-	 * Called when the apiarist's armor acts as protection against an attack.
-	 * 
-	 * @param player Player being attacked
-	 * @param armor Armor item
-	 * @param cause Optional cause of attack, such as a bee effect identifier
-	 * @param doProtect Whether or not to actually do the side effects of protection
-	 * @return Whether or not the armor should protect the player from that attack
-	 * @deprecated since Forestry 4.2. Use protectEntity
-	 */
-	@Deprecated
-	public boolean protectPlayer(EntityPlayer player, ItemStack armor, String cause, boolean doProtect);
 }

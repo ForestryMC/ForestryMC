@@ -11,7 +11,6 @@
 package forestry.apiculture;
 
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -32,15 +31,7 @@ public class ArmorApiaristHelper implements IArmorApiaristHelper {
 		}
 
 		IArmorApiarist armorApiarist = (IArmorApiarist) item;
-		try {
-			return armorApiarist.protectEntity(entity, stack, cause, doProtect);
-		} catch (Throwable ignored) { // protectEntity is new to the API and may not be implemented by the armor
-			if (entity instanceof EntityPlayer) {
-				return armorApiarist.protectPlayer((EntityPlayer) entity, stack, cause, doProtect);
-			} else {
-				return true; // fallback on assuming IArmorApiarist will protect the entity
-			}
-		}
+		return armorApiarist.protectEntity(entity, stack, cause, doProtect);
 	}
 
 	@Override
@@ -55,15 +46,5 @@ public class ArmorApiaristHelper implements IArmorApiaristHelper {
 		}
 
 		return count;
-	}
-
-	@Override
-	public boolean isArmorApiarist(ItemStack stack, EntityPlayer player, String cause, boolean doProtect) {
-		return isArmorApiarist(stack, (EntityLivingBase) player, cause, doProtect);
-	}
-
-	@Override
-	public int wearsItems(EntityPlayer player, String cause, boolean doProtect) {
-		return wearsItems((EntityLivingBase) player, cause, doProtect);
 	}
 }

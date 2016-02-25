@@ -5,9 +5,7 @@
  ******************************************************************************/
 package forestry.api.recipes;
 
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.world.World;
 
 /**
  * Extension of IRecipe to give better access to the expected crafting inputs.
@@ -32,18 +30,4 @@ public interface IDescriptiveRecipe extends IRecipe {
 	 */
 	Object[] getIngredients();
 
-	/**
-	 * @return true if the recipe manager should copy NBT from input items to the output item.
-	 * If true, all input items must have the same NBT for it to succeed.
-	 * @deprecated since Forestry 4.2 wood itemStacks use item damage (meta) instead of NBT
-	 */
-	@Deprecated
-	boolean preserveNBT();
-
-	/**
-	 * Used to check if a recipe matches current crafting inventory
-	 * @deprecated Since Forestry 4.1. This is handled by Forestry.
-	 */
-	@Deprecated
-	boolean matches(IInventory inventoryCrafting, World world);
 }

@@ -18,9 +18,7 @@ import net.minecraft.block.Block;
 
 import net.minecraftforge.oredict.OreDictionary;
 
-import forestry.api.genetics.IFlower;
-
-final class Flower implements IFlower {
+public final class Flower {
 
 	private final Block block;
 	private final int meta;
@@ -32,24 +30,22 @@ final class Flower implements IFlower {
 		this.weight = weight;
 	}
 
-	@Override
 	public boolean isPlantable() {
 		return this.weight != 0.0;
 	}
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof IFlower)) {
+		if (!(obj instanceof Flower)) {
 			return false;
 		}
 
-		IFlower flower = (IFlower) obj;
+		Flower flower = (Flower) obj;
 
 		return Block.isEqualTo(this.block, flower.getBlock()) && (this.meta == OreDictionary.WILDCARD_VALUE || flower.getMeta() == OreDictionary.WILDCARD_VALUE || this.meta == flower.getMeta());
 	}
 
-	@Override
-	public int compareTo(@Nonnull IFlower other) {
+	public int compareTo(@Nonnull Flower other) {
 		return this.weight.compareTo(other.getWeight());
 	}
 
@@ -58,22 +54,18 @@ final class Flower implements IFlower {
 		return Objects.hashCode(block);
 	}
 
-	@Override
 	public Block getBlock() {
 		return block;
 	}
 
-	@Override
 	public int getMeta() {
 		return meta;
 	}
 
-	@Override
 	public double getWeight() {
 		return weight;
 	}
 
-	@Override
 	public void setWeight(double weight) {
 		this.weight = weight;
 	}

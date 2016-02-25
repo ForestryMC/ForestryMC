@@ -81,15 +81,6 @@ public interface IAlleleRegistry {
 
 	/**
 	 * Registers an allele.
-	 * 
-	 * @param allele IAllele to register.
-	 * @deprecated since Forestry 4.2. Use the IChromosomeType-specific version.
-	 */
-	@Deprecated
-	void registerAllele(IAllele allele);
-
-	/**
-	 * Registers an allele.
 	 *
 	 * NOTE: Where possible, it is recommended to use IAlleleFactory instead
 	 *   because it has built-in advanced localization support.

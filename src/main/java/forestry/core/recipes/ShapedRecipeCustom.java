@@ -15,7 +15,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import net.minecraft.block.Block;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -125,17 +124,6 @@ public class ShapedRecipeCustom extends ShapedOreRecipe implements IDescriptiveR
 	@Override
 	public Object[] getIngredients() {
 		return getInput();
-	}
-
-	@Override
-	public boolean preserveNBT() {
-		return false;
-	}
-
-	@Override
-	@Deprecated
-	public boolean matches(IInventory inventoryCrafting, World world) {
-		return false;
 	}
 
 	@Override

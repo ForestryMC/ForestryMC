@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.plugins;
 
-import com.google.common.collect.ImmutableList;
-
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -29,7 +27,6 @@ import forestry.api.fuels.FermenterFuel;
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.MoistenerFuel;
 import forestry.api.fuels.RainSubstrate;
-import forestry.api.recipes.ICraftingProvider;
 import forestry.api.recipes.RecipeManagers;
 import forestry.apiculture.items.ItemRegistryApiculture;
 import forestry.core.blocks.BlockSoil;
@@ -69,32 +66,28 @@ public class PluginFactory extends BlankForestryPlugin {
 
 	@Override
 	public void setupAPI() {
-		RecipeManagers.craftingProviders = ImmutableList.<ICraftingProvider>of(
-				RecipeManagers.carpenterManager = new CarpenterRecipeManager(),
-				RecipeManagers.centrifugeManager = new CentrifugeRecipeManager(),
-				RecipeManagers.fabricatorManager = new FabricatorRecipeManager(),
-				RecipeManagers.fabricatorSmeltingManager = new FabricatorSmeltingRecipeManager(),
-				RecipeManagers.fermenterManager = new FermenterRecipeManager(),
-				RecipeManagers.moistenerManager = new MoistenerRecipeManager(),
-				RecipeManagers.squeezerManager = new SqueezerRecipeManager(),
-				RecipeManagers.stillManager = new StillRecipeManager()
-		);
+		RecipeManagers.carpenterManager = new CarpenterRecipeManager();
+		RecipeManagers.centrifugeManager = new CentrifugeRecipeManager();
+		RecipeManagers.fabricatorManager = new FabricatorRecipeManager();
+		RecipeManagers.fabricatorSmeltingManager = new FabricatorSmeltingRecipeManager();
+		RecipeManagers.fermenterManager = new FermenterRecipeManager();
+		RecipeManagers.moistenerManager = new MoistenerRecipeManager();
+		RecipeManagers.squeezerManager = new SqueezerRecipeManager();
+		RecipeManagers.stillManager = new StillRecipeManager();
 
 		setupFuelManager();
 	}
 
 	@Override
 	public void disabledSetupAPI() {
-		RecipeManagers.craftingProviders = ImmutableList.<ICraftingProvider>of(
-				RecipeManagers.carpenterManager = new DummyManagers.DummyCarpenterManager(),
-				RecipeManagers.centrifugeManager = new DummyManagers.DummyCentrifugeManager(),
-				RecipeManagers.fabricatorManager = new DummyManagers.DummyFabricatorManager(),
-				RecipeManagers.fabricatorSmeltingManager = new DummyManagers.DummyFabricatorSmeltingManager(),
-				RecipeManagers.fermenterManager = new DummyManagers.DummyFermenterManager(),
-				RecipeManagers.moistenerManager = new DummyManagers.DummyMoistenerManager(),
-				RecipeManagers.squeezerManager = new DummyManagers.DummySqueezerManager(),
-				RecipeManagers.stillManager = new DummyManagers.DummyStillManager()
-		);
+		RecipeManagers.carpenterManager = new DummyManagers.DummyCarpenterManager();
+		RecipeManagers.centrifugeManager = new DummyManagers.DummyCentrifugeManager();
+		RecipeManagers.fabricatorManager = new DummyManagers.DummyFabricatorManager();
+		RecipeManagers.fabricatorSmeltingManager = new DummyManagers.DummyFabricatorSmeltingManager();
+		RecipeManagers.fermenterManager = new DummyManagers.DummyFermenterManager();
+		RecipeManagers.moistenerManager = new DummyManagers.DummyMoistenerManager();
+		RecipeManagers.squeezerManager = new DummyManagers.DummySqueezerManager();
+		RecipeManagers.stillManager = new DummyManagers.DummyStillManager();
 
 		setupFuelManager();
 	}

@@ -11,9 +11,7 @@
 package forestry.factory.recipes;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import net.minecraft.item.ItemStack;
@@ -68,16 +66,5 @@ public class MoistenerRecipeManager implements IMoistenerManager {
 	@Override
 	public Set<IMoistenerRecipe> recipes() {
 		return Collections.unmodifiableSet(recipes);
-	}
-
-	@Override
-	public Map<Object[], Object[]> getRecipes() {
-		HashMap<Object[], Object[]> recipeList = new HashMap<>();
-
-		for (IMoistenerRecipe recipe : recipes) {
-			recipeList.put(new ItemStack[]{recipe.getResource()}, new ItemStack[]{recipe.getProduct()});
-		}
-
-		return recipeList;
 	}
 }

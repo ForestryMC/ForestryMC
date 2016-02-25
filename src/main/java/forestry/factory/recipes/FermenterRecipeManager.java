@@ -11,9 +11,7 @@
 package forestry.factory.recipes;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import net.minecraft.item.ItemStack;
@@ -100,16 +98,5 @@ public class FermenterRecipeManager implements IFermenterManager {
 	@Override
 	public Set<IFermenterRecipe> recipes() {
 		return Collections.unmodifiableSet(recipes);
-	}
-
-	@Override
-	public Map<Object[], Object[]> getRecipes() {
-		HashMap<Object[], Object[]> recipeList = new HashMap<>();
-
-		for (IFermenterRecipe recipe : recipes) {
-			recipeList.put(new Object[]{recipe.getResource(), recipe.getFluidResource()}, new Object[]{recipe.getOutput()});
-		}
-
-		return recipeList;
 	}
 }

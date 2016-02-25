@@ -5,20 +5,12 @@
  ******************************************************************************/
 package forestry.api.recipes;
 
-import java.util.Collection;
-
 /**
  * Contains all available recipe managers for Forestry machines and items.
  * 
  * @author SirSengir
  */
 public class RecipeManagers {
-
-	/**
-	 * @deprecated since Forestry 4.1.0. Use the specific recipe managers below instead.
-	 */
-	@Deprecated
-	public static Collection<ICraftingProvider> craftingProviders;
 	
 	/**
 	 * Allows you to add recipes to the carpenter. See {@link ICarpenterManager} for details.

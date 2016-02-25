@@ -40,8 +40,9 @@ import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IFlower;
 import forestry.apiculture.blocks.BlockTypeApiculture;
+import forestry.apiculture.flowers.Flower;
+import forestry.apiculture.flowers.FlowerRegistry;
 import forestry.apiculture.inventory.InventoryApiary;
 import forestry.apiculture.tiles.TileApiary;
 import forestry.arboriculture.worldgen.BlockTypeLog;
@@ -270,7 +271,8 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 							continue;
 						}
 
-						IFlower flower = FlowerManager.flowerRegistry.getRandomPlantableFlower(FlowerManager.FlowerTypeVanilla, world.rand);
+						FlowerRegistry flowerRegistry = (FlowerRegistry) FlowerManager.flowerRegistry;
+						Flower flower = flowerRegistry.getRandomPlantableFlower(FlowerManager.FlowerTypeVanilla, world.rand);
 						setBlockState(world, flower.getBlock().getStateFromMeta(flower.getMeta()), j, i, k, box);
 					}
 				}

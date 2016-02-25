@@ -12,9 +12,7 @@ package forestry.factory.recipes;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import net.minecraft.item.ItemStack;
@@ -112,16 +110,5 @@ public class SqueezerRecipeManager implements ISqueezerManager {
 	@Override
 	public Set<ISqueezerRecipe> recipes() {
 		return Collections.unmodifiableSet(recipes);
-	}
-
-	@Override
-	public Map<Object[], Object[]> getRecipes() {
-		HashMap<Object[], Object[]> recipeList = new HashMap<>();
-
-		for (ISqueezerRecipe recipe : recipes) {
-			recipeList.put(recipe.getResources(), new Object[]{recipe.getRemnants(), recipe.getFluidOutput()});
-		}
-
-		return recipeList;
 	}
 }

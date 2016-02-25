@@ -6,7 +6,6 @@
 package forestry.api.recipes;
 
 import java.util.Collection;
-import java.util.Map;
 
 public interface ICraftingProvider<T extends IForestryRecipe> {
 	/**
@@ -28,13 +27,4 @@ public interface ICraftingProvider<T extends IForestryRecipe> {
 	 * @since Forestry 4.1.0
 	 */
 	Collection<T> recipes();
-
-	/**
-	 * Access to the full list of recipes contained in the crafting provider.
-	 *
-	 * @return List of the given format where the first array represents inputs and the second outputs. Objects can be either ItemStack or LiquidStack.
-	 * @deprecated since Forestry 4.1.0. Use recipes()
-	 */
-	@Deprecated
-	Map<Object[], Object[]> getRecipes();
 }

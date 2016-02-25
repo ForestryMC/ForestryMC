@@ -40,7 +40,6 @@ import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeModifier;
-import forestry.api.genetics.IFlower;
 import forestry.api.genetics.IFlowerAcceptableRule;
 import forestry.api.genetics.IFlowerGrowthHelper;
 import forestry.api.genetics.IFlowerGrowthRule;
@@ -255,9 +254,8 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 		return false;
 	}
 
-	@Override
-	public Set<IFlower> getAcceptableFlowers(String flowerType) {
-		return ImmutableSet.<IFlower>copyOf(this.registeredFlowers.get(flowerType));
+	public Set<Flower> getAcceptableFlowers(String flowerType) {
+		return ImmutableSet.copyOf(this.registeredFlowers.get(flowerType));
 	}
 
 	@Override
@@ -271,14 +269,12 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 		}
 	}
 
-	@Override
-	public IFlower getRandomPlantableFlower(String flowerType, Random rand) {
+	public Flower getRandomPlantableFlower(String flowerType, Random rand) {
 		TreeMap<Double, Flower> chancesMap = getChancesMap(flowerType);
 		double maxKey = chancesMap.lastKey() + 1.0;
 		return chancesMap.get(chancesMap.lowerKey(rand.nextDouble() * maxKey));
 	}
 
-	@Override
 	public Collection<String> getFlowerTypes() {
 		return new ArrayList<>(Sets.union(defaultFlowerTypes, registeredFlowers.keySet()));
 	}
@@ -311,7 +307,7 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 
 	@Override
 	public boolean plantRandomFlower(String flowerType, World world, BlockPos pos) {
-		IFlower flower = getRandomPlantableFlower(flowerType, world.rand);
+		Flower flower = getRandomPlantableFlower(flowerType, world.rand);
 		return world.setBlockState(pos, flower.getBlock().getStateFromMeta(flower.getMeta()), Constants.FLAG_BLOCK_SYNCH);
 	}
 }

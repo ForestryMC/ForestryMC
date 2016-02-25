@@ -11,9 +11,7 @@
 package forestry.factory.recipes;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import net.minecraft.inventory.IInventory;
@@ -124,17 +122,5 @@ public class CarpenterRecipeManager implements ICarpenterManager {
 	@Override
 	public Set<ICarpenterRecipe> recipes() {
 		return Collections.unmodifiableSet(recipes);
-	}
-
-	@Override
-	public Map<Object[], Object[]> getRecipes() {
-
-		HashMap<Object[], Object[]> recipeList = new HashMap<>();
-
-		for (ICarpenterRecipe recipe : recipes) {
-			recipeList.put(recipe.getCraftingGridRecipe().getIngredients(), new Object[]{recipe.getCraftingGridRecipe().getRecipeOutput()});
-		}
-
-		return recipeList;
 	}
 }

@@ -11,9 +11,7 @@
 package forestry.factory.recipes;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import net.minecraft.inventory.IInventory;
@@ -23,7 +21,6 @@ import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.recipes.IFabricatorManager;
 import forestry.api.recipes.IFabricatorRecipe;
-import forestry.api.recipes.RecipeManagers;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.recipes.ShapedRecipeCustom;
 import forestry.core.utils.ItemStackUtil;
@@ -36,11 +33,6 @@ public class FabricatorRecipeManager implements IFabricatorManager {
 	public void addRecipe(ItemStack plan, FluidStack molten, ItemStack result, Object[] pattern) {
 		IFabricatorRecipe recipe = new FabricatorRecipe(plan, molten, ShapedRecipeCustom.createShapedRecipe(result, pattern));
 		addRecipe(recipe);
-	}
-
-	@Override
-	public void addSmelting(ItemStack resource, FluidStack molten, int meltingPoint) {
-		RecipeManagers.fabricatorSmeltingManager.addSmelting(resource, molten, meltingPoint);
 	}
 
 	public static IFabricatorRecipe findMatchingRecipe(ItemStack plan, IInventory resources) {
@@ -81,16 +73,5 @@ public class FabricatorRecipeManager implements IFabricatorManager {
 	@Override
 	public Set<IFabricatorRecipe> recipes() {
 		return Collections.unmodifiableSet(recipes);
-	}
-
-	@Override
-	public Map<Object[], Object[]> getRecipes() {
-		HashMap<Object[], Object[]> recipeList = new HashMap<>();
-
-		for (IFabricatorRecipe recipe : recipes) {
-			recipeList.put(recipe.getIngredients(), new Object[]{recipe.getRecipeOutput()});
-		}
-
-		return recipeList;
 	}
 }

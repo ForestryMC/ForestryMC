@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -70,12 +69,6 @@ public interface ISpeciesRoot {
 
 	/* BREEDING TRACKER */
 	IBreedingTracker getBreedingTracker(World world, GameProfile player);
-
-	/**
-	 * @deprecated since Forestry 4.2.1. Breeding tracker should be automatically synced.
-	 */
-	@Deprecated
-	void syncBreedingTrackerToPlayer(EntityPlayer player);
 
 	/* GENOME MANIPULATION */
 	IIndividual templateAsIndividual(IAllele[] template);

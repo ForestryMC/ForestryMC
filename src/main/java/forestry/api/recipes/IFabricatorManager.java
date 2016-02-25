@@ -13,10 +13,4 @@ public interface IFabricatorManager extends ICraftingProvider<IFabricatorRecipe>
 
 	void addRecipe(ItemStack plan, FluidStack molten, ItemStack result, Object[] pattern);
 
-	/**
-	 * @deprecated since Forestry 4.1. Use IFabricatorSmeltingManager
-	 */
-	@Deprecated
-	void addSmelting(ItemStack resource, FluidStack molten, int meltingPoint);
-
 }

@@ -148,20 +148,6 @@ public class AlleleRegistry implements IAlleleRegistry {
 	}
 
 	@Override
-	public void registerAllele(IAllele allele) {
-		alleleMap.put(allele.getUID(), allele);
-		if (allele instanceof IAlleleSpecies) {
-			IClassification branch = ((IAlleleSpecies) allele).getBranch();
-			if (branch != null) {
-				branch.addMemberSpecies((IAlleleSpecies) allele);
-			}
-		}
-		for (IAlleleHandler handler : this.alleleHandlers) {
-			handler.onRegisterAllele(allele);
-		}
-	}
-
-	@Override
 	public void registerAllele(IAllele allele, IChromosomeType... chromosomeTypes) {
 		for (IChromosomeType chromosomeType : chromosomeTypes) {
 			if (!chromosomeType.getAlleleClass().isAssignableFrom(allele.getClass())) {
@@ -170,7 +156,18 @@ public class AlleleRegistry implements IAlleleRegistry {
 			allelesByType.put(chromosomeType, allele);
 			typesByAllele.put(allele, chromosomeType);
 		}
-		registerAllele(allele);
+
+		alleleMap.put(allele.getUID(), allele);
+		if (allele instanceof IAlleleSpecies) {
+			IClassification branch = ((IAlleleSpecies) allele).getBranch();
+			if (branch != null) {
+				branch.addMemberSpecies((IAlleleSpecies) allele);
+			}
+		}
+
+		for (IAlleleHandler handler : this.alleleHandlers) {
+			handler.onRegisterAllele(allele);
+		}
 	}
 
 	@Override

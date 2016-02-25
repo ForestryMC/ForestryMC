@@ -11,9 +11,7 @@
 package forestry.factory.recipes;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import net.minecraftforge.fluids.Fluid;
@@ -78,16 +76,5 @@ public class StillRecipeManager implements IStillManager {
 	@Override
 	public Set<IStillRecipe> recipes() {
 		return Collections.unmodifiableSet(recipes);
-	}
-
-	@Override
-	public Map<Object[], Object[]> getRecipes() {
-		HashMap<Object[], Object[]> recipeList = new HashMap<>();
-
-		for (IStillRecipe recipe : recipes) {
-			recipeList.put(new Object[]{recipe.getInput()}, new Object[]{recipe.getOutput()});
-		}
-
-		return recipeList;
 	}
 }

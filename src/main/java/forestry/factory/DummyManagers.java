@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.factory;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
 import javax.annotation.Nullable;
@@ -57,11 +56,6 @@ public class DummyManagers {
 		public Set<T> recipes() {
 			return ImmutableSet.of();
 		}
-
-		@Override
-		public Map<Object[], Object[]> getRecipes() {
-			return ImmutableMap.of();
-		}
 	}
 
 	public static class DummyCarpenterManager extends DummyCraftingProvider<ICarpenterRecipe> implements ICarpenterManager {
@@ -97,10 +91,6 @@ public class DummyManagers {
 
 		}
 
-		@Override
-		public void addSmelting(ItemStack resource, FluidStack molten, int meltingPoint) {
-
-		}
 	}
 
 	public static class DummyFabricatorSmeltingManager extends DummyCraftingProvider<IFabricatorSmeltingRecipe> implements IFabricatorSmeltingManager {

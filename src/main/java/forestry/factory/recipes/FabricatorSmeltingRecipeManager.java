@@ -12,9 +12,7 @@ package forestry.factory.recipes;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import net.minecraft.item.ItemStack;
@@ -63,16 +61,5 @@ public class FabricatorSmeltingRecipeManager implements IFabricatorSmeltingManag
 	@Override
 	public Collection<IFabricatorSmeltingRecipe> recipes() {
 		return Collections.unmodifiableSet(recipes);
-	}
-
-	@Override
-	public Map<Object[], Object[]> getRecipes() {
-		HashMap<Object[], Object[]> recipeList = new HashMap<>();
-
-		for (IFabricatorSmeltingRecipe recipe : recipes) {
-			recipeList.put(new Object[]{recipe.getResource()}, new Object[]{recipe.getProduct()});
-		}
-
-		return recipeList;
 	}
 }

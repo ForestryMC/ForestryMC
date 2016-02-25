@@ -57,39 +57,4 @@ public class AlleleFactory implements IAlleleFactory {
 		AlleleManager.alleleRegistry.registerAllele(alleleFlowers, types);
 		return alleleFlowers;
 	}
-
-	@Override
-	public IAlleleFloat createFloat(String modId, String category, String name, float value, boolean isDominant) {
-		IAlleleFloat alleleFloat = new AlleleFloat(modId, category, name, value, isDominant);
-		AlleleManager.alleleRegistry.registerAllele(alleleFloat);
-		return alleleFloat;
-	}
-
-	@Override
-	public IAlleleArea createArea(String modId, String category, String name, int xDim, int yDim, int zDim, boolean isDominant) {
-		IAlleleArea alleleArea = new AlleleArea(modId, category, name, new int[]{xDim, yDim, zDim}, isDominant);
-		AlleleManager.alleleRegistry.registerAllele(alleleArea);
-		return alleleArea;
-	}
-
-	@Override
-	public IAlleleInteger createInteger(String modId, String category, String valueName, int value, boolean isDominant) {
-		IAlleleInteger alleleInteger = new AlleleInteger(modId, category, valueName, value, isDominant);
-		AlleleManager.alleleRegistry.registerAllele(alleleInteger);
-		return alleleInteger;
-	}
-
-	@Override
-	public IAlleleBoolean createBoolean(String modId, String category, boolean value, boolean isDominant) {
-		IAlleleBoolean alleleBoolean = new AlleleBoolean(modId, category, value, isDominant);
-		AlleleManager.alleleRegistry.registerAllele(alleleBoolean);
-		return alleleBoolean;
-	}
-
-	@Override
-	public IAlleleFlowers createFlowers(String modId, String category, String name, IFlowerProvider flowerProvider, boolean isDominant) {
-		IAlleleFlowers alleleFlowers = new AlleleFlowers(modId, category, name, flowerProvider, isDominant);
-		AlleleManager.alleleRegistry.registerAllele(alleleFlowers);
-		return alleleFlowers;
-	}
 }

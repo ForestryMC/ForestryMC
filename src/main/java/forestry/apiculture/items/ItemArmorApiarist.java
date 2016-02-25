@@ -16,12 +16,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.apiculture.IArmorApiarist;
 import forestry.api.core.IArmorNaturalist;
-import forestry.api.core.IModelManager;
 import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
 import forestry.api.core.Tabs;
 import forestry.core.config.Constants;
 import forestry.plugins.PluginApiculture;
@@ -61,11 +63,6 @@ public class ItemArmorApiarist extends ItemArmor implements IArmorApiarist, IArm
 
 	@Override
 	public boolean protectEntity(EntityLivingBase entity, ItemStack armor, String cause, boolean doProtect) {
-		return true;
-	}
-
-	@Override
-	public boolean protectPlayer(EntityPlayer player, ItemStack armor, String cause, boolean doProtect) {
 		return true;
 	}
 
