@@ -34,6 +34,8 @@ import net.minecraftforge.client.model.b3d.B3DLoader;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.fml.client.FMLClientHandler;
 
+import javax.annotation.Nonnull;
+
 import forestry.apiculture.entities.EntityFXBee;
 import forestry.apiculture.render.ParticleRenderer;
 import forestry.apiculture.render.TextureHabitatLocator;
@@ -46,7 +48,6 @@ import forestry.core.fluids.Fluids;
 import forestry.core.models.BlockModelIndex;
 import forestry.core.models.ModelIndex;
 import forestry.core.models.ModelManager;
-import forestry.core.models.RenderHandler;
 import forestry.core.render.RenderAnalyzer;
 import forestry.core.render.RenderEscritoire;
 import forestry.core.render.RenderMachine;
@@ -120,8 +121,8 @@ public class ProxyRenderClient extends ProxyRender {
 	}
 	
 	@Override
-	public void registerBlockModel(final BlockModelIndex index) {
-		RenderHandler.blockModels.add(index);
+	public void registerBlockModel(@Nonnull BlockModelIndex index) {
+		ModelManager.registerCustomBlockModel(index);
 		StateMapperBase ignoreState = new StateMapperBase() {
 			@Override
 			protected ModelResourceLocation getModelResourceLocation(IBlockState iBlockState) {
@@ -132,8 +133,8 @@ public class ProxyRenderClient extends ProxyRender {
 	}
 	
 	@Override
-	public void registerModel(final ModelIndex index) {
-		RenderHandler.models.add(index);
+	public void registerModel(@Nonnull ModelIndex index) {
+		ModelManager.registerCustomModel(index);
 	}
 
 	@Override
@@ -169,7 +170,6 @@ public class ProxyRenderClient extends ProxyRender {
 
 	@Override
 	public void registerModels() {
-		ModelManager.registerStateMappers();
 		ModelManager.registerModels();
 	}
 

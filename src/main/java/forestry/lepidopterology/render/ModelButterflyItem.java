@@ -18,10 +18,8 @@ import com.google.common.collect.ImmutableMap;
 
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.IButterfly;
-import forestry.core.models.ModelManager;
 import forestry.core.models.TRSRBakedModel;
 import forestry.core.utils.Log;
-import forestry.plugins.PluginLepidopterology;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;

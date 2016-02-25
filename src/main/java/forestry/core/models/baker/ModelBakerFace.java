@@ -8,13 +8,19 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.models;
+package forestry.core.models.baker;
 
 import org.lwjgl.util.vector.Vector3f;
 
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+/**
+ * A face of a baked model
+ */
+@SideOnly(Side.CLIENT)
 public class ModelBakerFace {
 
 	public final EnumFacing face;

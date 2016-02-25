@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.lepidopterology.blocks;
 
-import java.util.Locale;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 

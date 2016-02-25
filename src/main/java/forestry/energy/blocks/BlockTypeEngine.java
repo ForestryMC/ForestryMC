@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.energy.blocks;
 
-import java.util.Locale;
-
 import javax.annotation.Nonnull;
 
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;

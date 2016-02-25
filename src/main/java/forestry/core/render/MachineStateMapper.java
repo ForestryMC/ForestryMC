@@ -1,7 +1,6 @@
 package forestry.core.render;
 
 import java.util.LinkedHashMap;
-import java.util.Locale;
 import java.util.Map;
 import com.google.common.collect.Maps;
 

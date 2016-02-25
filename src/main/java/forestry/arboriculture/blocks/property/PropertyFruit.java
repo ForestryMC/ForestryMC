@@ -38,7 +38,7 @@ public class PropertyFruit extends PropertyAllele<IAlleleFruit> {
 
 	@Override
 	public Collection<IAlleleFruit> getAllowedValues() {
-		List<IAlleleFruit> trees = new ArrayList<>();
+		List<IAlleleFruit> trees = new ArrayList();
 		for(IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()){
 			if(allele instanceof IAlleleFruit)
 				if(((IAlleleFruit) allele).getModelName() != null)

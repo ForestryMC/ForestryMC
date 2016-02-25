@@ -8,7 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.models;
+package forestry.core.models.baker;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -16,6 +16,7 @@ import java.util.List;
 
 import org.lwjgl.util.vector.Vector3f;
 
+import forestry.api.core.ForestryAPI;
 import forestry.api.core.IModelBaker;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -28,11 +29,24 @@ import net.minecraft.client.resources.model.ModelRotation;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.client.model.IColoredBakedQuad;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * A model baker to make custom models in the mod
  */
+@SideOnly(Side.CLIENT)
 public class ModelBaker implements IModelBaker {
+	
+	private static final ModelBaker instance = new ModelBaker();
+
+	static {
+		ForestryAPI.modelBaker = instance;
+	}
+
+	public static ModelBaker getInstance() {
+		return instance;
+	}
 
 	protected double renderMinX;
 	protected double renderMaxX;

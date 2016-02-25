@@ -16,42 +16,48 @@ import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IRegistry;
 import net.minecraft.util.ResourceLocation;
-
+import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.ArrayList;
+import javax.annotation.Nonnull;
+
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelBaker;
 import forestry.api.core.IModelManager;
 import forestry.api.core.IStateMapperRegister;
+import forestry.core.config.Constants;
 import forestry.core.utils.StringUtil;
 
 @SideOnly(Side.CLIENT)
 public class ModelManager implements IModelManager {
+	
+	private static final ModelManager instance = new ModelManager();
+	
+	private static final ArrayList<BlockModelIndex> customBlockModels = new ArrayList<BlockModelIndex>();
+	private static final ArrayList<ModelIndex> customModels = new ArrayList<ModelIndex>();
 
-	private static ModelManager instance;
+	static {
+		ForestryAPI.modelManager = instance;
+	}
 
 	public static ModelManager getInstance() {
-		if (instance == null) {
-			instance = new ModelManager();
-			ForestryAPI.modleManager = instance;
-		}
-
 		return instance;
 	}
 
 	@Override
 	public void registerItemModel(Item item, int meta, String identifier) {
-		ModelLoader.setCustomModelResourceLocation(item, meta, getModelLocation(item, identifier));
+		ModelLoader.setCustomModelResourceLocation(item, meta, getModelLocation(identifier));
 	}
 
 	@Override
 	public void registerItemModel(Item item, int meta, String modID, String identifier) {
-		ModelLoader.setCustomModelResourceLocation(item, meta, getModelLocation(item, modID, identifier));
+		ModelLoader.setCustomModelResourceLocation(item, meta, getModelLocation(modID, identifier));
 	}
 
 	@Override
@@ -73,10 +79,38 @@ public class ModelManager implements IModelManager {
 		ModelBakery.registerItemVariants(item, resources);
 	}
 
+	@Override
+	public ModelResourceLocation getModelLocation(Item item, int meta) {
+		return getModelLocation(StringUtil.cleanItemName(new ItemStack(item, 1, meta)));
+	}
+
+	@Override
+	public ModelResourceLocation getModelLocation(Item item, int meta, String identifier) {
+		return getModelLocation(StringUtil.cleanTags(item.getUnlocalizedName(new ItemStack(item, 1, meta))) + identifier);
+	}
+
+	@Override
+	public ModelResourceLocation getModelLocation(Item item) {
+		return getModelLocation(StringUtil.cleanItemName(item));
+	}
+
+	@Override
+	public ModelResourceLocation getModelLocation(String identifier) {
+		return getModelLocation(Constants.ID, identifier);
+	}
+
+	@Override
+	public ModelResourceLocation getModelLocation(String modID, String identifier) {
+		return new ModelResourceLocation(modID + ":" + identifier, "inventory");
+	}
+	
 	public static void registerModels() {
 		for (Block block : GameData.getBlockRegistry()) {
 			if (block instanceof IItemModelRegister) {
 				((IItemModelRegister) block).registerModel(Item.getItemFromBlock(block), getInstance());
+			}
+			if (block instanceof IStateMapperRegister) {
+				((IStateMapperRegister) block).registerStateMapper();
 			}
 		}
 		for (Item item : GameData.getItemRegistry()) {
@@ -85,61 +119,25 @@ public class ModelManager implements IModelManager {
 			}
 		}
 	}
-	
-	public static void registerStateMappers(){
-		for (Block block : GameData.getBlockRegistry()) {
-			if (block instanceof IStateMapperRegister) {
-				((IStateMapperRegister) block).registerStateMapper();
-			}
+
+	public static void registerCustomModels(ModelBakeEvent event) {
+		IRegistry registry = event.modelRegistry;
+		for (final BlockModelIndex index : customBlockModels) {
+			registry.putObject(index.blockModelLocation, index.model);
+			registry.putObject(index.itemModelLocation, index.model);
+		}
+		
+		for (final ModelIndex index : customModels) {
+			registry.putObject(index.modelLocation, index.model);
 		}
 	}
-
-	@Override
-	public ModelResourceLocation getModelLocation(String identifier) {
-		return new ModelResourceLocation("forestry:" + identifier, "inventory");
+	
+	public static void registerCustomBlockModel(@Nonnull BlockModelIndex index){
+		customBlockModels.add(index);
 	}
-
-	@Override
-	public ModelResourceLocation getModelLocation(String modID, String identifier) {
-		return new ModelResourceLocation(modID + ":" + identifier, "inventory");
-	}
-
-	@Override
-	public ModelResourceLocation getModelLocation(Item item, int meta) {
-		return new ModelResourceLocation(
-				"forestry:" + StringUtil.cleanItemName(new ItemStack(item, 1, meta)), "inventory");
-	}
-
-	@Override
-	public ModelResourceLocation getModelLocation(Item item, int meta, String identifier) {
-		return new ModelResourceLocation(
-				"forestry:" + StringUtil.cleanTags(item.getUnlocalizedName(new ItemStack(item, 1, meta))) + identifier,
-				"inventory");
-	}
-
-	@Override
-	public ModelResourceLocation getModelLocation(Item item, int meta, String modifier, String identifier) {
-		return new ModelResourceLocation("forestry:" + modifier + "/" + identifier, "inventory");
-	}
-
-	@Override
-	public ModelResourceLocation getModelLocation(Item item) {
-		return new ModelResourceLocation("forestry:" + StringUtil.cleanItemName(item), "inventory");
-	}
-
-	@Override
-	public ModelResourceLocation getModelLocation(Item item, String identifier) {
-		return new ModelResourceLocation("forestry:" + identifier, "inventory");
-	}
-
-	@Override
-	public ModelResourceLocation getModelLocation(Item item, String modID, String identifier) {
-		return new ModelResourceLocation(modID + ":" + identifier, "inventory");
-	}
-
-	@Override
-	public IModelBaker createNewRenderer() {
-		return new ModelBaker();
+	
+	public static void registerCustomModel(@Nonnull ModelIndex index){
+		customModels.add(index);
 	}
 
 }

@@ -70,8 +70,8 @@ public class PacketFXSignal extends PacketCoordinates implements IForestryPacket
 		super.writeData(data);
 		data.writeShort(visualFX.ordinal());
 		data.writeShort(soundFX.ordinal());
-		data.writeUTF(ItemStackUtil.getBlockNameFromRegistryAsSting(state.getBlock()));
 		data.writeInt(state.getBlock().getMetaFromState(state));
+		data.writeUTF(ItemStackUtil.getBlockNameFromRegistryAsSting(state.getBlock()));
 	}
 
 	@Override

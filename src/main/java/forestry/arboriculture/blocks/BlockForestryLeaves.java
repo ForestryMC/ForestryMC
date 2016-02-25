@@ -277,7 +277,6 @@ public class BlockForestryLeaves extends BlockLeavesBase implements ITileEntityP
 	@SideOnly(Side.CLIENT)
 	@Override
 	public int colorMultiplier(IBlockAccess world, BlockPos pos, int renderPass) {
-
 		TileLeaves leaves = getLeafTile(world,pos);
 		if (leaves == null) {
 			return super.colorMultiplier(world, pos, 0);
@@ -285,12 +284,14 @@ public class BlockForestryLeaves extends BlockLeavesBase implements ITileEntityP
 		int colour = super.colorMultiplier(world, pos, 0);
 		if(renderPass == 0){
 			colour = leaves.getFoliageColour(Proxies.common.getClientInstance().thePlayer);
-			if (colour == PluginArboriculture.proxy.getFoliageColorBasic()) {
+			if (colour == 0 || colour == PluginArboriculture.proxy.getFoliageColorBasic()) {
 				return super.colorMultiplier(world, pos, 0);
 			}
-
 		}else{
 			colour = leaves.getFruitColour();
+			if (colour == 0) {
+				return super.colorMultiplier(world, pos, 0);
+			}
 		}
 		return colour;
 	}

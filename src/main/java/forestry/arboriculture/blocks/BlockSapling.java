@@ -25,12 +25,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumWorldBlockLayer;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.arboriculture.EnumGermlingType;
@@ -99,7 +97,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 	
 	@Override
 	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
-		if(world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileSapling){
+		if(world.getTileEntity(pos) instanceof TileSapling){
 			TileSapling sapling = (TileSapling) world.getTileEntity(pos);
 			IAlleleTreeSpecies species = sapling.getTree().getGenome().getPrimary();
 			state = state.withProperty(TREE, species);
@@ -125,8 +123,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 	}
 
 	/* PLANTING */
-	@Override
-	public boolean canSustainPlant(IBlockAccess world, BlockPos pos, EnumFacing direction, IPlantable plantable) {
+	public boolean canBlockStay(IBlockAccess world, BlockPos pos) {
 		TileSapling tile = getSaplingTile(world, pos);
 		if (tile == null) {
 			return false;
@@ -141,7 +138,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 	@Override
 	public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block neighborBlock) {
 		super.onNeighborBlockChange(world, pos, state, neighborBlock);
-		if (!world.isRemote && !this.canSustainPlant(world, pos, null, null)) {
+		if (!world.isRemote && !this.canBlockStay(world, pos)) {
 			dropAsSapling(world, pos);
 			world.setBlockToAir(pos);
 		}

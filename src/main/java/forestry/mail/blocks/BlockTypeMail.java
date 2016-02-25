@@ -11,10 +11,6 @@
 package forestry.mail.blocks;
 
 import javax.annotation.Nonnull;
-import java.util.Locale;
-
-import org.apache.commons.lang3.text.WordUtils;
-
 import forestry.core.blocks.IBlockType;
 import forestry.core.blocks.IMachineProperties;
 import forestry.core.blocks.MachineProperties;

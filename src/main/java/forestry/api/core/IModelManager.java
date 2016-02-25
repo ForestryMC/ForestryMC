@@ -21,26 +21,18 @@ public interface IModelManager {
 	
 	void registerItemModel(Item item, int meta, boolean withMeta);
 	
-	ModelResourceLocation getModelLocation(String identifier);
-	
-	ModelResourceLocation getModelLocation(String modID, String identifier);
-	
 	ModelResourceLocation getModelLocation(Item item);
-	
-	ModelResourceLocation getModelLocation(Item item, String identifier);
-	
-	ModelResourceLocation getModelLocation(Item item, String modifier, String identifier);
 	
 	ModelResourceLocation getModelLocation(Item item, int meta);
 	
 	ModelResourceLocation getModelLocation(Item item, int meta, String identifier);
 	
-	ModelResourceLocation getModelLocation(Item item, int meta, String modifier, String identifier);
+	ModelResourceLocation getModelLocation(String identifier);
+	
+	ModelResourceLocation getModelLocation(String modID, String identifier);
 	
 	void registerItemModel(Item item, ItemMeshDefinition definition);
 	
 	void registerVariant(Item item, ResourceLocation... resources);
-	
-	IModelBaker createNewRenderer();
 	
 }

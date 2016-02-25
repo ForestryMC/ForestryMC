@@ -190,7 +190,7 @@ public class ItemBlockWood extends ItemBlockForestry {
 		@Override
 		public ModelResourceLocation getModelLocation(ItemStack stack) {
 			EnumWoodType type = getWoodType(stack);
-			return ModelManager.getInstance().getModelLocation(stack.getItem(), 0, modifier, type.name().toLowerCase());
+			return ModelManager.getInstance().getModelLocation(modifier + "/" + type.name().toLowerCase());
 		}
 
 	}

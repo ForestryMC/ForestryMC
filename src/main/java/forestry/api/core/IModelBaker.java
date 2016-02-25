@@ -9,10 +9,13 @@ import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.util.BlockPos;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
- * A model baker to make custom models in the mod
+ * A model baker to make custom models
  */
+@SideOnly(Side.CLIENT)
 public interface IModelBaker {
 
 	void setRenderBoundsFromBlock(Block block);

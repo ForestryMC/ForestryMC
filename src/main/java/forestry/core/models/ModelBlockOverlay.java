@@ -28,9 +28,10 @@ import java.util.List;
 import forestry.api.core.IModelBaker;
 import forestry.core.blocks.propertys.UnlistedBlockAccess;
 import forestry.core.blocks.propertys.UnlistedBlockPos;
+import forestry.core.models.baker.ModelBaker;
 
 /**
- * A ovelay block model to make a block with 2 or more layers
+ * A overlay block model to make a block with 2 or more texture layers
  */
 public abstract class ModelBlockOverlay<B extends Block> implements ISmartItemModel, ISmartBlockModel {
 
@@ -144,7 +145,7 @@ public abstract class ModelBlockOverlay<B extends Block> implements ISmartItemMo
 
 	@Override
 	public IBakedModel handleBlockState(IBlockState state) {
-		IModelBaker baker = ModelManager.getInstance().createNewRenderer();
+		IModelBaker baker = ModelBaker.getInstance();
 		IExtendedBlockState stateExtended = (IExtendedBlockState) state;
 		
 		IBlockAccess world = stateExtended.getValue(UnlistedBlockAccess.BLOCKACCESS);
@@ -163,7 +164,7 @@ public abstract class ModelBlockOverlay<B extends Block> implements ISmartItemMo
 
 	@Override
 	public IBakedModel handleItemState(ItemStack stack) {
-		IModelBaker baker = ModelManager.getInstance().createNewRenderer();
+		IModelBaker baker = ModelBaker.getInstance();
 		Block block = Block.getBlockFromItem(stack.getItem());
 		
 		block.setBlockBoundsForItemRender();

@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.arboriculture.blocks;
 
-import java.util.Locale;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 

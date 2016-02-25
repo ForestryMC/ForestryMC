@@ -15,12 +15,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.List;
-import java.util.Map;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
@@ -29,26 +26,20 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.model.IBakedModel;
-import net.minecraft.client.resources.model.ModelBakery;
-import net.minecraft.client.resources.model.ModelManager;
 import net.minecraft.client.resources.model.ModelResourceLocation;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.ServerStatusResponse.MinecraftProtocolVersionIdentifier;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.ItemModelMesherForge;
 import net.minecraftforge.client.model.IFlexibleBakedModel;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ISmartItemModel;
-import net.minecraftforge.client.model.ItemLayerModel;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.MultiModel;
-import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.google.common.base.Charsets;
 import com.google.common.base.Function;
@@ -59,6 +50,8 @@ import forestry.core.items.ItemCrated;
 import forestry.core.utils.StringUtil;
 import forestry.plugins.PluginStorage;
 import gnu.trove.map.hash.TIntObjectHashMap;
+
+@SideOnly(Side.CLIENT)
 public class ModelCrate implements ISmartItemModel {
 	
 	private HashMap<String, MultiModel.Baked> crates = Maps.newHashMap();
@@ -72,7 +65,8 @@ public class ModelCrate implements ISmartItemModel {
 	
 	public ModelCrate() {
 	    textureGetter = new Function<ResourceLocation, TextureAtlasSprite>() {
-	        public TextureAtlasSprite apply(ResourceLocation location) {
+	        @Override
+			public TextureAtlasSprite apply(ResourceLocation location) {
 	          return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString());
 	        }
 	      };

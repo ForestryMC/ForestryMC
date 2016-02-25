@@ -10,16 +10,12 @@
  ******************************************************************************/
 package forestry.core.blocks.propertys;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import forestry.api.genetics.IAllele;
 import net.minecraft.block.properties.IProperty;
 
 public abstract class PropertyAllele<A extends IAllele & Comparable<A>> implements IProperty<A> {
 
     protected final String name;
-    protected final List<A> alleles = new ArrayList<A>();
 
     public PropertyAllele(String name){
         this.name = name;
@@ -40,8 +36,8 @@ public abstract class PropertyAllele<A extends IAllele & Comparable<A>> implemen
         }
         else if (object != null && this.getClass() == object.getClass())
         {
-        	PropertyAllele propertyhelper = (PropertyAllele)object;
-            return this.name.equals(propertyhelper.name);
+        	PropertyAllele propertyAllele = (PropertyAllele)object;
+            return name.equals(propertyAllele.name);
         }
         else
         {

@@ -63,9 +63,11 @@ public class BlockFruitPod extends BlockCocoa implements IStateMapperRegister {
 	
 	@Override
 	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
-		TileFruitPod sapling = (TileFruitPod) world.getTileEntity(pos);
-		IAlleleFruit fruit = sapling.getAllele();
-		state = state.withProperty(FRUIT, fruit);
+		TileFruitPod pot = getPodTile(world, pos);
+		if(pos != null){
+			IAlleleFruit fruit = pot.getAllele();
+			state = state.withProperty(FRUIT, fruit);
+		}
 		return super.getActualState(state, world, pos);
 	}
 

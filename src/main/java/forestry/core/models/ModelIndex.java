@@ -12,7 +12,10 @@ package forestry.core.models;
 
 import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class ModelIndex {
 
 	public final ModelResourceLocation modelLocation;

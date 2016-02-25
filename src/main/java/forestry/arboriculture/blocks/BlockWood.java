@@ -91,7 +91,9 @@ public abstract class BlockWood extends Block implements ITileEntityProvider, II
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		manager.registerVariant(item, ItemBlockWood.getVariants(this));
+		if(!isFireproof()){
+			manager.registerVariant(item, ItemBlockWood.getVariants(this));
+		}
 		manager.registerItemModel(item, new WoodMeshDefinition(this));
 	}
 
@@ -163,22 +165,19 @@ public abstract class BlockWood extends Block implements ITileEntityProvider, II
 	}
 	
     @Override
-	public void setHarvestLevel(String toolClass, int level, IBlockState state)
-    {
+	public void setHarvestLevel(String toolClass, int level, IBlockState state) {
         int idx = this.getMetaFromState(state);
         this.harvestTool[idx] = toolClass;
         this.harvestLevel[idx] = level;
     }
 
     @Override
-	public String getHarvestTool(IBlockState state)
-    {
+	public String getHarvestTool(IBlockState state){
         return harvestTool[getMetaFromState(state)];
     }
 
     @Override
-	public int getHarvestLevel(IBlockState state)
-    {
+	public int getHarvestLevel(IBlockState state){
         return harvestLevel[getMetaFromState(state)];
     }
 

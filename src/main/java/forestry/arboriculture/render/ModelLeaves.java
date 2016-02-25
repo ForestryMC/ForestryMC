@@ -26,7 +26,6 @@ public class ModelLeaves extends ModelBlockOverlay<BlockForestryLeaves> {
 
 	@Override
 	public void renderInventory(BlockForestryLeaves block, ItemStack itemStack, IModelBaker baker) {
-
 		if (!(itemStack.getItem() instanceof ItemBlockLeaves) || block == null) {
 			return;
 		}
@@ -72,7 +71,6 @@ public class ModelLeaves extends ModelBlockOverlay<BlockForestryLeaves> {
 
 	@Override
 	public boolean renderInWorld(BlockForestryLeaves block, IBlockAccess world, BlockPos pos, IModelBaker baker) {
-
 		TileLeaves tile = BlockForestryLeaves.getLeafTile(world, pos);
 		if (tile == null) {
 			return false;
@@ -92,7 +90,6 @@ public class ModelLeaves extends ModelBlockOverlay<BlockForestryLeaves> {
 	}
 
 	private boolean renderFruitOverlay(IBlockAccess world, BlockForestryLeaves block, BlockPos pos, IModelBaker baker, TextureAtlasSprite sprite, int colorIndex) {
-
 		// Bottom
 		renderBottomFace(world, block, pos, baker, sprite, colorIndex);
 		renderTopFace(world, block, pos, baker, sprite, colorIndex);

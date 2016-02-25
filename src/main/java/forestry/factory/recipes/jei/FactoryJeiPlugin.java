@@ -6,8 +6,6 @@ import javax.annotation.Nullable;
 import java.awt.Rectangle;
 import java.util.List;
 
-import net.minecraft.client.gui.inventory.GuiContainer;
-
 import forestry.core.gui.GuiForestry;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
 import forestry.factory.gui.ContainerWorktable;
@@ -99,7 +97,7 @@ public class FactoryJeiPlugin extends BlankModPlugin {
 		@Nullable
 		@Override
 		public List<Rectangle> getGuiExtraAreas(GuiForestry guiContainer) {
-			GuiForestry<?,?> guiForestry = (GuiForestry<?,?>) guiContainer;
+			GuiForestry<?,?> guiForestry = guiContainer;
 			return guiForestry.getExtraGuiAreas();
 		}
 	}

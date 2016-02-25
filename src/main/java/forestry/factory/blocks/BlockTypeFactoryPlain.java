@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.factory.blocks;
 
-import java.util.Locale;
-
 import javax.annotation.Nonnull;
 
 import forestry.core.blocks.IBlockType;

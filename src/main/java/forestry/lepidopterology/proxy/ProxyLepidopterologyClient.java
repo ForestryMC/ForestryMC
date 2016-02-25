@@ -10,13 +10,8 @@
  ******************************************************************************/
 package forestry.lepidopterology.proxy;
 
-import forestry.core.models.ModelIndex;
-import forestry.core.models.ModelManager;
-import forestry.core.proxy.Proxies;
 import forestry.lepidopterology.entities.EntityButterfly;
-import forestry.lepidopterology.render.ModelButterflyItem;
 import forestry.lepidopterology.render.RenderButterflyEntity;
-import forestry.plugins.PluginLepidopterology;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
 public class ProxyLepidopterologyClient extends ProxyLepidopterology {
