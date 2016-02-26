@@ -34,6 +34,7 @@ import forestry.core.config.Constants;
 import forestry.core.tiles.TileEngine;
 import forestry.core.utils.vect.Vect;
 import forestry.core.utils.vect.VectUtil;
+
 import cofh.api.energy.IEnergyConnection;
 import cofh.api.energy.IEnergyReceiver;
 
@@ -110,7 +111,7 @@ public abstract class BlockUtil {
 	}
 
 	public static int getMaturityPod(IBlockState state) {
-		return state.getValue(BlockCocoa.AGE).intValue();
+		return state.getValue(BlockCocoa.AGE);
 	}
 
 	public static boolean isWoodSlabBlock(Block block) {

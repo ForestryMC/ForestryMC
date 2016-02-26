@@ -18,7 +18,6 @@ import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockFenceGate;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.EffectRenderer;
@@ -32,12 +31,14 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.arboriculture.EnumWoodType;
 import forestry.api.arboriculture.TreeManager;
-import forestry.api.core.IModelManager;
 import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
 import forestry.api.core.Tabs;
 import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.items.ItemBlockWood;
@@ -70,16 +71,16 @@ public class BlockArbFence extends BlockFence implements IWoodTyped, IItemModelR
 		setHarvestLevel("axe", 0);
 		setStepSound(soundTypeWood);
 		setCreativeTab(Tabs.tabArboriculture);
-		setDefaultState(this.blockState.getBaseState().withProperty(NORTH, Boolean.valueOf(false))
-				.withProperty(EAST, Boolean.valueOf(false)).withProperty(SOUTH, Boolean.valueOf(false))
-				.withProperty(WEST, Boolean.valueOf(false)).withProperty(EnumWoodType.WOODTYPE, EnumWoodType.LARCH));
+		setDefaultState(this.blockState.getBaseState().withProperty(NORTH, false)
+				.withProperty(EAST, false).withProperty(SOUTH, false)
+				.withProperty(WEST, false).withProperty(EnumWoodType.WOODTYPE, EnumWoodType.LARCH));
 
 		this.particleCallback = new ParticleHelper.DefaultCallback(this);
 	}
 	
 	@Override
 	protected BlockState createBlockState() {
-		return new BlockState(this, new IProperty[] { NORTH, SOUTH, WEST, EAST, EnumWoodType.WOODTYPE });
+		return new BlockState(this, NORTH, SOUTH, WEST, EAST, EnumWoodType.WOODTYPE);
 	}
 	
 	@Override

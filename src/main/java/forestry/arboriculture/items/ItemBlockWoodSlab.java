@@ -8,8 +8,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.arboriculture.EnumWoodType;
 import forestry.arboriculture.blocks.BlockSlab;
 import forestry.arboriculture.blocks.BlockSlabDouble;
@@ -65,8 +67,8 @@ public class ItemBlockWoodSlab extends ItemBlockWood {
                 }
             }
 
-            return this.tryPlace(stack, world, pos.offset(side), stackWoodType) ? true : super.onItemUse(stack, player, world, pos, side, hitX, hitY, hitZ);
-        }
+			return this.tryPlace(stack, world, pos.offset(side), stackWoodType) || super.onItemUse(stack, player, world, pos, side, hitX, hitY, hitZ);
+		}
     }
 	
 	@Override
@@ -94,7 +96,7 @@ public class ItemBlockWoodSlab extends ItemBlockWood {
 
         pos = pos.offset(side);
         IBlockState iblockstate1 = world.getBlockState(pos);
-        return iblockstate1.getBlock() == this.slab && stackWoodType == blockWoodType ? true : super.canPlaceBlockOnSide(world, blockpos, side, player, itemStack);
+		return iblockstate1.getBlock() == this.slab && stackWoodType == blockWoodType || super.canPlaceBlockOnSide(world, blockpos, side, player, itemStack);
 	}
 	
     private boolean tryPlace(ItemStack itemStack, World world, BlockPos pos, Object variantInStack)

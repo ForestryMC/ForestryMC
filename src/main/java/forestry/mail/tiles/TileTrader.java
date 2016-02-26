@@ -21,7 +21,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+
 import net.minecraftforge.fml.common.Optional;
+
 import forestry.api.core.IErrorLogic;
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.IStamps;
@@ -310,7 +312,6 @@ public class TileTrader extends TileBase {
 		return (TradeStation) PostManager.postRegistry.getOrCreateTradeStation(worldObj, getAccessHandler().getOwner(), address);
 	}
 
-	/* ITRIGGERPROVIDER */
 	@Optional.Method(modid = "BuildCraftAPI|statements")
 	@Override
 	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {

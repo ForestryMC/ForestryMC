@@ -29,5 +29,5 @@ public interface IMoistenerManager extends ICraftingProvider<IMoistenerRecipe> {
 	 * @param timePerItem
 	 *            Moistener runs at 1 - 4 time ticks per ingame tick depending on light level. For mycelium this value is currently 5000.
 	 */
-	public void addRecipe(ItemStack resource, ItemStack product, int timePerItem);
+	void addRecipe(ItemStack resource, ItemStack product, int timePerItem);
 }

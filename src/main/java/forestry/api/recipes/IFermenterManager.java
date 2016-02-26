@@ -35,7 +35,7 @@ public interface IFermenterManager extends ICraftingProvider<IFermenterRecipe> {
 	 * @param liquid LiquidStack representing resource liquid and amount.
 	 * @throws NullPointerException if resource, output or liquid is null
 	 */
-	public void addRecipe(ItemStack resource, int fermentationValue, float modifier, FluidStack output, FluidStack liquid);
+	void addRecipe(ItemStack resource, int fermentationValue, float modifier, FluidStack output, FluidStack liquid);
 
 	/**
 	 * Add a recipe to the fermenter. Defaults to water as input liquid.
@@ -49,5 +49,5 @@ public interface IFermenterManager extends ICraftingProvider<IFermenterRecipe> {
 	 * determined by fermentationValue*modifier.
 	 * @throws NullPointerException if resource, output or liquid is null
 	 */
-	public void addRecipe(ItemStack resource, int fermentationValue, float modifier, FluidStack output);
+	void addRecipe(ItemStack resource, int fermentationValue, float modifier, FluidStack output);
 }

@@ -30,5 +30,5 @@ public interface IStillManager extends ICraftingProvider<IStillRecipe> {
 	 * @param output
 	 *            FluidStack representing the output liquid
 	 */
-	public void addRecipe(int cyclesPerUnit, FluidStack input, FluidStack output);
+	void addRecipe(int cyclesPerUnit, FluidStack input, FluidStack output);
 }

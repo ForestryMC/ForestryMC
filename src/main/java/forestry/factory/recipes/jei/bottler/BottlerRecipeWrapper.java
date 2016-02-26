@@ -1,5 +1,6 @@
 package forestry.factory.recipes.jei.bottler;
 
+import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
 
@@ -15,17 +16,20 @@ public class BottlerRecipeWrapper extends ForestryRecipeWrapper<BottlerRecipe> {
 	public BottlerRecipeWrapper(BottlerRecipe recipe) {
 		super(recipe);
 	}
-	
+
+	@Nonnull
 	@Override
 	public List<FluidStack> getFluidInputs() {
 		return Collections.singletonList(getRecipe().input);
 	}
-	
+
+	@Nonnull
 	@Override
 	public List<ItemStack> getInputs() {
 		return Collections.singletonList(getRecipe().empty);
 	}
-	
+
+	@Nonnull
 	@Override
 	public List getOutputs() {
 		return Collections.singletonList(getRecipe().filled);

@@ -10,14 +10,20 @@
  ******************************************************************************/
 package forestry.core.models;
 
+import com.google.common.base.Charsets;
+import com.google.common.base.Function;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
-import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Map;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
@@ -31,6 +37,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+
 import net.minecraftforge.client.ItemModelMesherForge;
 import net.minecraftforge.client.model.IFlexibleBakedModel;
 import net.minecraftforge.client.model.IModel;
@@ -41,20 +48,16 @@ import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.google.common.base.Charsets;
-import com.google.common.base.Function;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
-
 import forestry.core.items.ItemCrated;
 import forestry.core.utils.StringUtil;
 import forestry.plugins.PluginStorage;
+
 import gnu.trove.map.hash.TIntObjectHashMap;
 
 @SideOnly(Side.CLIENT)
 public class ModelCrate implements ISmartItemModel {
 	
-	private HashMap<String, MultiModel.Baked> crates = Maps.newHashMap();
+	private final Map<String, MultiModel.Baked> crates = Maps.newHashMap();
 	
 	public static IModel crateModel;
 	private final Function<ResourceLocation, TextureAtlasSprite> textureGetter;
@@ -64,12 +67,7 @@ public class ModelCrate implements ISmartItemModel {
 	public static ModelLoader loader;
 	
 	public ModelCrate() {
-	    textureGetter = new Function<ResourceLocation, TextureAtlasSprite>() {
-	        @Override
-			public TextureAtlasSprite apply(ResourceLocation location) {
-	          return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString());
-	        }
-	      };
+		textureGetter = new CrateTextureGetter();
 	}
 	
     /**
@@ -274,5 +272,12 @@ public class ModelCrate implements ISmartItemModel {
 		    crates.put(crateUID, new MultiModel.Baked(baseBaked, bakeModels(crated)));
 		}
 		return crates.get(crateUID);
+	}
+
+	private static class CrateTextureGetter implements Function<ResourceLocation, TextureAtlasSprite> {
+		@Override
+		public TextureAtlasSprite apply(ResourceLocation location) {
+			return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString());
+		}
 	}
 }

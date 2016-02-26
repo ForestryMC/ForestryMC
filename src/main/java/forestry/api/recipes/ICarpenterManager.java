@@ -33,7 +33,7 @@ public interface ICarpenterManager extends ICraftingProvider<ICarpenterRecipe> {
 	 * @param materials
 	 *            Materials needed in the crafting matrix. This gets passed directly to {@link ShapedRecipes}. Notation is the same.
 	 */
-	public void addRecipe(ItemStack box, ItemStack product, Object... materials);
+	void addRecipe(ItemStack box, ItemStack product, Object... materials);
 
 	/**
 	 * Add a shaped recipe to the carpenter.
@@ -47,7 +47,7 @@ public interface ICarpenterManager extends ICraftingProvider<ICarpenterRecipe> {
 	 * @param materials
 	 *            Materials needed in the crafting matrix. This gets passed directly to {@link ShapedRecipes}. Notation is the same.
 	 */
-	public void addRecipe(int packagingTime, ItemStack box, ItemStack product, Object... materials);
+	void addRecipe(int packagingTime, ItemStack box, ItemStack product, Object... materials);
 
 	/**
 	 * Add a shaped recipe to the carpenter.
@@ -63,5 +63,5 @@ public interface ICarpenterManager extends ICraftingProvider<ICarpenterRecipe> {
 	 * @param materials
 	 *            Materials needed in the crafting matrix. This gets passed directly to {@link ShapedRecipes}. Notation is the same.
 	 */
-	public void addRecipe(int packagingTime, FluidStack liquid, ItemStack box, ItemStack product, Object... materials);
+	void addRecipe(int packagingTime, FluidStack liquid, ItemStack box, ItemStack product, Object... materials);
 }

@@ -27,8 +27,7 @@ import forestry.core.utils.Log;
 
 public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
 
-	private final ModelBase model = new ModelBase() {
-	};
+	private final ModelBase model = new EngineModelBase();
 	private final ModelRenderer boiler;
 	private final ModelRenderer trunk;
 	private final ModelRenderer piston;
@@ -204,5 +203,8 @@ public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
 
 		GL11.glPopAttrib();
 		GL11.glPopMatrix();
+	}
+
+	private static class EngineModelBase extends ModelBase {
 	}
 }

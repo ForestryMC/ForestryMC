@@ -378,7 +378,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		// See whether we have socketed stuff.
 		ItemStack chip = sockets.getStackInSlot(0);
 		if (chip != null) {
-			ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitboard(chip);
+			ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitBoard(chip);
 			if (chipset != null) {
 				chipset.onLoad(this);
 			}
@@ -835,7 +835,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		// Dispose old chipsets correctly
 		if (sockets.getStackInSlot(slot) != null) {
 			if (ChipsetManager.circuitRegistry.isChipset(sockets.getStackInSlot(slot))) {
-				ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitboard(sockets.getStackInSlot(slot));
+				ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitBoard(sockets.getStackInSlot(slot));
 				if (chipset != null) {
 					chipset.onRemoval(this);
 				}
@@ -849,7 +849,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 			return;
 		}
 
-		ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitboard(stack);
+		ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitBoard(stack);
 		if (chipset != null) {
 			chipset.onInsertion(this);
 		}

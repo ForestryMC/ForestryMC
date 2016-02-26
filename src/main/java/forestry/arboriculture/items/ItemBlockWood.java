@@ -10,10 +10,9 @@
  ******************************************************************************/
 package forestry.arboriculture.items;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -28,8 +27,10 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.arboriculture.EnumWoodType;
 import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.tiles.TileWood;
@@ -172,10 +173,10 @@ public class ItemBlockWood extends ItemBlockForestry {
 	}
 	
 	public static ResourceLocation[] getVariants(IWoodTyped typed) {
-		List variants = new ArrayList<String>();
+		List<ResourceLocation> variants = new ArrayList<>();
 		for (EnumWoodType type : EnumWoodType.values())
 			variants.add(new ResourceLocation("forestry",  typed.getBlockKind() + "/" + type.getName().toLowerCase()));
-		return (ResourceLocation[]) variants.toArray(new ResourceLocation[variants.size()]);
+		return variants.toArray(new ResourceLocation[variants.size()]);
 	}
 	
 	@SideOnly(Side.CLIENT)

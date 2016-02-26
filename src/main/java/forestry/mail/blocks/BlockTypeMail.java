@@ -11,6 +11,7 @@
 package forestry.mail.blocks;
 
 import javax.annotation.Nonnull;
+
 import forestry.core.blocks.IBlockType;
 import forestry.core.blocks.IMachineProperties;
 import forestry.core.blocks.MachineProperties;

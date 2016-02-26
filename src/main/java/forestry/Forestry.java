@@ -16,7 +16,6 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -87,7 +86,6 @@ public class Forestry {
 		// Register event handler
 		EventHandlerCore eventHandlerCore = new EventHandlerCore();
 		MinecraftForge.EVENT_BUS.register(eventHandlerCore);
-		FMLCommonHandler.instance().bus().register(eventHandlerCore);
 		MinecraftForge.EVENT_BUS.register(new MultiblockEventHandler());
 
 		configFolder = new File(event.getModConfigurationDirectory(), "forestry");

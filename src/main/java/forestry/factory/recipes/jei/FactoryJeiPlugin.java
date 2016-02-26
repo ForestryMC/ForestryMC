@@ -2,7 +2,6 @@ package forestry.factory.recipes.jei;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.awt.Rectangle;
 import java.util.List;
 

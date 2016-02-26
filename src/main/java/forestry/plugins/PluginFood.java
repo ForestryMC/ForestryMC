@@ -20,7 +20,7 @@ import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
 import forestry.core.fluids.LiquidRegistryHelper;
 import forestry.core.recipes.RecipeUtil;
-import forestry.food.BeverageEffect;
+import forestry.food.BeverageEffects;
 import forestry.food.InfuserIngredientManager;
 import forestry.food.InfuserMixtureManager;
 import forestry.food.items.EnumBeverage;
@@ -56,8 +56,8 @@ public class PluginFood extends BlankForestryPlugin {
 
 			BeverageManager.ingredientManager.addIngredient(normalPollenCluster, "Strong Curative");
 			BeverageManager.ingredientManager.addIngredient(crystallinePollenCluster, "Weak Curative");
-			BeverageManager.infuserManager.addMixture(1, normalPollenCluster, BeverageEffect.strongAntidote);
-			BeverageManager.infuserManager.addMixture(1, crystallinePollenCluster, BeverageEffect.weakAntidote);
+			BeverageManager.infuserManager.addMixture(1, normalPollenCluster, BeverageEffects.strongAntidote);
+			BeverageManager.infuserManager.addMixture(1, crystallinePollenCluster, BeverageEffects.weakAntidote);
 		}
 	}
 

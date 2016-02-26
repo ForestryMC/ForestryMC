@@ -15,7 +15,6 @@ import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.block.BlockContainer;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
@@ -31,8 +30,8 @@ import net.minecraft.world.World;
 
 import forestry.api.apiculture.IHiveDrop;
 import forestry.api.apiculture.hives.IHiveRegistry.HiveType;
-import forestry.api.core.IModelManager;
 import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
 import forestry.api.core.Tabs;
 import forestry.apiculture.MaterialBeehive;
 import forestry.apiculture.tiles.TileSwarm;
@@ -42,7 +41,7 @@ import forestry.core.utils.ItemStackUtil;
 import forestry.plugins.PluginApiculture;
 
 public class BlockBeehives extends BlockContainer implements IItemModelRegister {
-	private static final PropertyEnum HIVETYPES = PropertyEnum.create("hive", HiveType.class);
+	private static final PropertyEnum HIVE_TYPES = PropertyEnum.create("hive", HiveType.class);
 	
 	public BlockBeehives() {
 		super(new MaterialBeehive(true));
@@ -50,22 +49,22 @@ public class BlockBeehives extends BlockContainer implements IItemModelRegister 
 		setHardness(1.0f);
 		setCreativeTab(Tabs.tabApiculture);
 		setHarvestLevel("scoop", 0);
-		setDefaultState(this.blockState.getBaseState().withProperty(HIVETYPES, HiveType.FOREST));
+		setDefaultState(this.blockState.getBaseState().withProperty(HIVE_TYPES, HiveType.FOREST));
 	}
 	
 	@Override
 	protected BlockState createBlockState() {
-		return new BlockState(this, new IProperty[] { HIVETYPES });
+		return new BlockState(this, HIVE_TYPES);
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return ((HiveType) state.getValue(HIVETYPES)).ordinal() + 1;
+		return ((HiveType) state.getValue(HIVE_TYPES)).ordinal() + 1;
 	}
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState().withProperty(HIVETYPES, HiveType.values()[meta - 1]);
+		return getDefaultState().withProperty(HIVE_TYPES, HiveType.values()[meta - 1]);
 	}
 
 	@Override
@@ -188,7 +187,7 @@ public class BlockBeehives extends BlockContainer implements IItemModelRegister 
 		// Swarm hive not added
 	}
 
-	/* IETM MODELS */
+	/* ITEM MODELS */
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
 		manager.registerItemModel(item, 1, "beehives/" + HiveType.FOREST.getName());

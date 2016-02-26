@@ -12,7 +12,6 @@ package forestry.arboriculture.blocks;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -40,22 +39,23 @@ import net.minecraft.util.EnumWorldBlockLayer;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.property.IExtendedBlockState;
-import net.minecraftforge.common.property.IUnlistedProperty;
+
+import com.mojang.authlib.GameProfile;
+
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.IShearable;
 import net.minecraftforge.common.property.ExtendedBlockState;
+import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import com.mojang.authlib.GameProfile;
 
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.IToolGrafter;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.TreeManager;
-import forestry.api.core.IModelManager;
 import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
 import forestry.api.core.IToolScoop;
 import forestry.api.core.Tabs;
 import forestry.api.lepidopterology.ButterflyManager;
@@ -209,7 +209,8 @@ public class BlockForestryLeaves extends BlockLeavesBase implements ITileEntityP
 	
 	@Override
 	public List<ItemStack> onSheared(ItemStack item, IBlockAccess world, BlockPos pos, int fortune) {
-		List<ItemStack> ret = new ArrayList(Arrays.asList(new ItemStack(this)));
+		List<ItemStack> ret = new ArrayList<>();
+		ret.add(new ItemStack(this));
 
 		TileLeaves leaves = getLeafTile(world, pos);
 		NBTTagCompound shearedLeavesNBT = new NBTTagCompound();
@@ -281,8 +282,8 @@ public class BlockForestryLeaves extends BlockLeavesBase implements ITileEntityP
 		if (leaves == null) {
 			return super.colorMultiplier(world, pos, 0);
 		}
-		int colour = super.colorMultiplier(world, pos, 0);
-		if(renderPass == 0){
+		final int colour;
+		if (renderPass == 0) {
 			colour = leaves.getFoliageColour(Proxies.common.getClientInstance().thePlayer);
 			if (colour == 0 || colour == PluginArboriculture.proxy.getFoliageColorBasic()) {
 				return super.colorMultiplier(world, pos, 0);

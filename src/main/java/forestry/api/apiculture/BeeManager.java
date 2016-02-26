@@ -25,7 +25,7 @@ public class BeeManager {
 	/**
 	 * List of items that can induce swarming. Integer denotes x in 1000 chance.
 	 */
-	public static HashMap<ItemStack, Integer> inducers = new HashMap<ItemStack, Integer>();
+	public static HashMap<ItemStack, Integer> inducers = new HashMap<>();
 
 	/**
 	 * Convenient access to AlleleManager.alleleRegistry.getSpeciesRoot("rootBees")

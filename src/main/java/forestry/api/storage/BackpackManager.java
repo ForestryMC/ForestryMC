@@ -23,5 +23,5 @@ public class BackpackManager {
 	/**
 	 * Only use this if you know what you are doing. Prefer backpackInterface.
 	 */
-	public static HashMap<String, IBackpackDefinition> definitions = new HashMap<String, IBackpackDefinition>();
+	public static HashMap<String, IBackpackDefinition> definitions = new HashMap<>();
 }

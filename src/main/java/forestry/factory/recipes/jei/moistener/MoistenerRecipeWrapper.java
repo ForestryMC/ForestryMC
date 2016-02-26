@@ -19,7 +19,8 @@ public class MoistenerRecipeWrapper extends ForestryRecipeWrapper<IMoistenerReci
 		super(recipe);
 		this.fuel = fuel;
 	}
-	
+
+	@Nonnull
 	@Override
 	public List<ItemStack> getInputs() {
 		List<ItemStack> inputs = new ArrayList<>();
@@ -29,6 +30,7 @@ public class MoistenerRecipeWrapper extends ForestryRecipeWrapper<IMoistenerReci
 		return inputs;
 	}
 
+	@Nonnull
 	@Override
 	public List<ItemStack> getOutputs() {
 		List<ItemStack> outputs = new ArrayList<>();

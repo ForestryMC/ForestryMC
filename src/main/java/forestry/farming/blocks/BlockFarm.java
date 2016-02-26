@@ -35,12 +35,14 @@ import net.minecraft.util.EnumWorldBlockLayer;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.property.IExtendedBlockState;
-import net.minecraftforge.common.property.IUnlistedProperty;
+
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.property.ExtendedBlockState;
+import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.core.IModelManager;
 import forestry.core.blocks.BlockStructure;
 import forestry.core.blocks.propertys.UnlistedBlockAccess;
@@ -221,7 +223,7 @@ public class BlockFarm extends BlockStructure {
 		return ParticleHelper.addDestroyEffects(world, this, world.getBlockState(pos), pos, effectRenderer, particleCallback);
 	}
 	
-	public class FarmCallback extends DefaultCallback{
+	private static class FarmCallback extends DefaultCallback {
 
 		public FarmCallback(Block block) {
 			super(block);

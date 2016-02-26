@@ -24,6 +24,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
+
 import forestry.core.TickHandlerCoreServer;
 import forestry.core.multiblock.MultiblockServerTickHandler;
 import forestry.core.network.packets.PacketFXSignal;
@@ -37,10 +38,10 @@ public class ProxyCommon {
 
 	public void registerTickHandlers(WorldGenerator worldGenerator) {
 		TickHandlerCoreServer tickHandlerCoreServer = new TickHandlerCoreServer(worldGenerator);
-		FMLCommonHandler.instance().bus().register(tickHandlerCoreServer);
 		MinecraftForge.EVENT_BUS.register(tickHandlerCoreServer);
 
-		FMLCommonHandler.instance().bus().register(new MultiblockServerTickHandler());
+		MultiblockServerTickHandler multiblockServerTickHandler = new MultiblockServerTickHandler();
+		MinecraftForge.EVENT_BUS.register(multiblockServerTickHandler);
 	}
 
 	public String getDisplayName(ItemStack itemstack) {

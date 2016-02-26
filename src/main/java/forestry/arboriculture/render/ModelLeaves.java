@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
+
 import forestry.api.core.IModelBaker;
 import forestry.arboriculture.blocks.BlockForestryLeaves;
 import forestry.arboriculture.genetics.TreeHelper;
@@ -23,6 +24,10 @@ import forestry.core.models.ModelBlockOverlay;
 import forestry.core.proxy.Proxies;
 
 public class ModelLeaves extends ModelBlockOverlay<BlockForestryLeaves> {
+
+	public ModelLeaves() {
+		super(BlockForestryLeaves.class);
+	}
 
 	@Override
 	public void renderInventory(BlockForestryLeaves block, ItemStack itemStack, IModelBaker baker) {

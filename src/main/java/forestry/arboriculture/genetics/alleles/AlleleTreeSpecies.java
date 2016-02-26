@@ -10,14 +10,17 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics.alleles;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.ModelResourceLocation;
+
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.IAlleleTreeSpeciesCustom;
@@ -130,7 +133,7 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 	}
 
 	@Override
-	public int compareTo(IAlleleTreeSpecies o) {
+	public int compareTo(@Nonnull IAlleleTreeSpecies o) {
 		return 0;
 	}
 

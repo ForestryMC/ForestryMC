@@ -22,7 +22,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+
 import net.minecraftforge.fml.common.Optional;
+
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitBoard;
@@ -95,7 +97,7 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 
 		ItemStack chip = sockets.getStackInSlot(0);
 		if (chip != null) {
-			ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitboard(chip);
+			ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitBoard(chip);
 			if (chipset != null) {
 				chipset.onLoad(this);
 			}
@@ -224,7 +226,7 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 		// Dispose correctly of old chipsets
 		if (sockets.getStackInSlot(slot) != null) {
 			if (ChipsetManager.circuitRegistry.isChipset(sockets.getStackInSlot(slot))) {
-				ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitboard(sockets.getStackInSlot(slot));
+				ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitBoard(sockets.getStackInSlot(slot));
 				if (chipset != null) {
 					chipset.onRemoval(this);
 				}
@@ -236,7 +238,7 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 			return;
 		}
 
-		ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitboard(stack);
+		ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitBoard(stack);
 		if (chipset != null) {
 			chipset.onInsertion(this);
 		}

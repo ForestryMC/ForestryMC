@@ -5,6 +5,7 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 import forestry.api.core.INBTTagable;
@@ -34,6 +35,7 @@ public interface IIndividual extends INBTTagable {
 
 	boolean isSecret();
 
+	@Nonnull
 	IGenome getGenome();
 
 	/**

@@ -19,7 +19,7 @@ import forestry.core.items.ItemOverlay;
 
 public class ItemStamps extends ItemOverlay implements IStamps {
 	public ItemStamps() {
-		super(CreativeTabForestry.tabForestry, EnumStampDefinition.VALUES);
+		super(CreativeTabForestry.tabForestry, (IOverlayInfo[]) EnumStampDefinition.VALUES);
 	}
 
 	@Override

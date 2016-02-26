@@ -19,9 +19,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.core.IModelManager;
 import forestry.api.core.IToolPipette;
 import forestry.core.config.Constants;
@@ -112,10 +114,10 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 		models[1] = manager.getModelLocation("pipette.1");
 		manager.registerVariant(item, new ResourceLocation("forestry:pipette.0"));
 		manager.registerVariant(item, new ResourceLocation("forestry:pipette.1"));
-		manager.registerItemModel(item, new PippetMeshDefinition());
+		manager.registerItemModel(item, new PipetteMeshDefinition());
 	}
 
-	public class PippetMeshDefinition implements ItemMeshDefinition {
+	public class PipetteMeshDefinition implements ItemMeshDefinition {
 
 		@Override
 		public ModelResourceLocation getModelLocation(ItemStack stack) {
@@ -131,7 +133,7 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 	@Override
 	public FluidStack drain(ItemStack pipette, int maxDrain, boolean doDrain) {
 		PipetteContents contained = new PipetteContents(pipette.getTagCompound());
-		if (contained.getContents() == null || contained.getContents().getFluid().getID() <= 0) {
+		if (contained.getContents() == null) {
 			return null;
 		}
 

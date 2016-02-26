@@ -16,7 +16,7 @@ import net.minecraftforge.common.EnumPlantType;
 
 import forestry.api.genetics.IIndividual;
 
-/** Just like IPollinatible but for checking only, it can't be mated */
+/** Just like IPollinatable but for checking only, it can't be mated */
 public interface ICheckPollinatable {
 
 	/**

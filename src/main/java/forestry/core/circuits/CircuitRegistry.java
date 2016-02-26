@@ -37,12 +37,12 @@ public class CircuitRegistry implements ICircuitRegistry {
 	}
 
 	@Override
-	public ICircuitLibrary getCircuitLibrary(World world, String playername) {
-		CircuitLibrary library = (CircuitLibrary) world.loadItemData(CircuitLibrary.class, "CircuitLibrary_" + playername);
+	public ICircuitLibrary getCircuitLibrary(World world, String playerName) {
+		CircuitLibrary library = (CircuitLibrary) world.loadItemData(CircuitLibrary.class, "CircuitLibrary_" + playerName);
 
 		if (library == null) {
-			library = new CircuitLibrary(playername);
-			world.setItemData("CircuitLibrary_" + playername, library);
+			library = new CircuitLibrary(playerName);
+			world.setItemData("CircuitLibrary_" + playerName, library);
 		}
 
 		return library;
@@ -104,7 +104,7 @@ public class CircuitRegistry implements ICircuitRegistry {
 	}
 
 	@Override
-	public ICircuitBoard getCircuitboard(ItemStack itemstack) {
+	public ICircuitBoard getCircuitBoard(ItemStack itemstack) {
 		NBTTagCompound nbttagcompound = itemstack.getTagCompound();
 		if (nbttagcompound == null) {
 			return null;

@@ -14,10 +14,6 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
-import org.lwjgl.util.vector.Vector3f;
-
-import forestry.api.core.ForestryAPI;
-import forestry.api.core.IModelBaker;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.BlockFaceUV;
@@ -28,9 +24,15 @@ import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.client.resources.model.ModelRotation;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+
 import net.minecraftforge.client.model.IColoredBakedQuad;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import org.lwjgl.util.vector.Vector3f;
+
+import forestry.api.core.ForestryAPI;
+import forestry.api.core.IModelBaker;
 
 /**
  * A model baker to make custom models in the mod
@@ -127,7 +129,7 @@ public class ModelBaker implements IModelBaker {
 
 	private final float quadsUV[] = new float[] { 0, 0, 1, 1, 0, 0, 1, 1 };
 	protected EnumSet<EnumFacing> renderFaces = EnumSet.allOf(EnumFacing.class);
-	private List<ModelBakerFace> faces = new ArrayList();
+	private List<ModelBakerFace> faces = new ArrayList<>();
 
 	protected float[] getFaceUvs(final EnumFacing face, final Vector3f to_16, final Vector3f from_16) {
 		float from_a = 0;
@@ -289,7 +291,7 @@ public class ModelBaker implements IModelBaker {
 	protected ModelBakerModel clearBaker() {
 		ModelBakerModel model = generatedModel.copy();
 		generatedModel = new ModelBakerModel();
-		faces = new ArrayList<ModelBakerFace>();
+		faces = new ArrayList<>();
 		return model;
 	}
 

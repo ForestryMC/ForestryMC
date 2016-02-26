@@ -20,9 +20,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.Optional;
 
 import com.mojang.authlib.GameProfile;
+
+import net.minecraftforge.fml.common.Optional;
 
 import forestry.api.mail.ILetter;
 import forestry.api.mail.IMailAddress;
@@ -89,12 +90,12 @@ public class TileMailbox extends TileBase implements IMailContainer {
 		return PostRegistry.getOrCreatePOBox(worldObj, address);
 	}
 
-	private IPostalState tryDispatchLetter(ItemStack letterstack) {
-		ILetter letter = PostManager.postRegistry.getLetter(letterstack);
+	private IPostalState tryDispatchLetter(ItemStack letterStack) {
+		ILetter letter = PostManager.postRegistry.getLetter(letterStack);
 		IPostalState result;
 
 		if (letter != null) {
-			result = PostManager.postRegistry.getPostOffice(worldObj).lodgeLetter(worldObj, letterstack, true);
+			result = PostManager.postRegistry.getPostOffice(worldObj).lodgeLetter(worldObj, letterStack, true);
 		} else {
 			result = EnumDeliveryState.NOT_MAILABLE;
 		}
@@ -102,7 +103,6 @@ public class TileMailbox extends TileBase implements IMailContainer {
 		return result;
 	}
 
-	/* IMAILCONTAINER */
 	@Override
 	public boolean hasMail() {
 
@@ -116,7 +116,6 @@ public class TileMailbox extends TileBase implements IMailContainer {
 		return false;
 	}
 
-	/* ITRIGGERPROVIDER */
 	@Optional.Method(modid = "BuildCraftAPI|statements")
 	@Override
 	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {

@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.fluids;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
@@ -19,6 +21,7 @@ import net.minecraftforge.fluids.FluidStack;
 import forestry.api.core.INBTTagable;
 
 public class PipetteContents implements INBTTagable {
+	@Nullable
 	private FluidStack contents;
 
 	public PipetteContents(NBTTagCompound nbttagcompound) {
@@ -27,11 +30,12 @@ public class PipetteContents implements INBTTagable {
 		}
 	}
 
+	@Nullable
 	public FluidStack getContents() {
 		return contents;
 	}
 
-	public void setContents(FluidStack contents) {
+	public void setContents(@Nonnull FluidStack contents) {
 		this.contents = contents;
 	}
 
@@ -40,7 +44,7 @@ public class PipetteContents implements INBTTagable {
 			return false;
 		}
 
-		return contents.getFluid().getID() > 0 && contents.amount >= 1000;
+		return contents.amount >= 1000;
 	}
 
 	public void addTooltip(List<String> list) {

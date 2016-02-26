@@ -17,6 +17,7 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
@@ -85,7 +86,7 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 
 		ItemStack chip = sockets.getStackInSlot(0);
 		if (chip != null) {
-			ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitboard(chip);
+			ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitBoard(chip);
 			if (chipset != null) {
 				chipset.onLoad(this);
 			}
@@ -261,7 +262,7 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 		// Dispose correctly of old chipsets
 		if (sockets.getStackInSlot(slot) != null) {
 			if (ChipsetManager.circuitRegistry.isChipset(sockets.getStackInSlot(slot))) {
-				ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitboard(sockets.getStackInSlot(slot));
+				ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitBoard(sockets.getStackInSlot(slot));
 				if (chipset != null) {
 					chipset.onRemoval(this);
 				}
@@ -273,7 +274,7 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 			return;
 		}
 
-		ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitboard(stack);
+		ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitBoard(stack);
 		if (chipset != null) {
 			chipset.onInsertion(this);
 		}

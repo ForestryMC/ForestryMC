@@ -11,9 +11,8 @@
 package forestry.core.models.baker;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.List;
-
-import org.lwjgl.util.vector.Vector3f;
 
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
@@ -22,21 +21,25 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import org.lwjgl.util.vector.Vector3f;
+
 @SideOnly(Side.CLIENT)
 public class ModelBakerModel implements IBakedModel {
-	protected List<BakedQuad>[] faces = new List[6];
+	private EnumMap<EnumFacing, List<BakedQuad>> faces = new EnumMap<>(EnumFacing.class);
 	protected List<BakedQuad> general;
 
 	public ModelBakerModel() {
-		general = new ArrayList<BakedQuad>();
-		for (EnumFacing f : EnumFacing.VALUES)
-			faces[f.ordinal()] = new ArrayList<BakedQuad>();
+		general = new ArrayList<>();
+		for (EnumFacing f : EnumFacing.VALUES) {
+			faces.put(f, new ArrayList<BakedQuad>());
+		}
 	}
 
-	private ModelBakerModel(List<BakedQuad> general, List<BakedQuad>[] faces) {
+	private ModelBakerModel(List<BakedQuad> general, EnumMap<EnumFacing, List<BakedQuad>> faces) {
 		this.general = general;
 		this.faces = faces;
 	}
@@ -66,7 +69,7 @@ public class ModelBakerModel implements IBakedModel {
 		return getTransform();
 	}
 
-	public ItemCameraTransforms getTransform() {
+	public static ItemCameraTransforms getTransform() {
 		Vector3f rotation = new Vector3f(getRotation()[0], getRotation()[1], getRotation()[2]);
 		Vector3f translation = new Vector3f(getTranslation()[0], getTranslation()[1], getTranslation()[2]);
 		translation.scale(0.0625F);
@@ -83,26 +86,26 @@ public class ModelBakerModel implements IBakedModel {
 		return new ItemCameraTransforms(transformV, ItemCameraTransforms.DEFAULT.firstPerson, ItemCameraTransforms.DEFAULT.head, ItemCameraTransforms.DEFAULT.gui, ItemCameraTransforms.DEFAULT.ground, ItemCameraTransforms.DEFAULT.fixed);
 	}
 
-	protected float[] getRotation() {
+	protected static float[] getRotation() {
 		return new float[] { -80, -45, 170 };
 	}
 
-	protected float[] getTranslation() {
+	protected static float[] getTranslation() {
 		return new float[] { 0, 1.5F, -2.75F };
 	}
 
-	protected float[] getScale() {
+	protected static float[] getScale() {
 		return new float[] { 0.375F, 0.375F, 0.375F };
 	}
 
 	@Override
-	public List getGeneralQuads() {
+	public List<BakedQuad> getGeneralQuads() {
 		return general;
 	}
 
 	@Override
-	public List getFaceQuads(EnumFacing face) {
-		return faces[face.ordinal()];
+	public List<BakedQuad> getFaceQuads(EnumFacing face) {
+		return faces.get(face);
 	}
 
 	public ModelBakerModel copy() {

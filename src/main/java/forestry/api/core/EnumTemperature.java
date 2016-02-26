@@ -8,6 +8,7 @@ package forestry.api.core;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.biome.BiomeGenBase;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -23,7 +24,7 @@ public enum EnumTemperature {
 	public final String name;
 	public final String iconIndex;
 
-	private EnumTemperature(String name, String iconIndex) {
+	EnumTemperature(String name, String iconIndex) {
 		this.name = name;
 		this.iconIndex = iconIndex;
 	}

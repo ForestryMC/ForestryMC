@@ -17,6 +17,7 @@ import net.minecraft.item.ItemStack;
 import forestry.core.items.ItemForestryFood;
 import forestry.core.items.ItemRegistry;
 import forestry.food.BeverageEffect;
+import forestry.food.BeverageEffects;
 
 public class ItemRegistryFood extends ItemRegistry {
 	public final ItemForestryFood honeyedSlice;
@@ -37,6 +38,6 @@ public class ItemRegistryFood extends ItemRegistry {
 		registerItem(infuser, "infuser");
 
 		// Mead
-		BeverageEffect.saveEffects(new ItemStack(beverage), Collections.singletonList(BeverageEffect.weakAlcoholic));
+		BeverageEffect.saveEffects(new ItemStack(beverage), Collections.singletonList(BeverageEffects.weakAlcoholic));
 	}
 }

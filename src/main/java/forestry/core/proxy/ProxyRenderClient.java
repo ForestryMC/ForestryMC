@@ -121,14 +121,9 @@ public class ProxyRenderClient extends ProxyRender {
 	}
 	
 	@Override
-	public void registerBlockModel(@Nonnull BlockModelIndex index) {
+	public void registerBlockModel(@Nonnull final BlockModelIndex index) {
 		ModelManager.registerCustomBlockModel(index);
-		StateMapperBase ignoreState = new StateMapperBase() {
-			@Override
-			protected ModelResourceLocation getModelResourceLocation(IBlockState iBlockState) {
-				return index.blockModelLocation;
-			}
-		};
+		StateMapperBase ignoreState = new BlockModeStateMapper(index);
 		registerStateMapper(index.block, ignoreState);
 	}
 	
@@ -141,19 +136,9 @@ public class ProxyRenderClient extends ProxyRender {
 	public void registerFluidStateMapper(Block block, final Fluids forestryFluid) {
 		final ModelResourceLocation fluidLocation = new ModelResourceLocation("forestry:blockforestryfluid",
 				forestryFluid.getTag());
-		StateMapperBase ignoreState = new StateMapperBase() {
-			@Override
-			protected ModelResourceLocation getModelResourceLocation(IBlockState iBlockState) {
-				return fluidLocation;
-			}
-		};
+		StateMapperBase ignoreState = new FluidStateMapper(fluidLocation);
 		registerStateMapper(block, ignoreState);
-		ModelLoader.setCustomMeshDefinition(Item.getItemFromBlock(block), new ItemMeshDefinition() {
-			@Override
-			public ModelResourceLocation getModelLocation(ItemStack stack) {
-				return fluidLocation;
-			}
-		});
+		ModelLoader.setCustomMeshDefinition(Item.getItemFromBlock(block), new FluidItemMeshDefinition(fluidLocation));
 		ModelBakery.registerItemVariants(Item.getItemFromBlock(block), fluidLocation);
 	}
 
@@ -257,5 +242,44 @@ public class ProxyRenderClient extends ProxyRender {
 		entityfx.setRBGColorF(red, green, blue);
 
 		Proxies.common.getClientInstance().effectRenderer.addEffect(entityfx);
+	}
+
+	private static class BlockModeStateMapper extends StateMapperBase {
+		private final BlockModelIndex index;
+
+		public BlockModeStateMapper(BlockModelIndex index) {
+			this.index = index;
+		}
+
+		@Override
+		protected ModelResourceLocation getModelResourceLocation(IBlockState iBlockState) {
+			return index.blockModelLocation;
+		}
+	}
+
+	private static class FluidStateMapper extends StateMapperBase {
+		private final ModelResourceLocation fluidLocation;
+
+		public FluidStateMapper(ModelResourceLocation fluidLocation) {
+			this.fluidLocation = fluidLocation;
+		}
+
+		@Override
+		protected ModelResourceLocation getModelResourceLocation(IBlockState iBlockState) {
+			return fluidLocation;
+		}
+	}
+
+	private static class FluidItemMeshDefinition implements ItemMeshDefinition {
+		private final ModelResourceLocation fluidLocation;
+
+		public FluidItemMeshDefinition(ModelResourceLocation fluidLocation) {
+			this.fluidLocation = fluidLocation;
+		}
+
+		@Override
+		public ModelResourceLocation getModelLocation(ItemStack stack) {
+			return fluidLocation;
+		}
 	}
 }

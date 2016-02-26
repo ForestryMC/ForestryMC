@@ -46,7 +46,7 @@ public class ContainerSocketedHelper<T extends TileEntity & ISocketable> impleme
 			return;
 		}
 
-		ICircuitBoard circuitBoard = ChipsetManager.circuitRegistry.getCircuitboard(itemstack);
+		ICircuitBoard circuitBoard = ChipsetManager.circuitRegistry.getCircuitBoard(itemstack);
 		if (circuitBoard == null) {
 			return;
 		}

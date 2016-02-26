@@ -44,7 +44,7 @@ public enum EnumBeeChromosome implements IChromosomeType {
 	 */
 	TEMPERATURE_TOLERANCE(IAlleleTolerance.class),
 	/**
-	 * Slightly incorrectly named. If true, a naturally dirunal bee can work during the night. If true, a naturally nocturnal bee can work during the day.
+	 * Slightly incorrectly named. If true, a naturally diurnal bee can work during the night. If true, a naturally nocturnal bee can work during the day.
 	 */
 	NOCTURNAL(IAlleleBoolean.class),
 	/**
@@ -81,15 +81,15 @@ public enum EnumBeeChromosome implements IChromosomeType {
 	 */
 	EFFECT(IAlleleBeeEffect.class);
 	
-	Class<? extends IAllele> clss;
+	private final Class<? extends IAllele> alleleClass;
 	
-	EnumBeeChromosome(Class<? extends IAllele> clss) {
-		this.clss = clss;
+	EnumBeeChromosome(Class<? extends IAllele> alleleClass) {
+		this.alleleClass = alleleClass;
 	}
 
 	@Override
 	public Class<? extends IAllele> getAlleleClass() {
-		return clss;
+		return alleleClass;
 	}
 
 	@Override

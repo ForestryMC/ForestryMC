@@ -1,20 +1,24 @@
 package forestry.core.render;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
 import com.google.common.collect.Maps;
 
-import forestry.core.blocks.IBlockType;
-import forestry.core.blocks.IMachinePropertiesTesr;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import net.minecraft.block.Block;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.ResourceLocation;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.core.blocks.IBlockType;
+import forestry.core.blocks.IMachinePropertiesTesr;
 
 @SideOnly(Side.CLIENT)
 public class MachineStateMapper<T extends Enum<T> & IBlockType & IStringSerializable> extends ForestryStateMapper {
@@ -38,7 +42,7 @@ public class MachineStateMapper<T extends Enum<T> & IBlockType & IStringSerializ
 				if (facing == EnumFacing.DOWN || facing == EnumFacing.UP)
 					continue;
 				IBlockState state = block.getDefaultState().withProperty(META, type).withProperty(FACE, facing);
-				LinkedHashMap linkedhashmap = Maps.newLinkedHashMap(state.getProperties());
+				LinkedHashMap<IProperty, Comparable> linkedhashmap = Maps.newLinkedHashMap(state.getProperties());
 				ResourceLocation blockLocation = Block.blockRegistry.getNameForObject(block);
 				String s = String.format("%s:%s", blockLocation.getResourceDomain(), blockLocation.getResourcePath() + "_" + META.getName((T) linkedhashmap.remove(META)));
 				mapStateModelLocations.put(state, new ModelResourceLocation(s, getPropertyString(linkedhashmap)));

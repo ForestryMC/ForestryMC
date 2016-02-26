@@ -11,7 +11,6 @@
 package forestry.core.commands;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -29,13 +28,7 @@ public class RootCommand extends CommandBase implements IForestryCommand {
 	public static final String ROOT_COMMAND_NAME = "forestry";
 	public static final String ROOT_COMMAND_ALIAS = "for";
 
-	private final SortedSet<SubCommand> children = new TreeSet<>(new Comparator<SubCommand>() {
-
-		@Override
-		public int compare(SubCommand o1, SubCommand o2) {
-			return o1.compareTo(o2);
-		}
-	});
+	private final SortedSet<SubCommand> children = new TreeSet<>();
 
 	public void addChildCommand(SubCommand child) {
 		child.setParent(this);
@@ -78,7 +71,7 @@ public class RootCommand extends CommandBase implements IForestryCommand {
 	}
 
 	@Override
-	public List addTabCompletionOptions(ICommandSender sender, String[] incomplete, BlockPos pos) {
+	public List<String> addTabCompletionOptions(ICommandSender sender, String[] incomplete, BlockPos pos) {
 		return CommandHelpers.addStandardTabCompletionOptions(this, sender, incomplete, pos);
 	}
 

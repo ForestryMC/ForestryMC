@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.genetics;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
@@ -26,6 +28,12 @@ public abstract class IndividualLiving extends Individual implements IIndividual
 	
 	protected IndividualLiving(int newHealth) {
 		health = maxHealth = newHealth;
+	}
+
+	protected IndividualLiving(@Nonnull NBTTagCompound nbt) {
+		super(nbt);
+		health = nbt.getInteger("Health");
+		maxHealth = nbt.getInteger("MaxH");
 	}
 	
 	/* SAVING & LOADING */

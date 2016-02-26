@@ -34,7 +34,7 @@ import forestry.core.utils.StringUtil;
 public class ItemElectronTube extends ItemOverlay {
 
 	public ItemElectronTube() {
-		super(CreativeTabForestry.tabForestry, EnumElectronTube.VALUES);
+		super(CreativeTabForestry.tabForestry, (IOverlayInfo[]) EnumElectronTube.VALUES);
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})

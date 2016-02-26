@@ -12,7 +12,6 @@ package forestry.arboriculture.blocks;
 
 import java.util.List;
 
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
@@ -30,9 +29,9 @@ import forestry.api.arboriculture.TreeManager;
 
 public class BlockLog extends BlockWood {
 
-	public static final PropertyEnum AXIS = PropertyEnum.create("axis", Axis.class);
+	private static final PropertyEnum AXIS = PropertyEnum.create("axis", Axis.class);
 	
-	public static enum Axis implements IStringSerializable {
+	private enum Axis implements IStringSerializable {
 		NORMAL, SIDE, SIDE_90;
 
 		@Override
@@ -67,7 +66,7 @@ public class BlockLog extends BlockWood {
 	
 	@Override
 	protected BlockState createBlockState() {
-		return new BlockState(this, new IProperty[] { EnumWoodType.WOODTYPE, AXIS });
+		return new BlockState(this, EnumWoodType.WOODTYPE, AXIS);
 	}
 	
 	@Override

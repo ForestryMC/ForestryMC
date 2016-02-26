@@ -23,6 +23,7 @@ import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -36,8 +37,9 @@ import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import forestry.api.core.IModelManager;
+
 import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
 import forestry.core.CreativeTabForestry;
 import forestry.core.config.Constants;
 import forestry.core.utils.BlockUtil;
@@ -234,7 +236,7 @@ public class BlockSoil extends Block implements IItemTyped, IItemModelRegister {
 	}
 
 	@Override
-	protected boolean canSilkHarvest() {
+	public boolean canSilkHarvest(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
 		return false;
 	}
 
@@ -255,9 +257,8 @@ public class BlockSoil extends Block implements IItemTyped, IItemModelRegister {
 	}
 
 	// / CREATIVE INVENTORY
-	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List itemList) {
+	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List<ItemStack> itemList) {
 		itemList.add(new ItemStack(this, 1, 0));
 		itemList.add(new ItemStack(this, 1, 1));
 	}

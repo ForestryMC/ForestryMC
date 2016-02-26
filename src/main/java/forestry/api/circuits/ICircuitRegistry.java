@@ -19,7 +19,7 @@ public interface ICircuitRegistry {
 
 	ICircuit getCircuit(String uid);
 
-	ICircuitLibrary getCircuitLibrary(World world, String playername);
+	ICircuitLibrary getCircuitLibrary(World world, String playerName);
 
 	/* LAYOUTS */
 	Map<String, ICircuitLayout> getRegisteredLayouts();
@@ -30,7 +30,7 @@ public interface ICircuitRegistry {
 
 	ICircuitLayout getDefaultLayout();
 
-	ICircuitBoard getCircuitboard(ItemStack itemstack);
+	ICircuitBoard getCircuitBoard(ItemStack itemstack);
 
 	boolean isChipset(ItemStack itemstack);
 

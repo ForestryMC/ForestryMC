@@ -20,7 +20,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLCommonHandler;
+
+import net.minecraftforge.common.MinecraftForge;
 
 import org.lwjgl.input.Keyboard;
 
@@ -34,8 +35,8 @@ public class ProxyCommonClient extends ProxyCommon {
 	public void registerTickHandlers(WorldGenerator worldGenerator) {
 		super.registerTickHandlers(worldGenerator);
 
-		FMLCommonHandler.instance().bus().register(new TickHandlerCoreClient());
-		FMLCommonHandler.instance().bus().register(new MultiblockClientTickHandler());
+		MinecraftForge.EVENT_BUS.register(new TickHandlerCoreClient());
+		MinecraftForge.EVENT_BUS.register(new MultiblockClientTickHandler());
 	}
 
 	@Override

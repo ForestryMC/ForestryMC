@@ -46,7 +46,7 @@ public class AddresseeSlot extends Widget {
 
 	@Override
 	protected String getLegacyTooltip(EntityPlayer player) {
-		return StringUtil.localize("gui.addressee." + containerLetter.getCarrierType().toString());
+		return StringUtil.localize("gui.addressee." + containerLetter.getCarrierType());
 	}
 
 	@Override

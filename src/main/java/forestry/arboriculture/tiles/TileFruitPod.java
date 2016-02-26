@@ -20,8 +20,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
@@ -61,7 +63,7 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 		super.readFromNBT(nbttagcompound);
 
 		IAllele stored = AlleleManager.alleleRegistry.getAllele(nbttagcompound.getString("UID"));
-		if (stored != null && stored instanceof IAlleleFruit) {
+		if (stored instanceof IAlleleFruit) {
 			allele = (IAlleleFruit) stored;
 		} else {
 			allele = (IAlleleFruit) AlleleManager.alleleRegistry.getAllele("fruitCocoa");

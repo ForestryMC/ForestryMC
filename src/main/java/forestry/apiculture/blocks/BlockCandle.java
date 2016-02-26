@@ -41,11 +41,13 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
-import forestry.api.core.IModelManager;
+
 import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
 import forestry.api.core.Tabs;
 import forestry.apiculture.tiles.TileCandle;
 import forestry.core.utils.ItemStackUtil;
@@ -209,7 +211,7 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister {
 	}
 
 	private static boolean tryDye(ItemStack held, boolean isLit, TileCandle tileCandle) {
-		// Check for dye-able ness.
+		// Check for dye-able.
 		for (Map.Entry<String, Integer> colour : colours.entrySet()) {
 			String colourName = colour.getKey();
 			for (ItemStack stack : OreDictionary.getOres(colourName)) {

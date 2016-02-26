@@ -14,6 +14,6 @@ public class Farmables {
 	 * 
 	 * Identifiers: farmArboreal farmWheat farmGourd farmInfernal farmPoales farmSucculentes farmVegetables farmShroom
 	 */
-	public static HashMap<String, Collection<IFarmable>> farmables = new HashMap<String, Collection<IFarmable>>();
+	public static HashMap<String, Collection<IFarmable>> farmables = new HashMap<>();
 
 }

@@ -23,8 +23,7 @@ import forestry.core.tiles.TileMill;
 
 public class RenderMill extends TileEntitySpecialRenderer<TileMill> {
 
-	private final ModelBase model = new ModelBase() {
-	};
+	private final ModelBase model = new MillModelBase();
 
 	private enum Textures {PEDESTAL, EXTENSION, BLADE_1, BLADE_2, CHARGE}
 
@@ -196,4 +195,6 @@ public class RenderMill extends TileEntitySpecialRenderer<TileMill> {
 
 	}
 
+	private static class MillModelBase extends ModelBase {
+	}
 }

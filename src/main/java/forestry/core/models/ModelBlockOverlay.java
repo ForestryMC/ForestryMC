@@ -10,8 +10,13 @@
  ******************************************************************************/
 package forestry.core.models;
 
+import javax.annotation.Nonnull;
+import java.util.Collections;
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.IBakedModel;
@@ -19,11 +24,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
+
 import net.minecraftforge.client.model.ISmartBlockModel;
 import net.minecraftforge.client.model.ISmartItemModel;
 import net.minecraftforge.common.property.IExtendedBlockState;
-import java.util.Collections;
-import java.util.List;
 
 import forestry.api.core.IModelBaker;
 import forestry.core.blocks.propertys.UnlistedBlockAccess;
@@ -34,6 +38,12 @@ import forestry.core.models.baker.ModelBaker;
  * A overlay block model to make a block with 2 or more texture layers
  */
 public abstract class ModelBlockOverlay<B extends Block> implements ISmartItemModel, ISmartBlockModel {
+	@Nonnull
+	private final Class<B> blockClass;
+
+	protected ModelBlockOverlay(@Nonnull Class<B> blockClass) {
+		this.blockClass = blockClass;
+	}
 
 	protected void renderBottomFace(IBlockAccess world, B block, BlockPos pos, IModelBaker baker, TextureAtlasSprite sprite, int colorIndex) {
 
@@ -109,12 +119,12 @@ public abstract class ModelBlockOverlay<B extends Block> implements ISmartItemMo
 	}
 
 	@Override
-	public List getFaceQuads(EnumFacing face) {
+	public List<BakedQuad> getFaceQuads(EnumFacing face) {
 		return Collections.emptyList();
 	}
 
 	@Override
-	public List getGeneralQuads() {
+	public List<BakedQuad> getGeneralQuads() {
 		return Collections.emptyList();
 	}
 
@@ -151,10 +161,14 @@ public abstract class ModelBlockOverlay<B extends Block> implements ISmartItemMo
 		IBlockAccess world = stateExtended.getValue(UnlistedBlockAccess.BLOCKACCESS);
 		BlockPos pos = stateExtended.getValue(UnlistedBlockPos.POS);
 		Block block = state.getBlock();
+		if (!blockClass.isInstance(block)) {
+			return null;
+		}
+		B bBlock = blockClass.cast(block);
 		
 		baker.setRenderBoundsFromBlock(block);
 		try{
-			renderInWorld((B) block, world, pos, baker);
+			renderInWorld(bBlock, world, pos, baker);
 		}catch(Exception e){
 			return null;
 		}
@@ -166,11 +180,15 @@ public abstract class ModelBlockOverlay<B extends Block> implements ISmartItemMo
 	public IBakedModel handleItemState(ItemStack stack) {
 		IModelBaker baker = ModelBaker.getInstance();
 		Block block = Block.getBlockFromItem(stack.getItem());
+		if (!blockClass.isInstance(block)) {
+			return null;
+		}
+		B bBlock = blockClass.cast(block);
 		
 		block.setBlockBoundsForItemRender();
 		baker.setRenderBoundsFromBlock(block);
 		try{
-			renderInventory((B) block, stack, baker);
+			renderInventory(bBlock, stack, baker);
 		}catch(Exception e){
 			return null;
 		}

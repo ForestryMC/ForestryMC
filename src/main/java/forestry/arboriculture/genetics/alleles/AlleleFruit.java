@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics.alleles;
 
+import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.List;
 
@@ -85,7 +86,7 @@ public class AlleleFruit extends AlleleCategorized implements IAlleleFruit {
 	}
 
 	@Override
-	public int compareTo(IAlleleFruit arg0) {
+	public int compareTo(@Nonnull IAlleleFruit arg0) {
 		return 0;
 	}
 

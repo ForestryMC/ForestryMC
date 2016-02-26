@@ -15,7 +15,7 @@ public enum EnumHumidity {
 
 	public final String name;
 
-	private EnumHumidity(String name) {
+	EnumHumidity(String name) {
 		this.name = name;
 	}
 

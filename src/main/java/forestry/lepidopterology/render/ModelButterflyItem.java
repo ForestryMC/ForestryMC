@@ -10,17 +10,14 @@
  ******************************************************************************/
 package forestry.lepidopterology.render;
 
-import java.io.IOException;
-import java.util.List;
-
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
 
-import forestry.api.lepidopterology.ButterflyManager;
-import forestry.api.lepidopterology.IButterfly;
-import forestry.core.models.TRSRBakedModel;
-import forestry.core.utils.Log;
+import java.io.IOException;
+import java.util.List;
+
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -29,9 +26,15 @@ import net.minecraft.client.resources.model.ModelRotation;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+
 import net.minecraftforge.client.model.IRetexturableModel;
 import net.minecraftforge.client.model.ISmartItemModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
+
+import forestry.api.lepidopterology.ButterflyManager;
+import forestry.api.lepidopterology.IButterfly;
+import forestry.core.models.TRSRBakedModel;
+import forestry.core.utils.Log;
 
 public class ModelButterflyItem implements ISmartItemModel {
 
@@ -44,12 +47,12 @@ public class ModelButterflyItem implements ISmartItemModel {
 	}
 
 	@Override
-	public List getFaceQuads(EnumFacing p_177551_1_) {
+	public List<BakedQuad> getFaceQuads(EnumFacing p_177551_1_) {
 		return null;
 	}
 
 	@Override
-	public List getGeneralQuads() {
+	public List<BakedQuad> getGeneralQuads() {
 		return null;
 	}
 
@@ -84,8 +87,7 @@ public class ModelButterflyItem implements ISmartItemModel {
 			try {
 				modelButterfly = (IRetexturableModel) ModelLoaderRegistry.getModel(location);
 			} catch (IOException e) {
-				Log.warning(
-						"Failed to find Butterfly Model for (" + location.toString() + ") in the Forestry registry.");
+				Log.warning("Failed to find Butterfly Model for (" + location + ") in the Forestry registry.");
 			}
 			if (modelButterfly == null) {
 				return null;
@@ -100,15 +102,10 @@ public class ModelButterflyItem implements ISmartItemModel {
 	}
 
 	public IBakedModel bakeModel(IButterfly butterfly) {
-		Function<ResourceLocation, TextureAtlasSprite> textureGetter = new Function<ResourceLocation, TextureAtlasSprite>() {
-			@Override
-			public TextureAtlasSprite apply(ResourceLocation location) {
-				return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString());
-			}
-		};
+		Function<ResourceLocation, TextureAtlasSprite> textureGetter = new ButterflyTextureGetter();
 		ImmutableMap.Builder<String, String> textures = ImmutableMap.builder();
-		textures.put("#ButterflyGE", butterfly.getGenome().getSecondary().getEntityTexture().toString().replace(".png", "").replace("textures/", ""));
-		textures.put("Butterfly2texture", butterfly.getGenome().getSecondary().getEntityTexture().toString().replace(".png", "").replace("textures/", ""));
+		textures.put("#ButterflyGE", butterfly.getGenome().getSecondary().getEntityTexture().replace(".png", "").replace("textures/", ""));
+		textures.put("Butterfly2texture", butterfly.getGenome().getSecondary().getEntityTexture().replace(".png", "").replace("textures/", ""));
 		modelButterfly = (IRetexturableModel) modelButterfly.retexture(textures.build());
 		return new TRSRBakedModel(modelButterfly.bake(ModelRotation.X0_Y0, DefaultVertexFormats.ITEM, textureGetter), -0.5F, -1.5F, 1.5F, 0, (float)Math.PI * 2, 0, 1F);
 	}
@@ -137,4 +134,10 @@ public class ModelButterflyItem implements ISmartItemModel {
 		return flap < 0.5 ? 0.75f + flap : 1.75f - flap;
 	}
 
+	private static class ButterflyTextureGetter implements Function<ResourceLocation, TextureAtlasSprite> {
+		@Override
+		public TextureAtlasSprite apply(ResourceLocation location) {
+			return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString());
+		}
+	}
 }

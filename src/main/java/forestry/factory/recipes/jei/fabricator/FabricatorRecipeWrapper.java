@@ -17,7 +17,8 @@ public class FabricatorRecipeWrapper extends ForestryRecipeWrapper<IFabricatorRe
 	public FabricatorRecipeWrapper(@Nonnull IFabricatorRecipe recipe) {
 		super(recipe);
 	}
-	
+
+	@Nonnull
 	@Override
 	public List getInputs() {
 		List<Object> inputs = new ArrayList<>();

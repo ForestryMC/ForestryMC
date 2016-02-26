@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.core.commands;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -42,13 +42,7 @@ public abstract class SubCommand implements IForestryCommand {
 	private final List<String> aliases = new ArrayList<>();
 	private PermLevel permLevel = PermLevel.EVERYONE;
 	private IForestryCommand parent;
-	private final SortedSet<SubCommand> children = new TreeSet<>(new Comparator<SubCommand>() {
-
-		@Override
-		public int compare(SubCommand o1, SubCommand o2) {
-			return o1.compareTo(o2);
-		}
-	});
+	private final SortedSet<SubCommand> children = new TreeSet<>();
 
 	public SubCommand(String name) {
 		this.name = name;
@@ -135,7 +129,7 @@ public abstract class SubCommand implements IForestryCommand {
 	}
 
 	@Override
-	public int compareTo(ICommand command) {
+	public int compareTo(@Nonnull ICommand command) {
 		return this.getCommandName().compareTo(command.getCommandName());
 	}
 

@@ -16,6 +16,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+
 import forestry.api.farming.FarmDirection;
 
 /**
@@ -95,7 +96,7 @@ public class Vect extends IVect {
 
 	@Override
 	public Vect add(BlockPos pos) {
-		return add(pos);
+		return add(pos.getX(), pos.getY(), pos.getZ());
 	}
 
 	@Override

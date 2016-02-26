@@ -24,7 +24,8 @@ public class FermenterRecipeWrapper extends ForestryRecipeWrapper<IFermenterReci
 		super(recipe);
 		this.fermentable = fermentable;
 	}
-	
+
+	@Nonnull
 	@Override
 	public List getInputs() {
 		List<ItemStack> inputs = new ArrayList<>();
@@ -39,7 +40,8 @@ public class FermenterRecipeWrapper extends ForestryRecipeWrapper<IFermenterReci
 	public ItemStack getFermentable() {
 		return fermentable;
 	}
-	
+
+	@Nonnull
 	@Override
 	public List<FluidStack> getFluidInputs() {
 		return Collections.singletonList(getRecipe().getFluidResource());

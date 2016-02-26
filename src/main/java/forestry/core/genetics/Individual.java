@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.genetics;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.nbt.NBTTagCompound;
 
 import forestry.api.genetics.IChromosomeType;
@@ -18,6 +20,14 @@ import forestry.api.genetics.IIndividual;
 public abstract class Individual implements IIndividual {
 
 	protected boolean isAnalyzed = false;
+
+	protected Individual() {
+
+	}
+
+	protected Individual(@Nonnull NBTTagCompound nbt) {
+		isAnalyzed = nbt.getBoolean("IsAnalyzed");
+	}
 
 	@Override
 	public boolean isAnalyzed() {

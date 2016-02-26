@@ -20,7 +20,7 @@ public interface IAlleleHandler {
 	 * @param allele
 	 *            Allele which was registered.
 	 */
-	public void onRegisterAllele(IAllele allele);
+	void onRegisterAllele(IAllele allele);
 
 	/**
 	 * Called when a classification is registered with {@link IAlleleRegistry}.
@@ -28,7 +28,7 @@ public interface IAlleleHandler {
 	 * @param classification
 	 *            Classification which was registered.
 	 */
-	public void onRegisterClassification(IClassification classification);
+	void onRegisterClassification(IClassification classification);
 
 	/**
 	 * Called when a fruit family is registered with {@link IAlleleRegistry}.
@@ -36,6 +36,5 @@ public interface IAlleleHandler {
 	 * @param family
 	 *            Fruit family which was registered.
 	 */
-	public void onRegisterFruitFamily(IFruitFamily family);
-
+	void onRegisterFruitFamily(IFruitFamily family);
 }

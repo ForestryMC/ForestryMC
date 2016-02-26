@@ -7,13 +7,14 @@ package forestry.api.apiculture.hives;
 
 import java.util.List;
 
-import forestry.api.apiculture.IHiveDrop;
 import net.minecraft.util.IStringSerializable;
+
+import forestry.api.apiculture.IHiveDrop;
 
 public interface IHiveRegistry {
 
 	/* Forestry Hive Names */
-	public static enum HiveType implements IStringSerializable{
+	enum HiveType implements IStringSerializable {
 		FOREST("Forestry:forest"),
 		MEADOWS("Forestry:meadows"),
 		DESERT("Forestry:desert"),
@@ -22,11 +23,11 @@ public interface IHiveRegistry {
 		SNOW("Forestry:snow"),
 		SWAMP("Forestry:swamp");
 		
-		private HiveType(String name) {
+		HiveType(String name) {
 			this.name = name;
 		}
 
-		public String name;
+		private final String name;
 		
 		public String getHiveName()
 		{

@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -72,24 +74,44 @@ public class Bee extends IndividualLiving implements IBee {
 	private int generation;
 	private boolean isNatural = true;
 
+	@Nonnull
 	private IBeeGenome genome;
+	@Nullable
 	private IBeeGenome mate;
 
 	/* CONSTRUCTOR */
-	public Bee(NBTTagCompound nbttagcompound) {
-		readFromNBT(nbttagcompound);
+	public Bee(@Nonnull NBTTagCompound nbttagcompound) {
+		super(nbttagcompound);
+
+		if (nbttagcompound.hasKey("NA")) {
+			isNatural = nbttagcompound.getBoolean("NA");
+		}
+
+		if (nbttagcompound.hasKey("GEN")) {
+			generation = nbttagcompound.getInteger("GEN");
+		}
+
+		if (nbttagcompound.hasKey("Genome")) {
+			genome = BeeGenome.fromNBT(nbttagcompound.getCompoundTag("Genome"));
+		} else {
+			genome = BeeDefinition.FOREST.getGenome();
+		}
+
+		if (nbttagcompound.hasKey("Mate")) {
+			mate = BeeGenome.fromNBT(nbttagcompound.getCompoundTag("Mate"));
+		}
 	}
 
-	public Bee(IBeeGenome genome, IBee mate) {
+	public Bee(@Nonnull IBeeGenome genome, IBee mate) {
 		this(genome);
 		this.mate = mate.getGenome();
 	}
 
-	public Bee(IBeeGenome genome) {
+	public Bee(@Nonnull IBeeGenome genome) {
 		this(genome, true, 0);
 	}
 
-	private Bee(IBeeGenome genome, boolean isNatural, int generation) {
+	private Bee(@Nonnull IBeeGenome genome, boolean isNatural, int generation) {
 		super(genome.getLifespan());
 		this.genome = genome;
 		this.isNatural = isNatural;
@@ -227,11 +249,13 @@ public class Bee extends IndividualLiving implements IBee {
 	}
 
 	// / INFORMATION
+	@Nonnull
 	@Override
 	public IBeeGenome getGenome() {
 		return genome;
 	}
 
+	@Nullable
 	@Override
 	public IBeeGenome getMate() {
 		return mate;

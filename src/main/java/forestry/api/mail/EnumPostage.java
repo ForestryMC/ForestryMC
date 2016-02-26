@@ -10,7 +10,7 @@ public enum EnumPostage {
 
 	private final int value;
 
-	private EnumPostage(int value) {
+	EnumPostage(int value) {
 		this.value = value;
 	}
 

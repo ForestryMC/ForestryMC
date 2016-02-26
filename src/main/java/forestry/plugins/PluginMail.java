@@ -13,7 +13,7 @@ package forestry.plugins;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
-import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.common.MinecraftForge;
 
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.PostManager;
@@ -64,7 +64,7 @@ public class PluginMail extends BlankForestryPlugin {
 		PluginCore.rootCommand.addChildCommand(new CommandMail());
 
 		if (Config.mailAlertEnabled) {
-			FMLCommonHandler.instance().bus().register(new EventHandlerMailAlert());
+			MinecraftForge.EVENT_BUS.register(new EventHandlerMailAlert());
 		}
 
 		blocks.mail.addDefinitions(BlockTypeMail.VALUES);

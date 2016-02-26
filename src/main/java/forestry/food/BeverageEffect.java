@@ -23,11 +23,6 @@ import forestry.api.food.IBeverageEffect;
 import forestry.core.utils.StringUtil;
 
 public abstract class BeverageEffect implements IBeverageEffect {
-
-	public static final IBeverageEffect weakAlcoholic = new BeverageEffectDrunk(10, 0.2f);
-	public static final IBeverageEffect weakAntidote = new BeverageEffectAntidote(20, 0.5f);
-	public static final IBeverageEffect strongAntidote = new BeverageEffectAntidote(21, 1.0f);
-
 	private final int id;
 	protected String description;
 
@@ -35,8 +30,7 @@ public abstract class BeverageEffect implements IBeverageEffect {
 		this.id = id;
 
 		if (BeverageManager.effectList[id] != null) {
-			throw new RuntimeException("Beverage effect slot " + id + " was already occupied by " + BeverageManager.effectList[id].toString()
-					+ " when trying to add " + this.toString());
+			throw new RuntimeException("Beverage effect slot " + id + " was already occupied by " + BeverageManager.effectList[id] + " when trying to add " + this);
 		} else {
 			BeverageManager.effectList[id] = this;
 		}

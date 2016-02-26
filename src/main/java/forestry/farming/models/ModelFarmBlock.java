@@ -1,16 +1,21 @@
 package forestry.farming.models;
 
-import forestry.api.core.IModelBaker;
-import forestry.core.models.ModelBlockOverlay;
-import forestry.farming.blocks.BlockFarm;
-import forestry.farming.blocks.EnumFarmBlockType;
-import forestry.farming.tiles.TileFarm;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
+import forestry.api.core.IModelBaker;
+import forestry.core.models.ModelBlockOverlay;
+import forestry.farming.blocks.BlockFarm;
+import forestry.farming.blocks.EnumFarmBlockType;
+import forestry.farming.tiles.TileFarm;
+
 public class ModelFarmBlock extends ModelBlockOverlay<BlockFarm> {
+
+	public ModelFarmBlock() {
+		super(BlockFarm.class);
+	}
 
 	@Override
 	public void renderInventory(BlockFarm blockFarm, ItemStack item, IModelBaker baker) {

@@ -10,8 +10,9 @@
  ******************************************************************************/
 package forestry.core.blocks.propertys;
 
-import forestry.api.genetics.IAllele;
 import net.minecraft.block.properties.IProperty;
+
+import forestry.api.genetics.IAllele;
 
 public abstract class PropertyAllele<A extends IAllele & Comparable<A>> implements IProperty<A> {
 

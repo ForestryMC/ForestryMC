@@ -13,5 +13,5 @@ package forestry.core.gui;
 public enum GuiType {
 	Item,
 	Tile,
-	Entity;
+	Entity
 }

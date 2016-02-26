@@ -9,7 +9,7 @@ import net.minecraftforge.common.BiomeDictionary;
 
 public class BiomeHelper {
 
-	private static final Map<BiomeGenBase, Boolean> isBiomeHellishCache = new HashMap<BiomeGenBase, Boolean>();
+	private static final Map<BiomeGenBase, Boolean> isBiomeHellishCache = new HashMap<>();
 
 	/**
 	 * Determines if it can rain or snow in the given biome.

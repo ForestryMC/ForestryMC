@@ -10,11 +10,11 @@
  ******************************************************************************/
 package forestry.apiculture.blocks;
 
+import com.google.common.collect.Maps;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-
-import com.google.common.collect.Maps;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
@@ -31,8 +31,10 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.core.IModelManager;
 import forestry.api.core.IStateMapperRegister;
 import forestry.api.core.Tabs;
@@ -274,7 +276,6 @@ public class BlockAlveary extends BlockStructure implements IStateMapperRegister
 			String s = String.format("%s:%s",
 					Block.blockRegistry.getNameForObject(state.getBlock()).getResourceDomain(),
 					"apiculture/alveary_" + TYPE.getName((Enum) linkedhashmap.remove(TYPE)));
-			;
 			return new ModelResourceLocation(s, this.getPropertyString(linkedhashmap));
 		}
 

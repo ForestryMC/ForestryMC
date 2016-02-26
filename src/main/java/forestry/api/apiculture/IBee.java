@@ -5,6 +5,8 @@
  ******************************************************************************/
 package forestry.api.apiculture;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Set;
 
@@ -26,12 +28,14 @@ public interface IBee extends IIndividualLiving {
 	/**
 	 * @return Bee's genetic information.
 	 */
+	@Nonnull
 	@Override
 	IBeeGenome getGenome();
 
 	/**
 	 * @return Genetic information of the bee's mate, null if unmated.
 	 */
+	@Nullable
 	@Override
 	IBeeGenome getMate();
 
