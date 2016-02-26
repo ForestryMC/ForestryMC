@@ -90,19 +90,6 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 		heat = nbttagcompound.getInteger("Heat");
 		tankManager.readFromNBT(nbttagcompound);
 		craftingInventory.readFromNBT(nbttagcompound);
-
-		// FIXME 1.8: wont need this
-		// move items from legacy crafting area to the new one
-		IInventory inventory = getInternalInventory();
-		for (int slot = InventoryFabricator.SLOT_CRAFTING_LEGACY_1; slot < InventoryFabricator.SLOT_CRAFTING_LEGACY_1 + InventoryFabricator.SLOT_CRAFTING_LEGACY_COUNT; slot++) {
-			ItemStack stack = inventory.getStackInSlot(slot);
-			if (stack != null) {
-				inventory.setInventorySlotContents(slot, null);
-
-				int newSlot = slot - InventoryFabricator.SLOT_CRAFTING_LEGACY_1;
-				craftingInventory.setInventorySlotContents(newSlot, stack);
-			}
-		}
 	}
 
 	@Override

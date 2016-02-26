@@ -13,13 +13,13 @@ package forestry.core.gui.widgets;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 import org.lwjgl.opengl.GL11;
 
 import forestry.core.gui.GuiUtil;
+import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
@@ -81,13 +81,15 @@ public class GameTokenWidget extends Widget {
 	}
 
 	@Override
-	protected String getLegacyTooltip(EntityPlayer player) {
+	public ToolTip getToolTip(int mouseX, int mouseY) {
 		EscritoireGameToken token = getToken();
 		if (token == null || !token.isVisible()) {
 			return null;
 		}
 
-		return token.getTooltip();
+		ToolTip tooltip = new ToolTip();
+		tooltip.add(token.getTooltip());
+		return tooltip;
 	}
 
 	@Override

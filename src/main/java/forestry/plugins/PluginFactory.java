@@ -14,7 +14,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.circuits.ChipsetManager;
@@ -259,11 +258,6 @@ public class PluginFactory extends BlankForestryPlugin {
 		// STILL
 		RecipeManagers.stillManager.addRecipe(Constants.STILL_DESTILLATION_DURATION, Fluids.BIOMASS.getFluid(Constants.STILL_DESTILLATION_INPUT),
 				Fluids.ETHANOL.getFluid(Constants.STILL_DESTILLATION_OUTPUT));
-
-		// convert old honey to new honey
-		if (FluidRegistry.isFluidRegistered(Fluids.LEGACY_HONEY.name())) {
-			RecipeManagers.stillManager.addRecipe(1, Fluids.LEGACY_HONEY.getFluid(1000), Fluids.HONEY.getFluid(1000));
-		}
 
 		// MOISTENER
 		RecipeManagers.moistenerManager.addRecipe(new ItemStack(Items.wheat_seeds), new ItemStack(Blocks.mycelium), 5000);

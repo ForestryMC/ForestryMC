@@ -10,11 +10,10 @@
  ******************************************************************************/
 package forestry.core.gui.widgets;
 
-import net.minecraft.entity.player.EntityPlayer;
-
 import org.lwjgl.opengl.GL11;
 
 import forestry.core.gui.GuiEscritoire;
+import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
@@ -39,8 +38,10 @@ public class ProbeButton extends Widget {
 	}
 
 	@Override
-	protected String getLegacyTooltip(EntityPlayer player) {
-		return StringUtil.localize("gui.escritoire.probe");
+	public ToolTip getToolTip(int mouseX, int mouseY) {
+		ToolTip tooltip = new ToolTip();
+		tooltip.add(StringUtil.localize("gui.escritoire.probe"));
+		return tooltip;
 	}
 
 	@Override

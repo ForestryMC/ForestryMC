@@ -123,12 +123,6 @@ public enum Fluids {
 			}
 		}
 	},
-	LEGACY_HONEY(new Color(255, 196, 35)) {
-		@Override
-		public String getTag() {
-			return "honey";
-		}
-	},
 	ICE(new Color(175, 242, 255), 920, 1000) {
 		@Override
 		public int getTemperature() {
@@ -265,7 +259,7 @@ public enum Fluids {
 	CREOSOTE(new Color(0x635c03)),
 	STEAM(new Color(0x91938F));
 
-	public static final Fluids[] forestryFluids = {ETHANOL, BIOMASS, GLASS, HONEY, LEGACY_HONEY, ICE, JUICE, MILK, SEEDOIL, SHORT_MEAD};
+	public static final Fluids[] forestryFluids = {ETHANOL, BIOMASS, GLASS, HONEY, ICE, JUICE, MILK, SEEDOIL, SHORT_MEAD};
 
 	private static final Map<String, Fluids> tagToFluid = new HashMap<>();
 

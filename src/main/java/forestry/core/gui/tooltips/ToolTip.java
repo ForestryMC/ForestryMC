@@ -12,6 +12,7 @@ package forestry.core.gui.tooltips;
 
 import com.google.common.collect.ForwardingList;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class ToolTip extends ForwardingList<ToolTipLine> {
 		return delegate;
 	}
 
-	public boolean add(String line) {
+	public boolean add(@Nonnull String line) {
 		return add(new ToolTipLine(line));
 	}
 

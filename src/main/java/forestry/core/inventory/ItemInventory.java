@@ -16,14 +16,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IChatComponent;
 
 import forestry.core.tiles.IFilterSlotDelegate;
 
 public abstract class ItemInventory implements IInventory, IFilterSlotDelegate {
-	private static final String KEY_ITEMS = "Items"; // legacy
 	private static final String KEY_SLOTS = "Slots";
 	private static final String KEY_UID = "UID";
 	private static final Random rand = new Random();
@@ -37,7 +35,7 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate {
 		this.parent = parent;
 		this.inventoryStacks = new ItemStack[size];
 
-		setUID(); // Set a uid to identify the itemstack on SMP
+		setUID(); // Set a uid to identify the itemStack on SMP
 
 		readFromNBT(parent.getTagCompound());
 	}
@@ -48,24 +46,8 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate {
 			return 0;
 		}
 
-		if (nbt.hasKey(KEY_SLOTS)) {
-			NBTTagCompound slotNbt = nbt.getCompoundTag(KEY_SLOTS);
-			return slotNbt.getKeySet().size();
-		}
-
-		int count = 0;
-		if (nbt.hasKey(KEY_ITEMS)) { // legacy since Forestry 3.6
-			NBTTagList nbttaglist = nbt.getTagList(KEY_ITEMS, 10);
-			for (int i = 0; i < nbttaglist.tagCount(); i++) {
-				NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
-				ItemStack itemStack1 = ItemStack.loadItemStackFromNBT(nbttagcompound1);
-				if (itemStack1 != null && itemStack1.stackSize > 0) {
-					count++;
-				}
-			}
-		}
-
-		return count;
+		NBTTagCompound slotNbt = nbt.getCompoundTag(KEY_SLOTS);
+		return slotNbt.getKeySet().size();
 	}
 
 	private void setUID() {
@@ -118,37 +100,15 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate {
 			return;
 		}
 
-		if (nbt.hasKey(KEY_SLOTS)) {
-			NBTTagCompound nbtSlots = nbt.getCompoundTag(KEY_SLOTS);
-			for (int i = 0; i < inventoryStacks.length; i++) {
-				String slotKey = getSlotNBTKey(i);
-				if (nbtSlots.hasKey(slotKey)) {
-					NBTTagCompound itemNbt = nbtSlots.getCompoundTag(slotKey);
-					ItemStack itemStack = ItemStack.loadItemStackFromNBT(itemNbt);
-					inventoryStacks[i] = itemStack;
-				} else {
-					inventoryStacks[i] = null;
-				}
-			}
-		} else {
-
-			// legacy since Forestry 3.6
-			if (nbt.hasKey(KEY_ITEMS)) {
-				for (int i = 0; i < inventoryStacks.length; i++) {
-					inventoryStacks[i] = null;
-				}
-
-				NBTTagList nbttaglist = nbt.getTagList(KEY_ITEMS, 10);
-				for (int i = 0; i < nbttaglist.tagCount(); i++) {
-					NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
-					byte byte0 = nbttagcompound1.getByte("Slot");
-					if (byte0 >= 0 && byte0 < inventoryStacks.length) {
-						ItemStack itemStack = ItemStack.loadItemStackFromNBT(nbttagcompound1);
-						inventoryStacks[byte0] = itemStack;
-					}
-				}
-
-				writeToParentNBT();
+		NBTTagCompound nbtSlots = nbt.getCompoundTag(KEY_SLOTS);
+		for (int i = 0; i < inventoryStacks.length; i++) {
+			String slotKey = getSlotNBTKey(i);
+			if (nbtSlots.hasKey(slotKey)) {
+				NBTTagCompound itemNbt = nbtSlots.getCompoundTag(slotKey);
+				ItemStack itemStack = ItemStack.loadItemStackFromNBT(itemNbt);
+				inventoryStacks[i] = itemStack;
+			} else {
+				inventoryStacks[i] = null;
 			}
 		}
 	}
@@ -172,7 +132,6 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate {
 		}
 
 		nbt.setTag(KEY_SLOTS, slotsNbt);
-		nbt.removeTag(KEY_ITEMS);
 	}
 
 	private static String getSlotNBTKey(int i) {

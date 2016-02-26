@@ -215,10 +215,6 @@ public class Config {
 
 		enableBackpackResupply = configCommon.getBooleanLocalized("performance", "backpacks.resupply", enableBackpackResupply);
 
-		// move legacy mail property
-		configCommon.moveProperty("tweaks.gui", "mail.alert", "tweaks.gui.mail.alert");
-		configCommon.renameProperty("tweaks.gui.mail.alert", "mail.alert", "enabled");
-
 		mailAlertEnabled = configCommon.getBooleanLocalized("tweaks.gui.mail.alert", "enabled", mailAlertEnabled);
 		mailAlertXPosition = configCommon.getEnumLocalized("tweaks.gui.mail.alert", "xPosition", mailAlertXPosition, GuiMailboxInfo.XPosition.values());
 		mailAlertYPosition = configCommon.getEnumLocalized("tweaks.gui.mail.alert", "yPosition", mailAlertYPosition, GuiMailboxInfo.YPosition.values());

@@ -236,19 +236,6 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
 
-		//legacy
-		{
-			if (nbt.hasKey("currentFluid")) {
-				Fluid fluid = FluidRegistry.getFluid(nbt.getString("currentFluid"));
-				if (fluid != null) {
-					int burnTime = nbt.getInteger("EngineBurnTime");
-					int totalTime = nbt.getInteger("EngineTotalTime");
-					burnTank.setCapacity(totalTime);
-					burnTank.setFluid(new FluidStack(fluid, burnTime));
-				}
-			}
-		}
-
 		if (nbt.hasKey("shutdown")) {
 			shutdown = nbt.getBoolean("shutdown");
 		}

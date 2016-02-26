@@ -18,10 +18,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.resources.model.ModelResourceLocation;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
@@ -41,8 +39,6 @@ import forestry.core.utils.BlockUtil;
 import forestry.core.utils.StringUtil;
 
 public class ItemBlockWood extends ItemBlockForestry {
-	private static final String LEGACY_WOOD_TYPE_KEY = "WoodType";
-
 	public ItemBlockWood(Block block) {
 		super(block);
 	}
@@ -84,42 +80,8 @@ public class ItemBlockWood extends ItemBlockForestry {
 	}
 
 	public static EnumWoodType getWoodType(ItemStack stack) {
-		EnumWoodType woodType = convertLegacyWood(stack);
-		if (woodType == null) {
-			int typeOrdinal = stack.getItemDamage();
-			woodType = getFromOrdinal(typeOrdinal);
-		}
-
-		return woodType;
-	}
-
-	// legacy handling of wood that has wood type saved to NBT
-	private static EnumWoodType convertLegacyWood(ItemStack itemStack) {
-		if (!itemStack.hasTagCompound()) {
-			return null;
-		}
-
-		NBTTagCompound compound = itemStack.getTagCompound();
-		if (!compound.hasKey(LEGACY_WOOD_TYPE_KEY)) {
-			return null;
-		}
-
-		int typeOrdinal = compound.getInteger(LEGACY_WOOD_TYPE_KEY);
-		EnumWoodType woodType = getFromOrdinal(typeOrdinal);
-		if (woodType != null) {
-			compound.removeTag(LEGACY_WOOD_TYPE_KEY);
-			if (compound.hasNoTags()) {
-				itemStack.setTagCompound(null);
-			}
-			saveToItemStack(woodType, itemStack);
-		}
-		return woodType;
-	}
-
-	@Override
-	public void onUpdate(ItemStack stack, World world, Entity player, int p_77663_4_, boolean p_77663_5_) {
-		super.onUpdate(stack, world, player, p_77663_4_, p_77663_5_);
-		convertLegacyWood(stack);
+		int typeOrdinal = stack.getItemDamage();
+		return getFromOrdinal(typeOrdinal);
 	}
 
 	private static EnumWoodType getFromOrdinal(int ordinal) {

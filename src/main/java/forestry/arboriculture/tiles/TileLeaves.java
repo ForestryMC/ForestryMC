@@ -116,12 +116,6 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 				caterpillar = ButterflyManager.butterflyRoot.getMember(nbttagcompound.getCompoundTag("CATER"));
 			}
 
-			if (nbttagcompound.hasKey("Decorative")) { //legacy
-				isDecorative = nbttagcompound.getBoolean("Decorative");
-			} else { //legacy
-				isDecorative = nbttagcompound.getBoolean("DEC");
-			}
-
 			if (nbttagcompound.hasKey("ContainedTree")) {
 				setTree(new Tree(nbttagcompound.getCompoundTag("ContainedTree")));
 			}

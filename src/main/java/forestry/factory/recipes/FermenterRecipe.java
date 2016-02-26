@@ -16,7 +16,6 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.recipes.IFermenterRecipe;
-import forestry.core.fluids.Fluids;
 
 public class FermenterRecipe implements IFermenterRecipe {
 
@@ -27,11 +26,6 @@ public class FermenterRecipe implements IFermenterRecipe {
 	private final FluidStack fluidResource;
 
 	public FermenterRecipe(ItemStack resource, int fermentationValue, float modifier, Fluid output, FluidStack fluidResource) {
-		// assume that fermenter recipes want to use Forestry's honey and not the legacy "fluid.honey"
-		if (Fluids.LEGACY_HONEY.is(fluidResource)) {
-			fluidResource = Fluids.HONEY.getFluid(fluidResource.amount);
-		}
-
 		if (resource == null) {
 			throw new NullPointerException("Fermenter Resource cannot be null!");
 		}

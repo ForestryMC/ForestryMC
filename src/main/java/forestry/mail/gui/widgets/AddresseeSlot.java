@@ -11,12 +11,12 @@
 package forestry.mail.gui.widgets;
 
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.entity.player.EntityPlayer;
 
 import org.lwjgl.opengl.GL11;
 
 import forestry.api.mail.IPostalCarrier;
 import forestry.api.mail.PostManager;
+import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.proxy.Proxies;
@@ -45,8 +45,11 @@ public class AddresseeSlot extends Widget {
 	}
 
 	@Override
-	protected String getLegacyTooltip(EntityPlayer player) {
-		return StringUtil.localize("gui.addressee." + containerLetter.getCarrierType());
+	public ToolTip getToolTip(int mouseX, int mouseY) {
+		String tooltipString = StringUtil.localize("gui.addressee." + containerLetter.getCarrierType());
+		ToolTip tooltip = new ToolTip();
+		tooltip.add(tooltipString);
+		return tooltip;
 	}
 
 	@Override

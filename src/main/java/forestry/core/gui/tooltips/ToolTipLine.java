@@ -10,35 +10,35 @@
  ******************************************************************************/
 package forestry.core.gui.tooltips;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.util.EnumChatFormatting;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ToolTipLine {
-
+	@Nonnull
 	private final String text;
+	@Nonnull
 	private final EnumChatFormatting color;
 	private final int spacing;
 
-	public ToolTipLine(String text, EnumChatFormatting color, int spacing) {
+	public ToolTipLine(@Nonnull String text, @Nonnull EnumChatFormatting color, int spacing) {
 		this.text = text;
 		this.color = color;
 		this.spacing = spacing;
 	}
 
-	public ToolTipLine(String text) {
+	public ToolTipLine(@Nonnull String text) {
 		this(text, null, 0);
-	}
-
-	public ToolTipLine() {
-		this("", null, 0);
 	}
 
 	public int getSpacing() {
 		return spacing;
 	}
 
+	@Nonnull
 	@Override
 	public String toString() {
 		if (color == null) {

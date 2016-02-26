@@ -23,13 +23,9 @@ public class InventoryFabricator extends InventoryAdapterTile<TileFabricator> {
 	public static final short SLOT_METAL = 0;
 	public static final short SLOT_PLAN = 1;
 	public static final short SLOT_RESULT = 2;
-	// FIXME 1.8: change indexes and use correct SLOT_COUNT of 21
-	// left this way for now to avoid losing items in existing fabricators
-	public static final short SLOT_CRAFTING_LEGACY_1 = 3;
-	public static final short SLOT_CRAFTING_LEGACY_COUNT = 9;
-	public static final short SLOT_INVENTORY_1 = 12;
+	public static final short SLOT_INVENTORY_1 = 3;
 	public static final short SLOT_INVENTORY_COUNT = 18;
-	public static final short SLOT_COUNT = 30;
+	public static final short SLOT_COUNT = 21;
 
 	public InventoryFabricator(TileFabricator fabricator) {
 		super(fabricator, SLOT_COUNT, "Items");

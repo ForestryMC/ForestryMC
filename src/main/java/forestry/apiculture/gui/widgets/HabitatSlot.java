@@ -10,13 +10,13 @@
  ******************************************************************************/
 package forestry.apiculture.gui.widgets;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Locale;
 
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.entity.player.EntityPlayer;
 
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.relauncher.Side;
@@ -24,18 +24,22 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.lwjgl.opengl.GL11;
 
+import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 
 public class HabitatSlot extends Widget {
+	@Nonnull
 	private final Collection<BiomeDictionary.Type> biomes;
+	@Nonnull
 	private final String name;
+	@Nonnull
 	private final String iconIndex;
 	public boolean isActive = false;
 
-	public HabitatSlot(WidgetManager widgetManager, int xPos, int yPos, String name, Collection<BiomeDictionary.Type> biomes) {
+	public HabitatSlot(@Nonnull WidgetManager widgetManager, int xPos, int yPos, @Nonnull String name, @Nonnull Collection<BiomeDictionary.Type> biomes) {
 		super(widgetManager, xPos, yPos);
 		this.biomes = biomes;
 		this.name = name;
@@ -43,8 +47,10 @@ public class HabitatSlot extends Widget {
 	}
 
 	@Override
-	public String getLegacyTooltip(EntityPlayer player) {
-		return name;
+	public ToolTip getToolTip(int mouseX, int mouseY) {
+		ToolTip tooltip = new ToolTip();
+		tooltip.add(name);
+		return tooltip;
 	}
 
 	@SideOnly(Side.CLIENT)

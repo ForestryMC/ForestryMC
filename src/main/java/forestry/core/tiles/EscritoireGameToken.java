@@ -122,6 +122,7 @@ public class EscritoireGameToken implements INbtWritable, IStreamable {
 		}
 	}
 
+	@Nonnull
 	public String getTooltip() {
 		return tokenStack != null ? tokenStack.getDisplayName() : StringUtil.localize("gui.unknown");
 	}

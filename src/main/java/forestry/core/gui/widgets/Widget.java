@@ -10,23 +10,24 @@
  ******************************************************************************/
 package forestry.core.gui.widgets;
 
-import net.minecraft.entity.player.EntityPlayer;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import forestry.core.gui.tooltips.IToolTipProvider;
 import forestry.core.gui.tooltips.ToolTip;
-import forestry.core.proxy.Proxies;
 
 /**
  * Basic non-ItemStack slot
  */
 public abstract class Widget implements IToolTipProvider {
+	@Nonnull
 	protected final WidgetManager manager;
 	protected final int xPos;
 	protected final int yPos;
 	protected int width = 16;
 	protected int height = 16;
 
-	public Widget(WidgetManager manager, int xPos, int yPos) {
+	public Widget(@Nonnull WidgetManager manager, int xPos, int yPos) {
 		this.manager = manager;
 		this.xPos = xPos;
 		this.yPos = yPos;
@@ -42,18 +43,9 @@ public abstract class Widget implements IToolTipProvider {
 
 	public abstract void draw(int startX, int startY);
 
+	@Nullable
 	@Override
 	public ToolTip getToolTip(int mouseX, int mouseY) {
-		String line = getLegacyTooltip(Proxies.common.getClientInstance().thePlayer);
-		if (line != null && !line.isEmpty()) {
-			ToolTip tip = new ToolTip();
-			tip.add(line);
-			return tip;
-		}
-		return null;
-	}
-
-	protected String getLegacyTooltip(EntityPlayer player) {
 		return null;
 	}
 

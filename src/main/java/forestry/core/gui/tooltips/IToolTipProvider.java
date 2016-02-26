@@ -10,11 +10,13 @@
  ******************************************************************************/
 package forestry.core.gui.tooltips;
 
+import javax.annotation.Nullable;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public interface IToolTipProvider {
-
+	@Nullable
 	ToolTip getToolTip(int mouseX, int mouseY);
 
 	boolean isToolTipVisible();
