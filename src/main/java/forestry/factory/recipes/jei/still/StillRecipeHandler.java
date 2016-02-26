@@ -31,10 +31,10 @@ public class StillRecipeHandler implements IRecipeHandler<StillRecipeWrapper> {
 	@Override
 	public boolean isRecipeValid(@Nonnull StillRecipeWrapper wrapper) {
 		IStillRecipe recipe = wrapper.getRecipe();
-		if(recipe.getInput() == null){
+		if (recipe.getInput() == null) {
 			return false;
 		}
-		if(recipe.getOutput() == null){
+		if (recipe.getOutput() == null) {
 			return false;
 		}
 		return true;

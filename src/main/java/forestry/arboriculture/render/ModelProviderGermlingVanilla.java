@@ -10,10 +10,11 @@
  ******************************************************************************/
 package forestry.arboriculture.render;
 
+import net.minecraft.client.resources.model.ModelResourceLocation;
+
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.IGermlingModelProvider;
 import forestry.api.core.IModelManager;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 
 public class ModelProviderGermlingVanilla implements IGermlingModelProvider {
 
@@ -29,24 +30,24 @@ public class ModelProviderGermlingVanilla implements IGermlingModelProvider {
 	@Override
 	public void registerModels(IModelManager manager) {
 		switch (vanillaMap) {
-		case 0:
-			model = manager.getModelLocation("minecraft", "oak_sapling");
-			break;
-		case 1:
-			model = manager.getModelLocation("minecraft", "spruce_sapling");
-			break;
-		case 2:
-			model = manager.getModelLocation("minecraft", "birch_sapling");
-			break;
-		case 3:
-			model = manager.getModelLocation("minecraft", "jungle_sapling");
-			break;
-		case 4:
-			model = manager.getModelLocation("minecraft", "dark_oak_sapling");
-			break;
-		case 5:
-			model = manager.getModelLocation("minecraft", "acacia_sapling");
-			break;
+			case 0:
+				model = manager.getModelLocation("minecraft", "oak_sapling");
+				break;
+			case 1:
+				model = manager.getModelLocation("minecraft", "spruce_sapling");
+				break;
+			case 2:
+				model = manager.getModelLocation("minecraft", "birch_sapling");
+				break;
+			case 3:
+				model = manager.getModelLocation("minecraft", "jungle_sapling");
+				break;
+			case 4:
+				model = manager.getModelLocation("minecraft", "dark_oak_sapling");
+				break;
+			case 5:
+				model = manager.getModelLocation("minecraft", "acacia_sapling");
+				break;
 		}
 		pollenModel = manager.getModelLocation("pollen");
 	}

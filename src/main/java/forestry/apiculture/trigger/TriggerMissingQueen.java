@@ -12,6 +12,7 @@ package forestry.apiculture.trigger;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+
 import forestry.api.core.IErrorLogicSource;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.triggers.Trigger;

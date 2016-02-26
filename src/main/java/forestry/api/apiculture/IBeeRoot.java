@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright 2011-2014 SirSengir
- * 
+ *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
 package forestry.api.apiculture;
@@ -48,6 +48,7 @@ public interface IBeeRoot extends ISpeciesRoot {
 	IBeeGenome templateAsGenome(IAllele[] templateActive, IAllele[] templateInactive);
 
 	/* BREEDING TRACKER */
+
 	/**
 	 * @param world
 	 * @return {@link IApiaristTracker} associated with the passed world.
@@ -56,6 +57,7 @@ public interface IBeeRoot extends ISpeciesRoot {
 	IApiaristTracker getBreedingTracker(World world, GameProfile player);
 
 	/* BEE SPECIFIC */
+
 	/**
 	 * @return type of bee encoded on the itemstack. EnumBeeType.NONE if it isn't a bee.
 	 */
@@ -81,7 +83,7 @@ public interface IBeeRoot extends ISpeciesRoot {
 
 	/**
 	 * Creates an IBee suitable for a queen containing the necessary second genome for the mate.
-	 * 
+	 *
 	 * @param genome
 	 *            Valid {@link IBeeGenome}
 	 * @param mate
@@ -112,6 +114,7 @@ public interface IBeeRoot extends ISpeciesRoot {
 	void setBeekeepingMode(World world, String name);
 
 	/* MISC */
+
 	/**
 	 * Creates beekeepingLogic for a housing.
 	 * Should be used when the housing is created, see IBeekeepingLogic

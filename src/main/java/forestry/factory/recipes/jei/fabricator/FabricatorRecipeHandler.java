@@ -31,17 +31,17 @@ public class FabricatorRecipeHandler implements IRecipeHandler<FabricatorRecipeW
 	@Override
 	public boolean isRecipeValid(@Nonnull FabricatorRecipeWrapper wrapper) {
 		IFabricatorRecipe recipe = wrapper.getRecipe();
-		if(recipe.getIngredients() == null){
+		if (recipe.getIngredients() == null) {
 			return false;
 		}
-		if(recipe.getLiquid() == null){
+		if (recipe.getLiquid() == null) {
 			return false;
 		}
-		if(recipe.getRecipeOutput() == null){
+		if (recipe.getRecipeOutput() == null) {
 			return false;
 		}
 		int inputCount = 0;
-		for(Object ingredient : recipe.getIngredients()){
+		for (Object ingredient : recipe.getIngredients()) {
 			inputCount++;
 		}
 		return inputCount > 0;

@@ -30,12 +30,14 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.arboriculture.EnumWoodType;
 import forestry.api.arboriculture.TreeManager;
-import forestry.api.core.IModelManager;
 import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
 import forestry.api.core.Tabs;
 import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.items.ItemBlockWood;
@@ -59,7 +61,7 @@ public class BlockSlab extends net.minecraft.block.BlockSlab implements IWoodTyp
 
 		harvestTool = new String[EnumWoodType.values().length];
 		harvestLevel = new int[harvestTool.length];
-		for(int i = 0;i < harvestTool.length;i++){
+		for (int i = 0; i < harvestTool.length; i++) {
 			harvestLevel[i] = -1;
 		}
 		
@@ -70,37 +72,37 @@ public class BlockSlab extends net.minecraft.block.BlockSlab implements IWoodTyp
 		setStepSound(soundTypeWood);
 		setHarvestLevel("axe", 0);
 		
-        IBlockState iblockstate = this.blockState.getBaseState();
+		IBlockState iblockstate = this.blockState.getBaseState();
 
-        if (!isDouble())
-        {
-            iblockstate = iblockstate.withProperty(HALF, EnumBlockHalf.BOTTOM);
-        }
+		if (!isDouble()) {
+			iblockstate = iblockstate.withProperty(HALF, EnumBlockHalf.BOTTOM);
+		}
 
-        setDefaultState(iblockstate.withProperty(EnumWoodType.WOODTYPE, EnumWoodType.LARCH));
+		setDefaultState(iblockstate.withProperty(EnumWoodType.WOODTYPE, EnumWoodType.LARCH));
 
 		this.particleCallback = new ParticleHelper.DefaultCallback(this);
 	}
 
 	@Override
 	protected BlockState createBlockState() {
-		return this.isDouble() ? new BlockState(this, new IProperty[] { EnumWoodType.WOODTYPE }): new BlockState(this, new IProperty[] { HALF, EnumWoodType.WOODTYPE });
+		return this.isDouble() ? new BlockState(this, new IProperty[]{EnumWoodType.WOODTYPE}) : new BlockState(this, new IProperty[]{HALF, EnumWoodType.WOODTYPE});
 	}
 	
-    @Override
+	@Override
 	public IBlockState getStateFromMeta(int meta) {
-    	if (this == PluginArboriculture.blocks.slabsDouble || this == PluginArboriculture.blocks.slabsDoubleFireproof)
-    		return getDefaultState();
-        return getDefaultState().withProperty(HALF, EnumBlockHalf.values()[meta]);
-    }
+		if (this == PluginArboriculture.blocks.slabsDouble || this == PluginArboriculture.blocks.slabsDoubleFireproof) {
+			return getDefaultState();
+		}
+		return getDefaultState().withProperty(HALF, EnumBlockHalf.values()[meta]);
+	}
 
-    @Override
-	public int getMetaFromState(IBlockState state){
-    	if(!state.getProperties().containsKey(HALF)) {
-    		return 0;
-    	}
-        return state.getValue(HALF).ordinal();
-    }
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		if (!state.getProperties().containsKey(HALF)) {
+			return 0;
+		}
+		return state.getValue(HALF).ordinal();
+	}
 
 	@Override
 	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
@@ -115,7 +117,7 @@ public class BlockSlab extends net.minecraft.block.BlockSlab implements IWoodTyp
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		if(!isFireproof()){
+		if (!isFireproof()) {
 			manager.registerVariant(item, ItemBlockWood.getVariants(this));
 		}
 		manager.registerItemModel(item, new WoodMeshDefinition(this));
@@ -177,7 +179,7 @@ public class BlockSlab extends net.minecraft.block.BlockSlab implements IWoodTyp
 	
 	@Override
 	public float getBlockHardness(World world, BlockPos pos) {
-		TileWood wood = TileWood.getWoodTile(world,pos);
+		TileWood wood = TileWood.getWoodTile(world, pos);
 		if (wood == null) {
 			return EnumWoodType.DEFAULT_HARDNESS;
 		}
@@ -249,20 +251,20 @@ public class BlockSlab extends net.minecraft.block.BlockSlab implements IWoodTyp
 		return ItemBlockWood.getWoodType(stack);
 	}
 	
-    @Override
-	public void setHarvestLevel(String toolClass, int level, IBlockState state){
-        int idx = this.getMetaFromState(state);
-        this.harvestTool[idx] = toolClass;
-        this.harvestLevel[idx] = level;
-    }
+	@Override
+	public void setHarvestLevel(String toolClass, int level, IBlockState state) {
+		int idx = this.getMetaFromState(state);
+		this.harvestTool[idx] = toolClass;
+		this.harvestLevel[idx] = level;
+	}
 
-    @Override
-	public String getHarvestTool(IBlockState state){
-        return harvestTool[getMetaFromState(state)];
-    }
+	@Override
+	public String getHarvestTool(IBlockState state) {
+		return harvestTool[getMetaFromState(state)];
+	}
 
-    @Override
-	public int getHarvestLevel(IBlockState state){
-        return harvestLevel[getMetaFromState(state)];
-    }
+	@Override
+	public int getHarvestLevel(IBlockState state) {
+		return harvestLevel[getMetaFromState(state)];
+	}
 }

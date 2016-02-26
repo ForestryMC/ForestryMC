@@ -14,6 +14,9 @@ import java.io.IOException;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+
+import net.minecraftforge.fml.common.Optional;
+
 import forestry.api.core.IErrorLogic;
 import forestry.core.circuits.ISpeedUpgradable;
 import forestry.core.config.Config;
@@ -23,8 +26,6 @@ import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamableGui;
 import forestry.core.render.TankRenderInfo;
 import forestry.energy.EnergyManager;
-
-import net.minecraftforge.fml.common.Optional;
 
 import buildcraft.api.tiles.IHasWork;
 import cofh.api.energy.IEnergyReceiver;

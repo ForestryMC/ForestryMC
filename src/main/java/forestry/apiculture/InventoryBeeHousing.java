@@ -12,6 +12,7 @@ package forestry.apiculture;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IBeeHousingInventory;

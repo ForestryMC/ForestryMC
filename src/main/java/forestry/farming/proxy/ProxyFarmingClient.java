@@ -11,6 +11,7 @@
 package forestry.farming.proxy;
 
 import net.minecraft.client.resources.model.ModelResourceLocation;
+
 import forestry.core.models.BlockModelIndex;
 import forestry.core.proxy.Proxies;
 import forestry.farming.models.ModelFarmBlock;

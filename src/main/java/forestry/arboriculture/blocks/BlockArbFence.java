@@ -62,7 +62,7 @@ public class BlockArbFence extends BlockFence implements IWoodTyped, IItemModelR
 
 		harvestTool = new String[EnumWoodType.values().length];
 		harvestLevel = new int[harvestTool.length];
-		for(int i = 0;i < harvestTool.length;i++){
+		for (int i = 0; i < harvestTool.length; i++) {
 			harvestLevel[i] = -1;
 		}
 		
@@ -124,7 +124,7 @@ public class BlockArbFence extends BlockFence implements IWoodTyped, IItemModelR
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		if(!isFireproof()){
+		if (!isFireproof()) {
 			manager.registerVariant(item, ItemBlockWood.getVariants(this));
 		}
 		manager.registerItemModel(item, new WoodMeshDefinition(this));
@@ -203,22 +203,22 @@ public class BlockArbFence extends BlockFence implements IWoodTyped, IItemModelR
 		return fireproof;
 	}
 	
-    @Override
-	public void setHarvestLevel(String toolClass, int level, IBlockState state){
-        int idx = this.getMetaFromState(state);
-        this.harvestTool[idx] = toolClass;
-        this.harvestLevel[idx] = level;
-    }
+	@Override
+	public void setHarvestLevel(String toolClass, int level, IBlockState state) {
+		int idx = this.getMetaFromState(state);
+		this.harvestTool[idx] = toolClass;
+		this.harvestLevel[idx] = level;
+	}
 
-    @Override
-	public String getHarvestTool(IBlockState state){
-        return harvestTool[getMetaFromState(state)];
-    }
+	@Override
+	public String getHarvestTool(IBlockState state) {
+		return harvestTool[getMetaFromState(state)];
+	}
 
-    @Override
-	public int getHarvestLevel(IBlockState state){
-        return harvestLevel[getMetaFromState(state)];
-    }
+	@Override
+	public int getHarvestLevel(IBlockState state) {
+		return harvestLevel[getMetaFromState(state)];
+	}
 
 	/* Particles */
 	@SideOnly(Side.CLIENT)

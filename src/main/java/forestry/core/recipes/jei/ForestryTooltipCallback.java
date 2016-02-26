@@ -29,7 +29,7 @@ public class ForestryTooltipCallback implements ITooltipCallback<ItemStack> {
 	@Override
 	public void onTooltip(int index, boolean input, ItemStack ingredient, List<String> tooltip) {
 		List<String> tip = tooltips.get(index);
-		if(!tip.isEmpty()){
+		if (!tip.isEmpty()) {
 			tooltip.addAll(tip);
 		}
 	}

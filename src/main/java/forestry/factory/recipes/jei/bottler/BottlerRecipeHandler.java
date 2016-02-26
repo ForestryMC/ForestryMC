@@ -31,10 +31,10 @@ public class BottlerRecipeHandler implements IRecipeHandler<BottlerRecipeWrapper
 	@Override
 	public boolean isRecipeValid(@Nonnull BottlerRecipeWrapper wrapper) {
 		BottlerRecipe recipe = wrapper.getRecipe();
-		if(recipe.input == null || recipe.input.amount <= 0){
+		if (recipe.input == null || recipe.input.amount <= 0) {
 			return false;
 		}
-		if(recipe.empty == null){
+		if (recipe.empty == null) {
 			return false;
 		}
 		return recipe.input != null;

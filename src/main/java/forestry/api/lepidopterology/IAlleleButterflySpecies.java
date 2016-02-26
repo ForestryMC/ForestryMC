@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright 2011-2014 SirSengir
- * 
+ *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
 package forestry.api.lepidopterology;
@@ -11,6 +11,7 @@ import java.util.Map;
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.common.BiomeDictionary;
+
 import forestry.api.core.ISpriteProvider;
 import forestry.api.genetics.IAlleleSpecies;
 
@@ -29,7 +30,7 @@ public interface IAlleleButterflySpecies extends IAlleleSpecies {
 	
 	/**
 	 * Allows butterflies to restrict random spawns beyond the restrictions set by getTemperature() and getHumidity().
-	 * 
+	 *
 	 * @return EnumSet of biome tags this butterfly species can be spawned in.
 	 */
 	EnumSet<BiomeDictionary.Type> getSpawnBiomes();

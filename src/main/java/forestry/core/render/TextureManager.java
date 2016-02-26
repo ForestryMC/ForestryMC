@@ -15,15 +15,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.util.ResourceLocation;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.ISpriteProvider;
 import forestry.api.core.ITextureManager;
 import forestry.core.proxy.Proxies;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.fml.relauncher.Side;
 
 @SideOnly(Side.CLIENT)
 public class TextureManager implements ITextureManager {
@@ -69,15 +71,17 @@ public class TextureManager implements ITextureManager {
 	
 	public TextureAtlasSprite getSprite(String modID, String identifier) {
 		TextureMap map = Proxies.common.getClientInstance().getTextureMapBlocks();
-		if (map.getAtlasSprite(new ResourceLocation(modID + ":" + identifier).toString()) == map.getMissingSprite())
+		if (map.getAtlasSprite(new ResourceLocation(modID + ":" + identifier).toString()) == map.getMissingSprite()) {
 			return map.registerSprite(new ResourceLocation(modID + ":" + identifier));
+		}
 		return map.getAtlasSprite(new ResourceLocation(modID + ":" + identifier).toString());
 	}
 	
 	public TextureAtlasSprite getSprite(String modID, String modifier, String identifier) {
 		TextureMap map = Proxies.common.getClientInstance().getTextureMapBlocks();
-		if (map.getAtlasSprite(new ResourceLocation(modID + ":" + modifier + "/" + identifier).toString()) == map.getMissingSprite())
+		if (map.getAtlasSprite(new ResourceLocation(modID + ":" + modifier + "/" + identifier).toString()) == map.getMissingSprite()) {
 			return map.registerSprite(new ResourceLocation(modID + ":" + modifier + "/" + identifier));
+		}
 		return map.getAtlasSprite(new ResourceLocation(modID + ":" + modifier + "/" + identifier).toString());
 	}
 

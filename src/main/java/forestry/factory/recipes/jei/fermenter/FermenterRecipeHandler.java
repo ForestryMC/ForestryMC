@@ -31,16 +31,16 @@ public class FermenterRecipeHandler implements IRecipeHandler<FermenterRecipeWra
 	@Override
 	public boolean isRecipeValid(@Nonnull FermenterRecipeWrapper wrapper) {
 		IFermenterRecipe recipe = wrapper.getRecipe();
-		if(recipe.getFermentationValue() <= 0){
+		if (recipe.getFermentationValue() <= 0) {
 			return false;
 		}
-		if(recipe.getModifier() <= 0 ){
+		if (recipe.getModifier() <= 0) {
 			return false;
 		}
-		if(recipe.getFluidResource() == null){
+		if (recipe.getFluidResource() == null) {
 			return false;
 		}
-		if(recipe.getResource() == null){
+		if (recipe.getResource() == null) {
 			return false;
 		}
 		return recipe.getOutput() != null;

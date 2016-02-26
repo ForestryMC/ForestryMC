@@ -73,10 +73,9 @@ public abstract class MultiblockTileEntityBase<T extends IMultiblockLogic> exten
 	}
 	
 	@Override
-    public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate)
-    {
-        return oldState.getBlock() != newSate.getBlock();
-    }
+	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate) {
+		return oldState.getBlock() != newSate.getBlock();
+	}
 
 	/* Network Communication */
 

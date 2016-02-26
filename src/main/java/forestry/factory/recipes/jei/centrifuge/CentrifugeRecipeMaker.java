@@ -13,8 +13,9 @@ public class CentrifugeRecipeMaker {
 	
 	public static List<CentrifugeRecipeWrapper> getCentrifugeRecipe() {
 		List<CentrifugeRecipeWrapper> recipes = new ArrayList<>();
-		for(ICentrifugeRecipe recipe : RecipeManagers.centrifugeManager.recipes())
+		for (ICentrifugeRecipe recipe : RecipeManagers.centrifugeManager.recipes()) {
 			recipes.add(new CentrifugeRecipeWrapper(recipe));
+		}
 		return recipes;
 	}
 	

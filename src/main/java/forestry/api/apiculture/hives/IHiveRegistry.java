@@ -29,8 +29,7 @@ public interface IHiveRegistry {
 
 		private final String name;
 		
-		public String getHiveName()
-		{
+		public String getHiveName() {
 			return name;
 		}
 		
@@ -50,5 +49,6 @@ public interface IHiveRegistry {
 	 * Add drops to a registered hive.
 	 */
 	void addDrops(String hiveName, IHiveDrop... drops);
+
 	void addDrops(String hiveName, List<IHiveDrop> drop);
 }

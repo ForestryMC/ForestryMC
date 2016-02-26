@@ -24,6 +24,7 @@ public interface IHiveDescription {
 	 * The hive block to be placed in the world.
 	 */
 	Block getBlock();
+
 	int getMeta();
 
 	/**
@@ -31,14 +32,16 @@ public interface IHiveDescription {
 	 * Used as a fast early-elimination check for hives that have no hope of spawning in the area.
 	 */
 	boolean isGoodBiome(BiomeGenBase biome);
+
 	boolean isGoodHumidity(EnumHumidity humidity);
+
 	boolean isGoodTemperature(EnumTemperature temperature);
 
 	/**
 	 * float representing the relative chance a hive will generate in a chunk.
 	 * Default is 1.0, higher numbers result in more hives, smaller will result in fewer.
 	 * Tree hives want around 3.0 to 4.0 since there are less locations to generate on.
- 	 */
+	 */
 	float getGenChance();
 
 	/**

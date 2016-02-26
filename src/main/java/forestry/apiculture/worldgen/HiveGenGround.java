@@ -13,11 +13,12 @@ package forestry.apiculture.worldgen;
 import java.util.HashSet;
 import java.util.Set;
 
-import forestry.core.utils.BlockUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
+
+import forestry.core.utils.BlockUtil;
 
 public class HiveGenGround extends HiveGen {
 

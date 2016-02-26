@@ -115,7 +115,7 @@ public abstract class BlockUtil {
 	}
 
 	public static boolean isWoodSlabBlock(Block block) {
-		if(block == null || block == Blocks.air){
+		if (block == null || block == Blocks.air) {
 			return false;
 		}
 		int[] oreIds = OreDictionary.getOreIDs(new ItemStack(block));
@@ -261,6 +261,7 @@ public abstract class BlockUtil {
 	}
 	
 	/* CHUNKS */
+
 	/**
 	 * Checks if chunk exits.
 	 */

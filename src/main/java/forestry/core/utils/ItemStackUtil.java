@@ -25,6 +25,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry;
 import net.minecraftforge.fml.common.registry.GameData;
 import net.minecraftforge.oredict.OreDictionary;
@@ -59,11 +60,11 @@ public abstract class ItemStackUtil {
 	}
 	
 	/**
-	 * 
+	 *
 	 * @return The registry name of the item as {@link ResourceLocation}
 	 */
-	public static ResourceLocation getItemNameFromRegistry(Item item){
-		if(item == null){
+	public static ResourceLocation getItemNameFromRegistry(Item item) {
+		if (item == null) {
 			return null;
 		}
 		FMLControlledNamespacedRegistry<Item> itemRegistry = GameData.getItemRegistry();
@@ -71,10 +72,10 @@ public abstract class ItemStackUtil {
 	}
 	
 	/**
-	 * 
+	 *
 	 * @return The registry name of the item as {@link String}
 	 */
-	public static String getItemNameFromRegistryAsSting(Item item){
+	public static String getItemNameFromRegistryAsSting(Item item) {
 		return getItemNameFromRegistry(item).toString();
 	}
 	
@@ -82,7 +83,7 @@ public abstract class ItemStackUtil {
 	 * @return The item from the item registry
 	 * @param itemName The registry name from the item as {@link String}
 	 */
-	public static Item getItemFromRegistry(String itemName){
+	public static Item getItemFromRegistry(String itemName) {
 		return getItemFromRegistry(new ResourceLocation(itemName));
 	}
 	
@@ -90,24 +91,24 @@ public abstract class ItemStackUtil {
 	 * @return The item from the item registry
 	 * @param itemName The registry name from the item as {@link ResourceLocation}
 	 */
-	public static Item getItemFromRegistry(ResourceLocation itemName){
-		if(itemName == null){
+	public static Item getItemFromRegistry(ResourceLocation itemName) {
+		if (itemName == null) {
 			return null;
 		}
 		FMLControlledNamespacedRegistry<Item> itemRegistry = GameData.getItemRegistry();
 		int registryID = itemRegistry.getId(itemName);
-		if(registryID == -1){
+		if (registryID == -1) {
 			return null;
 		}
 		return itemRegistry.getRaw(registryID);
 	}
 	
 	/**
-	 * 
+	 *
 	 * @return The registry name of the block as {@link ResourceLocation}
 	 */
-	public static ResourceLocation getBlockNameFromRegistry(Block block){
-		if(block == null){
+	public static ResourceLocation getBlockNameFromRegistry(Block block) {
+		if (block == null) {
 			return null;
 		}
 		FMLControlledNamespacedRegistry<Block> blockRegistry = GameData.getBlockRegistry();
@@ -115,10 +116,10 @@ public abstract class ItemStackUtil {
 	}
 	
 	/**
-	 * 
+	 *
 	 * @return The registry name of the block as {@link String}
 	 */
-	public static String getBlockNameFromRegistryAsSting(Block block){
+	public static String getBlockNameFromRegistryAsSting(Block block) {
 		return getBlockNameFromRegistry(block).toString();
 	}
 	
@@ -126,7 +127,7 @@ public abstract class ItemStackUtil {
 	 * @return The block from the block registry
 	 * @param itemName The registry name from the block as {@link String}
 	 */
-	public static Block getBlockFromRegistry(String itemName){
+	public static Block getBlockFromRegistry(String itemName) {
 		return getBlockFromRegistry(new ResourceLocation(itemName));
 	}
 	
@@ -134,13 +135,13 @@ public abstract class ItemStackUtil {
 	 * @return The block from the block registry
 	 * @param itemName The registry name from the block as {@link ResourceLocation}
 	 */
-	public static Block getBlockFromRegistry(ResourceLocation itemName){
-		if(itemName == null){
+	public static Block getBlockFromRegistry(ResourceLocation itemName) {
+		if (itemName == null) {
 			return null;
 		}
 		FMLControlledNamespacedRegistry<Block> blockRegistry = GameData.getBlockRegistry();
 		int registryID = blockRegistry.getId(itemName);
-		if(registryID == -1){
+		if (registryID == -1) {
 			return null;
 		}
 		return blockRegistry.getRaw(registryID);

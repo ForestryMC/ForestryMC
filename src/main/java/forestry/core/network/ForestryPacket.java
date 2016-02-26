@@ -12,10 +12,12 @@ package forestry.core.network;
 
 import java.io.IOException;
 
+import net.minecraft.network.PacketBuffer;
+
+import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
+
 import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
 
 public abstract class ForestryPacket implements IForestryPacket {
 	private final IPacketId id = getPacketId();

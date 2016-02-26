@@ -50,7 +50,7 @@ public class TileFarmControl extends TileFarm implements IFarmComponent.Listener
 			EnumFacing dir = direction.getOpposite();
 			World world = tile.getWorld();
 
-			return world.getRedstonePower(side, dir) > 0 || world.getStrongPower(side,dir) > 0;
+			return world.getRedstonePower(side, dir) > 0 || world.getStrongPower(side, dir) > 0;
 		}
 	}
 

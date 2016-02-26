@@ -12,6 +12,7 @@ package forestry.mail.triggers;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+
 import forestry.core.triggers.Trigger;
 import forestry.mail.tiles.IMailContainer;
 

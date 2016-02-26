@@ -12,6 +12,7 @@ package forestry.apiculture.trigger;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+
 import forestry.apiculture.inventory.InventoryApiary;
 import forestry.apiculture.tiles.TileApiary;
 import forestry.core.triggers.Trigger;

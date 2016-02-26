@@ -7,7 +7,6 @@ import java.io.InvalidObjectException;
 import java.util.Collection;
 import java.util.List;
 
-import forestry.core.utils.ItemStackUtil;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -18,6 +17,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+
+import forestry.core.utils.ItemStackUtil;
 
 public class DataInputStreamForestry extends DataInputStream {
 
@@ -139,13 +140,13 @@ public class DataInputStreamForestry extends DataInputStream {
 
 	public FluidStack readFluidStack() throws IOException {
 		int amount = readVarInt();
-		if(amount > 0){
+		if (amount > 0) {
 			String fluidName = readUTF();
 			Fluid fluid = FluidRegistry.getFluid(fluidName);
 			if (fluid == null) {
 				return null;
 			}
-	
+
 			return new FluidStack(fluid, amount);
 		}
 		return null;

@@ -25,10 +25,14 @@ public enum FarmDirection {
 
 	public static FarmDirection getFarmDirection(EnumFacing forgeDirection) {
 		switch (forgeDirection) {
-			case NORTH: return NORTH;
-			case EAST: return EAST;
-			case SOUTH: return SOUTH;
-			case WEST: return WEST;
+			case NORTH:
+				return NORTH;
+			case EAST:
+				return EAST;
+			case SOUTH:
+				return SOUTH;
+			case WEST:
+				return WEST;
 		}
 		return null;
 	}

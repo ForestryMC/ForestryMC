@@ -25,10 +25,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import forestry.api.core.IModelManager;
+
 import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
 import forestry.apiculture.entities.EntityMinecartApiary;
 import forestry.apiculture.entities.EntityMinecartBeeHousingBase;
 import forestry.apiculture.entities.EntityMinecartBeehouse;
@@ -36,22 +38,20 @@ import forestry.apiculture.entities.EntityMinecartBeehouse;
 public class ItemMinecartBeehouse extends ItemMinecart implements IItemModelRegister {
 	private final String[] definition = new String[]{"cart.beehouse", "cart.apiary"};
 
-    private static final IBehaviorDispenseItem dispenserMinecartBehavior = new BehaviorDefaultDispenseItem()
-    {
-        private final BehaviorDefaultDispenseItem behaviourDefaultDispenseItem = new BehaviorDefaultDispenseItem();
-        
-        @Override
-		public ItemStack dispenseStack(IBlockSource source, ItemStack stack)
-        {
-            return stack;
-        }
-    };
+	private static final IBehaviorDispenseItem dispenserMinecartBehavior = new BehaviorDefaultDispenseItem() {
+		private final BehaviorDefaultDispenseItem behaviourDefaultDispenseItem = new BehaviorDefaultDispenseItem();
+
+		@Override
+		public ItemStack dispenseStack(IBlockSource source, ItemStack stack) {
+			return stack;
+		}
+	};
 
 	public ItemMinecartBeehouse() {
 		super(null);
 		setMaxDamage(0);
 		setHasSubtypes(true);
-		BlockDispenser.dispenseBehaviorRegistry.putObject(this,new BehaviorDefaultDispenseItem());
+		BlockDispenser.dispenseBehaviorRegistry.putObject(this, new BehaviorDefaultDispenseItem());
 	}
 
 	@Override

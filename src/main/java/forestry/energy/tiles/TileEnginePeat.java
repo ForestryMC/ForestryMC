@@ -23,7 +23,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+
 import net.minecraftforge.fml.common.Optional;
+
 import forestry.api.fuels.FuelManager;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
@@ -287,7 +289,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 		super.writeToNBT(nbttagcompound);
 
 		if (fuelItem != null) {
-			nbttagcompound.setString("EngineFuelItem",  ItemStackUtil.getItemNameFromRegistryAsSting(fuelItem));
+			nbttagcompound.setString("EngineFuelItem", ItemStackUtil.getItemNameFromRegistryAsSting(fuelItem));
 		}
 
 		nbttagcompound.setInteger("EngineFuelMeta", fuelItemMeta);

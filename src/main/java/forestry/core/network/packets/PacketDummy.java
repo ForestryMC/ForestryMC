@@ -12,9 +12,10 @@ package forestry.core.network.packets;
 
 import java.io.IOException;
 
+import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
+
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.IForestryPacket;
-import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
 
 public abstract class PacketDummy implements IForestryPacket {
 	protected PacketDummy() {

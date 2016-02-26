@@ -10,6 +10,9 @@
  ******************************************************************************/
 package forestry.farming.gui.widgets;
 
+import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.item.ItemStack;
+
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmLogic;
 import forestry.core.gui.tooltips.ToolTip;
@@ -17,8 +20,6 @@ import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.proxy.Proxies;
 import forestry.farming.multiblock.IFarmControllerInternal;
-import net.minecraft.client.renderer.entity.RenderItem;
-import net.minecraft.item.ItemStack;
 
 public class FarmLogicSlot extends Widget {
 

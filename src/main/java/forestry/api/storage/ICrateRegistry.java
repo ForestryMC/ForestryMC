@@ -19,14 +19,18 @@ public interface ICrateRegistry {
 	 * Can only be called during the Init stage.
 	 */
 	void registerCrate(Item item, String uid);
+
 	void registerCrate(Block block, String uid);
+
 	void registerCrate(ItemStack stack, String uid);
 
 	/**
 	 * Same as the above, but uses the ore dictionary for the Carpenter crating recipe.
 	 */
 	void registerCrateUsingOreDict(Item item, String uid);
+
 	void registerCrateUsingOreDict(Block block, String uid);
+
 	void registerCrateUsingOreDict(ItemStack stack, String uid);
 
 }

@@ -27,8 +27,9 @@ public abstract class EntitySelector<T extends Entity> implements Predicate<T> {
 	
 	@Override
 	public boolean apply(Entity entity) {
-		if(entity == null)
+		if (entity == null) {
 			return false;
+		}
 		T castEntity = entityClass.cast(entity);
 		return isEntityApplicableTyped(castEntity);
 	}

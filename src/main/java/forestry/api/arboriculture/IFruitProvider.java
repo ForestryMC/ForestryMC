@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright 2011-2014 SirSengir
- * 
+ *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
 package forestry.api.arboriculture;
@@ -9,8 +9,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.genetics.IFruitFamily;
 
 public interface IFruitProvider {
@@ -41,6 +43,7 @@ public interface IFruitProvider {
 	String getModID();
 
 	/* TEXTURE OVERLAY */
+
 	/**
 	 * @param genome
 	 * @param world
@@ -59,7 +62,7 @@ public interface IFruitProvider {
 
 	/**
 	 * Tries to spawn a fruit block at the potential position when the tree generates.
-	 * 
+	 *
 	 * @param genome
 	 * @param world
 	 * @param pos

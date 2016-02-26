@@ -17,9 +17,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.core.IModelManager;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.ItemStackUtil;
@@ -72,11 +74,11 @@ public class ItemCrated extends ItemForestry {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		if(contained == null){
+		if (contained == null) {
 			manager.registerItemModel(item, 0, false);
 			manager.registerItemModel(item, 1, "crate-filled");
-		}else{
-			ModelResourceLocation modelLocation = new ModelResourceLocation("forestry:crate-filled",  StringUtil.cleanItemName(item));
+		} else {
+			ModelResourceLocation modelLocation = new ModelResourceLocation("forestry:crate-filled", StringUtil.cleanItemName(item));
 			ModelLoader.setCustomModelResourceLocation(item, 0, modelLocation);
 			ModelBakery.registerItemVariants(item, modelLocation);
 		}
@@ -84,8 +86,9 @@ public class ItemCrated extends ItemForestry {
 	
 	@Override
 	public int getColorFromItemStack(ItemStack stack, int renderPass) {
-		if(getContained() == null || renderPass == 100)
+		if (getContained() == null || renderPass == 100) {
 			return super.getColorFromItemStack(stack, renderPass);
+		}
 		return getContained().getItem().getColorFromItemStack(getContained(), renderPass);
 	}
 

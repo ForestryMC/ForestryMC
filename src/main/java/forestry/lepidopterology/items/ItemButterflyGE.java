@@ -22,8 +22,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.core.IModelManager;
 import forestry.api.core.Tabs;
 import forestry.api.genetics.AlleleManager;
@@ -169,14 +171,14 @@ public class ItemButterflyGE extends ItemGE {
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
 		switch (this.type) {
-		case CATERPILLAR:
-			manager.registerItemModel(item, 0, "caterpillar");
-			break;
-		case BUTTERFLY:
-			manager.registerItemModel(item, 0, "butterflyGE");
-			break;
-		default:
-			manager.registerItemModel(item, 0, "liquids/jar");
+			case CATERPILLAR:
+				manager.registerItemModel(item, 0, "caterpillar");
+				break;
+			case BUTTERFLY:
+				manager.registerItemModel(item, 0, "butterflyGE");
+				break;
+			default:
+				manager.registerItemModel(item, 0, "liquids/jar");
 		}
 	}
 

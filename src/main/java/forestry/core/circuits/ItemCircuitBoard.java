@@ -50,7 +50,7 @@ public class ItemCircuitBoard extends ItemForestry {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		for(int i = 0;i < 4;i++){
+		for (int i = 0; i < 4; i++) {
 			manager.registerItemModel(item, i, "chipsets");
 		}
 	}

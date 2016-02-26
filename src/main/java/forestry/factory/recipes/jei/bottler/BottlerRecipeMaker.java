@@ -3,9 +3,10 @@ package forestry.factory.recipes.jei.bottler;
 import java.util.ArrayList;
 import java.util.List;
 
-import forestry.factory.recipes.BottlerRecipe;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
+
+import forestry.factory.recipes.BottlerRecipe;
 
 public class BottlerRecipeMaker {
 

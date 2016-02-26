@@ -29,20 +29,14 @@ public class ItemBlockWoodSlab extends ItemBlockWood {
 	}
 	
 	@Override
-    public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ)
-    {
-		if (stack.stackSize == 0)
-        {
-            return false;
-        }
-        else if (!player.canPlayerEdit(pos.offset(side), side, stack))
-        {
-            return false;
-        }
-        else
-        {
-            IBlockState iblockstate = world.getBlockState(pos);
-            
+	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
+		if (stack.stackSize == 0) {
+			return false;
+		} else if (!player.canPlayerEdit(pos.offset(side), side, stack)) {
+			return false;
+		} else {
+			IBlockState iblockstate = world.getBlockState(pos);
+
 			EnumWoodType blockWoodType = null;
 			EnumWoodType stackWoodType = getWoodType(stack);
 			TileWood tile = TileUtil.getTile(world, pos, TileWood.class);
@@ -50,33 +44,31 @@ public class ItemBlockWoodSlab extends ItemBlockWood {
 				blockWoodType = tile.getWoodType();
 			}
 
-            if (iblockstate.getBlock() == this.slab){
-                EnumBlockHalf blockslab$enumblockhalf = iblockstate.getValue(net.minecraft.block.BlockSlab.HALF);
+			if (iblockstate.getBlock() == this.slab) {
+				EnumBlockHalf blockslab$enumblockhalf = iblockstate.getValue(net.minecraft.block.BlockSlab.HALF);
 
-                if ((side == EnumFacing.UP && blockslab$enumblockhalf == EnumBlockHalf.BOTTOM || side == EnumFacing.DOWN && blockslab$enumblockhalf == EnumBlockHalf.TOP) && blockWoodType == stackWoodType)
-                {
-                    if (world.checkNoEntityCollision(this.doubleSlab.getCollisionBoundingBox(world, pos, iblockstate)) )
-                    {
-                    	if(placeWood(stack, stackWoodType, doubleSlab.getDefaultState(), player, world, pos)){
-	                        world.playSoundEffect(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, this.doubleSlab.stepSound.getPlaceSound(), (this.doubleSlab.stepSound.getVolume() + 1.0F) / 2.0F, this.doubleSlab.stepSound.getFrequency() * 0.8F);
-	                        --stack.stackSize;
-                    	}
-                    }
+				if ((side == EnumFacing.UP && blockslab$enumblockhalf == EnumBlockHalf.BOTTOM || side == EnumFacing.DOWN && blockslab$enumblockhalf == EnumBlockHalf.TOP) && blockWoodType == stackWoodType) {
+					if (world.checkNoEntityCollision(this.doubleSlab.getCollisionBoundingBox(world, pos, iblockstate))) {
+						if (placeWood(stack, stackWoodType, doubleSlab.getDefaultState(), player, world, pos)) {
+							world.playSoundEffect(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, this.doubleSlab.stepSound.getPlaceSound(), (this.doubleSlab.stepSound.getVolume() + 1.0F) / 2.0F, this.doubleSlab.stepSound.getFrequency() * 0.8F);
+							--stack.stackSize;
+						}
+					}
 
-                    return true;
-                }
-            }
+					return true;
+				}
+			}
 
 			return this.tryPlace(stack, world, pos.offset(side), stackWoodType) || super.onItemUse(stack, player, world, pos, side, hitX, hitY, hitZ);
 		}
-    }
+	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public boolean canPlaceBlockOnSide(World world, BlockPos pos, EnumFacing side, EntityPlayer player, ItemStack itemStack) {
-        BlockPos blockpos = pos;
-        IBlockState iblockstate = world.getBlockState(pos);
-        
+		BlockPos blockpos = pos;
+		IBlockState iblockstate = world.getBlockState(pos);
+
 		EnumWoodType blockWoodType = null;
 		EnumWoodType stackWoodType = getWoodType(itemStack);
 		TileWood tile = TileUtil.getTile(world, pos, TileWood.class);
@@ -84,47 +76,41 @@ public class ItemBlockWoodSlab extends ItemBlockWood {
 			blockWoodType = tile.getWoodType();
 		}
 
-        if (iblockstate.getBlock() == slab)
-        {
-            boolean flag = iblockstate.getValue(net.minecraft.block.BlockSlab.HALF) == EnumBlockHalf.TOP;
+		if (iblockstate.getBlock() == slab) {
+			boolean flag = iblockstate.getValue(net.minecraft.block.BlockSlab.HALF) == EnumBlockHalf.TOP;
 
-            if ((side == EnumFacing.UP && !flag || side == EnumFacing.DOWN && flag) && stackWoodType == blockWoodType)
-            {
-                return true;
-            }
-        }
+			if ((side == EnumFacing.UP && !flag || side == EnumFacing.DOWN && flag) && stackWoodType == blockWoodType) {
+				return true;
+			}
+		}
 
-        pos = pos.offset(side);
-        IBlockState iblockstate1 = world.getBlockState(pos);
+		pos = pos.offset(side);
+		IBlockState iblockstate1 = world.getBlockState(pos);
 		return iblockstate1.getBlock() == this.slab && stackWoodType == blockWoodType || super.canPlaceBlockOnSide(world, blockpos, side, player, itemStack);
 	}
 	
-    private boolean tryPlace(ItemStack itemStack, World world, BlockPos pos, Object variantInStack)
-    {
-        IBlockState iblockstate = world.getBlockState(pos);
+	private boolean tryPlace(ItemStack itemStack, World world, BlockPos pos, Object variantInStack) {
+		IBlockState iblockstate = world.getBlockState(pos);
 
 		EnumWoodType blockWoodType = null;
 		TileWood tile = TileUtil.getTile(world, pos, TileWood.class);
 		if (tile != null) {
 			blockWoodType = tile.getWoodType();
 		}
-        
-        if (iblockstate.getBlock() == slab)
-        {
-            if (blockWoodType == variantInStack)
-            {
-                if (world.checkNoEntityCollision(this.doubleSlab.getCollisionBoundingBox(world, pos, doubleSlab.getDefaultState())))
-                {
-                	if(placeWood(itemStack, (EnumWoodType) variantInStack, doubleSlab.getDefaultState(), null, world, pos)){
-                		world.playSoundEffect(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, this.doubleSlab.stepSound.getPlaceSound(), (this.doubleSlab.stepSound.getVolume() + 1.0F) / 2.0F, this.doubleSlab.stepSound.getFrequency() * 0.8F);
-                    	--itemStack.stackSize;
-                	}
-                }
 
-                return true;
-            }
-        }
+		if (iblockstate.getBlock() == slab) {
+			if (blockWoodType == variantInStack) {
+				if (world.checkNoEntityCollision(this.doubleSlab.getCollisionBoundingBox(world, pos, doubleSlab.getDefaultState()))) {
+					if (placeWood(itemStack, (EnumWoodType) variantInStack, doubleSlab.getDefaultState(), null, world, pos)) {
+						world.playSoundEffect(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, this.doubleSlab.stepSound.getPlaceSound(), (this.doubleSlab.stepSound.getVolume() + 1.0F) / 2.0F, this.doubleSlab.stepSound.getFrequency() * 0.8F);
+						--itemStack.stackSize;
+					}
+				}
 
-        return false;
-    }
+				return true;
+			}
+		}
+
+		return false;
+	}
 }

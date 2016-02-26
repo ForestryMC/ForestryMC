@@ -12,10 +12,12 @@ package forestry.food.items;
 
 import java.awt.Color;
 
-import forestry.api.core.IModelManager;
 import net.minecraft.item.Item;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.core.IModelManager;
 
 public enum EnumBeverage implements ItemBeverage.IBeverageInfo {
 	MEAD_SHORT("meadShort", "glass", new Color(0xec9a19), new Color(0xffffff), 1, 0.2f, true),

@@ -10,10 +10,11 @@
  ******************************************************************************/
 package forestry.core.utils.vect;
 
-import forestry.api.farming.FarmDirection;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+
+import forestry.api.farming.FarmDirection;
 
 /**
  * Represents a position or dimensions.

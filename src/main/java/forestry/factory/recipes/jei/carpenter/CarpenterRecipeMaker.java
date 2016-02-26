@@ -13,8 +13,9 @@ public class CarpenterRecipeMaker {
 	
 	public static List<CarpenterRecipeWrapper> getCarpenterRecipes() {
 		List<CarpenterRecipeWrapper> recipes = new ArrayList<>();
-		for(ICarpenterRecipe recipe : RecipeManagers.carpenterManager.recipes())
+		for (ICarpenterRecipe recipe : RecipeManagers.carpenterManager.recipes()) {
 			recipes.add(new CarpenterRecipeWrapper(recipe));
+		}
 		return recipes;
 	}
 	

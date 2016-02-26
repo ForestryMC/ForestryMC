@@ -10,8 +10,9 @@
  ******************************************************************************/
 package forestry.energy.proxy;
 
-import forestry.core.tiles.TileEngine;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+
+import forestry.core.tiles.TileEngine;
 
 public class ProxyEnergy {
 	public TileEntitySpecialRenderer<TileEngine> getRenderDefaultEngine(String gfxBase) {

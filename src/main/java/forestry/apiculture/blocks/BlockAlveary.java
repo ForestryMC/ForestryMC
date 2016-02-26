@@ -196,7 +196,7 @@ public class BlockAlveary extends BlockStructure implements IStateMapperRegister
 
 	@Override
 	protected BlockState createBlockState() {
-		return new BlockState(this, new IProperty[] { TYPE, STATE, LEVEL });
+		return new BlockState(this, new IProperty[]{TYPE, STATE, LEVEL});
 	}
 	
 	@Override

@@ -15,6 +15,7 @@ import java.util.Locale;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
+
 import com.mojang.authlib.GameProfile;
 
 import forestry.core.access.EnumAccess;

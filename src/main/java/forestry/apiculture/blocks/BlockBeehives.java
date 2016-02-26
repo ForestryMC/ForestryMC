@@ -199,10 +199,9 @@ public class BlockBeehives extends BlockContainer implements IItemModelRegister 
 		manager.registerItemModel(item, 7, "beehives/" + HiveType.SWAMP.getName());
 	}
 	
-    @Override
-	public int getRenderType()
-    {
-        return 3;
-    }
+	@Override
+	public int getRenderType() {
+		return 3;
+	}
 
 }

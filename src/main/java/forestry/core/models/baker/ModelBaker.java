@@ -63,12 +63,13 @@ public class ModelBaker implements IModelBaker {
 
 	protected final FaceBakery faceBakery = new FaceBakery();
 
-	protected final float[] defUVs = new float[] { 0, 0, 1, 1 };
+	protected final float[] defUVs = new float[]{0, 0, 1, 1};
 
 	@Override
 	public void setRenderBoundsFromBlock(Block block) {
-		if (block == null)
+		if (block == null) {
 			return;
+		}
 
 		renderMinX = block.getBlockBoundsMinX();
 		renderMinY = block.getBlockBoundsMinY();
@@ -127,7 +128,7 @@ public class ModelBaker implements IModelBaker {
 		return false;
 	}
 
-	private final float quadsUV[] = new float[] { 0, 0, 1, 1, 0, 0, 1, 1 };
+	private final float quadsUV[] = new float[]{0, 0, 1, 1, 0, 0, 1, 1};
 	protected EnumSet<EnumFacing> renderFaces = EnumSet.allOf(EnumFacing.class);
 	private List<ModelBakerFace> faces = new ArrayList<>();
 
@@ -138,43 +139,43 @@ public class ModelBaker implements IModelBaker {
 		float to_b = 0;
 
 		switch (face) {
-		case UP:
-			from_a = from_16.x / 16.0f;
-			from_b = from_16.z / 16.0f;
-			to_a = to_16.x / 16.0f;
-			to_b = to_16.z / 16.0f;
-			break;
-		case DOWN:
-			from_a = from_16.x / 16.0f;
-			from_b = from_16.z / 16.0f;
-			to_a = to_16.x / 16.0f;
-			to_b = to_16.z / 16.0f;
-			break;
-		case SOUTH:
-			from_a = from_16.x / 16.0f;
-			from_b = from_16.y / 16.0f;
-			to_a = to_16.x / 16.0f;
-			to_b = to_16.y / 16.0f;
-			break;
-		case NORTH:
-			from_a = from_16.x / 16.0f;
-			from_b = from_16.y / 16.0f;
-			to_a = to_16.x / 16.0f;
-			to_b = to_16.y / 16.0f;
-			break;
-		case EAST:
-			from_a = from_16.y / 16.0f;
-			from_b = from_16.z / 16.0f;
-			to_a = to_16.y / 16.0f;
-			to_b = to_16.z / 16.0f;
-			break;
-		case WEST:
-			from_a = from_16.y / 16.0f;
-			from_b = from_16.z / 16.0f;
-			to_a = to_16.y / 16.0f;
-			to_b = to_16.z / 16.0f;
-			break;
-		default:
+			case UP:
+				from_a = from_16.x / 16.0f;
+				from_b = from_16.z / 16.0f;
+				to_a = to_16.x / 16.0f;
+				to_b = to_16.z / 16.0f;
+				break;
+			case DOWN:
+				from_a = from_16.x / 16.0f;
+				from_b = from_16.z / 16.0f;
+				to_a = to_16.x / 16.0f;
+				to_b = to_16.z / 16.0f;
+				break;
+			case SOUTH:
+				from_a = from_16.x / 16.0f;
+				from_b = from_16.y / 16.0f;
+				to_a = to_16.x / 16.0f;
+				to_b = to_16.y / 16.0f;
+				break;
+			case NORTH:
+				from_a = from_16.x / 16.0f;
+				from_b = from_16.y / 16.0f;
+				to_a = to_16.x / 16.0f;
+				to_b = to_16.y / 16.0f;
+				break;
+			case EAST:
+				from_a = from_16.y / 16.0f;
+				from_b = from_16.z / 16.0f;
+				to_a = to_16.y / 16.0f;
+				to_b = to_16.z / 16.0f;
+				break;
+			case WEST:
+				from_a = from_16.y / 16.0f;
+				from_b = from_16.z / 16.0f;
+				to_a = to_16.y / 16.0f;
+				to_b = to_16.z / 16.0f;
+				break;
+			default:
 		}
 
 		from_a = 1.0f - from_a;
@@ -182,7 +183,7 @@ public class ModelBaker implements IModelBaker {
 		to_a = 1.0f - to_a;
 		to_b = 1.0f - to_b;
 
-		final float[] afloat = new float[] { // :P
+		final float[] afloat = new float[]{ // :P
 				16.0f * (quadsUV[0] + quadsUV[2] * from_a + quadsUV[4] * from_b), // 0
 				16.0f * (quadsUV[1] + quadsUV[3] * from_a + quadsUV[5] * from_b), // 1
 
@@ -267,8 +268,9 @@ public class ModelBaker implements IModelBaker {
 	public IBakedModel bakeModel(boolean flip) {
 		ModelRotation mr = ModelRotation.X0_Y0;
 
-		if (flip)
+		if (flip) {
 			mr = ModelRotation.X0_Y180;
+		}
 
 		for (ModelBakerFace face : faces) {
 			final EnumFacing myFace = face.face;
@@ -280,10 +282,11 @@ public class ModelBaker implements IModelBaker {
 			BakedQuad bf = faceBakery.makeBakedQuad(face.to, face.from, bpf, face.spite, myFace, mr, null, true, true);
 			bf = new IColoredBakedQuad.ColoredBakedQuad(bf.getVertexData(), face.colorIndex, bf.getFace());
 
-			if (face.isEdge)
+			if (face.isEdge) {
 				this.generatedModel.getFaceQuads(myFace).add(bf);
-			else
+			} else {
 				this.generatedModel.getGeneralQuads().add(bf);
+			}
 		}
 		return clearBaker();
 	}

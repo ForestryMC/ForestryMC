@@ -5,9 +5,9 @@
  ******************************************************************************/
 package forestry.api.multiblock;
 
-import com.mojang.authlib.GameProfile;
-
 import net.minecraft.util.BlockPos;
+
+import com.mojang.authlib.GameProfile;
 
 /**
  * Basic interface for a multiblock machine component.

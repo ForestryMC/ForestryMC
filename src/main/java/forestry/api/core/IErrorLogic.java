@@ -40,5 +40,6 @@ public interface IErrorLogic extends IErrorSource {
 	 * Network serialization for syncing errors to the client from the server.
 	 */
 	void writeData(DataOutputStream data) throws IOException;
+
 	void readData(DataInputStream data) throws IOException;
 }

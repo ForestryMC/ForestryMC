@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright 2011-2014 SirSengir
- * 
+ *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
 package forestry.api.lepidopterology;
@@ -73,8 +73,7 @@ public enum EnumButterflyChromosome implements IChromosomeType {
 	/**
 	 * Not used yet
 	 */
-	TERRITORY(IAlleleArea.class),
-	;
+	TERRITORY(IAlleleArea.class),;
 	
 	Class<? extends IAllele> clss;
 	

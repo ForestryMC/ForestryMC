@@ -7,7 +7,7 @@ import java.util.List;
 import forestry.api.recipes.ICentrifugeRecipe;
 import forestry.core.recipes.jei.ForestryRecipeWrapper;
 
-public class CentrifugeRecipeWrapper extends ForestryRecipeWrapper<ICentrifugeRecipe>{
+public class CentrifugeRecipeWrapper extends ForestryRecipeWrapper<ICentrifugeRecipe> {
 	
 	public CentrifugeRecipeWrapper(@Nonnull ICentrifugeRecipe recipe) {
 		super(recipe);

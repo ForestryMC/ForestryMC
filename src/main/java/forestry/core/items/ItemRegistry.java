@@ -11,7 +11,9 @@
 package forestry.core.items;
 
 import net.minecraft.item.Item;
+
 import net.minecraftforge.fml.common.registry.GameRegistry;
+
 import forestry.core.utils.StringUtil;
 import forestry.plugins.PluginManager;
 

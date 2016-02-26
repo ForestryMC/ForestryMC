@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright 2011-2014 SirSengir
- * 
+ *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
 package forestry.api.mail;
@@ -19,6 +19,7 @@ public interface IPostRegistry {
 
 	/* MAIL ADDRESSES */
 	IMailAddress getMailAddress(GameProfile gameProfile);
+
 	IMailAddress getMailAddress(String traderName);
 
 	/* LETTERS */
@@ -31,6 +32,7 @@ public interface IPostRegistry {
 	ItemStack createLetterStack(ILetter letter);
 
 	/* CARRIERS */
+
 	/**
 	 * Registers a new {@link IPostalCarrier}. See {@link IPostalCarrier} for details.
 	 * @param carrier {@link IPostalCarrier} to register.

@@ -10,11 +10,14 @@
  ******************************************************************************/
 package forestry.core.triggers;
 
-import forestry.core.render.TextureManager;
-import forestry.core.utils.StringUtil;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.core.render.TextureManager;
+import forestry.core.utils.StringUtil;
+
 import buildcraft.api.statements.IStatement;
 import buildcraft.api.statements.IStatementParameter;
 import buildcraft.api.statements.ITriggerExternal;

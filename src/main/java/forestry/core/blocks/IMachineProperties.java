@@ -11,11 +11,7 @@
 package forestry.core.blocks;
 
 import javax.annotation.Nonnull;
-
 import java.util.List;
-
-import forestry.api.core.IModelManager;
-import forestry.core.tiles.TileForestry;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -32,7 +28,10 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public interface IMachineProperties<T extends TileForestry> extends IStringSerializable{
+import forestry.api.core.IModelManager;
+import forestry.core.tiles.TileForestry;
+
+public interface IMachineProperties<T extends TileForestry> extends IStringSerializable {
 	int getMeta();
 
 	@Nonnull

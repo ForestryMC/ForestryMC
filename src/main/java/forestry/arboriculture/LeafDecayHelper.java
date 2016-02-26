@@ -1,11 +1,12 @@
 package forestry.arboriculture;
 
-import forestry.core.utils.BlockUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLeavesBase;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
+
+import forestry.core.utils.BlockUtil;
 
 /** Based on vanilla leaf decay, but accepts leaves that are connected further from a trunk */
 public abstract class LeafDecayHelper {

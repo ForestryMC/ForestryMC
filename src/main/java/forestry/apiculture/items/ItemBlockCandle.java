@@ -13,8 +13,10 @@ package forestry.apiculture.items;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.apiculture.blocks.BlockCandle;
 import forestry.core.items.ItemBlockForestry;
 

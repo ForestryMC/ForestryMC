@@ -82,7 +82,7 @@ public class BlockSoil extends Block implements IItemTyped, IItemModelRegister {
 
 	@Override
 	protected BlockState createBlockState() {
-		return new BlockState(this, new IProperty[] { SOIL });
+		return new BlockState(this, new IProperty[]{SOIL});
 	}
 
 	@Override

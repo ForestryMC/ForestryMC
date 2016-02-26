@@ -990,7 +990,7 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 	}
 	
-	public static void preInit(){
+	public static void preInit() {
 		
 	}
 

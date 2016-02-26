@@ -17,6 +17,7 @@ import net.minecraft.block.BlockWall;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.BlockPos;
+
 import net.minecraftforge.common.IPlantable;
 
 public class AIButterflyRest extends AIButterflyBase {

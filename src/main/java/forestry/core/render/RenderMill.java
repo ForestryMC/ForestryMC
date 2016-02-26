@@ -92,9 +92,9 @@ public class RenderMill extends TileEntitySpecialRenderer<TileMill> {
 	 */
 	@Override
 	public void renderTileEntityAt(TileMill mill, double x, double y, double z, float partialTicks, int destroyStage) {
-		if(mill != null){
+		if (mill != null) {
 			render(mill.progress, mill.charge, EnumFacing.WEST, x, y, z);
-		}else{
+		} else {
 			byte charge = 0;
 			render(0.0f, charge, EnumFacing.WEST, x, y, z);
 		}

@@ -15,8 +15,10 @@ import java.util.Locale;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.SideOnly;
+
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IBeeModelProvider;
 import forestry.api.core.IModelManager;
@@ -36,7 +38,7 @@ public class DefaultBeeModelProvider implements IBeeModelProvider {
 	@Override
 	public void registerModels(Item item, IModelManager manager) {
 		String beeIconDir = "bees/default/";
-		EnumBeeType beeType = ((ItemBeeGE)item).getType();
+		EnumBeeType beeType = ((ItemBeeGE) item).getType();
 		String beeTypeNameBase = beeIconDir + beeType.toString().toLowerCase(Locale.ENGLISH);
 
 		models[beeType.ordinal()] = manager.getModelLocation(beeTypeNameBase);

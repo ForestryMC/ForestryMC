@@ -12,6 +12,7 @@ package forestry.factory.triggers;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+
 import forestry.core.tiles.TileEngine;
 import forestry.core.tiles.TilePowered;
 import forestry.core.triggers.Trigger;

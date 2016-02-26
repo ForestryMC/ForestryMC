@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright 2011-2014 SirSengir
- * 
+ *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
 package forestry.api.genetics;
@@ -11,7 +11,7 @@ import net.minecraft.item.ItemStack;
 
 /**
  * Can be implemented by tile entities which can bear fruit.
- * 
+ *
  * @author SirSengir
  */
 public interface IFruitBearer {
@@ -28,7 +28,7 @@ public interface IFruitBearer {
 
 	/**
 	 * Picks the fruits of this tile, resetting it to unripe fruits.
-	 * 
+	 *
 	 * @param tool
 	 *            Tool used in picking the fruits. May be null.
 	 * @return Picked fruits.
@@ -42,7 +42,7 @@ public interface IFruitBearer {
 
 	/**
 	 * Increases the ripeness of the fruit.
-	 * 
+	 *
 	 * @param add
 	 *            Float to add to the ripeness. Will truncate to valid values.
 	 */

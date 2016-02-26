@@ -11,6 +11,7 @@ import forestry.api.core.EnumTemperature;
 public interface IAlleleSpeciesCustom extends IAlleleSpecies {
 
 	IAlleleSpeciesCustom setTemperature(EnumTemperature temperature);
+
 	IAlleleSpeciesCustom setHumidity(EnumHumidity humidity);
 
 	IAlleleSpeciesCustom setHasEffect();

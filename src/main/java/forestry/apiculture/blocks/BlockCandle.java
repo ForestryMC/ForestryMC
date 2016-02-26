@@ -106,13 +106,14 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister {
 	
 	@Override
 	protected BlockState createBlockState() {
-		return new BlockState(this, new IProperty[] { FACING, STATE });
+		return new BlockState(this, new IProperty[]{FACING, STATE});
 	}
 	
 	@Override
 	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
-		if(((TileCandle)world.getTileEntity(pos)).isLit())
+		if (((TileCandle) world.getTileEntity(pos)).isLit()) {
 			state = state.withProperty(STATE, State.ON);
+		}
 		return super.getActualState(state, world, pos);
 	}
 
@@ -144,7 +145,7 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister {
 	
 	@Override
 	public int colorMultiplier(IBlockAccess worldIn, BlockPos pos, int renderPass) {
-		return ((TileCandle)worldIn.getTileEntity(pos)).getColour();
+		return ((TileCandle) worldIn.getTileEntity(pos)).getColour();
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
@@ -202,9 +203,9 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister {
 		if (toggleLitState) {
 			tileCandle.setLit(!isLit);
 			world.markBlockForUpdate(pos);
-            world.theProfiler.startSection("checkLight");
-            world.checkLight(pos);
-            world.theProfiler.endSection();
+			world.theProfiler.startSection("checkLight");
+			world.checkLight(pos);
+			world.theProfiler.endSection();
 			flag = true;
 		}
 		return flag;

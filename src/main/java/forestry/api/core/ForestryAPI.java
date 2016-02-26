@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright 2011-2014 SirSengir
- * 
+ *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
 package forestry.api.core;
@@ -12,10 +12,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Forestry's API is divided into several subcategories to make it easier to understand.
- * 
+ *
  * If you need to distribute API files, try to only include the parts you are actually
  * using to minimize conflicts due to API changes.
- * 
+ *
  *  .core     - Miscallenous base classes and interfaces as well as some basics for tools, armor, game modes and stuff needed by biome mods.
  *  .fuels    - Managers and classes to facilitate adding fuels to various engines and machines.
  *  .recipes  - Managers and helpers to facilitate adding new recipes to various machines.
@@ -25,7 +25,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  *  			\ .apiculture       - Bees.
  *  			\ .arboriculture    - Trees.
  *  			\ .lepidopterology  - Butterflies.
- *  
+ *
  *  Note that if Forestry is not present, all these references will be null.
  */
 public class ForestryAPI {

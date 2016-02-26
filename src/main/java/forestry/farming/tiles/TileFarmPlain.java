@@ -10,8 +10,9 @@
  ******************************************************************************/
 package forestry.farming.tiles;
 
-import forestry.api.multiblock.IMultiblockController;
 import net.minecraft.util.BlockPos;
+
+import forestry.api.multiblock.IMultiblockController;
 
 public class TileFarmPlain extends TileFarm {
 	@Override

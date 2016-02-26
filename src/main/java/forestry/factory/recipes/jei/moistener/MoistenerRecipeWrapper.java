@@ -10,7 +10,7 @@ import forestry.api.fuels.MoistenerFuel;
 import forestry.api.recipes.IMoistenerRecipe;
 import forestry.core.recipes.jei.ForestryRecipeWrapper;
 
-public class MoistenerRecipeWrapper extends ForestryRecipeWrapper<IMoistenerRecipe>{
+public class MoistenerRecipeWrapper extends ForestryRecipeWrapper<IMoistenerRecipe> {
 	
 	@Nonnull
 	private final MoistenerFuel fuel;
@@ -25,8 +25,9 @@ public class MoistenerRecipeWrapper extends ForestryRecipeWrapper<IMoistenerReci
 	public List<ItemStack> getInputs() {
 		List<ItemStack> inputs = new ArrayList<>();
 		inputs.add(getRecipe().getResource());
-		if(fuel.item != null)
+		if (fuel.item != null) {
 			inputs.add(fuel.item);
+		}
 		return inputs;
 	}
 
@@ -35,8 +36,9 @@ public class MoistenerRecipeWrapper extends ForestryRecipeWrapper<IMoistenerReci
 	public List<ItemStack> getOutputs() {
 		List<ItemStack> outputs = new ArrayList<>();
 		outputs.add(getRecipe().getProduct());
-		if(fuel.product != null)
+		if (fuel.product != null) {
 			outputs.add(fuel.product);
+		}
 		return outputs;
 	}
 

@@ -13,16 +13,18 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import forestry.api.core.IModelManager;
+
 import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
 import forestry.core.CreativeTabForestry;
 
 public class BlockResourceStorage extends Block implements IItemModelRegister {
 	public static final PropertyEnum RESOURCE = PropertyEnum.create("resource", ResourceType.class);
 	
-	public enum ResourceType implements IStringSerializable{
+	public enum ResourceType implements IStringSerializable {
 		APATITE,
 		COPPER,
 		TIN,
@@ -46,7 +48,7 @@ public class BlockResourceStorage extends Block implements IItemModelRegister {
 	
 	@Override
 	protected BlockState createBlockState() {
-		return new BlockState(this, new IProperty[] { RESOURCE });
+		return new BlockState(this, new IProperty[]{RESOURCE});
 	}
 
 	@Override

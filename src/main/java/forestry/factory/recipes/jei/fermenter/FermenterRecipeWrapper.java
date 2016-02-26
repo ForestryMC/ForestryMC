@@ -15,7 +15,7 @@ import forestry.api.recipes.IFermenterRecipe;
 import forestry.api.recipes.IVariableFermentable;
 import forestry.core.recipes.jei.ForestryRecipeWrapper;
 
-public class FermenterRecipeWrapper extends ForestryRecipeWrapper<IFermenterRecipe>{
+public class FermenterRecipeWrapper extends ForestryRecipeWrapper<IFermenterRecipe> {
 	
 	@Nonnull
 	private final ItemStack fermentable;

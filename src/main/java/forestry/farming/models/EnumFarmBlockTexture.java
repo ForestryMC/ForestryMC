@@ -14,8 +14,10 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.core.render.TextureManager;
 
 public enum EnumFarmBlockTexture {
@@ -44,46 +46,51 @@ public enum EnumFarmBlockTexture {
 	public static TextureAtlasSprite getSprite(EnumFarmBlockTexture texture, int side) {
 		TextureManager manager = TextureManager.getInstance();
 		switch (texture) {
-		case BRICK:
-			return manager.getSprite("minecraft", "blocks/brick");
-		case BRICK_STONE:
-			return manager.getSprite("minecraft", "blocks/stonebrick");
-		case BRICK_CHISELED:
-			return manager.getSprite("minecraft", "blocks/stonebrick_carved");
-		case BRICK_CRACKED:
-			return manager.getSprite("minecraft", "blocks/stonebrick_cracked");
-		case BRICK_MOSSY:
-			return manager.getSprite("minecraft", "blocks/stonebrick_mossy");
-		case BRICK_NETHER:
-			return manager.getSprite("minecraft", "blocks/nether_brick");
-		case SANDSTONE_CHISELED:
-			if (side == 0)
-				return manager.getSprite("minecraft", "blocks/sandstone_bottom");
-			else if (side == 1)
-				return manager.getSprite("minecraft", "blocks/sandstone_top");
-			return manager.getSprite("minecraft", "blocks/sandstone_carved");
-		case SANDSTONE_SMOOTH:
-			if (side == 0)
-				return manager.getSprite("minecraft", "blocks/sandstone_bottom");
-			else if (side == 1)
-				return manager.getSprite("minecraft", "blocks/sandstone_top");
-			return manager.getSprite("minecraft", "blocks/sandstone_smooth");
-		case QUARTZ:
-			if (side == 0)
-				return manager.getSprite("minecraft", "blocks/quartz_block_bottom");
-			else if (side == 1)
-				return manager.getSprite("minecraft", "blocks/quartz_block_top");
-			return manager.getSprite("minecraft", "blocks/quartz_block_side");
-		case QUARTZ_CHISELED:
-			if (side == 0 || side == 1)
-				return manager.getSprite("minecraft", "blocks/quartz_block_chiseled_top");
-			return manager.getSprite("minecraft", "blocks/quartz_block_chiseled");
-		case QUARTZ_LINES:
-			if (side == 0 || side == 1)
-				return manager.getSprite("minecraft", "blocks/quartz_block_lines_top");
-			return manager.getSprite("minecraft", "blocks/quartz_block_lines");
-		default:
-			return null;
+			case BRICK:
+				return manager.getSprite("minecraft", "blocks/brick");
+			case BRICK_STONE:
+				return manager.getSprite("minecraft", "blocks/stonebrick");
+			case BRICK_CHISELED:
+				return manager.getSprite("minecraft", "blocks/stonebrick_carved");
+			case BRICK_CRACKED:
+				return manager.getSprite("minecraft", "blocks/stonebrick_cracked");
+			case BRICK_MOSSY:
+				return manager.getSprite("minecraft", "blocks/stonebrick_mossy");
+			case BRICK_NETHER:
+				return manager.getSprite("minecraft", "blocks/nether_brick");
+			case SANDSTONE_CHISELED:
+				if (side == 0) {
+					return manager.getSprite("minecraft", "blocks/sandstone_bottom");
+				} else if (side == 1) {
+					return manager.getSprite("minecraft", "blocks/sandstone_top");
+				}
+				return manager.getSprite("minecraft", "blocks/sandstone_carved");
+			case SANDSTONE_SMOOTH:
+				if (side == 0) {
+					return manager.getSprite("minecraft", "blocks/sandstone_bottom");
+				} else if (side == 1) {
+					return manager.getSprite("minecraft", "blocks/sandstone_top");
+				}
+				return manager.getSprite("minecraft", "blocks/sandstone_smooth");
+			case QUARTZ:
+				if (side == 0) {
+					return manager.getSprite("minecraft", "blocks/quartz_block_bottom");
+				} else if (side == 1) {
+					return manager.getSprite("minecraft", "blocks/quartz_block_top");
+				}
+				return manager.getSprite("minecraft", "blocks/quartz_block_side");
+			case QUARTZ_CHISELED:
+				if (side == 0 || side == 1) {
+					return manager.getSprite("minecraft", "blocks/quartz_block_chiseled_top");
+				}
+				return manager.getSprite("minecraft", "blocks/quartz_block_chiseled");
+			case QUARTZ_LINES:
+				if (side == 0 || side == 1) {
+					return manager.getSprite("minecraft", "blocks/quartz_block_lines_top");
+				}
+				return manager.getSprite("minecraft", "blocks/quartz_block_lines");
+			default:
+				return null;
 		}
 	}
 

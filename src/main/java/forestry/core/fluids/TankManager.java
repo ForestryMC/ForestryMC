@@ -27,6 +27,7 @@ import net.minecraft.inventory.ICrafting;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
+
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
@@ -176,8 +177,9 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 		FluidStack fluid = tank.getFluid();
 		IForestryPacketClient packet = new PacketTankLevelUpdate(tile, tankIndex, fluid);
 		for (ICrafting crafter : crafters) {
-			if(crafter instanceof EntityPlayerMP)
+			if (crafter instanceof EntityPlayerMP) {
 				Proxies.net.sendToPlayer(packet, (EntityPlayerMP) crafter);
+			}
 		}
 
 		if (fluid == null) {

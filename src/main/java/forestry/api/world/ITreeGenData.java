@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright 2011-2014 SirSengir
- * 
+ *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
 package forestry.api.world;
@@ -22,6 +22,7 @@ public interface ITreeGenData {
 	boolean canGrow(World world, BlockPos pos, int expectedGirth, int expectedHeight);
 
 	void setLeaves(World world, GameProfile owner, BlockPos pos);
+
 	void setLeavesDecorative(World world, GameProfile owner, BlockPos pos);
 
 	void setLogBlock(World world, BlockPos pos, EnumFacing facing);

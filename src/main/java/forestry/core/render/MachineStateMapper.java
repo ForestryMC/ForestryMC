@@ -36,11 +36,13 @@ public class MachineStateMapper<T extends Enum<T> & IBlockType & IStringSerializ
 	@Override
 	public Map<IBlockState, ModelResourceLocation> putStateModelLocations(Block block) {
 		for (T type : machinePropertiesClass.getEnumConstants()) {
-			if (type.getMachineProperties() instanceof IMachinePropertiesTesr)
+			if (type.getMachineProperties() instanceof IMachinePropertiesTesr) {
 				continue;
+			}
 			for (EnumFacing facing : EnumFacing.values()) {
-				if (facing == EnumFacing.DOWN || facing == EnumFacing.UP)
+				if (facing == EnumFacing.DOWN || facing == EnumFacing.UP) {
 					continue;
+				}
 				IBlockState state = block.getDefaultState().withProperty(META, type).withProperty(FACE, facing);
 				LinkedHashMap<IProperty, Comparable> linkedhashmap = Maps.newLinkedHashMap(state.getProperties());
 				ResourceLocation blockLocation = Block.blockRegistry.getNameForObject(block);

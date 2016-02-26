@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright 2011-2014 SirSengir
- * 
+ *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
 package forestry.api.apiculture;
@@ -8,7 +8,7 @@ package forestry.api.apiculture;
 import forestry.api.genetics.IFlowerRegistry;
 
 public class FlowerManager {
-	/** 
+	/**
 	 * <blockquote><pre>e.g. FlowerManager.flowerRegister.registerPlantableFlower(new ItemStack(Blocks.red_flower), 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);</pre></blockquote>
 	 */
 	public static IFlowerRegistry flowerRegistry;

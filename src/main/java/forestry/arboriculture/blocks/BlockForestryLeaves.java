@@ -87,7 +87,7 @@ public class BlockForestryLeaves extends BlockLeavesBase implements ITileEntityP
 
 	@Override
 	protected BlockState createBlockState() {
-		return new ExtendedBlockState(this, new IProperty[0], new IUnlistedProperty[] { UnlistedBlockPos.POS, UnlistedBlockAccess.BLOCKACCESS });
+		return new ExtendedBlockState(this, new IProperty[0], new IUnlistedProperty[]{UnlistedBlockPos.POS, UnlistedBlockAccess.BLOCKACCESS});
 	}
 
 	/* TILE ENTITY */
@@ -278,7 +278,7 @@ public class BlockForestryLeaves extends BlockLeavesBase implements ITileEntityP
 	@SideOnly(Side.CLIENT)
 	@Override
 	public int colorMultiplier(IBlockAccess world, BlockPos pos, int renderPass) {
-		TileLeaves leaves = getLeafTile(world,pos);
+		TileLeaves leaves = getLeafTile(world, pos);
 		if (leaves == null) {
 			return super.colorMultiplier(world, pos, 0);
 		}
@@ -288,7 +288,7 @@ public class BlockForestryLeaves extends BlockLeavesBase implements ITileEntityP
 			if (colour == 0 || colour == PluginArboriculture.proxy.getFoliageColorBasic()) {
 				return super.colorMultiplier(world, pos, 0);
 			}
-		}else{
+		} else {
 			colour = leaves.getFruitColour();
 			if (colour == 0) {
 				return super.colorMultiplier(world, pos, 0);

@@ -38,7 +38,7 @@ public class HiveGenTree extends HiveGen {
 		// get to the bottom of the leaves
 		do {
 			y--;
-		} while (world.getBlockState(new BlockPos(x, y, z)).getBlock().isLeaves(world,new BlockPos(x, y, z)));
+		} while (world.getBlockState(new BlockPos(x, y, z)).getBlock().isLeaves(world, new BlockPos(x, y, z)));
 
 		return y;
 	}

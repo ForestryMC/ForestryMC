@@ -135,6 +135,7 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 	}
 
 	/* UPDATING */
+
 	/**
 	 * Leaves and saplings will implement their logic here.
 	 */

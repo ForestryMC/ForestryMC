@@ -31,14 +31,14 @@ public class CarpenterRecipeHandler implements IRecipeHandler<CarpenterRecipeWra
 	@Override
 	public boolean isRecipeValid(@Nonnull CarpenterRecipeWrapper wrapper) {
 		ICarpenterRecipe recipe = wrapper.getRecipe();
-		if(recipe.getPackagingTime() <= 0){
+		if (recipe.getPackagingTime() <= 0) {
 			return false;
 		}
-		if(recipe.getCraftingGridRecipe() == null || recipe.getCraftingGridRecipe().getIngredients() == null){
+		if (recipe.getCraftingGridRecipe() == null || recipe.getCraftingGridRecipe().getIngredients() == null) {
 			return false;
 		}
 		int inputCount = 0;
-		for(Object ingredient : recipe.getCraftingGridRecipe().getIngredients()){
+		for (Object ingredient : recipe.getCraftingGridRecipe().getIngredients()) {
 			inputCount++;
 		}
 		return inputCount > 0;

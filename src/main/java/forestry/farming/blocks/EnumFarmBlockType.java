@@ -4,11 +4,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-import forestry.core.render.TextureManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.IStringSerializable;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.core.render.TextureManager;
 
 public enum EnumFarmBlockType implements IStringSerializable {
 	PLAIN,

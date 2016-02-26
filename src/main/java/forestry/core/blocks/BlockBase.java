@@ -65,7 +65,7 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 	private final PropertyEnum<P> TYPE;
 	private final PropertyEnum<EnumFacing> FACE;
 	
-    protected final BlockState blockState;
+	protected final BlockState blockState;
 	
 	private boolean isReady = false;
 	
@@ -85,7 +85,7 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 		TYPE = PropertyEnum.create("type", machinePropertiesClass);
 		FACE = PropertyEnum.create("face", EnumFacing.class);
 		
-        this.blockState = this.createBlockState();
+		this.blockState = this.createBlockState();
 		IBlockState state = this.blockState.getBaseState().withProperty(FACE, EnumFacing.NORTH);
 		this.setDefaultState(state);
 	}
@@ -275,8 +275,9 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 
 	@Override
 	protected BlockState createBlockState() {
-		if(!isReady)
+		if (!isReady) {
 			return super.createBlockState();
+		}
 		return new BlockState(this, TYPE, FACE);
 	}
 
@@ -289,9 +290,9 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		for(Map.Entry<P, IMachineProperties> entry : properties.entrySet()){
+		for (Map.Entry<P, IMachineProperties> entry : properties.entrySet()) {
 			IMachineProperties<?> machineProperties = entry.getValue();
-			if (machineProperties.getMeta() == meta){
+			if (machineProperties.getMeta() == meta) {
 				P blockType = entry.getKey();
 				return getDefaultState().withProperty(this.TYPE, blockType);
 			}
@@ -309,17 +310,16 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 	@Override
 	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
 		TileForestry tile = TileUtil.getTile(world, pos, TileForestry.class);
-		if (tile != null ) {
+		if (tile != null) {
 			state = state.withProperty(FACE, tile.getOrientation());
 		}
 		return super.getActualState(state, world, pos);
 	}
 	
-    @Override
-	public BlockState getBlockState()
-    {
-        return this.blockState;
-    }
+	@Override
+	public BlockState getBlockState() {
+		return this.blockState;
+	}
 
 	@Override
 	public boolean getUseNeighborBrightness() {

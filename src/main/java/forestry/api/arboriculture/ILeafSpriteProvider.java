@@ -16,5 +16,6 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
  */
 public interface ILeafSpriteProvider {
 	TextureAtlasSprite getSprite(boolean pollinated, boolean fancy);
+
 	int getColor(boolean pollinated);
 }

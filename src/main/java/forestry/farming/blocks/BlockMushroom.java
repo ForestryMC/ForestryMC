@@ -31,10 +31,12 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenBigMushroom;
 import net.minecraft.world.gen.feature.WorldGenerator;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import forestry.api.core.IModelManager;
+
 import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
 import forestry.core.blocks.IItemTyped;
 import forestry.core.config.Constants;
 import forestry.core.utils.BlockUtil;
@@ -67,7 +69,7 @@ public class BlockMushroom extends BlockBush implements IItemTyped, IItemModelRe
 	
 	@Override
 	protected BlockState createBlockState() {
-		return new BlockState(this, new IProperty[] { MUSHROOM });
+		return new BlockState(this, new IProperty[]{MUSHROOM});
 	}
 
 	@Override

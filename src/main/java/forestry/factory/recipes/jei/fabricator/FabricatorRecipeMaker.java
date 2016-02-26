@@ -13,8 +13,9 @@ public class FabricatorRecipeMaker {
 	
 	public static List<FabricatorRecipeWrapper> getFabricatorRecipes() {
 		List<FabricatorRecipeWrapper> recipes = new ArrayList<>();
-		for(IFabricatorRecipe recipe : RecipeManagers.fabricatorManager.recipes())
+		for (IFabricatorRecipe recipe : RecipeManagers.fabricatorManager.recipes()) {
 			recipes.add(new FabricatorRecipeWrapper(recipe));
+		}
 		return recipes;
 	}
 	

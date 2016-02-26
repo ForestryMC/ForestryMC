@@ -5,8 +5,9 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
-import forestry.api.core.IModelManager;
 import net.minecraft.client.resources.model.ModelResourceLocation;
+
+import forestry.api.core.IModelManager;
 
 /**
  * Provides icons for saplings, pollen, etc.
@@ -15,5 +16,6 @@ import net.minecraft.client.resources.model.ModelResourceLocation;
  */
 public interface IGermlingModelProvider {
 	void registerModels(IModelManager manager);
+
 	ModelResourceLocation getModel(EnumGermlingType type);
 }

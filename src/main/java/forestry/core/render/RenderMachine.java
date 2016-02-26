@@ -88,10 +88,10 @@ public class RenderMachine extends TileEntitySpecialRenderer<TileBase> {
 	 */
 	@Override
 	public void renderTileEntityAt(TileBase tile, double x, double y, double z, float partialTicks, int destroyStage) {
-		if(tile != null){
+		if (tile != null) {
 			IRenderableTile generator = (IRenderableTile) tile;
 			render(generator.getResourceTankInfo(), generator.getProductTankInfo(), generator.getOrientation(), x, y, z);
-		}else{
+		} else {
 			render(TankRenderInfo.EMPTY, TankRenderInfo.EMPTY, EnumFacing.SOUTH, x, y, z);
 		}
 	}

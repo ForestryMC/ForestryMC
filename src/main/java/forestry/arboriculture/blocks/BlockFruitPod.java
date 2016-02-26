@@ -13,6 +13,7 @@ package forestry.arboriculture.blocks;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
 import net.minecraft.block.BlockCocoa;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockState;
@@ -23,11 +24,13 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.common.property.ExtendedBlockState;
+
 import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.core.IStateMapperRegister;
 import forestry.api.genetics.AlleleManager;
@@ -57,8 +60,8 @@ public class BlockFruitPod extends BlockCocoa implements IStateMapperRegister {
 
 	@Override
 	protected BlockState createBlockState() {
-		return new ExtendedBlockState(this, new IProperty[] { FACING, AGE, FRUIT },
-				new IUnlistedProperty[] { UnlistedBlockPos.POS, UnlistedBlockAccess.BLOCKACCESS });
+		return new ExtendedBlockState(this, new IProperty[]{FACING, AGE, FRUIT},
+				new IUnlistedProperty[]{UnlistedBlockPos.POS, UnlistedBlockAccess.BLOCKACCESS});
 	}
 	
 	@Override

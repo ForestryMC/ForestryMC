@@ -46,7 +46,8 @@ public class ItemWrench extends ItemForestry implements IToolWrench {
 	}
 
 	@Override
-	public void wrenchUsed(EntityPlayer player, BlockPos pos) {}
+	public void wrenchUsed(EntityPlayer player, BlockPos pos) {
+	}
 
 	@Override
 	public boolean canWrench(EntityPlayer entityPlayer, Entity entity) {
@@ -54,5 +55,6 @@ public class ItemWrench extends ItemForestry implements IToolWrench {
 	}
 
 	@Override
-	public void wrenchUsed(EntityPlayer entityPlayer, Entity entity) {}
+	public void wrenchUsed(EntityPlayer entityPlayer, Entity entity) {
+	}
 }

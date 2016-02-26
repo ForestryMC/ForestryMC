@@ -9,7 +9,7 @@ import net.minecraftforge.fluids.FluidStack;
 import forestry.api.recipes.IStillRecipe;
 import forestry.core.recipes.jei.ForestryRecipeWrapper;
 
-public class StillRecipeWrapper extends ForestryRecipeWrapper<IStillRecipe>{
+public class StillRecipeWrapper extends ForestryRecipeWrapper<IStillRecipe> {
 	
 	public StillRecipeWrapper(@Nonnull IStillRecipe recipe) {
 		super(recipe);

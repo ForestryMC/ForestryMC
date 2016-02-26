@@ -10,14 +10,20 @@ import net.minecraft.item.ItemStack;
 
 public interface IFarmInventory {
 	boolean hasResources(ItemStack[] resources);
+
 	void removeResources(ItemStack[] resources);
 
 	boolean acceptsAsGermling(ItemStack itemstack);
+
 	boolean acceptsAsResource(ItemStack itemstack);
+
 	boolean acceptsAsFertilizer(ItemStack itemstack);
 
 	IInventory getProductInventory();
+
 	IInventory getGermlingsInventory();
+
 	IInventory getResourcesInventory();
+
 	IInventory getFertilizerInventory();
 }

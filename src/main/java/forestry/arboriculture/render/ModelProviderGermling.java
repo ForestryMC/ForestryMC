@@ -10,12 +10,13 @@
  ******************************************************************************/
 package forestry.arboriculture.render;
 
+import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.util.ResourceLocation;
+
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.IGermlingModelProvider;
 import forestry.api.core.IModelManager;
 import forestry.plugins.PluginArboriculture;
-import net.minecraft.client.resources.model.ModelResourceLocation;
-import net.minecraft.util.ResourceLocation;
 
 public class ModelProviderGermling implements IGermlingModelProvider {
 

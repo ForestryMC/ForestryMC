@@ -38,9 +38,9 @@ public class RenderEscritoire extends TileEntitySpecialRenderer<TileEscritoire> 
 	 */
 	@Override
 	public void renderTileEntityAt(TileEscritoire escritoire, double x, double y, double z, float partialTicks, int destroyStage) {
-		if(escritoire != null){
+		if (escritoire != null) {
 			render(escritoire.getStackInSlot(InventoryEscritoire.SLOT_ANALYZE), escritoire.getOrientation(), x, y, z);
-		}else{
+		} else {
 			render(null, EnumFacing.EAST, x, y, z);
 		}
 	}

@@ -33,14 +33,14 @@ public class CentrifugeRecipeHandler implements IRecipeHandler<CentrifugeRecipeW
 	@Override
 	public boolean isRecipeValid(@Nonnull CentrifugeRecipeWrapper wrapper) {
 		ICentrifugeRecipe recipe = wrapper.getRecipe();
-		if(recipe.getProcessingTime() <= 0){
+		if (recipe.getProcessingTime() <= 0) {
 			return false;
 		}
-		if(recipe.getInput() == null){
+		if (recipe.getInput() == null) {
 			return false;
 		}
 		int inputCount = 0;
-		for(ItemStack ingredient : recipe.getAllProducts().keySet()){
+		for (ItemStack ingredient : recipe.getAllProducts().keySet()) {
 			inputCount++;
 		}
 		return inputCount > 0;

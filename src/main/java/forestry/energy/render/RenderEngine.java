@@ -92,14 +92,14 @@ public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
 	
 	@Override
 	public void renderTileEntityAt(TileEngine engine, double x, double y, double z, float partialTicks, int destroyStage) {
-		if(engine != null){
+		if (engine != null) {
 			if (engine instanceof TileEngine) {
 				TileEngine tileEngine = engine;
 				render(tileEngine.getTemperatureState(), tileEngine.progress, tileEngine.getOrientation(), x, y, z);
 			} else {
 				Log.severe("Tried to render a tile entity that is not an engine: " + engine);
 			}
-		}else{
+		} else {
 			render(TemperatureState.COOL, 0.25F, EnumFacing.UP, x, y, z);
 		}
 	}

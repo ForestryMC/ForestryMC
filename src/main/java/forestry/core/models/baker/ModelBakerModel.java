@@ -87,15 +87,15 @@ public class ModelBakerModel implements IBakedModel {
 	}
 
 	protected static float[] getRotation() {
-		return new float[] { -80, -45, 170 };
+		return new float[]{-80, -45, 170};
 	}
 
 	protected static float[] getTranslation() {
-		return new float[] { 0, 1.5F, -2.75F };
+		return new float[]{0, 1.5F, -2.75F};
 	}
 
 	protected static float[] getScale() {
-		return new float[] { 0.375F, 0.375F, 0.375F };
+		return new float[]{0.375F, 0.375F, 0.375F};
 	}
 
 	@Override

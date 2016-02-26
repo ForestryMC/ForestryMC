@@ -41,19 +41,19 @@ public class SqueezerRecipeHandler<R extends ForestryRecipeWrapper> implements I
 
 	@Override
 	public boolean isRecipeValid(@Nonnull R wrapper) {
-		if(wrapper.getFluidOutputs() == null || wrapper.getFluidOutputs().isEmpty()){
+		if (wrapper.getFluidOutputs() == null || wrapper.getFluidOutputs().isEmpty()) {
 			return false;
 		}
-		if(wrapper.getInputs() == null || wrapper.getInputs().isEmpty()){
+		if (wrapper.getInputs() == null || wrapper.getInputs().isEmpty()) {
 			return false;
 		}
-		if(wrapper.getOutputs() == null || wrapper.getOutputs().isEmpty()){
+		if (wrapper.getOutputs() == null || wrapper.getOutputs().isEmpty()) {
 			return false;
 		}
-		if(wrapper.getRecipe() instanceof ISqueezerContainerRecipe){
+		if (wrapper.getRecipe() instanceof ISqueezerContainerRecipe) {
 			ISqueezerContainerRecipe recipe = (ISqueezerContainerRecipe) wrapper.getRecipe();
 			return recipe.getProcessingTime() > 0 && recipe.getRemnantsChance() > 0;
-		}else{
+		} else {
 			ISqueezerRecipe recipe = (ISqueezerRecipe) wrapper.getRecipe();
 			return recipe.getProcessingTime() > 0 && recipe.getRemnantsChance() > 0;
 		}

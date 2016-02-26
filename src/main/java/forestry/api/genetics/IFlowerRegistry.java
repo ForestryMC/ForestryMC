@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright 2011-2014 SirSengir
- * 
+ *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
 package forestry.api.genetics;
@@ -29,6 +29,7 @@ public interface IFlowerRegistry {
 	 * Registers an accepted flower with any meta value.
 	 */
 	void registerAcceptableFlower(Block flowerBlock, String... flowerTypes);
+
 	/**
 	 * Registers an accepted flower with a specific meta value.
 	 */

@@ -26,11 +26,11 @@ public class SaplingStateMapper extends ForestryStateMapper {
 	public Map<IBlockState, ModelResourceLocation> putStateModelLocations(Block block) {
 		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
 			if (allele instanceof IAlleleTreeSpecies) {
-				IAlleleTreeSpecies tree = (IAlleleTreeSpecies)allele;
+				IAlleleTreeSpecies tree = (IAlleleTreeSpecies) allele;
 				IBlockState state = block.getDefaultState().withProperty(BlockSapling.TREE, tree);
 				LinkedHashMap<IProperty, Comparable> linkedhashmap = Maps.newLinkedHashMap(state.getProperties());
 				String modID = tree.getModID();
-				if(modID == null){
+				if (modID == null) {
 					modID = "forestry";
 				}
 				String s = String.format("%s:%s", modID, "germlings");

@@ -12,9 +12,10 @@ public enum EnumAddressee {
 	
 	public static EnumAddressee fromString(String ident) {
 		ident = ident.toLowerCase(Locale.ENGLISH);
-		for(EnumAddressee addr : values()) {
-			if(addr.toString().equals(ident))
+		for (EnumAddressee addr : values()) {
+			if (addr.toString().equals(ident)) {
 				return addr;
+			}
 		}
 		
 		return null;

@@ -21,6 +21,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
 import forestry.core.utils.ItemStackUtil;
 
 public class ItemForestryTool extends ItemForestry {
@@ -44,8 +45,9 @@ public class ItemForestryTool extends ItemForestry {
 	@Override
 	public float getDigSpeed(ItemStack itemstack, IBlockState state) {
 		for (String type : getToolClasses(itemstack)) {
-			if (state.getBlock().isToolEffective(type, state))
+			if (state.getBlock().isToolEffective(type, state)) {
 				return efficiencyOnProperMaterial;
+			}
 		}
 		return super.getDigSpeed(itemstack, state);
 	}

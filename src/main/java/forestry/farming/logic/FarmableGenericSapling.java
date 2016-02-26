@@ -57,7 +57,7 @@ public class FarmableGenericSapling implements IFarmable {
 	@Override
 	public ICrop getCropAt(World world, BlockPos pos) {
 		Block block = BlockUtil.getBlock(world, pos);
-		if (!block.isWood(world,pos)) {
+		if (!block.isWood(world, pos)) {
 			return null;
 		}
 

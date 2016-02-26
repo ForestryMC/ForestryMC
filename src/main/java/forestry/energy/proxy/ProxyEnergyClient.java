@@ -10,9 +10,10 @@
  ******************************************************************************/
 package forestry.energy.proxy;
 
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+
 import forestry.core.tiles.TileEngine;
 import forestry.energy.render.RenderEngine;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 
 public class ProxyEnergyClient extends ProxyEnergy {
 

@@ -37,7 +37,7 @@ public class FruitProviderPod extends FruitProviderNone {
 			uids = new short[]{stage1, stage2, stage3};
 		}
 		
-		public String getModelName(){
+		public String getModelName() {
 			return toString().toLowerCase(Locale.ENGLISH);
 		}
 	}

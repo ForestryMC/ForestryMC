@@ -1,13 +1,13 @@
 /*******************************************************************************
  * Copyright 2011-2014 SirSengir
- * 
+ *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
 package forestry.api.genetics;
 
 /**
  * Biological classifications from domain down to genus.
- * 
+ *
  * Used by the *alyzers to display hierarchies.
  */
 public interface IClassification {
@@ -61,7 +61,7 @@ public interface IClassification {
 
 	/**
 	 * A branch approximates a "genus" in real life. Real life examples: "Micrapis", "Megapis"
-	 * 
+	 *
 	 * @return flavour text (may be null)
 	 */
 	String getScientific();
@@ -88,7 +88,7 @@ public interface IClassification {
 
 	/**
 	 * Used by the allele registry to populate internal collection of branch members on the fly.
-	 * 
+	 *
 	 * @param species
 	 */
 	void addMemberSpecies(IAlleleSpecies species);
@@ -100,7 +100,7 @@ public interface IClassification {
 
 	/**
 	 * Only used internally by the AlleleRegistry if this classification has been added to another one.
-	 * 
+	 *
 	 * @param parent
 	 */
 	void setParent(IClassification parent);

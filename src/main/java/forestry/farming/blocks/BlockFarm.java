@@ -92,8 +92,8 @@ public class BlockFarm extends BlockStructure {
 
 	@Override
 	protected BlockState createBlockState() {
-		return new ExtendedBlockState(this, new IProperty[] { META },
-				new IUnlistedProperty[] { UnlistedBlockPos.POS, UnlistedBlockAccess.BLOCKACCESS });
+		return new ExtendedBlockState(this, new IProperty[]{META},
+				new IUnlistedProperty[]{UnlistedBlockPos.POS, UnlistedBlockAccess.BLOCKACCESS});
 	}
 
 	@Override

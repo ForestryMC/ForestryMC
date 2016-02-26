@@ -28,10 +28,12 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import forestry.api.core.IModelManager;
+
 import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
 import forestry.core.CreativeTabForestry;
 import forestry.plugins.PluginCore;
 
@@ -71,7 +73,7 @@ public class BlockResourceOre extends Block implements IItemModelRegister {
 
 	@Override
 	protected BlockState createBlockState() {
-		return new BlockState(this, new IProperty[] { RESOURCE });
+		return new BlockState(this, new IProperty[]{RESOURCE});
 	}
 
 	@Override

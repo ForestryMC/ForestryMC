@@ -17,7 +17,7 @@ import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.recipe.IRecipeWrapper;
 
-public class BottlerRecipeCategory extends ForestryRecipeCategory{
+public class BottlerRecipeCategory extends ForestryRecipeCategory {
 
 	private static final int emptySlot = 0;
 	private static final int outputSlot = 1;

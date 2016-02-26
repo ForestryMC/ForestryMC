@@ -56,7 +56,7 @@ public class PluginFluids extends BlankForestryPlugin {
 		if (forestryFluid.getFluid() == null && Config.isFluidEnabled(forestryFluid)) {
 			String fluidName = forestryFluid.getTag();
 			if (!FluidRegistry.isFluidRegistered(fluidName)) {
-				Fluid fluid = new Fluid(fluidName, 
+				Fluid fluid = new Fluid(fluidName,
 						forestryFluid.getResources()[0], forestryFluid.flowTextureExists() ? forestryFluid.getResources()[1]
 						: forestryFluid.getResources()[0]).setDensity(forestryFluid.getDensity()).setViscosity(forestryFluid.getViscosity()).setTemperature(forestryFluid.getTemperature());
 				FluidRegistry.registerFluid(fluid);

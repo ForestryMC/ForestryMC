@@ -20,6 +20,7 @@ import java.util.List;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+
 import forestry.core.tiles.AdjacentTileCache;
 import forestry.core.tiles.TileUtil;
 

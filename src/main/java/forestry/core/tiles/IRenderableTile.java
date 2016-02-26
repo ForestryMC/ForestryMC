@@ -10,8 +10,9 @@
  ******************************************************************************/
 package forestry.core.tiles;
 
-import forestry.core.render.TankRenderInfo;
 import net.minecraft.util.EnumFacing;
+
+import forestry.core.render.TankRenderInfo;
 
 public interface IRenderableTile {
 

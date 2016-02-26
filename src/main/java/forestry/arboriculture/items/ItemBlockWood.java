@@ -174,8 +174,9 @@ public class ItemBlockWood extends ItemBlockForestry {
 	
 	public static ResourceLocation[] getVariants(IWoodTyped typed) {
 		List<ResourceLocation> variants = new ArrayList<>();
-		for (EnumWoodType type : EnumWoodType.values())
-			variants.add(new ResourceLocation("forestry",  typed.getBlockKind() + "/" + type.getName().toLowerCase()));
+		for (EnumWoodType type : EnumWoodType.values()) {
+			variants.add(new ResourceLocation("forestry", typed.getBlockKind() + "/" + type.getName().toLowerCase()));
+		}
 		return variants.toArray(new ResourceLocation[variants.size()]);
 	}
 	

@@ -9,10 +9,13 @@ import java.util.Set;
 
 public interface IErrorStateRegistry {
 	void registerErrorState(IErrorState state);
+
 	void addAlias(IErrorState state, String name);
 
 	IErrorState getErrorState(short id);
+
 	IErrorState getErrorState(String name);
+
 	Set<IErrorState> getErrorStates();
 
 	IErrorLogic createErrorLogic();

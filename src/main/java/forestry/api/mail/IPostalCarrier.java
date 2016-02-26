@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright 2011-2014 SirSengir
- * 
+ *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
 package forestry.api.mail;
@@ -8,12 +8,13 @@ package forestry.api.mail;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  *  Postal Carriers are systems which can be hooked into Forestry's mail system to handle mail delivery.
- * 
+ *
  *  The two available carriers in vanilla Forestry are
  *       "player" - Delivers mail to individual players.
  *       "trader" - Handles mail addressed to trade stations.

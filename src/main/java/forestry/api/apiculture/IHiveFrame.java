@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright 2011-2014 SirSengir
- * 
+ *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
 package forestry.api.apiculture;
@@ -11,7 +11,7 @@ public interface IHiveFrame {
 
 	/**
 	 * Wears out a frame.
-	 * 
+	 *
 	 * @param housing IBeeHousing the frame is contained in.
 	 * @param frame ItemStack containing the actual frame.
 	 * @param queen Current queen in the caller.

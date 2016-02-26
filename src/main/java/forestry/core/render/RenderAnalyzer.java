@@ -38,9 +38,9 @@ public class RenderAnalyzer extends TileEntitySpecialRenderer<TileAnalyzer> {
 	 */
 	@Override
 	public void renderTileEntityAt(TileAnalyzer analyzer, double x, double y, double z, float partialTicks, int destroyStage) {
-		if(analyzer != null){
+		if (analyzer != null) {
 			render(analyzer.getIndividualOnDisplay(), analyzer.getWorld(), analyzer.getOrientation(), x, y, z);
-		}else{
+		} else {
 			render(null, null, EnumFacing.WEST, x, y, z);
 		}
 	}

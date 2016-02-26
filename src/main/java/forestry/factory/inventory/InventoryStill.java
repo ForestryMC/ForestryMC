@@ -12,6 +12,7 @@ package forestry.factory.inventory;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+
 import net.minecraftforge.fluids.Fluid;
 
 import forestry.core.fluids.FluidHelper;

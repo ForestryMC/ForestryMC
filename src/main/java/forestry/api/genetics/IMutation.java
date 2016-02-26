@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright 2011-2014 SirSengir
- * 
+ *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
 package forestry.api.genetics;
@@ -9,9 +9,9 @@ import java.util.Collection;
 
 /**
  * Individuals can be seeded either as hive drops or as mutation results.
- * 
+ *
  * {@link IAlleleRegistry} manages these.
- * 
+ *
  * @author SirSengir
  */
 public interface IMutation {
@@ -33,7 +33,7 @@ public interface IMutation {
 
 	/**
 	 * @return Array of {@link IAllele} representing the full default genome of the mutated side.
-	 * 
+	 *
 	 *         Make sure to return a proper array for the species class. Returning an allele of the wrong type will cause cast errors on runtime.
 	 */
 	IAllele[] getTemplate();

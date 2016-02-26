@@ -96,7 +96,7 @@ public class FactoryJeiPlugin extends BlankModPlugin {
 		@Nullable
 		@Override
 		public List<Rectangle> getGuiExtraAreas(GuiForestry guiContainer) {
-			GuiForestry<?,?> guiForestry = guiContainer;
+			GuiForestry<?, ?> guiForestry = (GuiForestry<?, ?>) guiContainer;
 			return guiForestry.getExtraGuiAreas();
 		}
 	}

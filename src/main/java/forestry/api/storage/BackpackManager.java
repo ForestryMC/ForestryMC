@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright 2011-2014 SirSengir
- * 
+ *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
 package forestry.api.storage;
@@ -13,7 +13,7 @@ import net.minecraft.item.ItemStack;
 public class BackpackManager {
 	/**
 	 * 0 - Miner's Backpack 1 - Digger's Backpack 2 - Forester's Backpack 3 - Hunter's Backpack 4 - Adventurer's Backpack
-	 * 
+	 *
 	 * Use IMC messages to achieve the same effect!
 	 */
 	public static ArrayList<ItemStack>[] backpackItems;

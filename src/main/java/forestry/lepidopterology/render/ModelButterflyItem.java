@@ -83,7 +83,7 @@ public class ModelButterflyItem implements ISmartItemModel {
 
 	@Override
 	public IBakedModel handleItemState(ItemStack item) {
-		if(modelButterfly == null){
+		if (modelButterfly == null) {
 			try {
 				modelButterfly = (IRetexturableModel) ModelLoaderRegistry.getModel(location);
 			} catch (IOException e) {
@@ -107,7 +107,7 @@ public class ModelButterflyItem implements ISmartItemModel {
 		textures.put("#ButterflyGE", butterfly.getGenome().getSecondary().getEntityTexture().replace(".png", "").replace("textures/", ""));
 		textures.put("Butterfly2texture", butterfly.getGenome().getSecondary().getEntityTexture().replace(".png", "").replace("textures/", ""));
 		modelButterfly = (IRetexturableModel) modelButterfly.retexture(textures.build());
-		return new TRSRBakedModel(modelButterfly.bake(ModelRotation.X0_Y0, DefaultVertexFormats.ITEM, textureGetter), -0.5F, -1.5F, 1.5F, 0, (float)Math.PI * 2, 0, 1F);
+		return new TRSRBakedModel(modelButterfly.bake(ModelRotation.X0_Y0, DefaultVertexFormats.ITEM, textureGetter), -0.5F, -1.5F, 1.5F, 0, (float) Math.PI * 2, 0, 1F);
 	}
 
 	public static float getIrregularWingYaw(long flapping, float flap) {

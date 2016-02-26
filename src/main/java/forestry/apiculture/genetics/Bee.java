@@ -710,7 +710,7 @@ public class Bee extends IndividualLiving implements IBee {
 		}
 
 		Vect area = getArea(genome, beeModifier);
-		Vect offset = new Vect(-area.getX()/ 2, -area.getY() / 4, -area.getZ() / 2);
+		Vect offset = new Vect(-area.getX() / 2, -area.getY() / 4, -area.getZ() / 2);
 		Vect housingPos = new Vect(housing.getCoordinates());
 
 		IIndividual pollen = null;

@@ -148,7 +148,7 @@ public class ProxyRenderClient extends ProxyRender {
 	}
 	
 	@Override
-	public void registerLoaders(){
+	public void registerLoaders() {
 		B3DLoader.instance.addDomain(Constants.ID);
 		OBJLoader.instance.addDomain(Constants.ID);
 	}

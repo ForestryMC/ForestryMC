@@ -13,6 +13,7 @@ package forestry.core.inventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+
 import forestry.core.access.IAccessHandler;
 import forestry.core.config.Constants;
 

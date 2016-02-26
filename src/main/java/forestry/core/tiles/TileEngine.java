@@ -18,6 +18,7 @@ import net.minecraft.inventory.ICrafting;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+
 import forestry.api.core.IErrorLogic;
 import forestry.apiculture.network.packets.PacketActiveUpdate;
 import forestry.core.config.Config;

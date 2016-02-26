@@ -22,6 +22,7 @@ import forestry.api.genetics.IClassification.EnumClassLevel;
 public interface IAlleleRegistry {
 
 	/* SPECIES ROOT CLASSES */
+
 	/**
 	 * Register a {@link ISpeciesRoot}.
 	 * @param root {@link ISpeciesRoot} to register.
@@ -55,9 +56,10 @@ public interface IAlleleRegistry {
 	ISpeciesRoot getSpeciesRoot(Class<? extends IIndividual> clz);
 
 	/* INDIVIDUAL */
+
 	/**
 	 * Tests the itemstack for genetic information.
-	 * 
+	 *
 	 * @param stack
 	 * @return true if the itemstack is an individual.
 	 */
@@ -65,7 +67,7 @@ public interface IAlleleRegistry {
 
 	/**
 	 * Retrieve genetic information from an itemstack.
-	 * 
+	 *
 	 * @param stack
 	 *            Stack to retrieve genetic information for.
 	 * @return IIndividual containing genetic information, null if none could be extracted.
@@ -98,7 +100,7 @@ public interface IAlleleRegistry {
 
 	/**
 	 * Registers an old allele UID and the new IAllele to replace instances of it with.
-	 * 
+	 *
 	 * @param deprecatedAlleleUID
 	 * 			the old allele's UID
 	 * @param replacement
@@ -108,7 +110,7 @@ public interface IAlleleRegistry {
 
 	/**
 	 * Gets an allele
-	 * 
+	 *
 	 * @param uid
 	 *            String based unique identifier of the allele to retrieve.
 	 * @return IAllele if found or a replacement is found in the Deprecated Allele map, null otherwise.
@@ -122,6 +124,7 @@ public interface IAlleleRegistry {
 	Collection<IAllele> getRegisteredAlleles(IChromosomeType type);
 
 	/* CLASSIFICATIONS */
+
 	/**
 	 * @return HashMap of all currently registered classifications.
 	 */
@@ -129,7 +132,7 @@ public interface IAlleleRegistry {
 
 	/**
 	 * Registers a classification.
-	 * 
+	 *
 	 * @param classification
 	 *            IClassification to register.
 	 */
@@ -137,7 +140,7 @@ public interface IAlleleRegistry {
 
 	/**
 	 * Creates and returns a classification.
-	 * 
+	 *
 	 * @param level
 	 *            EnumClassLevel of the classification to create.
 	 * @param uid
@@ -147,11 +150,12 @@ public interface IAlleleRegistry {
 	 * @return Created {@link IClassification} for easier chaining.
 	 */
 	IClassification createAndRegisterClassification(EnumClassLevel level, String uid, String scientific);
+
 	IClassification createAndRegisterClassification(EnumClassLevel level, String uid, String scientific, IClassification... members);
 
 	/**
 	 * Gets a classification.
-	 * 
+	 *
 	 * @param uid
 	 *            String based unique identifier of the classification to retrieve.
 	 * @return {@link IClassification} if found, null otherwise.
@@ -159,41 +163,44 @@ public interface IAlleleRegistry {
 	IClassification getClassification(String uid);
 
 	/* FRUIT FAMILIES */
+
 	/**
 	 * Get all registered fruit families.
-	 * 
+	 *
 	 * @return A map of registered fruit families and their UIDs.
 	 */
 	Map<String, IFruitFamily> getRegisteredFruitFamilies();
 
 	/**
 	 * Registers a new fruit family.
-	 * 
+	 *
 	 * @param family
 	 */
 	void registerFruitFamily(IFruitFamily family);
 
 	/**
 	 * Retrieves a fruit family identified by uid.
-	 * 
+	 *
 	 * @param uid
 	 * @return {IFruitFamily} if found, false otherwise.
 	 */
 	IFruitFamily getFruitFamily(String uid);
 
 	/* ALLELE HANDLERS */
+
 	/**
 	 * Registers a new IAlleleHandler
-	 * 
+	 *
 	 * @param handler
 	 *            IAlleleHandler to register.
 	 */
 	void registerAlleleHandler(IAlleleHandler handler);
 
 	/* BLACKLIST */
+
 	/**
 	 * Blacklist an allele identified by its UID from mutation.
-	 * 
+	 *
 	 * @param uid
 	 *            UID of the allele to blacklist.
 	 */
@@ -212,6 +219,7 @@ public interface IAlleleRegistry {
 	boolean isBlacklisted(String uid);
 
 	/* RESEARCH */
+
 	/**
 	 * @param researcher Username of the player who researched this note.
 	 * @param species {@link IAlleleSpecies} to encode on the research note.

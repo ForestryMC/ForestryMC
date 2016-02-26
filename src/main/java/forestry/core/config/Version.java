@@ -21,6 +21,7 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.versioning.DefaultArtifactVersion;
+
 import forestry.Forestry;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Log;

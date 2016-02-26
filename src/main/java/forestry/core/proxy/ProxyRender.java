@@ -94,7 +94,7 @@ public class ProxyRender {
 	public void registerModels() {
 	}
 	
-	public void registerLoaders(){
+	public void registerLoaders() {
 	}
 
 	/* FX */

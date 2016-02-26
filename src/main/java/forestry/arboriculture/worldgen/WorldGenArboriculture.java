@@ -134,7 +134,7 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 		int offsetX = 0;
 		int offsetZ = 0;
 		
-		if(leanDirection != null){
+		if (leanDirection != null) {
 			offsetX = leanDirection.getFrontOffsetX();
 			offsetZ = leanDirection.getFrontOffsetZ();
 		}
@@ -254,7 +254,7 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 			int offsetX = 0;
 			int offsetZ = 0;
 			
-			if(branchDirection != null){
+			if (branchDirection != null) {
 				offsetX = branchDirection.getFrontOffsetX();
 				offsetZ = branchDirection.getFrontOffsetZ();
 			}

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright 2011-2014 SirSengir
- * 
+ *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
 package forestry.api.farming;
@@ -15,8 +15,11 @@ import forestry.api.core.IErrorLogicSource;
 public interface IFarmHousing extends IErrorLogicSource {
 
 	int[] getCoords();
+
 	int[] getArea();
+
 	int[] getOffset();
+
 	World getWorld();
 
 	/**
@@ -25,6 +28,7 @@ public interface IFarmHousing extends IErrorLogicSource {
 	boolean doWork();
 
 	boolean hasLiquid(FluidStack liquid);
+
 	void removeLiquid(FluidStack liquid);
 
 	/**
@@ -41,7 +45,9 @@ public interface IFarmHousing extends IErrorLogicSource {
 
 	/* LOGIC */
 	void setFarmLogic(FarmDirection direction, IFarmLogic logic);
+
 	void resetFarmLogic(FarmDirection direction);
+
 	IFarmLogic getFarmLogic(FarmDirection direction);
 
 	/* GUI */

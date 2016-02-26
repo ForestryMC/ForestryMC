@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright 2011-2014 SirSengir
- * 
+ *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
 package forestry.api.genetics;
@@ -12,7 +12,7 @@ import forestry.api.core.INBTTagable;
 
 /**
  * An actual individual with genetic information.
- * 
+ *
  * Only the default implementation is supported.
  */
 public interface IIndividual extends INBTTagable {

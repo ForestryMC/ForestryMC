@@ -9,8 +9,12 @@ import net.minecraft.item.ItemStack;
 
 public interface IWoodItemAccess {
 	ItemStack getLog(EnumWoodType woodType, boolean fireproof);
+
 	ItemStack getPlanks(EnumWoodType woodType, boolean fireproof);
+
 	ItemStack getSlab(EnumWoodType woodType, boolean fireproof);
+
 	ItemStack getFence(EnumWoodType woodType, boolean fireproof);
+
 	ItemStack getStairs(EnumWoodType woodType, boolean fireproof);
 }

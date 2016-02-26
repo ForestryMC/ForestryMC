@@ -18,7 +18,9 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.common.registry.EntityRegistry;
+
 import forestry.api.core.ForestryAPI;
 import forestry.core.entities.EntitySelector;
 

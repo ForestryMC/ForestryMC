@@ -34,9 +34,9 @@ public class RenderNaturalistChest extends TileEntitySpecialRenderer<TileNatural
 	 */
 	@Override
 	public void renderTileEntityAt(TileNaturalistChest chest, double x, double y, double z, float partialTicks, int destroyStage) {
-		if(chest != null){
+		if (chest != null) {
 			render(chest.getOrientation(), chest.prevLidAngle, chest.lidAngle, x, y, z, partialTicks);
-		}else{
+		} else {
 			render(EnumFacing.WEST, 0, 0, x, y, z, 0);
 		}
 	}

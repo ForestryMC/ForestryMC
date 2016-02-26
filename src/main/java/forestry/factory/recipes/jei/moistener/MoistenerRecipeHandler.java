@@ -31,16 +31,16 @@ public class MoistenerRecipeHandler implements IRecipeHandler<MoistenerRecipeWra
 	@Override
 	public boolean isRecipeValid(@Nonnull MoistenerRecipeWrapper wrapper) {
 		IMoistenerRecipe recipe = wrapper.getRecipe();
-		if(recipe.getTimePerItem() <= 0){
+		if (recipe.getTimePerItem() <= 0) {
 			return false;
 		}
-		if(recipe.getResource() == null){
+		if (recipe.getResource() == null) {
 			return false;
 		}
-		if(recipe.getProduct() == null){
+		if (recipe.getProduct() == null) {
 			return false;
 		}
-		return wrapper.getFuel() != null || wrapper.getFuel().item != null|| wrapper.getFuel().product != null;
+		return wrapper.getFuel() != null || wrapper.getFuel().item != null || wrapper.getFuel().product != null;
 	}
 
 }

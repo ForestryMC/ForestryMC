@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright 2011-2014 SirSengir
- * 
+ *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
 package forestry.api.storage;
@@ -33,10 +33,11 @@ public interface IBackpackDefinition {
 
 	/**
 	 * Adds an item as valid for this backpack.
-	 * 
+	 *
 	 * @param validItem
 	 */
 	void addValidItem(ItemStack validItem);
+
 	void addValidItems(List<ItemStack> validItems);
 
 	/**

@@ -20,10 +20,12 @@ public interface IMutationCustom extends IMutation {
 
 	/** Require a specific temperature for this mutation to occur */
 	IMutationCustom restrictTemperature(EnumTemperature temperature);
+
 	IMutationCustom restrictTemperature(EnumTemperature minTemperature, EnumTemperature maxTemperature);
 
 	/** Require a specific humidity for this mutation to occur */
 	IMutationCustom restrictHumidity(EnumHumidity humidity);
+
 	IMutationCustom restrictHumidity(EnumHumidity minHumidity, EnumHumidity maxHumidity);
 
 	/**
@@ -37,10 +39,12 @@ public interface IMutationCustom extends IMutation {
 
 	/** Restrict the time of day that this mutation can occur */
 	IMutationCustom requireDay();
+
 	IMutationCustom requireNight();
 
 	/** Require a specific resource to be under the location of the mutation */
 	IMutationCustom requireResource(Block block, int meta);
+
 	IMutationCustom requireResource(String oreDictName);
 
 	/** Require some other custom mutation condition */

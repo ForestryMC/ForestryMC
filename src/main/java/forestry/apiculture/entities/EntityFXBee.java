@@ -70,9 +70,9 @@ public class EntityFXBee extends EntityFX {
 		float f12 = (float) ((prevPosY + (posY - prevPosY) * f) - interpPosY);
 		float f13 = (float) ((prevPosZ + (posZ - prevPosZ) * f) - interpPosZ);
 
-        int i = this.getBrightnessForRender(f);
-        int j = i >> 16 & 65535;
-        int k = i & 65535;
+		int i = this.getBrightnessForRender(f);
+		int j = i >> 16 & 65535;
+		int k = i & 65535;
 		wR.pos(f11 - f1 * f10 - f4 * f10, f12 - f2 * f10, f13 - f3 * f10 - f5 * f10).tex(maxU, maxV).color(particleRed, particleGreen, particleBlue, 1.0F).lightmap(j, k).endVertex();
 		wR.pos((f11 - f1 * f10) + f4 * f10, f12 + f2 * f10, (f13 - f3 * f10) + f5 * f10).tex(maxU, minV).color(particleRed, particleGreen, particleBlue, 1.0F).lightmap(j, k).endVertex();
 		wR.pos(f11 + f1 * f10 + f4 * f10, f12 + f2 * f10, f13 + f3 * f10 + f5 * f10).tex(minU, minV).color(particleRed, particleGreen, particleBlue, 1.0F).lightmap(j, k).endVertex();

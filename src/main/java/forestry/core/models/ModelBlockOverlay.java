@@ -167,9 +167,9 @@ public abstract class ModelBlockOverlay<B extends Block> implements ISmartItemMo
 		B bBlock = blockClass.cast(block);
 		
 		baker.setRenderBoundsFromBlock(block);
-		try{
+		try {
 			renderInWorld(bBlock, world, pos, baker);
-		}catch(Exception e){
+		} catch (Exception e) {
 			return null;
 		}
 		
@@ -187,9 +187,9 @@ public abstract class ModelBlockOverlay<B extends Block> implements ISmartItemMo
 		
 		block.setBlockBoundsForItemRender();
 		baker.setRenderBoundsFromBlock(block);
-		try{
+		try {
 			renderInventory(bBlock, stack, baker);
-		}catch(Exception e){
+		} catch (Exception e) {
 			return null;
 		}
 		

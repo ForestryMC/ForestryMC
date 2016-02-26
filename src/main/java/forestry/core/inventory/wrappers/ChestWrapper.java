@@ -207,7 +207,7 @@ public class ChestWrapper implements IInventory {
 	}
 
 	@Override
-	public void setField(int id, int value) {	
+	public void setField(int id, int value) {
 	}
 
 	@Override
@@ -216,7 +216,7 @@ public class ChestWrapper implements IInventory {
 	}
 
 	@Override
-	public void clear() {	
+	public void clear() {
 	}
 
 }

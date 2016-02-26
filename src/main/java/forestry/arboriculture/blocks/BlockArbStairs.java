@@ -30,12 +30,14 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.arboriculture.EnumWoodType;
 import forestry.api.arboriculture.TreeManager;
-import forestry.api.core.IModelManager;
 import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
 import forestry.api.core.Tabs;
 import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.items.ItemBlockWood;
@@ -54,13 +56,13 @@ public class BlockArbStairs extends BlockStairs implements IWoodTyped, IItemMode
 	public BlockArbStairs(Block par2Block, boolean fireproof) {
 		super(par2Block.getStateFromMeta(0));
 
-        this.setDefaultState(this.blockState.getBaseState().withProperty(EnumWoodType.WOODTYPE, EnumWoodType.LARCH).withProperty(FACING, EnumFacing.NORTH).withProperty(HALF, BlockStairs.EnumHalf.BOTTOM).withProperty(SHAPE, BlockStairs.EnumShape.STRAIGHT));
+		this.setDefaultState(this.blockState.getBaseState().withProperty(EnumWoodType.WOODTYPE, EnumWoodType.LARCH).withProperty(FACING, EnumFacing.NORTH).withProperty(HALF, BlockStairs.EnumHalf.BOTTOM).withProperty(SHAPE, BlockStairs.EnumShape.STRAIGHT));
 		
 		this.fireproof = fireproof;
 
 		harvestTool = new String[EnumWoodType.values().length];
 		harvestLevel = new int[harvestTool.length];
-		for(int i = 0;i < harvestTool.length;i++){
+		for (int i = 0; i < harvestTool.length; i++) {
 			harvestLevel[i] = -1;
 		}
 		
@@ -75,7 +77,7 @@ public class BlockArbStairs extends BlockStairs implements IWoodTyped, IItemMode
 
 	@Override
 	protected BlockState createBlockState() {
-		return new BlockState(this, new IProperty[] {	EnumWoodType.WOODTYPE, FACING, HALF, SHAPE });
+		return new BlockState(this, new IProperty[]{EnumWoodType.WOODTYPE, FACING, HALF, SHAPE});
 	}
 	
 	@Override
@@ -129,7 +131,7 @@ public class BlockArbStairs extends BlockStairs implements IWoodTyped, IItemMode
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		if(!isFireproof()){
+		if (!isFireproof()) {
 			manager.registerVariant(item, ItemBlockWood.getVariants(this));
 		}
 		manager.registerItemModel(item, new WoodMeshDefinition(this));
@@ -155,22 +157,22 @@ public class BlockArbStairs extends BlockStairs implements IWoodTyped, IItemMode
 		return new TileWood();
 	}
 	
-    @Override
-	public void setHarvestLevel(String toolClass, int level, IBlockState state){
-        int idx = this.getMetaFromState(state);
-        this.harvestTool[idx] = toolClass;
-        this.harvestLevel[idx] = level;
-    }
+	@Override
+	public void setHarvestLevel(String toolClass, int level, IBlockState state) {
+		int idx = this.getMetaFromState(state);
+		this.harvestTool[idx] = toolClass;
+		this.harvestLevel[idx] = level;
+	}
 
-    @Override
-	public String getHarvestTool(IBlockState state){
-        return harvestTool[getMetaFromState(state)];
-    }
+	@Override
+	public String getHarvestTool(IBlockState state) {
+		return harvestTool[getMetaFromState(state)];
+	}
 
-    @Override
-	public int getHarvestLevel(IBlockState state){
-        return harvestLevel[getMetaFromState(state)];
-    }
+	@Override
+	public int getHarvestLevel(IBlockState state) {
+		return harvestLevel[getMetaFromState(state)];
+	}
 
 	/* Particles */
 	@SideOnly(Side.CLIENT)

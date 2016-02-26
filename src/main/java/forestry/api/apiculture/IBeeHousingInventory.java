@@ -10,9 +10,11 @@ import net.minecraft.item.ItemStack;
 public interface IBeeHousingInventory {
 
 	ItemStack getQueen();
+
 	ItemStack getDrone();
 
 	void setQueen(ItemStack itemstack);
+
 	void setDrone(ItemStack itemstack);
 
 	/**

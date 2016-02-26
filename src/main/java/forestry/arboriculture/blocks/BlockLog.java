@@ -46,7 +46,7 @@ public class BlockLog extends BlockWood {
 		
 		harvestTool = new String[EnumWoodType.values().length];
 		harvestLevel = new int[harvestTool.length];
-		for(int i = 0;i < harvestTool.length;i++){
+		for (int i = 0; i < harvestTool.length; i++) {
 			harvestLevel[i] = -1;
 		}
 		

@@ -13,8 +13,9 @@ public class StillRecipeMaker {
 	
 	public static List<StillRecipeWrapper> getStillRecipes() {
 		List<StillRecipeWrapper> recipes = new ArrayList<>();
-		for(IStillRecipe recipe : RecipeManagers.stillManager.recipes())
+		for (IStillRecipe recipe : RecipeManagers.stillManager.recipes()) {
 			recipes.add(new StillRecipeWrapper(recipe));
+		}
 		return recipes;
 	}
 	

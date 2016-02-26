@@ -10,6 +10,9 @@
  ******************************************************************************/
 package forestry.core.models;
 
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.resources.model.ModelBakery;
@@ -18,14 +21,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IRegistry;
 import net.minecraft.util.ResourceLocation;
+
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.ArrayList;
-import javax.annotation.Nonnull;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IItemModelRegister;
@@ -62,9 +63,9 @@ public class ModelManager implements IModelManager {
 
 	@Override
 	public void registerItemModel(Item item, int meta, boolean withMeta) {
-		if(withMeta){
+		if (withMeta) {
 			ModelLoader.setCustomModelResourceLocation(item, meta, getModelLocation(item, meta));
-		}else{
+		} else {
 			ModelLoader.setCustomModelResourceLocation(item, meta, getModelLocation(item));
 		}
 	}
@@ -132,11 +133,11 @@ public class ModelManager implements IModelManager {
 		}
 	}
 	
-	public static void registerCustomBlockModel(@Nonnull BlockModelIndex index){
+	public static void registerCustomBlockModel(@Nonnull BlockModelIndex index) {
 		customBlockModels.add(index);
 	}
 	
-	public static void registerCustomModel(@Nonnull ModelIndex index){
+	public static void registerCustomModel(@Nonnull ModelIndex index) {
 		customModels.add(index);
 	}
 

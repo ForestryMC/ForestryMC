@@ -16,34 +16,27 @@ import forestry.api.genetics.IAllele;
 
 public abstract class PropertyAllele<A extends IAllele & Comparable<A>> implements IProperty<A> {
 
-    protected final String name;
+	protected final String name;
 
-    public PropertyAllele(String name){
-        this.name = name;
-    }
+	public PropertyAllele(String name) {
+		this.name = name;
+	}
 
-    @Override
-	public String getName()
-    {
-        return this.name;
-    }
+	@Override
+	public String getName() {
+		return this.name;
+	}
 
-    @Override
-	public boolean equals(Object object)
-    {
-        if (this == object)
-        {
-            return true;
-        }
-        else if (object != null && this.getClass() == object.getClass())
-        {
-        	PropertyAllele propertyAllele = (PropertyAllele)object;
-            return name.equals(propertyAllele.name);
-        }
-        else
-        {
-            return false;
-        }
-    }
+	@Override
+	public boolean equals(Object object) {
+		if (this == object) {
+			return true;
+		} else if (object != null && this.getClass() == object.getClass()) {
+			PropertyAllele propertyAllele = (PropertyAllele) object;
+			return name.equals(propertyAllele.name);
+		} else {
+			return false;
+		}
+	}
 	
 }

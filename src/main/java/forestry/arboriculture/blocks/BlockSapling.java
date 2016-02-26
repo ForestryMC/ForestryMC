@@ -13,6 +13,7 @@ package forestry.arboriculture.blocks;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.material.Material;
@@ -29,8 +30,10 @@ import net.minecraft.util.EnumWorldBlockLayer;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.TreeManager;
@@ -97,7 +100,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 	
 	@Override
 	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
-		if(world.getTileEntity(pos) instanceof TileSapling){
+		if (world.getTileEntity(pos) instanceof TileSapling) {
 			TileSapling sapling = (TileSapling) world.getTileEntity(pos);
 			IAlleleTreeSpecies species = sapling.getTree().getGenome().getPrimary();
 			state = state.withProperty(TREE, species);

@@ -6,13 +6,14 @@ import java.io.OutputStream;
 import java.util.Collection;
 import java.util.List;
 
-import forestry.core.utils.ItemStackUtil;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 
 import net.minecraftforge.fluids.FluidStack;
+
+import forestry.core.utils.ItemStackUtil;
 
 public class DataOutputStreamForestry extends DataOutputStream {
 

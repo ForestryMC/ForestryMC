@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright 2011-2014 SirSengir
- * 
+ *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
 package forestry.api.genetics;
@@ -84,23 +84,24 @@ public interface ISpeciesRoot {
 	IGenome templateAsGenome(IAllele[] templateActive, IAllele[] templateInactive);
 
 	/* TEMPLATES */
+
 	/**
 	 * Registers a bee template using the UID of the first allele as identifier.
-	 * 
+	 *
 	 * @param template
 	 */
 	void registerTemplate(IAllele[] template);
 
 	/**
 	 * Registers a bee template using the passed identifier.
-	 * 
+	 *
 	 * @param template
 	 */
 	void registerTemplate(String identifier, IAllele[] template);
 
 	/**
 	 * Retrieves a registered template using the passed identifier.
-	 * 
+	 *
 	 * @param identifier
 	 * @return Array of {@link IAllele} representing a genome.
 	 */
@@ -118,12 +119,14 @@ public interface ISpeciesRoot {
 	IAllele[] getRandomTemplate(Random rand);
 
 	Map<String, IAllele[]> getGenomeTemplates();
+
 	ArrayList<? extends IIndividual> getIndividualTemplates();
 
 	/* MUTATIONS */
+
 	/**
 	 * Use to register mutations.
-	 * 
+	 *
 	 * @param mutation
 	 */
 	void registerMutation(IMutation mutation);
@@ -148,6 +151,7 @@ public interface ISpeciesRoot {
 	Collection<? extends IMutation> getPaths(IAllele result, IChromosomeType chromosomeType);
 
 	/* RESEARCH */
+
 	/**
 	 * @return List of generic catalysts which should be accepted for research by species of this class.
 	 */

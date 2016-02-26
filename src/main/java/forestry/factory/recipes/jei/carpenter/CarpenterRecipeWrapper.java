@@ -12,7 +12,7 @@ import net.minecraftforge.fluids.FluidStack;
 import forestry.api.recipes.ICarpenterRecipe;
 import forestry.core.recipes.jei.ForestryRecipeWrapper;
 
-public class CarpenterRecipeWrapper extends ForestryRecipeWrapper<ICarpenterRecipe>{
+public class CarpenterRecipeWrapper extends ForestryRecipeWrapper<ICarpenterRecipe> {
 	
 	public CarpenterRecipeWrapper(@Nonnull ICarpenterRecipe recipe) {
 		super(recipe);
