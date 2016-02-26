@@ -46,14 +46,8 @@ public class ModelLeaves extends ModelBlockOverlay<BlockForestryLeaves> {
 		if (leavesIcon == null) {
 			return;
 		}
-		baker.setColorIndex(0);
-
-		baker.renderFaceYNeg(null, leavesIcon);
-		baker.renderFaceYPos(null, leavesIcon);
-		baker.renderFaceZNeg(null, leavesIcon);
-		baker.renderFaceZPos(null, leavesIcon);
-		baker.renderFaceXNeg(null, leavesIcon);
-		baker.renderFaceXPos(null, leavesIcon);
+		
+		baker.addBlockModel(block, null, leavesIcon, 0);
 
 		// add fruit
 		if (!leaves.hasFruit()) {
@@ -64,14 +58,7 @@ public class ModelLeaves extends ModelBlockOverlay<BlockForestryLeaves> {
 		if (fruitTexture == null) {
 			return;
 		}
-		baker.setColorIndex(1);
-
-		baker.renderFaceYNeg(null, fruitTexture);
-		baker.renderFaceYPos(null, fruitTexture);
-		baker.renderFaceZNeg(null, fruitTexture);
-		baker.renderFaceZPos(null, fruitTexture);
-		baker.renderFaceXNeg(null, fruitTexture);
-		baker.renderFaceXPos(null, fruitTexture);
+		baker.addBlockModel(block, null, fruitTexture, 1);
 	}
 
 	@Override
@@ -82,26 +69,14 @@ public class ModelLeaves extends ModelBlockOverlay<BlockForestryLeaves> {
 		}
 
 		// Render the plain leaf block.
-		baker.renderStandardBlock(block, pos, tile.getLeaveSprite(Proxies.render.fancyGraphicsEnabled()), 0);
+		baker.addBlockModel(block, pos, tile.getLeaveSprite(Proxies.render.fancyGraphicsEnabled()), 0);
 
 		// Render overlay for fruit leaves.
 		TextureAtlasSprite fruitSprite = tile.getFruitSprite();
 
 		if (fruitSprite != null) {
-			renderFruitOverlay(world, block, pos, baker, fruitSprite, 1);
+			baker.addBlockModel(block, pos, fruitSprite, 1);
 		}
-
-		return true;
-	}
-
-	private boolean renderFruitOverlay(IBlockAccess world, BlockForestryLeaves block, BlockPos pos, IModelBaker baker, TextureAtlasSprite sprite, int colorIndex) {
-		// Bottom
-		renderBottomFace(world, block, pos, baker, sprite, colorIndex);
-		renderTopFace(world, block, pos, baker, sprite, colorIndex);
-		renderEastFace(world, block, pos, baker, sprite, colorIndex);
-		renderWestFace(world, block, pos, baker, sprite, colorIndex);
-		renderNorthFace(world, block, pos, baker, sprite, colorIndex);
-		renderSouthFace(world, block, pos, baker, sprite, colorIndex);
 
 		return true;
 	}

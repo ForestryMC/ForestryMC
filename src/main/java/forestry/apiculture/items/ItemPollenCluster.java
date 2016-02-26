@@ -17,7 +17,7 @@ import forestry.core.items.ItemOverlay;
 
 public class ItemPollenCluster extends ItemOverlay {
 	public ItemPollenCluster() {
-		super(Tabs.tabApiculture, (IOverlayInfo[]) EnumPollenCluster.VALUES);
+		super(Tabs.tabApiculture, EnumPollenCluster.VALUES);
 	}
 
 	public ItemStack get(EnumPollenCluster pollenCluster, int amount) {

@@ -17,7 +17,7 @@ import forestry.core.items.ItemOverlay;
 
 public class ItemPropolis extends ItemOverlay {
 	public ItemPropolis() {
-		super(Tabs.tabApiculture, (IOverlayInfo[]) EnumPropolis.VALUES);
+		super(Tabs.tabApiculture, EnumPropolis.VALUES);
 	}
 
 	public ItemStack get(EnumPropolis propolis, int amount) {

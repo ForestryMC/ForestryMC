@@ -10,17 +10,15 @@
  ******************************************************************************/
 package forestry.core.models.baker;
 
+import org.lwjgl.util.vector.Vector3f;
 
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumFacing;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import org.lwjgl.util.vector.Vector3f;
-
 /**
- * A face of a baked model
+ * A face of a {@link ModelBakerModel }
  */
 @SideOnly(Side.CLIENT)
 public class ModelBakerFace {
@@ -37,8 +35,7 @@ public class ModelBakerFace {
 
 	public final int colorIndex;
 
-	public ModelBakerFace(EnumFacing face, boolean isEdge, int colorIndex, Vector3f to, Vector3f from, float[] defUVs2,
-			TextureAtlasSprite sprite) {
+	public ModelBakerFace(EnumFacing face, boolean isEdge, int colorIndex, Vector3f to, Vector3f from, float[] defUVs2, TextureAtlasSprite sprite) {
 		this.colorIndex = colorIndex;
 		this.face = face;
 		this.isEdge = isEdge;

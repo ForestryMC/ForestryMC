@@ -45,7 +45,7 @@ public abstract class ModelBlockOverlay<B extends Block> implements ISmartItemMo
 		this.blockClass = blockClass;
 	}
 
-	protected void renderBottomFace(IBlockAccess world, B block, BlockPos pos, IModelBaker baker, TextureAtlasSprite sprite, int colorIndex) {
+	protected void addBottomFace(IBlockAccess world, B block, BlockPos pos, IModelBaker baker, TextureAtlasSprite sprite, int colorIndex) {
 
 		BlockPos posNEW = new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ());
 
@@ -53,11 +53,11 @@ public abstract class ModelBlockOverlay<B extends Block> implements ISmartItemMo
 			return;
 		}
 		
-		baker.renderFaceYNeg(pos, sprite);
+		baker.addFaceYNeg(pos, sprite);
 
 	}
 
-	protected void renderTopFace(IBlockAccess world, B block, BlockPos pos, IModelBaker baker, TextureAtlasSprite sprite, int colorIndex) {
+	protected void addTopFace(IBlockAccess world, B block, BlockPos pos, IModelBaker baker, TextureAtlasSprite sprite, int colorIndex) {
 
 		BlockPos posNEW = new BlockPos(pos.getX(), pos.getY() + 1, pos.getZ());
 
@@ -66,11 +66,11 @@ public abstract class ModelBlockOverlay<B extends Block> implements ISmartItemMo
 		}
 
 
-		baker.renderFaceYPos(pos, sprite);
+		baker.addFaceYPos(pos, sprite);
 
 	}
 
-	protected void renderEastFace(IBlockAccess world, B block, BlockPos pos, IModelBaker baker, TextureAtlasSprite sprite, int colorIndex) {
+	protected void addEastFace(IBlockAccess world, B block, BlockPos pos, IModelBaker baker, TextureAtlasSprite sprite, int colorIndex) {
 
 		BlockPos posNEW = new BlockPos(pos.getX(), pos.getY(), pos.getZ() - 1);
 
@@ -78,11 +78,11 @@ public abstract class ModelBlockOverlay<B extends Block> implements ISmartItemMo
 			return;
 		}
 
-		baker.renderFaceZNeg(pos, sprite);
+		baker.addFaceZNeg(pos, sprite);
 
 	}
 
-	protected void renderWestFace(IBlockAccess world, B block, BlockPos pos, IModelBaker baker, TextureAtlasSprite sprite, int colorIndex) {
+	protected void addWestFace(IBlockAccess world, B block, BlockPos pos, IModelBaker baker, TextureAtlasSprite sprite, int colorIndex) {
 
 		BlockPos posNEW = new BlockPos(pos.getX(), pos.getY(), pos.getZ() + 1);
 
@@ -90,11 +90,11 @@ public abstract class ModelBlockOverlay<B extends Block> implements ISmartItemMo
 			return;
 		}
 
-		baker.renderFaceZPos(pos, sprite);
+		baker.addFaceZPos(pos, sprite);
 
 	}
 
-	protected void renderNorthFace(IBlockAccess world, B block, BlockPos pos, IModelBaker baker, TextureAtlasSprite sprite, int colorIndex) {
+	protected void addNorthFace(IBlockAccess world, B block, BlockPos pos, IModelBaker baker, TextureAtlasSprite sprite, int colorIndex) {
 
 		BlockPos posNEW = new BlockPos(pos.getX() - 1, pos.getY(), pos.getZ());
 
@@ -102,11 +102,11 @@ public abstract class ModelBlockOverlay<B extends Block> implements ISmartItemMo
 			return;
 		}
 
-		baker.renderFaceXNeg(pos, sprite);
+		baker.addFaceXNeg(pos, sprite);
 
 	}
 
-	protected void renderSouthFace(IBlockAccess world, B block, BlockPos pos, IModelBaker baker, TextureAtlasSprite sprite, int colorIndex) {
+	protected void addSouthFace(IBlockAccess world, B block, BlockPos pos, IModelBaker baker, TextureAtlasSprite sprite, int colorIndex) {
 
 		BlockPos posNEW = new BlockPos(pos.getX() + 1, pos.getY(), pos.getZ());
 
@@ -114,7 +114,7 @@ public abstract class ModelBlockOverlay<B extends Block> implements ISmartItemMo
 			return;
 		}
 
-		baker.renderFaceXPos(pos, sprite);
+		baker.addFaceXPos(pos, sprite);
 
 	}
 
