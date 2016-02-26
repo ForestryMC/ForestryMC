@@ -22,27 +22,22 @@ import net.minecraft.potion.PotionHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
-
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.Log;
 
 public class AlleleEffectPotion extends AlleleEffectThrottled {
 
 	private final Potion potion;
 	private final int potionFXColor;
-	private final boolean isBadEffect;
 	private final int duration;
 	private final float chance;
 
 	public AlleleEffectPotion(String name, boolean isDominant, Potion potion, int duration, int throttle, float chance) {
 		super(name, isDominant, throttle, true, false);
 		this.potion = potion;
-		this.isBadEffect = isBadEffect(potion);
 		this.duration = duration;
 		this.chance = chance;
 
@@ -64,7 +59,7 @@ public class AlleleEffectPotion extends AlleleEffectThrottled {
 			}
 
 			int dur = this.duration;
-			if (isBadEffect) {
+			if (potion.isBadEffect()) {
 				// Entities are not attacked if they wear a full set of apiarist's armor.
 				int count = BeeManager.armorApiaristHelper.wearsItems(entity, getUID(), true);
 				if (count >= 4) {
@@ -87,16 +82,6 @@ public class AlleleEffectPotion extends AlleleEffectThrottled {
 		}
 
 		return storedData;
-	}
-
-	//FIXME: remove when Potion.isBadEffect() is available server-side
-	private static boolean isBadEffect(Potion potion) {
-		try {
-			return (Boolean) ReflectionHelper.getPrivateValue(Potion.class, potion, "field_76418_K", "isBadEffect");
-		} catch (ReflectionHelper.UnableToFindFieldException e) {
-			Log.severe("Could not access potion field isBadEffect.");
-			return false;
-		}
 	}
 
 	@Override

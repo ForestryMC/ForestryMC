@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
-import org.apache.logging.log4j.Level;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -87,7 +85,7 @@ public abstract class BlockForestry extends BlockContainer implements IItemModel
 				((TileForestry) tile).onNeighborBlockChange(state.getBlock());
 			}
 		} catch (StackOverflowError error) {
-			Log.logThrowable(Level.ERROR, "Stack Overflow Error in BlockMachine.onNeighborBlockChange()", 10, error);
+			Log.error("Stack Overflow Error in BlockMachine.onNeighborBlockChange()", error);
 			throw error;
 		}
 	}

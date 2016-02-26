@@ -88,7 +88,7 @@ public class TileTrader extends TileBase {
 		super.readFromNBT(nbttagcompound);
 
 		if (nbttagcompound.hasKey("address")) {
-			address = MailAddress.loadFromNBT(nbttagcompound.getCompoundTag("address"));
+			address = new MailAddress(nbttagcompound.getCompoundTag("address"));
 		}
 	}
 

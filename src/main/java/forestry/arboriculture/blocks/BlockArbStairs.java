@@ -16,7 +16,6 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.ITileEntityProvider;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.EffectRenderer;
@@ -77,7 +76,7 @@ public class BlockArbStairs extends BlockStairs implements IWoodTyped, IItemMode
 
 	@Override
 	protected BlockState createBlockState() {
-		return new BlockState(this, new IProperty[]{EnumWoodType.WOODTYPE, FACING, HALF, SHAPE});
+		return new BlockState(this, EnumWoodType.WOODTYPE, FACING, HALF, SHAPE);
 	}
 	
 	@Override

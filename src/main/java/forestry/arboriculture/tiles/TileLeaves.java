@@ -542,7 +542,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 	private static void attemptButterflySpawn(World world, IButterfly butterfly, BlockPos pos) {
 		if (ButterflyManager.butterflyRoot.spawnButterflyInWorld(world, butterfly.copy(), pos.getX(), pos.getY() + 0.1f, pos.getZ()) != null) {
-			Log.finest("A caterpillar '%s' hatched at %s/%s/%s.", butterfly.getDisplayName(), pos.getX(), pos.getY(), pos.getZ());
+			Log.trace("A caterpillar '%s' hatched at %s/%s/%s.", butterfly.getDisplayName(), pos.getX(), pos.getY(), pos.getZ());
 		}
 	}
 

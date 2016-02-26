@@ -46,7 +46,7 @@ public class POBox extends WorldSavedData implements IInventory {
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		if (nbttagcompound.hasKey("address")) {
-			this.address = MailAddress.loadFromNBT(nbttagcompound.getCompoundTag("address"));
+			this.address = new MailAddress(nbttagcompound.getCompoundTag("address"));
 		}
 		letters.readFromNBT(nbttagcompound);
 	}

@@ -18,7 +18,6 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
@@ -82,7 +81,7 @@ public class BlockSoil extends Block implements IItemTyped, IItemModelRegister {
 
 	@Override
 	protected BlockState createBlockState() {
-		return new BlockState(this, new IProperty[]{SOIL});
+		return new BlockState(this, SOIL);
 	}
 
 	@Override

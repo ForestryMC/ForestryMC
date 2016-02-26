@@ -10,12 +10,14 @@
  ******************************************************************************/
 package forestry.core.tiles;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-import forestry.api.core.INBTTagable;
+import forestry.api.core.INbtWritable;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IIndividual;
 import forestry.core.network.DataInputStreamForestry;
@@ -24,7 +26,7 @@ import forestry.core.network.IStreamable;
 import forestry.core.utils.ColourUtil;
 import forestry.core.utils.StringUtil;
 
-public class EscritoireGameToken implements INBTTagable, IStreamable {
+public class EscritoireGameToken implements INbtWritable, IStreamable {
 
 	private enum State {
 		UNREVEALED,// face down
@@ -39,7 +41,9 @@ public class EscritoireGameToken implements INBTTagable, IStreamable {
 	private static final String[] OVERLAY_FAILED = new String[]{"errors/errored"};
 	private static final String[] OVERLAY_SELECTED = new String[]{"errors/unknown"};
 
+	@Nullable
 	private ItemStack tokenStack;
+	@Nonnull
 	private State state = State.UNREVEALED;
 
 	@SuppressWarnings("unused")
@@ -47,14 +51,22 @@ public class EscritoireGameToken implements INBTTagable, IStreamable {
 		// required for IStreamable serialization
 	}
 
-	public EscritoireGameToken(ItemStack tokenStack) {
+	public EscritoireGameToken(@Nullable ItemStack tokenStack) {
 		this.tokenStack = tokenStack;
 	}
 
-	public EscritoireGameToken(NBTTagCompound nbttagcompound) {
-		readFromNBT(nbttagcompound);
+	public EscritoireGameToken(@Nonnull NBTTagCompound nbttagcompound) {
+		if (nbttagcompound.hasKey("state")) {
+			int stateOrdinal = nbttagcompound.getInteger("state");
+			state = State.values()[stateOrdinal];
+		}
+
+		if (nbttagcompound.hasKey("tokenStack")) {
+			tokenStack = ItemStack.loadItemStackFromNBT(nbttagcompound.getCompoundTag("tokenStack"));
+		}
 	}
 
+	@Nullable
 	public ItemStack getTokenStack() {
 		return tokenStack;
 	}
@@ -127,19 +139,6 @@ public class EscritoireGameToken implements INBTTagable, IStreamable {
 
 	public boolean matches(EscritoireGameToken other) {
 		return ItemStack.areItemStacksEqual(tokenStack, other.getTokenStack());
-	}
-
-	/* INBTTagable */
-	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		if (nbttagcompound.hasKey("state")) {
-			int stateOrdinal = nbttagcompound.getInteger("state");
-			state = State.values()[stateOrdinal];
-		}
-
-		if (nbttagcompound.hasKey("tokenStack")) {
-			tokenStack = ItemStack.loadItemStackFromNBT(nbttagcompound.getCompoundTag("tokenStack"));
-		}
 	}
 
 	@Override

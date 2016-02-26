@@ -17,10 +17,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IChatComponent;
 
-import forestry.api.core.INBTTagable;
+import forestry.api.core.INbtReadable;
+import forestry.api.core.INbtWritable;
 import forestry.core.utils.InventoryUtil;
 
-public class InventoryPlain implements IInventory, INBTTagable {
+public class InventoryPlain implements IInventory, INbtWritable, INbtReadable {
 
 	private final ItemStack[] contents;
 	private final String name;

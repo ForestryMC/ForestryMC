@@ -467,9 +467,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 	/**
 	 * @param level the level of the block on the multiblock, starting at 0 for the bottom.
 	 * @param world World object for the world in which this controller is located.
-	 * @param x X coordinate of the block being tested
-	 * @param y Y coordinate of the block being tested
-	 * @param z Z coordinate of the block being tested
+	 * @param pos coordinate of the block being tested
 	 * @throws MultiblockValidationException if the tested block is not allowed on the machine's side faces
 	 */
 	protected void isBlockGoodForExteriorLevel(int level, World world, BlockPos pos) throws MultiblockValidationException {
@@ -480,9 +478,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 	/**
 	 * The interior is any block that does not touch blocks outside the machine.
 	 * @param world World object for the world in which this controller is located.
-	 * @param x X coordinate of the block being tested
-	 * @param y Y coordinate of the block being tested
-	 * @param z Z coordinate of the block being tested
+	 * @param pos coordinate of the block being tested
 	 * @throws MultiblockValidationException if the tested block is not allowed in the machine's interior
 	 */
 	protected void isBlockGoodForInterior(World world, BlockPos pos) throws MultiblockValidationException {
@@ -619,8 +615,8 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 			} else if (res > 0) {
 				return false;
 			} else {
-				Log.severe("My Controller (%d): size (%d), parts: %s", hashCode(), connectedParts.size(), getPartsListString());
-				Log.severe("Other Controller (%d): size (%d), coords: %s", otherController.hashCode(), otherController.getComponents().size(), otherController.getPartsListString());
+				Log.error("My Controller (%d): size (%d), parts: %s", hashCode(), connectedParts.size(), getPartsListString());
+				Log.error("Other Controller (%d): size (%d), coords: %s", otherController.hashCode(), otherController.getComponents().size(), otherController.getPartsListString());
 				throw new IllegalArgumentException("[" + (worldObj.isRemote ? "CLIENT" : "SERVER") + "] " +
 						"Two controllers with the same reference coord that somehow both have valid parts - this should never happen!");
 			}

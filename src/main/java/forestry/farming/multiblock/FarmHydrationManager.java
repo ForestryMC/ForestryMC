@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.farming.multiblock;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 
 import net.minecraft.nbt.NBTTagCompound;
@@ -17,23 +18,25 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
 import forestry.api.core.BiomeHelper;
-import forestry.api.core.INBTTagable;
+import forestry.api.core.INbtReadable;
+import forestry.api.core.INbtWritable;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
 import forestry.core.tiles.IClimatised;
 import forestry.farming.gui.IFarmLedgerDelegate;
 
-public class FarmHydrationManager implements IFarmLedgerDelegate, INBTTagable, IStreamable {
+public class FarmHydrationManager implements IFarmLedgerDelegate, INbtWritable, INbtReadable, IStreamable {
 	private static final int DELAY_HYDRATION = 100;
 	private static final float RAINFALL_MODIFIER_MAX = 15f;
 	private static final float RAINFALL_MODIFIER_MIN = 0.5f;
 
+	@Nonnull
 	private final IClimatised climatised;
 	private int hydrationDelay = 0;
 	private int ticksSinceRainfall = 0;
 
-	public FarmHydrationManager(IClimatised climatised) {
+	public FarmHydrationManager(@Nonnull IClimatised climatised) {
 		this.climatised = climatised;
 	}
 
@@ -87,12 +90,6 @@ public class FarmHydrationManager implements IFarmLedgerDelegate, INBTTagable, I
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		hydrationDelay = nbttagcompound.getInteger("HydrationDelay");
-		ticksSinceRainfall = nbttagcompound.getInteger("TicksSinceRainfall");
-	}
-
-	@Override
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 		nbttagcompound.setInteger("HydrationDelay", hydrationDelay);
 		nbttagcompound.setInteger("TicksSinceRainfall", ticksSinceRainfall);
@@ -108,5 +105,11 @@ public class FarmHydrationManager implements IFarmLedgerDelegate, INBTTagable, I
 	public void readData(DataInputStreamForestry data) throws IOException {
 		hydrationDelay = data.readVarInt();
 		ticksSinceRainfall = data.readVarInt();
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound nbt) {
+		hydrationDelay = nbt.getInteger("HydrationDelay");
+		ticksSinceRainfall = nbt.getInteger("TicksSinceRainfall");
 	}
 }

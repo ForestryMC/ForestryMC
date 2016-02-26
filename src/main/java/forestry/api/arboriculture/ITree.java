@@ -5,6 +5,7 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
+import javax.annotation.Nonnull;
 import java.util.EnumSet;
 
 import net.minecraft.item.ItemStack;
@@ -29,6 +30,7 @@ public interface ITree extends IIndividual, ITreeGenData {
 
 	IEffectData[] doFX(IEffectData[] storedData, World world, BlockPos pos);
 
+	@Nonnull
 	@Override
 	ITreeGenome getGenome();
 

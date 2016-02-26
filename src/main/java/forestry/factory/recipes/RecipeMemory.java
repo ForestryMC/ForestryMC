@@ -10,8 +10,10 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -22,14 +24,14 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 
-import forestry.api.core.INBTTagable;
+import forestry.api.core.INbtWritable;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
 
-public class RecipeMemory implements INBTTagable, IStreamable {
+public class RecipeMemory implements INbtWritable, IStreamable {
 
-	public static final int capacity = 9;
+	private static final int capacity = 9;
 
 	private static final List<Class<? extends Item>> memoryBlacklist = new ArrayList<>();
 
@@ -37,8 +39,27 @@ public class RecipeMemory implements INBTTagable, IStreamable {
 		memoryBlacklist.add(ItemMap.class); // almost every ItemMap is unique
 	}
 
-	private LinkedList<MemorizedRecipe> memorizedRecipes = new LinkedList<>();
+	private final LinkedList<MemorizedRecipe> memorizedRecipes;
 	private long lastUpdate;
+
+	public RecipeMemory() {
+		memorizedRecipes = new LinkedList<>();
+	}
+
+	public RecipeMemory(@Nonnull NBTTagCompound nbt) {
+		memorizedRecipes = new LinkedList<>();
+		if (!nbt.hasKey("RecipeMemory")) {
+			return;
+		}
+
+		NBTTagList nbttaglist = nbt.getTagList("RecipeMemory", 10);
+		for (int j = 0; j < nbttaglist.tagCount(); ++j) {
+			NBTTagCompound recipeNbt = nbttaglist.getCompoundTagAt(j);
+			MemorizedRecipe recipe = new MemorizedRecipe();
+			recipe.readFromNBT(recipeNbt);
+			memorizedRecipes.add(recipe);
+		}
+	}
 
 	private static boolean isValid(MemorizedRecipe recipe) {
 		if (recipe == null) {
@@ -53,16 +74,16 @@ public class RecipeMemory implements INBTTagable, IStreamable {
 	}
 
 	public void validate(World world) {
-		LinkedList<MemorizedRecipe> validRecipes = new LinkedList<>();
-		for (MemorizedRecipe recipe : memorizedRecipes) {
+		Iterator<MemorizedRecipe> iterator = memorizedRecipes.iterator();
+		while (iterator.hasNext()) {
+			MemorizedRecipe recipe = iterator.next();
 			if (recipe != null) {
 				recipe.calculateRecipeOutput(world);
-				if (isValid(recipe)) {
-					validRecipes.add(recipe);
+				if (!isValid(recipe)) {
+					iterator.remove();
 				}
 			}
 		}
-		this.memorizedRecipes = validRecipes;
 	}
 
 	public long getLastUpdate() {
@@ -160,22 +181,6 @@ public class RecipeMemory implements INBTTagable, IStreamable {
 		}
 
 		return null;
-	}
-
-	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		memorizedRecipes = new LinkedList<>();
-		if (!nbttagcompound.hasKey("RecipeMemory")) {
-			return;
-		}
-
-		NBTTagList nbttaglist = nbttagcompound.getTagList("RecipeMemory", 10);
-		for (int j = 0; j < nbttaglist.tagCount(); ++j) {
-			NBTTagCompound recipeNbt = nbttaglist.getCompoundTagAt(j);
-			MemorizedRecipe recipe = new MemorizedRecipe();
-			recipe.readFromNBT(recipeNbt);
-			memorizedRecipes.add(recipe);
-		}
 	}
 
 	@Override

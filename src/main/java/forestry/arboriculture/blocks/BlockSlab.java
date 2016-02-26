@@ -85,7 +85,7 @@ public class BlockSlab extends net.minecraft.block.BlockSlab implements IWoodTyp
 
 	@Override
 	protected BlockState createBlockState() {
-		return this.isDouble() ? new BlockState(this, new IProperty[]{EnumWoodType.WOODTYPE}) : new BlockState(this, new IProperty[]{HALF, EnumWoodType.WOODTYPE});
+		return this.isDouble() ? new BlockState(this, EnumWoodType.WOODTYPE) : new BlockState(this, HALF, EnumWoodType.WOODTYPE);
 	}
 	
 	@Override

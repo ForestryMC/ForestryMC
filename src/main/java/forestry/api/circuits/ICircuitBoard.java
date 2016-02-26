@@ -5,11 +5,12 @@
  ******************************************************************************/
 package forestry.api.circuits;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
-import forestry.api.core.INBTTagable;
+import forestry.api.core.INbtWritable;
 
-public interface ICircuitBoard extends INBTTagable {
+public interface ICircuitBoard extends INbtWritable {
 
 	int getPrimaryColor();
 
@@ -24,13 +25,14 @@ public interface ICircuitBoard extends INBTTagable {
 	void onRemoval(Object tile);
 
 	void onTick(Object tile);
-	
+
+	@Nonnull
 	ICircuit[] getCircuits();
 
 	/**
 	 * Specifies where a circuit can be used.
-	 * @since Forestry 4.0
 	 */
+	@Nonnull
 	ICircuitSocketType getSocketType();
 
 }

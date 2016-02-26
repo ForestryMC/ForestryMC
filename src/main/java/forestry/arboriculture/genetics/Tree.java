@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -59,55 +60,50 @@ import forestry.core.utils.StringUtil;
 
 public class Tree extends Individual implements ITree, IPlantable {
 
-	private ITreeGenome genome;
+	@Nonnull
+	private final ITreeGenome genome;
+	@Nullable
 	private ITreeGenome mate;
 
-	private EnumSet<EnumPlantType> plantTypes;
+	private final EnumSet<EnumPlantType> plantTypes;
 	private EnumPlantType plantType;
 
-	/* CONSTRUCTOR */
-	public Tree(NBTTagCompound nbttagcompound) {
-		readFromNBT(nbttagcompound);
+	public Tree(@Nonnull ITreeGenome genome) {
+		this.genome = genome;
+		plantTypes = genome.getPlantTypes();
+		plantTypes.add(genome.getPrimary().getPlantType());
 	}
 
-	public Tree(ITreeGenome genome) {
-		setGenome(genome);
-	}
-
-	/* SAVING & LOADING */
-	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-
-		super.readFromNBT(nbttagcompound);
+	public Tree(@Nonnull NBTTagCompound nbttagcompound) {
+		super(nbttagcompound);
 
 		if (nbttagcompound.hasKey("Genome")) {
-			setGenome(new TreeGenome(nbttagcompound.getCompoundTag("Genome")));
+			this.genome = new TreeGenome(nbttagcompound.getCompoundTag("Genome"));
 		} else {
-			setGenome(TreeDefinition.Oak.getGenome());
+			this.genome = TreeDefinition.Oak.getGenome();
 		}
+
+		this.plantTypes = genome.getPlantTypes();
+		this.plantTypes.add(genome.getPrimary().getPlantType());
 
 		if (nbttagcompound.hasKey("Mate")) {
 			mate = new TreeGenome(nbttagcompound.getCompoundTag("Mate"));
 		}
-
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
-
 		super.writeToNBT(nbttagcompound);
 
-		if (genome != null) {
-			NBTTagCompound nbtGenome = new NBTTagCompound();
-			genome.writeToNBT(nbtGenome);
-			nbttagcompound.setTag("Genome", nbtGenome);
-		}
+		NBTTagCompound nbtGenome = new NBTTagCompound();
+		genome.writeToNBT(nbtGenome);
+		nbttagcompound.setTag("Genome", nbtGenome);
+
 		if (mate != null) {
 			NBTTagCompound nbtMate = new NBTTagCompound();
 			mate.writeToNBT(nbtMate);
 			nbttagcompound.setTag("Mate", nbtMate);
 		}
-
 	}
 
 	/* INTERACTION */
@@ -255,15 +251,10 @@ public class Tree extends Individual implements ITree, IPlantable {
 	}
 
 	/* INFORMATION */
+	@Nonnull
 	@Override
 	public ITreeGenome getGenome() {
 		return genome;
-	}
-
-	private void setGenome(ITreeGenome genome) {
-		this.genome = genome;
-		plantTypes = genome.getPlantTypes();
-		plantTypes.add(genome.getPrimary().getPlantType());
 	}
 
 	@Override
@@ -273,6 +264,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 		return new Tree(nbttagcompound);
 	}
 
+	@Nullable
 	@Override
 	public ITreeGenome getMate() {
 		return this.mate;

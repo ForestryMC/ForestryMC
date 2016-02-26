@@ -33,7 +33,6 @@ import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.core.config.Constants;
-import forestry.core.config.Version;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
 
@@ -141,7 +140,7 @@ public final class CommandSaveStats extends SubCommand {
 			FileOutputStream fileout = new FileOutputStream(file);
 			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fileout, "UTF-8"));
 
-			writer.write("# " + Constants.MOD + newLine + "# " + Version.getVersion() + newLine);
+			writer.write("# " + Constants.MOD + newLine + "# " + Constants.VERSION + newLine);
 
 			for (String line : statistics) {
 				writer.write(line + newLine);

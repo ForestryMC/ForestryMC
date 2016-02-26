@@ -5,14 +5,14 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
-import forestry.api.core.INBTTagable;
+import forestry.api.core.INbtWritable;
 
 /**
  * Holds the {@link IChromosome}s which comprise the traits of a given individual.
  *
  * Only the default implementation is supported.
  */
-public interface IGenome extends INBTTagable {
+public interface IGenome extends INbtWritable {
 
 	IAlleleSpecies getPrimary();
 

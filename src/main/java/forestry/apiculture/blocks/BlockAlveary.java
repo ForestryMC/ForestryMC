@@ -17,7 +17,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
@@ -196,7 +195,7 @@ public class BlockAlveary extends BlockStructure implements IStateMapperRegister
 
 	@Override
 	protected BlockState createBlockState() {
-		return new BlockState(this, new IProperty[]{TYPE, STATE, LEVEL});
+		return new BlockState(this, TYPE, STATE, LEVEL);
 	}
 	
 	@Override

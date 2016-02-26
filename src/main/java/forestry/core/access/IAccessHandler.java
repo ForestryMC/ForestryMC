@@ -12,10 +12,11 @@ package forestry.core.access;
 
 import net.minecraft.entity.player.EntityPlayer;
 
-import forestry.api.core.INBTTagable;
+import forestry.api.core.INbtReadable;
+import forestry.api.core.INbtWritable;
 import forestry.core.network.IStreamable;
 
-public interface IAccessHandler extends IOwnable, IStreamable, INBTTagable {
+public interface IAccessHandler extends IOwnable, IStreamable, INbtWritable, INbtReadable {
 
 	boolean switchAccess(EntityPlayer player);
 

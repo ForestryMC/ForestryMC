@@ -44,14 +44,9 @@ public enum EnumBeeChromosome implements IChromosomeType {
 	 */
 	TEMPERATURE_TOLERANCE(IAlleleTolerance.class),
 	/**
-	 * Slightly incorrectly named. If true, a naturally diurnal bee can work during the night. If true, a naturally nocturnal bee can work during the day.
+	 * If true, a naturally diurnal bee can work during the night. If true, a naturally nocturnal bee can work during the day.
 	 */
-	NOCTURNAL(IAlleleBoolean.class),
-	/**
-	 * Not used / superseded by fixed values for the species. Probably going to be replaced with a boolean for FIRE_RESIST.
-	 */
-	@Deprecated
-	HUMIDITY(IAllele.class),
+	NEVER_SLEEPS(IAlleleBoolean.class),
 	/**
 	 * Humidity difference to its native supported one the bee can tolerate.
 	 */

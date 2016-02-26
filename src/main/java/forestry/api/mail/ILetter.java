@@ -10,9 +10,9 @@ import java.util.List;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
-import forestry.api.core.INBTTagable;
+import forestry.api.core.INbtWritable;
 
-public interface ILetter extends IInventory, INBTTagable {
+public interface ILetter extends IInventory, INbtWritable {
 
 	ItemStack[] getPostage();
 

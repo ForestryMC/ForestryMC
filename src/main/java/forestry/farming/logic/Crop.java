@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 
 import net.minecraft.block.Block;
@@ -52,6 +53,7 @@ public abstract class Crop implements ICrop {
 
 	protected abstract Collection<ItemStack> harvestBlock(Vect pos);
 
+	@Nullable
 	@Override
 	public Collection<ItemStack> harvest() {
 		if (!isCrop(position)) {

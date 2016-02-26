@@ -67,7 +67,6 @@ import forestry.core.multiblock.RectangularMultiblockControllerBase;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.tiles.ILiquidTankTile;
-import forestry.core.utils.Log;
 import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.vect.Vect;
 import forestry.core.utils.vect.VectUtil;
@@ -754,7 +753,6 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 		Collection<ItemStack> harvested = crop.harvest();
 		if (harvested == null) {
-			Log.fine("Failed to harvest crop: " + crop);
 			return true;
 		}
 

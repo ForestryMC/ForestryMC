@@ -5,6 +5,7 @@
  ******************************************************************************/
 package forestry.api.farming;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 
 import net.minecraft.item.ItemStack;
@@ -16,6 +17,7 @@ public interface ICrop {
 	 *
 	 * @return Products harvested.
 	 */
+	@Nullable
 	Collection<ItemStack> harvest();
 
 }

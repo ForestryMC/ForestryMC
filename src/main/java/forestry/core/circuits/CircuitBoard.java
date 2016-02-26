@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.circuits;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,18 +27,43 @@ import forestry.core.utils.StringUtil;
 
 public class CircuitBoard<T> implements ICircuitBoard {
 
-	private EnumCircuitBoardType type;
-	private ICircuitLayout layout;
-	private ICircuit[] circuits;
+	@Nonnull
+	private final EnumCircuitBoardType type;
+	@Nonnull
+	private final ICircuitLayout layout;
+	@Nonnull
+	private final ICircuit[] circuits;
 
-	public CircuitBoard(EnumCircuitBoardType type, ICircuitLayout layout, ICircuit[] circuits) {
+	public CircuitBoard(@Nonnull EnumCircuitBoardType type, @Nonnull ICircuitLayout layout, @Nonnull ICircuit[] circuits) {
 		this.type = type;
 		this.layout = layout;
 		this.circuits = circuits;
 	}
 
 	public CircuitBoard(NBTTagCompound nbttagcompound) {
-		readFromNBT(nbttagcompound);
+		type = EnumCircuitBoardType.values()[nbttagcompound.getShort("T")];
+
+		// Layout
+		ICircuitLayout layout = null;
+		if (nbttagcompound.hasKey("LY")) {
+			layout = ChipsetManager.circuitRegistry.getLayout(nbttagcompound.getString("LY"));
+		}
+		if (layout == null) {
+			ChipsetManager.circuitRegistry.getDefaultLayout();
+		}
+		this.layout = layout;
+
+		circuits = new ICircuit[4];
+
+		for (int i = 0; i < 4; i++) {
+			if (!nbttagcompound.hasKey("CA.I" + i)) {
+				continue;
+			}
+			ICircuit circuit = ChipsetManager.circuitRegistry.getCircuit(nbttagcompound.getString("CA.I" + i));
+			if (circuit != null) {
+				circuits[i] = circuit;
+			}
+		}
 	}
 
 	@Override
@@ -67,32 +93,6 @@ public class CircuitBoard<T> implements ICircuitBoard {
 			list.addAll(extendedTooltip);
 		} else {
 			list.add(EnumChatFormatting.ITALIC + "<" + StringUtil.localize("gui.tooltip.tmi") + ">");
-		}
-	}
-
-	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-
-		type = EnumCircuitBoardType.values()[nbttagcompound.getShort("T")];
-
-		// Layout
-		if (nbttagcompound.hasKey("LY")) {
-			layout = ChipsetManager.circuitRegistry.getLayout(nbttagcompound.getString("LY"));
-		}
-		if (layout == null) {
-			ChipsetManager.circuitRegistry.getDefaultLayout();
-		}
-
-		circuits = new ICircuit[4];
-
-		for (int i = 0; i < 4; i++) {
-			if (!nbttagcompound.hasKey("CA.I" + i)) {
-				continue;
-			}
-			ICircuit circuit = ChipsetManager.circuitRegistry.getCircuit(nbttagcompound.getString("CA.I" + i));
-			if (circuit != null) {
-				circuits[i] = circuit;
-			}
 		}
 	}
 
@@ -162,11 +162,13 @@ public class CircuitBoard<T> implements ICircuitBoard {
 		}
 	}
 
+	@Nonnull
 	@Override
 	public ICircuit[] getCircuits() {
 		return circuits;
 	}
 
+	@Nonnull
 	@Override
 	public ICircuitSocketType getSocketType() {
 		return layout.getSocketType();

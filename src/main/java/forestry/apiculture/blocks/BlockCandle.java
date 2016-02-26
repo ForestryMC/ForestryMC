@@ -22,7 +22,6 @@ import java.util.Random;
 import java.util.Set;
 
 import net.minecraft.block.BlockTorch;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
@@ -106,7 +105,7 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister {
 	
 	@Override
 	protected BlockState createBlockState() {
-		return new BlockState(this, new IProperty[]{FACING, STATE});
+		return new BlockState(this, FACING, STATE);
 	}
 	
 	@Override

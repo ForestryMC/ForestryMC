@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.mail;
 
+import javax.annotation.Nonnull;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -18,24 +19,26 @@ import net.minecraft.nbt.NBTUtil;
 
 import com.mojang.authlib.GameProfile;
 
-import forestry.api.core.INBTTagable;
+import forestry.api.core.INbtWritable;
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.IMailAddress;
 import forestry.core.utils.PlayerUtil;
 
-public class MailAddress implements INBTTagable, IMailAddress {
+public class MailAddress implements INbtWritable, IMailAddress {
 
 	private static final GameProfile invalidGameProfile = new GameProfile(new UUID(0, 0), "");
 
-	private EnumAddressee type;
-	private GameProfile gameProfile; // gameProfile is a fake GameProfile for traders, and real for players
+	@Nonnull
+	private final EnumAddressee type;
+	@Nonnull
+	private final GameProfile gameProfile; // gameProfile is a fake GameProfile for traders, and real for players
 
 	public MailAddress() {
 		this.type = EnumAddressee.PLAYER;
 		this.gameProfile = invalidGameProfile;
 	}
 
-	public MailAddress(GameProfile gameProfile) {
+	public MailAddress(@Nonnull GameProfile gameProfile) {
 		if (gameProfile == null) {
 			throw new IllegalArgumentException("gameProfile must not be null");
 		}
@@ -44,7 +47,7 @@ public class MailAddress implements INBTTagable, IMailAddress {
 		this.gameProfile = gameProfile;
 	}
 
-	public MailAddress(String name) {
+	public MailAddress(@Nonnull String name) {
 		if (name == null) {
 			throw new IllegalArgumentException("name must not be null");
 		}
@@ -53,22 +56,27 @@ public class MailAddress implements INBTTagable, IMailAddress {
 		this.gameProfile = new GameProfile(null, name);
 	}
 
-	public MailAddress(IMailAddress address) {
-		this.type = address.getType();
-		if (type == EnumAddressee.TRADER) {
-			String name = address.getName();
-			this.gameProfile = new GameProfile(null, name);
-		} else if (type == EnumAddressee.PLAYER) {
-			this.gameProfile = address.getPlayerProfile();
+	public MailAddress(@Nonnull NBTTagCompound nbt) {
+		EnumAddressee type = null;
+		GameProfile gameProfile = null;
+		if (nbt.hasKey("TP")) {
+			String typeName = nbt.getString("TP");
+			type = EnumAddressee.fromString(typeName);
 		}
+
+		if (type == null) {
+			type = EnumAddressee.PLAYER;
+			gameProfile = invalidGameProfile;
+		} else if (nbt.hasKey("profile")) {
+			NBTTagCompound profileTag = nbt.getCompoundTag("profile");
+			gameProfile = NBTUtil.readGameProfileFromNBT(profileTag);
+		}
+
+		this.type = type;
+		this.gameProfile = gameProfile;
 	}
 
-	public static MailAddress loadFromNBT(NBTTagCompound nbttagcompound) {
-		MailAddress address = new MailAddress();
-		address.readFromNBT(nbttagcompound);
-		return address;
-	}
-
+	@Nonnull
 	@Override
 	public EnumAddressee getType() {
 		return type;
@@ -124,23 +132,6 @@ public class MailAddress implements INBTTagable, IMailAddress {
 			return type + "-" + name + '-' + gameProfile.getId();
 		} else {
 			return type + "-" + name;
-		}
-	}
-
-	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		type = null;
-		if (nbttagcompound.hasKey("TP")) {
-			String typeName = nbttagcompound.getString("TP");
-			type = EnumAddressee.fromString(typeName);
-		}
-
-		if (type == null) {
-			type = EnumAddressee.PLAYER;
-			gameProfile = invalidGameProfile;
-		} else if (nbttagcompound.hasKey("profile")) {
-			NBTTagCompound profileTag = nbttagcompound.getCompoundTag("profile");
-			gameProfile = NBTUtil.readGameProfileFromNBT(profileTag);
 		}
 	}
 

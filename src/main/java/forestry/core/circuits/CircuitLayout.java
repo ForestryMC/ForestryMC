@@ -10,35 +10,43 @@
  ******************************************************************************/
 package forestry.core.circuits;
 
+import javax.annotation.Nonnull;
+
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.circuits.ICircuitSocketType;
 import forestry.core.utils.StringUtil;
 
 public class CircuitLayout implements ICircuitLayout {
 
+	@Nonnull
 	private final String uid;
+	@Nonnull
 	private final ICircuitSocketType socketType;
 
-	public CircuitLayout(String uid, ICircuitSocketType socketType) {
+	public CircuitLayout(@Nonnull String uid, @Nonnull ICircuitSocketType socketType) {
 		this.uid = uid;
 		this.socketType = socketType;
 	}
 
+	@Nonnull
 	@Override
 	public String getUID() {
 		return "forestry." + this.uid;
 	}
 
+	@Nonnull
 	@Override
 	public String getName() {
 		return StringUtil.localize("circuit.layout." + this.uid + ".name");
 	}
 
+	@Nonnull
 	@Override
 	public String getUsage() {
 		return StringUtil.localize("circuit.layout." + this.uid + ".usage");
 	}
 
+	@Nonnull
 	@Override
 	public ICircuitSocketType getSocketType() {
 		return socketType;

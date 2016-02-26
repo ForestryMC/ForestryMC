@@ -5,21 +5,26 @@
  ******************************************************************************/
 package forestry.api.circuits;
 
+import javax.annotation.Nonnull;
+
 public interface ICircuitLayout {
 
 	/** unique ID for this circuit layout */
+	@Nonnull
 	String getUID();
 
 	/** localized name for this circuit layout */
+	@Nonnull
 	String getName();
 
 	/** localized string for how this circuit layout is used */
+	@Nonnull
 	String getUsage();
 
 	/**
 	 * Specifies where a circuit layout is used.
-	 * @since Forestry 4.0
 	 */
+	@Nonnull
 	ICircuitSocketType getSocketType();
 
 }

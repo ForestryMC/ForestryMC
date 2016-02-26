@@ -7,9 +7,9 @@ package forestry.api.mail;
 
 import com.mojang.authlib.GameProfile;
 
-import forestry.api.core.INBTTagable;
+import forestry.api.core.INbtWritable;
 
-public interface IMailAddress extends INBTTagable {
+public interface IMailAddress extends INbtWritable {
 
 	EnumAddressee getType();
 

@@ -15,19 +15,20 @@ import java.io.IOException;
 import net.minecraft.nbt.NBTTagCompound;
 
 import forestry.api.core.ForestryAPI;
-import forestry.api.core.INBTTagable;
+import forestry.api.core.INbtReadable;
+import forestry.api.core.INbtWritable;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
 
-public class FarmFertilizerManager implements INBTTagable, IStreamable {
+public class FarmFertilizerManager implements INbtWritable, INbtReadable, IStreamable {
 	private static final int BUFFER_FERTILIZER = 200;
 
-	private final int fertilizerValue;
+	private final int fertilizerValue = ForestryAPI.activeMode.getIntegerSetting("farms.fertilizer.value");
 	private int storedFertilizer;
 
 	public FarmFertilizerManager() {
-		this.fertilizerValue = ForestryAPI.activeMode.getIntegerSetting("farms.fertilizer.value");
+		storedFertilizer = 0;
 	}
 
 	public boolean hasFertilizer(int amount) {

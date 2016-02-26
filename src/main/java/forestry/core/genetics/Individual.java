@@ -19,10 +19,10 @@ import forestry.api.genetics.IIndividual;
 
 public abstract class Individual implements IIndividual {
 
-	protected boolean isAnalyzed = false;
+	protected boolean isAnalyzed;
 
 	protected Individual() {
-
+		isAnalyzed = false;
 	}
 
 	protected Individual(@Nonnull NBTTagCompound nbt) {
@@ -42,16 +42,6 @@ public abstract class Individual implements IIndividual {
 
 		isAnalyzed = true;
 		return true;
-	}
-
-	/* SAVING & LOADING */
-	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		if (nbttagcompound == null) {
-			return;
-		}
-
-		isAnalyzed = nbttagcompound.getBoolean("IsAnalyzed");
 	}
 
 	@Override

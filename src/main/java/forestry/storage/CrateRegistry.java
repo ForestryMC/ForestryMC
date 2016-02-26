@@ -30,12 +30,12 @@ public class CrateRegistry implements ICrateRegistry {
 
 	private static void registerCrate(ItemStack stack, String uid, boolean useOreDict) {
 		if (stack == null || stack.getItem() == null) {
-			Log.severe("Tried to make a crate without an item");
+			Log.warning("Tried to make a crate without an item");
 			return;
 		}
 
 		if (uid == null) {
-			Log.severe("Tried to make a crate without a uid");
+			Log.warning("Tried to make a crate without a uid");
 			return;
 		}
 

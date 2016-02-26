@@ -21,12 +21,13 @@ import forestry.api.apiculture.FlowerManager;
 import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeModifier;
-import forestry.api.core.INBTTagable;
+import forestry.api.core.INbtReadable;
+import forestry.api.core.INbtWritable;
 import forestry.api.genetics.IFlowerProvider;
 import forestry.core.utils.vect.Vect;
 import forestry.plugins.PluginApiculture;
 
-public class HasFlowersCache implements INBTTagable {
+public class HasFlowersCache implements INbtWritable, INbtReadable {
 	private static final String nbtKey = "hasFlowerCache";
 	private static final Random random = new Random();
 	private static final int flowerCheckInterval = 128;

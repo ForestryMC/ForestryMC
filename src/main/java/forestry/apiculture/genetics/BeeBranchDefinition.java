@@ -21,7 +21,7 @@ public enum BeeBranchDefinition implements IBranchDefinition {
 		@Override
 		protected void setBranchProperties(IAllele[] alleles) {
 			AlleleHelper.instance.set(alleles, EnumBeeChromosome.TEMPERATURE_TOLERANCE, EnumAllele.Tolerance.DOWN_2);
-			AlleleHelper.instance.set(alleles, EnumBeeChromosome.NOCTURNAL, true);
+			AlleleHelper.instance.set(alleles, EnumBeeChromosome.NEVER_SLEEPS, true);
 			AlleleHelper.instance.set(alleles, EnumBeeChromosome.FLOWER_PROVIDER, EnumAllele.Flowers.NETHER);
 			AlleleHelper.instance.set(alleles, EnumBeeChromosome.FLOWERING, EnumAllele.Flowering.AVERAGE);
 		}
@@ -31,7 +31,7 @@ public enum BeeBranchDefinition implements IBranchDefinition {
 		protected void setBranchProperties(IAllele[] alleles) {
 			AlleleHelper.instance.set(alleles, EnumBeeChromosome.TEMPERATURE_TOLERANCE, EnumAllele.Tolerance.BOTH_1);
 			AlleleHelper.instance.set(alleles, EnumBeeChromosome.HUMIDITY_TOLERANCE, EnumAllele.Tolerance.DOWN_1);
-			AlleleHelper.instance.set(alleles, EnumBeeChromosome.NOCTURNAL, true);
+			AlleleHelper.instance.set(alleles, EnumBeeChromosome.NEVER_SLEEPS, true);
 			AlleleHelper.instance.set(alleles, EnumBeeChromosome.FLOWER_PROVIDER, EnumAllele.Flowers.CACTI);
 		}
 	},
@@ -53,7 +53,7 @@ public enum BeeBranchDefinition implements IBranchDefinition {
 			AlleleHelper.instance.set(alleles, EnumBeeChromosome.TEMPERATURE_TOLERANCE, EnumAllele.Tolerance.UP_1);
 			AlleleHelper.instance.set(alleles, EnumBeeChromosome.TERRITORY, EnumAllele.Territory.LARGE);
 			AlleleHelper.instance.set(alleles, EnumBeeChromosome.FLOWER_PROVIDER, EnumAllele.Flowers.END);
-			AlleleHelper.instance.set(alleles, EnumBeeChromosome.NOCTURNAL, true);
+			AlleleHelper.instance.set(alleles, EnumBeeChromosome.NEVER_SLEEPS, true);
 			AlleleHelper.instance.set(alleles, EnumBeeChromosome.EFFECT, AlleleEffect.effectMisanthrope);
 		}
 	},
@@ -145,7 +145,7 @@ public enum BeeBranchDefinition implements IBranchDefinition {
 			AlleleHelper.instance.set(defaultTemplate, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.SHORTER);
 			AlleleHelper.instance.set(defaultTemplate, EnumBeeChromosome.FERTILITY, EnumAllele.Fertility.NORMAL);
 			AlleleHelper.instance.set(defaultTemplate, EnumBeeChromosome.TEMPERATURE_TOLERANCE, EnumAllele.Tolerance.NONE);
-			AlleleHelper.instance.set(defaultTemplate, EnumBeeChromosome.NOCTURNAL, false);
+			AlleleHelper.instance.set(defaultTemplate, EnumBeeChromosome.NEVER_SLEEPS, false);
 			AlleleHelper.instance.set(defaultTemplate, EnumBeeChromosome.HUMIDITY_TOLERANCE, EnumAllele.Tolerance.NONE);
 			AlleleHelper.instance.set(defaultTemplate, EnumBeeChromosome.TOLERANT_FLYER, false);
 			AlleleHelper.instance.set(defaultTemplate, EnumBeeChromosome.CAVE_DWELLING, false);

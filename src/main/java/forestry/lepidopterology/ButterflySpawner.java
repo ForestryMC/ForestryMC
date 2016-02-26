@@ -58,7 +58,7 @@ public class ButterflySpawner implements ILeafTickHandler {
 
 	private static void attemptButterflySpawn(World world, IButterfly butterfly, BlockPos pos) {
 		if (ButterflyManager.butterflyRoot.spawnButterflyInWorld(world, butterfly.copy(), pos.getX(), pos.getY() + 0.1f, pos.getZ()) != null) {
-			Log.finest("Spawned a butterfly '%s' at %s/%s/%s.", butterfly.getDisplayName(), pos.getX(), pos.getY(), pos.getZ());
+			Log.trace("Spawned a butterfly '%s' at %s/%s/%s.", butterfly.getDisplayName(), pos.getX(), pos.getY(), pos.getZ());
 		}
 	}
 

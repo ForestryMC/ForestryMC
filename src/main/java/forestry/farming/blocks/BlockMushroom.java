@@ -17,7 +17,6 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.IGrowable;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
@@ -69,7 +68,7 @@ public class BlockMushroom extends BlockBush implements IItemTyped, IItemModelRe
 	
 	@Override
 	protected BlockState createBlockState() {
-		return new BlockState(this, new IProperty[]{MUSHROOM});
+		return new BlockState(this, MUSHROOM);
 	}
 
 	@Override

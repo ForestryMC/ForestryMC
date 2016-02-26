@@ -33,7 +33,8 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidTank;
 
-import forestry.api.core.INBTTagable;
+import forestry.api.core.INbtReadable;
+import forestry.api.core.INbtWritable;
 import forestry.core.fluids.tanks.FakeTank;
 import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.network.DataInputStreamForestry;
@@ -51,7 +52,7 @@ import forestry.core.utils.NBTUtil.NBTList;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TankManager implements ITankManager, ITankUpdateHandler, IStreamable, INBTTagable {
+public class TankManager implements ITankManager, ITankUpdateHandler, IStreamable, INbtWritable, INbtReadable {
 
 	private final List<StandardTank> tanks = new ArrayList<>();
 

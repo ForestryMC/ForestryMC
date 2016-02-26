@@ -12,43 +12,34 @@ package forestry.core.genetics;
 
 import com.google.common.base.Objects;
 
+import javax.annotation.Nonnull;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
-import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.ISpeciesRoot;
-import forestry.api.lepidopterology.EnumButterflyChromosome;
 import forestry.core.config.Config;
+import forestry.core.utils.Log;
 
 public abstract class Genome implements IGenome {
 
 	private static final String SLOT_TAG = "Slot";
-	private static final Set<IChromosomeType> unusedChromsomes = new HashSet<>();
 
-	static {
-		unusedChromsomes.add(EnumBeeChromosome.HUMIDITY);
-		unusedChromsomes.add(EnumButterflyChromosome.TERRITORY);
+	@Nonnull
+	private final IChromosome[] chromosomes;
+
+	protected Genome(@Nonnull NBTTagCompound nbttagcompound) {
+		this.chromosomes = getChromosomes(nbttagcompound, getSpeciesRoot());
 	}
 
-	private IChromosome[] chromosomes;
-
-	// / CONSTRUCTOR
-	protected Genome(NBTTagCompound nbttagcompound) {
-		this.chromosomes = new Chromosome[getDefaultTemplate().length];
-		readFromNBT(nbttagcompound);
-	}
-
-	protected Genome(IChromosome[] chromosomes) {
+	protected Genome(@Nonnull IChromosome[] chromosomes) {
 		checkChromosomes(chromosomes);
 		this.chromosomes = chromosomes;
 	}
@@ -62,10 +53,6 @@ public abstract class Genome implements IGenome {
 		IChromosomeType[] karyotype = getSpeciesRoot().getKaryotype();
 		for (int i = 0; i < karyotype.length; i++) {
 			IChromosomeType chromosomeType = karyotype[i];
-			if (unusedChromsomes.contains(chromosomeType)) {
-				continue;
-			}
-
 			IChromosome chromosome = chromosomes[i];
 			if (chromosome == null) {
 				String message = String.format("Tried to create a genome for '%s' from an invalid chromosome template. " +
@@ -111,9 +98,6 @@ public abstract class Genome implements IGenome {
 		IChromosomeType[] karyotype = getSpeciesRoot().getKaryotype();
 		for (int i = 0; i < chromosomes.length; i++) {
 			IChromosomeType chromosomeType = karyotype[i];
-			if (unusedChromsomes.contains(chromosomeType)) {
-				continue;
-			}
 			IChromosome chromosome = chromosomes[i];
 			stringBuilder.append(chromosomeType.getName()).append(": ").append(chromosome).append("\n");
 		}
@@ -148,7 +132,7 @@ public abstract class Genome implements IGenome {
 		}
 
 		NBTTagCompound chromosomeNBT = chromosomesNBT.getCompoundTagAt(0);
-		Chromosome chromosome = Chromosome.loadChromosomeFromNBT(chromosomeNBT);
+		Chromosome chromosome = new Chromosome(chromosomeNBT);
 
 		IAllele activeAllele = chromosome.getActiveAllele();
 		if (!(activeAllele instanceof IAlleleSpecies)) {
@@ -177,7 +161,7 @@ public abstract class Genome implements IGenome {
 		return chromosomes[chromosomeType.ordinal()];
 	}
 
-	private static IChromosome[] getChromosomes(NBTTagCompound genomeNBT, ISpeciesRoot speciesRoot) {
+	private static IChromosome[] getChromosomes(@Nonnull NBTTagCompound genomeNBT, @Nonnull ISpeciesRoot speciesRoot) {
 
 		NBTTagList chromosomesNBT = genomeNBT.getTagList("Chromosomes", 10);
 		IChromosome[] chromosomes = new IChromosome[speciesRoot.getDefaultTemplate().length];
@@ -187,32 +171,18 @@ public abstract class Genome implements IGenome {
 			byte chromosomeOrdinal = chromosomeNBT.getByte(SLOT_TAG);
 
 			if (chromosomeOrdinal >= 0 && chromosomeOrdinal < chromosomes.length) {
-				Chromosome chromosome = Chromosome.loadChromosomeFromNBT(chromosomeNBT);
+				Chromosome chromosome = new Chromosome(chromosomeNBT);
 				chromosomes[chromosomeOrdinal] = chromosome;
 
-				if (Config.clearInvalidChromosomes) {
-					IAllele template = speciesRoot.getDefaultTemplate()[chromosomeOrdinal];
-					Class<? extends IAllele> chromosomeClass = speciesRoot.getKaryotype()[chromosomeOrdinal].getAlleleClass();
-					if (chromosome.overrideInvalidAlleles(template, chromosomeClass)) {
-						chromosome.writeToNBT(chromosomeNBT);
+				IChromosomeType chromosomeType = speciesRoot.getKaryotype()[chromosomeOrdinal];
+				if (chromosome.hasInvalidAlleles(chromosomeType.getAlleleClass())) {
+					if (Config.clearInvalidChromosomes) {
+						Log.warning("Found Chromosome with invalid Alleles. Config is set to clear invalid chromosomes, replacing with the default.");
+						IAllele[] defaultTemplate = speciesRoot.getDefaultTemplate();
+						return speciesRoot.templateAsChromosomes(defaultTemplate);
+					} else {
+						throw new RuntimeException("Found Chromosome with invalid Alleles.\nNBTTagCompound: " + chromosomesNBT + "\nSee config option \"genetics.clear.invalid.chromosomes\".\nMissing: " + chromosomeNBT);
 					}
-				}
-
-				if (chromosome.hasInvalidAlleles(speciesRoot.getKaryotype()[chromosomeOrdinal].getAlleleClass())) {
-					throw new RuntimeException("Found Chromosome with invalid Alleles.\nNBTTagCompound: " + chromosomesNBT + "\nSee config option \"genetics.clear.invalid.chromosomes\".\nMissing: " + chromosomeNBT);
-				}
-			}
-		}
-
-		// handle old saves that have missing chromosomes
-		IChromosome speciesChromosome = chromosomes[speciesRoot.getKaryotypeKey().ordinal()];
-		if (speciesChromosome != null) {
-			IAlleleSpecies species = (IAlleleSpecies) speciesChromosome.getActiveAllele();
-			IAllele[] template = speciesRoot.getTemplate(species.getUID());
-			for (int i = 0; i < chromosomes.length; i++) {
-				IAllele allele = template[i];
-				if ((chromosomes[i] == null) && (allele != null)) {
-					chromosomes[i] = new Chromosome(allele);
 				}
 			}
 		}
@@ -226,12 +196,6 @@ public abstract class Genome implements IGenome {
 			return null;
 		}
 		return chromosome.getActiveAllele();
-	}
-
-	// / SAVING & LOADING
-	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		chromosomes = getChromosomes(nbttagcompound, getSpeciesRoot());
 	}
 
 	@Override

@@ -8,7 +8,6 @@ package forestry.api.lepidopterology;
 import java.util.Locale;
 
 import forestry.api.genetics.IAllele;
-import forestry.api.genetics.IAlleleArea;
 import forestry.api.genetics.IAlleleBoolean;
 import forestry.api.genetics.IAlleleFloat;
 import forestry.api.genetics.IAlleleFlowers;
@@ -69,11 +68,7 @@ public enum EnumButterflyChromosome implements IChromosomeType {
 	/**
 	 * Extra effect to surroundings. (?)
 	 */
-	EFFECT(IAlleleButterflyEffect.class),
-	/**
-	 * Not used yet
-	 */
-	TERRITORY(IAlleleArea.class),;
+	EFFECT(IAlleleButterflyEffect.class);
 	
 	Class<? extends IAllele> clss;
 	

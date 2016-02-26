@@ -38,7 +38,7 @@ import forestry.factory.recipes.MemorizedRecipe;
 import forestry.factory.recipes.RecipeMemory;
 
 public class TileWorktable extends TileBase implements ICrafterWorktable {
-	private final RecipeMemory recipeMemory;
+	private RecipeMemory recipeMemory;
 	private final InventoryAdapterTile craftingDisplay;
 	private MemorizedRecipe currentRecipe;
 
@@ -64,7 +64,7 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 		super.readFromNBT(nbttagcompound);
 
 		craftingDisplay.readFromNBT(nbttagcompound);
-		recipeMemory.readFromNBT(nbttagcompound);
+		recipeMemory = new RecipeMemory(nbttagcompound);
 	}
 
 	/* NETWORK */

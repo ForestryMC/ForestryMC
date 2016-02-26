@@ -8,14 +8,14 @@ package forestry.api.genetics;
 import javax.annotation.Nonnull;
 import java.util.List;
 
-import forestry.api.core.INBTTagable;
+import forestry.api.core.INbtWritable;
 
 /**
  * An actual individual with genetic information.
  *
  * Only the default implementation is supported.
  */
-public interface IIndividual extends INBTTagable {
+public interface IIndividual extends INbtWritable {
 
 	String getIdent();
 

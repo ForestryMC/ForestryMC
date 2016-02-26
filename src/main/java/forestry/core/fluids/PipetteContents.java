@@ -14,60 +14,52 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 import net.minecraftforge.fluids.FluidStack;
 
-import forestry.api.core.INBTTagable;
+import forestry.api.core.INbtWritable;
 
-public class PipetteContents implements INBTTagable {
+public class PipetteContents implements INbtWritable {
+	@Nonnull
+	private final FluidStack contents;
+
 	@Nullable
-	private FluidStack contents;
-
-	public PipetteContents(NBTTagCompound nbttagcompound) {
-		if (nbttagcompound != null) {
-			readFromNBT(nbttagcompound);
+	public static PipetteContents create(@Nullable ItemStack itemStack) {
+		if (itemStack == null) {
+			return null;
 		}
+		NBTTagCompound nbt = itemStack.getTagCompound();
+		FluidStack contents = FluidStack.loadFluidStackFromNBT(nbt);
+		if (contents == null) {
+			return null;
+		}
+		return new PipetteContents(contents);
 	}
 
-	@Nullable
+	public PipetteContents(@Nonnull FluidStack contents) {
+		this.contents = contents;
+	}
+
+	@Nonnull
 	public FluidStack getContents() {
 		return contents;
 	}
 
-	public void setContents(@Nonnull FluidStack contents) {
-		this.contents = contents;
-	}
-
 	public boolean isFull() {
-		if (contents == null) {
-			return false;
-		}
-
 		return contents.amount >= 1000;
 	}
 
 	public void addTooltip(List<String> list) {
-		if (contents == null) {
-			return;
-		}
-
 		String descr = contents.getFluid().getLocalizedName(contents);
 		descr += " (" + contents.amount + " mb)";
 
 		list.add(descr);
 	}
 
-	/* INBTTagable */
-	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		contents = FluidStack.loadFluidStackFromNBT(nbttagcompound);
-	}
-
 	@Override
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		if (contents != null) {
-			contents.writeToNBT(nbttagcompound);
-		}
+		contents.writeToNBT(nbttagcompound);
 	}
 }

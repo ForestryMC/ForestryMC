@@ -131,7 +131,7 @@ public class BeeGenome extends Genome implements IBeeGenome {
 
 	@Override
 	public boolean getNocturnal() {
-		return ((AlleleBoolean) getActiveAllele(EnumBeeChromosome.NOCTURNAL)).getValue();
+		return ((AlleleBoolean) getActiveAllele(EnumBeeChromosome.NEVER_SLEEPS)).getValue();
 	}
 
 	@Override

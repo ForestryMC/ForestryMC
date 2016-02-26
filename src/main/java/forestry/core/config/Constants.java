@@ -18,6 +18,9 @@ public class Constants implements IForestryConstants {
 	public static final String ID = "forestry";
 	public static final String URL = "http://forestry.sengir.net/";
 
+	public static final String VERSION = "@VERSION@";
+	public static final String BUILD_NUMBER = "@BUILD_NUMBER@";
+
 	public static final int FLAG_BLOCK_UPDATE = 1;
 	public static final int FLAG_BLOCK_SYNCH = 2;
 	public static final int FLAG_BLOCK_SYNCH_AND_UPDATE = FLAG_BLOCK_UPDATE + FLAG_BLOCK_SYNCH;

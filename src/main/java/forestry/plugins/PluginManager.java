@@ -81,7 +81,7 @@ public class PluginManager {
 	}
 
 	private static void registerHandlers(IForestryPlugin plugin) {
-		Log.fine("Registering Handlers for Plugin: {0}", plugin);
+		Log.debug("Registering Handlers for Plugin: {}", plugin);
 
 		IPacketRegistry packetRegistry = plugin.getPacketRegistry();
 		if (packetRegistry != null) {
@@ -199,24 +199,24 @@ public class PluginManager {
 		configurePlugins(forestryPlugins);
 
 		for (IForestryPlugin plugin : loadedPlugins) {
-			Log.fine("Setup Start: {0}", plugin);
+			Log.debug("Setup Start: {0}", plugin);
 			plugin.setupAPI();
 			plugin.registerItemsAndBlocks();
-			Log.fine("Setup Complete: {0}", plugin);
+			Log.debug("Setup Complete: {0}", plugin);
 		}
 
 		stage = Stage.SETUP_DISABLED;
 		for (IForestryPlugin plugin : unloadedPlugins) {
-			Log.fine("Disabled-Setup Start: {0}", plugin);
+			Log.debug("Disabled-Setup Start: {0}", plugin);
 			plugin.disabledSetupAPI();
-			Log.fine("Disabled-Setup Complete: {0}", plugin);
+			Log.debug("Disabled-Setup Complete: {0}", plugin);
 		}
 	}
 
 	public static void runPreInit() {
 		stage = Stage.PRE_INIT;
 		for (IForestryPlugin plugin : loadedPlugins) {
-			Log.fine("Pre-Init Start: {0}", plugin);
+			Log.debug("Pre-Init Start: {0}", plugin);
 			registerHandlers(plugin);
 			plugin.preInit();
 			if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.BUILDCRAFT_STATEMENTS)) {
@@ -226,26 +226,26 @@ public class PluginManager {
 				plugin.registerBackpackItems();
 				plugin.registerCrates();
 			}
-			Log.fine("Pre-Init Complete: {0}", plugin);
+			Log.debug("Pre-Init Complete: {0}", plugin);
 		}
 	}
 
 	public static void runInit() {
 		stage = Stage.INIT;
 		for (IForestryPlugin plugin : loadedPlugins) {
-			Log.fine("Init Start: {0}", plugin);
+			Log.debug("Init Start: {0}", plugin);
 			plugin.doInit();
 			plugin.registerRecipes();
-			Log.fine("Init Complete: {0}", plugin);
+			Log.debug("Init Complete: {0}", plugin);
 		}
 	}
 
 	public static void runPostInit() {
 		stage = Stage.POST_INIT;
 		for (IForestryPlugin plugin : loadedPlugins) {
-			Log.fine("Post-Init Start: {0}", plugin);
+			Log.debug("Post-Init Start: {0}", plugin);
 			plugin.postInit();
-			Log.fine("Post-Init Complete: {0}", plugin);
+			Log.debug("Post-Init Complete: {0}", plugin);
 		}
 
 		stage = Stage.FINISHED;

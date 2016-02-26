@@ -219,7 +219,7 @@ public class PluginApiculture extends BlankForestryPlugin {
 		}
 
 		beekeepingMode = config.getStringLocalized("beekeeping", "mode", "NORMAL", validBeekeepingModeNames);
-		Log.finer("Beekeeping mode read from config: " + beekeepingMode);
+		Log.debug("Beekeeping mode read from config: " + beekeepingMode);
 
 		secondPrincessChance = config.getFloatLocalized("beekeeping", "second.princess", secondPrincessChance, 0.0f, 100.0f);
 
@@ -247,7 +247,7 @@ public class PluginApiculture extends BlankForestryPlugin {
 
 			Set<Flower> acceptableFlowers = flowerRegistry.getAcceptableFlowers(flowerType);
 			if (acceptableFlowers == null || acceptableFlowers.size() == 0) {
-				Log.severe("Flower type '" + flowerType + "' has no valid flowers set in apiculture.cfg. Add valid flowers or delete the config to set it to default.");
+				Log.error("Flower type '" + flowerType + "' has no valid flowers set in apiculture.cfg. Add valid flowers or delete the config to set it to default.");
 			}
 		}
 
@@ -351,7 +351,7 @@ public class PluginApiculture extends BlankForestryPlugin {
 				for (Flower flower : flowers) {
 					String name = ItemStackUtil.getBlockNameFromRegistryAsSting(flower.getBlock());
 					if (name == null) {
-						Log.severe("Could not find name for flower: " + flower + " with type: " + flowerType);
+						Log.warning("Could not find name for flower: " + flower + " with type: " + flowerType);
 						continue;
 					}
 

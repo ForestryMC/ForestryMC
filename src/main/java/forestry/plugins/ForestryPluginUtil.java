@@ -29,7 +29,7 @@ public class ForestryPluginUtil {
 				T instance = asmInstanceClass.newInstance();
 				instances.add(instance);
 			} catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
-				Log.severe("Failed to load: {}", asmData.getClassName(), e);
+				Log.error("Failed to load: {}", asmData.getClassName(), e);
 			}
 		}
 		return instances;

@@ -35,17 +35,6 @@ public abstract class IndividualLiving extends Individual implements IIndividual
 		health = nbt.getInteger("Health");
 		maxHealth = nbt.getInteger("MaxH");
 	}
-	
-	/* SAVING & LOADING */
-	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-
-		super.readFromNBT(nbttagcompound);
-
-		health = nbttagcompound.getInteger("Health");
-		maxHealth = nbttagcompound.getInteger("MaxH");
-
-	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbttagcompound) {

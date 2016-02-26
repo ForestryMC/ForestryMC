@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.tiles;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.Random;
 
@@ -17,7 +18,8 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-import forestry.api.core.INBTTagable;
+import forestry.api.core.INbtReadable;
+import forestry.api.core.INbtWritable;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IIndividual;
@@ -25,7 +27,7 @@ import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
 
-public class EscritoireGame implements INBTTagable, IStreamable {
+public class EscritoireGame implements INbtWritable, INbtReadable, IStreamable {
 	private static final Random rand = new Random();
 	public static final int BOUNTY_MAX = 16;
 
@@ -34,10 +36,15 @@ public class EscritoireGame implements INBTTagable, IStreamable {
 		public static final Status[] VALUES = values();
 	}
 
-	private final EscritoireGameBoard gameBoard = new EscritoireGameBoard();
+	@Nonnull
+	private EscritoireGameBoard gameBoard;
 	private long lastUpdate;
 	private int bountyLevel;
 	private Status status = Status.EMPTY;
+
+	public EscritoireGame() {
+		gameBoard = new EscritoireGameBoard();
+	}
 
 	public EscritoireGameToken getToken(int index) {
 		return gameBoard.getToken(index);
@@ -51,7 +58,6 @@ public class EscritoireGame implements INBTTagable, IStreamable {
 		return lastUpdate;
 	}
 
-	/* SAVING & LOADING */
 	@Override
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 		nbttagcompound.setInteger("bountyLevel", bountyLevel);
@@ -62,13 +68,13 @@ public class EscritoireGame implements INBTTagable, IStreamable {
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		bountyLevel = nbttagcompound.getInteger("bountyLevel");
-		lastUpdate = nbttagcompound.getLong("lastUpdate");
-		gameBoard.readFromNBT(nbttagcompound);
+	public void readFromNBT(NBTTagCompound nbt) {
+		bountyLevel = nbt.getInteger("bountyLevel");
+		lastUpdate = nbt.getLong("lastUpdate");
+		gameBoard = new EscritoireGameBoard(nbt);
 
-		if (nbttagcompound.hasKey("Status")) {
-			int statusOrdinal = nbttagcompound.getInteger("Status");
+		if (nbt.hasKey("Status")) {
+			int statusOrdinal = nbt.getInteger("Status");
 			status = Status.values()[statusOrdinal];
 		}
 

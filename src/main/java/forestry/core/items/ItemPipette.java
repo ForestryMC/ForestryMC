@@ -47,25 +47,25 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 
 	@Override
 	public boolean canPipette(ItemStack itemstack) {
-		PipetteContents contained = new PipetteContents(itemstack.getTagCompound());
-		return !contained.isFull();
+		PipetteContents contained = PipetteContents.create(itemstack);
+		return contained != null && !contained.isFull();
 	}
 
 	@Override
 	public int fill(ItemStack itemstack, FluidStack liquid, boolean doFill) {
-		PipetteContents contained = new PipetteContents(itemstack.getTagCompound());
+		PipetteContents contained = PipetteContents.create(itemstack);
 
 		int limit = getCapacity(itemstack);
 		int filled;
 
-		if (contained.getContents() == null) {
+		if (contained == null) {
 			if (liquid.amount > limit) {
 				filled = limit;
 			} else {
 				filled = liquid.amount;
 			}
 
-			contained.setContents(new FluidStack(liquid, filled));
+			contained = new PipetteContents(new FluidStack(liquid, filled));
 			filled = liquid.amount;
 		} else {
 			if (contained.getContents().amount >= limit) {
@@ -99,8 +99,10 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean flag) {
-		PipetteContents contained = new PipetteContents(itemstack.getTagCompound());
-		contained.addTooltip(list);
+		PipetteContents contained = PipetteContents.create(itemstack);
+		if (contained != null) {
+			contained.addTooltip(list);
+		}
 	}
 
 	/* Models */
@@ -132,8 +134,8 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 
 	@Override
 	public FluidStack drain(ItemStack pipette, int maxDrain, boolean doDrain) {
-		PipetteContents contained = new PipetteContents(pipette.getTagCompound());
-		if (contained.getContents() == null) {
+		PipetteContents contained = PipetteContents.create(pipette);
+		if (contained == null) {
 			return null;
 		}
 

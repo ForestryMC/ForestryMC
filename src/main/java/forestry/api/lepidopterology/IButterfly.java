@@ -5,6 +5,8 @@
  ******************************************************************************/
 package forestry.api.lepidopterology;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
@@ -12,6 +14,7 @@ import forestry.api.genetics.IIndividualLiving;
 
 public interface IButterfly extends IIndividualLiving {
 
+	@Nonnull
 	@Override
 	IButterflyGenome getGenome();
 

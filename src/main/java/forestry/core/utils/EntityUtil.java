@@ -49,7 +49,7 @@ public abstract class EntityUtil {
 
 	public static void registerEntity(Class<? extends Entity> entityClass, String ident, int id, int eggForeground, int eggBackground, int trackingRange, int updateFrequency, boolean sendVelocity) {
 		EntityRegistry.registerModEntity(entityClass, ident, id, ForestryAPI.instance, trackingRange, updateFrequency, sendVelocity);
-		Log.finer("Registered entity %s (%s) with id %s.", ident, entityClass.toString(), id);
+		Log.debug("Registered entity %s (%s) with id %s.", ident, entityClass.toString(), id);
 	}
 
 	@SuppressWarnings("unchecked")

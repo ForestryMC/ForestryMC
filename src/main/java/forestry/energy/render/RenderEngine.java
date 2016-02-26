@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.energy.render;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -23,7 +25,6 @@ import forestry.core.proxy.Proxies;
 import forestry.core.render.ForestryResource;
 import forestry.core.tiles.TemperatureState;
 import forestry.core.tiles.TileEngine;
-import forestry.core.utils.Log;
 
 public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
 
@@ -91,14 +92,9 @@ public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
 	}
 	
 	@Override
-	public void renderTileEntityAt(TileEngine engine, double x, double y, double z, float partialTicks, int destroyStage) {
+	public void renderTileEntityAt(@Nullable TileEngine engine, double x, double y, double z, float partialTicks, int destroyStage) {
 		if (engine != null) {
-			if (engine instanceof TileEngine) {
-				TileEngine tileEngine = engine;
-				render(tileEngine.getTemperatureState(), tileEngine.progress, tileEngine.getOrientation(), x, y, z);
-			} else {
-				Log.severe("Tried to render a tile entity that is not an engine: " + engine);
-			}
+			render(engine.getTemperatureState(), engine.progress, engine.getOrientation(), x, y, z);
 		} else {
 			render(TemperatureState.COOL, 0.25F, EnumFacing.UP, x, y, z);
 		}

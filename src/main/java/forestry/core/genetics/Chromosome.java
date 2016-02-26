@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.genetics;
 
+import javax.annotation.Nonnull;
 import java.util.Random;
 
 import net.minecraft.nbt.NBTTagCompound;
@@ -24,27 +25,24 @@ public class Chromosome implements IChromosome {
 	private static final String UID0_TAG = "UID0";
 	private static final String UID1_TAG = "UID1";
 
-	private IAllele primary;
-	private IAllele secondary;
+	@Nonnull
+	private final IAllele primary;
+	@Nonnull
+	private final IAllele secondary;
 
 	// / CONSTRUCTOR
-	private Chromosome() {
-	}
-
-	public Chromosome(IAllele allele) {
+	public Chromosome(@Nonnull IAllele allele) {
 		primary = secondary = allele;
 	}
 
-	public Chromosome(IAllele primary, IAllele secondary) {
+	public Chromosome(@Nonnull IAllele primary, @Nonnull IAllele secondary) {
 		this.primary = primary;
 		this.secondary = secondary;
 	}
 
-	// / SAVING & LOADING
-	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		primary = AlleleManager.alleleRegistry.getAllele(nbttagcompound.getString(UID0_TAG));
-		secondary = AlleleManager.alleleRegistry.getAllele(nbttagcompound.getString(UID1_TAG));
+	public Chromosome(@Nonnull NBTTagCompound nbt) {
+		primary = AlleleManager.alleleRegistry.getAllele(nbt.getString(UID0_TAG));
+		secondary = AlleleManager.alleleRegistry.getAllele(nbt.getString(UID1_TAG));
 	}
 
 	@Override
@@ -97,58 +95,25 @@ public class Chromosome implements IChromosome {
 			return secondary;
 		}
 	}
-
-	public boolean overrideInvalidAlleles(IAllele template, Class<? extends IAllele> chromosomeClass) {
-		boolean foundInvalidAlleles = false;
-
-		// use the other chromosome instead of the template if it's valid
-		if (primary != null && chromosomeClass.isInstance(primary)) {
-			template = primary;
-		} else if (secondary != null && chromosomeClass.isInstance(secondary)) {
-			template = secondary;
-		}
-
-		if (primary == null) {
-			Log.warning("Missing primary allele: {0}. Setting to: {1}", this, template);
-			primary = template;
-			foundInvalidAlleles = true;
-		} else if (!chromosomeClass.isInstance(primary)) {
-			Log.warning("Wrong primary allele: {0}. Setting to: {1}", this, template);
-			primary = template;
-			foundInvalidAlleles = true;
-		}
-		
-		if (secondary == null) {
-			Log.warning("Missing secondary allele: {0}. Setting to: {1}", this, template);
-			secondary = template;
-			foundInvalidAlleles = true;
-		} else if (!chromosomeClass.isInstance(secondary)) {
-			Log.warning("Wrong secondary allele: {0}. Setting to: {1}", this, template);
-			secondary = template;
-			foundInvalidAlleles = true;
-		}
-
-		return foundInvalidAlleles;
-	}
 	
 	public boolean hasInvalidAlleles(Class<? extends IAllele> chromosomeClass) {
 		if (primary == null) {
-			Log.severe("Missing primary allele: {0}", this);
+			Log.warning("Missing primary allele: {}", this);
 			return true;
 		}
 
 		if (!chromosomeClass.isInstance(primary)) {
-			Log.severe("Wrong primary allele for: {0}. Should be: {1}", this, chromosomeClass.getSimpleName());
+			Log.warning("Wrong primary allele for: {}. Should be: {}", this, chromosomeClass.getSimpleName());
 			return true;
 		}
 		
 		if (secondary == null) {
-			Log.severe("Missing secondary allele: {0}", this);
+			Log.warning("Missing secondary allele: {}", this);
 			return true;
 		}
 
 		if (!chromosomeClass.isInstance(secondary)) {
-			Log.severe("Wrong secondary allele for: {0}. Should be: {1}", this, chromosomeClass.getSimpleName());
+			Log.warning("Wrong secondary allele for: {}. Should be: {}", this, chromosomeClass.getSimpleName());
 			return true;
 		}
 		
@@ -156,12 +121,6 @@ public class Chromosome implements IChromosome {
 	}
 
 	/* HELPER FUNCTIONS */
-	public static Chromosome loadChromosomeFromNBT(NBTTagCompound compound) {
-		Chromosome chromosome = new Chromosome();
-		chromosome.readFromNBT(compound);
-		return chromosome;
-	}
-
 	public static IChromosome inheritChromosome(Random rand, IChromosome parent1, IChromosome parent2) {
 
 		IAllele choice1;

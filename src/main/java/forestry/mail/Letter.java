@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.mail;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -45,22 +46,14 @@ public class Letter implements ILetter {
 		this.recipient = new IMailAddress[]{recipient};
 	}
 
-	public Letter(NBTTagCompound nbttagcompound) {
-		if (nbttagcompound != null) {
-			readFromNBT(nbttagcompound);
-		}
-	}
-
-	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-
+	public Letter(@Nonnull NBTTagCompound nbttagcompound) {
 		this.isProcessed = nbttagcompound.getBoolean("PRC");
-		this.sender = MailAddress.loadFromNBT(nbttagcompound.getCompoundTag("SDR"));
+		this.sender = new MailAddress(nbttagcompound.getCompoundTag("SDR"));
 
 		int recipientCount = nbttagcompound.getShort("CRC");
 		this.recipient = new MailAddress[recipientCount];
 		for (int i = 0; i < recipientCount; i++) {
-			this.recipient[i] = MailAddress.loadFromNBT(nbttagcompound.getCompoundTag("RC" + i));
+			this.recipient[i] = new MailAddress(nbttagcompound.getCompoundTag("RC" + i));
 		}
 
 		this.text = nbttagcompound.getString("TXT");

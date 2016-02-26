@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.lepidopterology.genetics;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -51,15 +53,27 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 
 	private static final Random rand = new Random();
 
-	private IButterflyGenome genome;
+	@Nonnull
+	private final IButterflyGenome genome;
+	@Nullable
 	private IButterflyGenome mate;
 
 	/* CONSTRUCTOR */
-	public Butterfly(NBTTagCompound nbttagcompound) {
-		readFromNBT(nbttagcompound);
+	public Butterfly(@Nonnull NBTTagCompound nbt) {
+		super(nbt);
+
+		if (nbt.hasKey("Genome")) {
+			genome = new ButterflyGenome(nbt.getCompoundTag("Genome"));
+		} else {
+			genome = ButterflyManager.butterflyRoot.templateAsGenome(ButterflyManager.butterflyRoot.getDefaultTemplate());
+		}
+
+		if (nbt.hasKey("Mate")) {
+			mate = new ButterflyGenome(nbt.getCompoundTag("Mate"));
+		}
 	}
 
-	public Butterfly(IButterflyGenome genome) {
+	public Butterfly(@Nonnull IButterflyGenome genome) {
 		super(genome.getLifespan());
 		this.genome = genome;
 	}
@@ -92,29 +106,6 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 		}
 	}
 
-	/* SAVING & LOADING */
-	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-
-		if (nbttagcompound == null) {
-			this.genome = ButterflyManager.butterflyRoot.templateAsGenome(ButterflyManager.butterflyRoot.getDefaultTemplate());
-			return;
-		}
-
-		super.readFromNBT(nbttagcompound);
-
-		if (nbttagcompound.hasKey("Genome")) {
-			genome = new ButterflyGenome(nbttagcompound.getCompoundTag("Genome"));
-		} else {
-			genome = ButterflyManager.butterflyRoot.templateAsGenome(ButterflyManager.butterflyRoot.getDefaultTemplate());
-		}
-		if (nbttagcompound.hasKey("Mate")) {
-			mate = new ButterflyGenome(nbttagcompound.getCompoundTag("Mate"));
-		}
-
-	}
-
-
 	@Override
 	public IButterfly copy() {
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
@@ -122,11 +113,13 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 		return new Butterfly(nbttagcompound);
 	}
 
+	@Nonnull
 	@Override
 	public IButterflyGenome getGenome() {
 		return genome;
 	}
 
+	@Nullable
 	@Override
 	public IButterflyGenome getMate() {
 		return mate;

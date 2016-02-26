@@ -90,7 +90,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 		}
 
 		if (nbttagcompound.hasKey("address")) {
-			address = MailAddress.loadFromNBT(nbttagcompound.getCompoundTag("address"));
+			address = new MailAddress(nbttagcompound.getCompoundTag("address"));
 		}
 
 		this.isVirtual = nbttagcompound.getBoolean("VRT");

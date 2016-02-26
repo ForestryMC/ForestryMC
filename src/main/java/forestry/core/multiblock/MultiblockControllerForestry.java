@@ -86,7 +86,7 @@ public abstract class MultiblockControllerForestry extends MultiblockControllerB
 		getAccessHandler().setOwner(owner);
 	}
 
-	/* INBTTagable */
+	/* INbtWritable */
 	@Override
 	public void writeToNBT(NBTTagCompound data) {
 		accessHandler.writeToNBT(data);

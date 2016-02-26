@@ -46,7 +46,6 @@ import forestry.core.blocks.BlockTypeCoreTesr;
 import forestry.core.circuits.CircuitRegistry;
 import forestry.core.circuits.SolderManager;
 import forestry.core.commands.CommandPlugins;
-import forestry.core.commands.CommandVersion;
 import forestry.core.commands.RootCommand;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
@@ -114,7 +113,6 @@ public class PluginCore extends BlankForestryPlugin {
 		
 		MinecraftForge.EVENT_BUS.register(this);
 
-		rootCommand.addChildCommand(new CommandVersion());
 		rootCommand.addChildCommand(new CommandPlugins());
 
 		blocks.core.addDefinitions(BlockTypeCoreTesr.VALUES);

@@ -18,7 +18,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
-import forestry.api.core.INBTTagable;
+import forestry.api.core.INbtReadable;
+import forestry.api.core.INbtWritable;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
@@ -27,7 +28,7 @@ import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.factory.inventory.InventoryCraftingForestry;
 
-public final class MemorizedRecipe implements INBTTagable, IStreamable {
+public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStreamable {
 	private final InventoryCraftingForestry craftMatrix = new InventoryCraftingForestry();
 	private final List<ItemStack> recipeOutputs = new ArrayList<>();
 	private int selectedRecipe;
@@ -112,7 +113,7 @@ public final class MemorizedRecipe implements INBTTagable, IStreamable {
 		return locked;
 	}
 
-	/* INBTTagable */
+	/* INbtWritable */
 	@Override
 	public final void readFromNBT(NBTTagCompound nbttagcompound) {
 		InventoryUtil.readFromNBT(craftMatrix, nbttagcompound);

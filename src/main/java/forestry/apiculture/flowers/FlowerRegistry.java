@@ -96,7 +96,7 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 	public void registerAcceptableFlowerRule(IFlowerAcceptableRule acceptableFlower, String... flowerTypes) {
 		for (String flowerType : flowerTypes) {
 			if (defaultFlowerTypes.contains(flowerType)) {
-				Log.severe("IFlowerAcceptableRules are too slow to be applied to Forestry's built-in flower type: " + flowerType + ".");
+				Log.error("IFlowerAcceptableRules are too slow to be applied to Forestry's built-in flower type: " + flowerType + ".");
 			} else {
 				registeredRules.put(flowerType, acceptableFlower);
 			}

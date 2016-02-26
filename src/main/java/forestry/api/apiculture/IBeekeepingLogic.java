@@ -7,14 +7,15 @@ package forestry.api.apiculture;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 
-import forestry.api.core.INBTTagable;
+import forestry.api.core.INbtReadable;
+import forestry.api.core.INbtWritable;
 
 /**
  * Stores beekeeping logic for bee housings.
  * Get one with BeeManager.beeRoot.createBeekeepingLogic(IBeeHousing housing)
- * Save and load it to NBT using the INBTTagable methods.
+ * Save and load it to NBT using the INbtWritable methods.
  */
-public interface IBeekeepingLogic extends INBTTagable {
+public interface IBeekeepingLogic extends INbtWritable, INbtReadable {
 
 	/* SERVER */
 

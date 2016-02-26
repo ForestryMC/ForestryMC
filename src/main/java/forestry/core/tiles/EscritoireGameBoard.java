@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.tiles;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,7 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
-import forestry.api.core.INBTTagable;
+import forestry.api.core.INbtWritable;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IGenome;
@@ -30,7 +31,7 @@ import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
 
-public class EscritoireGameBoard implements INBTTagable, IStreamable {
+public class EscritoireGameBoard implements INbtWritable, IStreamable {
 	private static final Random rand = new Random();
 	private static final int TOKEN_COUNT_MAX = 22;
 	private static final int TOKEN_COUNT_MIN = 6;
@@ -38,6 +39,26 @@ public class EscritoireGameBoard implements INBTTagable, IStreamable {
 	private final List<EscritoireGameToken> gameTokens = new ArrayList<>(TOKEN_COUNT_MAX);
 	private int tokenCount;
 
+	public EscritoireGameBoard() {
+
+	}
+
+	public EscritoireGameBoard(@Nonnull NBTTagCompound nbt) {
+		tokenCount = nbt.getInteger("TokenCount");
+
+		if (tokenCount > 0) {
+			EscritoireGameToken[] tokens = new EscritoireGameToken[tokenCount];
+			NBTTagList nbttaglist = nbt.getTagList("GameTokens", 10);
+
+			for (int j = 0; j < nbttaglist.tagCount(); ++j) {
+				NBTTagCompound nbttagcompound2 = nbttaglist.getCompoundTagAt(j);
+				int index = nbttagcompound2.getByte("Slot");
+				tokens[index] = new EscritoireGameToken(nbttagcompound2);
+			}
+
+			Collections.addAll(gameTokens, tokens);
+		}
+	}
 
 	public boolean initialize(ItemStack specimen) {
 		IIndividual individual = AlleleManager.alleleRegistry.getIndividual(specimen);
@@ -166,26 +187,6 @@ public class EscritoireGameBoard implements INBTTagable, IStreamable {
 		}
 
 		return tokenCount;
-	}
-
-	/* INBTTagable */
-	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		tokenCount = nbttagcompound.getInteger("TokenCount");
-		gameTokens.clear();
-
-		if (tokenCount > 0) {
-			EscritoireGameToken[] tokens = new EscritoireGameToken[tokenCount];
-			NBTTagList nbttaglist = nbttagcompound.getTagList("GameTokens", 10);
-
-			for (int j = 0; j < nbttaglist.tagCount(); ++j) {
-				NBTTagCompound nbttagcompound2 = nbttaglist.getCompoundTagAt(j);
-				int index = nbttagcompound2.getByte("Slot");
-				tokens[index] = new EscritoireGameToken(nbttagcompound2);
-			}
-
-			Collections.addAll(gameTokens, tokens);
-		}
 	}
 
 	@Override

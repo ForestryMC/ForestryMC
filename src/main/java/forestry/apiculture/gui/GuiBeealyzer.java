@@ -184,7 +184,7 @@ public class GuiBeealyzer extends GuiAlyzer {
 			nocturnal0 = bee.getGenome().getPrimary().isNocturnal() ? yes : no;
 			diurnal0 = !bee.getGenome().getPrimary().isNocturnal() ? yes : no;
 		}
-		if (((AlleleBoolean) bee.getGenome().getInactiveAllele(EnumBeeChromosome.NOCTURNAL)).getValue()) {
+		if (((AlleleBoolean) bee.getGenome().getInactiveAllele(EnumBeeChromosome.NEVER_SLEEPS)).getValue()) {
 			nocturnal1 = diurnal1 = yes;
 		} else {
 			nocturnal1 = bee.getGenome().getSecondary().isNocturnal() ? yes : no;

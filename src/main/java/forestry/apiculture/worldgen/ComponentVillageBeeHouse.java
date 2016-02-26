@@ -105,8 +105,7 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
-	public static ComponentVillageBeeHouse buildComponent(StructureVillagePieces.Start startPiece, List par1List, Random random, int par3, int par4, int par5, EnumFacing par6, int par7) {
+	public static ComponentVillageBeeHouse buildComponent(StructureVillagePieces.Start startPiece, List<StructureComponent> par1List, Random random, int par3, int par4, int par5, EnumFacing par6, int par7) {
 		StructureBoundingBox bbox = StructureBoundingBox.getComponentToAddBoundingBox(par3, par4, par5, 0, 0, 0, 10, 9, 11, par6);
 		if (!canVillageGoDeeper(bbox) || StructureComponent.findIntersecting(par1List, bbox) != null) {
 			return null;

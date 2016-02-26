@@ -8,7 +8,7 @@ package forestry.api.multiblock;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
-import forestry.api.core.INBTTagable;
+import forestry.api.core.INbtWritable;
 
 /**
  * Multiblock Logic implements the basic logic for IMultiblockComponent tile entities.
@@ -17,7 +17,7 @@ import forestry.api.core.INBTTagable;
  * IMultiblockComponent tile entities must wire up the methods in the "Updating and Synchronization" section.
  * As a starting point, you can use MultiblockTileEntityBase.
  */
-public interface IMultiblockLogic extends INBTTagable {
+public interface IMultiblockLogic extends INbtWritable {
 
 	/**
 	 * @return True if this block is connected to a multiblock controller. False otherwise.
@@ -62,7 +62,6 @@ public interface IMultiblockLogic extends INBTTagable {
 	 * Read the logic's data from file.
 	 * Use this in Tile.readFromNBT()
 	 */
-	@Override
 	void readFromNBT(NBTTagCompound nbttagcompound);
 
 	/**

@@ -35,7 +35,6 @@ import forestry.core.EventHandlerCore;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.GameMode;
-import forestry.core.config.Version;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.errors.ErrorStateRegistry;
 import forestry.core.gui.GuiHandler;
@@ -55,7 +54,7 @@ import forestry.plugins.PluginManager;
 @Mod(
 		modid = Constants.MOD,
 		name = "Forestry",
-		version = Version.VERSION,
+		version = Constants.VERSION,
 		guiFactory = "forestry.core.config.ForestryGuiConfigFactory",
 		dependencies = "required-after:Forge@[10.13.4.1566,);"
 				+ "after:Buildcraft|Core@[6.1.7,);"

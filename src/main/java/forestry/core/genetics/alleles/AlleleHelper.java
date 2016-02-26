@@ -119,7 +119,7 @@ public class AlleleHelper implements IAlleleHelper {
 		booleans.put(false, new AlleleBoolean(modId, "bool", false, false));
 		for (IAlleleBoolean alleleBoolean : booleans.values()) {
 			AlleleManager.alleleRegistry.registerAllele(alleleBoolean,
-					EnumBeeChromosome.NOCTURNAL,
+					EnumBeeChromosome.NEVER_SLEEPS,
 					EnumBeeChromosome.TOLERANT_FLYER,
 					EnumBeeChromosome.CAVE_DWELLING,
 					EnumButterflyChromosome.NOCTURNAL,

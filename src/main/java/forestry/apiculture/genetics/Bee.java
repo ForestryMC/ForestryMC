@@ -75,30 +75,30 @@ public class Bee extends IndividualLiving implements IBee {
 	private boolean isNatural = true;
 
 	@Nonnull
-	private IBeeGenome genome;
+	private final IBeeGenome genome;
 	@Nullable
 	private IBeeGenome mate;
 
 	/* CONSTRUCTOR */
-	public Bee(@Nonnull NBTTagCompound nbttagcompound) {
-		super(nbttagcompound);
+	public Bee(@Nonnull NBTTagCompound nbt) {
+		super(nbt);
 
-		if (nbttagcompound.hasKey("NA")) {
-			isNatural = nbttagcompound.getBoolean("NA");
+		if (nbt.hasKey("NA")) {
+			isNatural = nbt.getBoolean("NA");
 		}
 
-		if (nbttagcompound.hasKey("GEN")) {
-			generation = nbttagcompound.getInteger("GEN");
+		if (nbt.hasKey("GEN")) {
+			generation = nbt.getInteger("GEN");
 		}
 
-		if (nbttagcompound.hasKey("Genome")) {
-			genome = BeeGenome.fromNBT(nbttagcompound.getCompoundTag("Genome"));
+		if (nbt.hasKey("Genome")) {
+			genome = BeeGenome.fromNBT(nbt.getCompoundTag("Genome"));
 		} else {
 			genome = BeeDefinition.FOREST.getGenome();
 		}
 
-		if (nbttagcompound.hasKey("Mate")) {
-			mate = BeeGenome.fromNBT(nbttagcompound.getCompoundTag("Mate"));
+		if (nbt.hasKey("Mate")) {
+			mate = BeeGenome.fromNBT(nbt.getCompoundTag("Mate"));
 		}
 	}
 
@@ -116,37 +116,6 @@ public class Bee extends IndividualLiving implements IBee {
 		this.genome = genome;
 		this.isNatural = isNatural;
 		this.generation = generation;
-	}
-
-	/* SAVING & LOADING */
-	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-
-		if (nbttagcompound == null) {
-			genome = BeeDefinition.FOREST.getGenome();
-			return;
-		}
-
-		super.readFromNBT(nbttagcompound);
-
-		if (nbttagcompound.hasKey("NA")) {
-			isNatural = nbttagcompound.getBoolean("NA");
-		}
-
-		if (nbttagcompound.hasKey("GEN")) {
-			generation = nbttagcompound.getInteger("GEN");
-		}
-
-		if (nbttagcompound.hasKey("Genome")) {
-			genome = BeeGenome.fromNBT(nbttagcompound.getCompoundTag("Genome"));
-		} else {
-			genome = BeeDefinition.FOREST.getGenome();
-		}
-
-		if (nbttagcompound.hasKey("Mate")) {
-			mate = BeeGenome.fromNBT(nbttagcompound.getCompoundTag("Mate"));
-		}
-
 	}
 
 	@Override
