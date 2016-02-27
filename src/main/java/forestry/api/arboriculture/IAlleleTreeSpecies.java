@@ -14,11 +14,11 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.core.IModelManager;
-import forestry.api.genetics.IAlleleComparable;
+import forestry.api.genetics.IAlleleProperty;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IFruitFamily;
 
-public interface IAlleleTreeSpecies extends IAlleleSpecies<TreeChromosome>, IAlleleComparable<IAlleleTreeSpecies> {
+public interface IAlleleTreeSpecies extends IAlleleSpecies<TreeChromosome>, IAlleleProperty<IAlleleTreeSpecies> {
 
 	@Override
 	ITreeRoot getRoot();

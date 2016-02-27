@@ -12,9 +12,9 @@ package forestry.core.blocks.propertys;
 
 import net.minecraft.block.properties.IProperty;
 
-import forestry.api.genetics.IAlleleComparable;
+import forestry.api.genetics.IAlleleProperty;
 
-public abstract class PropertyAllele<A extends IAlleleComparable<A>> implements IProperty<A> {
+public abstract class PropertyAllele<A extends IAlleleProperty<A>> implements IProperty<A> {
 
 	protected final String name;
 

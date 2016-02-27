@@ -1,6 +1,6 @@
 package forestry.api.genetics;
 
-public interface IAlleleComparable<A extends IAlleleComparable<A>> extends IAllele, Comparable<A> {
+public interface IAlleleProperty<A extends IAlleleProperty<A>> extends IAllele, Comparable<A> {
 
 	/**
 	 * To campare the allele for the propertys
