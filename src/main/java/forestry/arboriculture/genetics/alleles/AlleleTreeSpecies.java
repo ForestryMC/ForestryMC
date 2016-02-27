@@ -139,5 +139,10 @@ public class AlleleTreeSpecies extends AlleleSpecies<TreeChromosome> implements 
 	public IModelProvider getModelProvider() {
 		return null;
 	}
+	
+	@Override
+	public int compareTo(IAlleleTreeSpecies o) {
+		return 0;
+	}
 
 }

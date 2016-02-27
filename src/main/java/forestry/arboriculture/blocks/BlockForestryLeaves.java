@@ -72,7 +72,6 @@ import forestry.core.blocks.propertys.UnlistedBlockAccess;
 import forestry.core.blocks.propertys.UnlistedBlockPos;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.ItemStackUtil;
-import forestry.plugins.PluginArboriculture;
 
 public class BlockForestryLeaves extends BlockLeavesBase implements ITileEntityProvider, IShearable, IGrowable, IItemModelRegister {
 

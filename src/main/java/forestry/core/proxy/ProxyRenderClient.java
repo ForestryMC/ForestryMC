@@ -36,8 +36,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.b3d.B3DLoader;
 import net.minecraftforge.client.model.obj.OBJLoader;
-import net.minecraftforge.fml.client.FMLClientHandler;
-
 import forestry.apiculture.entities.EntityFXBee;
 import forestry.apiculture.render.ParticleRenderer;
 import forestry.apiculture.render.TextureHabitatLocator;

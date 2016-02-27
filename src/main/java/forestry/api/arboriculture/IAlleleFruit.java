@@ -5,12 +5,12 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
-import forestry.api.genetics.IAllele;
+import forestry.api.genetics.IAlleleComparable;
 
 /**
  * Simple allele encapsulating an {@link IFruitProvider}.
  */
-public interface IAlleleFruit extends IAllele {
+public interface IAlleleFruit extends IAlleleComparable<IAlleleFruit> {
 
 	IFruitProvider getProvider();
 	

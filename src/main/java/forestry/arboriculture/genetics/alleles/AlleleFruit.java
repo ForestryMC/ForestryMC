@@ -96,5 +96,10 @@ public class AlleleFruit extends AlleleCategorized implements IAlleleFruit {
 	public String getModID() {
 		return getProvider().getModID();
 	}
+	
+	@Override
+	public int compareTo(IAlleleFruit o) {
+		return 0;
+	}
 
 }
