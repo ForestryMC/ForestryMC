@@ -111,10 +111,10 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 		float upSpread = (world.rand.nextFloat() * 6F) / 16F;
 		fxY += upSpread;
 
-		Proxies.render.addEntitySwarmFX(world, (fxX - distanceFromCenter), fxY, (fxZ + leftRightSpreadFromCenter));
-		Proxies.render.addEntitySwarmFX(world, (fxX + distanceFromCenter), fxY, (fxZ + leftRightSpreadFromCenter));
-		Proxies.render.addEntitySwarmFX(world, (fxX + leftRightSpreadFromCenter), fxY, (fxZ - distanceFromCenter));
-		Proxies.render.addEntitySwarmFX(world, (fxX + leftRightSpreadFromCenter), fxY, (fxZ + distanceFromCenter));
+		Proxies.render.addEntityHoneyDustFX(world, (fxX - distanceFromCenter), fxY, (fxZ + leftRightSpreadFromCenter));
+		Proxies.render.addEntityHoneyDustFX(world, (fxX + distanceFromCenter), fxY, (fxZ + leftRightSpreadFromCenter));
+		Proxies.render.addEntityHoneyDustFX(world, (fxX + leftRightSpreadFromCenter), fxY, (fxZ - distanceFromCenter));
+		Proxies.render.addEntityHoneyDustFX(world, (fxX + leftRightSpreadFromCenter), fxY, (fxZ + distanceFromCenter));
 	}
 
 	@Override

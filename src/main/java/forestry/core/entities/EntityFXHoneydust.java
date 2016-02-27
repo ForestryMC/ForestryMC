@@ -15,13 +15,9 @@ import net.minecraft.world.World;
 
 public class EntityFXHoneydust extends EntityReddustFX {
 
-	public EntityFXHoneydust(World world, double d, double d1, double d2, float f, float f1, float f2) {
-		this(world, d, d1, d2, 1.0F, f, f1, f2);
-	}
-
-	public EntityFXHoneydust(World world, double d, double d1, double d2, float f, float f1, float f2, float f3) {
-		super(world, d, d1, d2, f, f1, f2, f3);
-		particleRed = 0.9F + (world.rand.nextFloat() * 0.2F);
+	public EntityFXHoneydust(World world, double x, double y, double z, float f1, float f2, float f3) {
+		super(world, x, y, z, 1.0F, f1, f2, f3);
+		particleRed = 0.9F + (world.rand.nextFloat() * 0.1F);
 		particleGreen = 0.75F + (world.rand.nextFloat() * 0.2F);
 		particleBlue = 0F + (world.rand.nextFloat() * 0.2F);
 	}

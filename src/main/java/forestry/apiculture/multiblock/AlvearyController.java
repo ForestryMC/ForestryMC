@@ -280,10 +280,10 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 				fxY += upSpread;
 
 				// display fx on all 4 sides
-				Proxies.render.addEntitySwarmFX(worldObj, (fxX - distanceFromCenter), fxY, (fxZ + leftRightSpreadFromCenter));
-				Proxies.render.addEntitySwarmFX(worldObj, (fxX + distanceFromCenter), fxY, (fxZ + leftRightSpreadFromCenter));
-				Proxies.render.addEntitySwarmFX(worldObj, (fxX + leftRightSpreadFromCenter), fxY, (fxZ - distanceFromCenter));
-				Proxies.render.addEntitySwarmFX(worldObj, (fxX + leftRightSpreadFromCenter), fxY, (fxZ + distanceFromCenter));
+				Proxies.render.addEntityHoneyDustFX(worldObj, (fxX - distanceFromCenter), fxY, (fxZ + leftRightSpreadFromCenter));
+				Proxies.render.addEntityHoneyDustFX(worldObj, (fxX + distanceFromCenter), fxY, (fxZ + leftRightSpreadFromCenter));
+				Proxies.render.addEntityHoneyDustFX(worldObj, (fxX + leftRightSpreadFromCenter), fxY, (fxZ - distanceFromCenter));
+				Proxies.render.addEntityHoneyDustFX(worldObj, (fxX + leftRightSpreadFromCenter), fxY, (fxZ + distanceFromCenter));
 			}
 		}
 	}

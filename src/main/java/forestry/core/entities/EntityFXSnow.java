@@ -35,7 +35,7 @@ public class EntityFXSnow extends EntityFX {
 
 	@Override
 	public int getFXLayer() {
-		return 2;
+		return 1;
 	}
 
 	@Override

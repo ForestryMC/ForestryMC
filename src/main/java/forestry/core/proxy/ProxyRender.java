@@ -99,21 +99,21 @@ public class ProxyRender {
 
 	/* FX */
 
-	public void addBeeHiveFX(String texture, World world, double d1, double d2, double d3, int color) {
+	public void addBeeHiveFX(String texture, World world, double x, double y, double z, int color) {
 	}
 
-	public void addEntitySwarmFX(World world, double d1, double d2, double d3) {
+	public void addEntityHoneyDustFX(World world, double x, double y, double z) {
 	}
 
-	public void addEntityExplodeFX(World world, double d1, double d2, double d3) {
+	public void addEntityExplodeFX(World world, double x, double y, double z) {
 	}
 
-	public void addEntitySnowFX(World world, double d1, double d2, double d3) {
+	public void addEntitySnowFX(World world, double x, double y, double z) {
 	}
 
-	public void addEntityIgnitionFX(World world, double d1, double d2, double d3) {
+	public void addEntityIgnitionFX(World world, double x, double y, double z) {
 	}
 
-	public void addEntityPotionFX(World world, double d1, double d2, double d3, int color) {
+	public void addEntityPotionFX(World world, double x, double y, double z, int color) {
 	}
 }

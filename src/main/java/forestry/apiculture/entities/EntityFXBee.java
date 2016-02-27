@@ -86,6 +86,6 @@ public class EntityFXBee extends EntityFX {
 
 	@Override
 	public int getFXLayer() {
-		return 2;
+		return 1;
 	}
 }

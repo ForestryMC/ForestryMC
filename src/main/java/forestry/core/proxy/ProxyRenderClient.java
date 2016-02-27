@@ -15,6 +15,7 @@ import javax.annotation.Nonnull;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.statemap.IStateMapper;
@@ -65,7 +66,7 @@ public class ProxyRenderClient extends ProxyRender {
 
 	@Override
 	public boolean fancyGraphicsEnabled() {
-		return Proxies.common.getClientInstance().gameSettings.fancyGraphics;
+		return Minecraft.getMinecraft().gameSettings.fancyGraphics;
 	}
 
 	@Override
@@ -113,12 +114,12 @@ public class ProxyRenderClient extends ProxyRender {
 
 	@Override
 	public IResourceManager getSelectedTexturePack() {
-		return Proxies.common.getClientInstance().getResourceManager();
+		return Minecraft.getMinecraft().getResourceManager();
 	}
 
 	@Override
 	public void bindTexture(ResourceLocation location) {
-		Proxies.common.getClientInstance().getTextureManager().bindTexture(location);
+		Minecraft.getMinecraft().getTextureManager().bindTexture(location);
 	}
 	
 	@Override
@@ -159,12 +160,12 @@ public class ProxyRenderClient extends ProxyRender {
 		ModelManager.registerModels();
 	}
 
-	public static boolean shouldSpawnParticle(World world) {
+	private static boolean shouldSpawnParticle(World world) {
 		if (!Config.enableParticleFX) {
 			return false;
 		}
 
-		Minecraft mc = FMLClientHandler.instance().getClient();
+		Minecraft mc = Minecraft.getMinecraft();
 		int particleSetting = mc.gameSettings.particleSetting;
 
 		// minimal
@@ -182,56 +183,60 @@ public class ProxyRenderClient extends ProxyRender {
 	}
 
 	@Override
-	public void addBeeHiveFX(String icon, World world, double d1, double d2, double d3, int color) {
+	public void addBeeHiveFX(String icon, World world, double x, double y, double z, int color) {
 		if (!shouldSpawnParticle(world)) {
 			return;
 		}
 
-		EntityFX fx = new EntityFXBee(world, d1, d2, d3, color);
+		EntityFX fx = new EntityFXBee(world, x, y, z, color);
 		TextureAtlasSprite sprite = TextureManager.getInstance().getDefault(icon);
 		fx.setParticleIcon(sprite);
 		ParticleRenderer.getInstance().addEffect(fx);
 	}
 
 	@Override
-	public void addEntitySwarmFX(World world, double d1, double d2, double d3) {
+	public void addEntityHoneyDustFX(World world, double x, double y, double z) {
 		if (!shouldSpawnParticle(world)) {
 			return;
 		}
 
-		Proxies.common.getClientInstance().effectRenderer.addEffect(new EntityFXHoneydust(world, d1, d2, d3, 0, 0, 0));
+		EffectRenderer effectRenderer = Minecraft.getMinecraft().effectRenderer;
+		effectRenderer.addEffect(new EntityFXHoneydust(world, x, y, z, 0, 0, 0));
 	}
 
 	@Override
-	public void addEntityExplodeFX(World world, double d1, double d2, double d3) {
+	public void addEntityExplodeFX(World world, double x, double y, double z) {
 		if (!shouldSpawnParticle(world)) {
 			return;
 		}
 
-		EntityFX entityfx = Proxies.common.getClientInstance().effectRenderer.spawnEffectParticle(EnumParticleTypes.EXPLOSION_NORMAL.getParticleID(), d1, d2, d3, 0, 0, 0);
-		Proxies.common.getClientInstance().effectRenderer.addEffect(entityfx);
+		EffectRenderer effectRenderer = Minecraft.getMinecraft().effectRenderer;
+		EntityFX entityfx = effectRenderer.spawnEffectParticle(EnumParticleTypes.EXPLOSION_NORMAL.getParticleID(), x, y, z, 0, 0, 0);
+		effectRenderer.addEffect(entityfx);
 	}
 
 	@Override
-	public void addEntitySnowFX(World world, double d1, double d2, double d3) {
+	public void addEntitySnowFX(World world, double x, double y, double z) {
 		if (!shouldSpawnParticle(world)) {
 			return;
 		}
 
-		Proxies.common.getClientInstance().effectRenderer.addEffect(new EntityFXSnow(world, d1 + world.rand.nextGaussian(), d2, d3 + world.rand.nextGaussian()));
+		EffectRenderer effectRenderer = Minecraft.getMinecraft().effectRenderer;
+		effectRenderer.addEffect(new EntityFXSnow(world, x + world.rand.nextGaussian(), y, z + world.rand.nextGaussian()));
 	}
 
 	@Override
-	public void addEntityIgnitionFX(World world, double d1, double d2, double d3) {
+	public void addEntityIgnitionFX(World world, double x, double y, double z) {
 		if (!shouldSpawnParticle(world)) {
 			return;
 		}
 
-		Proxies.common.getClientInstance().effectRenderer.addEffect(new EntityFXIgnition(world, d1, d2, d3));
+		EffectRenderer effectRenderer = Minecraft.getMinecraft().effectRenderer;
+		effectRenderer.addEffect(new EntityFXIgnition(world, x, y, z));
 	}
 
 	@Override
-	public void addEntityPotionFX(World world, double d1, double d2, double d3, int color) {
+	public void addEntityPotionFX(World world, double x, double y, double z, int color) {
 		if (!shouldSpawnParticle(world)) {
 			return;
 		}
@@ -240,10 +245,11 @@ public class ProxyRenderClient extends ProxyRender {
 		float green = (color >> 8 & 255) / 255.0F;
 		float blue = (color & 255) / 255.0F;
 		
-		EntityFX entityfx = Proxies.common.getClientInstance().effectRenderer.spawnEffectParticle(EnumParticleTypes.SPELL.getParticleID(), d1, d2, d3, 0, 0, 0);
+		EffectRenderer effectRenderer = Minecraft.getMinecraft().effectRenderer;
+		EntityFX entityfx = effectRenderer.spawnEffectParticle(EnumParticleTypes.SPELL.getParticleID(), x, y, z, 0, 0, 0);
 		entityfx.setRBGColorF(red, green, blue);
 
-		Proxies.common.getClientInstance().effectRenderer.addEffect(entityfx);
+		effectRenderer.addEffect(entityfx);
 	}
 
 	private static class BlockModeStateMapper extends StateMapperBase {
