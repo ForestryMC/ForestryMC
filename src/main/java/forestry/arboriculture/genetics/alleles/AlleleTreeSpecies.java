@@ -23,19 +23,21 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
-import forestry.api.arboriculture.IAlleleTreeSpeciesCustom;
+import forestry.api.arboriculture.IAlleleTreeSpeciesBuilder;
 import forestry.api.arboriculture.IGermlingModelProvider;
 import forestry.api.arboriculture.ILeafSpriteProvider;
 import forestry.api.arboriculture.ITreeGenerator;
 import forestry.api.arboriculture.ITreeRoot;
+import forestry.api.arboriculture.TreeChromosome;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.IModelManager;
 import forestry.api.core.IModelProvider;
+import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IFruitFamily;
 import forestry.core.genetics.alleles.AlleleSpecies;
 
-public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeciesCustom {
+public class AlleleTreeSpecies extends AlleleSpecies<TreeChromosome> implements IAlleleTreeSpecies, IAlleleTreeSpeciesBuilder {
 	private final ITreeGenerator generator;
 	private final IGermlingModelProvider germlingModelProvider;
 	private final ILeafSpriteProvider leafmodelProvider;
@@ -52,6 +54,13 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 		this.germlingModelProvider = germlingModelProvider;
 		this.leafmodelProvider = leafIconProvider;
 		this.mdoelName = modelName;
+	}
+
+	// TODO: break this into a separate builder class
+	@Override
+	public IAlleleTreeSpecies build() {
+		AlleleManager.alleleRegistry.registerAllele(this, TreeChromosome.SPECIES);
+		return this;
 	}
 
 	@Override

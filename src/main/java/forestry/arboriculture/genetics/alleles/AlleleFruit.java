@@ -18,9 +18,9 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 import forestry.api.arboriculture.EnumFruitFamily;
-import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.arboriculture.IFruitProvider;
+import forestry.api.arboriculture.TreeChromosome;
 import forestry.api.genetics.AlleleManager;
 import forestry.arboriculture.FruitProviderNone;
 import forestry.arboriculture.FruitProviderPod;
@@ -60,7 +60,7 @@ public class AlleleFruit extends AlleleCategorized implements IAlleleFruit {
 		);
 
 		for (IAlleleFruit fruitAllele : fruitAlleles) {
-			AlleleManager.alleleRegistry.registerAllele(fruitAllele, EnumTreeChromosome.FRUITS);
+			AlleleManager.alleleRegistry.registerAllele(fruitAllele, TreeChromosome.FRUITS);
 		}
 	}
 
@@ -75,11 +75,13 @@ public class AlleleFruit extends AlleleCategorized implements IAlleleFruit {
 		this.provider = provider;
 	}
 
+	@Nonnull
 	@Override
 	public IFruitProvider getProvider() {
 		return this.provider;
 	}
-	
+
+	@Nonnull
 	@Override
 	public String getName() {
 		return getProvider().getDescription();

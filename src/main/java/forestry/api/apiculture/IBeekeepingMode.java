@@ -5,18 +5,15 @@
  ******************************************************************************/
 package forestry.api.apiculture;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
-public interface IBeekeepingMode {
+import forestry.api.genetics.ISpeciesMode;
 
-	/**
-	 * @return Localized name of this beekeeping mode.
-	 */
-	String getName();
-
+public interface IBeekeepingMode extends ISpeciesMode<BeeChromosome> {
 	/**
 	 * @return Localized list of strings outlining the behaviour of this beekeeping mode.
 	 */
@@ -57,12 +54,6 @@ public interface IBeekeepingMode {
 
 	/**
 	 * @param queen
-	 * @return true if an offspring of this queen is considered a natural
-	 */
-	boolean isNaturalOffspring(IBee queen);
-
-	/**
-	 * @param queen
 	 * @return true if this mode allows the passed queen or princess to be multiplied
 	 */
 	boolean mayMultiplyPrincess(IBee queen);
@@ -70,5 +61,6 @@ public interface IBeekeepingMode {
 	/**
 	 * @return the bee modifier for this mode
 	 */
+	@Nonnull
 	IBeeModifier getBeeModifier();
 }

@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.farming.multiblock;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 
 import net.minecraft.nbt.NBTTagCompound;
@@ -68,7 +69,7 @@ public class FarmFertilizerManager implements INbtWritable, INbtReadable, IStrea
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound data) {
+	public void writeToNBT(@Nonnull NBTTagCompound data) {
 		data.setInteger("StoredFertilizer", storedFertilizer);
 	}
 

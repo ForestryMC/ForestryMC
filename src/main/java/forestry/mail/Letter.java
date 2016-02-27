@@ -62,7 +62,7 @@ public class Letter implements ILetter {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
+	public void writeToNBT(@Nonnull NBTTagCompound nbttagcompound) {
 
 		nbttagcompound.setBoolean("PRC", isProcessed);
 

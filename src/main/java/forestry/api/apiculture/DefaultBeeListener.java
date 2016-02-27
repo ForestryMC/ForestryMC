@@ -5,7 +5,7 @@
  ******************************************************************************/
 package forestry.api.apiculture;
 
-import forestry.api.genetics.IIndividual;
+import forestry.api.arboriculture.ITree;
 
 /**
  * Easily extendable default IBeeListener.
@@ -24,7 +24,7 @@ public class DefaultBeeListener implements IBeeListener {
 	}
 
 	@Override
-	public boolean onPollenRetrieved(IIndividual pollen) {
+	public boolean onPollenRetrieved(ITree pollen) {
 		return false;
 	}
 

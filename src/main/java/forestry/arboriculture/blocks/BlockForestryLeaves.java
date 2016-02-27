@@ -12,6 +12,7 @@ package forestry.arboriculture.blocks;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -176,7 +177,7 @@ public class BlockForestryLeaves extends BlockLeavesBase implements ITileEntityP
 		}
 
 		// Add saplings
-		ITree[] saplings = tile.getTree().getSaplings((World) world, playerProfile, pos, saplingModifier);
+		Collection<ITree> saplings = tile.getTree().getSaplings((World) world, playerProfile, pos, saplingModifier);
 
 		for (ITree sapling : saplings) {
 			if (sapling != null) {

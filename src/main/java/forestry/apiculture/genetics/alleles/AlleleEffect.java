@@ -19,8 +19,8 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.Vec3;
 
+import forestry.api.apiculture.BeeChromosome;
 import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.IAlleleBeeEffect;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
@@ -79,7 +79,7 @@ public abstract class AlleleEffect extends AlleleCategorized implements IAlleleB
 		);
 
 		for (IAlleleBeeEffect beeEffect : beeEffects) {
-			AlleleManager.alleleRegistry.registerAllele(beeEffect, EnumBeeChromosome.EFFECT);
+			AlleleManager.alleleRegistry.registerAllele(beeEffect, BeeChromosome.EFFECT);
 		}
 	}
 

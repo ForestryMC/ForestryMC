@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -63,7 +65,7 @@ public class FakeBeekeepingLogic implements IBeekeepingLogic {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
+	public void writeToNBT(@Nonnull NBTTagCompound nbttagcompound) {
 
 	}
 }

@@ -11,6 +11,7 @@
 package forestry.apiculture.items;
 
 import java.util.List;
+import java.util.Map;
 
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.resources.model.ModelResourceLocation;
@@ -23,8 +24,8 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import forestry.api.apiculture.BeeChromosome;
 import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IBee;
@@ -153,7 +154,8 @@ public class ItemBeeGE extends ItemGE {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
+		Map<String, IAllele> registeredAlleles = AlleleManager.alleleRegistry.getRegisteredAlleles();
+		for (IAllele allele : registeredAlleles.values()) {
 			if (allele instanceof IAlleleBeeSpecies) {
 				((IAlleleBeeSpecies) allele).getModelProvider().registerModels(item, manager);
 			}
@@ -167,8 +169,7 @@ public class ItemBeeGE extends ItemGE {
 		public ModelResourceLocation getModelLocation(ItemStack stack) {
 			IAlleleBeeSpecies species = (IAlleleBeeSpecies) getSpecies(stack);
 			if (species == null) {
-				species = (IAlleleBeeSpecies) BeeManager.beeRoot.getDefaultTemplate()[EnumBeeChromosome.SPECIES
-						.ordinal()];
+				species = (IAlleleBeeSpecies) BeeManager.beeRoot.getDefaultTemplate().get(BeeChromosome.SPECIES);
 			}
 			return species.getModel(type);
 		}

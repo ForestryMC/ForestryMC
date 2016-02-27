@@ -19,7 +19,7 @@ public class SaveEventHandlerApiculture implements ISaveEventHandler {
 
 	@Override
 	public void onWorldLoad(World world) {
-		BeeManager.beeRoot.resetBeekeepingMode();
+		BeeManager.beeRoot.resetMode();
 	}
 
 	@Override

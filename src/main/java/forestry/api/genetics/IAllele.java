@@ -5,6 +5,8 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
+import javax.annotation.Nonnull;
+
 /**
  * An {@link IIndividual}'s {@link IGenome} is composed of {@link IChromosome}s consisting each of a primary and secondary {@link IAllele}.
  *
@@ -19,6 +21,7 @@ public interface IAllele {
 	/**
 	 * @return A unique string identifier for this allele.
 	 */
+	@Nonnull
 	String getUID();
 
 	/**
@@ -29,11 +32,13 @@ public interface IAllele {
 	/**
 	 * @return Localized short, human-readable identifier used in tooltips and beealyzer.
 	 */
+	@Nonnull
 	String getName();
 
 	/**
 	 * @return The unlocalized identifier
 	 */
+	@Nonnull
 	String getUnlocalizedName();
 
 }

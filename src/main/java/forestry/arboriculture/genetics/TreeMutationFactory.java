@@ -10,18 +10,18 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
+import com.google.common.collect.ImmutableMap;
+
 import forestry.api.arboriculture.IAlleleTreeSpecies;
-import forestry.api.arboriculture.ITreeMutationCustom;
+import forestry.api.arboriculture.ITreeMutationBuilder;
 import forestry.api.arboriculture.ITreeMutationFactory;
-import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.TreeChromosome;
 import forestry.api.genetics.IAllele;
 
 public class TreeMutationFactory implements ITreeMutationFactory {
 
 	@Override
-	public ITreeMutationCustom createMutation(IAlleleTreeSpecies parent0, IAlleleTreeSpecies parent1, IAllele[] result, int chance) {
-		ITreeMutationCustom mutation = new TreeMutation(parent0, parent1, result, chance);
-		TreeManager.treeRoot.registerMutation(mutation);
-		return mutation;
+	public ITreeMutationBuilder createMutation(IAlleleTreeSpecies parent0, IAlleleTreeSpecies parent1, ImmutableMap<TreeChromosome, IAllele> result, int chance) {
+		return new TreeMutation(parent0, parent1, result, chance);
 	}
 }

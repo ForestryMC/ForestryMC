@@ -20,12 +20,12 @@ import forestry.api.core.IModelProvider;
 /**
  * Basic species allele.
  */
-public interface IAlleleSpecies extends IAllele {
+public interface IAlleleSpecies<C extends IChromosomeType> extends IAllele {
 
 	/**
 	 * @return the {@link ISpeciesRoot} associated with this species.
 	 */
-	ISpeciesRoot getRoot();
+	ISpeciesRoot<C> getRoot();
 
 	/**
 	 * @return Localized short description of this species. (May be null.)
@@ -74,7 +74,7 @@ public interface IAlleleSpecies extends IAllele {
 	 * @param bountyLevel
 	 * @return Array of itemstacks representing the bounty for this research success.
 	 */
-	ItemStack[] getResearchBounty(World world, GameProfile gameProfile, IIndividual individual, int bountyLevel);
+	ItemStack[] getResearchBounty(World world, GameProfile gameProfile, IIndividual<C> individual, int bountyLevel);
 
 	/* CLIMATE */
 

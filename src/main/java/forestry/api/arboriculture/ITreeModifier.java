@@ -34,12 +34,4 @@ public interface ITreeModifier {
 	 * @return Float used to modify the maturation.
 	 */
 	float getMaturationModifier(ITreeGenome genome, float currentModifier);
-
-	/**
-	 * @param genome0
-	 * @param genome1
-	 * @return Float used to modify the base mutation chance.
-	 */
-	float getMutationModifier(ITreeGenome genome0, ITreeGenome genome1, float currentModifier);
-
 }

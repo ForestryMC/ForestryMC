@@ -10,18 +10,21 @@
  ******************************************************************************/
 package forestry.lepidopterology.genetics;
 
+import com.google.common.collect.ImmutableMap;
+
 import java.awt.Color;
-import java.util.Arrays;
 import java.util.Locale;
+import java.util.Map;
 
 import net.minecraft.item.ItemStack;
 
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IClassification;
+import forestry.api.lepidopterology.ButterflyChromosome;
 import forestry.api.lepidopterology.ButterflyManager;
-import forestry.api.lepidopterology.EnumButterflyChromosome;
 import forestry.api.lepidopterology.EnumFlutterType;
-import forestry.api.lepidopterology.IAlleleButterflySpeciesCustom;
+import forestry.api.lepidopterology.IAlleleButterflySpecies;
+import forestry.api.lepidopterology.IAlleleButterflySpeciesBuilder;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IButterflyGenome;
 import forestry.core.config.Constants;
@@ -32,20 +35,20 @@ public enum MothDefinition implements IButterflyDefinition {
 	Brimstone(ButterflyBranchDefinition.Opisthograptis, "brimstone", "luteolata", new Color(0xffea40), true, 1.0f),
 	LatticedHeath(ButterflyBranchDefinition.Chiasmia, "latticeHeath", "clathrata", new Color(0xf2f0be), true, 0.5f) {
 		@Override
-		protected void setAlleles(IAllele[] alleles) {
-			AlleleHelper.instance.set(alleles, EnumButterflyChromosome.SIZE, EnumAllele.Size.SMALLEST);
+		protected void setAlleles(Map<ButterflyChromosome, IAllele> alleles) {
+			AlleleHelper.instance.set(alleles, ButterflyChromosome.SIZE, EnumAllele.Size.SMALLEST);
 		}
 	},
 	Atlas(ButterflyBranchDefinition.Attacus, "atlas", "atlas", new Color(0xd96e3d), false, 0.1f) {
 		@Override
-		protected void setAlleles(IAllele[] alleles) {
-			AlleleHelper.instance.set(alleles, EnumButterflyChromosome.SIZE, EnumAllele.Size.LARGEST);
+		protected void setAlleles(Map<ButterflyChromosome, IAllele> alleles) {
+			AlleleHelper.instance.set(alleles, ButterflyChromosome.SIZE, EnumAllele.Size.LARGEST);
 		}
 	};
 
-	private final IAlleleButterflySpeciesCustom species;
+	private final IAlleleButterflySpecies species;
 	private final ButterflyBranchDefinition branch;
-	private IAllele[] template;
+	private ImmutableMap<ButterflyChromosome, IAllele> template;
 	private IButterflyGenome genome;
 
 	MothDefinition(ButterflyBranchDefinition branchDefinition, String speciesName, String binomial, Color serumColor, boolean dominant, float rarity) {
@@ -58,9 +61,11 @@ public enum MothDefinition implements IButterflyDefinition {
 
 		String texture = "forestry:" + Constants.TEXTURE_PATH_ENTITIES + "/butterflies/" + uid + ".png";
 
-		species = ButterflyManager.butterflyFactory.createSpecies("forestry." + uid, unlocalizedName, "Sengir", unlocalizedDescription, texture, dominant, branchDefinition.getBranch(), binomial, serumColor);
-		species.setRarity(rarity);
-		species.setNocturnal();
+		IAlleleButterflySpeciesBuilder speciesBuilder = ButterflyManager.butterflyFactory.createSpecies("forestry." + uid, unlocalizedName, "Sengir", unlocalizedDescription, texture, dominant, branchDefinition.getBranch(), binomial, serumColor);
+		speciesBuilder.setRarity(rarity);
+		speciesBuilder.setNocturnal();
+		setSpeciesProperties(speciesBuilder);
+		this.species = speciesBuilder.build();
 	}
 
 	public static void initMoths() {
@@ -70,28 +75,28 @@ public enum MothDefinition implements IButterflyDefinition {
 	}
 
 	private void init() {
-		setSpeciesProperties(species);
+		Map<ButterflyChromosome, IAllele> templateBuilder = branch.getTemplate();
+		AlleleHelper.instance.set(templateBuilder, ButterflyChromosome.SPECIES, species);
+		setAlleles(templateBuilder);
 
-		template = branch.getTemplate();
-		AlleleHelper.instance.set(template, EnumButterflyChromosome.SPECIES, species);
-		setAlleles(template);
+		template = ImmutableMap.copyOf(templateBuilder);
 
 		genome = ButterflyManager.butterflyRoot.templateAsGenome(template);
 
 		ButterflyManager.butterflyRoot.registerTemplate(template);
 	}
 
-	protected void setSpeciesProperties(IAlleleButterflySpeciesCustom species) {
+	protected void setSpeciesProperties(IAlleleButterflySpeciesBuilder species) {
 
 	}
 
-	protected void setAlleles(IAllele[] alleles) {
+	protected void setAlleles(Map<ButterflyChromosome, IAllele> alleles) {
 
 	}
 
 	@Override
-	public final IAllele[] getTemplate() {
-		return Arrays.copyOf(template, template.length);
+	public final ImmutableMap<ButterflyChromosome, IAllele> getTemplate() {
+		return template;
 	}
 
 	@Override

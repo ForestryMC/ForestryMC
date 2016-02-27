@@ -5,6 +5,8 @@
  ******************************************************************************/
 package forestry.api.apiculture;
 
+import javax.annotation.Nonnull;
+
 import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IFlowerProvider;
 import forestry.api.genetics.IGenome;
@@ -15,11 +17,13 @@ import forestry.api.genetics.IGenome;
  * @author SirSengir
  *
  */
-public interface IBeeGenome extends IGenome {
+public interface IBeeGenome extends IGenome<BeeChromosome> {
 
+	@Nonnull
 	@Override
 	IAlleleBeeSpecies getPrimary();
 	
+	@Nonnull
 	@Override
 	IAlleleBeeSpecies getSecondary();
 
@@ -29,8 +33,10 @@ public interface IBeeGenome extends IGenome {
 
 	int getFertility();
 
+	@Nonnull
 	EnumTolerance getToleranceTemp();
 
+	@Nonnull
 	EnumTolerance getToleranceHumid();
 
 	boolean getNocturnal();
@@ -39,12 +45,17 @@ public interface IBeeGenome extends IGenome {
 
 	boolean getCaveDwelling();
 
+	@Nonnull
 	IFlowerProvider getFlowerProvider();
 
 	int getFlowering();
 
 	int[] getTerritory();
 
+	@Nonnull
 	IAlleleBeeEffect getEffect();
 
+	@Nonnull
+	@Override
+	IBeeRoot getSpeciesRoot();
 }

@@ -10,9 +10,13 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
+import com.google.common.collect.ImmutableMap;
+
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map.Entry;
 
@@ -25,8 +29,8 @@ import com.mojang.authlib.GameProfile;
 
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
+import forestry.api.apiculture.BeeChromosome;
 import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IApiaristTracker;
@@ -42,19 +46,23 @@ import forestry.api.apiculture.IBeekeepingMode;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IChromosome;
-import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
 import forestry.apiculture.BeeHousingListener;
 import forestry.apiculture.BeeHousingModifier;
 import forestry.apiculture.BeekeepingLogic;
 import forestry.core.genetics.SpeciesRoot;
+import forestry.core.utils.Log;
 import forestry.plugins.PluginApiculture;
 
-public class BeeHelper extends SpeciesRoot implements IBeeRoot {
+public class BeeHelper extends SpeciesRoot<BeeChromosome> implements IBeeRoot {
 
 	private static int beeSpeciesCount = -1;
 	public static final String UID = "rootBees";
+
+	public BeeHelper() {
+		super(BeeChromosome.class);
+	}
 
 	@Override
 	public String getUID() {
@@ -62,7 +70,7 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 	}
 
 	@Override
-	public Class<? extends IIndividual> getMemberClass() {
+	public Class<IBee> getMemberClass() {
 		return IBee.class;
 	}
 
@@ -195,23 +203,32 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 
 	/* GENOME CONVERSIONS */
 	@Override
-	public IBeeGenome templateAsGenome(IAllele[] template) {
-		IChromosome[] chromosomes = templateAsChromosomes(template);
+	public IBeeGenome templateAsGenome(ImmutableMap<BeeChromosome, IAllele> template) {
+		ImmutableMap<BeeChromosome, IChromosome> chromosomes = templateAsChromosomes(template);
 		return new BeeGenome(chromosomes);
 	}
 
 	@Override
-	public IBeeGenome templateAsGenome(IAllele[] templateActive, IAllele[] templateInactive) {
-		return new BeeGenome(templateAsChromosomes(templateActive, templateInactive));
+	public IBeeGenome templateAsGenome(ImmutableMap<BeeChromosome, IAllele> templateActive, ImmutableMap<BeeChromosome, IAllele> templateInactive) {
+		ImmutableMap<BeeChromosome, IChromosome> chromosomes = templateAsChromosomes(templateActive, templateInactive);
+		return new BeeGenome(chromosomes);
 	}
 
+	@Nonnull
 	@Override
-	public IBee templateAsIndividual(IAllele[] template) {
+	public IBeeGenome chromosomesAsGenome(ImmutableMap<BeeChromosome, IChromosome> chromosomes) {
+		return new BeeGenome(chromosomes);
+	}
+
+	@Nonnull
+	@Override
+	public IBee templateAsIndividual(ImmutableMap<BeeChromosome, IAllele> template) {
 		return new Bee(templateAsGenome(template));
 	}
 
+	@Nonnull
 	@Override
-	public IBee templateAsIndividual(IAllele[] templateActive, IAllele[] templateInactive) {
+	public IBee templateAsIndividual(ImmutableMap<BeeChromosome, IAllele> templateActive, ImmutableMap<BeeChromosome, IAllele> templateInactive) {
 		return new Bee(templateAsGenome(templateActive, templateInactive));
 	}
 
@@ -224,15 +241,16 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 	}
 
 	@Override
-	public void registerTemplate(String identifier, IAllele[] template) {
+	public void registerTemplate(String identifier, ImmutableMap<BeeChromosome, IAllele> template) {
+		super.registerTemplate(identifier, template);
 		IBeeGenome beeGenome = BeeManager.beeRoot.templateAsGenome(template);
 		IBee bee = new Bee(beeGenome);
 		beeTemplates.add(bee);
-		speciesTemplates.put(identifier, template);
 	}
 
+	@Nonnull
 	@Override
-	public IAllele[] getDefaultTemplate() {
+	public ImmutableMap<BeeChromosome, IAllele> getDefaultTemplate() {
 		return BeeDefinition.FOREST.getTemplate();
 	}
 
@@ -251,14 +269,14 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 	}
 
 	@Override
-	public void registerMutation(IMutation mutation) {
-		if (AlleleManager.alleleRegistry.isBlacklisted(mutation.getTemplate()[0].getUID())) {
+	public void registerMutation(IMutation<BeeChromosome> mutation) {
+		if (AlleleManager.alleleRegistry.isBlacklisted(mutation.getResultTemplate().get(getKaryotypeKey()).getUID())) {
 			return;
 		}
-		if (AlleleManager.alleleRegistry.isBlacklisted(mutation.getAllele0().getUID())) {
+		if (AlleleManager.alleleRegistry.isBlacklisted(mutation.getSpecies0().getUID())) {
 			return;
 		}
-		if (AlleleManager.alleleRegistry.isBlacklisted(mutation.getAllele1().getUID())) {
+		if (AlleleManager.alleleRegistry.isBlacklisted(mutation.getSpecies1().getUID())) {
 			return;
 		}
 
@@ -266,21 +284,24 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 	}
 
 	/* BREEDING MODES */
-	private final ArrayList<IBeekeepingMode> beekeepingModes = new ArrayList<>();
+	@Nonnull
+	private final List<IBeekeepingMode> beekeepingModes = new ArrayList<>();
 	private static IBeekeepingMode activeBeekeepingMode;
 
 	@Override
-	public void resetBeekeepingMode() {
+	public void resetMode() {
 		activeBeekeepingMode = null;
 	}
 
+	@Nonnull
 	@Override
-	public ArrayList<IBeekeepingMode> getBeekeepingModes() {
+	public List<IBeekeepingMode> getModes() {
 		return this.beekeepingModes;
 	}
 
+	@Nonnull
 	@Override
-	public IBeekeepingMode getBeekeepingMode(World world) {
+	public IBeekeepingMode getMode(@Nonnull World world) {
 		if (activeBeekeepingMode != null) {
 			return activeBeekeepingMode;
 		}
@@ -292,37 +313,39 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 			mode = PluginApiculture.beekeepingMode;
 		}
 
-		setBeekeepingMode(world, mode);
+		setMode(world, mode);
 		FMLCommonHandler.instance().getFMLLogger().debug("Set beekeeping mode for a world to " + mode);
 
 		return activeBeekeepingMode;
 	}
 
 	@Override
-	public void registerBeekeepingMode(IBeekeepingMode mode) {
+	public void registerMode(@Nonnull IBeekeepingMode mode) {
 		beekeepingModes.add(mode);
 	}
 
 	@Override
-	public void setBeekeepingMode(World world, String name) {
-		activeBeekeepingMode = getBeekeepingMode(name);
+	public void setMode(@Nonnull World world, @Nonnull String name) {
+		activeBeekeepingMode = getMode(name);
 		getBreedingTracker(world, null).setModeName(name);
 	}
 
+	@Nonnull
 	@Override
-	public IBeekeepingMode getBeekeepingMode(String name) {
+	public IBeekeepingMode getMode(@Nonnull String name) {
 		for (IBeekeepingMode mode : beekeepingModes) {
 			if (mode.getName().equals(name) || mode.getName().equals(name.toLowerCase(Locale.ENGLISH))) {
 				return mode;
 			}
 		}
 
-		FMLCommonHandler.instance().getFMLLogger().debug("Failed to find a beekeeping mode called '%s', reverting to fallback.");
+		Log.debug("Failed to find a beekeeping mode called '%s', reverting to fallback.");
 		return beekeepingModes.get(0);
 	}
 
+	@Nonnull
 	@Override
-	public IApiaristTracker getBreedingTracker(World world, GameProfile player) {
+	public IApiaristTracker getBreedingTracker(@Nonnull World world, @Nonnull GameProfile player) {
 		String filename = "ApiaristTracker." + (player == null ? "common" : player.getId());
 		ApiaristTracker tracker = (ApiaristTracker) world.loadItemData(ApiaristTracker.class, filename);
 
@@ -353,13 +376,15 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 		return new BeeHousingListener(housing);
 	}
 
+	@Nonnull
 	@Override
-	public IChromosomeType[] getKaryotype() {
-		return EnumBeeChromosome.values();
+	public BeeChromosome[] getKaryotype() {
+		return BeeChromosome.values();
 	}
 
+	@Nonnull
 	@Override
-	public IChromosomeType getKaryotypeKey() {
-		return EnumBeeChromosome.SPECIES;
+	public BeeChromosome getKaryotypeKey() {
+		return BeeChromosome.SPECIES;
 	}
 }

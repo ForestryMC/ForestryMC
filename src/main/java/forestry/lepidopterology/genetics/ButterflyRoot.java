@@ -10,9 +10,14 @@
  ******************************************************************************/
 package forestry.lepidopterology.genetics;
 
+import com.google.common.collect.ImmutableMap;
+
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map.Entry;
 
 import net.minecraft.item.Item;
@@ -22,29 +27,38 @@ import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
+import net.minecraftforge.fml.common.FMLCommonHandler;
+
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
-import forestry.api.genetics.IChromosomeType;
+import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
+import forestry.api.lepidopterology.ButterflyChromosome;
 import forestry.api.lepidopterology.ButterflyManager;
-import forestry.api.lepidopterology.EnumButterflyChromosome;
 import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.api.lepidopterology.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IButterflyGenome;
+import forestry.api.lepidopterology.IButterflyMode;
 import forestry.api.lepidopterology.IButterflyMutation;
 import forestry.api.lepidopterology.IButterflyRoot;
-import forestry.api.lepidopterology.ILepidopteristTracker;
+import forestry.api.lepidopterology.IButterflyTracker;
 import forestry.core.genetics.SpeciesRoot;
 import forestry.core.utils.EntityUtil;
+import forestry.core.utils.Log;
 import forestry.lepidopterology.entities.EntityButterfly;
+import forestry.plugins.PluginArboriculture;
 import forestry.plugins.PluginLepidopterology;
 
-public class ButterflyHelper extends SpeciesRoot implements IButterflyRoot {
+public class ButterflyRoot extends SpeciesRoot<ButterflyChromosome> implements IButterflyRoot {
 
 	private static int butterflySpeciesCount = -1;
 	public static final String UID = "rootButterflies";
+
+	public ButterflyRoot() {
+		super(ButterflyChromosome.class);
+	}
 
 	@Override
 	public String getUID() {
@@ -52,7 +66,7 @@ public class ButterflyHelper extends SpeciesRoot implements IButterflyRoot {
 	}
 
 	@Override
-	public Class<? extends IIndividual> getMemberClass() {
+	public Class<IButterfly> getMemberClass() {
 		return IButterfly.class;
 	}
 
@@ -163,24 +177,32 @@ public class ButterflyHelper extends SpeciesRoot implements IButterflyRoot {
 	}
 
 	/* GENOME CONVERSIONS */
+	@Nonnull
 	@Override
-	public IButterfly templateAsIndividual(IAllele[] template) {
+	public IButterfly templateAsIndividual(ImmutableMap<ButterflyChromosome, IAllele> template) {
 		return new Butterfly(templateAsGenome(template));
 	}
 
+	@Nonnull
 	@Override
-	public IButterfly templateAsIndividual(IAllele[] templateActive, IAllele[] templateInactive) {
+	public IButterfly templateAsIndividual(ImmutableMap<ButterflyChromosome, IAllele> templateActive, ImmutableMap<ButterflyChromosome, IAllele> templateInactive) {
 		return new Butterfly(templateAsGenome(templateActive, templateInactive));
 	}
 
 	@Override
-	public IButterflyGenome templateAsGenome(IAllele[] template) {
+	public IButterflyGenome templateAsGenome(ImmutableMap<ButterflyChromosome, IAllele> template) {
 		return new ButterflyGenome(templateAsChromosomes(template));
 	}
 
 	@Override
-	public IButterflyGenome templateAsGenome(IAllele[] templateActive, IAllele[] templateInactive) {
+	public IButterflyGenome templateAsGenome(ImmutableMap<ButterflyChromosome, IAllele> templateActive, ImmutableMap<ButterflyChromosome, IAllele> templateInactive) {
 		return new ButterflyGenome(templateAsChromosomes(templateActive, templateInactive));
+	}
+
+	@Nonnull
+	@Override
+	public IButterflyGenome chromosomesAsGenome(ImmutableMap<ButterflyChromosome, IChromosome> chromosomes) {
+		return new ButterflyGenome(chromosomes);
 	}
 
 	/* TEMPLATES */
@@ -192,28 +214,28 @@ public class ButterflyHelper extends SpeciesRoot implements IButterflyRoot {
 	}
 
 	@Override
-	public IAllele[] getDefaultTemplate() {
+	public ImmutableMap<ButterflyChromosome, IAllele> getDefaultTemplate() {
 		return MothDefinition.Brimstone.getTemplate();
 	}
 
 	@Override
-	public void registerTemplate(String identifier, IAllele[] template) {
+	public void registerTemplate(String identifier, ImmutableMap<ButterflyChromosome, IAllele> template) {
+		super.registerTemplate(identifier, template);
 		butterflyTemplates.add(ButterflyManager.butterflyRoot.templateAsIndividual(template));
-		speciesTemplates.put(identifier, template);
 	}
 
 	/* MUTATIONS */
 	private static final ArrayList<IButterflyMutation> butterflyMutations = new ArrayList<>();
 
 	@Override
-	public void registerMutation(IMutation mutation) {
-		if (AlleleManager.alleleRegistry.isBlacklisted(mutation.getTemplate()[0].getUID())) {
+	public void registerMutation(IMutation<ButterflyChromosome> mutation) {
+		if (AlleleManager.alleleRegistry.isBlacklisted(mutation.getResultTemplate().get(ButterflyChromosome.SPECIES).getUID())) {
 			return;
 		}
-		if (AlleleManager.alleleRegistry.isBlacklisted(mutation.getAllele0().getUID())) {
+		if (AlleleManager.alleleRegistry.isBlacklisted(mutation.getSpecies0().getUID())) {
 			return;
 		}
-		if (AlleleManager.alleleRegistry.isBlacklisted(mutation.getAllele1().getUID())) {
+		if (AlleleManager.alleleRegistry.isBlacklisted(mutation.getSpecies1().getUID())) {
 			return;
 		}
 
@@ -229,14 +251,15 @@ public class ButterflyHelper extends SpeciesRoot implements IButterflyRoot {
 	}
 
 	/* BREEDING TRACKER */
+	@Nonnull
 	@Override
-	public ILepidopteristTracker getBreedingTracker(World world, GameProfile player) {
-		String filename = "LepidopteristTracker." + (player == null ? "common" : player.getId());
-		LepidopteristTracker tracker = (LepidopteristTracker) world.loadItemData(LepidopteristTracker.class, filename);
+	public IButterflyTracker getBreedingTracker(@Nonnull World world, @Nonnull GameProfile player) {
+		String filename = "ButterflyTracker." + (player == null ? "common" : player.getId());
+		ButterflyTracker tracker = (ButterflyTracker) world.loadItemData(ButterflyTracker.class, filename);
 
 		// Create a tracker if there is none yet.
 		if (tracker == null) {
-			tracker = new LepidopteristTracker(filename);
+			tracker = new ButterflyTracker(filename);
 			world.setItemData(filename, tracker);
 		}
 
@@ -246,14 +269,74 @@ public class ButterflyHelper extends SpeciesRoot implements IButterflyRoot {
 		return tracker;
 	}
 
+	@Nonnull
 	@Override
-	public IChromosomeType[] getKaryotype() {
-		return EnumButterflyChromosome.values();
+	public ButterflyChromosome[] getKaryotype() {
+		return ButterflyChromosome.values();
+	}
+
+	@Nonnull
+	@Override
+	public ButterflyChromosome getKaryotypeKey() {
+		return ButterflyChromosome.SPECIES;
+	}
+
+	/** Modes */
+	private static IButterflyMode activeMode;
+	@Nonnull
+	private final List<IButterflyMode> modes = new ArrayList<>();
+
+	@Nonnull
+	@Override
+	public List<IButterflyMode> getModes() {
+		return this.modes;
 	}
 
 	@Override
-	public IChromosomeType getKaryotypeKey() {
-		return EnumButterflyChromosome.SPECIES;
+	public void resetMode() {
+		activeMode = null;
 	}
 
+	@Nonnull
+	@Override
+	public IButterflyMode getMode(@Nonnull World world) {
+		if (activeMode != null) {
+			return activeMode;
+		}
+
+		IButterflyTracker tracker = getBreedingTracker(world, null);
+		String mode = tracker.getModeName();
+		if (mode == null || mode.isEmpty()) {
+			mode = PluginArboriculture.treekeepingMode;
+		}
+
+		setMode(world, mode);
+		FMLCommonHandler.instance().getFMLLogger().debug("Set Treekeeping mode for a world to " + mode);
+
+		return activeMode;
+	}
+
+	@Override
+	public void registerMode(@Nonnull IButterflyMode mode) {
+		modes.add(mode);
+	}
+
+	@Override
+	public void setMode(@Nonnull World world, @Nonnull String name) {
+		activeMode = getMode(name);
+		getBreedingTracker(world, null).setModeName(name);
+	}
+
+	@Nonnull
+	@Override
+	public IButterflyMode getMode(@Nonnull String name) {
+		for (IButterflyMode mode : modes) {
+			if (mode.getName().equals(name) || mode.getName().equals(name.toLowerCase(Locale.ENGLISH))) {
+				return mode;
+			}
+		}
+
+		Log.error("Failed to find a Butterfly mode called '%s', reverting to fallback.");
+		return modes.get(0);
+	}
 }

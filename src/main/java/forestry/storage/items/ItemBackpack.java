@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.storage.items;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Locale;
 
@@ -51,14 +52,17 @@ import forestry.storage.gui.GuiBackpackT2;
 import forestry.storage.inventory.ItemInventoryBackpack;
 
 public class ItemBackpack extends ItemWithGui {
+	@Nonnull
 	private final IBackpackDefinition definition;
+	@Nonnull
 	private final EnumBackpackType type;
 
-	public ItemBackpack(IBackpackDefinition definition, EnumBackpackType type) {
+	public ItemBackpack(@Nonnull IBackpackDefinition definition, @Nonnull EnumBackpackType type) {
 		this.definition = definition;
 		this.type = type;
 	}
 
+	@Nonnull
 	public IBackpackDefinition getDefinition() {
 		return definition;
 	}

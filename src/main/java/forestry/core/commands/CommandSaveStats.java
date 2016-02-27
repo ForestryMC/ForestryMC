@@ -32,6 +32,7 @@ import net.minecraft.world.World;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IBreedingTracker;
+import forestry.api.genetics.IChromosomeType;
 import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
@@ -163,7 +164,7 @@ public final class CommandSaveStats extends SubCommand {
 		return speciesListEntry(discoveredSymbol, blacklistedSymbol, notCountedSymbol, "UID", species, authority);
 	}
 
-	private static String generateSpeciesListEntry(IAlleleSpecies species, IBreedingTracker tracker) {
+	private static <C extends IChromosomeType> String generateSpeciesListEntry(IAlleleSpecies<C> species, IBreedingTracker<C> tracker) {
 		String discovered = "";
 		if (tracker.isDiscovered(species)) {
 			discovered = discoveredSymbol;

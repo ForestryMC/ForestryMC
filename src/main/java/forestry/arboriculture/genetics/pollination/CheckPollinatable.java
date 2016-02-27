@@ -14,7 +14,7 @@ import java.util.EnumSet;
 
 import net.minecraftforge.common.EnumPlantType;
 
-import forestry.api.genetics.IIndividual;
+import forestry.api.arboriculture.ITree;
 import forestry.api.genetics.IPollinatable;
 
 public class CheckPollinatable implements ICheckPollinatable {
@@ -31,12 +31,12 @@ public class CheckPollinatable implements ICheckPollinatable {
 	}
 
 	@Override
-	public IIndividual getPollen() {
+	public ITree getPollen() {
 		return pollinatable.getPollen();
 	}
 
 	@Override
-	public boolean canMateWith(IIndividual pollen) {
+	public boolean canMateWith(ITree pollen) {
 		return pollinatable.canMateWith(pollen);
 	}
 

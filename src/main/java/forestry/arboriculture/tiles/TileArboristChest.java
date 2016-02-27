@@ -10,10 +10,11 @@
  ******************************************************************************/
 package forestry.arboriculture.tiles;
 
+import forestry.api.arboriculture.TreeChromosome;
 import forestry.api.arboriculture.TreeManager;
 import forestry.core.tiles.TileNaturalistChest;
 
-public class TileArboristChest extends TileNaturalistChest {
+public class TileArboristChest extends TileNaturalistChest<TreeChromosome> {
 	public TileArboristChest() {
 		super(TreeManager.treeRoot);
 	}

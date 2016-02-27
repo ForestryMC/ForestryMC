@@ -59,7 +59,7 @@ public class EscritoireGame implements INbtWritable, INbtReadable, IStreamable {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
+	public void writeToNBT(@Nonnull NBTTagCompound nbttagcompound) {
 		nbttagcompound.setInteger("bountyLevel", bountyLevel);
 		nbttagcompound.setLong("lastUpdate", lastUpdate);
 		gameBoard.writeToNBT(nbttagcompound);
@@ -97,7 +97,7 @@ public class EscritoireGame implements INbtWritable, INbtReadable, IStreamable {
 	}
 
 	/* INTERACTION */
-	public void initialize(ItemStack specimen) {
+	public void initialize(@Nonnull ItemStack specimen) {
 		if (gameBoard.initialize(specimen)) {
 			status = Status.PLAYING;
 			bountyLevel = BOUNTY_MAX;

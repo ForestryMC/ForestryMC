@@ -13,9 +13,9 @@ import java.util.Set;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.biome.BiomeGenBase;
 
+import forestry.api.arboriculture.ITree;
 import forestry.api.core.IErrorState;
 import forestry.api.genetics.IEffectData;
-import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IIndividualLiving;
 
 /**
@@ -23,7 +23,7 @@ import forestry.api.genetics.IIndividualLiving;
  *
  * @author SirSengir
  */
-public interface IBee extends IIndividualLiving {
+public interface IBee extends IIndividualLiving<BeeChromosome> {
 
 	/**
 	 * @return Bee's genetic information.
@@ -79,14 +79,16 @@ public interface IBee extends IIndividualLiving {
 
 	ItemStack[] produceStacks(IBeeHousing housing);
 
+	@Nullable
 	IBee spawnPrincess(IBeeHousing housing);
 
+	@Nullable
 	IBee[] spawnDrones(IBeeHousing housing);
 
 	void plantFlowerRandom(IBeeHousing housing);
 
-	IIndividual retrievePollen(IBeeHousing housing);
+	ITree retrievePollen(IBeeHousing housing);
 
-	boolean pollinateRandom(IBeeHousing housing, IIndividual pollen);
+	boolean pollinateRandom(IBeeHousing housing, ITree pollen);
 
 }

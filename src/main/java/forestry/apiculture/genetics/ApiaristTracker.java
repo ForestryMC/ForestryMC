@@ -13,15 +13,15 @@ package forestry.apiculture.genetics;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
+import forestry.api.apiculture.BeeChromosome;
 import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.IApiaristTracker;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.genetics.BreedingTracker;
 
-public class ApiaristTracker extends BreedingTracker implements IApiaristTracker {
+public class ApiaristTracker extends BreedingTracker<BeeChromosome> implements IApiaristTracker {
 
 	/** Required for creation from map storage */
 	public ApiaristTracker(String s) {
@@ -55,13 +55,13 @@ public class ApiaristTracker extends BreedingTracker implements IApiaristTracker
 	}
 
 	@Override
-	public void registerPickup(IIndividual individual) {
-		ISpeciesRoot speciesRoot = individual.getGenome().getPrimary().getRoot();
+	public void registerPickup(IIndividual<BeeChromosome> individual) {
+		ISpeciesRoot<BeeChromosome> speciesRoot = individual.getGenome().getPrimary().getRoot();
 		if (!speciesRoot.getUID().equals(speciesRootUID())) {
 			return;
 		}
 
-		if (!individual.isPureBred(EnumBeeChromosome.SPECIES)) {
+		if (!individual.isPureBred(BeeChromosome.SPECIES)) {
 			return;
 		}
 
@@ -73,7 +73,7 @@ public class ApiaristTracker extends BreedingTracker implements IApiaristTracker
 	}
 
 	@Override
-	public void registerQueen(IIndividual bee) {
+	public void registerQueen(IIndividual<BeeChromosome> bee) {
 		queensTotal++;
 	}
 
@@ -83,8 +83,7 @@ public class ApiaristTracker extends BreedingTracker implements IApiaristTracker
 	}
 
 	@Override
-	public void registerPrincess(IIndividual bee) {
-
+	public void registerPrincess(IIndividual<BeeChromosome> bee) {
 		princessesTotal++;
 		registerBirth(bee);
 	}
@@ -95,7 +94,7 @@ public class ApiaristTracker extends BreedingTracker implements IApiaristTracker
 	}
 
 	@Override
-	public void registerDrone(IIndividual bee) {
+	public void registerDrone(IIndividual<BeeChromosome> bee) {
 		dronesTotal++;
 		registerBirth(bee);
 	}
@@ -106,7 +105,7 @@ public class ApiaristTracker extends BreedingTracker implements IApiaristTracker
 	}
 
 	@Override
-	protected IBreedingTracker getBreedingTracker(EntityPlayer player) {
+	protected IBreedingTracker<BeeChromosome> getBreedingTracker(EntityPlayer player) {
 		return BeeManager.beeRoot.getBreedingTracker(player.worldObj, player.getGameProfile());
 	}
 

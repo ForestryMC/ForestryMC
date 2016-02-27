@@ -10,10 +10,11 @@
  ******************************************************************************/
 package forestry.lepidopterology.tiles;
 
+import forestry.api.lepidopterology.ButterflyChromosome;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.core.tiles.TileNaturalistChest;
 
-public class TileLepidopteristChest extends TileNaturalistChest {
+public class TileLepidopteristChest extends TileNaturalistChest<ButterflyChromosome> {
 	public TileLepidopteristChest() {
 		super(ButterflyManager.butterflyRoot);
 	}

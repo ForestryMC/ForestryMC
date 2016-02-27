@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,10 +35,10 @@ import forestry.api.apiculture.IBeeHousingInventory;
 import forestry.api.apiculture.IBeeListener;
 import forestry.api.apiculture.IBeeModifier;
 import forestry.api.apiculture.IBeekeepingLogic;
+import forestry.api.arboriculture.ITree;
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorState;
 import forestry.api.genetics.IEffectData;
-import forestry.api.genetics.IIndividual;
 import forestry.apiculture.network.packets.PacketBeeLogicActive;
 import forestry.apiculture.network.packets.PacketBeeLogicActiveEntity;
 import forestry.core.config.Constants;
@@ -101,7 +102,7 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
+	public void writeToNBT(@Nonnull NBTTagCompound nbttagcompound) {
 		nbttagcompound.setInteger("BreedingTime", beeProgress);
 		nbttagcompound.setInteger("Throttle", queenWorkCycleThrottle);
 
@@ -492,7 +493,7 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 	private static class PollenHandler {
 		private static final int MAX_POLLINATION_ATTEMPTS = 20;
 
-		private IIndividual pollen;
+		private ITree pollen;
 		private int attemptedPollinations = 0;
 
 		public void doPollination(IBee queen, IBeeHousing beeHousing, IBeeListener beeListener) {

@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.core.genetics.alleles;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import net.minecraft.item.Item;
@@ -27,7 +27,9 @@ import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.IModelProvider;
 import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAlleleSpeciesCustom;
+import forestry.api.genetics.IAlleleSpecies;
+import forestry.api.genetics.IAlleleSpeciesBuilder;
+import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
@@ -36,7 +38,7 @@ import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.plugins.PluginApiculture;
 
-public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesCustom {
+public abstract class AlleleSpecies<C extends IChromosomeType<C>> extends Allele implements IAlleleSpecies<C>, IAlleleSpeciesBuilder<C> {
 	private final String binomial;
 	private final String authority;
 	private final String description;
@@ -99,13 +101,14 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesCust
 	}
 
 	@Override
-	public ItemStack[] getResearchBounty(World world, GameProfile researcher, IIndividual individual, int bountyLevel) {
+	public ItemStack[] getResearchBounty(World world, GameProfile researcher, IIndividual<C> individual, int bountyLevel) {
 		ItemStack research = null;
 		if (world.rand.nextFloat() < ((float) 10 / bountyLevel)) {
-			Collection<? extends IMutation> combinations = getRoot().getCombinations(this);
+			List<IMutation<C>> combinations = getRoot().getCombinations(this);
 			if (combinations.size() > 0) {
-				IMutation[] candidates = combinations.toArray(new IMutation[combinations.size()]);
-				research = AlleleManager.alleleRegistry.getMutationNoteStack(researcher, candidates[world.rand.nextInt(candidates.length)]);
+				int randomIndex = world.rand.nextInt(combinations.size());
+				IMutation<C> mutation = combinations.get(randomIndex);
+				research = AlleleManager.alleleRegistry.getMutationNoteStack(researcher, mutation);
 			}
 		}
 
@@ -157,31 +160,31 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesCust
 	}
 
 	@Override
-	public IAlleleSpeciesCustom setTemperature(EnumTemperature temperature) {
+	public AlleleSpecies<C> setTemperature(EnumTemperature temperature) {
 		climate = temperature;
 		return this;
 	}
 
 	@Override
-	public IAlleleSpeciesCustom setHumidity(EnumHumidity humidity) {
+	public AlleleSpecies<C> setHumidity(EnumHumidity humidity) {
 		this.humidity = humidity;
 		return this;
 	}
 
 	@Override
-	public IAlleleSpeciesCustom setHasEffect() {
+	public AlleleSpecies<C> setHasEffect() {
 		hasEffect = true;
 		return this;
 	}
 
 	@Override
-	public IAlleleSpeciesCustom setIsSecret() {
+	public AlleleSpecies<C> setIsSecret() {
 		isSecret = true;
 		return this;
 	}
 
 	@Override
-	public IAlleleSpeciesCustom setIsNotCounted() {
+	public AlleleSpecies<C> setIsNotCounted() {
 		isCounted = false;
 		return this;
 	}

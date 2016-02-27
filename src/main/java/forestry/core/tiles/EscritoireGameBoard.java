@@ -24,6 +24,7 @@ import net.minecraft.nbt.NBTTagList;
 import forestry.api.core.INbtWritable;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleSpecies;
+import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.ISpeciesRoot;
@@ -60,19 +61,24 @@ public class EscritoireGameBoard implements INbtWritable, IStreamable {
 		}
 	}
 
-	public boolean initialize(ItemStack specimen) {
-		IIndividual individual = AlleleManager.alleleRegistry.getIndividual(specimen);
+	public boolean initialize(@Nonnull ItemStack specimen) {
+		IIndividual<?> individual = AlleleManager.alleleRegistry.getIndividual(specimen);
 		if (individual == null) {
 			return false;
 		}
 
-		IGenome genome = individual.getGenome();
-		ISpeciesRoot root = genome.getPrimary().getRoot();
+		return initialize(individual);
+	}
+
+	private <C extends IChromosomeType> boolean initialize(@Nonnull IIndividual<C> individual) {
+
+		IGenome<C> genome = individual.getGenome();
+		ISpeciesRoot<C> root = genome.getPrimary().getRoot();
 
 		tokenCount = getTokenCount(genome);
 
 		for (int i = 0; i < tokenCount / 2; i++) {
-			IIndividual token = root.templateAsIndividual(root.getRandomTemplate(rand));
+			IIndividual<C> token = root.templateAsIndividual(root.getRandomTemplate(rand));
 			ItemStack pair = root.getMemberStack(token, 0);
 			gameTokens.add(new EscritoireGameToken(pair));
 			gameTokens.add(new EscritoireGameToken(pair));
@@ -170,7 +176,7 @@ public class EscritoireGameBoard implements INbtWritable, IStreamable {
 		tokenCount = 0;
 	}
 
-	private static int getTokenCount(IGenome genome) {
+	private static int getTokenCount(@Nonnull IGenome genome) {
 		IAlleleSpecies species1 = genome.getPrimary();
 		IAlleleSpecies species2 = genome.getSecondary();
 
@@ -190,7 +196,7 @@ public class EscritoireGameBoard implements INbtWritable, IStreamable {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
+	public void writeToNBT(@Nonnull NBTTagCompound nbttagcompound) {
 		if (tokenCount > 0) {
 			nbttagcompound.setInteger("TokenCount", tokenCount);
 			NBTTagList nbttaglist = new NBTTagList();

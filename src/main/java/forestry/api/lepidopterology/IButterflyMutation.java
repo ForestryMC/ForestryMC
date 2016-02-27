@@ -9,6 +9,6 @@ import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IMutation;
 
-public interface IButterflyMutation extends IMutation {
+public interface IButterflyMutation extends IMutation<ButterflyChromosome> {
 	float getChance(IButterflyNursery housing, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1);
 }

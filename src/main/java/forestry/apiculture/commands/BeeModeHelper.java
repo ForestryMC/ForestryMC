@@ -11,6 +11,7 @@
 package forestry.apiculture.commands;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import net.minecraft.world.World;
@@ -23,7 +24,7 @@ public class BeeModeHelper implements ICommandModeHelper {
 
 	@Override
 	public String[] getModeNames() {
-		ArrayList<IBeekeepingMode> beekeepingModes = BeeManager.beeRoot.getBeekeepingModes();
+		Collection<IBeekeepingMode> beekeepingModes = BeeManager.beeRoot.getModes();
 		int modeStringCount = beekeepingModes.size();
 		List<String> modeStrings = new ArrayList<>(modeStringCount);
 		for (IBeekeepingMode mode : beekeepingModes) {
@@ -35,7 +36,7 @@ public class BeeModeHelper implements ICommandModeHelper {
 
 	@Override
 	public String getModeNameMatching(String desired) {
-		IBeekeepingMode mode = BeeManager.beeRoot.getBeekeepingMode(desired);
+		IBeekeepingMode mode = BeeManager.beeRoot.getMode(desired);
 		if (mode == null) {
 			return null;
 		}
@@ -44,17 +45,17 @@ public class BeeModeHelper implements ICommandModeHelper {
 
 	@Override
 	public String getModeName(World world) {
-		return BeeManager.beeRoot.getBeekeepingMode(world).getName();
+		return BeeManager.beeRoot.getMode(world).getName();
 	}
 
 	@Override
 	public void setMode(World world, String modeName) {
-		BeeManager.beeRoot.setBeekeepingMode(world, modeName);
+		BeeManager.beeRoot.setMode(world, modeName);
 	}
 
 	@Override
 	public Iterable<String> getDescription(String modeName) {
-		IBeekeepingMode mode = BeeManager.beeRoot.getBeekeepingMode(modeName);
+		IBeekeepingMode mode = BeeManager.beeRoot.getMode(modeName);
 		return mode.getDescription();
 	}
 

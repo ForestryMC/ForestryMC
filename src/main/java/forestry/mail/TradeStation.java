@@ -10,13 +10,13 @@
  ******************************************************************************/
 package forestry.mail;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.world.World;
@@ -36,6 +36,7 @@ import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.StringUtil;
 import forestry.mail.inventory.InventoryTradeStation;
 import forestry.mail.items.EnumStampDefinition;
@@ -86,7 +87,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		if (nbttagcompound.hasKey("owner")) {
-			owner = NBTUtil.readGameProfileFromNBT(nbttagcompound.getCompoundTag("owner"));
+			owner = PlayerUtil.readGameProfileFromNBT(nbttagcompound.getCompoundTag("owner"));
 		}
 
 		if (nbttagcompound.hasKey("address")) {
@@ -99,10 +100,10 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
+	public void writeToNBT(@Nonnull NBTTagCompound nbttagcompound) {
 		if (owner != null) {
 			NBTTagCompound nbt = new NBTTagCompound();
-			NBTUtil.writeGameProfile(nbt, owner);
+			PlayerUtil.writeGameProfile(nbt, owner);
 			nbttagcompound.setTag("owner", nbt);
 		}
 

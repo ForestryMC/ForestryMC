@@ -13,7 +13,7 @@ import forestry.api.genetics.IIndividual;
  *
  * @author SirSengir
  */
-public interface IApiaristTracker extends IBreedingTracker {
+public interface IApiaristTracker extends IBreedingTracker<BeeChromosome> {
 
 	/**
 	 * Register the birth of a queen. Will mark species as discovered.
@@ -21,7 +21,7 @@ public interface IApiaristTracker extends IBreedingTracker {
 	 * @param queen
 	 *            Created queen.
 	 */
-	void registerQueen(IIndividual queen);
+	void registerQueen(IIndividual<BeeChromosome> queen);
 
 	/**
 	 * @return Amount of queens bred with this tracker.
@@ -34,7 +34,7 @@ public interface IApiaristTracker extends IBreedingTracker {
 	 * @param princess
 	 *            Created princess.
 	 */
-	void registerPrincess(IIndividual princess);
+	void registerPrincess(IIndividual<BeeChromosome> princess);
 
 	/**
 	 * @return Amount of princesses bred with this tracker.
@@ -47,7 +47,7 @@ public interface IApiaristTracker extends IBreedingTracker {
 	 * @param drone
 	 *            Created drone.
 	 */
-	void registerDrone(IIndividual drone);
+	void registerDrone(IIndividual<BeeChromosome> drone);
 
 	/**
 	 * @return Amount of drones bred with this tracker.

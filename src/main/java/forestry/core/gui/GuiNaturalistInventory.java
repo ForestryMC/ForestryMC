@@ -21,9 +21,10 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 import forestry.api.apiculture.IApiaristTracker;
-import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IBreedingTracker;
+import forestry.api.genetics.IChromosomeType;
+import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.ISpeciesRoot;
@@ -35,13 +36,13 @@ import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
 
-public class GuiNaturalistInventory extends GuiForestry<Container, IPagedInventory> {
-	private final ISpeciesRoot speciesRoot;
-	private final IBreedingTracker breedingTracker;
+public class GuiNaturalistInventory<C extends IChromosomeType> extends GuiForestry<Container, IPagedInventory> {
+	private final ISpeciesRoot<C> speciesRoot;
+	private final IBreedingTracker<C> breedingTracker;
 	private final HashMap<String, ItemStack> iconStacks = new HashMap<>();
 	private final int pageCurrent, pageMax;
 
-	public GuiNaturalistInventory(ISpeciesRoot speciesRoot, EntityPlayer player, Container container, IPagedInventory inventory, int page, int maxPages) {
+	public GuiNaturalistInventory(ISpeciesRoot<C> speciesRoot, EntityPlayer player, Container container, IPagedInventory inventory, int page, int maxPages) {
 		super(Constants.TEXTURE_PATH_GUI + "/apiaristinventory.png", container, inventory);
 
 		this.speciesRoot = speciesRoot;
@@ -52,7 +53,7 @@ public class GuiNaturalistInventory extends GuiForestry<Container, IPagedInvento
 		xSize = 196;
 		ySize = 202;
 
-		for (IIndividual individual : speciesRoot.getIndividualTemplates()) {
+		for (IIndividual<C> individual : speciesRoot.getIndividualTemplates()) {
 			iconStacks.put(individual.getIdent(), speciesRoot.getMemberStack(individual, 0));
 		}
 
@@ -65,7 +66,7 @@ public class GuiNaturalistInventory extends GuiForestry<Container, IPagedInvento
 		String header = StringUtil.localize("gui.page") + " " + (pageCurrent + 1) + "/" + pageMax;
 		fontRendererObj.drawString(header, guiLeft + 95 + textLayout.getCenteredOffset(header, 98), guiTop + 10, fontColor.get("gui.title"));
 
-		IIndividual individual = getIndividualAtPosition(i, j);
+		IIndividual<C> individual = getIndividualAtPosition(i, j);
 		if (individual == null) {
 			displayBreedingStatistics(10);
 		}
@@ -74,8 +75,10 @@ public class GuiNaturalistInventory extends GuiForestry<Container, IPagedInvento
 			RenderHelper.enableGUIStandardItemLighting();
 			textLayout.startPage();
 
-			displaySpeciesInformation(true, individual.getGenome().getPrimary(), iconStacks.get(individual.getIdent()), 10);
-			if (!individual.isPureBred(EnumTreeChromosome.SPECIES)) {
+			IGenome<C> genome = individual.getGenome();
+			displaySpeciesInformation(true, genome.getPrimary(), iconStacks.get(individual.getIdent()), 10);
+			C speciesChromosomeType = genome.getSpeciesRoot().getKaryotypeKey();
+			if (!individual.isPureBred(speciesChromosomeType)) {
 				displaySpeciesInformation(individual.isAnalyzed(), individual.getGenome().getSecondary(), iconStacks.get(individual.getGenome().getSecondary().getUID()), 10);
 			}
 
@@ -107,7 +110,7 @@ public class GuiNaturalistInventory extends GuiForestry<Container, IPagedInvento
 		}
 	}
 
-	private IIndividual getIndividualAtPosition(int x, int y) {
+	private IIndividual<C> getIndividualAtPosition(int x, int y) {
 		Slot slot = getSlotAtPosition(x, y);
 		if (slot == null) {
 			return null;
@@ -167,7 +170,7 @@ public class GuiNaturalistInventory extends GuiForestry<Container, IPagedInvento
 		int columnWidth = 16;
 		int column = 10;
 
-		for (IMutation combination : speciesRoot.getCombinations(species)) {
+		for (IMutation<C> combination : speciesRoot.getCombinations(species)) {
 			if (combination.isSecret()) {
 				continue;
 			}

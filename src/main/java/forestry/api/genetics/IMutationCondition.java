@@ -15,7 +15,7 @@ public interface IMutationCondition {
 	 * Most will return 1 if the condition is met and 0 otherwise,
 	 * but the float offers flexibility for more advanced conditions.
 	 */
-	float getChance(World world, BlockPos pos, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1);
+	<C extends IChromosomeType> float getChance(World world, BlockPos pos, IAlleleSpecies<C> species0, IAlleleSpecies<C> species1, IGenome<C> genome0, IGenome<C> genome1);
 
 	/**
 	 * A localized description of the mutation condition. (i.e. "A temperature of HOT is required.")

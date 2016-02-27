@@ -5,14 +5,14 @@
  ******************************************************************************/
 package forestry.api.lepidopterology;
 
+import forestry.api.arboriculture.ITree;
 import forestry.api.genetics.IHousing;
-import forestry.api.genetics.IIndividual;
 
 public interface IButterflyNursery extends IHousing {
 	
 	IButterfly getCaterpillar();
 	
-	IIndividual getNanny();
+	ITree getNanny();
 	
 	void setCaterpillar(IButterfly butterfly);
 	

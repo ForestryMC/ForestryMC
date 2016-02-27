@@ -6,6 +6,7 @@
 package forestry.api.arboriculture;
 
 import javax.annotation.Nonnull;
+import java.util.Collection;
 import java.util.EnumSet;
 
 import net.minecraft.item.ItemStack;
@@ -22,7 +23,7 @@ import forestry.api.genetics.IEffectData;
 import forestry.api.genetics.IIndividual;
 import forestry.api.world.ITreeGenData;
 
-public interface ITree extends IIndividual, ITreeGenData {
+public interface ITree extends IIndividual<TreeChromosome>, ITreeGenData {
 
 	void mate(ITree other);
 
@@ -38,10 +39,7 @@ public interface ITree extends IIndividual, ITreeGenData {
 
 	EnumSet<EnumPlantType> getPlantTypes();
 
-	/**
-	 * @since Forestry 4.0
-	 */
-	ITree[] getSaplings(World world, GameProfile playerProfile, BlockPos pos, float modifier);
+	Collection<ITree> getSaplings(World world, GameProfile playerProfile, BlockPos pos, float modifier);
 
 	ItemStack[] getProduceList();
 
@@ -86,7 +84,8 @@ public interface ITree extends IIndividual, ITreeGenData {
 	@Override
 	ITree copy();
 
-	boolean isPureBred(EnumTreeChromosome chromosome);
+	@Override
+	boolean isPureBred(TreeChromosome chromosome);
 
 	boolean canBearFruit();
 }

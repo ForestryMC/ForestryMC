@@ -14,7 +14,7 @@ import java.util.EnumSet;
 
 import net.minecraftforge.common.EnumPlantType;
 
-import forestry.api.genetics.IIndividual;
+import forestry.api.arboriculture.ITree;
 
 /** Just like IPollinatable but for checking only, it can't be mated */
 public interface ICheckPollinatable {
@@ -27,7 +27,7 @@ public interface ICheckPollinatable {
 	/**
 	 * @return IIndividual containing the genetic information of this IPollinatable
 	 */
-	IIndividual getPollen();
+	ITree getPollen();
 
 	/**
 	 * Checks whether this can mate with the given pollen.
@@ -37,7 +37,7 @@ public interface ICheckPollinatable {
 	 * @param pollen IIndividual representing the pollen.
 	 * @return true if mating is possible, false otherwise.
 	 */
-	boolean canMateWith(IIndividual pollen);
+	boolean canMateWith(ITree pollen);
 
 	boolean isPollinated();
 }

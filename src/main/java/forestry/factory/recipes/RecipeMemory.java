@@ -184,7 +184,7 @@ public class RecipeMemory implements INbtWritable, IStreamable {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
+	public void writeToNBT(@Nonnull NBTTagCompound nbttagcompound) {
 		NBTTagList nbttaglist = new NBTTagList();
 		for (MemorizedRecipe recipe : memorizedRecipes) {
 			if (recipe != null) {

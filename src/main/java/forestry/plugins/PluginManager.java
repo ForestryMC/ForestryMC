@@ -142,12 +142,12 @@ public class PluginManager {
 			if (plugin.canBeDisabled()) {
 				if (!isEnabled(config, plugin)) {
 					iterator.remove();
-					Log.info("Plugin disabled: {0}", plugin);
+					Log.info("Plugin disabled: {}", plugin);
 					continue;
 				}
 				if (!plugin.isAvailable()) {
 					iterator.remove();
-					Log.info("Plugin {0} failed to load: {1}", plugin, plugin.getFailMessage());
+					Log.info("Plugin {} failed to load: {}", plugin, plugin.getFailMessage());
 					continue;
 				}
 			}
@@ -168,7 +168,7 @@ public class PluginManager {
 					ForestryPlugin info = plugin.getClass().getAnnotation(ForestryPlugin.class);
 					String pluginId = info.pluginID();
 					toLoad.remove(pluginId);
-					Log.warning("Plugin {0} is missing dependencies: {1}", pluginId, dependencies);
+					Log.warning("Plugin {} is missing dependencies: {}", pluginId, dependencies);
 				}
 			}
 		} while (changed);
@@ -199,24 +199,24 @@ public class PluginManager {
 		configurePlugins(forestryPlugins);
 
 		for (IForestryPlugin plugin : loadedPlugins) {
-			Log.debug("Setup Start: {0}", plugin);
+			Log.debug("Setup Start: {}", plugin);
 			plugin.setupAPI();
 			plugin.registerItemsAndBlocks();
-			Log.debug("Setup Complete: {0}", plugin);
+			Log.debug("Setup Complete: {}", plugin);
 		}
 
 		stage = Stage.SETUP_DISABLED;
 		for (IForestryPlugin plugin : unloadedPlugins) {
-			Log.debug("Disabled-Setup Start: {0}", plugin);
+			Log.debug("Disabled-Setup Start: {}", plugin);
 			plugin.disabledSetupAPI();
-			Log.debug("Disabled-Setup Complete: {0}", plugin);
+			Log.debug("Disabled-Setup Complete: {}", plugin);
 		}
 	}
 
 	public static void runPreInit() {
 		stage = Stage.PRE_INIT;
 		for (IForestryPlugin plugin : loadedPlugins) {
-			Log.debug("Pre-Init Start: {0}", plugin);
+			Log.debug("Pre-Init Start: {}", plugin);
 			registerHandlers(plugin);
 			plugin.preInit();
 			if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.BUILDCRAFT_STATEMENTS)) {
@@ -226,26 +226,26 @@ public class PluginManager {
 				plugin.registerBackpackItems();
 				plugin.registerCrates();
 			}
-			Log.debug("Pre-Init Complete: {0}", plugin);
+			Log.debug("Pre-Init Complete: {}", plugin);
 		}
 	}
 
 	public static void runInit() {
 		stage = Stage.INIT;
 		for (IForestryPlugin plugin : loadedPlugins) {
-			Log.debug("Init Start: {0}", plugin);
+			Log.debug("Init Start: {}", plugin);
 			plugin.doInit();
 			plugin.registerRecipes();
-			Log.debug("Init Complete: {0}", plugin);
+			Log.debug("Init Complete: {}", plugin);
 		}
 	}
 
 	public static void runPostInit() {
 		stage = Stage.POST_INIT;
 		for (IForestryPlugin plugin : loadedPlugins) {
-			Log.debug("Post-Init Start: {0}", plugin);
+			Log.debug("Post-Init Start: {}", plugin);
 			plugin.postInit();
-			Log.debug("Post-Init Complete: {0}", plugin);
+			Log.debug("Post-Init Complete: {}", plugin);
 		}
 
 		stage = Stage.FINISHED;

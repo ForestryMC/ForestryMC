@@ -15,7 +15,6 @@ import java.util.Locale;
 import java.util.UUID;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTUtil;
 
 import com.mojang.authlib.GameProfile;
 
@@ -69,7 +68,7 @@ public class MailAddress implements INbtWritable, IMailAddress {
 			gameProfile = invalidGameProfile;
 		} else if (nbt.hasKey("profile")) {
 			NBTTagCompound profileTag = nbt.getCompoundTag("profile");
-			gameProfile = NBTUtil.readGameProfileFromNBT(profileTag);
+			gameProfile = PlayerUtil.readGameProfileFromNBT(profileTag);
 		}
 
 		this.type = type;
@@ -136,12 +135,12 @@ public class MailAddress implements INbtWritable, IMailAddress {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
+	public void writeToNBT(@Nonnull NBTTagCompound nbttagcompound) {
 		nbttagcompound.setString("TP", type.toString());
 
 		if (gameProfile != null) {
 			NBTTagCompound profileNbt = new NBTTagCompound();
-			NBTUtil.writeGameProfile(profileNbt, gameProfile);
+			PlayerUtil.writeGameProfile(profileNbt, gameProfile);
 			nbttagcompound.setTag("profile", profileNbt);
 		}
 	}

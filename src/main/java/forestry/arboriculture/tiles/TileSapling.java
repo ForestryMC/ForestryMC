@@ -14,10 +14,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
+import forestry.api.arboriculture.IArboristTracker;
 import forestry.api.arboriculture.ITree;
+import forestry.api.arboriculture.ITreeModifier;
 import forestry.api.arboriculture.ITreekeepingMode;
 import forestry.api.arboriculture.TreeManager;
-import forestry.api.genetics.IBreedingTracker;
 import forestry.arboriculture.worldgen.WorldGenArboriculture;
 import forestry.core.worldgen.WorldGenBase;
 
@@ -48,8 +49,9 @@ public class TileSapling extends TileTreeContainer {
 	}
 
 	private static int getRequiredMaturity(World world, ITree tree) {
-		ITreekeepingMode treekeepingMode = TreeManager.treeRoot.getTreekeepingMode(world);
-		float maturationModifier = treekeepingMode.getMaturationModifier(tree.getGenome(), 1f);
+		ITreekeepingMode treekeepingMode = TreeManager.treeRoot.getMode(world);
+		ITreeModifier treeModifier = treekeepingMode.getTreeModifier();
+		float maturationModifier = treeModifier.getMaturationModifier(tree.getGenome(), 1f);
 		return Math.round(tree.getRequiredMaturity() * maturationModifier);
 	}
 
@@ -100,7 +102,7 @@ public class TileSapling extends TileTreeContainer {
 		}
 
 		if (generated) {
-			IBreedingTracker breedingTracker = TreeManager.treeRoot.getBreedingTracker(worldObj, getOwner());
+			IArboristTracker breedingTracker = TreeManager.treeRoot.getBreedingTracker(worldObj, getOwner());
 			breedingTracker.registerBirth(tree);
 		}
 	}

@@ -14,7 +14,6 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.core.Tabs;
-import forestry.apiculture.genetics.BeeDefinition;
 import forestry.core.items.ItemForestry;
 import forestry.core.items.ItemOverlay;
 import forestry.core.items.ItemRegistry;
@@ -53,7 +52,6 @@ public class ItemRegistryApiculture extends ItemRegistry {
 
 	public ItemRegistryApiculture() {
 		// / BEES
-		BeeDefinition.preInit();
 		beeQueenGE = registerItem(new ItemBeeGE(EnumBeeType.QUEEN), "beeQueenGE");
 		beeDroneGE = registerItem(new ItemBeeGE(EnumBeeType.DRONE), "beeDroneGE");
 		beePrincessGE = registerItem(new ItemBeeGE(EnumBeeType.PRINCESS), "beePrincessGE");

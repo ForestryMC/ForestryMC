@@ -10,17 +10,19 @@
  ******************************************************************************/
 package forestry.core.genetics.alleles;
 
+import java.util.Map;
+
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IChromosomeType;
 
 public interface IAlleleHelper {
 
-	<T extends Enum<T> & IChromosomeType> void set(IAllele[] alleles, T chromosomeType, IAllele allele);
+	<C extends Enum<C> & IChromosomeType<C>> void set(Map<C, IAllele> alleles, C chromosomeType, IAllele allele);
 
-	<T extends Enum<T> & IChromosomeType> void set(IAllele[] alleles, T chromosomeType, IAlleleValue value);
+	<C extends Enum<C> & IChromosomeType<C>> void set(Map<C, IAllele> alleles, C chromosomeType, IAlleleValue value);
 
-	<T extends Enum<T> & IChromosomeType> void set(IAllele[] alleles, T chromosomeType, boolean value);
+	<C extends Enum<C> & IChromosomeType<C>> void set(Map<C, IAllele> alleles, C chromosomeType, boolean value);
 
-	<T extends Enum<T> & IChromosomeType> void set(IAllele[] alleles, T chromosomeType, int value);
+	<C extends Enum<C> & IChromosomeType<C>> void set(Map<C, IAllele> alleles, C chromosomeType, int value);
 
 }

@@ -5,6 +5,8 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
+import javax.annotation.Nonnull;
+
 import forestry.api.core.INbtWritable;
 
 /**
@@ -14,12 +16,16 @@ import forestry.api.core.INbtWritable;
  */
 public interface IChromosome extends INbtWritable {
 
+	@Nonnull
 	IAllele getPrimaryAllele();
 
+	@Nonnull
 	IAllele getSecondaryAllele();
 
+	@Nonnull
 	IAllele getInactiveAllele();
 
+	@Nonnull
 	IAllele getActiveAllele();
 
 }

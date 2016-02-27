@@ -15,7 +15,7 @@ import net.minecraftforge.common.BiomeDictionary;
 import forestry.api.core.ISpriteProvider;
 import forestry.api.genetics.IAlleleSpecies;
 
-public interface IAlleleButterflySpecies extends IAlleleSpecies {
+public interface IAlleleButterflySpecies extends IAlleleSpecies<ButterflyChromosome> {
 	
 	/**
 	 * @return the IBeeRoot

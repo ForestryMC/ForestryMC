@@ -10,6 +10,9 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
+import com.google.common.collect.ImmutableMap;
+
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -33,7 +36,6 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.api.arboriculture.EnumGermlingType;
-import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.IArboristTracker;
@@ -43,10 +45,11 @@ import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.arboriculture.ITreeMutation;
 import forestry.api.arboriculture.ITreeRoot;
 import forestry.api.arboriculture.ITreekeepingMode;
+import forestry.api.arboriculture.TreeChromosome;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
-import forestry.api.genetics.IChromosomeType;
+import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
 import forestry.arboriculture.blocks.BlockFruitPod;
@@ -55,18 +58,21 @@ import forestry.arboriculture.tiles.TileSapling;
 import forestry.core.config.Constants;
 import forestry.core.genetics.SpeciesRoot;
 import forestry.core.utils.BlockUtil;
+import forestry.core.utils.Log;
 import forestry.plugins.PluginArboriculture;
 
-public class TreeHelper extends SpeciesRoot implements ITreeRoot {
+public class TreeRoot extends SpeciesRoot<TreeChromosome> implements ITreeRoot {
 
 	public static final String UID = "rootTrees";
 	private static int treeSpeciesCount = -1;
 	private static ITreekeepingMode activeTreekeepingMode;
 	public static final ArrayList<ITree> treeTemplates = new ArrayList<>();
 
+	@Nonnull
 	private final ArrayList<ITreekeepingMode> treekeepingModes = new ArrayList<>();
 
-	public TreeHelper() {
+	public TreeRoot() {
+		super(TreeChromosome.class);
 		setResearchSuitability(new ItemStack(Blocks.sapling, 1, OreDictionary.WILDCARD_VALUE), 1.0f);
 	}
 
@@ -76,7 +82,7 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 	}
 
 	@Override
-	public Class<? extends IIndividual> getMemberClass() {
+	public Class<ITree> getMemberClass() {
 		return ITree.class;
 	}
 
@@ -245,28 +251,37 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 
 	/* GENOME CONVERSIONS */
 	@Override
-	public ITreeGenome templateAsGenome(IAllele[] template) {
+	public ITreeGenome templateAsGenome(ImmutableMap<TreeChromosome, IAllele> template) {
 		return new TreeGenome(templateAsChromosomes(template));
 	}
 
 	@Override
-	public ITreeGenome templateAsGenome(IAllele[] templateActive, IAllele[] templateInactive) {
+	public ITreeGenome templateAsGenome(ImmutableMap<TreeChromosome, IAllele> templateActive, ImmutableMap<TreeChromosome, IAllele> templateInactive) {
 		return new TreeGenome(templateAsChromosomes(templateActive, templateInactive));
 	}
 
+	@Nonnull
 	@Override
-	public ITree templateAsIndividual(IAllele[] template) {
+	public ITreeGenome chromosomesAsGenome(ImmutableMap<TreeChromosome, IChromosome> chromosomes) {
+		return new TreeGenome(chromosomes);
+	}
+
+	@Nonnull
+	@Override
+	public ITree templateAsIndividual(ImmutableMap<TreeChromosome, IAllele> template) {
 		return new Tree(templateAsGenome(template));
 	}
 
+	@Nonnull
 	@Override
-	public ITree templateAsIndividual(IAllele[] templateActive, IAllele[] templateInactive) {
+	public ITree templateAsIndividual(ImmutableMap<TreeChromosome, IAllele> templateActive, ImmutableMap<TreeChromosome, IAllele> templateInactive) {
 		return new Tree(templateAsGenome(templateActive, templateInactive));
 	}
 
 	/* BREEDING TRACKER */
+	@Nonnull
 	@Override
-	public IArboristTracker getBreedingTracker(World world, GameProfile player) {
+	public IArboristTracker getBreedingTracker(@Nonnull World world, @Nonnull GameProfile player) {
 		String filename = "ArboristTracker." + (player == null ? "common" : player.getId());
 		ArboristTracker tracker = (ArboristTracker) world.loadItemData(ArboristTracker.class, filename);
 
@@ -284,13 +299,20 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 
 	/* BREEDING MODES */
 
+	@Nonnull
 	@Override
-	public ArrayList<ITreekeepingMode> getTreekeepingModes() {
+	public List<ITreekeepingMode> getModes() {
 		return this.treekeepingModes;
 	}
 
 	@Override
-	public ITreekeepingMode getTreekeepingMode(World world) {
+	public void resetMode() {
+		activeTreekeepingMode = null;
+	}
+
+	@Nonnull
+	@Override
+	public ITreekeepingMode getMode(@Nonnull World world) {
 		if (activeTreekeepingMode != null) {
 			return activeTreekeepingMode;
 		}
@@ -302,32 +324,33 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 			mode = PluginArboriculture.treekeepingMode;
 		}
 
-		setTreekeepingMode(world, mode);
+		setMode(world, mode);
 		FMLCommonHandler.instance().getFMLLogger().debug("Set Treekeeping mode for a world to " + mode);
 
 		return activeTreekeepingMode;
 	}
 
 	@Override
-	public void registerTreekeepingMode(ITreekeepingMode mode) {
+	public void registerMode(@Nonnull ITreekeepingMode mode) {
 		treekeepingModes.add(mode);
 	}
 
 	@Override
-	public void setTreekeepingMode(World world, String name) {
-		activeTreekeepingMode = getTreekeepingMode(name);
+	public void setMode(@Nonnull World world, @Nonnull String name) {
+		activeTreekeepingMode = getMode(name);
 		getBreedingTracker(world, null).setModeName(name);
 	}
 
+	@Nonnull
 	@Override
-	public ITreekeepingMode getTreekeepingMode(String name) {
+	public ITreekeepingMode getMode(@Nonnull String name) {
 		for (ITreekeepingMode mode : treekeepingModes) {
 			if (mode.getName().equals(name) || mode.getName().equals(name.toLowerCase(Locale.ENGLISH))) {
 				return mode;
 			}
 		}
 
-		FMLCommonHandler.instance().getFMLLogger().debug("Failed to find a Treekeeping mode called '%s', reverting to fallback.");
+		Log.error("Failed to find a Treekeeping mode called '%s', reverting to fallback.");
 		return treekeepingModes.get(0);
 	}
 
@@ -339,13 +362,13 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 	}
 
 	@Override
-	public void registerTemplate(String identifier, IAllele[] template) {
+	public void registerTemplate(String identifier, ImmutableMap<TreeChromosome, IAllele> template) {
 		treeTemplates.add(new Tree(TreeManager.treeRoot.templateAsGenome(template)));
 		speciesTemplates.put(identifier, template);
 	}
 
 	@Override
-	public IAllele[] getDefaultTemplate() {
+	public ImmutableMap<TreeChromosome, IAllele> getDefaultTemplate() {
 		return TreeDefinition.Oak.getTemplate();
 	}
 
@@ -361,14 +384,14 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 	}
 
 	@Override
-	public void registerMutation(IMutation mutation) {
-		if (AlleleManager.alleleRegistry.isBlacklisted(mutation.getTemplate()[0].getUID())) {
+	public void registerMutation(IMutation<TreeChromosome> mutation) {
+		if (AlleleManager.alleleRegistry.isBlacklisted(mutation.getResultTemplate().get(TreeChromosome.SPECIES).getUID())) {
 			return;
 		}
-		if (AlleleManager.alleleRegistry.isBlacklisted(mutation.getAllele0().getUID())) {
+		if (AlleleManager.alleleRegistry.isBlacklisted(mutation.getSpecies0().getUID())) {
 			return;
 		}
-		if (AlleleManager.alleleRegistry.isBlacklisted(mutation.getAllele1().getUID())) {
+		if (AlleleManager.alleleRegistry.isBlacklisted(mutation.getSpecies1().getUID())) {
 			return;
 		}
 
@@ -388,14 +411,16 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 		return leafTickHandlers;
 	}
 
+	@Nonnull
 	@Override
-	public IChromosomeType[] getKaryotype() {
-		return EnumTreeChromosome.values();
+	public TreeChromosome[] getKaryotype() {
+		return TreeChromosome.values();
 	}
 
+	@Nonnull
 	@Override
-	public IChromosomeType getKaryotypeKey() {
-		return EnumTreeChromosome.SPECIES;
+	public TreeChromosome getKaryotypeKey() {
+		return TreeChromosome.SPECIES;
 	}
 
 }

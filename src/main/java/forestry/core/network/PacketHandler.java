@@ -12,6 +12,7 @@ package forestry.core.network;
 
 import java.io.InputStream;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.NetHandlerPlayServer;
@@ -22,8 +23,6 @@ import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientCustomPacketE
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ServerCustomPacketEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
-
-import forestry.core.proxy.Proxies;
 
 import io.netty.buffer.ByteBufInputStream;
 
@@ -55,7 +54,7 @@ public class PacketHandler {
 	@SubscribeEvent
 	public void onPacket(ClientCustomPacketEvent event) {
 		DataInputStreamForestry data = getStream(event.packet);
-		EntityPlayer player = Proxies.common.getPlayer();
+		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 
 		try {
 			byte packetIdOrdinal = data.readByte();

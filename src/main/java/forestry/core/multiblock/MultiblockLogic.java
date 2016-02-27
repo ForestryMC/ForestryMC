@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.multiblock;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
@@ -112,7 +114,7 @@ public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> i
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound data) {
+	public void writeToNBT(@Nonnull NBTTagCompound data) {
 		if (isMultiblockSaveDelegate() && isConnected()) {
 			NBTTagCompound multiblockData = new NBTTagCompound();
 			this.controller.writeToNBT(multiblockData);

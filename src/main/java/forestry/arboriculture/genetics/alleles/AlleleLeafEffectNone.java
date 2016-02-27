@@ -10,11 +10,14 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics.alleles;
 
+import javax.annotation.Nonnull;
+
 public class AlleleLeafEffectNone extends AlleleLeafEffect {
 	public AlleleLeafEffectNone() {
 		super("none", true);
 	}
 
+	@Nonnull
 	@Override
 	public String getUnlocalizedName() {
 		return "for.arboriculture.effect.none";

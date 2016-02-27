@@ -5,6 +5,10 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
+import com.google.common.collect.ImmutableMap;
+
+import javax.annotation.Nonnull;
+
 import forestry.api.core.INbtWritable;
 
 /**
@@ -12,19 +16,25 @@ import forestry.api.core.INbtWritable;
  *
  * Only the default implementation is supported.
  */
-public interface IGenome extends INbtWritable {
+public interface IGenome<C extends IChromosomeType> extends INbtWritable {
 
-	IAlleleSpecies getPrimary();
+	@Nonnull
+	IAlleleSpecies<C> getPrimary();
 
-	IAlleleSpecies getSecondary();
+	@Nonnull
+	IAlleleSpecies<C> getSecondary();
 
-	IChromosome[] getChromosomes();
+	@Nonnull
+	ImmutableMap<C, IChromosome> getChromosomes();
 
-	IAllele getActiveAllele(IChromosomeType chromosomeType);
+	@Nonnull
+	IAllele getActiveAllele(C chromosomeType);
 
-	IAllele getInactiveAllele(IChromosomeType chromosomeType);
+	@Nonnull
+	IAllele getInactiveAllele(C chromosomeType);
 
-	boolean isGeneticEqual(IGenome other);
-	
-	ISpeciesRoot getSpeciesRoot();
+	boolean isGeneticEqual(IGenome<C> other);
+
+	@Nonnull
+	ISpeciesRoot<C> getSpeciesRoot();
 }

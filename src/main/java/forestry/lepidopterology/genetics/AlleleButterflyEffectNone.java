@@ -10,11 +10,14 @@
  ******************************************************************************/
 package forestry.lepidopterology.genetics;
 
+import javax.annotation.Nonnull;
+
 public class AlleleButterflyEffectNone extends AlleleButterflyEffect {
 	public AlleleButterflyEffectNone() {
 		super("none", false);
 	}
 
+	@Nonnull
 	@Override
 	public String getUnlocalizedName() {
 		return "for.lepidopterology.effect.none";

@@ -12,7 +12,7 @@ package forestry.lepidopterology.genetics;
 
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IEffectData;
-import forestry.api.lepidopterology.EnumButterflyChromosome;
+import forestry.api.lepidopterology.ButterflyChromosome;
 import forestry.api.lepidopterology.IAlleleButterflyEffect;
 import forestry.api.lepidopterology.IEntityButterfly;
 import forestry.core.genetics.alleles.AlleleCategorized;
@@ -23,7 +23,7 @@ public class AlleleButterflyEffect extends AlleleCategorized implements IAlleleB
 
 	public static void createAlleles() {
 		butterflyNone = new AlleleButterflyEffectNone();
-		AlleleManager.alleleRegistry.registerAllele(butterflyNone, EnumButterflyChromosome.EFFECT);
+		AlleleManager.alleleRegistry.registerAllele(butterflyNone, ButterflyChromosome.EFFECT);
 	}
 
 	protected AlleleButterflyEffect(String valueName, boolean isDominant) {

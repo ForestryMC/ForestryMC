@@ -18,9 +18,9 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.arboriculture.ITreeGenome;
+import forestry.api.arboriculture.TreeChromosome;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.IFruitFamily;
 import forestry.core.utils.BlockUtil;
@@ -85,7 +85,7 @@ public class FruitProviderPod extends FruitProviderNone {
 		if (type == EnumPodType.COCOA) {
 			return BlockUtil.tryPlantPot(world, pos, Blocks.cocoa);
 		} else {
-			return TreeManager.treeRoot.setFruitBlock(world, (IAlleleFruit) genome.getActiveAllele(EnumTreeChromosome.FRUITS),
+			return TreeManager.treeRoot.setFruitBlock(world, (IAlleleFruit) genome.getActiveAllele(TreeChromosome.FRUITS),
 					genome.getSappiness(), type.uids, pos);
 		}
 	}

@@ -5,8 +5,12 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
+import com.google.common.collect.ImmutableMap;
+
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -19,7 +23,7 @@ import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.ISpeciesRoot;
 
-public interface ITreeRoot extends ISpeciesRoot {
+public interface ITreeRoot extends ISpeciesRoot<TreeChromosome> {
 
 	@Override
 	boolean isMember(ItemStack itemstack);
@@ -30,24 +34,30 @@ public interface ITreeRoot extends ISpeciesRoot {
 	@Override
 	ITree getMember(NBTTagCompound compound);
 
+	@Nonnull
 	@Override
-	ITree templateAsIndividual(IAllele[] template);
+	ITree templateAsIndividual(ImmutableMap<TreeChromosome, IAllele> template);
+
+	@Nonnull
+	@Override
+	ITree templateAsIndividual(ImmutableMap<TreeChromosome, IAllele> templateActive, ImmutableMap<TreeChromosome, IAllele> templateInactive);
 
 	@Override
-	ITree templateAsIndividual(IAllele[] templateActive, IAllele[] templateInactive);
+	ITreeGenome templateAsGenome(ImmutableMap<TreeChromosome, IAllele> template);
 
 	@Override
-	ITreeGenome templateAsGenome(IAllele[] template);
+	ITreeGenome templateAsGenome(ImmutableMap<TreeChromosome, IAllele> templateActive, ImmutableMap<TreeChromosome, IAllele> templateInactive);
 
+	@Nonnull
 	@Override
-	ITreeGenome templateAsGenome(IAllele[] templateActive, IAllele[] templateInactive);
+	ITreeGenome chromosomesAsGenome(ImmutableMap<TreeChromosome, IChromosome> chromosomes);
 
 	/**
-	 * @param world
 	 * @return {@link IArboristTracker} associated with the passed world.
 	 */
+	@Nonnull
 	@Override
-	IArboristTracker getBreedingTracker(World world, GameProfile player);
+	IArboristTracker getBreedingTracker(@Nonnull World world, @Nonnull GameProfile player);
 
 	/* TREE SPECIFIC */
 
@@ -72,23 +82,27 @@ public interface ITreeRoot extends ISpeciesRoot {
 	boolean plantSapling(World world, ITree tree, GameProfile owner, BlockPos pos);
 
 	@Override
-	IChromosome[] templateAsChromosomes(IAllele[] template);
+	ImmutableMap<TreeChromosome, IChromosome> templateAsChromosomes(ImmutableMap<TreeChromosome, IAllele> template);
 
 	@Override
-	IChromosome[] templateAsChromosomes(IAllele[] templateActive, IAllele[] templateInactive);
+	ImmutableMap<TreeChromosome, IChromosome> templateAsChromosomes(ImmutableMap<TreeChromosome, IAllele> templateActive, ImmutableMap<TreeChromosome, IAllele> templateInactive);
 
 	boolean setFruitBlock(World world, IAlleleFruit allele, float sappiness, short[] indices, BlockPos pos);
 
 	/* GAME MODE */
-	ArrayList<ITreekeepingMode> getTreekeepingModes();
+	@Nonnull
+	@Override
+	List<ITreekeepingMode> getModes();
 
-	ITreekeepingMode getTreekeepingMode(World world);
+	@Nonnull
+	@Override
+	ITreekeepingMode getMode(@Nonnull World world);
 
-	ITreekeepingMode getTreekeepingMode(String name);
+	@Nonnull
+	@Override
+	ITreekeepingMode getMode(@Nonnull String name);
 
-	void registerTreekeepingMode(ITreekeepingMode mode);
-
-	void setTreekeepingMode(World world, String name);
+	void registerMode(@Nonnull ITreekeepingMode mode);
 
 	/* TEMPLATES */
 	@Override

@@ -5,15 +5,19 @@
  ******************************************************************************/
 package forestry.api.lepidopterology;
 
+import javax.annotation.Nonnull;
+
 import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IFlowerProvider;
 import forestry.api.genetics.IGenome;
 
-public interface IButterflyGenome extends IGenome {
-	
+public interface IButterflyGenome extends IGenome<ButterflyChromosome> {
+
+	@Nonnull
 	@Override
 	IAlleleButterflySpecies getPrimary();
 
+	@Nonnull
 	@Override
 	IAlleleButterflySpecies getSecondary();
 
@@ -31,7 +35,7 @@ public interface IButterflyGenome extends IGenome {
 
 	EnumTolerance getToleranceHumid();
 
-	boolean getNocturnal();
+	boolean getNeverSleeps();
 
 	boolean getTolerantFlyer();
 
@@ -41,4 +45,7 @@ public interface IButterflyGenome extends IGenome {
 
 	IAlleleButterflyEffect getEffect();
 
+	@Nonnull
+	@Override
+	IButterflyRoot getSpeciesRoot();
 }

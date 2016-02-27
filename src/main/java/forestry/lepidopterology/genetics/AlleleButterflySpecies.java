@@ -27,16 +27,19 @@ import net.minecraftforge.common.BiomeDictionary;
 
 import forestry.api.core.IModelProvider;
 import forestry.api.core.ISpriteProvider;
+import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IIndividual;
+import forestry.api.lepidopterology.ButterflyChromosome;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.EnumFlutterType;
-import forestry.api.lepidopterology.IAlleleButterflySpeciesCustom;
+import forestry.api.lepidopterology.IAlleleButterflySpecies;
+import forestry.api.lepidopterology.IAlleleButterflySpeciesBuilder;
 import forestry.api.lepidopterology.IButterflyRoot;
 import forestry.core.genetics.alleles.AlleleSpecies;
 import forestry.lepidopterology.render.TextureAtlasButterfly;
 
-public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButterflySpeciesCustom, ISpriteProvider {
+public class AlleleButterflySpecies extends AlleleSpecies<ButterflyChromosome> implements IAlleleButterflySpecies, IAlleleButterflySpeciesBuilder, ISpriteProvider {
 	private final String texture;
 	private final Color serumColour;
 	private float rarity = 0.1f;
@@ -52,6 +55,13 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 		super(uid, unlocalizedName, authority, unlocalizedDescription, isDominant, branch, binomial);
 		this.serumColour = serumColour;
 		this.texture = texturePath;
+	}
+
+	// TODO: break this into a separate builder class
+	@Override
+	public IAlleleButterflySpecies build() {
+		AlleleManager.alleleRegistry.registerAllele(this, ButterflyChromosome.SPECIES);
+		return this;
 	}
 
 	@Override
@@ -133,7 +143,7 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 	}
 
 	@Override
-	public ItemStack[] getResearchBounty(World world, GameProfile researcher, IIndividual individual, int bountyLevel) {
+	public ItemStack[] getResearchBounty(World world, GameProfile researcher, IIndividual<ButterflyChromosome> individual, int bountyLevel) {
 		return new ItemStack[]{getRoot().getMemberStack(individual.copy(), EnumFlutterType.SERUM.ordinal())};
 	}
 

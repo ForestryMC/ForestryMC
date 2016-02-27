@@ -5,6 +5,8 @@
  ******************************************************************************/
 package forestry.api.multiblock;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
@@ -69,5 +71,5 @@ public interface IMultiblockLogic extends INbtWritable {
 	 * Use this in Tile.writeToNBT()
 	 */
 	@Override
-	void writeToNBT(NBTTagCompound nbttagcompound);
+	void writeToNBT(@Nonnull NBTTagCompound nbttagcompound);
 }

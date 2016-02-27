@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.arboriculture.commands;
 
+import com.google.common.collect.ImmutableMap;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.gen.feature.WorldGenerator;
@@ -17,6 +19,7 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.ITreeGenome;
+import forestry.api.arboriculture.TreeChromosome;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
@@ -73,7 +76,7 @@ public final class TreeGenHelper {
 			throw new SpeciesNotFoundException(speciesName);
 		}
 
-		IAllele[] template = TreeManager.treeRoot.getTemplate(species.getUID());
+		ImmutableMap<TreeChromosome, IAllele> template = TreeManager.treeRoot.getTemplate(species.getUID());
 
 		if (template == null) {
 			throw new TemplateNotFoundException(species);

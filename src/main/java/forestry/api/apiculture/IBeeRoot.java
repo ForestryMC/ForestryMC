@@ -5,8 +5,11 @@
  ******************************************************************************/
 package forestry.api.apiculture;
 
-import java.util.ArrayList;
+import com.google.common.collect.ImmutableMap;
+
+import javax.annotation.Nonnull;
 import java.util.Collection;
+import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -15,9 +18,10 @@ import net.minecraft.world.World;
 import com.mojang.authlib.GameProfile;
 
 import forestry.api.genetics.IAllele;
+import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.ISpeciesRoot;
 
-public interface IBeeRoot extends ISpeciesRoot {
+public interface IBeeRoot extends ISpeciesRoot<BeeChromosome> {
 
 	/**
 	 * @return true if passed item is a Forestry bee. Equal to getType(ItemStack stack) != EnumBeeType.NONE
@@ -35,17 +39,23 @@ public interface IBeeRoot extends ISpeciesRoot {
 	IBee getMember(NBTTagCompound compound);
 
 	/* GENOME CONVERSION */
+	@Nonnull
 	@Override
-	IBee templateAsIndividual(IAllele[] template);
+	IBee templateAsIndividual(ImmutableMap<BeeChromosome, IAllele> template);
+
+	@Nonnull
+	@Override
+	IBee templateAsIndividual(ImmutableMap<BeeChromosome, IAllele> templateActive, ImmutableMap<BeeChromosome, IAllele> templateInactive);
 
 	@Override
-	IBee templateAsIndividual(IAllele[] templateActive, IAllele[] templateInactive);
+	IBeeGenome templateAsGenome(ImmutableMap<BeeChromosome, IAllele> template);
 
 	@Override
-	IBeeGenome templateAsGenome(IAllele[] template);
+	IBeeGenome templateAsGenome(ImmutableMap<BeeChromosome, IAllele> templateActive, ImmutableMap<BeeChromosome, IAllele> templateInactive);
 
+	@Nonnull
 	@Override
-	IBeeGenome templateAsGenome(IAllele[] templateActive, IAllele[] templateInactive);
+	IBeeGenome chromosomesAsGenome(ImmutableMap<BeeChromosome, IChromosome> chromosomes);
 
 	/* BREEDING TRACKER */
 
@@ -54,7 +64,8 @@ public interface IBeeRoot extends ISpeciesRoot {
 	 * @return {@link IApiaristTracker} associated with the passed world.
 	 */
 	@Override
-	IApiaristTracker getBreedingTracker(World world, GameProfile player);
+	@Nonnull
+	IApiaristTracker getBreedingTracker(@Nonnull World world, @Nonnull GameProfile player);
 
 	/* BEE SPECIFIC */
 
@@ -94,24 +105,26 @@ public interface IBeeRoot extends ISpeciesRoot {
 
 	/* TEMPLATES */
 	@Override
-	ArrayList<IBee> getIndividualTemplates();
+	List<IBee> getIndividualTemplates();
 
 	/* MUTATIONS */
 	@Override
 	Collection<IBeeMutation> getMutations(boolean shuffle);
 
 	/* GAME MODE */
-	void resetBeekeepingMode();
+	void registerMode(@Nonnull IBeekeepingMode mode);
 
-	ArrayList<IBeekeepingMode> getBeekeepingModes();
+	@Nonnull
+	@Override
+	List<IBeekeepingMode> getModes();
 
-	IBeekeepingMode getBeekeepingMode(World world);
+	@Nonnull
+	@Override
+	IBeekeepingMode getMode(@Nonnull World world);
 
-	IBeekeepingMode getBeekeepingMode(String name);
-
-	void registerBeekeepingMode(IBeekeepingMode mode);
-
-	void setBeekeepingMode(World world, String name);
+	@Nonnull
+	@Override
+	IBeekeepingMode getMode(@Nonnull String name);
 
 	/* MISC */
 

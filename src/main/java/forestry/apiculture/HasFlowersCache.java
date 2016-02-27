@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture;
 
+import javax.annotation.Nonnull;
 import java.util.Random;
 
 import net.minecraft.nbt.NBTTagCompound;
@@ -102,7 +103,7 @@ public class HasFlowersCache implements INbtWritable, INbtReadable {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
+	public void writeToNBT(@Nonnull NBTTagCompound nbttagcompound) {
 		NBTTagCompound hasFlowerCacheNBT = new NBTTagCompound();
 		if (flowerCoords != null) {
 			hasFlowerCacheNBT.setInteger("flowerX", flowerCoords.getX());

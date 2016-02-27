@@ -13,7 +13,7 @@ public interface ITreeFactory {
 	/**
 	 * Creates a new tree species.
 	 * Automatically registered with AlleleManager.alleleRegistry.registerAllele()
-	 * See IAlleleTreeSpeciesCustom and IAlleleSpeciesCustom for adding additional properties to the returned species.
+	 * See IAlleleTreeSpeciesBuilder and IAlleleSpeciesBuilder for adding additional properties to the returned species.
 	 *
 	 * @param uid Unique Identifier for this species
 	 * @param unlocalizedName Unlocalized name for this species
@@ -28,7 +28,7 @@ public interface ITreeFactory {
 	 * @param generator The tree generator
 	 * @return a new tree species allele.
 	 */
-	IAlleleTreeSpeciesCustom createSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, boolean dominant, IClassification branch, String binomial, String mdoelName, ILeafSpriteProvider leafSpriteProvider, IGermlingModelProvider germlingModelProvider, ITreeGenerator generator);
+	IAlleleTreeSpeciesBuilder createSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, boolean dominant, IClassification branch, String binomial, String mdoelName, ILeafSpriteProvider leafSpriteProvider, IGermlingModelProvider germlingModelProvider, ITreeGenerator generator);
 
 	/** Get one of the built-in Forestry leaf types. Default type is deciduous. */
 	ILeafSpriteProvider getLeafIconProvider(EnumLeafType enumLeafType, Color color, Color colorPollinated);

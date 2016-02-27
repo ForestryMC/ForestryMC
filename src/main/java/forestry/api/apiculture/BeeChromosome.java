@@ -5,6 +5,7 @@
  ******************************************************************************/
 package forestry.api.apiculture;
 
+import javax.annotation.Nonnull;
 import java.util.Locale;
 
 import forestry.api.genetics.IAllele;
@@ -22,7 +23,7 @@ import forestry.api.genetics.ISpeciesRoot;
  *
  * @author SirSengir
  */
-public enum EnumBeeChromosome implements IChromosomeType {
+public enum BeeChromosome implements IChromosomeType<BeeChromosome> {
 	/**
 	 * Species of the bee. Alleles here must implement {@link IAlleleBeeSpecies}.
 	 */
@@ -75,25 +76,34 @@ public enum EnumBeeChromosome implements IChromosomeType {
 	 * Determines the bee's effect.
 	 */
 	EFFECT(IAlleleBeeEffect.class);
-	
+
+	@Nonnull
 	private final Class<? extends IAllele> alleleClass;
 	
-	EnumBeeChromosome(Class<? extends IAllele> alleleClass) {
+	BeeChromosome(@Nonnull Class<? extends IAllele> alleleClass) {
 		this.alleleClass = alleleClass;
 	}
 
+	@Nonnull
 	@Override
 	public Class<? extends IAllele> getAlleleClass() {
 		return alleleClass;
 	}
 
+	@Nonnull
 	@Override
 	public String getName() {
 		return this.toString().toLowerCase(Locale.ENGLISH);
 	}
 
+	@Nonnull
 	@Override
-	public ISpeciesRoot getSpeciesRoot() {
+	public ISpeciesRoot<BeeChromosome> getSpeciesRoot() {
 		return BeeManager.beeRoot;
+	}
+
+	@Override
+	public byte getUid() {
+		return (byte) ordinal();
 	}
 }

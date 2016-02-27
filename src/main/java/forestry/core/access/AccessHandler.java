@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.access;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,6 @@ import java.util.UUID;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTUtil;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
@@ -167,18 +167,17 @@ public final class AccessHandler implements IAccessHandler {
 		access = EnumAccess.values()[data.getInteger("Access")];
 
 		if (data.hasKey("owner")) {
-			owner = NBTUtil.readGameProfileFromNBT(data.getCompoundTag("owner"));
+			owner = PlayerUtil.readGameProfileFromNBT(data.getCompoundTag("owner"));
 		}
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound data) {
+	public void writeToNBT(@Nonnull NBTTagCompound data) {
 		data.setInteger("Access", access.ordinal());
 
 		if (this.owner != null) {
 			NBTTagCompound nbt = new NBTTagCompound();
-			NBTUtil.writeGameProfile(nbt, owner);
-			nbt.removeTag("Properties");
+			PlayerUtil.writeGameProfile(nbt, owner);
 			data.setTag("owner", nbt);
 		}
 	}

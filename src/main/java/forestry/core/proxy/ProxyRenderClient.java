@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.proxy;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -17,6 +19,7 @@ import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.statemap.IStateMapper;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.model.ModelBakery;
@@ -33,8 +36,6 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.b3d.B3DLoader;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.fml.client.FMLClientHandler;
-
-import javax.annotation.Nonnull;
 
 import forestry.apiculture.entities.EntityFXBee;
 import forestry.apiculture.render.ParticleRenderer;
@@ -187,7 +188,8 @@ public class ProxyRenderClient extends ProxyRender {
 		}
 
 		EntityFX fx = new EntityFXBee(world, d1, d2, d3, color);
-		fx.setParticleIcon(TextureManager.getInstance().getDefault(icon));
+		TextureAtlasSprite sprite = TextureManager.getInstance().getDefault(icon);
+		fx.setParticleIcon(sprite);
 		ParticleRenderer.getInstance().addEffect(fx);
 	}
 

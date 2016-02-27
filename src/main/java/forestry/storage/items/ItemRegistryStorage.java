@@ -49,7 +49,7 @@ public class ItemRegistryStorage extends ItemRegistry {
 		
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.APICULTURE)) {
 			definition = BackpackManager.definitions.get("apiarist");
-			apiaristBackpack = new ItemBackpackNaturalist(BeeManager.beeRoot, definition, EnumBackpackType.APIARIST);
+			apiaristBackpack = new ItemBackpackNaturalist<>(BeeManager.beeRoot, definition, EnumBackpackType.APIARIST);
 			apiaristBackpack.setCreativeTab(Tabs.tabApiculture);
 			registerItem(apiaristBackpack, "apiaristBag");
 		} else {
@@ -58,7 +58,7 @@ public class ItemRegistryStorage extends ItemRegistry {
 		
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.LEPIDOPTEROLOGY)) {
 			definition = BackpackManager.definitions.get("lepidopterist");
-			lepidopteristBackpack = new ItemBackpackNaturalist(ButterflyManager.butterflyRoot, definition, EnumBackpackType.APIARIST);
+			lepidopteristBackpack = new ItemBackpackNaturalist<>(ButterflyManager.butterflyRoot, definition, EnumBackpackType.APIARIST);
 			lepidopteristBackpack.setCreativeTab(Tabs.tabLepidopterology);
 			registerItem(lepidopteristBackpack, "lepidopteristBag");
 		} else {
