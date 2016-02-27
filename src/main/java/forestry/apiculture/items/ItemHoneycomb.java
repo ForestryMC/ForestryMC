@@ -61,7 +61,7 @@ public class ItemHoneycomb extends ItemForestry {
 	@Override
 	public int getColorFromItemStack(ItemStack itemstack, int j) {
 		EnumHoneyComb honeyComb = EnumHoneyComb.VALUES[itemstack.getItemDamage()];
-		if (j == 0) {
+		if (j == 1) {
 			return honeyComb.primaryColor;
 		} else {
 			return honeyComb.secondaryColor;
