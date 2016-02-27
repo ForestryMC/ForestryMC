@@ -111,10 +111,10 @@ public class ModelBaker implements IModelBaker {
 		if(pos != null){
 			posDOWN = new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ());
 			posUP = new BlockPos(pos.getX(), pos.getY() + 1, pos.getZ());
-			posEAST = new BlockPos(pos.getX(), pos.getY(), pos.getZ() - 1);
-			posWEST = new BlockPos(pos.getX(), pos.getY(), pos.getZ() + 1);
-			posNORTH = new BlockPos(pos.getX() - 1, pos.getY(), pos.getZ());
-			posSOUTH = new BlockPos(pos.getX() + 1, pos.getY(), pos.getZ());
+			posEAST = new BlockPos(pos.getX() - 1, pos.getY(), pos.getZ());
+			posWEST = new BlockPos(pos.getX() + 1, pos.getY(), pos.getZ());
+			posNORTH = new BlockPos(pos.getX(), pos.getY(), pos.getZ() - 1);
+			posSOUTH = new BlockPos(pos.getX(), pos.getY(), pos.getZ() + 1);
 		}
 
 		if (pos == null || block.shouldSideBeRendered(world, posDOWN, EnumFacing.DOWN)) {
@@ -126,11 +126,11 @@ public class ModelBaker implements IModelBaker {
 		}
 
 		if (pos == null || block.shouldSideBeRendered(world, posEAST, EnumFacing.EAST)) {
-			addFaceXPos(pos, textures[EnumFacing.EAST.ordinal()]);
+			addFaceXNeg(pos, textures[EnumFacing.EAST.ordinal()]);
 		}
 
 		if (pos == null || block.shouldSideBeRendered(world, posWEST, EnumFacing.WEST)) {
-			addFaceXNeg(pos, textures[EnumFacing.WEST.ordinal()]);
+			addFaceXPos(pos, textures[EnumFacing.WEST.ordinal()]);
 		}
 
 		if (pos == null || block.shouldSideBeRendered(world, posNORTH, EnumFacing.NORTH)) {

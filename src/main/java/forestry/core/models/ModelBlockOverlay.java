@@ -19,17 +19,20 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
-
+import net.minecraftforge.client.model.IFlexibleBakedModel;
 import net.minecraftforge.client.model.ISmartBlockModel;
 import net.minecraftforge.client.model.ISmartItemModel;
 import net.minecraftforge.common.property.IExtendedBlockState;
 
 import forestry.api.core.IModelBaker;
+import forestry.api.core.IModelBakerModel;
 import forestry.core.blocks.propertys.UnlistedBlockAccess;
 import forestry.core.blocks.propertys.UnlistedBlockPos;
 import forestry.core.models.baker.ModelBaker;
@@ -37,9 +40,11 @@ import forestry.core.models.baker.ModelBaker;
 /**
  * A overlay block model to make a block with 2 or more texture layers
  */
-public abstract class ModelBlockOverlay<B extends Block> implements ISmartItemModel, ISmartBlockModel {
+public abstract class ModelBlockOverlay<B extends Block> implements IFlexibleBakedModel, ISmartItemModel, ISmartBlockModel {
 	@Nonnull
 	private final Class<B> blockClass;
+	private IModelBakerModel latestBlockModel;
+	private IModelBakerModel latestItemModel;
 
 	protected ModelBlockOverlay(@Nonnull Class<B> blockClass) {
 		this.blockClass = blockClass;
@@ -130,27 +135,42 @@ public abstract class ModelBlockOverlay<B extends Block> implements ISmartItemMo
 
 	@Override
 	public boolean isAmbientOcclusion() {
-		return true;
+		if(latestItemModel == null && latestBlockModel == null)
+			return false;
+		return latestBlockModel != null ? latestBlockModel.isAmbientOcclusion() : latestItemModel.isAmbientOcclusion();
 	}
 
 	@Override
 	public boolean isGui3d() {
-		return true;
+		return latestItemModel.isGui3d();
 	}
 
 	@Override
 	public boolean isBuiltInRenderer() {
-		return false;
+		if(latestItemModel == null && latestBlockModel == null)
+			return false;
+		return latestBlockModel != null ? latestBlockModel.isBuiltInRenderer() : latestItemModel.isBuiltInRenderer();
 	}
 	
 	@Override
 	public TextureAtlasSprite getParticleTexture() {
+		if(latestBlockModel != null)
+			return latestBlockModel.getParticleTexture();
 		return null;
 	}
 
 	@Override
 	public ItemCameraTransforms getItemCameraTransforms() {
-		return ItemCameraTransforms.DEFAULT;
+		if(latestItemModel == null)
+			return null;
+		return latestItemModel.getItemCameraTransforms();
+	}
+	
+	@Override
+	public VertexFormat getFormat() {
+		if(latestItemModel == null && latestBlockModel == null)
+			return DefaultVertexFormats.BLOCK;
+		return latestBlockModel != null ? latestBlockModel.getFormat() : latestItemModel.getFormat();
 	}
 
 	@Override
@@ -168,12 +188,12 @@ public abstract class ModelBlockOverlay<B extends Block> implements ISmartItemMo
 		
 		baker.setRenderBoundsFromBlock(block);
 		try {
-			renderInWorld(bBlock, world, pos, baker);
+			backeWorldBlock(bBlock, world, pos, baker);
 		} catch (Exception e) {
 			return null;
 		}
 		
-		return baker.bakeModel(false);
+		return latestBlockModel = baker.bakeModel(false);
 	}
 
 	@Override
@@ -188,16 +208,16 @@ public abstract class ModelBlockOverlay<B extends Block> implements ISmartItemMo
 		block.setBlockBoundsForItemRender();
 		baker.setRenderBoundsFromBlock(block);
 		try {
-			renderInventory(bBlock, stack, baker);
+			backeInventoryBlock(bBlock, stack, baker);
 		} catch (Exception e) {
 			return null;
 		}
 		
-		return baker.bakeModel(true);
+		return latestItemModel = baker.bakeModel(true);
 	}
 	
-	protected abstract void renderInventory(B block, ItemStack item, IModelBaker baker);
+	protected abstract void backeInventoryBlock(B block, ItemStack item, IModelBaker baker);
 
-	protected abstract boolean renderInWorld(B block, IBlockAccess world, BlockPos pos, IModelBaker baker);
+	protected abstract boolean backeWorldBlock(B block, IBlockAccess world, BlockPos pos, IModelBaker baker);
 
 }

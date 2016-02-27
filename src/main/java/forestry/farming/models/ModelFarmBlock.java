@@ -18,28 +18,33 @@ public class ModelFarmBlock extends ModelBlockOverlay<BlockFarm> {
 	}
 
 	@Override
-	public void renderInventory(BlockFarm blockFarm, ItemStack item, IModelBaker baker) {
+	public void backeInventoryBlock(BlockFarm blockFarm, ItemStack item, IModelBaker baker) {
 		if (blockFarm == null) {
 			return;
 		}
 
 		EnumFarmBlockTexture type = EnumFarmBlockTexture.getFromCompound(item.getTagCompound());
 
+		// Add the plain block.
 		baker.addBlockModel(blockFarm, null, getSprites(type), 0);
+		// Add the overlay block.
 		baker.addBlockModel(blockFarm, null, getOverlaySprites(EnumFarmBlockType.VALUES[item.getItemDamage()]), 0);
 	}
 
 	@Override
-	public boolean renderInWorld(BlockFarm blockFarm, IBlockAccess world, BlockPos pos, IModelBaker baker) {
+	public boolean backeWorldBlock(BlockFarm blockFarm, IBlockAccess world, BlockPos pos, IModelBaker baker) {
 
 		TileFarm farm = (TileFarm) world.getTileEntity(pos);
 
 		TextureAtlasSprite[] textures = getSprites(farm.getFarmBlockTexture());
-		TextureAtlasSprite[] texturesOverlay = getOverlaySprites(farm.getFarmBlockType());
 
-		// Render the plain block.
-		baker.addBlockModel(blockFarm, pos, getSprites(farm.getFarmBlockTexture()), 0);
+		// Add the plain block.
+		baker.addBlockModel(blockFarm, pos, textures, 0);
+		// Add the overlay block.
 		baker.addBlockModel(blockFarm, pos, getOverlaySprites(farm.getFarmBlockType()), 0);
+		
+		// Set the particle sprite
+		baker.getCurrentModel().setParticleSprite(textures[0]);
 
 		return true;
 	}
@@ -57,22 +62,13 @@ public class ModelFarmBlock extends ModelBlockOverlay<BlockFarm> {
 
 	private static TextureAtlasSprite[] getOverlaySprites(EnumFarmBlockType farmType) {
 		TextureAtlasSprite[] textures = new TextureAtlasSprite[6];
-		textures[0] = getOverlaySprite(farmType, 0);
-		textures[1] = getOverlaySprite(farmType, 1);
-		textures[2] = getOverlaySprite(farmType, 2);
-		textures[3] = getOverlaySprite(farmType, 3);
-		textures[4] = getOverlaySprite(farmType, 4);
-		textures[5] = getOverlaySprite(farmType, 5);
+		textures[0] = EnumFarmBlockType.getSprite(farmType, 0);
+		textures[1] = EnumFarmBlockType.getSprite(farmType, 1);
+		textures[2] = EnumFarmBlockType.getSprite(farmType, 2);
+		textures[3] = EnumFarmBlockType.getSprite(farmType, 3);
+		textures[4] = EnumFarmBlockType.getSprite(farmType, 4);
+		textures[5] = EnumFarmBlockType.getSprite(farmType, 5);
 		return textures;
-	}
-
-	private static TextureAtlasSprite getOverlaySprite(EnumFarmBlockType texture, int side) {
-		return EnumFarmBlockType.getSprite(texture, side);
-	}
-	
-	@Override
-	public TextureAtlasSprite getParticleTexture() {
-		return getSprites(EnumFarmBlockTexture.BRICK)[0];
 	}
 
 }

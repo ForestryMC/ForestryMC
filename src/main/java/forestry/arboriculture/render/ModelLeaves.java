@@ -30,7 +30,7 @@ public class ModelLeaves extends ModelBlockOverlay<BlockForestryLeaves> {
 	}
 
 	@Override
-	public void renderInventory(BlockForestryLeaves block, ItemStack itemStack, IModelBaker baker) {
+	public void backeInventoryBlock(BlockForestryLeaves block, ItemStack itemStack, IModelBaker baker) {
 		if (!(itemStack.getItem() instanceof ItemBlockLeaves) || block == null) {
 			return;
 		}
@@ -62,14 +62,16 @@ public class ModelLeaves extends ModelBlockOverlay<BlockForestryLeaves> {
 	}
 
 	@Override
-	public boolean renderInWorld(BlockForestryLeaves block, IBlockAccess world, BlockPos pos, IModelBaker baker) {
+	public boolean backeWorldBlock(BlockForestryLeaves block, IBlockAccess world, BlockPos pos, IModelBaker baker) {
 		TileLeaves tile = BlockForestryLeaves.getLeafTile(world, pos);
 		if (tile == null) {
 			return false;
 		}
 
+		TextureAtlasSprite leaveSprite = tile.getLeaveSprite(Proxies.render.fancyGraphicsEnabled());
+		
 		// Render the plain leaf block.
-		baker.addBlockModel(block, pos, tile.getLeaveSprite(Proxies.render.fancyGraphicsEnabled()), 0);
+		baker.addBlockModel(block, pos, leaveSprite, 0);
 
 		// Render overlay for fruit leaves.
 		TextureAtlasSprite fruitSprite = tile.getFruitSprite();
@@ -77,6 +79,9 @@ public class ModelLeaves extends ModelBlockOverlay<BlockForestryLeaves> {
 		if (fruitSprite != null) {
 			baker.addBlockModel(block, pos, fruitSprite, 1);
 		}
+		
+		// Set the particle sprite
+		baker.getCurrentModel().setParticleSprite(leaveSprite);
 
 		return true;
 	}

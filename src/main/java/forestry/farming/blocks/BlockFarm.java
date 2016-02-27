@@ -13,14 +13,11 @@ package forestry.farming.blocks;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.particle.EffectRenderer;
-import net.minecraft.client.particle.EntityDiggingFX;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
@@ -47,8 +44,6 @@ import forestry.api.core.IModelManager;
 import forestry.core.blocks.BlockStructure;
 import forestry.core.blocks.propertys.UnlistedBlockAccess;
 import forestry.core.blocks.propertys.UnlistedBlockPos;
-import forestry.core.render.ParticleHelper;
-import forestry.core.render.ParticleHelper.DefaultCallback;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.farming.models.EnumFarmBlockTexture;
@@ -61,15 +56,12 @@ import forestry.farming.tiles.TileFarmValve;
 
 public class BlockFarm extends BlockStructure {
 
-	private final ParticleHelper.Callback particleCallback;
-
 	public static final PropertyEnum META = PropertyEnum.create("meta", EnumFarmBlockType.class);
 	
 	public BlockFarm() {
 		super(Material.rock);
 		setHardness(1.0f);
 		setHarvestLevel("pickaxe", 0);
-		this.particleCallback = new FarmCallback(this);
 		setDefaultState(blockState.getBaseState().withProperty(META, EnumFarmBlockType.PLAIN));
 	}
 	
@@ -202,41 +194,9 @@ public class BlockFarm extends BlockStructure {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation("forestry:ffarm", "inventory"));
-		ModelLoader.setCustomModelResourceLocation(item, 1, new ModelResourceLocation("forestry:ffarm", "inventory"));
-		ModelLoader.setCustomModelResourceLocation(item, 2, new ModelResourceLocation("forestry:ffarm", "inventory"));
-		ModelLoader.setCustomModelResourceLocation(item, 3, new ModelResourceLocation("forestry:ffarm", "inventory"));
-		ModelLoader.setCustomModelResourceLocation(item, 4, new ModelResourceLocation("forestry:ffarm", "inventory"));
-		ModelLoader.setCustomModelResourceLocation(item, 5, new ModelResourceLocation("forestry:ffarm", "inventory"));
-	}
-
-	/* Particles */
-	@SideOnly(Side.CLIENT)
-	@Override
-	public boolean addHitEffects(World worldObj, MovingObjectPosition target, EffectRenderer effectRenderer) {
-		return ParticleHelper.addHitEffects(worldObj, this, target, effectRenderer, particleCallback);
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public boolean addDestroyEffects(World world, BlockPos pos, EffectRenderer effectRenderer) {
-		return ParticleHelper.addDestroyEffects(world, this, world.getBlockState(pos), pos, effectRenderer, particleCallback);
-	}
-	
-	private static class FarmCallback extends DefaultCallback {
-
-		public FarmCallback(Block block) {
-			super(block);
+		for(int i = 0;i < 6;i++){
+			ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation("forestry:ffarm", "inventory"));
 		}
-		
-		@Override
-		protected void setTexture(EntityDiggingFX fx, BlockPos pos, IBlockState state) {
-			IExtendedBlockState extend = (IExtendedBlockState) state;
-			TileFarm farm = (TileFarm) fx.getEntityWorld().getTileEntity(pos);
-			
-			fx.setParticleIcon(EnumFarmBlockTexture.getSprite(farm.getFarmBlockTexture(), 2));
-		}
-		
 	}
 
 	@Override

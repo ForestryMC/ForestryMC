@@ -307,7 +307,7 @@ public class BlockForestryLeaves extends BlockLeavesBase implements ITileEntityP
 	@Override
 	@SideOnly(Side.CLIENT)
 	public EnumWorldBlockLayer getBlockLayer() {
-		return EnumWorldBlockLayer.CUTOUT;
+		return Proxies.render.fancyGraphicsEnabled() ? EnumWorldBlockLayer.CUTOUT_MIPPED : EnumWorldBlockLayer.SOLID;
 	}
 	
 	/* MODELS */

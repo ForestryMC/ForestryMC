@@ -91,7 +91,6 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 	}
 	
 	/* STATES */
-	
 	@Override
 	public int getMetaFromState(IBlockState state) {
 		return 0;
