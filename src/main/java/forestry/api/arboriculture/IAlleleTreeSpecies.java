@@ -7,7 +7,6 @@ package forestry.api.arboriculture;
 
 import java.util.Collection;
 
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 
 import net.minecraftforge.common.EnumPlantType;
@@ -18,7 +17,7 @@ import forestry.api.core.IModelManager;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IFruitFamily;
 
-public interface IAlleleTreeSpecies extends IAlleleSpecies<TreeChromosome>, Comparable<IAlleleTreeSpecies> {
+public interface IAlleleTreeSpecies extends IAlleleSpecies<TreeChromosome> {
 
 	@Override
 	ITreeRoot getRoot();
@@ -49,10 +48,8 @@ public interface IAlleleTreeSpecies extends IAlleleSpecies<TreeChromosome>, Comp
 	String getModelName();
 
 	/* TEXTURES AND OVERRIDES */
-	int getLeafColour(boolean pollinated);
-
 	@SideOnly(Side.CLIENT)
-	TextureAtlasSprite getLeafSprite(boolean pollinated, boolean fancy);
+	ILeafSpriteProvider getLeafSpriteProvider();
 
 	@SideOnly(Side.CLIENT)
 	ModelResourceLocation getGermlingModel(EnumGermlingType type);

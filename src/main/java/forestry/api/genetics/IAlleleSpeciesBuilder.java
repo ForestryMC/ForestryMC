@@ -8,7 +8,7 @@ package forestry.api.genetics;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 
-public interface IAlleleSpeciesBuilder<C extends IChromosomeType<C>> {
+public interface IAlleleSpeciesBuilder<C extends IChromosomeType> {
 
 	IAlleleSpecies<C> build();
 

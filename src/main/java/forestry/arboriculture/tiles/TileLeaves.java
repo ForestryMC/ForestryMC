@@ -35,6 +35,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.IFruitProvider;
+import forestry.api.arboriculture.ILeafSpriteProvider;
 import forestry.api.arboriculture.ILeafTickHandler;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.ITreeGenome;
@@ -69,8 +70,7 @@ import forestry.core.utils.PlayerUtil;
 
 public class TileLeaves extends TileTreeContainer implements IPollinatable, IFruitBearer, IButterflyNursery, IRipeningPacketReceiver {
 
-	private int colourLeaves;
-	private int colourLeavesPollinated;
+	private ILeafSpriteProvider leafSpriteProvider;
 	private int colourFruits;
 
 	private short textureIndexFruits = -1;
@@ -239,13 +239,8 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 			textureIndexFruits = -1;
 		}
 
-		colourLeaves = species.getLeafColour(false);
-		colourLeavesPollinated = species.getLeafColour(true);
-		if (isDestroyed(tree, damage)) {
-			colourLeaves = ColourUtil.addRGBComponents(colourLeaves, 92, 61, 0);
-		} else if (caterpillar != null) {
-			colourLeaves = ColourUtil.multiplyRGBComponents(colourLeaves, 1.5f);
-		}
+		leafSpriteProvider = species.getLeafSpriteProvider();
+
 		markDirty();
 	}
 
@@ -264,10 +259,16 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	}
 
 	public int getFoliageColour(EntityPlayer player) {
-		if (isPollinatedState && GeneticsUtil.hasNaturalistEye(player)) {
-			return colourLeavesPollinated;
+		final boolean showPollinated = isPollinatedState && GeneticsUtil.hasNaturalistEye(player);
+		final int baseColor = leafSpriteProvider.getColor(showPollinated);
+
+		ITree tree = getTree();
+		if (isDestroyed(tree, damage)) {
+			return ColourUtil.addRGBComponents(baseColor, 92, 61, 0);
+		} else if (caterpillar != null) {
+			return ColourUtil.multiplyRGBComponents(baseColor, 1.5f);
 		} else {
-			return colourLeaves;
+			return baseColor;
 		}
 	}
 
@@ -287,10 +288,14 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 	@SideOnly(Side.CLIENT)
 	public TextureAtlasSprite getLeaveSprite(boolean fancy) {
+		final ILeafSpriteProvider leafSpriteProvider;
 		if (species == null) {
-			return TreeDefinition.Oak.getIndividual().getGenome().getPrimary().getLeafSprite(false, fancy);
+			IAlleleTreeSpecies oakSpecies = TreeDefinition.Oak.getIndividual().getGenome().getPrimary();
+			leafSpriteProvider = oakSpecies.getLeafSpriteProvider();
+		} else {
+			leafSpriteProvider = species.getLeafSpriteProvider();
 		}
-		return species.getLeafSprite(isPollinatedState, fancy);
+		return leafSpriteProvider.getSprite(isPollinatedState, fancy);
 	}
 
 	@SideOnly(Side.CLIENT)

@@ -66,7 +66,8 @@ public class ItemBlockLeaves extends ItemBlockForestry {
 		if (renderPass == 1) {
 			return tileLeaves.getFruitColour();
 		} else {
-			return tileLeaves.getFoliageColour(Proxies.common.getPlayer());
+			EntityPlayer player = Proxies.common.getPlayer();
+			return tileLeaves.getFoliageColour(player);
 		}
 	}
 	

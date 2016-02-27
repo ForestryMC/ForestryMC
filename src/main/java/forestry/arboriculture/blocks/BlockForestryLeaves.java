@@ -24,6 +24,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -281,19 +283,19 @@ public class BlockForestryLeaves extends BlockLeavesBase implements ITileEntityP
 	public int colorMultiplier(IBlockAccess world, BlockPos pos, int renderPass) {
 		TileLeaves leaves = getLeafTile(world, pos);
 		if (leaves == null) {
-			return super.colorMultiplier(world, pos, 0);
+			return super.colorMultiplier(world, pos, renderPass);
 		}
+
 		final int colour;
 		if (renderPass == 0) {
-			colour = leaves.getFoliageColour(Proxies.common.getClientInstance().thePlayer);
-			if (colour == 0 || colour == PluginArboriculture.proxy.getFoliageColorBasic()) {
-				return super.colorMultiplier(world, pos, 0);
-			}
+			EntityPlayerSP thePlayer = Minecraft.getMinecraft().thePlayer;
+			colour = leaves.getFoliageColour(thePlayer);
 		} else {
 			colour = leaves.getFruitColour();
-			if (colour == 0) {
-				return super.colorMultiplier(world, pos, 0);
-			}
+		}
+
+		if (colour == 0) {
+			return super.colorMultiplier(world, pos, renderPass);
 		}
 		return colour;
 	}

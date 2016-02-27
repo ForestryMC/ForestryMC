@@ -88,11 +88,6 @@ public class AlleleFruit extends AlleleCategorized implements IAlleleFruit {
 	}
 
 	@Override
-	public int compareTo(@Nonnull IAlleleFruit arg0) {
-		return 0;
-	}
-
-	@Override
 	public String getModelName() {
 		return getProvider().getModelName();
 	}

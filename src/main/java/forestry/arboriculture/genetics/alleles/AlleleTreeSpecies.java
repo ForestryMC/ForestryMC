@@ -10,11 +10,9 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics.alleles;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 
 import net.minecraftforge.common.EnumPlantType;
@@ -40,10 +38,10 @@ import forestry.core.genetics.alleles.AlleleSpecies;
 public class AlleleTreeSpecies extends AlleleSpecies<TreeChromosome> implements IAlleleTreeSpecies, IAlleleTreeSpeciesBuilder {
 	private final ITreeGenerator generator;
 	private final IGermlingModelProvider germlingModelProvider;
-	private final ILeafSpriteProvider leafmodelProvider;
+	private final ILeafSpriteProvider leafSpriteProvider;
 	private final List<IFruitFamily> fruits = new ArrayList<>();
 	
-	private final String mdoelName;
+	private final String modelName;
 
 	private EnumPlantType nativeType = EnumPlantType.Plains;
 
@@ -52,8 +50,8 @@ public class AlleleTreeSpecies extends AlleleSpecies<TreeChromosome> implements 
 
 		this.generator = generator;
 		this.germlingModelProvider = germlingModelProvider;
-		this.leafmodelProvider = leafIconProvider;
-		this.mdoelName = modelName;
+		this.leafSpriteProvider = leafIconProvider;
+		this.modelName = modelName;
 	}
 
 	// TODO: break this into a separate builder class
@@ -97,18 +95,13 @@ public class AlleleTreeSpecies extends AlleleSpecies<TreeChromosome> implements 
 	}
 
 	@Override
-	public TextureAtlasSprite getLeafSprite(boolean pollinated, boolean fancy) {
-		return leafmodelProvider.getSprite(pollinated, fancy);
-	}
-
-	@Override
-	public int getLeafColour(boolean pollinated) {
-		return leafmodelProvider.getColor(pollinated);
+	public ILeafSpriteProvider getLeafSpriteProvider() {
+		return leafSpriteProvider;
 	}
 
 	@Override
 	public int getSpriteColour(int renderPass) {
-		return leafmodelProvider.getColor(false);
+		return leafSpriteProvider.getColor(false);
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -123,7 +116,7 @@ public class AlleleTreeSpecies extends AlleleSpecies<TreeChromosome> implements 
 		if (type == EnumGermlingType.SAPLING) {
 			return 0xFFFFFF;
 		}
-		return getLeafColour(false);
+		return getSpriteColour(renderPass);
 	}
 	
 	@Override
@@ -138,12 +131,7 @@ public class AlleleTreeSpecies extends AlleleSpecies<TreeChromosome> implements 
 	
 	@Override
 	public String getModelName() {
-		return mdoelName;
-	}
-
-	@Override
-	public int compareTo(@Nonnull IAlleleTreeSpecies o) {
-		return 0;
+		return modelName;
 	}
 
 	@SideOnly(Side.CLIENT)
