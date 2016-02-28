@@ -15,7 +15,7 @@ import forestry.core.blocks.BlockBase;
 
 public class BlockLepidopterology extends BlockBase<BlockTypeLepidopterologyTesr> {
 	public BlockLepidopterology() {
-		super(true, BlockTypeLepidopterologyTesr.class);
+		super(BlockTypeLepidopterologyTesr.class);
 		setCreativeTab(Tabs.tabLepidopterology);
 	}
 }

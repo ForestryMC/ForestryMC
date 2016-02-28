@@ -15,11 +15,12 @@ import javax.annotation.Nonnull;
 import forestry.apiculture.tiles.TileApiary;
 import forestry.apiculture.tiles.TileBeeHouse;
 import forestry.core.blocks.IBlockType;
+import forestry.core.blocks.IBlockTypeCustom;
 import forestry.core.blocks.IMachineProperties;
 import forestry.core.blocks.MachineProperties;
 import forestry.core.tiles.TileForestry;
 
-public enum BlockTypeApiculture implements IBlockType {
+public enum BlockTypeApiculture implements IBlockTypeCustom {
 	APIARY(0, TileApiary.class, "apiary"),
 	BEE_HOUSE(1, TileBeeHouse.class, "bee.house");
 
@@ -34,7 +35,7 @@ public enum BlockTypeApiculture implements IBlockType {
 
 	@Nonnull
 	@Override
-	public IMachineProperties getMachineProperties() {
+	public IMachineProperties<?> getMachineProperties() {
 		return machineProperties;
 	}
 

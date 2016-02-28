@@ -59,6 +59,7 @@ import jline.internal.Log;
 public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> extends BlockForestry implements IItemModelRegister, IStateMapperRegister {
 	private final Map<P, IMachineProperties> properties = new HashMap<>();
 	private final boolean hasTESR;
+	private final boolean hasCustom;
 	private final Class<P> machinePropertiesClass;
 	
 	/* PROPERTIES */
@@ -68,15 +69,12 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 	protected final BlockState blockState;
 	
 	private boolean isReady = false;
-	
-	public BlockBase(Class<P> machinePropertiesClass) {
-		this(false, machinePropertiesClass);
-	}
 
-	public BlockBase(boolean hasTESR, Class<P> machinePropertiesClass) {
+	public BlockBase(Class<P> machinePropertiesClass) {
 		super(Material.iron);
 
-		this.hasTESR = hasTESR;
+		this.hasTESR = IBlockTypeTesr.class.isAssignableFrom(machinePropertiesClass);;
+		this.hasCustom = IBlockTypeCustom.class.isAssignableFrom(machinePropertiesClass);
 		this.lightOpacity = this.isOpaqueCube() ? 255 : 0;
 		this.machinePropertiesClass = machinePropertiesClass;
 		
@@ -105,12 +103,12 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 
 	@Override
 	public boolean isOpaqueCube() {
-		return !hasTESR;
+		return !hasTESR && !hasCustom;
 	}
 	
 	@Override
 	public boolean isNormalCube() {
-		return !hasTESR;
+		return !hasTESR && !hasCustom;
 	}
 
 	@Override

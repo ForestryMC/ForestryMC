@@ -53,7 +53,7 @@ public class BlockEngine extends BlockBase<BlockTypeEngine> {
 	}
 
 	public BlockEngine() {
-		super(true, BlockTypeEngine.class);
+		super(BlockTypeEngine.class);
 	}
 
 	@Override
