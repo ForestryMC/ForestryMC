@@ -79,6 +79,18 @@ public class SqueezerRecipeManager implements ISqueezerManager {
 		return null;
 	}
 
+	public static ISqueezerRecipe findRecipeWithIngredient(ItemStack ingredient) {
+		for (ISqueezerRecipe recipe : recipes) {
+			for (ItemStack recipeIngredient : recipe.getResources()) {
+				if (ItemStackUtil.isCraftingEquivalent(recipeIngredient, ingredient, false, false)) {
+					return recipe;
+				}
+			}
+		}
+
+		return null;
+	}
+
 	public static boolean canUse(ItemStack itemStack) {
 		for (ISqueezerRecipe recipe : recipes) {
 			for (ItemStack recipeInput : recipe.getResources()) {
