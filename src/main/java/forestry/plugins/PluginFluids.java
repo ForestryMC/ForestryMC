@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -175,6 +176,11 @@ public class PluginFluids extends ForestryPlugin {
 	public static class FillBucketHook {
 		@SubscribeEvent
 		public void fillBucket(FillBucketEvent event) {
+			ItemStack bucket = event.current;
+			if (bucket == null || bucket.getItem() != Items.bucket) {
+				return;
+			}
+			
 			MovingObjectPosition movingObjectPosition = event.target;
 			int x = movingObjectPosition.blockX;
 			int y = movingObjectPosition.blockY;
