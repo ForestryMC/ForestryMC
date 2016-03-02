@@ -12,14 +12,13 @@ package forestry.apiculture.items;
 
 import java.util.List;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -35,7 +34,7 @@ import forestry.core.items.ItemWithGui;
 import forestry.core.utils.StringUtil;
 
 public class ItemHabitatLocator extends ItemWithGui {
-	private static final String iconName = "forestry:biomefinder";
+	private static final String iconName = "forestry:items/biomefinder";
 
 	private final HabitatLocatorLogic locatorLogic;
 
@@ -56,15 +55,11 @@ public class ItemHabitatLocator extends ItemWithGui {
 		}
 	}
 
-	/* TEXTURES */
+	/* SPRITES */
 	@SideOnly(Side.CLIENT)
-	public static TextureAtlasSprite sprite;
-
-	@SideOnly(Side.CLIENT)
-	public static void registerIcon(TextureMap map) {
+	public static void registerSprite() {
 		TextureAtlasSprite texture = new TextureHabitatLocator(iconName);
-		map.setTextureEntry("forestry:biomefinder", texture);
-		sprite = texture;
+		Minecraft.getMinecraft().getTextureMapBlocks().setTextureEntry(iconName, texture);
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})

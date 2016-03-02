@@ -34,8 +34,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.client.model.b3d.B3DLoader;
-import net.minecraftforge.client.model.obj.OBJLoader;
 import forestry.apiculture.entities.EntityFXBee;
 import forestry.apiculture.render.ParticleRenderer;
 import forestry.apiculture.render.TextureHabitatLocator;
@@ -145,12 +143,6 @@ public class ProxyRenderClient extends ProxyRender {
 	@Override
 	public void registerStateMapper(Block block, IStateMapper mapper) {
 		ModelLoader.setCustomStateMapper(block, mapper);
-	}
-	
-	@Override
-	public void registerLoaders() {
-		B3DLoader.instance.addDomain(Constants.ID);
-		OBJLoader.instance.addDomain(Constants.ID);
 	}
 
 	@Override

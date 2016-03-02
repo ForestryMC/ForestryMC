@@ -22,6 +22,7 @@ import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.model.IBakedModel;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.client.resources.model.ModelRotation;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -33,18 +34,10 @@ import net.minecraftforge.client.model.ModelLoaderRegistry;
 
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.IButterfly;
-import forestry.core.models.TRSRBakedModel;
-import forestry.core.utils.Log;
 
 public class ModelButterflyItem implements ISmartItemModel {
 
 	public IRetexturableModel modelButterfly;
-	public ResourceLocation location;
-
-	public ModelButterflyItem() {
-		this.location = new ResourceLocation("forestry:item/butterflyGE.b3d");
-		//this.location = new ResourceLocation("forestry:item/butterflyGE.obj");
-	}
 
 	@Override
 	public List<BakedQuad> getFaceQuads(EnumFacing p_177551_1_) {
@@ -85,9 +78,9 @@ public class ModelButterflyItem implements ISmartItemModel {
 	public IBakedModel handleItemState(ItemStack item) {
 		if (modelButterfly == null) {
 			try {
-				modelButterfly = (IRetexturableModel) ModelLoaderRegistry.getModel(location);
+				modelButterfly = (IRetexturableModel) ModelLoaderRegistry.getModel(new ModelResourceLocation("forestry:butterflyGE", "inventory"));
 			} catch (IOException e) {
-				Log.warning("Failed to find Butterfly Model for (" + location + ") in the Forestry registry.");
+				return null;
 			}
 			if (modelButterfly == null) {
 				return null;
@@ -98,40 +91,14 @@ public class ModelButterflyItem implements ISmartItemModel {
 			butterfly = ButterflyManager.butterflyRoot.templateAsIndividual(ButterflyManager.butterflyRoot.getDefaultTemplate());
 		}
 		return bakeModel(butterfly);
-		//return bakeModel(butterfly);
 	}
 
 	public IBakedModel bakeModel(IButterfly butterfly) {
 		Function<ResourceLocation, TextureAtlasSprite> textureGetter = new ButterflyTextureGetter();
 		ImmutableMap.Builder<String, String> textures = ImmutableMap.builder();
-		textures.put("#ButterflyGE", butterfly.getGenome().getSecondary().getEntityTexture().replace(".png", "").replace("textures/", ""));
-		textures.put("Butterfly2texture", butterfly.getGenome().getSecondary().getEntityTexture().replace(".png", "").replace("textures/", ""));
+		textures.put("butterfly", butterfly.getGenome().getSecondary().getEntityTexture().replace(".png", "").replace("textures/", "").replace("entity", "items"));
 		modelButterfly = (IRetexturableModel) modelButterfly.retexture(textures.build());
-		return new TRSRBakedModel(modelButterfly.bake(ModelRotation.X0_Y0, DefaultVertexFormats.ITEM, textureGetter), -0.5F, -1.5F, 1.5F, 0, (float) Math.PI * 2, 0, 1F);
-	}
-
-	public static float getIrregularWingYaw(long flapping, float flap) {
-		long irregular = flapping / 1024;
-		float wingYaw;
-
-		if (irregular % 11 == 0) {
-			wingYaw = 0.75f;
-		} else {
-			if (irregular % 7 == 0) {
-				flap *= 4;
-				flap = flap % 1;
-			} else if (irregular % 19 == 0) {
-				flap *= 6;
-				flap = flap % 1;
-			}
-			wingYaw = getRegularWingYaw(flap);
-		}
-
-		return wingYaw;
-	}
-
-	private static float getRegularWingYaw(float flap) {
-		return flap < 0.5 ? 0.75f + flap : 1.75f - flap;
+		return modelButterfly.bake(ModelRotation.X0_Y0, DefaultVertexFormats.ITEM, textureGetter);
 	}
 
 	private static class ButterflyTextureGetter implements Function<ResourceLocation, TextureAtlasSprite> {

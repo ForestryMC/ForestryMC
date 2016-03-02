@@ -198,7 +198,8 @@ public class AlleleButterflySpecies extends AlleleSpecies<ButterflyChromosome> i
 	
 	@Override
 	public void registerSprites() {
-		Minecraft.getMinecraft().getTextureMapBlocks().setTextureEntry(texture.replace(".png", "").replace("textures/", ""), new TextureAtlasButterfly(texture.replace(".png", "").replace("textures/", "")));
+		String spriteName = texture.replace(".png", "").replace("textures/", "").replace("entity", "items");
+		Minecraft.getMinecraft().getTextureMapBlocks().setTextureEntry(spriteName, new TextureAtlasButterfly(spriteName));
 	}
 
 	@Override

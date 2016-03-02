@@ -11,8 +11,11 @@
 package forestry.lepidopterology.proxy;
 
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
-
+import forestry.core.models.ModelIndex;
+import forestry.core.models.ModelManager;
+import forestry.core.proxy.Proxies;
 import forestry.lepidopterology.entities.EntityButterfly;
+import forestry.lepidopterology.render.ModelButterflyItem;
 import forestry.lepidopterology.render.RenderButterflyEntity;
 
 public class ProxyLepidopterologyClient extends ProxyLepidopterology {
@@ -20,6 +23,6 @@ public class ProxyLepidopterologyClient extends ProxyLepidopterology {
 	@Override
 	public void initializeRendering() {
 		RenderingRegistry.registerEntityRenderingHandler(EntityButterfly.class, new RenderButterflyEntity());
-		//Proxies.render.registerModel(new ModelIndex(ModelManager.getInstance().getModelLocation(PluginLepidopterology.items.butterflyGE, "butterflyGE"), new ModelButterflyItem()));
+		Proxies.render.registerModel(new ModelIndex(ModelManager.getInstance().getModelLocation("butterflyGE"), new ModelButterflyItem()));
 	}
 }
