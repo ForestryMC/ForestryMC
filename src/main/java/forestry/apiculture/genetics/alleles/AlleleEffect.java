@@ -29,7 +29,6 @@ import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IEffectData;
 import forestry.core.genetics.alleles.AlleleCategorized;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.EntityUtil;
 import forestry.core.utils.vect.MutableVect;
 import forestry.core.utils.vect.Vect;
 
@@ -155,6 +154,6 @@ public abstract class AlleleEffect extends AlleleCategorized implements IAlleleB
 
 	public static <T extends Entity> List<T> getEntitiesInRange(IBeeGenome genome, IBeeHousing housing, Class<T> entityClass) {
 		AxisAlignedBB boundingBox = getBounding(genome, housing);
-		return EntityUtil.getEntitiesWithinAABB(housing.getWorld(), entityClass, boundingBox);
+		return housing.getWorld().getEntitiesWithinAABB(entityClass, boundingBox);
 	}
 }

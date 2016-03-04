@@ -52,9 +52,8 @@ public class BlockStump extends BlockTorch implements IItemModelRegister {
 		manager.registerItemModel(item, 0, "stump");
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List itemList) {
+	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List<ItemStack> itemList) {
 		itemList.add(new ItemStack(this, 1, 0));
 	}
 

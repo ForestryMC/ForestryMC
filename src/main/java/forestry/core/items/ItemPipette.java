@@ -96,9 +96,8 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 		return filled;
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
-	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean flag) {
+	public void addInformation(ItemStack itemstack, EntityPlayer player, List<String> list, boolean flag) {
 		PipetteContents contained = PipetteContents.create(itemstack);
 		if (contained != null) {
 			contained.addTooltip(list);

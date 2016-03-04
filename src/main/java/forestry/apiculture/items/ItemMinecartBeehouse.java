@@ -98,9 +98,8 @@ public class ItemMinecartBeehouse extends ItemMinecart implements IItemModelRegi
 		}
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
-	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List itemList) {
+	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List<ItemStack> itemList) {
 		for (int i = 0; i < definition.length; i++) {
 			itemList.add(new ItemStack(this, 1, i));
 		}

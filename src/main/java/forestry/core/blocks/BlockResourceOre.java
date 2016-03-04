@@ -128,10 +128,8 @@ public class BlockResourceOre extends Block implements IItemModelRegister {
 		return getMetaFromState(state);
 	}
 
-	// / CREATIVE INVENTORY
-	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List itemList) {
+	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List<ItemStack> itemList) {
 		for (ResourceType resourceType : ResourceType.values()) {
 			ItemStack stack = get(resourceType, 1);
 			itemList.add(stack);

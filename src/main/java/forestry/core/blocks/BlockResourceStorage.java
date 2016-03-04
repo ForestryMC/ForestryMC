@@ -60,9 +60,8 @@ public class BlockResourceStorage extends Block implements IItemModelRegister {
 		return getDefaultState().withProperty(RESOURCE, ResourceType.values()[meta]);
 	}
 	
-	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs creativeTabs, List itemList) {
+	public void getSubBlocks(Item item, CreativeTabs creativeTabs, List<ItemStack> itemList) {
 		for (ResourceType resourceType : ResourceType.values()) {
 			ItemStack stack = get(resourceType);
 			itemList.add(stack);

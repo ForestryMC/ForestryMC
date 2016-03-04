@@ -33,7 +33,6 @@ import forestry.plugins.PluginApiculture;
 
 public abstract class HiveDecorator {
 
-	@SuppressWarnings("rawtypes")
 	private static final EventType EVENT_TYPE = EnumHelper.addEnum(EventType.class, "FORESTRY_HIVES", new Class[0], new Object[0]);
 
 	public static void decorateHives(IChunkProvider chunkProvider, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated) {

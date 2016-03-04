@@ -89,10 +89,9 @@ public class BlockArbStairs extends BlockStairs implements IWoodTyped, IItemMode
 		return super.getActualState(state, world, pos);
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(Item item, CreativeTabs tab, List list) {
+	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
 		for (EnumWoodType woodType : EnumWoodType.VALUES) {
 			list.add(TreeManager.woodItemAccess.getStairs(woodType, fireproof));
 		}

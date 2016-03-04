@@ -63,9 +63,8 @@ public class ItemLetter extends ItemWithGui {
 		LetterProperties.registerModel(item, manager);
 	}
 
-	@SuppressWarnings({"unchecked", "rawtypes"})
 	@Override
-	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean flag) {
+	public void addInformation(ItemStack itemstack, EntityPlayer player, List<String> list, boolean flag) {
 		NBTTagCompound nbttagcompound = itemstack.getTagCompound();
 		if (nbttagcompound == null) {
 			list.add('<' + StringUtil.localize("gui.blank") + '>');

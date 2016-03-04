@@ -107,8 +107,7 @@ public class BlockForestryLeaves extends BlockLeavesBase implements ITileEntityP
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	@SuppressWarnings({"unchecked", "rawtypes"})
-	public void getSubBlocks(Item item, CreativeTabs tab, List list) {
+	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
 
 		for (ITree tree : TreeManager.treeRoot.getIndividualTemplates()) {
 			TileLeaves leaves = new TileLeaves();

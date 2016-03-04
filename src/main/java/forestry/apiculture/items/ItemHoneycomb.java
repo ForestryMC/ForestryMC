@@ -68,9 +68,8 @@ public class ItemHoneycomb extends ItemForestry {
 		}
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
-	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List itemList) {
+	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List<ItemStack> itemList) {
 		for (int i = 0; i < EnumHoneyComb.VALUES.length; i++) {
 			EnumHoneyComb honeyComb = EnumHoneyComb.VALUES[i];
 			if (!honeyComb.isSecret() || Config.isDebug) {

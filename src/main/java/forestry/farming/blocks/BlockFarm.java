@@ -89,9 +89,8 @@ public class BlockFarm extends BlockStructure {
 	}
 
 	@Override
-	@SuppressWarnings({"rawtypes", "unchecked"})
 	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(Item item, CreativeTabs tab, List list) {
+	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
 		for (int i = 0; i < 6; i++) {
 			if (i == 1) {
 				continue;

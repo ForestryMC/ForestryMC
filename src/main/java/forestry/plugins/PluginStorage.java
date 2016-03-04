@@ -103,7 +103,6 @@ public class PluginStorage extends BlankForestryPlugin {
 	public static ItemRegistryStorage items;
 
 	@Override
-	@SuppressWarnings({"unchecked", "rawtypes"})
 	public void setupAPI() {
 		super.setupAPI();
 
@@ -153,7 +152,6 @@ public class PluginStorage extends BlankForestryPlugin {
 	}
 
 	@Override
-	@SuppressWarnings({"unchecked", "rawtypes"})
 	public void disabledSetupAPI() {
 		BackpackManager.backpackItems = new ArrayList[6];
 		BackpackManager.backpackItems[0] = minerItems;

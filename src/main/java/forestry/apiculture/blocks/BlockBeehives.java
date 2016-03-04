@@ -172,9 +172,8 @@ public class BlockBeehives extends BlockContainer implements IItemModelRegister 
 		return null;
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List itemList) {
+	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List<ItemStack> itemList) {
 		itemList.add(new ItemStack(this, 1, 1));
 		itemList.add(new ItemStack(this, 1, 2));
 		itemList.add(new ItemStack(this, 1, 3));

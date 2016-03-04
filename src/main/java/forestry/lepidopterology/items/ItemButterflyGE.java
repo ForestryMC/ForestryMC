@@ -92,9 +92,8 @@ public class ItemButterflyGE extends ItemGE {
 		return butterfly.getDisplayName();
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
-	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List itemList) {
+	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List<ItemStack> itemList) {
 		addCreativeItems(itemList, true);
 	}
 

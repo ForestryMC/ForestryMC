@@ -34,7 +34,6 @@ import forestry.api.farming.IFarmLogic;
 import forestry.core.config.Constants;
 import forestry.core.entities.EntitySelector;
 import forestry.core.utils.BlockUtil;
-import forestry.core.utils.EntityUtil;
 import forestry.core.utils.vect.Vect;
 
 public abstract class FarmLogic implements IFarmLogic {
@@ -118,7 +117,7 @@ public abstract class FarmLogic implements IFarmLogic {
 	protected List<ItemStack> collectEntityItems(boolean toWorldHeight) {
 		AxisAlignedBB harvestBox = getHarvestBox(housing, toWorldHeight);
 
-		List<EntityItem> entityItems = EntityUtil.selectEntitiesWithinAABB(housing.getWorld(), entitySelectorFarm, harvestBox);
+		List<EntityItem> entityItems = housing.getWorld().getEntitiesWithinAABB(entitySelectorFarm.getEntityClass(), harvestBox, entitySelectorFarm);
 		List<ItemStack> stacks = new ArrayList<>();
 		for (EntityItem entity : entityItems) {
 			ItemStack contained = entity.getEntityItem();

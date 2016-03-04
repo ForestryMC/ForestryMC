@@ -127,7 +127,6 @@ public class PluginLepidopterology extends BlankForestryPlugin {
 		config.save();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void registerRecipes() {
 		CraftingManager.getInstance().getRecipeList().add(new MatingRecipe());

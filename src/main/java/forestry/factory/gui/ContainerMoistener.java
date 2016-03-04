@@ -60,12 +60,11 @@ public class ContainerMoistener extends ContainerLiquidTanks<TileMoistener> impl
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
 
-		for (Object crafter : crafters) {
-			tile.sendGUINetworkData(this, (ICrafting) crafter);
+		for (ICrafting crafter : crafters) {
+			tile.sendGUINetworkData(this, crafter);
 		}
 	}
 }

@@ -14,6 +14,7 @@ import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 import forestry.api.arboriculture.EnumWoodType;
 import forestry.api.arboriculture.TreeManager;
@@ -26,9 +27,8 @@ public class BlockPlanks extends BlockWood {
 		setHarvestLevel("axe", 0);
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List list) {
+	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List<ItemStack> list) {
 		for (EnumWoodType woodType : EnumWoodType.VALUES) {
 			list.add(TreeManager.woodItemAccess.getPlanks(woodType, isFireproof()));
 		}

@@ -93,9 +93,8 @@ public class BlockArbFence extends BlockFence implements IWoodTyped, IItemModelR
 		return super.getActualState(state, world, pos);
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List list) {
+	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List<ItemStack> list) {
 		for (EnumWoodType woodType : EnumWoodType.VALUES) {
 			list.add(TreeManager.woodItemAccess.getFence(woodType, fireproof));
 		}

@@ -22,9 +22,8 @@ public class ItemBlockNBT extends ItemBlockForestry {
 		super(block);
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
-	public void addInformation(ItemStack itemstack, EntityPlayer player, List info, boolean par4) {
+	public void addInformation(ItemStack itemstack, EntityPlayer player, List<String> info, boolean par4) {
 		if (!itemstack.hasTagCompound()) {
 			return;
 		}

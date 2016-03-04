@@ -88,9 +88,8 @@ public class ItemBeeGE extends ItemGE {
 		return beeGrammar.replaceAll("%SPECIES", beeSpecies).replaceAll("%TYPE", beeType);
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
-	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean flag) {
+	public void addInformation(ItemStack itemstack, EntityPlayer player, List<String> list, boolean flag) {
 		if (!itemstack.hasTagCompound()) {
 			return;
 		}
@@ -107,14 +106,12 @@ public class ItemBeeGE extends ItemGE {
 		super.addInformation(itemstack, player, list, flag);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List itemList) {
+	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List<ItemStack> itemList) {
 		addCreativeItems(itemList, true);
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
-	public void addCreativeItems(List itemList, boolean hideSecrets) {
+	public void addCreativeItems(List<ItemStack> itemList, boolean hideSecrets) {
 		for (IBee bee : BeeManager.beeRoot.getIndividualTemplates()) {
 			// Don't show secret bees unless ordered to.
 			if (hideSecrets && bee.isSecret() && !Config.isDebug) {

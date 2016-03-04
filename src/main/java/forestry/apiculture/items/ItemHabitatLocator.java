@@ -62,9 +62,8 @@ public class ItemHabitatLocator extends ItemWithGui {
 		Minecraft.getMinecraft().getTextureMapBlocks().setTextureEntry(iconName, texture);
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
-	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean flag) {
+	public void addInformation(ItemStack itemstack, EntityPlayer player, List<String> list, boolean flag) {
 		BiomeGenBase currentBiome = player.worldObj.getBiomeGenForCoords(player.getPosition());
 
 		float temperatureValue = currentBiome.getFloatTemperature(player.getPosition());

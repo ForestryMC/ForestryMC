@@ -63,9 +63,8 @@ public abstract class ItemGE extends ItemForestry {
 		return species != null && species.hasEffect();
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
-	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean flag) {
+	public void addInformation(ItemStack itemstack, EntityPlayer player, List<String> list, boolean flag) {
 		if (!itemstack.hasTagCompound()) {
 			return;
 		}

@@ -133,9 +133,8 @@ public class BlockSlab extends net.minecraft.block.BlockSlab implements IWoodTyp
 		return "SomeSlab";
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List list) {
+	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List<ItemStack> list) {
 		if (isDouble()) {
 			for (EnumWoodType woodType : EnumWoodType.VALUES) {
 				list.add(TreeManager.woodItemAccess.getSlab(woodType, fireproof));

@@ -139,7 +139,6 @@ public class PluginApiculture extends BlankForestryPlugin {
 	private final Map<String, String[]> defaultPlantableFlowers = new HashMap<>();
 
 	@Override
-	@SuppressWarnings({"unchecked"})
 	public void setupAPI() {
 		super.setupAPI();
 

@@ -272,9 +272,8 @@ public class ItemResearchNote extends ItemForestry {
 		return StringUtil.localizeAndFormatRaw(getUnlocalizedName(itemstack) + ".name", researcherName);
 	}
 
-	@SuppressWarnings({"unchecked", "rawtypes"})
 	@Override
-	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean flag) {
+	public void addInformation(ItemStack itemstack, EntityPlayer player, List<String> list, boolean flag) {
 		ResearchNote note = new ResearchNote(itemstack.getTagCompound());
 		note.addTooltip(list);
 	}

@@ -72,14 +72,12 @@ public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron, ItemIn
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void initGui() {
 		super.initGui();
 
 		buttonList.add(new GuiButton(1, guiLeft + 12, guiTop + 10, 12, 18, "<"));
 		buttonList.add(new GuiButton(2, guiLeft + 130, guiTop + 10, 12, 18, ">"));
-
 	}
 
 	@Override

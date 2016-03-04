@@ -100,21 +100,15 @@ public class BlockAlveary extends BlockStructure implements IStateMapperRegister
 		setDefaultState(this.blockState.getBaseState().withProperty(TYPE, AlvearyType.PLAIN).withProperty(STATE, State.OFF).withProperty(LEVEL, AlvearyLevel.MIDDLE));
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(Item item, CreativeTabs tab, List list) {
+	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
 		for (int i = 0; i < 8; i++) {
 			if (i == 1) {
 				continue;
 			}
 			list.add(new ItemStack(item, 1, i));
 		}
-	}
-
-	@Override
-	public int getRenderType() {
-		return 3;
 	}
 	
 	@Override

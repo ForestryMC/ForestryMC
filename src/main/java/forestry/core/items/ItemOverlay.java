@@ -53,9 +53,8 @@ public class ItemOverlay extends ItemForestry {
 		return false;
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
-	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List itemList) {
+	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List<ItemStack> itemList) {
 		for (int i = 0; i < overlays.length; i++) {
 			if (Config.isDebug || !overlays[i].isSecret()) {
 				itemList.add(new ItemStack(this, 1, i));

@@ -255,7 +255,6 @@ public class BlockSoil extends Block implements IItemTyped, IItemModelRegister {
 		}
 	}
 
-	// / CREATIVE INVENTORY
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List<ItemStack> itemList) {
 		itemList.add(new ItemStack(this, 1, 0));

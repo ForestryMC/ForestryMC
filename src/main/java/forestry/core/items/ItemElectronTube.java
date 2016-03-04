@@ -37,11 +37,10 @@ public class ItemElectronTube extends ItemOverlay {
 		super(CreativeTabForestry.tabForestry, EnumElectronTube.VALUES);
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
-	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean flag) {
+	public void addInformation(ItemStack itemstack, EntityPlayer player, List<String> list, boolean flag) {
 		Multimap<ICircuitLayout, ICircuit> circuits = getCircuits(itemstack);
-		if (circuits.size() > 0) {
+		if (!circuits.isEmpty()) {
 			if (Proxies.common.isShiftDown()) {
 				for (ICircuitLayout circuitLayout : circuits.keys()) {
 					String circuitLayoutName = circuitLayout.getUsage();
@@ -58,13 +57,12 @@ public class ItemElectronTube extends ItemOverlay {
 		}
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
-	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List itemList) {
+	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List<ItemStack> itemList) {
 		for (int i = 0; i < overlays.length; i++) {
 			if (Config.isDebug || !overlays[i].isSecret()) {
 				ItemStack itemStack = new ItemStack(this, 1, i);
-				if (Config.isDebug || getCircuits(itemStack).size() > 0) {
+				if (Config.isDebug || !getCircuits(itemStack).isEmpty()) {
 					itemList.add(itemStack);
 				}
 			}

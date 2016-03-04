@@ -44,7 +44,6 @@ public class CircuitFarmLogic extends Circuit {
 	}
 
 	@Override
-	@SuppressWarnings("rawtypes")
 	public void onInsertion(int slot, Object tile) {
 		IFarmHousing housing = getCircuitable(tile);
 		if (housing == null) {

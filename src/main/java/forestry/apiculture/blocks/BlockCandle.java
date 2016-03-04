@@ -147,9 +147,8 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister {
 		return ((TileCandle) worldIn.getTileEntity(pos)).getColour();
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List itemList) {
+	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List<ItemStack> itemList) {
 		itemList.add(new ItemStack(this, 1, 0));
 	}
 

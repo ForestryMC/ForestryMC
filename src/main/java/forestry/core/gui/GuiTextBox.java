@@ -70,7 +70,6 @@ public class GuiTextBox extends GuiTextField {
 		return text.substring(0, cursorPos) + "_" + text.substring(cursorPos);
 	}
 
-	@SuppressWarnings("unchecked")
 	private void drawScrolledSplitString(String text, int startX, int startY, int width, int textColour) {
 		List<String> lines = fontRendererObj.listFormattedStringToWidth(text, width);
 		maxLines = lines.size();

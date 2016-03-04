@@ -78,9 +78,8 @@ public class ItemFruit extends ItemForestryFood {
 		EnumFruit.registerModel(item, manager);
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
-	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List itemList) {
+	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List<ItemStack> itemList) {
 		for (int i = 0; i < EnumFruit.values().length; i++) {
 			itemList.add(new ItemStack(this, 1, i));
 		}

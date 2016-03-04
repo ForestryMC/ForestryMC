@@ -211,12 +211,10 @@ public abstract class RecipeUtil {
 		addRecipe(new ItemStack(item), obj);
 	}
 
-	@SuppressWarnings("unchecked")
 	public static void addRecipe(ItemStack itemstack, Object... obj) {
 		CraftingManager.getInstance().getRecipeList().add(new ShapedRecipeCustom(itemstack, obj));
 	}
 
-	@SuppressWarnings("unchecked")
 	public static void addPriorityRecipe(ItemStack itemStack, Object... obj) {
 		CraftingManager.getInstance().getRecipeList().add(0, new ShapedRecipeCustom(itemStack, obj));
 	}
@@ -225,7 +223,6 @@ public abstract class RecipeUtil {
 		addShapelessRecipe(new ItemStack(item), obj);
 	}
 
-	@SuppressWarnings("unchecked")
 	public static void addShapelessRecipe(ItemStack itemstack, Object... obj) {
 		CraftingManager.getInstance().getRecipeList().add(new ShapelessOreRecipe(itemstack, obj));
 	}

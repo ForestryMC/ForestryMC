@@ -40,7 +40,6 @@ public abstract class ContainerLiquidTanks<T extends TileEntity & ILiquidTankTil
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
 		tile.getTankManager().updateGuiData(this, crafters);
