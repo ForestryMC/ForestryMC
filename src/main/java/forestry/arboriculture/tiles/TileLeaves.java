@@ -325,14 +325,11 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	}
 
 	@Override
-	public boolean canMateWith(IIndividual individual) {
+	public boolean canMateWith(ITree individual) {
 		if (getTree() == null || isDecorative) {
 			return false;
 		}
 		if (getTree().getMate() != null) {
-			return false;
-		}
-		if (!(individual instanceof ITree)) {
 			return false;
 		}
 
@@ -340,17 +337,17 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	}
 
 	@Override
-	public void mateWith(IIndividual individual) {
+	public void mateWith(ITree individual) {
 		if (getTree() == null || isDecorative) {
 			return;
 		}
 
-		getTree().mate((ITree) individual);
+		getTree().mate(individual);
 		worldObj.markBlockForUpdate(getPos());
 	}
 
 	@Override
-	public IIndividual getPollen() {
+	public ITree getPollen() {
 		if (isDecorative) {
 			return null;
 		}
