@@ -50,8 +50,8 @@ import forestry.arboriculture.commands.CommandTree;
 import forestry.arboriculture.genetics.TreeBranchDefinition;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.genetics.TreeFactory;
-import forestry.arboriculture.genetics.TreeRoot;
 import forestry.arboriculture.genetics.TreeMutationFactory;
+import forestry.arboriculture.genetics.TreeRoot;
 import forestry.arboriculture.genetics.TreekeepingMode;
 import forestry.arboriculture.genetics.alleles.AlleleGrowth;
 import forestry.arboriculture.genetics.alleles.AlleleLeafEffect;
@@ -386,6 +386,12 @@ public class PluginArboriculture extends BlankForestryPlugin {
 			return true;
 		}
 		return super.processIMCMessage(message);
+	}
+
+	@Override
+	public void getHiddenItems(List<ItemStack> hiddenItems) {
+		// sapling itemBlock is different from the normal item
+		hiddenItems.add(new ItemStack(blocks.saplingGE));
 	}
 
 	private static void registerDungeonLoot() {

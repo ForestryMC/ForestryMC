@@ -12,6 +12,7 @@ package forestry.plugins;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -31,6 +32,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
@@ -350,7 +352,13 @@ public class PluginFarming extends BlankForestryPlugin {
 		ChipsetManager.solderManager.addRecipe(layoutManual, PluginCore.items.tubes.get(EnumElectronTube.APATITE, 1), Circuit.farmShroomManual);
 		ChipsetManager.solderManager.addRecipe(layoutManual, PluginCore.items.tubes.get(EnumElectronTube.LAPIS, 1), Circuit.farmCocoaManual);
 	}
-	
+
+	@Override
+	public void getHiddenItems(List<ItemStack> hiddenItems) {
+		// mushrooms are a workaround for the farm and should not be obtainable
+		hiddenItems.add(new ItemStack(blocks.mushroom, 1, OreDictionary.WILDCARD_VALUE));
+	}
+
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public void handleTextureRemap(TextureStitchEvent.Pre event) {

@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.mail;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.renderer.ItemMeshDefinition;
@@ -24,6 +25,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.core.IModelManager;
 import forestry.api.mail.ILetter;
+import forestry.mail.items.ItemLetter;
 import forestry.plugins.PluginMail;
 
 public class LetterProperties {
@@ -110,15 +112,20 @@ public class LetterProperties {
 		manager.registerItemModel(item, new LetterMeshDefinition());
 	}
 
-	@SuppressWarnings("unchecked")
-	public static void getSubItems(Item item, CreativeTabs tab, List list) {
-		for (State state : State.values()) {
-			for (Size size : Size.values()) {
-				int meta = encodeMeta(state, size);
-				ItemStack letter = new ItemStack(item, 1, meta);
-				list.add(letter);
-			}
+	public static void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
+		int meta = encodeMeta(State.FRESH, Size.EMPTY);
+		ItemStack letter = new ItemStack(item, 1, meta);
+		list.add(letter);
+	}
+
+	public static List<ItemStack> getEmptiedLetters(ItemLetter item) {
+		List<ItemStack> openedLetters = new ArrayList<>();
+		for (Size size : Size.values()) {
+			int meta = encodeMeta(State.EMPTIED, size);
+			ItemStack letter = new ItemStack(item, 1, meta);
+			openedLetters.add(letter);
 		}
+		return openedLetters;
 	}
 
 	private static State getState(int meta) {

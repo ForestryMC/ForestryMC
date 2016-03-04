@@ -127,7 +127,7 @@ public class PluginMail extends BlankForestryPlugin {
 		}
 
 		// Recycling
-		RecipeUtil.addRecipe(new ItemStack(Items.paper), "###", '#', items.letters.getWildcard());
+		RecipeUtil.addRecipe(new ItemStack(Items.paper), "###", '#', ItemRegistryMail.emptiedLetterOreDict);
 
 		// Carpenter
 		RecipeManagers.carpenterManager.addRecipe(10, Fluids.WATER.getFluid(250), null, items.letters.getItemStack(), "###", "###", '#', PluginCore.items.woodPulp);

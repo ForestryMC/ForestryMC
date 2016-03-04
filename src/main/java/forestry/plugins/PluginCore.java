@@ -330,6 +330,12 @@ public class PluginCore extends BlankForestryPlugin {
 		return new FuelHandler();
 	}
 
+	@Override
+	public void getHiddenItems(List<ItemStack> hiddenItems) {
+		// research note items are not useful without actually having completed research
+		hiddenItems.add(new ItemStack(PluginCore.items.researchNote));
+	}
+
 	private static class FuelHandler implements IFuelHandler {
 
 		@Override

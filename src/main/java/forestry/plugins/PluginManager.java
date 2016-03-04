@@ -27,6 +27,7 @@ import java.util.Set;
 
 import net.minecraft.command.CommandHandler;
 import net.minecraft.command.ICommand;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
@@ -285,6 +286,15 @@ public class PluginManager {
 		for (IForestryPlugin plugin : loadedPlugins) {
 			plugin.populateChunkRetroGen(world, rand, chunkX, chunkZ);
 		}
+	}
+
+	@Nonnull
+	public static List<ItemStack> getHiddenItems() {
+		List<ItemStack> hiddenItems = new ArrayList<>();
+		for (IForestryPlugin plugin : loadedPlugins) {
+			plugin.getHiddenItems(hiddenItems);
+		}
+		return hiddenItems;
 	}
 
 	private static boolean isEnabled(Configuration config, IForestryPlugin plugin) {

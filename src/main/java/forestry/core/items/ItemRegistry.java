@@ -11,8 +11,10 @@
 package forestry.core.items;
 
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.core.utils.StringUtil;
 import forestry.plugins.PluginManager;
@@ -25,5 +27,9 @@ public abstract class ItemRegistry {
 		item.setUnlocalizedName("for." + name);
 		GameRegistry.registerItem(item, StringUtil.cleanItemName(item));
 		return item;
+	}
+
+	protected static void registerOreDict(String oreDictName, ItemStack itemStack) {
+		OreDictionary.registerOre(oreDictName, itemStack);
 	}
 }

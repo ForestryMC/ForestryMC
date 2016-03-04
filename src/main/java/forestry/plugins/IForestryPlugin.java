@@ -2,10 +2,12 @@ package forestry.plugins;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
 import net.minecraft.command.ICommand;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 
@@ -55,6 +57,8 @@ public interface IForestryPlugin {
 	void populateChunk(IChunkProvider chunkProvider, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGeneratedZ);
 
 	void populateChunkRetroGen(World world, Random rand, int chunkX, int chunkZ);
+
+	void getHiddenItems(List<ItemStack> hiddenItems);
 
 	@Nullable
 	ISaveEventHandler getSaveEventHandler();
