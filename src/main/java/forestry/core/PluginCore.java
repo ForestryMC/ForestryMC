@@ -129,11 +129,6 @@ public class PluginCore extends BlankForestryPlugin {
 	}
 
 	@Override
-	public boolean isAvailable() {
-		return true;
-	}
-
-	@Override
 	public ISaveEventHandler getSaveEventHandler() {
 		return new SaveEventHandlerCore();
 	}
@@ -227,7 +222,9 @@ public class PluginCore extends BlankForestryPlugin {
 		RecipeUtil.addRecipe(items.sturdyCasing, "###", "# #", "###", '#', "ingotBronze");
 
 		// / EMPTY CANS
-		RecipeUtil.addRecipe(ForestryAPI.activeMode.getStackSetting("recipe.output.can"), " # ", "# #", '#', "ingotTin");
+		int canAmount = ForestryAPI.activeMode.getIntegerSetting("recipe.output.can");
+		ItemStack canOutput = PluginFluids.items.canEmpty.getItemStack(canAmount);
+		RecipeUtil.addRecipe(canOutput, " # ", "# #", '#', "ingotTin");
 
 		// / GEARS
 		List<ItemStack> stoneGear = OreDictionary.getOres("gearStone");
@@ -254,39 +251,59 @@ public class PluginCore extends BlankForestryPlugin {
 		RecipeUtil.addRecipe(items.wrench, "# #", " # ", " # ", '#', "ingotBronze");
 
 		// Manure and Fertilizer
-		if (ForestryAPI.activeMode.getStackSetting("recipe.output.compost.wheat").stackSize > 0) {
-			RecipeUtil.addRecipe(ForestryAPI.activeMode.getStackSetting("recipe.output.compost.wheat"), " X ", "X#X", " X ", '#', Blocks.dirt, 'X', "cropWheat");
+		int compostWheatAmount = ForestryAPI.activeMode.getIntegerSetting("recipe.output.compost.wheat");
+		if (compostWheatAmount > 0) {
+			ItemStack compost = items.fertilizerBio.getItemStack(compostWheatAmount);
+			RecipeUtil.addRecipe(compost, " X ", "X#X", " X ", '#', Blocks.dirt, 'X', "cropWheat");
 		}
-		if (ForestryAPI.activeMode.getStackSetting("recipe.output.compost.ash").stackSize > 0) {
-			RecipeUtil.addRecipe(ForestryAPI.activeMode.getStackSetting("recipe.output.compost.ash"), " X ", "X#X", " X ", '#', Blocks.dirt, 'X', "dustAsh");
+
+		int compostAshAmount = ForestryAPI.activeMode.getIntegerSetting("recipe.output.compost.ash");
+		if (compostAshAmount > 0) {
+			ItemStack compost = items.fertilizerBio.getItemStack(compostAshAmount);
+			RecipeUtil.addRecipe(compost, " X ", "X#X", " X ", '#', Blocks.dirt, 'X', "dustAsh");
 		}
-		if (ForestryAPI.activeMode.getStackSetting("recipe.output.fertilizer.apatite").stackSize > 0) {
-			RecipeUtil.addRecipe(ForestryAPI.activeMode.getStackSetting("recipe.output.fertilizer.apatite"), " # ", " X ", " # ", '#', "sand", 'X', "gemApatite");
+
+		int fertilizerApatiteAmount = ForestryAPI.activeMode.getIntegerSetting("recipe.output.fertilizer.apatite");
+		if (fertilizerApatiteAmount > 0) {
+			ItemStack fertilizer = items.fertilizerCompound.getItemStack(fertilizerApatiteAmount);
+			RecipeUtil.addRecipe(fertilizer, " # ", " X ", " # ", '#', "sand", 'X', "gemApatite");
 		}
-		if (ForestryAPI.activeMode.getStackSetting("recipe.output.fertilizer.ash").stackSize > 0) {
-			RecipeUtil.addRecipe(ForestryAPI.activeMode.getStackSetting("recipe.output.fertilizer.ash"), "###", "#X#", "###", '#', "dustAsh", 'X', "gemApatite");
+
+		int fertilizerAshAmount = ForestryAPI.activeMode.getIntegerSetting("recipe.output.fertilizer.ash");
+		if (fertilizerAshAmount > 0) {
+			ItemStack fertilizer = items.fertilizerCompound.getItemStack(fertilizerAshAmount);
+			RecipeUtil.addRecipe(fertilizer, "###", "#X#", "###", '#', "dustAsh", 'X', "gemApatite");
 		}
 
 		// Humus
-		if (ForestryAPI.activeMode.getStackSetting("recipe.output.humus.compost").stackSize > 0) {
-			RecipeUtil.addRecipe(ForestryAPI.activeMode.getStackSetting("recipe.output.humus.compost"), "###", "#X#", "###", '#', Blocks.dirt, 'X', items.fertilizerBio);
+		int humusCompostAmount = ForestryAPI.activeMode.getIntegerSetting("recipe.output.humus.compost");
+		if (humusCompostAmount > 0) {
+			ItemStack humus = blocks.soil.get(BlockSoil.SoilType.HUMUS, humusCompostAmount);
+			RecipeUtil.addRecipe(humus, "###", "#X#", "###", '#', Blocks.dirt, 'X', items.fertilizerBio);
 		}
-		if (ForestryAPI.activeMode.getStackSetting("recipe.output.humus.fertilizer").stackSize > 0) {
-			RecipeUtil.addRecipe(ForestryAPI.activeMode.getStackSetting("recipe.output.humus.fertilizer"), "###", "#X#", "###", '#', Blocks.dirt, 'X', items.fertilizerCompound);
+
+		int humusFertilizerAmount = ForestryAPI.activeMode.getIntegerSetting("recipe.output.humus.fertilizer");
+		if (humusFertilizerAmount > 0) {
+			ItemStack humus = blocks.soil.get(BlockSoil.SoilType.HUMUS, humusFertilizerAmount);
+			RecipeUtil.addRecipe(humus, "###", "#X#", "###", '#', Blocks.dirt, 'X', items.fertilizerCompound);
 		}
 
 		// Bog earth
-		if (ForestryAPI.activeMode.getStackSetting("recipe.output.bogearth.bucket").stackSize > 0) {
-			RecipeUtil.addRecipe(ForestryAPI.activeMode.getStackSetting("recipe.output.bogearth.bucket"), "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', Items.water_bucket, 'Y', "sand");
+		int bogEarthOutputBucket = ForestryAPI.activeMode.getIntegerSetting("recipe.output.bogearth.bucket");
+		if (bogEarthOutputBucket > 0) {
+			ItemStack bogEarth = blocks.soil.get(BlockSoil.SoilType.BOG_EARTH, bogEarthOutputBucket);
+			RecipeUtil.addRecipe(bogEarth, "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', Items.water_bucket, 'Y', "sand");
 		}
 
-		if (ForestryAPI.activeMode.getStackSetting("recipe.output.bogearth.can").stackSize > 0) {
+		int bogEarthOutputCan = ForestryAPI.activeMode.getIntegerSetting("recipe.output.bogearth.can");
+		if (bogEarthOutputCan > 0) {
+			ItemStack bogEarth = blocks.soil.get(BlockSoil.SoilType.BOG_EARTH, bogEarthOutputCan);
 			ItemStack canWater = PluginFluids.items.getContainer(EnumContainerType.CAN, Fluids.WATER).getItemStack();
 			ItemStack waxCapsuleWater = PluginFluids.items.getContainer(EnumContainerType.CAPSULE, Fluids.WATER).getItemStack();
 			ItemStack refractoryWater = PluginFluids.items.getContainer(EnumContainerType.REFRACTORY, Fluids.WATER).getItemStack();
-			RecipeUtil.addRecipe(ForestryAPI.activeMode.getStackSetting("recipe.output.bogearth.can"), "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', canWater, 'Y', "sand");
-			RecipeUtil.addRecipe(ForestryAPI.activeMode.getStackSetting("recipe.output.bogearth.can"), "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', waxCapsuleWater, 'Y', "sand");
-			RecipeUtil.addRecipe(ForestryAPI.activeMode.getStackSetting("recipe.output.bogearth.can"), "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', refractoryWater, 'Y', "sand");
+			RecipeUtil.addRecipe(bogEarth, "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', canWater, 'Y', "sand");
+			RecipeUtil.addRecipe(bogEarth, "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', waxCapsuleWater, 'Y', "sand");
+			RecipeUtil.addRecipe(bogEarth, "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', refractoryWater, 'Y', "sand");
 		}
 
 		// Crafting Material

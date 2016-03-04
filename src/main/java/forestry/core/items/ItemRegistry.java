@@ -21,8 +21,8 @@ import forestry.plugins.PluginManager;
 
 public abstract class ItemRegistry {
 	protected static <T extends Item> T registerItem(T item, String name) {
-		if (PluginManager.getStage() != PluginManager.Stage.SETUP) {
-			throw new RuntimeException("Tried to register Item outside of Setup");
+		if (PluginManager.getStage() != PluginManager.Stage.REGISTER) {
+			throw new RuntimeException("Tried to register Item outside of REGISTER");
 		}
 		item.setUnlocalizedName("for." + name);
 		GameRegistry.registerItem(item, StringUtil.cleanItemName(item));

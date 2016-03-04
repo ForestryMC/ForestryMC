@@ -22,8 +22,8 @@ import forestry.plugins.PluginManager;
 
 public abstract class BlockRegistry {
 	protected static <T extends Block> T registerBlock(T block, Class<? extends ItemBlock> itemClass, String name, Object... itemCtorArgs) {
-		if (PluginManager.getStage() != PluginManager.Stage.SETUP) {
-			throw new RuntimeException("Tried to register Block outside of Setup");
+		if (PluginManager.getStage() != PluginManager.Stage.REGISTER) {
+			throw new RuntimeException("Tried to register Block outside of REGISTER");
 		}
 		block.setUnlocalizedName("for." + name);
 		GameRegistry.registerBlock(block, itemClass, StringUtil.cleanBlockName(block), itemCtorArgs);

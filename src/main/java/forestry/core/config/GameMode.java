@@ -14,14 +14,8 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-
 import forestry.Forestry;
 import forestry.api.core.IGameMode;
-import forestry.core.PluginCore;
-import forestry.core.PluginFluids;
-import forestry.core.blocks.BlockSoil;
 import forestry.core.utils.Log;
 
 public class GameMode implements IGameMode {
@@ -32,27 +26,26 @@ public class GameMode implements IGameMode {
 	private final Map<String, Boolean> booleanSettings = new HashMap<>();
 	private final Map<String, Integer> integerSettings = new HashMap<>();
 	private final Map<String, Float> floatSettings = new HashMap<>();
-	private final Map<String, ItemStack> stackSettings = new HashMap<>();
 
 	private static final float ENERGY_DEMAND_MODIFIER = 1.0f;
 	private static final float FUEL_MODIFIER = 1.0f;
 
 	private static final int FARM_FERTILIZER_VALUE = 2000;
 
-	private final ItemStack recipeFertilizerOutputApatite = PluginCore.items.fertilizerCompound.getItemStack(8);
-	private final ItemStack recipeFertilizerOutputAsh = PluginCore.items.fertilizerCompound.getItemStack(16);
-	private final ItemStack recipeCompostOutputWheat = PluginCore.items.fertilizerBio.getItemStack(4);
-	private final ItemStack recipeCompostOutputAsh = PluginCore.items.fertilizerBio.getItemStack(1);
+	private static final int recipeFertilizerOutputApatite = 8;
+	private static final int recipeFertilizerOutputAsh = 16;
+	private static final int recipeCompostOutputWheat = 4;
+	private static final int recipeCompostOutputAsh = 1;
 
-	private final ItemStack recipeHumusOutputFertilizer = PluginCore.blocks.soil.get(BlockSoil.SoilType.HUMUS, 8);
-	private final ItemStack recipeHumusOutputCompost = PluginCore.blocks.soil.get(BlockSoil.SoilType.HUMUS, 8);
+	private static final int recipeHumusOutputFertilizer = 8;
+	private static final int recipeHumusOutputCompost = 8;
 
-	private final ItemStack recipeBogEarthOutputBucket = PluginCore.blocks.soil.get(BlockSoil.SoilType.BOG_EARTH, 6);
-	private final ItemStack recipeBogEarthOutputCans = PluginCore.blocks.soil.get(BlockSoil.SoilType.BOG_EARTH, 8);
+	private static final int recipeBogEarthOutputBucket = 6;
+	private static final int recipeBogEarthOutputCans = 8;
 
-	private final ItemStack recipeCanOutput = PluginFluids.items.canEmpty.getItemStack(12);
-	private final ItemStack recipeCapsuleOutput = PluginFluids.items.waxCapsuleEmpty.getItemStack(4);
-	private final ItemStack recipeRefractoryOutput = PluginFluids.items.refractoryEmpty.getItemStack(4);
+	private static final int recipeCanOutput = 12;
+	private static final int recipeCapsuleOutput = 4;
+	private static final int recipeRefractoryOutput = 4;
 
 	private static final int FERMENTATION_DURATION_FERTILIZER = 200;
 	private static final int FERMENTATION_DURATION_COMPOST = 250;
@@ -89,17 +82,17 @@ public class GameMode implements IGameMode {
 		initSettingFloat(config, "fuel.biomass", "generator", FUEL_MODIFIER);
 		initSettingFloat(config, "fuel.biomass", "biogas", FUEL_MODIFIER);
 
-		initSettingStack(config, "recipe.output.fertilizer", "apatite", recipeFertilizerOutputApatite);
-		initSettingStack(config, "recipe.output.fertilizer", "ash", recipeFertilizerOutputAsh);
-		initSettingStack(config, "recipe.output.compost", "wheat", recipeCompostOutputWheat);
-		initSettingStack(config, "recipe.output.compost", "ash", recipeCompostOutputAsh);
-		initSettingStack(config, "recipe.output.humus", "fertilizer", recipeHumusOutputFertilizer);
-		initSettingStack(config, "recipe.output.humus", "compost", recipeHumusOutputCompost);
-		initSettingStack(config, "recipe.output.bogearth", "bucket", recipeBogEarthOutputBucket);
-		initSettingStack(config, "recipe.output.bogearth", "can", recipeBogEarthOutputCans);
-		initSettingStack(config, "recipe.output", "can", recipeCanOutput);
-		initSettingStack(config, "recipe.output", "capsule", recipeCapsuleOutput);
-		initSettingStack(config, "recipe.output", "refractory", recipeRefractoryOutput);
+		initSettingInt(config, "recipe.output.fertilizer", "apatite", recipeFertilizerOutputApatite);
+		initSettingInt(config, "recipe.output.fertilizer", "ash", recipeFertilizerOutputAsh);
+		initSettingInt(config, "recipe.output.compost", "wheat", recipeCompostOutputWheat);
+		initSettingInt(config, "recipe.output.compost", "ash", recipeCompostOutputAsh);
+		initSettingInt(config, "recipe.output.humus", "fertilizer", recipeHumusOutputFertilizer);
+		initSettingInt(config, "recipe.output.humus", "compost", recipeHumusOutputCompost);
+		initSettingInt(config, "recipe.output.bogearth", "bucket", recipeBogEarthOutputBucket);
+		initSettingInt(config, "recipe.output.bogearth", "can", recipeBogEarthOutputCans);
+		initSettingInt(config, "recipe.output", "can", recipeCanOutput);
+		initSettingInt(config, "recipe.output", "capsule", recipeCapsuleOutput);
+		initSettingInt(config, "recipe.output", "refractory", recipeRefractoryOutput);
 
 		initSettingInt(config, "fermenter.cycles", "fertilizer", FERMENTATION_DURATION_FERTILIZER);
 		initSettingInt(config, "fermenter.cycles", "compost", FERMENTATION_DURATION_COMPOST);
@@ -133,14 +126,6 @@ public class GameMode implements IGameMode {
 		integerSettings.put(fullKey, intValue);
 	}
 
-	private void initSettingStack(LocalizedConfiguration config, String category, String key, ItemStack defaultValue) {
-		String fullKey = category + '.' + key;
-		int stackSize = config.getIntLocalized(GAMEMODE_KEY + '.' + category, key, defaultValue.stackSize, 0, 64);
-		ItemStack changed = defaultValue.copy();
-		changed.stackSize = stackSize;
-		stackSettings.put(fullKey, changed);
-	}
-
 	private void initSettingBoolean(LocalizedConfiguration config, String category, String key, boolean defaultValue) {
 		String fullKey = category + '.' + key;
 		boolean booleanValue = config.getBooleanLocalized(GAMEMODE_KEY + '.' + category, key, defaultValue);
@@ -172,15 +157,6 @@ public class GameMode implements IGameMode {
 		}
 		Log.warning("No such setting: " + ident);
 		return false;
-	}
-
-	@Override
-	public ItemStack getStackSetting(String ident) {
-		if (stackSettings.containsKey(ident)) {
-			return stackSettings.get(ident);
-		}
-		Log.warning("No such setting: " + ident);
-		return new ItemStack(Items.apple, 1);
 	}
 
 	@Override

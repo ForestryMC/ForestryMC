@@ -493,8 +493,17 @@ public class PluginApiculture extends BlankForestryPlugin {
 		}
 
 		// / CAPSULES
-		RecipeUtil.addRecipe(ForestryAPI.activeMode.getStackSetting("recipe.output.capsule"), "###", '#', PluginCore.items.beeswax);
-		RecipeUtil.addRecipe(ForestryAPI.activeMode.getStackSetting("recipe.output.refractory"), "###", '#', PluginCore.items.refractoryWax);
+		int outputCapsuleAmount = ForestryAPI.activeMode.getIntegerSetting("recipe.output.capsule");
+		if (outputCapsuleAmount > 0) {
+			ItemStack capsule = PluginFluids.items.waxCapsuleEmpty.getItemStack(outputCapsuleAmount);
+			RecipeUtil.addRecipe(capsule, "###", '#', PluginCore.items.beeswax);
+		}
+
+		int outputRefractoryAmount = ForestryAPI.activeMode.getIntegerSetting("recipe.output.refractory");
+		if (outputRefractoryAmount > 0) {
+			ItemStack capsule = PluginFluids.items.refractoryEmpty.getItemStack(outputRefractoryAmount);
+			RecipeUtil.addRecipe(capsule, "###", '#', PluginCore.items.refractoryWax);
+		}
 
 		// / BITUMINOUS PEAT
 		RecipeUtil.addRecipe(PluginCore.items.bituminousPeat.getItemStack(),

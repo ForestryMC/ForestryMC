@@ -5,8 +5,6 @@
  ******************************************************************************/
 package forestry.api.core;
 
-import net.minecraft.item.ItemStack;
-
 public interface IGameMode {
 
 	/**
@@ -31,11 +29,5 @@ public interface IGameMode {
 	 * @return Value of the requested setting, 0 if unknown setting.
 	 */
 	float getFloatSetting(String ident);
-
-	/**
-	 * @param ident Identifier for the setting. (See the gamemode config.)
-	 * @return Value of the requested setting, an itemstack containing an apple if unknown setting.
-	 */
-	ItemStack getStackSetting(String ident);
 
 }

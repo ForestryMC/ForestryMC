@@ -64,8 +64,9 @@ public class PluginManager {
 	private static Stage stage = Stage.SETUP;
 
 	public enum Stage {
-		SETUP, // setup API to make it functional, register basic blocks and items. GameMode Configs are not yet accessible
+		SETUP, // setup API to make it functional. GameMode Configs are not yet accessible
 		SETUP_DISABLED, // setup fallback API to avoid crashes
+		REGISTER, // register basic blocks and items
 		PRE_INIT, // register handlers, triggers, definitions, backpacks, crates, and anything that depends on basic items
 		INIT, // anything that depends on PreInit stages, recipe registration
 		POST_INIT, // stubborn mod integration, dungeon loot, and finalization of things that take input from mods
@@ -145,12 +146,12 @@ public class PluginManager {
 			if (plugin.canBeDisabled()) {
 				if (!isEnabled(config, plugin)) {
 					iterator.remove();
-					Log.info("Plugin disabled: {0}", plugin);
+					Log.info("Plugin disabled: {}", plugin);
 					continue;
 				}
 				if (!plugin.isAvailable()) {
 					iterator.remove();
-					Log.info("Plugin {0} failed to load: {1}", plugin, plugin.getFailMessage());
+					Log.info("Plugin {} failed to load: {}", plugin, plugin.getFailMessage());
 					continue;
 				}
 			}
@@ -171,7 +172,7 @@ public class PluginManager {
 					ForestryPlugin info = plugin.getClass().getAnnotation(ForestryPlugin.class);
 					String pluginId = info.pluginID();
 					toLoad.remove(pluginId);
-					Log.warning("Plugin {0} is missing dependencies: {1}", pluginId, dependencies);
+					Log.warning("Plugin {} is missing dependencies: {}", pluginId, dependencies);
 				}
 			}
 		} while (changed);
@@ -202,24 +203,30 @@ public class PluginManager {
 		configurePlugins(forestryPlugins);
 
 		for (IForestryPlugin plugin : loadedPlugins) {
-			Log.debug("Setup Start: {0}", plugin);
+			Log.debug("Setup API Start: {}", plugin);
 			plugin.setupAPI();
-			plugin.registerItemsAndBlocks();
-			Log.debug("Setup Complete: {0}", plugin);
+			Log.debug("Setup API Complete: {}", plugin);
 		}
 
 		stage = Stage.SETUP_DISABLED;
 		for (IForestryPlugin plugin : unloadedPlugins) {
-			Log.debug("Disabled-Setup Start: {0}", plugin);
+			Log.debug("Disabled-Setup Start: {}", plugin);
 			plugin.disabledSetupAPI();
-			Log.debug("Disabled-Setup Complete: {0}", plugin);
+			Log.debug("Disabled-Setup Complete: {}", plugin);
+		}
+
+		stage = Stage.REGISTER;
+		for (IForestryPlugin plugin : loadedPlugins) {
+			Log.debug("Register Items and Blocks Start: {}", plugin);
+			plugin.registerItemsAndBlocks();
+			Log.debug("Register Items and Blocks Complete: {}", plugin);
 		}
 	}
 
 	public static void runPreInit() {
 		stage = Stage.PRE_INIT;
 		for (IForestryPlugin plugin : loadedPlugins) {
-			Log.debug("Pre-Init Start: {0}", plugin);
+			Log.debug("Pre-Init Start: {}", plugin);
 			registerHandlers(plugin);
 			plugin.preInit();
 			if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.BUILDCRAFT_STATEMENTS)) {
@@ -229,26 +236,26 @@ public class PluginManager {
 				plugin.registerBackpackItems();
 				plugin.registerCrates();
 			}
-			Log.debug("Pre-Init Complete: {0}", plugin);
+			Log.debug("Pre-Init Complete: {}", plugin);
 		}
 	}
 
 	public static void runInit() {
 		stage = Stage.INIT;
 		for (IForestryPlugin plugin : loadedPlugins) {
-			Log.debug("Init Start: {0}", plugin);
+			Log.debug("Init Start: {}", plugin);
 			plugin.doInit();
 			plugin.registerRecipes();
-			Log.debug("Init Complete: {0}", plugin);
+			Log.debug("Init Complete: {}", plugin);
 		}
 	}
 
 	public static void runPostInit() {
 		stage = Stage.POST_INIT;
 		for (IForestryPlugin plugin : loadedPlugins) {
-			Log.debug("Post-Init Start: {0}", plugin);
+			Log.debug("Post-Init Start: {}", plugin);
 			plugin.postInit();
-			Log.debug("Post-Init Complete: {0}", plugin);
+			Log.debug("Post-Init Complete: {}", plugin);
 		}
 
 		stage = Stage.FINISHED;

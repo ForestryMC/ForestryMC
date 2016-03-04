@@ -83,9 +83,9 @@ public class PluginFluids extends BlankForestryPlugin {
 				}
 			} else {
 				GameRegistry.UniqueIdentifier blockID = GameRegistry.findUniqueIdentifierFor(fluidBlock);
-				Log.warning("Pre-existing {0} fluid block detected, deferring to {1}:{2}, "
+				Log.warning("Pre-existing {} fluid block detected, deferring to {}:{}, "
 						+ "this may cause issues if the server/client have different mod load orders, "
-						+ "recommended that you disable all but one instance of {0} fluid blocks via your configs.", fluid.getName(), blockID.modId, blockID.name);
+						+ "recommended that you disable all but one instance of {} fluid blocks via your configs.", fluid.getName(), blockID.modId, blockID.name, fluid.getName());
 			}
 		}
 	}
