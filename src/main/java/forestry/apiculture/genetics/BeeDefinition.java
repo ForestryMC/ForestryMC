@@ -33,13 +33,13 @@ import forestry.api.apiculture.IBeeMutationCustom;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.IAllele;
+import forestry.apiculture.PluginApiculture;
 import forestry.apiculture.genetics.alleles.AlleleEffect;
 import forestry.apiculture.items.EnumHoneyComb;
 import forestry.apiculture.items.EnumPollenCluster;
+import forestry.core.PluginCore;
 import forestry.core.genetics.alleles.AlleleHelper;
 import forestry.core.genetics.alleles.EnumAllele;
-import forestry.plugins.PluginApiculture;
-import forestry.plugins.PluginCore;
 
 public enum BeeDefinition implements IBeeDefinition {
 	/* HONEY BRANCH */

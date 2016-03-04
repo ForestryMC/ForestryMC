@@ -18,10 +18,10 @@ import forestry.core.blocks.IBlockTypeTesr;
 import forestry.core.blocks.IMachinePropertiesTesr;
 import forestry.core.config.Constants;
 import forestry.core.tiles.TileEngine;
+import forestry.energy.PluginEnergy;
 import forestry.energy.tiles.TileEngineBiogas;
 import forestry.energy.tiles.TileEngineClockwork;
 import forestry.energy.tiles.TileEnginePeat;
-import forestry.plugins.PluginEnergy;
 
 public enum BlockTypeEngine implements IBlockTypeTesr {
 	PEAT(0, TileEnginePeat.class, "peat", "/engine_copper_"),

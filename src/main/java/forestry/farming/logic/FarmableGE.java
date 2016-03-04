@@ -20,10 +20,10 @@ import net.minecraft.world.World;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
+import forestry.arboriculture.PluginArboriculture;
 import forestry.arboriculture.genetics.TreeGenome;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.vect.Vect;
-import forestry.plugins.PluginArboriculture;
 
 public class FarmableGE implements IFarmable {
 

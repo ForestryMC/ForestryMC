@@ -8,7 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.plugins;
+package forestry.core;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
@@ -34,10 +34,6 @@ import forestry.api.genetics.AlleleManager;
 import forestry.api.multiblock.MultiblockManager;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
-import forestry.core.IPickupHandler;
-import forestry.core.ISaveEventHandler;
-import forestry.core.PickupHandlerCore;
-import forestry.core.SaveEventHandlerCore;
 import forestry.core.blocks.BlockRegistryCore;
 import forestry.core.blocks.BlockResourceOre;
 import forestry.core.blocks.BlockResourceStorage;
@@ -63,6 +59,9 @@ import forestry.core.network.PacketRegistryCore;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.ForestryModEnvWarningCallable;
+import forestry.plugins.BlankForestryPlugin;
+import forestry.plugins.ForestryPlugin;
+import forestry.plugins.ForestryPluginUids;
 
 @ForestryPlugin(pluginID = ForestryPluginUids.CORE, name = "Core", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.core.description")
 public class PluginCore extends BlankForestryPlugin {

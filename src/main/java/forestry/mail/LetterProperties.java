@@ -26,7 +26,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.core.IModelManager;
 import forestry.api.mail.ILetter;
 import forestry.mail.items.ItemLetter;
-import forestry.plugins.PluginMail;
 
 public class LetterProperties {
 	private enum State {

@@ -8,7 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.plugins;
+package forestry.arboriculture;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,8 +41,6 @@ import forestry.api.genetics.AlleleManager;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
-import forestry.arboriculture.IWoodTyped;
-import forestry.arboriculture.WoodItemAccess;
 import forestry.arboriculture.blocks.BlockFruitPod;
 import forestry.arboriculture.blocks.BlockRegistryArboriculture;
 import forestry.arboriculture.blocks.BlockTypeArboricultureTesr;
@@ -63,6 +61,7 @@ import forestry.arboriculture.tiles.TileFruitPod;
 import forestry.arboriculture.tiles.TileLeaves;
 import forestry.arboriculture.tiles.TileSapling;
 import forestry.arboriculture.tiles.TileWood;
+import forestry.core.PluginCore;
 import forestry.core.blocks.BlockTypeCoreTesr;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
@@ -73,6 +72,9 @@ import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.IMCUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.factory.recipes.FabricatorRecipe;
+import forestry.plugins.BlankForestryPlugin;
+import forestry.plugins.ForestryPlugin;
+import forestry.plugins.ForestryPluginUids;
 
 @ForestryPlugin(pluginID = ForestryPluginUids.ARBORICULTURE, name = "Arboriculture", author = "Binnie & SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.arboriculture.description")
 public class PluginArboriculture extends BlankForestryPlugin {

@@ -8,7 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.plugins;
+package forestry.storage;
 
 import java.awt.Color;
 import java.io.File;
@@ -63,9 +63,11 @@ import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.BackpackManager;
 import forestry.api.storage.IBackpackDefinition;
 import forestry.api.storage.StorageManager;
+import forestry.apiculture.PluginApiculture;
 import forestry.apiculture.blocks.BlockRegistryApiculture;
 import forestry.core.IPickupHandler;
 import forestry.core.IResupplyHandler;
+import forestry.core.PluginCore;
 import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
 import forestry.core.fluids.Fluids;
@@ -76,15 +78,14 @@ import forestry.core.utils.IMCUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.StringUtil;
+import forestry.lepidopterology.PluginLepidopterology;
 import forestry.lepidopterology.blocks.BlockRegistryLepidopterology;
 import forestry.lepidopterology.blocks.BlockTypeLepidopterologyTesr;
-import forestry.storage.BackpackDefinition;
+import forestry.plugins.BlankForestryPlugin;
+import forestry.plugins.ForestryPlugin;
+import forestry.plugins.ForestryPluginUids;
 import forestry.storage.BackpackDefinition.BackpackDefinitionApiarist;
 import forestry.storage.BackpackDefinition.BackpackDefinitionLepidopterist;
-import forestry.storage.BackpackInterface;
-import forestry.storage.CrateRegistry;
-import forestry.storage.PickupHandlerStorage;
-import forestry.storage.ResupplyHandler;
 import forestry.storage.items.ItemRegistryStorage;
 
 @ForestryPlugin(pluginID = ForestryPluginUids.STORAGE, name = "Storage", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.storage.description")

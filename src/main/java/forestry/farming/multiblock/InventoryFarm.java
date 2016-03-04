@@ -25,6 +25,7 @@ import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmInventory;
 import forestry.api.farming.IFarmLogic;
 import forestry.api.farming.IFarmable;
+import forestry.core.PluginCore;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.TankManager;
 import forestry.core.inventory.InventoryAdapterRestricted;
@@ -32,7 +33,6 @@ import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.SlotUtil;
-import forestry.plugins.PluginCore;
 
 public class InventoryFarm extends InventoryAdapterRestricted implements IFarmInventory {
 	public static final int SLOT_RESOURCES_1 = 0;

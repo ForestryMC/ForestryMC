@@ -23,10 +23,10 @@ import forestry.api.core.IErrorState;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.ISpeciesRoot;
+import forestry.apiculture.PluginApiculture;
 import forestry.apiculture.items.ItemRegistryApiculture;
 import forestry.core.errors.EnumErrorCode;
 import forestry.plugins.ForestryPluginUids;
-import forestry.plugins.PluginApiculture;
 
 public abstract class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
 	public static final int SLOT_SPECIMEN = 0;

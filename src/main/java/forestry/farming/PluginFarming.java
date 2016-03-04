@@ -8,7 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.plugins;
+package forestry.farming;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -40,6 +40,7 @@ import forestry.api.circuits.ICircuitLayout;
 import forestry.api.core.ForestryAPI;
 import forestry.api.farming.Farmables;
 import forestry.api.farming.IFarmable;
+import forestry.core.PluginCore;
 import forestry.core.circuits.Circuit;
 import forestry.core.circuits.CircuitLayout;
 import forestry.core.config.Constants;
@@ -78,6 +79,9 @@ import forestry.farming.tiles.TileFarmHatch;
 import forestry.farming.tiles.TileFarmPlain;
 import forestry.farming.tiles.TileFarmValve;
 import forestry.farming.triggers.FarmingTriggers;
+import forestry.plugins.BlankForestryPlugin;
+import forestry.plugins.ForestryPlugin;
+import forestry.plugins.ForestryPluginUids;
 
 @ForestryPlugin(pluginID = ForestryPluginUids.FARMING, name = "Farming", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.farming.description")
 public class PluginFarming extends BlankForestryPlugin {

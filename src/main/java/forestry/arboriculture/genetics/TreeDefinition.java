@@ -41,6 +41,7 @@ import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.IAllele;
 import forestry.api.world.ITreeGenData;
+import forestry.arboriculture.PluginArboriculture;
 import forestry.arboriculture.blocks.BlockForestryLeaves;
 import forestry.arboriculture.genetics.alleles.AlleleFruit;
 import forestry.arboriculture.genetics.alleles.AlleleGrowth;
@@ -89,7 +90,6 @@ import forestry.core.genetics.alleles.AlleleHelper;
 import forestry.core.genetics.alleles.AllelePlantType;
 import forestry.core.genetics.alleles.EnumAllele;
 import forestry.core.utils.BlockUtil;
-import forestry.plugins.PluginArboriculture;
 
 public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 	Oak(TreeBranchDefinition.QUERCUS, "appleOak", "robur", false, EnumLeafType.DECIDUOUS, new Color(4764952), new Color(4764952).brighter(), 0, new ItemStack(Blocks.log, 1, 0)) {

@@ -19,11 +19,11 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
+import forestry.arboriculture.PluginArboriculture;
 import forestry.arboriculture.tiles.TileLeaves;
 import forestry.core.items.ItemBlockForestry;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
-import forestry.plugins.PluginArboriculture;
 
 public class ItemBlockLeaves extends ItemBlockForestry {
 

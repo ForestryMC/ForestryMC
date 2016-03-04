@@ -27,6 +27,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.common.Optional;
 
 import forestry.api.fuels.FuelManager;
+import forestry.core.PluginCore;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.inventory.AdjacentInventoryCache;
@@ -40,7 +41,6 @@ import forestry.energy.gui.ContainerEnginePeat;
 import forestry.energy.gui.GuiEnginePeat;
 import forestry.energy.inventory.InventoryEnginePeat;
 import forestry.factory.triggers.FactoryTriggers;
-import forestry.plugins.PluginCore;
 
 import buildcraft.api.statements.ITriggerExternal;
 

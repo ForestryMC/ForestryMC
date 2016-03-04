@@ -29,6 +29,7 @@ import forestry.api.fuels.MoistenerFuel;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
+import forestry.core.PluginCore;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
 import forestry.core.recipes.RecipeUtil;
@@ -38,7 +39,6 @@ import forestry.farming.logic.FarmableGenericCrop;
 import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
-import forestry.plugins.PluginCore;
 
 @ForestryPlugin(pluginID = ForestryPluginUids.NATURA, name = "Natura", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.natura.description")
 public class PluginNatura extends BlankForestryPlugin {

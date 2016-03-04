@@ -39,7 +39,6 @@ import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.StringUtil;
 import forestry.mail.inventory.InventoryTradeStation;
 import forestry.mail.items.EnumStampDefinition;
-import forestry.plugins.PluginMail;
 
 public class TradeStation extends WorldSavedData implements ITradeStation, IInventoryAdapter {
 	public static final String SAVE_NAME = "TradePO_";

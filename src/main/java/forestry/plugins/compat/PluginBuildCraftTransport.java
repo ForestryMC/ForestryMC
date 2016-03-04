@@ -15,6 +15,7 @@ import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
+import forestry.core.PluginCore;
 import forestry.core.config.Constants;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.Log;
@@ -22,7 +23,6 @@ import forestry.core.utils.ModUtil;
 import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
-import forestry.plugins.PluginCore;
 
 @ForestryPlugin(pluginID = ForestryPluginUids.BUILDCRAFT_TRANSPORT, name = "BuildCraft 6 Transport", author = "mezz", url = Constants.URL, unlocalizedDescription = "for.plugin.buildcraft6.description")
 public class PluginBuildCraftTransport extends BlankForestryPlugin {

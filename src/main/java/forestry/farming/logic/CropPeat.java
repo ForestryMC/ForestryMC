@@ -19,10 +19,10 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+import forestry.core.PluginCore;
 import forestry.core.blocks.BlockSoil;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.vect.Vect;
-import forestry.plugins.PluginCore;
 
 public class CropPeat extends Crop {
 

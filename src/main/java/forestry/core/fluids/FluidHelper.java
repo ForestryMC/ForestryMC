@@ -26,10 +26,10 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidContainerItem;
 import net.minecraftforge.fluids.IFluidHandler;
 
+import forestry.core.PluginFluids;
 import forestry.core.config.Constants;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.ItemStackUtil;
-import forestry.plugins.PluginFluids;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>

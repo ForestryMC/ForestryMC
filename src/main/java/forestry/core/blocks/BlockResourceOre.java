@@ -34,7 +34,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.core.CreativeTabForestry;
-import forestry.plugins.PluginCore;
+import forestry.core.PluginCore;
 
 public class BlockResourceOre extends Block implements IItemModelRegister {
 	private static final PropertyEnum<ResourceType> RESOURCE = PropertyEnum.create("resource", ResourceType.class);

@@ -42,9 +42,9 @@ import forestry.core.genetics.ItemGE;
 import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.EntityUtil;
+import forestry.lepidopterology.PluginLepidopterology;
 import forestry.lepidopterology.entities.EntityButterfly;
 import forestry.lepidopterology.genetics.ButterflyGenome;
-import forestry.plugins.PluginLepidopterology;
 
 public class ItemButterflyGE extends ItemGE {
 

@@ -8,7 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.plugins;
+package forestry.lepidopterology;
 
 import javax.annotation.Nonnull;
 import java.io.File;
@@ -31,12 +31,12 @@ import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.recipes.RecipeManagers;
+import forestry.core.PluginCore;
 import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
 import forestry.core.fluids.Fluids;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.EntityUtil;
-import forestry.lepidopterology.ButterflySpawner;
 import forestry.lepidopterology.blocks.BlockRegistryLepidopterology;
 import forestry.lepidopterology.blocks.BlockTypeLepidopterologyTesr;
 import forestry.lepidopterology.commands.CommandButterfly;
@@ -51,6 +51,9 @@ import forestry.lepidopterology.items.ItemButterflyGE;
 import forestry.lepidopterology.items.ItemRegistryLepidopterology;
 import forestry.lepidopterology.proxy.ProxyLepidopterology;
 import forestry.lepidopterology.recipes.MatingRecipe;
+import forestry.plugins.BlankForestryPlugin;
+import forestry.plugins.ForestryPlugin;
+import forestry.plugins.ForestryPluginUids;
 
 @ForestryPlugin(pluginID = ForestryPluginUids.LEPIDOPTEROLOGY, name = "Lepidopterology", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.lepidopterology.description")
 public class PluginLepidopterology extends BlankForestryPlugin {

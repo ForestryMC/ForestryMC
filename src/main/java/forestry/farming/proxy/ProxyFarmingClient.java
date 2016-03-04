@@ -14,8 +14,8 @@ import net.minecraft.client.resources.model.ModelResourceLocation;
 
 import forestry.core.models.BlockModelIndex;
 import forestry.core.proxy.Proxies;
+import forestry.farming.PluginFarming;
 import forestry.farming.models.ModelFarmBlock;
-import forestry.plugins.PluginFarming;
 
 public class ProxyFarmingClient extends ProxyFarming {
 

@@ -19,7 +19,6 @@ import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.core.utils.Log;
 import forestry.lepidopterology.entities.EntityButterfly;
-import forestry.plugins.PluginLepidopterology;
 
 public class ButterflySpawner implements ILeafTickHandler {
 

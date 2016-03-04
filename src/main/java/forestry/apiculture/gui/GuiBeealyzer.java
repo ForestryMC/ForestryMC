@@ -23,6 +23,7 @@ import forestry.api.apiculture.IBee;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleInteger;
 import forestry.api.genetics.IAlleleTolerance;
+import forestry.apiculture.PluginApiculture;
 import forestry.apiculture.genetics.BeeGenome;
 import forestry.apiculture.inventory.ItemInventoryBeealyzer;
 import forestry.core.genetics.alleles.AlleleBoolean;
@@ -31,7 +32,6 @@ import forestry.core.gui.GuiAlyzer;
 import forestry.core.gui.widgets.ItemStackWidget;
 import forestry.core.inventory.ItemInventoryAlyzer;
 import forestry.core.utils.StringUtil;
-import forestry.plugins.PluginApiculture;
 
 public class GuiBeealyzer extends GuiAlyzer {
 

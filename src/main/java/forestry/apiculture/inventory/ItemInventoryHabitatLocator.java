@@ -24,13 +24,13 @@ import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBee;
 import forestry.api.core.IErrorSource;
 import forestry.api.core.IErrorState;
+import forestry.apiculture.PluginApiculture;
 import forestry.apiculture.items.HabitatLocatorLogic;
 import forestry.apiculture.items.ItemHabitatLocator;
 import forestry.core.config.Config;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.gui.IHintSource;
 import forestry.core.inventory.ItemInventory;
-import forestry.plugins.PluginApiculture;
 
 public class ItemInventoryHabitatLocator extends ItemInventory implements IErrorSource, IHintSource {
 

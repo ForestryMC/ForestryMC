@@ -25,10 +25,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
+import forestry.core.PluginCore;
 import forestry.core.blocks.BlockSoil;
 import forestry.core.utils.vect.Vect;
 import forestry.core.utils.vect.VectUtil;
-import forestry.plugins.PluginCore;
 
 public class FarmLogicPeat extends FarmLogicWatered {
 	private static final ItemStack bogEarth = PluginCore.blocks.soil.get(BlockSoil.SoilType.BOG_EARTH, 1);

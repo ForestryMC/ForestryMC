@@ -32,10 +32,10 @@ import forestry.api.genetics.IAlleleSpeciesBuilder;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
+import forestry.apiculture.PluginApiculture;
 import forestry.apiculture.items.ItemRegistryApiculture;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.ItemStackUtil;
-import forestry.plugins.PluginApiculture;
 
 public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesBuilder, IAlleleSpecies {
 	private final String binomial;

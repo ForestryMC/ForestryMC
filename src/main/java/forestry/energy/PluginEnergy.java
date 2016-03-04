@@ -8,7 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.plugins;
+package forestry.energy;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -21,6 +21,9 @@ import forestry.core.recipes.RecipeUtil;
 import forestry.energy.blocks.BlockRegistryEnergy;
 import forestry.energy.blocks.BlockTypeEngine;
 import forestry.energy.proxy.ProxyEnergy;
+import forestry.plugins.BlankForestryPlugin;
+import forestry.plugins.ForestryPlugin;
+import forestry.plugins.ForestryPluginUids;
 
 @ForestryPlugin(pluginID = ForestryPluginUids.ENERGY, name = "Energy", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.energy.description")
 public class PluginEnergy extends BlankForestryPlugin {

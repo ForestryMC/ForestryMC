@@ -41,11 +41,11 @@ import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.api.core.Tabs;
 import forestry.arboriculture.IWoodTyped;
+import forestry.arboriculture.PluginArboriculture;
 import forestry.arboriculture.items.ItemBlockWood;
 import forestry.arboriculture.items.ItemBlockWood.WoodMeshDefinition;
 import forestry.arboriculture.tiles.TileWood;
 import forestry.core.render.ParticleHelper;
-import forestry.plugins.PluginArboriculture;
 
 public class BlockArbFence extends BlockFence implements IWoodTyped, IItemModelRegister, ITileEntityProvider {
 

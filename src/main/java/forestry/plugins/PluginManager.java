@@ -46,6 +46,7 @@ import forestry.api.core.ForestryAPI;
 import forestry.core.IPickupHandler;
 import forestry.core.IResupplyHandler;
 import forestry.core.ISaveEventHandler;
+import forestry.core.PluginCore;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.utils.Log;
 

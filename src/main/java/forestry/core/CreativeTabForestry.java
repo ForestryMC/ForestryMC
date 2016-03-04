@@ -19,7 +19,6 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.Tabs;
 import forestry.plugins.ForestryPluginUids;
-import forestry.plugins.PluginCore;
 
 public class CreativeTabForestry extends CreativeTabs {
 

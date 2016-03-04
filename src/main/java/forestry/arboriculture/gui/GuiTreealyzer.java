@@ -31,6 +31,7 @@ import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleInteger;
 import forestry.api.genetics.IFruitFamily;
+import forestry.arboriculture.PluginArboriculture;
 import forestry.arboriculture.genetics.TreeGenome;
 import forestry.arboriculture.genetics.alleles.AlleleFruit;
 import forestry.arboriculture.inventory.ItemInventoryTreealyzer;
@@ -40,7 +41,6 @@ import forestry.core.gui.ContainerAlyzer;
 import forestry.core.gui.GuiAlyzer;
 import forestry.core.inventory.ItemInventoryAlyzer;
 import forestry.core.utils.StringUtil;
-import forestry.plugins.PluginArboriculture;
 
 public class GuiTreealyzer extends GuiAlyzer {
 

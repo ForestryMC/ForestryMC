@@ -27,9 +27,9 @@ import net.minecraftforge.event.terraingen.TerrainGen;
 
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
+import forestry.apiculture.PluginApiculture;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
-import forestry.plugins.PluginApiculture;
 
 public abstract class HiveDecorator {
 

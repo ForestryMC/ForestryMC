@@ -31,11 +31,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.api.core.Tabs;
+import forestry.apiculture.PluginApiculture;
 import forestry.apiculture.tiles.TileCandle;
 import forestry.core.config.Constants;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.ItemStackUtil;
-import forestry.plugins.PluginApiculture;
 
 public class BlockStump extends BlockTorch implements IItemModelRegister {
 

@@ -8,7 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.plugins;
+package forestry.mail;
 
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -18,8 +18,10 @@ import net.minecraftforge.common.MinecraftForge;
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.PostManager;
 import forestry.api.recipes.RecipeManagers;
+import forestry.apiculture.PluginApiculture;
 import forestry.apiculture.items.ItemRegistryApiculture;
 import forestry.core.ISaveEventHandler;
+import forestry.core.PluginCore;
 import forestry.core.circuits.EnumCircuitBoardType;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
@@ -27,10 +29,6 @@ import forestry.core.fluids.Fluids;
 import forestry.core.items.EnumElectronTube;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.recipes.RecipeUtil;
-import forestry.mail.EventHandlerMailAlert;
-import forestry.mail.PostRegistry;
-import forestry.mail.PostalCarrier;
-import forestry.mail.SaveEventHandlerMail;
 import forestry.mail.blocks.BlockRegistryMail;
 import forestry.mail.blocks.BlockTypeMail;
 import forestry.mail.commands.CommandMail;
@@ -38,6 +36,9 @@ import forestry.mail.items.EnumStampDefinition;
 import forestry.mail.items.ItemRegistryMail;
 import forestry.mail.network.PacketRegistryMail;
 import forestry.mail.triggers.MailTriggers;
+import forestry.plugins.BlankForestryPlugin;
+import forestry.plugins.ForestryPlugin;
+import forestry.plugins.ForestryPluginUids;
 
 @ForestryPlugin(pluginID = ForestryPluginUids.MAIL, name = "Mail", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.mail.description")
 public class PluginMail extends BlankForestryPlugin {

@@ -21,7 +21,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.core.IModelManager;
-import forestry.plugins.PluginCore;
+import forestry.core.PluginCore;
 
 public class ItemFruit extends ItemForestryFood {
 

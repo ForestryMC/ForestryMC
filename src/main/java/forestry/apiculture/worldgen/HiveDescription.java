@@ -27,8 +27,8 @@ import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.EnumTolerance;
+import forestry.apiculture.PluginApiculture;
 import forestry.apiculture.genetics.BeeDefinition;
-import forestry.plugins.PluginApiculture;
 
 public enum HiveDescription implements IHiveDescription {
 

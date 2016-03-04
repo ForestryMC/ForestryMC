@@ -20,6 +20,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 
 import forestry.api.apiculture.IAlleleBeeSpecies;
+import forestry.apiculture.PluginApiculture;
 import forestry.apiculture.genetics.BeeGenome;
 import forestry.apiculture.inventory.ItemInventoryImprinter;
 import forestry.core.config.Constants;
@@ -28,7 +29,6 @@ import forestry.core.gui.GuiUtil;
 import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
-import forestry.plugins.PluginApiculture;
 
 public class GuiImprinter extends GuiForestry<ContainerImprinter, ItemInventoryImprinter> {
 

@@ -24,7 +24,6 @@ import forestry.core.models.ModelIndex;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Log;
 import forestry.core.utils.StringUtil;
-import forestry.plugins.PluginStorage;
 
 public class CrateRegistry implements ICrateRegistry {
 

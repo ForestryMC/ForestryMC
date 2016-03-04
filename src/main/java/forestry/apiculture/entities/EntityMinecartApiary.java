@@ -27,6 +27,7 @@ import forestry.api.apiculture.IHiveFrame;
 import forestry.apiculture.ApiaryBeeListener;
 import forestry.apiculture.ApiaryBeeModifier;
 import forestry.apiculture.IApiary;
+import forestry.apiculture.PluginApiculture;
 import forestry.apiculture.blocks.BlockTypeApiculture;
 import forestry.apiculture.gui.ContainerMinecartBeehouse;
 import forestry.apiculture.gui.GuiBeeHousing;
@@ -34,7 +35,6 @@ import forestry.apiculture.inventory.IApiaryInventory;
 import forestry.apiculture.inventory.InventoryApiary;
 import forestry.core.config.Config;
 import forestry.core.inventory.IInventoryAdapter;
-import forestry.plugins.PluginApiculture;
 
 public class EntityMinecartApiary extends EntityMinecartBeeHousingBase implements IApiary {
 	private static final IBeeModifier beeModifier = new ApiaryBeeModifier();

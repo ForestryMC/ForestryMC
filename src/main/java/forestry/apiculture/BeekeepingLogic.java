@@ -47,7 +47,6 @@ import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Log;
-import forestry.plugins.PluginApiculture;
 
 public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 

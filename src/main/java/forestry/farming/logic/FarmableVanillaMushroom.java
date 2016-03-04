@@ -23,7 +23,7 @@ import forestry.core.proxy.Proxies;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.vect.Vect;
-import forestry.plugins.PluginFarming;
+import forestry.farming.PluginFarming;
 
 public class FarmableVanillaMushroom extends FarmableGenericSapling {
 

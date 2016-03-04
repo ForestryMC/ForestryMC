@@ -10,19 +10,15 @@
  ******************************************************************************/
 package forestry.core.utils;
 
-import java.util.List;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 
 import forestry.api.core.ForestryAPI;
-import forestry.core.entities.EntitySelector;
 
 public abstract class EntityUtil {
 	public static <E extends EntityLiving> E spawnEntity(World world, Class<E> entityClass, double x, double y, double z) {

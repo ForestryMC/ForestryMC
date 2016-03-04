@@ -29,9 +29,9 @@ import forestry.core.gui.ContainerAlyzer;
 import forestry.core.gui.GuiAlyzer;
 import forestry.core.inventory.ItemInventoryAlyzer;
 import forestry.core.utils.StringUtil;
+import forestry.lepidopterology.PluginLepidopterology;
 import forestry.lepidopterology.genetics.ButterflyGenome;
 import forestry.lepidopterology.inventory.ItemInventoryFlutterlyzer;
-import forestry.plugins.PluginLepidopterology;
 
 public class GuiFlutterlyzer extends GuiAlyzer {
 

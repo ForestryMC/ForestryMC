@@ -13,7 +13,7 @@ package forestry.lepidopterology.entities;
 import forestry.api.genetics.IPollinatable;
 import forestry.api.lepidopterology.IButterflyNursery;
 import forestry.core.utils.GeneticsUtil;
-import forestry.plugins.PluginLepidopterology;
+import forestry.lepidopterology.PluginLepidopterology;
 
 public class AIButterflyMate extends AIButterflyInteract {
 

@@ -49,8 +49,8 @@ import forestry.api.genetics.IMutation;
 import forestry.apiculture.BeeHousingListener;
 import forestry.apiculture.BeeHousingModifier;
 import forestry.apiculture.BeekeepingLogic;
+import forestry.apiculture.PluginApiculture;
 import forestry.core.genetics.SpeciesRoot;
-import forestry.plugins.PluginApiculture;
 
 public class BeeRoot extends SpeciesRoot implements IBeeRoot {
 

@@ -23,6 +23,7 @@ import net.minecraft.world.IBlockAccess;
 
 import forestry.api.arboriculture.EnumWoodType;
 import forestry.arboriculture.IWoodTyped;
+import forestry.arboriculture.PluginArboriculture;
 import forestry.arboriculture.blocks.BlockSlab;
 import forestry.arboriculture.items.ItemBlockWood;
 import forestry.core.network.DataInputStreamForestry;
@@ -30,7 +31,6 @@ import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
 import forestry.core.network.packets.PacketTileStream;
 import forestry.core.tiles.TileUtil;
-import forestry.plugins.PluginArboriculture;
 
 public class TileWood extends TileEntity implements IStreamable {
 	private EnumWoodType woodType;

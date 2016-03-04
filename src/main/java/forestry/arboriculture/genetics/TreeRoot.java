@@ -50,13 +50,13 @@ import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
+import forestry.arboriculture.PluginArboriculture;
 import forestry.arboriculture.blocks.BlockFruitPod;
 import forestry.arboriculture.tiles.TileFruitPod;
 import forestry.arboriculture.tiles.TileSapling;
 import forestry.core.config.Constants;
 import forestry.core.genetics.SpeciesRoot;
 import forestry.core.utils.BlockUtil;
-import forestry.plugins.PluginArboriculture;
 
 public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 

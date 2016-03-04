@@ -19,10 +19,10 @@ import net.minecraft.item.ItemStack;
 
 import forestry.Forestry;
 import forestry.api.core.IGameMode;
+import forestry.core.PluginCore;
+import forestry.core.PluginFluids;
 import forestry.core.blocks.BlockSoil;
 import forestry.core.utils.Log;
-import forestry.plugins.PluginCore;
-import forestry.plugins.PluginFluids;
 
 public class GameMode implements IGameMode {
 	private static final String GAMEMODE_KEY = "gamemode";

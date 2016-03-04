@@ -16,7 +16,7 @@ import net.minecraft.util.ResourceLocation;
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.IGermlingModelProvider;
 import forestry.api.core.IModelManager;
-import forestry.plugins.PluginArboriculture;
+import forestry.arboriculture.PluginArboriculture;
 
 public class ModelProviderGermling implements IGermlingModelProvider {
 

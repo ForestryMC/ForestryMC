@@ -40,9 +40,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.core.CreativeTabForestry;
+import forestry.core.PluginCore;
 import forestry.core.config.Constants;
 import forestry.core.utils.BlockUtil;
-import forestry.plugins.PluginCore;
 
 /**
  * Humus, bog earth, peat

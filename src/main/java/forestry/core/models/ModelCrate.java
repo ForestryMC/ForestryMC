@@ -50,7 +50,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.core.items.ItemCrated;
 import forestry.core.utils.StringUtil;
-import forestry.plugins.PluginStorage;
+import forestry.storage.PluginStorage;
 
 import gnu.trove.map.hash.TIntObjectHashMap;
 

@@ -39,8 +39,8 @@ import forestry.api.lepidopterology.IButterflyRoot;
 import forestry.api.lepidopterology.ILepidopteristTracker;
 import forestry.core.genetics.SpeciesRoot;
 import forestry.core.utils.EntityUtil;
+import forestry.lepidopterology.PluginLepidopterology;
 import forestry.lepidopterology.entities.EntityButterfly;
-import forestry.plugins.PluginLepidopterology;
 
 public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 

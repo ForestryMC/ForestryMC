@@ -8,7 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.plugins;
+package forestry.factory;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -27,7 +27,10 @@ import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.MoistenerFuel;
 import forestry.api.fuels.RainSubstrate;
 import forestry.api.recipes.RecipeManagers;
+import forestry.apiculture.PluginApiculture;
 import forestry.apiculture.items.ItemRegistryApiculture;
+import forestry.core.PluginCore;
+import forestry.core.PluginFluids;
 import forestry.core.blocks.BlockSoil;
 import forestry.core.blocks.BlockTypeCoreTesr;
 import forestry.core.circuits.Circuit;
@@ -43,7 +46,6 @@ import forestry.core.network.IPacketRegistry;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.datastructures.FluidMap;
 import forestry.core.utils.datastructures.ItemStackMap;
-import forestry.factory.DummyManagers;
 import forestry.factory.blocks.BlockRegistryFactory;
 import forestry.factory.blocks.BlockTypeFactoryPlain;
 import forestry.factory.blocks.BlockTypeFactoryTesr;
@@ -58,6 +60,10 @@ import forestry.factory.recipes.MoistenerRecipeManager;
 import forestry.factory.recipes.SqueezerRecipeManager;
 import forestry.factory.recipes.StillRecipeManager;
 import forestry.factory.triggers.FactoryTriggers;
+import forestry.plugins.BlankForestryPlugin;
+import forestry.plugins.ForestryPlugin;
+import forestry.plugins.ForestryPluginUids;
+import forestry.storage.PluginStorage;
 
 @ForestryPlugin(pluginID = ForestryPluginUids.FACTORY, name = "Factory", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.factory.description")
 public class PluginFactory extends BlankForestryPlugin {

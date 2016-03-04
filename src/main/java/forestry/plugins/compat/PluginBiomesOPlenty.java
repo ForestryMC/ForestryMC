@@ -26,6 +26,7 @@ import forestry.api.core.ForestryAPI;
 import forestry.api.farming.Farmables;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.BackpackManager;
+import forestry.core.PluginCore;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
 import forestry.core.recipes.RecipeUtil;
@@ -38,7 +39,6 @@ import forestry.farming.logic.FarmableGenericSapling;
 import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
-import forestry.plugins.PluginCore;
 
 @ForestryPlugin(pluginID = ForestryPluginUids.BIOMES_O_PLENTY, name = "BiomesOPlenty", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.plugin.biomesoplenty.description")
 public class PluginBiomesOPlenty extends BlankForestryPlugin {

@@ -25,7 +25,6 @@ import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
 import forestry.api.genetics.IFlowerProvider;
 import forestry.core.utils.vect.Vect;
-import forestry.plugins.PluginApiculture;
 
 public class HasFlowersCache implements INbtWritable, INbtReadable {
 	private static final String nbtKey = "hasFlowerCache";

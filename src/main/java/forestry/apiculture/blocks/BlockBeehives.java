@@ -34,11 +34,11 @@ import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.api.core.Tabs;
 import forestry.apiculture.MaterialBeehive;
+import forestry.apiculture.PluginApiculture;
 import forestry.apiculture.tiles.TileSwarm;
 import forestry.core.config.Config;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.ItemStackUtil;
-import forestry.plugins.PluginApiculture;
 
 public class BlockBeehives extends BlockContainer implements IItemModelRegister {
 	private static final PropertyEnum HIVE_TYPES = PropertyEnum.create("hive", HiveType.class);

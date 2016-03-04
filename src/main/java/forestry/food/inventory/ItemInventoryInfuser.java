@@ -15,7 +15,7 @@ import net.minecraft.item.ItemStack;
 
 import forestry.api.food.BeverageManager;
 import forestry.core.inventory.ItemInventory;
-import forestry.plugins.PluginFood;
+import forestry.food.PluginFood;
 
 public class ItemInventoryInfuser extends ItemInventory {
 	private static final short inputSlot = 0;

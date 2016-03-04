@@ -24,12 +24,12 @@ import forestry.api.apiculture.IBeeListener;
 import forestry.api.apiculture.IBeeModifier;
 import forestry.apiculture.BeehouseBeeModifier;
 import forestry.apiculture.InventoryBeeHousing;
+import forestry.apiculture.PluginApiculture;
 import forestry.apiculture.blocks.BlockTypeApiculture;
 import forestry.apiculture.gui.ContainerMinecartBeehouse;
 import forestry.apiculture.gui.GuiBeeHousing;
 import forestry.core.config.Config;
 import forestry.core.inventory.IInventoryAdapter;
-import forestry.plugins.PluginApiculture;
 
 public class EntityMinecartBeehouse extends EntityMinecartBeeHousingBase {
 	private static final IBeeModifier beeModifier = new BeehouseBeeModifier();

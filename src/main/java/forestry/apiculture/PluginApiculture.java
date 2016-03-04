@@ -8,7 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.plugins;
+package forestry.apiculture;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -60,8 +60,6 @@ import forestry.api.genetics.IClassification.EnumClassLevel;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
-import forestry.apiculture.ArmorApiaristHelper;
-import forestry.apiculture.SaveEventHandlerApiculture;
 import forestry.apiculture.blocks.BlockAlveary;
 import forestry.apiculture.blocks.BlockCandle;
 import forestry.apiculture.blocks.BlockRegistryApiculture;
@@ -75,8 +73,8 @@ import forestry.apiculture.flowers.FlowerRegistry;
 import forestry.apiculture.genetics.BeeBranchDefinition;
 import forestry.apiculture.genetics.BeeDefinition;
 import forestry.apiculture.genetics.BeeFactory;
-import forestry.apiculture.genetics.BeeRoot;
 import forestry.apiculture.genetics.BeeMutationFactory;
+import forestry.apiculture.genetics.BeeRoot;
 import forestry.apiculture.genetics.BeekeepingMode;
 import forestry.apiculture.genetics.HiveDrop;
 import forestry.apiculture.genetics.JubilanceFactory;
@@ -102,6 +100,8 @@ import forestry.apiculture.worldgen.HiveDescription;
 import forestry.apiculture.worldgen.HiveGenHelper;
 import forestry.apiculture.worldgen.HiveRegistry;
 import forestry.core.ISaveEventHandler;
+import forestry.core.PluginCore;
+import forestry.core.PluginFluids;
 import forestry.core.blocks.BlockTypeCoreTesr;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
@@ -117,7 +117,11 @@ import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.Stack;
 import forestry.core.utils.StringUtil;
+import forestry.food.PluginFood;
 import forestry.food.items.ItemRegistryFood;
+import forestry.plugins.BlankForestryPlugin;
+import forestry.plugins.ForestryPlugin;
+import forestry.plugins.ForestryPluginUids;
 
 @ForestryPlugin(pluginID = ForestryPluginUids.APICULTURE, name = "Apiculture", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.apiculture.description")
 public class PluginApiculture extends BlankForestryPlugin {

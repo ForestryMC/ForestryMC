@@ -27,8 +27,8 @@ import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitBoard;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.core.IModelManager;
+import forestry.core.PluginCore;
 import forestry.core.items.ItemForestry;
-import forestry.plugins.PluginCore;
 
 public class ItemCircuitBoard extends ItemForestry {
 

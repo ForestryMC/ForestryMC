@@ -14,7 +14,7 @@ import forestry.api.genetics.IPollinatable;
 import forestry.arboriculture.genetics.pollination.FakePollinatable;
 import forestry.arboriculture.genetics.pollination.ICheckPollinatable;
 import forestry.core.utils.GeneticsUtil;
-import forestry.plugins.PluginLepidopterology;
+import forestry.lepidopterology.PluginLepidopterology;
 
 public class AIButterflyPollinate extends AIButterflyInteract {
 

@@ -40,6 +40,7 @@ import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
+import forestry.apiculture.PluginApiculture;
 import forestry.apiculture.blocks.BlockTypeApiculture;
 import forestry.apiculture.flowers.Flower;
 import forestry.apiculture.flowers.FlowerRegistry;
@@ -49,6 +50,7 @@ import forestry.arboriculture.worldgen.BlockTypeLog;
 import forestry.arboriculture.worldgen.BlockTypeVanillaStairs;
 import forestry.arboriculture.worldgen.BlockTypeWood;
 import forestry.arboriculture.worldgen.BlockTypeWoodStairs;
+import forestry.core.PluginCore;
 import forestry.core.blocks.BlockTypeCoreTesr;
 import forestry.core.config.Constants;
 import forestry.core.tiles.TileUtil;
@@ -56,8 +58,6 @@ import forestry.core.worldgen.BlockType;
 import forestry.core.worldgen.BlockTypeTileForestry;
 import forestry.core.worldgen.IBlockType;
 import forestry.plugins.ForestryPluginUids;
-import forestry.plugins.PluginApiculture;
-import forestry.plugins.PluginCore;
 
 public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 

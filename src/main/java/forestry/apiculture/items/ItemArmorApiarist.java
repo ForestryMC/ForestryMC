@@ -25,8 +25,8 @@ import forestry.api.core.IArmorNaturalist;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.api.core.Tabs;
+import forestry.apiculture.PluginApiculture;
 import forestry.core.config.Constants;
-import forestry.plugins.PluginApiculture;
 
 public class ItemArmorApiarist extends ItemArmor implements IArmorApiarist, IArmorNaturalist, IItemModelRegister {
 

@@ -8,23 +8,24 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.plugins;
+package forestry.food;
 
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 import forestry.api.food.BeverageManager;
+import forestry.apiculture.PluginApiculture;
 import forestry.apiculture.items.EnumPollenCluster;
 import forestry.apiculture.items.ItemRegistryApiculture;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
 import forestry.core.fluids.LiquidRegistryHelper;
 import forestry.core.recipes.RecipeUtil;
-import forestry.food.BeverageEffects;
-import forestry.food.InfuserIngredientManager;
-import forestry.food.InfuserMixtureManager;
 import forestry.food.items.EnumBeverage;
 import forestry.food.items.ItemRegistryFood;
+import forestry.plugins.BlankForestryPlugin;
+import forestry.plugins.ForestryPlugin;
+import forestry.plugins.ForestryPluginUids;
 
 @ForestryPlugin(pluginID = ForestryPluginUids.FOOD, name = "Food", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.food.description")
 public class PluginFood extends BlankForestryPlugin {

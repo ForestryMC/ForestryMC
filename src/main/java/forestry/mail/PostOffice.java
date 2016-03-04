@@ -28,7 +28,6 @@ import forestry.api.mail.IStamps;
 import forestry.api.mail.ITradeStation;
 import forestry.api.mail.PostManager;
 import forestry.mail.items.EnumStampDefinition;
-import forestry.plugins.PluginMail;
 
 public class PostOffice extends WorldSavedData implements IPostOffice {
 

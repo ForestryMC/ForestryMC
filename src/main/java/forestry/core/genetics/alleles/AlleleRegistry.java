@@ -34,9 +34,9 @@ import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.ISpeciesRoot;
+import forestry.core.PluginCore;
 import forestry.core.genetics.Classification;
 import forestry.core.genetics.ItemResearchNote.EnumNoteType;
-import forestry.plugins.PluginCore;
 
 public class AlleleRegistry implements IAlleleRegistry {
 

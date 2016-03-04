@@ -33,10 +33,10 @@ import forestry.api.farming.Farmables;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
+import forestry.core.PluginCore;
 import forestry.core.blocks.BlockSoil;
 import forestry.core.utils.vect.Vect;
 import forestry.core.utils.vect.VectUtil;
-import forestry.plugins.PluginCore;
 
 public class FarmLogicArboreal extends FarmLogicHomogeneous {
 	private static final int BRANCH_RANGE = 20;

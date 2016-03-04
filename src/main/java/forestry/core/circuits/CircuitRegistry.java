@@ -23,7 +23,7 @@ import forestry.api.circuits.ICircuitBoard;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.circuits.ICircuitLibrary;
 import forestry.api.circuits.ICircuitRegistry;
-import forestry.plugins.PluginCore;
+import forestry.core.PluginCore;
 
 public class CircuitRegistry implements ICircuitRegistry {
 
