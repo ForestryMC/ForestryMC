@@ -20,7 +20,6 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
@@ -63,6 +62,7 @@ import forestry.core.render.TextureManager;
 import forestry.core.utils.ColourUtil;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.Log;
+import forestry.core.utils.PlayerUtil;
 
 public class TileLeaves extends TileTreeContainer implements IPollinatable, IFruitBearer, IButterflyNursery, IRipeningPacketReceiver {
 
@@ -105,7 +105,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 			setTree(containedTree);
 		} else {
 			if (nbttagcompound.hasKey("owner")) {
-				setOwner(NBTUtil.readGameProfileFromNBT(nbttagcompound.getCompoundTag("owner")));
+				setOwner(PlayerUtil.readGameProfileFromNBT(nbttagcompound.getCompoundTag("owner")));
 			}
 
 			ripeningTime = nbttagcompound.getShort("RT");
@@ -149,7 +149,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 			GameProfile owner = getOwner();
 			if (owner != null) {
 				NBTTagCompound nbt = new NBTTagCompound();
-				NBTUtil.writeGameProfile(nbt, owner);
+				PlayerUtil.writeGameProfile(nbt, owner);
 				nbtTagCompound.setTag("owner", nbt);
 			}
 

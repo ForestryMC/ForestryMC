@@ -46,8 +46,8 @@ import forestry.core.proxy.Proxies;
 import forestry.core.render.EnumTankLevel;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.IRenderableTile;
-import forestry.core.utils.NBTUtil;
-import forestry.core.utils.NBTUtil.NBTList;
+import forestry.core.utils.NBTUtilForestry;
+import forestry.core.utils.NBTUtilForestry.NBTList;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -106,7 +106,7 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 
 	@Override
 	public void readFromNBT(NBTTagCompound data) {
-		NBTList<NBTTagCompound> tagList = NBTUtil.getNBTList(data, "tanks", NBTUtil.EnumNBTType.COMPOUND);
+		NBTList<NBTTagCompound> tagList = NBTUtilForestry.getNBTList(data, "tanks", NBTUtilForestry.EnumNBTType.COMPOUND);
 		for (NBTTagCompound tag : tagList) {
 			int slot = tag.getByte("tank");
 			if (slot >= 0 && slot < tanks.size()) {

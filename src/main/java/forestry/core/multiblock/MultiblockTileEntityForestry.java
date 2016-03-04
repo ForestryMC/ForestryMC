@@ -10,11 +10,13 @@
  ******************************************************************************/
 package forestry.core.multiblock;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.world.World;
@@ -30,8 +32,10 @@ import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.tiles.IFilterSlotDelegate;
 import forestry.core.tiles.ILocatable;
+import forestry.core.utils.PlayerUtil;
 
 public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> extends MultiblockTileEntityBase<T> implements ISidedInventory, IFilterSlotDelegate, ILocatable, IGuiHandlerTile {
+	@Nullable
 	private GameProfile owner;
 
 	public MultiblockTileEntityForestry(T multiblockLogic) {
@@ -50,7 +54,8 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 		super.readFromNBT(data);
 
 		if (data.hasKey("owner")) {
-			owner = NBTUtil.readGameProfileFromNBT(data.getCompoundTag("owner"));
+			NBTTagCompound ownerNbt = data.getCompoundTag("owner");
+			this.owner = PlayerUtil.readGameProfileFromNBT(ownerNbt);
 		}
 
 		getInternalInventory().readFromNBT(data);
@@ -62,7 +67,7 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 
 		if (this.owner != null) {
 			NBTTagCompound nbt = new NBTTagCompound();
-			nbt.removeTag("Properties");
+			PlayerUtil.writeGameProfile(nbt, owner);
 			data.setTag("owner", nbt);
 		}
 
@@ -187,12 +192,13 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 	}
 
 	/* IMultiblockComponent */
+	@Nullable
 	@Override
 	public final GameProfile getOwner() {
 		return owner;
 	}
 
-	public final void setOwner(GameProfile owner) {
+	public final void setOwner(@Nonnull GameProfile owner) {
 		this.owner = owner;
 	}
 	

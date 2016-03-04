@@ -18,7 +18,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
@@ -34,6 +33,7 @@ import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.genetics.mutations.EnumMutateChance;
 import forestry.core.items.ItemForestry;
 import forestry.core.proxy.Proxies;
+import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.StringUtil;
 
 public class ItemResearchNote extends ItemForestry {
@@ -216,7 +216,7 @@ public class ItemResearchNote extends ItemForestry {
 		public ResearchNote(NBTTagCompound compound) {
 			if (compound != null) {
 				if (compound.hasKey("res")) {
-					this.researcher = NBTUtil.readGameProfileFromNBT(compound.getCompoundTag("res"));
+					this.researcher = PlayerUtil.readGameProfileFromNBT(compound.getCompoundTag("res"));
 				} else {
 					this.researcher = null;
 				}
@@ -232,7 +232,7 @@ public class ItemResearchNote extends ItemForestry {
 		public void writeToNBT(NBTTagCompound compound) {
 			if (this.researcher != null) {
 				NBTTagCompound nbt = new NBTTagCompound();
-				NBTUtil.writeGameProfile(nbt, researcher);
+				PlayerUtil.writeGameProfile(nbt, researcher);
 				compound.setTag("res", nbt);
 			}
 			compound.setByte("TYP", (byte) type.ordinal());

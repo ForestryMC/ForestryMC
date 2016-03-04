@@ -10,9 +10,14 @@
  ******************************************************************************/
 package forestry.core.utils;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.UUID;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
+import net.minecraft.util.StringUtils;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
@@ -73,5 +78,20 @@ public abstract class PlayerUtil {
 			player = FakePlayerFactory.get((WorldServer) world, profile);
 		}
 		return player;
+	}
+
+	public static void writeGameProfile(@Nonnull NBTTagCompound tagCompound, @Nonnull GameProfile profile) {
+		if (!StringUtils.isNullOrEmpty(profile.getName())) {
+			tagCompound.setString("Name", profile.getName());
+		}
+
+		if (profile.getId() != null) {
+			tagCompound.setString("Id", profile.getId().toString());
+		}
+	}
+
+	@Nullable
+	public static GameProfile readGameProfileFromNBT(@Nonnull NBTTagCompound compound) {
+		return NBTUtil.readGameProfileFromNBT(compound);
 	}
 }

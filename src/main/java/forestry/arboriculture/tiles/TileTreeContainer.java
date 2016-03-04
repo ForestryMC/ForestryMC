@@ -16,7 +16,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
@@ -54,7 +53,7 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 			containedTree = new Tree(nbttagcompound.getCompoundTag("ContainedTree"));
 		}
 		if (nbttagcompound.hasKey("owner")) {
-			owner = NBTUtil.readGameProfileFromNBT(nbttagcompound.getCompoundTag("owner"));
+			owner = PlayerUtil.readGameProfileFromNBT(nbttagcompound.getCompoundTag("owner"));
 		}
 	}
 
@@ -69,7 +68,7 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 		}
 		if (this.owner != null) {
 			NBTTagCompound nbt = new NBTTagCompound();
-			NBTUtil.writeGameProfile(nbt, owner);
+			PlayerUtil.writeGameProfile(nbt, owner);
 			nbttagcompound.setTag("owner", nbt);
 		}
 	}

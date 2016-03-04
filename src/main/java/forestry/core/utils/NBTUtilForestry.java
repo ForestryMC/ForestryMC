@@ -34,7 +34,7 @@ import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public abstract class NBTUtil {
+public abstract class NBTUtilForestry {
 
 	public enum EnumNBTType {
 
