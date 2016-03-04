@@ -41,7 +41,7 @@ import forestry.core.utils.EntityUtil;
 import forestry.lepidopterology.entities.EntityButterfly;
 import forestry.plugins.PluginLepidopterology;
 
-public class ButterflyHelper extends SpeciesRoot implements IButterflyRoot {
+public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 
 	private static int butterflySpeciesCount = -1;
 	public static final String UID = "rootButterflies";

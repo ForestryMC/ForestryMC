@@ -57,7 +57,7 @@ import forestry.core.genetics.SpeciesRoot;
 import forestry.core.utils.BlockUtil;
 import forestry.plugins.PluginArboriculture;
 
-public class TreeHelper extends SpeciesRoot implements ITreeRoot {
+public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 
 	public static final String UID = "rootTrees";
 	private static int treeSpeciesCount = -1;
@@ -66,7 +66,7 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 
 	private final ArrayList<ITreekeepingMode> treekeepingModes = new ArrayList<>();
 
-	public TreeHelper() {
+	public TreeRoot() {
 		setResearchSuitability(new ItemStack(Blocks.sapling, 1, OreDictionary.WILDCARD_VALUE), 1.0f);
 	}
 

@@ -112,7 +112,7 @@ public class ApiaristTracker extends BreedingTracker implements IApiaristTracker
 
 	@Override
 	protected String speciesRootUID() {
-		return BeeHelper.UID;
+		return BeeRoot.UID;
 	}
 
 }

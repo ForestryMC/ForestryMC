@@ -33,7 +33,7 @@ public class LepidopteristTracker extends BreedingTracker implements ILepidopter
 
 	@Override
 	protected String speciesRootUID() {
-		return ButterflyHelper.UID;
+		return ButterflyRoot.UID;
 	}
 
 	@Override

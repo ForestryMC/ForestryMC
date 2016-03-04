@@ -50,7 +50,7 @@ import forestry.arboriculture.commands.CommandTree;
 import forestry.arboriculture.genetics.TreeBranchDefinition;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.genetics.TreeFactory;
-import forestry.arboriculture.genetics.TreeHelper;
+import forestry.arboriculture.genetics.TreeRoot;
 import forestry.arboriculture.genetics.TreeMutationFactory;
 import forestry.arboriculture.genetics.TreekeepingMode;
 import forestry.arboriculture.genetics.alleles.AlleleGrowth;
@@ -94,7 +94,7 @@ public class PluginArboriculture extends BlankForestryPlugin {
 		TreeManager.woodItemAccess = new WoodItemAccess();
 
 		// Init tree interface
-		TreeManager.treeRoot = new TreeHelper();
+		TreeManager.treeRoot = new TreeRoot();
 		AlleleManager.alleleRegistry.registerSpeciesRoot(TreeManager.treeRoot);
 
 		// Modes

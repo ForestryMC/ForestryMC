@@ -75,7 +75,7 @@ import forestry.apiculture.flowers.FlowerRegistry;
 import forestry.apiculture.genetics.BeeBranchDefinition;
 import forestry.apiculture.genetics.BeeDefinition;
 import forestry.apiculture.genetics.BeeFactory;
-import forestry.apiculture.genetics.BeeHelper;
+import forestry.apiculture.genetics.BeeRoot;
 import forestry.apiculture.genetics.BeeMutationFactory;
 import forestry.apiculture.genetics.BeekeepingMode;
 import forestry.apiculture.genetics.HiveDrop;
@@ -156,7 +156,7 @@ public class PluginApiculture extends BlankForestryPlugin {
 		BeeManager.armorApiaristHelper = new ArmorApiaristHelper();
 
 		// Init bee interface
-		BeeManager.beeRoot = new BeeHelper();
+		BeeManager.beeRoot = new BeeRoot();
 		AlleleManager.alleleRegistry.registerSpeciesRoot(BeeManager.beeRoot);
 
 		// Modes

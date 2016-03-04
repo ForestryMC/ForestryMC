@@ -51,7 +51,7 @@ import forestry.apiculture.BeekeepingLogic;
 import forestry.core.genetics.SpeciesRoot;
 import forestry.plugins.PluginApiculture;
 
-public class BeeHelper extends SpeciesRoot implements IBeeRoot {
+public class BeeRoot extends SpeciesRoot implements IBeeRoot {
 
 	private static int beeSpeciesCount = -1;
 	public static final String UID = "rootBees";

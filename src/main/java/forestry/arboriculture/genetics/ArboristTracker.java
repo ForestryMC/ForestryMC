@@ -32,7 +32,7 @@ public class ArboristTracker extends BreedingTracker implements IArboristTracker
 
 	@Override
 	protected String speciesRootUID() {
-		return TreeHelper.UID;
+		return TreeRoot.UID;
 	}
 
 	@Override
