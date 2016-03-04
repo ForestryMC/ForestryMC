@@ -32,14 +32,13 @@ import forestry.api.core.ForestryEvent;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IBreedingTracker;
-import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.network.packets.PacketGenomeTrackerSync;
 import forestry.core.proxy.Proxies;
 
-public abstract class BreedingTracker<C extends IChromosomeType> extends WorldSavedData implements IBreedingTracker<C> {
+public abstract class BreedingTracker extends WorldSavedData implements IBreedingTracker {
 
 	private static final String SPECIES_COUNT_KEY = "SpeciesCount";
 	private static final String MUTATIONS_COUNT_KEY = "MutationsCount";
@@ -92,7 +91,7 @@ public abstract class BreedingTracker<C extends IChromosomeType> extends WorldSa
 	 * @param player used to get worldObj
 	 * @return common tracker for this breeding system
 	 */
-	protected abstract IBreedingTracker<C> getBreedingTracker(EntityPlayer player);
+	protected abstract IBreedingTracker getBreedingTracker(EntityPlayer player);
 
 	/**
 	 * Tag stored in NBT to identify the type of the tracker being synced
@@ -193,16 +192,15 @@ public abstract class BreedingTracker<C extends IChromosomeType> extends WorldSa
 		}
 	}
 
-	private String getMutationString(IMutation<C> mutation) {
-		String species0 = mutation.getSpecies0().getUID();
-		String species1 = mutation.getSpecies1().getUID();
-		C speciesChromosomeType = mutation.getRoot().getKaryotypeKey();
-		String resultSpecies = mutation.getResultTemplate().get(speciesChromosomeType).getUID();
+	private static String getMutationString(IMutation mutation) {
+		String species0 = mutation.getAllele0().getUID();
+		String species1 = mutation.getAllele1().getUID();
+		String resultSpecies = mutation.getTemplate()[0].getUID();
 		return String.format(MUTATION_FORMAT, species0, species1, resultSpecies);
 	}
 
 	@Override
-	public void registerMutation(IMutation<C> mutation) {
+	public void registerMutation(IMutation mutation) {
 		String mutationString = getMutationString(mutation);
 		if (!discoveredMutations.contains(mutationString)) {
 			discoveredMutations.add(mutationString);
@@ -217,7 +215,7 @@ public abstract class BreedingTracker<C extends IChromosomeType> extends WorldSa
 	}
 
 	@Override
-	public boolean isDiscovered(IMutation<C> mutation) {
+	public boolean isDiscovered(IMutation mutation) {
 		String mutationString = getMutationString(mutation);
 		return discoveredMutations.contains(mutationString) || researchedMutations.contains(mutationString);
 	}
@@ -233,13 +231,13 @@ public abstract class BreedingTracker<C extends IChromosomeType> extends WorldSa
 	}
 
 	@Override
-	public void registerBirth(IIndividual<C> individual) {
+	public void registerBirth(IIndividual individual) {
 		registerSpecies(individual.getGenome().getPrimary());
 		registerSpecies(individual.getGenome().getSecondary());
 	}
 
 	@Override
-	public void registerSpecies(IAlleleSpecies<C> species) {
+	public void registerSpecies(IAlleleSpecies species) {
 		if (!discoveredSpecies.contains(species.getUID())) {
 			discoveredSpecies.add(species.getUID());
 
@@ -252,7 +250,7 @@ public abstract class BreedingTracker<C extends IChromosomeType> extends WorldSa
 	}
 
 	@Override
-	public void researchMutation(IMutation<C> mutation) {
+	public void researchMutation(IMutation mutation) {
 		String mutationString = getMutationString(mutation);
 		if (!researchedMutations.contains(mutationString)) {
 			researchedMutations.add(mutationString);
@@ -265,7 +263,7 @@ public abstract class BreedingTracker<C extends IChromosomeType> extends WorldSa
 	}
 
 	@Override
-	public boolean isResearched(IMutation<C> mutation) {
+	public boolean isResearched(IMutation mutation) {
 		String mutationString = getMutationString(mutation);
 		return researchedMutations.contains(mutationString);
 	}

@@ -10,16 +10,11 @@
  ******************************************************************************/
 package forestry.core.genetics.mutations;
 
-import com.google.common.collect.ImmutableMap;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
@@ -27,176 +22,127 @@ import net.minecraftforge.common.BiomeDictionary;
 
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
-import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
-import forestry.api.genetics.IAlleleRegistry;
 import forestry.api.genetics.IAlleleSpecies;
-import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IGenome;
-import forestry.api.genetics.IMutation;
-import forestry.api.genetics.IMutationBuilder;
 import forestry.api.genetics.IMutationCondition;
-import forestry.api.genetics.ISpeciesMode;
-import forestry.api.genetics.ISpeciesRoot;
+import forestry.api.genetics.IMutationCustom;
 
-public abstract class Mutation<C extends IChromosomeType<C>> implements IMutation<C>, IMutationBuilder<C> {
+public abstract class Mutation implements IMutationCustom {
 
 	private final int chance;
 
-	@Nonnull
-	private final IAlleleSpecies<C> species0;
-	@Nonnull
-	private final IAlleleSpecies<C> species1;
-	@Nonnull
-	private final ImmutableMap<C, IAllele> resultTemplate;
+	private final IAlleleSpecies species0;
+	private final IAlleleSpecies species1;
 
-	@Nonnull
+	private final IAllele[] template;
+
 	private final List<IMutationCondition> mutationConditions = new ArrayList<>();
-	@Nonnull
 	private final List<String> specialConditions = new ArrayList<>();
 
 	private boolean isSecret = false;
 
-	protected Mutation(@Nonnull IAlleleSpecies<C> species0, @Nonnull IAlleleSpecies<C> species1, @Nonnull ImmutableMap<C, IAllele> resultTemplate, int chance) {
+	protected Mutation(IAlleleSpecies species0, IAlleleSpecies species1, IAllele[] template, int chance) {
 		this.species0 = species0;
 		this.species1 = species1;
-		this.resultTemplate = resultTemplate;
+		this.template = template;
 		this.chance = chance;
 	}
 
-	@Nullable
-	public static IMutation<?> create(@Nonnull NBTTagCompound nbt) {
-		IAlleleRegistry alleleRegistry = AlleleManager.alleleRegistry;
-
-		ISpeciesRoot<?> root = alleleRegistry.getSpeciesRoot(nbt.getString("ROT"));
-		IAllele allele0 = alleleRegistry.getAllele(nbt.getString("AL0"));
-		IAllele allele1 = alleleRegistry.getAllele(nbt.getString("AL1"));
-		IAllele result = AlleleManager.alleleRegistry.getAllele(nbt.getString("RST"));
-		if (root == null || allele0 == null || allele1 == null || result == null) {
-			return null;
-		}
-
-		IChromosomeType<?> speciesChromosomeType = root.getKaryotypeKey();
-		for (IMutation<?> mutation : root.getCombinations(allele0)) {
-			if (mutation.isPartner(allele1)) {
-				String mutationSpeciesUid = mutation.getResultTemplate().get(speciesChromosomeType).getUID();
-				if (mutationSpeciesUid.equals(result.getUID())) {
-					return mutation;
-				}
-			}
-		}
-
-		return null;
-	}
-
-	@Override
-	public void writeToNBT(@Nonnull NBTTagCompound nbt) {
-		ISpeciesRoot<C> speciesRoot = getRoot();
-		nbt.setString("ROT", speciesRoot.getUID());
-		nbt.setString("AL0", getSpecies0().getUID());
-		nbt.setString("AL1", getSpecies1().getUID());
-		nbt.setString("RST", getResultTemplate().get(speciesRoot.getKaryotypeKey()).getUID());
-	}
-
-	@Nonnull
 	@Override
 	public Collection<String> getSpecialConditions() {
 		return specialConditions;
 	}
 
 	@Override
-	public Mutation<C> setIsSecret() {
+	public Mutation setIsSecret() {
 		isSecret = true;
 		return this;
 	}
 
 	@Override
-	public Mutation<C> restrictTemperature(EnumTemperature temperature) {
+	public Mutation restrictTemperature(EnumTemperature temperature) {
 		return restrictTemperature(temperature, temperature);
 	}
 
 	@Override
-	public Mutation<C> restrictTemperature(EnumTemperature minTemperature, EnumTemperature maxTemperature) {
+	public Mutation restrictTemperature(EnumTemperature minTemperature, EnumTemperature maxTemperature) {
 		IMutationCondition mutationCondition = new MutationConditionTemperature(minTemperature, maxTemperature);
 		return addMutationCondition(mutationCondition);
 	}
 
 	@Override
-	public Mutation<C> restrictHumidity(EnumHumidity humidity) {
+	public Mutation restrictHumidity(EnumHumidity humidity) {
 		return restrictHumidity(humidity, humidity);
 	}
 
 	@Override
-	public Mutation<C> restrictHumidity(EnumHumidity minHumidity, EnumHumidity maxHumidity) {
+	public Mutation restrictHumidity(EnumHumidity minHumidity, EnumHumidity maxHumidity) {
 		IMutationCondition mutationCondition = new MutationConditionHumidity(minHumidity, maxHumidity);
 		return addMutationCondition(mutationCondition);
 	}
 
 	@Override
-	public Mutation<C> restrictBiomeType(BiomeDictionary.Type... types) {
+	public Mutation restrictBiomeType(BiomeDictionary.Type... types) {
 		IMutationCondition mutationCondition = new MutationConditionBiome(types);
 		return addMutationCondition(mutationCondition);
 	}
 
 	@Override
-	public Mutation<C> requireDay() {
+	public Mutation requireDay() {
 		IMutationCondition mutationCondition = new MutationConditionDaytime(true);
 		return addMutationCondition(mutationCondition);
 	}
 
 	@Override
-	public Mutation<C> requireNight() {
+	public Mutation requireNight() {
 		IMutationCondition mutationCondition = new MutationConditionDaytime(false);
 		return addMutationCondition(mutationCondition);
 	}
 
 	@Override
-	public Mutation<C> restrictDateRange(int startMonth, int startDay, int endMonth, int endDay) {
+	public Mutation restrictDateRange(int startMonth, int startDay, int endMonth, int endDay) {
 		IMutationCondition mutationCondition = new MutationConditionTimeLimited(startMonth, startDay, endMonth, endDay);
 		return addMutationCondition(mutationCondition);
 	}
 
 	@Override
-	public Mutation<C> requireResource(Block block, int meta) {
+	public Mutation requireResource(Block block, int meta) {
 		IMutationCondition mutationCondition = new MutationConditionRequiresResource(block, meta);
 		return addMutationCondition(mutationCondition);
 	}
 
 	@Override
-	public Mutation<C> requireResource(String oreName) {
+	public Mutation requireResource(String oreName) {
 		IMutationCondition mutationCondition = new MutationConditionRequiresResourceOreDict(oreName);
 		return addMutationCondition(mutationCondition);
 	}
 
 	@Override
-	public Mutation<C> addMutationCondition(IMutationCondition mutationCondition) {
+	public Mutation addMutationCondition(IMutationCondition mutationCondition) {
 		mutationConditions.add(mutationCondition);
 		specialConditions.add(mutationCondition.getDescription());
 		return this;
 	}
 
-	@Override
-	public float getChance(World world, BlockPos pos, IAlleleSpecies<C> species0, IAlleleSpecies<C> species1, IGenome<C> genome0, IGenome<C> genome1) {
+	protected float getChance(World world, BlockPos pos, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1) {
 		float mutationChance = chance;
 		for (IMutationCondition mutationCondition : mutationConditions) {
-			mutationChance *= mutationCondition.getChance(world, pos, species0, species1, genome0, genome1);
+			mutationChance *= mutationCondition.getChance(world, pos, allele0, allele1, genome0, genome1);
+			if (mutationChance == 0) {
+				return 0;
+			}
 		}
-
-		ISpeciesMode<C> mode = getRoot().getMode(world);
-		mutationChance *= mode.getMutationModifier(genome0, genome1);
-
 		return mutationChance;
 	}
 
-	@Nonnull
 	@Override
-	public IAlleleSpecies<C> getSpecies0() {
+	public IAlleleSpecies getAllele0() {
 		return species0;
 	}
 
-	@Nonnull
 	@Override
-	public IAlleleSpecies<C> getSpecies1() {
+	public IAlleleSpecies getAllele1() {
 		return species1;
 	}
 
@@ -205,10 +151,9 @@ public abstract class Mutation<C extends IChromosomeType<C>> implements IMutatio
 		return chance;
 	}
 
-	@Nonnull
 	@Override
-	public ImmutableMap<C, IAllele> getResultTemplate() {
-		return resultTemplate;
+	public IAllele[] getTemplate() {
+		return template;
 	}
 
 	@Override
@@ -216,15 +161,12 @@ public abstract class Mutation<C extends IChromosomeType<C>> implements IMutatio
 		return species0.getUID().equals(allele.getUID()) || species1.getUID().equals(allele.getUID());
 	}
 
-	@Nullable
 	@Override
 	public IAllele getPartner(IAllele allele) {
 		if (species0.getUID().equals(allele.getUID())) {
 			return species1;
-		} else if (species1.getUID().equals(allele.getUID())) {
-			return species0;
 		} else {
-			return null;
+			return species0;
 		}
 	}
 
@@ -232,4 +174,5 @@ public abstract class Mutation<C extends IChromosomeType<C>> implements IMutatio
 	public boolean isSecret() {
 		return isSecret;
 	}
+
 }

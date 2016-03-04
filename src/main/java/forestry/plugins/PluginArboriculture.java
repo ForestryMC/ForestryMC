@@ -50,8 +50,8 @@ import forestry.arboriculture.commands.CommandTree;
 import forestry.arboriculture.genetics.TreeBranchDefinition;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.genetics.TreeFactory;
+import forestry.arboriculture.genetics.TreeHelper;
 import forestry.arboriculture.genetics.TreeMutationFactory;
-import forestry.arboriculture.genetics.TreeRoot;
 import forestry.arboriculture.genetics.TreekeepingMode;
 import forestry.arboriculture.genetics.alleles.AlleleGrowth;
 import forestry.arboriculture.genetics.alleles.AlleleLeafEffect;
@@ -94,15 +94,15 @@ public class PluginArboriculture extends BlankForestryPlugin {
 		TreeManager.woodItemAccess = new WoodItemAccess();
 
 		// Init tree interface
-		TreeManager.treeRoot = new TreeRoot();
+		TreeManager.treeRoot = new TreeHelper();
 		AlleleManager.alleleRegistry.registerSpeciesRoot(TreeManager.treeRoot);
 
 		// Modes
-		TreeManager.treeRoot.registerMode(TreekeepingMode.easy);
-		TreeManager.treeRoot.registerMode(TreekeepingMode.normal);
-		TreeManager.treeRoot.registerMode(TreekeepingMode.hard);
-		TreeManager.treeRoot.registerMode(TreekeepingMode.hardcore);
-		TreeManager.treeRoot.registerMode(TreekeepingMode.insane);
+		TreeManager.treeRoot.registerTreekeepingMode(TreekeepingMode.easy);
+		TreeManager.treeRoot.registerTreekeepingMode(TreekeepingMode.normal);
+		TreeManager.treeRoot.registerTreekeepingMode(TreekeepingMode.hard);
+		TreeManager.treeRoot.registerTreekeepingMode(TreekeepingMode.hardcore);
+		TreeManager.treeRoot.registerTreekeepingMode(TreekeepingMode.insane);
 	}
 
 	@Override

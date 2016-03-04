@@ -10,9 +10,9 @@
  ******************************************************************************/
 package forestry.core.genetics;
 
-public abstract class Branch extends Classification {
+public class Branch extends Classification {
 
-	protected Branch(String uid, String scientific) {
+	public Branch(String uid, String scientific) {
 		super(EnumClassLevel.GENUS, uid, scientific);
 	}
 

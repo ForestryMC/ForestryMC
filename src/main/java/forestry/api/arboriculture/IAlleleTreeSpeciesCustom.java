@@ -7,17 +7,15 @@ package forestry.api.arboriculture;
 
 import net.minecraftforge.common.EnumPlantType;
 
-import forestry.api.genetics.IAlleleSpeciesBuilder;
+import forestry.api.genetics.IAlleleSpeciesCustom;
 import forestry.api.genetics.IFruitFamily;
 
-public interface IAlleleTreeSpeciesBuilder extends IAlleleSpeciesBuilder<TreeChromosome> {
-	@Override
-	IAlleleTreeSpecies build();
+public interface IAlleleTreeSpeciesCustom extends IAlleleSpeciesCustom, IAlleleTreeSpecies {
 
 	/** Add a fruit family for this tree. Trees can have multiple fruit families. */
-	IAlleleTreeSpeciesBuilder addFruitFamily(IFruitFamily family);
+	IAlleleTreeSpeciesCustom addFruitFamily(IFruitFamily family);
 
 	/** Set the minecraft plant type for this tree. Default is Plains. */
-	IAlleleTreeSpeciesBuilder setPlantType(EnumPlantType type);
+	IAlleleTreeSpeciesCustom setPlantType(EnumPlantType type);
 
 }

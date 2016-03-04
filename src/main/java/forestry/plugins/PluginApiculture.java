@@ -160,11 +160,11 @@ public class PluginApiculture extends BlankForestryPlugin {
 		AlleleManager.alleleRegistry.registerSpeciesRoot(BeeManager.beeRoot);
 
 		// Modes
-		BeeManager.beeRoot.registerMode(BeekeepingMode.easy);
-		BeeManager.beeRoot.registerMode(BeekeepingMode.normal);
-		BeeManager.beeRoot.registerMode(BeekeepingMode.hard);
-		BeeManager.beeRoot.registerMode(BeekeepingMode.hardcore);
-		BeeManager.beeRoot.registerMode(BeekeepingMode.insane);
+		BeeManager.beeRoot.registerBeekeepingMode(BeekeepingMode.easy);
+		BeeManager.beeRoot.registerBeekeepingMode(BeekeepingMode.normal);
+		BeeManager.beeRoot.registerBeekeepingMode(BeekeepingMode.hard);
+		BeeManager.beeRoot.registerBeekeepingMode(BeekeepingMode.hardcore);
+		BeeManager.beeRoot.registerBeekeepingMode(BeekeepingMode.insane);
 	}
 
 	@Override
@@ -176,8 +176,6 @@ public class PluginApiculture extends BlankForestryPlugin {
 	@Override
 	public void preInit() {
 		super.preInit();
-
-		BeeDefinition.preInit();
 
 		MinecraftForge.EVENT_BUS.register(this);
 
@@ -214,7 +212,7 @@ public class PluginApiculture extends BlankForestryPlugin {
 			}
 		}
 
-		List<IBeekeepingMode> beekeepingModes = BeeManager.beeRoot.getModes();
+		List<IBeekeepingMode> beekeepingModes = BeeManager.beeRoot.getBeekeepingModes();
 		String[] validBeekeepingModeNames = new String[beekeepingModes.size()];
 		for (int i = 0; i < beekeepingModes.size(); i++) {
 			validBeekeepingModeNames[i] = beekeepingModes.get(i).getName();
@@ -261,6 +259,8 @@ public class PluginApiculture extends BlankForestryPlugin {
 		// Genetics
 		createAlleles();
 		BeeDefinition.initBees();
+
+		AlleleManager.alleleRegistry.registerDeprecatedAlleleReplacement("forestry.speciesArgrarian", BeeDefinition.AGRARIAN.getGenome().getPrimary());
 
 		// Hives
 		createHives();

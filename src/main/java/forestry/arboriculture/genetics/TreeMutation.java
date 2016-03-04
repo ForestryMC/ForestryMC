@@ -10,36 +10,38 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
-import com.google.common.collect.ImmutableMap;
-
-import javax.annotation.Nonnull;
+import net.minecraft.util.BlockPos;
+import net.minecraft.world.World;
 
 import forestry.api.arboriculture.IAlleleTreeSpecies;
-import forestry.api.arboriculture.ITreeMutation;
-import forestry.api.arboriculture.ITreeMutationBuilder;
+import forestry.api.arboriculture.ITreeGenome;
+import forestry.api.arboriculture.ITreeMutationCustom;
 import forestry.api.arboriculture.ITreeRoot;
-import forestry.api.arboriculture.TreeChromosome;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.IAllele;
 import forestry.core.genetics.mutations.Mutation;
 
-public class TreeMutation extends Mutation<TreeChromosome> implements ITreeMutation, ITreeMutationBuilder {
+public class TreeMutation extends Mutation implements ITreeMutationCustom {
 
-	public TreeMutation(IAlleleTreeSpecies allele0, IAlleleTreeSpecies allele1, ImmutableMap<TreeChromosome, IAllele> template, int chance) {
+	public TreeMutation(IAlleleTreeSpecies allele0, IAlleleTreeSpecies allele1, IAllele[] template, int chance) {
 		super(allele0, allele1, template, chance);
 	}
 
-	// TODO: break this into a separate builder class
-	@Nonnull
-	@Override
-	public ITreeMutation build() {
-		TreeManager.treeRoot.registerMutation(this);
-		return this;
-	}
-
-	@Nonnull
 	@Override
 	public ITreeRoot getRoot() {
 		return TreeManager.treeRoot;
 	}
+
+	@Override
+	public float getChance(World world, BlockPos pos, IAlleleTreeSpecies allele0, IAlleleTreeSpecies allele1, ITreeGenome genome0, ITreeGenome genome1) {
+		float processedChance = super.getChance(world, pos, allele0, allele1, genome0, genome1);
+		if (processedChance <= 0) {
+			return 0;
+		}
+
+		processedChance *= getRoot().getTreekeepingMode(world).getMutationModifier(genome0, genome1, 1f);
+
+		return processedChance;
+	}
+
 }

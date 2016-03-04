@@ -21,7 +21,6 @@ import com.mojang.authlib.GameProfile;
 
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleSpecies;
-import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IIndividual;
 import forestry.core.gui.ContainerEscritoire;
 import forestry.core.gui.GuiEscritoire;
@@ -61,6 +60,10 @@ public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPi
 
 	public void choose(GameProfile gameProfile, int index) {
 		game.choose(index);
+		processTurnResult(gameProfile);
+	}
+
+	private void processTurnResult(GameProfile gameProfile) {
 		if (getGame().getStatus() != EscritoireGame.Status.SUCCESS) {
 			return;
 		}
@@ -70,11 +73,7 @@ public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPi
 			return;
 		}
 
-		processTurnResult(gameProfile, individual);
-	}
-	
-	private <C extends IChromosomeType> void processTurnResult(GameProfile gameProfile, IIndividual<C> individual) {
-		IAlleleSpecies<C> species = individual.getGenome().getPrimary();
+		IAlleleSpecies species = individual.getGenome().getPrimary();
 		for (ItemStack itemstack : species.getResearchBounty(worldObj, gameProfile, individual, game.getBountyLevel())) {
 			InventoryUtil.addStack(getInternalInventory(), itemstack, InventoryEscritoire.SLOT_RESULTS_1, InventoryEscritoire.SLOTS_RESULTS_COUNT, true);
 		}

@@ -5,7 +5,6 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
-import javax.annotation.Nonnull;
 import java.util.Locale;
 
 import net.minecraftforge.common.EnumPlantType;
@@ -18,8 +17,9 @@ import forestry.api.genetics.IAlleleInteger;
 import forestry.api.genetics.IAllelePlantType;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IFruitFamily;
+import forestry.api.genetics.ISpeciesRoot;
 
-public enum TreeChromosome implements IChromosomeType<TreeChromosome> {
+public enum EnumTreeChromosome implements IChromosomeType {
 
 	/**
 	 * Determines the following: - WorldGen, including the used wood blocks - {@link IFruitFamily}s supported. Limits which {@link IFruitProvider}
@@ -73,32 +73,25 @@ public enum TreeChromosome implements IChromosomeType<TreeChromosome> {
 	 */
 	FIREPROOF(IAlleleBoolean.class),;
 	
-	Class<? extends IAllele> alleleClass;
+	Class<? extends IAllele> clss;
 	
-	TreeChromosome(Class<? extends IAllele> alleleClass) {
-		this.alleleClass = alleleClass;
+	EnumTreeChromosome(Class<? extends IAllele> clss) {
+		this.clss = clss;
 	}
 
-	@Nonnull
 	@Override
 	public Class<? extends IAllele> getAlleleClass() {
-		return alleleClass;
+		return clss;
 	}
 
-	@Nonnull
 	@Override
 	public String getName() {
 		return this.toString().toLowerCase(Locale.ENGLISH);
 	}
 
-	@Nonnull
 	@Override
-	public ITreeRoot getSpeciesRoot() {
+	public ISpeciesRoot getSpeciesRoot() {
 		return TreeManager.treeRoot;
 	}
 
-	@Override
-	public byte getUid() {
-		return (byte) ordinal();
-	}
 }

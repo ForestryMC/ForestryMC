@@ -12,7 +12,7 @@ public interface IBeeFactory {
 	/**
 	 * Creates a new bee species.
 	 * Automatically registered with AlleleManager.alleleRegistry.registerAllele()
-	 * See IAlleleBeeSpeciesBuilder and IAlleleSpeciesBuilder for adding additional properties to the returned species.
+	 * See IAlleleBeeSpeciesCustom and IAlleleSpeciesCustom for adding additional properties to the returned species.
 	 *
 	 * @param uid Unique Identifier for this species
 	 * @param dominant Whether this species is genetically dominant (false means it is recessive)
@@ -25,7 +25,7 @@ public interface IBeeFactory {
 	 * @param secondaryColor The body color of this species
 	 * @return a new bee species allele.
 	 */
-	IAlleleBeeSpeciesBuilder createSpecies(String uid, boolean dominant, String authority, String unlocalizedName, String unlocalizedDescription, IClassification branch, String binomial, int primaryColor, int secondaryColor);
+	IAlleleBeeSpeciesCustom createSpecies(String uid, boolean dominant, String authority, String unlocalizedName, String unlocalizedDescription, IClassification branch, String binomial, int primaryColor, int secondaryColor);
 
 	/**
 	 * Creates a new bee branch.

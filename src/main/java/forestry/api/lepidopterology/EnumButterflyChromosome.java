@@ -5,7 +5,6 @@
  ******************************************************************************/
 package forestry.api.lepidopterology;
 
-import javax.annotation.Nonnull;
 import java.util.Locale;
 
 import forestry.api.genetics.IAllele;
@@ -17,7 +16,7 @@ import forestry.api.genetics.IAlleleTolerance;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.ISpeciesRoot;
 
-public enum ButterflyChromosome implements IChromosomeType<ButterflyChromosome> {
+public enum EnumButterflyChromosome implements IChromosomeType {
 	/**
 	 * Species of the bee. Alleles here must implement {@link IAlleleButterflySpecies}.
 	 */
@@ -70,34 +69,25 @@ public enum ButterflyChromosome implements IChromosomeType<ButterflyChromosome> 
 	 * Extra effect to surroundings. (?)
 	 */
 	EFFECT(IAlleleButterflyEffect.class);
-
-	@Nonnull
-	private final Class<? extends IAllele> alleleClass;
 	
-	ButterflyChromosome(@Nonnull Class<? extends IAllele> alleleClass) {
-		this.alleleClass = alleleClass;
+	Class<? extends IAllele> clss;
+	
+	EnumButterflyChromosome(Class<? extends IAllele> clss) {
+		this.clss = clss;
 	}
 
-	@Nonnull
 	@Override
 	public Class<? extends IAllele> getAlleleClass() {
-		return alleleClass;
+		return clss;
 	}
 
-	@Nonnull
 	@Override
 	public String getName() {
 		return this.toString().toLowerCase(Locale.ENGLISH);
 	}
 
-	@Nonnull
 	@Override
-	public ISpeciesRoot<ButterflyChromosome> getSpeciesRoot() {
+	public ISpeciesRoot getSpeciesRoot() {
 		return ButterflyManager.butterflyRoot;
-	}
-
-	@Override
-	public byte getUid() {
-		return (byte) ordinal();
 	}
 }

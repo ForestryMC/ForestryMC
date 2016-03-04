@@ -12,7 +12,7 @@ import net.minecraft.world.World;
 
 import forestry.api.genetics.IIndividualLiving;
 
-public interface IButterfly extends IIndividualLiving<ButterflyChromosome> {
+public interface IButterfly extends IIndividualLiving {
 
 	@Nonnull
 	@Override

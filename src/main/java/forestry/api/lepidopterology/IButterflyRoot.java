@@ -5,11 +5,8 @@
  ******************************************************************************/
 package forestry.api.lepidopterology;
 
-import com.google.common.collect.ImmutableMap;
-
-import javax.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.item.ItemStack;
@@ -19,11 +16,10 @@ import net.minecraft.world.World;
 import com.mojang.authlib.GameProfile;
 
 import forestry.api.genetics.IAllele;
-import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.ISpeciesRoot;
 
-public interface IButterflyRoot extends ISpeciesRoot<ButterflyChromosome> {
+public interface IButterflyRoot extends ISpeciesRoot {
 
 	@Override
 	boolean isMember(ItemStack stack);
@@ -35,31 +31,24 @@ public interface IButterflyRoot extends ISpeciesRoot<ButterflyChromosome> {
 	IButterfly getMember(NBTTagCompound compound);
 
 	@Override
-	ItemStack getMemberStack(IIndividual<ButterflyChromosome> butterfly, int type);
+	ItemStack getMemberStack(IIndividual butterfly, int type);
 
 	/* GENOME CONVERSION */
-	@Nonnull
 	@Override
-	IButterfly templateAsIndividual(ImmutableMap<ButterflyChromosome, IAllele> template);
-
-	@Nonnull
-	@Override
-	IButterfly templateAsIndividual(ImmutableMap<ButterflyChromosome, IAllele> templateActive, ImmutableMap<ButterflyChromosome, IAllele> templateInactive);
+	IButterfly templateAsIndividual(IAllele[] template);
 
 	@Override
-	IButterflyGenome templateAsGenome(ImmutableMap<ButterflyChromosome, IAllele> template);
+	IButterfly templateAsIndividual(IAllele[] templateActive, IAllele[] templateInactive);
 
 	@Override
-	IButterflyGenome templateAsGenome(ImmutableMap<ButterflyChromosome, IAllele> templateActive, ImmutableMap<ButterflyChromosome, IAllele> templateInactive);
+	IButterflyGenome templateAsGenome(IAllele[] template);
 
-	@Nonnull
 	@Override
-	IButterflyGenome chromosomesAsGenome(ImmutableMap<ButterflyChromosome, IChromosome> chromosomes);
+	IButterflyGenome templateAsGenome(IAllele[] templateActive, IAllele[] templateInactive);
 
 	/* BUTTERFLY SPECIFIC */
-	@Nonnull
 	@Override
-	IButterflyTracker getBreedingTracker(@Nonnull World world, @Nonnull GameProfile player);
+	ILepidopteristTracker getBreedingTracker(World world, GameProfile player);
 
 	/**
 	 * Spawns the given butterfly in the world.
@@ -75,7 +64,7 @@ public interface IButterflyRoot extends ISpeciesRoot<ButterflyChromosome> {
 
 	/* TEMPLATES */
 	@Override
-	List<IButterfly> getIndividualTemplates();
+	ArrayList<IButterfly> getIndividualTemplates();
 
 	/* MUTATIONS */
 	@Override
@@ -84,14 +73,4 @@ public interface IButterflyRoot extends ISpeciesRoot<ButterflyChromosome> {
 	@Override
 	EnumFlutterType getType(ItemStack stack);
 
-	/** Modes */
-	@Nonnull
-	@Override
-	IButterflyMode getMode(@Nonnull World world);
-
-	@Nonnull
-	@Override
-	List<IButterflyMode> getModes();
-
-	void registerMode(@Nonnull IButterflyMode mode);
 }

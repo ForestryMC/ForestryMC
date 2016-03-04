@@ -15,7 +15,7 @@ import forestry.api.core.INbtWritable;
  *
  * Only the default implementation is supported.
  */
-public interface IIndividual<C extends IChromosomeType> extends INbtWritable {
+public interface IIndividual extends INbtWritable {
 
 	String getIdent();
 
@@ -36,20 +36,20 @@ public interface IIndividual<C extends IChromosomeType> extends INbtWritable {
 	boolean isSecret();
 
 	@Nonnull
-	IGenome<C> getGenome();
+	IGenome getGenome();
 
 	/**
 	 * Check whether the genetic makeup of two IIndividuals is identical. Ignores additional data like generations, irregular mating, etc..
 	 * @param other
 	 * @return true if the given other IIndividual has the amount of chromosomes and their alleles are identical.
 	 */
-	boolean isGeneticEqual(IIndividual<C> other);
+	boolean isGeneticEqual(IIndividual other);
 
 	/**
 	 * @return A deep copy of this individual.
 	 */
-	IIndividual<C> copy();
+	IIndividual copy();
 
-	boolean isPureBred(C chromosomeType);
+	boolean isPureBred(IChromosomeType chromosomeType);
 
 }

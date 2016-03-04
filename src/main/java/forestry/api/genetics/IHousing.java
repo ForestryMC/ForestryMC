@@ -6,9 +6,6 @@
 package forestry.api.genetics;
 
 import net.minecraft.util.BlockPos;
-import net.minecraft.world.World;
-
-import com.mojang.authlib.GameProfile;
 
 /**
  * Any housing, hatchery or nest with a location in the world.
@@ -16,9 +13,5 @@ import com.mojang.authlib.GameProfile;
 public interface IHousing {
 
 	BlockPos getCoordinates();
-
-	World getWorld();
-
-	GameProfile getOwner();
 
 }

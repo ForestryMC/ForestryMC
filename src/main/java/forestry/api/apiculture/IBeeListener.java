@@ -5,7 +5,7 @@
  ******************************************************************************/
 package forestry.api.apiculture;
 
-import forestry.api.arboriculture.ITree;
+import forestry.api.genetics.IIndividual;
 
 public interface IBeeListener {
 
@@ -24,6 +24,6 @@ public interface IBeeListener {
 	 * Called when the bees have retrieved some pollen.
 	 * @return true if this bee listener handled the pollen.
 	 */
-	boolean onPollenRetrieved(ITree pollen);
+	boolean onPollenRetrieved(IIndividual pollen);
 
 }

@@ -6,7 +6,10 @@
 package forestry.api.apiculture;
 
 import net.minecraft.util.Vec3;
+import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
+
+import com.mojang.authlib.GameProfile;
 
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -41,7 +44,11 @@ public interface IBeeHousing extends IHousing, IErrorLogicSource {
 
 	boolean canBlockSeeTheSky();
 
+	World getWorld();
+
 	BiomeGenBase getBiome();
+
+	GameProfile getOwner();
 
 	/**
 	 * @since Forestry 4.2

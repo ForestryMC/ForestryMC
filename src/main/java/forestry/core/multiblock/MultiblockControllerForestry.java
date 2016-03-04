@@ -13,8 +13,6 @@ package forestry.core.multiblock;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -90,7 +88,7 @@ public abstract class MultiblockControllerForestry extends MultiblockControllerB
 
 	/* INbtWritable */
 	@Override
-	public void writeToNBT(@Nonnull NBTTagCompound data) {
+	public void writeToNBT(NBTTagCompound data) {
 		accessHandler.writeToNBT(data);
 	}
 

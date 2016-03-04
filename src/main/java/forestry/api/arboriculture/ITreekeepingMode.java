@@ -5,18 +5,18 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
-import javax.annotation.Nonnull;
-import java.util.List;
+import java.util.ArrayList;
 
-import forestry.api.genetics.ISpeciesMode;
+public interface ITreekeepingMode extends ITreeModifier {
 
-public interface ITreekeepingMode extends ISpeciesMode<TreeChromosome> {
+	/**
+	 * @return Localized name of this treekeeping mode.
+	 */
+	String getName();
 
 	/**
 	 * @return Localized list of strings outlining the behaviour of this treekeeping mode.
 	 */
-	List<String> getDescription();
+	ArrayList<String> getDescription();
 
-	@Nonnull
-	ITreeModifier getTreeModifier();
 }

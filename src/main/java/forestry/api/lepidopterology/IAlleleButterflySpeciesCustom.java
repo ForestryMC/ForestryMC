@@ -10,16 +10,12 @@
  ******************************************************************************/
 package forestry.api.lepidopterology;
 
-import forestry.api.genetics.IAlleleSpeciesBuilder;
+import forestry.api.genetics.IAlleleSpeciesCustom;
 
-public interface IAlleleButterflySpeciesBuilder extends IAlleleSpeciesBuilder<ButterflyChromosome> {
+public interface IAlleleButterflySpeciesCustom extends IAlleleButterflySpecies, IAlleleSpeciesCustom {
+	IAlleleButterflySpeciesCustom setRarity(float rarity);
 
-	@Override
-	IAlleleButterflySpecies build();
+	IAlleleButterflySpeciesCustom setFlightDistance(float flightDistance);
 
-	IAlleleButterflySpeciesBuilder setRarity(float rarity);
-
-	IAlleleButterflySpeciesBuilder setFlightDistance(float flightDistance);
-
-	IAlleleButterflySpeciesBuilder setNocturnal();
+	IAlleleButterflySpeciesCustom setNocturnal();
 }

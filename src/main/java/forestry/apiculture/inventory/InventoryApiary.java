@@ -71,7 +71,7 @@ public class InventoryApiary extends InventoryBeeHousing implements IApiaryInven
 
 	@Override
 	public void wearOutFrames(IBeeHousing beeHousing, int amount) {
-		IBeekeepingMode beekeepingMode = BeeManager.beeRoot.getMode(beeHousing.getWorld());
+		IBeekeepingMode beekeepingMode = BeeManager.beeRoot.getBeekeepingMode(beeHousing.getWorld());
 		int wear = Math.round(amount * beekeepingMode.getWearModifier());
 
 		for (int i = SLOT_FRAMES_1; i < SLOT_FRAMES_1 + SLOT_FRAMES_COUNT; i++) {

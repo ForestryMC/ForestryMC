@@ -10,12 +10,8 @@
  ******************************************************************************/
 package forestry.core.genetics;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -33,24 +29,10 @@ import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.ISpeciesRoot;
 
-public abstract class SpeciesRoot<C extends Enum<C> & IChromosomeType<C>> implements ISpeciesRoot<C> {
+public abstract class SpeciesRoot implements ISpeciesRoot {
 	
 	/* RESEARCH */
 	private final LinkedHashMap<ItemStack, Float> researchCatalysts = new LinkedHashMap<>();
-	private final ImmutableMap<Byte, C> chromosomeTypeMap;
-
-	public SpeciesRoot(@Nonnull Class<C> chromosomeTypeClass) {
-		ImmutableMap.Builder<Byte, C> chromosomeMapBuilder = ImmutableMap.builder();
-		for (C chromosomeType : chromosomeTypeClass.getEnumConstants()) {
-			chromosomeMapBuilder.put(chromosomeType.getUid(), chromosomeType);
-		}
-		chromosomeTypeMap = chromosomeMapBuilder.build();
-	}
-
-	@Override
-	public C getChromosomeTypeForUid(byte uid) {
-		return chromosomeTypeMap.get(uid);
-	}
 	
 	@Override
 	public Map<ItemStack, Float> getResearchCatalysts() {
@@ -63,48 +45,46 @@ public abstract class SpeciesRoot<C extends Enum<C> & IChromosomeType<C>> implem
 	}
 
 	/* TEMPLATES */
-	protected final Map<String, ImmutableMap<C, IAllele>> speciesTemplates = new HashMap<>();
+	protected final HashMap<String, IAllele[]> speciesTemplates = new HashMap<>();
 
 	@Override
-	public void registerTemplate(String identifier, ImmutableMap<C, IAllele> template) {
-		speciesTemplates.put(identifier, template);
-	}
-
-	@Override
-	public Map<String, ImmutableMap<C, IAllele>> getGenomeTemplates() {
+	public Map<String, IAllele[]> getGenomeTemplates() {
 		return speciesTemplates;
 	}
 	
 	@Override
-	public void registerTemplate(ImmutableMap<C, IAllele> template) {
+	public void registerTemplate(IAllele[] template) {
 		if (template == null) {
 			throw new IllegalArgumentException("Tried to register null template");
 		}
-		if (template.size() == 0) {
+		if (template.length == 0) {
 			throw new IllegalArgumentException("Tried to register empty template");
 		}
-		registerTemplate(template.get(getKaryotypeKey()).getUID(), template);
+		registerTemplate(template[0].getUID(), template);
 	}
 
 	@Override
-	public ImmutableMap<C, IAllele> getRandomTemplate(Random rand) {
-		Collection<ImmutableMap<C, IAllele>> templates = speciesTemplates.values();
+	public IAllele[] getRandomTemplate(Random rand) {
+		Collection<IAllele[]> templates = speciesTemplates.values();
 		int size = templates.size();
-		ImmutableList<ImmutableMap<C, IAllele>> templatesList = ImmutableList.copyOf(speciesTemplates.values());
-		return templatesList.get(rand.nextInt(size));
+		IAllele[][] templatesArray = templates.toArray(new IAllele[size][]);
+		return templatesArray[rand.nextInt(size)];
 	}
 
-	@Nullable
 	@Override
-	public ImmutableMap<C, IAllele> getTemplate(String identifier) {
-		return speciesTemplates.get(identifier);
+	public IAllele[] getTemplate(String identifier) {
+		IAllele[] template = speciesTemplates.get(identifier);
+		if (template == null) {
+			return null;
+		}
+		return Arrays.copyOf(template, template.length);
 	}
 
 	/* MUTATIONS */
 	@Override
-	public List<IMutation<C>> getCombinations(IAllele other) {
-		ArrayList<IMutation<C>> combinations = new ArrayList<>();
-		for (IMutation<C> mutation : getMutations(false)) {
+	public Collection<? extends IMutation> getCombinations(IAllele other) {
+		ArrayList<IMutation> combinations = new ArrayList<>();
+		for (IMutation mutation : getMutations(false)) {
 			if (mutation.isPartner(other)) {
 				combinations.add(mutation);
 			}
@@ -114,11 +94,11 @@ public abstract class SpeciesRoot<C extends Enum<C> & IChromosomeType<C>> implem
 	}
 
 	@Override
-	public List<IMutation<C>> getCombinations(IAlleleSpecies<C> parentSpecies0, IAlleleSpecies<C> parentSpecies1, boolean shuffle) {
-		List<IMutation<C>> combinations = new ArrayList<>();
+	public List<IMutation> getCombinations(IAlleleSpecies parentSpecies0, IAlleleSpecies parentSpecies1, boolean shuffle) {
+		List<IMutation> combinations = new ArrayList<>();
 
 		String parentSpecies1UID = parentSpecies1.getUID();
-		for (IMutation<C> mutation : getMutations(shuffle)) {
+		for (IMutation mutation : getMutations(shuffle)) {
 			if (mutation.isPartner(parentSpecies0)) {
 				IAllele partner = mutation.getPartner(parentSpecies0);
 				if (partner != null && partner.getUID().equals(parentSpecies1UID)) {
@@ -131,10 +111,10 @@ public abstract class SpeciesRoot<C extends Enum<C> & IChromosomeType<C>> implem
 	}
 
 	@Override
-	public Collection<? extends IMutation<C>> getPaths(IAllele result, C chromosomeType) {
-		ArrayList<IMutation<C>> paths = new ArrayList<>();
-		for (IMutation<C> mutation : getMutations(false)) {
-			if (mutation.getResultTemplate().get(chromosomeType) == result) {
+	public Collection<? extends IMutation> getPaths(IAllele result, IChromosomeType chromosomeType) {
+		ArrayList<IMutation> paths = new ArrayList<>();
+		for (IMutation mutation : getMutations(false)) {
+			if (mutation.getTemplate()[chromosomeType.ordinal()] == result) {
 				paths.add(mutation);
 			}
 		}
@@ -144,27 +124,26 @@ public abstract class SpeciesRoot<C extends Enum<C> & IChromosomeType<C>> implem
 
 	/* GENOME CONVERSIONS */
 	@Override
-	public ImmutableMap<C, IChromosome> templateAsChromosomes(ImmutableMap<C, IAllele> template) {
-		ImmutableMap.Builder<C, IChromosome> templateBuilder = ImmutableMap.builder();
-		for (Map.Entry<C, IAllele> entry : template.entrySet()) {
-			C chromosomeType = entry.getKey();
-			IAllele allele = entry.getValue();
-			IChromosome chromosome = new Chromosome(allele);
-			templateBuilder.put(chromosomeType, chromosome);
+	public IChromosome[] templateAsChromosomes(IAllele[] template) {
+		Chromosome[] chromosomes = new Chromosome[template.length];
+		for (int i = 0; i < template.length; i++) {
+			if (template[i] != null) {
+				chromosomes[i] = new Chromosome(template[i]);
+			}
 		}
-		return templateBuilder.build();
+
+		return chromosomes;
 	}
 
 	@Override
-	public ImmutableMap<C, IChromosome> templateAsChromosomes(ImmutableMap<C, IAllele> templateActive, ImmutableMap<C, IAllele> templateInactive) {
-		ImmutableMap.Builder<C, IChromosome> templateBuilder = ImmutableMap.builder();
-		for (Map.Entry<C, IAllele> activeEntry : templateActive.entrySet()) {
-			C chromosomeType = activeEntry.getKey();
-			IAllele activeAllele = activeEntry.getValue();
-			IAllele inactiveAllele = templateInactive.get(chromosomeType);
-			IChromosome chromosome = new Chromosome(activeAllele, inactiveAllele);
-			templateBuilder.put(chromosomeType, chromosome);
+	public IChromosome[] templateAsChromosomes(IAllele[] templateActive, IAllele[] templateInactive) {
+		Chromosome[] chromosomes = new Chromosome[templateActive.length];
+		for (int i = 0; i < templateActive.length; i++) {
+			if (templateActive[i] != null) {
+				chromosomes[i] = new Chromosome(templateActive[i], templateInactive[i]);
+			}
 		}
-		return templateBuilder.build();
+
+		return chromosomes;
 	}
 }

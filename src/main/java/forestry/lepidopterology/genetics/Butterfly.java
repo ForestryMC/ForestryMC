@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.lepidopterology.genetics;
 
-import com.google.common.collect.ImmutableMap;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -33,21 +31,25 @@ import net.minecraftforge.common.BiomeDictionary;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleTolerance;
 import forestry.api.genetics.IChromosome;
+import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IIndividual;
-import forestry.api.lepidopterology.ButterflyChromosome;
 import forestry.api.lepidopterology.ButterflyManager;
+import forestry.api.lepidopterology.EnumButterflyChromosome;
 import forestry.api.lepidopterology.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IButterflyGenome;
+import forestry.api.lepidopterology.IButterflyMutation;
 import forestry.api.lepidopterology.IButterflyNursery;
 import forestry.api.lepidopterology.IEntityButterfly;
+import forestry.core.genetics.Chromosome;
 import forestry.core.genetics.GenericRatings;
 import forestry.core.genetics.IndividualLiving;
 import forestry.core.utils.StringUtil;
 
-public class Butterfly extends IndividualLiving<ButterflyChromosome> implements IButterfly {
+public class Butterfly extends IndividualLiving implements IButterfly {
 
 	private static final Random rand = new Random();
 
@@ -80,24 +82,24 @@ public class Butterfly extends IndividualLiving<ButterflyChromosome> implements 
 	public void addTooltip(List<String> list) {
 		IAlleleButterflySpecies primary = genome.getPrimary();
 		IAlleleButterflySpecies secondary = genome.getSecondary();
-		if (!isPureBred(ButterflyChromosome.SPECIES)) {
+		if (!isPureBred(EnumButterflyChromosome.SPECIES)) {
 			list.add(EnumChatFormatting.BLUE + StringUtil.localize("butterflies.hybrid").replaceAll("%PRIMARY", primary.getName()).replaceAll("%SECONDARY", secondary.getName()));
 		}
 
 		if (getMate() != null) {
 			list.add(EnumChatFormatting.RED + StringUtil.localize("gui.fecundated").toUpperCase(Locale.ENGLISH));
 		}
-		list.add(EnumChatFormatting.YELLOW + genome.getActiveAllele(ButterflyChromosome.SIZE).getName());
-		list.add(EnumChatFormatting.DARK_GREEN + genome.getActiveAllele(ButterflyChromosome.SPEED).getName());
-		list.add(genome.getActiveAllele(ButterflyChromosome.LIFESPAN).getName() + ' ' + StringUtil.localize("gui.life"));
+		list.add(EnumChatFormatting.YELLOW + genome.getActiveAllele(EnumButterflyChromosome.SIZE).getName());
+		list.add(EnumChatFormatting.DARK_GREEN + genome.getActiveAllele(EnumButterflyChromosome.SPEED).getName());
+		list.add(genome.getActiveAllele(EnumButterflyChromosome.LIFESPAN).getName() + ' ' + StringUtil.localize("gui.life"));
 
-		IAlleleTolerance tempTolerance = (IAlleleTolerance) getGenome().getActiveAllele(ButterflyChromosome.TEMPERATURE_TOLERANCE);
+		IAlleleTolerance tempTolerance = (IAlleleTolerance) getGenome().getActiveAllele(EnumButterflyChromosome.TEMPERATURE_TOLERANCE);
 		list.add(EnumChatFormatting.GREEN + "T: " + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getTemperature()) + " / " + tempTolerance.getName());
 
-		IAlleleTolerance humidTolerance = (IAlleleTolerance) getGenome().getActiveAllele(ButterflyChromosome.TEMPERATURE_TOLERANCE);
+		IAlleleTolerance humidTolerance = (IAlleleTolerance) getGenome().getActiveAllele(EnumButterflyChromosome.TEMPERATURE_TOLERANCE);
 		list.add(EnumChatFormatting.GREEN + "H: " + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getHumidity()) + " / " + humidTolerance.getName());
 
-		list.add(EnumChatFormatting.RED + GenericRatings.rateActivityTime(genome.getNeverSleeps(), genome.getPrimary().isNocturnal()));
+		list.add(EnumChatFormatting.RED + GenericRatings.rateActivityTime(genome.getNocturnal(), genome.getPrimary().isNocturnal()));
 
 		if (genome.getTolerantFlyer()) {
 			list.add(EnumChatFormatting.WHITE + StringUtil.localize("gui.flyer.tooltip"));
@@ -190,13 +192,67 @@ public class Butterfly extends IndividualLiving<ButterflyChromosome> implements 
 		if (mate == null) {
 			return null;
 		}
-		ImmutableMap<ButterflyChromosome, IChromosome> chromosomes = createOffspringChromosomes(nursery.getWorld(), nursery.getOwner(), nursery.getCoordinates(), genome, mate);
-		IButterflyGenome genome = ButterflyManager.butterflyRoot.chromosomesAsGenome(chromosomes);
-		return new Butterfly(genome);
+
+		IChromosome[] chromosomes = new IChromosome[genome.getChromosomes().length];
+		IChromosome[] parent1 = genome.getChromosomes();
+		IChromosome[] parent2 = mate.getChromosomes();
+
+		// Check for mutation. Replace one of the parents with the mutation
+		// template if mutation occured.
+		IChromosome[] mutated1 = mutateSpecies(nursery, genome, mate);
+		if (mutated1 != null) {
+			parent1 = mutated1;
+		}
+		IChromosome[] mutated2 = mutateSpecies(nursery, mate, genome);
+		if (mutated2 != null) {
+			parent2 = mutated2;
+		}
+
+		for (int i = 0; i < parent1.length; i++) {
+			if (parent1[i] != null && parent2[i] != null) {
+				chromosomes[i] = Chromosome.inheritChromosome(rand, parent1[i], parent2[i]);
+			}
+		}
+
+		return new Butterfly(new ButterflyGenome(chromosomes));
+	}
+
+	private static IChromosome[] mutateSpecies(IButterflyNursery nursery, IGenome genomeOne, IGenome genomeTwo) {
+
+		IChromosome[] parent1 = genomeOne.getChromosomes();
+		IChromosome[] parent2 = genomeTwo.getChromosomes();
+
+		IGenome genome0;
+		IGenome genome1;
+		IAllele allele0;
+		IAllele allele1;
+
+		if (rand.nextBoolean()) {
+			allele0 = parent1[EnumButterflyChromosome.SPECIES.ordinal()].getPrimaryAllele();
+			allele1 = parent2[EnumButterflyChromosome.SPECIES.ordinal()].getSecondaryAllele();
+
+			genome0 = genomeOne;
+			genome1 = genomeTwo;
+		} else {
+			allele0 = parent2[EnumButterflyChromosome.SPECIES.ordinal()].getPrimaryAllele();
+			allele1 = parent1[EnumButterflyChromosome.SPECIES.ordinal()].getSecondaryAllele();
+
+			genome0 = genomeTwo;
+			genome1 = genomeOne;
+		}
+
+		for (IButterflyMutation mutation : ButterflyManager.butterflyRoot.getMutations(true)) {
+			float chance = mutation.getChance(nursery, allele0, allele1, genome0, genome1);
+			if (chance > rand.nextFloat() * 100) {
+				return ButterflyManager.butterflyRoot.templateAsChromosomes(mutation.getTemplate());
+			}
+		}
+
+		return null;
 	}
 
 	private boolean isActiveThisTime(boolean isDayTime) {
-		if (getGenome().getNeverSleeps()) {
+		if (getGenome().getNocturnal()) {
 			return true;
 		}
 

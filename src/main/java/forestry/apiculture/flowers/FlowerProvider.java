@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.flowers;
 
-import javax.annotation.Nonnull;
 import java.util.EnumSet;
 
 import net.minecraft.item.ItemStack;
@@ -26,24 +25,22 @@ import forestry.api.genetics.IPollinatable;
 import forestry.core.utils.StringUtil;
 
 public class FlowerProvider implements IFlowerProvider {
-	@Nonnull
+
 	private final String flowerType;
-	@Nonnull
 	private final String description;
 
-	public FlowerProvider(@Nonnull String flowerType, @Nonnull String description) {
+	public FlowerProvider(String flowerType, String description) {
 		this.flowerType = flowerType;
 		this.description = description;
 	}
 
-	@Nonnull
 	@Override
 	public String getFlowerType() {
 		return flowerType;
 	}
 
 	@Override
-	public boolean isAcceptedPollinatable(@Nonnull World world, @Nonnull IPollinatable pollinatable) {
+	public boolean isAcceptedPollinatable(World world, IPollinatable pollinatable) {
 
 		EnumSet<EnumPlantType> plantTypes = pollinatable.getPlantType();
 
@@ -57,13 +54,11 @@ public class FlowerProvider implements IFlowerProvider {
 		}
 	}
 
-	@Nonnull
 	@Override
 	public String getDescription() {
 		return StringUtil.localize(this.description);
 	}
 
-	@Nonnull
 	@Override
 	public ItemStack[] affectProducts(World world, IIndividual individual, BlockPos pos, ItemStack[] products) {
 		return products;

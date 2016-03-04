@@ -15,11 +15,10 @@ import javax.annotation.Nonnull;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
-import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IIndividualLiving;
 
-public abstract class IndividualLiving<C extends IChromosomeType> extends Individual<C> implements IIndividualLiving<C> {
+public abstract class IndividualLiving extends Individual implements IIndividualLiving {
 
 	private int health;
 	private int maxHealth;
@@ -38,7 +37,7 @@ public abstract class IndividualLiving<C extends IChromosomeType> extends Indivi
 	}
 
 	@Override
-	public void writeToNBT(@Nonnull NBTTagCompound nbttagcompound) {
+	public void writeToNBT(NBTTagCompound nbttagcompound) {
 
 		super.writeToNBT(nbttagcompound);
 
@@ -101,4 +100,5 @@ public abstract class IndividualLiving<C extends IChromosomeType> extends Indivi
 			health--;
 		}
 	}
+
 }

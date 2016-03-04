@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.access;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -101,7 +100,7 @@ public class FakeAccessHandler implements IAccessHandler {
 	}
 
 	@Override
-	public void writeToNBT(@Nonnull NBTTagCompound nbttagcompound) {
+	public void writeToNBT(NBTTagCompound nbttagcompound) {
 
 	}
 

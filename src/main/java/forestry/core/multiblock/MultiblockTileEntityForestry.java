@@ -14,6 +14,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.world.World;
@@ -29,7 +30,6 @@ import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.tiles.IFilterSlotDelegate;
 import forestry.core.tiles.ILocatable;
-import forestry.core.utils.PlayerUtil;
 
 public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> extends MultiblockTileEntityBase<T> implements ISidedInventory, IFilterSlotDelegate, ILocatable, IGuiHandlerTile {
 	private GameProfile owner;
@@ -50,7 +50,7 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 		super.readFromNBT(data);
 
 		if (data.hasKey("owner")) {
-			owner = PlayerUtil.readGameProfileFromNBT(data.getCompoundTag("owner"));
+			owner = NBTUtil.readGameProfileFromNBT(data.getCompoundTag("owner"));
 		}
 
 		getInternalInventory().readFromNBT(data);

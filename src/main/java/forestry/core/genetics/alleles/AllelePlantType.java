@@ -17,7 +17,7 @@ import java.util.Locale;
 
 import net.minecraftforge.common.EnumPlantType;
 
-import forestry.api.arboriculture.TreeChromosome;
+import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllelePlantType;
 
@@ -45,7 +45,7 @@ public class AllelePlantType extends AlleleCategorized implements IAllelePlantTy
 		);
 
 		for (IAllelePlantType allele : alleles) {
-			AlleleManager.alleleRegistry.registerAllele(allele, TreeChromosome.PLANT);
+			AlleleManager.alleleRegistry.registerAllele(allele, EnumTreeChromosome.PLANT);
 		}
 	}
 

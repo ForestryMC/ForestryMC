@@ -15,7 +15,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.genetics.IAlleleSpecies;
 
-public interface IAlleleBeeSpecies extends IAlleleSpecies<BeeChromosome> {
+public interface IAlleleBeeSpecies extends IAlleleSpecies {
 
 	/**
 	 * @return the IBeeRoot

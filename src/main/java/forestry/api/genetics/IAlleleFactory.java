@@ -31,7 +31,7 @@ public interface IAlleleFactory {
 	 * @param valueName allele value name for uid and localization (i.e. "smallest")
 	 * @param value allele float value
 	 * @param isDominant allele dominance
-	 * @param types allele chromosome type for registration (i.e. TreeChromosome.HEIGHT)
+	 * @param types allele chromosome type for registration (i.e. EnumTreeChromosome.HEIGHT)
 	 * @return a new IAlleleFloat, registered with the allele registry.
 	 * @since Forestry 4.2
 	 */
@@ -45,7 +45,7 @@ public interface IAlleleFactory {
 	 * @param yDimValue allele area Y Size
 	 * @param zDimValue    allele area Z Size
 	 * @param isDominant allele dominance
-	 * @param types allele chromosome type for registration (i.e. BeeChromosome.TERRITORY)
+	 * @param types allele chromosome type for registration (i.e. EnumBeeChromosome.TERRITORY)
 	 * @return a new IAlleleArea, registered with the allele registry.
 	 * @since Forestry 4.2
 	 */
@@ -57,7 +57,7 @@ public interface IAlleleFactory {
 	 * @param valueName allele value name for uid and localization (i.e. "low")
 	 * @param value allele int value
 	 * @param isDominant allele dominance
-	 * @param types allele chromosome type for registration (i.e. BeeChromosome.FERTILITY)
+	 * @param types allele chromosome type for registration (i.e. EnumBeeChromosome.FERTILITY)
 	 * @return a new IAlleleInteger, registered with the allele registry.
 	 * @since Forestry 4.2
 	 */
@@ -68,7 +68,7 @@ public interface IAlleleFactory {
 	 * @param category allele category for uid and localization (i.e. "fireproof")
 	 * @param value allele boolean value
 	 * @param isDominant allele dominance
-	 * @param types allele chromosome type for registration (i.e. TreeChromosome.FIREPROOF)
+	 * @param types allele chromosome type for registration (i.e. EnumTreeChromosome.FIREPROOF)
 	 * @return a new IAlleleBoolean, registered with the allele registry.
 	 * Note that valueName will always be "true" or "false"
 	 * @since Forestry 4.2
@@ -81,7 +81,7 @@ public interface IAlleleFactory {
 	 * @param valueName allele value name for uid (i.e. "vanilla")
 	 * @param value allele IFlowerProvider value
 	 * @param isDominant allele dominance
-	 * @param types allele chromosome type for registration (i.e. BeeChromosome.FLOWER_PROVIDER)
+	 * @param types allele chromosome type for registration (i.e. EnumBeeChromosome.FLOWER_PROVIDER)
 	 * @return a new IAlleleFlowers, registered with the allele registry.
 	 * IAlleleFlowers localization is handled by the IFlowerProvider.getDescription(), unlike the other alleles.
 	 * @since Forestry 4.2

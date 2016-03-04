@@ -10,9 +10,6 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
-import com.google.common.collect.ImmutableMap;
-
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -36,6 +33,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.api.arboriculture.EnumGermlingType;
+import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.IArboristTracker;
@@ -45,11 +43,10 @@ import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.arboriculture.ITreeMutation;
 import forestry.api.arboriculture.ITreeRoot;
 import forestry.api.arboriculture.ITreekeepingMode;
-import forestry.api.arboriculture.TreeChromosome;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
-import forestry.api.genetics.IChromosome;
+import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
 import forestry.arboriculture.blocks.BlockFruitPod;
@@ -58,21 +55,18 @@ import forestry.arboriculture.tiles.TileSapling;
 import forestry.core.config.Constants;
 import forestry.core.genetics.SpeciesRoot;
 import forestry.core.utils.BlockUtil;
-import forestry.core.utils.Log;
 import forestry.plugins.PluginArboriculture;
 
-public class TreeRoot extends SpeciesRoot<TreeChromosome> implements ITreeRoot {
+public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 
 	public static final String UID = "rootTrees";
 	private static int treeSpeciesCount = -1;
 	private static ITreekeepingMode activeTreekeepingMode;
 	public static final ArrayList<ITree> treeTemplates = new ArrayList<>();
 
-	@Nonnull
 	private final ArrayList<ITreekeepingMode> treekeepingModes = new ArrayList<>();
 
-	public TreeRoot() {
-		super(TreeChromosome.class);
+	public TreeHelper() {
 		setResearchSuitability(new ItemStack(Blocks.sapling, 1, OreDictionary.WILDCARD_VALUE), 1.0f);
 	}
 
@@ -82,7 +76,7 @@ public class TreeRoot extends SpeciesRoot<TreeChromosome> implements ITreeRoot {
 	}
 
 	@Override
-	public Class<ITree> getMemberClass() {
+	public Class<? extends IIndividual> getMemberClass() {
 		return ITree.class;
 	}
 
@@ -251,37 +245,28 @@ public class TreeRoot extends SpeciesRoot<TreeChromosome> implements ITreeRoot {
 
 	/* GENOME CONVERSIONS */
 	@Override
-	public ITreeGenome templateAsGenome(ImmutableMap<TreeChromosome, IAllele> template) {
+	public ITreeGenome templateAsGenome(IAllele[] template) {
 		return new TreeGenome(templateAsChromosomes(template));
 	}
 
 	@Override
-	public ITreeGenome templateAsGenome(ImmutableMap<TreeChromosome, IAllele> templateActive, ImmutableMap<TreeChromosome, IAllele> templateInactive) {
+	public ITreeGenome templateAsGenome(IAllele[] templateActive, IAllele[] templateInactive) {
 		return new TreeGenome(templateAsChromosomes(templateActive, templateInactive));
 	}
 
-	@Nonnull
 	@Override
-	public ITreeGenome chromosomesAsGenome(ImmutableMap<TreeChromosome, IChromosome> chromosomes) {
-		return new TreeGenome(chromosomes);
-	}
-
-	@Nonnull
-	@Override
-	public ITree templateAsIndividual(ImmutableMap<TreeChromosome, IAllele> template) {
+	public ITree templateAsIndividual(IAllele[] template) {
 		return new Tree(templateAsGenome(template));
 	}
 
-	@Nonnull
 	@Override
-	public ITree templateAsIndividual(ImmutableMap<TreeChromosome, IAllele> templateActive, ImmutableMap<TreeChromosome, IAllele> templateInactive) {
+	public ITree templateAsIndividual(IAllele[] templateActive, IAllele[] templateInactive) {
 		return new Tree(templateAsGenome(templateActive, templateInactive));
 	}
 
 	/* BREEDING TRACKER */
-	@Nonnull
 	@Override
-	public IArboristTracker getBreedingTracker(@Nonnull World world, @Nonnull GameProfile player) {
+	public IArboristTracker getBreedingTracker(World world, GameProfile player) {
 		String filename = "ArboristTracker." + (player == null ? "common" : player.getId());
 		ArboristTracker tracker = (ArboristTracker) world.loadItemData(ArboristTracker.class, filename);
 
@@ -299,20 +284,13 @@ public class TreeRoot extends SpeciesRoot<TreeChromosome> implements ITreeRoot {
 
 	/* BREEDING MODES */
 
-	@Nonnull
 	@Override
-	public List<ITreekeepingMode> getModes() {
+	public ArrayList<ITreekeepingMode> getTreekeepingModes() {
 		return this.treekeepingModes;
 	}
 
 	@Override
-	public void resetMode() {
-		activeTreekeepingMode = null;
-	}
-
-	@Nonnull
-	@Override
-	public ITreekeepingMode getMode(@Nonnull World world) {
+	public ITreekeepingMode getTreekeepingMode(World world) {
 		if (activeTreekeepingMode != null) {
 			return activeTreekeepingMode;
 		}
@@ -324,33 +302,32 @@ public class TreeRoot extends SpeciesRoot<TreeChromosome> implements ITreeRoot {
 			mode = PluginArboriculture.treekeepingMode;
 		}
 
-		setMode(world, mode);
+		setTreekeepingMode(world, mode);
 		FMLCommonHandler.instance().getFMLLogger().debug("Set Treekeeping mode for a world to " + mode);
 
 		return activeTreekeepingMode;
 	}
 
 	@Override
-	public void registerMode(@Nonnull ITreekeepingMode mode) {
+	public void registerTreekeepingMode(ITreekeepingMode mode) {
 		treekeepingModes.add(mode);
 	}
 
 	@Override
-	public void setMode(@Nonnull World world, @Nonnull String name) {
-		activeTreekeepingMode = getMode(name);
+	public void setTreekeepingMode(World world, String name) {
+		activeTreekeepingMode = getTreekeepingMode(name);
 		getBreedingTracker(world, null).setModeName(name);
 	}
 
-	@Nonnull
 	@Override
-	public ITreekeepingMode getMode(@Nonnull String name) {
+	public ITreekeepingMode getTreekeepingMode(String name) {
 		for (ITreekeepingMode mode : treekeepingModes) {
 			if (mode.getName().equals(name) || mode.getName().equals(name.toLowerCase(Locale.ENGLISH))) {
 				return mode;
 			}
 		}
 
-		Log.error("Failed to find a Treekeeping mode called '%s', reverting to fallback.");
+		FMLCommonHandler.instance().getFMLLogger().debug("Failed to find a Treekeeping mode called '%s', reverting to fallback.");
 		return treekeepingModes.get(0);
 	}
 
@@ -362,13 +339,13 @@ public class TreeRoot extends SpeciesRoot<TreeChromosome> implements ITreeRoot {
 	}
 
 	@Override
-	public void registerTemplate(String identifier, ImmutableMap<TreeChromosome, IAllele> template) {
+	public void registerTemplate(String identifier, IAllele[] template) {
 		treeTemplates.add(new Tree(TreeManager.treeRoot.templateAsGenome(template)));
 		speciesTemplates.put(identifier, template);
 	}
 
 	@Override
-	public ImmutableMap<TreeChromosome, IAllele> getDefaultTemplate() {
+	public IAllele[] getDefaultTemplate() {
 		return TreeDefinition.Oak.getTemplate();
 	}
 
@@ -384,14 +361,14 @@ public class TreeRoot extends SpeciesRoot<TreeChromosome> implements ITreeRoot {
 	}
 
 	@Override
-	public void registerMutation(IMutation<TreeChromosome> mutation) {
-		if (AlleleManager.alleleRegistry.isBlacklisted(mutation.getResultTemplate().get(TreeChromosome.SPECIES).getUID())) {
+	public void registerMutation(IMutation mutation) {
+		if (AlleleManager.alleleRegistry.isBlacklisted(mutation.getTemplate()[0].getUID())) {
 			return;
 		}
-		if (AlleleManager.alleleRegistry.isBlacklisted(mutation.getSpecies0().getUID())) {
+		if (AlleleManager.alleleRegistry.isBlacklisted(mutation.getAllele0().getUID())) {
 			return;
 		}
-		if (AlleleManager.alleleRegistry.isBlacklisted(mutation.getSpecies1().getUID())) {
+		if (AlleleManager.alleleRegistry.isBlacklisted(mutation.getAllele1().getUID())) {
 			return;
 		}
 
@@ -411,16 +388,14 @@ public class TreeRoot extends SpeciesRoot<TreeChromosome> implements ITreeRoot {
 		return leafTickHandlers;
 	}
 
-	@Nonnull
 	@Override
-	public TreeChromosome[] getKaryotype() {
-		return TreeChromosome.values();
+	public IChromosomeType[] getKaryotype() {
+		return EnumTreeChromosome.values();
 	}
 
-	@Nonnull
 	@Override
-	public TreeChromosome getKaryotypeKey() {
-		return TreeChromosome.SPECIES;
+	public IChromosomeType getKaryotypeKey() {
+		return EnumTreeChromosome.SPECIES;
 	}
 
 }

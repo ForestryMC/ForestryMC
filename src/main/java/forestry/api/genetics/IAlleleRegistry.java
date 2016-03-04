@@ -5,7 +5,6 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
-import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Map;
 
@@ -28,7 +27,7 @@ public interface IAlleleRegistry {
 	 * Register a {@link ISpeciesRoot}.
 	 * @param root {@link ISpeciesRoot} to register.
 	 */
-	void registerSpeciesRoot(ISpeciesRoot<?> root);
+	void registerSpeciesRoot(ISpeciesRoot root);
 
 	/**
 	 * @return Map of all registered {@link ISpeciesRoot}.
@@ -40,21 +39,21 @@ public interface IAlleleRegistry {
 	 * @param uid Unique id for the species class, i.e. "rootBees", "rootTrees", "rootButterflies".
 	 * @return {@link ISpeciesRoot} if it exists, null otherwise.
 	 */
-	ISpeciesRoot<?> getSpeciesRoot(String uid);
+	ISpeciesRoot getSpeciesRoot(String uid);
 
 	/**
 	 * Retrieve a matching {@link ISpeciesRoot} for the given itemstack.
 	 * @param stack An itemstack possibly containing NBT data which can be converted by a species root.
 	 * @return {@link ISpeciesRoot} if found, null otherwise.
 	 */
-	ISpeciesRoot<?> getSpeciesRoot(ItemStack stack);
+	ISpeciesRoot getSpeciesRoot(ItemStack stack);
 
 	/**
 	 * Retrieve a matching {@link ISpeciesRoot} for the given {@link IIndividual}-class.
-	 * @param individualClass Class extending {@link IIndividual}.
+	 * @param clz Class extending {@link IIndividual}.
 	 * @return {@link ISpeciesRoot} if found, null otherwise.
 	 */
-	ISpeciesRoot<?> getSpeciesRoot(Class<? extends IIndividual> individualClass);
+	ISpeciesRoot getSpeciesRoot(Class<? extends IIndividual> clz);
 
 	/* INDIVIDUAL */
 
@@ -73,8 +72,7 @@ public interface IAlleleRegistry {
 	 *            Stack to retrieve genetic information for.
 	 * @return IIndividual containing genetic information, null if none could be extracted.
 	 */
-	@Nullable
-	IIndividual<?> getIndividual(ItemStack stack);
+	IIndividual getIndividual(ItemStack stack);
 
 	/* ALLELES */
 
@@ -93,7 +91,7 @@ public interface IAlleleRegistry {
 	 * @param chromosomeTypes valid chromosomeTypes for this allele.
 	 * @since Forestry 4.2
 	 */
-	void registerAllele(IAllele allele, IChromosomeType<?>... chromosomeTypes);
+	void registerAllele(IAllele allele, IChromosomeType... chromosomeTypes);
 
 	/**
 	 * @return HashMap of all registered deprecated alleles and their corresponding replacements
@@ -123,9 +121,7 @@ public interface IAlleleRegistry {
 	 * @return unmodifiable collection of all the known allele variations for the given chromosome type.
 	 * @since Forestry 4.2
 	 */
-	Collection<IAllele> getRegisteredAlleles(IChromosomeType<?> type);
-
-	Collection<IChromosomeType<?>> getChromosomeTypes(IAllele allele);
+	Collection<IAllele> getRegisteredAlleles(IChromosomeType type);
 
 	/* CLASSIFICATIONS */
 

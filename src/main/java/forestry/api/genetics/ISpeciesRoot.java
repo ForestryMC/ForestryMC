@@ -5,10 +5,7 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
-import com.google.common.collect.ImmutableMap;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +20,7 @@ import com.mojang.authlib.GameProfile;
 /**
  * Describes a class of species (i.e. bees, trees, butterflies), provides helper functions and access to common functionality.
  */
-public interface ISpeciesRoot<C extends IChromosomeType> {
+public interface ISpeciesRoot {
 
 	/**
 	 * @return A unique identifier for the species class. Should consist of "root" + a common name for the species class in camel-case, i.e. "rootBees", "rootTrees", "rootButterflies".
@@ -33,7 +30,7 @@ public interface ISpeciesRoot<C extends IChromosomeType> {
 	/**
 	 * @return Class of the sub-interface inheriting from {@link IIndividual}.
 	 */
-	Class<? extends IIndividual<C>> getMemberClass();
+	Class<? extends IIndividual> getMemberClass();
 
 	/**
 	 * @return Integer denoting the number of (counted) species of this type in the world.
@@ -62,38 +59,29 @@ public interface ISpeciesRoot<C extends IChromosomeType> {
 	 */
 	boolean isMember(IIndividual individual);
 
-	@Nullable
-	IIndividual<C> getMember(ItemStack stack);
+	IIndividual getMember(ItemStack stack);
 
-	@Nullable
-	IIndividual<C> getMember(NBTTagCompound compound);
+	IIndividual getMember(NBTTagCompound compound);
 
-	@Nullable
 	ISpeciesType getType(ItemStack itemStack);
 
-	ItemStack getMemberStack(IIndividual<C> individual, int type);
+	ItemStack getMemberStack(IIndividual individual, int type);
 
 	/* BREEDING TRACKER */
-	@Nonnull
-	IBreedingTracker<C> getBreedingTracker(@Nonnull World world, @Nonnull GameProfile player);
+	IBreedingTracker getBreedingTracker(World world, GameProfile player);
 
 	/* GENOME MANIPULATION */
-	@Nonnull
-	IIndividual<C> templateAsIndividual(ImmutableMap<C, IAllele> template);
+	IIndividual templateAsIndividual(IAllele[] template);
 
-	@Nonnull
-	IIndividual<C> templateAsIndividual(ImmutableMap<C, IAllele> templateActive, ImmutableMap<C, IAllele> templateInactive);
+	IIndividual templateAsIndividual(IAllele[] templateActive, IAllele[] templateInactive);
 
-	ImmutableMap<C, IChromosome> templateAsChromosomes(ImmutableMap<C, IAllele> template);
+	IChromosome[] templateAsChromosomes(IAllele[] template);
 
-	ImmutableMap<C, IChromosome> templateAsChromosomes(ImmutableMap<C, IAllele> templateActive, ImmutableMap<C, IAllele> templateInactive);
+	IChromosome[] templateAsChromosomes(IAllele[] templateActive, IAllele[] templateInactive);
 
-	IGenome<C> templateAsGenome(ImmutableMap<C, IAllele> template);
+	IGenome templateAsGenome(IAllele[] template);
 
-	IGenome<C> templateAsGenome(ImmutableMap<C, IAllele> templateActive, ImmutableMap<C, IAllele> templateInactive);
-
-	@Nonnull
-	IGenome<C> chromosomesAsGenome(ImmutableMap<C, IChromosome> chromosomes);
+	IGenome templateAsGenome(IAllele[] templateActive, IAllele[] templateInactive);
 
 	/* TEMPLATES */
 
@@ -102,38 +90,37 @@ public interface ISpeciesRoot<C extends IChromosomeType> {
 	 *
 	 * @param template
 	 */
-	void registerTemplate(ImmutableMap<C, IAllele> template);
+	void registerTemplate(IAllele[] template);
 
 	/**
 	 * Registers a bee template using the passed identifier.
 	 *
 	 * @param template
 	 */
-	void registerTemplate(String identifier, ImmutableMap<C, IAllele> template);
+	void registerTemplate(String identifier, IAllele[] template);
 
 	/**
 	 * Retrieves a registered template using the passed identifier.
 	 *
 	 * @param identifier
-	 * @return Map of {@link IAllele} representing a genome.
+	 * @return Array of {@link IAllele} representing a genome.
 	 */
-	@Nullable
-	ImmutableMap<C, IAllele> getTemplate(String identifier);
+	IAllele[] getTemplate(String identifier);
 
 	/**
 	 * @return Default individual template for use when stuff breaks.
 	 */
-	ImmutableMap<C, IAllele> getDefaultTemplate();
+	IAllele[] getDefaultTemplate();
 
 	/**
 	 * @param rand Random to use.
 	 * @return A random template from the pool of registered species templates.
 	 */
-	ImmutableMap<C, IAllele> getRandomTemplate(Random rand);
+	IAllele[] getRandomTemplate(Random rand);
 
-	Map<String, ImmutableMap<C, IAllele>> getGenomeTemplates();
+	Map<String, IAllele[]> getGenomeTemplates();
 
-	List<? extends IIndividual<C>> getIndividualTemplates();
+	ArrayList<? extends IIndividual> getIndividualTemplates();
 
 	/* MUTATIONS */
 
@@ -142,26 +129,26 @@ public interface ISpeciesRoot<C extends IChromosomeType> {
 	 *
 	 * @param mutation
 	 */
-	void registerMutation(IMutation<C> mutation);
+	void registerMutation(IMutation mutation);
 
 	/**
 	 * @return All registered mutations.
 	 */
-	Collection<? extends IMutation<C>> getMutations(boolean shuffle);
+	Collection<? extends IMutation> getMutations(boolean shuffle);
 
 	/**
 	 * @param other Allele to match mutations against.
 	 * @return All registered mutations the given allele is part of.
 	 */
-	List<IMutation<C>> getCombinations(IAllele other);
+	Collection<? extends IMutation> getCombinations(IAllele other);
 
 	/**
 	 * @since Forestry 3.7
 	 * @return all possible mutations that result from breeding two species
 	 */
-	List<IMutation<C>> getCombinations(IAlleleSpecies<C> parentSpecies0, IAlleleSpecies<C> parentSpecies1, boolean shuffle);
+	List<IMutation> getCombinations(IAlleleSpecies parentSpecies0, IAlleleSpecies parentSpecies1, boolean shuffle);
 
-	Collection<? extends IMutation<C>> getPaths(IAllele result, C chromosomeType);
+	Collection<? extends IMutation> getPaths(IAllele result, IChromosomeType chromosomeType);
 
 	/* RESEARCH */
 
@@ -180,29 +167,10 @@ public interface ISpeciesRoot<C extends IChromosomeType> {
 	/**
 	 * @return Array of {@link IChromosomeType} which are in this species genome
 	 */
-	@Nonnull
-	C[] getKaryotype();
+	IChromosomeType[] getKaryotype();
 
 	/**
 	 * @return {@link IChromosomeType} which is the "key" for this species class, usually the species chromosome.
 	 */
-	@Nonnull
-	C getKaryotypeKey();
-
-	C getChromosomeTypeForUid(byte uid);
-
-	/* GAME MODE */
-	void resetMode();
-
-	@Nonnull
-	List<? extends ISpeciesMode<C>> getModes();
-
-	@Nonnull
-	ISpeciesMode<C> getMode(@Nonnull World world);
-
-	@Nonnull
-	ISpeciesMode<C> getMode(@Nonnull String name);
-
-	void setMode(@Nonnull World world, @Nonnull String name);
-
+	IChromosomeType getKaryotypeKey();
 }

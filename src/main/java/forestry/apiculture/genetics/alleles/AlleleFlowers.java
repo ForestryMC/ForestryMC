@@ -10,28 +10,24 @@
  ******************************************************************************/
 package forestry.apiculture.genetics.alleles;
 
-import javax.annotation.Nonnull;
-
 import forestry.api.genetics.IAlleleFlowers;
 import forestry.api.genetics.IFlowerProvider;
 import forestry.core.genetics.alleles.AlleleCategorized;
 
 public class AlleleFlowers extends AlleleCategorized implements IAlleleFlowers {
-	@Nonnull
+
 	private final IFlowerProvider provider;
 
-	public AlleleFlowers(@Nonnull String modId, @Nonnull String category, @Nonnull String name, @Nonnull IFlowerProvider provider, boolean isDominant) {
+	public AlleleFlowers(String modId, String category, String name, IFlowerProvider provider, boolean isDominant) {
 		super(modId, category, name, isDominant);
 		this.provider = provider;
 	}
 
-	@Nonnull
 	@Override
 	public IFlowerProvider getProvider() {
 		return provider;
 	}
-
-	@Nonnull
+	
 	@Override
 	public String getName() {
 		return getProvider().getDescription();

@@ -7,7 +7,7 @@ package forestry.api.lepidopterology;
 
 import forestry.api.genetics.IBreedingTracker;
 
-public interface IButterflyTracker extends IBreedingTracker<ButterflyChromosome> {
+public interface ILepidopteristTracker extends IBreedingTracker {
 
 	void registerCatch(IButterfly butterfly);
 	

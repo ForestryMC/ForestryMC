@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.multiblock;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
@@ -289,7 +288,7 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	}
 
 	@Override
-	public void writeToNBT(@Nonnull NBTTagCompound data) {
+	public void writeToNBT(NBTTagCompound data) {
 		super.writeToNBT(data);
 
 		data.setFloat("TempChange", tempChange);

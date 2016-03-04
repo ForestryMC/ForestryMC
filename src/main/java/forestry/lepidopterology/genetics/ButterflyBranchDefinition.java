@@ -10,16 +10,13 @@
  ******************************************************************************/
 package forestry.lepidopterology.genetics;
 
-import com.google.common.collect.ImmutableMap;
-
-import java.util.EnumMap;
-import java.util.Map;
+import java.util.Arrays;
 
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleRegistry;
 import forestry.api.genetics.IClassification;
-import forestry.api.lepidopterology.ButterflyChromosome;
+import forestry.api.lepidopterology.EnumButterflyChromosome;
 import forestry.core.genetics.IBranchDefinition;
 import forestry.core.genetics.alleles.AlleleHelper;
 import forestry.core.genetics.alleles.EnumAllele;
@@ -50,7 +47,7 @@ public enum ButterflyBranchDefinition implements IBranchDefinition {
 	Siproeta,
 	Speyeria;
 
-	private static ImmutableMap<ButterflyChromosome, IAllele> defaultTemplate;
+	private static IAllele[] defaultTemplate;
 
 	private final IClassification branch;
 
@@ -59,26 +56,24 @@ public enum ButterflyBranchDefinition implements IBranchDefinition {
 	}
 
 	@Override
-	public Map<ButterflyChromosome, IAllele> getTemplate() {
+	public IAllele[] getTemplate() {
 		if (defaultTemplate == null) {
-			Map<ButterflyChromosome, IAllele> defaultTemplateBuilder = new EnumMap<>(ButterflyChromosome.class);
-			AlleleHelper.instance.set(defaultTemplateBuilder, ButterflyChromosome.SIZE, EnumAllele.Size.SMALL);
-			AlleleHelper.instance.set(defaultTemplateBuilder, ButterflyChromosome.SPEED, EnumAllele.Speed.SLOWEST);
-			AlleleHelper.instance.set(defaultTemplateBuilder, ButterflyChromosome.LIFESPAN, EnumAllele.Lifespan.SHORTER);
-			AlleleHelper.instance.set(defaultTemplateBuilder, ButterflyChromosome.METABOLISM, 3);
-			AlleleHelper.instance.set(defaultTemplateBuilder, ButterflyChromosome.FERTILITY, 3);
-			AlleleHelper.instance.set(defaultTemplateBuilder, ButterflyChromosome.TEMPERATURE_TOLERANCE, EnumAllele.Tolerance.NONE);
-			AlleleHelper.instance.set(defaultTemplateBuilder, ButterflyChromosome.HUMIDITY_TOLERANCE, EnumAllele.Tolerance.NONE);
-			AlleleHelper.instance.set(defaultTemplateBuilder, ButterflyChromosome.NOCTURNAL, false);
-			AlleleHelper.instance.set(defaultTemplateBuilder, ButterflyChromosome.TOLERANT_FLYER, false);
-			AlleleHelper.instance.set(defaultTemplateBuilder, ButterflyChromosome.FIRE_RESIST, false);
-			AlleleHelper.instance.set(defaultTemplateBuilder, ButterflyChromosome.FLOWER_PROVIDER, EnumAllele.Flowers.VANILLA);
-			AlleleHelper.instance.set(defaultTemplateBuilder, ButterflyChromosome.EFFECT, AlleleButterflyEffect.butterflyNone);
+			defaultTemplate = new IAllele[EnumButterflyChromosome.values().length];
 
-			defaultTemplate = ImmutableMap.copyOf(defaultTemplateBuilder);
+			AlleleHelper.instance.set(defaultTemplate, EnumButterflyChromosome.SIZE, EnumAllele.Size.SMALL);
+			AlleleHelper.instance.set(defaultTemplate, EnumButterflyChromosome.SPEED, EnumAllele.Speed.SLOWEST);
+			AlleleHelper.instance.set(defaultTemplate, EnumButterflyChromosome.LIFESPAN, EnumAllele.Lifespan.SHORTER);
+			AlleleHelper.instance.set(defaultTemplate, EnumButterflyChromosome.METABOLISM, 3);
+			AlleleHelper.instance.set(defaultTemplate, EnumButterflyChromosome.FERTILITY, 3);
+			AlleleHelper.instance.set(defaultTemplate, EnumButterflyChromosome.TEMPERATURE_TOLERANCE, EnumAllele.Tolerance.NONE);
+			AlleleHelper.instance.set(defaultTemplate, EnumButterflyChromosome.HUMIDITY_TOLERANCE, EnumAllele.Tolerance.NONE);
+			AlleleHelper.instance.set(defaultTemplate, EnumButterflyChromosome.NOCTURNAL, false);
+			AlleleHelper.instance.set(defaultTemplate, EnumButterflyChromosome.TOLERANT_FLYER, false);
+			AlleleHelper.instance.set(defaultTemplate, EnumButterflyChromosome.FIRE_RESIST, false);
+			AlleleHelper.instance.set(defaultTemplate, EnumButterflyChromosome.FLOWER_PROVIDER, EnumAllele.Flowers.VANILLA);
+			AlleleHelper.instance.set(defaultTemplate, EnumButterflyChromosome.EFFECT, AlleleButterflyEffect.butterflyNone);
 		}
-
-		return new EnumMap<>(defaultTemplate);
+		return Arrays.copyOf(defaultTemplate, defaultTemplate.length);
 	}
 
 	@Override

@@ -12,28 +12,28 @@ package forestry.lepidopterology.genetics;
 
 import net.minecraft.entity.player.EntityPlayer;
 
+import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IIndividual;
-import forestry.api.lepidopterology.ButterflyChromosome;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.IButterfly;
-import forestry.api.lepidopterology.IButterflyTracker;
+import forestry.api.lepidopterology.ILepidopteristTracker;
 import forestry.core.genetics.BreedingTracker;
 
-public class ButterflyTracker extends BreedingTracker<ButterflyChromosome> implements IButterflyTracker {
+public class LepidopteristTracker extends BreedingTracker implements ILepidopteristTracker {
 
 	/** Required for creation from map storage */
-	public ButterflyTracker(String s) {
+	public LepidopteristTracker(String s) {
 		super(s);
 	}
 
 	@Override
-	protected IButterflyTracker getBreedingTracker(EntityPlayer player) {
+	protected IBreedingTracker getBreedingTracker(EntityPlayer player) {
 		return ButterflyManager.butterflyRoot.getBreedingTracker(player.worldObj, player.getGameProfile());
 	}
 
 	@Override
 	protected String speciesRootUID() {
-		return ButterflyRoot.UID;
+		return ButterflyHelper.UID;
 	}
 
 	@Override

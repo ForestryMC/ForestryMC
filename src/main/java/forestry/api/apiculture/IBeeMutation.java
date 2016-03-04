@@ -5,13 +5,10 @@
  ******************************************************************************/
 package forestry.api.apiculture;
 
-import javax.annotation.Nonnull;
-
 import forestry.api.genetics.IMutation;
 
-public interface IBeeMutation extends IMutation<BeeChromosome> {
-
-	@Nonnull
+public interface IBeeMutation extends IMutation {
+	
 	@Override
 	IBeeRoot getRoot();
 	

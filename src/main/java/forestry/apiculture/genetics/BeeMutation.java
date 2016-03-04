@@ -10,57 +10,42 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import com.google.common.collect.ImmutableMap;
-
-import javax.annotation.Nonnull;
-
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
-import forestry.api.apiculture.BeeChromosome;
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeModifier;
-import forestry.api.apiculture.IBeeMutation;
-import forestry.api.apiculture.IBeeMutationBuilder;
+import forestry.api.apiculture.IBeeMutationCustom;
 import forestry.api.apiculture.IBeeRoot;
 import forestry.api.genetics.IAllele;
 import forestry.core.genetics.mutations.Mutation;
 
-public class BeeMutation extends Mutation<BeeChromosome> implements IBeeMutation, IBeeMutationBuilder {
+public class BeeMutation extends Mutation implements IBeeMutationCustom {
 
-	public BeeMutation(IAlleleBeeSpecies bee0, IAlleleBeeSpecies bee1, ImmutableMap<BeeChromosome, IAllele> result, int chance) {
+	public BeeMutation(IAlleleBeeSpecies bee0, IAlleleBeeSpecies bee1, IAllele[] result, int chance) {
 		super(bee0, bee1, result, chance);
 	}
 
-	// TODO: break this into a separate builder class
-	@Nonnull
-	@Override
-	public IBeeMutation build() {
-		BeeManager.beeRoot.registerMutation(this);
-		return this;
-	}
-
-	@Nonnull
 	@Override
 	public IBeeRoot getRoot() {
 		return BeeManager.beeRoot;
 	}
 
 	@Override
-	public float getChance(IBeeHousing housing, IAlleleBeeSpecies genome, IAlleleBeeSpecies mate, IBeeGenome genome0, IBeeGenome genome1) {
+	public float getChance(IBeeHousing housing, IAlleleBeeSpecies allele0, IAlleleBeeSpecies allele1, IBeeGenome genome0, IBeeGenome genome1) {
 		World world = housing.getWorld();
 		BlockPos housingPos = housing.getCoordinates();
 
-		float processedChance = super.getChance(world, housingPos, genome, mate, genome0, genome1);
+		float processedChance = super.getChance(world, housingPos, allele0, allele1, genome0, genome1);
 		if (processedChance <= 0) {
 			return 0;
 		}
 
 		IBeeModifier beeHousingModifier = BeeManager.beeRoot.createBeeHousingModifier(housing);
-		IBeeModifier beeModeModifier = BeeManager.beeRoot.getMode(world).getBeeModifier();
+		IBeeModifier beeModeModifier = BeeManager.beeRoot.getBeekeepingMode(world).getBeeModifier();
 
 		processedChance *= beeHousingModifier.getMutationModifier(genome0, genome1, processedChance);
 		processedChance *= beeModeModifier.getMutationModifier(genome0, genome1, processedChance);

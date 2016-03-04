@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -127,7 +126,7 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 	}
 
 	@Override
-	public void writeToNBT(@Nonnull NBTTagCompound nbttagcompound) {
+	public void writeToNBT(NBTTagCompound nbttagcompound) {
 		InventoryUtil.writeToNBT(craftMatrix, nbttagcompound);
 		nbttagcompound.setLong("LastUsed", lastUsed);
 		nbttagcompound.setBoolean("Locked", locked);

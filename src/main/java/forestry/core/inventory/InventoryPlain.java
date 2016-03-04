@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.core.inventory;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -136,7 +134,7 @@ public class InventoryPlain implements IInventory, INbtWritable, INbtReadable {
 	}
 
 	@Override
-	public void writeToNBT(@Nonnull NBTTagCompound nbttagcompound) {
+	public void writeToNBT(NBTTagCompound nbttagcompound) {
 		InventoryUtil.writeToNBT(this, nbttagcompound);
 	}
 

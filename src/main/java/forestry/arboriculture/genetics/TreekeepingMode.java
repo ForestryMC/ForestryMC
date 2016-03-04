@@ -10,16 +10,11 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import forestry.api.arboriculture.ITreeGenome;
-import forestry.api.arboriculture.ITreeModifier;
 import forestry.api.arboriculture.ITreekeepingMode;
-import forestry.api.arboriculture.TreeChromosome;
-import forestry.api.genetics.IGenome;
 
 public class TreekeepingMode implements ITreekeepingMode {
 
@@ -29,71 +24,54 @@ public class TreekeepingMode implements ITreekeepingMode {
 	public static final ITreekeepingMode hardcore = new TreekeepingMode("HARDCORE", 0.7f, 0.7f, 0.5f, 0.5f);
 	public static final ITreekeepingMode insane = new TreekeepingMode("INSANE", 0.5f, 0.5f, 0.2f, 0.1f);
 
-	@Nonnull
 	private final String name;
-	@Nonnull
-	private final ITreeModifier treeModifier;
+	private final float yieldModifier;
+	private final float sappinessModifier;
+	private final float maturationModifier;
 	private final float mutationModifier;
 
-	private TreekeepingMode(@Nonnull String name, float yieldModifier, float sappinessModifier, float maturationModifier, float mutationModifier) {
+	public TreekeepingMode(String name, float yieldModifier, float sappinessModifier, float maturationModifier, float mutationModifier) {
 		this.name = name;
-		this.treeModifier = new TreekeepingModifier(yieldModifier, sappinessModifier, maturationModifier);
+		this.yieldModifier = yieldModifier;
+		this.sappinessModifier = sappinessModifier;
+		this.maturationModifier = maturationModifier;
 		this.mutationModifier = mutationModifier;
 	}
 
-	@Nonnull
 	@Override
 	public String getName() {
 		return this.name;
 	}
 
 	@Override
-	public List<String> getDescription() {
+	public ArrayList<String> getDescription() {
 		ArrayList<String> ret = new ArrayList<>();
 		ret.add("treemode." + name.toLowerCase(Locale.ENGLISH) + ".desc");
 		return ret;
 	}
 
 	@Override
-	public float getMutationModifier(IGenome<TreeChromosome> genome, IGenome<TreeChromosome> mate) {
-		return mutationModifier;
+	public float getHeightModifier(ITreeGenome genome, float currentModifier) {
+		return 1f;
 	}
 
 	@Override
-	@Nonnull
-	public ITreeModifier getTreeModifier() {
-		return treeModifier;
+	public float getYieldModifier(ITreeGenome genome, float currentModifier) {
+		return yieldModifier;
 	}
 
-	private static class TreekeepingModifier implements ITreeModifier {
-		private final float yieldModifier;
-		private final float sappinessModifier;
-		private final float maturationModifier;
+	@Override
+	public float getSappinessModifier(ITreeGenome genome, float currentModifier) {
+		return sappinessModifier;
+	}
 
-		public TreekeepingModifier(float yieldModifier, float sappinessModifier, float maturationModifier) {
-			this.yieldModifier = yieldModifier;
-			this.sappinessModifier = sappinessModifier;
-			this.maturationModifier = maturationModifier;
-		}
+	@Override
+	public float getMaturationModifier(ITreeGenome genome, float currentModifier) {
+		return maturationModifier;
+	}
 
-		@Override
-		public float getHeightModifier(ITreeGenome genome, float currentModifier) {
-			return 1f;
-		}
-
-		@Override
-		public float getYieldModifier(ITreeGenome genome, float currentModifier) {
-			return yieldModifier;
-		}
-
-		@Override
-		public float getSappinessModifier(ITreeGenome genome, float currentModifier) {
-			return sappinessModifier;
-		}
-
-		@Override
-		public float getMaturationModifier(ITreeGenome genome, float currentModifier) {
-			return maturationModifier;
-		}
+	@Override
+	public float getMutationModifier(ITreeGenome genome, ITreeGenome mate, float currentModifier) {
+		return mutationModifier;
 	}
 }

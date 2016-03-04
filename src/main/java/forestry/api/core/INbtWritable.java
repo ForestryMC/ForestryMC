@@ -5,10 +5,8 @@
  ******************************************************************************/
 package forestry.api.core;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.nbt.NBTTagCompound;
 
 public interface INbtWritable {
-	void writeToNBT(@Nonnull NBTTagCompound nbt);
+	void writeToNBT(NBTTagCompound nbt);
 }

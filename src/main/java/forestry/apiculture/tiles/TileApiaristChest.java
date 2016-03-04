@@ -10,11 +10,10 @@
  ******************************************************************************/
 package forestry.apiculture.tiles;
 
-import forestry.api.apiculture.BeeChromosome;
 import forestry.api.apiculture.BeeManager;
 import forestry.core.tiles.TileNaturalistChest;
 
-public class TileApiaristChest extends TileNaturalistChest<BeeChromosome> {
+public class TileApiaristChest extends TileNaturalistChest {
 	public TileApiaristChest() {
 		super(BeeManager.beeRoot);
 	}

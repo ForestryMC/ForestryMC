@@ -11,7 +11,6 @@
 package forestry.core.genetics;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Random;
 
 import net.minecraft.nbt.NBTTagCompound;
@@ -19,13 +18,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IChromosome;
-import forestry.core.genetics.alleles.Allele;
 import forestry.core.utils.Log;
 
 public class Chromosome implements IChromosome {
 
-	private static final String UID0_TAG = "0";
-	private static final String UID1_TAG = "1";
+	private static final String UID0_TAG = "UID0";
+	private static final String UID1_TAG = "UID1";
 
 	@Nonnull
 	private final IAllele primary;
@@ -42,37 +40,32 @@ public class Chromosome implements IChromosome {
 		this.secondary = secondary;
 	}
 
-	@Nullable
-	public static Chromosome create(@Nonnull NBTTagCompound nbt) {
-		IAllele primary = AlleleManager.alleleRegistry.getAllele(nbt.getString(UID0_TAG));
-		IAllele secondary = AlleleManager.alleleRegistry.getAllele(nbt.getString(UID1_TAG));
-		if (primary == null || secondary == null) {
-			return null;
-		}
-		return new Chromosome(primary, secondary);
+	public Chromosome(@Nonnull NBTTagCompound nbt) {
+		primary = AlleleManager.alleleRegistry.getAllele(nbt.getString(UID0_TAG));
+		secondary = AlleleManager.alleleRegistry.getAllele(nbt.getString(UID1_TAG));
 	}
 
 	@Override
-	public void writeToNBT(@Nonnull NBTTagCompound nbttagcompound) {
+	public void writeToNBT(NBTTagCompound nbttagcompound) {
 		nbttagcompound.setString(UID0_TAG, primary.getUID());
 		nbttagcompound.setString(UID1_TAG, secondary.getUID());
 	}
 
-	@Nonnull
 	@Override
 	public IAllele getPrimaryAllele() {
 		return primary;
 	}
 
-	@Nonnull
 	@Override
 	public IAllele getSecondaryAllele() {
 		return secondary;
 	}
 
-	@Nonnull
 	@Override
 	public IAllele getActiveAllele() {
+		if (primary == null || secondary == null) {
+			return null;
+		}
 		if (primary.isDominant()) {
 			return primary;
 		}
@@ -83,7 +76,6 @@ public class Chromosome implements IChromosome {
 		return primary;
 	}
 
-	@Nonnull
 	@Override
 	public IAllele getInactiveAllele() {
 		if (!secondary.isDominant()) {
@@ -150,24 +142,6 @@ public class Chromosome implements IChromosome {
 		} else {
 			return new Chromosome(choice2, choice1);
 		}
-	}
-
-	public static boolean equals(@Nullable IChromosome chromosome1, @Nullable IChromosome chromosome2) {
-		if (chromosome1 == chromosome2) {
-			return true;
-		}
-		if (chromosome1 == null || chromosome2 == null) {
-			return false;
-		}
-
-		if (!Allele.equals(chromosome1.getPrimaryAllele(), chromosome2.getPrimaryAllele())) {
-			return false;
-		}
-		if (!Allele.equals(chromosome1.getSecondaryAllele(), chromosome2.getSecondaryAllele())) {
-			return false;
-		}
-
-		return true;
 	}
 
 	@Override

@@ -18,7 +18,7 @@ import forestry.api.genetics.IAlleleProperty;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IFruitFamily;
 
-public interface IAlleleTreeSpecies extends IAlleleSpecies<TreeChromosome>, IAlleleProperty<IAlleleTreeSpecies> {
+public interface IAlleleTreeSpecies extends IAlleleSpecies, IAlleleProperty<IAlleleTreeSpecies> {
 
 	@Override
 	ITreeRoot getRoot();

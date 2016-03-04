@@ -7,7 +7,7 @@ package forestry.api.genetics;
 
 import net.minecraft.world.World;
 
-public interface IIndividualLiving<C extends IChromosomeType> extends IIndividual<C> {
+public interface IIndividualLiving extends IIndividual {
 
 	/**
 	 * @return Genetic information of the mate, null if unmated.

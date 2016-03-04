@@ -15,7 +15,7 @@ import forestry.api.apiculture.IBeekeepingMode;
  *
  * @author SirSengir
  */
-public interface IBreedingTracker<C extends IChromosomeType> {
+public interface IBreedingTracker {
 
 	/**
 	 * @return Name of the current {@link IBeekeepingMode}.
@@ -37,28 +37,28 @@ public interface IBreedingTracker<C extends IChromosomeType> {
 	 *
 	 * @param individual
 	 */
-	void registerBirth(IIndividual<C> individual);
+	void registerBirth(IIndividual individual);
 
 	/**
 	 * Register the pickup of an individual.
 	 *
 	 * @param individual
 	 */
-	void registerPickup(IIndividual<C> individual);
+	void registerPickup(IIndividual individual);
 	
 	/**
 	 * Marks a species as discovered. Should only be called from registerIndividual normally.
 	 *
 	 * @param species
 	 */
-	void registerSpecies(IAlleleSpecies<C> species);
+	void registerSpecies(IAlleleSpecies species);
 
 	/**
 	 * Register a successful mutation. Will mark it as discovered.
 	 *
 	 * @param mutation
 	 */
-	void registerMutation(IMutation<C> mutation);
+	void registerMutation(IMutation mutation);
 
 	/**
 	 * Queries the tracker for discovered species.
@@ -67,7 +67,7 @@ public interface IBreedingTracker<C extends IChromosomeType> {
 	 *            Mutation to query for.
 	 * @return true if the mutation has been discovered.
 	 */
-	boolean isDiscovered(IMutation<C> mutation);
+	boolean isDiscovered(IMutation mutation);
 
 	/**
 	 * Queries the tracker for discovered species.
@@ -76,7 +76,7 @@ public interface IBreedingTracker<C extends IChromosomeType> {
 	 *            Species to check.
 	 * @return true if the species has been bred.
 	 */
-	boolean isDiscovered(IAlleleSpecies<C> species);
+	boolean isDiscovered(IAlleleSpecies species);
 
 	/**
 	 * Register a successfully researched mutation.
@@ -84,12 +84,12 @@ public interface IBreedingTracker<C extends IChromosomeType> {
 	 * Researched mutations may have bonuses such as occurring at a higher rate.
 	 * Researched mutations count as discovered.
 	 */
-	void researchMutation(IMutation<C> mutation);
+	void researchMutation(IMutation mutation);
 
 	/**
 	 * @return true if the mutation has been researched.
 	 */
-	boolean isResearched(IMutation<C> mutation);
+	boolean isResearched(IMutation mutation);
 
 	/**
 	 * Synchronizes the tracker to the client side.

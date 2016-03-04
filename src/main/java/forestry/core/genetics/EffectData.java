@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.core.genetics;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.nbt.NBTTagCompound;
 
 import forestry.api.genetics.IEffectData;
@@ -66,6 +64,6 @@ public class EffectData implements IEffectData {
 	}
 
 	@Override
-	public void writeToNBT(@Nonnull NBTTagCompound nbttagcompound) {
+	public void writeToNBT(NBTTagCompound nbttagcompound) {
 	}
 }

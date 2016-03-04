@@ -4,7 +4,7 @@ import java.util.EnumSet;
 
 import net.minecraftforge.common.EnumPlantType;
 
-import forestry.api.arboriculture.ITree;
+import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IPollinatable;
 
 public class FakePollinatable implements IPollinatable {
@@ -21,17 +21,17 @@ public class FakePollinatable implements IPollinatable {
 	}
 
 	@Override
-	public ITree getPollen() {
+	public IIndividual getPollen() {
 		return checkPollinatable.getPollen();
 	}
 
 	@Override
-	public boolean canMateWith(ITree pollen) {
+	public boolean canMateWith(IIndividual pollen) {
 		return checkPollinatable.canMateWith(pollen);
 	}
 
 	@Override
-	public void mateWith(ITree pollen) {
+	public void mateWith(IIndividual pollen) {
 
 	}
 

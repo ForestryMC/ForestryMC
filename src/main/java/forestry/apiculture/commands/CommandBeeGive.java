@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.commands;
 
-import com.google.common.collect.ImmutableMap;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -22,7 +20,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 
-import forestry.api.apiculture.BeeChromosome;
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IAlleleBeeSpecies;
@@ -132,7 +129,7 @@ public class CommandBeeGive extends SubCommand {
 			throw new SpeciesNotFoundException(speciesName);
 		}
 
-		ImmutableMap<BeeChromosome, IAllele> template = BeeManager.beeRoot.getTemplate(species.getUID());
+		IAllele[] template = BeeManager.beeRoot.getTemplate(species.getUID());
 
 		if (template == null) {
 			throw new TemplateNotFoundException(species);

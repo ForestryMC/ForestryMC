@@ -15,13 +15,12 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
-import forestry.api.apiculture.BeeChromosome;
 import forestry.api.apiculture.BeeManager;
 import forestry.core.config.Config;
 import forestry.core.gui.IHintSource;
 import forestry.core.inventory.ItemInventoryAlyzer;
 
-public class ItemInventoryBeealyzer extends ItemInventoryAlyzer<BeeChromosome> implements IHintSource {
+public class ItemInventoryBeealyzer extends ItemInventoryAlyzer implements IHintSource {
 
 	public ItemInventoryBeealyzer(EntityPlayer player, ItemStack itemStack) {
 		super(BeeManager.beeRoot, player, itemStack);

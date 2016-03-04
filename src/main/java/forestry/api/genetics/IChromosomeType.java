@@ -5,25 +5,20 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
-import javax.annotation.Nonnull;
-
 /*
  * Interface to be implemented by the enums representing the various chromosomes
  */
-public interface IChromosomeType<C extends IChromosomeType<C>> {
+public interface IChromosomeType {
 
 	/*
 	 * Get class which all alleles on this chromosome must interface
 	 */
-	@Nonnull
 	Class<? extends IAllele> getAlleleClass();
 
-	@Nonnull
 	String getName();
 
-	@Nonnull
-	ISpeciesRoot<C> getSpeciesRoot();
+	ISpeciesRoot getSpeciesRoot();
 
-	byte getUid();
+	int ordinal();
 
 }

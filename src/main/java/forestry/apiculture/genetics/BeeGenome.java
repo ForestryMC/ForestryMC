@@ -13,7 +13,6 @@ package forestry.apiculture.genetics;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import com.google.common.collect.ImmutableMap;
 
 import javax.annotation.Nonnull;
 import java.util.concurrent.TimeUnit;
@@ -21,12 +20,11 @@ import java.util.concurrent.TimeUnit;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-import forestry.api.apiculture.BeeChromosome;
 import forestry.api.apiculture.BeeManager;
+import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.IAlleleBeeEffect;
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IBeeGenome;
-import forestry.api.apiculture.IBeeRoot;
 import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IAlleleFloat;
 import forestry.api.genetics.IAlleleFlowers;
@@ -34,13 +32,14 @@ import forestry.api.genetics.IAlleleInteger;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IFlowerProvider;
+import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.genetics.Genome;
 import forestry.core.genetics.alleles.AlleleArea;
 import forestry.core.genetics.alleles.AlleleBoolean;
 import forestry.core.genetics.alleles.AlleleTolerance;
 import forestry.core.utils.vect.Vect;
 
-public class BeeGenome extends Genome<BeeChromosome> implements IBeeGenome {
+public class BeeGenome extends Genome implements IBeeGenome {
 	/**
 	 * 0 - Species (determines product)
 	 * 1 - Speed
@@ -77,11 +76,11 @@ public class BeeGenome extends Genome<BeeChromosome> implements IBeeGenome {
 	}
 
 	/* CONSTRUCTOR */
-	private BeeGenome(@Nonnull NBTTagCompound nbttagcompound) {
+	private BeeGenome(NBTTagCompound nbttagcompound) {
 		super(nbttagcompound);
 	}
 
-	public BeeGenome(@Nonnull ImmutableMap<BeeChromosome, IChromosome> chromosomes) {
+	public BeeGenome(IChromosome[] chromosomes) {
 		super(chromosomes);
 	}
 
@@ -96,90 +95,83 @@ public class BeeGenome extends Genome<BeeChromosome> implements IBeeGenome {
 			return (IAlleleBeeSpecies) species;
 		}
 
-		return (IAlleleBeeSpecies) getActiveAllele(itemStack, BeeChromosome.SPECIES, BeeManager.beeRoot);
+		return (IAlleleBeeSpecies) getActiveAllele(itemStack, EnumBeeChromosome.SPECIES, BeeManager.beeRoot);
 	}
 
 	// / INFORMATION RETRIEVAL
-	@Nonnull
 	@Override
 	public IAlleleBeeSpecies getPrimary() {
-		return (IAlleleBeeSpecies) getActiveAllele(BeeChromosome.SPECIES);
+		return (IAlleleBeeSpecies) getActiveAllele(EnumBeeChromosome.SPECIES);
 	}
 
-	@Nonnull
 	@Override
 	public IAlleleBeeSpecies getSecondary() {
-		return (IAlleleBeeSpecies) getInactiveAllele(BeeChromosome.SPECIES);
+		return (IAlleleBeeSpecies) getInactiveAllele(EnumBeeChromosome.SPECIES);
 	}
 
 	@Override
 	public float getSpeed() {
-		return ((IAlleleFloat) getActiveAllele(BeeChromosome.SPEED)).getValue();
+		return ((IAlleleFloat) getActiveAllele(EnumBeeChromosome.SPEED)).getValue();
 	}
 
 	@Override
 	public int getLifespan() {
-		return ((IAlleleInteger) getActiveAllele(BeeChromosome.LIFESPAN)).getValue();
+		return ((IAlleleInteger) getActiveAllele(EnumBeeChromosome.LIFESPAN)).getValue();
 	}
 
 	@Override
 	public int getFertility() {
-		return ((IAlleleInteger) getActiveAllele(BeeChromosome.FERTILITY)).getValue();
+		return ((IAlleleInteger) getActiveAllele(EnumBeeChromosome.FERTILITY)).getValue();
 	}
 
-	@Nonnull
 	@Override
 	public EnumTolerance getToleranceTemp() {
-		return ((AlleleTolerance) getActiveAllele(BeeChromosome.TEMPERATURE_TOLERANCE)).getValue();
+		return ((AlleleTolerance) getActiveAllele(EnumBeeChromosome.TEMPERATURE_TOLERANCE)).getValue();
 	}
 
 	@Override
 	public boolean getNocturnal() {
-		return ((AlleleBoolean) getActiveAllele(BeeChromosome.NEVER_SLEEPS)).getValue();
+		return ((AlleleBoolean) getActiveAllele(EnumBeeChromosome.NEVER_SLEEPS)).getValue();
 	}
 
-	@Nonnull
 	@Override
 	public EnumTolerance getToleranceHumid() {
-		return ((AlleleTolerance) getActiveAllele(BeeChromosome.HUMIDITY_TOLERANCE)).getValue();
+		return ((AlleleTolerance) getActiveAllele(EnumBeeChromosome.HUMIDITY_TOLERANCE)).getValue();
 	}
 
 	@Override
 	public boolean getTolerantFlyer() {
-		return ((AlleleBoolean) getActiveAllele(BeeChromosome.TOLERANT_FLYER)).getValue();
+		return ((AlleleBoolean) getActiveAllele(EnumBeeChromosome.TOLERANT_FLYER)).getValue();
 	}
 
 	@Override
 	public boolean getCaveDwelling() {
-		return ((AlleleBoolean) getActiveAllele(BeeChromosome.CAVE_DWELLING)).getValue();
+		return ((AlleleBoolean) getActiveAllele(EnumBeeChromosome.CAVE_DWELLING)).getValue();
 	}
 
-	@Nonnull
 	@Override
 	public IFlowerProvider getFlowerProvider() {
-		return ((IAlleleFlowers) getActiveAllele(BeeChromosome.FLOWER_PROVIDER)).getProvider();
+		return ((IAlleleFlowers) getActiveAllele(EnumBeeChromosome.FLOWER_PROVIDER)).getProvider();
 	}
 
 	@Override
 	public int getFlowering() {
-		return ((IAlleleInteger) getActiveAllele(BeeChromosome.FLOWERING)).getValue();
+		return ((IAlleleInteger) getActiveAllele(EnumBeeChromosome.FLOWERING)).getValue();
 	}
 
 	@Override
 	public int[] getTerritory() {
-		Vect area = ((AlleleArea) getActiveAllele(BeeChromosome.TERRITORY)).getArea();
+		Vect area = ((AlleleArea) getActiveAllele(EnumBeeChromosome.TERRITORY)).getArea();
 		return area.toArray();
 	}
 
-	@Nonnull
 	@Override
 	public IAlleleBeeEffect getEffect() {
-		return (IAlleleBeeEffect) getActiveAllele(BeeChromosome.EFFECT);
+		return (IAlleleBeeEffect) getActiveAllele(EnumBeeChromosome.EFFECT);
 	}
 
-	@Nonnull
 	@Override
-	public IBeeRoot getSpeciesRoot() {
+	public ISpeciesRoot getSpeciesRoot() {
 		return BeeManager.beeRoot;
 	}
 }

@@ -16,7 +16,6 @@ import net.minecraft.world.World;
 import com.mojang.authlib.GameProfile;
 
 import forestry.api.arboriculture.ITreeModifier;
-import forestry.api.arboriculture.ITreekeepingMode;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.world.ITreeGenData;
 
@@ -100,15 +99,13 @@ public abstract class WorldGenTree extends WorldGenArboriculture {
 	}
 
 	protected int modifyByHeight(World world, int val, int min, int max) {
-		ITreekeepingMode mode = TreeManager.treeRoot.getMode(world);
-		ITreeModifier treeModifier = mode.getTreeModifier();
+		ITreeModifier treeModifier = TreeManager.treeRoot.getTreekeepingMode(world);
 		int determined = Math.round(val * tree.getHeightModifier() * treeModifier.getHeightModifier(tree.getGenome(), 1f));
 		return determined < min ? min : determined > max ? max : determined;
 	}
 
 	private int determineHeight(World world, int required, int variation) {
-		ITreekeepingMode mode = TreeManager.treeRoot.getMode(world);
-		ITreeModifier treeModifier = mode.getTreeModifier();
+		ITreeModifier treeModifier = TreeManager.treeRoot.getTreekeepingMode(world);
 		int baseHeight = required + world.rand.nextInt(variation);
 		int height = Math.round(baseHeight * tree.getHeightModifier() * treeModifier.getHeightModifier(tree.getGenome(), 1f));
 		return height < minHeight ? minHeight : height > maxHeight ? maxHeight : height;

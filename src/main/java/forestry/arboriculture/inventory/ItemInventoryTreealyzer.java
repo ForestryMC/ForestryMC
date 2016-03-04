@@ -15,14 +15,13 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
-import forestry.api.arboriculture.TreeChromosome;
 import forestry.api.arboriculture.TreeManager;
 import forestry.core.config.Config;
 import forestry.core.gui.IHintSource;
 import forestry.core.inventory.ItemInventoryAlyzer;
 import forestry.core.utils.GeneticsUtil;
 
-public class ItemInventoryTreealyzer extends ItemInventoryAlyzer<TreeChromosome> implements IHintSource {
+public class ItemInventoryTreealyzer extends ItemInventoryAlyzer implements IHintSource {
 
 	public ItemInventoryTreealyzer(EntityPlayer player, ItemStack itemStack) {
 		super(TreeManager.treeRoot, player, itemStack);

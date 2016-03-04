@@ -10,20 +10,17 @@
  ******************************************************************************/
 package forestry.arboriculture.tiles;
 
-import com.google.common.collect.ImmutableMap;
-
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.EnumMap;
 import java.util.EnumSet;
-import java.util.Map;
 
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
@@ -33,21 +30,21 @@ import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.ILeafSpriteProvider;
 import forestry.api.arboriculture.ILeafTickHandler;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.ITreeGenome;
-import forestry.api.arboriculture.ITreeModifier;
 import forestry.api.arboriculture.ITreekeepingMode;
-import forestry.api.arboriculture.TreeChromosome;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IEffectData;
 import forestry.api.genetics.IFruitBearer;
 import forestry.api.genetics.IFruitFamily;
+import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IPollinatable;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.IButterfly;
@@ -66,7 +63,6 @@ import forestry.core.render.TextureManager;
 import forestry.core.utils.ColourUtil;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.Log;
-import forestry.core.utils.PlayerUtil;
 
 public class TileLeaves extends TileTreeContainer implements IPollinatable, IFruitBearer, IButterflyNursery, IRipeningPacketReceiver {
 
@@ -104,12 +100,12 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 			isDecorative = true;
 
 			String speciesUID = nbttagcompound.getString("species");
-			ImmutableMap<TreeChromosome, IAllele> treeTemplate = TreeManager.treeRoot.getTemplate(speciesUID);
+			IAllele[] treeTemplate = TreeManager.treeRoot.getTemplate(speciesUID);
 			ITree containedTree = TreeManager.treeRoot.templateAsIndividual(treeTemplate);
 			setTree(containedTree);
 		} else {
 			if (nbttagcompound.hasKey("owner")) {
-				setOwner(PlayerUtil.readGameProfileFromNBT(nbttagcompound.getCompoundTag("owner")));
+				setOwner(NBTUtil.readGameProfileFromNBT(nbttagcompound.getCompoundTag("owner")));
 			}
 
 			ripeningTime = nbttagcompound.getShort("RT");
@@ -153,7 +149,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 			GameProfile owner = getOwner();
 			if (owner != null) {
 				NBTTagCompound nbt = new NBTTagCompound();
-				PlayerUtil.writeGameProfile(nbt, owner);
+				NBTUtil.writeGameProfile(nbt, owner);
 				nbtTagCompound.setTag("owner", nbt);
 			}
 
@@ -195,9 +191,8 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		}
 
 		if (hasFruit() && getRipeningTime() < ripeningPeriod) {
-			ITreekeepingMode treekeepingMode = TreeManager.treeRoot.getMode(worldObj);
-			ITreeModifier treeModifier = treekeepingMode.getTreeModifier();
-			float sappinessModifier = treeModifier.getSappinessModifier(genome, 1f);
+			ITreekeepingMode treekeepingMode = TreeManager.treeRoot.getTreekeepingMode(worldObj);
+			float sappinessModifier = treekeepingMode.getSappinessModifier(genome, 1f);
 			float sappiness = genome.getSappiness() * sappinessModifier;
 
 			if (worldObj.rand.nextFloat() < sappiness) {
@@ -330,7 +325,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	}
 
 	@Override
-	public boolean canMateWith(ITree individual) {
+	public boolean canMateWith(IIndividual individual) {
 		if (getTree() == null || isDecorative) {
 			return false;
 		}
@@ -345,17 +340,17 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	}
 
 	@Override
-	public void mateWith(ITree individual) {
+	public void mateWith(IIndividual individual) {
 		if (getTree() == null || isDecorative) {
 			return;
 		}
 
-		getTree().mate(individual);
+		getTree().mate((ITree) individual);
 		worldObj.markBlockForUpdate(getPos());
 	}
 
 	@Override
-	public ITree getPollen() {
+	public IIndividual getPollen() {
 		if (isDecorative) {
 			return null;
 		}
@@ -407,7 +402,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		data.writeByte(leafState);
 
 		if (hasFruit) {
-			String fruitAlleleUID = getTree().getGenome().getActiveAllele(TreeChromosome.FRUITS).getUID();
+			String fruitAlleleUID = getTree().getGenome().getActiveAllele(EnumTreeChromosome.FRUITS).getUID();
 			int colourFruits = getFruitColour();
 
 			data.writeUTF(fruitAlleleUID);
@@ -430,17 +425,16 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 			colourFruits = data.readInt();
 		}
 
-		ImmutableMap<TreeChromosome, IAllele> treeTemplate = TreeManager.treeRoot.getTemplate(speciesUID);
-		if (treeTemplate != null) {
-			if (fruitAlleleUID != null) {
-				IAllele fruitAllele = AlleleManager.alleleRegistry.getAllele(fruitAlleleUID);
-				if (fruitAllele != null) {
-					Map<TreeChromosome, IAllele> mutableTreeTemplate = new EnumMap<>(treeTemplate);
-					mutableTreeTemplate.put(TreeChromosome.FRUITS, fruitAllele);
-					treeTemplate = ImmutableMap.copyOf(mutableTreeTemplate);
-				}
-			}
+		IAllele[] treeTemplate = TreeManager.treeRoot.getTemplate(speciesUID);
 
+		if (fruitAlleleUID != null) {
+			IAllele fruitAllele = AlleleManager.alleleRegistry.getAllele(fruitAlleleUID);
+			if (fruitAllele != null) {
+				treeTemplate[EnumTreeChromosome.FRUITS.ordinal()] = fruitAllele;
+			}
+		}
+
+		if (treeTemplate != null) {
 			ITree tree = TreeManager.treeRoot.templateAsIndividual(treeTemplate);
 			if (isPollinatedState) {
 				tree.mate(tree);
@@ -562,7 +556,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	}
 
 	@Override
-	public ITree getNanny() {
+	public IIndividual getNanny() {
 		return getTree();
 	}
 

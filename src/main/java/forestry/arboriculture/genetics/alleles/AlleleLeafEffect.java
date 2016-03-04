@@ -14,9 +14,9 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
+import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleLeafEffect;
 import forestry.api.arboriculture.ITreeGenome;
-import forestry.api.arboriculture.TreeChromosome;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IEffectData;
 import forestry.core.genetics.alleles.Allele;
@@ -30,7 +30,7 @@ public class AlleleLeafEffect extends AlleleCategorized implements IAlleleLeafEf
 
 	public static void createAlleles() {
 		leavesNone = new AlleleLeafEffectNone();
-		AlleleManager.alleleRegistry.registerAllele(leavesNone, TreeChromosome.EFFECT);
+		AlleleManager.alleleRegistry.registerAllele(leavesNone, EnumTreeChromosome.EFFECT);
 	}
 
 	protected AlleleLeafEffect(String valueName, boolean isDominant) {

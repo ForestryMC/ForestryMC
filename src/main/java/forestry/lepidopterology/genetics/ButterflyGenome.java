@@ -10,10 +10,6 @@
  ******************************************************************************/
 package forestry.lepidopterology.genetics;
 
-import com.google.common.collect.ImmutableMap;
-
-import javax.annotation.Nonnull;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -24,24 +20,24 @@ import forestry.api.genetics.IAlleleInteger;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IFlowerProvider;
-import forestry.api.lepidopterology.ButterflyChromosome;
+import forestry.api.genetics.ISpeciesRoot;
 import forestry.api.lepidopterology.ButterflyManager;
+import forestry.api.lepidopterology.EnumButterflyChromosome;
 import forestry.api.lepidopterology.IAlleleButterflyEffect;
 import forestry.api.lepidopterology.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.IButterflyGenome;
-import forestry.api.lepidopterology.IButterflyRoot;
 import forestry.core.genetics.Genome;
 import forestry.core.genetics.alleles.AlleleBoolean;
 import forestry.core.genetics.alleles.AlleleTolerance;
 
-public class ButterflyGenome extends Genome<ButterflyChromosome> implements IButterflyGenome {
+public class ButterflyGenome extends Genome implements IButterflyGenome {
 
 	/* CONSTRUCTOR */
 	public ButterflyGenome(NBTTagCompound nbttagcompound) {
 		super(nbttagcompound);
 	}
 
-	public ButterflyGenome(ImmutableMap<ButterflyChromosome, IChromosome> chromosomes) {
+	public ButterflyGenome(IChromosome[] chromosomes) {
 		super(chromosomes);
 	}
 
@@ -56,85 +52,82 @@ public class ButterflyGenome extends Genome<ButterflyChromosome> implements IBut
 			return (IAlleleButterflySpecies) species;
 		}
 
-		return (IAlleleButterflySpecies) getActiveAllele(itemStack, ButterflyChromosome.SPECIES, ButterflyManager.butterflyRoot);
+		return (IAlleleButterflySpecies) getActiveAllele(itemStack, EnumButterflyChromosome.SPECIES, ButterflyManager.butterflyRoot);
 	}
 
 	/* SPECIES */
-	@Nonnull
 	@Override
 	public IAlleleButterflySpecies getPrimary() {
-		return (IAlleleButterflySpecies) getActiveAllele(ButterflyChromosome.SPECIES);
+		return (IAlleleButterflySpecies) getActiveAllele(EnumButterflyChromosome.SPECIES);
 	}
 
-	@Nonnull
 	@Override
 	public IAlleleButterflySpecies getSecondary() {
-		return (IAlleleButterflySpecies) getInactiveAllele(ButterflyChromosome.SPECIES);
+		return (IAlleleButterflySpecies) getInactiveAllele(EnumButterflyChromosome.SPECIES);
 	}
 
 	@Override
 	public float getSize() {
-		return ((IAlleleFloat) getActiveAllele(ButterflyChromosome.SIZE)).getValue();
+		return ((IAlleleFloat) getActiveAllele(EnumButterflyChromosome.SIZE)).getValue();
 	}
 	
 	@Override
 	public int getLifespan() {
-		return ((IAlleleInteger) getActiveAllele(ButterflyChromosome.LIFESPAN)).getValue();
+		return ((IAlleleInteger) getActiveAllele(EnumButterflyChromosome.LIFESPAN)).getValue();
 	}
 	
 	@Override
 	public float getSpeed() {
-		return ((IAlleleFloat) getActiveAllele(ButterflyChromosome.SPEED)).getValue();
+		return ((IAlleleFloat) getActiveAllele(EnumButterflyChromosome.SPEED)).getValue();
 	}
 
 	@Override
 	public int getMetabolism() {
-		return ((IAlleleInteger) getActiveAllele(ButterflyChromosome.METABOLISM)).getValue();
+		return ((IAlleleInteger) getActiveAllele(EnumButterflyChromosome.METABOLISM)).getValue();
 	}
 
 	@Override
 	public int getFertility() {
-		return ((IAlleleInteger) getActiveAllele(ButterflyChromosome.FERTILITY)).getValue();
+		return ((IAlleleInteger) getActiveAllele(EnumButterflyChromosome.FERTILITY)).getValue();
 	}
 
 	@Override
 	public EnumTolerance getToleranceTemp() {
-		return ((AlleleTolerance) getActiveAllele(ButterflyChromosome.TEMPERATURE_TOLERANCE)).getValue();
+		return ((AlleleTolerance) getActiveAllele(EnumButterflyChromosome.TEMPERATURE_TOLERANCE)).getValue();
 	}
 
 	@Override
 	public EnumTolerance getToleranceHumid() {
-		return ((AlleleTolerance) getActiveAllele(ButterflyChromosome.HUMIDITY_TOLERANCE)).getValue();
+		return ((AlleleTolerance) getActiveAllele(EnumButterflyChromosome.HUMIDITY_TOLERANCE)).getValue();
 	}
 
 	@Override
-	public boolean getNeverSleeps() {
-		return ((AlleleBoolean) getActiveAllele(ButterflyChromosome.NOCTURNAL)).getValue();
+	public boolean getNocturnal() {
+		return ((AlleleBoolean) getActiveAllele(EnumButterflyChromosome.NOCTURNAL)).getValue();
 	}
 
 	@Override
 	public boolean getTolerantFlyer() {
-		return ((AlleleBoolean) getActiveAllele(ButterflyChromosome.TOLERANT_FLYER)).getValue();
+		return ((AlleleBoolean) getActiveAllele(EnumButterflyChromosome.TOLERANT_FLYER)).getValue();
 	}
 
 	@Override
 	public boolean getFireResist() {
-		return ((AlleleBoolean) getActiveAllele(ButterflyChromosome.FIRE_RESIST)).getValue();
+		return ((AlleleBoolean) getActiveAllele(EnumButterflyChromosome.FIRE_RESIST)).getValue();
 	}
 
 	@Override
 	public IFlowerProvider getFlowerProvider() {
-		return ((IAlleleFlowers) getActiveAllele(ButterflyChromosome.FLOWER_PROVIDER)).getProvider();
+		return ((IAlleleFlowers) getActiveAllele(EnumButterflyChromosome.FLOWER_PROVIDER)).getProvider();
 	}
 
 	@Override
 	public IAlleleButterflyEffect getEffect() {
-		return (IAlleleButterflyEffect) getActiveAllele(ButterflyChromosome.EFFECT);
+		return (IAlleleButterflyEffect) getActiveAllele(EnumButterflyChromosome.EFFECT);
 	}
 
-	@Nonnull
 	@Override
-	public IButterflyRoot getSpeciesRoot() {
+	public ISpeciesRoot getSpeciesRoot() {
 		return ButterflyManager.butterflyRoot;
 	}
 

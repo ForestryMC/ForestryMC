@@ -5,8 +5,6 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
-import java.util.Collection;
-
 /**
  * Biological classifications from domain down to genus.
  *
@@ -76,7 +74,7 @@ public interface IClassification {
 	/**
 	 * @return Member groups of this one.
 	 */
-	Collection<IClassification> getMemberGroups();
+	IClassification[] getMemberGroups();
 
 	/**
 	 * Adds subgroups to this group.
@@ -86,14 +84,14 @@ public interface IClassification {
 	/**
 	 * @return Member species of this group.
 	 */
-	Collection<IAlleleSpecies<?>> getMemberSpecies();
+	IAlleleSpecies[] getMemberSpecies();
 
 	/**
 	 * Used by the allele registry to populate internal collection of branch members on the fly.
 	 *
 	 * @param species
 	 */
-	void addMemberSpecies(IAlleleSpecies<?> species);
+	void addMemberSpecies(IAlleleSpecies species);
 
 	/**
 	 * @return Parent classification, null if this is root.

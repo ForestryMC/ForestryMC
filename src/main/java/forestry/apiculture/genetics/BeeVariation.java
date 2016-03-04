@@ -1,15 +1,9 @@
 package forestry.apiculture.genetics;
 
-import com.google.common.collect.ImmutableMap;
-
-import javax.annotation.Nonnull;
-import java.util.EnumMap;
-import java.util.Map;
-
 import net.minecraft.item.ItemStack;
 
-import forestry.api.apiculture.BeeChromosome;
 import forestry.api.apiculture.BeeManager;
+import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IBeeGenome;
@@ -18,20 +12,19 @@ import forestry.core.genetics.alleles.AlleleHelper;
 
 public abstract class BeeVariation implements IBeeDefinition {
 
-	private final ImmutableMap<BeeChromosome, IAllele> template;
+	private final IAllele[] template;
 	private final IBeeGenome genome;
 
-	private BeeVariation(IBeeDefinition bee) {
-		Map<BeeChromosome, IAllele> templateBuilder = new EnumMap<>(bee.getTemplate());
-		initializeTemplate(templateBuilder);
-		template = ImmutableMap.copyOf(templateBuilder);
+	protected BeeVariation(IBeeDefinition bee) {
+		template = bee.getTemplate();
+		initializeTemplate(template);
 		genome = BeeManager.beeRoot.templateAsGenome(template);
 	}
 
-	protected abstract void initializeTemplate(@Nonnull Map<BeeChromosome, IAllele> template);
+	protected abstract void initializeTemplate(IAllele[] template);
 
 	@Override
-	public ImmutableMap<BeeChromosome, IAllele> getTemplate() {
+	public IAllele[] getTemplate() {
 		return template;
 	}
 
@@ -57,8 +50,8 @@ public abstract class BeeVariation implements IBeeDefinition {
 		}
 
 		@Override
-		protected void initializeTemplate(@Nonnull Map<BeeChromosome, IAllele> template) {
-			AlleleHelper.instance.set(template, BeeChromosome.TOLERANT_FLYER, true);
+		protected void initializeTemplate(IAllele[] template) {
+			AlleleHelper.instance.set(template, EnumBeeChromosome.TOLERANT_FLYER, true);
 		}
 	}
 }

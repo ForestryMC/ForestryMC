@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.lepidopterology.entities;
 
-import com.google.common.collect.ImmutableMap;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockFlower;
@@ -40,21 +38,20 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.arboriculture.EnumGermlingType;
-import forestry.api.arboriculture.ITree;
-import forestry.api.arboriculture.ITreeRoot;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.IToolScoop;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
-import forestry.api.lepidopterology.ButterflyChromosome;
+import forestry.api.genetics.IIndividual;
+import forestry.api.genetics.ISpeciesRoot;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.api.lepidopterology.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IButterflyGenome;
 import forestry.api.lepidopterology.IButterflyRoot;
-import forestry.api.lepidopterology.IButterflyTracker;
 import forestry.api.lepidopterology.IEntityButterfly;
+import forestry.api.lepidopterology.ILepidopteristTracker;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.lepidopterology.genetics.Butterfly;
@@ -78,7 +75,7 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 	private Vec3 flightTarget;
 	private int exhaustion;
 	private IButterfly contained;
-	private ITree pollen;
+	private IIndividual pollen;
 
 	public int cooldownPollination = 0;
 	public int cooldownEgg = 0;
@@ -256,12 +253,12 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 
 	/* POLLEN */
 	@Override
-	public ITree getPollen() {
+	public IIndividual getPollen() {
 		return pollen;
 	}
 
 	@Override
-	public void setPollen(ITree pollen) {
+	public void setPollen(IIndividual pollen) {
 		this.pollen = pollen;
 	}
 
@@ -382,7 +379,7 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 
 		if (!worldObj.isRemote) {
 			IButterflyRoot root = contained.getGenome().getPrimary().getRoot();
-			IButterflyTracker tracker = root.getBreedingTracker(worldObj, player.getGameProfile());
+			ILepidopteristTracker tracker = root.getBreedingTracker(worldObj, player.getGameProfile());
 			ItemStack itemStack = root.getMemberStack(contained.copy(), EnumFlutterType.BUTTERFLY.ordinal());
 
 			tracker.registerCatch(contained);
@@ -402,9 +399,9 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 		}
 
 		// Drop pollen if any
-		ITree pollen = getPollen();
+		IIndividual pollen = getPollen();
 		if (pollen != null) {
-			ITreeRoot root = pollen.getGenome().getSpeciesRoot();
+			ISpeciesRoot root = AlleleManager.alleleRegistry.getSpeciesRoot(pollen.getClass());
 			ItemStack pollenStack = root.getMemberStack(pollen, EnumGermlingType.POLLEN.ordinal());
 			ItemStackUtil.dropItemStackAsEntity(pollenStack, worldObj, posX, posY, posZ);
 		}
@@ -513,7 +510,7 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 			return null;
 		}
 		IButterflyRoot root = species.getRoot();
-		ImmutableMap<ButterflyChromosome, IAllele> template = root.getTemplate(species.getUID());
+		IAllele[] template = root.getTemplate(species.getUID());
 		IButterfly butterfly = root.templateAsIndividual(template);
 		return root.getMemberStack(butterfly, EnumFlutterType.BUTTERFLY.ordinal());
 	}

@@ -11,10 +11,9 @@
 package forestry.core.genetics;
 
 import com.google.common.base.Objects;
-import com.google.common.collect.ImmutableMap;
 
 import javax.annotation.Nonnull;
-import java.util.Map;
+import java.util.Arrays;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -29,31 +28,32 @@ import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.config.Config;
 import forestry.core.utils.Log;
 
-public abstract class Genome<C extends Enum<C> & IChromosomeType<C>> implements IGenome<C> {
+public abstract class Genome implements IGenome {
 
-	private static final String UID_KEY = "uid";
+	private static final String SLOT_TAG = "Slot";
 
 	@Nonnull
-	private final ImmutableMap<C, IChromosome> chromosomes;
+	private final IChromosome[] chromosomes;
 
 	protected Genome(@Nonnull NBTTagCompound nbttagcompound) {
 		this.chromosomes = getChromosomes(nbttagcompound, getSpeciesRoot());
 	}
 
-	protected Genome(@Nonnull ImmutableMap<C, IChromosome> chromosomes) {
+	protected Genome(@Nonnull IChromosome[] chromosomes) {
 		checkChromosomes(chromosomes);
 		this.chromosomes = chromosomes;
 	}
 
-	private void checkChromosomes(ImmutableMap<C, IChromosome> chromosomes) {
-		if (chromosomes == null || chromosomes.size() != getDefaultTemplate().size()) {
+	private void checkChromosomes(IChromosome[] chromosomes) {
+		if (chromosomes == null || chromosomes.length != getDefaultTemplate().length) {
 			String message = String.format("Tried to create a genome for '%s' from an invalid chromosome template.\n%s", getSpeciesRoot().getUID(), chromosomesToString(chromosomes));
 			throw new IllegalArgumentException(message);
 		}
 
-		C[] karyotype = getSpeciesRoot().getKaryotype();
-		for (C chromosomeType : karyotype) {
-			IChromosome chromosome = chromosomes.get(chromosomeType);
+		IChromosomeType[] karyotype = getSpeciesRoot().getKaryotype();
+		for (int i = 0; i < karyotype.length; i++) {
+			IChromosomeType chromosomeType = karyotype[i];
+			IChromosome chromosome = chromosomes[i];
 			if (chromosome == null) {
 				String message = String.format("Tried to create a genome for '%s' from an invalid chromosome template. " +
 						"Missing chromosome '%s'.\n%s", getSpeciesRoot().getUID(), chromosomeType.getName(), chromosomesToString(chromosomes));
@@ -61,7 +61,18 @@ public abstract class Genome<C extends Enum<C> & IChromosomeType<C>> implements 
 			}
 
 			IAllele primary = chromosome.getPrimaryAllele();
+			if (primary == null) {
+				String message = String.format("Tried to create a genome for '%s' from an invalid chromosome template. " +
+						"Missing primary allele for '%s'.\n%s", getSpeciesRoot().getUID(), chromosomeType.getName(), chromosomesToString(chromosomes));
+				throw new IllegalArgumentException(message);
+			}
+
 			IAllele secondary = chromosome.getSecondaryAllele();
+			if (secondary == null) {
+				String message = String.format("Tried to create a genome for '%s' from an invalid chromosome template. " +
+						"Missing secondary allele for '%s'.\n%s", getSpeciesRoot().getUID(), chromosomeType.getName(), chromosomesToString(chromosomes));
+				throw new IllegalArgumentException(message);
+			}
 
 			Class<? extends IAllele> chromosomeAlleleClass = chromosomeType.getAlleleClass();
 			if (!chromosomeAlleleClass.isAssignableFrom(primary.getClass())) {
@@ -78,24 +89,23 @@ public abstract class Genome<C extends Enum<C> & IChromosomeType<C>> implements 
 		}
 	}
 
-	@Nonnull
-	private String chromosomesToString(@Nonnull ImmutableMap<C, IChromosome> chromosomes) {
+	private String chromosomesToString(IChromosome[] chromosomes) {
 		if (chromosomes == null) {
 			return "null";
 		}
 
 		StringBuilder stringBuilder = new StringBuilder();
-		C[] karyotype = getSpeciesRoot().getKaryotype();
-		for (int i = 0; i < chromosomes.size(); i++) {
-			C chromosomeType = karyotype[i];
-			IChromosome chromosome = chromosomes.get(chromosomeType);
+		IChromosomeType[] karyotype = getSpeciesRoot().getKaryotype();
+		for (int i = 0; i < chromosomes.length; i++) {
+			IChromosomeType chromosomeType = karyotype[i];
+			IChromosome chromosome = chromosomes[i];
 			stringBuilder.append(chromosomeType.getName()).append(": ").append(chromosome).append("\n");
 		}
 
 		return stringBuilder.toString();
 	}
 
-	private ImmutableMap<C, IAllele> getDefaultTemplate() {
+	private IAllele[] getDefaultTemplate() {
 		return getSpeciesRoot().getDefaultTemplate();
 	}
 
@@ -122,10 +132,7 @@ public abstract class Genome<C extends Enum<C> & IChromosomeType<C>> implements 
 		}
 
 		NBTTagCompound chromosomeNBT = chromosomesNBT.getCompoundTagAt(0);
-		Chromosome chromosome = Chromosome.create(chromosomeNBT);
-		if (chromosome == null) {
-			return null;
-		}
+		Chromosome chromosome = new Chromosome(chromosomeNBT);
 
 		IAllele activeAllele = chromosome.getActiveAllele();
 		if (!(activeAllele instanceof IAlleleSpecies)) {
@@ -135,7 +142,7 @@ public abstract class Genome<C extends Enum<C> & IChromosomeType<C>> implements 
 		return (IAlleleSpecies) activeAllele;
 	}
 
-	private static <C extends Enum<C> & IChromosomeType<C>> IChromosome getChromosome(@Nonnull ItemStack itemStack, @Nonnull C chromosomeType, @Nonnull ISpeciesRoot<C> speciesRoot) {
+	private static IChromosome getChromosome(ItemStack itemStack, IChromosomeType chromosomeType, ISpeciesRoot speciesRoot) {
 		NBTTagCompound nbtTagCompound = itemStack.getTagCompound();
 		if (nbtTagCompound == null) {
 			return null;
@@ -146,43 +153,44 @@ public abstract class Genome<C extends Enum<C> & IChromosomeType<C>> implements 
 			return null;
 		}
 
-		ImmutableMap<C, IChromosome> chromosomes = getChromosomes(genome, speciesRoot);
+		IChromosome[] chromosomes = getChromosomes(genome, speciesRoot);
 		if (chromosomes == null) {
 			return null;
 		}
 
-		return chromosomes.get(chromosomeType);
+		return chromosomes[chromosomeType.ordinal()];
 	}
 
-	private static <C extends Enum<C> & IChromosomeType<C>> ImmutableMap<C, IChromosome> getChromosomes(@Nonnull NBTTagCompound genomeNBT, @Nonnull ISpeciesRoot<C> speciesRoot) {
+	private static IChromosome[] getChromosomes(@Nonnull NBTTagCompound genomeNBT, @Nonnull ISpeciesRoot speciesRoot) {
+
 		NBTTagList chromosomesNBT = genomeNBT.getTagList("Chromosomes", 10);
-		ImmutableMap.Builder<C, IChromosome> chromosomesBuilder = ImmutableMap.builder();
+		IChromosome[] chromosomes = new IChromosome[speciesRoot.getDefaultTemplate().length];
 
 		for (int i = 0; i < chromosomesNBT.tagCount(); i++) {
 			NBTTagCompound chromosomeNBT = chromosomesNBT.getCompoundTagAt(i);
-			byte chromosomeUid = chromosomeNBT.getByte(UID_KEY);
+			byte chromosomeOrdinal = chromosomeNBT.getByte(SLOT_TAG);
 
-			Chromosome chromosome = Chromosome.create(chromosomeNBT);
-			C chromosomeType = speciesRoot.getChromosomeTypeForUid(chromosomeUid);
+			if (chromosomeOrdinal >= 0 && chromosomeOrdinal < chromosomes.length) {
+				Chromosome chromosome = new Chromosome(chromosomeNBT);
+				chromosomes[chromosomeOrdinal] = chromosome;
 
-			Class<? extends IAllele> alleleClass = chromosomeType.getAlleleClass();
-			if (chromosome == null || chromosome.hasInvalidAlleles(alleleClass)) {
-				if (Config.clearInvalidChromosomes) {
-					Log.warning("Found Chromosome with invalid Alleles. Config is set to clear invalid chromosomes, replacing with the default.");
-					ImmutableMap<C, IAllele> defaultTemplate = speciesRoot.getDefaultTemplate();
-					return speciesRoot.templateAsChromosomes(defaultTemplate);
-				} else {
-					throw new RuntimeException("Found Chromosome with invalid Alleles.\nNBTTagCompound: " + chromosomesNBT + "\nSee config option \"genetics.clear.invalid.chromosomes\".\nMissing: " + chromosomeNBT);
+				IChromosomeType chromosomeType = speciesRoot.getKaryotype()[chromosomeOrdinal];
+				if (chromosome.hasInvalidAlleles(chromosomeType.getAlleleClass())) {
+					if (Config.clearInvalidChromosomes) {
+						Log.warning("Found Chromosome with invalid Alleles. Config is set to clear invalid chromosomes, replacing with the default.");
+						IAllele[] defaultTemplate = speciesRoot.getDefaultTemplate();
+						return speciesRoot.templateAsChromosomes(defaultTemplate);
+					} else {
+						throw new RuntimeException("Found Chromosome with invalid Alleles.\nNBTTagCompound: " + chromosomesNBT + "\nSee config option \"genetics.clear.invalid.chromosomes\".\nMissing: " + chromosomeNBT);
+					}
 				}
 			}
-
-			chromosomesBuilder.put(chromosomeType, chromosome);
 		}
 
-		return chromosomesBuilder.build();
+		return chromosomes;
 	}
 
-	protected static <C extends Enum<C> & IChromosomeType<C>> IAllele getActiveAllele(ItemStack itemStack, C chromosomeType, ISpeciesRoot<C> speciesRoot) {
+	protected static IAllele getActiveAllele(ItemStack itemStack, IChromosomeType chromosomeType, ISpeciesRoot speciesRoot) {
 		IChromosome chromosome = getChromosome(itemStack, chromosomeType, speciesRoot);
 		if (chromosome == null) {
 			return null;
@@ -191,55 +199,57 @@ public abstract class Genome<C extends Enum<C> & IChromosomeType<C>> implements 
 	}
 
 	@Override
-	public void writeToNBT(@Nonnull NBTTagCompound nbt) {
+	public void writeToNBT(NBTTagCompound nbttagcompound) {
+
 		NBTTagList nbttaglist = new NBTTagList();
-		for (Map.Entry<C, IChromosome> entry : chromosomes.entrySet()) {
-			C chromosomeType = entry.getKey();
-
-			IChromosome chromosome = entry.getValue();
-			byte chromosomeUid = chromosomeType.getUid();
-
-			NBTTagCompound chromosomeNbt = new NBTTagCompound();
-			chromosomeNbt.setByte(UID_KEY, chromosomeUid);
-			chromosome.writeToNBT(chromosomeNbt);
-
-			nbttaglist.appendTag(chromosomeNbt);
+		for (int i = 0; i < chromosomes.length; i++) {
+			if (chromosomes[i] != null) {
+				NBTTagCompound nbttagcompound1 = new NBTTagCompound();
+				nbttagcompound1.setByte(SLOT_TAG, (byte) i);
+				chromosomes[i].writeToNBT(nbttagcompound1);
+				nbttaglist.appendTag(nbttagcompound1);
+			}
 		}
-		nbt.setTag("Chromosomes", nbttaglist);
+		nbttagcompound.setTag("Chromosomes", nbttaglist);
 	}
 
 	// / INFORMATION RETRIEVAL
-	@Nonnull
 	@Override
-	public ImmutableMap<C, IChromosome> getChromosomes() {
-		return chromosomes;
-	}
-
-	@Nonnull
-	@Override
-	public IAllele getActiveAllele(C chromosomeType) {
-		return chromosomes.get(chromosomeType).getActiveAllele();
-	}
-
-	@Nonnull
-	@Override
-	public IAllele getInactiveAllele(C chromosomeType) {
-		return chromosomes.get(chromosomeType).getInactiveAllele();
+	public IChromosome[] getChromosomes() {
+		return Arrays.copyOf(chromosomes, chromosomes.length);
 	}
 
 	@Override
-	public boolean isGeneticEqual(IGenome<C> other) {
-		ImmutableMap<C, IChromosome> genetics = other.getChromosomes();
-		if (chromosomes.size() != genetics.size()) {
+	public IAllele getActiveAllele(IChromosomeType chromosomeType) {
+		return chromosomes[chromosomeType.ordinal()].getActiveAllele();
+	}
+
+	@Override
+	public IAllele getInactiveAllele(IChromosomeType chromosomeType) {
+		return chromosomes[chromosomeType.ordinal()].getInactiveAllele();
+	}
+
+	@Override
+	public boolean isGeneticEqual(IGenome other) {
+		IChromosome[] genetics = other.getChromosomes();
+		if (chromosomes.length != genetics.length) {
 			return false;
 		}
 
-		for (Map.Entry<C, IChromosome> entry : chromosomes.entrySet()) {
-			C chromosomeType = entry.getKey();
-			IChromosome chromosome = entry.getValue();
-			IChromosome otherChromosome = genetics.get(chromosomeType);
+		for (int i = 0; i < chromosomes.length; i++) {
+			IChromosome chromosome = chromosomes[i];
+			IChromosome otherChromosome = genetics[i];
+			if (chromosome == null && otherChromosome == null) {
+				continue;
+			}
+			if (chromosome == null || otherChromosome == null) {
+				return false;
+			}
 
-			if (!Chromosome.equals(chromosome, otherChromosome)) {
+			if (!chromosome.getPrimaryAllele().getUID().equals(otherChromosome.getPrimaryAllele().getUID())) {
+				return false;
+			}
+			if (!chromosome.getSecondaryAllele().getUID().equals(otherChromosome.getSecondaryAllele().getUID())) {
 				return false;
 			}
 		}
@@ -250,10 +260,9 @@ public abstract class Genome<C extends Enum<C> & IChromosomeType<C>> implements 
 	@Override
 	public String toString() {
 		Objects.ToStringHelper toStringHelper = Objects.toStringHelper(this);
-		for (Map.Entry<C, IChromosome> entry : chromosomes.entrySet()) {
-			C chromosomeType = entry.getKey();
-			IChromosome chromosome = entry.getValue();
-			toStringHelper.add(chromosomeType.getName(), chromosome);
+		int i = 0;
+		for (IChromosome chromosome : chromosomes) {
+			toStringHelper.add(String.valueOf(i++), chromosome);
 		}
 		return toStringHelper.toString();
 	}

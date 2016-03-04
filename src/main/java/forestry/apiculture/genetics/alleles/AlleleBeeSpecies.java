@@ -25,11 +25,9 @@ import com.mojang.authlib.GameProfile;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.api.apiculture.BeeChromosome;
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
-import forestry.api.apiculture.IAlleleBeeSpecies;
-import forestry.api.apiculture.IAlleleBeeSpeciesBuilder;
+import forestry.api.apiculture.IAlleleBeeSpeciesCustom;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeModelProvider;
@@ -38,7 +36,6 @@ import forestry.api.apiculture.IBeeSpriteColourProvider;
 import forestry.api.apiculture.IJubilanceProvider;
 import forestry.api.core.IModelManager;
 import forestry.api.core.IModelProvider;
-import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IIndividual;
 import forestry.apiculture.genetics.DefaultBeeModelProvider;
@@ -47,7 +44,7 @@ import forestry.apiculture.genetics.JubilanceDefault;
 import forestry.core.genetics.alleles.AlleleSpecies;
 import forestry.core.utils.ItemStackUtil;
 
-public class AlleleBeeSpecies extends AlleleSpecies<BeeChromosome> implements IAlleleBeeSpecies, IAlleleBeeSpeciesBuilder {
+public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpeciesCustom {
 	private final Map<ItemStack, Float> productChances = new HashMap<>();
 	private final Map<ItemStack, Float> specialtyChances = new HashMap<>();
 
@@ -69,15 +66,8 @@ public class AlleleBeeSpecies extends AlleleSpecies<BeeChromosome> implements IA
 		return BeeManager.beeRoot;
 	}
 
-	// TODO: break this into a separate builder class
 	@Override
-	public IAlleleBeeSpecies build() {
-		AlleleManager.alleleRegistry.registerAllele(this, BeeChromosome.SPECIES);
-		return this;
-	}
-
-	@Override
-	public IAlleleBeeSpeciesBuilder addProduct(ItemStack product, Float chance) {
+	public IAlleleBeeSpeciesCustom addProduct(ItemStack product, Float chance) {
 		if (product == null || product.getItem() == null) {
 			throw new IllegalArgumentException("Tried to add null product");
 		}
@@ -89,7 +79,7 @@ public class AlleleBeeSpecies extends AlleleSpecies<BeeChromosome> implements IA
 	}
 
 	@Override
-	public IAlleleBeeSpeciesBuilder addSpecialty(ItemStack specialty, Float chance) {
+	public IAlleleBeeSpeciesCustom addSpecialty(ItemStack specialty, Float chance) {
 		if (specialty == null || specialty.getItem() == null) {
 			throw new IllegalArgumentException("Tried to add null specialty");
 		}
@@ -101,25 +91,25 @@ public class AlleleBeeSpecies extends AlleleSpecies<BeeChromosome> implements IA
 	}
 
 	@Override
-	public IAlleleBeeSpeciesBuilder setJubilanceProvider(IJubilanceProvider provider) {
+	public IAlleleBeeSpeciesCustom setJubilanceProvider(IJubilanceProvider provider) {
 		this.jubilanceProvider = provider;
 		return this;
 	}
 
 	@Override
-	public IAlleleBeeSpeciesBuilder setNocturnal() {
+	public IAlleleBeeSpeciesCustom setNocturnal() {
 		nocturnal = true;
 		return this;
 	}
 	
 	@Override
-	public IAlleleBeeSpeciesBuilder setCustomBeeModelProvider(IBeeModelProvider beeIconProvider) {
+	public IAlleleBeeSpeciesCustom setCustomBeeModelProvider(IBeeModelProvider beeIconProvider) {
 		this.beeModelProvider = beeIconProvider;
 		return this;
 	}
 
 	@Override
-	public IAlleleBeeSpeciesBuilder setCustomBeeSpriteColourProvider(IBeeSpriteColourProvider beeIconColourProvider) {
+	public IAlleleBeeSpeciesCustom setCustomBeeSpriteColourProvider(IBeeSpriteColourProvider beeIconColourProvider) {
 		this.beeSpriteColourProvider = beeIconColourProvider;
 		return this;
 	}
@@ -146,7 +136,7 @@ public class AlleleBeeSpecies extends AlleleSpecies<BeeChromosome> implements IA
 	}
 
 	@Override
-	public ItemStack[] getResearchBounty(World world, GameProfile researcher, IIndividual<BeeChromosome> individual, int bountyLevel) {
+	public ItemStack[] getResearchBounty(World world, GameProfile researcher, IIndividual individual, int bountyLevel) {
 		ArrayList<ItemStack> bounty = new ArrayList<>();
 		Collections.addAll(bounty, super.getResearchBounty(world, researcher, individual, bountyLevel));
 

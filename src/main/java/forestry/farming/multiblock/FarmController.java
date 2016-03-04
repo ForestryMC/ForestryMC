@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.farming.multiblock;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -297,7 +296,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	}
 
 	@Override
-	public void writeToNBT(@Nonnull NBTTagCompound data) {
+	public void writeToNBT(NBTTagCompound data) {
 		super.writeToNBT(data);
 		sockets.writeToNBT(data);
 		hydrationManager.writeToNBT(data);

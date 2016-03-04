@@ -21,8 +21,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import forestry.api.arboriculture.ITreeGenome;
-import forestry.api.arboriculture.ITreeModifier;
-import forestry.api.arboriculture.ITreekeepingMode;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.IFruitFamily;
 
@@ -73,9 +71,7 @@ public class FruitProviderRipening extends FruitProviderNone {
 			return new ItemStack[0];
 		}
 
-		ITreekeepingMode mode = TreeManager.treeRoot.getMode(world);
-		ITreeModifier modifier = mode.getTreeModifier();
-		float modeYieldMod = modifier.getYieldModifier(genome, 1f);
+		float modeYieldMod = TreeManager.treeRoot.getTreekeepingMode(world).getYieldModifier(genome, 1f);
 
 		for (Map.Entry<ItemStack, Float> entry : products.entrySet()) {
 			if (world.rand.nextFloat() <= genome.getYield() * entry.getValue() * modeYieldMod * 5.0f * stage) {

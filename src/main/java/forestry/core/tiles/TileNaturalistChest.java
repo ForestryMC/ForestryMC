@@ -10,13 +10,11 @@
  ******************************************************************************/
 package forestry.core.tiles;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
 
-import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.gui.ContainerNaturalistInventory;
 import forestry.core.gui.GuiHandler;
@@ -26,17 +24,16 @@ import forestry.core.inventory.InventoryNaturalistChest;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 
-public abstract class TileNaturalistChest<C extends IChromosomeType> extends TileBase implements IPagedInventory {
+public abstract class TileNaturalistChest extends TileBase implements IPagedInventory {
 	private static final float lidAngleVariationPerTick = 0.1F;
 	public static final AxisAlignedBB chestBoundingBox = AxisAlignedBB.fromBounds(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
 
-	@Nonnull
-	private final ISpeciesRoot<C> speciesRoot;
+	private final ISpeciesRoot speciesRoot;
 	public float lidAngle;
 	public float prevLidAngle;
 	private int numPlayersUsing;
 
-	public TileNaturalistChest(@Nonnull ISpeciesRoot<C> speciesRoot) {
+	public TileNaturalistChest(ISpeciesRoot speciesRoot) {
 		super("naturalist.chest");
 		this.speciesRoot = speciesRoot;
 		setInternalInventory(new InventoryNaturalistChest(this, speciesRoot));
@@ -114,7 +111,7 @@ public abstract class TileNaturalistChest<C extends IChromosomeType> extends Til
 	@Override
 	public Object getGui(EntityPlayer player, int page) {
 		ContainerNaturalistInventory container = new ContainerNaturalistInventory(player.inventory, this, page);
-		return new GuiNaturalistInventory<>(speciesRoot, player, container, this, page, 5);
+		return new GuiNaturalistInventory(speciesRoot, player, container, this, page, 5);
 	}
 
 	@Override

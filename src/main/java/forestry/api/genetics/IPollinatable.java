@@ -9,8 +9,6 @@ import java.util.EnumSet;
 
 import net.minecraftforge.common.EnumPlantType;
 
-import forestry.api.arboriculture.ITree;
-
 /**
  * Can be implemented by tile entities, if they wish to be pollinatable.
  *
@@ -26,7 +24,7 @@ public interface IPollinatable {
 	/**
 	 * @return IIndividual containing the genetic information of this IPollinatable
 	 */
-	ITree getPollen();
+	IIndividual getPollen();
 
 	/**
 	 * Checks whether this {@link IPollinatable} can mate with the given pollen.
@@ -37,7 +35,7 @@ public interface IPollinatable {
 	 *            IIndividual representing the pollen.
 	 * @return true if mating is possible, false otherwise.
 	 */
-	boolean canMateWith(ITree pollen);
+	boolean canMateWith(IIndividual pollen);
 
 	/**
 	 * Pollinates this entity.
@@ -45,7 +43,7 @@ public interface IPollinatable {
 	 * @param pollen
 	 *            IIndividual representing the pollen.
 	 */
-	void mateWith(ITree pollen);
+	void mateWith(IIndividual pollen);
 
 	/**
 	 * @return true if this IPollinatable has already been pollinated.

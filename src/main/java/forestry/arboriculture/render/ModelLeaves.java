@@ -17,7 +17,7 @@ import net.minecraft.world.IBlockAccess;
 
 import forestry.api.core.IModelBaker;
 import forestry.arboriculture.blocks.BlockForestryLeaves;
-import forestry.arboriculture.genetics.TreeRoot;
+import forestry.arboriculture.genetics.TreeHelper;
 import forestry.arboriculture.items.ItemBlockLeaves;
 import forestry.arboriculture.tiles.TileLeaves;
 import forestry.core.models.ModelBlockOverlay;
@@ -39,7 +39,7 @@ public class ModelLeaves extends ModelBlockOverlay<BlockForestryLeaves> {
 		if (itemStack.hasTagCompound()) {
 			leaves.readFromNBT(itemStack.getTagCompound());
 		} else {
-			leaves.setTree(TreeRoot.treeTemplates.get(0));
+			leaves.setTree(TreeHelper.treeTemplates.get(0));
 		}
 
 		TextureAtlasSprite leavesIcon = leaves.getLeaveSprite(Proxies.render.fancyGraphicsEnabled());

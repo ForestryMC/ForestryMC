@@ -13,12 +13,12 @@ package forestry.arboriculture.genetics;
 import net.minecraft.entity.player.EntityPlayer;
 
 import forestry.api.arboriculture.IArboristTracker;
-import forestry.api.arboriculture.TreeChromosome;
 import forestry.api.arboriculture.TreeManager;
+import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IIndividual;
 import forestry.core.genetics.BreedingTracker;
 
-public class ArboristTracker extends BreedingTracker<TreeChromosome> implements IArboristTracker {
+public class ArboristTracker extends BreedingTracker implements IArboristTracker {
 
 	/** Required for creation from map storage */
 	public ArboristTracker(String s) {
@@ -26,13 +26,13 @@ public class ArboristTracker extends BreedingTracker<TreeChromosome> implements 
 	}
 
 	@Override
-	protected IArboristTracker getBreedingTracker(EntityPlayer player) {
+	protected IBreedingTracker getBreedingTracker(EntityPlayer player) {
 		return TreeManager.treeRoot.getBreedingTracker(player.worldObj, player.getGameProfile());
 	}
 
 	@Override
 	protected String speciesRootUID() {
-		return TreeRoot.UID;
+		return TreeHelper.UID;
 	}
 
 	@Override

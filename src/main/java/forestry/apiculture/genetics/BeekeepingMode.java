@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Random;
@@ -18,7 +17,6 @@ import java.util.Random;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
-import forestry.api.apiculture.BeeChromosome;
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.DefaultBeeModifier;
 import forestry.api.apiculture.IBee;
@@ -26,7 +24,6 @@ import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeModifier;
 import forestry.api.apiculture.IBeekeepingMode;
-import forestry.api.genetics.IGenome;
 
 public class BeekeepingMode implements IBeekeepingMode {
 
@@ -37,32 +34,22 @@ public class BeekeepingMode implements IBeekeepingMode {
 	public static final IBeekeepingMode insane = new BeekeepingMode("INSANE", 0.2f, 10.0f, 0.6f, true, true);
 
 	private final Random rand;
-	@Nonnull
 	private final String name;
 	private final boolean reducesFertility;
 	private final boolean canFatigue;
-	private final float mutationModifier;
-	@Nonnull
 	private final IBeeModifier beeModifier;
 
-	private BeekeepingMode(@Nonnull String name, float mutationModifier, float lifespanModifier, float speedModifier, boolean reducesFertility, boolean canFatigue) {
+	public BeekeepingMode(String name, float mutationModifier, float lifespanModifier, float speedModifier, boolean reducesFertility, boolean canFatigue) {
 		this.rand = new Random();
 		this.name = name;
 		this.reducesFertility = reducesFertility;
 		this.canFatigue = canFatigue;
 		this.beeModifier = new BeekeepingModeBeeModifier(mutationModifier, lifespanModifier, speedModifier);
-		this.mutationModifier = mutationModifier;
 	}
 
-	@Nonnull
 	@Override
 	public String getName() {
 		return this.name;
-	}
-
-	@Override
-	public float getMutationModifier(IGenome<BeeChromosome> genome, IGenome<BeeChromosome> mate) {
-		return mutationModifier;
 	}
 
 	@Override
@@ -131,13 +118,17 @@ public class BeekeepingMode implements IBeekeepingMode {
 		
 		return false;
 	}
+	
+	@Override
+	public boolean isNaturalOffspring(IBee queen) {
+		return queen.isNatural();
+	}
 
 	@Override
 	public boolean mayMultiplyPrincess(IBee queen) {
 		return true;
 	}
 
-	@Nonnull
 	@Override
 	public IBeeModifier getBeeModifier() {
 		return beeModifier;

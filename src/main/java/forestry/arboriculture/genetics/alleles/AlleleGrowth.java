@@ -13,9 +13,9 @@ package forestry.arboriculture.genetics.alleles;
 import java.util.Arrays;
 import java.util.List;
 
+import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleGrowth;
 import forestry.api.arboriculture.IGrowthProvider;
-import forestry.api.arboriculture.TreeChromosome;
 import forestry.api.genetics.AlleleManager;
 import forestry.arboriculture.genetics.GrowthProvider;
 import forestry.arboriculture.genetics.GrowthProviderTropical;
@@ -35,7 +35,7 @@ public class AlleleGrowth extends AlleleCategorized implements IAlleleGrowth {
 		);
 
 		for (IAlleleGrowth alleleGrowth : growthAlleles) {
-			AlleleManager.alleleRegistry.registerAllele(alleleGrowth, TreeChromosome.GROWTH);
+			AlleleManager.alleleRegistry.registerAllele(alleleGrowth, EnumTreeChromosome.GROWTH);
 		}
 	}
 

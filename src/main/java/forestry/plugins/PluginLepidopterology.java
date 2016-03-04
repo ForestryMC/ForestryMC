@@ -45,7 +45,7 @@ import forestry.lepidopterology.genetics.AlleleButterflyEffect;
 import forestry.lepidopterology.genetics.ButterflyBranchDefinition;
 import forestry.lepidopterology.genetics.ButterflyDefinition;
 import forestry.lepidopterology.genetics.ButterflyFactory;
-import forestry.lepidopterology.genetics.ButterflyRoot;
+import forestry.lepidopterology.genetics.ButterflyHelper;
 import forestry.lepidopterology.genetics.MothDefinition;
 import forestry.lepidopterology.items.ItemButterflyGE;
 import forestry.lepidopterology.items.ItemRegistryLepidopterology;
@@ -67,7 +67,7 @@ public class PluginLepidopterology extends BlankForestryPlugin {
 
 	@Override
 	public void setupAPI() {
-		ButterflyManager.butterflyRoot = new ButterflyRoot();
+		ButterflyManager.butterflyRoot = new ButterflyHelper();
 		AlleleManager.alleleRegistry.registerSpeciesRoot(ButterflyManager.butterflyRoot);
 
 		ButterflyManager.butterflyFactory = new ButterflyFactory();

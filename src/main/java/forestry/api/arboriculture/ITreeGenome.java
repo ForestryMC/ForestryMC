@@ -5,20 +5,17 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
-import javax.annotation.Nonnull;
 import java.util.EnumSet;
 
 import net.minecraftforge.common.EnumPlantType;
 
 import forestry.api.genetics.IGenome;
 
-public interface ITreeGenome extends IGenome<TreeChromosome> {
+public interface ITreeGenome extends IGenome {
 
-	@Nonnull
 	@Override
 	IAlleleTreeSpecies getPrimary();
 
-	@Nonnull
 	@Override
 	IAlleleTreeSpecies getSecondary();
 
@@ -48,8 +45,4 @@ public interface ITreeGenome extends IGenome<TreeChromosome> {
 	int getGirth();
 
 	IAlleleLeafEffect getEffect();
-
-	@Nonnull
-	@Override
-	ITreeRoot getSpeciesRoot();
 }

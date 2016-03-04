@@ -7,40 +7,37 @@ package forestry.api.apiculture;
 
 import net.minecraft.item.ItemStack;
 
-import forestry.api.genetics.IAlleleSpeciesBuilder;
+import forestry.api.genetics.IAlleleSpeciesCustom;
 
-public interface IAlleleBeeSpeciesBuilder extends IAlleleSpeciesBuilder<BeeChromosome> {
-
-	@Override
-	IAlleleBeeSpecies build();
+public interface IAlleleBeeSpeciesCustom extends IAlleleBeeSpecies, IAlleleSpeciesCustom {
 
 	/**
 	 * Add a product for this bee species.
 	 * Chance is between 0 and 1.
 	 */
-	IAlleleBeeSpeciesBuilder addProduct(ItemStack product, Float chance);
+	IAlleleBeeSpeciesCustom addProduct(ItemStack product, Float chance);
 
 	/**
 	 * Add a specialty product for this bee species.
 	 * Bees only produce their specialty when they are Jubilant (see IJubilanceProvider)
 	 * Chance is between 0 and 1.
 	 */
-	IAlleleBeeSpeciesBuilder addSpecialty(ItemStack specialty, Float chance);
+	IAlleleBeeSpeciesCustom addSpecialty(ItemStack specialty, Float chance);
 
 	/**
 	 * Set the Jubilance Provider for this bee species.
 	 * Bees only produce their specialty when they are Jubilant (see IJubilanceProvider)
 	 */
-	IAlleleBeeSpeciesBuilder setJubilanceProvider(IJubilanceProvider provider);
+	IAlleleBeeSpeciesCustom setJubilanceProvider(IJubilanceProvider provider);
 
 	/**
 	 * Make this species only active at night.
 	 */
-	IAlleleBeeSpeciesBuilder setNocturnal();
+	IAlleleBeeSpeciesCustom setNocturnal();
 
 	/** Use this if you have custom icons for bees. */
-	IAlleleBeeSpeciesBuilder setCustomBeeModelProvider(IBeeModelProvider beeIconProvider);
+	IAlleleBeeSpeciesCustom setCustomBeeModelProvider(IBeeModelProvider beeIconProvider);
 
 	/** Use this if you have custom icon colours for bees (other than the default static primary + secondary colours). */
-	IAlleleBeeSpeciesBuilder setCustomBeeSpriteColourProvider(IBeeSpriteColourProvider beeIconColourProvider);
+	IAlleleBeeSpeciesCustom setCustomBeeSpriteColourProvider(IBeeSpriteColourProvider beeIconColourProvider);
 }

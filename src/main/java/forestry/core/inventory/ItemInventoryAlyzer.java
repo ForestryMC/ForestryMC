@@ -21,7 +21,6 @@ import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorSource;
 import forestry.api.core.IErrorState;
 import forestry.api.genetics.IBreedingTracker;
-import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.apiculture.items.ItemRegistryApiculture;
@@ -29,7 +28,7 @@ import forestry.core.errors.EnumErrorCode;
 import forestry.plugins.ForestryPluginUids;
 import forestry.plugins.PluginApiculture;
 
-public abstract class ItemInventoryAlyzer<C extends IChromosomeType> extends ItemInventory implements IErrorSource {
+public abstract class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
 	public static final int SLOT_SPECIMEN = 0;
 	public static final int SLOT_ANALYZE_1 = 1;
 	public static final int SLOT_ANALYZE_2 = 2;
@@ -38,9 +37,9 @@ public abstract class ItemInventoryAlyzer<C extends IChromosomeType> extends Ite
 	public static final int SLOT_ANALYZE_5 = 6;
 	public static final int SLOT_ENERGY = 5;
 
-	private final ISpeciesRoot<C> speciesRoot;
+	private final ISpeciesRoot speciesRoot;
 
-	public ItemInventoryAlyzer(ISpeciesRoot<C> speciesRoot, EntityPlayer player, ItemStack itemstack) {
+	public ItemInventoryAlyzer(ISpeciesRoot speciesRoot, EntityPlayer player, ItemStack itemstack) {
 		super(player, 7, itemstack);
 		this.speciesRoot = speciesRoot;
 	}
@@ -76,7 +75,7 @@ public abstract class ItemInventoryAlyzer<C extends IChromosomeType> extends Ite
 			return;
 		}
 
-		IIndividual<C> individual = speciesRoot.getMember(specimen);
+		IIndividual individual = speciesRoot.getMember(specimen);
 		// No individual, abort
 		if (individual == null) {
 			return;
@@ -94,7 +93,7 @@ public abstract class ItemInventoryAlyzer<C extends IChromosomeType> extends Ite
 
 			individual.analyze();
 			if (player != null) {
-				IBreedingTracker<C> breedingTracker = speciesRoot.getBreedingTracker(player.worldObj, player.getGameProfile());
+				IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(player.worldObj, player.getGameProfile());
 				breedingTracker.registerSpecies(individual.getGenome().getPrimary());
 				breedingTracker.registerSpecies(individual.getGenome().getSecondary());
 			}

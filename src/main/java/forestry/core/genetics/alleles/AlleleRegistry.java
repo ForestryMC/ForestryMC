@@ -35,7 +35,7 @@ import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.genetics.Classification;
-import forestry.core.genetics.research.EnumNoteType;
+import forestry.core.genetics.ItemResearchNote.EnumNoteType;
 import forestry.plugins.PluginCore;
 
 public class AlleleRegistry implements IAlleleRegistry {
@@ -78,9 +78,9 @@ public class AlleleRegistry implements IAlleleRegistry {
 	}
 
 	@Override
-	public ISpeciesRoot getSpeciesRoot(Class<? extends IIndividual> individualClass) {
-		for (ISpeciesRoot<?> root : rootMap.values()) {
-			if (root.getMemberClass().isAssignableFrom(individualClass)) {
+	public ISpeciesRoot getSpeciesRoot(Class<? extends IIndividual> clz) {
+		for (ISpeciesRoot root : rootMap.values()) {
+			if (root.getMemberClass().isAssignableFrom(clz)) {
 				return root;
 			}
 		}
@@ -108,8 +108,8 @@ public class AlleleRegistry implements IAlleleRegistry {
 
 	/* ALLELES */
 	private final LinkedHashMap<String, IAllele> alleleMap = new LinkedHashMap<>(ALLELE_ARRAY_SIZE);
-	private final HashMultimap<IChromosomeType<?>, IAllele> allelesByType = HashMultimap.create();
-	private final HashMultimap<IAllele, IChromosomeType<?>> typesByAllele = HashMultimap.create();
+	private final HashMultimap<IChromosomeType, IAllele> allelesByType = HashMultimap.create();
+	private final HashMultimap<IAllele, IChromosomeType> typesByAllele = HashMultimap.create();
 	private final LinkedHashMap<String, IAllele> deprecatedAlleleMap = new LinkedHashMap<>(32);
 	private final LinkedHashMap<String, IClassification> classificationMap = new LinkedHashMap<>(128);
 	private final LinkedHashMap<String, IFruitFamily> fruitMap = new LinkedHashMap<>(64);
@@ -148,10 +148,9 @@ public class AlleleRegistry implements IAlleleRegistry {
 	}
 
 	@Override
-	public void registerAllele(IAllele allele, IChromosomeType<?>... chromosomeTypes) {
-		for (IChromosomeType<?> chromosomeType : chromosomeTypes) {
-			Class<? extends IAllele> chromosomeAlleleClass = chromosomeType.getAlleleClass();
-			if (!chromosomeAlleleClass.isAssignableFrom(allele.getClass())) {
+	public void registerAllele(IAllele allele, IChromosomeType... chromosomeTypes) {
+		for (IChromosomeType chromosomeType : chromosomeTypes) {
+			if (!chromosomeType.getAlleleClass().isAssignableFrom(allele.getClass())) {
 				throw new IllegalArgumentException("Allele class (" + allele.getClass() + ") does not match chromosome type (" + chromosomeType.getAlleleClass() + ").");
 			}
 			allelesByType.put(chromosomeType, allele);
@@ -160,10 +159,9 @@ public class AlleleRegistry implements IAlleleRegistry {
 
 		alleleMap.put(allele.getUID(), allele);
 		if (allele instanceof IAlleleSpecies) {
-			IAlleleSpecies<?> alleleSpecies = (IAlleleSpecies<?>) allele;
-			IClassification branch = alleleSpecies.getBranch();
+			IClassification branch = ((IAlleleSpecies) allele).getBranch();
 			if (branch != null) {
-				branch.addMemberSpecies(alleleSpecies);
+				branch.addMemberSpecies((IAlleleSpecies) allele);
 			}
 		}
 
@@ -193,12 +191,12 @@ public class AlleleRegistry implements IAlleleRegistry {
 	}
 
 	@Override
-	public Collection<IAllele> getRegisteredAlleles(IChromosomeType<?> type) {
+	public Collection<IAllele> getRegisteredAlleles(IChromosomeType type) {
 		return Collections.unmodifiableSet(allelesByType.get(type));
 	}
 
-	@Override
-	public Collection<IChromosomeType<?>> getChromosomeTypes(IAllele allele) {
+	// This method is not useful until all mod addon alleles are registered with their valid IChromosomeTypes
+	public Collection<IChromosomeType> getChromosomeTypes(IAllele allele) {
 		return Collections.unmodifiableSet(typesByAllele.get(allele));
 	}
 

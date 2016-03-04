@@ -183,34 +183,33 @@ public class GeneticsUtil {
 			return null;
 		}
 
-		IIndividual individual = getGeneticEquivalent(foreign);
-		if (!(individual instanceof ITree)) {
+		IIndividual tree = getGeneticEquivalent(foreign);
+		if (!(tree instanceof ITree)) {
 			return null;
 		}
-		ITree tree = (ITree) individual;
 
 		ItemStack ersatz = TreeManager.treeRoot.getMemberStack(tree, EnumGermlingType.SAPLING.ordinal());
 		ersatz.stackSize = foreign.stackSize;
 		return ersatz;
 	}
 
-	public static <C extends IChromosomeType> int getResearchComplexity(IAlleleSpecies<C> species, C speciesChromosome) {
-		return 1 + getGeneticAdvancement(species, new HashSet<IAlleleSpecies<C>>(), speciesChromosome);
+	public static int getResearchComplexity(IAlleleSpecies species, IChromosomeType speciesChromosome) {
+		return 1 + getGeneticAdvancement(species, new HashSet<IAlleleSpecies>(), speciesChromosome);
 	}
 
-	private static <C extends IChromosomeType> int getGeneticAdvancement(IAlleleSpecies<C> species, Set<IAlleleSpecies<C>> exclude, C speciesChromosome) {
+	private static int getGeneticAdvancement(IAlleleSpecies species, Set<IAlleleSpecies> exclude, IChromosomeType speciesChromosome) {
 		int highest = 0;
 		exclude.add(species);
 
-		for (IMutation<C> mutation : species.getRoot().getPaths(species, speciesChromosome)) {
-			highest = getHighestAdvancement(mutation.getSpecies0(), highest, exclude, speciesChromosome);
-			highest = getHighestAdvancement(mutation.getSpecies1(), highest, exclude, speciesChromosome);
+		for (IMutation mutation : species.getRoot().getPaths(species, speciesChromosome)) {
+			highest = getHighestAdvancement(mutation.getAllele0(), highest, exclude, speciesChromosome);
+			highest = getHighestAdvancement(mutation.getAllele1(), highest, exclude, speciesChromosome);
 		}
 
 		return 1 + highest;
 	}
 
-	private static <C extends IChromosomeType> int getHighestAdvancement(IAlleleSpecies<C> mutationSpecies, int highest, Set<IAlleleSpecies<C>> exclude, C speciesChromosome) {
+	private static int getHighestAdvancement(IAlleleSpecies mutationSpecies, int highest, Set<IAlleleSpecies> exclude, IChromosomeType speciesChromosome) {
 		if (exclude.contains(mutationSpecies) || AlleleManager.alleleRegistry.isBlacklisted(mutationSpecies.getUID())) {
 			return highest;
 		}

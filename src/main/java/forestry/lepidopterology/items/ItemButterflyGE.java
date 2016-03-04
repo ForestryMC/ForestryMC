@@ -31,6 +31,7 @@ import forestry.api.core.Tabs;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
+import forestry.api.genetics.IIndividual;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.api.lepidopterology.IAlleleButterflySpecies;
@@ -99,7 +100,7 @@ public class ItemButterflyGE extends ItemGE {
 
 	public void addCreativeItems(List<ItemStack> itemList, boolean hideSecrets) {
 
-		for (IButterfly individual : ButterflyManager.butterflyRoot.getIndividualTemplates()) {
+		for (IIndividual individual : ButterflyManager.butterflyRoot.getIndividualTemplates()) {
 			// Don't show secret butterflies unless ordered to.
 			if (hideSecrets && individual.isSecret() && !Config.isDebug) {
 				continue;
