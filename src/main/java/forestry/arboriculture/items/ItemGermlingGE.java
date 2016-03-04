@@ -101,14 +101,12 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable {
 		return StringUtil.localize("trees.grammar." + type.getName()).replaceAll("%SPECIES", species.getName()).replaceAll("%TYPE", StringUtil.localize("trees.grammar." + type.getName() + ".type"));
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List itemList) {
+	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List<ItemStack> itemList) {
 		addCreativeItems(itemList, true);
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
-	public void addCreativeItems(List itemList, boolean hideSecrets) {
+	public void addCreativeItems(List<ItemStack> itemList, boolean hideSecrets) {
 		for (IIndividual individual : TreeManager.treeRoot.getIndividualTemplates()) {
 			// Don't show secrets unless ordered to.
 			if (hideSecrets && individual.isSecret() && !Config.isDebug) {

@@ -5,6 +5,7 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -63,6 +64,7 @@ public interface ISpeciesRoot {
 
 	IIndividual getMember(NBTTagCompound compound);
 
+	@Nullable
 	ISpeciesType getType(ItemStack itemStack);
 
 	ItemStack getMemberStack(IIndividual individual, int type);

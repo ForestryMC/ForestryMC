@@ -5,6 +5,7 @@
  ******************************************************************************/
 package forestry.api.lepidopterology;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -70,6 +71,7 @@ public interface IButterflyRoot extends ISpeciesRoot {
 	@Override
 	Collection<IButterflyMutation> getMutations(boolean shuffle);
 
+	@Nullable
 	@Override
 	EnumFlutterType getType(ItemStack stack);
 

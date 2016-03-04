@@ -10,7 +10,7 @@ import java.util.Locale;
 import forestry.api.genetics.ISpeciesType;
 
 public enum EnumBeeType implements ISpeciesType {
-	DRONE, PRINCESS, QUEEN, LARVAE, NONE;
+	DRONE, PRINCESS, QUEEN, LARVAE;
 
 	public static final EnumBeeType[] VALUES = values();
 

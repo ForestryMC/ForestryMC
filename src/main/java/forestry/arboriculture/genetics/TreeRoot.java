@@ -19,6 +19,7 @@ import java.util.Locale;
 import java.util.Map.Entry;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -98,7 +99,7 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 
 	@Override
 	public boolean isMember(ItemStack itemstack) {
-		return getType(itemstack) != EnumGermlingType.NONE;
+		return getType(itemstack) != null;
 	}
 
 	@Override
@@ -115,7 +116,7 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 	@Override
 	public EnumGermlingType getType(ItemStack stack) {
 		if (stack == null) {
-			return EnumGermlingType.NONE;
+			return null;
 		}
 
 		Item item = stack.getItem();
@@ -126,7 +127,7 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 			return EnumGermlingType.POLLEN;
 		}
 
-		return EnumGermlingType.NONE;
+		return null;
 	}
 
 	@Override
@@ -192,7 +193,8 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 	@Override
 	public boolean plantSapling(World world, ITree tree, GameProfile owner, BlockPos pos) {
 
-		boolean placed = world.setBlockState(pos, PluginArboriculture.blocks.saplingGE.getStateFromMeta(0), Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
+		IBlockState state = PluginArboriculture.blocks.saplingGE.getStateFromMeta(0);
+		boolean placed = world.setBlockState(pos, state, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
 		if (!placed) {
 			return false;
 		}

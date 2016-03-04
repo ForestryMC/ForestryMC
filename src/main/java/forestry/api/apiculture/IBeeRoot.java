@@ -5,6 +5,7 @@
  ******************************************************************************/
 package forestry.api.apiculture;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -61,6 +62,7 @@ public interface IBeeRoot extends ISpeciesRoot {
 	/**
 	 * @return type of bee encoded on the itemstack. EnumBeeType.NONE if it isn't a bee.
 	 */
+	@Nullable
 	@Override
 	EnumBeeType getType(ItemStack stack);
 

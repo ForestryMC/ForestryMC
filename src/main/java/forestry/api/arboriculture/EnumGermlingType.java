@@ -8,7 +8,7 @@ package forestry.api.arboriculture;
 import forestry.api.genetics.ISpeciesType;
 
 public enum EnumGermlingType implements ISpeciesType {
-	SAPLING("sapling"), BLOSSOM("blossom"), POLLEN("pollen"), GERMLING("germling"), NONE("none");
+	SAPLING("sapling"), POLLEN("pollen");
 
 	public static final EnumGermlingType[] VALUES = values();
 	

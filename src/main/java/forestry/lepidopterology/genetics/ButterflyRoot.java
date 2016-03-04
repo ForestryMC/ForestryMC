@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.lepidopterology.genetics;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -74,13 +75,14 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 
 	@Override
 	public boolean isMember(ItemStack stack) {
-		return getType(stack) != EnumFlutterType.NONE;
+		return getType(stack) != null;
 	}
 
+	@Nullable
 	@Override
 	public EnumFlutterType getType(ItemStack stack) {
 		if (stack == null) {
-			return EnumFlutterType.NONE;
+			return null;
 		}
 
 		Item item = stack.getItem();
@@ -91,7 +93,7 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 		} else if (PluginLepidopterology.items.caterpillarGE == item) {
 			return EnumFlutterType.CATERPILLAR;
 		} else {
-			return EnumFlutterType.NONE;
+			return null;
 		}
 	}
 

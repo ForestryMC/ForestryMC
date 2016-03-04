@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -84,7 +85,7 @@ public class BeeRoot extends SpeciesRoot implements IBeeRoot {
 
 	@Override
 	public boolean isMember(ItemStack stack) {
-		return getType(stack) != EnumBeeType.NONE;
+		return getType(stack) != null;
 	}
 
 	@Override
@@ -133,10 +134,11 @@ public class BeeRoot extends SpeciesRoot implements IBeeRoot {
 		return beeStack;
 	}
 
+	@Nullable
 	@Override
 	public EnumBeeType getType(ItemStack stack) {
 		if (stack == null) {
-			return EnumBeeType.NONE;
+			return null;
 		}
 
 		Item item = stack.getItem();
@@ -151,7 +153,7 @@ public class BeeRoot extends SpeciesRoot implements IBeeRoot {
 			return EnumBeeType.LARVAE;
 		}
 
-		return EnumBeeType.NONE;
+		return null;
 	}
 
 	@Override

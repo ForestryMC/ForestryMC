@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.commands;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -43,9 +44,6 @@ public class CommandBeeGive extends SubCommand {
 
 		List<String> beeTypeStrings = new ArrayList<>();
 		for (EnumBeeType type : EnumBeeType.values()) {
-			if (type == EnumBeeType.NONE) {
-				continue;
-			}
 			beeTypeStrings.add(type.getName());
 		}
 
@@ -73,7 +71,7 @@ public class CommandBeeGive extends SubCommand {
 
 		IBeeGenome beeGenome = getBeeGenome(arguments[0]);
 		EnumBeeType beeType = getBeeType(arguments[1]);
-		if (beeType == EnumBeeType.NONE) {
+		if (beeType == null) {
 			printHelp(sender);
 			return;
 		}
@@ -164,13 +162,14 @@ public class CommandBeeGive extends SubCommand {
 		return species.toArray(new String[species.size()]);
 	}
 
+	@Nullable
 	private static EnumBeeType getBeeType(String beeTypeName) {
 		for (EnumBeeType beeType : EnumBeeType.values()) {
 			if (beeType.getName().equalsIgnoreCase(beeTypeName)) {
 				return beeType;
 			}
 		}
-		return EnumBeeType.NONE;
+		return null;
 	}
 
 	@Override

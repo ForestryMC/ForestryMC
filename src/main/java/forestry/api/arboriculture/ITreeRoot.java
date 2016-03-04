@@ -5,6 +5,7 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -62,6 +63,7 @@ public interface ITreeRoot extends ISpeciesRoot {
 	/**
 	 * @return type of tree encoded on the itemstack. EnumGermlingType.NONE if it isn't a tree.
 	 */
+	@Nullable
 	@Override
 	EnumGermlingType getType(ItemStack stack);
 
