@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.storage.items;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
@@ -23,9 +25,10 @@ import forestry.storage.gui.ContainerNaturalistBackpack;
 import forestry.storage.inventory.ItemInventoryBackpackPaged;
 
 public class ItemBackpackNaturalist extends ItemBackpack {
+	@Nonnull
 	private final ISpeciesRoot speciesRoot;
 
-	public ItemBackpackNaturalist(ISpeciesRoot speciesRoot, IBackpackDefinition definition, EnumBackpackType type) {
+	public ItemBackpackNaturalist(@Nonnull ISpeciesRoot speciesRoot, IBackpackDefinition definition, EnumBackpackType type) {
 		super(definition, type);
 		this.speciesRoot = speciesRoot;
 	}

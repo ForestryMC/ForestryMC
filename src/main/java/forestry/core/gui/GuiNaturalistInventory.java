@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.gui;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -36,12 +37,13 @@ import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
 
 public class GuiNaturalistInventory extends GuiForestry<Container, IPagedInventory> {
+	@Nonnull
 	private final ISpeciesRoot speciesRoot;
 	private final IBreedingTracker breedingTracker;
 	private final HashMap<String, ItemStack> iconStacks = new HashMap<>();
 	private final int pageCurrent, pageMax;
 
-	public GuiNaturalistInventory(ISpeciesRoot speciesRoot, EntityPlayer player, Container container, IPagedInventory inventory, int page, int maxPages) {
+	public GuiNaturalistInventory(@Nonnull ISpeciesRoot speciesRoot, EntityPlayer player, Container container, IPagedInventory inventory, int page, int maxPages) {
 		super(Constants.TEXTURE_PATH_GUI + "/apiaristinventory.png", container, inventory);
 
 		this.speciesRoot = speciesRoot;

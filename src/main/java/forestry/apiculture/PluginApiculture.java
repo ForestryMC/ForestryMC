@@ -747,43 +747,43 @@ public class PluginApiculture extends BlankForestryPlugin {
 	private static void registerBeehiveDrops() {
 		ItemStack honeyComb = items.beeComb.get(EnumHoneyComb.HONEY, 1);
 		hiveRegistry.addDrops(HiveType.FOREST.getHiveName(),
-				new HiveDrop(80, BeeDefinition.FOREST, honeyComb).setIgnobleShare(0.7f),
-				new HiveDrop(8, BeeDefinition.FOREST.getRainResist(), honeyComb),
-				new HiveDrop(3, BeeDefinition.VALIANT, honeyComb)
+				new HiveDrop(0.80, BeeDefinition.FOREST, honeyComb).setIgnobleShare(0.7),
+				new HiveDrop(0.08, BeeDefinition.FOREST.getRainResist(), honeyComb),
+				new HiveDrop(0.03, BeeDefinition.VALIANT, honeyComb)
 		);
 
 		hiveRegistry.addDrops(HiveType.MEADOWS.getHiveName(),
-				new HiveDrop(80, BeeDefinition.MEADOWS, honeyComb).setIgnobleShare(0.7f),
-				new HiveDrop(3, BeeDefinition.VALIANT, honeyComb)
+				new HiveDrop(0.80, BeeDefinition.MEADOWS, honeyComb).setIgnobleShare(0.7),
+				new HiveDrop(0.03, BeeDefinition.VALIANT, honeyComb)
 		);
 
 		ItemStack parchedComb = items.beeComb.get(EnumHoneyComb.PARCHED, 1);
 		hiveRegistry.addDrops(HiveType.DESERT.getHiveName(),
-				new HiveDrop(80, BeeDefinition.MODEST, parchedComb).setIgnobleShare(0.7f),
-				new HiveDrop(3, BeeDefinition.VALIANT, parchedComb)
+				new HiveDrop(0.80, BeeDefinition.MODEST, parchedComb).setIgnobleShare(0.7),
+				new HiveDrop(0.03, BeeDefinition.VALIANT, parchedComb)
 		);
 
 		ItemStack silkyComb = items.beeComb.get(EnumHoneyComb.SILKY, 1);
 		hiveRegistry.addDrops(HiveType.JUNGLE.getHiveName(),
-				new HiveDrop(80, BeeDefinition.TROPICAL, silkyComb).setIgnobleShare(0.7f),
-				new HiveDrop(3, BeeDefinition.VALIANT, silkyComb)
+				new HiveDrop(0.80, BeeDefinition.TROPICAL, silkyComb).setIgnobleShare(0.7),
+				new HiveDrop(0.03, BeeDefinition.VALIANT, silkyComb)
 		);
 
 		ItemStack mysteriousComb = items.beeComb.get(EnumHoneyComb.MYSTERIOUS, 1);
 		hiveRegistry.addDrops(HiveType.END.getHiveName(),
-				new HiveDrop(90, BeeDefinition.ENDED, mysteriousComb)
+				new HiveDrop(0.90, BeeDefinition.ENDED, mysteriousComb)
 		);
 
 		ItemStack frozenComb = items.beeComb.get(EnumHoneyComb.FROZEN, 1);
 		hiveRegistry.addDrops(HiveType.SNOW.getHiveName(),
-				new HiveDrop(80, BeeDefinition.WINTRY, frozenComb).setIgnobleShare(0.5f),
-				new HiveDrop(3, BeeDefinition.VALIANT, frozenComb)
+				new HiveDrop(0.80, BeeDefinition.WINTRY, frozenComb).setIgnobleShare(0.5),
+				new HiveDrop(0.03, BeeDefinition.VALIANT, frozenComb)
 		);
 
 		ItemStack mossyComb = items.beeComb.get(EnumHoneyComb.MOSSY, 1);
 		hiveRegistry.addDrops(HiveType.SWAMP.getHiveName(),
-				new HiveDrop(80, BeeDefinition.MARSHY, mossyComb).setIgnobleShare(0.4f),
-				new HiveDrop(3, BeeDefinition.VALIANT, mossyComb)
+				new HiveDrop(0.80, BeeDefinition.MARSHY, mossyComb).setIgnobleShare(0.4),
+				new HiveDrop(0.03, BeeDefinition.VALIANT, mossyComb)
 		);
 	}
 

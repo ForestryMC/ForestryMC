@@ -13,6 +13,7 @@ package forestry.apiculture.blocks;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.properties.PropertyEnum;
@@ -28,6 +29,9 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import forestry.api.apiculture.BeeManager;
+import forestry.api.apiculture.EnumBeeType;
+import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IHiveDrop;
 import forestry.api.apiculture.hives.IHiveRegistry.HiveType;
 import forestry.api.core.IItemModelRegister;
@@ -100,20 +104,28 @@ public class BlockBeehives extends BlockContainer implements IItemModelRegister 
 
 	@Override
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-		ArrayList<ItemStack> ret = new ArrayList<>();
+		List<ItemStack> drops = new ArrayList<>();
 
-		List<IHiveDrop> dropList = getDropsForHive(getMetaFromState(state));
+		Random random = world instanceof World ? ((World) world).rand : RANDOM;
 
-		Collections.shuffle(dropList);
+		List<IHiveDrop> hiveDrops = getDropsForHive(getMetaFromState(state));
+		Collections.shuffle(hiveDrops);
+
 		// Grab a princess
 		int tries = 0;
 		boolean hasPrincess = false;
 		while (tries <= 10 && !hasPrincess) {
 			tries++;
 
-			for (IHiveDrop drop : dropList) {
-				if (RANDOM.nextInt(100) < drop.getChance((World) world, pos)) {
-					ret.add(drop.getPrincess((World) world, pos, fortune));
+			for (IHiveDrop drop : hiveDrops) {
+				if (random.nextDouble() < drop.getChance(world, pos, fortune)) {
+					IBee bee = drop.getBeeType(world, pos);
+					if (random.nextFloat() < drop.getIgnobleChance(world, pos, fortune)) {
+						bee.setIsNatural(false);
+					}
+
+					ItemStack princess = BeeManager.beeRoot.getMemberStack(bee, EnumBeeType.PRINCESS.ordinal());
+					drops.add(princess);
 					hasPrincess = true;
 					break;
 				}
@@ -121,21 +133,24 @@ public class BlockBeehives extends BlockContainer implements IItemModelRegister 
 		}
 
 		// Grab drones
-		for (IHiveDrop drop : dropList) {
-			if (RANDOM.nextInt(100) < drop.getChance((World) world, pos)) {
-				ret.addAll(drop.getDrones((World) world, pos, fortune));
-				break;
-			}
-		}
-		// Grab anything else on offer
-		for (IHiveDrop drop : dropList) {
-			if (RANDOM.nextInt(100) < drop.getChance((World) world, pos)) {
-				ret.addAll(drop.getAdditional((World) world, pos, fortune));
+		for (IHiveDrop drop : hiveDrops) {
+			if (random.nextDouble() < drop.getChance(world, pos, fortune)) {
+				IBee bee = drop.getBeeType(world, pos);
+				ItemStack drone = BeeManager.beeRoot.getMemberStack(bee, EnumBeeType.DRONE.ordinal());
+				drops.add(drone);
 				break;
 			}
 		}
 
-		return ret;
+		// Grab anything else on offer
+		for (IHiveDrop drop : hiveDrops) {
+			if (random.nextDouble() < drop.getChance(world, pos, fortune)) {
+				drops.addAll(drop.getExtraItems(world, pos, fortune));
+				break;
+			}
+		}
+
+		return drops;
 	}
 
 	// / CREATIVE INVENTORY
