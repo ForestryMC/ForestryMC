@@ -14,6 +14,7 @@ import javax.annotation.Nonnull;
 import java.io.IOException;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
@@ -40,8 +41,8 @@ public class FarmHydrationManager implements IFarmLedgerDelegate, INbtWritable, 
 		this.climatised = climatised;
 	}
 
-	public void updateServer(World world, BiomeGenBase biome) {
-		if (world.isRaining() && BiomeHelper.canRainOrSnow(biome)) {
+	public void updateServer(World world, BlockPos coordinates) {
+		if (world.isRainingAt(coordinates)) {
 			if (hydrationDelay > 0) {
 				hydrationDelay--;
 			} else {

@@ -178,7 +178,7 @@ public class GuiBeealyzer extends GuiAlyzer {
 		String no = StringUtil.localize("no");
 
 		String diurnal0, diurnal1, nocturnal0, nocturnal1;
-		if (bee.getGenome().getNocturnal()) {
+		if (bee.getGenome().getNeverSleeps()) {
 			nocturnal0 = diurnal0 = yes;
 		} else {
 			nocturnal0 = bee.getGenome().getPrimary().isNocturnal() ? yes : no;
@@ -201,10 +201,10 @@ public class GuiBeealyzer extends GuiAlyzer {
 		textLayout.drawLine(nocturnal1, COLUMN_2, getColorCoding(false));
 		textLayout.newLineCompressed();
 
-		String primary = StringUtil.readableBoolean(bee.getGenome().getTolerantFlyer(), yes, no);
-		String secondary = StringUtil.readableBoolean(((AlleleBoolean) bee.getGenome().getInactiveAllele(EnumBeeChromosome.TOLERANT_FLYER)).getValue(), yes, no);
+		String primary = StringUtil.readableBoolean(bee.getGenome().getToleratesRain(), yes, no);
+		String secondary = StringUtil.readableBoolean(((AlleleBoolean) bee.getGenome().getInactiveAllele(EnumBeeChromosome.TOLERATES_RAIN)).getValue(), yes, no);
 
-		drawRow(StringUtil.localize("gui.flyer"), primary, secondary, bee, EnumBeeChromosome.TOLERANT_FLYER);
+		drawRow(StringUtil.localize("gui.flyer"), primary, secondary, bee, EnumBeeChromosome.TOLERATES_RAIN);
 
 		textLayout.newLineCompressed();
 

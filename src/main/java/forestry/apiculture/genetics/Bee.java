@@ -248,13 +248,14 @@ public class Bee extends IndividualLiving implements IBee {
 	public Set<IErrorState> getCanWork(IBeeHousing housing) {
 		World world = housing.getWorld();
 		BiomeGenBase biome = housing.getBiome();
+		BlockPos housingCoords = housing.getCoordinates();
 
 		Set<IErrorState> errorStates = new HashSet<>();
 
 		IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(housing);
 
 		// / Rain needs tolerant flyers
-		if (world.isRaining() && BiomeHelper.canRainOrSnow(biome) && !canFlyInRain(beeModifier)) {
+		if (world.isRainingAt(housingCoords) && !canFlyInRain(beeModifier)) {
 			errorStates.add(EnumErrorCode.IS_RAINING);
 		}
 
@@ -320,11 +321,11 @@ public class Bee extends IndividualLiving implements IBee {
 	}
 
 	private boolean canWorkAtNight(IBeeModifier beeModifier) {
-		return genome.getPrimary().isNocturnal() || genome.getNocturnal() || beeModifier.isSelfLighted();
+		return genome.getPrimary().isNocturnal() || genome.getNeverSleeps() || beeModifier.isSelfLighted();
 	}
 
 	private boolean canWorkDuringDay() {
-		return !genome.getPrimary().isNocturnal() || genome.getNocturnal();
+		return !genome.getPrimary().isNocturnal() || genome.getNeverSleeps();
 	}
 
 	private boolean canWorkUnderground(IBeeModifier beeModifier) {
@@ -332,7 +333,7 @@ public class Bee extends IndividualLiving implements IBee {
 	}
 
 	private boolean canFlyInRain(IBeeModifier beeModifier) {
-		return genome.getTolerantFlyer() || beeModifier.isSealed();
+		return genome.getToleratesRain() || beeModifier.isSealed();
 	}
 
 	private boolean isSuitableBiome(BiomeGenBase biome) {
@@ -418,11 +419,11 @@ public class Bee extends IndividualLiving implements IBee {
 		list.add(humidTolerance);
 		list.add(flowers);
 
-		if (genome.getNocturnal()) {
-			list.add(EnumChatFormatting.RED + GenericRatings.rateActivityTime(genome.getNocturnal(), false));
+		if (genome.getNeverSleeps()) {
+			list.add(EnumChatFormatting.RED + GenericRatings.rateActivityTime(genome.getNeverSleeps(), false));
 		}
 
-		if (genome.getTolerantFlyer()) {
+		if (genome.getToleratesRain()) {
 			list.add(EnumChatFormatting.WHITE + StringUtil.localize("gui.flyer.tooltip"));
 		}
 	}

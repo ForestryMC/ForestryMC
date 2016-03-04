@@ -66,7 +66,7 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 		// Raintanks in desert biomes are useless
 		if (worldObj != null) {
 			BiomeGenBase biome = worldObj.getBiomeGenForCoordsBody(getPos());
-			isValidBiome = BiomeHelper.canRainOrSnow(biome);
+			isValidBiome = biome.canRain();
 			getErrorLogic().setCondition(!isValidBiome, EnumErrorCode.NO_RAIN_BIOME);
 		}
 
@@ -117,7 +117,7 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 		boolean hasSky = worldObj.canBlockSeeSky(getPos().add(0, 1, 0));
 		errorLogic.setCondition(!hasSky, EnumErrorCode.NO_SKY_RAIN_TANK);
 
-		errorLogic.setCondition(!worldObj.isRaining(), EnumErrorCode.NOT_RAINING);
+		errorLogic.setCondition(!worldObj.isRainingAt(getPos()), EnumErrorCode.NOT_RAINING);
 
 		if (!errorLogic.hasErrors()) {
 			resourceTank.fill(STACK_WATER, true);

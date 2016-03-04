@@ -120,7 +120,7 @@ public class AlleleHelper implements IAlleleHelper {
 		for (IAlleleBoolean alleleBoolean : booleans.values()) {
 			AlleleManager.alleleRegistry.registerAllele(alleleBoolean,
 					EnumBeeChromosome.NEVER_SLEEPS,
-					EnumBeeChromosome.TOLERANT_FLYER,
+					EnumBeeChromosome.TOLERATES_RAIN,
 					EnumBeeChromosome.CAVE_DWELLING,
 					EnumButterflyChromosome.NOCTURNAL,
 					EnumButterflyChromosome.TOLERANT_FLYER,

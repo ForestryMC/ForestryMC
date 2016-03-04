@@ -33,9 +33,9 @@ public interface IBeeGenome extends IGenome {
 
 	EnumTolerance getToleranceHumid();
 
-	boolean getNocturnal();
+	boolean getNeverSleeps();
 
-	boolean getTolerantFlyer();
+	boolean getToleratesRain();
 
 	boolean getCaveDwelling();
 

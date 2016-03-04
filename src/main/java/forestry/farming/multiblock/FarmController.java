@@ -254,7 +254,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 	@Override
 	protected boolean updateServer(int tickCount) {
-		hydrationManager.updateServer(worldObj, getBiome());
+		hydrationManager.updateServer(worldObj, getTopCenterCoord());
 
 		if (updateOnInterval(20)) {
 			inventory.drainCan(tankManager);

@@ -781,7 +781,7 @@ public enum BeeDefinition implements IBeeDefinition {
 		@Override
 		protected void setAlleles(IAllele[] template) {
 			AlleleHelper.instance.set(template, EnumBeeChromosome.NEVER_SLEEPS, true);
-			AlleleHelper.instance.set(template, EnumBeeChromosome.TOLERANT_FLYER, true);
+			AlleleHelper.instance.set(template, EnumBeeChromosome.TOLERATES_RAIN, true);
 			AlleleHelper.instance.set(template, EnumBeeChromosome.FLOWER_PROVIDER, EnumAllele.Flowers.GOURD);
 		}
 
@@ -885,7 +885,7 @@ public enum BeeDefinition implements IBeeDefinition {
 		@Override
 		protected void setAlleles(IAllele[] template) {
 			AlleleHelper.instance.set(template, EnumBeeChromosome.FERTILITY, EnumAllele.Fertility.MAXIMUM);
-			AlleleHelper.instance.set(template, EnumBeeChromosome.TOLERANT_FLYER, true);
+			AlleleHelper.instance.set(template, EnumBeeChromosome.TOLERATES_RAIN, true);
 			AlleleHelper.instance.set(template, EnumBeeChromosome.NEVER_SLEEPS, true);
 		}
 
@@ -906,7 +906,7 @@ public enum BeeDefinition implements IBeeDefinition {
 
 		@Override
 		protected void setAlleles(IAllele[] template) {
-			AlleleHelper.instance.set(template, EnumBeeChromosome.TOLERANT_FLYER, true);
+			AlleleHelper.instance.set(template, EnumBeeChromosome.TOLERATES_RAIN, true);
 			AlleleHelper.instance.set(template, EnumBeeChromosome.NEVER_SLEEPS, true);
 			AlleleHelper.instance.set(template, EnumBeeChromosome.EFFECT, AlleleEffect.effectMycophilic);
 			AlleleHelper.instance.set(template, EnumBeeChromosome.TERRITORY, EnumAllele.Territory.LARGER);

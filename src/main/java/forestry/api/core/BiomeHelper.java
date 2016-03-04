@@ -12,13 +12,6 @@ public class BiomeHelper {
 	private static final Map<BiomeGenBase, Boolean> isBiomeHellishCache = new HashMap<>();
 
 	/**
-	 * Determines if it can rain or snow in the given biome.
-	 */
-	public static boolean canRainOrSnow(BiomeGenBase biomeGenBase) {
-		return biomeGenBase.getEnableSnow() || biomeGenBase.canRain();
-	}
-
-	/**
 	 * Determines if a given BiomeGenBase is of HELLISH temperature, since it is treated separately from actual temperature values.
 	 * Uses the BiomeDictionary.
 	 * @param biomeGen BiomeGenBase of the biome in question

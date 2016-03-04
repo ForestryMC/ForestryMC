@@ -54,7 +54,7 @@ public enum EnumBeeChromosome implements IChromosomeType {
 	/**
 	 * If true the bee can work during rain.
 	 */
-	TOLERANT_FLYER(IAlleleBoolean.class),
+	TOLERATES_RAIN(IAlleleBoolean.class),
 	/**
 	 * If true, the bee can work without a clear view of the sky.
 	 */

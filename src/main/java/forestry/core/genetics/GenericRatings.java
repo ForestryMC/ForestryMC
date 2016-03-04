@@ -34,9 +34,9 @@ public class GenericRatings {
 		}
 	}
 
-	public static String rateActivityTime(boolean nocturnalTrait, boolean naturalNocturnal) {
+	public static String rateActivityTime(boolean neverSleeps, boolean naturalNocturnal) {
 		String active = naturalNocturnal ? StringUtil.localize("gui.nocturnal") : StringUtil.localize("gui.diurnal");
-		if (nocturnalTrait) {
+		if (neverSleeps) {
 			active = StringUtil.append(", ", active, naturalNocturnal ? StringUtil.localize("gui.diurnal") : StringUtil.localize("gui.nocturnal"));
 		}
 		

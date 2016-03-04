@@ -130,7 +130,7 @@ public class BeeGenome extends Genome implements IBeeGenome {
 	}
 
 	@Override
-	public boolean getNocturnal() {
+	public boolean getNeverSleeps() {
 		return ((AlleleBoolean) getActiveAllele(EnumBeeChromosome.NEVER_SLEEPS)).getValue();
 	}
 
@@ -140,8 +140,8 @@ public class BeeGenome extends Genome implements IBeeGenome {
 	}
 
 	@Override
-	public boolean getTolerantFlyer() {
-		return ((AlleleBoolean) getActiveAllele(EnumBeeChromosome.TOLERANT_FLYER)).getValue();
+	public boolean getToleratesRain() {
+		return ((AlleleBoolean) getActiveAllele(EnumBeeChromosome.TOLERATES_RAIN)).getValue();
 	}
 
 	@Override
