@@ -27,7 +27,8 @@ import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.IModelProvider;
 import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAlleleSpeciesCustom;
+import forestry.api.genetics.IAlleleSpecies;
+import forestry.api.genetics.IAlleleSpeciesBuilder;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
@@ -36,7 +37,7 @@ import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.plugins.PluginApiculture;
 
-public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesCustom {
+public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesBuilder, IAlleleSpecies {
 	private final String binomial;
 	private final String authority;
 	private final String description;
@@ -157,31 +158,31 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesCust
 	}
 
 	@Override
-	public IAlleleSpeciesCustom setTemperature(EnumTemperature temperature) {
+	public IAlleleSpeciesBuilder setTemperature(EnumTemperature temperature) {
 		climate = temperature;
 		return this;
 	}
 
 	@Override
-	public IAlleleSpeciesCustom setHumidity(EnumHumidity humidity) {
+	public IAlleleSpeciesBuilder setHumidity(EnumHumidity humidity) {
 		this.humidity = humidity;
 		return this;
 	}
 
 	@Override
-	public IAlleleSpeciesCustom setHasEffect() {
+	public IAlleleSpeciesBuilder setHasEffect() {
 		hasEffect = true;
 		return this;
 	}
 
 	@Override
-	public IAlleleSpeciesCustom setIsSecret() {
+	public IAlleleSpeciesBuilder setIsSecret() {
 		isSecret = true;
 		return this;
 	}
 
 	@Override
-	public IAlleleSpeciesCustom setIsNotCounted() {
+	public IAlleleSpeciesBuilder setIsNotCounted() {
 		isCounted = false;
 		return this;
 	}

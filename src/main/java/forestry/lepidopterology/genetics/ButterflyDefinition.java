@@ -23,7 +23,8 @@ import forestry.api.genetics.IClassification;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.EnumButterflyChromosome;
 import forestry.api.lepidopterology.EnumFlutterType;
-import forestry.api.lepidopterology.IAlleleButterflySpeciesCustom;
+import forestry.api.lepidopterology.IAlleleButterflySpecies;
+import forestry.api.lepidopterology.IAlleleButterflySpeciesBuilder;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IButterflyGenome;
 import forestry.core.config.Constants;
@@ -78,7 +79,7 @@ public enum ButterflyDefinition implements IButterflyDefinition {
 	},
 	CitrusSwallow(ButterflyBranchDefinition.Papilio, "swallowtailC", "demodocus", new Color(0xeae389), false, 1.0f) {
 		@Override
-		protected void setSpeciesProperties(IAlleleButterflySpeciesCustom species) {
+		protected void setSpeciesProperties(IAlleleButterflySpeciesBuilder species) {
 			species.setTemperature(EnumTemperature.WARM)
 					.setHumidity(EnumHumidity.DAMP);
 		}
@@ -96,7 +97,7 @@ public enum ButterflyDefinition implements IButterflyDefinition {
 	},
 	EmeraldPeacock(ButterflyBranchDefinition.Papilio, "emeraldPeacock", "palinurus", new Color(0x7cfe80), true, 0.1f) {
 		@Override
-		protected void setSpeciesProperties(IAlleleButterflySpeciesCustom species) {
+		protected void setSpeciesProperties(IAlleleButterflySpeciesBuilder species) {
 			species.setTemperature(EnumTemperature.WARM)
 					.setHumidity(EnumHumidity.DAMP);
 		}
@@ -112,7 +113,7 @@ public enum ButterflyDefinition implements IButterflyDefinition {
 	},
 	ThoasSwallow(ButterflyBranchDefinition.Papilio, "swallowtailT", "thoas", new Color(0xeac783), false, 0.2f) {
 		@Override
-		protected void setSpeciesProperties(IAlleleButterflySpeciesCustom species) {
+		protected void setSpeciesProperties(IAlleleButterflySpeciesBuilder species) {
 			species.setTemperature(EnumTemperature.WARM)
 					.setHumidity(EnumHumidity.DAMP);
 		}
@@ -149,7 +150,7 @@ public enum ButterflyDefinition implements IButterflyDefinition {
 	},
 	Glasswing(ButterflyBranchDefinition.Greta, "glasswing", "oto", new Color(0x583732), true, 0.1f) {
 		@Override
-		protected void setSpeciesProperties(IAlleleButterflySpeciesCustom species) {
+		protected void setSpeciesProperties(IAlleleButterflySpeciesBuilder species) {
 			species.setTemperature(EnumTemperature.WARM);
 		}
 
@@ -181,7 +182,7 @@ public enum ButterflyDefinition implements IButterflyDefinition {
 	},
 	MBlueMorpho(ButterflyBranchDefinition.Morpho, "blueMorphoM", "menelaus", new Color(0x72e1fd), true, 0.5f) {
 		@Override
-		protected void setSpeciesProperties(IAlleleButterflySpeciesCustom species) {
+		protected void setSpeciesProperties(IAlleleButterflySpeciesBuilder species) {
 			species.setTemperature(EnumTemperature.WARM)
 					.setHumidity(EnumHumidity.DAMP);
 		}
@@ -195,7 +196,7 @@ public enum ButterflyDefinition implements IButterflyDefinition {
 	},
 	PBlueMorpho(ButterflyBranchDefinition.Morpho, "blueMorphoP", "peleides", new Color(0x6ecce8), true, 0.25f) {
 		@Override
-		protected void setSpeciesProperties(IAlleleButterflySpeciesCustom species) {
+		protected void setSpeciesProperties(IAlleleButterflySpeciesBuilder species) {
 			species.setTemperature(EnumTemperature.WARM)
 					.setHumidity(EnumHumidity.DAMP);
 		}
@@ -209,7 +210,7 @@ public enum ButterflyDefinition implements IButterflyDefinition {
 	},
 	RBlueMorpho(ButterflyBranchDefinition.Morpho, "blueMorphoR", "rhetenor", new Color(0x00bef8), true, 0.1f) {
 		@Override
-		protected void setSpeciesProperties(IAlleleButterflySpeciesCustom species) {
+		protected void setSpeciesProperties(IAlleleButterflySpeciesBuilder species) {
 			species.setTemperature(EnumTemperature.WARM)
 					.setHumidity(EnumHumidity.DAMP);
 		}
@@ -229,7 +230,7 @@ public enum ButterflyDefinition implements IButterflyDefinition {
 	},
 	Batesia(ButterflyBranchDefinition.Batesia, "paintedBeauty", "hypochlora", new Color(0xfe7763), true, 0.3f) {
 		@Override
-		protected void setSpeciesProperties(IAlleleButterflySpeciesCustom species) {
+		protected void setSpeciesProperties(IAlleleButterflySpeciesBuilder species) {
 			species.setTemperature(EnumTemperature.WARM)
 					.setHumidity(EnumHumidity.DAMP);
 		}
@@ -254,7 +255,7 @@ public enum ButterflyDefinition implements IButterflyDefinition {
 	},
 	BlueDuke(ButterflyBranchDefinition.Bassarona, "blueDuke", "durga", new Color(0x304240), true, 0.5f) {
 		@Override
-		protected void setSpeciesProperties(IAlleleButterflySpeciesCustom species) {
+		protected void setSpeciesProperties(IAlleleButterflySpeciesBuilder species) {
 			species.setTemperature(EnumTemperature.COLD);
 		}
 
@@ -272,7 +273,7 @@ public enum ButterflyDefinition implements IButterflyDefinition {
 	Postman(ButterflyBranchDefinition.Heliconius, "postman", "melpomene", new Color(0xf7302d), true, 0.3f),
 	Malachite(ButterflyBranchDefinition.Siproeta, "malachite", "stelenes", new Color(0xbdff53), true, 0.5f) {
 		@Override
-		protected void setSpeciesProperties(IAlleleButterflySpeciesCustom species) {
+		protected void setSpeciesProperties(IAlleleButterflySpeciesBuilder species) {
 			species.setTemperature(EnumTemperature.WARM)
 					.setHumidity(EnumHumidity.DAMP);
 		}
@@ -299,7 +300,7 @@ public enum ButterflyDefinition implements IButterflyDefinition {
 		}
 	};
 
-	private final IAlleleButterflySpeciesCustom species;
+	private final IAlleleButterflySpecies species;
 	private final ButterflyBranchDefinition branch;
 	private IAllele[] template;
 	private IButterflyGenome genome;
@@ -314,8 +315,10 @@ public enum ButterflyDefinition implements IButterflyDefinition {
 
 		String texture = "forestry:" + Constants.TEXTURE_PATH_ENTITIES + "/butterflies/" + uid + ".png";
 
-		species = ButterflyManager.butterflyFactory.createSpecies("forestry." + uid, unlocalizedName, "Sengir", unlocalizedDescription, texture, dominant, branchDefinition.getBranch(), binomial, serumColor);
-		species.setRarity(rarity);
+		IAlleleButterflySpeciesBuilder speciesBuilder = ButterflyManager.butterflyFactory.createSpecies("forestry." + uid, unlocalizedName, "Sengir", unlocalizedDescription, texture, dominant, branchDefinition.getBranch(), binomial, serumColor);
+		speciesBuilder.setRarity(rarity);
+		setSpeciesProperties(speciesBuilder);
+		this.species = speciesBuilder.build();
 	}
 
 	public static void initButterflies() {
@@ -325,8 +328,6 @@ public enum ButterflyDefinition implements IButterflyDefinition {
 	}
 
 	private void init() {
-		setSpeciesProperties(species);
-
 		template = branch.getTemplate();
 		AlleleHelper.instance.set(template, EnumButterflyChromosome.SPECIES, species);
 		setAlleles(template);
@@ -336,7 +337,7 @@ public enum ButterflyDefinition implements IButterflyDefinition {
 		ButterflyManager.butterflyRoot.registerTemplate(template);
 	}
 
-	protected void setSpeciesProperties(IAlleleButterflySpeciesCustom species) {
+	protected void setSpeciesProperties(IAlleleButterflySpeciesBuilder species) {
 
 	}
 

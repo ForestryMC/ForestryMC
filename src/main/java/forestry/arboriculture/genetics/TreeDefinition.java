@@ -28,7 +28,8 @@ import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.EnumLeafType;
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.EnumWoodType;
-import forestry.api.arboriculture.IAlleleTreeSpeciesCustom;
+import forestry.api.arboriculture.IAlleleTreeSpecies;
+import forestry.api.arboriculture.IAlleleTreeSpeciesBuilder;
 import forestry.api.arboriculture.IGermlingModelProvider;
 import forestry.api.arboriculture.ILeafSpriteProvider;
 import forestry.api.arboriculture.ITree;
@@ -105,7 +106,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 		}
 
 		@Override
-		protected void setSpeciesProperties(IAlleleTreeSpeciesCustom treeSpecies) {
+		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.POMES);
 		}
 
@@ -128,7 +129,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 		}
 
 		@Override
-		protected void setSpeciesProperties(IAlleleTreeSpeciesCustom treeSpecies) {
+		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.POMES);
 		}
 
@@ -150,7 +151,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 		}
 
 		@Override
-		protected void setSpeciesProperties(IAlleleTreeSpeciesCustom treeSpecies) {
+		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 
 		}
 
@@ -174,7 +175,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 		}
 
 		@Override
-		protected void setSpeciesProperties(IAlleleTreeSpeciesCustom treeSpecies) {
+		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.NUX)
 					.addFruitFamily(EnumFruitFamily.PRUNES)
 					.addFruitFamily(EnumFruitFamily.POMES);
@@ -192,7 +193,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 		}
 
 		@Override
-		protected void setSpeciesProperties(IAlleleTreeSpeciesCustom treeSpecies) {
+		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.NUX)
 					.addFruitFamily(EnumFruitFamily.PRUNES)
 					.addFruitFamily(EnumFruitFamily.POMES);
@@ -220,7 +221,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 		}
 
 		@Override
-		protected void setSpeciesProperties(IAlleleTreeSpeciesCustom treeSpecies) {
+		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.NUX)
 					.addFruitFamily(EnumFruitFamily.PRUNES)
 					.addFruitFamily(EnumFruitFamily.POMES);
@@ -248,7 +249,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 		}
 
 		@Override
-		protected void setSpeciesProperties(IAlleleTreeSpeciesCustom treeSpecies) {
+		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.PRUNES)
 					.addFruitFamily(EnumFruitFamily.POMES);
 		}
@@ -275,7 +276,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 		}
 
 		@Override
-		protected void setSpeciesProperties(IAlleleTreeSpeciesCustom treeSpecies) {
+		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.PRUNES)
 					.addFruitFamily(EnumFruitFamily.POMES);
 		}
@@ -300,7 +301,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 		}
 
 		@Override
-		protected void setSpeciesProperties(IAlleleTreeSpeciesCustom treeSpecies) {
+		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.PRUNES)
 					.addFruitFamily(EnumFruitFamily.POMES);
 		}
@@ -325,7 +326,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 		}
 
 		@Override
-		protected void setSpeciesProperties(IAlleleTreeSpeciesCustom treeSpecies) {
+		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.PRUNES)
 					.addFruitFamily(EnumFruitFamily.POMES);
 		}
@@ -349,7 +350,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 		}
 
 		@Override
-		protected void setSpeciesProperties(IAlleleTreeSpeciesCustom treeSpecies) {
+		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 
 		}
 
@@ -372,7 +373,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 		}
 
 		@Override
-		protected void setSpeciesProperties(IAlleleTreeSpeciesCustom treeSpecies) {
+		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 
 		}
 
@@ -396,7 +397,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 		}
 
 		@Override
-		protected void setSpeciesProperties(IAlleleTreeSpeciesCustom treeSpecies) {
+		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 
 		}
 
@@ -419,7 +420,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 		}
 
 		@Override
-		protected void setSpeciesProperties(IAlleleTreeSpeciesCustom treeSpecies) {
+		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 
 		}
 
@@ -444,7 +445,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 		}
 
 		@Override
-		protected void setSpeciesProperties(IAlleleTreeSpeciesCustom treeSpecies) {
+		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 
 		}
 
@@ -469,7 +470,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 		}
 
 		@Override
-		protected void setSpeciesProperties(IAlleleTreeSpeciesCustom treeSpecies) {
+		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.JUNGLE);
 		}
 
@@ -492,7 +493,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 		}
 
 		@Override
-		protected void setSpeciesProperties(IAlleleTreeSpeciesCustom treeSpecies) {
+		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.JUNGLE);
 		}
 
@@ -513,7 +514,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 		}
 
 		@Override
-		protected void setSpeciesProperties(IAlleleTreeSpeciesCustom treeSpecies) {
+		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.JUNGLE);
 		}
 
@@ -536,7 +537,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 		}
 
 		@Override
-		protected void setSpeciesProperties(IAlleleTreeSpeciesCustom treeSpecies) {
+		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.JUNGLE)
 					.addFruitFamily(EnumFruitFamily.PRUNES);
 		}
@@ -560,7 +561,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 		}
 
 		@Override
-		protected void setSpeciesProperties(IAlleleTreeSpeciesCustom treeSpecies) {
+		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.JUNGLE)
 					.addFruitFamily(EnumFruitFamily.PRUNES);
 		}
@@ -585,7 +586,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 		}
 
 		@Override
-		protected void setSpeciesProperties(IAlleleTreeSpeciesCustom treeSpecies) {
+		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.NUX);
 		}
 
@@ -607,7 +608,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 		}
 
 		@Override
-		protected void setSpeciesProperties(IAlleleTreeSpeciesCustom treeSpecies) {
+		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.JUNGLE);
 		}
 
@@ -631,7 +632,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 		}
 
 		@Override
-		protected void setSpeciesProperties(IAlleleTreeSpeciesCustom treeSpecies) {
+		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.JUNGLE)
 					.addFruitFamily(EnumFruitFamily.NUX);
 		}
@@ -653,7 +654,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 		}
 
 		@Override
-		protected void setSpeciesProperties(IAlleleTreeSpeciesCustom treeSpecies) {
+		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.JUNGLE)
 					.addFruitFamily(EnumFruitFamily.NUX);
 		}
@@ -675,7 +676,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 		}
 
 		@Override
-		protected void setSpeciesProperties(IAlleleTreeSpeciesCustom treeSpecies) {
+		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.JUNGLE);
 		}
 
@@ -697,7 +698,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 		}
 
 		@Override
-		protected void setSpeciesProperties(IAlleleTreeSpeciesCustom treeSpecies) {
+		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.JUNGLE)
 					.addFruitFamily(EnumFruitFamily.NUX);
 		}
@@ -721,7 +722,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 		}
 
 		@Override
-		protected void setSpeciesProperties(IAlleleTreeSpeciesCustom treeSpecies) {
+		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.JUNGLE);
 		}
 
@@ -742,7 +743,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 		}
 
 		@Override
-		protected void setSpeciesProperties(IAlleleTreeSpeciesCustom treeSpecies) {
+		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.JUNGLE)
 					.addFruitFamily(EnumFruitFamily.NUX);
 		}
@@ -765,7 +766,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 		}
 
 		@Override
-		protected void setSpeciesProperties(IAlleleTreeSpeciesCustom treeSpecies) {
+		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.JUNGLE)
 					.addFruitFamily(EnumFruitFamily.NUX);
 		}
@@ -791,7 +792,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 		}
 
 		@Override
-		protected void setSpeciesProperties(IAlleleTreeSpeciesCustom treeSpecies) {
+		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.JUNGLE)
 					.addFruitFamily(EnumFruitFamily.POMES)
 					.addFruitFamily(EnumFruitFamily.PRUNES);
@@ -816,7 +817,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 		}
 
 		@Override
-		protected void setSpeciesProperties(IAlleleTreeSpeciesCustom treeSpecies) {
+		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.NUX)
 					.addFruitFamily(EnumFruitFamily.PRUNES)
 					.addFruitFamily(EnumFruitFamily.POMES);
@@ -849,7 +850,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 		}
 
 		@Override
-		protected void setSpeciesProperties(IAlleleTreeSpeciesCustom treeSpecies) {
+		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.JUNGLE);
 		}
 
@@ -875,7 +876,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 		}
 
 		@Override
-		protected void setSpeciesProperties(IAlleleTreeSpeciesCustom treeSpecies) {
+		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.JUNGLE)
 					.addFruitFamily(EnumFruitFamily.NUX);
 		}
@@ -900,7 +901,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 		}
 
 		@Override
-		protected void setSpeciesProperties(IAlleleTreeSpeciesCustom treeSpecies) {
+		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.JUNGLE)
 					.addFruitFamily(EnumFruitFamily.NUX);
 		}
@@ -926,7 +927,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 		}
 
 		@Override
-		protected void setSpeciesProperties(IAlleleTreeSpeciesCustom treeSpecies) {
+		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.PRUNES)
 					.addFruitFamily(EnumFruitFamily.POMES);
 		}
@@ -947,7 +948,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 	};
 
 	private final TreeBranchDefinition branch;
-	private final IAlleleTreeSpeciesCustom species;
+	private final IAlleleTreeSpecies species;
 
 	private final EnumWoodType woodType; // for forestry trees
 	private final ItemStack vanillaWood; // for vanilla trees
@@ -967,7 +968,10 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 		ILeafSpriteProvider leafIconProvider = TreeManager.treeFactory.getLeafIconProvider(leafType, primary, secondary);
 		IGermlingModelProvider germlingIconProvider = new ModelProviderGermlingVanilla(vanillaMeta);
 
-		this.species = TreeManager.treeFactory.createSpecies(uid, unlocalizedName, "Sengir", unlocalizedDescription, dominant, branch.getBranch(), binomial, modelName, leafIconProvider, germlingIconProvider, this);
+		IAlleleTreeSpeciesBuilder speciesBuilder = TreeManager.treeFactory.createSpecies(uid, unlocalizedName, "Sengir", unlocalizedDescription, dominant, branch.getBranch(), binomial, modelName, leafIconProvider, germlingIconProvider, this);
+		setSpeciesProperties(speciesBuilder);
+		this.species = speciesBuilder.build();
+
 		this.woodType = null;
 		this.vanillaWood = vanillaWood;
 	}
@@ -984,12 +988,15 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 		ILeafSpriteProvider leafIconProvider = TreeManager.treeFactory.getLeafIconProvider(leafType, primary, secondary);
 		IGermlingModelProvider germlingIconProvider = new ModelProviderGermling(uid);
 
-		this.species = TreeManager.treeFactory.createSpecies(uid, unlocalizedName, "Sengir", unlocalizedDescription, dominant, branch.getBranch(), binomial, modelName, leafIconProvider, germlingIconProvider, this);
+		IAlleleTreeSpeciesBuilder speciesBuilder = TreeManager.treeFactory.createSpecies(uid, unlocalizedName, "Sengir", unlocalizedDescription, dominant, branch.getBranch(), binomial, modelName, leafIconProvider, germlingIconProvider, this);
+		setSpeciesProperties(speciesBuilder);
+		this.species = speciesBuilder.build();
+
 		this.woodType = woodType;
 		this.vanillaWood = null;
 	}
 
-	protected abstract void setSpeciesProperties(IAlleleTreeSpeciesCustom treeSpecies);
+	protected abstract void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies);
 
 	protected abstract void setAlleles(IAllele[] alleles);
 
@@ -1061,8 +1068,6 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 	}
 
 	private void init() {
-		setSpeciesProperties(species);
-
 		template = branch.getTemplate();
 		AlleleHelper.instance.set(template, EnumTreeChromosome.SPECIES, species);
 		setAlleles(template);

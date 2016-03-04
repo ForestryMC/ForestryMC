@@ -21,7 +21,8 @@ import forestry.api.genetics.IClassification;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.EnumButterflyChromosome;
 import forestry.api.lepidopterology.EnumFlutterType;
-import forestry.api.lepidopterology.IAlleleButterflySpeciesCustom;
+import forestry.api.lepidopterology.IAlleleButterflySpecies;
+import forestry.api.lepidopterology.IAlleleButterflySpeciesBuilder;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IButterflyGenome;
 import forestry.core.config.Constants;
@@ -43,7 +44,7 @@ public enum MothDefinition implements IButterflyDefinition {
 		}
 	};
 
-	private final IAlleleButterflySpeciesCustom species;
+	private final IAlleleButterflySpecies species;
 	private final ButterflyBranchDefinition branch;
 	private IAllele[] template;
 	private IButterflyGenome genome;
@@ -58,9 +59,11 @@ public enum MothDefinition implements IButterflyDefinition {
 
 		String texture = "forestry:" + Constants.TEXTURE_PATH_ENTITIES + "/butterflies/" + uid + ".png";
 
-		species = ButterflyManager.butterflyFactory.createSpecies("forestry." + uid, unlocalizedName, "Sengir", unlocalizedDescription, texture, dominant, branchDefinition.getBranch(), binomial, serumColor);
-		species.setRarity(rarity);
-		species.setNocturnal();
+		IAlleleButterflySpeciesBuilder speciesBuilder = ButterflyManager.butterflyFactory.createSpecies("forestry." + uid, unlocalizedName, "Sengir", unlocalizedDescription, texture, dominant, branchDefinition.getBranch(), binomial, serumColor);
+		speciesBuilder.setRarity(rarity);
+		speciesBuilder.setNocturnal();
+		setSpeciesProperties(speciesBuilder);
+		species = speciesBuilder.build();
 	}
 
 	public static void initMoths() {
@@ -70,8 +73,6 @@ public enum MothDefinition implements IButterflyDefinition {
 	}
 
 	private void init() {
-		setSpeciesProperties(species);
-
 		template = branch.getTemplate();
 		AlleleHelper.instance.set(template, EnumButterflyChromosome.SPECIES, species);
 		setAlleles(template);
@@ -81,7 +82,7 @@ public enum MothDefinition implements IButterflyDefinition {
 		ButterflyManager.butterflyRoot.registerTemplate(template);
 	}
 
-	protected void setSpeciesProperties(IAlleleButterflySpeciesCustom species) {
+	protected void setSpeciesProperties(IAlleleButterflySpeciesBuilder species) {
 
 	}
 

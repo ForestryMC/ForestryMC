@@ -26,8 +26,10 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.apiculture.BeeManager;
+import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.EnumBeeType;
-import forestry.api.apiculture.IAlleleBeeSpeciesCustom;
+import forestry.api.apiculture.IAlleleBeeSpecies;
+import forestry.api.apiculture.IAlleleBeeSpeciesBuilder;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeModelProvider;
@@ -36,6 +38,7 @@ import forestry.api.apiculture.IBeeSpriteColourProvider;
 import forestry.api.apiculture.IJubilanceProvider;
 import forestry.api.core.IModelManager;
 import forestry.api.core.IModelProvider;
+import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IIndividual;
 import forestry.apiculture.genetics.DefaultBeeModelProvider;
@@ -44,7 +47,7 @@ import forestry.apiculture.genetics.JubilanceDefault;
 import forestry.core.genetics.alleles.AlleleSpecies;
 import forestry.core.utils.ItemStackUtil;
 
-public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpeciesCustom {
+public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies, IAlleleBeeSpeciesBuilder {
 	private final Map<ItemStack, Float> productChances = new HashMap<>();
 	private final Map<ItemStack, Float> specialtyChances = new HashMap<>();
 
@@ -62,12 +65,18 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 	}
 
 	@Override
+	public IAlleleBeeSpecies build() {
+		AlleleManager.alleleRegistry.registerAllele(this, EnumBeeChromosome.SPECIES);
+		return this;
+	}
+
+	@Override
 	public IBeeRoot getRoot() {
 		return BeeManager.beeRoot;
 	}
 
 	@Override
-	public IAlleleBeeSpeciesCustom addProduct(ItemStack product, Float chance) {
+	public IAlleleBeeSpeciesBuilder addProduct(ItemStack product, Float chance) {
 		if (product == null || product.getItem() == null) {
 			throw new IllegalArgumentException("Tried to add null product");
 		}
@@ -79,7 +88,7 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 	}
 
 	@Override
-	public IAlleleBeeSpeciesCustom addSpecialty(ItemStack specialty, Float chance) {
+	public IAlleleBeeSpeciesBuilder addSpecialty(ItemStack specialty, Float chance) {
 		if (specialty == null || specialty.getItem() == null) {
 			throw new IllegalArgumentException("Tried to add null specialty");
 		}
@@ -91,25 +100,25 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 	}
 
 	@Override
-	public IAlleleBeeSpeciesCustom setJubilanceProvider(IJubilanceProvider provider) {
+	public IAlleleBeeSpeciesBuilder setJubilanceProvider(IJubilanceProvider provider) {
 		this.jubilanceProvider = provider;
 		return this;
 	}
 
 	@Override
-	public IAlleleBeeSpeciesCustom setNocturnal() {
+	public IAlleleBeeSpeciesBuilder setNocturnal() {
 		nocturnal = true;
 		return this;
 	}
 	
 	@Override
-	public IAlleleBeeSpeciesCustom setCustomBeeModelProvider(IBeeModelProvider beeIconProvider) {
+	public IAlleleBeeSpeciesBuilder setCustomBeeModelProvider(IBeeModelProvider beeIconProvider) {
 		this.beeModelProvider = beeIconProvider;
 		return this;
 	}
 
 	@Override
-	public IAlleleBeeSpeciesCustom setCustomBeeSpriteColourProvider(IBeeSpriteColourProvider beeIconColourProvider) {
+	public IAlleleBeeSpeciesBuilder setCustomBeeSpriteColourProvider(IBeeSpriteColourProvider beeIconColourProvider) {
 		this.beeSpriteColourProvider = beeIconColourProvider;
 		return this;
 	}

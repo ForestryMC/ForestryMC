@@ -18,7 +18,7 @@ public interface IButterflyFactory {
 	/**
 	 * Creates a new butterfly species.
 	 * Automatically registered with AlleleManager.alleleRegistry.registerAllele()
-	 * See IAlleleButterflySpeciesCustom and IAlleleSpeciesCustom for adding additional properties to the returned species.
+	 * See IAlleleButterflySpeciesBuilder and IAlleleSpeciesBuilder for adding additional properties to the returned species.
 	 *
 	 * @param uid Unique Identifier for this species
 	 * @param unlocalizedName Unlocalized name for this species
@@ -31,5 +31,5 @@ public interface IButterflyFactory {
 	 * @param serumColour The color of this butterfly's serum.
 	 * @return a new butterfly species allele.
 	 */
-	IAlleleButterflySpeciesCustom createSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, String texturePath, boolean dominant, IClassification branch, String binomial, Color serumColour);
+	IAlleleButterflySpeciesBuilder createSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, String texturePath, boolean dominant, IClassification branch, String binomial, Color serumColour);
 }

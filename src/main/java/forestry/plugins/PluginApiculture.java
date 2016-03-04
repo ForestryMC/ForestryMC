@@ -177,6 +177,8 @@ public class PluginApiculture extends BlankForestryPlugin {
 	public void preInit() {
 		super.preInit();
 
+		BeeDefinition.preInit();
+
 		MinecraftForge.EVENT_BUS.register(this);
 
 		blocks.apiculture.addDefinitions(BlockTypeApiculture.VALUES);

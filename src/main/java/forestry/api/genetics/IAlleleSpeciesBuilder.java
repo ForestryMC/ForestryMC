@@ -8,17 +8,19 @@ package forestry.api.genetics;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 
-public interface IAlleleSpeciesCustom extends IAlleleSpecies {
+public interface IAlleleSpeciesBuilder {
 
-	IAlleleSpeciesCustom setTemperature(EnumTemperature temperature);
+	IAlleleSpecies build();
 
-	IAlleleSpeciesCustom setHumidity(EnumHumidity humidity);
+	IAlleleSpeciesBuilder setTemperature(EnumTemperature temperature);
 
-	IAlleleSpeciesCustom setHasEffect();
+	IAlleleSpeciesBuilder setHumidity(EnumHumidity humidity);
+
+	IAlleleSpeciesBuilder setHasEffect();
 
 	/** Secret species are not shown in creative mode. */
-	IAlleleSpeciesCustom setIsSecret();
+	IAlleleSpeciesBuilder setIsSecret();
 
 	/** Uncounted species do not count toward total species discovered. */
-	IAlleleSpeciesCustom setIsNotCounted();
+	IAlleleSpeciesBuilder setIsNotCounted();
 }
