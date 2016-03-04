@@ -1,8 +1,9 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "forestry:items/backpacks/t2.cloth",
-		"layer1": "forestry:items/backpacks/t2.outline"
+        "layer0": "forestry:items/backpacks/woven.cloth",
+		"layer1": "forestry:items/backpacks/woven.outline",
+		"layer2": "forestry:items/backpacks/receive"
     },
     "display": {
         "thirdperson": {

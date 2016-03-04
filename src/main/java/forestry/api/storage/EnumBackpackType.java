@@ -6,5 +6,5 @@
 package forestry.api.storage;
 
 public enum EnumBackpackType {
-	APIARIST, T1, T2
+	NORMAL, WOVEN, NATURALIST
 }

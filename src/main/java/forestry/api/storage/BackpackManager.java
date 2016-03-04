@@ -5,23 +5,13 @@
  ******************************************************************************/
 package forestry.api.storage;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import net.minecraft.item.ItemStack;
-
 public class BackpackManager {
-	/**
-	 * 0 - Miner's Backpack 1 - Digger's Backpack 2 - Forester's Backpack 3 - Hunter's Backpack 4 - Adventurer's Backpack
-	 *
-	 * Use IMC messages to achieve the same effect!
-	 */
-	public static ArrayList<ItemStack>[] backpackItems;
+	public static final String MINER_UID = "forestry.miner";
+	public static final String DIGGER_UID = "forestry.digger";
+	public static final String FORESTER_UID = "forestry.forester";
+	public static final String ADVENTURER_UID = "forestry.adventurer";
+	public static final String BUILDER_UID = "forestry.builder";
+	public static final String HUNTER_UID = "forestry.hunter";
 
 	public static IBackpackInterface backpackInterface;
-
-	/**
-	 * Only use this if you know what you are doing. Prefer backpackInterface.
-	 */
-	public static HashMap<String, IBackpackDefinition> definitions = new HashMap<>();
 }

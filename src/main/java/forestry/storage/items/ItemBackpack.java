@@ -235,7 +235,7 @@ public class ItemBackpack extends ItemWithGui {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		EnumBackpackType t = type == EnumBackpackType.APIARIST ? EnumBackpackType.T1 : type;
+		EnumBackpackType t = (type == EnumBackpackType.NATURALIST) ? EnumBackpackType.NORMAL : type;
 		String typeTag = "backpacks/" + t.toString().toLowerCase(Locale.ENGLISH);
 		models = new ModelResourceLocation[4];
 		models[0] = new ModelResourceLocation("forestry:" + typeTag + "_neutral", "inventory");
@@ -254,7 +254,6 @@ public class ItemBackpack extends ItemWithGui {
 
 		@Override
 		public ModelResourceLocation getModelLocation(ItemStack stack) {
-			EnumBackpackType t = type == EnumBackpackType.APIARIST ? EnumBackpackType.T1 : type;
 			return models[stack.getItemDamage()];
 		}
 
@@ -274,11 +273,11 @@ public class ItemBackpack extends ItemWithGui {
 
 	private static int getSlotsForType(EnumBackpackType type) {
 		switch (type) {
-			case APIARIST:
+			case NATURALIST:
 				return Constants.SLOTS_BACKPACK_APIARIST;
-			case T2:
-				return Constants.SLOTS_BACKPACK_T2;
-			case T1:
+			case WOVEN:
+				return Constants.SLOTS_BACKPACK_WOVEN;
+			case NORMAL:
 			default:
 				return Constants.SLOTS_BACKPACK_DEFAULT;
 		}
@@ -305,9 +304,9 @@ public class ItemBackpack extends ItemWithGui {
 		}
 		EnumBackpackType type = EnumBackpackType.values()[data];
 		switch (type) {
-			case T1:
+			case NORMAL:
 				return new GuiBackpack(new ContainerBackpack(player, ContainerBackpack.Size.DEFAULT, heldItem));
-			case T2:
+			case WOVEN:
 				return new GuiBackpackT2(new ContainerBackpack(player, ContainerBackpack.Size.T2, heldItem));
 		}
 		return null;
@@ -320,9 +319,9 @@ public class ItemBackpack extends ItemWithGui {
 		}
 		EnumBackpackType type = EnumBackpackType.values()[data];
 		switch (type) {
-			case T1:
+			case NORMAL:
 				return new ContainerBackpack(player, ContainerBackpack.Size.DEFAULT, heldItem);
-			case T2:
+			case WOVEN:
 				return new ContainerBackpack(player, ContainerBackpack.Size.T2, heldItem);
 		}
 		return null;

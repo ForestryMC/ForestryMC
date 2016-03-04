@@ -12,11 +12,6 @@ import net.minecraft.item.ItemStack;
 public interface IBackpackDefinition {
 
 	/**
-	 * @return A unique string identifier
-	 */
-	String getKey();
-
-	/**
 	 * @return Human-readable name of the backpack.
 	 */
 	String getName(ItemStack backpack);

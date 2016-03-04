@@ -10,18 +10,38 @@
  ******************************************************************************/
 package forestry.storage;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
+
 import net.minecraft.item.Item;
 
-import forestry.api.storage.BackpackManager;
 import forestry.api.storage.EnumBackpackType;
 import forestry.api.storage.IBackpackDefinition;
 import forestry.api.storage.IBackpackInterface;
 import forestry.storage.items.ItemBackpack;
 
 public class BackpackInterface implements IBackpackInterface {
+	/**
+	 * Only use this if you know what you are doing. Prefer backpackInterface.
+	 */
+	public final Map<String, IBackpackDefinition> definitions = new HashMap<>();
+
+	@Nullable
 	@Override
-	public Item addBackpack(IBackpackDefinition definition, EnumBackpackType type) {
-		BackpackManager.definitions.put(definition.getKey(), definition);
+	public IBackpackDefinition getBackpack(@Nonnull String uid) {
+		return definitions.get(uid);
+	}
+
+	@Override
+	public void registerBackpack(@Nonnull String uid, @Nonnull IBackpackDefinition definition) {
+		definitions.put(uid, definition);
+	}
+
+	@Nonnull
+	@Override
+	public Item createBackpack(@Nonnull IBackpackDefinition definition, @Nonnull EnumBackpackType type) {
 		return new ItemBackpack(definition, type);
 	}
 }

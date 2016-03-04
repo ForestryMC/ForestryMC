@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.storage;
 
+import javax.annotation.Nonnull;
+import java.awt.Color;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -29,8 +31,6 @@ import forestry.core.utils.ItemStackUtil;
 
 public class BackpackDefinition implements IBackpackDefinition {
 
-	private final String name;
-
 	private final int primaryColor; // - c03384
 	private final int secondaryColor;
 
@@ -39,19 +39,13 @@ public class BackpackDefinition implements IBackpackDefinition {
 	private final Set<Class> validItemClasses = new HashSet<>();
 	private final Set<Class> validBlockClasses = new HashSet<>();
 
-	public BackpackDefinition(String name, int primaryColor) {
-		this(name, primaryColor, 0xffffff);
+	public BackpackDefinition(@Nonnull Color primaryColor) {
+		this(primaryColor, new Color(0xffffff));
 	}
 
-	public BackpackDefinition(String name, int primaryColor, int secondaryColor) {
-		this.name = name;
-		this.primaryColor = primaryColor;
-		this.secondaryColor = secondaryColor;
-	}
-
-	@Override
-	public String getKey() {
-		return name;
+	public BackpackDefinition(@Nonnull Color primaryColor, @Nonnull Color secondaryColor) {
+		this.primaryColor = primaryColor.getRGB();
+		this.secondaryColor = secondaryColor.getRGB();
 	}
 
 	@Override
@@ -114,10 +108,10 @@ public class BackpackDefinition implements IBackpackDefinition {
 	}
 
 	public void addValidOreDictName(String oreDictName) {
-		//		if (OreDictionary.doesOreNameExist(oreDictName)) { //TODO: add this back when using a forge version that supports it
-		int oreId = OreDictionary.getOreID(oreDictName);
-		validOreIds.add(oreId);
-		//		}
+		if (OreDictionary.doesOreNameExist(oreDictName)) {
+			int oreId = OreDictionary.getOreID(oreDictName);
+			validOreIds.add(oreId);
+		}
 	}
 
 	public void addValidOreDictNames(List<String> oreDictNames) {
@@ -220,8 +214,8 @@ public class BackpackDefinition implements IBackpackDefinition {
 
 	public static class BackpackDefinitionApiarist extends BackpackDefinition {
 
-		public BackpackDefinitionApiarist(int primaryColor) {
-			super("apiarist", primaryColor);
+		public BackpackDefinitionApiarist(@Nonnull Color primaryColor) {
+			super(primaryColor);
 		}
 
 		@Override
@@ -232,8 +226,8 @@ public class BackpackDefinition implements IBackpackDefinition {
 
 	public static class BackpackDefinitionLepidopterist extends BackpackDefinition {
 
-		public BackpackDefinitionLepidopterist(int primaryColor) {
-			super("lepidopterist", primaryColor);
+		public BackpackDefinitionLepidopterist(@Nonnull Color primaryColor) {
+			super(primaryColor);
 		}
 
 		@Override

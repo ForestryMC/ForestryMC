@@ -94,13 +94,6 @@ public class PluginStorage extends BlankForestryPlugin {
 
 	private static final List<ItemCrated> crates = new ArrayList<>();
 	private static final String CONFIG_CATEGORY = "backpacks";
-	
-	private final ArrayList<ItemStack> minerItems = new ArrayList<>();
-	private final ArrayList<ItemStack> diggerItems = new ArrayList<>();
-	private final ArrayList<ItemStack> foresterItems = new ArrayList<>();
-	private final ArrayList<ItemStack> hunterItems = new ArrayList<>();
-	private final ArrayList<ItemStack> adventurerItems = new ArrayList<>();
-	private final ArrayList<ItemStack> builderItems = new ArrayList<>();
 
 	public static ItemRegistryStorage items;
 
@@ -112,56 +105,35 @@ public class PluginStorage extends BlankForestryPlugin {
 
 		BackpackManager.backpackInterface = new BackpackInterface();
 
-		BackpackManager.backpackItems = new ArrayList[6];
-
-		BackpackManager.backpackItems[0] = minerItems;
-		BackpackManager.backpackItems[1] = diggerItems;
-		BackpackManager.backpackItems[2] = foresterItems;
-		BackpackManager.backpackItems[3] = hunterItems;
-		BackpackManager.backpackItems[4] = adventurerItems;
-		BackpackManager.backpackItems[5] = builderItems;
-
 		BackpackDefinition definition;
 
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.APICULTURE)) {
-			definition = new BackpackDefinitionApiarist(new Color(0xc4923d).getRGB());
-			BackpackManager.definitions.put(definition.getKey(), definition);
+			definition = new BackpackDefinitionApiarist(new Color(0xc4923d));
+			BackpackManager.backpackInterface.registerBackpack("apiarist", definition);
 		}
 
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.LEPIDOPTEROLOGY)) {
-			definition = new BackpackDefinitionLepidopterist(new Color(0x995b31).getRGB());
-			BackpackManager.definitions.put(definition.getKey(), definition);
+			definition = new BackpackDefinitionLepidopterist(new Color(0x995b31));
+			BackpackManager.backpackInterface.registerBackpack("lepidopterist", definition);
 		}
 
-		definition = new BackpackDefinition("miner", new Color(0x36187d).getRGB());
-		BackpackManager.definitions.put(definition.getKey(), definition);
+		definition = new BackpackDefinition(new Color(0x36187d));
+		BackpackManager.backpackInterface.registerBackpack(BackpackManager.MINER_UID, definition);
 
-		definition = new BackpackDefinition("digger", new Color(0x363cc5).getRGB());
-		BackpackManager.definitions.put(definition.getKey(), definition);
+		definition = new BackpackDefinition(new Color(0x363cc5));
+		BackpackManager.backpackInterface.registerBackpack(BackpackManager.DIGGER_UID, definition);
 
-		definition = new BackpackDefinition("forester", new Color(0x347427).getRGB());
-		BackpackManager.definitions.put(definition.getKey(), definition);
+		definition = new BackpackDefinition(new Color(0x347427));
+		BackpackManager.backpackInterface.registerBackpack(BackpackManager.FORESTER_UID, definition);
 
-		definition = new BackpackDefinition("hunter", new Color(0x412215).getRGB());
-		BackpackManager.definitions.put(definition.getKey(), definition);
+		definition = new BackpackDefinition(new Color(0x412215));
+		BackpackManager.backpackInterface.registerBackpack(BackpackManager.HUNTER_UID, definition);
 
-		definition = new BackpackDefinition("adventurer", new Color(0x7fb8c2).getRGB());
-		BackpackManager.definitions.put(definition.getKey(), definition);
+		definition = new BackpackDefinition(new Color(0x7fb8c2));
+		BackpackManager.backpackInterface.registerBackpack(BackpackManager.ADVENTURER_UID, definition);
 
-		definition = new BackpackDefinition("builder", new Color(0xdd3a3a).getRGB());
-		BackpackManager.definitions.put(definition.getKey(), definition);
-		
-	}
-
-	@Override
-	public void disabledSetupAPI() {
-		BackpackManager.backpackItems = new ArrayList[6];
-		BackpackManager.backpackItems[0] = minerItems;
-		BackpackManager.backpackItems[1] = diggerItems;
-		BackpackManager.backpackItems[2] = foresterItems;
-		BackpackManager.backpackItems[3] = hunterItems;
-		BackpackManager.backpackItems[4] = adventurerItems;
-		BackpackManager.backpackItems[5] = builderItems;
+		definition = new BackpackDefinition(new Color(0xdd3a3a));
+		BackpackManager.backpackInterface.registerBackpack(BackpackManager.BUILDER_UID, definition);
 	}
 
 	@Override
@@ -185,16 +157,16 @@ public class PluginStorage extends BlankForestryPlugin {
 
 		LocalizedConfiguration config = new LocalizedConfiguration(configFile, "1.0.0");
 
-		handleBackpackConfig(config, "miner");
-		handleBackpackConfig(config, "digger");
-		handleBackpackConfig(config, "forester");
-		handleBackpackConfig(config, "hunter");
-		handleBackpackConfig(config, "adventurer");
-		handleBackpackConfig(config, "builder");
+		handleBackpackConfig(config, BackpackManager.MINER_UID);
+		handleBackpackConfig(config, BackpackManager.DIGGER_UID);
+		handleBackpackConfig(config, BackpackManager.FORESTER_UID);
+		handleBackpackConfig(config, BackpackManager.HUNTER_UID);
+		handleBackpackConfig(config, BackpackManager.ADVENTURER_UID);
+		handleBackpackConfig(config, BackpackManager.BUILDER_UID);
 
 		config.save();
 
-		BackpackDefinition forester = (BackpackDefinition) BackpackManager.definitions.get("forester");
+		BackpackDefinition forester = (BackpackDefinition) BackpackManager.backpackInterface.getBackpack(BackpackManager.FORESTER_UID);
 		forester.addValidBlockClasses(Arrays.<Class>asList(
 				IPlantable.class,
 				IGrowable.class,
@@ -205,7 +177,7 @@ public class PluginStorage extends BlankForestryPlugin {
 				IGrowable.class
 		));
 
-		BackpackDefinition builder = (BackpackDefinition) BackpackManager.definitions.get("builder");
+		BackpackDefinition builder = (BackpackDefinition) BackpackManager.backpackInterface.getBackpack(BackpackManager.BUILDER_UID);
 		builder.addValidBlockClasses(Arrays.<Class>asList(
 				BlockStairs.class,
 				BlockFence.class,
@@ -227,21 +199,14 @@ public class PluginStorage extends BlankForestryPlugin {
 		builder.addValidItemClass(ItemDoor.class);
 	}
 
-	private void setDefaultsForConfig() {
+	private static void setDefaultsForConfig() {
 
-		final BackpackDefinition miner = (BackpackDefinition) BackpackManager.definitions.get("miner");
-		final BackpackDefinition digger = (BackpackDefinition) BackpackManager.definitions.get("digger");
-		final BackpackDefinition forester = (BackpackDefinition) BackpackManager.definitions.get("forester");
-		final BackpackDefinition adventurer = (BackpackDefinition) BackpackManager.definitions.get("adventurer");
-		final BackpackDefinition builder = (BackpackDefinition) BackpackManager.definitions.get("builder");
-		final BackpackDefinition hunter = (BackpackDefinition) BackpackManager.definitions.get("hunter");
-
-		miner.addValidItems(minerItems);
-		digger.addValidItems(diggerItems);
-		forester.addValidItems(foresterItems);
-		hunter.addValidItems(hunterItems);
-		adventurer.addValidItems(adventurerItems);
-		builder.addValidItems(builderItems);
+		final BackpackDefinition miner = (BackpackDefinition) BackpackManager.backpackInterface.getBackpack(BackpackManager.MINER_UID);
+		final BackpackDefinition digger = (BackpackDefinition) BackpackManager.backpackInterface.getBackpack(BackpackManager.DIGGER_UID);
+		final BackpackDefinition forester = (BackpackDefinition) BackpackManager.backpackInterface.getBackpack(BackpackManager.FORESTER_UID);
+		final BackpackDefinition adventurer = (BackpackDefinition) BackpackManager.backpackInterface.getBackpack(BackpackManager.ADVENTURER_UID);
+		final BackpackDefinition builder = (BackpackDefinition) BackpackManager.backpackInterface.getBackpack(BackpackManager.BUILDER_UID);
+		final BackpackDefinition hunter = (BackpackDefinition) BackpackManager.backpackInterface.getBackpack(BackpackManager.HUNTER_UID);
 
 		final Pattern minerOreDictPattern = Pattern.compile("(ore|dust|gem|ingot|nugget|crushed|cluster|denseore)[A-Z].*");
 		final Pattern diggerOreDictPattern = Pattern.compile("(stone)[A-Z].*");
@@ -404,7 +369,7 @@ public class PluginStorage extends BlankForestryPlugin {
 	}
 
 	private static void handleBackpackConfig(LocalizedConfiguration config, String backpackName) {
-		BackpackDefinition backpackDefinition = (BackpackDefinition) BackpackManager.definitions.get(backpackName);
+		BackpackDefinition backpackDefinition = (BackpackDefinition) BackpackManager.backpackInterface.getBackpack(backpackName);
 
 		List<ItemStack> backpackItems;
 		List<String> backpackOreDict = new ArrayList<>();
@@ -488,13 +453,12 @@ public class PluginStorage extends BlankForestryPlugin {
 				return true;
 			}
 
-			if (!BackpackManager.definitions.containsKey(tokens[0])) {
+			IBackpackDefinition backpackDefinition = BackpackManager.backpackInterface.getBackpack(tokens[0]);
+			if (backpackDefinition == null) {
 				String errorMessage = IMCUtil.getInvalidIMCMessageText(message);
 				Log.warning("%s For non-existent backpack %s.", errorMessage, tokens[0]);
 				return true;
 			}
-
-			IBackpackDefinition backpackDefinition = BackpackManager.definitions.get(tokens[0]);
 			List<ItemStack> itemStacks = ItemStackUtil.parseItemStackStrings(tokens[1], 0);
 			backpackDefinition.addValidItems(itemStacks);
 
@@ -539,7 +503,7 @@ public class PluginStorage extends BlankForestryPlugin {
 			RecipeManagers.carpenterManager.addRecipe(20, Fluids.WATER.getFluid(1000), null, items.crate.getItemStack(24),
 					" # ", "# #", " # ", '#', "logWood");
 
-			// / BACKPACKS T2
+			// / BACKPACKS WOVEN
 			addT2BackpackRecipe(items.minerBackpack, items.minerBackpackT2);
 			addT2BackpackRecipe(items.diggerBackpack, items.diggerBackpackT2);
 			addT2BackpackRecipe(items.foresterBackpack, items.foresterBackpackT2);

@@ -208,18 +208,14 @@ public class PluginBiomesOPlenty extends BlankForestryPlugin {
 	public void registerBackpackItems() {
 		// most blocks are covered by the oreDictionary
 
-		final int MINER = 0;
-		final int DIGGER = 1;
-		final int FORESTER = 2;
-
-		addBlocksToBackpack(MINER,
+		addBlocksToBackpack(BackpackManager.MINER_UID,
 				"driedDirt",
 				"overgrownNetherrack",
 				"cragRock",
 				"ashStone"
 		);
 
-		addBlocksToBackpack(DIGGER,
+		addBlocksToBackpack(BackpackManager.DIGGER_UID,
 				"bopGrass",
 				"newBopGrass",
 				"longGrass",
@@ -231,17 +227,17 @@ public class PluginBiomesOPlenty extends BlankForestryPlugin {
 				"newBopDirt"
 		);
 
-		addBlocksToBackpack(FORESTER,
+		addBlocksToBackpack(BackpackManager.FORESTER_UID,
 				"petals"
 		);
 	}
 
-	private static void addBlocksToBackpack(int backpackId, String... blockNames) {
+	private static void addBlocksToBackpack(String backpackUid, String... blockNames) {
 		for (String blockName : blockNames) {
 			Block block = GameRegistry.findBlock(BoP, blockName);
 			if (block != null) {
 				ItemStack blockStack = new ItemStack(block, 1, OreDictionary.WILDCARD_VALUE);
-				BackpackManager.backpackItems[backpackId].add(blockStack);
+				BackpackManager.backpackInterface.getBackpack(backpackUid).addValidItem(blockStack);
 			} else {
 				Log.warning("Missing block: ", blockName);
 			}

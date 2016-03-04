@@ -25,7 +25,6 @@ import forestry.core.genetics.BreedingTracker;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.PacketIdClient;
-import forestry.core.proxy.Proxies;
 
 public class PacketGenomeTrackerSync extends PacketNBT implements IForestryPacketClient {
 
@@ -42,8 +41,8 @@ public class PacketGenomeTrackerSync extends PacketNBT implements IForestryPacke
 		String type = getTagCompound().getString(BreedingTracker.TYPE_KEY);
 
 		ISpeciesRoot root = AlleleManager.alleleRegistry.getSpeciesRoot(type);
-		if (root != null) {
-			tracker = root.getBreedingTracker(Proxies.common.getRenderWorld(), player.getGameProfile());
+		if (root != null && player != null) {
+			tracker = root.getBreedingTracker(player.getEntityWorld(), player.getGameProfile());
 		}
 		if (tracker != null) {
 			tracker.decodeFromNBT(getTagCompound());
