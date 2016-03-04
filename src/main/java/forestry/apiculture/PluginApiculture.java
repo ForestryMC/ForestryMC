@@ -151,7 +151,8 @@ public class PluginApiculture extends BlankForestryPlugin {
 
 		FlowerManager.flowerRegistry = new FlowerRegistry();
 
-		BeeManager.villageBees = new ArrayList[]{new ArrayList<>(), new ArrayList<>()};
+		BeeManager.commonVillageBees = new ArrayList<>();
+		BeeManager.uncommonVillageBees = new ArrayList<>();
 
 		BeeManager.beeFactory = new BeeFactory();
 		BeeManager.beeMutationFactory = new BeeMutationFactory();
@@ -287,16 +288,16 @@ public class PluginApiculture extends BlankForestryPlugin {
 		EntityUtil.registerEntity(EntityMinecartBeehouse.class, "cart.beehouse", 1, 0x000000, 0xffffff, 256, 3, true);
 		EntityUtil.registerEntity(EntityMinecartApiary.class, "cart.apiary", 2, 0x000000, 0xffffff, 256, 3, true);
 
-		BeeManager.villageBees[0].add(BeeDefinition.FOREST.getGenome());
-		BeeManager.villageBees[0].add(BeeDefinition.MEADOWS.getGenome());
-		BeeManager.villageBees[0].add(BeeDefinition.MODEST.getGenome());
-		BeeManager.villageBees[0].add(BeeDefinition.MARSHY.getGenome());
-		BeeManager.villageBees[0].add(BeeDefinition.WINTRY.getGenome());
-		BeeManager.villageBees[0].add(BeeDefinition.TROPICAL.getGenome());
+		BeeManager.commonVillageBees.add(BeeDefinition.FOREST.getGenome());
+		BeeManager.commonVillageBees.add(BeeDefinition.MEADOWS.getGenome());
+		BeeManager.commonVillageBees.add(BeeDefinition.MODEST.getGenome());
+		BeeManager.commonVillageBees.add(BeeDefinition.MARSHY.getGenome());
+		BeeManager.commonVillageBees.add(BeeDefinition.WINTRY.getGenome());
+		BeeManager.commonVillageBees.add(BeeDefinition.TROPICAL.getGenome());
 
-		BeeManager.villageBees[1].add(BeeDefinition.FOREST.getRainResist().getGenome());
-		BeeManager.villageBees[1].add(BeeDefinition.COMMON.getGenome());
-		BeeManager.villageBees[1].add(BeeDefinition.VALIANT.getGenome());
+		BeeManager.uncommonVillageBees.add(BeeDefinition.FOREST.getRainResist().getGenome());
+		BeeManager.uncommonVillageBees.add(BeeDefinition.COMMON.getGenome());
+		BeeManager.uncommonVillageBees.add(BeeDefinition.VALIANT.getGenome());
 
 		/*if (Config.enableVillagers) {
 			// Register villager stuff

@@ -5,8 +5,10 @@
  ******************************************************************************/
 package forestry.api.apiculture;
 
-import java.util.ArrayList;
+import javax.annotation.Nonnull;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import net.minecraft.item.ItemStack;
 
@@ -19,14 +21,19 @@ import net.minecraft.item.ItemStack;
 public class BeeManager {
 
 	/**
-	 * 0 - Common Village Bees 1 - Uncommon Village Bees (20 % of spawns)
+	 * Common Village Bees
 	 */
-	public static ArrayList<IBeeGenome>[] villageBees;
+	public static List<IBeeGenome> commonVillageBees;
+	/**
+	 * Uncommon Village Bees (20 % of spawns)
+	 */
+	public static List<IBeeGenome> uncommonVillageBees;
 
 	/**
 	 * List of items that can induce swarming. Integer denotes x in 1000 chance.
 	 */
-	public static HashMap<ItemStack, Integer> inducers = new HashMap<>();
+	@Nonnull
+	public static final Map<ItemStack, Integer> inducers = new HashMap<>();
 
 	/**
 	 * Convenient access to AlleleManager.alleleRegistry.getSpeciesRoot("rootBees")

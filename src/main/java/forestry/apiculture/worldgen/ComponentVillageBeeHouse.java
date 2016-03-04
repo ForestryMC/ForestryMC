@@ -342,11 +342,11 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 		// Get current biome
 		BiomeGenBase biome = world.getBiomeGenForCoords(pos);
 
-		ArrayList<IBeeGenome> candidates;
-		if (BeeManager.villageBees[1] != null && BeeManager.villageBees[1].size() > 0 && world.rand.nextDouble() < 0.2) {
-			candidates = BeeManager.villageBees[1];
+		List<IBeeGenome> candidates;
+		if (BeeManager.uncommonVillageBees != null && !BeeManager.uncommonVillageBees.isEmpty() && world.rand.nextDouble() < 0.2) {
+			candidates = BeeManager.uncommonVillageBees;
 		} else {
-			candidates = BeeManager.villageBees[0];
+			candidates = BeeManager.commonVillageBees;
 		}
 
 		EnumTemperature biomeTemperature = EnumTemperature.getFromBiome(biome, pos);
@@ -362,7 +362,9 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 
 		// No valid ones found, return any of the common ones.
 		if (valid.isEmpty()) {
-			return BeeManager.beeRoot.getBee(world, BeeManager.villageBees[0].get(world.rand.nextInt(BeeManager.villageBees[0].size())));
+			int index = world.rand.nextInt(BeeManager.commonVillageBees.size());
+			IBeeGenome genome = BeeManager.commonVillageBees.get(index);
+			return BeeManager.beeRoot.getBee(world, genome);
 		}
 
 		return BeeManager.beeRoot.getBee(world, valid.get(world.rand.nextInt(valid.size())));
