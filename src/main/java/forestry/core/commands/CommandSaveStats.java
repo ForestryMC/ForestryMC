@@ -34,6 +34,7 @@ import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
+import forestry.core.utils.Log;
 import forestry.core.utils.StringUtil;
 
 public final class CommandSaveStats extends SubCommand {
@@ -150,7 +151,7 @@ public final class CommandSaveStats extends SubCommand {
 
 		} catch (IOException ex) {
 			CommandHelpers.sendLocalizedChatMessage(sender, "for.chat.command.forestry.stats.save.error3");
-			ex.printStackTrace();
+			Log.error(StringUtil.localize("for.chat.command.forestry.stats.save.error3"), ex);
 			return;
 		}
 

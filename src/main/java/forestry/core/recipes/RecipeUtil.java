@@ -74,9 +74,8 @@ public abstract class RecipeUtil {
 
 		try {
 			return getShapedRecipeAsArray(recipe.getWidth(), recipe.getHeight(), recipe.getIngredients(), recipe.getRecipeOutput());
-		} catch (Exception ex) {
-			Log.warning("Exception while trying to parse an ItemStack[10] from an IRecipe:");
-			Log.warning(ex.getMessage());
+		} catch (RuntimeException ex) {
+			Log.warning("Exception while trying to parse an ItemStack[10] from an IRecipe:", ex);
 		}
 
 		return null;

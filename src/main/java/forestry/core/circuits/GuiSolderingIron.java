@@ -57,16 +57,12 @@ public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron, ItemIn
 			fontRendererObj.drawString(description, guiLeft + 32, guiTop + 36 + row, fontColor.get("gui.screen"));
 
 			if (tube == null) {
-				try {
-					ICircuitSocketType socketType = layout.getSocketType();
-					if (CircuitSocketType.FARM.equals(socketType)) {
-						FarmDirection farmDirection = FarmDirection.values()[i];
-						String farmDirectionString = farmDirection.toString().toLowerCase(Locale.ENGLISH);
-						String localizedDirection = StringUtil.localize("gui.solder." + farmDirectionString);
-						fontRendererObj.drawString(localizedDirection, guiLeft + 17, guiTop + 36 + row, fontColor.get("gui.screen"));
-					}
-				} catch (Throwable ignored) {
-					// older circuit layouts do not have getSocketType()
+				ICircuitSocketType socketType = layout.getSocketType();
+				if (CircuitSocketType.FARM.equals(socketType)) {
+					FarmDirection farmDirection = FarmDirection.values()[i];
+					String farmDirectionString = farmDirection.toString().toLowerCase(Locale.ENGLISH);
+					String localizedDirection = StringUtil.localize("gui.solder." + farmDirectionString);
+					fontRendererObj.drawString(localizedDirection, guiLeft + 17, guiTop + 36 + row, fontColor.get("gui.screen"));
 				}
 			}
 		}

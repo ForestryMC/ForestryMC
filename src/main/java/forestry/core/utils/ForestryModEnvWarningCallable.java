@@ -53,7 +53,7 @@ public class ForestryModEnvWarningCallable implements ICrashCallable {
 
 	@Nonnull
 	@Override
-	public String call() throws Exception {
+	public String call() {
 		return disabledModulesMessage;
 	}
 

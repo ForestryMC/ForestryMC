@@ -49,6 +49,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.core.items.ItemCrated;
+import forestry.core.utils.Log;
 import forestry.core.utils.StringUtil;
 import forestry.storage.PluginStorage;
 
@@ -112,7 +113,7 @@ public class ModelCrate implements ISmartItemModel {
 				ModelBlock modelblock = p_177581_1_.getRootModel();
 				return modelblock == MODEL_GENERATED || modelblock == MODEL_COMPASS || modelblock == MODEL_CLOCK;
 			}
-		} catch (Exception e) {
+		} catch (IOException e) {
 			return false;
 		}
 	}
@@ -148,7 +149,11 @@ public class ModelCrate implements ISmartItemModel {
 				modelblock.name = p_177594_1_.toString();
 				model = modelblock;
 			} finally {
-				reader.close();
+				try {
+					reader.close();
+				} catch (IOException e) {
+					Log.error("Failed to close crate model reader.", e);
+				}
 			}
 
 			if (model != null && model.getParentLocation() != null) {

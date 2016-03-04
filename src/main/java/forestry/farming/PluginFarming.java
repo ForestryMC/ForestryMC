@@ -215,7 +215,7 @@ public class PluginFarming extends BlankForestryPlugin {
 			try {
 				Block sapling = ItemStackUtil.getBlockFromRegistry(saplingString);
 				if (sapling == null || sapling == Blocks.air) {
-					throw new RuntimeException("can't find block for " + saplingString);
+					throw new IllegalArgumentException("can't find block for " + saplingString);
 				}
 				int saplingMeta = Integer.parseInt(saplingMetaString);
 
@@ -224,15 +224,15 @@ public class PluginFarming extends BlankForestryPlugin {
 				} else {
 					Item windfall = ItemStackUtil.getItemFromRegistry(windfallString);
 					if (windfall == null) {
-						throw new RuntimeException("can't find item for " + windfallString);
+						throw new IllegalArgumentException("can't find item for " + windfallString);
 					}
 
 					ItemStack windfallStack = new ItemStack(windfall, 1, Integer.parseInt(windfallMetaString));
 
 					farmables.add(new FarmableGenericSapling(sapling, saplingMeta, windfallStack));
 				}
-			} catch (Exception ex) {
-				Log.warning("%s for farm '%s': %s", errormsg, tokens[0], ex.getMessage());
+			} catch (IllegalArgumentException e) {
+				Log.warning("%s for farm '%s'", errormsg, tokens[0], e.getMessage());
 			}
 			return true;
 
@@ -259,19 +259,19 @@ public class PluginFarming extends BlankForestryPlugin {
 			try {
 				Item seed = ItemStackUtil.getItemFromRegistry(items[0]);
 				if (seed == null) {
-					throw new RuntimeException("can't find item for " + items[0]);
+					throw new IllegalArgumentException("can't find item for " + items[0]);
 				}
 				Block crop = ItemStackUtil.getBlockFromRegistry(items[2]);
 				if (crop == null || crop == Blocks.air) {
-					throw new RuntimeException("can't find block for " + items[2]);
+					throw new IllegalArgumentException("can't find block for " + items[2]);
 				}
 
 				Farmables.farmables.get(tokens[0]).add(
 						new FarmableGenericCrop(new ItemStack(seed, 1, Integer.parseInt(items[1])),
 								crop,
 								Integer.parseInt(items[3])));
-			} catch (Exception ex) {
-				Log.warning("%s for farm '%s': %s", errormsg, tokens[0], ex.getMessage());
+			} catch (IllegalArgumentException e) {
+				Log.warning("%s for farm '%s': %s", errormsg, tokens[0], e.getMessage());
 			}
 
 			return true;

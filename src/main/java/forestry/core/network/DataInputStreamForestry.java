@@ -79,7 +79,7 @@ public class DataInputStreamForestry extends DataInputStream {
 				T streamable = streamableClass.newInstance();
 				streamable.readData(this);
 				return streamable;
-			} catch (ReflectiveOperationException e) {
+			} catch (IllegalAccessException | InstantiationException | IOException e) {
 				throw new InvalidObjectException("Failed to read Streamable for class " + streamableClass + " with error " + e);
 			}
 		}

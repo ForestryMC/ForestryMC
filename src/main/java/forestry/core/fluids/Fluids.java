@@ -12,6 +12,7 @@ package forestry.core.fluids;
 
 import javax.annotation.Nonnull;
 import java.awt.Color;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -418,7 +419,7 @@ public enum Fluids {
 			ResourceLocation resourceLocation = new ResourceLocation(Constants.ID, "blocks/liquid/" + getTag() + "_flow");
 			IResourceManager resourceManager = Proxies.common.getClientInstance().getResourceManager();
 			return resourceManager.getResource(resourceLocation) != null;
-		} catch (java.lang.Exception e) {
+		} catch (IOException e) {
 			return false;
 		}
 	}

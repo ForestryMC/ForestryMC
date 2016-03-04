@@ -10,10 +10,13 @@
  ******************************************************************************/
 package forestry.core.render;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
 import net.minecraft.client.resources.IResourceManager;
+
+import forestry.core.utils.Log;
 
 public class FontColour {
 
@@ -41,8 +44,8 @@ public class FontColour {
 			//if (fontStream != null)
 			//	fontStream.close();
 			defaultFontStream.close();
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (IOException e) {
+			Log.error("Failed to load font colors.", e);
 		}
 
 	}

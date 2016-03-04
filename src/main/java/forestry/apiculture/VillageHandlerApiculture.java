@@ -19,11 +19,7 @@ import net.minecraftforge.fml.common.registry.VillagerRegistry.VillagerProfessio
 public class VillageHandlerApiculture /*implements IVillageCreationHandler, IVillageTradeHandler*/ {
 
 	/*public static void registerVillageComponents() {
-		try {
-			MapGenStructureIO.func_143031_a(ComponentVillageBeeHouse.class, "Forestry:BeeHouse");
-		} catch (Throwable e) {
-			Log.severe("Failed to register village beehouse.");
-		}
+		MapGenStructureIO.registerStructureComponent(ComponentVillageBeeHouse.class, "Forestry:BeeHouse");
 	}
 
 	@SuppressWarnings("unchecked")

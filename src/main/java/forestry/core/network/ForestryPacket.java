@@ -16,6 +16,8 @@ import net.minecraft.network.PacketBuffer;
 
 import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
 
+import forestry.core.utils.Log;
+
 import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
 
@@ -31,7 +33,7 @@ public abstract class ForestryPacket implements IForestryPacket {
 			data.writeByte(id.ordinal());
 			writeData(data);
 		} catch (IOException e) {
-			e.printStackTrace();
+			Log.error("Failed to write packet.", e);
 		}
 
 		return new FMLProxyPacket(new PacketBuffer(buf.buffer()), PacketHandler.channelId);

@@ -13,7 +13,9 @@ package forestry.core.config;
 import com.google.common.collect.LinkedListMultimap;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -199,7 +201,7 @@ public class Config {
 		String[] stamps = configCommon.getStringListLocalized("crafting.stamps", "disabled", defaultCollectors, allStamps);
 		try {
 			collectorStamps.addAll(Arrays.asList(stamps));
-		} catch (Exception ex) {
+		} catch (RuntimeException ex) {
 			Log.warning("Failed to read config for 'crafting.stamps.disabled', setting to default.");
 			Property property = configCommon.get("crafting.stamps", "disabled", defaultCollectors);
 			property.setToDefault();
@@ -287,8 +289,10 @@ public class Config {
 			while ((readBytes = stream.read(buffer)) > 0) {
 				outstream.write(buffer, 0, readBytes);
 			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		} catch (FileNotFoundException e) {
+			Log.error("File not found.", e);
+		} catch (IOException e) {
+			Log.error("Failed to copy file.", e);
 		}
 	}
 
@@ -299,8 +303,8 @@ public class Config {
 		try {
 			InputStream hintStream = Config.class.getResourceAsStream("/config/forestry/hints.properties");
 			prop.load(hintStream);
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		} catch (IOException e) {
+			Log.error("Failed to load hints file.", e);
 		}
 
 		for (String key : prop.stringPropertyNames()) {

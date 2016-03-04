@@ -26,6 +26,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
+
 import net.minecraftforge.client.model.IFlexibleBakedModel;
 import net.minecraftforge.client.model.ISmartBlockModel;
 import net.minecraftforge.client.model.ISmartItemModel;
@@ -189,7 +190,7 @@ public abstract class ModelBlockOverlay<B extends Block> implements IFlexibleBak
 		baker.setRenderBoundsFromBlock(block);
 		try {
 			backeWorldBlock(bBlock, world, pos, baker);
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			return null;
 		}
 		
@@ -209,7 +210,7 @@ public abstract class ModelBlockOverlay<B extends Block> implements IFlexibleBak
 		baker.setRenderBoundsFromBlock(block);
 		try {
 			backeInventoryBlock(bBlock, stack, baker);
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			return null;
 		}
 		

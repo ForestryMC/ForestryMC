@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.network;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,6 +25,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
 
 import forestry.core.proxy.Proxies;
+import forestry.core.utils.Log;
 
 import io.netty.buffer.ByteBufInputStream;
 
@@ -47,8 +49,8 @@ public class PacketHandler {
 			IForestryPacketServer packetHandler = packetId.getPacketHandler();
 			packetHandler.readData(data);
 			packetHandler.onPacketData(data, player);
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		} catch (IOException e) {
+			Log.error("Failed to read packet.", e);
 		}
 	}
 
@@ -63,8 +65,8 @@ public class PacketHandler {
 			IForestryPacketClient packetHandler = packetId.getPacketHandler();
 			packetHandler.readData(data);
 			packetHandler.onPacketData(data, player);
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		} catch (IOException e) {
+			Log.error("Failed to read packet.", e);
 		}
 	}
 

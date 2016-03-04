@@ -53,15 +53,12 @@ public class CircuitFarmLogic extends Circuit {
 		IFarmLogic logic;
 		try {
 			logic = logicClass.getConstructor(IFarmHousing.class).newInstance(housing);
-		} catch (Exception ex) {
-			throw new RuntimeException("Failed to instantiate logic of class " + logicClass.getName() + ": " + ex.getMessage());
+		} catch (ReflectiveOperationException ex) {
+			throw new RuntimeException("Failed to instantiate logic of class " + logicClass.getName() + ": " + ex.getMessage(), ex);
 		}
 
-		try {
-			logic.setManual(isManual);
-		} catch (Throwable e) {
-			// uses older version of the API that doesn't implement setManual
-		}
+		logic.setManual(isManual);
+
 		housing.setFarmLogic(FarmDirection.values()[slot], logic);
 	}
 

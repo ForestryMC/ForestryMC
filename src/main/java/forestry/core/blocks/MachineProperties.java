@@ -114,8 +114,8 @@ public class MachineProperties<T extends TileForestry> implements IMachineProper
 	public TileEntity createTileEntity() {
 		try {
 			return teClass.getConstructor().newInstance();
-		} catch (Exception ex) {
-			throw new RuntimeException("Failed to instantiate tile entity of class " + teClass.getName());
+		} catch (ReflectiveOperationException e) {
+			throw new RuntimeException("Failed to instantiate tile entity of class " + teClass.getName(), e);
 		}
 	}
 

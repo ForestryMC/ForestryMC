@@ -51,12 +51,8 @@ public class ContainerSocketedHelper<T extends TileEntity & ISocketable> impleme
 			return;
 		}
 
-		try {
-			if (!tile.getSocketType().equals(circuitBoard.getSocketType())) {
-				return;
-			}
-		} catch (Throwable ignored) {
-			// older circuitBoards don't have getSocketType()
+		if (!tile.getSocketType().equals(circuitBoard.getSocketType())) {
+			return;
 		}
 
 		ItemStack toSocket = itemstack.copy();

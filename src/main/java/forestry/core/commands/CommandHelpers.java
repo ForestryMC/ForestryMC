@@ -44,7 +44,7 @@ public class CommandHelpers {
 				if (world != null) {
 					return world;
 				}
-			} catch (Exception ex) {
+			} catch (NumberFormatException e) {
 				throwWrongUsage(sender, command);
 			}
 		}

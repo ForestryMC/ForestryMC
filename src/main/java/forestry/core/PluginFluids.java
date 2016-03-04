@@ -145,21 +145,6 @@ public class PluginFluids extends BlankForestryPlugin {
 		FuelManager.generatorFuel.put(biomass.getFluid(), biomassFuel);
 	}
 
-	public static class MissingFluidException extends RuntimeException {
-		public MissingFluidException(String tag) {
-			super("Fluid '" + tag + "' was not found. Please check your configs.");
-		}
-	}
-
-	@Override
-	public void postInit() {
-		for (Fluids fluidType : Fluids.forestryFluids) {
-			if (fluidType.getFluid() == null && Config.isFluidEnabled(fluidType)) {
-				throw new MissingFluidException(fluidType.getTag());
-			}
-		}
-	}
-
 	public static class FillBucketHook {
 		@SubscribeEvent
 		public void fillBucket(FillBucketEvent event) {

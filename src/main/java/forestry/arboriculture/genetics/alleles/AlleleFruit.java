@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics.alleles;
 
-import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.List;
 

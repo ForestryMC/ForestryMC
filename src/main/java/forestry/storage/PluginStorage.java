@@ -12,6 +12,7 @@ package forestry.storage;
 
 import java.awt.Color;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -583,8 +584,8 @@ public class PluginStorage extends BlankForestryPlugin {
 			ModelCrate.MODEL_COMPASS = ObfuscationReflectionHelper.getPrivateValue(ModelBakery.class, event.modelLoader, 15);
 			ModelCrate.MODEL_CLOCK = ObfuscationReflectionHelper.getPrivateValue(ModelBakery.class, event.modelLoader, 16);
 			ModelCrate.loader = event.modelLoader;
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (IOException e) {
+			Log.error("Failed to bake model.", e);
 		}
 	}
 }

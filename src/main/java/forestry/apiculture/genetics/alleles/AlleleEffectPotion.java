@@ -89,7 +89,7 @@ public class AlleleEffectPotion extends AlleleEffectThrottled {
 		if (housing.getWorld().rand.nextBoolean()) {
 			super.doFX(genome, storedData, housing);
 		} else {
-			Vec3 beeFXCoordinates = getFXCoordinates(housing);
+			Vec3 beeFXCoordinates = housing.getBeeFXCoordinates();
 			Proxies.render.addEntityPotionFX(housing.getWorld(), beeFXCoordinates.xCoord, beeFXCoordinates.yCoord + 0.5, beeFXCoordinates.zCoord, potionFXColor);
 		}
 		return storedData;
