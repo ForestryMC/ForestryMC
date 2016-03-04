@@ -10,14 +10,15 @@
  ******************************************************************************/
 package forestry.core.utils;
 
+import com.google.common.base.Joiner;
+
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
-import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.ICrashCallable;
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.relauncher.Side;
 
 import forestry.core.config.Constants;
 import forestry.plugins.ForestryPlugin;
@@ -25,73 +26,38 @@ import forestry.plugins.IForestryPlugin;
 import forestry.plugins.PluginManager;
 
 /**
- * ICrashCallable for highlighting certain mods and listing disabled modules for crash reports.
+ * ICrashCallable for listing disabled modules for crash reports.
  **/
 public class ForestryModEnvWarningCallable implements ICrashCallable {
-
-	private final List<String> modIDs;
-	private final List<String> disabledModules;
+	@Nonnull
+	private final String disabledModulesMessage;
 
 	public static void register() {
-		ForestryModEnvWarningCallable callable = new ForestryModEnvWarningCallable();
-		if (callable.modIDs.size() > 0 || callable.disabledModules.size() > 0) {
+		Set<IForestryPlugin> configDisabledPlugins = PluginManager.configDisabledPlugins;
+		if (!configDisabledPlugins.isEmpty()) {
+			List<String> disabledPluginNames = new ArrayList<>();
+			for (IForestryPlugin plugin : configDisabledPlugins) {
+				ForestryPlugin info = plugin.getClass().getAnnotation(ForestryPlugin.class);
+				disabledPluginNames.add(info.name());
+			}
+
+			String disabledModulesMessage = "Plugins have been disabled in the config: " + Joiner.on(", ").join(disabledPluginNames);
+			ForestryModEnvWarningCallable callable = new ForestryModEnvWarningCallable(disabledModulesMessage);
 			FMLCommonHandler.instance().registerCrashCallable(callable);
 		}
 	}
 
-	private ForestryModEnvWarningCallable() {
-		this.modIDs = new ArrayList<>();
-
-		if (FMLCommonHandler.instance().getSide() == Side.CLIENT && FMLClientHandler.instance().hasOptifine()) {
-			modIDs.add("Optifine");
-		}
-
-		if (Loader.isModLoaded("gregtech_addon")) {
-			modIDs.add("GregTech");
-		}
-
-		try {
-			Class<?> c = Class.forName("org.bukkit.Bukkit");
-			if (c != null) {
-				modIDs.add("Bukkit, Cauldron, or other Bukkit replacement");
-			}
-		} catch (Throwable ignored) {
-			// No need to do anything.
-		}
-
-		this.disabledModules = new ArrayList<>();
-		for (IForestryPlugin plugin : PluginManager.configDisabledPlugins) {
-			ForestryPlugin info = plugin.getClass().getAnnotation(ForestryPlugin.class);
-			disabledModules.add(info.name());
-		}
+	private ForestryModEnvWarningCallable(@Nonnull String disabledModulesMessage) {
+		this.disabledModulesMessage = disabledModulesMessage;
 	}
 
+	@Nonnull
 	@Override
 	public String call() throws Exception {
-		StringBuilder message = new StringBuilder();
-		if (modIDs.size() > 0) {
-			message.append("Warning: You have mods that change the behavior of Minecraft, ForgeModLoader, and/or Minecraft Forge to your client: \r\n");
-			message.append(modIDs.get(0));
-			for (int i = 1; i < modIDs.size(); ++i) {
-				message.append(", ").append(modIDs.get(i));
-			}
-			message.append("\r\nThese may have caused this error, and may not be supported. Try reproducing the crash WITHOUT these mods, and report it then.");
-		}
-
-		if (disabledModules.size() > 0) {
-			if (message.length() > 0) {
-				message.append("\r\n");
-			}
-			message.append("Info: The following plugins have been disabled in the config: ");
-			message.append(disabledModules.get(0));
-			for (int i = 1; i < disabledModules.size(); ++i) {
-				message.append(", ").append(disabledModules.get(i));
-			}
-		}
-
-		return message.toString();
+		return disabledModulesMessage;
 	}
 
+	@Nonnull
 	@Override
 	public String getLabel() {
 		return Constants.MOD + " ";

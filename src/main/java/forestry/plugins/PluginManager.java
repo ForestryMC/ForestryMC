@@ -72,6 +72,7 @@ public class PluginManager {
 		FINISHED
 	}
 
+	@Nonnull
 	public static final Set<IForestryPlugin> configDisabledPlugins = new HashSet<>();
 
 	public static Stage getStage() {
