@@ -10,21 +10,18 @@
  ******************************************************************************/
 package forestry.core.items;
 
+import java.util.Locale;
+
 public enum EnumContainerType {
-	GLASS("glass"),
-	JAR("jar"),
-	CAN("can"),
-	CAPSULE("waxCapsule"),
-	REFRACTORY("refractory"),
-	BUCKET("bucket");
+	GLASS, JAR, CAN, CAPSULE, REFRACTORY;
 
 	private final String name;
 
-	EnumContainerType(String name) {
-		this.name = name;
+	EnumContainerType() {
+		this.name = name().toLowerCase(Locale.ENGLISH).replace('_', '.');
 	}
 
-	public String getContainerNameKey() {
+	public String getName() {
 		return name;
 	}
 }

@@ -13,8 +13,6 @@ package forestry.core.items;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 
-import net.minecraft.init.Blocks;
-
 import forestry.core.fluids.Fluids;
 
 public class ItemRegistryFluids extends ItemRegistry {
@@ -29,20 +27,26 @@ public class ItemRegistryFluids extends ItemRegistry {
 	}
 
 	public ItemRegistryFluids() {
-		canEmpty = registerEmptyContainer(EnumContainerType.CAN, "canEmpty");
-		waxCapsuleEmpty = registerEmptyContainer(EnumContainerType.CAPSULE, "waxCapsule");
-		refractoryEmpty = registerEmptyContainer(EnumContainerType.REFRACTORY, "refractoryEmpty");
-
+		canEmpty = registerEmptyContainer(EnumContainerType.CAN, "can.empty");
+		waxCapsuleEmpty = registerEmptyContainer(EnumContainerType.CAPSULE, "capsule.empty");
+		refractoryEmpty = registerEmptyContainer(EnumContainerType.REFRACTORY, "refractory.empty");
 
 		for (Fluids fluidType : Fluids.values()) {
 			if (fluidType.getFluid() == null) {
 				continue;
 			}
 			for (EnumContainerType type : fluidType.getContainerTypes()) {
-				ItemLiquidContainer liquidContainer = new ItemLiquidContainer(type, fluidType.getBlock(), fluidType.getColor());
-				fluidType.setProperties(liquidContainer);
+				int color = fluidType.getColor().getRGB();
 
-				String name = type.getContainerNameKey() + fluidType.getContainerNameKey();
+				DrinkProperties drinkProperties = fluidType.getDrinkProperties();
+				ItemLiquidContainer liquidContainer;
+				if (drinkProperties == null) {
+					liquidContainer = new ItemLiquidContainer(type, color);
+				} else {
+					liquidContainer = new ItemLiquidContainerDrinkable(type, color, drinkProperties);
+				}
+
+				String name = type.getName() + '.' + fluidType.getTag();
 				registerItem(liquidContainer, name);
 
 				containers.put(type, fluidType.getFluid().getName(), liquidContainer);
@@ -51,6 +55,6 @@ public class ItemRegistryFluids extends ItemRegistry {
 	}
 
 	private static ItemLiquidContainer registerEmptyContainer(EnumContainerType type, String name) {
-		return registerItem(new ItemLiquidContainer(type, Blocks.air, null), name);
+		return registerItem(new ItemLiquidContainer(type, 0), name);
 	}
 }

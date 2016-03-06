@@ -219,7 +219,7 @@ public class PluginNatura extends BlankForestryPlugin {
 
 		int amount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed");
 		for (ItemStack aSeedList : seedList) {
-			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{aSeedList}, Fluids.SEEDOIL.getFluid(amount));
+			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{aSeedList}, Fluids.SEED_OIL.getFluid(amount));
 		}
 
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FARMING)) {

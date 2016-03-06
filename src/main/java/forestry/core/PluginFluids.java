@@ -10,22 +10,15 @@
  ******************************************************************************/
 package forestry.core;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.block.Block;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.ResourceLocation;
 
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.player.FillBucketEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.common.eventhandler.Event;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.GameData;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import forestry.api.core.ForestryAPI;
@@ -34,14 +27,12 @@ import forestry.api.fuels.GeneratorFuel;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
-import forestry.core.fluids.BlockForestryFluid;
 import forestry.core.fluids.Fluids;
 import forestry.core.fluids.LiquidRegistryHelper;
 import forestry.core.items.EnumContainerType;
 import forestry.core.items.ItemLiquidContainer;
 import forestry.core.items.ItemRegistryFluids;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.BlockUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.StringUtil;
 import forestry.plugins.BlankForestryPlugin;
@@ -51,19 +42,19 @@ import forestry.plugins.ForestryPluginUids;
 @ForestryPlugin(pluginID = ForestryPluginUids.FLUIDS, name = "Fluids", author = "mezz", url = Constants.URL, unlocalizedDescription = "for.plugin.fluids.description")
 public class PluginFluids extends BlankForestryPlugin {
 
-	private static final List<Fluids> forestryFluidsWithBlocks = new ArrayList<>();
-
 	public static ItemRegistryFluids items;
 
-	private static void createFluid(Fluids forestryFluid) {
-		if (forestryFluid.getFluid() == null && Config.isFluidEnabled(forestryFluid)) {
-			String fluidName = forestryFluid.getTag();
+	private static void createFluid(Fluids fluidDefinition) {
+		if (fluidDefinition.getFluid() == null && Config.isFluidEnabled(fluidDefinition)) {
+			String fluidName = fluidDefinition.getTag();
 			if (!FluidRegistry.isFluidRegistered(fluidName)) {
-				Fluid fluid = new Fluid(fluidName,
-						forestryFluid.getResources()[0], forestryFluid.flowTextureExists() ? forestryFluid.getResources()[1]
-						: forestryFluid.getResources()[0]).setDensity(forestryFluid.getDensity()).setViscosity(forestryFluid.getViscosity()).setTemperature(forestryFluid.getTemperature());
+				ResourceLocation[] resources = fluidDefinition.getResources();
+				Fluid fluid = new Fluid(fluidName, resources[0], fluidDefinition.flowTextureExists() ? resources[1] : resources[0]);
+				fluid.setDensity(fluidDefinition.getDensity());
+				fluid.setViscosity(fluidDefinition.getViscosity());
+				fluid.setTemperature(fluidDefinition.getTemperature());
 				FluidRegistry.registerFluid(fluid);
-				createBlock(forestryFluid);
+				createBlock(fluidDefinition);
 			}
 		}
 	}
@@ -78,14 +69,16 @@ public class PluginFluids extends BlankForestryPlugin {
 				if (fluidBlock != null) {
 					fluidBlock.setUnlocalizedName("forestry.fluid." + forestryFluid.getTag());
 					GameRegistry.registerBlock(fluidBlock, ItemBlock.class, StringUtil.cleanBlockName(fluidBlock));
-					forestryFluidsWithBlocks.add(forestryFluid);
 					Proxies.render.registerFluidStateMapper(fluidBlock, forestryFluid);
+					if (forestryFluid.getOtherContainers().isEmpty()) {
+						FluidRegistry.addBucketForFluid(fluid);
+					}
 				}
 			} else {
-				GameRegistry.UniqueIdentifier blockID = GameRegistry.findUniqueIdentifierFor(fluidBlock);
+				ResourceLocation resourceLocation = GameData.getBlockRegistry().getNameForObject(fluidBlock);
 				Log.warning("Pre-existing {} fluid block detected, deferring to {}:{}, "
 						+ "this may cause issues if the server/client have different mod load orders, "
-						+ "recommended that you disable all but one instance of {} fluid blocks via your configs.", fluid.getName(), blockID.modId, blockID.name, fluid.getName());
+						+ "recommended that you disable all but one instance of {} fluid blocks via your configs.", fluid.getName(), resourceLocation.getResourceDomain(), resourceLocation.getResourcePath(), fluid.getName());
 			}
 		}
 	}
@@ -97,16 +90,11 @@ public class PluginFluids extends BlankForestryPlugin {
 
 	@Override
 	public void registerItemsAndBlocks() {
-		for (Fluids fluidType : Fluids.forestryFluids) {
+		for (Fluids fluidType : Fluids.FORESTRY_FLUIDs) {
 			createFluid(fluidType);
 		}
 
 		items = new ItemRegistryFluids();
-	}
-
-	@Override
-	public void preInit() {
-		MinecraftForge.EVENT_BUS.register(getFillBucketHook());
 	}
 
 	@Override
@@ -136,34 +124,12 @@ public class PluginFluids extends BlankForestryPlugin {
 			RecipeManagers.squeezerManager.addContainerRecipe(10, items.refractoryEmpty.getItemStack(), PluginCore.items.refractoryWax.getItemStack(), 0.10f);
 		}
 
-		FluidStack ethanol = Fluids.ETHANOL.getFluid(1);
+		FluidStack ethanol = Fluids.BIO_ETHANOL.getFluid(1);
 		GeneratorFuel ethanolFuel = new GeneratorFuel(ethanol, (int) (32 * ForestryAPI.activeMode.getFloatSetting("fuel.ethanol.generator")), 4);
 		FuelManager.generatorFuel.put(ethanol.getFluid(), ethanolFuel);
 
 		FluidStack biomass = Fluids.BIOMASS.getFluid(1);
 		GeneratorFuel biomassFuel = new GeneratorFuel(biomass, (int) (8 * ForestryAPI.activeMode.getFloatSetting("fuel.biomass.generator")), 1);
 		FuelManager.generatorFuel.put(biomass.getFluid(), biomassFuel);
-	}
-
-	public static class FillBucketHook {
-		@SubscribeEvent
-		public void fillBucket(FillBucketEvent event) {
-			MovingObjectPosition movingObjectPosition = event.target;
-			Block targetedBlock = BlockUtil.getBlock(event.world, event.target.getBlockPos());
-			if (targetedBlock instanceof BlockForestryFluid) {
-				Item filledBucket = ItemLiquidContainer.getExistingBucket(targetedBlock);
-				if (filledBucket != null) {
-					event.result = new ItemStack(filledBucket);
-					event.setResult(Event.Result.ALLOW);
-					if (!event.world.isRemote) {
-						event.world.setBlockToAir(event.target.getBlockPos());
-					}
-				}
-			}
-		}
-	}
-
-	private static Object getFillBucketHook() {
-		return new FillBucketHook();
 	}
 }

@@ -155,9 +155,9 @@ public class PluginFactory extends BlankForestryPlugin {
 				Constants.ENGINE_FUEL_VALUE_WATER, Constants.ENGINE_CYCLE_DURATION_WATER, 3));
 		FuelManager.bronzeEngineFuel.put(Fluids.MILK.getFluid(), new EngineBronzeFuel(Fluids.MILK.getFluid(),
 				Constants.ENGINE_FUEL_VALUE_MILK, Constants.ENGINE_CYCLE_DURATION_MILK, 3));
-		FuelManager.bronzeEngineFuel.put(Fluids.SEEDOIL.getFluid(), new EngineBronzeFuel(Fluids.SEEDOIL.getFluid(),
+		FuelManager.bronzeEngineFuel.put(Fluids.SEED_OIL.getFluid(), new EngineBronzeFuel(Fluids.SEED_OIL.getFluid(),
 				Constants.ENGINE_FUEL_VALUE_SEED_OIL, Constants.ENGINE_CYCLE_DURATION_SEED_OIL, 1));
-		FuelManager.bronzeEngineFuel.put(Fluids.HONEY.getFluid(), new EngineBronzeFuel(Fluids.HONEY.getFluid(),
+		FuelManager.bronzeEngineFuel.put(Fluids.FOR_HONEY.getFluid(), new EngineBronzeFuel(Fluids.FOR_HONEY.getFluid(),
 				Constants.ENGINE_FUEL_VALUE_HONEY, Constants.ENGINE_CYCLE_DURATION_HONEY, 1));
 		FuelManager.bronzeEngineFuel.put(Fluids.JUICE.getFluid(), new EngineBronzeFuel(Fluids.JUICE.getFluid(),
 				Constants.ENGINE_FUEL_VALUE_JUICE, Constants.ENGINE_CYCLE_DURATION_JUICE, 1));
@@ -253,7 +253,7 @@ public class PluginFactory extends BlankForestryPlugin {
 		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Items.carrot)}, Fluids.JUICE.getFluid(appleJuiceAmount),
 				PluginCore.items.mulch.getItemStack(), appleMulchAmount);
 		int seedOilAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed");
-		FluidStack seedOil = Fluids.SEEDOIL.getFluid(seedOilAmount);
+		FluidStack seedOil = Fluids.SEED_OIL.getFluid(seedOilAmount);
 		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Items.wheat_seeds)}, seedOil);
 		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Items.pumpkin_seeds)}, seedOil);
 		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Items.melon_seeds)}, seedOil);
@@ -263,7 +263,7 @@ public class PluginFactory extends BlankForestryPlugin {
 
 		// STILL
 		RecipeManagers.stillManager.addRecipe(Constants.STILL_DESTILLATION_DURATION, Fluids.BIOMASS.getFluid(Constants.STILL_DESTILLATION_INPUT),
-				Fluids.ETHANOL.getFluid(Constants.STILL_DESTILLATION_OUTPUT));
+				Fluids.BIO_ETHANOL.getFluid(Constants.STILL_DESTILLATION_OUTPUT));
 
 		// MOISTENER
 		RecipeManagers.moistenerManager.addRecipe(new ItemStack(Items.wheat_seeds), new ItemStack(Blocks.mycelium), 5000);
@@ -293,12 +293,12 @@ public class PluginFactory extends BlankForestryPlugin {
 		RecipeManagers.fabricatorSmeltingManager.addSmelting(new ItemStack(Blocks.sandstone, 1, 2), Fluids.GLASS.getFluid(4000), 4800);
 
 		// / CARPENTER
-		RecipeManagers.carpenterManager.addRecipe(50, Fluids.SEEDOIL.getFluid(250), null, PluginCore.items.impregnatedCasing.getItemStack(),
+		RecipeManagers.carpenterManager.addRecipe(50, Fluids.SEED_OIL.getFluid(250), null, PluginCore.items.impregnatedCasing.getItemStack(),
 				"###",
 				"# #",
 				"###",
 				'#', "logWood");
-		RecipeManagers.carpenterManager.addRecipe(50, Fluids.SEEDOIL.getFluid(500), null,
+		RecipeManagers.carpenterManager.addRecipe(50, Fluids.SEED_OIL.getFluid(500), null,
 				PluginCore.blocks.core.get(BlockTypeCoreTesr.ESCRITOIRE),
 				"#  ",
 				"###",
@@ -306,7 +306,7 @@ public class PluginFactory extends BlankForestryPlugin {
 				'#', "plankWood");
 
 		// RESOURCES
-		RecipeManagers.carpenterManager.addRecipe(10, Fluids.SEEDOIL.getFluid(100), null,
+		RecipeManagers.carpenterManager.addRecipe(10, Fluids.SEED_OIL.getFluid(100), null,
 				PluginCore.items.stickImpregnated.getItemStack(2),
 				"#",
 				"#",

@@ -119,7 +119,7 @@ public class PluginMail extends BlankForestryPlugin {
 						'X', stampDefinition.getCraftingIngredient(),
 						'#', Items.paper,
 						'Z', stampGlue);
-				RecipeManagers.carpenterManager.addRecipe(10, Fluids.SEEDOIL.getFluid(300), null, stamps,
+				RecipeManagers.carpenterManager.addRecipe(10, Fluids.SEED_OIL.getFluid(300), null, stamps,
 						"XXX",
 						"###",
 						'X', stampDefinition.getCraftingIngredient(),

@@ -47,8 +47,8 @@ public abstract class RecipeUtil {
 			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, output.getFluid(1), Fluids.JUICE.getFluid(1));
 		}
 
-		if (FluidRegistry.isFluidRegistered(Fluids.HONEY.getFluid())) {
-			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, output.getFluid(1), Fluids.HONEY.getFluid(1));
+		if (FluidRegistry.isFluidRegistered(Fluids.FOR_HONEY.getFluid())) {
+			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, output.getFluid(1), Fluids.FOR_HONEY.getFluid(1));
 		}
 	}
 

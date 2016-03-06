@@ -107,8 +107,8 @@ public class Config {
 		return !Config.disabledStructures.contains(uid);
 	}
 
-	public static boolean isFluidEnabled(Fluids fluids) {
-		return !Config.disabledFluids.contains(fluids.getTag());
+	public static boolean isFluidEnabled(Fluids fluidDefinition) {
+		return !Config.disabledFluids.contains(fluidDefinition.getTag());
 	}
 
 	public static boolean isBlockEnabled(String tag) {
@@ -249,7 +249,7 @@ public class Config {
 	private static void loadConfigFluids(File configFile) {
 		configFluid = new LocalizedConfiguration(configFile, "1.0.0");
 
-		for (Fluids fluid : Fluids.forestryFluids) {
+		for (Fluids fluid : Fluids.FORESTRY_FLUIDs) {
 			String fluidName = StatCollector.translateToLocal("fluid." + fluid.getTag());
 
 			boolean enabledFluid = !Config.disabledFluids.contains(fluid.getTag());

@@ -119,7 +119,7 @@ public class PluginBiomesOPlenty extends BlankForestryPlugin {
 			if (boPTurnipSeeds != null) {
 				Farmables.farmables.get("farmVegetables").add(new FarmableGenericCrop(boPTurnipSeedStack, boPTurnip, 7));
 				if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FACTORY)) {
-					RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{boPTurnipSeedStack}, Fluids.SEEDOIL.getFluid(amount));
+					RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{boPTurnipSeedStack}, Fluids.SEED_OIL.getFluid(amount));
 				}
 			}
 
@@ -146,7 +146,7 @@ public class PluginBiomesOPlenty extends BlankForestryPlugin {
 		if (misc != null) {
 			ItemStack pinecone = new ItemStack(misc, 1, 13);
 			if (pinecone != null) {
-				RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{pinecone}, Fluids.SEEDOIL.getFluid(3 * amount));
+				RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{pinecone}, Fluids.SEED_OIL.getFluid(3 * amount));
 			}
 		}
 

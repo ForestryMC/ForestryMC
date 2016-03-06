@@ -585,7 +585,7 @@ public class PluginApiculture extends BlankForestryPlugin {
 
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FACTORY)) {
 			// / SQUEEZER
-			FluidStack honeyDropFluid = Fluids.HONEY.getFluid(Constants.FLUID_PER_HONEY_DROP);
+			FluidStack honeyDropFluid = Fluids.FOR_HONEY.getFluid(Constants.FLUID_PER_HONEY_DROP);
 			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{items.honeyDrop.getItemStack()}, honeyDropFluid, items.propolis.getItemStack(), 5);
 			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{items.honeydew.getItemStack()}, honeyDropFluid);
 
@@ -601,7 +601,7 @@ public class PluginApiculture extends BlankForestryPlugin {
 					'X', "ingotTin",
 					'R', "dustRedstone",
 					'D', "gemDiamond");
-			RecipeManagers.carpenterManager.addRecipe(50, Fluids.HONEY.getFluid(500), null, PluginCore.items.craftingMaterial.getScentedPaneling(),
+			RecipeManagers.carpenterManager.addRecipe(50, Fluids.FOR_HONEY.getFluid(500), null, PluginCore.items.craftingMaterial.getScentedPaneling(),
 					" J ", "###", "WPW",
 					'#', "plankWood",
 					'J', items.royalJelly,
@@ -716,7 +716,7 @@ public class PluginApiculture extends BlankForestryPlugin {
 			));
 
 			// / FERMENTER
-			RecipeManagers.fermenterManager.addRecipe(items.honeydew.getItemStack(), 500, 1.0f, Fluids.SHORT_MEAD.getFluid(1), Fluids.HONEY.getFluid(1));
+			RecipeManagers.fermenterManager.addRecipe(items.honeydew.getItemStack(), 500, 1.0f, Fluids.SHORT_MEAD.getFluid(1), Fluids.FOR_HONEY.getFluid(1));
 		}
 
 		// ANALYZER

@@ -16,6 +16,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -74,6 +75,7 @@ public class Forestry {
 		ForestryAPI.forestryConstants = new Constants();
 		ForestryAPI.errorStateRegistry = new ErrorStateRegistry();
 		EnumErrorCode.init();
+		FluidRegistry.enableUniversalBucket();
 	}
 
 	public static PacketHandler packetHandler;

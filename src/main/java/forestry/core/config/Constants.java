@@ -59,10 +59,6 @@ public class Constants implements IForestryConstants {
 
 	// Food stuff
 	public static final int FOOD_AMBROSIA_HEAL = 8;
-	public static final int FOOD_JUICE_HEAL = 2;
-	public static final float FOOD_JUICE_SATURATION = 0.2f;
-	public static final int FOOD_HONEY_HEAL = 2;
-	public static final float FOOD_HONEY_SATURATION = 0.2f;
 
 	public static final int APIARY_MIN_LEVEL_LIGHT = 11;
 	public static final int APIARY_BREEDING_TIME = 100;

@@ -47,7 +47,7 @@ public class PluginBuildCraftFuels extends BlankForestryPlugin {
 
 		coolantManager.addCoolant(Fluids.ICE.getFluid(), Constants.ICE_COOLING_MULTIPLIER * waterCooling);
 
-		Fluid ethanol = Fluids.ETHANOL.getFluid();
+		Fluid ethanol = Fluids.BIO_ETHANOL.getFluid();
 		if (ethanol != null) {
 			int ethanolPower = 40;
 			int ethanolBurnTime = Math.round(Constants.ENGINE_CYCLE_DURATION_ETHANOL * ForestryAPI.activeMode.getFloatSetting("fuel.ethanol.combustion"));
