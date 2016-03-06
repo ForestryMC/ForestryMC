@@ -10,13 +10,6 @@
  ******************************************************************************/
 package forestry.energy.tiles;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitBoard;
@@ -26,15 +19,25 @@ import forestry.core.circuits.ISocketable;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.inventory.InventoryAdapter;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.IStreamableGui;
 import forestry.core.tiles.TemperatureState;
 import forestry.core.tiles.TileEngine;
 import forestry.energy.gui.ContainerEngineElectric;
 import forestry.energy.gui.GuiEngineElectric;
 import forestry.plugins.compat.PluginIC2;
-
 import ic2.api.energy.prefab.BasicSink;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
-public class TileEngineElectric extends TileEngine implements ISocketable, IInventory {
+import java.io.IOException;
+
+public class TileEngineElectric extends TileEngine implements ISocketable, IInventory, IStreamableGui {
 	protected static class EuConfig {
 
 		public int euForCycle;
@@ -90,6 +93,32 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 			ic2EnergySink.writeToNBT(nbttagcompound);
 		}
 		sockets.writeToNBT(nbttagcompound);
+	}
+
+	@Override
+	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
+		data.writeVarInt(currentOutput);
+		data.writeVarInt(heat);
+		sockets.writeData(data);
+		energyManager.writeData(data);
+		final boolean hasIc2EnergySink = (ic2EnergySink != null);
+		data.writeBoolean(hasIc2EnergySink);
+		if (hasIc2EnergySink) {
+			data.writeVarInt((int) ic2EnergySink.getEnergyStored());
+		}
+	}
+
+	@Override
+	public void readGuiData(DataInputStreamForestry data) throws IOException {
+		currentOutput = data.readVarInt();
+		heat = data.readVarInt();
+		sockets.readData(data);
+		energyManager.readData(data);
+		final boolean hasIc2EnergySink = data.readBoolean();
+		if (hasIc2EnergySink) {
+			final int energyStored = data.readVarInt();
+			ic2EnergySink.setEnergyStored(energyStored);
+		}
 	}
 
 	@Override
@@ -219,35 +248,12 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 	// / SMP GUI
 	@Override
 	public void getGUINetworkData(int i, int j) {
-
-		switch (i) {
-
-			case 0:
-				currentOutput = j;
-				break;
-			case 1:
-				energyManager.fromGuiInt(j);
-				break;
-			case 2:
-				heat = j;
-				break;
-			case 3:
-				if (ic2EnergySink != null) {
-					ic2EnergySink.setEnergyStored(j);
-				}
-				break;
-		}
-
+		// handled by IStreamableGui
 	}
 
 	@Override
 	public void sendGUINetworkData(Container containerEngine, ICrafting iCrafting) {
-		iCrafting.sendProgressBarUpdate(containerEngine, 0, currentOutput);
-		iCrafting.sendProgressBarUpdate(containerEngine, 1, energyManager.toGuiInt());
-		iCrafting.sendProgressBarUpdate(containerEngine, 2, heat);
-		if (ic2EnergySink != null) {
-			iCrafting.sendProgressBarUpdate(containerEngine, 3, (short) ic2EnergySink.getEnergyStored());
-		}
+		// handled by IStreamableGui
 	}
 
 	// / ENERGY CONFIG CHANGE

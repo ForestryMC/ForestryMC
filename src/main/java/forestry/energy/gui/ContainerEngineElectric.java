@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.energy.gui;
 
+import forestry.core.network.packets.PacketGuiUpdate;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
 
@@ -36,13 +37,9 @@ public class ContainerEngineElectric extends ContainerSocketed<TileEngineElectri
 	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
-
-		if (tile == null) {
-			return;
-		}
-
-		for (Object crafter : crafters) {
-			tile.sendGUINetworkData(this, (ICrafting) crafter);
+		if (tile != null) {
+			PacketGuiUpdate packet = new PacketGuiUpdate(tile);
+			sendPacketToCrafters(packet);
 		}
 	}
 
