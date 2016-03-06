@@ -214,7 +214,7 @@ public class PluginFarming extends BlankForestryPlugin {
 
 			try {
 				Block sapling = ItemStackUtil.getBlockFromRegistry(saplingString);
-				if (sapling == null || sapling == Blocks.air) {
+				if (sapling == null) {
 					throw new IllegalArgumentException("can't find block for " + saplingString);
 				}
 				int saplingMeta = Integer.parseInt(saplingMetaString);
@@ -262,7 +262,7 @@ public class PluginFarming extends BlankForestryPlugin {
 					throw new IllegalArgumentException("can't find item for " + items[0]);
 				}
 				Block crop = ItemStackUtil.getBlockFromRegistry(items[2]);
-				if (crop == null || crop == Blocks.air) {
+				if (crop == null) {
 					throw new IllegalArgumentException("can't find block for " + items[2]);
 				}
 

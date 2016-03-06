@@ -380,7 +380,7 @@ public class PluginArboriculture extends BlankForestryPlugin {
 		if (message.key.equals("add-fence-block") && message.isStringMessage()) {
 			Block block = ItemStackUtil.getBlockFromRegistry(message.getStringValue());
 
-			if (block != null && block != Blocks.air) {
+			if (block != null) {
 				validFences.add(block);
 			} else {
 				IMCUtil.logInvalidIMCMessage(message);

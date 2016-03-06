@@ -114,8 +114,8 @@ public abstract class BlockUtil {
 		return state.getValue(BlockCocoa.AGE);
 	}
 
-	public static boolean isWoodSlabBlock(Block block) {
-		if (block == null || block == Blocks.air) {
+	public static boolean isWoodSlabBlock(Block block, IBlockAccess world, BlockPos pos) {
+		if (block == null || block.isAir(world, pos)) {
 			return false;
 		}
 		int[] oreIds = OreDictionary.getOreIDs(new ItemStack(block));

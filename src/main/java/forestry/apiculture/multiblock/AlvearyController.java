@@ -174,7 +174,7 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 				BlockPos pos = new BlockPos(slabX, slabY, slabZ);
 				IBlockState state = worldObj.getBlockState(pos);
 				Block block = state.getBlock();
-				if (!BlockUtil.isWoodSlabBlock(block)) {
+				if (!BlockUtil.isWoodSlabBlock(block, worldObj, pos)) {
 					throw new MultiblockValidationException(StatCollector.translateToLocal("for.multiblock.alveary.error.needSlabs"));
 				}
 
