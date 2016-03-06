@@ -12,6 +12,8 @@ package forestry.core.blocks.propertys;
 
 import net.minecraft.block.properties.IProperty;
 
+import java.util.List;
+
 import forestry.api.genetics.IAlleleProperty;
 
 public abstract class PropertyAllele<A extends IAlleleProperty<A>> implements IProperty<A> {
@@ -38,5 +40,8 @@ public abstract class PropertyAllele<A extends IAlleleProperty<A>> implements IP
 			return false;
 		}
 	}
+	
+	@Override
+	public abstract List<A> getAllowedValues();
 	
 }

@@ -13,6 +13,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 /**
  * Provides icons, needed in some interfaces, most notably for bees and trees. 
  */
+@SideOnly(Side.CLIENT)
 public interface ISpriteProvider {
 	
 	@SideOnly(Side.CLIENT)

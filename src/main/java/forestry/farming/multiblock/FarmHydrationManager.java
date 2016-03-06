@@ -16,9 +16,6 @@ import java.io.IOException;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
-
-import forestry.api.core.BiomeHelper;
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
 import forestry.core.network.DataInputStreamForestry;

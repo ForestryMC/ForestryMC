@@ -11,7 +11,7 @@
 package forestry.arboriculture.render;
 
 import net.minecraft.client.resources.model.ModelResourceLocation;
-
+import net.minecraft.item.Item;
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.IGermlingModelProvider;
 import forestry.api.core.IModelManager;
@@ -28,7 +28,7 @@ public class ModelProviderGermlingVanilla implements IGermlingModelProvider {
 	}
 
 	@Override
-	public void registerModels(IModelManager manager) {
+	public void registerModels(Item item, IModelManager manager) {
 		switch (vanillaMap) {
 			case 0:
 				model = manager.getModelLocation("minecraft", "oak_sapling");

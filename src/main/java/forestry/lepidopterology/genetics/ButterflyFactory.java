@@ -18,7 +18,7 @@ import forestry.api.lepidopterology.IButterflyFactory;
 
 public class ButterflyFactory implements IButterflyFactory {
 	@Override
-	public IAlleleButterflySpeciesBuilder createSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, String texturePath, boolean isDominant, IClassification branch, String binomial, Color serumColour) {
-		return new AlleleButterflySpecies(uid, unlocalizedName, authority, unlocalizedDescription, texturePath, isDominant, branch, binomial, serumColour);
+	public IAlleleButterflySpeciesBuilder createSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, String modID, String texturePath, boolean isDominant, IClassification branch, String binomial, Color serumColour) {
+		return new AlleleButterflySpecies(uid, unlocalizedName, authority, unlocalizedDescription, modID, texturePath, isDominant, branch, binomial, serumColour);
 	}
 }

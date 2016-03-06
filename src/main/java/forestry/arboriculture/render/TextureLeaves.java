@@ -34,7 +34,7 @@ public class TextureLeaves {
 
 	public static void registerAllSprites() {
 		for (TextureLeaves leafTexture : leafTextures.values()) {
-			leafTexture.registerIcons();
+			leafTexture.registerSprites();
 		}
 	}
 
@@ -48,7 +48,7 @@ public class TextureLeaves {
 		this.leafType = enumLeafType;
 	}
 
-	private void registerIcons() {
+	private void registerSprites() {
 		String ident = leafType.toString().toLowerCase(Locale.ENGLISH);
 
 		plain = TextureManager.registerSprite("blocks/leaves/" + ident + ".plain");

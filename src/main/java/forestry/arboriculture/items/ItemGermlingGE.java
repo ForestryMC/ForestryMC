@@ -78,16 +78,6 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable {
 	}
 
 	@Override
-	protected int getDefaultPrimaryColour() {
-		return 0;
-	}
-
-	@Override
-	protected int getDefaultSecondaryColour() {
-		return 0;
-	}
-
-	@Override
 	public String getItemStackDisplayName(ItemStack itemstack) {
 		if (!itemstack.hasTagCompound()) {
 			return "Unknown";
@@ -117,6 +107,7 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable {
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public int getColorFromItemStack(ItemStack itemstack, int renderPass) {
 		return getSpeciesOrDefault(itemstack).getGermlingColour(type, renderPass);
@@ -129,11 +120,12 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable {
 		manager.registerItemModel(item, new GermlingMeshDefinition());
 		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
 			if (allele instanceof IAlleleTreeSpecies) {
-				((IAlleleTreeSpecies) allele).registerModels(manager);
+				((IAlleleTreeSpecies) allele).registerModels(item, manager);
 			}
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
 	private class GermlingMeshDefinition implements ItemMeshDefinition {
 		@Override
 		public ModelResourceLocation getModelLocation(ItemStack stack) {

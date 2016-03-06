@@ -8,7 +8,7 @@ package forestry.api.arboriculture;
 import java.util.Collection;
 
 import net.minecraft.client.resources.model.ModelResourceLocation;
-
+import net.minecraft.item.Item;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -37,28 +37,28 @@ public interface IAlleleTreeSpecies extends IAlleleSpecies, IAlleleProperty<IAll
 	 * @return Tree generator for this species.
 	 */
 	ITreeGenerator getGenerator();
-
-	/**
-	 * @return The ModID from the mod.
-	 */
-	String getModID();
 	
 	/**
 	 * @return The name of the model from the tree.
 	 */
 	String getModelName();
+	
+	/**
+	 * @return The modid from the mod of the species.
+	 */
+	String getModID();
 
-	/* TEXTURES AND OVERRIDES */
+	/* MODELS AND OVERRIDES */
 	@SideOnly(Side.CLIENT)
 	ILeafSpriteProvider getLeafSpriteProvider();
+	
+	@SideOnly(Side.CLIENT)
+	int getGermlingColour(EnumGermlingType type, int renderPass);
 
 	@SideOnly(Side.CLIENT)
 	ModelResourceLocation getGermlingModel(EnumGermlingType type);
 	
 	@SideOnly(Side.CLIENT)
-	void registerModels(IModelManager manager);
-	
-	@SideOnly(Side.CLIENT)
-	int getGermlingColour(EnumGermlingType type, int renderPass);
+	void registerModels(Item item, IModelManager manager);
 
 }

@@ -29,6 +29,11 @@ public interface IAlleleButterflySpecies extends IAlleleSpecies {
 	String getEntityTexture();
 	
 	/**
+	 * @return Path of the texture to use for item model.
+	 */
+	String getItemTexture();
+	
+	/**
 	 * Allows butterflies to restrict random spawns beyond the restrictions set by getTemperature() and getHumidity().
 	 *
 	 * @return EnumSet of biome tags this butterfly species can be spawned in.
@@ -60,4 +65,9 @@ public interface IAlleleButterflySpecies extends IAlleleSpecies {
 	Map<ItemStack, Float> getCaterpillarLoot();
 	
 	ISpriteProvider getSpriteProvider();
+	
+	/**
+	 * @return The modid from the mod of the species.
+	 */
+	String getModID();
 }

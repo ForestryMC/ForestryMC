@@ -20,12 +20,8 @@ import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
-import forestry.api.core.IModelProvider;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IAlleleSpeciesBuilder;
@@ -186,8 +182,4 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesBuil
 		isCounted = false;
 		return this;
 	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public abstract IModelProvider getModelProvider();
 }

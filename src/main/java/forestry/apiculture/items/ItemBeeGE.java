@@ -61,16 +61,6 @@ public class ItemBeeGE extends ItemGE {
 	}
 
 	@Override
-	protected int getDefaultPrimaryColour() {
-		return 0xffffff;
-	}
-
-	@Override
-	protected int getDefaultSecondaryColour() {
-		return 0xffdc16;
-	}
-
-	@Override
 	public String getItemStackDisplayName(ItemStack itemstack) {
 
 		if (itemstack.getTagCompound() == null) {
@@ -125,16 +115,22 @@ public class ItemBeeGE extends ItemGE {
 		}
 	}
 
-	/* RENDERING */
+	/* MODELS */
+	@SideOnly(Side.CLIENT)
 	@Override
 	public int getColorFromItemStack(ItemStack itemstack, int renderPass) {
 		if (!itemstack.hasTagCompound()) {
-			return super.getColorFromItemStack(itemstack, renderPass);
+			if (renderPass == 1) {
+				return 0xffdc16;
+			} else {
+				return 0xffffff;
+			}
 		}
 
 		return getColourFromSpecies(BeeGenome.getSpecies(itemstack), renderPass);
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public int getColourFromSpecies(IAlleleSpecies species, int renderPass) {
 
@@ -146,13 +142,12 @@ public class ItemBeeGE extends ItemGE {
 
 	}
 
-	/* MODELS */
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
 		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
 			if (allele instanceof IAlleleBeeSpecies) {
-				((IAlleleBeeSpecies) allele).getModelProvider().registerModels(item, manager);
+				((IAlleleBeeSpecies) allele).registerModels(item, manager);
 			}
 		}
 		manager.registerItemModel(item, new BeeMeshDefinition());
@@ -164,8 +159,7 @@ public class ItemBeeGE extends ItemGE {
 		public ModelResourceLocation getModelLocation(ItemStack stack) {
 			IAlleleBeeSpecies species = (IAlleleBeeSpecies) getSpecies(stack);
 			if (species == null) {
-				species = (IAlleleBeeSpecies) BeeManager.beeRoot.getDefaultTemplate()[EnumBeeChromosome.SPECIES
-						.ordinal()];
+				species = (IAlleleBeeSpecies) BeeManager.beeRoot.getDefaultTemplate()[EnumBeeChromosome.SPECIES.ordinal()];
 			}
 			return species.getModel(type);
 		}

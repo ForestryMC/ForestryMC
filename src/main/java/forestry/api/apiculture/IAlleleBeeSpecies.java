@@ -8,11 +8,12 @@ package forestry.api.apiculture;
 import java.util.Map;
 
 import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
+import forestry.api.core.IModelManager;
 import forestry.api.genetics.IAlleleSpecies;
 
 public interface IAlleleBeeSpecies extends IAlleleSpecies {
@@ -46,6 +47,9 @@ public interface IAlleleBeeSpecies extends IAlleleSpecies {
 
 	@SideOnly(Side.CLIENT)
 	ModelResourceLocation getModel(EnumBeeType type);
+	
+	@SideOnly(Side.CLIENT)
+	void registerModels(Item item, IModelManager manager);
 
 	/**
 	 * @deprecated since Forestry 3.6.

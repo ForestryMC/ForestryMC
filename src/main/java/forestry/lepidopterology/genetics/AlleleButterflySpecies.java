@@ -17,6 +17,7 @@ import java.util.Map;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -25,7 +26,6 @@ import com.mojang.authlib.GameProfile;
 
 import net.minecraftforge.common.BiomeDictionary;
 
-import forestry.api.core.IModelProvider;
 import forestry.api.core.ISpriteProvider;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IClassification;
@@ -36,11 +36,13 @@ import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.api.lepidopterology.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.IAlleleButterflySpeciesBuilder;
 import forestry.api.lepidopterology.IButterflyRoot;
+import forestry.core.config.Constants;
 import forestry.core.genetics.alleles.AlleleSpecies;
 import forestry.lepidopterology.render.TextureAtlasButterfly;
 
 public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButterflySpecies, IAlleleButterflySpeciesBuilder, ISpriteProvider {
 	private final String texture;
+	private final String modID;
 	private final Color serumColour;
 	private float rarity = 0.1f;
 	private float flightDistance = 5.0f;
@@ -51,9 +53,11 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 	private final Map<ItemStack, Float> butterflyLoot = new HashMap<>();
 	private final Map<ItemStack, Float> caterpillarLoot = new HashMap<>();
 
-	public AlleleButterflySpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, String texturePath, boolean isDominant, IClassification branch, String binomial, Color serumColour) {
+	public AlleleButterflySpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, String modID, String texturePath, boolean isDominant, IClassification branch, String binomial, Color serumColour) {
 		super(uid, unlocalizedName, authority, unlocalizedDescription, isDominant, branch, binomial);
 		this.serumColour = serumColour;
+		
+		this.modID = modID;
 		this.texture = texturePath;
 	}
 
@@ -98,7 +102,12 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 
 	@Override
 	public String getEntityTexture() {
-		return texture;
+		return getModID() + ":" + Constants.TEXTURE_PATH_ENTITIES + "/" + texture + ".png";
+	}
+	
+	@Override
+	public String getItemTexture() {
+		return getModID() + ":" + "items/" + texture;
 	}
 
 	@Override
@@ -186,23 +195,24 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 	}
 
 	@Override
-	public IModelProvider getModelProvider() {
-		return null;
-	}
-
-	@Override
 	public ISpriteProvider getSpriteProvider() {
 		return this;
 	}
 	
 	@Override
 	public void registerSprites() {
-		String spriteName = texture.replace(".png", "").replace("textures/", "").replace("entity", "items");
-		Minecraft.getMinecraft().getTextureMapBlocks().setTextureEntry(spriteName, new TextureAtlasButterfly(spriteName));
+		String spriteName = getItemTexture();
+		TextureMap textureMap = Minecraft.getMinecraft().getTextureMapBlocks();
+		textureMap.setTextureEntry(spriteName, new TextureAtlasButterfly(spriteName));
 	}
 
 	@Override
 	public TextureAtlasSprite getSprite(short texUID) {
 		return null;
+	}
+	
+	@Override
+	public String getModID() {
+		return modID;
 	}
 }

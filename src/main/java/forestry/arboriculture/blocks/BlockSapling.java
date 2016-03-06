@@ -34,7 +34,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.arboriculture.EnumGermlingType;
-import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
@@ -93,16 +92,16 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 	/* STATES */
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return 0;
+		return TREE.getAllowedValues().indexOf(state.getValue(TREE));
+	}
+	
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		return getDefaultState().withProperty(TREE, TREE.getAllowedValues().get(meta));
 	}
 	
 	@Override
 	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
-		if (world.getTileEntity(pos) instanceof TileSapling) {
-			TileSapling sapling = (TileSapling) world.getTileEntity(pos);
-			IAlleleTreeSpecies species = sapling.getTree().getGenome().getPrimary();
-			state = state.withProperty(TREE, species);
-		}
 		return super.getActualState(state, world, pos);
 	}
 	
@@ -116,6 +115,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 		Proxies.render.registerStateMapper(this, new SaplingStateMapper());
 	}
 	
+	/* MODELS */
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
@@ -139,7 +139,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 	@Override
 	public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block neighborBlock) {
 		super.onNeighborBlockChange(world, pos, state, neighborBlock);
-		if (!world.isRemote && !this.canBlockStay(world, pos)) {
+		if (!world.isRemote && !canBlockStay(world, pos)) {
 			dropAsSapling(world, pos);
 			world.setBlockToAir(pos);
 		}
@@ -185,7 +185,6 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 	}
 
 	/* GROWNING */
-	
 	@Override
 	public boolean canUseBonemeal(World world, Random rand, BlockPos pos, IBlockState state) {
 		TileSapling saplingTile = getSaplingTile(world, pos);

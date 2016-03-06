@@ -14,14 +14,12 @@ import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.api.core.IModelManager;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IIndividual;
 import forestry.core.items.ItemForestry;
@@ -31,12 +29,8 @@ import forestry.core.utils.StringUtil;
 public abstract class ItemGE extends ItemForestry {
 	protected ItemGE(CreativeTabs creativeTab) {
 		super(creativeTab);
-		hasSubtypes = true;
+		setHasSubtypes(true);
 	}
-
-	protected abstract int getDefaultPrimaryColour();
-
-	protected abstract int getDefaultSecondaryColour();
 
 	public abstract IIndividual getIndividual(ItemStack itemstack);
 
@@ -82,24 +76,7 @@ public abstract class ItemGE extends ItemForestry {
 		}
 	}
 
-	/* ICONS */
 	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerModel(Item item, IModelManager manager) {
-		// Need to disable normal registration.
-	}
-
-	@Override
-	public int getColorFromItemStack(ItemStack itemstack, int renderPass) {
-		if (renderPass == 0) {
-			return getDefaultPrimaryColour();
-		} else if (renderPass == 1) {
-			return getDefaultSecondaryColour();
-		} else {
-			return 0xffffff;
-		}
-	}
-
 	public int getColourFromSpecies(IAlleleSpecies species, int renderPass) {
 		return 0xffffff;
 	}

@@ -6,7 +6,7 @@
 package forestry.api.arboriculture;
 
 import net.minecraft.client.resources.model.ModelResourceLocation;
-
+import net.minecraft.item.Item;
 import forestry.api.core.IModelManager;
 
 /**
@@ -15,7 +15,7 @@ import forestry.api.core.IModelManager;
  * There is no default implementation because every sapling has a unique icon.
  */
 public interface IGermlingModelProvider {
-	void registerModels(IModelManager manager);
+	void registerModels(Item item, IModelManager manager);
 
 	ModelResourceLocation getModel(EnumGermlingType type);
 }

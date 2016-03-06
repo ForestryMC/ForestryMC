@@ -58,16 +58,6 @@ public class ItemButterflyGE extends ItemGE {
 	}
 
 	@Override
-	protected int getDefaultPrimaryColour() {
-		return 0;
-	}
-
-	@Override
-	protected int getDefaultSecondaryColour() {
-		return 0;
-	}
-
-	@Override
 	public IButterfly getIndividual(ItemStack itemstack) {
 		return ButterflyManager.butterflyRoot.getMember(itemstack);
 	}
@@ -146,7 +136,8 @@ public class ItemButterflyGE extends ItemGE {
 		return false;
 	}
 
-	/* ICONS FOR SERUMS */
+	/* MODELS */
+	@SideOnly(Side.CLIENT)
 	@Override
 	public int getColorFromItemStack(ItemStack itemstack, int renderPass) {
 		if (!itemstack.hasTagCompound()) {
@@ -156,6 +147,7 @@ public class ItemButterflyGE extends ItemGE {
 		return getColourFromSpecies(AlleleManager.alleleRegistry.getIndividual(itemstack).getGenome().getPrimary(), renderPass);
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public int getColourFromSpecies(IAlleleSpecies species, int renderPass) {
 		if (species != null) {
@@ -165,8 +157,8 @@ public class ItemButterflyGE extends ItemGE {
 		}
 
 	}
-
-	/* MODELS */
+	
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
 		switch (this.type) {
@@ -218,6 +210,9 @@ public class ItemButterflyGE extends ItemGE {
 		}
 	}
 
+	/**
+	 * Register butterfly item sprites
+	 */
 	@SideOnly(Side.CLIENT)
 	public static void registerSprites() {
 		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {

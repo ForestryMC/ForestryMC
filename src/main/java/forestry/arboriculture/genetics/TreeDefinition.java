@@ -968,7 +968,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 		ILeafSpriteProvider leafIconProvider = TreeManager.treeFactory.getLeafIconProvider(leafType, primary, secondary);
 		IGermlingModelProvider germlingIconProvider = new ModelProviderGermlingVanilla(vanillaMeta);
 
-		IAlleleTreeSpeciesBuilder speciesBuilder = TreeManager.treeFactory.createSpecies(uid, unlocalizedName, "Sengir", unlocalizedDescription, dominant, branch.getBranch(), binomial, modelName, leafIconProvider, germlingIconProvider, this);
+		IAlleleTreeSpeciesBuilder speciesBuilder = TreeManager.treeFactory.createSpecies(uid, unlocalizedName, "Sengir", unlocalizedDescription, dominant, branch.getBranch(), binomial, "forestry", modelName, leafIconProvider, germlingIconProvider, this);
 		setSpeciesProperties(speciesBuilder);
 		this.species = speciesBuilder.build();
 
@@ -988,7 +988,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 		ILeafSpriteProvider leafIconProvider = TreeManager.treeFactory.getLeafIconProvider(leafType, primary, secondary);
 		IGermlingModelProvider germlingIconProvider = new ModelProviderGermling(uid);
 
-		IAlleleTreeSpeciesBuilder speciesBuilder = TreeManager.treeFactory.createSpecies(uid, unlocalizedName, "Sengir", unlocalizedDescription, dominant, branch.getBranch(), binomial, modelName, leafIconProvider, germlingIconProvider, this);
+		IAlleleTreeSpeciesBuilder speciesBuilder = TreeManager.treeFactory.createSpecies(uid, unlocalizedName, "Sengir", unlocalizedDescription, dominant, branch.getBranch(), binomial, "forestry", modelName, leafIconProvider, germlingIconProvider, this);
 		setSpeciesProperties(speciesBuilder);
 		this.species = speciesBuilder.build();
 

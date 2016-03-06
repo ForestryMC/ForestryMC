@@ -52,6 +52,7 @@ import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
 import forestry.arboriculture.PluginArboriculture;
 import forestry.arboriculture.blocks.BlockFruitPod;
+import forestry.arboriculture.blocks.BlockSapling;
 import forestry.arboriculture.tiles.TileFruitPod;
 import forestry.arboriculture.tiles.TileSapling;
 import forestry.core.config.Constants;
@@ -193,7 +194,7 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 	@Override
 	public boolean plantSapling(World world, ITree tree, GameProfile owner, BlockPos pos) {
 
-		IBlockState state = PluginArboriculture.blocks.saplingGE.getStateFromMeta(0);
+		IBlockState state = PluginArboriculture.blocks.saplingGE.getDefaultState().withProperty(BlockSapling.TREE, tree.getGenome().getPrimary());
 		boolean placed = world.setBlockState(pos, state, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
 		if (!placed) {
 			return false;

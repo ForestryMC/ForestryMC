@@ -10,12 +10,8 @@ import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
-import forestry.api.core.IModelProvider;
 
 /**
  * Basic species allele.
@@ -112,8 +108,4 @@ public interface IAlleleSpecies extends IAllele {
 	 * @return Colour to use for the render pass.
 	 */
 	int getSpriteColour(int renderPass);
-
-	@SideOnly(Side.CLIENT)
-	IModelProvider getModelProvider();
-
 }

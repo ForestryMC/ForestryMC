@@ -37,7 +37,6 @@ import forestry.api.apiculture.IBeeRoot;
 import forestry.api.apiculture.IBeeSpriteColourProvider;
 import forestry.api.apiculture.IJubilanceProvider;
 import forestry.api.core.IModelManager;
-import forestry.api.core.IModelProvider;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IIndividual;
@@ -180,11 +179,11 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 	public boolean isJubilant(IBeeGenome genome, IBeeHousing housing) {
 		return jubilanceProvider.isJubilant(this, genome, housing);
 	}
-
-	@Override
+	
 	@SideOnly(Side.CLIENT)
-	public IModelProvider getModelProvider() {
-		return new BeeModelProviderWrapper(beeModelProvider);
+	@Override
+	public void registerModels(Item item, IModelManager manager){
+		beeModelProvider.registerModels(item, manager);
 	}
 
 	@Override
@@ -200,25 +199,5 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 	@Override
 	public String getEntityTexture() {
 		return null;
-	}
-
-	@SideOnly(Side.CLIENT)
-	private static class BeeModelProviderWrapper implements IModelProvider {
-
-		private final IBeeModelProvider beeModelProvider;
-
-		public BeeModelProviderWrapper(IBeeModelProvider beeModelProvider) {
-			this.beeModelProvider = beeModelProvider;
-		}
-
-		@Override
-		public ModelResourceLocation getModel() {
-			return null;
-		}
-
-		@Override
-		public void registerModels(Item item, IModelManager manager) {
-			beeModelProvider.registerModels(item, manager);
-		}
 	}
 }

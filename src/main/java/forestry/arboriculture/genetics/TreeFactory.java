@@ -24,8 +24,8 @@ import forestry.arboriculture.render.SpriteProviderLeaves;
 
 public class TreeFactory implements ITreeFactory {
 	@Override
-	public IAlleleTreeSpeciesBuilder createSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, boolean dominant, IClassification branch, String binomial, String modelName, ILeafSpriteProvider leafSpriteProvider, IGermlingModelProvider germlingModelProvider, ITreeGenerator generator) {
-		return new AlleleTreeSpecies(uid, unlocalizedName, authority, unlocalizedDescription, dominant, branch, binomial, modelName, leafSpriteProvider, germlingModelProvider, generator);
+	public IAlleleTreeSpeciesBuilder createSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, boolean dominant, IClassification branch, String binomial, String modID, String modelName, ILeafSpriteProvider leafSpriteProvider, IGermlingModelProvider germlingModelProvider, ITreeGenerator generator) {
+		return new AlleleTreeSpecies(uid, unlocalizedName, authority, unlocalizedDescription, dominant, branch, binomial, modID, modelName, leafSpriteProvider, germlingModelProvider, generator);
 	}
 
 	@Override

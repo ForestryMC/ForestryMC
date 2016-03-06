@@ -25,7 +25,6 @@ import forestry.api.lepidopterology.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.IAlleleButterflySpeciesBuilder;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IButterflyGenome;
-import forestry.core.config.Constants;
 import forestry.core.genetics.alleles.AlleleHelper;
 import forestry.core.genetics.alleles.EnumAllele;
 
@@ -57,9 +56,9 @@ public enum MothDefinition implements IButterflyDefinition {
 		String unlocalizedName = "for.butterflies.species." + parent.getUID().substring((parent.getLevel().name().toLowerCase(Locale.ENGLISH)).length() + 1) + '.' + speciesName;
 		String unlocalizedDescription = "for.description." + uid;
 
-		String texture = "forestry:" + Constants.TEXTURE_PATH_ENTITIES + "/butterflies/" + uid + ".png";
+		String texture = "butterflies/" + uid;
 
-		IAlleleButterflySpeciesBuilder speciesBuilder = ButterflyManager.butterflyFactory.createSpecies("forestry." + uid, unlocalizedName, "Sengir", unlocalizedDescription, texture, dominant, branchDefinition.getBranch(), binomial, serumColor);
+		IAlleleButterflySpeciesBuilder speciesBuilder = ButterflyManager.butterflyFactory.createSpecies("forestry." + uid, unlocalizedName, "Sengir", unlocalizedDescription, "forestry", texture, dominant, branchDefinition.getBranch(), binomial, serumColor);
 		speciesBuilder.setRarity(rarity);
 		speciesBuilder.setNocturnal();
 		setSpeciesProperties(speciesBuilder);

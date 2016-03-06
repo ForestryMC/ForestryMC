@@ -153,7 +153,7 @@ public class PluginLepidopterology extends BlankForestryPlugin {
 	
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
-	public void textureHook(TextureStitchEvent.Pre event) {
+	public void registerSprites(TextureStitchEvent.Pre event) {
 		ItemButterflyGE.registerSprites();
 	}
 }

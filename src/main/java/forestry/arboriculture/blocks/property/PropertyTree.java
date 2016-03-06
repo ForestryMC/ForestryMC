@@ -3,7 +3,6 @@ package forestry.arboriculture.blocks.property;
 import com.google.common.base.Objects;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import forestry.api.arboriculture.IAlleleTreeSpecies;
@@ -33,7 +32,7 @@ public class PropertyTree extends PropertyAllele<IAlleleTreeSpecies> {
 	}
 
 	@Override
-	public Collection<IAlleleTreeSpecies> getAllowedValues() {
+	public List<IAlleleTreeSpecies> getAllowedValues() {
 		List<IAlleleTreeSpecies> trees = new ArrayList<>();
 		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
 			if (allele instanceof IAlleleTreeSpecies) {

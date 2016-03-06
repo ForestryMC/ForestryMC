@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.resources.model.ModelResourceLocation;
-
+import net.minecraft.item.Item;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -29,7 +29,6 @@ import forestry.api.arboriculture.ITreeGenerator;
 import forestry.api.arboriculture.ITreeRoot;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.IModelManager;
-import forestry.api.core.IModelProvider;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IFruitFamily;
@@ -42,15 +41,18 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 	private final List<IFruitFamily> fruits = new ArrayList<>();
 	
 	private final String modelName;
+	private final String modID;
 
 	private EnumPlantType nativeType = EnumPlantType.Plains;
 
-	public AlleleTreeSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, boolean isDominant, IClassification branch, String binomial, String modelName, ILeafSpriteProvider leafIconProvider, IGermlingModelProvider germlingModelProvider, ITreeGenerator generator) {
+	public AlleleTreeSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, boolean isDominant, IClassification branch, String binomial, String modID, String modelName, ILeafSpriteProvider leafIconProvider, IGermlingModelProvider germlingModelProvider, ITreeGenerator generator) {
 		super(uid, unlocalizedName, authority, unlocalizedDescription, isDominant, branch, binomial);
 
 		this.generator = generator;
 		this.germlingModelProvider = germlingModelProvider;
 		this.leafSpriteProvider = leafIconProvider;
+		
+		this.modID = modID;
 		this.modelName = modelName;
 	}
 
@@ -119,24 +121,18 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 	}
 	
 	@Override
-	public void registerModels(IModelManager manager) {
-		germlingModelProvider.registerModels(manager);
+	public void registerModels(Item item, IModelManager manager) {
+		germlingModelProvider.registerModels(item, manager);
 	}
 
 	@Override
 	public String getModID() {
-		return "forestry";
+		return modID;
 	}
 	
 	@Override
 	public String getModelName() {
 		return modelName;
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public IModelProvider getModelProvider() {
-		return null;
 	}
 	
 	@Override

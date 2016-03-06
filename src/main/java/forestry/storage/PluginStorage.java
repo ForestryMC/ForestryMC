@@ -12,7 +12,6 @@ package forestry.storage;
 
 import java.awt.Color;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -36,8 +35,6 @@ import net.minecraft.block.BlockTrapDoor;
 import net.minecraft.block.BlockWall;
 import net.minecraft.block.BlockWorkbench;
 import net.minecraft.block.IGrowable;
-import net.minecraft.client.resources.model.ModelBakery;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -45,13 +42,11 @@ import net.minecraft.item.ItemDoor;
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.client.event.ModelBakeEvent;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.IShearable;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -542,14 +537,6 @@ public class PluginStorage extends BlankForestryPlugin {
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public void onBakeModel(ModelBakeEvent event) {
-		try {
-			ModelCrate.crateModel = ModelLoaderRegistry.getModel(new ModelResourceLocation("forestry:crate-filled", "inventory"));
-			ModelCrate.MODEL_GENERATED = ObfuscationReflectionHelper.getPrivateValue(ModelBakery.class, event.modelLoader, 14);
-			ModelCrate.MODEL_COMPASS = ObfuscationReflectionHelper.getPrivateValue(ModelBakery.class, event.modelLoader, 15);
-			ModelCrate.MODEL_CLOCK = ObfuscationReflectionHelper.getPrivateValue(ModelBakery.class, event.modelLoader, 16);
-			ModelCrate.loader = event.modelLoader;
-		} catch (IOException e) {
-			Log.error("Failed to bake model.", e);
-		}
+		ModelCrate.initModel(event);
 	}
 }

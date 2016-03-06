@@ -14,65 +14,28 @@ import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
 
 import java.io.IOException;
-import java.util.List;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.client.resources.model.ModelRotation;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.client.model.IRetexturableModel;
-import net.minecraftforge.client.model.ISmartItemModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
-
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.IButterfly;
+import forestry.core.models.BlankItemModel;
+import forestry.core.models.DefaultTextureGetter;
 
-public class ModelButterflyItem implements ISmartItemModel {
+@SideOnly(Side.CLIENT)
+public class ModelButterflyItem extends BlankItemModel {
 
-	public IRetexturableModel modelButterfly;
-
-	@Override
-	public List<BakedQuad> getFaceQuads(EnumFacing p_177551_1_) {
-		return null;
-	}
-
-	@Override
-	public List<BakedQuad> getGeneralQuads() {
-		return null;
-	}
-
-	@Override
-	public boolean isAmbientOcclusion() {
-		return true;
-	}
-
-	@Override
-	public boolean isGui3d() {
-		return true;
-	}
-
-	@Override
-	public boolean isBuiltInRenderer() {
-		return false;
-	}
-	
-	@Override
-	public TextureAtlasSprite getParticleTexture() {
-		return null;
-	}
-
-	@Override
-	public ItemCameraTransforms getItemCameraTransforms() {
-		return null;
-	}
+	@SideOnly(Side.CLIENT)
+	private IRetexturableModel modelButterfly;
 
 	@Override
 	public IBakedModel handleItemState(ItemStack item) {
@@ -92,19 +55,13 @@ public class ModelButterflyItem implements ISmartItemModel {
 		}
 		return bakeModel(butterfly);
 	}
+	
+	private Function<ResourceLocation, TextureAtlasSprite> textureGetter = new DefaultTextureGetter();
 
-	public IBakedModel bakeModel(IButterfly butterfly) {
-		Function<ResourceLocation, TextureAtlasSprite> textureGetter = new ButterflyTextureGetter();
+	private IBakedModel bakeModel(IButterfly butterfly) {
 		ImmutableMap.Builder<String, String> textures = ImmutableMap.builder();
-		textures.put("butterfly", butterfly.getGenome().getSecondary().getEntityTexture().replace(".png", "").replace("textures/", "").replace("entity", "items"));
+		textures.put("butterfly", butterfly.getGenome().getSecondary().getItemTexture());
 		modelButterfly = (IRetexturableModel) modelButterfly.retexture(textures.build());
 		return modelButterfly.bake(ModelRotation.X0_Y0, DefaultVertexFormats.ITEM, textureGetter);
-	}
-
-	private static class ButterflyTextureGetter implements Function<ResourceLocation, TextureAtlasSprite> {
-		@Override
-		public TextureAtlasSprite apply(ResourceLocation location) {
-			return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString());
-		}
 	}
 }
