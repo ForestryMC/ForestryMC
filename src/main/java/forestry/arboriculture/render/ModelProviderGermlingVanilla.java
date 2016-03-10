@@ -10,8 +10,11 @@
  ******************************************************************************/
 package forestry.arboriculture.render;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
+
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.IGermlingModelProvider;
 import forestry.api.core.IModelManager;
@@ -52,6 +55,7 @@ public class ModelProviderGermlingVanilla implements IGermlingModelProvider {
 		pollenModel = manager.getModelLocation("pollen");
 	}
 
+	@Nonnull
 	@Override
 	public ModelResourceLocation getModel(EnumGermlingType type) {
 		if (type == EnumGermlingType.POLLEN) {

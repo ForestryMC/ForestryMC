@@ -32,7 +32,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
@@ -64,12 +63,13 @@ import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.arboriculture.LeafDecayHelper;
+import forestry.arboriculture.PluginArboriculture;
 import forestry.arboriculture.genetics.TreeDefinition;
-import forestry.arboriculture.items.ItemBlockLeaves;
 import forestry.arboriculture.tiles.TileLeaves;
 import forestry.core.blocks.propertys.UnlistedBlockAccess;
 import forestry.core.blocks.propertys.UnlistedBlockPos;
 import forestry.core.proxy.Proxies;
+import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemStackUtil;
 
 public class BlockForestryLeaves extends BlockLeavesBase implements ITileEntityProvider, IShearable, IGrowable, IItemModelRegister {
@@ -97,42 +97,21 @@ public class BlockForestryLeaves extends BlockLeavesBase implements ITileEntityP
 		return new TileLeaves();
 	}
 
-	public static TileLeaves getLeafTile(IBlockAccess world, BlockPos pos) {
-		TileEntity tile = world.getTileEntity(pos);
-		if (tile instanceof TileLeaves) {
-			return (TileLeaves) tile;
-		}
-		return null;
-	}
-
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
 
-		for (ITree tree : TreeManager.treeRoot.getIndividualTemplates()) {
-			TileLeaves leaves = new TileLeaves();
-			leaves.setDecorative();
-			leaves.setTree(tree);
-
-			NBTTagCompound leavesNBT = new NBTTagCompound();
-			leaves.writeToNBTDecorative(leavesNBT);
-
-			ItemStack itemStack = new ItemStack(item, 1, 0);
-			itemStack.setTagCompound(leavesNBT);
-
-			list.add(itemStack);
-		}
 	}
 
 	/* DROP HANDLING */
 	// Hack: 	When harvesting leaves we need to get the drops in onBlockHarvested,
 	// 			because Mojang destroys the block and tile before calling getDrops.
-	private final ThreadLocal<ArrayList<ItemStack>> drops = new ThreadLocal<>();
+	private final ThreadLocal<List<ItemStack>> drops = new ThreadLocal<>();
 
 	@Override
 	public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
-		TileLeaves leafTile = getLeafTile(world, pos);
-		if (leafTile == null || leafTile.isDecorative()) {
+		TileLeaves leafTile = TileUtil.getTile(world, pos, TileLeaves.class);
+		if (leafTile == null) {
 			return;
 		}
 
@@ -150,13 +129,13 @@ public class BlockForestryLeaves extends BlockLeavesBase implements ITileEntityP
 			}
 		}
 		GameProfile playerProfile = player.getGameProfile();
-		ArrayList<ItemStack> leafDrops = getLeafDrop(world, playerProfile, pos, saplingModifier, fortune);
+		List<ItemStack> leafDrops = getLeafDrop(world, playerProfile, pos, saplingModifier, fortune);
 		drops.set(leafDrops);
 	}
 	
 	@Override
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-		ArrayList<ItemStack> ret = drops.get();
+		List<ItemStack> ret = drops.get();
 		drops.remove();
 
 		// leaves not harvested, get drops normally
@@ -167,11 +146,11 @@ public class BlockForestryLeaves extends BlockLeavesBase implements ITileEntityP
 		return ret;
 	}
 
-	private static ArrayList<ItemStack> getLeafDrop(IBlockAccess world, @Nullable GameProfile playerProfile, BlockPos pos, float saplingModifier, int fortune) {
-		ArrayList<ItemStack> prod = new ArrayList<>();
+	private static List<ItemStack> getLeafDrop(IBlockAccess world, @Nullable GameProfile playerProfile, BlockPos pos, float saplingModifier, int fortune) {
+		List<ItemStack> prod = new ArrayList<>();
 
-		TileLeaves tile = getLeafTile(world, pos);
-		if (tile == null || tile.getTree() == null || tile.isDecorative()) {
+		TileLeaves tile = TileUtil.getTile(world, pos, TileLeaves.class);
+		if (tile == null || tile.getTree() == null) {
 			return prod;
 		}
 
@@ -194,12 +173,13 @@ public class BlockForestryLeaves extends BlockLeavesBase implements ITileEntityP
 	
 	@Override
 	public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos, EntityPlayer player) {
-		ItemStack itemStack = super.getPickBlock(target, world, pos, player);
-		TileLeaves leaves = getLeafTile(world, pos);
-		NBTTagCompound leavesNBT = new NBTTagCompound();
-		leaves.writeToNBTDecorative(leavesNBT);
-		itemStack.setTagCompound(leavesNBT);
-		return itemStack;
+		TileLeaves leaves = TileUtil.getTile(world, pos, TileLeaves.class);
+		if (leaves == null) {
+			return null;
+		}
+		ITree tree = leaves.getTree();
+		String speciesUid = tree.getGenome().getPrimary().getUID();
+		return PluginArboriculture.blocks.getDecorativeLeaves(speciesUid);
 	}
 	
 	@Override
@@ -209,26 +189,19 @@ public class BlockForestryLeaves extends BlockLeavesBase implements ITileEntityP
 	
 	@Override
 	public List<ItemStack> onSheared(ItemStack item, IBlockAccess world, BlockPos pos, int fortune) {
-		List<ItemStack> ret = new ArrayList<>();
-		ret.add(new ItemStack(this));
-
-		TileLeaves leaves = getLeafTile(world, pos);
-		NBTTagCompound shearedLeavesNBT = new NBTTagCompound();
-		leaves.writeToNBTDecorative(shearedLeavesNBT);
-
-		for (ItemStack stack : ret) {
-			if (stack.getItem() instanceof ItemBlockLeaves) {
-				stack.setTagCompound(shearedLeavesNBT);
-			}
+		TileLeaves leaves = TileUtil.getTile(world, pos, TileLeaves.class);
+		if (leaves == null) {
+			return null;
 		}
-
-		return ret;
+		ITree tree = leaves.getTree();
+		String speciesUid = tree.getGenome().getPrimary().getUID();
+		return Collections.singletonList(PluginArboriculture.blocks.getDecorativeLeaves(speciesUid));
 	}
 	
 	@Override
 	public void beginLeavesDecay(World world, BlockPos pos) {
-		TileLeaves tile = getLeafTile(world, pos);
-		if (tile == null || tile.isDecorative()) {
+		TileLeaves tile = TileUtil.getTile(world, pos, TileLeaves.class);
+		if (tile == null) {
 			return;
 		}
 		super.beginLeavesDecay(world, pos);
@@ -236,7 +209,7 @@ public class BlockForestryLeaves extends BlockLeavesBase implements ITileEntityP
 	
 	@Override
 	public AxisAlignedBB getCollisionBoundingBox(World world, BlockPos pos, IBlockState state) {
-		TileLeaves tileLeaves = getLeafTile(world, pos);
+		TileLeaves tileLeaves = TileUtil.getTile(world, pos, TileLeaves.class);
 		if (tileLeaves != null && TreeDefinition.Willow.getUID().equals(tileLeaves.getSpeciesUID())) {
 			return null;
 		}
@@ -251,8 +224,8 @@ public class BlockForestryLeaves extends BlockLeavesBase implements ITileEntityP
 	
 	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
-		TileLeaves tileLeaves = getLeafTile(world, pos);
-		if (tileLeaves == null || tileLeaves.isDecorative()) {
+		TileLeaves tileLeaves = TileUtil.getTile(world, pos, TileLeaves.class);
+		if (tileLeaves == null) {
 			return;
 		}
 
@@ -278,7 +251,7 @@ public class BlockForestryLeaves extends BlockLeavesBase implements ITileEntityP
 	@SideOnly(Side.CLIENT)
 	@Override
 	public int colorMultiplier(IBlockAccess world, BlockPos pos, int renderPass) {
-		TileLeaves leaves = getLeafTile(world, pos);
+		TileLeaves leaves = TileUtil.getTile(world, pos, TileLeaves.class);
 		if (leaves == null) {
 			return super.colorMultiplier(world, pos, renderPass);
 		}
@@ -356,7 +329,7 @@ public class BlockForestryLeaves extends BlockLeavesBase implements ITileEntityP
 
 	@Override
 	public boolean canGrow(World world, BlockPos pos, IBlockState state, boolean isClient) {
-		TileLeaves leafTile = getLeafTile(world, pos);
+		TileLeaves leafTile = TileUtil.getTile(world, pos, TileLeaves.class);
 		if (leafTile != null) {
 			return leafTile.hasFruit() && leafTile.getRipeness() < 1.0f;
 		}
@@ -370,7 +343,7 @@ public class BlockForestryLeaves extends BlockLeavesBase implements ITileEntityP
 	
 	@Override
 	public void grow(World world, Random rand, BlockPos pos, IBlockState state) {
-		TileLeaves leafTile = getLeafTile(world, pos);
+		TileLeaves leafTile = TileUtil.getTile(world, pos, TileLeaves.class);
 		if (leafTile != null) {
 			leafTile.addRipeness(1.0f);
 		}

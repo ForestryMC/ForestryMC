@@ -8,6 +8,7 @@ package forestry.api.core;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.BlockPos;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -27,17 +28,17 @@ public interface IModelBaker {
 	
 	void addBlockModel(Block block, BlockPos pos, TextureAtlasSprite sprites, int colorIndex);
 	
-	void addFaceXNeg(BlockPos pos, TextureAtlasSprite sprite);
+	void addFaceXNeg(TextureAtlasSprite sprite);
 	
-	void addFaceYNeg(BlockPos pos, TextureAtlasSprite sprite);
+	void addFaceYNeg(TextureAtlasSprite sprite);
 
-	void addFaceZNeg(BlockPos pos, TextureAtlasSprite sprite);
+	void addFaceZNeg(TextureAtlasSprite sprite);
 
-    void addFaceYPos(BlockPos pos, TextureAtlasSprite sprite);
+	void addFaceYPos(TextureAtlasSprite sprite);
 
-	void addFaceZPos(BlockPos pos, TextureAtlasSprite sprite);
+	void addFaceZPos(TextureAtlasSprite sprite);
 
-	void addFaceXPos(BlockPos pos, TextureAtlasSprite sprite);
+	void addFaceXPos(TextureAtlasSprite sprite);
 	
 	IModelBakerModel getCurrentModel();
 	

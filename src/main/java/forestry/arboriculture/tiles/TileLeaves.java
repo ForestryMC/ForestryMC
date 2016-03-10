@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.arboriculture.tiles;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
@@ -22,8 +23,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
-
-import com.mojang.authlib.GameProfile;
 
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.fml.relauncher.Side;
@@ -49,7 +48,6 @@ import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IButterflyGenome;
 import forestry.api.lepidopterology.IButterflyNursery;
-import forestry.arboriculture.genetics.Tree;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.genetics.alleles.AlleleFruit;
 import forestry.arboriculture.network.IRipeningPacketReceiver;
@@ -62,11 +60,9 @@ import forestry.core.render.TextureManager;
 import forestry.core.utils.ColourUtil;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.Log;
-import forestry.core.utils.PlayerUtil;
 
 public class TileLeaves extends TileTreeContainer implements IPollinatable, IFruitBearer, IButterflyNursery, IRipeningPacketReceiver {
 
-	private ILeafSpriteProvider leafSpriteProvider;
 	private int colourFruits;
 
 	private short textureIndexFruits = -1;
@@ -77,9 +73,6 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	private int ripeningTime;
 	private short ripeningPeriod = Short.MAX_VALUE - 1;
 
-	// set true when placed by a player
-	private boolean isDecorative = false;
-
 	private int maturationTime;
 	private int damage;
 
@@ -88,88 +81,42 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	/* SAVING & LOADING */
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		// trees from itemStacks will have no coordinates
-		if (nbttagcompound.hasKey("x")) {
-			int x = nbttagcompound.getInteger("x");
-			int y = nbttagcompound.getInteger("y");
-			int z = nbttagcompound.getInteger("z");
-			pos = new BlockPos(x, y, z);
+		super.readFromNBT(nbttagcompound);
+
+		ripeningTime = nbttagcompound.getShort("RT");
+		damage = nbttagcompound.getInteger("ENC");
+
+		if (nbttagcompound.hasKey("CATER")) {
+			maturationTime = nbttagcompound.getInteger("CATMAT");
+			caterpillar = ButterflyManager.butterflyRoot.getMember(nbttagcompound.getCompoundTag("CATER"));
 		}
 
-		if (nbttagcompound.hasKey("species")) {
-			isDecorative = true;
-
-			String speciesUID = nbttagcompound.getString("species");
-			IAllele[] treeTemplate = TreeManager.treeRoot.getTemplate(speciesUID);
-			ITree containedTree = TreeManager.treeRoot.templateAsIndividual(treeTemplate);
-			setTree(containedTree);
-		} else {
-			if (nbttagcompound.hasKey("owner")) {
-				setOwner(PlayerUtil.readGameProfileFromNBT(nbttagcompound.getCompoundTag("owner")));
-			}
-
-			ripeningTime = nbttagcompound.getShort("RT");
-			damage = nbttagcompound.getInteger("ENC");
-
-			if (nbttagcompound.hasKey("CATER")) {
-				maturationTime = nbttagcompound.getInteger("CATMAT");
-				caterpillar = ButterflyManager.butterflyRoot.getMember(nbttagcompound.getCompoundTag("CATER"));
-			}
-
-			if (nbttagcompound.hasKey("ContainedTree")) {
-				setTree(new Tree(nbttagcompound.getCompoundTag("ContainedTree")));
-			}
-		}
-	}
-
-	public void writeToNBTDecorative(NBTTagCompound nbtTagCompound) {
-		String speciesUID = getSpeciesUID();
-		if (speciesUID != null) {
-			nbtTagCompound.setString("species", speciesUID);
+		ITree tree = getTree();
+		if (tree != null) {
+			setTree(tree);
 		}
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbtTagCompound) {
-		nbtTagCompound.setString("id", "forestry.Leaves");
-		nbtTagCompound.setInteger("x", getPos().getX());
-		nbtTagCompound.setInteger("y", getPos().getY());
-		nbtTagCompound.setInteger("z", getPos().getZ());
+		super.writeToNBT(nbtTagCompound);
 
-		if (isDecorative) {
-			writeToNBTDecorative(nbtTagCompound);
-		} else {
-			ITree tree = getTree();
-			if (tree != null) {
-				NBTTagCompound subcompound = new NBTTagCompound();
-				tree.writeToNBT(subcompound);
-				nbtTagCompound.setTag("ContainedTree", subcompound);
-			}
+		nbtTagCompound.setInteger("RT", getRipeningTime());
+		nbtTagCompound.setInteger("ENC", damage);
 
-			GameProfile owner = getOwner();
-			if (owner != null) {
-				NBTTagCompound nbt = new NBTTagCompound();
-				PlayerUtil.writeGameProfile(nbt, owner);
-				nbtTagCompound.setTag("owner", nbt);
-			}
+		if (caterpillar != null) {
+			nbtTagCompound.setInteger("CATMAT", maturationTime);
 
-			nbtTagCompound.setInteger("RT", getRipeningTime());
-			nbtTagCompound.setInteger("ENC", damage);
-
-			if (caterpillar != null) {
-				nbtTagCompound.setInteger("CATMAT", maturationTime);
-
-				NBTTagCompound subcompound = new NBTTagCompound();
-				caterpillar.writeToNBT(subcompound);
-				nbtTagCompound.setTag("CATER", subcompound);
-			}
+			NBTTagCompound caterpillarNbt = new NBTTagCompound();
+			caterpillar.writeToNBT(caterpillarNbt);
+			nbtTagCompound.setTag("CATER", caterpillarNbt);
 		}
 	}
 
 	@Override
 	public void onBlockTick() {
 		ITree tree = getTree();
-		if (isDecorative || tree == null) {
+		if (tree == null) {
 			return;
 		}
 
@@ -234,8 +181,6 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 			textureIndexFruits = -1;
 		}
 
-		leafSpriteProvider = species.getLeafSpriteProvider();
-
 		markDirty();
 	}
 
@@ -255,7 +200,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 	public int getFoliageColour(EntityPlayer player) {
 		final boolean showPollinated = isPollinatedState && GeneticsUtil.hasNaturalistEye(player);
-		final int baseColor = leafSpriteProvider.getColor(showPollinated);
+		final int baseColor = getLeafSpriteProvider().getColor(showPollinated);
 
 		ITree tree = getTree();
 		if (isDestroyed(tree, damage)) {
@@ -283,14 +228,18 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 	@SideOnly(Side.CLIENT)
 	public TextureAtlasSprite getLeaveSprite(boolean fancy) {
-		final ILeafSpriteProvider leafSpriteProvider;
-		if (species == null) {
-			IAlleleTreeSpecies oakSpecies = TreeDefinition.Oak.getIndividual().getGenome().getPrimary();
-			leafSpriteProvider = oakSpecies.getLeafSpriteProvider();
-		} else {
-			leafSpriteProvider = species.getLeafSpriteProvider();
-		}
+		final ILeafSpriteProvider leafSpriteProvider = getLeafSpriteProvider();
 		return leafSpriteProvider.getSprite(isPollinatedState, fancy);
+	}
+
+	@Nonnull
+	private ILeafSpriteProvider getLeafSpriteProvider() {
+		if (species != null) {
+			return species.getLeafSpriteProvider();
+		} else {
+			IAlleleTreeSpecies oakSpecies = TreeDefinition.Oak.getIndividual().getGenome().getPrimary();
+			return oakSpecies.getLeafSpriteProvider();
+		}
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -303,15 +252,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	}
 
 	public int getRipeningTime() {
-		return isDecorative ? ripeningPeriod : ripeningTime;
-	}
-
-	public void setDecorative() {
-		isDecorative = true;
-	}
-
-	public boolean isDecorative() {
-		return isDecorative;
+		return ripeningTime;
 	}
 
 	/* IPOLLINATABLE */
@@ -326,7 +267,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 	@Override
 	public boolean canMateWith(ITree individual) {
-		if (getTree() == null || isDecorative) {
+		if (getTree() == null) {
 			return false;
 		}
 		if (getTree().getMate() != null) {
@@ -338,7 +279,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 	@Override
 	public void mateWith(ITree individual) {
-		if (getTree() == null || isDecorative) {
+		if (getTree() == null) {
 			return;
 		}
 
@@ -348,9 +289,6 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 	@Override
 	public ITree getPollen() {
-		if (isDecorative) {
-			return null;
-		}
 		return getTree();
 	}
 
@@ -439,7 +377,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 			setTree(tree);
 
-			worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
+			worldObj.markBlockForUpdate(getPos());
 		}
 	}
 
@@ -456,7 +394,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	@Override
 	public Collection<ItemStack> pickFruit(ItemStack tool) {
 		ITree tree = getTree();
-		if (tree == null || !hasFruit() || isDecorative) {
+		if (tree == null || !hasFruit()) {
 			return Collections.emptyList();
 		}
 
@@ -493,7 +431,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 	@Override
 	public void addRipeness(float add) {
-		if (getTree() == null || !isFruitLeaf || getRipeningTime() >= ripeningPeriod || isDecorative) {
+		if (getTree() == null || !isFruitLeaf || getRipeningTime() >= ripeningPeriod) {
 			return;
 		}
 		ripeningTime += ripeningPeriod * add;
@@ -559,9 +497,6 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 	@Override
 	public void setCaterpillar(IButterfly butterfly) {
-		if (isDecorative) {
-			return;
-		}
 		maturationTime = 0;
 		caterpillar = butterfly;
 		sendNetworkUpdate();
@@ -570,6 +505,6 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	@Override
 	public boolean canNurse(IButterfly butterfly) {
 		ITree tree = getTree();
-		return !isDecorative && !isDestroyed(tree, damage) && caterpillar == null;
+		return !isDestroyed(tree, damage) && caterpillar == null;
 	}
 }

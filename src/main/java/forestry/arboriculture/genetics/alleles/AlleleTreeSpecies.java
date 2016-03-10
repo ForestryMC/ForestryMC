@@ -10,11 +10,13 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics.alleles;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
+
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -35,17 +37,34 @@ import forestry.api.genetics.IFruitFamily;
 import forestry.core.genetics.alleles.AlleleSpecies;
 
 public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeciesBuilder, IAlleleTreeSpecies {
+	@Nonnull
 	private final ITreeGenerator generator;
+	@Nonnull
 	private final IGermlingModelProvider germlingModelProvider;
+	@Nonnull
 	private final ILeafSpriteProvider leafSpriteProvider;
+	@Nonnull
 	private final List<IFruitFamily> fruits = new ArrayList<>();
-	
+	@Nonnull
 	private final String modelName;
+	@Nonnull
 	private final String modID;
-
+	@Nonnull
 	private EnumPlantType nativeType = EnumPlantType.Plains;
 
-	public AlleleTreeSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, boolean isDominant, IClassification branch, String binomial, String modID, String modelName, ILeafSpriteProvider leafIconProvider, IGermlingModelProvider germlingModelProvider, ITreeGenerator generator) {
+	public AlleleTreeSpecies(
+			@Nonnull String uid,
+			@Nonnull String unlocalizedName,
+			@Nonnull String authority,
+			@Nonnull String unlocalizedDescription,
+			boolean isDominant,
+			@Nonnull IClassification branch,
+			@Nonnull String binomial,
+			@Nonnull String modID,
+			@Nonnull String modelName,
+			@Nonnull ILeafSpriteProvider leafIconProvider,
+			@Nonnull IGermlingModelProvider germlingModelProvider,
+			@Nonnull ITreeGenerator generator) {
 		super(uid, unlocalizedName, authority, unlocalizedDescription, isDominant, branch, binomial);
 
 		this.generator = generator;
@@ -62,6 +81,7 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 		return this;
 	}
 
+	@Nonnull
 	@Override
 	public ITreeRoot getRoot() {
 		return TreeManager.treeRoot;
@@ -80,21 +100,25 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 	}
 
 	/* OTHER */
+	@Nonnull
 	@Override
 	public EnumPlantType getPlantType() {
 		return nativeType;
 	}
 
+	@Nonnull
 	@Override
 	public List<IFruitFamily> getSuitableFruit() {
 		return fruits;
 	}
 
+	@Nonnull
 	@Override
 	public ITreeGenerator getGenerator() {
 		return generator;
 	}
 
+	@Nonnull
 	@Override
 	public ILeafSpriteProvider getLeafSpriteProvider() {
 		return leafSpriteProvider;
@@ -105,6 +129,7 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 		return leafSpriteProvider.getColor(false);
 	}
 	
+	@Nonnull
 	@SideOnly(Side.CLIENT)
 	@Override
 	public ModelResourceLocation getGermlingModel(EnumGermlingType type) {
@@ -125,11 +150,13 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 		germlingModelProvider.registerModels(item, manager);
 	}
 
+	@Nonnull
 	@Override
 	public String getModID() {
 		return modID;
 	}
 	
+	@Nonnull
 	@Override
 	public String getModelName() {
 		return modelName;

@@ -18,6 +18,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IStringSerializable;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
@@ -42,7 +43,6 @@ import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.IAllele;
 import forestry.api.world.ITreeGenData;
 import forestry.arboriculture.PluginArboriculture;
-import forestry.arboriculture.blocks.BlockForestryLeaves;
 import forestry.arboriculture.genetics.alleles.AlleleFruit;
 import forestry.arboriculture.genetics.alleles.AlleleGrowth;
 import forestry.arboriculture.render.ModelProviderGermling;
@@ -89,9 +89,10 @@ import forestry.core.genetics.alleles.AlleleBoolean;
 import forestry.core.genetics.alleles.AlleleHelper;
 import forestry.core.genetics.alleles.AllelePlantType;
 import forestry.core.genetics.alleles.EnumAllele;
+import forestry.core.tiles.TileUtil;
 import forestry.core.utils.BlockUtil;
 
-public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
+public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSerializable {
 	Oak(TreeBranchDefinition.QUERCUS, "appleOak", "robur", false, EnumLeafType.DECIDUOUS, new Color(4764952), new Color(4764952).brighter(), 0, new ItemStack(Blocks.log, 1, 0)) {
 		@Override
 		public WorldGenerator getWorldGenerator(ITreeGenData tree) {
@@ -947,6 +948,8 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 		}
 	};
 
+	public static TreeDefinition[] VALUES = values();
+
 	private final TreeBranchDefinition branch;
 	private final IAlleleTreeSpecies species;
 
@@ -1031,7 +1034,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 	}
 
 	@Override
-	public void setLeaves(ITreeGenome genome, World world, GameProfile owner, BlockPos pos, boolean decorative) {
+	public void setLeaves(ITreeGenome genome, World world, GameProfile owner, BlockPos pos) {
 		boolean placed = world.setBlockState(pos, PluginArboriculture.blocks.leaves.getStateFromMeta(0), Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
 		if (!placed) {
 			return;
@@ -1043,16 +1046,13 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 			return;
 		}
 
-		TileLeaves tileLeaves = BlockForestryLeaves.getLeafTile(world, pos);
+		TileLeaves tileLeaves = TileUtil.getTile(world, pos, TileLeaves.class);
 		if (tileLeaves == null) {
 			world.setBlockToAir(pos);
 			return;
 		}
 
 		tileLeaves.setOwner(owner);
-		if (decorative) {
-			tileLeaves.setDecorative();
-		}
 		tileLeaves.setTree(new Tree(genome));
 
 		world.markBlockForUpdate(pos);
@@ -1107,5 +1107,21 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 	}
 
 	public static void preInit() {
+	}
+
+	@Override
+	public String getName() {
+		return name();
+	}
+
+	public int getMetadata() {
+		return ordinal();
+	}
+
+	public static TreeDefinition byMetadata(int meta) {
+		if (meta < 0 || meta >= VALUES.length) {
+			meta = 0;
+		}
+		return VALUES[meta];
 	}
 }

@@ -43,85 +43,12 @@ import forestry.core.models.baker.ModelBaker;
  */
 public abstract class ModelBlockOverlay<B extends Block> implements IFlexibleBakedModel, ISmartItemModel, ISmartBlockModel {
 	@Nonnull
-	private final Class<B> blockClass;
-	private IModelBakerModel latestBlockModel;
-	private IModelBakerModel latestItemModel;
+	protected final Class<B> blockClass;
+	protected IModelBakerModel latestBlockModel;
+	protected IModelBakerModel latestItemModel;
 
 	protected ModelBlockOverlay(@Nonnull Class<B> blockClass) {
 		this.blockClass = blockClass;
-	}
-
-	protected void addBottomFace(IBlockAccess world, B block, BlockPos pos, IModelBaker baker, TextureAtlasSprite sprite, int colorIndex) {
-
-		BlockPos posNEW = new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ());
-
-		if (!block.shouldSideBeRendered(world, posNEW, EnumFacing.DOWN)) {
-			return;
-		}
-		
-		baker.addFaceYNeg(pos, sprite);
-
-	}
-
-	protected void addTopFace(IBlockAccess world, B block, BlockPos pos, IModelBaker baker, TextureAtlasSprite sprite, int colorIndex) {
-
-		BlockPos posNEW = new BlockPos(pos.getX(), pos.getY() + 1, pos.getZ());
-
-		if (!block.shouldSideBeRendered(world, posNEW, EnumFacing.UP)) {
-			return;
-		}
-
-
-		baker.addFaceYPos(pos, sprite);
-
-	}
-
-	protected void addEastFace(IBlockAccess world, B block, BlockPos pos, IModelBaker baker, TextureAtlasSprite sprite, int colorIndex) {
-
-		BlockPos posNEW = new BlockPos(pos.getX(), pos.getY(), pos.getZ() - 1);
-
-		if (!block.shouldSideBeRendered(world, posNEW, EnumFacing.EAST)) {
-			return;
-		}
-
-		baker.addFaceZNeg(pos, sprite);
-
-	}
-
-	protected void addWestFace(IBlockAccess world, B block, BlockPos pos, IModelBaker baker, TextureAtlasSprite sprite, int colorIndex) {
-
-		BlockPos posNEW = new BlockPos(pos.getX(), pos.getY(), pos.getZ() + 1);
-
-		if (!block.shouldSideBeRendered(world, posNEW, EnumFacing.WEST)) {
-			return;
-		}
-
-		baker.addFaceZPos(pos, sprite);
-
-	}
-
-	protected void addNorthFace(IBlockAccess world, B block, BlockPos pos, IModelBaker baker, TextureAtlasSprite sprite, int colorIndex) {
-
-		BlockPos posNEW = new BlockPos(pos.getX() - 1, pos.getY(), pos.getZ());
-
-		if (!block.shouldSideBeRendered(world, posNEW, EnumFacing.NORTH)) {
-			return;
-		}
-
-		baker.addFaceXNeg(pos, sprite);
-
-	}
-
-	protected void addSouthFace(IBlockAccess world, B block, BlockPos pos, IModelBaker baker, TextureAtlasSprite sprite, int colorIndex) {
-
-		BlockPos posNEW = new BlockPos(pos.getX() + 1, pos.getY(), pos.getZ());
-
-		if (!block.shouldSideBeRendered(world, posNEW, EnumFacing.SOUTH)) {
-			return;
-		}
-
-		baker.addFaceXPos(pos, sprite);
-
 	}
 
 	@Override
@@ -188,11 +115,7 @@ public abstract class ModelBlockOverlay<B extends Block> implements IFlexibleBak
 		B bBlock = blockClass.cast(block);
 		
 		baker.setRenderBoundsFromBlock(block);
-		try {
-			backeWorldBlock(bBlock, world, pos, baker);
-		} catch (RuntimeException e) {
-			return null;
-		}
+		bakeWorldBlock(bBlock, world, pos, baker);
 		
 		return latestBlockModel = baker.bakeModel(false);
 	}
@@ -209,7 +132,7 @@ public abstract class ModelBlockOverlay<B extends Block> implements IFlexibleBak
 		block.setBlockBoundsForItemRender();
 		baker.setRenderBoundsFromBlock(block);
 		try {
-			backeInventoryBlock(bBlock, stack, baker);
+			bakeInventoryBlock(bBlock, stack, baker);
 		} catch (RuntimeException e) {
 			return null;
 		}
@@ -217,8 +140,8 @@ public abstract class ModelBlockOverlay<B extends Block> implements IFlexibleBak
 		return latestItemModel = baker.bakeModel(true);
 	}
 	
-	protected abstract void backeInventoryBlock(B block, ItemStack item, IModelBaker baker);
+	protected abstract void bakeInventoryBlock(B block, ItemStack item, IModelBaker baker);
 
-	protected abstract boolean backeWorldBlock(B block, IBlockAccess world, BlockPos pos, IModelBaker baker);
+	protected abstract boolean bakeWorldBlock(B block, IBlockAccess world, BlockPos pos, IModelBaker baker);
 
 }

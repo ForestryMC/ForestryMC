@@ -14,12 +14,6 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
-import org.lwjgl.util.vector.Vector3f;
-
-import forestry.api.core.ForestryAPI;
-import forestry.api.core.IModelBaker;
-import forestry.api.core.IModelBakerModel;
-import forestry.core.proxy.Proxies;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.BlockFaceUV;
@@ -30,9 +24,17 @@ import net.minecraft.client.resources.model.ModelRotation;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+
 import net.minecraftforge.client.model.IColoredBakedQuad;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import org.lwjgl.util.vector.Vector3f;
+
+import forestry.api.core.ForestryAPI;
+import forestry.api.core.IModelBaker;
+import forestry.api.core.IModelBakerModel;
+import forestry.core.proxy.Proxies;
 
 /**
  * A model baker to make custom models in the mod
@@ -118,27 +120,27 @@ public class ModelBaker implements IModelBaker {
 		}
 
 		if (pos == null || block.shouldSideBeRendered(world, posDOWN, EnumFacing.DOWN)) {
-			addFaceYNeg(pos, textures[EnumFacing.DOWN.ordinal()]);
+			addFaceYNeg(textures[EnumFacing.DOWN.ordinal()]);
 		}
 
 		if (pos == null || block.shouldSideBeRendered(world, posUP, EnumFacing.UP)) {
-			addFaceYPos(pos, textures[EnumFacing.UP.ordinal()]);
+			addFaceYPos(textures[EnumFacing.UP.ordinal()]);
 		}
 
 		if (pos == null || block.shouldSideBeRendered(world, posEAST, EnumFacing.EAST)) {
-			addFaceXNeg(pos, textures[EnumFacing.EAST.ordinal()]);
+			addFaceXNeg(textures[EnumFacing.EAST.ordinal()]);
 		}
 
 		if (pos == null || block.shouldSideBeRendered(world, posWEST, EnumFacing.WEST)) {
-			addFaceXPos(pos, textures[EnumFacing.WEST.ordinal()]);
+			addFaceXPos(textures[EnumFacing.WEST.ordinal()]);
 		}
 
 		if (pos == null || block.shouldSideBeRendered(world, posNORTH, EnumFacing.NORTH)) {
-			addFaceZNeg(pos, textures[EnumFacing.NORTH.ordinal()]);
+			addFaceZNeg(textures[EnumFacing.NORTH.ordinal()]);
 		}
 
 		if (pos == null || block.shouldSideBeRendered(world, posSOUTH, EnumFacing.SOUTH)) {
-			addFaceZPos(pos, textures[EnumFacing.SOUTH.ordinal()]);
+			addFaceZPos(textures[EnumFacing.SOUTH.ordinal()]);
 		}
 		setRenderBounds(0, 0, 0, 1, 1, 1);
 	}
@@ -150,7 +152,7 @@ public class ModelBaker implements IModelBaker {
 
 	private final float quadsUV[] = new float[] { 0, 0, 1, 1, 0, 0, 1, 1 };
 	protected EnumSet<EnumFacing> renderFaces = EnumSet.allOf(EnumFacing.class);
-	private List<ModelBakerFace> faces = new ArrayList();
+	private List<ModelBakerFace> faces = new ArrayList<>();
 
 	protected float[] getFaceUvs(final EnumFacing face, final Vector3f to_16, final Vector3f from_16) {
 		float from_a = 0;
@@ -221,7 +223,7 @@ public class ModelBaker implements IModelBaker {
 	}
 
 	@Override
-	public void addFaceXNeg(BlockPos pos, TextureAtlasSprite sprite) {
+	public void addFaceXNeg(TextureAtlasSprite sprite) {
 		boolean isEdge = renderMinX < 0.0001;
 		Vector3f to = new Vector3f((float) renderMinX * 16.0f, (float) renderMinY * 16.0f, (float) renderMinZ * 16.0f);
 		Vector3f from = new Vector3f((float) renderMinX * 16.0f, (float) renderMaxY * 16.0f, (float) renderMaxZ * 16.0f);
@@ -230,7 +232,7 @@ public class ModelBaker implements IModelBaker {
 	}
 
 	@Override
-	public void addFaceYNeg(BlockPos pos, TextureAtlasSprite sprite) {
+	public void addFaceYNeg(TextureAtlasSprite sprite) {
 		boolean isEdge = renderMinY < 0.0001;
 		Vector3f to = new Vector3f((float) renderMinX * 16.0f, (float) renderMinY * 16.0f, (float) renderMinZ * 16.0f);
 		Vector3f from = new Vector3f((float) renderMaxX * 16.0f, (float) renderMinY * 16.0f, (float) renderMaxZ * 16.0f);
@@ -239,7 +241,7 @@ public class ModelBaker implements IModelBaker {
 	}
 
 	@Override
-	public void addFaceZNeg(BlockPos pos, TextureAtlasSprite sprite) {
+	public void addFaceZNeg(TextureAtlasSprite sprite) {
 		boolean isEdge = renderMinZ < 0.0001;
 		Vector3f to = new Vector3f((float) renderMinX * 16.0f, (float) renderMinY * 16.0f, (float) renderMinZ * 16.0f);
 		Vector3f from = new Vector3f((float) renderMaxX * 16.0f, (float) renderMaxY * 16.0f, (float) renderMinZ * 16.0f);
@@ -248,7 +250,7 @@ public class ModelBaker implements IModelBaker {
 	}
 
 	@Override
-	public void addFaceYPos(BlockPos pos, TextureAtlasSprite sprite) {
+	public void addFaceYPos(TextureAtlasSprite sprite) {
 		boolean isEdge = renderMaxY > 0.9999;
 		Vector3f to = new Vector3f((float) renderMinX * 16.0f, (float) renderMaxY * 16.0f, (float) renderMinZ * 16.0f);
 		Vector3f from = new Vector3f((float) renderMaxX * 16.0f, (float) renderMaxY * 16.0f, (float) renderMaxZ * 16.0f);
@@ -257,7 +259,7 @@ public class ModelBaker implements IModelBaker {
 	}
 
 	@Override
-	public void addFaceZPos(BlockPos pos, TextureAtlasSprite sprite) {
+	public void addFaceZPos(TextureAtlasSprite sprite) {
 		boolean isEdge = renderMaxZ > 0.9999;
 		Vector3f to = new Vector3f((float) renderMinX * 16.0f, (float) renderMinY * 16.0f, (float) renderMaxZ * 16.0f);
 		Vector3f from = new Vector3f((float) renderMaxX * 16.0f, (float) renderMaxY * 16.0f, (float) renderMaxZ * 16.0f);
@@ -266,7 +268,7 @@ public class ModelBaker implements IModelBaker {
 	}
 
 	@Override
-	public void addFaceXPos(BlockPos pos, TextureAtlasSprite sprite) {
+	public void addFaceXPos(TextureAtlasSprite sprite) {
 		
 		boolean isEdge = renderMaxX > 0.9999;
 		Vector3f to = new Vector3f((float) renderMaxX * 16.0f, (float) renderMinY * 16.0f, (float) renderMinZ * 16.0f);
@@ -286,7 +288,8 @@ public class ModelBaker implements IModelBaker {
 		if (flip)
 			mr = ModelRotation.X0_Y180;
 
-		for (ModelBakerFace face : faces) {
+		// TODO: find out why there is a concurrent modification issue with faces
+		for (ModelBakerFace face : new ArrayList<>(faces)) {
 			final EnumFacing myFace = face.face;
 			final float[] uvs = getFaceUvs(myFace, face.from, face.to);
 
@@ -308,7 +311,7 @@ public class ModelBaker implements IModelBaker {
 	public IModelBakerModel clear() {
 		ModelBakerModel model = currentModel.copy();
 		currentModel = new ModelBakerModel();
-		faces = new ArrayList<ModelBakerFace>();
+		faces = new ArrayList<>();
 		return model;
 	}
 	

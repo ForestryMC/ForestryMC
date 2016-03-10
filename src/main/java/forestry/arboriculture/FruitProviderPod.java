@@ -94,7 +94,12 @@ public class FruitProviderPod extends FruitProviderNone {
 	public short getSpriteIndex(ITreeGenome genome, IBlockAccess world, BlockPos pos, int ripeningTime, boolean fancy) {
 		return type.uids[0];
 	}
-	
+
+	@Override
+	public short getDecorativeSpriteIndex() {
+		return type.uids[0];
+	}
+
 	@Override
 	public void registerSprites() {
 	}

@@ -89,11 +89,6 @@ public class FruitProviderRipening extends FruitProviderNone {
 	}
 
 	@Override
-	public ItemStack[] getSpecialty() {
-		return new ItemStack[0];
-	}
-
-	@Override
 	public boolean markAsFruitLeaf(ITreeGenome genome, World world, BlockPos pos) {
 		return true;
 	}
@@ -101,7 +96,10 @@ public class FruitProviderRipening extends FruitProviderNone {
 	@Override
 	public int getColour(ITreeGenome genome, IBlockAccess world, BlockPos pos, int ripeningTime) {
 		float stage = getRipeningStage(ripeningTime);
+		return getColour(stage);
+	}
 
+	private int getColour(float stage) {
 		int r = (colourCallow >> 16 & 255) + (int) (diffR * stage);
 		int g = (colourCallow >> 8 & 255) + (int) (diffG * stage);
 		int b = (colourCallow & 255) + (int) (diffB * stage);
@@ -111,4 +109,8 @@ public class FruitProviderRipening extends FruitProviderNone {
 		return (r & 255) << 16 | (g & 255) << 8 | b & 255;
 	}
 
+	@Override
+	public int getDecorativeColor() {
+		return getColour(1.0f);
+	}
 }

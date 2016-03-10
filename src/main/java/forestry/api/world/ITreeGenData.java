@@ -23,8 +23,6 @@ public interface ITreeGenData {
 
 	void setLeaves(World world, GameProfile owner, BlockPos pos);
 
-	void setLeavesDecorative(World world, GameProfile owner, BlockPos pos);
-
 	void setLogBlock(World world, BlockPos pos, EnumFacing facing);
 
 	boolean allowsFruitBlocks();

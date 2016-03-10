@@ -21,6 +21,9 @@ public interface IFruitProvider {
 
 	int getColour(ITreeGenome genome, IBlockAccess world, BlockPos pos, int ripeningTime);
 
+	/** return the color to use for decorative leaves. Usually the ripe color. */
+	int getDecorativeColor();
+
 	boolean markAsFruitLeaf(ITreeGenome genome, World world, BlockPos pos);
 
 	int getRipeningPeriod();
@@ -54,6 +57,9 @@ public interface IFruitProvider {
 	 * @return IIcon index of the texture to overlay on the leaf block.
 	 */
 	short getSpriteIndex(ITreeGenome genome, IBlockAccess world, BlockPos pos, int ripeningTime, boolean fancy);
+
+	/** return the sprite index to display on decorative leaves */
+	short getDecorativeSpriteIndex();
 
 	/**
 	 * @return true if this fruit provider requires fruit blocks to spawn, false otherwise.

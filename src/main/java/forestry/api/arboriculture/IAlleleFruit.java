@@ -5,6 +5,8 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
+import javax.annotation.Nonnull;
+
 import forestry.api.genetics.IAlleleProperty;
 
 /**
@@ -12,10 +14,13 @@ import forestry.api.genetics.IAlleleProperty;
  */
 public interface IAlleleFruit extends IAlleleProperty<IAlleleFruit> {
 
+	@Nonnull
 	IFruitProvider getProvider();
-	
+
+	@Nonnull
 	String getModelName();
-	
+
+	@Nonnull
 	String getModID();
 
 }

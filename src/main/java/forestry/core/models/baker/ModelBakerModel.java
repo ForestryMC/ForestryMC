@@ -13,9 +13,6 @@ package forestry.core.models.baker;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.lwjgl.util.vector.Vector3f;
-
-import forestry.api.core.IModelBakerModel;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.block.model.ItemTransformVec3f;
@@ -24,8 +21,13 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import org.lwjgl.util.vector.Vector3f;
+
+import forestry.api.core.IModelBakerModel;
 
 @SideOnly(Side.CLIENT)
 public class ModelBakerModel implements IModelBakerModel {
@@ -170,12 +172,12 @@ public class ModelBakerModel implements IModelBakerModel {
 	}
 
 	@Override
-	public List getGeneralQuads() {
+	public List<BakedQuad> getGeneralQuads() {
 		return general;
 	}
 
 	@Override
-	public List getFaceQuads(EnumFacing face) {
+	public List<BakedQuad> getFaceQuads(EnumFacing face) {
 		return faces[face.ordinal()];
 	}
 

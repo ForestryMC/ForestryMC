@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics.alleles;
 
+import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.List;
 
@@ -64,17 +65,19 @@ public class AlleleFruit extends AlleleCategorized implements IAlleleFruit {
 		}
 	}
 
+	@Nonnull
 	private final IFruitProvider provider;
 
-	public AlleleFruit(String name, IFruitProvider provider) {
+	public AlleleFruit(@Nonnull String name, @Nonnull IFruitProvider provider) {
 		this(name, provider, false);
 	}
 
-	public AlleleFruit(String name, IFruitProvider provider, boolean isDominant) {
+	public AlleleFruit(@Nonnull String name, @Nonnull IFruitProvider provider, boolean isDominant) {
 		super(Constants.MOD_ID, "fruit", name, isDominant);
 		this.provider = provider;
 	}
 
+	@Nonnull
 	@Override
 	public IFruitProvider getProvider() {
 		return this.provider;
@@ -85,11 +88,13 @@ public class AlleleFruit extends AlleleCategorized implements IAlleleFruit {
 		return getProvider().getDescription();
 	}
 
+	@Nonnull
 	@Override
 	public String getModelName() {
 		return getProvider().getModelName();
 	}
 
+	@Nonnull
 	@Override
 	public String getModID() {
 		return getProvider().getModID();

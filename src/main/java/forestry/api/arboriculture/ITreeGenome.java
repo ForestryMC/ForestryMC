@@ -5,6 +5,7 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
+import javax.annotation.Nonnull;
 import java.util.EnumSet;
 
 import net.minecraftforge.common.EnumPlantType;
@@ -19,6 +20,7 @@ public interface ITreeGenome extends IGenome {
 	@Override
 	IAlleleTreeSpecies getSecondary();
 
+	@Nonnull
 	IFruitProvider getFruitProvider();
 
 	IGrowthProvider getGrowthProvider();

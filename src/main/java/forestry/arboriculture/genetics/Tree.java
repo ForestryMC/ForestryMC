@@ -215,12 +215,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 
 	@Override
 	public void setLeaves(World world, GameProfile owner, BlockPos pos) {
-		genome.getPrimary().getGenerator().setLeaves(genome, world, owner, pos, false);
-	}
-
-	@Override
-	public void setLeavesDecorative(World world, GameProfile owner, BlockPos pos) {
-		genome.getPrimary().getGenerator().setLeaves(genome, world, owner, pos, true);
+		genome.getPrimary().getGenerator().setLeaves(genome, world, owner, pos);
 	}
 
 	@Override

@@ -11,13 +11,17 @@
 package forestry.arboriculture.blocks;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.ItemStack;
 
 import forestry.api.arboriculture.EnumWoodType;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.genetics.alleles.AlleleFruit;
+import forestry.arboriculture.items.ItemBlockDecorativeLeaves;
 import forestry.arboriculture.items.ItemBlockLeaves;
 import forestry.arboriculture.items.ItemBlockWood;
 import forestry.arboriculture.items.ItemBlockWoodSlab;
@@ -40,6 +44,8 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 
 	public final BlockSapling saplingGE;
 	public final BlockForestryLeaves leaves;
+	public final List<BlockDecorativeLeaves> leavesDecorative;
+	private final Map<String, ItemStack> speciesToLeavesDecorative;
 	public final BlockFruitPod pods;
 	
 	public final BlockArboriculture arboriculture;
@@ -136,6 +142,20 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 		// Leaves
 		leaves = registerBlock(new BlockForestryLeaves(), ItemBlockLeaves.class, "leaves");
 		registerOreDictWildcard("treeLeaves", leaves);
+
+		leavesDecorative = BlockDecorativeLeaves.create();
+		speciesToLeavesDecorative = new HashMap<>();
+		for (BlockDecorativeLeaves leaves : leavesDecorative) {
+			registerBlock(leaves, ItemBlockDecorativeLeaves.class, "leaves.decorative." + leaves.getBlockNumber());
+			registerOreDictWildcard("treeLeaves", leaves);
+
+			for (IBlockState state : leaves.getBlockState().getValidStates()) {
+				TreeDefinition treeDefinition = state.getValue(leaves.getVariant());
+				String speciesUid = treeDefinition.getUID();
+				int meta = leaves.getMetaFromState(state);
+				speciesToLeavesDecorative.put(speciesUid, new ItemStack(leaves, 1, meta));
+			}
+		}
 		
 		// Pods
 		AlleleFruit.createAlleles();
@@ -143,5 +163,9 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 		
 		// Machines
 		arboriculture = registerBlock(new BlockArboriculture(), ItemBlockForestry.class, "arboriculture");
+	}
+
+	public ItemStack getDecorativeLeaves(String speciesUid) {
+		return speciesToLeavesDecorative.get(speciesUid);
 	}
 }

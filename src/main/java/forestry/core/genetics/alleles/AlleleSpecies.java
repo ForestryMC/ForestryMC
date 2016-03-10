@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.genetics.alleles;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Map;
 
@@ -45,7 +46,13 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesBuil
 	private EnumTemperature climate = EnumTemperature.NORMAL;
 	private EnumHumidity humidity = EnumHumidity.NORMAL;
 
-	protected AlleleSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, boolean isDominant, IClassification branch, String binomial) {
+	protected AlleleSpecies(@Nonnull String uid,
+			@Nonnull String unlocalizedName,
+			@Nonnull String authority,
+			@Nonnull String unlocalizedDescription,
+			boolean isDominant,
+			@Nonnull IClassification branch,
+			@Nonnull String binomial) {
 		super(uid, unlocalizedName, isDominant);
 
 		this.branch = branch;

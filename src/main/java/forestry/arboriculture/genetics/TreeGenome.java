@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
+import javax.annotation.Nonnull;
 import java.util.EnumSet;
 
 import net.minecraft.item.ItemStack;
@@ -68,6 +69,7 @@ public class TreeGenome extends Genome implements ITreeGenome {
 		return (IAlleleTreeSpecies) getInactiveAllele(EnumTreeChromosome.SPECIES);
 	}
 
+	@Nonnull
 	@Override
 	public IFruitProvider getFruitProvider() {
 		return ((IAlleleFruit) getActiveAllele(EnumTreeChromosome.FRUITS)).getProvider();

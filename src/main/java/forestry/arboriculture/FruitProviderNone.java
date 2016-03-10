@@ -88,6 +88,11 @@ public class FruitProviderNone implements IFruitProvider {
 	}
 
 	@Override
+	public int getDecorativeColor() {
+		return 0xffffff;
+	}
+
+	@Override
 	public boolean markAsFruitLeaf(ITreeGenome genome, World world, BlockPos pos) {
 		return false;
 	}
@@ -120,7 +125,16 @@ public class FruitProviderNone implements IFruitProvider {
 			return -1;
 		}
 	}
-	
+
+	@Override
+	public short getDecorativeSpriteIndex() {
+		if (overlay != null) {
+			return overlay.texUID;
+		} else {
+			return -1;
+		}
+	}
+
 	@Override
 	public void registerSprites() {
 		if (overlay != null) {

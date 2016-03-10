@@ -22,6 +22,7 @@ import forestry.arboriculture.items.ItemBlockLeaves;
 import forestry.arboriculture.tiles.TileLeaves;
 import forestry.core.models.ModelBlockOverlay;
 import forestry.core.proxy.Proxies;
+import forestry.core.tiles.TileUtil;
 
 public class ModelLeaves extends ModelBlockOverlay<BlockForestryLeaves> {
 
@@ -30,7 +31,7 @@ public class ModelLeaves extends ModelBlockOverlay<BlockForestryLeaves> {
 	}
 
 	@Override
-	public void backeInventoryBlock(BlockForestryLeaves block, ItemStack itemStack, IModelBaker baker) {
+	public void bakeInventoryBlock(BlockForestryLeaves block, ItemStack itemStack, IModelBaker baker) {
 		if (!(itemStack.getItem() instanceof ItemBlockLeaves) || block == null) {
 			return;
 		}
@@ -62,8 +63,8 @@ public class ModelLeaves extends ModelBlockOverlay<BlockForestryLeaves> {
 	}
 
 	@Override
-	public boolean backeWorldBlock(BlockForestryLeaves block, IBlockAccess world, BlockPos pos, IModelBaker baker) {
-		TileLeaves tile = BlockForestryLeaves.getLeafTile(world, pos);
+	public boolean bakeWorldBlock(BlockForestryLeaves block, IBlockAccess world, BlockPos pos, IModelBaker baker) {
+		TileLeaves tile = TileUtil.getTile(world, pos, TileLeaves.class);
 		if (tile == null) {
 			return false;
 		}

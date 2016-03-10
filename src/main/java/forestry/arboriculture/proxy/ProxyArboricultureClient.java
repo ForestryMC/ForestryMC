@@ -14,6 +14,8 @@ import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.world.ColorizerFoliage;
 
 import forestry.arboriculture.PluginArboriculture;
+import forestry.arboriculture.blocks.BlockDecorativeLeaves;
+import forestry.arboriculture.render.ModelDecorativeLeaves;
 import forestry.arboriculture.render.ModelLeaves;
 import forestry.core.models.BlockModelIndex;
 import forestry.core.proxy.Proxies;
@@ -21,9 +23,20 @@ import forestry.core.proxy.Proxies;
 public class ProxyArboricultureClient extends ProxyArboriculture {
 	@Override
 	public void initializeModels() {
-		Proxies.render.registerBlockModel(new BlockModelIndex(new ModelResourceLocation("forestry:leaves"),
-				new ModelResourceLocation("forestry:leaves", "inventory"), new ModelLeaves(),
-				PluginArboriculture.blocks.leaves));
+		{
+			ModelResourceLocation blockModelLocation = new ModelResourceLocation("forestry:leaves");
+			ModelResourceLocation itemModelLocation = new ModelResourceLocation("forestry:leaves", "inventory");
+			BlockModelIndex blockModelIndex = new BlockModelIndex(blockModelLocation, itemModelLocation, new ModelLeaves(), PluginArboriculture.blocks.leaves);
+			Proxies.render.registerBlockModel(blockModelIndex);
+		}
+
+		for (BlockDecorativeLeaves leaves : PluginArboriculture.blocks.leavesDecorative) {
+			String resourceName = "forestry:leaves.decorative." + leaves.getBlockNumber();
+			ModelResourceLocation blockModelLocation = new ModelResourceLocation(resourceName);
+			ModelResourceLocation itemModeLocation = new ModelResourceLocation(resourceName, "inventory");
+			BlockModelIndex blockModelIndex = new BlockModelIndex(blockModelLocation, itemModeLocation, new ModelDecorativeLeaves(), leaves);
+			Proxies.render.registerBlockModel(blockModelIndex);
+		}
 	}
 
 	@Override

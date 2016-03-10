@@ -18,7 +18,7 @@ public class ModelFarmBlock extends ModelBlockOverlay<BlockFarm> {
 	}
 
 	@Override
-	public void backeInventoryBlock(BlockFarm blockFarm, ItemStack item, IModelBaker baker) {
+	public void bakeInventoryBlock(BlockFarm blockFarm, ItemStack item, IModelBaker baker) {
 		if (blockFarm == null) {
 			return;
 		}
@@ -32,7 +32,7 @@ public class ModelFarmBlock extends ModelBlockOverlay<BlockFarm> {
 	}
 
 	@Override
-	public boolean backeWorldBlock(BlockFarm blockFarm, IBlockAccess world, BlockPos pos, IModelBaker baker) {
+	public boolean bakeWorldBlock(BlockFarm blockFarm, IBlockAccess world, BlockPos pos, IModelBaker baker) {
 
 		TileFarm farm = (TileFarm) world.getTileEntity(pos);
 

@@ -22,5 +22,5 @@ public interface ITreeGenerator {
 
 	void setLogBlock(ITreeGenome genome, World world, BlockPos pos, EnumFacing facing);
 
-	void setLeaves(ITreeGenome genome, World world, GameProfile owner, BlockPos pos, boolean decorative);
+	void setLeaves(ITreeGenome genome, World world, GameProfile owner, BlockPos pos);
 }
