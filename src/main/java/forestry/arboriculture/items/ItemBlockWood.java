@@ -19,7 +19,7 @@ import forestry.arboriculture.WoodHelper;
 import forestry.core.items.ItemBlockForestry;
 
 public class ItemBlockWood<B extends Block & IWoodTyped> extends ItemBlockForestry<B> {
-	public ItemBlockWood(B block) {
+	public ItemBlockWood(Block block) {
 		super(block);
 	}
 

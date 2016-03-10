@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.arboriculture.items;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -27,7 +28,7 @@ import forestry.core.utils.StringUtil;
 
 public class ItemBlockLeaves extends ItemBlockForestry<BlockForestryLeaves> {
 
-	public ItemBlockLeaves(BlockForestryLeaves block) {
+	public ItemBlockLeaves(Block block) {
 		super(block);
 	}
 

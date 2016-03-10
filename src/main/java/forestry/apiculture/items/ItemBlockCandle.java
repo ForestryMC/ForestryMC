@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -21,7 +22,7 @@ import forestry.core.items.ItemBlockForestry;
 
 public class ItemBlockCandle extends ItemBlockForestry<BlockCandle> {
 
-	public ItemBlockCandle(BlockCandle block) {
+	public ItemBlockCandle(Block block) {
 		super(block);
 	}
 

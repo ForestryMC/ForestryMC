@@ -25,7 +25,7 @@ import forestry.core.tiles.TileUtil;
 
 public class ItemBlockForestry<B extends Block> extends ItemBlock {
 
-	public ItemBlockForestry(B block) {
+	public ItemBlockForestry(Block block) {
 		super(block);
 		setMaxDamage(0);
 		setHasSubtypes(true);
