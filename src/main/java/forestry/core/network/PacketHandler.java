@@ -13,9 +13,11 @@ package forestry.core.network;
 import java.io.IOException;
 import java.io.InputStream;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.NetHandlerPlayServer;
+import net.minecraft.util.IThreadListener;
 
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLEventChannel;
@@ -47,8 +49,7 @@ public class PacketHandler {
 			byte packetIdOrdinal = data.readByte();
 			PacketIdServer packetId = PacketIdServer.VALUES[packetIdOrdinal];
 			IForestryPacketServer packetHandler = packetId.getPacketHandler();
-			packetHandler.readData(data);
-			packetHandler.onPacketData(data, player);
+			checkThreadAndEnqueue(packetHandler, data, player, player.getServerForPlayer());
 		} catch (IOException e) {
 			Log.error("Failed to read packet.", e);
 		}
@@ -63,8 +64,7 @@ public class PacketHandler {
 			byte packetIdOrdinal = data.readByte();
 			PacketIdClient packetId = PacketIdClient.VALUES[packetIdOrdinal];
 			IForestryPacketClient packetHandler = packetId.getPacketHandler();
-			packetHandler.readData(data);
-			packetHandler.onPacketData(data, player);
+			checkThreadAndEnqueue(packetHandler, data, player, Minecraft.getMinecraft());
 		} catch (IOException e) {
 			Log.error("Failed to read packet.", e);
 		}
@@ -79,4 +79,35 @@ public class PacketHandler {
 		channel.sendTo(packet, player);
 	}
 
+	private static void checkThreadAndEnqueue(final IForestryPacketClient packet, final DataInputStreamForestry data, final EntityPlayer player, IThreadListener threadListener) {
+		if (!threadListener.isCallingFromMinecraftThread()) {
+			threadListener.addScheduledTask(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						packet.readData(data);
+						packet.onPacketData(data, player);
+					} catch (IOException e) {
+						Log.error("Network Error", e);
+					}
+				}
+			});
+		}
+	}
+
+	private static void checkThreadAndEnqueue(final IForestryPacketServer packet, final DataInputStreamForestry data, final EntityPlayerMP player, IThreadListener threadListener) {
+		if (!threadListener.isCallingFromMinecraftThread()) {
+			threadListener.addScheduledTask(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						packet.readData(data);
+						packet.onPacketData(data, player);
+					} catch (IOException e) {
+						Log.error("Network Error", e);
+					}
+				}
+			});
+		}
+	}
 }
