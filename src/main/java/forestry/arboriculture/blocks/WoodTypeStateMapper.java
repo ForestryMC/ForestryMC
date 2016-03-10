@@ -25,11 +25,20 @@ class WoodTypeStateMapper extends StateMapperBase {
 
 	@Nonnull
 	private final IWoodTyped woodTyped;
+	@Nonnull
+	private final String blockPath;
 	@Nullable
 	private final PropertyWoodType propertyWoodType;
 
 	public WoodTypeStateMapper(@Nonnull IWoodTyped woodTyped, @Nullable PropertyWoodType propertyWoodType) {
 		this.woodTyped = woodTyped;
+		this.blockPath = woodTyped.getBlockKind();
+		this.propertyWoodType = propertyWoodType;
+	}
+
+	public WoodTypeStateMapper(@Nonnull IWoodTyped woodTyped, @Nonnull String blockPath, @Nullable PropertyWoodType propertyWoodType) {
+		this.woodTyped = woodTyped;
+		this.blockPath = blockPath;
 		this.propertyWoodType = propertyWoodType;
 	}
 
@@ -47,8 +56,7 @@ class WoodTypeStateMapper extends StateMapperBase {
 		int meta = block.getMetaFromState(state);
 		EnumWoodType woodType = woodTyped.getWoodType(meta);
 		String resourceDomain = Block.blockRegistry.getNameForObject(block).getResourceDomain();
-		String blockKind = woodTyped.getBlockKind().replace('.', '/');
-		String resourceLocation = "arboriculture/" + blockKind + '/' + woodType;
+		String resourceLocation = "arboriculture/" + blockPath + '/' + woodType;
 		String propertyString = this.getPropertyString(properties);
 		return new ModelResourceLocation(resourceDomain + ':' + resourceLocation, propertyString);
 	}

@@ -43,7 +43,7 @@ public class WoodHelper {
 	public static ResourceLocation[] getResourceLocations(IWoodTyped typed) {
 		List<ResourceLocation> resourceLocations = new ArrayList<>();
 		for (EnumWoodType woodType : typed.getWoodTypes()) {
-			String blockKind = typed.getBlockKind().replace('.', '/');
+			String blockKind = typed.getBlockKind();
 			ResourceLocation resourceLocation = new ForestryResource(blockKind + "/" + woodType);
 			resourceLocations.add(resourceLocation);
 		}
@@ -63,7 +63,7 @@ public class WoodHelper {
 		public ModelResourceLocation getModelLocation(ItemStack stack) {
 			int meta = stack.getMetadata();
 			EnumWoodType woodType = wood.getWoodType(meta);
-			String blockKind = wood.getBlockKind().replace('.', '/');
+			String blockKind = wood.getBlockKind();
 			return ModelManager.getInstance().getModelLocation(blockKind + "/" + woodType);
 		}
 

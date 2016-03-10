@@ -14,6 +14,7 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Random;
 
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.material.Material;
@@ -141,6 +142,27 @@ public abstract class BlockArbSlab extends BlockSlab implements IWoodTyped, IIte
 
 		return meta;
 	}
+
+	@Override
+	public int damageDropped(IBlockState state) {
+		return state.getValue(getVariant()).getMetadata() - (blockNumber * VARIANTS_PER_BLOCK);
+	}
+
+	@Override
+	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+		EnumWoodType woodType = state.getValue(getVariant());
+		ItemStack slab = TreeManager.woodItemAccess.getSlab(woodType, isFireproof());
+		return slab.getItem();
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public Item getItem(World worldIn, BlockPos pos) {
+		IBlockState blockState = worldIn.getBlockState(pos);
+		EnumWoodType woodType = blockState.getValue(getVariant());
+		ItemStack slab = TreeManager.woodItemAccess.getSlab(woodType, isFireproof());
+		return slab.getItem();
+	}
 	
 	@SideOnly(Side.CLIENT)
 	@Override
@@ -185,7 +207,7 @@ public abstract class BlockArbSlab extends BlockSlab implements IWoodTyped, IIte
 	@Nonnull
 	@Override
 	public String getBlockKind() {
-		return isDouble() ? "slab.double" : "slab";
+		return "slab";
 	}
 
 	@Override
@@ -211,6 +233,7 @@ public abstract class BlockArbSlab extends BlockSlab implements IWoodTyped, IIte
 
 	@Override
 	public void registerStateMapper() {
-		Proxies.render.registerStateMapper(this, new WoodTypeStateMapper(this, getVariant()));
+		String blockPath = isDouble() ? "slab/double" : "slab";
+		Proxies.render.registerStateMapper(this, new WoodTypeStateMapper(this, blockPath, getVariant()));
 	}
 }
