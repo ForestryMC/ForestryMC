@@ -33,10 +33,10 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.core.config.Constants;
 import forestry.core.items.DrinkProperties;
 import forestry.core.items.EnumContainerType;
 import forestry.core.proxy.Proxies;
+import forestry.core.render.ForestryResource;
 
 public enum Fluids {
 
@@ -258,9 +258,9 @@ public enum Fluids {
 		this.density = density;
 		this.viscosity = viscosity;
 		
-		resources[0] = new ResourceLocation(Constants.ID, "blocks/liquid/" + getTag() + "_still");
+		resources[0] = new ForestryResource("blocks/liquid/" + getTag() + "_still");
 		if (flowTextureExists()) {
-			resources[1] = new ResourceLocation(Constants.ID, "blocks/liquid/" + getTag() + "_flow");
+			resources[1] = new ForestryResource("blocks/liquid/" + getTag() + "_flow");
 		}
 	}
 
@@ -378,7 +378,7 @@ public enum Fluids {
 	@SideOnly(Side.CLIENT)
 	public boolean flowTextureExists() {
 		try {
-			ResourceLocation resourceLocation = new ResourceLocation(Constants.ID, "blocks/liquid/" + getTag() + "_flow");
+			ResourceLocation resourceLocation = new ForestryResource("blocks/liquid/" + getTag() + "_flow");
 			IResourceManager resourceManager = Proxies.common.getClientInstance().getResourceManager();
 			return resourceManager.getResource(resourceLocation) != null;
 		} catch (IOException e) {

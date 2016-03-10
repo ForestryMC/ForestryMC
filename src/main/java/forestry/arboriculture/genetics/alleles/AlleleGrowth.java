@@ -19,6 +19,7 @@ import forestry.api.arboriculture.IGrowthProvider;
 import forestry.api.genetics.AlleleManager;
 import forestry.arboriculture.genetics.GrowthProvider;
 import forestry.arboriculture.genetics.GrowthProviderTropical;
+import forestry.core.config.Constants;
 import forestry.core.genetics.alleles.AlleleCategorized;
 
 public class AlleleGrowth extends AlleleCategorized implements IAlleleGrowth {
@@ -46,7 +47,7 @@ public class AlleleGrowth extends AlleleCategorized implements IAlleleGrowth {
 	}
 
 	public AlleleGrowth(String name, IGrowthProvider provider, boolean isDominant) {
-		super("forestry", "growth", name, isDominant);
+		super(Constants.MOD_ID, "growth", name, isDominant);
 		this.provider = provider;
 	}
 

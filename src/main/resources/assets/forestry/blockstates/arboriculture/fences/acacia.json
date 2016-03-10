@@ -1,0 +1,20 @@
+{
+    "variants": {
+        "east=false,north=false,south=false,west=false": { "model": "forestry:arboriculture/fences/acacia_post" },
+        "east=false,north=true,south=false,west=false": { "model": "forestry:arboriculture/fences/acacia_n", "uvlock": true },
+        "east=true,north=false,south=false,west=false": { "model": "forestry:arboriculture/fences/acacia_n", "y": 90, "uvlock": true },
+        "east=false,north=false,south=true,west=false": { "model": "forestry:arboriculture/fences/acacia_n", "y": 180, "uvlock": true },
+        "east=false,north=false,south=false,west=true": { "model": "forestry:arboriculture/fences/acacia_n", "y": 270, "uvlock": true },
+        "east=true,north=true,south=false,west=false": { "model": "forestry:arboriculture/fences/acacia_ne", "uvlock": true },
+        "east=true,north=false,south=true,west=false": { "model": "forestry:arboriculture/fences/acacia_ne", "y": 90, "uvlock": true },
+        "east=false,north=false,south=true,west=true": { "model": "forestry:arboriculture/fences/acacia_ne", "y": 180, "uvlock": true },
+        "east=false,north=true,south=false,west=true": { "model": "forestry:arboriculture/fences/acacia_ne", "y": 270, "uvlock": true },
+        "east=false,north=true,south=true,west=false": { "model": "forestry:arboriculture/fences/acacia_ns", "uvlock": true },
+        "east=true,north=false,south=false,west=true": { "model": "forestry:arboriculture/fences/acacia_ns", "y": 90, "uvlock": true },
+        "east=true,north=true,south=true,west=false": { "model": "forestry:arboriculture/fences/acacia_nse", "uvlock": true },
+        "east=true,north=false,south=true,west=true": { "model": "forestry:arboriculture/fences/acacia_nse", "y": 90, "uvlock": true },
+        "east=false,north=true,south=true,west=true": { "model": "forestry:arboriculture/fences/acacia_nse", "y": 180, "uvlock": true },
+        "east=true,north=true,south=false,west=true": { "model": "forestry:arboriculture/fences/acacia_nse", "y": 270, "uvlock": true },
+        "east=true,north=true,south=true,west=true": { "model": "forestry:arboriculture/fences/acacia_nsew", "uvlock": true }
+	}
+}

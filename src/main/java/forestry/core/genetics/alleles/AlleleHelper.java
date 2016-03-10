@@ -33,7 +33,7 @@ import forestry.plugins.ForestryPluginUids;
 
 public class AlleleHelper implements IAlleleHelper {
 
-	private static final String modId = Constants.ID;
+	private static final String modId = Constants.MOD_ID;
 	public static AlleleHelper instance;
 
 	private final Map<Class, Map<?, ? extends IAllele>> alleleMaps = new HashMap<>();
@@ -49,8 +49,6 @@ public class AlleleHelper implements IAlleleHelper {
 					EnumBeeChromosome.TERRITORY,
 					EnumTreeChromosome.TERRITORY
 			);
-
-			AlleleManager.alleleRegistry.registerDeprecatedAlleleReplacement("forestry.territoryDefault", get(EnumAllele.Territory.AVERAGE));
 		}
 
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.APICULTURE) || ForestryAPI.enabledPlugins.contains(ForestryPluginUids.LEPIDOPTEROLOGY)) {
@@ -72,8 +70,6 @@ public class AlleleHelper implements IAlleleHelper {
 					EnumBeeChromosome.FLOWER_PROVIDER,
 					EnumButterflyChromosome.FLOWER_PROVIDER
 			);
-
-			AlleleManager.alleleRegistry.registerDeprecatedAlleleReplacement("forestry.speedNorm", get(EnumAllele.Speed.NORMAL));
 		}
 
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.ARBORICULTURE)) {
@@ -83,19 +79,6 @@ public class AlleleHelper implements IAlleleHelper {
 			createAlleles(EnumAllele.Fireproof.class, EnumTreeChromosome.FIREPROOF);
 			createAlleles(EnumAllele.Maturation.class, EnumTreeChromosome.MATURATION);
 			createAlleles(EnumAllele.Sappiness.class, EnumTreeChromosome.SAPPINESS);
-
-			AlleleManager.alleleRegistry.registerDeprecatedAlleleReplacement("forestry.heightMax10", get(EnumAllele.Height.AVERAGE));
-			AlleleManager.alleleRegistry.registerDeprecatedAlleleReplacement("forestry.saplingsDefault", get(EnumAllele.Saplings.AVERAGE));
-			AlleleManager.alleleRegistry.registerDeprecatedAlleleReplacement("forestry.saplingsDouble", get(EnumAllele.Saplings.HIGH));
-			AlleleManager.alleleRegistry.registerDeprecatedAlleleReplacement("forestry.saplingsTriple", get(EnumAllele.Saplings.HIGHER));
-			AlleleManager.alleleRegistry.registerDeprecatedAlleleReplacement("forestry.yieldDefault", get(EnumAllele.Yield.AVERAGE));
-			AlleleManager.alleleRegistry.registerDeprecatedAlleleReplacement("forestry.maturitySlowest", get(EnumAllele.Maturation.SLOWEST));
-			AlleleManager.alleleRegistry.registerDeprecatedAlleleReplacement("forestry.maturitySlower", get(EnumAllele.Maturation.SLOWER));
-			AlleleManager.alleleRegistry.registerDeprecatedAlleleReplacement("forestry.maturitySlow", get(EnumAllele.Maturation.SLOW));
-			AlleleManager.alleleRegistry.registerDeprecatedAlleleReplacement("forestry.maturityAverage", get(EnumAllele.Maturation.AVERAGE));
-			AlleleManager.alleleRegistry.registerDeprecatedAlleleReplacement("forestry.maturityFast", get(EnumAllele.Maturation.FAST));
-			AlleleManager.alleleRegistry.registerDeprecatedAlleleReplacement("forestry.maturityFaster", get(EnumAllele.Maturation.FASTER));
-			AlleleManager.alleleRegistry.registerDeprecatedAlleleReplacement("forestry.maturityFastest", get(EnumAllele.Maturation.FASTEST));
 		}
 
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.LEPIDOPTEROLOGY)) {

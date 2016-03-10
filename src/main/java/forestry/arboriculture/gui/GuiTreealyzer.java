@@ -35,7 +35,6 @@ import forestry.arboriculture.PluginArboriculture;
 import forestry.arboriculture.genetics.TreeGenome;
 import forestry.arboriculture.genetics.alleles.AlleleFruit;
 import forestry.arboriculture.inventory.ItemInventoryTreealyzer;
-import forestry.core.genetics.alleles.AlleleBoolean;
 import forestry.core.genetics.alleles.AllelePlantType;
 import forestry.core.gui.ContainerAlyzer;
 import forestry.core.gui.GuiAlyzer;
@@ -140,18 +139,6 @@ public class GuiTreealyzer extends GuiAlyzer {
 		drawChromosomeRow(StringUtil.localize("gui.yield"), tree, EnumTreeChromosome.YIELD);
 		textLayout.newLineCompressed();
 		drawChromosomeRow(StringUtil.localize("gui.sappiness"), tree, EnumTreeChromosome.SAPPINESS);
-		textLayout.newLineCompressed();
-
-		String yes = StringUtil.localize("yes");
-		String no = StringUtil.localize("no");
-
-		AlleleBoolean primaryFireproof = (AlleleBoolean) tree.getGenome().getActiveAllele(EnumTreeChromosome.FIREPROOF);
-		AlleleBoolean secondaryFireproof = (AlleleBoolean) tree.getGenome().getInactiveAllele(EnumTreeChromosome.FIREPROOF);
-
-		textLayout.drawLine(StringUtil.localize("gui.fireproof"), COLUMN_0);
-		drawLine(StringUtil.readableBoolean(primaryFireproof.getValue(), yes, no), COLUMN_1, tree, EnumTreeChromosome.FIREPROOF, false);
-		drawLine(StringUtil.readableBoolean(secondaryFireproof.getValue(), yes, no), COLUMN_2, tree, EnumTreeChromosome.FIREPROOF, false);
-
 		textLayout.newLineCompressed();
 
 		drawChromosomeRow(StringUtil.localize("gui.effect"), tree, EnumTreeChromosome.EFFECT);

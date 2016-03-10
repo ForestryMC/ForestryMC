@@ -46,7 +46,7 @@ public class PluginChisel extends BlankForestryPlugin {
 				"diorite"
 		);
 		for (String wBlocks : worldgenBlocks) {
-			FMLInterModComms.sendMessage(Constants.MOD, "add-backpack-items", String.format("digger@%s:%s", Chisel, wBlocks));
+			FMLInterModComms.sendMessage(Constants.MOD_ID, "add-backpack-items", String.format("digger@%s:%s", Chisel, wBlocks));
 		}
 
 	}

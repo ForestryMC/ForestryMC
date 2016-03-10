@@ -60,7 +60,7 @@ public class ForestryModEnvWarningCallable implements ICrashCallable {
 	@Nonnull
 	@Override
 	public String getLabel() {
-		return Constants.MOD + " ";
+		return Constants.MOD_ID + " ";
 	}
 
 }

@@ -20,6 +20,7 @@ import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.arboriculture.blocks.BlockFruitPod;
+import forestry.core.config.Constants;
 import forestry.core.render.ForestryStateMapper;
 
 @SideOnly(Side.CLIENT)
@@ -40,7 +41,7 @@ public class FluidPodStateMapper extends ForestryStateMapper {
 								LinkedHashMap<IProperty, Comparable> linkedhashmap = Maps.newLinkedHashMap(state.getProperties());
 								String modID = fruit.getModID();
 								if (modID == null) {
-									modID = "forestry";
+									modID = Constants.MOD_ID;
 								}
 								String modelName = BlockFruitPod.FRUIT.getName((IAlleleFruit) linkedhashmap.remove(BlockFruitPod.FRUIT));
 								String s = String.format("%s:%s", modID, "pods/" + modelName);

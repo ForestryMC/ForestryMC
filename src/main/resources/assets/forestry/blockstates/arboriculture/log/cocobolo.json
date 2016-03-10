@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "axis=y":  { "model": "forestry:arboriculture/logs/cocobolo" },
+    "axis=z":   { "model": "forestry:arboriculture/logs/cocobolo_side" },
+    "axis=x":   { "model": "forestry:arboriculture/logs/cocobolo_side", "y": 90 },
+    "axis=none": { "model": "forestry:arboriculture/logs/cocobolo_bark" }
+  }
+}

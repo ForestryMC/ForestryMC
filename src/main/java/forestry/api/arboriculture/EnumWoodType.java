@@ -5,21 +5,24 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
+import javax.annotation.Nonnull;
 import java.util.Locale;
 import java.util.Random;
 
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.util.IStringSerializable;
 
 public enum EnumWoodType implements IStringSerializable {
-	LARCH, TEAK, ACACIA, LIME, CHESTNUT,
-	WENGE, BAOBAB, SEQUOIA(4.0f), KAPOK, EBONY,
-	MAHOGANY, BALSA(1.0f), WILLOW, WALNUT, GREENHEART(7.5f),
-	CHERRY, MAHOE, POPLAR, PALM, PAPAYA,
-	PINE(3.0f), PLUM, MAPLE, CITRUS, GIGANTEUM,
-	IPE, PADAUK, COCOBOLO, ZEBRAWOOD;
-	
-	public static final PropertyEnum<EnumWoodType> WOODTYPE = PropertyEnum.create("woodtype", EnumWoodType.class);
+	LARCH, TEAK, ACACIA, LIME,
+	CHESTNUT, WENGE, BAOBAB, SEQUOIA(4.0f),
+
+	KAPOK, EBONY, MAHOGANY, BALSA(1.0f),
+	WILLOW, WALNUT, GREENHEART(7.5f), CHERRY,
+
+	MAHOE, POPLAR, PALM, PAPAYA,
+	PINE(3.0f), PLUM, MAPLE, CITRUS,
+
+	GIGANTEUM, IPE, PADAUK, COCOBOLO,
+	ZEBRAWOOD;
 
 	public static final float DEFAULT_HARDNESS = 2.0f;
 	public static final EnumWoodType[] VALUES = values();
@@ -50,5 +53,17 @@ public enum EnumWoodType implements IStringSerializable {
 	@Override
 	public String getName() {
 		return toString();
+	}
+
+	public int getMetadata() {
+		return ordinal();
+	}
+
+	@Nonnull
+	public static EnumWoodType byMetadata(int meta) {
+		if (meta < 0 || meta >= VALUES.length) {
+			meta = 0;
+		}
+		return VALUES[meta];
 	}
 }

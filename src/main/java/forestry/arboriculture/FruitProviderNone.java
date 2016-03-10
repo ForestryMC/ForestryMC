@@ -20,6 +20,7 @@ import net.minecraft.world.World;
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.genetics.IFruitFamily;
+import forestry.core.config.Constants;
 import forestry.core.render.TextureManager;
 
 public class FruitProviderNone implements IFruitProvider {
@@ -134,6 +135,6 @@ public class FruitProviderNone implements IFruitProvider {
 	
 	@Override
 	public String getModID() {
-		return "forestry";
+		return Constants.MOD_ID;
 	}
 }

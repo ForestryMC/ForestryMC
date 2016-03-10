@@ -10,121 +10,103 @@
  ******************************************************************************/
 package forestry.arboriculture;
 
+import javax.annotation.Nonnull;
 import java.util.EnumMap;
+import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 
 import forestry.api.arboriculture.EnumWoodType;
 import forestry.api.arboriculture.IWoodItemAccess;
-import forestry.arboriculture.items.ItemBlockWood;
+import forestry.arboriculture.blocks.BlockArbFence;
+import forestry.arboriculture.blocks.BlockArbLog;
+import forestry.arboriculture.blocks.BlockArbPlanks;
+import forestry.arboriculture.blocks.BlockArbSlab;
+import forestry.arboriculture.blocks.BlockArbStairs;
 
 public class WoodItemAccess implements IWoodItemAccess {
-	private static final EnumMap<EnumWoodType, ItemStack> logs = new EnumMap<>(EnumWoodType.class);
-	private static final EnumMap<EnumWoodType, ItemStack> logsFireproof = new EnumMap<>(EnumWoodType.class);
-	private static final EnumMap<EnumWoodType, ItemStack> planks = new EnumMap<>(EnumWoodType.class);
-	private static final EnumMap<EnumWoodType, ItemStack> planksFireproof = new EnumMap<>(EnumWoodType.class);
-	private static final EnumMap<EnumWoodType, ItemStack> slabs = new EnumMap<>(EnumWoodType.class);
-	private static final EnumMap<EnumWoodType, ItemStack> slabsFireproof = new EnumMap<>(EnumWoodType.class);
-	private static final EnumMap<EnumWoodType, ItemStack> fences = new EnumMap<>(EnumWoodType.class);
-	private static final EnumMap<EnumWoodType, ItemStack> fencesFireproof = new EnumMap<>(EnumWoodType.class);
-	private static final EnumMap<EnumWoodType, ItemStack> stairs = new EnumMap<>(EnumWoodType.class);
-	private static final EnumMap<EnumWoodType, ItemStack> stairsFireproof = new EnumMap<>(EnumWoodType.class);
+	private static final WoodMap logs = new WoodMap();
+	private static final WoodMap planks = new WoodMap();
+	private static final WoodMap slabs = new WoodMap();
+	private static final WoodMap fences = new WoodMap();
+	private static final WoodMap stairs = new WoodMap();
 
-	private static ItemStack getStack(EnumWoodType woodType, Block block) {
-		ItemStack itemStack = new ItemStack(block);
-		ItemBlockWood.saveToItemStack(woodType, itemStack);
-		return itemStack;
-	}
+	private static class WoodMap {
+		private final EnumMap<EnumWoodType, ItemStack> normal = new EnumMap<>(EnumWoodType.class);
+		private final EnumMap<EnumWoodType, ItemStack> fireproof = new EnumMap<>(EnumWoodType.class);
 
-	public static void registerLog(Block block, EnumWoodType woodType, boolean fireproof) {
-		ItemStack itemStack = getStack(woodType, block);
-		if (fireproof) {
-			logsFireproof.put(woodType, itemStack);
-		} else {
-			logs.put(woodType, itemStack);
+		@Nonnull
+		public EnumMap<EnumWoodType, ItemStack> get(boolean fireproof) {
+			return fireproof ? this.fireproof : this.normal;
 		}
 	}
 
-	public static void registerPlanks(Block block, EnumWoodType woodType, boolean fireproof) {
-		ItemStack itemStack = getStack(woodType, block);
-		if (fireproof) {
-			planksFireproof.put(woodType, itemStack);
-		} else {
-			planks.put(woodType, itemStack);
+	public static void registerLogs(List<BlockArbLog> blocks) {
+		for (BlockArbLog block : blocks) {
+			register(block, logs);
 		}
 	}
 
-	public static void registerSlab(Block block, EnumWoodType woodType, boolean fireproof) {
-		ItemStack itemStack = getStack(woodType, block);
-		if (fireproof) {
-			slabsFireproof.put(woodType, itemStack);
-		} else {
-			slabs.put(woodType, itemStack);
+	public static void registerPlanks(List<BlockArbPlanks> blocks) {
+		for (BlockArbPlanks block : blocks) {
+			register(block, planks);
 		}
 	}
 
-	public static void registerFence(Block block, EnumWoodType woodType, boolean fireproof) {
-		ItemStack itemStack = getStack(woodType, block);
-		if (fireproof) {
-			fencesFireproof.put(woodType, itemStack);
-		} else {
-			fences.put(woodType, itemStack);
+	public static void registerSlabs(List<BlockArbSlab> blocks) {
+		for (BlockArbSlab block : blocks) {
+			register(block, slabs);
 		}
 	}
 
-	public static void registerStairs(Block block, EnumWoodType woodType, boolean fireproof) {
-		ItemStack itemStack = getStack(woodType, block);
-		if (fireproof) {
-			stairsFireproof.put(woodType, itemStack);
-		} else {
-			stairs.put(woodType, itemStack);
+	public static void registerFences(List<BlockArbFence> blocks) {
+		for (BlockArbFence block : blocks) {
+			register(block, fences);
+		}
+	}
+
+	public static void registerStairs(List<BlockArbStairs> blocks) {
+		for (BlockArbStairs block : blocks) {
+			register(block, stairs);
+		}
+	}
+
+	private static <T extends Block & IWoodTyped> void register(T woodTyped, WoodMap woodMap) {
+		boolean fireproof = woodTyped.isFireproof();
+		EnumMap<EnumWoodType, ItemStack> registryMap = woodMap.get(fireproof);
+		for (IBlockState blockState : woodTyped.getBlockState().getValidStates()) {
+			int meta = woodTyped.getMetaFromState(blockState);
+			EnumWoodType woodType = woodTyped.getWoodType(meta);
+			ItemStack itemStack = new ItemStack(woodTyped, 1, meta);
+			registryMap.put(woodType, itemStack);
 		}
 	}
 
 	@Override
 	public ItemStack getPlanks(EnumWoodType woodType, boolean fireproof) {
-		if (fireproof) {
-			return planksFireproof.get(woodType).copy();
-		} else {
-			return planks.get(woodType).copy();
-		}
+		return planks.get(fireproof).get(woodType).copy();
 	}
 
 	@Override
 	public ItemStack getLog(EnumWoodType woodType, boolean fireproof) {
-		if (fireproof) {
-			return logsFireproof.get(woodType).copy();
-		} else {
-			return logs.get(woodType).copy();
-		}
+		return logs.get(fireproof).get(woodType).copy();
 	}
 
 	@Override
 	public ItemStack getSlab(EnumWoodType woodType, boolean fireproof) {
-		if (fireproof) {
-			return slabsFireproof.get(woodType).copy();
-		} else {
-			return slabs.get(woodType).copy();
-		}
+		return slabs.get(fireproof).get(woodType).copy();
 	}
 
 	@Override
 	public ItemStack getFence(EnumWoodType woodType, boolean fireproof) {
-		if (fireproof) {
-			return fencesFireproof.get(woodType).copy();
-		} else {
-			return fences.get(woodType).copy();
-		}
+		return fences.get(fireproof).get(woodType).copy();
 	}
 
 	@Override
 	public ItemStack getStairs(EnumWoodType woodType, boolean fireproof) {
-		if (fireproof) {
-			return stairsFireproof.get(woodType).copy();
-		} else {
-			return stairs.get(woodType).copy();
-		}
+		return stairs.get(fireproof).get(woodType).copy();
 	}
 
 }

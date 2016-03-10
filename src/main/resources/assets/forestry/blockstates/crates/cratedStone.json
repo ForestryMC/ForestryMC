@@ -14,7 +14,7 @@
       "inventory": [{ }],
       "contained": [{
           "model": "stone",
-          "transform": { "scale": .5 }
+          "transform": { "scale": 0.5 }
         }]
     }
 }

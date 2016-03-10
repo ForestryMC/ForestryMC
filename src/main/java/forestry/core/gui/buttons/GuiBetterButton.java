@@ -23,11 +23,12 @@ import org.lwjgl.opengl.GL11;
 import forestry.core.config.Constants;
 import forestry.core.gui.tooltips.IToolTipProvider;
 import forestry.core.gui.tooltips.ToolTip;
+import forestry.core.render.ForestryResource;
 
 @SideOnly(Side.CLIENT)
 public class GuiBetterButton extends GuiButton implements IToolTipProvider {
 
-	private static final ResourceLocation TEXTURE = new ResourceLocation("forestry", Constants.TEXTURE_PATH_GUI + "/buttons.png");
+	private static final ResourceLocation TEXTURE = new ForestryResource(Constants.TEXTURE_PATH_GUI + "/buttons.png");
 	protected IButtonTextureSet texture;
 	private ToolTip toolTip;
 	private boolean useTexWidth = false;

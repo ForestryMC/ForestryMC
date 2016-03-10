@@ -20,6 +20,7 @@ import net.minecraftforge.common.EnumPlantType;
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllelePlantType;
+import forestry.core.config.Constants;
 
 public class AllelePlantType extends AlleleCategorized implements IAllelePlantType {
 
@@ -56,7 +57,7 @@ public class AllelePlantType extends AlleleCategorized implements IAllelePlantTy
 	}
 
 	protected AllelePlantType(String name, EnumSet<EnumPlantType> types, boolean isDominant) {
-		super("forestry", "plantType", name, isDominant);
+		super(Constants.MOD_ID, "plantType", name, isDominant);
 		this.types = types;
 	}
 

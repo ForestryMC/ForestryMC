@@ -18,6 +18,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.Tabs;
+import forestry.core.config.Constants;
 import forestry.plugins.ForestryPluginUids;
 
 public class CreativeTabForestry extends CreativeTabs {
@@ -36,7 +37,7 @@ public class CreativeTabForestry extends CreativeTabs {
 		}
 	}
 
-	public static final CreativeTabs tabForestry = new CreativeTabForestry(0, "forestry");
+	public static final CreativeTabs tabForestry = new CreativeTabForestry(0, Constants.MOD_ID);
 
 	private final int icon;
 
@@ -50,16 +51,16 @@ public class CreativeTabForestry extends CreativeTabs {
 		Item iconItem;
 		switch (icon) {
 			case 1:
-				iconItem = GameRegistry.findItem("Forestry", "beeDroneGE");
+				iconItem = GameRegistry.findItem(Constants.MOD_ID, "beeDroneGE");
 				break;
 			case 2:
-				iconItem = GameRegistry.findItem("Forestry", "sapling");
+				iconItem = GameRegistry.findItem(Constants.MOD_ID, "sapling");
 				break;
 			case 3:
-				iconItem = GameRegistry.findItem("Forestry", "butterflyGE");
+				iconItem = GameRegistry.findItem(Constants.MOD_ID, "butterflyGE");
 				break;
 			default:
-				iconItem = GameRegistry.findItem("Forestry", "fertilizerCompound");
+				iconItem = GameRegistry.findItem(Constants.MOD_ID, "fertilizerCompound");
 				break;
 		}
 		if (iconItem == null) {

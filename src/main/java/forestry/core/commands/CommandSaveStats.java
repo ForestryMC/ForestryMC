@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.PlayerNotFoundException;
@@ -117,7 +116,7 @@ public final class CommandSaveStats extends SubCommand {
 			}
 		}
 
-		File file = new File(Proxies.common.getForestryRoot(), "config/" + Constants.MOD.toLowerCase(Locale.ENGLISH) + "/stats/" + player.getDisplayName() + '-' + saveHelper.getFileSuffix() + ".log");
+		File file = new File(Proxies.common.getForestryRoot(), "config/" + Constants.RESOURCE_ID + "/stats/" + player.getDisplayName() + '-' + saveHelper.getFileSuffix() + ".log");
 		try {
 			File folder = file.getParentFile();
 			if (folder != null && !folder.exists()) {
@@ -141,7 +140,7 @@ public final class CommandSaveStats extends SubCommand {
 			FileOutputStream fileout = new FileOutputStream(file);
 			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fileout, "UTF-8"));
 
-			writer.write("# " + Constants.MOD + newLine + "# " + Constants.VERSION + newLine);
+			writer.write("# " + Constants.MOD_ID + newLine + "# " + Constants.VERSION + newLine);
 
 			for (String line : statistics) {
 				writer.write(line + newLine);

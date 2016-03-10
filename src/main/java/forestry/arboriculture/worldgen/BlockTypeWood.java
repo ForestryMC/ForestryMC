@@ -10,23 +10,28 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 import forestry.api.world.ITreeGenData;
-import forestry.arboriculture.items.ItemBlockWood;
+import forestry.core.config.Constants;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.worldgen.IBlockType;
 
 public class BlockTypeWood implements IBlockType, ITreeBlockType {
-
-	protected final ItemStack itemStack;
-	protected int blockMeta;
+	protected Block block;
+	protected IBlockState state;
 
 	public BlockTypeWood(ItemStack itemStack) {
-		this.itemStack = itemStack;
+		block = ItemStackUtil.getBlock(itemStack);
+		if (block == null) {
+			throw new NullPointerException("Couldn't find block for itemStack " + itemStack);
+		}
+		state = block.getStateFromMeta(itemStack.getMetadata());
 	}
 
 	@Override
@@ -36,7 +41,7 @@ public class BlockTypeWood implements IBlockType, ITreeBlockType {
 
 	@Override
 	public void setBlock(World world, BlockPos pos) {
-		ItemBlockWood.placeWood(itemStack, ItemStackUtil.getBlock(itemStack).getStateFromMeta(blockMeta), null, world, pos);
+		world.setBlockState(pos, state, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
 	}
 
 	@Override

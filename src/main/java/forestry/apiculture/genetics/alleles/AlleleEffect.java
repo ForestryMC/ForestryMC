@@ -26,6 +26,7 @@ import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeModifier;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IEffectData;
+import forestry.core.config.Constants;
 import forestry.core.genetics.alleles.AlleleCategorized;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.vect.MutableVect;
@@ -82,7 +83,7 @@ public abstract class AlleleEffect extends AlleleCategorized implements IAlleleB
 	}
 
 	protected AlleleEffect(String valueName, boolean isDominant) {
-		super("forestry", "effect", valueName, isDominant);
+		super(Constants.MOD_ID, "effect", valueName, isDominant);
 	}
 
 	@Override

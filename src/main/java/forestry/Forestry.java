@@ -53,8 +53,8 @@ import forestry.plugins.PluginManager;
  * @author SirSengir
  */
 @Mod(
-		modid = Constants.MOD,
-		name = "Forestry",
+		modid = Constants.MOD_ID,
+		name = Constants.MOD_ID,
 		version = Constants.VERSION,
 		guiFactory = "forestry.core.config.ForestryGuiConfigFactory",
 		dependencies = "required-after:Forge@[10.13.4.1566,);"
@@ -66,7 +66,7 @@ import forestry.plugins.PluginManager;
 				+ "after:HardcoreEnderExpansion;")
 public class Forestry {
 
-	@Mod.Instance(Constants.MOD)
+	@Mod.Instance(Constants.MOD_ID)
 	public static Forestry instance;
 	private File configFolder;
 
@@ -89,7 +89,7 @@ public class Forestry {
 		MinecraftForge.EVENT_BUS.register(eventHandlerCore);
 		MinecraftForge.EVENT_BUS.register(new MultiblockEventHandler());
 
-		configFolder = new File(event.getModConfigurationDirectory(), "forestry");
+		configFolder = new File(event.getModConfigurationDirectory(), Constants.RESOURCE_ID);
 		Config.load();
 
 		PluginManager.runSetup(event);
@@ -142,13 +142,13 @@ public class Forestry {
 	public void missingMapping(FMLMissingMappingsEvent event) {
 		for (MissingMapping mapping : event.get()) {
 			if (mapping.type == Type.BLOCK) {
-				Block block = GameRegistry.findBlock(Constants.MOD, StringUtil.cleanTags(mapping.name));
+				Block block = GameRegistry.findBlock(Constants.MOD_ID, StringUtil.cleanTags(mapping.name));
 				if (block != null) {
 					mapping.remap(block);
 					Log.warning("Remapping block " + mapping.name + " to " + StringUtil.cleanBlockName(block));
 				}
 			} else {
-				Item item = GameRegistry.findItem(Constants.MOD, StringUtil.cleanTags(mapping.name));
+				Item item = GameRegistry.findItem(Constants.MOD_ID, StringUtil.cleanTags(mapping.name));
 				if (item != null) {
 					mapping.remap(item);
 					Log.warning("Remapping item " + mapping.name + " to " + StringUtil.cleanItemName(item));

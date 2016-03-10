@@ -24,7 +24,7 @@ import net.minecraftforge.fml.client.config.IConfigElement;
 public class ForestryGuiConfig extends GuiConfig {
 
 	public ForestryGuiConfig(GuiScreen parent) {
-		super(parent, getConfigCategories(), Constants.MOD, true, true, Constants.MOD);
+		super(parent, getConfigCategories(), Constants.MOD_ID, true, true, Constants.MOD_ID);
 	}
 
 	private static List<IConfigElement> getConfigCategories() {

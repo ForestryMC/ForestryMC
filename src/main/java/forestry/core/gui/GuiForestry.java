@@ -44,6 +44,7 @@ import forestry.core.gui.ledgers.PowerLedger;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.FontColour;
+import forestry.core.render.ForestryResource;
 import forestry.core.tiles.IClimatised;
 import forestry.core.tiles.IPowerHandler;
 
@@ -59,7 +60,7 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 	protected FontColour fontColor;
 
 	protected GuiForestry(String texture, C container, I inventory) {
-		this(new ResourceLocation("forestry", texture), container, inventory);
+		this(new ForestryResource(texture), container, inventory);
 	}
 
 	protected GuiForestry(ResourceLocation texture, C container, I inventory) {

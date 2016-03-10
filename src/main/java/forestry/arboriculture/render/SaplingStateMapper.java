@@ -17,6 +17,7 @@ import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.arboriculture.blocks.BlockSapling;
+import forestry.core.config.Constants;
 import forestry.core.render.ForestryStateMapper;
 
 @SideOnly(Side.CLIENT)
@@ -31,7 +32,7 @@ public class SaplingStateMapper extends ForestryStateMapper {
 				LinkedHashMap<IProperty, Comparable> linkedhashmap = Maps.newLinkedHashMap(state.getProperties());
 				String modID = tree.getModID();
 				if (modID == null) {
-					modID = "forestry";
+					modID = Constants.MOD_ID;
 				}
 				String s = String.format("%s:%s", modID, "germlings");
 				mapStateModelLocations.put(state, new ModelResourceLocation(s, getPropertyString(linkedhashmap)));

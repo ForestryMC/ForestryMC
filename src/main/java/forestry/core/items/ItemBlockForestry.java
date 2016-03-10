@@ -23,12 +23,18 @@ import forestry.core.blocks.BlockBase;
 import forestry.core.tiles.TileForestry;
 import forestry.core.tiles.TileUtil;
 
-public class ItemBlockForestry extends ItemBlock {
+public class ItemBlockForestry<B extends Block> extends ItemBlock {
 
-	public ItemBlockForestry(Block block) {
+	public ItemBlockForestry(B block) {
 		super(block);
 		setMaxDamage(0);
 		setHasSubtypes(true);
+	}
+
+	@Override
+	public B getBlock() {
+		//noinspection unchecked
+		return (B) super.getBlock();
 	}
 
 	@Override

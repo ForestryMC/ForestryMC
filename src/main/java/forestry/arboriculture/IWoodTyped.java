@@ -10,8 +10,20 @@
  ******************************************************************************/
 package forestry.arboriculture;
 
+import javax.annotation.Nonnull;
+import java.util.Collection;
+
+import forestry.api.arboriculture.EnumWoodType;
+
 public interface IWoodTyped {
+	@Nonnull
 	String getBlockKind();
 
 	boolean isFireproof();
+
+	@Nonnull
+	EnumWoodType getWoodType(int meta);
+
+	@Nonnull
+	Collection<EnumWoodType> getWoodTypes();
 }

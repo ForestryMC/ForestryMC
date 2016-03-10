@@ -97,7 +97,7 @@ public class PluginNatura extends BlankForestryPlugin {
 			RecipeUtil.addFermenterRecipes(saplingWild, ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.sapling"), Fluids.BIOMASS);
 
 			String saplingName = ItemStackUtil.getItemNameFromRegistryAsSting(saplingItem);
-			FMLInterModComms.sendMessage(Constants.MOD, "add-farmable-sapling", String.format("farmArboreal@%s.-1", saplingName));
+			FMLInterModComms.sendMessage(Constants.MOD_ID, "add-farmable-sapling", String.format("farmArboreal@%s.-1", saplingName));
 		}
 
 		Item netherBerry = GameRegistry.findItem(NATURA, "berry.nether");

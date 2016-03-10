@@ -15,6 +15,7 @@ import net.minecraftforge.fluids.Fluid;
 import forestry.api.recipes.IFabricatorSmeltingRecipe;
 import forestry.core.recipes.jei.ForestryRecipeCategory;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
+import forestry.core.render.ForestryResource;
 import forestry.factory.recipes.FabricatorSmeltingRecipeManager;
 
 import mezz.jei.api.IGuiHelper;
@@ -33,7 +34,7 @@ public class FabricatorRecipeCategory extends ForestryRecipeCategory {
 	
 	private static final int inputTank = 0;
 	
-	private final static ResourceLocation guiTexture = new ResourceLocation("forestry", "textures/gui/fabricator.png");
+	private final static ResourceLocation guiTexture = new ForestryResource("textures/gui/fabricator.png");
 	@Nonnull
 	private final ICraftingGridHelper craftingGridHelper;
 	

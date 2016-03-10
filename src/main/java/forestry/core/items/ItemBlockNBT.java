@@ -16,7 +16,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
-public class ItemBlockNBT extends ItemBlockForestry {
+public class ItemBlockNBT extends ItemBlockForestry<Block> {
 
 	public ItemBlockNBT(Block block) {
 		super(block);

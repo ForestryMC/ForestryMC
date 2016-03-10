@@ -1,0 +1,6 @@
+{
+	"variants": {
+        "half=bottom": { "model": "forestry:arboriculture/slab/mahoe_half" },
+        "half=top": { "model": "forestry:arboriculture/slab/mahoe_upper" }
+    }
+}

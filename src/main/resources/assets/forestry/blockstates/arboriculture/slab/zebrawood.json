@@ -1,0 +1,6 @@
+{
+	"variants": {
+        "half=bottom": { "model": "forestry:arboriculture/slab/zebrawood_half" },
+        "half=top": { "model": "forestry:arboriculture/slab/zebrawood_upper" }
+    }
+}

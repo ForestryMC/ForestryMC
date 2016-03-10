@@ -1,0 +1,20 @@
+{
+    "variants": {
+        "east=false,north=false,south=false,west=false": { "model": "forestry:arboriculture/fences/zebrawood_post" },
+        "east=false,north=true,south=false,west=false": { "model": "forestry:arboriculture/fences/zebrawood_n", "uvlock": true },
+        "east=true,north=false,south=false,west=false": { "model": "forestry:arboriculture/fences/zebrawood_n", "y": 90, "uvlock": true },
+        "east=false,north=false,south=true,west=false": { "model": "forestry:arboriculture/fences/zebrawood_n", "y": 180, "uvlock": true },
+        "east=false,north=false,south=false,west=true": { "model": "forestry:arboriculture/fences/zebrawood_n", "y": 270, "uvlock": true },
+        "east=true,north=true,south=false,west=false": { "model": "forestry:arboriculture/fences/zebrawood_ne", "uvlock": true },
+        "east=true,north=false,south=true,west=false": { "model": "forestry:arboriculture/fences/zebrawood_ne", "y": 90, "uvlock": true },
+        "east=false,north=false,south=true,west=true": { "model": "forestry:arboriculture/fences/zebrawood_ne", "y": 180, "uvlock": true },
+        "east=false,north=true,south=false,west=true": { "model": "forestry:arboriculture/fences/zebrawood_ne", "y": 270, "uvlock": true },
+        "east=false,north=true,south=true,west=false": { "model": "forestry:arboriculture/fences/zebrawood_ns", "uvlock": true },
+        "east=true,north=false,south=false,west=true": { "model": "forestry:arboriculture/fences/zebrawood_ns", "y": 90, "uvlock": true },
+        "east=true,north=true,south=true,west=false": { "model": "forestry:arboriculture/fences/zebrawood_nse", "uvlock": true },
+        "east=true,north=false,south=true,west=true": { "model": "forestry:arboriculture/fences/zebrawood_nse", "y": 90, "uvlock": true },
+        "east=false,north=true,south=true,west=true": { "model": "forestry:arboriculture/fences/zebrawood_nse", "y": 180, "uvlock": true },
+        "east=true,north=true,south=false,west=true": { "model": "forestry:arboriculture/fences/zebrawood_nse", "y": 270, "uvlock": true },
+        "east=true,north=true,south=true,west=true": { "model": "forestry:arboriculture/fences/zebrawood_nsew", "uvlock": true }
+	}
+}

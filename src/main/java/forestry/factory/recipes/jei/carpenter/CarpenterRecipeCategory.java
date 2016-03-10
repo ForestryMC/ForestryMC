@@ -10,6 +10,7 @@ import net.minecraft.util.ResourceLocation;
 
 import forestry.core.recipes.jei.ForestryRecipeCategory;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
+import forestry.core.render.ForestryResource;
 
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.ICraftingGridHelper;
@@ -29,7 +30,7 @@ public class CarpenterRecipeCategory extends ForestryRecipeCategory {
 	
 	private static final int inputTank = 0;
 	
-	private final static ResourceLocation guiTexture = new ResourceLocation("forestry", "textures/gui/carpenter.png");
+	private final static ResourceLocation guiTexture = new ForestryResource("textures/gui/carpenter.png");
 	@Nonnull
 	private final ICraftingGridHelper craftingGridHelper;
 	@Nonnull

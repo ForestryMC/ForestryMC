@@ -19,7 +19,7 @@ import forestry.core.blocks.IItemTyped;
  * For blocks whose type depends on metadata.
  * This allows control over which localized name maps to which meta value.
  */
-public class ItemBlockTyped extends ItemBlockForestry {
+public class ItemBlockTyped extends ItemBlockForestry<Block> {
 
 	public ItemBlockTyped(Block block) {
 		super(block);

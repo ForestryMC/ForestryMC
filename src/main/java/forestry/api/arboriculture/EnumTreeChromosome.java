@@ -73,15 +73,15 @@ public enum EnumTreeChromosome implements IChromosomeType {
 	 */
 	FIREPROOF(IAlleleBoolean.class),;
 	
-	Class<? extends IAllele> clss;
+	Class<? extends IAllele> alleleClass;
 	
-	EnumTreeChromosome(Class<? extends IAllele> clss) {
-		this.clss = clss;
+	EnumTreeChromosome(Class<? extends IAllele> alleleClass) {
+		this.alleleClass = alleleClass;
 	}
 
 	@Override
 	public Class<? extends IAllele> getAlleleClass() {
-		return clss;
+		return alleleClass;
 	}
 
 	@Override

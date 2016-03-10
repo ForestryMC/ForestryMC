@@ -17,6 +17,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
@@ -51,9 +52,9 @@ import forestry.core.blocks.BlockStructure;
 import forestry.core.proxy.Proxies;
 
 public class BlockAlveary extends BlockStructure implements IStateMapperRegister {
-	private static final PropertyEnum TYPE = PropertyEnum.create("alveary", AlvearyType.class);
-	private static final PropertyEnum STATE = PropertyEnum.create("state", State.class);
-	private static final PropertyEnum LEVEL = PropertyEnum.create("type", AlvearyLevel.class);
+	private static final PropertyEnum<AlvearyType> TYPE = PropertyEnum.create("alveary", AlvearyType.class);
+	private static final PropertyEnum<State> STATE = PropertyEnum.create("state", State.class);
+	private static final PropertyEnum<AlvearyLevel> LEVEL = PropertyEnum.create("type", AlvearyLevel.class);
 	
 	private enum State implements IStringSerializable {
 		ON, OFF;
@@ -255,21 +256,20 @@ public class BlockAlveary extends BlockStructure implements IStateMapperRegister
 
 		@Override
 		protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
-			LinkedHashMap linkedhashmap = Maps.newLinkedHashMap(state.getProperties());
-			if (linkedhashmap.get(TYPE) != AlvearyType.PLAIN) {
-				linkedhashmap.remove(LEVEL);
+			LinkedHashMap<IProperty, Comparable> properties = Maps.newLinkedHashMap(state.getProperties());
+			if (properties.get(TYPE) != AlvearyType.PLAIN) {
+				properties.remove(LEVEL);
 			}
-			if (linkedhashmap.get(TYPE) == AlvearyType.SIEVE
-					|| linkedhashmap.get(TYPE) == AlvearyType.ENTRANCE
-					|| linkedhashmap.get(TYPE) == AlvearyType.STABILISER
-					|| linkedhashmap.get(TYPE) == AlvearyType.HYGRO
-					|| linkedhashmap.get(TYPE) == AlvearyType.PLAIN) {
-				linkedhashmap.remove(STATE);
+			if (properties.get(TYPE) == AlvearyType.SIEVE
+					|| properties.get(TYPE) == AlvearyType.ENTRANCE
+					|| properties.get(TYPE) == AlvearyType.STABILISER
+					|| properties.get(TYPE) == AlvearyType.HYGRO
+					|| properties.get(TYPE) == AlvearyType.PLAIN) {
+				properties.remove(STATE);
 			}
-			String s = String.format("%s:%s",
-					Block.blockRegistry.getNameForObject(state.getBlock()).getResourceDomain(),
-					"apiculture/alveary_" + TYPE.getName((Enum) linkedhashmap.remove(TYPE)));
-			return new ModelResourceLocation(s, this.getPropertyString(linkedhashmap));
+			String resourceDomain = Block.blockRegistry.getNameForObject(state.getBlock()).getResourceDomain();
+			String resourceLocation = "apiculture/alveary_" + TYPE.getName((AlvearyType) properties.remove(TYPE));
+			return new ModelResourceLocation(resourceDomain + ':' + resourceLocation, this.getPropertyString(properties));
 		}
 
 	}

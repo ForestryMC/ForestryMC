@@ -41,6 +41,8 @@ import forestry.api.genetics.AlleleManager;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
+import forestry.arboriculture.blocks.BlockArbLog;
+import forestry.arboriculture.blocks.BlockArbSlab;
 import forestry.arboriculture.blocks.BlockFruitPod;
 import forestry.arboriculture.blocks.BlockRegistryArboriculture;
 import forestry.arboriculture.blocks.BlockTypeArboricultureTesr;
@@ -60,7 +62,6 @@ import forestry.arboriculture.render.TextureLeaves;
 import forestry.arboriculture.tiles.TileFruitPod;
 import forestry.arboriculture.tiles.TileLeaves;
 import forestry.arboriculture.tiles.TileSapling;
-import forestry.arboriculture.tiles.TileWood;
 import forestry.core.PluginCore;
 import forestry.core.blocks.BlockTypeCoreTesr;
 import forestry.core.config.Constants;
@@ -119,41 +120,22 @@ public class PluginArboriculture extends BlankForestryPlugin {
 
 		MinecraftForge.EVENT_BUS.register(this);
 
-		for (EnumWoodType woodType : EnumWoodType.VALUES) {
-			WoodItemAccess.registerLog(blocks.logs, woodType, false);
-			WoodItemAccess.registerPlanks(blocks.planks, woodType, false);
-			WoodItemAccess.registerSlab(blocks.slabs, woodType, false);
-			WoodItemAccess.registerFence(blocks.fences, woodType, false);
-			WoodItemAccess.registerStairs(blocks.stairs, woodType, false);
+		WoodItemAccess.registerLogs(blocks.logs);
+		WoodItemAccess.registerPlanks(blocks.planks);
+		WoodItemAccess.registerSlabs(blocks.slabs);
+		WoodItemAccess.registerFences(blocks.fences);
+		WoodItemAccess.registerStairs(blocks.stairs);
 
-			WoodItemAccess.registerLog(blocks.logsFireproof, woodType, true);
-			WoodItemAccess.registerPlanks(blocks.planksFireproof, woodType, true);
-			WoodItemAccess.registerSlab(blocks.slabsFireproof, woodType, true);
-			WoodItemAccess.registerFence(blocks.fencesFireproof, woodType, true);
-			WoodItemAccess.registerStairs(blocks.stairsFireproof, woodType, true);
-		}
+		WoodItemAccess.registerLogs(blocks.logsFireproof);
+		WoodItemAccess.registerPlanks(blocks.planksFireproof);
+		WoodItemAccess.registerSlabs(blocks.slabsFireproof);
+		WoodItemAccess.registerFences(blocks.fencesFireproof);
+		WoodItemAccess.registerStairs(blocks.stairsFireproof);
 
 		blocks.arboriculture.addDefinitions(BlockTypeArboricultureTesr.ARB_CHEST);
 
 		// Init rendering
 		proxy.initializeModels();
-
-		// Register vanilla and forestry fence ids
-		validFences.add(blocks.fences);
-		validFences.add(blocks.fencesFireproof);
-		validFences.add(Blocks.oak_fence);
-		validFences.add(Blocks.spruce_fence);
-		validFences.add(Blocks.birch_fence);
-		validFences.add(Blocks.jungle_fence);
-		validFences.add(Blocks.dark_oak_fence);
-		validFences.add(Blocks.acacia_fence);
-		validFences.add(Blocks.oak_fence_gate);
-		validFences.add(Blocks.spruce_fence_gate);
-		validFences.add(Blocks.birch_fence_gate);
-		validFences.add(Blocks.jungle_fence_gate);
-		validFences.add(Blocks.dark_oak_fence_gate);
-		validFences.add(Blocks.acacia_fence_gate);
-		validFences.add(Blocks.nether_brick_fence);
 
 		// Commands
 		PluginCore.rootCommand.addChildCommand(new CommandTree());
@@ -170,11 +152,11 @@ public class PluginArboriculture extends BlankForestryPlugin {
 
 		GameRegistry.registerTileEntity(TileSapling.class, "forestry.Sapling");
 		GameRegistry.registerTileEntity(TileLeaves.class, "forestry.Leaves");
-		GameRegistry.registerTileEntity(TileWood.class, "forestry.Wood");
 		GameRegistry.registerTileEntity(TileFruitPod.class, "forestry.Pods");
 
 		blocks.arboriculture.init();
 
+		// TODO bring back villagers
 		/*if (Config.enableVillagers) {
 			VillagerRegistry.instance().registerVillagerId(Constants.ID_VILLAGER_LUMBERJACK);
 			Proxies.render.registerVillagerSkin(Constants.ID_VILLAGER_LUMBERJACK, Constants.TEXTURE_SKIN_LUMBERJACK);
@@ -203,7 +185,11 @@ public class PluginArboriculture extends BlankForestryPlugin {
 	@Override
 	public void registerRecipes() {
 
-		RecipeUtil.addSmelting(new ItemStack(blocks.logs, 1, OreDictionary.WILDCARD_VALUE), new ItemStack(Items.coal, 1, 1), 0.15F);
+		for (BlockArbLog log : blocks.logs) {
+			ItemStack logInput = new ItemStack(log, 1, OreDictionary.WILDCARD_VALUE);
+			ItemStack coalOutput = new ItemStack(Items.coal, 1, 1);
+			RecipeUtil.addSmelting(logInput, coalOutput, 0.15F);
+		}
 
 		for (EnumWoodType woodType : EnumWoodType.VALUES) {
 			ItemStack planks = TreeManager.woodItemAccess.getPlanks(woodType, false);
@@ -429,7 +415,7 @@ public class PluginArboriculture extends BlankForestryPlugin {
 				IWoodTyped woodTypedBlock = (IWoodTyped) block;
 				if (woodTypedBlock.isFireproof()) {
 					return 0;
-				} else if (blocks.slabs == block) {
+				} else if (block instanceof BlockArbSlab) {
 					return 150;
 				}
 			}

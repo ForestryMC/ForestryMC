@@ -12,6 +12,7 @@ import forestry.api.fuels.FermenterFuel;
 import forestry.api.fuels.FuelManager;
 import forestry.core.recipes.jei.ForestryRecipeCategory;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
+import forestry.core.render.ForestryResource;
 
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
@@ -30,7 +31,7 @@ public class FermenterRecipeCategory extends ForestryRecipeCategory {
 	private static final int inputTank = 0;
 	private static final int outputTank = 1;
 	
-	private final static ResourceLocation guiTexture = new ResourceLocation("forestry", "textures/gui/fermenter.png");
+	private final static ResourceLocation guiTexture = new ForestryResource("textures/gui/fermenter.png");
 	@Nonnull
 	private final IDrawableAnimated progressBar0;
 	@Nonnull

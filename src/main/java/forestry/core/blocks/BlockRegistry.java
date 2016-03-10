@@ -10,6 +10,9 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -21,16 +24,34 @@ import forestry.core.utils.StringUtil;
 import forestry.plugins.PluginManager;
 
 public abstract class BlockRegistry {
-	protected static <T extends Block> T registerBlock(T block, Class<? extends ItemBlock> itemClass, String name, Object... itemCtorArgs) {
+	private final List<Block> allBlocks = new ArrayList<>();
+
+	protected <T extends Block> T registerBlock(T block, ItemBlock itemBlock, String name) {
+		if (PluginManager.getStage() != PluginManager.Stage.REGISTER) {
+			throw new RuntimeException("Tried to register Block outside of REGISTER");
+		}
+		block.setUnlocalizedName("for." + name);
+		GameRegistry.registerBlock(block, null, name);
+		GameRegistry.registerItem(itemBlock, name);
+		allBlocks.add(block);
+		return block;
+	}
+
+	protected <T extends Block> T registerBlock(T block, Class<? extends ItemBlock> itemClass, String name, Object... itemCtorArgs) {
 		if (PluginManager.getStage() != PluginManager.Stage.REGISTER) {
 			throw new RuntimeException("Tried to register Block outside of REGISTER");
 		}
 		block.setUnlocalizedName("for." + name);
 		GameRegistry.registerBlock(block, itemClass, StringUtil.cleanBlockName(block), itemCtorArgs);
+		allBlocks.add(block);
 		return block;
 	}
 
 	protected static void registerOreDictWildcard(String oreDictName, Block block) {
 		OreDictionary.registerOre(oreDictName, new ItemStack(block, 1, OreDictionary.WILDCARD_VALUE));
+	}
+	
+	public List<Block> getAllBlocks() {
+		return allBlocks;
 	}
 }

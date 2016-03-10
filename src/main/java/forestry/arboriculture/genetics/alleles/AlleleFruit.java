@@ -25,6 +25,7 @@ import forestry.arboriculture.FruitProviderNone;
 import forestry.arboriculture.FruitProviderPod;
 import forestry.arboriculture.FruitProviderRandom;
 import forestry.arboriculture.FruitProviderRipening;
+import forestry.core.config.Constants;
 import forestry.core.genetics.alleles.AlleleCategorized;
 import forestry.core.items.ItemFruit;
 
@@ -70,7 +71,7 @@ public class AlleleFruit extends AlleleCategorized implements IAlleleFruit {
 	}
 
 	public AlleleFruit(String name, IFruitProvider provider, boolean isDominant) {
-		super("forestry", "fruit", name, isDominant);
+		super(Constants.MOD_ID, "fruit", name, isDominant);
 		this.provider = provider;
 	}
 

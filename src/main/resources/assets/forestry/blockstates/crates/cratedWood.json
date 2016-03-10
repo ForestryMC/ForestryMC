@@ -14,7 +14,7 @@
       "inventory": [{ }],
       "contained": [{
           "model": "oak_log",
-          "transform": { "scale": .5, "translation":[ -0.0625, 0, 0 ] }
+          "transform": { "scale": 0.5, "translation":[ -0.0625, 0, 0 ] }
         }]
     }
 }

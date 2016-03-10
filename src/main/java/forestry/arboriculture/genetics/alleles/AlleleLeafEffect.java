@@ -19,6 +19,7 @@ import forestry.api.arboriculture.IAlleleLeafEffect;
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IEffectData;
+import forestry.core.config.Constants;
 import forestry.core.genetics.alleles.Allele;
 import forestry.core.genetics.alleles.AlleleCategorized;
 import forestry.core.utils.vect.Vect;
@@ -34,7 +35,7 @@ public class AlleleLeafEffect extends AlleleCategorized implements IAlleleLeafEf
 	}
 
 	protected AlleleLeafEffect(String valueName, boolean isDominant) {
-		super("forestry", "leaves", valueName, isDominant);
+		super(Constants.MOD_ID, "leaves", valueName, isDominant);
 	}
 
 	@Override

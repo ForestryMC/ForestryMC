@@ -10,139 +10,48 @@
  ******************************************************************************/
 package forestry.arboriculture.blocks;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.annotation.Nonnull;
+import java.util.Collection;
+import java.util.Collections;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockStairs;
-import net.minecraft.block.ITileEntityProvider;
-import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.particle.EffectRenderer;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.arboriculture.EnumWoodType;
-import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
+import forestry.api.core.IStateMapperRegister;
 import forestry.api.core.Tabs;
 import forestry.arboriculture.IWoodTyped;
-import forestry.arboriculture.items.ItemBlockWood;
-import forestry.arboriculture.items.ItemBlockWood.WoodMeshDefinition;
-import forestry.arboriculture.tiles.TileWood;
-import forestry.core.render.ParticleHelper;
+import forestry.arboriculture.WoodHelper;
+import forestry.arboriculture.WoodHelper.WoodMeshDefinition;
+import forestry.core.proxy.Proxies;
 
-public class BlockArbStairs extends BlockStairs implements IWoodTyped, IItemModelRegister, ITileEntityProvider {
-
-	private final ParticleHelper.Callback particleCallback;
+public class BlockArbStairs extends BlockStairs implements IWoodTyped, IItemModelRegister, IStateMapperRegister {
 	private final boolean fireproof;
-	
-	protected String[] harvestTool;
-	protected int[] harvestLevel;
+	private final EnumWoodType woodType;
 
-	public BlockArbStairs(Block par2Block, boolean fireproof) {
-		super(par2Block.getStateFromMeta(0));
-
-		this.setDefaultState(this.blockState.getBaseState().withProperty(EnumWoodType.WOODTYPE, EnumWoodType.LARCH).withProperty(FACING, EnumFacing.NORTH).withProperty(HALF, BlockStairs.EnumHalf.BOTTOM).withProperty(SHAPE, BlockStairs.EnumShape.STRAIGHT));
-		
+	public BlockArbStairs(boolean fireproof, IBlockState modelState, EnumWoodType woodType) {
+		super(modelState);
 		this.fireproof = fireproof;
-
-		harvestTool = new String[EnumWoodType.values().length];
-		harvestLevel = new int[harvestTool.length];
-		for (int i = 0; i < harvestTool.length; i++) {
-			harvestLevel[i] = -1;
-		}
-		
+		this.woodType = woodType;
 		setCreativeTab(Tabs.tabArboriculture);
-		setHardness(2.0F);
-		setResistance(5.0F);
 		setHarvestLevel("axe", 0);
-
-		this.particleCallback = new ParticleHelper.DefaultCallback(this);
-	}
-	
-
-	@Override
-	protected BlockState createBlockState() {
-		return new BlockState(this, EnumWoodType.WOODTYPE, FACING, HALF, SHAPE);
-	}
-	
-	@Override
-	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
-		TileEntity tile = world.getTileEntity(pos);
-		if (tile instanceof TileWood) {
-			TileWood wood = (TileWood) tile;
-			state = state.withProperty(EnumWoodType.WOODTYPE, wood.getWoodType());
-		}
-		return super.getActualState(state, world, pos);
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
-		for (EnumWoodType woodType : EnumWoodType.VALUES) {
-			list.add(TreeManager.woodItemAccess.getStairs(woodType, fireproof));
-		}
-	}
-
-	/* DROP HANDLING */
-	// Hack: 	When harvesting we need to get the drops in onBlockHarvested,
-	// 			because Mojang destroys the block and tile before calling getDrops.
-	private final ThreadLocal<ArrayList<ItemStack>> drops = new ThreadLocal<>();
-	
-	@Override
-	public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
-		drops.set(TileWood.getDrops(this, world, pos));
-	}
-	
-	@Override
-	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-		ArrayList<ItemStack> ret = drops.get();
-		drops.remove();
-
-		// not harvested, get drops normally
-		if (ret == null) {
-			ret = TileWood.getDrops(this, world, pos);
-		}
-
-		return ret;
-	}
-	
-	@Override
-	public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos, EntityPlayer player) {
-		return TileWood.getPickBlock(this, world, pos);
 	}
 
 	/* MODELS */
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		if (!isFireproof()) {
-			manager.registerVariant(item, ItemBlockWood.getVariants(this));
-		}
+		manager.registerVariant(item, WoodHelper.getResourceLocations(this));
 		manager.registerItemModel(item, new WoodMeshDefinition(this));
-	}
-
-	@Override
-	public boolean getUseNeighborBrightness() {
-		return true;
-	}
-
-	@Override
-	public String getBlockKind() {
-		return "stairs";
 	}
 
 	@Override
@@ -150,38 +59,42 @@ public class BlockArbStairs extends BlockStairs implements IWoodTyped, IItemMode
 		return fireproof;
 	}
 
+	@Nonnull
 	@Override
-	public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
-		return new TileWood();
+	public String getBlockKind() {
+		return "stairs";
 	}
-	
+
+	@Nonnull
 	@Override
-	public void setHarvestLevel(String toolClass, int level, IBlockState state) {
-		int idx = this.getMetaFromState(state);
-		this.harvestTool[idx] = toolClass;
-		this.harvestLevel[idx] = level;
+	public EnumWoodType getWoodType(int meta) {
+		return woodType;
+	}
+
+	@Nonnull
+	@Override
+	public Collection<EnumWoodType> getWoodTypes() {
+		return Collections.singleton(woodType);
 	}
 
 	@Override
-	public String getHarvestTool(IBlockState state) {
-		return harvestTool[getMetaFromState(state)];
+	public void registerStateMapper() {
+		Proxies.render.registerStateMapper(this, new WoodTypeStateMapper(this, null));
 	}
 
 	@Override
-	public int getHarvestLevel(IBlockState state) {
-		return harvestLevel[getMetaFromState(state)];
+	public int getFlammability(IBlockAccess world, BlockPos pos, EnumFacing face) {
+		if (fireproof) {
+			return 0;
+		}
+		return 20;
 	}
 
-	/* Particles */
-	@SideOnly(Side.CLIENT)
 	@Override
-	public boolean addHitEffects(World worldObj, MovingObjectPosition target, EffectRenderer effectRenderer) {
-		return ParticleHelper.addHitEffects(worldObj, this, target, effectRenderer, particleCallback);
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public boolean addDestroyEffects(World world, BlockPos pos, EffectRenderer effectRenderer) {
-		return ParticleHelper.addDestroyEffects(world, this, world.getBlockState(pos), pos, effectRenderer, particleCallback);
+	public int getFireSpreadSpeed(IBlockAccess world, BlockPos pos, EnumFacing face) {
+		if (fireproof) {
+			return 0;
+		}
+		return 5;
 	}
 }

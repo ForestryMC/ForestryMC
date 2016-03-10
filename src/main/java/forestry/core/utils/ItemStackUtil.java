@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.utils;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -407,6 +408,7 @@ public abstract class ItemStackUtil {
 		return created;
 	}
 
+	@Nullable
 	public static Block getBlock(ItemStack stack) {
 		Item item = stack.getItem();
 

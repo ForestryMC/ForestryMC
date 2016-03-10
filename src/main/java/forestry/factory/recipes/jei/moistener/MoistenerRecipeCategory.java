@@ -9,6 +9,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 
 import forestry.core.recipes.jei.ForestryRecipeCategory;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
+import forestry.core.render.ForestryResource;
 
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
@@ -28,7 +29,7 @@ public class MoistenerRecipeCategory extends ForestryRecipeCategory {
 	
 	private static final int inputTank = 0;
 	
-	private final static ResourceLocation guiTexture = new ResourceLocation("forestry", "textures/gui/moistener.png");
+	private final static ResourceLocation guiTexture = new ForestryResource("textures/gui/moistener.png");
 	@Nonnull
 	private final IDrawableAnimated arrow;
 	@Nonnull

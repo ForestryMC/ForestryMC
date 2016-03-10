@@ -10,6 +10,12 @@
  ******************************************************************************/
 package forestry.arboriculture.blocks;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.block.state.IBlockState;
+
+import forestry.api.arboriculture.EnumWoodType;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.genetics.alleles.AlleleFruit;
 import forestry.arboriculture.items.ItemBlockLeaves;
@@ -19,18 +25,18 @@ import forestry.core.blocks.BlockRegistry;
 import forestry.core.items.ItemBlockForestry;
 
 public class BlockRegistryArboriculture extends BlockRegistry {
-	public final BlockLog logs;
-	public final BlockPlanks planks;
-	public final BlockSlab slabs;
-	public final BlockSlab slabsDouble;
-	public final BlockArbFence fences;
-	public final BlockArbStairs stairs;
-	public final BlockLog logsFireproof;
-	public final BlockPlanks planksFireproof;
-	public final BlockSlab slabsFireproof;
-	public final BlockSlab slabsDoubleFireproof;
-	public final BlockArbFence fencesFireproof;
-	public final BlockArbStairs stairsFireproof;
+	public final List<BlockArbLog> logs;
+	public final List<BlockArbLog> logsFireproof;
+	public final List<BlockArbPlanks> planks;
+	public final List<BlockArbPlanks> planksFireproof;
+	public final List<BlockArbSlab> slabs;
+	public final List<BlockArbSlab> slabsDouble;
+	public final List<BlockArbSlab> slabsFireproof;
+	public final List<BlockArbSlab> slabsDoubleFireproof;
+	public final List<BlockArbFence> fences;
+	public final List<BlockArbFence> fencesFireproof;
+	public final List<BlockArbStairs> stairs;
+	public final List<BlockArbStairs> stairsFireproof;
 
 	public final BlockSapling saplingGE;
 	public final BlockForestryLeaves leaves;
@@ -40,43 +46,87 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 
 	public BlockRegistryArboriculture() {
 		// Wood blocks
-		logs = registerBlock(new BlockLog(false), ItemBlockWood.class, "logs");
-		registerOreDictWildcard("logWood", logs);
-		
-		planks = registerBlock(new BlockPlanks(false), ItemBlockWood.class, "planks");
-		registerOreDictWildcard("plankWood", planks);
+		logs = BlockArbLog.create(false);
+		for (BlockArbLog block : logs) {
+			registerBlock(block, ItemBlockWood.class, "logs." + block.getBlockNumber());
+			registerOreDictWildcard("logWood", block);
+		}
 
-		BlockSlab blockSlab = new BlockSlab(false);
-		BlockSlab blockSlabDouble = new BlockSlabDouble(false);
-		slabs = registerBlock(blockSlab, ItemBlockWoodSlab.class, "slabs", blockSlabDouble, blockSlab);
-		registerOreDictWildcard("slabWood", slabs);
+		logsFireproof = BlockArbLog.create(true);
+		for (BlockArbLog block : logsFireproof) {
+			registerBlock(block, ItemBlockWood.class, "logs.fireproof." + block.getBlockNumber());
+			registerOreDictWildcard("logWood", block);
+		}
 
-		slabsDouble = registerBlock(blockSlabDouble, ItemBlockWoodSlab.class, "slabsDouble", blockSlabDouble, blockSlab);
-		
-		fences = registerBlock(new BlockArbFence(false), ItemBlockWood.class, "fences");
-		registerOreDictWildcard("fenceWood", fences);
-		
-		stairs = registerBlock(new BlockArbStairs(planks, false), ItemBlockWood.class, "stairs");
-		registerOreDictWildcard("stairWood", stairs);
-		
-		logsFireproof = registerBlock(new BlockLog(true), ItemBlockWood.class, "logsFireproof");
-		registerOreDictWildcard("logWood", logsFireproof);
-		
-		planksFireproof = registerBlock(new BlockPlanks(true), ItemBlockWood.class, "planksFireproof");
-		registerOreDictWildcard("plankWood", planksFireproof);
+		planks = BlockArbPlanks.create(false);
+		for (BlockArbPlanks block : planks) {
+			registerBlock(block, ItemBlockWood.class, "planks." + block.getBlockNumber());
+			registerOreDictWildcard("plankWood", block);
+		}
 
-		BlockSlab blockSlabFireproof = new BlockSlab(true);
-		BlockSlab blockSlabDoubleFireproof = new BlockSlabDouble(true);
-		slabsFireproof = registerBlock(blockSlabFireproof, ItemBlockWoodSlab.class, "slabsFireproof", blockSlabDoubleFireproof, blockSlabFireproof);
-		registerOreDictWildcard("slabWood", slabsFireproof);
+		planksFireproof = BlockArbPlanks.create(true);
+		for (BlockArbPlanks block : planksFireproof) {
+			registerBlock(block, ItemBlockWood.class, "planks.fireproof." + block.getBlockNumber());
+			registerOreDictWildcard("plankWood", block);
+		}
 
-		slabsDoubleFireproof = registerBlock(blockSlabDoubleFireproof, ItemBlockWoodSlab.class, "slabsDoubleFireproof", blockSlabDoubleFireproof, blockSlabFireproof);
-		
-		fencesFireproof = registerBlock(new BlockArbFence(true), ItemBlockWood.class, "fencesFireproof");
-		registerOreDictWildcard("fenceWood", fencesFireproof);
-		
-		stairsFireproof = registerBlock(new BlockArbStairs(planksFireproof, true), ItemBlockWood.class, "stairsFireproof");
-		registerOreDictWildcard("stairWood", stairsFireproof);
+		slabs = BlockArbSlab.create(false, false);
+		slabsDouble = BlockArbSlab.create(false, true);
+		for (int i = 0; i < slabs.size(); i++) {
+			BlockArbSlab slab = slabs.get(i);
+			BlockArbSlab slabDouble = slabsDouble.get(i);
+			registerBlock(slab, new ItemBlockWoodSlab(slab, slab, slabDouble), "slabs." + slab.getBlockNumber());
+			registerBlock(slabDouble, new ItemBlockWoodSlab(slabDouble, slab, slabDouble), "slabs.double." + slabDouble.getBlockNumber());
+			registerOreDictWildcard("slabWood", slab);
+		}
+
+		slabsFireproof = BlockArbSlab.create(true, false);
+		slabsDoubleFireproof = BlockArbSlab.create(true, true);
+		for (int i = 0; i < slabsFireproof.size(); i++) {
+			BlockArbSlab slab = slabsFireproof.get(i);
+			BlockArbSlab slabDouble = slabsDoubleFireproof.get(i);
+			registerBlock(slab, new ItemBlockWoodSlab(slab, slab, slabDouble), "slabs.fireproof." + slab.getBlockNumber());
+			registerBlock(slabDouble, new ItemBlockWoodSlab(slabDouble, slab, slabDouble), "slabs.double.fireproof." + slabDouble.getBlockNumber());
+			registerOreDictWildcard("slabWood", slab);
+		}
+
+		fences = new ArrayList<>();
+		fencesFireproof = new ArrayList<>();
+		for (EnumWoodType woodType : EnumWoodType.VALUES) {
+			BlockArbFence fence = registerBlock(new BlockArbFence(false, woodType), ItemBlockWood.class, "fences." + woodType);
+			registerOreDictWildcard("fenceWood", fence);
+			fences.add(fence);
+
+			BlockArbFence fenceFireproof = registerBlock(new BlockArbFence(true, woodType), ItemBlockWood.class, "fences.fireproof." + woodType);
+			registerOreDictWildcard("fenceWood", fenceFireproof);
+			fencesFireproof.add(fenceFireproof);
+		}
+
+		stairs = new ArrayList<>();
+		for (BlockArbPlanks plank : planks) {
+			for (IBlockState blockState : plank.getBlockState().getValidStates()) {
+				int meta = plank.getMetaFromState(blockState);
+				EnumWoodType woodType = plank.getWoodType(meta);
+
+				BlockArbStairs stair = new BlockArbStairs(false, blockState, woodType);
+				stair = registerBlock(stair, ItemBlockWood.class, "stairs." + woodType);
+				registerOreDictWildcard("stairWood", stair);
+				stairs.add(stair);
+			}
+		}
+
+		stairsFireproof = new ArrayList<>();
+		for (BlockArbPlanks plank : planksFireproof) {
+			for (IBlockState blockState : plank.getBlockState().getValidStates()) {
+				int meta = plank.getMetaFromState(blockState);
+				EnumWoodType woodType = plank.getWoodType(meta);
+
+				BlockArbStairs stair = new BlockArbStairs(true, blockState, woodType);
+				stair = registerBlock(stair, ItemBlockWood.class, "stairs.fireproof." + woodType);
+				registerOreDictWildcard("stairWood", stair);
+				stairsFireproof.add(stair);
+			}
+		}
 		
 		// Saplings
 		TreeDefinition.preInit();

@@ -20,12 +20,14 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
 
+import forestry.core.config.Constants;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class RootCommand extends CommandBase implements IForestryCommand {
 
-	public static final String ROOT_COMMAND_NAME = "forestry";
+	public static final String ROOT_COMMAND_NAME = Constants.MOD_ID;
 	public static final String ROOT_COMMAND_ALIAS = "for";
 
 	private final SortedSet<SubCommand> children = new TreeSet<>();

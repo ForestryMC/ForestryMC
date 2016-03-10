@@ -9,6 +9,7 @@ import net.minecraft.util.ResourceLocation;
 
 import forestry.core.recipes.jei.ForestryRecipeCategory;
 import forestry.core.recipes.jei.ForestryTooltipCallback;
+import forestry.core.render.ForestryResource;
 
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
@@ -28,7 +29,7 @@ public class SqueezerRecipeCategory extends ForestryRecipeCategory {
 	
 	private static final int outputTank = 0;
 	
-	private final static ResourceLocation guiTexture = new ResourceLocation("forestry", "textures/gui/squeezersocket.png");
+	private final static ResourceLocation guiTexture = new ForestryResource("textures/gui/squeezersocket.png");
 	@Nonnull
 	private final IDrawableAnimated arrow;
 	@Nonnull

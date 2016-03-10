@@ -1,0 +1,20 @@
+{
+    "variants": {
+        "east=false,north=false,south=false,west=false": { "model": "forestry:arboriculture/fences/cherry_post" },
+        "east=false,north=true,south=false,west=false": { "model": "forestry:arboriculture/fences/cherry_n", "uvlock": true },
+        "east=true,north=false,south=false,west=false": { "model": "forestry:arboriculture/fences/cherry_n", "y": 90, "uvlock": true },
+        "east=false,north=false,south=true,west=false": { "model": "forestry:arboriculture/fences/cherry_n", "y": 180, "uvlock": true },
+        "east=false,north=false,south=false,west=true": { "model": "forestry:arboriculture/fences/cherry_n", "y": 270, "uvlock": true },
+        "east=true,north=true,south=false,west=false": { "model": "forestry:arboriculture/fences/cherry_ne", "uvlock": true },
+        "east=true,north=false,south=true,west=false": { "model": "forestry:arboriculture/fences/cherry_ne", "y": 90, "uvlock": true },
+        "east=false,north=false,south=true,west=true": { "model": "forestry:arboriculture/fences/cherry_ne", "y": 180, "uvlock": true },
+        "east=false,north=true,south=false,west=true": { "model": "forestry:arboriculture/fences/cherry_ne", "y": 270, "uvlock": true },
+        "east=false,north=true,south=true,west=false": { "model": "forestry:arboriculture/fences/cherry_ns", "uvlock": true },
+        "east=true,north=false,south=false,west=true": { "model": "forestry:arboriculture/fences/cherry_ns", "y": 90, "uvlock": true },
+        "east=true,north=true,south=true,west=false": { "model": "forestry:arboriculture/fences/cherry_nse", "uvlock": true },
+        "east=true,north=false,south=true,west=true": { "model": "forestry:arboriculture/fences/cherry_nse", "y": 90, "uvlock": true },
+        "east=false,north=true,south=true,west=true": { "model": "forestry:arboriculture/fences/cherry_nse", "y": 180, "uvlock": true },
+        "east=true,north=true,south=false,west=true": { "model": "forestry:arboriculture/fences/cherry_nse", "y": 270, "uvlock": true },
+        "east=true,north=true,south=true,west=true": { "model": "forestry:arboriculture/fences/cherry_nsew", "uvlock": true }
+	}
+}

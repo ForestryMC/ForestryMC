@@ -14,6 +14,7 @@ import net.minecraft.util.ResourceLocation;
 import forestry.core.recipes.jei.ForestryRecipeCategory;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
 import forestry.core.recipes.jei.ForestryTooltipCallback;
+import forestry.core.render.ForestryResource;
 
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawableAnimated;
@@ -37,7 +38,7 @@ public class CentrifugeRecipeCategory extends ForestryRecipeCategory {
 	private static final int inputSlot = 0;
 	private static final int outputSlot = 1;
 	
-	private final static ResourceLocation guiTexture = new ResourceLocation("forestry", "textures/gui/centrifugesocket.png");
+	private final static ResourceLocation guiTexture = new ForestryResource("textures/gui/centrifugesocket.png");
 	@Nonnull
 	private final IDrawableAnimated arrow;
 	private final ForestryTooltipCallback tooltip = new ForestryTooltipCallback();

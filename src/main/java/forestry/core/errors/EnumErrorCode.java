@@ -127,7 +127,7 @@ public enum EnumErrorCode implements IErrorState {
 
 	@Override
 	public String getUniqueName() {
-		return Constants.MOD + ":" + name;
+		return Constants.MOD_ID + ":" + name;
 	}
 
 	public static void init() {

@@ -82,13 +82,13 @@ public class TickHandlerCoreServer {
 			tag.setBoolean("retrogen", true);
 		}
 
-		event.getData().setTag(Constants.MOD, tag);
+		event.getData().setTag(Constants.MOD_ID, tag);
 	}
 
 	@SubscribeEvent
 	public void chunkLoadEventHandler(ChunkDataEvent.Load event) {
 		if (Config.doRetrogen) {
-			NBTTagCompound tag = (NBTTagCompound) event.getData().getTag(Constants.MOD);
+			NBTTagCompound tag = (NBTTagCompound) event.getData().getTag(Constants.MOD_ID);
 			if (tag == null || !tag.hasKey("retrogen") || Config.forceRetrogen) {
 				ChunkCoords coords = new ChunkCoords(event.getChunk());
 				chunkRegenList.put(coords.dimension, coords);

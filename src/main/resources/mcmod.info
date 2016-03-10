@@ -1,15 +1,15 @@
 [
 {
-  "modid": "Forestry",
-  "name": "Forestry for Minecraft",
+  "modid": "forestry",
+  "name": "Forestry",
   "description": "Trees, bees and more.",
-  "credits": "mistaqur, Binnie",
+  "credits": "mistaqur, Binnie, CovertJaguar, MysteriousAges, Nirek, Nedelosk",
   "logoFile": "/assets/forestry/logo.png",
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "http://forestry.sengir.net/",
-  "updateUrl": "http://forestry.sengir.net/wiki/index.php?n=Main.Downloads",
-  "authorList": [ "SirSengir" ],
+  "updateUrl": "http://minecraft.curseforge.com/projects/forestry",
+  "authorList": [ "SirSengir", "mezz" ],
   "screenshots": [ "/gfx/forestry/screenshots/screen1.jpg", "/gfx/forestry/screenshots/screen2.jpg" ],
   "dependencies": [
      "mod_MinecraftForge"

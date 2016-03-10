@@ -1,0 +1,6 @@
+{
+	"variants": {
+        "half=bottom": { "model": "forestry:arboriculture/slab/lime_half" },
+        "half=top": { "model": "forestry:arboriculture/slab/lime_upper" }
+    }
+}

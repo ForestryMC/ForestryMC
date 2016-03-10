@@ -15,6 +15,7 @@ import forestry.api.genetics.IEffectData;
 import forestry.api.lepidopterology.EnumButterflyChromosome;
 import forestry.api.lepidopterology.IAlleleButterflyEffect;
 import forestry.api.lepidopterology.IEntityButterfly;
+import forestry.core.config.Constants;
 import forestry.core.genetics.alleles.AlleleCategorized;
 
 public class AlleleButterflyEffect extends AlleleCategorized implements IAlleleButterflyEffect {
@@ -27,7 +28,7 @@ public class AlleleButterflyEffect extends AlleleCategorized implements IAlleleB
 	}
 
 	protected AlleleButterflyEffect(String valueName, boolean isDominant) {
-		super("forestry", "bf", valueName, isDominant);
+		super(Constants.RESOURCE_ID, "bf", valueName, isDominant);
 	}
 
 	@Override

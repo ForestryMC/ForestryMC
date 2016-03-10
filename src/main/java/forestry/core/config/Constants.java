@@ -14,8 +14,8 @@ import forestry.api.core.IForestryConstants;
 
 public class Constants implements IForestryConstants {
 	// System
-	public static final String MOD = "Forestry";
-	public static final String ID = "forestry";
+	public static final String MOD_ID = "Forestry";
+	public static final String RESOURCE_ID = "forestry";
 	public static final String URL = "http://forestry.sengir.net/";
 
 	public static final String VERSION = "@VERSION@";

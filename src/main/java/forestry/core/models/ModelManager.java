@@ -97,7 +97,7 @@ public class ModelManager implements IModelManager {
 
 	@Override
 	public ModelResourceLocation getModelLocation(String identifier) {
-		return getModelLocation(Constants.ID, identifier);
+		return getModelLocation(Constants.RESOURCE_ID, identifier);
 	}
 
 	@Override
