@@ -3,6 +3,8 @@ package forestry.arboriculture.blocks;
 import com.google.common.collect.Maps;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import java.util.Map;
 
 import net.minecraft.block.Block;
@@ -17,8 +19,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.arboriculture.EnumWoodType;
 import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.blocks.property.PropertyWoodType;
-
-import com.sun.istack.internal.Nullable;
 
 @SideOnly(Side.CLIENT)
 class WoodTypeStateMapper extends StateMapperBase {
