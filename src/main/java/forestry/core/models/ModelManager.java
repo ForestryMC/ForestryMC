@@ -13,6 +13,7 @@ package forestry.core.models;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
@@ -23,11 +24,14 @@ import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.common.registry.GameData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.core.ForestryAPI;
+import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
+import forestry.api.core.IStateMapperRegister;
 import forestry.core.config.Constants;
 import forestry.core.utils.StringUtil;
 
@@ -36,8 +40,8 @@ public class ModelManager implements IModelManager {
 	
 	private static final ModelManager instance = new ModelManager();
 	
-	private static final ArrayList<BlockModelIndex> customBlockModels = new ArrayList<>();
-	private static final ArrayList<ModelIndex> customModels = new ArrayList<>();
+	private static final ArrayList<BlockModelIndex> customBlockModels = new ArrayList<BlockModelIndex>();
+	private static final ArrayList<ModelIndex> customModels = new ArrayList<ModelIndex>();
 
 	static {
 		ForestryAPI.modelManager = instance;
@@ -99,6 +103,22 @@ public class ModelManager implements IModelManager {
 	@Override
 	public ModelResourceLocation getModelLocation(String modID, String identifier) {
 		return new ModelResourceLocation(modID + ":" + identifier, "inventory");
+	}
+	
+	public static void registerModels() {
+		for (Block block : GameData.getBlockRegistry()) {
+			if (block instanceof IItemModelRegister) {
+				((IItemModelRegister) block).registerModel(Item.getItemFromBlock(block), getInstance());
+			}
+			if (block instanceof IStateMapperRegister) {
+				((IStateMapperRegister) block).registerStateMapper();
+			}
+		}
+		for (Item item : GameData.getItemRegistry()) {
+			if (item instanceof IItemModelRegister) {
+				((IItemModelRegister) item).registerModel(item, getInstance());
+			}
+		}
 	}
 
 	public static void registerCustomModels(ModelBakeEvent event) {

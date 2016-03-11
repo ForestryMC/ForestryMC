@@ -14,18 +14,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.oredict.OreDictionary;
 
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IStateMapperRegister;
-import forestry.core.models.ModelManager;
 import forestry.core.utils.StringUtil;
 import forestry.plugins.PluginManager;
 
@@ -40,9 +34,6 @@ public abstract class BlockRegistry {
 		GameRegistry.registerBlock(block, null, name);
 		GameRegistry.registerItem(itemBlock, name);
 		allBlocks.add(block);
-
-		registerRendering(block);
-
 		return block;
 	}
 
@@ -53,21 +44,7 @@ public abstract class BlockRegistry {
 		block.setUnlocalizedName("for." + name);
 		GameRegistry.registerBlock(block, itemClass, StringUtil.cleanBlockName(block), itemCtorArgs);
 		allBlocks.add(block);
-
-		registerRendering(block);
-
 		return block;
-	}
-
-	private static void registerRendering(Block block) {
-		if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
-			if (block instanceof IItemModelRegister) {
-				((IItemModelRegister) block).registerModel(Item.getItemFromBlock(block), ModelManager.getInstance());
-			}
-			if (block instanceof IStateMapperRegister) {
-				((IStateMapperRegister) block).registerStateMapper();
-			}
-		}
 	}
 
 	protected static void registerOreDictWildcard(String oreDictName, Block block) {

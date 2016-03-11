@@ -146,6 +146,11 @@ public class ProxyRenderClient extends ProxyRender {
 		ModelLoader.setCustomStateMapper(block, mapper);
 	}
 
+	@Override
+	public void registerModels() {
+		ModelManager.registerModels();
+	}
+
 	private static boolean shouldSpawnParticle(World world) {
 		if (!Config.enableParticleFX) {
 			return false;

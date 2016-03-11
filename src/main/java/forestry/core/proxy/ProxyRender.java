@@ -90,6 +90,9 @@ public class ProxyRender {
 
 	public void bindTexture(ResourceLocation location) {
 	}
+	
+	public void registerModels() {
+	}
 
 	/* FX */
 
