@@ -13,9 +13,13 @@ package forestry.core.items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.oredict.OreDictionary;
 
+import forestry.api.core.IItemModelRegister;
+import forestry.core.models.ModelManager;
 import forestry.core.utils.StringUtil;
 import forestry.plugins.PluginManager;
 
@@ -26,6 +30,13 @@ public abstract class ItemRegistry {
 		}
 		item.setUnlocalizedName("for." + name);
 		GameRegistry.registerItem(item, StringUtil.cleanItemName(item));
+
+		if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
+			if (item instanceof IItemModelRegister) {
+				((IItemModelRegister) item).registerModel(item, ModelManager.getInstance());
+			}
+		}
+
 		return item;
 	}
 

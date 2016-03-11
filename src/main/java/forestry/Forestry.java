@@ -97,8 +97,6 @@ public class Forestry {
 		ForestryAPI.activeMode = new GameMode(Config.gameMode);
 
 		PluginManager.runPreInit();
-		
-		Proxies.render.registerModels();
 	}
 
 	@EventHandler
