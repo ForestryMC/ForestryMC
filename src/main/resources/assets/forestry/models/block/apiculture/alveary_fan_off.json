@@ -1,5 +1,5 @@
 {
-    "parent": "forestry:block/apiculture/alveary_plain_middle",
+    "parent": "forestry:block/apiculture/alveary_plain_normal",
     "textures": {
         "particle": "forestry:blocks/apiculture/alveary.fan.off",
         "down": "forestry:blocks/apiculture/alveary.fan.off",

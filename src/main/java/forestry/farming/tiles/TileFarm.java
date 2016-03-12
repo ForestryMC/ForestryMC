@@ -66,11 +66,6 @@ public abstract class TileFarm extends MultiblockTileEntityForestry<MultiblockLo
 		return getMultiblockLogic().getController().getInternalInventory();
 	}
 
-	@Override
-	public boolean allowsAutomation() {
-		return false;
-	}
-
 	/* SAVING & LOADING */
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {

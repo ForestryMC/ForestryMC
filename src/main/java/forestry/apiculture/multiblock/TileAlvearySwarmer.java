@@ -23,7 +23,7 @@ import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IBee;
 import forestry.api.multiblock.IAlvearyComponent;
-import forestry.apiculture.blocks.BlockAlveary;
+import forestry.apiculture.blocks.BlockAlvearyType;
 import forestry.apiculture.gui.ContainerAlvearySwarmer;
 import forestry.apiculture.gui.GuiAlvearySwarmer;
 import forestry.apiculture.inventory.InventorySwarmer;
@@ -45,7 +45,7 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, 
 	private boolean active;
 
 	public TileAlvearySwarmer() {
-		super(BlockAlveary.AlvearyType.SWARMER);
+		super(BlockAlvearyType.SWARMER);
 		this.inventory = new InventorySwarmer(this);
 	}
 

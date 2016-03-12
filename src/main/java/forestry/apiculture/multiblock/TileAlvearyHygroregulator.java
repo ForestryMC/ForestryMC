@@ -22,7 +22,7 @@ import net.minecraftforge.fluids.IFluidHandler;
 
 import forestry.api.core.IClimateControlled;
 import forestry.api.multiblock.IAlvearyComponent;
-import forestry.apiculture.blocks.BlockAlveary;
+import forestry.apiculture.blocks.BlockAlvearyType;
 import forestry.apiculture.gui.ContainerAlvearyHygroregulator;
 import forestry.apiculture.gui.GuiAlvearyHygroregulator;
 import forestry.apiculture.inventory.InventoryHygroregulator;
@@ -45,7 +45,7 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 	private int transferTime;
 
 	public TileAlvearyHygroregulator() {
-		super(BlockAlveary.AlvearyType.HYGRO);
+		super(BlockAlvearyType.HYGRO);
 
 		this.inventory = new InventoryHygroregulator(this);
 

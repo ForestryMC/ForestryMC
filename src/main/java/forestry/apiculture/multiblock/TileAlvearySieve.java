@@ -20,7 +20,7 @@ import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.api.multiblock.IAlvearyComponent;
-import forestry.apiculture.blocks.BlockAlveary;
+import forestry.apiculture.blocks.BlockAlvearyType;
 import forestry.apiculture.gui.ContainerAlvearySieve;
 import forestry.apiculture.gui.GuiAlvearySieve;
 import forestry.apiculture.inventory.InventoryAlvearySieve;
@@ -33,7 +33,7 @@ public class TileAlvearySieve extends TileAlveary implements IAlvearyComponent.B
 	private final InventoryAlvearySieve inventory;
 
 	public TileAlvearySieve() {
-		super(BlockAlveary.AlvearyType.SIEVE);
+		super(BlockAlvearyType.SIEVE);
 		this.inventory = new InventoryAlvearySieve(this);
 		this.beeListener = new AlvearySieveBeeListener(inventory);
 	}

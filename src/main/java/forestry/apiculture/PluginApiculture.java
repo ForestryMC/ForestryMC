@@ -60,7 +60,7 @@ import forestry.api.genetics.IClassification.EnumClassLevel;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
-import forestry.apiculture.blocks.BlockAlveary;
+import forestry.apiculture.blocks.BlockAlvearyType;
 import forestry.apiculture.blocks.BlockCandle;
 import forestry.apiculture.blocks.BlockRegistryApiculture;
 import forestry.apiculture.blocks.BlockTypeApiculture;
@@ -527,57 +527,58 @@ public class PluginApiculture extends BlankForestryPlugin {
 				'#', PluginCore.items.beeswax);
 
 		// / ALVEARY
-		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.AlvearyType.PLAIN),
+		ItemStack alvearyPlainBlock = blocks.getAlvearyBlock(BlockAlvearyType.PLAIN);
+		RecipeUtil.addRecipe(alvearyPlainBlock,
 				"###",
 				"#X#",
 				"###",
 				'X', PluginCore.items.impregnatedCasing,
 				'#', PluginCore.items.craftingMaterial.getScentedPaneling());
 		// SWARMER
-		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.AlvearyType.SWARMER),
+		RecipeUtil.addRecipe(blocks.getAlvearyBlock(BlockAlvearyType.SWARMER),
 				"#G#",
 				" X ",
 				"#G#",
 				'#', PluginCore.items.tubes.get(EnumElectronTube.DIAMOND, 1),
-				'X', blocks.alveary,
+				'X', alvearyPlainBlock,
 				'G', "ingotGold");
 		// FAN
-		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.AlvearyType.FAN),
+		RecipeUtil.addRecipe(blocks.getAlvearyBlock(BlockAlvearyType.FAN),
 				"I I",
 				" X ",
 				"I#I",
 				'#', PluginCore.items.tubes.get(EnumElectronTube.GOLD, 1),
-				'X', blocks.alveary,
+				'X', alvearyPlainBlock,
 				'I', "ingotIron");
 		// HEATER
-		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.AlvearyType.HEATER),
+		RecipeUtil.addRecipe(blocks.getAlvearyBlock(BlockAlvearyType.HEATER),
 				"#I#",
 				" X ",
 				"YYY",
 				'#', PluginCore.items.tubes.get(EnumElectronTube.GOLD, 1),
-				'X', blocks.alveary,
+				'X', alvearyPlainBlock,
 				'I', "ingotIron", 'Y', "stone");
 		// HYGROREGULATOR
-		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.AlvearyType.HYGRO),
+		RecipeUtil.addRecipe(blocks.getAlvearyBlock(BlockAlvearyType.HYGRO),
 				"GIG",
 				"GXG",
 				"GIG",
-				'X', blocks.alveary,
+				'X', alvearyPlainBlock,
 				'I', "ingotIron",
 				'G', "blockGlass");
 		// STABILISER
-		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.AlvearyType.STABILISER),
+		RecipeUtil.addRecipe(blocks.getAlvearyBlock(BlockAlvearyType.STABILISER),
 				"G G",
 				"GXG",
 				"G G",
-				'X', blocks.alveary,
+				'X', alvearyPlainBlock,
 				'G', "gemQuartz");
 		// SIEVE
-		RecipeUtil.addRecipe(blocks.alveary.get(BlockAlveary.AlvearyType.SIEVE),
+		RecipeUtil.addRecipe(blocks.getAlvearyBlock(BlockAlvearyType.SIEVE),
 				"III",
 				" X ",
 				"WWW",
-				'X', blocks.alveary,
+				'X', alvearyPlainBlock,
 				'I', "ingotIron",
 				'W', PluginCore.items.craftingMaterial.getWovenSilk());
 

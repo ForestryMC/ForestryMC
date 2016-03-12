@@ -1,7 +1,8 @@
 {
     "variants": {
-		"type=right": { "model": "forestry:apiculture/alveary_plain_right" },
-		"type=middle": { "model": "forestry:apiculture/alveary_plain_middle" },
-		"type=left": { "model": "forestry:apiculture/alveary_plain_left" }
+		"type=normal": { "model": "forestry:apiculture/alveary_plain_normal" },
+		"type=entrance_right": { "model": "forestry:apiculture/alveary_plain_entrance_right" },
+		"type=entrance": { "model": "forestry:apiculture/alveary_plain_entrance" },
+		"type=entrance_left": { "model": "forestry:apiculture/alveary_plain_entrance_left" }
 	}
 }

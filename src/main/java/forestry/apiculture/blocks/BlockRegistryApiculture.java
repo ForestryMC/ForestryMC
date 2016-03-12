@@ -10,6 +10,10 @@
  ******************************************************************************/
 package forestry.apiculture.blocks;
 
+import java.util.Map;
+
+import net.minecraft.item.ItemStack;
+
 import forestry.api.core.Tabs;
 import forestry.apiculture.items.ItemBlockCandle;
 import forestry.core.blocks.BlockBase;
@@ -22,7 +26,7 @@ public class BlockRegistryApiculture extends BlockRegistry {
 	public final BlockBeehives beehives;
 	public final BlockCandle candle;
 	public final BlockStump stump;
-	public final BlockAlveary alveary;
+	private final Map<BlockAlvearyType, BlockAlveary> alvearyBlockMap;
 
 	public BlockRegistryApiculture() {
 		apiculture = registerBlock(new BlockApiculture(), ItemBlockForestry.class, "apiculture");
@@ -36,6 +40,14 @@ public class BlockRegistryApiculture extends BlockRegistry {
 		candle = registerBlock(new BlockCandle(), ItemBlockCandle.class, "candle");
 		stump = registerBlock(new BlockStump(), ItemBlockForestry.class, "stump");
 
-		alveary = registerBlock(new BlockAlveary(), ItemBlockForestry.class, "alveary");
+		alvearyBlockMap = BlockAlveary.create();
+		for (BlockAlveary block : alvearyBlockMap.values()) {
+			registerBlock(block, new ItemBlockForestry(block), "alveary." + block.getAlvearyType());
+		}
+	}
+
+	public ItemStack getAlvearyBlock(BlockAlvearyType type) {
+		BlockAlveary alvearyBlock = alvearyBlockMap.get(type);
+		return new ItemStack(alvearyBlock);
 	}
 }

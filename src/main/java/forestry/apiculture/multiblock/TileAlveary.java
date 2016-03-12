@@ -13,9 +13,11 @@ package forestry.apiculture.multiblock;
 import java.io.IOException;
 import java.util.List;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.Vec3;
+import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
 import forestry.api.apiculture.IBeeHousing;
@@ -28,7 +30,7 @@ import forestry.api.core.EnumTemperature;
 import forestry.api.core.IErrorLogic;
 import forestry.api.multiblock.IAlvearyComponent;
 import forestry.api.multiblock.IMultiblockController;
-import forestry.apiculture.blocks.BlockAlveary;
+import forestry.apiculture.blocks.BlockAlvearyType;
 import forestry.apiculture.gui.ContainerAlveary;
 import forestry.apiculture.gui.GuiAlveary;
 import forestry.core.access.EnumAccess;
@@ -48,12 +50,12 @@ public abstract class TileAlveary extends MultiblockTileEntityForestry<Multibloc
 	private final String unlocalizedTitle;
 
 	protected TileAlveary() {
-		this(BlockAlveary.AlvearyType.PLAIN);
+		this(BlockAlvearyType.PLAIN);
 	}
 
-	protected TileAlveary(BlockAlveary.AlvearyType type) {
+	protected TileAlveary(BlockAlvearyType type) {
 		super(new MultiblockLogicAlveary());
-		this.unlocalizedTitle = "tile.for.alveary." + type.ordinal() + ".name";
+		this.unlocalizedTitle = "tile.for.alveary." + type + ".name";
 	}
 
 	@Override
@@ -63,7 +65,11 @@ public abstract class TileAlveary extends MultiblockTileEntityForestry<Multibloc
 			this.worldObj.markBlockForUpdate(getPos());
 		}
 		worldObj.notifyBlockOfStateChange(getPos(), getBlockType());
-		//markDirty();
+	}
+
+	@Override
+	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
+		return oldState.getBlock() != newState.getBlock();
 	}
 
 	@Override
