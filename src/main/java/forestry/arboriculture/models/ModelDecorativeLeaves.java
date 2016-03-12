@@ -8,7 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.arboriculture.render;
+package forestry.arboriculture.models;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -17,7 +17,7 @@ import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
-
+import net.minecraftforge.common.property.IExtendedBlockState;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.ILeafSpriteProvider;
 import forestry.api.arboriculture.ITreeGenome;
@@ -75,13 +75,12 @@ public class ModelDecorativeLeaves extends ModelBlockOverlay<BlockDecorativeLeav
 	}
 
 	@Override
-	protected boolean bakeWorldBlock(BlockDecorativeLeaves block, IBlockAccess world, BlockPos pos, IModelBaker baker) {
-		return false;
+	protected void bakeWorldBlock(BlockDecorativeLeaves block, IBlockAccess world, BlockPos pos, IExtendedBlockState stateExtended, IModelBaker baker) {
 	}
 
-	public static boolean bakeBlock(BlockDecorativeLeaves block, TreeDefinition treeDefinition, IModelBaker baker) {
+	public static void bakeBlock(BlockDecorativeLeaves block, TreeDefinition treeDefinition, IModelBaker baker) {
 		if (treeDefinition == null) {
-			return false;
+			return;
 		}
 
 		ITreeGenome genome = treeDefinition.getGenome();
@@ -101,7 +100,5 @@ public class ModelDecorativeLeaves extends ModelBlockOverlay<BlockDecorativeLeav
 		
 		// Set the particle sprite
 		baker.setParticleSprite(leaveSprite);
-
-		return true;
 	}
 }

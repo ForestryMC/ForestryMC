@@ -1,4 +1,4 @@
-package forestry.arboriculture.render;
+package forestry.arboriculture.models;
 
 import com.google.common.collect.Maps;
 

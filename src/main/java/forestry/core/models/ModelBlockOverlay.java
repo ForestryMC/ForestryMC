@@ -115,7 +115,7 @@ public abstract class ModelBlockOverlay<B extends Block> implements IFlexibleBak
 		B bBlock = blockClass.cast(block);
 		
 		baker.setRenderBoundsFromBlock(block);
-		bakeWorldBlock(bBlock, world, pos, baker);
+		bakeWorldBlock(bBlock, world, pos, stateExtended, baker);
 		
 		return latestBlockModel = baker.bakeModel(false);
 	}
@@ -136,8 +136,8 @@ public abstract class ModelBlockOverlay<B extends Block> implements IFlexibleBak
 		return latestItemModel = baker.bakeModel(true);
 	}
 	
-	protected abstract void bakeInventoryBlock(B block, ItemStack item, IModelBaker baker);
+	protected abstract void bakeInventoryBlock(@Nonnull B block, @Nonnull ItemStack item, @Nonnull IModelBaker baker);
 
-	protected abstract boolean bakeWorldBlock(B block, IBlockAccess world, BlockPos pos, IModelBaker baker);
+	protected abstract void bakeWorldBlock(@Nonnull B block, @Nonnull IBlockAccess world, @Nonnull BlockPos pos, @Nonnull IExtendedBlockState stateExtended, @Nonnull IModelBaker baker);
 
 }

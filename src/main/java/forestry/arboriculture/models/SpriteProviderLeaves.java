@@ -8,7 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.arboriculture.render;
+package forestry.arboriculture.models;
 
 import java.awt.Color;
 

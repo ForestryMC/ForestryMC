@@ -8,13 +8,13 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.arboriculture.render;
+package forestry.arboriculture.models;
 
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
-
+import net.minecraftforge.common.property.IExtendedBlockState;
 import forestry.api.core.IModelBaker;
 import forestry.arboriculture.blocks.BlockForestryLeaves;
 import forestry.arboriculture.genetics.TreeRoot;
@@ -63,10 +63,10 @@ public class ModelLeaves extends ModelBlockOverlay<BlockForestryLeaves> {
 	}
 
 	@Override
-	public boolean bakeWorldBlock(BlockForestryLeaves block, IBlockAccess world, BlockPos pos, IModelBaker baker) {
+	public void bakeWorldBlock(BlockForestryLeaves block, IBlockAccess world, BlockPos pos, IExtendedBlockState stateExtended, IModelBaker baker) {
 		TileLeaves tile = TileUtil.getTile(world, pos, TileLeaves.class);
 		if (tile == null) {
-			return false;
+			return;
 		}
 
 		TextureAtlasSprite leaveSprite = tile.getLeaveSprite(Proxies.render.fancyGraphicsEnabled());
@@ -83,7 +83,5 @@ public class ModelLeaves extends ModelBlockOverlay<BlockForestryLeaves> {
 		
 		// Set the particle sprite
 		baker.setParticleSprite(leaveSprite);
-
-		return true;
 	}
 }

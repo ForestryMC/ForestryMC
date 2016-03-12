@@ -14,13 +14,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 
 import net.minecraftforge.fml.common.Optional;
 
-import forestry.api.multiblock.IMultiblockController;
-import forestry.apiculture.blocks.BlockAlveary;
 import forestry.apiculture.trigger.ApicultureTriggers;
 
 import buildcraft.api.statements.IStatementContainer;

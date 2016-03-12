@@ -30,6 +30,9 @@ public enum PacketIdServer implements IPacketId {
 
 	// Factory
 	WORKTABLE_NEI_SELECT,
+	
+	//Greenhouse
+	TILE_FORESTRY_CAMOUFLAGE,
 
 	// Mail
 	LETTER_INFO_REQUEST,

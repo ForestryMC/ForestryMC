@@ -15,7 +15,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockCocoa;
+import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -86,7 +86,7 @@ public abstract class BlockUtil {
 			return false;
 		}
 
-		IBlockState state = Blocks.cocoa.getDefaultState().withProperty(BlockCocoa.FACING, facing);
+		IBlockState state = Blocks.cocoa.getDefaultState().withProperty(BlockDirectional.FACING, facing);
 		world.setBlockState(pos, state);
 		return true;
 	}

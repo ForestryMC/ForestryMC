@@ -26,11 +26,6 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.lwjgl.opengl.GL11;
-
 import forestry.api.core.IToolPipette;
 import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.gui.IContainerLiquidTanks;
@@ -160,10 +155,10 @@ public class TankWidget extends Widget {
 
 	
 	private static void drawFluidTexture(double xCoord, double yCoord, TextureAtlasSprite textureSprite, int maskTop, int maskRight, double zLevel) {
-		double uMin = (double) textureSprite.getMinU();
-		double uMax = (double) textureSprite.getMaxU();
-		double vMin = (double) textureSprite.getMinV();
-		double vMax = (double) textureSprite.getMaxV();
+		double uMin = textureSprite.getMinU();
+		double uMax = textureSprite.getMaxU();
+		double vMin = textureSprite.getMinV();
+		double vMax = textureSprite.getMaxV();
 		uMax = uMax - (maskRight / 16.0 * (uMax - uMin));
 		vMax = vMax - (maskTop / 16.0 * (vMax - vMin));
 

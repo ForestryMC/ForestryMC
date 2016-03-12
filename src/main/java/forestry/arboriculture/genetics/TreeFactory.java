@@ -20,7 +20,7 @@ import forestry.api.arboriculture.ITreeFactory;
 import forestry.api.arboriculture.ITreeGenerator;
 import forestry.api.genetics.IClassification;
 import forestry.arboriculture.genetics.alleles.AlleleTreeSpecies;
-import forestry.arboriculture.render.SpriteProviderLeaves;
+import forestry.arboriculture.models.SpriteProviderLeaves;
 
 public class TreeFactory implements ITreeFactory {
 	@Override
