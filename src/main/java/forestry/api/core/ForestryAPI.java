@@ -46,12 +46,6 @@ public class ForestryAPI {
 	 */
 	@SideOnly(Side.CLIENT)
 	public static IModelManager modelManager;
-	
-	/**
-	 * A {@link IModelBaker} to bake custom models
-	 */
-	@SideOnly(Side.CLIENT)
-	public static IModelBaker modelBaker;
 
 	/**
 	 * The currently active {@link IGameMode}.

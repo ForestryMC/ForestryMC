@@ -44,7 +44,7 @@ public class ModelFarmBlock extends ModelBlockOverlay<BlockFarm> {
 		baker.addBlockModel(blockFarm, pos, getOverlaySprites(farm.getFarmBlockType()), 0);
 		
 		// Set the particle sprite
-		baker.getCurrentModel().setParticleSprite(textures[0]);
+		baker.setParticleSprite(textures[0]);
 
 		return true;
 	}

@@ -12,7 +12,6 @@ package forestry.core.models.baker;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -32,7 +31,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.lwjgl.util.vector.Vector3f;
 
-import forestry.api.core.ForestryAPI;
 import forestry.api.core.IModelBaker;
 import forestry.api.core.IModelBakerModel;
 import forestry.core.proxy.Proxies;
@@ -42,16 +40,9 @@ import forestry.core.proxy.Proxies;
  */
 @SideOnly(Side.CLIENT)
 public class ModelBaker implements IModelBaker {
-	
-	private static final ModelBaker instance = new ModelBaker();
 
-	static {
-		ForestryAPI.modelBaker = instance;
-	}
-
-	public static ModelBaker getInstance() {
-		return instance;
-	}
+	private static final float quadsUV[] = new float[]{0, 0, 1, 1, 0, 0, 1, 1};
+	private final List<ModelBakerFace> faces = new ArrayList<>();
 
 	protected double renderMinX;
 	protected double renderMaxX;
@@ -151,10 +142,6 @@ public class ModelBaker implements IModelBaker {
 		addBlockModel(block, pos, new TextureAtlasSprite[]{ texture ,  texture, texture, texture, texture, texture }, colorIndex);
 	}
 
-	private final float quadsUV[] = new float[] { 0, 0, 1, 1, 0, 0, 1, 1 };
-	protected EnumSet<EnumFacing> renderFaces = EnumSet.allOf(EnumFacing.class);
-	private List<ModelBakerFace> faces = new ArrayList<>();
-
 	protected float[] getFaceUvs(final EnumFacing face, final Vector3f to_16, final Vector3f from_16) {
 		float from_a = 0;
 		float from_b = 0;
@@ -206,7 +193,7 @@ public class ModelBaker implements IModelBaker {
 		to_a = 1.0f - to_a;
 		to_b = 1.0f - to_b;
 
-		final float[] afloat = new float[] { // :P
+		return new float[]{ // :P
 				16.0f * (quadsUV[0] + quadsUV[2] * from_a + quadsUV[4] * from_b), // 0
 				16.0f * (quadsUV[1] + quadsUV[3] * from_a + quadsUV[5] * from_b), // 1
 
@@ -219,8 +206,6 @@ public class ModelBaker implements IModelBaker {
 				16.0f * (quadsUV[0] + quadsUV[2] * from_a + quadsUV[4] * to_b), // 0
 				16.0f * (quadsUV[1] + quadsUV[3] * from_a + quadsUV[5] * to_b), // 1
 		};
-
-		return afloat;
 	}
 
 	@Override
@@ -289,8 +274,7 @@ public class ModelBaker implements IModelBaker {
 		if (flip)
 			mr = ModelRotation.X0_Y180;
 
-		// TODO: find out why there is a concurrent modification issue with faces
-		for (ModelBakerFace face : new ArrayList<>(faces)) {
+		for (ModelBakerFace face : faces) {
 			final EnumFacing myFace = face.face;
 			final float[] uvs = getFaceUvs(myFace, face.from, face.to);
 
@@ -305,20 +289,11 @@ public class ModelBaker implements IModelBaker {
 			else
 				this.currentModel.getGeneralQuads().add(bf);
 		}
-		return clear();
-	}
-
-	@Override
-	public IModelBakerModel clear() {
-		ModelBakerModel model = currentModel.copy();
-		currentModel = new ModelBakerModel();
-		faces = new ArrayList<>();
-		return model;
-	}
-	
-	@Override
-	public IModelBakerModel getCurrentModel() {
 		return currentModel;
 	}
 
+	@Override
+	public void setParticleSprite(TextureAtlasSprite particleSprite) {
+		currentModel.setParticleSprite(particleSprite);
+	}
 }

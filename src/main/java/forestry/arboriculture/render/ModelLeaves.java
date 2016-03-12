@@ -82,7 +82,7 @@ public class ModelLeaves extends ModelBlockOverlay<BlockForestryLeaves> {
 		}
 		
 		// Set the particle sprite
-		baker.getCurrentModel().setParticleSprite(leaveSprite);
+		baker.setParticleSprite(leaveSprite);
 
 		return true;
 	}

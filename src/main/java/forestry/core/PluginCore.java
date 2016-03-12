@@ -52,7 +52,6 @@ import forestry.core.genetics.alleles.AlleleRegistry;
 import forestry.core.items.EnumContainerType;
 import forestry.core.items.ItemRegistryCore;
 import forestry.core.models.ModelManager;
-import forestry.core.models.baker.ModelBaker;
 import forestry.core.multiblock.MultiblockLogicFactory;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.network.PacketRegistryCore;
@@ -95,9 +94,6 @@ public class PluginCore extends BlankForestryPlugin {
 		AlleleHelper.instance = new AlleleHelper();
 
 		MultiblockManager.logicFactory = new MultiblockLogicFactory();
-		
-		//To crate the ModelBaker
-		ModelBaker.getInstance();
 	}
 
 	@Override

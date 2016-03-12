@@ -103,7 +103,7 @@ public abstract class ModelBlockOverlay<B extends Block> implements IFlexibleBak
 
 	@Override
 	public IBakedModel handleBlockState(IBlockState state) {
-		IModelBaker baker = ModelBaker.getInstance();
+		IModelBaker baker = new ModelBaker();
 		IExtendedBlockState stateExtended = (IExtendedBlockState) state;
 		
 		IBlockAccess world = stateExtended.getValue(UnlistedBlockAccess.BLOCKACCESS);
@@ -122,7 +122,7 @@ public abstract class ModelBlockOverlay<B extends Block> implements IFlexibleBak
 
 	@Override
 	public IBakedModel handleItemState(ItemStack stack) {
-		IModelBaker baker = ModelBaker.getInstance();
+		IModelBaker baker = new ModelBaker();
 		Block block = Block.getBlockFromItem(stack.getItem());
 		if (!blockClass.isInstance(block)) {
 			return null;
@@ -131,11 +131,7 @@ public abstract class ModelBlockOverlay<B extends Block> implements IFlexibleBak
 		
 		block.setBlockBoundsForItemRender();
 		baker.setRenderBoundsFromBlock(block);
-		try {
-			bakeInventoryBlock(bBlock, stack, baker);
-		} catch (RuntimeException e) {
-			return null;
-		}
+		bakeInventoryBlock(bBlock, stack, baker);
 		
 		return latestItemModel = baker.bakeModel(true);
 	}

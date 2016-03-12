@@ -40,10 +40,8 @@ public interface IModelBaker {
 
 	void addFaceXPos(TextureAtlasSprite sprite);
 	
-	IModelBakerModel getCurrentModel();
+	void setParticleSprite(TextureAtlasSprite particleSprite);
 	
 	IModelBakerModel bakeModel(boolean flip);
-	
-	IModelBakerModel clear();
 	
 }

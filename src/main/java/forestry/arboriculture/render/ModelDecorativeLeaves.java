@@ -37,7 +37,7 @@ public class ModelDecorativeLeaves extends ModelBlockOverlay<BlockDecorativeLeav
 
 	@Override
 	public IBakedModel handleBlockState(IBlockState state) {
-		IModelBaker baker = ModelBaker.getInstance();
+		IModelBaker baker = new ModelBaker();
 
 		Block block = state.getBlock();
 		if (!blockClass.isInstance(block)) {
@@ -54,7 +54,7 @@ public class ModelDecorativeLeaves extends ModelBlockOverlay<BlockDecorativeLeav
 
 	@Override
 	public IBakedModel handleItemState(ItemStack stack) {
-		IModelBaker baker = ModelBaker.getInstance();
+		IModelBaker baker = new ModelBaker();
 		Block block = Block.getBlockFromItem(stack.getItem());
 		if (!blockClass.isInstance(block)) {
 			return null;
@@ -100,7 +100,7 @@ public class ModelDecorativeLeaves extends ModelBlockOverlay<BlockDecorativeLeav
 		}
 		
 		// Set the particle sprite
-		baker.getCurrentModel().setParticleSprite(leaveSprite);
+		baker.setParticleSprite(leaveSprite);
 
 		return true;
 	}
