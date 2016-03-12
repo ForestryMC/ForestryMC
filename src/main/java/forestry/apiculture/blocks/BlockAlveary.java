@@ -152,6 +152,7 @@ public abstract class BlockAlveary extends BlockStructure implements IStateMappe
 	public void registerModel(Item item, IModelManager manager) {
 		manager.registerItemModel(item, 0, "apiculture/alveary." + getAlvearyType());
 	}
+	
 	@Override
 	protected BlockState createBlockState() {
 		BlockAlvearyType alvearyType = getAlvearyType();

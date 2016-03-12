@@ -32,30 +32,6 @@ import buildcraft.api.statements.ITriggerProvider;
 public class TileAlvearyPlain extends TileAlveary implements ITriggerProvider {
 
 	@Override
-	public void onMachineAssembled(IMultiblockController multiblockController, BlockPos minCoord, BlockPos maxCoord) {
-		super.onMachineAssembled(multiblockController, minCoord, maxCoord);
-
-		if (!worldObj.isRemote) {
-			// set alveary entrance block meta
-			if (getPos().getY() == maxCoord.getY()) {
-				if ((getPos().getX() > minCoord.getX() && getPos().getX() < maxCoord.getX()) || (getPos().getZ() > minCoord.getZ() && getPos().getZ() < maxCoord.getZ())) {
-					this.worldObj.setBlockState(getPos(), getBlockType().getStateFromMeta(BlockAlveary.AlvearyType.ENTRANCE.ordinal()), 2);
-				}
-			}
-		}
-	}
-
-	@Override
-	public void onMachineBroken() {
-		super.onMachineBroken();
-
-		if (!worldObj.isRemote) {
-			// set alveary entrance block meta back to normal
-			this.worldObj.setBlockState(getPos(), getBlockType().getStateFromMeta(BlockAlveary.AlvearyType.PLAIN.ordinal()), 2);
-		}
-	}
-
-	@Override
 	public boolean allowsAutomation() {
 		return true;
 	}
