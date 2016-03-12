@@ -66,11 +66,11 @@ public class ItemBlockLeaves extends ItemBlockForestry<BlockForestryLeaves> {
 		TileLeaves tileLeaves = new TileLeaves();
 		tileLeaves.readFromNBT(itemStack.getTagCompound());
 		
-		if (renderPass == 1) {
-			return tileLeaves.getFruitColour();
-		} else {
+		if (renderPass == 0) {
 			EntityPlayer player = Proxies.common.getPlayer();
 			return tileLeaves.getFoliageColour(player);
+		} else {
+			return tileLeaves.getFruitColour();
 		}
 	}
 	

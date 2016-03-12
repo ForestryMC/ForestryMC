@@ -11,6 +11,7 @@
 package forestry.arboriculture;
 
 import javax.annotation.Nonnull;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -42,12 +43,13 @@ public class FruitProviderRipening extends FruitProviderNone {
 		products.put(product, modifier);
 	}
 
-	public FruitProviderRipening setColours(int ripe, int callow) {
-		colourCallow = callow;
+	public FruitProviderRipening setColours(Color ripe, Color callow) {
+		colourCallow = callow.getRGB();
+		int ripeRGB = ripe.getRGB();
 
-		diffR = (ripe >> 16 & 255) - (callow >> 16 & 255);
-		diffG = (ripe >> 8 & 255) - (callow >> 8 & 255);
-		diffB = (ripe & 255) - (callow & 255);
+		diffR = (ripeRGB >> 16 & 255) - (colourCallow >> 16 & 255);
+		diffG = (ripeRGB >> 8 & 255) - (colourCallow >> 8 & 255);
+		diffB = (ripeRGB & 255) - (colourCallow & 255);
 
 		return this;
 	}
@@ -108,8 +110,6 @@ public class FruitProviderRipening extends FruitProviderNone {
 		int g = (colourCallow >> 8 & 255) + (int) (diffG * stage);
 		int b = (colourCallow & 255) + (int) (diffB * stage);
 
-		// System.out.println(String.format("Calcultated rgb %s/%s/%s from %s and %s, resulting in %s",
-		// r, g, b, colourCallow, stage, (r & 255) << 16 | (g & 255) << 8 | b & 255));
 		return (r & 255) << 16 | (g & 255) << 8 | b & 255;
 	}
 

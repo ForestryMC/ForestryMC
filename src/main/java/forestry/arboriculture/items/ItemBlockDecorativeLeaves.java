@@ -9,6 +9,7 @@ import forestry.arboriculture.PluginArboriculture;
 import forestry.arboriculture.blocks.BlockDecorativeLeaves;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.core.items.ItemBlockForestry;
+import forestry.core.utils.ColourUtil;
 import forestry.core.utils.Translator;
 
 public class ItemBlockDecorativeLeaves extends ItemBlockForestry<BlockDecorativeLeaves> {
@@ -41,10 +42,12 @@ public class ItemBlockDecorativeLeaves extends ItemBlockForestry<BlockDecorative
 		ITreeGenome genome = treeDefinition.getGenome();
 
 		if (renderPass == 0) {
-			return genome.getPrimary().getLeafSpriteProvider().getColor(false);
+			int rgb = genome.getPrimary().getLeafSpriteProvider().getColor(false);
+			return ColourUtil.rgbToBgr(rgb);
 		} else {
 			IFruitProvider fruitProvider = genome.getFruitProvider();
-			return fruitProvider.getDecorativeColor();
+			int rgb = fruitProvider.getDecorativeColor();
+			return ColourUtil.rgbToBgr(rgb);
 		}
 	}
 }

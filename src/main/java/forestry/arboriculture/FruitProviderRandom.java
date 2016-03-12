@@ -11,6 +11,7 @@
 package forestry.arboriculture;
 
 import javax.annotation.Nonnull;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -40,13 +41,18 @@ public class FruitProviderRandom extends FruitProviderNone {
 		products.put(product, modifier);
 	}
 
-	public FruitProviderRandom setColour(int colour) {
-		this.colour = colour;
+	public FruitProviderRandom setColour(Color colour) {
+		this.colour = colour.getRGB();
 		return this;
 	}
 
 	@Override
 	public int getColour(ITreeGenome genome, IBlockAccess world, BlockPos pos, int ripeningTime) {
+		return colour;
+	}
+
+	@Override
+	public int getDecorativeColor() {
 		return colour;
 	}
 

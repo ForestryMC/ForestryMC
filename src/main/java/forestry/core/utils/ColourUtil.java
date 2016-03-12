@@ -12,6 +12,12 @@ package forestry.core.utils;
 
 public class ColourUtil {
 
+	public static int rgbToBgr(int rgb) {
+		int r = rgb >> 16 & 0xFF;
+		int b = rgb & 0xFF;
+		return rgb & 0xFF00FF00 | r | (b << 16);
+	}
+
 	public static int addRGBComponents(int colour, int r, int g, int b) {
 		r = ((colour & 0xff0000) >> 16) + r;
 		g = ((colour & 0xff00) >> 8) + g;
