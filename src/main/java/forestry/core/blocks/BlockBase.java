@@ -73,7 +73,7 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 	public BlockBase(Class<P> machinePropertiesClass) {
 		super(Material.iron);
 
-		this.hasTESR = IBlockTypeTesr.class.isAssignableFrom(machinePropertiesClass);;
+		this.hasTESR = IBlockTypeTesr.class.isAssignableFrom(machinePropertiesClass);
 		this.hasCustom = IBlockTypeCustom.class.isAssignableFrom(machinePropertiesClass);
 		this.lightOpacity = this.isOpaqueCube() ? 255 : 0;
 		this.machinePropertiesClass = machinePropertiesClass;
@@ -86,6 +86,10 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 		this.blockState = this.createBlockState();
 		IBlockState state = this.blockState.getBaseState().withProperty(FACE, EnumFacing.NORTH);
 		this.setDefaultState(state);
+	}
+
+	public PropertyEnum<P> getTypeProperty() {
+		return TYPE;
 	}
 
 	@SafeVarargs

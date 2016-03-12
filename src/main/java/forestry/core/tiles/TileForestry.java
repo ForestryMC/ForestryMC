@@ -226,7 +226,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 		this.orientation = orientation;
 		this.setNeedsNetworkUpdate();
 		worldObj.notifyBlockOfStateChange(getPos(), BlockUtil.getBlock(worldObj, getPos()));
-		worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
+		worldObj.markBlockForUpdate(getPos());
 	}
 
 	protected final void setNeedsNetworkUpdate() {

@@ -14,7 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.BlockPos;
+import net.minecraft.world.World;
 
 import forestry.core.blocks.BlockBase;
 import forestry.core.config.Config;
@@ -51,5 +54,18 @@ public abstract class TileBase extends TileForestry implements IHintSource {
 			return block.getUnlocalizedName() + "." + blockBase.getNameFromMeta(meta) + ".name";
 		}
 		return super.getUnlocalizedTitle();
+	}
+
+	@Override
+	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
+		Block oldBlock = oldState.getBlock();
+		Block newBlock = newState.getBlock();
+		if (oldBlock != newBlock || !(oldBlock instanceof BlockBase) || !(newBlock instanceof BlockBase)) {
+			return true;
+		}
+
+		BlockBase oldBlockBase = (BlockBase) oldBlock;
+		BlockBase newBlockBase = (BlockBase) newBlock;
+		return oldState.getValue(oldBlockBase.getTypeProperty()) != newState.getValue(newBlockBase.getTypeProperty());
 	}
 }

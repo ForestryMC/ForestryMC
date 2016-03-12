@@ -12,10 +12,10 @@ package forestry.arboriculture.tiles;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
+import java.util.List;
 
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
@@ -387,7 +387,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 			return;
 		}
 		colourFruits = newColourFruits;
-		worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
+		worldObj.markBlockForUpdate(getPos());
 	}
 
 	/* IFRUITBEARER */
@@ -398,10 +398,10 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 			return Collections.emptyList();
 		}
 
-		ItemStack[] produceStacks = tree.produceStacks(worldObj, getPos(), getRipeningTime());
+		List<ItemStack> produceStacks = tree.produceStacks(worldObj, getPos(), getRipeningTime());
 		ripeningTime = 0;
 		sendNetworkUpdateRipening();
-		return Arrays.asList(produceStacks);
+		return produceStacks;
 	}
 
 	@Override

@@ -16,7 +16,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 
 import forestry.arboriculture.network.IRipeningPacketReceiver;
-import forestry.arboriculture.tiles.TileFruitPod;
 import forestry.arboriculture.tiles.TileLeaves;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
@@ -30,11 +29,6 @@ public class PacketRipeningUpdate extends PacketCoordinates implements IForestry
 	private int value;
 
 	public PacketRipeningUpdate() {
-	}
-
-	public PacketRipeningUpdate(TileFruitPod fruitPod) {
-		super(fruitPod);
-		value = fruitPod.getMaturity();
 	}
 
 	public PacketRipeningUpdate(TileLeaves leaves) {

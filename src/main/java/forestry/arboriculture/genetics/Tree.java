@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Map;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -424,18 +425,21 @@ public class Tree extends Individual implements ITree, IPlantable {
 		return genome.getPrimary().getSuitableFruit().contains(genome.getFruitProvider().getFamily());
 	}
 
+	@Nonnull
 	@Override
-	public ItemStack[] getProduceList() {
+	public Map<ItemStack, Float> getProducts() {
 		return genome.getFruitProvider().getProducts();
 	}
 
+	@Nonnull
 	@Override
-	public ItemStack[] getSpecialtyList() {
+	public Map<ItemStack, Float> getSpecialties() {
 		return genome.getFruitProvider().getSpecialty();
 	}
 
+	@Nonnull
 	@Override
-	public ItemStack[] produceStacks(World world, BlockPos pos, int ripeningTime) {
+	public List<ItemStack> produceStacks(World world, BlockPos pos, int ripeningTime) {
 		return genome.getFruitProvider().getFruits(genome, world, pos, ripeningTime);
 	}
 

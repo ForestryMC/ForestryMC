@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.models.baker;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
@@ -277,7 +278,7 @@ public class ModelBaker implements IModelBaker {
 		addFace(EnumFacing.EAST, isEdge, to, from, defUVs, sprite);
 	}
 
-	protected void addFace(EnumFacing face, boolean isEdge, Vector3f to, Vector3f from, float[] defUVs2, TextureAtlasSprite texture) {
+	protected void addFace(@Nonnull EnumFacing face, boolean isEdge, Vector3f to, Vector3f from, float[] defUVs2, TextureAtlasSprite texture) {
 		faces.add(new ModelBakerFace(face, isEdge, colorIndex, to, from, defUVs2, texture));
 	}
 

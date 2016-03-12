@@ -162,7 +162,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	public void handleItemStackForDisplay(ItemStack itemStack) {
 		if (!ItemStack.areItemStacksEqual(itemStack, individualOnDisplayClient)) {
 			individualOnDisplayClient = itemStack;
-			worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
+			worldObj.markBlockForUpdate(getPos());
 		}
 	}
 

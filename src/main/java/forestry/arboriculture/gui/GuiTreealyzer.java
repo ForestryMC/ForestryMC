@@ -263,7 +263,7 @@ public class GuiTreealyzer extends GuiAlyzer {
 		textLayout.newLine();
 
 		int x = COLUMN_0;
-		for (ItemStack stack : tree.getProduceList()) {
+		for (ItemStack stack : tree.getProducts().keySet()) {
 			itemRender.renderItemIntoGUI(stack, guiLeft + x, guiTop + textLayout.getLineY());
 			x += 18;
 			if (x > 148) {
@@ -281,7 +281,7 @@ public class GuiTreealyzer extends GuiAlyzer {
 		textLayout.newLine();
 
 		x = COLUMN_0;
-		for (ItemStack stack : tree.getSpecialtyList()) {
+		for (ItemStack stack : tree.getSpecialties().keySet()) {
 			itemRender.renderItemIntoGUI(stack, guiLeft + x, guiTop + textLayout.getLineY());
 			x += 18;
 			if (x > 148) {

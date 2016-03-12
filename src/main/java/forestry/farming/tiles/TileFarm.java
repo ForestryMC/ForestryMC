@@ -89,7 +89,7 @@ public abstract class TileFarm extends MultiblockTileEntityForestry<MultiblockLo
 	public void setFarmBlockTexture(EnumFarmBlockTexture farmBlockTexture) {
 		if (this.farmBlockTexture != farmBlockTexture) {
 			this.farmBlockTexture = farmBlockTexture;
-			worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
+			worldObj.markBlockForUpdate(getPos());
 		}
 	}
 

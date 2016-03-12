@@ -11,6 +11,7 @@
 package forestry.core.utils;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -30,7 +31,6 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.oredict.OreDictionary;
 
-import forestry.core.config.Constants;
 import forestry.core.tiles.TileEngine;
 import forestry.core.utils.vect.Vect;
 import forestry.core.utils.vect.VectUtil;
@@ -79,39 +79,37 @@ public abstract class BlockUtil {
 		return receptor.canConnectEnergy(side);
 	}
 
-	public static boolean tryPlantPot(World world, BlockPos pos, Block block) {
+	public static boolean tryPlantCocoaPod(World world, BlockPos pos) {
 
-		int direction = getDirectionalMetadata(world, pos);
-		if (direction < 0) {
+		EnumFacing facing = getValidPodFacing(world, pos);
+		if (facing == null) {
 			return false;
 		}
 
-		world.setBlockState(pos, block.getStateFromMeta(direction), Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
+		IBlockState state = Blocks.cocoa.getDefaultState().withProperty(BlockCocoa.FACING, facing);
+		world.setBlockState(pos, state);
 		return true;
 	}
-	
-	public static int getDirectionalMetadata(World world, BlockPos pos) {
-		for (int i = 2; i < 6; i++) {
-			if (!isValidPot(world, pos, EnumFacing.values()[i])) {
-				continue;
+
+	@Nullable
+	public static EnumFacing getValidPodFacing(World world, BlockPos pos) {
+		for (EnumFacing facing : EnumFacing.HORIZONTALS) {
+			if (isValidPodLocation(world, pos, facing)) {
+				return facing;
 			}
-			return i;
 		}
-		return -1;
+		return null;
 	}
 	
-	public static boolean isValidPot(World world, BlockPos pos, EnumFacing direction) {
+	public static boolean isValidPodLocation(World world, BlockPos pos, EnumFacing direction) {
 		pos = pos.offset(direction);
 		IBlockState state = world.getBlockState(pos);
-		if (state.getBlock() == Blocks.log) {
+		Block block = state.getBlock();
+		if (block == Blocks.log) {
 			return state.getValue(BlockPlanks.VARIANT) == BlockPlanks.EnumType.JUNGLE;
 		} else {
-			return state.getBlock().isWood(world, pos);
+			return block.isWood(world, pos);
 		}
-	}
-
-	public static int getMaturityPod(IBlockState state) {
-		return state.getValue(BlockCocoa.AGE);
 	}
 
 	public static boolean isWoodSlabBlock(Block block, IBlockAccess world, BlockPos pos) {

@@ -11,6 +11,7 @@
 package forestry.farming.logic;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockCocoa;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -42,7 +43,7 @@ public class FarmableCocoa implements IFarmable {
 			return null;
 		}
 		int meta = BlockUtil.getBlockMetadata(world, pos);
-		if (BlockUtil.getMaturityPod(BlockUtil.getBlockState(world, pos)) < 2) {
+		if (BlockUtil.getBlockState(world, pos).getValue(BlockCocoa.AGE) < 2) {
 			return null;
 		}
 
@@ -61,7 +62,7 @@ public class FarmableCocoa implements IFarmable {
 
 	@Override
 	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
-		return BlockUtil.tryPlantPot(world, pos, COCOA_PLANT);
+		return BlockUtil.tryPlantCocoaPod(world, pos);
 	}
 
 }

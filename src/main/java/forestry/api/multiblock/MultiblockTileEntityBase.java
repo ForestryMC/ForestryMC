@@ -5,14 +5,12 @@
  ******************************************************************************/
 package forestry.api.multiblock;
 
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
-import net.minecraft.world.World;
 
 /**
  * Base logic class for Multiblock-connected tile entities.
@@ -70,11 +68,6 @@ public abstract class MultiblockTileEntityBase<T extends IMultiblockLogic> exten
 	public final void validate() {
 		super.validate();
 		multiblockLogic.validate(worldObj, this);
-	}
-	
-	@Override
-	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate) {
-		return oldState.getBlock() != newSate.getBlock();
 	}
 
 	/* Network Communication */

@@ -35,6 +35,7 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.EnumWoodType;
+import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
@@ -43,7 +44,6 @@ import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
 import forestry.arboriculture.blocks.BlockArbLog;
 import forestry.arboriculture.blocks.BlockArbSlab;
-import forestry.arboriculture.blocks.BlockFruitPod;
 import forestry.arboriculture.blocks.BlockRegistryArboriculture;
 import forestry.arboriculture.blocks.BlockTypeArboricultureTesr;
 import forestry.arboriculture.commands.CommandTree;
@@ -53,6 +53,7 @@ import forestry.arboriculture.genetics.TreeFactory;
 import forestry.arboriculture.genetics.TreeMutationFactory;
 import forestry.arboriculture.genetics.TreeRoot;
 import forestry.arboriculture.genetics.TreekeepingMode;
+import forestry.arboriculture.genetics.alleles.AlleleFruit;
 import forestry.arboriculture.genetics.alleles.AlleleGrowth;
 import forestry.arboriculture.genetics.alleles.AlleleLeafEffect;
 import forestry.arboriculture.items.ItemRegistryArboriculture;
@@ -428,23 +429,8 @@ public class PluginArboriculture extends BlankForestryPlugin {
 	@SideOnly(Side.CLIENT)
 	public void registerSprites(TextureStitchEvent.Pre event) {
 		TextureLeaves.registerAllSprites();
-		BlockFruitPod.registerSprites();
-	}
-
-	/*@SubscribeEvent
-	public void fuelBurnTimeEvent(FuelBurnTimeEvent fuelBurnTimeEvent) {
-		Item item = fuelBurnTimeEvent.fuel.getItem();
-		Block block = Block.getBlockFromItem(item);
-
-		if (block instanceof IWoodTyped) {
-			IWoodTyped woodTypedBlock = (IWoodTyped) block;
-			if (woodTypedBlock.isFireproof()) {
-				fuelBurnTimeEvent.burnTime = 0;
-				fuelBurnTimeEvent.setResult(Event.Result.DENY);
-			} else if (blocks.slabs == block) {
-				fuelBurnTimeEvent.burnTime = 150;
-				fuelBurnTimeEvent.setResult(Event.Result.DENY);
-			}
+		for (IAlleleFruit alleleFruit : AlleleFruit.getFruitAlleles()) {
+			alleleFruit.getProvider().registerSprites();
 		}
-	}*/
+	}
 }

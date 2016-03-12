@@ -5,6 +5,11 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Map;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -29,20 +34,25 @@ public interface IFruitProvider {
 	int getRipeningPeriod();
 
 	// / Products, Chance
-	ItemStack[] getProducts();
+	@Nonnull
+	Map<ItemStack, Float> getProducts();
 
 	// / Specialty, Chance
-	ItemStack[] getSpecialty();
+	@Nonnull
+	Map<ItemStack, Float> getSpecialty();
 
-	ItemStack[] getFruits(ITreeGenome genome, World world, BlockPos pos, int ripeningTime);
+	@Nonnull
+	List<ItemStack> getFruits(ITreeGenome genome, World world, BlockPos pos, int ripeningTime);
 
 	/**
 	 * @return Short, human-readable identifier used in the treealyzer.
 	 */
 	String getDescription();
-	
+
+	@Nullable
 	String getModelName();
-	
+
+	@Nonnull
 	String getModID();
 
 	/* TEXTURE OVERLAY */

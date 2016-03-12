@@ -981,7 +981,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 
 	// forestry tree constructor
 	TreeDefinition(TreeBranchDefinition branch, String speciesName, String binomial, boolean dominant, EnumLeafType leafType, Color primary, Color secondary, EnumWoodType woodType) {
-		String uid = "forestry.tree" + this;
+		String uid = Constants.MOD_ID + ".tree" + this;
 		String unlocalizedDescription = "for.description.tree" + this;
 		String unlocalizedName = "for.trees.species." + speciesName;
 		String modelName = uid.substring("forestry.".length());

@@ -19,6 +19,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 
 import forestry.api.arboriculture.EnumWoodType;
+import forestry.api.arboriculture.IAlleleFruit;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.genetics.alleles.AlleleFruit;
 import forestry.arboriculture.items.ItemBlockDecorativeLeaves;
@@ -46,8 +47,8 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 	public final BlockForestryLeaves leaves;
 	public final List<BlockDecorativeLeaves> leavesDecorative;
 	private final Map<String, ItemStack> speciesToLeavesDecorative;
-	public final BlockFruitPod pods;
-	
+	public final Map<String, BlockFruitPod> podsMap;
+
 	public final BlockArboriculture arboriculture;
 
 	public BlockRegistryArboriculture() {
@@ -146,7 +147,7 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 		leavesDecorative = BlockDecorativeLeaves.create();
 		speciesToLeavesDecorative = new HashMap<>();
 		for (BlockDecorativeLeaves leaves : leavesDecorative) {
-			registerBlock(leaves, ItemBlockDecorativeLeaves.class, "leaves.decorative." + leaves.getBlockNumber());
+			registerBlock(leaves, new ItemBlockDecorativeLeaves(leaves), "leaves.decorative." + leaves.getBlockNumber());
 			registerOreDictWildcard("treeLeaves", leaves);
 
 			for (IBlockState state : leaves.getBlockState().getValidStates()) {
@@ -159,13 +160,22 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 		
 		// Pods
 		AlleleFruit.createAlleles();
-		pods = registerBlock(new BlockFruitPod(), ItemBlockForestry.class, "pods");
-		
+		podsMap = new HashMap<>();
+		for (BlockFruitPod pod : BlockFruitPod.create()) {
+			IAlleleFruit fruit = pod.getFruit();
+			registerBlock(pod, "pods." + fruit.getModelName());
+			podsMap.put(fruit.getUID(), pod);
+		}
+
 		// Machines
 		arboriculture = registerBlock(new BlockArboriculture(), ItemBlockForestry.class, "arboriculture");
 	}
 
 	public ItemStack getDecorativeLeaves(String speciesUid) {
 		return speciesToLeavesDecorative.get(speciesUid);
+	}
+
+	public BlockFruitPod getFruitPod(IAlleleFruit fruit) {
+		return podsMap.get(fruit.getUID());
 	}
 }

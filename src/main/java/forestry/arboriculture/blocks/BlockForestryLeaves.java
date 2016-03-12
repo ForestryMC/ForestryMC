@@ -165,7 +165,7 @@ public class BlockForestryLeaves extends BlockLeavesBase implements ITileEntityP
 
 		// Add fruits
 		if (tile.hasFruit()) {
-			Collections.addAll(prod, tile.getTree().produceStacks((World) world, pos, tile.getRipeningTime()));
+			prod.addAll(tile.getTree().produceStacks((World) world, pos, tile.getRipeningTime()));
 		}
 
 		return prod;
@@ -345,7 +345,7 @@ public class BlockForestryLeaves extends BlockLeavesBase implements ITileEntityP
 	public void grow(World world, Random rand, BlockPos pos, IBlockState state) {
 		TileLeaves leafTile = TileUtil.getTile(world, pos, TileLeaves.class);
 		if (leafTile != null) {
-			leafTile.addRipeness(1.0f);
+			leafTile.addRipeness(0.5f);
 		}
 	}
 }

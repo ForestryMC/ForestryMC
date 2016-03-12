@@ -7,6 +7,8 @@ package forestry.api.arboriculture;
 
 import javax.annotation.Nonnull;
 import java.util.EnumSet;
+import java.util.List;
+import java.util.Map;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
@@ -43,11 +45,16 @@ public interface ITree extends IIndividual, ITreeGenData {
 	 */
 	ITree[] getSaplings(World world, GameProfile playerProfile, BlockPos pos, float modifier);
 
-	ItemStack[] getProduceList();
+	// Products, Chance
+	@Nonnull
+	Map<ItemStack, Float> getProducts();
 
-	ItemStack[] getSpecialtyList();
+	// Specialties, Chance
+	@Nonnull
+	Map<ItemStack, Float> getSpecialties();
 
-	ItemStack[] produceStacks(World world, BlockPos pos, int ripeningTime);
+	@Nonnull
+	List<ItemStack> produceStacks(World world, BlockPos pos, int ripeningTime);
 
 	/**
 	 * @return Boolean indicating whether a sapling can stay planted at the given position.

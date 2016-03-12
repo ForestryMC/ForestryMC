@@ -10,9 +10,14 @@
  ******************************************************************************/
 package forestry.arboriculture;
 
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -42,15 +47,17 @@ public class FruitProviderPod extends FruitProviderNone {
 		}
 	}
 
-	private static final ItemStack[] DUMMY = new ItemStack[0];
-
 	private final EnumPodType type;
-	private final ItemStack[] drop;
+	@Nonnull
+	private final Map<ItemStack, Float> drops;
 
 	public FruitProviderPod(String key, IFruitFamily family, EnumPodType type, ItemStack... dropOnMature) {
 		super(key, family);
 		this.type = type;
-		this.drop = dropOnMature;
+		this.drops = new HashMap<>();
+		for (ItemStack drop : dropOnMature) {
+			this.drops.put(drop, 1.0f);
+		}
 	}
 
 	@Override
@@ -58,21 +65,22 @@ public class FruitProviderPod extends FruitProviderNone {
 		return true;
 	}
 
+	@Nonnull
 	@Override
-	public ItemStack[] getFruits(ITreeGenome genome, World world, BlockPos pos, int ripeningTime) {
-		if (drop == null || drop.length == 0) {
-			return DUMMY;
+	public List<ItemStack> getFruits(ITreeGenome genome, World world, BlockPos pos, int ripeningTime) {
+		if (drops.isEmpty()) {
+			return Collections.emptyList();
 		}
 
 		if (ripeningTime >= 2) {
-			ItemStack[] dropping = new ItemStack[drop.length];
-			for (int i = 0; i < drop.length; i++) {
-				dropping[i] = drop[i].copy();
+			List<ItemStack> drops = new ArrayList<>();
+			for (ItemStack aDrop : this.drops.keySet()) {
+				drops.add(aDrop.copy());
 			}
-			return dropping;
+			return drops;
 		}
 
-		return DUMMY;
+		return Collections.emptyList();
 	}
 
 	@Override
@@ -83,27 +91,38 @@ public class FruitProviderPod extends FruitProviderNone {
 		}
 
 		if (type == EnumPodType.COCOA) {
-			return BlockUtil.tryPlantPot(world, pos, Blocks.cocoa);
+			return BlockUtil.tryPlantCocoaPod(world, pos);
 		} else {
-			return TreeManager.treeRoot.setFruitBlock(world, (IAlleleFruit) genome.getActiveAllele(EnumTreeChromosome.FRUITS),
-					genome.getSappiness(), type.uids, pos);
+			IAlleleFruit activeAllele = (IAlleleFruit) genome.getActiveAllele(EnumTreeChromosome.FRUITS);
+			return TreeManager.treeRoot.setFruitBlock(world, activeAllele, genome.getSappiness(), pos);
 		}
 	}
 	
 	@Override
 	public short getSpriteIndex(ITreeGenome genome, IBlockAccess world, BlockPos pos, int ripeningTime, boolean fancy) {
-		return type.uids[0];
+		if (ripeningTime < 0 || ripeningTime >= type.uids.length) {
+			return getDecorativeSpriteIndex();
+		}
+		return type.uids[ripeningTime];
 	}
 
 	@Override
 	public short getDecorativeSpriteIndex() {
-		return type.uids[0];
+		int index = type.uids.length - 1;
+		return type.uids[index];
+	}
+
+	@Nonnull
+	@Override
+	public Map<ItemStack, Float> getProducts() {
+		return Collections.unmodifiableMap(drops);
 	}
 
 	@Override
 	public void registerSprites() {
 	}
-	
+
+	@Nonnull
 	@Override
 	public String getModelName() {
 		return type.getModelName();

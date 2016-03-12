@@ -10,7 +10,12 @@
  ******************************************************************************/
 package forestry.arboriculture;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
@@ -67,9 +72,10 @@ public class FruitProviderNone implements IFruitProvider {
 		return family;
 	}
 
+	@Nonnull
 	@Override
-	public ItemStack[] getFruits(ITreeGenome genome, World world, BlockPos pos, int ripeningTime) {
-		return new ItemStack[0];
+	public List<ItemStack> getFruits(ITreeGenome genome, World world, BlockPos pos, int ripeningTime) {
+		return Collections.emptyList();
 	}
 
 	@Override
@@ -102,14 +108,16 @@ public class FruitProviderNone implements IFruitProvider {
 		return ripeningPeriod;
 	}
 
+	@Nonnull
 	@Override
-	public ItemStack[] getProducts() {
-		return new ItemStack[0];
+	public Map<ItemStack, Float> getProducts() {
+		return Collections.emptyMap();
 	}
 
+	@Nonnull
 	@Override
-	public ItemStack[] getSpecialty() {
-		return new ItemStack[0];
+	public Map<ItemStack, Float> getSpecialty() {
+		return Collections.emptyMap();
 	}
 
 	@Override
@@ -141,12 +149,14 @@ public class FruitProviderNone implements IFruitProvider {
 			TextureManager.registerSpriteUID(overlay.texUID, "blocks/leaves/fruits." + overlay.ident);
 		}
 	}
-	
+
+	@Nullable
 	@Override
 	public String getModelName() {
 		return null;
 	}
-	
+
+	@Nonnull
 	@Override
 	public String getModID() {
 		return Constants.MOD_ID;

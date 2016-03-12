@@ -37,6 +37,10 @@ public abstract class BlockRegistry {
 		return block;
 	}
 
+	protected <T extends Block> T registerBlock(T block, String name) {
+		return registerBlock(block, (Class<? extends ItemBlock>) null, name);
+	}
+
 	protected <T extends Block> T registerBlock(T block, Class<? extends ItemBlock> itemClass, String name, Object... itemCtorArgs) {
 		if (PluginManager.getStage() != PluginManager.Stage.REGISTER) {
 			throw new RuntimeException("Tried to register Block outside of REGISTER");

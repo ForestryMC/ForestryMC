@@ -11,10 +11,13 @@
 package forestry.arboriculture.genetics.alleles;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.init.Items;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 
 import forestry.api.arboriculture.EnumFruitFamily;
@@ -22,6 +25,7 @@ import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.IAllele;
 import forestry.arboriculture.FruitProviderNone;
 import forestry.arboriculture.FruitProviderPod;
 import forestry.arboriculture.FruitProviderRandom;
@@ -44,12 +48,14 @@ public class AlleleFruit extends AlleleCategorized implements IAlleleFruit {
 	public static IAlleleFruit fruitLemon;
 	public static IAlleleFruit fruitPlum;
 	public static IAlleleFruit fruitJujube;
+	private static List<IAlleleFruit> fruitAlleles;
+	private static List<IAlleleFruit> fruitAllelesWithModels;
 
 	public static void createAlleles() {
 		List<IAlleleFruit> fruitAlleles = Arrays.asList(
 				fruitNone = new AlleleFruit("none", new FruitProviderNone("none", null)),
 				fruitApple = new AlleleFruit("apple", new FruitProviderRandom("apple", EnumFruitFamily.POMES, new ItemStack(Items.apple), 1.0f).setColour(0xff2e2e).setOverlay("pomes")),
-				fruitCocoa = new AlleleFruit("cocoa", new FruitProviderPod("cocoa", EnumFruitFamily.JUNGLE, FruitProviderPod.EnumPodType.COCOA)),
+				fruitCocoa = new AlleleFruit("cocoa", new FruitProviderPod("cocoa", EnumFruitFamily.JUNGLE, FruitProviderPod.EnumPodType.COCOA, new ItemStack(Items.dye, 1, EnumDyeColor.BROWN.getDyeDamage()))),
 				// .setColours(0xecdca5, 0xc4d24a), true);
 				fruitChestnut = new AlleleFruit("chestnut", new FruitProviderRipening("chestnut", EnumFruitFamily.NUX, ItemFruit.EnumFruit.CHESTNUT.getStack(), 1.0f).setRipeningPeriod(6).setColours(0x7f333d, 0xc4d24a).setOverlay("nuts"), true),
 				fruitWalnut = new AlleleFruit("walnut", new FruitProviderRipening("walnut", EnumFruitFamily.NUX, ItemFruit.EnumFruit.WALNUT.getStack(), 1.0f).setRipeningPeriod(8).setColours(0xfba248, 0xc4d24a).setOverlay("nuts"), true),
@@ -63,6 +69,34 @@ public class AlleleFruit extends AlleleCategorized implements IAlleleFruit {
 		for (IAlleleFruit fruitAllele : fruitAlleles) {
 			AlleleManager.alleleRegistry.registerAllele(fruitAllele, EnumTreeChromosome.FRUITS);
 		}
+	}
+
+	public static List<IAlleleFruit> getFruitAlleles() {
+		if (fruitAlleles == null) {
+			fruitAlleles = new ArrayList<>();
+			for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
+				if (allele instanceof IAlleleFruit) {
+					IAlleleFruit alleleFruit = (IAlleleFruit) allele;
+					fruitAlleles.add(alleleFruit);
+				}
+			}
+		}
+		return fruitAlleles;
+	}
+
+	public static List<IAlleleFruit> getFruitAllelesWithModels() {
+		if (fruitAllelesWithModels == null) {
+			fruitAllelesWithModels = new ArrayList<>();
+			for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
+				if (allele instanceof IAlleleFruit) {
+					IAlleleFruit alleleFruit = (IAlleleFruit) allele;
+					if (alleleFruit.getModelName() != null) {
+						fruitAllelesWithModels.add(alleleFruit);
+					}
+				}
+			}
+		}
+		return fruitAllelesWithModels;
 	}
 
 	@Nonnull
@@ -88,7 +122,7 @@ public class AlleleFruit extends AlleleCategorized implements IAlleleFruit {
 		return getProvider().getDescription();
 	}
 
-	@Nonnull
+	@Nullable
 	@Override
 	public String getModelName() {
 		return getProvider().getModelName();

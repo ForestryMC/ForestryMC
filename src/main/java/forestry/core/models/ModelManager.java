@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
@@ -122,7 +123,7 @@ public class ModelManager implements IModelManager {
 	}
 
 	public static void registerCustomModels(ModelBakeEvent event) {
-		IRegistry registry = event.modelRegistry;
+		IRegistry<ModelResourceLocation, IBakedModel> registry = event.modelRegistry;
 		for (final BlockModelIndex index : customBlockModels) {
 			registry.putObject(index.blockModelLocation, index.model);
 			registry.putObject(index.itemModelLocation, index.model);

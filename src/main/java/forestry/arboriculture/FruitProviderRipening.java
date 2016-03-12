@@ -10,10 +10,12 @@
  ******************************************************************************/
 package forestry.arboriculture;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
@@ -26,6 +28,7 @@ import forestry.api.genetics.IFruitFamily;
 
 public class FruitProviderRipening extends FruitProviderNone {
 
+	@Nonnull
 	private final Map<ItemStack, Float> products = new HashMap<>();
 
 	private int colourCallow = 0xffffff;
@@ -62,13 +65,14 @@ public class FruitProviderRipening extends FruitProviderNone {
 		return (float) ripeningTime / ripeningPeriod;
 	}
 
+	@Nonnull
 	@Override
-	public ItemStack[] getFruits(ITreeGenome genome, World world, BlockPos pos, int ripeningTime) {
+	public List<ItemStack> getFruits(ITreeGenome genome, World world, BlockPos pos, int ripeningTime) {
 		ArrayList<ItemStack> product = new ArrayList<>();
 
 		float stage = getRipeningStage(ripeningTime);
 		if (stage < 0.5f) {
-			return new ItemStack[0];
+			return Collections.emptyList();
 		}
 
 		float modeYieldMod = TreeManager.treeRoot.getTreekeepingMode(world).getYieldModifier(genome, 1f);
@@ -79,13 +83,13 @@ public class FruitProviderRipening extends FruitProviderNone {
 			}
 		}
 
-		return product.toArray(new ItemStack[product.size()]);
+		return product;
 	}
 
+	@Nonnull
 	@Override
-	public ItemStack[] getProducts() {
-		Set<ItemStack> products = this.products.keySet();
-		return products.toArray(new ItemStack[products.size()]);
+	public Map<ItemStack, Float> getProducts() {
+		return Collections.unmodifiableMap(products);
 	}
 
 	@Override

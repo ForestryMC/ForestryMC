@@ -38,6 +38,7 @@ import forestry.apiculture.genetics.alleles.AlleleEffect;
 import forestry.apiculture.items.EnumHoneyComb;
 import forestry.apiculture.items.EnumPollenCluster;
 import forestry.core.PluginCore;
+import forestry.core.config.Constants;
 import forestry.core.genetics.alleles.AlleleHelper;
 import forestry.core.genetics.alleles.EnumAllele;
 
@@ -988,7 +989,7 @@ public enum BeeDefinition implements IBeeDefinition {
 		String lowercaseName = this.toString().toLowerCase(Locale.ENGLISH);
 		String species = "species" + WordUtils.capitalize(lowercaseName);
 
-		String uid = "forestry." + species;
+		String uid = Constants.MOD_ID + '.' + species;
 		String description = "for.description." + species;
 		String name = "for.bees.species." + lowercaseName;
 

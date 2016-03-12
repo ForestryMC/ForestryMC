@@ -19,6 +19,7 @@ import java.util.Locale;
 import java.util.Map.Entry;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -26,6 +27,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
@@ -57,6 +59,7 @@ import forestry.arboriculture.tiles.TileFruitPod;
 import forestry.arboriculture.tiles.TileSapling;
 import forestry.core.config.Constants;
 import forestry.core.genetics.SpeciesRoot;
+import forestry.core.tiles.TileUtil;
 import forestry.core.utils.BlockUtil;
 
 public class TreeRoot extends SpeciesRoot implements ITreeRoot {
@@ -219,29 +222,35 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 	}
 
 	@Override
-	public boolean setFruitBlock(World world, IAlleleFruit allele, float sappiness, short[] indices, BlockPos pos) {
+	public boolean setFruitBlock(World world, IAlleleFruit allele, float sappiness, BlockPos pos) {
 
-		int direction = BlockUtil.getDirectionalMetadata(world, pos);
-		if (direction < 0) {
+		EnumFacing facing = BlockUtil.getValidPodFacing(world, pos);
+		if (facing == null) {
 			return false;
 		}
 
-		boolean placed = world.setBlockState(pos, PluginArboriculture.blocks.pods.getStateFromMeta(direction), Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
+		BlockFruitPod fruitPod = PluginArboriculture.blocks.getFruitPod(allele);
+		if (fruitPod == null) {
+			return false;
+		}
+
+		IBlockState state = fruitPod.getDefaultState().withProperty(BlockDirectional.FACING, facing);
+		boolean placed = world.setBlockState(pos, state);
 		if (!placed) {
 			return false;
 		}
 
 		Block block = BlockUtil.getBlock(world, pos);
-		if (PluginArboriculture.blocks.pods != block) {
+		if (fruitPod != block) {
 			return false;
 		}
 
-		TileFruitPod pod = BlockFruitPod.getPodTile(world, pos);
+		TileFruitPod pod = TileUtil.getTile(world, pos, TileFruitPod.class);
 		if (pod == null) {
 			world.setBlockToAir(pos);
 			return false;
 		}
-		pod.setFruit(allele, sappiness, indices);
+		pod.setProperties(allele, sappiness);
 		world.markBlockForUpdate(pos);
 		return true;
 	}
