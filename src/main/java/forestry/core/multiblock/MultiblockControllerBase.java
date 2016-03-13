@@ -537,24 +537,6 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 		}
 	}
 	
-	protected BlockPos getMaxXYCoord() {
-		BlockPos maximumCoord = new BlockPos(0, 0, 0);
-
-		for (IMultiblockComponent part : connectedParts) {
-			BlockPos partCoords = part.getCoordinates();
-			int maxX = maximumCoord.getX();
-			int maxZ = maximumCoord.getZ();
-			if (partCoords.getX() > maximumCoord.getX()) {
-				maxX = partCoords.getX();
-			}
-			if (partCoords.getZ() > maximumCoord.getZ()) {
-				maxZ = partCoords.getZ();
-			}
-			maximumCoord = new BlockPos(maxX, 0, maxZ);
-		}
-		return maximumCoord;
-	}
-	
 	/**
 	 * @return The minimum bounding-box coordinate containing this machine's blocks.
 	 */

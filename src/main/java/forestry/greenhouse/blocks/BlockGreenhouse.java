@@ -16,6 +16,7 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
@@ -23,6 +24,7 @@ import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -121,11 +123,6 @@ public abstract class BlockGreenhouse extends BlockStructure {
 	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
 		list.add(new ItemStack(item));
 	}
-	
-	@Override
-	public int damageDropped(IBlockState state) {
-		return getMetaFromState(state);
-	}
 
 	@Override
 	public TileEntity createTileEntity(World world, IBlockState state) {
@@ -159,17 +156,43 @@ public abstract class BlockGreenhouse extends BlockStructure {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public EnumWorldBlockLayer getBlockLayer() {
+		if(getGreenhouseType() == BlockGreenhouseType.GLASS){
+			return EnumWorldBlockLayer.TRANSLUCENT;
+		}
 		return EnumWorldBlockLayer.CUTOUT;
 	}
 	
 	@Override
-	public boolean isNormalCube(IBlockAccess world, BlockPos pos) {
-		IBlockState state = world.getBlockState(pos);
-		if(getGreenhouseType() == BlockGreenhouseType.SPRINKLER){
-			return false;
-		}
-		return super.isNormalCube(world, pos);
+	public boolean isFullCube() {
+		return getGreenhouseType() != BlockGreenhouseType.GLASS && getGreenhouseType() == BlockGreenhouseType.SPRINKLER;
 	}
+	
+	@Override
+	public boolean isOpaqueCube() {
+		return getGreenhouseType() != BlockGreenhouseType.GLASS;
+	}
+	
+    @SideOnly(Side.CLIENT)
+    public boolean shouldSideBeRendered(IBlockAccess worldIn, BlockPos pos, EnumFacing side)
+    {
+        IBlockState iblockstate = worldIn.getBlockState(pos);
+        Block block = iblockstate.getBlock();
+
+        if (getGreenhouseType() == BlockGreenhouseType.GLASS)
+        {
+            if (worldIn.getBlockState(pos.offset(side.getOpposite())) != iblockstate)
+            {
+                return true;
+            }
+
+            if (block == this)
+            {
+                return false;
+            }
+        }
+
+        return block == this ? false : super.shouldSideBeRendered(worldIn, pos, side);
+    }
 	
 	@SideOnly(Side.CLIENT)
 	@Override

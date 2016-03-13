@@ -5,6 +5,7 @@ import forestry.greenhouse.blocks.BlockGreenhouseType;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockModelShapes;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
@@ -45,11 +46,24 @@ public class ModelGreenhouse extends ModelBlockOverlay<BlockGreenhouse> {
 				BlockModelShapes modelShapes = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes();
 				baker.addBakedModel(modelShapes.getModelForState(Block.getBlockFromItem(camouflageBlockStack.getItem()).getStateFromMeta(camouflageBlockStack.getItemDamage())));
 			}
+			else if(block.getGreenhouseType() == BlockGreenhouseType.GLASS){
+				TextureAtlasSprite glassSprite = BlockGreenhouseType.getSprite(BlockGreenhouseType.GLASS, null);
+				baker.addBlockModel(block, pos, BlockGreenhouseType.getSprite(BlockGreenhouseType.GLASS, null), 100);
+				baker.setParticleSprite(glassSprite);
+			}else{
+				TextureAtlasSprite plainSprite = BlockGreenhouseType.getSprite(BlockGreenhouseType.PLAIN, null);
+				baker.addBlockModel(block, pos, BlockGreenhouseType.getSprite(BlockGreenhouseType.PLAIN, null), 100);
+				baker.setParticleSprite(plainSprite);
+			}
 		}else{
 			if(block.getGreenhouseType() == BlockGreenhouseType.GLASS){
+				TextureAtlasSprite glassSprite = BlockGreenhouseType.getSprite(BlockGreenhouseType.GLASS, null);
 				baker.addBlockModel(block, pos, BlockGreenhouseType.getSprite(BlockGreenhouseType.GLASS, null), 100);
+				baker.setParticleSprite(glassSprite);
 			}else{
+				TextureAtlasSprite plainSprite = BlockGreenhouseType.getSprite(BlockGreenhouseType.PLAIN, null);
 				baker.addBlockModel(block, pos, BlockGreenhouseType.getSprite(BlockGreenhouseType.PLAIN, null), 100);
+				baker.setParticleSprite(plainSprite);
 			}
 		}
 		if(block.getGreenhouseType() != BlockGreenhouseType.PLAIN && block.getGreenhouseType() != BlockGreenhouseType.GLASS){

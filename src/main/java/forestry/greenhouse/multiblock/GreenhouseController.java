@@ -42,6 +42,7 @@ import forestry.core.tiles.ILiquidTankTile;
 import forestry.energy.EnergyManager;
 import forestry.greenhouse.blocks.BlockGreenhouse;
 import forestry.greenhouse.network.packets.PacketCamouflageUpdate;
+import forestry.greenhouse.tiles.TileGreenhouseSprinkler;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -342,6 +343,20 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	}
 	
 	@Override
+	protected void isBlockGoodForInterior(World world, BlockPos pos) throws MultiblockValidationException {
+	}
+	
+	@Override
+	public boolean isInGreenhouse(BlockPos pos) {
+		for(InternalBlock inerBlock : internalBlocks){
+			if(inerBlock.pos.equals(pos)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	@Override
 	protected void isMachineWhole() throws MultiblockValidationException {
 		int minX = getSizeLimits().getMinimumXSize();
 		int minY = getSizeLimits().getMinimumYSize();
@@ -442,7 +457,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 						}
 					} else {
 						if (part != null) {
-							if (!myClass.equals(part.getMultiblockLogic().getController().getClass())) {
+							if (myClass.equals(part.getMultiblockLogic().getController().getClass())) {
 								throw new MultiblockValidationException(StatCollector.translateToLocalFormatted("for.multiblock.error.invalid.part", x, y, z, myClass.getSimpleName()));
 							}
 							isGoodForInterior(part);
@@ -453,31 +468,49 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 				}
 			}
 			if(isNextRoof){
-				addInternalBlock(new InternalBlock(getMinimumCoord().add(1, 1, 1)), internalBlocks);
-			}else{
-				throw new MultiblockValidationException(StatCollector.translateToLocalFormatted("for.multiblock.error.space.closed"));
+				InternalBlock iB = new InternalBlock(getMinimumCoord().add(1, 1, 1));
+				internalBlocks.add(iB);
+				addInternalBlock(iB, internalBlocks);
+				break;
 			}
+		}
+		if(internalBlocks.isEmpty()){
+			throw new MultiblockValidationException(StatCollector.translateToLocalFormatted("for.multiblock.error.space.closed"));
 		}
 		this.internalBlocks.addAll(internalBlocks);
 	}
 	
-	private InternalBlock addInternalBlock(InternalBlock internalBlock, List<InternalBlock> internalBlocks) throws MultiblockValidationException{
+	private void addInternalBlock(InternalBlock internalBlock, List<InternalBlock> internalBlocks) throws MultiblockValidationException{
 		isBlockGoodForInterior(worldObj, internalBlock.pos);
 		for(Map.Entry<EnumFacing, Boolean> entry : internalBlock.testetFaces.entrySet()){
 			if(!entry.getValue()){
 				BlockPos posFacing = new BlockPos(internalBlock.pos.getX() + entry.getKey().getFrontOffsetX(), internalBlock.pos.getY() + entry.getKey().getFrontOffsetY(), internalBlock.pos.getZ() + entry.getKey().getFrontOffsetZ());
 				BlockPos minPos = getMinimumCoord();
-				BlockPos maxPos = getMaxXYCoord();
+				BlockPos maxPos = getMaximumCoord();
 				if(minPos.getX() > posFacing.getX() || minPos.getZ() > posFacing.getZ() || maxPos.getX() < posFacing.getX() || maxPos.getZ() < posFacing.getZ()){
 					throw new MultiblockValidationException(StatCollector.translateToLocalFormatted("for.multiblock.error.space.closed"));
 				}
-				if(worldObj.getTileEntity(posFacing) instanceof IGreenhouseComponent && worldObj.getBlockState(posFacing).getBlock().isSideSolid(worldObj, posFacing, entry.getKey())){
-					entry.setValue(true);
+				
+				TileEntity tile = worldObj.getTileEntity(posFacing);
+				
+				if(tile instanceof IGreenhouseComponent){
+					if(((IGreenhouseComponent) tile).getMultiblockLogic().getController() != this){
+						throw new MultiblockValidationException(StatCollector.translateToLocalFormatted("for.multiblock.error.not.connected.part", posFacing.getX(), posFacing.getY(), posFacing.getZ()));
+					}
+					else if(!(tile instanceof TileGreenhouseSprinkler)){
+						entry.setValue(true);
+					}
+				}else{
+					InternalBlock iB = new InternalBlock(posFacing, entry.getKey().getOpposite(), internalBlock);
+					if(!internalBlocks.contains(iB)){
+						internalBlocks.add(iB);
+						addInternalBlock(iB, internalBlocks);
+					}else{
+						entry.setValue(true);
+					}
 				}
-				internalBlocks.add(addInternalBlock(new InternalBlock(posFacing, entry.getKey(), internalBlock), internalBlocks));
 			}
 		}
-		return internalBlock;
 	}
 	
 	@Override
@@ -485,24 +518,33 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		return CamouflageType.DEFAULT;
 	}
 
-	private class InternalBlock{
+	private static class InternalBlock{
 		public BlockPos pos;
 		public EnumMap<EnumFacing, Boolean> testetFaces = Maps.newEnumMap(EnumFacing.class);
 		public InternalBlock root;
 		
-		public InternalBlock(BlockPos pos) {
+		private InternalBlock(BlockPos pos) {
 			this.pos = pos;
 			for(EnumFacing facing : EnumFacing.VALUES){
 				testetFaces.put(facing, false);
 			}
 		}
 		
-		public InternalBlock(BlockPos pos, EnumFacing facing, InternalBlock root) {
+		private InternalBlock(BlockPos pos, EnumFacing facing, InternalBlock root) {
 			this.pos = pos;
 			for(EnumFacing f : EnumFacing.VALUES){
-				testetFaces.put(facing, f == facing);
+				testetFaces.put(f, f == facing);
 			}
 			this.root = root;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if(!(obj instanceof InternalBlock)){
+				return false;
+			}
+			InternalBlock ib = (InternalBlock) obj;
+			return ib.pos.equals(pos);
 		}
 	}
 

@@ -14,6 +14,7 @@ import forestry.core.fluids.FakeTankManager;
 import forestry.core.fluids.ITankManager;
 import forestry.core.multiblock.FakeMultiblockController;
 import forestry.energy.EnergyManager;
+import net.minecraft.util.BlockPos;
 
 public class FakeGreenhouseController extends FakeMultiblockController implements IGreenhouseControllerInternal {
 	public static final FakeGreenhouseController instance = new FakeGreenhouseController();
@@ -30,6 +31,11 @@ public class FakeGreenhouseController extends FakeMultiblockController implement
 	@Override
 	public EnergyManager getEnergyManager() {
 		return null;
+	}
+	
+	@Override
+	public boolean isInGreenhouse(BlockPos pos) {
+		return false;
 	}
 
 }

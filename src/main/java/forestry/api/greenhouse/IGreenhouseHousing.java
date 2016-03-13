@@ -8,14 +8,14 @@ package forestry.api.greenhouse;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.IErrorLogicSource;
+import forestry.core.tiles.IClimatised;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
-public interface IGreenhouseHousing extends IErrorLogicSource {
-
-	EnumTemperature getTemperature();
-
-	EnumHumidity getHumidity();
+public interface IGreenhouseHousing extends IErrorLogicSource, IClimatised {
 
 	World getWorld();
+	
+	boolean isInGreenhouse(BlockPos pos);
 	
 }

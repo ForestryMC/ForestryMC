@@ -12,11 +12,8 @@ package forestry.greenhouse.proxy;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.resources.model.ModelResourceLocation;
-import net.minecraft.item.ItemStack;
 import forestry.core.models.BlockModelIndex;
 import forestry.core.proxy.Proxies;
-import forestry.farming.PluginFarming;
-import forestry.farming.models.ModelFarmBlock;
 import forestry.greenhouse.PluginGreenhouse;
 import forestry.greenhouse.blocks.BlockGreenhouseType;
 import forestry.greenhouse.models.ModelGreenhouse;

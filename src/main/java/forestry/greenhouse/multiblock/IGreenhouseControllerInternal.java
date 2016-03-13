@@ -20,7 +20,7 @@ import forestry.core.network.IStreamableGui;
 import forestry.core.tiles.IClimatised;
 import forestry.energy.EnergyManager;
 
-public interface IGreenhouseControllerInternal extends IGreenhouseController, IMultiblockControllerInternal, IClimatised, IRestrictedAccess, IStreamableGui {
+public interface IGreenhouseControllerInternal extends IGreenhouseController, IMultiblockControllerInternal, IRestrictedAccess, IStreamableGui {
 
 	ITankManager getTankManager();
 	
