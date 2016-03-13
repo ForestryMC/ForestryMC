@@ -414,7 +414,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			registerMutation(Spruce, Larch, 10);
 		}
 	},
-	Sequioa(TreeBranchDefinition.SEQUOIA, "coastSequoia", "sempervirens", false, EnumLeafType.CONIFERS, new Color(0x418e71), new Color(0x569896), EnumWoodType.SEQUOIA) {
+	Sequoia(TreeBranchDefinition.SEQUOIA, "coastSequoia", "sempervirens", false, EnumLeafType.CONIFERS, new Color(0x418e71), new Color(0x569896), EnumWoodType.SEQUOIA) {
 		@Override
 		public WorldGenerator getWorldGenerator(ITreeGenData tree) {
 			return new WorldGenSequoia(tree);
