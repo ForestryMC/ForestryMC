@@ -77,7 +77,7 @@ public abstract class ContainerTile<T extends TileEntity> extends ContainerFores
 			IErrorLogicSource errorLogicSource = (IErrorLogicSource) tile;
 			ImmutableSet<IErrorState> errorStates = errorLogicSource.getErrorLogic().getErrorStates();
 
-			if ((previousErrorStates == null) || !errorStates.equals(previousErrorStates)) {
+			if (previousErrorStates == null || !errorStates.equals(previousErrorStates)) {
 				PacketErrorUpdate packet = new PacketErrorUpdate(tile, errorLogicSource);
 				sendPacketToCrafters(packet);
 			}

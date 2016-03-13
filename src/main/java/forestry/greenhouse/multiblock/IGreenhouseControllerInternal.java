@@ -12,15 +12,15 @@ package forestry.greenhouse.multiblock;
 
 import javax.annotation.Nullable;
 
+import forestry.api.core.ICamouflageHandler;
 import forestry.api.multiblock.IGreenhouseController;
 import forestry.core.access.IRestrictedAccess;
 import forestry.core.fluids.ITankManager;
 import forestry.core.multiblock.IMultiblockControllerInternal;
 import forestry.core.network.IStreamableGui;
-import forestry.core.tiles.IClimatised;
 import forestry.energy.EnergyManager;
 
-public interface IGreenhouseControllerInternal extends IGreenhouseController, IMultiblockControllerInternal, IRestrictedAccess, IStreamableGui {
+public interface IGreenhouseControllerInternal extends IGreenhouseController, IMultiblockControllerInternal, IRestrictedAccess, IStreamableGui, ICamouflageHandler {
 
 	ITankManager getTankManager();
 	

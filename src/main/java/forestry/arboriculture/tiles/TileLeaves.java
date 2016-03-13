@@ -168,7 +168,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 			isFruitLeaf = fruitProvider.markAsFruitLeaf(genome, worldObj, getPos());
 			if (isFruitLeaf) {
 				// Hardcoded because vanilla oak trees don't show fruits.
-				if ((species == TreeDefinition.Oak.getGenome().getPrimary()) && (fruitProvider == AlleleFruit.fruitApple.getProvider())) {
+				if (species == TreeDefinition.Oak.getGenome().getPrimary() && fruitProvider == AlleleFruit.fruitApple.getProvider()) {
 					textureIndexFruits = -1;
 				} else {
 					textureIndexFruits = fruitProvider.getSpriteIndex(genome, worldObj, getPos(), getRipeningTime(), true);

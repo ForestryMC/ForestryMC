@@ -48,7 +48,7 @@ public class ProxyNetwork {
 	}
 
 	public void sendToPlayer(IForestryPacketClient packet, EntityPlayer entityplayer) {
-		if (!(entityplayer instanceof EntityPlayerMP) || (entityplayer instanceof FakePlayer)) {
+		if (!(entityplayer instanceof EntityPlayerMP) || entityplayer instanceof FakePlayer) {
 			return;
 		}
 

@@ -43,8 +43,9 @@ public class ModelBakerModel implements IModelBakerModel {
 
 	public ModelBakerModel() {
 		general = new ArrayList<BakedQuad>();
-		for (EnumFacing f : EnumFacing.VALUES)
+		for (EnumFacing f : EnumFacing.VALUES) {
 			faces[f.ordinal()] = new ArrayList<BakedQuad>();
+		}
 		formate = DefaultVertexFormats.BLOCK;
 		isGui3d = true;
 		isAmbientOcclusion = false;

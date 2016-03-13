@@ -73,6 +73,11 @@ public final class AccessHandler implements IAccessHandler {
 	public final boolean allowsViewing(EntityPlayer player) {
 		return allowsAlteration(player) || getAccess() == EnumAccess.VIEWABLE;
 	}
+	
+	@Override
+	public boolean allowsInteracting(EntityPlayer player) {
+		return allowsAlteration(player);
+	}
 
 	@Override
 	public final boolean allowsPipeConnections() {

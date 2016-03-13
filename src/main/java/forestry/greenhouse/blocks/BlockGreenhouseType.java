@@ -16,15 +16,16 @@ import forestry.core.render.TextureManager;
 import forestry.greenhouse.blocks.BlockGreenhouse.State;
 
 public enum BlockGreenhouseType {
-	PLAIN(true),
-	GLASS(true),
+	PLAIN,
+	GLASS,
 	GEARBOX(true),
 	VALVE(true),
 	FAN(true, true),
 	HEATER(true, true),
 	DRYER(true, true),
 	CONTROL(true),
-	SPRINKLER(false, true);
+	SPRINKLER(false, true),
+	DOOR;
 	
 	public static final BlockGreenhouseType[] VALUES = values();
 	
@@ -40,21 +41,21 @@ public enum BlockGreenhouseType {
 	private static final int TYPE_DRYER = 8;
 	private static final int TYPE_CONTROL = 9;
 	
-	public final boolean canCamouflage;
+	public final boolean hasOverlaySprite;
 	public final boolean activatable;
 	
-	BlockGreenhouseType(boolean canCamouflage, boolean activatable) {
-		this.canCamouflage = canCamouflage;
+	BlockGreenhouseType(boolean hasOverlaySprite, boolean activatable) {
+		this.hasOverlaySprite = hasOverlaySprite;
 		this.activatable = activatable;
 	}
 	
-	BlockGreenhouseType(boolean canCamouflage) {
-		this.canCamouflage = canCamouflage;
+	BlockGreenhouseType(boolean hasOverlaySprite) {
+		this.hasOverlaySprite = hasOverlaySprite;
 		this.activatable = false;
 	}
 	
 	BlockGreenhouseType() {
-		this.canCamouflage = false;
+		this.hasOverlaySprite = false;
 		this.activatable = false;
 	}
 
@@ -92,15 +93,17 @@ public enum BlockGreenhouseType {
 			case VALVE:
 				return sprites.get(TYPE_VALVE);
 			case FAN:
-				if(state == null || state.getValue(BlockGreenhouse.STATE) == State.OFF)
+				if(state == null || state.getValue(BlockGreenhouse.STATE) == State.OFF) {
 					return sprites.get(TYPE_FAN_OFF);
-				else
+				} else {
 					return sprites.get(TYPE_FAN_ON);
+				}
 			case HEATER:
-				if(state == null || state.getValue(BlockGreenhouse.STATE) == State.OFF)
+				if(state == null || state.getValue(BlockGreenhouse.STATE) == State.OFF) {
 					return sprites.get(TYPE_HEATER_OFF);
-				else
+				} else {
 					return sprites.get(TYPE_HEATER_ON);
+				}
 			case DRYER:
 				return sprites.get(TYPE_DRYER);
 			case CONTROL:

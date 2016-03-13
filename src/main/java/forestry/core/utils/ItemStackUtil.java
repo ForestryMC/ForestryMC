@@ -160,7 +160,7 @@ public abstract class ItemStackUtil {
 			return;
 		}
 
-		if (giver.stackSize <= (receptor.getMaxStackSize() - receptor.stackSize)) {
+		if (giver.stackSize <= receptor.getMaxStackSize() - receptor.stackSize) {
 			receptor.stackSize += giver.stackSize;
 			giver.stackSize = 0;
 			return;
@@ -199,7 +199,7 @@ public abstract class ItemStackUtil {
 
 			boolean matched = false;
 			for (ItemStack cached : condensed) {
-				if ((cached.isItemEqual(stack) && ItemStack.areItemStackTagsEqual(cached, stack))) {
+				if (cached.isItemEqual(stack) && ItemStack.areItemStackTagsEqual(cached, stack)) {
 					cached.stackSize += stack.stackSize;
 					matched = true;
 				}
@@ -392,9 +392,9 @@ public abstract class ItemStackUtil {
 		}
 
 		float f1 = 0.7F;
-		double d = (world.rand.nextFloat() * f1) + (1.0F - f1) * 0.5D;
-		double d1 = (world.rand.nextFloat() * f1) + (1.0F - f1) * 0.5D;
-		double d2 = (world.rand.nextFloat() * f1) + (1.0F - f1) * 0.5D;
+		double d = world.rand.nextFloat() * f1 + (1.0F - f1) * 0.5D;
+		double d1 = world.rand.nextFloat() * f1 + (1.0F - f1) * 0.5D;
+		double d2 = world.rand.nextFloat() * f1 + (1.0F - f1) * 0.5D;
 		EntityItem entityitem = new EntityItem(world, x + d, y + d1, z + d2, items);
 		entityitem.setPickupDelay(delayForPickup);
 

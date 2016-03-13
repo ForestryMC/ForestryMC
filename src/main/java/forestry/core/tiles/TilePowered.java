@@ -144,7 +144,7 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
 			return 0;
 		}
 
-		return (workCounter * i) / ticksPerWorkCycle;
+		return workCounter * i / ticksPerWorkCycle;
 	}
 
 	@Override

@@ -430,7 +430,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	@Override
 	public int[] getArea() {
 		if (area == null) {
-			area = new int[]{7 + (allowedExtent * 2), 13, 7 + (allowedExtent * 2)};
+			area = new int[]{7 + allowedExtent * 2, 13, 7 + allowedExtent * 2};
 		}
 		return area;
 	}

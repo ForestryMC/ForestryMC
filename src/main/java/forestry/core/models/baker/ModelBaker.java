@@ -65,8 +65,9 @@ public class ModelBaker implements IModelBaker {
 
 	@Override
 	public void setRenderBoundsFromBlock(@Nonnull Block block) {
-		if (block == null)
+		if (block == null) {
 			return;
+		}
 
 		renderMinX = block.getBlockBoundsMinX();
 		renderMinY = block.getBlockBoundsMinY();
@@ -280,8 +281,9 @@ public class ModelBaker implements IModelBaker {
 	public IModelBakerModel bakeModel(boolean flip) {
 		ModelRotation mr = ModelRotation.X0_Y0;
 
-		if (flip)
+		if (flip) {
 			mr = ModelRotation.X0_Y180;
+		}
 
 		for (ModelBakerFace face : faces) {
 			final EnumFacing myFace = face.face;
@@ -293,10 +295,11 @@ public class ModelBaker implements IModelBaker {
 			BakedQuad bf = faceBakery.makeBakedQuad(face.to, face.from, bpf, face.spite, myFace, mr, null, true, true);
 			bf = new IColoredBakedQuad.ColoredBakedQuad(bf.getVertexData(), face.colorIndex, bf.getFace());
 
-			if (face.isEdge)
+			if (face.isEdge) {
 				this.currentModel.getFaceQuads(myFace).add(bf);
-			else
+			} else {
 				this.currentModel.getGeneralQuads().add(bf);
+			}
 		}
 		
 		//Add baked models to the current model.

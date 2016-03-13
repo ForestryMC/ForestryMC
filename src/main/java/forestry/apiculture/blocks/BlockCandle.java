@@ -282,7 +282,7 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister {
 
 	@Override
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-		TileCandle tileCandle = (TileCandle) (world.getTileEntity(pos));
+		TileCandle tileCandle = (TileCandle) world.getTileEntity(pos);
 		int colour = getColourValueFromItemStack(stack);
 		boolean isLit = isLit(stack);
 		tileCandle.setColour(colour);

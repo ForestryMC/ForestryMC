@@ -63,8 +63,9 @@ public abstract class ModelBlockOverlay<B extends Block> implements IFlexibleBak
 
 	@Override
 	public boolean isAmbientOcclusion() {
-		if(latestItemModel == null && latestBlockModel == null)
+		if(latestItemModel == null && latestBlockModel == null) {
 			return false;
+		}
 		return latestBlockModel != null ? latestBlockModel.isAmbientOcclusion() : latestItemModel.isAmbientOcclusion();
 	}
 
@@ -75,29 +76,33 @@ public abstract class ModelBlockOverlay<B extends Block> implements IFlexibleBak
 
 	@Override
 	public boolean isBuiltInRenderer() {
-		if(latestItemModel == null && latestBlockModel == null)
+		if(latestItemModel == null && latestBlockModel == null) {
 			return false;
+		}
 		return latestBlockModel != null ? latestBlockModel.isBuiltInRenderer() : latestItemModel.isBuiltInRenderer();
 	}
 	
 	@Override
 	public TextureAtlasSprite getParticleTexture() {
-		if(latestBlockModel != null)
+		if(latestBlockModel != null) {
 			return latestBlockModel.getParticleTexture();
+		}
 		return null;
 	}
 
 	@Override
 	public ItemCameraTransforms getItemCameraTransforms() {
-		if(latestItemModel == null)
+		if(latestItemModel == null) {
 			return null;
+		}
 		return latestItemModel.getItemCameraTransforms();
 	}
 	
 	@Override
 	public VertexFormat getFormat() {
-		if(latestItemModel == null && latestBlockModel == null)
+		if(latestItemModel == null && latestBlockModel == null) {
 			return DefaultVertexFormats.BLOCK;
+		}
 		return latestBlockModel != null ? latestBlockModel.getFormat() : latestItemModel.getFormat();
 	}
 

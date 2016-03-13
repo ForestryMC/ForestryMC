@@ -87,11 +87,11 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 	}
 	
 	private static int getRandomOffset(Random random, int centrePos, int offset) {
-		return centrePos + random.nextInt(offset) - (offset / 2);
+		return centrePos + random.nextInt(offset) - offset / 2;
 	}
 	
 	private static boolean isSuitableForMycelium(World world, Block block, BlockPos pos) {
-		return block == Blocks.grass || (block == Blocks.dirt && world.canBlockSeeSky(pos));
+		return block == Blocks.grass || block == Blocks.dirt && world.canBlockSeeSky(pos);
 	}
 
 	private static boolean isSuitableForGrowth(Block block) {

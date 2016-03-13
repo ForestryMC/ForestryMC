@@ -105,7 +105,7 @@ public abstract class BlockArbLog extends BlockLog implements IWoodTyped, IState
 	@Nonnull
 	@Override
 	public EnumWoodType getWoodType(int meta) {
-		int variantMeta = (meta & VARIANTS_META_MASK) + (blockNumber * VARIANTS_PER_BLOCK);
+		int variantMeta = (meta & VARIANTS_META_MASK) + blockNumber * VARIANTS_PER_BLOCK;
 		return EnumWoodType.byMetadata(variantMeta);
 	}
 
@@ -128,6 +128,7 @@ public abstract class BlockArbLog extends BlockLog implements IWoodTyped, IState
 		}
 	}
 
+	@SuppressWarnings("incomplete-switch")
 	@Override
 	public int getMetaFromState(IBlockState state) {
 		int i = damageDropped(state);
@@ -160,7 +161,7 @@ public abstract class BlockArbLog extends BlockLog implements IWoodTyped, IState
 
 	@Override
 	public int damageDropped(IBlockState state) {
-		return state.getValue(getVariant()).getMetadata() - (blockNumber * VARIANTS_PER_BLOCK);
+		return state.getValue(getVariant()).getMetadata() - blockNumber * VARIANTS_PER_BLOCK;
 	}
 	
 	@Override

@@ -10,10 +10,12 @@
  ******************************************************************************/
 package forestry.greenhouse.multiblock;
 
+import forestry.api.core.EnumCamouflageType;
 import forestry.core.fluids.FakeTankManager;
 import forestry.core.fluids.ITankManager;
 import forestry.core.multiblock.FakeMultiblockController;
 import forestry.energy.EnergyManager;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 
 public class FakeGreenhouseController extends FakeMultiblockController implements IGreenhouseControllerInternal {
@@ -37,5 +39,22 @@ public class FakeGreenhouseController extends FakeMultiblockController implement
 	public boolean isInGreenhouse(BlockPos pos) {
 		return false;
 	}
+
+	@Override
+	public ItemStack getCamouflageBlock(EnumCamouflageType type) {
+		return null;
+	}
+
+	@Override
+	public void setCamouflageBlock(EnumCamouflageType type, ItemStack camouflageBlock) {
+		
+	}
+
+	@Override
+	public BlockPos getCoordinates() {
+		return null;
+	}
+	
+	
 
 }

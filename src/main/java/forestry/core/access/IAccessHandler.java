@@ -27,6 +27,8 @@ public interface IAccessHandler extends IOwnable, IStreamable, INbtWritable, INb
 	boolean allowsAlteration(EntityPlayer player);
 
 	boolean allowsViewing(EntityPlayer player);
+	
+	boolean allowsInteracting(EntityPlayer player);
 
 	boolean allowsPipeConnections();
 

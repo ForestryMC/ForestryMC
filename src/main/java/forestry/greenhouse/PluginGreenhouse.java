@@ -1,15 +1,25 @@
+/*******************************************************************************
+ * Copyright (c) 2011-2014 SirSengir.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the GNU Lesser Public License v3
+ * which accompanies this distribution, and is available at
+ * http://www.gnu.org/licenses/lgpl-3.0.txt
+ *
+ * Various Contributors including, but not limited to:
+ * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ ******************************************************************************/
 package forestry.greenhouse;
 
-import java.util.List;
-import javax.annotation.Nonnull;
-
-import com.google.common.collect.Lists;
-
+import forestry.api.core.EnumCamouflageType;
+import forestry.api.greenhouse.GreenhouseManager;
+import forestry.api.greenhouse.IGreenhouseItemAccess;
 import forestry.core.config.Constants;
+import forestry.greenhouse.blocks.BlockGreenhouse;
 import forestry.greenhouse.blocks.BlockGreenhouseType;
 import forestry.greenhouse.blocks.BlockRegistryGreenhouse;
 import forestry.greenhouse.proxy.ProxyGreenhouse;
 import forestry.greenhouse.tiles.TileGreenhouseControl;
+import forestry.greenhouse.tiles.TileGreenhouseDoor;
 import forestry.greenhouse.tiles.TileGreenhouseDryer;
 import forestry.greenhouse.tiles.TileGreenhouseFan;
 import forestry.greenhouse.tiles.TileGreenhouseGearbox;
@@ -37,7 +47,11 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 	public static ProxyGreenhouse proxy;
 	
 	public static BlockRegistryGreenhouse blocks;
-	private static final List<ItemStack> greenhouseGlass = Lists.newArrayList();
+	
+	@Override
+	public void setupAPI() {
+		GreenhouseManager.greenhouseItemAccess = new GreenhouseItemAccess();
+	}
 	
 	@Override
 	public void registerItemsAndBlocks() {
@@ -48,57 +62,52 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 	public void doInit() {
 		super.doInit();
 		
-		GameRegistry.registerTileEntity(TileGreenhouseFan.class, "forestry.greenhouse.fan");
-		GameRegistry.registerTileEntity(TileGreenhouseHeater.class, "forestry.greenhouse.heater");
-		GameRegistry.registerTileEntity(TileGreenhouseDryer.class, "forestry.greenhouse.dryer");
-		GameRegistry.registerTileEntity(TileGreenhouseSprinkler.class, "forestry.greenhouse.sprinkler");
-		GameRegistry.registerTileEntity(TileGreenhouseValve.class, "forestry.greenhouse.valve");
-		GameRegistry.registerTileEntity(TileGreenhouseGearbox.class, "forestry.greenhouse.gearbox");
-		GameRegistry.registerTileEntity(TileGreenhouseControl.class, "forestry.greenhouse.controller");
-		GameRegistry.registerTileEntity(TileGreenhousePlain.class, "forestry.greenhouse.plain");
+		GameRegistry.registerTileEntity(TileGreenhouseFan.class, "forestry.GreenhouseFan");
+		GameRegistry.registerTileEntity(TileGreenhouseHeater.class, "forestry.GreenhouseHeater");
+		GameRegistry.registerTileEntity(TileGreenhouseDryer.class, "forestry.GreenhouseDryer");
+		GameRegistry.registerTileEntity(TileGreenhouseSprinkler.class, "forestry.GreenhouseSprinkler");
+		GameRegistry.registerTileEntity(TileGreenhouseValve.class, "forestry.GreenhouseValve");
+		GameRegistry.registerTileEntity(TileGreenhouseGearbox.class, "forestry.GreenhouseGearbox");
+		GameRegistry.registerTileEntity(TileGreenhouseControl.class, "forestry.GreenhouseController");
+		GameRegistry.registerTileEntity(TileGreenhousePlain.class, "forestry.GreenhousePlain");
+		GameRegistry.registerTileEntity(TileGreenhouseDoor.class, "forestry.GreenhouseDoor");
 	}
 	
 	@Override
 	public void preInit(){
 		MinecraftForge.EVENT_BUS.register(this);
 		
-		addGreenhouseGlass(new ItemStack(Blocks.glass, 1, 0));
-		addGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 0));
-		addGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 1));
-		addGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 2));
-		addGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 3));
-		addGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 4));
-		addGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 5));
-		addGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 6));
-		addGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 7));
-		addGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 8));
-		addGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 9));
-		addGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 10));
-		addGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 11));
-		addGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 12));
-		addGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 13));
-		addGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 14));
-		addGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 15));
+		IGreenhouseItemAccess greenhouseAccess = GreenhouseManager.greenhouseItemAccess;
+		
+		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.glass, 1, 0));
+		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 0));
+		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 1));
+		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 2));
+		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 3));
+		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 4));
+		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 5));
+		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 6));
+		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 7));
+		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 8));
+		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 9));
+		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 10));
+		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 11));
+		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 12));
+		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 13));
+		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 14));
+		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 15));
+		
+		for(BlockGreenhouseType type : BlockGreenhouseType.VALUES){
+			if(type == BlockGreenhouseType.GLASS){
+				greenhouseAccess.addToCamouflageBlockBlackList(EnumCamouflageType.GLASS, blocks.getGreenhouseBlock(type));
+			}else if(type == BlockGreenhouseType.DOOR){
+				greenhouseAccess.addToCamouflageBlockBlackList(EnumCamouflageType.DOOR, blocks.getGreenhouseBlock(type));
+			}else{
+				greenhouseAccess.addToCamouflageBlockBlackList(EnumCamouflageType.DEFAULT, blocks.getGreenhouseBlock(type));
+			}
+		}
 		
 		proxy.initializeModels();
-	}
-	
-	public static void addGreenhouseGlass(@Nonnull ItemStack stack){
-		for(ItemStack glass : greenhouseGlass){
-			if(ItemStack.areItemStackTagsEqual(stack, glass)){
-				return;
-			}
-		}
-		greenhouseGlass.add(stack);
-	}
-	
-	public static boolean isGreenhouseGlass(@Nonnull ItemStack stack){
-		for(ItemStack glass : greenhouseGlass){
-			if(ItemStack.areItemStackTagsEqual(stack, glass)){
-				return true;
-			}
-		}
-		return false;
 	}
 	
 	@SubscribeEvent

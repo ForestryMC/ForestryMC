@@ -310,7 +310,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 
 		for (ItemStack stack : InventoryUtil.getStacks(inventory, SLOT_SEND_BUFFER, SLOT_SEND_BUFFER_COUNT)) {
 			if (stack != null && stack.isItemEqual(tradegood) && ItemStack.areItemStackTagsEqual(stack, tradegood)) {
-				orderCount += (stack.stackSize / (float) tradegood.stackSize);
+				orderCount += stack.stackSize / (float) tradegood.stackSize;
 				if (orderCount >= max) {
 					return max;
 				}

@@ -184,7 +184,7 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 			for (int x = 0; x < girth; x++) {
 				for (int z = 0; z < girth; z++) {
 
-					if ((x > 0 && x < girth) && (z > 0 && z < girth)) {
+					if (x > 0 && x < girth && z > 0 && z < girth) {
 						continue;
 					}
 
@@ -309,7 +309,7 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 	@Override
 	protected boolean addBlock(World world, BlockPos pos, ITreeBlockType type, EnumReplaceMode replace) {
 		if (replace == EnumReplaceMode.ALL
-				|| (replace == EnumReplaceMode.SOFT && BlockUtil.isReplaceableBlock(world, startPos.add(pos)))
+				|| replace == EnumReplaceMode.SOFT && BlockUtil.isReplaceableBlock(world, startPos.add(pos))
 				|| world.isAirBlock(startPos.add(pos))) {
 			type.setBlock(world, tree, startPos.add(pos));
 			return true;

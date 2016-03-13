@@ -42,7 +42,7 @@ public class ContainerEscritoire extends ContainerTile<TileEscritoire> implement
 
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 2; j++) {
-				addSlotToContainer(new SlotOutput(this.tile, InventoryEscritoire.SLOT_RESULTS_1 + (i * 2) + j, 177 + j * 18, 85 + i * 18));
+				addSlotToContainer(new SlotOutput(this.tile, InventoryEscritoire.SLOT_RESULTS_1 + i * 2 + j, 177 + j * 18, 85 + i * 18));
 			}
 		}
 	}

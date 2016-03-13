@@ -24,7 +24,6 @@ import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -48,6 +47,7 @@ import forestry.core.blocks.BlockStructure;
 import forestry.core.blocks.propertys.UnlistedBlockAccess;
 import forestry.core.blocks.propertys.UnlistedBlockPos;
 import forestry.greenhouse.tiles.TileGreenhouseControl;
+import forestry.greenhouse.tiles.TileGreenhouseDoor;
 import forestry.greenhouse.tiles.TileGreenhouseDryer;
 import forestry.greenhouse.tiles.TileGreenhouseFan;
 import forestry.greenhouse.tiles.TileGreenhouseGearbox;
@@ -72,13 +72,18 @@ public abstract class BlockGreenhouse extends BlockStructure {
 	public static Map<BlockGreenhouseType, BlockGreenhouse> create() {
 		Map<BlockGreenhouseType, BlockGreenhouse> blockMap = new EnumMap<>(BlockGreenhouseType.class);
 		for (final BlockGreenhouseType type : BlockGreenhouseType.VALUES) {
-			BlockGreenhouse block = new BlockGreenhouse() {
-				@Nonnull
-				@Override
-				public BlockGreenhouseType getGreenhouseType() {
-					return type;
-				}
-			};
+			BlockGreenhouse block;
+			if(type == BlockGreenhouseType.DOOR){
+				block = new BlockGreenhouseDoor();
+			}else{
+				block = new BlockGreenhouse() {
+					@Nonnull
+					@Override
+					public BlockGreenhouseType getGreenhouseType() {
+						return type;
+					}
+				};
+			}
 			blockMap.put(type, block);
 		}
 		return blockMap;
@@ -142,6 +147,8 @@ public abstract class BlockGreenhouse extends BlockStructure {
 				return new TileGreenhouseHeater();
 			case CONTROL:
 				return new TileGreenhouseControl();
+			case DOOR:
+				return new TileGreenhouseDoor();
 			default:
 				return new TileGreenhousePlain();
 		}
@@ -164,7 +171,7 @@ public abstract class BlockGreenhouse extends BlockStructure {
 	
 	@Override
 	public boolean isFullCube() {
-		return getGreenhouseType() != BlockGreenhouseType.GLASS && getGreenhouseType() == BlockGreenhouseType.SPRINKLER;
+		return getGreenhouseType() != BlockGreenhouseType.GLASS && getGreenhouseType() != BlockGreenhouseType.SPRINKLER;
 	}
 	
 	@Override
@@ -172,7 +179,8 @@ public abstract class BlockGreenhouse extends BlockStructure {
 		return getGreenhouseType() != BlockGreenhouseType.GLASS;
 	}
 	
-    @SideOnly(Side.CLIENT)
+    @Override
+	@SideOnly(Side.CLIENT)
     public boolean shouldSideBeRendered(IBlockAccess worldIn, BlockPos pos, EnumFacing side)
     {
         IBlockState iblockstate = worldIn.getBlockState(pos);
@@ -189,6 +197,8 @@ public abstract class BlockGreenhouse extends BlockStructure {
             {
                 return false;
             }
+        }else if(getGreenhouseType() == BlockGreenhouseType.DOOR){
+        	return super.shouldSideBeRendered(worldIn, pos, side);
         }
 
         return block == this ? false : super.shouldSideBeRendered(worldIn, pos, side);

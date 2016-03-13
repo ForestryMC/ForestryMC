@@ -32,6 +32,7 @@ import forestry.core.gui.IContainerLiquidTanks;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.proxy.Proxies;
 import forestry.farming.gui.ContainerFarm;
+import forestry.greenhouse.gui.ContainerGreenhouse;
 
 /**
  * Slot for liquid tanks
@@ -61,6 +62,8 @@ public class TankWidget extends Widget {
 			return ((IContainerLiquidTanks) container).getTank(slot);
 		} else if (container instanceof ContainerFarm) {
 			return ((ContainerFarm) container).getTank(slot);
+		}else if (container instanceof ContainerGreenhouse) {
+			return ((ContainerGreenhouse) container).getTank(slot);
 		}
 		return null;
 	}
@@ -95,7 +98,7 @@ public class TankWidget extends Widget {
 
 		int fluidColor = fluid.getColor(contents);
 
-		int scaledAmount = (contents.amount * height) / tank.getCapacity();
+		int scaledAmount = contents.amount * height / tank.getCapacity();
 		if (contents.amount > 0 && scaledAmount < 1) {
 			scaledAmount = 1;
 		}
@@ -107,18 +110,18 @@ public class TankWidget extends Widget {
 		setGLColorFromInt(fluidColor);
 
 		final int xTileCount = width / 16;
-		final int xRemainder = width - (xTileCount * 16);
+		final int xRemainder = width - xTileCount * 16;
 		final int yTileCount = scaledAmount / 16;
-		final int yRemainder = scaledAmount - (yTileCount * 16);
+		final int yRemainder = scaledAmount - yTileCount * 16;
 
 		final int yStart = startY + height;
 
 		for (int xTile = 0; xTile <= xTileCount; xTile++) {
 			for (int yTile = 0; yTile <= yTileCount; yTile++) {
-				int width = (xTile == xTileCount) ? xRemainder : 16;
-				int height = (yTile == yTileCount) ? yRemainder : 16;
-				int x = startX + (xTile * 16);
-				int y = yStart - ((yTile + 1) * 16);
+				int width = xTile == xTileCount ? xRemainder : 16;
+				int height = yTile == yTileCount ? yRemainder : 16;
+				int x = startX + xTile * 16;
+				int y = yStart - (yTile + 1) * 16;
 				if (width > 0 && height > 0) {
 					int maskTop = 16 - height;
 					int maskRight = 16 - width;
@@ -159,8 +162,8 @@ public class TankWidget extends Widget {
 		double uMax = textureSprite.getMaxU();
 		double vMin = textureSprite.getMinV();
 		double vMax = textureSprite.getMaxV();
-		uMax = uMax - (maskRight / 16.0 * (uMax - uMin));
-		vMax = vMax - (maskTop / 16.0 * (vMax - vMin));
+		uMax = uMax - maskRight / 16.0 * (uMax - uMin);
+		vMax = vMax - maskTop / 16.0 * (vMax - vMin);
 
 		Tessellator tessellator = Tessellator.getInstance();
 		WorldRenderer worldrenderer = tessellator.getWorldRenderer();

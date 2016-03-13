@@ -145,8 +145,8 @@ public abstract class BlockUtil {
 	 * Ray traces through the blocks collision from start vector to end vector returning a ray trace hit.
 	 */
 	public static MovingObjectPosition collisionRayTrace(@Nonnull BlockPos pos, @Nonnull Vec3 startVec, @Nonnull Vec3 endVec, double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
-		startVec = startVec.addVector((-pos.getX()), (-pos.getY()), (-pos.getZ()));
-		endVec = endVec.addVector((-pos.getX()), (-pos.getY()), (-pos.getZ()));
+		startVec = startVec.addVector(-pos.getX(), -pos.getY(), -pos.getZ());
+		endVec = endVec.addVector(-pos.getX(), -pos.getY(), -pos.getZ());
 		Vec3 vec32 = startVec.getIntermediateWithXValue(endVec, minX);
 		Vec3 vec33 = startVec.getIntermediateWithXValue(endVec, maxX);
 		Vec3 vec34 = startVec.getIntermediateWithYValue(endVec, minY);
@@ -241,21 +241,21 @@ public abstract class BlockUtil {
 	 * Checks if a vector is within the Y and Z bounds of the block.
 	 */
 	private static boolean isVecInsideYZBounds(Vec3 vec, double minY, double minZ, double maxY, double maxZ) {
-		return vec != null && (vec.yCoord >= minY && vec.yCoord <= maxY && vec.zCoord >= minZ && vec.zCoord <= maxZ);
+		return vec != null && vec.yCoord >= minY && vec.yCoord <= maxY && vec.zCoord >= minZ && vec.zCoord <= maxZ;
 	}
 
 	/**
 	 * Checks if a vector is within the X and Z bounds of the block.
 	 */
 	private static boolean isVecInsideXZBounds(Vec3 vec, double minX, double minZ, double maxX, double maxZ) {
-		return vec != null && (vec.xCoord >= minX && vec.xCoord <= maxX && vec.zCoord >= minZ && vec.zCoord <= maxZ);
+		return vec != null && vec.xCoord >= minX && vec.xCoord <= maxX && vec.zCoord >= minZ && vec.zCoord <= maxZ;
 	}
 
 	/**
 	 * Checks if a vector is within the X and Y bounds of the block.
 	 */
 	private static boolean isVecInsideXYBounds(Vec3 vec, double minX, double minY, double maxX, double maxY) {
-		return vec != null && (vec.xCoord >= minX && vec.xCoord <= maxX && vec.yCoord >= minY && vec.yCoord <= maxY);
+		return vec != null && vec.xCoord >= minX && vec.xCoord <= maxX && vec.yCoord >= minY && vec.yCoord <= maxY;
 	}
 	
 	/* CHUNKS */

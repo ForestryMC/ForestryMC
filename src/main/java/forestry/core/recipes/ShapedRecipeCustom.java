@@ -54,7 +54,7 @@ public class ShapedRecipeCustom extends ShapedOreRecipe implements IDescriptiveR
 		}
 
 		if (recipe[idx] instanceof String[]) {
-			String[] parts = ((String[]) recipe[idx++]);
+			String[] parts = (String[]) recipe[idx++];
 
 			for (String s : parts) {
 				width = s.length();

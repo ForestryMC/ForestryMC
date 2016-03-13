@@ -41,8 +41,8 @@ public class AlleleEffectFertile extends AlleleEffectThrottled {
 		
 		int blockX = getRandomOffset(world.rand, housingCoordinates.getX(), area.getX());
 		int blockZ = getRandomOffset(world.rand, housingCoordinates.getZ(), area.getZ());
-		int blockMaxY = housingCoordinates.getY() + (area.getY() / 2) + 1;
-		int blockMinY = housingCoordinates.getY() - (area.getY() / 2) - 1;
+		int blockMaxY = housingCoordinates.getY() + area.getY() / 2 + 1;
+		int blockMinY = housingCoordinates.getY() - area.getY() / 2 - 1;
 		
 		for (int attempt = 0; attempt < MAX_BLOCK_FIND_TRIES; ++attempt) {
 			if (tryTickColumn(world, blockX, blockZ, blockMaxY, blockMinY)) {
@@ -56,7 +56,7 @@ public class AlleleEffectFertile extends AlleleEffectThrottled {
 	}
 	
 	private static int getRandomOffset(Random random, int centrePos, int offset) {
-		return centrePos + random.nextInt(offset) - (offset / 2);
+		return centrePos + random.nextInt(offset) - offset / 2;
 	}
 
 	private static boolean tryTickColumn(World world, int x, int z, int maxY, int minY) {

@@ -137,7 +137,7 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 		FluidStack resultFluid = currentRecipe.getFluidOutput();
 		productTank.fill(resultFluid, true);
 
-		if (currentRecipe.getRemnants() != null && (worldObj.rand.nextFloat() < currentRecipe.getRemnantsChance())) {
+		if (currentRecipe.getRemnants() != null && worldObj.rand.nextFloat() < currentRecipe.getRemnantsChance()) {
 			ItemStack remnant = currentRecipe.getRemnants().copy();
 			inventory.addRemnant(remnant, true);
 		}
@@ -180,7 +180,7 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 		boolean canAdd = true;
 
 		if (hasResources) {
-			hasRecipe = (currentRecipe != null);
+			hasRecipe = currentRecipe != null;
 			if (hasRecipe) {
 				FluidStack resultFluid = currentRecipe.getFluidOutput();
 				canFill = productTank.canFill(resultFluid);

@@ -158,7 +158,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 
 		currentRecipe = FermenterRecipeManager.findMatchingRecipe(resource, fluid);
 
-		fermentationTotalTime = fermentationTime = (currentRecipe == null) ? 0 : currentRecipe.getFermentationValue();
+		fermentationTotalTime = fermentationTime = currentRecipe == null ? 0 : currentRecipe.getFermentationValue();
 
 		if (currentRecipe != null) {
 			currentResourceModifier = determineResourceMod(resource);
@@ -203,7 +203,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 			return false;
 		}
 
-		return ((float) fermentationStack.stackSize / (float) fermentationStack.getMaxStackSize()) > percentage;
+		return (float) fermentationStack.stackSize / (float) fermentationStack.getMaxStackSize() > percentage;
 	}
 
 	@Override
@@ -213,7 +213,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 			return false;
 		}
 
-		return ((float) fuelStack.stackSize / (float) fuelStack.getMaxStackSize()) > percentage;
+		return (float) fuelStack.stackSize / (float) fuelStack.getMaxStackSize() > percentage;
 	}
 
 	@Override
@@ -221,7 +221,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 		checkRecipe();
 		checkFuel();
 
-		boolean hasRecipe = (currentRecipe != null);
+		boolean hasRecipe = currentRecipe != null;
 		boolean hasFuel = fuelBurnTime > 0;
 		boolean hasResource = fermentationTime > 0 || getStackInSlot(InventoryFermenter.SLOT_RESOURCE) != null;
 		boolean hasFluidResource = resourceTank.canDrain(fuelCurrentFerment);
@@ -248,7 +248,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 			return 0;
 		}
 
-		return (fuelBurnTime * i) / fuelTotalTime;
+		return fuelBurnTime * i / fuelTotalTime;
 	}
 
 	public int getFermentationProgressScaled(int i) {
@@ -256,7 +256,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 			return 0;
 		}
 
-		return (fermentationTime * i) / fermentationTotalTime;
+		return fermentationTime * i / fermentationTotalTime;
 	}
 
 	@Override

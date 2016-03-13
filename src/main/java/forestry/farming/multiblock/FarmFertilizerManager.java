@@ -77,7 +77,7 @@ public class FarmFertilizerManager implements INbtWritable, INbtReadable, IStrea
 			return 0;
 		}
 
-		return (storedFertilizer * scale) / (fertilizerValue + BUFFER_FERTILIZER);
+		return storedFertilizer * scale / (fertilizerValue + BUFFER_FERTILIZER);
 	}
 
 	@Override

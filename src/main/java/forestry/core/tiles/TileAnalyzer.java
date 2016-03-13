@@ -173,7 +173,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 
 		ItemStack specimen = getStackInSlot(InventoryAnalyzer.SLOT_ANALYZE);
 
-		boolean hasSpecimen = (specimen != null);
+		boolean hasSpecimen = specimen != null;
 		boolean hasResource = true;
 		boolean hasSpace = true;
 

@@ -11,7 +11,7 @@
 package forestry.greenhouse.gui;
 
 import net.minecraft.entity.player.InventoryPlayer;
-
+import net.minecraftforge.fluids.IFluidTank;
 import forestry.core.gui.ContainerTile;
 import forestry.core.network.packets.PacketGuiUpdate;
 import forestry.greenhouse.tiles.TileGreenhouse;
@@ -27,6 +27,10 @@ public class ContainerGreenhouse extends ContainerTile<TileGreenhouse> {
 		super.detectAndSendChanges();
 		PacketGuiUpdate packet = new PacketGuiUpdate(tile);
 		sendPacketToCrafters(packet);
+	}
+	
+	public IFluidTank getTank(int slot) {
+		return tile.getMultiblockLogic().getController().getTankManager().getTank(slot);
 	}
 
 }

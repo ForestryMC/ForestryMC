@@ -54,7 +54,7 @@ public enum MothDefinition implements IButterflyDefinition {
 
 		String uid = "moth" + name();
 		IClassification parent = branch.getBranch().getParent();
-		String unlocalizedName = "for.butterflies.species." + parent.getUID().substring((parent.getLevel().name().toLowerCase(Locale.ENGLISH)).length() + 1) + '.' + speciesName;
+		String unlocalizedName = "for.butterflies.species." + parent.getUID().substring(parent.getLevel().name().toLowerCase(Locale.ENGLISH).length() + 1) + '.' + speciesName;
 		String unlocalizedDescription = "for.description." + uid;
 
 		String texture = "butterflies/" + uid;

@@ -27,7 +27,7 @@ public class WorldGenTeak extends WorldGenTree {
 	public void generate(World world) {
 		generateTreeTrunk(world, height, girth);
 
-		float leafMultiplier = (height / 6.0f);
+		float leafMultiplier = height / 6.0f;
 		if (leafMultiplier > 2) {
 			leafMultiplier = 2;
 		}

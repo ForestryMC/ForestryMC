@@ -59,7 +59,7 @@ public class InventoryMoistener extends InventoryAdapterTile<TileMoistener> {
 			return true;
 		}
 
-		if (SlotUtil.isSlotInRange(slotIndex, SLOT_STASH_1, (SLOT_STASH_COUNT + SLOT_RESERVOIR_COUNT))) {
+		if (SlotUtil.isSlotInRange(slotIndex, SLOT_STASH_1, SLOT_STASH_COUNT + SLOT_RESERVOIR_COUNT)) {
 			return !FuelManager.moistenerResource.containsKey(itemstack);
 		}
 

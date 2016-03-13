@@ -16,6 +16,9 @@ public interface IGreenhouseComponent<T extends IMultiblockLogicGreenhouse> exte
 	interface Listener extends IGreenhouseComponent {
 		IGreenhouseListener getGreenhouseListener();
 	}
+	
+	interface Door extends IGreenhouseComponent {
+	}
 
 	interface Climatiser extends IGreenhouseComponent {
 		<G extends IGreenhouseController & IGreenhouseHousing & IClimateControlled> void changeClimate(int tickCount, G greenhouse);

@@ -108,7 +108,7 @@ public class ItemBackpack extends ItemWithGui {
 
 	public static ItemStack tryStowing(EntityPlayer player, ItemStack backpackStack, ItemStack stack) {
 
-		ItemBackpack backpack = ((ItemBackpack) backpackStack.getItem());
+		ItemBackpack backpack = (ItemBackpack) backpackStack.getItem();
 		ItemInventory inventory = new ItemInventoryBackpack(player, backpack.getBackpackSize(), backpackStack);
 		if (backpackStack.getItemDamage() == 1) {
 			return stack;
@@ -235,7 +235,7 @@ public class ItemBackpack extends ItemWithGui {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		EnumBackpackType t = (type == EnumBackpackType.NATURALIST) ? EnumBackpackType.NORMAL : type;
+		EnumBackpackType t = type == EnumBackpackType.NATURALIST ? EnumBackpackType.NORMAL : type;
 		String typeTag = "backpacks/" + t.toString().toLowerCase(Locale.ENGLISH);
 		models = new ModelResourceLocation[4];
 		models[0] = new ModelResourceLocation("forestry:" + typeTag + "_neutral", "inventory");
@@ -297,6 +297,7 @@ public class ItemBackpack extends ItemWithGui {
 		}
 	}
 
+	@SuppressWarnings("incomplete-switch")
 	@Override
 	public Object getGui(EntityPlayer player, ItemStack heldItem, int data) {
 		if (data > EnumBackpackType.values().length) {
@@ -312,6 +313,7 @@ public class ItemBackpack extends ItemWithGui {
 		return null;
 	}
 
+	@SuppressWarnings("incomplete-switch")
 	@Override
 	public Object getContainer(EntityPlayer player, ItemStack heldItem, int data) {
 		if (data > EnumBackpackType.values().length) {

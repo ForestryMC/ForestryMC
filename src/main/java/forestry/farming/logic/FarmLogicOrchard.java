@@ -228,7 +228,7 @@ public class FarmLogicOrchard extends FarmLogic {
 
 		Block candidate = VectUtil.getBlock(world, position);
 		for (Block block : traversalBlocks) {
-			if (block == (candidate)) {
+			if (block == candidate) {
 				return true;
 			}
 		}

@@ -109,7 +109,7 @@ public class BlockSoil extends Block implements IItemTyped, IItemModelRegister {
 
 	@Override
 	public int getDamageValue(World world, BlockPos pos) {
-		return (getMetaFromState(world.getBlockState(pos)) & 0x03);
+		return getMetaFromState(world.getBlockState(pos)) & 0x03;
 	}
 
 	@Override
@@ -173,7 +173,7 @@ public class BlockSoil extends Block implements IItemTyped, IItemModelRegister {
 		grade++;
 
 		// Repackage in format TTGG
-		meta = (grade << 2 | type);
+		meta = grade << 2 | type;
 
 		if (grade >= degradeDelimiter) {
 			world.setBlockState(pos, Blocks.sand.getStateFromMeta(0), Constants.FLAG_BLOCK_SYNCH);
@@ -217,7 +217,7 @@ public class BlockSoil extends Block implements IItemTyped, IItemModelRegister {
 		// Increment (de)gradation
 		maturity++;
 
-		meta = (maturity << 2 | type);
+		meta = maturity << 2 | type;
 		world.setBlockState(pos, BlockUtil.getBlock(world, pos).getStateFromMeta(meta), Constants.FLAG_BLOCK_SYNCH);
 		world.markBlockForUpdate(pos);
 	}

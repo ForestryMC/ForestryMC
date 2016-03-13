@@ -127,14 +127,14 @@ public abstract class BlockArbSlab extends BlockSlab implements IWoodTyped, IIte
 	@Nonnull
 	@Override
 	public EnumWoodType getWoodType(int meta) {
-		int variantMeta = (meta & VARIANTS_META_MASK) + (blockNumber * VARIANTS_PER_BLOCK);
+		int variantMeta = (meta & VARIANTS_META_MASK) + blockNumber * VARIANTS_PER_BLOCK;
 		return EnumWoodType.byMetadata(variantMeta);
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
 		EnumWoodType woodType = state.getValue(getVariant());
-		int meta = woodType.getMetadata() - (blockNumber * VARIANTS_PER_BLOCK);
+		int meta = woodType.getMetadata() - blockNumber * VARIANTS_PER_BLOCK;
 
 		if (!this.isDouble() && state.getValue(HALF) == BlockSlab.EnumBlockHalf.TOP) {
 			meta |= 8;
@@ -145,7 +145,7 @@ public abstract class BlockArbSlab extends BlockSlab implements IWoodTyped, IIte
 
 	@Override
 	public int damageDropped(IBlockState state) {
-		return state.getValue(getVariant()).getMetadata() - (blockNumber * VARIANTS_PER_BLOCK);
+		return state.getValue(getVariant()).getMetadata() - blockNumber * VARIANTS_PER_BLOCK;
 	}
 
 	@Override

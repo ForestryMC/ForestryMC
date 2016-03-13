@@ -25,9 +25,9 @@ public class TreeSpawner implements ITreeSpawner {
 	public boolean spawn(ICommandSender sender, String treeName, EntityPlayer player) throws SpeciesNotFoundException, TemplateNotFoundException {
 		Vec3 look = player.getLookVec();
 
-		int x = (int) Math.round(player.posX + (3 * look.xCoord));
+		int x = (int) Math.round(player.posX + 3 * look.xCoord);
 		int y = (int) Math.round(player.posY);
-		int z = (int) Math.round(player.posZ + (3 * look.zCoord));
+		int z = (int) Math.round(player.posZ + 3 * look.zCoord);
 		BlockPos pos = new BlockPos(x, y, z);
 
 		WorldGenerator gen = TreeGenHelper.getWorldGen(treeName, player, pos);

@@ -88,7 +88,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	}
 
 	public void rotateAfterPlacement(EntityPlayer player, EnumFacing side) {
-		int l = MathHelper.floor_double(((player.rotationYaw * 4F) / 360F) + 0.5D) & 3;
+		int l = MathHelper.floor_double(player.rotationYaw * 4F / 360F + 0.5D) & 3;
 		if (l == 0) {
 			setOrientation(EnumFacing.NORTH);
 		}

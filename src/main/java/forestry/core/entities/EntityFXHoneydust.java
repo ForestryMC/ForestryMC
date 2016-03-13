@@ -17,8 +17,8 @@ public class EntityFXHoneydust extends EntityReddustFX {
 
 	public EntityFXHoneydust(World world, double x, double y, double z, float f1, float f2, float f3) {
 		super(world, x, y, z, 1.0F, f1, f2, f3);
-		particleRed = 0.9F + (world.rand.nextFloat() * 0.1F);
-		particleGreen = 0.75F + (world.rand.nextFloat() * 0.2F);
-		particleBlue = 0F + (world.rand.nextFloat() * 0.2F);
+		particleRed = 0.9F + world.rand.nextFloat() * 0.1F;
+		particleGreen = 0.75F + world.rand.nextFloat() * 0.2F;
+		particleBlue = 0F + world.rand.nextFloat() * 0.2F;
 	}
 }

@@ -109,7 +109,7 @@ public class PluginManager {
 
 		IFuelHandler fuelHandler = plugin.getFuelHandler();
 		if (fuelHandler != null) {
-			GameRegistry.registerFuelHandler((fuelHandler));
+			GameRegistry.registerFuelHandler(fuelHandler);
 		}
 	}
 

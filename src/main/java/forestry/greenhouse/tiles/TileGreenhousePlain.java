@@ -11,5 +11,4 @@
 package forestry.greenhouse.tiles;
 
 public class TileGreenhousePlain extends TileGreenhouse {
-	
 }

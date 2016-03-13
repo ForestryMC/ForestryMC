@@ -405,7 +405,7 @@ public abstract class InventoryUtil {
 		if (stackMax == 0) {
 			return false;
 		}
-		return ((float) amount / (float) stackMax) >= percent;
+		return (float) amount / (float) stackMax >= percent;
 	}
 
 	public static boolean isEmpty(IInventory inventory, int slotStart, int slotCount) {
@@ -465,7 +465,7 @@ public abstract class InventoryUtil {
 
 	public static boolean tryAddStack(IInventory inventory, ItemStack stack, int startSlot, int slots, boolean all, boolean doAdd) {
 		int added = addStack(inventory, stack, startSlot, slots, false);
-		boolean success = all ? (added == stack.stackSize) : (added > 0);
+		boolean success = all ? added == stack.stackSize : added > 0;
 
 		if (success && doAdd) {
 			addStack(inventory, stack, startSlot, slots, true);

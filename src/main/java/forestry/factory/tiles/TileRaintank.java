@@ -152,7 +152,7 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 	}
 
 	public int getFillProgressScaled(int i) {
-		return (fillingTime * i) / Constants.RAINTANK_FILLING_TIME;
+		return fillingTime * i / Constants.RAINTANK_FILLING_TIME;
 	}
 
 	/* SMP GUI */

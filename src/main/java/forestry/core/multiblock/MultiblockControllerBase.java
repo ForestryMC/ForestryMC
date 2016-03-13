@@ -109,7 +109,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 		if (!connectedParts.add(part)) {
 			Log.warning("[%s] Controller %s is double-adding part %d @ %s. This is unusual. " +
 							"If you encounter odd behavior, please tear down the machine and rebuild it.",
-					(worldObj.isRemote ? "CLIENT" : "SERVER"), hashCode(), part.hashCode(), coord);
+					worldObj.isRemote ? "CLIENT" : "SERVER", hashCode(), part.hashCode(), coord);
 		}
 
 		MultiblockLogic logic = (MultiblockLogic) part.getMultiblockLogic();
@@ -580,7 +580,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 	}
 
 	protected final boolean isCoordInMultiblock(int x, int y, int z) {
-		return (x >= minimumCoord.getX() && x <= maximumCoord.getX()) && (y >= minimumCoord.getY() && y <= maximumCoord.getY()) && (z >= minimumCoord.getZ() && z <= maximumCoord.getZ());
+		return x >= minimumCoord.getX() && x <= maximumCoord.getX() && y >= minimumCoord.getY() && y <= maximumCoord.getY() && z >= minimumCoord.getZ() && z <= maximumCoord.getZ();
 	}
 
 	@Override

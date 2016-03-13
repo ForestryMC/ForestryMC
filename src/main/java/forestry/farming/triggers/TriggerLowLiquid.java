@@ -53,6 +53,6 @@ public class TriggerLowLiquid extends Trigger {
 		if (tank.getCapacity() == 0) {
 			return false;
 		}
-		return ((float) tank.getFluidAmount() / tank.getCapacity()) <= threshold;
+		return (float) tank.getFluidAmount() / tank.getCapacity() <= threshold;
 	}
 }

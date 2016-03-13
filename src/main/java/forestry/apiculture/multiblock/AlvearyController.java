@@ -279,10 +279,10 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 				fxY += upSpread;
 
 				// display fx on all 4 sides
-				Proxies.render.addEntityHoneyDustFX(worldObj, (fxX - distanceFromCenter), fxY, (fxZ + leftRightSpreadFromCenter));
-				Proxies.render.addEntityHoneyDustFX(worldObj, (fxX + distanceFromCenter), fxY, (fxZ + leftRightSpreadFromCenter));
-				Proxies.render.addEntityHoneyDustFX(worldObj, (fxX + leftRightSpreadFromCenter), fxY, (fxZ - distanceFromCenter));
-				Proxies.render.addEntityHoneyDustFX(worldObj, (fxX + leftRightSpreadFromCenter), fxY, (fxZ + distanceFromCenter));
+				Proxies.render.addEntityHoneyDustFX(worldObj, fxX - distanceFromCenter, fxY, fxZ + leftRightSpreadFromCenter);
+				Proxies.render.addEntityHoneyDustFX(worldObj, fxX + distanceFromCenter, fxY, fxZ + leftRightSpreadFromCenter);
+				Proxies.render.addEntityHoneyDustFX(worldObj, fxX + leftRightSpreadFromCenter, fxY, fxZ - distanceFromCenter);
+				Proxies.render.addEntityHoneyDustFX(worldObj, fxX + leftRightSpreadFromCenter, fxY, fxZ + distanceFromCenter);
 			}
 		}
 	}
@@ -428,7 +428,7 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	/* GUI */
 	@Override
 	public int getHealthScaled(int i) {
-		return (breedingProgressPercent * i) / 100;
+		return breedingProgressPercent * i / 100;
 	}
 
 	@Override

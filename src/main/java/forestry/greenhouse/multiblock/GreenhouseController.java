@@ -20,8 +20,10 @@ import java.util.Set;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import forestry.api.core.EnumCamouflageType;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
+import forestry.api.core.ICamouflagedBlock;
 import forestry.api.core.IClimateControlled;
 import forestry.api.multiblock.IGreenhouseComponent;
 import forestry.api.multiblock.IMultiblockComponent;
@@ -37,13 +39,10 @@ import forestry.core.multiblock.RectangularMultiblockControllerBase;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.proxy.Proxies;
-import forestry.core.tiles.ICamouflagedBlock;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.energy.EnergyManager;
-import forestry.greenhouse.blocks.BlockGreenhouse;
 import forestry.greenhouse.network.packets.PacketCamouflageUpdate;
 import forestry.greenhouse.tiles.TileGreenhouseSprinkler;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -54,7 +53,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.fluids.FluidRegistry;
 
-public class GreenhouseController extends RectangularMultiblockControllerBase implements IGreenhouseControllerInternal, IClimateControlled, ILiquidTankTile, ICamouflagedBlock {
+public class GreenhouseController extends RectangularMultiblockControllerBase implements IGreenhouseControllerInternal, IClimateControlled, ILiquidTankTile {
 
 	private final List<InternalBlock> internalBlocks = Lists.newArrayList();
 	private final Set<IGreenhouseComponent.Listener> listenerComponents = new HashSet<>();
@@ -67,7 +66,11 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	private final TankManager tankManager;
 	private final StandardTank resourceTank;
 	private final EnergyManager energyManager;
-	private ItemStack camouflageBlock;
+	
+	//Camouflage blocks
+	private ItemStack camouflagePlainBlock;
+	private ItemStack camouflageGlassBlock;
+	private ItemStack camouflageDoorBlock;
 	
 	public GreenhouseController(World world) {
 		super(world, GreenhouseMultiblockSizeLimits.instance);
@@ -165,11 +168,9 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		tankManager.writeToNBT(data);
 		energyManager.writeToNBT(data);
 		
-		if(camouflageBlock != null){
-			NBTTagCompound nbtTag = new NBTTagCompound();
-			camouflageBlock.writeToNBT(nbtTag);
-			data.setTag("CamouflageBlock", nbtTag);
-		}
+		writeCamouflageBlockToNBT(data, EnumCamouflageType.DEFAULT);
+		writeCamouflageBlockToNBT(data, EnumCamouflageType.GLASS);
+		writeCamouflageBlockToNBT(data, EnumCamouflageType.DOOR);
 	}
 	
 	@Override
@@ -181,8 +182,23 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		tankManager.readFromNBT(data);
 		energyManager.readFromNBT(data);
 		
-		if(data.hasKey("CamouflageBlock")){
-			setCamouflageBlock(ItemStack.loadItemStackFromNBT(data.getCompoundTag("CamouflageBlock")));
+		readCamouflageBlockFromNBT(data, EnumCamouflageType.DEFAULT);
+		readCamouflageBlockFromNBT(data, EnumCamouflageType.GLASS);
+		readCamouflageBlockFromNBT(data, EnumCamouflageType.DOOR);
+	}
+	
+	private void writeCamouflageBlockToNBT(NBTTagCompound data, EnumCamouflageType type){
+		ItemStack camouflageBlock = getCamouflageBlock(type);
+		if(camouflageBlock != null){
+			NBTTagCompound nbtTag = new NBTTagCompound();
+			camouflageBlock.writeToNBT(nbtTag);
+			data.setTag("Camouflage" + type.name(), nbtTag);
+		}
+	}
+	
+	private void readCamouflageBlockFromNBT(NBTTagCompound data, EnumCamouflageType type){
+		if(data.hasKey("Camouflage" + type.name())){
+			setCamouflageBlock(type, ItemStack.loadItemStackFromNBT(data.getCompoundTag("Camouflage" + type.name())));
 		}
 	}
 
@@ -206,13 +222,9 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		data.writeVarInt(Math.round(humidChange * 100));
 		tankManager.writeData(data);
 		energyManager.writeData(data);
-		ItemStack camouflageBlock = getCamouflageBlock();
-		if(camouflageBlock != null){
-			data.writeShort(1);
-			data.writeItemStack(camouflageBlock);
-		}else{
-			data.writeShort(0);
-		}
+		writeCamouflageBlockToData(data, EnumCamouflageType.DEFAULT);
+		writeCamouflageBlockToData(data, EnumCamouflageType.GLASS);
+		writeCamouflageBlockToData(data, EnumCamouflageType.DOOR);
 	}
 
 	@Override
@@ -221,28 +233,69 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		humidChange = data.readVarInt() / 100.0F;
 		tankManager.readData(data);
 		energyManager.readData(data);
+		readCamouflageBlockFromData(data);
+		readCamouflageBlockFromData(data);
+		readCamouflageBlockFromData(data);
+	}
+	
+	private void writeCamouflageBlockToData(DataOutputStreamForestry data, EnumCamouflageType type) throws IOException{
+		ItemStack camouflageBlock = getCamouflageBlock(type);
+		if(camouflageBlock != null){
+			data.writeShort(1);
+			data.writeShort(type.ordinal());
+			data.writeItemStack(camouflageBlock);
+		}else{
+			data.writeShort(0);
+		}
+	}
+	
+	private void readCamouflageBlockFromData(DataInputStreamForestry data) throws IOException{
 		if(data.readShort() == 1){
-			setCamouflageBlock(data.readItemStack());
+			setCamouflageBlock(EnumCamouflageType.VALUES[data.readShort()], data.readItemStack());
 		}
 	}
 	
 	@Override
-	public boolean setCamouflageBlock(ItemStack camouflageBlock) {
-		this.camouflageBlock = camouflageBlock;
+	public void setCamouflageBlock(EnumCamouflageType type, ItemStack camouflageBlock) {
+		switch (type) {
+		case DEFAULT:
+			camouflagePlainBlock = camouflageBlock;
+			break;
+		case GLASS:
+			camouflageGlassBlock = camouflageBlock;
+			break;
+		case DOOR:
+			camouflageDoorBlock = camouflageBlock;
+			break;
+		default:
+			return;
+		}
 		
 		if (worldObj != null && worldObj.isRemote) {
 			for(IMultiblockComponent comp : connectedParts){
-				ICamouflagedBlock camBlock = (ICamouflagedBlock) comp;
-				worldObj.markBlockForUpdate(camBlock.getCoordinates());
-				Proxies.net.sendToServer(new PacketCamouflageUpdate(this, true));
+				if(comp instanceof ICamouflagedBlock){
+					ICamouflagedBlock camBlock = (ICamouflagedBlock) comp;
+					if(camBlock.getCamouflageType() == type){
+						worldObj.markBlockForUpdate(camBlock.getCoordinates());
+					}
+				}
 			}
+			Proxies.net.sendToServer(new PacketCamouflageUpdate(this, type, true));
 		}
-		return true;
 	}
 	
 	@Override
-	public ItemStack getCamouflageBlock() {
-		return camouflageBlock;
+	public ItemStack getCamouflageBlock(EnumCamouflageType type) {
+		switch (type) {
+		case DEFAULT:
+			return camouflagePlainBlock;
+		case GLASS:
+			return camouflageGlassBlock;
+		case DOOR:
+			return camouflageDoorBlock;
+		default:
+			return null;
+		}
 	}
 
 	@Override
@@ -310,9 +363,8 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		}
 		
 		boolean canWork = true;
-		
 		for (IGreenhouseComponent.Listener listenerComponent : listenerComponents) {
-			canWork = listenerComponent.getGreenhouseListener().canWork(this);
+			canWork = listenerComponent.getGreenhouseListener().canWork(this, canWork);
 		}
 		
 		if(canWork){
@@ -405,7 +457,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		Class<? extends RectangularMultiblockControllerBase> myClass = this.getClass();
 		
 		List<InternalBlock> internalBlocks = Lists.newArrayList();
-		for (int y = minimumCoord.getY(); y <= maximumCoord.getY(); y++) {
+		height: for (int y = minimumCoord.getY(); y <= maximumCoord.getY(); y++) {
 			for (int x = minimumCoord.getX(); x <= maximumCoord.getX(); x++) {
 				for (int z = minimumCoord.getZ(); z <= maximumCoord.getZ(); z++) {
 					// Okay, figure out what sort of block this should be.
@@ -420,29 +472,40 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 					
 					// Validate block type against both part-level and material-level validators.
 					int extremes = 0;
+					int sides = 0;
 
 					if (x == minimumCoord.getX()) {
+						extremes++;
+						sides++;
+					}
+					if (y == minimumCoord.getY()) {
 						extremes++;
 					}
 					if (z == minimumCoord.getZ()) {
 						extremes++;
+						sides++;
 					}
 					
 					if (x == maximumCoord.getX()) {
 						extremes++;
+						sides++;
 					}
 					if (z == maximumCoord.getZ()) {
 						extremes++;
+						sides++;
 					}
 					
 					
 					if (extremes >= 1) {
 						// Side
 						BlockPos posUp = pos.add(0, 1, 0);
-						IBlockState state = worldObj.getBlockState(posUp);
-						if(!(state.getBlock() instanceof BlockGreenhouse)){
-							isNextRoof = true;
-							break;
+						TileEntity tileUp = worldObj.getTileEntity(posUp);
+						if(sides >= 1 && !(tileUp instanceof IGreenhouseComponent)){
+							int delta = y - minimumCoord.getY();
+							if(y - minimumCoord.getY() >= minY){
+								isNextRoof = true;
+							}
+							break height;
 						}
 						
 						int exteriorLevel = y - minimumCoord.getY();
@@ -467,14 +530,12 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 					}
 				}
 			}
-			if(isNextRoof){
-				InternalBlock iB = new InternalBlock(getMinimumCoord().add(1, 1, 1));
-				internalBlocks.add(iB);
-				addInternalBlock(iB, internalBlocks);
-				break;
-			}
 		}
-		if(internalBlocks.isEmpty()){
+		if(isNextRoof){
+			InternalBlock iB = new InternalBlock(getMinimumCoord().add(1, 1, 1));
+			internalBlocks.add(iB);
+			addInternalBlock(iB, internalBlocks);
+		}else if(internalBlocks.isEmpty()){
 			throw new MultiblockValidationException(StatCollector.translateToLocalFormatted("for.multiblock.error.space.closed"));
 		}
 		this.internalBlocks.addAll(internalBlocks);
@@ -487,7 +548,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 				BlockPos posFacing = new BlockPos(internalBlock.pos.getX() + entry.getKey().getFrontOffsetX(), internalBlock.pos.getY() + entry.getKey().getFrontOffsetY(), internalBlock.pos.getZ() + entry.getKey().getFrontOffsetZ());
 				BlockPos minPos = getMinimumCoord();
 				BlockPos maxPos = getMaximumCoord();
-				if(minPos.getX() > posFacing.getX() || minPos.getZ() > posFacing.getZ() || maxPos.getX() < posFacing.getX() || maxPos.getZ() < posFacing.getZ()){
+				if(minPos.getX() > posFacing.getX() || minPos.getY() > posFacing.getY() || minPos.getZ() > posFacing.getZ() || maxPos.getX() < posFacing.getX() || maxPos.getY() < posFacing.getY() || maxPos.getZ() < posFacing.getZ()){
 					throw new MultiblockValidationException(StatCollector.translateToLocalFormatted("for.multiblock.error.space.closed"));
 				}
 				
@@ -502,20 +563,15 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 					}
 				}else{
 					InternalBlock iB = new InternalBlock(posFacing, entry.getKey().getOpposite(), internalBlock);
-					if(!internalBlocks.contains(iB)){
+					if(internalBlocks.contains(iB)){
+						entry.setValue(true);
+					}else{
 						internalBlocks.add(iB);
 						addInternalBlock(iB, internalBlocks);
-					}else{
-						entry.setValue(true);
 					}
 				}
 			}
 		}
-	}
-	
-	@Override
-	public CamouflageType getType() {
-		return CamouflageType.DEFAULT;
 	}
 
 	private static class InternalBlock{

@@ -25,22 +25,25 @@ public class TileGreenhouseGearbox extends TileGreenhouse implements IEnergyRece
 	/* IEnergyReceiver */
 	@Override
 	public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
-		if(getEnergyManager() == null)
+		if(getEnergyManager() == null) {
 			return 0;
+		}
 		return getEnergyManager().receiveEnergy(from, maxReceive, simulate);
 	}
 
 	@Override
 	public int getEnergyStored(EnumFacing from) {
-		if(getEnergyManager() == null)
+		if(getEnergyManager() == null) {
 			return 0;
+		}
 		return getEnergyManager().getEnergyStored(from);
 	}
 
 	@Override
 	public int getMaxEnergyStored(EnumFacing from) {
-		if(getEnergyManager() == null)
+		if(getEnergyManager() == null) {
 			return 0;
+		}
 		return getEnergyManager().getMaxEnergyStored(from);
 	}
 
@@ -50,8 +53,9 @@ public class TileGreenhouseGearbox extends TileGreenhouse implements IEnergyRece
 	}
 	
 	private EnergyManager getEnergyManager() {
-		if(!getMultiblockLogic().isConnected())
+		if(!getMultiblockLogic().isConnected()) {
 			return null;
+		}
 		return getMultiblockLogic().getController().getEnergyManager();
 	}
 

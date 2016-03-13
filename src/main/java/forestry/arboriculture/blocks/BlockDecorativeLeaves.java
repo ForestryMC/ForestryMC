@@ -168,7 +168,7 @@ public abstract class BlockDecorativeLeaves extends Block implements IShearable,
 
 	@Nonnull
 	public TreeDefinition getTreeType(int meta) {
-		int variantMeta = (meta & VARIANTS_META_MASK) + (blockNumber * VARIANTS_PER_BLOCK);
+		int variantMeta = (meta & VARIANTS_META_MASK) + blockNumber * VARIANTS_PER_BLOCK;
 		return TreeDefinition.byMetadata(variantMeta);
 	}
 
@@ -179,7 +179,7 @@ public abstract class BlockDecorativeLeaves extends Block implements IShearable,
 
 	@Override
 	public int damageDropped(IBlockState state) {
-		return state.getValue(getVariant()).getMetadata() - (blockNumber * VARIANTS_PER_BLOCK);
+		return state.getValue(getVariant()).getMetadata() - blockNumber * VARIANTS_PER_BLOCK;
 	}
 
 	@Override

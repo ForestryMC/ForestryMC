@@ -11,11 +11,12 @@
 package forestry.greenhouse.gui;
 
 import net.minecraft.entity.player.EntityPlayer;
-
+import forestry.api.core.EnumCamouflageType;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.ledgers.ClimateLedger;
 import forestry.core.gui.widgets.TankWidget;
+import forestry.greenhouse.gui.widgets.WidgetCamouflageSlot;
 import forestry.greenhouse.multiblock.IGreenhouseControllerInternal;
 import forestry.greenhouse.tiles.TileGreenhouse;
 
@@ -24,12 +25,24 @@ public class GuiGreenhouse extends GuiForestryTitled<ContainerGreenhouse, TileGr
 	public GuiGreenhouse(EntityPlayer player, TileGreenhouse tile) {
 		super(Constants.TEXTURE_PATH_GUI + "/greenhouse.png", new ContainerGreenhouse(player.inventory, tile), tile);
 
-		widgetManager.add(new TankWidget(widgetManager, 80, 14, 0).setOverlayOrigin(176, 0));
+		//Add the water tank
+		widgetManager.add(new TankWidget(widgetManager, 80, 16, 0).setOverlayOrigin(176, 0));
+		
+		//Add the multiblock camouflage slots
+		widgetManager.add(new WidgetCamouflageSlot(widgetManager, 152, 16, inventory.getMultiblockLogic().getController(), EnumCamouflageType.DEFAULT));
+		widgetManager.add(new WidgetCamouflageSlot(widgetManager, 152, 37, inventory.getMultiblockLogic().getController(), EnumCamouflageType.GLASS));
+		widgetManager.add(new WidgetCamouflageSlot(widgetManager, 152, 58, inventory.getMultiblockLogic().getController(), EnumCamouflageType.DOOR));
+		
+		//Add the tile camouflage slots
+		widgetManager.add(new WidgetCamouflageSlot(widgetManager, 8, 16, inventory, EnumCamouflageType.DEFAULT));
+		widgetManager.add(new WidgetCamouflageSlot(widgetManager, 8, 37, inventory, EnumCamouflageType.GLASS));
+		widgetManager.add(new WidgetCamouflageSlot(widgetManager, 8, 58, inventory, EnumCamouflageType.DOOR));
 	}
 
 	@Override
 	protected void addLedgers() {
 		IGreenhouseControllerInternal greenhouseController = inventory.getMultiblockLogic().getController();
+		
 		ledgerManager.add(new ClimateLedger(ledgerManager, greenhouseController));
 		super.addLedgers();
 	}

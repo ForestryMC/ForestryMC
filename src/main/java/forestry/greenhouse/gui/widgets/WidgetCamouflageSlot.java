@@ -10,52 +10,67 @@
  ******************************************************************************/
 package forestry.greenhouse.gui.widgets;
 
+import java.util.Locale;
+
+import forestry.api.core.EnumCamouflageType;
+import forestry.api.core.ICamouflageHandler;
+import forestry.api.greenhouse.GreenhouseManager;
+import forestry.api.multiblock.IMultiblockController;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.proxy.Proxies;
-import forestry.core.tiles.ICamouflagedBlock;
-import forestry.core.tiles.ICamouflagedBlock.CamouflageType;
-import forestry.greenhouse.PluginGreenhouse;
+import mezz.jei.gui.ingredients.GuiIngredient;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.BlockModelShapes;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
 
 public class WidgetCamouflageSlot extends Widget {
 	
-	private ICamouflagedBlock camouflagedBlock;
+	private ICamouflageHandler camouflageHandler;
+	private EnumCamouflageType type;
 
-	public WidgetCamouflageSlot(WidgetManager manager, int xPos, int yPos, ICamouflagedBlock camouflagedBlock) {
+	public WidgetCamouflageSlot(WidgetManager manager, int xPos, int yPos, ICamouflageHandler camouflageHandler, EnumCamouflageType type) {
 		super(manager, xPos, yPos);
 		
-		this.camouflagedBlock = camouflagedBlock;
+		this.camouflageHandler = camouflageHandler;
+		this.type = type;
 	}
 
 	@Override
 	public void draw(int startX, int startY) {
-		if (camouflagedBlock == null || camouflagedBlock.getCamouflageBlock() != null) {
+		if (camouflageHandler != null && camouflageHandler.getCamouflageBlock(type) != null) {
 			Proxies.render.bindTexture(TextureMap.locationBlocksTexture);
 			RenderItem renderItem = Proxies.common.getClientInstance().getRenderItem();
-			renderItem.renderItemIntoGUI(camouflagedBlock.getCamouflageBlock(), startX + xPos, startY + yPos);
+			renderItem.renderItemIntoGUI(camouflageHandler.getCamouflageBlock(type), startX + xPos, startY + yPos);
 		}
 	}
 	
 	@Override
 	public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
 		super.handleMouseClick(mouseX, mouseY, mouseButton);
+		if(camouflageHandler == null){
+			return;
+		}
 		if(GuiScreen.isShiftKeyDown()){
-			camouflagedBlock.setCamouflageBlock(null);
+			camouflageHandler.setCamouflageBlock(type, null);
 		}else{
 			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-			ItemStack heldStack = player.getHeldItem();
-			if(heldStack != null && Block.getBlockFromItem(heldStack.getItem()) != null){
-				Block block = Block.getBlockFromItem(heldStack.getItem());
-				if(camouflagedBlock.getType() == CamouflageType.DEFAULT && !block.isOpaqueCube() && block.isNormalCube(player.worldObj, camouflagedBlock.getCoordinates()) || camouflagedBlock.getType() == CamouflageType.GLASS && block.isOpaqueCube() && PluginGreenhouse.isGreenhouseGlass(heldStack)){
-					camouflagedBlock.setCamouflageBlock(heldStack);
+			ItemStack stack = player.inventory.getItemStack();
+			if(stack != null && Block.getBlockFromItem(stack.getItem()) != null){
+				Block block = Block.getBlockFromItem(stack.getItem());
+				
+				if(!GreenhouseManager.greenhouseItemAccess.isOnCamouflageBlockBlackList(type, stack) && (type == EnumCamouflageType.DEFAULT && block.isOpaqueCube() && block.isNormalCube(player.worldObj, camouflageHandler.getCoordinates()) || type == EnumCamouflageType.GLASS && GreenhouseManager.greenhouseItemAccess.isGreenhouseGlass(stack))){
+					camouflageHandler.setCamouflageBlock(type, stack);
 				}
 			}
 		}
@@ -74,10 +89,19 @@ public class WidgetCamouflageSlot extends Widget {
 		@Override
 		public void refresh() {
 			toolTip.clear();
-			if (camouflagedBlock == null || camouflagedBlock.getCamouflageBlock() == null) {
-				return;
+			String typeName = type.name().toLowerCase(Locale.ENGLISH);
+			if(camouflageHandler instanceof IMultiblockController){
+				toolTip.add(StatCollector.translateToLocal("for.gui.empty.slot.camouflage.multiblock." + typeName) + ": ");
+			}else{
+				toolTip.add(StatCollector.translateToLocal("for.gui.empty.slot.camouflage." + typeName) + ": ");
 			}
-			toolTip.add(camouflagedBlock.getCamouflageBlock().getTooltip(Proxies.common.getClientInstance().thePlayer, false));
+			ItemStack camouflageBlock = camouflageHandler.getCamouflageBlock(type);
+					
+			if (camouflageHandler == null || camouflageBlock == null) {
+				toolTip.add(EnumChatFormatting.ITALIC.toString() + StatCollector.translateToLocal("for.gui.empty"));
+			}else{
+				toolTip.add(EnumChatFormatting.ITALIC.toString() + camouflageBlock.getTooltip(Proxies.common.getClientInstance().thePlayer, false));
+			}
 		}
 	};
 

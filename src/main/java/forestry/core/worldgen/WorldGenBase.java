@@ -89,7 +89,7 @@ public abstract class WorldGenBase extends WorldGenerator {
 				for (int z = (int) start.z; z < (int) start.z + area.z; z++) {
 					Vector position = new Vector(x, y, z);
 					Vector treeCenter = new Vector(center.x, y, center.z);
-					if (Vector.distance(position, treeCenter) <= (radius) + 0.01) {
+					if (Vector.distance(position, treeCenter) <= radius + 0.01) {
 						EnumFacing direction = Vector.direction(position, treeCenter);
 						block.setDirection(direction);
 						addBlock(world, new BlockPos(x, y, z), block, replace);
@@ -116,7 +116,7 @@ public abstract class WorldGenBase extends WorldGenerator {
 					}
 
 					double distance = Vector.distance(new Vector(x, y, z), new Vector(center.x, y, center.z));
-					if ((radius - width - 0.01 < distance && distance <= (radius) + 0.01)) {
+					if (radius - width - 0.01 < distance && distance <= radius + 0.01) {
 						addBlock(world, new BlockPos(x, y, z), block, replace);
 					}
 				}
@@ -130,7 +130,7 @@ public abstract class WorldGenBase extends WorldGenerator {
 		for (int x = (int) start.x; x < (int) start.x + area.x; x++) {
 			for (int y = (int) start.y; y < (int) start.y + area.y; y++) {
 				for (int z = (int) start.z; z < (int) start.z + area.z; z++) {
-					if (Vector.distance(new Vector(x, y, z), new Vector(center.x, center.y, center.z)) <= (radius) + 0.01) {
+					if (Vector.distance(new Vector(x, y, z), new Vector(center.x, center.y, center.z)) <= radius + 0.01) {
 						addBlock(world, new BlockPos(x, y, z), block, replace);
 					}
 				}

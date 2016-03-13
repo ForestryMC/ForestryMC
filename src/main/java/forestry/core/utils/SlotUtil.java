@@ -23,7 +23,7 @@ import forestry.core.gui.slots.SlotForestry;
 public abstract class SlotUtil {
 
 	public static boolean isSlotInRange(int slotIndex, int start, int count) {
-		return (slotIndex >= start) && (slotIndex < start + count);
+		return slotIndex >= start && slotIndex < start + count;
 	}
 
 	public static ItemStack slotClickPhantom(SlotForestry slot, int mouseButton, int modifier, EntityPlayer player) {
@@ -70,7 +70,7 @@ public abstract class SlotUtil {
 			return null;
 		}
 
-		boolean fromCraftingSlot = (slot instanceof SlotCrafting);
+		boolean fromCraftingSlot = slot instanceof SlotCrafting;
 
 		int numSlots = inventorySlots.size();
 		ItemStack stackInSlot = slot.getStack();

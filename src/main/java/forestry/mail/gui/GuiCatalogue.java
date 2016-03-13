@@ -55,7 +55,7 @@ public class GuiCatalogue extends GuiForestry<ContainerCatalogue, IInventory> {
 		buttonList.add(new GuiButton(2, width / 2 + 44, guiTop + 150, 12, 20, ">"));
 		buttonList.add(new GuiButton(3, width / 2 - 58, guiTop + 150, 12, 20, "<"));
 
-		buttonFilter = new GuiButton(4, (width / 2) - 44, guiTop + 150, 42, 20, StringUtil.localize("gui.mail.filter.all"));
+		buttonFilter = new GuiButton(4, width / 2 - 44, guiTop + 150, 42, 20, StringUtil.localize("gui.mail.filter.all"));
 		buttonList.add(buttonFilter);
 
 		buttonUse = new GuiButton(5, width / 2, guiTop + 150, 42, 20, StringUtil.localize("gui.mail.address.copy"));

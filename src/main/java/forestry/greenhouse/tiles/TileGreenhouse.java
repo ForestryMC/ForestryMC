@@ -17,7 +17,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
-
+import forestry.api.core.EnumCamouflageType;
+import forestry.api.core.ICamouflageHandler;
+import forestry.api.core.ICamouflagedBlock;
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.multiblock.IGreenhouseComponent;
@@ -32,15 +34,15 @@ import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamableGui;
 import forestry.core.proxy.Proxies;
-import forestry.core.tiles.ICamouflagedBlock;
 import forestry.core.tiles.ITitled;
+import forestry.greenhouse.blocks.BlockGreenhouse;
 import forestry.greenhouse.blocks.BlockGreenhouseType;
 import forestry.greenhouse.gui.ContainerGreenhouse;
 import forestry.greenhouse.gui.GuiGreenhouse;
 import forestry.greenhouse.multiblock.MultiblockLogicGreenhouse;
 import forestry.greenhouse.network.packets.PacketCamouflageUpdate;
 
-public abstract class TileGreenhouse extends MultiblockTileEntityForestry<MultiblockLogicGreenhouse> implements IGreenhouseComponent, IHintSource, IStreamableGui, IErrorLogicSource, IRestrictedAccess, ITitled, ICamouflagedBlock {
+public abstract class TileGreenhouse extends MultiblockTileEntityForestry<MultiblockLogicGreenhouse> implements IGreenhouseComponent, IHintSource, IStreamableGui, IErrorLogicSource, IRestrictedAccess, ITitled, ICamouflageHandler, ICamouflagedBlock {
 
 	private ItemStack camouflageBlock;
 
@@ -90,26 +92,21 @@ public abstract class TileGreenhouse extends MultiblockTileEntityForestry<Multib
 
 	/* CONSTRUCTION MATERIAL */
 	@Override
-	public boolean setCamouflageBlock(ItemStack camouflageBlock) {
+	public void setCamouflageBlock(EnumCamouflageType type, ItemStack camouflageBlock) {
 		this.camouflageBlock = camouflageBlock;
 		
 		if (worldObj != null) {
 			if (worldObj.isRemote) {
-				worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
+				worldObj.markBlockForUpdate(getPos());
 			} else {
-				Proxies.net.sendToServer(new PacketCamouflageUpdate(this));
+				Proxies.net.sendToServer(new PacketCamouflageUpdate(this, type));
 			}
 		}
-		return true;
 	}
 	
 	@Override
-	public ItemStack getCamouflageBlock() {
+	public ItemStack getCamouflageBlock(EnumCamouflageType type) {
 		return camouflageBlock;
-	}
-	
-	public BlockGreenhouseType getGreenhouseBlockType() {
-		return BlockGreenhouseType.VALUES[getBlockMetadata()];
 	}
 
 	/* TILEFORESTRY */
@@ -128,7 +125,7 @@ public abstract class TileGreenhouse extends MultiblockTileEntityForestry<Multib
 	protected void decodeDescriptionPacket(NBTTagCompound packetData) {
 		super.decodeDescriptionPacket(packetData);
 		if(packetData.hasKey("CamouflageBlock")){
-			setCamouflageBlock(ItemStack.loadItemStackFromNBT(packetData.getCompoundTag("CamouflageBlock")));
+			setCamouflageBlock(getCamouflageType(), ItemStack.loadItemStackFromNBT(packetData.getCompoundTag("CamouflageBlock")));
 		}
 	}
 
@@ -142,7 +139,7 @@ public abstract class TileGreenhouse extends MultiblockTileEntityForestry<Multib
 	@Override
 	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
 		getMultiblockLogic().getController().writeGuiData(data);
-		ItemStack camouflageBlock = getCamouflageBlock();
+		ItemStack camouflageBlock = getCamouflageBlock(getCamouflageType());
 		if(camouflageBlock != null){
 			data.writeShort(1);
 			data.writeItemStack(camouflageBlock);
@@ -155,7 +152,7 @@ public abstract class TileGreenhouse extends MultiblockTileEntityForestry<Multib
 	public void readGuiData(DataInputStreamForestry data) throws IOException {
 		getMultiblockLogic().getController().readGuiData(data);
 		if(data.readShort() == 1){
-			setCamouflageBlock(data.readItemStack());
+			setCamouflageBlock(getCamouflageType(), data.readItemStack());
 		}
 		
 	}
@@ -193,10 +190,10 @@ public abstract class TileGreenhouse extends MultiblockTileEntityForestry<Multib
 	}
 	
 	@Override
-	public CamouflageType getType() {
-		if(BlockGreenhouseType.VALUES[getBlockMetadata()] == BlockGreenhouseType.GLASS){
-			return CamouflageType.GLASS;
+	public EnumCamouflageType getCamouflageType() {
+		if(getBlockType() instanceof BlockGreenhouse && ((BlockGreenhouse)getBlockType()).getGreenhouseType() == BlockGreenhouseType.GLASS){
+			return EnumCamouflageType.GLASS;
 		}
-		return CamouflageType.DEFAULT;
+		return EnumCamouflageType.DEFAULT;
 	}
 }

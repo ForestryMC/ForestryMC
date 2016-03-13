@@ -74,8 +74,8 @@ public abstract class LeafDecayHelper {
 										leafDecayValues[(xOffset + arrayOffset) * xArrayMult + (yOffset + arrayOffset + 1) * yArrayMult + zOffset + arrayOffset] = sustainedValue;
 									}
 
-									if (leafDecayValues[(xOffset + arrayOffset) * xArrayMult + (yOffset + arrayOffset) * yArrayMult + (zOffset + arrayOffset - 1)] == IS_LEAVES) {
-										leafDecayValues[(xOffset + arrayOffset) * xArrayMult + (yOffset + arrayOffset) * yArrayMult + (zOffset + arrayOffset - 1)] = sustainedValue;
+									if (leafDecayValues[(xOffset + arrayOffset) * xArrayMult + (yOffset + arrayOffset) * yArrayMult + zOffset + arrayOffset - 1] == IS_LEAVES) {
+										leafDecayValues[(xOffset + arrayOffset) * xArrayMult + (yOffset + arrayOffset) * yArrayMult + zOffset + arrayOffset - 1] = sustainedValue;
 									}
 
 									if (leafDecayValues[(xOffset + arrayOffset) * xArrayMult + (yOffset + arrayOffset) * yArrayMult + zOffset + arrayOffset + 1] == IS_LEAVES) {
@@ -88,7 +88,7 @@ public abstract class LeafDecayHelper {
 				}
 			}
 
-			int sustainValue = leafDecayValues[(arrayOffset * xArrayMult) + (arrayOffset * yArrayMult) + arrayOffset];
+			int sustainValue = leafDecayValues[arrayOffset * xArrayMult + arrayOffset * yArrayMult + arrayOffset];
 
 			if (sustainValue >= 0) {
 				world.setBlockState(pos, state.getBlock().getStateFromMeta(leafMeta & -9), 4); // stop trying to decay

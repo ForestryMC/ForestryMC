@@ -23,6 +23,9 @@ public class ProxyGreenhouseClient extends ProxyGreenhouse {
 	@Override
 	public void initializeModels() {
 		for(BlockGreenhouseType greenhouseType : BlockGreenhouseType.VALUES){
+			if(greenhouseType == BlockGreenhouseType.DOOR) {
+				return;
+			}
 			Proxies.render.registerBlockModel(new BlockModelIndex(new ModelResourceLocation("forestry:greenhouse." + greenhouseType),
 				new ModelResourceLocation("forestry:greenhouse", "inventory"), new ModelGreenhouse(),
 				Block.getBlockFromItem(PluginGreenhouse.blocks.getGreenhouseBlock(greenhouseType).getItem())));

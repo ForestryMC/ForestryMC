@@ -5,8 +5,6 @@
  ******************************************************************************/
 package forestry.api.greenhouse;
 
-import forestry.api.core.EnumHumidity;
-import forestry.api.core.EnumTemperature;
 import forestry.api.core.IErrorLogicSource;
 import forestry.core.tiles.IClimatised;
 import net.minecraft.util.BlockPos;

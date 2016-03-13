@@ -123,7 +123,7 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 	/* RESEARCH */
 	@Override
 	public int getComplexity() {
-		return (int) ((1.35f / rarity) * 1.5);
+		return (int) (1.35f / rarity * 1.5);
 	}
 
 	@Override

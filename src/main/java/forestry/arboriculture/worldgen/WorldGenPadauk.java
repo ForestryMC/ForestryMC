@@ -47,11 +47,11 @@ public class WorldGenPadauk extends WorldGenTree {
 				if (world.rand.nextBoolean()) {
 					
 					int[] offset = {-1, 1};
-					int offsetValue = (offset[new Random().nextInt(offset.length)]);
+					int offsetValue = offset[new Random().nextInt(offset.length)];
 					int maxBranchLength = 3;
 					int branchLength = new Random().nextInt(maxBranchLength + 1);
 					EnumFacing[] direction = {EnumFacing.NORTH, EnumFacing.EAST};
-					EnumFacing directionValue = (direction[new Random().nextInt(direction.length)]);
+					EnumFacing directionValue = direction[new Random().nextInt(direction.length)];
 					int branchSpawn = leafSpawn;
 
 					for (int j = 1; j < branchLength + 1; j++) {

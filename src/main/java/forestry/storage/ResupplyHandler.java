@@ -32,7 +32,7 @@ public class ResupplyHandler implements IResupplyHandler {
 	private static List<ItemStack> backpacks(InventoryPlayer playerInventory) {
 		List<ItemStack> backpacks = new ArrayList<>();
 		for (ItemStack itemStack : playerInventory.mainInventory) {
-			if (itemStack != null && itemStack.stackSize > 0 && (itemStack.getItem() instanceof ItemBackpack)) {
+			if (itemStack != null && itemStack.stackSize > 0 && itemStack.getItem() instanceof ItemBackpack) {
 				backpacks.add(itemStack);
 			}
 		}
@@ -61,7 +61,7 @@ public class ResupplyHandler implements IResupplyHandler {
 			}
 
 			// Load their inventory
-			ItemBackpack backpackItem = ((ItemBackpack) backpack.getItem());
+			ItemBackpack backpackItem = (ItemBackpack) backpack.getItem();
 			ItemInventory backpackInventory = new ItemInventoryBackpack(player, backpackItem.getBackpackSize(), backpack);
 
 			Event event = new BackpackResupplyEvent(player, backpackItem.getDefinition(), backpackInventory);

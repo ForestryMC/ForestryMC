@@ -58,7 +58,12 @@ public class FakeAccessHandler implements IAccessHandler {
 	public boolean allowsViewing(EntityPlayer player) {
 		return true;
 	}
-
+	
+	@Override
+	public boolean allowsInteracting(EntityPlayer player) {
+		return true;
+	}
+	
 	@Override
 	public boolean allowsPipeConnections() {
 		return true;

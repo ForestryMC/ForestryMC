@@ -141,7 +141,7 @@ public abstract class EntityMinecartBeeHousingBase extends EntityMinecartContain
 
 	@Override
 	public int getHealthScaled(int i) {
-		return (breedingProgressPercent * i) / 100;
+		return breedingProgressPercent * i / 100;
 	}
 
 	@Override
