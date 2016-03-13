@@ -1057,7 +1057,7 @@ public enum BeeDefinition implements IBeeDefinition {
 	@Override
 	public final ItemStack getMemberStack(EnumBeeType beeType) {
 		IBee bee = getIndividual();
-		return BeeManager.beeRoot.getMemberStack(bee, beeType.ordinal());
+		return BeeManager.beeRoot.getMemberStack(bee, beeType);
 	}
 
 	public final IBeeDefinition getRainResist() {

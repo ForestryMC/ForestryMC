@@ -103,7 +103,7 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable {
 				continue;
 			}
 
-			itemList.add(TreeManager.treeRoot.getMemberStack(individual, type.ordinal()));
+			itemList.add(TreeManager.treeRoot.getMemberStack(individual, type));
 		}
 	}
 

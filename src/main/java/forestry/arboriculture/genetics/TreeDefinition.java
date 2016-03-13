@@ -1104,7 +1104,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 	@Override
 	public final ItemStack getMemberStack(EnumGermlingType treeType) {
 		ITree tree = getIndividual();
-		return TreeManager.treeRoot.getMemberStack(tree, treeType.ordinal());
+		return TreeManager.treeRoot.getMemberStack(tree, treeType);
 	}
 
 	public static void preInit() {

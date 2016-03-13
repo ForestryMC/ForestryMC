@@ -31,9 +31,6 @@ public interface IButterflyRoot extends ISpeciesRoot {
 	@Override
 	IButterfly getMember(NBTTagCompound compound);
 
-	@Override
-	ItemStack getMemberStack(IIndividual butterfly, int type);
-
 	/* GENOME CONVERSION */
 	@Override
 	IButterfly templateAsIndividual(IAllele[] template);

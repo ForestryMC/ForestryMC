@@ -25,7 +25,7 @@ public class MatingRecipe implements IRecipe {
 	private ItemStack cached;
 	
 	public MatingRecipe() {
-		unknown = ButterflyManager.butterflyRoot.getMemberStack(ButterflyManager.butterflyRoot.getIndividualTemplates().get(0), EnumFlutterType.BUTTERFLY.ordinal());
+		unknown = ButterflyManager.butterflyRoot.getMemberStack(ButterflyManager.butterflyRoot.getIndividualTemplates().get(0), EnumFlutterType.BUTTERFLY);
 	}
 	
 	@Override
@@ -36,11 +36,11 @@ public class MatingRecipe implements IRecipe {
 		int sera = 0;
 		
 		for (int i = 0; i < crafting.getSizeInventory(); i++) {
-			if (ButterflyManager.butterflyRoot.isMember(crafting.getStackInSlot(i), EnumFlutterType.BUTTERFLY.ordinal())) {
+			if (ButterflyManager.butterflyRoot.isMember(crafting.getStackInSlot(i), EnumFlutterType.BUTTERFLY)) {
 				butterflies++;
 				mated = ButterflyManager.butterflyRoot.isMated(crafting.getStackInSlot(i));
 				cached = crafting.getStackInSlot(i);
-			} else if (ButterflyManager.butterflyRoot.isMember(crafting.getStackInSlot(i), EnumFlutterType.SERUM.ordinal())) {
+			} else if (ButterflyManager.butterflyRoot.isMember(crafting.getStackInSlot(i), EnumFlutterType.SERUM)) {
 				sera++;
 			}
 		}
@@ -62,9 +62,9 @@ public class MatingRecipe implements IRecipe {
 		IButterfly butterfly = null;
 		IButterfly serum = null;
 		for (int i = 0; i < crafting.getSizeInventory(); i++) {
-			if (ButterflyManager.butterflyRoot.isMember(crafting.getStackInSlot(i), EnumFlutterType.BUTTERFLY.ordinal())) {
+			if (ButterflyManager.butterflyRoot.isMember(crafting.getStackInSlot(i), EnumFlutterType.BUTTERFLY)) {
 				butterfly = ButterflyManager.butterflyRoot.getMember(crafting.getStackInSlot(i));
-			} else if (ButterflyManager.butterflyRoot.isMember(crafting.getStackInSlot(i), EnumFlutterType.SERUM.ordinal())) {
+			} else if (ButterflyManager.butterflyRoot.isMember(crafting.getStackInSlot(i), EnumFlutterType.SERUM)) {
 				serum = ButterflyManager.butterflyRoot.getMember(crafting.getStackInSlot(i));
 			}
 		}
@@ -74,7 +74,7 @@ public class MatingRecipe implements IRecipe {
 		
 		IButterfly mated = butterfly.copy();
 		mated.mate(serum);
-		return ButterflyManager.butterflyRoot.getMemberStack(mated, EnumFlutterType.BUTTERFLY.ordinal());
+		return ButterflyManager.butterflyRoot.getMemberStack(mated, EnumFlutterType.BUTTERFLY);
 	}
 
 	@Override

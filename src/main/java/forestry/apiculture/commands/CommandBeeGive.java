@@ -93,7 +93,7 @@ public class CommandBeeGive extends SubCommand {
 			bee.mate(bee);
 		}
 
-		ItemStack beeStack = BeeManager.beeRoot.getMemberStack(bee, beeType.ordinal());
+		ItemStack beeStack = BeeManager.beeRoot.getMemberStack(bee, beeType);
 		player.dropPlayerItemWithRandomChoice(beeStack, true);
 
 		CommandHelpers.sendLocalizedChatMessage(sender, "for.chat.command.forestry.bee.give.given", player.getName(), bee.getGenome().getPrimary().getName(), beeType.getName());

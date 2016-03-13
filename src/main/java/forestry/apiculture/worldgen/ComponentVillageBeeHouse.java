@@ -334,7 +334,7 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 
 	private static ItemStack getRandomVillageBeeStack(World world, BlockPos pos, EnumBeeType beeType) {
 		IBee randomVillageBee = getRandomVillageBee(world, pos);
-		return BeeManager.beeRoot.getMemberStack(randomVillageBee, beeType.ordinal());
+		return BeeManager.beeRoot.getMemberStack(randomVillageBee, beeType);
 	}
 
 	private static IBee getRandomVillageBee(World world, BlockPos pos) {

@@ -124,7 +124,7 @@ public class BlockBeehives extends BlockContainer implements IItemModelRegister 
 						bee.setIsNatural(false);
 					}
 
-					ItemStack princess = BeeManager.beeRoot.getMemberStack(bee, EnumBeeType.PRINCESS.ordinal());
+					ItemStack princess = BeeManager.beeRoot.getMemberStack(bee, EnumBeeType.PRINCESS);
 					drops.add(princess);
 					hasPrincess = true;
 					break;
@@ -136,7 +136,7 @@ public class BlockBeehives extends BlockContainer implements IItemModelRegister 
 		for (IHiveDrop drop : hiveDrops) {
 			if (random.nextDouble() < drop.getChance(world, pos, fortune)) {
 				IBee bee = drop.getBeeType(world, pos);
-				ItemStack drone = BeeManager.beeRoot.getMemberStack(bee, EnumBeeType.DRONE.ordinal());
+				ItemStack drone = BeeManager.beeRoot.getMemberStack(bee, EnumBeeType.DRONE);
 				drops.add(drone);
 				break;
 			}

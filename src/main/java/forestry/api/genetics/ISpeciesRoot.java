@@ -51,7 +51,7 @@ public interface ISpeciesRoot {
 	 * @param type Integer denoting the type needed to match. (i.e. butterfly vs. butterfly serum; bee queens, princesses, drones; etc.)
 	 * @return true if the itemstack contains an {@link IIndividual} of this class, false otherwise.
 	 */
-	boolean isMember(ItemStack stack, int type);
+	boolean isMember(ItemStack stack, ISpeciesType type);
 
 	/**
 	 * Used to check whether the given {@link IIndividual} is member of this class.
@@ -67,7 +67,10 @@ public interface ISpeciesRoot {
 	@Nullable
 	ISpeciesType getType(ItemStack itemStack);
 
-	ItemStack getMemberStack(IIndividual individual, int type);
+	/** Species type used to represent this species in icons */
+	ISpeciesType getIconType();
+
+	ItemStack getMemberStack(IIndividual individual, ISpeciesType type);
 
 	/* BREEDING TRACKER */
 	IBreedingTracker getBreedingTracker(World world, GameProfile player);

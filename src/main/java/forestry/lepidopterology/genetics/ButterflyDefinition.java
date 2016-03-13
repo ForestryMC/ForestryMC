@@ -363,6 +363,6 @@ public enum ButterflyDefinition implements IButterflyDefinition {
 	@Override
 	public final ItemStack getMemberStack(EnumFlutterType flutterType) {
 		IButterfly butterfly = getIndividual();
-		return ButterflyManager.butterflyRoot.getMemberStack(butterfly, flutterType.ordinal());
+		return ButterflyManager.butterflyRoot.getMemberStack(butterfly, flutterType);
 	}
 }

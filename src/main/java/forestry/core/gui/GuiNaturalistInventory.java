@@ -28,6 +28,7 @@ import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.ISpeciesRoot;
+import forestry.api.genetics.ISpeciesType;
 import forestry.core.config.Constants;
 import forestry.core.genetics.mutations.EnumMutateChance;
 import forestry.core.gui.buttons.GuiBetterButton;
@@ -55,7 +56,7 @@ public class GuiNaturalistInventory extends GuiForestry<Container, IPagedInvento
 		ySize = 202;
 
 		for (IIndividual individual : speciesRoot.getIndividualTemplates()) {
-			iconStacks.put(individual.getIdent(), speciesRoot.getMemberStack(individual, 0));
+			iconStacks.put(individual.getIdent(), speciesRoot.getMemberStack(individual, speciesRoot.getIconType()));
 		}
 
 		breedingTracker = speciesRoot.getBreedingTracker(player.worldObj, player.getGameProfile());

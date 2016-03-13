@@ -152,7 +152,7 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 
 	@Override
 	public ItemStack[] getResearchBounty(World world, GameProfile researcher, IIndividual individual, int bountyLevel) {
-		return new ItemStack[]{getRoot().getMemberStack(individual.copy(), EnumFlutterType.SERUM.ordinal())};
+		return new ItemStack[]{getRoot().getMemberStack(individual.copy(), EnumFlutterType.SERUM)};
 	}
 
 	/* OTHER */

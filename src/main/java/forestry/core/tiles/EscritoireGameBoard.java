@@ -73,7 +73,7 @@ public class EscritoireGameBoard implements INbtWritable, IStreamable {
 
 		for (int i = 0; i < tokenCount / 2; i++) {
 			IIndividual token = root.templateAsIndividual(root.getRandomTemplate(rand));
-			ItemStack pair = root.getMemberStack(token, 0);
+			ItemStack pair = root.getMemberStack(token, root.getIconType());
 			gameTokens.add(new EscritoireGameToken(pair));
 			gameTokens.add(new EscritoireGameToken(pair));
 		}

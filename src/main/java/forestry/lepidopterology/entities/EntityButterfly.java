@@ -381,7 +381,7 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 		if (!worldObj.isRemote) {
 			IButterflyRoot root = contained.getGenome().getPrimary().getRoot();
 			ILepidopteristTracker tracker = root.getBreedingTracker(worldObj, player.getGameProfile());
-			ItemStack itemStack = root.getMemberStack(contained.copy(), EnumFlutterType.BUTTERFLY.ordinal());
+			ItemStack itemStack = root.getMemberStack(contained.copy(), EnumFlutterType.BUTTERFLY);
 
 			tracker.registerCatch(contained);
 			ItemStackUtil.dropItemStackAsEntity(itemStack, worldObj, posX, posY, posZ);
@@ -403,7 +403,7 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 		IIndividual pollen = getPollen();
 		if (pollen != null) {
 			ISpeciesRoot root = AlleleManager.alleleRegistry.getSpeciesRoot(pollen.getClass());
-			ItemStack pollenStack = root.getMemberStack(pollen, EnumGermlingType.POLLEN.ordinal());
+			ItemStack pollenStack = root.getMemberStack(pollen, EnumGermlingType.POLLEN);
 			ItemStackUtil.dropItemStackAsEntity(pollenStack, worldObj, posX, posY, posZ);
 		}
 	}
@@ -513,6 +513,6 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 		IButterflyRoot root = species.getRoot();
 		IAllele[] template = root.getTemplate(species.getUID());
 		IButterfly butterfly = root.templateAsIndividual(template);
-		return root.getMemberStack(butterfly, EnumFlutterType.BUTTERFLY.ordinal());
+		return root.getMemberStack(butterfly, EnumFlutterType.BUTTERFLY);
 	}
 }

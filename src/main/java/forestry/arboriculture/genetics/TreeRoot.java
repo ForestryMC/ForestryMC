@@ -52,6 +52,7 @@ import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
+import forestry.api.genetics.ISpeciesType;
 import forestry.arboriculture.PluginArboriculture;
 import forestry.arboriculture.blocks.BlockFruitPod;
 import forestry.arboriculture.blocks.BlockSapling;
@@ -107,8 +108,8 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 	}
 
 	@Override
-	public boolean isMember(ItemStack stack, int type) {
-		return getType(stack).ordinal() == type;
+	public boolean isMember(ItemStack stack, ISpeciesType type) {
+		return getType(stack) == type;
 	}
 
 	@Override
@@ -132,6 +133,11 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 		}
 
 		return null;
+	}
+
+	@Override
+	public EnumGermlingType getIconType() {
+		return EnumGermlingType.SAPLING;
 	}
 
 	@Override
@@ -167,13 +173,16 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 	}
 
 	@Override
-	public ItemStack getMemberStack(IIndividual tree, int type) {
+	public ItemStack getMemberStack(IIndividual tree, ISpeciesType type) {
 		if (!isMember(tree)) {
+			return null;
+		}
+		if (!(type instanceof EnumGermlingType)) {
 			return null;
 		}
 
 		Item germlingItem;
-		switch (EnumGermlingType.VALUES[type]) {
+		switch ((EnumGermlingType) type) {
 			case SAPLING:
 				germlingItem = PluginArboriculture.items.sapling;
 				break;

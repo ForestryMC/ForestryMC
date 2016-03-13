@@ -41,7 +41,7 @@ public abstract class BeeVariation implements IBeeDefinition {
 	@Override
 	public final ItemStack getMemberStack(EnumBeeType beeType) {
 		IBee bee = getIndividual();
-		return BeeManager.beeRoot.getMemberStack(bee, beeType.ordinal());
+		return BeeManager.beeRoot.getMemberStack(bee, beeType);
 	}
 
 	public static class RainResist extends BeeVariation {

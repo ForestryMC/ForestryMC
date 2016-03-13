@@ -108,7 +108,7 @@ public class ItemBeeGE extends ItemGE {
 				continue;
 			}
 
-			ItemStack beeStack = BeeManager.beeRoot.getMemberStack(bee, type.ordinal());
+			ItemStack beeStack = BeeManager.beeRoot.getMemberStack(bee, type);
 			if (beeStack != null) {
 				itemList.add(beeStack);
 			}

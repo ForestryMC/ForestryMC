@@ -395,7 +395,7 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 			count--;
 			IBee heiress = queen.spawnPrincess(beeHousing);
 			if (heiress != null) {
-				ItemStack princess = BeeManager.beeRoot.getMemberStack(heiress, EnumBeeType.PRINCESS.ordinal());
+				ItemStack princess = BeeManager.beeRoot.getMemberStack(heiress, EnumBeeType.PRINCESS);
 				breedingTracker.registerPrincess(heiress);
 				offspring.push(princess);
 			}
@@ -404,7 +404,7 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 		// Drones
 		IBee[] drones = queen.spawnDrones(beeHousing);
 		for (IBee drone : drones) {
-			ItemStack droneStack = BeeManager.beeRoot.getMemberStack(drone, EnumBeeType.DRONE.ordinal());
+			ItemStack droneStack = BeeManager.beeRoot.getMemberStack(drone, EnumBeeType.DRONE);
 			breedingTracker.registerDrone(drone);
 			offspring.push(droneStack);
 		}
