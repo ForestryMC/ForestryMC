@@ -12,6 +12,8 @@ package forestry.core.proxy;
 
 import javax.annotation.Nonnull;
 
+import com.google.common.collect.ImmutableMap;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -34,7 +36,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 import net.minecraftforge.client.model.ModelLoader;
-
+import net.minecraftforge.client.model.animation.Animation;
+import net.minecraftforge.client.model.animation.ITimeValue;
+import net.minecraftforge.common.model.animation.IAnimationStateMachine;
 import forestry.apiculture.entities.EntityFXBee;
 import forestry.apiculture.render.ParticleRenderer;
 import forestry.apiculture.render.TextureHabitatLocator;
@@ -150,6 +154,11 @@ public class ProxyRenderClient extends ProxyRender {
 	public void registerModels() {
 		ModelManager.registerModels();
 	}
+	
+	@Override
+    public IAnimationStateMachine loadAnimationState(ResourceLocation location, ImmutableMap<String, ITimeValue> parameters){
+        return Animation.INSTANCE.load(location, parameters);
+    }
 
 	private static boolean shouldSpawnParticle(World world) {
 		if (!Config.enableParticleFX) {

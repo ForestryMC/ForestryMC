@@ -13,6 +13,8 @@ package forestry.greenhouse.multiblock;
 import forestry.api.core.EnumCamouflageType;
 import forestry.core.fluids.FakeTankManager;
 import forestry.core.fluids.ITankManager;
+import forestry.core.inventory.FakeInventoryAdapter;
+import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.multiblock.FakeMultiblockController;
 import forestry.energy.EnergyManager;
 import net.minecraft.item.ItemStack;
@@ -23,6 +25,11 @@ public class FakeGreenhouseController extends FakeMultiblockController implement
 	
 	private FakeGreenhouseController() {
 
+	}
+	
+	@Override
+	public IInventoryAdapter getInternalInventory() {
+		return FakeInventoryAdapter.instance();
 	}
 
 	@Override

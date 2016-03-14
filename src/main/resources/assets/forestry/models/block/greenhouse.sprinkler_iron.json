@@ -1,0 +1,43 @@
+{
+"textures": {
+    "iron_base": "blocks/anvil_base"
+},
+"elements": [ 
+{
+    "from": [ 7, 4, 7 ],
+    "to": [ 9, 10, 9 ],
+    "faces": {
+        "down":  { "uv": [ 9, 9, 7, 7 ], "texture": "#iron_base" },
+        "up":    { "uv": [ 7, 7, 9, 9 ], "texture": "#iron_base" },
+        "north": { "uv": [ 7, 6, 9, 12 ], "texture": "#iron_base" },
+        "south": { "uv": [ 7, 6, 9, 12 ], "texture": "#iron_base" },
+        "west":  { "uv": [ 7, 6, 9, 12 ], "texture": "#iron_base" },
+        "east":  { "uv": [ 7, 6, 9, 12 ], "texture": "#iron_base" }
+    }
+},
+{
+    "from": [ 7.5, 5, 5.5 ],
+    "to": [ 8.5, 6, 10.5 ],
+    "faces": {
+        "down":  { "uv": [ 8.5, 10.5, 7.5, 5.5 ], "texture": "#iron_base" },
+        "up":    { "uv": [ 7.5, 5.5, 8.5, 10.5 ], "texture": "#iron_base" },
+        "north": { "uv": [ 7.5, 10, 8.5, 11 ], "texture": "#iron_base" },
+        "south": { "uv": [ 7.5, 10, 8.5, 11 ], "texture": "#iron_base" },
+        "west":  { "uv": [ 5.5, 10, 10.5, 11 ], "texture": "#iron_base" },
+        "east":  { "uv": [ 5.5, 10, 10.5, 11 ], "texture": "#iron_base" }
+    }
+},
+{
+    "from": [ 5.5, 5, 7.5 ],
+    "to": [ 10.5, 6, 8.5 ],
+    "faces": {
+        "down":  { "uv": [ 10.5, 8.5, 5.5, 7.5 ], "texture": "#iron_base" },
+        "up":    { "uv": [ 5.5, 7.5, 10.5, 8.5 ], "texture": "#iron_base" },
+        "north": { "uv": [ 5.5, 10, 10.5, 11 ], "texture": "#iron_base" },
+        "south": { "uv": [ 5.5, 10, 10.5, 11 ], "texture": "#iron_base" },
+        "west":  { "uv": [ 7.5, 10, 8.5, 11 ], "texture": "#iron_base" },
+        "east":  { "uv": [ 7.5, 10, 8.5, 11 ], "texture": "#iron_base" }
+    }
+}
+]
+}

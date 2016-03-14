@@ -16,12 +16,15 @@ import forestry.api.core.ICamouflageHandler;
 import forestry.api.multiblock.IGreenhouseController;
 import forestry.core.access.IRestrictedAccess;
 import forestry.core.fluids.ITankManager;
+import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.multiblock.IMultiblockControllerInternal;
 import forestry.core.network.IStreamableGui;
 import forestry.energy.EnergyManager;
 
 public interface IGreenhouseControllerInternal extends IGreenhouseController, IMultiblockControllerInternal, IRestrictedAccess, IStreamableGui, ICamouflageHandler {
 
+	IInventoryAdapter getInternalInventory();
+	
 	ITankManager getTankManager();
 	
 	@Nullable

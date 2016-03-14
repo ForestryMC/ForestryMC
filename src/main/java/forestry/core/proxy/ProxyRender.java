@@ -12,6 +12,8 @@ package forestry.core.proxy;
 
 import javax.annotation.Nullable;
 
+import com.google.common.collect.ImmutableMap;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.statemap.IStateMapper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -20,7 +22,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-
+import net.minecraftforge.client.model.animation.ITimeValue;
+import net.minecraftforge.common.model.animation.IAnimationStateMachine;
 import forestry.core.fluids.Fluids;
 import forestry.core.models.BlockModelIndex;
 import forestry.core.models.ModelIndex;
@@ -92,6 +95,10 @@ public class ProxyRender {
 	}
 	
 	public void registerModels() {
+	}
+	
+	public IAnimationStateMachine loadAnimationState(ResourceLocation location, ImmutableMap<String, ITimeValue> parameters){
+		return null;
 	}
 
 	/* FX */

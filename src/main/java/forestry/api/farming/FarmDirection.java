@@ -23,6 +23,7 @@ public enum FarmDirection {
 		return forgeDirection;
 	}
 
+	@SuppressWarnings("incomplete-switch")
 	public static FarmDirection getFarmDirection(EnumFacing forgeDirection) {
 		switch (forgeDirection) {
 			case NORTH:

@@ -42,6 +42,7 @@ public class EnergyManager implements IEnergyHandler, IEnergyReceiver, IEnergyPr
 		mode = EnergyTransferMode.RECEIVE;
 	}
 
+	@SuppressWarnings("incomplete-switch")
 	private boolean canExtract() {
 		switch (mode) {
 			case EXTRACT:
@@ -51,6 +52,7 @@ public class EnergyManager implements IEnergyHandler, IEnergyReceiver, IEnergyPr
 		return false;
 	}
 
+	@SuppressWarnings("incomplete-switch")
 	private boolean canReceive() {
 		switch (mode) {
 			case RECEIVE:

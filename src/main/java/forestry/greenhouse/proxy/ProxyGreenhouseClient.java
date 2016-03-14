@@ -12,11 +12,14 @@ package forestry.greenhouse.proxy;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraftforge.client.model.animation.AnimationTESR;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import forestry.core.models.BlockModelIndex;
 import forestry.core.proxy.Proxies;
 import forestry.greenhouse.PluginGreenhouse;
 import forestry.greenhouse.blocks.BlockGreenhouseType;
 import forestry.greenhouse.models.ModelGreenhouse;
+import forestry.greenhouse.tiles.TileGreenhouseSprinkler;
 
 public class ProxyGreenhouseClient extends ProxyGreenhouse {
 
@@ -24,7 +27,11 @@ public class ProxyGreenhouseClient extends ProxyGreenhouse {
 	public void initializeModels() {
 		for(BlockGreenhouseType greenhouseType : BlockGreenhouseType.VALUES){
 			if(greenhouseType == BlockGreenhouseType.DOOR) {
-				return;
+				continue;
+			}
+			else if(greenhouseType == BlockGreenhouseType.SPRINKLER){
+				ClientRegistry.bindTileEntitySpecialRenderer(TileGreenhouseSprinkler.class, new AnimationTESR());
+				continue;
 			}
 			Proxies.render.registerBlockModel(new BlockModelIndex(new ModelResourceLocation("forestry:greenhouse." + greenhouseType),
 				new ModelResourceLocation("forestry:greenhouse", "inventory"), new ModelGreenhouse(),

@@ -29,6 +29,7 @@ import forestry.core.access.IAccessHandler;
 import forestry.core.access.IRestrictedAccess;
 import forestry.core.config.Config;
 import forestry.core.gui.IHintSource;
+import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.multiblock.MultiblockTileEntityForestry;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
@@ -195,5 +196,10 @@ public abstract class TileGreenhouse extends MultiblockTileEntityForestry<Multib
 			return EnumCamouflageType.GLASS;
 		}
 		return EnumCamouflageType.DEFAULT;
+	}
+	
+	@Override
+	public IInventoryAdapter getInternalInventory() {
+		return getMultiblockLogic().getController().getInternalInventory();
 	}
 }

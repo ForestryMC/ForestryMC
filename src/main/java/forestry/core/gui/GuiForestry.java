@@ -49,7 +49,7 @@ import forestry.core.tiles.IClimatised;
 import forestry.core.tiles.IPowerHandler;
 
 @Optional.Interface(iface = "codechicken.nei.api.INEIGuiHandler", modid = "NotEnoughItems")
-public abstract class GuiForestry<C extends Container, I extends IInventory> extends GuiContainer /*implements INEIGuiHandler*/ {
+public abstract class GuiForestry<C extends Container, I extends IInventory> extends GuiContainer {
 	protected final I inventory;
 	protected final C container;
 

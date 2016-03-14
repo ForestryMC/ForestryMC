@@ -27,6 +27,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumWorldBlockLayer;
@@ -38,10 +39,12 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
+import net.minecraftforge.common.property.Properties;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.core.IModelManager;
+import forestry.api.multiblock.IGreenhouseComponent;
 import forestry.core.CreativeTabForestry;
 import forestry.core.blocks.BlockStructure;
 import forestry.core.blocks.propertys.UnlistedBlockAccess;
@@ -93,7 +96,7 @@ public abstract class BlockGreenhouse extends BlockStructure {
 		super(Material.rock);
 		BlockGreenhouseType greenhouseType = getGreenhouseType();
 		IBlockState defaultState = this.blockState.getBaseState();
-		if(greenhouseType.activatable){
+		if(greenhouseType.activatable && greenhouseType != BlockGreenhouseType.SPRINKLER){
 			defaultState = defaultState.withProperty(STATE, State.OFF);
 		}
 		setDefaultState(defaultState);
@@ -102,6 +105,32 @@ public abstract class BlockGreenhouse extends BlockStructure {
 		setHarvestLevel("pickaxe", 0);
 		setCreativeTab(CreativeTabForestry.tabForestry);
 	}
+	
+    @Override
+	@SideOnly(Side.CLIENT)
+    public AxisAlignedBB getSelectedBoundingBox(World worldIn, BlockPos pos){
+    	if(getGreenhouseType() == BlockGreenhouseType.SPRINKLER){
+    		this.setBlockBoundsBasedOnState(worldIn, pos);
+    	}
+        return super.getSelectedBoundingBox(worldIn, pos);
+    }
+
+    @Override
+	public AxisAlignedBB getCollisionBoundingBox(World worldIn, BlockPos pos, IBlockState state){
+    	if(getGreenhouseType() == BlockGreenhouseType.SPRINKLER){
+    		this.setBlockBoundsBasedOnState(worldIn, pos);
+    	}
+        return super.getCollisionBoundingBox(worldIn, pos, state);
+    }
+
+    @Override
+	public void setBlockBoundsBasedOnState(IBlockAccess worldIn, BlockPos pos){
+    	if(getGreenhouseType() == BlockGreenhouseType.SPRINKLER){
+    		setBlockBounds(0.3125F, 0.25F, 0.3125F, 0.6875F, 1F, 0.6875F);
+    	}else{
+    		super.setBlockBoundsBasedOnState(worldIn, pos);
+    	}
+    }
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
@@ -110,16 +139,30 @@ public abstract class BlockGreenhouse extends BlockStructure {
 
 	@Override
 	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
-		return ((IExtendedBlockState) super.getExtendedState(state, world, pos)).withProperty(UnlistedBlockPos.POS, pos)
-				.withProperty(UnlistedBlockAccess.BLOCKACCESS, world);
+		if(getGreenhouseType() != BlockGreenhouseType.SPRINKLER && getGreenhouseType() != BlockGreenhouseType.DOOR){
+			return ((IExtendedBlockState) super.getExtendedState(state, world, pos)).withProperty(UnlistedBlockPos.POS, pos)
+				.	withProperty(UnlistedBlockAccess.BLOCKACCESS, world);
+		}
+		return super.getExtendedState(state, world, pos);
 	}
 
 	@Override
 	protected BlockState createBlockState() {
-		if(getGreenhouseType().activatable){
+		if(getGreenhouseType() == BlockGreenhouseType.SPRINKLER){
+			 return new ExtendedBlockState(this, new IProperty[]{ Properties.StaticProperty }, new IUnlistedProperty[]{ Properties.AnimationProperty });
+		}else if(getGreenhouseType().activatable){
 			return new ExtendedBlockState(this, new IProperty[]{STATE}, new IUnlistedProperty[]{UnlistedBlockPos.POS, UnlistedBlockAccess.BLOCKACCESS});
 		}else{
 			return new ExtendedBlockState(this, new IProperty[0], new IUnlistedProperty[]{UnlistedBlockPos.POS, UnlistedBlockAccess.BLOCKACCESS});
+		}
+	}
+	
+	@Override
+	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+		if(getGreenhouseType() == BlockGreenhouseType.SPRINKLER){
+			return state.withProperty(Properties.StaticProperty, true);
+		}else{
+			return super.getActualState(state, worldIn, pos);
 		}
 	}
 
@@ -163,7 +206,7 @@ public abstract class BlockGreenhouse extends BlockStructure {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public EnumWorldBlockLayer getBlockLayer() {
-		if(getGreenhouseType() == BlockGreenhouseType.GLASS){
+		if(getGreenhouseType() == BlockGreenhouseType.GLASS || getGreenhouseType() == BlockGreenhouseType.SPRINKLER){
 			return EnumWorldBlockLayer.TRANSLUCENT;
 		}
 		return EnumWorldBlockLayer.CUTOUT;
@@ -176,7 +219,20 @@ public abstract class BlockGreenhouse extends BlockStructure {
 	
 	@Override
 	public boolean isOpaqueCube() {
-		return getGreenhouseType() != BlockGreenhouseType.GLASS;
+		return getGreenhouseType() != BlockGreenhouseType.GLASS && getGreenhouseType() != BlockGreenhouseType.SPRINKLER;
+	}
+	
+	@Override
+	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
+		if(getGreenhouseType() == BlockGreenhouseType.SPRINKLER){
+			if(worldIn.getBlockState(pos.up()).getBlock() == this){
+				return false;
+			}
+			if(!(worldIn.getTileEntity(pos.up()) instanceof IGreenhouseComponent)){
+				return false;
+			}
+		}
+		return super.canPlaceBlockAt(worldIn, pos);
 	}
 	
     @Override
@@ -207,7 +263,11 @@ public abstract class BlockGreenhouse extends BlockStructure {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation("forestry:greenhouse", "inventory"));
+		if(getGreenhouseType() == BlockGreenhouseType.SPRINKLER){
+			ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation("forestry:greenhouse.sprinkler", "inventory"));
+		}else{
+			ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation("forestry:greenhouse", "inventory"));
+		}
 	}
 
 	@Override

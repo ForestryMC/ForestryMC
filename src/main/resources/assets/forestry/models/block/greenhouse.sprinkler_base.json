@@ -1,0 +1,20 @@
+{
+"textures": {
+	"particle": "blocks/glass_green",
+    "glass": "blocks/glass_green"
+},
+"elements": [ 
+{
+    "from": [ 5, 10, 5 ],
+    "to": [ 11, 16, 11 ],
+    "faces": {
+        "down":  { "uv": [ 16, 16, 0, 0 ], "texture": "#glass" },
+        "up":    { "uv": [ 16, 0, 0, 16 ], "texture": "#glass" },
+        "north": { "uv": [ 0, 0, 16, 16 ], "texture": "#glass" },
+        "south": { "uv": [ 0, 0, 16, 16 ], "texture": "#glass" },
+        "west":  { "uv": [ 0, 0, 16, 16 ], "texture": "#glass" },
+        "east":  { "uv": [ 0, 0, 15.5, 16 ], "texture": "#glass" }
+    }
+}
+]
+}

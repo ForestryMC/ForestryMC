@@ -14,7 +14,6 @@ import forestry.api.core.EnumCamouflageType;
 import forestry.api.greenhouse.GreenhouseManager;
 import forestry.api.greenhouse.IGreenhouseItemAccess;
 import forestry.core.config.Constants;
-import forestry.greenhouse.blocks.BlockGreenhouse;
 import forestry.greenhouse.blocks.BlockGreenhouseType;
 import forestry.greenhouse.blocks.BlockRegistryGreenhouse;
 import forestry.greenhouse.proxy.ProxyGreenhouse;
