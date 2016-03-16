@@ -10,39 +10,26 @@
  ******************************************************************************/
 package forestry.core.inventory.filters;
 
-import net.minecraft.item.ItemStack;
-
 import forestry.core.utils.InventoryUtil;
+import net.minecraft.item.ItemStack;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ArrayStackFilter extends StackFilter {
+public class ExclusionStackFilter extends StackFilter {
 
-    private final ItemStack[] stacks;
+    private final ItemStack[] exclude;
 
-    public ArrayStackFilter(ItemStack... stacks) {
-        this.stacks = stacks;
+    public ExclusionStackFilter(ItemStack... exclude) {
+        this.exclude = exclude;
     }
 
     @Override
     public boolean apply(final ItemStack stack) {
-        if (stacks.length == 0 || !hasFilter()) {
-            return true;
-        }
-        return InventoryUtil.isItemEqual(stack, stacks);
+        if (stack == null) {
+			return false;
+		}
+        return !InventoryUtil.isItemEqual(stack, exclude);
     }
 
-    public ItemStack[] getStacks() {
-        return stacks;
-    }
-
-    public boolean hasFilter() {
-        for (ItemStack filter : stacks) {
-            if (filter != null) {
-                return true;
-            }
-        }
-        return false;
-    }
 }

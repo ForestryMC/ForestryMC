@@ -8,8 +8,23 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.greenhouse.models;
 
-public class ModelGreenhouseSprinkler {
+package forestry.core.inventory.iterators;
 
+import net.minecraft.item.ItemStack;
+
+/**
+ * This interface extends IInvSlot by allowing you to modify a slot directly.
+ * This is only valid on inventories backed by IInventory.
+ * <p/>
+ * <p/>
+ * Created by CovertJaguar on 3/16/2016 for Railcraft.
+ *
+ * @author CovertJaguar <http://www.railcraft.info>
+ */
+public interface IExtInvSlot extends IInvSlot {
+    /**
+     * Sets the current ItemStack in the slot.
+     */
+    void setStackInSlot(ItemStack stack);
 }

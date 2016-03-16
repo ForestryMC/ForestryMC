@@ -32,8 +32,8 @@ import forestry.apiculture.worldgen.Hive;
 import forestry.apiculture.worldgen.HiveDecorator;
 import forestry.apiculture.worldgen.HiveDescriptionSwarmer;
 import forestry.core.inventory.IInventoryAdapter;
-import forestry.core.inventory.wrappers.IInvSlot;
-import forestry.core.inventory.wrappers.InventoryIterator;
+import forestry.core.inventory.iterators.IExtInvSlot;
+import forestry.core.inventory.iterators.InventoryIterator;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.IActivatable;
 import forestry.core.utils.ItemStackUtil;
@@ -116,7 +116,7 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, 
 			return 0;
 		}
 
-		for (IInvSlot slot : InventoryIterator.getIterable(getInternalInventory())) {
+		for (IExtInvSlot slot : InventoryIterator.getIterable(getInternalInventory())) {
 			ItemStack stack = slot.getStackInSlot();
 			for (Entry<ItemStack, Integer> entry : BeeManager.inducers.entrySet()) {
 				if (ItemStackUtil.isIdenticalItem(entry.getKey(), stack)) {

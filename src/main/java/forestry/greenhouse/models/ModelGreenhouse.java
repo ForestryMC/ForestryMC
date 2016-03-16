@@ -12,8 +12,6 @@ package forestry.greenhouse.models;
 
 import forestry.greenhouse.blocks.BlockGreenhouse;
 import forestry.greenhouse.blocks.BlockGreenhouseType;
-import forestry.greenhouse.multiblock.IGreenhouseControllerInternal;
-import forestry.greenhouse.tiles.TileGreenhouse;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockModelShapes;
@@ -21,6 +19,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.property.IExtendedBlockState;
 
@@ -28,10 +27,12 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import forestry.api.core.ICamouflageHandler;
+import forestry.api.core.ICamouflagedBlock;
 import forestry.api.core.IModelBaker;
+import forestry.api.multiblock.IGreenhouseComponent;
 import forestry.core.models.ModelBlockOverlay;
 
-public class ModelGreenhouse extends ModelBlockOverlay<BlockGreenhouse> {
+public class ModelGreenhouse<G extends TileEntity & IGreenhouseComponent & ICamouflageHandler & ICamouflagedBlock> extends ModelBlockOverlay<BlockGreenhouse> {
 
 	public ModelGreenhouse() {
 		super(BlockGreenhouse.class);
@@ -39,26 +40,15 @@ public class ModelGreenhouse extends ModelBlockOverlay<BlockGreenhouse> {
 
 	@Override
 	protected void bakeInventoryBlock(BlockGreenhouse block, ItemStack item, IModelBaker baker) {
-		bakeBlockModel(block, null, null, baker, null);
+		bakeBlockModel(block, null, null, null, baker, null);
 	}
 
 	@Override
 	protected void bakeWorldBlock(BlockGreenhouse block, IBlockAccess world, BlockPos pos, IExtendedBlockState stateExtended, IModelBaker baker) {
-		TileEntity tile = world.getTileEntity(pos);
-		if(!(tile instanceof TileGreenhouse)){
-			return;
-		}
-		TileGreenhouse greenhouse = (TileGreenhouse) tile;
-		IGreenhouseControllerInternal greenhouseController = greenhouse.getMultiblockLogic().getController();
-		
-		ICamouflageHandler camouflageHandler = greenhouse;
-		if(greenhouse.getCamouflageBlock(greenhouse.getCamouflageType()) == null && greenhouseController.getCamouflageBlock(greenhouse.getCamouflageType()) != null){
-			camouflageHandler = greenhouseController;
-		}
-		bakeBlockModel(block, pos, stateExtended, baker, camouflageHandler.getCamouflageBlock(greenhouse.getCamouflageType()));
+		bakeBlockModel(block, world, pos, stateExtended, baker, BlockGreenhouse.getCamouflageBlock(world, pos));
 	}
 	
-	private void bakeBlockModel(@Nonnull BlockGreenhouse block, @Nullable BlockPos pos, @Nullable IExtendedBlockState stateExtended, @Nonnull IModelBaker baker, @Nullable ItemStack camouflageBlock){
+	private void bakeBlockModel(@Nonnull BlockGreenhouse block, @Nullable IBlockAccess world, @Nullable BlockPos pos, @Nullable IExtendedBlockState stateExtended, @Nonnull IModelBaker baker, @Nullable ItemStack camouflageBlock){
 		if(camouflageBlock != null){
 			BlockModelShapes modelShapes = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes();
 			
@@ -67,18 +57,22 @@ public class ModelGreenhouse extends ModelBlockOverlay<BlockGreenhouse> {
 		
 		//Bake the default blocks
 		else if(block.getGreenhouseType() == BlockGreenhouseType.GLASS){
-			TextureAtlasSprite glassSprite = BlockGreenhouseType.getSprite(BlockGreenhouseType.GLASS, null);
+			TextureAtlasSprite glassSprite = BlockGreenhouseType.getSprite(BlockGreenhouseType.GLASS, null, null, world, pos);
 			
-			baker.addBlockModel(block, pos, BlockGreenhouseType.getSprite(BlockGreenhouseType.GLASS, null), 100);
+			baker.addBlockModel(block, pos, BlockGreenhouseType.getSprite(BlockGreenhouseType.GLASS, null, null, world, pos), 100);
 			baker.setParticleSprite(glassSprite);
 		}else{
-			TextureAtlasSprite plainSprite = BlockGreenhouseType.getSprite(BlockGreenhouseType.PLAIN, null);
+			TextureAtlasSprite plainSprite = BlockGreenhouseType.getSprite(BlockGreenhouseType.PLAIN, null, null, world, pos);
 			
-			baker.addBlockModel(block, pos, BlockGreenhouseType.getSprite(BlockGreenhouseType.PLAIN, null), 100);
+			baker.addBlockModel(block, pos, BlockGreenhouseType.getSprite(BlockGreenhouseType.PLAIN, null, null, world, pos), 100);
 			baker.setParticleSprite(plainSprite);
 		}
 		if(block.getGreenhouseType().hasOverlaySprite){
-			baker.addBlockModel(block, pos, BlockGreenhouseType.getSprite(block.getGreenhouseType(), stateExtended), 101);
+			TextureAtlasSprite[] sprite = new TextureAtlasSprite[6];
+			for(EnumFacing facing : EnumFacing.VALUES){
+				sprite[facing.ordinal()] =  BlockGreenhouseType.getSprite(block.getGreenhouseType(), facing, stateExtended, world, pos);
+			}
+			baker.addBlockModel(block, pos, sprite, 101);
 		}
 	}
 

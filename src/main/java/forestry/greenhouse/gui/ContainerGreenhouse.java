@@ -22,7 +22,7 @@ public class ContainerGreenhouse extends ContainerTile<TileGreenhouse> {
 	public ContainerGreenhouse(InventoryPlayer playerInventory, TileGreenhouse tile) {
 		super(tile, playerInventory, 8, 84);
 		
-		addSlotToContainer(new SlotFiltered(tile, 0, 53, 37));
+		addSlotToContainer(new SlotFiltered(tile, 0, 125, 37));
 	}
 
 	@Override

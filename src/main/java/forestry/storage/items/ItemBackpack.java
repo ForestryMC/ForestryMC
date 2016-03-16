@@ -29,7 +29,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import forestry.api.core.IModelManager;
 import forestry.api.storage.BackpackStowEvent;
 import forestry.api.storage.EnumBackpackType;
@@ -38,8 +37,8 @@ import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiHandler;
 import forestry.core.inventory.ItemInventory;
-import forestry.core.inventory.wrappers.IInvSlot;
-import forestry.core.inventory.wrappers.InventoryIterator;
+import forestry.core.inventory.iterators.IExtInvSlot;
+import forestry.core.inventory.iterators.InventoryIterator;
 import forestry.core.items.ItemWithGui;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.InventoryUtil;
@@ -175,7 +174,7 @@ public class ItemBackpack extends ItemWithGui {
 
 	private static void tryChestTransfer(ItemInventoryBackpack backpackInventory, IInventory target) {
 
-		for (IInvSlot slot : InventoryIterator.getIterable(backpackInventory)) {
+		for (IExtInvSlot slot : InventoryIterator.getIterable(backpackInventory)) {
 			ItemStack packStack = slot.getStackInSlot();
 			if (packStack == null) {
 				continue;
@@ -188,7 +187,7 @@ public class ItemBackpack extends ItemWithGui {
 
 	private void tryChestReceive(ItemInventoryBackpack backpackInventory, IInventory target) {
 
-		for (IInvSlot slot : InventoryIterator.getIterable(target)) {
+		for (IExtInvSlot slot : InventoryIterator.getIterable(target)) {
 			ItemStack targetStack = slot.getStackInSlot();
 			if (targetStack == null) {
 				continue;

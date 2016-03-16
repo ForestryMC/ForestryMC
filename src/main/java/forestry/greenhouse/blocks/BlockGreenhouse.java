@@ -42,18 +42,21 @@ import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.common.property.Properties;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
+import forestry.api.core.ICamouflageHandler;
+import forestry.api.core.ICamouflagedBlock;
 import forestry.api.core.IModelManager;
 import forestry.api.multiblock.IGreenhouseComponent;
 import forestry.core.CreativeTabForestry;
 import forestry.core.blocks.BlockStructure;
 import forestry.core.blocks.propertys.UnlistedBlockAccess;
 import forestry.core.blocks.propertys.UnlistedBlockPos;
+import forestry.greenhouse.multiblock.IGreenhouseControllerInternal;
 import forestry.greenhouse.tiles.TileGreenhouseControl;
 import forestry.greenhouse.tiles.TileGreenhouseDoor;
 import forestry.greenhouse.tiles.TileGreenhouseDryer;
 import forestry.greenhouse.tiles.TileGreenhouseFan;
 import forestry.greenhouse.tiles.TileGreenhouseGearbox;
+import forestry.greenhouse.tiles.TileGreenhouseHatch;
 import forestry.greenhouse.tiles.TileGreenhouseHeater;
 import forestry.greenhouse.tiles.TileGreenhousePlain;
 import forestry.greenhouse.tiles.TileGreenhouseSprinkler;
@@ -192,6 +195,9 @@ public abstract class BlockGreenhouse extends BlockStructure {
 				return new TileGreenhouseControl();
 			case DOOR:
 				return new TileGreenhouseDoor();
+			case HATCH_INPUT:
+			case HATCH_OUTPUT:
+				return new TileGreenhouseHatch();
 			default:
 				return new TileGreenhousePlain();
 		}
@@ -200,6 +206,20 @@ public abstract class BlockGreenhouse extends BlockStructure {
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
 		return createTileEntity(world, getStateFromMeta(meta));
+	}
+	
+	@Override
+	public int colorMultiplier(IBlockAccess world, BlockPos pos, int renderPass) {
+		TileEntity tile = world.getTileEntity(pos);
+		if(tile instanceof ICamouflagedBlock){
+			if(renderPass < 100 && BlockGreenhouse.getCamouflageBlock(world, pos) != null){
+				return Block.getBlockFromItem(BlockGreenhouse.getCamouflageBlock(world, pos).getItem()).colorMultiplier(world, pos, renderPass);
+			}
+			
+			return super.colorMultiplier(world, pos, renderPass);
+		}else{
+			return super.colorMultiplier(world, pos, renderPass);
+		}
 	}
 
 	/* MODELS */
@@ -259,6 +279,21 @@ public abstract class BlockGreenhouse extends BlockStructure {
 
         return block == this ? false : super.shouldSideBeRendered(worldIn, pos, side);
     }
+    
+	public static <G extends TileEntity & IGreenhouseComponent & ICamouflageHandler & ICamouflagedBlock> ItemStack getCamouflageBlock(IBlockAccess world, BlockPos pos){
+		TileEntity tile = world.getTileEntity(pos);
+		if(tile instanceof IGreenhouseComponent && tile instanceof ICamouflageHandler && tile instanceof ICamouflagedBlock){
+			G greenhouse = (G) tile;
+			IGreenhouseControllerInternal greenhouseController = (IGreenhouseControllerInternal) greenhouse.getMultiblockLogic().getController();
+			
+			ICamouflageHandler camouflageHandler = greenhouse;
+			if(greenhouse.getCamouflageBlock(greenhouse.getCamouflageType()) == null && greenhouseController.getCamouflageBlock(greenhouse.getCamouflageType()) != null){
+				camouflageHandler = greenhouseController;
+			}
+			return camouflageHandler.getCamouflageBlock(greenhouse.getCamouflageType());
+		}
+		return null;
+	}
 	
 	@SideOnly(Side.CLIENT)
 	@Override

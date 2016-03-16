@@ -274,6 +274,9 @@ public class ModelBaker implements IModelBaker {
 	}
 
 	protected void addFace(@Nonnull EnumFacing face, boolean isEdge, Vector3f to, Vector3f from, float[] defUVs2, TextureAtlasSprite texture) {
+		if(texture == null) {
+			return;
+		}
 		faces.add(new ModelBakerFace(face, isEdge, colorIndex, to, from, defUVs2, texture));
 	}
 
@@ -283,6 +286,14 @@ public class ModelBaker implements IModelBaker {
 
 		if (flip) {
 			mr = ModelRotation.X0_Y180;
+		}
+		
+		//Add baked models to the current model.
+		for(IBakedModel bakedModel : bakedModels){
+			for(EnumFacing gce : EnumFacing.VALUES){
+				this.currentModel.getFaceQuads(gce).addAll(bakedModel.getFaceQuads(gce));
+			}
+			this.currentModel.getGeneralQuads().addAll(bakedModel.getGeneralQuads());
 		}
 
 		for (ModelBakerFace face : faces) {
@@ -300,14 +311,6 @@ public class ModelBaker implements IModelBaker {
 			} else {
 				this.currentModel.getGeneralQuads().add(bf);
 			}
-		}
-		
-		//Add baked models to the current model.
-		for(IBakedModel bakedModel : bakedModels){
-			for(EnumFacing gce : EnumFacing.VALUES){
-				this.currentModel.getFaceQuads(gce).addAll(bakedModel.getFaceQuads(gce));
-			}
-			this.currentModel.getGeneralQuads().addAll(bakedModel.getGeneralQuads());
 		}
 		
 		return currentModel;

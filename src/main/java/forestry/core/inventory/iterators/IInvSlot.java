@@ -8,26 +8,30 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.inventory.filters;
+package forestry.core.inventory.iterators;
 
 import net.minecraft.item.ItemStack;
 
 /**
- * @author CovertJaguar <http://www.railcraft.info>
+ * This Interface represents an abstract inventory slot. It provides a unified interface for interfacing with Inventories.
+ *
+ * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class InvertedStackFilter implements IStackFilter {
+public interface IInvSlot {
 
-	private final IStackFilter filter;
+    boolean canPutStackInSlot(ItemStack stack);
 
-	public InvertedStackFilter(IStackFilter filter) {
-		this.filter = filter;
-	}
+    boolean canTakeStackFromSlot(ItemStack stack);
 
-	@Override
-	public boolean matches(ItemStack stack) {
-		if (stack == null) {
-			return false;
-		}
-		return !filter.matches(stack);
-	}
+    ItemStack decreaseStackInSlot();
+
+    /**
+     * It is not legal to edit the stack returned from this function.
+     */
+    ItemStack getStackInSlot();
+
+//    void setStackInSlot(ItemStack stack);
+
+    int getIndex();
+
 }

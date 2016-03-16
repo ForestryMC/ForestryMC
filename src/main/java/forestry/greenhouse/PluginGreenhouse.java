@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.greenhouse;
 
-import forestry.api.core.EnumCamouflageType;
 import forestry.api.greenhouse.GreenhouseManager;
 import forestry.api.greenhouse.IGreenhouseItemAccess;
 import forestry.core.config.Constants;
@@ -22,6 +21,7 @@ import forestry.greenhouse.tiles.TileGreenhouseDoor;
 import forestry.greenhouse.tiles.TileGreenhouseDryer;
 import forestry.greenhouse.tiles.TileGreenhouseFan;
 import forestry.greenhouse.tiles.TileGreenhouseGearbox;
+import forestry.greenhouse.tiles.TileGreenhouseHatch;
 import forestry.greenhouse.tiles.TileGreenhouseHeater;
 import forestry.greenhouse.tiles.TileGreenhousePlain;
 import forestry.greenhouse.tiles.TileGreenhouseSprinkler;
@@ -70,6 +70,7 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 		GameRegistry.registerTileEntity(TileGreenhouseControl.class, "forestry.GreenhouseController");
 		GameRegistry.registerTileEntity(TileGreenhousePlain.class, "forestry.GreenhousePlain");
 		GameRegistry.registerTileEntity(TileGreenhouseDoor.class, "forestry.GreenhouseDoor");
+		GameRegistry.registerTileEntity(TileGreenhouseHatch.class, "forestry.GreenhouseHatch");
 	}
 	
 	@Override
@@ -95,16 +96,6 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 13));
 		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 14));
 		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 15));
-		
-		for(BlockGreenhouseType type : BlockGreenhouseType.VALUES){
-			if(type == BlockGreenhouseType.GLASS){
-				greenhouseAccess.addToCamouflageBlockBlackList(EnumCamouflageType.GLASS, blocks.getGreenhouseBlock(type));
-			}else if(type == BlockGreenhouseType.DOOR){
-				greenhouseAccess.addToCamouflageBlockBlackList(EnumCamouflageType.DOOR, blocks.getGreenhouseBlock(type));
-			}else{
-				greenhouseAccess.addToCamouflageBlockBlackList(EnumCamouflageType.DEFAULT, blocks.getGreenhouseBlock(type));
-			}
-		}
 		
 		proxy.initializeModels();
 	}

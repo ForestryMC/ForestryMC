@@ -8,25 +8,25 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.inventory.wrappers;
+package forestry.core.inventory.filters;
 
+import forestry.core.utils.InventoryUtil;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
 /**
- * @author CovertJaguar <http://www.railcraft.info/>
+ * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface IInvSlot {
+public class InventoryStackFilter extends StackFilter {
 
-	boolean canPutStackInSlot(ItemStack stack);
+    private final IInventory inv;
 
-	boolean canTakeStackFromSlot(ItemStack stack);
+    public InventoryStackFilter(IInventory inv) {
+        this.inv = inv;
+    }
 
-	ItemStack decreaseStackInSlot();
-
-	ItemStack getStackInSlot();
-
-	void setStackInSlot(ItemStack stack);
-
-	int getIndex();
-
+    @Override
+    public boolean apply(final ItemStack stack) {
+        return InventoryUtil.containsItem(inv, stack);
+    }
 }

@@ -10,133 +10,56 @@
  ******************************************************************************/
 package forestry.core.inventory.wrappers;
 
-import net.minecraft.entity.player.EntityPlayer;
+import forestry.core.inventory.InventoryPlain;
+import forestry.core.inventory.iterators.IExtInvSlot;
+import forestry.core.inventory.iterators.InventoryIterator;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IChatComponent;
-
-import forestry.core.utils.InventoryUtil;
 
 /**
  * Creates a deep copy of an existing IInventory.
- *
+ * <p/>
  * Useful for performing inventory manipulations and then examining the results
  * without affecting the original inventory.
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class InventoryCopy implements IInventory {
+public class InventoryCopy extends InvWrapperBase {
 
-	private final IInventory orignal;
-	private final ItemStack contents[];
+    private InventoryPlain copy;
 
-	public InventoryCopy(IInventory orignal) {
-		this.orignal = orignal;
-		contents = new ItemStack[orignal.getSizeInventory()];
-		InventoryUtil.deepCopyInventoryContents(orignal, this);
-	}
+    public InventoryCopy(IInventory original) {
+        super(original);
+        this.copy = new InventoryPlain(original.getSizeInventory());
+        for (IExtInvSlot slot : InventoryIterator.getIterable(original)) {
+            ItemStack stack = slot.getStackInSlot();
+            if (stack != null) {
+                copy.setInventorySlotContents(slot.getIndex(), stack.copy());
+            }
+        }
+    }
 
-	@Override
-	public int getSizeInventory() {
-		return contents.length;
-	}
+    @Override
+    public void setInventorySlotContents(int slot, ItemStack itemstack) {
+        copy.setInventorySlotContents(slot, itemstack);
+    }
 
-	@Override
-	public ItemStack getStackInSlot(int i) {
-		return contents[i];
-	}
+    @Override
+    public ItemStack getStackInSlot(int slot) {
+        return copy.getStackInSlot(slot);
+    }
 
-	@Override
-	public ItemStack decrStackSize(int i, int j) {
-		if (contents[i] != null) {
-			if (contents[i].stackSize <= j) {
-				ItemStack itemstack = contents[i];
-				contents[i] = null;
-				markDirty();
-				return itemstack;
-			}
-			ItemStack itemstack1 = contents[i].splitStack(j);
-			if (contents[i].stackSize <= 0) {
-				contents[i] = null;
-			}
-			markDirty();
-			return itemstack1;
-		} else {
-			return null;
-		}
-	}
+    @Override
+    public ItemStack decrStackSize(int slot, int amount) {
+        return copy.decrStackSize(slot, amount);
+    }
 
-	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		contents[i] = itemstack;
-		if (itemstack != null && itemstack.stackSize > getInventoryStackLimit()) {
-			itemstack.stackSize = getInventoryStackLimit();
-		}
-		markDirty();
-	}
+    @Override
+    public ItemStack removeStackFromSlot(int slot) {
+        return copy.removeStackFromSlot(slot);
+    }
 
-	@Override
-	public String getName() {
-		return orignal.getName();
-	}
-	
-	@Override
-	public IChatComponent getDisplayName() {
-		return orignal.getDisplayName();
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return orignal.getInventoryStackLimit();
-	}
-
-	@Override
+    @Override
 	public void markDirty() {
-	}
-
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-		return true;
-	}
-
-	@Override
-	public void openInventory(EntityPlayer entityplayer) {
-	}
-
-	@Override
-	public void closeInventory(EntityPlayer entityplayer) {
-	}
-	
-	@Override
-	public ItemStack removeStackFromSlot(int slot) {
-		return orignal.removeStackFromSlot(slot);
-	}
-	
-	@Override
-	public boolean hasCustomName() {
-		return orignal.hasCustomName();
-	}
-
-	@Override
-	public boolean isItemValidForSlot(int slot, ItemStack stack) {
-		return orignal.isItemValidForSlot(slot, stack);
-	}
-	
-	@Override
-	public int getField(int id) {
-		return 0;
-	}
-	
-	@Override
-	public int getFieldCount() {
-		return 0;
-	}
-	
-	@Override
-	public void clear() {
-	}
-	
-	@Override
-	public void setField(int id, int value) {
-	}
+    }
 }

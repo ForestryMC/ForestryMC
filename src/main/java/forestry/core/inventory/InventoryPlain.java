@@ -27,6 +27,11 @@ public class InventoryPlain implements IInventory, INbtWritable, INbtReadable {
 	private final String name;
 	private final int stackLimit;
 
+	public InventoryPlain(int size) {
+		this(size, null, 64);
+	}
+
+	
 	public InventoryPlain(int size, String name) {
 		this(size, name, 64);
 	}
@@ -82,6 +87,9 @@ public class InventoryPlain implements IInventory, INbtWritable, INbtReadable {
 
 	@Override
 	public String getName() {
+		if(name == null){
+			return "Plain";
+		}
 		return name;
 	}
 
@@ -106,7 +114,7 @@ public class InventoryPlain implements IInventory, INbtWritable, INbtReadable {
 	
 	@Override
 	public boolean hasCustomName() {
-		return true;
+		return name != null;
 	}
 	
 	@Override

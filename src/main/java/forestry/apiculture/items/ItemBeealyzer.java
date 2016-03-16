@@ -26,13 +26,11 @@ public class ItemBeealyzer extends ItemWithGui {
 
 	@Override
 	public Object getGui(EntityPlayer player, ItemStack heldItem, int data) {
-		ItemInventoryBeealyzer inventory = new ItemInventoryBeealyzer(player, heldItem);
-		return new GuiBeealyzer(player, inventory);
+		return new GuiBeealyzer(player, new ItemInventoryBeealyzer(player, heldItem));
 	}
 
 	@Override
 	public Object getContainer(EntityPlayer player, ItemStack heldItem, int data) {
-		ItemInventoryBeealyzer inventory = new ItemInventoryBeealyzer(player, heldItem);
-		return new ContainerAlyzer(inventory, player);
+		return new ContainerAlyzer(new ItemInventoryBeealyzer(player, heldItem), player);
 	}
 }

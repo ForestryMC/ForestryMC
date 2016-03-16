@@ -71,23 +71,23 @@ public abstract class TileGreenhouse extends MultiblockTileEntityForestry<Multib
 
 	/* SAVING & LOADING */
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		super.readFromNBT(nbttagcompound);
+	public void readFromNBT(NBTTagCompound data) {
+		super.readFromNBT(data);
 		
-		if(nbttagcompound.hasKey("CamouflageBlock")){
-			camouflageBlock = ItemStack.loadItemStackFromNBT(nbttagcompound.getCompoundTag("CamouflageBlock"));
+		if(data.hasKey("CamouflageBlock")){
+			camouflageBlock = ItemStack.loadItemStackFromNBT(data.getCompoundTag("CamouflageBlock"));
 		}
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		super.writeToNBT(nbttagcompound);
+	public void writeToNBT(NBTTagCompound data) {
+		super.writeToNBT(data);
 
 
 		if(camouflageBlock != null){
 			NBTTagCompound nbtTag = new NBTTagCompound();
 			camouflageBlock.writeToNBT(nbtTag);
-			nbttagcompound.setTag("CamouflageBlock", nbtTag);
+			data.setTag("CamouflageBlock", nbtTag);
 		}
 	}
 

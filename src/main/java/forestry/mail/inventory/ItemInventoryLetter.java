@@ -35,7 +35,7 @@ import forestry.mail.items.ItemStamps;
 public class ItemInventoryLetter extends ItemInventory implements IErrorSource, IHintSource {
 	private ILetter letter;
 
-	public ItemInventoryLetter(EntityPlayer player, ItemStack itemstack) {
+	public ItemInventoryLetter(EntityPlayer player,ItemStack itemstack) {
 		super(player, 0, itemstack);
 	}
 
