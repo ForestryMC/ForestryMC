@@ -271,6 +271,7 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 	
 	/* STATES */
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void registerStateMapper() {
 		Proxies.render.registerStateMapper(this, new MachineStateMapper<>(machinePropertiesClass, TYPE, FACE));
 	}

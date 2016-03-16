@@ -54,7 +54,7 @@ public enum BlockGreenhouseType {
 	}
 
 	@SideOnly(Side.CLIENT)
-	private static EnumMap<BlockGreenhouseSprites, TextureAtlasSprite> sprites = new EnumMap(BlockGreenhouseSprites.class);
+	private static EnumMap<BlockGreenhouseSprites, TextureAtlasSprite> sprites;
 	
 	private static enum BlockGreenhouseSprites{
 		PLAIN, GLASS, GEARS("gears"), VALVE("valve"), FAN_OFF("fan.off"), FAN_ON("fan.on"), HEATER_OFF("heater.off"), HEATER_ON("heater.on"), DRYER("dryer"), CONTROL("control"), HATCH_DEFAULT("hatch"), HATCH_INPUT("hatch_input"), HATCH_OUTPUT("hatch_output");
@@ -74,6 +74,7 @@ public enum BlockGreenhouseType {
 	
 	@SideOnly(Side.CLIENT)
 	public static void registerSprites() {
+		sprites = new EnumMap<>(BlockGreenhouseSprites.class);
 		for(BlockGreenhouseSprites sprite : BlockGreenhouseSprites.VALUES){
 			if(sprite == BlockGreenhouseSprites.PLAIN){
 				sprites.put(sprite, TextureManager.getSprite("minecraft", "blocks/brick"));

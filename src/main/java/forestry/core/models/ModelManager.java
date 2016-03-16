@@ -105,7 +105,8 @@ public class ModelManager implements IModelManager {
 	public ModelResourceLocation getModelLocation(String modID, String identifier) {
 		return new ModelResourceLocation(modID + ":" + identifier, "inventory");
 	}
-	
+
+	@SideOnly(Side.CLIENT)
 	public static void registerModels() {
 		for (Block block : GameData.getBlockRegistry()) {
 			if (block instanceof IItemModelRegister) {

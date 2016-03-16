@@ -30,6 +30,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -245,7 +246,7 @@ public enum Fluids {
 	private final int density, viscosity;
 	@Nonnull
 	private final Color color;
-	
+
 	private final ResourceLocation[] resources = new ResourceLocation[2];
 
 	Fluids(@Nonnull Color color) {
@@ -257,7 +258,7 @@ public enum Fluids {
 		this.color = color;
 		this.density = density;
 		this.viscosity = viscosity;
-		
+
 		resources[0] = new ForestryResource("blocks/liquid/" + getTag() + "_still");
 		if (flowTextureExists()) {
 			resources[1] = new ForestryResource("blocks/liquid/" + getTag() + "_flow");
@@ -375,8 +376,10 @@ public enum Fluids {
 		return null;
 	}
 	
-	@SideOnly(Side.CLIENT)
 	public boolean flowTextureExists() {
+		if (FMLCommonHandler.instance().getSide() == Side.SERVER) {
+			return true;
+		}
 		try {
 			ResourceLocation resourceLocation = new ForestryResource("blocks/liquid/" + getTag() + "_flow");
 			IResourceManager resourceManager = Proxies.common.getClientInstance().getResourceManager();

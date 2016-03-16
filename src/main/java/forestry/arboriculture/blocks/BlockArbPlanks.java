@@ -143,6 +143,7 @@ public abstract class BlockArbPlanks extends Block implements IWoodTyped, IState
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void registerStateMapper() {
 		Proxies.render.registerStateMapper(this, new WoodTypeStateMapper(this, getVariant()));
 	}

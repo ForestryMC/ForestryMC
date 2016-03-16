@@ -238,6 +238,7 @@ public abstract class BlockArbLog extends BlockLog implements IWoodTyped, IState
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void registerStateMapper() {
 		Proxies.render.registerStateMapper(this, new WoodTypeStateMapper(this, getVariant()));
 	}

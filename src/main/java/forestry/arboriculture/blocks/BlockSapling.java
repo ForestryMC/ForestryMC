@@ -111,6 +111,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void registerStateMapper() {
 		Proxies.render.registerStateMapper(this, new SaplingStateMapper());
 	}

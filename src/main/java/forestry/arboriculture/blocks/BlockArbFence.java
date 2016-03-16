@@ -121,6 +121,7 @@ public class BlockArbFence extends BlockFence implements IWoodTyped, IItemModelR
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void registerStateMapper() {
 		Proxies.render.registerStateMapper(this, new WoodTypeStateMapper(this, null));
 	}

@@ -63,7 +63,7 @@ public class TextureManager implements ITextureManager {
 			defaultIcons.put(str, icon);
 		}
 	}
-	
+
 	public static TextureAtlasSprite registerSprite(String identifier) {
 		TextureMap map = Proxies.common.getClientInstance().getTextureMapBlocks();
 		return map.registerSprite(new ResourceLocation("forestry:" + identifier));

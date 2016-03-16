@@ -232,6 +232,7 @@ public abstract class BlockArbSlab extends BlockSlab implements IWoodTyped, IIte
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void registerStateMapper() {
 		String blockPath = isDouble() ? "slab/double" : "slab";
 		Proxies.render.registerStateMapper(this, new WoodTypeStateMapper(this, blockPath, getVariant()));
