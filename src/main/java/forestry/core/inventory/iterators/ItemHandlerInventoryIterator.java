@@ -76,7 +76,7 @@ public class ItemHandlerInventoryIterator extends InventoryIterator<IInvSlot> {
 
         @Override
         public ItemStack decreaseStackInSlot() {
-            return inv.extractItem(slot, 1, true);
+            return inv.extractItem(slot, 1, false);
         }
 
         @Override
