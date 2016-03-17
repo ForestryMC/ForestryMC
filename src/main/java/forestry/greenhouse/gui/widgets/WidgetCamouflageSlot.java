@@ -89,7 +89,7 @@ public class WidgetCamouflageSlot extends Widget {
 			if(camouflageHandler instanceof IMultiblockController){
 				toolTip.add(StatCollector.translateToLocal("for.gui.empty.slot.camouflage.multiblock." + typeName) + ": ");
 			}else{
-				toolTip.add(StatCollector.translateToLocal("for.gui.empty.slot.camouflage." + typeName) + ": ");
+				toolTip.add(StatCollector.translateToLocal("for.gui.empty.slot.camouflage") + ": ");
 			}
 			ItemStack camouflageBlock = camouflageHandler.getCamouflageBlock(type);
 					

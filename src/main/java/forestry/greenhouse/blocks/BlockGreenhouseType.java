@@ -82,7 +82,7 @@ public enum BlockGreenhouseType {
 				TextureManager.registerSprite("blocks/greenhouse/fan.off"),
 				TextureManager.registerSprite("blocks/greenhouse/fan.on"),
 				TextureManager.registerSprite("blocks/greenhouse/heater.off"),
-				TextureManager.registerSprite("blocks/greenhouse/heater.off"),
+				TextureManager.registerSprite("blocks/greenhouse/heater.on"),
 				TextureManager.registerSprite("blocks/greenhouse/dryer"),
 				TextureManager.registerSprite("blocks/greenhouse/control"),
 				TextureManager.registerSprite("blocks/greenhouse/hatch_input"),

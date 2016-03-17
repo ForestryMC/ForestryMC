@@ -45,7 +45,8 @@ import forestry.core.utils.CamouflageUtil;
 import forestry.energy.EnergyManager;
 import forestry.greenhouse.blocks.BlockGreenhouse;
 import forestry.greenhouse.blocks.BlockGreenhouseType;
-import forestry.greenhouse.network.packets.PacketCamouflageUpdate;
+import forestry.greenhouse.network.packets.PacketCamouflageUpdateToClient;
+import forestry.greenhouse.network.packets.PacketCamouflageUpdateToServer;
 import forestry.greenhouse.tiles.TileGreenhouseSprinkler;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
@@ -259,16 +260,20 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 			return;
 		}
 		
-		if (worldObj != null && worldObj.isRemote) {
-			for(IMultiblockComponent comp : connectedParts){
-				if(comp instanceof ICamouflagedBlock){
-					ICamouflagedBlock camBlock = (ICamouflagedBlock) comp;
-					if(camBlock.getCamouflageType() == type){
-						worldObj.markBlockForUpdate(camBlock.getCoordinates());
+		if (worldObj != null) {
+				if(worldObj.isRemote){
+				for(IMultiblockComponent comp : connectedParts){
+					if(comp instanceof ICamouflagedBlock){
+						ICamouflagedBlock camBlock = (ICamouflagedBlock) comp;
+						if(camBlock.getCamouflageType() == type){
+							worldObj.markBlockForUpdate(camBlock.getCoordinates());
+						}
 					}
 				}
+				Proxies.net.sendToServer(new PacketCamouflageUpdateToServer(this, type, true));
+			}else{
+				Proxies.net.sendNetworkPacket(new PacketCamouflageUpdateToClient(this, type, true), worldObj);
 			}
-			Proxies.net.sendToServer(new PacketCamouflageUpdate(this, type, true));
 		}
 	}
 	

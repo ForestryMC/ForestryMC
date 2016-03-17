@@ -27,9 +27,6 @@ public enum PacketIdServer implements IPacketId {
 
 	// Apiculture
 	BEE_LOGIC_ACTIVE_ENTITY_REQUEST,
-
-	// Factory
-	WORKTABLE_NEI_SELECT,
 	
 	//Greenhouse
 	TILE_FORESTRY_CAMOUFLAGE,

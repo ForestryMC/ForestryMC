@@ -39,7 +39,7 @@ import forestry.core.utils.PlayerUtil;
 import forestry.greenhouse.blocks.BlockGreenhouse;
 import forestry.greenhouse.blocks.BlockGreenhouseType;
 import forestry.greenhouse.multiblock.MultiblockLogicGreenhouse;
-import forestry.greenhouse.network.packets.PacketCamouflageUpdate;
+import forestry.greenhouse.network.packets.PacketCamouflageUpdateToServer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -139,7 +139,7 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 			if (worldObj.isRemote) {
 				worldObj.markBlockForUpdate(getPos());
 			} else {
-				Proxies.net.sendToServer(new PacketCamouflageUpdate(this, type));
+				Proxies.net.sendToServer(new PacketCamouflageUpdateToServer(this, type));
 			}
 		}
 	}

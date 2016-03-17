@@ -12,9 +12,12 @@ package forestry.greenhouse;
 
 import forestry.api.greenhouse.GreenhouseManager;
 import forestry.api.greenhouse.IGreenhouseItemAccess;
+import forestry.apiculture.network.PacketRegistryApiculture;
 import forestry.core.config.Constants;
+import forestry.core.network.IPacketRegistry;
 import forestry.greenhouse.blocks.BlockGreenhouseType;
 import forestry.greenhouse.blocks.BlockRegistryGreenhouse;
+import forestry.greenhouse.network.PacketRegistryGreenhouse;
 import forestry.greenhouse.proxy.ProxyGreenhouse;
 import forestry.greenhouse.tiles.TileGreenhouseControl;
 import forestry.greenhouse.tiles.TileGreenhouseDoor;
@@ -98,6 +101,11 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 15));
 		
 		proxy.initializeModels();
+	}
+	
+	@Override
+	public IPacketRegistry getPacketRegistry() {
+		return new PacketRegistryGreenhouse();
 	}
 	
 	@SubscribeEvent

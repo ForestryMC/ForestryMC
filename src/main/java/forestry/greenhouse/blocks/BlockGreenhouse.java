@@ -42,9 +42,11 @@ import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.common.property.Properties;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import forestry.api.core.ForestryAPI;
 import forestry.api.core.ICamouflageHandler;
 import forestry.api.core.ICamouflagedBlock;
 import forestry.api.core.IModelManager;
+import forestry.api.core.Tabs;
 import forestry.api.multiblock.IGreenhouseComponent;
 import forestry.core.CreativeTabForestry;
 import forestry.core.blocks.BlockStructure;
@@ -61,6 +63,7 @@ import forestry.greenhouse.tiles.TileGreenhouseHeater;
 import forestry.greenhouse.tiles.TileGreenhousePlain;
 import forestry.greenhouse.tiles.TileGreenhouseSprinkler;
 import forestry.greenhouse.tiles.TileGreenhouseValve;
+import forestry.plugins.ForestryPluginUids;
 
 public abstract class BlockGreenhouse extends BlockStructure {
 
@@ -106,7 +109,11 @@ public abstract class BlockGreenhouse extends BlockStructure {
 		
 		setHardness(1.0f);
 		setHarvestLevel("pickaxe", 0);
-		setCreativeTab(CreativeTabForestry.tabForestry);
+		if(ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FARMING)){
+			setCreativeTab(Tabs.tabAgriculture);
+		}else{
+			setCreativeTab(CreativeTabForestry.tabForestry);
+		}
 	}
 	
     @Override

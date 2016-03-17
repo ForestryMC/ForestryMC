@@ -11,11 +11,13 @@
 package forestry.greenhouse.network;
 
 import forestry.core.network.PacketRegistry;
-import forestry.greenhouse.network.packets.PacketCamouflageUpdate;
+import forestry.greenhouse.network.packets.PacketCamouflageUpdateToClient;
+import forestry.greenhouse.network.packets.PacketCamouflageUpdateToServer;
 
 public class PacketRegistryGreenhouse extends PacketRegistry {
 	@Override
 	public void registerPackets() {
-		registerServerPacket(new PacketCamouflageUpdate());
+		registerServerPacket(new PacketCamouflageUpdateToServer());
+		registerClientPacket(new PacketCamouflageUpdateToClient());
 	}
 }

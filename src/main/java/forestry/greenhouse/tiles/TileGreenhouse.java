@@ -41,7 +41,8 @@ import forestry.greenhouse.blocks.BlockGreenhouseType;
 import forestry.greenhouse.gui.ContainerGreenhouse;
 import forestry.greenhouse.gui.GuiGreenhouse;
 import forestry.greenhouse.multiblock.MultiblockLogicGreenhouse;
-import forestry.greenhouse.network.packets.PacketCamouflageUpdate;
+import forestry.greenhouse.network.packets.PacketCamouflageUpdateToClient;
+import forestry.greenhouse.network.packets.PacketCamouflageUpdateToServer;
 
 public abstract class TileGreenhouse extends MultiblockTileEntityForestry<MultiblockLogicGreenhouse> implements IGreenhouseComponent, IHintSource, IStreamableGui, IErrorLogicSource, IRestrictedAccess, ITitled, ICamouflageHandler, ICamouflagedBlock {
 
@@ -99,8 +100,9 @@ public abstract class TileGreenhouse extends MultiblockTileEntityForestry<Multib
 		if (worldObj != null) {
 			if (worldObj.isRemote) {
 				worldObj.markBlockForUpdate(getPos());
+				Proxies.net.sendToServer(new PacketCamouflageUpdateToServer(this, type));
 			} else {
-				Proxies.net.sendToServer(new PacketCamouflageUpdate(this, type));
+				Proxies.net.sendNetworkPacket(new PacketCamouflageUpdateToClient(this, type), worldObj);
 			}
 		}
 	}
