@@ -13,11 +13,12 @@ package forestry.farming.tiles;
 import java.io.IOException;
 import java.util.List;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
-
+import net.minecraft.world.World;
 import forestry.api.circuits.ICircuitSocketType;
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorLogicSource;
@@ -47,6 +48,11 @@ public abstract class TileFarm extends MultiblockTileEntityForestry<MultiblockLo
 
 	protected TileFarm() {
 		super(new MultiblockLogicFarm());
+	}
+	
+	@Override
+	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
+		return oldState.getBlock() != newState.getBlock();
 	}
 
 	@Override
