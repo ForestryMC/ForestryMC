@@ -225,11 +225,11 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 			return 0;
 		}
 
-		return (burnTank.getFluidAmount() * i) / burnTank.getCapacity();
+		return burnTank.getFluidAmount() * i / burnTank.getCapacity();
 	}
 
 	public int getOperatingTemperatureScaled(int i) {
-		return (int) Math.round((heat * i) / (maxHeat * 0.2));
+		return (int) Math.round(heat * i / (maxHeat * 0.2));
 	}
 
 	@Override

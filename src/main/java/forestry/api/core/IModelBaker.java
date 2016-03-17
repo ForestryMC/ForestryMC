@@ -5,10 +5,13 @@
  ******************************************************************************/
 package forestry.api.core;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.util.BlockPos;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -18,29 +21,31 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public interface IModelBaker {
 
-	void setRenderBoundsFromBlock(Block block);
+	void setRenderBoundsFromBlock(@Nonnull Block block);
 
 	void setRenderBounds(double d, double e, double f, double g, double h, double i );
 
 	void setColorIndex(int color);
 
-	void addBlockModel(Block block, BlockPos pos, TextureAtlasSprite[] sprites, int colorIndex);
+	void addBlockModel(@Nonnull Block block, @Nullable BlockPos pos, @Nonnull TextureAtlasSprite[] sprites, int colorIndex);
 	
-	void addBlockModel(Block block, BlockPos pos, TextureAtlasSprite sprites, int colorIndex);
+	void addBlockModel(@Nonnull Block block, @Nullable BlockPos pos, @Nonnull TextureAtlasSprite sprites, int colorIndex);
 	
-	void addFaceXNeg(TextureAtlasSprite sprite);
+	void addBakedModel(@Nonnull IBakedModel model);
 	
-	void addFaceYNeg(TextureAtlasSprite sprite);
-
-	void addFaceZNeg(TextureAtlasSprite sprite);
-
-	void addFaceYPos(TextureAtlasSprite sprite);
-
-	void addFaceZPos(TextureAtlasSprite sprite);
-
-	void addFaceXPos(TextureAtlasSprite sprite);
+	void addFaceXNeg(@Nonnull TextureAtlasSprite sprite);
 	
-	void setParticleSprite(TextureAtlasSprite particleSprite);
+	void addFaceYNeg(@Nonnull TextureAtlasSprite sprite);
+
+	void addFaceZNeg(@Nonnull TextureAtlasSprite sprite);
+
+	void addFaceYPos(@Nonnull TextureAtlasSprite sprite);
+
+	void addFaceZPos(@Nonnull TextureAtlasSprite sprite);
+
+	void addFaceXPos(@Nonnull TextureAtlasSprite sprite);
+	
+	void setParticleSprite(@Nullable TextureAtlasSprite particleSprite);
 	
 	IModelBakerModel bakeModel(boolean flip);
 	

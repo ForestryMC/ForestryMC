@@ -30,7 +30,7 @@ public class EntityFXIgnition extends EntityFX {
 		this.motionZ *= 0.8;
 		this.motionY = this.rand.nextFloat() * 0.4F + 0.05F;
 		this.particleRed = this.particleGreen = this.particleBlue = 1.0F;
-		this.particleScale *= (this.rand.nextFloat() / 2) + 0.3F;
+		this.particleScale *= this.rand.nextFloat() / 2 + 0.3F;
 		this.ignitionParticleScale = this.particleScale;
 		this.particleMaxAge = (int) (16.0 / (Math.random() * 0.8 + 0.2));
 		this.noClip = false;
@@ -75,7 +75,7 @@ public class EntityFXIgnition extends EntityFX {
 
 		float f = (float) this.particleAge / (float) this.particleMaxAge;
 
-		if (this.rand.nextFloat() > (f * 2)) {
+		if (this.rand.nextFloat() > f * 2) {
 			this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX, this.posY, this.posZ, this.motionX, this.motionY, this.motionZ);
 		}
 

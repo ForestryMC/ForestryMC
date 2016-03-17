@@ -69,7 +69,7 @@ public class TextureManager implements ITextureManager {
 		return map.registerSprite(new ResourceLocation("forestry:" + identifier));
 	}
 	
-	public TextureAtlasSprite getSprite(String modID, String identifier) {
+	public static TextureAtlasSprite getSprite(String modID, String identifier) {
 		TextureMap map = Proxies.common.getClientInstance().getTextureMapBlocks();
 		if (map.getAtlasSprite(new ResourceLocation(modID + ":" + identifier).toString()) == map.getMissingSprite()) {
 			return map.registerSprite(new ResourceLocation(modID + ":" + identifier));
@@ -77,7 +77,7 @@ public class TextureManager implements ITextureManager {
 		return map.getAtlasSprite(new ResourceLocation(modID + ":" + identifier).toString());
 	}
 	
-	public TextureAtlasSprite getSprite(String modID, String modifier, String identifier) {
+	public static TextureAtlasSprite getSprite(String modID, String modifier, String identifier) {
 		TextureMap map = Proxies.common.getClientInstance().getTextureMapBlocks();
 		if (map.getAtlasSprite(new ResourceLocation(modID + ":" + modifier + "/" + identifier).toString()) == map.getMissingSprite()) {
 			return map.registerSprite(new ResourceLocation(modID + ":" + modifier + "/" + identifier));

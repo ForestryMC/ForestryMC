@@ -130,7 +130,7 @@ public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> i
 
 	@Override
 	public final boolean isConnected() {
-		return (controller != null);
+		return controller != null;
 	}
 
 	public final void becomeMultiblockSaveDelegate() {

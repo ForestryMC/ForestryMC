@@ -74,11 +74,11 @@ public class TextureHabitatLocator extends TextureAtlasSprite {
 
 		double angleChange = targetAngle - currentAngle;
 		while (angleChange < -Math.PI) {
-			angleChange += (Math.PI * 2D);
+			angleChange += Math.PI * 2D;
 		}
 
 		while (angleChange >= Math.PI) {
-			angleChange -= (Math.PI * 2D);
+			angleChange -= Math.PI * 2D;
 		}
 
 		if (angleChange < -1.0D) {

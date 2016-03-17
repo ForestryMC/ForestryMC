@@ -140,7 +140,7 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 	public boolean hasWork() {
 		checkRecipe();
 
-		boolean hasRecipe = (currentRecipe != null);
+		boolean hasRecipe = currentRecipe != null;
 		boolean hasTankSpace = true;
 		boolean hasLiquidResource = true;
 

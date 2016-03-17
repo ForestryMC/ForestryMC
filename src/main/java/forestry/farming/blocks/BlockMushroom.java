@@ -127,7 +127,7 @@ public class BlockMushroom extends BlockBush implements IItemTyped, IItemModelRe
 		if (maturity != 3) {
 			maturity = 3;
 			int matX = maturity << 2;
-			int meta = (matX | type.ordinal());
+			int meta = matX | type.ordinal();
 			world.setBlockState(new BlockPos(i, j, k), world.getBlockState(new BlockPos(i, j, k)).getBlock().getStateFromMeta(meta), Constants.FLAG_BLOCK_SYNCH);
 		} else if (lightvalue <= 7) {
 			generateTree(world, new BlockPos(i, j, k), world.getBlockState(new BlockPos(i, j, k)), random);

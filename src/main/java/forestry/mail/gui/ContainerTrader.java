@@ -59,7 +59,7 @@ public class ContainerTrader extends ContainerTile<TileTrader> {
 
 		for (int row = 0; row < 2; row++) {
 			for (int col = 0; col < bufCols; col++) {
-				addSlotToContainer(new SlotFiltered(this.tile, TradeStation.SLOT_SEND_BUFFER + col + row * bufCols, 123 + col * 18, (19 + (18 * 4)) + row * 18));
+				addSlotToContainer(new SlotFiltered(this.tile, TradeStation.SLOT_SEND_BUFFER + col + row * bufCols, 123 + col * 18, 19 + 18 * 4 + row * 18));
 			}
 		}
 	}

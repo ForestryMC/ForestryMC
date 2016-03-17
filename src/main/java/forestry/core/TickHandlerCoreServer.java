@@ -68,7 +68,7 @@ public class TickHandlerCoreServer {
 				Random random = new Random(worldSeed);
 				long xSeed = random.nextLong() >> 2 + 1L;
 				long zSeed = random.nextLong() >> 2 + 1L;
-				random.setSeed((xSeed * coords.xCoord + zSeed * coords.zCoord) ^ worldSeed);
+				random.setSeed(xSeed * coords.xCoord + zSeed * coords.zCoord ^ worldSeed);
 
 				worldGenerator.retroGen(random, coords.xCoord, coords.zCoord, world);
 			}

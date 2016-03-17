@@ -17,11 +17,15 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IChatComponent;
-
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 import forestry.core.tiles.IFilterSlotDelegate;
 
-public abstract class ItemInventory implements IInventory, IFilterSlotDelegate {
+public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, ICapabilityProvider {
 	private static final String KEY_SLOTS = "Slots";
 	private static final String KEY_UID = "UID";
 	private static final Random rand = new Random();
@@ -286,5 +290,20 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate {
 	
 	@Override
 	public void setField(int id, int value) {
+	}
+	
+	IItemHandler handler = new ItemHandlerItemInventory(this);
+	
+	@Override
+	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
+			return (T) handler;
+		}
+		return null;
+	}
+	
+	@Override
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
 	}
 }

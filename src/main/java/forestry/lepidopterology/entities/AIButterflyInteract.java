@@ -30,7 +30,7 @@ public abstract class AIButterflyInteract extends AIButterflyBase {
 			return false;
 		}
 
-		rest = new BlockPos((int) entity.posX, ((int) Math.floor(entity.posY)) - 1, (int) entity.posZ);
+		rest = new BlockPos((int) entity.posX, (int) Math.floor(entity.posY) - 1, (int) entity.posZ);
 		if (entity.worldObj.isAirBlock(rest)) {
 			return false;
 		}

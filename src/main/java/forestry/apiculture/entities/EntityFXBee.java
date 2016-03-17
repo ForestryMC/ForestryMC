@@ -42,9 +42,9 @@ public class EntityFXBee extends EntityFX {
 		this.prevPosY = this.posY;
 		this.prevPosZ = this.posZ;
 		this.moveEntity(this.motionX, this.motionY, this.motionZ);
-		this.motionX *= (1 + 0.2D * rand.nextFloat());
+		this.motionX *= 1 + 0.2D * rand.nextFloat();
 		this.motionY = (this.motionY + 0.2 * (-0.5 + rand.nextFloat())) / 2;
-		this.motionZ *= (1 + 0.2D * rand.nextFloat());
+		this.motionZ *= 1 + 0.2D * rand.nextFloat();
 
 		if (this.particleAge++ >= this.particleMaxAge) {
 			this.setDead();
@@ -66,17 +66,17 @@ public class EntityFXBee extends EntityFX {
 		}
 
 		float f10 = 0.1F * particleScale;
-		float f11 = (float) ((prevPosX + (posX - prevPosX) * f) - interpPosX);
-		float f12 = (float) ((prevPosY + (posY - prevPosY) * f) - interpPosY);
-		float f13 = (float) ((prevPosZ + (posZ - prevPosZ) * f) - interpPosZ);
+		float f11 = (float) (prevPosX + (posX - prevPosX) * f - interpPosX);
+		float f12 = (float) (prevPosY + (posY - prevPosY) * f - interpPosY);
+		float f13 = (float) (prevPosZ + (posZ - prevPosZ) * f - interpPosZ);
 
 		int i = this.getBrightnessForRender(f);
 		int j = i >> 16 & 65535;
 		int k = i & 65535;
 		wR.pos(f11 - f1 * f10 - f4 * f10, f12 - f2 * f10, f13 - f3 * f10 - f5 * f10).tex(maxU, maxV).color(particleRed, particleGreen, particleBlue, 1.0F).lightmap(j, k).endVertex();
-		wR.pos((f11 - f1 * f10) + f4 * f10, f12 + f2 * f10, (f13 - f3 * f10) + f5 * f10).tex(maxU, minV).color(particleRed, particleGreen, particleBlue, 1.0F).lightmap(j, k).endVertex();
+		wR.pos(f11 - f1 * f10 + f4 * f10, f12 + f2 * f10, f13 - f3 * f10 + f5 * f10).tex(maxU, minV).color(particleRed, particleGreen, particleBlue, 1.0F).lightmap(j, k).endVertex();
 		wR.pos(f11 + f1 * f10 + f4 * f10, f12 + f2 * f10, f13 + f3 * f10 + f5 * f10).tex(minU, minV).color(particleRed, particleGreen, particleBlue, 1.0F).lightmap(j, k).endVertex();
-		wR.pos((f11 + f1 * f10) - f4 * f10, f12 - f2 * f10, (f13 + f3 * f10) - f5 * f10).tex(minU, maxV).color(particleRed, particleGreen, particleBlue, 1.0F).lightmap(j, k).endVertex();
+		wR.pos(f11 + f1 * f10 - f4 * f10, f12 - f2 * f10, f13 + f3 * f10 - f5 * f10).tex(minU, maxV).color(particleRed, particleGreen, particleBlue, 1.0F).lightmap(j, k).endVertex();
 	}
 
 	@Override

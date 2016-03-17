@@ -133,7 +133,7 @@ public class ModelBee extends ModelBase {
 		GL11.glPushMatrix();
 		float scale = 0.75f;
 		GL11.glScalef(scale, scale, scale);
-		GL11.glTranslatef(0.0F, (12.0f / scale) * f5, 0.0F);
+		GL11.glTranslatef(0.0F, 12.0f / scale * f5, 0.0F);
 
 		snout.render(f5);
 		torsoWing.render(f5);

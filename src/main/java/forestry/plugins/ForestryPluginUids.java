@@ -7,6 +7,7 @@ public class ForestryPluginUids {
 	public static final String ENERGY = "forestry.energy";
 	public static final String FACTORY = "forestry.factory";
 	public static final String FARMING = "forestry.farming";
+	public static final String GREENHOUSE = "forestry.greenhouse";
 	public static final String FLUIDS = "forestry.fluids";
 	public static final String FOOD = "forestry.food";
 	public static final String LEPIDOPTEROLOGY = "forestry.lepidopterology";

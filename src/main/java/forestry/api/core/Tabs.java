@@ -12,6 +12,7 @@ import net.minecraft.creativetab.CreativeTabs;
  */
 public class Tabs {
 
+	public static CreativeTabs tabAgriculture;
 	public static CreativeTabs tabApiculture;
 	public static CreativeTabs tabArboriculture;
 	public static CreativeTabs tabLepidopterology;

@@ -96,7 +96,7 @@ public class BlockEngine extends BlockBase<BlockTypeEngine> {
 			AxisAlignedBB boundingBox = boundingBoxBase.offset(pos.getX(), pos.getY(), pos.getZ());
 			MovingObjectPosition intersection = boundingBox.calculateIntercept(start, end);
 			if (intersection != null) {
-				if (nearestIntersection == null || (intersection.hitVec.distanceTo(start) < nearestIntersection.hitVec.distanceTo(start))) {
+				if (nearestIntersection == null || intersection.hitVec.distanceTo(start) < nearestIntersection.hitVec.distanceTo(start)) {
 					nearestIntersection = intersection;
 				}
 			}

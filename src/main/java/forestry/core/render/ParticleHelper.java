@@ -49,9 +49,9 @@ public class ParticleHelper {
 		}
 
 		float b = 0.1F;
-		double px = x + rand.nextDouble() * (block.getBlockBoundsMaxX() - block.getBlockBoundsMinX() - (b * 2.0F)) + b + block.getBlockBoundsMinX();
-		double py = y + rand.nextDouble() * (block.getBlockBoundsMaxY() - block.getBlockBoundsMinY() - (b * 2.0F)) + b + block.getBlockBoundsMinY();
-		double pz = z + rand.nextDouble() * (block.getBlockBoundsMaxZ() - block.getBlockBoundsMinZ() - (b * 2.0F)) + b + block.getBlockBoundsMinZ();
+		double px = x + rand.nextDouble() * (block.getBlockBoundsMaxX() - block.getBlockBoundsMinX() - b * 2.0F) + b + block.getBlockBoundsMinX();
+		double py = y + rand.nextDouble() * (block.getBlockBoundsMaxY() - block.getBlockBoundsMinY() - b * 2.0F) + b + block.getBlockBoundsMinY();
+		double pz = z + rand.nextDouble() * (block.getBlockBoundsMaxZ() - block.getBlockBoundsMinZ() - b * 2.0F) + b + block.getBlockBoundsMinZ();
 
 		if (sideHit == EnumFacing.DOWN) {
 			py = y + block.getBlockBoundsMinY() - b;

@@ -156,9 +156,9 @@ public final class FluidHelper {
 		if (fluidInContainer == null) {
 			return FillStatus.INVALID_INPUT;
 		}
-		boolean moveToOutput = (fluidInContainer.amount >= containerCapacity);
+		boolean moveToOutput = fluidInContainer.amount >= containerCapacity;
 		if (moveToOutput) {
-			if ((output != null) && (output.stackSize >= output.getMaxStackSize() || !InventoryUtil.isItemEqual(filled, output))) {
+			if (output != null && (output.stackSize >= output.getMaxStackSize() || !InventoryUtil.isItemEqual(filled, output))) {
 				return FillStatus.NO_SPACE;
 			}
 		} else {

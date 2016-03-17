@@ -464,7 +464,7 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 			motionY += (Math.signum(diffY) * 0.699999988079071d - motionY) * 0.10000000149011612d;
 			motionZ += (Math.signum(diffZ) * 0.5d - motionZ) * 0.10000000149011612d;
 
-			float horizontal = (float) ((Math.atan2(motionZ, motionX) * 180d) / Math.PI) - 90f;
+			float horizontal = (float) (Math.atan2(motionZ, motionX) * 180d / Math.PI) - 90f;
 			rotationYaw += MathHelper.wrapAngleTo180_float(horizontal - rotationYaw);
 
 			setMoveForward(contained.getGenome().getSpeed());

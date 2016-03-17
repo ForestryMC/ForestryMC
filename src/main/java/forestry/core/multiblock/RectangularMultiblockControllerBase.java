@@ -123,6 +123,10 @@ public abstract class RectangularMultiblockControllerBase extends MultiblockCont
 			}
 		}
 	}
+	
+	protected IMultiblockSizeLimits getSizeLimits() {
+		return sizeLimits;
+	}
 
 	protected abstract void isGoodForExteriorLevel(IMultiblockComponent part, int level) throws MultiblockValidationException;
 

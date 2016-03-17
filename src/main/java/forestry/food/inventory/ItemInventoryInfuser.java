@@ -76,8 +76,8 @@ public class ItemInventoryInfuser extends ItemInventory {
 					break;
 				}
 
-				if ((ghost.getItemDamage() >= 0 && ingredient.isItemEqual(ghost))
-						|| (ghost.getItemDamage() < 0 && ghost.getItem() == ingredient.getItem())) {
+				if (ghost.getItemDamage() >= 0 && ingredient.isItemEqual(ghost)
+						|| ghost.getItemDamage() < 0 && ghost.getItem() == ingredient.getItem()) {
 					ItemStack removed = decrStackSize(i, 1);
 					ghost.stackSize -= removed.stackSize;
 				}

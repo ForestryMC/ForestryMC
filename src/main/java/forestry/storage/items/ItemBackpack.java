@@ -29,7 +29,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import forestry.api.core.IModelManager;
 import forestry.api.storage.BackpackStowEvent;
 import forestry.api.storage.EnumBackpackType;
@@ -38,8 +37,8 @@ import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiHandler;
 import forestry.core.inventory.ItemInventory;
-import forestry.core.inventory.wrappers.IInvSlot;
-import forestry.core.inventory.wrappers.InventoryIterator;
+import forestry.core.inventory.iterators.IExtInvSlot;
+import forestry.core.inventory.iterators.InventoryIterator;
 import forestry.core.items.ItemWithGui;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.InventoryUtil;
@@ -108,7 +107,7 @@ public class ItemBackpack extends ItemWithGui {
 
 	public static ItemStack tryStowing(EntityPlayer player, ItemStack backpackStack, ItemStack stack) {
 
-		ItemBackpack backpack = ((ItemBackpack) backpackStack.getItem());
+		ItemBackpack backpack = (ItemBackpack) backpackStack.getItem();
 		ItemInventory inventory = new ItemInventoryBackpack(player, backpack.getBackpackSize(), backpackStack);
 		if (backpackStack.getItemDamage() == 1) {
 			return stack;
@@ -175,7 +174,7 @@ public class ItemBackpack extends ItemWithGui {
 
 	private static void tryChestTransfer(ItemInventoryBackpack backpackInventory, IInventory target) {
 
-		for (IInvSlot slot : InventoryIterator.getIterable(backpackInventory)) {
+		for (IExtInvSlot slot : InventoryIterator.getIterable(backpackInventory)) {
 			ItemStack packStack = slot.getStackInSlot();
 			if (packStack == null) {
 				continue;
@@ -188,7 +187,7 @@ public class ItemBackpack extends ItemWithGui {
 
 	private void tryChestReceive(ItemInventoryBackpack backpackInventory, IInventory target) {
 
-		for (IInvSlot slot : InventoryIterator.getIterable(target)) {
+		for (IExtInvSlot slot : InventoryIterator.getIterable(target)) {
 			ItemStack targetStack = slot.getStackInSlot();
 			if (targetStack == null) {
 				continue;
@@ -235,7 +234,7 @@ public class ItemBackpack extends ItemWithGui {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		EnumBackpackType t = (type == EnumBackpackType.NATURALIST) ? EnumBackpackType.NORMAL : type;
+		EnumBackpackType t = type == EnumBackpackType.NATURALIST ? EnumBackpackType.NORMAL : type;
 		String typeTag = "backpacks/" + t.toString().toLowerCase(Locale.ENGLISH);
 		models = new ModelResourceLocation[4];
 		models[0] = new ModelResourceLocation("forestry:" + typeTag + "_neutral", "inventory");
@@ -297,6 +296,7 @@ public class ItemBackpack extends ItemWithGui {
 		}
 	}
 
+	@SuppressWarnings("incomplete-switch")
 	@Override
 	public Object getGui(EntityPlayer player, ItemStack heldItem, int data) {
 		if (data > EnumBackpackType.values().length) {
@@ -312,6 +312,7 @@ public class ItemBackpack extends ItemWithGui {
 		return null;
 	}
 
+	@SuppressWarnings("incomplete-switch")
 	@Override
 	public Object getContainer(EntityPlayer player, ItemStack heldItem, int data) {
 		if (data > EnumBackpackType.values().length) {

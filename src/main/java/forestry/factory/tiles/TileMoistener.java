@@ -428,7 +428,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 			}
 		}
 
-		return ((float) avail / (float) max) > percentage;
+		return (float) avail / (float) max > percentage;
 	}
 
 	public boolean hasResourcesMin(float percentage) {
@@ -437,7 +437,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 			return false;
 		}
 
-		return ((float) inventory.getStackInSlot(InventoryMoistener.SLOT_RESOURCE).stackSize / (float) inventory.getStackInSlot(InventoryMoistener.SLOT_RESOURCE).getMaxStackSize()) > percentage;
+		return (float) inventory.getStackInSlot(InventoryMoistener.SLOT_RESOURCE).stackSize / (float) inventory.getStackInSlot(InventoryMoistener.SLOT_RESOURCE).getMaxStackSize() > percentage;
 	}
 
 	public boolean isProducing() {
@@ -449,7 +449,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 			return 0;
 		}
 
-		return (productionTime * i) / timePerItem;
+		return productionTime * i / timePerItem;
 
 	}
 
@@ -458,12 +458,12 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 			return 0;
 		}
 
-		return (burnTime * i) / totalTime;
+		return burnTime * i / totalTime;
 
 	}
 
 	public int getResourceScaled(int i) {
-		return (resourceTank.getFluidAmount() * i) / Constants.PROCESSOR_TANK_CAPACITY;
+		return resourceTank.getFluidAmount() * i / Constants.PROCESSOR_TANK_CAPACITY;
 	}
 
 	/* IRenderableTile */

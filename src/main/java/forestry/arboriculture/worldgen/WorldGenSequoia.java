@@ -33,7 +33,7 @@ public class WorldGenSequoia extends WorldGenTree {
 		generateTreeTrunk(world, height, girth);
 		generateSupportStems(world, height, girth, 0.4f, 0.4f);
 
-		int topHeight = (height / 3) + world.rand.nextInt(height / 6);
+		int topHeight = height / 3 + world.rand.nextInt(height / 6);
 
 		List<BlockPos> branchCoords = new ArrayList<>();
 		for (int yBranch = topHeight; yBranch < height; yBranch++) {

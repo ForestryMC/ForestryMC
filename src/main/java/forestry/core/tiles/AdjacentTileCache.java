@@ -140,7 +140,7 @@ public final class AdjacentTileCache {
 
 		public boolean hasTriggered(World world, int ticks) {
 			long currentTime = world.getTotalWorldTime();
-			if (currentTime >= (ticks + startTime) || startTime > currentTime) {
+			if (currentTime >= ticks + startTime || startTime > currentTime) {
 				startTime = currentTime;
 				return true;
 			}

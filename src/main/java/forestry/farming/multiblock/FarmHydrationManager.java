@@ -84,7 +84,7 @@ public class FarmHydrationManager implements IFarmLedgerDelegate, INbtWritable, 
 
 	@Override
 	public double getDrought() {
-		return Math.round(((double) ticksSinceRainfall / 24000) * 10) / 10.;
+		return Math.round((double) ticksSinceRainfall / 24000 * 10) / 10.;
 	}
 
 	@Override

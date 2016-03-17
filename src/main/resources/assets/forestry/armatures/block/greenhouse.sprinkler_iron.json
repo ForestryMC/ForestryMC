@@ -1,0 +1,40 @@
+{
+  "joints": {
+    "sprinkler_iron":    { "0": [ 1.0 ], "1": [ 1.0 ], "2": [ 1.0 ] }
+  },
+  "clips": {
+    "default": {
+      "loop": false,
+      "joint_clips": {},
+      "events": {}
+    },
+    "moving": {
+      "loop": true,
+      "joint_clips": {
+        "sprinkler_iron": [
+          {
+            "variable": "axis_y",
+            "type": "uniform",
+            "interpolation": "nearest",
+            "samples": [ 1 ]
+          },
+          {
+            "variable": "angle",
+            "type": "uniform",
+            "interpolation": "linear",
+            "samples": [
+              0, 120, 240,
+              0, 120, 240,
+              0, 120, 240,
+              0, 120, 240
+            ]
+          }
+        ]
+      },
+      "events": {
+        "0.5": "boop"
+      }
+    }
+  }
+}
+

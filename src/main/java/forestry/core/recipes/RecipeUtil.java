@@ -290,7 +290,7 @@ public abstract class RecipeUtil {
 
 				if (widthIt >= 0 && heightIt >= 0 && widthIt < width && heightIt < height) {
 					if (mirror) {
-						recipeIngredient = recipeIngredients[(width - widthIt - 1) + heightIt * width];
+						recipeIngredient = recipeIngredients[width - widthIt - 1 + heightIt * width];
 					} else {
 						recipeIngredient = recipeIngredients[widthIt + heightIt * width];
 					}

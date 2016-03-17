@@ -62,7 +62,7 @@ public class TileEngineClockwork extends TileEngine {
 		}
 		
 		player.addExhaustion(WIND_EXHAUSTION);
-		if (tension > ENGINE_CLOCKWORK_WIND_MAX + (0.1 * WIND_TENSION_BASE)) {
+		if (tension > ENGINE_CLOCKWORK_WIND_MAX + 0.1 * WIND_TENSION_BASE) {
 			player.attackEntityFrom(damageSourceEngineClockwork, 6);
 		}
 		tension = tension > ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE ? ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE : tension;
@@ -145,7 +145,7 @@ public class TileEngineClockwork extends TileEngine {
 			return 0;
 		}
 		
-		float fromClockwork = (tension / ENGINE_CLOCKWORK_WIND_MAX) * Constants.ENGINE_PISTON_SPEED_MAX;
+		float fromClockwork = tension / ENGINE_CLOCKWORK_WIND_MAX * Constants.ENGINE_PISTON_SPEED_MAX;
 
 		fromClockwork = Math.round(fromClockwork * 100f) / 100f;
 

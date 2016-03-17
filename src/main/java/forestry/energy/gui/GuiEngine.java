@@ -59,7 +59,7 @@ public abstract class GuiEngine<C extends Container, I extends TileEngine> exten
 			drawText(inventory.getEnergyManager().getEnergyStored(inventory.getOrientation()) + " RF", x + 22, y + 56);
 
 			drawSubheader(StringUtil.localize("gui.heat") + ':', x + 22, y + 68);
-			drawText((((double) inventory.getHeat() / (double) 10) + 20.0) + " C", x + 22, y + 80);
+			drawText((double) inventory.getHeat() / (double) 10 + 20.0 + " C", x + 22, y + 80);
 		}
 
 		@Override

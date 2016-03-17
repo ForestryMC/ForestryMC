@@ -164,7 +164,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 
 		if (isBurning()) {
 			heatToAdd++;
-			if (((double) energyManager.getTotalEnergyStored() / (double) energyManager.getMaxEnergyStored()) > 0.5) {
+			if ((double) energyManager.getTotalEnergyStored() / (double) energyManager.getMaxEnergyStored() > 0.5) {
 				heatToAdd++;
 			}
 		}
@@ -251,7 +251,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 			return 0;
 		}
 
-		return (burnTime * i) / totalBurnTime;
+		return burnTime * i / totalBurnTime;
 	}
 
 	@Override
@@ -262,7 +262,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 		}
 
 		IInventoryAdapter inventory = getInternalInventory();
-		return ((float) inventory.getStackInSlot(fuelSlot).stackSize / (float) inventory.getStackInSlot(fuelSlot).getMaxStackSize()) > percentage;
+		return (float) inventory.getStackInSlot(fuelSlot).stackSize / (float) inventory.getStackInSlot(fuelSlot).getMaxStackSize() > percentage;
 	}
 
 	// / LOADING AND SAVING

@@ -19,6 +19,7 @@ import forestry.core.circuits.ISolderingIron;
 import forestry.core.inventory.ItemInventorySolderingIron;
 
 public class ItemSolderingIron extends ItemWithGui implements ISolderingIron {
+	
 	@Override
 	public Object getGui(EntityPlayer player, ItemStack heldItem, int data) {
 		return new GuiSolderingIron(player, new ItemInventorySolderingIron(player, heldItem));

@@ -45,8 +45,8 @@ import forestry.api.world.ITreeGenData;
 import forestry.arboriculture.PluginArboriculture;
 import forestry.arboriculture.genetics.alleles.AlleleFruit;
 import forestry.arboriculture.genetics.alleles.AlleleGrowth;
-import forestry.arboriculture.render.ModelProviderGermling;
-import forestry.arboriculture.render.ModelProviderGermlingVanilla;
+import forestry.arboriculture.models.ModelProviderGermling;
+import forestry.arboriculture.models.ModelProviderGermlingVanilla;
 import forestry.arboriculture.tiles.TileLeaves;
 import forestry.arboriculture.worldgen.BlockTypeLog;
 import forestry.arboriculture.worldgen.WorldGenAcacia;
@@ -1005,6 +1005,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 
 	protected abstract void registerMutations();
 
+	@SuppressWarnings("incomplete-switch")
 	@Override
 	public void setLogBlock(ITreeGenome genome, World world, BlockPos pos, EnumFacing facing) {
 		if (woodType == null) {

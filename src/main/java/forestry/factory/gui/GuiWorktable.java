@@ -37,9 +37,9 @@ public class GuiWorktable extends GuiForestryTitled<ContainerWorktable, TileWork
 
 		int slot = 0;
 		for (int y = 0; y < 3; y++) {
-			int yPos = 20 + (y * SPACING);
+			int yPos = 20 + y * SPACING;
 			for (int x = 0; x < 3; x++) {
-				int xPos = 110 + (x * SPACING);
+				int xPos = 110 + x * SPACING;
 				MemorizedRecipeSlot memorizedRecipeSlot = new MemorizedRecipeSlot(widgetManager, xPos, yPos, recipeMemory, slot++);
 				widgetManager.add(memorizedRecipeSlot);
 			}

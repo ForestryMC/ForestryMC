@@ -24,20 +24,24 @@ import forestry.plugins.ForestryPluginUids;
 public class CreativeTabForestry extends CreativeTabs {
 
 	static {
+		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FARMING)) {
+			Tabs.tabAgriculture= new CreativeTabForestry(1, "agriculture");
+		}
+		
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.APICULTURE)) {
-			Tabs.tabApiculture = new CreativeTabForestry(1, "apiculture");
+			Tabs.tabApiculture = new CreativeTabForestry(2, "apiculture");
 		}
 
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.ARBORICULTURE)) {
-			Tabs.tabArboriculture = new CreativeTabForestry(2, "arboriculture");
+			Tabs.tabArboriculture = new CreativeTabForestry(3, "arboriculture");
 		}
 
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.LEPIDOPTEROLOGY)) {
-			Tabs.tabLepidopterology = new CreativeTabForestry(3, "lepidopterology");
+			Tabs.tabLepidopterology = new CreativeTabForestry(4, "lepidopterology");
 		}
 	}
 
-	public static final CreativeTabs tabForestry = new CreativeTabForestry(0, Constants.MOD_ID);
+	public static final CreativeTabs tabForestry = new CreativeTabForestry(0, Constants.RESOURCE_ID);
 
 	private final int icon;
 
@@ -51,12 +55,15 @@ public class CreativeTabForestry extends CreativeTabs {
 		Item iconItem;
 		switch (icon) {
 			case 1:
-				iconItem = GameRegistry.findItem(Constants.MOD_ID, "beeDroneGE");
+				iconItem = GameRegistry.findItem(Constants.MOD_ID, "ffarm");
 				break;
 			case 2:
-				iconItem = GameRegistry.findItem(Constants.MOD_ID, "sapling");
+				iconItem = GameRegistry.findItem(Constants.MOD_ID, "beeDroneGE");
 				break;
 			case 3:
+				iconItem = GameRegistry.findItem(Constants.MOD_ID, "sapling");
+				break;
+			case 4:
 				iconItem = GameRegistry.findItem(Constants.MOD_ID, "butterflyGE");
 				break;
 			default:

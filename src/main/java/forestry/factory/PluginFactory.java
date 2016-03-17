@@ -277,7 +277,7 @@ public class PluginFactory extends BlankForestryPlugin {
 
 		RecipeUtil.addFermenterRecipes(new ItemStack(Blocks.cactus), ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.cactus"), Fluids.BIOMASS);
 		RecipeUtil.addFermenterRecipes(new ItemStack(Items.wheat), ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
-		RecipeUtil.addFermenterRecipes(new ItemStack(Items.potato), (2 * ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.wheat")), Fluids.BIOMASS);
+		RecipeUtil.addFermenterRecipes(new ItemStack(Items.potato), 2 * ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
 		RecipeUtil.addFermenterRecipes(new ItemStack(Items.reeds), ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.cane"), Fluids.BIOMASS);
 		RecipeUtil.addFermenterRecipes(new ItemStack(Blocks.brown_mushroom), ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.mushroom"), Fluids.BIOMASS);
 		RecipeUtil.addFermenterRecipes(new ItemStack(Blocks.red_mushroom), ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.mushroom"), Fluids.BIOMASS);

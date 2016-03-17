@@ -42,10 +42,10 @@ public class FarmableStacked implements IFarmable {
 
 	@Override
 	public ICrop getCropAt(World world, BlockPos pos) {
-		if (BlockUtil.getBlock(world, new BlockPos(pos.getX(), pos.getY() + (matureHeight - 1), pos.getZ())) != block) {
+		if (BlockUtil.getBlock(world, new BlockPos(pos.getX(), pos.getY() + matureHeight - 1, pos.getZ())) != block) {
 			return null;
 		}
-		return new CropBlock(world, block, matureMeta, new Vect(pos.getX(), pos.getY() + (matureHeight - 1), pos.getZ()));
+		return new CropBlock(world, block, matureMeta, new Vect(pos.getX(), pos.getY() + matureHeight - 1, pos.getZ()));
 	}
 
 	@Override

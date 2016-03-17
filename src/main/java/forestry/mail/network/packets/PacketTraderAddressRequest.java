@@ -54,7 +54,7 @@ public class PacketTraderAddressRequest extends PacketCoordinates implements IFo
 	@Override
 	public void onPacketData(DataInputStreamForestry data, EntityPlayerMP player) throws IOException {
 		TileEntity tile = getTarget(player.worldObj);
-		if ((tile instanceof TileTrader)) {
+		if (tile instanceof TileTrader) {
 			((TileTrader) tile).handleSetAddressRequest(addressName);
 		}
 	}

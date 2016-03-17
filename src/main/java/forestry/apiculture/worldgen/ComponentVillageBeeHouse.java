@@ -85,7 +85,7 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 	private void createBuildingBlocks(Random random) {
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.ARBORICULTURE)) {
 
-			boolean fireproof = (random.nextInt(4) == 0);
+			boolean fireproof = random.nextInt(4) == 0;
 
 			EnumWoodType roofWood = EnumWoodType.getRandom(random);
 			EnumWoodType logWood = EnumWoodType.getRandom(random);

@@ -124,6 +124,7 @@ public class StandardTank extends FluidTank implements IStreamable {
 		return fluid != null;
 	}
 
+	@SuppressWarnings("incomplete-switch")
 	public boolean canBeFilledExternally() {
 		switch (tankMode) {
 			case DEFAULT:
@@ -133,6 +134,7 @@ public class StandardTank extends FluidTank implements IStreamable {
 		return false;
 	}
 
+	@SuppressWarnings("incomplete-switch")
 	public boolean canBeDrainedExternally() {
 		switch (tankMode) {
 			case DEFAULT:
@@ -156,7 +158,7 @@ public class StandardTank extends FluidTank implements IStreamable {
 
 	public boolean canDrain(int amount) {
 		FluidStack drained = drain(amount, false);
-		return (drained != null) && (drained.amount == amount);
+		return drained != null && drained.amount == amount;
 	}
 
 	public boolean canDrain(FluidStack toDrain) {

@@ -70,7 +70,7 @@ public class TileFarmGearbox extends TileFarm implements IEnergyReceiver, IEnerg
 			workCounter++;
 		}
 
-		if (workCounter >= WORK_CYCLES && (tickCount % 5 == 0)) {
+		if (workCounter >= WORK_CYCLES && tickCount % 5 == 0) {
 			IFarmController farmController = getMultiblockLogic().getController();
 			if (farmController.doWork()) {
 				workCounter = 0;

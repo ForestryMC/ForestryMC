@@ -315,7 +315,7 @@ public class BlockForestryLeaves extends BlockLeavesBase implements ITileEntityP
 		ItemStack heldItem = player.getHeldItem();
 		TileEntity tile = world.getTileEntity(pos);
 		IButterfly caterpillar = tile instanceof TileLeaves ? ((TileLeaves) tile).getCaterpillar() : null;
-		if (heldItem != null && (heldItem.getItem() instanceof IToolScoop) && caterpillar != null) {
+		if (heldItem != null && heldItem.getItem() instanceof IToolScoop && caterpillar != null) {
 			ItemStack butterfly = ButterflyManager.butterflyRoot.getMemberStack(caterpillar, EnumFlutterType.CATERPILLAR.ordinal());
 			ItemStackUtil.dropItemStackAsEntity(butterfly, world, pos);
 			((TileLeaves) tile).setCaterpillar(null);

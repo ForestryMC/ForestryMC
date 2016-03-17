@@ -71,7 +71,7 @@ public abstract class ContainerForestry extends Container {
 			}
 		}
 
-		Slot slot = (slotIndex < 0) ? null : getSlot(slotIndex);
+		Slot slot = slotIndex < 0 ? null : getSlot(slotIndex);
 		if (slot instanceof SlotForestry) {
 			SlotForestry slotForestry = (SlotForestry) slot;
 			if (slotForestry.isPhantom()) {

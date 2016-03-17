@@ -10,16 +10,21 @@
  ******************************************************************************/
 package forestry.core.inventory.filters;
 
+import com.google.common.base.Predicate;
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nonnull;
+
 /**
- * This interface is used with several of the functions in IItemTransfer to
- * provide a convenient means of dealing with entire classes of items without
- * having to specify each item individually.
+ * This interface is used to provide a convenient means of dealing with entire classes of items without having to specify each item individually.
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface IStackFilter {
+public interface IStackFilter extends Predicate<ItemStack> {
 
-	boolean matches(ItemStack stack);
+    StackFilter and(@Nonnull Predicate<? super ItemStack>... other);
+
+    StackFilter or(@Nonnull Predicate<? super ItemStack>... other);
+
+    StackFilter negate();
 }

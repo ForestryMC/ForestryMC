@@ -104,7 +104,7 @@ public abstract class BlockArbPlanks extends Block implements IWoodTyped, IState
 	@Nonnull
 	@Override
 	public EnumWoodType getWoodType(int meta) {
-		int variantMeta = (meta & VARIANTS_META_MASK) + (blockNumber * VARIANTS_PER_BLOCK);
+		int variantMeta = (meta & VARIANTS_META_MASK) + blockNumber * VARIANTS_PER_BLOCK;
 		return EnumWoodType.byMetadata(variantMeta);
 	}
 
@@ -126,7 +126,7 @@ public abstract class BlockArbPlanks extends Block implements IWoodTyped, IState
 
 	@Override
 	public int damageDropped(IBlockState state) {
-		return state.getValue(getVariant()).getMetadata() - (blockNumber * VARIANTS_PER_BLOCK);
+		return state.getValue(getVariant()).getMetadata() - blockNumber * VARIANTS_PER_BLOCK;
 	}
 
 	@Override

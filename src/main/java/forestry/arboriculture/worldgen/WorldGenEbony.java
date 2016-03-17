@@ -57,8 +57,8 @@ public class WorldGenEbony extends WorldGenTree {
 				h = height / 2 + world.rand.nextInt(height / 2);
 			}
 
-			int x_off = -(girth) + world.rand.nextInt(2 * girth);
-			int y_off = -(girth) + world.rand.nextInt(2 * girth);
+			int x_off = -girth + world.rand.nextInt(2 * girth);
+			int y_off = -girth + world.rand.nextInt(2 * girth);
 
 			Vector center = new Vector(x_off, h, y_off);
 			int radius = 1 + world.rand.nextInt(girth);

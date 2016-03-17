@@ -10,12 +10,9 @@
  ******************************************************************************/
 package forestry.core.inventory.wrappers;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IChatComponent;
 
 /**
  * Wrapper class used to bake the side variable into the object itself instead
@@ -23,129 +20,34 @@ import net.minecraft.util.IChatComponent;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class SidedInventoryMapper implements ISidedInventory {
+public class SidedInventoryMapper extends InvWrapperBase implements ISidedInventory {
 
-	private final ISidedInventory inv;
-	private final EnumFacing side;
-	private boolean checkItems = true;
+    private final ISidedInventory inv;
+    private final EnumFacing side;
 
-	public SidedInventoryMapper(ISidedInventory inv, EnumFacing side) {
-		this(inv, side, true);
-	}
+    public SidedInventoryMapper(ISidedInventory inv, EnumFacing side) {
+        this(inv, side, true);
+    }
 
-	public SidedInventoryMapper(ISidedInventory inv, EnumFacing side, boolean checkItems) {
-		this.inv = inv;
-		this.side = side;
-		this.checkItems = checkItems;
-	}
+    public SidedInventoryMapper(ISidedInventory inv, EnumFacing side, boolean checkItems) {
+        super(inv, checkItems);
+        this.inv = inv;
+        this.side = side;
+    }
 
-	public IInventory getBaseInventory() {
-		return inv;
-	}
+    @Override
+    public int[] getSlotsForFace(EnumFacing side) {
+        return inv.getSlotsForFace(side);
+    }
 
-	@Override
-	public int getSizeInventory() {
-		return inv.getSizeInventory();
-	}
+    @Override
+    public boolean canInsertItem(int slot, ItemStack stack, EnumFacing s) {
+        return !checkItems() || inv.canInsertItem(slot, stack, side);
+    }
 
-	@Override
-	public ItemStack getStackInSlot(int slot) {
-		return inv.getStackInSlot(slot);
-	}
-
-	@Override
-	public ItemStack decrStackSize(int slot, int amount) {
-		return inv.decrStackSize(slot, amount);
-	}
-
-	@Override
-	public void setInventorySlotContents(int slot, ItemStack itemstack) {
-		inv.setInventorySlotContents(slot, itemstack);
-	}
-	
-	@Override
-	public String getName() {
-		return inv.getName();
-	}
-	
-	@Override
-	public IChatComponent getDisplayName() {
-		return inv.getDisplayName();
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return inv.getInventoryStackLimit();
-	}
-
-	@Override
-	public void markDirty() {
-		inv.markDirty();
-	}
-
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-		return inv.isUseableByPlayer(entityplayer);
-	}
-
-	@Override
-	public void openInventory(EntityPlayer entityplayer) {
-		inv.openInventory(entityplayer);
-	}
-
-	@Override
-	public void closeInventory(EntityPlayer entityplayer) {
-		inv.closeInventory(entityplayer);
-	}
-	
-	@Override
-	public ItemStack removeStackFromSlot(int index) {
-		return inv.removeStackFromSlot(index);
-	}
-	
-	@Override
-	public boolean hasCustomName() {
-		return inv.hasCustomName();
-	}
-
-	@Override
-	public boolean isItemValidForSlot(int slot, ItemStack stack) {
-		return !checkItems || inv.isItemValidForSlot(slot, stack);
-	}
-
-	@Override
-	public int[] getSlotsForFace(EnumFacing side) {
-		return inv.getSlotsForFace(side);
-	}
-	
-	@Override
-	public boolean canInsertItem(int slot, ItemStack stack, EnumFacing s) {
-		return !checkItems || inv.canInsertItem(slot, stack, side);
-	}
-
-	@Override
-	public boolean canExtractItem(int slot, ItemStack stack, EnumFacing s) {
-		return !checkItems || inv.canExtractItem(slot, stack, side);
-	}
-
-	@Override
-	public int getField(int id) {
-		return inv.getField(id);
-	}
-
-	@Override
-	public void setField(int id, int value) {
-		inv.setField(id, value);
-	}
-
-	@Override
-	public int getFieldCount() {
-		return inv.getFieldCount();
-	}
-
-	@Override
-	public void clear() {
-		inv.clear();
-	}
+    @Override
+    public boolean canExtractItem(int slot, ItemStack stack, EnumFacing s) {
+        return !checkItems() || inv.canExtractItem(slot, stack, side);
+    }
 
 }

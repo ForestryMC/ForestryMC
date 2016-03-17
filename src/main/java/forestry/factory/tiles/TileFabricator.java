@@ -115,7 +115,7 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 
 		if (!moltenTank.isEmpty()) {
 			// Remove smelt if we have gone below melting point
-			if (heat < (getMeltingPoint() - 100)) {
+			if (heat < getMeltingPoint() - 100) {
 				moltenTank.drain(5, true);
 			}
 		}
@@ -260,7 +260,7 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 	}
 
 	public int getHeatScaled(int i) {
-		return (heat * i) / MAX_HEAT;
+		return heat * i / MAX_HEAT;
 	}
 
 	private int getMeltingPoint() {
@@ -282,7 +282,7 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 		if (meltingPoint <= 0) {
 			return 0;
 		} else {
-			return (meltingPoint * i) / MAX_HEAT;
+			return meltingPoint * i / MAX_HEAT;
 		}
 	}
 

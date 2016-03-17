@@ -74,8 +74,8 @@ public class LedgerManager {
 
 	private Ledger getAtPosition(int mX, int mY) {
 		if (ledgers.size() > 0) {
-			final int xShift = ((gui.width - gui.getSizeX()) / 2) + gui.getSizeX();
-			int yShift = ((gui.height - gui.getSizeY()) / 2) + 8;
+			final int xShift = (gui.width - gui.getSizeX()) / 2 + gui.getSizeX();
+			int yShift = (gui.height - gui.getSizeY()) / 2 + 8;
 
 			for (Ledger ledger : ledgers) {
 				if (!ledger.isVisible()) {
@@ -92,8 +92,8 @@ public class LedgerManager {
 			}
 		}
 
-		final int xShiftError = ((gui.width - gui.getSizeX()) / 2);
-		int yShiftError = ((gui.height - gui.getSizeY()) / 2) + 8;
+		final int xShiftError = (gui.width - gui.getSizeX()) / 2;
+		int yShiftError = (gui.height - gui.getSizeY()) / 2 + 8;
 
 		for (ErrorLedger errorLedger : errorLedgers) {
 			if (!errorLedger.isVisible()) {

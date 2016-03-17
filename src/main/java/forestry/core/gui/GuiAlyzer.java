@@ -112,8 +112,8 @@ public abstract class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory>
 		textLayout.drawLine(text0, textLayout.column0);
 		int columnwidth = textLayout.column2 - textLayout.column1 - 2;
 
-		GuiUtil.drawItemStack(this, iconStacks.get(primary.getUID()), guiLeft + textLayout.column1 + (columnwidth - 20), guiTop + 10);
-		GuiUtil.drawItemStack(this, iconStacks.get(secondary.getUID()), guiLeft + textLayout.column2 + (columnwidth - 20), guiTop + 10);
+		GuiUtil.drawItemStack(this, iconStacks.get(primary.getUID()), guiLeft + textLayout.column1 + columnwidth - 20, guiTop + 10);
+		GuiUtil.drawItemStack(this, iconStacks.get(secondary.getUID()), guiLeft + textLayout.column2 + columnwidth - 20, guiTop + 10);
 
 		String primaryName = customPrimaryName == null ? primary.getName() : customPrimaryName;
 		String secondaryName = customSecondaryName == null ? secondary.getName() : customSecondaryName;
@@ -225,7 +225,7 @@ public abstract class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory>
 			textLayout.drawSplitLine(tokens[0], 12, 200, 0x666666);
 			if (tokens.length > 1) {
 				String signature = "- " + tokens[1];
-				fontRendererObj.drawStringWithShadow(signature, (guiLeft + 210) - fontRendererObj.getStringWidth(signature), guiTop + 145 - 14, 0x99cc32);
+				fontRendererObj.drawStringWithShadow(signature, guiLeft + 210 - fontRendererObj.getStringWidth(signature), guiTop + 145 - 14, 0x99cc32);
 			}
 		}
 

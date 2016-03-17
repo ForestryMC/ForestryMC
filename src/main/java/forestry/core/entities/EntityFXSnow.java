@@ -40,9 +40,9 @@ public class EntityFXSnow extends EntityFX {
 
 	@Override
 	public void renderParticle(WorldRenderer worldRenderer, Entity entity, float timeStep, float rotationX, float rotationXZ, float rotationZ, float rotationYZ, float rotationXY) {
-		double x = (this.prevPosX + (this.posX - this.prevPosX) * timeStep - interpPosX);
-		double y = (this.prevPosY + (this.posY - this.prevPosY) * timeStep - interpPosY);
-		double z = (this.prevPosZ + (this.posZ - this.prevPosZ) * timeStep - interpPosZ);
+		double x = this.prevPosX + (this.posX - this.prevPosX) * timeStep - interpPosX;
+		double y = this.prevPosY + (this.posY - this.prevPosY) * timeStep - interpPosY;
+		double z = this.prevPosZ + (this.posZ - this.prevPosZ) * timeStep - interpPosZ;
 
 		float minU = this.particleTextureIndexX / 16.0F;
 		float maxU = minU + 0.0624375F;
@@ -66,9 +66,9 @@ public class EntityFXSnow extends EntityFX {
 		int i = this.getBrightnessForRender(timeStep);
 		int j = i >> 16 & 65535;
 		int k = i & 65535;
-		worldRenderer.pos((x - rotationX * scale - rotationYZ * scale), (y - rotationXZ * scale), (z - rotationZ * scale - rotationXY * scale)).tex(maxU, maxV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
-		worldRenderer.pos((x - rotationX * scale + rotationYZ * scale), (y + rotationXZ * scale), (z - rotationZ * scale + rotationXY * scale)).tex(maxU, minV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
-		worldRenderer.pos((x + rotationX * scale + rotationYZ * scale), (y + rotationXZ * scale), (z + rotationZ * scale + rotationXY * scale)).tex(minU, minV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
-		worldRenderer.pos((x + rotationX * scale - rotationYZ * scale), (y - rotationXZ * scale), (z + rotationZ * scale - rotationXY * scale)).tex(minU, maxV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
+		worldRenderer.pos(x - rotationX * scale - rotationYZ * scale, y - rotationXZ * scale, z - rotationZ * scale - rotationXY * scale).tex(maxU, maxV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
+		worldRenderer.pos(x - rotationX * scale + rotationYZ * scale, y + rotationXZ * scale, z - rotationZ * scale + rotationXY * scale).tex(maxU, minV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
+		worldRenderer.pos(x + rotationX * scale + rotationYZ * scale, y + rotationXZ * scale, z + rotationZ * scale + rotationXY * scale).tex(minU, minV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
+		worldRenderer.pos(x + rotationX * scale - rotationYZ * scale, y - rotationXZ * scale, z + rotationZ * scale - rotationXY * scale).tex(minU, maxV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
 	}
 }

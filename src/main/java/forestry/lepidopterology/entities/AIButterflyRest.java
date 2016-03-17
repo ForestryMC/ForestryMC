@@ -36,7 +36,7 @@ public class AIButterflyRest extends AIButterflyBase {
 		}
 
 		int x = (int) entity.posX;
-		int y = ((int) Math.floor(entity.posY));
+		int y = (int) Math.floor(entity.posY);
 		int z = (int) entity.posZ;
 		BlockPos pos = new BlockPos(x, y, z);
 

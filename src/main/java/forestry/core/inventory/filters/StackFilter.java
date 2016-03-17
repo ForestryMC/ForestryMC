@@ -10,40 +10,113 @@
  ******************************************************************************/
 package forestry.core.inventory.filters;
 
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemFood;
-import net.minecraft.item.ItemSeeds;
+import com.google.common.base.Predicate;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntityFurnace;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 /**
- * This interface is used with several of the functions in IItemTransfer to
- * provide a convenient means of dealing with entire classes of items without
- * having to specify each item individually.
+ * This class is used to provide a convenient means of dealing with entire classes of items without having to specify each item individually.
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public enum StackFilter implements IStackFilter {
+@SuppressWarnings("unused")
+public class StackFilter implements IStackFilter {
+    /**
+     * Railcraft adds the following IItemTypes during preInit: ALL, FUEL, TRACK, MINECART, BALLAST, FEED
+     * <p/>
+     * Feel free to grab them from here or define your own.
+     */
+    public static final Map<String, IStackFilter> standardFilters = new HashMap<String, IStackFilter>();
 
-	ALL {
-		@Override
-		public boolean matches(ItemStack stack) {
-			return true;
-		}
-	},
-	FUEL {
-		@Override
-		public boolean matches(ItemStack stack) {
-			return TileEntityFurnace.getItemBurnTime(stack) > 0;
-		}
-	},
-	FEED {
-		@Override
-		public boolean matches(ItemStack stack) {
-			return stack.getItem() instanceof ItemFood || stack.getItem() == Items.wheat || stack.getItem() instanceof ItemSeeds;
-		}
-	};
+    @Override
+    public boolean apply(@Nullable final ItemStack input) {
+        return true;
+    }
 
-	@Override
-	public abstract boolean matches(ItemStack stack);
+    @Override
+    public final StackFilter and(@Nonnull final Predicate<? super ItemStack>... other) {
+        Objects.requireNonNull(other);
+        return new StackFilter() {
+            @Override
+            public boolean apply(ItemStack stack) {
+                for (Predicate<? super ItemStack> filter : other) {
+                    if (!filter.apply(stack)) {
+						return false;
+					}
+                }
+                return StackFilter.this.apply(stack);
+            }
+        };
+    }
+
+    @Override
+    public final StackFilter or(@Nonnull final Predicate<? super ItemStack>... other) {
+        Objects.requireNonNull(other);
+        return new StackFilter() {
+            @Override
+            public boolean apply(ItemStack stack) {
+                for (Predicate<? super ItemStack> filter : other) {
+                    if (filter.apply(stack)) {
+						return true;
+					}
+                }
+                return StackFilter.this.apply(stack);
+            }
+        };
+    }
+
+    @Override
+    public final StackFilter negate() {
+        return new StackFilter() {
+            @Override
+            public boolean apply(ItemStack stack) {
+                return !StackFilter.this.apply(stack);
+            }
+        };
+    }
+
+    public static StackFilter buildAnd(@Nonnull final Predicate<? super ItemStack>... filters) {
+        return new StackFilter() {
+            @Override
+            public boolean apply(ItemStack stack) {
+                Objects.requireNonNull(stack);
+                for (Predicate<? super ItemStack> filter : filters) {
+                    if (!filter.apply(stack)) {
+						return false;
+					}
+                }
+                return true;
+            }
+        };
+    }
+
+    public static StackFilter buildOr(@Nonnull final Predicate<? super ItemStack>... filters) {
+        return new StackFilter() {
+            @Override
+            public boolean apply(ItemStack stack) {
+                Objects.requireNonNull(stack);
+                for (Predicate<? super ItemStack> filter : filters) {
+                    if (filter.apply(stack)) {
+						return true;
+					}
+                }
+                return false;
+            }
+        };
+    }
+
+    public static StackFilter invert(@Nonnull final Predicate<? super ItemStack> filter) {
+        return new StackFilter() {
+            @Override
+            public boolean apply(ItemStack stack) {
+                return !filter.apply(stack);
+            }
+        };
+    }
+
 }

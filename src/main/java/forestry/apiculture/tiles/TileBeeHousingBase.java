@@ -108,13 +108,13 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 		double fxZ = zCoord + 0.5F;
 		float distanceFromCenter = 0.6F;
 		float leftRightSpreadFromCenter = distanceFromCenter * (world.rand.nextFloat() - 0.5F);
-		float upSpread = (world.rand.nextFloat() * 6F) / 16F;
+		float upSpread = world.rand.nextFloat() * 6F / 16F;
 		fxY += upSpread;
 
-		Proxies.render.addEntityHoneyDustFX(world, (fxX - distanceFromCenter), fxY, (fxZ + leftRightSpreadFromCenter));
-		Proxies.render.addEntityHoneyDustFX(world, (fxX + distanceFromCenter), fxY, (fxZ + leftRightSpreadFromCenter));
-		Proxies.render.addEntityHoneyDustFX(world, (fxX + leftRightSpreadFromCenter), fxY, (fxZ - distanceFromCenter));
-		Proxies.render.addEntityHoneyDustFX(world, (fxX + leftRightSpreadFromCenter), fxY, (fxZ + distanceFromCenter));
+		Proxies.render.addEntityHoneyDustFX(world, fxX - distanceFromCenter, fxY, fxZ + leftRightSpreadFromCenter);
+		Proxies.render.addEntityHoneyDustFX(world, fxX + distanceFromCenter, fxY, fxZ + leftRightSpreadFromCenter);
+		Proxies.render.addEntityHoneyDustFX(world, fxX + leftRightSpreadFromCenter, fxY, fxZ - distanceFromCenter);
+		Proxies.render.addEntityHoneyDustFX(world, fxX + leftRightSpreadFromCenter, fxY, fxZ + distanceFromCenter);
 	}
 
 	@Override
@@ -126,7 +126,7 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 
 	@Override
 	public int getHealthScaled(int i) {
-		return (breedingProgressPercent * i) / 100;
+		return breedingProgressPercent * i / 100;
 	}
 
 	@Override

@@ -197,7 +197,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 			checkRecipe();
 		}
 
-		boolean hasRecipe = (currentRecipe != null);
+		boolean hasRecipe = currentRecipe != null;
 		boolean hasLiquidResources = true;
 		boolean hasItemResources = true;
 		boolean canAdd = true;

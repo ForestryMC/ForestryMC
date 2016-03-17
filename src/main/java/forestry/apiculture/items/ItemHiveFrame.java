@@ -57,7 +57,7 @@ public class ItemHiveFrame extends ItemForestry implements IHiveFrame {
 
 		@Override
 		public float getProductionModifier(IBeeGenome genome, float currentModifier) {
-			return (currentModifier < 10f) ? 2f : 1f;
+			return currentModifier < 10f ? 2f : 1f;
 		}
 
 		@Override

@@ -31,7 +31,7 @@ public class PacketPipetteClick extends PacketSlotClick implements IForestryPack
 
 	@Override
 	public void onPacketData(DataInputStreamForestry data, EntityPlayerMP player) throws IOException {
-		if ((player.openContainer instanceof IContainerLiquidTanks)) {
+		if (player.openContainer instanceof IContainerLiquidTanks) {
 			((IContainerLiquidTanks) player.openContainer).handlePipetteClick(getSlot(), player);
 		}
 	}

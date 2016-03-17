@@ -114,7 +114,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 			currentRecipe = BottlerRecipe.getRecipe(resource, emptyCan);
 			if (currentRecipe != null) {
 				float viscosityMultiplier = resource.getFluid().getViscosity(resource) / 1000.0f;
-				viscosityMultiplier = ((viscosityMultiplier - 1f) / 20f) + 1f; // scale down the effect
+				viscosityMultiplier = (viscosityMultiplier - 1f) / 20f + 1f; // scale down the effect
 
 				int fillAmount = Math.min(currentRecipe.input.amount, resource.amount);
 				float fillTime = fillAmount / (float) Constants.BUCKET_VOLUME;
@@ -133,7 +133,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 			return false;
 		}
 
-		return ((float) inventory.getStackInSlot(InventoryBottler.SLOT_INPUT_EMPTY_CAN).stackSize / (float) inventory.getStackInSlot(InventoryBottler.SLOT_INPUT_EMPTY_CAN).getMaxStackSize()) > percentage;
+		return (float) inventory.getStackInSlot(InventoryBottler.SLOT_INPUT_EMPTY_CAN).stackSize / (float) inventory.getStackInSlot(InventoryBottler.SLOT_INPUT_EMPTY_CAN).getMaxStackSize() > percentage;
 	}
 
 	@Override

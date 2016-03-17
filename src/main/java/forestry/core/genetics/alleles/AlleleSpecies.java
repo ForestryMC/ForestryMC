@@ -105,7 +105,7 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesBuil
 	@Override
 	public ItemStack[] getResearchBounty(World world, GameProfile researcher, IIndividual individual, int bountyLevel) {
 		ItemStack research = null;
-		if (world.rand.nextFloat() < ((float) 10 / bountyLevel)) {
+		if (world.rand.nextFloat() < (float) 10 / bountyLevel) {
 			Collection<? extends IMutation> combinations = getRoot().getCombinations(this);
 			if (combinations.size() > 0) {
 				IMutation[] candidates = combinations.toArray(new IMutation[combinations.size()]);

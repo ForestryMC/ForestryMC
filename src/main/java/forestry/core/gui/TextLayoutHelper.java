@@ -60,7 +60,7 @@ public class TextLayoutHelper {
 	}
 	
 	public void newLineCompressed() {
-		line += (LINE_HEIGHT - 2);
+		line += LINE_HEIGHT - 2;
 	}
 	
 	public void newLine(int lineHeight) {

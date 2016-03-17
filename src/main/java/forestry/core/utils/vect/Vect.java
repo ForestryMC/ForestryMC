@@ -136,6 +136,6 @@ public class Vect extends IVect {
 			return false;
 		}
 		Vect other = (Vect) obj;
-		return (getX() == other.getX()) && (getY() == other.getY()) && (getZ() == other.getZ());
+		return getX() == other.getX() && getY() == other.getY() && getZ() == other.getZ();
 	}
 }

@@ -39,20 +39,20 @@ public class WorldGenMinableMeta extends WorldGenerator {
 		boolean hasGenerated = false;
 
 		float randomBase = random.nextFloat() * 3.141593F;
-		double d = (pos.getX() + 8) + (MathHelper.sin(randomBase) * numberOfBlocks) / 8F;
-		double d1 = (pos.getX() + 8) - (MathHelper.sin(randomBase) * numberOfBlocks) / 8F;
-		double d2 = (pos.getZ() + 8) + (MathHelper.cos(randomBase) * numberOfBlocks) / 8F;
-		double d3 = (pos.getZ() + 8) - (MathHelper.cos(randomBase) * numberOfBlocks) / 8F;
-		double d4 = (pos.getY() + random.nextInt(3)) - 2;
-		double d5 = (pos.getY() + random.nextInt(3)) - 2;
+		double d = pos.getX() + 8 + MathHelper.sin(randomBase) * numberOfBlocks / 8F;
+		double d1 = pos.getX() + 8 - MathHelper.sin(randomBase) * numberOfBlocks / 8F;
+		double d2 = pos.getZ() + 8 + MathHelper.cos(randomBase) * numberOfBlocks / 8F;
+		double d3 = pos.getZ() + 8 - MathHelper.cos(randomBase) * numberOfBlocks / 8F;
+		double d4 = pos.getY() + random.nextInt(3) - 2;
+		double d5 = pos.getY() + random.nextInt(3) - 2;
 
 		for (int l = 0; l <= numberOfBlocks; l++) {
-			double d6 = d + ((d1 - d) * l) / numberOfBlocks;
-			double d7 = d4 + ((d5 - d4) * l) / numberOfBlocks;
-			double d8 = d2 + ((d3 - d2) * l) / numberOfBlocks;
-			double d9 = (random.nextDouble() * numberOfBlocks) / 16D;
-			double d10 = (MathHelper.sin((l * 3.141593F) / numberOfBlocks) + 1.0F) * d9 + 1.0D;
-			double d11 = (MathHelper.sin((l * 3.141593F) / numberOfBlocks) + 1.0F) * d9 + 1.0D;
+			double d6 = d + (d1 - d) * l / numberOfBlocks;
+			double d7 = d4 + (d5 - d4) * l / numberOfBlocks;
+			double d8 = d2 + (d3 - d2) * l / numberOfBlocks;
+			double d9 = random.nextDouble() * numberOfBlocks / 16D;
+			double d10 = (MathHelper.sin(l * 3.141593F / numberOfBlocks) + 1.0F) * d9 + 1.0D;
+			double d11 = (MathHelper.sin(l * 3.141593F / numberOfBlocks) + 1.0F) * d9 + 1.0D;
 			int xStart = MathHelper.floor_double(d6 - d10 / 2D);
 			int yStart = MathHelper.floor_double(d7 - d11 / 2D);
 			int zStart = MathHelper.floor_double(d8 - d10 / 2D);
@@ -61,19 +61,19 @@ public class WorldGenMinableMeta extends WorldGenerator {
 			int zEnd = MathHelper.floor_double(d8 + d10 / 2D);
 
 			for (int targetX = xStart; targetX <= xEnd; targetX++) {
-				double d12 = ((targetX + 0.5D) - d6) / (d10 / 2D);
+				double d12 = (targetX + 0.5D - d6) / (d10 / 2D);
 				if (d12 * d12 >= 1.0D) {
 					continue;
 				}
 
 				for (int targetY = yStart; targetY <= yEnd; targetY++) {
-					double d13 = ((targetY + 0.5D) - d7) / (d11 / 2D);
+					double d13 = (targetY + 0.5D - d7) / (d11 / 2D);
 					if (d12 * d12 + d13 * d13 >= 1.0D) {
 						continue;
 					}
 
 					for (int targetZ = zStart; targetZ <= zEnd; targetZ++) {
-						double d14 = ((targetZ + 0.5D) - d8) / (d10 / 2D);
+						double d14 = (targetZ + 0.5D - d8) / (d10 / 2D);
 						BlockPos target = new BlockPos(targetX, targetY, targetZ);
 						if (d12 * d12 + d13 * d13 + d14 * d14 < 1.0D && world.getBlockState(target).getBlock() == Blocks.stone) {
 							world.setBlockState(target, mineableBlock.getStateFromMeta(mineableBlockMeta), Constants.FLAG_BLOCK_SYNCH);

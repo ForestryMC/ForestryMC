@@ -92,7 +92,7 @@ public class CommandPlugins extends SubCommand {
 					continue;
 				}
 
-				if ((info.pluginID().equalsIgnoreCase(pluginUid) || info.name().equalsIgnoreCase(pluginUid))) {
+				if (info.pluginID().equalsIgnoreCase(pluginUid) || info.name().equalsIgnoreCase(pluginUid)) {
 					found = plugin;
 					break;
 				}

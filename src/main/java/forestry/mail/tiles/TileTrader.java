@@ -208,7 +208,7 @@ public class TileTrader extends TileBase {
 			}
 		}
 
-		return ((float) count / (float) total);
+		return (float) count / (float) total;
 	}
 
 	public boolean hasPaperMin(int count) {

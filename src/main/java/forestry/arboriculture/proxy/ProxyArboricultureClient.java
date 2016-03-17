@@ -15,8 +15,8 @@ import net.minecraft.world.ColorizerFoliage;
 
 import forestry.arboriculture.PluginArboriculture;
 import forestry.arboriculture.blocks.BlockDecorativeLeaves;
-import forestry.arboriculture.render.ModelDecorativeLeaves;
-import forestry.arboriculture.render.ModelLeaves;
+import forestry.arboriculture.models.ModelDecorativeLeaves;
+import forestry.arboriculture.models.ModelLeaves;
 import forestry.core.models.BlockModelIndex;
 import forestry.core.proxy.Proxies;
 
