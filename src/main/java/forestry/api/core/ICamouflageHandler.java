@@ -11,6 +11,8 @@ import net.minecraft.item.ItemStack;
 public interface ICamouflageHandler extends ILocatable {
 
     ItemStack getCamouflageBlock(EnumCamouflageType type);
+    
+    ItemStack getDefaultCamouflageBlock(EnumCamouflageType type);
 
     void setCamouflageBlock(EnumCamouflageType type, ItemStack camouflageBlock);
 	

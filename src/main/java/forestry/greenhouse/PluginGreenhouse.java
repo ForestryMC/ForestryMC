@@ -12,7 +12,6 @@ package forestry.greenhouse;
 
 import forestry.api.greenhouse.GreenhouseManager;
 import forestry.api.greenhouse.IGreenhouseItemAccess;
-import forestry.apiculture.network.PacketRegistryApiculture;
 import forestry.core.config.Constants;
 import forestry.core.network.IPacketRegistry;
 import forestry.greenhouse.blocks.BlockGreenhouseType;

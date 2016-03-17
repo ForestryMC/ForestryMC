@@ -51,6 +51,11 @@ public class FakeGreenhouseController extends FakeMultiblockController implement
 	public ItemStack getCamouflageBlock(EnumCamouflageType type) {
 		return null;
 	}
+	
+	@Override
+	public ItemStack getDefaultCamouflageBlock(EnumCamouflageType type) {
+		return null;
+	}
 
 	@Override
 	public void setCamouflageBlock(EnumCamouflageType type, ItemStack camouflageBlock) {

@@ -58,7 +58,7 @@ public class WidgetCamouflageSlot extends Widget {
 			return;
 		}
 		if(GuiScreen.isShiftKeyDown()){
-			camouflageHandler.setCamouflageBlock(type, null);
+			camouflageHandler.setCamouflageBlock(type, camouflageHandler.getDefaultCamouflageBlock(type));
 		}else{
 			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 			ItemStack stack = player.inventory.getItemStack();

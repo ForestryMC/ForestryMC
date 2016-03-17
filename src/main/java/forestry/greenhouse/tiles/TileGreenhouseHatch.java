@@ -148,6 +148,11 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 	public ItemStack getCamouflageBlock(EnumCamouflageType type) {
 		return camouflageBlock;
 	}
+	
+	@Override
+	public ItemStack getDefaultCamouflageBlock(EnumCamouflageType type) {
+		return null;
+	}
 
 	/* TILEFORESTRY */
 	@Override

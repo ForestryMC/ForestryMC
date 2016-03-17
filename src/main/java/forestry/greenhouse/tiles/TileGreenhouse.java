@@ -111,6 +111,11 @@ public abstract class TileGreenhouse extends MultiblockTileEntityForestry<Multib
 	public ItemStack getCamouflageBlock(EnumCamouflageType type) {
 		return camouflageBlock;
 	}
+	
+	@Override
+	public ItemStack getDefaultCamouflageBlock(EnumCamouflageType type) {
+		return null;
+	}
 
 	/* TILEFORESTRY */
 

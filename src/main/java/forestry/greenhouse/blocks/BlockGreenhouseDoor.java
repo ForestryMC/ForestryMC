@@ -44,7 +44,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public  class BlockGreenhouseDoor extends BlockGreenhouse implements IStateMapperRegister {
 
-	//The door  propertys
+	//The door propertys
     private static final PropertyDirection FACING = BlockDoor.FACING;
     private static final PropertyBool OPEN = BlockDoor.OPEN;
     private static final PropertyEnum<BlockDoor.EnumHingePosition> HINGE = BlockDoor.HINGE;

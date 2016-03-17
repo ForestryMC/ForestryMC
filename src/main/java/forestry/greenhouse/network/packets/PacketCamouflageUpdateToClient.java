@@ -13,7 +13,6 @@ package forestry.greenhouse.network.packets;
 import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import forestry.api.core.EnumCamouflageType;
@@ -23,9 +22,7 @@ import forestry.api.multiblock.IMultiblockController;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IForestryPacketClient;
-import forestry.core.network.IForestryPacketServer;
 import forestry.core.network.PacketIdClient;
-import forestry.core.network.PacketIdServer;
 import forestry.core.network.packets.PacketCoordinates;
 
 public class PacketCamouflageUpdateToClient extends PacketCoordinates implements IForestryPacketClient {

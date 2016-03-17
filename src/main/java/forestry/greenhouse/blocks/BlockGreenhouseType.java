@@ -1,7 +1,6 @@
 package forestry.greenhouse.blocks;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.EnumMap;
 import java.util.Locale;
 
 import javax.annotation.Nullable;
@@ -36,21 +35,6 @@ public enum BlockGreenhouseType {
 	
 	public static final BlockGreenhouseType[] VALUES = values();
 	
-	/* TEXTURE IDS*/
-	private static final int TYPE_PLAIN = 0;
-	private static final int TYPE_GLASS = 1;
-	private static final int TYPE_GEARS = 2;
-	private static final int TYPE_VALVE = 3;
-	private static final int TYPE_FAN_OFF = 4;
-	private static final int TYPE_FAN_ON = 5;
-	private static final int TYPE_HEATER_OFF = 6;
-	private static final int TYPE_HEATER_ON = 7;
-	private static final int TYPE_DRYER = 8;
-	private static final int TYPE_CONTROL = 9;
-	private static final int TYPE_HATCH_INPUT = 10;
-	private static final int TYPE_HATCH_OUTPUT = 11;
-	private static final int TYPE_HATCH = 12;
-	
 	public final boolean hasOverlaySprite;
 	public final boolean activatable;
 	
@@ -70,25 +54,35 @@ public enum BlockGreenhouseType {
 	}
 
 	@SideOnly(Side.CLIENT)
-	private static List<TextureAtlasSprite> sprites;
-
+	private static EnumMap<BlockGreenhouseSprites, TextureAtlasSprite> sprites = new EnumMap(BlockGreenhouseSprites.class);
+	
+	private static enum BlockGreenhouseSprites{
+		PLAIN, GLASS, GEARS("gears"), VALVE("valve"), FAN_OFF("fan.off"), FAN_ON("fan.on"), HEATER_OFF("heater.off"), HEATER_ON("heater.on"), DRYER("dryer"), CONTROL("control"), HATCH_DEFAULT("hatch"), HATCH_INPUT("hatch_input"), HATCH_OUTPUT("hatch_output");
+		
+		public static final BlockGreenhouseSprites[] VALUES = values();
+		
+		private String spriteName;
+		
+		private BlockGreenhouseSprites(String spriteName) {
+			this.spriteName = spriteName;
+		}
+		
+		private BlockGreenhouseSprites() {
+			this.spriteName = null;
+		}
+	}
+	
 	@SideOnly(Side.CLIENT)
 	public static void registerSprites() {
-		sprites = Arrays.asList(
-				TextureManager.getSprite("minecraft", "blocks/brick"),
-				TextureManager.getSprite("minecraft", "blocks/glass_green"),
-				TextureManager.registerSprite("blocks/greenhouse/gears"),
-				TextureManager.registerSprite("blocks/greenhouse/valve"),
-				TextureManager.registerSprite("blocks/greenhouse/fan.off"),
-				TextureManager.registerSprite("blocks/greenhouse/fan.on"),
-				TextureManager.registerSprite("blocks/greenhouse/heater.off"),
-				TextureManager.registerSprite("blocks/greenhouse/heater.on"),
-				TextureManager.registerSprite("blocks/greenhouse/dryer"),
-				TextureManager.registerSprite("blocks/greenhouse/control"),
-				TextureManager.registerSprite("blocks/greenhouse/hatch_input"),
-				TextureManager.registerSprite("blocks/greenhouse/hatch_output"),
-				TextureManager.registerSprite("blocks/greenhouse/hatch")
-		);
+		for(BlockGreenhouseSprites sprite : BlockGreenhouseSprites.VALUES){
+			if(sprite == BlockGreenhouseSprites.PLAIN){
+				sprites.put(sprite, TextureManager.getSprite("minecraft", "blocks/brick"));
+			}else if(sprite == BlockGreenhouseSprites.GLASS){
+				sprites.put(sprite, TextureManager.getSprite("minecraft", "blocks/glass_green"));
+			}else{
+				sprites.put(sprite, TextureManager.registerSprite("blocks/greenhouse/" + sprite.spriteName));
+			}
+		}
 	}
 	
 	/**
@@ -101,43 +95,43 @@ public enum BlockGreenhouseType {
 			tile = world.getTileEntity(pos);
 		}
 		switch (type) {
-			case PLAIN:
-				return sprites.get(TYPE_PLAIN);
-			case GLASS:
-				return sprites.get(TYPE_GLASS);
+		case PLAIN:
+			return sprites.get(BlockGreenhouseSprites.PLAIN);
+		case GLASS:
+			return sprites.get(BlockGreenhouseSprites.GLASS);
 			case GEARBOX:
-				return sprites.get(TYPE_GEARS);
+				return sprites.get(BlockGreenhouseSprites.GEARS);
 			case VALVE:
-				return sprites.get(TYPE_VALVE);
+				return sprites.get(BlockGreenhouseSprites.VALUES);
 			case FAN:
 				if(state == null || state.getValue(BlockGreenhouse.STATE) == State.OFF) {
-					return sprites.get(TYPE_FAN_OFF);
+					return sprites.get(BlockGreenhouseSprites.FAN_OFF);
 				} else {
-					return sprites.get(TYPE_FAN_ON);
+					return sprites.get(BlockGreenhouseSprites.FAN_ON);
 				}
 			case HEATER:
 				if(state == null || state.getValue(BlockGreenhouse.STATE) == State.OFF) {
-					return sprites.get(TYPE_HEATER_OFF);
+					return sprites.get(BlockGreenhouseSprites.HEATER_OFF);
 				} else {
-					return sprites.get(TYPE_HEATER_ON);
+					return sprites.get(BlockGreenhouseSprites.HEATER_ON);
 				}
 			case DRYER:
-				return sprites.get(TYPE_DRYER);
+				return sprites.get(BlockGreenhouseSprites.DRYER);
 			case CONTROL:
-				return sprites.get(TYPE_CONTROL);
+				return sprites.get(BlockGreenhouseSprites.CONTROL);
 			case HATCH_OUTPUT:
 			case HATCH_INPUT:
 				if(tile == null || facing == null || !(tile instanceof TileGreenhouseHatch)){
-					return sprites.get(TYPE_HATCH);
+					return sprites.get(BlockGreenhouseSprites.HATCH_DEFAULT);
 				}
 				TileGreenhouseHatch hatch = (TileGreenhouseHatch) tile;
 				if(hatch.getOutwardsDir() == null){
-					return sprites.get(TYPE_HATCH);
+					return sprites.get(BlockGreenhouseSprites.HATCH_DEFAULT);
 				}
 				if(hatch.getOutwardsDir() == facing){
-					return sprites.get(TYPE_HATCH_OUTPUT);
+					return sprites.get(BlockGreenhouseSprites.HATCH_OUTPUT);
 				}else if(hatch.getOutwardsDir().getOpposite() == facing){
-					return sprites.get(TYPE_HATCH_INPUT);
+					return sprites.get(BlockGreenhouseSprites.HATCH_INPUT);
 				}
 				return null;
 			default:

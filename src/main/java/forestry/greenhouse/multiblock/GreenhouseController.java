@@ -49,6 +49,7 @@ import forestry.greenhouse.network.packets.PacketCamouflageUpdateToClient;
 import forestry.greenhouse.network.packets.PacketCamouflageUpdateToServer;
 import forestry.greenhouse.tiles.TileGreenhouseSprinkler;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -286,6 +287,20 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 			return camouflageGlassBlock;
 		case DOOR:
 			return camouflageDoorBlock;
+		default:
+			return null;
+		}
+	}
+	
+	@Override
+	public ItemStack getDefaultCamouflageBlock(EnumCamouflageType type) {
+		switch (type) {
+		case DEFAULT:
+			return new ItemStack(Blocks.brick_block);
+		case GLASS:
+			return new ItemStack(Blocks.stained_glass, 1, 13);
+		case DOOR:
+			return null;
 		default:
 			return null;
 		}
