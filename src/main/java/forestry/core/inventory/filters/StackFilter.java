@@ -80,7 +80,7 @@ public class StackFilter implements IStackFilter {
         };
     }
 
-    private static StackFilter buildAnd(@Nonnull final Predicate<? super ItemStack>... filters) {
+    public static StackFilter buildAnd(@Nonnull final Predicate<? super ItemStack>... filters) {
         return new StackFilter() {
             @Override
             public boolean apply(ItemStack stack) {
@@ -95,7 +95,7 @@ public class StackFilter implements IStackFilter {
         };
     }
 
-    private static StackFilter buildOr(@Nonnull final Predicate<? super ItemStack>... filters) {
+    public static StackFilter buildOr(@Nonnull final Predicate<? super ItemStack>... filters) {
         return new StackFilter() {
             @Override
             public boolean apply(ItemStack stack) {
@@ -110,7 +110,7 @@ public class StackFilter implements IStackFilter {
         };
     }
 
-    private static StackFilter invert(@Nonnull final Predicate<? super ItemStack> filter) {
+    public static StackFilter invert(@Nonnull final Predicate<? super ItemStack> filter) {
         return new StackFilter() {
             @Override
             public boolean apply(ItemStack stack) {
