@@ -16,7 +16,7 @@ import forestry.api.multiblock.IGreenhouseController;
 
 public interface IGreenhouseLogic extends INbtWritable, INbtReadable {
 
-	void onWork();
+	void work();
 	
 	void onChange(EnumGreenhouseChangeType type, Object event);
 	

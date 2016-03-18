@@ -34,7 +34,7 @@ public class GreenhouseEffect extends DefaultGreenhouseLogic implements IGreenho
 	}
 	
 	@Override
-	public void onWork() {
+	public void work() {
 		if(controller == null || !controller.isAssembled()){
 			return;
 		}

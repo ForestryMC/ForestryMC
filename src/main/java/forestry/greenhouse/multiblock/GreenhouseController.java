@@ -26,6 +26,7 @@ import forestry.api.core.CamouflageEvents.CamouflageChangeEvent;
 import forestry.api.greenhouse.EnumGreenhouseChangeType;
 import forestry.api.greenhouse.GreenhouseManager;
 import forestry.api.greenhouse.IGreenhouseLogic;
+import forestry.api.greenhouse.IGreenhouseState;
 import forestry.api.core.EnumCamouflageType;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -50,6 +51,7 @@ import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.utils.CamouflageUtil;
 import forestry.core.utils.Log;
 import forestry.energy.EnergyManager;
+import forestry.greenhouse.GreenhouseState;
 import forestry.greenhouse.blocks.BlockGreenhouse;
 import forestry.greenhouse.blocks.BlockGreenhouseType;
 import forestry.greenhouse.network.packets.PacketCamouflageUpdate;
@@ -435,6 +437,10 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 				inventory.drainCan(tankManager);
 			}
 			
+			for(IGreenhouseLogic logic : logics){
+				logic.work();
+			}
+			
 			for (IGreenhouseComponent.Active activeComponent : activeComponents) {
 				activeComponent.updateServer(tickCount);
 			}
@@ -694,6 +700,11 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	@Override
 	public List<IGreenhouseLogic> getLogics() {
 		return logics;
+	}
+	
+	@Override
+	public IGreenhouseState createState() {
+		return new GreenhouseState(worldObj, getBiome().rainfall + humidChange, getBiome().temperature + tempChange);
 	}
 
 }

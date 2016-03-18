@@ -144,7 +144,7 @@ public class BlockSoil extends Block implements IItemTyped, IItemModelRegister {
 			for (int j = -1; j < 2; j++) {
 				IBlockState state = world.getBlockState(new BlockPos(pos.getX() + i, pos.getY() + 1, pos.getZ() + j));
 				Block block = state.getBlock();
-				if (block == Blocks.log || block == Blocks.sapling || block instanceof IGrowable) {
+				if (block == Blocks.log || block == Blocks.log2 || block == Blocks.sapling || block instanceof IGrowable) {
 					// We are not returning true if we are the base of a sapling.
 					return !(i == 0 && j == 0);
 				}

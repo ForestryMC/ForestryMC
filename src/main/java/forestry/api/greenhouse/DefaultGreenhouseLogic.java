@@ -27,7 +27,7 @@ public class DefaultGreenhouseLogic implements IGreenhouseLogic {
 	}
 
 	@Override
-	public void onWork() {
+	public void work() {
 	}
 
 	@Override
