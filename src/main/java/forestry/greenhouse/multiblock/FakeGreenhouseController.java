@@ -16,6 +16,7 @@ import java.util.List;
 import forestry.api.core.EnumCamouflageType;
 import forestry.api.greenhouse.EnumGreenhouseChangeType;
 import forestry.api.greenhouse.IGreenhouseLogic;
+import forestry.api.greenhouse.IGreenhouseState;
 import forestry.core.fluids.FakeTankManager;
 import forestry.core.fluids.ITankManager;
 import forestry.core.inventory.FakeInventoryAdapter;
@@ -92,4 +93,9 @@ public class FakeGreenhouseController extends FakeMultiblockController implement
 	public void addHumidityChange(float change, float boundaryDown, float boundaryUp) {
 	}
 
+	@Override
+	public IGreenhouseState createState() {
+		return null;
+	}
+	
 }

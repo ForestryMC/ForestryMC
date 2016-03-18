@@ -48,6 +48,7 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 	@Override
 	public void setupAPI() {
 		GreenhouseManager.greenhouseAccess = new GreenhouseAccess();
+		GreenhouseManager.greenhouseHelper = new GreenhouseHelper();
 	}
 	
 	@Override

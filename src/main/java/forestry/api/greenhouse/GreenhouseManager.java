@@ -12,6 +12,8 @@ public class GreenhouseManager {
 	
 	public static IGreenhouseAccess greenhouseAccess;
 	
+	public static IGreenhouseHelper greenhouseHelper;
+	
 	public static List<Class<? extends IGreenhouseLogic>> greenhouseLogics = new ArrayList();
 
 }

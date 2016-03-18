@@ -12,6 +12,7 @@ package forestry.greenhouse.multiblock;
 
 import javax.annotation.Nullable;
 
+import forestry.api.greenhouse.IGreenhouseState;
 import forestry.api.multiblock.IGreenhouseController;
 import forestry.core.access.IRestrictedAccess;
 import forestry.core.fluids.ITankManager;
@@ -28,6 +29,8 @@ public interface IGreenhouseControllerInternal extends IGreenhouseController, IM
 	
 	@Nullable
 	EnergyManager getEnergyManager();
+	
+	IGreenhouseState createState();
 	
 	void createLogics();
 	

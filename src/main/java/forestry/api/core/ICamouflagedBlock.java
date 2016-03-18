@@ -5,10 +5,15 @@
  ******************************************************************************/
 package forestry.api.core;
 
-import forestry.core.tiles.ILocatable;
+import net.minecraft.util.BlockPos;
+import net.minecraft.world.World;
 
-public interface ICamouflagedBlock extends ILocatable {
+public interface ICamouflagedBlock {
 
 	EnumCamouflageType getCamouflageType();
+	
+	BlockPos getCoordinates();
+
+	World getWorld();
 	
 }
