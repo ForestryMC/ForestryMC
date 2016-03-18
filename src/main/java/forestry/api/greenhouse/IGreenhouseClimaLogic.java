@@ -5,13 +5,7 @@
  ******************************************************************************/
 package forestry.api.greenhouse;
 
-import java.util.ArrayList;
-import java.util.List;
+public interface IGreenhouseClimaLogic extends IGreenhouseLogic {
 
-public class GreenhouseManager {
 	
-	public static IGreenhouseAccess greenhouseAccess;
-	
-	public static List<Class<? extends IGreenhouseLogic>> greenhouseLogics = new ArrayList();
-
 }

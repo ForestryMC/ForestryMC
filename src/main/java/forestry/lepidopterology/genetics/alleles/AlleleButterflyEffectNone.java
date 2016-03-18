@@ -8,14 +8,15 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.greenhouse.network;
+package forestry.lepidopterology.genetics.alleles;
 
-import forestry.core.network.PacketRegistry;
-import forestry.greenhouse.network.packets.PacketCamouflageUpdate;
+public class AlleleButterflyEffectNone extends AlleleButterflyEffect {
+	public AlleleButterflyEffectNone() {
+		super("none", false);
+	}
 
-public class PacketRegistryGreenhouse extends PacketRegistry {
 	@Override
-	public void registerPackets() {
-		registerServerPacket(new PacketCamouflageUpdate());
+	public String getUnlocalizedName() {
+		return "for.lepidopterology.effect.none";
 	}
 }

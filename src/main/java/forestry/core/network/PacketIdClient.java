@@ -51,9 +51,6 @@ public enum PacketIdClient implements IPacketId {
 
 	// Arboriculture
 	RIPENING_UPDATE,
-
-	// Greanhouse
-	TILE_FORESTRY_CAMOUFLAGE,
 	
 	// Mail
 	TRADING_ADDRESS_RESPONSE,

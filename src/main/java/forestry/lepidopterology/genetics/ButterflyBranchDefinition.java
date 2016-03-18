@@ -20,6 +20,7 @@ import forestry.api.lepidopterology.EnumButterflyChromosome;
 import forestry.core.genetics.IBranchDefinition;
 import forestry.core.genetics.alleles.AlleleHelper;
 import forestry.core.genetics.alleles.EnumAllele;
+import forestry.lepidopterology.genetics.alleles.AlleleButterflyEffect;
 
 public enum ButterflyBranchDefinition implements IBranchDefinition {
 	Anthocharis,

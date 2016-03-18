@@ -31,6 +31,7 @@ import forestry.api.core.ICamouflagedBlock;
 import forestry.api.core.IModelBaker;
 import forestry.api.multiblock.IGreenhouseComponent;
 import forestry.core.models.ModelBlockOverlay;
+import forestry.core.utils.CamouflageUtil;
 
 public class ModelGreenhouse<G extends TileEntity & IGreenhouseComponent & ICamouflageHandler & ICamouflagedBlock> extends ModelBlockOverlay<BlockGreenhouse> {
 
@@ -45,14 +46,16 @@ public class ModelGreenhouse<G extends TileEntity & IGreenhouseComponent & ICamo
 
 	@Override
 	protected void bakeWorldBlock(BlockGreenhouse block, IBlockAccess world, BlockPos pos, IExtendedBlockState stateExtended, IModelBaker baker) {
-		bakeBlockModel(block, world, pos, stateExtended, baker, BlockGreenhouse.getCamouflageBlock(world, pos));
+		ItemStack camouflageStack = CamouflageUtil.getCamouflageBlock(world, pos);
+		
+		bakeBlockModel(block, world, pos, stateExtended, baker, camouflageStack);
 	}
 	
-	private void bakeBlockModel(@Nonnull BlockGreenhouse block, @Nullable IBlockAccess world, @Nullable BlockPos pos, @Nullable IExtendedBlockState stateExtended, @Nonnull IModelBaker baker, @Nullable ItemStack camouflageBlock){
-		if(camouflageBlock != null){
+	private void bakeBlockModel(@Nonnull BlockGreenhouse block, @Nullable IBlockAccess world, @Nullable BlockPos pos, @Nullable IExtendedBlockState stateExtended, @Nonnull IModelBaker baker, @Nullable ItemStack camouflageStack){
+		if(camouflageStack != null){
 			BlockModelShapes modelShapes = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes();
 			
-			baker.addBakedModel(modelShapes.getModelForState(Block.getBlockFromItem(camouflageBlock.getItem()).getStateFromMeta(camouflageBlock.getItemDamage())));
+			baker.addBakedModel(modelShapes.getModelForState(Block.getBlockFromItem(camouflageStack.getItem()).getStateFromMeta(camouflageStack.getItemDamage())));
 		}
 		
 		//Bake the default blocks

@@ -14,11 +14,10 @@ import forestry.core.tiles.TileEngine;
 import forestry.core.utils.BlockUtil;
 
 import cofh.api.energy.EnergyStorage;
-import cofh.api.energy.IEnergyHandler;
 import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
 
-public class EnergyManager implements IEnergyHandler, IEnergyReceiver, IEnergyProvider, IStreamable {
+public class EnergyManager implements IEnergyReceiver, IEnergyProvider, IStreamable {
 	private enum EnergyTransferMode {
 		EXTRACT, RECEIVE, BOTH
 	}

@@ -17,11 +17,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
+import net.minecraftforge.common.MinecraftForge;
 import forestry.api.core.EnumCamouflageType;
 import forestry.api.core.ICamouflageHandler;
 import forestry.api.core.ICamouflagedBlock;
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorLogicSource;
+import forestry.api.core.CamouflageEvents.CamouflageChangeEvent;
 import forestry.api.multiblock.IGreenhouseComponent;
 import forestry.api.multiblock.IMultiblockController;
 import forestry.core.access.EnumAccess;
@@ -41,8 +43,7 @@ import forestry.greenhouse.blocks.BlockGreenhouseType;
 import forestry.greenhouse.gui.ContainerGreenhouse;
 import forestry.greenhouse.gui.GuiGreenhouse;
 import forestry.greenhouse.multiblock.MultiblockLogicGreenhouse;
-import forestry.greenhouse.network.packets.PacketCamouflageUpdateToClient;
-import forestry.greenhouse.network.packets.PacketCamouflageUpdateToServer;
+import forestry.greenhouse.network.packets.PacketCamouflageUpdate;
 
 public abstract class TileGreenhouse extends MultiblockTileEntityForestry<MultiblockLogicGreenhouse> implements IGreenhouseComponent, IHintSource, IStreamableGui, IErrorLogicSource, IRestrictedAccess, ITitled, ICamouflageHandler, ICamouflagedBlock {
 
@@ -92,7 +93,6 @@ public abstract class TileGreenhouse extends MultiblockTileEntityForestry<Multib
 		}
 	}
 
-	/* CONSTRUCTION MATERIAL */
 	@Override
 	public void setCamouflageBlock(EnumCamouflageType type, ItemStack camouflageBlock) {
 		this.camouflageBlock = camouflageBlock;
@@ -100,11 +100,10 @@ public abstract class TileGreenhouse extends MultiblockTileEntityForestry<Multib
 		if (worldObj != null) {
 			if (worldObj.isRemote) {
 				worldObj.markBlockForUpdate(getPos());
-				Proxies.net.sendToServer(new PacketCamouflageUpdateToServer(this, type));
-			} else {
-				Proxies.net.sendNetworkPacket(new PacketCamouflageUpdateToClient(this, type), worldObj);
+				Proxies.net.sendToServer(new PacketCamouflageUpdate(this, type));
 			}
 		}
+		MinecraftForge.EVENT_BUS.post(new CamouflageChangeEvent(this, this, type));
 	}
 	
 	@Override

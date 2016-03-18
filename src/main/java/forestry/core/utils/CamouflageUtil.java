@@ -14,10 +14,15 @@ import java.io.IOException;
 
 import forestry.api.core.EnumCamouflageType;
 import forestry.api.core.ICamouflageHandler;
+import forestry.api.core.ICamouflagedBlock;
+import forestry.api.multiblock.IMultiblockComponent;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.world.IBlockAccess;
 
 public class CamouflageUtil {
 
@@ -51,6 +56,35 @@ public class CamouflageUtil {
 		if(data.readShort() == 1){
 			handler.setCamouflageBlock(EnumCamouflageType.VALUES[data.readShort()], data.readItemStack());
 		}
+	}
+	
+	public static ICamouflageHandler getCamouflageHandler(IBlockAccess world, BlockPos pos){
+		TileEntity tile = world.getTileEntity(pos);
+		
+		if(tile instanceof IMultiblockComponent){
+			IMultiblockComponent component = (IMultiblockComponent) tile;
+			if(component.getMultiblockLogic().getController() instanceof ICamouflageHandler){
+				return (ICamouflageHandler) component.getMultiblockLogic().getController();
+			}
+		}
+		if(tile instanceof ICamouflageHandler){
+			return (ICamouflageHandler) tile;
+		}
+		return null;
+	}
+	
+	public static ItemStack getCamouflageBlock(IBlockAccess world, BlockPos pos){
+		ICamouflageHandler handler = getCamouflageHandler(world, pos);
+		if(handler == null){
+			return null;
+		}
+		TileEntity tile = world.getTileEntity(pos);
+		if(tile instanceof ICamouflagedBlock){
+			ICamouflagedBlock block = (ICamouflagedBlock) tile;
+			
+			return handler.getCamouflageBlock(block.getCamouflageType());
+		}
+		return null;
 	}
 	
 }

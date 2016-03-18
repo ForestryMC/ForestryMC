@@ -12,7 +12,7 @@ package forestry.greenhouse.network.packets;
 
 import java.io.IOException;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import forestry.api.core.EnumCamouflageType;
@@ -21,27 +21,27 @@ import forestry.api.multiblock.IMultiblockComponent;
 import forestry.api.multiblock.IMultiblockController;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
-import forestry.core.network.IForestryPacketClient;
-import forestry.core.network.PacketIdClient;
+import forestry.core.network.IForestryPacketServer;
+import forestry.core.network.PacketIdServer;
 import forestry.core.network.packets.PacketCoordinates;
 
-public class PacketCamouflageUpdateToClient extends PacketCoordinates implements IForestryPacketClient {
+public class PacketCamouflageUpdate extends PacketCoordinates implements IForestryPacketServer {
 
 	private ItemStack camouflageBlock;
 	private EnumCamouflageType type;
 	private boolean isMultiblock;
 
-	public PacketCamouflageUpdateToClient() {
+	public PacketCamouflageUpdate() {
 	}
 
-	public PacketCamouflageUpdateToClient(ICamouflageHandler tile, EnumCamouflageType type, boolean isMultiblock) {
+	public PacketCamouflageUpdate(ICamouflageHandler tile, EnumCamouflageType type, boolean isMultiblock) {
 		super(tile.getCoordinates());
 		this.camouflageBlock = tile.getCamouflageBlock(type);
 		this.isMultiblock = isMultiblock;
 		this.type = type;
 	}
 	
-	public PacketCamouflageUpdateToClient(ICamouflageHandler tile, EnumCamouflageType type) {
+	public PacketCamouflageUpdate(ICamouflageHandler tile, EnumCamouflageType type) {
 		super(tile.getCoordinates());
 		this.camouflageBlock = tile.getCamouflageBlock(type);
 		this.isMultiblock = false;
@@ -49,8 +49,8 @@ public class PacketCamouflageUpdateToClient extends PacketCoordinates implements
 	}
 
 	@Override
-	public PacketIdClient getPacketId() {
-		return PacketIdClient.TILE_FORESTRY_CAMOUFLAGE;
+	public PacketIdServer getPacketId() {
+		return PacketIdServer.TILE_FORESTRY_CAMOUFLAGE;
 	}
 
 	@Override
@@ -70,7 +70,7 @@ public class PacketCamouflageUpdateToClient extends PacketCoordinates implements
 	}
 
 	@Override
-	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) {
+	public void onPacketData(DataInputStreamForestry data, EntityPlayerMP player) {
 		TileEntity tile = getTarget(player.worldObj);
 		ICamouflageHandler handler = null;
 		if(isMultiblock && tile instanceof IMultiblockComponent){

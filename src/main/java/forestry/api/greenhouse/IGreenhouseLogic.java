@@ -8,14 +8,20 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.greenhouse.network;
+package forestry.api.greenhouse;
 
-import forestry.core.network.PacketRegistry;
-import forestry.greenhouse.network.packets.PacketCamouflageUpdate;
+import forestry.api.core.INbtReadable;
+import forestry.api.core.INbtWritable;
+import forestry.api.multiblock.IGreenhouseController;
 
-public class PacketRegistryGreenhouse extends PacketRegistry {
-	@Override
-	public void registerPackets() {
-		registerServerPacket(new PacketCamouflageUpdate());
-	}
+public interface IGreenhouseLogic extends INbtWritable, INbtReadable {
+
+	void onWork();
+	
+	void onChange(EnumGreenhouseChangeType type, Object event);
+	
+	IGreenhouseController getController();
+	
+	String getName();
+	
 }

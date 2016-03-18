@@ -414,7 +414,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 			return;
 		}
 
-		if (this.assemblyState != AssemblyState.Assembled) {
+		if (onlyUpdateWhenAssembled() && this.assemblyState != AssemblyState.Assembled) {
 			// Not assembled - don't run game logic
 			return;
 		}
@@ -883,5 +883,9 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 
 	private static boolean isInvalid(IMultiblockComponent part) {
 		return part instanceof TileEntity && ((TileEntity) part).isInvalid();
+	}
+	
+	protected boolean onlyUpdateWhenAssembled(){
+		return true;
 	}
 }

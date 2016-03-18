@@ -12,32 +12,31 @@ package forestry.greenhouse;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
 
-import com.google.common.collect.Lists;
-
 import forestry.api.core.EnumCamouflageType;
-import forestry.api.greenhouse.IGreenhouseItemAccess;
+import forestry.api.greenhouse.IGreenhouseAccess;
 import forestry.core.utils.Log;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 
-public class GreenhouseItemAccess implements IGreenhouseItemAccess {
+public class GreenhouseAccess implements IGreenhouseAccess {
 
-	private final List<ItemStack> greenhouseGlass = Lists.newArrayList();
+	private final Map<ItemStack, Float> greenhouseGlass = new HashMap();
 	private final Map<EnumCamouflageType, List<ItemStack>> camouflageBlockBlacklist = new EnumMap(EnumCamouflageType.class);
 	
-	public GreenhouseItemAccess() {
+	public GreenhouseAccess() {
 		for(EnumCamouflageType type : EnumCamouflageType.VALUES){
 			camouflageBlockBlacklist.put(type, new ArrayList());
 		}
 	}
 	
 	@Override
-	public void registerGreenhouseGlass(@Nonnull ItemStack glass) {
+	public void registerGreenhouseGlass(@Nonnull ItemStack glass, float lightTransmittance) {
 		if(glass == null || glass.getItem() == null){
 			Log.error("Fail to register greenhouse glass, because it is null");
 			return;
@@ -47,13 +46,27 @@ public class GreenhouseItemAccess implements IGreenhouseItemAccess {
 			Log.error("Fail to register greenhouse glass: " + block + ".");
 			return;
 		}
-		for(ItemStack greenhouseGlass : greenhouseGlass){
+		for(ItemStack greenhouseGlass : greenhouseGlass.keySet()){
 			if(greenhouseGlass.getItem() == glass.getItem() && greenhouseGlass.getItemDamage() == glass.getItemDamage() && ItemStack.areItemStackTagsEqual(glass, greenhouseGlass)){
 				Log.error("Fail to register greenhouse glass, because it is already registered: " + glass + ".");
 				return;
 			}
 		}
-		greenhouseGlass.add(glass);
+		greenhouseGlass.put(glass, lightTransmittance);
+	}
+	
+	@Override
+	public float getGreenhouseGlassLightTransmittance(ItemStack glass) {
+		if(glass == null || glass.getItem() == null || Block.getBlockFromItem(glass.getItem()) == null) {
+			return 0.5F;
+		}
+		for(Map.Entry<ItemStack, Float> greenhouseGlassEntry : greenhouseGlass.entrySet()){
+			ItemStack greenhouseGlass = greenhouseGlassEntry.getKey();
+			if(greenhouseGlass.getItem() == glass.getItem() && greenhouseGlass.getItemDamage() == glass.getItemDamage() && ItemStack.areItemStackTagsEqual(glass, greenhouseGlass)){
+				return greenhouseGlassEntry.getValue();
+			}
+		}
+		return 0.5F;
 	}
 
 	@Override
@@ -61,7 +74,7 @@ public class GreenhouseItemAccess implements IGreenhouseItemAccess {
 		if(glass == null || glass.getItem() == null || Block.getBlockFromItem(glass.getItem()) == null) {
 			return false;
 		}
-		for(ItemStack greenhouseGlass : greenhouseGlass){
+		for(ItemStack greenhouseGlass : greenhouseGlass.keySet()){
 			if(greenhouseGlass.getItem() == glass.getItem() && greenhouseGlass.getItemDamage() == glass.getItemDamage() && ItemStack.areItemStackTagsEqual(glass, greenhouseGlass)){
 				return true;
 			}

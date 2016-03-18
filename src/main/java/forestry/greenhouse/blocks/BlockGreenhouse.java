@@ -43,7 +43,6 @@ import net.minecraftforge.common.property.Properties;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.core.ForestryAPI;
-import forestry.api.core.ICamouflageHandler;
 import forestry.api.core.ICamouflagedBlock;
 import forestry.api.core.IModelManager;
 import forestry.api.core.Tabs;
@@ -52,7 +51,7 @@ import forestry.core.CreativeTabForestry;
 import forestry.core.blocks.BlockStructure;
 import forestry.core.blocks.propertys.UnlistedBlockAccess;
 import forestry.core.blocks.propertys.UnlistedBlockPos;
-import forestry.greenhouse.multiblock.IGreenhouseControllerInternal;
+import forestry.core.utils.CamouflageUtil;
 import forestry.greenhouse.tiles.TileGreenhouseControl;
 import forestry.greenhouse.tiles.TileGreenhouseDoor;
 import forestry.greenhouse.tiles.TileGreenhouseDryer;
@@ -219,8 +218,10 @@ public abstract class BlockGreenhouse extends BlockStructure {
 	public int colorMultiplier(IBlockAccess world, BlockPos pos, int renderPass) {
 		TileEntity tile = world.getTileEntity(pos);
 		if(tile instanceof ICamouflagedBlock){
-			if(renderPass < 100 && BlockGreenhouse.getCamouflageBlock(world, pos) != null){
-				return Block.getBlockFromItem(BlockGreenhouse.getCamouflageBlock(world, pos).getItem()).colorMultiplier(world, pos, renderPass);
+			ItemStack camouflageStack = CamouflageUtil.getCamouflageBlock(world, pos);
+			
+			if(renderPass < 100 && camouflageStack != null){
+				return Block.getBlockFromItem(camouflageStack.getItem()).colorMultiplier(world, pos, renderPass);
 			}
 			
 			return super.colorMultiplier(world, pos, renderPass);
@@ -286,21 +287,6 @@ public abstract class BlockGreenhouse extends BlockStructure {
 
         return block == this ? false : super.shouldSideBeRendered(worldIn, pos, side);
     }
-    
-	public static <G extends TileEntity & IGreenhouseComponent & ICamouflageHandler & ICamouflagedBlock> ItemStack getCamouflageBlock(IBlockAccess world, BlockPos pos){
-		TileEntity tile = world.getTileEntity(pos);
-		if(tile instanceof IGreenhouseComponent && tile instanceof ICamouflageHandler && tile instanceof ICamouflagedBlock){
-			G greenhouse = (G) tile;
-			IGreenhouseControllerInternal greenhouseController = (IGreenhouseControllerInternal) greenhouse.getMultiblockLogic().getController();
-			
-			ICamouflageHandler camouflageHandler = greenhouse;
-			if(greenhouse.getCamouflageBlock(greenhouse.getCamouflageType()) == null && greenhouseController.getCamouflageBlock(greenhouse.getCamouflageType()) != null){
-				camouflageHandler = greenhouseController;
-			}
-			return camouflageHandler.getCamouflageBlock(greenhouse.getCamouflageType());
-		}
-		return null;
-	}
 	
 	@SideOnly(Side.CLIENT)
 	@Override

@@ -5,8 +5,18 @@
  ******************************************************************************/
 package forestry.api.multiblock;
 
-import forestry.api.greenhouse.IGreenhouseHousing;
+import java.util.List;
 
-public interface IGreenhouseController extends IMultiblockController, IGreenhouseHousing {
+import forestry.api.core.ICamouflageHandler;
+import forestry.api.core.IClimateControlled;
+import forestry.api.greenhouse.EnumGreenhouseChangeType;
+import forestry.api.greenhouse.IGreenhouseHousing;
+import forestry.api.greenhouse.IGreenhouseLogic;
+
+public interface IGreenhouseController extends IMultiblockController, IGreenhouseHousing, ICamouflageHandler, IClimateControlled {
+	
+	void onChange(EnumGreenhouseChangeType type, Object event);
+	
+	List<IGreenhouseLogic> getLogics();
 
 }

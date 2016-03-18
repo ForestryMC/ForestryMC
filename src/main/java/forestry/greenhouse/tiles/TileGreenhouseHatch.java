@@ -25,6 +25,7 @@ import forestry.api.core.ICamouflageHandler;
 import forestry.api.core.ICamouflagedBlock;
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorLogicSource;
+import forestry.api.core.CamouflageEvents.CamouflageChangeEvent;
 import forestry.api.multiblock.IGreenhouseComponent;
 import forestry.api.multiblock.IMultiblockController;
 import forestry.api.multiblock.MultiblockTileEntityBase;
@@ -39,13 +40,14 @@ import forestry.core.utils.PlayerUtil;
 import forestry.greenhouse.blocks.BlockGreenhouse;
 import forestry.greenhouse.blocks.BlockGreenhouseType;
 import forestry.greenhouse.multiblock.MultiblockLogicGreenhouse;
-import forestry.greenhouse.network.packets.PacketCamouflageUpdateToServer;
+import forestry.greenhouse.network.packets.PacketCamouflageUpdate;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -138,10 +140,10 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 		if (worldObj != null) {
 			if (worldObj.isRemote) {
 				worldObj.markBlockForUpdate(getPos());
-			} else {
-				Proxies.net.sendToServer(new PacketCamouflageUpdateToServer(this, type));
+				Proxies.net.sendToServer(new PacketCamouflageUpdate(this, type));
 			}
 		}
+		MinecraftForge.EVENT_BUS.post(new CamouflageChangeEvent(this, this, type));
 	}
 	
 	@Override

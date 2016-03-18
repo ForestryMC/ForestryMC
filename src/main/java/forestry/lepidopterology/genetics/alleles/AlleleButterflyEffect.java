@@ -8,7 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.lepidopterology.genetics;
+package forestry.lepidopterology.genetics.alleles;
 
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IEffectData;

@@ -10,11 +10,13 @@ import javax.annotation.Nonnull;
 import forestry.api.core.EnumCamouflageType;
 import net.minecraft.item.ItemStack;
 
-public interface IGreenhouseItemAccess {
+public interface IGreenhouseAccess {
 
-	void registerGreenhouseGlass(@Nonnull ItemStack glass);
+	void registerGreenhouseGlass(@Nonnull ItemStack glass, float lightTransmittance);
 	
 	boolean isGreenhouseGlass(@Nonnull ItemStack glass);
+	
+	float getGreenhouseGlassLightTransmittance(@Nonnull ItemStack glass);
 	
 	void addToCamouflageBlockBlackList(@Nonnull EnumCamouflageType type, @Nonnull ItemStack camouflageBlock);
 	

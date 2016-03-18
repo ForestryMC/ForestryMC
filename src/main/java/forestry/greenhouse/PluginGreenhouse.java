@@ -11,11 +11,11 @@
 package forestry.greenhouse;
 
 import forestry.api.greenhouse.GreenhouseManager;
-import forestry.api.greenhouse.IGreenhouseItemAccess;
+import forestry.api.greenhouse.IGreenhouseAccess;
 import forestry.core.config.Constants;
 import forestry.core.network.IPacketRegistry;
-import forestry.greenhouse.blocks.BlockGreenhouseType;
 import forestry.greenhouse.blocks.BlockRegistryGreenhouse;
+import forestry.greenhouse.logics.GreenhouseEffect;
 import forestry.greenhouse.network.PacketRegistryGreenhouse;
 import forestry.greenhouse.proxy.ProxyGreenhouse;
 import forestry.greenhouse.tiles.TileGreenhouseControl;
@@ -33,13 +33,9 @@ import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 @ForestryPlugin(pluginID = ForestryPluginUids.GREENHOUSE, name = "Greenhouse", author = "Nedelosk", url = Constants.URL, unlocalizedDescription = "for.plugin.greenhouse.description")
 public class PluginGreenhouse extends BlankForestryPlugin {
@@ -51,7 +47,7 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 	
 	@Override
 	public void setupAPI() {
-		GreenhouseManager.greenhouseItemAccess = new GreenhouseItemAccess();
+		GreenhouseManager.greenhouseAccess = new GreenhouseAccess();
 	}
 	
 	@Override
@@ -77,40 +73,36 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 	
 	@Override
 	public void preInit(){
-		MinecraftForge.EVENT_BUS.register(this);
+		MinecraftForge.EVENT_BUS.register(new EventHandlerGreenhouse());
 		
-		IGreenhouseItemAccess greenhouseAccess = GreenhouseManager.greenhouseItemAccess;
+		IGreenhouseAccess greenhouseAccess = GreenhouseManager.greenhouseAccess;
 		
-		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.glass, 1, 0));
-		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 0));
-		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 1));
-		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 2));
-		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 3));
-		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 4));
-		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 5));
-		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 6));
-		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 7));
-		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 8));
-		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 9));
-		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 10));
-		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 11));
-		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 12));
-		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 13));
-		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 14));
-		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 15));
+		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.glass, 1, 0), 0.5F);
+		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 0), 0.25F);
+		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 1), 0.25F);
+		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 2), 0.25F);
+		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 3), 0.25F);
+		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 4), 0.25F);
+		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 5), 0.25F);
+		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 6), 0.25F);
+		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 7), 0.25F);
+		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 8), 0.25F);
+		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 9), 0.25F);
+		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 10), 0.25F);
+		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 11), 0.25F);
+		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 12), 0.25F);
+		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 13), 0.25F);
+		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 14), 0.25F);
+		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 15), 0.25F);
 		
 		proxy.initializeModels();
+		
+		GreenhouseManager.greenhouseLogics.add(GreenhouseEffect.class);
 	}
 	
 	@Override
 	public IPacketRegistry getPacketRegistry() {
 		return new PacketRegistryGreenhouse();
-	}
-	
-	@SubscribeEvent
-	@SideOnly(Side.CLIENT)
-	public void handleTextureRemap(TextureStitchEvent.Pre event) {
-		BlockGreenhouseType.registerSprites();
 	}
 	
 }

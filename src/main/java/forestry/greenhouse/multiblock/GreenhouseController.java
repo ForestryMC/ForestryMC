@@ -11,6 +11,8 @@
 package forestry.greenhouse.multiblock;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.List;
@@ -20,12 +22,16 @@ import java.util.Set;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import forestry.api.core.CamouflageEvents.CamouflageChangeEvent;
+import forestry.api.greenhouse.EnumGreenhouseChangeType;
+import forestry.api.greenhouse.GreenhouseManager;
+import forestry.api.greenhouse.IGreenhouseLogic;
 import forestry.api.core.EnumCamouflageType;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.ICamouflagedBlock;
-import forestry.api.core.IClimateControlled;
 import forestry.api.multiblock.IGreenhouseComponent;
+import forestry.api.multiblock.IGreenhouseController;
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.core.access.EnumAccess;
 import forestry.core.config.Constants;
@@ -42,11 +48,11 @@ import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.utils.CamouflageUtil;
+import forestry.core.utils.Log;
 import forestry.energy.EnergyManager;
 import forestry.greenhouse.blocks.BlockGreenhouse;
 import forestry.greenhouse.blocks.BlockGreenhouseType;
-import forestry.greenhouse.network.packets.PacketCamouflageUpdateToClient;
-import forestry.greenhouse.network.packets.PacketCamouflageUpdateToServer;
+import forestry.greenhouse.network.packets.PacketCamouflageUpdate;
 import forestry.greenhouse.tiles.TileGreenhouseSprinkler;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -58,14 +64,16 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidRegistry;
 
-public class GreenhouseController extends RectangularMultiblockControllerBase implements IGreenhouseControllerInternal, IClimateControlled, ILiquidTankTile {
+public class GreenhouseController extends RectangularMultiblockControllerBase implements IGreenhouseControllerInternal, ILiquidTankTile {
 
-	private final List<InternalBlock> internalBlocks = Lists.newArrayList();
-	private final Set<IGreenhouseComponent.Listener> listenerComponents = new HashSet<>();
-	private final Set<IGreenhouseComponent.Climatiser> climatiserComponents = new HashSet<>();
-	private final Set<IGreenhouseComponent.Active> activeComponents = new HashSet<>();
+	private final List<InternalBlock> internalBlocks = new ArrayList();
+	private final Set<IGreenhouseComponent.Listener> listenerComponents = new HashSet();
+	private final Set<IGreenhouseComponent.Climatiser> climatiserComponents = new HashSet();
+	private final Set<IGreenhouseComponent.Active> activeComponents = new HashSet();
+	private final List<IGreenhouseLogic> logics  = new ArrayList();
 	
 	private float tempChange;
 	private float humidChange;
@@ -89,6 +97,23 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		this.tankManager = new TankManager(this, resourceTank);
 		this.energyManager = new EnergyManager(2000, 100000);
 		this.inventory = new InventoryGreenhouse(this);
+	}
+	
+	@Override
+	public void createLogics() {
+		logics.clear();
+		for(Class<? extends IGreenhouseLogic> logicClass : GreenhouseManager.greenhouseLogics){
+			try{
+				logics.add(createLogic(logicClass));
+			}catch(Exception e){
+				Log.error("Fail to create a greenhouse logic with the class: " + logicClass);
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	private IGreenhouseLogic createLogic(Class<? extends IGreenhouseLogic> logicClass) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
+		return logicClass.getConstructor(IGreenhouseController.class).newInstance(this);
 	}
 
 	@Override
@@ -190,6 +215,12 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		CamouflageUtil.writeCamouflageBlockToNBT(data, this, EnumCamouflageType.DEFAULT);
 		CamouflageUtil.writeCamouflageBlockToNBT(data, this, EnumCamouflageType.GLASS);
 		CamouflageUtil.writeCamouflageBlockToNBT(data, this, EnumCamouflageType.DOOR);
+		
+		for(IGreenhouseLogic logic : getLogics()){
+			NBTTagCompound nbtTag = new NBTTagCompound();
+			logic.writeToNBT(nbtTag);
+			data.setTag("logic" + logic.getName(), nbtTag);
+		}
 	}
 	
 	@Override
@@ -205,6 +236,10 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		CamouflageUtil.readCamouflageBlockFromNBT(data, this, EnumCamouflageType.DEFAULT);
 		CamouflageUtil.readCamouflageBlockFromNBT(data, this, EnumCamouflageType.GLASS);
 		CamouflageUtil.readCamouflageBlockFromNBT(data, this, EnumCamouflageType.DOOR);
+		
+		for(IGreenhouseLogic logic : getLogics()){
+			logic.readFromNBT(data.getCompoundTag("logic" + logic.getName()));
+		}
 	}
 
 	@Override
@@ -271,11 +306,11 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 						}
 					}
 				}
-				Proxies.net.sendToServer(new PacketCamouflageUpdateToServer(this, type, true));
-			}else{
-				Proxies.net.sendNetworkPacket(new PacketCamouflageUpdateToClient(this, type, true), worldObj);
+				Proxies.net.sendToServer(new PacketCamouflageUpdate(this, type, true));
 			}
 		}
+		
+		MinecraftForge.EVENT_BUS.post(new CamouflageChangeEvent(null, this, type));
 	}
 	
 	@Override
@@ -328,10 +363,18 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	}
 	
 	@Override
+	protected void onMachineAssembled() {
+		super.onMachineAssembled();
+		
+		createLogics();
+	}
+	
+	@Override
 	protected void onMachineDisassembled() {
 		super.onMachineDisassembled();
 		
 		internalBlocks.clear();
+		logics.clear();
 	}
 
 	@Override
@@ -366,30 +409,53 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 
 	@Override
 	protected boolean updateServer(int tickCount) {
-		if (updateOnInterval(20)) {
-			inventory.drainCan(tankManager);
-		}
+		if(!isAssembled()){
+			boolean hasChangeClima = false;
+			if (updateOnInterval(45)) {
+				if(humidChange > 0F){
+					if(humidChange > 0.25F){
+						humidChange=- 0.25F;
+					}else{
+						humidChange = 0F;
+					}
+					hasChangeClima = true;
+				}
+				if(tempChange > 0F){
+					if(tempChange > 0.25F){
+						tempChange=- 0.25F;
+					}else{
+						tempChange = 0F;
+					}
+					hasChangeClima = true;
+				}
+			}
+			return hasChangeClima;
+		}else{
+			if (updateOnInterval(20)) {
+				inventory.drainCan(tankManager);
+			}
+			
+			for (IGreenhouseComponent.Active activeComponent : activeComponents) {
+				activeComponent.updateServer(tickCount);
+			}
+			
+			boolean canWork = true;
+			for (IGreenhouseComponent.Listener listenerComponent : listenerComponents) {
+				canWork = listenerComponent.getGreenhouseListener().canWork(this, canWork);
+			}
+			
+			if(canWork){
+	
+				for (IGreenhouseComponent.Climatiser climatiser : climatiserComponents) {
+					climatiser.changeClimate(tickCount, this);
+				}
 		
-		for (IGreenhouseComponent.Active activeComponent : activeComponents) {
-			activeComponent.updateServer(tickCount);
-		}
-		
-		boolean canWork = true;
-		for (IGreenhouseComponent.Listener listenerComponent : listenerComponents) {
-			canWork = listenerComponent.getGreenhouseListener().canWork(this, canWork);
-		}
-		
-		if(canWork){
-
-			for (IGreenhouseComponent.Climatiser climatiser : climatiserComponents) {
-				climatiser.changeClimate(tickCount, this);
+				tempChange = equalizeChange(tempChange);
+				humidChange = equalizeChange(humidChange);
 			}
 	
-			tempChange = equalizeChange(tempChange);
-			humidChange = equalizeChange(humidChange);
+			return canWork;
 		}
-
-		return canWork;
 	}
 
 	@Override
@@ -616,6 +682,18 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 			InternalBlock ib = (InternalBlock) obj;
 			return ib.pos.equals(pos);
 		}
+	}
+
+	@Override
+	public void onChange(EnumGreenhouseChangeType type, Object event) {
+		for(IGreenhouseLogic logic : logics){
+			logic.onChange(type, event);
+		}
+	}
+
+	@Override
+	public List<IGreenhouseLogic> getLogics() {
+		return logics;
 	}
 
 }

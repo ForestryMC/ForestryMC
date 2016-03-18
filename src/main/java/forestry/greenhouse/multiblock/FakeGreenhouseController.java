@@ -10,7 +10,12 @@
  ******************************************************************************/
 package forestry.greenhouse.multiblock;
 
+import java.util.Collections;
+import java.util.List;
+
 import forestry.api.core.EnumCamouflageType;
+import forestry.api.greenhouse.EnumGreenhouseChangeType;
+import forestry.api.greenhouse.IGreenhouseLogic;
 import forestry.core.fluids.FakeTankManager;
 import forestry.core.fluids.ITankManager;
 import forestry.core.inventory.FakeInventoryAdapter;
@@ -24,7 +29,6 @@ public class FakeGreenhouseController extends FakeMultiblockController implement
 	public static final FakeGreenhouseController instance = new FakeGreenhouseController();
 	
 	private FakeGreenhouseController() {
-
 	}
 	
 	@Override
@@ -67,6 +71,25 @@ public class FakeGreenhouseController extends FakeMultiblockController implement
 		return null;
 	}
 	
-	
+	@Override
+	public List<IGreenhouseLogic> getLogics() {
+		return Collections.emptyList();
+	}
+
+	@Override
+	public void onChange(EnumGreenhouseChangeType type, Object event) {
+	}
+
+	@Override
+	public void createLogics() {
+	}
+
+	@Override
+	public void addTemperatureChange(float change, float boundaryDown, float boundaryUp) {
+	}
+
+	@Override
+	public void addHumidityChange(float change, float boundaryDown, float boundaryUp) {
+	}
 
 }

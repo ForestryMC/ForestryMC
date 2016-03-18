@@ -65,7 +65,7 @@ public class WidgetCamouflageSlot extends Widget {
 			if(stack != null && Block.getBlockFromItem(stack.getItem()) != null){
 				Block block = Block.getBlockFromItem(stack.getItem());
 				
-				if(!GreenhouseManager.greenhouseItemAccess.isOnCamouflageBlockBlackList(type, stack) && (type == EnumCamouflageType.DEFAULT && block.isOpaqueCube() && !block.hasTileEntity(block.getStateFromMeta(stack.getItemDamage())) && block.isNormalCube(player.worldObj, camouflageHandler.getCoordinates()) || type == EnumCamouflageType.GLASS && GreenhouseManager.greenhouseItemAccess.isGreenhouseGlass(stack))){
+				if(!GreenhouseManager.greenhouseAccess.isOnCamouflageBlockBlackList(type, stack) && (type == EnumCamouflageType.DEFAULT && block.isOpaqueCube() && !block.hasTileEntity(block.getStateFromMeta(stack.getItemDamage())) && block.isNormalCube(player.worldObj, camouflageHandler.getCoordinates()) || type == EnumCamouflageType.GLASS && GreenhouseManager.greenhouseAccess.isGreenhouseGlass(stack))){
 					camouflageHandler.setCamouflageBlock(type, stack);
 				}
 			}
