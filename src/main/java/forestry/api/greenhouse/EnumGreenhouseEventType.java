@@ -5,7 +5,7 @@
  ******************************************************************************/
 package forestry.api.greenhouse;
 
-public enum EnumGreenhouseChangeType {
+public enum EnumGreenhouseEventType {
 
 	CAMOUFLAGE
 	

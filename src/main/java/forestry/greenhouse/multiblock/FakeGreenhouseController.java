@@ -14,9 +14,10 @@ import java.util.Collections;
 import java.util.List;
 
 import forestry.api.core.EnumCamouflageType;
-import forestry.api.greenhouse.EnumGreenhouseChangeType;
+import forestry.api.greenhouse.EnumGreenhouseEventType;
 import forestry.api.greenhouse.IGreenhouseLogic;
 import forestry.api.greenhouse.IGreenhouseState;
+import forestry.api.greenhouse.IInternalBlock;
 import forestry.core.fluids.FakeTankManager;
 import forestry.core.fluids.ITankManager;
 import forestry.core.inventory.FakeInventoryAdapter;
@@ -78,7 +79,7 @@ public class FakeGreenhouseController extends FakeMultiblockController implement
 	}
 
 	@Override
-	public void onChange(EnumGreenhouseChangeType type, Object event) {
+	public void onChange(EnumGreenhouseEventType type, Object event) {
 	}
 
 	@Override
@@ -92,6 +93,11 @@ public class FakeGreenhouseController extends FakeMultiblockController implement
 	@Override
 	public IGreenhouseState createState() {
 		return null;
+	}
+
+	@Override
+	public List<IInternalBlock> getInternalBlocks() {
+		return Collections.emptyList();
 	}
 	
 }

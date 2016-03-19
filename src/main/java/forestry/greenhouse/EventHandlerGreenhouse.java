@@ -10,9 +10,9 @@
  ******************************************************************************/
 package forestry.greenhouse;
 
-import forestry.api.core.CamouflageEvents.CamouflageChangeEvent;
 import forestry.api.core.ICamouflageHandler;
-import forestry.api.greenhouse.EnumGreenhouseChangeType;
+import forestry.api.greenhouse.EnumGreenhouseEventType;
+import forestry.api.greenhouse.GreenhouseEvents.CamouflageChangeEvent;
 import forestry.api.multiblock.IGreenhouseComponent;
 import forestry.api.multiblock.IGreenhouseController;
 import forestry.greenhouse.blocks.BlockGreenhouseType;
@@ -38,7 +38,7 @@ public class EventHandlerGreenhouse {
 		}
 		
 		if(controller != null){
-			controller.onChange(EnumGreenhouseChangeType.CAMOUFLAGE, event);
+			controller.onChange(EnumGreenhouseEventType.CAMOUFLAGE, event);
 		}
 	}
 	

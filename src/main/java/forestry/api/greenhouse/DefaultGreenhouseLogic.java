@@ -31,7 +31,7 @@ public class DefaultGreenhouseLogic implements IGreenhouseLogic {
 	}
 
 	@Override
-	public void onChange(EnumGreenhouseChangeType type, Object event) {
+	public void onEvent(EnumGreenhouseEventType type, Object event) {
 	}
 	
 	@Override

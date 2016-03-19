@@ -10,10 +10,13 @@
  ******************************************************************************/
 package forestry.greenhouse.multiblock;
 
+import java.util.List;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import forestry.api.greenhouse.IGreenhouseState;
+import forestry.api.greenhouse.IInternalBlock;
 import forestry.api.multiblock.IGreenhouseController;
 import forestry.core.access.IRestrictedAccess;
 import forestry.core.fluids.ITankManager;
@@ -24,14 +27,19 @@ import forestry.energy.EnergyManager;
 
 public interface IGreenhouseControllerInternal extends IGreenhouseController, IMultiblockControllerInternal, IRestrictedAccess, IStreamableGui {
 
+	@Nonnull
 	IInventoryAdapter getInternalInventory();
 	
+	@Nonnull
 	ITankManager getTankManager();
 	
 	@Nullable
 	EnergyManager getEnergyManager();
 	
-	@Nonnull
+	@Nullable
 	IGreenhouseState createState();
+	
+	@Nonnull
+	List<IInternalBlock> getInternalBlocks();
 	
 }

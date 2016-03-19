@@ -23,7 +23,7 @@ import forestry.api.core.ICamouflageHandler;
 import forestry.api.core.ICamouflagedBlock;
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorLogicSource;
-import forestry.api.core.CamouflageEvents.CamouflageChangeEvent;
+import forestry.api.greenhouse.GreenhouseEvents.CamouflageChangeEvent;
 import forestry.api.multiblock.IGreenhouseComponent;
 import forestry.api.multiblock.IMultiblockController;
 import forestry.core.access.EnumAccess;
@@ -103,7 +103,7 @@ public abstract class TileGreenhouse extends MultiblockTileEntityForestry<Multib
 				Proxies.net.sendToServer(new PacketCamouflageUpdate(this, type));
 			}
 		}
-		MinecraftForge.EVENT_BUS.post(new CamouflageChangeEvent(this, this, type));
+		MinecraftForge.EVENT_BUS.post(new CamouflageChangeEvent(getMultiblockLogic().getController().createState(), this, this, type));
 	}
 	
 	@Override

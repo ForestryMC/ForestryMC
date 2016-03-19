@@ -13,7 +13,7 @@ package forestry.greenhouse.logics;
 import forestry.api.core.EnumCamouflageType;
 import forestry.api.core.ICamouflagedBlock;
 import forestry.api.greenhouse.DefaultGreenhouseLogic;
-import forestry.api.greenhouse.EnumGreenhouseChangeType;
+import forestry.api.greenhouse.EnumGreenhouseEventType;
 import forestry.api.greenhouse.GreenhouseManager;
 import forestry.api.greenhouse.IGreenhouseClimaLogic;
 import forestry.api.multiblock.IGreenhouseController;
@@ -59,8 +59,8 @@ public class GreenhouseLogicGreenhouseEffect extends DefaultGreenhouseLogic impl
 	}
 
 	@Override
-	public void onChange(EnumGreenhouseChangeType type, Object event) {
-		if(type == EnumGreenhouseChangeType.CAMOUFLAGE){
+	public void onEvent(EnumGreenhouseEventType type, Object event) {
+		if(type == EnumGreenhouseEventType.CAMOUFLAGE){
 			if(controller == null || !controller.isAssembled()) {
 				return;
 			}

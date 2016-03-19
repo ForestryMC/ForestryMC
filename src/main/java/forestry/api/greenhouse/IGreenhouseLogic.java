@@ -18,7 +18,7 @@ public interface IGreenhouseLogic extends INbtWritable, INbtReadable {
 
 	void work();
 	
-	void onChange(EnumGreenhouseChangeType type, Object event);
+	void onEvent(EnumGreenhouseEventType type, Object event);
 	
 	IGreenhouseController getController();
 	

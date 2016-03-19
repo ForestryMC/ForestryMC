@@ -9,7 +9,7 @@ import java.util.List;
 
 import forestry.api.core.ICamouflageHandler;
 import forestry.api.core.IClimateControlled;
-import forestry.api.greenhouse.EnumGreenhouseChangeType;
+import forestry.api.greenhouse.EnumGreenhouseEventType;
 import forestry.api.greenhouse.IGreenhouseHousing;
 import forestry.api.greenhouse.IGreenhouseLogic;
 
@@ -18,7 +18,7 @@ public interface IGreenhouseController extends IMultiblockController, IGreenhous
 	/**
 	 * Handle change events
 	 */
-	void onChange(EnumGreenhouseChangeType type, Object event);
+	void onChange(EnumGreenhouseEventType type, Object event);
 	
 	/**
 	 * @return The logics of the greenhouse

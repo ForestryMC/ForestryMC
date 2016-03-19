@@ -5,27 +5,25 @@
  ******************************************************************************/
 package forestry.api.greenhouse;
 
-import java.util.List;
+import java.util.Collection;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import forestry.api.core.EnumHumidity;
-import forestry.api.core.EnumTemperature;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
-public interface IGreenhouseState {
+public interface IInternalBlock {
 	
-	EnumTemperature getTemperature();
-
-	EnumHumidity getHumidity();
-
-	float getExactTemperature();
-
-	float getExactHumidity();
-	
-	List<IInternalBlock> getInternalBlocks();
-
-	/**
-	 * @return The world in that the greenhouse standing
-	 */
+	@Nonnull
 	World getWorld();
 	
+	@Nonnull
+	BlockPos getPos();
+	
+	@Nullable
+	IInternalBlock getRoot();
+	
+	@Nonnull
+	Collection<IInternalBlockFace> getFaces();
+
 }

@@ -20,7 +20,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 import net.minecraftforge.fluids.FluidStack;
-
 import forestry.core.PluginFluids;
 import forestry.core.config.Constants;
 import forestry.core.items.EnumContainerType;

@@ -13,20 +13,20 @@ package forestry.greenhouse.multiblock;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
-import forestry.api.core.CamouflageEvents.CamouflageChangeEvent;
-import forestry.api.greenhouse.EnumGreenhouseChangeType;
+import forestry.api.greenhouse.EnumGreenhouseEventType;
 import forestry.api.greenhouse.GreenhouseManager;
 import forestry.api.greenhouse.IGreenhouseLogic;
 import forestry.api.greenhouse.IGreenhouseState;
+import forestry.api.greenhouse.IInternalBlock;
+import forestry.api.greenhouse.IInternalBlockFace;
+import forestry.api.greenhouse.GreenhouseEvents.CamouflageChangeEvent;
+import forestry.api.greenhouse.GreenhouseEvents.CheckInternalBlockFaceEvent;
+import forestry.api.greenhouse.GreenhouseEvents.CreateInternalBlockEvent;
 import forestry.api.core.EnumCamouflageType;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -71,7 +71,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 
 public class GreenhouseController extends RectangularMultiblockControllerBase implements IGreenhouseControllerInternal, ILiquidTankTile {
 
-	private final List<InternalBlock> internalBlocks = new ArrayList();
+	private final List<IInternalBlock> internalBlocks = new ArrayList();
 	private final Set<IGreenhouseComponent.Listener> listenerComponents = new HashSet();
 	private final Set<IGreenhouseComponent.Climatiser> climatiserComponents = new HashSet();
 	private final Set<IGreenhouseComponent.Active> activeComponents = new HashSet();
@@ -302,7 +302,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 			}
 		}
 		
-		MinecraftForge.EVENT_BUS.post(new CamouflageChangeEvent(null, this, type));
+		MinecraftForge.EVENT_BUS.post(new CamouflageChangeEvent(createState(), null, this, type));
 	}
 	
 	@Override
@@ -336,8 +336,8 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	/* GREENHOUSE */
 	@Override
 	public boolean isInGreenhouse(BlockPos pos) {
-		for(InternalBlock inerBlock : internalBlocks){
-			if(inerBlock.pos.equals(pos)){
+		for(IInternalBlock inerBlock : internalBlocks){
+			if(inerBlock.getPos().equals(pos)){
 				return true;
 			}
 		}
@@ -346,13 +346,13 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	
 	@Override
 	public IGreenhouseState createState() {
-		return new GreenhouseState(worldObj, getBiome().rainfall + humidChange, getBiome().temperature + tempChange);
+		return new GreenhouseState(this);
 	}
 	
 	@Override
-	public void onChange(EnumGreenhouseChangeType type, Object event) {
+	public void onChange(EnumGreenhouseEventType type, Object event) {
 		for(IGreenhouseLogic logic : logics){
-			logic.onChange(type, event);
+			logic.onEvent(type, event);
 		}
 	}
 	
@@ -547,7 +547,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		boolean isNextRoof = false;
 		Class<? extends RectangularMultiblockControllerBase> myClass = this.getClass();
 		
-		List<InternalBlock> internalBlocks = Lists.newArrayList();
+		List<IInternalBlock> internalBlocks = Lists.newArrayList();
 		height: for (int y = minimumCoord.getY(); y <= maximumCoord.getY(); y++) {
 			for (int x = minimumCoord.getX(); x <= maximumCoord.getX(); x++) {
 				for (int z = minimumCoord.getZ(); z <= maximumCoord.getZ(); z++) {
@@ -625,9 +625,11 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 			}
 		}
 		if(isNextRoof){
-			InternalBlock iB = new InternalBlock(getMinimumCoord().add(1, 1, 1));
-			internalBlocks.add(iB);
-			addInternalBlock(iB, internalBlocks);
+			CreateInternalBlockEvent event = new CreateInternalBlockEvent(createState(), new InternalBlock(worldObj, getMinimumCoord().add(1, 1, 1)));
+			
+			MinecraftForge.EVENT_BUS.post(event);
+			
+			checkInternalBlock(event.internalBlock, internalBlocks);
 		}else if(internalBlocks.isEmpty()){
 			throw new MultiblockValidationException(StatCollector.translateToLocalFormatted("for.multiblock.error.space.closed"));
 		}
@@ -652,67 +654,55 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	protected void isBlockGoodForInterior(World world, BlockPos pos) throws MultiblockValidationException {
 	}
 	
-	private void addInternalBlock(InternalBlock internalBlock, List<InternalBlock> internalBlocks) throws MultiblockValidationException{
-		isBlockGoodForInterior(worldObj, internalBlock.pos);
-		for(Map.Entry<EnumFacing, Boolean> entry : internalBlock.testetFaces.entrySet()){
-			if(!entry.getValue()){
-				BlockPos posFacing = new BlockPos(internalBlock.pos.getX() + entry.getKey().getFrontOffsetX(), internalBlock.pos.getY() + entry.getKey().getFrontOffsetY(), internalBlock.pos.getZ() + entry.getKey().getFrontOffsetZ());
+	private void checkInternalBlock(IInternalBlock blockToCheck, List<IInternalBlock> internalBlocks) throws MultiblockValidationException{
+		internalBlocks.add(blockToCheck);
+		BlockPos posRoot = blockToCheck.getPos();
+		
+		isBlockGoodForInterior(worldObj, posRoot);
+		for(IInternalBlockFace faceToCheck : blockToCheck.getFaces()){
+			CheckInternalBlockFaceEvent checkEvent = new CheckInternalBlockFaceEvent(createState(), blockToCheck, faceToCheck);
+			MinecraftForge.EVENT_BUS.post(checkEvent);
+			
+			if(!faceToCheck.isTested()){
+				EnumFacing face = faceToCheck.getFace();
+				BlockPos posFacing = posRoot.offset(face);
+				
 				BlockPos minPos = getMinimumCoord();
 				BlockPos maxPos = getMaximumCoord();
+				
 				if(minPos.getX() > posFacing.getX() || minPos.getY() > posFacing.getY() || minPos.getZ() > posFacing.getZ() || maxPos.getX() < posFacing.getX() || maxPos.getY() < posFacing.getY() || maxPos.getZ() < posFacing.getZ()){
 					throw new MultiblockValidationException(StatCollector.translateToLocalFormatted("for.multiblock.error.space.closed"));
 				}
 				
-				TileEntity tile = worldObj.getTileEntity(posFacing);
+				TileEntity tileFace = worldObj.getTileEntity(posFacing);
 				
-				if(tile instanceof IGreenhouseComponent){
-					if(((IGreenhouseComponent) tile).getMultiblockLogic().getController() != this){
+				if(tileFace instanceof IGreenhouseComponent){
+					if(((IGreenhouseComponent) tileFace).getMultiblockLogic().getController() != this){
 						throw new MultiblockValidationException(StatCollector.translateToLocalFormatted("for.multiblock.error.not.connected.part", posFacing.getX(), posFacing.getY(), posFacing.getZ()));
 					}
-					else if(!(tile instanceof TileGreenhouseSprinkler)){
-						entry.setValue(true);
+					else if(!(tileFace instanceof TileGreenhouseSprinkler)){
+						faceToCheck.setTested(true);
 					}
 				}else{
-					InternalBlock iB = new InternalBlock(posFacing, entry.getKey().getOpposite(), internalBlock);
-					if(internalBlocks.contains(iB)){
-						entry.setValue(true);
+					CreateInternalBlockEvent createEvent = new CreateInternalBlockEvent(createState(), new InternalBlock(worldObj, posFacing, face.getOpposite(), blockToCheck));
+					MinecraftForge.EVENT_BUS.post(createEvent);
+					
+					IInternalBlock internalBlock = createEvent.internalBlock;
+					
+					// Check is the internal block in the list
+					if(internalBlocks.contains(internalBlock)){
+						faceToCheck.setTested(true);
 					}else{
-						internalBlocks.add(iB);
-						addInternalBlock(iB, internalBlocks);
+						checkInternalBlock(internalBlock, internalBlocks);
 					}
 				}
 			}
 		}
 	}
 	
-	private static class InternalBlock{
-		public BlockPos pos;
-		public EnumMap<EnumFacing, Boolean> testetFaces = Maps.newEnumMap(EnumFacing.class);
-		public InternalBlock root;
-		
-		private InternalBlock(BlockPos pos) {
-			this.pos = pos;
-			for(EnumFacing facing : EnumFacing.VALUES){
-				testetFaces.put(facing, false);
-			}
-		}
-		
-		private InternalBlock(BlockPos pos, EnumFacing facing, InternalBlock root) {
-			this.pos = pos;
-			for(EnumFacing f : EnumFacing.VALUES){
-				testetFaces.put(f, f == facing);
-			}
-			this.root = root;
-		}
-		
-		@Override
-		public boolean equals(Object obj) {
-			if(!(obj instanceof InternalBlock)){
-				return false;
-			}
-			InternalBlock ib = (InternalBlock) obj;
-			return ib.pos.equals(pos);
-		}
+	@Override
+	public List<IInternalBlock> getInternalBlocks() {
+		return internalBlocks;
 	}
 
 }
