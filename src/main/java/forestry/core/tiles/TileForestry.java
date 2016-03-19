@@ -28,9 +28,10 @@ import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.common.Optional;
-
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.wrapper.SidedInvWrapper;
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorLogicSource;
 import forestry.core.access.AccessHandler;
@@ -387,5 +388,21 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	
 	@Override
 	public void clear() {
+	}
+	
+	@Override
+	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && inventory != null){
+			return (T) new SidedInvWrapper(inventory, facing);
+		}
+		return super.getCapability(capability, facing);
+	}
+	
+	@Override
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && inventory != null){
+			return true;
+		}
+		return super.hasCapability(capability, facing);
 	}
 }
