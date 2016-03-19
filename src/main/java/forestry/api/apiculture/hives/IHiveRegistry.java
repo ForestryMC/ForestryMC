@@ -23,6 +23,8 @@ public interface IHiveRegistry {
 		SNOW("Forestry:snow"),
 		SWAMP("Forestry:swamp");
 		
+		public static final HiveType[] VALUES = values();
+		
 		HiveType(String name) {
 			this.name = name;
 		}

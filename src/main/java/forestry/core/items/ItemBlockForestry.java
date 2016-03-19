@@ -18,7 +18,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-
+import forestry.api.apiculture.hives.IHiveRegistry.HiveType;
+import forestry.apiculture.blocks.BlockBeehives;
 import forestry.core.blocks.BlockBase;
 import forestry.core.tiles.TileForestry;
 import forestry.core.tiles.TileUtil;
@@ -49,6 +50,10 @@ public class ItemBlockForestry<B extends Block> extends ItemBlock {
 			BlockBase<?> blockBase = (BlockBase) block;
 			int meta = itemstack.getMetadata();
 			return block.getUnlocalizedName() + "." + blockBase.getNameFromMeta(meta);
+		}else if(block instanceof BlockBeehives){
+			BlockBeehives blockHives = (BlockBeehives) block;
+			int meta = itemstack.getMetadata();
+			return block.getUnlocalizedName() + "." + HiveType.VALUES[meta - 1].getName();
 		}
 		return block.getUnlocalizedName();
 	}
