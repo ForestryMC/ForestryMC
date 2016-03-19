@@ -28,6 +28,7 @@ import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
+import forestry.api.genetics.ISpeciesType;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.EnumButterflyChromosome;
 import forestry.api.lepidopterology.EnumFlutterType;
@@ -96,11 +97,15 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 			return null;
 		}
 	}
+	
+	@Override
+	public EnumFlutterType getIconType() {
+		return EnumFlutterType.BUTTERFLY;
+	}
 
 	@Override
-	public boolean isMember(ItemStack stack, int type) {
-		EnumFlutterType flutterType = getType(stack);
-		return flutterType != null && flutterType.ordinal() == type;
+	public boolean isMember(ItemStack stack, ISpeciesType type) {
+		return getType(stack) == type;
 	}
 
 	@Override
@@ -126,10 +131,13 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 	}
 
 	@Override
-	public ItemStack getMemberStack(IIndividual butterfly, int type) {
+	public ItemStack getMemberStack(IIndividual butterfly, ISpeciesType type) {
+		if (!(type instanceof EnumFlutterType)) {
+			return null;
+		}
 
 		Item butterflyItem;
-		switch (EnumFlutterType.VALUES[type]) {
+		switch ((EnumFlutterType) type) {
 			case SERUM:
 				butterflyItem = PluginLepidopterology.items.serumGE;
 				break;

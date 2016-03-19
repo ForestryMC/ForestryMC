@@ -24,7 +24,6 @@ import forestry.api.apiculture.IBeeModelProvider;
 import forestry.api.core.IModelManager;
 import forestry.apiculture.items.ItemBeeGE;
 
-@SideOnly(Side.CLIENT)
 public class DefaultBeeModelProvider implements IBeeModelProvider {
 
 	public static final DefaultBeeModelProvider instance = new DefaultBeeModelProvider();
@@ -33,19 +32,26 @@ public class DefaultBeeModelProvider implements IBeeModelProvider {
 
 	}
 
-	private static final ModelResourceLocation[] models = new ModelResourceLocation[EnumBeeType.values().length];
+	@SideOnly(Side.CLIENT)
+	private static ModelResourceLocation[] models;
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void registerModels(Item item, IModelManager manager) {
 		String beeIconDir = "bees/default/";
 		EnumBeeType beeType = ((ItemBeeGE) item).getType();
 		String beeTypeNameBase = beeIconDir + beeType.toString().toLowerCase(Locale.ENGLISH);
+
+		if (models == null) {
+			models = new ModelResourceLocation[EnumBeeType.values().length];
+		}
 
 		models[beeType.ordinal()] = manager.getModelLocation(beeTypeNameBase);
 		manager.registerVariant(item, new ResourceLocation("forestry:" + beeTypeNameBase));
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public ModelResourceLocation getModel(EnumBeeType type) {
 		return models[type.ordinal()];
 	}

@@ -25,6 +25,8 @@ import net.minecraft.world.World;
 import com.mojang.authlib.GameProfile;
 
 import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.core.ISpriteProvider;
 import forestry.api.genetics.AlleleManager;
@@ -152,7 +154,7 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 
 	@Override
 	public ItemStack[] getResearchBounty(World world, GameProfile researcher, IIndividual individual, int bountyLevel) {
-		return new ItemStack[]{getRoot().getMemberStack(individual.copy(), EnumFlutterType.SERUM.ordinal())};
+		return new ItemStack[]{getRoot().getMemberStack(individual.copy(), EnumFlutterType.SERUM)};
 	}
 
 	/* OTHER */
@@ -200,6 +202,7 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void registerSprites() {
 		String spriteName = getItemTexture();
 		TextureMap textureMap = Minecraft.getMinecraft().getTextureMapBlocks();
@@ -207,6 +210,7 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public TextureAtlasSprite getSprite(short texUID) {
 		return null;
 	}

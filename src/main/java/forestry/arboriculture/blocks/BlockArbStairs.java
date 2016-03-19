@@ -78,6 +78,7 @@ public class BlockArbStairs extends BlockStairs implements IWoodTyped, IItemMode
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void registerStateMapper() {
 		Proxies.render.registerStateMapper(this, new WoodTypeStateMapper(this, null));
 	}

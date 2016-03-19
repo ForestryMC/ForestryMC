@@ -13,7 +13,7 @@
 		"tree=spruce": { "model": "forestry:germlings/sapling.treeSpruce" },
 		"tree=larch": { "model": "forestry:germlings/sapling.treeLarch" },
 		"tree=pine": { "model": "forestry:germlings/sapling.treePine" },
-		"tree=sequioa": { "model": "forestry:germlings/sapling.treeSequioa" },
+		"tree=sequoia": { "model": "forestry:germlings/sapling.treeSequoia" },
 		"tree=gigant": { "model": "forestry:germlings/sapling.treeGigant" },
 		"tree=jungle": { "model": "forestry:germlings/sapling.treeJungle" },
 		"tree=teak": { "model": "forestry:germlings/sapling.treeTeak" },

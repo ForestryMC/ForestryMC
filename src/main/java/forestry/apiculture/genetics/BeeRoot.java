@@ -46,6 +46,7 @@ import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
+import forestry.api.genetics.ISpeciesType;
 import forestry.apiculture.BeeHousingListener;
 import forestry.apiculture.BeeHousingModifier;
 import forestry.apiculture.BeekeepingLogic;
@@ -89,8 +90,8 @@ public class BeeRoot extends SpeciesRoot implements IBeeRoot {
 	}
 
 	@Override
-	public boolean isMember(ItemStack stack, int type) {
-		return getType(stack).ordinal() == type;
+	public boolean isMember(ItemStack stack, ISpeciesType type) {
+		return getType(stack) == type;
 	}
 
 	@Override
@@ -99,14 +100,17 @@ public class BeeRoot extends SpeciesRoot implements IBeeRoot {
 	}
 
 	@Override
-	public ItemStack getMemberStack(IIndividual individual, int type) {
+	public ItemStack getMemberStack(IIndividual individual, ISpeciesType type) {
 		if (!isMember(individual)) {
 			return null;
 		}
 		IBee bee = (IBee) individual;
+		if (!(type instanceof EnumBeeType)) {
+			return null;
+		}
 
 		Item beeItem;
-		switch (EnumBeeType.VALUES[type]) {
+		switch ((EnumBeeType) type) {
 			case QUEEN:
 				beeItem = PluginApiculture.items.beeQueenGE;
 				// ensure a queen is always mated
@@ -154,6 +158,11 @@ public class BeeRoot extends SpeciesRoot implements IBeeRoot {
 		}
 
 		return null;
+	}
+
+	@Override
+	public EnumBeeType getIconType() {
+		return EnumBeeType.DRONE;
 	}
 
 	@Override

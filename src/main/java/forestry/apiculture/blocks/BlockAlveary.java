@@ -225,6 +225,7 @@ public abstract class BlockAlveary extends BlockStructure implements IStateMappe
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void registerStateMapper() {
 		Proxies.render.registerStateMapper(this, new AlvearyStateMapper(getAlvearyType()));
 	}

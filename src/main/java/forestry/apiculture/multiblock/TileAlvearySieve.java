@@ -77,7 +77,7 @@ public class TileAlvearySieve extends TileAlveary implements IAlvearyComponent.B
 
 			ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(pollen.getClass());
 
-			ItemStack pollenStack = speciesRoot.getMemberStack(pollen, EnumGermlingType.POLLEN.ordinal());
+			ItemStack pollenStack = speciesRoot.getMemberStack(pollen, EnumGermlingType.POLLEN);
 			if (pollenStack != null) {
 				inventory.storePollenStack(pollenStack);
 				return true;

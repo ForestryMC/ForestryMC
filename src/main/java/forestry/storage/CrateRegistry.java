@@ -11,7 +11,6 @@
 package forestry.storage;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -19,8 +18,6 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import forestry.api.storage.ICrateRegistry;
 import forestry.core.items.ItemCrated;
-import forestry.core.models.ModelCrate;
-import forestry.core.models.ModelIndex;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Log;
 import forestry.core.utils.StringUtil;
@@ -41,7 +38,7 @@ public class CrateRegistry implements ICrateRegistry {
 		ItemCrated crate = new ItemCrated(stack, useOreDict);
 		crate.setUnlocalizedName(uid);
 		GameRegistry.registerItem(crate, StringUtil.cleanItemName(crate));
-		Proxies.render.registerModel(new ModelIndex(new ModelResourceLocation("forestry:crate-filled", StringUtil.cleanItemName(crate)), new ModelCrate()));
+		Proxies.render.registerModelCrate(crate);
 		PluginStorage.registerCrate(crate);
 	}
 

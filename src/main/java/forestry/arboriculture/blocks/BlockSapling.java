@@ -111,6 +111,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void registerStateMapper() {
 		Proxies.render.registerStateMapper(this, new SaplingStateMapper());
 	}
@@ -157,7 +158,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 		if (sapling == null || sapling.getTree() == null) {
 			return null;
 		}
-		return TreeManager.treeRoot.getMemberStack(sapling.getTree(), EnumGermlingType.SAPLING.ordinal());
+		return TreeManager.treeRoot.getMemberStack(sapling.getTree(), EnumGermlingType.SAPLING);
 	}
 	
 	@Override
@@ -178,7 +179,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 
 		TileSapling sapling = getSaplingTile(world, pos);
 		if (sapling != null && sapling.getTree() != null) {
-			ItemStack saplingStack = TreeManager.treeRoot.getMemberStack(sapling.getTree(), EnumGermlingType.SAPLING.ordinal());
+			ItemStack saplingStack = TreeManager.treeRoot.getMemberStack(sapling.getTree(), EnumGermlingType.SAPLING);
 			ItemStackUtil.dropItemStackAsEntity(saplingStack, world, pos);
 		}
 

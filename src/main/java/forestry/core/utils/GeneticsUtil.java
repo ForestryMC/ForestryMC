@@ -188,7 +188,7 @@ public class GeneticsUtil {
 			return null;
 		}
 
-		ItemStack ersatz = TreeManager.treeRoot.getMemberStack(tree, EnumGermlingType.SAPLING.ordinal());
+		ItemStack ersatz = TreeManager.treeRoot.getMemberStack(tree, EnumGermlingType.SAPLING);
 		ersatz.stackSize = foreign.stackSize;
 		return ersatz;
 	}

@@ -95,7 +95,7 @@ public class ItemButterflyGE extends ItemGE {
 				continue;
 			}
 
-			itemList.add(ButterflyManager.butterflyRoot.getMemberStack(individual, type.ordinal()));
+			itemList.add(ButterflyManager.butterflyRoot.getMemberStack(individual, type));
 		}
 	}
 

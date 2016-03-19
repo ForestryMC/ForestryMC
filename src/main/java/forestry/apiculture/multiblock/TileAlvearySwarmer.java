@@ -93,7 +93,7 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, 
 		// Queue swarm spawn
 		IBee princess = BeeManager.beeRoot.getMember(princessStack);
 		princess.setIsNatural(false);
-		pendingSpawns.push(BeeManager.beeRoot.getMemberStack(princess, EnumBeeType.PRINCESS.ordinal()));
+		pendingSpawns.push(BeeManager.beeRoot.getMemberStack(princess, EnumBeeType.PRINCESS));
 	}
 
 	@Override

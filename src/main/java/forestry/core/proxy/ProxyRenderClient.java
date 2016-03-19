@@ -48,7 +48,9 @@ import forestry.core.entities.EntityFXHoneydust;
 import forestry.core.entities.EntityFXIgnition;
 import forestry.core.entities.EntityFXSnow;
 import forestry.core.fluids.Fluids;
+import forestry.core.items.ItemCrated;
 import forestry.core.models.BlockModelIndex;
+import forestry.core.models.ModelCrate;
 import forestry.core.models.ModelIndex;
 import forestry.core.models.ModelManager;
 import forestry.core.render.RenderAnalyzer;
@@ -62,6 +64,7 @@ import forestry.core.tiles.TileBase;
 import forestry.core.tiles.TileEscritoire;
 import forestry.core.tiles.TileMill;
 import forestry.core.tiles.TileNaturalistChest;
+import forestry.core.utils.StringUtil;
 
 public class ProxyRenderClient extends ProxyRender {
 
@@ -133,6 +136,12 @@ public class ProxyRenderClient extends ProxyRender {
 	@Override
 	public void registerModel(@Nonnull ModelIndex index) {
 		ModelManager.registerCustomModel(index);
+	}
+
+	@Override
+	public void registerModelCrate(ItemCrated crate) {
+		ModelResourceLocation modelLocation = new ModelResourceLocation("forestry:crate-filled", StringUtil.cleanItemName(crate));
+		registerModel(new ModelIndex(modelLocation, new ModelCrate()));
 	}
 
 	@Override

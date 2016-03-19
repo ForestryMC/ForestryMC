@@ -159,7 +159,7 @@ public class BlockForestryLeaves extends BlockLeavesBase implements ITileEntityP
 
 		for (ITree sapling : saplings) {
 			if (sapling != null) {
-				prod.add(TreeManager.treeRoot.getMemberStack(sapling, EnumGermlingType.SAPLING.ordinal()));
+				prod.add(TreeManager.treeRoot.getMemberStack(sapling, EnumGermlingType.SAPLING));
 			}
 		}
 
@@ -316,7 +316,7 @@ public class BlockForestryLeaves extends BlockLeavesBase implements ITileEntityP
 		TileEntity tile = world.getTileEntity(pos);
 		IButterfly caterpillar = tile instanceof TileLeaves ? ((TileLeaves) tile).getCaterpillar() : null;
 		if (heldItem != null && heldItem.getItem() instanceof IToolScoop && caterpillar != null) {
-			ItemStack butterfly = ButterflyManager.butterflyRoot.getMemberStack(caterpillar, EnumFlutterType.CATERPILLAR.ordinal());
+			ItemStack butterfly = ButterflyManager.butterflyRoot.getMemberStack(caterpillar, EnumFlutterType.CATERPILLAR);
 			ItemStackUtil.dropItemStackAsEntity(butterfly, world, pos);
 			((TileLeaves) tile).setCaterpillar(null);
 			return true;

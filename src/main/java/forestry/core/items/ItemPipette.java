@@ -106,11 +106,12 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 
 	/* Models */
 	@SideOnly(Side.CLIENT)
-	public ModelResourceLocation[] models = new ModelResourceLocation[2];
+	public ModelResourceLocation[] models;
 
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
+		models = new ModelResourceLocation[2];
 		models[0] = manager.getModelLocation("pipette.0");
 		models[1] = manager.getModelLocation("pipette.1");
 		manager.registerVariant(item, new ResourceLocation("forestry:pipette.0"));
