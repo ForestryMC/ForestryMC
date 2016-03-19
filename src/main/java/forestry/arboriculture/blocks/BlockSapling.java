@@ -39,6 +39,7 @@ import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.api.core.IStateMapperRegister;
 import forestry.arboriculture.blocks.property.PropertyTree;
+import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.models.SaplingStateMapper;
 import forestry.arboriculture.tiles.TileSapling;
 import forestry.core.proxy.Proxies;
@@ -92,17 +93,18 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 	/* STATES */
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return TREE.getAllowedValues().indexOf(state.getValue(TREE));
-	}
-	
-	@Override
-	public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState().withProperty(TREE, TREE.getAllowedValues().get(meta));
+		return 0;
 	}
 	
 	@Override
 	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
-		return super.getActualState(state, world, pos);
+		TileSapling sapling = getSaplingTile(world, pos);
+		if(sapling != null && sapling.getTree() != null){
+			state = state.withProperty(TREE, sapling.getTree().getGenome().getPrimary());
+		}else{
+			state = state.withProperty(TREE, TreeDefinition.Oak.getGenome().getPrimary());
+		}
+		return state;
 	}
 	
 	@Override
