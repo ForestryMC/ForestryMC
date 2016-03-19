@@ -33,6 +33,7 @@ import forestry.api.apiculture.IBeeModifier;
 import forestry.api.apiculture.IBeekeepingLogic;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
+import forestry.api.core.ForestryAPI;
 import forestry.api.core.IClimateControlled;
 import forestry.api.multiblock.IAlvearyComponent;
 import forestry.api.multiblock.IMultiblockComponent;
@@ -351,12 +352,13 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	@Override
 	public float getExactTemperature() {
 		BlockPos coords = getReferenceCoord();
-		return getBiome().getFloatTemperature(coords) + tempChange;
+		return ForestryAPI.climateManager.getTemperature(getWorld(), coords) + tempChange;
 	}
 
 	@Override
 	public float getExactHumidity() {
-		return getBiome().rainfall + humidChange;
+		BlockPos coords = getReferenceCoord();
+		return ForestryAPI.climateManager.getHumidity(getWorld(), coords) + humidChange;
 	}
 
 	@Override

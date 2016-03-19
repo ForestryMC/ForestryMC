@@ -94,6 +94,7 @@ public class PluginCore extends BlankForestryPlugin {
 		AlleleHelper.instance = new AlleleHelper();
 
 		MultiblockManager.logicFactory = new MultiblockLogicFactory();
+		ForestryAPI.climateManager = new ClimateManager();
 	}
 
 	@Override

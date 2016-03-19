@@ -46,6 +46,8 @@ public class ForestryAPI {
 	 */
 	@SideOnly(Side.CLIENT)
 	public static IModelManager modelManager;
+	
+	public static IClimateManager climateManager;
 
 	/**
 	 * The currently active {@link IGameMode}.

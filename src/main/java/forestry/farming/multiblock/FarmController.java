@@ -41,6 +41,7 @@ import forestry.api.circuits.ICircuitBoard;
 import forestry.api.circuits.ICircuitSocketType;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
+import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorLogic;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
@@ -386,8 +387,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 	@Override
 	public EnumTemperature getTemperature() {
-		BlockPos coords = getReferenceCoord();
-		return EnumTemperature.getFromBiome(getBiome(), coords);
+		return EnumTemperature.getFromValue(getExactTemperature());
 	}
 
 	@Override
@@ -398,12 +398,13 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	@Override
 	public float getExactTemperature() {
 		BlockPos coords = getReferenceCoord();
-		return getBiome().getFloatTemperature(coords);
+		return ForestryAPI.climateManager.getTemperature(getWorld(), coords);
 	}
 
 	@Override
 	public float getExactHumidity() {
-		return getBiome().rainfall;
+		BlockPos coords = getReferenceCoord();
+		return ForestryAPI.climateManager.getHumidity(getWorld(), coords);
 	}
 
 	private int[] coords;
