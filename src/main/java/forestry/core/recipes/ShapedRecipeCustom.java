@@ -10,9 +10,9 @@
  ******************************************************************************/
 package forestry.core.recipes;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.inventory.InventoryCrafting;
@@ -24,6 +24,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import forestry.api.recipes.IDescriptiveRecipe;
+import forestry.core.PluginCore;
 import forestry.core.utils.ItemStackUtil;
 
 public class ShapedRecipeCustom extends ShapedOreRecipe implements IDescriptiveRecipe {
@@ -166,10 +167,10 @@ public class ShapedRecipeCustom extends ShapedOreRecipe implements IDescriptiveR
 					if (!ItemStackUtil.isCraftingEquivalent((ItemStack) target, slot)) {
 						return false;
 					}
-				} else if (target instanceof ArrayList) {
+				} else if (target instanceof List) {
 					boolean matched = false;
 
-					Iterator<ItemStack> itr = ((ArrayList<ItemStack>) target).iterator();
+					Iterator<ItemStack> itr = ((List<ItemStack>) target).iterator();
 					while (itr.hasNext() && !matched) {
 						matched = ItemStackUtil.isCraftingEquivalent(itr.next(), slot);
 					}

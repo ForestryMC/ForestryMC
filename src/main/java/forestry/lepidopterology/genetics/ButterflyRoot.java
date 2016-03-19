@@ -99,7 +99,8 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 
 	@Override
 	public boolean isMember(ItemStack stack, int type) {
-		return getType(stack).ordinal() == type;
+		EnumFlutterType flutterType = getType(stack);
+		return flutterType != null && flutterType.ordinal() == type;
 	}
 
 	@Override
