@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.greenhouse.multiblock;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import forestry.api.greenhouse.IGreenhouseState;
@@ -30,8 +31,7 @@ public interface IGreenhouseControllerInternal extends IGreenhouseController, IM
 	@Nullable
 	EnergyManager getEnergyManager();
 	
+	@Nonnull
 	IGreenhouseState createState();
-	
-	void createLogics();
 	
 }

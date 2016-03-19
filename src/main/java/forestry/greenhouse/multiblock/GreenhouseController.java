@@ -92,8 +92,8 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	
 	public GreenhouseController(World world) {
 		super(world, GreenhouseMultiblockSizeLimits.instance);
-		tempChange = 0;
-		humidChange = 0;
+		this.tempChange = 0;
+		this.humidChange = 0;
 		
 		this.resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, FluidRegistry.WATER);
 		this.tankManager = new TankManager(this, resourceTank);
@@ -101,32 +101,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		this.inventory = new InventoryGreenhouse(this);
 	}
 	
-	@Override
-	public void createLogics() {
-		logics.clear();
-		for(Class<? extends IGreenhouseLogic> logicClass : GreenhouseManager.greenhouseLogics){
-			try{
-				logics.add(createLogic(logicClass));
-			}catch(Exception e){
-				Log.error("Fail to create a greenhouse logic with the class: " + logicClass);
-				e.printStackTrace();
-			}
-		}
-	}
-	
-	private IGreenhouseLogic createLogic(Class<? extends IGreenhouseLogic> logicClass) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
-		return logicClass.getConstructor(IGreenhouseController.class).newInstance(this);
-	}
-
-	@Override
-	public IInventoryAdapter getInternalInventory() {
-		if (isAssembled()) {
-			return inventory;
-		} else {
-			return FakeInventoryAdapter.instance();
-		}
-	}
-	
+	/* CLIMATE */
 	@Override
 	public EnumTemperature getTemperature() {
 		BlockPos coords = getReferenceCoord();
@@ -189,21 +164,19 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		return change;
 	}
 	
+	/* LOCATION */
 	@Override
 	public World getWorld() {
 		return worldObj;
 	}
-
+	
 	@Override
-	public void formatDescriptionPacket(NBTTagCompound data) {
-		writeToNBT(data);
-	}
-
-	@Override
-	public void decodeDescriptionPacket(NBTTagCompound data) {
-		readFromNBT(data);
+	public BlockPos getCoordinates() {
+		BlockPos coord = getReferenceCoord();
+		return new BlockPos(coord);
 	}
 	
+	/* SAVING & LOADING */
 	@Override
 	public void writeToNBT(NBTTagCompound data) {
 		super.writeToNBT(data);
@@ -243,6 +216,21 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 			logic.readFromNBT(data.getCompoundTag("logic" + logic.getName()));
 		}
 	}
+	
+	@Override
+	public void formatDescriptionPacket(NBTTagCompound data) {
+		writeToNBT(data);
+	}
+
+	@Override
+	public void decodeDescriptionPacket(NBTTagCompound data) {
+		readFromNBT(data);
+	}
+	
+	@Override
+	protected void onAttachedPartWithMultiblockData(IMultiblockComponent part, NBTTagCompound data) {
+		readFromNBT(data);
+	}
 
 	@Override
 	public void onSwitchAccess(EnumAccess oldAccess, EnumAccess newAccess) {
@@ -257,7 +245,8 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 			markDirty();
 		}
 	}
-
+	
+	/* GUI DATA */
 	@Override
 	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
 		data.writeVarInt(Math.round(tempChange * 100));
@@ -282,6 +271,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		CamouflageUtil.readCamouflageBlockFromData(data, this);
 	}
 	
+	/* CAMOUFLAGE */
 	@Override
 	public void setCamouflageBlock(EnumCamouflageType type, ItemStack camouflageBlock) {
 		switch (type) {
@@ -342,13 +332,53 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 			return null;
 		}
 	}
-
+	
+	/* GREENHOUSE */
 	@Override
-	public BlockPos getCoordinates() {
-		BlockPos coord = getReferenceCoord();
-		return new BlockPos(coord);
+	public boolean isInGreenhouse(BlockPos pos) {
+		for(InternalBlock inerBlock : internalBlocks){
+			if(inerBlock.pos.equals(pos)){
+				return true;
+			}
+		}
+		return false;
 	}
 	
+	@Override
+	public IGreenhouseState createState() {
+		return new GreenhouseState(worldObj, getBiome().rainfall + humidChange, getBiome().temperature + tempChange);
+	}
+	
+	@Override
+	public void onChange(EnumGreenhouseChangeType type, Object event) {
+		for(IGreenhouseLogic logic : logics){
+			logic.onChange(type, event);
+		}
+	}
+	
+	/* GREENHOUSE LOGICS */
+	private void createLogics() {
+		logics.clear();
+		for(Class<? extends IGreenhouseLogic> logicClass : GreenhouseManager.greenhouseLogics){
+			try{
+				logics.add(createLogic(logicClass));
+			}catch(Exception e){
+				Log.error("Fail to create a greenhouse logic with the class: " + logicClass);
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	private IGreenhouseLogic createLogic(Class<? extends IGreenhouseLogic> logicClass) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
+		return logicClass.getConstructor(IGreenhouseController.class).newInstance(this);
+	}
+	
+	@Override
+	public List<IGreenhouseLogic> getLogics() {
+		return logics;
+	}
+	
+	/* MANAGERS */
 	@Override
 	public TankManager getTankManager() {
 		return tankManager;
@@ -358,12 +388,17 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	public EnergyManager getEnergyManager() {
 		return energyManager;
 	}
-
+	
 	@Override
-	protected void onAttachedPartWithMultiblockData(IMultiblockComponent part, NBTTagCompound data) {
-		readFromNBT(data);
+	public IInventoryAdapter getInternalInventory() {
+		if (isAssembled()) {
+			return inventory;
+		} else {
+			return FakeInventoryAdapter.instance();
+		}
 	}
 	
+	/* CONTROLLER */
 	@Override
 	protected void onMachineAssembled() {
 		super.onMachineAssembled();
@@ -462,34 +497,6 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	
 			return canWork;
 		}
-	}
-
-	@Override
-	protected void updateClient(int tickCount) {
-	}
-
-	@Override
-	protected void isGoodForExteriorLevel(IMultiblockComponent part, int level) throws MultiblockValidationException {
-		
-	}
-
-	@Override
-	protected void isGoodForInterior(IMultiblockComponent part) throws MultiblockValidationException {
-		
-	}
-	
-	@Override
-	protected void isBlockGoodForInterior(World world, BlockPos pos) throws MultiblockValidationException {
-	}
-	
-	@Override
-	public boolean isInGreenhouse(BlockPos pos) {
-		for(InternalBlock inerBlock : internalBlocks){
-			if(inerBlock.pos.equals(pos)){
-				return true;
-			}
-		}
-		return false;
 	}
 	
 	@Override
@@ -626,6 +633,24 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		}
 		this.internalBlocks.addAll(internalBlocks);
 	}
+
+	@Override
+	protected void updateClient(int tickCount) {
+	}
+
+	@Override
+	protected void isGoodForExteriorLevel(IMultiblockComponent part, int level) throws MultiblockValidationException {
+		
+	}
+
+	@Override
+	protected void isGoodForInterior(IMultiblockComponent part) throws MultiblockValidationException {
+		
+	}
+	
+	@Override
+	protected void isBlockGoodForInterior(World world, BlockPos pos) throws MultiblockValidationException {
+	}
 	
 	private void addInternalBlock(InternalBlock internalBlock, List<InternalBlock> internalBlocks) throws MultiblockValidationException{
 		isBlockGoodForInterior(worldObj, internalBlock.pos);
@@ -659,7 +684,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 			}
 		}
 	}
-
+	
 	private static class InternalBlock{
 		public BlockPos pos;
 		public EnumMap<EnumFacing, Boolean> testetFaces = Maps.newEnumMap(EnumFacing.class);
@@ -688,23 +713,6 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 			InternalBlock ib = (InternalBlock) obj;
 			return ib.pos.equals(pos);
 		}
-	}
-
-	@Override
-	public void onChange(EnumGreenhouseChangeType type, Object event) {
-		for(IGreenhouseLogic logic : logics){
-			logic.onChange(type, event);
-		}
-	}
-
-	@Override
-	public List<IGreenhouseLogic> getLogics() {
-		return logics;
-	}
-	
-	@Override
-	public IGreenhouseState createState() {
-		return new GreenhouseState(worldObj, getBiome().rainfall + humidChange, getBiome().temperature + tempChange);
 	}
 
 }

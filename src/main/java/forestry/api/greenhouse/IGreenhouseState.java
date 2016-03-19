@@ -19,6 +19,9 @@ public interface IGreenhouseState {
 
 	float getExactHumidity();
 
+	/**
+	 * @return The world in that the greenhouse standing
+	 */
 	World getWorld();
 	
 }

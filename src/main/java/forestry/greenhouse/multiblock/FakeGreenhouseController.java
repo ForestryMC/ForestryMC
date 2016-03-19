@@ -82,10 +82,6 @@ public class FakeGreenhouseController extends FakeMultiblockController implement
 	}
 
 	@Override
-	public void createLogics() {
-	}
-
-	@Override
 	public void addTemperatureChange(float change, float boundaryDown, float boundaryUp) {
 	}
 

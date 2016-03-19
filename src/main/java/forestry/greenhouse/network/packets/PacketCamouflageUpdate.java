@@ -27,7 +27,7 @@ import forestry.core.network.packets.PacketCoordinates;
 
 public class PacketCamouflageUpdate extends PacketCoordinates implements IForestryPacketServer {
 
-	private ItemStack camouflageBlock;
+	private ItemStack camouflageStack;
 	private EnumCamouflageType type;
 	private boolean isMultiblock;
 
@@ -36,14 +36,14 @@ public class PacketCamouflageUpdate extends PacketCoordinates implements IForest
 
 	public PacketCamouflageUpdate(ICamouflageHandler tile, EnumCamouflageType type, boolean isMultiblock) {
 		super(tile.getCoordinates());
-		this.camouflageBlock = tile.getCamouflageBlock(type);
+		this.camouflageStack = tile.getCamouflageBlock(type);
 		this.isMultiblock = isMultiblock;
 		this.type = type;
 	}
 	
 	public PacketCamouflageUpdate(ICamouflageHandler tile, EnumCamouflageType type) {
 		super(tile.getCoordinates());
-		this.camouflageBlock = tile.getCamouflageBlock(type);
+		this.camouflageStack = tile.getCamouflageBlock(type);
 		this.isMultiblock = false;
 		this.type = type;
 	}
@@ -58,7 +58,7 @@ public class PacketCamouflageUpdate extends PacketCoordinates implements IForest
 		super.writeData(data);
 		data.writeBoolean(isMultiblock);
 		data.writeShort(type.ordinal());
-		data.writeItemStack(camouflageBlock);
+		data.writeItemStack(camouflageStack);
 	}
 
 	@Override
@@ -66,24 +66,27 @@ public class PacketCamouflageUpdate extends PacketCoordinates implements IForest
 		super.readData(data);
 		isMultiblock = data.readBoolean();
 		type = EnumCamouflageType.VALUES[data.readShort()];
-		camouflageBlock = data.readItemStack();
+		camouflageStack = data.readItemStack();
 	}
 
 	@Override
 	public void onPacketData(DataInputStreamForestry data, EntityPlayerMP player) {
 		TileEntity tile = getTarget(player.worldObj);
 		ICamouflageHandler handler = null;
+		
 		if(isMultiblock && tile instanceof IMultiblockComponent){
 			IMultiblockController controller = ((IMultiblockComponent) tile).getMultiblockLogic().getController();
+			
 			if(controller instanceof ICamouflageHandler){
 				handler = (ICamouflageHandler) controller;
 			}
-		}
-		else if (tile instanceof ICamouflageHandler) {
+			
+		}else if (tile instanceof ICamouflageHandler) {
 			handler = (ICamouflageHandler) tile;
 		}
+		
 		if(handler != null){
-			handler.setCamouflageBlock(type, camouflageBlock);
+			handler.setCamouflageBlock(type, camouflageStack);
 		}
 	}
 }

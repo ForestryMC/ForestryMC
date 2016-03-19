@@ -15,7 +15,8 @@ import forestry.api.greenhouse.IGreenhouseAccess;
 import forestry.core.config.Constants;
 import forestry.core.network.IPacketRegistry;
 import forestry.greenhouse.blocks.BlockRegistryGreenhouse;
-import forestry.greenhouse.logics.GreenhouseEffect;
+import forestry.greenhouse.logics.GreenhouseLogicGreenhouseDoor;
+import forestry.greenhouse.logics.GreenhouseLogicGreenhouseEffect;
 import forestry.greenhouse.network.PacketRegistryGreenhouse;
 import forestry.greenhouse.proxy.ProxyGreenhouse;
 import forestry.greenhouse.tiles.TileGreenhouseControl;
@@ -98,7 +99,8 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 		
 		proxy.initializeModels();
 		
-		GreenhouseManager.greenhouseLogics.add(GreenhouseEffect.class);
+		GreenhouseManager.greenhouseLogics.add(GreenhouseLogicGreenhouseEffect.class);
+		GreenhouseManager.greenhouseLogics.add(GreenhouseLogicGreenhouseDoor.class);
 	}
 	
 	@Override

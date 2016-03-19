@@ -17,7 +17,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockModelShapes;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
@@ -26,14 +25,11 @@ import net.minecraftforge.common.property.IExtendedBlockState;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import forestry.api.core.ICamouflageHandler;
-import forestry.api.core.ICamouflagedBlock;
 import forestry.api.core.IModelBaker;
-import forestry.api.multiblock.IGreenhouseComponent;
 import forestry.core.models.ModelBlockOverlay;
 import forestry.core.utils.CamouflageUtil;
 
-public class ModelGreenhouse<G extends TileEntity & IGreenhouseComponent & ICamouflageHandler & ICamouflagedBlock> extends ModelBlockOverlay<BlockGreenhouse> {
+public class ModelGreenhouse extends ModelBlockOverlay<BlockGreenhouse> {
 
 	public ModelGreenhouse() {
 		super(BlockGreenhouse.class);

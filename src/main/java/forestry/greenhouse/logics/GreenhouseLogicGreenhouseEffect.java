@@ -23,12 +23,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
-public class GreenhouseEffect extends DefaultGreenhouseLogic implements IGreenhouseClimaLogic {
+public class GreenhouseLogicGreenhouseEffect extends DefaultGreenhouseLogic implements IGreenhouseClimaLogic {
 
 	private float lightTransmittance;
 	private int workTimer;
 	
-	public GreenhouseEffect(IGreenhouseController controller) {
+	public GreenhouseLogicGreenhouseEffect(IGreenhouseController controller) {
 		super(controller, "GreenhouseEffect");
 		
 	}
@@ -39,7 +39,10 @@ public class GreenhouseEffect extends DefaultGreenhouseLogic implements IGreenho
 			return;
 		}
 		if(controller.getWorld().isDaytime()){
-			controller.addTemperatureChange(lightTransmittance / 100, 0F, 2.5F);
+			if(workTimer++>20){
+				controller.addTemperatureChange(lightTransmittance / 100, 0F, 2.5F);
+				workTimer = 0;
+			}
 		}
 	}
 
@@ -74,7 +77,7 @@ public class GreenhouseEffect extends DefaultGreenhouseLogic implements IGreenho
 							float camouflageLightTransmittance = GreenhouseManager.greenhouseAccess.getGreenhouseGlassLightTransmittance(camouflageStack);
 							
 							if(camouflageLightTransmittance < 1 && camouflageLightTransmittance > 0){
-								lightTransmittance=+ camouflageLightTransmittance;
+								lightTransmittance= lightTransmittance + camouflageLightTransmittance;
 								i++;
 							}
 						}
