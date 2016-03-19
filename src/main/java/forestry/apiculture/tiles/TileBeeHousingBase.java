@@ -25,6 +25,7 @@ import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeekeepingLogic;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
+import forestry.api.core.ForestryAPI;
 import forestry.apiculture.gui.IGuiBeeHousingInventory;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
@@ -72,7 +73,7 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 	/* ICLIMATISED */
 	@Override
 	public EnumTemperature getTemperature() {
-		return EnumTemperature.getFromBiome(getBiome(), getPos());
+		return EnumTemperature.getFromBiome(getBiome(), worldObj, getPos());
 	}
 
 	@Override
@@ -82,12 +83,12 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 
 	@Override
 	public float getExactTemperature() {
-		return getBiome().getFloatTemperature(getPos());
+		return ForestryAPI.climateManager.getTemperature(worldObj, getPos());
 	}
 
 	@Override
 	public float getExactHumidity() {
-		return getBiome().rainfall;
+		return ForestryAPI.climateManager.getHumidity(worldObj, getPos());
 	}
 
 	/* UPDATING */

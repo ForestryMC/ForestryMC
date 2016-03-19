@@ -30,6 +30,7 @@ import forestry.api.greenhouse.GreenhouseEvents.CreateInternalBlockEvent;
 import forestry.api.core.EnumCamouflageType;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
+import forestry.api.core.ForestryAPI;
 import forestry.api.core.ICamouflagedBlock;
 import forestry.api.multiblock.IGreenhouseComponent;
 import forestry.api.multiblock.IGreenhouseController;
@@ -99,6 +100,10 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		this.tankManager = new TankManager(this, resourceTank);
 		this.energyManager = new EnergyManager(2000, 100000);
 		this.inventory = new InventoryGreenhouse(this);
+		
+		camouflagePlainBlock = getDefaultCamouflageBlock(EnumCamouflageType.DEFAULT);
+		camouflageGlassBlock = getDefaultCamouflageBlock(EnumCamouflageType.GLASS);
+		camouflageDoorBlock = getDefaultCamouflageBlock(EnumCamouflageType.DOOR);
 	}
 	
 	/* CLIMATE */
@@ -334,16 +339,6 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	}
 	
 	/* GREENHOUSE */
-	@Override
-	public boolean isInGreenhouse(BlockPos pos) {
-		for(IInternalBlock inerBlock : internalBlocks){
-			if(inerBlock.getPos().equals(pos)){
-				return true;
-			}
-		}
-		return false;
-	}
-	
 	@Override
 	public IGreenhouseState createState() {
 		return new GreenhouseState(this);

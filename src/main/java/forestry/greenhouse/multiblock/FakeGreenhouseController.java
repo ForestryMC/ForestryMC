@@ -47,11 +47,6 @@ public class FakeGreenhouseController extends FakeMultiblockController implement
 	public EnergyManager getEnergyManager() {
 		return null;
 	}
-	
-	@Override
-	public boolean isInGreenhouse(BlockPos pos) {
-		return false;
-	}
 
 	@Override
 	public ItemStack getCamouflageBlock(EnumCamouflageType type) {

@@ -7,6 +7,7 @@ package forestry.api.core;
 
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.BlockPos;
+import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
 import net.minecraftforge.fml.relauncher.Side;
@@ -66,11 +67,11 @@ public enum EnumTemperature {
 		return getFromValue(biomeGenBase.temperature);
 	}
 
-	public static EnumTemperature getFromBiome(BiomeGenBase biomeGenBase, BlockPos pos) {
+	public static EnumTemperature getFromBiome(BiomeGenBase biomeGenBase, World world, BlockPos pos) {
 		if (BiomeHelper.isBiomeHellish(biomeGenBase)) {
 			return HELLISH;
 		}
-		float temperature = biomeGenBase.getFloatTemperature(pos);
+		float temperature = ForestryAPI.climateManager.getTemperature(world, pos);
 		return getFromValue(temperature);
 	}
 }

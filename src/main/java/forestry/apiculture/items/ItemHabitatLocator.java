@@ -25,6 +25,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
+import forestry.api.core.ForestryAPI;
 import forestry.api.core.Tabs;
 import forestry.api.genetics.AlleleManager;
 import forestry.apiculture.gui.ContainerHabitatLocator;
@@ -67,9 +68,9 @@ public class ItemHabitatLocator extends ItemWithGui {
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List<String> list, boolean flag) {
 		BiomeGenBase currentBiome = player.worldObj.getBiomeGenForCoords(player.getPosition());
 
-		float temperatureValue = currentBiome.getFloatTemperature(player.getPosition());
+		float temperatureValue = ForestryAPI.climateManager.getTemperature(player.worldObj, player.getPosition());
 		EnumTemperature temperature = EnumTemperature.getFromValue(temperatureValue);
-		EnumHumidity humidity = EnumHumidity.getFromValue(currentBiome.rainfall);
+		EnumHumidity humidity = EnumHumidity.getFromValue(ForestryAPI.climateManager.getHumidity(player.worldObj, player.getPosition()));
 
 		list.add(StringUtil.localize("gui.currentBiome") + ": " + currentBiome.biomeName);
 		list.add(StringUtil.localize("gui.temperature") + ": " + AlleleManager.climateHelper.toDisplay(temperature));

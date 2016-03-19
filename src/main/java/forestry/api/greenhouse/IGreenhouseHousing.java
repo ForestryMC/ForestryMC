@@ -26,10 +26,4 @@ public interface IGreenhouseHousing extends IErrorLogicSource {
 	 */
 	World getWorld();
 	
-	
-	/**
-	 * @return Is the position in the greenhouse
-	 */
-	boolean isInGreenhouse(BlockPos pos);
-	
 }

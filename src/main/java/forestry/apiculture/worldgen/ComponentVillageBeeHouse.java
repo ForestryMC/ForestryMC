@@ -349,7 +349,7 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 			candidates = BeeManager.commonVillageBees;
 		}
 
-		EnumTemperature biomeTemperature = EnumTemperature.getFromBiome(biome, pos);
+		EnumTemperature biomeTemperature = EnumTemperature.getFromBiome(biome, world, pos);
 		EnumHumidity biomeHumidity = EnumHumidity.getFromValue(biome.rainfall);
 
 		// Add bees that can live in this environment

@@ -34,7 +34,7 @@ public class MutationConditionTemperature implements IMutationCondition {
 	@Override
 	public float getChance(World world, BlockPos pos, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1) {
 		BiomeGenBase biome = world.getWorldChunkManager().getBiomeGenerator(pos);
-		EnumTemperature biomeTemperature = EnumTemperature.getFromBiome(biome, pos);
+		EnumTemperature biomeTemperature = EnumTemperature.getFromBiome(biome, world, pos);
 
 		if (biomeTemperature.ordinal() < minTemperature.ordinal() || biomeTemperature.ordinal() > maxTemperature.ordinal()) {
 			return 0;

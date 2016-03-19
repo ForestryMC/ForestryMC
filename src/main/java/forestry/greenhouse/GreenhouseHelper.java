@@ -10,8 +10,11 @@
  ******************************************************************************/
 package forestry.greenhouse;
 
+import forestry.api.core.IClimateManager;
 import forestry.api.greenhouse.IGreenhouseHelper;
 import forestry.api.greenhouse.IGreenhouseState;
+import forestry.api.greenhouse.IInternalBlock;
+import forestry.api.multiblock.IGreenhouseController;
 import forestry.core.multiblock.IMultiblockControllerInternal;
 import forestry.core.multiblock.MultiblockRegistry;
 import forestry.greenhouse.multiblock.IGreenhouseControllerInternal;
@@ -25,13 +28,22 @@ public class GreenhouseHelper implements IGreenhouseHelper {
 		for(IMultiblockControllerInternal controllerInternal : MultiblockRegistry.getControllersFromWorld(world)){
 			if(controllerInternal instanceof IGreenhouseControllerInternal){
 				if(controllerInternal.isAssembled()){
-					if(((IGreenhouseControllerInternal) controllerInternal).isInGreenhouse(pos)){
+					if(isPosiotionInGreenhouse((IGreenhouseControllerInternal) controllerInternal, pos)){
 						return ((IGreenhouseControllerInternal) controllerInternal).createState();
 					}
 				}
 			}
 		}
 		return null;
+	}
+	
+	private static boolean isPosiotionInGreenhouse(IGreenhouseControllerInternal controller, BlockPos pos){
+		for(IInternalBlock internalBlock : controller.getInternalBlocks()){
+			if(internalBlock.getPos().equals(pos)){
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

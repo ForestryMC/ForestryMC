@@ -23,7 +23,7 @@ import net.minecraft.world.World;
 public class InternalBlock implements IInternalBlock {
 	private final BlockPos pos;
 	private final World world;
-	private final List<IInternalBlockFace> faces = new ArrayList();
+	private final List<IInternalBlockFace> faces = new ArrayList(6);
 	private final IInternalBlock root;
 	
 	public InternalBlock(World world, BlockPos pos) {

@@ -71,7 +71,7 @@ public abstract class EntityMinecartBeeHousingBase extends EntityMinecartContain
 
 	@Override
 	public EnumTemperature getTemperature() {
-		return EnumTemperature.getFromBiome(getBiome(), getPosition());
+		return EnumTemperature.getFromBiome(getBiome(), worldObj, getPosition());
 	}
 
 	@Override
@@ -81,12 +81,12 @@ public abstract class EntityMinecartBeeHousingBase extends EntityMinecartContain
 
 	@Override
 	public float getExactTemperature() {
-		return getBiome().temperature;
+		return ForestryAPI.climateManager.getTemperature(worldObj, getPosition());
 	}
 
 	@Override
 	public float getExactHumidity() {
-		return getBiome().rainfall;
+		return ForestryAPI.climateManager.getHumidity(worldObj, getPosition());
 	}
 
 	@Override

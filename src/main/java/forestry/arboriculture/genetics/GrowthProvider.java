@@ -19,6 +19,7 @@ import forestry.api.arboriculture.EnumGrowthConditions;
 import forestry.api.arboriculture.IGrowthProvider;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.ITreeGenome;
+import forestry.api.core.ForestryAPI;
 import forestry.arboriculture.tiles.TileSapling;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.StringUtil;
@@ -57,7 +58,9 @@ public class GrowthProvider implements IGrowthProvider {
 	protected static EnumGrowthConditions getConditionsFromRainfall(World world, BlockPos pos, float min, float max) {
 
 		BiomeGenBase biome = world.getWorldChunkManager().getBiomeGenerator(pos);
-		if (biome.rainfall < min || biome.rainfall > max) {
+		float humidity = ForestryAPI.climateManager.getHumidity(world, pos);
+		
+		if (humidity < min || humidity > max) {
 			return EnumGrowthConditions.HOSTILE;
 		}
 
@@ -67,7 +70,7 @@ public class GrowthProvider implements IGrowthProvider {
 	protected static EnumGrowthConditions getConditionsFromTemperature(World world, BlockPos pos, float min, float max) {
 
 		BiomeGenBase biome = world.getWorldChunkManager().getBiomeGenerator(pos);
-		float biomeTemperature = biome.getFloatTemperature(pos);
+		float biomeTemperature = ForestryAPI.climateManager.getTemperature(world, pos);
 		if (biomeTemperature < min || biomeTemperature > max) {
 			return EnumGrowthConditions.HOSTILE;
 		}
