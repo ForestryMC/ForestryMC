@@ -40,6 +40,8 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 	public final List<BlockArbSlab> slabsDoubleFireproof;
 	public final List<BlockArbFence> fences;
 	public final List<BlockArbFence> fencesFireproof;
+	public final List<BlockArbFenceGate> fenceGates;
+	public final List<BlockArbFenceGate> fenceGatesFireproof;
 	public final List<BlockArbStairs> stairs;
 	public final List<BlockArbStairs> stairsFireproof;
 
@@ -107,6 +109,18 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 			BlockArbFence fenceFireproof = registerBlock(new BlockArbFence(true, woodType), ItemBlockWood.class, "fences.fireproof." + woodType);
 			registerOreDictWildcard("fenceWood", fenceFireproof);
 			fencesFireproof.add(fenceFireproof);
+		}
+		
+		fenceGates = new ArrayList<>();
+		fenceGatesFireproof = new ArrayList<>();
+		for (EnumWoodType woodType : EnumWoodType.VALUES) {
+			BlockArbFenceGate fence = registerBlock(new BlockArbFenceGate(false, woodType), ItemBlockWood.class, "fence.gates." + woodType);
+			registerOreDictWildcard("fenceGateWood", fence);
+			fenceGates.add(fence);
+
+			BlockArbFenceGate fenceFireproof = registerBlock(new BlockArbFenceGate(true, woodType), ItemBlockWood.class, "fence.gates.fireproof." + woodType);
+			registerOreDictWildcard("fenceGateWood", fenceFireproof);
+			fenceGatesFireproof.add(fenceFireproof);
 		}
 
 		stairs = new ArrayList<>();

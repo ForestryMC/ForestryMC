@@ -5,6 +5,8 @@ import com.google.common.collect.Maps;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import net.minecraft.block.Block;
@@ -12,7 +14,6 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.client.resources.model.ModelResourceLocation;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -29,6 +30,8 @@ class WoodTypeStateMapper extends StateMapperBase {
 	private final String blockPath;
 	@Nullable
 	private final PropertyWoodType propertyWoodType;
+	@Nonnull
+	private final List<IProperty> propertysToRemove = new ArrayList();
 
 	public WoodTypeStateMapper(@Nonnull IWoodTyped woodTyped, @Nullable PropertyWoodType propertyWoodType) {
 		this.woodTyped = woodTyped;
@@ -41,6 +44,11 @@ class WoodTypeStateMapper extends StateMapperBase {
 		this.blockPath = blockPath;
 		this.propertyWoodType = propertyWoodType;
 	}
+	
+	public WoodTypeStateMapper addPropertyToRemove(IProperty property){
+		this.propertysToRemove.add(property);
+		return this;
+	}
 
 	@Override
 	protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
@@ -49,7 +57,11 @@ class WoodTypeStateMapper extends StateMapperBase {
 			properties = Maps.newLinkedHashMap(state.getProperties());
 			properties.remove(propertyWoodType);
 		} else {
-			properties = state.getProperties();
+			properties = Maps.newLinkedHashMap(state.getProperties());
+		}
+		
+		for(IProperty property : propertysToRemove){
+			properties.remove(property);
 		}
 
 		Block block = state.getBlock();

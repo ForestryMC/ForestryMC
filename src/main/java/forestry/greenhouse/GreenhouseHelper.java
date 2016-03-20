@@ -10,11 +10,9 @@
  ******************************************************************************/
 package forestry.greenhouse;
 
-import forestry.api.core.IClimateManager;
 import forestry.api.greenhouse.IGreenhouseHelper;
 import forestry.api.greenhouse.IGreenhouseState;
 import forestry.api.greenhouse.IInternalBlock;
-import forestry.api.multiblock.IGreenhouseController;
 import forestry.core.multiblock.IMultiblockControllerInternal;
 import forestry.core.multiblock.MultiblockRegistry;
 import forestry.greenhouse.multiblock.IGreenhouseControllerInternal;
