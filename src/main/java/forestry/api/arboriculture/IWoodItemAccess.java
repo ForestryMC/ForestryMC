@@ -15,6 +15,8 @@ public interface IWoodItemAccess {
 	ItemStack getSlab(EnumWoodType woodType, boolean fireproof);
 
 	ItemStack getFence(EnumWoodType woodType, boolean fireproof);
+	
+	ItemStack getFenceGate(EnumWoodType woodType, boolean fireproof);
 
 	ItemStack getStairs(EnumWoodType woodType, boolean fireproof);
 }

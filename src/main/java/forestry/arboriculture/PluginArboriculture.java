@@ -125,12 +125,14 @@ public class PluginArboriculture extends BlankForestryPlugin {
 		WoodItemAccess.registerPlanks(blocks.planks);
 		WoodItemAccess.registerSlabs(blocks.slabs);
 		WoodItemAccess.registerFences(blocks.fences);
+		WoodItemAccess.registerFenceGates(blocks.fenceGates);
 		WoodItemAccess.registerStairs(blocks.stairs);
 
 		WoodItemAccess.registerLogs(blocks.logsFireproof);
 		WoodItemAccess.registerPlanks(blocks.planksFireproof);
 		WoodItemAccess.registerSlabs(blocks.slabsFireproof);
 		WoodItemAccess.registerFences(blocks.fencesFireproof);
+		WoodItemAccess.registerFenceGates(blocks.fenceGatesFireproof);
 		WoodItemAccess.registerStairs(blocks.stairsFireproof);
 
 		blocks.arboriculture.addDefinitions(BlockTypeArboricultureTesr.ARB_CHEST);
@@ -197,12 +199,14 @@ public class PluginArboriculture extends BlankForestryPlugin {
 			ItemStack logs = TreeManager.woodItemAccess.getLog(woodType, false);
 			ItemStack slabs = TreeManager.woodItemAccess.getSlab(woodType, false);
 			ItemStack fences = TreeManager.woodItemAccess.getFence(woodType, false);
+			ItemStack fenceGates = TreeManager.woodItemAccess.getFenceGate(woodType, false);
 			ItemStack stairs = TreeManager.woodItemAccess.getStairs(woodType, false);
 
 			ItemStack fireproofPlanks = TreeManager.woodItemAccess.getPlanks(woodType, true);
 			ItemStack fireproofLogs = TreeManager.woodItemAccess.getLog(woodType, true);
 			ItemStack fireproofSlabs = TreeManager.woodItemAccess.getSlab(woodType, true);
 			ItemStack fireproofFences = TreeManager.woodItemAccess.getFence(woodType, true);
+			ItemStack fireproofFenceGates = TreeManager.woodItemAccess.getFenceGate(woodType, true);
 			ItemStack fireproofStairs = TreeManager.woodItemAccess.getStairs(woodType, true);
 
 			planks.stackSize = 4;
@@ -237,6 +241,20 @@ public class PluginArboriculture extends BlankForestryPlugin {
 			RecipeUtil.addRecipe(fireproofFences.copy(),
 					"#X#",
 					"#X#",
+					'#', fireproofPlanks.copy(), 'X', "stickWood");
+			
+			fenceGates.stackSize = 1;
+			planks.stackSize = 1;
+			RecipeUtil.addRecipe(fenceGates.copy(),
+					"X#X",
+					"X#X",
+					'#', planks.copy(), 'X', "stickWood");
+
+			fireproofFenceGates.stackSize = 1;
+			fireproofPlanks.stackSize = 1;
+			RecipeUtil.addRecipe(fireproofFenceGates.copy(),
+					"X#X",
+					"X#X",
 					'#', fireproofPlanks.copy(), 'X', "stickWood");
 
 			stairs.stackSize = 4;

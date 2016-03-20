@@ -21,6 +21,7 @@ import net.minecraft.item.ItemStack;
 import forestry.api.arboriculture.EnumWoodType;
 import forestry.api.arboriculture.IWoodItemAccess;
 import forestry.arboriculture.blocks.BlockArbFence;
+import forestry.arboriculture.blocks.BlockArbFenceGate;
 import forestry.arboriculture.blocks.BlockArbLog;
 import forestry.arboriculture.blocks.BlockArbPlanks;
 import forestry.arboriculture.blocks.BlockArbSlab;
@@ -31,6 +32,7 @@ public class WoodItemAccess implements IWoodItemAccess {
 	private static final WoodMap planks = new WoodMap();
 	private static final WoodMap slabs = new WoodMap();
 	private static final WoodMap fences = new WoodMap();
+	private static final WoodMap fenceGates = new WoodMap();
 	private static final WoodMap stairs = new WoodMap();
 
 	private static class WoodMap {
@@ -64,6 +66,12 @@ public class WoodItemAccess implements IWoodItemAccess {
 	public static void registerFences(List<BlockArbFence> blocks) {
 		for (BlockArbFence block : blocks) {
 			register(block, fences);
+		}
+	}
+	
+	public static void registerFenceGates(List<BlockArbFenceGate> blocks) {
+		for (BlockArbFenceGate block : blocks) {
+			register(block, fenceGates);
 		}
 	}
 
@@ -102,6 +110,11 @@ public class WoodItemAccess implements IWoodItemAccess {
 	@Override
 	public ItemStack getFence(EnumWoodType woodType, boolean fireproof) {
 		return fences.get(fireproof).get(woodType).copy();
+	}
+	
+	@Override
+	public ItemStack getFenceGate(EnumWoodType woodType, boolean fireproof) {
+		return fenceGates.get(fireproof).get(woodType).copy();
 	}
 
 	@Override
