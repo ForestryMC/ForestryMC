@@ -23,11 +23,13 @@ public class GreenhouseHelper implements IGreenhouseHelper {
 
 	@Override
 	public IGreenhouseState getGreenhouseState(World world, BlockPos pos) {
-		for(IMultiblockControllerInternal controllerInternal : MultiblockRegistry.getControllersFromWorld(world)){
-			if(controllerInternal instanceof IGreenhouseControllerInternal){
-				if(controllerInternal.isAssembled()){
-					if(isPosiotionInGreenhouse((IGreenhouseControllerInternal) controllerInternal, pos)){
-						return ((IGreenhouseControllerInternal) controllerInternal).createState();
+		if(MultiblockRegistry.getControllersFromWorld(world) != null){
+			for(IMultiblockControllerInternal controllerInternal : MultiblockRegistry.getControllersFromWorld(world)){
+				if(controllerInternal instanceof IGreenhouseControllerInternal){
+					if(controllerInternal.isAssembled()){
+						if(isPosiotionInGreenhouse((IGreenhouseControllerInternal) controllerInternal, pos)){
+							return ((IGreenhouseControllerInternal) controllerInternal).createState();
+						}
 					}
 				}
 			}
