@@ -103,7 +103,7 @@ public enum BlockGreenhouseType {
 			case GEARBOX:
 				return sprites.get(BlockGreenhouseSprites.GEARS);
 			case VALVE:
-				return sprites.get(BlockGreenhouseSprites.VALUES);
+				return sprites.get(BlockGreenhouseSprites.VALVE);
 			case FAN:
 				if(state == null || state.getValue(BlockGreenhouse.STATE) == State.OFF) {
 					return sprites.get(BlockGreenhouseSprites.FAN_OFF);

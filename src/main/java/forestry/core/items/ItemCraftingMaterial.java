@@ -23,7 +23,7 @@ import forestry.api.core.IModelManager;
 
 public class ItemCraftingMaterial extends ItemForestry {
 
-	private final String[] definition = new String[]{"pulsatingDust", "pulsatingMesh", "silkWisp", "wovenSilk", "dissipationCharge", "iceShard", "scentedPaneling"};
+	private final String[] definition = new String[]{"pulsatingDust", "pulsatingMesh", "silkWisp", "wovenSilk", "dissipationCharge", "iceShard", "scentedPaneling", "camouflagedPaneling" };
 
 	public ItemCraftingMaterial() {
 		super();
@@ -61,7 +61,7 @@ public class ItemCraftingMaterial extends ItemForestry {
 
 	@Override
 	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List<ItemStack> itemList) {
-		for (int i = 0; i < 7; i++) {
+		for (int i = 0; i < definition.length; i++) {
 			itemList.add(new ItemStack(this, 1, i));
 		}
 	}
@@ -92,5 +92,9 @@ public class ItemCraftingMaterial extends ItemForestry {
 
 	public ItemStack getScentedPaneling() {
 		return new ItemStack(this, 1, 6);
+	}
+	
+	public ItemStack getCamouflagedPaneling() {
+		return new ItemStack(this, 1, 7);
 	}
 }

@@ -10,10 +10,17 @@
  ******************************************************************************/
 package forestry.greenhouse;
 
+import forestry.api.core.ForestryAPI;
 import forestry.api.greenhouse.GreenhouseManager;
 import forestry.api.greenhouse.IGreenhouseAccess;
+import forestry.api.recipes.RecipeManagers;
+import forestry.core.PluginCore;
 import forestry.core.config.Constants;
+import forestry.core.fluids.Fluids;
+import forestry.core.items.EnumElectronTube;
 import forestry.core.network.IPacketRegistry;
+import forestry.core.recipes.RecipeUtil;
+import forestry.greenhouse.blocks.BlockGreenhouseType;
 import forestry.greenhouse.blocks.BlockRegistryGreenhouse;
 import forestry.greenhouse.logics.GreenhouseLogicGreenhouseDoor;
 import forestry.greenhouse.logics.GreenhouseLogicGreenhouseEffect;
@@ -55,6 +62,119 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 	@Override
 	public void registerItemsAndBlocks() {
 		blocks = new BlockRegistryGreenhouse();
+	}
+	
+	@Override
+	public void registerRecipes() {
+		
+		ItemStack greenhousePlainBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.PLAIN);
+		RecipeUtil.addRecipe(greenhousePlainBlock,
+				"###",
+				"#X#",
+				"###",
+				'X', Blocks.brick_block,
+				'#', PluginCore.items.craftingMaterial.getCamouflagedPaneling());
+		
+		ItemStack greenhouseGlassBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.GLASS);
+		RecipeUtil.addRecipe(greenhouseGlassBlock,
+				"###",
+				"#X#",
+				"###",
+				'X', "blockGlass",
+				'#', PluginCore.items.craftingMaterial.getCamouflagedPaneling());
+		
+		ItemStack greenhouseHatchInputBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.HATCH_INPUT);
+		RecipeUtil.addRecipe(greenhouseHatchInputBlock,
+				"TXT",
+				"#H#",
+				'X', blocks.getGreenhouseBlock(BlockGreenhouseType.PLAIN),
+				'H', Blocks.trapdoor,
+				'#', "gearTin",
+				'T', PluginCore.items.tubes.get(EnumElectronTube.BRONZE, 1));
+		
+		ItemStack greenhouseHatchOutputBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.HATCH_OUTPUT);
+		RecipeUtil.addRecipe(greenhouseHatchOutputBlock,
+				"#H#",
+				"TXT",
+				'X', blocks.getGreenhouseBlock(BlockGreenhouseType.PLAIN),
+				'H', Blocks.trapdoor,
+				'#', "gearTin",
+				'T', PluginCore.items.tubes.get(EnumElectronTube.BRONZE, 1));
+		
+		ItemStack greenhouseControlBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.CONTROL);
+		RecipeUtil.addRecipe(greenhouseControlBlock,
+				" X ",
+				"#T#",
+				'X', blocks.getGreenhouseBlock(BlockGreenhouseType.PLAIN),
+				'#', "dustRedstone",
+				'T', PluginCore.items.tubes.get(EnumElectronTube.GOLD, 1));
+		
+		ItemStack greenhouseGearBoxBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.GEARBOX);
+		RecipeUtil.addRecipe(greenhouseGearBoxBlock,
+				" X ",
+				"###",
+				'X', blocks.getGreenhouseBlock(BlockGreenhouseType.PLAIN),
+				'#', "gearTin");
+		
+		ItemStack greenhouseValveBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.VALVE);
+		RecipeUtil.addRecipe(greenhouseValveBlock,
+				" X ",
+				"#G#",
+				'X', blocks.getGreenhouseBlock(BlockGreenhouseType.PLAIN),
+				'#', "blockGlass",
+				'G', "gearTin");
+		
+		ItemStack greenhouseHeaterBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.HEATER);
+		RecipeUtil.addRecipe(greenhouseHeaterBlock,
+				"T#T",
+				"#X#",
+				"T#T",
+				'X', blocks.getGreenhouseBlock(BlockGreenhouseType.PLAIN),
+				'#', "ingotGold",
+				'T', PluginCore.items.tubes.get(EnumElectronTube.GOLD, 1));
+		
+		ItemStack greenhouseFanlock = blocks.getGreenhouseBlock(BlockGreenhouseType.FAN);
+		RecipeUtil.addRecipe(greenhouseFanlock,
+				"T#T",
+				"#X#",
+				"T#T",
+				'X', blocks.getGreenhouseBlock(BlockGreenhouseType.PLAIN),
+				'#', "ingotTin",
+				'T', PluginCore.items.tubes.get(EnumElectronTube.TIN, 1));
+		
+		ItemStack greenhouseDryerBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.DRYER);
+		RecipeUtil.addRecipe(greenhouseDryerBlock,
+				"T#T",
+				"#X#",
+				"T#T",
+				'X', blocks.getGreenhouseBlock(BlockGreenhouseType.PLAIN),
+				'#', "ingotBronze",
+				'T', PluginCore.items.tubes.get(EnumElectronTube.BLAZE, 1));
+		
+		ItemStack greenhouseSprinklerBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.SPRINKLER);
+		RecipeUtil.addRecipe(greenhouseSprinklerBlock,
+				"TXT",
+				" I ",
+				"III",
+				'X', blocks.getGreenhouseBlock(BlockGreenhouseType.GLASS),
+				'I', "ingotIron",
+				'T', PluginCore.items.tubes.get(EnumElectronTube.LAPIS, 1));
+		
+		ItemStack greenhouseDoorBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.DOOR);
+		RecipeUtil.addRecipe(greenhouseDoorBlock,
+				true,
+				"GG ",
+				"GG ",
+				"GG ",
+				'G', blocks.getGreenhouseBlock(BlockGreenhouseType.GLASS));
+		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FACTORY)) {
+			RecipeManagers.carpenterManager.addRecipe(50, Fluids.BIOMASS.getFluid(500), null, PluginCore.items.craftingMaterial.getCamouflagedPaneling(),
+					" A ", "###", "RPR",
+					'#', "plankWood",
+					'A', "dustAsh",
+					'R', "dustRedstone",
+					'P', "pulpWood");
+		}
 	}
 	
 	@Override

@@ -18,7 +18,6 @@ import forestry.arboriculture.WoodHelper.WoodMeshDefinition;
 import forestry.core.proxy.Proxies;
 import net.minecraft.block.BlockFenceGate;
 import net.minecraft.block.BlockPlanks.EnumType;
-import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -29,9 +28,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockArbFenceGate extends BlockFenceGate implements IWoodTyped, IItemModelRegister, IStateMapperRegister {
-    public static final PropertyBool OPEN = PropertyBool.create("open");
-    public static final PropertyBool POWERED = PropertyBool.create("powered");
-    public static final PropertyBool IN_WALL = PropertyBool.create("in_wall");
     
 	private final boolean fireproof;
 	private final EnumWoodType woodType;
