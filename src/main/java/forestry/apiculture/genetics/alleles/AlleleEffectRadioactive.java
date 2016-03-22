@@ -49,7 +49,7 @@ public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 
 			// Entities are not attacked if they wear a full set of apiarist's armor.
 			int count = BeeManager.armorApiaristHelper.wearsItems(entity, getUID(), true);
-			damage -= count;
+			damage -= (count * 2);
 			if (damage <= 0) {
 				continue;
 			}
