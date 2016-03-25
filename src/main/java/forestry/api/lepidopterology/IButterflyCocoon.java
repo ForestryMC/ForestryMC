@@ -8,10 +8,18 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.lepidopterology.proxy;
+package forestry.api.lepidopterology;
 
-public class ProxyLepidopterology {
+import forestry.api.genetics.IHousing;
 
-	public void preInitializeRendering() {
-	}
+public interface IButterflyCocoon extends IHousing{
+
+	IButterfly getCaterpillar();
+	
+	void setCaterpillar(IButterfly butterfly);
+	
+	IButterflyNursery getNursery();
+	
+	void setNursery(IButterflyNursery nursery);
+	
 }

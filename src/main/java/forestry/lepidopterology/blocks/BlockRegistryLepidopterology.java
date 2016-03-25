@@ -15,8 +15,10 @@ import forestry.core.items.ItemBlockForestry;
 
 public class BlockRegistryLepidopterology extends BlockRegistry {
 	public final BlockLepidopterology lepidopterology;
+	public final BlockCocoon cocoon;
 
 	public BlockRegistryLepidopterology() {
 		lepidopterology = registerBlock(new BlockLepidopterology(), ItemBlockForestry.class, "lepidopterology");
+		cocoon = registerBlock(new BlockCocoon(), ItemBlockForestry.class, "cocoon");
 	}
 }

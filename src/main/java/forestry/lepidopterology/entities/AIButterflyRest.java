@@ -44,14 +44,14 @@ public class AIButterflyRest extends AIButterflyBase {
 			return false;
 		}
 
-		y--;
+		pos = pos.add(x, -1, z);
 		if (entity.worldObj.isAirBlock(pos)) {
 			return false;
 		}
 		if (entity.worldObj.getBlockState(pos).getBlock().getMaterial().isLiquid()) {
 			return false;
 		}
-		if (!entity.getButterfly().isAcceptedEnvironment(entity.worldObj, x, y, z)) {
+		if (!entity.getButterfly().isAcceptedEnvironment(entity.worldObj, x, pos.getY(), z)) {
 			return false;
 		}
 

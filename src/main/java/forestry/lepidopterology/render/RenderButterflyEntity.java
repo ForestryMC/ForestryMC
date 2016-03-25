@@ -10,18 +10,19 @@
  ******************************************************************************/
 package forestry.lepidopterology.render;
 
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderLiving;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
-
+import net.minecraftforge.fml.client.registry.IRenderFactory;
 import forestry.lepidopterology.entities.EntityButterfly;
 
 public class RenderButterflyEntity extends RenderLiving<EntityButterfly> {
 
 	private final ModelButterfly butterflyModel;
 
-	public RenderButterflyEntity() {
-		super(Minecraft.getMinecraft().getRenderManager(), new ModelButterfly(), 0.25f);
+	public RenderButterflyEntity(RenderManager manager) {
+		super(manager, new ModelButterfly(), 0.25f);
 		butterflyModel = (ModelButterfly) mainModel;
 	}
 
@@ -49,4 +50,12 @@ public class RenderButterflyEntity extends RenderLiving<EntityButterfly> {
 		return entity.getWingFlap(partialTickTime);
 	}
 
+	public static class Factory implements IRenderFactory<EntityButterfly>{
+		@Override
+		public Render<? super EntityButterfly> createRenderFor(RenderManager manager) {
+			return new RenderButterflyEntity(manager);
+		}
+		
+	}
+	
 }

@@ -80,6 +80,7 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 
 	public int cooldownPollination = 0;
 	public int cooldownEgg = 0;
+	public int cooldownMate = 0;
 
 	// Client Rendering
 	private IAlleleButterflySpecies species;
@@ -449,6 +450,9 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 		if (cooldownPollination > 0) {
 			cooldownPollination--;
 		}
+		if (cooldownMate > 0) {
+			cooldownMate--;
+		}
 	}
 
 	@Override
@@ -514,5 +518,21 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 		IAllele[] template = root.getTemplate(species.getUID());
 		IButterfly butterfly = root.templateAsIndividual(template);
 		return root.getMemberStack(butterfly, EnumFlutterType.BUTTERFLY);
+	}
+
+	@Override
+	public boolean canMateWith(IEntityButterfly butterfly) {
+		if(butterfly == null || butterfly.getButterfly() == null || butterfly.getButterfly().getMate() != null){
+			return false;
+		}
+		if (getButterfly() == null || getButterfly().getMate() != null) {
+			return false;
+		}
+		return !getButterfly().isGeneticEqual(butterfly.getButterfly());
+	}
+
+	@Override
+	public boolean canMate() {
+		return cooldownMate <= 0;
 	}
 }

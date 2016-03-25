@@ -37,6 +37,7 @@ import forestry.api.lepidopterology.EnumButterflyChromosome;
 import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.api.lepidopterology.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.IAlleleButterflySpeciesBuilder;
+import forestry.api.lepidopterology.IButterflyCocoonProvider;
 import forestry.api.lepidopterology.IButterflyRoot;
 import forestry.core.config.Constants;
 import forestry.core.genetics.alleles.AlleleSpecies;
@@ -54,13 +55,16 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 
 	private final Map<ItemStack, Float> butterflyLoot = new HashMap<>();
 	private final Map<ItemStack, Float> caterpillarLoot = new HashMap<>();
+	
+	private final IButterflyCocoonProvider cocoonProvider;
 
-	public AlleleButterflySpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, String modID, String texturePath, boolean isDominant, IClassification branch, String binomial, Color serumColour) {
+	public AlleleButterflySpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, String modID, String texturePath, boolean isDominant, IClassification branch, String binomial, Color serumColour, IButterflyCocoonProvider cocoonProvider) {
 		super(uid, unlocalizedName, authority, unlocalizedDescription, isDominant, branch, binomial);
 		this.serumColour = serumColour;
 		
 		this.modID = modID;
 		this.texture = texturePath;
+		this.cocoonProvider = cocoonProvider;
 	}
 
 	@Override
@@ -109,9 +113,9 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 	
 	@Override
 	public String getItemTexture() {
-		return getModID() + ":" + "items/" + texture;
+		return getModID() + ":items/" + texture;
 	}
-
+	
 	@Override
 	public EnumSet<BiomeDictionary.Type> getSpawnBiomes() {
 		return spawnBiomes;
@@ -218,5 +222,10 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 	@Override
 	public String getModID() {
 		return modID;
+	}
+	
+	@Override
+	public IButterflyCocoonProvider getCocoonProvider() {
+		return cocoonProvider;
 	}
 }

@@ -26,4 +26,8 @@ public interface IEntityButterfly extends IAnimals {
 	ITree getPollen();
 
 	void setPollen(ITree pollen);
+	
+	boolean canMateWith(IEntityButterfly butterfly);
+	
+	boolean canMate();
 }

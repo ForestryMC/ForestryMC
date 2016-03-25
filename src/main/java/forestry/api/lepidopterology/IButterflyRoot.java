@@ -53,6 +53,8 @@ public interface IButterflyRoot extends ISpeciesRoot {
 	 * @return butterfly entity on success, null otherwise.
 	 */
 	EntityLiving spawnButterflyInWorld(World world, IButterfly butterfly, double x, double y, double z);
+	
+	boolean plantCocoon(World world, IButterflyNursery nursery, GameProfile owner);
 
 	/**
 	 * @return true if passed item is mated.

@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.lepidopterology.proxy;
 
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import forestry.core.models.ModelIndex;
 import forestry.core.models.ModelManager;
@@ -17,12 +18,15 @@ import forestry.core.proxy.Proxies;
 import forestry.lepidopterology.entities.EntityButterfly;
 import forestry.lepidopterology.render.ModelButterflyItem;
 import forestry.lepidopterology.render.RenderButterflyEntity;
+import forestry.lepidopterology.render.RendererCocoon;
+import forestry.lepidopterology.tiles.TileCocoon;
 
 public class ProxyLepidopterologyClient extends ProxyLepidopterology {
 
 	@Override
-	public void initializeRendering() {
-		RenderingRegistry.registerEntityRenderingHandler(EntityButterfly.class, new RenderButterflyEntity());
+	public void preInitializeRendering() {
+		RenderingRegistry.registerEntityRenderingHandler(EntityButterfly.class, new RenderButterflyEntity.Factory());
 		Proxies.render.registerModel(new ModelIndex(ModelManager.getInstance().getModelLocation("butterflyGE"), new ModelButterflyItem()));
+		ClientRegistry.bindTileEntitySpecialRenderer(TileCocoon.class, new RendererCocoon());
 	}
 }

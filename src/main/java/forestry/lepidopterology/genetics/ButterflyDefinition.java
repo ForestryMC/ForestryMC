@@ -26,6 +26,7 @@ import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.api.lepidopterology.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.IAlleleButterflySpeciesBuilder;
 import forestry.api.lepidopterology.IButterfly;
+import forestry.api.lepidopterology.IButterflyCocoonProvider;
 import forestry.api.lepidopterology.IButterflyGenome;
 import forestry.core.config.Constants;
 import forestry.core.genetics.alleles.AlleleHelper;
@@ -314,8 +315,9 @@ public enum ButterflyDefinition implements IButterflyDefinition {
 		String unlocalizedDescription = "for.description." + uid;
 
 		String texture = "butterflies/" + uid;
+		IButterflyCocoonProvider cocoonProvider = new DefaultCocoonProvider();
 
-		IAlleleButterflySpeciesBuilder speciesBuilder = ButterflyManager.butterflyFactory.createSpecies(Constants.MOD_ID + '.' + uid, unlocalizedName, "Sengir", unlocalizedDescription, Constants.RESOURCE_ID, texture, dominant, branchDefinition.getBranch(), binomial, serumColor);
+		IAlleleButterflySpeciesBuilder speciesBuilder = ButterflyManager.butterflyFactory.createSpecies(Constants.MOD_ID + '.' + uid, unlocalizedName, "Sengir", unlocalizedDescription, Constants.RESOURCE_ID, texture, dominant, branchDefinition.getBranch(), binomial, serumColor, cocoonProvider);
 		speciesBuilder.setRarity(rarity);
 		setSpeciesProperties(speciesBuilder);
 		this.species = speciesBuilder.build();

@@ -21,6 +21,7 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
@@ -51,6 +52,7 @@ import forestry.lepidopterology.items.ItemButterflyGE;
 import forestry.lepidopterology.items.ItemRegistryLepidopterology;
 import forestry.lepidopterology.proxy.ProxyLepidopterology;
 import forestry.lepidopterology.recipes.MatingRecipe;
+import forestry.lepidopterology.tiles.TileCocoon;
 import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
@@ -88,6 +90,9 @@ public class PluginLepidopterology extends BlankForestryPlugin {
 		
 		ButterflyBranchDefinition.createAlleles();
 		AlleleButterflyEffect.createAlleles();
+		
+		GameRegistry.registerTileEntity(TileCocoon.class, "forestry.Cocoon");
+		proxy.preInitializeRendering();
 
 		blocks.lepidopterology.addDefinitions(BlockTypeLepidopterologyTesr.VALUES);
 	}
@@ -108,7 +113,6 @@ public class PluginLepidopterology extends BlankForestryPlugin {
 		PluginCore.rootCommand.addChildCommand(new CommandButterfly());
 
 		EntityUtil.registerEntity(EntityButterfly.class, "butterflyGE", 0, 0x000000, 0xffffff, 50, 1, true);
-		proxy.initializeRendering();
 
 		MothDefinition.initMoths();
 		ButterflyDefinition.initButterflies();

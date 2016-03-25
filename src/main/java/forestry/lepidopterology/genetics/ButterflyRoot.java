@@ -16,9 +16,14 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map.Entry;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
@@ -36,12 +41,16 @@ import forestry.api.lepidopterology.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IButterflyGenome;
 import forestry.api.lepidopterology.IButterflyMutation;
+import forestry.api.lepidopterology.IButterflyNursery;
 import forestry.api.lepidopterology.IButterflyRoot;
 import forestry.api.lepidopterology.ILepidopteristTracker;
+import forestry.core.config.Constants;
 import forestry.core.genetics.SpeciesRoot;
+import forestry.core.utils.BlockUtil;
 import forestry.core.utils.EntityUtil;
 import forestry.lepidopterology.PluginLepidopterology;
 import forestry.lepidopterology.entities.EntityButterfly;
+import forestry.lepidopterology.tiles.TileCocoon;
 
 public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 
@@ -161,6 +170,52 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 	@Override
 	public EntityButterfly spawnButterflyInWorld(World world, IButterfly butterfly, double x, double y, double z) {
 		return EntityUtil.spawnEntity(world, new EntityButterfly(world, butterfly), x, y, z);
+	}
+	
+	@Override
+	public boolean plantCocoon(World world, IButterflyNursery nursery, GameProfile owner) {
+		BlockPos pos = getNextPos(world, nursery.getCoordinates());
+		IBlockState state = PluginLepidopterology.blocks.cocoon.getDefaultState();
+		boolean placed = world.setBlockState(pos, state, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
+		if (!placed) {
+			return false;
+		}
+
+		Block block = BlockUtil.getBlock(world, pos);
+		if (PluginLepidopterology.blocks.cocoon != block) {
+			return false;
+		}
+
+		TileEntity tile = world.getTileEntity(pos);
+		if (!(tile instanceof TileCocoon)) {
+			world.setBlockToAir(pos);
+			return false;
+		}
+
+		TileCocoon cocoon = (TileCocoon) tile;
+		cocoon.setCaterpillar(nursery.getCaterpillar());
+		cocoon.setOwner(owner);
+		cocoon.setNursery(nursery);
+
+		return true;
+	}
+	
+	private BlockPos getNextPos(World world, BlockPos pos){
+		int x = pos.getX();
+		int y = pos.getY();
+		int z = pos.getZ();
+		
+		do {
+			y--;
+		} while (!canReplace(world, new BlockPos(x, y, z)));
+
+		return new BlockPos(x, y, z);
+	}
+	
+	private boolean canReplace(World world, BlockPos pos) {
+		Block block = BlockUtil.getBlock(world, pos);
+		Material material = block.getMaterial();
+		return block.isReplaceable(world, pos) && !material.isLiquid() || block.isAir(world, pos) || material == Material.plants;
 	}
 
 	@Override

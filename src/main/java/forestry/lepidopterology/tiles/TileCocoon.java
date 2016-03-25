@@ -1,0 +1,220 @@
+/*******************************************************************************
+ * Copyright (c) 2011-2014 SirSengir.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the GNU Lesser Public License v3
+ * which accompanies this distribution, and is available at
+ * http://www.gnu.org/licenses/lgpl-3.0.txt
+ *
+ * Various Contributors including, but not limited to:
+ * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ ******************************************************************************/
+package forestry.lepidopterology.tiles;
+
+import java.io.IOException;
+
+import com.mojang.authlib.GameProfile;
+
+import forestry.api.genetics.IAllele;
+import forestry.api.lepidopterology.ButterflyManager;
+import forestry.api.lepidopterology.IButterfly;
+import forestry.api.lepidopterology.IButterflyCocoon;
+import forestry.api.lepidopterology.IButterflyGenome;
+import forestry.api.lepidopterology.IButterflyNursery;
+import forestry.core.access.IOwnable;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.IStreamable;
+import forestry.core.network.packets.PacketTileStream;
+import forestry.core.proxy.Proxies;
+import forestry.core.utils.Log;
+import forestry.core.utils.PlayerUtil;
+import forestry.lepidopterology.genetics.Butterfly;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.Packet;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.world.World;
+
+public class TileCocoon extends TileEntity implements IStreamable, IOwnable, IButterflyCocoon {
+
+	private int age;
+	private int maturationTime;
+	private IButterfly caterpillar;
+	private GameProfile owner;
+	private BlockPos nursery;
+
+	/* SAVING & LOADING */
+	@Override
+	public void readFromNBT(NBTTagCompound nbttagcompound) {
+		super.readFromNBT(nbttagcompound);
+
+		if (nbttagcompound.hasKey("Caterpillar")) {
+			caterpillar = new Butterfly(nbttagcompound.getCompoundTag("Caterpillar"));
+		}
+		if (nbttagcompound.hasKey("owner")) {
+			owner = PlayerUtil.readGameProfileFromNBT(nbttagcompound.getCompoundTag("owner"));
+		}
+		if(nbttagcompound.hasKey("nursery")){
+			NBTTagCompound nbt = nbttagcompound.getCompoundTag("nursery");
+			int x = nbt.getInteger("x");
+			int y = nbt.getInteger("y");
+			int z = nbt.getInteger("z");
+			nursery = new BlockPos(x, y, z);
+		}
+		age = nbttagcompound.getInteger("Age");
+		maturationTime = nbttagcompound.getInteger("CATMAT");
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound nbttagcompound) {
+		super.writeToNBT(nbttagcompound);
+
+		if (caterpillar != null) {
+			NBTTagCompound subcompound = new NBTTagCompound();
+			caterpillar.writeToNBT(subcompound);
+			nbttagcompound.setTag("Caterpillar", subcompound);
+		}
+		if (this.owner != null) {
+			NBTTagCompound nbt = new NBTTagCompound();
+			PlayerUtil.writeGameProfile(nbt, owner);
+			nbttagcompound.setTag("owner", nbt);
+		}
+		if(nursery != null){
+			BlockPos pos = nursery;
+			NBTTagCompound nbt = new NBTTagCompound();
+			nbt.setInteger("x", pos.getX());
+			nbt.setInteger("y", pos.getY());
+			nbt.setInteger("z", pos.getZ());
+			nbttagcompound.setTag("nursery", nbt);
+		}
+		nbttagcompound.setInteger("Age", age);
+		nbttagcompound.setInteger("CATMAT", maturationTime);
+	}
+
+	@Override
+	public void writeData(DataOutputStreamForestry data) throws IOException {
+		String speciesUID = "";
+		IButterfly caterpillar = getCaterpillar();
+		if (caterpillar != null) {
+			speciesUID = caterpillar.getIdent();
+		}
+		data.writeUTF(speciesUID);
+		data.writeInt(age);
+	}
+
+	@Override
+	public void readData(DataInputStreamForestry data) throws IOException {
+		String speciesUID = data.readUTF();
+		IButterfly caterpillar = getButterfly(speciesUID);
+		setCaterpillar(caterpillar);
+		age = data.readInt();
+	}
+
+	private static IButterfly getButterfly(String speciesUID) {
+		IAllele[] butterflyTemplate = ButterflyManager.butterflyRoot.getTemplate(speciesUID);
+		if (butterflyTemplate == null) {
+			return null;
+		}
+		return ButterflyManager.butterflyRoot.templateAsIndividual(butterflyTemplate);
+	}
+
+	/* IOwnable */
+	@Override
+	public GameProfile getOwner() {
+		return owner;
+	}
+
+	@Override
+	public void setOwner(GameProfile owner) {
+		this.owner = owner;
+	}
+
+	@Override
+	public boolean isOwned() {
+		return owner != null;
+	}
+
+	@Override
+	public boolean isOwner(EntityPlayer player) {
+		return player != null && PlayerUtil.isSameGameProfile(player.getGameProfile(), owner);
+	}
+
+	@Override
+	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate) {
+		return !Block.isEqualTo(oldState.getBlock(), newSate.getBlock());
+	}
+
+	/* INETWORKEDENTITY */
+	@Override
+	public Packet getDescriptionPacket() {
+		return new PacketTileStream(this).getPacket();
+	}
+	
+	public void onBlockTick() {
+		maturationTime++;
+
+		IButterflyGenome caterpillarGenome = caterpillar.getGenome();
+		int caterpillarMatureTime = Math.round((float) caterpillarGenome.getLifespan() / (caterpillarGenome.getFertility() * 2));
+
+		if (maturationTime >= caterpillarMatureTime) {
+			if(age < 2){
+				age++;
+				maturationTime = 0;
+			}else if(caterpillar.canTakeFlight(worldObj, getPos().getX(), getPos().getY(), getPos().getZ())){
+				worldObj.setBlockToAir(getPos());
+				if (worldObj.isAirBlock(getPos())) {
+					attemptButterflySpawn(worldObj, caterpillar, getPos());
+				}
+				return;
+			}
+		}
+	}
+	
+	private static void attemptButterflySpawn(World world, IButterfly butterfly, BlockPos pos) {
+		if (ButterflyManager.butterflyRoot.spawnButterflyInWorld(world, butterfly.copy(), pos.getX(), pos.getY() + 0.1f, pos.getZ()) != null) {
+			Log.trace("A caterpillar '%s' hatched at %s/%s/%s.", butterfly.getDisplayName(), pos.getX(), pos.getY(), pos.getZ());
+		}
+	}
+
+	@Override
+	public BlockPos getCoordinates() {
+		return getPos();
+	}
+
+	@Override
+	public IButterfly getCaterpillar() {
+		return caterpillar;
+	}
+
+	@Override
+	public IButterflyNursery getNursery() {
+		TileEntity nursery = worldObj.getTileEntity(this.nursery);
+		if(nursery instanceof IButterflyNursery){
+			return (IButterflyNursery) nursery;
+		}
+		return null;
+	}
+	
+	@Override
+	public void setNursery(IButterflyNursery nursery) {
+		this.nursery = nursery.getCoordinates();
+	}
+
+	@Override
+	public void setCaterpillar(IButterfly butterfly) {
+		this.caterpillar = butterfly;
+		sendNetworkUpdate();
+	}
+
+	private void sendNetworkUpdate() {
+		Proxies.net.sendNetworkPacket(new PacketTileStream(this), worldObj);
+	}
+	
+	public int getAge() {
+		return age;
+	}
+
+}

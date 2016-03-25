@@ -12,7 +12,6 @@ package forestry.lepidopterology.genetics;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-
 import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IAlleleFloat;
 import forestry.api.genetics.IAlleleFlowers;

@@ -22,8 +22,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
-import net.minecraft.world.World;
-
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -59,7 +57,6 @@ import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.ColourUtil;
 import forestry.core.utils.GeneticsUtil;
-import forestry.core.utils.Log;
 
 public class TileLeaves extends TileTreeContainer implements IPollinatable, IFruitBearer, IButterflyNursery, IRipeningPacketReceiver {
 
@@ -458,25 +455,11 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		IButterflyGenome caterpillarGenome = caterpillar.getGenome();
 		int caterpillarMatureTime = Math.round((float) caterpillarGenome.getLifespan() / (caterpillarGenome.getFertility() * 2));
 
-		if (maturationTime >= caterpillarMatureTime && caterpillar.canTakeFlight(worldObj, getPos().getX(), getPos().getY(), getPos().getZ())) {
-			if (worldObj.isAirBlock(getPos().add(-1, 0, 0))) {
-				attemptButterflySpawn(worldObj, caterpillar, getPos().add(-1, 0, 0));
-			} else if (worldObj.isAirBlock(getPos().add(1, 0, 0))) {
-				attemptButterflySpawn(worldObj, caterpillar, getPos().add(1, 0, 0));
-			} else if (worldObj.isAirBlock(getPos().add(0, 0, -1))) {
-				attemptButterflySpawn(worldObj, caterpillar, getPos().add(0, 0, -1));
-			} else if (worldObj.isAirBlock(getPos().add(0, 0, 1))) {
-				attemptButterflySpawn(worldObj, caterpillar, getPos().add(0, 0, 1));
-			}
+		if (maturationTime >= caterpillarMatureTime) {
+			ButterflyManager.butterflyRoot.plantCocoon(worldObj, this, getOwner());
 			setCaterpillar(null);
 		} else if (!wasDestroyed && isDestroyed(tree, damage)) {
 			sendNetworkUpdate();
-		}
-	}
-
-	private static void attemptButterflySpawn(World world, IButterfly butterfly, BlockPos pos) {
-		if (ButterflyManager.butterflyRoot.spawnButterflyInWorld(world, butterfly.copy(), pos.getX(), pos.getY() + 0.1f, pos.getZ()) != null) {
-			Log.trace("A caterpillar '%s' hatched at %s/%s/%s.", butterfly.getDisplayName(), pos.getX(), pos.getY(), pos.getZ());
 		}
 	}
 

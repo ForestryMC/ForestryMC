@@ -25,12 +25,13 @@ public interface IButterflyFactory {
 	 * @param authority Authority for the binomial name, e.g. "Sengir" on species of base Forestry.
 	 * @param unlocalizedDescription Unlocalized description for this species
 	 * @param modID The modID form the mod of the butterfly
-	 * @param texturePath String texture path for this butterfly e.g. "forestry:textures/entities/butterfly/..."
+	 * @param texturePath String texture path for this butterfly e.g. "forestry:butterfly/..."
 	 * @param dominant Whether this species is genetically dominant (false means it is recessive)
 	 * @param branch Classification of this species
 	 * @param binomial Binomial name of the species sans genus. "humboldti" will have the bee species flavour name be "Apis humboldti". Feel free to use fun names or null.
 	 * @param serumColour The color of this butterfly's serum.
+	 * @param cocoonProvider A IButterflyCocoonProvider for the butterfly
 	 * @return a new butterfly species allele.
 	 */
-	IAlleleButterflySpeciesBuilder createSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, String modID, String texturePath, boolean dominant, IClassification branch, String binomial, Color serumColour);
+	IAlleleButterflySpeciesBuilder createSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, String modID, String texturePath, boolean dominant, IClassification branch, String binomial, Color serumColour, IButterflyCocoonProvider cocoonProvider);
 }

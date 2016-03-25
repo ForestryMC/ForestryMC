@@ -8,10 +8,10 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.lepidopterology.proxy;
+package forestry.api.lepidopterology;
 
-public class ProxyLepidopterology {
+public interface IButterflyCocoonProvider {
+	
+	String getCocoonTexture(int age);
 
-	public void preInitializeRendering() {
-	}
 }

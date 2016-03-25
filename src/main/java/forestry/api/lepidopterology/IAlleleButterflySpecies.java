@@ -67,6 +67,11 @@ public interface IAlleleButterflySpecies extends IAlleleSpecies {
 	ISpriteProvider getSpriteProvider();
 	
 	/**
+	 * @return the IButterflyCocoonProvider
+	 */
+	IButterflyCocoonProvider getCocoonProvider();
+	
+	/**
 	 * @return The modid from the mod of the species.
 	 */
 	String getModID();
