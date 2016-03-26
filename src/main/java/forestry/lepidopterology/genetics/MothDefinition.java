@@ -15,8 +15,6 @@ import java.util.Arrays;
 import java.util.Locale;
 
 import net.minecraft.item.ItemStack;
-import forestry.api.core.EnumHumidity;
-import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IClassification;
 import forestry.api.lepidopterology.ButterflyManager;
@@ -29,7 +27,6 @@ import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IButterflyCocoonProvider;
 import forestry.api.lepidopterology.IButterflyGenome;
 import forestry.api.lepidopterology.IButterflyMutationCustom;
-import forestry.apiculture.genetics.BeeDefinition;
 import forestry.core.config.Constants;
 import forestry.core.genetics.alleles.AlleleHelper;
 import forestry.core.genetics.alleles.EnumAllele;

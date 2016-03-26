@@ -16,7 +16,6 @@ import forestry.api.lepidopterology.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.core.proxy.Proxies;
 import forestry.lepidopterology.blocks.BlockCocoon;
-import forestry.lepidopterology.genetics.ButterflyDefinition;
 import forestry.lepidopterology.genetics.MothDefinition;
 import forestry.lepidopterology.tiles.TileCocoon;
 import net.minecraft.block.state.IBlockState;
