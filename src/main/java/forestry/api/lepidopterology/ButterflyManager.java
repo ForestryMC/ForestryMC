@@ -11,11 +11,19 @@
 package forestry.api.lepidopterology;
 
 public class ButterflyManager {
-
+	
+	/**
+	 * Convenient access to AlleleManager.alleleRegistry.getSpeciesRoot("rootButterflies")
+	 */
 	public static IButterflyRoot butterflyRoot;
 
 	/**
 	 * Used to create new butterflies.
 	 */
 	public static IButterflyFactory butterflyFactory;
+	
+	/**
+	 * Used to create new butterfly mutations.
+	 */
+	public static IButterflyMutationFactory butterflyMutationFactory;
 }

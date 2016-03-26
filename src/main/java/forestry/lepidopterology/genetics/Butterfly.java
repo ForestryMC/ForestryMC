@@ -188,7 +188,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 	}
 
 	@Override
-	public IButterfly spawnCaterpillar(IButterflyNursery nursery) {
+	public IButterfly spawnCaterpillar(World world, IButterflyNursery nursery) {
 		// We need a mated queen to produce offspring.
 		if (mate == null) {
 			return null;
@@ -200,11 +200,11 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 
 		// Check for mutation. Replace one of the parents with the mutation
 		// template if mutation occured.
-		IChromosome[] mutated1 = mutateSpecies(nursery, genome, mate);
+		IChromosome[] mutated1 = mutateSpecies(world, nursery, genome, mate);
 		if (mutated1 != null) {
 			parent1 = mutated1;
 		}
-		IChromosome[] mutated2 = mutateSpecies(nursery, mate, genome);
+		IChromosome[] mutated2 = mutateSpecies(world, nursery, mate, genome);
 		if (mutated2 != null) {
 			parent2 = mutated2;
 		}
@@ -218,7 +218,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 		return new Butterfly(new ButterflyGenome(chromosomes));
 	}
 
-	private static IChromosome[] mutateSpecies(IButterflyNursery nursery, IGenome genomeOne, IGenome genomeTwo) {
+	private static IChromosome[] mutateSpecies(World world, IButterflyNursery nursery, IGenome genomeOne, IGenome genomeTwo) {
 
 		IChromosome[] parent1 = genomeOne.getChromosomes();
 		IChromosome[] parent2 = genomeTwo.getChromosomes();
@@ -243,7 +243,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 		}
 
 		for (IButterflyMutation mutation : ButterflyManager.butterflyRoot.getMutations(true)) {
-			float chance = mutation.getChance(nursery, allele0, allele1, genome0, genome1);
+			float chance = mutation.getChance(world, nursery, allele0, allele1, genome0, genome1);
 			if (chance > rand.nextFloat() * 100) {
 				return ButterflyManager.butterflyRoot.templateAsChromosomes(mutation.getTemplate());
 			}

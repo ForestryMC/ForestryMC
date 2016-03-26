@@ -56,7 +56,11 @@ public interface IButterfly extends IIndividualLiving {
 	 */
 	boolean isAcceptedEnvironment(World world, double x, double y, double z);
 
-	IButterfly spawnCaterpillar(IButterflyNursery nursery);
+	/**
+	 * @param world
+	 * @return create a caterpillar with the two genome's from the nursery.
+	 */
+	IButterfly spawnCaterpillar(World world, IButterflyNursery nursery);
 	
 	/**
 	 * @param entity
