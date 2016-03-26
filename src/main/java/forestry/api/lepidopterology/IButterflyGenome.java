@@ -40,5 +40,7 @@ public interface IButterflyGenome extends IGenome {
 	IFlowerProvider getFlowerProvider();
 
 	IAlleleButterflyEffect getEffect();
+	
+	IAlleleButterflyCocoon getCocoon();
 
 }

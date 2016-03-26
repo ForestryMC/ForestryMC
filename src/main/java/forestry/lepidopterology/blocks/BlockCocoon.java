@@ -107,9 +107,6 @@ public class BlockCocoon extends Block implements ITileEntityProvider, IStateMap
     
     @Override
     public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list) {
-    	super.getSubBlocks(itemIn, tab, list);
-    	list.add(new ItemStack(itemIn, 1, 1));
-    	list.add(new ItemStack(itemIn, 1, 2));
     }
     
     @Override

@@ -14,13 +14,12 @@ import java.awt.Color;
 
 import forestry.api.genetics.IClassification;
 import forestry.api.lepidopterology.IAlleleButterflySpeciesBuilder;
-import forestry.api.lepidopterology.IButterflyCocoonProvider;
 import forestry.api.lepidopterology.IButterflyFactory;
 import forestry.lepidopterology.genetics.alleles.AlleleButterflySpecies;
 
 public class ButterflyFactory implements IButterflyFactory {
 	@Override
-	public IAlleleButterflySpeciesBuilder createSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, String modID, String texturePath, boolean isDominant, IClassification branch, String binomial, Color serumColour, IButterflyCocoonProvider cocoonProvider) {
-		return new AlleleButterflySpecies(uid, unlocalizedName, authority, unlocalizedDescription, modID, texturePath, isDominant, branch, binomial, serumColour, cocoonProvider);
+	public IAlleleButterflySpeciesBuilder createSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, String modID, String texturePath, boolean isDominant, IClassification branch, String binomial, Color serumColour) {
+		return new AlleleButterflySpecies(uid, unlocalizedName, authority, unlocalizedDescription, modID, texturePath, isDominant, branch, binomial, serumColour);
 	}
 }

@@ -30,8 +30,7 @@ public interface IButterflyFactory {
 	 * @param branch Classification of this species
 	 * @param binomial Binomial name of the species sans genus. "humboldti" will have the bee species flavour name be "Apis humboldti". Feel free to use fun names or null.
 	 * @param serumColour The color of this butterfly's serum.
-	 * @param cocoonProvider A IButterflyCocoonProvider for the butterfly
 	 * @return a new butterfly species allele.
 	 */
-	IAlleleButterflySpeciesBuilder createSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, String modID, String texturePath, boolean dominant, IClassification branch, String binomial, Color serumColour, IButterflyCocoonProvider cocoonProvider);
+	IAlleleButterflySpeciesBuilder createSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, String modID, String texturePath, boolean dominant, IClassification branch, String binomial, Color serumColour);
 }

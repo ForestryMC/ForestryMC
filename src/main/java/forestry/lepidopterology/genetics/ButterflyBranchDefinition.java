@@ -20,6 +20,7 @@ import forestry.api.lepidopterology.EnumButterflyChromosome;
 import forestry.core.genetics.IBranchDefinition;
 import forestry.core.genetics.alleles.AlleleHelper;
 import forestry.core.genetics.alleles.EnumAllele;
+import forestry.lepidopterology.genetics.alleles.AlleleButterflyCocoon;
 import forestry.lepidopterology.genetics.alleles.AlleleButterflyEffect;
 
 public enum ButterflyBranchDefinition implements IBranchDefinition {
@@ -74,6 +75,7 @@ public enum ButterflyBranchDefinition implements IBranchDefinition {
 			AlleleHelper.instance.set(defaultTemplate, EnumButterflyChromosome.FIRE_RESIST, false);
 			AlleleHelper.instance.set(defaultTemplate, EnumButterflyChromosome.FLOWER_PROVIDER, EnumAllele.Flowers.VANILLA);
 			AlleleHelper.instance.set(defaultTemplate, EnumButterflyChromosome.EFFECT, AlleleButterflyEffect.butterflyNone);
+			AlleleHelper.instance.set(defaultTemplate, EnumButterflyChromosome.COCOON, AlleleButterflyCocoon.cocoonDefault);
 		}
 		return Arrays.copyOf(defaultTemplate, defaultTemplate.length);
 	}

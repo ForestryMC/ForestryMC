@@ -10,8 +10,12 @@
  ******************************************************************************/
 package forestry.api.lepidopterology;
 
-public interface IButterflyCocoonProvider {
+import forestry.api.genetics.IAllele;
+
+public interface IAlleleButterflyCocoon extends IAllele {
+
+	EnumCocoonType getCocoonType();
 	
 	String getCocoonTexture(int age);
-
+	
 }

@@ -42,14 +42,14 @@ public class ButterflySpawner implements ILeafTickHandler {
 			return false;
 		}
 		
-		if (world.isAirBlock(pos.add(-1, 0, 0))) {
-			attemptButterflySpawn(world, spawn, pos.add(-1, 0, 0));
-		} else if (world.isAirBlock(pos.add(1, 0, 0))) {
-			attemptButterflySpawn(world, spawn, pos.add(1, 0, 0));
-		} else if (world.isAirBlock(pos.add(0, 0, -1))) {
-			attemptButterflySpawn(world, spawn, pos.add(0, 0, -1));
-		} else if (world.isAirBlock(pos.add(0, 0, 1))) {
-			attemptButterflySpawn(world, spawn, pos.add(0, 0, 1));
+		if (world.isAirBlock(pos.north())) {
+			attemptButterflySpawn(world, spawn, pos.north());
+		} else if (world.isAirBlock(pos.south())) {
+			attemptButterflySpawn(world, spawn, pos.south());
+		} else if (world.isAirBlock(pos.west())) {
+			attemptButterflySpawn(world, spawn, pos.west());
+		} else if (world.isAirBlock(pos.east())) {
+			attemptButterflySpawn(world, spawn, pos.east());
 		}
 		
 		return false;

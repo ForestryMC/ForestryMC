@@ -48,6 +48,7 @@ import forestry.lepidopterology.genetics.ButterflyFactory;
 import forestry.lepidopterology.genetics.ButterflyMutationFactory;
 import forestry.lepidopterology.genetics.ButterflyRoot;
 import forestry.lepidopterology.genetics.MothDefinition;
+import forestry.lepidopterology.genetics.alleles.AlleleButterflyCocoon;
 import forestry.lepidopterology.genetics.alleles.AlleleButterflyEffect;
 import forestry.lepidopterology.items.ItemButterflyGE;
 import forestry.lepidopterology.items.ItemRegistryLepidopterology;
@@ -78,6 +79,8 @@ public class PluginLepidopterology extends BlankForestryPlugin {
 
 		ButterflyManager.butterflyFactory = new ButterflyFactory();
 		ButterflyManager.butterflyMutationFactory = new ButterflyMutationFactory();
+		
+		AlleleButterflyCocoon.createAlleles();
 	}
 
 	@Override

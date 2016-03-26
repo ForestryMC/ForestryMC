@@ -22,6 +22,7 @@ import forestry.api.genetics.IFlowerProvider;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.EnumButterflyChromosome;
+import forestry.api.lepidopterology.IAlleleButterflyCocoon;
 import forestry.api.lepidopterology.IAlleleButterflyEffect;
 import forestry.api.lepidopterology.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.IButterflyGenome;
@@ -123,6 +124,11 @@ public class ButterflyGenome extends Genome implements IButterflyGenome {
 	@Override
 	public IAlleleButterflyEffect getEffect() {
 		return (IAlleleButterflyEffect) getActiveAllele(EnumButterflyChromosome.EFFECT);
+	}
+	
+	@Override
+	public IAlleleButterflyCocoon getCocoon() {
+		return (IAlleleButterflyCocoon) getActiveAllele(EnumButterflyChromosome.COCOON);
 	}
 
 	@Override

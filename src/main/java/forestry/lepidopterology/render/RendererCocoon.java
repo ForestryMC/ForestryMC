@@ -49,7 +49,7 @@ public class RendererCocoon extends TileEntitySpecialRenderer<TileCocoon> {
 		GL11.glTranslated((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
 		GL11.glRotated(180, 0F, 0F, 1F);
 		GL11.glRotatef(180.0F, 0.0F, 1.0F, 0.0F);
-		Proxies.render.bindTexture(new ResourceLocation(species.getModID(), species.getCocoonProvider().getCocoonTexture(age)));
+		Proxies.render.bindTexture(new ResourceLocation(species.getModID(), butterfly.getGenome().getCocoon().getCocoonTexture(age)));
 		modelCocoon.renderCucoon(age);
 		GL11.glPopMatrix();
 	}
