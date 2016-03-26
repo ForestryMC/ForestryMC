@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.worldgen;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
