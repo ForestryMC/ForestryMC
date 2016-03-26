@@ -38,13 +38,13 @@ public class HiveGenGround extends HiveGen {
 
 	@Override
 	public int getYForHive(World world, int x, int z) {
-		int y = world.getHeight(new BlockPos(x, 0, z)).getY();
 
 		// get to the ground
-		while (y >= 0 && (world.getBlockState(new BlockPos(x, y - 1, z)).getBlock().isLeaves(world, new BlockPos(x, y - 1, z)) || canReplace(world, new BlockPos(x, y - 1, z)))) {
-			y--;
+		BlockPos pos = world.getHeight(new BlockPos(x, 0, z));
+		while (pos.getY() >= 0 && (world.getBlockState(pos).getBlock().isLeaves(world, pos) || canReplace(world, pos))) {
+			pos = pos.add(0, -1, 0);
 		}
 
-		return y;
+		return pos.getY();
 	}
 }

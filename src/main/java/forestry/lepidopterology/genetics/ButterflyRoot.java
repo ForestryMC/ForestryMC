@@ -207,15 +207,9 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 		
 		do {
 			y--;
-		} while (!canReplace(world, new BlockPos(x, y, z)));
+		} while (!BlockUtil.canReplace(world, new BlockPos(x, y, z)));
 
 		return new BlockPos(x, y, z);
-	}
-	
-	private boolean canReplace(World world, BlockPos pos) {
-		Block block = BlockUtil.getBlock(world, pos);
-		Material material = block.getMaterial();
-		return block.isReplaceable(world, pos) && !material.isLiquid() || block.isAir(world, pos) || material == Material.plants;
 	}
 
 	@Override

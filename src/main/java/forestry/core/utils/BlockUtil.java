@@ -17,6 +17,7 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.BlockPlanks;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -289,5 +290,44 @@ public abstract class BlockUtil {
 		} else {
 			return false;
 		}
+	}
+	
+	public static boolean canReplace(World world, BlockPos pos) {
+		Block block = getBlock(world, pos);
+		Material material = block.getMaterial();
+		return material.isReplaceable() && block.isReplaceable(world, pos) && !material.isLiquid() || block.isAir(world, pos) || material == Material.plants;
+	}
+	
+	public static boolean canPlaceTree(World world, BlockPos pos){
+		BlockPos downPos = pos.down();
+		Block block = world.getBlockState(downPos).getBlock();
+		if(block.isReplaceable(world, downPos) && block.getMaterial().isLiquid() || block.isLeaves(world, downPos) || block.isWood(world, downPos)){
+			return false;
+		}
+		return true;
+	}
+	
+	public static BlockPos getNextReplaceableUpPos(World world, BlockPos pos){
+		int x = pos.getX();
+		int y = pos.getY();
+		int z = pos.getZ();
+		
+		do {
+			y++;
+		} while (!BlockUtil.canReplace(world, new BlockPos(x, y, z)));
+
+		return new BlockPos(x, y, z);
+	}
+	
+	public static BlockPos getNextSolidDownPos(World world, BlockPos pos){
+		int x = pos.getX();
+		int y = pos.getY();
+		int z = pos.getZ();
+		
+		do {
+			y--;
+		} while (BlockUtil.canReplace(world, new BlockPos(x, y - 1, z)));
+		
+		return new BlockPos(x, y, z);
 	}
 }
