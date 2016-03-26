@@ -17,6 +17,7 @@ import forestry.api.lepidopterology.IButterfly;
 import forestry.core.proxy.Proxies;
 import forestry.lepidopterology.blocks.BlockCocoon;
 import forestry.lepidopterology.genetics.ButterflyDefinition;
+import forestry.lepidopterology.genetics.MothDefinition;
 import forestry.lepidopterology.tiles.TileCocoon;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -38,7 +39,7 @@ public class RendererCocoon extends TileEntitySpecialRenderer<TileCocoon> {
 		}
 		IButterfly butterfly = te.getCaterpillar();
 		if(butterfly == null){
-			butterfly = ButterflyDefinition.Brimstone.getIndividual();
+			butterfly = MothDefinition.BombyxMori.getIndividual();
 		}
 		render(butterfly, te.getAge(), x, y, z);
 	}

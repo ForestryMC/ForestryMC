@@ -122,5 +122,12 @@ public class BlockCocoon extends Block implements ITileEntityProvider, IStateMap
     public void registerStateMapper() {
     	Proxies.render.registerStateMapper(this, EmptyStateMapper.instance);
     }
-
+    
+    @Override
+    public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock) {
+    	IBlockState stateUp = worldIn.getBlockState(pos.up());
+    	if(stateUp.getBlock().isAir(worldIn, pos.up())){
+    		worldIn.setBlockToAir(pos);
+    	}
+    }
 }

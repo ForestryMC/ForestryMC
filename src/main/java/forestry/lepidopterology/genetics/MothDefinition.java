@@ -15,33 +15,50 @@ import java.util.Arrays;
 import java.util.Locale;
 
 import net.minecraft.item.ItemStack;
-
+import forestry.api.core.EnumHumidity;
+import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IClassification;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.EnumButterflyChromosome;
+import forestry.api.lepidopterology.EnumCocoonType;
 import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.api.lepidopterology.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.IAlleleButterflySpeciesBuilder;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IButterflyCocoonProvider;
 import forestry.api.lepidopterology.IButterflyGenome;
+import forestry.api.lepidopterology.IButterflyMutationCustom;
+import forestry.apiculture.genetics.BeeDefinition;
 import forestry.core.config.Constants;
 import forestry.core.genetics.alleles.AlleleHelper;
 import forestry.core.genetics.alleles.EnumAllele;
 
 public enum MothDefinition implements IButterflyDefinition {
-	Brimstone(ButterflyBranchDefinition.Opisthograptis, "brimstone", "luteolata", new Color(0xffea40), true, 1.0f),
-	LatticedHeath(ButterflyBranchDefinition.Chiasmia, "latticeHeath", "clathrata", new Color(0xf2f0be), true, 0.5f) {
+	Brimstone(ButterflyBranchDefinition.Opisthograptis, "brimstone", "luteolata", new Color(0xffea40), true, 1.0f, EnumCocoonType.DEFAULT),
+	LatticedHeath(ButterflyBranchDefinition.Chiasmia, "latticeHeath", "clathrata", new Color(0xf2f0be), true, 0.5f, EnumCocoonType.DEFAULT) {
 		@Override
 		protected void setAlleles(IAllele[] alleles) {
 			AlleleHelper.instance.set(alleles, EnumButterflyChromosome.SIZE, EnumAllele.Size.SMALLEST);
 		}
 	},
-	Atlas(ButterflyBranchDefinition.Attacus, "atlas", "atlas", new Color(0xd96e3d), false, 0.1f) {
+	Atlas(ButterflyBranchDefinition.Attacus, "atlas", "atlas", new Color(0xd96e3d), false, 0.1f, EnumCocoonType.DEFAULT) {
 		@Override
 		protected void setAlleles(IAllele[] alleles) {
 			AlleleHelper.instance.set(alleles, EnumButterflyChromosome.SIZE, EnumAllele.Size.LARGEST);
+		}
+	},
+	BombyxMori(ButterflyBranchDefinition.Bombyx, "bombyxMori", "bombyxMori", new Color(0xDADADA), false, 0.05f, EnumCocoonType.SILK){
+		
+		@Override
+		protected void setSpeciesProperties(IAlleleButterflySpeciesBuilder species) {
+		}
+		
+		@Override
+		protected void setAlleles(IAllele[] alleles) {
+			AlleleHelper.instance.set(alleles, EnumButterflyChromosome.SIZE, EnumAllele.Size.SMALLEST);
+			AlleleHelper.instance.set(alleles, EnumButterflyChromosome.SPEED, EnumAllele.Speed.SLOWER);
+			AlleleHelper.instance.set(alleles, EnumButterflyChromosome.METABOLISM, 4);
 		}
 	};
 
@@ -50,7 +67,7 @@ public enum MothDefinition implements IButterflyDefinition {
 	private IAllele[] template;
 	private IButterflyGenome genome;
 
-	MothDefinition(ButterflyBranchDefinition branchDefinition, String speciesName, String binomial, Color serumColor, boolean dominant, float rarity) {
+	MothDefinition(ButterflyBranchDefinition branchDefinition, String speciesName, String binomial, Color serumColor, boolean dominant, float rarity, EnumCocoonType cocoonType) {
 		branch = branchDefinition;
 
 		String uid = "moth" + name();
@@ -60,7 +77,7 @@ public enum MothDefinition implements IButterflyDefinition {
 
 		String texture = "butterflies/" + uid;
 		
-		IButterflyCocoonProvider cocoonProvider = new DefaultCocoonProvider();
+		IButterflyCocoonProvider cocoonProvider = new DefaultCocoonProvider(cocoonType.name().toLowerCase(Locale.ENGLISH));
 
 		IAlleleButterflySpeciesBuilder speciesBuilder = ButterflyManager.butterflyFactory.createSpecies("forestry." + uid, unlocalizedName, "Sengir", unlocalizedDescription, Constants.RESOURCE_ID, texture, dominant, branchDefinition.getBranch(), binomial, serumColor, cocoonProvider);
 		speciesBuilder.setRarity(rarity);
@@ -72,6 +89,9 @@ public enum MothDefinition implements IButterflyDefinition {
 	public static void initMoths() {
 		for (MothDefinition butterfly : values()) {
 			butterfly.init();
+		}
+		for (MothDefinition butterfly : values()) {
+			butterfly.registerMutations();
 		}
 	}
 
@@ -91,6 +111,14 @@ public enum MothDefinition implements IButterflyDefinition {
 
 	protected void setAlleles(IAllele[] alleles) {
 
+	}
+	
+	protected void registerMutations(){
+		
+	}
+	
+	protected final IButterflyMutationCustom registerMutation(MothDefinition parent1, MothDefinition parent2, int chance) {
+		return ButterflyManager.butterflyMutationFactory.createMutation(parent1.species, parent2.species, getTemplate(), chance);
 	}
 
 	@Override

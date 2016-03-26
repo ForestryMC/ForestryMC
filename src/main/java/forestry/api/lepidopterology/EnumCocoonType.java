@@ -8,21 +8,10 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.lepidopterology.genetics;
+package forestry.api.lepidopterology;
 
-import forestry.api.lepidopterology.IButterflyCocoonProvider;
+public enum EnumCocoonType {
+	
+	DEFAULT, SILK
 
-public class DefaultCocoonProvider implements IButterflyCocoonProvider {
-
-	private String cocoonType;
-	
-	public DefaultCocoonProvider(String cocoonType) {
-		this.cocoonType = cocoonType;
-	}
-	
-	@Override
-	public String getCocoonTexture(int age) {
-		return "textures/blocks/lepidopterology/cocoons/" + cocoonType + "_" + age + ".png";
-	}
-	
 }

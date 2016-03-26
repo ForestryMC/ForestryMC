@@ -15,70 +15,74 @@ import java.util.Arrays;
 import java.util.Locale;
 
 import net.minecraft.item.ItemStack;
-
+import forestry.api.apiculture.BeeManager;
+import forestry.api.apiculture.IBeeMutationCustom;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IClassification;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.EnumButterflyChromosome;
+import forestry.api.lepidopterology.EnumCocoonType;
 import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.api.lepidopterology.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.IAlleleButterflySpeciesBuilder;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IButterflyCocoonProvider;
 import forestry.api.lepidopterology.IButterflyGenome;
+import forestry.api.lepidopterology.IButterflyMutationCustom;
+import forestry.apiculture.genetics.BeeDefinition;
 import forestry.core.config.Constants;
 import forestry.core.genetics.alleles.AlleleHelper;
 import forestry.core.genetics.alleles.EnumAllele;
 
 public enum ButterflyDefinition implements IButterflyDefinition {
-	CabbageWhite(ButterflyBranchDefinition.Pieris, "cabbageWhite", "rapae", new Color(0xccffee), true, 1.0f) {
+	CabbageWhite(ButterflyBranchDefinition.Pieris, "cabbageWhite", "rapae", new Color(0xccffee), true, 1.0f, EnumCocoonType.DEFAULT) {
 		@Override
 		protected void setAlleles(IAllele[] alleles) {
 			AlleleHelper.instance.set(alleles, EnumButterflyChromosome.SIZE, EnumAllele.Size.AVERAGE);
 		}
 	},
-	Brimstone(ButterflyBranchDefinition.Gonepteryx, "brimstone", "rhamni", new Color(0xf0ee38), true, 1.0f),
-	Aurora(ButterflyBranchDefinition.Anthocharis, "orangeTip", "cardamines", new Color(0xe34f05), true, 0.5f) {
+	Brimstone(ButterflyBranchDefinition.Gonepteryx, "brimstone", "rhamni", new Color(0xf0ee38), true, 1.0f, EnumCocoonType.DEFAULT),
+	Aurora(ButterflyBranchDefinition.Anthocharis, "orangeTip", "cardamines", new Color(0xe34f05), true, 0.5f, EnumCocoonType.DEFAULT) {
 		@Override
 		protected void setAlleles(IAllele[] alleles) {
 			AlleleHelper.instance.set(alleles, EnumButterflyChromosome.SIZE, EnumAllele.Size.SMALLER);
 		}
 	},
-	Postillion(ButterflyBranchDefinition.Colias, "postillion", "croceus", new Color(0xd77e04), true, 0.5f) {
+	Postillion(ButterflyBranchDefinition.Colias, "postillion", "croceus", new Color(0xd77e04), true, 0.5f, EnumCocoonType.DEFAULT) {
 		@Override
 		protected void setAlleles(IAllele[] alleles) {
 			AlleleHelper.instance.set(alleles, EnumButterflyChromosome.SPEED, EnumAllele.Speed.SLOW);
 		}
 	},
-	PalaenoSulphur(ButterflyBranchDefinition.Colias, "palaenoSulphur", "palaeno", new Color(0xf8fba3), true, 0.4f) {
+	PalaenoSulphur(ButterflyBranchDefinition.Colias, "palaenoSulphur", "palaeno", new Color(0xf8fba3), true, 0.4f, EnumCocoonType.DEFAULT) {
 		@Override
 		protected void setAlleles(IAllele[] alleles) {
 			AlleleHelper.instance.set(alleles, EnumButterflyChromosome.SPEED, EnumAllele.Speed.SLOWER);
 		}
 	},
-	Reseda(ButterflyBranchDefinition.Pontia, "reseda", "edusa", new Color(0x747d48), true, 0.3f) {
+	Reseda(ButterflyBranchDefinition.Pontia, "reseda", "edusa", new Color(0x747d48), true, 0.3f, EnumCocoonType.DEFAULT) {
 		@Override
 		protected void setAlleles(IAllele[] alleles) {
 			AlleleHelper.instance.set(alleles, EnumButterflyChromosome.SPEED, EnumAllele.Speed.SLOWER);
 		}
 	},
-	SpringAzure(ButterflyBranchDefinition.Celastrina, "springAzure", "argiolus", new Color(0xb8cae2), true, 0.3f) {
+	SpringAzure(ButterflyBranchDefinition.Celastrina, "springAzure", "argiolus", new Color(0xb8cae2), true, 0.3f, EnumCocoonType.DEFAULT) {
 		@Override
 		protected void setAlleles(IAllele[] alleles) {
 			AlleleHelper.instance.set(alleles, EnumButterflyChromosome.SIZE, EnumAllele.Size.SMALLER);
 			AlleleHelper.instance.set(alleles, EnumButterflyChromosome.LIFESPAN, EnumAllele.Lifespan.SHORT);
 		}
 	},
-	GozoraAzure(ButterflyBranchDefinition.Celastrina, "gozoraAzure", "gozora", new Color(0x6870e7), true, 0.2f) {
+	GozoraAzure(ButterflyBranchDefinition.Celastrina, "gozoraAzure", "gozora", new Color(0x6870e7), true, 0.2f, EnumCocoonType.DEFAULT) {
 		@Override
 		protected void setAlleles(IAllele[] alleles) {
 			AlleleHelper.instance.set(alleles, EnumButterflyChromosome.SIZE, EnumAllele.Size.SMALLER);
 			AlleleHelper.instance.set(alleles, EnumButterflyChromosome.LIFESPAN, EnumAllele.Lifespan.SHORT);
 		}
 	},
-	CitrusSwallow(ButterflyBranchDefinition.Papilio, "swallowtailC", "demodocus", new Color(0xeae389), false, 1.0f) {
+	CitrusSwallow(ButterflyBranchDefinition.Papilio, "swallowtailC", "demodocus", new Color(0xeae389), false, 1.0f, EnumCocoonType.DEFAULT) {
 		@Override
 		protected void setSpeciesProperties(IAlleleButterflySpeciesBuilder species) {
 			species.setTemperature(EnumTemperature.WARM)
@@ -96,7 +100,7 @@ public enum ButterflyDefinition implements IButterflyDefinition {
 			AlleleHelper.instance.set(alleles, EnumButterflyChromosome.HUMIDITY_TOLERANCE, EnumAllele.Tolerance.DOWN_1);
 		}
 	},
-	EmeraldPeacock(ButterflyBranchDefinition.Papilio, "emeraldPeacock", "palinurus", new Color(0x7cfe80), true, 0.1f) {
+	EmeraldPeacock(ButterflyBranchDefinition.Papilio, "emeraldPeacock", "palinurus", new Color(0x7cfe80), true, 0.1f, EnumCocoonType.DEFAULT) {
 		@Override
 		protected void setSpeciesProperties(IAlleleButterflySpeciesBuilder species) {
 			species.setTemperature(EnumTemperature.WARM)
@@ -112,7 +116,7 @@ public enum ButterflyDefinition implements IButterflyDefinition {
 			AlleleHelper.instance.set(alleles, EnumButterflyChromosome.HUMIDITY_TOLERANCE, EnumAllele.Tolerance.DOWN_1);
 		}
 	},
-	ThoasSwallow(ButterflyBranchDefinition.Papilio, "swallowtailT", "thoas", new Color(0xeac783), false, 0.2f) {
+	ThoasSwallow(ButterflyBranchDefinition.Papilio, "swallowtailT", "thoas", new Color(0xeac783), false, 0.2f, EnumCocoonType.DEFAULT) {
 		@Override
 		protected void setSpeciesProperties(IAlleleButterflySpeciesBuilder species) {
 			species.setTemperature(EnumTemperature.WARM)
@@ -126,13 +130,13 @@ public enum ButterflyDefinition implements IButterflyDefinition {
 			AlleleHelper.instance.set(alleles, EnumButterflyChromosome.LIFESPAN, EnumAllele.Lifespan.SHORTEST);
 		}
 	},
-	Spicebush(ButterflyBranchDefinition.Papilio, "swallowtailS", "troilus", new Color(0xeefeff), true, 0.5f) {
+	Spicebush(ButterflyBranchDefinition.Papilio, "swallowtailS", "troilus", new Color(0xeefeff), true, 0.5f, EnumCocoonType.DEFAULT) {
 		@Override
 		protected void setAlleles(IAllele[] alleles) {
 			AlleleHelper.instance.set(alleles, EnumButterflyChromosome.SIZE, EnumAllele.Size.AVERAGE);
 		}
 	},
-	BlackSwallow(ButterflyBranchDefinition.Papilio, "swallowtailB", "polyxenes", new Color(0xeac783), true, 1.0f) {
+	BlackSwallow(ButterflyBranchDefinition.Papilio, "swallowtailB", "polyxenes", new Color(0xeac783), true, 1.0f, EnumCocoonType.DEFAULT) {
 		@Override
 		protected void setAlleles(IAllele[] alleles) {
 			AlleleHelper.instance.set(alleles, EnumButterflyChromosome.SPEED, EnumAllele.Speed.SLOW);
@@ -142,14 +146,14 @@ public enum ButterflyDefinition implements IButterflyDefinition {
 			AlleleHelper.instance.set(alleles, EnumButterflyChromosome.HUMIDITY_TOLERANCE, EnumAllele.Tolerance.DOWN_1);
 		}
 	},
-	ZebraSwallow(ButterflyBranchDefinition.Protographium, "swallowtailZ", "marcellus", new Color(0xeafeff), true, 0.5f) {
+	ZebraSwallow(ButterflyBranchDefinition.Protographium, "swallowtailZ", "marcellus", new Color(0xeafeff), true, 0.5f, EnumCocoonType.DEFAULT) {
 		@Override
 		protected void setAlleles(IAllele[] alleles) {
 			AlleleHelper.instance.set(alleles, EnumButterflyChromosome.SPEED, EnumAllele.Speed.SLOWER);
 			AlleleHelper.instance.set(alleles, EnumButterflyChromosome.SIZE, EnumAllele.Size.AVERAGE);
 		}
 	},
-	Glasswing(ButterflyBranchDefinition.Greta, "glasswing", "oto", new Color(0x583732), true, 0.1f) {
+	Glasswing(ButterflyBranchDefinition.Greta, "glasswing", "oto", new Color(0x583732), true, 0.1f, EnumCocoonType.DEFAULT) {
 		@Override
 		protected void setSpeciesProperties(IAlleleButterflySpeciesBuilder species) {
 			species.setTemperature(EnumTemperature.WARM);
@@ -163,25 +167,25 @@ public enum ButterflyDefinition implements IButterflyDefinition {
 			AlleleHelper.instance.set(alleles, EnumButterflyChromosome.TEMPERATURE_TOLERANCE, EnumAllele.Tolerance.DOWN_1);
 		}
 	},
-	SpeckledWood(ButterflyBranchDefinition.Pararge, "speckledWood", "aegeria", new Color(0x947245), true, 1.0f) {
+	SpeckledWood(ButterflyBranchDefinition.Pararge, "speckledWood", "aegeria", new Color(0x947245), true, 1.0f, EnumCocoonType.DEFAULT) {
 		@Override
 		protected void setAlleles(IAllele[] alleles) {
 			AlleleHelper.instance.set(alleles, EnumButterflyChromosome.FERTILITY, 2);
 		}
 	},
-	MSpeckledWood(ButterflyBranchDefinition.Pararge, "speckledWoodM", "xiphia", new Color(0x402919), true, 0.5f) {
+	MSpeckledWood(ButterflyBranchDefinition.Pararge, "speckledWoodM", "xiphia", new Color(0x402919), true, 0.5f, EnumCocoonType.DEFAULT) {
 		@Override
 		protected void setAlleles(IAllele[] alleles) {
 			AlleleHelper.instance.set(alleles, EnumButterflyChromosome.FERTILITY, 2);
 		}
 	},
-	CSpeckledWood(ButterflyBranchDefinition.Pararge, "speckledWoodC", "xiphioides", new Color(0x51372a), true, 0.5f) {
+	CSpeckledWood(ButterflyBranchDefinition.Pararge, "speckledWoodC", "xiphioides", new Color(0x51372a), true, 0.5f, EnumCocoonType.DEFAULT) {
 		@Override
 		protected void setAlleles(IAllele[] alleles) {
 			AlleleHelper.instance.set(alleles, EnumButterflyChromosome.FERTILITY, 2);
 		}
 	},
-	MBlueMorpho(ButterflyBranchDefinition.Morpho, "blueMorphoM", "menelaus", new Color(0x72e1fd), true, 0.5f) {
+	MBlueMorpho(ButterflyBranchDefinition.Morpho, "blueMorphoM", "menelaus", new Color(0x72e1fd), true, 0.5f, EnumCocoonType.DEFAULT) {
 		@Override
 		protected void setSpeciesProperties(IAlleleButterflySpeciesBuilder species) {
 			species.setTemperature(EnumTemperature.WARM)
@@ -195,7 +199,7 @@ public enum ButterflyDefinition implements IButterflyDefinition {
 			AlleleHelper.instance.set(alleles, EnumButterflyChromosome.FERTILITY, 2);
 		}
 	},
-	PBlueMorpho(ButterflyBranchDefinition.Morpho, "blueMorphoP", "peleides", new Color(0x6ecce8), true, 0.25f) {
+	PBlueMorpho(ButterflyBranchDefinition.Morpho, "blueMorphoP", "peleides", new Color(0x6ecce8), true, 0.25f, EnumCocoonType.DEFAULT) {
 		@Override
 		protected void setSpeciesProperties(IAlleleButterflySpeciesBuilder species) {
 			species.setTemperature(EnumTemperature.WARM)
@@ -209,7 +213,7 @@ public enum ButterflyDefinition implements IButterflyDefinition {
 			AlleleHelper.instance.set(alleles, EnumButterflyChromosome.FERTILITY, 2);
 		}
 	},
-	RBlueMorpho(ButterflyBranchDefinition.Morpho, "blueMorphoR", "rhetenor", new Color(0x00bef8), true, 0.1f) {
+	RBlueMorpho(ButterflyBranchDefinition.Morpho, "blueMorphoR", "rhetenor", new Color(0x00bef8), true, 0.1f, EnumCocoonType.DEFAULT) {
 		@Override
 		protected void setSpeciesProperties(IAlleleButterflySpeciesBuilder species) {
 			species.setTemperature(EnumTemperature.WARM)
@@ -223,13 +227,13 @@ public enum ButterflyDefinition implements IButterflyDefinition {
 			AlleleHelper.instance.set(alleles, EnumButterflyChromosome.FERTILITY, 2);
 		}
 	},
-	Comma(ButterflyBranchDefinition.Polygonia, "comma", "c-album", new Color(0xf89505), true, 0.3f) {
+	Comma(ButterflyBranchDefinition.Polygonia, "comma", "c-album", new Color(0xf89505), true, 0.3f, EnumCocoonType.DEFAULT) {
 		@Override
 		protected void setAlleles(IAllele[] alleles) {
 			AlleleHelper.instance.set(alleles, EnumButterflyChromosome.SPEED, EnumAllele.Speed.SLOWER);
 		}
 	},
-	Batesia(ButterflyBranchDefinition.Batesia, "paintedBeauty", "hypochlora", new Color(0xfe7763), true, 0.3f) {
+	Batesia(ButterflyBranchDefinition.Batesia, "paintedBeauty", "hypochlora", new Color(0xfe7763), true, 0.3f, EnumCocoonType.DEFAULT) {
 		@Override
 		protected void setSpeciesProperties(IAlleleButterflySpeciesBuilder species) {
 			species.setTemperature(EnumTemperature.WARM)
@@ -241,20 +245,20 @@ public enum ButterflyDefinition implements IButterflyDefinition {
 			AlleleHelper.instance.set(alleles, EnumButterflyChromosome.SIZE, EnumAllele.Size.LARGE);
 		}
 	},
-	BlueWing(ButterflyBranchDefinition.Myscelia, "blueWing", "ethusa", new Color(0x3a93cc), true, 0.3f) {
+	BlueWing(ButterflyBranchDefinition.Myscelia, "blueWing", "ethusa", new Color(0x3a93cc), true, 0.3f, EnumCocoonType.DEFAULT) {
 		@Override
 		protected void setAlleles(IAllele[] alleles) {
 			AlleleHelper.instance.set(alleles, EnumButterflyChromosome.SIZE, EnumAllele.Size.AVERAGE);
 			AlleleHelper.instance.set(alleles, EnumButterflyChromosome.METABOLISM, 5);
 		}
 	},
-	Monarch(ButterflyBranchDefinition.Danaus, "monarch", "plexippus", new Color(0xffa722), true, 0.2f) {
+	Monarch(ButterflyBranchDefinition.Danaus, "monarch", "plexippus", new Color(0xffa722), true, 0.2f, EnumCocoonType.DEFAULT) {
 		@Override
 		protected void setAlleles(IAllele[] alleles) {
 			AlleleHelper.instance.set(alleles, EnumButterflyChromosome.SIZE, EnumAllele.Size.AVERAGE);
 		}
 	},
-	BlueDuke(ButterflyBranchDefinition.Bassarona, "blueDuke", "durga", new Color(0x304240), true, 0.5f) {
+	BlueDuke(ButterflyBranchDefinition.Bassarona, "blueDuke", "durga", new Color(0x304240), true, 0.5f, EnumCocoonType.DEFAULT) {
 		@Override
 		protected void setSpeciesProperties(IAlleleButterflySpeciesBuilder species) {
 			species.setTemperature(EnumTemperature.COLD);
@@ -265,14 +269,14 @@ public enum ButterflyDefinition implements IButterflyDefinition {
 			AlleleHelper.instance.set(alleles, EnumButterflyChromosome.TEMPERATURE_TOLERANCE, EnumAllele.Tolerance.BOTH_1);
 		}
 	},
-	GlassyTiger(ButterflyBranchDefinition.Parantica, "glassyTiger", "aglea", new Color(0x5b3935), true, 0.3f) {
+	GlassyTiger(ButterflyBranchDefinition.Parantica, "glassyTiger", "aglea", new Color(0x5b3935), true, 0.3f, EnumCocoonType.DEFAULT) {
 		@Override
 		protected void setAlleles(IAllele[] alleles) {
 			AlleleHelper.instance.set(alleles, EnumButterflyChromosome.SIZE, EnumAllele.Size.AVERAGE);
 		}
 	},
-	Postman(ButterflyBranchDefinition.Heliconius, "postman", "melpomene", new Color(0xf7302d), true, 0.3f),
-	Malachite(ButterflyBranchDefinition.Siproeta, "malachite", "stelenes", new Color(0xbdff53), true, 0.5f) {
+	Postman(ButterflyBranchDefinition.Heliconius, "postman", "melpomene", new Color(0xf7302d), true, 0.3f, EnumCocoonType.DEFAULT),
+	Malachite(ButterflyBranchDefinition.Siproeta, "malachite", "stelenes", new Color(0xbdff53), true, 0.5f, EnumCocoonType.DEFAULT) {
 		@Override
 		protected void setSpeciesProperties(IAlleleButterflySpeciesBuilder species) {
 			species.setTemperature(EnumTemperature.WARM)
@@ -286,14 +290,14 @@ public enum ButterflyDefinition implements IButterflyDefinition {
 			AlleleHelper.instance.set(alleles, EnumButterflyChromosome.HUMIDITY_TOLERANCE, EnumAllele.Tolerance.DOWN_1);
 		}
 	},
-	LLacewing(ButterflyBranchDefinition.Cethosia, "leopardLacewing", "cyane", new Color(0xfb8a06), true, 0.7f) {
+	LLacewing(ButterflyBranchDefinition.Cethosia, "leopardLacewing", "cyane", new Color(0xfb8a06), true, 0.7f, EnumCocoonType.DEFAULT) {
 		@Override
 		protected void setAlleles(IAllele[] alleles) {
 			AlleleHelper.instance.set(alleles, EnumButterflyChromosome.TEMPERATURE_TOLERANCE, EnumAllele.Tolerance.UP_1);
 			AlleleHelper.instance.set(alleles, EnumButterflyChromosome.HUMIDITY_TOLERANCE, EnumAllele.Tolerance.UP_1);
 		}
 	},
-	DianaFrit(ButterflyBranchDefinition.Speyeria, "dianaFritillary", "diana", new Color(0xffac05), true, 0.6f) {
+	DianaFrit(ButterflyBranchDefinition.Speyeria, "dianaFritillary", "diana", new Color(0xffac05), true, 0.6f, EnumCocoonType.DEFAULT) {
 		@Override
 		protected void setAlleles(IAllele[] alleles) {
 			AlleleHelper.instance.set(alleles, EnumButterflyChromosome.SPEED, EnumAllele.Speed.SLOWER);
@@ -306,7 +310,7 @@ public enum ButterflyDefinition implements IButterflyDefinition {
 	private IAllele[] template;
 	private IButterflyGenome genome;
 
-	ButterflyDefinition(ButterflyBranchDefinition branchDefinition, String speciesName, String binomial, Color serumColor, boolean dominant, float rarity) {
+	ButterflyDefinition(ButterflyBranchDefinition branchDefinition, String speciesName, String binomial, Color serumColor, boolean dominant, float rarity, EnumCocoonType cocoonType) {
 		this.branch = branchDefinition;
 
 		String uid = "lepi" + name();
@@ -315,7 +319,7 @@ public enum ButterflyDefinition implements IButterflyDefinition {
 		String unlocalizedDescription = "for.description." + uid;
 
 		String texture = "butterflies/" + uid;
-		IButterflyCocoonProvider cocoonProvider = new DefaultCocoonProvider();
+		IButterflyCocoonProvider cocoonProvider = new DefaultCocoonProvider(cocoonType.name().toLowerCase(Locale.ENGLISH));
 
 		IAlleleButterflySpeciesBuilder speciesBuilder = ButterflyManager.butterflyFactory.createSpecies(Constants.MOD_ID + '.' + uid, unlocalizedName, "Sengir", unlocalizedDescription, Constants.RESOURCE_ID, texture, dominant, branchDefinition.getBranch(), binomial, serumColor, cocoonProvider);
 		speciesBuilder.setRarity(rarity);
@@ -326,6 +330,9 @@ public enum ButterflyDefinition implements IButterflyDefinition {
 	public static void initButterflies() {
 		for (ButterflyDefinition butterfly : values()) {
 			butterfly.init();
+		}
+		for (ButterflyDefinition butterfly : values()) {
+			butterfly.registerMutations();
 		}
 	}
 
@@ -345,6 +352,13 @@ public enum ButterflyDefinition implements IButterflyDefinition {
 
 	protected void setAlleles(IAllele[] alleles) {
 
+	}
+	protected void registerMutations(){
+		
+	}
+	
+	protected final IButterflyMutationCustom registerMutation(ButterflyDefinition parent1, ButterflyDefinition parent2, int chance) {
+		return ButterflyManager.butterflyMutationFactory.createMutation(parent1.species, parent2.species, getTemplate(), chance);
 	}
 
 	@Override

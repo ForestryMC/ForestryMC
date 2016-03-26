@@ -13,11 +13,11 @@ public interface IButterflyMutationFactory {
 	 * Automatically registered with ButterflyManager.butterflyRoot.registerMutation()
 	 * See IButterflyMutationCustom and IMutationCustom for adding additional properties to the returned mutation.
 	 *
-	 * @param parentTree0 A parent butterfly for this mutation
-	 * @param parentTree1 A parent butterfly for this mutation
+	 * @param parentButterfly0 A parent butterfly for this mutation
+	 * @param parentButterfly1 A parent butterfly for this mutation
 	 * @param result The resulting alleles for this mutation
 	 * @param chance The chance that breeding the two parent butterfly's will result in this mutation
-	 * @return a new tree mutation.
+	 * @return a new butterfly mutation.
 	 */
 	IButterflyMutationCustom createMutation(IAlleleButterflySpecies parentButterfly0, IAlleleButterflySpecies parentButterfly1, IAllele[] result, int chance);
 }

@@ -27,6 +27,7 @@ public enum ButterflyBranchDefinition implements IBranchDefinition {
 	Attacus,
 	Bassarona,
 	Batesia,
+	Bombyx,
 	Celastrina,
 	Cethosia,
 	Chiasmia,
@@ -122,7 +123,10 @@ public enum ButterflyBranchDefinition implements IBranchDefinition {
 								Papilio.getBranch(),
 								Protographium.getBranch()
 						),
-						alleleRegistry.createAndRegisterClassification(IClassification.EnumClassLevel.FAMILY, "notchidae", "Notchidae")
+						alleleRegistry.createAndRegisterClassification(IClassification.EnumClassLevel.FAMILY, "notchidae", "Notchidae"),
+						alleleRegistry.createAndRegisterClassification(IClassification.EnumClassLevel.FAMILY, "bombycidae", "Bombycidae",
+								Bombyx.getBranch()
+						)
 				)
 		);
 	}
