@@ -41,7 +41,7 @@ public class HiveGenGround extends HiveGen {
 
 		// get to the ground
 		BlockPos pos = world.getHeight(new BlockPos(x, 0, z));
-		while (pos.getY() >= 0 && (world.getBlockState(pos).getBlock().isLeaves(world, pos) || canReplace(world, pos))) {
+		while (pos.getY() >= 0 && (world.getBlockState(pos.down()).getBlock().isLeaves(world, pos.down()) || canReplace(world, pos.down()))) {
 			pos = pos.add(0, -1, 0);
 		}
 
