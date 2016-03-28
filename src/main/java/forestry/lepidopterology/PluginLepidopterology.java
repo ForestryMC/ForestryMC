@@ -11,7 +11,14 @@
 package forestry.lepidopterology;
 
 import javax.annotation.Nonnull;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
 import java.io.File;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import net.minecraft.item.ItemStack;
@@ -19,6 +26,7 @@ import net.minecraft.item.crafting.CraftingManager;
 
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -30,7 +38,9 @@ import net.minecraftforge.oredict.RecipeSorter;
 import forestry.Forestry;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.IAllele;
 import forestry.api.lepidopterology.ButterflyManager;
+import forestry.api.lepidopterology.IAlleleButterflySpecies;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.PluginCore;
 import forestry.core.config.Constants;
@@ -38,6 +48,7 @@ import forestry.core.config.LocalizedConfiguration;
 import forestry.core.fluids.Fluids;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.EntityUtil;
+import forestry.core.utils.StringUtil;
 import forestry.lepidopterology.blocks.BlockRegistryLepidopterology;
 import forestry.lepidopterology.blocks.BlockTypeLepidopterologyTesr;
 import forestry.lepidopterology.commands.CommandButterfly;
@@ -68,6 +79,7 @@ public class PluginLepidopterology extends BlankForestryPlugin {
 	public static int spawnConstraint = 100;
 	public static int entityConstraint = 1000;
 	private static boolean allowPollination = true;
+	public static final Map<String, Float> spawnRaritys = Maps.newHashMap();
 
 	public static ItemRegistryLepidopterology items;
 	public static BlockRegistryLepidopterology blocks;
@@ -112,9 +124,6 @@ public class PluginLepidopterology extends BlankForestryPlugin {
 
 	@Override
 	public void doInit() {
-		File configFile = new File(Forestry.instance.getConfigFolder(), CONFIG_CATEGORY + ".cfg");
-		loadConfig(configFile);
-
 		PluginCore.rootCommand.addChildCommand(new CommandButterfly());
 
 		EntityUtil.registerEntity(EntityButterfly.class, "butterflyGE", 0, 0x000000, 0xffffff, 50, 1, true);
@@ -128,14 +137,45 @@ public class PluginLepidopterology extends BlankForestryPlugin {
 
 		RecipeSorter.register("forestry:lepidopterologymating", MatingRecipe.class, RecipeSorter.Category.SHAPELESS, "before:minecraft:shapeless");
 	}
+	
+	@Override
+	public void postInit() {
+		File configFile = new File(Forestry.instance.getConfigFolder(), CONFIG_CATEGORY + ".cfg");
+		loadConfig(configFile);
+	}
 
 	private static void loadConfig(File configFile) {
-		LocalizedConfiguration config = new LocalizedConfiguration(configFile, "1.0.0");
+		LocalizedConfiguration config = new LocalizedConfiguration(configFile, "1.1.0");
 
 		spawnConstraint = config.getIntLocalized("butterfly.entities", "spawn.limit", spawnConstraint, 0, 500);
 		entityConstraint = config.getIntLocalized("butterfly.entities", "maximum", entityConstraint, 0, 5000);
 		allowPollination = config.getBooleanLocalized("butterfly.entities", "pollination", allowPollination);
+		
+		List<String> butterflyRarity = Lists.newArrayList();
+		for(IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()){
+			if(allele instanceof IAlleleButterflySpecies){
+				IAlleleButterflySpecies species = (IAlleleButterflySpecies) allele;
+				butterflyRarity.add(species.getUID() + ":" + species.getRarity());
+			}
+		}
+		Collections.sort(butterflyRarity);
+		String[] defaultRaritys = butterflyRarity.toArray(new String[butterflyRarity.size()]);
 
+		Property rarityConf = config.get("alleles", "rarity", defaultRaritys);
+		rarityConf.comment =  StringUtil.localize("config.butterfly.alleles.rarity");
+		
+		String[] configRaritys = rarityConf.getStringList();
+		for(String rarity : configRaritys){
+			if(rarity.contains(":") && rarity.length() > 3){
+				String[] raritys = rarity.split(":");
+				try{
+					spawnRaritys.put(raritys[0], Float.parseFloat(raritys[1]));
+				}catch(Exception e){
+					
+				}
+			}
+		}
+		
 		config.save();
 	}
 

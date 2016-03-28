@@ -45,7 +45,7 @@ public enum MothDefinition implements IButterflyDefinition {
 			AlleleHelper.instance.set(alleles, EnumButterflyChromosome.SIZE, EnumAllele.Size.LARGEST);
 		}
 	},
-	BombyxMori(ButterflyBranchDefinition.Bombyx, "bombyxMori", "bombyxMori", new Color(0xDADADA), false, 0.05f){
+	BombyxMori(ButterflyBranchDefinition.Bombyx, "bombyxMori", "bombyxMori", new Color(0xDADADA), false, 0){
 		
 		@Override
 		protected void setSpeciesProperties(IAlleleButterflySpeciesBuilder species) {
