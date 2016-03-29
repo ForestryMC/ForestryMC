@@ -10,12 +10,14 @@
  ******************************************************************************/
 package forestry.greenhouse;
 
+import java.util.Collection;
 import java.util.List;
 
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.greenhouse.IGreenhouseState;
 import forestry.api.greenhouse.IInternalBlock;
+import forestry.api.multiblock.IMultiblockComponent;
 import forestry.greenhouse.multiblock.GreenhouseController;
 import net.minecraft.world.World;
 
@@ -25,16 +27,18 @@ public final class GreenhouseState implements IGreenhouseState {
 	private final float temperature;
 	private final World world;
 	private final List<IInternalBlock> internalBlocks;
+	private final Collection<IMultiblockComponent> greenhouseComponents;
 	
-	public GreenhouseState(World world, float humidity, float temperature, List<IInternalBlock> internalBlocks) {
+	public GreenhouseState(World world, float humidity, float temperature, List<IInternalBlock> internalBlocks, Collection<IMultiblockComponent> greenhouseComponents) {
 		this.world = world;
 		this.humidity = humidity;
 		this.temperature = temperature;
 		this.internalBlocks = internalBlocks;
+		this.greenhouseComponents = greenhouseComponents;
 	}
 	
 	public GreenhouseState(GreenhouseController controller) {
-		this(controller.getWorld(), controller.getExactHumidity(), controller.getExactTemperature(), controller.getInternalBlocks());
+		this(controller.getWorld(), controller.getExactHumidity(), controller.getExactTemperature(), controller.getInternalBlocks(), controller.getComponents());
 	}
 	
 	@Override
@@ -65,6 +69,11 @@ public final class GreenhouseState implements IGreenhouseState {
 	@Override
 	public List<IInternalBlock> getInternalBlocks() {
 		return internalBlocks;
+	}
+	
+	@Override
+	public Collection<IMultiblockComponent> getGreenhouseComponents() {
+		return greenhouseComponents;
 	}
 
 }

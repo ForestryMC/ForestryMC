@@ -10,12 +10,17 @@
  ******************************************************************************/
 package forestry.api.lepidopterology;
 
+import java.util.Map;
+
 import forestry.api.genetics.IAllele;
+import net.minecraft.item.ItemStack;
 
 public interface IAlleleButterflyCocoon extends IAllele {
 
 	EnumCocoonType getCocoonType();
 	
 	String getCocoonTexture(int age);
+	
+	Map<ItemStack, Float> getCocoonLoot();
 	
 }

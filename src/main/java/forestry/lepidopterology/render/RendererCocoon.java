@@ -16,6 +16,7 @@ import forestry.api.lepidopterology.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.core.proxy.Proxies;
 import forestry.lepidopterology.blocks.BlockCocoon;
+import forestry.lepidopterology.blocks.BlockSolidCocoon;
 import forestry.lepidopterology.genetics.MothDefinition;
 import forestry.lepidopterology.tiles.TileCocoon;
 import net.minecraft.block.state.IBlockState;
@@ -33,7 +34,7 @@ public class RendererCocoon extends TileEntitySpecialRenderer<TileCocoon> {
 	public void renderTileEntityAt(TileCocoon te, double x, double y, double z, float partialTicks, int destroyStage) {
 		IBlockState state = te.getWorld().getBlockState(te.getPos());
 		
-		if(state == null || !(state.getBlock() instanceof BlockCocoon)){
+		if(state == null || !(state.getBlock() instanceof BlockCocoon) && !(state.getBlock() instanceof BlockSolidCocoon)){
 			return;
 		}
 		IButterfly butterfly = te.getCaterpillar();

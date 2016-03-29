@@ -52,6 +52,7 @@ public class ModelGreenhouse extends ModelBlockOverlay<BlockGreenhouse> {
 			BlockModelShapes modelShapes = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes();
 			
 			baker.addBakedModel(modelShapes.getModelForState(Block.getBlockFromItem(camouflageStack.getItem()).getStateFromMeta(camouflageStack.getItemDamage())));
+			baker.setParticleSprite(modelShapes.getModelForState(Block.getBlockFromItem(camouflageStack.getItem()).getStateFromMeta(camouflageStack.getItemDamage())).getParticleTexture());
 		}
 		
 		//Bake the default blocks

@@ -31,7 +31,8 @@ public enum BlockGreenhouseType {
 	DRYER(true, true),
 	CONTROL(true),
 	SPRINKLER(false, true),
-	DOOR;
+	DOOR,
+	BUTTERFLY_HATCH(true);
 	
 	public static final BlockGreenhouseType[] VALUES = values();
 	
@@ -57,7 +58,7 @@ public enum BlockGreenhouseType {
 	private static EnumMap<BlockGreenhouseSprites, TextureAtlasSprite> sprites;
 	
 	private static enum BlockGreenhouseSprites{
-		PLAIN, GLASS, GEARS("gears"), VALVE("valve"), FAN_OFF("fan.off"), FAN_ON("fan.on"), HEATER_OFF("heater.off"), HEATER_ON("heater.on"), DRYER("dryer"), CONTROL("control"), HATCH_DEFAULT("hatch"), HATCH_INPUT("hatch_input"), HATCH_OUTPUT("hatch_output");
+		PLAIN, GLASS, GEARS("gears"), VALVE("valve"), FAN_OFF("fan.off"), FAN_ON("fan.on"), HEATER_OFF("heater.off"), HEATER_ON("heater.on"), DRYER("dryer"), CONTROL("control"), HATCH_DEFAULT("hatch"), HATCH_INPUT("hatch_input"), HATCH_OUTPUT("hatch_output"), BUTTERFLY_HATCH("butterfly_hatch");
 		
 		public static final BlockGreenhouseSprites[] VALUES = values();
 		
@@ -135,6 +136,11 @@ public enum BlockGreenhouseType {
 					return sprites.get(BlockGreenhouseSprites.HATCH_INPUT);
 				}
 				return null;
+			case BUTTERFLY_HATCH:
+				if(facing == EnumFacing.DOWN || facing == EnumFacing.UP){
+					return null;
+				}
+				return sprites.get(BlockGreenhouseSprites.BUTTERFLY_HATCH);
 			default:
 				return Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();	
 		}

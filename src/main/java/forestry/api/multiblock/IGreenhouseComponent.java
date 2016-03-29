@@ -8,6 +8,8 @@ package forestry.api.multiblock;
 import forestry.api.core.IClimateControlled;
 import forestry.api.greenhouse.IGreenhouseHousing;
 import forestry.api.greenhouse.IGreenhouseListener;
+import forestry.api.lepidopterology.IButterflyCocoon;
+import net.minecraft.item.ItemStack;
 
 public interface IGreenhouseComponent<T extends IMultiblockLogicGreenhouse> extends IMultiblockComponent {
 	@Override
@@ -22,6 +24,10 @@ public interface IGreenhouseComponent<T extends IMultiblockLogicGreenhouse> exte
 
 	interface Climatiser extends IGreenhouseComponent {
 		<G extends IGreenhouseController & IGreenhouseHousing & IClimateControlled> void changeClimate(int tickCount, G greenhouse);
+	}
+	
+	interface ButterflyHatch extends IGreenhouseComponent {
+		ItemStack[] addCocoonLoot(IButterflyCocoon cocoon);
 	}
 
 	interface Active extends IGreenhouseComponent {

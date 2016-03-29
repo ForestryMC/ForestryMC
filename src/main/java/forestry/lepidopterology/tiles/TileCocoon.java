@@ -20,18 +20,22 @@ import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IButterflyCocoon;
 import forestry.api.lepidopterology.IButterflyGenome;
 import forestry.api.lepidopterology.IButterflyNursery;
+import forestry.api.multiblock.IGreenhouseComponent;
 import forestry.core.access.IOwnable;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
 import forestry.core.network.packets.PacketTileStream;
 import forestry.core.proxy.Proxies;
+import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.PlayerUtil;
+import forestry.greenhouse.multiblock.GreenhouseController;
 import forestry.lepidopterology.genetics.Butterfly;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
@@ -40,12 +44,23 @@ import net.minecraft.world.World;
 
 public class TileCocoon extends TileEntity implements IStreamable, IOwnable, IButterflyCocoon {
 
+	public TileCocoon() {
+	}
+	
+	public TileCocoon(boolean isSolid) {
+		this.isSolid = isSolid;
+		if(isSolid){
+			this.age = 2;
+		}
+	}
+	
 	private int age;
 	private int maturationTime;
 	private IButterfly caterpillar;
 	private GameProfile owner;
 	private BlockPos nursery;
-
+	private boolean isSolid;
+	
 	/* SAVING & LOADING */
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
@@ -66,6 +81,7 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnable, IBu
 		}
 		age = nbttagcompound.getInteger("Age");
 		maturationTime = nbttagcompound.getInteger("CATMAT");
+		isSolid = nbttagcompound.getBoolean("isSolid");
 	}
 
 	@Override
@@ -92,6 +108,7 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnable, IBu
 		}
 		nbttagcompound.setInteger("Age", age);
 		nbttagcompound.setInteger("CATMAT", maturationTime);
+		nbttagcompound.setBoolean("isSolid", isSolid);
 	}
 
 	@Override
@@ -164,10 +181,18 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnable, IBu
 				age++;
 				maturationTime = 0;
 			}else if(caterpillar.canTakeFlight(worldObj, getPos().getX(), getPos().getY(), getPos().getZ())){
-				worldObj.setBlockToAir(getPos());
-				if (worldObj.isAirBlock(getPos())) {
-					attemptButterflySpawn(worldObj, caterpillar, getPos());
+				IGreenhouseComponent.ButterflyHatch hatch = GreenhouseController.getGreenhouseButterflyHatch(worldObj, pos);
+				ItemStack[] cocoonDrops;
+				if(hatch != null){
+					cocoonDrops = hatch.addCocoonLoot(this);
+				}else{
+					cocoonDrops = caterpillar.getCocoonDrop(this);
 				}
+				for(ItemStack drop : cocoonDrops){
+					ItemStackUtil.dropItemStackAsEntity(drop, worldObj, pos);
+				}
+				worldObj.setBlockToAir(getPos());
+				attemptButterflySpawn(worldObj, caterpillar, getPos());
 				return;
 			}
 		}
@@ -215,6 +240,15 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnable, IBu
 	
 	public int getAge() {
 		return age;
+	}
+	
+	public ItemStack[] getCocoonDrops() {
+		return caterpillar.getCocoonDrop(this);
+	}
+
+	@Override
+	public boolean isSolid() {
+		return isSolid;
 	}
 
 }

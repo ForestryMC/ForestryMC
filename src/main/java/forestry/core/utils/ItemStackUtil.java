@@ -440,6 +440,11 @@ public abstract class ItemStackUtil {
 		List<Stack> stacks = Stack.parseStackStrings(itemStackStrings, missingMetaValue);
 		return getItemStacks(stacks);
 	}
+	
+	public static ItemStack parseItemStackString(String itemStackString, int missingMetaValue) {
+		Stack stack = Stack.parseStackString(itemStackString, missingMetaValue);
+		return getItemStack(stack);
+	}
 
 	private static List<ItemStack> getItemStacks(List<Stack> stacks) {
 		List<ItemStack> itemStacks = new ArrayList<>(stacks.size());
@@ -452,6 +457,16 @@ public abstract class ItemStackUtil {
 			}
 		}
 		return itemStacks;
+	}
+	
+	private static ItemStack getItemStack(Stack stack) {
+		Item item = stack.getItem();
+		if (item != null) {
+			int meta = stack.getMeta();
+			ItemStack itemStack = new ItemStack(item, 1, meta);
+			return itemStack;
+		}
+		return null;
 	}
 
 }

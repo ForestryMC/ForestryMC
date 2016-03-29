@@ -80,6 +80,12 @@ public abstract class BlockGreenhouse extends BlockStructure {
 	public static Map<BlockGreenhouseType, BlockGreenhouse> create() {
 		Map<BlockGreenhouseType, BlockGreenhouse> blockMap = new EnumMap<>(BlockGreenhouseType.class);
 		for (final BlockGreenhouseType type : BlockGreenhouseType.VALUES) {
+			if(type == BlockGreenhouseType.BUTTERFLY_HATCH){
+				if(!ForestryAPI.enabledPlugins.contains(ForestryPluginUids.LEPIDOPTEROLOGY)) {
+					continue;
+				}
+			}
+			
 			BlockGreenhouse block;
 			if(type == BlockGreenhouseType.DOOR){
 				block = new BlockGreenhouseDoor();
@@ -203,6 +209,8 @@ public abstract class BlockGreenhouse extends BlockStructure {
 				return new TileGreenhouseDoor();
 			case HATCH_INPUT:
 			case HATCH_OUTPUT:
+				return new TileGreenhouseHatch();
+			case BUTTERFLY_HATCH:
 				return new TileGreenhouseHatch();
 			default:
 				return new TileGreenhousePlain();

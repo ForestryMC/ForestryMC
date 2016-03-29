@@ -11,7 +11,9 @@
 package forestry.lepidopterology.genetics.alleles;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 
@@ -19,8 +21,10 @@ import forestry.api.genetics.AlleleManager;
 import forestry.api.lepidopterology.EnumButterflyChromosome;
 import forestry.api.lepidopterology.EnumCocoonType;
 import forestry.api.lepidopterology.IAlleleButterflyCocoon;
+import forestry.core.PluginCore;
 import forestry.core.config.Constants;
 import forestry.core.genetics.alleles.AlleleCategorized;
+import net.minecraft.item.ItemStack;
 
 public class AlleleButterflyCocoon extends AlleleCategorized implements IAlleleButterflyCocoon {
 
@@ -33,6 +37,9 @@ public class AlleleButterflyCocoon extends AlleleCategorized implements IAlleleB
 				cocoonDefault = new AlleleButterflyCocoon("default", EnumCocoonType.DEFAULT, false),
 				cocoonSilk = new AlleleButterflyCocoon("silk", EnumCocoonType.SILK, false)
 		);
+		
+		cocoonSilk.getCocoonLoot().put(PluginCore.items.craftingMaterial.getSilkWisp(), 0.75F);
+		cocoonSilk.getCocoonLoot().put(PluginCore.items.craftingMaterial.getSilkWisp(), 0.25F);
 
 		for (IAlleleButterflyCocoon cocoonAllele : cocoonAlleles) {
 			AlleleManager.alleleRegistry.registerAllele(cocoonAllele, EnumButterflyChromosome.COCOON);
@@ -41,9 +48,10 @@ public class AlleleButterflyCocoon extends AlleleCategorized implements IAlleleB
 	
 	@Nonnull
 	private EnumCocoonType type;
+	private Map<ItemStack, Float> loot = new HashMap();
 	
 	public AlleleButterflyCocoon(String name, @Nonnull EnumCocoonType type, boolean isDominant) {
-		super(Constants.MOD_ID, "fruit", name, isDominant);
+		super(Constants.MOD_ID, "cocoon", name, isDominant);
 		this.type = type;
 	}
 
@@ -57,4 +65,9 @@ public class AlleleButterflyCocoon extends AlleleCategorized implements IAlleleB
 		return "textures/blocks/lepidopterology/cocoons/" + type + "_" + age + ".png";
 	}
 
+	@Override
+	public Map<ItemStack, Float> getCocoonLoot() {
+		return loot;
+	}
+	
 }

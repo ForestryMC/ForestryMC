@@ -8,20 +8,17 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.api.lepidopterology;
+package forestry.greenhouse.inventory;
 
-import forestry.api.genetics.IHousing;
+import forestry.core.inventory.InventoryAdapterTile;
+import forestry.greenhouse.tiles.TileGreenhouseButterflyHatch;
 
-public interface IButterflyCocoon extends IHousing{
+public class InventoryGreenhouseButterflyHatch extends InventoryAdapterTile<TileGreenhouseButterflyHatch> {
+
+	public static final int SLOTS = 4;
 	
-	IButterfly getCaterpillar();
-	
-	void setCaterpillar(IButterfly butterfly);
-	
-	IButterflyNursery getNursery();
-	
-	void setNursery(IButterflyNursery nursery);
-	
-	boolean isSolid();
-	
+	public InventoryGreenhouseButterflyHatch(TileGreenhouseButterflyHatch tile) {
+		super(tile, SLOTS, "Items");
+	}
+
 }

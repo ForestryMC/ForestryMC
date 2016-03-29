@@ -79,6 +79,12 @@ public interface IButterfly extends IIndividualLiving {
 	ItemStack[] getCaterpillarDrop(IButterflyNursery nursery, boolean playerKill, int lootLevel);
 	
 	/**
+	 * @param cocoon
+	 * @return Array of itemstacks to drop on breaking of the cocoon.
+	 */
+	ItemStack[] getCocoonDrop(IButterflyCocoon cocoon);
+	
+	/**
 	 * Create an exact copy of this butterfly.
 	 */
 	@Override

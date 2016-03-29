@@ -12,19 +12,18 @@ package forestry.lepidopterology.blocks;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
-
 import forestry.api.core.IStateMapperRegister;
 import forestry.api.core.Tabs;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.EmptyStateMapper;
-import forestry.core.tiles.TileUtil;
+import forestry.core.utils.ItemStackUtil;
 import forestry.lepidopterology.tiles.TileCocoon;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -34,10 +33,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockCocoon extends Block implements ITileEntityProvider, IStateMapperRegister {
+public class BlockSolidCocoon extends Block implements ITileEntityProvider, IStateMapperRegister {
 	
-	public BlockCocoon() {
+	public BlockSolidCocoon() {
 		super(Material.cloth);
+		setHarvestLevel("scoop", 0);
+		setHardness(0.5F);
 		setTickRandomly(true);
 		setStepSound(soundTypeGrass);
 		setCreativeTab(Tabs.tabLepidopterology);
@@ -52,27 +53,31 @@ public class BlockCocoon extends Block implements ITileEntityProvider, IStateMap
 	public boolean isOpaqueCube(){
         return false;
     }
-    
+	
 	@Override
-	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
-		TileCocoon tileCocoon = TileUtil.getTile(world, pos, TileCocoon.class);
-		if (tileCocoon == null) {
-			return;
+	public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+		if (canHarvestBlock(world, pos, player)) {
+			TileEntity tile = world.getTileEntity(pos);
+
+			if (tile instanceof TileCocoon) {
+				TileCocoon cocoon = (TileCocoon) tile;
+				ItemStack[] drops = cocoon.getCocoonDrops();
+				if (drops != null) {
+					for (ItemStack stack : drops) {
+						if (stack != null) {
+							ItemStackUtil.dropItemStackAsEntity(stack, world, pos);
+						}
+					}
+				}
+			}
 		}
 
-		if (tileCocoon.isInvalid()) {
-			return;
-		}
-
-		if (world.rand.nextFloat() > 0.1) {
-			return;
-		}
-		tileCocoon.onBlockTick();
+		return world.setBlockToAir(pos);
 	}
 
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		return new TileCocoon(false);
+		return new TileCocoon(true);
 	}
 
     @Override

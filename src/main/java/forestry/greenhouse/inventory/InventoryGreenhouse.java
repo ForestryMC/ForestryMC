@@ -8,11 +8,12 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.greenhouse.multiblock;
+package forestry.greenhouse.inventory;
 
 import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.TankManager;
 import forestry.core.inventory.InventoryAdapterRestricted;
+import forestry.greenhouse.multiblock.GreenhouseController;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 

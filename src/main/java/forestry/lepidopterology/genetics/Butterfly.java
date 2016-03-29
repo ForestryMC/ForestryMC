@@ -39,8 +39,10 @@ import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IIndividual;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.EnumButterflyChromosome;
+import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.api.lepidopterology.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.IButterfly;
+import forestry.api.lepidopterology.IButterflyCocoon;
 import forestry.api.lepidopterology.IButterflyGenome;
 import forestry.api.lepidopterology.IButterflyMutation;
 import forestry.api.lepidopterology.IButterflyNursery;
@@ -49,6 +51,7 @@ import forestry.core.genetics.Chromosome;
 import forestry.core.genetics.GenericRatings;
 import forestry.core.genetics.IndividualLiving;
 import forestry.core.utils.StringUtil;
+import forestry.lepidopterology.PluginLepidopterology;
 
 public class Butterfly extends IndividualLiving implements IButterfly {
 
@@ -299,6 +302,36 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 			if (rand.nextFloat() < entry.getValue() * metabolism) {
 				drop.add(entry.getKey().copy());
 			}
+		}
+
+		return drop.toArray(new ItemStack[drop.size()]);
+	}
+	
+	@Override
+	public ItemStack[] getCocoonDrop(IButterflyCocoon cocoon) {
+		ArrayList<ItemStack> drop = new ArrayList<>();
+		float metabolism = (float) getGenome().getMetabolism() / 10;
+
+		for (Map.Entry<ItemStack, Float> entry : getGenome().getCocoon().getCocoonLoot().entrySet()) {
+			if (rand.nextFloat() < entry.getValue() * metabolism) {
+				drop.add(entry.getKey().copy());
+			}
+		}
+		
+		if(PluginLepidopterology.getSerumChance() > 0){
+			if(rand.nextFloat() < PluginLepidopterology.getSerumChance() * metabolism){
+				ItemStack stack = ButterflyManager.butterflyRoot.getMemberStack(this, EnumFlutterType.SERUM);
+				if(PluginLepidopterology.getSecondSerumChance() > 0){
+					if(rand.nextFloat() < PluginLepidopterology.getSecondSerumChance() * metabolism){
+						stack.stackSize = 2;
+					}
+				}
+				drop.add(ButterflyManager.butterflyRoot.getMemberStack(this, EnumFlutterType.SERUM));
+			}
+		}
+		
+		if(cocoon.isSolid()){
+			drop.add(ButterflyManager.butterflyRoot.getMemberStack(this, EnumFlutterType.BUTTERFLY));
 		}
 
 		return drop.toArray(new ItemStack[drop.size()]);

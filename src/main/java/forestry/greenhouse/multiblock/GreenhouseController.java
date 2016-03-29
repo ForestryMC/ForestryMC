@@ -34,6 +34,7 @@ import forestry.api.core.ICamouflagedBlock;
 import forestry.api.multiblock.IGreenhouseComponent;
 import forestry.api.multiblock.IGreenhouseController;
 import forestry.api.multiblock.IMultiblockComponent;
+import forestry.api.multiblock.IGreenhouseComponent.ButterflyHatch;
 import forestry.core.access.EnumAccess;
 import forestry.core.config.Constants;
 import forestry.core.fluids.TankManager;
@@ -54,6 +55,7 @@ import forestry.energy.EnergyManager;
 import forestry.greenhouse.GreenhouseState;
 import forestry.greenhouse.blocks.BlockGreenhouse;
 import forestry.greenhouse.blocks.BlockGreenhouseType;
+import forestry.greenhouse.inventory.InventoryGreenhouse;
 import forestry.greenhouse.network.packets.PacketCamouflageUpdate;
 import forestry.greenhouse.tiles.TileGreenhouseSprinkler;
 import net.minecraft.block.state.IBlockState;
@@ -698,5 +700,18 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	public List<IInternalBlock> getInternalBlocks() {
 		return internalBlocks;
 	}
+	
+    public static ButterflyHatch getGreenhouseButterflyHatch(World world, BlockPos pos){
+    	if(GreenhouseManager.greenhouseHelper.getGreenhouseState(world, pos) == null){
+    		return null;
+    	}
+    	IGreenhouseState state = GreenhouseManager.greenhouseHelper.getGreenhouseState(world, pos);
+    	for(IMultiblockComponent greenhouse : state.getGreenhouseComponents()){
+    		if(greenhouse instanceof ButterflyHatch){
+    			return (ButterflyHatch) greenhouse;
+    		}
+    	}
+    	return null;
+    }
 
 }
