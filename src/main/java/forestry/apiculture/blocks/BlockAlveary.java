@@ -260,9 +260,11 @@ public abstract class BlockAlveary extends BlockStructure implements IStateMappe
 			TileAlveary tileAlveary = (TileAlveary) tileEntity;
 
 			// We must check that the slabs on top were not removed
-			IAlvearyControllerInternal alvery = tileAlveary.getMultiblockLogic().getController();
-			alvery.reassemble();
-			Proxies.net.sendNetworkPacket(new PacketAlveryChange(alvery), world);
+			IAlvearyControllerInternal alveary = tileAlveary.getMultiblockLogic().getController();
+			alveary.reassemble();
+			if(alveary.getReferenceCoord() != null){
+				Proxies.net.sendNetworkPacket(new PacketAlveryChange(alveary), world);
+			}
 		}
 	}
 }
