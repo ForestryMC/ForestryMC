@@ -52,6 +52,7 @@ public class AIButterflyMate extends AIButterflyInteract {
 			if(entity.getButterfly().getMate() == null){
 		        if (entity.cooldownMate <= 0 && entity.getDistanceSqToEntity(targetMate) < 9.0D){
 		        	entity.getButterfly().mate(targetMate.getButterfly());
+		        	targetMate.getButterfly().mate(entity.getButterfly());
 		        	entity.cooldownMate = EntityButterfly.COOLDOWNS;
 		        }
 			}else{

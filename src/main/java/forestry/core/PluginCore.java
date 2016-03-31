@@ -45,7 +45,6 @@ import forestry.core.commands.RootCommand;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
-import forestry.core.genetics.CapabilityIndividual;
 import forestry.core.genetics.alleles.AlleleFactory;
 import forestry.core.genetics.alleles.AlleleHelper;
 import forestry.core.genetics.alleles.AlleleRegistry;
@@ -95,8 +94,6 @@ public class PluginCore extends BlankForestryPlugin {
 
 		MultiblockManager.logicFactory = new MultiblockLogicFactory();
 		ForestryAPI.climateManager = new ClimateManager();
-		
-		CapabilityIndividual.register();
 	}
 
 	@Override
