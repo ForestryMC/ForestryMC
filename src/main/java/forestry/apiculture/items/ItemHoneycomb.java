@@ -26,8 +26,8 @@ import forestry.api.core.Tabs;
 import forestry.core.config.Config;
 import forestry.core.items.ItemForestry;
 
-public class ItemHoneycomb extends ItemForestry {
-	public ItemHoneycomb() {
+public class ItemHoneyComb extends ItemForestry {
+	public ItemHoneyComb() {
 		super();
 		setMaxDamage(0);
 		setHasSubtypes(true);

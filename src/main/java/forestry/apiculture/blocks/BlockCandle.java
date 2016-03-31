@@ -54,7 +54,7 @@ import forestry.core.utils.ItemStackUtil;
 public class BlockCandle extends BlockTorch implements IItemModelRegister {
 
 	private static final ImmutableMap<String, Integer> colours;
-	private static final Set<Item> lightingItems;
+	public static final Set<Item> lightingItems;
 	public static final String colourTagName = "colour";
 	
 	private static final PropertyEnum STATE = PropertyEnum.create("state", State.class);

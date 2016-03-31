@@ -12,7 +12,7 @@ package forestry.core.blocks;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
+import com.google.common.base.Predicate;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -23,7 +23,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -37,71 +36,51 @@ import forestry.core.CreativeTabForestry;
 import forestry.core.PluginCore;
 
 public class BlockResourceOre extends Block implements IItemModelRegister {
-	private static final PropertyEnum<ResourceType> RESOURCE = PropertyEnum.create("resource", ResourceType.class);
-	
-	public enum ResourceType implements IStringSerializable {
-		APATITE(0),
-		COPPER(1),
-		TIN(2);
-		
-		public static final ResourceType[] VALUES = values();
-
-		private final int meta;
-
-		ResourceType(int meta) {
-			this.meta = meta;
-		}
-
-		public int getMeta() {
-			return meta;
-		}
-
+	public static final PropertyEnum<EnumResourceType> ORE_RESOURCES = PropertyEnum.create("resource", EnumResourceType.class, new Predicate<EnumResourceType>(){
 		@Override
-		public String getName() {
-			return name().toLowerCase(Locale.ENGLISH);
+		public boolean apply(EnumResourceType input) {
+			return input.hasOre();
 		}
-	}
-
+	});
+	
 	public BlockResourceOre() {
 		super(Material.rock);
 		setHardness(3F);
 		setResistance(5F);
 		setCreativeTab(CreativeTabForestry.tabForestry);
-		setDefaultState(this.blockState.getBaseState().withProperty(RESOURCE, ResourceType.APATITE));
+		setDefaultState(this.blockState.getBaseState().withProperty(ORE_RESOURCES, EnumResourceType.APATITE));
 	}
 
 	@Override
 	protected BlockState createBlockState() {
-		return new BlockState(this, RESOURCE);
+		return new BlockState(this, ORE_RESOURCES);
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return state.getValue(RESOURCE).getMeta();
+		return state.getValue(ORE_RESOURCES).getMeta();
 	}
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState().withProperty(RESOURCE, ResourceType.values()[meta]);
+		return getDefaultState().withProperty(ORE_RESOURCES, EnumResourceType.VALUES[meta]);
 	}
 
 	@Override
 	public void dropBlockAsItemWithChance(World world, BlockPos pos, IBlockState state, float chance, int fortune) {
 		super.dropBlockAsItemWithChance(world, pos, state, chance, fortune);
 		
-
-		if (state.getValue(RESOURCE) == ResourceType.APATITE) {
+		if (state.getValue(ORE_RESOURCES) == EnumResourceType.APATITE) {
 			this.dropXpOnBlockBreak(world, pos, MathHelper.getRandomIntegerInRange(world.rand, 1, 4));
 		}
 	}
 
 	@Override
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-		ArrayList<ItemStack> drops = new ArrayList<>();
-		
-		ResourceType metadata = state.getValue(RESOURCE);
+		ArrayList<ItemStack> drops = new ArrayList();
+		EnumResourceType metadata = state.getValue(ORE_RESOURCES);
 
-		if (metadata == ResourceType.APATITE) {
+		if (metadata == EnumResourceType.APATITE) {
 			int fortuneModifier = RANDOM.nextInt(fortune + 2) - 1;
 			if (fortuneModifier < 0) {
 				fortuneModifier = 0;
@@ -112,7 +91,7 @@ public class BlockResourceOre extends Block implements IItemModelRegister {
 				drops.add(PluginCore.items.apatite.getItemStack(amount));
 			}
 		} else {
-			drops.add(new ItemStack(this, 1, metadata.ordinal()));
+			drops.add(new ItemStack(this, 1, metadata.getMeta()));
 		}
 
 		return drops;
@@ -130,9 +109,8 @@ public class BlockResourceOre extends Block implements IItemModelRegister {
 
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List<ItemStack> itemList) {
-		for (ResourceType resourceType : ResourceType.values()) {
-			ItemStack stack = get(resourceType, 1);
-			itemList.add(stack);
+		for (EnumResourceType resourceType : ORE_RESOURCES.getAllowedValues()) {
+			itemList.add(get(resourceType, 1));
 		}
 	}
 
@@ -145,7 +123,7 @@ public class BlockResourceOre extends Block implements IItemModelRegister {
 		manager.registerItemModel(item, 2, "ores/tin");
 	}
 
-	public ItemStack get(ResourceType type, int amount) {
-		return new ItemStack(this, amount, type.ordinal());
+	public ItemStack get(EnumResourceType type, int amount) {
+		return new ItemStack(this, amount, type.getMeta());
 	}
 }

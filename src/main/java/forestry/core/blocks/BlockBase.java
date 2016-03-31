@@ -56,7 +56,7 @@ import forestry.core.utils.PlayerUtil;
 
 import jline.internal.Log;
 
-public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> extends BlockForestry implements IItemModelRegister, IStateMapperRegister {
+public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> extends BlockForestry implements IItemModelRegister, IStateMapperRegister, IBlockWithMeta {
 	private final Map<P, IMachineProperties> properties = new HashMap<>();
 	private final boolean hasTESR;
 	private final boolean hasCustom;
@@ -68,7 +68,7 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 	
 	protected final BlockState blockState;
 	
-	private boolean isReady = false;
+	private boolean canCreateProps = false;
 
 	public BlockBase(Class<P> machinePropertiesClass) {
 		super(Material.iron);
@@ -78,7 +78,7 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 		this.lightOpacity = this.isOpaqueCube() ? 255 : 0;
 		this.machinePropertiesClass = machinePropertiesClass;
 		
-		isReady = true;
+		canCreateProps = true;
 		
 		TYPE = PropertyEnum.create("type", machinePropertiesClass);
 		FACE = PropertyEnum.create("face", EnumFacing.class);
@@ -162,18 +162,12 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 
 	/* TILE ENTITY CREATION */
 	@Override
-	public TileEntity createTileEntity(World world, IBlockState state) {
-		IMachineProperties definition = state.getValue(TYPE).getMachineProperties();
+	public TileEntity createNewTileEntity(World world, int meta) {
+		IMachineProperties definition = getStateFromMeta(meta).getValue(TYPE).getMachineProperties();
 		if (definition == null) {
 			return null;
 		}
 		return definition.createTileEntity();
-	}
-
-	@Override
-	public TileEntity createNewTileEntity(World world, int meta) {
-		IBlockState state = getStateFromMeta(meta);
-		return createTileEntity(world, state); // TODO: refactor to just use Block, not BlockContainer
 	}
 
 	/* INTERACTION */
@@ -278,7 +272,7 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 
 	@Override
 	protected BlockState createBlockState() {
-		if (!isReady) {
+		if (!canCreateProps) {
 			return super.createBlockState();
 		}
 		return new BlockState(this, TYPE, FACE);
@@ -303,6 +297,7 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 		return getDefaultState();
 	}
 
+	@Override
 	public String getNameFromMeta(int meta) {
 		IBlockState state = getStateFromMeta(meta);
 		IBlockType blockType = (IBlockType) state.getProperties().get(TYPE);

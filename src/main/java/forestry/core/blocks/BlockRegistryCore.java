@@ -32,16 +32,16 @@ public class BlockRegistryCore extends BlockRegistry {
 		
 		resources = registerBlock(new BlockResourceOre(), ItemBlockForestry.class, "resources");
 		resources.setHarvestLevel("pickaxe", 1);
-		OreDictionary.registerOre("oreApatite", resources.get(BlockResourceOre.ResourceType.APATITE, 1));
-		OreDictionary.registerOre("oreCopper", resources.get(BlockResourceOre.ResourceType.COPPER, 1));
-		OreDictionary.registerOre("oreTin", resources.get(BlockResourceOre.ResourceType.TIN, 1));
+		OreDictionary.registerOre("oreApatite", resources.get(EnumResourceType.APATITE, 1));
+		OreDictionary.registerOre("oreCopper", resources.get(EnumResourceType.COPPER, 1));
+		OreDictionary.registerOre("oreTin", resources.get(EnumResourceType.TIN, 1));
 		
 		resourceStorage = registerBlock(new BlockResourceStorage(), ItemBlockForestry.class, "resourceStorage");
 		resourceStorage.setHarvestLevel("pickaxe", 0);
-		OreDictionary.registerOre("blockApatite", resourceStorage.get(BlockResourceStorage.ResourceType.APATITE));
-		OreDictionary.registerOre("blockCopper", resourceStorage.get(BlockResourceStorage.ResourceType.COPPER));
-		OreDictionary.registerOre("blockTin", resourceStorage.get(BlockResourceStorage.ResourceType.TIN));
-		OreDictionary.registerOre("blockBronze", resourceStorage.get(BlockResourceStorage.ResourceType.BRONZE));
+		OreDictionary.registerOre("blockApatite", resourceStorage.get(EnumResourceType.APATITE));
+		OreDictionary.registerOre("blockCopper", resourceStorage.get(EnumResourceType.COPPER));
+		OreDictionary.registerOre("blockTin", resourceStorage.get(EnumResourceType.TIN));
+		OreDictionary.registerOre("blockBronze", resourceStorage.get(EnumResourceType.BRONZE));
 
 		// register some common oreDict names for our recipes
 		OreDictionary.registerOre("chestWood", Blocks.chest);

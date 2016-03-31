@@ -17,8 +17,6 @@ import net.minecraft.block.BlockTorch;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
@@ -35,7 +33,6 @@ import forestry.apiculture.PluginApiculture;
 import forestry.apiculture.tiles.TileCandle;
 import forestry.core.config.Constants;
 import forestry.core.utils.BlockUtil;
-import forestry.core.utils.ItemStackUtil;
 
 public class BlockStump extends BlockTorch implements IItemModelRegister {
 
@@ -61,10 +58,7 @@ public class BlockStump extends BlockTorch implements IItemModelRegister {
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
 		
 		ItemStack held = player.getCurrentEquippedItem();
-		if (held != null &&
-				(held.getItem() == Items.flint_and_steel ||
-						held.getItem() == Items.flint ||
-						ItemStackUtil.equals(Blocks.torch, held))) {
+		if (held != null && BlockCandle.lightingItems.contains(held.getItem())) {
 			world.setBlockState(pos, PluginApiculture.blocks.candle.getStateFromMeta(BlockUtil.getBlockMetadata(world, pos) | 0x08), Constants.FLAG_BLOCK_SYNCH);
 			TileCandle tc = new TileCandle();
 			tc.setColour(0); // default to white
@@ -82,6 +76,6 @@ public class BlockStump extends BlockTorch implements IItemModelRegister {
 	}
 	
 	@Override
-	public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+	public void randomDisplayTick(World world, BlockPos pos, IBlockState state, Random rand) {
 	}
 }

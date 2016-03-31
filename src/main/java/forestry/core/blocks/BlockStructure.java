@@ -111,7 +111,6 @@ public abstract class BlockStructure extends BlockForestry {
 
 	@Override
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
-		
 		if (world.isRemote) {
 			return;
 		}
@@ -131,11 +130,6 @@ public abstract class BlockStructure extends BlockForestry {
 			}
 		}
 		super.breakBlock(world, pos, state);
-	}
-	
-	@Override
-	public int getRenderType() {
-		return 3;
 	}
 
 }

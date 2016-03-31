@@ -23,7 +23,7 @@ import forestry.core.items.ItemBlockForestry;
 public class BlockRegistryApiculture extends BlockRegistry {
 	public final BlockApiculture apiculture;
 	public final BlockBase<BlockTypeApicultureTesr> apicultureChest;
-	public final BlockBeehives beehives;
+	public final BlockBeeHives beehives;
 	public final BlockCandle candle;
 	public final BlockStump stump;
 	private final Map<BlockAlvearyType, BlockAlveary> alvearyBlockMap;
@@ -35,7 +35,7 @@ public class BlockRegistryApiculture extends BlockRegistry {
 		apicultureChest.setCreativeTab(Tabs.tabApiculture);
 		apicultureChest.setHarvestLevel("axe", 0);
 
-		beehives = registerBlock(new BlockBeehives(), ItemBlockForestry.class, "beehives");
+		beehives = registerBlock(new BlockBeeHives(), ItemBlockForestry.class, "beehives");
 
 		candle = registerBlock(new BlockCandle(), ItemBlockCandle.class, "candle");
 		stump = registerBlock(new BlockStump(), ItemBlockForestry.class, "stump");

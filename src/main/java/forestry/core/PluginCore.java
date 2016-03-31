@@ -35,10 +35,9 @@ import forestry.api.multiblock.MultiblockManager;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
 import forestry.core.blocks.BlockRegistryCore;
-import forestry.core.blocks.BlockResourceOre;
-import forestry.core.blocks.BlockResourceStorage;
 import forestry.core.blocks.BlockSoil;
 import forestry.core.blocks.BlockTypeCoreTesr;
+import forestry.core.blocks.EnumResourceType;
 import forestry.core.circuits.CircuitRegistry;
 import forestry.core.circuits.SolderManager;
 import forestry.core.commands.CommandPlugins;
@@ -46,6 +45,7 @@ import forestry.core.commands.RootCommand;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
+import forestry.core.genetics.CapabilityIndividual;
 import forestry.core.genetics.alleles.AlleleFactory;
 import forestry.core.genetics.alleles.AlleleHelper;
 import forestry.core.genetics.alleles.AlleleRegistry;
@@ -95,6 +95,8 @@ public class PluginCore extends BlankForestryPlugin {
 
 		MultiblockManager.logicFactory = new MultiblockLogicFactory();
 		ForestryAPI.climateManager = new ClimateManager();
+		
+		CapabilityIndividual.register();
 	}
 
 	@Override
@@ -205,9 +207,9 @@ public class PluginCore extends BlankForestryPlugin {
 	public void registerRecipes() {
 
 		/* SMELTING RECIPES */
-		RecipeUtil.addSmelting(blocks.resources.get(BlockResourceOre.ResourceType.APATITE, 1), items.apatite, 0.5f);
-		RecipeUtil.addSmelting(blocks.resources.get(BlockResourceOre.ResourceType.COPPER, 1), items.ingotCopper, 0.5f);
-		RecipeUtil.addSmelting(blocks.resources.get(BlockResourceOre.ResourceType.TIN, 1), items.ingotTin, 0.5f);
+		RecipeUtil.addSmelting(blocks.resources.get(EnumResourceType.APATITE, 1), items.apatite, 0.5f);
+		RecipeUtil.addSmelting(blocks.resources.get(EnumResourceType.COPPER, 1), items.ingotCopper, 0.5f);
+		RecipeUtil.addSmelting(blocks.resources.get(EnumResourceType.TIN, 1), items.ingotTin, 0.5f);
 		RecipeUtil.addSmelting(new ItemStack(items.peat), items.ash, 0.0f);
 
 		/* BRONZE INGOTS */
@@ -310,16 +312,16 @@ public class PluginCore extends BlankForestryPlugin {
 		RecipeUtil.addRecipe(items.pipette, "  #", " X ", "X  ", 'X', "paneGlass", '#', new ItemStack(Blocks.wool, 1, OreDictionary.WILDCARD_VALUE));
 
 		// Storage Blocks
-		RecipeUtil.addRecipe(blocks.resourceStorage.get(BlockResourceStorage.ResourceType.APATITE), "###", "###", "###", '#', "gemApatite");
+		RecipeUtil.addRecipe(blocks.resourceStorage.get(EnumResourceType.APATITE), "###", "###", "###", '#', "gemApatite");
 		RecipeUtil.addShapelessRecipe(new ItemStack(items.apatite, 9), "blockApatite");
 
-		RecipeUtil.addRecipe(blocks.resourceStorage.get(BlockResourceStorage.ResourceType.COPPER), "###", "###", "###", '#', "ingotCopper");
+		RecipeUtil.addRecipe(blocks.resourceStorage.get(EnumResourceType.COPPER), "###", "###", "###", '#', "ingotCopper");
 		RecipeUtil.addShapelessRecipe(new ItemStack(items.ingotCopper, 9), "blockCopper");
 
-		RecipeUtil.addRecipe(blocks.resourceStorage.get(BlockResourceStorage.ResourceType.TIN), "###", "###", "###", '#', "ingotTin");
+		RecipeUtil.addRecipe(blocks.resourceStorage.get(EnumResourceType.TIN), "###", "###", "###", '#', "ingotTin");
 		RecipeUtil.addShapelessRecipe(new ItemStack(items.ingotTin, 9), "blockTin");
 
-		RecipeUtil.addRecipe(blocks.resourceStorage.get(BlockResourceStorage.ResourceType.BRONZE), "###", "###", "###", '#', "ingotBronze");
+		RecipeUtil.addRecipe(blocks.resourceStorage.get(EnumResourceType.BRONZE), "###", "###", "###", '#', "ingotBronze");
 		RecipeUtil.addShapelessRecipe(new ItemStack(items.ingotBronze, 9), "blockBronze");
 	}
 

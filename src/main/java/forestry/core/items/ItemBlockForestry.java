@@ -18,9 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import forestry.api.apiculture.hives.IHiveRegistry.HiveType;
-import forestry.apiculture.blocks.BlockBeehives;
-import forestry.core.blocks.BlockBase;
+import forestry.core.blocks.IBlockWithMeta;
 import forestry.core.tiles.TileForestry;
 import forestry.core.tiles.TileUtil;
 
@@ -46,14 +44,10 @@ public class ItemBlockForestry<B extends Block> extends ItemBlock {
 	@Override
 	public String getUnlocalizedName(ItemStack itemstack) {
 		Block block = getBlock();
-		if (block instanceof BlockBase) {
-			BlockBase<?> blockBase = (BlockBase) block;
+		if(block instanceof IBlockWithMeta){
+			IBlockWithMeta blockMeta = (IBlockWithMeta) block;
 			int meta = itemstack.getMetadata();
-			return block.getUnlocalizedName() + "." + blockBase.getNameFromMeta(meta);
-		}else if(block instanceof BlockBeehives){
-			BlockBeehives blockHives = (BlockBeehives) block;
-			int meta = itemstack.getMetadata();
-			return block.getUnlocalizedName() + "." + HiveType.VALUES[meta - 1].getName();
+			return block.getUnlocalizedName() + "." + blockMeta.getNameFromMeta(meta);
 		}
 		return block.getUnlocalizedName();
 	}

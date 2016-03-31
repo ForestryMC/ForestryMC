@@ -164,8 +164,8 @@ public class BlockMushroom extends BlockBush implements IItemTyped, IItemModelRe
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerModel(Item item, IModelManager manager) {
-		manager.registerItemModel(item, 0, "minecraft", "red_mushroom");
 		manager.registerItemModel(item, 0, "minecraft", "brown_mushroom");
+		manager.registerItemModel(item, 1, "minecraft", "red_mushroom");
 	}
 	
 	@Override

@@ -41,7 +41,7 @@ public class ItemRegistryApiculture extends ItemRegistry {
 	public final ItemForestry honeydew;
 	public final ItemForestry royalJelly;
 	public final ItemForestry waxCast;
-	public final ItemHoneycomb beeComb;
+	public final ItemHoneyComb beeComb;
 
 	public final ItemArmorApiarist apiaristHat;
 	public final ItemArmorApiarist apiaristChest;
@@ -86,7 +86,7 @@ public class ItemRegistryApiculture extends ItemRegistry {
 		waxCast = registerItem(new ItemWaxCast(), "waxCast");
 		
 		// / BEE COMBS
-		beeComb = registerItem(new ItemHoneycomb(), "beeCombs");
+		beeComb = registerItem(new ItemHoneyComb(), "beeCombs");
 		OreDictionary.registerOre("beeComb", beeComb.getWildcard());
 		
 		// / APIARIST'S CLOTHES

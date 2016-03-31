@@ -32,17 +32,17 @@ import forestry.apiculture.genetics.BeeDefinition;
 
 public enum HiveDescription implements IHiveDescription {
 
-	FOREST(1, 3.0f, BeeDefinition.FOREST, HiveManager.genHelper.tree()),
-	MEADOWS(2, 1.0f, BeeDefinition.MEADOWS, HiveManager.genHelper.ground(Blocks.dirt, Blocks.grass)),
-	DESERT(3, 1.0f, BeeDefinition.MODEST, HiveManager.genHelper.ground(Blocks.dirt, Blocks.grass, Blocks.sand, Blocks.sandstone)),
-	JUNGLE(4, 4.0f, BeeDefinition.TROPICAL, HiveManager.genHelper.tree()),
-	END(5, 4.0f, BeeDefinition.ENDED, HiveManager.genHelper.ground(Blocks.end_stone)) {
+	FOREST(0, 3.0f, BeeDefinition.FOREST, HiveManager.genHelper.tree()),
+	MEADOWS(1, 1.0f, BeeDefinition.MEADOWS, HiveManager.genHelper.ground(Blocks.dirt, Blocks.grass)),
+	DESERT(2, 1.0f, BeeDefinition.MODEST, HiveManager.genHelper.ground(Blocks.dirt, Blocks.grass, Blocks.sand, Blocks.sandstone)),
+	JUNGLE(3, 4.0f, BeeDefinition.TROPICAL, HiveManager.genHelper.tree()),
+	END(4, 4.0f, BeeDefinition.ENDED, HiveManager.genHelper.ground(Blocks.end_stone)) {
 		@Override
 		public boolean isGoodBiome(BiomeGenBase biome) {
 			return BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.END);
 		}
 	},
-	SNOW(6, 2.0f, BeeDefinition.WINTRY, HiveManager.genHelper.ground(Blocks.dirt, Blocks.grass, Blocks.snow)) {
+	SNOW(5, 2.0f, BeeDefinition.WINTRY, HiveManager.genHelper.ground(Blocks.dirt, Blocks.grass, Blocks.snow)) {
 		@Override
 		public void postGen(World world, BlockPos pos) {
 			if (world.isAirBlock(pos.add(0, 1, 0))) {
@@ -50,7 +50,7 @@ public enum HiveDescription implements IHiveDescription {
 			}
 		}
 	},
-	SWAMP(7, 2.0f, BeeDefinition.MARSHY, HiveManager.genHelper.ground(Blocks.dirt, Blocks.grass)),;
+	SWAMP(6, 2.0f, BeeDefinition.MARSHY, HiveManager.genHelper.ground(Blocks.dirt, Blocks.grass)),;
 
 	private final int meta;
 	private final float genChance;

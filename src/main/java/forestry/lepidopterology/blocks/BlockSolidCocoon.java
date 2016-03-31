@@ -13,7 +13,6 @@ package forestry.lepidopterology.blocks;
 import java.util.Collections;
 import java.util.List;
 import forestry.api.core.IStateMapperRegister;
-import forestry.api.core.Tabs;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.EmptyStateMapper;
 import forestry.core.utils.ItemStackUtil;
@@ -22,9 +21,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
@@ -41,7 +38,7 @@ public class BlockSolidCocoon extends Block implements ITileEntityProvider, ISta
 		setHardness(0.5F);
 		setTickRandomly(true);
 		setStepSound(soundTypeGrass);
-		setCreativeTab(Tabs.tabLepidopterology);
+		setCreativeTab(null);
 	}
 	
     @Override
@@ -83,10 +80,6 @@ public class BlockSolidCocoon extends Block implements ITileEntityProvider, ISta
     @Override
 	public int getMetaFromState(IBlockState state){
         return 0;
-    }
-    
-    @Override
-    public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list) {
     }
     
     @Override

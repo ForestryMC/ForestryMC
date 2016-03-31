@@ -382,7 +382,7 @@ public  class BlockGreenhouseDoor extends BlockGreenhouse implements IStateMappe
     @Override
 	protected BlockState createBlockState()
     {
-        return new BlockState(this, new IProperty[] {HALF, FACING, OPEN, HINGE, POWERED});
+        return new BlockState(this, HALF, FACING, OPEN, HINGE, POWERED);
     }
     
     @Override

@@ -82,6 +82,7 @@ import forestry.apiculture.genetics.alleles.AlleleEffect;
 import forestry.apiculture.items.EnumHoneyComb;
 import forestry.apiculture.items.EnumPollenCluster;
 import forestry.apiculture.items.EnumPropolis;
+import forestry.apiculture.items.ItemHabitatLocator;
 import forestry.apiculture.items.ItemRegistryApiculture;
 import forestry.apiculture.multiblock.TileAlvearyFan;
 import forestry.apiculture.multiblock.TileAlvearyHeater;
@@ -937,5 +938,6 @@ public class PluginApiculture extends BlankForestryPlugin {
 		for (int i = 0; i < EntityFXSnow.sprites.length; i++) {
 			EntityFXSnow.sprites[i] = event.map.registerSprite(new ResourceLocation("forestry:items/particles/snow." + (i + 1)));
 		}
+		ItemHabitatLocator.registerSprite();
 	}
 }

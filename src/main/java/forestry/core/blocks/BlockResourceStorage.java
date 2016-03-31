@@ -1,8 +1,6 @@
 package forestry.core.blocks;
 
 import java.util.List;
-import java.util.Locale;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
@@ -11,8 +9,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IStringSerializable;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -21,50 +17,35 @@ import forestry.api.core.IModelManager;
 import forestry.core.CreativeTabForestry;
 
 public class BlockResourceStorage extends Block implements IItemModelRegister {
-	public static final PropertyEnum RESOURCE = PropertyEnum.create("resource", ResourceType.class);
-	
-	public enum ResourceType implements IStringSerializable {
-		APATITE,
-		COPPER,
-		TIN,
-		BRONZE;
-
-		public static final ResourceType[] VALUES = values();
-
-		@Override
-		public String getName() {
-			return name().toLowerCase(Locale.ENGLISH);
-		}
-	}
+	public static final PropertyEnum<EnumResourceType> STORAGE_RESOURCES = PropertyEnum.create("resource", EnumResourceType.class);
 
 	public BlockResourceStorage() {
 		super(Material.iron);
 		setHardness(3F);
 		setResistance(5F);
 		setCreativeTab(CreativeTabForestry.tabForestry);
-		setDefaultState(this.blockState.getBaseState().withProperty(RESOURCE, ResourceType.APATITE));
+		setDefaultState(this.blockState.getBaseState().withProperty(STORAGE_RESOURCES, EnumResourceType.APATITE));
 	}
 	
 	@Override
 	protected BlockState createBlockState() {
-		return new BlockState(this, RESOURCE);
+		return new BlockState(this, STORAGE_RESOURCES);
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return ((ResourceType) state.getValue(RESOURCE)).ordinal();
+		return state.getValue(STORAGE_RESOURCES).getMeta();
 	}
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState().withProperty(RESOURCE, ResourceType.values()[meta]);
+		return getDefaultState().withProperty(STORAGE_RESOURCES, EnumResourceType.VALUES[meta]);
 	}
 	
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs creativeTabs, List<ItemStack> itemList) {
-		for (ResourceType resourceType : ResourceType.values()) {
-			ItemStack stack = get(resourceType);
-			itemList.add(stack);
+		for (EnumResourceType resourceType : EnumResourceType.VALUES) {
+			itemList.add(get(resourceType));
 		}
 	}
 
@@ -76,13 +57,12 @@ public class BlockResourceStorage extends Block implements IItemModelRegister {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		manager.registerItemModel(item, 0, "storage/apatite");
-		manager.registerItemModel(item, 1, "storage/copper");
-		manager.registerItemModel(item, 2, "storage/tin");
-		manager.registerItemModel(item, 3, "storage/bronze");
+		for(EnumResourceType resourceType : EnumResourceType.VALUES){
+			manager.registerItemModel(item, resourceType.getMeta(), "storage/" + resourceType.getName());
+		}
 	}
 
-	public ItemStack get(ResourceType type) {
-		return new ItemStack(this, 1, type.ordinal());
+	public ItemStack get(EnumResourceType type) {
+		return new ItemStack(this, 1, type.getMeta());
 	}
 }

@@ -57,7 +57,7 @@ import forestry.farming.tiles.TileFarmValve;
 
 public class BlockFarm extends BlockStructure {
 
-	public static final PropertyEnum META = PropertyEnum.create("meta", EnumFarmBlockType.class);
+	public static final PropertyEnum<EnumFarmBlockType> META = PropertyEnum.create("meta", EnumFarmBlockType.class);
 	
 	public BlockFarm() {
 		super(Material.rock);
@@ -70,12 +70,12 @@ public class BlockFarm extends BlockStructure {
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState().withProperty(META, EnumFarmBlockType.values()[meta]);
+		return getDefaultState().withProperty(META, EnumFarmBlockType.VALUES[meta]);
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return ((EnumFarmBlockType) state.getValue(META)).ordinal();
+		return state.getValue(META).ordinal();
 	}
 
 	@Override
@@ -196,6 +196,9 @@ public class BlockFarm extends BlockStructure {
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
 		for(int i = 0;i < 6;i++){
+			if(i == 1){
+				continue;
+			}
 			ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation("forestry:ffarm", "inventory"));
 		}
 	}

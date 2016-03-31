@@ -11,7 +11,7 @@
 package forestry.core.blocks;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -30,7 +30,7 @@ import forestry.core.access.IRestrictedAccess;
 import forestry.core.tiles.TileForestry;
 import forestry.core.utils.Log;
 
-public abstract class BlockForestry extends BlockContainer implements IItemModelRegister {
+public abstract class BlockForestry extends Block implements IItemModelRegister, ITileEntityProvider {
 
 	protected BlockForestry(Material material) {
 		super(material);
