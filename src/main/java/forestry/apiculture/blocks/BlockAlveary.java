@@ -37,6 +37,7 @@ import forestry.api.core.IModelManager;
 import forestry.api.core.IStateMapperRegister;
 import forestry.api.core.Tabs;
 import forestry.apiculture.MaterialBeehive;
+import forestry.apiculture.multiblock.IAlvearyControllerInternal;
 import forestry.apiculture.multiblock.TileAlveary;
 import forestry.apiculture.multiblock.TileAlvearyFan;
 import forestry.apiculture.multiblock.TileAlvearyHeater;
@@ -45,6 +46,7 @@ import forestry.apiculture.multiblock.TileAlvearyPlain;
 import forestry.apiculture.multiblock.TileAlvearySieve;
 import forestry.apiculture.multiblock.TileAlvearyStabiliser;
 import forestry.apiculture.multiblock.TileAlvearySwarmer;
+import forestry.apiculture.network.packets.PacketAlveryChange;
 import forestry.core.blocks.BlockStructure;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.IActivatable;
@@ -258,7 +260,9 @@ public abstract class BlockAlveary extends BlockStructure implements IStateMappe
 			TileAlveary tileAlveary = (TileAlveary) tileEntity;
 
 			// We must check that the slabs on top were not removed
-			tileAlveary.getMultiblockLogic().getController().reassemble();
+			IAlvearyControllerInternal alvery = tileAlveary.getMultiblockLogic().getController();
+			alvery.reassemble();
+			Proxies.net.sendNetworkPacket(new PacketAlveryChange(alvery), world);
 		}
 	}
 }

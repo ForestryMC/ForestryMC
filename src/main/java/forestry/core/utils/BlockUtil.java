@@ -20,6 +20,7 @@ import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
@@ -115,6 +116,9 @@ public abstract class BlockUtil {
 
 	public static boolean isWoodSlabBlock(Block block, IBlockAccess world, BlockPos pos) {
 		if (block == null || block.isAir(world, pos)) {
+			return false;
+		}
+		if(Item.getItemFromBlock(block) == null){
 			return false;
 		}
 		int[] oreIds = OreDictionary.getOreIDs(new ItemStack(block));

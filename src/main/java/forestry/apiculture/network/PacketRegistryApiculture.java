@@ -11,6 +11,7 @@
 package forestry.apiculture.network;
 
 import forestry.apiculture.network.packets.PacketActiveUpdate;
+import forestry.apiculture.network.packets.PacketAlveryChange;
 import forestry.apiculture.network.packets.PacketBeeLogicActive;
 import forestry.apiculture.network.packets.PacketBeeLogicActiveEntity;
 import forestry.apiculture.network.packets.PacketBeeLogicEntityRequest;
@@ -30,5 +31,7 @@ public class PacketRegistryApiculture extends PacketRegistry {
 		registerClientPacket(new PacketCandleUpdate());
 		
 		registerServerPacket(new PacketBeeLogicEntityRequest());
+		
+		registerClientPacket(new PacketAlveryChange());
 	}
 }
