@@ -30,6 +30,7 @@ import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.core.models.BlankItemModel;
 import forestry.core.models.DefaultTextureGetter;
+import forestry.core.models.TRSRBakedModel;
 
 @SideOnly(Side.CLIENT)
 public class ModelButterflyItem extends BlankItemModel {
@@ -62,6 +63,6 @@ public class ModelButterflyItem extends BlankItemModel {
 		ImmutableMap.Builder<String, String> textures = ImmutableMap.builder();
 		textures.put("butterfly", butterfly.getGenome().getSecondary().getItemTexture());
 		modelButterfly = (IRetexturableModel) modelButterfly.retexture(textures.build());
-		return modelButterfly.bake(ModelRotation.X0_Y0, DefaultVertexFormats.ITEM, textureGetter);
+		return new TRSRBakedModel(modelButterfly.bake(ModelRotation.X0_Y0, DefaultVertexFormats.ITEM, textureGetter), 0.0F, 0.0F, 0.0F, butterfly.getSize());
 	}
 }
