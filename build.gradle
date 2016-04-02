@@ -33,8 +33,8 @@ ext.apiForestry = "./api/forestry"
 ext.apiRedstoneFlux = "./api/redstoneflux"
 
 // java version
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 minecraft {
 	version = mcversion + "-" + forgeversion
@@ -50,7 +50,8 @@ sourceSets {
 	main {
 		java {
 			srcDir project.apiForestry
-			srcDir project.apiRedstoneFlux + "/src/main/java"
+			srcDir project.apiRedstoneFlux
+			srcDir "./api/buildcraft"
 		}
 		resources {
 			srcDir project.dirLang
@@ -117,7 +118,11 @@ jar {
 		from project.apiRedstoneFlux + "/LICENSE - LGPLv3.txt"
 	}
 	into ('invtweaks/api') {
-		from "./src/main/java/invtweaks/LICENSE.txt"
+		from "./src/api/java/invtweaks/LICENSE.txt"
+	}
+	
+	into ('buildcraft/api') {
+		from "./src/api/java/buildcraft/LICENSE"
 	}
 
 	configurations.shade.each{ dep ->
@@ -130,7 +135,6 @@ jar {
 task mainJar(type: Jar, dependsOn: 'reobf') {
 	from (zipTree(jar.getArchivePath())) {
 		include '**'
-		exclude '**/uristqwerty/**'
 	}
 
 	destinationDir = file(dirDest)
@@ -143,9 +147,7 @@ task mainJar(type: Jar, dependsOn: 'reobf') {
 }
 
 task devJar(type: Jar, dependsOn: 'classes') {
-	from (sourceSets.main.output) {
-		exclude '**/uristqwerty/**'
-	}
+	from sourceSets.main.output
 
 	destinationDir = file(dirDest)
 	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
@@ -168,9 +170,7 @@ task apiJar(type: Jar, dependsOn: 'classes') {
 }
 
 task srcJar(type: Jar, dependsOn: 'classes') {
-	from (sourceSets.main.allSource) {
-		exclude '**/uristqwerty/**'
-	}
+	from sourceSets.main.allSource
 
 	destinationDir = file(dirDest)
 	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
