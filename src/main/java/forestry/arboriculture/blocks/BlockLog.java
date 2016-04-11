@@ -103,6 +103,7 @@ public class BlockLog extends BlockWood {
 	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
 		int meta = world.getBlockMetadata(x, y, z);
 		TileWood wood = TileWood.getWoodTile(world, x, y, z);
+		if(wood==null)return null;
 		EnumWoodType type = wood.getWoodType();
 		if (type == null) {
 			return getIcon(side, meta);

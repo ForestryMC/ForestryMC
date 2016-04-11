@@ -106,6 +106,7 @@ public class BlockArbFence extends BlockFence implements IWoodTyped, ITileEntity
 	@Override
 	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
 		TileWood wood = TileWood.getWoodTile(world, x, y, z);
+		if(wood==null)return null;
 		EnumWoodType woodType = wood.getWoodType();
 		return IconProviderWood.getPlankIcon(woodType);
 	}
