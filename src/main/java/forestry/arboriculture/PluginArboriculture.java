@@ -127,6 +127,7 @@ public class PluginArboriculture extends BlankForestryPlugin {
 		WoodItemAccess.registerFences(blocks.fences);
 		WoodItemAccess.registerFenceGates(blocks.fenceGates);
 		WoodItemAccess.registerStairs(blocks.stairs);
+		WoodItemAccess.registerDoors(blocks.doors);
 
 		WoodItemAccess.registerLogs(blocks.logsFireproof);
 		WoodItemAccess.registerPlanks(blocks.planksFireproof);
@@ -201,6 +202,7 @@ public class PluginArboriculture extends BlankForestryPlugin {
 			ItemStack fences = TreeManager.woodItemAccess.getFence(woodType, false);
 			ItemStack fenceGates = TreeManager.woodItemAccess.getFenceGate(woodType, false);
 			ItemStack stairs = TreeManager.woodItemAccess.getStairs(woodType, false);
+			ItemStack doors = TreeManager.woodItemAccess.getDoor(woodType);
 
 			ItemStack fireproofPlanks = TreeManager.woodItemAccess.getPlanks(woodType, true);
 			ItemStack fireproofLogs = TreeManager.woodItemAccess.getLog(woodType, true);
@@ -271,6 +273,22 @@ public class PluginArboriculture extends BlankForestryPlugin {
 					"#  ",
 					"## ",
 					"###",
+					'#', fireproofPlanks.copy());
+
+			doors.stackSize = 3;
+			planks.stackSize = 1;
+			RecipeUtil.addPriorityRecipe(doors.copy(),
+					"## ",
+					"## ",
+					"## ",
+					'#', planks.copy());
+
+			doors.stackSize = 3;
+			fireproofPlanks.stackSize = 1;
+			RecipeUtil.addPriorityRecipe(doors.copy(),
+					"## ",
+					"## ",
+					"## ",
 					'#', fireproofPlanks.copy());
 
 			// Fabricator recipes

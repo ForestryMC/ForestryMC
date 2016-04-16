@@ -42,10 +42,9 @@ public class WoodHelper {
 
 	public static ResourceLocation[] getResourceLocations(IWoodTyped typed) {
 		List<ResourceLocation> resourceLocations = new ArrayList<>();
+		String blockKind = typed.getBlockKind();
 		for (EnumWoodType woodType : typed.getWoodTypes()) {
-			String blockKind = typed.getBlockKind();
-			ResourceLocation resourceLocation = new ForestryResource(blockKind + "/" + woodType);
-			resourceLocations.add(resourceLocation);
+			resourceLocations.add(new ForestryResource(blockKind + "/" + woodType));
 		}
 		return resourceLocations.toArray(new ResourceLocation[resourceLocations.size()]);
 	}

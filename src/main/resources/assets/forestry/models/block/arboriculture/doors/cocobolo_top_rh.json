@@ -1,0 +1,7 @@
+{
+  "parent": "block/door_top_rh",
+  "textures": {
+    "bottom": "forestry:blocks/doors/cocobolo_lower",
+    "top": "forestry:blocks/doors/cocobolo_upper"
+  }
+}

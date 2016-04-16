@@ -1,0 +1,7 @@
+{
+  "parent": "block/door_bottom",
+  "textures": {
+    "bottom": "forestry:blocks/doors/padauk_lower",
+    "top": "forestry:blocks/doors/padauk_upper"
+  }
+}

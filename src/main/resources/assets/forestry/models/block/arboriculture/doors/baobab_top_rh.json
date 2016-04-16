@@ -1,0 +1,7 @@
+{
+  "parent": "block/door_top_rh",
+  "textures": {
+    "bottom": "forestry:blocks/doors/baobab_lower",
+    "top": "forestry:blocks/doors/baobab_upper"
+  }
+}

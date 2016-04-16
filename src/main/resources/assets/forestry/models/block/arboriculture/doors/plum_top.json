@@ -1,0 +1,7 @@
+{
+  "parent": "block/door_top",
+  "textures": {
+    "bottom": "forestry:blocks/doors/plum_lower",
+    "top": "forestry:blocks/doors/plum_upper"
+  }
+}

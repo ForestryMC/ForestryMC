@@ -10,14 +10,10 @@
  ******************************************************************************/
 package forestry.lepidopterology.commands;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
-import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
-import forestry.arboriculture.PluginArboriculture;
 import forestry.core.commands.CommandHelpers;
 import forestry.core.commands.SubCommand;
 import forestry.lepidopterology.entities.EntityButterfly;
@@ -54,54 +50,6 @@ public class CommandButterfly extends SubCommand {
 				for (Object entity : world.loadedEntityList) {
 					if (entity instanceof EntityButterfly) {
 						((EntityButterfly) entity).setDead();
-					}
-				}
-
-				BlockPos pos = sender.getPosition();
-				for (Block block : PluginArboriculture.blocks.logs) {
-					for (IBlockState state : block.getBlockState().getValidStates()) {
-						world.setBlockState(pos, state, 2 | 4);
-						pos = pos.add(2, 0, 0);
-					}
-				}
-
-				pos = sender.getPosition().add(0, 0, 2);
-				for (Block block : PluginArboriculture.blocks.planks) {
-					for (IBlockState state : block.getBlockState().getValidStates()) {
-						world.setBlockState(pos, state, 2 | 4);
-						pos = pos.add(2, 0, 0);
-					}
-				}
-
-				pos = sender.getPosition().add(0, 0, 4);
-				for (Block block : PluginArboriculture.blocks.slabs) {
-					for (IBlockState state : block.getBlockState().getValidStates()) {
-						world.setBlockState(pos, state, 2 | 4);
-						pos = pos.add(2, 0, 0);
-					}
-				}
-
-				pos = sender.getPosition().add(0, 0, 6);
-				for (Block block : PluginArboriculture.blocks.slabsDouble) {
-					for (IBlockState state : block.getBlockState().getValidStates()) {
-						world.setBlockState(pos, state, 2 | 4);
-						pos = pos.add(2, 0, 0);
-					}
-				}
-
-				pos = sender.getPosition().add(0, 0, 8);
-				for (Block block : PluginArboriculture.blocks.fences) {
-					for (IBlockState state : block.getBlockState().getValidStates()) {
-						world.setBlockState(pos, state, 2 | 4);
-						pos = pos.add(2, 0, 0);
-					}
-				}
-
-				pos = sender.getPosition().add(0, 0, 10);
-				for (Block block : PluginArboriculture.blocks.stairs) {
-					for (IBlockState state : block.getBlockState().getValidStates()) {
-						world.setBlockState(pos, state, 2 | 4);
-						pos = pos.add(2, 0, 0);
 					}
 				}
 			}

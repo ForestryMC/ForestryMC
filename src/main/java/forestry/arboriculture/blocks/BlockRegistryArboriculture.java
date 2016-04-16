@@ -25,6 +25,7 @@ import forestry.arboriculture.genetics.alleles.AlleleFruit;
 import forestry.arboriculture.items.ItemBlockDecorativeLeaves;
 import forestry.arboriculture.items.ItemBlockLeaves;
 import forestry.arboriculture.items.ItemBlockWood;
+import forestry.arboriculture.items.ItemBlockWoodDoor;
 import forestry.arboriculture.items.ItemBlockWoodSlab;
 import forestry.core.blocks.BlockRegistry;
 import forestry.core.items.ItemBlockForestry;
@@ -44,6 +45,7 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 	public final List<BlockArbFenceGate> fenceGatesFireproof;
 	public final List<BlockArbStairs> stairs;
 	public final List<BlockArbStairs> stairsFireproof;
+	public final List<BlockArbDoor> doors;
 
 	public final BlockSapling saplingGE;
 	public final BlockForestryLeaves leaves;
@@ -147,6 +149,13 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 				registerOreDictWildcard("stairWood", stair);
 				stairsFireproof.add(stair);
 			}
+		}
+
+		doors = new ArrayList<>();
+		for (EnumWoodType woodType : EnumWoodType.VALUES) {
+			BlockArbDoor door = registerBlock(new BlockArbDoor(woodType), ItemBlockWoodDoor.class, "doors." + woodType);
+			registerOreDictWildcard("doorWood", door);
+			doors.add(door);
 		}
 		
 		// Saplings

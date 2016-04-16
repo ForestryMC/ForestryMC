@@ -4,7 +4,6 @@ import com.google.common.collect.Maps;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +13,7 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.client.resources.model.ModelResourceLocation;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -31,7 +31,7 @@ class WoodTypeStateMapper extends StateMapperBase {
 	@Nullable
 	private final PropertyWoodType propertyWoodType;
 	@Nonnull
-	private final List<IProperty> propertysToRemove = new ArrayList();
+	private final List<IProperty> propertiesToRemove = new ArrayList<>();
 
 	public WoodTypeStateMapper(@Nonnull IWoodTyped woodTyped, @Nullable PropertyWoodType propertyWoodType) {
 		this.woodTyped = woodTyped;
@@ -46,7 +46,7 @@ class WoodTypeStateMapper extends StateMapperBase {
 	}
 	
 	public WoodTypeStateMapper addPropertyToRemove(IProperty property){
-		this.propertysToRemove.add(property);
+		this.propertiesToRemove.add(property);
 		return this;
 	}
 
@@ -60,7 +60,7 @@ class WoodTypeStateMapper extends StateMapperBase {
 			properties = Maps.newLinkedHashMap(state.getProperties());
 		}
 		
-		for(IProperty property : propertysToRemove){
+		for (IProperty property : propertiesToRemove) {
 			properties.remove(property);
 		}
 

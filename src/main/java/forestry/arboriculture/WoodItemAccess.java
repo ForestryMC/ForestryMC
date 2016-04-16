@@ -20,6 +20,7 @@ import net.minecraft.item.ItemStack;
 
 import forestry.api.arboriculture.EnumWoodType;
 import forestry.api.arboriculture.IWoodItemAccess;
+import forestry.arboriculture.blocks.BlockArbDoor;
 import forestry.arboriculture.blocks.BlockArbFence;
 import forestry.arboriculture.blocks.BlockArbFenceGate;
 import forestry.arboriculture.blocks.BlockArbLog;
@@ -34,6 +35,13 @@ public class WoodItemAccess implements IWoodItemAccess {
 	private static final WoodMap fences = new WoodMap();
 	private static final WoodMap fenceGates = new WoodMap();
 	private static final WoodMap stairs = new WoodMap();
+	private static final WoodMap doors = new WoodMap() {
+		@Nonnull
+		@Override
+		public EnumMap<EnumWoodType, ItemStack> get(boolean fireproof) {
+			return super.get(false);
+		}
+	};
 
 	private static class WoodMap {
 		private final EnumMap<EnumWoodType, ItemStack> normal = new EnumMap<>(EnumWoodType.class);
@@ -81,6 +89,12 @@ public class WoodItemAccess implements IWoodItemAccess {
 		}
 	}
 
+	public static void registerDoors(List<BlockArbDoor> blocks) {
+		for (BlockArbDoor block : blocks) {
+			register(block, doors);
+		}
+	}
+
 	private static <T extends Block & IWoodTyped> void register(T woodTyped, WoodMap woodMap) {
 		boolean fireproof = woodTyped.isFireproof();
 		EnumMap<EnumWoodType, ItemStack> registryMap = woodMap.get(fireproof);
@@ -122,4 +136,8 @@ public class WoodItemAccess implements IWoodItemAccess {
 		return stairs.get(fireproof).get(woodType).copy();
 	}
 
+	@Override
+	public ItemStack getDoor(EnumWoodType woodType) {
+		return doors.get(false).get(woodType).copy();
+	}
 }
