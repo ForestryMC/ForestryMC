@@ -50,6 +50,7 @@ public class PluginFood extends ForestryPlugin {
 		super.preInit();
 
 		LiquidRegistryHelper.registerLiquidContainer(Fluids.SHORT_MEAD, Constants.BUCKET_VOLUME, items.beverage.get(EnumBeverage.MEAD_SHORT, 1), new ItemStack(Items.glass_bottle));
+		LiquidRegistryHelper.registerLiquidContainer(Fluids.MEAD, Constants.BUCKET_VOLUME, items.beverage.get(EnumBeverage.MEAD, 1), new ItemStack(Items.glass_bottle));
 
 		ItemRegistryApiculture beeItems = PluginApiculture.items;
 		if (beeItems != null) {

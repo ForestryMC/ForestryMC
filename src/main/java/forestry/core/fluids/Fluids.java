@@ -211,7 +211,31 @@ public enum Fluids {
 		@Override
 		public EnumSet<EnumContainerType> getContainerTypes() {
 			return EnumSet.of(
-					EnumContainerType.BUCKET
+					EnumContainerType.BUCKET,
+					EnumContainerType.CAN,
+					EnumContainerType.CAPSULE,
+					EnumContainerType.REFRACTORY
+			);
+		}
+	},
+	MEAD("Mead", new Color(202, 102, 0), 1000, 1200) {
+		@Override
+		public String getTag() {
+			return "mead";
+		}
+
+		@Override
+		public Block makeBlock() {
+			return new BlockForestryFluid(this);
+		}
+
+		@Override
+		public EnumSet<EnumContainerType> getContainerTypes() {
+			return EnumSet.of(
+					EnumContainerType.BUCKET,
+					EnumContainerType.CAN,
+					EnumContainerType.CAPSULE,
+					EnumContainerType.REFRACTORY
 			);
 		}
 	},
@@ -260,7 +284,7 @@ public enum Fluids {
 	CREOSOTE(new Color(0x635c03)),
 	STEAM(new Color(0x91938F));
 
-	public static final Fluids[] forestryFluids = {ETHANOL, BIOMASS, GLASS, HONEY, LEGACY_HONEY, ICE, JUICE, MILK, SEEDOIL, SHORT_MEAD};
+	public static final Fluids[] forestryFluids = {ETHANOL, BIOMASS, GLASS, HONEY, LEGACY_HONEY, ICE, JUICE, MILK, SEEDOIL, SHORT_MEAD, MEAD};
 
 	private static final Map<String, Fluids> tagToFluid = new HashMap<>();
 
