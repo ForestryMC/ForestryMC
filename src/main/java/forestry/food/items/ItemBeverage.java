@@ -50,7 +50,7 @@ public class ItemBeverage extends ItemForestryFood {
 
 	public ItemBeverage() {
 		super(1, 0.2f);
-		setMaxStackSize(1);
+		setMaxStackSize(8);
 		this.beverages = EnumBeverage.VALUES;
 	}
 
@@ -65,13 +65,18 @@ public class ItemBeverage extends ItemForestryFood {
 	@Override
 	public ItemStack onEaten(ItemStack itemstack, World world, EntityPlayer entityplayer) {
 		List<IBeverageEffect> effects = BeverageEffect.loadEffects(itemstack);
+		ItemStack container = new ItemStack(Items.glass_bottle, 1);
 
 		itemstack.stackSize--;
+		if (!entityplayer.inventory.addItemStackToInventory(container)) {
+				entityplayer.dropPlayerItemWithRandomChoice(container, false);
+		} else {
+			entityplayer.inventory.setInventorySlotContents(entityplayer.inventory.currentItem, container);
+		}
+		entityplayer.inventory.markDirty();
+
 		entityplayer.getFoodStats().func_151686_a(this, itemstack);
 		world.playSoundAtEntity(entityplayer, "random.burp", 0.5F, world.rand.nextFloat() * 0.1F + 0.9F);
-		if(itemstack.stackSize == 0) {
-			itemstack = new ItemStack(Items.glass_bottle, 1);
-		}
 		if (world.isRemote) {
 			return itemstack;
 		}
