@@ -47,6 +47,6 @@ public class TriggerLowGermlings extends Trigger {
 
 		TileFarmHatch tileHatch = (TileFarmHatch) tile;
 		IInventory germlingsInventory = tileHatch.getMultiblockLogic().getController().getFarmInventory().getGermlingsInventory();
-		return InventoryUtil.containsPercent(germlingsInventory, threshold);
+		return !InventoryUtil.containsPercent(germlingsInventory, threshold);
 	}
 }
