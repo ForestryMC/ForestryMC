@@ -101,16 +101,16 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 			registerOreDictWildcard("slabWood", slab);
 		}
 
-		fences = new ArrayList<>();
-		fencesFireproof = new ArrayList<>();
-		for (EnumWoodType woodType : EnumWoodType.VALUES) {
-			BlockArbFence fence = registerBlock(new BlockArbFence(false, woodType), ItemBlockWood.class, "fences." + woodType);
-			registerOreDictWildcard("fenceWood", fence);
-			fences.add(fence);
+		fences = BlockArbFence.create(false);
+		for (BlockArbFence block : fences) {
+			registerBlock(block, ItemBlockWood.class, "fences." + block.getBlockNumber());
+			registerOreDictWildcard("fenceWood", block);
+		}
 
-			BlockArbFence fenceFireproof = registerBlock(new BlockArbFence(true, woodType), ItemBlockWood.class, "fences.fireproof." + woodType);
-			registerOreDictWildcard("fenceWood", fenceFireproof);
-			fencesFireproof.add(fenceFireproof);
+		fencesFireproof = BlockArbFence.create(true);
+		for (BlockArbFence block : fencesFireproof) {
+			registerBlock(block, ItemBlockWood.class, "fences.fireproof." + block.getBlockNumber());
+			registerOreDictWildcard("fenceWood", block);
 		}
 		
 		fenceGates = new ArrayList<>();
