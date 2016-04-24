@@ -41,7 +41,7 @@ public class DefaultGreenhouseLogic implements IGreenhouseLogic {
 
 	@Override
 	public String getName() {
-		return null;
+		return name;
 	}
 
 }

@@ -218,6 +218,10 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		CamouflageUtil.readCamouflageBlockFromNBT(data, this, EnumCamouflageType.GLASS);
 		CamouflageUtil.readCamouflageBlockFromNBT(data, this, EnumCamouflageType.DOOR);
 		
+		if(logics.isEmpty()){
+			createLogics();
+		}
+		
 		for(IGreenhouseLogic logic : getLogics()){
 			logic.readFromNBT(data.getCompoundTag("logic" + logic.getName()));
 		}
