@@ -16,8 +16,13 @@ import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 
 public class EntityFXBee extends EntityFX {
+	private final double originX;
+	private final double originZ;
+
 	public EntityFXBee(World world, double x, double y, double z, int color) {
 		super(world, x, y, z, 0.0D, 0.0D, 0.0D);
+		this.originX = x;
+		this.originZ = z;
 
 		particleRed = (color >> 16 & 255) / 255.0F;
 		particleGreen = (color >> 8 & 255) / 255.0F;
@@ -25,12 +30,12 @@ public class EntityFXBee extends EntityFX {
 
 		this.setSize(0.1F, 0.1F);
 		this.particleScale *= 0.2F;
-		this.particleMaxAge = (int) (20.0D / (Math.random() * 0.8D + 0.2D));
+		this.particleMaxAge = (int) (80.0D / (Math.random() * 0.8D + 0.2D));
 		this.noClip = true;
 
-		this.motionX *= 0.1D;
+		this.motionX *= 0.9D;
 		this.motionY *= 0.015D;
-		this.motionZ *= 0.1D;
+		this.motionZ *= 0.9D;
 	}
 
 	/**
@@ -42,9 +47,21 @@ public class EntityFXBee extends EntityFX {
 		this.prevPosY = this.posY;
 		this.prevPosZ = this.posZ;
 		this.moveEntity(this.motionX, this.motionY, this.motionZ);
-		this.motionX *= 1 + 0.2D * rand.nextFloat();
-		this.motionY = (this.motionY + 0.2 * (-0.5 + rand.nextFloat())) / 2;
-		this.motionZ *= 1 + 0.2D * rand.nextFloat();
+
+		if (this.particleAge == this.particleMaxAge / 2) {
+			this.motionX = (this.originX - this.posX) * 0.04;
+			this.motionZ = (this.originZ - this.posZ) * 0.04;
+		}
+
+		if (this.particleAge < (this.particleMaxAge / 4) || this.particleAge > (this.particleMaxAge * 3 / 4)) {
+			this.motionX *= 0.92 + 0.2D * rand.nextFloat();
+			this.motionY = (this.motionY + 0.2 * (-0.5 + rand.nextFloat())) / 2;
+			this.motionZ *= 0.92 + 0.2D * rand.nextFloat();
+		} else {
+			this.motionX *= 0.95;
+			this.motionY = (this.motionY + 0.2 * (-0.5 + rand.nextFloat())) / 2;
+			this.motionZ *= 0.95;
+		}
 
 		if (this.particleAge++ >= this.particleMaxAge) {
 			this.setDead();
