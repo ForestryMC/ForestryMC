@@ -23,9 +23,9 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
-import forestry.core.gui.tooltips.ToolTipLine;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -90,14 +90,14 @@ public class FilteredTank extends StandardTank {
 					rarity = EnumRarity.COMMON;
 				}
 				FluidStack filterFluidStack = FluidRegistry.getFluidStack(fluidFilter.getName(), 0);
-				ToolTipLine name = new ToolTipLine(fluidFilter.getLocalizedName(filterFluidStack), rarity.rarityColor, 2);
-				toolTip.add(name);
+				toolTip.add(fluidFilter.getLocalizedName(filterFluidStack), rarity.rarityColor);
 			}
 		} else {
 			toolTip.add(EnumChatFormatting.ITALIC + "<" + StringUtil.localize("gui.tooltip.tmi") + ">");
 		}
 
-		toolTip.add(String.format("%,d", getFluidAmount()) + " / " + String.format("%,d", getCapacity()));
+		String liquidAmount = Translator.translateToLocalFormatted("for.gui.tooltip.liquid.amount", getFluidAmount(), getCapacity());
+		toolTip.add(liquidAmount);
 	}
 
 }

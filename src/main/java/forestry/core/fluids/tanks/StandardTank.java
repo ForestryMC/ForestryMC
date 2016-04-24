@@ -12,7 +12,6 @@ package forestry.core.fluids.tanks;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
-import java.util.Locale;
 
 import net.minecraft.item.EnumRarity;
 import net.minecraft.tileentity.TileEntity;
@@ -26,10 +25,10 @@ import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.ITankUpdateHandler;
 import forestry.core.fluids.TankManager;
 import forestry.core.gui.tooltips.ToolTip;
-import forestry.core.gui.tooltips.ToolTipLine;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
+import forestry.core.utils.Translator;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -201,11 +200,11 @@ public class StandardTank extends FluidTank implements IStreamable {
 			if (rarity == null) {
 				rarity = EnumRarity.COMMON;
 			}
-			ToolTipLine fluidName = new ToolTipLine(fluidType.getLocalizedName(getFluid()), rarity.rarityColor, 2);
-			toolTip.add(fluidName);
+			toolTip.add(fluidType.getLocalizedName(getFluid()), rarity.rarityColor);
 			amount = getFluid().amount;
 		}
-		toolTip.add(new ToolTipLine(String.format(Locale.ENGLISH, "%,d / %,d", amount, getCapacity())));
+		String liquidAmount = Translator.translateToLocalFormatted("for.gui.tooltip.liquid.amount", amount, getCapacity());
+		toolTip.add(liquidAmount);
 	}
 
 	protected final ToolTip toolTip = new ToolTip() {

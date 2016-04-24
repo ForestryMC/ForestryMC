@@ -73,7 +73,7 @@ public class LedgerManager {
 	}
 
 	private Ledger getAtPosition(int mX, int mY) {
-		if (ledgers.size() > 0) {
+		if (!ledgers.isEmpty()) {
 			final int xShift = (gui.width - gui.getSizeX()) / 2 + gui.getSizeX();
 			int yShift = (gui.height - gui.getSizeY()) / 2 + 8;
 

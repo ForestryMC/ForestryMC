@@ -181,25 +181,15 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
-		{
-			RenderHelper.enableGUIStandardItemLighting();
-			GL11.glDisable(GL11.GL_LIGHTING);
-			GL11.glDisable(GL11.GL_DEPTH_TEST);
-			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240 / 1.0F, 240 / 1.0F);
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		ledgerManager.drawTooltips(mouseX, mouseY);
 
-			ledgerManager.drawTooltips(mouseX, mouseY);
+		InventoryPlayer playerInv = mc.thePlayer.inventory;
 
-			InventoryPlayer playerInv = mc.thePlayer.inventory;
-
-			if (playerInv.getItemStack() == null) {
-				GuiUtil.drawToolTips(this, widgetManager.getWidgets(), mouseX, mouseY);
-				GuiUtil.drawToolTips(this, buttonList, mouseX, mouseY);
-				GuiUtil.drawToolTips(this, inventorySlots.inventorySlots, mouseX, mouseY);
-			}
+		if (playerInv.getItemStack() == null) {
+			GuiUtil.drawToolTips(this, widgetManager.getWidgets(), mouseX, mouseY);
+			GuiUtil.drawToolTips(this, buttonList, mouseX, mouseY);
+			GuiUtil.drawToolTips(this, inventorySlots.inventorySlots, mouseX, mouseY);
 		}
-		GL11.glPopAttrib();
 	}
 
 	@Override

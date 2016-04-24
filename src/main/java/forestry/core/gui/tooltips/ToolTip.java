@@ -10,18 +10,20 @@
  ******************************************************************************/
 package forestry.core.gui.tooltips;
 
-import com.google.common.collect.ForwardingList;
-
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+
+import net.minecraft.util.EnumChatFormatting;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class ToolTip extends ForwardingList<ToolTipLine> {
+public class ToolTip {
 
-	private final List<ToolTipLine> delegate = new ArrayList<>();
+	private final List<String> lines = new ArrayList<>();
 	private final long delay;
 	private long mouseOverStart;
 
@@ -33,13 +35,20 @@ public class ToolTip extends ForwardingList<ToolTipLine> {
 		this.delay = delay;
 	}
 
-	@Override
-	protected final List<ToolTipLine> delegate() {
-		return delegate;
+	public void clear() {
+		lines.clear();
 	}
 
 	public boolean add(@Nonnull String line) {
-		return add(new ToolTipLine(line));
+		return add(line, null);
+	}
+
+	public boolean add(@Nonnull String line, @Nullable EnumChatFormatting formatting) {
+		if (formatting != null) {
+			return lines.add(formatting + line);
+		} else {
+			return lines.add(line);
+		}
 	}
 
 	public boolean add(List lines) {
@@ -50,6 +59,10 @@ public class ToolTip extends ForwardingList<ToolTipLine> {
 			}
 		}
 		return changed;
+	}
+
+	public List<String> getLines() {
+		return Collections.unmodifiableList(lines);
 	}
 
 	public void onTick(boolean mouseOver) {
