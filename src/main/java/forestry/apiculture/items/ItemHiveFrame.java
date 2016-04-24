@@ -10,6 +10,9 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
+import java.util.List;
+
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
 import forestry.api.apiculture.DefaultBeeModifier;
@@ -21,9 +24,11 @@ import forestry.api.apiculture.IHiveFrame;
 import forestry.api.core.Tabs;
 import forestry.core.items.ItemForestry;
 
+import mezz.jei.util.Translator;
+
 public class ItemHiveFrame extends ItemForestry implements IHiveFrame {
 
-	private final IBeeModifier beeModifier;
+	private final HiveFrameBeeModifier beeModifier;
 
 	public ItemHiveFrame(int maxDamage, float geneticDecay) {
 		setMaxStackSize(1);
@@ -48,7 +53,17 @@ public class ItemHiveFrame extends ItemForestry implements IHiveFrame {
 		return beeModifier;
 	}
 
+	@Override
+	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+		super.addInformation(stack, playerIn, tooltip, advanced);
+		beeModifier.addInformation(stack, playerIn, tooltip, advanced);
+		if (!stack.isItemDamaged()) {
+			tooltip.add(Translator.translateToLocalFormatted("item.for.frame.durability", stack.getMaxDamage()));
+		}
+	}
+
 	private static class HiveFrameBeeModifier extends DefaultBeeModifier {
+		private static final float production = 2f;
 		private final float geneticDecay;
 
 		public HiveFrameBeeModifier(float geneticDecay) {
@@ -57,12 +72,17 @@ public class ItemHiveFrame extends ItemForestry implements IHiveFrame {
 
 		@Override
 		public float getProductionModifier(IBeeGenome genome, float currentModifier) {
-			return currentModifier < 10f ? 2f : 1f;
+			return currentModifier < 10f ? production : 1f;
 		}
 
 		@Override
 		public float getGeneticDecay(IBeeGenome genome, float currentModifier) {
 			return this.geneticDecay;
+		}
+
+		public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+			tooltip.add(Translator.translateToLocalFormatted("item.for.bee.modifier.production", production));
+			tooltip.add(Translator.translateToLocalFormatted("item.for.bee.modifier.genetic.decay", geneticDecay));
 		}
 	}
 }
