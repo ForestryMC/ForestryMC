@@ -22,5 +22,17 @@ public class ApicultureJeiPlugin extends BlankModPlugin {
 				new ItemStack(PluginApiculture.items.frameUntreated)
 		);
 		registry.addDescription(frames, "for.jei.description.frames");
+
+		List<ItemStack> apiaristSuit = Arrays.asList(
+				new ItemStack(PluginApiculture.items.apiaristBoots),
+				new ItemStack(PluginApiculture.items.apiaristChest),
+				new ItemStack(PluginApiculture.items.apiaristHat),
+				new ItemStack(PluginApiculture.items.apiaristLegs)
+		);
+		registry.addDescription(apiaristSuit, "for.jei.description.apiarist.suit");
+
+		registry.addDescription(new ItemStack(PluginApiculture.items.habitatLocator), "for.jei.description.habitat.locator");
+
+		registry.addDescription(new ItemStack(PluginApiculture.items.scoop), "for.jei.description.scoop");
 	}
 }
