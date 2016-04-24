@@ -16,11 +16,6 @@ public abstract class ForestryRecipeCategory extends BlankRecipeCategory {
 		this.background = background;
 		this.localizedName = Translator.translateToLocal(unlocalizedName);
 	}
-	
-	public ForestryRecipeCategory(@Nonnull IDrawable background, String unlocalizedName, int slots) {
-		this.background = background;
-		this.localizedName = Translator.translateToLocal(unlocalizedName);
-	}
 
 	@Nonnull
 	@Override

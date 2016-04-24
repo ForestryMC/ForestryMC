@@ -26,6 +26,9 @@ import forestry.factory.recipes.jei.fermenter.FermenterRecipeMaker;
 import forestry.factory.recipes.jei.moistener.MoistenerRecipeCategory;
 import forestry.factory.recipes.jei.moistener.MoistenerRecipeHandler;
 import forestry.factory.recipes.jei.moistener.MoistenerRecipeMaker;
+import forestry.factory.recipes.jei.rainmaker.RainmakerRecipeCategory;
+import forestry.factory.recipes.jei.rainmaker.RainmakerRecipeHandler;
+import forestry.factory.recipes.jei.rainmaker.RainmakerRecipeMaker;
 import forestry.factory.recipes.jei.squeezer.SqueezerContainerRecipeWrapper;
 import forestry.factory.recipes.jei.squeezer.SqueezerRecipeCategory;
 import forestry.factory.recipes.jei.squeezer.SqueezerRecipeHandler;
@@ -57,7 +60,8 @@ public class FactoryJeiPlugin extends BlankModPlugin {
 				new FabricatorRecipeCategory(guiHelper),
 				new FermenterRecipeCategory(guiHelper),
 				new MoistenerRecipeCategory(guiHelper),
-				new SqueezerRecipeCategory(guiHelper, ForestryRecipeCategoryUid.SQUEEZER),
+				new RainmakerRecipeCategory(guiHelper),
+				new SqueezerRecipeCategory(guiHelper),
 				new StillRecipeCategory(guiHelper));
 		
 		registry.addRecipeHandlers(new BottlerRecipeHandler(),
@@ -66,6 +70,7 @@ public class FactoryJeiPlugin extends BlankModPlugin {
 				new FabricatorRecipeHandler(),
 				new FermenterRecipeHandler(),
 				new MoistenerRecipeHandler(),
+				new RainmakerRecipeHandler(),
 				new SqueezerRecipeHandler<>(SqueezerRecipeWrapper.class, ForestryRecipeCategoryUid.SQUEEZER),
 				new SqueezerRecipeHandler<>(SqueezerContainerRecipeWrapper.class, ForestryRecipeCategoryUid.SQUEEZER),
 				new StillRecipeHandler());
@@ -76,6 +81,7 @@ public class FactoryJeiPlugin extends BlankModPlugin {
 		registry.addRecipes(FabricatorRecipeMaker.getFabricatorRecipes());
 		registry.addRecipes(FermenterRecipeMaker.getFermenterRecipes());
 		registry.addRecipes(MoistenerRecipeMaker.getMoistenerRecipes());
+		registry.addRecipes(RainmakerRecipeMaker.getRecipes());
 		registry.addRecipes(SqueezerRecipeMaker.getSqueezerRecipes());
 		registry.addRecipes(SqueezerRecipeMaker.getSqueezerContainerRecipes());
 		registry.addRecipes(StillRecipeMaker.getStillRecipes());

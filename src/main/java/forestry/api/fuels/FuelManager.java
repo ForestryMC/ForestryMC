@@ -5,37 +5,36 @@
  ******************************************************************************/
 package forestry.api.fuels;
 
-import java.util.HashMap;
+import java.util.Map;
 
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.fluids.Fluid;
 
-
 public class FuelManager {
 	/**
 	 * Add new fuels for the fermenter here (i.e. fertilizer).
 	 */
-	public static HashMap<ItemStack, FermenterFuel> fermenterFuel;
+	public static Map<ItemStack, FermenterFuel> fermenterFuel;
 	/**
 	 * Add new resources for the moistener here (i.e. wheat)
 	 */
-	public static HashMap<ItemStack, MoistenerFuel> moistenerResource;
+	public static Map<ItemStack, MoistenerFuel> moistenerResource;
 	/**
 	 * Add new substrates for the rainmaker here
 	 */
-	public static HashMap<ItemStack, RainSubstrate> rainSubstrate;
+	public static Map<ItemStack, RainSubstrate> rainSubstrate;
 	/**
 	 * Add new fuels for EngineBronze (= biogas engine) here
 	 */
-	public static HashMap<Fluid, EngineBronzeFuel> bronzeEngineFuel;
+	public static Map<Fluid, EngineBronzeFuel> bronzeEngineFuel;
 	/**
 	 * Add new fuels for EngineCopper (= peat-fired engine) here
 	 */
-	public static HashMap<ItemStack, EngineCopperFuel> copperEngineFuel;
+	public static Map<ItemStack, EngineCopperFuel> copperEngineFuel;
 	/**
 	 * Add new fuels for Generator here
 	 */
-	public static HashMap<Fluid, GeneratorFuel> generatorFuel;
+	public static Map<Fluid, GeneratorFuel> generatorFuel;
 
 }

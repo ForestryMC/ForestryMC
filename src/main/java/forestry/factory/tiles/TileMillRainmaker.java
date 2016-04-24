@@ -42,7 +42,7 @@ public class TileMillRainmaker extends TileMill {
 		// We don't have a gui, but we can be activated
 		if (FuelManager.rainSubstrate.containsKey(player.inventory.getCurrentItem()) && charge == 0) {
 			RainSubstrate substrate = FuelManager.rainSubstrate.get(player.inventory.getCurrentItem());
-			if (substrate.item.isItemEqual(player.inventory.getCurrentItem())) {
+			if (substrate.getItem().isItemEqual(player.inventory.getCurrentItem())) {
 				addCharge(substrate);
 				player.inventory.getCurrentItem().stackSize--;
 			}
@@ -74,9 +74,9 @@ public class TileMillRainmaker extends TileMill {
 
 	public void addCharge(RainSubstrate substrate) {
 		charge = 1;
-		speed = substrate.speed;
-		duration = substrate.duration;
-		reverse = substrate.reverse;
+		speed = substrate.getSpeed();
+		duration = substrate.getDuration();
+		reverse = substrate.isReverse();
 		sendNetworkUpdate();
 	}
 

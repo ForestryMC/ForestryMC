@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 import forestry.core.recipes.jei.ForestryRecipeCategory;
+import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
 import forestry.core.recipes.jei.ForestryTooltipCallback;
 import forestry.core.render.ForestryResource;
 
@@ -34,23 +35,20 @@ public class SqueezerRecipeCategory extends ForestryRecipeCategory {
 	private final IDrawableAnimated arrow;
 	@Nonnull
 	private final IDrawable tankOverlay;
-	@Nonnull
-	private final String UID;
 	private final ForestryTooltipCallback tooltip = new ForestryTooltipCallback();
 	
-	public SqueezerRecipeCategory(@Nonnull IGuiHelper guiHelper, @Nonnull String UID) {
-		super(guiHelper.createDrawable(guiTexture, 9, 16, 158, 61), "tile.for.factory.squeezer.name", 10);
+	public SqueezerRecipeCategory(@Nonnull IGuiHelper guiHelper) {
+		super(guiHelper.createDrawable(guiTexture, 9, 16, 158, 61), "tile.for.factory.squeezer.name");
 		
 		IDrawableStatic arrowDrawable = guiHelper.createDrawable(guiTexture, 176, 60, 43, 18);
 		this.arrow = guiHelper.createAnimatedDrawable(arrowDrawable, 200, IDrawableAnimated.StartDirection.LEFT, false);
 		this.tankOverlay = guiHelper.createDrawable(guiTexture, 176, 0, 16, 58);
-		this.UID = UID;
 	}
 	
 	@Nonnull
 	@Override
 	public String getUid() {
-		return UID;
+		return ForestryRecipeCategoryUid.SQUEEZER;
 	}
 
 	@Override
