@@ -27,12 +27,15 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.IChunkProvider;
 
 import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Property;
@@ -57,6 +60,7 @@ import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IClassification.EnumClassLevel;
+import forestry.api.genetics.IFlowerAcceptableRule;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
@@ -94,7 +98,7 @@ import forestry.apiculture.multiblock.TileAlvearySwarmer;
 import forestry.apiculture.network.PacketRegistryApiculture;
 import forestry.apiculture.proxy.ProxyApiculture;
 import forestry.apiculture.tiles.TileCandle;
-import forestry.apiculture.tiles.TileSwarm;
+import forestry.apiculture.tiles.TileHive;
 import forestry.apiculture.trigger.ApicultureTriggers;
 import forestry.apiculture.worldgen.HiveDecorator;
 import forestry.apiculture.worldgen.HiveDescription;
@@ -275,7 +279,7 @@ public class PluginApiculture extends BlankForestryPlugin {
 		BeeManager.inducers.put(items.royalJelly.getItemStack(), 10);
 
 		GameRegistry.registerTileEntity(TileAlvearyPlain.class, "forestry.Alveary");
-		GameRegistry.registerTileEntity(TileSwarm.class, "forestry.Swarm");
+		GameRegistry.registerTileEntity(TileHive.class, "forestry.Swarm");
 		GameRegistry.registerTileEntity(TileAlvearySwarmer.class, "forestry.AlvearySwarmer");
 		GameRegistry.registerTileEntity(TileAlvearyHeater.class, "forestry.AlvearyHeater");
 		GameRegistry.registerTileEntity(TileAlvearyFan.class, "forestry.AlvearyFan");
@@ -322,6 +326,8 @@ public class PluginApiculture extends BlankForestryPlugin {
 	private void setDefaultsForConfig() {
 		
 		FlowerRegistry flowerRegistry = (FlowerRegistry) FlowerManager.flowerRegistry;
+
+		flowerRegistry.registerAcceptableFlowerRule(new EndFlowerAcceptableRule(), FlowerManager.FlowerTypeEnd);
 
 		// Register acceptable plants
 		flowerRegistry.registerAcceptableFlower(Blocks.dragon_egg, FlowerManager.FlowerTypeEnd);
@@ -443,6 +449,11 @@ public class PluginApiculture extends BlankForestryPlugin {
 				"#X#", "###", " # ",
 				'#', "stickWood",
 				'X', Blocks.wool);
+		RecipeUtil.addRecipe(items.smoker,
+				"LS#",
+				"LF#",
+				"###",
+				'#', "ingotTin", 'S', "stickWood", 'F', Items.flint_and_steel, 'L', "leather");
 		RecipeUtil.addRecipe(new ItemStack(Items.slime_ball),
 				"#X#", "#X#", "#X#",
 				'#', items.propolis,
@@ -755,42 +766,42 @@ public class PluginApiculture extends BlankForestryPlugin {
 
 	private static void registerBeehiveDrops() {
 		ItemStack honeyComb = items.beeComb.get(EnumHoneyComb.HONEY, 1);
-		hiveRegistry.addDrops(HiveType.FOREST.getHiveName(),
+		hiveRegistry.addDrops(HiveType.FOREST.getHiveUid(),
 				new HiveDrop(0.80, BeeDefinition.FOREST, honeyComb).setIgnobleShare(0.7),
 				new HiveDrop(0.08, BeeDefinition.FOREST.getRainResist(), honeyComb),
 				new HiveDrop(0.03, BeeDefinition.VALIANT, honeyComb)
 		);
 
-		hiveRegistry.addDrops(HiveType.MEADOWS.getHiveName(),
+		hiveRegistry.addDrops(HiveType.MEADOWS.getHiveUid(),
 				new HiveDrop(0.80, BeeDefinition.MEADOWS, honeyComb).setIgnobleShare(0.7),
 				new HiveDrop(0.03, BeeDefinition.VALIANT, honeyComb)
 		);
 
 		ItemStack parchedComb = items.beeComb.get(EnumHoneyComb.PARCHED, 1);
-		hiveRegistry.addDrops(HiveType.DESERT.getHiveName(),
+		hiveRegistry.addDrops(HiveType.DESERT.getHiveUid(),
 				new HiveDrop(0.80, BeeDefinition.MODEST, parchedComb).setIgnobleShare(0.7),
 				new HiveDrop(0.03, BeeDefinition.VALIANT, parchedComb)
 		);
 
 		ItemStack silkyComb = items.beeComb.get(EnumHoneyComb.SILKY, 1);
-		hiveRegistry.addDrops(HiveType.JUNGLE.getHiveName(),
+		hiveRegistry.addDrops(HiveType.JUNGLE.getHiveUid(),
 				new HiveDrop(0.80, BeeDefinition.TROPICAL, silkyComb).setIgnobleShare(0.7),
 				new HiveDrop(0.03, BeeDefinition.VALIANT, silkyComb)
 		);
 
 		ItemStack mysteriousComb = items.beeComb.get(EnumHoneyComb.MYSTERIOUS, 1);
-		hiveRegistry.addDrops(HiveType.END.getHiveName(),
+		hiveRegistry.addDrops(HiveType.END.getHiveUid(),
 				new HiveDrop(0.90, BeeDefinition.ENDED, mysteriousComb)
 		);
 
 		ItemStack frozenComb = items.beeComb.get(EnumHoneyComb.FROZEN, 1);
-		hiveRegistry.addDrops(HiveType.SNOW.getHiveName(),
+		hiveRegistry.addDrops(HiveType.SNOW.getHiveUid(),
 				new HiveDrop(0.80, BeeDefinition.WINTRY, frozenComb).setIgnobleShare(0.5),
 				new HiveDrop(0.03, BeeDefinition.VALIANT, frozenComb)
 		);
 
 		ItemStack mossyComb = items.beeComb.get(EnumHoneyComb.MOSSY, 1);
-		hiveRegistry.addDrops(HiveType.SWAMP.getHiveName(),
+		hiveRegistry.addDrops(HiveType.SWAMP.getHiveUid(),
 				new HiveDrop(0.80, BeeDefinition.MARSHY, mossyComb).setIgnobleShare(0.4),
 				new HiveDrop(0.03, BeeDefinition.VALIANT, mossyComb)
 		);
@@ -813,6 +824,7 @@ public class PluginApiculture extends BlankForestryPlugin {
 
 		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(stack, 7, 12, 12));
 		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(items.scoop.getItemStack(), 1, 1, 8));
+		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(items.smoker.getItemStack(), 1, 1, 8));
 		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(items.propolis.get(EnumPropolis.NORMAL, 1), 2, 4, 6));
 		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(items.beeComb.get(EnumHoneyComb.HONEY, 1), 4, 12, 7));
 		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(items.beeComb.get(EnumHoneyComb.FROZEN, 1), 2, 10, 7));
@@ -824,13 +836,13 @@ public class PluginApiculture extends BlankForestryPlugin {
 	}
 
 	private static void createHives() {
-		hiveRegistry.registerHive(HiveType.FOREST.getHiveName(), HiveDescription.FOREST);
-		hiveRegistry.registerHive(HiveType.MEADOWS.getHiveName(), HiveDescription.MEADOWS);
-		hiveRegistry.registerHive(HiveType.DESERT.getHiveName(), HiveDescription.DESERT);
-		hiveRegistry.registerHive(HiveType.JUNGLE.getHiveName(), HiveDescription.JUNGLE);
-		hiveRegistry.registerHive(HiveType.END.getHiveName(), HiveDescription.END);
-		hiveRegistry.registerHive(HiveType.SNOW.getHiveName(), HiveDescription.SNOW);
-		hiveRegistry.registerHive(HiveType.SWAMP.getHiveName(), HiveDescription.SWAMP);
+		hiveRegistry.registerHive(HiveType.FOREST.getHiveUid(), HiveDescription.FOREST);
+		hiveRegistry.registerHive(HiveType.MEADOWS.getHiveUid(), HiveDescription.MEADOWS);
+		hiveRegistry.registerHive(HiveType.DESERT.getHiveUid(), HiveDescription.DESERT);
+		hiveRegistry.registerHive(HiveType.JUNGLE.getHiveUid(), HiveDescription.JUNGLE);
+		hiveRegistry.registerHive(HiveType.END.getHiveUid(), HiveDescription.END);
+		hiveRegistry.registerHive(HiveType.SNOW.getHiveUid(), HiveDescription.SNOW);
+		hiveRegistry.registerHive(HiveType.SWAMP.getHiveUid(), HiveDescription.SWAMP);
 	}
 
 	private static void createAlleles() {
@@ -939,5 +951,13 @@ public class PluginApiculture extends BlankForestryPlugin {
 			EntityFXSnow.sprites[i] = event.map.registerSprite(new ResourceLocation("forestry:items/particles/snow." + (i + 1)));
 		}
 		ItemHabitatLocator.registerSprite();
+	}
+
+	private static class EndFlowerAcceptableRule implements IFlowerAcceptableRule {
+		@Override
+		public boolean isAcceptableFlower(String flowerType, World world, BlockPos pos) {
+			BiomeGenBase biomeGenForCoords = world.getBiomeGenForCoords(pos);
+			return BiomeDictionary.isBiomeOfType(biomeGenForCoords, BiomeDictionary.Type.END);
+		}
 	}
 }

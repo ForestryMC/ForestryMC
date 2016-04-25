@@ -45,6 +45,11 @@ public class ArmorApiaristHelper implements IArmorApiaristHelper {
 			}
 		}
 
+		ItemStack heldItem = entity.getHeldItem();
+		if (isArmorApiarist(heldItem, entity, cause, doProtect)) {
+			count++;
+		}
+
 		return count;
 	}
 }

@@ -16,7 +16,7 @@ import forestry.api.core.Tabs;
 public class ItemScoop extends ItemForestryTool implements IToolScoop {
 	public ItemScoop() {
 		super(null);
-		setEfficiencyOnProperMaterial(4.0f);
+		setEfficiencyOnProperMaterial(2.0f);
 		setMaxDamage(10);
 		setCreativeTab(Tabs.tabApiculture);
 		setMaxStackSize(1);

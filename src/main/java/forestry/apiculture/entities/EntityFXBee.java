@@ -97,11 +97,6 @@ public class EntityFXBee extends EntityFX {
 	}
 
 	@Override
-	public int getBrightnessForRender(float partialTicks) {
-		return 0x0000f0;
-	}
-
-	@Override
 	public int getFXLayer() {
 		return 1;
 	}

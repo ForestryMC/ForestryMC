@@ -33,25 +33,23 @@ import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IHiveDrop;
+import forestry.api.apiculture.IHiveTile;
 import forestry.api.apiculture.hives.IHiveRegistry.HiveType;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.api.core.Tabs;
 import forestry.apiculture.MaterialBeehive;
 import forestry.apiculture.PluginApiculture;
-import forestry.apiculture.tiles.TileSwarm;
+import forestry.apiculture.tiles.TileHive;
 import forestry.core.blocks.IBlockWithMeta;
-import forestry.core.config.Config;
-import forestry.core.utils.InventoryUtil;
-import forestry.core.utils.ItemStackUtil;
 
 public class BlockBeeHives extends BlockContainer implements IItemModelRegister, IBlockWithMeta {
 	private static final PropertyEnum<HiveType> HIVE_TYPES = PropertyEnum.create("hive", HiveType.class);
 	
 	public BlockBeeHives() {
 		super(new MaterialBeehive(true));
-		setLightLevel(0.8f);
-		setHardness(1.0f);
+		setLightLevel(0.4f);
+		setHardness(2.5f);
 		setCreativeTab(Tabs.tabApiculture);
 		setHarvestLevel("scoop", 0);
 		setDefaultState(this.blockState.getBaseState().withProperty(HIVE_TYPES, HiveType.FOREST));
@@ -64,7 +62,7 @@ public class BlockBeeHives extends BlockContainer implements IItemModelRegister,
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return state.getValue(HIVE_TYPES).ordinal();
+		return state.getValue(HIVE_TYPES).getMeta();
 	}
 
 	@Override
@@ -74,7 +72,7 @@ public class BlockBeeHives extends BlockContainer implements IItemModelRegister,
 
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
-		return new TileSwarm();
+		return new TileHive();
 	}
 
 	@Override
@@ -83,24 +81,23 @@ public class BlockBeeHives extends BlockContainer implements IItemModelRegister,
 	}
 
 	@Override
-	public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-		if (canHarvestBlock(world, pos, player)) {
-			// Handle TE'd beehives
-			TileEntity tile = world.getTileEntity(pos);
-
-			if (tile instanceof TileSwarm) {
-				TileSwarm swarm = (TileSwarm) tile;
-				if (swarm.containsBees()) {
-					for (ItemStack beeStack : InventoryUtil.getStacks(swarm.contained)) {
-						if (beeStack != null) {
-							ItemStackUtil.dropItemStackAsEntity(beeStack, world, pos);
-						}
-					}
-				}
-			}
+	public void onBlockClicked(World world, BlockPos pos, EntityPlayer player) {
+		super.onBlockClicked(world, pos, player);
+		TileEntity tile = world.getTileEntity(pos);
+		if (tile instanceof IHiveTile) {
+			IHiveTile hive = (IHiveTile) tile;
+			hive.onAttack(world, pos, player);
 		}
+	}
 
-		return world.setBlockToAir(pos);
+	@Override
+	public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
+		boolean canHarvest = canHarvestBlock(world, pos, player);
+		TileEntity tile = world.getTileEntity(pos);
+		if (tile instanceof IHiveTile) {
+			IHiveTile hive = (IHiveTile) tile;
+			hive.onBroken(world, pos, player, canHarvest);
+		}
 	}
 
 	@Override
@@ -169,28 +166,28 @@ public class BlockBeeHives extends BlockContainer implements IItemModelRegister,
 	}
 
 	private static String getHiveNameForMeta(int meta) {
-		return HiveType.VALUES[meta].getHiveName();
+		return HiveType.VALUES[meta].getHiveUid();
+	}
+
+	public static HiveType getHiveType(IBlockState state) {
+		return state.getValue(HIVE_TYPES);
 	}
 
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List<ItemStack> itemList) {
-		itemList.add(new ItemStack(this, 1, 0));
-		itemList.add(new ItemStack(this, 1, 1));
-		itemList.add(new ItemStack(this, 1, 2));
-		itemList.add(new ItemStack(this, 1, 3));
-		if (Config.isDebug) {
-			itemList.add(new ItemStack(this, 1, 4));
+		for (IBlockState blockState : getBlockState().getValidStates()) {
+			if (getHiveType(blockState) != HiveType.SWARM) {
+				int meta = getMetaFromState(blockState);
+				itemList.add(new ItemStack(this, 1, meta));
+			}
 		}
-		itemList.add(new ItemStack(this, 1, 5));
-		itemList.add(new ItemStack(this, 1, 6));
-		// Swarm hive not added
 	}
 
 	/* ITEM MODELS */
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		for(int i = 0;i < HiveType.VALUES.length;i++){
-			manager.registerItemModel(item, i, "beehives/" + HiveType.VALUES[i].getName());
+		for (HiveType hiveType : HiveType.VALUES)  {
+			manager.registerItemModel(item, hiveType.getMeta(), "beehives/" + hiveType.getName());
 		}
 	}
 	

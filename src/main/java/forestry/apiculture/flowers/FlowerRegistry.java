@@ -47,7 +47,6 @@ import forestry.api.genetics.IFlowerRegistry;
 import forestry.api.genetics.IIndividual;
 import forestry.core.config.Constants;
 import forestry.core.utils.BlockUtil;
-import forestry.core.utils.Log;
 import forestry.core.utils.vect.MutableVect;
 import forestry.core.utils.vect.Vect;
 
@@ -95,11 +94,7 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 	@Override
 	public void registerAcceptableFlowerRule(IFlowerAcceptableRule acceptableFlower, String... flowerTypes) {
 		for (String flowerType : flowerTypes) {
-			if (defaultFlowerTypes.contains(flowerType)) {
-				Log.error("IFlowerAcceptableRules are too slow to be applied to Forestry's built-in flower type: " + flowerType + ".");
-			} else {
-				registeredRules.put(flowerType, acceptableFlower);
-			}
+			registeredRules.put(flowerType, acceptableFlower);
 		}
 	}
 
@@ -215,25 +210,6 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 			}
 			meta = block.getMetaFromState(world.getBlockState(pos));
 		}
-
-		/*if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.AGRICRAFT)) {
-			Block cropBlock = GameRegistry.findBlock("AgriCraft", "crops");
-			if (block == cropBlock) {
-				if (block instanceof IPlantable) {
-					//For agricraft versions which implement IPlantable in the BlockCrop class
-					block = ((IPlantable) block).getPlant(world, x, y, z);
-				} else {
-					//For earlier versions of AgriCraft
-					ArrayList<ItemStack> drops = block.getDrops(world, x, y, z, 7, 0);
-					if (drops.get(1).getItem() == Items.wheat_seeds && flowerType.equals(FlowerManager.FlowerTypeWheat)) {
-						return true;
-					}
-					if (drops.get(1).getItem() == Items.nether_wart && flowerType.equals(FlowerManager.FlowerTypeNether)) {
-						return true;
-					}
-				}
-			}
-		}*/
 
 		Flower flower = new Flower(block, meta, 0);
 		return acceptedFlowers.contains(flower);

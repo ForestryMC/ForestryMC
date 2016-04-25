@@ -1,12 +1,12 @@
 {
     "parent": "block/cube",
     "textures": {
-        "particle": "forestry:blocks/beehives/beehive.2.side",
-        "down": "forestry:blocks/beehives/beehive.2.top",
-        "up": "forestry:blocks/beehives/beehive.2.top",
-        "north": "forestry:blocks/beehives/beehive.2.side",
-        "east": "forestry:blocks/beehives/beehive.2.side",
-        "south": "forestry:blocks/beehives/beehive.2.side",
-        "west": "forestry:blocks/beehives/beehive.2.side"
+        "particle": "forestry:blocks/beehives/meadows.side",
+        "down": "forestry:blocks/beehives/meadows.top",
+        "up": "forestry:blocks/beehives/meadows.top",
+        "north": "forestry:blocks/beehives/meadows.side",
+        "east": "forestry:blocks/beehives/meadows.side",
+        "south": "forestry:blocks/beehives/meadows.side",
+        "west": "forestry:blocks/beehives/meadows.side"
     }
 }

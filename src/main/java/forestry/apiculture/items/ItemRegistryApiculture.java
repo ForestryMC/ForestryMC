@@ -49,6 +49,7 @@ public class ItemRegistryApiculture extends ItemRegistry {
 	public final ItemArmorApiarist apiaristBoots;
 
 	public final ItemScoop scoop;
+	public final ItemSmoker smoker;
 
 	public ItemRegistryApiculture() {
 		// / BEES
@@ -98,5 +99,7 @@ public class ItemRegistryApiculture extends ItemRegistry {
 		// TOOLS
 		scoop = registerItem(new ItemScoop(), "scoop");
 		scoop.setHarvestLevel("scoop", 3);
+
+		smoker = registerItem(new ItemSmoker(), "smoker");
 	}
 }

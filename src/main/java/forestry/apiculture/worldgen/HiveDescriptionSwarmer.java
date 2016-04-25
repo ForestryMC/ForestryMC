@@ -10,6 +10,9 @@
  ******************************************************************************/
 package forestry.apiculture.worldgen;
 
+import java.util.Arrays;
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -23,14 +26,14 @@ import forestry.api.apiculture.hives.IHiveGen;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.apiculture.PluginApiculture;
-import forestry.apiculture.tiles.TileSwarm;
+import forestry.apiculture.tiles.TileHive;
 
 public class HiveDescriptionSwarmer implements IHiveDescription {
 
-	private final ItemStack[] bees;
+	private final List<ItemStack> bees;
 
 	public HiveDescriptionSwarmer(ItemStack... bees) {
-		this.bees = bees;
+		this.bees = Arrays.asList(bees);
 	}
 
 	@Override
@@ -45,7 +48,7 @@ public class HiveDescriptionSwarmer implements IHiveDescription {
 
 	@Override
 	public int getMeta() {
-		return 8;
+		return 7;
 	}
 
 	@Override
@@ -71,8 +74,8 @@ public class HiveDescriptionSwarmer implements IHiveDescription {
 	@Override
 	public void postGen(World world, BlockPos pos) {
 		TileEntity tile = world.getTileEntity(pos);
-		if (tile instanceof TileSwarm) {
-			((TileSwarm) tile).setContained(bees);
+		if (tile instanceof TileHive) {
+			((TileHive) tile).setContained(bees);
 		}
 	}
 }

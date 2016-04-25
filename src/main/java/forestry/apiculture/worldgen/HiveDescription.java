@@ -10,13 +10,20 @@
  ******************************************************************************/
 package forestry.apiculture.worldgen;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
 import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.common.IPlantable;
 
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.hives.HiveManager;
@@ -32,11 +39,29 @@ import forestry.apiculture.genetics.BeeDefinition;
 
 public enum HiveDescription implements IHiveDescription {
 
-	FOREST(0, 3.0f, BeeDefinition.FOREST, HiveManager.genHelper.tree()),
-	MEADOWS(1, 1.0f, BeeDefinition.MEADOWS, HiveManager.genHelper.ground(Blocks.dirt, Blocks.grass)),
-	DESERT(2, 1.0f, BeeDefinition.MODEST, HiveManager.genHelper.ground(Blocks.dirt, Blocks.grass, Blocks.sand, Blocks.sandstone)),
-	JUNGLE(3, 4.0f, BeeDefinition.TROPICAL, HiveManager.genHelper.tree()),
-	END(4, 4.0f, BeeDefinition.ENDED, HiveManager.genHelper.ground(Blocks.end_stone)) {
+	FOREST(0, 3.0f, BeeDefinition.FOREST, HiveManager.genHelper.tree()) {
+		@Override
+		public void postGen(World world, BlockPos pos) {
+			super.postGen(world, pos);
+			postGenFlowers(world, pos, flowerStates);
+		}
+	},
+	MEADOWS(1, 1.0f, BeeDefinition.MEADOWS, HiveManager.genHelper.ground(Blocks.dirt, Blocks.grass)) {
+		@Override
+		public void postGen(World world, BlockPos pos) {
+			super.postGen(world, pos);
+			postGenFlowers(world, pos, flowerStates);
+		}
+	},
+	DESERT(2, 1.0f, BeeDefinition.MODEST, HiveManager.genHelper.ground(Blocks.dirt, Blocks.grass, Blocks.sand, Blocks.sandstone)) {
+		@Override
+		public void postGen(World world, BlockPos pos) {
+			super.postGen(world, pos);
+			postGenFlowers(world, pos, cactusStates);
+		}
+	},
+	JUNGLE(3, 6.0f, BeeDefinition.TROPICAL, HiveManager.genHelper.tree()),
+	END(4, 6.0f, BeeDefinition.ENDED, HiveManager.genHelper.ground(Blocks.end_stone)) {
 		@Override
 		public boolean isGoodBiome(BiomeGenBase biome) {
 			return BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.END);
@@ -48,9 +73,30 @@ public enum HiveDescription implements IHiveDescription {
 			if (world.isAirBlock(pos.add(0, 1, 0))) {
 				world.setBlockState(pos.add(0, 1, 0), Blocks.snow_layer.getStateFromMeta(0), 0);
 			}
+
+			postGenFlowers(world, pos, flowerStates);
 		}
 	},
-	SWAMP(6, 2.0f, BeeDefinition.MARSHY, HiveManager.genHelper.ground(Blocks.dirt, Blocks.grass)),;
+	SWAMP(6, 2.0f, BeeDefinition.MARSHY, HiveManager.genHelper.ground(Blocks.dirt, Blocks.grass)) {
+		@Override
+		public void postGen(World world, BlockPos pos) {
+			super.postGen(world, pos);
+
+			postGenFlowers(world, pos, mushroomStates);
+		}
+	};
+
+	private static final IHiveGen groundGen = HiveManager.genHelper.ground(Blocks.dirt, Blocks.grass, Blocks.snow, Blocks.sand, Blocks.sandstone);
+	private static final List<IBlockState> flowerStates = new ArrayList<>();
+	private static final List<IBlockState> mushroomStates = new ArrayList<>();
+	private static final List<IBlockState> cactusStates = Collections.singletonList(Blocks.cactus.getDefaultState());
+
+	static {
+		flowerStates.addAll(Blocks.red_flower.getBlockState().getValidStates());
+		flowerStates.addAll(Blocks.yellow_flower.getBlockState().getValidStates());
+		mushroomStates.add(Blocks.red_mushroom.getDefaultState());
+		mushroomStates.add(Blocks.brown_mushroom.getDefaultState());
+	}
 
 	private final int meta;
 	private final float genChance;
@@ -106,5 +152,47 @@ public enum HiveDescription implements IHiveDescription {
 	@Override
 	public void postGen(World world, BlockPos pos) {
 
+	}
+
+	protected static void postGenFlowers(World world, BlockPos hivePos, List<IBlockState> flowerStates) {
+		int plantedCount = 0;
+		for (int i = 0; i < 10; i++) {
+			int xOffset = world.rand.nextInt(8) - 4;
+			int zOffset = world.rand.nextInt(8) - 4;
+			BlockPos blockPos = hivePos.add(xOffset, 0, zOffset);
+			if (!world.isBlockLoaded(blockPos) || (xOffset == 0 && zOffset == 0)) {
+				continue;
+			}
+
+			int y = groundGen.getYForHive(world, blockPos.getX(), blockPos.getZ());
+			if (y <= 0) {
+				continue;
+			}
+
+			blockPos = new BlockPos(blockPos.getX(), y, blockPos.getZ());
+			IBlockState state = flowerStates.get(world.rand.nextInt(flowerStates.size()));
+			Block block = state.getBlock();
+			if (!block.canPlaceBlockAt(world, blockPos)) {
+				continue;
+			}
+
+			world.setBlockState(blockPos, state);
+			plantedCount++;
+
+			if (block instanceof IPlantable) {
+				IPlantable plantable = (IPlantable) block;
+
+				BlockPos groundPos = blockPos.down();
+				Block ground = world.getBlockState(groundPos).getBlock();
+				if (!ground.canSustainPlant(world, groundPos, EnumFacing.UP, plantable)) {
+					world.setBlockToAir(blockPos);
+					plantedCount--;
+				}
+			}
+
+			if (plantedCount >= 3) {
+				break;
+			}
+		}
 	}
 }

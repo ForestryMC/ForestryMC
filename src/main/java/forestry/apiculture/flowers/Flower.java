@@ -12,8 +12,6 @@ package forestry.apiculture.flowers;
 
 import com.google.common.base.Objects;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.block.Block;
 
 import net.minecraftforge.oredict.OreDictionary;
@@ -43,10 +41,6 @@ public final class Flower {
 		Flower flower = (Flower) obj;
 
 		return Block.isEqualTo(this.block, flower.getBlock()) && (this.meta == OreDictionary.WILDCARD_VALUE || flower.getMeta() == OreDictionary.WILDCARD_VALUE || this.meta == flower.getMeta());
-	}
-
-	public int compareTo(@Nonnull Flower other) {
-		return this.weight.compareTo(other.getWeight());
 	}
 
 	@Override

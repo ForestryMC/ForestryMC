@@ -139,7 +139,7 @@ public abstract class AlleleEffect extends AlleleCategorized implements IAlleleB
 		Vect min = new Vect(housing.getCoordinates()).add(offset);
 		Vect max = min.add(area);
 
-		return AxisAlignedBB.fromBounds(min.getX(), min.getY(), min.getZ(), max.getX(), max.getY(), max.getX());
+		return AxisAlignedBB.fromBounds(min.getX(), min.getY(), min.getZ(), max.getX(), max.getY(), max.getZ());
 	}
 
 	public static <T extends Entity> List<T> getEntitiesInRange(IBeeGenome genome, IBeeHousing housing, Class<T> entityClass) {

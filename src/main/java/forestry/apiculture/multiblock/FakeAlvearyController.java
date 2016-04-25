@@ -12,7 +12,6 @@ package forestry.apiculture.multiblock;
 
 import java.util.Collections;
 
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.biome.BiomeGenBase;
@@ -24,6 +23,7 @@ import forestry.api.apiculture.IBeeListener;
 import forestry.api.apiculture.IBeeModifier;
 import forestry.api.apiculture.IBeekeepingLogic;
 import forestry.apiculture.FakeBeekeepingLogic;
+import forestry.apiculture.tiles.FakeBeeHousingInventory;
 import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.multiblock.FakeMultiblockController;
@@ -95,36 +95,4 @@ public class FakeAlvearyController extends FakeMultiblockController implements I
 		return 0;
 	}
 
-	private static class FakeBeeHousingInventory implements IBeeHousingInventory {
-		public static final FakeBeeHousingInventory instance = new FakeBeeHousingInventory();
-
-		private FakeBeeHousingInventory() {
-
-		}
-
-		@Override
-		public ItemStack getQueen() {
-			return null;
-		}
-
-		@Override
-		public ItemStack getDrone() {
-			return null;
-		}
-
-		@Override
-		public void setQueen(ItemStack itemstack) {
-
-		}
-
-		@Override
-		public void setDrone(ItemStack itemstack) {
-
-		}
-
-		@Override
-		public boolean addProduct(ItemStack product, boolean all) {
-			return false;
-		}
-	}
 }

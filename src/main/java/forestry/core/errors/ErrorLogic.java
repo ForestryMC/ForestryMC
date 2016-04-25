@@ -42,7 +42,7 @@ public class ErrorLogic implements IErrorLogic {
 
 	@Override
 	public final boolean hasErrors() {
-		return errorStates.size() > 0;
+		return !errorStates.isEmpty();
 	}
 
 	@Override

@@ -5,6 +5,7 @@
  ******************************************************************************/
 package forestry.api.apiculture.hives;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 import net.minecraft.util.IStringSerializable;
@@ -15,29 +16,44 @@ public interface IHiveRegistry {
 
 	/* Forestry Hive Names */
 	enum HiveType implements IStringSerializable {
-		FOREST("Forestry:forest"),
-		MEADOWS("Forestry:meadows"),
-		DESERT("Forestry:desert"),
-		JUNGLE("Forestry:jungle"),
-		END("Forestry:end"),
-		SNOW("Forestry:snow"),
-		SWAMP("Forestry:swamp");
+		FOREST("Forestry:forest", "Forestry.speciesForest"),
+		MEADOWS("Forestry:meadows", "Forestry.speciesMeadows"),
+		DESERT("Forestry:desert", "Forestry.speciesModest"),
+		JUNGLE("Forestry:jungle", "Forestry.speciesTropical"),
+		END("Forestry:end", "Forestry.speciesEnded"),
+		SNOW("Forestry:snow", "Forestry.speciesWintry"),
+		SWAMP("Forestry:swamp", "Forestry.speciesMarshy"),
+		SWARM("Forestry:swarm", "Forestry.speciesForest");
 		
 		public static final HiveType[] VALUES = values();
-		
-		HiveType(String name) {
-			this.name = name;
+
+		@Nonnull
+		private final String hiveUid;
+		@Nonnull
+		private final String speciesUid;
+
+		HiveType(@Nonnull String hiveUid, @Nonnull String speciesUid) {
+			this.hiveUid = hiveUid;
+			this.speciesUid = speciesUid;
 		}
 
-		private final String name;
-		
-		public String getHiveName() {
-			return name;
+		@Nonnull
+		public String getHiveUid() {
+			return hiveUid;
 		}
-		
+
+		@Nonnull
+		public String getSpeciesUid() {
+			return speciesUid;
+		}
+
 		@Override
 		public String getName() {
 			return name().toLowerCase();
+		}
+
+		public int getMeta() {
+			return ordinal();
 		}
 		
 	}

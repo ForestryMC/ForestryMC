@@ -10,9 +10,9 @@
  ******************************************************************************/
 package forestry.core.proxy;
 
-import javax.annotation.Nonnull;
-
 import com.google.common.collect.ImmutableMap;
+
+import javax.annotation.Nonnull;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -39,6 +39,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.animation.Animation;
 import net.minecraftforge.client.model.animation.ITimeValue;
 import net.minecraftforge.common.model.animation.IAnimationStateMachine;
+
 import forestry.apiculture.entities.EntityFXBee;
 import forestry.apiculture.render.ParticleRenderer;
 import forestry.apiculture.render.TextureHabitatLocator;
@@ -46,6 +47,7 @@ import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.entities.EntityFXHoneydust;
 import forestry.core.entities.EntityFXIgnition;
+import forestry.core.entities.EntityFXSmoke;
 import forestry.core.entities.EntityFXSnow;
 import forestry.core.fluids.Fluids;
 import forestry.core.items.ItemCrated;
@@ -242,6 +244,16 @@ public class ProxyRenderClient extends ProxyRender {
 
 		EffectRenderer effectRenderer = Minecraft.getMinecraft().effectRenderer;
 		effectRenderer.addEffect(new EntityFXIgnition(world, x, y, z));
+	}
+
+	@Override
+	public void addEntitySmokeFX(World world, double x, double y, double z) {
+		if (!shouldSpawnParticle(world)) {
+			return;
+		}
+
+		EffectRenderer effectRenderer = Minecraft.getMinecraft().effectRenderer;
+		effectRenderer.addEffect(new EntityFXSmoke(world, x, y, z));
 	}
 
 	@Override

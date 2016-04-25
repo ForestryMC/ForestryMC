@@ -10,9 +10,9 @@
  ******************************************************************************/
 package forestry.core.proxy;
 
-import javax.annotation.Nullable;
-
 import com.google.common.collect.ImmutableMap;
+
+import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.statemap.IStateMapper;
@@ -22,8 +22,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+
 import net.minecraftforge.client.model.animation.ITimeValue;
 import net.minecraftforge.common.model.animation.IAnimationStateMachine;
+
 import forestry.core.fluids.Fluids;
 import forestry.core.items.ItemCrated;
 import forestry.core.models.BlockModelIndex;
@@ -120,6 +122,9 @@ public class ProxyRender {
 	}
 
 	public void addEntityIgnitionFX(World world, double x, double y, double z) {
+	}
+
+	public void addEntitySmokeFX(World world, double x, double y, double z) {
 	}
 
 	public void addEntityPotionFX(World world, double x, double y, double z, int color) {
