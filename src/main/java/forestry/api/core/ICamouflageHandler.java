@@ -10,14 +10,29 @@ import net.minecraft.world.World;
 
 public interface ICamouflageHandler{
 
+	/**
+	 * @return The item of the block that is the camouflage of this handler for the EnumCamouflageType.
+	 */
     ItemStack getCamouflageBlock(EnumCamouflageType type);
     
+    /**
+     * @return The default camouflage block item for the EnumCamouflageType.
+     */
     ItemStack getDefaultCamouflageBlock(EnumCamouflageType type);
 
+    /**
+     * Set the camouflage block item for the EnumCamouflageType.
+     */
     void setCamouflageBlock(EnumCamouflageType type, ItemStack camouflageBlock);
     
+    /**
+     * @return The coordinates of the handler as a BlockPos.
+     */
 	BlockPos getCoordinates();
 
+	/**
+	 * @return The world of the handler.
+	 */
 	World getWorld();
 	
 }

@@ -24,6 +24,7 @@ import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.multiblock.FakeMultiblockController;
 import forestry.energy.EnergyManager;
+import forestry.greenhouse.FakeGreenhouseState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 
@@ -87,12 +88,11 @@ public class FakeGreenhouseController extends FakeMultiblockController implement
 
 	@Override
 	public IGreenhouseState createState() {
-		return null;
+		return FakeGreenhouseState.instance;
 	}
-
+	
 	@Override
 	public List<IInternalBlock> getInternalBlocks() {
 		return Collections.emptyList();
 	}
-	
 }

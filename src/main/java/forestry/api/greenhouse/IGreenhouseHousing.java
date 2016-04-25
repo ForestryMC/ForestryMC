@@ -21,7 +21,7 @@ public interface IGreenhouseHousing extends IErrorLogicSource {
 	float getExactHumidity();
 	
 	/**
-	 * @return The world in that the housing is
+	 * @return The world in that the housing is.
 	 */
 	World getWorld();
 	

@@ -27,19 +27,34 @@ import forestry.energy.EnergyManager;
 
 public interface IGreenhouseControllerInternal extends IGreenhouseController, IMultiblockControllerInternal, IRestrictedAccess, IStreamableGui {
 
+	/**
+	 * @return The inventory of the controller.
+	 */
 	@Nonnull
 	IInventoryAdapter getInternalInventory();
 	
+	/**
+	 * @return The tank manager of the controller.
+	 */
 	@Nonnull
 	ITankManager getTankManager();
 	
+	
+	/**
+	 * @return The energy manager of the controller.
+	 */
 	@Nullable
 	EnergyManager getEnergyManager();
 	
-	@Nullable
+	
+	/**
+	 * @return The current state of the greenhouse controller.
+	 */
+	@Nonnull
 	IGreenhouseState createState();
 	
-	@Nonnull
+	/**
+	 * @return A list with all internal block's of the greenhouse.
+	 */
 	List<IInternalBlock> getInternalBlocks();
-	
 }

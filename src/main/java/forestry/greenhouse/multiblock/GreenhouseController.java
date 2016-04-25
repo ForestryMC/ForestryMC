@@ -360,17 +360,22 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	private void createLogics() {
 		logics.clear();
 		for(Class<? extends IGreenhouseLogic> logicClass : GreenhouseManager.greenhouseLogics){
-			try{
-				logics.add(createLogic(logicClass));
-			}catch(Exception e){
-				Log.error("Fail to create a greenhouse logic with the class: " + logicClass);
-				e.printStackTrace();
+			IGreenhouseLogic logic = createLogic(logicClass);
+			if(logic != null){
+				logics.add(logic);
 			}
 		}
 	}
 	
-	private IGreenhouseLogic createLogic(Class<? extends IGreenhouseLogic> logicClass) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
-		return logicClass.getConstructor(IGreenhouseController.class).newInstance(this);
+	private IGreenhouseLogic createLogic(Class<? extends IGreenhouseLogic> logicClass) {
+		try {
+			return logicClass.getConstructor(IGreenhouseController.class).newInstance(this);
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| NoSuchMethodException | SecurityException e) {
+			e.printStackTrace();
+			Log.error("Fail to create a greenhouse logic with the class: " + logicClass);
+			return null;
+		}
 	}
 	
 	@Override
@@ -547,7 +552,6 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		boolean isNextRoof = false;
 		Class<? extends RectangularMultiblockControllerBase> myClass = this.getClass();
 		
-		List<IInternalBlock> internalBlocks = Lists.newArrayList();
 		height: for (int y = minimumCoord.getY(); y <= maximumCoord.getY(); y++) {
 			for (int x = minimumCoord.getX(); x <= maximumCoord.getX(); x++) {
 				for (int z = minimumCoord.getZ(); z <= maximumCoord.getZ(); z++) {
@@ -624,37 +628,32 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 				}
 			}
 		}
-		if(isNextRoof){
-			CreateInternalBlockEvent event = new CreateInternalBlockEvent(createState(), new InternalBlock(worldObj, getMinimumCoord().add(1, 1, 1)));
-			
-			MinecraftForge.EVENT_BUS.post(event);
-			
-			checkInternalBlock(event.internalBlock, internalBlocks);
-		}else if(internalBlocks.isEmpty()){
+		internalBlocks.clear();
+		
+		if(isNextRoof){	
+			checkInternalBlock(createInternalBlock(new InternalBlock(worldObj, getMinimumCoord().add(1, 1, 1))));
+		}
+		if(internalBlocks.isEmpty()){
 			throw new MultiblockValidationException(StatCollector.translateToLocalFormatted("for.multiblock.error.space.closed"));
 		}
 		this.internalBlocks.addAll(internalBlocks);
+		
+		int hatches = 0;
+		for(IMultiblockComponent comp : connectedParts){
+			if(comp instanceof IGreenhouseComponent.ButterflyHatch){
+				hatches++;
+			}
+		}
+		if(hatches > 1){
+			throw new MultiblockValidationException(StatCollector.translateToLocalFormatted("for.multiblock.error.butterflyhatch.tomany"));
+		}
 	}
 
 	@Override
 	protected void updateClient(int tickCount) {
 	}
-
-	@Override
-	protected void isGoodForExteriorLevel(IMultiblockComponent part, int level) throws MultiblockValidationException {
-		
-	}
-
-	@Override
-	protected void isGoodForInterior(IMultiblockComponent part) throws MultiblockValidationException {
-		
-	}
 	
-	@Override
-	protected void isBlockGoodForInterior(World world, BlockPos pos) throws MultiblockValidationException {
-	}
-	
-	private void checkInternalBlock(IInternalBlock blockToCheck, List<IInternalBlock> internalBlocks) throws MultiblockValidationException{
+	private void checkInternalBlock(IInternalBlock blockToCheck) throws MultiblockValidationException{
 		internalBlocks.add(blockToCheck);
 		BlockPos posRoot = blockToCheck.getPos();
 		
@@ -684,20 +683,26 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 						faceToCheck.setTested(true);
 					}
 				}else{
-					CreateInternalBlockEvent createEvent = new CreateInternalBlockEvent(createState(), new InternalBlock(worldObj, posFacing, face.getOpposite(), blockToCheck));
-					MinecraftForge.EVENT_BUS.post(createEvent);
-					
-					IInternalBlock internalBlock = createEvent.internalBlock;
+					IInternalBlock internalBlock = createInternalBlock(new InternalBlock(worldObj, posFacing, face.getOpposite(), blockToCheck));
 					
 					// Check is the internal block in the list
 					if(internalBlocks.contains(internalBlock)){
 						faceToCheck.setTested(true);
 					}else{
-						checkInternalBlock(internalBlock, internalBlocks);
+						checkInternalBlock(internalBlock);
 					}
 				}
 			}
 		}
+	}
+	
+	private IInternalBlock createInternalBlock(IInternalBlock internalBlock){
+		CreateInternalBlockEvent createEvent = new CreateInternalBlockEvent(createState(), internalBlock);
+		
+		MinecraftForge.EVENT_BUS.post(createEvent);
+		
+		return createEvent.internalBlock;
+		
 	}
 	
 	@Override
@@ -717,5 +722,19 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
     	}
     	return null;
     }
+    
+	@Override
+	protected void isGoodForExteriorLevel(IMultiblockComponent part, int level) throws MultiblockValidationException {
+		
+	}
+
+	@Override
+	protected void isGoodForInterior(IMultiblockComponent part) throws MultiblockValidationException {
+		
+	}
+	
+	@Override
+	protected void isBlockGoodForInterior(World world, BlockPos pos) throws MultiblockValidationException {
+	}
 
 }

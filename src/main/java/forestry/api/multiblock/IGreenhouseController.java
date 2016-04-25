@@ -16,12 +16,12 @@ import forestry.api.greenhouse.IGreenhouseLogic;
 public interface IGreenhouseController extends IMultiblockController, IGreenhouseHousing, ICamouflageHandler, IClimateControlled {
 	
 	/**
-	 * Handle change events
+	 * Handle change events.
 	 */
 	void onChange(EnumGreenhouseEventType type, Object event);
 	
 	/**
-	 * @return The logics of the greenhouse
+	 * @return The logics of the greenhouse.
 	 */
 	List<IGreenhouseLogic> getLogics();
 
