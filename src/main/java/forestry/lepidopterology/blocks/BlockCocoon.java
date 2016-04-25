@@ -34,7 +34,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class BlockCocoon extends Block implements ITileEntityProvider, IStateMapperRegister {
 	
 	public BlockCocoon() {
-		super(Material.cloth);
+		super(new MaterialCocoon());
 		setTickRandomly(true);
 		setStepSound(soundTypeGrass);
 		setCreativeTab(null);

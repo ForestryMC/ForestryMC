@@ -33,7 +33,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class BlockSolidCocoon extends Block implements ITileEntityProvider, IStateMapperRegister {
 	
 	public BlockSolidCocoon() {
-		super(Material.cloth);
+		super(new MaterialCocoon());
 		setHarvestLevel("scoop", 0);
 		setHardness(0.5F);
 		setTickRandomly(true);
