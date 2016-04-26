@@ -79,7 +79,6 @@ public class TileHive extends TileEntity implements ITickable, IHiveTile, IActiv
 	/**
 	 * Hack to make sure that hives glow.
 	 * TODO: remove when Mojang fixes this bug: https://bugs.mojang.com/browse/MC-3329
-	 * Hives should not need to tick normally.
 	 */
 	private boolean updatedLight;
 
