@@ -17,7 +17,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Random;
 
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 
 public class EscritoireTextSource {
 
@@ -32,13 +32,17 @@ public class EscritoireTextSource {
 		researchNotes = ArrayListMultimap.create();
 		EnumSet<Notes> multipleTranslationNoteLevels = EnumSet.of(Notes.level1, Notes.level2, Notes.level3, Notes.level4, Notes.success, Notes.failure);
 		for (Notes notesLevel : multipleTranslationNoteLevels) {
-			int levelCount = Integer.valueOf(StringUtil.localize("gui.escritoire.notes." + notesLevel + ".count"));
-			for (int i = 1; i <= levelCount; i++) {
-				String note = StringUtil.localize("gui.escritoire.notes." + notesLevel + '.' + i);
-				researchNotes.put(notesLevel, note);
+			for (int i = 1; i <= 10; i++) {
+				String key = "for.gui.escritoire.notes." + notesLevel + '.' + i;
+				String note = Translator.translateToLocal(key);
+				if (key.equals(note)) {
+					break;
+				} else {
+					researchNotes.put(notesLevel, note);
+				}
 			}
 		}
-		researchNotes.put(Notes.empty, StringUtil.localize("gui.escritoire.instructions"));
+		researchNotes.put(Notes.empty, Translator.translateToLocal("for.gui.escritoire.instructions"));
 	}
 
 	private String researchNote;
