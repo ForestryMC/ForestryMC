@@ -53,6 +53,6 @@ class HiveBeeHousingInventory implements IBeeHousingInventory {
 
 	@Override
 	public boolean addProduct(ItemStack product, boolean all) {
-		return false;
+		return true;
 	}
 }
