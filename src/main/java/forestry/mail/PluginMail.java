@@ -106,7 +106,7 @@ public class PluginMail extends BlankForestryPlugin {
 
 		if (Config.craftingStampsEnabled) {
 			for (EnumStampDefinition stampDefinition : EnumStampDefinition.VALUES) {
-				if (Config.collectorStamps.contains(stampDefinition.getName())) {
+				if (Config.collectorStamps.contains(stampDefinition.getUid())) {
 					continue;
 				}
 

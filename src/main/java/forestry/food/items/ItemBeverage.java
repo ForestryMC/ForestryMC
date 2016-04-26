@@ -133,7 +133,7 @@ public class ItemBeverage extends ItemForestryFood {
 
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {
-		return super.getUnlocalizedName(stack) + "." + beverages[stack.getItemDamage()].getName();
+		return super.getUnlocalizedName(stack) + "." + beverages[stack.getItemDamage()].getUid();
 	}
 
 	/* MODELS */
