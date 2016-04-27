@@ -17,6 +17,7 @@ import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.ActiveRenderInfo;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -131,15 +132,12 @@ public class ParticleRenderer {
 		// bind the texture
 		Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
 
-		// save the old gl state
-		GL11.glPushAttrib(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-
 		// gl states/settings for drawing
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		GL11.glDepthMask(false);
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
-		GL11.glAlphaFunc(GL11.GL_GREATER, 0.003921569F);
+		GlStateManager.enableBlend();
+		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.003921569F);
 
 		Tessellator tessellator = Tessellator.getInstance();
 		WorldRenderer worldRenderer = tessellator.getWorldRenderer();
@@ -152,7 +150,9 @@ public class ParticleRenderer {
 		tessellator.draw();
 
 		// restore previous gl state
-		GL11.glPopAttrib();
+		GlStateManager.depthMask(true);
+		GlStateManager.disableBlend();
+		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
 
 		Minecraft.getMinecraft().mcProfiler.endSection();
 	}
