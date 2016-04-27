@@ -24,7 +24,7 @@ import forestry.core.config.Config;
 
 public class ItemOverlay extends ItemForestry {
 	public interface IOverlayInfo {
-		String getName();
+		String getUid();
 
 		int getPrimaryColor();
 
@@ -35,7 +35,7 @@ public class ItemOverlay extends ItemForestry {
 
 	protected final IOverlayInfo[] overlays;
 
-	public ItemOverlay(CreativeTabs tab, IOverlayInfo... overlays) {
+	public ItemOverlay(CreativeTabs tab, IOverlayInfo[] overlays) {
 		setMaxDamage(0);
 		setHasSubtypes(true);
 		setCreativeTab(tab);
@@ -77,7 +77,7 @@ public class ItemOverlay extends ItemForestry {
 			return null;
 		}
 
-		return super.getUnlocalizedName(stack) + "." + overlays[stack.getItemDamage()].getName();
+		return super.getUnlocalizedName(stack) + "." + overlays[stack.getItemDamage()].getUid();
 	}
 
 	@Override

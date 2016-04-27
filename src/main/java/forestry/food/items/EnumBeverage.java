@@ -66,7 +66,7 @@ public enum EnumBeverage implements ItemBeverage.IBeverageInfo {
 	}
 
 	@Override
-	public String getName() {
+	public String getUid() {
 		return name;
 	}
 

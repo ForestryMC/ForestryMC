@@ -11,8 +11,7 @@
 package forestry.core.gui;
 
 import net.minecraft.client.gui.FontRenderer;
-
-import org.lwjgl.opengl.GL11;
+import net.minecraft.client.renderer.GlStateManager;
 
 import forestry.core.render.FontColour;
 
@@ -39,7 +38,7 @@ public class TextLayoutHelper {
 	
 	public void startPage() {
 		line = LINE_HEIGHT;
-		GL11.glPushMatrix();
+		GlStateManager.pushMatrix();
 	}
 	
 	public void startPage(int column0, int column1, int column2) {
@@ -68,7 +67,7 @@ public class TextLayoutHelper {
 	}
 	
 	public void endPage() {
-		GL11.glPopMatrix();
+		GlStateManager.popMatrix();
 	}
 	
 	public void drawRow(String text0, String text1, String text2, int colour0, int colour1, int colour2) {

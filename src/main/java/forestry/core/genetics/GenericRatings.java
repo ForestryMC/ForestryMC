@@ -18,19 +18,19 @@ public class GenericRatings {
 
 	public static String rateMetabolism(int metabolism) {
 		if (metabolism >= 19) {
-			return StatCollector.translateToLocal("forestry.allele.highest");
+			return StatCollector.translateToLocal("Forestry.allele.highest");
 		} else if (metabolism >= 16) {
-			return StatCollector.translateToLocal("forestry.allele.higher");
+			return StatCollector.translateToLocal("Forestry.allele.higher");
 		} else if (metabolism >= 13) {
-			return StatCollector.translateToLocal("forestry.allele.high");
+			return StatCollector.translateToLocal("Forestry.allele.high");
 		} else if (metabolism >= 10) {
-			return StatCollector.translateToLocal("forestry.allele.average");
+			return StatCollector.translateToLocal("Forestry.allele.average");
 		} else if (metabolism >= 7) {
-			return StatCollector.translateToLocal("forestry.allele.slow");
+			return StatCollector.translateToLocal("Forestry.allele.slow");
 		} else if (metabolism >= 4) {
-			return StatCollector.translateToLocal("forestry.allele.slower");
+			return StatCollector.translateToLocal("Forestry.allele.slower");
 		} else {
-			return StatCollector.translateToLocal("forestry.allele.slowest");
+			return StatCollector.translateToLocal("Forestry.allele.slowest");
 		}
 	}
 

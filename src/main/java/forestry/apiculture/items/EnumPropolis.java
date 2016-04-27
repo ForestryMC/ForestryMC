@@ -38,7 +38,7 @@ public enum EnumPropolis implements ItemOverlay.IOverlayInfo {
 	}
 
 	@Override
-	public String getName() {
+	public String getUid() {
 		return name;
 	}
 

@@ -16,11 +16,10 @@ import java.util.Locale;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.opengl.GL11;
 
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.IRenderableTile;
@@ -97,8 +96,8 @@ public class RenderMachine extends TileEntitySpecialRenderer<TileBase> {
 	}
 
 	private void render(TankRenderInfo resourceTankInfo, TankRenderInfo productTankInfo, EnumFacing orientation, double x, double y, double z) {
-		GL11.glPushMatrix();
-		GL11.glTranslatef((float) x, (float) y, (float) z);
+		GlStateManager.pushMatrix();
+		GlStateManager.translate((float) x, (float) y, (float) z);
 
 		float[] angle = {0, 0, 0};
 
@@ -154,7 +153,7 @@ public class RenderMachine extends TileEntitySpecialRenderer<TileBase> {
 		renderTank(resourceTank, textureResourceTank, resourceTankInfo, factor);
 		renderTank(productTank, textureProductTank, productTankInfo, factor);
 
-		GL11.glPopMatrix();
+		GlStateManager.popMatrix();
 	}
 
 	private void renderTank(ModelRenderer tankModel, ResourceLocation textureBase, TankRenderInfo renderInfo, float factor) {
@@ -169,12 +168,12 @@ public class RenderMachine extends TileEntitySpecialRenderer<TileBase> {
 		Color primaryTankColor = renderInfo.getFluidColor();
 		float[] colors = new float[3];
 		primaryTankColor.getRGBColorComponents(colors);
-		GL11.glColor4f(colors[0], colors[1], colors[2], 1.0f);
+		GlStateManager.color(colors[0], colors[1], colors[2], 1.0f);
 
 		Proxies.render.bindTexture(textureResourceTankLevel);
 		tankModel.render(factor);
 
-		GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+		GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 
 	private static class RenderModelBase extends ModelBase {

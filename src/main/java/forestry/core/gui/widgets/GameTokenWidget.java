@@ -10,13 +10,11 @@
  ******************************************************************************/
 package forestry.core.gui.widgets;
 
-import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-
-import org.lwjgl.opengl.GL11;
 
 import forestry.core.gui.GuiUtil;
 import forestry.core.gui.tooltips.ToolTip;
@@ -58,9 +56,10 @@ public class GameTokenWidget extends Widget {
 
 		Proxies.render.bindTexture(manager.gui.textureFile);
 
-		GL11.glColor4f(colorR, colorG, colorB, 1.0F);
+		GlStateManager.enableDepth();
+		GlStateManager.color(colorR, colorG, colorB);
 		manager.gui.drawTexturedModalRect(startX + xPos, startY + yPos, 228, 0, 22, 22);
-		GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
+		GlStateManager.color(1.0f, 1.0f, 1.0f);
 
 		ItemStack tokenStack = HIDDEN_TOKEN;
 		if (token.isVisible()) {
@@ -69,15 +68,13 @@ public class GameTokenWidget extends Widget {
 
 		GuiUtil.drawItemStack(manager.gui, tokenStack, startX + xPos + 3, startY + yPos + 3);
 
-		manager.gui.setZLevel(150f);
+		GlStateManager.disableDepth();
 		for (String ident : getToken().getOverlayIcons()) {
-			RenderHelper.enableGUIStandardItemLighting();
 			Proxies.render.bindTexture(TextureMap.locationBlocksTexture);
 			TextureAtlasSprite icon = TextureManager.getInstance().getDefault(ident);
 			manager.gui.drawTexturedModalRect(startX + xPos + 3, startY + yPos + 3, icon, 16, 16);
-			RenderHelper.disableStandardItemLighting();
 		}
-		manager.gui.setZLevel(0f);
+		GlStateManager.enableDepth();
 	}
 
 	@Override

@@ -9,9 +9,9 @@ import net.minecraft.util.StatCollector;
  * For example, temperature tolerances or speeds are categories with several values.
  *
  * This class helps localization by allowing specific names like
- * forestry.allele.speed.fast
+ * Forestry.allele.speed.fast
  * and can fall back on generic names like
- * forestry.allele.fast
+ * Forestry.allele.fast
  */
 public abstract class AlleleCategorized extends Allele {
 	protected AlleleCategorized(String modId, String category, String valueName, boolean isDominant) {

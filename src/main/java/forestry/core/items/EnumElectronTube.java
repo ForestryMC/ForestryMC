@@ -11,6 +11,7 @@
 package forestry.core.items;
 
 import java.awt.Color;
+import java.util.Locale;
 
 public enum EnumElectronTube implements ItemOverlay.IOverlayInfo {
 	COPPER(new Color(0xe3b78e)),
@@ -29,7 +30,7 @@ public enum EnumElectronTube implements ItemOverlay.IOverlayInfo {
 
 	public static final EnumElectronTube[] VALUES = values();
 
-	private final String name;
+	private final String uid;
 	private final int primaryColor;
 	private final int secondaryColor;
 
@@ -38,14 +39,14 @@ public enum EnumElectronTube implements ItemOverlay.IOverlayInfo {
 	}
 
 	EnumElectronTube(Color secondaryColor, Color primaryColor) {
-		this.name = "ex-" + ordinal();
+		this.uid = toString().toLowerCase(Locale.ENGLISH);
 		this.primaryColor = primaryColor.getRGB();
 		this.secondaryColor = secondaryColor.getRGB();
 	}
 
 	@Override
-	public String getName() {
-		return name;
+	public String getUid() {
+		return uid;
 	}
 
 	@Override

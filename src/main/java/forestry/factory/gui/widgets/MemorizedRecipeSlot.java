@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.factory.gui.widgets;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.ItemStack;
@@ -43,19 +44,14 @@ public class MemorizedRecipeSlot extends ItemStackWidgetBase {
 	public void draw(int startX, int startY) {
 		super.draw(startX, startY);
 
-		GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
-		GL11.glDisable(GL11.GL_DEPTH_TEST);
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		GlStateManager.disableDepth();
 
 		if (recipeMemory.isLocked(slotNumber)) {
-			manager.gui.setZLevel(110f);
 			Proxies.render.bindTexture(TextureMap.locationBlocksTexture);
 			manager.gui.drawTexturedModalRect(startX + xPos, startY + yPos, lockIcon, 16, 16);
-			manager.gui.setZLevel(0f);
 		}
 
-		GL11.glPopAttrib();
+		GlStateManager.enableDepth();
 	}
 
 	@Override

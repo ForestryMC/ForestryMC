@@ -14,11 +14,10 @@ import javax.annotation.Nullable;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.opengl.GL11;
 
 import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
@@ -102,14 +101,14 @@ public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
 
 	private void render(TemperatureState state, float progress, EnumFacing orientation, double x, double y, double z) {
 
-		GL11.glPushMatrix();
-		GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
-		GL11.glEnable(GL11.GL_LIGHTING);
-		GL11.glDisable(GL11.GL_BLEND);
-		GL11.glEnable(GL11.GL_CULL_FACE);
-		GL11.glColor3f(1, 1, 1);
+		GlStateManager.pushMatrix();
+		GlStateManager.pushAttrib();
+		GlStateManager.enableLighting();
+		GlStateManager.disableBlend();
+		GlStateManager.enableCull();
+		GlStateManager.color(1, 1, 1);
 
-		GL11.glTranslatef((float) x, (float) y, (float) z);
+		GlStateManager.translate((float) x, (float) y, (float) z);
 
 		float step;
 
@@ -159,9 +158,9 @@ public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
 		boiler.render(factor);
 
 		Proxies.render.bindTexture(textures[Textures.PISTON.ordinal()]);
-		GL11.glTranslatef(translate[0] * tfactor, translate[1] * tfactor, translate[2] * tfactor);
+		GlStateManager.translate(translate[0] * tfactor, translate[1] * tfactor, translate[2] * tfactor);
 		piston.render(factor);
-		GL11.glTranslatef(-translate[0] * tfactor, -translate[1] * tfactor, -translate[2] * tfactor);
+		GlStateManager.translate(-translate[0] * tfactor, -translate[1] * tfactor, -translate[2] * tfactor);
 
 		ResourceLocation texture;
 
@@ -193,12 +192,12 @@ public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
 		if (step > 0) {
 			for (int i = 0; i <= step + 2; i += 2) {
 				extension.render(factor);
-				GL11.glTranslatef(translate[0] * chamberf, translate[1] * chamberf, translate[2] * chamberf);
+				GlStateManager.translate(translate[0] * chamberf, translate[1] * chamberf, translate[2] * chamberf);
 			}
 		}
 
-		GL11.glPopAttrib();
-		GL11.glPopMatrix();
+		GlStateManager.popAttrib();
+		GlStateManager.popMatrix();
 	}
 
 	private static class EngineModelBase extends ModelBase {

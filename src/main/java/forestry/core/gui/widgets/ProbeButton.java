@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.core.gui.widgets;
 
-import org.lwjgl.opengl.GL11;
+import net.minecraft.client.renderer.GlStateManager;
 
 import forestry.core.gui.GuiEscritoire;
 import forestry.core.gui.tooltips.ToolTip;
@@ -32,7 +32,7 @@ public class ProbeButton extends Widget {
 
 	@Override
 	public void draw(int startX, int startY) {
-		GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
+		GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0F);
 		Proxies.render.bindTexture(manager.gui.textureFile);
 		manager.gui.drawTexturedModalRect(startX + xPos, startY + yPos, 228, pressed ? 47 : 22, width, height);
 	}

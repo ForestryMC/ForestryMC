@@ -15,7 +15,7 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.lwjgl.opengl.GL11;
+import net.minecraft.client.renderer.GlStateManager;
 
 import forestry.api.core.IErrorSource;
 import forestry.api.core.IErrorState;
@@ -133,7 +133,7 @@ public class LedgerManager {
 				continue;
 			}
 
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 			ledger.setPosition(gui.getSizeX(), yPos);
 			ledger.draw();
 			yPos += ledger.getHeight();
@@ -156,7 +156,7 @@ public class LedgerManager {
 				continue;
 			}
 
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 			errorLedger.draw(-errorLedger.getWidth(), yPos);
 			yPos += errorLedger.getHeight();
 		}

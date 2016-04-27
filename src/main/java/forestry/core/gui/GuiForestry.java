@@ -18,6 +18,7 @@ import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderItem;
@@ -28,9 +29,6 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.fml.common.Optional;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.core.IErrorSource;
@@ -200,25 +198,16 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 		int y = (height - ySize) / 2;
 		drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
 
-		GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
+		RenderHelper.enableGUIStandardItemLighting();
+		GlStateManager.disableLighting();
+		GlStateManager.enableRescaleNormal();
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.pushMatrix();
 		{
-			RenderHelper.enableGUIStandardItemLighting();
-			GL11.glDisable(GL11.GL_LIGHTING);
-			GL11.glDisable(GL11.GL_DEPTH_TEST);
-			GL11.glPushMatrix();
-			{
-				GL11.glTranslatef(guiLeft, guiTop, 0.0F);
-				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-
-				GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-				OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240 / 1.0F, 240 / 1.0F);
-				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-
-				drawWidgets();
-			}
-			GL11.glPopMatrix();
+			GlStateManager.translate(guiLeft, guiTop, 0.0F);
+			drawWidgets();
 		}
-		GL11.glPopAttrib();
+		GlStateManager.popMatrix();
 
 		bindTexture(textureFile);
 	}
@@ -229,7 +218,7 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 	}
 
 	protected void bindTexture(ResourceLocation texturePath) {
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		Proxies.render.bindTexture(texturePath);
 	}
 
