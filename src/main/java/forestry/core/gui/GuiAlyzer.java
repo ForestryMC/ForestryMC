@@ -17,12 +17,11 @@ import java.util.Stack;
 
 import org.apache.commons.lang3.StringUtils;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-
-import org.lwjgl.opengl.GL11;
 
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.genetics.AlleleManager;
@@ -335,7 +334,7 @@ public abstract class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory>
 		boolean researched = breedingTracker.isResearched(combination);
 		if (researched) {
 			fontRendererObj.drawString("+", x + 9, y + 1, 0);
-			GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+			GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
 		}
 	}
 
@@ -345,7 +344,7 @@ public abstract class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory>
 		String text = "(" + toleranceAllele.getName() + ")";
 
 		// Enable correct lighting.
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
 		switch (tolerance) {
 			case BOTH_1:
@@ -401,7 +400,7 @@ public abstract class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory>
 
 	protected void drawFertilityInfo(int fertility, int x, int textColor, int texOffset) {
 		// Enable correct lighting.
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
 		String fertilityString = Integer.toString(fertility) + " x";
 

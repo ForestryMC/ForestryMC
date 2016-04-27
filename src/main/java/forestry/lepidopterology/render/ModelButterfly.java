@@ -12,10 +12,9 @@ package forestry.lepidopterology.render;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
-
-import org.lwjgl.opengl.GL11;
 
 public class ModelButterfly extends ModelBase {
 
@@ -76,15 +75,15 @@ public class ModelButterfly extends ModelBase {
 		wingRight.rotateAngleZ = MathHelper.cos(swing * 1.3F) * (float) Math.PI * 0.25F;
 		wingLeft.rotateAngleZ = -wingRight.rotateAngleZ;
 
-		GL11.glPushMatrix();
-		GL11.glScalef(scale, scale, scale);
-		GL11.glTranslatef(0.0F, 20.0f / scale * f5, 0.0F);
+		GlStateManager.pushMatrix();
+		GlStateManager.scale(scale, scale, scale);
+		GlStateManager.translate(0.0F, 20.0f / scale * f5, 0.0F);
 		wingRight.render(f5);
 		eyeRight.render(f5);
 		eyeLeft.render(f5);
 		wingLeft.render(f5);
 		body.render(f5);
-		GL11.glPopMatrix();
+		GlStateManager.popMatrix();
 
 	}
 

@@ -20,13 +20,12 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.biome.BiomeGenBase;
 
 import net.minecraftforge.common.BiomeDictionary;
-
-import org.lwjgl.opengl.GL11;
 
 import forestry.apiculture.gui.widgets.HabitatSlot;
 import forestry.apiculture.inventory.ItemInventoryHabitatLocator;
@@ -101,7 +100,7 @@ public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator, Item
 		for (HabitatSlot slot : habitatSlots) {
 			slot.draw(startX, startY);
 		}
-		GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f); // Reset afterwards.
+		GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f); // Reset afterwards.
 	}
 
 	@Override

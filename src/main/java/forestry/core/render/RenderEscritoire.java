@@ -10,12 +10,11 @@
  ******************************************************************************/
 package forestry.core.render;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.opengl.GL11;
 
 import forestry.core.config.Constants;
 import forestry.core.inventory.InventoryEscritoire;
@@ -48,8 +47,8 @@ public class RenderEscritoire extends TileEntitySpecialRenderer<TileEscritoire> 
 	private void render(ItemStack itemstack, EnumFacing orientation, double x, double y, double z) {
 		float factor = (float) (1.0 / 16.0);
 
-		GL11.glPushMatrix();
-		GL11.glTranslatef((float) x + 0.5f, (float) y + 0.875f, (float) z + 0.5f);
+		GlStateManager.pushMatrix();
+		GlStateManager.translate((float) x + 0.5f, (float) y + 0.875f, (float) z + 0.5f);
 
 		float[] angle = {(float) Math.PI, 0, 0};
 
@@ -74,23 +73,23 @@ public class RenderEscritoire extends TileEntitySpecialRenderer<TileEscritoire> 
 		Proxies.render.bindTexture(texture);
 		modelEscritoire.render(null, angle[0], angle[1], angle[2], 0f, 0f, factor);
 
-		GL11.glPopMatrix();
+		GlStateManager.popMatrix();
 
 		/*
 		if(itemstack != null) {
 			float renderScale = 1.0f;
 
-			GL11.glPushMatrix();
-			GL11.glTranslatef((float) x, (float) y, (float) z);
-			GL11.glTranslatef(0.6f, 0.8f, 0.5f);
-			GL11.glRotatef(90.0f, 1.0F, 0.0F, 0.0F);
-			GL11.glScalef(renderScale, renderScale, renderScale);
+			GlStateManager.pushMatrix();
+			GlStateManager.translate((float) x, (float) y, (float) z);
+			GlStateManager.translate(0.6f, 0.8f, 0.5f);
+			GlStateManager.rotate(90.0f, 1.0F, 0.0F, 0.0F);
+			GlStateManager.scale(renderScale, renderScale, renderScale);
 
 			RenderItem.renderInFrame = true;
 			dummyEntityItem.setEntityItemStack(itemstack);
 			customRenderItem.doRenderItem(dummyEntityItem, 0, 0, 0, 0, 0);
 			RenderItem.renderInFrame = false;
-			GL11.glPopMatrix();
+			GlStateManager.popMatrix();
 		}
 		 */
 

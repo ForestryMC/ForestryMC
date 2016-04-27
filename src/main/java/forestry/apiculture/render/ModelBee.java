@@ -12,10 +12,9 @@ package forestry.apiculture.render;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
-
-import org.lwjgl.opengl.GL11;
 
 import forestry.api.apiculture.EnumBeeType;
 
@@ -130,10 +129,10 @@ public class ModelBee extends ModelBase {
 		wingRight.rotateAngleZ = MathHelper.cos(swing * 1.3F) * (float) Math.PI * 0.25F;
 		wingLeft.rotateAngleZ = -wingRight.rotateAngleZ;
 
-		GL11.glPushMatrix();
+		GlStateManager.pushMatrix();
 		float scale = 0.75f;
-		GL11.glScalef(scale, scale, scale);
-		GL11.glTranslatef(0.0F, 12.0f / scale * f5, 0.0F);
+		GlStateManager.scale(scale, scale, scale);
+		GlStateManager.translate(0.0F, 12.0f / scale * f5, 0.0F);
 
 		snout.render(f5);
 		torsoWing.render(f5);
@@ -152,7 +151,7 @@ public class ModelBee extends ModelBase {
 			crownQueen.render(f5);
 		}
 
-		GL11.glPopMatrix();
+		GlStateManager.popMatrix();
 	}
 
 	private static void setRotation(ModelRenderer model, float x, float y, float z) {

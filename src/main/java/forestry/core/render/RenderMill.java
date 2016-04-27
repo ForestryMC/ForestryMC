@@ -12,11 +12,10 @@ package forestry.core.render;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.opengl.GL11;
 
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileMill;
@@ -102,9 +101,9 @@ public class RenderMill extends TileEntitySpecialRenderer<TileMill> {
 
 	private void render(float progress, int charge, EnumFacing orientation, double x, double y, double z) {
 
-		GL11.glPushMatrix();
+		GlStateManager.pushMatrix();
 
-		GL11.glTranslatef((float) x, (float) y, (float) z);
+		GlStateManager.translate((float) x, (float) y, (float) z);
 
 		float step;
 
@@ -181,17 +180,17 @@ public class RenderMill extends TileEntitySpecialRenderer<TileMill> {
 		extension.render(factor);
 
 		Proxies.render.bindTexture(textures[Textures.BLADE_1.ordinal()]);
-		GL11.glTranslatef(translate[0] * tfactor, translate[1] * tfactor, translate[2] * tfactor);
+		GlStateManager.translate(translate[0] * tfactor, translate[1] * tfactor, translate[2] * tfactor);
 		blade1.render(factor);
 
 		// Reset
-		GL11.glTranslatef(-translate[0] * tfactor, -translate[1] * tfactor, -translate[2] * tfactor);
+		GlStateManager.translate(-translate[0] * tfactor, -translate[1] * tfactor, -translate[2] * tfactor);
 
 		Proxies.render.bindTexture(textures[Textures.BLADE_2.ordinal()]);
-		GL11.glTranslatef(-translate[0] * tfactor, translate[1] * tfactor, -translate[2] * tfactor);
+		GlStateManager.translate(-translate[0] * tfactor, translate[1] * tfactor, -translate[2] * tfactor);
 		blade2.render(factor);
 
-		GL11.glPopMatrix();
+		GlStateManager.popMatrix();
 
 	}
 

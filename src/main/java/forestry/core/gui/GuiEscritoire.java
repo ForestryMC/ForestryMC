@@ -10,12 +10,11 @@
  ******************************************************************************/
 package forestry.core.gui;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
-
-import org.lwjgl.opengl.GL11;
 
 import forestry.core.config.Constants;
 import forestry.core.gui.widgets.GameTokenWidget;
@@ -87,8 +86,8 @@ public class GuiEscritoire extends GuiForestry<ContainerEscritoire, TileEscritoi
 
 		textLayout.startPage();
 		{
-			GL11.glScaled(0.5, 0.5, 0.5);
-			GL11.glTranslated(guiLeft + 170, guiTop + 10, 0.0);
+			GlStateManager.scale(0.5, 0.5, 0.5);
+			GlStateManager.translate(guiLeft + 170, guiTop + 10, 0.0);
 
 			textLayout.newLine();
 			textLayout.newLine();

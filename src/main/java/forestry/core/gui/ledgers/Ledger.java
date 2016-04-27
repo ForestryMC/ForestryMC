@@ -14,11 +14,10 @@ import java.awt.Rectangle;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.opengl.GL11;
 
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
@@ -198,7 +197,7 @@ public abstract class Ledger {
 		float colorG = (overlayColor >> 8 & 255) / 255.0F;
 		float colorB = (overlayColor & 255) / 255.0F;
 
-		GL11.glColor4f(colorR, colorG, colorB, 1.0F);
+		GlStateManager.color(colorR, colorG, colorB, 1.0F);
 
 		Proxies.render.bindTexture(texture);
 
@@ -211,12 +210,12 @@ public abstract class Ledger {
 
 		manager.gui.drawTexturedModalRect(x + 4, y + 4, 256 - width + 4, 256 - height + 4, width - 4, height - 4); // body + bottom + right
 
-		GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
+		GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0F);
 	}
 
 	protected void drawSprite(TextureAtlasSprite sprite, int x, int y) {
 		if (sprite != null) {
-			GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
+			GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0F);
 			Proxies.render.bindTexture(TextureMap.locationBlocksTexture);
 			manager.gui.drawTexturedModalRect(x, y, sprite, 16, 16);
 		}

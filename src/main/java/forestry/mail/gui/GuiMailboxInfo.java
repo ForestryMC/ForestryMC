@@ -14,9 +14,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.opengl.GL11;
 
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
@@ -63,7 +62,7 @@ public class GuiMailboxInfo extends Gui {
 			y = scaledresolution.getScaledHeight() - HEIGHT;
 		}
 
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		Proxies.render.bindTexture(textureAlert);
 
 		this.drawTexturedModalRect(x, y, 0, 0, WIDTH, HEIGHT);

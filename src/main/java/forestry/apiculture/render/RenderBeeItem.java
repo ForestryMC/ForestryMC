@@ -95,13 +95,13 @@ public class RenderBeeItem/* implements IItemRenderer*/ {
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glEnable(GL11.GL_COLOR_MATERIAL);
 
-		GL11.glPushMatrix();
+		GlStateManager.pushMatrix();
 
-		GL11.glScalef(2.0f, 2.0f, 2.0f);
-		GL11.glTranslatef(translateX, translateY, translateZ);
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		GL11.glRotatef(-135.0F, 0.0F, 1.0F, 0.0F);
-		GL11.glRotatef(-((float) Math.atan(pitch / 40.0F)) * 20.0F, 1.0F, 0.0F, 0.0F);
+		GlStateManager.scale(2.0f, 2.0f, 2.0f);
+		GlStateManager.translate(translateX, translateY, translateZ);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.rotate(-135.0F, 0.0F, 1.0F, 0.0F);
+		GlStateManager.rotate(-((float) Math.atan(pitch / 40.0F)) * 20.0F, 1.0F, 0.0F, 0.0F);
 
 		entity.renderYawOffset = (float) Math.atan(yaw / 40.0F) * 20.0F;
 		entity.rotationYaw = (float) Math.atan(yaw / 40.0F) * 40.0F;
@@ -110,7 +110,7 @@ public class RenderBeeItem/* implements IItemRenderer*/ {
 
 		RenderManager.instance.renderEntityWithPosYaw(entity, 0.0D, 0.0D, 0.0D, 0.0F, getWingYaw(bee));
 
-		GL11.glPopMatrix();
+		GlStateManager.popMatrix();
 
 		RenderHelper.disableStandardItemLighting();
 		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
@@ -124,15 +124,15 @@ public class RenderBeeItem/* implements IItemRenderer*/ {
 	private void renderBeeInInventory(IBee bee) {*/
 
 		/*
-		GL11.glPushMatrix();
-        //GL11.glTranslatef(-0.3f, -2.5f, 0f);
-        GL11.glScalef(-1.0f, 1.0f, 1.0f);
-        //GL11.glScalef((float)Math.PI / 2, 1.0f, 1.0f);
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glRotatef(-135.0F, 0.0F, 1.0F, 0.0F);
-        //GL11.glRotatef(-((float) Math.atan((double) (1 / 40.0F))) * 20.0F, 1.0F, 0.0F, 0.0F);
+		GlStateManager.pushMatrix();
+        //GlStateManager.translate(-0.3f, -2.5f, 0f);
+        GlStateManager.scale(-1.0f, 1.0f, 1.0f);
+        //GlStateManager.scale((float)Math.PI / 2, 1.0f, 1.0f);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.rotate(-135.0F, 0.0F, 1.0F, 0.0F);
+        //GlStateManager.rotate(-((float) Math.atan((double) (1 / 40.0F))) * 20.0F, 1.0F, 0.0F, 0.0F);
         renderBeeHalo();
-        GL11.glPopMatrix();
+        GlStateManager.popMatrix();
 		*/
 
 		/*GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
@@ -140,14 +140,14 @@ public class RenderBeeItem/* implements IItemRenderer*/ {
 		GL11.glEnable(GL11.GL_COLOR_MATERIAL);
 		RenderHelper.enableStandardItemLighting();
 
-		GL11.glPushMatrix();
+		GlStateManager.pushMatrix();
 
-		GL11.glTranslatef(-0.3f, -2.5f, 0f);
-		GL11.glScalef(-3.0f, 3.0f, 3.0f);
-		GL11.glRotatef(32.0F, 0.0F, 1.0F, 0.0F);
-		GL11.glScalef(1.6f, 1f, 1f);
+		GlStateManager.translate(-0.3f, -2.5f, 0f);
+		GlStateManager.scale(-3.0f, 3.0f, 3.0f);
+		GlStateManager.rotate(32.0F, 0.0F, 1.0F, 0.0F);
+		GlStateManager.scale(1.6f, 1f, 1f);
 
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		entity.renderYawOffset = 0;
 		entity.rotationYaw = 0;
 		entity.rotationPitch = 0;
@@ -155,7 +155,7 @@ public class RenderBeeItem/* implements IItemRenderer*/ {
 
 		RenderManager.instance.renderEntityWithPosYaw(entity, 0.0D, 0.0D, 0.0D, 0.0F, getWingYaw(bee));
 
-		GL11.glPopMatrix();
+		GlStateManager.popMatrix();
 		RenderHelper.disableStandardItemLighting();
 		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		OpenGlHelper.setActiveTexture(OpenGlHelper.lightmapTexUnit);

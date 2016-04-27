@@ -132,8 +132,10 @@ public class TankWidget extends Widget {
 		}
 		
 		if (drawOverlay) {
+			GlStateManager.disableDepth();
 			Proxies.render.bindTexture(manager.gui.textureFile);
 			manager.gui.drawTexturedModalRect(startX + xPos, startY + yPos, overlayTexX, overlayTexY, 16, 60);
+			GlStateManager.enableDepth();
 		}
 		
 		GlStateManager.color(1, 1, 1, 1);

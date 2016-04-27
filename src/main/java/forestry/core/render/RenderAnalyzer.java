@@ -10,14 +10,13 @@
  ******************************************************************************/
 package forestry.core.render;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-
-import org.lwjgl.opengl.GL11;
 
 import forestry.apiculture.render.ModelAnalyzer;
 import forestry.core.proxy.Proxies;
@@ -55,10 +54,10 @@ public class RenderAnalyzer extends TileEntitySpecialRenderer<TileAnalyzer> {
 		}
 		float renderScale = 1.0f;
 
-		GL11.glPushMatrix();
-		GL11.glTranslatef((float) x, (float) y, (float) z);
-		GL11.glTranslatef(0.5f, 0.2f, 0.5f);
-		GL11.glScalef(renderScale, renderScale, renderScale);
+		GlStateManager.pushMatrix();
+		GlStateManager.translate((float) x, (float) y, (float) z);
+		GlStateManager.translate(0.5f, 0.2f, 0.5f);
+		GlStateManager.scale(renderScale, renderScale, renderScale);
 		dummyEntityItem.setEntityItemStack(itemstack);
 
 		if (world.getTotalWorldTime() != lastTick) {
@@ -68,7 +67,7 @@ public class RenderAnalyzer extends TileEntitySpecialRenderer<TileAnalyzer> {
 		RenderManager rendermanager = Proxies.common.getClientInstance().getRenderManager();
 		
 		rendermanager.renderEntityWithPosYaw(dummyEntityItem, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F);
-		GL11.glPopMatrix();
+		GlStateManager.popMatrix();
 
 	}
 

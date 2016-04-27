@@ -16,27 +16,16 @@ import java.util.List;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.fml.client.config.GuiUtils;
-
-import org.lwjgl.opengl.GL11;
 
 import forestry.core.gui.tooltips.IToolTipProvider;
 import forestry.core.gui.tooltips.ToolTip;
 
 public class GuiUtil {
 	public static void drawItemStack(GuiForestry gui, ItemStack stack, int xPos, int yPos) {
-		GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
-		RenderHelper.enableGUIStandardItemLighting();
-
-		RenderItem itemRender = GuiForestry.getItemRenderer();
-
-		GL11.glTranslatef(0.0F, 0.0F, 32.0F);
-		gui.setZLevel(100.0F);
-		itemRender.zLevel = 100.0F;
 		FontRenderer font = null;
 		if (stack != null) {
 			font = stack.getItem().getFontRenderer(stack);
@@ -44,13 +33,10 @@ public class GuiUtil {
 		if (font == null) {
 			font = gui.getFontRenderer();
 		}
-		itemRender.renderItemAndEffectIntoGUI(stack, xPos, yPos);
-		itemRender.renderItemOverlayIntoGUI(font, stack, xPos, yPos, "");
-		gui.setZLevel(0.0F);
-		itemRender.zLevel = 0.0F;
 
-		RenderHelper.disableStandardItemLighting();
-		GL11.glPopAttrib();
+		RenderItem itemRender = GuiForestry.getItemRenderer();
+		itemRender.renderItemAndEffectIntoGUI(stack, xPos, yPos);
+		itemRender.renderItemOverlayIntoGUI(font, stack, xPos, yPos, null);
 	}
 
 	public static void drawToolTips(GuiForestry gui, ToolTip toolTips, int mouseX, int mouseY) {

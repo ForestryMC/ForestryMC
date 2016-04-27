@@ -12,10 +12,9 @@ package forestry.apiculture.render;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.opengl.GL11;
 
 import forestry.core.proxy.Proxies;
 import forestry.core.render.ForestryResource;
@@ -57,9 +56,9 @@ public class ModelAnalyzer extends ModelBase {
 
 	public void render(EnumFacing orientation, float posX, float posY, float posZ) {
 
-		GL11.glPushMatrix();
+		GlStateManager.pushMatrix();
 
-		GL11.glTranslatef(posX, posY, posZ);
+		GlStateManager.translate(posX, posY, posZ);
 		float[] angle = {0, 0, 0};
 
 		if (orientation == null) {
@@ -106,8 +105,7 @@ public class ModelAnalyzer extends ModelBase {
 		Proxies.render.bindTexture(textures[2]);
 		tower2.render(factor);
 
-		GL11.glPopMatrix();
-
+		GlStateManager.popMatrix();
 	}
 
 }

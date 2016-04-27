@@ -15,14 +15,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Locale;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import org.lwjgl.opengl.GL11;
 
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.widgets.Widget;
@@ -66,9 +65,9 @@ public class HabitatSlot extends Widget {
 	public void draw(int startX, int startY) {
 		if (getIcon() != null) {
 			if (!isActive) {
-				GL11.glColor4f(0.2f, 0.2f, 0.2f, 0.2f);
+				GlStateManager.color(0.2f, 0.2f, 0.2f, 0.2f);
 			} else {
-				GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+				GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
 			}
 
 			Proxies.render.bindTexture(TextureMap.locationBlocksTexture);
