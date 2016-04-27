@@ -24,6 +24,7 @@ import forestry.api.lepidopterology.IAlleleButterflyCocoon;
 import forestry.core.PluginCore;
 import forestry.core.config.Constants;
 import forestry.core.genetics.alleles.AlleleCategorized;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.ItemStack;
 
 public class AlleleButterflyCocoon extends AlleleCategorized implements IAlleleButterflyCocoon {
@@ -63,6 +64,11 @@ public class AlleleButterflyCocoon extends AlleleCategorized implements IAlleleB
 	@Override
 	public String getCocoonTexture(int age) {
 		return "textures/blocks/lepidopterology/cocoons/" + type + "_" + age + ".png";
+	}
+	
+	@Override
+	public ModelResourceLocation getCocoonItemModel(int age) {
+		return new ModelResourceLocation(Constants.RESOURCE_ID + ":lepidopterology/cocoons/" + type + "_" + age + ".png", "inventory");
 	}
 
 	@Override

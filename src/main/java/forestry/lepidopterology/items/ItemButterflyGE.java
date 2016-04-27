@@ -13,6 +13,8 @@ package forestry.lepidopterology.items;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -36,6 +38,7 @@ import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.api.lepidopterology.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.IButterfly;
+import forestry.api.lepidopterology.IButterflyGenome;
 import forestry.api.lepidopterology.IButterflyNursery;
 import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
@@ -189,11 +192,22 @@ public class ItemButterflyGE extends ItemGE {
 				manager.registerItemModel(item, 0, "butterflyGE");
 				break;
 			case COCOON:
-				manager.registerItemModel(item, 0, "cocoon");
+				manager.registerItemModel(item, new CocoonMeshDefinition());
 				break;
 			default:
 				manager.registerItemModel(item, 0, "liquids/jar");
 		}
+	}
+	
+	private class CocoonMeshDefinition implements ItemMeshDefinition{
+
+		@Override
+		public ModelResourceLocation getModelLocation(ItemStack itemstack) {
+			int age = itemstack.getTagCompound().getInteger("Age");
+			IButterflyGenome genome = (IButterflyGenome) AlleleManager.alleleRegistry.getIndividual(itemstack).getGenome();
+			return genome.getCocoon().getCocoonItemModel(age);
+		}
+		
 	}
 
 	@Override
