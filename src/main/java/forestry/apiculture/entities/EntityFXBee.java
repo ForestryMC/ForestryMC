@@ -53,7 +53,7 @@ public class EntityFXBee extends EntityFX {
 			this.motionZ = (this.originZ - this.posZ) * 0.04;
 		}
 
-		if (this.particleAge < (this.particleMaxAge / 4) || this.particleAge > (this.particleMaxAge * 3 / 4)) {
+		if (this.particleAge < this.particleMaxAge / 4 || this.particleAge > this.particleMaxAge * 3 / 4) {
 			this.motionX *= 0.92 + 0.2D * rand.nextFloat();
 			this.motionY = (this.motionY + 0.2 * (-0.5 + rand.nextFloat())) / 2;
 			this.motionZ *= 0.92 + 0.2D * rand.nextFloat();

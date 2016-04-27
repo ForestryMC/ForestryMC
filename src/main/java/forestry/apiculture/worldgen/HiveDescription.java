@@ -160,7 +160,7 @@ public enum HiveDescription implements IHiveDescription {
 			int xOffset = world.rand.nextInt(8) - 4;
 			int zOffset = world.rand.nextInt(8) - 4;
 			BlockPos blockPos = hivePos.add(xOffset, 0, zOffset);
-			if (!world.isBlockLoaded(blockPos) || (xOffset == 0 && zOffset == 0)) {
+			if (!world.isBlockLoaded(blockPos) || xOffset == 0 && zOffset == 0) {
 				continue;
 			}
 

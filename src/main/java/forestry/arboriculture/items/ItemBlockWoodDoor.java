@@ -34,7 +34,7 @@ public class ItemBlockWoodDoor extends ItemBlockWood<BlockArbDoor> {
 			} else if (!this.block.canPlaceBlockAt(worldIn, pos)) {
 				return false;
 			} else {
-				ItemDoor.placeDoor(worldIn, pos, EnumFacing.fromAngle((double) playerIn.rotationYaw), this.block);
+				ItemDoor.placeDoor(worldIn, pos, EnumFacing.fromAngle(playerIn.rotationYaw), this.block);
 				--stack.stackSize;
 				return true;
 			}

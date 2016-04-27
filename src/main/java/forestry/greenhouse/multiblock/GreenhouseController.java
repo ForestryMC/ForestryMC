@@ -17,7 +17,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.google.common.collect.Lists;
 import forestry.api.greenhouse.EnumGreenhouseEventType;
 import forestry.api.greenhouse.GreenhouseManager;
 import forestry.api.greenhouse.IGreenhouseLogic;

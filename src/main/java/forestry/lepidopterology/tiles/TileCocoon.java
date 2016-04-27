@@ -242,6 +242,10 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnable, IBu
 		return age;
 	}
 	
+	public void setAge(int age) {
+		this.age = age;
+	}
+	
 	public ItemStack[] getCocoonDrops() {
 		return caterpillar.getCocoonDrop(this);
 	}

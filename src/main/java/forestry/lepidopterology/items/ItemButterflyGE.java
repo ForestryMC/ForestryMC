@@ -25,7 +25,7 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
+import forestry.api.arboriculture.ITree;
 import forestry.api.core.IModelManager;
 import forestry.api.core.Tabs;
 import forestry.api.genetics.AlleleManager;
@@ -41,7 +41,9 @@ import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
 import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.proxy.Proxies;
+import forestry.core.utils.BlockUtil;
 import forestry.core.utils.EntityUtil;
+import forestry.core.utils.GeneticsUtil;
 import forestry.lepidopterology.PluginLepidopterology;
 import forestry.lepidopterology.entities.EntityButterfly;
 import forestry.lepidopterology.genetics.ButterflyGenome;
@@ -88,14 +90,32 @@ public class ItemButterflyGE extends ItemGE {
 	}
 
 	public void addCreativeItems(List<ItemStack> itemList, boolean hideSecrets) {
-
-		for (IIndividual individual : ButterflyManager.butterflyRoot.getIndividualTemplates()) {
-			// Don't show secret butterflies unless ordered to.
-			if (hideSecrets && individual.isSecret() && !Config.isDebug) {
-				continue;
+		if(type == EnumFlutterType.COCOON){
+			for(int age = 0;age < 3;age++){
+				for (IIndividual individual : ButterflyManager.butterflyRoot.getIndividualTemplates()) {
+					// Don't show secret butterflies unless ordered to.
+					if (hideSecrets && individual.isSecret() && !Config.isDebug) {
+						continue;
+					}
+		
+					ItemStack butterfly = ButterflyManager.butterflyRoot.getMemberStack(individual, type);
+					
+					if(type == EnumFlutterType.COCOON){
+						butterfly.getTagCompound().setInteger("Age", age);
+					}
+					
+					itemList.add(butterfly);
+				}
 			}
-
-			itemList.add(ButterflyManager.butterflyRoot.getMemberStack(individual, type));
+		}else{
+			for (IIndividual individual : ButterflyManager.butterflyRoot.getIndividualTemplates()) {
+				// Don't show secret butterflies unless ordered to.
+				if (hideSecrets && individual.isSecret() && !Config.isDebug) {
+					continue;
+				}
+				
+				itemList.add(ButterflyManager.butterflyRoot.getMemberStack(individual, type));
+			}
 		}
 	}
 
@@ -168,6 +188,9 @@ public class ItemButterflyGE extends ItemGE {
 			case BUTTERFLY:
 				manager.registerItemModel(item, 0, "butterflyGE");
 				break;
+			case COCOON:
+				manager.registerItemModel(item, 0, "cocoon");
+				break;
 			default:
 				manager.registerItemModel(item, 0, "liquids/jar");
 		}
@@ -185,7 +208,50 @@ public class ItemButterflyGE extends ItemGE {
 			return false;
 		}
 
-		if (type == EnumFlutterType.CATERPILLAR) {
+		if (type == EnumFlutterType.COCOON) {
+			int age = stack.getTagCompound().getInteger("Age");
+			
+			// x, y, z are the coordinates of the block "hit", can thus either be the soil or tall grass, etc.
+			int yShift;
+			if (!BlockUtil.isReplaceableBlock(world, pos)) {
+				if(!world.isAirBlock(pos.add(0, -1, 0))){
+					return false;
+				}
+				yShift = 1;
+			} else {
+				yShift = 0;
+			}
+			BlockPos posS = pos.add(0, -yShift, 0);
+			
+			IButterflyNursery nursery = null;
+			
+			if(world.getTileEntity(pos) instanceof IButterflyNursery){
+				nursery = (IButterflyNursery) world.getTileEntity(pos);
+			}else{
+				ITree treeLeave = GeneticsUtil.getErsatzPollen(world, pos);
+				
+				if(treeLeave != null){
+					treeLeave.setLeaves(world, player.getGameProfile(), pos);
+					nursery = (IButterflyNursery) world.getTileEntity(pos);
+				}
+			}
+			if(nursery != null){
+				if(nursery.canNurse(flutter)){
+					nursery.setCaterpillar(flutter);
+					if(ButterflyManager.butterflyRoot.plantCocoon(world, nursery, player.getGameProfile(), age)){
+						Proxies.common.addBlockPlaceEffects(world, pos, world.getBlockState(posS));
+						if (!player.capabilities.isCreativeMode) {
+							stack.stackSize--;
+						}
+						return true;
+					}else{
+						nursery.setCaterpillar(null);
+						return false;
+					}
+				}
+			}
+			return false;
+		}else if (type == EnumFlutterType.CATERPILLAR) {
 
 			TileEntity target = world.getTileEntity(pos);
 			if (!(target instanceof IButterflyNursery)) {

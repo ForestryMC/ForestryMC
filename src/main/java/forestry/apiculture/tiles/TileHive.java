@@ -224,7 +224,7 @@ public class TileHive extends TileEntity implements ITickable, IHiveTile, IActiv
 		if (damage > 0) {
 			// Entities are not attacked if they wear a full set of apiarist's armor.
 			int count = BeeManager.armorApiaristHelper.wearsItems(entity, damageSourceBeeHive.damageType, true);
-			damage -= (damage / 4.0f) * count;
+			damage -= damage / 4.0f * count;
 			if (damage > 0) {
 				entity.attackEntityFrom(damageSourceBeeHive, damage);
 			}

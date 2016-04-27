@@ -101,7 +101,9 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 			return EnumFlutterType.SERUM;
 		} else if (PluginLepidopterology.items.caterpillarGE == item) {
 			return EnumFlutterType.CATERPILLAR;
-		} else {
+		} else if (PluginLepidopterology.items.cocoonGE == item) {
+			return EnumFlutterType.COCOON;
+		}else {
 			return null;
 		}
 	}
@@ -152,6 +154,9 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 			case CATERPILLAR:
 				butterflyItem = PluginLepidopterology.items.caterpillarGE;
 				break;
+			case COCOON:
+				butterflyItem = PluginLepidopterology.items.cocoonGE;
+				break;
 			case BUTTERFLY:
 			default:
 				butterflyItem = PluginLepidopterology.items.butterflyGE;
@@ -172,7 +177,7 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 	}
 	
 	@Override
-	public boolean plantCocoon(World world, IButterflyNursery nursery, GameProfile owner) {
+	public boolean plantCocoon(World world, IButterflyNursery nursery, GameProfile owner, int age) {
 		BlockPos pos = getNextPos(world, nursery.getCoordinates());
 		IBlockState state = PluginLepidopterology.blocks.cocoon.getDefaultState();
 		boolean placed = world.setBlockState(pos, state, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
@@ -195,6 +200,7 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 		cocoon.setCaterpillar(nursery.getCaterpillar());
 		cocoon.setOwner(owner);
 		cocoon.setNursery(nursery);
+		cocoon.setAge(age);
 
 		return true;
 	}
