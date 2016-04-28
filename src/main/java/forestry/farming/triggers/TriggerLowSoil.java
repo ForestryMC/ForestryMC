@@ -24,6 +24,7 @@ import forestry.farming.tiles.TileFarmHatch;
 
 import buildcraft.api.statements.IStatementContainer;
 import buildcraft.api.statements.IStatementParameter;
+import buildcraft.api.statements.StatementParameterItemStack;
 
 public class TriggerLowSoil extends Trigger {
 
@@ -49,6 +50,11 @@ public class TriggerLowSoil extends Trigger {
 		return 0;
 	}
 
+	@Override
+	public IStatementParameter createParameter(int index) {
+		return new StatementParameterItemStack();
+	}
+
 	/**
 	 * Return true if the tile given in parameter activates the trigger, given
 	 * the parameters.
@@ -67,14 +73,14 @@ public class TriggerLowSoil extends Trigger {
 		TileFarmHatch tileHatch = (TileFarmHatch) tile;
 		IFarmController farmController = tileHatch.getMultiblockLogic().getController();
 		IFarmInventory farmInventory = farmController.getFarmInventory();
+		IInventory resourcesInventory = farmInventory.getResourcesInventory();
 
 		if (parameter == null || parameter.getItemStack() == null) {
-			IInventory resourcesInventory = farmInventory.getResourcesInventory();
-			return InventoryUtil.containsPercent(resourcesInventory, threshold);
+			return !InventoryUtil.containsAmount(resourcesInventory, threshold);
 		} else {
 			ItemStack filter = parameter.getItemStack().copy();
 			filter.stackSize = threshold;
-			return farmInventory.hasResources(new ItemStack[]{filter});
+			return !InventoryUtil.contains(resourcesInventory, new ItemStack[]{filter});
 		}
 	}
 }

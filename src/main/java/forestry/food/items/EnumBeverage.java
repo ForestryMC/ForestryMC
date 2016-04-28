@@ -22,8 +22,8 @@ import forestry.core.render.TextureManager;
 
 public enum EnumBeverage implements ItemBeverage.IBeverageInfo {
 	MEAD_SHORT("meadShort", "glass", new Color(0xec9a19), new Color(0xffffff), 1, 0.2f, true),
-	MEAD_CURATIVE("meadCurative", "glass", new Color(0xc5feff), new Color(0xffffff), 1, 0.2f, true);
-
+	MEAD_CURATIVE("meadCurative", "glass", new Color(0xc5feff), new Color(0xffffff), 1, 0.2f, true),
+	MEAD("mead", "glass", new Color(0xcc6600), new Color(0xffffff), 10, 0.1f, true);
 	public static final EnumBeverage[] VALUES = values();
 
 	private final String name;

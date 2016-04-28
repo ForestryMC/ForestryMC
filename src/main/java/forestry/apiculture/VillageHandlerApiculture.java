@@ -49,6 +49,7 @@ public class VillageHandlerApiculture implements IVillageCreationHandler, IVilla
 	@Override
 	public void manipulateTradesForVillager(EntityVillager villager, MerchantRecipeList recipeList, Random random) {
 		ItemStack wildcardPrincess = new ItemStack(PluginApiculture.items.beePrincessGE, 1, OreDictionary.WILDCARD_VALUE);
+		ItemStack wildcardDrone = new ItemStack(PluginApiculture.items.beeDroneGE, 4, OreDictionary.WILDCARD_VALUE);
 		recipeList.add(new MerchantRecipe(wildcardPrincess, new ItemStack(Items.emerald, 1)));
 
 		ItemStack randomComb = PluginApiculture.items.beeComb.getRandomComb(1, random, false);
@@ -62,6 +63,23 @@ public class VillageHandlerApiculture implements IVillageCreationHandler, IVilla
 
 		ItemStack monasticDrone = BeeDefinition.MONASTIC.getMemberStack(EnumBeeType.DRONE);
 		recipeList.add(new MerchantRecipe(new ItemStack(Items.emerald, 12), wildcardPrincess, monasticDrone));
+
+		ItemStack endDrone = BeeDefinition.ENDED.getMemberStack(EnumBeeType.DRONE);
+		recipeList.add(new MerchantRecipe(new ItemStack(Items.ender_eye, 16), wildcardPrincess, endDrone));
+
+		ItemStack propolis = new ItemStack(PluginApiculture.items.propolis,1);
+		ItemStack forestDrone = BeeDefinition.FOREST.getMemberStack(EnumBeeType.DRONE);
+		ItemStack meadowsDrone = BeeDefinition.MEADOWS.getMemberStack(EnumBeeType.DRONE);
+		ItemStack modestDrone = BeeDefinition.MODEST.getMemberStack(EnumBeeType.DRONE);
+		ItemStack tropicalDrone = BeeDefinition.TROPICAL.getMemberStack(EnumBeeType.DRONE);
+		ItemStack wintryDrone = BeeDefinition.WINTRY.getMemberStack(EnumBeeType.DRONE);
+		ItemStack marshyDrone = BeeDefinition.MARSHY.getMemberStack(EnumBeeType.DRONE);
+		recipeList.add(new MerchantRecipe(propolis, wildcardDrone, forestDrone));
+		recipeList.add(new MerchantRecipe(propolis, wildcardDrone, meadowsDrone));
+		recipeList.add(new MerchantRecipe(propolis, wildcardDrone, modestDrone));
+		recipeList.add(new MerchantRecipe(propolis, wildcardDrone, tropicalDrone));
+		recipeList.add(new MerchantRecipe(propolis, wildcardDrone, wintryDrone));
+		recipeList.add(new MerchantRecipe(propolis, wildcardDrone, marshyDrone));
 	}
 
 	@Override

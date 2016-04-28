@@ -67,12 +67,20 @@ public class PluginPlantMegaPack extends ForestryPlugin {
 
 		ImmutableList<String> landCropPlant = ImmutableList.of(
 				"Beet",
+				"BellPepperOrange",
+				"BellPepperRed",
 				"BellPepperYellow",
+				"Broccoli",
+				"Cassava",
 				"Celery",
 				"Corn",
 				"Cucumber",
+				"Eggplant",
+				"GreenBean",
+				"Leek",
 				"Lettuce",
 				"Onion",
+				"Sorrel",
 				"Spinach",
 				"Tomato"
 		);

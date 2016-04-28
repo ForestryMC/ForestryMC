@@ -31,6 +31,9 @@ import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.SlotUtil;
 import forestry.plugins.PluginCore;
+import forestry.plugins.PluginManager;
+
+import ic2.api.item.IC2Items;
 
 public class InventoryFarm extends InventoryAdapterRestricted implements IFarmInventory {
 	public static final int SLOT_RESOURCES_1 = 0;
@@ -132,8 +135,14 @@ public class InventoryFarm extends InventoryAdapterRestricted implements IFarmIn
 		if (itemstack == null) {
 			return false;
 		}
-
 		Item item = itemstack.getItem();
+		if (PluginManager.Module.INDUSTRIALCRAFT.isEnabled()) {
+			Item ic2fert = IC2Items.getItem("fertilizer").getItem();
+			if (ic2fert == item) {
+					return true;
+			}
+		}
+
 		return PluginCore.items.fertilizerCompound == item;
 	}
 

@@ -710,6 +710,8 @@ public class PluginApiculture extends ForestryPlugin {
 
 			// / FERMENTER
 			RecipeManagers.fermenterManager.addRecipe(items.honeydew.getItemStack(), 500, 1.0f, Fluids.SHORT_MEAD.getFluid(1), Fluids.HONEY.getFluid(1));
+			// / STILL
+			RecipeManagers.stillManager.addRecipe(Constants.STILL_DESTILLATION_DURATION, Fluids.SHORT_MEAD.getFluid(10), Fluids.MEAD.getFluid(5));
 		}
 
 		// ANALYZER

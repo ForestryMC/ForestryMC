@@ -407,6 +407,22 @@ public abstract class InventoryUtil {
 		return ((float) amount / (float) stackMax) >= percent;
 	}
 
+	public static boolean containsAmount(IInventory inventory, int amount) {
+		int total = 0;
+		int slot1 = 0;
+		int length = inventory.getSizeInventory();
+		for (ItemStack itemStack : getStacks(inventory, slot1, length)) {
+			if (itemStack == null) {
+				continue;
+			}
+			total += itemStack.stackSize;
+			if (total >= amount) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public static boolean isEmpty(IInventory inventory, int slotStart, int slotCount) {
 		for (int i = slotStart; i < slotStart + slotCount; i++) {
 			if (inventory.getStackInSlot(i) != null) {
