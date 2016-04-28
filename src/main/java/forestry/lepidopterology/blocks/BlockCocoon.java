@@ -24,6 +24,7 @@ import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -98,6 +99,40 @@ public class BlockCocoon extends Block implements ITileEntityProvider, IStateMap
     @Override
     public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
     	return Collections.emptyList();
+    }
+    
+    @Override
+    public AxisAlignedBB getSelectedBoundingBox(World world, BlockPos pos) {
+    	TileCocoon cocoon = TileUtil.getTile(world, pos, TileCocoon.class);
+    	if(cocoon != null){
+    		if(cocoon.getAge() == 0){
+    			setBlockBounds(0.375F, 0.5F, 0.4375F, 0.5625F, 1F, 0.6875F);
+    		}else if(cocoon.getAge() == 1){
+    			setBlockBounds(0.34375F, 0.375F, 0.40625F, 0.59375F, 1F, 0.71875F);
+    		}else if(cocoon.getAge() == 2){
+    			setBlockBounds(0.34375F, 0.25F, 0.28125F, 0.71875F, 1F, 0.71875F);
+    		}else{
+    			setBlockBounds(0, 0, 0, 1, 1, 1);
+    		}
+    	}
+    	return super.getSelectedBoundingBox(world, pos);
+    }
+    
+    @Override
+    public AxisAlignedBB getCollisionBoundingBox(World world, BlockPos pos, IBlockState state) {
+    	TileCocoon cocoon = TileUtil.getTile(world, pos, TileCocoon.class);
+    	if(cocoon != null){
+    		if(cocoon.getAge() == 0){
+    			setBlockBounds(0.375F, 0.5F, 0.4375F, 0.5625F, 1F, 0.6875F);
+    		}else if(cocoon.getAge() == 1){
+    			setBlockBounds(0.34375F, 0.375F, 0.40625F, 0.59375F, 1F, 0.71875F);
+    		}else if(cocoon.getAge() == 2){
+    			setBlockBounds(0.34375F, 0.25F, 0.28125F, 0.71875F, 1F, 0.71875F);
+    		}else{
+    			setBlockBounds(0, 0, 0, 1, 1, 1);
+    		}
+    	}
+    	return super.getCollisionBoundingBox(world, pos, state);
     }
     
 }

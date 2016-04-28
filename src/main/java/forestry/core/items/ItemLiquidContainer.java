@@ -133,7 +133,11 @@ public class ItemLiquidContainer extends ItemForestry {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		manager.registerItemModel(item, 0, "liquids/" + type.toString().toLowerCase(Locale.ENGLISH));
+		if(color == 0){
+			manager.registerItemModel(item, 0, "liquids/" + type.toString().toLowerCase(Locale.ENGLISH)+ "_empty");
+		}else{
+			manager.registerItemModel(item, 0, "liquids/" + type.toString().toLowerCase(Locale.ENGLISH));
+		}
 	}
 
 	@Override
