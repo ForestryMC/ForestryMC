@@ -14,6 +14,7 @@ import javax.annotation.Nonnull;
 
 import forestry.core.network.packets.PacketDummyServer;
 
+/** Packets sent to the server from the client */
 public enum PacketIdServer implements IPacketId {
 	INVALID,
 
@@ -24,6 +25,9 @@ public enum PacketIdServer implements IPacketId {
 	ACCESS_SWITCH_ENTITY,
 	CHIPSET_CLICK,
 	SOLDERING_IRON_CLICK,
+
+	// JEI
+	WORKTABLE_RECIPE_REQUEST,
 
 	// Apiculture
 	BEE_LOGIC_ACTIVE_ENTITY_REQUEST,

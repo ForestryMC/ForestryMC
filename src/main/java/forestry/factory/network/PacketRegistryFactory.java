@@ -12,6 +12,7 @@ package forestry.factory.network;
 
 import forestry.core.network.PacketRegistry;
 import forestry.factory.network.packets.PacketWorktableMemoryUpdate;
+import forestry.factory.network.packets.PacketWorktableRecipeRequest;
 import forestry.factory.network.packets.PacketWorktableRecipeUpdate;
 
 public class PacketRegistryFactory extends PacketRegistry {
@@ -20,5 +21,7 @@ public class PacketRegistryFactory extends PacketRegistry {
 
 		registerClientPacket(new PacketWorktableMemoryUpdate());
 		registerClientPacket(new PacketWorktableRecipeUpdate());
+
+		registerServerPacket(new PacketWorktableRecipeRequest());
 	}
 }

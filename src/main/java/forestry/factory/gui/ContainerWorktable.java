@@ -28,7 +28,9 @@ import forestry.factory.inventory.InventoryCraftingForestry;
 import forestry.factory.inventory.InventoryGhostCrafting;
 import forestry.factory.inventory.InventoryWorktable;
 import forestry.factory.network.packets.PacketWorktableMemoryUpdate;
+import forestry.factory.network.packets.PacketWorktableRecipeRequest;
 import forestry.factory.network.packets.PacketWorktableRecipeUpdate;
+import forestry.factory.recipes.MemorizedRecipe;
 import forestry.factory.recipes.RecipeMemory;
 import forestry.factory.tiles.TileWorktable;
 
@@ -81,7 +83,7 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
 		}
 	}
 
-	private void updateCraftMatrix() {
+	public void updateCraftMatrix() {
 		IInventory crafting = tile.getCraftingDisplay();
 		for (int i = 0; i < crafting.getSizeInventory(); i++) {
 			onCraftMatrixChanged(crafting, i);
@@ -154,5 +156,9 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
 				break;
 			}
 		}
+	}
+
+	public void sendWorktableRecipeRequest(MemorizedRecipe recipe) {
+		Proxies.net.sendToServer(new PacketWorktableRecipeRequest(tile, recipe));
 	}
 }

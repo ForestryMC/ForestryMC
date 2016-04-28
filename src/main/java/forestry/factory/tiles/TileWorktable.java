@@ -237,7 +237,7 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 
 	public void setCurrentRecipe(InventoryCraftingForestry crafting) {
 		List<ItemStack> recipeOutputs = RecipeUtil.findMatchingRecipes(crafting, worldObj);
-		MemorizedRecipe recipe = recipeOutputs.size() == 0 ? null : new MemorizedRecipe(crafting, recipeOutputs);
+		MemorizedRecipe recipe = recipeOutputs.isEmpty() ? null : new MemorizedRecipe(crafting, recipeOutputs);
 
 		if (currentRecipe != null && recipe != null) {
 			if (recipe.hasRecipeOutput(currentRecipe.getRecipeOutput())) {
