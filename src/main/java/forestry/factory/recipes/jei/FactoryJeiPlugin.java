@@ -6,8 +6,6 @@ import java.awt.Rectangle;
 import java.util.List;
 
 import forestry.core.gui.GuiForestry;
-import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
-import forestry.factory.gui.ContainerWorktable;
 import forestry.factory.recipes.jei.bottler.BottlerRecipeCategory;
 import forestry.factory.recipes.jei.bottler.BottlerRecipeHandler;
 import forestry.factory.recipes.jei.bottler.BottlerRecipeMaker;
@@ -44,7 +42,6 @@ import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.gui.IAdvancedGuiHandler;
-import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import mezz.jei.api.recipe.transfer.IRecipeTransferRegistry;
 
 @JEIPlugin
@@ -54,7 +51,8 @@ public class FactoryJeiPlugin extends BlankModPlugin {
 		IJeiHelpers jeiHelpers = registry.getJeiHelpers();
 		IGuiHelper guiHelper = jeiHelpers.getGuiHelper();
 
-		registry.addRecipeCategories(new BottlerRecipeCategory(guiHelper),
+		registry.addRecipeCategories(
+				new BottlerRecipeCategory(guiHelper),
 				new CarpenterRecipeCategory(guiHelper),
 				new CentrifugeRecipeCategory(guiHelper),
 				new FabricatorRecipeCategory(guiHelper),
@@ -62,18 +60,21 @@ public class FactoryJeiPlugin extends BlankModPlugin {
 				new MoistenerRecipeCategory(guiHelper),
 				new RainmakerRecipeCategory(guiHelper),
 				new SqueezerRecipeCategory(guiHelper),
-				new StillRecipeCategory(guiHelper));
+				new StillRecipeCategory(guiHelper)
+		);
 		
-		registry.addRecipeHandlers(new BottlerRecipeHandler(),
+		registry.addRecipeHandlers(
+				new BottlerRecipeHandler(),
 				new CarpenterRecipeHandler(),
 				new CentrifugeRecipeHandler(),
 				new FabricatorRecipeHandler(),
 				new FermenterRecipeHandler(),
 				new MoistenerRecipeHandler(),
 				new RainmakerRecipeHandler(),
-				new SqueezerRecipeHandler<>(SqueezerRecipeWrapper.class, ForestryRecipeCategoryUid.SQUEEZER),
-				new SqueezerRecipeHandler<>(SqueezerContainerRecipeWrapper.class, ForestryRecipeCategoryUid.SQUEEZER),
-				new StillRecipeHandler());
+				new SqueezerRecipeHandler<>(SqueezerRecipeWrapper.class),
+				new SqueezerRecipeHandler<>(SqueezerContainerRecipeWrapper.class),
+				new StillRecipeHandler()
+		);
 
 		registry.addRecipes(BottlerRecipeMaker.getBottlerRecipes());
 		registry.addRecipes(CarpenterRecipeMaker.getCarpenterRecipes());
@@ -87,7 +88,7 @@ public class FactoryJeiPlugin extends BlankModPlugin {
 		registry.addRecipes(StillRecipeMaker.getStillRecipes());
 
 		IRecipeTransferRegistry transferRegistry = registry.getRecipeTransferRegistry();
-		transferRegistry.addRecipeTransferHandler(ContainerWorktable.class, VanillaRecipeCategoryUid.CRAFTING, 19, 9, 1, 36);
+		transferRegistry.addRecipeTransferHandler(new WorktableRecipeTransferHandler());
 
 		registry.addAdvancedGuiHandlers(new ForestryAdvancedGuiHandler());
 	}

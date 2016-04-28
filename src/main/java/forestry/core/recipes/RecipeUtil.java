@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.recipes;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -146,6 +147,7 @@ public abstract class RecipeUtil {
 		return crafting;
 	}
 
+	@Nonnull
 	public static List<ItemStack> findMatchingRecipes(InventoryCrafting inventory, World world) {
 		ItemStack repairRecipe = findRepairRecipe(inventory);
 		if (repairRecipe != null) {

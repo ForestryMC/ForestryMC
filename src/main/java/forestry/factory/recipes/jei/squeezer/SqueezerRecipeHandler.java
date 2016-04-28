@@ -3,6 +3,7 @@ package forestry.factory.recipes.jei.squeezer;
 import javax.annotation.Nonnull;
 
 import forestry.api.recipes.ISqueezerRecipe;
+import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
 import forestry.core.recipes.jei.ForestryRecipeWrapper;
 import forestry.factory.recipes.ISqueezerContainerRecipe;
 
@@ -12,25 +13,22 @@ import mezz.jei.api.recipe.IRecipeWrapper;
 public class SqueezerRecipeHandler<R extends ForestryRecipeWrapper> implements IRecipeHandler<R> {
 	
 	@Nonnull
-	private final Class<R> clazz;
-	@Nonnull
-	private final String UID;
+	private final Class<R> recipeClass;
 	
-	public SqueezerRecipeHandler(@Nonnull Class<R> recipeClass, @Nonnull String UID) {
-		this.clazz = recipeClass;
-		this.UID = UID;
+	public SqueezerRecipeHandler(@Nonnull Class<R> recipeClass) {
+		this.recipeClass = recipeClass;
 	}
 	
 	@Nonnull
 	@Override
 	public Class<R> getRecipeClass() {
-		return clazz;
+		return recipeClass;
 	}
 
 	@Nonnull
 	@Override
 	public String getRecipeCategoryUid() {
-		return UID;
+		return ForestryRecipeCategoryUid.SQUEEZER;
 	}
 
 	@Nonnull
