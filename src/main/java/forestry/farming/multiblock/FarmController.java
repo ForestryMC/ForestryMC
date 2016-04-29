@@ -442,6 +442,11 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	}
 
 	@Override
+	public String getUnlocalizedType() {
+		return "for.multiblock.farm.type";
+	}
+
+	@Override
 	public boolean doWork() {
 		farmWorkTicks++;
 		if (targets.isEmpty() || farmWorkTicks % 20 == 0) {

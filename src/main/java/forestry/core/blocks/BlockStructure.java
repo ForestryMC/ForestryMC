@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
+import forestry.core.utils.Translator;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -20,7 +21,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
@@ -76,7 +76,7 @@ public abstract class BlockStructure extends BlockForestry {
 					}
 				}
 			} else {
-				player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("for.multiblock.error.notConnected")));
+				player.addChatMessage(new ChatComponentText(Translator.translateToLocal("for.multiblock.error.notConnected")));
 				return true;
 			}
 		}

@@ -387,6 +387,11 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	}
 
 	@Override
+	public String getUnlocalizedType() {
+		return "for.multiblock.alveary.type";
+	}
+
+	@Override
 	public BiomeGenBase getBiome() {
 		if (cachedBiome == null) {
 			BlockPos coords = getReferenceCoord();
