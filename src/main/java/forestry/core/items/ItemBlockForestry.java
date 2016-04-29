@@ -18,6 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+
 import forestry.core.blocks.IBlockWithMeta;
 import forestry.core.tiles.TileForestry;
 import forestry.core.tiles.TileUtil;
@@ -51,7 +52,7 @@ public class ItemBlockForestry<B extends Block> extends ItemBlock {
 		}
 		return block.getUnlocalizedName();
 	}
-	
+
 	@Override
 	public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState) {
 		boolean placed = super.placeBlockAt(stack, player, world, pos, side, hitX, hitY, hitZ, newState);

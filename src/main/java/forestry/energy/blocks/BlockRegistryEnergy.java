@@ -11,12 +11,12 @@
 package forestry.energy.blocks;
 
 import forestry.core.blocks.BlockRegistry;
-import forestry.core.items.ItemBlockForestry;
+import forestry.energy.items.ItemEngine;
 
 public class BlockRegistryEnergy extends BlockRegistry {
 	public final BlockEngine engine;
 
 	public BlockRegistryEnergy() {
-		engine = registerBlock(new BlockEngine(), ItemBlockForestry.class, "engine");
+		engine = registerBlock(new BlockEngine(), ItemEngine.class, "engine");
 	}
 }
