@@ -14,7 +14,6 @@ import javax.annotation.Nullable;
 
 import forestry.api.core.IErrorState;
 import forestry.core.utils.StringUtil;
-import net.minecraft.client.renderer.GlStateManager;
 
 /**
  * A ledger displaying error messages and help text.
