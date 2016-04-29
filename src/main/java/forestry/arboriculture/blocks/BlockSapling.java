@@ -34,6 +34,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.arboriculture.EnumGermlingType;
+import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
@@ -132,11 +133,13 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 		if (tile == null) {
 			return false;
 		}
-		if (tile.getTree() == null) {
+
+		ITree tree = tile.getTree();
+		if (tree == null) {
 			return false;
 		}
 
-		return tile.getTree().canStay(world, pos);
+		return tree.canStay(world, pos);
 	}
 	
 	@Override

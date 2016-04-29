@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.arboriculture.tiles;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 
 import net.minecraft.block.Block;
@@ -41,7 +42,9 @@ import forestry.core.utils.PlayerUtil;
  */
 public abstract class TileTreeContainer extends TileEntity implements IStreamable, IOwnable {
 
+	@Nullable
 	private ITree containedTree;
+	@Nullable
 	private GameProfile owner;
 
 	/* SAVING & LOADING */
@@ -108,6 +111,7 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 		}
 	}
 
+	@Nullable
 	public ITree getTree() {
 		return this.containedTree;
 	}

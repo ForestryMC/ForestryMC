@@ -153,12 +153,17 @@ public class BlockForestryLeaves extends BlockLeavesBase implements ITileEntityP
 		List<ItemStack> prod = new ArrayList<>();
 
 		TileLeaves tile = TileUtil.getTile(world, pos, TileLeaves.class);
-		if (tile == null || tile.getTree() == null) {
+		if (tile == null) {
+			return prod;
+		}
+
+		ITree tree = tile.getTree();
+		if (tree == null) {
 			return prod;
 		}
 
 		// Add saplings
-		ITree[] saplings = tile.getTree().getSaplings((World) world, playerProfile, pos, saplingModifier);
+		ITree[] saplings = tree.getSaplings((World) world, playerProfile, pos, saplingModifier);
 
 		for (ITree sapling : saplings) {
 			if (sapling != null) {
@@ -168,7 +173,7 @@ public class BlockForestryLeaves extends BlockLeavesBase implements ITileEntityP
 
 		// Add fruits
 		if (tile.hasFruit()) {
-			prod.addAll(tile.getTree().produceStacks((World) world, pos, tile.getRipeningTime()));
+			prod.addAll(tree.produceStacks((World) world, pos, tile.getRipeningTime()));
 		}
 
 		return prod;
@@ -180,7 +185,12 @@ public class BlockForestryLeaves extends BlockLeavesBase implements ITileEntityP
 		if (leaves == null) {
 			return null;
 		}
+
 		ITree tree = leaves.getTree();
+		if (tree == null) {
+			return null;
+		}
+
 		String speciesUid = tree.getGenome().getPrimary().getUID();
 		return PluginArboriculture.blocks.getDecorativeLeaves(speciesUid);
 	}
@@ -196,7 +206,12 @@ public class BlockForestryLeaves extends BlockLeavesBase implements ITileEntityP
 		if (leaves == null) {
 			return null;
 		}
+
 		ITree tree = leaves.getTree();
+		if (tree == null) {
+			return null;
+		}
+
 		String speciesUid = tree.getGenome().getPrimary().getUID();
 		return Collections.singletonList(PluginArboriculture.blocks.getDecorativeLeaves(speciesUid));
 	}

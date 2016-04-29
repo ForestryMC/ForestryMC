@@ -218,6 +218,9 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 	private int determineFruitColour() {
 		ITree tree = getTree();
+		if (tree == null) {
+			tree = TreeDefinition.Cherry.getIndividual();
+		}
 		ITreeGenome genome = tree.getGenome();
 		IFruitProvider fruit = genome.getFruitProvider();
 		return fruit.getColour(genome, worldObj, getPos(), getRipeningTime());
@@ -255,32 +258,35 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	/* IPOLLINATABLE */
 	@Override
 	public EnumSet<EnumPlantType> getPlantType() {
-		if (getTree() == null) {
+		ITree tree = getTree();
+		if (tree == null) {
 			return EnumSet.noneOf(EnumPlantType.class);
 		}
 
-		return getTree().getPlantTypes();
+		return tree.getPlantTypes();
 	}
 
 	@Override
 	public boolean canMateWith(ITree individual) {
-		if (getTree() == null) {
+		ITree tree = getTree();
+		if (tree == null) {
 			return false;
 		}
-		if (getTree().getMate() != null) {
+		if (tree.getMate() != null) {
 			return false;
 		}
 
-		return !getTree().isGeneticEqual(individual);
+		return !tree.isGeneticEqual(individual);
 	}
 
 	@Override
 	public void mateWith(ITree individual) {
-		if (getTree() == null) {
+		ITree tree = getTree();
+		if (tree == null) {
 			return;
 		}
 
-		getTree().mate(individual);
+		tree.mate(individual);
 		worldObj.markBlockForUpdate(getPos());
 	}
 
