@@ -67,7 +67,7 @@ public abstract class Trigger implements ITriggerExternal {
 	private TextureAtlasSprite icon;
 
 	@SideOnly(Side.CLIENT)
-	public void registerIcons() {
+	public void registerSprites() {
 		icon = TextureManager.registerSprite("triggers/" + unlocalized.replace("trigger.", ""));
 	}
 

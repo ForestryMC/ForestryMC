@@ -12,15 +12,19 @@ package forestry.apiculture.entities;
 
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 
 public class EntityFXBee extends EntityFX {
 	private final double originX;
 	private final double originZ;
+	
+	public static TextureAtlasSprite beeSprite;
 
 	public EntityFXBee(World world, double x, double y, double z, int color) {
 		super(world, x, y, z, 0.0D, 0.0D, 0.0D);
+		setParticleIcon(beeSprite);
 		this.originX = x;
 		this.originZ = z;
 

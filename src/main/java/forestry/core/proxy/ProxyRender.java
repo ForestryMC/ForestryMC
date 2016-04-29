@@ -109,7 +109,7 @@ public class ProxyRender {
 
 	/* FX */
 
-	public void addBeeHiveFX(String texture, World world, double x, double y, double z, int color) {
+	public void addBeeHiveFX(World world, double x, double y, double z, int color) {
 	}
 
 	public void addEntityHoneyDustFX(World world, double x, double y, double z) {

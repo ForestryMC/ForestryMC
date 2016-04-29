@@ -111,7 +111,8 @@ public enum EnumErrorCode implements IErrorState {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerSprite() {
-		texture = TextureManager.registerSprite("items/errors/" + iconName);
+		String location = "forestry:gui/errors/" + iconName;
+		texture = TextureManager.registerSprite(new ErrorAtlasSprite(location), location);
 	}
 
 	@SideOnly(Side.CLIENT)

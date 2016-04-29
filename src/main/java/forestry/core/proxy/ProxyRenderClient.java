@@ -194,14 +194,12 @@ public class ProxyRenderClient extends ProxyRender {
 	}
 
 	@Override
-	public void addBeeHiveFX(String icon, World world, double x, double y, double z, int color) {
+	public void addBeeHiveFX(World world, double x, double y, double z, int color) {
 		if (!shouldSpawnParticle(world)) {
 			return;
 		}
 
 		EntityFX fx = new EntityFXBee(world, x, y, z, color);
-		TextureAtlasSprite sprite = TextureManager.getInstance().getDefault(icon);
-		fx.setParticleIcon(sprite);
 		ParticleRenderer.getInstance().addEffect(fx);
 	}
 

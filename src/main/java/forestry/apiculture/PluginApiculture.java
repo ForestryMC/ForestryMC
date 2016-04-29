@@ -70,6 +70,7 @@ import forestry.apiculture.blocks.BlockRegistryApiculture;
 import forestry.apiculture.blocks.BlockTypeApiculture;
 import forestry.apiculture.blocks.BlockTypeApicultureTesr;
 import forestry.apiculture.commands.CommandBee;
+import forestry.apiculture.entities.EntityFXBee;
 import forestry.apiculture.entities.EntityMinecartApiary;
 import forestry.apiculture.entities.EntityMinecartBeehouse;
 import forestry.apiculture.flowers.Flower;
@@ -948,8 +949,9 @@ public class PluginApiculture extends BlankForestryPlugin {
 	public void textureHook(TextureStitchEvent.Pre event) {
 		EntityFXSnow.sprites = new TextureAtlasSprite[3];
 		for (int i = 0; i < EntityFXSnow.sprites.length; i++) {
-			EntityFXSnow.sprites[i] = event.map.registerSprite(new ResourceLocation("forestry:items/particles/snow." + (i + 1)));
+			EntityFXSnow.sprites[i] = event.map.registerSprite(new ResourceLocation("forestry:entity/particles/snow." + (i + 1)));
 		}
+		EntityFXBee.beeSprite = event.map.registerSprite(new ResourceLocation("forestry:entity/particles/swarm_bee"));
 		ItemHabitatLocator.registerSprite();
 	}
 

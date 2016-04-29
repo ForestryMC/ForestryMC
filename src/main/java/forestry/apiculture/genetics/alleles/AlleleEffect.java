@@ -104,7 +104,7 @@ public abstract class AlleleEffect extends AlleleCategorized implements IAlleleB
 	@Override
 	public IEffectData doFX(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
 		Vec3 beeFXCoordinates = housing.getBeeFXCoordinates();
-		Proxies.render.addBeeHiveFX("particles/swarm_bee", housing.getWorld(), beeFXCoordinates.xCoord, beeFXCoordinates.yCoord, beeFXCoordinates.zCoord, genome.getPrimary().getSpriteColour(0));
+		Proxies.render.addBeeHiveFX(housing.getWorld(), beeFXCoordinates.xCoord, beeFXCoordinates.yCoord, beeFXCoordinates.zCoord, genome.getPrimary().getSpriteColour(0));
 		return storedData;
 	}
 
