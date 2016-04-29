@@ -72,6 +72,17 @@ public abstract class IndividualLiving extends Individual implements IIndividual
 	}
 
 	@Override
+	public final void setHealth(int health) {
+		if (health < 0) {
+			health = 0;
+		} else if (health > getMaxHealth()) {
+			health = getMaxHealth();
+		}
+
+		this.health = health;
+	}
+
+	@Override
 	public int getMaxHealth() {
 		return this.maxHealth;
 	}
@@ -80,7 +91,7 @@ public abstract class IndividualLiving extends Individual implements IIndividual
 	public void age(World world, float lifespanModifier) {
 
 		if (lifespanModifier < 0.001f) {
-			this.health = 0;
+			setHealth(0);
 			return;
 		}
 
@@ -97,7 +108,7 @@ public abstract class IndividualLiving extends Individual implements IIndividual
 
 	private void decreaseHealth() {
 		if (health > 0) {
-			health--;
+			setHealth(health - 1);
 		}
 	}
 

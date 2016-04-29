@@ -20,6 +20,11 @@ public interface IIndividualLiving extends IIndividual {
 	int getHealth();
 
 	/**
+	 * Set the current health of the individual.
+	 */
+	void setHealth(int health);
+
+	/**
 	 * @return Maximum health of the individual.
 	 */
 	int getMaxHealth();
