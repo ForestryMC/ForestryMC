@@ -38,7 +38,7 @@ public class CropPeat extends Crop {
 		}
 
 		BlockSoil blockSoil = (BlockSoil) block;
-		BlockSoil.SoilType soilType = blockSoil.getTypeFromMeta(getBlockMeta(pos));
+		BlockSoil.SoilType soilType = BlockSoil.getTypeFromMeta(getBlockMeta(pos));
 		return soilType == BlockSoil.SoilType.PEAT;
 	}
 

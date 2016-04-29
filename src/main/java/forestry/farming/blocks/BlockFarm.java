@@ -165,8 +165,8 @@ public class BlockFarm extends BlockStructure {
 	}
 
 	@Override
-	public TileEntity createTileEntity(World world, IBlockState state) {
-		switch (getMetaFromState(state)) {
+	public TileEntity createNewTileEntity(World world, int meta) {
+		switch (meta) {
 			case 2:
 				return new TileFarmGearbox();
 			case 3:
@@ -178,11 +178,6 @@ public class BlockFarm extends BlockStructure {
 			default:
 				return new TileFarmPlain();
 		}
-	}
-
-	@Override
-	public TileEntity createNewTileEntity(World world, int meta) {
-		return createTileEntity(world, getStateFromMeta(meta));
 	}
 
 	/* MODELS */

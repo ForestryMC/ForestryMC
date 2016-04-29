@@ -15,7 +15,6 @@ import net.minecraft.init.Blocks;
 import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.core.items.ItemBlockForestry;
-import forestry.core.items.ItemBlockTyped;
 
 public class BlockRegistryCore extends BlockRegistry {
 	public final BlockCore core;
@@ -26,7 +25,7 @@ public class BlockRegistryCore extends BlockRegistry {
 	public BlockRegistryCore() {
 		core = registerBlock(new BlockCore(), ItemBlockForestry.class, "core");
 		
-		soil = registerBlock(new BlockSoil(), ItemBlockTyped.class, "soil");
+		soil = registerBlock(new BlockSoil(), ItemBlockForestry.class, "soil");
 		soil.setHarvestLevel("shovel", 0, soil.getStateFromMeta(0));
 		soil.setHarvestLevel("shovel", 0, soil.getStateFromMeta(1));
 		

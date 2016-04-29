@@ -10,9 +10,9 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -47,15 +47,25 @@ import forestry.core.utils.BlockUtil;
 /**
  * Humus, bog earth, peat
  */
-public class BlockSoil extends Block implements IItemTyped, IItemModelRegister {
+public class BlockSoil extends Block implements IItemModelRegister, IBlockWithMeta {
 	private static final PropertyEnum<SoilType> SOIL = PropertyEnum.create("soil", SoilType.class);
 	
 	public enum SoilType implements IStringSerializable {
-		HUMUS, BOG_EARTH, PEAT;
+		HUMUS("humus"),
+		BOG_EARTH("bog.earth"),
+		PEAT("peat");
+
+		@Nonnull
+		private final String name;
+
+		SoilType(@Nonnull String name) {
+			this.name = name;
+		}
 		
+		@Nonnull
 		@Override
 		public String getName() {
-			return name().toLowerCase(Locale.ENGLISH);
+			return name;
 		}
 	}
 
@@ -239,8 +249,7 @@ public class BlockSoil extends Block implements IItemTyped, IItemModelRegister {
 		return false;
 	}
 
-	@Override
-	public SoilType getTypeFromMeta(int meta) {
+	public static SoilType getTypeFromMeta(int meta) {
 		int type = meta & 0x03;
 		int maturity = meta >> 2;
 
@@ -268,6 +277,12 @@ public class BlockSoil extends Block implements IItemTyped, IItemModelRegister {
 		manager.registerItemModel(item, 0, "soil/humus");
 		manager.registerItemModel(item, 1, "soil/bog");
 		manager.registerItemModel(item, 2, "soil/peat");
+	}
+
+	@Override
+	public String getNameFromMeta(int meta) {
+		SoilType type = getTypeFromMeta(meta);
+		return type.getName();
 	}
 
 	public ItemStack get(SoilType soilType, int amount) {

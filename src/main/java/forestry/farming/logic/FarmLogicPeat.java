@@ -48,7 +48,7 @@ public class FarmLogicPeat extends FarmLogicWatered {
 			return false;
 		}
 		BlockSoil blockSoil = (BlockSoil) block;
-		BlockSoil.SoilType soilType = blockSoil.getTypeFromMeta(itemStack.getItemDamage());
+		BlockSoil.SoilType soilType = BlockSoil.getTypeFromMeta(itemStack.getItemDamage());
 		return soilType == BlockSoil.SoilType.BOG_EARTH || soilType == BlockSoil.SoilType.PEAT;
 	}
 
@@ -95,7 +95,7 @@ public class FarmLogicPeat extends FarmLogicWatered {
 			}
 
 			BlockSoil blockSoil = (BlockSoil) block;
-			BlockSoil.SoilType soilType = blockSoil.getTypeFromMeta(occupant.getItemDamage());
+			BlockSoil.SoilType soilType = BlockSoil.getTypeFromMeta(occupant.getItemDamage());
 
 			if (soilType == BlockSoil.SoilType.PEAT) {
 				crops.push(new CropPeat(world, position));

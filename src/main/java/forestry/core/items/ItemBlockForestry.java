@@ -57,15 +57,17 @@ public class ItemBlockForestry<B extends Block> extends ItemBlock {
 	public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState) {
 		boolean placed = super.placeBlockAt(stack, player, world, pos, side, hitX, hitY, hitZ, newState);
 
-		TileForestry tile = TileUtil.getTile(world, pos, TileForestry.class);
+		if (block.hasTileEntity(newState)) {
+			TileForestry tile = TileUtil.getTile(world, pos, TileForestry.class);
 
-		if (tile != null) {
-			if (stack.getItem() instanceof ItemBlockNBT && stack.hasTagCompound()) {
-				tile.readFromNBT(stack.getTagCompound());
-				tile.setPos(pos);
+			if (tile != null) {
+				if (stack.getItem() instanceof ItemBlockNBT && stack.hasTagCompound()) {
+					tile.readFromNBT(stack.getTagCompound());
+					tile.setPos(pos);
+				}
+
+				tile.rotateAfterPlacement(player, side);
 			}
-
-			tile.rotateAfterPlacement(player, side);
 		}
 
 		return placed;

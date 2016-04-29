@@ -22,6 +22,7 @@ import java.util.Random;
 import java.util.Set;
 
 import net.minecraft.block.BlockTorch;
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
@@ -51,13 +52,13 @@ import forestry.api.core.Tabs;
 import forestry.apiculture.tiles.TileCandle;
 import forestry.core.utils.ItemStackUtil;
 
-public class BlockCandle extends BlockTorch implements IItemModelRegister {
+public class BlockCandle extends BlockTorch implements IItemModelRegister, ITileEntityProvider {
 
 	private static final ImmutableMap<String, Integer> colours;
 	public static final Set<Item> lightingItems;
 	public static final String colourTagName = "colour";
 	
-	private static final PropertyEnum STATE = PropertyEnum.create("state", State.class);
+	private static final PropertyEnum<State> STATE = PropertyEnum.create("state", State.class);
 
 	private enum State implements IStringSerializable {
 		ON, OFF;
@@ -96,7 +97,6 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister {
 	}
 
 	public BlockCandle() {
-		super();
 		this.setHardness(0.0F);
 		this.setStepSound(soundTypeWood);
 		setCreativeTab(Tabs.tabApiculture);
@@ -117,12 +117,7 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister {
 	}
 
 	@Override
-	public boolean hasTileEntity(IBlockState state) {
-		return true;
-	}
-
-	@Override
-	public TileEntity createTileEntity(World world, IBlockState state) {
+	public TileEntity createNewTileEntity(World worldIn, int meta) {
 		return new TileCandle();
 	}
 

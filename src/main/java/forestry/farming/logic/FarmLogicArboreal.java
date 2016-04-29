@@ -60,7 +60,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 			return false;
 		}
 		BlockSoil blockSoil = (BlockSoil) block;
-		return blockSoil.getTypeFromMeta(soil.getItemDamage()) == BlockSoil.SoilType.HUMUS;
+		return BlockSoil.getTypeFromMeta(soil.getItemDamage()) == BlockSoil.SoilType.HUMUS;
 	}
 
 	@Override

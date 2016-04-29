@@ -10,11 +10,10 @@
  ******************************************************************************/
 package forestry.greenhouse.blocks;
 
+import javax.annotation.Nonnull;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.annotation.Nonnull;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -42,6 +41,7 @@ import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.common.property.Properties;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.ICamouflagedBlock;
 import forestry.api.core.IModelManager;
@@ -66,7 +66,7 @@ import forestry.plugins.ForestryPluginUids;
 
 public abstract class BlockGreenhouse extends BlockStructure {
 
-	public static final PropertyEnum STATE = PropertyEnum.create("state", State.class);
+	public static final PropertyEnum<State> STATE = PropertyEnum.create("state", State.class);
 	
 	public static enum State implements IStringSerializable {
 		ON, OFF;
@@ -188,7 +188,7 @@ public abstract class BlockGreenhouse extends BlockStructure {
 	}
 
 	@Override
-	public TileEntity createTileEntity(World world, IBlockState state) {
+	public TileEntity createNewTileEntity(World world, int meta) {
 		BlockGreenhouseType type = getGreenhouseType();
 		switch (type) {
 			case GEARBOX:
@@ -215,11 +215,6 @@ public abstract class BlockGreenhouse extends BlockStructure {
 			default:
 				return new TileGreenhousePlain();
 		}
-	}
-
-	@Override
-	public TileEntity createNewTileEntity(World world, int meta) {
-		return createTileEntity(world, getStateFromMeta(meta));
 	}
 	
 	@Override

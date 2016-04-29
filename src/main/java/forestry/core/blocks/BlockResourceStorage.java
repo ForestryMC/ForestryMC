@@ -16,7 +16,7 @@ import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.core.CreativeTabForestry;
 
-public class BlockResourceStorage extends Block implements IItemModelRegister {
+public class BlockResourceStorage extends Block implements IItemModelRegister, IBlockWithMeta {
 	public static final PropertyEnum<EnumResourceType> STORAGE_RESOURCES = PropertyEnum.create("resource", EnumResourceType.class);
 
 	public BlockResourceStorage() {
@@ -64,5 +64,11 @@ public class BlockResourceStorage extends Block implements IItemModelRegister {
 
 	public ItemStack get(EnumResourceType type) {
 		return new ItemStack(this, 1, type.getMeta());
+	}
+
+	@Override
+	public String getNameFromMeta(int meta) {
+		EnumResourceType resourceType = getStateFromMeta(meta).getValue(STORAGE_RESOURCES);
+		return resourceType.getName();
 	}
 }

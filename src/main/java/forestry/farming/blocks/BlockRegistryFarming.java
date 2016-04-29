@@ -11,7 +11,7 @@
 package forestry.farming.blocks;
 
 import forestry.core.blocks.BlockRegistry;
-import forestry.core.items.ItemBlockTyped;
+import forestry.core.items.ItemBlockForestry;
 import forestry.farming.items.ItemBlockFarm;
 
 public class BlockRegistryFarming extends BlockRegistry {
@@ -19,7 +19,7 @@ public class BlockRegistryFarming extends BlockRegistry {
 	public final BlockFarm farm;
 
 	public BlockRegistryFarming() {
-		mushroom = registerBlock(new BlockMushroom(), ItemBlockTyped.class, "mushroom");
+		mushroom = registerBlock(new BlockMushroom(), ItemBlockForestry.class, "mushroom");
 		farm = registerBlock(new BlockFarm(), ItemBlockFarm.class, "ffarm");
 	}
 }

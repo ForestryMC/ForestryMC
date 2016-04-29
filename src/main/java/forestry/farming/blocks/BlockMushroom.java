@@ -36,13 +36,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
-import forestry.core.blocks.IItemTyped;
+import forestry.core.blocks.IBlockWithMeta;
 import forestry.core.config.Constants;
 import forestry.core.utils.BlockUtil;
 
-public class BlockMushroom extends BlockBush implements IItemTyped, IItemModelRegister, IGrowable {
+public class BlockMushroom extends BlockBush implements IItemModelRegister, IGrowable, IBlockWithMeta {
 
-	public static final PropertyEnum MUSHROOM = PropertyEnum.create("mushroom", MushroomType.class);
+	public static final PropertyEnum<MushroomType> MUSHROOM = PropertyEnum.create("mushroom", MushroomType.class);
 	
 	public enum MushroomType implements IStringSerializable {
 		BROWN, RED;
@@ -57,7 +57,6 @@ public class BlockMushroom extends BlockBush implements IItemTyped, IItemModelRe
 	private final ItemStack[] drops;
 
 	public BlockMushroom() {
-		super();
 		setHardness(0.0f);
 		this.generators = new WorldGenerator[]{new WorldGenBigMushroom(Blocks.brown_mushroom_block), new WorldGenBigMushroom(Blocks.red_mushroom_block)};
 		this.drops = new ItemStack[]{new ItemStack(Blocks.brown_mushroom), new ItemStack(Blocks.red_mushroom)};
@@ -73,7 +72,7 @@ public class BlockMushroom extends BlockBush implements IItemTyped, IItemModelRe
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return ((MushroomType) state.getValue(MUSHROOM)).ordinal();
+		return state.getValue(MUSHROOM).ordinal();
 	}
 
 	@Override
@@ -147,8 +146,7 @@ public class BlockMushroom extends BlockBush implements IItemTyped, IItemModelRe
 		this.generateTree(worldIn, pos, state, rand);
 	}
 
-	@Override
-	public MushroomType getTypeFromMeta(int meta) {
+	public static MushroomType getTypeFromMeta(int meta) {
 		meta %= MushroomType.values().length;
 		return MushroomType.values()[meta];
 	}
@@ -183,4 +181,9 @@ public class BlockMushroom extends BlockBush implements IItemTyped, IItemModelRe
 		this.grow(worldIn, pos, state, rand);
 	}
 
+	@Override
+	public String getNameFromMeta(int meta) {
+		MushroomType type = getTypeFromMeta(meta);
+		return type.getName();
+	}
 }

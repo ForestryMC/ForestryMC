@@ -35,7 +35,7 @@ import forestry.api.core.IModelManager;
 import forestry.core.CreativeTabForestry;
 import forestry.core.PluginCore;
 
-public class BlockResourceOre extends Block implements IItemModelRegister {
+public class BlockResourceOre extends Block implements IItemModelRegister, IBlockWithMeta {
 	public static final PropertyEnum<EnumResourceType> ORE_RESOURCES = PropertyEnum.create("resource", EnumResourceType.class, new Predicate<EnumResourceType>(){
 		@Override
 		public boolean apply(EnumResourceType input) {
@@ -77,7 +77,7 @@ public class BlockResourceOre extends Block implements IItemModelRegister {
 
 	@Override
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-		ArrayList<ItemStack> drops = new ArrayList();
+		List<ItemStack> drops = new ArrayList<>();
 		EnumResourceType metadata = state.getValue(ORE_RESOURCES);
 
 		if (metadata == EnumResourceType.APATITE) {
@@ -125,5 +125,11 @@ public class BlockResourceOre extends Block implements IItemModelRegister {
 
 	public ItemStack get(EnumResourceType type, int amount) {
 		return new ItemStack(this, amount, type.getMeta());
+	}
+
+	@Override
+	public String getNameFromMeta(int meta) {
+		EnumResourceType resourceType = getStateFromMeta(meta).getValue(ORE_RESOURCES);
+		return resourceType.getName();
 	}
 }
