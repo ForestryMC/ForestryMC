@@ -63,10 +63,16 @@ repositories {
 	maven {
 		url "http://dvs1.progwml6.com/files/maven"
 	}
+	maven {
+		name = "ic2"
+		url = "http://maven.ic2.player.to/"
+	}
 }
 
 dependencies {
 	deobfCompile "mezz.jei:jei_${mcversion}:${jei_version}"
+	deobfCompile "net.industrial-craft:industrialcraft-2:${ic2_version}:api"
+	runtime "net.industrial-craft:industrialcraft-2:${ic2_version}:dev"
 }
 
 configurations {

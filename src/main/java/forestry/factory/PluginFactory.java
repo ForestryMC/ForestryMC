@@ -168,7 +168,16 @@ public class PluginFactory extends BlankForestryPlugin {
 		FuelManager.rainSubstrate.put(iodineCharge, new RainSubstrate(iodineCharge, Constants.RAINMAKER_RAIN_DURATION_IODINE, 0.01f));
 		FuelManager.rainSubstrate.put(dissipationCharge, new RainSubstrate(dissipationCharge, 0.075f));
 
-		blocks.factoryTESR.addDefinitions(BlockTypeFactoryTesr.VALUES);
+		blocks.factoryTESR.addDefinitions(
+				BlockTypeFactoryTesr.BOTTLER,
+				BlockTypeFactoryTesr.CARPENTER,
+				BlockTypeFactoryTesr.CENTRIFUGE,
+				BlockTypeFactoryTesr.FERMENTER,
+				BlockTypeFactoryTesr.MOISTENER,
+				BlockTypeFactoryTesr.SQUEEZER,
+				BlockTypeFactoryTesr.STILL,
+				BlockTypeFactoryTesr.RAINMAKER
+		);
 		blocks.factoryPlain.addDefinitions(BlockTypeFactoryPlain.VALUES);
 
 		ICircuitLayout layoutMachineUpgrade = new CircuitLayout("machine.upgrade", CircuitSocketType.MACHINE);
