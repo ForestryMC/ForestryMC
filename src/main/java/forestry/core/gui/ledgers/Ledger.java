@@ -11,6 +11,7 @@
 package forestry.core.gui.ledgers;
 
 import java.awt.Rectangle;
+import java.util.Date;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
@@ -86,48 +87,36 @@ public abstract class Ledger {
 	}
 
 	// adjust the update's move amount to match the look of 60 fps (16.67 ms per update)
-	private static final float msPerUpdate = 16.667f;
-	private long lastUpdateTime = 0;
+	private static final float msPerUpdate = 67.667f;
+	private long lastUpdateTime = -1;
 
 	public void update() {
+        if (lastUpdateTime < 0) {
+            lastUpdateTime = (new Date()).getTime();
+        }
 
-		long updateTime;
-		if (lastUpdateTime == 0) {
-			lastUpdateTime = System.currentTimeMillis();
-			updateTime = lastUpdateTime + Math.round(msPerUpdate);
-		} else {
-			updateTime = System.currentTimeMillis();
-		}
+        long updateTime = (new Date()).getTime();
+        int updateVal = (int) Math.round((updateTime - lastUpdateTime) / 8.0);
 
-		float moveAmount = Config.guiTabSpeed * (updateTime - lastUpdateTime) / msPerUpdate;
+        // Width
+        if (open && currentWidth < maxWidth) {
+            currentWidth += updateVal;
+            currentWidth = Math.min(maxWidth, currentWidth);
+        } else if (!open && currentWidth > minWidth) {
+            currentWidth -= updateVal;
+            currentWidth = Math.max(minWidth, currentWidth);
+        }
 
-		lastUpdateTime = updateTime;
+        // Height
+        if (open && currentHeight < maxHeight) {
+            currentHeight += updateVal;
+            currentHeight = Math.min(maxWidth, currentHeight);
+        } else if (!open && currentHeight > minHeight) {
+            currentHeight -= updateVal;
+            currentHeight = Math.max(minHeight, currentHeight);
+        }
 
-		// Width
-		if (open && currentWidth < maxWidth) {
-			currentWidth += moveAmount;
-			if (currentWidth > maxWidth) {
-				currentWidth = maxWidth;
-			}
-		} else if (!open && currentWidth > minWidth) {
-			currentWidth -= moveAmount;
-			if (currentWidth < minWidth) {
-				currentWidth = minWidth;
-			}
-		}
-
-		// Height
-		if (open && currentHeight < maxHeight) {
-			currentHeight += moveAmount;
-			if (currentHeight > maxHeight) {
-				currentHeight = maxHeight;
-			}
-		} else if (!open && currentHeight > minHeight) {
-			currentHeight -= moveAmount;
-			if (currentHeight < minHeight) {
-				currentHeight = minHeight;
-			}
-		}
+        lastUpdateTime = updateTime;
 	}
 
 	public int getHeight() {
