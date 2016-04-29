@@ -95,4 +95,8 @@ public class FakeAlvearyController extends FakeMultiblockController implements I
 		return 0;
 	}
 
+	@Override
+	public String getUnlocalizedType() {
+		return "for.multiblock.alveary.type";
+	}
 }

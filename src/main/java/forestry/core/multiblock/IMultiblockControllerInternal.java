@@ -122,6 +122,11 @@ public interface IMultiblockControllerInternal extends IMultiblockController, IN
 	String getPartsListString();
 
 	/**
+	 * @return an unlocalized string to specify the type of the multiblock
+	 */
+	String getUnlocalizedType();
+
+	/**
 	 * Checks all of the parts in the controller. If any are dead or do not exist in the world, they are removed.
 	 */
 	void auditParts();

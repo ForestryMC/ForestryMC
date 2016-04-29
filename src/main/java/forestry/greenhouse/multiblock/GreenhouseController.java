@@ -50,6 +50,7 @@ import forestry.core.proxy.Proxies;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.utils.CamouflageUtil;
 import forestry.core.utils.Log;
+import forestry.core.utils.Translator;
 import forestry.energy.EnergyManager;
 import forestry.greenhouse.GreenhouseState;
 import forestry.greenhouse.blocks.BlockGreenhouse;
@@ -64,7 +65,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.MinecraftForge;
@@ -174,7 +174,12 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	public World getWorld() {
 		return worldObj;
 	}
-	
+
+	@Override
+	public String getUnlocalizedType() {
+		return "for.multiblock.greenhouse.type";
+	}
+
 	@Override
 	public BlockPos getCoordinates() {
 		BlockPos coord = getReferenceCoord();
@@ -510,7 +515,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		int minZ = getSizeLimits().getMinimumZSize();
 
 		if (connectedParts.size() < getSizeLimits().getMinimumNumberOfBlocksForAssembledMachine()) {
-			throw new MultiblockValidationException(StatCollector.translateToLocalFormatted("for.multiblock.error.small", minX, minY, minZ));
+			throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.small", minX, minY, minZ));
 		}
 		
 		BlockPos maximumCoord = getMaximumCoord();
@@ -526,22 +531,22 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		int maxZ = getSizeLimits().getMaximumZSize();
 
 		if (maxX > 0 && deltaX > maxX) {
-			throw new MultiblockValidationException(StatCollector.translateToLocalFormatted("for.multiblock.error.large.x", maxX));
+			throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.large.x", maxX));
 		}
 		if (maxY > 0 && deltaY > maxY) {
-			throw new MultiblockValidationException(StatCollector.translateToLocalFormatted("for.multiblock.error.large.y", maxY));
+			throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.large.y", maxY));
 		}
 		if (maxZ > 0 && deltaZ > maxZ) {
-			throw new MultiblockValidationException(StatCollector.translateToLocalFormatted("for.multiblock.error.large.z", maxZ));
+			throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.large.z", maxZ));
 		}
 		if (deltaX < minX) {
-			throw new MultiblockValidationException(StatCollector.translateToLocalFormatted("for.multiblock.error.small.x", minX));
+			throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.small.x", minX));
 		}
 		if (deltaY < minY) {
-			throw new MultiblockValidationException(StatCollector.translateToLocalFormatted("for.multiblock.error.small.y", minY));
+			throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.small.y", minY));
 		}
 		if (deltaZ < minZ) {
-			throw new MultiblockValidationException(StatCollector.translateToLocalFormatted("for.multiblock.error.small.z", minZ));
+			throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.small.z", minZ));
 		}
 
 		// Now we run a simple check on each block within that volume.
@@ -606,7 +611,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 						if (part != null) {
 							// Ensure this part should actually be allowed within a cube of this controller's type
 							if (!myClass.equals(part.getMultiblockLogic().getController().getClass())) {
-								throw new MultiblockValidationException(StatCollector.translateToLocalFormatted("for.multiblock.error.invalid.part", x, y, z, myClass.getSimpleName()));
+								throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.invalid.part", Translator.translateToLocal(getUnlocalizedType())));
 							}
 							isGoodForExteriorLevel(part, exteriorLevel);
 						} else {
@@ -618,7 +623,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 							if(state.getBlock() instanceof BlockGreenhouse && ((BlockGreenhouse)state.getBlock()).getGreenhouseType() == BlockGreenhouseType.SPRINKLER || !myClass.equals(part.getMultiblockLogic().getController().getClass())){
 								isGoodForInterior(part);
 							}else{
-								throw new MultiblockValidationException(StatCollector.translateToLocalFormatted("for.multiblock.error.invalid.part", x, y, z, myClass.getSimpleName()));
+								throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.invalid.part", Translator.translateToLocal(getUnlocalizedType())));
 							}
 						} else {
 							isBlockGoodForInterior(this.worldObj, pos);
@@ -633,7 +638,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 			checkInternalBlock(createInternalBlock(new InternalBlock(worldObj, getMinimumCoord().add(1, 1, 1))));
 		}
 		if(internalBlocks.isEmpty()){
-			throw new MultiblockValidationException(StatCollector.translateToLocalFormatted("for.multiblock.error.space.closed"));
+			throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.space.closed"));
 		}
 		this.internalBlocks.addAll(internalBlocks);
 		
@@ -644,7 +649,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 			}
 		}
 		if(hatches > 1){
-			throw new MultiblockValidationException(StatCollector.translateToLocalFormatted("for.multiblock.error.butterflyhatch.tomany"));
+			throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.butterflyhatch.toomany"));
 		}
 	}
 
@@ -669,14 +674,14 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 				BlockPos maxPos = getMaximumCoord();
 				
 				if(minPos.getX() > posFacing.getX() || minPos.getY() > posFacing.getY() || minPos.getZ() > posFacing.getZ() || maxPos.getX() < posFacing.getX() || maxPos.getY() < posFacing.getY() || maxPos.getZ() < posFacing.getZ()){
-					throw new MultiblockValidationException(StatCollector.translateToLocalFormatted("for.multiblock.error.space.closed"));
+					throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.space.closed"));
 				}
 				
 				TileEntity tileFace = worldObj.getTileEntity(posFacing);
 				
 				if(tileFace instanceof IGreenhouseComponent){
 					if(((IGreenhouseComponent) tileFace).getMultiblockLogic().getController() != this){
-						throw new MultiblockValidationException(StatCollector.translateToLocalFormatted("for.multiblock.error.not.connected.part", posFacing.getX(), posFacing.getY(), posFacing.getZ()));
+						throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.not.connected.part"));
 					}
 					else if(!(tileFace instanceof TileGreenhouseSprinkler)){
 						faceToCheck.setTested(true);

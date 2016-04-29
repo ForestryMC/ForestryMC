@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import forestry.core.utils.Translator;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -20,7 +21,6 @@ import net.minecraft.world.chunk.IChunkProvider;
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.Log;
-import forestry.core.utils.StringUtil;
 
 /**
  * This class contains the base logic for "multiblock controllers". Conceptually, they are
@@ -472,7 +472,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 	 */
 	protected void isBlockGoodForExteriorLevel(int level, World world, BlockPos pos) throws MultiblockValidationException {
 		Block block = BlockUtil.getBlock(world, pos);
-		throw new MultiblockValidationException(StringUtil.localizeAndFormatRaw("for.multiblock.error.invalid.interior", pos.getX(), pos.getY(), pos.getZ(), block.getLocalizedName()));
+		throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.invalid.interior", block.getLocalizedName()));
 	}
 	
 	/**
@@ -483,7 +483,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 	 */
 	protected void isBlockGoodForInterior(World world, BlockPos pos) throws MultiblockValidationException {
 		Block block = BlockUtil.getBlock(world, pos);
-		throw new MultiblockValidationException(StringUtil.localizeAndFormatRaw("for.multiblock.error.invalid.interior", pos.getX(), pos.getY(), pos.getZ(), block.getLocalizedName()));
+		throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.invalid.interior", block.getLocalizedName()));
 	}
 	
 	@Override

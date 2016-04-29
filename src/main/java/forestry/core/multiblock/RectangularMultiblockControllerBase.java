@@ -1,8 +1,8 @@
 package forestry.core.multiblock;
 
+import forestry.core.utils.Translator;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 import forestry.api.multiblock.IMultiblockComponent;
@@ -23,7 +23,7 @@ public abstract class RectangularMultiblockControllerBase extends MultiblockCont
 		int minZ = sizeLimits.getMinimumZSize();
 
 		if (connectedParts.size() < sizeLimits.getMinimumNumberOfBlocksForAssembledMachine()) {
-			throw new MultiblockValidationException(StatCollector.translateToLocalFormatted("for.multiblock.error.small", minX, minY, minZ));
+			throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.small", minX, minY, minZ));
 		}
 		
 		BlockPos maximumCoord = getMaximumCoord();
@@ -39,22 +39,22 @@ public abstract class RectangularMultiblockControllerBase extends MultiblockCont
 		int maxZ = sizeLimits.getMaximumZSize();
 
 		if (maxX > 0 && deltaX > maxX) {
-			throw new MultiblockValidationException(StatCollector.translateToLocalFormatted("for.multiblock.error.large.x", maxX));
+			throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.large.x", maxX));
 		}
 		if (maxY > 0 && deltaY > maxY) {
-			throw new MultiblockValidationException(StatCollector.translateToLocalFormatted("for.multiblock.error.large.y", maxY));
+			throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.large.y", maxY));
 		}
 		if (maxZ > 0 && deltaZ > maxZ) {
-			throw new MultiblockValidationException(StatCollector.translateToLocalFormatted("for.multiblock.error.large.z", maxZ));
+			throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.large.z", maxZ));
 		}
 		if (deltaX < minX) {
-			throw new MultiblockValidationException(StatCollector.translateToLocalFormatted("for.multiblock.error.small.x", minX));
+			throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.small.x", minX));
 		}
 		if (deltaY < minY) {
-			throw new MultiblockValidationException(StatCollector.translateToLocalFormatted("for.multiblock.error.small.y", minY));
+			throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.small.y", minY));
 		}
 		if (deltaZ < minZ) {
-			throw new MultiblockValidationException(StatCollector.translateToLocalFormatted("for.multiblock.error.small.z", minZ));
+			throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.small.z", minZ));
 		}
 
 		// Now we run a simple check on each block within that volume.
@@ -74,7 +74,7 @@ public abstract class RectangularMultiblockControllerBase extends MultiblockCont
 						
 						// Ensure this part should actually be allowed within a cube of this controller's type
 						if (!myClass.equals(part.getMultiblockLogic().getController().getClass())) {
-							throw new MultiblockValidationException(StatCollector.translateToLocalFormatted("for.multiblock.error.invalid.part", x, y, z, myClass.getSimpleName()));
+							throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.invalid.part", Translator.translateToLocal(getUnlocalizedType())));
 						}
 					} else {
 						// This is permitted so that we can incorporate certain non-multiblock parts inside interiors

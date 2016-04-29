@@ -95,4 +95,9 @@ public class FakeGreenhouseController extends FakeMultiblockController implement
 	public List<IInternalBlock> getInternalBlocks() {
 		return Collections.emptyList();
 	}
+
+	@Override
+	public String getUnlocalizedType() {
+		return "for.multiblock.greenhouse.type";
+	}
 }

@@ -134,6 +134,11 @@ public class FakeFarmController extends FakeMultiblockController implements IFar
 		return FakeTankManager.instance;
 	}
 
+	@Override
+	public String getUnlocalizedType() {
+		return "for.multiblock.farm.type";
+	}
+
 	private static class FakeFarmInventory implements IFarmInventory {
 		public static final FakeFarmInventory instance = new FakeFarmInventory();
 
