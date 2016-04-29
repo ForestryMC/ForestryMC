@@ -1,31 +1,23 @@
 package buildcraft.api.recipes;
 
-import java.util.HashSet;
 import java.util.Set;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
+import com.google.common.base.Predicate;
 
 import net.minecraftforge.fluids.FluidStack;
 
 public interface IComplexRefineryRecipeManager {
     IHeatableRecipe createHeatingRecipe(FluidStack in, FluidStack out, int heatFrom, int heatTo, int ticks);
 
-    default IHeatableRecipe addHeatableRecipe(FluidStack in, FluidStack out, int heatFrom, int heatTo, int ticks, boolean replaceExisting) {
-        return getHeatableRegistry().addRecipe(createHeatingRecipe(in, out, heatFrom, heatTo, ticks), replaceExisting);
-    }
+    IHeatableRecipe addHeatableRecipe(FluidStack in, FluidStack out, int heatFrom, int heatTo, int ticks, boolean replaceExisting);
 
     ICoolableRecipe createCoolableRecipe(FluidStack in, FluidStack out, int heatFrom, int heatTo, int ticks);
 
-    default ICoolableRecipe addCoolableRecipe(FluidStack in, FluidStack out, int heatFrom, int heatTo, int ticks, boolean replaceExisting) {
-        return getCoolableRegistry().addRecipe(createCoolableRecipe(in, out, heatFrom, heatTo, ticks), replaceExisting);
-    }
+    ICoolableRecipe addCoolableRecipe(FluidStack in, FluidStack out, int heatFrom, int heatTo, int ticks, boolean replaceExisting);
 
     IDistilationRecipe createDistilationRecipe(FluidStack in, FluidStack outGas, FluidStack outLiquid, int ticks);
 
-    default IDistilationRecipe addDistilationRecipe(FluidStack in, FluidStack outGas, FluidStack outLiquid, int ticks, boolean replaceExisting) {
-        return getDistilationRegistry().addRecipe(createDistilationRecipe(in, outGas, outLiquid, ticks), replaceExisting);
-    }
+    IDistilationRecipe addDistilationRecipe(FluidStack in, FluidStack outGas, FluidStack outLiquid, int ticks, boolean replaceExisting);
 
     IComplexRefineryRegistry<IHeatableRecipe> getHeatableRegistry();
 
@@ -36,20 +28,12 @@ public interface IComplexRefineryRecipeManager {
     public interface IComplexRefineryRegistry<R extends IComplexRefineryRecipe> {
         /** @return an unmodifiable set containing all of the distilation recipies that satisfy the given predicate. All
          *         of the recipe objects are guarenteed to never be null. */
-        Stream<R> getRecipes(Predicate<R> toReturn);
-
-        default Set<R> getRecipesAsSet(Predicate<R> toReturn) {
-            return getRecipes(toReturn).collect(Collectors.toCollection(() -> new HashSet<>()));
-        }
+        Set<R> getRecipes(Predicate<R> toReturn);
 
         /** @return an unmodifiable set containing all of the distilation recipies. */
-        default Set<R> getAllRecipes() {
-            return getRecipesAsSet(r -> true);
-        }
+        Set<R> getAllRecipes();
 
-        default R getRecipeForInput(FluidStack fluid) {
-            return getRecipes(r -> r.in().equals(fluid)).findAny().orElse(null);
-        }
+        R getRecipeForInput(FluidStack fluid);
 
         Set<R> removeRecipes(Predicate<R> toRemove);
 

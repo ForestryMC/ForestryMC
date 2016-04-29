@@ -2,7 +2,8 @@ package buildcraft.api.core;
 
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.Supplier;
+
+import com.google.common.base.Supplier;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -24,8 +25,18 @@ public abstract class Identifier {
     private static Map<String, Supplier<Identifier>> registeredIdentifiers;
 
     static {
-        registeredIdentifiers.put("mincraft:tile", () -> new Tile(0, null));
-        registeredIdentifiers.put("mincraft:entity", () -> new MovableEntity(0, null));
+        registeredIdentifiers.put("mincraft:tile", new Supplier<Identifier>() {
+            @Override
+            public Identifier get() {
+                return new Tile(0, null);
+            }
+        });
+        registeredIdentifiers.put("mincraft:entity", new Supplier<Identifier>() {
+            @Override
+            public Identifier get() {
+                return new MovableEntity(0, null);
+            }
+        });
     }
 
     protected final int dimId;
@@ -161,18 +172,27 @@ public abstract class Identifier {
             this.uniqueId = uniqueId;
         }
 
+        private Entity get(World world) {
+            for (Entity entity : world.loadedEntityList) {
+                if (entity.getPersistentID().equals(uniqueId)) {
+                    return entity;
+                }
+            }
+            return null;
+        }
+
         @Override
         public Entity getByIdentifier(MinecraftServer server) {
             World world = server.worldServerForDimension(dimId);
             if (world == null || world.provider.getDimensionId() != dimId) return null;
-            return world.loadedEntityList.stream().filter(e -> e.getPersistentID().equals(uniqueId)).findFirst().orElse(null);
+            return get(world);
         }
 
         @Override
         public boolean isLoaded(MinecraftServer server) {
             World world = server.worldServerForDimension(dimId);
             if (world == null || world.provider.getDimensionId() != dimId) return false;
-            return world.loadedEntityList.stream().filter(e -> e.getPersistentID().equals(uniqueId)).findFirst().orElse(null) != null;
+            return get(world) != null;
         }
 
         @Override
@@ -180,7 +200,7 @@ public abstract class Identifier {
         public Entity getByIdentifierClient() {
             World world = Minecraft.getMinecraft().theWorld;
             if (world == null || world.provider.getDimensionId() != dimId) return null;
-            return world.loadedEntityList.stream().filter(e -> e.getPersistentID().equals(uniqueId)).findFirst().orElse(null);
+            return get(world);
         }
 
         @Override
@@ -188,7 +208,7 @@ public abstract class Identifier {
         public boolean isLoadedClient() {
             World world = Minecraft.getMinecraft().theWorld;
             if (world == null || world.provider.getDimensionId() != dimId) return false;
-            return world.loadedEntityList.stream().filter(e -> e.getPersistentID().equals(uniqueId)).findFirst().orElse(null) != null;
+            return get(world) != null;
         }
 
         @Override

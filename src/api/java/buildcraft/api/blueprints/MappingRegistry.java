@@ -6,7 +6,6 @@ package buildcraft.api.blueprints;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -407,16 +406,19 @@ public class MappingRegistry {
     }
 
     public void addToCrashReport(CrashReportCategory cat) {
-        Comparator<Entry<?, Integer>> comparator = (e1, e2) -> e1.getValue() - e2.getValue();
-
         cat.addCrashSection("Item Map Count", itemToId.size());
-        itemToId.entrySet().stream().sorted(comparator).forEach(e -> cat.addCrashSection("  - ID " + e.getValue(), Item.itemRegistry.getNameForObject(
-                e.getKey())));
+        for (Entry<Item, Integer> e : itemToId.entrySet()) {
+            cat.addCrashSection("  - ID " + e.getValue(), Item.itemRegistry.getNameForObject(e.getKey()));
+        }
 
         cat.addCrashSection("Block Map Count", blockToId.size());
-        blockToId.entrySet().stream().sorted(comparator).forEach(e -> cat.addCrashSection("  - ID " + e.getValue(), e.getKey()));
+        for (Entry<Block, Integer> e : blockToId.entrySet()) {
+            cat.addCrashSection("  - ID " + e.getValue(), Block.blockRegistry.getNameForObject(e.getKey()));
+        }
 
         cat.addCrashSection("Entity Map Count", entityToId.size());
-        entityToId.entrySet().stream().sorted(comparator).forEach(e -> cat.addCrashSection("  - ID " + e.getValue(), e.getKey()));
+        for (Entry<Class<? extends Entity>, Integer> e : entityToId.entrySet()) {
+            cat.addCrashSection("  - ID " + e.getValue(), e.getKey());
+        }
     }
 }

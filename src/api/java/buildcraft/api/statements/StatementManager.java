@@ -145,6 +145,10 @@ public final class StatementManager {
     }
 
     private static IStatementParameter createParameter(Class<? extends IStatementParameter> param) {
+        if (param == null) {
+            return null;
+        }
+
         try {
             return param.newInstance();
         } catch (InstantiationException e) {

@@ -1,17 +1,15 @@
 package buildcraft.api.core;
 
-import java.util.Locale;
-import java.util.Map;
-
 import com.google.common.collect.Maps;
-
+import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTBase.NBTPrimitive;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 
-import io.netty.buffer.ByteBuf;
+import java.util.Locale;
+import java.util.Map;
 
 public enum EnumPipePart implements IStringSerializable,INetworkLoadable_BC8<EnumPipePart> {
     DOWN(EnumFacing.DOWN),
@@ -34,6 +32,10 @@ public enum EnumPipePart implements IStringSerializable,INetworkLoadable_BC8<Enu
             nameMap.put(part.name(), part);
             if (part.face != null) facingMap.put(part.face, part);
         }
+    }
+
+    public static int ordinal(EnumFacing face) {
+        return face == null ? 6 : face.ordinal();
     }
 
     public static EnumPipePart fromFacing(EnumFacing face) {

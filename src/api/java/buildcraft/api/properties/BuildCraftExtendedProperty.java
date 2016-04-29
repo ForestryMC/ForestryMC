@@ -22,7 +22,7 @@ public class BuildCraftExtendedProperty<T extends Comparable<T>> extends BuildCr
     }
 
     public static BuildCraftExtendedProperty<Double> create(String name, final double min, final double max) {
-        return new BuildCraftExtendedProperty<>(name, Double.class, new Predicate<Double>() {
+        return new BuildCraftExtendedProperty<Double>(name, Double.class, new Predicate<Double>() {
             @Override
             public boolean apply(Double input) {
                 return input >= min && input <= max;
