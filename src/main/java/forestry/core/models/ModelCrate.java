@@ -23,9 +23,12 @@ import java.io.StringReader;
 import java.util.IdentityHashMap;
 import java.util.Map;
 
+import javax.vecmath.Vector3f;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ModelBlock;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.IResource;
@@ -40,8 +43,12 @@ import net.minecraftforge.client.ItemModelMesherForge;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.model.IFlexibleBakedModel;
 import net.minecraftforge.client.model.IModel;
+import net.minecraftforge.client.model.IModelState;
+import net.minecraftforge.client.model.IPerspectiveAwareModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.MultiModel;
+import net.minecraftforge.client.model.SimpleModelState;
+import net.minecraftforge.client.model.TRSRTransformation;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -73,7 +80,8 @@ public class ModelCrate extends BlankItemModel {
 			MODEL_COMPASS = ObfuscationReflectionHelper.getPrivateValue(ModelBakery.class, event.modelLoader, 15);
 			MODEL_CLOCK = ObfuscationReflectionHelper.getPrivateValue(ModelBakery.class, event.modelLoader, 16);
 		} catch (IOException e) {
-			Log.error("Failed to bake crate model model.");
+			Log.error("Failed to init the crate model.");
+			e.printStackTrace();
 		}
 	}
 	
@@ -200,10 +208,10 @@ public class ModelCrate extends BlankItemModel {
 	/**
 	 * Bake the crate model;
 	 */
-	private IFlexibleBakedModel getModelCrate() {
+	/*private IFlexibleBakedModel getModelCrate() {
 		IFlexibleBakedModel flexModel = getModel(new ItemStack(PluginStorage.items.crate, 1, 1));
 		return crateModel.bake(crateModel.getDefaultState(), flexModel.getFormat(), textureGetter);
-	}
+	}*/
 
 	/**
 	 * Bake the crated model
@@ -213,15 +221,28 @@ public class ModelCrate extends BlankItemModel {
 		ItemCrated crated = (ItemCrated) stack.getItem();
 		String crateUID = StringUtil.cleanItemName(crated);
 		if (crates.get(crateUID) == null) {
-			IFlexibleBakedModel baseBaked = getModelCrate();
-
+			IFlexibleBakedModel baseBaked = getModel(new ItemStack(PluginStorage.items.crate, 1, 1));
 			//Set the crate color index to 100
 			for (BakedQuad quad : baseBaked.getGeneralQuads()) {
 				ObfuscationReflectionHelper.setPrivateValue(BakedQuad.class, quad, 100, 1);
 			}
-			crates.put(crateUID, new MultiModel.Baked(baseBaked, bakeContentModels(crated)));
+			crates.put(crateUID, new MultiModel.Baked(null, true, new IPerspectiveAwareModel.MapWrapper(baseBaked, getTransformations()), bakeContentModels(crated)));
 		}
 		return crates.get(crateUID);
+	}
+		
+	public IModelState getTransformations(){
+        TRSRTransformation thirdperson = TRSRTransformation.blockCenterToCorner(new TRSRTransformation(
+                new Vector3f(0, 1f / 16, -3f / 16),
+                TRSRTransformation.quatFromYXZDegrees(new Vector3f(-90, 0, 0)),
+                new Vector3f(0.55f, 0.55f, 0.55f),
+                null));
+            TRSRTransformation firstperson = TRSRTransformation.blockCenterToCorner(new TRSRTransformation(
+                new Vector3f(0, 4f / 16, 2f / 16),
+                TRSRTransformation.quatFromYXZDegrees(new Vector3f(0, -135, 25)),
+                new Vector3f(1.7f, 1.7f, 1.7f),
+                null));
+            return new SimpleModelState(ImmutableMap.of(TransformType.THIRD_PERSON, thirdperson, TransformType.FIRST_PERSON, firstperson));
 	}
 	
 	@Override

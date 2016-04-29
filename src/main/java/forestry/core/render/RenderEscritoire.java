@@ -40,7 +40,7 @@ public class RenderEscritoire extends TileEntitySpecialRenderer<TileEscritoire> 
 		if (escritoire != null) {
 			render(escritoire.getStackInSlot(InventoryEscritoire.SLOT_ANALYZE), escritoire.getOrientation(), x, y, z);
 		} else {
-			render(null, EnumFacing.EAST, x, y, z);
+			render(null, EnumFacing.SOUTH, x, y, z);
 		}
 	}
 
