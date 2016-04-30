@@ -19,6 +19,7 @@ import forestry.core.gui.ledgers.Ledger;
 import forestry.core.gui.ledgers.LedgerManager;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 
 public class FarmLedger extends Ledger {
 	private final IFarmLedgerDelegate delegate;
@@ -52,25 +53,25 @@ public class FarmLedger extends Ledger {
 			return;
 		}
 
-		y += drawHeader(StringUtil.localize("gui.hydration"), xHeader, y);
+		y += drawHeader(Translator.translateToLocal("for.gui.hydration"), xHeader, y);
 		y += 4;
 
-		y += drawSubheader(StringUtil.localize("gui.hydr.heat") + ':', xBody, y);
+		y += drawSubheader(Translator.translateToLocal("for.gui.hydr.heat") + ':', xBody, y);
 		y += 3;
 		y += drawText(StringUtil.floatAsPercent(delegate.getHydrationTempModifier()), xBody, y);
 		y += 3;
 
-		y += drawSubheader(StringUtil.localize("gui.hydr.humid") + ':', xBody, y);
+		y += drawSubheader(Translator.translateToLocal("for.gui.hydr.humid") + ':', xBody, y);
 		y += 3;
 		y += drawText(StringUtil.floatAsPercent(delegate.getHydrationHumidModifier()), xBody, y);
 		y += 3;
 
-		y += drawSubheader(StringUtil.localize("gui.hydr.rainfall") + ':', xBody, y);
+		y += drawSubheader(Translator.translateToLocal("for.gui.hydr.rainfall") + ':', xBody, y);
 		y += 3;
 		y += drawText(StringUtil.floatAsPercent(delegate.getHydrationRainfallModifier()) + " (" + delegate.getDrought() + " d)", xBody, y);
 		y += 3;
 
-		y += drawSubheader(StringUtil.localize("gui.hydr.overall") + ':', xBody, y);
+		y += drawSubheader(Translator.translateToLocal("for.gui.hydr.overall") + ':', xBody, y);
 		y += 3;
 		drawText(StringUtil.floatAsPercent(delegate.getHydrationModifier()), xBody, y);
 	}
@@ -78,6 +79,6 @@ public class FarmLedger extends Ledger {
 	@Override
 	public String getTooltip() {
 		float hydrationModifier = delegate.getHydrationModifier();
-		return StringUtil.floatAsPercent(hydrationModifier) + ' ' + StringUtil.localize("gui.hydration");
+		return StringUtil.floatAsPercent(hydrationModifier) + ' ' + Translator.translateToLocal("for.gui.hydration");
 	}
 }

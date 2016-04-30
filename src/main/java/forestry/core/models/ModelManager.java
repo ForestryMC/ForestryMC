@@ -19,12 +19,12 @@ import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.IRegistry;
 import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry;
 import net.minecraftforge.fml.common.registry.GameData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -34,7 +34,6 @@ import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.api.core.IStateMapperRegister;
 import forestry.core.config.Constants;
-import forestry.core.utils.StringUtil;
 
 @SideOnly(Side.CLIENT)
 public class ModelManager implements IModelManager {
@@ -63,12 +62,8 @@ public class ModelManager implements IModelManager {
 	}
 
 	@Override
-	public void registerItemModel(Item item, int meta, boolean withMeta) {
-		if (withMeta) {
-			ModelLoader.setCustomModelResourceLocation(item, meta, getModelLocation(item, meta));
-		} else {
-			ModelLoader.setCustomModelResourceLocation(item, meta, getModelLocation(item));
-		}
+	public void registerItemModel(Item item, int meta) {
+		ModelLoader.setCustomModelResourceLocation(item, meta, getModelLocation(item));
 	}
 
 	@Override
@@ -82,18 +77,10 @@ public class ModelManager implements IModelManager {
 	}
 
 	@Override
-	public ModelResourceLocation getModelLocation(Item item, int meta) {
-		return getModelLocation(StringUtil.cleanItemName(new ItemStack(item, 1, meta)));
-	}
-
-	@Override
-	public ModelResourceLocation getModelLocation(Item item, int meta, String identifier) {
-		return getModelLocation(StringUtil.cleanTags(item.getUnlocalizedName(new ItemStack(item, 1, meta))) + identifier);
-	}
-
-	@Override
 	public ModelResourceLocation getModelLocation(Item item) {
-		return getModelLocation(StringUtil.cleanItemName(item));
+		FMLControlledNamespacedRegistry<Item> itemRegistry = (FMLControlledNamespacedRegistry<Item>) Item.itemRegistry;
+		String itemName = itemRegistry.getNameForObject(item).getResourcePath();
+		return getModelLocation(itemName);
 	}
 
 	@Override

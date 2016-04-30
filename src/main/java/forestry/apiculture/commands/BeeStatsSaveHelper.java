@@ -13,7 +13,6 @@ package forestry.apiculture.commands;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
@@ -27,6 +26,7 @@ import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.core.commands.IStatsSaveHelper;
 import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 
 public class BeeStatsSaveHelper implements IStatsSaveHelper {
 
@@ -38,13 +38,13 @@ public class BeeStatsSaveHelper implements IStatsSaveHelper {
 	@Override
 	public void addExtraInfo(Collection<String> statistics, IBreedingTracker breedingTracker) {
 		IApiaristTracker tracker = (IApiaristTracker) breedingTracker;
-		String discoveredLine = StatCollector.translateToLocal("for.chat.command.forestry.stats.save.key.discovered") + ":";
+		String discoveredLine = Translator.translateToLocal("for.chat.command.forestry.stats.save.key.discovered") + ":";
 		statistics.add(discoveredLine);
 		statistics.add(StringUtil.line(discoveredLine.length()));
 
-		String queen = StatCollector.translateToLocal("for.bees.grammar.queen.type");
-		String princess = StatCollector.translateToLocal("for.bees.grammar.princess.type");
-		String drone = StatCollector.translateToLocal("for.bees.grammar.drone.type");
+		String queen = Translator.translateToLocal("for.bees.grammar.queen.type");
+		String princess = Translator.translateToLocal("for.bees.grammar.princess.type");
+		String drone = Translator.translateToLocal("for.bees.grammar.drone.type");
 		statistics.add(queen + ":\t\t" + tracker.getQueenCount());
 		statistics.add(princess + ":\t" + tracker.getPrincessCount());
 		statistics.add(drone + ":\t\t" + tracker.getDroneCount());

@@ -41,7 +41,7 @@ public class ItemArmorNaturalist extends ItemArmor implements IArmorNaturalist, 
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		manager.registerItemModel(item, 0, true);
+		manager.registerItemModel(item, 0);
 	}
 
 	@Override

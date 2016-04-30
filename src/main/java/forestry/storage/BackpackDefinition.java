@@ -20,7 +20,6 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.StatCollector;
 
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -28,6 +27,7 @@ import forestry.api.apiculture.BeeManager;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.storage.IBackpackDefinition;
 import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.Translator;
 
 public class BackpackDefinition implements IBackpackDefinition {
 
@@ -51,7 +51,7 @@ public class BackpackDefinition implements IBackpackDefinition {
 	@Override
 	public String getName(ItemStack backpack) {
 		Item item = backpack.getItem();
-		String display = StatCollector.translateToLocal(item.getUnlocalizedNameInefficiently(backpack) + ".name").trim();
+		String display = Translator.translateToLocal(item.getUnlocalizedNameInefficiently(backpack) + ".name").trim();
 
 		if (backpack.hasTagCompound() && backpack.getTagCompound().hasKey("display", 10)) {
 			NBTTagCompound nbt = backpack.getTagCompound().getCompoundTag("display");

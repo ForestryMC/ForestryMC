@@ -19,7 +19,7 @@ import net.minecraft.client.gui.FontRenderer;
 import forestry.core.gui.IHintSource;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 
 public class HintLedger extends Ledger {
 
@@ -32,8 +32,8 @@ public class HintLedger extends Ledger {
 		int position = new Random().nextInt(hints.size());
 		String hint = hints.get(position);
 
-		hintString = StringUtil.localize("hints." + hint + ".desc");
-		hintTooltip = StringUtil.localize("hints." + hint + ".tag");
+		hintString = Translator.translateToLocal("for.hints." + hint + ".desc");
+		hintTooltip = Translator.translateToLocal("for.hints." + hint + ".tag");
 
 		Minecraft minecraft = Proxies.common.getClientInstance();
 		FontRenderer fontRenderer = minecraft.fontRendererObj;
@@ -54,7 +54,7 @@ public class HintLedger extends Ledger {
 			return;
 		}
 
-		drawHeader(StringUtil.localize("gui.didyouknow") + '?', x + 22, y + 8);
+		drawHeader(Translator.translateToLocal("for.gui.didyouknow") + '?', x + 22, y + 8);
 		drawSplitText(hintString, x + 12, y + 20, maxTextWidth);
 	}
 

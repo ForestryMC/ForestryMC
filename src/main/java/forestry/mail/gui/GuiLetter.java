@@ -29,7 +29,7 @@ import forestry.core.gui.GuiTextBox;
 import forestry.core.gui.widgets.ItemStackWidget;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 import forestry.mail.gui.widgets.AddresseeSlot;
 import forestry.mail.inventory.ItemInventoryLetter;
 import forestry.mail.network.packets.PacketLetterInfoRequest;
@@ -163,23 +163,23 @@ public class GuiLetter extends GuiForestry<ContainerLetter, ItemInventoryLetter>
 
 		String infoString = null;
 		if (container.getTradeInfo() == null) {
-			infoString = "gui.mail.notrader";
+			infoString = "for.gui.mail.notrader";
 		} else if (container.getTradeInfo().tradegood == null) {
-			infoString = "gui.mail.nothingtotrade";
+			infoString = "for.gui.mail.nothingtotrade";
 		} else if (!container.getTradeInfo().state.isOk()) {
-			infoString = "chat.mail." + container.getTradeInfo().state.getIdentifier();
+			infoString = "for.chat.mail." + container.getTradeInfo().state.getIdentifier();
 		}
 
 		if (infoString != null) {
-			fontRendererObj.drawSplitString(StringUtil.localize(infoString), guiLeft + x, guiTop + y, 119, fontColor.get("gui.mail.lettertext"));
+			fontRendererObj.drawSplitString(Translator.translateToLocal(infoString), guiLeft + x, guiTop + y, 119, fontColor.get("gui.mail.lettertext"));
 			return;
 		}
 
-		fontRendererObj.drawString(StringUtil.localize("gui.mail.pleasesend"), guiLeft + x, guiTop + y, fontColor.get("gui.mail.lettertext"));
+		fontRendererObj.drawString(Translator.translateToLocal("for.gui.mail.pleasesend"), guiLeft + x, guiTop + y, fontColor.get("gui.mail.lettertext"));
 
 		addTradeInfoWidget(new ItemStackWidget(widgetManager, x, y + 10, container.getTradeInfo().tradegood));
 
-		fontRendererObj.drawString(StringUtil.localize("gui.mail.foreveryattached"), guiLeft + x, guiTop + y + 28, fontColor.get("gui.mail.lettertext"));
+		fontRendererObj.drawString(Translator.translateToLocal("for.gui.mail.foreveryattached"), guiLeft + x, guiTop + y + 28, fontColor.get("gui.mail.lettertext"));
 
 		for (int i = 0; i < container.getTradeInfo().required.length; i++) {
 			addTradeInfoWidget(new ItemStackWidget(widgetManager, x + i * 18, y + 38, container.getTradeInfo().required[i]));

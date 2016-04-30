@@ -20,7 +20,7 @@ import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IMutationCondition;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 
 public class MutationConditionHumidity implements IMutationCondition {
 	private final EnumHumidity minHumidity;
@@ -48,9 +48,9 @@ public class MutationConditionHumidity implements IMutationCondition {
 
 		if (minHumidity != maxHumidity) {
 			String maxHumidityString = AlleleManager.climateHelper.toDisplay(maxHumidity);
-			return StringUtil.localize("mutation.condition.humidity.range").replace("%LOW", minHumidityString).replace("%HIGH", maxHumidityString);
+			return Translator.translateToLocal("for.mutation.condition.humidity.range").replace("%LOW", minHumidityString).replace("%HIGH", maxHumidityString);
 		} else {
-			return StringUtil.localizeAndFormat("mutation.condition.humidity.single", minHumidityString);
+			return Translator.translateToLocalFormatted("for.mutation.condition.humidity.single", minHumidityString);
 		}
 	}
 }

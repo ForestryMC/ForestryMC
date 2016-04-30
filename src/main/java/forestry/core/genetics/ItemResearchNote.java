@@ -34,7 +34,7 @@ import forestry.core.genetics.mutations.EnumMutateChance;
 import forestry.core.items.ItemForestry;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.PlayerUtil;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 
 public class ItemResearchNote extends ItemForestry {
 
@@ -90,15 +90,15 @@ public class ItemResearchNote extends ItemForestry {
 				String species1 = encoded.getAllele0().getName();
 				String species2 = encoded.getAllele1().getName();
 				String mutationChanceKey = EnumMutateChance.rateChance(encoded.getBaseChance()).toString().toLowerCase(Locale.ENGLISH);
-				String mutationChance = StringUtil.localize("researchNote.chance." + mutationChanceKey);
+				String mutationChance = Translator.translateToLocal("for.researchNote.chance." + mutationChanceKey);
 				String speciesResult = encoded.getTemplate()[root.getKaryotypeKey().ordinal()].getName();
 
-				tooltips.add(StringUtil.localize("researchNote.discovery.0"));
-				tooltips.add(StringUtil.localize("researchNote.discovery.1").replace("%SPEC1", species1).replace("%SPEC2", species2));
-				tooltips.add(StringUtil.localizeAndFormat("researchNote.discovery.2", mutationChance));
-				tooltips.add(StringUtil.localizeAndFormat("researchNote.discovery.3", speciesResult));
+				tooltips.add(Translator.translateToLocal("for.researchNote.discovery.0"));
+				tooltips.add(Translator.translateToLocal("for.researchNote.discovery.1").replace("%SPEC1", species1).replace("%SPEC2", species2));
+				tooltips.add(Translator.translateToLocalFormatted("for.researchNote.discovery.2", mutationChance));
+				tooltips.add(Translator.translateToLocalFormatted("for.researchNote.discovery.3", speciesResult));
 
-				if (encoded.getSpecialConditions() != null && encoded.getSpecialConditions().size() > 0) {
+				if (encoded.getSpecialConditions() != null && !encoded.getSpecialConditions().isEmpty()) {
 					for (String line : encoded.getSpecialConditions()) {
 						tooltips.add(EnumChatFormatting.GOLD + line);
 					}
@@ -114,7 +114,7 @@ public class ItemResearchNote extends ItemForestry {
 				}
 
 				tooltips.add("researchNote.discovered.0");
-				tooltips.add(StringUtil.localizeAndFormat("researchNote.discovered.1", allele0.getName(), allele0.getBinomial()));
+				tooltips.add(Translator.translateToLocalFormatted("for.researchNote.discovered.1", allele0.getName(), allele0.getBinomial()));
 			}
 
 			return tooltips;
@@ -242,8 +242,8 @@ public class ItemResearchNote extends ItemForestry {
 		public void addTooltip(List<String> list) {
 			ArrayList<String> tooltips = type.getTooltip(inner);
 			if (tooltips.size() <= 0) {
-				list.add(EnumChatFormatting.ITALIC + EnumChatFormatting.RED.toString() + StringUtil.localize("researchNote.error.0"));
-				list.add(StringUtil.localize("researchNote.error.1"));
+				list.add(EnumChatFormatting.ITALIC + EnumChatFormatting.RED.toString() + Translator.translateToLocal("for.researchNote.error.0"));
+				list.add(Translator.translateToLocal("for.researchNote.error.1"));
 				return;
 			}
 
@@ -269,7 +269,7 @@ public class ItemResearchNote extends ItemForestry {
 		} else {
 			researcherName = note.researcher.getName();
 		}
-		return StringUtil.localizeAndFormatRaw(getUnlocalizedName(itemstack) + ".name", researcherName);
+		return Translator.translateToLocalFormatted(getUnlocalizedName(itemstack) + ".name", researcherName);
 	}
 
 	@Override

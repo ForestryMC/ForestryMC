@@ -27,6 +27,7 @@ import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.genetics.IFruitFamily;
 import forestry.core.config.Constants;
 import forestry.core.render.TextureManager;
+import forestry.core.utils.Translator;
 
 public class FruitProviderNone implements IFruitProvider {
 
@@ -50,15 +51,15 @@ public class FruitProviderNone implements IFruitProvider {
 		overlayTypes.put("plums", new OverlayType("plums", (short) 1004));
 	}
 
-	private final String key;
+	private final String unlocalizedDescription;
 	private final IFruitFamily family;
 
 	protected int ripeningPeriod = 10;
 
 	private OverlayType overlay = null;
 
-	public FruitProviderNone(String key, IFruitFamily family) {
-		this.key = key;
+	public FruitProviderNone(String unlocalizedDescription, IFruitFamily family) {
+		this.unlocalizedDescription = unlocalizedDescription;
 		this.family = family;
 	}
 
@@ -122,7 +123,7 @@ public class FruitProviderNone implements IFruitProvider {
 
 	@Override
 	public String getDescription() {
-		return "fruits." + key;
+		return Translator.translateToLocal(unlocalizedDescription);
 	}
 	
 	@Override

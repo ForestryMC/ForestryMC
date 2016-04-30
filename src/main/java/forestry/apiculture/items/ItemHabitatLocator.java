@@ -33,7 +33,7 @@ import forestry.apiculture.gui.GuiHabitatLocator;
 import forestry.apiculture.inventory.ItemInventoryHabitatLocator;
 import forestry.apiculture.render.TextureHabitatLocator;
 import forestry.core.items.ItemWithGui;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 
 public class ItemHabitatLocator extends ItemWithGui {
 	private static final String iconName = "forestry:items/biomefinder";
@@ -72,9 +72,9 @@ public class ItemHabitatLocator extends ItemWithGui {
 		EnumTemperature temperature = EnumTemperature.getFromValue(temperatureValue);
 		EnumHumidity humidity = EnumHumidity.getFromValue(ForestryAPI.climateManager.getHumidity(player.worldObj, player.getPosition()));
 
-		list.add(StringUtil.localize("gui.currentBiome") + ": " + currentBiome.biomeName);
-		list.add(StringUtil.localize("gui.temperature") + ": " + AlleleManager.climateHelper.toDisplay(temperature));
-		list.add(StringUtil.localize("gui.humidity") + ": " + AlleleManager.climateHelper.toDisplay(humidity));
+		list.add(Translator.translateToLocal("for.gui.currentBiome") + ": " + currentBiome.biomeName);
+		list.add(Translator.translateToLocal("for.gui.temperature") + ": " + AlleleManager.climateHelper.toDisplay(temperature));
+		list.add(Translator.translateToLocal("for.gui.humidity") + ": " + AlleleManager.climateHelper.toDisplay(humidity));
 	}
 
 	@Override

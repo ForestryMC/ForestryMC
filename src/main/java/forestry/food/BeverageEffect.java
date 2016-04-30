@@ -20,14 +20,15 @@ import net.minecraft.nbt.NBTTagList;
 
 import forestry.api.food.BeverageManager;
 import forestry.api.food.IBeverageEffect;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 
 public abstract class BeverageEffect implements IBeverageEffect {
 	private final int id;
-	protected String description;
+	private final String unlocalizedDescription;
 
-	protected BeverageEffect(int id) {
+	protected BeverageEffect(int id, String unlocalizedDescription) {
 		this.id = id;
+		this.unlocalizedDescription = unlocalizedDescription;
 
 		if (BeverageManager.effectList[id] != null) {
 			throw new RuntimeException("Beverage effect slot " + id + " was already occupied by " + BeverageManager.effectList[id] + " when trying to add " + this);
@@ -48,9 +49,9 @@ public abstract class BeverageEffect implements IBeverageEffect {
 	@Override
 	public String getDescription() {
 		if (getLevel() != null) {
-			return StringUtil.localize(description) + " " + getLevel();
+			return Translator.translateToLocal(unlocalizedDescription) + " " + getLevel();
 		} else {
-			return StringUtil.localize(description);
+			return Translator.translateToLocal(unlocalizedDescription);
 		}
 	}
 

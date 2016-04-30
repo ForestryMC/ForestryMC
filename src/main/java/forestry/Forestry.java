@@ -12,9 +12,6 @@ package forestry;
 
 import java.io.File;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -22,14 +19,11 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLInterModComms.IMCEvent;
-import net.minecraftforge.fml.common.event.FMLMissingMappingsEvent;
-import net.minecraftforge.fml.common.event.FMLMissingMappingsEvent.MissingMapping;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.common.registry.GameRegistry.Type;
 
 import forestry.api.core.ForestryAPI;
 import forestry.core.EventHandlerCore;
@@ -42,8 +36,6 @@ import forestry.core.gui.GuiHandler;
 import forestry.core.multiblock.MultiblockEventHandler;
 import forestry.core.network.PacketHandler;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.Log;
-import forestry.core.utils.StringUtil;
 import forestry.core.worldgen.WorldGenerator;
 import forestry.plugins.PluginManager;
 
@@ -137,24 +129,5 @@ public class Forestry {
 	@EventHandler
 	public void processIMCMessages(IMCEvent event) {
 		PluginManager.processIMCMessages(event.getMessages());
-	}
-
-	@EventHandler
-	public void missingMapping(FMLMissingMappingsEvent event) {
-		for (MissingMapping mapping : event.get()) {
-			if (mapping.type == Type.BLOCK) {
-				Block block = GameRegistry.findBlock(Constants.MOD_ID, StringUtil.cleanTags(mapping.name));
-				if (block != null) {
-					mapping.remap(block);
-					Log.warning("Remapping block " + mapping.name + " to " + StringUtil.cleanBlockName(block));
-				}
-			} else {
-				Item item = GameRegistry.findItem(Constants.MOD_ID, StringUtil.cleanTags(mapping.name));
-				if (item != null) {
-					mapping.remap(item);
-					Log.warning("Remapping item " + mapping.name + " to " + StringUtil.cleanItemName(item));
-				}
-			}
-		}
 	}
 }

@@ -16,7 +16,7 @@ import forestry.core.gui.GuiEscritoire;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 
 public class ProbeButton extends Widget {
 
@@ -40,7 +40,7 @@ public class ProbeButton extends Widget {
 	@Override
 	public ToolTip getToolTip(int mouseX, int mouseY) {
 		ToolTip tooltip = new ToolTip();
-		tooltip.add(StringUtil.localize("gui.escritoire.probe"));
+		tooltip.add(Translator.translateToLocal("for.gui.escritoire.probe"));
 		return tooltip;
 	}
 

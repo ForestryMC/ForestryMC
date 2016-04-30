@@ -24,8 +24,8 @@ public class TriggerLowFuel extends Trigger {
 
 	private float threshold = 0.25F;
 
-	public TriggerLowFuel(String tag, float threshold) {
-		super(tag, "lowFuel");
+	public TriggerLowFuel(String uid, float threshold) {
+		super(uid, "lowFuel");
 		this.threshold = threshold;
 	}
 

@@ -17,7 +17,6 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.StatCollector;
 
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
@@ -26,10 +25,6 @@ import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fluids.IFluidContainerItem;
 
 public class JEIUtils {
-
-	public static String translate(String unlocalized) {
-		return StatCollector.translateToLocal("forestry.jei." + unlocalized);
-	}
 
 	public static List<ItemStack> getItemVariations(ItemStack base) {
 		List<ItemStack> variations = new ArrayList<>();

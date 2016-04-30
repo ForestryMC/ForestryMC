@@ -24,7 +24,7 @@ import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IIndividual;
 import forestry.core.items.ItemForestry;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 
 public abstract class ItemGE extends ItemForestry {
 	protected ItemGE(CreativeTabs creativeTab) {
@@ -69,10 +69,10 @@ public abstract class ItemGE extends ItemForestry {
 			if (Proxies.common.isShiftDown()) {
 				individual.addTooltip(list);
 			} else {
-				list.add(EnumChatFormatting.ITALIC + "<" + StringUtil.localize("gui.tooltip.tmi") + ">");
+				list.add(EnumChatFormatting.ITALIC + "<" + Translator.translateToLocal("for.gui.tooltip.tmi") + ">");
 			}
 		} else {
-			list.add("<" + StringUtil.localize("gui.unknown") + ">");
+			list.add("<" + Translator.translateToLocal("for.gui.unknown") + ">");
 		}
 	}
 

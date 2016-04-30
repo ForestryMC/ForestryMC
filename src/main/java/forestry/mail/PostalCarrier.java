@@ -29,7 +29,7 @@ import forestry.api.mail.PostManager;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.PlayerUtil;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 import forestry.mail.network.packets.PacketPOBoxInfoUpdate;
 
 public class PostalCarrier implements IPostalCarrier {
@@ -49,7 +49,7 @@ public class PostalCarrier implements IPostalCarrier {
 
 	@Override
 	public String getName() {
-		return StringUtil.localize("gui.addressee." + type);
+		return Translator.translateToLocal("for.gui.addressee." + type);
 	}
 
 	@Override

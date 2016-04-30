@@ -67,7 +67,7 @@ import forestry.core.genetics.GenericRatings;
 import forestry.core.genetics.IndividualLiving;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.Log;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 import forestry.core.utils.vect.Vect;
 
 public class Bee extends IndividualLiving implements IBee {
@@ -369,7 +369,7 @@ public class Bee extends IndividualLiving implements IBee {
 
 		// No info 4 u!
 		if (!isAnalyzed) {
-			list.add("<" + StringUtil.localize("gui.unknown") + ">");
+			list.add("<" + Translator.translateToLocal("for.gui.unknown") + ">");
 			return;
 		}
 
@@ -377,7 +377,7 @@ public class Bee extends IndividualLiving implements IBee {
 		IAlleleBeeSpecies primary = genome.getPrimary();
 		IAlleleBeeSpecies secondary = genome.getSecondary();
 		if (!isPureBred(EnumBeeChromosome.SPECIES)) {
-			list.add(EnumChatFormatting.BLUE + StringUtil.localize("bees.hybrid").replaceAll("%PRIMARY", primary.getName()).replaceAll("%SECONDARY", secondary.getName()));
+			list.add(EnumChatFormatting.BLUE + Translator.translateToLocal("for.bees.hybrid").replaceAll("%PRIMARY", primary.getName()).replaceAll("%SECONDARY", secondary.getName()));
 		}
 
 		if (generation > 0) {
@@ -392,7 +392,7 @@ public class Bee extends IndividualLiving implements IBee {
 				rarity = EnumRarity.COMMON;
 			}
 
-			String generationString = rarity.rarityColor + StringUtil.localizeAndFormat("gui.beealyzer.generations", generation);
+			String generationString = rarity.rarityColor + Translator.translateToLocalFormatted("for.gui.beealyzer.generations", generation);
 			list.add(generationString);
 		}
 
@@ -400,15 +400,15 @@ public class Bee extends IndividualLiving implements IBee {
 		IAlleleTolerance tempToleranceAllele = (IAlleleTolerance) getGenome().getActiveAllele(EnumBeeChromosome.TEMPERATURE_TOLERANCE);
 		IAlleleTolerance humidToleranceAllele = (IAlleleTolerance) getGenome().getActiveAllele(EnumBeeChromosome.HUMIDITY_TOLERANCE);
 
-		String unlocalizedCustomSpeed = "tooltip.worker." + speedAllele.getUnlocalizedName().replaceAll("(.*)\\.", "");
+		String unlocalizedCustomSpeed = "for.tooltip.worker." + speedAllele.getUnlocalizedName().replaceAll("(.*)\\.", "");
 		String speed;
-		if (StringUtil.canTranslate(unlocalizedCustomSpeed)) {
-			speed = StringUtil.localize(unlocalizedCustomSpeed);
+		if (Translator.canTranslateToLocal(unlocalizedCustomSpeed)) {
+			speed = Translator.translateToLocal(unlocalizedCustomSpeed);
 		} else {
-			speed = speedAllele.getName() + ' ' + StringUtil.localize("gui.worker");
+			speed = speedAllele.getName() + ' ' + Translator.translateToLocal("for.gui.worker");
 		}
 
-		String lifespan = genome.getActiveAllele(EnumBeeChromosome.LIFESPAN).getName() + ' ' + StringUtil.localize("gui.life");
+		String lifespan = genome.getActiveAllele(EnumBeeChromosome.LIFESPAN).getName() + ' ' + Translator.translateToLocal("for.gui.life");
 		String tempTolerance = EnumChatFormatting.GREEN + "T: " + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getTemperature()) + " / " + tempToleranceAllele.getName();
 		String humidTolerance = EnumChatFormatting.GREEN + "H: " + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getHumidity()) + " / " + humidToleranceAllele.getName();
 		String flowers = genome.getFlowerProvider().getDescription();
@@ -424,7 +424,7 @@ public class Bee extends IndividualLiving implements IBee {
 		}
 
 		if (genome.getToleratesRain()) {
-			list.add(EnumChatFormatting.WHITE + StringUtil.localize("gui.flyer.tooltip"));
+			list.add(EnumChatFormatting.WHITE + Translator.translateToLocal("for.gui.flyer.tooltip"));
 		}
 	}
 

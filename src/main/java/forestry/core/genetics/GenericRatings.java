@@ -10,34 +10,33 @@
  ******************************************************************************/
 package forestry.core.genetics;
 
-import net.minecraft.util.StatCollector;
-
 import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 
 public class GenericRatings {
 
 	public static String rateMetabolism(int metabolism) {
 		if (metabolism >= 19) {
-			return StatCollector.translateToLocal("Forestry.allele.highest");
+			return Translator.translateToLocal("Forestry.allele.highest");
 		} else if (metabolism >= 16) {
-			return StatCollector.translateToLocal("Forestry.allele.higher");
+			return Translator.translateToLocal("Forestry.allele.higher");
 		} else if (metabolism >= 13) {
-			return StatCollector.translateToLocal("Forestry.allele.high");
+			return Translator.translateToLocal("Forestry.allele.high");
 		} else if (metabolism >= 10) {
-			return StatCollector.translateToLocal("Forestry.allele.average");
+			return Translator.translateToLocal("Forestry.allele.average");
 		} else if (metabolism >= 7) {
-			return StatCollector.translateToLocal("Forestry.allele.slow");
+			return Translator.translateToLocal("Forestry.allele.slow");
 		} else if (metabolism >= 4) {
-			return StatCollector.translateToLocal("Forestry.allele.slower");
+			return Translator.translateToLocal("Forestry.allele.slower");
 		} else {
-			return StatCollector.translateToLocal("Forestry.allele.slowest");
+			return Translator.translateToLocal("Forestry.allele.slowest");
 		}
 	}
 
 	public static String rateActivityTime(boolean neverSleeps, boolean naturalNocturnal) {
-		String active = naturalNocturnal ? StringUtil.localize("gui.nocturnal") : StringUtil.localize("gui.diurnal");
+		String active = naturalNocturnal ? Translator.translateToLocal("for.gui.nocturnal") : Translator.translateToLocal("for.gui.diurnal");
 		if (neverSleeps) {
-			active = StringUtil.append(", ", active, naturalNocturnal ? StringUtil.localize("gui.diurnal") : StringUtil.localize("gui.nocturnal"));
+			active = StringUtil.append(", ", active, naturalNocturnal ? Translator.translateToLocal("for.gui.diurnal") : Translator.translateToLocal("for.gui.nocturnal"));
 		}
 		
 		return active;

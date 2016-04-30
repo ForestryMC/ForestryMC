@@ -19,7 +19,7 @@ import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 import forestry.mail.gui.ContainerLetter;
 
 public class AddresseeSlot extends Widget {
@@ -45,7 +45,7 @@ public class AddresseeSlot extends Widget {
 
 	@Override
 	public ToolTip getToolTip(int mouseX, int mouseY) {
-		String tooltipString = StringUtil.localize("gui.addressee." + containerLetter.getCarrierType());
+		String tooltipString = Translator.translateToLocal("for.gui.addressee." + containerLetter.getCarrierType());
 		ToolTip tooltip = new ToolTip();
 		tooltip.add(tooltipString);
 		return tooltip;

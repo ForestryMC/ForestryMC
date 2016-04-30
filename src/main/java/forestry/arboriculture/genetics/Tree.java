@@ -25,7 +25,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.StatCollector;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
@@ -57,7 +56,7 @@ import forestry.core.config.Config;
 import forestry.core.genetics.Chromosome;
 import forestry.core.genetics.Individual;
 import forestry.core.utils.BlockUtil;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 
 public class Tree extends Individual implements ITree, IPlantable {
 
@@ -281,7 +280,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 
 		// No info 4 u!
 		if (!isAnalyzed) {
-			list.add("<" + StringUtil.localize("gui.unknown") + ">");
+			list.add("<" + Translator.translateToLocal("for.gui.unknown") + ">");
 			return;
 		}
 
@@ -289,7 +288,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 		IAlleleTreeSpecies primary = genome.getPrimary();
 		IAlleleTreeSpecies secondary = genome.getSecondary();
 		if (!isPureBred(EnumTreeChromosome.SPECIES)) {
-			list.add(EnumChatFormatting.BLUE + StringUtil.localize("trees.hybrid").replaceAll("%PRIMARY", primary.getName()).replaceAll("%SECONDARY", secondary.getName()));
+			list.add(EnumChatFormatting.BLUE + Translator.translateToLocal("for.trees.hybrid").replaceAll("%PRIMARY", primary.getName()).replaceAll("%SECONDARY", secondary.getName()));
 		}
 
 		String sappiness = EnumChatFormatting.GOLD + "S: " + genome.getActiveAllele(EnumTreeChromosome.SAPPINESS).getName();
@@ -304,7 +303,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 
 		IAlleleBoolean primaryFireproof = (IAlleleBoolean) genome.getActiveAllele(EnumTreeChromosome.FIREPROOF);
 		if (primaryFireproof.getValue()) {
-			list.add(EnumChatFormatting.RED + StatCollector.translateToLocal("for.gui.fireresist"));
+			list.add(EnumChatFormatting.RED + Translator.translateToLocal("for.gui.fireresist"));
 		}
 
 		IAllele fruit = getGenome().getActiveAllele(EnumTreeChromosome.FRUITS);
@@ -313,7 +312,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 			if (!canBearFruit()) {
 				strike = EnumChatFormatting.STRIKETHROUGH.toString();
 			}
-			list.add(strike + EnumChatFormatting.GREEN + "F: " + StringUtil.localize(genome.getFruitProvider().getDescription()));
+			list.add(strike + EnumChatFormatting.GREEN + "F: " + genome.getFruitProvider().getDescription());
 		}
 
 	}

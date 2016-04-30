@@ -16,7 +16,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
-import forestry.core.utils.StringUtil;
 import forestry.plugins.PluginManager;
 
 public abstract class ItemRegistry {
@@ -25,7 +24,7 @@ public abstract class ItemRegistry {
 			throw new RuntimeException("Tried to register Item outside of REGISTER");
 		}
 		item.setUnlocalizedName("for." + name);
-		GameRegistry.registerItem(item, StringUtil.cleanItemName(item));
+		GameRegistry.registerItem(item, name);
 		return item;
 	}
 

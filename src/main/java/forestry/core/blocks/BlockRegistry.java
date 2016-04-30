@@ -20,7 +20,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
-import forestry.core.utils.StringUtil;
 import forestry.plugins.PluginManager;
 
 public abstract class BlockRegistry {
@@ -46,7 +45,7 @@ public abstract class BlockRegistry {
 			throw new RuntimeException("Tried to register Block outside of REGISTER");
 		}
 		block.setUnlocalizedName("for." + name);
-		GameRegistry.registerBlock(block, itemClass, StringUtil.cleanBlockName(block), itemCtorArgs);
+		GameRegistry.registerBlock(block, itemClass, name, itemCtorArgs);
 		allBlocks.add(block);
 		return block;
 	}

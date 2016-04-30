@@ -23,7 +23,7 @@ import net.minecraftforge.common.BiomeDictionary;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IMutationCondition;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 
 public class MutationConditionBiome implements IMutationCondition {
 
@@ -49,10 +49,10 @@ public class MutationConditionBiome implements IMutationCondition {
 	public String getDescription() {
 		if (validBiomeTypes.size() > 1) {
 			String biomeTypes = Arrays.toString(validBiomeTypes.toArray()).toLowerCase(Locale.ENGLISH);
-			return StringUtil.localizeAndFormat("mutation.condition.biome.multiple", biomeTypes);
+			return Translator.translateToLocalFormatted("for.mutation.condition.biome.multiple", biomeTypes);
 		} else {
 			String biomeType = validBiomeTypes.get(0).toString().toLowerCase(Locale.ENGLISH);
-			return StringUtil.localizeAndFormat("mutation.condition.biome.single", biomeType);
+			return Translator.translateToLocalFormatted("for.mutation.condition.biome.single", biomeType);
 		}
 	}
 }

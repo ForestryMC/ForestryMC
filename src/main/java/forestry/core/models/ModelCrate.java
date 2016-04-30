@@ -15,6 +15,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 
+import javax.vecmath.Vector3f;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -23,12 +24,10 @@ import java.io.StringReader;
 import java.util.IdentityHashMap;
 import java.util.Map;
 
-import javax.vecmath.Vector3f;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.ModelBlock;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
+import net.minecraft.client.renderer.block.model.ModelBlock;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.IResource;
@@ -50,12 +49,12 @@ import net.minecraftforge.client.model.MultiModel;
 import net.minecraftforge.client.model.SimpleModelState;
 import net.minecraftforge.client.model.TRSRTransformation;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.core.items.ItemCrated;
 import forestry.core.utils.Log;
-import forestry.core.utils.StringUtil;
 import forestry.storage.PluginStorage;
 
 import gnu.trove.map.hash.TIntObjectHashMap;
@@ -219,7 +218,8 @@ public class ModelCrate extends BlankItemModel {
 	@Override
 	public IBakedModel handleItemState(ItemStack stack) {
 		ItemCrated crated = (ItemCrated) stack.getItem();
-		String crateUID = StringUtil.cleanItemName(crated);
+		FMLControlledNamespacedRegistry<Item> itemRegistry = (FMLControlledNamespacedRegistry<Item>) Item.itemRegistry;
+		String crateUID = itemRegistry.getNameForObject(crated).getResourcePath();
 		if (crates.get(crateUID) == null) {
 			IFlexibleBakedModel baseBaked = getModel(new ItemStack(PluginStorage.items.crate, 1, 1));
 			//Set the crate color index to 100
@@ -230,9 +230,9 @@ public class ModelCrate extends BlankItemModel {
 		}
 		return crates.get(crateUID);
 	}
-		
-	public IModelState getTransformations(){
-        TRSRTransformation thirdperson = TRSRTransformation.blockCenterToCorner(new TRSRTransformation(
+
+	public static IModelState getTransformations() {
+		TRSRTransformation thirdperson = TRSRTransformation.blockCenterToCorner(new TRSRTransformation(
                 new Vector3f(0, 1f / 16, -3f / 16),
                 TRSRTransformation.quatFromYXZDegrees(new Vector3f(-90, 0, 0)),
                 new Vector3f(0.55f, 0.55f, 0.55f),

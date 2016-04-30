@@ -24,7 +24,7 @@ import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IMutationCondition;
 import forestry.core.utils.BlockUtil;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 
 public class MutationConditionRequiresResourceOreDict implements IMutationCondition {
 
@@ -65,6 +65,6 @@ public class MutationConditionRequiresResourceOreDict implements IMutationCondit
 
 	@Override
 	public String getDescription() {
-		return StringUtil.localizeAndFormat("mutation.condition.resource", displayName);
+		return Translator.translateToLocalFormatted("for.mutation.condition.resource", displayName);
 	}
 }

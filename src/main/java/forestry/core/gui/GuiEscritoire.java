@@ -23,7 +23,7 @@ import forestry.core.gui.widgets.Widget;
 import forestry.core.tiles.EscritoireGame;
 import forestry.core.tiles.EscritoireTextSource;
 import forestry.core.tiles.TileEscritoire;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 
 public class GuiEscritoire extends GuiForestry<ContainerEscritoire, TileEscritoire> {
 	private final ItemStack LEVEL_ITEM = new ItemStack(Items.paper);
@@ -93,7 +93,7 @@ public class GuiEscritoire extends GuiForestry<ContainerEscritoire, TileEscritoi
 			textLayout.newLine();
 			String format = EnumChatFormatting.UNDERLINE + EnumChatFormatting.ITALIC.toString();
 			int attemptNo = EscritoireGame.BOUNTY_MAX - inventory.getGame().getBountyLevel();
-			String attemptNoString = StringUtil.localizeAndFormat("gui.escritoire.attempt.number", attemptNo);
+			String attemptNoString = Translator.translateToLocalFormatted("for.gui.escritoire.attempt.number", attemptNo);
 			textLayout.drawLine(format + attemptNoString, 170, fontColor.get("gui.mail.lettertext"));
 			textLayout.newLine();
 			String escritoireText = textSource.getText(inventory.getGame());

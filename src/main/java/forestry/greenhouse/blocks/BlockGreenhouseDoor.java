@@ -34,7 +34,6 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumWorldBlockLayer;
 import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.StatCollector;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -42,6 +41,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import forestry.core.utils.Translator;
 public  class BlockGreenhouseDoor extends BlockGreenhouse implements IStateMapperRegister {
 
 	//The door propertys
@@ -58,7 +58,7 @@ public  class BlockGreenhouseDoor extends BlockGreenhouse implements IStateMappe
 
     @Override
 	public String getLocalizedName(){
-        return StatCollector.translateToLocal((this.getUnlocalizedName() + ".name").replaceAll("tile", "item"));
+        return Translator.translateToLocal((this.getUnlocalizedName() + ".name").replaceAll("tile", "item"));
     }
 
     @Override

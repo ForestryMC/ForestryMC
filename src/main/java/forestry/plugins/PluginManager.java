@@ -29,7 +29,6 @@ import net.minecraft.command.CommandHandler;
 import net.minecraft.command.ICommand;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 
@@ -49,6 +48,7 @@ import forestry.core.ISaveEventHandler;
 import forestry.core.PluginCore;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.utils.Log;
+import forestry.core.utils.Translator;
 
 public class PluginManager {
 
@@ -309,7 +309,7 @@ public class PluginManager {
 	private static boolean isEnabled(Configuration config, IForestryPlugin plugin) {
 		ForestryPlugin info = plugin.getClass().getAnnotation(ForestryPlugin.class);
 
-		String comment = StatCollector.translateToLocal(info.unlocalizedDescription());
+		String comment = Translator.translateToLocal(info.unlocalizedDescription());
 		Property prop = config.get(CATEGORY_PLUGINS, info.pluginID(), true, comment);
 		boolean enabled = prop.getBoolean();
 

@@ -29,6 +29,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.core.IModelManager;
 import forestry.api.storage.BackpackStowEvent;
 import forestry.api.storage.EnumBackpackType;
@@ -42,7 +43,7 @@ import forestry.core.inventory.iterators.InventoryIterator;
 import forestry.core.items.ItemWithGui;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.InventoryUtil;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 import forestry.storage.BackpackMode;
 import forestry.storage.gui.ContainerBackpack;
 import forestry.storage.gui.GuiBackpack;
@@ -212,13 +213,13 @@ public class ItemBackpack extends ItemWithGui {
 
 		BackpackMode mode = getMode(itemstack);
 		if (mode == BackpackMode.LOCKED) {
-			list.add(StringUtil.localize("storage.backpack.mode.locked"));
+			list.add(Translator.translateToLocal("for.storage.backpack.mode.locked"));
 		} else if (mode == BackpackMode.RECEIVE) {
-			list.add(StringUtil.localize("storage.backpack.mode.receiving"));
+			list.add(Translator.translateToLocal("for.storage.backpack.mode.receiving"));
 		} else if (mode == BackpackMode.RESUPPLY) {
-			list.add(StringUtil.localize("storage.backpack.mode.resupply"));
+			list.add(Translator.translateToLocal("for.storage.backpack.mode.resupply"));
 		}
-		list.add(StringUtil.localize("gui.slots").replaceAll("%USED", String.valueOf(occupied)).replaceAll("%SIZE", String.valueOf(getBackpackSize())));
+		list.add(Translator.translateToLocal("for.gui.slots").replaceAll("%USED", String.valueOf(occupied)).replaceAll("%SIZE", String.valueOf(getBackpackSize())));
 
 	}
 

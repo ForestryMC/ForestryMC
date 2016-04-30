@@ -28,7 +28,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
@@ -69,6 +68,7 @@ import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.utils.PlayerUtil;
+import forestry.core.utils.Translator;
 import forestry.core.utils.vect.Vect;
 import forestry.core.utils.vect.VectUtil;
 import forestry.farming.FarmHelper;
@@ -219,7 +219,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		}
 
 		if (!hasGearbox) {
-			throw new MultiblockValidationException(StatCollector.translateToLocal("for.multiblock.farm.error.needGearbox"));
+			throw new MultiblockValidationException(Translator.translateToLocal("for.multiblock.farm.error.needGearbox"));
 		}
 	}
 
@@ -232,14 +232,14 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	@Override
 	public void isGoodForExteriorLevel(IMultiblockComponent part, int level) throws MultiblockValidationException {
 		if (level == 2 && !(part instanceof TileFarmPlain)) {
-			throw new MultiblockValidationException(StatCollector.translateToLocal("for.multiblock.farm.error.needPlainBand"));
+			throw new MultiblockValidationException(Translator.translateToLocal("for.multiblock.farm.error.needPlainBand"));
 		}
 	}
 
 	@Override
 	public void isGoodForInterior(IMultiblockComponent part) throws MultiblockValidationException {
 		if (!(part instanceof TileFarmPlain)) {
-			throw new MultiblockValidationException(StatCollector.translateToLocal("for.multiblock.farm.error.needPlainInterior"));
+			throw new MultiblockValidationException(Translator.translateToLocal("for.multiblock.farm.error.needPlainInterior"));
 		}
 	}
 

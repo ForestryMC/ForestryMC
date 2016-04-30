@@ -25,7 +25,7 @@ import forestry.core.access.IRestrictedAccess;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.PlayerUtil;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 
 /**
  * Ledger displaying ownership information
@@ -70,23 +70,23 @@ public class OwnerLedger extends Ledger implements IAccessOwnerListener {
 			return;
 		}
 
-		drawHeader(StringUtil.localize("gui.owner"), x + 22, y + 8);
+		drawHeader(Translator.translateToLocal("for.gui.owner"), x + 22, y + 8);
 
 		drawText(PlayerUtil.getOwnerName(accessHandler), x + 22, y + 20);
 
 		Minecraft minecraft = Proxies.common.getClientInstance();
 		boolean playerIsOwner = accessHandler.isOwner(minecraft.thePlayer);
 		if (playerIsOwner) {
-			drawSubheader(StringUtil.localize("gui.access") + ':', x + 22, y + 32);
+			drawSubheader(Translator.translateToLocal("for.gui.access") + ':', x + 22, y + 32);
 			// Access rules
 			drawSprite(accessIcon, x + 20, y + 40);
-			drawText(StringUtil.localize(accessType.getName()), x + 38, y + 44);
+			drawText(Translator.translateToLocal(accessType.getUnlocalizedName()), x + 38, y + 44);
 		}
 	}
 
 	@Override
 	public String getTooltip() {
-		return StringUtil.localize("gui.owner") + ": " + PlayerUtil.getOwnerName(accessHandler);
+		return Translator.translateToLocal("for.gui.owner") + ": " + PlayerUtil.getOwnerName(accessHandler);
 	}
 
 	@Override

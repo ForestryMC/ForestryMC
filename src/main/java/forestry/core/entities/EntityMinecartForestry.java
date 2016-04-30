@@ -17,7 +17,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
@@ -33,6 +32,7 @@ import forestry.core.gui.GuiHandler;
 import forestry.core.gui.IGuiHandlerEntity;
 import forestry.core.gui.IHintSource;
 import forestry.core.tiles.ITitled;
+import forestry.core.utils.Translator;
 
 public abstract class EntityMinecartForestry extends EntityMinecart implements ITitled, IRestrictedAccess, IHintSource, IGuiHandlerEntity {
 	private final AccessHandler accessHandler = new AccessHandler(this);
@@ -115,7 +115,7 @@ public abstract class EntityMinecartForestry extends EntityMinecart implements I
 
 	@Override
 	public String getName() {
-		return StatCollector.translateToLocal(getUnlocalizedTitle());
+		return Translator.translateToLocal(getUnlocalizedTitle());
 	}
 
 	/* ITitled */

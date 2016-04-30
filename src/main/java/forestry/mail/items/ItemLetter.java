@@ -26,7 +26,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.core.IModelManager;
 import forestry.api.mail.ILetter;
 import forestry.core.items.ItemWithGui;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 import forestry.mail.Letter;
 import forestry.mail.LetterProperties;
 import forestry.mail.gui.ContainerLetter;
@@ -67,7 +67,7 @@ public class ItemLetter extends ItemWithGui {
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List<String> list, boolean flag) {
 		NBTTagCompound nbttagcompound = itemstack.getTagCompound();
 		if (nbttagcompound == null) {
-			list.add('<' + StringUtil.localize("gui.blank") + '>');
+			list.add('<' + Translator.translateToLocal("for.gui.blank") + '>');
 			return;
 		}
 

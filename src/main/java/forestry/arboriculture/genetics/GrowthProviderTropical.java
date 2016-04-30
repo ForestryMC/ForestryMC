@@ -18,7 +18,7 @@ import net.minecraft.world.biome.BiomeGenBase;
 
 import forestry.api.arboriculture.EnumGrowthConditions;
 import forestry.api.arboriculture.ITreeGenome;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 
 public class GrowthProviderTropical extends GrowthProvider {
 
@@ -49,7 +49,7 @@ public class GrowthProviderTropical extends GrowthProvider {
 
 	@Override
 	public String getDescription() {
-		return StringUtil.localize("growth.tropical");
+		return Translator.translateToLocal("for.growth.tropical");
 	}
 
 }

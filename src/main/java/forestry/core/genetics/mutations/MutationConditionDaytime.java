@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IMutationCondition;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 
 public class MutationConditionDaytime implements IMutationCondition {
 
@@ -37,9 +37,9 @@ public class MutationConditionDaytime implements IMutationCondition {
 	@Override
 	public String getDescription() {
 		if (daytime) {
-			return StringUtil.localize("mutation.condition.daytime.day");
+			return Translator.translateToLocal("for.mutation.condition.daytime.day");
 		} else {
-			return StringUtil.localize("mutation.condition.daytime.night");
+			return Translator.translateToLocal("for.mutation.condition.daytime.night");
 		}
 	}
 }

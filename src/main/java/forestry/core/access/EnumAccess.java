@@ -16,19 +16,19 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public enum EnumAccess {
-	SHARED("gui.rule.shared"), VIEWABLE("gui.rule.restricted"), PRIVATE("gui.rule.private");
+	SHARED("for.gui.rule.shared"), VIEWABLE("for.gui.rule.restricted"), PRIVATE("for.gui.rule.private");
 
-	private final String name;
+	private final String unlocalizedName;
 	
 	@SideOnly(Side.CLIENT)
 	private TextureAtlasSprite icon;
 
-	EnumAccess(String name) {
-		this.name = name;
+	EnumAccess(String unlocalizedName) {
+		this.unlocalizedName = unlocalizedName;
 	}
 
-	public String getName() {
-		return this.name;
+	public String getUnlocalizedName() {
+		return this.unlocalizedName;
 	}
 
 }

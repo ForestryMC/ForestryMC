@@ -18,13 +18,13 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import forestry.api.core.IModelManager;
 import forestry.core.tiles.TileForestry;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.BlockUtil;
-import forestry.core.utils.StringUtil;
 
 public class MachineProperties<T extends TileForestry> implements IMachineProperties<T> {
 
@@ -105,7 +105,8 @@ public class MachineProperties<T extends TileForestry> implements IMachineProper
 
 	@Override
 	public void registerModel(@Nonnull Item item, @Nonnull IModelManager manager) {
-		String identifier = StringUtil.cleanItemName(item) + "_" + name;
+		FMLControlledNamespacedRegistry<Item> itemRegistry = (FMLControlledNamespacedRegistry<Item>) Item.itemRegistry;
+		String identifier = itemRegistry.getNameForObject(item).getResourcePath() + "_" + name;
 		manager.registerItemModel(item, meta, identifier);
 	}
 

@@ -19,7 +19,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.StatCollector;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
@@ -49,6 +48,7 @@ import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.BlockUtil;
+import forestry.core.utils.Translator;
 
 public class AlvearyController extends RectangularMultiblockControllerBase implements IAlvearyControllerInternal, IClimateControlled {
 
@@ -176,12 +176,12 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 				IBlockState state = worldObj.getBlockState(pos);
 				Block block = state.getBlock();
 				if (!BlockUtil.isWoodSlabBlock(block, worldObj, pos)) {
-					throw new MultiblockValidationException(StatCollector.translateToLocal("for.multiblock.alveary.error.needSlabs"));
+					throw new MultiblockValidationException(Translator.translateToLocal("for.multiblock.alveary.error.needSlabs"));
 				}
 
 				int meta = block.getMetaFromState(state);
 				if ((meta & 8) != 0) {
-					throw new MultiblockValidationException(StatCollector.translateToLocal("for.multiblock.alveary.error.needSlabs"));
+					throw new MultiblockValidationException(Translator.translateToLocal("for.multiblock.alveary.error.needSlabs"));
 				}
 			}
 		}
@@ -196,7 +196,7 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 				}
 				Block block = BlockUtil.getBlock(worldObj, new BlockPos(airX, airY, airZ));
 				if (block.isOpaqueCube()) {
-					throw new MultiblockValidationException(StatCollector.translateToLocal("for.multiblock.alveary.error.needSpace"));
+					throw new MultiblockValidationException(Translator.translateToLocal("for.multiblock.alveary.error.needSpace"));
 				}
 			}
 		}
@@ -205,14 +205,14 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	@Override
 	protected void isGoodForExteriorLevel(IMultiblockComponent part, int level) throws MultiblockValidationException {
 		if (level == 2 && !(part instanceof TileAlvearyPlain)) {
-			throw new MultiblockValidationException(StatCollector.translateToLocal("for.multiblock.alveary.error.needPlainOnTop"));
+			throw new MultiblockValidationException(Translator.translateToLocal("for.multiblock.alveary.error.needPlainOnTop"));
 		}
 	}
 
 	@Override
 	protected void isGoodForInterior(IMultiblockComponent part) throws MultiblockValidationException {
 		if (!(part instanceof TileAlvearyPlain)) {
-			throw new MultiblockValidationException(StatCollector.translateToLocal("for.multiblock.alveary.error.needPlainInterior"));
+			throw new MultiblockValidationException(Translator.translateToLocal("for.multiblock.alveary.error.needPlainInterior"));
 		}
 	}
 

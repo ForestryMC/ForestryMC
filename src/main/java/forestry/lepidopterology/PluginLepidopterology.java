@@ -10,25 +10,25 @@
  ******************************************************************************/
 package forestry.lepidopterology;
 
-import javax.annotation.Nonnull;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import javax.annotation.Nonnull;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Map.Entry;
+import java.util.Random;
 import java.util.Set;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
+
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Property;
@@ -55,7 +55,7 @@ import forestry.core.fluids.Fluids;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.EntityUtil;
 import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 import forestry.lepidopterology.blocks.BlockRegistryLepidopterology;
 import forestry.lepidopterology.blocks.BlockTypeLepidopterologyTesr;
 import forestry.lepidopterology.commands.CommandButterfly;
@@ -208,7 +208,7 @@ public class PluginLepidopterology extends BlankForestryPlugin {
 		String[] defaultRaritys = butterflyRarity.toArray(new String[butterflyRarity.size()]);
 
 		Property rarityConf = config.get("butterfly.alleles", "rarity", defaultRaritys);
-		rarityConf.comment =  StringUtil.localize("config.butterfly.alleles.rarity");
+		rarityConf.comment = Translator.translateToLocal("for.config.butterfly.alleles.rarity");
 		
 		String[] configRaritys = rarityConf.getStringList();
 		for(String rarity : configRaritys){
@@ -247,7 +247,7 @@ public class PluginLepidopterology extends BlankForestryPlugin {
 		String[] defaultLoot = lootList.toArray(new String[lootList.size()]);
 		
 		Property lootConf = config.get("butterfly.cocoons.alleles.loot", cocoon.getUID(), defaultLoot);
-		lootConf.comment =  StringUtil.localize("config.butterfly.alleles.loot");
+		lootConf.comment = Translator.translateToLocal("for.config.butterfly.alleles.loot");
 		
 		String[] configLoot = lootConf.getStringList();
 		for(String loot : configLoot){

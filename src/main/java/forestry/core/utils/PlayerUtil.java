@@ -49,7 +49,7 @@ public abstract class PlayerUtil {
 	public static String getOwnerName(IOwnable ownable) {
 		GameProfile profile = ownable.getOwner();
 		if (profile == null) {
-			return StringUtil.localize("gui.derelict");
+			return Translator.translateToLocal("for.gui.derelict");
 		} else {
 			return profile.getName();
 		}

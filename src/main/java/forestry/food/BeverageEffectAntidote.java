@@ -19,9 +19,8 @@ public class BeverageEffectAntidote extends BeverageEffect {
 	private float chance = 0.2f;
 
 	public BeverageEffectAntidote(int id, float chance) {
-		super(id);
+		super(id, "for.beverage.effect.antidote");
 		this.chance = chance;
-		this.description = "beverage.effect.antidote";
 	}
 
 	@Override

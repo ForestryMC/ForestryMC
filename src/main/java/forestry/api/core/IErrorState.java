@@ -20,9 +20,9 @@ public interface IErrorState {
 	
 	String getUniqueName();
 
-	String getDescription();
+	String getUnlocalizedDescription();
 
-	String getHelp();
+	String getUnlocalizedHelp();
 
 	@SideOnly(Side.CLIENT)
 	void registerSprite();

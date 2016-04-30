@@ -19,7 +19,7 @@ import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IMutationCondition;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 
 public class MutationConditionTemperature implements IMutationCondition {
 
@@ -48,9 +48,9 @@ public class MutationConditionTemperature implements IMutationCondition {
 
 		if (minTemperature != maxTemperature) {
 			String maxString = AlleleManager.climateHelper.toDisplay(maxTemperature);
-			return StringUtil.localize("mutation.condition.temperature.range").replace("%LOW", minString).replace("%HIGH", maxString);
+			return Translator.translateToLocal("for.mutation.condition.temperature.range").replace("%LOW", minString).replace("%HIGH", maxString);
 		} else {
-			return StringUtil.localizeAndFormat("mutation.condition.temperature.single", minString);
+			return Translator.translateToLocalFormatted("for.mutation.condition.temperature.single", minString);
 		}
 	}
 }

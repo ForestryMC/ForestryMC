@@ -99,13 +99,13 @@ public enum EnumErrorCode implements IErrorState {
 	}
 
 	@Override
-	public String getDescription() {
-		return "errors." + name + ".desc";
+	public String getUnlocalizedDescription() {
+		return "for.errors." + name + ".desc";
 	}
 
 	@Override
-	public String getHelp() {
-		return "errors." + name + ".help";
+	public String getUnlocalizedHelp() {
+		return "for.errors." + name + ".help";
 	}
 
 	@SideOnly(Side.CLIENT)

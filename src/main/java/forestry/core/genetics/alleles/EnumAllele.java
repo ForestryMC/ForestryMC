@@ -118,7 +118,7 @@ public class EnumAllele {
 
 		Flowers(String flowerType, boolean dominant) {
 			String lowercaseName = toString().toLowerCase(Locale.ENGLISH);
-			this.value = new FlowerProvider(flowerType, "flowers." + lowercaseName);
+			this.value = new FlowerProvider(flowerType, "for.flowers." + lowercaseName);
 			this.dominant = dominant;
 		}
 

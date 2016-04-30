@@ -20,13 +20,9 @@ public interface IModelManager {
 	
 	void registerItemModel(Item item, int meta, String identifier);
 	
-	void registerItemModel(Item item, int meta, boolean withMeta);
+	void registerItemModel(Item item, int meta);
 	
 	ModelResourceLocation getModelLocation(Item item);
-	
-	ModelResourceLocation getModelLocation(Item item, int meta);
-	
-	ModelResourceLocation getModelLocation(Item item, int meta, String identifier);
 	
 	ModelResourceLocation getModelLocation(String identifier);
 	

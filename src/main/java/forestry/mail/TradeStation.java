@@ -36,7 +36,7 @@ import forestry.core.inventory.InventoryAdapter;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.PlayerUtil;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 import forestry.mail.inventory.InventoryTradeStation;
 import forestry.mail.items.EnumStampDefinition;
 
@@ -210,7 +210,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 
 		// Prepare the letter
 		ILetter mail = new Letter(this.address, letter.getSender());
-		mail.setText(StringUtil.localize("gui.mail.order.attached"));
+		mail.setText(Translator.translateToLocal("for.gui.mail.order.attached"));
 		for (int i = 0; i < ordersToFillCount; i++) {
 			mail.addAttachment(inventory.getStackInSlot(SLOT_TRADEGOOD).copy());
 		}
@@ -272,9 +272,9 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 
 			String orderFilledMessage;
 			if (ordersToFillCount == 1) {
-				orderFilledMessage = StringUtil.localize("gui.mail.order.filled.one");
+				orderFilledMessage = Translator.translateToLocal("for.gui.mail.order.filled.one");
 			} else {
-				orderFilledMessage = StringUtil.localize("gui.mail.order.filled.multiple");
+				orderFilledMessage = Translator.translateToLocal("for.gui.mail.order.filled.multiple");
 				orderFilledMessage = orderFilledMessage.replace("%COUNT", Integer.toString(ordersToFillCount));
 			}
 

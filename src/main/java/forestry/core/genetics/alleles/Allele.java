@@ -10,9 +10,8 @@
  ******************************************************************************/
 package forestry.core.genetics.alleles;
 
-import net.minecraft.util.StatCollector;
-
 import forestry.api.genetics.IAllele;
+import forestry.core.utils.Translator;
 
 public abstract class Allele implements IAllele {
 
@@ -38,7 +37,7 @@ public abstract class Allele implements IAllele {
 
 	@Override
 	public String getName() {
-		return StatCollector.translateToLocal(getUnlocalizedName());
+		return Translator.translateToLocal(getUnlocalizedName());
 	}
 
 	@Override

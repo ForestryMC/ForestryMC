@@ -13,10 +13,10 @@ package forestry.core.config;
 import java.io.File;
 import java.util.Arrays;
 
-import net.minecraft.util.StatCollector;
-
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
+
+import forestry.core.utils.Translator;
 
 public class LocalizedConfiguration extends Configuration {
 
@@ -40,8 +40,8 @@ public class LocalizedConfiguration extends Configuration {
 		String langKey = "for.config." + category + '.' + name;
 		String commentKey = langKey + '.' + "comment";
 		String comment = "";
-		if (StatCollector.canTranslate(commentKey)) {
-			comment = StatCollector.translateToLocal(commentKey);
+		if (Translator.canTranslateToLocal(commentKey)) {
+			comment = Translator.translateToLocal(commentKey);
 		}
 		return getBoolean(name, category, defaultValue, comment, langKey);
 	}
@@ -50,8 +50,8 @@ public class LocalizedConfiguration extends Configuration {
 		String langKey = "for.config." + category + '.' + name;
 		String commentKey = langKey + '.' + "comment";
 		String comment = "";
-		if (StatCollector.canTranslate(commentKey)) {
-			comment = StatCollector.translateToLocal(commentKey);
+		if (Translator.canTranslateToLocal(commentKey)) {
+			comment = Translator.translateToLocal(commentKey);
 		}
 		return getString(name, category, defaultValue, comment, langKey);
 	}
@@ -60,8 +60,8 @@ public class LocalizedConfiguration extends Configuration {
 		String langKey = "for.config." + category + '.' + name;
 		String commentKey = langKey + '.' + "comment";
 		String comment = "";
-		if (StatCollector.canTranslate(commentKey)) {
-			comment = StatCollector.translateToLocal(commentKey);
+		if (Translator.canTranslateToLocal(commentKey)) {
+			comment = Translator.translateToLocal(commentKey);
 		}
 
 		Property prop = this.get(category, name, defaultValue);
@@ -75,8 +75,8 @@ public class LocalizedConfiguration extends Configuration {
 		String langKey = "for.config." + category + '.' + name;
 		String commentKey = langKey + '.' + "comment";
 		String comment = "";
-		if (StatCollector.canTranslate(commentKey)) {
-			comment = StatCollector.translateToLocal(commentKey);
+		if (Translator.canTranslateToLocal(commentKey)) {
+			comment = Translator.translateToLocal(commentKey);
 		}
 
 		Property prop = this.get(category, name, defaultValue.name());
@@ -106,8 +106,8 @@ public class LocalizedConfiguration extends Configuration {
 		String langKey = "for.config." + category + '.' + name;
 		String commentKey = langKey + '.' + "comment";
 		String comment = "";
-		if (StatCollector.canTranslate(commentKey)) {
-			comment = StatCollector.translateToLocal(commentKey);
+		if (Translator.canTranslateToLocal(commentKey)) {
+			comment = Translator.translateToLocal(commentKey);
 		}
 		return super.getStringList(name, category, defaultValue, comment);
 	}
@@ -116,8 +116,8 @@ public class LocalizedConfiguration extends Configuration {
 		String langKey = "for.config." + category + '.' + name;
 		String commentKey = langKey + '.' + "comment";
 		String comment = "";
-		if (StatCollector.canTranslate(commentKey)) {
-			comment = StatCollector.translateToLocal(commentKey);
+		if (Translator.canTranslateToLocal(commentKey)) {
+			comment = Translator.translateToLocal(commentKey);
 		}
 
 		Property prop = this.get(category, name, defaultValue);
@@ -131,8 +131,8 @@ public class LocalizedConfiguration extends Configuration {
 		String langKey = "for.config." + category + '.' + name;
 		String commentKey = langKey + '.' + "comment";
 		String comment = "";
-		if (StatCollector.canTranslate(commentKey)) {
-			comment = StatCollector.translateToLocal(commentKey);
+		if (Translator.canTranslateToLocal(commentKey)) {
+			comment = Translator.translateToLocal(commentKey);
 		}
 		return getFloat(name, category, defaultValue, minValue, maxValue, comment, langKey);
 	}
@@ -141,8 +141,8 @@ public class LocalizedConfiguration extends Configuration {
 		String langKey = "for.config." + category + '.' + name;
 		String commentKey = langKey + '.' + "comment";
 		String comment = "";
-		if (StatCollector.canTranslate(commentKey)) {
-			comment = StatCollector.translateToLocal(commentKey);
+		if (Translator.canTranslateToLocal(commentKey)) {
+			comment = Translator.translateToLocal(commentKey);
 		}
 		return getInt(name, category, defaultValue, minValue, maxValue, comment, langKey);
 	}

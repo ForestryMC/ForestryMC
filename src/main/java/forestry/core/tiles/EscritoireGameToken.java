@@ -24,7 +24,7 @@ import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
 import forestry.core.utils.ColourUtil;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 
 public class EscritoireGameToken implements INbtWritable, IStreamable {
 
@@ -124,7 +124,7 @@ public class EscritoireGameToken implements INbtWritable, IStreamable {
 
 	@Nonnull
 	public String getTooltip() {
-		return tokenStack != null ? tokenStack.getDisplayName() : StringUtil.localize("gui.unknown");
+		return tokenStack != null ? tokenStack.getDisplayName() : Translator.translateToLocal("for.gui.unknown");
 	}
 
 	public String[] getOverlayIcons() {

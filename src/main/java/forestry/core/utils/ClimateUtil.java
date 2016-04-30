@@ -196,11 +196,11 @@ public class ClimateUtil implements IClimateHelper {
 
 	@Override
 	public String toDisplay(EnumTemperature temperature) {
-		return StringUtil.localize("gui." + temperature.toString().toLowerCase(Locale.ENGLISH));
+		return Translator.translateToLocal("for.gui." + temperature.toString().toLowerCase(Locale.ENGLISH));
 	}
 
 	@Override
 	public String toDisplay(EnumHumidity humidity) {
-		return StringUtil.localize("gui." + humidity.toString().toLowerCase(Locale.ENGLISH));
+		return Translator.translateToLocal("for.gui." + humidity.toString().toLowerCase(Locale.ENGLISH));
 	}
 }

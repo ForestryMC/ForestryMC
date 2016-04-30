@@ -36,8 +36,8 @@ public class FruitProviderRandom extends FruitProviderNone {
 	private final Map<ItemStack, Float> products = new HashMap<>();
 	private int colour = 0xffffff;
 
-	public FruitProviderRandom(String key, IFruitFamily family, ItemStack product, float modifier) {
-		super(key, family);
+	public FruitProviderRandom(String unlocalizedDescription, IFruitFamily family, ItemStack product, float modifier) {
+		super(unlocalizedDescription, family);
 		products.put(product, modifier);
 	}
 

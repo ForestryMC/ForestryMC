@@ -19,7 +19,7 @@ import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IMutationCondition;
 import forestry.core.utils.DayMonth;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 
 public class MutationConditionTimeLimited implements IMutationCondition {
 
@@ -56,6 +56,6 @@ public class MutationConditionTimeLimited implements IMutationCondition {
 
 	@Override
 	public String getDescription() {
-		return StringUtil.localize("mutation.condition.date").replace("%START", start.toString()).replace("%END", end.toString());
+		return Translator.translateToLocal("for.mutation.condition.date").replace("%START", start.toString()).replace("%END", end.toString());
 	}
 }

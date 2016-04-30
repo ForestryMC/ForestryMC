@@ -16,7 +16,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.core.render.TextureManager;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 
 import buildcraft.api.statements.IStatement;
 import buildcraft.api.statements.IStatementParameter;
@@ -26,7 +26,7 @@ import buildcraft.api.statements.StatementManager;
 public abstract class Trigger implements ITriggerExternal {
 
 	private final String uid;
-	private final String unlocalized;
+	private final String localization;
 
 	protected Trigger(String uid) {
 		this(uid, uid);
@@ -34,7 +34,7 @@ public abstract class Trigger implements ITriggerExternal {
 
 	protected Trigger(String uid, String localization) {
 		this.uid = "forestry:" + uid;
-		unlocalized = "trigger." + localization;
+		this.localization = localization;
 		StatementManager.registerStatement(this);
 	}
 
@@ -45,7 +45,7 @@ public abstract class Trigger implements ITriggerExternal {
 
 	@Override
 	public String getDescription() {
-		return StringUtil.localize(unlocalized);
+		return Translator.translateToLocal("for.trigger." + localization);
 	}
 
 	@Override
@@ -68,7 +68,7 @@ public abstract class Trigger implements ITriggerExternal {
 
 	@SideOnly(Side.CLIENT)
 	public void registerSprites() {
-		icon = TextureManager.registerSprite("triggers/" + unlocalized.replace("trigger.", ""));
+		icon = TextureManager.registerSprite("triggers/" + localization);
 	}
 
 	@Override

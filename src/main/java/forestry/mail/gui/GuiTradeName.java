@@ -21,7 +21,7 @@ import org.lwjgl.input.Keyboard;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 import forestry.mail.network.packets.PacketTraderAddressRequest;
 import forestry.mail.tiles.TileTrader;
 
@@ -72,7 +72,7 @@ public class GuiTradeName extends GuiForestry<ContainerTradeName, TileTrader> {
 	protected void drawGuiContainerBackgroundLayer(float var1, int var2, int var3) {
 		super.drawGuiContainerBackgroundLayer(var1, var2, var3);
 
-		String prompt = StringUtil.localize("gui.mail.nametrader");
+		String prompt = Translator.translateToLocal("for.gui.mail.nametrader");
 		textLayout.startPage();
 		textLayout.newLine();
 		textLayout.drawCenteredLine(prompt, 0, fontColor.get("gui.mail.text"));

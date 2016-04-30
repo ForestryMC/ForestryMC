@@ -21,7 +21,7 @@ import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IMutationCondition;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 
 public class MutationConditionRequiresResource implements IMutationCondition {
 
@@ -48,6 +48,6 @@ public class MutationConditionRequiresResource implements IMutationCondition {
 
 	@Override
 	public String getDescription() {
-		return StringUtil.localizeAndFormat("mutation.condition.resource", blockRequired.getDisplayName());
+		return Translator.translateToLocalFormatted("for.mutation.condition.resource", blockRequired.getDisplayName());
 	}
 }

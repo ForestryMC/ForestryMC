@@ -20,7 +20,6 @@ import forestry.api.storage.ICrateRegistry;
 import forestry.core.items.ItemCrated;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Log;
-import forestry.core.utils.StringUtil;
 
 public class CrateRegistry implements ICrateRegistry {
 
@@ -37,7 +36,7 @@ public class CrateRegistry implements ICrateRegistry {
 
 		ItemCrated crate = new ItemCrated(stack, useOreDict);
 		crate.setUnlocalizedName(uid);
-		GameRegistry.registerItem(crate, StringUtil.cleanItemName(crate));
+		GameRegistry.registerItem(crate, uid);
 		Proxies.render.registerModelCrate(crate);
 		PluginStorage.registerCrate(crate);
 	}

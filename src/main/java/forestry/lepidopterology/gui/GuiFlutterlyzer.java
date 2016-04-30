@@ -29,6 +29,7 @@ import forestry.core.gui.ContainerAlyzer;
 import forestry.core.gui.GuiAlyzer;
 import forestry.core.inventory.ItemInventoryAlyzer;
 import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 import forestry.lepidopterology.PluginLepidopterology;
 import forestry.lepidopterology.genetics.ButterflyGenome;
 import forestry.lepidopterology.inventory.ItemInventoryFlutterlyzer;
@@ -36,7 +37,7 @@ import forestry.lepidopterology.inventory.ItemInventoryFlutterlyzer;
 public class GuiFlutterlyzer extends GuiAlyzer {
 
 	public GuiFlutterlyzer(EntityPlayer player, ItemInventoryFlutterlyzer inventory) {
-		super(ButterflyManager.butterflyRoot, player, new ContainerAlyzer(inventory, player), inventory, "gui.flutterlyzer");
+		super(ButterflyManager.butterflyRoot, player, new ContainerAlyzer(inventory, player), inventory, "for.gui.flutterlyzer");
 
 		ArrayList<ItemStack> butterflyList = new ArrayList<>();
 		PluginLepidopterology.items.butterflyGE.addCreativeItems(butterflyList, false);
@@ -96,33 +97,33 @@ public class GuiFlutterlyzer extends GuiAlyzer {
 	private void drawAnalyticsPage1(IButterfly butterfly) {
 		textLayout.startPage(COLUMN_0, COLUMN_1, COLUMN_2);
 
-		textLayout.drawLine(StringUtil.localize("gui.active"), COLUMN_1);
-		textLayout.drawLine(StringUtil.localize("gui.inactive"), COLUMN_2);
+		textLayout.drawLine(Translator.translateToLocal("for.gui.active"), COLUMN_1);
+		textLayout.drawLine(Translator.translateToLocal("for.gui.inactive"), COLUMN_2);
 
 		textLayout.newLine();
 		textLayout.newLine();
 
-		drawSpeciesRow(StringUtil.localize("gui.species"), butterfly, EnumButterflyChromosome.SPECIES, null, null);
+		drawSpeciesRow(Translator.translateToLocal("for.gui.species"), butterfly, EnumButterflyChromosome.SPECIES, null, null);
 		textLayout.newLine();
 
-		drawRow(StringUtil.localize("gui.size"), butterfly.getGenome().getActiveAllele(EnumButterflyChromosome.SIZE).getName(),
+		drawRow(Translator.translateToLocal("for.gui.size"), butterfly.getGenome().getActiveAllele(EnumButterflyChromosome.SIZE).getName(),
 				butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.SIZE).getName(), butterfly, EnumButterflyChromosome.SPEED);
 		textLayout.newLine();
 
-		drawRow(StringUtil.localize("gui.lifespan"), butterfly.getGenome().getActiveAllele(EnumButterflyChromosome.LIFESPAN).getName(),
+		drawRow(Translator.translateToLocal("for.gui.lifespan"), butterfly.getGenome().getActiveAllele(EnumButterflyChromosome.LIFESPAN).getName(),
 				butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.LIFESPAN).getName(), butterfly,
 				EnumButterflyChromosome.LIFESPAN);
 		textLayout.newLine();
 
-		drawRow(StringUtil.localize("gui.speed"), butterfly.getGenome().getActiveAllele(EnumButterflyChromosome.SPEED).getName(),
+		drawRow(Translator.translateToLocal("for.gui.speed"), butterfly.getGenome().getActiveAllele(EnumButterflyChromosome.SPEED).getName(),
 				butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.SPEED).getName(), butterfly, EnumButterflyChromosome.SPEED);
 		textLayout.newLine();
 
-		drawRow(StringUtil.localize("gui.metabolism"), GenericRatings.rateMetabolism(butterfly.getGenome().getMetabolism()),
+		drawRow(Translator.translateToLocal("for.gui.metabolism"), GenericRatings.rateMetabolism(butterfly.getGenome().getMetabolism()),
 				GenericRatings.rateMetabolism(((IAlleleInteger) butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.METABOLISM)).getValue()), butterfly, EnumButterflyChromosome.METABOLISM);
 		textLayout.newLine();
 
-		textLayout.drawLine(StringUtil.localize("gui.fertility"), COLUMN_0);
+		textLayout.drawLine(Translator.translateToLocal("for.gui.fertility"), COLUMN_0);
 		drawFertilityInfo(butterfly.getGenome().getFertility(), COLUMN_1, getColorCoding(butterfly.getGenome().getActiveAllele(EnumButterflyChromosome.FERTILITY)
 				.isDominant()), 8);
 		drawFertilityInfo(((IAlleleInteger) butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.FERTILITY)).getValue(), COLUMN_2, getColorCoding(butterfly
@@ -130,12 +131,12 @@ public class GuiFlutterlyzer extends GuiAlyzer {
 
 		textLayout.newLine();
 
-		drawRow(StringUtil.localize("gui.flowers"), butterfly.getGenome().getFlowerProvider().getDescription(),
+		drawRow(Translator.translateToLocal("for.gui.flowers"), butterfly.getGenome().getFlowerProvider().getDescription(),
 				((IAlleleFlowers) butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.FLOWER_PROVIDER)).getProvider()
 						.getDescription(), butterfly, EnumButterflyChromosome.FLOWER_PROVIDER);
 		textLayout.newLine();
 
-		drawRow(StringUtil.localize("gui.effect"), butterfly.getGenome().getEffect().getName(),
+		drawRow(Translator.translateToLocal("for.gui.effect"), butterfly.getGenome().getEffect().getName(),
 				butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.EFFECT).getName(), butterfly,
 				EnumButterflyChromosome.EFFECT);
 
@@ -147,39 +148,39 @@ public class GuiFlutterlyzer extends GuiAlyzer {
 	private void drawAnalyticsPage2(IButterfly butterfly) {
 		textLayout.startPage(COLUMN_0, COLUMN_1, COLUMN_2);
 
-		textLayout.drawLine(StringUtil.localize("gui.active"), COLUMN_1);
-		textLayout.drawLine(StringUtil.localize("gui.inactive"), COLUMN_2);
+		textLayout.drawLine(Translator.translateToLocal("for.gui.active"), COLUMN_1);
+		textLayout.drawLine(Translator.translateToLocal("for.gui.inactive"), COLUMN_2);
 
 		textLayout.newLine();
 		textLayout.newLine();
 
-		drawRow(StringUtil.localize("gui.climate"), AlleleManager.climateHelper.toDisplay(butterfly.getGenome().getPrimary().getTemperature()),
+		drawRow(Translator.translateToLocal("for.gui.climate"), AlleleManager.climateHelper.toDisplay(butterfly.getGenome().getPrimary().getTemperature()),
 				AlleleManager.climateHelper.toDisplay(butterfly.getGenome().getPrimary().getTemperature()), butterfly, EnumButterflyChromosome.SPECIES);
 		textLayout.newLine();
 
 		IAlleleTolerance tempToleranceActive = (IAlleleTolerance) butterfly.getGenome().getActiveAllele(EnumButterflyChromosome.TEMPERATURE_TOLERANCE);
 		IAlleleTolerance tempToleranceInactive = (IAlleleTolerance) butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.TEMPERATURE_TOLERANCE);
-		textLayout.drawLine("  " + StringUtil.localize("gui.tolerance"), COLUMN_0);
+		textLayout.drawLine("  " + Translator.translateToLocal("for.gui.tolerance"), COLUMN_0);
 		drawToleranceInfo(tempToleranceActive, COLUMN_1);
 		drawToleranceInfo(tempToleranceInactive, COLUMN_2);
 
 		textLayout.newLine();
 
-		drawRow(StringUtil.localize("gui.humidity"), AlleleManager.climateHelper.toDisplay(butterfly.getGenome().getPrimary().getHumidity()),
+		drawRow(Translator.translateToLocal("for.gui.humidity"), AlleleManager.climateHelper.toDisplay(butterfly.getGenome().getPrimary().getHumidity()),
 				AlleleManager.climateHelper.toDisplay(butterfly.getGenome().getPrimary().getHumidity()), butterfly, EnumButterflyChromosome.SPECIES);
 		textLayout.newLine();
 
 		IAlleleTolerance humidToleranceActive = (IAlleleTolerance) butterfly.getGenome().getActiveAllele(EnumButterflyChromosome.HUMIDITY_TOLERANCE);
 		IAlleleTolerance humidToleranceInactive = (IAlleleTolerance) butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.HUMIDITY_TOLERANCE);
-		textLayout.drawLine("  " + StringUtil.localize("gui.tolerance"), COLUMN_0);
+		textLayout.drawLine("  " + Translator.translateToLocal("for.gui.tolerance"), COLUMN_0);
 		drawToleranceInfo(humidToleranceActive, COLUMN_1);
 		drawToleranceInfo(humidToleranceInactive, COLUMN_2);
 
 		textLayout.newLine();
 		textLayout.newLine();
 
-		String yes = StringUtil.localize("yes");
-		String no = StringUtil.localize("no");
+		String yes = Translator.translateToLocal("for.yes");
+		String no = Translator.translateToLocal("for.no");
 
 		String diurnal0, diurnal1, nocturnal0, nocturnal1;
 		if (butterfly.getGenome().getNocturnal()) {
@@ -195,12 +196,12 @@ public class GuiFlutterlyzer extends GuiAlyzer {
 			diurnal1 = !butterfly.getGenome().getSecondary().isNocturnal() ? yes : no;
 		}
 
-		textLayout.drawLine(StringUtil.localize("gui.diurnal"), COLUMN_0);
+		textLayout.drawLine(Translator.translateToLocal("for.gui.diurnal"), COLUMN_0);
 		textLayout.drawLine(diurnal0, COLUMN_1, getColorCoding(false));
 		textLayout.drawLine(diurnal1, COLUMN_2, getColorCoding(false));
 		textLayout.newLine();
 
-		textLayout.drawLine(StringUtil.localize("gui.nocturnal"), COLUMN_0);
+		textLayout.drawLine(Translator.translateToLocal("for.gui.nocturnal"), COLUMN_0);
 		textLayout.drawLine(nocturnal0, COLUMN_1, getColorCoding(false));
 		textLayout.drawLine(nocturnal1, COLUMN_2, getColorCoding(false));
 		textLayout.newLine();
@@ -209,14 +210,14 @@ public class GuiFlutterlyzer extends GuiAlyzer {
 		String secondary = StringUtil.readableBoolean(((AlleleBoolean) butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.TOLERANT_FLYER)).getValue(), yes,
 				no);
 
-		drawRow(StringUtil.localize("gui.flyer"), primary, secondary, butterfly, EnumButterflyChromosome.TOLERANT_FLYER);
+		drawRow(Translator.translateToLocal("for.gui.flyer"), primary, secondary, butterfly, EnumButterflyChromosome.TOLERANT_FLYER);
 		textLayout.newLine();
 
 		primary = StringUtil.readableBoolean(butterfly.getGenome().getFireResist(), yes, no);
 		secondary = StringUtil.readableBoolean(((AlleleBoolean) butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.FIRE_RESIST)).getValue(), yes,
 				no);
 
-		drawRow(StringUtil.localize("gui.fireresist"), primary, secondary, butterfly, EnumButterflyChromosome.FIRE_RESIST);
+		drawRow(Translator.translateToLocal("for.gui.fireresist"), primary, secondary, butterfly, EnumButterflyChromosome.FIRE_RESIST);
 
 		textLayout.endPage();
 	}
@@ -225,7 +226,7 @@ public class GuiFlutterlyzer extends GuiAlyzer {
 
 		textLayout.startPage(COLUMN_0, COLUMN_1, COLUMN_2);
 
-		textLayout.drawLine(StringUtil.localize("gui.loot.butterfly") + ":", COLUMN_0);
+		textLayout.drawLine(Translator.translateToLocal("for.gui.loot.butterfly") + ":", COLUMN_0);
 		textLayout.newLine();
 
 		int x = COLUMN_0;
@@ -241,7 +242,7 @@ public class GuiFlutterlyzer extends GuiAlyzer {
 		textLayout.newLine();
 		textLayout.newLine();
 
-		textLayout.drawLine(StringUtil.localize("gui.loot.caterpillar") + ":", COLUMN_0);
+		textLayout.drawLine(Translator.translateToLocal("for.gui.loot.caterpillar") + ":", COLUMN_0);
 		textLayout.newLine();
 
 		x = COLUMN_0;

@@ -14,7 +14,7 @@ import java.util.List;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuit;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 
 public abstract class Circuit implements ICircuit {
 
@@ -49,18 +49,18 @@ public abstract class Circuit implements ICircuit {
 	}
 
 	@Override
-	public String getName() {
-		return "circuit." + this.uid;
+	public String getUnlocalizedName() {
+		return "for.circuit." + this.uid;
 	}
 
 	@Override
 	public void addTooltip(List<String> list) {
-		list.add(StringUtil.localize(getName()));
+		list.add(Translator.translateToLocal(getUnlocalizedName()));
 
 		int i = 1;
 		while (true) {
-			String unlocalizedDescription = getName() + ".description." + i;
-			String description = StringUtil.localize(unlocalizedDescription);
+			String unlocalizedDescription = getUnlocalizedName() + ".description." + i;
+			String description = Translator.translateToLocal(unlocalizedDescription);
 			if (description.endsWith(unlocalizedDescription)) {
 				break;
 			}

@@ -22,7 +22,6 @@ import java.util.Set;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.StatCollector;
 import net.minecraft.world.biome.BiomeGenBase;
 
 import net.minecraftforge.common.BiomeDictionary;
@@ -31,6 +30,7 @@ import forestry.apiculture.gui.widgets.HabitatSlot;
 import forestry.apiculture.inventory.ItemInventoryHabitatLocator;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
+import forestry.core.utils.Translator;
 
 public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator, ItemInventoryHabitatLocator> {
 	private static final LinkedListMultimap<String, BiomeDictionary.Type> habitats = LinkedListMultimap.create();
@@ -84,7 +84,7 @@ public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator, Item
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
-		String str = StatCollector.translateToLocal("item.for.habitatLocator.name").toUpperCase();
+		String str = Translator.translateToLocal("item.for.habitatLocator.name").toUpperCase();
 		fontRendererObj.drawString(str, startX + 8 + textLayout.getCenteredOffset(str, 138), startY + 16, fontColor.get("gui.screen"));
 
 		// Set active according to valid biomes.

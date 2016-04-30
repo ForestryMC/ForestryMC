@@ -51,8 +51,8 @@ public class FruitProviderPod extends FruitProviderNone {
 	@Nonnull
 	private final Map<ItemStack, Float> drops;
 
-	public FruitProviderPod(String key, IFruitFamily family, EnumPodType type, ItemStack... dropOnMature) {
-		super(key, family);
+	public FruitProviderPod(String unlocalizedDescription, IFruitFamily family, EnumPodType type, ItemStack... dropOnMature) {
+		super(unlocalizedDescription, family);
 		this.type = type;
 		this.drops = new HashMap<>();
 		for (ItemStack drop : dropOnMature) {

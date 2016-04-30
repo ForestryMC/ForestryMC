@@ -2,7 +2,7 @@ package forestry.core.genetics.alleles;
 
 import org.apache.commons.lang3.text.WordUtils;
 
-import net.minecraft.util.StatCollector;
+import forestry.core.utils.Translator;
 
 /**
  * Alleles that have a category with several values inherit from this class.
@@ -24,7 +24,7 @@ public abstract class AlleleCategorized extends Allele {
 
 	private static String getUnlocalizedName(String modId, String category, String valueName) {
 		String customName = modId + '.' + "allele." + category + '.' + valueName;
-		if (StatCollector.canTranslate(customName)) {
+		if (Translator.canTranslateToLocal(customName)) {
 			return customName;
 		} else {
 			return modId + '.' + "allele." + valueName;

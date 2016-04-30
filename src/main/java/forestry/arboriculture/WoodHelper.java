@@ -15,7 +15,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.arboriculture.EnumWoodType;
 import forestry.core.models.ModelManager;
 import forestry.core.render.ForestryResource;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 
 public class WoodHelper {
 	@Nonnull
@@ -23,18 +23,18 @@ public class WoodHelper {
 		String blockKind = wood.getBlockKind();
 
 		String displayName;
-		String customUnlocalizedName = blockKind + "." + woodType.ordinal() + ".name";
-		if (StringUtil.canTranslateTile(customUnlocalizedName)) {
-			displayName = StringUtil.localizeTile(customUnlocalizedName);
+		String customUnlocalizedName = "tile.for." + blockKind + "." + woodType.ordinal() + ".name";
+		if (Translator.canTranslateToLocal(customUnlocalizedName)) {
+			displayName = Translator.translateToLocal(customUnlocalizedName);
 		} else {
-			String woodGrammar = StringUtil.localize(blockKind + ".grammar");
-			String woodTypeName = StringUtil.localize("trees.woodType." + woodType);
+			String woodGrammar = Translator.translateToLocal("for." + blockKind + ".grammar");
+			String woodTypeName = Translator.translateToLocal("for.trees.woodType." + woodType);
 
 			displayName = woodGrammar.replaceAll("%TYPE", woodTypeName);
 		}
 
 		if (wood.isFireproof()) {
-			displayName = StringUtil.localizeAndFormatRaw("tile.for.fireproof", displayName);
+			displayName = Translator.translateToLocalFormatted("tile.for.fireproof", displayName);
 		}
 
 		return displayName;

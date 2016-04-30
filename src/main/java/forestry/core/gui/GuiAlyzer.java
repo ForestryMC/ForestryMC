@@ -40,7 +40,7 @@ import forestry.core.config.Constants;
 import forestry.core.genetics.mutations.EnumMutateChance;
 import forestry.core.gui.widgets.ItemStackWidget;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 
 public abstract class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory> {
 
@@ -51,17 +51,17 @@ public abstract class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory>
 	private final ISpeciesRoot speciesRoot;
 	private final IBreedingTracker breedingTracker;
 
-	private final String guiName;
+	private final String unlocalizedName;
 
 	protected final Map<String, ItemStack> iconStacks = new HashMap<>();
 
-	protected GuiAlyzer(ISpeciesRoot speciesRoot, EntityPlayer player, ContainerAlyzer container, IInventory inventory, String guiName) {
+	protected GuiAlyzer(ISpeciesRoot speciesRoot, EntityPlayer player, ContainerAlyzer container, IInventory inventory, String unlocalizedName) {
 		super(Constants.TEXTURE_PATH_GUI + "/beealyzer2.png", container, inventory);
 
 		this.xSize = 246;
 		this.ySize = 238;
 
-		this.guiName = guiName;
+		this.unlocalizedName = unlocalizedName;
 
 		this.speciesRoot = speciesRoot;
 		this.breedingTracker = this.speciesRoot.getBreedingTracker(player.worldObj, player.getGameProfile());
@@ -124,8 +124,8 @@ public abstract class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory>
 	}
 
 	protected static String checkCustomName(String key) {
-		if (StringUtil.canTranslate(key)) {
-			return StringUtil.localize(key);
+		if (Translator.canTranslateToLocal(key)) {
+			return Translator.translateToLocal(key);
 		} else {
 			return null;
 		}
@@ -142,24 +142,24 @@ public abstract class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory>
 		textLayout.startPage();
 
 		textLayout.newLine();
-		String title = StringUtil.localize(guiName).toUpperCase();
+		String title = Translator.translateToLocal(unlocalizedName).toUpperCase();
 		textLayout.drawCenteredLine(title, 8, 208, fontColor.get("gui.screen"));
 		textLayout.newLine();
 
-		fontRendererObj.drawSplitString(StringUtil.localize(guiName + ".help"), guiLeft + COLUMN_0 + 4, guiTop + 42, 200, fontColor.get("gui.screen"));
+		fontRendererObj.drawSplitString(Translator.translateToLocal(unlocalizedName + ".help"), guiLeft + COLUMN_0 + 4, guiTop + 42, 200, fontColor.get("gui.screen"));
 		textLayout.newLine();
 		textLayout.newLine();
 		textLayout.newLine();
 
-		textLayout.drawLine(StringUtil.localize("gui.alyzer.overview") + ":", COLUMN_0 + 4);
+		textLayout.drawLine(Translator.translateToLocal("for.gui.alyzer.overview") + ":", COLUMN_0 + 4);
 		textLayout.newLine();
-		textLayout.drawLine("I  : " + StringUtil.localize("gui.general"), COLUMN_0 + 4);
+		textLayout.drawLine("I  : " + Translator.translateToLocal("for.gui.general"), COLUMN_0 + 4);
 		textLayout.newLine();
-		textLayout.drawLine("II : " + StringUtil.localize("gui.environment"), COLUMN_0 + 4);
+		textLayout.drawLine("II : " + Translator.translateToLocal("for.gui.environment"), COLUMN_0 + 4);
 		textLayout.newLine();
-		textLayout.drawLine("III: " + StringUtil.localize("gui.produce"), COLUMN_0 + 4);
+		textLayout.drawLine("III: " + Translator.translateToLocal("for.gui.produce"), COLUMN_0 + 4);
 		textLayout.newLine();
-		textLayout.drawLine("IV : " + StringUtil.localize("gui.evolution"), COLUMN_0 + 4);
+		textLayout.drawLine("IV : " + Translator.translateToLocal("for.gui.evolution"), COLUMN_0 + 4);
 
 		textLayout.endPage();
 	}
@@ -168,7 +168,7 @@ public abstract class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory>
 
 		textLayout.startPage();
 
-		textLayout.drawLine(StringUtil.localize("gui.alyzer.classification") + ":", 12);
+		textLayout.drawLine(Translator.translateToLocal("for.gui.alyzer.classification") + ":", 12);
 		textLayout.newLine();
 
 		Stack<IClassification> hierarchy = new Stack<>();
@@ -208,9 +208,9 @@ public abstract class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory>
 		textLayout.drawLine("SPECIES", 170, 0xebae85);
 
 		textLayout.newLine();
-		textLayout.drawLine(StringUtil.localize("gui.alyzer.authority") + ": " + individual.getGenome().getPrimary().getAuthority(), 12);
+		textLayout.drawLine(Translator.translateToLocal("for.gui.alyzer.authority") + ": " + individual.getGenome().getPrimary().getAuthority(), 12);
 		if (AlleleManager.alleleRegistry.isBlacklisted(individual.getIdent())) {
-			String extinct = ">> " + StringUtil.localize("gui.alyzer.extinct").toUpperCase() + " <<";
+			String extinct = ">> " + Translator.translateToLocal("for.gui.alyzer.extinct").toUpperCase() + " <<";
 			fontRendererObj.drawStringWithShadow(extinct, guiLeft + 200 - fontRendererObj.getStringWidth(extinct),
 					guiTop + textLayout.getLineY(), fontColor.get("gui.beealyzer.dominant"));
 		}
@@ -218,7 +218,7 @@ public abstract class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory>
 		textLayout.newLine();
 		String description = individual.getGenome().getPrimary().getDescription();
 		if (StringUtils.isBlank(description) || description.startsWith("for.description.")) {
-			textLayout.drawSplitLine(StringUtil.localize("gui.alyzer.nodescription"), 12, 200, 0x666666);
+			textLayout.drawSplitLine(Translator.translateToLocal("for.gui.alyzer.nodescription"), 12, 200, 0x666666);
 		} else {
 			String tokens[] = description.split("\\|");
 			textLayout.drawSplitLine(tokens[0], 12, 200, 0x666666);
@@ -234,7 +234,7 @@ public abstract class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory>
 	protected void drawAnalyticsPageMutations(IIndividual individual) {
 
 		textLayout.startPage(COLUMN_0, COLUMN_1, COLUMN_2);
-		textLayout.drawLine(StringUtil.localize("gui.beealyzer.mutations") + ":", COLUMN_0);
+		textLayout.drawLine(Translator.translateToLocal("for.gui.beealyzer.mutations") + ":", COLUMN_0);
 		textLayout.newLine();
 
 		RenderHelper.enableGUIStandardItemLighting();

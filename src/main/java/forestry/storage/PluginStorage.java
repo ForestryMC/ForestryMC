@@ -73,7 +73,7 @@ import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.IMCUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 import forestry.lepidopterology.PluginLepidopterology;
 import forestry.lepidopterology.blocks.BlockRegistryLepidopterology;
 import forestry.lepidopterology.blocks.BlockTypeLepidopterologyTesr;
@@ -375,7 +375,7 @@ public class PluginStorage extends BlankForestryPlugin {
 			String[] defaultValidItems = validItems.toArray(new String[validItems.size()]);
 
 			Property backpackConf = config.get("backpacks." + backpackName, "item.stacks", defaultValidItems);
-			backpackConf.comment = StringUtil.localizeAndFormat("config.backpacks.item.stacks.format", backpackName);
+			backpackConf.comment = Translator.translateToLocalFormatted("for.config.backpacks.item.stacks.format", backpackName);
 
 			String[] backpackItemList = backpackConf.getStringList();
 			backpackItems = ItemStackUtil.parseItemStackStrings(backpackItemList, OreDictionary.WILDCARD_VALUE);
@@ -395,7 +395,7 @@ public class PluginStorage extends BlankForestryPlugin {
 			defaultOreNames = defaultOreNamesList.toArray(new String[defaultOreNamesList.size()]);
 
 			Property backpackConf = config.get("backpacks." + backpackName, "ore.dict", defaultOreNames);
-			backpackConf.comment = StringUtil.localizeAndFormat("config.backpacks.ore.dict.format", backpackName);
+			backpackConf.comment = Translator.translateToLocalFormatted("for.config.backpacks.ore.dict.format", backpackName);
 
 			String[] oreDictNameList = backpackConf.getStringList();
 			Collections.addAll(backpackOreDict, oreDictNameList);

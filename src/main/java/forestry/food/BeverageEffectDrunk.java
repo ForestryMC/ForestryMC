@@ -21,9 +21,8 @@ public class BeverageEffectDrunk extends BeverageEffect {
 	private final float chance;
 
 	public BeverageEffectDrunk(int id, float chance) {
-		super(id);
+		super(id, "for.beverage.effect.alcoholic");
 		this.chance = chance;
-		this.description = "beverage.effect.alcoholic";
 		this.drunkEffect = new PotionEffect(Potion.confusion.id, 25 * 20, 0);
 	}
 

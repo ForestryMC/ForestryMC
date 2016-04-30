@@ -25,7 +25,6 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.command.PlayerNotFoundException;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 import forestry.api.genetics.AlleleManager;
@@ -35,6 +34,7 @@ import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Log;
 import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 
 public final class CommandSaveStats extends SubCommand {
 
@@ -43,9 +43,9 @@ public final class CommandSaveStats extends SubCommand {
 	private static final String notCountedSymbol;
 
 	static {
-		discoveredSymbol = StatCollector.translateToLocal("for.chat.command.forestry.stats.save.key.discovered.symbol");
-		blacklistedSymbol = StatCollector.translateToLocal("for.chat.command.forestry.stats.save.key.blacklisted.symbol");
-		notCountedSymbol = StatCollector.translateToLocal("for.chat.command.forestry.stats.save.key.notCounted.symbol");
+		discoveredSymbol = Translator.translateToLocal("for.chat.command.forestry.stats.save.key.discovered.symbol");
+		blacklistedSymbol = Translator.translateToLocal("for.chat.command.forestry.stats.save.key.blacklisted.symbol");
+		notCountedSymbol = Translator.translateToLocal("for.chat.command.forestry.stats.save.key.notCounted.symbol");
 	}
 
 	private final IStatsSaveHelper saveHelper;
@@ -82,27 +82,27 @@ public final class CommandSaveStats extends SubCommand {
 		Collection<String> statistics = new ArrayList<>();
 
 		String date = DateFormat.getInstance().format(new Date());
-		statistics.add(StatCollector.translateToLocalFormatted(saveHelper.getUnlocalizedSaveStatsString(), player.getDisplayName(), date));
+		statistics.add(Translator.translateToLocalFormatted(saveHelper.getUnlocalizedSaveStatsString(), player.getDisplayName(), date));
 		statistics.add("");
-		statistics.add(StatCollector.translateToLocalFormatted("for.chat.command.forestry.stats.save.mode", modeHelper.getModeName(world)));
+		statistics.add(Translator.translateToLocalFormatted("for.chat.command.forestry.stats.save.mode", modeHelper.getModeName(world)));
 		statistics.add("");
 
 		IBreedingTracker tracker = saveHelper.getBreedingTracker(world, player.getGameProfile());
 		if (tracker == null) {
-			statistics.add(StatCollector.translateToLocal("for.chat.command.forestry.stats.save.error4"));
+			statistics.add(Translator.translateToLocal("for.chat.command.forestry.stats.save.error4"));
 		} else {
 			saveHelper.addExtraInfo(statistics, tracker);
 
 			Collection<IAlleleSpecies> species = saveHelper.getSpecies();
 
-			String speciesCount = StatCollector.translateToLocal("for.gui.speciescount");
+			String speciesCount = Translator.translateToLocal("for.gui.speciescount");
 			String speciesCountLine = String.format("%s (%s):", speciesCount, species.size());
 			statistics.add(speciesCountLine);
 			statistics.add(StringUtil.line(speciesCountLine.length()));
 
-			statistics.add(discoveredSymbol + ": " + StatCollector.translateToLocal("for.chat.command.forestry.stats.save.key.discovered"));
-			statistics.add(blacklistedSymbol + ": " + StatCollector.translateToLocal("for.chat.command.forestry.stats.save.key.blacklisted"));
-			statistics.add(notCountedSymbol + ": " + StatCollector.translateToLocal("for.chat.command.forestry.stats.save.key.notCounted"));
+			statistics.add(discoveredSymbol + ": " + Translator.translateToLocal("for.chat.command.forestry.stats.save.key.discovered"));
+			statistics.add(blacklistedSymbol + ": " + Translator.translateToLocal("for.chat.command.forestry.stats.save.key.blacklisted"));
+			statistics.add(notCountedSymbol + ": " + Translator.translateToLocal("for.chat.command.forestry.stats.save.key.notCounted"));
 			statistics.add("");
 
 			String header = generateSpeciesListHeader();
@@ -150,7 +150,7 @@ public final class CommandSaveStats extends SubCommand {
 
 		} catch (IOException ex) {
 			CommandHelpers.sendLocalizedChatMessage(sender, "for.chat.command.forestry.stats.save.error3");
-			Log.error(StringUtil.localize("for.chat.command.forestry.stats.save.error3"), ex);
+			Log.error(Translator.translateToLocal("for.for.chat.command.forestry.stats.save.error3"), ex);
 			return;
 		}
 
@@ -158,8 +158,8 @@ public final class CommandSaveStats extends SubCommand {
 	}
 
 	private static String generateSpeciesListHeader() {
-		String authority = StatCollector.translateToLocal("for.gui.alyzer.authority");
-		String species = StatCollector.translateToLocal("for.gui.species");
+		String authority = Translator.translateToLocal("for.gui.alyzer.authority");
+		String species = Translator.translateToLocal("for.gui.species");
 		return speciesListEntry(discoveredSymbol, blacklistedSymbol, notCountedSymbol, "UID", species, authority);
 	}
 

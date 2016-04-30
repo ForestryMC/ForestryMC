@@ -16,7 +16,7 @@ import java.util.Locale;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IClassification;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 
 public class Classification implements IClassification {
 
@@ -63,12 +63,12 @@ public class Classification implements IClassification {
 
 	@Override
 	public String getName() {
-		return StringUtil.localize(uid);
+		return Translator.translateToLocal("for." + uid);
 	}
 
 	@Override
 	public String getDescription() {
-		return StringUtil.localize(uid + ".description");
+		return Translator.translateToLocal("for." + uid + ".description");
 	}
 
 	@Override

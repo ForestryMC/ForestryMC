@@ -21,6 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -46,7 +47,7 @@ import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.GeneticsUtil;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 
 public class ItemGermlingGE extends ItemGE implements IVariableFermentable {
 
@@ -83,11 +84,12 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable {
 		}
 		IAlleleSpecies species = getSpecies(itemstack);
 
-		String customTreeKey = "trees.custom." + type.getName() + "." + species.getUnlocalizedName().replace("trees.species.", "");
-		if (StringUtil.canTranslate(customTreeKey)) {
-			return StringUtil.localize(customTreeKey);
+		String customTreeKey = "for.trees.custom." + type.getName() + "." + species.getUnlocalizedName().replace("trees.species.", "");
+		if (Translator.canTranslateToLocal(customTreeKey)) {
+			return Translator.translateToLocal(customTreeKey);
 		}
-		return StringUtil.localize("trees.grammar." + type.getName()).replaceAll("%SPECIES", species.getName()).replaceAll("%TYPE", StringUtil.localize("trees.grammar." + type.getName() + ".type"));
+		String typeString = Translator.translateToLocal("for.trees.grammar." + type.getName() + ".type");
+		return Translator.translateToLocal("for.trees.grammar." + type.getName()).replaceAll("%SPECIES", species.getName()).replaceAll("%TYPE", typeString);
 	}
 
 	@Override

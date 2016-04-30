@@ -29,7 +29,7 @@ import forestry.core.CreativeTabForestry;
 import forestry.core.circuits.SolderManager;
 import forestry.core.config.Config;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 
 public class ItemElectronTube extends ItemOverlay {
 
@@ -50,10 +50,10 @@ public class ItemElectronTube extends ItemOverlay {
 					}
 				}
 			} else {
-				list.add(EnumChatFormatting.ITALIC + "<" + StringUtil.localize("gui.tooltip.tmi") + ">");
+				list.add(EnumChatFormatting.ITALIC + "<" + Translator.translateToLocal("for.gui.tooltip.tmi") + ">");
 			}
 		} else {
-			list.add("<" + StringUtil.localize("gui.noeffect") + ">");
+			list.add("<" + Translator.translateToLocal("for.gui.noeffect") + ">");
 		}
 	}
 

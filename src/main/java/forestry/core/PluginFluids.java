@@ -34,7 +34,6 @@ import forestry.core.items.ItemLiquidContainer;
 import forestry.core.items.ItemRegistryFluids;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Log;
-import forestry.core.utils.StringUtil;
 import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
@@ -67,8 +66,9 @@ public class PluginFluids extends BlankForestryPlugin {
 			if (fluidBlock == null) {
 				fluidBlock = forestryFluid.makeBlock();
 				if (fluidBlock != null) {
-					fluidBlock.setUnlocalizedName("forestry.fluid." + forestryFluid.getTag());
-					GameRegistry.registerBlock(fluidBlock, ItemBlock.class, StringUtil.cleanBlockName(fluidBlock));
+					String name = "fluid." + forestryFluid.getTag();
+					fluidBlock.setUnlocalizedName("forestry." + name);
+					GameRegistry.registerBlock(fluidBlock, ItemBlock.class, name);
 					Proxies.render.registerFluidStateMapper(fluidBlock, forestryFluid);
 					if (forestryFluid.getOtherContainers().isEmpty()) {
 						FluidRegistry.addBucketForFluid(fluid);

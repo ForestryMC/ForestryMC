@@ -50,7 +50,7 @@ import forestry.api.lepidopterology.IEntityButterfly;
 import forestry.core.genetics.Chromosome;
 import forestry.core.genetics.GenericRatings;
 import forestry.core.genetics.IndividualLiving;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 import forestry.lepidopterology.PluginLepidopterology;
 
 public class Butterfly extends IndividualLiving implements IButterfly {
@@ -87,15 +87,15 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 		IAlleleButterflySpecies primary = genome.getPrimary();
 		IAlleleButterflySpecies secondary = genome.getSecondary();
 		if (!isPureBred(EnumButterflyChromosome.SPECIES)) {
-			list.add(EnumChatFormatting.BLUE + StringUtil.localize("butterflies.hybrid").replaceAll("%PRIMARY", primary.getName()).replaceAll("%SECONDARY", secondary.getName()));
+			list.add(EnumChatFormatting.BLUE + Translator.translateToLocal("for.butterflies.hybrid").replaceAll("%PRIMARY", primary.getName()).replaceAll("%SECONDARY", secondary.getName()));
 		}
 
 		if (getMate() != null) {
-			list.add(EnumChatFormatting.RED + StringUtil.localize("gui.fecundated").toUpperCase(Locale.ENGLISH));
+			list.add(EnumChatFormatting.RED + Translator.translateToLocal("for.gui.fecundated").toUpperCase(Locale.ENGLISH));
 		}
 		list.add(EnumChatFormatting.YELLOW + genome.getActiveAllele(EnumButterflyChromosome.SIZE).getName());
 		list.add(EnumChatFormatting.DARK_GREEN + genome.getActiveAllele(EnumButterflyChromosome.SPEED).getName());
-		list.add(genome.getActiveAllele(EnumButterflyChromosome.LIFESPAN).getName() + ' ' + StringUtil.localize("gui.life"));
+		list.add(genome.getActiveAllele(EnumButterflyChromosome.LIFESPAN).getName() + ' ' + Translator.translateToLocal("for.gui.life"));
 
 		IAlleleTolerance tempTolerance = (IAlleleTolerance) getGenome().getActiveAllele(EnumButterflyChromosome.TEMPERATURE_TOLERANCE);
 		list.add(EnumChatFormatting.GREEN + "T: " + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getTemperature()) + " / " + tempTolerance.getName());
@@ -106,7 +106,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 		list.add(EnumChatFormatting.RED + GenericRatings.rateActivityTime(genome.getNocturnal(), genome.getPrimary().isNocturnal()));
 
 		if (genome.getTolerantFlyer()) {
-			list.add(EnumChatFormatting.WHITE + StringUtil.localize("gui.flyer.tooltip"));
+			list.add(EnumChatFormatting.WHITE + Translator.translateToLocal("for.gui.flyer.tooltip"));
 		}
 	}
 

@@ -34,7 +34,7 @@ import forestry.core.gui.buttons.GuiBetterButton;
 import forestry.core.gui.buttons.StandardButtonTextureSets;
 import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 
 public class GuiNaturalistInventory extends GuiForestry<Container, IPagedInventory> {
 	@Nonnull
@@ -64,7 +64,7 @@ public class GuiNaturalistInventory extends GuiForestry<Container, IPagedInvento
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
 		super.drawGuiContainerBackgroundLayer(f, i, j);
-		String header = StringUtil.localize("gui.page") + " " + (pageCurrent + 1) + "/" + pageMax;
+		String header = Translator.translateToLocal("for.gui.page") + " " + (pageCurrent + 1) + "/" + pageMax;
 		fontRendererObj.drawString(header, guiLeft + 95 + textLayout.getCenteredOffset(header, 98), guiTop + 10, fontColor.get("gui.title"));
 
 		IIndividual individual = getIndividualAtPosition(i, j);
@@ -133,19 +133,19 @@ public class GuiNaturalistInventory extends GuiForestry<Container, IPagedInvento
 
 		textLayout.startPage();
 
-		textLayout.drawLine(StringUtil.localize("gui.speciescount") + ": " + breedingTracker.getSpeciesBred() + "/" + speciesRoot.getSpeciesCount(), x);
+		textLayout.drawLine(Translator.translateToLocal("for.gui.speciescount") + ": " + breedingTracker.getSpeciesBred() + "/" + speciesRoot.getSpeciesCount(), x);
 		textLayout.newLine();
 		textLayout.newLine();
 
 		if (breedingTracker instanceof IApiaristTracker) {
 			IApiaristTracker tracker = (IApiaristTracker) breedingTracker;
-			textLayout.drawLine(StringUtil.localize("gui.queens") + ": " + tracker.getQueenCount(), x);
+			textLayout.drawLine(Translator.translateToLocal("for.gui.queens") + ": " + tracker.getQueenCount(), x);
 			textLayout.newLine();
 
-			textLayout.drawLine(StringUtil.localize("gui.princesses") + ": " + tracker.getPrincessCount(), x);
+			textLayout.drawLine(Translator.translateToLocal("for.gui.princesses") + ": " + tracker.getPrincessCount(), x);
 			textLayout.newLine();
 
-			textLayout.drawLine(StringUtil.localize("gui.drones") + ": " + tracker.getDroneCount(), x);
+			textLayout.drawLine(Translator.translateToLocal("for.gui.drones") + ": " + tracker.getDroneCount(), x);
 			textLayout.newLine();
 		}
 
@@ -155,7 +155,7 @@ public class GuiNaturalistInventory extends GuiForestry<Container, IPagedInvento
 	private void displaySpeciesInformation(boolean analyzed, IAlleleSpecies species, ItemStack iconStack, int x) {
 
 		if (!analyzed) {
-			textLayout.drawLine(StringUtil.localize("gui.unknown"), x);
+			textLayout.drawLine(Translator.translateToLocal("for.gui.unknown"), x);
 			return;
 		}
 

@@ -14,7 +14,7 @@ public interface ICircuit {
 
 	int getLimit();
 
-	String getName();
+	String getUnlocalizedName();
 
 	boolean isCircuitable(Object tile);
 

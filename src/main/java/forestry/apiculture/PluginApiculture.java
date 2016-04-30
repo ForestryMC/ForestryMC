@@ -122,7 +122,7 @@ import forestry.core.utils.IMCUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.Stack;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 import forestry.food.PluginFood;
 import forestry.food.items.ItemRegistryFood;
 import forestry.plugins.BlankForestryPlugin;
@@ -235,8 +235,8 @@ public class PluginApiculture extends BlankForestryPlugin {
 
 		secondPrincessChance = config.getFloatLocalized("beekeeping", "second.princess", secondPrincessChance, 0.0f, 100.0f);
 
-		String acceptedFlowerMessage = StringUtil.localize("config.beekeeping.flowers.accepted.comment");
-		String plantableFlowerMessage = StringUtil.localize("config.beekeeping.flowers.plantable.comment");
+		String acceptedFlowerMessage = Translator.translateToLocal("for.config.beekeeping.flowers.accepted.comment");
+		String plantableFlowerMessage = Translator.translateToLocal("for.config.beekeeping.flowers.plantable.comment");
 
 		FlowerRegistry flowerRegistry = (FlowerRegistry) FlowerManager.flowerRegistry;
 

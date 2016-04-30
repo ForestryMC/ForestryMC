@@ -14,7 +14,7 @@ import javax.annotation.Nonnull;
 
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.circuits.ICircuitSocketType;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 
 public class CircuitLayout implements ICircuitLayout {
 
@@ -37,13 +37,13 @@ public class CircuitLayout implements ICircuitLayout {
 	@Nonnull
 	@Override
 	public String getName() {
-		return StringUtil.localize("circuit.layout." + this.uid + ".name");
+		return Translator.translateToLocal("for.circuit.layout." + this.uid + ".name");
 	}
 
 	@Nonnull
 	@Override
 	public String getUsage() {
-		return StringUtil.localize("circuit.layout." + this.uid + ".usage");
+		return Translator.translateToLocal("for.circuit.layout." + this.uid + ".usage");
 	}
 
 	@Nonnull

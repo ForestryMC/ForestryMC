@@ -14,9 +14,8 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
 
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.IForestryPlugin;
 import forestry.plugins.PluginManager;
@@ -99,7 +98,7 @@ public class CommandPlugins extends SubCommand {
 			}
 
 			if (found == null) {
-				throw new CommandException(StringUtil.localizeAndFormat("chat.plugins.error", pluginUid));
+				throw new CommandException(Translator.translateToLocalFormatted("for.chat.plugins.error", pluginUid));
 			}
 
 			EnumChatFormatting formatting = found.isAvailable() ? EnumChatFormatting.GREEN : EnumChatFormatting.RED;
@@ -117,7 +116,7 @@ public class CommandPlugins extends SubCommand {
 					CommandHelpers.sendChatMessage(sender, EnumChatFormatting.BLUE + "URL: " + info.url());
 				}
 				if (!info.unlocalizedDescription().isEmpty()) {
-					CommandHelpers.sendChatMessage(sender, StatCollector.translateToLocal(info.unlocalizedDescription()));
+					CommandHelpers.sendChatMessage(sender, Translator.translateToLocal(info.unlocalizedDescription()));
 				}
 			}
 

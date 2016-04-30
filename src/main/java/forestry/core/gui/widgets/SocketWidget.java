@@ -23,7 +23,7 @@ import forestry.core.gui.GuiForestry;
 import forestry.core.gui.IContainerSocketed;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 
 public class SocketWidget extends Widget {
 
@@ -57,9 +57,9 @@ public class SocketWidget extends Widget {
 			if (stack != null) {
 				EntityPlayer player = Proxies.common.getClientInstance().thePlayer;
 				toolTip.add(stack.getTooltip(player, false));
-				toolTip.add(EnumChatFormatting.ITALIC + StringUtil.localize("gui.socket.remove"));
+				toolTip.add(EnumChatFormatting.ITALIC + Translator.translateToLocal("for.gui.socket.remove"));
 			} else {
-				toolTip.add(StringUtil.localize("gui.emptysocket"));
+				toolTip.add(Translator.translateToLocal("for.gui.emptysocket"));
 			}
 		}
 	};

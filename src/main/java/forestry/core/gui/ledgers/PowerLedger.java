@@ -12,7 +12,7 @@ package forestry.core.gui.ledgers;
 
 import forestry.core.render.TextureManager;
 import forestry.core.tiles.IPowerHandler;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 import forestry.energy.EnergyManager;
 
 public class PowerLedger extends Ledger {
@@ -42,15 +42,15 @@ public class PowerLedger extends Ledger {
 
 		EnergyManager energyManager = tile.getEnergyManager();
 
-		drawHeader(StringUtil.localize("gui.energy"), xHeader, y + 8);
+		drawHeader(Translator.translateToLocal("for.gui.energy"), xHeader, y + 8);
 
-		drawSubheader(StringUtil.localize("gui.stored") + ':', xBody, y + 20);
+		drawSubheader(Translator.translateToLocal("for.gui.stored") + ':', xBody, y + 20);
 		drawText(energyManager.getTotalEnergyStored() + " RF", xBody, y + 32);
 
-		drawSubheader(StringUtil.localize("gui.maxenergy") + ':', xBody, y + 44);
+		drawSubheader(Translator.translateToLocal("for.gui.maxenergy") + ':', xBody, y + 44);
 		drawText(energyManager.getMaxEnergyStored() + " RF", xBody, y + 56);
 
-		drawSubheader(StringUtil.localize("gui.maxenergyreceive") + ':', xBody, y + 68);
+		drawSubheader(Translator.translateToLocal("for.gui.maxenergyreceive") + ':', xBody, y + 68);
 		drawText(energyManager.getMaxEnergyReceived() + " RF", xBody, y + 80);
 	}
 

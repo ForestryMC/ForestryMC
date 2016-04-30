@@ -28,7 +28,7 @@ import forestry.core.gui.GuiForestry;
 import forestry.core.gui.GuiUtil;
 import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 
 public class GuiImprinter extends GuiForestry<ContainerImprinter, ItemInventoryImprinter> {
 
@@ -57,8 +57,8 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter, ItemInventoryI
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
-		int offset = (138 - fontRendererObj.getStringWidth(StringUtil.localize("gui.imprinter.name"))) / 2;
-		fontRendererObj.drawString(StringUtil.localize("gui.imprinter.name"), startX + 8 + offset, startY + 16, fontColor.get("gui.screen"));
+		int offset = (138 - fontRendererObj.getStringWidth(Translator.translateToLocal("for.gui.imprinter.name"))) / 2;
+		fontRendererObj.drawString(Translator.translateToLocal("for.gui.imprinter.name"), startX + 8 + offset, startY + 16, fontColor.get("gui.screen"));
 
 		IAlleleBeeSpecies primary = inventory.getPrimary();
 		drawBeeSpeciesIcon(primary, startX + 12, startY + 32);
@@ -68,7 +68,7 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter, ItemInventoryI
 		drawBeeSpeciesIcon(secondary, startX + 12, startY + 52);
 		fontRendererObj.drawString(secondary.getName(), startX + 32, startY + 56, fontColor.get("gui.screen"));
 
-		String youCheater = StringUtil.localize("gui.imprinter.cheater");
+		String youCheater = Translator.translateToLocal("for.gui.imprinter.cheater");
 		offset = (138 - fontRendererObj.getStringWidth(youCheater)) / 2;
 		fontRendererObj.drawString(youCheater, startX + 8 + offset, startY + 76, fontColor.get("gui.screen"));
 

@@ -67,7 +67,7 @@ public class ItemOverlay extends ItemForestry {
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
 		for (int i = 0; i < overlays.length; i++) {
-			manager.registerItemModel(item, i, false);
+			manager.registerItemModel(item, i);
 		}
 	}
 

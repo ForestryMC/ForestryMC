@@ -16,7 +16,7 @@ import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.ledgers.Ledger;
 import forestry.core.render.TextureManager;
 import forestry.core.tiles.TileEngine;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 
 public abstract class GuiEngine<C extends Container, I extends TileEngine> extends GuiForestryTitled<C, I> {
 
@@ -50,15 +50,15 @@ public abstract class GuiEngine<C extends Container, I extends TileEngine> exten
 				return;
 			}
 
-			drawHeader(StringUtil.localize("gui.energy"), x + 22, y + 8);
+			drawHeader(Translator.translateToLocal("for.gui.energy"), x + 22, y + 8);
 
-			drawSubheader(StringUtil.localize("gui.currentOutput") + ':', x + 22, y + 20);
+			drawSubheader(Translator.translateToLocal("for.gui.currentOutput") + ':', x + 22, y + 20);
 			drawText(inventory.getCurrentOutput() + " RF/t", x + 22, y + 32);
 
-			drawSubheader(StringUtil.localize("gui.stored") + ':', x + 22, y + 44);
+			drawSubheader(Translator.translateToLocal("for.gui.stored") + ':', x + 22, y + 44);
 			drawText(inventory.getEnergyManager().getEnergyStored(inventory.getOrientation()) + " RF", x + 22, y + 56);
 
-			drawSubheader(StringUtil.localize("gui.heat") + ':', x + 22, y + 68);
+			drawSubheader(Translator.translateToLocal("for.gui.heat") + ':', x + 22, y + 68);
 			drawText((double) inventory.getHeat() / (double) 10 + 20.0 + " C", x + 22, y + 80);
 		}
 

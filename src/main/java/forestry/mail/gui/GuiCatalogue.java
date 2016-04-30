@@ -28,7 +28,7 @@ import forestry.core.config.SessionVars;
 import forestry.core.gui.GuiForestry;
 import forestry.core.gui.widgets.ItemStackWidget;
 import forestry.core.gui.widgets.Widget;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 
 public class GuiCatalogue extends GuiForestry<ContainerCatalogue, IInventory> {
 
@@ -55,10 +55,10 @@ public class GuiCatalogue extends GuiForestry<ContainerCatalogue, IInventory> {
 		buttonList.add(new GuiButton(2, width / 2 + 44, guiTop + 150, 12, 20, ">"));
 		buttonList.add(new GuiButton(3, width / 2 - 58, guiTop + 150, 12, 20, "<"));
 
-		buttonFilter = new GuiButton(4, width / 2 - 44, guiTop + 150, 42, 20, StringUtil.localize("gui.mail.filter.all"));
+		buttonFilter = new GuiButton(4, width / 2 - 44, guiTop + 150, 42, 20, Translator.translateToLocal("for.gui.mail.filter.all"));
 		buttonList.add(buttonFilter);
 
-		buttonUse = new GuiButton(5, width / 2, guiTop + 150, 42, 20, StringUtil.localize("gui.mail.address.copy"));
+		buttonUse = new GuiButton(5, width / 2, guiTop + 150, 42, 20, Translator.translateToLocal("for.gui.mail.address.copy"));
 		buttonList.add(buttonUse);
 	}
 
@@ -86,22 +86,22 @@ public class GuiCatalogue extends GuiForestry<ContainerCatalogue, IInventory> {
 			buttonUse.enabled = false;
 		}
 
-		buttonFilter.displayString = StringUtil.localize("gui.mail.filter." + container.getFilterIdent());
+		buttonFilter.displayString = Translator.translateToLocal("for.gui.mail.filter." + container.getFilterIdent());
 	}
 
 	private void drawNoTrade(int x, int y) {
-		fontRendererObj.drawSplitString(StringUtil.localize("gui.mail.notrades"), x, y + 18, 119, fontColor.get("gui.book"));
+		fontRendererObj.drawSplitString(Translator.translateToLocal("for.gui.mail.notrades"), x, y + 18, 119, fontColor.get("gui.book"));
 	}
 
 	private void drawTradePreview(TradeStationInfo tradeInfo, int x, int y) {
 
 		fontRendererObj.drawString(boldUnderline + tradeInfo.address.getName(), x, y, fontColor.get("gui.book"));
 
-		fontRendererObj.drawString(String.format(StringUtil.localize("gui.mail.willtrade"), tradeInfo.owner.getName()), x, y + 18, fontColor.get("gui.book"));
+		fontRendererObj.drawString(String.format(Translator.translateToLocal("for.gui.mail.willtrade"), tradeInfo.owner.getName()), x, y + 18, fontColor.get("gui.book"));
 
 		addTradeInfoWidget(new ItemStackWidget(widgetManager, x - guiLeft, y - guiTop + 28, tradeInfo.tradegood));
 
-		fontRendererObj.drawString(StringUtil.localize("gui.mail.tradefor"), x, y + 46, fontColor.get("gui.book"));
+		fontRendererObj.drawString(Translator.translateToLocal("for.gui.mail.tradefor"), x, y + 46, fontColor.get("gui.book"));
 
 		for (int i = 0; i < tradeInfo.required.length; i++) {
 			ItemStack itemStack = tradeInfo.required[i];
@@ -109,9 +109,9 @@ public class GuiCatalogue extends GuiForestry<ContainerCatalogue, IInventory> {
 		}
 
 		if (tradeInfo.state.isOk()) {
-			fontRendererObj.drawSplitString(EnumChatFormatting.DARK_GREEN + StringUtil.localize("chat.mail." + tradeInfo.state.getIdentifier()), x, y + 82, 119, fontColor.get("gui.book"));
+			fontRendererObj.drawSplitString(EnumChatFormatting.DARK_GREEN + Translator.translateToLocal("for.chat.mail." + tradeInfo.state.getIdentifier()), x, y + 82, 119, fontColor.get("gui.book"));
 		} else {
-			fontRendererObj.drawSplitString(EnumChatFormatting.DARK_RED + StringUtil.localize("chat.mail." + tradeInfo.state.getIdentifier()), x, y + 82, 119, fontColor.get("gui.book"));
+			fontRendererObj.drawSplitString(EnumChatFormatting.DARK_RED + Translator.translateToLocal("for.chat.mail." + tradeInfo.state.getIdentifier()), x, y + 82, 119, fontColor.get("gui.book"));
 		}
 	}
 

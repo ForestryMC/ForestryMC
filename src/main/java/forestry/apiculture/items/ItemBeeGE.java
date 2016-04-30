@@ -36,7 +36,7 @@ import forestry.api.genetics.IAlleleSpecies;
 import forestry.apiculture.genetics.BeeGenome;
 import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 
 public class ItemBeeGE extends ItemGE {
 
@@ -68,13 +68,13 @@ public class ItemBeeGE extends ItemGE {
 		}
 
 		IBee individual = BeeManager.beeRoot.getMember(itemstack);
-		String customBeeKey = "bees.custom." + type.getName() + "." + individual.getGenome().getPrimary().getUnlocalizedName().replace("bees.species.", "");
-		if (StringUtil.canTranslate(customBeeKey)) {
-			return StringUtil.localize(customBeeKey);
+		String customBeeKey = "for.bees.custom." + type.getName() + "." + individual.getGenome().getPrimary().getUnlocalizedName().replace("bees.species.", "");
+		if (Translator.canTranslateToLocal(customBeeKey)) {
+			return Translator.translateToLocal(customBeeKey);
 		}
-		String beeGrammar = StringUtil.localize("bees.grammar." + type.getName());
+		String beeGrammar = Translator.translateToLocal("for.bees.grammar." + type.getName());
 		String beeSpecies = individual.getDisplayName();
-		String beeType = StringUtil.localize("bees.grammar." + type.getName() + ".type");
+		String beeType = Translator.translateToLocal("for.bees.grammar." + type.getName() + ".type");
 		return beeGrammar.replaceAll("%SPECIES", beeSpecies).replaceAll("%TYPE", beeType);
 	}
 
@@ -87,9 +87,9 @@ public class ItemBeeGE extends ItemGE {
 		if (type != EnumBeeType.DRONE) {
 			IBee individual = BeeManager.beeRoot.getMember(itemstack);
 			if (individual.isNatural()) {
-				list.add(EnumChatFormatting.YELLOW + EnumChatFormatting.ITALIC.toString() + StringUtil.localize("bees.stock.pristine"));
+				list.add(EnumChatFormatting.YELLOW + EnumChatFormatting.ITALIC.toString() + Translator.translateToLocal("for.bees.stock.pristine"));
 			} else {
-				list.add(EnumChatFormatting.YELLOW + StringUtil.localize("bees.stock.ignoble"));
+				list.add(EnumChatFormatting.YELLOW + Translator.translateToLocal("for.bees.stock.ignoble"));
 			}
 		}
 

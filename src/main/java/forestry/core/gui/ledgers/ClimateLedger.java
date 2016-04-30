@@ -14,6 +14,7 @@ import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.AlleleManager;
 import forestry.core.tiles.IClimatised;
 import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 
 /**
  * A ledger containing climate information.
@@ -43,12 +44,12 @@ public class ClimateLedger extends Ledger {
 			return;
 		}
 
-		drawHeader(StringUtil.localize("gui.climate"), x + 22, y + 8);
+		drawHeader(Translator.translateToLocal("for.gui.climate"), x + 22, y + 8);
 
-		drawSubheader(StringUtil.localize("gui.temperature") + ':', x + 22, y + 20);
+		drawSubheader(Translator.translateToLocal("for.gui.temperature") + ':', x + 22, y + 20);
 		drawText(AlleleManager.climateHelper.toDisplay(temperature) + ' ' + StringUtil.floatAsPercent(tile.getExactTemperature()), x + 22, y + 32);
 
-		drawSubheader(StringUtil.localize("gui.humidity") + ':', x + 22, y + 44);
+		drawSubheader(Translator.translateToLocal("for.gui.humidity") + ':', x + 22, y + 44);
 		drawText(AlleleManager.climateHelper.toDisplay(tile.getHumidity()) + ' ' + StringUtil.floatAsPercent(tile.getExactHumidity()), x + 22, y + 56);
 	}
 

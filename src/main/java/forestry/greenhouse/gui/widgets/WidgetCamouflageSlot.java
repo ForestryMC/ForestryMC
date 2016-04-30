@@ -12,14 +12,6 @@ package forestry.greenhouse.gui.widgets;
 
 import java.util.Locale;
 
-import forestry.api.core.EnumCamouflageType;
-import forestry.api.core.ICamouflageHandler;
-import forestry.api.greenhouse.GreenhouseManager;
-import forestry.api.multiblock.IMultiblockController;
-import forestry.core.gui.tooltips.ToolTip;
-import forestry.core.gui.widgets.Widget;
-import forestry.core.gui.widgets.WidgetManager;
-import forestry.core.proxy.Proxies;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -28,7 +20,16 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
+
+import forestry.api.core.EnumCamouflageType;
+import forestry.api.core.ICamouflageHandler;
+import forestry.api.greenhouse.GreenhouseManager;
+import forestry.api.multiblock.IMultiblockController;
+import forestry.core.gui.tooltips.ToolTip;
+import forestry.core.gui.widgets.Widget;
+import forestry.core.gui.widgets.WidgetManager;
+import forestry.core.proxy.Proxies;
+import forestry.core.utils.Translator;
 
 public class WidgetCamouflageSlot extends Widget {
 	
@@ -87,14 +88,14 @@ public class WidgetCamouflageSlot extends Widget {
 			toolTip.clear();
 			String typeName = type.name().toLowerCase(Locale.ENGLISH);
 			if(camouflageHandler instanceof IMultiblockController){
-				toolTip.add(StatCollector.translateToLocal("for.gui.empty.slot.camouflage.multiblock." + typeName) + ": ");
+				toolTip.add(Translator.translateToLocal("for.gui.empty.slot.camouflage.multiblock." + typeName) + ": ");
 			}else{
-				toolTip.add(StatCollector.translateToLocal("for.gui.empty.slot.camouflage") + ": ");
+				toolTip.add(Translator.translateToLocal("for.gui.empty.slot.camouflage") + ": ");
 			}
 			ItemStack camouflageBlock = camouflageHandler.getCamouflageBlock(type);
 					
 			if (camouflageHandler == null || camouflageBlock == null) {
-				toolTip.add(EnumChatFormatting.ITALIC.toString() + StatCollector.translateToLocal("for.gui.empty"));
+				toolTip.add(EnumChatFormatting.ITALIC.toString() + Translator.translateToLocal("for.gui.empty"));
 			}else{
 				toolTip.add(EnumChatFormatting.ITALIC.toString() + camouflageBlock.getTooltip(Proxies.common.getClientInstance().thePlayer, false));
 			}

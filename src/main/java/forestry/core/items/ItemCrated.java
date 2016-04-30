@@ -15,17 +15,17 @@ import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.core.IModelManager;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 
 public class ItemCrated extends ItemForestry {
 
@@ -64,10 +64,10 @@ public class ItemCrated extends ItemForestry {
 	@Override
 	public String getItemStackDisplayName(ItemStack itemstack) {
 		if (contained == null) {
-			return StatCollector.translateToLocal("item.for.crate.name");
+			return Translator.translateToLocal("item.for.crate.name");
 		} else {
 			String containedName = Proxies.common.getDisplayName(contained);
-			return StringUtil.localizeAndFormat("item.crated.grammar", containedName);
+			return Translator.translateToLocalFormatted("for.item.crated.grammar", containedName);
 		}
 	}
 
@@ -75,10 +75,12 @@ public class ItemCrated extends ItemForestry {
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
 		if (contained == null) {
-			manager.registerItemModel(item, 0, false);
+			manager.registerItemModel(item, 0);
 			manager.registerItemModel(item, 1, "crate-filled");
 		} else {
-			ModelResourceLocation modelLocation = new ModelResourceLocation("forestry:crate-filled", StringUtil.cleanItemName(item));
+			FMLControlledNamespacedRegistry<Item> itemRegistry = (FMLControlledNamespacedRegistry<Item>) Item.itemRegistry;
+			String itemName = itemRegistry.getNameForObject(item).getResourcePath();
+			ModelResourceLocation modelLocation = new ModelResourceLocation("forestry:crate-filled", itemName);
 			ModelLoader.setCustomModelResourceLocation(item, 0, modelLocation);
 			ModelBakery.registerItemVariants(item, modelLocation);
 		}

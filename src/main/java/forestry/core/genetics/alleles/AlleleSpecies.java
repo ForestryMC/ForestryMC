@@ -16,7 +16,6 @@ import java.util.Map;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
@@ -33,6 +32,7 @@ import forestry.apiculture.PluginApiculture;
 import forestry.apiculture.items.ItemRegistryApiculture;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.Translator;
 
 public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesBuilder, IAlleleSpecies {
 	private final String binomial;
@@ -57,7 +57,7 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesBuil
 
 		this.branch = branch;
 		this.binomial = binomial;
-		this.description = StatCollector.translateToLocal(unlocalizedDescription);
+		this.description = Translator.translateToLocal(unlocalizedDescription);
 		this.authority = authority;
 	}
 

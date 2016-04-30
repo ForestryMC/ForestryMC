@@ -23,7 +23,7 @@ import forestry.api.circuits.ICircuitBoard;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.circuits.ICircuitSocketType;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 
 public class CircuitBoard<T> implements ICircuitBoard {
 
@@ -92,7 +92,7 @@ public class CircuitBoard<T> implements ICircuitBoard {
 		if (Proxies.common.isShiftDown() || extendedTooltip.size() <= 4) {
 			list.addAll(extendedTooltip);
 		} else {
-			list.add(EnumChatFormatting.ITALIC + "<" + StringUtil.localize("gui.tooltip.tmi") + ">");
+			list.add(EnumChatFormatting.ITALIC + "<" + Translator.translateToLocal("for.gui.tooltip.tmi") + ">");
 		}
 	}
 

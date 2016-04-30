@@ -28,7 +28,7 @@ import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -85,12 +85,12 @@ public class CommandHelpers {
 	}
 
 	public static void throwWrongUsage(ICommandSender sender, IForestryCommand command) throws WrongUsageException {
-		throw new WrongUsageException(StringUtil.localizeAndFormat("chat.help", command.getCommandUsage(sender)));
+		throw new WrongUsageException(Translator.translateToLocalFormatted("for.chat.help", command.getCommandUsage(sender)));
 	}
 
 	public static void processChildCommand(ICommandSender sender, SubCommand child, String[] args) throws CommandException {
 		if (!sender.canCommandSenderUseCommand(child.getPermissionLevel(), child.getFullCommandString())) {
-			throw new WrongUsageException(StringUtil.localize("chat.command.noperms"));
+			throw new WrongUsageException(Translator.translateToLocal("for.chat.command.noperms"));
 		}
 		String[] newargs = new String[args.length - 1];
 		System.arraycopy(args, 1, newargs, 0, newargs.length);

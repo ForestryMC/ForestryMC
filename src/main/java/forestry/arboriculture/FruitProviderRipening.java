@@ -38,8 +38,8 @@ public class FruitProviderRipening extends FruitProviderNone {
 	private int diffG;
 	private int diffB;
 
-	public FruitProviderRipening(String key, IFruitFamily family, ItemStack product, float modifier) {
-		super(key, family);
+	public FruitProviderRipening(String unlocalizedDescription, IFruitFamily family, ItemStack product, float modifier) {
+		super(unlocalizedDescription, family);
 		products.put(product, modifier);
 	}
 

@@ -24,7 +24,6 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.StringUtil;
 import forestry.core.utils.Translator;
 
 /**
@@ -93,7 +92,7 @@ public class FilteredTank extends StandardTank {
 				toolTip.add(fluidFilter.getLocalizedName(filterFluidStack), rarity.rarityColor);
 			}
 		} else {
-			toolTip.add(EnumChatFormatting.ITALIC + "<" + StringUtil.localize("gui.tooltip.tmi") + ">");
+			toolTip.add(EnumChatFormatting.ITALIC + "<" + Translator.translateToLocal("for.gui.tooltip.tmi") + ">");
 		}
 
 		String liquidAmount = Translator.translateToLocalFormatted("for.gui.tooltip.liquid.amount", getFluidAmount(), getCapacity());

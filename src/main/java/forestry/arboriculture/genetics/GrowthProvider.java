@@ -22,7 +22,7 @@ import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.core.ForestryAPI;
 import forestry.arboriculture.tiles.TileSapling;
 import forestry.core.utils.BlockUtil;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 import forestry.core.utils.vect.Vect;
 
 public class GrowthProvider implements IGrowthProvider {
@@ -47,7 +47,7 @@ public class GrowthProvider implements IGrowthProvider {
 
 	@Override
 	public String getDescription() {
-		return StringUtil.localize("growth.normal");
+		return Translator.translateToLocal("for.growth.normal");
 	}
 
 	@Override

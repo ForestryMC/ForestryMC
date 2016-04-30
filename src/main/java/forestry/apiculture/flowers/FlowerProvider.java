@@ -22,16 +22,16 @@ import forestry.api.apiculture.FlowerManager;
 import forestry.api.genetics.IFlowerProvider;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IPollinatable;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 
 public class FlowerProvider implements IFlowerProvider {
 
 	private final String flowerType;
-	private final String description;
+	private final String unlocalizedDescription;
 
-	public FlowerProvider(String flowerType, String description) {
+	public FlowerProvider(String flowerType, String unlocalizedDescription) {
 		this.flowerType = flowerType;
-		this.description = description;
+		this.unlocalizedDescription = unlocalizedDescription;
 	}
 
 	@Override
@@ -56,7 +56,7 @@ public class FlowerProvider implements IFlowerProvider {
 
 	@Override
 	public String getDescription() {
-		return StringUtil.localize(this.description);
+		return Translator.translateToLocal(this.unlocalizedDescription);
 	}
 
 	@Override

@@ -14,6 +14,7 @@ import javax.annotation.Nullable;
 
 import forestry.api.core.IErrorState;
 import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 
 /**
  * A ledger displaying error messages and help text.
@@ -31,7 +32,7 @@ public class ErrorLedger extends Ledger {
 	public void setState(@Nullable IErrorState state) {
 		this.state = state;
 		if (state != null) {
-			int lineHeight = StringUtil.getLineHeight(maxTextWidth, getTooltip(), StringUtil.localize(state.getHelp()));
+			int lineHeight = StringUtil.getLineHeight(maxTextWidth, getTooltip(), Translator.translateToLocal(state.getUnlocalizedHelp()));
 			maxHeight = lineHeight + 20;
 		}
 	}
@@ -59,7 +60,7 @@ public class ErrorLedger extends Ledger {
 			y += drawHeader(getTooltip(), xHeader, y);
 			y += 4;
 
-			String helpString = StringUtil.localize(state.getHelp());
+			String helpString = Translator.translateToLocal(state.getUnlocalizedHelp());
 			drawSplitText(helpString, xBody, y, maxTextWidth);
 		}
 	}
@@ -74,7 +75,7 @@ public class ErrorLedger extends Ledger {
 		if (!isVisible()) {
 			return "";
 		}
-		return StringUtil.localize(state.getDescription());
+		return Translator.translateToLocal(state.getUnlocalizedDescription());
 	}
 
 }

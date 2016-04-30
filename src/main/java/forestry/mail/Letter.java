@@ -25,7 +25,7 @@ import forestry.api.mail.IMailAddress;
 import forestry.api.mail.IStamps;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.utils.InventoryUtil;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 
 public class Letter implements ILetter {
 	public static final short SLOT_ATTACHMENT_1 = 0;
@@ -241,10 +241,10 @@ public class Letter implements ILetter {
 	@Override
 	public void addTooltip(List<String> list) {
 		if (this.sender != null && StringUtils.isNotBlank(this.sender.getName())) {
-			list.add(StringUtil.localize("gui.mail.from") + ": " + this.sender.getName());
+			list.add(Translator.translateToLocal("for.gui.mail.from") + ": " + this.sender.getName());
 		}
 		if (this.recipient != null && this.recipient.length > 0) {
-			list.add(StringUtil.localize("gui.mail.to") + ": " + this.getRecipientString());
+			list.add(Translator.translateToLocal("for.gui.mail.to") + ": " + this.getRecipientString());
 		}
 	}
 

@@ -16,7 +16,7 @@ import net.minecraftforge.fluids.IFluidTank;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.widgets.ReservoirWidget;
 import forestry.core.gui.widgets.WidgetManager;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 
 public class BiogasSlot extends ReservoirWidget {
 	public BiogasSlot(WidgetManager manager, int xPos, int yPos, int slot) {
@@ -29,7 +29,7 @@ public class BiogasSlot extends ReservoirWidget {
 		ToolTip toolTip = new ToolTip();
 		FluidStack fluid = tank.getFluid();
 		if (fluid == null) {
-			toolTip.add(StringUtil.localize("gui.empty"));
+			toolTip.add(Translator.translateToLocal("for.gui.empty"));
 		} else {
 			toolTip.add(fluid.getLocalizedName());
 		}

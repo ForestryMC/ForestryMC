@@ -24,14 +24,12 @@ import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 
-import net.minecraft.util.StatCollector;
-
 import net.minecraftforge.common.config.Property;
 
 import forestry.Forestry;
 import forestry.core.fluids.Fluids;
 import forestry.core.utils.Log;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 import forestry.mail.gui.GuiMailboxInfo;
 
 public class Config {
@@ -151,7 +149,7 @@ public class Config {
 		if (recreate) {
 			Log.info("Recreating all gamemode definitions from the defaults. This may be caused by an upgrade");
 
-			String recreateDefinitionsComment = StringUtil.localize("config.difficulty.recreate.definitions.comment");
+			String recreateDefinitionsComment = Translator.translateToLocal("for.config.difficulty.recreate.definitions.comment");
 			Property property = configCommon.get("difficulty", "recreate.definitions", true, recreateDefinitionsComment);
 			property.set(false);
 
@@ -250,17 +248,17 @@ public class Config {
 		configFluid = new LocalizedConfiguration(configFile, "1.0.0");
 
 		for (Fluids fluid : Fluids.FORESTRY_FLUIDs) {
-			String fluidName = StatCollector.translateToLocal("fluid." + fluid.getTag());
+			String fluidName = Translator.translateToLocal("fluid." + fluid.getTag());
 
 			boolean enabledFluid = !Config.disabledFluids.contains(fluid.getTag());
-			String enableFluidComment = StringUtil.localizeAndFormatRaw("for.config.fluids.enable.format", fluidName);
+			String enableFluidComment = Translator.translateToLocalFormatted("for.config.fluids.enable.format", fluidName);
 			enabledFluid = configFluid.getBoolean("enableFluid", fluid.getTag(), enabledFluid, enableFluidComment);
 			if (!enabledFluid) {
 				Config.disabledFluids.add(fluid.getTag());
 			}
 
 			boolean enabledFluidBlock = !Config.disabledBlocks.contains(fluid.getTag());
-			String enableFluidBlockComment = StringUtil.localizeAndFormatRaw("for.config.fluid.blocks.enable.format", fluidName);
+			String enableFluidBlockComment = Translator.translateToLocalFormatted("for.config.fluid.blocks.enable.format", fluidName);
 			enabledFluidBlock = configFluid.getBoolean("enableFluidBlock", fluid.getTag(), enabledFluidBlock, enableFluidBlockComment);
 			if (!enabledFluidBlock) {
 				Config.disabledBlocks.add(fluid.getTag());
