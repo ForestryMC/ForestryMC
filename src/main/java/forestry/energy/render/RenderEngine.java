@@ -26,8 +26,6 @@ import forestry.core.tiles.TemperatureState;
 import forestry.core.tiles.TileEngine;
 
 public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
-
-	private final ModelBase model = new EngineModelBase();
 	private final ModelRenderer boiler;
 	private final ModelRenderer trunk;
 	private final ModelRenderer piston;
@@ -51,6 +49,7 @@ public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
 	}
 
 	public RenderEngine() {
+		ModelBase model = new EngineModelBase();
 		boiler = new ModelRenderer(model, 0, 0);
 		boiler.addBox(-8F, -8F, -8F, 16, 6, 16);
 		boiler.rotationPointX = 8;
@@ -100,14 +99,9 @@ public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
 	}
 
 	private void render(TemperatureState state, float progress, EnumFacing orientation, double x, double y, double z) {
-
-		GlStateManager.pushMatrix();
-		GlStateManager.pushAttrib();
-		GlStateManager.enableLighting();
-		GlStateManager.disableBlend();
-		GlStateManager.enableCull();
 		GlStateManager.color(1, 1, 1);
 
+		GlStateManager.pushMatrix();
 		GlStateManager.translate((float) x, (float) y, (float) z);
 
 		float step;
@@ -196,7 +190,6 @@ public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
 			}
 		}
 
-		GlStateManager.popAttrib();
 		GlStateManager.popMatrix();
 	}
 
