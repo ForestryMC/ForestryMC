@@ -126,11 +126,6 @@ public abstract class EntityMinecartContainerForestry extends EntityMinecartFore
 	}
 	
 	@Override
-	public String getName() {
-		return getInternalInventory().getName();
-	}
-	
-	@Override
 	public boolean hasCustomName() {
 		return false;
 	}
