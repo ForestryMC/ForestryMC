@@ -124,7 +124,7 @@ public class BlockCocoon extends Block implements ITileEntityProvider, IStateMap
     
     @Override
     public AxisAlignedBB getCollisionBoundingBox(World world, BlockPos pos, IBlockState state) {
-    	setBlockBounds(0, 0, 0, 1, 1, 1);
+    	setBlockBounds(0.3125F, 0.3125F, 0.3125F, 0.6875F, 1F, 0.6875F);
     	return super.getCollisionBoundingBox(world, pos, state);
     }
     

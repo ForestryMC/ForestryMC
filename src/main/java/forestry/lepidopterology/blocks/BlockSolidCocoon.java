@@ -125,35 +125,13 @@ public class BlockSolidCocoon extends Block implements ITileEntityProvider, ISta
     
     @Override
     public AxisAlignedBB getSelectedBoundingBox(World world, BlockPos pos) {
-    	TileCocoon cocoon = TileUtil.getTile(world, pos, TileCocoon.class);
-    	if(cocoon != null){
-    		if(cocoon.getAge() == 0){
-    			setBlockBounds(0.375F, 0.5F, 0.4375F, 0.5625F, 1F, 0.6875F);
-    		}else if(cocoon.getAge() == 1){
-    			setBlockBounds(0.34375F, 0.375F, 0.40625F, 0.59375F, 1F, 0.71875F);
-    		}else if(cocoon.getAge() == 2){
-    			setBlockBounds(0.34375F, 0.25F, 0.28125F, 0.71875F, 1F, 0.71875F);
-    		}else{
-    			setBlockBounds(0, 0, 0, 1, 1, 1);
-    		}
-    	}
+    	setBlockBounds(0.3125F, 0.3125F, 0.3125F, 0.6875F, 1F, 0.6875F);
     	return super.getSelectedBoundingBox(world, pos);
     }
     
     @Override
     public AxisAlignedBB getCollisionBoundingBox(World world, BlockPos pos, IBlockState state) {
-    	TileCocoon cocoon = TileUtil.getTile(world, pos, TileCocoon.class);
-    	if(cocoon != null){
-    		if(cocoon.getAge() == 0){
-    			setBlockBounds(0.375F, 0.5F, 0.4375F, 0.5625F, 1F, 0.6875F);
-    		}else if(cocoon.getAge() == 1){
-    			setBlockBounds(0.34375F, 0.375F, 0.40625F, 0.59375F, 1F, 0.71875F);
-    		}else if(cocoon.getAge() == 2){
-    			setBlockBounds(0.34375F, 0.25F, 0.28125F, 0.71875F, 1F, 0.71875F);
-    		}else{
-    			setBlockBounds(0, 0, 0, 1, 1, 1);
-    		}
-    	}
+    	setBlockBounds(0.3125F, 0.3125F, 0.3125F, 0.6875F, 1F, 0.6875F);
     	return super.getCollisionBoundingBox(world, pos, state);
     }
     
