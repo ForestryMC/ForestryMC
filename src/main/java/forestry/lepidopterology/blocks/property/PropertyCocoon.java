@@ -8,7 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.arboriculture.blocks.property;
+package forestry.lepidopterology.blocks.property;
 
 import com.google.common.base.Objects;
 
@@ -18,22 +18,23 @@ import java.util.List;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
+import forestry.api.lepidopterology.IAlleleButterflyCocoon;
 import forestry.core.blocks.propertys.PropertyAllele;
 
-public class PropertyTree extends PropertyAllele<IAlleleTreeSpecies> {
+public class PropertyCocoon extends PropertyAllele<IAlleleButterflyCocoon> {
 
-	public PropertyTree(String name) {
+	public PropertyCocoon(String name) {
 		super(name);
 	}
 
 	@Override
-	public Class<IAlleleTreeSpecies> getValueClass() {
-		return IAlleleTreeSpecies.class;
+	public Class<IAlleleButterflyCocoon> getValueClass() {
+		return IAlleleButterflyCocoon.class;
 	}
 
 	@Override
 	public String toString() {
-		return Objects.toStringHelper(this).add("name", this.name).add("clazz", IAlleleTreeSpecies.class).add("values", this.getAllowedValues()).toString();
+		return Objects.toStringHelper(this).add("name", this.name).add("clazz", IAlleleButterflyCocoon.class).add("values", this.getAllowedValues()).toString();
 	}
 
 	@Override
@@ -42,19 +43,19 @@ public class PropertyTree extends PropertyAllele<IAlleleTreeSpecies> {
 	}
 
 	@Override
-	public List<IAlleleTreeSpecies> getAllowedValues() {
-		List<IAlleleTreeSpecies> trees = new ArrayList<>();
+	public List<IAlleleButterflyCocoon> getAllowedValues() {
+		List<IAlleleButterflyCocoon> trees = new ArrayList<>();
 		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
-			if (allele instanceof IAlleleTreeSpecies) {
-				trees.add((IAlleleTreeSpecies) allele);
+			if (allele instanceof IAlleleButterflyCocoon) {
+				trees.add((IAlleleButterflyCocoon) allele);
 			}
 		}
 		return trees;
 	}
 
 	@Override
-	public String getName(IAlleleTreeSpecies value) {
-		return value.getModelName().replace("tree", "");
+	public String getName(IAlleleButterflyCocoon value) {
+		return value.getCocoonName();
 	}
 	
 }

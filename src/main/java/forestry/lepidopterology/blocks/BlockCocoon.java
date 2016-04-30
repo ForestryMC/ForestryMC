@@ -16,11 +16,13 @@ import java.util.Random;
 
 import forestry.api.core.IStateMapperRegister;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.EmptyStateMapper;
 import forestry.core.tiles.TileUtil;
+import forestry.lepidopterology.blocks.property.PropertyCocoon;
+import forestry.lepidopterology.genetics.alleles.AlleleButterflyCocoon;
 import forestry.lepidopterology.tiles.TileCocoon;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -33,11 +35,35 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockCocoon extends Block implements ITileEntityProvider, IStateMapperRegister {
 	
+	private static final PropertyCocoon COCOON = AlleleButterflyCocoon.COCOON;
+	
 	public BlockCocoon() {
 		super(new MaterialCocoon());
 		setTickRandomly(true);
 		setStepSound(soundTypeGrass);
 		setCreativeTab(null);
+		setDefaultState(this.blockState.getBaseState().withProperty(COCOON, AlleleButterflyCocoon.cocoonDefault).withProperty(AlleleButterflyCocoon.AGE, 0));
+	}
+	
+	@Override
+	protected BlockState createBlockState() {
+		return new BlockState(this, COCOON, AlleleButterflyCocoon.AGE);
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
+		TileCocoon cocoon = TileUtil.getTile(world, pos, TileCocoon.class);
+		if(cocoon != null){
+			state = state.withProperty(COCOON, cocoon.getCaterpillar().getGenome().getCocoon()).withProperty(AlleleButterflyCocoon.AGE, cocoon.getAge());
+		}
+		return super.getActualState(state, world, pos);
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void registerStateMapper() {
+		Proxies.render.registerStateMapper(this, new CocoonStateMapper());
 	}
 	
     @Override
@@ -78,17 +104,6 @@ public class BlockCocoon extends Block implements ITileEntityProvider, IStateMap
     }
     
     @Override
-    public int getRenderType() {
-    	return 2;
-    }
-    
-    @SideOnly(Side.CLIENT)
-    @Override
-    public void registerStateMapper() {
-    	Proxies.render.registerStateMapper(this, EmptyStateMapper.instance);
-    }
-    
-    @Override
     public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock) {
     	IBlockState stateUp = worldIn.getBlockState(pos.up());
     	if(stateUp.getBlock().isAir(worldIn, pos.up())){
@@ -103,35 +118,13 @@ public class BlockCocoon extends Block implements ITileEntityProvider, IStateMap
     
     @Override
     public AxisAlignedBB getSelectedBoundingBox(World world, BlockPos pos) {
-    	TileCocoon cocoon = TileUtil.getTile(world, pos, TileCocoon.class);
-    	if(cocoon != null){
-    		if(cocoon.getAge() == 0){
-    			setBlockBounds(0.375F, 0.5F, 0.4375F, 0.5625F, 1F, 0.6875F);
-    		}else if(cocoon.getAge() == 1){
-    			setBlockBounds(0.34375F, 0.375F, 0.40625F, 0.59375F, 1F, 0.71875F);
-    		}else if(cocoon.getAge() == 2){
-    			setBlockBounds(0.34375F, 0.25F, 0.28125F, 0.71875F, 1F, 0.71875F);
-    		}else{
-    			setBlockBounds(0, 0, 0, 1, 1, 1);
-    		}
-    	}
+    	setBlockBounds(0.3125F, 0.3125F, 0.3125F, 0.6875F, 1F, 0.6875F);
     	return super.getSelectedBoundingBox(world, pos);
     }
     
     @Override
     public AxisAlignedBB getCollisionBoundingBox(World world, BlockPos pos, IBlockState state) {
-    	TileCocoon cocoon = TileUtil.getTile(world, pos, TileCocoon.class);
-    	if(cocoon != null){
-    		if(cocoon.getAge() == 0){
-    			setBlockBounds(0.375F, 0.5F, 0.4375F, 0.5625F, 1F, 0.6875F);
-    		}else if(cocoon.getAge() == 1){
-    			setBlockBounds(0.34375F, 0.375F, 0.40625F, 0.59375F, 1F, 0.71875F);
-    		}else if(cocoon.getAge() == 2){
-    			setBlockBounds(0.34375F, 0.25F, 0.28125F, 0.71875F, 1F, 0.71875F);
-    		}else{
-    			setBlockBounds(0, 0, 0, 1, 1, 1);
-    		}
-    	}
+    	setBlockBounds(0, 0, 0, 1, 1, 1);
     	return super.getCollisionBoundingBox(world, pos, state);
     }
     

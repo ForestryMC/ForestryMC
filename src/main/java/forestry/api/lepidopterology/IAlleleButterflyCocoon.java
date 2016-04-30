@@ -12,17 +12,15 @@ package forestry.api.lepidopterology;
 
 import java.util.Map;
 
-import forestry.api.genetics.IAllele;
+import forestry.api.genetics.IAlleleProperty;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.ItemStack;
 
-public interface IAlleleButterflyCocoon extends IAllele {
-
-	EnumCocoonType getCocoonType();
-	
-	String getCocoonTexture(int age);
+public interface IAlleleButterflyCocoon extends IAlleleProperty<IAlleleButterflyCocoon> {
 	
 	ModelResourceLocation getCocoonItemModel(int age);
+	
+	String getCocoonName();
 	
 	Map<ItemStack, Float> getCocoonLoot();
 	

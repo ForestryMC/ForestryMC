@@ -27,6 +27,7 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.ITree;
 import forestry.api.core.IModelManager;
 import forestry.api.core.Tabs;
@@ -36,6 +37,7 @@ import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IIndividual;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.EnumFlutterType;
+import forestry.api.lepidopterology.IAlleleButterflyCocoon;
 import forestry.api.lepidopterology.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IButterflyGenome;
@@ -193,6 +195,13 @@ public class ItemButterflyGE extends ItemGE {
 				break;
 			case COCOON:
 				manager.registerItemModel(item, new CocoonMeshDefinition());
+				for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
+					if (allele instanceof IAlleleButterflyCocoon) {
+						for(int age = 0;age < 3;age++){
+							manager.registerVariant(this, ((IAlleleButterflyCocoon) allele).getCocoonItemModel(age));
+						}
+					}
+				}
 				break;
 			default:
 				manager.registerItemModel(item, 0, "liquids/jar");

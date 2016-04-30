@@ -118,7 +118,6 @@ public class PluginLepidopterology extends BlankForestryPlugin {
 		
 		ButterflyBranchDefinition.createAlleles();
 		AlleleButterflyEffect.createAlleles();
-		AlleleButterflyCocoon.createAlleles();
 		
 		GameRegistry.registerTileEntity(TileCocoon.class, "forestry.Cocoon");
 		proxy.preInitializeRendering();
@@ -142,6 +141,7 @@ public class PluginLepidopterology extends BlankForestryPlugin {
 
 		MothDefinition.initMoths();
 		ButterflyDefinition.initButterflies();
+		AlleleButterflyCocoon.createLoot();
 
 		blocks.lepidopterology.init();
 

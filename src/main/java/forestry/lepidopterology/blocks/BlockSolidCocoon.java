@@ -17,9 +17,12 @@ import forestry.core.proxy.Proxies;
 import forestry.core.render.EmptyStateMapper;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemStackUtil;
+import forestry.lepidopterology.blocks.property.PropertyCocoon;
+import forestry.lepidopterology.genetics.alleles.AlleleButterflyCocoon;
 import forestry.lepidopterology.tiles.TileCocoon;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -33,6 +36,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockSolidCocoon extends Block implements ITileEntityProvider, IStateMapperRegister {
 	
+	private static final PropertyCocoon COCOON = AlleleButterflyCocoon.COCOON;
+	
 	public BlockSolidCocoon() {
 		super(new MaterialCocoon());
 		setHarvestLevel("scoop", 0);
@@ -40,6 +45,28 @@ public class BlockSolidCocoon extends Block implements ITileEntityProvider, ISta
 		setTickRandomly(true);
 		setStepSound(soundTypeGrass);
 		setCreativeTab(null);
+		setDefaultState(this.blockState.getBaseState().withProperty(COCOON, AlleleButterflyCocoon.cocoonDefault).withProperty(AlleleButterflyCocoon.AGE, 0));
+	}
+	
+	@Override
+	protected BlockState createBlockState() {
+		return new BlockState(this, COCOON, AlleleButterflyCocoon.AGE);
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
+		TileCocoon cocoon = TileUtil.getTile(world, pos, TileCocoon.class);
+		if(cocoon != null){
+			state = state.withProperty(COCOON, cocoon.getCaterpillar().getGenome().getCocoon()).withProperty(AlleleButterflyCocoon.AGE, cocoon.getAge());
+		}
+		return super.getActualState(state, world, pos);
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void registerStateMapper() {
+		Proxies.render.registerStateMapper(this, new CocoonStateMapper());
 	}
 	
     @Override
@@ -81,17 +108,6 @@ public class BlockSolidCocoon extends Block implements ITileEntityProvider, ISta
     @Override
 	public int getMetaFromState(IBlockState state){
         return 0;
-    }
-    
-    @Override
-    public int getRenderType() {
-    	return 2;
-    }
-    
-    @SideOnly(Side.CLIENT)
-    @Override
-    public void registerStateMapper() {
-    	Proxies.render.registerStateMapper(this, EmptyStateMapper.instance);
     }
     
     @Override
