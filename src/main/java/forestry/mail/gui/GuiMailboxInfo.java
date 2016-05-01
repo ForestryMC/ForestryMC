@@ -63,6 +63,7 @@ public class GuiMailboxInfo extends Gui {
 		}
 
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.disableLighting();
 		Proxies.render.bindTexture(textureAlert);
 
 		this.drawTexturedModalRect(x, y, 0, 0, WIDTH, HEIGHT);
