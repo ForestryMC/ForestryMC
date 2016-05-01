@@ -47,11 +47,11 @@ import net.minecraftforge.client.model.MultiModel;
 import net.minecraftforge.client.model.SimpleModelState;
 import net.minecraftforge.client.model.TRSRTransformation;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
-import net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.core.items.ItemCrated;
+import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.storage.PluginStorage;
 
@@ -206,8 +206,7 @@ public class ModelCrate extends BlankItemModel {
 	@Override
 	public IBakedModel handleItemState(ItemStack stack) {
 		ItemCrated crated = (ItemCrated) stack.getItem();
-		FMLControlledNamespacedRegistry<Item> itemRegistry = (FMLControlledNamespacedRegistry<Item>) Item.itemRegistry;
-		String crateUID = itemRegistry.getNameForObject(crated).getResourcePath();
+		String crateUID = ItemStackUtil.getItemNameFromRegistry(crated).getResourcePath();
 		if (crates.get(crateUID) == null) {
 			IFlexibleBakedModel baseBaked = getModel(new ItemStack(PluginStorage.items.crate, 1, 1));
 			//Set the crate color index to 100

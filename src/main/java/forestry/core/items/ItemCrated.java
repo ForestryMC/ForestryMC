@@ -18,7 +18,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -78,8 +77,7 @@ public class ItemCrated extends ItemForestry {
 			manager.registerItemModel(item, 0);
 			manager.registerItemModel(item, 1, "crate-filled");
 		} else {
-			FMLControlledNamespacedRegistry<Item> itemRegistry = (FMLControlledNamespacedRegistry<Item>) Item.itemRegistry;
-			String itemName = itemRegistry.getNameForObject(item).getResourcePath();
+			String itemName = ItemStackUtil.getItemNameFromRegistry(item).getResourcePath();
 			ModelResourceLocation modelLocation = new ModelResourceLocation("forestry:crate-filled", itemName);
 			ModelLoader.setCustomModelResourceLocation(item, 0, modelLocation);
 			ModelBakery.registerItemVariants(item, modelLocation);

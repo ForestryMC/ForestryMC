@@ -24,7 +24,6 @@ import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry;
 import net.minecraftforge.fml.common.registry.GameData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -34,6 +33,7 @@ import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.api.core.IStateMapperRegister;
 import forestry.core.config.Constants;
+import forestry.core.utils.ItemStackUtil;
 
 @SideOnly(Side.CLIENT)
 public class ModelManager implements IModelManager {
@@ -78,8 +78,7 @@ public class ModelManager implements IModelManager {
 
 	@Override
 	public ModelResourceLocation getModelLocation(Item item) {
-		FMLControlledNamespacedRegistry<Item> itemRegistry = (FMLControlledNamespacedRegistry<Item>) Item.itemRegistry;
-		String itemName = itemRegistry.getNameForObject(item).getResourcePath();
+		String itemName = ItemStackUtil.getItemNameFromRegistry(item).getResourcePath();
 		return getModelLocation(itemName);
 	}
 

@@ -38,7 +38,6 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.animation.Animation;
 import net.minecraftforge.client.model.animation.ITimeValue;
 import net.minecraftforge.common.model.animation.IAnimationStateMachine;
-import net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry;
 
 import forestry.apiculture.entities.EntityFXBee;
 import forestry.apiculture.render.ParticleRenderer;
@@ -65,6 +64,7 @@ import forestry.core.tiles.TileBase;
 import forestry.core.tiles.TileEscritoire;
 import forestry.core.tiles.TileMill;
 import forestry.core.tiles.TileNaturalistChest;
+import forestry.core.utils.ItemStackUtil;
 
 public class ProxyRenderClient extends ProxyRender {
 
@@ -140,8 +140,7 @@ public class ProxyRenderClient extends ProxyRender {
 
 	@Override
 	public void registerModelCrate(ItemCrated crate) {
-		FMLControlledNamespacedRegistry<Item> itemRegistry = (FMLControlledNamespacedRegistry<Item>) Item.itemRegistry;
-		String cleanItemName = itemRegistry.getNameForObject(crate).getResourcePath();
+		String cleanItemName = ItemStackUtil.getItemNameFromRegistry(crate).getResourcePath();
 		ModelResourceLocation modelLocation = new ModelResourceLocation("forestry:crate-filled", cleanItemName);
 		registerModel(new ModelIndex(modelLocation, new ModelCrate()));
 	}
