@@ -27,7 +27,7 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import forestry.api.arboriculture.IAlleleTreeSpecies;
+
 import forestry.api.arboriculture.ITree;
 import forestry.api.core.IModelManager;
 import forestry.api.core.ISpriteRegister;
@@ -58,6 +58,7 @@ import forestry.lepidopterology.genetics.ButterflyGenome;
 public class ItemButterflyGE extends ItemGE implements ISpriteRegister {
 
 	private static final Random rand = new Random();
+	public static final String NBT_AGE = "Age";
 
 	private final EnumFlutterType type;
 
@@ -108,7 +109,7 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister {
 					ItemStack butterfly = ButterflyManager.butterflyRoot.getMemberStack(individual, type);
 					
 					if(type == EnumFlutterType.COCOON){
-						butterfly.getTagCompound().setInteger("Age", age);
+						butterfly.getTagCompound().setInteger(NBT_AGE, age);
 					}
 					
 					itemList.add(butterfly);
@@ -210,11 +211,11 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister {
 		}
 	}
 	
-	private class CocoonMeshDefinition implements ItemMeshDefinition{
+	private static class CocoonMeshDefinition implements ItemMeshDefinition {
 
 		@Override
 		public ModelResourceLocation getModelLocation(ItemStack itemstack) {
-			int age = itemstack.getTagCompound().getInteger("Age");
+			int age = itemstack.getTagCompound().getInteger(NBT_AGE);
 			IButterflyGenome genome = (IButterflyGenome) AlleleManager.alleleRegistry.getIndividual(itemstack).getGenome();
 			return genome.getCocoon().getCocoonItemModel(age);
 		}
@@ -234,7 +235,7 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister {
 		}
 
 		if (type == EnumFlutterType.COCOON) {
-			int age = stack.getTagCompound().getInteger("Age");
+			int age = stack.getTagCompound().getInteger(NBT_AGE);
 			
 			// x, y, z are the coordinates of the block "hit", can thus either be the soil or tall grass, etc.
 			int yShift;
@@ -304,6 +305,7 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister {
 	/**
 	 * Register butterfly item sprites
 	 */
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerSprites(ITextureManager manager) {
 		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {

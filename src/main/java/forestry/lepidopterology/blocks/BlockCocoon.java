@@ -14,24 +14,32 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import forestry.api.core.IStateMapperRegister;
-import forestry.core.proxy.Proxies;
-import forestry.core.tiles.TileUtil;
-import forestry.lepidopterology.blocks.property.PropertyCocoon;
-import forestry.lepidopterology.genetics.alleles.AlleleButterflyCocoon;
-import forestry.lepidopterology.tiles.TileCocoon;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.core.IStateMapperRegister;
+import forestry.api.lepidopterology.ButterflyManager;
+import forestry.api.lepidopterology.EnumFlutterType;
+import forestry.api.lepidopterology.IButterfly;
+import forestry.core.proxy.Proxies;
+import forestry.core.tiles.TileUtil;
+import forestry.lepidopterology.blocks.property.PropertyCocoon;
+import forestry.lepidopterology.genetics.alleles.AlleleButterflyCocoon;
+import forestry.lepidopterology.items.ItemButterflyGE;
+import forestry.lepidopterology.tiles.TileCocoon;
 
 public class BlockCocoon extends Block implements ITileEntityProvider, IStateMapperRegister {
 	
@@ -115,9 +123,29 @@ public class BlockCocoon extends Block implements ITileEntityProvider, IStateMap
     public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
     	return Collections.emptyList();
     }
-    
-    @Override
-    public AxisAlignedBB getSelectedBoundingBox(World world, BlockPos pos) {
+
+	@Override
+	public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos, EntityPlayer player) {
+		TileCocoon tile = TileUtil.getTile(world, pos, TileCocoon.class);
+		if (tile == null) {
+			return null;
+		}
+
+		IButterfly caterpillar = tile.getCaterpillar();
+		int age = tile.getAge();
+
+		ItemStack stack = ButterflyManager.butterflyRoot.getMemberStack(caterpillar, EnumFlutterType.COCOON);
+		if (stack == null) {
+			return null;
+		}
+
+		stack.getTagCompound().setInteger(ItemButterflyGE.NBT_AGE, age);
+
+		return stack;
+	}
+
+	@Override
+	public AxisAlignedBB getSelectedBoundingBox(World world, BlockPos pos) {
     	setBlockBounds(0.3125F, 0.3125F, 0.3125F, 0.6875F, 1F, 0.6875F);
     	return super.getSelectedBoundingBox(world, pos);
     }
