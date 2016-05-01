@@ -23,16 +23,16 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 
 import forestry.api.mail.EnumAddressee;
+import forestry.api.mail.EnumTradeStationState;
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.IPostOffice;
 import forestry.api.mail.IPostalState;
 import forestry.api.mail.ITradeStation;
+import forestry.api.mail.ITradeStationInfo;
 import forestry.api.mail.PostManager;
-import forestry.api.mail.TradeStationInfo;
 import forestry.core.gui.IGuiSelectable;
 import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.proxy.Proxies;
-import forestry.mail.EnumStationState;
 import forestry.mail.network.packets.PacketLetterInfoResponse;
 
 public class ContainerCatalogue extends Container implements IGuiSelectable, ILetterInfoReceiver {
@@ -40,7 +40,7 @@ public class ContainerCatalogue extends Container implements IGuiSelectable, ILe
 	private final EntityPlayer player;
 	private final List<ITradeStation> stations = new ArrayList<>();
 
-	private TradeStationInfo currentTrade = null;
+	private ITradeStationInfo currentTrade = null;
 
 	private int stationIndex = 0;
 
@@ -54,14 +54,14 @@ public class ContainerCatalogue extends Container implements IGuiSelectable, ILe
 	private static final List<Set<IPostalState>> FILTERS = new ArrayList<>();
 
 	static {
-		EnumSet<EnumStationState> all = EnumSet.allOf(EnumStationState.class);
-		EnumSet<EnumStationState> online = EnumSet.of(EnumStationState.OK);
-		EnumSet<EnumStationState> offline = EnumSet.copyOf(all);
+		EnumSet<EnumTradeStationState> all = EnumSet.allOf(EnumTradeStationState.class);
+		EnumSet<EnumTradeStationState> online = EnumSet.of(EnumTradeStationState.OK);
+		EnumSet<EnumTradeStationState> offline = EnumSet.copyOf(all);
 		offline.removeAll(online);
 
-		FILTERS.add(Collections.<IPostalState>unmodifiableSet(all));
-		FILTERS.add(Collections.<IPostalState>unmodifiableSet(online));
-		FILTERS.add(Collections.<IPostalState>unmodifiableSet(offline));
+		FILTERS.add(Collections.unmodifiableSet(all));
+		FILTERS.add(Collections.unmodifiableSet(online));
+		FILTERS.add(Collections.unmodifiableSet(offline));
 	}
 
 	public ContainerCatalogue(EntityPlayer player) {
@@ -91,10 +91,10 @@ public class ContainerCatalogue extends Container implements IGuiSelectable, ILe
 		Map<IMailAddress, ITradeStation> tradeStations = postOffice.getActiveTradeStations(player.worldObj);
 
 		for (ITradeStation station : tradeStations.values()) {
-			TradeStationInfo info = station.getTradeInfo();
+			ITradeStationInfo info = station.getTradeInfo();
 
 			// Filter out any trade stations which do not actually offer anything.
-			if (info.tradegood != null && FILTERS.get(currentFilter).contains(info.state)) {
+			if (info.getTradegood() != null && FILTERS.get(currentFilter).contains(info.getState())) {
 				stations.add(station);
 			}
 		}
@@ -109,7 +109,7 @@ public class ContainerCatalogue extends Container implements IGuiSelectable, ILe
 			return;
 		}
 
-		if (stations.size() == 0) {
+		if (stations.isEmpty()) {
 			return;
 		}
 		stationIndex = (stationIndex + 1) % stations.size();
@@ -122,7 +122,7 @@ public class ContainerCatalogue extends Container implements IGuiSelectable, ILe
 			return;
 		}
 
-		if (stations.size() == 0) {
+		if (stations.isEmpty()) {
 			return;
 		}
 		stationIndex = (stationIndex - 1 + stations.size()) % stations.size();
@@ -166,11 +166,11 @@ public class ContainerCatalogue extends Container implements IGuiSelectable, ILe
 		setTradeInfo(packet.tradeInfo);
 	}
 
-	public TradeStationInfo getTradeInfo() {
+	public ITradeStationInfo getTradeInfo() {
 		return currentTrade;
 	}
 
-	private void setTradeInfo(TradeStationInfo info) {
+	private void setTradeInfo(ITradeStationInfo info) {
 		currentTrade = info;
 	}
 

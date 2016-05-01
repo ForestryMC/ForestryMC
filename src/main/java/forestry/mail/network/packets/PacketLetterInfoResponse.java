@@ -20,27 +20,28 @@ import net.minecraft.item.ItemStack;
 import com.mojang.authlib.GameProfile;
 
 import forestry.api.mail.EnumAddressee;
+import forestry.api.mail.EnumTradeStationState;
 import forestry.api.mail.IMailAddress;
+import forestry.api.mail.ITradeStationInfo;
 import forestry.api.mail.PostManager;
-import forestry.api.mail.TradeStationInfo;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.ForestryPacket;
 import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.PacketIdClient;
-import forestry.mail.EnumStationState;
+import forestry.mail.TradeStationInfo;
 import forestry.mail.gui.ILetterInfoReceiver;
 
 public class PacketLetterInfoResponse extends ForestryPacket implements IForestryPacketClient {
 
 	public EnumAddressee type;
-	public TradeStationInfo tradeInfo;
+	public ITradeStationInfo tradeInfo;
 	public IMailAddress address;
 
 	public PacketLetterInfoResponse() {
 	}
 
-	public PacketLetterInfoResponse(EnumAddressee type, TradeStationInfo info, IMailAddress address) {
+	public PacketLetterInfoResponse(EnumAddressee type, ITradeStationInfo info, IMailAddress address) {
 		this.type = type;
 		if (type == EnumAddressee.TRADER) {
 			this.tradeInfo = info;
@@ -88,16 +89,16 @@ public class PacketLetterInfoResponse extends ForestryPacket implements IForestr
 
 			data.writeShort(0);
 
-			data.writeUTF(tradeInfo.address.getName());
+			data.writeUTF(tradeInfo.getAddress().getName());
 
-			data.writeLong(tradeInfo.owner.getId().getMostSignificantBits());
-			data.writeLong(tradeInfo.owner.getId().getLeastSignificantBits());
-			data.writeUTF(tradeInfo.owner.getName());
+			data.writeLong(tradeInfo.getOwner().getId().getMostSignificantBits());
+			data.writeLong(tradeInfo.getOwner().getId().getLeastSignificantBits());
+			data.writeUTF(tradeInfo.getOwner().getName());
 
-			data.writeItemStack(tradeInfo.tradegood);
-			data.writeItemStacks(tradeInfo.required);
+			data.writeItemStack(tradeInfo.getTradegood());
+			data.writeItemStacks(tradeInfo.getRequired());
 
-			data.writeShort(tradeInfo.state.ordinal());
+			data.writeShort(tradeInfo.getState().ordinal());
 		}
 	}
 
@@ -129,7 +130,7 @@ public class PacketLetterInfoResponse extends ForestryPacket implements IForestr
 			tradegood = data.readItemStack();
 			required = data.readItemStacks();
 
-			this.tradeInfo = new TradeStationInfo(address, owner, tradegood, required, EnumStationState.values()[data.readShort()]);
+			this.tradeInfo = new TradeStationInfo(address, owner, tradegood, required, EnumTradeStationState.values()[data.readShort()]);
 		}
 	}
 

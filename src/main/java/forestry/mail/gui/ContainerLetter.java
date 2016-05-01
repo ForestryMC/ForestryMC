@@ -24,8 +24,8 @@ import forestry.api.mail.ILetter;
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.IPostalCarrier;
 import forestry.api.mail.ITradeStation;
+import forestry.api.mail.ITradeStationInfo;
 import forestry.api.mail.PostManager;
-import forestry.api.mail.TradeStationInfo;
 import forestry.core.gui.ContainerItemInventory;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.network.packets.PacketString;
@@ -38,7 +38,7 @@ import forestry.mail.network.packets.PacketLetterTextSet;
 public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter> implements ILetterInfoReceiver {
 
 	private EnumAddressee carrierType = EnumAddressee.PLAYER;
-	private TradeStationInfo tradeInfo = null;
+	private ITradeStationInfo tradeInfo = null;
 
 	public ContainerLetter(EntityPlayer player, ItemInventoryLetter inventory) {
 		super(inventory, player.inventory, 17, 145);
@@ -205,16 +205,16 @@ public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter>
 		}
 	}
 
-	public TradeStationInfo getTradeInfo() {
+	public ITradeStationInfo getTradeInfo() {
 		return this.tradeInfo;
 	}
 
-	private void setTradeInfo(TradeStationInfo info) {
+	private void setTradeInfo(ITradeStationInfo info) {
 		this.tradeInfo = info;
 		if (tradeInfo == null) {
 			getLetter().setRecipient(null);
 		} else {
-			getLetter().setRecipient(tradeInfo.address);
+			getLetter().setRecipient(tradeInfo.getAddress());
 		}
 	}
 }

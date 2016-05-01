@@ -24,13 +24,13 @@ import net.minecraft.world.WorldSavedData;
 import com.mojang.authlib.GameProfile;
 
 import forestry.api.mail.EnumPostage;
+import forestry.api.mail.EnumTradeStationState;
 import forestry.api.mail.ILetter;
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.IPostalState;
 import forestry.api.mail.IStamps;
 import forestry.api.mail.ITradeStation;
 import forestry.api.mail.PostManager;
-import forestry.api.mail.TradeStationInfo;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.utils.InventoryUtil;
@@ -144,21 +144,21 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 		ItemStack[] condensedRequired = ItemStackUtil.condenseStacks(InventoryUtil.getStacks(inventory, SLOT_EXCHANGE_1, SLOT_EXCHANGE_COUNT));
 
 		// Set current state
-		EnumStationState state = EnumStationState.OK;
+		EnumTradeStationState state = EnumTradeStationState.OK;
 
 		// Virtual trade stations are always ready for service.
 		if (!isVirtual()) {
 			// Will assume that the owner should get a notice.
 			if (!hasPaper(2)) {
-				state = EnumStationState.INSUFFICIENT_PAPER;
+				state = EnumTradeStationState.INSUFFICIENT_PAPER;
 			}
 
 			if (!canPayPostage(3)) {
-				state = EnumStationState.INSUFFICIENT_STAMPS;
+				state = EnumTradeStationState.INSUFFICIENT_STAMPS;
 			}
 
 			if (countFillableOrders(1, inventory.getStackInSlot(SLOT_TRADEGOOD)) <= 0) {
-				state = EnumStationState.INSUFFICIENT_TRADE_GOOD;
+				state = EnumTradeStationState.INSUFFICIENT_TRADE_GOOD;
 			}
 		}
 
@@ -174,14 +174,14 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 		ILetter letter = PostManager.postRegistry.getLetter(letterstack);
 
 		if (!isVirtual() && !hasPaper(sendOwnerNotice ? 2 : 1)) {
-			return EnumStationState.INSUFFICIENT_PAPER;
+			return EnumTradeStationState.INSUFFICIENT_PAPER;
 		}
 
 		int ordersToFillCount = ItemStackUtil.containsSets(InventoryUtil.getStacks(inventory, SLOT_EXCHANGE_1, SLOT_EXCHANGE_COUNT), letter.getAttachments());
 
 		// Not a single match.
 		if (ordersToFillCount <= 0) {
-			return EnumStationState.INSUFFICIENT_OFFER;
+			return EnumTradeStationState.INSUFFICIENT_OFFER;
 		}
 
 		if (!isVirtual()) {
@@ -189,7 +189,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 
 			// Nothing can be filled.
 			if (fillable <= 0) {
-				return EnumStationState.INSUFFICIENT_TRADE_GOOD;
+				return EnumTradeStationState.INSUFFICIENT_TRADE_GOOD;
 			}
 
 			if (fillable < ordersToFillCount) {
@@ -200,7 +200,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 			int storable = countStorablePayment(ordersToFillCount, InventoryUtil.getStacks(inventory, SLOT_EXCHANGE_1, SLOT_EXCHANGE_COUNT));
 
 			if (storable <= 0) {
-				return EnumStationState.INSUFFICIENT_BUFFER;
+				return EnumTradeStationState.INSUFFICIENT_BUFFER;
 			}
 
 			if (storable < ordersToFillCount) {
@@ -220,7 +220,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 		int requiredPostage = mail.requiredPostage();
 		if (!isVirtual()) {
 			if (!canPayPostage(requiredPostage + (sendOwnerNotice ? 1 : 0))) {
-				return EnumStationState.INSUFFICIENT_STAMPS;
+				return EnumTradeStationState.INSUFFICIENT_STAMPS;
 			}
 		}
 
@@ -245,7 +245,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 		IPostalState responseState = PostManager.postRegistry.getPostOffice(world).lodgeLetter(world, mailstack, doLodge);
 		
 		if (!responseState.isOk()) {
-			return EnumDeliveryState.RESPONSE_NOT_MAILABLE;
+			return new ResponseNotMailable(responseState);
 		}
 
 		// Store received items
@@ -422,31 +422,46 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 		return false;
 	}
 
-	private int[] getPostage(int postage, boolean virtual) {
+	private int[] getPostage(final int postageRequired, boolean virtual) {
 		int[] stamps = new int[EnumPostage.values().length];
+		int postageRemaining = postageRequired;
 
 		for (int i = EnumPostage.values().length - 1; i > 0; i--) {
-			if (postage <= 0) {
+			if (postageRemaining <= 0) {
 				break;
 			}
 
 			EnumPostage postValue = EnumPostage.values()[i];
 
-			if (postValue.getValue() > postage) {
+			if (postValue.getValue() > postageRemaining) {
 				continue;
 			}
 
-			int num = 99;
-			if (!virtual) {
-				num = getNumStamps(postValue);
-			}
-			int max = (int) Math.floor(postage / postValue.getValue());
+			int num = virtual ? 99 : getNumStamps(postValue);
+			int max = (int) Math.floor(postageRemaining / postValue.getValue());
 			if (max < num) {
 				num = max;
 			}
 
 			stamps[i] = num;
-			postage -= num * postValue.getValue();
+			postageRemaining -= num * postValue.getValue();
+		}
+
+		// use larger stamps if exact change isn't available
+		if (postageRemaining > 0) {
+			for (int i = 0; i < EnumPostage.values().length; i++) {
+				EnumPostage postValue = EnumPostage.values()[i];
+
+				if (postValue.getValue() >= postageRequired) {
+					stamps = new int[EnumPostage.values().length];
+
+					int num = virtual ? 99 : getNumStamps(postValue);
+					if (num > 0) {
+						stamps[i] = 1;
+						return stamps;
+					}
+				}
+			}
 		}
 
 		return stamps;

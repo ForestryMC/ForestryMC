@@ -12,6 +12,7 @@ package forestry.mail;
 
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.Random;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -28,6 +29,7 @@ import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.Translator;
 
 public class Letter implements ILetter {
+	private static final Random rand = new Random();
 	public static final short SLOT_ATTACHMENT_1 = 0;
 	public static final short SLOT_ATTACHMENT_COUNT = 18;
 	public static final short SLOT_POSTAGE_1 = 18;
@@ -40,10 +42,12 @@ public class Letter implements ILetter {
 
 	private String text;
 	private final InventoryAdapter inventory = new InventoryAdapter(22, "INV");
+	private final String uid;
 
 	public Letter(IMailAddress sender, IMailAddress recipient) {
 		this.sender = sender;
 		this.recipient = new IMailAddress[]{recipient};
+		this.uid = String.valueOf(rand.nextInt());
 	}
 
 	public Letter(@Nonnull NBTTagCompound nbttagcompound) {
@@ -57,7 +61,7 @@ public class Letter implements ILetter {
 		}
 
 		this.text = nbttagcompound.getString("TXT");
-
+		this.uid = nbttagcompound.getString("UID");
 		this.inventory.readFromNBT(nbttagcompound);
 	}
 
@@ -78,7 +82,7 @@ public class Letter implements ILetter {
 		}
 
 		nbttagcompound.setString("TXT", this.text);
-
+		nbttagcompound.setString("UID", this.uid);
 		inventory.writeToNBT(nbttagcompound);
 	}
 

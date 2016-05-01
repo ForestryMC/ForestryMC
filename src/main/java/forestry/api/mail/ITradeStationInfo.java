@@ -5,20 +5,18 @@
  ******************************************************************************/
 package forestry.api.mail;
 
-import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
 
-public interface ITradeStation extends ILetterHandler, IInventory {
+import com.mojang.authlib.GameProfile;
 
+public interface ITradeStationInfo {
 	IMailAddress getAddress();
 
-	boolean isValid();
+	GameProfile getOwner();
 
-	void invalidate();
+	ItemStack getTradegood();
 
-	void setVirtual(boolean isVirtual);
+	ItemStack[] getRequired();
 
-	boolean isVirtual();
-
-	ITradeStationInfo getTradeInfo();
-
+	EnumTradeStationState getState();
 }

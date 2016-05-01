@@ -17,7 +17,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
@@ -62,7 +62,7 @@ public class TileMailbox extends TileBase implements IMailContainer {
 		if (PostManager.postRegistry.isLetter(held)) {
 			IPostalState result = this.tryDispatchLetter(held);
 			if (!result.isOk()) {
-				player.addChatMessage(new ChatComponentTranslation("for.chat.mail." + result.getIdentifier()));
+				player.addChatMessage(new ChatComponentText(result.getDescription()));
 			} else {
 				held.stackSize--;
 			}

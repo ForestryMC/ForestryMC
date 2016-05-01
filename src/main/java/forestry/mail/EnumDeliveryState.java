@@ -10,12 +10,24 @@
  ******************************************************************************/
 package forestry.mail;
 
-import java.util.Locale;
+import javax.annotation.Nonnull;
 
 import forestry.api.mail.IPostalState;
+import forestry.core.utils.Translator;
 
 public enum EnumDeliveryState implements IPostalState {
-	OK, NO_MAILBOX, NOT_MAILABLE, ALREADY_MAILED, NOT_POSTPAID, MAILBOX_FULL, RESPONSE_NOT_MAILABLE;
+	OK("for.chat.mail.ok"),
+	NO_MAILBOX("for.chat.mail.no.mailbox"),
+	NOT_MAILABLE("for.chat.mail.not.mailable"),
+	ALREADY_MAILED("for.chat.mail.already.mailed"),
+	NOT_POSTPAID("for.chat.mail.not.postpaid"),
+	MAILBOX_FULL("for.chat.mail.mailbox.full");
+
+	private final String unlocalizedDescription;
+
+	EnumDeliveryState(@Nonnull String unlocalizedDescription) {
+		this.unlocalizedDescription = unlocalizedDescription;
+	}
 
 	@Override
 	public boolean isOk() {
@@ -23,7 +35,7 @@ public enum EnumDeliveryState implements IPostalState {
 	}
 
 	@Override
-	public String getIdentifier() {
-		return this.toString().toLowerCase(Locale.ENGLISH);
+	public String getDescription() {
+		return Translator.translateToLocal(unlocalizedDescription);
 	}
 }

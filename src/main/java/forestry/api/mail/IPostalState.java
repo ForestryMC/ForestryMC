@@ -6,9 +6,9 @@
 package forestry.api.mail;
 
 public interface IPostalState {
+	/** Normal states are OK, error states are not OK */
 	boolean isOk();
 
-	String getIdentifier();
-	
-	int ordinal();
+	/** Localized description of the postal state */
+	String getDescription();
 }

@@ -23,7 +23,7 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 
 import forestry.api.mail.EnumAddressee;
-import forestry.api.mail.TradeStationInfo;
+import forestry.api.mail.ITradeStationInfo;
 import forestry.core.config.SessionVars;
 import forestry.core.gui.GuiForestry;
 import forestry.core.gui.widgets.ItemStackWidget;
@@ -76,11 +76,11 @@ public class GuiCatalogue extends GuiForestry<ContainerCatalogue, IInventory> {
 
 		clearTradeInfoWidgets();
 
-		TradeStationInfo tradeInfo = container.getTradeInfo();
+		ITradeStationInfo tradeInfo = container.getTradeInfo();
 
 		if (tradeInfo != null) {
 			drawTradePreview(tradeInfo, guiLeft + 38, guiTop + 30);
-			buttonUse.enabled = tradeInfo.state.isOk();
+			buttonUse.enabled = tradeInfo.getState().isOk();
 		} else {
 			drawNoTrade(guiLeft + 38, guiTop + 30);
 			buttonUse.enabled = false;
@@ -93,25 +93,25 @@ public class GuiCatalogue extends GuiForestry<ContainerCatalogue, IInventory> {
 		fontRendererObj.drawSplitString(Translator.translateToLocal("for.gui.mail.notrades"), x, y + 18, 119, fontColor.get("gui.book"));
 	}
 
-	private void drawTradePreview(TradeStationInfo tradeInfo, int x, int y) {
+	private void drawTradePreview(ITradeStationInfo tradeInfo, int x, int y) {
 
-		fontRendererObj.drawString(boldUnderline + tradeInfo.address.getName(), x, y, fontColor.get("gui.book"));
+		fontRendererObj.drawString(boldUnderline + tradeInfo.getAddress().getName(), x, y, fontColor.get("gui.book"));
 
-		fontRendererObj.drawString(String.format(Translator.translateToLocal("for.gui.mail.willtrade"), tradeInfo.owner.getName()), x, y + 18, fontColor.get("gui.book"));
+		fontRendererObj.drawString(String.format(Translator.translateToLocal("for.gui.mail.willtrade"), tradeInfo.getOwner().getName()), x, y + 18, fontColor.get("gui.book"));
 
-		addTradeInfoWidget(new ItemStackWidget(widgetManager, x - guiLeft, y - guiTop + 28, tradeInfo.tradegood));
+		addTradeInfoWidget(new ItemStackWidget(widgetManager, x - guiLeft, y - guiTop + 28, tradeInfo.getTradegood()));
 
 		fontRendererObj.drawString(Translator.translateToLocal("for.gui.mail.tradefor"), x, y + 46, fontColor.get("gui.book"));
 
-		for (int i = 0; i < tradeInfo.required.length; i++) {
-			ItemStack itemStack = tradeInfo.required[i];
+		for (int i = 0; i < tradeInfo.getRequired().length; i++) {
+			ItemStack itemStack = tradeInfo.getRequired()[i];
 			addTradeInfoWidget(new ItemStackWidget(widgetManager, x - guiLeft + i * 18, y - guiTop + 56, itemStack));
 		}
 
-		if (tradeInfo.state.isOk()) {
-			fontRendererObj.drawSplitString(EnumChatFormatting.DARK_GREEN + Translator.translateToLocal("for.chat.mail." + tradeInfo.state.getIdentifier()), x, y + 82, 119, fontColor.get("gui.book"));
+		if (tradeInfo.getState().isOk()) {
+			fontRendererObj.drawSplitString(EnumChatFormatting.DARK_GREEN + tradeInfo.getState().getDescription(), x, y + 82, 119, fontColor.get("gui.book"));
 		} else {
-			fontRendererObj.drawSplitString(EnumChatFormatting.DARK_RED + Translator.translateToLocal("for.chat.mail." + tradeInfo.state.getIdentifier()), x, y + 82, 119, fontColor.get("gui.book"));
+			fontRendererObj.drawSplitString(EnumChatFormatting.DARK_RED + tradeInfo.getState().getDescription(), x, y + 82, 119, fontColor.get("gui.book"));
 		}
 	}
 
@@ -143,9 +143,9 @@ public class GuiCatalogue extends GuiForestry<ContainerCatalogue, IInventory> {
 				container.cycleFilter();
 				break;
 			case 5:
-				TradeStationInfo info = container.getTradeInfo();
+				ITradeStationInfo info = container.getTradeInfo();
 				if (info != null) {
-					SessionVars.setStringVar("mail.letter.recipient", info.address.getName());
+					SessionVars.setStringVar("mail.letter.recipient", info.getAddress().getName());
 					SessionVars.setStringVar("mail.letter.addressee", EnumAddressee.TRADER.toString());
 				}
 				mc.thePlayer.closeScreen();

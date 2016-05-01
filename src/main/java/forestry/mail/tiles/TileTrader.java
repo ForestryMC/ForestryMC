@@ -111,7 +111,7 @@ public class TileTrader extends TileBase {
 	public void readData(DataInputStreamForestry data) throws IOException {
 		super.readData(data);
 		String address = data.readUTF();
-		if (address.length() > 0) {
+		if (!address.isEmpty()) {
 			this.address = PostManager.postRegistry.getMailAddress(address);
 		}
 	}

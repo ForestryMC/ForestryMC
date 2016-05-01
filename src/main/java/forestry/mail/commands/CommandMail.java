@@ -21,8 +21,8 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 
 import forestry.api.mail.ITradeStation;
+import forestry.api.mail.ITradeStationInfo;
 import forestry.api.mail.PostManager;
-import forestry.api.mail.TradeStationInfo;
 import forestry.core.commands.CommandHelpers;
 import forestry.core.commands.SubCommand;
 import forestry.core.utils.StringUtil;
@@ -57,22 +57,22 @@ public class CommandMail extends SubCommand {
 			}
 		}
 
-		private static String makeTradeListEntry(TradeStationInfo info) {
-			EnumChatFormatting formatting = info.state.isOk() ? EnumChatFormatting.GREEN : EnumChatFormatting.RED;
+		private static String makeTradeListEntry(ITradeStationInfo info) {
+			EnumChatFormatting formatting = info.getState().isOk() ? EnumChatFormatting.GREEN : EnumChatFormatting.RED;
 
 			String tradegood = "[ ? ]";
-			if (info.tradegood != null) {
-				tradegood = info.tradegood.stackSize + "x" + info.tradegood.getDisplayName();
+			if (info.getTradegood() != null) {
+				tradegood = info.getTradegood().stackSize + "x" + info.getTradegood().getDisplayName();
 			}
 			String demand = "[ ? ]";
-			if (info.required.length > 0) {
+			if (info.getRequired().length > 0) {
 				demand = "";
-				for (ItemStack dmd : info.required) {
+				for (ItemStack dmd : info.getRequired()) {
 					demand = StringUtil.append(", ", demand, dmd.stackSize + "x" + dmd.getDisplayName());
 				}
 			}
 
-			return String.format("%s%-12s | %-20s | %s", formatting, info.address.getName(), tradegood, demand);
+			return String.format("%s%-12s | %-20s | %s", formatting, info.getAddress().getName(), tradegood, demand);
 		}
 	}
 

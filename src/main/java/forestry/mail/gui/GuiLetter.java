@@ -163,26 +163,26 @@ public class GuiLetter extends GuiForestry<ContainerLetter, ItemInventoryLetter>
 
 		String infoString = null;
 		if (container.getTradeInfo() == null) {
-			infoString = "for.gui.mail.notrader";
-		} else if (container.getTradeInfo().tradegood == null) {
-			infoString = "for.gui.mail.nothingtotrade";
-		} else if (!container.getTradeInfo().state.isOk()) {
-			infoString = "for.chat.mail." + container.getTradeInfo().state.getIdentifier();
+			infoString = Translator.translateToLocal("for.gui.mail.no.trader");
+		} else if (container.getTradeInfo().getTradegood() == null) {
+			infoString = Translator.translateToLocal("for.gui.mail.nothing.to.trade");
+		} else if (!container.getTradeInfo().getState().isOk()) {
+			infoString = container.getTradeInfo().getState().getDescription();
 		}
 
 		if (infoString != null) {
-			fontRendererObj.drawSplitString(Translator.translateToLocal(infoString), guiLeft + x, guiTop + y, 119, fontColor.get("gui.mail.lettertext"));
+			fontRendererObj.drawSplitString(infoString, guiLeft + x, guiTop + y, 119, fontColor.get("gui.mail.lettertext"));
 			return;
 		}
 
 		fontRendererObj.drawString(Translator.translateToLocal("for.gui.mail.pleasesend"), guiLeft + x, guiTop + y, fontColor.get("gui.mail.lettertext"));
 
-		addTradeInfoWidget(new ItemStackWidget(widgetManager, x, y + 10, container.getTradeInfo().tradegood));
+		addTradeInfoWidget(new ItemStackWidget(widgetManager, x, y + 10, container.getTradeInfo().getTradegood()));
 
 		fontRendererObj.drawString(Translator.translateToLocal("for.gui.mail.foreveryattached"), guiLeft + x, guiTop + y + 28, fontColor.get("gui.mail.lettertext"));
 
-		for (int i = 0; i < container.getTradeInfo().required.length; i++) {
-			addTradeInfoWidget(new ItemStackWidget(widgetManager, x + i * 18, y + 38, container.getTradeInfo().required[i]));
+		for (int i = 0; i < container.getTradeInfo().getRequired().length; i++) {
+			addTradeInfoWidget(new ItemStackWidget(widgetManager, x + i * 18, y + 38, container.getTradeInfo().getRequired()[i]));
 		}
 	}
 
