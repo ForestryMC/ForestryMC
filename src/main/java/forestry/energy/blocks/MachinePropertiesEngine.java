@@ -13,8 +13,8 @@ import forestry.core.tiles.TileEngine;
 import forestry.core.tiles.TileUtil;
 
 public class MachinePropertiesEngine<T extends TileEngine> extends MachinePropertiesTesr<T> {
-	public MachinePropertiesEngine(int meta, @Nonnull Class<T> teClass, @Nonnull String name, @Nullable TileEntitySpecialRenderer<? super T> renderer) {
-		super(meta, teClass, name, renderer);
+	public MachinePropertiesEngine(int meta, @Nonnull Class<T> teClass, @Nonnull String name, @Nullable TileEntitySpecialRenderer<? super T> renderer, String particleTextureLocation) {
+		super(meta, teClass, name, renderer, particleTextureLocation);
 	}
 
 	@Override

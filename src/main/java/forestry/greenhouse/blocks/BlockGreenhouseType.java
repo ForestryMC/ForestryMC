@@ -14,7 +14,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
+import forestry.api.core.ITextureManager;
 import forestry.core.render.TextureManager;
 import forestry.greenhouse.blocks.BlockGreenhouse.State;
 import forestry.greenhouse.tiles.TileGreenhouseHatch;
@@ -144,6 +144,10 @@ public enum BlockGreenhouseType {
 			default:
 				return Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();	
 		}
+	}
+	
+	public static EnumMap<BlockGreenhouseSprites, TextureAtlasSprite> getSprites() {
+		return sprites;
 	}
 	
 	@Override

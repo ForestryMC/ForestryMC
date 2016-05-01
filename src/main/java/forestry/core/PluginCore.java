@@ -21,6 +21,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.client.event.ModelBakeEvent;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.IFuelHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -55,6 +56,7 @@ import forestry.core.multiblock.MultiblockLogicFactory;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.network.PacketRegistryCore;
 import forestry.core.recipes.RecipeUtil;
+import forestry.core.render.TextureManager;
 import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.ForestryModEnvWarningCallable;
 import forestry.plugins.BlankForestryPlugin;
@@ -367,5 +369,11 @@ public class PluginCore extends BlankForestryPlugin {
 	@SideOnly(Side.CLIENT)
 	public void onBakeModel(ModelBakeEvent event) {
 		ModelManager.registerCustomModels(event);
+	}
+	
+	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
+	public void registerSprites(TextureStitchEvent.Pre event) {
+		TextureManager.registerSprites();
 	}
 }

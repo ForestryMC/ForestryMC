@@ -116,11 +116,11 @@ public class ParticleHelper {
 		void addDestroyEffects(EntityDiggingFX fx, BlockPos pos, IBlockState state);
 	}
 
-	public static class DefaultCallback implements ParticleHelper.Callback {
+	public static class DefaultCallback<B extends Block> implements ParticleHelper.Callback {
 
-		private final Block block;
+		protected final B block;
 
-		public DefaultCallback(Block block) {
+		public DefaultCallback(B block) {
 			this.block = block;
 		}
 
@@ -140,5 +140,21 @@ public class ParticleHelper {
 		protected void setTexture(EntityDiggingFX fx, BlockPos pos, IBlockState state) {
 			fx.setParticleIcon(Proxies.common.getClientInstance().getBlockRendererDispatcher().getBlockModelShapes().getTexture(state));
 		}
+	}
+	
+	public static class TexturedCallback extends ParticleHelper.DefaultCallback{
+
+		private final String textureLocation;
+		
+		public TexturedCallback(Block block, String textureLocation) {
+			super(block);
+			this.textureLocation = textureLocation;
+		}
+		
+		@Override
+		protected void setTexture(EntityDiggingFX fx, BlockPos pos, IBlockState state) {
+			fx.setParticleIcon(Proxies.common.getClientInstance().getTextureMapBlocks().getAtlasSprite(textureLocation));
+		}
+
 	}
 }

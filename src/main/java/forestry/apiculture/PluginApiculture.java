@@ -952,7 +952,6 @@ public class PluginApiculture extends BlankForestryPlugin {
 			EntityFXSnow.sprites[i] = event.map.registerSprite(new ResourceLocation("forestry:entity/particles/snow." + (i + 1)));
 		}
 		EntityFXBee.beeSprite = event.map.registerSprite(new ResourceLocation("forestry:entity/particles/swarm_bee"));
-		ItemHabitatLocator.registerSprite();
 	}
 
 	private static class EndFlowerAcceptableRule implements IFlowerAcceptableRule {

@@ -14,7 +14,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-
+import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileAnalyzer;
 import forestry.core.tiles.TileEscritoire;
@@ -30,7 +30,7 @@ public enum BlockTypeCoreTesr implements IBlockTypeTesr {
 	private final IMachinePropertiesTesr machineProperties;
 
 	<T extends TileForestry> BlockTypeCoreTesr(int meta, @Nonnull Class<T> teClass, @Nonnull String name, @Nullable TileEntitySpecialRenderer<T> renderer) {
-		this.machineProperties = new MachinePropertiesTesr<>(meta, teClass, name, renderer);
+		this.machineProperties = new MachinePropertiesTesr<>(meta, teClass, name, renderer, Constants.RESOURCE_ID + ":blocks/" + name + ".0");
 	}
 
 	@Nonnull

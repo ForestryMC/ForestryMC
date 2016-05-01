@@ -17,15 +17,19 @@ import forestry.core.tiles.TileForestry;
 public class MachinePropertiesTesr<T extends TileForestry> extends MachineProperties<T> implements IMachinePropertiesTesr<T> {
 	@Nullable
 	private final TileEntitySpecialRenderer<? super T> renderer;
+	@Nonnull
+	private final String particleTextureLocation;
 
-	public MachinePropertiesTesr(int meta, @Nonnull Class<T> teClass, @Nonnull String name, @Nullable TileEntitySpecialRenderer<? super T> renderer) {
+	public MachinePropertiesTesr(int meta, @Nonnull Class<T> teClass, @Nonnull String name, @Nullable TileEntitySpecialRenderer<? super T> renderer, String particleTextureLocation) {
 		super(meta, teClass, name);
 		this.renderer = renderer;
+		this.particleTextureLocation = particleTextureLocation;
 	}
 
-	public MachinePropertiesTesr(int meta, @Nonnull Class<T> teClass, @Nonnull String name, @Nullable TileEntitySpecialRenderer<? super T> renderer, @Nonnull AxisAlignedBB boundingBox) {
+	public MachinePropertiesTesr(int meta, @Nonnull Class<T> teClass, @Nonnull String name, @Nullable TileEntitySpecialRenderer<? super T> renderer, @Nonnull AxisAlignedBB boundingBox, String particleTextureLocation) {
 		super(meta, teClass, name, boundingBox);
 		this.renderer = renderer;
+		this.particleTextureLocation = particleTextureLocation;
 	}
 
 	@Nullable
@@ -44,5 +48,11 @@ public class MachinePropertiesTesr<T extends TileForestry> extends MachineProper
 				ForgeHooksClient.registerTESRItemStack(item, getMeta(), getTeClass());
 			}
 		}
+	}
+	
+	@Nonnull
+	@Override
+	public String getParticleTextureLocation() {
+		return particleTextureLocation;
 	}
 }

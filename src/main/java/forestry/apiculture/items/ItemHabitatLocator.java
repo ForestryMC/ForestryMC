@@ -26,6 +26,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.ForestryAPI;
+import forestry.api.core.ISpriteRegister;
+import forestry.api.core.ITextureManager;
 import forestry.api.core.Tabs;
 import forestry.api.genetics.AlleleManager;
 import forestry.apiculture.gui.ContainerHabitatLocator;
@@ -35,7 +37,7 @@ import forestry.apiculture.render.TextureHabitatLocator;
 import forestry.core.items.ItemWithGui;
 import forestry.core.utils.Translator;
 
-public class ItemHabitatLocator extends ItemWithGui {
+public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
 	private static final String iconName = "forestry:items/biomefinder";
 
 	private final HabitatLocatorLogic locatorLogic;
@@ -59,7 +61,7 @@ public class ItemHabitatLocator extends ItemWithGui {
 
 	/* SPRITES */
 	@SideOnly(Side.CLIENT)
-	public static void registerSprite() {
+	public void registerSprites(ITextureManager manager) {
 		TextureAtlasSprite texture = new TextureHabitatLocator(iconName);
 		Minecraft.getMinecraft().getTextureMapBlocks().setTextureEntry(iconName, texture);
 	}

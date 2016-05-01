@@ -89,16 +89,15 @@ public class RenderMachine extends TileEntitySpecialRenderer<TileBase> {
 	public void renderTileEntityAt(TileBase tile, double x, double y, double z, float partialTicks, int destroyStage) {
 		if (tile != null) {
 			IRenderableTile generator = (IRenderableTile) tile;
-			render(generator.getResourceTankInfo(), generator.getProductTankInfo(), generator.getOrientation(), x, y, z);
+			render(generator.getResourceTankInfo(), generator.getProductTankInfo(), generator.getOrientation(), x, y, z, destroyStage);
 		} else {
-			render(TankRenderInfo.EMPTY, TankRenderInfo.EMPTY, EnumFacing.SOUTH, x, y, z);
+			render(TankRenderInfo.EMPTY, TankRenderInfo.EMPTY, EnumFacing.SOUTH, x, y, z, -1);
 		}
 	}
 
-	private void render(TankRenderInfo resourceTankInfo, TankRenderInfo productTankInfo, EnumFacing orientation, double x, double y, double z) {
+	private void render(TankRenderInfo resourceTankInfo, TankRenderInfo productTankInfo, EnumFacing orientation, double x, double y, double z, int destroyStage) {
 		GlStateManager.pushMatrix();
 		GlStateManager.translate((float) x, (float) y, (float) z);
-
 		float[] angle = {0, 0, 0};
 
 		if (orientation == null) {
@@ -145,15 +144,17 @@ public class RenderMachine extends TileEntitySpecialRenderer<TileBase> {
 		productTank.rotateAngleZ = angle[2];
 
 		float factor = (float) (1.0 / 16.0);
-
-		Proxies.render.bindTexture(textureBase);
+		
+        Proxies.render.bindTexture(textureBase);
+        
 		basefront.render(factor);
 		baseback.render(factor);
 
 		renderTank(resourceTank, textureResourceTank, resourceTankInfo, factor);
 		renderTank(productTank, textureProductTank, productTankInfo, factor);
 
-		GlStateManager.popMatrix();
+        GlStateManager.popMatrix();
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
 	private void renderTank(ModelRenderer tankModel, ResourceLocation textureBase, TankRenderInfo renderInfo, float factor) {

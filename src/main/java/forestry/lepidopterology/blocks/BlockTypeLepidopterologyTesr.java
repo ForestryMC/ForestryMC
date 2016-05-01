@@ -19,6 +19,7 @@ import net.minecraft.util.AxisAlignedBB;
 import forestry.core.blocks.IBlockTypeTesr;
 import forestry.core.blocks.IMachinePropertiesTesr;
 import forestry.core.blocks.MachinePropertiesTesr;
+import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileForestry;
 import forestry.core.tiles.TileNaturalistChest;
@@ -34,9 +35,9 @@ public enum BlockTypeLepidopterologyTesr implements IBlockTypeTesr {
 
 	<T extends TileForestry> BlockTypeLepidopterologyTesr(int meta, @Nonnull Class<T> teClass, @Nonnull String name, @Nullable TileEntitySpecialRenderer<? super T> renderer, @Nullable AxisAlignedBB boundingBox) {
 		if (boundingBox != null) {
-			this.machineProperties = new MachinePropertiesTesr<>(meta, teClass, name, renderer, boundingBox);
+			this.machineProperties = new MachinePropertiesTesr<>(meta, teClass, name, renderer, boundingBox, Constants.RESOURCE_ID + ":blocks/" + name + ".0");
 		} else {
-			this.machineProperties = new MachinePropertiesTesr<>(meta, teClass, name, renderer);
+			this.machineProperties = new MachinePropertiesTesr<>(meta, teClass, name, renderer, Constants.RESOURCE_ID + ":blocks/" + name + ".0");
 		}
 	}
 

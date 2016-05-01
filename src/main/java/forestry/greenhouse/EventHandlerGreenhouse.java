@@ -41,11 +41,5 @@ public class EventHandlerGreenhouse {
 			controller.onChange(EnumGreenhouseEventType.CAMOUFLAGE, event);
 		}
 	}
-	
-	@SubscribeEvent
-	@SideOnly(Side.CLIENT)
-	public void handleTextureRemap(TextureStitchEvent.Pre event) {
-		BlockGreenhouseType.registerSprites();
-	}
 
 }

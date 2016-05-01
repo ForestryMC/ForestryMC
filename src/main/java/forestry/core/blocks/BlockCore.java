@@ -10,6 +10,11 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
+import net.minecraft.client.particle.EffectRenderer;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.world.World;
+
 public class BlockCore extends BlockBase<BlockTypeCoreTesr> {
 	public BlockCore() {
 		super(BlockTypeCoreTesr.class);

@@ -114,8 +114,6 @@ public class PluginLepidopterology extends BlankForestryPlugin {
 
 	@Override
 	public void preInit() {
-		MinecraftForge.EVENT_BUS.register(this);
-		
 		ButterflyBranchDefinition.createAlleles();
 		AlleleButterflyEffect.createAlleles();
 		
@@ -306,11 +304,5 @@ public class PluginLepidopterology extends BlankForestryPlugin {
 	
 	public static float getSecondSerumChance() {
 		return secondSerumChance;
-	}
-	
-	@SubscribeEvent
-	@SideOnly(Side.CLIENT)
-	public void registerSprites(TextureStitchEvent.Pre event) {
-		ItemButterflyGE.registerSprites();
 	}
 }

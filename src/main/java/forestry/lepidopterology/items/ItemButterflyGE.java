@@ -30,6 +30,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.ITree;
 import forestry.api.core.IModelManager;
+import forestry.api.core.ISpriteRegister;
+import forestry.api.core.ITextureManager;
 import forestry.api.core.Tabs;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
@@ -53,7 +55,7 @@ import forestry.lepidopterology.PluginLepidopterology;
 import forestry.lepidopterology.entities.EntityButterfly;
 import forestry.lepidopterology.genetics.ButterflyGenome;
 
-public class ItemButterflyGE extends ItemGE {
+public class ItemButterflyGE extends ItemGE implements ISpriteRegister {
 
 	private static final Random rand = new Random();
 
@@ -303,7 +305,7 @@ public class ItemButterflyGE extends ItemGE {
 	 * Register butterfly item sprites
 	 */
 	@SideOnly(Side.CLIENT)
-	public static void registerSprites() {
+	public void registerSprites(ITextureManager manager) {
 		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
 			if (allele instanceof IAlleleButterflySpecies) {
 				((IAlleleButterflySpecies) allele).getSpriteProvider().registerSprites();

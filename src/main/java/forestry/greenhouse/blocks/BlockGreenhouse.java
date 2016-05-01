@@ -45,6 +45,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.ICamouflagedBlock;
 import forestry.api.core.IModelManager;
+import forestry.api.core.ISpriteRegister;
+import forestry.api.core.ITextureManager;
 import forestry.api.core.Tabs;
 import forestry.api.multiblock.IGreenhouseComponent;
 import forestry.core.CreativeTabForestry;
@@ -64,7 +66,7 @@ import forestry.greenhouse.tiles.TileGreenhouseSprinkler;
 import forestry.greenhouse.tiles.TileGreenhouseValve;
 import forestry.plugins.ForestryPluginUids;
 
-public abstract class BlockGreenhouse extends BlockStructure {
+public abstract class BlockGreenhouse extends BlockStructure implements ISpriteRegister {
 
 	public static final PropertyEnum<State> STATE = PropertyEnum.create("state", State.class);
 	
@@ -299,6 +301,12 @@ public abstract class BlockGreenhouse extends BlockStructure {
 		}else{
 			ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation("forestry:greenhouse", "inventory"));
 		}
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void registerSprites(ITextureManager manager) {
+		BlockGreenhouseType.registerSprites();
 	}
 
 	@Override

@@ -19,6 +19,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.particle.EffectRenderer;
+import net.minecraft.client.particle.EntityDiggingFX;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -32,6 +34,7 @@ import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -42,12 +45,17 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
+import forestry.api.core.ISpriteRegister;
 import forestry.api.core.IStateMapperRegister;
+import forestry.api.core.ITextureManager;
 import forestry.core.access.IAccessHandler;
 import forestry.core.circuits.ISocketable;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.proxy.Proxies;
+import forestry.core.render.MachineParticleCallback;
 import forestry.core.render.MachineStateMapper;
+import forestry.core.render.ParticleHelper;
+import forestry.core.render.TextureManager;
 import forestry.core.tiles.TileBase;
 import forestry.core.tiles.TileForestry;
 import forestry.core.tiles.TileUtil;
@@ -56,7 +64,7 @@ import forestry.core.utils.PlayerUtil;
 
 import jline.internal.Log;
 
-public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> extends BlockForestry implements IItemModelRegister, IStateMapperRegister, IBlockWithMeta {
+public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> extends BlockForestry implements IItemModelRegister, ISpriteRegister, IStateMapperRegister, IBlockWithMeta {
 	private final Map<P, IMachineProperties> properties = new HashMap<>();
 	private final boolean hasTESR;
 	private final boolean hasCustom;
@@ -65,6 +73,8 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 	/* PROPERTIES */
 	private final PropertyEnum<P> TYPE;
 	private final PropertyEnum<EnumFacing> FACE;
+	
+	private final ParticleHelper.Callback particleCallback;
 	
 	protected final BlockState blockState;
 	
@@ -86,6 +96,8 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 		this.blockState = this.createBlockState();
 		IBlockState state = this.blockState.getBaseState().withProperty(FACE, EnumFacing.NORTH);
 		this.setDefaultState(state);
+		
+		particleCallback = new MachineParticleCallback(this, TYPE);
 	}
 
 	public PropertyEnum<P> getTypeProperty() {
@@ -323,8 +335,45 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 	public boolean getUseNeighborBrightness() {
 		return hasTESR;
 	}
+	
+	/* Particles */
+	@SideOnly(Side.CLIENT)
+	@Override
+	public boolean addHitEffects(World world, MovingObjectPosition target, EffectRenderer effectRenderer) {
+		IBlockState state = world.getBlockState(target.getBlockPos());
+		
+		P protety = state.getValue(TYPE);
+		if(protety.getMachineProperties() instanceof IMachinePropertiesTesr){
+			return ParticleHelper.addHitEffects(world, this, target, effectRenderer, particleCallback);
+		}
+		return false;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public boolean addDestroyEffects(World world, BlockPos pos, EffectRenderer effectRenderer) {
+		IBlockState state = world.getBlockState(pos);
+		
+		P protety = state.getValue(TYPE);
+		if(protety.getMachineProperties() instanceof IMachinePropertiesTesr){
+			return ParticleHelper.addDestroyEffects(world, this, world.getBlockState(pos), pos, effectRenderer, particleCallback);
+		}
+		return false;
+	}
+	
+	
 
 	public final ItemStack get(P type) {
 		return new ItemStack(this, 1, type.getMachineProperties().getMeta());
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void registerSprites(ITextureManager manager) {
+		for(P property : properties.keySet()){
+			if(property.getMachineProperties() instanceof IMachinePropertiesTesr){
+				Proxies.common.getClientInstance().getTextureMapBlocks().registerSprite(new ResourceLocation(((IMachinePropertiesTesr)property.getMachineProperties()).getParticleTextureLocation()));
+			}
+		}
 	}
 }
