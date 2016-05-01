@@ -44,7 +44,7 @@ public class CentrifugeRecipeCategory extends ForestryRecipeCategory {
 	private final ForestryTooltipCallback tooltip = new ForestryTooltipCallback();
 	
 	public CentrifugeRecipeCategory(IGuiHelper guiHelper) {
-		super(guiHelper.createDrawable(guiTexture, 5, 14, 166, 65), "tile.for.factory.centrifuge.name");
+		super(guiHelper.createDrawable(guiTexture, 25, 18, 126, 54), "tile.for.factory.centrifuge.name");
 		
 		IDrawableStatic arrowDrawable = guiHelper.createDrawable(guiTexture, 176, 0, 4, 17);
 		this.arrow = guiHelper.createAnimatedDrawable(arrowDrawable, 80, IDrawableAnimated.StartDirection.BOTTOM, false);
@@ -58,14 +58,14 @@ public class CentrifugeRecipeCategory extends ForestryRecipeCategory {
 
 	@Override
 	public void drawAnimations(@Nonnull Minecraft minecraft) {
-		arrow.draw(minecraft, 53, 22);
+		arrow.draw(minecraft, 33, 18);
 	}
 
 	@Override
 	public void setRecipe(@Nonnull IRecipeLayout recipeLayout, @Nonnull IRecipeWrapper recipeWrapper) {
 		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
 		
-		guiItemStacks.init(inputSlot, true, 24, 22);
+		guiItemStacks.init(inputSlot, true, 4, 18);
 		guiItemStacks.setFromRecipe(inputSlot, recipeWrapper.getInputs());
 		CentrifugeRecipeWrapper centrifugeWrapper = (CentrifugeRecipeWrapper) recipeWrapper;
 		setResults(centrifugeWrapper.getRecipe().getAllProducts(), (GuiItemStackGroup) guiItemStacks);
@@ -86,8 +86,8 @@ public class CentrifugeRecipeCategory extends ForestryRecipeCategory {
 			if (i >= OUTPUTS.length) {
 				return;
 			}
-			int x = 92 + OUTPUTS[i][0] * 18;
-			int y = 4 + OUTPUTS[i][1] * 18;
+			int x = 72 + OUTPUTS[i][0] * 18;
+			int y = OUTPUTS[i][1] * 18;
 			int ID = outputSlot + i;
 			guiItemStacks.init(ID, false, x, y);
 			guiItemStacks.set(ID, stack.getKey());

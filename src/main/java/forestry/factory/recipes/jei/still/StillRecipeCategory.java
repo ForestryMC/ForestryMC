@@ -30,7 +30,7 @@ public class StillRecipeCategory extends ForestryRecipeCategory {
 	private final IDrawableAnimated progressBar;
 	
 	public StillRecipeCategory(IGuiHelper guiHelper) {
-		super(guiHelper.createDrawable(guiTexture, 30, 11, 116, 65), "tile.for.factory.still.name");
+		super(guiHelper.createDrawable(guiTexture, 34, 14, 108, 60), "tile.for.factory.still.name");
 		this.tankOverlay = guiHelper.createDrawable(guiTexture, 176, 0, 16, 58);
 		
 		IDrawableStatic progressBarDrawable0 = guiHelper.createDrawable(guiTexture, 176, 74, 4, 18);
@@ -45,15 +45,15 @@ public class StillRecipeCategory extends ForestryRecipeCategory {
 
 	@Override
 	public void drawAnimations(@Nonnull Minecraft minecraft) {
-		progressBar.draw(minecraft, 54, 6);
+		progressBar.draw(minecraft, 50, 3);
 	}
 
 	@Override
 	public void setRecipe(@Nonnull IRecipeLayout recipeLayout, @Nonnull IRecipeWrapper recipeWrapper) {
 		IGuiFluidStackGroup guiFluidStacks = recipeLayout.getFluidStacks();
 
-		guiFluidStacks.init(inputTank, true, 5, 4, 16, 58, 10000, false, tankOverlay);
-		guiFluidStacks.init(outputTank, false, 95, 4, 16, 58, 10000, false, tankOverlay);
+		guiFluidStacks.init(inputTank, true, 1, 1, 16, 58, 10000, false, tankOverlay);
+		guiFluidStacks.init(outputTank, false, 91, 1, 16, 58, 10000, false, tankOverlay);
 		
 		guiFluidStacks.set(inputTank, recipeWrapper.getFluidInputs());
 		guiFluidStacks.set(outputTank, recipeWrapper.getFluidOutputs());

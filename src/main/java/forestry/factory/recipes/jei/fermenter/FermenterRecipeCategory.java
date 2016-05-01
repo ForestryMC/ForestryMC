@@ -40,7 +40,7 @@ public class FermenterRecipeCategory extends ForestryRecipeCategory {
 	private final IDrawable tankOverlay;
 	
 	public FermenterRecipeCategory(IGuiHelper guiHelper) {
-		super(guiHelper.createDrawable(guiTexture, 30, 15, 116, 65), "tile.for.factory.fermenter.name");
+		super(guiHelper.createDrawable(guiTexture, 34, 18, 108, 60), "tile.for.factory.fermenter.name");
 		
 		IDrawableStatic progressBarDrawable0 = guiHelper.createDrawable(guiTexture, 176, 60, 4, 18);
 		this.progressBar0 = guiHelper.createAnimatedDrawable(progressBarDrawable0, 40, IDrawableAnimated.StartDirection.BOTTOM, false);
@@ -57,8 +57,8 @@ public class FermenterRecipeCategory extends ForestryRecipeCategory {
 
 	@Override
 	public void drawAnimations(@Nonnull Minecraft minecraft) {
-		progressBar0.draw(minecraft, 44, 17);
-		progressBar1.draw(minecraft, 68, 31);
+		progressBar0.draw(minecraft, 40, 14);
+		progressBar1.draw(minecraft, 64, 28);
 	}
 
 	@Override
@@ -66,11 +66,11 @@ public class FermenterRecipeCategory extends ForestryRecipeCategory {
 		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
 		IGuiFluidStackGroup guiFluidStacks = recipeLayout.getFluidStacks();
 		
-		guiItemStacks.init(resourceSlot, true, 54, 7);
-		guiItemStacks.init(fuelSlot, true, 44, 41);
+		guiItemStacks.init(resourceSlot, true, 50, 4);
+		guiItemStacks.init(fuelSlot, true, 40, 38);
 		
-		guiFluidStacks.init(inputTank, true, 5, 4, 16, 58, 10000, false, tankOverlay);
-		guiFluidStacks.init(outputTank, false, 95, 4, 16, 58, 10000, false, tankOverlay);
+		guiFluidStacks.init(inputTank, true, 1, 1, 16, 58, 10000, false, tankOverlay);
+		guiFluidStacks.init(outputTank, false, 91, 1, 16, 58, 10000, false, tankOverlay);
 		
 		FermenterRecipeWrapper wrapper = (FermenterRecipeWrapper) recipeWrapper;
 		

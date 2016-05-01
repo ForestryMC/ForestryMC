@@ -31,7 +31,7 @@ public class BottlerRecipeCategory extends ForestryRecipeCategory {
 	private final IDrawable tankOverlay;
 	
 	public BottlerRecipeCategory(IGuiHelper guiHelper) {
-		super(guiHelper.createDrawable(guiTexture, 48, 11, 123, 65), "tile.for.factory.bottler.name");
+		super(guiHelper.createDrawable(guiTexture, 52, 16, 81, 60), "tile.for.factory.bottler.name");
 		
 		IDrawableStatic arrowDrawable = guiHelper.createDrawable(guiTexture, 176, 74, 24, 17);
 		this.arrow = guiHelper.createAnimatedDrawable(arrowDrawable, 200, IDrawableAnimated.StartDirection.LEFT, false);
@@ -46,7 +46,7 @@ public class BottlerRecipeCategory extends ForestryRecipeCategory {
 
 	@Override
 	public void drawAnimations(@Nonnull Minecraft minecraft) {
-		arrow.draw(minecraft, 32, 28);
+		arrow.draw(minecraft, 28, 23);
 	}
 
 	@Override
@@ -54,10 +54,10 @@ public class BottlerRecipeCategory extends ForestryRecipeCategory {
 		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
 		IGuiFluidStackGroup guiFluidStacks = recipeLayout.getFluidStacks();
 		
-		guiItemStacks.init(emptySlot, true, 67, 7);
-		guiItemStacks.init(outputSlot, false, 67, 43);
+		guiItemStacks.init(emptySlot, true, 63, 2);
+		guiItemStacks.init(outputSlot, false, 63, 38);
 		
-		guiFluidStacks.init(inputTank, true, 5, 6, 16, 58, 10000, false, tankOverlay);
+		guiFluidStacks.init(inputTank, true, 1, 1, 16, 58, 10000, false, tankOverlay);
 		
 		guiItemStacks.setFromRecipe(emptySlot, recipeWrapper.getInputs());
 		guiItemStacks.setFromRecipe(outputSlot, recipeWrapper.getOutputs());
