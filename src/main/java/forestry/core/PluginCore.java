@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core;
 
+import com.google.common.collect.ImmutableMap;
+
 import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
@@ -33,6 +35,7 @@ import forestry.api.circuits.ChipsetManager;
 import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.multiblock.MultiblockManager;
+import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
 import forestry.core.blocks.BlockRegistryCore;
@@ -322,6 +325,13 @@ public class PluginCore extends BlankForestryPlugin {
 
 		RecipeUtil.addRecipe(blocks.resourceStorage.get(EnumResourceType.BRONZE), "###", "###", "###", '#', "ingotBronze");
 		RecipeUtil.addShapelessRecipe(new ItemStack(items.ingotBronze, 9), "blockBronze");
+
+		// alternate recipes
+		if (!ForestryAPI.enabledPlugins.contains(ForestryPluginUids.APICULTURE)) {
+			RecipeManagers.centrifugeManager.addRecipe(5, new ItemStack(Items.string), ImmutableMap.of(
+					items.craftingMaterial.getSilkWisp(), 0.15f
+			));
+		}
 	}
 
 	@Override

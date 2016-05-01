@@ -387,9 +387,13 @@ public class PluginFactory extends BlankForestryPlugin {
 		// Ender pearl
 		RecipeManagers.carpenterManager.addRecipe(100, null, new ItemStack(Items.ender_pearl, 1), " # ", "###", " # ", '#',
 				PluginCore.items.craftingMaterial.getPulsatingMesh());
+
 		// Woven Silk
 		RecipeManagers.carpenterManager.addRecipe(10, Fluids.WATER.getFluid(500), null, PluginCore.items.craftingMaterial.getWovenSilk(),
-				"###", "###", "###", '#', PluginCore.items.craftingMaterial.getSilkWisp());
+				"###",
+				"###",
+				"###",
+				'#', PluginCore.items.craftingMaterial.getSilkWisp());
 
 		// Boxes
 		RecipeManagers.carpenterManager.addRecipe(5, Fluids.WATER.getFluid(1000), null, PluginCore.items.carton.getItemStack(2),
