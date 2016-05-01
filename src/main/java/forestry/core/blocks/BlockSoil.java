@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLog;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
@@ -152,9 +153,10 @@ public class BlockSoil extends Block implements IItemModelRegister, IBlockWithMe
 	private static boolean isEnrooted(World world, BlockPos pos) {
 		for (int i = -1; i < 2; i++) {
 			for (int j = -1; j < 2; j++) {
-				IBlockState state = world.getBlockState(new BlockPos(pos.getX() + i, pos.getY() + 1, pos.getZ() + j));
+				BlockPos blockPos = pos.add(i, 1, j);
+				IBlockState state = world.getBlockState(blockPos);
 				Block block = state.getBlock();
-				if (block == Blocks.log || block == Blocks.log2 || block == Blocks.sapling || block instanceof IGrowable) {
+				if (block instanceof BlockLog || block instanceof IGrowable) {
 					// We are not returning true if we are the base of a sapling.
 					return !(i == 0 && j == 0);
 				}
