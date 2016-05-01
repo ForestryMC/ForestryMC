@@ -51,6 +51,7 @@ import forestry.core.proxy.Proxies;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.EntityUtil;
 import forestry.core.utils.GeneticsUtil;
+import forestry.core.utils.Translator;
 import forestry.lepidopterology.PluginLepidopterology;
 import forestry.lepidopterology.entities.EntityButterfly;
 import forestry.lepidopterology.genetics.ButterflyGenome;
@@ -75,21 +76,6 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister {
 	@Override
 	protected IAlleleSpecies getSpecies(ItemStack itemStack) {
 		return ButterflyGenome.getSpecies(itemStack);
-	}
-
-	@Override
-	public String getItemStackDisplayName(ItemStack itemstack) {
-
-		if (itemstack.getTagCompound() == null) {
-			return "???";
-		}
-
-		IButterfly butterfly = ButterflyManager.butterflyRoot.getMember(itemstack);
-		if (butterfly == null) {
-			return "???";
-		}
-
-		return butterfly.getDisplayName();
 	}
 
 	@Override
@@ -313,6 +299,23 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister {
 				((IAlleleButterflySpecies) allele).getSpriteProvider().registerSprites();
 			}
 		}
+	}
+
+	@Override
+	public String getItemStackDisplayName(ItemStack itemstack) {
+		if (itemstack.getTagCompound() == null) {
+			return super.getItemStackDisplayName(itemstack);
+		}
+
+		IButterfly individual = ButterflyManager.butterflyRoot.getMember(itemstack);
+		String customKey = "for.butterflies.custom." + type.getName() + "." + individual.getGenome().getPrimary().getUnlocalizedName().replace("butterflies.species.", "");
+		if (Translator.canTranslateToLocal(customKey)) {
+			return Translator.translateToLocal(customKey);
+		}
+		String grammar = Translator.translateToLocal("for.butterflies.grammar." + type.getName());
+		String speciesString = individual.getDisplayName();
+		String typeString = Translator.translateToLocal("for.butterflies.grammar." + type.getName() + ".type");
+		return grammar.replaceAll("%SPECIES", speciesString).replaceAll("%TYPE", typeString);
 	}
 
 }
