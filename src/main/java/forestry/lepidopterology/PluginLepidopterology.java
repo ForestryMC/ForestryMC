@@ -276,6 +276,13 @@ public class PluginLepidopterology extends BlankForestryPlugin {
 				'Y', "chestWood");
 	}
 
+	@Override
+	public void getHiddenItems(List<ItemStack> hiddenItems) {
+		// cocoon itemBlock is different from the normal item
+		hiddenItems.add(new ItemStack(blocks.cocoon));
+		hiddenItems.add(new ItemStack(blocks.solidCocoon));
+	}
+
 	public static boolean isPollinationAllowed() {
 		return allowPollination;
 	}

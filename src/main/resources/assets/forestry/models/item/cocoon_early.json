@@ -1,6 +1,6 @@
 {
-    "parent": "item/generated",
+    "parent": "builtin/generated",
     "textures": {
-        "layer0": "items/cocoons/cocoon_early"
+        "layer0": "forestry:items/cocoons/cocoon_early"
     }
 }

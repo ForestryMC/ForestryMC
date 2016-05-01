@@ -19,6 +19,7 @@ import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
@@ -30,6 +31,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
 import forestry.api.core.IStateMapperRegister;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.EnumFlutterType;
@@ -41,7 +44,7 @@ import forestry.lepidopterology.genetics.alleles.AlleleButterflyCocoon;
 import forestry.lepidopterology.items.ItemButterflyGE;
 import forestry.lepidopterology.tiles.TileCocoon;
 
-public class BlockCocoon extends Block implements ITileEntityProvider, IStateMapperRegister {
+public class BlockCocoon extends Block implements ITileEntityProvider, IStateMapperRegister, IItemModelRegister {
 	
 	private static final PropertyCocoon COCOON = AlleleButterflyCocoon.COCOON;
 	
@@ -72,6 +75,13 @@ public class BlockCocoon extends Block implements ITileEntityProvider, IStateMap
 	@Override
 	public void registerStateMapper() {
 		Proxies.render.registerStateMapper(this, new CocoonStateMapper());
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void registerModel(Item item, IModelManager manager) {
+		//To delete the error message
+		manager.registerItemModel(item, 0, "cocoon_late");
 	}
 	
     @Override
