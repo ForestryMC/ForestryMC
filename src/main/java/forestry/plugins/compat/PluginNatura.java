@@ -96,7 +96,7 @@ public class PluginNatura extends BlankForestryPlugin {
 			ItemStack saplingWild = new ItemStack(saplingItem, 1, OreDictionary.WILDCARD_VALUE);
 			RecipeUtil.addFermenterRecipes(saplingWild, ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.sapling"), Fluids.BIOMASS);
 
-			String saplingName = ItemStackUtil.getItemNameFromRegistryAsSting(saplingItem);
+			String saplingName = ItemStackUtil.getItemNameFromRegistryAsString(saplingItem);
 			FMLInterModComms.sendMessage(Constants.MOD_ID, "add-farmable-sapling", String.format("farmArboreal@%s.-1", saplingName));
 		}
 

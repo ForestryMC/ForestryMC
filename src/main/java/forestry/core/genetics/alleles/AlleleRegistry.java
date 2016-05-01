@@ -57,10 +57,7 @@ public class AlleleRegistry implements IAlleleRegistry {
 
 	@Override
 	public ISpeciesRoot getSpeciesRoot(String uid) {
-		if (rootMap.containsKey(uid)) {
-			return rootMap.get(uid);
-		}
-		return null;
+		return rootMap.get(uid);
 	}
 
 	@Override

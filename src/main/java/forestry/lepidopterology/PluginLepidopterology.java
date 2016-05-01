@@ -29,14 +29,9 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 
-import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
 
@@ -68,7 +63,6 @@ import forestry.lepidopterology.genetics.ButterflyRoot;
 import forestry.lepidopterology.genetics.MothDefinition;
 import forestry.lepidopterology.genetics.alleles.AlleleButterflyCocoon;
 import forestry.lepidopterology.genetics.alleles.AlleleButterflyEffect;
-import forestry.lepidopterology.items.ItemButterflyGE;
 import forestry.lepidopterology.items.ItemRegistryLepidopterology;
 import forestry.lepidopterology.proxy.ProxyLepidopterology;
 import forestry.lepidopterology.recipes.MatingRecipe;
@@ -233,7 +227,7 @@ public class PluginLepidopterology extends BlankForestryPlugin {
 		Map<ItemStack, Float> cooconLoot = new HashMap();
 		List<String> lootList = new ArrayList();
 		for(Entry<ItemStack, Float> entry : cocoon.getCocoonLoot().entrySet()){
-			String itemStackString = ItemStackUtil.getItemNameFromRegistryAsSting(entry.getKey().getItem());
+			String itemStackString = ItemStackUtil.getItemNameFromRegistryAsString(entry.getKey().getItem());
 
 			int meta = entry.getKey().getItemDamage();
 			if (meta != OreDictionary.WILDCARD_VALUE) {

@@ -25,7 +25,7 @@ public class DataOutputStreamForestry extends DataOutputStream {
 		if (itemstack == null) {
 			writeUTF("");
 		} else {
-			writeUTF(ItemStackUtil.getItemNameFromRegistryAsSting(itemstack.getItem()));
+			writeUTF(ItemStackUtil.getItemNameFromRegistryAsString(itemstack.getItem()));
 			writeByte(itemstack.stackSize);
 			writeVarInt(itemstack.getItemDamage());
 

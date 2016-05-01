@@ -289,7 +289,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 		super.writeToNBT(nbttagcompound);
 
 		if (fuelItem != null) {
-			nbttagcompound.setString("EngineFuelItem", ItemStackUtil.getItemNameFromRegistryAsSting(fuelItem));
+			nbttagcompound.setString("EngineFuelItem", ItemStackUtil.getItemNameFromRegistryAsString(fuelItem));
 		}
 
 		nbttagcompound.setInteger("EngineFuelMeta", fuelItemMeta);

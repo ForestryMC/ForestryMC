@@ -35,6 +35,8 @@ public interface IBackpackDefinition {
 
 	void addValidItems(List<ItemStack> validItems);
 
+	void addValidOreDictName(String oreDictName);
+
 	/**
 	 * Returns true if the itemstack is a valid item for this backpack type.
 	 */

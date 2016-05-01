@@ -16,28 +16,25 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 import net.minecraftforge.oredict.OreDictionary;
 
-import forestry.api.apiculture.BeeManager;
-import forestry.api.lepidopterology.ButterflyManager;
+import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.ISpeciesRoot;
 import forestry.api.storage.IBackpackDefinition;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Translator;
 
 public class BackpackDefinition implements IBackpackDefinition {
 
-	private final int primaryColor; // - c03384
+	private final int primaryColor;
 	private final int secondaryColor;
 
 	private final Set<String> validItemStacks = new HashSet<>();
 	private final Set<Integer> validOreIds = new HashSet<>();
-	private final Set<Class> validItemClasses = new HashSet<>();
-	private final Set<Class> validBlockClasses = new HashSet<>();
 
 	public BackpackDefinition(@Nonnull Color primaryColor) {
 		this(primaryColor, new Color(0xffffff));
@@ -76,23 +73,10 @@ public class BackpackDefinition implements IBackpackDefinition {
 
 	@Override
 	public void addValidItem(ItemStack validItem) {
-		if (validItem == null) {
-			return;
+		String itemStackString = ItemStackUtil.getStringForItemStack(validItem);
+		if (itemStackString != null) {
+			this.validItemStacks.add(itemStackString);
 		}
-
-		Item item = validItem.getItem();
-		if (item == null) {
-			return;
-		}
-
-		String itemStackString = ItemStackUtil.getItemNameFromRegistryAsSting(item);
-
-		int meta = validItem.getItemDamage();
-		if (meta != OreDictionary.WILDCARD_VALUE) {
-			itemStackString = itemStackString + ':' + meta;
-		}
-
-		this.validItemStacks.add(itemStackString);
 	}
 
 	public void clearAllValid() {
@@ -107,6 +91,7 @@ public class BackpackDefinition implements IBackpackDefinition {
 		}
 	}
 
+	@Override
 	public void addValidOreDictName(String oreDictName) {
 		if (OreDictionary.doesOreNameExist(oreDictName)) {
 			int oreId = OreDictionary.getOreID(oreDictName);
@@ -120,44 +105,12 @@ public class BackpackDefinition implements IBackpackDefinition {
 		}
 	}
 
-	public void addValidItemClass(Class itemClass) {
-		if (itemClass != null) {
-			validItemClasses.add(itemClass);
-		}
-	}
-
-	public void addValidItemClasses(List<Class> itemClasses) {
-		for (Class itemClass : itemClasses) {
-			addValidItemClass(itemClass);
-		}
-	}
-
-	public void addValidBlockClass(Class blockClass) {
-		if (blockClass != null) {
-			validBlockClasses.add(blockClass);
-		}
-	}
-
-	public void addValidBlockClasses(List<Class> blockClasses) {
-		for (Class blockClass : blockClasses) {
-			addValidBlockClass(blockClass);
-		}
-	}
-
 	public Set<String> getValidItemStacks() {
 		return validItemStacks;
 	}
 
 	public Set<Integer> getValidOreIds() {
 		return validOreIds;
-	}
-
-	public Set<Class> getValidBlockClasses() {
-		return validBlockClasses;
-	}
-
-	public Set<Class> getValidItemClasses() {
-		return validItemClasses;
 	}
 
 	@Override
@@ -171,7 +124,7 @@ public class BackpackDefinition implements IBackpackDefinition {
 			return false;
 		}
 
-		String itemStackStringWild = ItemStackUtil.getItemNameFromRegistryAsSting(item);
+		String itemStackStringWild = ItemStackUtil.getItemNameFromRegistryAsString(item);
 		if (validItemStacks.contains(itemStackStringWild)) {
 			return true;
 		}
@@ -192,47 +145,22 @@ public class BackpackDefinition implements IBackpackDefinition {
 			}
 		}
 
-		for (Class itemClass : validItemClasses) {
-			if (itemClass.isInstance(item)) {
-				validItemStacks.add(itemStackStringWild);
-				return true;
-			}
-		}
-
-		Block block = Block.getBlockFromItem(item);
-		if (block != null) {
-			for (Class blockClass : validBlockClasses) {
-				if (blockClass.isInstance(block)) {
-					validItemStacks.add(itemStackStringWild);
-					return true;
-				}
-			}
-		}
-
 		return false;
 	}
 
-	public static class BackpackDefinitionApiarist extends BackpackDefinition {
+	public static class BackpackDefinitionNaturalist extends BackpackDefinition {
+		@Nonnull
+		private final String speciesRootUid;
 
-		public BackpackDefinitionApiarist(@Nonnull Color primaryColor) {
+		public BackpackDefinitionNaturalist(@Nonnull Color primaryColor, @Nonnull String speciesRootUid) {
 			super(primaryColor);
+			this.speciesRootUid = speciesRootUid;
 		}
 
 		@Override
 		public boolean isValidItem(ItemStack itemStack) {
-			return BeeManager.beeRoot.isMember(itemStack);
-		}
-	}
-
-	public static class BackpackDefinitionLepidopterist extends BackpackDefinition {
-
-		public BackpackDefinitionLepidopterist(@Nonnull Color primaryColor) {
-			super(primaryColor);
-		}
-
-		@Override
-		public boolean isValidItem(ItemStack itemStack) {
-			return ButterflyManager.butterflyRoot.isMember(itemStack);
+			ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(speciesRootUid);
+			return speciesRoot.isMember(itemStack);
 		}
 	}
 }

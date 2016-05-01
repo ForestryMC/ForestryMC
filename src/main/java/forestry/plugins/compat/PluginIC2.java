@@ -22,6 +22,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
+
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitLayout;
@@ -246,7 +247,7 @@ public class PluginIC2 extends BlankForestryPlugin {
 
 		if (rubberSapling != null && resin != null) {
 			String saplingName = ItemStackUtil.getBlockNameFromRegistryAsSting(ItemStackUtil.getBlock(rubberSapling));
-			String resinName = ItemStackUtil.getItemNameFromRegistryAsSting(resin.getItem());
+			String resinName = ItemStackUtil.getItemNameFromRegistryAsString(resin.getItem());
 			String imc = String.format("farmArboreal@%s.%s.%s.%s",
 					saplingName, rubberSapling.getItemDamage(),
 					resinName, resin.getItemDamage());
