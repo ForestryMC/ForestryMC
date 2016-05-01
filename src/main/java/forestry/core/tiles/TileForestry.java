@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.tiles;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Random;
@@ -28,10 +29,12 @@ import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
+
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorLogicSource;
 import forestry.core.access.AccessHandler;
@@ -62,6 +65,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	private final AccessHandler accessHandler = new AccessHandler(this);
 	private final ErrorLogic errorHandler = new ErrorLogic();
 	private final AdjacentTileCache tileCache = new AdjacentTileCache(this);
+	@Nonnull
 	private IInventoryAdapter inventory = FakeInventoryAdapter.instance();
 
 	private int tickCount = rand.nextInt(256);
@@ -393,6 +397,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
 		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && inventory != null){
+			//noinspection unchecked
 			return (T) new SidedInvWrapper(inventory, facing);
 		}
 		return super.getCapability(capability, facing);
