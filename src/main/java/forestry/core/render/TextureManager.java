@@ -71,8 +71,11 @@ public class TextureManager implements ITextureManager {
 	
 	public static TextureAtlasSprite registerSprite(TextureAtlasSprite sprite, String identifier) {
 		TextureMap map = Proxies.common.getClientInstance().getTextureMapBlocks();
-		map.setTextureEntry(identifier, sprite);
-		return sprite;
+		if(map.setTextureEntry(identifier, sprite)){
+			return sprite;
+		}else{
+			return map.getTextureExtry(identifier);
+		}
 	}
 	
 	public static TextureAtlasSprite getSprite(String modID, String identifier) {
