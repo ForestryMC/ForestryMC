@@ -40,7 +40,7 @@ public class TriggerNoFrames extends Trigger {
 
 		InventoryApiary inventory = (InventoryApiary) apiary.getInternalInventory();
 
-		return inventory.getFrames().size() == 0;
+		return inventory.getFrames().isEmpty();
 	}
 
 }

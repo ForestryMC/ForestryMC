@@ -20,15 +20,14 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
+
 import net.minecraftforge.fml.common.registry.GameData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.core.ForestryAPI;
-import forestry.api.core.IItemModelRegister;
 import forestry.api.core.ISpriteProvider;
 import forestry.api.core.ISpriteRegister;
-import forestry.api.core.IStateMapperRegister;
 import forestry.api.core.ITextureManager;
 import forestry.core.proxy.Proxies;
 

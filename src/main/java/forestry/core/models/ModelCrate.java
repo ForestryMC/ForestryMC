@@ -11,7 +11,6 @@
 package forestry.core.models;
 
 import com.google.common.base.Charsets;
-import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 
@@ -28,7 +27,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.block.model.ModelBlock;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.model.IBakedModel;
@@ -79,8 +77,7 @@ public class ModelCrate extends BlankItemModel {
 			MODEL_COMPASS = ObfuscationReflectionHelper.getPrivateValue(ModelBakery.class, event.modelLoader, 15);
 			MODEL_CLOCK = ObfuscationReflectionHelper.getPrivateValue(ModelBakery.class, event.modelLoader, 16);
 		} catch (IOException e) {
-			Log.error("Failed to init the crate model.");
-			e.printStackTrace();
+			Log.error("Failed to init the crate model.", e);
 		}
 	}
 	
@@ -176,6 +173,7 @@ public class ModelCrate extends BlankItemModel {
 					try {
 						model.parent = loadModel(model.getParentLocation());
 					} catch (IOException e) {
+						Log.error("Failed to load model.", e);
 					}
 				}
 			}
@@ -201,16 +199,6 @@ public class ModelCrate extends BlankItemModel {
 			return new IFlexibleBakedModel.Wrapper(model, DefaultVertexFormats.ITEM);
 		}
 	}
-
-	private Function<ResourceLocation, TextureAtlasSprite> textureGetter = new DefaultTextureGetter();
-	
-	/**
-	 * Bake the crate model;
-	 */
-	/*private IFlexibleBakedModel getModelCrate() {
-		IFlexibleBakedModel flexModel = getModel(new ItemStack(PluginStorage.items.crate, 1, 1));
-		return crateModel.bake(crateModel.getDefaultState(), flexModel.getFormat(), textureGetter);
-	}*/
 
 	/**
 	 * Bake the crated model

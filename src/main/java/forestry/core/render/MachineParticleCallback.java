@@ -10,16 +10,16 @@
  ******************************************************************************/
 package forestry.core.render;
 
-import forestry.core.blocks.BlockBase;
-import forestry.core.blocks.IBlockType;
-import forestry.core.blocks.IMachinePropertiesTesr;
-import forestry.core.proxy.Proxies;
-import net.minecraft.block.Block;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.EntityDiggingFX;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.IStringSerializable;
+
+import forestry.core.blocks.BlockBase;
+import forestry.core.blocks.IBlockType;
+import forestry.core.blocks.IMachinePropertiesTesr;
+import forestry.core.proxy.Proxies;
 
 public class MachineParticleCallback<P extends Enum<P> & IBlockType & IStringSerializable> extends ParticleHelper.DefaultCallback<BlockBase> {
 	

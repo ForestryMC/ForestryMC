@@ -40,8 +40,8 @@ public class ModelManager implements IModelManager {
 	
 	private static final ModelManager instance = new ModelManager();
 	
-	private static final ArrayList<BlockModelIndex> customBlockModels = new ArrayList<BlockModelIndex>();
-	private static final ArrayList<ModelIndex> customModels = new ArrayList<ModelIndex>();
+	private static final ArrayList<BlockModelIndex> customBlockModels = new ArrayList<>();
+	private static final ArrayList<ModelIndex> customModels = new ArrayList<>();
 
 	static {
 		ForestryAPI.modelManager = instance;

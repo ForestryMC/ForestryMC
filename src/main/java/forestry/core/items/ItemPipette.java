@@ -32,7 +32,6 @@ import forestry.core.fluids.PipetteContents;
 public class ItemPipette extends ItemForestry implements IToolPipette {
 
 	public ItemPipette() {
-		super();
 		setMaxStackSize(1);
 		setFull3D();
 	}

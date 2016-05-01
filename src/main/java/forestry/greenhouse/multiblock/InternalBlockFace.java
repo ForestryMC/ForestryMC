@@ -10,9 +10,12 @@
  ******************************************************************************/
 package forestry.greenhouse.multiblock;
 
-import forestry.api.greenhouse.IInternalBlockFace;
+import javax.annotation.Nonnull;
+
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+
+import forestry.api.greenhouse.IInternalBlockFace;
 
 public class InternalBlockFace implements IInternalBlockFace {
 
@@ -36,11 +39,13 @@ public class InternalBlockFace implements IInternalBlockFace {
 		this.isTested = tested;
 	}
 
+	@Nonnull
 	@Override
 	public EnumFacing getFace() {
 		return face;
 	}
 
+	@Nonnull
 	@Override
 	public BlockPos getPos() {
 		return pos;

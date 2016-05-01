@@ -24,6 +24,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.wrapper.InvWrapper;
 
 import forestry.core.tiles.IFilterSlotDelegate;
 
@@ -32,7 +33,7 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 	private static final String KEY_UID = "UID";
 	private static final Random rand = new Random();
 
-	private final IItemHandler capabilityHandler = new ItemHandlerItemInventory<>(this);
+	private final IItemHandler capabilityHandler = new InvWrapper(this);
 	private final EntityPlayer player;
 	private final ItemStack parent;
 	private final ItemStack[] inventoryStacks;

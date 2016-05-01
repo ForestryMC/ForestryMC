@@ -10,59 +10,59 @@
  ******************************************************************************/
 package forestry.greenhouse;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
 
 import forestry.api.core.EnumCamouflageType;
 import forestry.api.greenhouse.IGreenhouseAccess;
 import forestry.core.utils.Log;
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
 
 public class GreenhouseAccess implements IGreenhouseAccess {
 
-	private final Map<ItemStack, Float> greenhouseGlass = new HashMap();
-	private final Map<EnumCamouflageType, List<ItemStack>> camouflageBlockBlacklist = new EnumMap(EnumCamouflageType.class);
+	private final Map<ItemStack, Float> greenhouseGlasses = new HashMap<>();
+	private final Map<EnumCamouflageType, List<ItemStack>> camouflageBlockBlacklist = new EnumMap<>(EnumCamouflageType.class);
 	
 	public GreenhouseAccess() {
-		for(EnumCamouflageType type : EnumCamouflageType.VALUES){
-			camouflageBlockBlacklist.put(type, new ArrayList());
+		for (EnumCamouflageType type : EnumCamouflageType.VALUES) {
+			camouflageBlockBlacklist.put(type, new ArrayList<>());
 		}
 	}
 	
 	@Override
 	public void registerGreenhouseGlass(@Nonnull ItemStack glass, float lightTransmittance) {
-		if(glass == null || glass.getItem() == null){
+		if (glass == null || glass.getItem() == null) {
 			Log.error("Fail to register greenhouse glass, because it is null");
 			return;
 		}
 		Block block = Block.getBlockFromItem(glass.getItem());
-		if(block == null || block.isOpaqueCube()){
+		if (block == null || block.isOpaqueCube()) {
 			Log.error("Fail to register greenhouse glass: " + block + ".");
 			return;
 		}
-		for(ItemStack greenhouseGlass : greenhouseGlass.keySet()){
-			if(greenhouseGlass.getItem() == glass.getItem() && greenhouseGlass.getItemDamage() == glass.getItemDamage() && ItemStack.areItemStackTagsEqual(glass, greenhouseGlass)){
+		for (ItemStack greenhouseGlass : greenhouseGlasses.keySet()) {
+			if (greenhouseGlass.getItem() == glass.getItem() && greenhouseGlass.getItemDamage() == glass.getItemDamage() && ItemStack.areItemStackTagsEqual(glass, greenhouseGlass)) {
 				Log.error("Fail to register greenhouse glass, because it is already registered: " + glass + ".");
 				return;
 			}
 		}
-		greenhouseGlass.put(glass, lightTransmittance);
+		greenhouseGlasses.put(glass, lightTransmittance);
 	}
 	
 	@Override
-	public float getGreenhouseGlassLightTransmittance(ItemStack glass) {
-		if(glass == null || glass.getItem() == null || Block.getBlockFromItem(glass.getItem()) == null) {
+	public float getGreenhouseGlassLightTransmittance(@Nonnull ItemStack glass) {
+		if (glass == null || glass.getItem() == null || Block.getBlockFromItem(glass.getItem()) == null) {
 			return 0.5F;
 		}
-		for(Map.Entry<ItemStack, Float> greenhouseGlassEntry : greenhouseGlass.entrySet()){
+		for (Map.Entry<ItemStack, Float> greenhouseGlassEntry : greenhouseGlasses.entrySet()) {
 			ItemStack greenhouseGlass = greenhouseGlassEntry.getKey();
-			if(greenhouseGlass.getItem() == glass.getItem() && greenhouseGlass.getItemDamage() == glass.getItemDamage() && ItemStack.areItemStackTagsEqual(glass, greenhouseGlass)){
+			if (greenhouseGlass.getItem() == glass.getItem() && greenhouseGlass.getItemDamage() == glass.getItemDamage() && ItemStack.areItemStackTagsEqual(glass, greenhouseGlass)) {
 				return greenhouseGlassEntry.getValue();
 			}
 		}
@@ -71,11 +71,11 @@ public class GreenhouseAccess implements IGreenhouseAccess {
 
 	@Override
 	public boolean isGreenhouseGlass(@Nonnull ItemStack glass) {
-		if(glass == null || glass.getItem() == null || Block.getBlockFromItem(glass.getItem()) == null) {
+		if (glass == null || glass.getItem() == null || Block.getBlockFromItem(glass.getItem()) == null) {
 			return false;
 		}
-		for(ItemStack greenhouseGlass : greenhouseGlass.keySet()){
-			if(greenhouseGlass.getItem() == glass.getItem() && greenhouseGlass.getItemDamage() == glass.getItemDamage() && ItemStack.areItemStackTagsEqual(glass, greenhouseGlass)){
+		for (ItemStack greenhouseGlass : greenhouseGlasses.keySet()) {
+			if (greenhouseGlass.getItem() == glass.getItem() && greenhouseGlass.getItemDamage() == glass.getItemDamage() && ItemStack.areItemStackTagsEqual(glass, greenhouseGlass)) {
 				return true;
 			}
 		}
@@ -84,17 +84,17 @@ public class GreenhouseAccess implements IGreenhouseAccess {
 
 	@Override
 	public void addToCamouflageBlockBlackList(@Nonnull EnumCamouflageType type, @Nonnull ItemStack camouflageBlock) {
-		if(camouflageBlock == null || camouflageBlock.getItem() == null){
+		if (camouflageBlock == null || camouflageBlock.getItem() == null) {
 			Log.error("Fail to add camouflage block item to the black list, because it is null");
 			return;
 		}
 		Block block = Block.getBlockFromItem(camouflageBlock.getItem());
-		if(block == null){
+		if (block == null) {
 			Log.error("Fail to add camouflage block item to the black list: because it has no block.");
 			return;
 		}
-		for(ItemStack camouflageBlacklisted : camouflageBlockBlacklist.get(type)){
-			if(camouflageBlacklisted.getItem() == camouflageBlock.getItem() && camouflageBlacklisted.getItemDamage() == camouflageBlock.getItemDamage() && ItemStack.areItemStackTagsEqual(camouflageBlock, camouflageBlacklisted)){
+		for (ItemStack camouflageBlacklisted : camouflageBlockBlacklist.get(type)) {
+			if (camouflageBlacklisted.getItem() == camouflageBlock.getItem() && camouflageBlacklisted.getItemDamage() == camouflageBlock.getItemDamage() && ItemStack.areItemStackTagsEqual(camouflageBlock, camouflageBlacklisted)) {
 				Log.error("Fail to add camouflage block item to the black list, because it is already registered: " + camouflageBlock + ".");
 				return;
 			}
@@ -104,11 +104,11 @@ public class GreenhouseAccess implements IGreenhouseAccess {
 
 	@Override
 	public boolean isOnCamouflageBlockBlackList(@Nonnull EnumCamouflageType type, @Nonnull ItemStack camouflageBlock) {
-		if(camouflageBlock == null || camouflageBlock.getItem() == null || Block.getBlockFromItem(camouflageBlock.getItem()) == null) {
+		if (camouflageBlock == null || camouflageBlock.getItem() == null || Block.getBlockFromItem(camouflageBlock.getItem()) == null) {
 			return false;
 		}
-		for(ItemStack camouflageBlacklisted : camouflageBlockBlacklist.get(type)){
-			if(camouflageBlacklisted.getItem() == camouflageBlock.getItem() && camouflageBlacklisted.getItemDamage() == camouflageBlock.getItemDamage() && ItemStack.areItemStackTagsEqual(camouflageBlock, camouflageBlacklisted)){
+		for (ItemStack camouflageBlacklisted : camouflageBlockBlacklist.get(type)) {
+			if (camouflageBlacklisted.getItem() == camouflageBlock.getItem() && camouflageBlacklisted.getItemDamage() == camouflageBlock.getItemDamage() && ItemStack.areItemStackTagsEqual(camouflageBlock, camouflageBlacklisted)) {
 				return true;
 			}
 		}

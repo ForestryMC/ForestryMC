@@ -23,8 +23,8 @@ import net.minecraft.item.ItemStack;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public interface IExtInvSlot extends IInvSlot {
-    /**
-     * Sets the current ItemStack in the slot.
-     */
-    void setStackInSlot(ItemStack stack);
+	/**
+	 * Sets the current ItemStack in the slot.
+	 */
+	void setStackInSlot(ItemStack stack);
 }

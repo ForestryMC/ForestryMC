@@ -150,7 +150,7 @@ public class AlleleFruit extends AlleleCategorized implements IAlleleFruit {
 	}
 	
 	@Override
-	public int compareTo(IAlleleFruit o) {
+	public int compareTo(@Nonnull IAlleleFruit o) {
 		return 0;
 	}
 

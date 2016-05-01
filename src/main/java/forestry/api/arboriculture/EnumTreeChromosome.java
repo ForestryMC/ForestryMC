@@ -47,7 +47,7 @@ public enum EnumTreeChromosome implements IChromosomeType {
 	 */
 	YIELD(IAlleleFloat.class),
 	/**
-	 * May add additional tolerances for {@link EnumPlantTypes}.
+	 * May add additional tolerances for {@link EnumPlantType}.
 	 */
 	PLANT(IAllelePlantType.class),
 	/**

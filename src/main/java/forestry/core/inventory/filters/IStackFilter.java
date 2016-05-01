@@ -11,9 +11,10 @@
 package forestry.core.inventory.filters;
 
 import com.google.common.base.Predicate;
-import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
+
+import net.minecraft.item.ItemStack;
 
 /**
  * This interface is used to provide a convenient means of dealing with entire classes of items without having to specify each item individually.
@@ -22,9 +23,9 @@ import javax.annotation.Nonnull;
  */
 public interface IStackFilter extends Predicate<ItemStack> {
 
-    StackFilter and(@Nonnull Predicate<? super ItemStack>... other);
+	StackFilter and(@Nonnull Predicate<? super ItemStack>... other);
 
-    StackFilter or(@Nonnull Predicate<? super ItemStack>... other);
+	StackFilter or(@Nonnull Predicate<? super ItemStack>... other);
 
-    StackFilter negate();
+	StackFilter negate();
 }

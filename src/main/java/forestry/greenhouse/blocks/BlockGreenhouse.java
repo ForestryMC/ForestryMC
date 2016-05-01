@@ -70,7 +70,7 @@ public abstract class BlockGreenhouse extends BlockStructure implements ISpriteR
 
 	public static final PropertyEnum<State> STATE = PropertyEnum.create("state", State.class);
 	
-	public static enum State implements IStringSerializable {
+	public enum State implements IStringSerializable {
 		ON, OFF;
 
 		@Override
@@ -82,16 +82,16 @@ public abstract class BlockGreenhouse extends BlockStructure implements ISpriteR
 	public static Map<BlockGreenhouseType, BlockGreenhouse> create() {
 		Map<BlockGreenhouseType, BlockGreenhouse> blockMap = new EnumMap<>(BlockGreenhouseType.class);
 		for (final BlockGreenhouseType type : BlockGreenhouseType.VALUES) {
-			if(type == BlockGreenhouseType.BUTTERFLY_HATCH){
-				if(!ForestryAPI.enabledPlugins.contains(ForestryPluginUids.LEPIDOPTEROLOGY)) {
+			if (type == BlockGreenhouseType.BUTTERFLY_HATCH) {
+				if (!ForestryAPI.enabledPlugins.contains(ForestryPluginUids.LEPIDOPTEROLOGY)) {
 					continue;
 				}
 			}
 			
 			BlockGreenhouse block;
-			if(type == BlockGreenhouseType.DOOR){
+			if (type == BlockGreenhouseType.DOOR) {
 				block = new BlockGreenhouseDoor();
-			}else{
+			} else {
 				block = new BlockGreenhouse() {
 					@Nonnull
 					@Override
@@ -109,45 +109,45 @@ public abstract class BlockGreenhouse extends BlockStructure implements ISpriteR
 		super(Material.rock);
 		BlockGreenhouseType greenhouseType = getGreenhouseType();
 		IBlockState defaultState = this.blockState.getBaseState();
-		if(greenhouseType.activatable && greenhouseType != BlockGreenhouseType.SPRINKLER){
+		if (greenhouseType.activatable && greenhouseType != BlockGreenhouseType.SPRINKLER) {
 			defaultState = defaultState.withProperty(STATE, State.OFF);
 		}
 		setDefaultState(defaultState);
 		
 		setHardness(1.0f);
 		setHarvestLevel("pickaxe", 0);
-		if(ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FARMING)){
+		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FARMING)) {
 			setCreativeTab(Tabs.tabAgriculture);
-		}else{
+		} else {
 			setCreativeTab(CreativeTabForestry.tabForestry);
 		}
 	}
 	
-    @Override
+	@Override
 	@SideOnly(Side.CLIENT)
-    public AxisAlignedBB getSelectedBoundingBox(World worldIn, BlockPos pos){
-    	if(getGreenhouseType() == BlockGreenhouseType.SPRINKLER){
-    		this.setBlockBoundsBasedOnState(worldIn, pos);
-    	}
-        return super.getSelectedBoundingBox(worldIn, pos);
-    }
+	public AxisAlignedBB getSelectedBoundingBox(World worldIn, BlockPos pos) {
+		if (getGreenhouseType() == BlockGreenhouseType.SPRINKLER) {
+			this.setBlockBoundsBasedOnState(worldIn, pos);
+		}
+		return super.getSelectedBoundingBox(worldIn, pos);
+	}
 
-    @Override
-	public AxisAlignedBB getCollisionBoundingBox(World worldIn, BlockPos pos, IBlockState state){
-    	if(getGreenhouseType() == BlockGreenhouseType.SPRINKLER){
-    		this.setBlockBoundsBasedOnState(worldIn, pos);
-    	}
-        return super.getCollisionBoundingBox(worldIn, pos, state);
-    }
+	@Override
+	public AxisAlignedBB getCollisionBoundingBox(World worldIn, BlockPos pos, IBlockState state) {
+		if (getGreenhouseType() == BlockGreenhouseType.SPRINKLER) {
+			this.setBlockBoundsBasedOnState(worldIn, pos);
+		}
+		return super.getCollisionBoundingBox(worldIn, pos, state);
+	}
 
-    @Override
-	public void setBlockBoundsBasedOnState(IBlockAccess worldIn, BlockPos pos){
-    	if(getGreenhouseType() == BlockGreenhouseType.SPRINKLER){
-    		setBlockBounds(0.3125F, 0.25F, 0.3125F, 0.6875F, 1F, 0.6875F);
-    	}else{
-    		super.setBlockBoundsBasedOnState(worldIn, pos);
-    	}
-    }
+	@Override
+	public void setBlockBoundsBasedOnState(IBlockAccess worldIn, BlockPos pos) {
+		if (getGreenhouseType() == BlockGreenhouseType.SPRINKLER) {
+			setBlockBounds(0.3125F, 0.25F, 0.3125F, 0.6875F, 1F, 0.6875F);
+		} else {
+			super.setBlockBoundsBasedOnState(worldIn, pos);
+		}
+	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
@@ -156,29 +156,29 @@ public abstract class BlockGreenhouse extends BlockStructure implements ISpriteR
 
 	@Override
 	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
-		if(getGreenhouseType() != BlockGreenhouseType.SPRINKLER && getGreenhouseType() != BlockGreenhouseType.DOOR){
+		if (getGreenhouseType() != BlockGreenhouseType.SPRINKLER && getGreenhouseType() != BlockGreenhouseType.DOOR) {
 			return ((IExtendedBlockState) super.getExtendedState(state, world, pos)).withProperty(UnlistedBlockPos.POS, pos)
-				.	withProperty(UnlistedBlockAccess.BLOCKACCESS, world);
+					.withProperty(UnlistedBlockAccess.BLOCKACCESS, world);
 		}
 		return super.getExtendedState(state, world, pos);
 	}
 
 	@Override
 	protected BlockState createBlockState() {
-		if(getGreenhouseType() == BlockGreenhouseType.SPRINKLER){
-			 return new ExtendedBlockState(this, new IProperty[]{ Properties.StaticProperty }, new IUnlistedProperty[]{ Properties.AnimationProperty });
-		}else if(getGreenhouseType().activatable){
+		if (getGreenhouseType() == BlockGreenhouseType.SPRINKLER) {
+			return new ExtendedBlockState(this, new IProperty[]{Properties.StaticProperty}, new IUnlistedProperty[]{Properties.AnimationProperty});
+		} else if (getGreenhouseType().activatable) {
 			return new ExtendedBlockState(this, new IProperty[]{STATE}, new IUnlistedProperty[]{UnlistedBlockPos.POS, UnlistedBlockAccess.BLOCKACCESS});
-		}else{
+		} else {
 			return new ExtendedBlockState(this, new IProperty[0], new IUnlistedProperty[]{UnlistedBlockPos.POS, UnlistedBlockAccess.BLOCKACCESS});
 		}
 	}
 	
 	@Override
 	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-		if(getGreenhouseType() == BlockGreenhouseType.SPRINKLER){
+		if (getGreenhouseType() == BlockGreenhouseType.SPRINKLER) {
 			return state.withProperty(Properties.StaticProperty, true);
-		}else{
+		} else {
 			return super.getActualState(state, worldIn, pos);
 		}
 	}
@@ -222,15 +222,15 @@ public abstract class BlockGreenhouse extends BlockStructure implements ISpriteR
 	@Override
 	public int colorMultiplier(IBlockAccess world, BlockPos pos, int renderPass) {
 		TileEntity tile = world.getTileEntity(pos);
-		if(tile instanceof ICamouflagedBlock){
+		if (tile instanceof ICamouflagedBlock) {
 			ItemStack camouflageStack = CamouflageUtil.getCamouflageBlock(world, pos);
 			
-			if(renderPass < 100 && camouflageStack != null){
+			if (renderPass < 100 && camouflageStack != null) {
 				return Block.getBlockFromItem(camouflageStack.getItem()).colorMultiplier(world, pos, renderPass);
 			}
 			
 			return super.colorMultiplier(world, pos, renderPass);
-		}else{
+		} else {
 			return super.colorMultiplier(world, pos, renderPass);
 		}
 	}
@@ -239,7 +239,7 @@ public abstract class BlockGreenhouse extends BlockStructure implements ISpriteR
 	@Override
 	@SideOnly(Side.CLIENT)
 	public EnumWorldBlockLayer getBlockLayer() {
-		if(getGreenhouseType() == BlockGreenhouseType.GLASS || getGreenhouseType() == BlockGreenhouseType.SPRINKLER){
+		if (getGreenhouseType() == BlockGreenhouseType.GLASS || getGreenhouseType() == BlockGreenhouseType.SPRINKLER) {
 			return EnumWorldBlockLayer.TRANSLUCENT;
 		}
 		return EnumWorldBlockLayer.CUTOUT;
@@ -257,48 +257,44 @@ public abstract class BlockGreenhouse extends BlockStructure implements ISpriteR
 	
 	@Override
 	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
-		if(getGreenhouseType() == BlockGreenhouseType.SPRINKLER){
-			if(worldIn.getBlockState(pos.up()).getBlock() == this){
+		if (getGreenhouseType() == BlockGreenhouseType.SPRINKLER) {
+			if (worldIn.getBlockState(pos.up()).getBlock() == this) {
 				return false;
 			}
-			if(!(worldIn.getTileEntity(pos.up()) instanceof IGreenhouseComponent)){
+			if (!(worldIn.getTileEntity(pos.up()) instanceof IGreenhouseComponent)) {
 				return false;
 			}
 		}
 		return super.canPlaceBlockAt(worldIn, pos);
 	}
 	
-    @Override
+	@Override
 	@SideOnly(Side.CLIENT)
-    public boolean shouldSideBeRendered(IBlockAccess worldIn, BlockPos pos, EnumFacing side)
-    {
-        IBlockState iblockstate = worldIn.getBlockState(pos);
-        Block block = iblockstate.getBlock();
+	public boolean shouldSideBeRendered(IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
+		IBlockState iblockstate = worldIn.getBlockState(pos);
+		Block block = iblockstate.getBlock();
 
-        if (getGreenhouseType() == BlockGreenhouseType.GLASS)
-        {
-            if (worldIn.getBlockState(pos.offset(side.getOpposite())) != iblockstate)
-            {
-                return true;
-            }
+		if (getGreenhouseType() == BlockGreenhouseType.GLASS) {
+			if (worldIn.getBlockState(pos.offset(side.getOpposite())) != iblockstate) {
+				return true;
+			}
 
-            if (block == this)
-            {
-                return false;
-            }
-        }else if(getGreenhouseType() == BlockGreenhouseType.DOOR){
-        	return super.shouldSideBeRendered(worldIn, pos, side);
-        }
+			if (block == this) {
+				return false;
+			}
+		} else if (getGreenhouseType() == BlockGreenhouseType.DOOR) {
+			return super.shouldSideBeRendered(worldIn, pos, side);
+		}
 
-        return block == this ? false : super.shouldSideBeRendered(worldIn, pos, side);
-    }
+		return block != this && super.shouldSideBeRendered(worldIn, pos, side);
+	}
 	
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		if(getGreenhouseType() == BlockGreenhouseType.SPRINKLER){
+		if (getGreenhouseType() == BlockGreenhouseType.SPRINKLER) {
 			ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation("forestry:greenhouse.sprinkler", "inventory"));
-		}else{
+		} else {
 			ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation("forestry:greenhouse", "inventory"));
 		}
 	}

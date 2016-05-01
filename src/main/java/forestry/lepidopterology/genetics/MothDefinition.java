@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.Locale;
 
 import net.minecraft.item.ItemStack;
+
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IClassification;
 import forestry.api.lepidopterology.ButterflyManager;
@@ -45,11 +46,6 @@ public enum MothDefinition implements IButterflyDefinition {
 		}
 	},
 	BombyxMori(ButterflyBranchDefinition.Bombyx, "bombyxMori", "bombyxMori", new Color(0xDADADA), false, 0){
-		
-		@Override
-		protected void setSpeciesProperties(IAlleleButterflySpeciesBuilder species) {
-		}
-		
 		@Override
 		protected void setAlleles(IAllele[] alleles) {
 			AlleleHelper.instance.set(alleles, EnumButterflyChromosome.SIZE, EnumAllele.Size.SMALLEST);

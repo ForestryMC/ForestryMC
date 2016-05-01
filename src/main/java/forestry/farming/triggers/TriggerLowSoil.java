@@ -43,11 +43,6 @@ public class TriggerLowSoil extends Trigger {
 		return 1;
 	}
 
-	@Override
-	public int minParameters() {
-		return 0;
-	}
-
 	/**
 	 * Return true if the tile given in parameter activates the trigger, given
 	 * the parameters.

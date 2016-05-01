@@ -35,7 +35,7 @@ public class MutationConditionRequiresResourceOreDict implements IMutationCondit
 		this.oreDictId = OreDictionary.getOreID(oreDictName);
 
 		List<ItemStack> ores = OreDictionary.getOres(oreDictName);
-		if (ores != null && 0 < ores.size()) {
+		if (ores != null && !ores.isEmpty()) {
 			this.displayName = ores.get(0).getDisplayName();
 		} else {
 			this.displayName = oreDictName;

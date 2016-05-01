@@ -10,11 +10,15 @@
  ******************************************************************************/
 package forestry.arboriculture.models;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
+
 import net.minecraftforge.common.property.IExtendedBlockState;
+
 import forestry.api.core.IModelBaker;
 import forestry.arboriculture.blocks.BlockForestryLeaves;
 import forestry.arboriculture.genetics.TreeRoot;
@@ -31,7 +35,7 @@ public class ModelLeaves extends ModelBlockOverlay<BlockForestryLeaves> {
 	}
 
 	@Override
-	public void bakeInventoryBlock(BlockForestryLeaves block, ItemStack itemStack, IModelBaker baker) {
+	public void bakeInventoryBlock(@Nonnull BlockForestryLeaves block, @Nonnull ItemStack itemStack, @Nonnull IModelBaker baker) {
 		if (!(itemStack.getItem() instanceof ItemBlockLeaves) || block == null) {
 			return;
 		}
@@ -63,7 +67,7 @@ public class ModelLeaves extends ModelBlockOverlay<BlockForestryLeaves> {
 	}
 
 	@Override
-	public void bakeWorldBlock(BlockForestryLeaves block, IBlockAccess world, BlockPos pos, IExtendedBlockState stateExtended, IModelBaker baker) {
+	public void bakeWorldBlock(@Nonnull BlockForestryLeaves block, @Nonnull IBlockAccess world, @Nonnull BlockPos pos, @Nonnull IExtendedBlockState stateExtended, @Nonnull IModelBaker baker) {
 		TileLeaves tile = TileUtil.getTile(world, pos, TileLeaves.class);
 		if (tile == null) {
 			return;

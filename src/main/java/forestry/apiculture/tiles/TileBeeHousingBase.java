@@ -165,11 +165,6 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 	}
 
 	@Override
-	public World getWorld() {
-		return worldObj;
-	}
-
-	@Override
 	public Vec3 getBeeFXCoordinates() {
 		return new Vec3(getPos().getX() + 0.5, getPos().getY() + 0.5, getPos().getZ() + 0.5);
 	}

@@ -10,16 +10,17 @@
  ******************************************************************************/
 package forestry.greenhouse.logics;
 
+import net.minecraft.block.BlockDoor;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.nbt.NBTTagCompound;
+
 import forestry.api.greenhouse.DefaultGreenhouseLogic;
 import forestry.api.greenhouse.IGreenhouseClimaLogic;
 import forestry.api.multiblock.IGreenhouseController;
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.greenhouse.tiles.TileGreenhouseDoor;
-import net.minecraft.block.BlockDoor;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.nbt.NBTTagCompound;
 
-public class GreenhouseLogicGreenhouseDoor extends DefaultGreenhouseLogic implements IGreenhouseClimaLogic{
+public class GreenhouseLogicGreenhouseDoor extends DefaultGreenhouseLogic implements IGreenhouseClimaLogic {
 
 	private int workTimer;
 	
@@ -29,15 +30,15 @@ public class GreenhouseLogicGreenhouseDoor extends DefaultGreenhouseLogic implem
 	
 	@Override
 	public void work() {
-		if(controller == null || !controller.isAssembled()){
+		if (controller == null || !controller.isAssembled()) {
 			return;
 		}
-		if(workTimer++>20){
+		if (workTimer++ > 20) {
 			int openDoors = 0;
-			for(IMultiblockComponent component : controller.getComponents()){
-				if(component instanceof TileGreenhouseDoor){
+			for (IMultiblockComponent component : controller.getComponents()) {
+				if (component instanceof TileGreenhouseDoor) {
 					IBlockState state = ((TileGreenhouseDoor) component).getWorld().getBlockState(component.getCoordinates());
-					if(state.getValue(BlockDoor.OPEN)){
+					if (state.getValue(BlockDoor.OPEN)) {
 						openDoors++;
 					}
 				}

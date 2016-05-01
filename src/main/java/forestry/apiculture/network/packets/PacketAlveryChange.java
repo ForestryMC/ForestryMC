@@ -12,6 +12,7 @@ package forestry.apiculture.network.packets;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.apiculture.multiblock.IAlvearyControllerInternal;
 import forestry.core.network.DataInputStreamForestry;
@@ -38,7 +39,7 @@ public class PacketAlveryChange extends PacketCoordinates implements IForestryPa
 	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) {
 		TileEntity tile = getTarget(Proxies.common.getRenderWorld());
 		if (tile instanceof IMultiblockComponent) {
-			((IMultiblockComponent) tile).getMultiblockLogic().getController().reassemble();;
+			((IMultiblockComponent) tile).getMultiblockLogic().getController().reassemble();
 		}
 	}
 }

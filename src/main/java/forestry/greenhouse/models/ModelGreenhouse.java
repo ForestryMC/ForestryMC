@@ -10,8 +10,9 @@
  ******************************************************************************/
 package forestry.greenhouse.models;
 
-import forestry.greenhouse.blocks.BlockGreenhouse;
-import forestry.greenhouse.blocks.BlockGreenhouseType;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockModelShapes;
@@ -20,14 +21,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.common.property.IExtendedBlockState;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import net.minecraftforge.common.property.IExtendedBlockState;
 
 import forestry.api.core.IModelBaker;
 import forestry.core.models.ModelBlockOverlay;
 import forestry.core.utils.CamouflageUtil;
+import forestry.greenhouse.blocks.BlockGreenhouse;
+import forestry.greenhouse.blocks.BlockGreenhouseType;
 
 public class ModelGreenhouse extends ModelBlockOverlay<BlockGreenhouse> {
 
@@ -36,19 +37,19 @@ public class ModelGreenhouse extends ModelBlockOverlay<BlockGreenhouse> {
 	}
 
 	@Override
-	protected void bakeInventoryBlock(BlockGreenhouse block, ItemStack item, IModelBaker baker) {
+	protected void bakeInventoryBlock(@Nonnull BlockGreenhouse block, @Nonnull ItemStack item, @Nonnull IModelBaker baker) {
 		bakeBlockModel(block, null, null, null, baker, null);
 	}
 
 	@Override
-	protected void bakeWorldBlock(BlockGreenhouse block, IBlockAccess world, BlockPos pos, IExtendedBlockState stateExtended, IModelBaker baker) {
+	protected void bakeWorldBlock(@Nonnull BlockGreenhouse block, @Nonnull IBlockAccess world, @Nonnull BlockPos pos, @Nonnull IExtendedBlockState stateExtended, @Nonnull IModelBaker baker) {
 		ItemStack camouflageStack = CamouflageUtil.getCamouflageBlock(world, pos);
 		
 		bakeBlockModel(block, world, pos, stateExtended, baker, camouflageStack);
 	}
 	
-	private void bakeBlockModel(@Nonnull BlockGreenhouse block, @Nullable IBlockAccess world, @Nullable BlockPos pos, @Nullable IExtendedBlockState stateExtended, @Nonnull IModelBaker baker, @Nullable ItemStack camouflageStack){
-		if(camouflageStack != null){
+	private void bakeBlockModel(@Nonnull BlockGreenhouse block, @Nullable IBlockAccess world, @Nullable BlockPos pos, @Nullable IExtendedBlockState stateExtended, @Nonnull IModelBaker baker, @Nullable ItemStack camouflageStack) {
+		if (camouflageStack != null) {
 			BlockModelShapes modelShapes = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes();
 			
 			baker.addBakedModel(modelShapes.getModelForState(Block.getBlockFromItem(camouflageStack.getItem()).getStateFromMeta(camouflageStack.getItemDamage())));
@@ -56,21 +57,21 @@ public class ModelGreenhouse extends ModelBlockOverlay<BlockGreenhouse> {
 		}
 		
 		//Bake the default blocks
-		else if(block.getGreenhouseType() == BlockGreenhouseType.GLASS){
+		else if (block.getGreenhouseType() == BlockGreenhouseType.GLASS) {
 			TextureAtlasSprite glassSprite = BlockGreenhouseType.getSprite(BlockGreenhouseType.GLASS, null, null, world, pos);
 			
 			baker.addBlockModel(block, pos, BlockGreenhouseType.getSprite(BlockGreenhouseType.GLASS, null, null, world, pos), 100);
 			baker.setParticleSprite(glassSprite);
-		}else{
+		} else {
 			TextureAtlasSprite plainSprite = BlockGreenhouseType.getSprite(BlockGreenhouseType.PLAIN, null, null, world, pos);
 			
 			baker.addBlockModel(block, pos, BlockGreenhouseType.getSprite(BlockGreenhouseType.PLAIN, null, null, world, pos), 100);
 			baker.setParticleSprite(plainSprite);
 		}
-		if(block.getGreenhouseType().hasOverlaySprite){
+		if (block.getGreenhouseType().hasOverlaySprite) {
 			TextureAtlasSprite[] sprite = new TextureAtlasSprite[6];
-			for(EnumFacing facing : EnumFacing.VALUES){
-				sprite[facing.ordinal()] =  BlockGreenhouseType.getSprite(block.getGreenhouseType(), facing, stateExtended, world, pos);
+			for (EnumFacing facing : EnumFacing.VALUES) {
+				sprite[facing.ordinal()] = BlockGreenhouseType.getSprite(block.getGreenhouseType(), facing, stateExtended, world, pos);
 			}
 			baker.addBlockModel(block, pos, sprite, 101);
 		}

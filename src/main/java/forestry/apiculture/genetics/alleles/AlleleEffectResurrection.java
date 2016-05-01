@@ -79,7 +79,7 @@ public class AlleleEffectResurrection extends AlleleEffectThrottled {
 	@Override
 	public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
 		List<EntityItem> entities = getEntitiesInRange(genome, housing, EntityItem.class);
-		if (entities.size() == 0) {
+		if (entities.isEmpty()) {
 			return storedData;
 		}
 

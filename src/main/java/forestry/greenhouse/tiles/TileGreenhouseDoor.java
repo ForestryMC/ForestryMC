@@ -10,6 +10,9 @@
  ******************************************************************************/
 package forestry.greenhouse.tiles;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.BlockPos;
+
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.multiblock.IGreenhouseComponent;
@@ -19,8 +22,6 @@ import forestry.core.access.IAccessHandler;
 import forestry.core.access.IRestrictedAccess;
 import forestry.core.multiblock.MultiblockTileEntityForestry;
 import forestry.greenhouse.multiblock.MultiblockLogicGreenhouse;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.BlockPos;
 
 public class TileGreenhouseDoor extends MultiblockTileEntityForestry<MultiblockLogicGreenhouse> implements IGreenhouseComponent.Door, IErrorLogicSource, IRestrictedAccess {
 
@@ -38,11 +39,6 @@ public class TileGreenhouseDoor extends MultiblockTileEntityForestry<MultiblockL
 	public void onMachineBroken() {
 		worldObj.notifyBlockOfStateChange(getPos(), worldObj.getBlockState(pos).getBlock());
 		markDirty();
-	}
-
-	@Override
-	public boolean allowsAutomation() {
-		return false;
 	}
 	
 	@Override

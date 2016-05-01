@@ -381,7 +381,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 		}
 
 		// Grab new items from stash
-		for (int i = 0; i < (slotsToShift.size() > 0 ? shiftedSlots : 2); i++) {
+		for (int i = 0; i < (!slotsToShift.isEmpty() ? shiftedSlots : 2); i++) {
 			int resourceSlot = getNextResourceSlot(0, InventoryMoistener.SLOT_RESERVOIR_1);
 			// Stop if no resources are available
 			if (resourceSlot < 0) {

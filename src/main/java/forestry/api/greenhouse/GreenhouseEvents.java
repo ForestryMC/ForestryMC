@@ -13,17 +13,18 @@ package forestry.api.greenhouse;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import net.minecraftforge.fml.common.eventhandler.Event;
+
 import forestry.api.core.EnumCamouflageType;
 import forestry.api.core.ICamouflageHandler;
 import forestry.api.core.ICamouflagedBlock;
-import net.minecraftforge.fml.common.eventhandler.Event;
 
 public class GreenhouseEvents extends Event {
 	
 	@Nullable
 	public final IGreenhouseState state;
 	
-	public GreenhouseEvents(IGreenhouseState state) {
+	public GreenhouseEvents(@Nullable IGreenhouseState state) {
 		this.state = state;
 	}
 	
@@ -36,7 +37,7 @@ public class GreenhouseEvents extends Event {
 		@Nonnull
 		public final EnumCamouflageType camouflageType;
 		
-		public CamouflageChangeEvent(IGreenhouseState state, ICamouflagedBlock camouflagedBlock, ICamouflageHandler camouflageHandler, EnumCamouflageType camouflageType) {
+		public CamouflageChangeEvent(IGreenhouseState state, @Nullable ICamouflagedBlock camouflagedBlock, @Nonnull ICamouflageHandler camouflageHandler, @Nonnull EnumCamouflageType camouflageType) {
 			super(state);
 			
 			this.camouflagedBlock = camouflagedBlock;
@@ -50,7 +51,7 @@ public class GreenhouseEvents extends Event {
 		@Nonnull
 		public IInternalBlock internalBlock;
 		
-		public InternalBlockEvent(IGreenhouseState state, IInternalBlock internalBlock) {
+		public InternalBlockEvent(IGreenhouseState state, @Nonnull IInternalBlock internalBlock) {
 			super(state);
 			
 			this.internalBlock = internalBlock;
@@ -69,7 +70,7 @@ public class GreenhouseEvents extends Event {
 		@Nonnull
 		public final IInternalBlockFace face;
 		
-		public CheckInternalBlockFaceEvent(IGreenhouseState state, IInternalBlock internalBlock, IInternalBlockFace face) {
+		public CheckInternalBlockFaceEvent(IGreenhouseState state, IInternalBlock internalBlock, @Nonnull IInternalBlockFace face) {
 			super(state, internalBlock);
 			
 			this.face = face;

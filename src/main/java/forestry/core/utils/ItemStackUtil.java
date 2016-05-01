@@ -484,8 +484,7 @@ public abstract class ItemStackUtil {
 		Item item = stack.getItem();
 		if (item != null) {
 			int meta = stack.getMeta();
-			ItemStack itemStack = new ItemStack(item, 1, meta);
-			return itemStack;
+			return new ItemStack(item, 1, meta);
 		}
 		return null;
 	}

@@ -10,10 +10,15 @@
  ******************************************************************************/
 package forestry.lepidopterology.genetics.alleles;
 
+import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.item.ItemStack;
 
 import forestry.api.genetics.AlleleManager;
 import forestry.api.lepidopterology.EnumButterflyChromosome;
@@ -22,9 +27,6 @@ import forestry.core.PluginCore;
 import forestry.core.config.Constants;
 import forestry.core.genetics.alleles.AlleleCategorized;
 import forestry.lepidopterology.blocks.property.PropertyCocoon;
-import net.minecraft.block.properties.PropertyInteger;
-import net.minecraft.client.resources.model.ModelResourceLocation;
-import net.minecraft.item.ItemStack;
 
 public class AlleleButterflyCocoon extends AlleleCategorized implements IAlleleButterflyCocoon {
 	
@@ -51,8 +53,8 @@ public class AlleleButterflyCocoon extends AlleleCategorized implements IAlleleB
 		cocoonSilk.getCocoonLoot().put(PluginCore.items.craftingMaterial.getSilkWisp(), 0.25F);
 	}
 	
-	private Map<ItemStack, Float> loot = new HashMap();
-	private String name;
+	private final Map<ItemStack, Float> loot = new HashMap<>();
+	private final String name;
 	
 	public AlleleButterflyCocoon(String name, boolean isDominant) {
 		super(Constants.MOD_ID, "cocoon", name, isDominant);
@@ -85,7 +87,7 @@ public class AlleleButterflyCocoon extends AlleleCategorized implements IAlleleB
 	}
 	
 	@Override
-	public int compareTo(IAlleleButterflyCocoon o) {
+	public int compareTo(@Nonnull IAlleleButterflyCocoon o) {
 		return 0;
 	}
 	

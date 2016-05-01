@@ -101,39 +101,39 @@ public class PluginFarming extends BlankForestryPlugin {
 	public void preInit() {
 		MinecraftForge.EVENT_BUS.register(this);
 
-		Farmables.farmables.put("farmArboreal", new ArrayList<IFarmable>());
+		Farmables.farmables.put("farmArboreal", new ArrayList<>());
 		Farmables.farmables.get("farmArboreal").add(new FarmableVanillaSapling());
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.ARBORICULTURE)) {
 			Farmables.farmables.get("farmArboreal").add(new FarmableGE());
 		}
 		
-		Farmables.farmables.put("farmOrchard", new ArrayList<IFarmable>());
+		Farmables.farmables.put("farmOrchard", new ArrayList<>());
 		Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(Blocks.wheat, 7));
 		Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(Blocks.potatoes, 7));
 		Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(Blocks.carrots, 7));
 
-		Farmables.farmables.put("farmShroom", new ArrayList<IFarmable>());
+		Farmables.farmables.put("farmShroom", new ArrayList<>());
 		Farmables.farmables.get("farmShroom").add(new FarmableVanillaMushroom(Blocks.brown_mushroom, 0));
 		Farmables.farmables.get("farmShroom").add(new FarmableVanillaMushroom(Blocks.red_mushroom, 0));
 
-		Farmables.farmables.put("farmWheat", new ArrayList<IFarmable>());
+		Farmables.farmables.put("farmWheat", new ArrayList<>());
 		Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(new ItemStack(Items.wheat_seeds), Blocks.wheat, 7));
 
-		Farmables.farmables.put("farmGourd", new ArrayList<IFarmable>());
+		Farmables.farmables.put("farmGourd", new ArrayList<>());
 		Farmables.farmables.get("farmGourd").add(
 				new FarmableGourd(new ItemStack(Items.pumpkin_seeds), new ItemStack(Blocks.pumpkin_stem), new ItemStack(Blocks.pumpkin)));
 		Farmables.farmables.get("farmGourd").add(new FarmableGourd(new ItemStack(Items.melon_seeds), new ItemStack(Blocks.melon_stem), new ItemStack(Blocks.melon_block)));
 
-		Farmables.farmables.put("farmInfernal", new ArrayList<IFarmable>());
+		Farmables.farmables.put("farmInfernal", new ArrayList<>());
 		Farmables.farmables.get("farmInfernal").add(new FarmableGenericCrop(new ItemStack(Items.nether_wart), Blocks.nether_wart, 3));
 
-		Farmables.farmables.put("farmPoales", new ArrayList<IFarmable>());
+		Farmables.farmables.put("farmPoales", new ArrayList<>());
 		Farmables.farmables.get("farmPoales").add(new FarmableStacked(Blocks.reeds, 3, 0));
 
-		Farmables.farmables.put("farmSucculentes", new ArrayList<IFarmable>());
+		Farmables.farmables.put("farmSucculentes", new ArrayList<>());
 		Farmables.farmables.get("farmSucculentes").add(new FarmableStacked(Blocks.cactus, 3, 0));
 
-		Farmables.farmables.put("farmVegetables", new ArrayList<IFarmable>());
+		Farmables.farmables.put("farmVegetables", new ArrayList<>());
 		Farmables.farmables.get("farmVegetables").add(new FarmableGenericCrop(new ItemStack(Items.potato), Blocks.potatoes, 7));
 		Farmables.farmables.get("farmVegetables").add(new FarmableGenericCrop(new ItemStack(Items.carrot), Blocks.carrots, 7));
 

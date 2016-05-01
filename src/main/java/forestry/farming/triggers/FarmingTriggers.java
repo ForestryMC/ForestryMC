@@ -30,7 +30,7 @@ public class FarmingTriggers {
 	public static List<ITriggerExternal> allExternalTriggers;
 
 	public static void initialize() {
-		allExternalTriggers = Arrays.<ITriggerExternal>asList(
+		allExternalTriggers = Arrays.asList(
 				lowResourceLiquid50 = new TriggerLowLiquid("lowLiquid.50", 0.5f),
 				lowResourceLiquid25 = new TriggerLowLiquid("lowLiquid.25", 0.25f),
 				lowSoil128 = new TriggerLowSoil(128),

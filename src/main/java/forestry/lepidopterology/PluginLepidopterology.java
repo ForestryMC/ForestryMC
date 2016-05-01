@@ -50,6 +50,7 @@ import forestry.core.fluids.Fluids;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.EntityUtil;
 import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.Log;
 import forestry.core.utils.Translator;
 import forestry.lepidopterology.blocks.BlockRegistryLepidopterology;
 import forestry.lepidopterology.blocks.BlockTypeLepidopterologyTesr;
@@ -209,7 +210,7 @@ public class PluginLepidopterology extends BlankForestryPlugin {
 				try{
 					spawnRaritys.put(raritys[0], Float.parseFloat(raritys[1]));
 				}catch(Exception e){
-					
+					Log.error("Failed to parse spawn rarity for butterfly. {}", rarity, e);
 				}
 			}
 		}
@@ -224,8 +225,8 @@ public class PluginLepidopterology extends BlankForestryPlugin {
 	}
 	
 	private static void parseCooconLoot(LocalizedConfiguration config, IAlleleButterflyCocoon cocoon){
-		Map<ItemStack, Float> cooconLoot = new HashMap();
-		List<String> lootList = new ArrayList();
+		Map<ItemStack, Float> cooconLoot = new HashMap<>();
+		List<String> lootList = new ArrayList<>();
 		for(Entry<ItemStack, Float> entry : cocoon.getCocoonLoot().entrySet()){
 			String itemStackString = ItemStackUtil.getItemNameFromRegistryAsString(entry.getKey().getItem());
 
@@ -251,7 +252,7 @@ public class PluginLepidopterology extends BlankForestryPlugin {
 						cooconLoot.put(itemStack, Float.parseFloat(loots[1]));
 					}
 				}catch(Exception e){
-					
+					Log.error("Failed to parse cocoon loot. {}", loot, e);
 				}
 			}
 		}

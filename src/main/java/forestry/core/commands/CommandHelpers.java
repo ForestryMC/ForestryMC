@@ -109,7 +109,7 @@ public class CommandHelpers {
 		body.setColor(EnumChatFormatting.GRAY);
 
 		List<String> commandAliases = command.getCommandAliases();
-		if (commandAliases.size() > 0) {
+		if (!commandAliases.isEmpty()) {
 			sendLocalizedChatMessage(sender, body, "for.chat.command.aliases", commandAliases.toString().replace("[", "").replace("]", ""));
 		}
 

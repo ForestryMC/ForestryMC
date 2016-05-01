@@ -49,7 +49,7 @@ public class TextureAtlasButterfly extends TextureAtlasSprite {
 	}
 	
 	private void resetSprite() {
-		this.setFramesTextureData(Lists.<int[][]>newArrayList());
+		this.setFramesTextureData(Lists.newArrayList());
 		this.frameCounter = 0;
 		this.tickCounter = 0;
 	}

@@ -59,7 +59,7 @@ public class TickHandlerCoreServer {
 			int dimensionID = world.provider.getDimensionId();
 			List<ChunkCoords> chunkList = chunkRegenList.get(dimensionID);
 
-			if (chunkList.size() > 0) {
+			if (!chunkList.isEmpty()) {
 				ChunkCoords coords = chunkList.get(0);
 				chunkList.remove(0);
 

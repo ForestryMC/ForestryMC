@@ -24,7 +24,6 @@ public abstract class ForestryEvent extends Event {
 		public final GameProfile username;
 
 		private BreedingEvent(ISpeciesRoot root, GameProfile username, IBreedingTracker tracker) {
-			super();
 			this.root = root;
 			this.username = username;
 			this.tracker = tracker;
@@ -54,7 +53,6 @@ public abstract class ForestryEvent extends Event {
 		public final EntityPlayer player;
 
 		public SyncedBreedingTracker(IBreedingTracker tracker, EntityPlayer player) {
-			super();
 			this.tracker = tracker;
 			this.player = player;
 		}

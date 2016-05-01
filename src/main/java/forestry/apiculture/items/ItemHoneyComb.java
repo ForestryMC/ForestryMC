@@ -28,7 +28,6 @@ import forestry.core.items.ItemForestry;
 
 public class ItemHoneyComb extends ItemForestry {
 	public ItemHoneyComb() {
-		super();
 		setMaxDamage(0);
 		setHasSubtypes(true);
 		setCreativeTab(Tabs.tabApiculture);

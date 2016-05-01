@@ -70,7 +70,7 @@ public class MultiblockWorldRegistry {
 	 * Called before Tile Entities are ticked in the world. Run game logic.
 	 */
 	public void tickStart() {
-		if (controllers.size() > 0) {
+		if (!controllers.isEmpty()) {
 			for (IMultiblockControllerInternal controller : controllers) {
 				if (controller.getWorld() == worldObj && controller.getWorld().isRemote == worldObj.isRemote) {
 					if (controller.isEmpty()) {
@@ -95,7 +95,7 @@ public class MultiblockWorldRegistry {
 
 		// Merge pools - sets of adjacent machines which should be merged later on in processing
 		List<Set<IMultiblockControllerInternal>> mergePools = null;
-		if (orphanedParts.size() > 0) {
+		if (!orphanedParts.isEmpty()) {
 			Set<IMultiblockComponent> orphansToProcess = null;
 			
 			// Keep the synchronized block small. We can't iterate over orphanedParts directly
@@ -103,13 +103,13 @@ public class MultiblockWorldRegistry {
 			// is not chunk-safe on the client, because Minecraft is stupid.
 			// It's possible to polyfill this, but the polyfill is too slow for comfort.
 			synchronized (orphanedPartsMutex) {
-				if (orphanedParts.size() > 0) {
+				if (!orphanedParts.isEmpty()) {
 					orphansToProcess = orphanedParts;
 					orphanedParts = new HashSet<>();
 				}
 			}
 			
-			if (orphansToProcess != null && orphansToProcess.size() > 0) {
+			if (orphansToProcess != null && !orphansToProcess.isEmpty()) {
 				Set<IMultiblockControllerInternal> compatibleControllers;
 				
 				// Process orphaned blocks
@@ -133,7 +133,7 @@ public class MultiblockWorldRegistry {
 					// THIS IS THE ONLY PLACE WHERE PARTS ATTACH TO MACHINES
 					// Try to attach to a neighbor's master controller
 					compatibleControllers = attachToNeighbors(orphan);
-					if (compatibleControllers.size() == 0) {
+					if (compatibleControllers.isEmpty()) {
 						// FOREVER ALONE! Create and register a new controller.
 						// THIS IS THE ONLY PLACE WHERE NEW CONTROLLERS ARE CREATED.
 						MultiblockLogic logic = (MultiblockLogic) orphan.getMultiblockLogic();
@@ -178,7 +178,7 @@ public class MultiblockWorldRegistry {
 			}
 		}
 
-		if (mergePools != null && mergePools.size() > 0) {
+		if (mergePools != null && !mergePools.isEmpty()) {
 			// Process merges - any machines that have been marked for merge should be merged
 			// into the "master" machine.
 			// To do this, we combine lists of machines that are touching one another and therefore
@@ -211,7 +211,7 @@ public class MultiblockWorldRegistry {
 		// Process splits and assembly
 		// Any controllers which have had parts removed must be checked to see if some parts are no longer
 		// physically connected to their master.
-		if (dirtyControllers.size() > 0) {
+		if (!dirtyControllers.isEmpty()) {
 			for (IMultiblockControllerInternal controller : dirtyControllers) {
 				if (controller == null) {
 					continue;
@@ -229,7 +229,7 @@ public class MultiblockWorldRegistry {
 					addDeadController(controller);
 				}
 				
-				if (newlyDetachedParts.size() > 0) {
+				if (!newlyDetachedParts.isEmpty()) {
 					// Controller has shed some parts - add them to the detached list for delayed processing
 					detachedParts.addAll(newlyDetachedParts);
 				}
@@ -239,7 +239,7 @@ public class MultiblockWorldRegistry {
 		}
 		
 		// Unregister dead controllers
-		if (deadControllers.size() > 0) {
+		if (!deadControllers.isEmpty()) {
 			for (IMultiblockControllerInternal controller : deadControllers) {
 				// Go through any controllers which have marked themselves as potentially dead.
 				// Validate that they are empty/dead, then unregister them.

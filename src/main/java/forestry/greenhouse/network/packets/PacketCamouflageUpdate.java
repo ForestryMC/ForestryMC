@@ -15,6 +15,7 @@ import java.io.IOException;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+
 import forestry.api.core.EnumCamouflageType;
 import forestry.api.core.ICamouflageHandler;
 import forestry.api.multiblock.IMultiblockComponent;
@@ -74,18 +75,18 @@ public class PacketCamouflageUpdate extends PacketCoordinates implements IForest
 		TileEntity tile = getTarget(player.worldObj);
 		ICamouflageHandler handler = null;
 		
-		if(isMultiblock && tile instanceof IMultiblockComponent){
+		if (isMultiblock && tile instanceof IMultiblockComponent) {
 			IMultiblockController controller = ((IMultiblockComponent) tile).getMultiblockLogic().getController();
 			
-			if(controller instanceof ICamouflageHandler){
+			if (controller instanceof ICamouflageHandler) {
 				handler = (ICamouflageHandler) controller;
 			}
 			
-		}else if (tile instanceof ICamouflageHandler) {
+		} else if (tile instanceof ICamouflageHandler) {
 			handler = (ICamouflageHandler) tile;
 		}
 		
-		if(handler != null){
+		if (handler != null) {
 			handler.setCamouflageBlock(type, camouflageStack);
 		}
 	}

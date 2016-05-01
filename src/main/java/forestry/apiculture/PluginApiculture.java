@@ -87,7 +87,6 @@ import forestry.apiculture.genetics.alleles.AlleleEffect;
 import forestry.apiculture.items.EnumHoneyComb;
 import forestry.apiculture.items.EnumPollenCluster;
 import forestry.apiculture.items.EnumPropolis;
-import forestry.apiculture.items.ItemHabitatLocator;
 import forestry.apiculture.items.ItemRegistryApiculture;
 import forestry.apiculture.multiblock.TileAlvearyFan;
 import forestry.apiculture.multiblock.TileAlvearyHeater;
@@ -258,7 +257,7 @@ public class PluginApiculture extends BlankForestryPlugin {
 			parsePlantableFlowers(property, flowerType);
 
 			Set<Flower> acceptableFlowers = flowerRegistry.getAcceptableFlowers(flowerType);
-			if (acceptableFlowers == null || acceptableFlowers.size() == 0) {
+			if (acceptableFlowers == null || acceptableFlowers.isEmpty()) {
 				Log.error("Flower type '" + flowerType + "' has no valid flowers set in apiculture.cfg. Add valid flowers or delete the config to set it to default.");
 			}
 		}
@@ -691,7 +690,7 @@ public class PluginApiculture extends BlankForestryPlugin {
 			));
 
 			// Irradiated combs
-			RecipeManagers.centrifugeManager.addRecipe(20, items.beeComb.get(EnumHoneyComb.IRRADIATED, 1), ImmutableMap.<ItemStack, Float>of(
+			RecipeManagers.centrifugeManager.addRecipe(20, items.beeComb.get(EnumHoneyComb.IRRADIATED, 1), ImmutableMap.of(
 			));
 
 			// Powdery combs

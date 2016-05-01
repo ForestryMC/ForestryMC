@@ -10,10 +10,13 @@
  ******************************************************************************/
 package forestry.core.tiles;
 
+import javax.annotation.Nonnull;
+
 import forestry.core.fluids.ITankManager;
 
 public interface ILiquidTankTile extends ILocatable {
 
+	@Nonnull
 	ITankManager getTankManager();
 
 }

@@ -10,11 +10,12 @@
  ******************************************************************************/
 package forestry.core.inventory.wrappers;
 
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+
 import forestry.core.inventory.InventoryPlain;
 import forestry.core.inventory.iterators.IExtInvSlot;
 import forestry.core.inventory.iterators.InventoryIterator;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
 
 /**
  * Creates a deep copy of an existing IInventory.
@@ -26,40 +27,40 @@ import net.minecraft.item.ItemStack;
  */
 public class InventoryCopy extends InvWrapperBase {
 
-    private InventoryPlain copy;
+	private final InventoryPlain copy;
 
-    public InventoryCopy(IInventory original) {
-        super(original);
-        this.copy = new InventoryPlain(original.getSizeInventory());
-        for (IExtInvSlot slot : InventoryIterator.getIterable(original)) {
-            ItemStack stack = slot.getStackInSlot();
-            if (stack != null) {
-                copy.setInventorySlotContents(slot.getIndex(), stack.copy());
-            }
-        }
-    }
+	public InventoryCopy(IInventory original) {
+		super(original);
+		this.copy = new InventoryPlain(original.getSizeInventory());
+		for (IExtInvSlot slot : InventoryIterator.getIterable(original)) {
+			ItemStack stack = slot.getStackInSlot();
+			if (stack != null) {
+				copy.setInventorySlotContents(slot.getIndex(), stack.copy());
+			}
+		}
+	}
 
-    @Override
-    public void setInventorySlotContents(int slot, ItemStack itemstack) {
-        copy.setInventorySlotContents(slot, itemstack);
-    }
+	@Override
+	public void setInventorySlotContents(int slot, ItemStack itemstack) {
+		copy.setInventorySlotContents(slot, itemstack);
+	}
 
-    @Override
-    public ItemStack getStackInSlot(int slot) {
-        return copy.getStackInSlot(slot);
-    }
+	@Override
+	public ItemStack getStackInSlot(int slot) {
+		return copy.getStackInSlot(slot);
+	}
 
-    @Override
-    public ItemStack decrStackSize(int slot, int amount) {
-        return copy.decrStackSize(slot, amount);
-    }
+	@Override
+	public ItemStack decrStackSize(int slot, int amount) {
+		return copy.decrStackSize(slot, amount);
+	}
 
-    @Override
-    public ItemStack removeStackFromSlot(int slot) {
-        return copy.removeStackFromSlot(slot);
-    }
+	@Override
+	public ItemStack removeStackFromSlot(int slot) {
+		return copy.removeStackFromSlot(slot);
+	}
 
-    @Override
+	@Override
 	public void markDirty() {
-    }
+	}
 }

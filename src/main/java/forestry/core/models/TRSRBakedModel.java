@@ -76,7 +76,7 @@ public class TRSRBakedModel implements IFlexibleBakedModel {
 				}
 			}
 			//faces.put(face, builder.build());
-			faces.put(face, ImmutableList.<BakedQuad>of());
+			faces.put(face, ImmutableList.of());
 		}
 
 		// general quads

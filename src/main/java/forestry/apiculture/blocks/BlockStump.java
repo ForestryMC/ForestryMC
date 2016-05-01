@@ -37,7 +37,6 @@ import forestry.core.utils.BlockUtil;
 public class BlockStump extends BlockTorch implements IItemModelRegister {
 
 	public BlockStump() {
-		super();
 		this.setHardness(0.0F);
 		this.setStepSound(soundTypeWood);
 		setCreativeTab(Tabs.tabApiculture);

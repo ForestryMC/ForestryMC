@@ -12,6 +12,13 @@ package forestry.greenhouse.tiles;
 
 import com.google.common.collect.ImmutableMap;
 
+import net.minecraft.util.ResourceLocation;
+
+import net.minecraftforge.client.model.animation.Animation;
+import net.minecraftforge.client.model.animation.IAnimationProvider;
+import net.minecraftforge.client.model.animation.TimeValues.VariableValue;
+import net.minecraftforge.common.model.animation.IAnimationStateMachine;
+
 import forestry.api.core.IClimateControlled;
 import forestry.api.greenhouse.IGreenhouseHousing;
 import forestry.api.multiblock.IGreenhouseController;
@@ -19,34 +26,28 @@ import forestry.core.config.Constants;
 import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.proxy.Proxies;
 import forestry.greenhouse.multiblock.IGreenhouseControllerInternal;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.animation.Animation;
-import net.minecraftforge.client.model.animation.IAnimationProvider;
-import net.minecraftforge.client.model.animation.ITimeValue;
-import net.minecraftforge.client.model.animation.TimeValues.VariableValue;
-import net.minecraftforge.common.model.animation.IAnimationStateMachine;
 
 public class TileGreenhouseSprinkler extends TileGreenhouseClimatiser implements IAnimationProvider {
 	
-    private final IAnimationStateMachine asm;
-    private final VariableValue cycleLength = new VariableValue(4);
-    private final VariableValue clickTime = new VariableValue(Float.NEGATIVE_INFINITY);
+	private final IAnimationStateMachine asm;
+	private final VariableValue cycleLength = new VariableValue(4);
+	private final VariableValue clickTime = new VariableValue(Float.NEGATIVE_INFINITY);
 	
 	protected static final int WATER_PER_OPERATION = 2;
 	private static final SprinklerDefinition definition = new SprinklerDefinition();
 
 	public TileGreenhouseSprinkler() {
 		super(definition);
-        asm = Proxies.render.loadAnimationState(new ResourceLocation(Constants.RESOURCE_ID, "asms/block/sprinkler.json"), ImmutableMap.<String, ITimeValue>of(
-                "cycle_length", cycleLength,
-                "click_time", clickTime
-            ));
+		asm = Proxies.render.loadAnimationState(new ResourceLocation(Constants.RESOURCE_ID, "asms/block/sprinkler.json"), ImmutableMap.of(
+				"cycle_length", cycleLength,
+				"click_time", clickTime
+		));
 	}
 	
-    @Override
-    public boolean hasFastRenderer(){
-        return true;
-    }
+	@Override
+	public boolean hasFastRenderer() {
+		return true;
+	}
 	
 	@Override
 	public <G extends IGreenhouseController & IGreenhouseHousing & IClimateControlled> void changeClimate(int tick, G greenhouse) {
@@ -68,13 +69,13 @@ public class TileGreenhouseSprinkler extends TileGreenhouseClimatiser implements
 	public void setActive(boolean active) {
 		super.setActive(active);
 		if (worldObj != null && worldObj.isRemote) {
-			if(asm.currentState().equals("moving") && !isActive()){
+			if (asm.currentState().equals("moving") && !isActive()) {
 				clickTime.setValue(Animation.getWorldTime(getWorld(), Animation.getPartialTickTime()));
 				asm.transition("stopping");
-			}else if(asm.currentState().equals("default") && isActive()){
-	            float time = Animation.getWorldTime(getWorld(), Animation.getPartialTickTime());
-	            clickTime.setValue(time);
-	            
+			} else if (asm.currentState().equals("default") && isActive()) {
+				float time = Animation.getWorldTime(getWorld(), Animation.getPartialTickTime());
+				clickTime.setValue(time);
+
 				asm.transition("starting");
 			}
 		}
@@ -102,9 +103,9 @@ public class TileGreenhouseSprinkler extends TileGreenhouseClimatiser implements
 	}
 	
 	@Override
-    public IAnimationStateMachine asm(){
-        return asm;
-    }
+	public IAnimationStateMachine asm() {
+		return asm;
+	}
 
 	private static class SprinklerDefinition implements IClimitiserDefinition {
 

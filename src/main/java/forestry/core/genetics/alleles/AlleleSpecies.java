@@ -107,7 +107,7 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesBuil
 		ItemStack research = null;
 		if (world.rand.nextFloat() < (float) 10 / bountyLevel) {
 			Collection<? extends IMutation> combinations = getRoot().getCombinations(this);
-			if (combinations.size() > 0) {
+			if (!combinations.isEmpty()) {
 				IMutation[] candidates = combinations.toArray(new IMutation[combinations.size()]);
 				research = AlleleManager.alleleRegistry.getMutationNoteStack(researcher, candidates[world.rand.nextInt(candidates.length)]);
 			}

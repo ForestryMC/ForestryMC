@@ -141,20 +141,4 @@ public class ParticleHelper {
 			fx.setParticleIcon(Proxies.common.getClientInstance().getBlockRendererDispatcher().getBlockModelShapes().getTexture(state));
 		}
 	}
-	
-	public static class TexturedCallback extends ParticleHelper.DefaultCallback{
-
-		private final String textureLocation;
-		
-		public TexturedCallback(Block block, String textureLocation) {
-			super(block);
-			this.textureLocation = textureLocation;
-		}
-		
-		@Override
-		protected void setTexture(EntityDiggingFX fx, BlockPos pos, IBlockState state) {
-			fx.setParticleIcon(Proxies.common.getClientInstance().getTextureMapBlocks().getAtlasSprite(textureLocation));
-		}
-
-	}
 }

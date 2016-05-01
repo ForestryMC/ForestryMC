@@ -26,7 +26,6 @@ public class ItemCraftingMaterial extends ItemForestry {
 	private final String[] definition = new String[]{"pulsatingDust", "pulsatingMesh", "silkWisp", "wovenSilk", "dissipationCharge", "iceShard", "scentedPaneling", "camouflagedPaneling" };
 
 	public ItemCraftingMaterial() {
-		super();
 		setMaxDamage(0);
 		setHasSubtypes(true);
 	}

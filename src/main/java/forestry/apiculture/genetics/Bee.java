@@ -573,7 +573,7 @@ public class Bee extends IndividualLiving implements IBee {
 			}
 		}
 
-		if (bees.size() > 0) {
+		if (!bees.isEmpty()) {
 			return bees.toArray(new IBee[bees.size()]);
 		} else {
 			return null;

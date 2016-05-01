@@ -17,7 +17,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
+
 import net.minecraftforge.common.MinecraftForge;
+
 import forestry.api.core.EnumCamouflageType;
 import forestry.api.core.ICamouflageHandler;
 import forestry.api.core.ICamouflagedBlock;
@@ -66,17 +68,12 @@ public abstract class TileGreenhouse extends MultiblockTileEntityForestry<Multib
 		markDirty();
 	}
 
-	@Override
-	public boolean allowsAutomation() {
-		return false;
-	}
-
 	/* SAVING & LOADING */
 	@Override
 	public void readFromNBT(NBTTagCompound data) {
 		super.readFromNBT(data);
 		
-		if(data.hasKey("CamouflageBlock")){
+		if (data.hasKey("CamouflageBlock")) {
 			camouflageBlock = ItemStack.loadItemStackFromNBT(data.getCompoundTag("CamouflageBlock"));
 		}
 	}
@@ -86,7 +83,7 @@ public abstract class TileGreenhouse extends MultiblockTileEntityForestry<Multib
 		super.writeToNBT(data);
 
 
-		if(camouflageBlock != null){
+		if (camouflageBlock != null) {
 			NBTTagCompound nbtTag = new NBTTagCompound();
 			camouflageBlock.writeToNBT(nbtTag);
 			data.setTag("CamouflageBlock", nbtTag);
@@ -121,7 +118,7 @@ public abstract class TileGreenhouse extends MultiblockTileEntityForestry<Multib
 	@Override
 	protected void encodeDescriptionPacket(NBTTagCompound packetData) {
 		super.encodeDescriptionPacket(packetData);
-		if(camouflageBlock != null){
+		if (camouflageBlock != null) {
 			NBTTagCompound nbtTag = new NBTTagCompound();
 			camouflageBlock.writeToNBT(nbtTag);
 			packetData.setTag("CamouflageBlock", nbtTag);
@@ -131,7 +128,7 @@ public abstract class TileGreenhouse extends MultiblockTileEntityForestry<Multib
 	@Override
 	protected void decodeDescriptionPacket(NBTTagCompound packetData) {
 		super.decodeDescriptionPacket(packetData);
-		if(packetData.hasKey("CamouflageBlock")){
+		if (packetData.hasKey("CamouflageBlock")) {
 			setCamouflageBlock(getCamouflageType(), ItemStack.loadItemStackFromNBT(packetData.getCompoundTag("CamouflageBlock")));
 		}
 	}
@@ -147,10 +144,10 @@ public abstract class TileGreenhouse extends MultiblockTileEntityForestry<Multib
 	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
 		getMultiblockLogic().getController().writeGuiData(data);
 		ItemStack camouflageBlock = getCamouflageBlock(getCamouflageType());
-		if(camouflageBlock != null){
+		if (camouflageBlock != null) {
 			data.writeShort(1);
 			data.writeItemStack(camouflageBlock);
-		}else{
+		} else {
 			data.writeShort(0);
 		}
 	}
@@ -158,7 +155,7 @@ public abstract class TileGreenhouse extends MultiblockTileEntityForestry<Multib
 	@Override
 	public void readGuiData(DataInputStreamForestry data) throws IOException {
 		getMultiblockLogic().getController().readGuiData(data);
-		if(data.readShort() == 1){
+		if (data.readShort() == 1) {
 			setCamouflageBlock(getCamouflageType(), data.readItemStack());
 		}
 		
@@ -198,7 +195,7 @@ public abstract class TileGreenhouse extends MultiblockTileEntityForestry<Multib
 	
 	@Override
 	public EnumCamouflageType getCamouflageType() {
-		if(getBlockType() instanceof BlockGreenhouse && ((BlockGreenhouse)getBlockType()).getGreenhouseType() == BlockGreenhouseType.GLASS){
+		if (getBlockType() instanceof BlockGreenhouse && ((BlockGreenhouse) getBlockType()).getGreenhouseType() == BlockGreenhouseType.GLASS) {
 			return EnumCamouflageType.GLASS;
 		}
 		return EnumCamouflageType.DEFAULT;

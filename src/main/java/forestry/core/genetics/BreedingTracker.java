@@ -173,7 +173,7 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 			final int count = nbttagcompound.getInteger(countKey);
 			for (int i = 0; i < count; i++) {
 				String value = nbttagcompound.getString(key + i);
-				if (value != null && value.length() > 0) {
+				if (value != null && !value.isEmpty()) {
 					values.add(value);
 				}
 			}
@@ -186,7 +186,7 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 		Iterator<String> iterator = values.iterator();
 		for (int i = 0; i < count; i++) {
 			String value = iterator.next();
-			if (value != null && value.length() > 0) {
+			if (value != null && !value.isEmpty()) {
 				nbttagcompound.setString(key + i, value);
 			}
 		}

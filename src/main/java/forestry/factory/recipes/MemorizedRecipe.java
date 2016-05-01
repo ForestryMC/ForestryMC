@@ -86,7 +86,7 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 	}
 
 	public ItemStack getRecipeOutput() {
-		if (recipeOutputs.size() == 0) {
+		if (recipeOutputs.isEmpty()) {
 			return null;
 		} else {
 			return recipeOutputs.get(selectedRecipe);

@@ -256,7 +256,6 @@ public class ItemResearchNote extends ItemForestry {
 	}
 
 	public ItemResearchNote() {
-		super();
 		setCreativeTab(null);
 	}
 

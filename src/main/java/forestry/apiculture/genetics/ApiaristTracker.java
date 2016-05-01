@@ -65,7 +65,7 @@ public class ApiaristTracker extends BreedingTracker implements IApiaristTracker
 			return;
 		}
 
-		if (speciesRoot.getCombinations(individual.getGenome().getPrimary()).size() > 0) {
+		if (!speciesRoot.getCombinations(individual.getGenome().getPrimary()).isEmpty()) {
 			return;
 		}
 

@@ -10,16 +10,27 @@
  ******************************************************************************/
 package forestry.greenhouse.tiles;
 
-import java.util.List;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.List;
+
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+
 import com.mojang.authlib.GameProfile;
 
-import cofh.api.energy.IEnergyConnection;
-import cofh.api.energy.IEnergyHandler;
-import cofh.api.energy.IEnergyProvider;
-import cofh.api.energy.IEnergyReceiver;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.items.CapabilityItemHandler;
+
 import forestry.api.core.EnumCamouflageType;
 import forestry.api.core.ICamouflageHandler;
 import forestry.api.core.ICamouflagedBlock;
@@ -41,19 +52,11 @@ import forestry.greenhouse.blocks.BlockGreenhouse;
 import forestry.greenhouse.blocks.BlockGreenhouseType;
 import forestry.greenhouse.multiblock.MultiblockLogicGreenhouse;
 import forestry.greenhouse.network.packets.PacketCamouflageUpdate;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
-import net.minecraftforge.items.CapabilityItemHandler;
+
+import cofh.api.energy.IEnergyConnection;
+import cofh.api.energy.IEnergyHandler;
+import cofh.api.energy.IEnergyProvider;
+import cofh.api.energy.IEnergyReceiver;
 
 public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogicGreenhouse> implements IGreenhouseComponent, IHintSource, IErrorLogicSource, IRestrictedAccess, ICamouflageHandler, ICamouflagedBlock, IFluidHandler, IEnergyProvider, IEnergyReceiver {
 
@@ -93,7 +96,7 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 	public void readFromNBT(NBTTagCompound data) {
 		super.readFromNBT(data);
 		
-		if(data.hasKey("CamouflageBlock")){
+		if (data.hasKey("CamouflageBlock")) {
 			camouflageBlock = ItemStack.loadItemStackFromNBT(data.getCompoundTag("CamouflageBlock"));
 		}
 		
@@ -108,7 +111,7 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 		super.writeToNBT(data);
 
 
-		if(camouflageBlock != null){
+		if (camouflageBlock != null) {
 			NBTTagCompound nbtTag = new NBTTagCompound();
 			camouflageBlock.writeToNBT(nbtTag);
 			data.setTag("CamouflageBlock", nbtTag);
@@ -160,7 +163,7 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 	@Override
 	protected void encodeDescriptionPacket(NBTTagCompound packetData) {
 		super.encodeDescriptionPacket(packetData);
-		if(camouflageBlock != null){
+		if (camouflageBlock != null) {
 			NBTTagCompound nbtTag = new NBTTagCompound();
 			camouflageBlock.writeToNBT(nbtTag);
 			packetData.setTag("CamouflageBlock", nbtTag);
@@ -170,7 +173,7 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 	@Override
 	protected void decodeDescriptionPacket(NBTTagCompound packetData) {
 		super.decodeDescriptionPacket(packetData);
-		if(packetData.hasKey("CamouflageBlock")){
+		if (packetData.hasKey("CamouflageBlock")) {
 			setCamouflageBlock(getCamouflageType(), ItemStack.loadItemStackFromNBT(packetData.getCompoundTag("CamouflageBlock")));
 		}
 	}
@@ -199,61 +202,61 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 	
 	@Override
 	public EnumCamouflageType getCamouflageType() {
-		if(getBlockType() instanceof BlockGreenhouse && ((BlockGreenhouse)getBlockType()).getGreenhouseType() == BlockGreenhouseType.GLASS){
+		if (getBlockType() instanceof BlockGreenhouse && ((BlockGreenhouse) getBlockType()).getGreenhouseType() == BlockGreenhouseType.GLASS) {
 			return EnumCamouflageType.GLASS;
 		}
 		return EnumCamouflageType.DEFAULT;
 	}
 	
-	private IInventory getOutwardsInventory(){
-		if(getOutwardsTile() == null){
+	private IInventory getOutwardsInventory() {
+		if (getOutwardsTile() == null) {
 			return null;
 		}
 		return TileUtil.getInventoryFromTile(getOutwardsTile(), outwards.getOpposite());
 	}
 	
-	private TileEntity getOutwardsTile(){
-		if(outwards == null || worldObj == null || pos == null){
+	private TileEntity getOutwardsTile() {
+		if (outwards == null || worldObj == null || pos == null) {
 			return null;
 		}
 		return worldObj.getTileEntity(getPos().offset(outwards));
 	}
 	
-	private IFluidHandler getOutwardFluidHandler(){
+	private IFluidHandler getOutwardFluidHandler() {
 		TileEntity tile = getOutwardsTile();
-		if(tile == null || !(tile instanceof IFluidHandler)){
+		if (!(tile instanceof IFluidHandler)) {
 			return null;
 		}
 		return (IFluidHandler) tile;
 	}
 	
-	private IEnergyConnection getOutwardEnergyConnection(){
+	private IEnergyConnection getOutwardEnergyConnection() {
 		TileEntity tile = getOutwardsTile();
-		if(tile == null || !(tile instanceof IEnergyConnection)){
+		if (!(tile instanceof IEnergyConnection)) {
 			return null;
 		}
 		return (IEnergyConnection) tile;
 	}
 	
-	private IEnergyHandler getOutwardEnergyHandler(){
+	private IEnergyHandler getOutwardEnergyHandler() {
 		TileEntity tile = getOutwardsTile();
-		if(tile == null || !(tile instanceof IEnergyHandler)){
+		if (!(tile instanceof IEnergyHandler)) {
 			return null;
 		}
 		return (IEnergyHandler) tile;
 	}
 	
-	private IEnergyReceiver getOutwardEnergyReceiver(){
+	private IEnergyReceiver getOutwardEnergyReceiver() {
 		TileEntity tile = getOutwardsTile();
-		if(tile == null || !(tile instanceof IEnergyReceiver)){
+		if (!(tile instanceof IEnergyReceiver)) {
 			return null;
 		}
 		return (IEnergyReceiver) tile;
 	}
 	
-	private IEnergyProvider getOutwardEnergyProvider(){
+	private IEnergyProvider getOutwardEnergyProvider() {
 		TileEntity tile = getOutwardsTile();
-		if(tile == null || !(tile instanceof IEnergyProvider)){
+		if (!(tile instanceof IEnergyProvider)) {
 			return null;
 		}
 		return (IEnergyProvider) tile;
@@ -263,33 +266,39 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 		outwards = null;
 
 		int facesMatching = 0;
-		if(maxCoord.getX() == getPos().getX() || minCoord.getX() == getPos().getX()) { facesMatching++; }
-		if(maxCoord.getY() == getPos().getY() || minCoord.getY() == getPos().getY()) { facesMatching++; }
-		if(maxCoord.getZ() == getPos().getZ() || minCoord.getZ() == getPos().getZ()) { facesMatching++; }
-		if(facesMatching == 1){
-			if(maxCoord.getX() == getPos().getX()) {
+		if (maxCoord.getX() == getPos().getX() || minCoord.getX() == getPos().getX()) {
+			facesMatching++;
+		}
+		if (maxCoord.getY() == getPos().getY() || minCoord.getY() == getPos().getY()) {
+			facesMatching++;
+		}
+		if (maxCoord.getZ() == getPos().getZ() || minCoord.getZ() == getPos().getZ()) {
+			facesMatching++;
+		}
+		if (facesMatching == 1) {
+			if (maxCoord.getX() == getPos().getX()) {
 				outwards = EnumFacing.EAST;
-			}else if(minCoord.getX() == getPos().getX()) {
+			} else if (minCoord.getX() == getPos().getX()) {
 				outwards = EnumFacing.WEST;
-			}else if(maxCoord.getZ() == getPos().getZ()) {
+			} else if (maxCoord.getZ() == getPos().getZ()) {
 				outwards = EnumFacing.SOUTH;
-			}else if(minCoord.getZ() == getPos().getZ()) {
+			} else if (minCoord.getZ() == getPos().getZ()) {
 				outwards = EnumFacing.NORTH;
-			}else if(maxCoord.getY() == getPos().getY()) {
+			} else if (maxCoord.getY() == getPos().getY()) {
 				outwards = EnumFacing.UP;
-			}else {
+			} else {
 				outwards = EnumFacing.DOWN;
 			}
 		}
 		
-		if(((BlockGreenhouse)getBlockType()).getGreenhouseType() != BlockGreenhouseType.HATCH_OUTPUT){
+		if (((BlockGreenhouse) getBlockType()).getGreenhouseType() != BlockGreenhouseType.HATCH_OUTPUT) {
 			outwards = outwards.getOpposite();
 		}
 	}
 	
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && getOutwardsTile() != null){
+		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && getOutwardsTile() != null) {
 			return getOutwardsTile().getCapability(capability, facing);
 		}
 		return super.getCapability(capability, facing);
@@ -297,7 +306,7 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 	
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && getOutwardsTile() != null){
+		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && getOutwardsTile() != null) {
 			return getOutwardsTile().hasCapability(capability, facing);
 		}
 		return super.hasCapability(capability, facing);
@@ -306,7 +315,7 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 	@Override
 	public int getEnergyStored(EnumFacing from) {
 		IEnergyHandler handler = getOutwardEnergyHandler();
-		if(handler == null) {
+		if (handler == null) {
 			return 0;
 		}
 		return handler.getEnergyStored(from);
@@ -315,7 +324,7 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 	@Override
 	public int getMaxEnergyStored(EnumFacing from) {
 		IEnergyHandler handler = getOutwardEnergyHandler();
-		if(handler == null) {
+		if (handler == null) {
 			return 0;
 		}
 		return handler.getMaxEnergyStored(from);
@@ -324,7 +333,7 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 	@Override
 	public boolean canConnectEnergy(EnumFacing from) {
 		IEnergyConnection connection = getOutwardEnergyConnection();
-		if(connection == null) {
+		if (connection == null) {
 			return false;
 		}
 		return connection.canConnectEnergy(from);
@@ -333,7 +342,7 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 	@Override
 	public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
 		IEnergyReceiver receiver = getOutwardEnergyReceiver();
-		if(receiver == null) {
+		if (receiver == null) {
 			return 0;
 		}
 		return receiver.receiveEnergy(from, maxReceive, simulate);
@@ -342,7 +351,7 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 	@Override
 	public int extractEnergy(EnumFacing from, int maxExtract, boolean simulate) {
 		IEnergyProvider provider = getOutwardEnergyProvider();
-		if(provider == null) {
+		if (provider == null) {
 			return 0;
 		}
 		return provider.extractEnergy(from, maxExtract, simulate);
@@ -351,7 +360,7 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 	@Override
 	public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
 		IFluidHandler handler = getOutwardFluidHandler();
-		if(handler == null){
+		if (handler == null) {
 			return 0;
 		}
 		return handler.fill(from, resource, doFill);
@@ -360,7 +369,7 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 	@Override
 	public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
 		IFluidHandler handler = getOutwardFluidHandler();
-		if(handler == null){
+		if (handler == null) {
 			return null;
 		}
 		return handler.drain(from, resource, doDrain);
@@ -369,7 +378,7 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 	@Override
 	public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
 		IFluidHandler handler = getOutwardFluidHandler();
-		if(handler == null){
+		if (handler == null) {
 			return null;
 		}
 		return handler.drain(from, maxDrain, doDrain);
@@ -378,7 +387,7 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 	@Override
 	public boolean canFill(EnumFacing from, Fluid fluid) {
 		IFluidHandler handler = getOutwardFluidHandler();
-		if(handler == null){
+		if (handler == null) {
 			return false;
 		}
 		return handler.canFill(from, fluid);
@@ -387,7 +396,7 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 	@Override
 	public boolean canDrain(EnumFacing from, Fluid fluid) {
 		IFluidHandler handler = getOutwardFluidHandler();
-		if(handler == null){
+		if (handler == null) {
 			return false;
 		}
 		return handler.canDrain(from, fluid);
@@ -396,7 +405,7 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 	@Override
 	public FluidTankInfo[] getTankInfo(EnumFacing from) {
 		IFluidHandler handler = getOutwardFluidHandler();
-		if(handler == null){
+		if (handler == null) {
 			return null;
 		}
 		return handler.getTankInfo(from);

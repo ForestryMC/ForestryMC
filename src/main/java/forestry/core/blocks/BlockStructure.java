@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
-import forestry.core.utils.Translator;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -31,6 +30,7 @@ import forestry.core.circuits.ISocketable;
 import forestry.core.multiblock.MultiblockTileEntityForestry;
 import forestry.core.multiblock.MultiblockUtil;
 import forestry.core.utils.InventoryUtil;
+import forestry.core.utils.Translator;
 
 public abstract class BlockStructure extends BlockForestry {
 
@@ -120,7 +120,7 @@ public abstract class BlockStructure extends BlockForestry {
 			IMultiblockComponent part = (IMultiblockComponent) tile;
 
 			// drop inventory if we're the last part remaining
-			if (MultiblockUtil.getNeighboringParts(world, part).size() == 0) {
+			if (MultiblockUtil.getNeighboringParts(world, part).isEmpty()) {
 				if (tile instanceof IInventory) {
 					InventoryUtil.dropInventory((IInventory) tile, world, pos);
 				}

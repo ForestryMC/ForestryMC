@@ -11,6 +11,7 @@
 package forestry.core.inventory;
 
 import net.minecraft.inventory.IInventory;
+
 import net.minecraftforge.items.IItemHandler;
 
 /**
@@ -19,17 +20,17 @@ import net.minecraftforge.items.IItemHandler;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class InventoryObject {
-    private Object inventory;
+	private final Object inventory;
 
-    public InventoryObject(IInventory inventory) {
-        this.inventory = inventory;
-    }
+	public InventoryObject(IInventory inventory) {
+		this.inventory = inventory;
+	}
 
-    public InventoryObject(IItemHandler inventory) {
-        this.inventory = inventory;
-    }
+	public InventoryObject(IItemHandler inventory) {
+		this.inventory = inventory;
+	}
 
-    public Object getObject() {
-        return inventory;
-    }
+	public Object getObject() {
+		return inventory;
+	}
 }

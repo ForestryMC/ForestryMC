@@ -163,7 +163,7 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 	}
 	
 	@Override
-	public int compareTo(IAlleleTreeSpecies o) {
+	public int compareTo(@Nonnull IAlleleTreeSpecies o) {
 		return 0;
 	}
 

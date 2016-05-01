@@ -1,10 +1,14 @@
 package forestry.farming.models;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
+
 import net.minecraftforge.common.property.IExtendedBlockState;
+
 import forestry.api.core.IModelBaker;
 import forestry.core.models.ModelBlockOverlay;
 import forestry.farming.blocks.BlockFarm;
@@ -18,7 +22,7 @@ public class ModelFarmBlock extends ModelBlockOverlay<BlockFarm> {
 	}
 
 	@Override
-	public void bakeInventoryBlock(BlockFarm blockFarm, ItemStack item, IModelBaker baker) {
+	public void bakeInventoryBlock(@Nonnull BlockFarm blockFarm, @Nonnull ItemStack item, @Nonnull IModelBaker baker) {
 		if (blockFarm == null) {
 			return;
 		}
@@ -32,7 +36,7 @@ public class ModelFarmBlock extends ModelBlockOverlay<BlockFarm> {
 	}
 
 	@Override
-	public void bakeWorldBlock(BlockFarm blockFarm, IBlockAccess world, BlockPos pos, IExtendedBlockState stateExtended, IModelBaker baker) {
+	public void bakeWorldBlock(@Nonnull BlockFarm blockFarm, @Nonnull IBlockAccess world, @Nonnull BlockPos pos, @Nonnull IExtendedBlockState stateExtended, @Nonnull IModelBaker baker) {
 
 		TileFarm farm = (TileFarm) world.getTileEntity(pos);
 

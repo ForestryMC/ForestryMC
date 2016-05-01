@@ -39,7 +39,6 @@ import forestry.core.inventory.filters.ArrayStackFilter;
 import forestry.core.inventory.filters.IStackFilter;
 import forestry.core.inventory.filters.StandardStackFilters;
 import forestry.core.inventory.iterators.IExtInvSlot;
-import forestry.core.inventory.iterators.IInvSlot;
 import forestry.core.inventory.iterators.InventoryIterator;
 import forestry.core.inventory.manipulators.InventoryManipulator;
 import forestry.core.inventory.wrappers.InventoryCopy;
@@ -78,12 +77,12 @@ public abstract class InventoryUtil {
 		return damage == -1 || damage == OreDictionary.WILDCARD_VALUE;
 	}
 	
-    public static ItemStack makeSafe(ItemStack stack) {
-        if (stack.stackSize <= 0) {
+	public static ItemStack makeSafe(ItemStack stack) {
+		if (stack.stackSize <= 0) {
 			return null;
 		}
-        return stack;
-    }
+		return stack;
+	}
 
 	/**
 	 * A more robust item comparison function.
@@ -166,21 +165,21 @@ public abstract class InventoryUtil {
 		return false;
 	}
 
-    /**
-     * Returns true if the item is equal to any one of several possible matches.
-     *
-     * @param stack   the ItemStack to test
-     * @param matches the ItemStacks to test against
-     * @return true if a match is found
-     */
-    public static boolean isItemEqual(ItemStack stack, Collection<ItemStack> matches) {
-        for (ItemStack match : matches) {
-            if (isItemEqual(stack, match)) {
+	/**
+	 * Returns true if the item is equal to any one of several possible matches.
+	 *
+	 * @param stack   the ItemStack to test
+	 * @param matches the ItemStacks to test against
+	 * @return true if a match is found
+	 */
+	public static boolean isItemEqual(ItemStack stack, Collection<ItemStack> matches) {
+		for (ItemStack match : matches) {
+			if (isItemEqual(stack, match)) {
 				return true;
 			}
-        }
-        return false;
-    }
+		}
+		return false;
+	}
 	
 	/**
 	 * Places an ItemStack in a destination IInventory. Will attempt to move as
@@ -215,23 +214,6 @@ public abstract class InventoryUtil {
 		}
 		return false;
 	}
-	
-    /**
-     * Returns true if the inventory contains the specified item.
-     *
-     * @param inv  the inventory  The inventory to check
-     * @param item The ItemStack to look for
-     * @return true is exists
-     */
-    public static boolean containsItem(IInventory inv, ItemStack item) {
-        for (IInvSlot slot : InventoryIterator.getIterable(inv)) {
-            ItemStack stack = slot.getStackInSlot();
-            if (stack != null && isItemEqual(stack, item)) {
-				return true;
-			}
-        }
-        return false;
-    }
 
 	/**
 	 * Attempts to move an ItemStack from one inventory to another.

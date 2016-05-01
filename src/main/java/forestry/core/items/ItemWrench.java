@@ -26,7 +26,6 @@ import buildcraft.api.tools.IToolWrench;
 public class ItemWrench extends ItemForestry implements IToolWrench {
 
 	public ItemWrench() {
-		super();
 		setHarvestLevel("wrench", 0);
 	}
 	

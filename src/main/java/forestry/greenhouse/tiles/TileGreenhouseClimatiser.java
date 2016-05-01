@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.greenhouse.tiles;
 
+import net.minecraft.nbt.NBTTagCompound;
+
 import forestry.api.core.IClimateControlled;
 import forestry.api.greenhouse.IGreenhouseHousing;
 import forestry.api.multiblock.IGreenhouseComponent;
@@ -18,14 +20,13 @@ import forestry.apiculture.network.packets.PacketActiveUpdate;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.IActivatable;
 import forestry.greenhouse.multiblock.IGreenhouseControllerInternal;
-import net.minecraft.nbt.NBTTagCompound;
 
 public class TileGreenhouseClimatiser extends TileGreenhouse implements IActivatable, IGreenhouseComponent.Climatiser {
 	
 	protected static final int WORK_CYCLES = 1;
 	protected static final int ENERGY_PER_OPERATION = 50;
 	
-	protected enum ClimitiserType{
+	protected enum ClimitiserType {
 		TEMPERATURE, HUMIDITY
 	}
 	
@@ -59,9 +60,9 @@ public class TileGreenhouseClimatiser extends TileGreenhouse implements IActivat
 
 		if (workingTime > 0) {
 			workingTime--;
-			if(definition.getType() == ClimitiserType.TEMPERATURE){
+			if (definition.getType() == ClimitiserType.TEMPERATURE) {
 				greenhouse.addTemperatureChange(definition.getChangePerTransfer(), definition.getBoundaryDown(), definition.getBoundaryUp());
-			}else if(definition.getType() == ClimitiserType.HUMIDITY){
+			} else if (definition.getType() == ClimitiserType.HUMIDITY) {
 				greenhouse.addHumidityChange(definition.getChangePerTransfer(), definition.getBoundaryDown(), definition.getBoundaryUp());
 			}
 		}

@@ -11,6 +11,7 @@
 package forestry.greenhouse.gui;
 
 import net.minecraft.entity.player.EntityPlayer;
+
 import forestry.api.core.EnumCamouflageType;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;

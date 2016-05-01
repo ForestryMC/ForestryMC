@@ -42,9 +42,9 @@ public class ModelBakerModel implements IModelBakerModel {
 	private float[] scale = getDefaultScale();
 
 	public ModelBakerModel() {
-		general = new ArrayList<BakedQuad>();
+		general = new ArrayList<>();
 		for (EnumFacing f : EnumFacing.VALUES) {
-			faces[f.ordinal()] = new ArrayList<BakedQuad>();
+			faces[f.ordinal()] = new ArrayList<>();
 		}
 		formate = DefaultVertexFormats.BLOCK;
 		isGui3d = true;

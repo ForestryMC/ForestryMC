@@ -194,7 +194,7 @@ public class GeneticsUtil {
 	}
 
 	public static int getResearchComplexity(IAlleleSpecies species, IChromosomeType speciesChromosome) {
-		return 1 + getGeneticAdvancement(species, new HashSet<IAlleleSpecies>(), speciesChromosome);
+		return 1 + getGeneticAdvancement(species, new HashSet<>(), speciesChromosome);
 	}
 
 	private static int getGeneticAdvancement(IAlleleSpecies species, Set<IAlleleSpecies> exclude, IChromosomeType speciesChromosome) {

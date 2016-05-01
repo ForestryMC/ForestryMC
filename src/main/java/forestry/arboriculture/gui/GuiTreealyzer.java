@@ -234,7 +234,7 @@ public class GuiTreealyzer extends GuiAlyzer {
 
 		strike = "";
 		IAlleleFruit fruit1 = (IAlleleFruit) tree.getGenome().getInactiveAllele(EnumTreeChromosome.FRUITS);
-		if (!tree.getGenome().getSecondary().getSuitableFruit().contains(((IAlleleFruit) fruit1).getProvider().getFamily()) && fruit1 != AlleleFruit.fruitNone) {
+		if (!tree.getGenome().getSecondary().getSuitableFruit().contains(fruit1.getProvider().getFamily()) && fruit1 != AlleleFruit.fruitNone) {
 			strike = EnumChatFormatting.STRIKETHROUGH.toString();
 		}
 		textLayout.drawLine(strike + fruit1.getProvider().getDescription(), COLUMN_2, fruitDominance1);

@@ -13,6 +13,8 @@ package forestry.core.multiblock;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -98,6 +100,7 @@ public abstract class MultiblockControllerForestry extends MultiblockControllerB
 	}
 
 	/* INVENTORY */
+	@Nonnull
 	public IInventoryAdapter getInternalInventory() {
 		return FakeInventoryAdapter.instance();
 	}

@@ -20,7 +20,6 @@ import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.EffectRenderer;
-import net.minecraft.client.particle.EntityDiggingFX;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -55,7 +54,6 @@ import forestry.core.proxy.Proxies;
 import forestry.core.render.MachineParticleCallback;
 import forestry.core.render.MachineStateMapper;
 import forestry.core.render.ParticleHelper;
-import forestry.core.render.TextureManager;
 import forestry.core.tiles.TileBase;
 import forestry.core.tiles.TileForestry;
 import forestry.core.tiles.TileUtil;
@@ -97,7 +95,7 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 		IBlockState state = this.blockState.getBaseState().withProperty(FACE, EnumFacing.NORTH);
 		this.setDefaultState(state);
 		
-		particleCallback = new MachineParticleCallback(this, TYPE);
+		particleCallback = new MachineParticleCallback<>(this, TYPE);
 	}
 
 	public PropertyEnum<P> getTypeProperty() {

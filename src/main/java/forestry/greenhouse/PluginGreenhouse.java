@@ -10,6 +10,13 @@
  ******************************************************************************/
 package forestry.greenhouse;
 
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+
 import forestry.api.core.ForestryAPI;
 import forestry.api.greenhouse.GreenhouseManager;
 import forestry.api.greenhouse.IGreenhouseAccess;
@@ -40,11 +47,6 @@ import forestry.greenhouse.tiles.TileGreenhouseValve;
 import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 @ForestryPlugin(pluginID = ForestryPluginUids.GREENHOUSE, name = "Greenhouse", author = "Nedelosk", url = Constants.URL, unlocalizedDescription = "for.plugin.greenhouse.description")
 public class PluginGreenhouse extends BlankForestryPlugin {
@@ -192,13 +194,13 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 		GameRegistry.registerTileEntity(TileGreenhousePlain.class, "forestry.GreenhousePlain");
 		GameRegistry.registerTileEntity(TileGreenhouseDoor.class, "forestry.GreenhouseDoor");
 		GameRegistry.registerTileEntity(TileGreenhouseHatch.class, "forestry.GreenhouseHatch");
-		if(ForestryAPI.enabledPlugins.contains(ForestryPluginUids.LEPIDOPTEROLOGY)){
+		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.LEPIDOPTEROLOGY)) {
 			GameRegistry.registerTileEntity(TileGreenhouseButterflyHatch.class, "forestry.GreenhouseButterflyHatch");
 		}
 	}
 	
 	@Override
-	public void preInit(){
+	public void preInit() {
 		MinecraftForge.EVENT_BUS.register(new EventHandlerGreenhouse());
 		
 		IGreenhouseAccess greenhouseAccess = GreenhouseManager.greenhouseAccess;

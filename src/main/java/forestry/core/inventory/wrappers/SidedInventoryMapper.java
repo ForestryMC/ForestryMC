@@ -22,32 +22,32 @@ import net.minecraft.util.EnumFacing;
  */
 public class SidedInventoryMapper extends InvWrapperBase implements ISidedInventory {
 
-    private final ISidedInventory inv;
-    private final EnumFacing side;
+	private final ISidedInventory inv;
+	private final EnumFacing side;
 
-    public SidedInventoryMapper(ISidedInventory inv, EnumFacing side) {
-        this(inv, side, true);
-    }
+	public SidedInventoryMapper(ISidedInventory inv, EnumFacing side) {
+		this(inv, side, true);
+	}
 
-    public SidedInventoryMapper(ISidedInventory inv, EnumFacing side, boolean checkItems) {
-        super(inv, checkItems);
-        this.inv = inv;
-        this.side = side;
-    }
+	public SidedInventoryMapper(ISidedInventory inv, EnumFacing side, boolean checkItems) {
+		super(inv, checkItems);
+		this.inv = inv;
+		this.side = side;
+	}
 
-    @Override
-    public int[] getSlotsForFace(EnumFacing side) {
-        return inv.getSlotsForFace(side);
-    }
+	@Override
+	public int[] getSlotsForFace(EnumFacing side) {
+		return inv.getSlotsForFace(side);
+	}
 
-    @Override
-    public boolean canInsertItem(int slot, ItemStack stack, EnumFacing s) {
-        return !checkItems() || inv.canInsertItem(slot, stack, side);
-    }
+	@Override
+	public boolean canInsertItem(int slot, ItemStack stack, EnumFacing s) {
+		return !checkItems() || inv.canInsertItem(slot, stack, side);
+	}
 
-    @Override
-    public boolean canExtractItem(int slot, ItemStack stack, EnumFacing s) {
-        return !checkItems() || inv.canExtractItem(slot, stack, side);
-    }
+	@Override
+	public boolean canExtractItem(int slot, ItemStack stack, EnumFacing s) {
+		return !checkItems() || inv.canExtractItem(slot, stack, side);
+	}
 
 }

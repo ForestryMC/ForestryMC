@@ -46,11 +46,11 @@ public class TileGreenhouseControl extends TileGreenhouse implements IGreenhouse
 		}
 
 		private boolean hasRedstoneSignal() {
-			for(EnumFacing direction : EnumFacing.VALUES){
+			for (EnumFacing direction : EnumFacing.VALUES) {
 				Vect side = new Vect(tile).add(direction);
 				EnumFacing dir = direction.getOpposite();
 				World world = tile.getWorld();
-				if(world.getRedstonePower(side, dir) > 0 || world.getStrongPower(side, dir) > 0){
+				if (world.getRedstonePower(side, dir) > 0 || world.getStrongPower(side, dir) > 0) {
 					return true;
 				}
 			}

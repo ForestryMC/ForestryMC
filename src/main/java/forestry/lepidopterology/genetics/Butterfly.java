@@ -136,7 +136,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 		}
 
 		BiomeGenBase biome = world.getBiomeGenForCoordsBody(new BlockPos(x, 0, z));
-		if (getGenome().getPrimary().getSpawnBiomes().size() > 0) {
+		if (!getGenome().getPrimary().getSpawnBiomes().isEmpty()) {
 			boolean noneMatched = true;
 
 			if (getGenome().getPrimary().strictSpawnMatch()) {

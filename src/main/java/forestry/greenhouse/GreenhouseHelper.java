@@ -10,24 +10,25 @@
  ******************************************************************************/
 package forestry.greenhouse;
 
+import net.minecraft.util.BlockPos;
+import net.minecraft.world.World;
+
 import forestry.api.greenhouse.IGreenhouseHelper;
 import forestry.api.greenhouse.IGreenhouseState;
 import forestry.api.greenhouse.IInternalBlock;
 import forestry.core.multiblock.IMultiblockControllerInternal;
 import forestry.core.multiblock.MultiblockRegistry;
 import forestry.greenhouse.multiblock.IGreenhouseControllerInternal;
-import net.minecraft.util.BlockPos;
-import net.minecraft.world.World;
 
 public class GreenhouseHelper implements IGreenhouseHelper {
 
 	@Override
 	public IGreenhouseState getGreenhouseState(World world, BlockPos pos) {
-		if(MultiblockRegistry.getControllersFromWorld(world) != null){
-			for(IMultiblockControllerInternal controllerInternal : MultiblockRegistry.getControllersFromWorld(world)){
-				if(controllerInternal instanceof IGreenhouseControllerInternal){
-					if(controllerInternal.isAssembled()){
-						if(isPosiotionInGreenhouse((IGreenhouseControllerInternal) controllerInternal, pos)){
+		if (MultiblockRegistry.getControllersFromWorld(world) != null) {
+			for (IMultiblockControllerInternal controllerInternal : MultiblockRegistry.getControllersFromWorld(world)) {
+				if (controllerInternal instanceof IGreenhouseControllerInternal) {
+					if (controllerInternal.isAssembled()) {
+						if (isPosiotionInGreenhouse((IGreenhouseControllerInternal) controllerInternal, pos)) {
 							return ((IGreenhouseControllerInternal) controllerInternal).createState();
 						}
 					}
@@ -37,9 +38,9 @@ public class GreenhouseHelper implements IGreenhouseHelper {
 		return null;
 	}
 	
-	private static boolean isPosiotionInGreenhouse(IGreenhouseControllerInternal controller, BlockPos pos){
-		for(IInternalBlock internalBlock : controller.getInternalBlocks()){
-			if(internalBlock.getPos().equals(pos)){
+	private static boolean isPosiotionInGreenhouse(IGreenhouseControllerInternal controller, BlockPos pos) {
+		for (IInternalBlock internalBlock : controller.getInternalBlocks()) {
+			if (internalBlock.getPos().equals(pos)) {
 				return true;
 			}
 		}

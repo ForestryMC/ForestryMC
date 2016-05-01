@@ -10,34 +10,31 @@
  ******************************************************************************/
 package forestry.greenhouse;
 
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
 import forestry.api.core.ICamouflageHandler;
 import forestry.api.greenhouse.EnumGreenhouseEventType;
 import forestry.api.greenhouse.GreenhouseEvents.CamouflageChangeEvent;
 import forestry.api.multiblock.IGreenhouseComponent;
 import forestry.api.multiblock.IGreenhouseController;
-import forestry.greenhouse.blocks.BlockGreenhouseType;
-import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EventHandlerGreenhouse {
 	
 	@SubscribeEvent
-	public void onCamouflageChance(CamouflageChangeEvent event){
+	public void onCamouflageChance(CamouflageChangeEvent event) {
 		ICamouflageHandler handler = event.camouflageHandler;
 		
 		IGreenhouseController controller = null;
-		if(handler instanceof IGreenhouseController){
+		if (handler instanceof IGreenhouseController) {
 			controller = (IGreenhouseController) handler;
 		}
 		
-		if(handler instanceof IGreenhouseComponent){
+		if (handler instanceof IGreenhouseComponent) {
 			IGreenhouseComponent component = (IGreenhouseComponent) handler;
 			controller = component.getMultiblockLogic().getController();
 		}
 		
-		if(controller != null){
+		if (controller != null) {
 			controller.onChange(EnumGreenhouseEventType.CAMOUFLAGE, event);
 		}
 	}

@@ -10,8 +10,12 @@
  ******************************************************************************/
 package forestry.greenhouse.multiblock;
 
+import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 
 import forestry.api.core.EnumCamouflageType;
 import forestry.api.greenhouse.EnumGreenhouseEventType;
@@ -25,8 +29,6 @@ import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.multiblock.FakeMultiblockController;
 import forestry.energy.EnergyManager;
 import forestry.greenhouse.FakeGreenhouseState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
 
 public class FakeGreenhouseController extends FakeMultiblockController implements IGreenhouseControllerInternal {
 	public static final FakeGreenhouseController instance = new FakeGreenhouseController();
@@ -34,11 +36,13 @@ public class FakeGreenhouseController extends FakeMultiblockController implement
 	private FakeGreenhouseController() {
 	}
 	
+	@Nonnull
 	@Override
 	public IInventoryAdapter getInternalInventory() {
 		return FakeInventoryAdapter.instance();
 	}
 
+	@Nonnull
 	@Override
 	public ITankManager getTankManager() {
 		return FakeTankManager.instance;
@@ -86,6 +90,7 @@ public class FakeGreenhouseController extends FakeMultiblockController implement
 	public void addHumidityChange(float change, float boundaryDown, float boundaryUp) {
 	}
 
+	@Nonnull
 	@Override
 	public IGreenhouseState createState() {
 		return FakeGreenhouseState.instance;

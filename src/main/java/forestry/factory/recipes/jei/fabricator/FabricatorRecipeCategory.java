@@ -95,7 +95,7 @@ public class FabricatorRecipeCategory extends ForestryRecipeCategory {
 		for (IFabricatorSmeltingRecipe smelting : FabricatorSmeltingRecipeManager.recipes) {
 			Fluid fluid = smelting.getProduct().getFluid();
 			if (!smeltingInputs.containsKey(fluid)) {
-				smeltingInputs.put(fluid, new ArrayList<IFabricatorSmeltingRecipe>());
+				smeltingInputs.put(fluid, new ArrayList<>());
 			}
 			smeltingInputs.get(fluid).add(smelting);
 		}

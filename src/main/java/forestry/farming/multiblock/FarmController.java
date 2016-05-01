@@ -500,8 +500,8 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 			if (stage == Stage.HARVEST) {
 				Collection<ICrop> harvested = harvestTargets(farmTargets, logic, farmListeners);
-				farmWorkStatus.didWork = harvested.size() > 0;
-				if (harvested.size() > 0) {
+				farmWorkStatus.didWork = !harvested.isEmpty();
+				if (!harvested.isEmpty()) {
 					pendingCrops.addAll(harvested);
 					harvestProvider = logic;
 				}
@@ -684,7 +684,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		if (farmTargets != null) {
 			for (FarmTarget target : farmTargets) {
 				Collection<ICrop> harvested = harvestTarget(target, logic, farmListeners);
-				if (harvested.size() > 0) {
+				if (!harvested.isEmpty()) {
 					return harvested;
 				}
 			}
@@ -696,7 +696,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	private static Collection<ICrop> harvestTarget(FarmTarget target, IFarmLogic logic, Iterable<IFarmListener> farmListeners) {
 		BlockPos pos = new BlockPos(target.getStart().getX(), target.getStart().getX() + target.getYOffset(), target.getStart().getZ());
 		Collection<ICrop> harvested = logic.harvest(pos, target.getDirection(), target.getExtent());
-		if (harvested == null || harvested.size() == 0) {
+		if (harvested == null || harvested.isEmpty()) {
 			return Collections.emptyList();
 		}
 

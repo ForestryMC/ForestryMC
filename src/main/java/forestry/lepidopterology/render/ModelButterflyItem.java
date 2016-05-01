@@ -14,6 +14,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
 
 import java.io.IOException;
+
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.model.IBakedModel;
@@ -26,6 +27,7 @@ import net.minecraftforge.client.model.IRetexturableModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.core.models.BlankItemModel;
@@ -35,6 +37,7 @@ import forestry.core.models.TRSRBakedModel;
 @SideOnly(Side.CLIENT)
 public class ModelButterflyItem extends BlankItemModel {
 
+	private final Function<ResourceLocation, TextureAtlasSprite> textureGetter = new DefaultTextureGetter();
 	@SideOnly(Side.CLIENT)
 	private IRetexturableModel modelButterfly;
 
@@ -56,8 +59,6 @@ public class ModelButterflyItem extends BlankItemModel {
 		}
 		return bakeModel(butterfly);
 	}
-	
-	private Function<ResourceLocation, TextureAtlasSprite> textureGetter = new DefaultTextureGetter();
 
 	private IBakedModel bakeModel(IButterfly butterfly) {
 		ImmutableMap.Builder<String, String> textures = ImmutableMap.builder();

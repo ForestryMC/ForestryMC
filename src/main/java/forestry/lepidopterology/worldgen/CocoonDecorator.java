@@ -22,6 +22,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.IChunkProvider;
+
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.common.util.EnumHelper;
@@ -70,14 +71,14 @@ public abstract class CocoonDecorator {
 		
 		Type[] types = BiomeDictionary.getTypesForBiome(biome);
 		EnumSet<Type> speciesTypes = butterfly.getGenome().getPrimary().getSpawnBiomes();
-			
+
 		boolean biomeTypesGood = false;
-		for(Type type : types){
-			if(speciesTypes == null || speciesTypes.size() <= 0 || speciesTypes.equals(type)){
+		for (Type type : types) {
+			if (speciesTypes == null || speciesTypes.size() <= 0 || speciesTypes.contains(type)) {
 				biomeTypesGood = true;
 			}
 		}
-		if(!biomeTypesGood) {
+		if (!biomeTypesGood) {
 			return false;
 		}
 
@@ -121,10 +122,10 @@ public abstract class CocoonDecorator {
 		}
 		
 		TileEntity tile = world.getTileEntity(pos);
-		if(tile instanceof TileCocoon){
+		if (tile instanceof TileCocoon) {
 			TileCocoon cocoon = (TileCocoon) tile;
 			cocoon.setCaterpillar(butterfly);
-		}else{
+		} else {
 			return false;
 		}
 
@@ -134,7 +135,7 @@ public abstract class CocoonDecorator {
 		return true;
 	}
 	
-	private static int getYForCocoon(World world, int x, int z){
+	private static int getYForCocoon(World world, int x, int z) {
 		int y = world.getHeight(new BlockPos(x, 0, z)).getY() - 1;
 		if (!world.getBlockState(new BlockPos(x, y, z)).getBlock().isLeaves(world, new BlockPos(x, y, z))) {
 			return -1;

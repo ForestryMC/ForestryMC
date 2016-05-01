@@ -74,7 +74,7 @@ public class CentrifugeRecipeCategory extends ForestryRecipeCategory {
 	
 	private void setResults(Map<ItemStack, Float> outputs, GuiItemStackGroup guiItemStacks) {
 		Set<Entry<ItemStack, Float>> entrySet = outputs.entrySet();
-		if (entrySet.size() == 0) {
+		if (entrySet.isEmpty()) {
 			return;
 		}
 		PriorityQueue<Entry<ItemStack, Float>> sortByChance = new PriorityQueue<>(entrySet.size(), highestChanceComparator);

@@ -33,7 +33,6 @@ import forestry.core.items.ItemForestry;
 public class ItemCircuitBoard extends ItemForestry {
 
 	public ItemCircuitBoard() {
-		super();
 		setHasSubtypes(true);
 	}
 

@@ -3,21 +3,17 @@ package forestry.lepidopterology.blocks;
 import java.util.Map;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.lepidopterology.IAlleleButterflyCocoon;
-import forestry.arboriculture.blocks.BlockFruitPod;
 import forestry.core.config.Constants;
 import forestry.core.render.ForestryStateMapper;
-import forestry.lepidopterology.blocks.property.PropertyCocoon;
 import forestry.lepidopterology.genetics.alleles.AlleleButterflyCocoon;
 
 @SideOnly(Side.CLIENT)

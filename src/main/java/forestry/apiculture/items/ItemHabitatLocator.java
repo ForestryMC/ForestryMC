@@ -60,6 +60,7 @@ public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
 	}
 
 	/* SPRITES */
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerSprites(ITextureManager manager) {
 		TextureAtlasSprite texture = new TextureHabitatLocator(iconName);

@@ -20,13 +20,13 @@ public class MachinePropertiesTesr<T extends TileForestry> extends MachineProper
 	@Nonnull
 	private final String particleTextureLocation;
 
-	public MachinePropertiesTesr(int meta, @Nonnull Class<T> teClass, @Nonnull String name, @Nullable TileEntitySpecialRenderer<? super T> renderer, String particleTextureLocation) {
+	public MachinePropertiesTesr(int meta, @Nonnull Class<T> teClass, @Nonnull String name, @Nullable TileEntitySpecialRenderer<? super T> renderer, @Nonnull String particleTextureLocation) {
 		super(meta, teClass, name);
 		this.renderer = renderer;
 		this.particleTextureLocation = particleTextureLocation;
 	}
 
-	public MachinePropertiesTesr(int meta, @Nonnull Class<T> teClass, @Nonnull String name, @Nullable TileEntitySpecialRenderer<? super T> renderer, @Nonnull AxisAlignedBB boundingBox, String particleTextureLocation) {
+	public MachinePropertiesTesr(int meta, @Nonnull Class<T> teClass, @Nonnull String name, @Nullable TileEntitySpecialRenderer<? super T> renderer, @Nonnull AxisAlignedBB boundingBox, @Nonnull String particleTextureLocation) {
 		super(meta, teClass, name, boundingBox);
 		this.renderer = renderer;
 		this.particleTextureLocation = particleTextureLocation;

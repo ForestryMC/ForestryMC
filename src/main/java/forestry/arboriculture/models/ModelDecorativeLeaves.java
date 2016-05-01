@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.arboriculture.models;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -17,7 +19,9 @@ import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
+
 import net.minecraftforge.common.property.IExtendedBlockState;
+
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.ILeafSpriteProvider;
 import forestry.api.arboriculture.ITreeGenome;
@@ -70,12 +74,12 @@ public class ModelDecorativeLeaves extends ModelBlockOverlay<BlockDecorativeLeav
 	}
 
 	@Override
-	protected void bakeInventoryBlock(BlockDecorativeLeaves block, ItemStack item, IModelBaker baker) {
+	protected void bakeInventoryBlock(@Nonnull BlockDecorativeLeaves block, @Nonnull ItemStack item, @Nonnull IModelBaker baker) {
 
 	}
 
 	@Override
-	protected void bakeWorldBlock(BlockDecorativeLeaves block, IBlockAccess world, BlockPos pos, IExtendedBlockState stateExtended, IModelBaker baker) {
+	protected void bakeWorldBlock(@Nonnull BlockDecorativeLeaves block, @Nonnull IBlockAccess world, @Nonnull BlockPos pos, @Nonnull IExtendedBlockState stateExtended, @Nonnull IModelBaker baker) {
 	}
 
 	public static void bakeBlock(BlockDecorativeLeaves block, TreeDefinition treeDefinition, IModelBaker baker) {

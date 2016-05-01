@@ -112,7 +112,7 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 		if (Config.enableHints && inventory instanceof IHintSource) {
 			IHintSource hintSource = (IHintSource) inventory;
 			List<String> hints = hintSource.getHints();
-			if (hints != null && hints.size() > 0) {
+			if (hints != null && !hints.isEmpty()) {
 				ledgerManager.add(new HintLedger(ledgerManager, hintSource));
 			}
 		}

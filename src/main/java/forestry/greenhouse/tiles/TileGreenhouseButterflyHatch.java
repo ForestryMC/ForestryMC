@@ -12,6 +12,10 @@ package forestry.greenhouse.tiles;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+
 import forestry.api.lepidopterology.IButterflyCocoon;
 import forestry.api.multiblock.IGreenhouseComponent;
 import forestry.core.inventory.IInventoryAdapter;
@@ -19,15 +23,12 @@ import forestry.core.utils.InventoryUtil;
 import forestry.greenhouse.gui.ContainerGreenhouseButterflyHatch;
 import forestry.greenhouse.gui.GuiGreenhouseButterflyHatch;
 import forestry.greenhouse.inventory.InventoryGreenhouseButterflyHatch;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 
 public class TileGreenhouseButterflyHatch extends TileGreenhouse implements IGreenhouseComponent.ButterflyHatch {
 
-	private InventoryGreenhouseButterflyHatch inventory;
+	private final InventoryGreenhouseButterflyHatch inventory;
 	
 	public TileGreenhouseButterflyHatch() {
-		super();
 		this.inventory = new InventoryGreenhouseButterflyHatch(this);
 	}
 	
@@ -39,13 +40,13 @@ public class TileGreenhouseButterflyHatch extends TileGreenhouse implements IGre
 	
 	@Override
 	public ItemStack[] addCocoonLoot(IButterflyCocoon cocoon) {
-		List<ItemStack> loots = new ArrayList();
-		for(ItemStack loot : cocoon.getCaterpillar().getCocoonDrop(cocoon)){
-			if(!InventoryUtil.tryAddStack(this, loot, 0, InventoryGreenhouseButterflyHatch.SLOTS, true)){
+		List<ItemStack> loots = new ArrayList<>();
+		for (ItemStack loot : cocoon.getCaterpillar().getCocoonDrop(cocoon)) {
+			if (!InventoryUtil.tryAddStack(this, loot, 0, InventoryGreenhouseButterflyHatch.SLOTS, true)) {
 				loots.add(loot);
 			}
 		}
-		if(loots.size() > 0){
+		if (!loots.isEmpty()) {
 			return loots.toArray(new ItemStack[loots.size()]);
 		}
 		return null;

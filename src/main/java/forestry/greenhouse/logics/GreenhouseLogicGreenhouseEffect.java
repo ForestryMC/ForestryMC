@@ -10,6 +10,10 @@
  ******************************************************************************/
 package forestry.greenhouse.logics;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+
 import forestry.api.core.EnumCamouflageType;
 import forestry.api.core.ICamouflagedBlock;
 import forestry.api.greenhouse.DefaultGreenhouseLogic;
@@ -19,9 +23,6 @@ import forestry.api.greenhouse.IGreenhouseClimaLogic;
 import forestry.api.multiblock.IGreenhouseController;
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.core.utils.CamouflageUtil;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
 
 public class GreenhouseLogicGreenhouseEffect extends DefaultGreenhouseLogic implements IGreenhouseClimaLogic {
 
@@ -35,11 +36,11 @@ public class GreenhouseLogicGreenhouseEffect extends DefaultGreenhouseLogic impl
 	
 	@Override
 	public void work() {
-		if(controller == null || !controller.isAssembled()){
+		if (controller == null || !controller.isAssembled()) {
 			return;
 		}
-		if(controller.getWorld().isDaytime()){
-			if(workTimer++>20){
+		if (controller.getWorld().isDaytime()) {
+			if (workTimer++ > 20) {
 				controller.addTemperatureChange(lightTransmittance / 100, 0F, 2.5F);
 				workTimer = 0;
 			}
@@ -60,31 +61,31 @@ public class GreenhouseLogicGreenhouseEffect extends DefaultGreenhouseLogic impl
 
 	@Override
 	public void onEvent(EnumGreenhouseEventType type, Object event) {
-		if(type == EnumGreenhouseEventType.CAMOUFLAGE){
-			if(controller == null || !controller.isAssembled()) {
+		if (type == EnumGreenhouseEventType.CAMOUFLAGE) {
+			if (controller == null || !controller.isAssembled()) {
 				return;
 			}
 			float lightTransmittance = 0F;
 			int i = 0;
 			
 			World world = controller.getWorld();
-			for(IMultiblockComponent component : controller.getComponents()){
-				if(component instanceof ICamouflagedBlock){
+			for (IMultiblockComponent component : controller.getComponents()) {
+				if (component instanceof ICamouflagedBlock) {
 					ICamouflagedBlock block = (ICamouflagedBlock) component;
-					if(block.getCamouflageType() == EnumCamouflageType.GLASS){
-						if(world.canBlockSeeSky(component.getCoordinates())){
+					if (block.getCamouflageType() == EnumCamouflageType.GLASS) {
+						if (world.canBlockSeeSky(component.getCoordinates())) {
 							ItemStack camouflageStack = CamouflageUtil.getCamouflageBlock(world, component.getCoordinates());
 							float camouflageLightTransmittance = GreenhouseManager.greenhouseAccess.getGreenhouseGlassLightTransmittance(camouflageStack);
 							
-							if(camouflageLightTransmittance < 1 && camouflageLightTransmittance > 0){
-								lightTransmittance= lightTransmittance + camouflageLightTransmittance;
+							if (camouflageLightTransmittance < 1 && camouflageLightTransmittance > 0) {
+								lightTransmittance = lightTransmittance + camouflageLightTransmittance;
 								i++;
 							}
 						}
 					}
 				}
 			}
-			if(i != 0){
+			if (i != 0) {
 				this.lightTransmittance = lightTransmittance / i;
 			}
 		}

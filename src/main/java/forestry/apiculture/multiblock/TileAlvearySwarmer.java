@@ -62,7 +62,7 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, 
 	/* UPDATING */
 	@Override
 	public void updateServer(int tickCount) {
-		if (pendingSpawns.size() > 0) {
+		if (!pendingSpawns.isEmpty()) {
 			setActive(true);
 			if (tickCount % 1000 == 0) {
 				trySpawnSwarm();

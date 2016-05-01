@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.greenhouse.tiles;
 
-public class TileGreenhouseHeater extends TileGreenhouseClimatiser{
+public class TileGreenhouseHeater extends TileGreenhouseClimatiser {
 
 	private static final HeaterDefinition definition = new HeaterDefinition();
 
