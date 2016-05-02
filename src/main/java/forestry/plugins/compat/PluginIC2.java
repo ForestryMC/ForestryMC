@@ -180,31 +180,31 @@ public class PluginIC2 extends BlankForestryPlugin {
 		}
 
 		if (resin != null) {
-			crateRegistry.registerCrate(resin, "cratedResin");
+			crateRegistry.registerCrate(resin);
 		}
 
 		if (rubber != null) {
-			crateRegistry.registerCrate(rubber, "cratedRubber");
+			crateRegistry.registerCrate(rubber);
 		}
 
 		ItemStack scrap = IC2Items.getItem("crafting", "scrap");
 		if (scrap != null) {
-			crateRegistry.registerCrate(scrap, "cratedScrap");
+			crateRegistry.registerCrate(scrap);
 		}
 
 		ItemStack uuMatter = IC2Items.getItem("misc_resource", "matter");
 		if (uuMatter != null) {
-			crateRegistry.registerCrate(uuMatter, "cratedUUM");
+			crateRegistry.registerCrate(uuMatter);
 		}
 
 		ItemStack silver = IC2Items.getItem("ingot", "silver");
 		if (silver != null) {
-			crateRegistry.registerCrateUsingOreDict(silver, "cratedSilver");
+			crateRegistry.registerCrateUsingOreDict(silver);
 		}
 
 		ItemStack brass = IC2Items.getItem("ingot", "bronze");
 		if (brass != null) {
-			crateRegistry.registerCrateUsingOreDict(brass, "cratedBrass");
+			crateRegistry.registerCrateUsingOreDict(brass);
 		}
 	}
 

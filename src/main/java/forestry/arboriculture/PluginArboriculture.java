@@ -177,13 +177,13 @@ public class PluginArboriculture extends BlankForestryPlugin {
 	@Override
 	public void registerCrates() {
 		ICrateRegistry crateRegistry = StorageManager.crateRegistry;
-		crateRegistry.registerCrate(EnumFruit.CHERRY.getStack(), "cratedCherry");
-		crateRegistry.registerCrate(EnumFruit.WALNUT.getStack(), "cratedWalnut");
-		crateRegistry.registerCrate(EnumFruit.CHESTNUT.getStack(), "cratedChestnut");
-		crateRegistry.registerCrate(EnumFruit.LEMON.getStack(), "cratedLemon");
-		crateRegistry.registerCrate(EnumFruit.PLUM.getStack(), "cratedPlum");
-		crateRegistry.registerCrate(EnumFruit.PAPAYA.getStack(), "cratedPapaya");
-		crateRegistry.registerCrate(EnumFruit.DATES.getStack(), "cratedDates");
+		crateRegistry.registerCrate(EnumFruit.CHERRY.getStack());
+		crateRegistry.registerCrate(EnumFruit.WALNUT.getStack());
+		crateRegistry.registerCrate(EnumFruit.CHESTNUT.getStack());
+		crateRegistry.registerCrate(EnumFruit.LEMON.getStack());
+		crateRegistry.registerCrate(EnumFruit.PLUM.getStack());
+		crateRegistry.registerCrate(EnumFruit.PAPAYA.getStack());
+		crateRegistry.registerCrate(EnumFruit.DATES.getStack());
 	}
 
 	@Override

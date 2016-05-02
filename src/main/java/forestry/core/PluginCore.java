@@ -139,70 +139,70 @@ public class PluginCore extends BlankForestryPlugin {
 		ICrateRegistry crateRegistry = StorageManager.crateRegistry;
 
 		// forestry items
-		crateRegistry.registerCrate(items.peat, "cratedPeat");
-		crateRegistry.registerCrate(items.apatite, "cratedApatite");
-		crateRegistry.registerCrate(items.fertilizerCompound, "cratedFertilizer");
-		crateRegistry.registerCrate(items.mulch, "cratedMulch");
-		crateRegistry.registerCrate(items.phosphor, "cratedPhosphor");
-		crateRegistry.registerCrate(items.ash, "cratedAsh");
-		crateRegistry.registerCrateUsingOreDict(items.ingotTin, "cratedTin");
-		crateRegistry.registerCrateUsingOreDict(items.ingotCopper, "cratedCopper");
-		crateRegistry.registerCrateUsingOreDict(items.ingotBronze, "cratedBronze");
+		crateRegistry.registerCrate(items.peat);
+		crateRegistry.registerCrate(items.apatite);
+		crateRegistry.registerCrate(items.fertilizerCompound);
+		crateRegistry.registerCrate(items.mulch);
+		crateRegistry.registerCrate(items.phosphor);
+		crateRegistry.registerCrate(items.ash);
+		crateRegistry.registerCrateUsingOreDict(items.ingotTin);
+		crateRegistry.registerCrateUsingOreDict(items.ingotCopper);
+		crateRegistry.registerCrateUsingOreDict(items.ingotBronze);
 
 		// forestry blocks
-		crateRegistry.registerCrate(blocks.soil.get(BlockSoil.SoilType.HUMUS, 1), "cratedHumus");
-		crateRegistry.registerCrate(blocks.soil.get(BlockSoil.SoilType.BOG_EARTH, 1), "cratedBogearth");
+		crateRegistry.registerCrate(blocks.soil.get(BlockSoil.SoilType.HUMUS, 1));
+		crateRegistry.registerCrate(blocks.soil.get(BlockSoil.SoilType.BOG_EARTH, 1));
 
 		// vanilla items
-		crateRegistry.registerCrate(Items.wheat, "cratedWheat");
-		crateRegistry.registerCrate(Items.cookie, "cratedCookies");
-		crateRegistry.registerCrate(Items.redstone, "cratedRedstone");
-		crateRegistry.registerCrate(new ItemStack(Items.dye, 1, 4), "cratedLapis");
-		crateRegistry.registerCrate(Items.reeds, "cratedReeds");
-		crateRegistry.registerCrate(Items.clay_ball, "cratedClay");
-		crateRegistry.registerCrate(Items.glowstone_dust, "cratedGlowstone");
-		crateRegistry.registerCrate(Items.apple, "cratedApples");
-		crateRegistry.registerCrate(new ItemStack(Items.nether_wart), "cratedNetherwart");
-		crateRegistry.registerCrate(new ItemStack(Items.coal, 1, 1), "cratedCharcoal");
-		crateRegistry.registerCrate(new ItemStack(Items.coal, 1, 0), "cratedCoal");
-		crateRegistry.registerCrate(Items.wheat_seeds, "cratedSeeds");
-		crateRegistry.registerCrate(Items.potato, "cratedPotatoes");
-		crateRegistry.registerCrate(Items.carrot, "cratedCarrots");
+		crateRegistry.registerCrate(Items.wheat);
+		crateRegistry.registerCrate(Items.cookie);
+		crateRegistry.registerCrate(Items.redstone);
+		crateRegistry.registerCrate(new ItemStack(Items.dye, 1, 4));
+		crateRegistry.registerCrate(Items.reeds);
+		crateRegistry.registerCrate(Items.clay_ball);
+		crateRegistry.registerCrate(Items.glowstone_dust);
+		crateRegistry.registerCrate(Items.apple);
+		crateRegistry.registerCrate(new ItemStack(Items.nether_wart));
+		crateRegistry.registerCrate(new ItemStack(Items.coal, 1, 1));
+		crateRegistry.registerCrate(new ItemStack(Items.coal, 1, 0));
+		crateRegistry.registerCrate(Items.wheat_seeds);
+		crateRegistry.registerCrate(Items.potato);
+		crateRegistry.registerCrate(Items.carrot);
 
 		// vanilla blocks
-		crateRegistry.registerCrate(new ItemStack(Blocks.log, 1, 0), "cratedWood");
-		crateRegistry.registerCrate(new ItemStack(Blocks.log, 1, 1), "cratedSpruceWood");
-		crateRegistry.registerCrate(new ItemStack(Blocks.log, 1, 2), "cratedBirchWood");
-		crateRegistry.registerCrate(new ItemStack(Blocks.log, 1, 3), "cratedJungleWood");
-		crateRegistry.registerCrate(new ItemStack(Blocks.log2, 1, 0), "cratedAcaciaWood");
-		crateRegistry.registerCrate(new ItemStack(Blocks.log2, 1, 1), "cratedDarkOakWood");
-		crateRegistry.registerCrate(Blocks.cobblestone, "cratedCobblestone");
-		crateRegistry.registerCrate(new ItemStack(Blocks.dirt, 1, 0), "cratedDirt");
-		crateRegistry.registerCrate(new ItemStack(Blocks.dirt, 1, 2), "cratedPodzol");
-		crateRegistry.registerCrate(new ItemStack(Blocks.stone, 1, 0), "cratedStone");
-		crateRegistry.registerCrate(new ItemStack(Blocks.stone, 1, 1), "cratedGranite");
-		crateRegistry.registerCrate(new ItemStack(Blocks.stone, 1, 3), "cratedDiorite");
-		crateRegistry.registerCrate(new ItemStack(Blocks.stone, 1, 5), "cratedAndesite");
-		crateRegistry.registerCrate(new ItemStack(Blocks.prismarine, 1, 0), "cratedPrismarine");
-		crateRegistry.registerCrate(new ItemStack(Blocks.prismarine, 1, 1), "cratedPrismarinebrick");
-		crateRegistry.registerCrate(new ItemStack(Blocks.prismarine, 1, 2), "cratedPrismarinedark");
-		crateRegistry.registerCrate(Blocks.brick_block, "cratedBrick");
-		crateRegistry.registerCrate(Blocks.cactus, "cratedCacti");
-		crateRegistry.registerCrate(new ItemStack(Blocks.sand, 1, 0), "cratedSand");
-		crateRegistry.registerCrate(new ItemStack(Blocks.sand, 1, 1), "cratedRedSand");
-		crateRegistry.registerCrate(Blocks.obsidian, "cratedObsidian");
-		crateRegistry.registerCrate(Blocks.netherrack, "cratedNetherrack");
-		crateRegistry.registerCrate(Blocks.soul_sand, "cratedSoulsand");
-		crateRegistry.registerCrate(Blocks.sandstone, "cratedSandstone");
-		crateRegistry.registerCrate(Blocks.nether_brick, "cratedNetherbrick");
-		crateRegistry.registerCrate(Blocks.mycelium, "cratedMycelium");
-		crateRegistry.registerCrate(Blocks.gravel, "cratedGravel");
-		crateRegistry.registerCrate(new ItemStack(Blocks.sapling, 1, 0), "cratedSaplings");
-		crateRegistry.registerCrate(new ItemStack(Blocks.sapling, 1, 1), "cratedSpruceSapling");
-		crateRegistry.registerCrate(new ItemStack(Blocks.sapling, 1, 2), "cratedBirchSapling");
-		crateRegistry.registerCrate(new ItemStack(Blocks.sapling, 1, 3), "cratedJungleSapling");
-		crateRegistry.registerCrate(new ItemStack(Blocks.sapling, 1, 4), "cratedAcaciaSapling");
-		crateRegistry.registerCrate(new ItemStack(Blocks.sapling, 1, 5), "cratedDarkOakSapling");
+		crateRegistry.registerCrate(new ItemStack(Blocks.log, 1, 0));
+		crateRegistry.registerCrate(new ItemStack(Blocks.log, 1, 1));
+		crateRegistry.registerCrate(new ItemStack(Blocks.log, 1, 2));
+		crateRegistry.registerCrate(new ItemStack(Blocks.log, 1, 3));
+		crateRegistry.registerCrate(new ItemStack(Blocks.log2, 1, 0));
+		crateRegistry.registerCrate(new ItemStack(Blocks.log2, 1, 1));
+		crateRegistry.registerCrate(Blocks.cobblestone);
+		crateRegistry.registerCrate(new ItemStack(Blocks.dirt, 1, 0));
+		crateRegistry.registerCrate(new ItemStack(Blocks.dirt, 1, 2));
+		crateRegistry.registerCrate(new ItemStack(Blocks.stone, 1, 0));
+		crateRegistry.registerCrate(new ItemStack(Blocks.stone, 1, 1));
+		crateRegistry.registerCrate(new ItemStack(Blocks.stone, 1, 3));
+		crateRegistry.registerCrate(new ItemStack(Blocks.stone, 1, 5));
+		crateRegistry.registerCrate(new ItemStack(Blocks.prismarine, 1, 0));
+		crateRegistry.registerCrate(new ItemStack(Blocks.prismarine, 1, 1));
+		crateRegistry.registerCrate(new ItemStack(Blocks.prismarine, 1, 2));
+		crateRegistry.registerCrate(Blocks.brick_block);
+		crateRegistry.registerCrate(Blocks.cactus);
+		crateRegistry.registerCrate(new ItemStack(Blocks.sand, 1, 0));
+		crateRegistry.registerCrate(new ItemStack(Blocks.sand, 1, 1));
+		crateRegistry.registerCrate(Blocks.obsidian);
+		crateRegistry.registerCrate(Blocks.netherrack);
+		crateRegistry.registerCrate(Blocks.soul_sand);
+		crateRegistry.registerCrate(Blocks.sandstone);
+		crateRegistry.registerCrate(Blocks.nether_brick);
+		crateRegistry.registerCrate(Blocks.mycelium);
+		crateRegistry.registerCrate(Blocks.gravel);
+		crateRegistry.registerCrate(new ItemStack(Blocks.sapling, 1, 0));
+		crateRegistry.registerCrate(new ItemStack(Blocks.sapling, 1, 1));
+		crateRegistry.registerCrate(new ItemStack(Blocks.sapling, 1, 2));
+		crateRegistry.registerCrate(new ItemStack(Blocks.sapling, 1, 3));
+		crateRegistry.registerCrate(new ItemStack(Blocks.sapling, 1, 4));
+		crateRegistry.registerCrate(new ItemStack(Blocks.sapling, 1, 5));
 	}
 
 	@Override

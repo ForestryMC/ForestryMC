@@ -19,55 +19,53 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import forestry.api.storage.ICrateRegistry;
 import forestry.core.items.ItemCrated;
 import forestry.core.proxy.Proxies;
+import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 
 public class CrateRegistry implements ICrateRegistry {
 
-	private static void registerCrate(ItemStack stack, String uid, boolean useOreDict) {
+	private static void registerCrate(ItemStack stack, boolean useOreDict) {
 		if (stack == null || stack.getItem() == null) {
 			Log.warning("Tried to make a crate without an item");
 			return;
 		}
 
-		if (uid == null) {
-			Log.warning("Tried to make a crate without a uid");
-			return;
-		}
-
+		String itemName = ItemStackUtil.getStringForItemStack(stack).replace(':', '.');
+		String crateName = "crated." + itemName;
 		ItemCrated crate = new ItemCrated(stack, useOreDict);
-		crate.setUnlocalizedName(uid);
-		GameRegistry.registerItem(crate, uid);
+		crate.setUnlocalizedName(crateName);
+		GameRegistry.registerItem(crate, crateName);
 		Proxies.render.registerModelCrate(crate);
 		PluginStorage.registerCrate(crate);
 	}
 
 	@Override
-	public void registerCrate(Item item, String uid) {
-		registerCrate(new ItemStack(item), uid, false);
+	public void registerCrate(Item item) {
+		registerCrate(new ItemStack(item), false);
 	}
 
 	@Override
-	public void registerCrateUsingOreDict(Item item, String uid) {
-		registerCrate(new ItemStack(item), uid, true);
+	public void registerCrateUsingOreDict(Item item) {
+		registerCrate(new ItemStack(item), true);
 	}
 
 	@Override
-	public void registerCrate(Block block, String uid) {
-		registerCrate(new ItemStack(block), uid, false);
+	public void registerCrate(Block block) {
+		registerCrate(new ItemStack(block), false);
 	}
 
 	@Override
-	public void registerCrateUsingOreDict(Block block, String uid) {
-		registerCrate(new ItemStack(block), uid, true);
+	public void registerCrateUsingOreDict(Block block) {
+		registerCrate(new ItemStack(block), true);
 	}
 
 	@Override
-	public void registerCrate(ItemStack stack, String uid) {
-		registerCrate(stack, uid, false);
+	public void registerCrate(ItemStack stack) {
+		registerCrate(stack, false);
 	}
 
 	@Override
-	public void registerCrateUsingOreDict(ItemStack stack, String uid) {
-		registerCrate(stack, uid, true);
+	public void registerCrateUsingOreDict(ItemStack stack) {
+		registerCrate(stack, true);
 	}
 }
