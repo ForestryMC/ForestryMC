@@ -18,7 +18,7 @@ import java.util.TreeSet;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 
 import forestry.core.config.Constants;
 
@@ -95,7 +95,7 @@ public class RootCommand extends CommandBase implements IForestryCommand {
 	}
 
 	@Override
-	public void printHelp(ICommandSender sender) {
+	public void printHelp(MinecraftServer server, ICommandSender sender) {
 		CommandHelpers.printHelp(sender, this);
 	}
 

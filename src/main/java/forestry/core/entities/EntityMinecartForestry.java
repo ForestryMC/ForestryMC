@@ -17,6 +17,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
@@ -49,8 +50,8 @@ public abstract class EntityMinecartForestry extends EntityMinecart implements I
 	}
 
 	@Override
-	public final boolean interactFirst(EntityPlayer player) {
-		if (MinecraftForge.EVENT_BUS.post(new MinecartInteractEvent(this, player))) {
+	public boolean processInitialInteract(EntityPlayer player, ItemStack stack, EnumHand hand) {
+		if (MinecraftForge.EVENT_BUS.post(new MinecartInteractEvent(this, player, stack, hand))) {
 			return true;
 		}
 
@@ -65,7 +66,7 @@ public abstract class EntityMinecartForestry extends EntityMinecart implements I
 	}
 
 	@Override
-	public EnumMinecartType getMinecartType() {
+	public Type getType() {
 		return null;
 	}
 

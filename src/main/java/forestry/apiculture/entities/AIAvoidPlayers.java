@@ -16,7 +16,7 @@ import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.pathfinding.PathEntity;
 import net.minecraft.pathfinding.PathNavigate;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
 
 public class AIAvoidPlayers extends EntityAIBase {
 
@@ -54,8 +54,8 @@ public class AIAvoidPlayers extends EntityAIBase {
 			return false;
 		}
 
-		Vec3 randomTarget = RandomPositionGenerator.findRandomTargetBlockAwayFrom(mob, 16, 7,
-				new Vec3(player.posX, player.posY, player.posZ));
+		Vec3d randomTarget = RandomPositionGenerator.findRandomTargetBlockAwayFrom(mob, 16, 7,
+				new Vec3d(player.posX, player.posY, player.posZ));
 
 		if (randomTarget == null) {
 			return false;

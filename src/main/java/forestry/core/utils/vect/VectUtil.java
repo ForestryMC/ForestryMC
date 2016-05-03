@@ -16,32 +16,40 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
+@Deprecated
 public final class VectUtil {
+	@Deprecated
 	public static boolean isAirBlock(World world, IVect position) {
 		return world.isAirBlock(position);
 	}
 
+	@Deprecated
 	public static boolean isWoodBlock(World world, IVect position) {
 		Block block = getBlock(world, position);
 		return block.isWood(world, position);
 	}
 
+	@Deprecated
 	public static TileEntity getTile(World world, IVect position) {
 		return world.getTileEntity(position);
 	}
-	
+
+	@Deprecated
 	public static IBlockState getBlockState(World world, IVect position) {
 		return world.getBlockState(position);
 	}
 
+	@Deprecated
 	public static Block getBlock(World world, IVect position) {
 		return getBlockState(world, position).getBlock();
 	}
 
+	@Deprecated
 	public static int getBlockMeta(World world, IVect position) {
 		return getBlock(world, position).getMetaFromState(getBlockState(world, position));
 	}
 
+	@Deprecated
 	public static ItemStack getAsItemStack(World world, IVect position) {
 		return new ItemStack(getBlock(world, position), 1, getBlockMeta(world, position));
 	}

@@ -18,7 +18,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockModelShapes;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 
@@ -48,7 +48,7 @@ public class ModelGreenhouse extends ModelBlockOverlay<BlockGreenhouse> {
 		bakeBlockModel(block, world, pos, stateExtended, baker, camouflageStack);
 	}
 	
-	private void bakeBlockModel(@Nonnull BlockGreenhouse block, @Nullable IBlockAccess world, @Nullable BlockPos pos, @Nullable IExtendedBlockState stateExtended, @Nonnull IModelBaker baker, @Nullable ItemStack camouflageStack) {
+	private static void bakeBlockModel(@Nonnull BlockGreenhouse block, @Nullable IBlockAccess world, @Nullable BlockPos pos, @Nullable IExtendedBlockState stateExtended, @Nonnull IModelBaker baker, @Nullable ItemStack camouflageStack) {
 		if (camouflageStack != null) {
 			BlockModelShapes modelShapes = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes();
 			
@@ -68,6 +68,7 @@ public class ModelGreenhouse extends ModelBlockOverlay<BlockGreenhouse> {
 			baker.addBlockModel(block, pos, BlockGreenhouseType.getSprite(BlockGreenhouseType.PLAIN, null, null, world, pos), 100);
 			baker.setParticleSprite(plainSprite);
 		}
+
 		if (block.getGreenhouseType().hasOverlaySprite) {
 			TextureAtlasSprite[] sprite = new TextureAtlasSprite[6];
 			for (EnumFacing facing : EnumFacing.VALUES) {

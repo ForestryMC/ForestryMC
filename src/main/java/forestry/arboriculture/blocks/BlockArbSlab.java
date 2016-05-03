@@ -17,15 +17,16 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.BlockSlab;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -74,7 +75,7 @@ public abstract class BlockArbSlab extends BlockSlab implements IWoodTyped, IIte
 	private final int blockNumber;
 
 	private BlockArbSlab(boolean fireproof, int blockNumber) {
-		super(Material.wood);
+		super(Material.WOOD);
 		this.fireproof = fireproof;
 		this.blockNumber = blockNumber;
 
@@ -91,7 +92,7 @@ public abstract class BlockArbSlab extends BlockSlab implements IWoodTyped, IIte
 		setLightOpacity(0);
 		setHardness(2.0F);
 		setResistance(5.0F);
-		setStepSound(soundTypeWood);
+		setSoundType(SoundType.WOOD);
 		setHarvestLevel("axe", 0);
 	}
 
@@ -108,8 +109,8 @@ public abstract class BlockArbSlab extends BlockSlab implements IWoodTyped, IIte
 	}
 
 	@Override
-	protected BlockState createBlockState() {
-		return this.isDouble() ? new BlockState(this, getVariant()) : new BlockState(this, HALF, getVariant());
+	protected BlockStateContainer createBlockState() {
+		return this.isDouble() ? new BlockStateContainer(this, getVariant()) : new BlockStateContainer(this, HALF, getVariant());
 	}
 	
 	@Override
@@ -155,13 +156,12 @@ public abstract class BlockArbSlab extends BlockSlab implements IWoodTyped, IIte
 		return slab.getItem();
 	}
 
+	@SuppressWarnings("deprecation") // this is the way the vanilla slabs work
 	@Override
-	@SideOnly(Side.CLIENT)
-	public Item getItem(World worldIn, BlockPos pos) {
-		IBlockState blockState = worldIn.getBlockState(pos);
-		EnumWoodType woodType = blockState.getValue(getVariant());
+	public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state) {
+		EnumWoodType woodType = state.getValue(getVariant());
 		ItemStack slab = TreeManager.woodItemAccess.getSlab(woodType, isFireproof());
-		return slab.getItem();
+		return new ItemStack(slab.getItem(), 1, getMetaFromState(state));
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -185,10 +185,9 @@ public abstract class BlockArbSlab extends BlockSlab implements IWoodTyped, IIte
 			}
 		}
 	}
-	
+
 	@Override
-	public float getBlockHardness(World world, BlockPos pos) {
-		IBlockState blockState = world.getBlockState(pos);
+	public float getBlockHardness(IBlockState blockState, World worldIn, BlockPos pos) {
 		int meta = getMetaFromState(blockState);
 		EnumWoodType woodType = getWoodType(meta);
 		return woodType.getHardness();
@@ -211,17 +210,12 @@ public abstract class BlockArbSlab extends BlockSlab implements IWoodTyped, IIte
 	}
 
 	@Override
-	public boolean getUseNeighborBrightness() {
-		return true;
-	}
-
-	@Override
 	public IProperty getVariantProperty() {
 		return getVariant();
 	}
 
 	@Override
-	public Object getVariant(ItemStack stack) {
+	public Comparable<?> getTypeForItem(ItemStack stack) {
 		return getWoodType(stack.getMetadata());
 	}
 

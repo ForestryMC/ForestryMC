@@ -14,13 +14,15 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.BlockTorch;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fml.relauncher.Side;
@@ -38,7 +40,7 @@ public class BlockStump extends BlockTorch implements IItemModelRegister {
 
 	public BlockStump() {
 		this.setHardness(0.0F);
-		this.setStepSound(soundTypeWood);
+		this.setSoundType(SoundType.WOOD);
 		setCreativeTab(Tabs.tabApiculture);
 	}
 
@@ -54,14 +56,12 @@ public class BlockStump extends BlockTorch implements IItemModelRegister {
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
-		
-		ItemStack held = player.getCurrentEquippedItem();
-		if (held != null && BlockCandle.lightingItems.contains(held.getItem())) {
-			world.setBlockState(pos, PluginApiculture.blocks.candle.getStateFromMeta(BlockUtil.getBlockMetadata(world, pos) | 0x08), Constants.FLAG_BLOCK_SYNCH);
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+		if (heldItem != null && BlockCandle.lightingItems.contains(heldItem.getItem())) {
+			worldIn.setBlockState(pos, PluginApiculture.blocks.candle.getStateFromMeta(BlockUtil.getBlockMetadata(worldIn, pos) | 0x08), Constants.FLAG_BLOCK_SYNCH);
 			TileCandle tc = new TileCandle();
 			tc.setColour(0); // default to white
-			world.setTileEntity(pos, tc);
+			worldIn.setTileEntity(pos, tc);
 			return true;
 		}
 
@@ -69,12 +69,6 @@ public class BlockStump extends BlockTorch implements IItemModelRegister {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public int getRenderColor(IBlockState state) {
-		return 0xee0000;
-	}
-	
-	@Override
-	public void randomDisplayTick(World world, BlockPos pos, IBlockState state, Random rand) {
+	public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
 	}
 }

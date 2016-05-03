@@ -18,8 +18,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
@@ -100,7 +100,7 @@ public class ItemResearchNote extends ItemForestry {
 
 				if (encoded.getSpecialConditions() != null && !encoded.getSpecialConditions().isEmpty()) {
 					for (String line : encoded.getSpecialConditions()) {
-						tooltips.add(EnumChatFormatting.GOLD + line);
+						tooltips.add(TextFormatting.GOLD + line);
 					}
 				}
 			} else if (this == SPECIES) {
@@ -138,7 +138,7 @@ public class ItemResearchNote extends ItemForestry {
 
 				IBreedingTracker tracker = encoded.getRoot().getBreedingTracker(world, player.getGameProfile());
 				if (tracker.isResearched(encoded)) {
-					player.addChatMessage(new ChatComponentTranslation("for.chat.cannotmemorizeagain"));
+					player.addChatMessage(new TextComponentTranslation("for.chat.cannotmemorizeagain"));
 					return false;
 				}
 
@@ -151,12 +151,12 @@ public class ItemResearchNote extends ItemForestry {
 				tracker.registerSpecies(speciesResult);
 
 				tracker.researchMutation(encoded);
-				player.addChatMessage(new ChatComponentTranslation("for.chat.memorizednote"));
+				player.addChatMessage(new TextComponentTranslation("for.chat.memorizednote"));
 
-				player.addChatMessage(new ChatComponentTranslation("for.chat.memorizednote2",
-						EnumChatFormatting.GRAY + species0.getName(),
-						EnumChatFormatting.GRAY + species1.getName(),
-						EnumChatFormatting.GREEN + speciesResult.getName()));
+				player.addChatMessage(new TextComponentTranslation("for.chat.memorizednote2",
+						TextFormatting.GRAY + species0.getName(),
+						TextFormatting.GRAY + species1.getName(),
+						TextFormatting.GREEN + speciesResult.getName()));
 
 				return true;
 			}
@@ -242,7 +242,7 @@ public class ItemResearchNote extends ItemForestry {
 		public void addTooltip(List<String> list) {
 			ArrayList<String> tooltips = type.getTooltip(inner);
 			if (tooltips.size() <= 0) {
-				list.add(EnumChatFormatting.ITALIC + EnumChatFormatting.RED.toString() + Translator.translateToLocal("for.researchNote.error.0"));
+				list.add(TextFormatting.ITALIC + TextFormatting.RED.toString() + Translator.translateToLocal("for.researchNote.error.0"));
 				list.add(Translator.translateToLocal("for.researchNote.error.1"));
 				return;
 			}

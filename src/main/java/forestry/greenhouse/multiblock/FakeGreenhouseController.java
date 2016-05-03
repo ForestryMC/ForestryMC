@@ -15,7 +15,7 @@ import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 
 import forestry.api.core.EnumCamouflageType;
 import forestry.api.greenhouse.EnumGreenhouseEventType;

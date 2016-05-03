@@ -13,13 +13,14 @@ package forestry.greenhouse.gui.widgets;
 import java.util.Locale;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 
 import forestry.api.core.EnumCamouflageType;
 import forestry.api.core.ICamouflageHandler;
@@ -46,7 +47,7 @@ public class WidgetCamouflageSlot extends Widget {
 	@Override
 	public void draw(int startX, int startY) {
 		if (camouflageHandler != null && camouflageHandler.getCamouflageBlock(type) != null) {
-			Proxies.render.bindTexture(TextureMap.locationBlocksTexture);
+			Proxies.render.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 			RenderItem renderItem = Proxies.common.getClientInstance().getRenderItem();
 			renderItem.renderItemIntoGUI(camouflageHandler.getCamouflageBlock(type), startX + xPos, startY + yPos);
 		}
@@ -65,9 +66,11 @@ public class WidgetCamouflageSlot extends Widget {
 			ItemStack stack = player.inventory.getItemStack();
 			if (stack != null && Block.getBlockFromItem(stack.getItem()) != null) {
 				Block block = Block.getBlockFromItem(stack.getItem());
-				
-				if (!GreenhouseManager.greenhouseAccess.isOnCamouflageBlockBlackList(type, stack) && (type == EnumCamouflageType.DEFAULT && block.isOpaqueCube() && !block.hasTileEntity(block.getStateFromMeta(stack.getItemDamage())) && block.isNormalCube(player.worldObj, camouflageHandler.getCoordinates()) || type == EnumCamouflageType.GLASS && GreenhouseManager.greenhouseAccess.isGreenhouseGlass(stack))) {
-					camouflageHandler.setCamouflageBlock(type, stack);
+				if (!GreenhouseManager.greenhouseAccess.isOnCamouflageBlockBlackList(type, stack)) {
+					IBlockState stateFromMeta = block.getStateFromMeta(stack.getItemDamage());
+					if (type == EnumCamouflageType.DEFAULT && block.isOpaqueCube(stateFromMeta) && !block.hasTileEntity(stateFromMeta) && block.isNormalCube(stateFromMeta, player.worldObj, camouflageHandler.getCoordinates()) || type == EnumCamouflageType.GLASS && GreenhouseManager.greenhouseAccess.isGreenhouseGlass(stack)) {
+						camouflageHandler.setCamouflageBlock(type, stack);
+					}
 				}
 			}
 		}
@@ -95,9 +98,9 @@ public class WidgetCamouflageSlot extends Widget {
 			ItemStack camouflageBlock = camouflageHandler.getCamouflageBlock(type);
 
 			if (camouflageHandler == null || camouflageBlock == null) {
-				toolTip.add(EnumChatFormatting.ITALIC.toString() + Translator.translateToLocal("for.gui.empty"));
+				toolTip.add(TextFormatting.ITALIC.toString() + Translator.translateToLocal("for.gui.empty"));
 			} else {
-				toolTip.add(EnumChatFormatting.ITALIC.toString() + camouflageBlock.getTooltip(Proxies.common.getClientInstance().thePlayer, false));
+				toolTip.add(TextFormatting.ITALIC.toString() + camouflageBlock.getTooltip(Proxies.common.getClientInstance().thePlayer, false));
 			}
 		}
 	};

@@ -21,12 +21,11 @@ import net.minecraft.command.PlayerNotFoundException;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.ChatStyle;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.world.World;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 
 import forestry.core.utils.Translator;
 
@@ -35,41 +34,13 @@ import forestry.core.utils.Translator;
  */
 public class CommandHelpers {
 
-	public static World getWorld(ICommandSender sender, IForestryCommand command, String[] args, int worldArgIndex) throws WrongUsageException {
-		// Handle passed in world argument
-		if (worldArgIndex < args.length) {
-			try {
-				int dim = Integer.parseInt(args[worldArgIndex]);
-				World world = MinecraftServer.getServer().worldServerForDimension(dim);
-				if (world != null) {
-					return world;
-				}
-			} catch (NumberFormatException e) {
-				throwWrongUsage(sender, command);
-			}
-		}
-		return getWorld(sender, command);
-	}
-
-	public static World getWorld(ICommandSender sender, IForestryCommand command) {
-		return sender.getEntityWorld();
-	}
-
-	public static EntityPlayerMP getPlayer(ICommandSender sender, String playerName) throws PlayerNotFoundException {
-		return CommandBase.getPlayer(sender, playerName);
-	}
-
-	public static String[] getPlayers() {
-		return MinecraftServer.getServer().getAllUsernames();
-	}
-
 	public static void sendLocalizedChatMessage(ICommandSender sender, String locTag, Object... args) {
-		sender.addChatMessage(new ChatComponentTranslation(locTag, args));
+		sender.addChatMessage(new TextComponentTranslation(locTag, args));
 	}
 
-	public static void sendLocalizedChatMessage(ICommandSender sender, ChatStyle chatStyle, String locTag, Object... args) {
-		ChatComponentTranslation chat = new ChatComponentTranslation(locTag, args);
-		chat.setChatStyle(chatStyle);
+	public static void sendLocalizedChatMessage(ICommandSender sender, Style chatStyle, String locTag, Object... args) {
+		TextComponentTranslation chat = new TextComponentTranslation(locTag, args);
+		chat.setStyle(chatStyle);
 		sender.addChatMessage(chat);
 	}
 
@@ -81,32 +52,32 @@ public class CommandHelpers {
 	 * Messages will not be localized properly if you use StringUtil.localize().
 	 */
 	public static void sendChatMessage(ICommandSender sender, String message) {
-		sender.addChatMessage(new ChatComponentText(message));
+		sender.addChatMessage(new TextComponentString(message));
 	}
 
 	public static void throwWrongUsage(ICommandSender sender, IForestryCommand command) throws WrongUsageException {
 		throw new WrongUsageException(Translator.translateToLocalFormatted("for.chat.help", command.getCommandUsage(sender)));
 	}
 
-	public static void processChildCommand(ICommandSender sender, SubCommand child, String[] args) throws CommandException {
+	public static void processChildCommand(MinecraftServer server, ICommandSender sender, SubCommand child, String[] args) throws CommandException {
 		if (!sender.canCommandSenderUseCommand(child.getPermissionLevel(), child.getFullCommandString())) {
 			throw new WrongUsageException(Translator.translateToLocal("for.chat.command.noperms"));
 		}
 		String[] newargs = new String[args.length - 1];
 		System.arraycopy(args, 1, newargs, 0, newargs.length);
-		child.processCommand(sender, newargs);
+		child.execute(server, sender, newargs);
 	}
 
 	public static void printHelp(ICommandSender sender, IForestryCommand command) {
 
 		String commandString = command.getFullCommandString().replace(" ", ".");
 
-		ChatStyle header = new ChatStyle();
-		header.setColor(EnumChatFormatting.BLUE);
+		Style header = new Style();
+		header.setColor(TextFormatting.BLUE);
 		sendLocalizedChatMessage(sender, header, "for.chat.command." + commandString + ".format", command.getFullCommandString());
 
-		ChatStyle body = new ChatStyle();
-		body.setColor(EnumChatFormatting.GRAY);
+		Style body = new Style();
+		body.setColor(TextFormatting.GRAY);
 
 		List<String> commandAliases = command.getCommandAliases();
 		if (!commandAliases.isEmpty()) {
@@ -128,15 +99,15 @@ public class CommandHelpers {
 		}
 	}
 
-	public static boolean processStandardCommands(ICommandSender sender, IForestryCommand command, String[] args) throws CommandException {
+	public static boolean processStandardCommands(MinecraftServer server, ICommandSender sender, IForestryCommand command, String[] args) throws CommandException {
 		if (args.length >= 1) {
 			if (args[0].equals("help")) {
-				command.printHelp(sender);
+				command.printHelp(, sender);
 				return true;
 			}
 			for (SubCommand child : command.getChildren()) {
 				if (matches(args[0], child)) {
-					processChildCommand(sender, child, args);
+					processChildCommand(server, sender, child, args);
 					return true;
 				}
 			}
@@ -161,13 +132,13 @@ public class CommandHelpers {
 		return CommandBase.getListOfStringsMatchingLastWord(strings, lastWords);
 	}
 
-	public static List<String> addStandardTabCompletionOptions(IForestryCommand command, ICommandSender sender, String[] incomplete, BlockPos pos) {
+	public static List<String> addStandardTabCompletionOptions(MinecraftServer server, IForestryCommand command, ICommandSender sender, String[] incomplete, BlockPos pos) {
 		if (incomplete.length > 1) {
 			String commandName = incomplete[0];
 			for (SubCommand child : command.getChildren()) {
 				if (CommandHelpers.matches(commandName, child)) {
 					String[] incompleteRemaining = Arrays.copyOfRange(incomplete, 1, incomplete.length);
-					return child.addTabCompletionOptions(sender, incompleteRemaining, pos);
+					return child.getTabCompletionOptions(server, sender, incompleteRemaining, pos);
 				}
 			}
 		}

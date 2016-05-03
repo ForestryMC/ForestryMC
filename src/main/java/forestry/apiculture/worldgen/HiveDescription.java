@@ -17,7 +17,7 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
@@ -71,7 +71,7 @@ public enum HiveDescription implements IHiveDescription {
 		@Override
 		public void postGen(World world, BlockPos pos) {
 			if (world.isAirBlock(pos.add(0, 1, 0))) {
-				world.setBlockState(pos.add(0, 1, 0), Blocks.snow_layer.getStateFromMeta(0), 0);
+				world.setBlockState(pos.add(0, 1, 0), Blocks.snow_layer.getDefaultState(), 0);
 			}
 
 			postGenFlowers(world, pos, flowerStates);

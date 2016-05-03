@@ -15,10 +15,12 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
+import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.PlayerNotFoundException;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.BlockPos;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
 
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.genetics.AlleleManager;
@@ -48,12 +50,12 @@ public final class CommandTreeSpawn extends SubCommand {
 		EntityPlayer player;
 		String treeName;
 		try {
-			player = CommandHelpers.getPlayer(sender, arguments[arguments.length - 1]);
+			player = CommandBase.getPlayer((MinecraftServer) sender, (ICommandSender) arguments[arguments.length - 1], null);
 			String[] argumentsWithoutPlayer = new String[arguments.length - 1];
 			System.arraycopy(arguments, 0, argumentsWithoutPlayer, 0, arguments.length - 1);
 			treeName = StringUtils.join(argumentsWithoutPlayer, " ");
 		} catch (PlayerNotFoundException e) {
-			player = CommandHelpers.getPlayer(sender, sender.getName());
+			player = CommandBase.getPlayer((MinecraftServer) sender, (ICommandSender) sender.getName(), null);
 			treeName = StringUtils.join(arguments, " ");
 		}
 

@@ -11,7 +11,7 @@
 package forestry.apiculture.worldgen;
 
 import net.minecraft.block.Block;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class HiveGenTree extends HiveGen {

@@ -23,8 +23,8 @@ import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
@@ -342,7 +342,7 @@ public class Bee extends IndividualLiving implements IBee {
 		}
 
 		EnumTemperature temperature = EnumTemperature.getFromBiome(biome);
-		EnumHumidity humidity = EnumHumidity.getFromValue(biome.rainfall);
+		EnumHumidity humidity = EnumHumidity.getFromValue(biome.getRainfall());
 		return isSuitableClimate(temperature, humidity);
 	}
 
@@ -355,7 +355,7 @@ public class Bee extends IndividualLiving implements IBee {
 	@Override
 	public ArrayList<BiomeGenBase> getSuitableBiomes() {
 		ArrayList<BiomeGenBase> suitableBiomes = new ArrayList<>();
-		for (BiomeGenBase biome : BiomeGenBase.getBiomeGenArray()) {
+		for (BiomeGenBase biome : BiomeGenBase.REGISTRY) {
 			if (isSuitableBiome(biome)) {
 				suitableBiomes.add(biome);
 			}
@@ -377,7 +377,7 @@ public class Bee extends IndividualLiving implements IBee {
 		IAlleleBeeSpecies primary = genome.getPrimary();
 		IAlleleBeeSpecies secondary = genome.getSecondary();
 		if (!isPureBred(EnumBeeChromosome.SPECIES)) {
-			list.add(EnumChatFormatting.BLUE + Translator.translateToLocal("for.bees.hybrid").replaceAll("%PRIMARY", primary.getName()).replaceAll("%SECONDARY", secondary.getName()));
+			list.add(TextFormatting.BLUE + Translator.translateToLocal("for.bees.hybrid").replaceAll("%PRIMARY", primary.getName()).replaceAll("%SECONDARY", secondary.getName()));
 		}
 
 		if (generation > 0) {
@@ -409,8 +409,8 @@ public class Bee extends IndividualLiving implements IBee {
 		}
 
 		String lifespan = genome.getActiveAllele(EnumBeeChromosome.LIFESPAN).getName() + ' ' + Translator.translateToLocal("for.gui.life");
-		String tempTolerance = EnumChatFormatting.GREEN + "T: " + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getTemperature()) + " / " + tempToleranceAllele.getName();
-		String humidTolerance = EnumChatFormatting.GREEN + "H: " + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getHumidity()) + " / " + humidToleranceAllele.getName();
+		String tempTolerance = TextFormatting.GREEN + "T: " + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getTemperature()) + " / " + tempToleranceAllele.getName();
+		String humidTolerance = TextFormatting.GREEN + "H: " + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getHumidity()) + " / " + humidToleranceAllele.getName();
 		String flowers = genome.getFlowerProvider().getDescription();
 
 		list.add(lifespan);
@@ -420,11 +420,11 @@ public class Bee extends IndividualLiving implements IBee {
 		list.add(flowers);
 
 		if (genome.getNeverSleeps()) {
-			list.add(EnumChatFormatting.RED + GenericRatings.rateActivityTime(genome.getNeverSleeps(), false));
+			list.add(TextFormatting.RED + GenericRatings.rateActivityTime(genome.getNeverSleeps(), false));
 		}
 
 		if (genome.getToleratesRain()) {
-			list.add(EnumChatFormatting.WHITE + Translator.translateToLocal("for.gui.flyer.tooltip"));
+			list.add(TextFormatting.WHITE + Translator.translateToLocal("for.gui.flyer.tooltip"));
 		}
 	}
 

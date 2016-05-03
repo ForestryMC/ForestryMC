@@ -19,7 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.text.ITextComponent;
 
 import forestry.api.mail.ILetter;
 import forestry.api.mail.IMailAddress;
@@ -338,7 +338,7 @@ public class Letter implements ILetter {
 	}
 
 	@Override
-	public IChatComponent getDisplayName() {
+	public ITextComponent getDisplayName() {
 		return inventory.getDisplayName();
 	}
 }

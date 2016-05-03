@@ -20,7 +20,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
@@ -223,10 +223,6 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 
 	public void setZLevel(float level) {
 		this.zLevel = level;
-	}
-
-	public static RenderItem getItemRenderer() {
-		return Proxies.common.getClientInstance().getRenderItem();
 	}
 
 	public int getSizeX() {

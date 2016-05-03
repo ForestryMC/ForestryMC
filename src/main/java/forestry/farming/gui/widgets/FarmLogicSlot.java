@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.farming.gui.widgets;
 
-import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.item.ItemStack;
 
 import forestry.api.farming.FarmDirection;

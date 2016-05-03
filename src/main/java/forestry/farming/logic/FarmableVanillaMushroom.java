@@ -14,7 +14,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
@@ -54,7 +54,7 @@ public class FarmableVanillaMushroom extends FarmableGenericSapling {
 			meta = 1;
 		}
 
-		Proxies.common.addBlockPlaceEffects(world, pos, Blocks.brown_mushroom.getStateFromMeta(0));
+		Proxies.common.addBlockPlaceEffects(world, pos, Blocks.brown_mushroom.getDefaultState());
 		return world.setBlockState(pos, PluginFarming.blocks.mushroom.getStateFromMeta(meta), Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
 	}
 }

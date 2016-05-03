@@ -15,7 +15,7 @@ import java.util.List;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -69,7 +69,7 @@ public abstract class ItemGE extends ItemForestry {
 			if (Proxies.common.isShiftDown()) {
 				individual.addTooltip(list);
 			} else {
-				list.add(EnumChatFormatting.ITALIC + "<" + Translator.translateToLocal("for.gui.tooltip.tmi") + ">");
+				list.add(TextFormatting.ITALIC + "<" + Translator.translateToLocal("for.gui.tooltip.tmi") + ">");
 			}
 		} else {
 			list.add("<" + Translator.translateToLocal("for.gui.unknown") + ">");

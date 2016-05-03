@@ -10,14 +10,14 @@
  ******************************************************************************/
 package forestry.lepidopterology.entities;
 
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public abstract class AIButterflyMovement extends AIButterflyBase {
 
-	protected Vec3 flightTarget;
+	protected Vec3d flightTarget;
 
 	protected AIButterflyMovement(EntityButterfly entity) {
 		super(entity);

@@ -11,7 +11,7 @@
 package forestry.greenhouse.proxy;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 
 import net.minecraftforge.client.model.animation.AnimationTESR;
 import net.minecraftforge.fml.client.registry.ClientRegistry;

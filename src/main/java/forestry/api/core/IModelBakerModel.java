@@ -5,14 +5,15 @@
  ******************************************************************************/
 package forestry.api.core;
 
+import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
-import net.minecraftforge.client.model.IFlexibleBakedModel;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public interface IModelBakerModel extends IFlexibleBakedModel {
+public interface IModelBakerModel extends IBakedModel {
 	
 	void setGui3d(boolean gui3d);
 	
@@ -20,7 +21,7 @@ public interface IModelBakerModel extends IFlexibleBakedModel {
 	
 	void setParticleSprite(TextureAtlasSprite particleSprite);
 	
-	void setFormat(VertexFormat formate);
+//	void setFormat(VertexFormat formate);
 	
 	void setRotation(float[] rotation);
 

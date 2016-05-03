@@ -19,7 +19,8 @@ import net.minecraft.block.BlockDoor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
-import net.minecraft.util.BlockPos;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fml.relauncher.Side;
@@ -39,7 +40,7 @@ public class BlockArbDoor extends BlockDoor implements IWoodTyped, IItemModelReg
 	private final EnumWoodType woodType;
 
 	public BlockArbDoor(EnumWoodType woodType) {
-		super(Material.wood);
+		super(Material.WOOD);
 		this.woodType = woodType;
 
 		setHarvestLevel("axe", 0);
@@ -81,8 +82,7 @@ public class BlockArbDoor extends BlockDoor implements IWoodTyped, IItemModelReg
 	}
 
 	@Override
-	public float getBlockHardness(World world, BlockPos pos) {
-		IBlockState blockState = world.getBlockState(pos);
+	public float getBlockHardness(IBlockState blockState, World worldIn, BlockPos pos) {
 		int meta = getMetaFromState(blockState);
 		EnumWoodType woodType = getWoodType(meta);
 		return woodType.getHardness();
@@ -98,8 +98,8 @@ public class BlockArbDoor extends BlockDoor implements IWoodTyped, IItemModelReg
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public Item getItem(World worldIn, BlockPos pos) {
-		return getItem();
+	public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state) {
+		return new ItemStack(getItem());
 	}
 
 	private Item getItem() {

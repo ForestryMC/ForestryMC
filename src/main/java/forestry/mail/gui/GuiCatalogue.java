@@ -17,7 +17,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.input.Keyboard;
@@ -32,7 +32,7 @@ import forestry.core.utils.Translator;
 
 public class GuiCatalogue extends GuiForestry<ContainerCatalogue, IInventory> {
 
-	private static final String boldUnderline = EnumChatFormatting.BOLD.toString() + EnumChatFormatting.UNDERLINE;
+	private static final String boldUnderline = TextFormatting.BOLD.toString() + TextFormatting.UNDERLINE;
 
 	private GuiButton buttonFilter;
 	private GuiButton buttonUse;
@@ -109,9 +109,9 @@ public class GuiCatalogue extends GuiForestry<ContainerCatalogue, IInventory> {
 		}
 
 		if (tradeInfo.getState().isOk()) {
-			fontRendererObj.drawSplitString(EnumChatFormatting.DARK_GREEN + tradeInfo.getState().getDescription(), x, y + 82, 119, fontColor.get("gui.book"));
+			fontRendererObj.drawSplitString(TextFormatting.DARK_GREEN + tradeInfo.getState().getDescription(), x, y + 82, 119, fontColor.get("gui.book"));
 		} else {
-			fontRendererObj.drawSplitString(EnumChatFormatting.DARK_RED + tradeInfo.getState().getDescription(), x, y + 82, 119, fontColor.get("gui.book"));
+			fontRendererObj.drawSplitString(TextFormatting.DARK_RED + tradeInfo.getState().getDescription(), x, y + 82, 119, fontColor.get("gui.book"));
 		}
 	}
 

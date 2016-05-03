@@ -13,7 +13,7 @@ package forestry.core.commands;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 
 import forestry.core.utils.Translator;
 import forestry.plugins.ForestryPlugin;
@@ -52,7 +52,7 @@ public class CommandPlugins extends SubCommand {
 	}
 
 	private static String makeListEntry(IForestryPlugin plugin) {
-		String entry = plugin.isAvailable() ? EnumChatFormatting.GREEN.toString() : EnumChatFormatting.RED.toString();
+		String entry = plugin.isAvailable() ? TextFormatting.GREEN.toString() : TextFormatting.RED.toString();
 
 		ForestryPlugin info = plugin.getClass().getAnnotation(ForestryPlugin.class);
 		if (info != null) {
@@ -101,19 +101,19 @@ public class CommandPlugins extends SubCommand {
 				throw new CommandException(Translator.translateToLocalFormatted("for.chat.plugins.error", pluginUid));
 			}
 
-			EnumChatFormatting formatting = found.isAvailable() ? EnumChatFormatting.GREEN : EnumChatFormatting.RED;
+			TextFormatting formatting = found.isAvailable() ? TextFormatting.GREEN : TextFormatting.RED;
 
 			ForestryPlugin info = found.getClass().getAnnotation(ForestryPlugin.class);
 			if (info != null) {
 				CommandHelpers.sendChatMessage(sender, formatting + "Plugin: " + info.name());
 				if (!info.version().isEmpty()) {
-					CommandHelpers.sendChatMessage(sender, EnumChatFormatting.BLUE + "Version: " + info.version());
+					CommandHelpers.sendChatMessage(sender, TextFormatting.BLUE + "Version: " + info.version());
 				}
 				if (!info.author().isEmpty()) {
-					CommandHelpers.sendChatMessage(sender, EnumChatFormatting.BLUE + "Author(s): " + info.author());
+					CommandHelpers.sendChatMessage(sender, TextFormatting.BLUE + "Author(s): " + info.author());
 				}
 				if (!info.url().isEmpty()) {
-					CommandHelpers.sendChatMessage(sender, EnumChatFormatting.BLUE + "URL: " + info.url());
+					CommandHelpers.sendChatMessage(sender, TextFormatting.BLUE + "URL: " + info.url());
 				}
 				if (!info.unlocalizedDescription().isEmpty()) {
 					CommandHelpers.sendChatMessage(sender, Translator.translateToLocal(info.unlocalizedDescription()));

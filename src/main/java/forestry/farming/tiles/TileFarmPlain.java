@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.farming.tiles;
 
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 
 import forestry.api.multiblock.IMultiblockController;
 
@@ -31,6 +31,6 @@ public class TileFarmPlain extends TileFarm {
 		super.onMachineBroken();
 
 		// set band block meta back to normal
-		this.worldObj.setBlockState(getPos(), getBlockType().getStateFromMeta(0), 2);
+		this.worldObj.setBlockState(getPos(), getBlockType().getDefaultState(), 2);
 	}
 }

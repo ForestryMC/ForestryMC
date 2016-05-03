@@ -43,7 +43,6 @@ public class BlockRegistryCore extends BlockRegistry {
 		OreDictionary.registerOre("blockBronze", resourceStorage.get(EnumResourceType.BRONZE));
 
 		// register some common oreDict names for our recipes
-		OreDictionary.registerOre("chestWood", Blocks.chest);
-		OreDictionary.registerOre("craftingTableWood", Blocks.crafting_table);
+		OreDictionary.registerOre("craftingTableWood", Blocks.CRAFTING_TABLE);
 	}
 }

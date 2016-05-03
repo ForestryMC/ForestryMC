@@ -31,7 +31,7 @@ import net.minecraft.block.BlockPlanks.EnumType;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
@@ -49,7 +49,7 @@ public class BlockArbFenceGate extends BlockFenceGate implements IWoodTyped, IIt
 		
 		setHardness(2.0F);
 		setResistance(5.0F);
-		setStepSound(soundTypeWood);
+		setSoundType(SoundType.WOOD);
         setCreativeTab(Tabs.tabArboriculture);
     }
     

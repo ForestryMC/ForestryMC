@@ -16,7 +16,8 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.BlockPos;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.core.blocks.BlockBase;
@@ -31,7 +32,7 @@ public abstract class TileBase extends TileForestry implements IHintSource {
 		this.hints = new ArrayList<>(Config.hints.get(hintKey));
 	}
 
-	public void openGui(EntityPlayer player) {
+	public void openGui(EntityPlayer player, ItemStack heldItem) {
 		GuiHandler.openGui(player, this);
 	}
 

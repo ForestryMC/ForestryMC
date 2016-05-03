@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -43,7 +43,7 @@ public class ToolTip {
 		return add(line, null);
 	}
 
-	public boolean add(@Nonnull String line, @Nullable EnumChatFormatting formatting) {
+	public boolean add(@Nonnull String line, @Nullable TextFormatting formatting) {
 		if (formatting != null) {
 			return lines.add(formatting + line);
 		} else {

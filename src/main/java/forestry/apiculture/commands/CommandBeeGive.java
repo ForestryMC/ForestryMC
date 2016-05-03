@@ -15,11 +15,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.PlayerNotFoundException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
@@ -63,27 +65,27 @@ public class CommandBeeGive extends SubCommand {
 	}
 
 	@Override
-	public void processSubCommand(ICommandSender sender, String[] arguments) throws SpeciesNotFoundException, TemplateNotFoundException, PlayerNotFoundException {
-		if (arguments.length < 2) {
-			printHelp(sender);
+	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws SpeciesNotFoundException, TemplateNotFoundException, PlayerNotFoundException {
+		if (args.length < 2) {
+			printHelp(, sender);
 			return;
 		}
 
-		IBeeGenome beeGenome = getBeeGenome(arguments[0]);
-		EnumBeeType beeType = getBeeType(arguments[1]);
+		IBeeGenome beeGenome = getBeeGenome(args[0]);
+		EnumBeeType beeType = getBeeType(args[1]);
 		if (beeType == null) {
-			printHelp(sender);
+			printHelp(, sender);
 			return;
 		}
 
 		EntityPlayer player;
-		if (arguments.length == 3) {
-			player = CommandHelpers.getPlayer(sender, arguments[2]);
+		if (args.length == 3) {
+			player = CommandBase.getPlayer(server, sender, args[2]);
 		} else {
-			player = CommandHelpers.getPlayer(sender, sender.getName());
+			player = CommandBase.getPlayer(server, sender, sender.getName());
 		}
 		if (player == null) {
-			printHelp(sender);
+			printHelp(, sender);
 			return;
 		}
 
@@ -94,7 +96,7 @@ public class CommandBeeGive extends SubCommand {
 		}
 
 		ItemStack beeStack = BeeManager.beeRoot.getMemberStack(bee, beeType);
-		player.dropPlayerItemWithRandomChoice(beeStack, true);
+		player.dropItem(beeStack, false, true);
 
 		CommandHelpers.sendLocalizedChatMessage(sender, "for.chat.command.forestry.bee.give.given", player.getName(), bee.getGenome().getPrimary().getName(), beeType.getName());
 	}
@@ -137,15 +139,15 @@ public class CommandBeeGive extends SubCommand {
 	}
 
 	@Override
-	public List<String> addTabCompletionOptions(ICommandSender sender, String[] parameters, BlockPos pos) {
-		if (parameters.length == 1) {
-			List<String> tabCompletion = CommandHelpers.getListOfStringsMatchingLastWord(parameters, getSpecies());
+	public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos pos) {
+		if (args.length == 1) {
+			List<String> tabCompletion = CommandHelpers.getListOfStringsMatchingLastWord(args, getSpecies());
 			tabCompletion.add("help");
 			return tabCompletion;
-		} else if (parameters.length == 2) {
-			return CommandHelpers.getListOfStringsMatchingLastWord(parameters, beeTypeArr);
-		} else if (parameters.length == 3) {
-			return CommandHelpers.getListOfStringsMatchingLastWord(parameters, CommandHelpers.getPlayers());
+		} else if (args.length == 2) {
+			return CommandHelpers.getListOfStringsMatchingLastWord(args, beeTypeArr);
+		} else if (args.length == 3) {
+			return CommandHelpers.getListOfStringsMatchingLastWord(args, server.getPlayerList().getAllUsernames());
 		}
 		return null;
 	}

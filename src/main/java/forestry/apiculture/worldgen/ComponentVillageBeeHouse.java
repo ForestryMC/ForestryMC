@@ -15,18 +15,17 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockStairs;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
-
-import net.minecraftforge.common.ChestGenHooks;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
@@ -98,10 +97,10 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 		} else {
 			int roofMeta = random.nextInt(16);
 
-			logs = new BlockType(Blocks.log, random.nextInt(4));
-			planks = new BlockType(Blocks.planks, roofMeta);
+			logs = new BlockType(Blocks.LOG, random.nextInt(4));
+			planks = new BlockType(Blocks.PLANKS, roofMeta);
 			stairs = new BlockTypeVanillaStairs(roofMeta);
-			fence = new BlockType(Blocks.oak_fence, 0);
+			fence = new BlockType(Blocks.OAK_FENCE, 0);
 		}
 	}
 
@@ -126,8 +125,8 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 			boundingBox.offset(0, averageGroundLevel - boundingBox.maxY + 8 - 1, 0);
 		}
 
-		fillWithBlocks(world, structBoundingBox, 1, 1, 1, 7, 4, 4, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
-		fillWithBlocks(world, structBoundingBox, 2, 1, 6, 8, 4, 10, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
+		fillWithBlocks(world, structBoundingBox, 1, 1, 1, 7, 4, 4, Blocks.AIR.getDefaultState(), Blocks.AIR.getDefaultState(), false);
+		fillWithBlocks(world, structBoundingBox, 2, 1, 6, 8, 4, 10, Blocks.AIR.getDefaultState(), Blocks.AIR.getDefaultState(), false);
 
 		// Garden
 		buildGarden(world, structBoundingBox);
@@ -144,12 +143,13 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 		buildApiaries(world, structBoundingBox);
 
 		// Floor
-		fillWithBlocks(world, structBoundingBox, 1, 0, 1, 7, 0, 4, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
+		fillWithBlocks(world, structBoundingBox, 1, 0, 1, 7, 0, 4, Blocks.PLANKS.getDefaultState(), Blocks.PLANKS.getDefaultState(), false);
 
-		fillWithBlocks(world, structBoundingBox, 0, 0, 0, 0, 3, 5, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
-		fillWithBlocks(world, structBoundingBox, 8, 0, 0, 8, 3, 5, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
-		fillWithBlocks(world, structBoundingBox, 1, 0, 0, 7, 1, 0, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
-		fillWithBlocks(world, structBoundingBox, 1, 0, 5, 7, 1, 5, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
+		IBlockState cobblestoneState = Blocks.COBBLESTONE.getDefaultState();
+		fillWithBlocks(world, structBoundingBox, 0, 0, 0, 0, 3, 5, cobblestoneState, cobblestoneState, false);
+		fillWithBlocks(world, structBoundingBox, 8, 0, 0, 8, 3, 5, cobblestoneState, cobblestoneState, false);
+		fillWithBlocks(world, structBoundingBox, 1, 0, 0, 7, 1, 0, cobblestoneState, cobblestoneState, false);
+		fillWithBlocks(world, structBoundingBox, 1, 0, 5, 7, 1, 5, cobblestoneState, cobblestoneState, false);
 
 		fillBoxWith(world, structBoundingBox, 1, 2, 0, 7, 3, 0, planks, false);
 		fillBoxWith(world, structBoundingBox, 1, 2, 5, 7, 3, 5, planks, false);
@@ -169,56 +169,61 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 		placeBlockAtCurrentPosition(world, logs, 8, 2, 1, structBoundingBox);
 		placeBlockAtCurrentPosition(world, logs, 8, 2, 4, structBoundingBox);
 		
-		setBlockState(world, Blocks.glass_pane.getStateFromMeta(0), 0, 2, 2, structBoundingBox);
-		setBlockState(world, Blocks.glass_pane.getStateFromMeta(0), 0, 2, 3, structBoundingBox);
+		IBlockState glassPaneState = Blocks.GLASS_PANE.getDefaultState();
+		setBlockState(world, glassPaneState, 0, 2, 2, structBoundingBox);
+		setBlockState(world, glassPaneState, 0, 2, 3, structBoundingBox);
 
-		setBlockState(world, Blocks.glass_pane.getStateFromMeta(0), 8, 2, 2, structBoundingBox);
-		setBlockState(world, Blocks.glass_pane.getStateFromMeta(0), 8, 2, 3, structBoundingBox);
+		setBlockState(world, glassPaneState, 8, 2, 2, structBoundingBox);
+		setBlockState(world, glassPaneState, 8, 2, 3, structBoundingBox);
 
 		// Windows garden side
-		setBlockState(world, Blocks.glass_pane.getStateFromMeta(0), 2, 2, 5, structBoundingBox);
-		setBlockState(world, Blocks.glass_pane.getStateFromMeta(0), 3, 2, 5, structBoundingBox);
-		setBlockState(world, Blocks.glass_pane.getStateFromMeta(0), 4, 2, 5, structBoundingBox);
+		setBlockState(world, glassPaneState, 2, 2, 5, structBoundingBox);
+		setBlockState(world, glassPaneState, 3, 2, 5, structBoundingBox);
+		setBlockState(world, glassPaneState, 4, 2, 5, structBoundingBox);
 
-		setBlockState(world, Blocks.glass_pane.getStateFromMeta(0), 5, 2, 0, structBoundingBox);
-		setBlockState(world, Blocks.glass_pane.getStateFromMeta(0), 6, 2, 5, structBoundingBox);
+		setBlockState(world, glassPaneState, 5, 2, 0, structBoundingBox);
+		setBlockState(world, glassPaneState, 6, 2, 5, structBoundingBox);
 
 		// Escritoire
 		if (random.nextInt(2) == 0) {
 			IBlockType escritoireBlock = new BlockTypeTileForestry(PluginCore.blocks.core, BlockTypeCoreTesr.ESCRITOIRE.ordinal());
-			escritoireBlock.setDirection(getRotatedDirection(EnumFacing.EAST));
+			escritoireBlock.setDirection(EnumFacing.EAST);
 			placeBlockAtCurrentPosition(world, escritoireBlock, 1, 1, 3, structBoundingBox);
 		}
 
-		setBlockState(world, Blocks.air.getStateFromMeta(0), 2, 1, 0, structBoundingBox);
-		setBlockState(world, Blocks.air.getStateFromMeta(0), 2, 2, 0, structBoundingBox);
-		placeDoorCurrentPosition(world, structBoundingBox, random, 2, 1, 0, coordBaseMode);
+		IBlockState airState = Blocks.AIR.getDefaultState();
+		setBlockState(world, airState, 2, 1, 0, structBoundingBox);
+		setBlockState(world, airState, 2, 2, 0, structBoundingBox);
+		placeDoorCurrentPosition(world, structBoundingBox, random, 2, 1, 0, getCoordBaseMode());
 
 		if (isAirBlockAtCurrentPosition(world, new BlockPos(2, 0, -1), structBoundingBox) && !isAirBlockAtCurrentPosition(world, new BlockPos(2, -1, -1), structBoundingBox)) {
-			setBlockState(world, Blocks.stone_stairs.getStateFromMeta(getMetadataWithOffset(Blocks.stone_stairs, 3)), 2, 0, -1, structBoundingBox);
+			setBlockState(world, Blocks.STONE_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.NORTH), 2, 0, -1, structBoundingBox);
 		}
 
-		setBlockState(world, Blocks.air.getStateFromMeta(0), 6, 1, 5, structBoundingBox);
-		setBlockState(world, Blocks.air.getStateFromMeta(0), 6, 2, 5, structBoundingBox);
+		setBlockState(world, airState, 6, 1, 5, structBoundingBox);
+		setBlockState(world, airState, 6, 2, 5, structBoundingBox);
 
 		// Candles / Lighting
-		setBlockState(world, Blocks.torch.getStateFromMeta(0), 2, 3, 4, structBoundingBox);
-		setBlockState(world, Blocks.torch.getStateFromMeta(0), 6, 3, 4, structBoundingBox);
-		setBlockState(world, Blocks.torch.getStateFromMeta(0), 2, 3, 1, structBoundingBox);
-		setBlockState(world, Blocks.torch.getStateFromMeta(0), 6, 3, 1, structBoundingBox);
 
-		placeDoorCurrentPosition(world, structBoundingBox, random, 6, 1, 5, coordBaseMode);
+		IBlockState torchState = Blocks.TORCH.getDefaultState();
+		setBlockState(world, torchState, 2, 3, 4, structBoundingBox);
+		setBlockState(world, torchState, 6, 3, 4, structBoundingBox);
+		setBlockState(world, torchState, 2, 3, 1, structBoundingBox);
+		setBlockState(world, torchState, 6, 3, 1, structBoundingBox);
+
+		placeDoorCurrentPosition(world, structBoundingBox, random, 6, 1, 5, getCoordBaseMode());
 
 		for (int i = 0; i < 5; ++i) {
 			for (int j = 0; j < 9; ++j) {
 				clearCurrentPositionBlocksUpwards(world, j, 7, i, structBoundingBox);
-				replaceAirAndLiquidDownwards(world, Blocks.cobblestone.getStateFromMeta(0), j, -1, i, structBoundingBox);
+				replaceAirAndLiquidDownwards(world, Blocks.COBBLESTONE.getDefaultState(), j, -1, i, structBoundingBox);
 			}
 		}
 
-		generateChestContents(world, structBoundingBox, random, 7, 1, 4,
-				ChestGenHooks.getItems(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, random),
-				random.nextInt(4) + random.nextInt(4) + 5);
+		// TODO: Chest loot
+//		generateChestContents(world, structBoundingBox, random, 7, 1, 4,
+//				ChestGenHooks.getItems(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, random),
+//				random.nextInt(4) + random.nextInt(4) + 5);
 
 		spawnVillagers(world, boundingBox, 7, 1, 1, 2);
 
@@ -228,10 +233,10 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 	private void buildRoof(World world, StructureBoundingBox structBoundingBox) {
 		for (int i = -1; i <= 2; ++i) {
 			for (int j = 0; j <= 8; ++j) {
-				stairs.setDirection(getRotatedDirection(EnumFacing.NORTH));
+				stairs.setDirection(EnumFacing.NORTH);
 				placeBlockAtCurrentPosition(world, stairs, j, 4 + i, i, structBoundingBox);
 
-				stairs.setDirection(getRotatedDirection(EnumFacing.SOUTH));
+				stairs.setDirection(EnumFacing.SOUTH);
 				placeBlockAtCurrentPosition(world, stairs, j, 4 + i, 5 - i, structBoundingBox);
 			}
 		}
@@ -239,14 +244,14 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 
 	private void buildGarden(World world, StructureBoundingBox box) {
 
-		Block ground = Blocks.dirt;
+		Block ground = Blocks.DIRT;
 		if (isInDesert) {
-			ground = Blocks.sand;
+			ground = Blocks.SAND;
 		}
 
 		for (int i = 1; i <= 8; i++) {
 			for (int j = 6; j <= 10; j++) {
-				replaceAirAndLiquidDownwards(world, ground.getStateFromMeta(0), i, 0, j, box);
+				replaceAirAndLiquidDownwards(world, ground.getDefaultState(), i, 0, j, box);
 			}
 		}
 	}
@@ -254,7 +259,7 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 	private void plantFlowerGarden(World world, StructureBoundingBox box, int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
 
 		if (isInDesert) {
-			setBlockState(world, Blocks.cactus.getStateFromMeta(0), 4, 1, 7, box);
+			setBlockState(world, Blocks.CACTUS.getDefaultState(), 4, 1, 7, box);
 			return;
 		}
 
@@ -266,7 +271,9 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 						int yCoord = getYWithOffset(i);
 						int zCoord = getZWithOffset(j, k);
 
-						if (!Blocks.red_flower.canBlockStay(world, new BlockPos(xCoord, yCoord, zCoord), world.getBlockState(new BlockPos(xCoord, yCoord, zCoord)))) {
+						BlockPos pos = new BlockPos(xCoord, yCoord, zCoord);
+						IBlockState blockState = world.getBlockState(pos);
+						if (!Blocks.RED_FLOWER.canBlockStay(world, pos, blockState)) {
 							continue;
 						}
 
@@ -350,7 +357,7 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 		}
 
 		EnumTemperature biomeTemperature = EnumTemperature.getFromBiome(biome, world, pos);
-		EnumHumidity biomeHumidity = EnumHumidity.getFromValue(biome.rainfall);
+		EnumHumidity biomeHumidity = EnumHumidity.getFromValue(biome.getRainfall());
 
 		// Add bees that can live in this environment
 		List<IBeeGenome> valid = new ArrayList<>();
@@ -402,7 +409,7 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 	}
 	
 	@Override
-	protected int func_180779_c(int villagerCount, int p_180779_2_) {
+	protected int chooseProfession(int villagerCount, int currentVillagerProfession) {
 		if (villagerCount <= 0) {
 			return Constants.ID_VILLAGER_BEEKEEPER;
 		} else {
@@ -411,14 +418,7 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 	}
 
 	private boolean isAirBlockAtCurrentPosition(World world, BlockPos pos, StructureBoundingBox box) {
-		return getBlockStateFromPos(world, pos.getX(), pos.getY(), pos.getZ(), box).getBlock().isAir(world, pos);
+		IBlockState blockStateFromPos = getBlockStateFromPos(world, pos.getX(), pos.getY(), pos.getZ(), box);
+		return blockStateFromPos.getBlock().isAir(blockStateFromPos, world, pos);
 	}
-
-	/** rotates a direction according to the way the structure is facing **/
-	private EnumFacing getRotatedDirection(EnumFacing direction) {
-		int stairDirection = 5 - direction.ordinal();
-		int meta = getMetadataWithOffset(Blocks.oak_stairs, stairDirection);
-		return EnumFacing.values()[5 - meta];
-	}
-
 }

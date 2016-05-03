@@ -17,18 +17,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.BlockFaceUV;
 import net.minecraft.client.renderer.block.model.BlockPartFace;
 import net.minecraft.client.renderer.block.model.FaceBakery;
+import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.ModelRotation;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.IBakedModel;
-import net.minecraft.client.resources.model.ModelRotation;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
-import net.minecraftforge.client.model.IColoredBakedQuad;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -48,14 +49,7 @@ public class ModelBaker implements IModelBaker {
 	private final List<ModelBakerFace> faces = new ArrayList<>();
 	private final List<IBakedModel> bakedModels = new ArrayList<>();
 
-	protected double renderMinX;
-	protected double renderMaxX;
-
-	protected double renderMinY;
-	protected double renderMaxY;
-
-	protected double renderMinZ;
-	protected double renderMaxZ;
+	protected AxisAlignedBB renderBounds;
 
 	protected ModelBakerModel currentModel = new ModelBakerModel();
 
@@ -69,22 +63,13 @@ public class ModelBaker implements IModelBaker {
 			return;
 		}
 
-		renderMinX = block.getBlockBoundsMinX();
-		renderMinY = block.getBlockBoundsMinY();
-		renderMinZ = block.getBlockBoundsMinZ();
-		renderMaxX = block.getBlockBoundsMaxX();
-		renderMaxY = block.getBlockBoundsMaxY();
-		renderMaxZ = block.getBlockBoundsMaxZ();
+		//TODO: Fixme
+		renderBounds = Block.FULL_BLOCK_AABB;
 	}
 
 	@Override
-	public void setRenderBounds(double d, double e, double f, double g, double h, double i) {
-		renderMinX = d;
-		renderMinY = e;
-		renderMinZ = f;
-		renderMaxX = g;
-		renderMaxY = h;
-		renderMaxZ = i;
+	public void setRenderBounds(double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
+		renderBounds = new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ);
 	}
 
 	protected int colorIndex = -1;
@@ -101,44 +86,13 @@ public class ModelBaker implements IModelBaker {
 		setColorIndex(colorIndex);
 		
 		World world = Proxies.common.getRenderWorld();
-		BlockPos posDOWN = null;
-		BlockPos posUP = null;
-		BlockPos posEAST = null;
-		BlockPos posWEST = null;
-		BlockPos posNORTH = null;
-		BlockPos posSOUTH = null;
-		if(pos != null){
-			posDOWN = new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ());
-			posUP = new BlockPos(pos.getX(), pos.getY() + 1, pos.getZ());
-			posEAST = new BlockPos(pos.getX() - 1, pos.getY(), pos.getZ());
-			posWEST = new BlockPos(pos.getX() + 1, pos.getY(), pos.getZ());
-			posNORTH = new BlockPos(pos.getX(), pos.getY(), pos.getZ() - 1);
-			posSOUTH = new BlockPos(pos.getX(), pos.getY(), pos.getZ() + 1);
+		IBlockState blockState = world.getBlockState(pos);
+		for (EnumFacing facing : EnumFacing.VALUES) {
+			if (pos == null || block.shouldSideBeRendered(blockState, world, pos, facing)) {
+				addFace(facing, textures[facing.ordinal()]);
+			}
 		}
 
-		if (pos == null || block.shouldSideBeRendered(world, posDOWN, EnumFacing.DOWN)) {
-			addFaceYNeg(textures[EnumFacing.DOWN.ordinal()]);
-		}
-
-		if (pos == null || block.shouldSideBeRendered(world, posUP, EnumFacing.UP)) {
-			addFaceYPos(textures[EnumFacing.UP.ordinal()]);
-		}
-
-		if (pos == null || block.shouldSideBeRendered(world, posEAST, EnumFacing.EAST)) {
-			addFaceXNeg(textures[EnumFacing.EAST.ordinal()]);
-		}
-
-		if (pos == null || block.shouldSideBeRendered(world, posWEST, EnumFacing.WEST)) {
-			addFaceXPos(textures[EnumFacing.WEST.ordinal()]);
-		}
-
-		if (pos == null || block.shouldSideBeRendered(world, posNORTH, EnumFacing.NORTH)) {
-			addFaceZNeg(textures[EnumFacing.NORTH.ordinal()]);
-		}
-
-		if (pos == null || block.shouldSideBeRendered(world, posSOUTH, EnumFacing.SOUTH)) {
-			addFaceZPos(textures[EnumFacing.SOUTH.ordinal()]);
-		}
 		setRenderBounds(0, 0, 0, 1, 1, 1);
 	}
 
@@ -152,7 +106,7 @@ public class ModelBaker implements IModelBaker {
 		this.bakedModels.add(model);
 	}
 
-	protected float[] getFaceUvs(final EnumFacing face, final Vector3f to_16, final Vector3f from_16) {
+	protected static float[] getFaceUvs(final EnumFacing face, final Vector3f to_16, final Vector3f from_16) {
 		float from_a = 0;
 		float from_b = 0;
 		float to_a = 0;
@@ -219,65 +173,39 @@ public class ModelBaker implements IModelBaker {
 	}
 
 	@Override
-	public void addFaceXNeg(@Nonnull TextureAtlasSprite sprite) {
-		boolean isEdge = renderMinX < 0.0001;
-		Vector3f to = new Vector3f((float) renderMinX * 16.0f, (float) renderMinY * 16.0f, (float) renderMinZ * 16.0f);
-		Vector3f from = new Vector3f((float) renderMinX * 16.0f, (float) renderMaxY * 16.0f, (float) renderMaxZ * 16.0f);
-
-		addFace(EnumFacing.WEST, isEdge, to, from, defUVs, sprite);
-	}
-
-	@Override
-	public void addFaceYNeg(@Nonnull TextureAtlasSprite sprite) {
-		boolean isEdge = renderMinY < 0.0001;
-		Vector3f to = new Vector3f((float) renderMinX * 16.0f, (float) renderMinY * 16.0f, (float) renderMinZ * 16.0f);
-		Vector3f from = new Vector3f((float) renderMaxX * 16.0f, (float) renderMinY * 16.0f, (float) renderMaxZ * 16.0f);
-
-		addFace(EnumFacing.DOWN, isEdge, to, from, defUVs, sprite);
-	}
-
-	@Override
-	public void addFaceZNeg(@Nonnull TextureAtlasSprite sprite) {
-		boolean isEdge = renderMinZ < 0.0001;
-		Vector3f to = new Vector3f((float) renderMinX * 16.0f, (float) renderMinY * 16.0f, (float) renderMinZ * 16.0f);
-		Vector3f from = new Vector3f((float) renderMaxX * 16.0f, (float) renderMaxY * 16.0f, (float) renderMinZ * 16.0f);
-
-		addFace(EnumFacing.NORTH, isEdge, to, from, defUVs, sprite);
-	}
-
-	@Override
-	public void addFaceYPos(@Nonnull TextureAtlasSprite sprite) {
-		boolean isEdge = renderMaxY > 0.9999;
-		Vector3f to = new Vector3f((float) renderMinX * 16.0f, (float) renderMaxY * 16.0f, (float) renderMinZ * 16.0f);
-		Vector3f from = new Vector3f((float) renderMaxX * 16.0f, (float) renderMaxY * 16.0f, (float) renderMaxZ * 16.0f);
-
-		addFace(EnumFacing.UP, isEdge, to, from, defUVs, sprite);
-	}
-
-	@Override
-	public void addFaceZPos(@Nonnull TextureAtlasSprite sprite) {
-		boolean isEdge = renderMaxZ > 0.9999;
-		Vector3f to = new Vector3f((float) renderMinX * 16.0f, (float) renderMinY * 16.0f, (float) renderMaxZ * 16.0f);
-		Vector3f from = new Vector3f((float) renderMaxX * 16.0f, (float) renderMaxY * 16.0f, (float) renderMaxZ * 16.0f);
-
-		addFace(EnumFacing.SOUTH, isEdge, to, from, defUVs, sprite);
-	}
-
-	@Override
-	public void addFaceXPos(@Nonnull TextureAtlasSprite sprite) {
-		
-		boolean isEdge = renderMaxX > 0.9999;
-		Vector3f to = new Vector3f((float) renderMaxX * 16.0f, (float) renderMinY * 16.0f, (float) renderMinZ * 16.0f);
-		Vector3f from = new Vector3f((float) renderMaxX * 16.0f, (float) renderMaxY * 16.0f, (float) renderMaxZ * 16.0f);
-
-		addFace(EnumFacing.EAST, isEdge, to, from, defUVs, sprite);
-	}
-
-	protected void addFace(@Nonnull EnumFacing face, boolean isEdge, Vector3f to, Vector3f from, float[] defUVs2, TextureAtlasSprite texture) {
-		if(texture == null) {
+	public void addFace(@Nonnull EnumFacing facing, @Nonnull TextureAtlasSprite sprite) {
+		if (sprite == null) {
 			return;
 		}
-		faces.add(new ModelBakerFace(face, isEdge, colorIndex, to, from, defUVs2, texture));
+
+		boolean isEdge;
+		switch (facing) {
+			case WEST:
+				isEdge = renderBounds.minX < 0.0001;
+				break;
+			case DOWN:
+				isEdge = renderBounds.minY < 0.0001;
+				break;
+			case NORTH:
+				isEdge = renderBounds.minZ < 0.0001;
+				break;
+			case UP:
+				isEdge = renderBounds.maxY > 0.9999;
+				break;
+			case SOUTH:
+				isEdge = renderBounds.maxZ > 0.9999;
+				break;
+			case EAST:
+				isEdge = renderBounds.maxX > 0.9999;
+				break;
+			default:
+				return;
+		}
+
+		Vector3f to = new Vector3f((float) renderBounds.minX * 16.0f, (float) renderBounds.minY * 16.0f, (float) renderBounds.minZ * 16.0f);
+		Vector3f from = new Vector3f((float) renderBounds.maxX * 16.0f, (float) renderBounds.maxY * 16.0f, (float) renderBounds.maxZ * 16.0f);
+
+		faces.add(new ModelBakerFace(facing, isEdge, colorIndex, to, from, defUVs, sprite));
 	}
 
 	@Override
@@ -290,10 +218,7 @@ public class ModelBaker implements IModelBaker {
 		
 		//Add baked models to the current model.
 		for(IBakedModel bakedModel : bakedModels){
-			for(EnumFacing gce : EnumFacing.VALUES){
-				this.currentModel.getFaceQuads(gce).addAll(bakedModel.getFaceQuads(gce));
-			}
-			this.currentModel.getGeneralQuads().addAll(bakedModel.getGeneralQuads());
+			this.currentModel.addModelQuads(bakedModel);
 		}
 
 		for (ModelBakerFace face : faces) {
@@ -304,13 +229,13 @@ public class ModelBaker implements IModelBaker {
 			final BlockPartFace bpf = new BlockPartFace(myFace, face.colorIndex, "", uv);
 
 			BakedQuad bf = faceBakery.makeBakedQuad(face.to, face.from, bpf, face.spite, myFace, mr, null, true, true);
-			bf = new IColoredBakedQuad.ColoredBakedQuad(bf.getVertexData(), face.colorIndex, bf.getFace());
+//			bf = new IColoredBakedQuad.ColoredBakedQuad(bf.getVertexData(), face.colorIndex, bf.getFace());
 
-			if (face.isEdge) {
-				this.currentModel.getFaceQuads(myFace).add(bf);
-			} else {
-				this.currentModel.getGeneralQuads().add(bf);
-			}
+//			if (face.isEdge) {
+//				this.currentModel.getFaceQuads(myFace).add(bf);
+//			} else {
+//				this.currentModel.getGeneralQuads().add(bf);
+//			}
 		}
 		
 		return currentModel;

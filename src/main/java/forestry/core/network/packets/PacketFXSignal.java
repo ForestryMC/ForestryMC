@@ -14,7 +14,11 @@ import java.io.IOException;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.BlockPos;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
@@ -30,14 +34,19 @@ public class PacketFXSignal extends PacketCoordinates implements IForestryPacket
 	}
 
 	public enum SoundFXType {
-		NONE(""), BLOCK_DESTROY(""), BLOCK_PLACE(""), LEAF("step.grass"), LOG("dig.wood"), DIRT("dig.gravel");
+		NONE(null),
+		BLOCK_DESTROY(null),
+		BLOCK_PLACE(null),
+		LEAF(Blocks.LEAVES.getSoundType().getStepSound()),
+		LOG(Blocks.LOG.getSoundType().getBreakSound()),
+		DIRT(Blocks.DIRT.getSoundType().getBreakSound());
 
-		public final String soundFile;
+		public final SoundEvent soundEvent;
 		public final float volume;
 		public final float pitch;
 
-		SoundFXType(String soundFile) {
-			this.soundFile = soundFile;
+		SoundFXType(SoundEvent soundEvent) {
+			this.soundEvent = soundEvent;
 			this.volume = 1.0f;
 			this.pitch = 1.0f;
 		}
@@ -86,20 +95,20 @@ public class PacketFXSignal extends PacketCoordinates implements IForestryPacket
 
 	@Override
 	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
+		World renderWorld = Proxies.common.getRenderWorld();
 		if (visualFX != VisualFXType.NONE) {
-			Proxies.common.addBlockDestroyEffects(Proxies.common.getRenderWorld(), getPos(), state);
+			Proxies.common.addBlockDestroyEffects(renderWorld, getPos(), state);
 		}
 		if (soundFX != SoundFXType.NONE) {
 			if (soundFX == SoundFXType.BLOCK_DESTROY) {
-				Proxies.common.playBlockBreakSoundFX(Proxies.common.getRenderWorld(), getPos(), state);
+				Proxies.common.playBlockBreakSoundFX(renderWorld, getPos(), state);
 			} else if (soundFX == SoundFXType.BLOCK_PLACE) {
-				Proxies.common.playBlockPlaceSoundFX(Proxies.common.getRenderWorld(), getPos(), state);
+				Proxies.common.playBlockPlaceSoundFX(renderWorld, getPos(), state);
 			} else {
-				Proxies.common.playSoundFX(Proxies.common.getRenderWorld(), getPos(), soundFX.soundFile, soundFX.volume, soundFX.pitch);
+				Proxies.common.playSoundFX(renderWorld, getPos(), soundFX.soundEvent, SoundCategory.BLOCKS, soundFX.volume, soundFX.pitch);
 			}
 		}
 	}
-
 
 	@Override
 	public PacketIdClient getPacketId() {

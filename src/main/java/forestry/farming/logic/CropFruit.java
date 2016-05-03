@@ -53,7 +53,7 @@ public class CropFruit extends Crop {
 		}
 
 		Proxies.common.sendFXSignal(PacketFXSignal.VisualFXType.BLOCK_DESTROY, PacketFXSignal.SoundFXType.LEAF, world, pos,
-				getBlock(pos).getStateFromMeta(0));
+				getBlock(pos).getDefaultState());
 		return ((IFruitBearer) tile).pickFruit(null);
 	}
 

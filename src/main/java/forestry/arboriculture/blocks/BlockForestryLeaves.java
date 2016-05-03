@@ -16,35 +16,34 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.BlockLeavesBase;
+import net.minecraft.block.BlockLeaves;
+import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.ITileEntityProvider;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Enchantments;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumWorldBlockLayer;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.common.IShearable;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
@@ -70,17 +69,13 @@ import forestry.core.blocks.propertys.UnlistedBlockAccess;
 import forestry.core.blocks.propertys.UnlistedBlockPos;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileUtil;
+import forestry.core.utils.BlockUtil;
 import forestry.core.utils.ItemStackUtil;
 
-public class BlockForestryLeaves extends BlockLeavesBase implements ITileEntityProvider, IShearable, IGrowable, IItemModelRegister {
+public class BlockForestryLeaves extends BlockLeaves implements ITileEntityProvider, IGrowable, IItemModelRegister {
 
 	public BlockForestryLeaves() {
-		super(Material.leaves, false);
 		setCreativeTab(Tabs.tabArboriculture);
-		setStepSound(soundTypeGrass);
-		setTickRandomly(true);
-        setHardness(0.2F);
-        setLightOpacity(1);
 	}
 	
 	@Override
@@ -90,7 +85,7 @@ public class BlockForestryLeaves extends BlockLeavesBase implements ITileEntityP
 	}
 
 	@Override
-	protected BlockState createBlockState() {
+	protected BlockStateContainer createBlockState() {
 		return new ExtendedBlockState(this, new IProperty[0], new IUnlistedProperty[]{UnlistedBlockPos.POS, UnlistedBlockAccess.BLOCKACCESS});
 	}
 
@@ -118,7 +113,7 @@ public class BlockForestryLeaves extends BlockLeavesBase implements ITileEntityP
 			return;
 		}
 
-		int fortune = EnchantmentHelper.getFortuneModifier(player);
+		int fortune = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, player.getActiveItemStack());
 		float saplingModifier = 1.0f;
 
 		if (!world.isRemote) {
@@ -127,7 +122,8 @@ public class BlockForestryLeaves extends BlockLeavesBase implements ITileEntityP
 				saplingModifier = ((IToolGrafter) held.getItem()).getSaplingModifier(held, world, player, pos);
 				held.damageItem(1, player);
 				if (held.stackSize <= 0) {
-					player.destroyCurrentEquippedItem();
+					net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem(player, held, EnumHand.MAIN_HAND);
+					player.setHeldItem(EnumHand.MAIN_HAND, null);
 				}
 			}
 		}
@@ -180,7 +176,7 @@ public class BlockForestryLeaves extends BlockLeavesBase implements ITileEntityP
 	}
 	
 	@Override
-	public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos, EntityPlayer player) {
+	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
 		TileLeaves leaves = TileUtil.getTile(world, pos, TileLeaves.class);
 		if (leaves == null) {
 			return null;
@@ -194,12 +190,7 @@ public class BlockForestryLeaves extends BlockLeavesBase implements ITileEntityP
 		String speciesUid = tree.getGenome().getPrimary().getUID();
 		return PluginArboriculture.blocks.getDecorativeLeaves(speciesUid);
 	}
-	
-	@Override
-	public boolean isShearable(ItemStack item, IBlockAccess world, BlockPos pos) {
-		return true;
-	}
-	
+
 	@Override
 	public List<ItemStack> onSheared(ItemStack item, IBlockAccess world, BlockPos pos, int fortune) {
 		TileLeaves leaves = TileUtil.getTile(world, pos, TileLeaves.class);
@@ -217,27 +208,28 @@ public class BlockForestryLeaves extends BlockLeavesBase implements ITileEntityP
 	}
 	
 	@Override
-	public void beginLeavesDecay(World world, BlockPos pos) {
+	public void beginLeavesDecay(IBlockState state, World world, BlockPos pos) {
 		TileLeaves tile = TileUtil.getTile(world, pos, TileLeaves.class);
 		if (tile == null) {
 			return;
 		}
-		super.beginLeavesDecay(world, pos);
+		super.beginLeavesDecay(state, world, pos);
 	}
 	
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(World world, BlockPos pos, IBlockState state) {
-		TileLeaves tileLeaves = TileUtil.getTile(world, pos, TileLeaves.class);
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
+		TileLeaves tileLeaves = TileUtil.getTile(worldIn, pos, TileLeaves.class);
 		if (tileLeaves != null && TreeDefinition.Willow.getUID().equals(tileLeaves.getSpeciesUID())) {
 			return null;
 		}
-		return super.getCollisionBoundingBox(world, pos, state);
+		return super.getCollisionBoundingBox(blockState, worldIn, pos);
 	}
 	
 	@Override
-	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, Entity entity) {
-		entity.motionX *= 0.4D;
-		entity.motionZ *= 0.4D;
+	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
+		super.onEntityCollidedWithBlock(worldIn, pos, state, entityIn);
+		entityIn.motionX *= 0.4D;
+		entityIn.motionZ *= 0.4D;
 	}
 	
 	@Override
@@ -262,41 +254,25 @@ public class BlockForestryLeaves extends BlockLeavesBase implements ITileEntityP
 
 	/* RENDERING */
 	@Override
-	public boolean isOpaqueCube() {
+	public boolean isOpaqueCube(IBlockState state) {
 		return !Proxies.render.fancyGraphicsEnabled();
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	@Override
-	public int colorMultiplier(IBlockAccess world, BlockPos pos, int renderPass) {
-		TileLeaves leaves = TileUtil.getTile(world, pos, TileLeaves.class);
-		if (leaves == null) {
-			return super.colorMultiplier(world, pos, renderPass);
-		}
-
-		final int colour;
-		if (renderPass == 0) {
-			EntityPlayerSP thePlayer = Minecraft.getMinecraft().thePlayer;
-			colour = leaves.getFoliageColour(thePlayer);
-		} else {
-			colour = leaves.getFruitColour();
-		}
-
-		if (colour == 0) {
-			return super.colorMultiplier(world, pos, renderPass);
-		}
-		return colour;
+	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+		return (Proxies.render.fancyGraphicsEnabled() || blockAccess.getBlockState(pos.offset(side)).getBlock() != this) && BlockUtil.shouldSideBeRendered(blockState, blockAccess, pos, side);
 	}
-	
-	@Override
-	public boolean shouldSideBeRendered(IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
-		return true;
-	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
-	public EnumWorldBlockLayer getBlockLayer() {
-		return Proxies.render.fancyGraphicsEnabled() ? EnumWorldBlockLayer.CUTOUT_MIPPED : EnumWorldBlockLayer.SOLID;
+	public BlockRenderLayer getBlockLayer() {
+		return Proxies.render.fancyGraphicsEnabled() ? BlockRenderLayer.CUTOUT_MIPPED : BlockRenderLayer.SOLID;
+	}
+
+	@Override
+	public BlockPlanks.EnumType getWoodType(int meta) {
+		return BlockPlanks.EnumType.OAK;
 	}
 	
 	/* MODELS */
@@ -326,21 +302,19 @@ public class BlockForestryLeaves extends BlockLeavesBase implements ITileEntityP
 			return 5;
 		}
 	}
-	
+
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
-		
-		ItemStack heldItem = player.getHeldItem();
-		TileEntity tile = world.getTileEntity(pos);
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+		TileEntity tile = worldIn.getTileEntity(pos);
 		IButterfly caterpillar = tile instanceof TileLeaves ? ((TileLeaves) tile).getCaterpillar() : null;
 		if (heldItem != null && heldItem.getItem() instanceof IToolScoop && caterpillar != null) {
 			ItemStack butterfly = ButterflyManager.butterflyRoot.getMemberStack(caterpillar, EnumFlutterType.CATERPILLAR);
-			ItemStackUtil.dropItemStackAsEntity(butterfly, world, pos);
+			ItemStackUtil.dropItemStackAsEntity(butterfly, worldIn, pos);
 			((TileLeaves) tile).setCaterpillar(null);
 			return true;
 		}
-		
-		return super.onBlockActivated(world, pos, state, player, side, hitX, hitY, hitZ);
+
+		return super.onBlockActivated(worldIn, pos, state, playerIn, hand, heldItem, side, hitX, hitY, hitZ);
 	}
 
 	/* IGrowable */

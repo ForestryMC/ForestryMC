@@ -11,8 +11,8 @@
 package forestry.core.models;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.resources.model.IBakedModel;
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 
 public class BlockModelIndex {
 

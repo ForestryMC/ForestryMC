@@ -19,10 +19,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.WeightedRandomChestContent;
 
 import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.IFuelHandler;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -33,7 +31,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
-import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.EnumWoodType;
 import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.arboriculture.TreeManager;
@@ -191,7 +188,7 @@ public class PluginArboriculture extends BlankForestryPlugin {
 
 		for (BlockArbLog log : blocks.logs) {
 			ItemStack logInput = new ItemStack(log, 1, OreDictionary.WILDCARD_VALUE);
-			ItemStack coalOutput = new ItemStack(Items.coal, 1, 1);
+			ItemStack coalOutput = new ItemStack(Items.COAL, 1, 1);
 			RecipeUtil.addSmelting(logInput, coalOutput, 0.15F);
 		}
 
@@ -373,19 +370,19 @@ public class PluginArboriculture extends BlankForestryPlugin {
 	}
 
 	private static void registerErsatzGenomes() {
-		AlleleManager.ersatzSpecimen.put(new ItemStack(Blocks.leaves, 1, 0), TreeDefinition.Oak.getIndividual());
-		AlleleManager.ersatzSpecimen.put(new ItemStack(Blocks.leaves, 1, 1), TreeDefinition.Spruce.getIndividual());
-		AlleleManager.ersatzSpecimen.put(new ItemStack(Blocks.leaves, 1, 2), TreeDefinition.Birch.getIndividual());
-		AlleleManager.ersatzSpecimen.put(new ItemStack(Blocks.leaves, 1, 3), TreeDefinition.Jungle.getIndividual());
-		AlleleManager.ersatzSpecimen.put(new ItemStack(Blocks.leaves2, 1, 0), TreeDefinition.AcaciaVanilla.getIndividual());
-		AlleleManager.ersatzSpecimen.put(new ItemStack(Blocks.leaves2, 1, 1), TreeDefinition.DarkOak.getIndividual());
+		AlleleManager.ersatzSpecimen.put(new ItemStack(Blocks.LEAVES, 1, 0), TreeDefinition.Oak.getIndividual());
+		AlleleManager.ersatzSpecimen.put(new ItemStack(Blocks.LEAVES, 1, 1), TreeDefinition.Spruce.getIndividual());
+		AlleleManager.ersatzSpecimen.put(new ItemStack(Blocks.LEAVES, 1, 2), TreeDefinition.Birch.getIndividual());
+		AlleleManager.ersatzSpecimen.put(new ItemStack(Blocks.LEAVES, 1, 3), TreeDefinition.Jungle.getIndividual());
+		AlleleManager.ersatzSpecimen.put(new ItemStack(Blocks.LEAVES2, 1, 0), TreeDefinition.AcaciaVanilla.getIndividual());
+		AlleleManager.ersatzSpecimen.put(new ItemStack(Blocks.LEAVES2, 1, 1), TreeDefinition.DarkOak.getIndividual());
 
-		AlleleManager.ersatzSaplings.put(new ItemStack(Blocks.sapling, 1, 0), TreeDefinition.Oak.getIndividual());
-		AlleleManager.ersatzSaplings.put(new ItemStack(Blocks.sapling, 1, 1), TreeDefinition.Spruce.getIndividual());
-		AlleleManager.ersatzSaplings.put(new ItemStack(Blocks.sapling, 1, 2), TreeDefinition.Birch.getIndividual());
-		AlleleManager.ersatzSaplings.put(new ItemStack(Blocks.sapling, 1, 3), TreeDefinition.Jungle.getIndividual());
-		AlleleManager.ersatzSaplings.put(new ItemStack(Blocks.sapling, 1, 4), TreeDefinition.AcaciaVanilla.getIndividual());
-		AlleleManager.ersatzSaplings.put(new ItemStack(Blocks.sapling, 1, 5), TreeDefinition.DarkOak.getIndividual());
+		AlleleManager.ersatzSaplings.put(new ItemStack(Blocks.SAPLING, 1, 0), TreeDefinition.Oak.getIndividual());
+		AlleleManager.ersatzSaplings.put(new ItemStack(Blocks.SAPLING, 1, 1), TreeDefinition.Spruce.getIndividual());
+		AlleleManager.ersatzSaplings.put(new ItemStack(Blocks.SAPLING, 1, 2), TreeDefinition.Birch.getIndividual());
+		AlleleManager.ersatzSaplings.put(new ItemStack(Blocks.SAPLING, 1, 3), TreeDefinition.Jungle.getIndividual());
+		AlleleManager.ersatzSaplings.put(new ItemStack(Blocks.SAPLING, 1, 4), TreeDefinition.AcaciaVanilla.getIndividual());
+		AlleleManager.ersatzSaplings.put(new ItemStack(Blocks.SAPLING, 1, 5), TreeDefinition.DarkOak.getIndividual());
 	}
 
 	@Override
@@ -420,6 +417,8 @@ public class PluginArboriculture extends BlankForestryPlugin {
 	}
 
 	private static void registerDungeonLoot() {
+		// TODO: Fix chest loot
+		/*
 		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(items.grafter.getItemStack(), 1, 1, 8));
 
 		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Oak.getMemberStack(EnumGermlingType.SAPLING), 2, 3, 6));
@@ -435,6 +434,7 @@ public class PluginArboriculture extends BlankForestryPlugin {
 			ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Larch.getMemberStack(EnumGermlingType.POLLEN), 1, 2, 3));
 			ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Lime.getMemberStack(EnumGermlingType.POLLEN), 1, 2, 3));
 		}
+		*/
 	}
 
 	private static class FuelHandler implements IFuelHandler {

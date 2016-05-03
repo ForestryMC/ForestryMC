@@ -16,9 +16,10 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.chunk.IChunkProvider;
 
 import net.minecraftforge.common.util.EnumHelper;
@@ -35,7 +36,7 @@ public abstract class HiveDecorator {
 
 	private static final EventType EVENT_TYPE = EnumHelper.addEnum(EventType.class, "FORESTRY_HIVES", new Class[0], new Object[0]);
 
-	public static void decorateHives(IChunkProvider chunkProvider, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated) {
+	public static void decorateHives(IChunkGenerator chunkProvider, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated) {
 		if (!TerrainGen.populate(chunkProvider, world, rand, chunkX, chunkZ, hasVillageGenerated, EVENT_TYPE)) {
 			return;
 		}
@@ -68,7 +69,7 @@ public abstract class HiveDecorator {
 		int worldZ = chunkZ * 16;
 
 		BiomeGenBase biome = world.getBiomeGenForCoords(new BlockPos(worldX, 0, worldZ));
-		EnumHumidity humidity = EnumHumidity.getFromValue(biome.rainfall);
+		EnumHumidity humidity = EnumHumidity.getFromValue(biome.getRainfall());
 
 		if (!hive.isGoodBiome(biome) || !hive.isGoodHumidity(humidity)) {
 			return false;
@@ -90,7 +91,7 @@ public abstract class HiveDecorator {
 		int worldX = chunkX * 16;
 		int worldZ = chunkZ * 16;
 		BiomeGenBase biome = world.getBiomeGenForCoords(new BlockPos(chunkX, 0, chunkZ));
-		EnumHumidity humidity = EnumHumidity.getFromValue(biome.rainfall);
+		EnumHumidity humidity = EnumHumidity.getFromValue(biome.getRainfall());
 
 		for (int x = 0; x < 16; x++) {
 			for (int z = 0; z < 16; z++) {
@@ -145,7 +146,6 @@ public abstract class HiveDecorator {
 		}
 
 		hiveBlock.onBlockAdded(world, pos, state);
-		world.markBlockForUpdate(pos);
 
 		if (!Config.generateBeehivesDebug) {
 			hive.postGen(world, pos);

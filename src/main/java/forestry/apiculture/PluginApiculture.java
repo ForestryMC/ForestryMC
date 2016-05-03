@@ -26,17 +26,15 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.chunk.IChunkProvider;
 
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fluids.FluidStack;
@@ -51,7 +49,6 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.Forestry;
 import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.FlowerManager;
 import forestry.api.apiculture.IBeekeepingMode;
 import forestry.api.apiculture.hives.HiveManager;
@@ -245,7 +242,7 @@ public class PluginApiculture extends BlankForestryPlugin {
 				defaultAccepted = Constants.EMPTY_STRINGS;
 			}
 			Property property = config.get("beekeeping.flowers." + flowerType, "accepted", defaultAccepted);
-			property.comment = acceptedFlowerMessage;
+			property.setComment(acceptedFlowerMessage);
 			parseAcceptedFlowers(property.getStringList(), flowerType);
 
 			String[] defaultPlantable = defaultPlantableFlowers.get(flowerType);
@@ -253,7 +250,7 @@ public class PluginApiculture extends BlankForestryPlugin {
 				defaultPlantable = Constants.EMPTY_STRINGS;
 			}
 			property = config.get("beekeeping.flowers." + flowerType, "plantable", defaultPlantable);
-			property.comment = plantableFlowerMessage;
+			property.setComment(plantableFlowerMessage);
 			parsePlantableFlowers(property, flowerType);
 
 			Set<Flower> acceptableFlowers = flowerRegistry.getAcceptableFlowers(flowerType);
@@ -330,29 +327,29 @@ public class PluginApiculture extends BlankForestryPlugin {
 		flowerRegistry.registerAcceptableFlowerRule(new EndFlowerAcceptableRule(), FlowerManager.FlowerTypeEnd);
 
 		// Register acceptable plants
-		flowerRegistry.registerAcceptableFlower(Blocks.dragon_egg, FlowerManager.FlowerTypeEnd);
-		flowerRegistry.registerAcceptableFlower(Blocks.vine, FlowerManager.FlowerTypeJungle);
-		flowerRegistry.registerAcceptableFlower(Blocks.tallgrass, FlowerManager.FlowerTypeJungle);
-		flowerRegistry.registerAcceptableFlower(Blocks.wheat, FlowerManager.FlowerTypeWheat);
-		flowerRegistry.registerAcceptableFlower(Blocks.pumpkin_stem, FlowerManager.FlowerTypeGourd);
-		flowerRegistry.registerAcceptableFlower(Blocks.melon_stem, FlowerManager.FlowerTypeGourd);
-		flowerRegistry.registerAcceptableFlower(Blocks.nether_wart, FlowerManager.FlowerTypeNether);
-		flowerRegistry.registerAcceptableFlower(Blocks.cactus, FlowerManager.FlowerTypeCacti);
+		flowerRegistry.registerAcceptableFlower(Blocks.DRAGON_EGG, FlowerManager.FlowerTypeEnd);
+		flowerRegistry.registerAcceptableFlower(Blocks.VINE, FlowerManager.FlowerTypeJungle);
+		flowerRegistry.registerAcceptableFlower(Blocks.TALLGRASS, FlowerManager.FlowerTypeJungle);
+		flowerRegistry.registerAcceptableFlower(Blocks.WHEAT, FlowerManager.FlowerTypeWheat);
+		flowerRegistry.registerAcceptableFlower(Blocks.PUMPKIN_STEM, FlowerManager.FlowerTypeGourd);
+		flowerRegistry.registerAcceptableFlower(Blocks.MELON_STEM, FlowerManager.FlowerTypeGourd);
+		flowerRegistry.registerAcceptableFlower(Blocks.NETHER_WART, FlowerManager.FlowerTypeNether);
+		flowerRegistry.registerAcceptableFlower(Blocks.CACTUS, FlowerManager.FlowerTypeCacti);
 		
-		flowerRegistry.registerAcceptableFlower(Blocks.double_plant, 0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
-		flowerRegistry.registerAcceptableFlower(Blocks.double_plant, 1, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
-		flowerRegistry.registerAcceptableFlower(Blocks.double_plant, 4, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
-		flowerRegistry.registerAcceptableFlower(Blocks.double_plant, 5, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
+		flowerRegistry.registerAcceptableFlower(Blocks.DOUBLE_PLANT, 0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
+		flowerRegistry.registerAcceptableFlower(Blocks.DOUBLE_PLANT, 1, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
+		flowerRegistry.registerAcceptableFlower(Blocks.DOUBLE_PLANT, 4, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
+		flowerRegistry.registerAcceptableFlower(Blocks.DOUBLE_PLANT, 5, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
 		
 		// Register plantable plants
 		for (int meta = 0; meta <= 8; meta++) {
-			flowerRegistry.registerPlantableFlower(Blocks.red_flower, meta, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
+			flowerRegistry.registerPlantableFlower(Blocks.RED_FLOWER, meta, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
 		}
 
-		flowerRegistry.registerPlantableFlower(Blocks.yellow_flower, 0, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
-		flowerRegistry.registerPlantableFlower(Blocks.brown_mushroom, 0, 1.0, FlowerManager.FlowerTypeMushrooms);
-		flowerRegistry.registerPlantableFlower(Blocks.red_mushroom, 0, 1.0, FlowerManager.FlowerTypeMushrooms);
-		flowerRegistry.registerPlantableFlower(Blocks.cactus, 0, 1.0, FlowerManager.FlowerTypeCacti);
+		flowerRegistry.registerPlantableFlower(Blocks.YELLOW_FLOWER, 0, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
+		flowerRegistry.registerPlantableFlower(Blocks.BROWN_MUSHROOM, 0, 1.0, FlowerManager.FlowerTypeMushrooms);
+		flowerRegistry.registerPlantableFlower(Blocks.RED_MUSHROOM, 0, 1.0, FlowerManager.FlowerTypeMushrooms);
+		flowerRegistry.registerPlantableFlower(Blocks.CACTUS, 0, 1.0, FlowerManager.FlowerTypeCacti);
 
 		for (String flowerType : flowerRegistry.getFlowerTypes()) {
 			Set<Flower> flowers = flowerRegistry.getAcceptableFlowers(flowerType);
@@ -448,39 +445,39 @@ public class PluginApiculture extends BlankForestryPlugin {
 		RecipeUtil.addRecipe(items.scoop,
 				"#X#", "###", " # ",
 				'#', "stickWood",
-				'X', Blocks.wool);
+				'X', Blocks.WOOL);
 		RecipeUtil.addRecipe(items.smoker,
 				"LS#",
 				"LF#",
 				"###",
-				'#', "ingotTin", 'S', "stickWood", 'F', Items.flint_and_steel, 'L', "leather");
-		RecipeUtil.addRecipe(new ItemStack(Items.slime_ball),
+				'#', "ingotTin", 'S', "stickWood", 'F', Items.FLINT_AND_STEEL, 'L', "leather");
+		RecipeUtil.addRecipe(new ItemStack(Items.SLIME_BALL),
 				"#X#", "#X#", "#X#",
 				'#', items.propolis,
 				'X', items.pollenCluster.get(EnumPollenCluster.NORMAL, 1));
-		RecipeUtil.addRecipe(new ItemStack(Items.speckled_melon),
+		RecipeUtil.addRecipe(new ItemStack(Items.SPECKLED_MELON),
 				"#X#", "#Y#", "#X#",
 				'#', items.honeyDrop,
 				'X', items.honeydew,
-				'Y', Items.melon);
+				'Y', Items.MELON);
 		RecipeUtil.addRecipe(items.frameUntreated,
 				"###", "#S#", "###",
 				'#', "stickWood",
-				'S', Items.string);
+				'S', Items.STRING);
 		RecipeUtil.addRecipe(items.frameImpregnated,
 				"###", "#S#", "###",
 				'#', PluginCore.items.stickImpregnated,
-				'S', Items.string);
+				'S', Items.STRING);
 		RecipeUtil.addRecipe(items.minecartBeehouse.getBeeHouseMinecart(),
 				"B",
 				"C",
 				'B', blocks.apiculture.get(BlockTypeApiculture.BEE_HOUSE),
-				'C', Items.minecart);
+				'C', Items.MINECART);
 		RecipeUtil.addRecipe(items.minecartBeehouse.getApiaryMinecart(),
 				"B",
 				"C",
 				'B', blocks.apiculture.get(BlockTypeApiculture.APIARY),
-				'C', Items.minecart);
+				'C', Items.MINECART);
 
 		// FOOD STUFF
 		ItemRegistryFood foodItems = PluginFood.items;
@@ -488,7 +485,7 @@ public class PluginApiculture extends BlankForestryPlugin {
 			RecipeUtil.addRecipe(new ItemStack(foodItems.honeyedSlice, 4),
 					"###", "#X#", "###",
 					'#', items.honeyDrop,
-					'X', Items.bread);
+					'X', Items.BREAD);
 
 			RecipeUtil.addRecipe(foodItems.honeyPot,
 					"# #", " X ", "# #",
@@ -523,7 +520,7 @@ public class PluginApiculture extends BlankForestryPlugin {
 				'Y', items.propolis);
 
 		// / TORCHES
-		RecipeUtil.addRecipe(new ItemStack(Blocks.torch, 3),
+		RecipeUtil.addRecipe(new ItemStack(Blocks.TORCH, 3),
 				" # ", " # ", " Y ",
 				'#', PluginCore.items.beeswax,
 				'Y', "stickWood");
@@ -601,9 +598,9 @@ public class PluginApiculture extends BlankForestryPlugin {
 			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{items.honeydew.getItemStack()}, honeyDropFluid);
 
 			ItemStack phosphor = PluginCore.items.phosphor.getItemStack(2);
-			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{phosphor, new ItemStack(Blocks.sand)}, Fluids.LAVA.getFluid(2000));
-			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{phosphor, new ItemStack(Blocks.sand, 1, 1)}, Fluids.LAVA.getFluid(2000));
-			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{phosphor, new ItemStack(Blocks.dirt)}, Fluids.LAVA.getFluid(1600));
+			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{phosphor, new ItemStack(Blocks.SAND)}, Fluids.LAVA.getFluid(2000));
+			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{phosphor, new ItemStack(Blocks.SAND, 1, 1)}, Fluids.LAVA.getFluid(2000));
+			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{phosphor, new ItemStack(Blocks.DIRT)}, Fluids.LAVA.getFluid(1600));
 
 			// / CARPENTER
 			RecipeManagers.carpenterManager.addRecipe(100, Fluids.WATER.getFluid(2000), null, items.beealyzer.getItemStack(),
@@ -624,7 +621,7 @@ public class PluginApiculture extends BlankForestryPlugin {
 					"###",
 					"###",
 					'#', PluginCore.items.beeswax,
-					'X', Items.string);
+					'X', Items.STRING);
 			RecipeManagers.carpenterManager.addRecipe(10, Fluids.WATER.getFluid(200), null, blocks.candle.getUnlitCandle(6),
 					"#X#",
 					'#', PluginCore.items.beeswax,
@@ -642,7 +639,7 @@ public class PluginApiculture extends BlankForestryPlugin {
 			// Cocoa combs
 			RecipeManagers.centrifugeManager.addRecipe(20, items.beeComb.get(EnumHoneyComb.COCOA, 1), ImmutableMap.of(
 					PluginCore.items.beeswax.getItemStack(), 1.0f,
-					new ItemStack(Items.dye, 1, 3), 0.5f
+					new ItemStack(Items.DYE, 1, 3), 0.5f
 			));
 
 			// Simmering combs
@@ -667,7 +664,7 @@ public class PluginApiculture extends BlankForestryPlugin {
 			RecipeManagers.centrifugeManager.addRecipe(20, items.beeComb.get(EnumHoneyComb.FROZEN, 1), ImmutableMap.of(
 					PluginCore.items.beeswax.getItemStack(), 0.8f,
 					items.honeyDrop.getItemStack(), 0.7f,
-					new ItemStack(Items.snowball), 0.4f,
+					new ItemStack(Items.SNOWBALL), 0.4f,
 					items.pollenCluster.get(EnumPollenCluster.CRYSTALLINE, 1), 0.2f
 			));
 
@@ -697,14 +694,14 @@ public class PluginApiculture extends BlankForestryPlugin {
 			RecipeManagers.centrifugeManager.addRecipe(20, items.beeComb.get(EnumHoneyComb.POWDERY, 1), ImmutableMap.of(
 					items.honeyDrop.getItemStack(), 0.2f,
 					PluginCore.items.beeswax.getItemStack(), 0.2f,
-					new ItemStack(Items.gunpowder), 0.9f
+					new ItemStack(Items.GUNPOWDER), 0.9f
 			));
 
 			// Wheaten Combs
 			RecipeManagers.centrifugeManager.addRecipe(20, items.beeComb.get(EnumHoneyComb.WHEATEN, 1), ImmutableMap.of(
 					items.honeyDrop.getItemStack(), 0.2f,
 					PluginCore.items.beeswax.getItemStack(), 0.2f,
-					new ItemStack(Items.wheat), 0.8f
+					new ItemStack(Items.WHEAT), 0.8f
 			));
 
 			// Mossy Combs
@@ -717,7 +714,7 @@ public class PluginApiculture extends BlankForestryPlugin {
 			RecipeManagers.centrifugeManager.addRecipe(20, items.beeComb.get(EnumHoneyComb.MELLOW, 1), ImmutableMap.of(
 					items.honeydew.getItemStack(), 0.6f,
 					PluginCore.items.beeswax.getItemStack(), 0.2f,
-					new ItemStack(Items.quartz), 0.3f
+					new ItemStack(Items.QUARTZ), 0.3f
 			));
 
 			// Silky Propolis
@@ -815,6 +812,8 @@ public class PluginApiculture extends BlankForestryPlugin {
 			rarity = 10;
 		}
 
+		//TODO: Chest Loot
+		/*
 		ChestGenHooks.addItem(ChestGenHooks.DUNGEON_CHEST, new WeightedRandomChestContent(BeeDefinition.STEADFAST.getMemberStack(EnumBeeType.DRONE), 1, 1, rarity));
 
 		ItemStack stack = blocks.candle.getUnlitCandle(1);
@@ -833,6 +832,7 @@ public class PluginApiculture extends BlankForestryPlugin {
 		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(BeeDefinition.FOREST.getRainResist().getMemberStack(EnumBeeType.PRINCESS), 1, 1, 5));
 		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(BeeDefinition.COMMON.getMemberStack(EnumBeeType.DRONE), 1, 2, 8));
 		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(BeeDefinition.MEADOWS.getMemberStack(EnumBeeType.PRINCESS), 1, 1, 5));
+		*/
 	}
 
 	private static void createHives() {
@@ -911,7 +911,7 @@ public class PluginApiculture extends BlankForestryPlugin {
 	}
 
 	@Override
-	public void populateChunk(IChunkProvider chunkProvider, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated) {
+	public void populateChunk(IChunkGenerator chunkProvider, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated) {
 		if (Config.getBeehivesAmount() > 0.0) {
 			HiveDecorator.decorateHives(chunkProvider, world, rand, chunkX, chunkZ, hasVillageGenerated);
 		}
@@ -948,9 +948,9 @@ public class PluginApiculture extends BlankForestryPlugin {
 	public void textureHook(TextureStitchEvent.Pre event) {
 		EntityFXSnow.sprites = new TextureAtlasSprite[3];
 		for (int i = 0; i < EntityFXSnow.sprites.length; i++) {
-			EntityFXSnow.sprites[i] = event.map.registerSprite(new ResourceLocation("forestry:entity/particles/snow." + (i + 1)));
+			EntityFXSnow.sprites[i] = event.getMap().registerSprite(new ResourceLocation("forestry:entity/particles/snow." + (i + 1)));
 		}
-		EntityFXBee.beeSprite = event.map.registerSprite(new ResourceLocation("forestry:entity/particles/swarm_bee"));
+		EntityFXBee.beeSprite = event.getMap().registerSprite(new ResourceLocation("forestry:entity/particles/swarm_bee"));
 	}
 
 	private static class EndFlowerAcceptableRule implements IFlowerAcceptableRule {

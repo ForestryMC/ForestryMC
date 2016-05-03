@@ -12,24 +12,19 @@ package forestry.core.models;
 
 import java.util.List;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumFacing;
-import net.minecraftforge.client.model.ISmartItemModel;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public abstract class BlankItemModel implements ISmartItemModel {
-
+public abstract class BlankItemModel implements IBakedModel {
 	@Override
-	public List<BakedQuad> getFaceQuads(EnumFacing facing) {
-		return null;
-	}
-
-	@Override
-	public List<BakedQuad> getGeneralQuads() {
+	public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
 		return null;
 	}
 

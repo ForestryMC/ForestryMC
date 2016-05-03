@@ -16,7 +16,7 @@ import net.minecraft.block.BlockFlower;
 import net.minecraft.block.BlockWall;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.material.Material;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 
 import net.minecraftforge.common.IPlantable;
 

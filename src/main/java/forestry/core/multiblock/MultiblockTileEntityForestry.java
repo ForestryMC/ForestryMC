@@ -18,7 +18,7 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
@@ -129,7 +129,7 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 	}
 	
 	@Override
-	public IChatComponent getDisplayName() {
+	public ITextComponent getDisplayName() {
 		return getInternalInventory().getDisplayName();
 	}
 

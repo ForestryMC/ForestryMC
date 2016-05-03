@@ -12,9 +12,12 @@ package forestry.core.worldgen;
 
 import java.util.Random;
 
-import net.minecraft.util.BlockPos;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.gen.feature.WorldGenMinable;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent;
@@ -22,29 +25,30 @@ import net.minecraftforge.fml.common.IWorldGenerator;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import forestry.core.PluginCore;
+import forestry.core.blocks.BlockResourceOre;
 import forestry.core.blocks.EnumResourceType;
 import forestry.core.config.Config;
 import forestry.plugins.PluginManager;
 
 public class WorldGenerator implements IWorldGenerator {
 
-	private WorldGenMinableMeta apatiteGenerator;
-	private WorldGenMinableMeta copperGenerator;
-	private WorldGenMinableMeta tinGenerator;
+	private WorldGenMinable apatiteGenerator;
+	private WorldGenMinable copperGenerator;
+	private WorldGenMinable tinGenerator;
 
 	public WorldGenerator() {
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 
 	@Override
-	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
+	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
 		generateWorld(random, chunkX, chunkZ, world);
 	}
 
 	@SubscribeEvent
 	public void populateChunk(PopulateChunkEvent.Post event) {
 		// / PLUGIN WORLD GENERATION
-		PluginManager.populateChunk(event.chunkProvider, event.world, event.rand, event.chunkX, event.chunkZ, event.hasVillageGenerated);
+		PluginManager.populateChunk(event.getGen(), event.getWorld(), event.getRand(), event.getChunkX(), event.getChunkZ(), event.isHasVillageGenerated());
 	}
 
 	public void retroGen(Random random, int chunkX, int chunkZ, World world) {
@@ -56,9 +60,14 @@ public class WorldGenerator implements IWorldGenerator {
 	private void generateWorld(Random random, int chunkX, int chunkZ, World world) {
 
 		if (apatiteGenerator == null) {
-			apatiteGenerator = new WorldGenMinableMeta(PluginCore.blocks.resources, EnumResourceType.APATITE.getMeta(), 36);
-			copperGenerator = new WorldGenMinableMeta(PluginCore.blocks.resources, EnumResourceType.COPPER.getMeta(), 6);
-			tinGenerator = new WorldGenMinableMeta(PluginCore.blocks.resources, EnumResourceType.TIN.getMeta(), 6);
+			BlockResourceOre resourcesBlock = PluginCore.blocks.resources;
+
+			IBlockState apatiteBlockState = resourcesBlock.getStateFromMeta(EnumResourceType.APATITE.getMeta());
+			IBlockState copperBlockState = resourcesBlock.getStateFromMeta(EnumResourceType.COPPER.getMeta());
+			IBlockState tinBlockState = resourcesBlock.getStateFromMeta(EnumResourceType.TIN.getMeta());
+			apatiteGenerator = new WorldGenMinable(apatiteBlockState, 36);
+			copperGenerator = new WorldGenMinable(copperBlockState, 6);
+			tinGenerator = new WorldGenMinable(tinBlockState, 6);
 		}
 
 		// shift to world coordinates

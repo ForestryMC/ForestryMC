@@ -11,10 +11,11 @@
 package forestry.lepidopterology.entities;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.RandomPositionGenerator;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 
 public abstract class AIButterflyBase extends EntityAIBase {
 
@@ -24,13 +25,13 @@ public abstract class AIButterflyBase extends EntityAIBase {
 		this.entity = entity;
 	}
 
-	protected Vec3 getRandomDestination() {
+	protected Vec3d getRandomDestination() {
 		if (entity.isInWater()) {
 			return getRandomDestinationUpwards();
 		}
 
-		Vec3 randomTarget = RandomPositionGenerator.findRandomTargetBlockAwayFrom(entity, 16, 7,
-				new Vec3(entity.posX, entity.posY, entity.posZ));
+		Vec3d randomTarget = RandomPositionGenerator.findRandomTargetBlockAwayFrom(entity, 16, 7,
+				new Vec3d(entity.posX, entity.posY, entity.posZ));
 
 		if (randomTarget == null) {
 			return null;
@@ -43,8 +44,8 @@ public abstract class AIButterflyBase extends EntityAIBase {
 		}
 	}
 
-	protected Vec3 getRandomDestinationUpwards() {
-		Vec3 destination = new Vec3(entity.posX, entity.posY + entity.getRNG().nextInt(10) + 2, entity.posZ);
+	protected Vec3d getRandomDestinationUpwards() {
+		Vec3d destination = new Vec3d(entity.posX, entity.posY + entity.getRNG().nextInt(10) + 2, entity.posZ);
 		if (validateDestination(destination, true)) {
 			return destination;
 		} else {
@@ -52,12 +53,13 @@ public abstract class AIButterflyBase extends EntityAIBase {
 		}
 	}
 
-	private boolean validateDestination(Vec3 dest, boolean allowFluids) {
+	private boolean validateDestination(Vec3d dest, boolean allowFluids) {
 		if (dest.yCoord < 1) {
 			return false;
 		}
-		Block block = entity.worldObj.getBlockState(new BlockPos(dest)).getBlock();
-		if (!allowFluids && block.getMaterial().isLiquid()) {
+		IBlockState blockState = entity.worldObj.getBlockState(new BlockPos(dest));
+		Block block = blockState.getBlock();
+		if (!allowFluids && block.getMaterial(blockState).isLiquid()) {
 			return false;
 		}
 		if (!block.isPassable(entity.worldObj, new BlockPos(dest))) {

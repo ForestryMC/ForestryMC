@@ -10,11 +10,11 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -41,7 +41,7 @@ public class MachineProperties<T extends TileForestry> implements IMachineProper
 	private Block block;
 
 	public MachineProperties(int meta, @Nonnull Class<T> teClass, @Nonnull String name) {
-		this(meta, "forestry." + name, teClass, name, AxisAlignedBB.fromBounds(0, 0, 0, 1, 1, 1));
+		this(meta, "forestry." + name, teClass, name, new AxisAlignedBB(0, 0, 0, 1, 1, 1));
 	}
 
 	public MachineProperties(int meta, @Nonnull Class<T> teClass, @Nonnull String name, @Nonnull AxisAlignedBB boundingBox) {
@@ -80,7 +80,7 @@ public class MachineProperties<T extends TileForestry> implements IMachineProper
 
 	@Nonnull
 	@Override
-	public MovingObjectPosition collisionRayTrace(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull Vec3 startVec, @Nonnull Vec3 endVec) {
+	public RayTraceResult collisionRayTrace(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull Vec3d startVec, @Nonnull Vec3d endVec) {
 		return BlockUtil.collisionRayTrace(pos, startVec, endVec, boundingBox);
 	}
 

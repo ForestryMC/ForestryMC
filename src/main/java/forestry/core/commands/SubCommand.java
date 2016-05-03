@@ -20,7 +20,8 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
-import net.minecraft.util.BlockPos;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -76,21 +77,21 @@ public abstract class SubCommand implements IForestryCommand {
 	public List<String> getCommandAliases() {
 		return aliases;
 	}
-	
+
 	@Override
-	public List<String> addTabCompletionOptions(ICommandSender sender, String[] incomplete, BlockPos pos) {
-		return CommandHelpers.addStandardTabCompletionOptions(this, sender, incomplete, pos);
+	public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos pos) {
+		return CommandHelpers.addStandardTabCompletionOptions(server, this, sender, args, pos);
 	}
 
 	@Override
-	public final void processCommand(ICommandSender sender, String[] args) throws WrongUsageException, CommandException {
-		if (!CommandHelpers.processStandardCommands(sender, this, args)) {
-			processSubCommand(sender, args);
+	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+		if (!CommandHelpers.processStandardCommands(server, sender, this, args)) {
+			executeSubCommand(server, sender, args);
 		}
 	}
 
-	public void processSubCommand(ICommandSender sender, String[] args) throws WrongUsageException, CommandException {
-		printHelp(sender);
+	public void executeSubCommand(MinecraftServer server, ICommandSender sender, String[] args) throws WrongUsageException, CommandException {
+		printHelp(, sender);
 	}
 
 	public SubCommand setPermLevel(PermLevel permLevel) {
@@ -104,7 +105,7 @@ public abstract class SubCommand implements IForestryCommand {
 	}
 
 	@Override
-	public boolean canCommandSenderUseCommand(ICommandSender sender) {
+	public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
 		return sender.canCommandSenderUseCommand(getPermissionLevel(), getCommandName());
 	}
 

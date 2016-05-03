@@ -11,7 +11,7 @@
 package forestry.greenhouse.tiles;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorLogicSource;

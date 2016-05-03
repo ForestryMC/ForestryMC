@@ -11,9 +11,9 @@
 package forestry.core.utils;
 
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 
 public class DamageSourceForestry extends DamageSource {
 
@@ -23,15 +23,15 @@ public class DamageSourceForestry extends DamageSource {
 	}
 
 	@Override
-	public IChatComponent getDeathMessage(EntityLivingBase living) {
+	public ITextComponent getDeathMessage(EntityLivingBase living) {
 		EntityLivingBase other = living.getAttackingEntity();
 		String ssp = "death." + this.damageType;
 		String smp = ssp + ".player";
 
 		if (other != null) {
-			return new ChatComponentTranslation(smp, living.getDisplayName(), other.getDisplayName());
+			return new TextComponentTranslation(smp, living.getDisplayName(), other.getDisplayName());
 		} else {
-			return new ChatComponentTranslation(ssp, living.getDisplayName());
+			return new TextComponentTranslation(ssp, living.getDisplayName());
 		}
 	}
 

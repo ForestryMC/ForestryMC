@@ -17,11 +17,11 @@ import java.util.List;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import forestry.core.blocks.BlockBase;
@@ -33,22 +33,22 @@ public class BlockEngine extends BlockBase<BlockTypeEngine> {
 
 	static {
 		boundingBoxesForDirections.put(EnumFacing.DOWN, ImmutableList.of(
-				AxisAlignedBB.fromBounds(0.0, 0.5, 0.0, 1.0, 1.0, 1.0), AxisAlignedBB.fromBounds(0.25, 0.0, 0.25, 0.75, 0.5, 0.75)
+				new AxisAlignedBB(0.0, 0.5, 0.0, 1.0, 1.0, 1.0), new AxisAlignedBB(0.25, 0.0, 0.25, 0.75, 0.5, 0.75)
 		));
 		boundingBoxesForDirections.put(EnumFacing.UP, ImmutableList.of(
-				AxisAlignedBB.fromBounds(0.0, 0.0, 0.0, 1.0, 0.5, 1.0), AxisAlignedBB.fromBounds(0.25, 0.5, 0.25, 0.75, 1.0, 0.75)
+				new AxisAlignedBB(0.0, 0.0, 0.0, 1.0, 0.5, 1.0), new AxisAlignedBB(0.25, 0.5, 0.25, 0.75, 1.0, 0.75)
 		));
 		boundingBoxesForDirections.put(EnumFacing.NORTH, ImmutableList.of(
-				AxisAlignedBB.fromBounds(0.0, 0.0, 0.5, 1.0, 1.0, 1.0), AxisAlignedBB.fromBounds(0.25, 0.25, 0.0, 0.75, 0.75, 0.5)
+				new AxisAlignedBB(0.0, 0.0, 0.5, 1.0, 1.0, 1.0), new AxisAlignedBB(0.25, 0.25, 0.0, 0.75, 0.75, 0.5)
 		));
 		boundingBoxesForDirections.put(EnumFacing.SOUTH, ImmutableList.of(
-				AxisAlignedBB.fromBounds(0.0, 0.0, 0.0, 1.0, 1.0, 0.5), AxisAlignedBB.fromBounds(0.25, 0.25, 0.5, 0.75, 0.75, 1.0)
+				new AxisAlignedBB(0.0, 0.0, 0.0, 1.0, 1.0, 0.5), new AxisAlignedBB(0.25, 0.25, 0.5, 0.75, 0.75, 1.0)
 		));
 		boundingBoxesForDirections.put(EnumFacing.WEST, ImmutableList.of(
-				AxisAlignedBB.fromBounds(0.5, 0.0, 0.0, 1.0, 1.0, 1.0), AxisAlignedBB.fromBounds(0.0, 0.25, 0.25, 0.5, 0.75, 0.75)
+				new AxisAlignedBB(0.5, 0.0, 0.0, 1.0, 1.0, 1.0), new AxisAlignedBB(0.0, 0.25, 0.25, 0.5, 0.75, 0.75)
 		));
 		boundingBoxesForDirections.put(EnumFacing.EAST, ImmutableList.of(
-				AxisAlignedBB.fromBounds(0.0, 0.0, 0.0, 0.5, 1.0, 1.0), AxisAlignedBB.fromBounds(0.5, 0.25, 0.25, 1.0, 0.75, 0.75)
+				new AxisAlignedBB(0.0, 0.0, 0.0, 0.5, 1.0, 1.0), new AxisAlignedBB(0.5, 0.25, 0.25, 1.0, 0.75, 0.75)
 		));
 	}
 
@@ -57,10 +57,10 @@ public class BlockEngine extends BlockBase<BlockTypeEngine> {
 	}
 
 	@Override
-	public void addCollisionBoxesToList(World world, BlockPos pos, IBlockState state, AxisAlignedBB mask, List<AxisAlignedBB> list, Entity collidingEntity) {
-		TileEngine tile = TileUtil.getTile(world, pos, TileEngine.class);
+	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, Entity entityIn) {
+		TileEngine tile = TileUtil.getTile(worldIn, pos, TileEngine.class);
 		if (tile == null) {
-			super.addCollisionBoxesToList(world, pos, state, mask, list, collidingEntity);
+			super.addCollisionBoxToList(state, worldIn, pos, entityBox, collidingBoxes, entityIn);
 			return;
 		}
 
@@ -72,29 +72,29 @@ public class BlockEngine extends BlockBase<BlockTypeEngine> {
 
 		for (AxisAlignedBB boundingBoxBase : boundingBoxes) {
 			AxisAlignedBB boundingBox = boundingBoxBase.offset(pos.getX(), pos.getY(), pos.getZ());
-			if (mask.intersectsWith(boundingBox)) {
-				list.add(boundingBox);
+			if (entityBox.intersectsWith(boundingBox)) {
+				collidingBoxes.add(boundingBox);
 			}
 		}
 	}
 
 	@Override
-	public MovingObjectPosition collisionRayTrace(World world, BlockPos pos, Vec3 start, Vec3 end) {
-		TileEngine tile = TileUtil.getTile(world, pos, TileEngine.class);
+	public RayTraceResult collisionRayTrace(IBlockState blockState, World worldIn, BlockPos pos, Vec3d start, Vec3d end) {
+		TileEngine tile = TileUtil.getTile(worldIn, pos, TileEngine.class);
 		if (tile == null) {
-			return super.collisionRayTrace(world, pos, start, end);
+			return super.collisionRayTrace(blockState, worldIn, pos, start, end);
 		}
 
 		EnumFacing orientation = tile.getOrientation();
 		List<AxisAlignedBB> boundingBoxes = boundingBoxesForDirections.get(orientation);
 		if (boundingBoxes == null) {
-			return super.collisionRayTrace(world, pos, start, end);
+			return super.collisionRayTrace(blockState, worldIn, pos, start, end);
 		}
 
-		MovingObjectPosition nearestIntersection = null;
+		RayTraceResult nearestIntersection = null;
 		for (AxisAlignedBB boundingBoxBase : boundingBoxes) {
 			AxisAlignedBB boundingBox = boundingBoxBase.offset(pos.getX(), pos.getY(), pos.getZ());
-			MovingObjectPosition intersection = boundingBox.calculateIntercept(start, end);
+			RayTraceResult intersection = boundingBox.calculateIntercept(start, end);
 			if (intersection != null) {
 				if (nearestIntersection == null || intersection.hitVec.distanceTo(start) < nearestIntersection.hitVec.distanceTo(start)) {
 					nearestIntersection = intersection;
@@ -105,7 +105,7 @@ public class BlockEngine extends BlockBase<BlockTypeEngine> {
 		if (nearestIntersection != null) {
 			Object hitInfo = nearestIntersection.hitInfo;
 			Entity entityHit = nearestIntersection.entityHit;
-			nearestIntersection = new MovingObjectPosition(nearestIntersection.typeOfHit, nearestIntersection.hitVec, nearestIntersection.sideHit, pos);
+			nearestIntersection = new RayTraceResult(nearestIntersection.typeOfHit, nearestIntersection.hitVec, nearestIntersection.sideHit, pos);
 			nearestIntersection.hitInfo = hitInfo;
 			nearestIntersection.entityHit = entityHit;
 		}

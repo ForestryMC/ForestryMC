@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.lepidopterology.entities;
 
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 
 public abstract class AIButterflyInteract extends AIButterflyBase {
 

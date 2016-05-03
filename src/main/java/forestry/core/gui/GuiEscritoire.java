@@ -14,7 +14,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 
 import forestry.core.config.Constants;
 import forestry.core.gui.widgets.GameTokenWidget;
@@ -91,7 +91,7 @@ public class GuiEscritoire extends GuiForestry<ContainerEscritoire, TileEscritoi
 
 			textLayout.newLine();
 			textLayout.newLine();
-			String format = EnumChatFormatting.UNDERLINE + EnumChatFormatting.ITALIC.toString();
+			String format = TextFormatting.UNDERLINE + TextFormatting.ITALIC.toString();
 			int attemptNo = EscritoireGame.BOUNTY_MAX - inventory.getGame().getBountyLevel();
 			String attemptNoString = Translator.translateToLocalFormatted("for.gui.escritoire.attempt.number", attemptNo);
 			textLayout.drawLine(format + attemptNoString, 170, fontColor.get("gui.mail.lettertext"));

@@ -22,8 +22,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -156,14 +156,17 @@ public class Tree extends Individual implements ITree, IPlantable {
 
 	@Override
 	public boolean canStay(IBlockAccess world, BlockPos pos) {
-		Block block = BlockUtil.getBlock(world, pos.add(0, -1, 0));
-		if (block == null) {
+		BlockPos blockPos = pos.add(0, -1, 0);
+		IBlockState blockState = world.getBlockState(blockPos);
+		if (blockState == null) {
 			return false;
 		}
 
+		Block block = blockState.getBlock();
+
 		for (EnumPlantType type : getPlantTypes()) {
 			this.plantType = type;
-			if (block.canSustainPlant(world, pos.add(0, -1, 0), EnumFacing.UP, this)) {
+			if (block.canSustainPlant(blockState, world, blockPos, EnumFacing.UP, this)) {
 				return true;
 			}
 		}
@@ -288,31 +291,31 @@ public class Tree extends Individual implements ITree, IPlantable {
 		IAlleleTreeSpecies primary = genome.getPrimary();
 		IAlleleTreeSpecies secondary = genome.getSecondary();
 		if (!isPureBred(EnumTreeChromosome.SPECIES)) {
-			list.add(EnumChatFormatting.BLUE + Translator.translateToLocal("for.trees.hybrid").replaceAll("%PRIMARY", primary.getName()).replaceAll("%SECONDARY", secondary.getName()));
+			list.add(TextFormatting.BLUE + Translator.translateToLocal("for.trees.hybrid").replaceAll("%PRIMARY", primary.getName()).replaceAll("%SECONDARY", secondary.getName()));
 		}
 
-		String sappiness = EnumChatFormatting.GOLD + "S: " + genome.getActiveAllele(EnumTreeChromosome.SAPPINESS).getName();
-		String maturation = EnumChatFormatting.RED + "M: " + genome.getActiveAllele(EnumTreeChromosome.MATURATION).getName();
-		String height = EnumChatFormatting.LIGHT_PURPLE + "H: " + genome.getActiveAllele(EnumTreeChromosome.HEIGHT).getName();
-		String girth = EnumChatFormatting.AQUA + "G: " + String.format("%sx%s", genome.getGirth(), genome.getGirth());
-		String saplings = EnumChatFormatting.YELLOW + "S: " + genome.getActiveAllele(EnumTreeChromosome.FERTILITY).getName();
-		String yield = EnumChatFormatting.WHITE + "Y: " + genome.getActiveAllele(EnumTreeChromosome.YIELD).getName();
+		String sappiness = TextFormatting.GOLD + "S: " + genome.getActiveAllele(EnumTreeChromosome.SAPPINESS).getName();
+		String maturation = TextFormatting.RED + "M: " + genome.getActiveAllele(EnumTreeChromosome.MATURATION).getName();
+		String height = TextFormatting.LIGHT_PURPLE + "H: " + genome.getActiveAllele(EnumTreeChromosome.HEIGHT).getName();
+		String girth = TextFormatting.AQUA + "G: " + String.format("%sx%s", genome.getGirth(), genome.getGirth());
+		String saplings = TextFormatting.YELLOW + "S: " + genome.getActiveAllele(EnumTreeChromosome.FERTILITY).getName();
+		String yield = TextFormatting.WHITE + "Y: " + genome.getActiveAllele(EnumTreeChromosome.YIELD).getName();
 		list.add(String.format("%s, %s", saplings, maturation));
 		list.add(String.format("%s, %s", height, girth));
 		list.add(String.format("%s, %s", yield, sappiness));
 
 		IAlleleBoolean primaryFireproof = (IAlleleBoolean) genome.getActiveAllele(EnumTreeChromosome.FIREPROOF);
 		if (primaryFireproof.getValue()) {
-			list.add(EnumChatFormatting.RED + Translator.translateToLocal("for.gui.fireresist"));
+			list.add(TextFormatting.RED + Translator.translateToLocal("for.gui.fireresist"));
 		}
 
 		IAllele fruit = getGenome().getActiveAllele(EnumTreeChromosome.FRUITS);
 		if (fruit != AlleleFruit.fruitNone) {
 			String strike = "";
 			if (!canBearFruit()) {
-				strike = EnumChatFormatting.STRIKETHROUGH.toString();
+				strike = TextFormatting.STRIKETHROUGH.toString();
 			}
-			list.add(strike + EnumChatFormatting.GREEN + "F: " + genome.getFruitProvider().getDescription());
+			list.add(strike + TextFormatting.GREEN + "F: " + genome.getFruitProvider().getDescription());
 		}
 
 	}

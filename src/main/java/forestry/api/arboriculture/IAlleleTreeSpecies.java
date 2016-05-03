@@ -8,7 +8,7 @@ package forestry.api.arboriculture;
 import javax.annotation.Nonnull;
 import java.util.Collection;
 
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 
 import net.minecraftforge.common.EnumPlantType;

@@ -12,13 +12,16 @@ package forestry.apiculture.items;
 
 import java.util.List;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemMeshDefinition;
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.color.IItemColor;
+import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -87,9 +90,9 @@ public class ItemBeeGE extends ItemGE {
 		if (type != EnumBeeType.DRONE) {
 			IBee individual = BeeManager.beeRoot.getMember(itemstack);
 			if (individual.isNatural()) {
-				list.add(EnumChatFormatting.YELLOW + EnumChatFormatting.ITALIC.toString() + Translator.translateToLocal("for.bees.stock.pristine"));
+				list.add(TextFormatting.YELLOW + TextFormatting.ITALIC.toString() + Translator.translateToLocal("for.bees.stock.pristine"));
 			} else {
-				list.add(EnumChatFormatting.YELLOW + Translator.translateToLocal("for.bees.stock.ignoble"));
+				list.add(TextFormatting.YELLOW + Translator.translateToLocal("for.bees.stock.ignoble"));
 			}
 		}
 
@@ -115,21 +118,12 @@ public class ItemBeeGE extends ItemGE {
 		}
 	}
 
-	/* MODELS */
 	@SideOnly(Side.CLIENT)
-	@Override
-	public int getColorFromItemStack(ItemStack itemstack, int renderPass) {
-		if (!itemstack.hasTagCompound()) {
-			if (renderPass == 1) {
-				return 0xffdc16;
-			} else {
-				return 0xffffff;
-			}
-		}
+	public void registerItemColors() {
 
-		return getColourFromSpecies(BeeGenome.getSpecies(itemstack), renderPass);
 	}
 
+	/* MODELS */
 	@SideOnly(Side.CLIENT)
 	@Override
 	public int getColourFromSpecies(IAlleleSpecies species, int renderPass) {

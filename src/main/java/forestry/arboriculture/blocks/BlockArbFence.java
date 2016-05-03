@@ -18,15 +18,18 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockFenceGate;
+import net.minecraft.block.BlockPlanks;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -71,7 +74,7 @@ public abstract class BlockArbFence extends BlockFence implements IWoodTyped, II
 	private final int blockNumber;
 
 	public BlockArbFence(boolean fireproof, int blockNumber) {
-		super(Material.wood);
+		super(Material.WOOD, BlockPlanks.EnumType.OAK.getMapColor());
 		this.fireproof = fireproof;
 		this.blockNumber = blockNumber;
 
@@ -87,7 +90,7 @@ public abstract class BlockArbFence extends BlockFence implements IWoodTyped, II
 		setHardness(2.0F);
 		setResistance(5.0F);
 		setHarvestLevel("axe", 0);
-		setStepSound(soundTypeWood);
+		setSoundType(SoundType.WOOD);
 		setCreativeTab(Tabs.tabArboriculture);
 	}
 
@@ -104,13 +107,20 @@ public abstract class BlockArbFence extends BlockFence implements IWoodTyped, II
 	}
 
 	@Override
-	public boolean canConnectTo(IBlockAccess world, BlockPos pos) {
-		Block block = world.getBlockState(pos).getBlock();
+	public boolean canConnectTo(IBlockAccess worldIn, BlockPos pos) {
+		IBlockState blockState = worldIn.getBlockState(pos);
+		Block block = blockState.getBlock();
 		if (PluginArboriculture.validFences.contains(block) || block instanceof BlockFence || block instanceof BlockFenceGate) {
 			return true;
 		}
 
-		return block.getMaterial().isOpaque() && block.isNormalCube() && block.getMaterial() != Material.gourd;
+		if (block != Blocks.BARRIER) {
+			Material blockMaterial = block.getMaterial(blockState);
+			if (blockMaterial.isOpaque() && blockState.isFullCube() && blockMaterial != Material.GOURD) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/* Models */
@@ -120,10 +130,9 @@ public abstract class BlockArbFence extends BlockFence implements IWoodTyped, II
 		manager.registerVariant(item, WoodHelper.getResourceLocations(this));
 		manager.registerItemModel(item, new WoodMeshDefinition(this));
 	}
-	
+
 	@Override
-	public float getBlockHardness(World world, BlockPos pos) {
-		IBlockState blockState = world.getBlockState(pos);
+	public float getBlockHardness(IBlockState blockState, World worldIn, BlockPos pos) {
 		int meta = getMetaFromState(blockState);
 		EnumWoodType woodType = getWoodType(meta);
 		return woodType.getHardness();
@@ -176,8 +185,8 @@ public abstract class BlockArbFence extends BlockFence implements IWoodTyped, II
 	}
 
 	@Override
-	protected BlockState createBlockState() {
-		return new BlockState(this, NORTH, EAST, WEST, SOUTH, getVariant());
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, NORTH, EAST, WEST, SOUTH, getVariant());
 	}
 
 	@Override

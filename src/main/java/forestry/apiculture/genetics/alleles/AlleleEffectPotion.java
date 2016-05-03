@@ -18,8 +18,8 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.potion.PotionHelper;
-import net.minecraft.util.Vec3;
+import net.minecraft.potion.PotionUtils;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import forestry.api.apiculture.BeeManager;
@@ -41,8 +41,8 @@ public class AlleleEffectPotion extends AlleleEffectThrottled {
 		this.duration = duration;
 		this.chance = chance;
 
-		Collection<PotionEffect> potionEffects = Collections.singleton(new PotionEffect(potion.getId(), 1, 0));
-		this.potionFXColor = PotionHelper.calcPotionLiquidColor(potionEffects);
+		Collection<PotionEffect> potionEffects = Collections.singleton(new PotionEffect(potion, 1, 0));
+		this.potionFXColor = PotionUtils.getPotionColorFromEffectList(potionEffects);
 	}
 
 	public AlleleEffectPotion(String name, boolean isDominant, Potion potion, int duration) {
@@ -78,7 +78,7 @@ public class AlleleEffectPotion extends AlleleEffectThrottled {
 				}
 			}
 
-			entity.addPotionEffect(new PotionEffect(potion.getId(), dur, 0));
+			entity.addPotionEffect(new PotionEffect(potion, dur, 0));
 		}
 
 		return storedData;
@@ -89,7 +89,7 @@ public class AlleleEffectPotion extends AlleleEffectThrottled {
 		if (housing.getWorld().rand.nextBoolean()) {
 			super.doFX(genome, storedData, housing);
 		} else {
-			Vec3 beeFXCoordinates = housing.getBeeFXCoordinates();
+			Vec3d beeFXCoordinates = housing.getBeeFXCoordinates();
 			Proxies.render.addEntityPotionFX(housing.getWorld(), beeFXCoordinates.xCoord, beeFXCoordinates.yCoord + 0.5, beeFXCoordinates.zCoord, potionFXColor);
 		}
 		return storedData;

@@ -17,7 +17,7 @@ import java.util.Map;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.creativetab.CreativeTabs;
@@ -27,14 +27,16 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -74,16 +76,16 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 	
 	private final ParticleHelper.Callback particleCallback;
 	
-	protected final BlockState blockState;
+	protected final BlockStateContainer blockState;
 	
 	private boolean canCreateProps = false;
 
 	public BlockBase(Class<P> machinePropertiesClass) {
-		super(Material.iron);
+		super(Material.IRON);
 
 		this.hasTESR = IBlockTypeTesr.class.isAssignableFrom(machinePropertiesClass);
 		this.hasCustom = IBlockTypeCustom.class.isAssignableFrom(machinePropertiesClass);
-		this.lightOpacity = this.isOpaqueCube() ? 255 : 0;
+		this.lightOpacity = (!hasTESR && !hasCustom) ? 255 : 0;
 		this.machinePropertiesClass = machinePropertiesClass;
 		
 		canCreateProps = true;
@@ -116,21 +118,21 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 	}
 
 	@Override
-	public boolean isOpaqueCube() {
-		return !hasTESR && !hasCustom;
-	}
-	
-	@Override
-	public boolean isNormalCube() {
+	public boolean isOpaqueCube(IBlockState state) {
 		return !hasTESR && !hasCustom;
 	}
 
 	@Override
-	public int getRenderType() {
+	public boolean isNormalCube(IBlockState state) {
+		return !hasTESR && !hasCustom;
+	}
+
+	@Override
+	public EnumBlockRenderType getRenderType(IBlockState state) {
 		if (hasTESR) {
-			return 2;
+			return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
 		} else {
-			return 3;
+			return EnumBlockRenderType.MODEL;
 		}
 	}
 
@@ -143,21 +145,21 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(World world, BlockPos pos, IBlockState state) {
-		IMachineProperties definition = getDefinition(world, pos);
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
+		IMachineProperties definition = getDefinition(worldIn, pos);
 		if (definition == null) {
-			return super.getCollisionBoundingBox(world, pos, state);
+			return super.getCollisionBoundingBox(blockState, worldIn, pos);
 		}
-		return definition.getBoundingBox(pos, state);
+		return definition.getBoundingBox(pos, blockState);
 	}
-	
+
 	@Override
-	public MovingObjectPosition collisionRayTrace(World world, BlockPos pos, Vec3 start, Vec3 end) {
-		IMachineProperties definition = getDefinition(world, pos);
+	public RayTraceResult collisionRayTrace(IBlockState blockState, World worldIn, BlockPos pos, Vec3d start, Vec3d end) {
+		IMachineProperties definition = getDefinition(worldIn, pos);
 		if (definition == null) {
-			return super.collisionRayTrace(world, pos, start, end);
+			return super.collisionRayTrace(blockState, worldIn, pos, start, end);
 		} else {
-			return definition.collisionRayTrace(world, pos, start, end);
+			return definition.collisionRayTrace(worldIn, pos, start, end);
 		}
 	}
 
@@ -182,43 +184,42 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 
 	/* INTERACTION */
 	@Override
-	public boolean isSideSolid(IBlockAccess world, BlockPos pos, EnumFacing side) {
+	public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
 		IMachineProperties definition = getDefinition(world, pos);
 		return definition != null && definition.isSolidOnSide(world, pos, side);
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (player.isSneaking()) {
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+		if (playerIn.isSneaking()) {
 			return false;
 		}
 
-		TileBase tile = TileUtil.getTile(world, pos, TileBase.class);
+		TileBase tile = TileUtil.getTile(worldIn, pos, TileBase.class);
 		if (tile == null) {
 			return false;
 		}
 
-		if (!TileUtil.isUsableByPlayer(player, tile)) {
+		if (!TileUtil.isUsableByPlayer(playerIn, tile)) {
 			return false;
 		}
 
 		IAccessHandler access = tile.getAccessHandler();
 
-		ItemStack current = player.getCurrentEquippedItem();
-		if (current != null && current.getItem() != Items.bucket && tile instanceof IFluidHandler && access.allowsAlteration(player)) {
-			if (FluidHelper.handleRightClick((IFluidHandler) tile, side, player, true, tile.canDrainWithBucket())) {
+		if (heldItem != null && heldItem.getItem() != Items.BUCKET && tile instanceof IFluidHandler && access.allowsAlteration(playerIn)) {
+			if (FluidHelper.handleRightClick((IFluidHandler) tile, side, playerIn, true, tile.canDrainWithBucket())) {
 				return true;
 			}
 		}
 
-		if (world.isRemote) {
+		if (worldIn.isRemote) {
 			return true;
 		}
 
-		if (access.allowsViewing(player)) {
-			tile.openGui(player);
+		if (access.allowsViewing(playerIn)) {
+			tile.openGui(playerIn, heldItem);
 		} else {
-			player.addChatMessage(new ChatComponentTranslation("for.chat.accesslocked", PlayerUtil.getOwnerName(access)));
+			playerIn.addChatMessage(new TextComponentTranslation("for.chat.accesslocked", PlayerUtil.getOwnerName(access)));
 		}
 		return true;
 	}
@@ -281,11 +282,11 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 	}
 
 	@Override
-	protected BlockState createBlockState() {
+	protected BlockStateContainer createBlockState() {
 		if (!canCreateProps) {
 			return super.createBlockState();
 		}
-		return new BlockState(this, TYPE, FACE);
+		return new BlockStateContainer(this, TYPE, FACE);
 	}
 
 	@Override
@@ -325,35 +326,33 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 	}
 	
 	@Override
-	public BlockState getBlockState() {
+	public BlockStateContainer getBlockState() {
 		return this.blockState;
 	}
 
 	@Override
-	public boolean getUseNeighborBrightness() {
+	public boolean getUseNeighborBrightness(IBlockState state) {
 		return hasTESR;
 	}
-	
+
 	/* Particles */
 	@SideOnly(Side.CLIENT)
 	@Override
-	public boolean addHitEffects(World world, MovingObjectPosition target, EffectRenderer effectRenderer) {
-		IBlockState state = world.getBlockState(target.getBlockPos());
-		
-		P protety = state.getValue(TYPE);
-		if(protety.getMachineProperties() instanceof IMachinePropertiesTesr){
-			return ParticleHelper.addHitEffects(world, this, target, effectRenderer, particleCallback);
+	public boolean addHitEffects(IBlockState state, World worldObj, RayTraceResult target, EffectRenderer effectRenderer) {
+		P property = state.getValue(TYPE);
+		if(property.getMachineProperties() instanceof IMachinePropertiesTesr){
+			return ParticleHelper.addHitEffects(worldObj, this, target, effectRenderer, particleCallback);
 		}
 		return false;
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	@Override
 	public boolean addDestroyEffects(World world, BlockPos pos, EffectRenderer effectRenderer) {
 		IBlockState state = world.getBlockState(pos);
 		
-		P protety = state.getValue(TYPE);
-		if(protety.getMachineProperties() instanceof IMachinePropertiesTesr){
+		P property = state.getValue(TYPE);
+		if(property.getMachineProperties() instanceof IMachinePropertiesTesr){
 			return ParticleHelper.addDestroyEffects(world, this, world.getBlockState(pos), pos, effectRenderer, particleCallback);
 		}
 		return false;

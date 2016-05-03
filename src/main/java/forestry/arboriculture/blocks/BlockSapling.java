@@ -16,17 +16,18 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumWorldBlockLayer;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -48,7 +49,7 @@ import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemStackUtil;
 
 public class BlockSapling extends BlockTreeContainer implements IGrowable, IStateMapperRegister, IItemModelRegister {
-	
+	protected static final AxisAlignedBB SAPLING_AABB = new AxisAlignedBB(0.09999999403953552D, 0.0D, 0.09999999403953552D, 0.8999999761581421D, 0.800000011920929D, 0.8999999761581421D);
 	/* PROPERTYS */
 	public static final PropertyTree TREE = new PropertyTree("tree");
 	
@@ -57,11 +58,14 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 	}
 
 	public BlockSapling() {
-		super(Material.plants);
+		super(Material.PLANTS);
+		setSoundType(SoundType.PLANT);
+	}
 
-		float factor = 0.4F;
-		setBlockBounds(0.5F - factor, 0.0F, 0.5F - factor, 0.5F + factor, factor * 2.0F, 0.5F + factor);
-		setStepSound(soundTypeGrass);
+	@Override
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
+	{
+		return SAPLING_AABB;
 	}
 
 	@Override
@@ -70,25 +74,27 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 	}
 
 	/* COLLISION BOX */
+
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(World worldIn, BlockPos pos, IBlockState state) {
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
 		return null;
 	}
 
 	/* RENDERING */
+
 	@Override
-	public boolean isOpaqueCube() {
+	public boolean isOpaqueCube(IBlockState state) {
+		return false;
+	}
+
+	@Override
+	public boolean isNormalCube(IBlockState state, IBlockAccess world, BlockPos pos) {
 		return false;
 	}
 	
 	@Override
-	public boolean isBlockNormalCube() {
-		return false;
-	}
-	
-	@Override
-	public EnumWorldBlockLayer getBlockLayer() {
-		return EnumWorldBlockLayer.CUTOUT;
+	public BlockRenderLayer getBlockLayer() {
+		return BlockRenderLayer.CUTOUT;
 	}
 	
 	/* STATES */
@@ -109,8 +115,8 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 	}
 	
 	@Override
-	protected BlockState createBlockState() {
-		return new BlockState(this, TREE);
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, TREE);
 	}
 	
 	@Override
@@ -128,7 +134,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 	}
 
 	/* PLANTING */
-	public boolean canBlockStay(IBlockAccess world, BlockPos pos) {
+	public static boolean canBlockStay(IBlockAccess world, BlockPos pos) {
 		TileSapling tile = getSaplingTile(world, pos);
 		if (tile == null) {
 			return false;
@@ -156,18 +162,18 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		return new ArrayList<>();
 	}
-	
+
 	@Override
-	public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos, EntityPlayer player) {
+	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
 		TileSapling sapling = getSaplingTile(world, pos);
 		if (sapling == null || sapling.getTree() == null) {
 			return null;
 		}
 		return TreeManager.treeRoot.getMemberStack(sapling.getTree(), EnumGermlingType.SAPLING);
 	}
-	
+
 	@Override
-	public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
 		if (!world.isRemote && canHarvestBlock(world, pos, player)) {
 			if (!player.capabilities.isCreativeMode) {
 				dropAsSapling(world, pos);

@@ -20,23 +20,25 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.renderer.block.model.ModelBakery;
+
+
 import net.minecraft.client.renderer.block.statemap.IStateMapper;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.resources.IResourceManager;
-import net.minecraft.client.resources.model.ModelBakery;
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.animation.Animation;
-import net.minecraftforge.client.model.animation.ITimeValue;
+import net.minecraftforge.common.animation.ITimeValue;
 import net.minecraftforge.common.model.animation.IAnimationStateMachine;
 
 import forestry.apiculture.entities.EntityFXBee;
@@ -51,7 +53,6 @@ import forestry.core.entities.EntityFXSnow;
 import forestry.core.fluids.Fluids;
 import forestry.core.items.ItemCrated;
 import forestry.core.models.BlockModelIndex;
-import forestry.core.models.ModelCrate;
 import forestry.core.models.ModelIndex;
 import forestry.core.models.ModelManager;
 import forestry.core.render.RenderAnalyzer;
@@ -142,7 +143,8 @@ public class ProxyRenderClient extends ProxyRender {
 	public void registerModelCrate(ItemCrated crate) {
 		String cleanItemName = ItemStackUtil.getItemNameFromRegistry(crate).getResourcePath();
 		ModelResourceLocation modelLocation = new ModelResourceLocation("forestry:crate-filled", cleanItemName);
-		registerModel(new ModelIndex(modelLocation, new ModelCrate()));
+		// TODO: fix crate rendering
+//		registerModel(new ModelIndex(modelLocation, new ModelCrate()));
 	}
 
 	@Override

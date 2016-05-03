@@ -12,7 +12,7 @@ package forestry.farming.logic;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
@@ -72,7 +72,7 @@ public class FarmableGourd implements IFarmable {
 
 	@Override
 	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
-		return world.setBlockState(pos, ItemStackUtil.getBlock(stem).getStateFromMeta(0), Constants.FLAG_BLOCK_SYNCH);
+		return world.setBlockState(pos, ItemStackUtil.getBlock(stem).getDefaultState(), Constants.FLAG_BLOCK_SYNCH);
 	}
 
 }

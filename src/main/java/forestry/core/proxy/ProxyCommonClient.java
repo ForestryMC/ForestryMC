@@ -18,7 +18,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.MinecraftForge;
@@ -27,6 +29,7 @@ import org.lwjgl.input.Keyboard;
 
 import forestry.core.TickHandlerCoreClient;
 import forestry.core.multiblock.MultiblockClientTickHandler;
+import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.worldgen.WorldGenerator;
 
 public class ProxyCommonClient extends ProxyCommon {
@@ -74,41 +77,27 @@ public class ProxyCommonClient extends ProxyCommon {
 	}
 
 	@Override
-	public void playSoundFX(World world, BlockPos pos, IBlockState state) {
-		Block block = state.getBlock();
-		if (!world.isRemote) {
-			super.playSoundFX(world, pos, state);
-		} else {
-			playSoundFX(world, pos, block.stepSound.getStepSound(), block.stepSound.getVolume(), block.stepSound.getFrequency());
-		}
-	}
-
-	@Override
 	public void playBlockBreakSoundFX(World world, BlockPos pos, IBlockState state) {
 		Block block = state.getBlock();
-		if (!world.isRemote) {
-			super.playSoundFX(world, pos, state);
-		} else {
-			playSoundFX(world, pos, block.stepSound.getBreakSound(), block.stepSound.getVolume() / 4, block.stepSound.getFrequency());
-		}
+		playSoundFX(world, pos, block.getSoundType().getBreakSound(), SoundCategory.BLOCKS, block.getSoundType().getVolume() / 4, block.getSoundType().getPitch());
 	}
 
 	@Override
 	public void playBlockPlaceSoundFX(World world, BlockPos pos, IBlockState state) {
 		Block block = state.getBlock();
-		if (!world.isRemote) {
-			super.playSoundFX(world, pos, state);
-		} else {
-			playSoundFX(world, pos, block.stepSound.getStepSound(), block.stepSound.getVolume() / 4, block.stepSound.getFrequency());
-		}
+		playSoundFX(world, pos, block.getSoundType().getStepSound(), SoundCategory.BLOCKS, block.getSoundType().getVolume() / 4, block.getSoundType().getPitch());
 	}
 
 	@Override
-	public void playSoundFX(World world, BlockPos pos, String sound, float volume, float pitch) {
+	public void sendFXSignal(PacketFXSignal.VisualFXType visualFX, PacketFXSignal.SoundFXType soundFX, World world, BlockPos pos, IBlockState state) {
+	}
+
+	@Override
+	public void playSoundFX(World world, BlockPos pos, SoundEvent sound, SoundCategory soundCategory, float volume, float pitch) {
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();
-		world.playSound(x + 0.5, y + 0.5, z + 0.5, sound, volume, (1.0f + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.2f) * 0.7f, false);
+		world.playSound(x + 0.5, y + 0.5, z + 0.5, sound, soundCategory, volume, pitch, false);
 	}
 
 	@Override

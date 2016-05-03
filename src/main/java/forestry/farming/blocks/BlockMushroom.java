@@ -14,18 +14,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
+import net.minecraft.block.BlockDirt;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenBigMushroom;
@@ -58,16 +58,16 @@ public class BlockMushroom extends BlockBush implements IItemModelRegister, IGro
 
 	public BlockMushroom() {
 		setHardness(0.0f);
-		this.generators = new WorldGenerator[]{new WorldGenBigMushroom(Blocks.brown_mushroom_block), new WorldGenBigMushroom(Blocks.red_mushroom_block)};
-		this.drops = new ItemStack[]{new ItemStack(Blocks.brown_mushroom), new ItemStack(Blocks.red_mushroom)};
+		this.generators = new WorldGenerator[]{new WorldGenBigMushroom(Blocks.BROWN_MUSHROOM_BLOCK), new WorldGenBigMushroom(Blocks.RED_MUSHROOM_BLOCK)};
+		this.drops = new ItemStack[]{new ItemStack(Blocks.BROWN_MUSHROOM), new ItemStack(Blocks.RED_MUSHROOM)};
 		setCreativeTab(null);
 		setDefaultState(this.blockState.getBaseState().withProperty(MUSHROOM, MushroomType.BROWN));
 		setTickRandomly(true);
 	}
 	
 	@Override
-	protected BlockState createBlockState() {
-		return new BlockState(this, MUSHROOM);
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, MUSHROOM);
 	}
 
 	@Override
@@ -88,7 +88,7 @@ public class BlockMushroom extends BlockBush implements IItemModelRegister, IGro
 	// / DROPS
 	@Override
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-		ArrayList<ItemStack> ret = new ArrayList<>();
+		List<ItemStack> ret = new ArrayList<>();
 
 		MushroomType type = getTypeFromMeta(state.getBlock().getMetaFromState(state));
 
@@ -98,8 +98,23 @@ public class BlockMushroom extends BlockBush implements IItemModelRegister, IGro
 	}
 
 	@Override
-	protected boolean canPlaceBlockOn(Block block) {
-		return block == Blocks.mycelium;
+	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
+		return super.canPlaceBlockAt(worldIn, pos) && this.canBlockStay(worldIn, pos, this.getDefaultState());
+	}
+
+	@Override
+	protected boolean canSustainBush(IBlockState state) {
+		return state.isFullBlock();
+	}
+
+	@Override
+	public boolean canBlockStay(World worldIn, BlockPos pos, IBlockState state) {
+		if (pos.getY() >= 0 && pos.getY() < 256) {
+			IBlockState iblockstate = worldIn.getBlockState(pos.down());
+			return iblockstate.getBlock() == Blocks.MYCELIUM || (iblockstate.getBlock() == Blocks.DIRT && iblockstate.getValue(BlockDirt.VARIANT) == BlockDirt.DirtType.PODZOL || worldIn.getLight(pos) < 13 && iblockstate.getBlock().canSustainPlant(iblockstate, worldIn, pos.down(), net.minecraft.util.EnumFacing.UP, this));
+		} else {
+			return false;
+		}
 	}
 	
 	@Override

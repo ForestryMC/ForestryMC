@@ -15,14 +15,15 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -48,14 +49,14 @@ public class BlockSolidCocoon extends Block implements ITileEntityProvider, ISta
 		setHarvestLevel("scoop", 0);
 		setHardness(0.5F);
 		setTickRandomly(true);
-		setStepSound(soundTypeGrass);
+		setSoundType(SoundType.GROUND);
 		setCreativeTab(null);
 		setDefaultState(this.blockState.getBaseState().withProperty(COCOON, AlleleButterflyCocoon.cocoonDefault).withProperty(AlleleButterflyCocoon.AGE, 0));
 	}
 	
 	@Override
-	protected BlockState createBlockState() {
-		return new BlockState(this, COCOON, AlleleButterflyCocoon.AGE);
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, COCOON, AlleleButterflyCocoon.AGE);
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -82,17 +83,17 @@ public class BlockSolidCocoon extends Block implements ITileEntityProvider, ISta
 	}
 
 	@Override
-	public boolean isFullCube(){
-        return false;
-    }
+	public boolean isFullBlock(IBlockState state) {
+		return false;
+	}
 
-    @Override
-	public boolean isOpaqueCube(){
-        return false;
-    }
-	
 	@Override
-	public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+	public boolean isOpaqueCube(IBlockState state) {
+		return false;
+	}
+
+	@Override
+	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
 		if (canHarvestBlock(world, pos, player)) {
 			TileEntity tile = world.getTileEntity(pos);
 
@@ -125,7 +126,7 @@ public class BlockSolidCocoon extends Block implements ITileEntityProvider, ISta
     @Override
     public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock) {
     	IBlockState stateUp = worldIn.getBlockState(pos.up());
-    	if(stateUp.getBlock().isAir(worldIn, pos.up())){
+    	if(stateUp.getBlock().isAir(stateUp, worldIn, pos.up())){
     		worldIn.setBlockToAir(pos);
     	}
     }
@@ -134,17 +135,17 @@ public class BlockSolidCocoon extends Block implements ITileEntityProvider, ISta
     public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
     	return Collections.emptyList();
     }
-    
-    @Override
-    public AxisAlignedBB getSelectedBoundingBox(World world, BlockPos pos) {
-    	setBlockBounds(0.3125F, 0.3125F, 0.3125F, 0.6875F, 1F, 0.6875F);
-    	return super.getSelectedBoundingBox(world, pos);
-    }
-    
-    @Override
-    public AxisAlignedBB getCollisionBoundingBox(World world, BlockPos pos, IBlockState state) {
-    	setBlockBounds(0.3125F, 0.3125F, 0.3125F, 0.6875F, 1F, 0.6875F);
-    	return super.getCollisionBoundingBox(world, pos, state);
-    }
+
+	@Override
+	public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World worldIn, BlockPos pos) {
+		setBlockBounds(0.3125F, 0.3125F, 0.3125F, 0.6875F, 1F, 0.6875F);
+		return super.getSelectedBoundingBox(state, worldIn, pos);
+	}
+
+	@Override
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
+		setBlockBounds(0.3125F, 0.3125F, 0.3125F, 0.6875F, 1F, 0.6875F);
+		return super.getCollisionBoundingBox(blockState, worldIn, pos);
+	}
     
 }

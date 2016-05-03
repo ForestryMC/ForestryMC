@@ -2,7 +2,7 @@ package forestry.core.utils;
 
 import java.util.IllegalFormatException;
 
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 
 public class Translator {
 	private Translator() {
@@ -10,15 +10,15 @@ public class Translator {
 	}
 
 	public static String translateToLocal(String key) {
-		if (StatCollector.canTranslate(key)) {
-			return StatCollector.translateToLocal(key);
+		if (I18n.canTranslate(key)) {
+			return I18n.translateToLocal(key);
 		} else {
-			return StatCollector.translateToFallback(key);
+			return I18n.translateToFallback(key);
 		}
 	}
 
 	public static boolean canTranslateToLocal(String key) {
-		return StatCollector.canTranslate(key);
+		return I18n.canTranslate(key);
 	}
 
 	public static String translateToLocalFormatted(String key, Object... format) {

@@ -14,9 +14,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.potion.Potion;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.Vec3;
+import net.minecraft.init.MobEffects;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.Vec3d;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeChromosome;
@@ -59,8 +59,8 @@ public abstract class AlleleEffect extends AlleleCategorized implements IAlleleB
 				effectNone = new AlleleEffectNone("none", true),
 				effectAggressive = new AlleleEffectAggressive(),
 				effectHeroic = new AlleleEffectHeroic(),
-				effectBeatific = new AlleleEffectPotion("beatific", false, Potion.regeneration, 100),
-				effectMiasmic = new AlleleEffectPotion("miasmic", false, Potion.poison, 600, 100, 0.1f),
+				effectBeatific = new AlleleEffectPotion("beatific", false, MobEffects.REGENERATION, 100),
+				effectMiasmic = new AlleleEffectPotion("miasmic", false, MobEffects.POISON, 600, 100, 0.1f),
 				effectMisanthrope = new AlleleEffectMisanthrope(),
 				effectGlacial = new AlleleEffectGlacial(),
 				effectRadioactive = new AlleleEffectRadioactive(),
@@ -69,7 +69,7 @@ public abstract class AlleleEffect extends AlleleCategorized implements IAlleleB
 				effectExploration = new AlleleEffectExploration(),
 				effectFestiveEaster = new AlleleEffectNone("festiveEaster", true),
 				effectSnowing = new AlleleEffectSnowing(),
-				effectDrunkard = new AlleleEffectPotion("drunkard", false, Potion.confusion, 100),
+				effectDrunkard = new AlleleEffectPotion("drunkard", false, MobEffects.NAUSEA, 100),
 				effectReanimation = new AlleleEffectResurrection("reanimation", AlleleEffectResurrection.getReanimationList()),
 				effectResurrection = new AlleleEffectResurrection("resurrection", AlleleEffectResurrection.getResurrectionList()),
 				effectRepulsion = new AlleleEffectRepulsion(),
@@ -103,7 +103,7 @@ public abstract class AlleleEffect extends AlleleCategorized implements IAlleleB
 
 	@Override
 	public IEffectData doFX(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
-		Vec3 beeFXCoordinates = housing.getBeeFXCoordinates();
+		Vec3d beeFXCoordinates = housing.getBeeFXCoordinates();
 		Proxies.render.addBeeHiveFX(housing.getWorld(), beeFXCoordinates.xCoord, beeFXCoordinates.yCoord, beeFXCoordinates.zCoord, genome.getPrimary().getSpriteColour(0));
 		return storedData;
 	}
@@ -139,7 +139,7 @@ public abstract class AlleleEffect extends AlleleCategorized implements IAlleleB
 		Vect min = new Vect(housing.getCoordinates()).add(offset);
 		Vect max = min.add(area);
 
-		return AxisAlignedBB.fromBounds(min.getX(), min.getY(), min.getZ(), max.getX(), max.getY(), max.getZ());
+		return new AxisAlignedBB(min.getX(), min.getY(), min.getZ(), max.getX(), max.getY(), max.getZ());
 	}
 
 	public static <T extends Entity> List<T> getEntitiesInRange(IBeeGenome genome, IBeeHousing housing, Class<T> entityClass) {

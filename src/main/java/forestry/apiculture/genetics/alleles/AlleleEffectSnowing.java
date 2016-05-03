@@ -13,7 +13,7 @@ package forestry.apiculture.genetics.alleles;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
@@ -70,7 +70,7 @@ public class AlleleEffectSnowing extends AlleleEffectThrottled {
 					world.setBlockState(posBlock, block.getStateFromMeta(meta + 1), Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
 				}
 			} else if (block.isReplaceable(world, posBlock)) {
-				world.setBlockState(posBlock, Blocks.snow_layer.getStateFromMeta(0), Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
+				world.setBlockState(posBlock, Blocks.snow_layer.getDefaultState(), Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
 			}
 		}
 

@@ -70,7 +70,7 @@ public class HabitatSlot extends Widget {
 				GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
 			}
 
-			Proxies.render.bindTexture(TextureMap.locationBlocksTexture);
+			Proxies.render.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 			manager.gui.drawTexturedModalRect(startX + xPos, startY + yPos, getIcon(), 16, 16);
 		}
 	}

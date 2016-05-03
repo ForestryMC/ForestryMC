@@ -17,7 +17,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.BlockPos;
+import net.minecraft.server.management.UserListOpsEntry;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.MinecraftForge;
@@ -54,7 +57,8 @@ public class ProxyCommon {
 
 	public boolean isOp(EntityPlayer player) {
 		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
-		return server.getConfigurationManager().canSendCommands(player.getGameProfile());
+		UserListOpsEntry userlistopsentry = server.getPlayerList().getOppedPlayers().getEntry(player.getGameProfile());
+		return userlistopsentry.getPermissionLevel() >= server.getOpPermissionLevel();
 	}
 
 	public double getBlockReachDistance(EntityPlayer entityplayer) {
@@ -65,11 +69,7 @@ public class ProxyCommon {
 		return false;
 	}
 
-	public void playSoundFX(World world, BlockPos pos, IBlockState state) {
-		Proxies.net.sendNetworkPacket(new PacketFXSignal(PacketFXSignal.SoundFXType.LEAF, pos, state), world);
-	}
-
-	public void playSoundFX(World world, BlockPos pos, String sound, float volume, float pitch) {
+	public void playSoundFX(World world, BlockPos pos, SoundEvent sound, SoundCategory soundCategory, float volume, float pitch) {
 	}
 
 	public void addBlockDestroyEffects(World world, BlockPos pos, IBlockState state) {
@@ -87,9 +87,7 @@ public class ProxyCommon {
 	}
 
 	public void sendFXSignal(PacketFXSignal.VisualFXType visualFX, PacketFXSignal.SoundFXType soundFX, World world, BlockPos pos, IBlockState state) {
-		if (!world.isRemote) {
-			Proxies.net.sendNetworkPacket(new PacketFXSignal(visualFX, soundFX, pos, state), world);
-		}
+		Proxies.net.sendNetworkPacket(new PacketFXSignal(visualFX, soundFX, pos, state), world);
 	}
 
 	public World getRenderWorld() {

@@ -11,7 +11,7 @@
 package forestry.core.utils.vect;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 
 import forestry.api.farming.FarmDirection;
@@ -19,6 +19,7 @@ import forestry.api.farming.FarmDirection;
 /**
  * Represents a position or dimensions.
  */
+@Deprecated
 public abstract class IVect extends BlockPos {
 	
 	public IVect(int x, int y, int z) {

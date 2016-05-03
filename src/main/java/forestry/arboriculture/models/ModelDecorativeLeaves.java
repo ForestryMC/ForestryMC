@@ -14,10 +14,10 @@ import javax.annotation.Nonnull;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
 import net.minecraftforge.common.property.IExtendedBlockState;
@@ -39,39 +39,38 @@ public class ModelDecorativeLeaves extends ModelBlockOverlay<BlockDecorativeLeav
 		super(BlockDecorativeLeaves.class);
 	}
 
-	@Override
-	public IBakedModel handleBlockState(IBlockState state) {
-		IModelBaker baker = new ModelBaker();
-
-		Block block = state.getBlock();
-		if (!blockClass.isInstance(block)) {
-			return null;
-		}
-		BlockDecorativeLeaves bBlock = blockClass.cast(block);
-		TreeDefinition tree = state.getValue(bBlock.getVariant());
-
-		baker.setRenderBoundsFromBlock(block);
-		bakeBlock(bBlock, tree, baker);
-
-		return latestBlockModel = baker.bakeModel(false);
-	}
-
-	@Override
-	public IBakedModel handleItemState(ItemStack stack) {
-		IModelBaker baker = new ModelBaker();
-		Block block = Block.getBlockFromItem(stack.getItem());
-		if (!blockClass.isInstance(block)) {
-			return null;
-		}
-		BlockDecorativeLeaves bBlock = blockClass.cast(block);
-		TreeDefinition tree = bBlock.getTreeType(stack.getMetadata());
-
-		block.setBlockBoundsForItemRender();
-		baker.setRenderBoundsFromBlock(block);
-		bakeBlock(bBlock, tree, baker);
-
-		return latestItemModel = baker.bakeModel(true);
-	}
+//	@Override
+//	public IBakedModel handleBlockState(IBlockState state) {
+//		IModelBaker baker = new ModelBaker();
+//
+//		Block block = state.getBlock();
+//		if (!blockClass.isInstance(block)) {
+//			return null;
+//		}
+//		BlockDecorativeLeaves bBlock = blockClass.cast(block);
+//		TreeDefinition tree = state.getValue(bBlock.getVariant());
+//
+//		baker.setRenderBoundsFromBlock(block);
+//		bakeBlock(bBlock, tree, baker);
+//
+//		return latestBlockModel = baker.bakeModel(false);
+//	}
+//
+//	@Override
+//	public IBakedModel handleItemState(ItemStack stack) {
+//		IModelBaker baker = new ModelBaker();
+//		Block block = Block.getBlockFromItem(stack.getItem());
+//		if (!blockClass.isInstance(block)) {
+//			return null;
+//		}
+//		BlockDecorativeLeaves bBlock = blockClass.cast(block);
+//		TreeDefinition tree = bBlock.getTreeType(stack.getMetadata());
+//
+//		baker.setRenderBoundsFromBlock(block);
+//		bakeBlock(bBlock, tree, baker);
+//
+//		return latestItemModel = baker.bakeModel(true);
+//	}
 
 	@Override
 	protected void bakeInventoryBlock(@Nonnull BlockDecorativeLeaves block, @Nonnull ItemStack item, @Nonnull IModelBaker baker) {

@@ -18,18 +18,19 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.IGrowable;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -73,10 +74,10 @@ public class BlockSoil extends Block implements IItemModelRegister, IBlockWithMe
 	private static final int degradeDelimiter = 3;
 
 	public BlockSoil() {
-		super(Material.sand);
+		super(Material.GROUND);
 		setTickRandomly(true);
 		setHardness(0.5f);
-		setStepSound(soundTypeGrass);
+		setSoundType(SoundType.GROUND);
 		setCreativeTab(CreativeTabForestry.tabForestry);
 	}
 	
@@ -91,8 +92,8 @@ public class BlockSoil extends Block implements IItemModelRegister, IBlockWithMe
 	}
 
 	@Override
-	protected BlockState createBlockState() {
-		return new BlockState(this, SOIL);
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, SOIL);
 	}
 
 	@Override
@@ -108,19 +109,14 @@ public class BlockSoil extends Block implements IItemModelRegister, IBlockWithMe
 
 		if (type == SoilType.PEAT) {
 			ret.add(PluginCore.items.peat.getItemStack());
-			ret.add(new ItemStack(Blocks.dirt));
+			ret.add(new ItemStack(Blocks.DIRT));
 		} else if (type == SoilType.HUMUS) {
-			ret.add(new ItemStack(Blocks.dirt));
+			ret.add(new ItemStack(Blocks.DIRT));
 		} else {
 			ret.add(new ItemStack(this, 1, SoilType.BOG_EARTH.ordinal()));
 		}
 
 		return ret;
-	}
-
-	@Override
-	public int getDamageValue(World world, BlockPos pos) {
-		return getMetaFromState(world.getBlockState(pos)) & 0x03;
 	}
 
 	@Override
@@ -188,11 +184,11 @@ public class BlockSoil extends Block implements IItemModelRegister, IBlockWithMe
 		meta = grade << 2 | type;
 
 		if (grade >= degradeDelimiter) {
-			world.setBlockState(pos, Blocks.sand.getStateFromMeta(0), Constants.FLAG_BLOCK_SYNCH);
+			world.setBlockState(pos, Blocks.SAND.getDefaultState(), Constants.FLAG_BLOCK_SYNCH);
 		} else {
 			world.setBlockState(pos, BlockUtil.getBlock(world, pos).getStateFromMeta(meta), Constants.FLAG_BLOCK_SYNCH);
 		}
-		world.markBlockForUpdate(pos);
+		world.markBlockRangeForRenderUpdate(pos, pos);
 	}
 
 	private static boolean isMoistened(World world, BlockPos pos) {
@@ -200,7 +196,7 @@ public class BlockSoil extends Block implements IItemModelRegister, IBlockWithMe
 		for (int i = -2; i < 3; i++) {
 			for (int j = -2; j < 3; j++) {
 				Block block = world.getBlockState(new BlockPos(pos.getX() + i, pos.getY(), pos.getZ() + j)).getBlock();
-				if (block == Blocks.water || block == Blocks.flowing_water) {
+				if (block == Blocks.WATER || block == Blocks.FLOWING_WATER) {
 					return true;
 				}
 			}
@@ -230,13 +226,14 @@ public class BlockSoil extends Block implements IItemModelRegister, IBlockWithMe
 		maturity++;
 
 		meta = maturity << 2 | type;
-		world.setBlockState(pos, BlockUtil.getBlock(world, pos).getStateFromMeta(meta), Constants.FLAG_BLOCK_SYNCH);
-		world.markBlockForUpdate(pos);
+		Block block = BlockUtil.getBlock(world, pos);
+		world.setBlockState(pos, block.getStateFromMeta(meta), Constants.FLAG_BLOCK_SYNCH);
+		world.markBlockRangeForRenderUpdate(pos, pos);
 	}
 
 	@Override
-	public boolean canSustainPlant(IBlockAccess world, BlockPos pos, EnumFacing direction, IPlantable plant) {
-		EnumPlantType plantType = plant.getPlantType(world, pos);
+	public boolean canSustainPlant(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing direction, IPlantable plantable) {
+		EnumPlantType plantType = plantable.getPlantType(world, pos);
 		if (plantType != EnumPlantType.Crop && plantType != EnumPlantType.Plains) {
 			return false;
 		}

@@ -12,12 +12,13 @@
  */
 package forestry.mail.commands;
 
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ChatStyle;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 import forestry.api.mail.ITradeStation;
@@ -48,7 +49,7 @@ public class CommandMail extends SubCommand {
 		}
 
 		@Override
-		public void processSubCommand(ICommandSender sender, String[] args) {
+		public void executeSubCommand(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 			if (!(sender instanceof EntityPlayer)) {
 				return;
 			}
@@ -58,7 +59,7 @@ public class CommandMail extends SubCommand {
 		}
 
 		private static String makeTradeListEntry(ITradeStationInfo info) {
-			EnumChatFormatting formatting = info.getState().isOk() ? EnumChatFormatting.GREEN : EnumChatFormatting.RED;
+			TextFormatting formatting = info.getState().isOk() ? TextFormatting.GREEN : TextFormatting.RED;
 
 			String tradegood = "[ ? ]";
 			if (info.getTradegood() != null) {
@@ -85,24 +86,24 @@ public class CommandMail extends SubCommand {
 		}
 
 		@Override
-		public void processSubCommand(ICommandSender sender, String[] args) throws WrongUsageException {
+		public void executeSubCommand(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 			if (args.length != 1) {
 				CommandHelpers.throwWrongUsage(sender, this);
 			}
 
-			World world = CommandHelpers.getWorld(sender, this);
+			World world = sender.getEntityWorld();
 			MailAddress address = new MailAddress(args[0]);
 			ITradeStation trade = PostManager.postRegistry.getTradeStation(world, address);
 			if (trade == null) {
-				ChatStyle red = new ChatStyle();
-				red.setColor(EnumChatFormatting.RED);
+				Style red = new Style();
+				red.setColor(TextFormatting.RED);
 				CommandHelpers.sendLocalizedChatMessage(sender, red, "for.chat.command.forestry.mail.virtualize.no_tradestation", args[0]);
 				return;
 			}
 
 			trade.setVirtual(!trade.isVirtual());
-			ChatStyle green = new ChatStyle();
-			green.setColor(EnumChatFormatting.GREEN);
+			Style green = new Style();
+			green.setColor(TextFormatting.GREEN);
 			CommandHelpers.sendLocalizedChatMessage(sender, green, "for.chat.command.forestry.mail.virtualize.set", trade.getAddress().getName(), trade.isVirtual());
 		}
 	}

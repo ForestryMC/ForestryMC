@@ -10,18 +10,20 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
@@ -31,6 +33,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmLogic;
+import forestry.arboriculture.blocks.BlockFruitPod;
 import forestry.core.config.Constants;
 import forestry.core.entities.EntitySelector;
 import forestry.core.utils.BlockUtil;
@@ -58,7 +61,7 @@ public abstract class FarmLogic implements IFarmLogic {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public ResourceLocation getTextureMap() {
-		return TextureMap.locationBlocksTexture;
+		return TextureMap.LOCATION_BLOCKS_TEXTURE;
 	}
 	
 	@Override
@@ -77,12 +80,13 @@ public abstract class FarmLogic implements IFarmLogic {
 
 	public abstract boolean isAcceptedWindfall(ItemStack stack);
 
-	protected final boolean isAirBlock(Block block) {
-		return block.getMaterial() == Material.air;
+	@Deprecated
+	protected final boolean isAirBlock(@Nonnull Block block, @Nonnull IBlockState blockState, @Nonnull World world, @Nonnull BlockPos blockPos) {
+		return block.isAir(blockState, world, blockPos);
 	}
 
 	protected final boolean isWaterSourceBlock(World world, Vect position) {
-		return BlockUtil.getBlock(world, position) == Blocks.water &&
+		return BlockUtil.getBlock(world, position) == Blocks.WATER &&
 				BlockUtil.getBlockMetadata(world, position) == 0;
 	}
 
@@ -111,7 +115,7 @@ public abstract class FarmLogic implements IFarmLogic {
 			maxY = getWorld().getHeight();
 		}
 
-		return AxisAlignedBB.fromBounds(min.getX(), min.getY(), min.getZ(), max.getX(), maxY, max.getZ());
+		return new AxisAlignedBB(min.getX(), min.getY(), min.getZ(), max.getX(), maxY, max.getZ());
 	}
 
 	protected List<ItemStack> collectEntityItems(boolean toWorldHeight) {

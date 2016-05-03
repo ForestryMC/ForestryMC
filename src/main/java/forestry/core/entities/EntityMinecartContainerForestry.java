@@ -10,13 +10,14 @@
  ******************************************************************************/
 package forestry.core.entities;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 
 import forestry.core.inventory.IInventoryAdapter;
@@ -69,9 +70,9 @@ public abstract class EntityMinecartContainerForestry extends EntityMinecartFore
 	}
 
 	@Override
-	public void travelToDimension(int dimensionId) {
-		dropContentsWhenDead = false;
-		super.travelToDimension(dimensionId);
+	public Entity changeDimension(int dimensionIn) {
+		this.dropContentsWhenDead = false;
+		return super.changeDimension(dimensionIn);
 	}
 
 	/* IInventory */
@@ -121,7 +122,7 @@ public abstract class EntityMinecartContainerForestry extends EntityMinecartFore
 	}
 	
 	@Override
-	public IChatComponent getDisplayName() {
+	public ITextComponent getDisplayName() {
 		return getInternalInventory().getDisplayName();
 	}
 	

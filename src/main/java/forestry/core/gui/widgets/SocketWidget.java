@@ -14,12 +14,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 
 import forestry.core.circuits.ISocketable;
 import forestry.core.circuits.ISolderingIron;
 import forestry.core.circuits.ItemCircuitBoard;
-import forestry.core.gui.GuiForestry;
 import forestry.core.gui.IContainerSocketed;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.proxy.Proxies;
@@ -40,7 +39,7 @@ public class SocketWidget extends Widget {
 	public void draw(int startX, int startY) {
 		ItemStack socketStack = tile.getSocket(slot);
 		if (socketStack != null) {
-			GuiForestry.getItemRenderer().renderItemIntoGUI(socketStack, startX + xPos, startY + yPos);
+			Proxies.common.getClientInstance().getRenderItem().renderItemIntoGUI(socketStack, startX + xPos, startY + yPos);
 		}
 	}
 
@@ -57,7 +56,7 @@ public class SocketWidget extends Widget {
 			if (stack != null) {
 				EntityPlayer player = Proxies.common.getClientInstance().thePlayer;
 				toolTip.add(stack.getTooltip(player, false));
-				toolTip.add(EnumChatFormatting.ITALIC + Translator.translateToLocal("for.gui.socket.remove"));
+				toolTip.add(TextFormatting.ITALIC + Translator.translateToLocal("for.gui.socket.remove"));
 			} else {
 				toolTip.add(Translator.translateToLocal("for.gui.emptysocket"));
 			}

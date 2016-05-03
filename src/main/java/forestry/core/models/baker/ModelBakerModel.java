@@ -11,52 +11,47 @@
 package forestry.core.models.baker;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.block.model.ItemTransformVec3f;
+import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MathHelper;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import org.lwjgl.util.vector.Vector3f;
 
 import forestry.api.core.IModelBakerModel;
 
 @SideOnly(Side.CLIENT)
 public class ModelBakerModel implements IModelBakerModel {
-	private List<BakedQuad>[] faces = new List[6];
-	private List<BakedQuad> general;
+	private final List<IBakedModel> models;
 	private boolean isGui3d;
 	private boolean isAmbientOcclusion;
-	private VertexFormat formate;
+	private VertexFormat format;
 	private TextureAtlasSprite particleSprite;
 	private float[] rotation = getDefaultRotation();
 	private float[] translation = getDefaultTranslation();
 	private float[] scale = getDefaultScale();
 
 	public ModelBakerModel() {
-		general = new ArrayList<>();
-		for (EnumFacing f : EnumFacing.VALUES) {
-			faces[f.ordinal()] = new ArrayList<>();
-		}
-		formate = DefaultVertexFormats.BLOCK;
+		models = new ArrayList<>();
+		format = DefaultVertexFormats.BLOCK;
 		isGui3d = true;
 		isAmbientOcclusion = false;
 	}
 
-	private ModelBakerModel(List<BakedQuad> general, List<BakedQuad>[] faces, boolean isGui3d, boolean isAmbientOcclusion, VertexFormat formate, float[] rotation, float[] translation, float[] scale, TextureAtlasSprite particleSprite) {
-		this.general = general;
-		this.faces = faces;
+	private ModelBakerModel(List<IBakedModel> models, boolean isGui3d, boolean isAmbientOcclusion, VertexFormat format, float[] rotation, float[] translation, float[] scale, TextureAtlasSprite particleSprite) {
+		this.models = models;
 		this.isGui3d = isGui3d;
 		this.isAmbientOcclusion = isAmbientOcclusion;
-		this.formate = formate;
+		this.format = format;
 		this.rotation = rotation;
 		this.translation = translation;
 		this.scale = scale;
@@ -94,40 +89,18 @@ public class ModelBakerModel implements IModelBakerModel {
 	}
 	
 	@Override
-	public VertexFormat getFormat() {
-		return formate;
-	}
-	
-	@Override
-	public void setFormat(VertexFormat formate) {
-		this.formate = formate;
-	}
-	
-	@Override
 	public boolean isBuiltInRenderer() {
 		return false;
 	}
 
 	@Override
 	public ItemCameraTransforms getItemCameraTransforms() {
-		return getTransform();
+		return ItemCameraTransforms.DEFAULT;
 	}
 
-	public ItemCameraTransforms getTransform() {
-		Vector3f rotation = new Vector3f(getRotation()[0], getRotation()[1], getRotation()[2]);
-		Vector3f translation = new Vector3f(getTranslation()[0], getTranslation()[1], getTranslation()[2]);
-		translation.scale(0.0625F);
-		MathHelper.clamp_double(translation.x, -1.5D, 1.5D);
-		MathHelper.clamp_double(translation.y, -1.5D, 1.5D);
-		MathHelper.clamp_double(translation.z, -1.5D, 1.5D);
-		Vector3f scale = new Vector3f(getScale()[0], getScale()[1], getScale()[2]);
-		MathHelper.clamp_double(scale.x, -1.5D, 1.5D);
-		MathHelper.clamp_double(scale.y, -1.5D, 1.5D);
-		MathHelper.clamp_double(scale.z, -1.5D, 1.5D);
-
-		new ItemTransformVec3f(rotation, translation, scale);
-		ItemTransformVec3f transformV = new ItemTransformVec3f(rotation, translation, scale);
-		return new ItemCameraTransforms(transformV, ItemCameraTransforms.DEFAULT.firstPerson, ItemCameraTransforms.DEFAULT.head, ItemCameraTransforms.DEFAULT.gui, ItemCameraTransforms.DEFAULT.ground, ItemCameraTransforms.DEFAULT.fixed);
+	@Override
+	public ItemOverrideList getOverrides() {
+		return ItemOverrideList.NONE;
 	}
 
 	public static float[] getDefaultRotation() {
@@ -172,17 +145,26 @@ public class ModelBakerModel implements IModelBakerModel {
 		return scale;
 	}
 
-	@Override
-	public List<BakedQuad> getGeneralQuads() {
-		return general;
+	public void addModelQuads(IBakedModel model) {
+		this.models.add(model);
 	}
 
 	@Override
-	public List<BakedQuad> getFaceQuads(EnumFacing face) {
-		return faces[face.ordinal()];
+	public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
+		List<BakedQuad> quads = new ArrayList<>();
+		if (side == null) {
+			for (IBakedModel model : this.models) {
+				quads.addAll(model.getQuads(state, null, rand));
+			}
+		} else {
+			for (IBakedModel model : this.models) {
+				quads.addAll(model.getQuads(state, side, rand));
+			}
+		}
+		return quads;
 	}
 
 	public ModelBakerModel copy() {
-		return new ModelBakerModel(general, faces, isGui3d, isAmbientOcclusion, formate, rotation, translation, scale, particleSprite);
+		return new ModelBakerModel(models, isGui3d, isAmbientOcclusion, format, rotation, translation, scale, particleSprite);
 	}
 }

@@ -10,11 +10,14 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import net.minecraft.client.resources.model.ModelBakery;
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.model.ModelBakery;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
 import net.minecraftforge.client.model.ModelLoader;
@@ -45,19 +48,19 @@ public class ItemCrated extends ItemForestry {
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-		if (!world.isRemote) {
-			if (contained == null || itemstack.stackSize == 0) {
-				return itemstack;
+	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+		if (!worldIn.isRemote) {
+			if (contained == null || itemStackIn.stackSize == 0) {
+				return ActionResult.newResult(EnumActionResult.PASS, itemStackIn);
 			}
 
-			itemstack.stackSize--;
+			itemStackIn.stackSize--;
 
 			ItemStack dropStack = contained.copy();
 			dropStack.stackSize = 9;
-			ItemStackUtil.dropItemStackAsEntity(dropStack, world, entityplayer.posX, entityplayer.posY, entityplayer.posZ, 40);
+			ItemStackUtil.dropItemStackAsEntity(dropStack, worldIn, playerIn.posX, playerIn.posY, playerIn.posZ, 40);
 		}
-		return itemstack;
+		return ActionResult.newResult(EnumActionResult.SUCCESS, itemStackIn);
 	}
 
 	@Override
@@ -83,13 +86,14 @@ public class ItemCrated extends ItemForestry {
 			ModelBakery.registerItemVariants(item, modelLocation);
 		}
 	}
-	
-	@Override
-	public int getColorFromItemStack(ItemStack stack, int renderPass) {
-		if (getContained() == null || renderPass == 100) {
-			return super.getColorFromItemStack(stack, renderPass);
-		}
-		return getContained().getItem().getColorFromItemStack(getContained(), renderPass);
-	}
+
+	// TODO: crate rendering
+//	@Override
+//	public int getColorFromItemStack(ItemStack stack, int renderPass) {
+//		if (getContained() == null || renderPass == 100) {
+//			return super.getColorFromItemStack(stack, renderPass);
+//		}
+//		return getContained().getItem().getColorFromItemStack(getContained(), renderPass);
+//	}
 
 }

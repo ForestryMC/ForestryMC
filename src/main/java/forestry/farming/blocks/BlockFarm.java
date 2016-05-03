@@ -16,9 +16,9 @@ import java.util.List;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -26,10 +26,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumWorldBlockLayer;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -60,7 +60,7 @@ public class BlockFarm extends BlockStructure {
 	public static final PropertyEnum<EnumFarmBlockType> META = PropertyEnum.create("meta", EnumFarmBlockType.class);
 	
 	public BlockFarm() {
-		super(Material.rock);
+		super(Material.ROCK);
 		setHardness(1.0f);
 		setHarvestLevel("pickaxe", 0);
 		setDefaultState(blockState.getBaseState().withProperty(META, EnumFarmBlockType.PLAIN));
@@ -85,7 +85,7 @@ public class BlockFarm extends BlockStructure {
 	}
 
 	@Override
-	protected BlockState createBlockState() {
+	protected BlockStateContainer createBlockState() {
 		return new ExtendedBlockState(this, new IProperty[]{META},
 				new IUnlistedProperty[]{UnlistedBlockPos.POS, UnlistedBlockAccess.BLOCKACCESS});
 	}
@@ -107,12 +107,12 @@ public class BlockFarm extends BlockStructure {
 			}
 		}
 	}
-	
+
 	@Override
-	public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos, EntityPlayer player) {
+	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
 		List<ItemStack> drops = getDrops(world, pos, BlockUtil.getBlockState(world, pos), 0);
 		if (drops.isEmpty()) {
-			return super.getPickBlock(target, world, pos, player);
+			return super.getPickBlock(state, target, world, pos, player);
 		}
 		return drops.get(0);
 	}
@@ -131,7 +131,6 @@ public class BlockFarm extends BlockStructure {
 	
 	@Override
 	public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-		int meta = BlockUtil.getBlockMetadata(world, pos);
 		if (!world.isRemote && canHarvestBlock(world, pos, player)) {
 			List<ItemStack> drops = getDrops(world, pos, BlockUtil.getBlockState(world, pos), 0);
 			for (ItemStack drop : drops) {
@@ -159,12 +158,6 @@ public class BlockFarm extends BlockStructure {
 	}
 
 	@Override
-	public int getDamageValue(World world, BlockPos pos) {
-		int meta = getMetaFromState(world.getBlockState(pos));
-		return meta != 1 ? meta : 0;
-	}
-
-	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
 		switch (meta) {
 			case 2:
@@ -183,8 +176,8 @@ public class BlockFarm extends BlockStructure {
 	/* MODELS */
 	@Override
 	@SideOnly(Side.CLIENT)
-	public EnumWorldBlockLayer getBlockLayer() {
-		return EnumWorldBlockLayer.CUTOUT;
+	public BlockRenderLayer getBlockLayer() {
+		return BlockRenderLayer.CUTOUT;
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -199,8 +192,9 @@ public class BlockFarm extends BlockStructure {
 	}
 
 	@Override
-	public boolean canConnectRedstone(IBlockAccess world, BlockPos pos, EnumFacing side) {
-		return getMetaFromState(world.getBlockState(pos)) == 5;
+	public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+		IBlockState blockState = world.getBlockState(pos);
+		return blockState.getValue(META) == EnumFarmBlockType.CONTROL;
 	}
 
 	public ItemStack get(EnumFarmBlockType type, int amount) {

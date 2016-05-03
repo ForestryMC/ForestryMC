@@ -33,8 +33,13 @@ public abstract class Crop implements ICrop {
 		this.position = position;
 	}
 
+	protected final void setBlock(Vect position, IBlockState blockState) {
+		world.setBlockState(position, blockState, Constants.FLAG_BLOCK_SYNCH);
+	}
+
+	@Deprecated
 	protected final void setBlock(Vect position, Block block, int meta) {
-		world.setBlockState(position, block.getStateFromMeta(meta), Constants.FLAG_BLOCK_SYNCH);
+		setBlock(position, block.getStateFromMeta(meta));
 	}
 
 	protected final Block getBlock(Vect position) {

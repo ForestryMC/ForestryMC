@@ -10,12 +10,13 @@
  ******************************************************************************/
 package forestry.core.entities;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.EntityFX;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 public class EntityFXColoredDropParticle extends EntityFX {
@@ -47,41 +48,42 @@ public class EntityFXColoredDropParticle extends EntityFX {
 		this.prevPosY = this.posY;
 		this.prevPosZ = this.posZ;
 
-		this.motionY -= this.particleGravity;
+		this.ySpeed -= this.particleGravity;
 
 		if (this.bobTimer-- > 0) {
-			this.motionX *= 0.02D;
-			this.motionY *= 0.02D;
-			this.motionZ *= 0.02D;
+			this.xSpeed *= 0.02D;
+			this.ySpeed *= 0.02D;
+			this.zSpeed *= 0.02D;
 			this.setParticleTextureIndex(113);
 		} else {
 			this.setParticleTextureIndex(112);
 		}
 
-		this.moveEntity(this.motionX, this.motionY, this.motionZ);
-		this.motionX *= 0.9800000190734863D;
-		this.motionY *= 0.9800000190734863D;
-		this.motionZ *= 0.9800000190734863D;
+		this.moveEntity(this.xSpeed, this.ySpeed, this.zSpeed);
+		this.xSpeed *= 0.9800000190734863D;
+		this.ySpeed *= 0.9800000190734863D;
+		this.zSpeed *= 0.9800000190734863D;
 
 		if (this.particleMaxAge-- <= 0) {
-			this.setDead();
+			this.setExpired();
 		}
 
-		if (this.onGround) {
+		if (this.isCollided) {
 			this.setParticleTextureIndex(114);
 
-			this.motionX *= 0.699999988079071D;
-			this.motionZ *= 0.699999988079071D;
+			this.xSpeed *= 0.699999988079071D;
+			this.zSpeed *= 0.699999988079071D;
 		}
 
 		IBlockState state = this.worldObj.getBlockState(new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ)));
-		Material material = state.getBlock().getMaterial();
+		Block block = state.getBlock();
+		Material material = block.getMaterial(state);
 
 		if (material.isLiquid() || material.isSolid()) {
-			double d0 = MathHelper.floor_double(this.posY) + 1 - BlockLiquid.getLiquidHeightPercent(state.getBlock().getMetaFromState(state));
+			double d0 = MathHelper.floor_double(this.posY) + 1 - BlockLiquid.getLiquidHeightPercent(block.getMetaFromState(state));
 
 			if (this.posY < d0) {
-				this.setDead();
+				this.setExpired();
 			}
 		}
 	}

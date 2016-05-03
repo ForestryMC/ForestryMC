@@ -6,7 +6,7 @@
 package forestry.api.genetics;
 
 import net.minecraft.block.Block;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.apiculture.IBee;

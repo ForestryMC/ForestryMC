@@ -7,7 +7,7 @@ package forestry.api.greenhouse;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 
 public interface IInternalBlockFace {

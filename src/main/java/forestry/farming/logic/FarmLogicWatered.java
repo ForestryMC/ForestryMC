@@ -15,9 +15,10 @@ import java.util.Collection;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fluids.FluidStack;
@@ -97,7 +98,8 @@ public abstract class FarmLogicWatered extends FarmLogic {
 
 		for (int i = 0; i < extent; i++) {
 			Vect position = translateWithOffset(pos, direction, i);
-			Block soil = VectUtil.getBlock(world, position);
+			IBlockState state = world.getBlockState(position);
+			Block soil = state.getBlock();
 
 			ItemStack soilStack = VectUtil.getAsItemStack(world, position);
 			if (isAcceptedGround(soilStack) || !housing.getFarmInventory().hasResources(resources)) {
@@ -110,9 +112,9 @@ public abstract class FarmLogicWatered extends FarmLogic {
 				break;
 			}
 
-			if (!isAirBlock(soil) && !BlockUtil.isReplaceableBlock(soil)) {
+			if (!isAirBlock(soil, state, world, platformPosition) && !BlockUtil.isReplaceableBlock(state, world, platformPosition)) {
 				produce.addAll(BlockUtil.getBlockDrops(getWorld(), position));
-				setBlock(position, Blocks.air, 0);
+				world.setBlockToAir(position);
 				return trySetSoil(position);
 			}
 
@@ -174,7 +176,7 @@ public abstract class FarmLogicWatered extends FarmLogic {
 		}
 
 		produce.addAll(BlockUtil.getBlockDrops(world, position));
-		setBlock(position, Blocks.water, 0);
+		setBlock(position, Blocks.WATER, 0);
 		housing.removeLiquid(STACK_WATER);
 		return true;
 	}

@@ -16,9 +16,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -77,9 +78,11 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 	}
 
 	protected ItemStack getParent() {
-		ItemStack equipped = player.getCurrentEquippedItem();
-		if (isSameItemInventory(equipped, parent)) {
-			return equipped;
+		for (EnumHand hand : EnumHand.values()) {
+			ItemStack held = player.getHeldItem(hand);
+			if (isSameItemInventory(held, parent)) {
+				return held;
+			}
 		}
 		return parent;
 	}
@@ -218,8 +221,8 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 	}
 	
 	@Override
-	public IChatComponent getDisplayName() {
-		return new ChatComponentText(getName());
+	public ITextComponent getDisplayName() {
+		return new TextComponentString(getName());
 	}
 
 	@Override

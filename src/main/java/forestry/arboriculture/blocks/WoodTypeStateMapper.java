@@ -12,7 +12,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -52,7 +52,7 @@ class WoodTypeStateMapper extends StateMapperBase {
 
 	@Override
 	protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
-		final Map<IProperty, Comparable> properties;
+		final Map<IProperty<?>, Comparable<?>> properties;
 		if (propertyWoodType != null) {
 			properties = Maps.newLinkedHashMap(state.getProperties());
 			properties.remove(propertyWoodType);
@@ -67,7 +67,7 @@ class WoodTypeStateMapper extends StateMapperBase {
 		Block block = state.getBlock();
 		int meta = block.getMetaFromState(state);
 		EnumWoodType woodType = woodTyped.getWoodType(meta);
-		String resourceDomain = Block.blockRegistry.getNameForObject(block).getResourceDomain();
+		String resourceDomain = Block.REGISTRY.getNameForObject(block).getResourceDomain();
 		String resourceLocation = "arboriculture/" + blockPath + '/' + woodType;
 		String propertyString = this.getPropertyString(properties);
 		return new ModelResourceLocation(resourceDomain + ':' + resourceLocation, propertyString);

@@ -14,7 +14,7 @@ import java.io.IOException;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
@@ -165,8 +165,8 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 	}
 
 	@Override
-	public Vec3 getBeeFXCoordinates() {
-		return new Vec3(getPos().getX() + 0.5, getPos().getY() + 0.5, getPos().getZ() + 0.5);
+	public Vec3d getBeeFXCoordinates() {
+		return new Vec3d(getPos().getX() + 0.5, getPos().getY() + 0.5, getPos().getZ() + 0.5);
 	}
 
 }

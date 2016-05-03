@@ -70,7 +70,7 @@ public class GameTokenWidget extends Widget {
 
 		GlStateManager.disableDepth();
 		for (String ident : getToken().getOverlayIcons()) {
-			Proxies.render.bindTexture(TextureMap.locationBlocksTexture);
+			Proxies.render.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 			TextureAtlasSprite icon = TextureManager.getInstance().getDefault(ident);
 			manager.gui.drawTexturedModalRect(startX + xPos + 3, startY + yPos + 3, icon, 16, 16);
 		}

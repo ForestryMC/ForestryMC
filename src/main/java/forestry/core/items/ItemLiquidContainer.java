@@ -17,9 +17,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.MovingObjectPosition.MovingObjectType;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fluids.FluidRegistry;
@@ -67,66 +69,63 @@ public class ItemLiquidContainer extends ItemForestry {
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-
-		if (world.isRemote) {
-			return itemstack;
+	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+		if (worldIn.isRemote) {
+			return ActionResult.newResult(EnumActionResult.PASS, itemStackIn);
 		}
 
-		MovingObjectPosition movingobjectposition = this.getMovingObjectPositionFromPlayer(world, entityplayer, true);
-		if (movingobjectposition != null && movingobjectposition.typeOfHit == MovingObjectType.BLOCK) {
-
-			BlockPos pos = movingobjectposition.getBlockPos();
-			Block targetedBlock = world.getBlockState(pos).getBlock();
-
-			FluidStack fluid = null;
-
-			if (targetedBlock instanceof IFluidBlock) {
-				fluid = ((IFluidBlock) targetedBlock).drain(world, pos, false);
-			} else {
-				if (targetedBlock == Blocks.water || targetedBlock == Blocks.flowing_water) {
-					fluid = new FluidStack(FluidRegistry.WATER, 1000);
-				} else if (targetedBlock == Blocks.lava || targetedBlock == Blocks.flowing_lava) {
-					fluid = new FluidStack(FluidRegistry.LAVA, 1000);
-				}
-			}
-
-			ItemStack filledContainer = FluidHelper.getFilledContainer(fluid.getFluid(), itemstack);
-			if (filledContainer == null) {
-				return itemstack;
-			}
-
-			// Search for a slot to stow a filled container in player's
-			// inventory
-			int slot = getMatchingSlot(entityplayer, filledContainer);
-			if (slot < 0) {
-				return itemstack;
-			}
-
-			if (entityplayer.inventory.getStackInSlot(slot) == null) {
-				entityplayer.inventory.setInventorySlotContents(slot, filledContainer.copy());
-			} else {
-				entityplayer.inventory.getStackInSlot(slot).stackSize++;
-			}
-
-			// Remove consumed liquid block in world
-			if (targetedBlock instanceof IFluidBlock) {
-				((IFluidBlock) targetedBlock).drain(world, pos, true);
-			} else {
-				world.setBlockToAir(pos);
-			}
-
-			// Remove consumed empty container
-			itemstack.stackSize--;
-
-			// Notify player that his inventory has changed.
-			Proxies.net.inventoryChangeNotify(entityplayer);
-
-			return itemstack;
+		RayTraceResult rayTraceResult = this.rayTrace(worldIn, playerIn, true);
+		if (rayTraceResult == null || rayTraceResult.typeOfHit != RayTraceResult.Type.BLOCK) {
+			return ActionResult.newResult(EnumActionResult.PASS, itemStackIn);
 		}
 
-		return itemstack;
+		BlockPos pos = rayTraceResult.getBlockPos();
+		Block targetedBlock = worldIn.getBlockState(pos).getBlock();
 
+		FluidStack fluid = null;
+
+		if (targetedBlock instanceof IFluidBlock) {
+			fluid = ((IFluidBlock) targetedBlock).drain(worldIn, pos, false);
+		} else {
+			if (targetedBlock == Blocks.WATER || targetedBlock == Blocks.FLOWING_WATER) {
+				fluid = new FluidStack(FluidRegistry.WATER, 1000);
+			} else if (targetedBlock == Blocks.LAVA || targetedBlock == Blocks.FLOWING_LAVA) {
+				fluid = new FluidStack(FluidRegistry.LAVA, 1000);
+			}
+		}
+
+		ItemStack filledContainer = FluidHelper.getFilledContainer(fluid.getFluid(), itemStackIn);
+		if (filledContainer == null) {
+			return ActionResult.newResult(EnumActionResult.FAIL, itemStackIn);
+		}
+
+		// Search for a slot to stow a filled container in player's
+		// inventory
+		int slot = getMatchingSlot(playerIn, filledContainer);
+		if (slot < 0) {
+			return ActionResult.newResult(EnumActionResult.FAIL, itemStackIn);
+		}
+
+		if (playerIn.inventory.getStackInSlot(slot) == null) {
+			playerIn.inventory.setInventorySlotContents(slot, filledContainer.copy());
+		} else {
+			playerIn.inventory.getStackInSlot(slot).stackSize++;
+		}
+
+		// Remove consumed liquid block in world
+		if (targetedBlock instanceof IFluidBlock) {
+			((IFluidBlock) targetedBlock).drain(worldIn, pos, true);
+		} else {
+			worldIn.setBlockToAir(pos);
+		}
+
+		// Remove consumed empty container
+		itemStackIn.stackSize--;
+
+		// Notify player that his inventory has changed.
+		Proxies.net.inventoryChangeNotify(playerIn);
+
+		return ActionResult.newResult(EnumActionResult.SUCCESS, itemStackIn);
 	}
 
 	/* Models */
@@ -140,14 +139,15 @@ public class ItemLiquidContainer extends ItemForestry {
 		}
 	}
 
-	@Override
-	public int getColorFromItemStack(ItemStack itemstack, int j) {
-		if (j > 0) {
-			return color;
-		} else {
-			return 0xffffff;
-		}
-	}
+	// TODO: liquid container coloring
+//	@Override
+//	public int getColorFromItemStack(ItemStack itemstack, int j) {
+//		if (j > 0) {
+//			return color;
+//		} else {
+//			return 0xffffff;
+//		}
+//	}
 
 	public EnumContainerType getType() {
 		return type;

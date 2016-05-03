@@ -11,7 +11,7 @@
 package forestry.core.multiblock;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.multiblock.IMultiblockComponent;

@@ -45,8 +45,8 @@ public class CropBasicAgriCraft extends Crop {
 			harvest.remove(1); //AgriCraft returns cropsticks in 0, seeds in 1 in getDrops, removing since harvesting doesn't return them.
 		}
 		harvest.remove(0);
-		Proxies.common.addBlockDestroyEffects(world, pos, Blocks.melon_block.getStateFromMeta(0));
-		world.setBlockState(pos, getBlock(pos).getStateFromMeta(0), Constants.FLAG_BLOCK_SYNCH);
+		Proxies.common.addBlockDestroyEffects(world, pos, Blocks.MELON_BLOCK.getDefaultState());
+		world.setBlockState(pos, getBlock(pos).getDefaultState(), Constants.FLAG_BLOCK_SYNCH);
 		return harvest;
 	}
 

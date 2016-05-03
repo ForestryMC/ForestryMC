@@ -6,19 +6,20 @@ import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumWorldBlockLayer;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -27,8 +28,6 @@ import net.minecraftforge.common.IShearable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.api.arboriculture.IFruitProvider;
-import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.api.core.Tabs;
@@ -60,10 +59,10 @@ public abstract class BlockDecorativeLeaves extends Block implements IShearable,
 	private final int blockNumber;
 
 	public BlockDecorativeLeaves(int blockNumber) {
-		super(Material.leaves);
+		super(Material.LEAVES);
 		this.blockNumber = blockNumber;
 		this.setCreativeTab(Tabs.tabArboriculture);
-		setStepSound(soundTypeGrass);
+		setSoundType(SoundType.PLANT);
 	}
 
 	public int getBlockNumber() {
@@ -74,8 +73,8 @@ public abstract class BlockDecorativeLeaves extends Block implements IShearable,
 	public abstract PropertyTreeType getVariant();
 
 	@Override
-	protected BlockState createBlockState() {
-		return new BlockState(this, getVariant());
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, getVariant());
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -101,54 +100,40 @@ public abstract class BlockDecorativeLeaves extends Block implements IShearable,
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(World world, BlockPos pos, IBlockState state) {
-		TreeDefinition treeDefinition = state.getValue(getVariant());
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
+		TreeDefinition treeDefinition = blockState.getValue(getVariant());
 		if (TreeDefinition.Willow.equals(treeDefinition)) {
 			return null;
 		}
-		return super.getCollisionBoundingBox(world, pos, state);
+		return super.getCollisionBoundingBox(blockState, worldIn, pos);
 	}
 
 	@Override
-	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, Entity entity) {
-		entity.motionX *= 0.4D;
-		entity.motionZ *= 0.4D;
+	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
+		entityIn.motionX *= 0.4D;
+		entityIn.motionZ *= 0.4D;
 	}
 
-	/* RENDERING */
 	@Override
-	public boolean isOpaqueCube() {
+	public boolean isOpaqueCube(IBlockState state) {
 		return !Proxies.render.fancyGraphicsEnabled();
 	}
 
-	@SideOnly(Side.CLIENT)
 	@Override
-	public int colorMultiplier(IBlockAccess world, BlockPos pos, int renderPass) {
-		IBlockState state = world.getBlockState(pos);
-		TreeDefinition treeDefinition = state.getValue(getVariant());
-		if (treeDefinition == null) {
-			return super.colorMultiplier(world, pos, renderPass);
-		}
-
-		ITreeGenome genome = treeDefinition.getGenome();
-
-		if (renderPass == 0) {
-			return genome.getPrimary().getLeafSpriteProvider().getColor(false);
-		} else {
-			IFruitProvider fruitProvider = genome.getFruitProvider();
-			return fruitProvider.getDecorativeColor();
-		}
+	public boolean isVisuallyOpaque()
+	{
+		return false;
 	}
 
 	@Override
-	public boolean shouldSideBeRendered(IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
-		return true;
+	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+		return (Proxies.render.fancyGraphicsEnabled() || blockAccess.getBlockState(pos.offset(side)).getBlock() != this) && super.shouldSideBeRendered(blockState, blockAccess, pos, side);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public EnumWorldBlockLayer getBlockLayer() {
-		return Proxies.render.fancyGraphicsEnabled() ? EnumWorldBlockLayer.CUTOUT_MIPPED : EnumWorldBlockLayer.SOLID;
+	public BlockRenderLayer getBlockLayer() {
+		return Proxies.render.fancyGraphicsEnabled() ? BlockRenderLayer.CUTOUT_MIPPED : BlockRenderLayer.SOLID;
 	}
 
 	/* MODELS */

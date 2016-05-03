@@ -45,7 +45,7 @@ public class MemorizedRecipeSlot extends ItemStackWidgetBase {
 		GlStateManager.disableDepth();
 
 		if (recipeMemory.isLocked(slotNumber)) {
-			Proxies.render.bindTexture(TextureMap.locationBlocksTexture);
+			Proxies.render.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 			manager.gui.drawTexturedModalRect(startX + xPos, startY + yPos, lockIcon, 16, 16);
 		}
 

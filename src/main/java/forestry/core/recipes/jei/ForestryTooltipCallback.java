@@ -6,7 +6,7 @@ import java.text.NumberFormat;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 
 import forestry.core.utils.Translator;
 
@@ -38,13 +38,13 @@ public class ForestryTooltipCallback implements ITooltipCallback<ItemStack> {
 	
 	public void addChanceTooltip(int index, float chance) {
 		if (chance <= 0.0F) {
-			tooltips.get(index).add(EnumChatFormatting.GRAY + String.format(Translator.translateToLocal("forestry.jei.chance"), Translator.translateToLocal("forestry.jei.chance.never")));
+			tooltips.get(index).add(TextFormatting.GRAY + String.format(Translator.translateToLocal("forestry.jei.chance"), Translator.translateToLocal("forestry.jei.chance.never")));
 		} else if (chance < 0.01F) {
-			tooltips.get(index).add(EnumChatFormatting.GRAY + String.format(Translator.translateToLocal("forestry.jei.chance"), Translator.translateToLocal("forestry.jei.chance.lessThan1")));
+			tooltips.get(index).add(TextFormatting.GRAY + String.format(Translator.translateToLocal("forestry.jei.chance"), Translator.translateToLocal("forestry.jei.chance.lessThan1")));
 		} else if (chance != 1.0F) {
 			NumberFormat percentFormat = NumberFormat.getPercentInstance();
 			percentFormat.setMaximumFractionDigits(2);
-			tooltips.get(index).add(EnumChatFormatting.GRAY + String.format(Translator.translateToLocal("forestry.jei.chance"), String.valueOf(percentFormat.format(chance))));
+			tooltips.get(index).add(TextFormatting.GRAY + String.format(Translator.translateToLocal("forestry.jei.chance"), String.valueOf(percentFormat.format(chance))));
 		}
 	}
 

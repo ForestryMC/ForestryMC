@@ -14,10 +14,12 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatStyle;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 public class CommandModeInfo extends SubCommand {
@@ -34,9 +36,9 @@ public class CommandModeInfo extends SubCommand {
 	}
 
 	@Override
-	public void processSubCommand(ICommandSender sender, String[] args) {
+	public void executeSubCommand(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		if (args.length <= 0) {
-			printHelp(sender);
+			printHelp(, sender);
 			return;
 		}
 
@@ -44,12 +46,12 @@ public class CommandModeInfo extends SubCommand {
 
 		if (modeName == null) {
 			CommandHelpers.sendLocalizedChatMessage(sender, "for.chat.command.forestry.mode.info.error", args[0]);
-			printHelp(sender);
+			printHelp(, sender);
 			return;
 		}
 
-		ChatStyle green = new ChatStyle();
-		green.setColor(EnumChatFormatting.GREEN);
+		Style green = new Style();
+		green.setColor(TextFormatting.GREEN);
 		CommandHelpers.sendLocalizedChatMessage(sender, green, modeName);
 
 		for (String desc : modeHelper.getDescription(modeName)) {
@@ -61,7 +63,7 @@ public class CommandModeInfo extends SubCommand {
 	public void printHelp(ICommandSender sender) {
 		super.printHelp(sender);
 
-		World world = CommandHelpers.getWorld(sender, this);
+		World world = sender.getEntityWorld();
 
 		String modeName = modeHelper.getModeName(world);
 		String worldName = String.valueOf(world.getWorldInfo().getSaveVersion());
@@ -71,7 +73,7 @@ public class CommandModeInfo extends SubCommand {
 	}
 
 	@Override
-	public List<String> addTabCompletionOptions(ICommandSender sender, String[] incomplete, BlockPos pos) {
-		return CommandHelpers.getListOfStringsMatchingLastWord(incomplete, modeStringArr);
+	public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos pos) {
+		return CommandHelpers.getListOfStringsMatchingLastWord(args, modeStringArr);
 	}
 }

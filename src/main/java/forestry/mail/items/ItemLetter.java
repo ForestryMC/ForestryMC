@@ -17,7 +17,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fml.relauncher.Side;
@@ -44,7 +44,7 @@ public class ItemLetter extends ItemWithGui {
 			if (itemstack.stackSize == 1) {
 				openGui(entityplayer);
 			} else {
-				entityplayer.addChatMessage(new ChatComponentTranslation("for.chat.mail.wrongstacksize"));
+				entityplayer.addChatMessage(new TextComponentTranslation("for.chat.mail.wrongstacksize"));
 			}
 		}
 

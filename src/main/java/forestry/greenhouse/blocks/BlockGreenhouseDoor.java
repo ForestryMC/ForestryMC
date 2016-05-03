@@ -18,19 +18,22 @@ import net.minecraft.block.BlockDoor;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.statemap.StateMap;
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumWorldBlockLayer;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -63,7 +66,7 @@ public class BlockGreenhouseDoor extends BlockGreenhouse implements IStateMapper
 	}
 
 	@Override
-	public boolean isOpaqueCube() {
+	public boolean isOpaqueCube(IBlockState state) {
 		return false;
 	}
 
@@ -73,21 +76,20 @@ public class BlockGreenhouseDoor extends BlockGreenhouse implements IStateMapper
 	}
 
 	@Override
-	public boolean isFullCube() {
+	public boolean isFullCube(IBlockState state) {
 		return false;
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public AxisAlignedBB getSelectedBoundingBox(World worldIn, BlockPos pos) {
+	public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World worldIn, BlockPos pos) {
 		this.setBlockBoundsBasedOnState(worldIn, pos);
-		return super.getSelectedBoundingBox(worldIn, pos);
+		return super.getSelectedBoundingBox(state, worldIn, pos);
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(World worldIn, BlockPos pos, IBlockState state) {
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
 		this.setBlockBoundsBasedOnState(worldIn, pos);
-		return super.getCollisionBoundingBox(worldIn, pos, state);
+		return super.getCollisionBoundingBox(blockState, worldIn, pos);
 	}
 
 	@Override
@@ -140,25 +142,25 @@ public class BlockGreenhouseDoor extends BlockGreenhouse implements IStateMapper
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
-		TileEntity tile = world.getTileEntity(pos);
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+		TileEntity tile = worldIn.getTileEntity(pos);
 		if (!(tile instanceof TileGreenhouseDoor)) {
 			return false;
 		}
 		TileGreenhouseDoor door = (TileGreenhouseDoor) tile;
-		if (!door.getAccessHandler().allowsInteracting(player)) {
+		if (!door.getAccessHandler().allowsInteracting(playerIn)) {
 			return false;
 		} else {
 			BlockPos blockpos = state.getValue(HALF) == BlockDoor.EnumDoorHalf.LOWER ? pos : pos.down();
-			IBlockState iblockstate = pos.equals(blockpos) ? state : world.getBlockState(blockpos);
+			IBlockState iblockstate = pos.equals(blockpos) ? state : worldIn.getBlockState(blockpos);
 
 			if (iblockstate.getBlock() != this) {
 				return false;
 			} else {
 				state = iblockstate.cycleProperty(OPEN);
-				world.setBlockState(blockpos, state, 2);
-				world.markBlockRangeForRenderUpdate(blockpos, pos);
-				world.playAuxSFXAtEntity(player, state.getValue(OPEN) ? 1003 : 1006, pos, 0);
+				worldIn.setBlockState(blockpos, state, 2);
+				worldIn.markBlockRangeForRenderUpdate(blockpos, pos);
+				worldIn.playAuxSFXAtEntity(playerIn, state.getValue(OPEN) ? 1003 : 1006, pos, 0);
 				return true;
 			}
 		}
@@ -185,7 +187,7 @@ public class BlockGreenhouseDoor extends BlockGreenhouse implements IStateMapper
 				flag1 = true;
 			}
 
-			if (!World.doesBlockHaveSolidTopSurface(worldIn, pos.down())) {
+			if (!worldIn.isSideSolid(pos.down(), EnumFacing.UP)) {
 				worldIn.setBlockToAir(pos);
 				flag1 = true;
 
@@ -201,7 +203,7 @@ public class BlockGreenhouseDoor extends BlockGreenhouse implements IStateMapper
 			} else {
 				boolean flag = worldIn.isBlockPowered(pos) || worldIn.isBlockPowered(blockpos1);
 
-				if ((flag || neighborBlock.canProvidePower()) && neighborBlock != this && flag != iblockstate1.getValue(POWERED)) {
+				if ((flag || neighborBlock.canProvidePower(state)) && neighborBlock != this && flag != iblockstate1.getValue(POWERED)) {
 					worldIn.setBlockState(blockpos1, iblockstate1.withProperty(POWERED, flag), 2);
 
 					if (flag != state.getValue(OPEN)) {
@@ -220,14 +222,14 @@ public class BlockGreenhouseDoor extends BlockGreenhouse implements IStateMapper
 	}
 
 	@Override
-	public MovingObjectPosition collisionRayTrace(World worldIn, BlockPos pos, Vec3 start, Vec3 end) {
+	public RayTraceResult collisionRayTrace(IBlockState blockState, World worldIn, BlockPos pos, Vec3d start, Vec3d end) {
 		this.setBlockBoundsBasedOnState(worldIn, pos);
-		return super.collisionRayTrace(worldIn, pos, start, end);
+		return super.collisionRayTrace(blockState, worldIn, pos, start, end);
 	}
 
 	@Override
 	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
-		return pos.getY() < worldIn.getHeight() - 1 && (World.doesBlockHaveSolidTopSurface(worldIn, pos.down()) && super.canPlaceBlockAt(worldIn, pos) && super.canPlaceBlockAt(worldIn, pos.up()));
+		return pos.getY() < worldIn.getHeight() - 1 && (worldIn.isSideSolid(pos.down(), EnumFacing.UP)) && super.canPlaceBlockAt(worldIn, pos) && super.canPlaceBlockAt(worldIn, pos.up()));
 	}
 
 	@Override
@@ -285,8 +287,8 @@ public class BlockGreenhouseDoor extends BlockGreenhouse implements IStateMapper
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public EnumWorldBlockLayer getBlockLayer() {
-		return EnumWorldBlockLayer.TRANSLUCENT;
+	public BlockRenderLayer getBlockLayer() {
+		return BlockRenderLayer.TRANSLUCENT;
 	}
 
 	@Override
@@ -355,8 +357,8 @@ public class BlockGreenhouseDoor extends BlockGreenhouse implements IStateMapper
 	}
 
 	@Override
-	protected BlockState createBlockState() {
-		return new BlockState(this, HALF, FACING, OPEN, HINGE, POWERED);
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, HALF, FACING, OPEN, HINGE, POWERED);
 	}
 
 	@Override

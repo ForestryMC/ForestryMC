@@ -13,7 +13,7 @@ package forestry.core.gui.widgets;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -22,6 +22,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
@@ -106,7 +107,7 @@ public class TankWidget extends Widget {
 			scaledAmount = height;
 		}
 
-		Proxies.render.bindTexture(TextureMap.locationBlocksTexture);
+		Proxies.render.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 		setGLColorFromInt(fluidColor);
 
 		final int xTileCount = width / 16;
@@ -168,12 +169,12 @@ public class TankWidget extends Widget {
 		vMax = vMax - maskTop / 16.0 * (vMax - vMin);
 
 		Tessellator tessellator = Tessellator.getInstance();
-		WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-		worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
-		worldrenderer.pos(xCoord, yCoord + 16, zLevel).tex(uMin,  vMax).endVertex();
-		worldrenderer.pos(xCoord + 16 - maskRight, yCoord + 16, zLevel).tex(uMax, vMax).endVertex();
-		worldrenderer.pos(xCoord + 16 - maskRight, yCoord + maskTop, zLevel).tex(uMax, vMin).endVertex();
-		worldrenderer.pos(xCoord, yCoord + maskTop,  zLevel).tex(uMin, vMin).endVertex();
+		VertexBuffer vertexBuffer = tessellator.getBuffer();
+		vertexBuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
+		vertexBuffer.pos(xCoord, yCoord + 16, zLevel).tex(uMin,  vMax).endVertex();
+		vertexBuffer.pos(xCoord + 16 - maskRight, yCoord + 16, zLevel).tex(uMax, vMax).endVertex();
+		vertexBuffer.pos(xCoord + 16 - maskRight, yCoord + maskTop, zLevel).tex(uMax, vMin).endVertex();
+		vertexBuffer.pos(xCoord, yCoord + maskTop,  zLevel).tex(uMin, vMin).endVertex();
 		tessellator.draw();
 	}
 

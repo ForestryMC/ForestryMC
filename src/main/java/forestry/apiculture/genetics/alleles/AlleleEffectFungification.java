@@ -7,8 +7,8 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.passive.EntityMooshroom;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenBigMushroom;
 
@@ -66,7 +66,7 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 			BlockPos pos = new BlockPos(blockX, blockY, blockZ);
 			Block block = world.getBlockState(pos).getBlock();
 			if (isSuitableForMycelium(world, block, pos)) {
-				world.setBlockState(pos, Blocks.mycelium.getStateFromMeta(0));
+				world.setBlockState(pos, Blocks.MYCELIUM.getDefaultState());
 				break;
 			} else if (isSuitableForGrowth(block)) {
 				doMushroomGrowth(block, world, pos);
@@ -91,11 +91,11 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 	}
 	
 	private static boolean isSuitableForMycelium(World world, Block block, BlockPos pos) {
-		return block == Blocks.grass || block == Blocks.dirt && world.canBlockSeeSky(pos);
+		return block == Blocks.GRASS || block == Blocks.DIRT && world.canBlockSeeSky(pos);
 	}
 
 	private static boolean isSuitableForGrowth(Block block) {
-		return block == Blocks.red_mushroom || block == Blocks.brown_mushroom;
+		return block == Blocks.RED_MUSHROOM || block == Blocks.BROWN_MUSHROOM;
 	}
 	
 	private static void convertCowToMooshroom(EntityCow cow) {

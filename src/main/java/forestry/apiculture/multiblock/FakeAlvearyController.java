@@ -12,8 +12,8 @@ package forestry.apiculture.multiblock;
 
 import java.util.Collections;
 
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.biome.BiomeGenBase;
 
 import com.mojang.authlib.GameProfile;
@@ -76,7 +76,7 @@ public class FakeAlvearyController extends FakeMultiblockController implements I
 	}
 
 	@Override
-	public Vec3 getBeeFXCoordinates() {
+	public Vec3d getBeeFXCoordinates() {
 		return null;
 	}
 

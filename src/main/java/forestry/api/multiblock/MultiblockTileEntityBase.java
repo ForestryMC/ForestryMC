@@ -8,9 +8,9 @@ package forestry.api.multiblock;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 
 /**
  * Base logic class for Multiblock-connected tile entities.
@@ -77,11 +77,11 @@ public abstract class MultiblockTileEntityBase<T extends IMultiblockLogic> exten
 		NBTTagCompound packetData = new NBTTagCompound();
 		multiblockLogic.encodeDescriptionPacket(packetData);
 		this.encodeDescriptionPacket(packetData);
-		return new S35PacketUpdateTileEntity(getPos(), 0, packetData);
+		return new SPacketUpdateTileEntity(getPos(), 0, packetData);
 	}
 	
 	@Override
-	public final void onDataPacket(NetworkManager network, S35PacketUpdateTileEntity packet) {
+	public final void onDataPacket(NetworkManager network, SPacketUpdateTileEntity packet) {
 		NBTTagCompound nbtData = packet.getNbtCompound();
 		multiblockLogic.decodeDescriptionPacket(nbtData);
 		this.decodeDescriptionPacket(nbtData);

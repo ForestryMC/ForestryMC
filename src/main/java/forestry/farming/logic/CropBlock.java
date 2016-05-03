@@ -38,7 +38,7 @@ public class CropBlock extends Crop {
 	@Override
 	protected Collection<ItemStack> harvestBlock(Vect pos) {
 		Collection<ItemStack> harvested = block.getDrops(world, pos, block.getStateFromMeta(meta), 0);
-		Proxies.common.addBlockDestroyEffects(world, pos, block.getStateFromMeta(0));
+		Proxies.common.addBlockDestroyEffects(world, pos, block.getDefaultState());
 		// Block.breakBlock() is called by vanilla itself, removing TEs.
 		world.setBlockToAir(pos);
 		return harvested;

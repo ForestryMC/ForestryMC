@@ -16,15 +16,14 @@ import java.util.Collection;
 import java.util.List;
 
 import net.minecraft.block.BlockLog;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -148,8 +147,8 @@ public abstract class BlockArbLog extends BlockLog implements IWoodTyped, IState
 	}
 
 	@Override
-	protected BlockState createBlockState() {
-		return new BlockState(this, getVariant(), LOG_AXIS);
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, getVariant(), LOG_AXIS);
 	}
 
 	@Override
@@ -186,8 +185,7 @@ public abstract class BlockArbLog extends BlockLog implements IWoodTyped, IState
 	}
 
 	@Override
-	public float getBlockHardness(World world, BlockPos pos) {
-		IBlockState blockState = world.getBlockState(pos);
+	public float getBlockHardness(IBlockState blockState, World worldIn, BlockPos pos) {
 		int meta = getMetaFromState(blockState);
 		EnumWoodType woodType = getWoodType(meta);
 		return woodType.getHardness();
@@ -213,28 +211,6 @@ public abstract class BlockArbLog extends BlockLog implements IWoodTyped, IState
 			return 0;
 		}
 		return super.getFlammability(world, pos, face);
-	}
-
-	@Override
-	public boolean canSustainLeaves(IBlockAccess world, BlockPos pos) {
-		return true;
-	}
-	
-	@Override
-	public boolean isWood(IBlockAccess world, BlockPos pos) {
-		return true;
-	}
-
-	@Override
-	public boolean rotateBlock(net.minecraft.world.World world, net.minecraft.util.BlockPos pos, EnumFacing axis) {
-		IBlockState state = world.getBlockState(pos);
-		for (IProperty<?> prop : state.getProperties().keySet()) {
-			if (prop.getName().equals("axis")) {
-				world.setBlockState(pos, state.cycleProperty(prop));
-				return true;
-			}
-		}
-		return false;
 	}
 
 	@Override

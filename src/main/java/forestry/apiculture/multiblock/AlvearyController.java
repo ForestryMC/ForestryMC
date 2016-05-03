@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.multiblock;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
@@ -18,8 +19,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
@@ -86,6 +87,7 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 		return beekeepingLogic;
 	}
 
+	@Nonnull
 	@Override
 	public IInventoryAdapter getInternalInventory() {
 		if (isAssembled()) {
@@ -330,9 +332,9 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	}
 
 	@Override
-	public Vec3 getBeeFXCoordinates() {
+	public Vec3d getBeeFXCoordinates() {
 		BlockPos coord = getCenterCoord();
-		return new Vec3(coord.getX() + 0.5, coord.getY() + 1.5, coord.getZ() + 0.5);
+		return new Vec3d(coord.getX() + 0.5, coord.getY() + 1.5, coord.getZ() + 0.5);
 	}
 
 	@Override

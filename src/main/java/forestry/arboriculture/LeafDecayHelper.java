@@ -1,9 +1,9 @@
 package forestry.arboriculture;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockLeavesBase;
+import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.core.utils.BlockUtil;
@@ -15,7 +15,7 @@ public abstract class LeafDecayHelper {
 	private static final short IS_LEAVES = -2;
 	private static int[] leafDecayValues;
 
-	public static void leafDecay(BlockLeavesBase leaves, World world, BlockPos pos) {
+	public static void leafDecay(BlockLeaves leaves, World world, BlockPos pos) {
 		if (world.isRemote) {
 			return;
 		}
@@ -38,10 +38,11 @@ public abstract class LeafDecayHelper {
 				for (int xOffset = -radius; xOffset <= radius; ++xOffset) {
 					for (int yOffset = -radius; yOffset <= radius; ++yOffset) {
 						for (int zOffset = -radius; zOffset <= radius; ++zOffset) {
-							Block block = BlockUtil.getBlock(world, pos.add(xOffset, yOffset, zOffset));
-
-							if (!block.canSustainLeaves(world, pos.add(xOffset, yOffset, zOffset))) {
-								if (block.isLeaves(world, pos.add(xOffset, yOffset, zOffset))) {
+							BlockPos blockPos = pos.add(xOffset, yOffset, zOffset);
+							Block block = BlockUtil.getBlock(world, blockPos);
+							IBlockState blockState = world.getBlockState(blockPos);
+							if (!block.canSustainLeaves(blockState, world, blockPos)) {
+								if (block.isLeaves(blockState, world, blockPos)) {
 									leafDecayValues[(xOffset + arrayOffset) * xArrayMult + (yOffset + arrayOffset) * yArrayMult + zOffset + arrayOffset] = IS_LEAVES;
 								} else {
 									leafDecayValues[(xOffset + arrayOffset) * xArrayMult + (yOffset + arrayOffset) * yArrayMult + zOffset + arrayOffset] = NOT_SUSTAINS_LEAVES;

@@ -14,7 +14,8 @@ import java.util.List;
 
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
-import net.minecraft.util.BlockPos;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public final class CommandModeSet extends SubCommand {
@@ -31,25 +32,20 @@ public final class CommandModeSet extends SubCommand {
 	}
 
 	@Override
-	public void processSubCommand(ICommandSender sender, String[] args) throws WrongUsageException {
+	public void executeSubCommand(MinecraftServer server, ICommandSender sender, String[] args) throws WrongUsageException {
 		if (args.length == 0 || args.length > 2) {
-			printHelp(sender);
+			printHelp(, sender);
 			return;
 		}
 
-		World world;
-		if (args.length == 2) {
-			world = CommandHelpers.getWorld(sender, this, args, 0);
-		} else {
-			world = CommandHelpers.getWorld(sender, this);
-		}
+		World world = sender.getEntityWorld();
 
 		String desired = args[args.length - 1];
 
 		String modeName = modeSetter.getModeNameMatching(desired);
 		if (modeName == null) {
 			CommandHelpers.sendLocalizedChatMessage(sender, "for.chat.command.forestry.mode.set.error", desired);
-			printHelp(sender);
+			printHelp(, sender);
 			return;
 		}
 
@@ -58,7 +54,7 @@ public final class CommandModeSet extends SubCommand {
 	}
 
 	@Override
-	public List<String> addTabCompletionOptions(ICommandSender sender, String[] incomplete, BlockPos pos) {
-		return CommandHelpers.getListOfStringsMatchingLastWord(incomplete, modeStringArr);
+	public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos pos) {
+		return CommandHelpers.getListOfStringsMatchingLastWord(args, modeStringArr);
 	}
 }

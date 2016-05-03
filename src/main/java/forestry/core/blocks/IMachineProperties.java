@@ -19,12 +19,12 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -60,7 +60,7 @@ public interface IMachineProperties<T extends TileForestry> extends IStringSeria
 	AxisAlignedBB getBoundingBox(@Nonnull BlockPos pos, @Nonnull IBlockState state);
 
 	@Nonnull
-	MovingObjectPosition collisionRayTrace(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull Vec3 startVec, @Nonnull Vec3 endVec);
+	RayTraceResult collisionRayTrace(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull Vec3d startVec, @Nonnull Vec3d endVec);
 
 	boolean isSolidOnSide(@Nonnull IBlockAccess world, @Nonnull BlockPos pos, @Nonnull EnumFacing side);
 

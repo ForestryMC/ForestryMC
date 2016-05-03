@@ -17,8 +17,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
@@ -51,23 +51,21 @@ public class TileMailbox extends TileBase implements IMailContainer {
 
 	/* GUI */
 	@Override
-	public void openGui(EntityPlayer player) {
+	public void openGui(EntityPlayer player, ItemStack heldItem) {
 		if (worldObj.isRemote) {
 			return;
 		}
 
-		ItemStack held = player.getCurrentEquippedItem();
-
 		// Handle letter sending
-		if (PostManager.postRegistry.isLetter(held)) {
-			IPostalState result = this.tryDispatchLetter(held);
+		if (PostManager.postRegistry.isLetter(heldItem)) {
+			IPostalState result = this.tryDispatchLetter(heldItem);
 			if (!result.isOk()) {
-				player.addChatMessage(new ChatComponentText(result.getDescription()));
+				player.addChatMessage(new TextComponentString(result.getDescription()));
 			} else {
-				held.stackSize--;
+				heldItem.stackSize--;
 			}
 		} else {
-			super.openGui(player);
+			super.openGui(player, heldItem);
 		}
 	}
 

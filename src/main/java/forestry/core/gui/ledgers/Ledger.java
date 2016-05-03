@@ -216,7 +216,7 @@ public abstract class Ledger {
 	protected void drawSprite(TextureAtlasSprite sprite, int x, int y) {
 		if (sprite != null) {
 			GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0F);
-			Proxies.render.bindTexture(TextureMap.locationBlocksTexture);
+			Proxies.render.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 			manager.gui.drawTexturedModalRect(x, y, sprite, 16, 16);
 		}
 	}

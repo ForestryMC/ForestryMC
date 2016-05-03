@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuit;
@@ -79,7 +79,7 @@ public class CircuitBoard<T> implements ICircuitBoard {
 	@Override
 	public void addTooltip(List<String> list) {
 		if (layout != null) {
-			list.add(EnumChatFormatting.GOLD + layout.getUsage() + ":");
+			list.add(TextFormatting.GOLD + layout.getUsage() + ":");
 		}
 
 		List<String> extendedTooltip = new ArrayList<>();
@@ -92,7 +92,7 @@ public class CircuitBoard<T> implements ICircuitBoard {
 		if (Proxies.common.isShiftDown() || extendedTooltip.size() <= 4) {
 			list.addAll(extendedTooltip);
 		} else {
-			list.add(EnumChatFormatting.ITALIC + "<" + Translator.translateToLocal("for.gui.tooltip.tmi") + ">");
+			list.add(TextFormatting.ITALIC + "<" + Translator.translateToLocal("for.gui.tooltip.tmi") + ">");
 		}
 	}
 

@@ -9,9 +9,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.IBakedModel;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -33,17 +34,7 @@ public interface IModelBaker {
 	
 	void addBakedModel(@Nonnull IBakedModel model);
 	
-	void addFaceXNeg(@Nonnull TextureAtlasSprite sprite);
-	
-	void addFaceYNeg(@Nonnull TextureAtlasSprite sprite);
-
-	void addFaceZNeg(@Nonnull TextureAtlasSprite sprite);
-
-	void addFaceYPos(@Nonnull TextureAtlasSprite sprite);
-
-	void addFaceZPos(@Nonnull TextureAtlasSprite sprite);
-
-	void addFaceXPos(@Nonnull TextureAtlasSprite sprite);
+	void addFace(@Nonnull EnumFacing facing, @Nonnull TextureAtlasSprite sprite);
 	
 	void setParticleSprite(@Nullable TextureAtlasSprite particleSprite);
 	

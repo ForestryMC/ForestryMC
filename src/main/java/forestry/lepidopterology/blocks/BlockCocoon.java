@@ -16,15 +16,16 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -51,14 +52,14 @@ public class BlockCocoon extends Block implements ITileEntityProvider, IStateMap
 	public BlockCocoon() {
 		super(new MaterialCocoon());
 		setTickRandomly(true);
-		setStepSound(soundTypeGrass);
+		setSoundType(SoundType.GROUND);
 		setCreativeTab(null);
 		setDefaultState(this.blockState.getBaseState().withProperty(COCOON, AlleleButterflyCocoon.cocoonDefault).withProperty(AlleleButterflyCocoon.AGE, 0));
 	}
 	
 	@Override
-	protected BlockState createBlockState() {
-		return new BlockState(this, COCOON, AlleleButterflyCocoon.AGE);
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, COCOON, AlleleButterflyCocoon.AGE);
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -83,16 +84,16 @@ public class BlockCocoon extends Block implements ITileEntityProvider, IStateMap
 		//To delete the error message
 		manager.registerItemModel(item, 0, "cocoon_late");
 	}
-	
-    @Override
-	public boolean isFullCube(){
-        return false;
-    }
 
-    @Override
-	public boolean isOpaqueCube(){
-        return false;
-    }
+	@Override
+	public boolean isFullBlock(IBlockState state) {
+		return false;
+	}
+
+	@Override
+	public boolean isOpaqueCube(IBlockState state) {
+		return false;
+	}
     
 	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
@@ -124,7 +125,7 @@ public class BlockCocoon extends Block implements ITileEntityProvider, IStateMap
     @Override
     public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock) {
     	IBlockState stateUp = worldIn.getBlockState(pos.up());
-    	if(stateUp.getBlock().isAir(worldIn, pos.up())){
+    	if(stateUp.getBlock().isAir(stateUp, worldIn, pos.up())){
     		worldIn.setBlockToAir(pos);
     	}
     }
@@ -135,7 +136,7 @@ public class BlockCocoon extends Block implements ITileEntityProvider, IStateMap
     }
 
 	@Override
-	public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos, EntityPlayer player) {
+	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
 		TileCocoon tile = TileUtil.getTile(world, pos, TileCocoon.class);
 		if (tile == null) {
 			return null;
@@ -155,15 +156,15 @@ public class BlockCocoon extends Block implements ITileEntityProvider, IStateMap
 	}
 
 	@Override
-	public AxisAlignedBB getSelectedBoundingBox(World world, BlockPos pos) {
-    	setBlockBounds(0.3125F, 0.3125F, 0.3125F, 0.6875F, 1F, 0.6875F);
-    	return super.getSelectedBoundingBox(world, pos);
-    }
-    
-    @Override
-    public AxisAlignedBB getCollisionBoundingBox(World world, BlockPos pos, IBlockState state) {
-    	setBlockBounds(0.3125F, 0.3125F, 0.3125F, 0.6875F, 1F, 0.6875F);
-    	return super.getCollisionBoundingBox(world, pos, state);
-    }
+	public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World worldIn, BlockPos pos) {
+		setBlockBounds(0.3125F, 0.3125F, 0.3125F, 0.6875F, 1F, 0.6875F);
+		return super.getSelectedBoundingBox(state, worldIn, pos);
+	}
+
+	@Override
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
+		setBlockBounds(0.3125F, 0.3125F, 0.3125F, 0.6875F, 1F, 0.6875F);
+		return super.getCollisionBoundingBox(blockState, worldIn, pos);
+	}
     
 }

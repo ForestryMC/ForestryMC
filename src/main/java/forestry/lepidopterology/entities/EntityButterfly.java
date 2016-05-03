@@ -16,19 +16,21 @@ import net.minecraft.block.BlockFlower;
 import net.minecraft.block.BlockWall;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -53,7 +55,6 @@ import forestry.api.lepidopterology.IButterflyGenome;
 import forestry.api.lepidopterology.IButterflyRoot;
 import forestry.api.lepidopterology.IEntityButterfly;
 import forestry.api.lepidopterology.ILepidopteristTracker;
-import forestry.core.utils.BlockUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.lepidopterology.genetics.Butterfly;
 
@@ -73,7 +74,7 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 	public static final int EXHAUSTION_CONSUMPTION = 100 * EXHAUSTION_REST;
 	public static final int MAX_LIFESPAN = 24000 * 7; // one minecraft week in ticks
 
-	private Vec3 flightTarget;
+	private Vec3d flightTarget;
 	private int exhaustion;
 	private IButterfly contained;
 	private ITree pollen;
@@ -187,11 +188,11 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 	}
 
 	/* DESTINATION */
-	public Vec3 getDestination() {
+	public Vec3d getDestination() {
 		return flightTarget;
 	}
 
-	public void setDestination(Vec3 destination) {
+	public void setDestination(Vec3d destination) {
 		flightTarget = destination;
 	}
 
@@ -203,7 +204,7 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 			weight -= 15.0f;
 		}
 
-		if (!worldObj.getEntitiesWithinAABB(EntityButterfly.class, AxisAlignedBB.fromBounds(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1)).isEmpty()) {
+		if (!worldObj.getEntitiesWithinAABB(EntityButterfly.class, new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1)).isEmpty()) {
 			weight -= 1.0f;
 		}
 
@@ -211,23 +212,26 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 		if (depth > 0) {
 			weight -= 0.1f * depth;
 		} else {
-			Block block = BlockUtil.getBlock(worldObj, pos);
+			IBlockState blockState = worldObj.getBlockState(pos);
+			Block block = blockState.getBlock();
 			if (block instanceof BlockFlower) {
 				weight += 2.0f;
 			} else if (block instanceof IPlantable) {
 				weight += 1.5f;
 			} else if (block instanceof IGrowable) {
 				weight += 1.0f;
-			} else if (block.getMaterial() == Material.plants) {
+			} else if (block.getMaterial(blockState) == Material.PLANTS) {
 				weight += 1.0f;
 			}
 
-			block = BlockUtil.getBlock(worldObj, pos.add(0, -1, 0));
-			if (block.isLeaves(worldObj, pos.add(0, -1, 0))) {
+			BlockPos posBelow = pos.down();
+			IBlockState blockStateBelow = worldObj.getBlockState(posBelow);
+			Block blockBelow = blockState.getBlock();
+			if (blockBelow.isLeaves(blockStateBelow, worldObj, posBelow)) {
 				weight += 2.5f;
-			} else if (block instanceof BlockFence) {
+			} else if (blockBelow instanceof BlockFence) {
 				weight += 1.0f;
-			} else if (block instanceof BlockWall) {
+			} else if (blockBelow instanceof BlockWall) {
 				weight += 1.0f;
 			}
 		}
@@ -242,10 +246,11 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 		int zz = pos.getZ() & 15;
 		int depth = 0;
 		for (int y = chunk.getTopFilledSegment() + 15; y > 0; --y) {
-			Block block = chunk.getBlock(xx, y, zz);
-			if (block.getMaterial().isLiquid()) {
+			IBlockState blockState = chunk.getBlockState(xx, y, zz);
+			Block block = blockState.getBlock();
+			if (block.getMaterial(blockState).isLiquid()) {
 				depth++;
-			} else if (!block.isAir(worldObj, pos)) {
+			} else if (!block.isAir(blockState, worldObj, pos)) {
 				break;
 			}
 		}
@@ -364,8 +369,9 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 	}
 
 	/* INTERACTION */
+
 	@Override
-	public boolean interact(EntityPlayer player) {
+	protected boolean processInteract(EntityPlayer player, EnumHand hand, ItemStack stack) {
 		if (isDead) {
 			return false;
 		}
@@ -388,7 +394,7 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 			ItemStackUtil.dropItemStackAsEntity(itemStack, worldObj, posX, posY, posZ);
 			setDead();
 		} else {
-			player.swingItem();
+			player.swingArm(hand);
 		}
 		return true;
 	}
@@ -469,7 +475,7 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 			motionZ += (Math.signum(diffZ) * 0.5d - motionZ) * 0.10000000149011612d;
 
 			float horizontal = (float) (Math.atan2(motionZ, motionX) * 180d / Math.PI) - 90f;
-			rotationYaw += MathHelper.wrapAngleTo180_float(horizontal - rotationYaw);
+			rotationYaw += MathHelper.wrapDegrees(horizontal - rotationYaw);
 
 			setMoveForward(contained.getGenome().getSpeed());
 		}
@@ -483,9 +489,9 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 	@Override
 	public void fall(float distance, float damageMultiplier) {
 	}
-	
+
 	@Override
-	protected void updateFallState(double y, boolean onGroundIn, Block blockIn, BlockPos pos) {
+	protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos) {
 	}
 
 	@Override
@@ -510,7 +516,7 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 	}
 
 	@Override
-	public ItemStack getPickedResult(MovingObjectPosition target) {
+	public ItemStack getPickedResult(RayTraceResult target) {
 		if (species == null) {
 			return null;
 		}

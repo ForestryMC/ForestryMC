@@ -17,19 +17,17 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.renderer.vertex.VertexFormat;
-import net.minecraft.client.resources.model.IBakedModel;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 
-import net.minecraftforge.client.model.IFlexibleBakedModel;
-import net.minecraftforge.client.model.ISmartBlockModel;
-import net.minecraftforge.client.model.ISmartItemModel;
 import net.minecraftforge.common.property.IExtendedBlockState;
 
 import forestry.api.core.IModelBaker;
@@ -41,7 +39,8 @@ import forestry.core.models.baker.ModelBaker;
 /**
  * A overlay block model to make a block with 2 or more texture layers
  */
-public abstract class ModelBlockOverlay<B extends Block> implements IFlexibleBakedModel, ISmartItemModel, ISmartBlockModel {
+public abstract class ModelBlockOverlay<B extends Block> implements IBakedModel {
+	private ItemOverrideList overrideList;
 	@Nonnull
 	protected final Class<B> blockClass;
 	protected IModelBakerModel latestBlockModel;
@@ -52,13 +51,23 @@ public abstract class ModelBlockOverlay<B extends Block> implements IFlexibleBak
 	}
 
 	@Override
-	public List<BakedQuad> getFaceQuads(EnumFacing face) {
-		return Collections.emptyList();
-	}
+	public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
+		IModelBaker baker = new ModelBaker();
+		IExtendedBlockState stateExtended = (IExtendedBlockState) state;
 
-	@Override
-	public List<BakedQuad> getGeneralQuads() {
-		return Collections.emptyList();
+		IBlockAccess world = stateExtended.getValue(UnlistedBlockAccess.BLOCKACCESS);
+		BlockPos pos = stateExtended.getValue(UnlistedBlockPos.POS);
+		Block block = state.getBlock();
+		if (!blockClass.isInstance(block)) {
+			return null;
+		}
+		B bBlock = blockClass.cast(block);
+
+		baker.setRenderBoundsFromBlock(block);
+		bakeWorldBlock(bBlock, world, pos, stateExtended, baker);
+
+		latestBlockModel = baker.bakeModel(false);
+		return latestBlockModel.getQuads(state, side, rand);
 	}
 
 	@Override
@@ -98,51 +107,48 @@ public abstract class ModelBlockOverlay<B extends Block> implements IFlexibleBak
 		return latestItemModel.getItemCameraTransforms();
 	}
 	
-	@Override
-	public VertexFormat getFormat() {
-		if(latestItemModel == null && latestBlockModel == null) {
-			return DefaultVertexFormats.BLOCK;
-		}
-		return latestBlockModel != null ? latestBlockModel.getFormat() : latestItemModel.getFormat();
+//	@Override
+//	public VertexFormat getFormat() {
+//		if(latestItemModel == null && latestBlockModel == null) {
+//			return DefaultVertexFormats.BLOCK;
+//		}
+//		return latestBlockModel != null ? latestBlockModel.getFormat() : latestItemModel.getFormat();
+//	}
+
+	protected ItemOverrideList createOverrides() {
+		return new OverlayItemOverrideList();
 	}
 
 	@Override
-	public IBakedModel handleBlockState(IBlockState state) {
-		IModelBaker baker = new ModelBaker();
-		IExtendedBlockState stateExtended = (IExtendedBlockState) state;
-		
-		IBlockAccess world = stateExtended.getValue(UnlistedBlockAccess.BLOCKACCESS);
-		BlockPos pos = stateExtended.getValue(UnlistedBlockPos.POS);
-		Block block = state.getBlock();
-		if (!blockClass.isInstance(block)) {
-			return null;
+	public ItemOverrideList getOverrides() {
+		if (overrideList == null) {
+			overrideList = createOverrides();
 		}
-		B bBlock = blockClass.cast(block);
-		
-		baker.setRenderBoundsFromBlock(block);
-		bakeWorldBlock(bBlock, world, pos, stateExtended, baker);
-		
-		return latestBlockModel = baker.bakeModel(false);
+		return overrideList;
 	}
 
-	@Override
-	public IBakedModel handleItemState(ItemStack stack) {
-		IModelBaker baker = new ModelBaker();
-		Block block = Block.getBlockFromItem(stack.getItem());
-		if (!blockClass.isInstance(block)) {
-			return null;
-		}
-		B bBlock = blockClass.cast(block);
-		
-		block.setBlockBoundsForItemRender();
-		baker.setRenderBoundsFromBlock(block);
-		bakeInventoryBlock(bBlock, stack, baker);
-		
-		return latestItemModel = baker.bakeModel(true);
-	}
-	
 	protected abstract void bakeInventoryBlock(@Nonnull B block, @Nonnull ItemStack item, @Nonnull IModelBaker baker);
 
 	protected abstract void bakeWorldBlock(@Nonnull B block, @Nonnull IBlockAccess world, @Nonnull BlockPos pos, @Nonnull IExtendedBlockState stateExtended, @Nonnull IModelBaker baker);
 
+	private class OverlayItemOverrideList extends ItemOverrideList {
+		public OverlayItemOverrideList() {
+			super(Collections.emptyList());
+		}
+		
+		@Override
+		public IBakedModel handleItemState(IBakedModel originalModel, ItemStack stack, World world, EntityLivingBase entity) {
+			IModelBaker baker = new ModelBaker();
+			Block block = Block.getBlockFromItem(stack.getItem());
+			if (!blockClass.isInstance(block)) {
+				return null;
+			}
+			B bBlock = blockClass.cast(block);
+
+			baker.setRenderBoundsFromBlock(block);
+			bakeInventoryBlock(bBlock, stack, baker);
+
+			return latestItemModel = baker.bakeModel(true);
+		}
+	}
 }

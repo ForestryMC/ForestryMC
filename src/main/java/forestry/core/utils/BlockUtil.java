@@ -23,11 +23,11 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -61,6 +61,7 @@ public abstract class BlockUtil {
 	/**
 	 * @return The block from the pos
 	 */
+	@Deprecated
 	public static Block getBlock(IBlockAccess world, BlockPos posBlock) {
 		return getBlockState(world, posBlock).getBlock();
 	}
@@ -88,7 +89,7 @@ public abstract class BlockUtil {
 			return false;
 		}
 
-		IBlockState state = Blocks.cocoa.getDefaultState().withProperty(BlockDirectional.FACING, facing);
+		IBlockState state = Blocks.COCOA.getDefaultState().withProperty(BlockDirectional.FACING, facing);
 		world.setBlockState(pos, state);
 		return true;
 	}
@@ -107,15 +108,15 @@ public abstract class BlockUtil {
 		pos = pos.offset(direction);
 		IBlockState state = world.getBlockState(pos);
 		Block block = state.getBlock();
-		if (block == Blocks.log) {
+		if (block == Blocks.LOG) {
 			return state.getValue(BlockPlanks.VARIANT) == BlockPlanks.EnumType.JUNGLE;
 		} else {
 			return block.isWood(world, pos);
 		}
 	}
 
-	public static boolean isWoodSlabBlock(Block block, IBlockAccess world, BlockPos pos) {
-		if (block == null || block.isAir(world, pos)) {
+	public static boolean isWoodSlabBlock(IBlockState blockState, Block block, IBlockAccess world, BlockPos pos) {
+		if (blockState == null || block == null || block.isAir(blockState, world, pos)) {
 			return false;
 		}
 		if(Item.getItemFromBlock(block) == null){
@@ -131,33 +132,32 @@ public abstract class BlockUtil {
 		return false;
 	}
 
-	public static boolean isReplaceableBlock(World world, BlockPos pos) {
+	public static boolean isReplaceableBlock(IBlockState blockState, World world, BlockPos pos) {
 		Block block = world.getBlockState(pos).getBlock();
 
-		return isReplaceableBlock(block);
+		return isReplaceableBlock(blockState, block);
 	}
 
-	public static boolean isReplaceableBlock(Block block) {
-		return block == Blocks.vine || block == Blocks.tallgrass || block == Blocks.deadbush || block == Blocks.snow_layer
-				|| block.getMaterial().isReplaceable();
+	public static boolean isReplaceableBlock(IBlockState blockState, Block block) {
+		return block.getMaterial(blockState).isReplaceable();
 	}
 
-	public static MovingObjectPosition collisionRayTrace(@Nonnull BlockPos pos, @Nonnull Vec3 startVec, @Nonnull Vec3 endVec, @Nonnull AxisAlignedBB bounds) {
+	public static RayTraceResult collisionRayTrace(@Nonnull BlockPos pos, @Nonnull Vec3d startVec, @Nonnull Vec3d endVec, @Nonnull AxisAlignedBB bounds) {
 		return collisionRayTrace(pos, startVec, endVec, bounds.minX, bounds.minY, bounds.minZ, bounds.maxX, bounds.maxY, bounds.maxZ);
 	}
 
 	/**
 	 * Ray traces through the blocks collision from start vector to end vector returning a ray trace hit.
 	 */
-	public static MovingObjectPosition collisionRayTrace(@Nonnull BlockPos pos, @Nonnull Vec3 startVec, @Nonnull Vec3 endVec, double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
+	public static RayTraceResult collisionRayTrace(@Nonnull BlockPos pos, @Nonnull Vec3d startVec, @Nonnull Vec3d endVec, double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
 		startVec = startVec.addVector(-pos.getX(), -pos.getY(), -pos.getZ());
 		endVec = endVec.addVector(-pos.getX(), -pos.getY(), -pos.getZ());
-		Vec3 vec32 = startVec.getIntermediateWithXValue(endVec, minX);
-		Vec3 vec33 = startVec.getIntermediateWithXValue(endVec, maxX);
-		Vec3 vec34 = startVec.getIntermediateWithYValue(endVec, minY);
-		Vec3 vec35 = startVec.getIntermediateWithYValue(endVec, maxY);
-		Vec3 vec36 = startVec.getIntermediateWithZValue(endVec, minZ);
-		Vec3 vec37 = startVec.getIntermediateWithZValue(endVec, maxZ);
+		Vec3d vec32 = startVec.getIntermediateWithXValue(endVec, minX);
+		Vec3d vec33 = startVec.getIntermediateWithXValue(endVec, maxX);
+		Vec3d vec34 = startVec.getIntermediateWithYValue(endVec, minY);
+		Vec3d vec35 = startVec.getIntermediateWithYValue(endVec, maxY);
+		Vec3d vec36 = startVec.getIntermediateWithZValue(endVec, minZ);
+		Vec3d vec37 = startVec.getIntermediateWithZValue(endVec, maxZ);
 
 		if (!isVecInsideYZBounds(vec32, minY, minZ, maxY, maxZ)) {
 			vec32 = null;
@@ -183,7 +183,7 @@ public abstract class BlockUtil {
 			vec37 = null;
 		}
 
-		Vec3 minHit = null;
+		Vec3d minHit = null;
 
 		if (vec32 != null && (minHit == null || startVec.squareDistanceTo(vec32) < startVec.squareDistanceTo(minHit))) {
 			minHit = vec32;
@@ -238,28 +238,28 @@ public abstract class BlockUtil {
 				sideHit = 3;
 			}
 
-			return new MovingObjectPosition(minHit.addVector(pos.getX(), pos.getY(), pos.getZ()), EnumFacing.values()[sideHit], pos);
+			return new RayTraceResult(minHit.addVector(pos.getX(), pos.getY(), pos.getZ()), EnumFacing.values()[sideHit], pos);
 		}
 	}
 
 	/**
 	 * Checks if a vector is within the Y and Z bounds of the block.
 	 */
-	private static boolean isVecInsideYZBounds(Vec3 vec, double minY, double minZ, double maxY, double maxZ) {
+	private static boolean isVecInsideYZBounds(Vec3d vec, double minY, double minZ, double maxY, double maxZ) {
 		return vec != null && vec.yCoord >= minY && vec.yCoord <= maxY && vec.zCoord >= minZ && vec.zCoord <= maxZ;
 	}
 
 	/**
 	 * Checks if a vector is within the X and Z bounds of the block.
 	 */
-	private static boolean isVecInsideXZBounds(Vec3 vec, double minX, double minZ, double maxX, double maxZ) {
+	private static boolean isVecInsideXZBounds(Vec3d vec, double minX, double minZ, double maxX, double maxZ) {
 		return vec != null && vec.xCoord >= minX && vec.xCoord <= maxX && vec.zCoord >= minZ && vec.zCoord <= maxZ;
 	}
 
 	/**
 	 * Checks if a vector is within the X and Y bounds of the block.
 	 */
-	private static boolean isVecInsideXYBounds(Vec3 vec, double minX, double minY, double maxX, double maxY) {
+	private static boolean isVecInsideXYBounds(Vec3d vec, double minX, double minY, double maxX, double maxY) {
 		return vec != null && vec.xCoord >= minX && vec.xCoord <= maxX && vec.yCoord >= minY && vec.yCoord <= maxY;
 	}
 	
@@ -284,7 +284,7 @@ public abstract class BlockUtil {
 
 			for (int k1 = minX; k1 <= maxX; ++k1) {
 				for (int l1 = minZ; l1 <= maxZ; ++l1) {
-					if (!world.getChunkProvider().chunkExists(k1, l1)) {
+					if (world.getChunkProvider().getLoadedChunk(k1, l1) == null) {
 						return false;
 					}
 				}
@@ -296,42 +296,79 @@ public abstract class BlockUtil {
 		}
 	}
 	
-	public static boolean canReplace(World world, BlockPos pos) {
+	public static boolean canReplace(IBlockState blockState, World world, BlockPos pos) {
 		Block block = getBlock(world, pos);
-		Material material = block.getMaterial();
-		return material.isReplaceable() && block.isReplaceable(world, pos) && !material.isLiquid() || block.isAir(world, pos) || material == Material.plants;
+		Material material = block.getMaterial(blockState);
+		return material.isReplaceable() && block.isReplaceable(world, pos) && !material.isLiquid() || block.isAir(blockState, world, pos) || material == Material.PLANTS;
 	}
 	
-	public static boolean canPlaceTree(World world, BlockPos pos){
+	public static boolean canPlaceTree(IBlockState blockState, World world, BlockPos pos){
 		BlockPos downPos = pos.down();
 		Block block = world.getBlockState(downPos).getBlock();
-		if(block.isReplaceable(world, downPos) && block.getMaterial().isLiquid() || block.isLeaves(world, downPos) || block.isWood(world, downPos)){
+		if(block.isReplaceable(world, downPos) && block.getMaterial(blockState).isLiquid() || block.isLeaves(blockState, world, downPos) || block.isWood(world, downPos)){
 			return false;
 		}
 		return true;
 	}
 	
 	public static BlockPos getNextReplaceableUpPos(World world, BlockPos pos){
-		int x = pos.getX();
-		int y = pos.getY();
-		int z = pos.getZ();
-		
-		do {
-			y++;
-		} while (!BlockUtil.canReplace(world, new BlockPos(x, y, z)));
+		IBlockState blockState;
 
-		return new BlockPos(x, y, z);
+		do {
+			pos = pos.up();
+			blockState = world.getBlockState(pos);
+		} while (!BlockUtil.canReplace(blockState, world, pos));
+
+		return pos;
 	}
 	
 	public static BlockPos getNextSolidDownPos(World world, BlockPos pos){
-		int x = pos.getX();
-		int y = pos.getY();
-		int z = pos.getZ();
-		
+		IBlockState blockState;
+
 		do {
-			y--;
-		} while (BlockUtil.canReplace(world, new BlockPos(x, y - 1, z)));
-		
-		return new BlockPos(x, y, z);
+			pos = pos.down();
+			blockState = world.getBlockState(pos);
+		} while (BlockUtil.canReplace(blockState, world, pos));
+
+		return pos;
+	}
+
+	/** Copied from {@link Block#shouldSideBeRendered} */
+	public static boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+		AxisAlignedBB axisalignedbb = blockState.getBoundingBox(blockAccess, pos);
+
+		switch (side) {
+			case DOWN:
+				if (axisalignedbb.minY > 0.0D) {
+					return true;
+				}
+				break;
+			case UP:
+				if (axisalignedbb.maxY < 1.0D) {
+					return true;
+				}
+				break;
+			case NORTH:
+				if (axisalignedbb.minZ > 0.0D) {
+					return true;
+				}
+				break;
+			case SOUTH:
+				if (axisalignedbb.maxZ < 1.0D) {
+					return true;
+				}
+				break;
+			case WEST:
+				if (axisalignedbb.minX > 0.0D) {
+					return true;
+				}
+				break;
+			case EAST:
+				if (axisalignedbb.maxX < 1.0D) {
+					return true;
+				}
+		}
+
+		return !blockAccess.getBlockState(pos.offset(side)).doesSideBlockRendering(blockAccess, pos.offset(side), side.getOpposite());
 	}
 }

@@ -19,10 +19,12 @@ import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -35,6 +37,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.lwjgl.opengl.GL11;
+
+import forestry.core.proxy.Proxies;
 
 @SideOnly(Side.CLIENT)
 public class ParticleRenderer {
@@ -68,7 +72,8 @@ public class ParticleRenderer {
 
 	@SubscribeEvent
 	public void onRenderWorldLast(RenderWorldLastEvent event) {
-		render(event.partialTicks);
+		EntityPlayer thePlayer = Proxies.common.getPlayer();
+		render(thePlayer, event.getPartialTicks());
 	}
 
 	@SubscribeEvent
@@ -103,7 +108,7 @@ public class ParticleRenderer {
 
 			particle.onUpdate();
 
-			if (particle.isDead) {
+			if (!particle.isAlive()) {
 				it.remove();
 			}
 		}
@@ -115,7 +120,7 @@ public class ParticleRenderer {
 		Minecraft.getMinecraft().mcProfiler.endSection();
 	}
 
-	private synchronized void render(float partialTicks) {
+	private synchronized void render(Entity entityIn, float partialTicks) {
 		Minecraft.getMinecraft().mcProfiler.startSection(name + "-render");
 
 		float rotationX = ActiveRenderInfo.getRotationX();
@@ -130,7 +135,7 @@ public class ParticleRenderer {
 		EntityFX.interpPosZ = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partialTicks;
 
 		// bind the texture
-		Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+		Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 
 		// gl states/settings for drawing
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
@@ -140,11 +145,11 @@ public class ParticleRenderer {
 		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.003921569F);
 
 		Tessellator tessellator = Tessellator.getInstance();
-		WorldRenderer worldRenderer = tessellator.getWorldRenderer();
-		worldRenderer.begin(7, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
+		VertexBuffer vertexBuffer = tessellator.getBuffer();
+		vertexBuffer.begin(7, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
 
 		for (EntityFX particle : particles) {
-			particle.renderParticle(worldRenderer, particle, partialTicks, rotationX, rotationXZ, rotationZ, rotationYZ, rotationXY);
+			particle.renderParticle(vertexBuffer, entityIn, partialTicks, rotationX, rotationXZ, rotationZ, rotationYZ, rotationXY);
 		}
 
 		tessellator.draw();

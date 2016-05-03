@@ -7,9 +7,9 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import forestry.api.apiculture.IArmorApiarist;
@@ -43,10 +43,10 @@ public class ItemSmoker extends ItemForestry implements IArmorApiarist {
 	}
 
 	private static void addSmoke(World worldObj, Entity entity, int distance) {
-		Vec3 look = entity.getLookVec();
-		Vec3 handOffset = look.crossProduct(new Vec3(0, 1, 0));
-		Vec3 lookDistance = new Vec3(look.xCoord * distance, look.yCoord * distance, look.zCoord * distance);
-		Vec3 smokePos = lookDistance.add(entity.getPositionVector()).add(handOffset);
+		Vec3d look = entity.getLookVec();
+		Vec3d handOffset = look.crossProduct(new Vec3d(0, 1, 0));
+		Vec3d lookDistance = new Vec3d(look.xCoord * distance, look.yCoord * distance, look.zCoord * distance);
+		Vec3d smokePos = lookDistance.add(entity.getPositionVector()).add(handOffset);
 		Proxies.render.addEntitySmokeFX(worldObj, smokePos.xCoord, smokePos.yCoord + 1, smokePos.zCoord);
 		BlockPos blockPos = new BlockPos(smokePos.xCoord, smokePos.yCoord + 1, smokePos.zCoord);
 		TileEntity tileEntity = worldObj.getTileEntity(blockPos);

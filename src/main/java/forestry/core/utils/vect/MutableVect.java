@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.core.utils.vect;
 
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 
 import forestry.api.farming.FarmDirection;
@@ -18,6 +18,7 @@ import forestry.api.farming.FarmDirection;
 /**
  * Represents changeable positions or dimensions.
  */
+@Deprecated
 public class MutableVect extends IVect {
 	public int x;
 	public int y;

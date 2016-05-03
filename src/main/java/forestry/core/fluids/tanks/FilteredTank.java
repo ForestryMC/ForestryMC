@@ -17,7 +17,7 @@ import java.util.Set;
 
 import net.minecraft.item.EnumRarity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -92,7 +92,7 @@ public class FilteredTank extends StandardTank {
 				toolTip.add(fluidFilter.getLocalizedName(filterFluidStack), rarity.rarityColor);
 			}
 		} else {
-			toolTip.add(EnumChatFormatting.ITALIC + "<" + Translator.translateToLocal("for.gui.tooltip.tmi") + ">");
+			toolTip.add(TextFormatting.ITALIC + "<" + Translator.translateToLocal("for.gui.tooltip.tmi") + ">");
 		}
 
 		String liquidAmount = Translator.translateToLocalFormatted("for.gui.tooltip.liquid.amount", getFluidAmount(), getCapacity());

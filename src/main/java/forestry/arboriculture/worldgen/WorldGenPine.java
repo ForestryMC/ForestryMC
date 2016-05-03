@@ -13,7 +13,7 @@ package forestry.arboriculture.worldgen;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.world.ITreeGenData;

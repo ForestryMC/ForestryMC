@@ -23,8 +23,9 @@ import java.util.Set;
 
 import net.minecraft.block.BlockTorch;
 import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
@@ -35,10 +36,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -50,6 +52,7 @@ import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.api.core.Tabs;
 import forestry.apiculture.tiles.TileCandle;
+import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemStackUtil;
 
 public class BlockCandle extends BlockTorch implements IItemModelRegister, ITileEntityProvider {
@@ -90,22 +93,22 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister, ITile
 				.build();
 
 		lightingItems = new HashSet<>(Arrays.asList(
-				Items.flint_and_steel,
-				Items.flint,
-				Item.getItemFromBlock(Blocks.torch)
+				Items.FLINT_AND_STEEL,
+				Items.FLINT,
+				Item.getItemFromBlock(Blocks.TORCH)
 		));
 	}
 
 	public BlockCandle() {
 		this.setHardness(0.0F);
-		this.setStepSound(soundTypeWood);
+		this.setSoundType(SoundType.WOOD);
 		setCreativeTab(Tabs.tabApiculture);
 		setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.UP).withProperty(STATE, State.OFF));
 	}
 	
 	@Override
-	protected BlockState createBlockState() {
-		return new BlockState(this, FACING, STATE);
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, FACING, STATE);
 	}
 	
 	@Override
@@ -129,17 +132,12 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister, ITile
 	}
 
 	@Override
-	public int getLightValue(IBlockAccess world, BlockPos pos) {
+	public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
 		TileEntity tileEntity = world.getTileEntity(pos);
 		if (tileEntity instanceof TileCandle && ((TileCandle) tileEntity).isLit()) {
 			return 14;
 		}
 		return 0;
-	}
-	
-	@Override
-	public int colorMultiplier(IBlockAccess worldIn, BlockPos pos, int renderPass) {
-		return ((TileCandle) worldIn.getTileEntity(pos)).getColour();
 	}
 
 	@Override
@@ -148,8 +146,8 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister, ITile
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
-		TileEntity tileEntity = world.getTileEntity(pos);
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+		TileEntity tileEntity = worldIn.getTileEntity(pos);
 		if (!(tileEntity instanceof TileCandle)) {
 			return false;
 		}
@@ -159,7 +157,6 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister, ITile
 
 		boolean flag = false;
 		boolean toggleLitState = true;
-		ItemStack heldItem = player.getCurrentEquippedItem();
 
 		if (!isLit) {
 			if (heldItem == null || !lightingItems.contains(heldItem.getItem())) {
@@ -186,7 +183,7 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister, ITile
 			} else {
 				boolean dyed = tryDye(heldItem, isLit, tileCandle);
 				if (dyed) {
-					world.markBlockForUpdate(pos);
+					worldIn.markBlockRangeForRenderUpdate(pos, pos);
 					toggleLitState = false;
 					flag = true;
 				}
@@ -195,10 +192,10 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister, ITile
 
 		if (toggleLitState) {
 			tileCandle.setLit(!isLit);
-			world.markBlockForUpdate(pos);
-			world.theProfiler.startSection("checkLight");
-			world.checkLight(pos);
-			world.theProfiler.endSection();
+			worldIn.markBlockRangeForRenderUpdate(pos, pos);
+			worldIn.theProfiler.startSection("checkLight");
+			worldIn.checkLight(pos);
+			worldIn.theProfiler.endSection();
 			flag = true;
 		}
 		return flag;
@@ -252,7 +249,7 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister, ITile
 	}
 
 	@Override
-	public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos, EntityPlayer player) {
+	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
 		return getCandleDrop(world, pos);
 	}
 
@@ -285,11 +282,10 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister, ITile
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void randomDisplayTick(World world, BlockPos pos, IBlockState state, Random rand) {
-		TileEntity tileEntity = world.getTileEntity(pos);
-		if (tileEntity instanceof TileCandle && ((TileCandle) tileEntity).isLit()) {
-			super.randomDisplayTick(world, pos, state, rand);
+	public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+		TileCandle tileCandle = TileUtil.getTile(worldIn, pos, TileCandle.class);
+		if (tileCandle != null && tileCandle.isLit()) {
+			super.randomDisplayTick(stateIn, worldIn, pos, rand);
 		}
 	}
 

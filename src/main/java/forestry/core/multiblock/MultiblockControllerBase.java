@@ -13,7 +13,7 @@ import forestry.core.utils.Translator;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
@@ -372,7 +372,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 	@Override
 	public void _onAssimilated(IMultiblockControllerInternal otherController) {
 		if (referenceCoord != null) {
-			if (worldObj.getChunkProvider().chunkExists(referenceCoord.getX() >> 4, referenceCoord.getZ() >> 4)) {
+			if (worldObj.getChunkProvider().getLoadedChunk(referenceCoord.getX() >> 4, referenceCoord.getZ() >> 4) != null) {
 				TileEntity te = this.worldObj.getTileEntity(referenceCoord);
 				if (te instanceof IMultiblockComponent) {
 					IMultiblockComponent part = (IMultiblockComponent) te;
@@ -694,7 +694,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 		for (IMultiblockComponent part : connectedParts) {
 			// This happens during chunk unload.
 			BlockPos partCoord = part.getCoordinates();
-			if (!chunkProvider.chunkExists(partCoord.getX() >> 4, partCoord.getZ() >> 4) || isInvalid(part)) {
+			if (chunkProvider.getLoadedChunk(partCoord.getX() >> 4, partCoord.getZ() >> 4) == null || isInvalid(part)) {
 				deadParts.add(part);
 				onDetachBlock(part);
 				continue;
@@ -798,7 +798,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 		IChunkProvider chunkProvider = worldObj.getChunkProvider();
 		for (IMultiblockComponent part : connectedParts) {
 			BlockPos partCoord = part.getCoordinates();
-			if (chunkProvider.chunkExists(partCoord.getX() >> 4, partCoord.getZ() >> 4)) {
+			if (chunkProvider.getLoadedChunk(partCoord.getX() >> 4, partCoord.getZ() >> 4) != null) {
 				onDetachBlock(part);
 			}
 		}
@@ -823,7 +823,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 
 		for (IMultiblockComponent part : connectedParts) {
 			BlockPos partCoord = part.getCoordinates();
-			if (isInvalid(part) || !chunkProvider.chunkExists(partCoord.getX() >> 4, partCoord.getZ() >> 4)) {
+			if (isInvalid(part) || chunkProvider.getLoadedChunk(partCoord.getX() >> 4, partCoord.getZ() >> 4) == null) {
 				// Chunk is unloading, skip this coord to prevent chunk thrashing
 				continue;
 			}
@@ -838,47 +838,6 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 			MultiblockLogic logic = (MultiblockLogic) theChosenOne.getMultiblockLogic();
 			logic.becomeMultiblockSaveDelegate();
 		}
-	}
-	
-	/**
-	 * Marks the reference coord dirty & updateable.
-	 *
-	 * On the server, this will mark the for a data-update, so that
-	 * nearby clients will receive an updated description packet from the server
-	 * after a short time. The block's chunk will also be marked dirty and the
-	 * block's chunk will be saved to disk the next time chunks are saved.
-	 *
-	 * On the client, this will mark the block for a rendering update.
-	 */
-	protected void markReferenceCoordForUpdate() {
-		BlockPos rc = getReferenceCoord();
-		if (worldObj != null && rc != null) {
-			worldObj.markBlockForUpdate(rc);
-		}
-	}
-	
-	/**
-	 * Marks the reference coord dirty.
-	 *
-	 * On the server, this marks the reference coord's chunk as dirty; the block (and chunk)
-	 * will be saved to disk the next time chunks are saved. This does NOT mark it dirty for
-	 * a description-packet update.
-	 *
-	 * On the client, does nothing.
-	 * @see MultiblockControllerBase#markReferenceCoordForUpdate()
-	 */
-	protected void markReferenceCoordDirty() {
-		if (worldObj == null || worldObj.isRemote) {
-			return;
-		}
-
-		BlockPos referenceCoord = getReferenceCoord();
-		if (referenceCoord == null) {
-			return;
-		}
-
-		TileEntity saveTe = worldObj.getTileEntity(referenceCoord);
-		worldObj.markChunkDirty(referenceCoord, saveTe);
 	}
 
 	private static boolean isInvalid(IMultiblockComponent part) {

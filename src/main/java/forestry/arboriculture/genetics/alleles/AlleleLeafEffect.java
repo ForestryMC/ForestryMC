@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics.alleles;
 
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.arboriculture.EnumTreeChromosome;
@@ -61,6 +61,6 @@ public class AlleleLeafEffect extends AlleleCategorized implements IAlleleLeafEf
 		Vect min = offset.add(x, y, z);
 		Vect max = min.add(area);
 
-		return AxisAlignedBB.fromBounds(min.getX(), min.getY(), min.getZ(), max.getX(), max.getY(), max.getZ());
+		return new AxisAlignedBB(min.getX(), min.getY(), min.getZ(), max.getX(), max.getY(), max.getZ());
 	}
 }

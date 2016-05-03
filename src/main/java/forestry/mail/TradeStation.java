@@ -17,7 +17,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
 
@@ -393,7 +393,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	private void removePaper() {
 		for (int i = SLOT_LETTERS_1; i < SLOT_LETTERS_1 + SLOT_LETTERS_COUNT; i++) {
 			ItemStack stack = inventory.getStackInSlot(i);
-			if (stack != null && stack.getItem() == Items.paper && stack.stackSize > 0) {
+			if (stack != null && stack.getItem() == Items.PAPER && stack.stackSize > 0) {
 				inventory.decrStackSize(i, 1);
 				break;
 			}
@@ -627,7 +627,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	}
 	
 	@Override
-	public IChatComponent getDisplayName() {
+	public ITextComponent getDisplayName() {
 		return inventory.getDisplayName();
 	}
 	

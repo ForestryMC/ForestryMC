@@ -22,12 +22,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.capabilities.Capability;
@@ -230,8 +230,9 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 		}
 		this.orientation = orientation;
 		this.setNeedsNetworkUpdate();
-		worldObj.notifyBlockOfStateChange(getPos(), BlockUtil.getBlock(worldObj, getPos()));
-		worldObj.markBlockForUpdate(getPos());
+		BlockPos pos = getPos();
+		worldObj.notifyBlockOfStateChange(pos, BlockUtil.getBlock(worldObj, pos));
+		worldObj.markBlockRangeForRenderUpdate(pos, pos);
 	}
 
 	protected final void setNeedsNetworkUpdate() {
@@ -327,8 +328,8 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	}
 
 	@Override
-	public IChatComponent getDisplayName() {
-		return new ChatComponentText(getName());
+	public ITextComponent getDisplayName() {
+		return new TextComponentTranslation(getUnlocalizedTitle());
 	}
 	
 	@Override

@@ -13,7 +13,7 @@ package forestry.apiculture.genetics.alleles;
 import java.util.List;
 
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import forestry.api.apiculture.BeeManager;
@@ -68,7 +68,7 @@ public class AlleleEffectIgnition extends AlleleEffectThrottled {
 		if (housing.getWorld().rand.nextInt(2) != 0) {
 			super.doFX(genome, storedData, housing);
 		} else {
-			Vec3 beeFXCoordinates = housing.getBeeFXCoordinates();
+			Vec3d beeFXCoordinates = housing.getBeeFXCoordinates();
 			Proxies.render.addEntityIgnitionFX(housing.getWorld(), beeFXCoordinates.xCoord, beeFXCoordinates.yCoord + 0.5, beeFXCoordinates.zCoord);
 		}
 		return storedData;

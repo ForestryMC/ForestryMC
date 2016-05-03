@@ -13,7 +13,7 @@ package forestry.core.inventory.wrappers;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.text.ITextComponent;
 
 /**
  * Created by CovertJaguar on 3/6/2016 for Railcraft.
@@ -67,7 +67,7 @@ public abstract class InvWrapperBase implements IInventory {
     }
 
     @Override
-    public IChatComponent getDisplayName() {
+    public ITextComponent getDisplayName() {
         return inv.getDisplayName();
     }
 

@@ -9,6 +9,7 @@ import java.util.Set;
 import net.minecraft.command.ICommand;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.chunk.IChunkProvider;
 
 import net.minecraftforge.fml.common.IFuelHandler;
@@ -54,7 +55,7 @@ public interface IForestryPlugin {
 
 	boolean processIMCMessage(FMLInterModComms.IMCMessage message);
 
-	void populateChunk(IChunkProvider chunkProvider, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGeneratedZ);
+	void populateChunk(IChunkGenerator chunkProvider, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGeneratedZ);
 
 	void populateChunkRetroGen(World world, Random rand, int chunkX, int chunkZ);
 

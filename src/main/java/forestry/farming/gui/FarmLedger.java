@@ -10,8 +10,12 @@
  ******************************************************************************/
 package forestry.farming.gui;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ItemModelMesher;
+import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.IBakedModel;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
@@ -44,8 +48,16 @@ public class FarmLedger extends Ledger {
 		int xHeader = x + 22;
 
 		// Draw icon
-		IBakedModel iBakedModel = Proxies.common.getClientInstance().getRenderItem().getItemModelMesher().getItemModel(new ItemStack(Items.water_bucket));
-		TextureAtlasSprite textureAtlasSprite = Proxies.common.getClientInstance().getTextureMapBlocks().getAtlasSprite(iBakedModel.getParticleTexture().getIconName());
+		Minecraft minecraft = Proxies.common.getClientInstance();
+		RenderItem renderItem = minecraft.getRenderItem();
+		ItemModelMesher itemModelMesher = renderItem.getItemModelMesher();
+		IBakedModel iBakedModel = itemModelMesher.getItemModel(new ItemStack(Items.WATER_BUCKET));
+
+		TextureMap textureMapBlocks = minecraft.getTextureMapBlocks();
+		TextureAtlasSprite particleTexture = iBakedModel.getParticleTexture();
+		String particleTextureIconName = particleTexture.getIconName();
+		TextureAtlasSprite textureAtlasSprite = textureMapBlocks.getAtlasSprite(particleTextureIconName);
+
 		drawSprite(textureAtlasSprite, xIcon, y);
 		y += 4;
 

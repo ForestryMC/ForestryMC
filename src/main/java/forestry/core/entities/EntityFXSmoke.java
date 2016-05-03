@@ -11,7 +11,7 @@
 package forestry.core.entities;
 
 import net.minecraft.client.particle.EntityFX;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
@@ -25,15 +25,14 @@ public class EntityFXSmoke extends EntityFX {
 
 	public EntityFXSmoke(World world, double x, double y, double z) {
 		super(world, x, y, z, 0, 0, 0);
-		this.motionX *= 0.8;
-		this.motionY *= 0.8;
-		this.motionZ *= 0.8;
-		this.motionY = this.rand.nextFloat() * 0.2F + 0.05F;
+		this.xSpeed *= 0.8;
+		this.xSpeed *= 0.8;
+		this.xSpeed *= 0.8;
+		this.xSpeed = this.rand.nextFloat() * 0.2F + 0.05F;
 		this.particleRed = this.particleGreen = this.particleBlue = 1.0F;
 		this.particleScale *= this.rand.nextFloat() / 4;
 		this.ignitionParticleScale = this.particleScale;
 		this.particleMaxAge = (int) (16.0 / (Math.random() * 0.8 + 0.2));
-		this.noClip = false;
 		this.setParticleTextureIndex(49);
 	}
 
@@ -44,19 +43,11 @@ public class EntityFXSmoke extends EntityFX {
 		return 240 | j << 16;
 	}
 
-	/**
-	 * Gets how bright this entity is.
-	 */
 	@Override
-	public float getBrightness(float p_70013_1_) {
-		return 1.0F;
-	}
-	
-	@Override
-	public void renderParticle(WorldRenderer worldRendererIn, Entity entityIn, float partialTicks, float p_180434_4_, float p_180434_5_, float p_180434_6_, float p_180434_7_, float p_180434_8_) {
+	public void renderParticle(VertexBuffer worldRendererIn, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
 		float f6 = (this.particleAge + partialTicks) / this.particleMaxAge;
 		this.particleScale = this.ignitionParticleScale * (1.0F - f6 * f6);
-		super.renderParticle(worldRendererIn, entityIn, partialTicks, p_180434_4_, p_180434_5_, p_180434_6_, p_180434_7_, p_180434_8_);
+		super.renderParticle(worldRendererIn, entityIn, partialTicks, rotationX, rotationZ, rotationYZ, rotationXY, rotationXZ);
 	}
 
 	/**
@@ -69,24 +60,24 @@ public class EntityFXSmoke extends EntityFX {
 		this.prevPosZ = this.posZ;
 
 		if (this.particleAge++ >= this.particleMaxAge) {
-			this.setDead();
+			this.setExpired();
 		}
 
 		float f = (float) this.particleAge / (float) this.particleMaxAge;
 
 		if (this.rand.nextFloat() > f * 2) {
-			this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX, this.posY, this.posZ, this.motionX, this.motionY, this.motionZ);
+			this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX, this.posY, this.posZ, this.xSpeed, this.ySpeed, this.zSpeed);
 		}
 
-		this.motionY -= 0.03D;
-		this.moveEntity(this.motionX, this.motionY, this.motionZ);
-		this.motionX *= 0.999D;
-		this.motionY *= 0.999D;
-		this.motionZ *= 0.999D;
+		this.ySpeed -= 0.03D;
+		this.moveEntity(this.xSpeed, this.ySpeed, this.zSpeed);
+		this.xSpeed *= 0.999D;
+		this.ySpeed *= 0.999D;
+		this.zSpeed *= 0.999D;
 
-		if (this.onGround) {
-			this.motionX *= 0.7;
-			this.motionZ *= 0.7;
+		if (this.isCollided) {
+			this.xSpeed *= 0.7;
+			this.zSpeed *= 0.7;
 		}
 	}
 }

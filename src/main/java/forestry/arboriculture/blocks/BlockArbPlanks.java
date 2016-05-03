@@ -17,14 +17,14 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -66,7 +66,7 @@ public abstract class BlockArbPlanks extends Block implements IWoodTyped, IState
 	private final int blockNumber;
 
 	private BlockArbPlanks(boolean fireproof, int blockNumber) {
-		super(Material.wood);
+		super(Material.WOOD);
 		this.fireproof = fireproof;
 		this.blockNumber = blockNumber;
 
@@ -120,8 +120,8 @@ public abstract class BlockArbPlanks extends Block implements IWoodTyped, IState
 	}
 
 	@Override
-	protected BlockState createBlockState() {
-		return new BlockState(this, getVariant());
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, getVariant());
 	}
 
 	@Override
@@ -156,8 +156,7 @@ public abstract class BlockArbPlanks extends Block implements IWoodTyped, IState
 	}
 
 	@Override
-	public float getBlockHardness(World world, BlockPos pos) {
-		IBlockState blockState = world.getBlockState(pos);
+	public float getBlockHardness(IBlockState blockState, World worldIn, BlockPos pos) {
 		int meta = getMetaFromState(blockState);
 		EnumWoodType woodType = getWoodType(meta);
 		return woodType.getHardness();

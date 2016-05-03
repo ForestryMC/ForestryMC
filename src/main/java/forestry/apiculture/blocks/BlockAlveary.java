@@ -17,16 +17,17 @@ import java.util.List;
 import java.util.Map;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -105,19 +106,14 @@ public abstract class BlockAlveary extends BlockStructure implements IStateMappe
 		setHardness(1.0f);
 		setCreativeTab(Tabs.tabApiculture);
 		setHarvestLevel("axe", 0);
-		setStepSound(soundTypeWood);
+		setSoundType(SoundType.WOOD);
 	}
 
 	@Nonnull
 	public abstract BlockAlvearyType getAlvearyType();
-	
+
 	@Override
-	public boolean isNormalCube() {
-		return true;
-	}
-	
-	@Override
-	public boolean isFullCube() {
+	public boolean isNormalCube(IBlockState state, IBlockAccess world, BlockPos pos) {
 		return true;
 	}
 
@@ -156,15 +152,15 @@ public abstract class BlockAlveary extends BlockStructure implements IStateMappe
 	}
 	
 	@Override
-	protected BlockState createBlockState() {
+	protected BlockStateContainer createBlockState() {
 		BlockAlvearyType alvearyType = getAlvearyType();
 
 		if (alvearyType == BlockAlvearyType.PLAIN) {
-			return new BlockState(this, PLAIN_TYPE);
+			return new BlockStateContainer(this, PLAIN_TYPE);
 		} else if (alvearyType.activatable) {
-			return new BlockState(this, STATE);
+			return new BlockStateContainer(this, STATE);
 		} else {
-			return new BlockState(this);
+			return new BlockStateContainer(this);
 		}
 	}
 	
@@ -185,9 +181,9 @@ public abstract class BlockAlveary extends BlockStructure implements IStateMappe
 			if (!tile.getMultiblockLogic().getController().isAssembled()) {
 				state = state.withProperty(PLAIN_TYPE, AlvearyPlainType.NORMAL);
 			} else {
-				IBlockState blockStateAbove = world.getBlockState(pos.add(0, 1, 0));
+				IBlockState blockStateAbove = world.getBlockState(pos.up());
 				Block blockAbove = blockStateAbove.getBlock();
-				if (BlockUtil.isWoodSlabBlock(blockAbove, world, pos)) {
+				if (BlockUtil.isWoodSlabBlock(blockStateAbove, blockAbove, world, pos)) {
 					List<EnumFacing> blocksTouching = getBlocksTouching(world, pos);
 					switch (blocksTouching.size()) {
 						case 3:
@@ -243,7 +239,7 @@ public abstract class BlockAlveary extends BlockStructure implements IStateMappe
 
 		@Override
 		protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
-			String resourceDomain = Block.blockRegistry.getNameForObject(state.getBlock()).getResourceDomain();
+			String resourceDomain = Block.REGISTRY.getNameForObject(state.getBlock()).getResourceDomain();
 			String resourceLocation = "apiculture/alveary_" + type;
 			String propertyString = getPropertyString(state.getProperties());
 			return new ModelResourceLocation(resourceDomain + ':' + resourceLocation, propertyString);

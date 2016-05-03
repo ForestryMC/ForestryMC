@@ -21,10 +21,12 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.PlayerNotFoundException;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.BlockPos;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.genetics.AlleleManager;
@@ -74,9 +76,9 @@ public final class CommandSaveStats extends SubCommand {
 
 		EntityPlayerMP player;
 		if (args.length > 0) {
-			player = CommandHelpers.getPlayer(sender, args[0]);
+			player = CommandBase.getPlayer((MinecraftServer) sender, (ICommandSender) args[0], null);
 		} else {
-			player = CommandHelpers.getPlayer(sender, sender.getName());
+			player = CommandBase.getPlayer((MinecraftServer) sender, (ICommandSender) sender.getName(), null);
 		}
 
 		Collection<String> statistics = new ArrayList<>();

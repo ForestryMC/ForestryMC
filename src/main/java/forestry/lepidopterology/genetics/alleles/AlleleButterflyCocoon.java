@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.minecraft.block.properties.PropertyInteger;
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.ItemStack;
 
 import forestry.api.genetics.AlleleManager;

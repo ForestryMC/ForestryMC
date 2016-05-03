@@ -4,7 +4,7 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -20,7 +20,7 @@ public class BlockResourceStorage extends Block implements IItemModelRegister, I
 	public static final PropertyEnum<EnumResourceType> STORAGE_RESOURCES = PropertyEnum.create("resource", EnumResourceType.class);
 
 	public BlockResourceStorage() {
-		super(Material.iron);
+		super(Material.IRON);
 		setHardness(3F);
 		setResistance(5F);
 		setCreativeTab(CreativeTabForestry.tabForestry);
@@ -28,8 +28,8 @@ public class BlockResourceStorage extends Block implements IItemModelRegister, I
 	}
 	
 	@Override
-	protected BlockState createBlockState() {
-		return new BlockState(this, STORAGE_RESOURCES);
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, STORAGE_RESOURCES);
 	}
 
 	@Override

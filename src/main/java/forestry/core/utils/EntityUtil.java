@@ -13,7 +13,7 @@ package forestry.core.utils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fml.common.registry.EntityRegistry;
@@ -34,7 +34,7 @@ public abstract class EntityUtil {
 			return null;
 		}
 
-		living.setLocationAndAngles(x, y, z, MathHelper.wrapAngleTo180_float(world.rand.nextFloat() * 360.0f), 0.0f);
+		living.setLocationAndAngles(x, y, z, MathHelper.wrapDegrees(world.rand.nextFloat() * 360.0f), 0.0f);
 		living.rotationYawHead = living.rotationYaw;
 		living.renderYawOffset = living.rotationYaw;
 		living.onInitialSpawn(null, null);
@@ -49,11 +49,11 @@ public abstract class EntityUtil {
 	}
 
 	private static <E extends EntityLiving> E createEntity(World world, Class<E> entityClass) {
-		if (!EntityList.classToStringMapping.containsKey(entityClass)) {
+		if (!EntityList.CLASS_TO_NAME.containsKey(entityClass)) {
 			return null;
 		}
 
-		String entityString = EntityList.classToStringMapping.get(entityClass);
+		String entityString = EntityList.CLASS_TO_NAME.get(entityClass);
 		if (entityString == null) {
 			return null;
 		}

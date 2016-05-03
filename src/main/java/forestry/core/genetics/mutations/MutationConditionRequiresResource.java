@@ -12,7 +12,7 @@ package forestry.core.genetics.mutations;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.apiculture.IBeeHousing;

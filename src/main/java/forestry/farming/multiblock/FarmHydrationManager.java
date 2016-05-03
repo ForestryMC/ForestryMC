@@ -14,7 +14,7 @@ import javax.annotation.Nonnull;
 import java.io.IOException;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;

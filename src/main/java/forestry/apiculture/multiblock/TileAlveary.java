@@ -15,8 +15,8 @@ import java.util.List;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
@@ -62,7 +62,7 @@ public abstract class TileAlveary extends MultiblockTileEntityForestry<Multibloc
 	public void onMachineAssembled(IMultiblockController multiblockController, BlockPos minCoord, BlockPos maxCoord) {
 		// Re-render this block on the client
 		if (worldObj.isRemote) {
-			this.worldObj.markBlockForUpdate(getPos());
+			this.worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
 		}
 		worldObj.notifyBlockOfStateChange(getPos(), getBlockType());
 	}
@@ -76,7 +76,7 @@ public abstract class TileAlveary extends MultiblockTileEntityForestry<Multibloc
 	public void onMachineBroken() {
 		// Re-render this block on the client
 		if (worldObj.isRemote) {
-			this.worldObj.markBlockForUpdate(getPos());
+			this.worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
 		}
 		worldObj.notifyBlockOfStateChange(getPos(), getBlockType());
 		markDirty();
@@ -110,7 +110,7 @@ public abstract class TileAlveary extends MultiblockTileEntityForestry<Multibloc
 	}
 
 	@Override
-	public Vec3 getBeeFXCoordinates() {
+	public Vec3d getBeeFXCoordinates() {
 		return getMultiblockLogic().getController().getBeeFXCoordinates();
 	}
 

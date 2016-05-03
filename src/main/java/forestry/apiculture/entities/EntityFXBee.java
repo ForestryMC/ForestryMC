@@ -11,7 +11,7 @@
 package forestry.apiculture.entities;
 
 import net.minecraft.client.particle.EntityFX;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
@@ -24,7 +24,7 @@ public class EntityFXBee extends EntityFX {
 
 	public EntityFXBee(World world, double x, double y, double z, int color) {
 		super(world, x, y, z, 0.0D, 0.0D, 0.0D);
-		setParticleIcon(beeSprite);
+		setParticleTexture(beeSprite);
 		this.originX = x;
 		this.originZ = z;
 
@@ -35,11 +35,10 @@ public class EntityFXBee extends EntityFX {
 		this.setSize(0.1F, 0.1F);
 		this.particleScale *= 0.2F;
 		this.particleMaxAge = (int) (80.0D / (Math.random() * 0.8D + 0.2D));
-		this.noClip = true;
 
-		this.motionX *= 0.9D;
-		this.motionY *= 0.015D;
-		this.motionZ *= 0.9D;
+		this.xSpeed *= 0.9D;
+		this.ySpeed *= 0.015D;
+		this.zSpeed *= 0.9D;
 	}
 
 	/**
@@ -50,54 +49,54 @@ public class EntityFXBee extends EntityFX {
 		this.prevPosX = this.posX;
 		this.prevPosY = this.posY;
 		this.prevPosZ = this.posZ;
-		this.moveEntity(this.motionX, this.motionY, this.motionZ);
+		this.moveEntity(this.xSpeed, this.ySpeed, this.zSpeed);
 
 		if (this.particleAge == this.particleMaxAge / 2) {
-			this.motionX = (this.originX - this.posX) * 0.04;
-			this.motionZ = (this.originZ - this.posZ) * 0.04;
+			this.xSpeed = (this.originX - this.posX) * 0.04;
+			this.zSpeed = (this.originZ - this.posZ) * 0.04;
 		}
 
 		if (this.particleAge < this.particleMaxAge / 4 || this.particleAge > this.particleMaxAge * 3 / 4) {
-			this.motionX *= 0.92 + 0.2D * rand.nextFloat();
-			this.motionY = (this.motionY + 0.2 * (-0.5 + rand.nextFloat())) / 2;
-			this.motionZ *= 0.92 + 0.2D * rand.nextFloat();
+			this.xSpeed *= 0.92 + 0.2D * rand.nextFloat();
+			this.ySpeed = (this.ySpeed + 0.2 * (-0.5 + rand.nextFloat())) / 2;
+			this.zSpeed *= 0.92 + 0.2D * rand.nextFloat();
 		} else {
-			this.motionX *= 0.95;
-			this.motionY = (this.motionY + 0.2 * (-0.5 + rand.nextFloat())) / 2;
-			this.motionZ *= 0.95;
+			this.xSpeed *= 0.95;
+			this.ySpeed = (this.ySpeed + 0.2 * (-0.5 + rand.nextFloat())) / 2;
+			this.zSpeed *= 0.95;
 		}
 
 		if (this.particleAge++ >= this.particleMaxAge) {
-			this.setDead();
+			this.setExpired();
 		}
 	}
 
 	@Override
-	public void renderParticle(WorldRenderer wR, Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
+	public void renderParticle(VertexBuffer worldRendererIn, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
 		float minU = 0;
 		float maxU = 1;
 		float minV = 0;
 		float maxV = 1;
 
-		if (this.particleIcon != null) {
-			minU = particleIcon.getMinU();
-			maxU = particleIcon.getMaxU();
-			minV = particleIcon.getMinV();
-			maxV = particleIcon.getMaxV();
+		if (this.particleTexture != null) {
+			minU = particleTexture.getMinU();
+			maxU = particleTexture.getMaxU();
+			minV = particleTexture.getMinV();
+			maxV = particleTexture.getMaxV();
 		}
 
 		float f10 = 0.1F * particleScale;
-		float f11 = (float) (prevPosX + (posX - prevPosX) * f - interpPosX);
-		float f12 = (float) (prevPosY + (posY - prevPosY) * f - interpPosY);
-		float f13 = (float) (prevPosZ + (posZ - prevPosZ) * f - interpPosZ);
+		float f11 = (float) (prevPosX + (posX - prevPosX) * partialTicks - interpPosX);
+		float f12 = (float) (prevPosY + (posY - prevPosY) * partialTicks - interpPosY);
+		float f13 = (float) (prevPosZ + (posZ - prevPosZ) * partialTicks - interpPosZ);
 
-		int i = this.getBrightnessForRender(f);
+		int i = this.getBrightnessForRender(partialTicks);
 		int j = i >> 16 & 65535;
 		int k = i & 65535;
-		wR.pos(f11 - f1 * f10 - f4 * f10, f12 - f2 * f10, f13 - f3 * f10 - f5 * f10).tex(maxU, maxV).color(particleRed, particleGreen, particleBlue, 1.0F).lightmap(j, k).endVertex();
-		wR.pos(f11 - f1 * f10 + f4 * f10, f12 + f2 * f10, f13 - f3 * f10 + f5 * f10).tex(maxU, minV).color(particleRed, particleGreen, particleBlue, 1.0F).lightmap(j, k).endVertex();
-		wR.pos(f11 + f1 * f10 + f4 * f10, f12 + f2 * f10, f13 + f3 * f10 + f5 * f10).tex(minU, minV).color(particleRed, particleGreen, particleBlue, 1.0F).lightmap(j, k).endVertex();
-		wR.pos(f11 + f1 * f10 - f4 * f10, f12 - f2 * f10, f13 + f3 * f10 - f5 * f10).tex(minU, maxV).color(particleRed, particleGreen, particleBlue, 1.0F).lightmap(j, k).endVertex();
+		worldRendererIn.pos(f11 - rotationX * f10 - rotationXY * f10, f12 - rotationZ * f10, f13 - rotationYZ * f10 - rotationXZ * f10).tex(maxU, maxV).color(particleRed, particleGreen, particleBlue, 1.0F).lightmap(j, k).endVertex();
+		worldRendererIn.pos(f11 - rotationX * f10 + rotationXY * f10, f12 + rotationZ * f10, f13 - rotationYZ * f10 + rotationXZ * f10).tex(maxU, minV).color(particleRed, particleGreen, particleBlue, 1.0F).lightmap(j, k).endVertex();
+		worldRendererIn.pos(f11 + rotationX * f10 + rotationXY * f10, f12 + rotationZ * f10, f13 + rotationYZ * f10 + rotationXZ * f10).tex(minU, minV).color(particleRed, particleGreen, particleBlue, 1.0F).lightmap(j, k).endVertex();
+		worldRendererIn.pos(f11 + rotationX * f10 - rotationXY * f10, f12 - rotationZ * f10, f13 + rotationYZ * f10 - rotationXZ * f10).tex(minU, maxV).color(particleRed, particleGreen, particleBlue, 1.0F).lightmap(j, k).endVertex();
 	}
 
 	@Override

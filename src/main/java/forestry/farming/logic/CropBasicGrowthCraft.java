@@ -47,12 +47,12 @@ public class CropBasicGrowthCraft extends Crop {
 		if (harvest.size() > 1) {
 			harvest.remove(0); //Hops have rope as first drop.
 		}
-		Proxies.common.addBlockDestroyEffects(world, pos, block.getStateFromMeta(0));
+		Proxies.common.addBlockDestroyEffects(world, pos, block.getDefaultState());
 		if (isGrape) {
 			world.setBlockToAir(pos);
 
 		} else {
-			world.setBlockState(pos, block.getStateFromMeta(0), Constants.FLAG_BLOCK_SYNCH);
+			world.setBlockState(pos, block.getDefaultState(), Constants.FLAG_BLOCK_SYNCH);
 		}
 
 		if (isRice) {

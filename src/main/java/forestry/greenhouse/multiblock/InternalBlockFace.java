@@ -12,7 +12,7 @@ package forestry.greenhouse.multiblock;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 
 import forestry.api.greenhouse.IInternalBlockFace;

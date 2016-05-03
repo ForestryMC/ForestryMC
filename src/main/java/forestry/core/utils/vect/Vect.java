@@ -14,7 +14,7 @@ import java.util.Random;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 
 import forestry.api.farming.FarmDirection;
@@ -22,6 +22,7 @@ import forestry.api.farming.FarmDirection;
 /**
  * Represents an unchangeable position or dimensions.
  */
+@Deprecated
 public class Vect extends IVect {
 
 	public Vect(int[] dim) {
