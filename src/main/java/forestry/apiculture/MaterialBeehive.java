@@ -16,7 +16,7 @@ import net.minecraft.block.material.Material;
 public class MaterialBeehive extends Material {
 
 	public MaterialBeehive(boolean noHarvest) {
-		super(MapColor.stoneColor);
+		super(MapColor.STONE);
 		if (noHarvest) {
 			this.setRequiresTool();
 		}

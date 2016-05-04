@@ -39,7 +39,7 @@ public class ContainerEngineElectric extends ContainerSocketed<TileEngineElectri
 
 		if (tile != null) {
 			PacketGuiUpdate packet = new PacketGuiUpdate(tile);
-			sendPacketToCrafters(packet);
+			sendPacketToListeners(packet);
 		}
 	}
 

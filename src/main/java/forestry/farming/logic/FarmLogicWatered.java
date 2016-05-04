@@ -106,7 +106,7 @@ public abstract class FarmLogicWatered extends FarmLogic {
 				continue;
 			}
 
-			Vect platformPosition = position.add(0, -1, 0);
+			BlockPos platformPosition = position.down();
 			Block platformBlock = VectUtil.getBlock(world, platformPosition);
 			if (!FarmHelper.bricks.contains(platformBlock)) {
 				break;
@@ -138,7 +138,7 @@ public abstract class FarmLogicWatered extends FarmLogic {
 		for (int i = 0; i < extent; i++) {
 			Vect position = translateWithOffset(pos, direction, i);
 
-			Vect platformPosition = position.add(0, -1, 0);
+			BlockPos platformPosition = position.down();
 			Block platformBlock = VectUtil.getBlock(world, platformPosition);
 			if (!FarmHelper.bricks.contains(platformBlock)) {
 				break;

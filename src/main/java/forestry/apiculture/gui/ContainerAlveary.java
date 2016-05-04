@@ -27,6 +27,6 @@ public class ContainerAlveary extends ContainerTile<TileAlveary> {
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
 		PacketGuiUpdate packet = new PacketGuiUpdate(tile);
-		sendPacketToCrafters(packet);
+		sendPacketToListeners(packet);
 	}
 }

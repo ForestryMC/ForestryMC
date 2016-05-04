@@ -73,7 +73,7 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 	private final ArrayList<ITreekeepingMode> treekeepingModes = new ArrayList<>();
 
 	public TreeRoot() {
-		setResearchSuitability(new ItemStack(Blocks.sapling, 1, OreDictionary.WILDCARD_VALUE), 1.0f);
+		setResearchSuitability(new ItemStack(Blocks.SAPLING, 1, OreDictionary.WILDCARD_VALUE), 1.0f);
 	}
 
 	@Override
@@ -260,7 +260,7 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 			return false;
 		}
 		pod.setProperties(allele, sappiness);
-		world.markBlockForUpdate(pos);
+		world.markBlockRangeForRenderUpdate(pos, pos);
 		return true;
 	}
 

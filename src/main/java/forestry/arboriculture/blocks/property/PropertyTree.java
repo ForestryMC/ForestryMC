@@ -11,6 +11,7 @@
 package forestry.arboriculture.blocks.property;
 
 import com.google.common.base.Objects;
+import com.google.common.base.Optional;
 
 import java.util.ArrayList;
 import java.util.List;

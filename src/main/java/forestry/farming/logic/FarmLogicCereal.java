@@ -37,7 +37,7 @@ public class FarmLogicCereal extends FarmLogicCrops {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public Item getItem() {
-		return Items.wheat;
+		return Items.WHEAT;
 	}
 
 }

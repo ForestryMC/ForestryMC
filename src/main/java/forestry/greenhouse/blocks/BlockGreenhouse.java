@@ -67,7 +67,7 @@ import forestry.greenhouse.tiles.TileGreenhouseValve;
 import forestry.plugins.ForestryPluginUids;
 
 public abstract class BlockGreenhouse extends BlockStructure implements ISpriteRegister {
-
+	private static final AxisAlignedBB SPRINKLER_BOUNDS = new AxisAlignedBB(0.3125F, 0.25F, 0.3125F, 0.6875F, 1F, 0.6875F);
 	public static final PropertyEnum<State> STATE = PropertyEnum.create("state", State.class);
 	
 	public enum State implements IStringSerializable {
@@ -127,7 +127,7 @@ public abstract class BlockGreenhouse extends BlockStructure implements ISpriteR
 	@SideOnly(Side.CLIENT)
 	public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World worldIn, BlockPos pos) {
 		if (getGreenhouseType() == BlockGreenhouseType.SPRINKLER) {
-			this.setBlockBoundsBasedOnState(worldIn, pos);
+			return SPRINKLER_BOUNDS;
 		}
 		return super.getSelectedBoundingBox(state, worldIn, pos);
 	}
@@ -135,18 +135,9 @@ public abstract class BlockGreenhouse extends BlockStructure implements ISpriteR
 	@Override
 	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
 		if (getGreenhouseType() == BlockGreenhouseType.SPRINKLER) {
-			this.setBlockBoundsBasedOnState(worldIn, pos);
+			return SPRINKLER_BOUNDS;
 		}
 		return super.getCollisionBoundingBox(blockState, worldIn, pos);
-	}
-
-	@Override
-	public void setBlockBoundsBasedOnState(IBlockAccess worldIn, BlockPos pos) {
-		if (getGreenhouseType() == BlockGreenhouseType.SPRINKLER) {
-			setBlockBounds(0.3125F, 0.25F, 0.3125F, 0.6875F, 1F, 0.6875F);
-		} else {
-			super.setBlockBoundsBasedOnState(worldIn, pos);
-		}
 	}
 
 	@Override
@@ -218,22 +209,23 @@ public abstract class BlockGreenhouse extends BlockStructure implements ISpriteR
 				return new TileGreenhousePlain();
 		}
 	}
-	
-	@Override
-	public int colorMultiplier(IBlockAccess world, BlockPos pos, int renderPass) {
-		TileEntity tile = world.getTileEntity(pos);
-		if (tile instanceof ICamouflagedBlock) {
-			ItemStack camouflageStack = CamouflageUtil.getCamouflageBlock(world, pos);
-			
-			if (renderPass < 100 && camouflageStack != null) {
-				return Block.getBlockFromItem(camouflageStack.getItem()).colorMultiplier(world, pos, renderPass);
-			}
-			
-			return super.colorMultiplier(world, pos, renderPass);
-		} else {
-			return super.colorMultiplier(world, pos, renderPass);
-		}
-	}
+
+	// TODO: greenhouse color
+//	@Override
+//	public int colorMultiplier(IBlockAccess world, BlockPos pos, int renderPass) {
+//		TileEntity tile = world.getTileEntity(pos);
+//		if (tile instanceof ICamouflagedBlock) {
+//			ItemStack camouflageStack = CamouflageUtil.getCamouflageBlock(world, pos);
+//
+//			if (renderPass < 100 && camouflageStack != null) {
+//				return Block.getBlockFromItem(camouflageStack.getItem()).colorMultiplier(world, pos, renderPass);
+//			}
+//
+//			return super.colorMultiplier(world, pos, renderPass);
+//		} else {
+//			return super.colorMultiplier(world, pos, renderPass);
+//		}
+//	}
 
 	/* MODELS */
 	@Override

@@ -54,7 +54,7 @@ public class FarmLogicRubber extends FarmLogic {
 		if (!inActive) {
 			return PluginIC2.resin.getItem();
 		} else {
-			return Items.gunpowder;
+			return Items.GUNPOWDER;
 		}
 	}
 

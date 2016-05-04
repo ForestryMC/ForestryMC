@@ -105,7 +105,7 @@ public abstract class FarmLogicHomogeneous extends FarmLogic {
 				continue;
 			}
 
-			Vect platformPosition = position.add(0, -1, 0);
+			BlockPos platformPosition = position.down();
 			Block platformBlock = VectUtil.getBlock(world, platformPosition);
 
 			if (!FarmHelper.bricks.contains(platformBlock)) {

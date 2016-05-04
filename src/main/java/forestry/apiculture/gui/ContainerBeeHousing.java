@@ -34,7 +34,7 @@ public class ContainerBeeHousing extends ContainerTile<TileBeeHousingBase> imple
 		if (this.beeProgress != beeProgress) {
 			this.beeProgress = beeProgress;
 			IForestryPacketClient packet = new PacketGuiUpdate(tile);
-			sendPacketToCrafters(packet);
+			sendPacketToListeners(packet);
 		}
 	}
 

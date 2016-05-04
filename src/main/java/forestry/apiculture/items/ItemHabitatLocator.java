@@ -75,7 +75,7 @@ public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
 		EnumTemperature temperature = EnumTemperature.getFromValue(temperatureValue);
 		EnumHumidity humidity = EnumHumidity.getFromValue(ForestryAPI.climateManager.getHumidity(player.worldObj, player.getPosition()));
 
-		list.add(Translator.translateToLocal("for.gui.currentBiome") + ": " + currentBiome.biomeName);
+		list.add(Translator.translateToLocal("for.gui.currentBiome") + ": " + currentBiome.getBiomeName());
 		list.add(Translator.translateToLocal("for.gui.temperature") + ": " + AlleleManager.climateHelper.toDisplay(temperature));
 		list.add(Translator.translateToLocal("for.gui.humidity") + ": " + AlleleManager.climateHelper.toDisplay(humidity));
 	}

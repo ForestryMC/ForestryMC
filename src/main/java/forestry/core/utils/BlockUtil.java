@@ -297,7 +297,7 @@ public abstract class BlockUtil {
 	}
 	
 	public static boolean canReplace(IBlockState blockState, World world, BlockPos pos) {
-		Block block = getBlock(world, pos);
+		Block block = blockState.getBlock();
 		Material material = block.getMaterial(blockState);
 		return material.isReplaceable() && block.isReplaceable(world, pos) && !material.isLiquid() || block.isAir(blockState, world, pos) || material == Material.PLANTS;
 	}

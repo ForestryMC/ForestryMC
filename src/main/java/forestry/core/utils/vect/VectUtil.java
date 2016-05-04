@@ -14,43 +14,44 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 @Deprecated
 public final class VectUtil {
 	@Deprecated
-	public static boolean isAirBlock(World world, IVect position) {
+	public static boolean isAirBlock(World world, BlockPos position) {
 		return world.isAirBlock(position);
 	}
 
 	@Deprecated
-	public static boolean isWoodBlock(World world, IVect position) {
+	public static boolean isWoodBlock(World world, BlockPos position) {
 		Block block = getBlock(world, position);
 		return block.isWood(world, position);
 	}
 
 	@Deprecated
-	public static TileEntity getTile(World world, IVect position) {
+	public static TileEntity getTile(World world, BlockPos position) {
 		return world.getTileEntity(position);
 	}
 
 	@Deprecated
-	public static IBlockState getBlockState(World world, IVect position) {
+	public static IBlockState getBlockState(World world, BlockPos position) {
 		return world.getBlockState(position);
 	}
 
 	@Deprecated
-	public static Block getBlock(World world, IVect position) {
+	public static Block getBlock(World world, BlockPos position) {
 		return getBlockState(world, position).getBlock();
 	}
 
 	@Deprecated
-	public static int getBlockMeta(World world, IVect position) {
+	public static int getBlockMeta(World world, BlockPos position) {
 		return getBlock(world, position).getMetaFromState(getBlockState(world, position));
 	}
 
 	@Deprecated
-	public static ItemStack getAsItemStack(World world, IVect position) {
+	public static ItemStack getAsItemStack(World world, BlockPos position) {
 		return new ItemStack(getBlock(world, position), 1, getBlockMeta(world, position));
 	}
 }

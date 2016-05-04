@@ -397,9 +397,9 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && inventory != null){
-			//noinspection unchecked
-			return (T) new SidedInvWrapper(inventory, facing);
+		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && inventory != null){
+			SidedInvWrapper sidedInvWrapper = new SidedInvWrapper(inventory, facing);
+			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(sidedInvWrapper);
 		}
 		return super.getCapability(capability, facing);
 	}

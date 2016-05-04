@@ -12,6 +12,7 @@ package forestry.core.gui;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
@@ -50,8 +51,8 @@ public abstract class ContainerItemInventory<I extends ItemInventory> extends Co
 	}
 
 	@Override
-	public final ItemStack slotClick(int slotIndex, int button, int modifier, EntityPlayer player) {
-		ItemStack result = super.slotClick(slotIndex, button, modifier, player);
+	public ItemStack slotClick(int slotId, int dragType_or_button, ClickType clickTypeIn, EntityPlayer player) {
+		ItemStack result = super.slotClick(slotId, dragType_or_button, clickTypeIn, player);
 		inventory.onSlotClick(player);
 		return result;
 	}

@@ -28,6 +28,7 @@ import forestry.arboriculture.WoodHelper.WoodMeshDefinition;
 import forestry.core.proxy.Proxies;
 import net.minecraft.block.BlockFenceGate;
 import net.minecraft.block.BlockPlanks.EnumType;
+import net.minecraft.block.SoundType;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

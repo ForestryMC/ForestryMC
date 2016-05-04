@@ -65,7 +65,7 @@ public class BlockFruitPod extends BlockCocoa implements IStateMapperRegister, I
 	}
 
 	@Override
-	public ItemStack getPickBlock(RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
 		TileFruitPod tile = TileUtil.getTile(world, pos, TileFruitPod.class);
 		if (tile == null) {
 			return null;
@@ -88,9 +88,9 @@ public class BlockFruitPod extends BlockCocoa implements IStateMapperRegister, I
 
 		tile.onBlockTick();
 	}
-	
+
 	@Override
-	public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
 		if (!world.isRemote) {
 			TileFruitPod tile = TileUtil.getTile(world, pos, TileFruitPod.class);
 			if (tile != null) {
@@ -100,7 +100,7 @@ public class BlockFruitPod extends BlockCocoa implements IStateMapperRegister, I
 			}
 		}
 
-		return super.removedByPlayer(world, pos, player, willHarvest);
+		return super.removedByPlayer(state, world, pos, player, willHarvest);
 	}
 	
 	@Override

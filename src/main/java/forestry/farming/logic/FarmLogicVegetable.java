@@ -28,7 +28,7 @@ public class FarmLogicVegetable extends FarmLogicCrops {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public Item getItem() {
-		return Items.carrot;
+		return Items.CARROT;
 	}
 
 	@Override

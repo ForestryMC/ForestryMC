@@ -307,8 +307,10 @@ public abstract class TileEngine extends TileBase implements IEnergyConnection, 
 	}
 
 	/* SMP GUI */
+	@Deprecated //use packets
 	public abstract void getGUINetworkData(int i, int j);
 
+	@Deprecated //use packets
 	public abstract void sendGUINetworkData(Container containerEngine, ICrafting iCrafting);
 
 	@Override

@@ -67,14 +67,14 @@ public class CommandBeeGive extends SubCommand {
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws SpeciesNotFoundException, TemplateNotFoundException, PlayerNotFoundException {
 		if (args.length < 2) {
-			printHelp(, sender);
+			printHelp(sender);
 			return;
 		}
 
 		IBeeGenome beeGenome = getBeeGenome(args[0]);
 		EnumBeeType beeType = getBeeType(args[1]);
 		if (beeType == null) {
-			printHelp(, sender);
+			printHelp(sender);
 			return;
 		}
 
@@ -85,7 +85,7 @@ public class CommandBeeGive extends SubCommand {
 			player = CommandBase.getPlayer(server, sender, sender.getName());
 		}
 		if (player == null) {
-			printHelp(, sender);
+			printHelp(sender);
 			return;
 		}
 

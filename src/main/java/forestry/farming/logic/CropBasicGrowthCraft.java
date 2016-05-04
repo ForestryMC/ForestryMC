@@ -56,7 +56,7 @@ public class CropBasicGrowthCraft extends Crop {
 		}
 
 		if (isRice) {
-			world.setBlockState(pos.add(0, -1, 0), block.getStateFromMeta(7), Constants.FLAG_BLOCK_SYNCH);
+			world.setBlockState(pos.down(), block.getStateFromMeta(7), Constants.FLAG_BLOCK_SYNCH);
 		}
 
 		return harvest;

@@ -23,41 +23,43 @@ import javax.vecmath.Vector4f;
 import java.util.EnumMap;
 import java.util.List;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.client.renderer.vertex.VertexFormatElement;
 import net.minecraft.util.EnumFacing;
 
-import net.minecraftforge.client.model.IFlexibleBakedModel;
-import net.minecraftforge.client.model.TRSRTransformation;
 import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
 import net.minecraftforge.client.model.pipeline.VertexTransformer;
+import net.minecraftforge.common.model.TRSRTransformation;
 
 // for those wondering TRSR stands for Translation Rotation Scale Rotation
-public class TRSRBakedModel implements IFlexibleBakedModel {
+public class TRSRBakedModel implements IBakedModel {
 
 	protected final ImmutableList<BakedQuad> general;
 	protected final ImmutableMap<EnumFacing, ImmutableList<BakedQuad>> faces;
-	protected final IFlexibleBakedModel original;
+	protected final IBakedModel original;
 
-	public TRSRBakedModel(IFlexibleBakedModel original, float x, float y, float z, float scale) {
+	public TRSRBakedModel(IBakedModel original, float x, float y, float z, float scale) {
 		this(original, x, y, z, 0, 0, 0, scale, scale, scale);
 	}
 
-	public TRSRBakedModel(IFlexibleBakedModel original, float x, float y, float z, float rotX, float rotY, float rotZ, float scale) {
+	public TRSRBakedModel(IBakedModel original, float x, float y, float z, float rotX, float rotY, float rotZ, float scale) {
 		this(original, x, y, z, rotX, rotY, rotZ, scale, scale, scale);
 	}
 
-	public TRSRBakedModel(IFlexibleBakedModel original, float x, float y, float z, float rotX, float rotY, float rotZ, float scaleX, float scaleY, float scaleZ) {
+	public TRSRBakedModel(IBakedModel original, float x, float y, float z, float rotX, float rotY, float rotZ, float scaleX, float scaleY, float scaleZ) {
 		this(original, new TRSRTransformation(new Vector3f(x, y, z),
 				null,
 				new Vector3f(scaleX, scaleY, scaleZ),
 				TRSRTransformation.quatFromYXZ(rotY, rotX, rotZ)));
 	}
 
-	public TRSRBakedModel(IFlexibleBakedModel original, TRSRTransformation transform) {
+	public TRSRBakedModel(IBakedModel original, TRSRTransformation transform) {
 		this.original = original;
 
 		ImmutableList.Builder<BakedQuad> builder;
@@ -69,8 +71,8 @@ public class TRSRBakedModel implements IFlexibleBakedModel {
 		EnumMap<EnumFacing, ImmutableList<BakedQuad>> faces = Maps.newEnumMap(EnumFacing.class);
 		for (EnumFacing face : EnumFacing.values()) {
 			if (!original.isBuiltInRenderer()) {
-				for (BakedQuad quad : original.getFaceQuads(face)) {
-					Transformer transformer = new Transformer(transform, original.getFormat());
+				for (BakedQuad quad : original.getQuads(null, face, 0)) {
+					Transformer transformer = new Transformer(transform, quad.getFormat());
 					quad.pipe(transformer);
 					builder.add(transformer.build());
 				}
@@ -82,8 +84,8 @@ public class TRSRBakedModel implements IFlexibleBakedModel {
 		// general quads
 		//builder = ImmutableList.builder();
 		if (!original.isBuiltInRenderer()) {
-			for (BakedQuad quad : original.getGeneralQuads()) {
-				Transformer transformer = new Transformer(transform, original.getFormat());
+			for (BakedQuad quad : original.getQuads(null, null, 0)) {
+				Transformer transformer = new Transformer(transform, quad.getFormat());
 				quad.pipe(transformer);
 				builder.add(transformer.build());
 			}
@@ -94,12 +96,10 @@ public class TRSRBakedModel implements IFlexibleBakedModel {
 	}
 
 	@Override
-	public List<BakedQuad> getFaceQuads(EnumFacing side) {
-		return faces.get(side);
-	}
-
-	@Override
-	public List<BakedQuad> getGeneralQuads() {
+	public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
+		if (side != null) {
+			return faces.get(side);
+		}
 		return general;
 	}
 
@@ -129,8 +129,8 @@ public class TRSRBakedModel implements IFlexibleBakedModel {
 	}
 
 	@Override
-	public VertexFormat getFormat() {
-		return original.getFormat();
+	public ItemOverrideList getOverrides() {
+		return null;
 	}
 
 	public static class Transformer extends VertexTransformer {

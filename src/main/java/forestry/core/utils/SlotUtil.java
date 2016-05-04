@@ -14,6 +14,7 @@ import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotCrafting;
 import net.minecraft.item.ItemStack;
@@ -26,7 +27,7 @@ public abstract class SlotUtil {
 		return slotIndex >= start && slotIndex < start + count;
 	}
 
-	public static ItemStack slotClickPhantom(SlotForestry slot, int mouseButton, int modifier, EntityPlayer player) {
+	public static ItemStack slotClickPhantom(SlotForestry slot, int mouseButton, ClickType clickTypeIn, EntityPlayer player) {
 		ItemStack stack = null;
 
 		ItemStack stackSlot = slot.getStack();
@@ -46,10 +47,10 @@ public abstract class SlotUtil {
 					fillPhantomSlot(slot, stackHeld, mouseButton);
 				}
 			} else if (stackHeld == null) {
-				adjustPhantomSlot(slot, mouseButton, modifier);
+				adjustPhantomSlot(slot, mouseButton, clickTypeIn);
 			} else if (slot.isItemValid(stackHeld)) {
 				if (ItemStackUtil.isIdenticalItem(stackSlot, stackHeld)) {
-					adjustPhantomSlot(slot, mouseButton, modifier);
+					adjustPhantomSlot(slot, mouseButton, clickTypeIn);
 				} else {
 					fillPhantomSlot(slot, stackHeld, mouseButton);
 				}
@@ -116,13 +117,13 @@ public abstract class SlotUtil {
 		}
 	}
 
-	private static void adjustPhantomSlot(SlotForestry slot, int mouseButton, int modifier) {
+	private static void adjustPhantomSlot(SlotForestry slot, int mouseButton, ClickType clickTypeIn) {
 		if (!slot.canAdjustPhantom()) {
 			return;
 		}
 		ItemStack stackSlot = slot.getStack();
 		int stackSize;
-		if (modifier == 1) {
+		if (clickTypeIn == ClickType.QUICK_MOVE) {
 			stackSize = mouseButton == 0 ? (stackSlot.stackSize + 1) / 2 : stackSlot.stackSize * 2;
 		} else {
 			stackSize = mouseButton == 0 ? stackSlot.stackSize - 1 : stackSlot.stackSize + 1;

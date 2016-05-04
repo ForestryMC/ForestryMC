@@ -90,7 +90,7 @@ public class FarmableGenericSapling implements IFarmable {
 
 	@Override
 	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
-		return germling.copy().onItemUse(player, world, pos.add(0, -1, 0), EnumFacing.UP, 0, 0, 0);
+		return germling.copy().onItemUse(player, world, pos.down(), EnumFacing.UP, 0, 0, 0);
 	}
 
 }

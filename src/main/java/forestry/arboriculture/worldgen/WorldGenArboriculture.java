@@ -15,6 +15,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
@@ -56,10 +57,10 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 		}
 	}
 
-	private static final ITreeBlockType vineNorth = new TreeBlockType(Blocks.vine, 1);
-	private static final ITreeBlockType vineSouth = new TreeBlockType(Blocks.vine, 4);
-	private static final ITreeBlockType vineWest = new TreeBlockType(Blocks.vine, 8);
-	private static final ITreeBlockType vineEast = new TreeBlockType(Blocks.vine, 2);
+	private static final ITreeBlockType vineNorth = new TreeBlockType(Blocks.VINE, 1);
+	private static final ITreeBlockType vineSouth = new TreeBlockType(Blocks.VINE, 4);
+	private static final ITreeBlockType vineWest = new TreeBlockType(Blocks.VINE, 8);
+	private static final ITreeBlockType vineEast = new TreeBlockType(Blocks.VINE, 2);
 	private static final int minPodHeight = 3;
 
 	private static final BlockType air = new BlockTypeVoid();
@@ -198,8 +199,10 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 	}
 
 	private void trySpawnFruitBlock(World world, BlockPos pos) {
-		if (BlockUtil.isReplaceableBlock(world, pos.add(startPos)) || world.isAirBlock(pos.add(startPos))) {
-			tree.trySpawnFruitBlock(world, pos.add(startPos));
+		pos = pos.add(startPos);
+		IBlockState blockState = world.getBlockState(pos);
+		if (BlockUtil.isReplaceableBlock(blockState, world, pos) || world.isAirBlock(pos)) {
+			tree.trySpawnFruitBlock(world, pos);
 		}
 	}
 
@@ -308,10 +311,12 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 
 	@Override
 	protected boolean addBlock(World world, BlockPos pos, ITreeBlockType type, EnumReplaceMode replace) {
+		pos = pos.add(startPos);
+		IBlockState blockState = world.getBlockState(pos);
 		if (replace == EnumReplaceMode.ALL
-				|| replace == EnumReplaceMode.SOFT && BlockUtil.isReplaceableBlock(world, startPos.add(pos))
-				|| world.isAirBlock(startPos.add(pos))) {
-			type.setBlock(world, tree, startPos.add(pos));
+				|| replace == EnumReplaceMode.SOFT && BlockUtil.isReplaceableBlock(blockState, world, pos)
+				|| world.isAirBlock(pos)) {
+			type.setBlock(world, tree, pos);
 			return true;
 		}
 		return false;

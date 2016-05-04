@@ -13,6 +13,7 @@ package forestry.apiculture.items;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
@@ -30,14 +31,14 @@ import forestry.core.config.Constants;
 
 public class ItemArmorApiarist extends ItemArmor implements IArmorApiarist, IArmorNaturalist, IItemModelRegister {
 
-	public ItemArmorApiarist(int slot) {
-		super(ArmorMaterial.LEATHER, 0, slot);
+	public ItemArmorApiarist(EntityEquipmentSlot equipmentSlotIn) {
+		super(ArmorMaterial.LEATHER, 0, equipmentSlotIn);
 		this.setMaxDamage(100);
 		setCreativeTab(Tabs.tabApiculture);
 	}
 
 	@Override
-	public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {
+	public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
 		if (stack != null && stack.getItem() == PluginApiculture.items.apiaristLegs) {
 			return Constants.RESOURCE_ID + ":" + Constants.TEXTURE_APIARIST_ARMOR_SECONDARY;
 		} else {
@@ -52,11 +53,6 @@ public class ItemArmorApiarist extends ItemArmor implements IArmorApiarist, IArm
 	}
 
 	@Override
-	public int getColorFromItemStack(ItemStack itemstack, int renderPass) {
-		return 0xffffff;
-	}
-
-	@Override
 	public boolean hasColor(ItemStack itemstack) {
 		return false;
 	}
@@ -68,7 +64,7 @@ public class ItemArmorApiarist extends ItemArmor implements IArmorApiarist, IArm
 
 	@Override
 	public boolean canSeePollination(EntityPlayer player, ItemStack armor, boolean doSee) {
-		return armorType == 0;
+		return armorType == EntityEquipmentSlot.HEAD;
 	}
 
 }

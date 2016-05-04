@@ -64,13 +64,13 @@ public class AlleleEffectSnowing extends AlleleEffectThrottled {
 			IBlockState state = world.getBlockState(posBlock);
 			Block block = state.getBlock();
 
-			if (block == Blocks.snow_layer) {
+			if (block == Blocks.SNOW_LAYER) {
 				int meta = block.getMetaFromState(state);
 				if (meta < 7) {
 					world.setBlockState(posBlock, block.getStateFromMeta(meta + 1), Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
 				}
 			} else if (block.isReplaceable(world, posBlock)) {
-				world.setBlockState(posBlock, Blocks.snow_layer.getDefaultState(), Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
+				world.setBlockState(posBlock, Blocks.SNOW_LAYER.getDefaultState(), Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
 			}
 		}
 

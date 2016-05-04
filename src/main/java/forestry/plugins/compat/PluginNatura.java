@@ -211,7 +211,7 @@ public class PluginNatura extends BlankForestryPlugin {
 		ArrayList<ItemStack> seedList = new ArrayList<>();
 		if (seedBarley != null) {
 			seedList.add(seedBarley);
-			RecipeManagers.moistenerManager.addRecipe(seedBarley, new ItemStack(Blocks.mycelium), 5000);
+			RecipeManagers.moistenerManager.addRecipe(seedBarley, new ItemStack(Blocks.MYCELIUM), 5000);
 		}
 		if (seedCotton != null) {
 			seedList.add(seedCotton);
@@ -272,7 +272,7 @@ public class PluginNatura extends BlankForestryPlugin {
 			int compostWheatAmount = ForestryAPI.activeMode.getIntegerSetting("recipe.output.compost.wheat");
 			if (compostWheatAmount > 0) {
 				ItemStack compostWheat = PluginCore.items.fertilizerBio.getItemStack(compostWheatAmount);
-				RecipeUtil.addRecipe(compostWheat, " X ", "X#X", " X ", '#', Blocks.dirt, 'X', itemBarley);
+				RecipeUtil.addRecipe(compostWheat, " X ", "X#X", " X ", '#', Blocks.DIRT, 'X', itemBarley);
 			}
 			FuelManager.moistenerResource.put(itemBarley, new MoistenerFuel(itemBarley, PluginCore.items.mouldyWheat.getItemStack(), 0, 300));
 		}

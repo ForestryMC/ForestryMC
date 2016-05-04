@@ -12,6 +12,7 @@ package forestry.core.items;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
@@ -28,13 +29,13 @@ import forestry.core.config.Constants;
 public class ItemArmorNaturalist extends ItemArmor implements IArmorNaturalist, IItemModelRegister {
 
 	public ItemArmorNaturalist() {
-		super(ArmorMaterial.LEATHER, 0, 0);
+		super(ArmorMaterial.LEATHER, 0, EntityEquipmentSlot.HEAD);
 		this.setMaxDamage(100);
 		setCreativeTab(CreativeTabForestry.tabForestry);
 	}
 
 	@Override
-	public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {
+	public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
 		return Constants.RESOURCE_ID + ":" + Constants.TEXTURE_NATURALIST_ARMOR_PRIMARY;
 	}
 
@@ -45,18 +46,13 @@ public class ItemArmorNaturalist extends ItemArmor implements IArmorNaturalist, 
 	}
 
 	@Override
-	public int getColorFromItemStack(ItemStack itemstack, int renderPass) {
-		return 0xffffff;
-	}
-
-	@Override
 	public boolean hasColor(ItemStack itemstack) {
 		return false;
 	}
 
 	@Override
 	public boolean canSeePollination(EntityPlayer player, ItemStack armor, boolean doSee) {
-		return armorType == 0;
+		return armorType == EntityEquipmentSlot.HEAD;
 	}
 
 }

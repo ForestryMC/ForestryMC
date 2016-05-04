@@ -42,7 +42,7 @@ public abstract class ContainerLiquidTanks<T extends TileEntity & ILiquidTankTil
 	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
-		tile.getTankManager().updateGuiData(this, crafters);
+		tile.getTankManager().updateGuiData(this, listeners);
 	}
 	
 	@Override

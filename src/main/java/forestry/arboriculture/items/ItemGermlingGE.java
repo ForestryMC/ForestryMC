@@ -12,14 +12,21 @@ package forestry.arboriculture.items;
 
 import java.util.List;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fml.relauncher.Side;
@@ -109,7 +116,6 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable {
 	}
 
 	@SideOnly(Side.CLIENT)
-	@Override
 	public int getColorFromItemStack(ItemStack itemstack, int renderPass) {
 		return getSpeciesOrDefault(itemstack).getGermlingColour(type, renderPass);
 	}
@@ -138,68 +144,65 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable {
 		}
 
 	}
-	
+
 	@Override
-	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		ITree tree = TreeManager.treeRoot.getMember(stack);
 		if (tree == null) {
-			return false;
+			return EnumActionResult.PASS;
 		}
 
 		if (type == EnumGermlingType.SAPLING) {
 			// x, y, z are the coordinates of the block "hit", can thus either be the soil or tall grass, etc.
-			int yShift;
-			if (!BlockUtil.isReplaceableBlock(world, pos)) {
-				if (!world.isAirBlock(new BlockPos(pos.getX(), pos.getY() + 1, pos.getZ()))) {
-					return false;
+			IBlockState hitBlock = worldIn.getBlockState(pos);
+			if (!BlockUtil.isReplaceableBlock(hitBlock, hitBlock.getBlock())) {
+				if (!worldIn.isAirBlock(pos.up())) {
+					return EnumActionResult.FAIL;
 				}
-				yShift = 1;
-			} else {
-				yShift = 0;
-			}
-			BlockPos posS = pos.add(0, yShift, 0);
-
-			if (!tree.canStay(world, posS)) {
-				return false;
+				pos = pos.up();
 			}
 
-			if (TreeManager.treeRoot.plantSapling(world, tree, player.getGameProfile(), posS)) {
-				Proxies.common.addBlockPlaceEffects(world, pos, world.getBlockState(posS));
-				if (!player.capabilities.isCreativeMode) {
+			if (!tree.canStay(worldIn, pos)) {
+				return EnumActionResult.FAIL;
+			}
+
+			if (TreeManager.treeRoot.plantSapling(worldIn, tree, playerIn.getGameProfile(), pos)) {
+				Proxies.common.addBlockPlaceEffects(worldIn, pos, worldIn.getBlockState(pos));
+				if (!playerIn.capabilities.isCreativeMode) {
 					stack.stackSize--;
 				}
-				return true;
+				return EnumActionResult.SUCCESS;
 			} else {
-				return false;
+				return EnumActionResult.FAIL;
 			}
 		} else if (type == EnumGermlingType.POLLEN) {
 
-			ICheckPollinatable checkPollinatable = GeneticsUtil.getCheckPollinatable(world, pos);
+			ICheckPollinatable checkPollinatable = GeneticsUtil.getCheckPollinatable(worldIn, pos);
 
 			if (checkPollinatable == null) {
-				return false;
+				return EnumActionResult.PASS;
 			}
 
 			if (!checkPollinatable.canMateWith(tree)) {
-				return false;
+				return EnumActionResult.FAIL;
 			}
 
-			IPollinatable pollinatable = GeneticsUtil.getOrCreatePollinatable(player.getGameProfile(), world, pos);
+			IPollinatable pollinatable = GeneticsUtil.getOrCreatePollinatable(playerIn.getGameProfile(), worldIn, pos);
 
 			if (!pollinatable.canMateWith(tree)) {
-				return false;
+				return EnumActionResult.FAIL;
 			}
 
 			pollinatable.mateWith(tree);
-			Proxies.common.sendFXSignal(PacketFXSignal.VisualFXType.BLOCK_DESTROY, PacketFXSignal.SoundFXType.LEAF, world, pos,
-					world.getBlockState(pos));
-			if (!player.capabilities.isCreativeMode) {
+			Proxies.common.sendFXSignal(PacketFXSignal.VisualFXType.BLOCK_DESTROY, PacketFXSignal.SoundFXType.LEAF, worldIn, pos,
+					worldIn.getBlockState(pos));
+			if (!playerIn.capabilities.isCreativeMode) {
 				stack.stackSize--;
 			}
-			return true;
+			return EnumActionResult.SUCCESS;
 
 		} else {
-			return false;
+			return EnumActionResult.PASS;
 		}
 	}
 

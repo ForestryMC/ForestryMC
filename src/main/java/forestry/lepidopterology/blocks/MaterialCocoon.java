@@ -16,7 +16,7 @@ import net.minecraft.block.material.Material;
 public class MaterialCocoon extends Material {
 
 	public MaterialCocoon() {
-		super(MapColor.clothColor);
+		super(MapColor.CLOTH);
 		
 		setRequiresTool();
 	}

@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.worldgen;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -19,7 +20,7 @@ import forestry.core.utils.BlockUtil;
 public abstract class HiveGen implements IHiveGen {
 
 	@Override
-	public boolean canReplace(World world, BlockPos pos) {
-		return BlockUtil.canReplace(world, pos);
+	public boolean canReplace(IBlockState blockState, World world, BlockPos pos) {
+		return BlockUtil.canReplace(blockState, world, pos);
 	}
 }

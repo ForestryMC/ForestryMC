@@ -91,7 +91,7 @@ public abstract class SubCommand implements IForestryCommand {
 	}
 
 	public void executeSubCommand(MinecraftServer server, ICommandSender sender, String[] args) throws WrongUsageException, CommandException {
-		printHelp(, sender);
+		printHelp(sender);
 	}
 
 	public SubCommand setPermLevel(PermLevel permLevel) {

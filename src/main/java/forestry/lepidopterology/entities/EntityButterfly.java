@@ -23,6 +23,9 @@ import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
@@ -63,9 +66,9 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 	/* CONSTANTS */
 	public static final int COOLDOWNS = 1500;
 
-	private static final int DATAWATCHER_ID_SPECIES = 16;
-	private static final int DATAWATCHER_ID_SIZE = 17;
-	private static final int DATAWATCHER_ID_STATE = 18;
+	private static final DataParameter<String> DATAWATCHER_ID_SPECIES = EntityDataManager.createKey(EntityButterfly.class, DataSerializers.STRING);
+	private static final DataParameter<Integer> DATAWATCHER_ID_SIZE = EntityDataManager.createKey(EntityButterfly.class, DataSerializers.VARINT);
+	private static final DataParameter<Byte> DATAWATCHER_ID_STATE = EntityDataManager.createKey(EntityButterfly.class, DataSerializers.BYTE);
 
 	private static final float DEFAULT_BUTTERFLY_SIZE = 0.75f;
 	private static final EnumButterflyState DEFAULT_STATE = EnumButterflyState.FLYING;
@@ -104,9 +107,9 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 	protected void entityInit() {
 		super.entityInit();
 
-		dataWatcher.addObject(DATAWATCHER_ID_SPECIES, "");
-		dataWatcher.addObject(DATAWATCHER_ID_SIZE, (int) (DEFAULT_BUTTERFLY_SIZE * 100));
-		dataWatcher.addObject(DATAWATCHER_ID_STATE, (byte) DEFAULT_STATE.ordinal());
+		dataManager.register(DATAWATCHER_ID_SPECIES, "");
+		dataManager.register(DATAWATCHER_ID_SIZE, (int) (DEFAULT_BUTTERFLY_SIZE * 100));
+		dataManager.register(DATAWATCHER_ID_STATE, (byte) DEFAULT_STATE.ordinal());
 	}
 
 	private void setDefaults() {
@@ -170,7 +173,7 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 		if (this.state != state) {
 			this.state = state;
 			if (!worldObj.isRemote) {
-				dataWatcher.updateObject(DATAWATCHER_ID_STATE, (byte) state.ordinal());
+				dataManager.set(DATAWATCHER_ID_STATE, (byte) state.ordinal());
 			}
 		}
 	}
@@ -303,8 +306,8 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 		species = genome.getPrimary();
 
 		if (!worldObj.isRemote) {
-			dataWatcher.updateObject(DATAWATCHER_ID_SIZE, (int) (size * 100));
-			dataWatcher.updateObject(DATAWATCHER_ID_SPECIES, species.getUID());
+			dataManager.set(DATAWATCHER_ID_SIZE, (int) (size * 100));
+			dataManager.set(DATAWATCHER_ID_SPECIES, species.getUID());
 		} else {
 			textureResource = new ResourceLocation(species.getEntityTexture());
 		}
@@ -376,12 +379,11 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 			return false;
 		}
 
-		ItemStack heldItem = player.getHeldItem();
-		if (heldItem == null) {
+		if (stack == null) {
 			return false;
 		}
 
-		if (!(heldItem.getItem() instanceof IToolScoop)) {
+		if (!(stack.getItem() instanceof IToolScoop)) {
 			return false;
 		}
 
@@ -423,16 +425,16 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 		// Update stuff client side
 		if (worldObj.isRemote) {
 			if (species == null) {
-				String speciesUid = dataWatcher.getWatchableObjectString(DATAWATCHER_ID_SPECIES);
+				String speciesUid = dataManager.get(DATAWATCHER_ID_SPECIES);
 				IAllele allele = AlleleManager.alleleRegistry.getAllele(speciesUid);
 				if (allele instanceof IAlleleButterflySpecies) {
 					species = (IAlleleButterflySpecies) allele;
 					textureResource = new ResourceLocation(species.getEntityTexture());
-					size = dataWatcher.getWatchableObjectInt(DATAWATCHER_ID_SIZE) / 100f;
+					size = dataManager.get(DATAWATCHER_ID_SIZE) / 100f;
 				}
 			}
 
-			int stateOrdinal = dataWatcher.getWatchableObjectByte(DATAWATCHER_ID_STATE);
+			byte stateOrdinal = dataManager.get(DATAWATCHER_ID_STATE);
 			if (state == null || state.ordinal() != stateOrdinal) {
 				setState(EnumButterflyState.VALUES[stateOrdinal]);
 			}

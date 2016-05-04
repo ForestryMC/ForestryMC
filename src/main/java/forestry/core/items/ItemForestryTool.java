@@ -43,22 +43,22 @@ public class ItemForestryTool extends ItemForestry {
 	}
 
 	@Override
-	public float getDigSpeed(ItemStack itemstack, IBlockState state) {
+	public float getStrVsBlock(ItemStack itemstack, IBlockState state) {
 		for (String type : getToolClasses(itemstack)) {
 			if (state.getBlock().isToolEffective(type, state)) {
 				return efficiencyOnProperMaterial;
 			}
 		}
-		return super.getDigSpeed(itemstack, state);
+		return super.getStrVsBlock(itemstack, state);
 	}
 
 	@SubscribeEvent
 	public void onDestroyCurrentItem(PlayerDestroyItemEvent event) {
-		if (event.original == null || event.original.getItem() != this) {
+		if (event.getOriginal() == null || event.getOriginal().getItem() != this) {
 			return;
 		}
 
-		EntityPlayer player = event.entityPlayer;
+		EntityPlayer player = event.getEntityPlayer();
 		World world = player.worldObj;
 
 		if (!world.isRemote && remnants != null) {
@@ -67,9 +67,10 @@ public class ItemForestryTool extends ItemForestry {
 	}
 
 	@Override
-	public boolean onBlockDestroyed(ItemStack stack, World world, Block block, BlockPos pos, EntityLivingBase player) {
-		if (block.getBlockHardness(world, pos) != 0) {
-			stack.damageItem(1, player);
+	public boolean onBlockDestroyed(ItemStack stack, World worldIn, IBlockState state, BlockPos pos, EntityLivingBase entityLiving) {
+		Block block = state.getBlock();
+		if (block.getBlockHardness(state, worldIn, pos) != 0) {
+			stack.damageItem(1, entityLiving);
 		}
 		return true;
 	}

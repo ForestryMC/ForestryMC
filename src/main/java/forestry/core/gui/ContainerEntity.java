@@ -69,7 +69,7 @@ public class ContainerEntity<T extends Entity & IInventory> extends ContainerFor
 
 			if (previousErrorStates == null || !errorStates.equals(previousErrorStates)) {
 				PacketErrorUpdateEntity packet = new PacketErrorUpdateEntity(entity, errorLogicSource);
-				sendPacketToCrafters(packet);
+				sendPacketToListeners(packet);
 			}
 
 			previousErrorStates = errorStates;
@@ -81,7 +81,7 @@ public class ContainerEntity<T extends Entity & IInventory> extends ContainerFor
 			EnumAccess access = accessHandler.getAccess();
 			if (access != previousAccess) {
 				IForestryPacketClient packet = new PacketAccessUpdateEntity(restrictedAccess, entity);
-				sendPacketToCrafters(packet);
+				sendPacketToListeners(packet);
 
 				previousAccess = access;
 			}

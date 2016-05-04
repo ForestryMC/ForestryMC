@@ -58,16 +58,6 @@ public class ItemHoneyComb extends ItemForestry {
 	}
 
 	@Override
-	public int getColorFromItemStack(ItemStack itemstack, int j) {
-		EnumHoneyComb honeyComb = EnumHoneyComb.VALUES[itemstack.getItemDamage()];
-		if (j == 1) {
-			return honeyComb.primaryColor;
-		} else {
-			return honeyComb.secondaryColor;
-		}
-	}
-
-	@Override
 	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List<ItemStack> itemList) {
 		for (int i = 0; i < EnumHoneyComb.VALUES.length; i++) {
 			EnumHoneyComb honeyComb = EnumHoneyComb.VALUES[i];

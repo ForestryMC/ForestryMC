@@ -18,6 +18,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 
@@ -165,7 +166,7 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 			ItemStack container = null;
 
 			if (itemStack.getItem().hasContainerItem(itemStack)) {
-				container = itemStack.getItem().getContainerItem(itemStack);
+				container = ForgeHooks.getContainerItem(itemStack);
 			} else if (itemStack.stackSize > 1) {
 				// TerraFirmaCraft's crafting event handler does some tricky stuff with its tools.
 				// It sets the tool's stack size to 2 instead of using a container.
@@ -177,13 +178,8 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 				continue;
 			}
 
-			if (container != null && container.isItemStackDamageable() && container.getItemDamage() > container.getMaxDamage()) {
-				MinecraftForge.EVENT_BUS.post(new PlayerDestroyItemEvent(player, container));
-				continue;
-			}
-
 			if (!InventoryUtil.tryAddStack(this, container, true)) {
-				player.dropPlayerItemWithRandomChoice(container, false);
+				player.dropItem(container, false);
 			}
 		}
 		

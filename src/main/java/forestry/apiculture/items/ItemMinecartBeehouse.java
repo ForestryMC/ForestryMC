@@ -21,8 +21,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemMinecart;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fml.relauncher.Side;
@@ -48,33 +50,33 @@ public class ItemMinecartBeehouse extends ItemMinecart implements IItemModelRegi
 		super(null);
 		setMaxDamage(0);
 		setHasSubtypes(true);
-		BlockDispenser.dispenseBehaviorRegistry.putObject(this, dispenserMinecartBehavior);
+		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(this, dispenserMinecartBehavior);
 	}
 
 	@Override
-	public boolean onItemUse(ItemStack itemStack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (!BlockRailBase.isRailBlock(world.getBlockState(pos))) {
-			return false;
+	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		if (!BlockRailBase.isRailBlock(worldIn.getBlockState(pos))) {
+			return EnumActionResult.PASS;
 		}
 
-		if (!world.isRemote) {
+		if (!worldIn.isRemote) {
 			EntityMinecartBeeHousingBase entityMinecart;
-			if (itemStack.getItemDamage() == 0) {
-				entityMinecart = new EntityMinecartBeehouse(world, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F);
+			if (stack.getItemDamage() == 0) {
+				entityMinecart = new EntityMinecartBeehouse(worldIn, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F);
 			} else {
-				entityMinecart = new EntityMinecartApiary(world, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F);
+				entityMinecart = new EntityMinecartApiary(worldIn, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F);
 			}
-			entityMinecart.setOwner(player.getGameProfile());
+			entityMinecart.setOwner(playerIn.getGameProfile());
 
-			if (itemStack.hasDisplayName()) {
-				entityMinecart.setCustomNameTag(itemStack.getDisplayName());
+			if (stack.hasDisplayName()) {
+				entityMinecart.setCustomNameTag(stack.getDisplayName());
 			}
 
-			world.spawnEntityInWorld(entityMinecart);
+			worldIn.spawnEntityInWorld(entityMinecart);
 		}
 
-		--itemStack.stackSize;
-		return true;
+		--stack.stackSize;
+		return EnumActionResult.SUCCESS;
 	}
 
 	@Override

@@ -302,7 +302,7 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 		}
 
 		IBlockState blockState = world.getBlockState(posNew);
-		if (PluginApiculture.blocks.apiculture == blockState.getBlock() || !world.isBlockLoaded(posNew.add(0, -1, 0))) {
+		if (PluginApiculture.blocks.apiculture == blockState.getBlock() || !world.isBlockLoaded(posNew.down())) {
 			return;
 		}
 

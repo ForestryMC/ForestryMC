@@ -34,7 +34,7 @@ public class ContainerGreenhouseButterflyHatch extends ContainerTile<TileGreenho
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
 		PacketGuiUpdate packet = new PacketGuiUpdate(tile);
-		sendPacketToCrafters(packet);
+		sendPacketToListeners(packet);
 	}
 	
 	public IFluidTank getTank(int slot) {

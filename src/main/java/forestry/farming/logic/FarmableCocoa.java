@@ -27,8 +27,8 @@ import forestry.core.utils.vect.Vect;
 
 public class FarmableCocoa implements IFarmable {
 
-	private static final Block COCOA_PLANT = Blocks.cocoa;
-	public static final Item COCOA_SEED = Items.dye;
+	private static final Block COCOA_PLANT = Blocks.COCOA;
+	public static final Item COCOA_SEED = Items.DYE;
 	public static final int COCOA_META = 3;
 
 	@Override

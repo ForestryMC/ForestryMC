@@ -31,7 +31,7 @@ public class ProxyNetwork {
 		}
 
 		WorldServer worldServer = (WorldServer) world;
-		PlayerManager playerManager = worldServer.getPlayerManager();
+		PlayerManager playerManager = worldServer.getPlayerChunkMap();
 
 		int chunkX = packet.getPos().getX() >> 4;
 		int chunkZ = packet.getPos().getZ() >> 4;

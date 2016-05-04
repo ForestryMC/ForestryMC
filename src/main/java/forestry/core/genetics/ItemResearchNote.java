@@ -18,6 +18,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -278,24 +281,23 @@ public class ItemResearchNote extends ItemForestry {
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-
-		if (world.isRemote) {
-			return itemstack;
+	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+		if (worldIn.isRemote) {
+			return ActionResult.newResult(EnumActionResult.PASS, itemStackIn);
 		}
 
-		ResearchNote note = new ResearchNote(itemstack.getTagCompound());
-		if (note.registerResults(world, entityplayer)) {
-			entityplayer.inventory.decrStackSize(entityplayer.inventory.currentItem, 1);
+		ResearchNote note = new ResearchNote(itemStackIn.getTagCompound());
+		if (note.registerResults(worldIn, playerIn)) {
+			playerIn.inventory.decrStackSize(playerIn.inventory.currentItem, 1);
 			// Notify player that his inventory has changed.
-			Proxies.net.inventoryChangeNotify(entityplayer);
+			Proxies.net.inventoryChangeNotify(playerIn);
 		}
 
-		return itemstack;
+		return ActionResult.newResult(EnumActionResult.SUCCESS, itemStackIn);
 	}
 
-	@Override
-	public int getColorFromItemStack(ItemStack itemstack, int j) {
-		return 0xffe8a5;
-	}
+//	@Override
+//	public int getColorFromItemStack(ItemStack itemstack, int j) {
+//		return 0xffe8a5;
+//	}
 }

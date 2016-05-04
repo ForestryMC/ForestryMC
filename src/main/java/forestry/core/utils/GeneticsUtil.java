@@ -150,7 +150,7 @@ public class GeneticsUtil {
 			if (block == Blocks.leaves2) {
 				meta = meta + 4; //Dark Oak and Acacia are their own leaf block, but added on the end of sapling
 			}
-			block = Blocks.sapling;
+			block = Blocks.SAPLING;
 		}
 		ItemStack itemStack = new ItemStack(block, 1, meta);
 		IIndividual tree = getGeneticEquivalent(itemStack);

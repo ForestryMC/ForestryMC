@@ -58,6 +58,7 @@ import forestry.core.models.ModelManager;
 import forestry.core.multiblock.MultiblockLogicFactory;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.network.PacketRegistryCore;
+import forestry.core.proxy.Proxies;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.ClimateUtil;
@@ -127,6 +128,8 @@ public class PluginCore extends BlankForestryPlugin {
 		ForestryModEnvWarningCallable.register();
 
 		AlleleHelper.instance.init();
+
+		Proxies.render.initRendering();
 	}
 
 	@Override
@@ -154,55 +157,55 @@ public class PluginCore extends BlankForestryPlugin {
 		crateRegistry.registerCrate(blocks.soil.get(BlockSoil.SoilType.BOG_EARTH, 1));
 
 		// vanilla items
-		crateRegistry.registerCrate(Items.wheat);
-		crateRegistry.registerCrate(Items.cookie);
-		crateRegistry.registerCrate(Items.redstone);
-		crateRegistry.registerCrate(new ItemStack(Items.dye, 1, 4));
-		crateRegistry.registerCrate(Items.reeds);
-		crateRegistry.registerCrate(Items.clay_ball);
-		crateRegistry.registerCrate(Items.glowstone_dust);
-		crateRegistry.registerCrate(Items.apple);
-		crateRegistry.registerCrate(new ItemStack(Items.nether_wart));
-		crateRegistry.registerCrate(new ItemStack(Items.coal, 1, 1));
-		crateRegistry.registerCrate(new ItemStack(Items.coal, 1, 0));
-		crateRegistry.registerCrate(Items.wheat_seeds);
-		crateRegistry.registerCrate(Items.potato);
-		crateRegistry.registerCrate(Items.carrot);
+		crateRegistry.registerCrate(Items.WHEAT);
+		crateRegistry.registerCrate(Items.COOKIE);
+		crateRegistry.registerCrate(Items.REDSTONE);
+		crateRegistry.registerCrate(new ItemStack(Items.DYE, 1, 4));
+		crateRegistry.registerCrate(Items.REEDS);
+		crateRegistry.registerCrate(Items.CLAY_BALL);
+		crateRegistry.registerCrate(Items.GLOWSTONE_DUST);
+		crateRegistry.registerCrate(Items.APPLE);
+		crateRegistry.registerCrate(new ItemStack(Items.NETHER_WART));
+		crateRegistry.registerCrate(new ItemStack(Items.COAL, 1, 1));
+		crateRegistry.registerCrate(new ItemStack(Items.COAL, 1, 0));
+		crateRegistry.registerCrate(Items.WHEAT_SEEDS);
+		crateRegistry.registerCrate(Items.POTATO);
+		crateRegistry.registerCrate(Items.CARROT);
 
 		// vanilla blocks
-		crateRegistry.registerCrate(new ItemStack(Blocks.log, 1, 0));
-		crateRegistry.registerCrate(new ItemStack(Blocks.log, 1, 1));
-		crateRegistry.registerCrate(new ItemStack(Blocks.log, 1, 2));
-		crateRegistry.registerCrate(new ItemStack(Blocks.log, 1, 3));
-		crateRegistry.registerCrate(new ItemStack(Blocks.log2, 1, 0));
-		crateRegistry.registerCrate(new ItemStack(Blocks.log2, 1, 1));
-		crateRegistry.registerCrate(Blocks.cobblestone);
-		crateRegistry.registerCrate(new ItemStack(Blocks.dirt, 1, 0));
-		crateRegistry.registerCrate(new ItemStack(Blocks.dirt, 1, 2));
-		crateRegistry.registerCrate(new ItemStack(Blocks.stone, 1, 0));
-		crateRegistry.registerCrate(new ItemStack(Blocks.stone, 1, 1));
-		crateRegistry.registerCrate(new ItemStack(Blocks.stone, 1, 3));
-		crateRegistry.registerCrate(new ItemStack(Blocks.stone, 1, 5));
-		crateRegistry.registerCrate(new ItemStack(Blocks.prismarine, 1, 0));
-		crateRegistry.registerCrate(new ItemStack(Blocks.prismarine, 1, 1));
-		crateRegistry.registerCrate(new ItemStack(Blocks.prismarine, 1, 2));
-		crateRegistry.registerCrate(Blocks.brick_block);
-		crateRegistry.registerCrate(Blocks.cactus);
-		crateRegistry.registerCrate(new ItemStack(Blocks.sand, 1, 0));
-		crateRegistry.registerCrate(new ItemStack(Blocks.sand, 1, 1));
-		crateRegistry.registerCrate(Blocks.obsidian);
-		crateRegistry.registerCrate(Blocks.netherrack);
-		crateRegistry.registerCrate(Blocks.soul_sand);
-		crateRegistry.registerCrate(Blocks.sandstone);
-		crateRegistry.registerCrate(Blocks.nether_brick);
-		crateRegistry.registerCrate(Blocks.mycelium);
-		crateRegistry.registerCrate(Blocks.gravel);
-		crateRegistry.registerCrate(new ItemStack(Blocks.sapling, 1, 0));
-		crateRegistry.registerCrate(new ItemStack(Blocks.sapling, 1, 1));
-		crateRegistry.registerCrate(new ItemStack(Blocks.sapling, 1, 2));
-		crateRegistry.registerCrate(new ItemStack(Blocks.sapling, 1, 3));
-		crateRegistry.registerCrate(new ItemStack(Blocks.sapling, 1, 4));
-		crateRegistry.registerCrate(new ItemStack(Blocks.sapling, 1, 5));
+		crateRegistry.registerCrate(new ItemStack(Blocks.LOG, 1, 0));
+		crateRegistry.registerCrate(new ItemStack(Blocks.LOG, 1, 1));
+		crateRegistry.registerCrate(new ItemStack(Blocks.LOG, 1, 2));
+		crateRegistry.registerCrate(new ItemStack(Blocks.LOG, 1, 3));
+		crateRegistry.registerCrate(new ItemStack(Blocks.LOG2, 1, 0));
+		crateRegistry.registerCrate(new ItemStack(Blocks.LOG2, 1, 1));
+		crateRegistry.registerCrate(Blocks.COBBLESTONE);
+		crateRegistry.registerCrate(new ItemStack(Blocks.DIRT, 1, 0));
+		crateRegistry.registerCrate(new ItemStack(Blocks.DIRT, 1, 2));
+		crateRegistry.registerCrate(new ItemStack(Blocks.STONE, 1, 0));
+		crateRegistry.registerCrate(new ItemStack(Blocks.STONE, 1, 1));
+		crateRegistry.registerCrate(new ItemStack(Blocks.STONE, 1, 3));
+		crateRegistry.registerCrate(new ItemStack(Blocks.STONE, 1, 5));
+		crateRegistry.registerCrate(new ItemStack(Blocks.PRISMARINE, 1, 0));
+		crateRegistry.registerCrate(new ItemStack(Blocks.PRISMARINE, 1, 1));
+		crateRegistry.registerCrate(new ItemStack(Blocks.PRISMARINE, 1, 2));
+		crateRegistry.registerCrate(Blocks.BRICK_BLOCK);
+		crateRegistry.registerCrate(Blocks.CACTUS);
+		crateRegistry.registerCrate(new ItemStack(Blocks.SAND, 1, 0));
+		crateRegistry.registerCrate(new ItemStack(Blocks.SAND, 1, 1));
+		crateRegistry.registerCrate(Blocks.OBSIDIAN);
+		crateRegistry.registerCrate(Blocks.NETHERRACK);
+		crateRegistry.registerCrate(Blocks.SOUL_SAND);
+		crateRegistry.registerCrate(Blocks.SANDSTONE);
+		crateRegistry.registerCrate(Blocks.NETHER_BRICK);
+		crateRegistry.registerCrate(Blocks.MYCELIUM);
+		crateRegistry.registerCrate(Blocks.GRAVEL);
+		crateRegistry.registerCrate(new ItemStack(Blocks.SAPLING, 1, 0));
+		crateRegistry.registerCrate(new ItemStack(Blocks.SAPLING, 1, 1));
+		crateRegistry.registerCrate(new ItemStack(Blocks.SAPLING, 1, 2));
+		crateRegistry.registerCrate(new ItemStack(Blocks.SAPLING, 1, 3));
+		crateRegistry.registerCrate(new ItemStack(Blocks.SAPLING, 1, 4));
+		crateRegistry.registerCrate(new ItemStack(Blocks.SAPLING, 1, 5));
 	}
 
 	@Override
@@ -255,13 +258,13 @@ public class PluginCore extends BlankForestryPlugin {
 		int compostWheatAmount = ForestryAPI.activeMode.getIntegerSetting("recipe.output.compost.wheat");
 		if (compostWheatAmount > 0) {
 			ItemStack compost = items.fertilizerBio.getItemStack(compostWheatAmount);
-			RecipeUtil.addRecipe(compost, " X ", "X#X", " X ", '#', Blocks.dirt, 'X', "cropWheat");
+			RecipeUtil.addRecipe(compost, " X ", "X#X", " X ", '#', Blocks.DIRT, 'X', "cropWheat");
 		}
 
 		int compostAshAmount = ForestryAPI.activeMode.getIntegerSetting("recipe.output.compost.ash");
 		if (compostAshAmount > 0) {
 			ItemStack compost = items.fertilizerBio.getItemStack(compostAshAmount);
-			RecipeUtil.addRecipe(compost, " X ", "X#X", " X ", '#', Blocks.dirt, 'X', "dustAsh");
+			RecipeUtil.addRecipe(compost, " X ", "X#X", " X ", '#', Blocks.DIRT, 'X', "dustAsh");
 		}
 
 		int fertilizerApatiteAmount = ForestryAPI.activeMode.getIntegerSetting("recipe.output.fertilizer.apatite");
@@ -280,20 +283,20 @@ public class PluginCore extends BlankForestryPlugin {
 		int humusCompostAmount = ForestryAPI.activeMode.getIntegerSetting("recipe.output.humus.compost");
 		if (humusCompostAmount > 0) {
 			ItemStack humus = blocks.soil.get(BlockSoil.SoilType.HUMUS, humusCompostAmount);
-			RecipeUtil.addRecipe(humus, "###", "#X#", "###", '#', Blocks.dirt, 'X', items.fertilizerBio);
+			RecipeUtil.addRecipe(humus, "###", "#X#", "###", '#', Blocks.DIRT, 'X', items.fertilizerBio);
 		}
 
 		int humusFertilizerAmount = ForestryAPI.activeMode.getIntegerSetting("recipe.output.humus.fertilizer");
 		if (humusFertilizerAmount > 0) {
 			ItemStack humus = blocks.soil.get(BlockSoil.SoilType.HUMUS, humusFertilizerAmount);
-			RecipeUtil.addRecipe(humus, "###", "#X#", "###", '#', Blocks.dirt, 'X', items.fertilizerCompound);
+			RecipeUtil.addRecipe(humus, "###", "#X#", "###", '#', Blocks.DIRT, 'X', items.fertilizerCompound);
 		}
 
 		// Bog earth
 		int bogEarthOutputBucket = ForestryAPI.activeMode.getIntegerSetting("recipe.output.bogearth.bucket");
 		if (bogEarthOutputBucket > 0) {
 			ItemStack bogEarth = blocks.soil.get(BlockSoil.SoilType.BOG_EARTH, bogEarthOutputBucket);
-			RecipeUtil.addRecipe(bogEarth, "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', Items.water_bucket, 'Y', "sand");
+			RecipeUtil.addRecipe(bogEarth, "#Y#", "YXY", "#Y#", '#', Blocks.DIRT, 'X', Items.WATER_BUCKET, 'Y', "sand");
 		}
 
 		int bogEarthOutputCan = ForestryAPI.activeMode.getIntegerSetting("recipe.output.bogearth.can");
@@ -302,16 +305,16 @@ public class PluginCore extends BlankForestryPlugin {
 			ItemStack canWater = PluginFluids.items.getContainer(EnumContainerType.CAN, Fluids.WATER).getItemStack();
 			ItemStack waxCapsuleWater = PluginFluids.items.getContainer(EnumContainerType.CAPSULE, Fluids.WATER).getItemStack();
 			ItemStack refractoryWater = PluginFluids.items.getContainer(EnumContainerType.REFRACTORY, Fluids.WATER).getItemStack();
-			RecipeUtil.addRecipe(bogEarth, "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', canWater, 'Y', "sand");
-			RecipeUtil.addRecipe(bogEarth, "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', waxCapsuleWater, 'Y', "sand");
-			RecipeUtil.addRecipe(bogEarth, "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', refractoryWater, 'Y', "sand");
+			RecipeUtil.addRecipe(bogEarth, "#Y#", "YXY", "#Y#", '#', Blocks.DIRT, 'X', canWater, 'Y', "sand");
+			RecipeUtil.addRecipe(bogEarth, "#Y#", "YXY", "#Y#", '#', Blocks.DIRT, 'X', waxCapsuleWater, 'Y', "sand");
+			RecipeUtil.addRecipe(bogEarth, "#Y#", "YXY", "#Y#", '#', Blocks.DIRT, 'X', refractoryWater, 'Y', "sand");
 		}
 
 		// Crafting Material
-		RecipeUtil.addRecipe(new ItemStack(Items.string), "#", "#", "#", '#', items.craftingMaterial.getSilkWisp());
+		RecipeUtil.addRecipe(new ItemStack(Items.STRING), "#", "#", "#", '#', items.craftingMaterial.getSilkWisp());
 
 		// / Pipette
-		RecipeUtil.addRecipe(items.pipette, "  #", " X ", "X  ", 'X', "paneGlass", '#', new ItemStack(Blocks.wool, 1, OreDictionary.WILDCARD_VALUE));
+		RecipeUtil.addRecipe(items.pipette, "  #", " X ", "X  ", 'X', "paneGlass", '#', new ItemStack(Blocks.WOOL, 1, OreDictionary.WILDCARD_VALUE));
 
 		// Storage Blocks
 		RecipeUtil.addRecipe(blocks.resourceStorage.get(EnumResourceType.APATITE), "###", "###", "###", '#', "gemApatite");
@@ -328,7 +331,7 @@ public class PluginCore extends BlankForestryPlugin {
 
 		// alternate recipes
 		if (!ForestryAPI.enabledPlugins.contains(ForestryPluginUids.APICULTURE)) {
-			RecipeManagers.centrifugeManager.addRecipe(5, new ItemStack(Items.string), ImmutableMap.of(
+			RecipeManagers.centrifugeManager.addRecipe(5, new ItemStack(Items.STRING), ImmutableMap.of(
 					items.craftingMaterial.getSilkWisp(), 0.15f
 			));
 		}

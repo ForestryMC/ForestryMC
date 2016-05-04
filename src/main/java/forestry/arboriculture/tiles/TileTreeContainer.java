@@ -107,7 +107,7 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 	public void setTree(ITree tree) {
 		this.containedTree = tree;
 		if (worldObj != null && worldObj.isRemote) {
-			worldObj.markBlockForUpdate(getPos());
+			worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
 		}
 	}
 

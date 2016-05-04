@@ -49,23 +49,23 @@ public class AlleleEffectResurrection extends AlleleEffectThrottled {
 
 	public static List<Resurrectable> getReanimationList() {
 		ArrayList<Resurrectable> list = new ArrayList<>();
-		list.add(new Resurrectable(new ItemStack(Items.bone), EntitySkeleton.class));
-		list.add(new Resurrectable(new ItemStack(Items.arrow), EntitySkeleton.class));
-		list.add(new Resurrectable(new ItemStack(Items.rotten_flesh), EntityZombie.class));
-		list.add(new Resurrectable(new ItemStack(Items.blaze_rod), EntityBlaze.class));
+		list.add(new Resurrectable(new ItemStack(Items.BONE), EntitySkeleton.class));
+		list.add(new Resurrectable(new ItemStack(Items.ARROW), EntitySkeleton.class));
+		list.add(new Resurrectable(new ItemStack(Items.ROTTEN_FLESH), EntityZombie.class));
+		list.add(new Resurrectable(new ItemStack(Items.BLAZE_ROD), EntityBlaze.class));
 		return list;
 	}
 
 	public static List<Resurrectable> getResurrectionList() {
 		ArrayList<Resurrectable> list = new ArrayList<>();
-		list.add(new Resurrectable(new ItemStack(Items.gunpowder), EntityCreeper.class));
-		list.add(new Resurrectable(new ItemStack(Items.ender_pearl), EntityEnderman.class));
-		list.add(new Resurrectable(new ItemStack(Items.string), EntitySpider.class));
-		list.add(new Resurrectable(new ItemStack(Items.spider_eye), EntitySpider.class));
-		list.add(new Resurrectable(new ItemStack(Items.string), EntityCaveSpider.class));
-		list.add(new Resurrectable(new ItemStack(Items.spider_eye), EntityCaveSpider.class));
-		list.add(new Resurrectable(new ItemStack(Items.ghast_tear), EntityGhast.class));
-		list.add(new Resurrectable(new ItemStack(Blocks.dragon_egg), EntityDragon.class));
+		list.add(new Resurrectable(new ItemStack(Items.GUNPOWDER), EntityCreeper.class));
+		list.add(new Resurrectable(new ItemStack(Items.ENDER_PEARL), EntityEnderman.class));
+		list.add(new Resurrectable(new ItemStack(Items.STRING), EntitySpider.class));
+		list.add(new Resurrectable(new ItemStack(Items.SPIDER_EYE), EntitySpider.class));
+		list.add(new Resurrectable(new ItemStack(Items.STRING), EntityCaveSpider.class));
+		list.add(new Resurrectable(new ItemStack(Items.SPIDER_EYE), EntityCaveSpider.class));
+		list.add(new Resurrectable(new ItemStack(Items.GHAST_TEAR), EntityGhast.class));
+		list.add(new Resurrectable(new ItemStack(Blocks.DRAGON_EGG), EntityDragon.class));
 		return list;
 	}
 

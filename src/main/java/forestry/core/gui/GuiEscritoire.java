@@ -26,7 +26,7 @@ import forestry.core.tiles.TileEscritoire;
 import forestry.core.utils.Translator;
 
 public class GuiEscritoire extends GuiForestry<ContainerEscritoire, TileEscritoire> {
-	private final ItemStack LEVEL_ITEM = new ItemStack(Items.paper);
+	private final ItemStack LEVEL_ITEM = new ItemStack(Items.PAPER);
 	private final EscritoireTextSource textSource = new EscritoireTextSource();
 
 	public GuiEscritoire(EntityPlayer player, TileEscritoire tile) {

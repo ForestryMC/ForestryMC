@@ -35,7 +35,7 @@ public class JubilanceRequiresResource implements IJubilanceProvider {
 		World world = housing.getWorld();
 		BlockPos housingCoords = housing.getCoordinates();
 
-		IBlockState state = world.getBlockState(housingCoords.add(0, -1, 0));
+		IBlockState state = world.getBlockState(housingCoords.down());
 		return ItemStackUtil.equals(state, blockRequired);
 	}
 

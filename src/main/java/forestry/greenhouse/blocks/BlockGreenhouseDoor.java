@@ -15,25 +15,23 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoor;
+import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumWorldBlockLayer;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -55,6 +53,11 @@ public class BlockGreenhouseDoor extends BlockGreenhouse implements IStateMapper
 	private static final PropertyEnum<BlockDoor.EnumHingePosition> HINGE = BlockDoor.HINGE;
 	private static final PropertyBool POWERED = BlockDoor.POWERED;
 	private static final PropertyEnum<BlockDoor.EnumDoorHalf> HALF = BlockDoor.HALF;
+
+	protected static final AxisAlignedBB SOUTH_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 0.1875D);
+	protected static final AxisAlignedBB NORTH_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.8125D, 1.0D, 1.0D, 1.0D);
+	protected static final AxisAlignedBB WEST_AABB = new AxisAlignedBB(0.8125D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D);
+	protected static final AxisAlignedBB EAST_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.1875D, 1.0D, 1.0D);
 
 	public BlockGreenhouseDoor() {
 		setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(OPEN, false).withProperty(HINGE, BlockDoor.EnumHingePosition.LEFT).withProperty(POWERED, false).withProperty(HALF, BlockDoor.EnumDoorHalf.LOWER));
@@ -81,63 +84,23 @@ public class BlockGreenhouseDoor extends BlockGreenhouse implements IStateMapper
 	}
 
 	@Override
-	public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World worldIn, BlockPos pos) {
-		this.setBlockBoundsBasedOnState(worldIn, pos);
-		return super.getSelectedBoundingBox(state, worldIn, pos);
-	}
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+		state = state.getActualState(source, pos);
+		EnumFacing enumfacing = state.getValue(FACING);
+		boolean flag = !state.getValue(OPEN);
+		boolean flag1 = state.getValue(HINGE) == BlockDoor.EnumHingePosition.RIGHT;
 
-	@Override
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
-		this.setBlockBoundsBasedOnState(worldIn, pos);
-		return super.getCollisionBoundingBox(blockState, worldIn, pos);
-	}
-
-	@Override
-	public void setBlockBoundsBasedOnState(IBlockAccess worldIn, BlockPos pos) {
-		this.setBoundBasedOnMeta(combineMetadata(worldIn, pos));
-	}
-
-	private void setBoundBasedOnMeta(int combinedMeta) {
-		float f = 0.1875F;
-		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F);
-		EnumFacing enumfacing = getFacing(combinedMeta);
-		boolean flag = isOpen(combinedMeta);
-		boolean flag1 = isHingeLeft(combinedMeta);
-
-		if (flag) {
-			if (enumfacing == EnumFacing.EAST) {
-				if (!flag1) {
-					this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, f);
-				} else {
-					this.setBlockBounds(0.0F, 0.0F, 1.0F - f, 1.0F, 1.0F, 1.0F);
-				}
-			} else if (enumfacing == EnumFacing.SOUTH) {
-				if (!flag1) {
-					this.setBlockBounds(1.0F - f, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
-				} else {
-					this.setBlockBounds(0.0F, 0.0F, 0.0F, f, 1.0F, 1.0F);
-				}
-			} else if (enumfacing == EnumFacing.WEST) {
-				if (!flag1) {
-					this.setBlockBounds(0.0F, 0.0F, 1.0F - f, 1.0F, 1.0F, 1.0F);
-				} else {
-					this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, f);
-				}
-			} else if (enumfacing == EnumFacing.NORTH) {
-				if (!flag1) {
-					this.setBlockBounds(0.0F, 0.0F, 0.0F, f, 1.0F, 1.0F);
-				} else {
-					this.setBlockBounds(1.0F - f, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
-				}
-			}
-		} else if (enumfacing == EnumFacing.EAST) {
-			this.setBlockBounds(0.0F, 0.0F, 0.0F, f, 1.0F, 1.0F);
-		} else if (enumfacing == EnumFacing.SOUTH) {
-			this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, f);
-		} else if (enumfacing == EnumFacing.WEST) {
-			this.setBlockBounds(1.0F - f, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
-		} else if (enumfacing == EnumFacing.NORTH) {
-			this.setBlockBounds(0.0F, 0.0F, 1.0F - f, 1.0F, 1.0F, 1.0F);
+		switch (enumfacing)
+		{
+			case EAST:
+			default:
+				return flag ? EAST_AABB : (flag1 ? NORTH_AABB : SOUTH_AABB);
+			case SOUTH:
+				return flag ? SOUTH_AABB : (flag1 ? EAST_AABB : WEST_AABB);
+			case WEST:
+				return flag ? WEST_AABB : (flag1 ? SOUTH_AABB : NORTH_AABB);
+			case NORTH:
+				return flag ? NORTH_AABB : (flag1 ? WEST_AABB : EAST_AABB);
 		}
 	}
 
@@ -222,19 +185,14 @@ public class BlockGreenhouseDoor extends BlockGreenhouse implements IStateMapper
 	}
 
 	@Override
-	public RayTraceResult collisionRayTrace(IBlockState blockState, World worldIn, BlockPos pos, Vec3d start, Vec3d end) {
-		this.setBlockBoundsBasedOnState(worldIn, pos);
-		return super.collisionRayTrace(blockState, worldIn, pos, start, end);
-	}
-
-	@Override
 	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
-		return pos.getY() < worldIn.getHeight() - 1 && (worldIn.isSideSolid(pos.down(), EnumFacing.UP)) && super.canPlaceBlockAt(worldIn, pos) && super.canPlaceBlockAt(worldIn, pos.up()));
+		return pos.getY() < worldIn.getHeight() - 1 && (worldIn.getBlockState(pos.down()).isSideSolid(worldIn, pos.down(), EnumFacing.UP) && super.canPlaceBlockAt(worldIn, pos) && super.canPlaceBlockAt(worldIn, pos.up()));
 	}
 
 	@Override
-	public int getMobilityFlag() {
-		return 1;
+	public EnumPushReaction getMobilityFlag(IBlockState state)
+	{
+		return EnumPushReaction.DESTROY;
 	}
 
 	private static int combineMetadata(IBlockAccess worldIn, BlockPos pos) {

@@ -18,7 +18,9 @@ import java.util.Map;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
@@ -57,29 +59,29 @@ public abstract class ContainerForestry extends Container {
 	}
 
 	@Override
-	public ItemStack slotClick(int slotIndex, int button, int modifier, EntityPlayer player) {
+	public ItemStack slotClick(int slotId, int dragType_or_button, ClickType clickTypeIn, EntityPlayer player) {
 		if (!canAccess(player)) {
 			return null;
 		}
 
-		if (modifier == 2 && button >= 0 && button < 9) {
+		if (clickTypeIn == ClickType.QUICK_MOVE && dragType_or_button >= 0 && dragType_or_button < 9) {
 			// hotkey used to move item from slot to hotbar
-			int hotbarSlotIndex = 27 + button;
+			int hotbarSlotIndex = 27 + dragType_or_button;
 			Slot hotbarSlot = getSlot(hotbarSlotIndex);
 			if (hotbarSlot instanceof SlotLocked) {
 				return null;
 			}
 		}
 
-		Slot slot = slotIndex < 0 ? null : getSlot(slotIndex);
+		Slot slot = slotId < 0 ? null : getSlot(slotId);
 		if (slot instanceof SlotForestry) {
 			SlotForestry slotForestry = (SlotForestry) slot;
 			if (slotForestry.isPhantom()) {
-				return SlotUtil.slotClickPhantom(slotForestry, button, modifier, player);
+				return SlotUtil.slotClickPhantom(slotForestry, dragType_or_button, clickTypeIn, player);
 			}
 		}
 
-		return super.slotClick(slotIndex, button, modifier, player);
+		return super.slotClick(slotId, dragType_or_button, clickTypeIn, player);
 	}
 
 	@Override
@@ -93,10 +95,10 @@ public abstract class ContainerForestry extends Container {
 
 	protected abstract boolean canAccess(EntityPlayer player);
 
-	protected final void sendPacketToCrafters(IForestryPacketClient packet) {
-		for (Object crafter : crafters) {
-			if (crafter instanceof EntityPlayer) {
-				Proxies.net.sendToPlayer(packet, (EntityPlayer) crafter);
+	protected final void sendPacketToListeners(IForestryPacketClient packet) {
+		for (ICrafting listener : listeners) {
+			if (listener instanceof EntityPlayer) {
+				Proxies.net.sendToPlayer(packet, (EntityPlayer) listener);
 			}
 		}
 	}

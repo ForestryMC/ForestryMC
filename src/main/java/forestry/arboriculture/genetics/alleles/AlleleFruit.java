@@ -55,10 +55,10 @@ public class AlleleFruit extends AlleleCategorized implements IAlleleFruit {
 	public static void createAlleles() {
 		List<IAlleleFruit> fruitAlleles = Arrays.asList(
 				fruitNone = new AlleleFruit("none", new FruitProviderNone("for.fruits.none", null)),
-				fruitApple = new AlleleFruit("apple", new FruitProviderRandom("for.fruits.apple", EnumFruitFamily.POMES, new ItemStack(Items.apple), 1.0f)
+				fruitApple = new AlleleFruit("apple", new FruitProviderRandom("for.fruits.apple", EnumFruitFamily.POMES, new ItemStack(Items.APPLE), 1.0f)
 						.setColour(new Color(0xff2e2e))
 						.setOverlay("pomes")),
-				fruitCocoa = new AlleleFruit("cocoa", new FruitProviderPod("for.fruits.cocoa", EnumFruitFamily.JUNGLE, FruitProviderPod.EnumPodType.COCOA, new ItemStack(Items.dye, 1, EnumDyeColor.BROWN.getDyeDamage()))),
+				fruitCocoa = new AlleleFruit("cocoa", new FruitProviderPod("for.fruits.cocoa", EnumFruitFamily.JUNGLE, FruitProviderPod.EnumPodType.COCOA, new ItemStack(Items.DYE, 1, EnumDyeColor.BROWN.getDyeDamage()))),
 				// .setColours(0xecdca5, 0xc4d24a), true);
 				fruitChestnut = new AlleleFruit("chestnut", new FruitProviderRipening("for.fruits.chestnut", EnumFruitFamily.NUX, ItemFruit.EnumFruit.CHESTNUT.getStack(), 1.0f)
 						.setRipeningPeriod(6)

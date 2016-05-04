@@ -22,7 +22,10 @@ import net.minecraft.world.IBlockAccess;
 
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.apiculture.PluginApiculture;
+import forestry.apiculture.blocks.BlockRegistryApiculture;
 import forestry.apiculture.genetics.BeeGenome;
+import forestry.apiculture.items.EnumHoneyComb;
+import forestry.apiculture.items.ItemRegistryApiculture;
 import forestry.apiculture.tiles.TileCandle;
 import forestry.core.tiles.TileUtil;
 
@@ -30,28 +33,40 @@ public class ProxyApicultureClient extends ProxyApiculture {
 
 	@Override
 	public void initializeRendering() {
-		/*if (PluginApiculture.fancyRenderedBees) {
-			RenderingRegistry.registerEntityRenderingHandler(EntityBee.class, new RenderBeeEntity());
-
-			MinecraftForgeClient.registerItemRenderer(PluginApiculture.items.beeDroneGE, new RenderBeeItem());
-			MinecraftForgeClient.registerItemRenderer(PluginApiculture.items.beePrincessGE, new RenderBeeItem());
-			MinecraftForgeClient.registerItemRenderer(PluginApiculture.items.beeQueenGE, new RenderBeeItem());
-		}*/
-
 		Minecraft minecraft = Minecraft.getMinecraft();
+
 		ItemColors itemColors = minecraft.getItemColors();
+		BlockColors blockColors = minecraft.getBlockColors();
+
+		ItemRegistryApiculture items = PluginApiculture.items;
+		BlockRegistryApiculture blocks = PluginApiculture.blocks;
+
 		itemColors.registerItemColorHandler(new BeeItemColor(),
-				PluginApiculture.items.beeQueenGE,
-				PluginApiculture.items.beeDroneGE,
-				PluginApiculture.items.beeLarvaeGE,
-				PluginApiculture.items.beePrincessGE
+				items.beeQueenGE,
+				items.beeDroneGE,
+				items.beeLarvaeGE,
+				items.beePrincessGE
+		);
+		itemColors.registerItemColorHandler(new HoneyCombItemColor(),
+				items.beeComb
 		);
 
-		BlockColors blockColors = minecraft.getBlockColors();
 		blockColors.registerBlockColorHandler(new CandleBlockColor(),
-				PluginApiculture.blocks.candle,
-				PluginApiculture.blocks.stump
+				blocks.candle,
+				blocks.stump
 		);
+	}
+
+	private static class HoneyCombItemColor implements IItemColor {
+		@Override
+		public int getColorFromItemstack(ItemStack itemstack, int tintIndex) {
+			EnumHoneyComb honeyComb = EnumHoneyComb.VALUES[itemstack.getItemDamage()];
+			if (tintIndex == 1) {
+				return honeyComb.primaryColor;
+			} else {
+				return honeyComb.secondaryColor;
+			}
+		}
 	}
 
 	private static class BeeItemColor implements IItemColor {

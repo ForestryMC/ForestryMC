@@ -102,7 +102,7 @@ public class PluginMail extends BlankForestryPlugin {
 			letterGlue = Items.slime_ball;
 		}
 
-		RecipeUtil.addShapelessRecipe(items.letters.getItemStack(), Items.paper, letterGlue);
+		RecipeUtil.addShapelessRecipe(items.letters.getItemStack(), Items.PAPER, letterGlue);
 
 		if (Config.craftingStampsEnabled) {
 			for (EnumStampDefinition stampDefinition : EnumStampDefinition.VALUES) {
@@ -117,23 +117,23 @@ public class PluginMail extends BlankForestryPlugin {
 						"###",
 						"ZZZ",
 						'X', stampDefinition.getCraftingIngredient(),
-						'#', Items.paper,
+						'#', Items.PAPER,
 						'Z', stampGlue);
 				RecipeManagers.carpenterManager.addRecipe(10, Fluids.SEED_OIL.getFluid(300), null, stamps,
 						"XXX",
 						"###",
 						'X', stampDefinition.getCraftingIngredient(),
-						'#', Items.paper);
+						'#', Items.PAPER);
 			}
 		}
 
 		// Recycling
-		RecipeUtil.addRecipe(new ItemStack(Items.paper), "###", '#', ItemRegistryMail.emptiedLetterOreDict);
+		RecipeUtil.addRecipe(new ItemStack(Items.PAPER), "###", '#', ItemRegistryMail.emptiedLetterOreDict);
 
 		// Carpenter
 		RecipeManagers.carpenterManager.addRecipe(10, Fluids.WATER.getFluid(250), null, items.letters.getItemStack(), "###", "###", '#', PluginCore.items.woodPulp);
 
-		RecipeUtil.addShapelessRecipe(items.catalogue.getItemStack(), items.stamps.getWildcard(), new ItemStack(Items.book));
+		RecipeUtil.addShapelessRecipe(items.catalogue.getItemStack(), items.stamps.getWildcard(), new ItemStack(Items.BOOK));
 
 		RecipeUtil.addRecipe(blocks.mail.get(BlockTypeMail.MAILBOX),
 				" # ",

@@ -38,7 +38,7 @@ public class CommandModeInfo extends SubCommand {
 	@Override
 	public void executeSubCommand(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		if (args.length <= 0) {
-			printHelp(, sender);
+			printHelp(sender);
 			return;
 		}
 
@@ -46,7 +46,7 @@ public class CommandModeInfo extends SubCommand {
 
 		if (modeName == null) {
 			CommandHelpers.sendLocalizedChatMessage(sender, "for.chat.command.forestry.mode.info.error", args[0]);
-			printHelp(, sender);
+			printHelp(sender);
 			return;
 		}
 

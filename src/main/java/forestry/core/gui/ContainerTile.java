@@ -79,7 +79,7 @@ public abstract class ContainerTile<T extends TileEntity> extends ContainerFores
 
 			if (previousErrorStates == null || !errorStates.equals(previousErrorStates)) {
 				PacketErrorUpdate packet = new PacketErrorUpdate(tile, errorLogicSource);
-				sendPacketToCrafters(packet);
+				sendPacketToListeners(packet);
 			}
 
 			previousErrorStates = errorStates;
@@ -90,7 +90,7 @@ public abstract class ContainerTile<T extends TileEntity> extends ContainerFores
 			int energyManagerData = energyManager.toGuiInt();
 			if (energyManagerData != previousEnergyManagerData) {
 				PacketGuiEnergy packet = new PacketGuiEnergy(windowId, energyManagerData);
-				sendPacketToCrafters(packet);
+				sendPacketToListeners(packet);
 
 				previousEnergyManagerData = energyManagerData;
 			}
@@ -102,7 +102,7 @@ public abstract class ContainerTile<T extends TileEntity> extends ContainerFores
 			EnumAccess access = accessHandler.getAccess();
 			if (access != previousAccess) {
 				IForestryPacketClient packet = new PacketAccessUpdate(restrictedAccess, tile);
-				sendPacketToCrafters(packet);
+				sendPacketToListeners(packet);
 
 				previousAccess = access;
 			}
@@ -127,7 +127,7 @@ public abstract class ContainerTile<T extends TileEntity> extends ContainerFores
 
 			if (guiNeedsUpdate) {
 				PacketGuiUpdate packet = new PacketGuiUpdate(tilePowered);
-				sendPacketToCrafters(packet);
+				sendPacketToListeners(packet);
 			}
 		}
 	}

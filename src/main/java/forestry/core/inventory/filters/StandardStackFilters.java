@@ -45,7 +45,7 @@ public enum StandardStackFilters implements IStackFilter {
 	FEED {
 		@Override
 		public boolean apply(ItemStack stack) {
-			return stack.getItem() instanceof ItemFood || stack.getItem() == Items.wheat || stack.getItem() instanceof ItemSeeds;
+			return stack.getItem() instanceof ItemFood || stack.getItem() == Items.WHEAT || stack.getItem() instanceof ItemSeeds;
 		}
 	};
 

@@ -102,7 +102,7 @@ public class CommandHelpers {
 	public static boolean processStandardCommands(MinecraftServer server, ICommandSender sender, IForestryCommand command, String[] args) throws CommandException {
 		if (args.length >= 1) {
 			if (args[0].equals("help")) {
-				command.printHelp(, sender);
+				command.printHelp(sender);
 				return true;
 			}
 			for (SubCommand child : command.getChildren()) {

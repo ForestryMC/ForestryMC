@@ -21,17 +21,17 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.core.render.TextureManager;
 
 public enum EnumFarmBlockTexture {
-	BRICK_STONE(new ItemStack(Blocks.stonebrick, 1, 0)),
-	BRICK_MOSSY(new ItemStack(Blocks.stonebrick, 1, 1)),
-	BRICK_CRACKED(new ItemStack(Blocks.stonebrick, 1, 2)),
-	BRICK(new ItemStack(Blocks.brick_block)),
-	SANDSTONE_SMOOTH(new ItemStack(Blocks.sandstone, 1, 2)),
-	SANDSTONE_CHISELED(new ItemStack(Blocks.sandstone, 1, 1)),
-	BRICK_NETHER(new ItemStack(Blocks.nether_brick)),
-	BRICK_CHISELED(new ItemStack(Blocks.stonebrick, 1, 3)),
-	QUARTZ(new ItemStack(Blocks.quartz_block, 1, 0)),
-	QUARTZ_CHISELED(new ItemStack(Blocks.quartz_block, 1, 1)),
-	QUARTZ_LINES(new ItemStack(Blocks.quartz_block, 1, 2));
+	BRICK_STONE(new ItemStack(Blocks.STONEBRICK, 1, 0)),
+	BRICK_MOSSY(new ItemStack(Blocks.STONEBRICK, 1, 1)),
+	BRICK_CRACKED(new ItemStack(Blocks.STONEBRICK, 1, 2)),
+	BRICK(new ItemStack(Blocks.BRICK_BLOCK)),
+	SANDSTONE_SMOOTH(new ItemStack(Blocks.SANDSTONE, 1, 2)),
+	SANDSTONE_CHISELED(new ItemStack(Blocks.SANDSTONE, 1, 1)),
+	BRICK_NETHER(new ItemStack(Blocks.NETHER_BRICK)),
+	BRICK_CHISELED(new ItemStack(Blocks.STONEBRICK, 1, 3)),
+	QUARTZ(new ItemStack(Blocks.QUARTZ_BLOCK, 1, 0)),
+	QUARTZ_CHISELED(new ItemStack(Blocks.QUARTZ_BLOCK, 1, 1)),
+	QUARTZ_LINES(new ItemStack(Blocks.QUARTZ_BLOCK, 1, 2));
 
 	private final ItemStack base;
 

@@ -49,7 +49,7 @@ public class FarmLogicCocoa extends FarmLogic {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public Item getItem() {
-		return Items.dye;
+		return Items.DYE;
 	}
 
 	@Override

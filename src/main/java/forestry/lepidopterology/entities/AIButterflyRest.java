@@ -89,8 +89,8 @@ public class AIButterflyRest extends AIButterflyBase {
 		if (isPlant(block)) {
 			return true;
 		}
-		block = entity.worldObj.getBlockState(pos.add(0, -1, 0)).getBlock();
-		return isRest(block) || block.isLeaves(entity.worldObj, pos.add(0, -1, 0));
+		block = entity.worldObj.getBlockState(pos.down()).getBlock();
+		return isRest(block) || block.isLeaves(entity.worldObj, pos.down());
 	}
 
 	private static boolean isRest(Block block) {

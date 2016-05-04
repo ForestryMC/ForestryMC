@@ -29,7 +29,7 @@ public class VillageHandlerApiculture /*implements IVillageCreationHandler, IVil
 		recipeList.add(new MerchantRecipe(wildcardPrincess, new ItemStack(Items.emerald, 1)));
 
 		ItemStack randomComb = PluginApiculture.items.beeComb.getRandomComb(1, random, false);
-		recipeList.add(new MerchantRecipe(new ItemStack(Items.wheat, 2), randomComb));
+		recipeList.add(new MerchantRecipe(new ItemStack(Items.WHEAT, 2), randomComb));
 
 		ItemStack apiary = PluginApiculture.blocks.apiculture.get(BlockTypeApiculture.APIARY);
 		recipeList.add(new MerchantRecipe(new ItemStack(Blocks.log, 24, OreDictionary.WILDCARD_VALUE), apiary));

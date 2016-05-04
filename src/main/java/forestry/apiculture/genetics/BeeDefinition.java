@@ -259,7 +259,7 @@ public enum BeeDefinition implements IBeeDefinition {
 		@Override
 		protected void setSpeciesProperties(IAlleleBeeSpeciesBuilder beeSpecies) {
 			beeSpecies.addProduct(PluginApiculture.items.beeComb.get(EnumHoneyComb.COCOA, 1), 0.30f)
-					.addSpecialty(new ItemStack(Items.sugar), 0.15f);
+					.addSpecialty(new ItemStack(Items.SUGAR), 0.15f);
 		}
 
 		@Override
@@ -350,7 +350,7 @@ public enum BeeDefinition implements IBeeDefinition {
 		@Override
 		protected void setSpeciesProperties(IAlleleBeeSpeciesBuilder beeSpecies) {
 			beeSpecies.addProduct(PluginApiculture.items.beeComb.get(EnumHoneyComb.SIMMERING, 1), 0.45f)
-					.addProduct(new ItemStack(Items.glowstone_dust), 0.15f)
+					.addProduct(new ItemStack(Items.GLOWSTONE_DUST), 0.15f)
 					.setHasEffect()
 					.setTemperature(EnumTemperature.HELLISH)
 					.setHumidity(EnumHumidity.ARID);
@@ -684,7 +684,7 @@ public enum BeeDefinition implements IBeeDefinition {
 		@Override
 		protected void setSpeciesProperties(IAlleleBeeSpeciesBuilder beeSpecies) {
 			beeSpecies.addProduct(PluginApiculture.items.beeComb.get(EnumHoneyComb.SILKY, 1), 0.30f)
-					.addProduct(new ItemStack(Items.egg), 0.10f)
+					.addProduct(new ItemStack(Items.EGG), 0.10f)
 					.setHasEffect()
 					.setIsNotCounted();
 		}
@@ -770,11 +770,11 @@ public enum BeeDefinition implements IBeeDefinition {
 		@Override
 		protected void setSpeciesProperties(IAlleleBeeSpeciesBuilder beeSpecies) {
 			beeSpecies.addProduct(PluginApiculture.items.beeComb.get(EnumHoneyComb.HONEY, 1), 0.40f)
-					.addProduct(new ItemStack(Items.cookie), 0.15f)
-					.addSpecialty(new ItemStack(Items.skull, 1, 0), 0.02f)
-					.addSpecialty(new ItemStack(Items.skull, 1, 2), 0.02f)
-					.addSpecialty(new ItemStack(Items.skull, 1, 3), 0.02f)
-					.addSpecialty(new ItemStack(Items.skull, 1, 4), 0.02f)
+					.addProduct(new ItemStack(Items.COOKIE), 0.15f)
+					.addSpecialty(new ItemStack(Items.SKULL, 1, 0), 0.02f)
+					.addSpecialty(new ItemStack(Items.SKULL, 1, 2), 0.02f)
+					.addSpecialty(new ItemStack(Items.SKULL, 1, 3), 0.02f)
+					.addSpecialty(new ItemStack(Items.SKULL, 1, 4), 0.02f)
 					.setHasEffect()
 					.setIsNotCounted();
 		}

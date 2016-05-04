@@ -25,7 +25,7 @@ import forestry.core.tiles.EscritoireGame;
 import forestry.core.tiles.EscritoireGameToken;
 
 public class GameTokenWidget extends Widget {
-	private final ItemStack HIDDEN_TOKEN = new ItemStack(Items.book);
+	private final ItemStack HIDDEN_TOKEN = new ItemStack(Items.BOOK);
 
 	private final EscritoireGame game;
 	private final int index;

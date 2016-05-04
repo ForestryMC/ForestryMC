@@ -73,7 +73,7 @@ public class ContainerCarpenter extends ContainerLiquidTanks<TileCarpenter> impl
 			oldCraftPreview = newCraftPreview;
 
 			PacketItemStackDisplay packet = new PacketItemStackDisplay(tile, newCraftPreview);
-			sendPacketToCrafters(packet);
+			sendPacketToListeners(packet);
 		}
 	}
 

@@ -14,8 +14,14 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.particle.EntityDiggingFX;
+import net.minecraft.client.renderer.BlockModelShapes;
+import net.minecraft.client.renderer.BlockRendererDispatcher;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
@@ -35,42 +41,45 @@ public class ParticleHelper {
 	private static final Random rand = new Random();
 
 	@SideOnly(Side.CLIENT)
-	public static boolean addHitEffects(World world, Block block, RayTraceResult target, EffectRenderer effectRenderer, Callback callback) {
-		int x = target.getBlockPos().getX();
-		int y = target.getBlockPos().getY();
-		int z = target.getBlockPos().getZ();
+	public static boolean addBlockHitEffects(World world, BlockPos pos, EnumFacing side, EffectRenderer effectRenderer, Callback callback) {
+		IBlockState iblockstate = world.getBlockState(pos);
+		if(iblockstate.getRenderType() != EnumBlockRenderType.INVISIBLE) {
+			int x = pos.getX();
+			int y = pos.getY();
+			int z = pos.getZ();
+			float f = 0.1F;
+			AxisAlignedBB axisalignedbb = iblockstate.getBoundingBox(world, pos);
+			double px = (double)x + world.rand.nextDouble() * (axisalignedbb.maxX - axisalignedbb.minX - (double)(f * 2.0F)) + (double)f + axisalignedbb.minX;
+			double py = (double)y + world.rand.nextDouble() * (axisalignedbb.maxY - axisalignedbb.minY - (double)(f * 2.0F)) + (double)f + axisalignedbb.minY;
+			double pz = (double)z + world.rand.nextDouble() * (axisalignedbb.maxZ - axisalignedbb.minZ - (double)(f * 2.0F)) + (double)f + axisalignedbb.minZ;
+			if(side == EnumFacing.DOWN) {
+				py = (double)y + axisalignedbb.minY - (double)f;
+			}
 
-		EnumFacing sideHit = target.sideHit;
-		
-		IBlockState state = world.getBlockState(target.getBlockPos());
+			if(side == EnumFacing.UP) {
+				py = (double)y + axisalignedbb.maxY + (double)f;
+			}
 
-		if (block != state.getBlock()) {
-			return true;
+			if(side == EnumFacing.NORTH) {
+				pz = (double)z + axisalignedbb.minZ - (double)f;
+			}
+
+			if(side == EnumFacing.SOUTH) {
+				pz = (double)z + axisalignedbb.maxZ + (double)f;
+			}
+
+			if(side == EnumFacing.WEST) {
+				px = (double)x + axisalignedbb.minX - (double)f;
+			}
+
+			if(side == EnumFacing.EAST) {
+				px = (double)x + axisalignedbb.maxX + (double)f;
+			}
+
+			EntityDiggingFX fx = (EntityDiggingFX) effectRenderer.spawnEffectParticle(EnumParticleTypes.BLOCK_DUST.getParticleID(), px, py, pz, 0.0D, 0.0D, 0.0D, Block.getStateId(iblockstate));
+			callback.addHitEffects(fx, pos, iblockstate);
+			effectRenderer.addEffect(fx.setBlockPos(new BlockPos(x, y, z)).multiplyVelocity(0.2F).multipleParticleScaleBy(0.6F));
 		}
-
-		float b = 0.1F;
-		double px = x + rand.nextDouble() * (block.getBlockBoundsMaxX() - block.getBlockBoundsMinX() - b * 2.0F) + b + block.getBlockBoundsMinX();
-		double py = y + rand.nextDouble() * (block.getBlockBoundsMaxY() - block.getBlockBoundsMinY() - b * 2.0F) + b + block.getBlockBoundsMinY();
-		double pz = z + rand.nextDouble() * (block.getBlockBoundsMaxZ() - block.getBlockBoundsMinZ() - b * 2.0F) + b + block.getBlockBoundsMinZ();
-
-		if (sideHit == EnumFacing.DOWN) {
-			py = y + block.getBlockBoundsMinY() - b;
-		} else if (sideHit == EnumFacing.UP) {
-			py = y + block.getBlockBoundsMaxY() + b;
-		} else if (sideHit == EnumFacing.NORTH) {
-			pz = z + block.getBlockBoundsMinZ() - b;
-		} else if (sideHit == EnumFacing.SOUTH) {
-			pz = z + block.getBlockBoundsMaxZ() + b;
-		} else if (sideHit == EnumFacing.WEST) {
-			px = x + block.getBlockBoundsMinX() - b;
-		} else if (sideHit == EnumFacing.EAST) {
-			px = x + block.getBlockBoundsMaxX() + b;
-		}
-
-		EntityDiggingFX fx = (EntityDiggingFX) effectRenderer.spawnEffectParticle(EnumParticleTypes.BLOCK_DUST.getParticleID(), px, py, pz, 0.0D, 0.0D, 0.0D, Block.getStateId(state));
-		callback.addHitEffects(fx, target.getBlockPos(), state);
-		effectRenderer.addEffect(fx.setBlockPos(new BlockPos(x, y, z)).multiplyVelocity(0.2F).multipleParticleScaleBy(0.6F));
-
 		return true;
 	}
 
@@ -138,7 +147,11 @@ public class ParticleHelper {
 
 		@SideOnly(Side.CLIENT)
 		protected void setTexture(EntityDiggingFX fx, BlockPos pos, IBlockState state) {
-			fx.setParticleIcon(Proxies.common.getClientInstance().getBlockRendererDispatcher().getBlockModelShapes().getTexture(state));
+			Minecraft minecraft = Proxies.common.getClientInstance();
+			BlockRendererDispatcher blockRendererDispatcher = minecraft.getBlockRendererDispatcher();
+			BlockModelShapes blockModelShapes = blockRendererDispatcher.getBlockModelShapes();
+			TextureAtlasSprite texture = blockModelShapes.getTexture(state);
+			fx.setParticleTexture(texture);
 		}
 	}
 }

@@ -34,7 +34,7 @@ public final class CommandModeSet extends SubCommand {
 	@Override
 	public void executeSubCommand(MinecraftServer server, ICommandSender sender, String[] args) throws WrongUsageException {
 		if (args.length == 0 || args.length > 2) {
-			printHelp(, sender);
+			printHelp(sender);
 			return;
 		}
 
@@ -45,7 +45,7 @@ public final class CommandModeSet extends SubCommand {
 		String modeName = modeSetter.getModeNameMatching(desired);
 		if (modeName == null) {
 			CommandHelpers.sendLocalizedChatMessage(sender, "for.chat.command.forestry.mode.set.error", desired);
-			printHelp(, sender);
+			printHelp(sender);
 			return;
 		}
 

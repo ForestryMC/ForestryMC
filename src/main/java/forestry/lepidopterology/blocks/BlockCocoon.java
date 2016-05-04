@@ -46,9 +46,9 @@ import forestry.lepidopterology.items.ItemButterflyGE;
 import forestry.lepidopterology.tiles.TileCocoon;
 
 public class BlockCocoon extends Block implements ITileEntityProvider, IStateMapperRegister, IItemModelRegister {
-	
+	public static final AxisAlignedBB BOUNDING_BOX = new AxisAlignedBB(0.3125F, 0.3125F, 0.3125F, 0.6875F, 1F, 0.6875F);
 	private static final PropertyCocoon COCOON = AlleleButterflyCocoon.COCOON;
-	
+
 	public BlockCocoon() {
 		super(new MaterialCocoon());
 		setTickRandomly(true);
@@ -157,14 +157,12 @@ public class BlockCocoon extends Block implements ITileEntityProvider, IStateMap
 
 	@Override
 	public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World worldIn, BlockPos pos) {
-		setBlockBounds(0.3125F, 0.3125F, 0.3125F, 0.6875F, 1F, 0.6875F);
-		return super.getSelectedBoundingBox(state, worldIn, pos);
+		return BOUNDING_BOX;
 	}
 
 	@Override
 	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
-		setBlockBounds(0.3125F, 0.3125F, 0.3125F, 0.6875F, 1F, 0.6875F);
-		return super.getCollisionBoundingBox(blockState, worldIn, pos);
+		return BOUNDING_BOX;
 	}
     
 }

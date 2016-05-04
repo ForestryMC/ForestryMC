@@ -128,9 +128,9 @@ public class BlockFarm extends BlockStructure {
 		TileFarm tile = (TileFarm) world.getTileEntity(pos);
 		tile.setFarmBlockTexture(EnumFarmBlockTexture.getFromCompound(stack.getTagCompound()));
 	}
-	
+
 	@Override
-	public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
 		if (!world.isRemote && canHarvestBlock(world, pos, player)) {
 			List<ItemStack> drops = getDrops(world, pos, BlockUtil.getBlockState(world, pos), 0);
 			for (ItemStack drop : drops) {

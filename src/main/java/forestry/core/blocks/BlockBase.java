@@ -341,7 +341,7 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 	public boolean addHitEffects(IBlockState state, World worldObj, RayTraceResult target, EffectRenderer effectRenderer) {
 		P property = state.getValue(TYPE);
 		if(property.getMachineProperties() instanceof IMachinePropertiesTesr){
-			return ParticleHelper.addHitEffects(worldObj, this, target, effectRenderer, particleCallback);
+			return ParticleHelper.addBlockHitEffects(worldObj, target.getBlockPos(), target.sideHit, effectRenderer, particleCallback);
 		}
 		return false;
 	}

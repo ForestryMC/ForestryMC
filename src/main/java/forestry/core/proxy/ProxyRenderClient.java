@@ -25,6 +25,8 @@ import net.minecraft.client.renderer.block.model.ModelBakery;
 
 import net.minecraft.client.renderer.block.statemap.IStateMapper;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
+import net.minecraft.client.renderer.color.IItemColor;
+import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -44,6 +46,7 @@ import net.minecraftforge.common.model.animation.IAnimationStateMachine;
 import forestry.apiculture.entities.EntityFXBee;
 import forestry.apiculture.render.ParticleRenderer;
 import forestry.apiculture.render.TextureHabitatLocator;
+import forestry.core.PluginCore;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.entities.EntityFXHoneydust;
@@ -52,6 +55,7 @@ import forestry.core.entities.EntityFXSmoke;
 import forestry.core.entities.EntityFXSnow;
 import forestry.core.fluids.Fluids;
 import forestry.core.items.ItemCrated;
+import forestry.core.items.ItemOverlay;
 import forestry.core.models.BlockModelIndex;
 import forestry.core.models.ModelIndex;
 import forestry.core.models.ModelManager;
@@ -148,6 +152,28 @@ public class ProxyRenderClient extends ProxyRender {
 	}
 
 	@Override
+	public void initRendering() {
+		Minecraft minecraft = Minecraft.getMinecraft();
+
+		ItemColors itemColors = minecraft.getItemColors();
+
+//		itemColors.registerItemColorHandler(new ItemOverlayColor(),
+//				PluginCore.items.
+//		);
+	}
+
+	private static class ItemOverlayColor implements IItemColor {
+		@Override
+		public int getColorFromItemstack(ItemStack stack, int tintIndex) {
+			Item item = stack.getItem();
+			if (item instanceof ItemOverlay) {
+				return ((ItemOverlay) item).getColorFromItemStack(stack, tintIndex);
+			}
+			return 0xffffff;
+		}
+	}
+
+	@Override
 	public void registerFluidStateMapper(Block block, final Fluids forestryFluid) {
 		final ModelResourceLocation fluidLocation = new ModelResourceLocation("forestry:blockforestryfluid",
 				forestryFluid.getTag());
@@ -167,10 +193,10 @@ public class ProxyRenderClient extends ProxyRender {
 		ModelManager.registerModels();
 	}
 	
-	@Override
-    public IAnimationStateMachine loadAnimationState(ResourceLocation location, ImmutableMap<String, ITimeValue> parameters){
-        return Animation.INSTANCE.load(location, parameters);
-    }
+//	@Override
+//    public IAnimationStateMachine loadAnimationState(ResourceLocation location, ImmutableMap<String, ITimeValue> parameters){
+//        return Animation.INSTANCE.load(location, parameters);
+//    }
 
 	private static boolean shouldSpawnParticle(World world) {
 		if (!Config.enableParticleFX) {

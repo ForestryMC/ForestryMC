@@ -46,14 +46,14 @@ public enum HiveDescription implements IHiveDescription {
 			postGenFlowers(world, pos, flowerStates);
 		}
 	},
-	MEADOWS(1, 1.0f, BeeDefinition.MEADOWS, HiveManager.genHelper.ground(Blocks.dirt, Blocks.grass)) {
+	MEADOWS(1, 1.0f, BeeDefinition.MEADOWS, HiveManager.genHelper.ground(Blocks.DIRT, Blocks.GRASS)) {
 		@Override
 		public void postGen(World world, BlockPos pos) {
 			super.postGen(world, pos);
 			postGenFlowers(world, pos, flowerStates);
 		}
 	},
-	DESERT(2, 1.0f, BeeDefinition.MODEST, HiveManager.genHelper.ground(Blocks.dirt, Blocks.grass, Blocks.sand, Blocks.sandstone)) {
+	DESERT(2, 1.0f, BeeDefinition.MODEST, HiveManager.genHelper.ground(Blocks.DIRT, Blocks.GRASS, Blocks.SAND, Blocks.SANDSTONE)) {
 		@Override
 		public void postGen(World world, BlockPos pos) {
 			super.postGen(world, pos);
@@ -61,23 +61,23 @@ public enum HiveDescription implements IHiveDescription {
 		}
 	},
 	JUNGLE(3, 6.0f, BeeDefinition.TROPICAL, HiveManager.genHelper.tree()),
-	END(4, 6.0f, BeeDefinition.ENDED, HiveManager.genHelper.ground(Blocks.end_stone)) {
+	END(4, 6.0f, BeeDefinition.ENDED, HiveManager.genHelper.ground(Blocks.END_STONE, Blocks.END_BRICKS)) {
 		@Override
 		public boolean isGoodBiome(BiomeGenBase biome) {
 			return BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.END);
 		}
 	},
-	SNOW(5, 2.0f, BeeDefinition.WINTRY, HiveManager.genHelper.ground(Blocks.dirt, Blocks.grass, Blocks.snow)) {
+	SNOW(5, 2.0f, BeeDefinition.WINTRY, HiveManager.genHelper.ground(Blocks.DIRT, Blocks.GRASS, Blocks.SNOW)) {
 		@Override
 		public void postGen(World world, BlockPos pos) {
 			if (world.isAirBlock(pos.add(0, 1, 0))) {
-				world.setBlockState(pos.add(0, 1, 0), Blocks.snow_layer.getDefaultState(), 0);
+				world.setBlockState(pos.add(0, 1, 0), Blocks.SNOW_LAYER.getDefaultState(), 0);
 			}
 
 			postGenFlowers(world, pos, flowerStates);
 		}
 	},
-	SWAMP(6, 2.0f, BeeDefinition.MARSHY, HiveManager.genHelper.ground(Blocks.dirt, Blocks.grass)) {
+	SWAMP(6, 2.0f, BeeDefinition.MARSHY, HiveManager.genHelper.ground(Blocks.DIRT, Blocks.GRASS)) {
 		@Override
 		public void postGen(World world, BlockPos pos) {
 			super.postGen(world, pos);
@@ -86,16 +86,16 @@ public enum HiveDescription implements IHiveDescription {
 		}
 	};
 
-	private static final IHiveGen groundGen = HiveManager.genHelper.ground(Blocks.dirt, Blocks.grass, Blocks.snow, Blocks.sand, Blocks.sandstone);
+	private static final IHiveGen groundGen = HiveManager.genHelper.ground(Blocks.DIRT, Blocks.GRASS, Blocks.SNOW, Blocks.SAND, Blocks.SANDSTONE);
 	private static final List<IBlockState> flowerStates = new ArrayList<>();
 	private static final List<IBlockState> mushroomStates = new ArrayList<>();
-	private static final List<IBlockState> cactusStates = Collections.singletonList(Blocks.cactus.getDefaultState());
+	private static final List<IBlockState> cactusStates = Collections.singletonList(Blocks.CACTUS.getDefaultState());
 
 	static {
-		flowerStates.addAll(Blocks.red_flower.getBlockState().getValidStates());
-		flowerStates.addAll(Blocks.yellow_flower.getBlockState().getValidStates());
-		mushroomStates.add(Blocks.red_mushroom.getDefaultState());
-		mushroomStates.add(Blocks.brown_mushroom.getDefaultState());
+		flowerStates.addAll(Blocks.RED_FLOWER.getBlockState().getValidStates());
+		flowerStates.addAll(Blocks.YELLOW_FLOWER.getBlockState().getValidStates());
+		mushroomStates.add(Blocks.RED_MUSHROOM.getDefaultState());
+		mushroomStates.add(Blocks.BROWN_MUSHROOM.getDefaultState());
 	}
 
 	private final int meta;
@@ -183,8 +183,9 @@ public enum HiveDescription implements IHiveDescription {
 				IPlantable plantable = (IPlantable) block;
 
 				BlockPos groundPos = blockPos.down();
-				Block ground = world.getBlockState(groundPos).getBlock();
-				if (!ground.canSustainPlant(world, groundPos, EnumFacing.UP, plantable)) {
+				IBlockState blockState = world.getBlockState(groundPos);
+				Block ground = blockState.getBlock();
+				if (!ground.canSustainPlant(blockState, world, groundPos, EnumFacing.UP, plantable)) {
 					world.setBlockToAir(blockPos);
 					plantedCount--;
 				}

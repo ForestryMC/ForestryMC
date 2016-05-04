@@ -15,10 +15,9 @@ import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import forestry.core.utils.BlockUtil;
 
 public class HiveGenGround extends HiveGen {
 
@@ -26,14 +25,18 @@ public class HiveGenGround extends HiveGen {
 
 	public HiveGenGround(Block... groundBlocks) {
 		for (Block block : groundBlocks) {
-			groundMaterials.add(block.getMaterial());
+			IBlockState blockState = block.getDefaultState();
+			Material blockMaterial = block.getMaterial(blockState);
+			groundMaterials.add(blockMaterial);
 		}
 	}
 
 	@Override
 	public boolean isValidLocation(World world, BlockPos pos) {
-		Block ground = BlockUtil.getBlock(world, pos.add(0, -1, 0));
-		return groundMaterials.contains(ground.getMaterial());
+		IBlockState groundBlockState = world.getBlockState(pos.down());
+		Block groundBlock = groundBlockState.getBlock();
+		Material groundBlockMaterial = groundBlock.getMaterial(groundBlockState);
+		return groundMaterials.contains(groundBlockMaterial);
 	}
 
 	@Override
@@ -41,8 +44,12 @@ public class HiveGenGround extends HiveGen {
 
 		// get to the ground
 		BlockPos pos = world.getHeight(new BlockPos(x, 0, z));
-		while (pos.getY() >= 0 && (world.getBlockState(pos.down()).getBlock().isLeaves(world, pos.down()) || canReplace(world, pos.down()))) {
-			pos = pos.add(0, -1, 0);
+		IBlockState blockState = world.getBlockState(pos.down());
+		Block block = blockState.getBlock();
+		while (pos.getY() >= 0 && (block.isLeaves(blockState, world, pos.down()) || canReplace(blockState, world, pos.down()))) {
+			pos = pos.down();
+			blockState = world.getBlockState(pos);
+			block = blockState.getBlock();
 		}
 
 		return pos.getY();

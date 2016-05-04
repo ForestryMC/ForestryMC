@@ -33,7 +33,7 @@ public class ContainerMinecartBeehouse extends ContainerEntity<EntityMinecartBee
 		if (this.beeProgress != beeProgress) {
 			this.beeProgress = beeProgress;
 			IForestryPacketClient packet = new PacketGuiUpdateEntity(entity, entity);
-			sendPacketToCrafters(packet);
+			sendPacketToListeners(packet);
 		}
 	}
 

@@ -15,8 +15,7 @@ import com.google.common.collect.ImmutableMap;
 import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.client.model.animation.Animation;
-import net.minecraftforge.client.model.animation.IAnimationProvider;
-import net.minecraftforge.client.model.animation.TimeValues.VariableValue;
+import net.minecraftforge.common.animation.TimeValues;
 import net.minecraftforge.common.model.animation.IAnimationStateMachine;
 
 import forestry.api.core.IClimateControlled;
@@ -27,11 +26,11 @@ import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.proxy.Proxies;
 import forestry.greenhouse.multiblock.IGreenhouseControllerInternal;
 
-public class TileGreenhouseSprinkler extends TileGreenhouseClimatiser implements IAnimationProvider {
+public class TileGreenhouseSprinkler extends TileGreenhouseClimatiser {//implements IAnimationProvider {
 	
 	private final IAnimationStateMachine asm;
-	private final VariableValue cycleLength = new VariableValue(4);
-	private final VariableValue clickTime = new VariableValue(Float.NEGATIVE_INFINITY);
+	private final TimeValues.VariableValue cycleLength = new TimeValues.VariableValue(4);
+	private final TimeValues.VariableValue clickTime = new TimeValues.VariableValue(Float.NEGATIVE_INFINITY);
 	
 	protected static final int WATER_PER_OPERATION = 2;
 	private static final SprinklerDefinition definition = new SprinklerDefinition();
@@ -102,10 +101,10 @@ public class TileGreenhouseSprinkler extends TileGreenhouseClimatiser implements
 		}
 	}
 	
-	@Override
-	public IAnimationStateMachine asm() {
-		return asm;
-	}
+//	@Override
+//	public IAnimationStateMachine asm() {
+//		return asm;
+//	}
 
 	private static class SprinklerDefinition implements IClimitiserDefinition {
 

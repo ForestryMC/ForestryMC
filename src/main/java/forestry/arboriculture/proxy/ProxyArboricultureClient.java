@@ -16,6 +16,10 @@ import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.color.BlockColors;
 import net.minecraft.client.renderer.color.IBlockColor;
+import net.minecraft.client.renderer.color.IItemColor;
+import net.minecraft.client.renderer.color.ItemColors;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ColorizerFoliage;
 import net.minecraft.world.IBlockAccess;
@@ -26,6 +30,7 @@ import forestry.arboriculture.PluginArboriculture;
 import forestry.arboriculture.blocks.BlockDecorativeLeaves;
 import forestry.arboriculture.blocks.property.PropertyTreeType;
 import forestry.arboriculture.genetics.TreeDefinition;
+import forestry.arboriculture.items.ItemGermlingGE;
 import forestry.arboriculture.models.ModelDecorativeLeaves;
 import forestry.arboriculture.models.ModelLeaves;
 import forestry.arboriculture.tiles.TileLeaves;
@@ -54,6 +59,9 @@ public class ProxyArboricultureClient extends ProxyArboriculture {
 
 		Minecraft minecraft = Minecraft.getMinecraft();
 		BlockColors blockColors = minecraft.getBlockColors();
+		ItemColors itemColors = minecraft.getItemColors();
+
+		itemColors.registerItemColorHandler(new SaplingItemColor(), PluginArboriculture.items.sapling);
 
 		blockColors.registerBlockColorHandler(new LeavesBlockColor(), PluginArboriculture.blocks.leaves);
 
@@ -116,6 +124,17 @@ public class ProxyArboricultureClient extends ProxyArboriculture {
 				IFruitProvider fruitProvider = genome.getFruitProvider();
 				return fruitProvider.getDecorativeColor();
 			}
+		}
+	}
+
+	private static class SaplingItemColor implements IItemColor {
+		@Override
+		public int getColorFromItemstack(ItemStack stack, int tintIndex) {
+			Item item = stack.getItem();
+			if (item instanceof ItemGermlingGE) {
+				return ((ItemGermlingGE) item).getColorFromItemStack(stack, tintIndex);
+			}
+			return 0xffffff;
 		}
 	}
 }

@@ -39,7 +39,7 @@ public abstract class BlockForestry extends Block implements IItemModelRegister,
 	}
 
 	@Override
-	public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
 		TileEntity tile = world.getTileEntity(pos);
 
 		if (tile instanceof IRestrictedAccess) {
@@ -49,7 +49,7 @@ public abstract class BlockForestry extends Block implements IItemModelRegister,
 			}
 		}
 		
-		return super.removedByPlayer(world, pos, player, willHarvest);
+		return super.removedByPlayer(state, world, pos, player, willHarvest);
 	}
 
 	@Override

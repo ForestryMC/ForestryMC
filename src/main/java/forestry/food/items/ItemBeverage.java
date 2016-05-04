@@ -13,10 +13,17 @@ package forestry.food.items;
 import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.stats.StatList;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fml.relauncher.Side;
@@ -57,19 +64,25 @@ public class ItemBeverage extends ItemForestryFood {
 	}
 
 	@Override
-	public ItemStack onItemUseFinish(ItemStack stack, World world, EntityPlayer player) {
+	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving) {
 		List<IBeverageEffect> effects = BeverageEffect.loadEffects(stack);
 
 		stack.stackSize--;
-		player.getFoodStats().addStats(this, stack);
-		world.playSoundAtEntity(player, "random.burp", 0.5F, world.rand.nextFloat() * 0.1F + 0.9F);
 
-		if (world.isRemote) {
-			return stack;
-		}
+		if (entityLiving instanceof EntityPlayer) {
+			EntityPlayer entityplayer = (EntityPlayer) entityLiving;
+			entityplayer.getFoodStats().addStats(this, stack);
+			worldIn.playSound((EntityPlayer)null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, worldIn.rand.nextFloat() * 0.1F + 0.9F);
 
-		for (IBeverageEffect effect : effects) {
-			effect.doEffect(world, player);
+			if (worldIn.isRemote) {
+				return stack;
+			}
+
+			for (IBeverageEffect effect : effects) {
+				effect.doEffect(worldIn, entityplayer);
+			}
+
+			entityplayer.addStat(StatList.getObjectUseStats(this));
 		}
 
 		return stack;
@@ -100,15 +113,16 @@ public class ItemBeverage extends ItemForestryFood {
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-
-		int meta = itemstack.getItemDamage();
+	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
+	{
+		int meta = itemStackIn.getItemDamage();
 		IBeverageInfo beverage = beverages[meta];
-
-		if (entityplayer.canEat(beverage.isAlwaysEdible())) {
-			entityplayer.setItemInUse(itemstack, getMaxItemUseDuration(itemstack));
+		if (playerIn.canEat(beverage.isAlwaysEdible())) {
+			playerIn.setActiveHand(hand);
+			return new ActionResult<>(EnumActionResult.SUCCESS, itemStackIn);
+		} else {
+			return new ActionResult<>(EnumActionResult.FAIL, itemStackIn);
 		}
-		return itemstack;
 	}
 
 	@Override
@@ -147,7 +161,6 @@ public class ItemBeverage extends ItemForestryFood {
 
 	@Override
 	public int getColorFromItemStack(ItemStack itemstack, int j) {
-
 		if (j == 1 || beverages[itemstack.getItemDamage()].getSecondaryColor() == 0) {
 			return beverages[itemstack.getItemDamage()].getPrimaryColor();
 		} else {

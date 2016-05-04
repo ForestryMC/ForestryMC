@@ -80,7 +80,6 @@ public class ItemOverlay extends ItemForestry {
 		return super.getUnlocalizedName(stack) + "." + overlays[stack.getItemDamage()].getUid();
 	}
 
-	@Override
 	public int getColorFromItemStack(ItemStack itemstack, int j) {
 		IOverlayInfo overlayInfo = overlays[itemstack.getItemDamage()];
 		if (j == 0 || overlayInfo.getSecondaryColor() == 0) {

@@ -45,6 +45,10 @@ public class ProxyRender {
 		return false;
 	}
 
+	public void initRendering() {
+
+	}
+
 	@Nullable
 	public TileEntitySpecialRenderer<TileBase> getRenderDefaultMachine(String gfxBase) {
 		return null;
@@ -103,9 +107,9 @@ public class ProxyRender {
 	public void registerModels() {
 	}
 	
-	public IAnimationStateMachine loadAnimationState(ResourceLocation location, ImmutableMap<String, ITimeValue> parameters){
-		return null;
-	}
+//	public IAnimationStateMachine loadAnimationState(ResourceLocation location, ImmutableMap<String, ITimeValue> parameters){
+//		return null;
+//	}
 
 	/* FX */
 

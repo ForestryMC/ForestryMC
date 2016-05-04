@@ -41,7 +41,7 @@ public final class TreeGenHelper {
 	public static void generateTree(WorldGenerator gen, EntityPlayer player, BlockPos pos) {
 		World world = player.worldObj;
 		
-		if(world.isAirBlock(pos.add(0, -1, 0))){
+		if(world.isAirBlock(pos.down())){
 			pos = BlockUtil.getNextSolidDownPos(world, pos);
 		}else{
 			pos = BlockUtil.getNextReplaceableUpPos(world, pos);

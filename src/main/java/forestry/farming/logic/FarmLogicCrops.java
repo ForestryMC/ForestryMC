@@ -35,7 +35,7 @@ public abstract class FarmLogicCrops extends FarmLogicWatered {
 	private final Iterable<IFarmable> seeds;
 
 	protected FarmLogicCrops(IFarmHousing housing, Iterable<IFarmable> seeds) {
-		super(housing, new ItemStack(Blocks.dirt), new ItemStack(Blocks.farmland));
+		super(housing, new ItemStack(Blocks.DIRT), new ItemStack(Blocks.farmland));
 
 		this.seeds = seeds;
 	}
@@ -83,7 +83,7 @@ public abstract class FarmLogicCrops extends FarmLogicWatered {
 				continue;
 			}
 
-			ItemStack below = VectUtil.getAsItemStack(world, position.add(0, -1, 0));
+			ItemStack below = VectUtil.getAsItemStack(world, position.down());
 			if (ground.getItem() != below.getItem()) {
 				continue;
 			}

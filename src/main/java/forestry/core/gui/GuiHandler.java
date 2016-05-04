@@ -15,6 +15,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -76,11 +77,13 @@ public class GuiHandler implements IGuiHandler {
 
 		switch (guiId.getGuiType()) {
 			case Item: {
-				ItemStack heldItem = player.getCurrentEquippedItem();
-				if (heldItem != null) {
-					Item item = heldItem.getItem();
-					if (guiId.getGuiHandlerClass().isInstance(item)) {
-						return ((IGuiHandlerItem) item).getGui(player, heldItem, data);
+				for (EnumHand hand : EnumHand.values()) {
+					ItemStack heldItem = player.getHeldItem(hand);
+					if (heldItem != null) {
+						Item item = heldItem.getItem();
+						if (guiId.getGuiHandlerClass().isInstance(item)) {
+							return ((IGuiHandlerItem) item).getGui(player, heldItem, data);
+						}
 					}
 				}
 				break;
@@ -114,11 +117,13 @@ public class GuiHandler implements IGuiHandler {
 
 		switch (guiId.getGuiType()) {
 			case Item: {
-				ItemStack heldItem = player.getCurrentEquippedItem();
-				if (heldItem != null) {
-					Item item = heldItem.getItem();
-					if (guiId.getGuiHandlerClass().isInstance(item)) {
-						return ((IGuiHandlerItem) item).getContainer(player, heldItem, data);
+				for (EnumHand hand : EnumHand.values()) {
+					ItemStack heldItem = player.getHeldItem(hand);
+					if (heldItem != null) {
+						Item item = heldItem.getItem();
+						if (guiId.getGuiHandlerClass().isInstance(item)) {
+							return ((IGuiHandlerItem) item).getContainer(player, heldItem, data);
+						}
 					}
 				}
 				break;

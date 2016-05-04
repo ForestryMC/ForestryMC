@@ -46,7 +46,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 	}
 
 	public FarmLogicArboreal(IFarmHousing housing) {
-		super(housing, new ItemStack(Blocks.dirt), PluginCore.blocks.soil.get(BlockSoil.SoilType.HUMUS, 1), Farmables.farmables.get("farmArboreal"));
+		super(housing, new ItemStack(Blocks.DIRT), PluginCore.blocks.soil.get(BlockSoil.SoilType.HUMUS, 1), Farmables.farmables.get("farmArboreal"));
 	}
 
 	@Override
@@ -71,7 +71,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public Item getItem() {
-		return Item.getItemFromBlock(Blocks.sapling);
+		return Item.getItemFromBlock(Blocks.SAPLING);
 	}
 
 	@Override

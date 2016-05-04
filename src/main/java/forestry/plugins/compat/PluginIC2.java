@@ -270,7 +270,7 @@ public class PluginIC2 extends BlankForestryPlugin {
 			int bogEarthOutputCan = ForestryAPI.activeMode.getIntegerSetting("recipe.output.bogearth.can");
 			if (bogEarthOutputCan > 0) {
 				ItemStack bogEarthCan = PluginCore.blocks.soil.get(BlockSoil.SoilType.BOG_EARTH, bogEarthOutputCan);
-				RecipeUtil.addRecipe(bogEarthCan, "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', waterCell, 'Y', "sand");
+				RecipeUtil.addRecipe(bogEarthCan, "#Y#", "YXY", "#Y#", '#', Blocks.DIRT, 'X', waterCell, 'Y', "sand");
 			}
 		}
 

@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
@@ -76,7 +77,8 @@ public final class Hive {
 	}
 
 	public boolean canReplace(World world, BlockPos pos) {
-		return hiveDescription.getHiveGen().canReplace(world, pos);
+		IBlockState blockState = world.getBlockState(pos);
+		return hiveDescription.getHiveGen().canReplace(blockState, world, pos);
 	}
 
 	public int getYForHive(World world, int x, int z) {

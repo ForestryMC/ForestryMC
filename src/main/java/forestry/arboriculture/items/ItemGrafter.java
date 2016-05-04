@@ -13,6 +13,7 @@ package forestry.arboriculture.items;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -34,15 +35,16 @@ public class ItemGrafter extends ItemForestryTool implements IToolGrafter {
 	}
 
 	@Override
-	public boolean canHarvestBlock(Block block, ItemStack itemStack) {
-		if (block instanceof BlockLeaves || block.getMaterial() == Material.leaves) {
+	public boolean canHarvestBlock(IBlockState state, ItemStack stack) {
+		Block block = state.getBlock();
+		if (block instanceof BlockLeaves || block.getMaterial(state) == Material.LEAVES) {
 			return true;
 		}
-		return super.canHarvestBlock(block, itemStack);
+		return super.canHarvestBlock(state, stack);
 	}
-	
+
 	@Override
-	public boolean onBlockDestroyed(ItemStack stack, World world, Block block, BlockPos pos, EntityLivingBase player) {
+	public boolean onBlockDestroyed(ItemStack stack, World worldIn, IBlockState state, BlockPos pos, EntityLivingBase entityLiving) {
 		return true;
 	}
 

@@ -72,14 +72,14 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
 		if (craftMatrixChanged) {
 			craftMatrixChanged = false;
 			tile.setCurrentRecipe(craftMatrix);
-			sendPacketToCrafters(new PacketWorktableRecipeUpdate(tile));
+			sendPacketToListeners(new PacketWorktableRecipeUpdate(tile));
 		}
 
 		super.detectAndSendChanges();
 
 		if (lastMemoryUpdate != tile.getMemory().getLastUpdate()) {
 			lastMemoryUpdate = tile.getMemory().getLastUpdate();
-			sendPacketToCrafters(new PacketWorktableMemoryUpdate(tile));
+			sendPacketToListeners(new PacketWorktableMemoryUpdate(tile));
 		}
 	}
 
@@ -130,13 +130,13 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
 			case -1: { // clicked clear button
 				tile.clearCraftMatrix();
 				updateCraftMatrix();
-				sendPacketToCrafters(new PacketWorktableRecipeUpdate(tile));
+				sendPacketToListeners(new PacketWorktableRecipeUpdate(tile));
 				break;
 			}
 			case 0: { // clicked a memorized recipe
 				tile.chooseRecipeMemory(secondary);
 				updateCraftMatrix();
-				sendPacketToCrafters(new PacketWorktableRecipeUpdate(tile));
+				sendPacketToListeners(new PacketWorktableRecipeUpdate(tile));
 				break;
 			}
 			case 1: { // right clicked a memorized recipe
@@ -147,12 +147,12 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
 			}
 			case 100: { // clicked previous recipe conflict button
 				tile.choosePreviousConflictRecipe();
-				sendPacketToCrafters(new PacketWorktableRecipeUpdate(tile));
+				sendPacketToListeners(new PacketWorktableRecipeUpdate(tile));
 				break;
 			}
 			case 101: { // clicked next recipe conflict button
 				tile.chooseNextConflictRecipe();
-				sendPacketToCrafters(new PacketWorktableRecipeUpdate(tile));
+				sendPacketToListeners(new PacketWorktableRecipeUpdate(tile));
 				break;
 			}
 		}

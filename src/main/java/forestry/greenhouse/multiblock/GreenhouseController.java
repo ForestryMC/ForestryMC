@@ -340,9 +340,9 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 	public ItemStack getDefaultCamouflageBlock(EnumCamouflageType type) {
 		switch (type) {
 			case DEFAULT:
-				return new ItemStack(Blocks.brick_block);
+				return new ItemStack(Blocks.BRICK_BLOCK);
 			case GLASS:
-				return new ItemStack(Blocks.stained_glass, 1, 13);
+				return new ItemStack(Blocks.STAINED_GLASS, 1, 13);
 			case DOOR:
 				return null;
 			default:

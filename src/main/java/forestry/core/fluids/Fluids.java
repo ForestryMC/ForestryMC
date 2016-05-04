@@ -155,7 +155,7 @@ public enum Fluids {
 		@Override
 		public List<ItemStack> getOtherContainers() {
 			return Collections.singletonList(
-					new ItemStack(Items.milk_bucket)
+					new ItemStack(Items.MILK_BUCKET)
 			);
 		}
 	},

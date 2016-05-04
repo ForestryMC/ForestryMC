@@ -10,14 +10,18 @@
  ******************************************************************************/
 package forestry.core.blocks.propertys;
 
+import com.google.common.base.Optional;
+
 import net.minecraft.block.properties.IProperty;
 
 import java.util.List;
 
+import forestry.api.arboriculture.IAlleleTreeSpecies;
+import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleProperty;
 
 public abstract class PropertyAllele<A extends IAlleleProperty<A>> implements IProperty<A> {
-
 	protected final String name;
 
 	public PropertyAllele(String name) {
@@ -27,6 +31,17 @@ public abstract class PropertyAllele<A extends IAlleleProperty<A>> implements IP
 	@Override
 	public String getName() {
 		return this.name;
+	}
+
+	@Override
+	public Optional<A> parseValue(String value) {
+		IAllele allele = AlleleManager.alleleRegistry.getAllele(value);
+		Class<A> valueClass = getValueClass();
+		if (valueClass.isInstance(allele)) {
+			A alleleValue = valueClass.cast(allele);
+			return Optional.of(alleleValue);
+		}
+		return Optional.absent();
 	}
 
 	@Override

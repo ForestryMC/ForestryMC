@@ -212,7 +212,7 @@ public class TileTrader extends TileBase {
 	}
 
 	public boolean hasPaperMin(int count) {
-		return hasItemCount(TradeStation.SLOT_LETTERS_1, TradeStation.SLOT_LETTERS_COUNT, new ItemStack(Items.paper), count);
+		return hasItemCount(TradeStation.SLOT_LETTERS_1, TradeStation.SLOT_LETTERS_COUNT, new ItemStack(Items.PAPER), count);
 	}
 
 	public boolean hasInputBufMin(float percentage) {

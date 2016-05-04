@@ -28,7 +28,7 @@ import forestry.plugins.ForestryPluginUids;
 public class FarmableVanillaSapling extends FarmableGenericSapling {
 
 	public FarmableVanillaSapling() {
-		super(Blocks.sapling, -1, new ItemStack(Items.apple), new ItemStack(FarmableCocoa.COCOA_SEED, 1, FarmableCocoa.COCOA_META));
+		super(Blocks.SAPLING, -1, new ItemStack(Items.APPLE), new ItemStack(FarmableCocoa.COCOA_SEED, 1, FarmableCocoa.COCOA_META));
 	}
 
 	@Override
@@ -41,7 +41,7 @@ public class FarmableVanillaSapling extends FarmableGenericSapling {
 
 			return TreeManager.treeRoot.plantSapling(world, (ITree) tree, player.getGameProfile(), pos);
 		} else {
-			return germling.copy().onItemUse(player, world, pos.add(0, -1, 0), EnumFacing.UP, 0, 0, 0);
+			return germling.copy().onItemUse(player, world, pos.down(), EnumFacing.UP, 0, 0, 0);
 		}
 	}
 

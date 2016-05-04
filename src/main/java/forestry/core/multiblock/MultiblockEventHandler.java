@@ -18,13 +18,13 @@ public class MultiblockEventHandler {
 	@SubscribeEvent(priority = EventPriority.NORMAL)
 	public void onChunkLoad(ChunkEvent.Load loadEvent) {
 		Chunk chunk = loadEvent.getChunk();
-		World world = loadEvent.world;
+		World world = loadEvent.getWorld();
 		MultiblockRegistry.onChunkLoaded(world, chunk.xPosition, chunk.zPosition);
 	}
 
 	// Cleanup, for nice memory usageness
 	@SubscribeEvent(priority = EventPriority.NORMAL)
 	public void onWorldUnload(WorldEvent.Unload unloadWorldEvent) {
-		MultiblockRegistry.onWorldUnloaded(unloadWorldEvent.world);
+		MultiblockRegistry.onWorldUnloaded(unloadWorldEvent.getWorld());
 	}
 }

@@ -11,7 +11,10 @@
 package forestry.factory.tiles;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.SoundCategory;
 
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.RainSubstrate;
@@ -30,21 +33,21 @@ public class TileMillRainmaker extends TileMill {
 	}
 
 	@Override
-	public void openGui(EntityPlayer player) {
+	public void openGui(EntityPlayer player, ItemStack heldItem) {
 		if (player.worldObj.isRemote) {
 			return;
 		}
 
-		if (player.inventory.getCurrentItem() == null) {
+		if (heldItem == null) {
 			return;
 		}
 
 		// We don't have a gui, but we can be activated
-		if (FuelManager.rainSubstrate.containsKey(player.inventory.getCurrentItem()) && charge == 0) {
-			RainSubstrate substrate = FuelManager.rainSubstrate.get(player.inventory.getCurrentItem());
-			if (substrate.getItem().isItemEqual(player.inventory.getCurrentItem())) {
+		if (FuelManager.rainSubstrate.containsKey(heldItem) && charge == 0) {
+			RainSubstrate substrate = FuelManager.rainSubstrate.get(heldItem);
+			if (substrate.getItem().isItemEqual(heldItem)) {
 				addCharge(substrate);
-				player.inventory.getCurrentItem().stackSize--;
+				heldItem.stackSize--;
 			}
 		}
 		sendNetworkUpdate();
@@ -83,8 +86,7 @@ public class TileMillRainmaker extends TileMill {
 	@Override
 	public void activate() {
 		if (Proxies.render.hasRendering()) {
-			worldObj.playSoundEffect(getPos().getX(), getPos().getY(), getPos().getZ(), "ambient.weather.thunder", 4F,
-					(1.0F + (worldObj.rand.nextFloat() - worldObj.rand.nextFloat()) * 0.2F) * 0.7F);
+			worldObj.playSound((EntityPlayer)null, getPos(), SoundEvents.ENTITY_LIGHTNING_THUNDER, SoundCategory.WEATHER, 10000.0F, 0.8F + worldObj.rand.nextFloat() * 0.2F);
 
 			float f = getPos().getX() + 0.5F;
 			float f1 = getPos().getY() + 0.0F + worldObj.rand.nextFloat() * 6F / 16F;

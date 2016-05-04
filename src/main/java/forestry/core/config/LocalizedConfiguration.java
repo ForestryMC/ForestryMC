@@ -32,7 +32,7 @@ public class LocalizedConfiguration extends Configuration {
 	@Override
 	public boolean getBoolean(String category, String name, boolean defaultValue, String comment) {
 		Property prop = this.get(category, name, defaultValue);
-		prop.comment = comment + " [default: " + defaultValue + "]";
+		prop.setComment(comment + " [default: " + defaultValue + "]");
 		return prop.getBoolean(defaultValue);
 	}
 
@@ -67,7 +67,7 @@ public class LocalizedConfiguration extends Configuration {
 		Property prop = this.get(category, name, defaultValue);
 		prop.setValidValues(validValues);
 		prop.setLanguageKey(langKey);
-		prop.comment = comment + " [default: " + defaultValue + "] [valid: " + Arrays.toString(prop.getValidValues()) + "]";
+		prop.setComment(comment + " [default: " + defaultValue + "] [valid: " + Arrays.toString(prop.getValidValues()) + "]");
 		return prop.getString();
 	}
 
@@ -89,7 +89,7 @@ public class LocalizedConfiguration extends Configuration {
 
 		prop.setValidValues(validValues);
 		prop.setLanguageKey(langKey);
-		prop.comment = comment + " [default: " + defaultValue + "] [valid: " + Arrays.toString(prop.getValidValues()) + "]";
+		prop.setComment(comment + " [default: " + defaultValue + "] [valid: " + Arrays.toString(prop.getValidValues()) + "]");
 		String stringValue = prop.getString();
 
 		T enumValue = defaultValue;
@@ -123,7 +123,7 @@ public class LocalizedConfiguration extends Configuration {
 		Property prop = this.get(category, name, defaultValue);
 		prop.setLanguageKey(langKey);
 		prop.setValidValues(validValues);
-		prop.comment = comment + " [default: " + Arrays.toString(defaultValue) + "] [valid: " + Arrays.toString(prop.getValidValues()) + "]";
+		prop.setComment(comment + " [default: " + Arrays.toString(defaultValue) + "] [valid: " + Arrays.toString(prop.getValidValues()) + "]");
 		return prop.getStringList();
 	}
 

@@ -26,11 +26,11 @@ import forestry.core.utils.vect.VectUtil;
 public class FarmHelper {
 
 	public static final ImmutableSet<Block> bricks = ImmutableSet.of(
-			Blocks.brick_block,
-			Blocks.stonebrick,
-			Blocks.sandstone,
-			Blocks.nether_brick,
-			Blocks.quartz_block
+			Blocks.BRICK_BLOCK,
+			Blocks.STONEBRICK,
+			Blocks.SANDSTONE,
+			Blocks.NETHER_BRICK,
+			Blocks.QUARTZ_BLOCK
 	);
 
 	private static FarmDirection getOpposite(FarmDirection farmDirection) {

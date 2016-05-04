@@ -65,7 +65,7 @@ public final class FluidHelper {
 						if (current.stackSize > 1) {
 							player.inventory.decrStackSize(player.inventory.currentItem, 1);
 							if (drainedContainer != null && !player.inventory.addItemStackToInventory(drainedContainer)) {
-								player.dropPlayerItemWithRandomChoice(drainedContainer, false);
+								player.dropItem(drainedContainer, false);
 							}
 						} else {
 							player.inventory.setInventorySlotContents(player.inventory.currentItem, drainedContainer);

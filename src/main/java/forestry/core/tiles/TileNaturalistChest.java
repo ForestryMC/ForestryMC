@@ -13,6 +13,8 @@ package forestry.core.tiles;
 import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 
 import forestry.api.genetics.ISpeciesRoot;
@@ -87,7 +89,7 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 	}
 
 	private void playLidSound(String sound) {
-		worldObj.playSoundEffect(getPos().getX() + 0.5, getPos().getY() + 0.5, getPos().getZ() + 0.5, sound, 0.5F, worldObj.rand.nextFloat() * 0.1F + 0.9F);
+		this.worldObj.playSound((EntityPlayer)null, getPos(), SoundEvents.BLOCK_CHEST_OPEN, SoundCategory.BLOCKS, 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
 	}
 
 	@Override

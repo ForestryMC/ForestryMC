@@ -31,7 +31,7 @@ public class ContainerGreenhouse extends ContainerTile<TileGreenhouse> {
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
 		PacketGuiUpdate packet = new PacketGuiUpdate(tile);
-		sendPacketToCrafters(packet);
+		sendPacketToListeners(packet);
 	}
 	
 	public IFluidTank getTank(int slot) {

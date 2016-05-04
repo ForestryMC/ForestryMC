@@ -18,6 +18,7 @@ import java.util.TreeSet;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 
 import forestry.core.config.Constants;
@@ -50,8 +51,8 @@ public class RootCommand extends CommandBase implements IForestryCommand {
 	}
 
 	@Override
-	public void processCommand(ICommandSender sender, String[] args) throws CommandException {
-		if (!CommandHelpers.processStandardCommands(sender, this, args)) {
+	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+		if (!CommandHelpers.processStandardCommands(server, sender, this, args)) {
 			CommandHelpers.throwWrongUsage(sender, this);
 		}
 	}
@@ -73,8 +74,8 @@ public class RootCommand extends CommandBase implements IForestryCommand {
 	}
 
 	@Override
-	public List<String> addTabCompletionOptions(ICommandSender sender, String[] incomplete, BlockPos pos) {
-		return CommandHelpers.addStandardTabCompletionOptions(this, sender, incomplete, pos);
+	public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos pos) {
+		return CommandHelpers.addStandardTabCompletionOptions(server, this, sender, args, pos);
 	}
 
 	/* IForestryCommand */
@@ -95,7 +96,7 @@ public class RootCommand extends CommandBase implements IForestryCommand {
 	}
 
 	@Override
-	public void printHelp(MinecraftServer server, ICommandSender sender) {
+	public void printHelp(ICommandSender sender) {
 		CommandHelpers.printHelp(sender, this);
 	}
 

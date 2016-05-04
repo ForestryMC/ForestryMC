@@ -13,6 +13,9 @@ package forestry.core.items;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
 import forestry.core.gui.ContainerItemInventory;
@@ -25,12 +28,12 @@ public abstract class ItemWithGui extends ItemForestry implements IGuiHandlerIte
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-		if (!world.isRemote) {
-			openGui(entityplayer);
+	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+		if (!worldIn.isRemote) {
+			openGui(playerIn);
 		}
 
-		return itemstack;
+		return ActionResult.newResult(EnumActionResult.SUCCESS, itemStackIn);
 	}
 
 	protected void openGui(EntityPlayer entityplayer) {

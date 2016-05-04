@@ -44,7 +44,7 @@ public class FarmLogicReeds extends FarmLogic {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public Item getItem() {
-		return Items.reeds;
+		return Items.REEDS;
 	}
 
 	@Override
@@ -72,7 +72,7 @@ public class FarmLogicReeds extends FarmLogic {
 			return false;
 		}
 
-		return ItemStackUtil.equals(Blocks.sand, itemstack) || ItemStackUtil.equals(Blocks.dirt, itemstack);
+		return ItemStackUtil.equals(Blocks.SAND, itemstack) || ItemStackUtil.equals(Blocks.DIRT, itemstack);
 	}
 
 	@Override
@@ -81,7 +81,7 @@ public class FarmLogicReeds extends FarmLogic {
 			return false;
 		}
 
-		return itemstack.getItem() == Items.reeds;
+		return itemstack.getItem() == Items.REEDS;
 	}
 
 	@Override

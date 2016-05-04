@@ -27,7 +27,7 @@ public class GrowthRuleDirtGrass implements IFlowerGrowthRule {
 		}
 
 		Block ground = world.getBlockState(new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ())).getBlock();
-		if (ground != Blocks.dirt && ground != Blocks.grass) {
+		if (ground != Blocks.DIRT && ground != Blocks.GRASS) {
 			return false;
 		}
 

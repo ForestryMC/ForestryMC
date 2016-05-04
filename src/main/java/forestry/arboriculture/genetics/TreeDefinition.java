@@ -93,7 +93,7 @@ import forestry.core.tiles.TileUtil;
 import forestry.core.utils.BlockUtil;
 
 public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSerializable {
-	Oak(TreeBranchDefinition.QUERCUS, "appleOak", "robur", false, EnumLeafType.DECIDUOUS, new Color(4764952), new Color(4764952).brighter(), 0, new ItemStack(Blocks.log, 1, 0)) {
+	Oak(TreeBranchDefinition.QUERCUS, "appleOak", "robur", false, EnumLeafType.DECIDUOUS, new Color(4764952), new Color(4764952).brighter(), 0, new ItemStack(Blocks.LOG, 1, 0)) {
 		@Override
 		public WorldGenerator getWorldGenerator(ITreeGenData tree) {
 			return new WorldGenOak(tree);
@@ -116,7 +116,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			// vanilla
 		}
 	},
-	DarkOak(TreeBranchDefinition.QUERCUS, "darkOak", "velutina", false, EnumLeafType.DECIDUOUS, new Color(4764952), new Color(4764952).brighter(), 5, new ItemStack(Blocks.log2, 1, 1)) {
+	DarkOak(TreeBranchDefinition.QUERCUS, "darkOak", "velutina", false, EnumLeafType.DECIDUOUS, new Color(4764952), new Color(4764952).brighter(), 5, new ItemStack(Blocks.LOG2, 1, 1)) {
 		@Override
 		public WorldGenerator getWorldGenerator(ITreeGenData tree) {
 			return new WorldGenDarkOak(tree);
@@ -139,7 +139,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			// vanilla
 		}
 	},
-	Birch(TreeBranchDefinition.BETULA, "silverBirch", "pendula", false, EnumLeafType.DECIDUOUS, new Color(8431445), new Color(0xb0c648), 2, new ItemStack(Blocks.log, 1, 2)) {
+	Birch(TreeBranchDefinition.BETULA, "silverBirch", "pendula", false, EnumLeafType.DECIDUOUS, new Color(8431445), new Color(0xb0c648), 2, new ItemStack(Blocks.LOG, 1, 2)) {
 		@Override
 		public WorldGenerator getWorldGenerator(ITreeGenData tree) {
 			return new WorldGenBirch(tree);
@@ -344,7 +344,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			registerMutation(Spruce, Larch, 5);
 		}
 	},
-	Spruce(TreeBranchDefinition.PICEA, "redSpruce", "abies", false, EnumLeafType.CONIFERS, new Color(6396257), new Color(0x539d12), 1, new ItemStack(Blocks.log, 1, 1)) {
+	Spruce(TreeBranchDefinition.PICEA, "redSpruce", "abies", false, EnumLeafType.CONIFERS, new Color(6396257), new Color(0x539d12), 1, new ItemStack(Blocks.LOG, 1, 1)) {
 		@Override
 		public WorldGenerator getWorldGenerator(ITreeGenData tree) {
 			return new WorldGenSpruce(tree);
@@ -464,7 +464,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			// only available by rare villager trade
 		}
 	},
-	Jungle(TreeBranchDefinition.TROPICAL, "jungle", "tectona", false, EnumLeafType.JUNGLE, new Color(4764952), new Color(0x658917), 3, new ItemStack(Blocks.log, 1, 3)) {
+	Jungle(TreeBranchDefinition.TROPICAL, "jungle", "tectona", false, EnumLeafType.JUNGLE, new Color(4764952), new Color(0x658917), 3, new ItemStack(Blocks.LOG, 1, 3)) {
 		@Override
 		public WorldGenerator getWorldGenerator(ITreeGenData tree) {
 			return new WorldGenJungle(tree);
@@ -626,7 +626,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			registerMutation(Kapok, Ebony, 10);
 		}
 	},
-	AcaciaVanilla(TreeBranchDefinition.ACACIA, "acacia", "aneura", true, EnumLeafType.DECIDUOUS, new Color(0x616101), new Color(0xb3b302), 4, new ItemStack(Blocks.log2, 1, 0)) {
+	AcaciaVanilla(TreeBranchDefinition.ACACIA, "acacia", "aneura", true, EnumLeafType.DECIDUOUS, new Color(0x616101), new Color(0xb3b302), 4, new ItemStack(Blocks.LOG2, 1, 0)) {
 		@Override
 		public WorldGenerator getWorldGenerator(ITreeGenData tree) {
 			return new WorldGenAcaciaVanilla(tree);
@@ -1056,7 +1056,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 		tileLeaves.setOwner(owner);
 		tileLeaves.setTree(new Tree(genome));
 
-		world.markBlockForUpdate(pos);
+		world.markBlockRangeForRenderUpdate(pos, pos);
 	}
 
 	public static void initTrees() {

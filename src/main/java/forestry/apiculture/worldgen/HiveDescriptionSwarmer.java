@@ -38,7 +38,7 @@ public class HiveDescriptionSwarmer implements IHiveDescription {
 
 	@Override
 	public IHiveGen getHiveGen() {
-		return new HiveGenGround(Blocks.dirt, Blocks.grass);
+		return new HiveGenGround(Blocks.DIRT, Blocks.GRASS);
 	}
 
 	@Override

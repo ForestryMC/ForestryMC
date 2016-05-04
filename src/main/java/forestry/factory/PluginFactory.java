@@ -135,7 +135,7 @@ public class PluginFactory extends BlankForestryPlugin {
 		FuelManager.fermenterFuel.put(mulch, new FermenterFuel(mulch, valueCompost, cyclesCompost));
 
 		// Add moistener resources
-		ItemStack wheat = new ItemStack(Items.wheat);
+		ItemStack wheat = new ItemStack(Items.WHEAT);
 		ItemStack mouldyWheat = coreItems.mouldyWheat.getItemStack();
 		ItemStack decayingWheat = coreItems.decayingWheat.getItemStack();
 		FuelManager.moistenerResource.put(wheat, new MoistenerFuel(wheat, mouldyWheat, 0, 300));
@@ -221,17 +221,17 @@ public class PluginFactory extends BlankForestryPlugin {
 		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), electronTube.get(EnumElectronTube.DIAMOND, 4), new Object[]{
 				" X ", "#X#", "XXX", '#', "dustRedstone", 'X', "gemDiamond"});
 		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), electronTube.get(EnumElectronTube.OBSIDIAN, 4), new Object[]{
-				" X ", "#X#", "XXX", '#', "dustRedstone", 'X', Blocks.obsidian});
+				" X ", "#X#", "XXX", '#', "dustRedstone", 'X', Blocks.OBSIDIAN});
 		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), electronTube.get(EnumElectronTube.BLAZE, 4), new Object[]{
-				" X ", "#X#", "XXX", '#', "dustRedstone", 'X', Items.blaze_powder});
+				" X ", "#X#", "XXX", '#', "dustRedstone", 'X', Items.BLAZE_POWDER});
 		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), electronTube.get(EnumElectronTube.EMERALD, 4), new Object[]{
 				" X ", "#X#", "XXX", '#', "dustRedstone", 'X', "gemEmerald"});
 		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), electronTube.get(EnumElectronTube.APATITE, 4),
 				new Object[]{" X ", "#X#", "XXX", '#', "dustRedstone", 'X', "gemApatite"});
 		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), electronTube.get(EnumElectronTube.LAPIS, 4),
-				new Object[]{" X ", "#X#", "XXX", '#', "dustRedstone", 'X', new ItemStack(Items.dye, 1, 4)});
+				new Object[]{" X ", "#X#", "XXX", '#', "dustRedstone", 'X', new ItemStack(Items.DYE, 1, 4)});
 		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), electronTube.get(EnumElectronTube.ENDER, 4),
-				new Object[]{" X ", "#X#", "XXX", '#', new ItemStack(Items.ender_eye, 1, 0), 'X', new ItemStack(Blocks.end_stone, 1, 0)});
+				new Object[]{" X ", "#X#", "XXX", '#', new ItemStack(Items.ENDER_EYE, 1, 0), 'X', new ItemStack(Blocks.END_STONE, 1, 0)});
 
 		String[] dyes = {"dyeBlack", "dyeRed", "dyeGreen", "dyeBrown", "dyeBlue", "dyePurple", "dyeCyan", "dyeLightGray", "dyeGray", "dyePink", "dyeLime",
 				"dyeYellow", "dyeLightBlue", "dyeMagenta", "dyeOrange", "dyeWhite"};
@@ -241,12 +241,12 @@ public class PluginFactory extends BlankForestryPlugin {
 			FluidStack liquidGlass = Fluids.GLASS.getFluid(Constants.BUCKET_VOLUME);
 			FluidStack liquidGlassX4 = Fluids.GLASS.getFluid(Constants.BUCKET_VOLUME * 4);
 			for (int i = 0; i < 16; i++) {
-				RecipeManagers.fabricatorManager.addRecipe(beeItems.waxCast.getWildcard(), liquidGlass, new ItemStack(Blocks.stained_glass, 4, 15 - i), new Object[]{
+				RecipeManagers.fabricatorManager.addRecipe(beeItems.waxCast.getWildcard(), liquidGlass, new ItemStack(Blocks.STAINED_GLASS, 4, 15 - i), new Object[]{
 						"#", "X",
 						'#', dyes[i],
 						'X', beeItems.propolis.getWildcard()});
 			}
-			RecipeManagers.fabricatorManager.addRecipe(beeItems.waxCast.getWildcard(), liquidGlassX4, new ItemStack(Blocks.glass, 1, 0), new Object[]{
+			RecipeManagers.fabricatorManager.addRecipe(beeItems.waxCast.getWildcard(), liquidGlassX4, new ItemStack(Blocks.GLASS, 1, 0), new Object[]{
 					"#", "X",
 					'X', beeItems.propolis.getWildcard()});
 		}
@@ -254,52 +254,52 @@ public class PluginFactory extends BlankForestryPlugin {
 		// / SQUEEZER
 		int appleMulchAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.mulch.apple");
 		int appleJuiceAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.apple");
-		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Items.apple)}, Fluids.JUICE.getFluid(appleJuiceAmount),
+		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Items.APPLE)}, Fluids.JUICE.getFluid(appleJuiceAmount),
 				PluginCore.items.mulch.getItemStack(), appleMulchAmount);
-		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Items.carrot)}, Fluids.JUICE.getFluid(appleJuiceAmount),
+		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Items.CARROT)}, Fluids.JUICE.getFluid(appleJuiceAmount),
 				PluginCore.items.mulch.getItemStack(), appleMulchAmount);
 
-		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Items.carrot)}, Fluids.JUICE.getFluid(appleJuiceAmount),
+		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Items.CARROT)}, Fluids.JUICE.getFluid(appleJuiceAmount),
 				PluginCore.items.mulch.getItemStack(), appleMulchAmount);
 		int seedOilAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed");
 		FluidStack seedOil = Fluids.SEED_OIL.getFluid(seedOilAmount);
-		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Items.wheat_seeds)}, seedOil);
-		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Items.pumpkin_seeds)}, seedOil);
-		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Items.melon_seeds)}, seedOil);
-		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{PluginCore.items.phosphor.getItemStack(2), new ItemStack(Blocks.cobblestone)}, Fluids.LAVA.getFluid(1600));
-		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Blocks.cactus)}, Fluids.WATER.getFluid(500));
-		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Items.snowball), PluginCore.items.craftingMaterial.getIceShard(4)}, Fluids.ICE.getFluid(4000));
+		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Items.WHEAT_SEEDS)}, seedOil);
+		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Items.PUMPKIN_SEEDS)}, seedOil);
+		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Items.MELON_SEEDS)}, seedOil);
+		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{PluginCore.items.phosphor.getItemStack(2), new ItemStack(Blocks.COBBLESTONE)}, Fluids.LAVA.getFluid(1600));
+		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Blocks.CACTUS)}, Fluids.WATER.getFluid(500));
+		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Items.SNOWBALL), PluginCore.items.craftingMaterial.getIceShard(4)}, Fluids.ICE.getFluid(4000));
 
 		// STILL
 		RecipeManagers.stillManager.addRecipe(Constants.STILL_DESTILLATION_DURATION, Fluids.BIOMASS.getFluid(Constants.STILL_DESTILLATION_INPUT),
 				Fluids.BIO_ETHANOL.getFluid(Constants.STILL_DESTILLATION_OUTPUT));
 
 		// MOISTENER
-		RecipeManagers.moistenerManager.addRecipe(new ItemStack(Items.wheat_seeds), new ItemStack(Blocks.mycelium), 5000);
-		RecipeManagers.moistenerManager.addRecipe(new ItemStack(Blocks.cobblestone), new ItemStack(Blocks.mossy_cobblestone), 20000);
-		RecipeManagers.moistenerManager.addRecipe(new ItemStack(Blocks.stonebrick), new ItemStack(Blocks.stonebrick, 1, 1), 20000);
+		RecipeManagers.moistenerManager.addRecipe(new ItemStack(Items.WHEAT_SEEDS), new ItemStack(Blocks.MYCELIUM), 5000);
+		RecipeManagers.moistenerManager.addRecipe(new ItemStack(Blocks.COBBLESTONE), new ItemStack(Blocks.MOSSY_COBBLESTONE), 20000);
+		RecipeManagers.moistenerManager.addRecipe(new ItemStack(Blocks.STONEBRICK), new ItemStack(Blocks.STONEBRICK, 1, 1), 20000);
 
 		// FERMENTER
 		for (int i = 0; i < 6; i++) {
-			RecipeUtil.addFermenterRecipes(new ItemStack(Blocks.sapling, 1, i), ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.sapling"), Fluids.BIOMASS);
+			RecipeUtil.addFermenterRecipes(new ItemStack(Blocks.SAPLING, 1, i), ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.sapling"), Fluids.BIOMASS);
 		}
 
-		RecipeUtil.addFermenterRecipes(new ItemStack(Blocks.cactus), ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.cactus"), Fluids.BIOMASS);
-		RecipeUtil.addFermenterRecipes(new ItemStack(Items.wheat), ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
-		RecipeUtil.addFermenterRecipes(new ItemStack(Items.potato), 2 * ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
-		RecipeUtil.addFermenterRecipes(new ItemStack(Items.reeds), ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.cane"), Fluids.BIOMASS);
-		RecipeUtil.addFermenterRecipes(new ItemStack(Blocks.brown_mushroom), ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.mushroom"), Fluids.BIOMASS);
-		RecipeUtil.addFermenterRecipes(new ItemStack(Blocks.red_mushroom), ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.mushroom"), Fluids.BIOMASS);
+		RecipeUtil.addFermenterRecipes(new ItemStack(Blocks.CACTUS), ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.cactus"), Fluids.BIOMASS);
+		RecipeUtil.addFermenterRecipes(new ItemStack(Items.WHEAT), ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
+		RecipeUtil.addFermenterRecipes(new ItemStack(Items.POTATO), 2 * ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
+		RecipeUtil.addFermenterRecipes(new ItemStack(Items.REEDS), ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.cane"), Fluids.BIOMASS);
+		RecipeUtil.addFermenterRecipes(new ItemStack(Blocks.BROWN_MUSHROOM), ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.mushroom"), Fluids.BIOMASS);
+		RecipeUtil.addFermenterRecipes(new ItemStack(Blocks.RED_MUSHROOM), ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.mushroom"), Fluids.BIOMASS);
 
 		// FABRICATOR
 
-		RecipeManagers.fabricatorSmeltingManager.addSmelting(new ItemStack(Blocks.glass), Fluids.GLASS.getFluid(1000), 1000);
-		RecipeManagers.fabricatorSmeltingManager.addSmelting(new ItemStack(Blocks.glass_pane), Fluids.GLASS.getFluid(375), 1000);
-		RecipeManagers.fabricatorSmeltingManager.addSmelting(new ItemStack(Blocks.sand), Fluids.GLASS.getFluid(1000), 3000);
-		RecipeManagers.fabricatorSmeltingManager.addSmelting(new ItemStack(Blocks.sand, 1, 1), Fluids.GLASS.getFluid(1000), 3000);
-		RecipeManagers.fabricatorSmeltingManager.addSmelting(new ItemStack(Blocks.sandstone), Fluids.GLASS.getFluid(4000), 4800);
-		RecipeManagers.fabricatorSmeltingManager.addSmelting(new ItemStack(Blocks.sandstone, 1, 1), Fluids.GLASS.getFluid(4000), 4800);
-		RecipeManagers.fabricatorSmeltingManager.addSmelting(new ItemStack(Blocks.sandstone, 1, 2), Fluids.GLASS.getFluid(4000), 4800);
+		RecipeManagers.fabricatorSmeltingManager.addSmelting(new ItemStack(Blocks.GLASS), Fluids.GLASS.getFluid(1000), 1000);
+		RecipeManagers.fabricatorSmeltingManager.addSmelting(new ItemStack(Blocks.GLASS_PANE), Fluids.GLASS.getFluid(375), 1000);
+		RecipeManagers.fabricatorSmeltingManager.addSmelting(new ItemStack(Blocks.SAND), Fluids.GLASS.getFluid(1000), 3000);
+		RecipeManagers.fabricatorSmeltingManager.addSmelting(new ItemStack(Blocks.SAND, 1, 1), Fluids.GLASS.getFluid(1000), 3000);
+		RecipeManagers.fabricatorSmeltingManager.addSmelting(new ItemStack(Blocks.SANDSTONE), Fluids.GLASS.getFluid(4000), 4800);
+		RecipeManagers.fabricatorSmeltingManager.addSmelting(new ItemStack(Blocks.SANDSTONE, 1, 1), Fluids.GLASS.getFluid(4000), 4800);
+		RecipeManagers.fabricatorSmeltingManager.addSmelting(new ItemStack(Blocks.SANDSTONE, 1, 2), Fluids.GLASS.getFluid(4000), 4800);
 
 		// / CARPENTER
 		RecipeManagers.carpenterManager.addRecipe(50, Fluids.SEED_OIL.getFluid(250), null, PluginCore.items.impregnatedCasing.getItemStack(),
@@ -325,7 +325,7 @@ public class PluginFactory extends BlankForestryPlugin {
 				"#",
 				'#', "logWood");
 		RecipeManagers.carpenterManager.addRecipe(5, Fluids.WATER.getFluid(250), null,
-				new ItemStack(Items.paper, 1),
+				new ItemStack(Items.PAPER, 1),
 				"#",
 				"#",
 				'#', "pulpWood");
@@ -334,13 +334,13 @@ public class PluginFactory extends BlankForestryPlugin {
 				"###",
 				"#X#",
 				"###",
-				'#', Blocks.dirt,
+				'#', Blocks.DIRT,
 				'X', PluginCore.items.mulch);
 		RecipeManagers.carpenterManager.addRecipe(5, Fluids.WATER.getFluid(1000), null,
 				PluginCore.blocks.soil.get(BlockSoil.SoilType.BOG_EARTH, 8),
 				"#X#",
 				"XYX", "#X#",
-				'#', Blocks.dirt,
+				'#', Blocks.DIRT,
 				'X', "sand",
 				'Y', PluginCore.items.mulch);
 		RecipeManagers.carpenterManager.addRecipe(75, Fluids.WATER.getFluid(5000), null, PluginCore.items.hardenedCasing.getItemStack(),
@@ -371,7 +371,7 @@ public class PluginFactory extends BlankForestryPlugin {
 					"#Y#",
 					"X#X",
 					'#', beeItems.pollenCluster.getWildcard(),
-					'X', Items.gunpowder,
+					'X', Items.GUNPOWDER,
 					'Y', PluginFluids.items.canEmpty,
 					'Z', beeItems.honeyDrop);
 			RecipeManagers.carpenterManager.addRecipe(5, Fluids.WATER.getFluid(1000), null, PluginCore.items.craftingMaterial.getDissipationCharge(),
@@ -379,13 +379,13 @@ public class PluginFactory extends BlankForestryPlugin {
 					"#Y#",
 					"X#X",
 					'#', beeItems.royalJelly,
-					'X', Items.gunpowder,
+					'X', Items.GUNPOWDER,
 					'Y', PluginFluids.items.canEmpty,
 					'Z', beeItems.honeydew);
 		}
 
 		// Ender pearl
-		RecipeManagers.carpenterManager.addRecipe(100, null, new ItemStack(Items.ender_pearl, 1), " # ", "###", " # ", '#',
+		RecipeManagers.carpenterManager.addRecipe(100, null, new ItemStack(Items.ENDER_PEARL, 1), " # ", "###", " # ", '#',
 				PluginCore.items.craftingMaterial.getPulsatingMesh());
 
 		// Woven Silk
@@ -511,7 +511,7 @@ public class PluginFactory extends BlankForestryPlugin {
 				"B",
 				"W",
 				"C",
-				'B', Items.book,
+				'B', Items.BOOK,
 				'W', "craftingTableWood",
 				'C', "chestWood");
 	}

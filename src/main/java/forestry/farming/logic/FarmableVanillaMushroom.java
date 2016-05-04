@@ -35,7 +35,7 @@ public class FarmableVanillaMushroom extends FarmableGenericSapling {
 	public ICrop getCropAt(World world, BlockPos pos) {
 		Block block = BlockUtil.getBlock(world, pos);
 
-		if (block != Blocks.brown_mushroom_block && block != Blocks.red_mushroom_block) {
+		if (block != Blocks.BROWN_MUSHROOM_block && block != Blocks.RED_MUSHROOM_block) {
 			return null;
 		}
 
@@ -50,11 +50,11 @@ public class FarmableVanillaMushroom extends FarmableGenericSapling {
 	@Override
 	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
 		int meta = 0;
-		if (ItemStackUtil.equals(Blocks.red_mushroom, germling)) {
+		if (ItemStackUtil.equals(Blocks.RED_MUSHROOM, germling)) {
 			meta = 1;
 		}
 
-		Proxies.common.addBlockPlaceEffects(world, pos, Blocks.brown_mushroom.getDefaultState());
+		Proxies.common.addBlockPlaceEffects(world, pos, Blocks.BROWN_MUSHROOM.getDefaultState());
 		return world.setBlockState(pos, PluginFarming.blocks.mushroom.getStateFromMeta(meta), Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
 	}
 }

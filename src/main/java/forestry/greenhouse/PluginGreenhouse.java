@@ -75,7 +75,7 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 				"###",
 				"#X#",
 				"###",
-				'X', Blocks.brick_block,
+				'X', Blocks.BRICK_BLOCK,
 				'#', PluginCore.items.craftingMaterial.getCamouflagedPaneling());
 		
 		ItemStack greenhouseGlassBlock = blocks.getGreenhouseBlock(BlockGreenhouseType.GLASS);
@@ -205,23 +205,23 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 		
 		IGreenhouseAccess greenhouseAccess = GreenhouseManager.greenhouseAccess;
 		
-		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.glass, 1, 0), 0.5F);
-		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 0), 0.25F);
-		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 1), 0.25F);
-		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 2), 0.25F);
-		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 3), 0.25F);
-		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 4), 0.25F);
-		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 5), 0.25F);
-		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 6), 0.25F);
-		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 7), 0.25F);
-		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 8), 0.25F);
-		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 9), 0.25F);
-		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 10), 0.25F);
-		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 11), 0.25F);
-		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 12), 0.25F);
-		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 13), 0.25F);
-		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 14), 0.25F);
-		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.stained_glass, 1, 15), 0.25F);
+		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.GLASS, 1, 0), 0.5F);
+		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.STAINED_GLASS, 1, 0), 0.25F);
+		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.STAINED_GLASS, 1, 1), 0.25F);
+		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.STAINED_GLASS, 1, 2), 0.25F);
+		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.STAINED_GLASS, 1, 3), 0.25F);
+		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.STAINED_GLASS, 1, 4), 0.25F);
+		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.STAINED_GLASS, 1, 5), 0.25F);
+		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.STAINED_GLASS, 1, 6), 0.25F);
+		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.STAINED_GLASS, 1, 7), 0.25F);
+		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.STAINED_GLASS, 1, 8), 0.25F);
+		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.STAINED_GLASS, 1, 9), 0.25F);
+		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.STAINED_GLASS, 1, 10), 0.25F);
+		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.STAINED_GLASS, 1, 11), 0.25F);
+		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.STAINED_GLASS, 1, 12), 0.25F);
+		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.STAINED_GLASS, 1, 13), 0.25F);
+		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.STAINED_GLASS, 1, 14), 0.25F);
+		greenhouseAccess.registerGreenhouseGlass(new ItemStack(Blocks.STAINED_GLASS, 1, 15), 0.25F);
 		
 		proxy.initializeModels();
 		

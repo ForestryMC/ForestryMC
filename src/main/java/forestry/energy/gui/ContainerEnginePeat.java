@@ -42,7 +42,7 @@ public class ContainerEnginePeat extends ContainerTile<TileEnginePeat> {
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
 
-		for (ICrafting crafter : crafters) {
+		for (ICrafting crafter : listeners) {
 			tile.sendGUINetworkData(this, crafter);
 		}
 	}

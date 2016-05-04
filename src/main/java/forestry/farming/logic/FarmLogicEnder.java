@@ -35,7 +35,7 @@ import forestry.core.utils.vect.VectUtil;
 public class FarmLogicEnder extends FarmLogicHomogeneous {
 
 	public FarmLogicEnder(IFarmHousing housing) {
-		super(housing, new ItemStack(Blocks.end_stone), new ItemStack(Blocks.end_stone), Farmables.farmables.get("farmEnder"));
+		super(housing, new ItemStack(Blocks.END_STONE), new ItemStack(Blocks.END_STONE), Farmables.farmables.get("farmEnder"));
 	}
 
 	@Override
@@ -46,7 +46,7 @@ public class FarmLogicEnder extends FarmLogicHomogeneous {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public Item getItem() {
-		return Items.ender_eye;
+		return Items.ENDER_EYE;
 	}
 
 	@Override
@@ -93,7 +93,7 @@ public class FarmLogicEnder extends FarmLogicHomogeneous {
 				continue;
 			}
 
-			ItemStack below = VectUtil.getAsItemStack(world, position.add(0, -1, 0));
+			ItemStack below = VectUtil.getAsItemStack(world, position.down());
 			if (!isAcceptedSoil(below)) {
 				continue;
 			}

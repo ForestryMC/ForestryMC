@@ -44,7 +44,7 @@ public class FarmLogicSucculent extends FarmLogic {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public Item getItem() {
-		return Items.dye;
+		return Items.DYE;
 	}
 	
 	@Override
@@ -78,7 +78,7 @@ public class FarmLogicSucculent extends FarmLogic {
 			return false;
 		}
 
-		return ItemStackUtil.equals(Blocks.sand, itemstack);
+		return ItemStackUtil.equals(Blocks.SAND, itemstack);
 	}
 
 	@Override
@@ -87,7 +87,7 @@ public class FarmLogicSucculent extends FarmLogic {
 			return false;
 		}
 
-		return ItemStackUtil.equals(Blocks.cactus, itemstack);
+		return ItemStackUtil.equals(Blocks.CACTUS, itemstack);
 	}
 
 	@Override

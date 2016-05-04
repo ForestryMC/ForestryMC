@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
+import net.minecraft.inventory.EntityEquipmentSlot;
+
 import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.api.apiculture.EnumBeeType;
@@ -91,10 +93,10 @@ public class ItemRegistryApiculture extends ItemRegistry {
 		OreDictionary.registerOre("beeComb", beeComb.getWildcard());
 		
 		// / APIARIST'S CLOTHES
-		apiaristHat = registerItem(new ItemArmorApiarist(0), "apiaristHelmet");
-		apiaristChest = registerItem(new ItemArmorApiarist(1), "apiaristChest");
-		apiaristLegs = registerItem(new ItemArmorApiarist(2), "apiaristLegs");
-		apiaristBoots = registerItem(new ItemArmorApiarist(3), "apiaristBoots");
+		apiaristHat = registerItem(new ItemArmorApiarist(EntityEquipmentSlot.HEAD), "apiaristHelmet");
+		apiaristChest = registerItem(new ItemArmorApiarist(EntityEquipmentSlot.CHEST), "apiaristChest");
+		apiaristLegs = registerItem(new ItemArmorApiarist(EntityEquipmentSlot.LEGS), "apiaristLegs");
+		apiaristBoots = registerItem(new ItemArmorApiarist(EntityEquipmentSlot.FEET), "apiaristBoots");
 		
 		// TOOLS
 		scoop = registerItem(new ItemScoop(), "scoop");

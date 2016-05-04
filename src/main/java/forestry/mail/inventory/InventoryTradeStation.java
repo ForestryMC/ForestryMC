@@ -71,7 +71,7 @@ public class InventoryTradeStation extends InventoryAdapter {
 			return false;
 		} else if (SlotUtil.isSlotInRange(slotIndex, TradeStation.SLOT_LETTERS_1, TradeStation.SLOT_LETTERS_COUNT)) {
 			Item item = itemStack.getItem();
-			return item == Items.paper;
+			return item == Items.PAPER;
 		} else if (SlotUtil.isSlotInRange(slotIndex, TradeStation.SLOT_STAMPS_1, TradeStation.SLOT_STAMPS_COUNT)) {
 			Item item = itemStack.getItem();
 			return item instanceof IStamps;

@@ -12,12 +12,16 @@ package forestry.core.render;
 
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityDiggingFX;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.IStringSerializable;
 
 import forestry.core.blocks.BlockBase;
 import forestry.core.blocks.IBlockType;
+import forestry.core.blocks.IMachineProperties;
 import forestry.core.blocks.IMachinePropertiesTesr;
 import forestry.core.proxy.Proxies;
 
@@ -32,9 +36,15 @@ public class MachineParticleCallback<P extends Enum<P> & IBlockType & IStringSer
 	
 	@Override
 	protected void setTexture(EntityDiggingFX fx, BlockPos pos, IBlockState state) {
-		P protety = state.getValue(TYPE);
-		if(protety.getMachineProperties() instanceof IMachinePropertiesTesr){
-			fx.setParticleIcon(Proxies.common.getClientInstance().getTextureMapBlocks().getAtlasSprite(((IMachinePropertiesTesr)protety.getMachineProperties()).getParticleTextureLocation()));
+		P property = state.getValue(TYPE);
+		IMachineProperties<?> machineProperties = property.getMachineProperties();
+		if(machineProperties instanceof IMachinePropertiesTesr){
+			Minecraft minecraft = Proxies.common.getClientInstance();
+			TextureMap textureMapBlocks = minecraft.getTextureMapBlocks();
+			IMachinePropertiesTesr machinePropertiesTesr = (IMachinePropertiesTesr) machineProperties;
+			String particleTextureLocation = machinePropertiesTesr.getParticleTextureLocation();
+			TextureAtlasSprite particleTexture = textureMapBlocks.getAtlasSprite(particleTextureLocation);
+			fx.setParticleTexture(particleTexture);
 		}
 	}
 

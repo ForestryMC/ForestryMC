@@ -55,7 +55,7 @@ public class FarmLogicOrchard extends FarmLogic {
 		//			traversalBlocksBuilder.add(Blocks.farmland);
 		//		}
 		//		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.INDUSTRIALCRAFT)) {
-		//			traversalBlocksBuilder.add(Blocks.dirt);
+		//			traversalBlocksBuilder.add(Blocks.DIRT);
 		//		}
 		//		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.PLANTMEGAPACK)) {
 		//			traversalBlocksBuilder.add(Blocks.WATER);
