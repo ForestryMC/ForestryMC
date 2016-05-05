@@ -177,7 +177,7 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 				BlockPos pos = new BlockPos(slabX, slabY, slabZ);
 				IBlockState state = worldObj.getBlockState(pos);
 				Block block = state.getBlock();
-				if (!BlockUtil.isWoodSlabBlock(block, worldObj, pos)) {
+				if (!BlockUtil.isWoodSlabBlock(state, block, worldObj, pos)) {
 					throw new MultiblockValidationException(Translator.translateToLocal("for.multiblock.alveary.error.needSlabs"));
 				}
 
@@ -196,8 +196,9 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 				if (isCoordInMultiblock(airX, airY, airZ)) {
 					continue;
 				}
-				Block block = BlockUtil.getBlock(worldObj, new BlockPos(airX, airY, airZ));
-				if (block.isOpaqueCube()) {
+				IBlockState blockState = worldObj.getBlockState(new BlockPos(airX, airY, airZ));
+				Block block = blockState.getBlock();
+				if (block.isOpaqueCube(blockState)) {
 					throw new MultiblockValidationException(Translator.translateToLocal("for.multiblock.alveary.error.needSpace"));
 				}
 			}

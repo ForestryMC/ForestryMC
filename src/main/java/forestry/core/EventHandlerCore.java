@@ -43,7 +43,7 @@ public class EventHandlerCore {
 		}
 
 		for (IPickupHandler handler : PluginManager.pickupHandlers) {
-			if (handler.onItemPickup(event.entityPlayer, event.item)) {
+			if (handler.onItemPickup(event.getEntityPlayer(), event.getItem())) {
 				event.setResult(Result.ALLOW);
 				return;
 			}
@@ -65,21 +65,21 @@ public class EventHandlerCore {
 	@SubscribeEvent
 	public void handleWorldLoad(WorldEvent.Load event) {
 		for (ISaveEventHandler handler : PluginManager.saveEventHandlers) {
-			handler.onWorldLoad(event.world);
+			handler.onWorldLoad(event.getWorld());
 		}
 	}
 
 	@SubscribeEvent
 	public void handleWorldSave(WorldEvent.Save event) {
 		for (ISaveEventHandler handler : PluginManager.saveEventHandlers) {
-			handler.onWorldSave(event.world);
+			handler.onWorldSave(event.getWorld());
 		}
 	}
 
 	@SubscribeEvent
 	public void handleWorldUnload(WorldEvent.Unload event) {
 		for (ISaveEventHandler handler : PluginManager.saveEventHandlers) {
-			handler.onWorldUnload(event.world);
+			handler.onWorldUnload(event.getWorld());
 		}
 	}
 	

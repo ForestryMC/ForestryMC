@@ -13,6 +13,7 @@ package forestry.farming.logic;
 import java.util.Collection;
 import java.util.Stack;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -89,7 +90,8 @@ public class FarmLogicInfernal extends FarmLogicHomogeneous {
 
 		for (int i = 0; i < extent; i++) {
 			Vect position = translateWithOffset(pos, direction, i);
-			if (!VectUtil.isAirBlock(world, position) && !BlockUtil.isReplaceableBlock(world, position)) {
+			IBlockState blockState = world.getBlockState(position);
+			if (!VectUtil.isAirBlock(world, position) && !BlockUtil.isReplaceableBlock(blockState, world, position)) {
 				continue;
 			}
 

@@ -11,34 +11,32 @@
 package forestry.core.items;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import net.minecraftforge.fml.common.Optional;
-
-import buildcraft.api.tools.IToolWrench;
-
-@Optional.Interface(iface = "buildcraft.api.tools.IToolWrench", modid = "BuildCraftAPI|tools")
-public class ItemWrench extends ItemForestry implements IToolWrench {
+//@Optional.Interface(iface = "buildcraft.api.tools.IToolWrench", modid = "BuildCraftAPI|tools")
+public class ItemWrench extends ItemForestry {//implements IToolWrench {
 
 	public ItemWrench() {
 		setHarvestLevel("wrench", 0);
 	}
-	
+
 	@Override
-	public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
 		Block block = world.getBlockState(pos).getBlock();
 		if (block.rotateBlock(world, pos, side)) {
-			player.swingItem();
-			return !world.isRemote;
+			player.swingArm(hand);
+			return EnumActionResult.SUCCESS;
 		}
-		return false;
+		return EnumActionResult.FAIL;
 	}
 
+	/*
 	@Override
 	public boolean canWrench(EntityPlayer player, BlockPos pos) {
 		return true;
@@ -56,4 +54,5 @@ public class ItemWrench extends ItemForestry implements IToolWrench {
 	@Override
 	public void wrenchUsed(EntityPlayer entityPlayer, Entity entity) {
 	}
+	*/
 }

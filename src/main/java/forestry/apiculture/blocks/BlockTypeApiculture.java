@@ -21,7 +21,7 @@ import forestry.core.tiles.TileForestry;
 
 public enum BlockTypeApiculture implements IBlockType {
 	APIARY(0, TileApiary.class, "apiary"),
-	BEE_HOUSE(1, TileBeeHouse.class, "bee.house");
+	BEE_HOUSE(1, TileBeeHouse.class, "bee_house");
 
 	public static final BlockTypeApiculture[] VALUES = values();
 

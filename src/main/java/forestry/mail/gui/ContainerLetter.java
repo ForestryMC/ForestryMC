@@ -19,6 +19,8 @@ import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
+import net.minecraftforge.fml.common.FMLCommonHandler;
+
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.ILetter;
 import forestry.api.mail.IMailAddress;
@@ -121,7 +123,7 @@ public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter>
 	}
 
 	public void handleRequestLetterInfo(EntityPlayer player, String recipientName, EnumAddressee type) {
-		IMailAddress recipient = getRecipient(recipientName, type);
+		IMailAddress recipient = getRecipient(player.getServer(), recipientName, type);
 
 		getLetter().setRecipient(recipient);
 		
@@ -134,10 +136,10 @@ public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter>
 		Proxies.net.sendToPlayer(new PacketLetterInfoResponse(type, tradeInfo, recipient), player);
 	}
 
-	private static IMailAddress getRecipient(String recipientName, EnumAddressee type) {
+	private static IMailAddress getRecipient(MinecraftServer minecraftServer, String recipientName, EnumAddressee type) {
 		switch (type) {
 			case PLAYER: {
-				GameProfile gameProfile = MinecraftServer.getServer().getPlayerProfileCache().getGameProfileForUsername(recipientName);
+				GameProfile gameProfile = minecraftServer.getPlayerProfileCache().getGameProfileForUsername(recipientName);
 				if (gameProfile == null) {
 					gameProfile = new GameProfile(new UUID(0, 0), recipientName);
 				}

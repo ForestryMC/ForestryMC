@@ -31,7 +31,8 @@ public interface IArmorApiaristHelper {
 	 * @param entity Entity being attacked
 	 * @param cause Optional cause of attack, such as a bee effect identifier
 	 * @param doProtect Whether or not to actually do the side effects of protection
-	 * @return The number of valid Apiarist Armor pieces the player is wearing that are actually protecting
+	 * @return The number of valid Apiarist Armor pieces the player is wearing that are actually protecting.
+	 * 			4 means full protection, but it can go higher if they are holding items like the smoker.
 	 * @since Forestry 4.2
 	 */
 	int wearsItems(EntityLivingBase entity, String cause, boolean doProtect);

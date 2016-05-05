@@ -7,6 +7,7 @@ package forestry.api.apiculture.hives;
 
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.Locale;
 
 import net.minecraft.util.IStringSerializable;
 
@@ -49,7 +50,7 @@ public interface IHiveRegistry {
 
 		@Override
 		public String getName() {
-			return name().toLowerCase();
+			return name().toLowerCase(Locale.ENGLISH);
 		}
 
 		public int getMeta() {

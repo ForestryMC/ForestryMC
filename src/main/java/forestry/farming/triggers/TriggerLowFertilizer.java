@@ -10,39 +10,29 @@
  ******************************************************************************/
 package forestry.farming.triggers;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+// TODO: Buildcraft for 1.9
+public class TriggerLowFertilizer {//} extends Trigger {
 
-import forestry.core.triggers.Trigger;
-import forestry.core.utils.InventoryUtil;
-import forestry.farming.tiles.TileFarmHatch;
-
-import buildcraft.api.statements.IStatementContainer;
-import buildcraft.api.statements.IStatementParameter;
-
-public class TriggerLowFertilizer extends Trigger {
-
-	private final float threshold;
-
-	public TriggerLowFertilizer(String tag, float threshold) {
-		super(tag, "lowFertilizer");
-		this.threshold = threshold;
-	}
-
-	@Override
-	public String getDescription() {
-		return super.getDescription() + " < " + threshold * 100 + "%";
-	}
-
-	@Override
-	public boolean isTriggerActive(TileEntity tile, EnumFacing side, IStatementContainer source, IStatementParameter[] parameters) {
-		if (!(tile instanceof TileFarmHatch)) {
-			return false;
-		}
-
-		TileFarmHatch tileHatch = (TileFarmHatch) tile;
-		IInventory fertilizerInventory = tileHatch.getMultiblockLogic().getController().getFarmInventory().getFertilizerInventory();
-		return InventoryUtil.containsPercent(fertilizerInventory, threshold);
-	}
+//	private final float threshold;
+//
+//	public TriggerLowFertilizer(String tag, float threshold) {
+//		super(tag, "lowFertilizer");
+//		this.threshold = threshold;
+//	}
+//
+//	@Override
+//	public String getDescription() {
+//		return super.getDescription() + " < " + threshold * 100 + "%";
+//	}
+//
+//	@Override
+//	public boolean isTriggerActive(TileEntity tile, EnumFacing side, IStatementContainer source, IStatementParameter[] parameters) {
+//		if (!(tile instanceof TileFarmHatch)) {
+//			return false;
+//		}
+//
+//		TileFarmHatch tileHatch = (TileFarmHatch) tile;
+//		IInventory fertilizerInventory = tileHatch.getMultiblockLogic().getController().getFarmInventory().getFertilizerInventory();
+//		return InventoryUtil.containsPercent(fertilizerInventory, threshold);
+//	}
 }

@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.Map.Entry;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -206,15 +207,13 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 	}
 	
 	private BlockPos getNextPos(World world, BlockPos pos){
-		int x = pos.getX();
-		int y = pos.getY();
-		int z = pos.getZ();
-		
+		IBlockState blockState;
 		do {
-			y--;
-		} while (!BlockUtil.canReplace(world, new BlockPos(x, y, z)));
+			pos.down();
+			blockState = world.getBlockState(pos);
+		} while (!BlockUtil.canReplace(blockState, world, pos));
 
-		return new BlockPos(x, y, z);
+		return pos;
 	}
 
 	@Override

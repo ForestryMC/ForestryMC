@@ -12,7 +12,7 @@ package forestry.lepidopterology.commands;
 
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
-import net.minecraft.world.World;
+import net.minecraft.server.MinecraftServer;
 
 import forestry.core.commands.CommandHelpers;
 import forestry.core.commands.SubCommand;
@@ -38,19 +38,14 @@ public class CommandButterfly extends SubCommand {
 		}
 
 		@Override
-		public void processSubCommand(ICommandSender sender, String[] args) throws WrongUsageException {
+		public void executeSubCommand(MinecraftServer server, ICommandSender sender, String[] args) throws WrongUsageException {
 			if (args.length > 1) {
 				CommandHelpers.throwWrongUsage(sender, this);
 			}
 
-			World world = CommandHelpers.getWorld(sender, this, args, 0);
-			if (world == null) {
-				CommandHelpers.throwWrongUsage(sender, this);
-			} else {
-				for (Object entity : world.loadedEntityList) {
-					if (entity instanceof EntityButterfly) {
-						((EntityButterfly) entity).setDead();
-					}
+			for (Object entity : sender.getEntityWorld().getLoadedEntityList()) {
+				if (entity instanceof EntityButterfly) {
+					((EntityButterfly) entity).setDead();
 				}
 			}
 		}

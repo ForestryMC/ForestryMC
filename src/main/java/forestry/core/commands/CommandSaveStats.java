@@ -22,8 +22,10 @@ import java.util.Date;
 import java.util.List;
 
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.PlayerNotFoundException;
+import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
@@ -59,26 +61,27 @@ public final class CommandSaveStats extends SubCommand {
 		this.modeHelper = modeHelper;
 	}
 
+
 	@Override
-	public List<String> addTabCompletionOptions(ICommandSender sender, String[] parameters, BlockPos pos) {
-		return CommandHelpers.getListOfStringsMatchingLastWord(parameters, CommandHelpers.getPlayers());
+	public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos pos) {
+		return CommandHelpers.getListOfStringsMatchingLastWord(args, server.getAllUsernames());
 	}
 
 	@Override
-	public void processSubCommand(ICommandSender sender, String[] args) throws PlayerNotFoundException {
+	public void executeSubCommand(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		if (args.length > 1) {
 			printHelp(sender);
 			return;
 		}
 
 		String newLine = System.getProperty("line.separator");
-		World world = CommandHelpers.getWorld(sender, this);
+		World world = sender.getEntityWorld();
 
 		EntityPlayerMP player;
 		if (args.length > 0) {
-			player = CommandBase.getPlayer((MinecraftServer) sender, (ICommandSender) args[0], null);
+			player = CommandBase.getPlayer(server, sender, args[0]);
 		} else {
-			player = CommandBase.getPlayer((MinecraftServer) sender, (ICommandSender) sender.getName(), null);
+			player = CommandBase.getPlayer(server, sender, sender.getName());
 		}
 
 		Collection<String> statistics = new ArrayList<>();

@@ -192,8 +192,13 @@ public class ProxyRenderClient extends ProxyRender {
 	public void registerModels() {
 		ModelManager.registerModels();
 	}
-	
-//	@Override
+
+	@Override
+	public void registerItemAndBlockColors() {
+		ModelManager.registerItemAndBlockColors();
+	}
+
+	//	@Override
 //    public IAnimationStateMachine loadAnimationState(ResourceLocation location, ImmutableMap<String, ITimeValue> parameters){
 //        return Animation.INSTANCE.load(location, parameters);
 //    }

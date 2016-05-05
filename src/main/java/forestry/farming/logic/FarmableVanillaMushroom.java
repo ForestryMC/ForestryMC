@@ -35,7 +35,7 @@ public class FarmableVanillaMushroom extends FarmableGenericSapling {
 	public ICrop getCropAt(World world, BlockPos pos) {
 		Block block = BlockUtil.getBlock(world, pos);
 
-		if (block != Blocks.BROWN_MUSHROOM_block && block != Blocks.RED_MUSHROOM_block) {
+		if (block != Blocks.BROWN_MUSHROOM_BLOCK && block != Blocks.RED_MUSHROOM_BLOCK) {
 			return null;
 		}
 

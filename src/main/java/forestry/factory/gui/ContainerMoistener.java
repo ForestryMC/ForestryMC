@@ -63,7 +63,7 @@ public class ContainerMoistener extends ContainerLiquidTanks<TileMoistener> impl
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
 
-		for (ICrafting crafter : crafters) {
+		for (ICrafting crafter : listeners) {
 			tile.sendGUINetworkData(this, crafter);
 		}
 	}

@@ -14,6 +14,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
@@ -41,7 +43,7 @@ public class FarmableVanillaSapling extends FarmableGenericSapling {
 
 			return TreeManager.treeRoot.plantSapling(world, (ITree) tree, player.getGameProfile(), pos);
 		} else {
-			return germling.copy().onItemUse(player, world, pos.down(), EnumFacing.UP, 0, 0, 0);
+			return germling.copy().onItemUse(player, world, pos.down(), EnumHand.MAIN_HAND, EnumFacing.UP, 0, 0, 0) == EnumActionResult.SUCCESS;
 		}
 	}
 

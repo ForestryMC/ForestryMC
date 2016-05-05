@@ -15,8 +15,6 @@ import java.io.IOException;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
-import net.minecraftforge.fml.common.Optional;
-
 import forestry.api.core.IErrorLogic;
 import forestry.core.circuits.ISpeedUpgradable;
 import forestry.core.config.Config;
@@ -27,11 +25,10 @@ import forestry.core.network.IStreamableGui;
 import forestry.core.render.TankRenderInfo;
 import forestry.energy.EnergyManager;
 
-import buildcraft.api.tiles.IHasWork;
 import cofh.api.energy.IEnergyReceiver;
 
-@Optional.Interface(iface = "buildcraft.api.tiles.IHasWork", modid = "BuildCraftAPI|tiles")
-public abstract class TilePowered extends TileBase implements IRenderableTile, IEnergyReceiver, IPowerHandler, IHasWork, ISpeedUpgradable, IStreamableGui {
+//@Optional.Interface(iface = "buildcraft.api.tiles.IHasWork", modid = "BuildCraftAPI|tiles")
+public abstract class TilePowered extends TileBase implements IRenderableTile, IEnergyReceiver, IPowerHandler, ISpeedUpgradable, IStreamableGui {
 	private static final int WORK_TICK_INTERVAL = 5; // one Forestry work tick happens every WORK_TICK_INTERVAL game ticks
 
 	private final EnergyManager energyManager;
@@ -89,7 +86,8 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
 		return false;
 	}
 
-	@Override
+	// TODO: buildcraft for 1.9
+//	@Override
 	public abstract boolean hasWork();
 
 	@Override

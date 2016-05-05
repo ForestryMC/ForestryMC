@@ -14,6 +14,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 import net.minecraftforge.common.util.FakePlayer;
@@ -41,10 +42,9 @@ public class TileEngineClockwork extends TileEngine {
 	public TileEngineClockwork() {
 		super(null, ENGINE_CLOCKWORK_HEAT_MAX, 10000);
 	}
-	
+
 	@Override
-	public void openGui(EntityPlayer player) {
-		
+	public void openGui(EntityPlayer player, ItemStack heldItem) {
 		if (!(player instanceof EntityPlayerMP)) {
 			return;
 		}

@@ -10,74 +10,62 @@
  ******************************************************************************/
 package forestry.core.triggers;
 
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+// TODO: buildcraft for 1.9
+public abstract class Trigger {//implements ITriggerExternal {
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+//	private final String uid;
+//	private final String localization;
 
-import forestry.core.render.TextureManager;
-import forestry.core.utils.Translator;
-
-import buildcraft.api.statements.IStatement;
-import buildcraft.api.statements.IStatementParameter;
-import buildcraft.api.statements.ITriggerExternal;
-import buildcraft.api.statements.StatementManager;
-
-public abstract class Trigger implements ITriggerExternal {
-
-	private final String uid;
-	private final String localization;
-
-	protected Trigger(String uid) {
-		this(uid, uid);
-	}
-
-	protected Trigger(String uid, String localization) {
-		this.uid = "forestry:" + uid;
-		this.localization = localization;
-		StatementManager.registerStatement(this);
-	}
-
-	@Override
-	public String getUniqueTag() {
-		return uid;
-	}
-
-	@Override
-	public String getDescription() {
-		return Translator.translateToLocal("for.trigger." + localization);
-	}
-
-	@Override
-	public IStatementParameter createParameter(int index) {
-		return null;
-	}
-
-	@Override
-	public int maxParameters() {
-		return 0;
-	}
-
-	@Override
-	public int minParameters() {
-		return 0;
-	}
-
-	@SideOnly(Side.CLIENT)
-	private TextureAtlasSprite icon;
-
-	@SideOnly(Side.CLIENT)
-	public void registerSprites() {
-		icon = TextureManager.registerSprite("triggers/" + localization);
-	}
-
-	@Override
-	public TextureAtlasSprite getGuiSprite() {
-		return icon;
-	}
-
-	@Override
-	public IStatement rotateLeft() {
-		return this;
-	}
+//	protected Trigger(String uid) {
+//		this(uid, uid);
+//	}
+//
+//	protected Trigger(String uid, String localization) {
+//		this.uid = "forestry:" + uid;
+//		this.localization = localization;
+//		StatementManager.registerStatement(this);
+//	}
+//
+//	@Override
+//	public String getUniqueTag() {
+//		return uid;
+//	}
+//
+//	@Override
+//	public String getDescription() {
+//		return Translator.translateToLocal("for.trigger." + localization);
+//	}
+//
+//	@Override
+//	public IStatementParameter createParameter(int index) {
+//		return null;
+//	}
+//
+//	@Override
+//	public int maxParameters() {
+//		return 0;
+//	}
+//
+//	@Override
+//	public int minParameters() {
+//		return 0;
+//	}
+//
+//	@SideOnly(Side.CLIENT)
+//	private TextureAtlasSprite icon;
+//
+//	@SideOnly(Side.CLIENT)
+//	public void registerSprites() {
+//		icon = TextureManager.registerSprite("triggers/" + localization);
+//	}
+//
+//	@Override
+//	public TextureAtlasSprite getGuiSprite() {
+//		return icon;
+//	}
+//
+//	@Override
+//	public IStatement rotateLeft() {
+//		return this;
+//	}
 }

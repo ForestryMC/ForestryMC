@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 
 import forestry.api.core.EnumCamouflageType;
@@ -42,8 +43,13 @@ public class GreenhouseAccess implements IGreenhouseAccess {
 			return;
 		}
 		Block block = Block.getBlockFromItem(glass.getItem());
-		if (block == null || block.isOpaqueCube()) {
-			Log.error("Fail to register greenhouse glass: " + block + ".");
+		if (block == null) {
+			Log.error("Fail to register greenhouse glass, it has no matching block: " + glass + ".");
+			return;
+		}
+		IBlockState defaultBlockState = block.getDefaultState();
+		if (block.isOpaqueCube(defaultBlockState)) {
+			Log.error("Fail to register greenhouse glass, it is opaque: " + block + ".");
 			return;
 		}
 		for (ItemStack greenhouseGlass : greenhouseGlasses.keySet()) {

@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
 
 import forestry.api.arboriculture.EnumGrowthConditions;
 import forestry.api.arboriculture.IGrowthProvider;
@@ -56,8 +56,6 @@ public class GrowthProvider implements IGrowthProvider {
 	}
 
 	protected static EnumGrowthConditions getConditionsFromRainfall(World world, BlockPos pos, float min, float max) {
-
-		BiomeGenBase biome = world.getWorldChunkManager().getBiomeGenerator(pos);
 		float humidity = ForestryAPI.climateManager.getHumidity(world, pos);
 		
 		if (humidity < min || humidity > max) {
@@ -68,8 +66,6 @@ public class GrowthProvider implements IGrowthProvider {
 	}
 
 	protected static EnumGrowthConditions getConditionsFromTemperature(World world, BlockPos pos, float min, float max) {
-
-		BiomeGenBase biome = world.getWorldChunkManager().getBiomeGenerator(pos);
 		float biomeTemperature = ForestryAPI.climateManager.getTemperature(world, pos);
 		if (biomeTemperature < min || biomeTemperature > max) {
 			return EnumGrowthConditions.HOSTILE;
@@ -110,7 +106,8 @@ public class GrowthProvider implements IGrowthProvider {
 			for (int y = start.getY(); y < start.getY() + area.getY(); y++) {
 				for (int z = start.getZ(); z < start.getZ() + area.getZ(); z++) {
 					BlockPos pos = new BlockPos(x, y, z);
-					if (!world.isAirBlock(pos) && !BlockUtil.isReplaceableBlock(world, pos)) {
+					IBlockState blockState = world.getBlockState(pos);
+					if (!world.isAirBlock(pos) && !BlockUtil.isReplaceableBlock(blockState, world, pos)) {
 						return false;
 					}
 				}

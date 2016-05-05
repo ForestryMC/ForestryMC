@@ -117,7 +117,7 @@ public class TileGreenhouseClimatiser extends TileGreenhouse implements IActivat
 
 		if (worldObj != null) {
 			if (worldObj.isRemote) {
-				worldObj.markBlockForUpdate(getPos());
+				worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
 			} else {
 				Proxies.net.sendNetworkPacket(new PacketActiveUpdate(this), worldObj);
 			}

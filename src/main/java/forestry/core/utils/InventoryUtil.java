@@ -10,11 +10,7 @@
  ******************************************************************************/
 package forestry.core.utils;
 
-import java.util.AbstractMap;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-import java.util.Map;
 
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,13 +19,11 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -41,12 +35,9 @@ import forestry.core.inventory.filters.StandardStackFilters;
 import forestry.core.inventory.iterators.IExtInvSlot;
 import forestry.core.inventory.iterators.InventoryIterator;
 import forestry.core.inventory.manipulators.InventoryManipulator;
-import forestry.core.inventory.wrappers.InventoryCopy;
 import forestry.core.inventory.wrappers.SidedInventoryMapper;
 import forestry.core.tiles.AdjacentTileCache;
 import forestry.plugins.ForestryPluginUids;
-
-import buildcraft.api.transport.IPipeTile;
 
 public abstract class InventoryUtil {
 
@@ -286,42 +277,43 @@ public abstract class InventoryUtil {
 		return false;
 	}
 
+	//TODO Buildcraft for 1.9
 	@Optional.Method(modid = "BuildCraftAPI|transport")
 	private static boolean internal_moveOneItemToPipe(IInventory source, AdjacentTileCache tileCache, EnumFacing[] directions) {
-		IInventory invClone = new InventoryCopy(source);
-		ItemStack stackToMove = removeOneItem(invClone);
-		if (stackToMove == null) {
-			return false;
-		}
-		if (stackToMove.stackSize <= 0) {
-			return false;
-		}
-
-		List<Map.Entry<EnumFacing, IPipeTile>> pipes = new ArrayList<>();
-		boolean foundPipe = false;
-		for (EnumFacing side : directions) {
-			TileEntity tile = tileCache.getTileOnSide(side);
-			if (tile instanceof IPipeTile) {
-				IPipeTile pipe = (IPipeTile) tile;
-				if (pipe.getPipeType() == IPipeTile.PipeType.ITEM && pipe.isPipeConnected(side.getOpposite())) {
-					pipes.add(new AbstractMap.SimpleEntry<>(side, pipe));
-					foundPipe = true;
-				}
-			}
-		}
-
-		if (!foundPipe) {
-			return false;
-		}
-
-		int choice = tileCache.getSource().getWorld().rand.nextInt(pipes.size());
-		Map.Entry<EnumFacing, IPipeTile> pipe = pipes.get(choice);
-		if (pipe.getValue().injectItem(stackToMove, false, pipe.getKey().getOpposite(), null) > 0) {
-			if (removeOneItem(source, stackToMove) != null) {
-				pipe.getValue().injectItem(stackToMove, true, pipe.getKey().getOpposite(), null);
-				return true;
-			}
-		}
+//		IInventory invClone = new InventoryCopy(source);
+//		ItemStack stackToMove = removeOneItem(invClone);
+//		if (stackToMove == null) {
+//			return false;
+//		}
+//		if (stackToMove.stackSize <= 0) {
+//			return false;
+//		}
+//
+//		List<Map.Entry<EnumFacing, IPipeTile>> pipes = new ArrayList<>();
+//		boolean foundPipe = false;
+//		for (EnumFacing side : directions) {
+//			TileEntity tile = tileCache.getTileOnSide(side);
+//			if (tile instanceof IPipeTile) {
+//				IPipeTile pipe = (IPipeTile) tile;
+//				if (pipe.getPipeType() == IPipeTile.PipeType.ITEM && pipe.isPipeConnected(side.getOpposite())) {
+//					pipes.add(new AbstractMap.SimpleEntry<>(side, pipe));
+//					foundPipe = true;
+//				}
+//			}
+//		}
+//
+//		if (!foundPipe) {
+//			return false;
+//		}
+//
+//		int choice = tileCache.getSource().getWorld().rand.nextInt(pipes.size());
+//		Map.Entry<EnumFacing, IPipeTile> pipe = pipes.get(choice);
+//		if (pipe.getValue().injectItem(stackToMove, false, pipe.getKey().getOpposite(), null) > 0) {
+//			if (removeOneItem(source, stackToMove) != null) {
+//				pipe.getValue().injectItem(stackToMove, true, pipe.getKey().getOpposite(), null);
+//				return true;
+//			}
+//		}
 		return false;
 	}
 
@@ -628,19 +620,11 @@ public abstract class InventoryUtil {
 			return;
 		}
 
-		ItemStack container = itemstack.getItem().getContainerItem(itemstack);
-
-		if (container.isItemStackDamageable() && container.getItemDamage() > container.getMaxDamage()) {
-			if (player != null) {
-				MinecraftForge.EVENT_BUS.post(new PlayerDestroyItemEvent(player, container));
-			}
-			container = null;
-		}
-
+		ItemStack container = ForgeHooks.getContainerItem(itemstack);
 		if (container != null) {
 			if (!tryAddStack(stowing, container, slotIndex, 1, true)) {
 				if (!tryAddStack(stowing, container, true) && player != null) {
-					player.dropPlayerItemWithRandomChoice(container, true);
+					player.dropItem(container, true);
 				}
 			}
 		}

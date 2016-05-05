@@ -71,7 +71,7 @@ public class GrowthRuleFlowerPot implements IFlowerGrowthRule {
 		flowerPotTile.markDirty();
 
 		if (!world.setBlockState(pos, world.getBlockState(pos).getBlock().getStateFromMeta(1), 2)) {
-			world.markBlockForUpdate(pos);
+			world.markBlockRangeForRenderUpdate(pos, pos);
 		}
 
 		return true;

@@ -179,7 +179,7 @@ public class ContainerCatalogue extends Container implements IGuiSelectable, ILe
 		super.detectAndSendChanges();
 
 		if (needsSynch) {
-			for (ICrafting crafter : crafters) {
+			for (ICrafting crafter : listeners) {
 				crafter.sendProgressBarUpdate(this, 0, stationIndex);
 				crafter.sendProgressBarUpdate(this, 1, stations.size());
 				crafter.sendProgressBarUpdate(this, 2, currentFilter);

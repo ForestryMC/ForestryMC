@@ -13,14 +13,9 @@ package forestry.apiculture.tiles;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-
-import net.minecraftforge.fml.common.Optional;
 
 import forestry.api.apiculture.IBeeHousingInventory;
 import forestry.api.apiculture.IBeeListener;
@@ -33,9 +28,6 @@ import forestry.apiculture.gui.ContainerBeeHousing;
 import forestry.apiculture.gui.GuiBeeHousing;
 import forestry.apiculture.inventory.IApiaryInventory;
 import forestry.apiculture.inventory.InventoryApiary;
-import forestry.apiculture.trigger.ApicultureTriggers;
-
-import buildcraft.api.statements.ITriggerExternal;
 
 public class TileApiary extends TileBeeHousingBase implements IApiary {
 	private final IBeeModifier beeModifier = new ApiaryBeeModifier();
@@ -76,15 +68,16 @@ public class TileApiary extends TileBeeHousingBase implements IApiary {
 	}
 
 	/* ITRIGGERPROVIDER */
-	@Optional.Method(modid = "BuildCraftAPI|statements")
-	@Override
-	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
-		LinkedList<ITriggerExternal> res = new LinkedList<>();
-		res.add(ApicultureTriggers.missingQueen);
-		res.add(ApicultureTriggers.missingDrone);
-		res.add(ApicultureTriggers.noFrames);
-		return res;
-	}
+	// TODO: buildcraft for 1.9
+//	@Optional.Method(modid = "BuildCraftAPI|statements")
+//	@Override
+//	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
+//		LinkedList<ITriggerExternal> res = new LinkedList<>();
+//		res.add(ApicultureTriggers.missingQueen);
+//		res.add(ApicultureTriggers.missingDrone);
+//		res.add(ApicultureTriggers.noFrames);
+//		return res;
+//	}
 
 	@Override
 	public Object getGui(EntityPlayer player, int data) {

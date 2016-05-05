@@ -13,6 +13,7 @@ package forestry.core.commands;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextFormatting;
 
 import forestry.core.utils.Translator;
@@ -32,7 +33,7 @@ public class CommandPlugins extends SubCommand {
 	}
 
 	@Override
-	public void processSubCommand(ICommandSender sender, String[] args) throws WrongUsageException {
+	public void executeSubCommand(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		if (args.length == 0) {
 			listPluginsForSender(sender);
 		} else {
@@ -75,7 +76,7 @@ public class CommandPlugins extends SubCommand {
 		}
 
 		@Override
-		public void processSubCommand(ICommandSender sender, String[] args) throws CommandException {
+		public void executeSubCommand(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 			if (args.length == 1) {
 				listPluginInfoForSender(sender, args[0]);
 			} else {

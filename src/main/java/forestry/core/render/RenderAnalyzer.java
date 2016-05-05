@@ -66,7 +66,7 @@ public class RenderAnalyzer extends TileEntitySpecialRenderer<TileAnalyzer> {
 		}
 		RenderManager rendermanager = Proxies.common.getClientInstance().getRenderManager();
 		
-		rendermanager.renderEntityWithPosYaw(dummyEntityItem, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F);
+		rendermanager.doRenderEntity(dummyEntityItem, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, false);
 		GlStateManager.popMatrix();
 
 	}

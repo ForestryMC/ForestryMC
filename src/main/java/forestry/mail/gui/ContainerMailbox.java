@@ -12,6 +12,7 @@ package forestry.mail.gui;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
@@ -49,10 +50,10 @@ public class ContainerMailbox extends ContainerTile<TileMailbox> {
 	}
 
 	@Override
-	public ItemStack slotClick(int slotIndex, int button, int par3, EntityPlayer player) {
-		ItemStack stack = super.slotClick(slotIndex, button, par3, player);
+	public ItemStack slotClick(int slotId, int dragType_or_button, ClickType clickTypeIn, EntityPlayer player) {
+		ItemStack stack = super.slotClick(slotId, dragType_or_button, clickTypeIn, player);
 
-		if (SlotUtil.isSlotInRange(slotIndex, SLOT_LETTERS, SLOT_LETTERS_COUNT)) {
+		if (SlotUtil.isSlotInRange(slotId, SLOT_LETTERS, SLOT_LETTERS_COUNT)) {
 			if (!player.worldObj.isRemote && mailInventory != null) {
 				POBoxInfo info = mailInventory.getPOBoxInfo();
 				Proxies.net.sendToPlayer(new PacketPOBoxInfoUpdate(info), player);

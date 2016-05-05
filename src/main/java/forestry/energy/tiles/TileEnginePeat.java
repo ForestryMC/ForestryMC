@@ -42,8 +42,6 @@ import forestry.energy.gui.GuiEnginePeat;
 import forestry.energy.inventory.InventoryEnginePeat;
 import forestry.factory.triggers.FactoryTriggers;
 
-import buildcraft.api.statements.ITriggerExternal;
-
 public class TileEnginePeat extends TileEngine implements ISidedInventory {
 	private Item fuelItem;
 	private int fuelItemMeta;
@@ -331,14 +329,15 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 	}
 
 	/* ITriggerProvider */
-	@Optional.Method(modid = "BuildCraftAPI|statements")
-	@Override
-	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
-		LinkedList<ITriggerExternal> res = new LinkedList<>();
-		res.add(FactoryTriggers.lowFuel25);
-		res.add(FactoryTriggers.lowFuel10);
-		return res;
-	}
+	// TODO: buildcraft for 1.9
+//	@Optional.Method(modid = "BuildCraftAPI|statements")
+//	@Override
+//	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
+//		LinkedList<ITriggerExternal> res = new LinkedList<>();
+//		res.add(FactoryTriggers.lowFuel25);
+//		res.add(FactoryTriggers.lowFuel10);
+//		return res;
+//	}
 
 	@Override
 	public Object getGui(EntityPlayer player, int data) {

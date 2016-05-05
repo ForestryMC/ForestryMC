@@ -10,8 +10,10 @@
  ******************************************************************************/
 package forestry.food.items;
 
+import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 
 import forestry.core.config.Constants;
 import forestry.core.items.ItemForestryFood;
@@ -21,7 +23,8 @@ public class ItemAmbrosia extends ItemForestryFood {
 	public ItemAmbrosia() {
 		super(Constants.FOOD_AMBROSIA_HEAL, 0.6f);
 		setAlwaysEdible();
-		setPotionEffect(Potion.regeneration.id, 40, 0, 1.0F);
+		PotionEffect potionEffect = new PotionEffect(MobEffects.REGENERATION, 40, 0);
+		setPotionEffect(potionEffect, 1.0F);
 	}
 
 	@Override

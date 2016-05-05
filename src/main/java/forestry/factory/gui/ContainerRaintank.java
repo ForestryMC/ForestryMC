@@ -39,7 +39,7 @@ public class ContainerRaintank extends ContainerLiquidTanks<TileRaintank> {
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
 
-		for (ICrafting crafter : crafters) {
+		for (ICrafting crafter : listeners) {
 			tile.sendGUINetworkData(this, crafter);
 		}
 	}

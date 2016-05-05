@@ -12,7 +12,6 @@ package forestry.core.tiles;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -31,7 +30,6 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
@@ -52,13 +50,8 @@ import forestry.core.network.packets.PacketTileStream;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.BlockUtil;
 
-import buildcraft.api.statements.IStatementContainer;
-import buildcraft.api.statements.ITriggerExternal;
-import buildcraft.api.statements.ITriggerInternal;
-import buildcraft.api.statements.ITriggerProvider;
-
-@Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = "BuildCraftAPI|statements")
-public abstract class TileForestry extends TileEntity implements IStreamable, IErrorLogicSource, ITriggerProvider, ISidedInventory, IFilterSlotDelegate, IRestrictedAccess, ITitled, ILocatable, IGuiHandlerTile, ITickable {
+//@Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = "BuildCraftAPI|statements")
+public abstract class TileForestry extends TileEntity implements IStreamable, IErrorLogicSource, ISidedInventory, IFilterSlotDelegate, IRestrictedAccess, ITitled, ILocatable, IGuiHandlerTile, ITickable {
 	private static final EnumFacing[] forgeDirections = EnumFacing.values();
 	private static final Random rand = new Random();
 
@@ -199,17 +192,18 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	}
 
 	/* ITriggerProvider */
-	@Optional.Method(modid = "BuildCraftAPI|statements")
-	@Override
-	public Collection<ITriggerInternal> getInternalTriggers(IStatementContainer container) {
-		return null;
-	}
-
-	@Optional.Method(modid = "BuildCraftAPI|statements")
-	@Override
-	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
-		return null;
-	}
+	// TODO: buildcraft for 1.9
+//	@Optional.Method(modid = "BuildCraftAPI|statements")
+//	@Override
+//	public Collection<ITriggerInternal> getInternalTriggers(IStatementContainer container) {
+//		return null;
+//	}
+//
+//	@Optional.Method(modid = "BuildCraftAPI|statements")
+//	@Override
+//	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
+//		return null;
+//	}
 
 	// / REDSTONE INFO
 	protected boolean isRedstoneActivated() {

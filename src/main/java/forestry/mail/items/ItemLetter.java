@@ -17,6 +17,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 
@@ -39,16 +42,13 @@ public class ItemLetter extends ItemWithGui {
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-		if (!world.isRemote) {
-			if (itemstack.stackSize == 1) {
-				openGui(entityplayer);
-			} else {
-				entityplayer.addChatMessage(new TextComponentTranslation("for.chat.mail.wrongstacksize"));
-			}
+	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+		if (itemStackIn.stackSize == 1) {
+			return super.onItemRightClick(itemStackIn, worldIn, playerIn, hand);
+		} else {
+			playerIn.addChatMessage(new TextComponentTranslation("for.chat.mail.wrongstacksize"));
+			return ActionResult.newResult(EnumActionResult.FAIL, itemStackIn);
 		}
-
-		return itemstack;
 	}
 
 	@Override

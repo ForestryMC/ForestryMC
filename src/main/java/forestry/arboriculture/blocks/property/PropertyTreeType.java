@@ -15,6 +15,7 @@ import com.google.common.collect.Lists;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
+import java.util.Locale;
 
 import net.minecraft.block.properties.PropertyEnum;
 

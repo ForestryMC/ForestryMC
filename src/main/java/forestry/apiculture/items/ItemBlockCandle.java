@@ -11,6 +11,7 @@
 package forestry.apiculture.items;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -20,7 +21,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.apiculture.blocks.BlockCandle;
 import forestry.core.items.ItemBlockForestry;
 
-public class ItemBlockCandle extends ItemBlockForestry<BlockCandle> {
+public class ItemBlockCandle extends ItemBlockForestry<BlockCandle> implements IItemColor {
 
 	public ItemBlockCandle(Block block) {
 		super(block);
@@ -28,7 +29,7 @@ public class ItemBlockCandle extends ItemBlockForestry<BlockCandle> {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public int getColorFromItemStack(ItemStack stack, int pass) {
+	public int getColorFromItemstack(ItemStack stack, int pass) {
 		int value = 0xffffff;
 		if (pass == 1 && stack.hasTagCompound()) {
 			NBTTagCompound tag = stack.getTagCompound();

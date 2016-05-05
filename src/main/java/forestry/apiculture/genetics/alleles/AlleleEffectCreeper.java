@@ -13,6 +13,9 @@ package forestry.apiculture.genetics.alleles;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -82,8 +85,8 @@ public class AlleleEffectCreeper extends AlleleEffectThrottled {
 				continue;
 			}
 
-			world.playSoundEffect(housingCoords.getX(), housingCoords.getY(), housingCoords.getZ(), "mob.creeper", 4F,
-					(1.0F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.2F) * 0.7F);
+			float pitch = (1.0F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.2F) * 0.7F;
+			world.playSound((EntityPlayer)null, housingCoords.getX(), housingCoords.getY(), housingCoords.getZ(), SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 4.0F, pitch);
 			storedData.setInteger(indexExplosionTimer, 2); // Set explosion timer
 		}
 

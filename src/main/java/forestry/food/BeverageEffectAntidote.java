@@ -11,6 +11,7 @@
 package forestry.food;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
 import net.minecraft.potion.Potion;
 import net.minecraft.world.World;
 
@@ -25,12 +26,9 @@ public class BeverageEffectAntidote extends BeverageEffect {
 
 	@Override
 	public void doEffect(World world, EntityPlayer player) {
-
-		if (world.rand.nextFloat() >= chance) {
-			return;
+		if (world.rand.nextFloat() < chance) {
+			player.removePotionEffect(MobEffects.POISON);
 		}
-
-		player.removePotionEffect(Potion.poison.getId());
 	}
 
 	@Override

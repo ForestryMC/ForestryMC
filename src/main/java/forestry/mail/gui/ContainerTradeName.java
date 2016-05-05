@@ -31,10 +31,10 @@ public class ContainerTradeName extends ContainerTile<TileTrader> {
 		super.detectAndSendChanges();
 
 		if (tile.isLinked()) {
-			for (Object crafter : crafters) {
+			for (Object crafter : listeners) {
 				if (crafter instanceof EntityPlayer) {
 					EntityPlayer player = (EntityPlayer) crafter;
-					tile.openGui(player);
+					tile.openGui(player, player.getHeldItemMainhand());
 				}
 			}
 		}

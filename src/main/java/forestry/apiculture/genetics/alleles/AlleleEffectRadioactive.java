@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
@@ -85,7 +86,8 @@ public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 				continue;
 			}
 
-			Block block = world.getBlockState(posBlock).getBlock();
+			IBlockState blockState = world.getBlockState(posBlock);
+			Block block = blockState.getBlock();
 
 			if (block instanceof BlockAlveary) {
 				continue;
@@ -96,7 +98,7 @@ public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 				continue;
 			}
 
-			if (block.getBlockHardness(world, posBlock) < 0) {
+			if (block.getBlockHardness(blockState, world, posBlock) < 0) {
 				continue;
 			}
 

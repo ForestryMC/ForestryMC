@@ -15,6 +15,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.SlotCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemHoe;
 import net.minecraft.item.ItemPickaxe;
@@ -64,6 +65,7 @@ public class SlotCrafter extends Slot {
 
 	/**
 	 * the itemStack passed in is the output - ie, iron ingots, and pickaxes, not ore and wood.
+	 * Copied from {@link SlotCrafting#onCrafting(ItemStack)}
 	 */
 	@Override
 	protected void onCrafting(ItemStack stack) {
@@ -74,47 +76,43 @@ public class SlotCrafter extends Slot {
 		this.amountCrafted = 0;
 
 		if (stack.getItem() == Item.getItemFromBlock(Blocks.CRAFTING_TABLE)) {
-			this.thePlayer.triggerAchievement(AchievementList.buildWorkBench);
+			this.thePlayer.addStat(AchievementList.BUILD_WORK_BENCH);
 		}
 
 		if (stack.getItem() instanceof ItemPickaxe) {
-			this.thePlayer.triggerAchievement(AchievementList.buildPickaxe);
+			this.thePlayer.addStat(AchievementList.BUILD_PICKAXE);
 		}
 
 		if (stack.getItem() == Item.getItemFromBlock(Blocks.FURNACE)) {
-			this.thePlayer.triggerAchievement(AchievementList.buildFurnace);
+			this.thePlayer.addStat(AchievementList.BUILD_FURNACE);
 		}
 
 		if (stack.getItem() instanceof ItemHoe) {
-			this.thePlayer.triggerAchievement(AchievementList.buildHoe);
+			this.thePlayer.addStat(AchievementList.BUILD_HOE);
 		}
 
 		if (stack.getItem() == Items.BREAD) {
-			this.thePlayer.triggerAchievement(AchievementList.makeBread);
+			this.thePlayer.addStat(AchievementList.MAKE_BREAD);
 		}
 
 		if (stack.getItem() == Items.CAKE) {
-			this.thePlayer.triggerAchievement(AchievementList.bakeCake);
+			this.thePlayer.addStat(AchievementList.BAKE_CAKE);
 		}
 
 		if (stack.getItem() instanceof ItemPickaxe && ((ItemPickaxe) stack.getItem()).getToolMaterial() != Item.ToolMaterial.WOOD) {
-			this.thePlayer.triggerAchievement(AchievementList.buildBetterPickaxe);
+			this.thePlayer.addStat(AchievementList.BUILD_BETTER_PICKAXE);
 		}
 
 		if (stack.getItem() instanceof ItemSword) {
-			this.thePlayer.triggerAchievement(AchievementList.buildSword);
+			this.thePlayer.addStat(AchievementList.BUILD_SWORD);
 		}
 
 		if (stack.getItem() == Item.getItemFromBlock(Blocks.ENCHANTING_TABLE)) {
-			this.thePlayer.triggerAchievement(AchievementList.enchantments);
+			this.thePlayer.addStat(AchievementList.ENCHANTMENTS);
 		}
 
 		if (stack.getItem() == Item.getItemFromBlock(Blocks.BOOKSHELF)) {
-			this.thePlayer.triggerAchievement(AchievementList.bookcase);
-		}
-
-		if (stack.getItem() == Items.GOLDEN_APPLE && stack.getMetadata() == 1) {
-			this.thePlayer.triggerAchievement(AchievementList.overpowered);
+			this.thePlayer.addStat(AchievementList.BOOKCASE);
 		}
 	}
 

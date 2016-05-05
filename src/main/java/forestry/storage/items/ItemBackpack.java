@@ -15,11 +15,15 @@ import java.util.Locale;
 
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -50,7 +54,7 @@ import forestry.storage.gui.GuiBackpack;
 import forestry.storage.gui.GuiBackpackT2;
 import forestry.storage.inventory.ItemInventoryBackpack;
 
-public class ItemBackpack extends ItemWithGui {
+public class ItemBackpack extends ItemWithGui implements IItemColor {
 	private final IBackpackDefinition definition;
 	private final EnumBackpackType type;
 
@@ -74,36 +78,31 @@ public class ItemBackpack extends ItemWithGui {
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer player) {
-		if (!world.isRemote) {
-			if (!player.isSneaking()) {
-				openGui(player);
-			} else {
-				switchMode(itemstack);
-			}
+	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+		if (!playerIn.isSneaking()) {
+			return super.onItemRightClick(itemStackIn, worldIn, playerIn, hand);
+		} else {
+			switchMode(itemStackIn);
+			return ActionResult.newResult(EnumActionResult.SUCCESS, itemStackIn);
 		}
-
-		return itemstack;
 	}
 
 	@Override
-	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
-		return getInventoryHit(world, pos, side) != null;
+	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		if (getInventoryHit(worldIn, pos, facing) != null) {
+			return EnumActionResult.SUCCESS;
+		}
+		return EnumActionResult.FAIL;
 	}
 
 	@Override
-	public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
-		
-		if (world.isRemote) {
-			return false;
-		}
-
+	public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
 		// We only do this when shift is clicked
 		if (!player.isSneaking()) {
-			return false;
+			return EnumActionResult.FAIL;
 		}
 
-		return evaluateTileHit(stack, player, world, pos, side);
+		return evaluateTileHit(stack, player, world, pos, side) ? EnumActionResult.SUCCESS : EnumActionResult.FAIL;
 	}
 
 	public static ItemStack tryStowing(EntityPlayer player, ItemStack backpackStack, ItemStack stack) {
@@ -260,7 +259,7 @@ public class ItemBackpack extends ItemWithGui {
 	}
 
 	@Override
-	public int getColorFromItemStack(ItemStack itemstack, int j) {
+	public int getColorFromItemstack(ItemStack itemstack, int j) {
 
 		if (j == 0) {
 			return definition.getPrimaryColour();

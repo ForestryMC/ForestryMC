@@ -14,6 +14,7 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import net.minecraft.block.Block;
@@ -63,7 +64,7 @@ public abstract class BlockAlveary extends BlockStructure implements IStateMappe
 
 		@Override
 		public String getName() {
-			return name().toLowerCase();
+			return name().toLowerCase(Locale.ENGLISH);
 		}
 	}
 	
@@ -72,7 +73,7 @@ public abstract class BlockAlveary extends BlockStructure implements IStateMappe
 
 		@Override
 		public String getName() {
-			return name().toLowerCase();
+			return name().toLowerCase(Locale.ENGLISH);
 		}
 	}
 

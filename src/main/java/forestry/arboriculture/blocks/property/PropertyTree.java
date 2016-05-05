@@ -15,6 +15,7 @@ import com.google.common.base.Optional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.genetics.AlleleManager;
@@ -55,7 +56,7 @@ public class PropertyTree extends PropertyAllele<IAlleleTreeSpecies> {
 
 	@Override
 	public String getName(IAlleleTreeSpecies value) {
-		return value.getModelName().replace("tree", "");
+		return value.getModelName().replace("tree", "").toLowerCase(Locale.ENGLISH);
 	}
 	
 }

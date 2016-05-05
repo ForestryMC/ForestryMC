@@ -106,6 +106,9 @@ public class ProxyRender {
 	
 	public void registerModels() {
 	}
+
+	public void registerItemAndBlockColors() {
+	}
 	
 //	public IAnimationStateMachine loadAnimationState(ResourceLocation location, ImmutableMap<String, ITimeValue> parameters){
 //		return null;

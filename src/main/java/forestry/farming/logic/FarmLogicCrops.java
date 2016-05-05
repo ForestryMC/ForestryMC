@@ -13,6 +13,7 @@ package forestry.farming.logic;
 import java.util.Collection;
 import java.util.Stack;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -79,7 +80,8 @@ public abstract class FarmLogicCrops extends FarmLogicWatered {
 
 		for (int i = 0; i < extent; i++) {
 			Vect position = translateWithOffset(pos, direction, i);
-			if (!VectUtil.isAirBlock(world, position) && !BlockUtil.isReplaceableBlock(getWorld(), position)) {
+			IBlockState state = world.getBlockState(position);
+			if (!VectUtil.isAirBlock(world, position) && !BlockUtil.isReplaceableBlock(state, world, position)) {
 				continue;
 			}
 

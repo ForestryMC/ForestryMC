@@ -21,7 +21,7 @@ import forestry.core.genetics.ItemResearchNote;
 public class ItemRegistryCore extends ItemRegistry {
 	/* Fertilizer */
 	public final ItemForestry fertilizerBio;
-	public final ItemForestryBonemeal fertilizerCompound;
+	public final ItemFertilizer fertilizerCompound;
 
 	/* Gems */
 	public final ItemForestry apatite;
@@ -87,7 +87,7 @@ public class ItemRegistryCore extends ItemRegistry {
 	
 	public ItemRegistryCore() {
 		fertilizerBio = registerItem(new ItemForestry(), "fertilizerBio");
-		fertilizerCompound = registerItem(new ItemForestryBonemeal(), "fertilizerCompound");
+		fertilizerCompound = registerItem(new ItemFertilizer(), "fertilizerCompound");
 
 		apatite = registerItem(new ItemForestry(), "apatite");
 		OreDictionary.registerOre("gemApatite", apatite);

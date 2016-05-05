@@ -10,29 +10,19 @@
  ******************************************************************************/
 package forestry.farming.tiles;
 
-import java.util.Collection;
-import java.util.Collections;
-
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 
-import net.minecraftforge.fml.common.Optional;
-
 import forestry.api.multiblock.IFarmComponent;
 import forestry.core.inventory.AdjacentInventoryCache;
 import forestry.core.tiles.AdjacentTileCache;
 import forestry.core.utils.InventoryUtil;
-import forestry.farming.triggers.FarmingTriggers;
 
-import buildcraft.api.statements.IStatementContainer;
-import buildcraft.api.statements.ITriggerExternal;
-import buildcraft.api.statements.ITriggerInternal;
-import buildcraft.api.statements.ITriggerProvider;
-
-@Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = "BuildCraftAPI|statements")
-public class TileFarmHatch extends TileFarm implements ISidedInventory, IFarmComponent.Active, ITriggerProvider {
+// TODO: Buildcraft for 1.9
+//@Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = "BuildCraftAPI|statements")
+public class TileFarmHatch extends TileFarm implements ISidedInventory, IFarmComponent.Active {
 
 	private static final EnumFacing[] dumpDirections = new EnumFacing[]{EnumFacing.DOWN};
 
@@ -70,21 +60,22 @@ public class TileFarmHatch extends TileFarm implements ISidedInventory, IFarmCom
 
 	}
 
-	@Optional.Method(modid = "BuildCraftAPI|statements")
-	@Override
-	public Collection<ITriggerInternal> getInternalTriggers(IStatementContainer container) {
-		return Collections.emptyList();
-	}
-
-	/* ITRIGGERPROVIDER */
-	@Optional.Method(modid = "BuildCraftAPI|statements")
-	@Override
-	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
-		if (!getMultiblockLogic().isConnected()) {
-			return Collections.emptyList();
-		}
-
-		return FarmingTriggers.allExternalTriggers;
-	}
+	// TODO: Buildcraft for 1.9
+//	@Optional.Method(modid = "BuildCraftAPI|statements")
+//	@Override
+//	public Collection<ITriggerInternal> getInternalTriggers(IStatementContainer container) {
+//		return Collections.emptyList();
+//	}
+//
+//	/* ITRIGGERPROVIDER */
+//	@Optional.Method(modid = "BuildCraftAPI|statements")
+//	@Override
+//	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
+//		if (!getMultiblockLogic().isConnected()) {
+//			return Collections.emptyList();
+//		}
+//
+//		return FarmingTriggers.allExternalTriggers;
+//	}
 
 }

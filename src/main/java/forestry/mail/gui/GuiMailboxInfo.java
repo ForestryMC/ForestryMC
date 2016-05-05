@@ -11,11 +11,15 @@
 package forestry.mail.gui;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.world.World;
 
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
@@ -92,7 +96,9 @@ public class GuiMailboxInfo extends Gui {
 		}
 
 		if (playJingle) {
-			Proxies.common.getRenderWorld().playSoundAtEntity(Proxies.common.getClientInstance().thePlayer, "random.levelup", 1.0f, 1.0f);
+			EntityPlayerSP thePlayer = Proxies.common.getClientInstance().thePlayer;
+			World world = Proxies.common.getRenderWorld();
+			world.playSound(null, thePlayer.posX, thePlayer.posY, thePlayer.posZ, SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0f, 1.0F);
 		}
 
 		this.poInfo = info;

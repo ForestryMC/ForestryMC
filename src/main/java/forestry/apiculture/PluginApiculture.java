@@ -199,10 +199,11 @@ public class PluginApiculture extends BlankForestryPlugin {
 		PluginCore.rootCommand.addChildCommand(new CommandBee());
 	}
 
-	@Override
-	public void registerTriggers() {
-		ApicultureTriggers.initialize();
-	}
+	// TODO: Buildcraft for 1.9
+//	@Override
+//	public void registerTriggers() {
+//		ApicultureTriggers.initialize();
+//	}
 
 	@Override
 	public void doInit() {

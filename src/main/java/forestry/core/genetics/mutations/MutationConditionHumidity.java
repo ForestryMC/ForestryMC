@@ -12,7 +12,6 @@ package forestry.core.genetics.mutations;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
 
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.ForestryAPI;
@@ -33,7 +32,6 @@ public class MutationConditionHumidity implements IMutationCondition {
 
 	@Override
 	public float getChance(World world, BlockPos pos, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1) {
-		BiomeGenBase biome = world.getWorldChunkManager().getBiomeGenerator(pos);
 		EnumHumidity biomeHumidity = EnumHumidity.getFromValue(ForestryAPI.climateManager.getHumidity(world, pos));
 
 		if (biomeHumidity.ordinal() < minHumidity.ordinal() || biomeHumidity.ordinal() > maxHumidity.ordinal()) {

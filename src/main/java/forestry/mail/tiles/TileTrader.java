@@ -11,18 +11,12 @@
 package forestry.mail.tiles;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.LinkedList;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-
-import net.minecraftforge.fml.common.Optional;
 
 import forestry.api.core.IErrorLogic;
 import forestry.api.mail.IMailAddress;
@@ -44,9 +38,6 @@ import forestry.mail.gui.GuiTradeName;
 import forestry.mail.gui.GuiTrader;
 import forestry.mail.inventory.InventoryTradeStation;
 import forestry.mail.network.packets.PacketTraderAddressResponse;
-import forestry.mail.triggers.MailTriggers;
-
-import buildcraft.api.statements.ITriggerExternal;
 
 public class TileTrader extends TileBase {
 
@@ -59,7 +50,7 @@ public class TileTrader extends TileBase {
 	}
 
 	@Override
-	public void openGui(EntityPlayer player) {
+	public void openGui(EntityPlayer player, ItemStack heldItem) {
 		short data = (short) (isLinked() ? 0 : 1);
 		GuiHandler.openGui(player, this, data);
 	}
@@ -312,20 +303,21 @@ public class TileTrader extends TileBase {
 		return (TradeStation) PostManager.postRegistry.getOrCreateTradeStation(worldObj, getAccessHandler().getOwner(), address);
 	}
 
-	@Optional.Method(modid = "BuildCraftAPI|statements")
-	@Override
-	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
-		LinkedList<ITriggerExternal> res = new LinkedList<>();
-		res.add(MailTriggers.lowPaper64);
-		res.add(MailTriggers.lowPaper32);
-		res.add(MailTriggers.lowInput25);
-		res.add(MailTriggers.lowInput10);
-		res.add(MailTriggers.lowPostage40);
-		res.add(MailTriggers.lowPostage20);
-		res.add(MailTriggers.highBuffer90);
-		res.add(MailTriggers.highBuffer75);
-		return res;
-	}
+	// TODO: Buildcraft for 1.9
+//	@Optional.Method(modid = "BuildCraftAPI|statements")
+//	@Override
+//	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
+//		LinkedList<ITriggerExternal> res = new LinkedList<>();
+//		res.add(MailTriggers.lowPaper64);
+//		res.add(MailTriggers.lowPaper32);
+//		res.add(MailTriggers.lowInput25);
+//		res.add(MailTriggers.lowInput10);
+//		res.add(MailTriggers.lowPostage40);
+//		res.add(MailTriggers.lowPostage20);
+//		res.add(MailTriggers.highBuffer90);
+//		res.add(MailTriggers.highBuffer75);
+//		return res;
+//	}
 
 	@Override
 	public Object getGui(EntityPlayer player, int data) {

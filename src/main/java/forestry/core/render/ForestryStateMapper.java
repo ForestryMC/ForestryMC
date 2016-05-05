@@ -15,10 +15,10 @@ public abstract class ForestryStateMapper implements IStateMapper {
 	protected Map<IBlockState, ModelResourceLocation> mapStateModelLocations = Maps.newLinkedHashMap();
 
 	@SuppressWarnings("unchecked")
-	public String getPropertyString(Map<IProperty, Comparable> map) {
+	public String getPropertyString(Map<IProperty<?>, Comparable<?>> map) {
 		StringBuilder stringbuilder = new StringBuilder();
 
-		for (Entry<IProperty, Comparable> entry : map.entrySet()) {
+		for (Entry<IProperty<?>, Comparable<?>> entry : map.entrySet()) {
 			if (stringbuilder.length() != 0) {
 				stringbuilder.append(",");
 			}

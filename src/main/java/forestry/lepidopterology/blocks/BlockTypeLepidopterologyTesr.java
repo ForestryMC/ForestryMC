@@ -26,7 +26,7 @@ import forestry.core.tiles.TileNaturalistChest;
 import forestry.lepidopterology.tiles.TileLepidopteristChest;
 
 public enum BlockTypeLepidopterologyTesr implements IBlockTypeTesr {
-	LEPICHEST(0, TileLepidopteristChest.class, "lepi.chest", Proxies.render.getRenderChest("lepichest"), TileNaturalistChest.chestBoundingBox);
+	LEPICHEST(0, TileLepidopteristChest.class, "lepi_chest", Proxies.render.getRenderChest("lepichest"), TileNaturalistChest.chestBoundingBox);
 
 	public static final BlockTypeLepidopterologyTesr[] VALUES = values();
 

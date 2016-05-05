@@ -14,14 +14,18 @@ import java.awt.Color;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -34,7 +38,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
-import forestry.core.entities.EntityFXColoredDropParticle;
+import forestry.core.entities.EntityFXColoredDripParticle;
 import forestry.core.utils.BlockUtil;
 
 public class BlockForestryFluid extends BlockFluidClassic implements IItemModelRegister {
@@ -52,7 +56,7 @@ public class BlockForestryFluid extends BlockFluidClassic implements IItemModelR
 	}
 
 	private BlockForestryFluid(Fluid fluid, int flammability, boolean flammable, Color color) {
-		super(fluid, Material.water);
+		super(fluid, Material.WATER);
 
 		setDensity(fluid.getDensity());
 
@@ -72,22 +76,61 @@ public class BlockForestryFluid extends BlockFluidClassic implements IItemModelR
 		return FluidRegistry.getFluid(fluidName);
 	}
 
+	/**
+	 * Copied from {@link BlockLiquid#randomDisplayTick(IBlockState, World, BlockPos, Random)}
+	 * and modified to have colored particles.
+	 */
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void randomDisplayTick(World world, BlockPos pos, IBlockState state, Random rand) {
-		if (rand.nextInt(10) == 0 && World.doesBlockHaveSolidTopSurface(world, new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ())) && !world.getBlockState(new BlockPos(pos.getX(), pos.getY() - 2, pos.getZ())).getBlock().getMaterial().blocksMovement()) {
-			double px = pos.getX() + rand.nextFloat();
-			double py = pos.getY() - 1.05D;
-			double pz = pos.getZ() + rand.nextFloat();
+	public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+		double d0 = (double) pos.getX();
+		double d1 = (double) pos.getY();
+		double d2 = (double) pos.getZ();
 
-			EntityFX fx = new EntityFXColoredDropParticle(world, px, py, pz, color.getRed(), color.getGreen(), color.getBlue());
-			FMLClientHandler.instance().getClient().effectRenderer.addEffect(fx);
+		if (this.blockMaterial == Material.WATER) {
+			int i = stateIn.getValue(LEVEL);
+
+			if (i > 0 && i < 8) {
+				if (rand.nextInt(64) == 0) {
+					worldIn.playSound(d0 + 0.5D, d1 + 0.5D, d2 + 0.5D, SoundEvents.BLOCK_WATER_AMBIENT, SoundCategory.BLOCKS, rand.nextFloat() * 0.25F + 0.75F, rand.nextFloat() + 0.5F, false);
+				}
+			} else if (rand.nextInt(10) == 0) {
+				worldIn.spawnParticle(EnumParticleTypes.SUSPENDED, d0 + (double) rand.nextFloat(), d1 + (double) rand.nextFloat(), d2 + (double) rand.nextFloat(), 0.0D, 0.0D, 0.0D);
+			}
+		}
+
+		if (this.blockMaterial == Material.LAVA && worldIn.getBlockState(pos.up()).getMaterial() == Material.AIR && !worldIn.getBlockState(pos.up()).isOpaqueCube()) {
+			if (rand.nextInt(100) == 0) {
+				double d8 = d0 + (double) rand.nextFloat();
+				double d4 = d1 + stateIn.getBoundingBox(worldIn, pos).maxY;
+				double d6 = d2 + (double) rand.nextFloat();
+				worldIn.spawnParticle(EnumParticleTypes.LAVA, d8, d4, d6, 0.0D, 0.0D, 0.0D);
+				worldIn.playSound(d8, d4, d6, SoundEvents.BLOCK_LAVA_POP, SoundCategory.BLOCKS, 0.2F + rand.nextFloat() * 0.2F, 0.9F + rand.nextFloat() * 0.15F, false);
+			}
+
+			if (rand.nextInt(200) == 0) {
+				worldIn.playSound(d0, d1, d2, SoundEvents.BLOCK_LAVA_AMBIENT, SoundCategory.BLOCKS, 0.2F + rand.nextFloat() * 0.2F, 0.9F + rand.nextFloat() * 0.15F, false);
+			}
+		}
+
+		if (rand.nextInt(10) == 0 && worldIn.getBlockState(pos.down()).isFullyOpaque()) {
+			Material material = worldIn.getBlockState(pos.down(2)).getMaterial();
+
+			if (!material.blocksMovement() && !material.isLiquid()) {
+				double px = d0 + (double) rand.nextFloat();
+				double py = d1 - 1.05D;
+				double pz = d2 + (double) rand.nextFloat();
+
+				EntityFX fx = new EntityFXColoredDripParticle(worldIn, px, py, pz, color.getRed(), color.getGreen(), color.getBlue());
+				FMLClientHandler.instance().getClient().effectRenderer.addEffect(fx);
+			}
 		}
 	}
 
 	@Override
 	public boolean canDisplace(IBlockAccess world, BlockPos pos) {
-		if (world.getBlockState(pos).getBlock().getMaterial().isLiquid()) {
+		IBlockState blockState = world.getBlockState(pos);
+		if (blockState.getBlock().getMaterial(blockState).isLiquid()) {
 			return false;
 		}
 		return super.canDisplace(world, pos);
@@ -95,7 +138,8 @@ public class BlockForestryFluid extends BlockFluidClassic implements IItemModelR
 	
 	@Override
 	public boolean displaceIfPossible(World world, BlockPos pos) {
-		if (world.getBlockState(pos).getBlock().getMaterial().isLiquid()) {
+		IBlockState blockState = world.getBlockState(pos);
+		if (blockState.getBlock().getMaterial(blockState).isLiquid()) {
 			return false;
 		}
 		return super.displaceIfPossible(world, pos);
@@ -130,13 +174,13 @@ public class BlockForestryFluid extends BlockFluidClassic implements IItemModelR
 	}
 
 	@Override
-	public Material getMaterial() {
+	public Material getMaterial(IBlockState state) {
 		// Fahrenheit 451 = 505.928 Kelvin
 		// The temperature at which book-paper catches fire, and burns.
 		if (temperature > 505) {
-			return Material.lava;
+			return Material.LAVA;
 		} else {
-			return super.getMaterial();
+			return super.getMaterial(state);
 		}
 	}
 	
@@ -155,21 +199,22 @@ public class BlockForestryFluid extends BlockFluidClassic implements IItemModelR
 		int z = pos.getZ();
 
 		// Start fires if the fluid is lava-like
-		if (getMaterial() == Material.lava) {
+		if (getMaterial(state) == Material.LAVA) {
 			int rangeUp = rand.nextInt(3);
 
 			for (int i = 0; i < rangeUp; ++i) {
 				x += rand.nextInt(3) - 1;
 				++y;
 				z += rand.nextInt(3) - 1;
-				Block block = world.getBlockState(new BlockPos(x, y, z)).getBlock();
+				IBlockState blockState = world.getBlockState(new BlockPos(x, y, z));
+				Block block = blockState.getBlock();
 
-				if (block.getMaterial() == Material.air) {
+				if (block.getMaterial(blockState) == Material.AIR) {
 					if (isNeighborFlammable(world, x, y, z)) {
 						world.setBlockState(new BlockPos(x, y, z), Blocks.FIRE.getDefaultState());
 						return;
 					}
-				} else if (block.getMaterial().blocksMovement()) {
+				} else if (block.getMaterial(blockState).blocksMovement()) {
 					return;
 				}
 			}

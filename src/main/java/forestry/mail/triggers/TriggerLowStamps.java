@@ -10,37 +10,29 @@
  ******************************************************************************/
 package forestry.mail.triggers;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-
-import forestry.core.triggers.Trigger;
-import forestry.mail.tiles.TileTrader;
-
-import buildcraft.api.statements.IStatementContainer;
-import buildcraft.api.statements.IStatementParameter;
-
-public class TriggerLowStamps extends Trigger {
-
-	private final int threshold;
-
-	public TriggerLowStamps(String tag, int threshold) {
-		super(tag, "lowStamps");
-		this.threshold = threshold;
-	}
-
-	@Override
-	public String getDescription() {
-		return super.getDescription() + " < " + threshold + "p";
-	}
-
-	@Override
-	public boolean isTriggerActive(TileEntity tile, EnumFacing side, IStatementContainer source, IStatementParameter[] parameters) {
-
-		if (!(tile instanceof TileTrader)) {
-			return false;
-		}
-
-		return !((TileTrader) tile).hasPostageMin(threshold);
-	}
+// TODO: Buildcraft for 1.9
+public class TriggerLowStamps {//extends Trigger {
+//
+//	private final int threshold;
+//
+//	public TriggerLowStamps(String tag, int threshold) {
+//		super(tag, "lowStamps");
+//		this.threshold = threshold;
+//	}
+//
+//	@Override
+//	public String getDescription() {
+//		return super.getDescription() + " < " + threshold + "p";
+//	}
+//
+//	@Override
+//	public boolean isTriggerActive(TileEntity tile, EnumFacing side, IStatementContainer source, IStatementParameter[] parameters) {
+//
+//		if (!(tile instanceof TileTrader)) {
+//			return false;
+//		}
+//
+//		return !((TileTrader) tile).hasPostageMin(threshold);
+//	}
 
 }

@@ -71,10 +71,11 @@ public class PluginMail extends BlankForestryPlugin {
 		blocks.mail.addDefinitions(BlockTypeMail.VALUES);
 	}
 
-	@Override
-	public void registerTriggers() {
-		MailTriggers.initialize();
-	}
+	// TODO: Buildcraft for 1.9
+//	@Override
+//	public void registerTriggers() {
+//		MailTriggers.initialize();
+//	}
 
 	@Override
 	public void doInit() {

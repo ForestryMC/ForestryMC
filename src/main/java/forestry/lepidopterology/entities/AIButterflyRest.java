@@ -16,6 +16,7 @@ import net.minecraft.block.BlockFlower;
 import net.minecraft.block.BlockWall;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 
 import net.minecraftforge.common.IPlantable;
@@ -48,7 +49,8 @@ public class AIButterflyRest extends AIButterflyBase {
 		if (entity.worldObj.isAirBlock(pos)) {
 			return false;
 		}
-		if (entity.worldObj.getBlockState(pos).getBlock().getMaterial().isLiquid()) {
+		IBlockState blockState = entity.worldObj.getBlockState(pos);
+		if (blockState.getBlock().getMaterial(blockState).isLiquid()) {
 			return false;
 		}
 		if (!entity.getButterfly().isAcceptedEnvironment(entity.worldObj, x, pos.getY(), z)) {
@@ -82,15 +84,18 @@ public class AIButterflyRest extends AIButterflyBase {
 	}
 
 	private boolean canLand(BlockPos pos) {
-		Block block = entity.worldObj.getBlockState(pos).getBlock();
+		IBlockState blockState = entity.worldObj.getBlockState(pos);
+		Block block = blockState.getBlock();
 		if (!block.isPassable(entity.worldObj, pos)) {
 			return false;
 		}
-		if (isPlant(block)) {
+		if (isPlant(blockState)) {
 			return true;
 		}
-		block = entity.worldObj.getBlockState(pos.down()).getBlock();
-		return isRest(block) || block.isLeaves(entity.worldObj, pos.down());
+
+		IBlockState blockStateBelow = entity.worldObj.getBlockState(pos.down());
+		Block blockBelow = blockStateBelow.getBlock();
+		return isRest(blockBelow) || blockBelow.isLeaves(blockStateBelow, entity.worldObj, pos.down());
 	}
 
 	private static boolean isRest(Block block) {
@@ -100,14 +105,15 @@ public class AIButterflyRest extends AIButterflyBase {
 		return block instanceof BlockWall;
 	}
 
-	private static boolean isPlant(Block block) {
+	private static boolean isPlant(IBlockState blockState) {
+		Block block = blockState.getBlock();
 		if (block instanceof BlockFlower) {
 			return true;
 		} else if (block instanceof IPlantable) {
 			return true;
 		} else if (block instanceof IGrowable) {
 			return true;
-		} else if (block.getMaterial() == Material.plants) {
+		} else if (block.getMaterial(blockState) == Material.PLANTS) {
 			return true;
 		}
 		return false;

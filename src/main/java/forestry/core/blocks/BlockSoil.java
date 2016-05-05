@@ -54,7 +54,7 @@ public class BlockSoil extends Block implements IItemModelRegister, IBlockWithMe
 	
 	public enum SoilType implements IStringSerializable {
 		HUMUS("humus"),
-		BOG_EARTH("bog.earth"),
+		BOG_EARTH("bog_earth"),
 		PEAT("peat");
 
 		@Nonnull

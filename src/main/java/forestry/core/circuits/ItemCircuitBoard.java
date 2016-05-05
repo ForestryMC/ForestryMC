@@ -13,6 +13,7 @@ package forestry.core.circuits;
 import java.util.List;
 import java.util.Locale;
 
+import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -30,7 +31,7 @@ import forestry.api.core.IModelManager;
 import forestry.core.PluginCore;
 import forestry.core.items.ItemForestry;
 
-public class ItemCircuitBoard extends ItemForestry {
+public class ItemCircuitBoard extends ItemForestry implements IItemColor {
 
 	public ItemCircuitBoard() {
 		setHasSubtypes(true);
@@ -62,9 +63,9 @@ public class ItemCircuitBoard extends ItemForestry {
 	}
 
 	@Override
-	public int getColorFromItemStack(ItemStack itemstack, int pass) {
+	public int getColorFromItemstack(ItemStack itemstack, int tintIndex) {
 		EnumCircuitBoardType type = EnumCircuitBoardType.values()[itemstack.getItemDamage()];
-		if (pass == 0) {
+		if (tintIndex == 0) {
 			return type.getPrimaryColor();
 		} else {
 			return type.getSecondaryColor();

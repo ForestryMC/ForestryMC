@@ -12,6 +12,7 @@ package forestry.food.items;
 
 import java.util.List;
 
+import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -36,7 +37,7 @@ import forestry.core.items.ItemForestryFood;
 import forestry.core.items.ItemOverlay;
 import forestry.food.BeverageEffect;
 
-public class ItemBeverage extends ItemForestryFood {
+public class ItemBeverage extends ItemForestryFood implements IItemColor {
 	public interface IBeverageInfo extends ItemOverlay.IOverlayInfo {
 		int getHeal();
 
@@ -160,7 +161,7 @@ public class ItemBeverage extends ItemForestryFood {
 	}
 
 	@Override
-	public int getColorFromItemStack(ItemStack itemstack, int j) {
+	public int getColorFromItemstack(ItemStack itemstack, int j) {
 		if (j == 1 || beverages[itemstack.getItemDamage()].getSecondaryColor() == 0) {
 			return beverages[itemstack.getItemDamage()].getPrimaryColor();
 		} else {

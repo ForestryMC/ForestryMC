@@ -29,7 +29,7 @@ public class SaplingStateMapper extends ForestryStateMapper {
 			if (allele instanceof IAlleleTreeSpecies) {
 				IAlleleTreeSpecies tree = (IAlleleTreeSpecies) allele;
 				IBlockState state = block.getDefaultState().withProperty(BlockSapling.TREE, tree);
-				LinkedHashMap<IProperty, Comparable> linkedhashmap = Maps.newLinkedHashMap(state.getProperties());
+				LinkedHashMap<IProperty<?>, Comparable<?>> linkedhashmap = Maps.newLinkedHashMap(state.getProperties());
 				String modID = tree.getModID();
 				if (modID == null) {
 					modID = Constants.MOD_ID;

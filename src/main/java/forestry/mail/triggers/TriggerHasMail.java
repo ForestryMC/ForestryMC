@@ -10,29 +10,21 @@
  ******************************************************************************/
 package forestry.mail.triggers;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+// TODO: Buildcraft for 1.9
+public class TriggerHasMail {//extends Trigger {
 
-import forestry.core.triggers.Trigger;
-import forestry.mail.tiles.IMailContainer;
-
-import buildcraft.api.statements.IStatementContainer;
-import buildcraft.api.statements.IStatementParameter;
-
-public class TriggerHasMail extends Trigger {
-
-	public TriggerHasMail() {
-		super("mail.hasMail", "hasMail");
-	}
-
-	@Override
-	public boolean isTriggerActive(TileEntity tile, EnumFacing side, IStatementContainer source, IStatementParameter[] parameters) {
-
-		if (!(tile instanceof IMailContainer)) {
-			return false;
-		}
-
-		return ((IMailContainer) tile).hasMail();
-	}
+//	public TriggerHasMail() {
+//		super("mail.hasMail", "hasMail");
+//	}
+//
+//	@Override
+//	public boolean isTriggerActive(TileEntity tile, EnumFacing side, IStatementContainer source, IStatementParameter[] parameters) {
+//
+//		if (!(tile instanceof IMailContainer)) {
+//			return false;
+//		}
+//
+//		return ((IMailContainer) tile).hasMail();
+//	}
 
 }

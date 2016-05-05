@@ -56,7 +56,7 @@ public class TickHandlerCoreServer {
 
 		if (Config.doRetrogen) {
 			World world = event.world;
-			int dimensionID = world.provider.getDimensionId();
+			int dimensionID = world.provider.getDimension();
 			List<ChunkCoords> chunkList = chunkRegenList.get(dimensionID);
 
 			if (!chunkList.isEmpty()) {
@@ -102,7 +102,7 @@ public class TickHandlerCoreServer {
 		public final int zCoord;
 
 		public ChunkCoords(Chunk chunk) {
-			this.dimension = chunk.getWorld().provider.getDimensionId();
+			this.dimension = chunk.getWorld().provider.getDimension();
 			this.xCoord = chunk.xPosition;
 			this.zCoord = chunk.zPosition;
 		}

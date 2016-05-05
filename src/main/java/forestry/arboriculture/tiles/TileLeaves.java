@@ -287,7 +287,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		}
 
 		tree.mate(individual);
-		worldObj.markBlockForUpdate(getPos());
+		worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
 	}
 
 	@Override
@@ -380,7 +380,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 			setTree(tree);
 
-			worldObj.markBlockForUpdate(getPos());
+			worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
 		}
 	}
 
@@ -390,7 +390,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 			return;
 		}
 		colourFruits = newColourFruits;
-		worldObj.markBlockForUpdate(getPos());
+		worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
 	}
 
 	/* IFRUITBEARER */

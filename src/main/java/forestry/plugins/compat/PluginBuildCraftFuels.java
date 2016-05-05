@@ -10,21 +10,13 @@
  ******************************************************************************/
 package forestry.plugins.compat;
 
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fml.common.Optional;
-
-import forestry.api.core.ForestryAPI;
 import forestry.core.config.Constants;
-import forestry.core.fluids.Fluids;
 import forestry.core.utils.ModUtil;
 import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
 
-import buildcraft.api.fuels.BuildcraftFuelRegistry;
-import buildcraft.api.fuels.ICoolant;
-import buildcraft.api.fuels.ICoolantManager;
-
+// TODO: Buildcraft for 1.9
 @ForestryPlugin(pluginID = ForestryPluginUids.BUILDCRAFT_FUELS, name = "BuildCraft 6 Fuels", author = "mezz", url = Constants.URL, unlocalizedDescription = "for.plugin.buildcraft6.description")
 public class PluginBuildCraftFuels extends BlankForestryPlugin {
 
@@ -38,21 +30,21 @@ public class PluginBuildCraftFuels extends BlankForestryPlugin {
 		return "Compatible BuildCraftAPI|fuels version not found";
 	}
 
-	@Optional.Method(modid = "BuildCraftAPI|fuels")
-	@Override
-	public void doInit() {
-		ICoolantManager coolantManager = BuildcraftFuelRegistry.coolant;
-		ICoolant waterCoolant = coolantManager.getCoolant(Fluids.WATER.getFluid());
-		float waterCooling = waterCoolant.getDegreesCoolingPerMB(100);
-
-		coolantManager.addCoolant(Fluids.ICE.getFluid(), Constants.ICE_COOLING_MULTIPLIER * waterCooling);
-
-		Fluid ethanol = Fluids.BIO_ETHANOL.getFluid();
-		if (ethanol != null) {
-			int ethanolPower = 40;
-			int ethanolBurnTime = Math.round(Constants.ENGINE_CYCLE_DURATION_ETHANOL * ForestryAPI.activeMode.getFloatSetting("fuel.ethanol.combustion"));
-			BuildcraftFuelRegistry.fuel.addFuel(ethanol, ethanolPower, ethanolBurnTime);
-		}
-	}
+//	@Optional.Method(modid = "BuildCraftAPI|fuels")
+//	@Override
+//	public void doInit() {
+//		ICoolantManager coolantManager = BuildcraftFuelRegistry.coolant;
+//		ICoolant waterCoolant = coolantManager.getCoolant(Fluids.WATER.getFluid());
+//		float waterCooling = waterCoolant.getDegreesCoolingPerMB(100);
+//
+//		coolantManager.addCoolant(Fluids.ICE.getFluid(), Constants.ICE_COOLING_MULTIPLIER * waterCooling);
+//
+//		Fluid ethanol = Fluids.BIO_ETHANOL.getFluid();
+//		if (ethanol != null) {
+//			int ethanolPower = 40;
+//			int ethanolBurnTime = Math.round(Constants.ENGINE_CYCLE_DURATION_ETHANOL * ForestryAPI.activeMode.getFloatSetting("fuel.ethanol.combustion"));
+//			BuildcraftFuelRegistry.fuel.addFuel(ethanol, ethanolPower, ethanolBurnTime);
+//		}
+//	}
 
 }

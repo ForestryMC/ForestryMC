@@ -1,9 +1,17 @@
 package forestry.core.items;
 
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
+import net.minecraft.stats.StatList;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.FoodStats;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 
 public class ItemLiquidContainerDrinkable extends ItemLiquidContainer {
@@ -15,11 +23,22 @@ public class ItemLiquidContainerDrinkable extends ItemLiquidContainer {
 	}
 
 	@Override
-	public ItemStack onItemUseFinish(ItemStack stack, World world, EntityPlayer player) {
-		stack.stackSize--;
-		FoodStats foodStats = player.getFoodStats();
-		foodStats.addStats(properties.getHealAmount(), properties.getSaturationModifier());
-		world.playSoundAtEntity(player, "random.burp", 0.5F, world.rand.nextFloat() * 0.1F + 0.9F);
+	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving) {
+		if (entityLiving instanceof EntityPlayer && !((EntityPlayer)entityLiving).capabilities.isCreativeMode) {
+			EntityPlayer player = (EntityPlayer) entityLiving;
+			if (!player.capabilities.isCreativeMode) {
+				--stack.stackSize;
+			}
+
+			if (!worldIn.isRemote) {
+				FoodStats foodStats = player.getFoodStats();
+				foodStats.addStats(properties.getHealAmount(), properties.getSaturationModifier());
+				worldIn.playSound((EntityPlayer)null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, worldIn.rand.nextFloat() * 0.1F + 0.9F);
+			}
+
+			player.addStat(StatList.getObjectUseStats(this));
+		}
+
 		return stack;
 	}
 
@@ -34,10 +53,12 @@ public class ItemLiquidContainerDrinkable extends ItemLiquidContainer {
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-		if (entityplayer.canEat(false)) {
-			entityplayer.setItemInUse(itemstack, getMaxItemUseDuration(itemstack));
+	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+		if (playerIn.canEat(false)) {
+			playerIn.setActiveHand(hand);
+			return new ActionResult<>(EnumActionResult.SUCCESS, itemStackIn);
+		} else {
+			return new ActionResult<>(EnumActionResult.FAIL, itemStackIn);
 		}
-		return itemstack;
 	}
 }

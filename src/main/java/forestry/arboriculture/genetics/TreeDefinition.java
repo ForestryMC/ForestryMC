@@ -12,6 +12,7 @@ package forestry.arboriculture.genetics;
 
 import java.awt.Color;
 import java.util.Arrays;
+import java.util.Locale;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -1112,7 +1113,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 
 	@Override
 	public String getName() {
-		return name();
+		return name().toLowerCase(Locale.ENGLISH);
 	}
 
 	public int getMetadata() {

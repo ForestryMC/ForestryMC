@@ -116,7 +116,7 @@ public class MultiblockWorldRegistry {
 				// These are blocks that exist in a valid chunk and require a controller
 				for (IMultiblockComponent orphan : orphansToProcess) {
 					coord = orphan.getCoordinates();
-					if (!chunkProvider.chunkExists(coord.getX() >> 4, coord.getZ() >> 4)) {
+					if (chunkProvider.getLoadedChunk(coord.getX() >> 4, coord.getZ() >> 4) == null) {
 						continue;
 					}
 
@@ -312,7 +312,7 @@ public class MultiblockWorldRegistry {
 	public void onPartAdded(IMultiblockComponent part) {
 		BlockPos worldLocation = part.getCoordinates();
 		
-		if (!worldObj.getChunkProvider().chunkExists(worldLocation.getX() >> 4, worldLocation.getZ() >> 4)) {
+		if (worldObj.getChunkProvider().getLoadedChunk(worldLocation.getX() >> 4, worldLocation.getZ() >> 4) == null) {
 			// Part goes into the waiting-for-chunk-load list
 			Set<IMultiblockComponent> partSet;
 			long chunkHash = ChunkCoordIntPair.chunkXZ2Int(worldLocation.getX() >> 4, worldLocation.getZ() >> 4);

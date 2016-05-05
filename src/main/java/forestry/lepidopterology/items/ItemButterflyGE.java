@@ -16,6 +16,7 @@ import java.util.Random;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -59,7 +60,7 @@ import forestry.lepidopterology.PluginLepidopterology;
 import forestry.lepidopterology.entities.EntityButterfly;
 import forestry.lepidopterology.genetics.ButterflyGenome;
 
-public class ItemButterflyGE extends ItemGE implements ISpriteRegister {
+public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IItemColor {
 
 	private static final Random rand = new Random();
 	public static final String NBT_AGE = "Age";
@@ -310,6 +311,17 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister {
 		String speciesString = individual.getDisplayName();
 		String typeString = Translator.translateToLocal("for.butterflies.grammar." + type.getName() + ".type");
 		return grammar.replaceAll("%SPECIES", speciesString).replaceAll("%TYPE", typeString);
+	}
+
+	@Override
+	public int getColorFromItemstack(ItemStack stack, int tintIndex) {
+		if (stack.hasTagCompound()) {
+			IAlleleSpecies species = AlleleManager.alleleRegistry.getIndividual(stack).getGenome().getPrimary();
+			if (species != null) {
+				return species.getSpriteColour(tintIndex);
+			}
+		}
+		return 0xffffff;
 	}
 
 }

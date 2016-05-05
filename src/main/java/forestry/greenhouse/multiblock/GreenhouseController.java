@@ -23,8 +23,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
@@ -311,7 +311,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 					if (comp instanceof ICamouflagedBlock) {
 						ICamouflagedBlock camBlock = (ICamouflagedBlock) comp;
 						if (camBlock.getCamouflageType() == type) {
-							worldObj.markBlockForUpdate(camBlock.getCoordinates());
+							worldObj.markBlockRangeForRenderUpdate(camBlock.getCoordinates(), camBlock.getCoordinates());
 						}
 					}
 				}

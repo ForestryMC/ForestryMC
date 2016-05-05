@@ -13,6 +13,7 @@ package forestry.greenhouse.blocks;
 import javax.annotation.Nonnull;
 import java.util.EnumMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import net.minecraft.block.Block;
@@ -75,7 +76,7 @@ public abstract class BlockGreenhouse extends BlockStructure implements ISpriteR
 
 		@Override
 		public String getName() {
-			return name().toLowerCase();
+			return name().toLowerCase(Locale.ENGLISH);
 		}
 	}
 	

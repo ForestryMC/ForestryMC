@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -65,11 +66,17 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister, ITile
 	private static final PropertyEnum<State> STATE = PropertyEnum.create("state", State.class);
 
 	private enum State implements IStringSerializable {
-		ON, OFF;
+		ON("on"), OFF("off");
+
+		private final String name;
+
+		State(String name) {
+			this.name = name;
+		}
 
 		@Override
 		public String getName() {
-			return name();
+			return name;
 		}
 	}
 	

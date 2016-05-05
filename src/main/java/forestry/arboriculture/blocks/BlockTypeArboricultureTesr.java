@@ -26,7 +26,7 @@ import forestry.core.tiles.TileForestry;
 import forestry.core.tiles.TileNaturalistChest;
 
 public enum BlockTypeArboricultureTesr implements IBlockTypeTesr {
-	ARB_CHEST(0, TileArboristChest.class, "arb.chest", Proxies.render.getRenderChest("arbchest"), TileNaturalistChest.chestBoundingBox);
+	ARB_CHEST(0, TileArboristChest.class, "arb_chest", Proxies.render.getRenderChest("arbchest"), TileNaturalistChest.chestBoundingBox);
 
 	public static final BlockTypeArboricultureTesr[] VALUES = values();
 

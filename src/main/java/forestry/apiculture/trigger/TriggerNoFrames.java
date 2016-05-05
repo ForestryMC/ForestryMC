@@ -10,37 +10,30 @@
  ******************************************************************************/
 package forestry.apiculture.trigger;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-
-import forestry.apiculture.inventory.InventoryApiary;
-import forestry.apiculture.tiles.TileApiary;
 import forestry.core.triggers.Trigger;
 
-import buildcraft.api.statements.IStatementContainer;
-import buildcraft.api.statements.IStatementParameter;
+public class TriggerNoFrames {//extends Trigger {
 
-public class TriggerNoFrames extends Trigger {
-
-	public TriggerNoFrames() {
-		super("noFrames");
-	}
+//	public TriggerNoFrames() {
+//		super("noFrames");
+//	}
 
 	/**
 	 * Return true if the tile given in parameter activates the trigger, given the parameters.
 	 */
-	@Override
-	public boolean isTriggerActive(TileEntity tile, EnumFacing side, IStatementContainer source, IStatementParameter[] parameters) {
-
-		if (!(tile instanceof TileApiary)) {
-			return false;
-		}
-
-		TileApiary apiary = (TileApiary) tile;
-
-		InventoryApiary inventory = (InventoryApiary) apiary.getInternalInventory();
-
-		return inventory.getFrames().isEmpty();
-	}
+	// TODO: buildcraft for 1.9
+//	@Override
+//	public boolean isTriggerActive(TileEntity tile, EnumFacing side, IStatementContainer source, IStatementParameter[] parameters) {
+//
+//		if (!(tile instanceof TileApiary)) {
+//			return false;
+//		}
+//
+//		TileApiary apiary = (TileApiary) tile;
+//
+//		InventoryApiary inventory = (InventoryApiary) apiary.getInternalInventory();
+//
+//		return inventory.getFrames().isEmpty();
+//	}
 
 }

@@ -42,14 +42,14 @@ public class PacketHandler {
 
 	@SubscribeEvent
 	public void onPacket(ServerCustomPacketEvent event) {
-		DataInputStreamForestry data = getStream(event.packet);
-		EntityPlayerMP player = ((NetHandlerPlayServer) event.handler).playerEntity;
+		DataInputStreamForestry data = getStream(event.getPacket());
+		EntityPlayerMP player = ((NetHandlerPlayServer) event.getHandler()).playerEntity;
 
 		try {
 			byte packetIdOrdinal = data.readByte();
 			PacketIdServer packetId = PacketIdServer.VALUES[packetIdOrdinal];
 			IForestryPacketServer packetHandler = packetId.getPacketHandler();
-			checkThreadAndEnqueue(packetHandler, data, player, player.getServerForPlayer());
+			checkThreadAndEnqueue(packetHandler, data, player, player.getServerWorld());
 		} catch (IOException e) {
 			Log.error("Failed to read packet.", e);
 		}
@@ -57,7 +57,7 @@ public class PacketHandler {
 
 	@SubscribeEvent
 	public void onPacket(ClientCustomPacketEvent event) {
-		DataInputStreamForestry data = getStream(event.packet);
+		DataInputStreamForestry data = getStream(event.getPacket());
 		EntityPlayer player = Proxies.common.getPlayer();
 
 		try {

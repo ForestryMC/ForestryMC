@@ -22,8 +22,8 @@ import forestry.mail.tiles.TileTrader;
 
 public enum BlockTypeMail implements IBlockType {
 	MAILBOX(0, TileMailbox.class, "mailbox"),
-	TRADE_STATION(1, TileTrader.class, "trade.station"),
-	PHILATELIST(2, TileStampCollector.class, "stamp.collector");
+	TRADE_STATION(1, TileTrader.class, "trade_station"),
+	PHILATELIST(2, TileStampCollector.class, "stamp_collector");
 
 	public static final BlockTypeMail[] VALUES = values();
 

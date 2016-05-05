@@ -12,6 +12,7 @@ package forestry.farming.blocks;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 import net.minecraft.block.BlockBush;
@@ -49,7 +50,7 @@ public class BlockMushroom extends BlockBush implements IItemModelRegister, IGro
 		
 		@Override
 		public String getName() {
-			return name().toLowerCase();
+			return name().toLowerCase(Locale.ENGLISH);
 		}
 	}
 

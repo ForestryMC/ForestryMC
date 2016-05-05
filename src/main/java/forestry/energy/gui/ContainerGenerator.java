@@ -34,12 +34,11 @@ public class ContainerGenerator extends ContainerLiquidTanks<TileEuGenerator> {
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
 
-		for (Object crafter : crafters) {
-			tile.sendGUINetworkData(this, (ICrafting) crafter);
+		for (ICrafting crafter : listeners) {
+			tile.sendGUINetworkData(this, crafter);
 		}
 	}
 }

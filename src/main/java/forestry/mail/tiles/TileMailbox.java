@@ -10,20 +10,13 @@
  ******************************************************************************/
 package forestry.mail.tiles;
 
-import java.util.Collection;
-import java.util.LinkedList;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
-
-import net.minecraftforge.fml.common.Optional;
 
 import forestry.api.mail.ILetter;
 import forestry.api.mail.IMailAddress;
@@ -36,9 +29,6 @@ import forestry.mail.POBox;
 import forestry.mail.PostRegistry;
 import forestry.mail.gui.ContainerMailbox;
 import forestry.mail.gui.GuiMailbox;
-import forestry.mail.triggers.MailTriggers;
-
-import buildcraft.api.statements.ITriggerExternal;
 
 public class TileMailbox extends TileBase implements IMailContainer {
 
@@ -114,13 +104,14 @@ public class TileMailbox extends TileBase implements IMailContainer {
 		return false;
 	}
 
-	@Optional.Method(modid = "BuildCraftAPI|statements")
-	@Override
-	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
-		LinkedList<ITriggerExternal> res = new LinkedList<>();
-		res.add(MailTriggers.triggerHasMail);
-		return res;
-	}
+	// TODO: Buildcraft for 1.9
+//	@Optional.Method(modid = "BuildCraftAPI|statements")
+//	@Override
+//	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
+//		LinkedList<ITriggerExternal> res = new LinkedList<>();
+//		res.add(MailTriggers.triggerHasMail);
+//		return res;
+//	}
 
 	@Override
 	public Object getGui(EntityPlayer player, int data) {

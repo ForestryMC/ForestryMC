@@ -10,9 +10,10 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
+import com.google.common.base.Predicate;
+
 import java.util.ArrayList;
 import java.util.List;
-import com.google.common.base.Predicate;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -44,7 +45,7 @@ public class BlockResourceOre extends Block implements IItemModelRegister, IBloc
 	});
 	
 	public BlockResourceOre() {
-		super(Material.rock);
+		super(Material.ROCK);
 		setHardness(3F);
 		setResistance(5F);
 		setCreativeTab(CreativeTabForestry.tabForestry);
@@ -97,11 +98,6 @@ public class BlockResourceOre extends Block implements IItemModelRegister, IBloc
 		return drops;
 	}
 
-	@Override
-	public int getDamageValue(World world, BlockPos pos) {
-		return getMetaFromState(world.getBlockState(pos));
-	}
-	
 	@Override
 	public int damageDropped(IBlockState state) {
 		return getMetaFromState(state);

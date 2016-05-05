@@ -142,7 +142,7 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 		
 		if (worldObj != null) {
 			if (worldObj.isRemote) {
-				worldObj.markBlockForUpdate(getPos());
+				worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
 				Proxies.net.sendToServer(new PacketCamouflageUpdate(this, type));
 			}
 		}

@@ -38,16 +38,10 @@ public class ArmorApiaristHelper implements IArmorApiaristHelper {
 	public int wearsItems(EntityLivingBase entity, String cause, boolean doProtect) {
 		int count = 0;
 
-		for (int i = 1; i <= 4; i++) {
-			ItemStack armorItem = entity.getEquipmentInSlot(i);
+		for (ItemStack armorItem : entity.getEquipmentAndArmor()) {
 			if (isArmorApiarist(armorItem, entity, cause, doProtect)) {
 				count++;
 			}
-		}
-
-		ItemStack heldItem = entity.getHeldItem();
-		if (isArmorApiarist(heldItem, entity, cause, doProtect)) {
-			count++;
 		}
 
 		return count;

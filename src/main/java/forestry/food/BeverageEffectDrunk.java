@@ -11,6 +11,7 @@
 package forestry.food;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
@@ -23,7 +24,7 @@ public class BeverageEffectDrunk extends BeverageEffect {
 	public BeverageEffectDrunk(int id, float chance) {
 		super(id, "for.beverage.effect.alcoholic");
 		this.chance = chance;
-		this.drunkEffect = new PotionEffect(Potion.confusion.id, 25 * 20, 0);
+		this.drunkEffect = new PotionEffect(MobEffects.NAUSEA, 25 * 20, 0);
 	}
 
 	@Override

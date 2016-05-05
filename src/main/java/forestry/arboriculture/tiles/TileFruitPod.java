@@ -190,6 +190,6 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 		} else {
 			allele = (IAlleleFruit) AlleleManager.alleleRegistry.getAllele(Constants.MOD_ID + ".fruitCocoa");
 		}
-		worldObj.markBlockForUpdate(getPos());
+		worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
 	}
 }

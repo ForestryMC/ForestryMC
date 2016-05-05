@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.arboriculture.commands;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -46,8 +47,9 @@ public final class TreeGenHelper {
 		}else{
 			pos = BlockUtil.getNextReplaceableUpPos(world, pos);
 		}
-		
-		if(BlockUtil.canPlaceTree(world, pos)){
+
+		IBlockState blockState = world.getBlockState(pos);
+		if (BlockUtil.canPlaceTree(blockState, world, pos)){
 			if (gen instanceof WorldGenBase) {
 				((WorldGenBase) gen).generate(world, pos, false);
 			} else {
