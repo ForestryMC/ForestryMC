@@ -12,6 +12,7 @@ package forestry.core.models;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -29,7 +30,6 @@ import net.minecraft.util.registry.IRegistry;
 
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.common.registry.GameData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -45,8 +45,13 @@ public class ModelManager implements IModelManager {
 	
 	private static final ModelManager instance = new ModelManager();
 	
-	private static final ArrayList<BlockModelIndex> customBlockModels = new ArrayList<>();
-	private static final ArrayList<ModelIndex> customModels = new ArrayList<>();
+	private final List<BlockModelIndex> customBlockModels = new ArrayList<>();
+	private final List<ModelIndex> customModels = new ArrayList<>();
+
+	private final List<IItemModelRegister> itemModelRegisters = new ArrayList<>();
+	private final List<IStateMapperRegister> stateMapperRegisters = new ArrayList<>();
+	private final List<IBlockColor> blockColorList = new ArrayList<>();
+	private final List<IItemColor> itemColorList = new ArrayList<>();
 
 	static {
 		ForestryAPI.modelManager = instance;
@@ -97,50 +102,67 @@ public class ModelManager implements IModelManager {
 		return new ModelResourceLocation(modID + ":" + identifier, "inventory");
 	}
 
-	/**
-	 * TODO: keep lists of each type of block and item to be registered.
-	 * Iterating over GameData.getBlockRegistry() and GameData.getItemRegistry() will be VERY slow on a big pack.
-	 */
-	@SideOnly(Side.CLIENT)
-	public static void registerModels() {
-		for (Block block : GameData.getBlockRegistry()) {
-			if (block instanceof IItemModelRegister) {
-				((IItemModelRegister) block).registerModel(Item.getItemFromBlock(block), getInstance());
-			}
-			if (block instanceof IStateMapperRegister) {
-				((IStateMapperRegister) block).registerStateMapper();
-			}
+	public void registerBlock(Block block) {
+		if (block instanceof IItemModelRegister) {
+			itemModelRegisters.add((IItemModelRegister) block);
 		}
-		for (Item item : GameData.getItemRegistry()) {
-			if (item instanceof IItemModelRegister) {
-				((IItemModelRegister) item).registerModel(item, getInstance());
-			}
+		if (block instanceof IStateMapperRegister) {
+			stateMapperRegisters.add((IStateMapperRegister) block);
+		}
+		if (block instanceof IBlockColor) {
+			blockColorList.add((IBlockColor) block);
 		}
 	}
 
-	/**
-	 * TODO: keep lists of each type of block and item to be registered.
-	 * Iterating over GameData.getBlockRegistry() and GameData.getItemRegistry() will be VERY slow on a big pack.
-	 */
+	public void registerItem(Item item) {
+		if (item instanceof IItemModelRegister) {
+			itemModelRegisters.add((IItemModelRegister) item);
+		}
+		if (item instanceof IItemColor) {
+			itemColorList.add((IItemColor) item);
+		}
+	}
+
 	@SideOnly(Side.CLIENT)
-	public static void registerItemAndBlockColors() {
+	public void registerModels() {
+		for (IItemModelRegister itemModelRegister : itemModelRegisters) {
+			Item item = null;
+			if (itemModelRegister instanceof Block) {
+				item = Item.getItemFromBlock((Block) itemModelRegister);
+			} else if (itemModelRegister instanceof Item) {
+				item = (Item) itemModelRegister;
+			}
+
+			if (item != null) {
+				itemModelRegister.registerModel(item, this);
+			}
+		}
+
+		for (IStateMapperRegister stateMapperRegister : stateMapperRegisters) {
+			stateMapperRegister.registerStateMapper();
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	public void registerItemAndBlockColors() {
 		Minecraft minecraft = Minecraft.getMinecraft();
+		
 		BlockColors blockColors = minecraft.getBlockColors();
-		ItemColors itemColors = minecraft.getItemColors();
-
-		for (Block block : GameData.getBlockRegistry()) {
-			if (block instanceof IBlockColor) {
-				blockColors.registerBlockColorHandler((IBlockColor) block, block);
+		for (IBlockColor blockColor : blockColorList) {
+			if (blockColor instanceof Block) {
+				blockColors.registerBlockColorHandler(blockColor, (Block) blockColor);
 			}
 		}
-		for (Item item : GameData.getItemRegistry()) {
-			if (item instanceof IItemColor) {
-				itemColors.registerItemColorHandler((IItemColor) item, item);
+
+		ItemColors itemColors = minecraft.getItemColors();
+		for (IItemColor itemColor : itemColorList) {
+			if (itemColor instanceof Item) {
+				itemColors.registerItemColorHandler(itemColor, (Item) itemColor);
 			}
 		}
 	}
 
-	public static void registerCustomModels(ModelBakeEvent event) {
+	public void registerCustomModels(ModelBakeEvent event) {
 		IRegistry<ModelResourceLocation, IBakedModel> registry = event.getModelRegistry();
 		for (final BlockModelIndex index : customBlockModels) {
 			registry.putObject(index.blockModelLocation, index.model);
@@ -152,11 +174,11 @@ public class ModelManager implements IModelManager {
 		}
 	}
 	
-	public static void registerCustomBlockModel(@Nonnull BlockModelIndex index) {
+	public void registerCustomBlockModel(@Nonnull BlockModelIndex index) {
 		customBlockModels.add(index);
 	}
 	
-	public static void registerCustomModel(@Nonnull ModelIndex index) {
+	public void registerCustomModel(@Nonnull ModelIndex index) {
 		customModels.add(index);
 	}
 

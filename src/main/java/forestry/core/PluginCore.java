@@ -381,7 +381,7 @@ public class PluginCore extends BlankForestryPlugin {
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public void onBakeModel(ModelBakeEvent event) {
-		ModelManager.registerCustomModels(event);
+		ModelManager.getInstance().registerCustomModels(event);
 	}
 	
 	@SubscribeEvent

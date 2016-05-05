@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.core.proxy;
 
-import com.google.common.collect.ImmutableMap;
-
 import javax.annotation.Nonnull;
 
 import net.minecraft.block.Block;
@@ -21,32 +19,24 @@ import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelBakery;
-
-
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.IStateMapper;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
-import net.minecraft.client.renderer.color.IItemColor;
-import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.resources.IResourceManager;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.client.model.animation.Animation;
-import net.minecraftforge.common.animation.ITimeValue;
-import net.minecraftforge.common.model.animation.IAnimationStateMachine;
 
 import forestry.apiculture.entities.EntityFXBee;
 import forestry.apiculture.render.ParticleRenderer;
 import forestry.apiculture.render.TextureHabitatLocator;
-import forestry.core.PluginCore;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.entities.EntityFXHoneydust;
@@ -55,7 +45,6 @@ import forestry.core.entities.EntityFXSmoke;
 import forestry.core.entities.EntityFXSnow;
 import forestry.core.fluids.Fluids;
 import forestry.core.items.ItemCrated;
-import forestry.core.items.ItemOverlay;
 import forestry.core.models.BlockModelIndex;
 import forestry.core.models.ModelIndex;
 import forestry.core.models.ModelManager;
@@ -133,14 +122,14 @@ public class ProxyRenderClient extends ProxyRender {
 	
 	@Override
 	public void registerBlockModel(@Nonnull final BlockModelIndex index) {
-		ModelManager.registerCustomBlockModel(index);
+		ModelManager.getInstance().registerCustomBlockModel(index);
 		StateMapperBase ignoreState = new BlockModeStateMapper(index);
 		registerStateMapper(index.block, ignoreState);
 	}
 	
 	@Override
 	public void registerModel(@Nonnull ModelIndex index) {
-		ModelManager.registerCustomModel(index);
+		ModelManager.getInstance().registerCustomModel(index);
 	}
 
 	@Override
@@ -149,28 +138,6 @@ public class ProxyRenderClient extends ProxyRender {
 		ModelResourceLocation modelLocation = new ModelResourceLocation("forestry:crate-filled", cleanItemName);
 		// TODO: fix crate rendering
 //		registerModel(new ModelIndex(modelLocation, new ModelCrate()));
-	}
-
-	@Override
-	public void initRendering() {
-		Minecraft minecraft = Minecraft.getMinecraft();
-
-		ItemColors itemColors = minecraft.getItemColors();
-
-//		itemColors.registerItemColorHandler(new ItemOverlayColor(),
-//				PluginCore.items.
-//		);
-	}
-
-	private static class ItemOverlayColor implements IItemColor {
-		@Override
-		public int getColorFromItemstack(ItemStack stack, int tintIndex) {
-			Item item = stack.getItem();
-			if (item instanceof ItemOverlay) {
-				return ((ItemOverlay) item).getColorFromItemStack(stack, tintIndex);
-			}
-			return 0xffffff;
-		}
 	}
 
 	@Override
@@ -190,12 +157,12 @@ public class ProxyRenderClient extends ProxyRender {
 
 	@Override
 	public void registerModels() {
-		ModelManager.registerModels();
+		ModelManager.getInstance().registerModels();
 	}
 
 	@Override
 	public void registerItemAndBlockColors() {
-		ModelManager.registerItemAndBlockColors();
+		ModelManager.getInstance().registerItemAndBlockColors();
 	}
 
 	//	@Override

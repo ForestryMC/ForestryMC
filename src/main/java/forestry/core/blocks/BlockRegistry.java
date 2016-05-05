@@ -10,9 +10,6 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -20,11 +17,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
+import forestry.core.models.ModelManager;
 import forestry.plugins.PluginManager;
 
 public abstract class BlockRegistry {
-	private final List<Block> allBlocks = new ArrayList<>();
-
 	protected <T extends Block> T registerBlock(T block, ItemBlock itemBlock, String name) {
 		if (PluginManager.getStage() != PluginManager.Stage.REGISTER) {
 			throw new RuntimeException("Tried to register Block outside of REGISTER");
@@ -32,7 +28,7 @@ public abstract class BlockRegistry {
 		block.setUnlocalizedName("for." + name);
 		GameRegistry.registerBlock(block, null, name);
 		GameRegistry.registerItem(itemBlock, name);
-		allBlocks.add(block);
+		ModelManager.getInstance().registerBlock(block);
 		return block;
 	}
 
@@ -46,15 +42,11 @@ public abstract class BlockRegistry {
 		}
 		block.setUnlocalizedName("for." + name);
 		GameRegistry.registerBlock(block, itemClass, name, itemCtorArgs);
-		allBlocks.add(block);
+		ModelManager.getInstance().registerBlock(block);
 		return block;
 	}
 
 	protected static void registerOreDictWildcard(String oreDictName, Block block) {
 		OreDictionary.registerOre(oreDictName, new ItemStack(block, 1, OreDictionary.WILDCARD_VALUE));
-	}
-	
-	public List<Block> getAllBlocks() {
-		return allBlocks;
 	}
 }

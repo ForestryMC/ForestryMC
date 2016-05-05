@@ -13,7 +13,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.arboriculture.EnumWoodType;
-import forestry.core.models.ModelManager;
+import forestry.api.core.ForestryAPI;
 import forestry.core.render.ForestryResource;
 import forestry.core.utils.Translator;
 
@@ -63,7 +63,7 @@ public class WoodHelper {
 			int meta = stack.getMetadata();
 			EnumWoodType woodType = wood.getWoodType(meta);
 			String blockKind = wood.getBlockKind();
-			return ModelManager.getInstance().getModelLocation(blockKind + "/" + woodType);
+			return ForestryAPI.modelManager.getModelLocation(blockKind + "/" + woodType);
 		}
 
 	}
