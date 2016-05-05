@@ -12,7 +12,9 @@ package forestry.core.models.baker;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -36,19 +38,29 @@ public class ModelBakerModel implements IModelBakerModel {
 	private boolean isAmbientOcclusion;
 	private VertexFormat format;
 	private TextureAtlasSprite particleSprite;
+	private final Map<EnumFacing, List<BakedQuad>> faceQuads;
+	private final List<BakedQuad> generalQuads;
 	private float[] rotation = getDefaultRotation();
 	private float[] translation = getDefaultTranslation();
 	private float[] scale = getDefaultScale();
 
 	public ModelBakerModel() {
 		models = new ArrayList<>();
+		faceQuads = new HashMap<>();
+		generalQuads = new ArrayList<>();
 		format = DefaultVertexFormats.BLOCK;
 		isGui3d = true;
 		isAmbientOcclusion = false;
+		
+		for(EnumFacing face : EnumFacing.VALUES){
+			faceQuads.put(face, new ArrayList());
+		}
 	}
 
-	private ModelBakerModel(List<IBakedModel> models, boolean isGui3d, boolean isAmbientOcclusion, VertexFormat format, float[] rotation, float[] translation, float[] scale, TextureAtlasSprite particleSprite) {
+	private ModelBakerModel(List<IBakedModel> models, Map<EnumFacing, List<BakedQuad>> faceQuads, List<BakedQuad> generalQuads, boolean isGui3d, boolean isAmbientOcclusion, VertexFormat format, float[] rotation, float[] translation, float[] scale, TextureAtlasSprite particleSprite) {
 		this.models = models;
+		this.faceQuads = faceQuads;
+		this.generalQuads = generalQuads;
 		this.isGui3d = isGui3d;
 		this.isAmbientOcclusion = isAmbientOcclusion;
 		this.format = format;
@@ -148,23 +160,30 @@ public class ModelBakerModel implements IModelBakerModel {
 	public void addModelQuads(IBakedModel model) {
 		this.models.add(model);
 	}
+	
+	@Override
+	public void addQuad(EnumFacing facing, BakedQuad quad) {
+		if(facing != null){
+			faceQuads.get(facing).add(quad);
+		}else{
+			generalQuads.add(quad);
+		}
+	}
 
 	@Override
 	public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
 		List<BakedQuad> quads = new ArrayList<>();
-		if (side == null) {
-			for (IBakedModel model : this.models) {
-				quads.addAll(model.getQuads(state, null, rand));
-			}
-		} else {
-			for (IBakedModel model : this.models) {
-				quads.addAll(model.getQuads(state, side, rand));
-			}
+		for (IBakedModel model : this.models) {
+			quads.addAll(model.getQuads(state, side, rand));
 		}
+		if(side != null){
+			quads.addAll(faceQuads.get(side));
+		}
+		quads.addAll(generalQuads);
 		return quads;
 	}
 
 	public ModelBakerModel copy() {
-		return new ModelBakerModel(models, isGui3d, isAmbientOcclusion, format, rotation, translation, scale, particleSprite);
+		return new ModelBakerModel(models, faceQuads, generalQuads, isGui3d, isAmbientOcclusion, format, rotation, translation, scale, particleSprite);
 	}
 }

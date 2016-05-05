@@ -2,6 +2,7 @@ package forestry.farming.models;
 
 import javax.annotation.Nonnull;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -30,9 +31,9 @@ public class ModelFarmBlock extends ModelBlockOverlay<BlockFarm> {
 		EnumFarmBlockTexture type = EnumFarmBlockTexture.getFromCompound(item.getTagCompound());
 
 		// Add the plain block.
-		baker.addBlockModel(blockFarm, null, getSprites(type), 0);
+		baker.addBlockModel(blockFarm, Block.FULL_BLOCK_AABB, null, getSprites(type), 0);
 		// Add the overlay block.
-		baker.addBlockModel(blockFarm, null, getOverlaySprites(EnumFarmBlockType.VALUES[item.getItemDamage()]), 0);
+		baker.addBlockModel(blockFarm, Block.FULL_BLOCK_AABB, null, getOverlaySprites(EnumFarmBlockType.VALUES[item.getItemDamage()]), 0);
 	}
 
 	@Override
@@ -43,9 +44,9 @@ public class ModelFarmBlock extends ModelBlockOverlay<BlockFarm> {
 		TextureAtlasSprite[] textures = getSprites(farm.getFarmBlockTexture());
 
 		// Add the plain block.
-		baker.addBlockModel(blockFarm, pos, textures, 0);
+		baker.addBlockModel(blockFarm, Block.FULL_BLOCK_AABB, pos, textures, 0);
 		// Add the overlay block.
-		baker.addBlockModel(blockFarm, pos, getOverlaySprites(farm.getFarmBlockType()), 0);
+		baker.addBlockModel(blockFarm, Block.FULL_BLOCK_AABB, pos, getOverlaySprites(farm.getFarmBlockType()), 0);
 		
 		// Set the particle sprite
 		baker.setParticleSprite(textures[0]);

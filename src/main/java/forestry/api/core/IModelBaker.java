@@ -12,6 +12,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -22,15 +23,19 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public interface IModelBaker {
 
-	void setRenderBoundsFromBlock(@Nonnull Block block);
+	void setRenderBounds(@Nonnull AxisAlignedBB renderBounds);
 
-	void setRenderBounds(double d, double e, double f, double g, double h, double i );
+	void setRenderBounds(double d, double e, double f, double g, double h, double i);
 
 	void setColorIndex(int color);
 
-	void addBlockModel(@Nonnull Block block, @Nullable BlockPos pos, @Nonnull TextureAtlasSprite[] sprites, int colorIndex);
+	void addBlockModel(@Nonnull Block block, @Nonnull AxisAlignedBB renderBounds, @Nullable BlockPos pos, @Nonnull TextureAtlasSprite[] sprites, int colorIndex);
 	
-	void addBlockModel(@Nonnull Block block, @Nullable BlockPos pos, @Nonnull TextureAtlasSprite sprites, int colorIndex);
+	void addBlockModel(@Nonnull Block block, @Nonnull AxisAlignedBB renderBounds, @Nullable BlockPos pos, @Nonnull TextureAtlasSprite sprites, int colorIndex);
+	
+	void addModel(@Nonnull AxisAlignedBB renderBounds, @Nonnull TextureAtlasSprite[] textures, int colorIndex);
+	
+	void addModel(@Nonnull AxisAlignedBB renderBounds, @Nonnull TextureAtlasSprite texture, int colorIndex);
 	
 	void addBakedModel(@Nonnull IBakedModel model);
 	

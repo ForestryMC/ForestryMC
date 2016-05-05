@@ -58,13 +58,12 @@ public class ModelBaker implements IModelBaker {
 	protected final float[] defUVs = new float[] { 0, 0, 1, 1 };
 
 	@Override
-	public void setRenderBoundsFromBlock(@Nonnull Block block) {
-		if (block == null) {
+	public void setRenderBounds(@Nonnull AxisAlignedBB renderBounds) {
+		if (renderBounds == null) {
 			return;
 		}
 
-		//TODO: Fixme
-		renderBounds = Block.FULL_BLOCK_AABB;
+		this.renderBounds = renderBounds;
 	}
 
 	@Override
@@ -80,25 +79,49 @@ public class ModelBaker implements IModelBaker {
 	}
 	
 	@Override
-	public void addBlockModel(@Nonnull Block block, @Nullable BlockPos pos, @Nonnull TextureAtlasSprite[] textures, int colorIndex) {
-		setRenderBoundsFromBlock(block);
+	public void addModel(AxisAlignedBB renderBounds, @Nonnull TextureAtlasSprite[] textures, int colorIndex) {
+		setRenderBounds(renderBounds);
 		
 		setColorIndex(colorIndex);
 		
-		World world = Proxies.common.getRenderWorld();
-		IBlockState blockState = world.getBlockState(pos);
 		for (EnumFacing facing : EnumFacing.VALUES) {
-			if (pos == null || block.shouldSideBeRendered(blockState, world, pos, facing)) {
+			addFace(facing, textures[facing.ordinal()]);
+		}
+
+		setRenderBounds(Block.FULL_BLOCK_AABB);
+	}
+	
+	@Override
+	public void addModel(AxisAlignedBB renderBounds, @Nonnull TextureAtlasSprite texture, int colorIndex) {
+		addModel(renderBounds, new TextureAtlasSprite[]{ texture, texture, texture, texture, texture, texture }, colorIndex);
+	}
+	
+	@Override
+	public void addBlockModel(@Nonnull Block block, AxisAlignedBB renderBounds, @Nullable BlockPos pos, @Nonnull TextureAtlasSprite[] textures, int colorIndex) {
+		setRenderBounds(renderBounds);
+		
+		setColorIndex(colorIndex);
+		
+		if(pos != null){
+			World world = Proxies.common.getRenderWorld();
+			IBlockState blockState = world.getBlockState(pos);
+			for (EnumFacing facing : EnumFacing.VALUES) {
+				if (block.shouldSideBeRendered(blockState, world, pos, facing)) {
+					addFace(facing, textures[facing.ordinal()]);
+				}
+			}
+		}else {
+			for (EnumFacing facing : EnumFacing.VALUES) {
 				addFace(facing, textures[facing.ordinal()]);
 			}
 		}
 
-		setRenderBounds(0, 0, 0, 1, 1, 1);
+		setRenderBounds(Block.FULL_BLOCK_AABB);
 	}
 
 	@Override
-	public void addBlockModel(@Nonnull Block block, @Nullable BlockPos pos, @Nonnull TextureAtlasSprite texture, int colorIndex) {
-		addBlockModel(block, pos, new TextureAtlasSprite[]{ texture ,  texture, texture, texture, texture, texture }, colorIndex);
+	public void addBlockModel(@Nonnull Block block, @Nonnull AxisAlignedBB renderBounds, @Nullable BlockPos pos, @Nonnull TextureAtlasSprite texture, int colorIndex) {
+		addBlockModel(block, renderBounds, pos, new TextureAtlasSprite[]{ texture, texture, texture, texture, texture, texture }, colorIndex);
 	}
 	
 	@Override
@@ -178,7 +201,7 @@ public class ModelBaker implements IModelBaker {
 			return;
 		}
 
-		boolean isEdge;
+		/*boolean isEdge;
 		switch (facing) {
 			case WEST:
 				isEdge = renderBounds.minX < 0.0001;
@@ -200,12 +223,12 @@ public class ModelBaker implements IModelBaker {
 				break;
 			default:
 				return;
-		}
+		}*/
 
 		Vector3f to = new Vector3f((float) renderBounds.minX * 16.0f, (float) renderBounds.minY * 16.0f, (float) renderBounds.minZ * 16.0f);
 		Vector3f from = new Vector3f((float) renderBounds.maxX * 16.0f, (float) renderBounds.maxY * 16.0f, (float) renderBounds.maxZ * 16.0f);
 
-		faces.add(new ModelBakerFace(facing, isEdge, colorIndex, to, from, defUVs, sprite));
+		faces.add(new ModelBakerFace(facing/*, isEdge*/, colorIndex, to, from, defUVs, sprite));
 	}
 
 	@Override
@@ -218,7 +241,7 @@ public class ModelBaker implements IModelBaker {
 		
 		//Add baked models to the current model.
 		for(IBakedModel bakedModel : bakedModels){
-			this.currentModel.addModelQuads(bakedModel);
+			currentModel.addModelQuads(bakedModel);
 		}
 
 		for (ModelBakerFace face : faces) {
@@ -229,13 +252,9 @@ public class ModelBaker implements IModelBaker {
 			final BlockPartFace bpf = new BlockPartFace(myFace, face.colorIndex, "", uv);
 
 			BakedQuad bf = faceBakery.makeBakedQuad(face.to, face.from, bpf, face.spite, myFace, mr, null, true, true);
-//			bf = new IColoredBakedQuad.ColoredBakedQuad(bf.getVertexData(), face.colorIndex, bf.getFace());
 
-//			if (face.isEdge) {
-//				this.currentModel.getFaceQuads(myFace).add(bf);
-//			} else {
-//				this.currentModel.getGeneralQuads().add(bf);
-//			}
+			//if (face.isEdge) {
+			currentModel.addQuad(myFace, bf);
 		}
 		
 		return currentModel;

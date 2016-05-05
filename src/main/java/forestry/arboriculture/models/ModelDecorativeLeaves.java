@@ -92,13 +92,13 @@ public class ModelDecorativeLeaves extends ModelBlockOverlay<BlockDecorativeLeav
 		TextureAtlasSprite leaveSprite = leafSpriteProvider.getSprite(false, Proxies.render.fancyGraphicsEnabled());
 		
 		// Render the plain leaf block.
-		baker.addBlockModel(block, null, leaveSprite, 0);
+		baker.addBlockModel(block, Block.FULL_BLOCK_AABB, null, leaveSprite, 0);
 
 		// Render overlay for fruit leaves.
 		TextureAtlasSprite fruitSprite = TextureManager.getInstance().getSprite(genome.getFruitProvider().getDecorativeSpriteIndex());
 
 		if (fruitSprite != null) {
-			baker.addBlockModel(block, null, fruitSprite, 1);
+			baker.addBlockModel(block, Block.FULL_BLOCK_AABB, null, fruitSprite, 1);
 		}
 		
 		// Set the particle sprite

@@ -63,7 +63,7 @@ public abstract class ModelBlockOverlay<B extends Block> implements IBakedModel 
 		}
 		B bBlock = blockClass.cast(block);
 
-		baker.setRenderBoundsFromBlock(block);
+		baker.setRenderBounds(block.getBoundingBox(state, world, pos));
 		bakeWorldBlock(bBlock, world, pos, stateExtended, baker);
 
 		latestBlockModel = baker.bakeModel(false);
@@ -145,7 +145,7 @@ public abstract class ModelBlockOverlay<B extends Block> implements IBakedModel 
 			}
 			B bBlock = blockClass.cast(block);
 
-			baker.setRenderBoundsFromBlock(block);
+			baker.setRenderBounds(block.getBoundingBox(block.getStateFromMeta(stack.getItemDamage()), world, null));
 			bakeInventoryBlock(bBlock, stack, baker);
 
 			return latestItemModel = baker.bakeModel(true);

@@ -12,6 +12,7 @@ package forestry.arboriculture.models;
 
 import javax.annotation.Nonnull;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -52,7 +53,7 @@ public class ModelLeaves extends ModelBlockOverlay<BlockForestryLeaves> {
 			return;
 		}
 		
-		baker.addBlockModel(block, null, leavesIcon, 0);
+		baker.addBlockModel(block, Block.FULL_BLOCK_AABB, null, leavesIcon, 0);
 
 		// add fruit
 		if (!leaves.hasFruit()) {
@@ -63,7 +64,7 @@ public class ModelLeaves extends ModelBlockOverlay<BlockForestryLeaves> {
 		if (fruitTexture == null) {
 			return;
 		}
-		baker.addBlockModel(block, null, fruitTexture, 1);
+		baker.addBlockModel(block, Block.FULL_BLOCK_AABB, null, fruitTexture, 1);
 	}
 
 	@Override
@@ -76,13 +77,13 @@ public class ModelLeaves extends ModelBlockOverlay<BlockForestryLeaves> {
 		TextureAtlasSprite leaveSprite = tile.getLeaveSprite(Proxies.render.fancyGraphicsEnabled());
 		
 		// Render the plain leaf block.
-		baker.addBlockModel(block, pos, leaveSprite, 0);
+		baker.addBlockModel(block, Block.FULL_BLOCK_AABB, pos, leaveSprite, 0);
 
 		// Render overlay for fruit leaves.
 		TextureAtlasSprite fruitSprite = tile.getFruitSprite();
 
 		if (fruitSprite != null) {
-			baker.addBlockModel(block, pos, fruitSprite, 1);
+			baker.addBlockModel(block, Block.FULL_BLOCK_AABB, pos, fruitSprite, 1);
 		}
 		
 		// Set the particle sprite

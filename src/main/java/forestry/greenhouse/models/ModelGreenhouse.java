@@ -60,12 +60,12 @@ public class ModelGreenhouse extends ModelBlockOverlay<BlockGreenhouse> {
 		else if (block.getGreenhouseType() == BlockGreenhouseType.GLASS) {
 			TextureAtlasSprite glassSprite = BlockGreenhouseType.getSprite(BlockGreenhouseType.GLASS, null, null, world, pos);
 			
-			baker.addBlockModel(block, pos, BlockGreenhouseType.getSprite(BlockGreenhouseType.GLASS, null, null, world, pos), 100);
+			baker.addBlockModel(block, Block.FULL_BLOCK_AABB, pos, BlockGreenhouseType.getSprite(BlockGreenhouseType.GLASS, null, null, world, pos), 100);
 			baker.setParticleSprite(glassSprite);
 		} else {
 			TextureAtlasSprite plainSprite = BlockGreenhouseType.getSprite(BlockGreenhouseType.PLAIN, null, null, world, pos);
 			
-			baker.addBlockModel(block, pos, BlockGreenhouseType.getSprite(BlockGreenhouseType.PLAIN, null, null, world, pos), 100);
+			baker.addBlockModel(block, Block.FULL_BLOCK_AABB, pos, BlockGreenhouseType.getSprite(BlockGreenhouseType.PLAIN, null, null, world, pos), 100);
 			baker.setParticleSprite(plainSprite);
 		}
 
@@ -74,7 +74,7 @@ public class ModelGreenhouse extends ModelBlockOverlay<BlockGreenhouse> {
 			for (EnumFacing facing : EnumFacing.VALUES) {
 				sprite[facing.ordinal()] = BlockGreenhouseType.getSprite(block.getGreenhouseType(), facing, stateExtended, world, pos);
 			}
-			baker.addBlockModel(block, pos, sprite, 101);
+			baker.addBlockModel(block, Block.FULL_BLOCK_AABB, pos, sprite, 101);
 		}
 	}
 

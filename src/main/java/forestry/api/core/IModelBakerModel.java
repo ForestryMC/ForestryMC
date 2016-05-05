@@ -5,10 +5,14 @@
  ******************************************************************************/
 package forestry.api.core;
 
+import java.util.List;
+
+import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.SimpleBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
-
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -22,6 +26,8 @@ public interface IModelBakerModel extends IBakedModel {
 	void setParticleSprite(TextureAtlasSprite particleSprite);
 	
 //	void setFormat(VertexFormat formate);
+	
+    void addQuad(EnumFacing facing, BakedQuad quad);
 	
 	void setRotation(float[] rotation);
 
