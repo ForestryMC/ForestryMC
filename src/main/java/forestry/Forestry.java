@@ -100,6 +100,8 @@ public class Forestry {
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
 
 		PluginManager.runInit();
+
+		Proxies.render.registerItemAndBlockColors();
 	}
 
 	@EventHandler
