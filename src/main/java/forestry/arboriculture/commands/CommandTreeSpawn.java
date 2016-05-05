@@ -15,7 +15,6 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
-import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.PlayerNotFoundException;
 import net.minecraft.entity.player.EntityPlayer;
@@ -41,38 +40,29 @@ public final class CommandTreeSpawn extends SubCommand {
 	}
 
 	@Override
-	public final void processSubCommand(ICommandSender sender, String[] arguments) throws PlayerNotFoundException, SpeciesNotFoundException, TemplateNotFoundException {
-		if (arguments.length < 1 || arguments.length > 2) {
+	public void executeSubCommand(MinecraftServer server, ICommandSender sender, String[] args) throws PlayerNotFoundException, SpeciesNotFoundException, TemplateNotFoundException {
+		if (args.length < 1 || args.length > 2) {
 			printHelp(sender);
 			return;
 		}
 
-		EntityPlayer player;
-		String treeName;
-		try {
-			player = CommandBase.getPlayer((MinecraftServer) sender, (ICommandSender) arguments[arguments.length - 1], null);
-			String[] argumentsWithoutPlayer = new String[arguments.length - 1];
-			System.arraycopy(arguments, 0, argumentsWithoutPlayer, 0, arguments.length - 1);
-			treeName = StringUtils.join(argumentsWithoutPlayer, " ");
-		} catch (PlayerNotFoundException e) {
-			player = CommandBase.getPlayer((MinecraftServer) sender, (ICommandSender) sender.getName(), null);
-			treeName = StringUtils.join(arguments, " ");
-		}
+		if (sender instanceof EntityPlayer) {
+			EntityPlayer player = (EntityPlayer) sender;
+			String treeName = StringUtils.join(args, " ");
 
-		boolean success = treeSpawner.spawn(sender, treeName, player);
-		if (!success) {
-			printHelp(sender);
+			boolean success = treeSpawner.spawn(sender, treeName, player);
+			if (!success) {
+				printHelp(sender);
+			}
 		}
 	}
 
 	@Override
-	public List<String> addTabCompletionOptions(ICommandSender sender, String[] parameters, BlockPos pos) {
-		if (parameters.length == 1) {
-			List<String> tabCompletion = CommandHelpers.getListOfStringsMatchingLastWord(parameters, getSpecies());
+	public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos pos) {
+		if (args.length == 1) {
+			List<String> tabCompletion = CommandHelpers.getListOfStringsMatchingLastWord(args, getSpecies());
 			tabCompletion.add("help");
 			return tabCompletion;
-		} else if (parameters.length == 2) {
-			return CommandHelpers.getListOfStringsMatchingLastWord(parameters, CommandHelpers.getPlayers());
 		}
 		return null;
 	}

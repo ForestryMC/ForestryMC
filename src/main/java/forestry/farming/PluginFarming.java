@@ -108,34 +108,34 @@ public class PluginFarming extends BlankForestryPlugin {
 		}
 		
 		Farmables.farmables.put("farmOrchard", new ArrayList<>());
-		Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(Blocks.wheat, 7));
-		Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(Blocks.potatoes, 7));
-		Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(Blocks.carrots, 7));
+		Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(Blocks.WHEAT, 7));
+		Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(Blocks.POTATOES, 7));
+		Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(Blocks.CARROTS, 7));
 
 		Farmables.farmables.put("farmShroom", new ArrayList<>());
 		Farmables.farmables.get("farmShroom").add(new FarmableVanillaMushroom(Blocks.BROWN_MUSHROOM, 0));
 		Farmables.farmables.get("farmShroom").add(new FarmableVanillaMushroom(Blocks.RED_MUSHROOM, 0));
 
 		Farmables.farmables.put("farmWheat", new ArrayList<>());
-		Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(new ItemStack(Items.WHEAT_SEEDS), Blocks.wheat, 7));
+		Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(new ItemStack(Items.WHEAT_SEEDS), Blocks.WHEAT, 7));
 
 		Farmables.farmables.put("farmGourd", new ArrayList<>());
 		Farmables.farmables.get("farmGourd").add(
-				new FarmableGourd(new ItemStack(Items.PUMPKIN_SEEDS), new ItemStack(Blocks.pumpkin_stem), new ItemStack(Blocks.pumpkin)));
-		Farmables.farmables.get("farmGourd").add(new FarmableGourd(new ItemStack(Items.MELON_SEEDS), new ItemStack(Blocks.melon_stem), new ItemStack(Blocks.melon_block)));
+				new FarmableGourd(new ItemStack(Items.PUMPKIN_SEEDS), new ItemStack(Blocks.PUMPKIN_STEM), new ItemStack(Blocks.PUMPKIN)));
+		Farmables.farmables.get("farmGourd").add(new FarmableGourd(new ItemStack(Items.MELON_SEEDS), new ItemStack(Blocks.MELON_STEM), new ItemStack(Blocks.MELON_BLOCK)));
 
 		Farmables.farmables.put("farmInfernal", new ArrayList<>());
-		Farmables.farmables.get("farmInfernal").add(new FarmableGenericCrop(new ItemStack(Items.nether_wart), Blocks.nether_wart, 3));
+		Farmables.farmables.get("farmInfernal").add(new FarmableGenericCrop(new ItemStack(Items.NETHER_WART), Blocks.NETHER_WART, 3));
 
 		Farmables.farmables.put("farmPoales", new ArrayList<>());
-		Farmables.farmables.get("farmPoales").add(new FarmableStacked(Blocks.reeds, 3, 0));
+		Farmables.farmables.get("farmPoales").add(new FarmableStacked(Blocks.REEDS, 3, 0));
 
 		Farmables.farmables.put("farmSucculentes", new ArrayList<>());
 		Farmables.farmables.get("farmSucculentes").add(new FarmableStacked(Blocks.CACTUS, 3, 0));
 
 		Farmables.farmables.put("farmVegetables", new ArrayList<>());
-		Farmables.farmables.get("farmVegetables").add(new FarmableGenericCrop(new ItemStack(Items.POTATO), Blocks.potatoes, 7));
-		Farmables.farmables.get("farmVegetables").add(new FarmableGenericCrop(new ItemStack(Items.CARROT), Blocks.carrots, 7));
+		Farmables.farmables.get("farmVegetables").add(new FarmableGenericCrop(new ItemStack(Items.POTATO), Blocks.POTATOES, 7));
+		Farmables.farmables.get("farmVegetables").add(new FarmableGenericCrop(new ItemStack(Items.CARROT), Blocks.CARROTS, 7));
 
 		proxy.initializeModels();
 
@@ -318,7 +318,7 @@ public class PluginFarming extends BlankForestryPlugin {
 					"TDT",
 					'#', basic,
 					'T', "gearTin",
-					'D', Blocks.trapdoor);
+					'D', Blocks.TRAPDOOR);
 
 			RecipeUtil.addRecipe(valve,
 					" # ",

@@ -277,8 +277,8 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 				FlowerManager.FlowerTypeJungle);
 		registerGrowthRule(new GrowthRuleMycelium(), FlowerManager.FlowerTypeMushrooms);
 		registerGrowthRule(new GrowthRuleNone(), FlowerManager.FlowerTypeEnd);
-		registerGrowthRule(new GrowthRuleFertilize(Blocks.melon_stem, Blocks.pumpkin_stem), FlowerManager.FlowerTypeGourd);
-		registerGrowthRule(new GrowthRuleFertilize(Blocks.wheat), FlowerManager.FlowerTypeWheat);
+		registerGrowthRule(new GrowthRuleFertilize(Blocks.MELON_STEM, Blocks.PUMPKIN_STEM), FlowerManager.FlowerTypeGourd);
+		registerGrowthRule(new GrowthRuleFertilize(Blocks.WHEAT), FlowerManager.FlowerTypeWheat);
 	}
 
 	@Override

@@ -98,8 +98,8 @@ public class PluginMail extends BlankForestryPlugin {
 			stampGlue = beeItems.honeyDrop;
 			letterGlue = beeItems.propolis.getWildcard();
 		} else {
-			stampGlue = Items.slime_ball;
-			letterGlue = Items.slime_ball;
+			stampGlue = Items.SLIME_BALL;
+			letterGlue = Items.SLIME_BALL;
 		}
 
 		RecipeUtil.addShapelessRecipe(items.letters.getItemStack(), Items.PAPER, letterGlue);

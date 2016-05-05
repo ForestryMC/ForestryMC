@@ -48,7 +48,7 @@ public class PluginFood extends BlankForestryPlugin {
 
 	@Override
 	public void preInit() {
-		LiquidRegistryHelper.registerLiquidContainer(Fluids.SHORT_MEAD, Constants.BUCKET_VOLUME, items.beverage.get(EnumBeverage.MEAD_SHORT, 1), new ItemStack(Items.glass_bottle));
+		LiquidRegistryHelper.registerLiquidContainer(Fluids.SHORT_MEAD, Constants.BUCKET_VOLUME, items.beverage.get(EnumBeverage.MEAD_SHORT, 1), new ItemStack(Items.GLASS_BOTTLE));
 
 		ItemRegistryApiculture beeItems = PluginApiculture.items;
 		if (beeItems != null) {

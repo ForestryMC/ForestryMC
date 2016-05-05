@@ -27,6 +27,7 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -55,7 +56,7 @@ import forestry.apiculture.tiles.TileCandle;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemStackUtil;
 
-public class BlockCandle extends BlockTorch implements IItemModelRegister, ITileEntityProvider {
+public class BlockCandle extends BlockTorch implements IItemModelRegister, ITileEntityProvider, IBlockColor {
 
 	private static final ImmutableMap<String, Integer> colours;
 	public static final Set<Item> lightingItems;
@@ -320,5 +321,14 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister, ITile
 
 	public ItemStack getLitCandle(int amount) {
 		return new ItemStack(this, amount, 1);
+	}
+
+	@Override
+	public int colorMultiplier(IBlockState state, IBlockAccess worldIn, BlockPos pos, int tintIndex) {
+		TileCandle tileCandle = TileUtil.getTile(worldIn, pos, TileCandle.class);
+		if (tileCandle != null) {
+			return tileCandle.getColour();
+		}
+		return 0xffffff;
 	}
 }

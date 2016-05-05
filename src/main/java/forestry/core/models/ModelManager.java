@@ -14,10 +14,15 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.color.BlockColors;
+import net.minecraft.client.renderer.color.IBlockColor;
+import net.minecraft.client.renderer.color.IItemColor;
+import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.IRegistry;
@@ -92,8 +97,16 @@ public class ModelManager implements IModelManager {
 		return new ModelResourceLocation(modID + ":" + identifier, "inventory");
 	}
 
+	/**
+	 * TODO: keep lists of each type of block and item to be registered.
+	 * Iterating over GameData.getBlockRegistry() and GameData.getItemRegistry() will be VERY slow on a big pack.
+	 */
 	@SideOnly(Side.CLIENT)
 	public static void registerModels() {
+		Minecraft minecraft = Minecraft.getMinecraft();
+		BlockColors blockColors = minecraft.getBlockColors();
+		ItemColors itemColors = minecraft.getItemColors();
+
 		for (Block block : GameData.getBlockRegistry()) {
 			if (block instanceof IItemModelRegister) {
 				((IItemModelRegister) block).registerModel(Item.getItemFromBlock(block), getInstance());
@@ -101,10 +114,16 @@ public class ModelManager implements IModelManager {
 			if (block instanceof IStateMapperRegister) {
 				((IStateMapperRegister) block).registerStateMapper();
 			}
+			if (block instanceof IBlockColor) {
+				blockColors.registerBlockColorHandler((IBlockColor) block, block);
+			}
 		}
 		for (Item item : GameData.getItemRegistry()) {
 			if (item instanceof IItemModelRegister) {
 				((IItemModelRegister) item).registerModel(item, getInstance());
+			}
+			if (item instanceof IItemColor) {
+				itemColors.registerItemColorHandler((IItemColor) item, item);
 			}
 		}
 	}

@@ -27,6 +27,7 @@ import java.util.Set;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.chunk.IChunkProvider;
 
 import net.minecraftforge.common.config.Property;
@@ -150,12 +151,12 @@ public class PluginLepidopterology extends BlankForestryPlugin {
 		File configFile = new File(Forestry.instance.getConfigFolder(), CONFIG_CATEGORY + ".cfg");
 		loadConfig(configFile);
 	}
-	
+
 	@Override
-	public void populateChunk(IChunkProvider chunkProvider, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated) {
+	public void populateChunk(IChunkGenerator chunkGenerator, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated) {
 		if(generateCocoons){
 			if (generateCocoonsAmount > 0.0) {
-				CocoonDecorator.decorateCocoons(chunkProvider, world, rand, chunkX, chunkZ, hasVillageGenerated);
+				CocoonDecorator.decorateCocoons(chunkGenerator, world, rand, chunkX, chunkZ, hasVillageGenerated);
 			}
 		}
 	}
@@ -201,7 +202,7 @@ public class PluginLepidopterology extends BlankForestryPlugin {
 		String[] defaultRaritys = butterflyRarity.toArray(new String[butterflyRarity.size()]);
 
 		Property rarityConf = config.get("butterfly.alleles", "rarity", defaultRaritys);
-		rarityConf.comment = Translator.translateToLocal("for.config.butterfly.alleles.rarity");
+		rarityConf.setComment(Translator.translateToLocal("for.config.butterfly.alleles.rarity"));
 		
 		String[] configRaritys = rarityConf.getStringList();
 		for(String rarity : configRaritys){
@@ -240,7 +241,7 @@ public class PluginLepidopterology extends BlankForestryPlugin {
 		String[] defaultLoot = lootList.toArray(new String[lootList.size()]);
 		
 		Property lootConf = config.get("butterfly.cocoons.alleles.loot", cocoon.getUID(), defaultLoot);
-		lootConf.comment = Translator.translateToLocal("for.config.butterfly.alleles.loot");
+		lootConf.setComment(Translator.translateToLocal("for.config.butterfly.alleles.loot"));
 		
 		String[] configLoot = lootConf.getStringList();
 		for(String loot : configLoot){

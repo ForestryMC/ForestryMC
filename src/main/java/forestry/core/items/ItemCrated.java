@@ -89,11 +89,11 @@ public class ItemCrated extends ItemForestry {
 
 	// TODO: crate rendering
 //	@Override
-//	public int getColorFromItemStack(ItemStack stack, int renderPass) {
+//	public int getColorFromItemstack(ItemStack stack, int renderPass) {
 //		if (getContained() == null || renderPass == 100) {
-//			return super.getColorFromItemStack(stack, renderPass);
+//			return super.getColorFromItemstack(stack, renderPass);
 //		}
-//		return getContained().getItem().getColorFromItemStack(getContained(), renderPass);
+//		return getContained().getItem().getColorFromItemstack(getContained(), renderPass);
 //	}
 
 }

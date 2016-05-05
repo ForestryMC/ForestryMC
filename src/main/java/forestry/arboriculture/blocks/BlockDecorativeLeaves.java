@@ -10,7 +10,10 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -31,11 +34,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.api.core.Tabs;
+import forestry.arboriculture.PluginArboriculture;
 import forestry.arboriculture.blocks.property.PropertyTreeType;
 import forestry.arboriculture.genetics.TreeDefinition;
+import forestry.arboriculture.tiles.TileLeaves;
 import forestry.core.proxy.Proxies;
+import forestry.core.tiles.TileUtil;
 
-public abstract class BlockDecorativeLeaves extends Block implements IShearable, IItemModelRegister {
+public abstract class BlockDecorativeLeaves extends Block implements IShearable, IItemModelRegister, IBlockColor {
 	private static final int VARIANTS_PER_BLOCK = 16;
 	private static final int VARIANTS_META_MASK = VARIANTS_PER_BLOCK - 1;
 
@@ -192,6 +198,21 @@ public abstract class BlockDecorativeLeaves extends Block implements IShearable,
 			return 10;
 		} else {
 			return 5;
+		}
+	}
+
+	@Override
+	public int colorMultiplier(IBlockState state, IBlockAccess worldIn, BlockPos pos, int tintIndex) {
+		TileLeaves leaves = TileUtil.getTile(worldIn, pos, TileLeaves.class);
+		if (leaves == null) {
+			return PluginArboriculture.proxy.getFoliageColorBasic();
+		}
+
+		if (tintIndex == 0) {
+			EntityPlayerSP thePlayer = Minecraft.getMinecraft().thePlayer;
+			return leaves.getFoliageColour(thePlayer);
+		} else {
+			return leaves.getFruitColour();
 		}
 	}
 }

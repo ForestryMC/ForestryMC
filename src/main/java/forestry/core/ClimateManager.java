@@ -27,7 +27,7 @@ public class ClimateManager implements IClimateManager{
 		if(state != null){
 			return state.getExactTemperature();
 		}
-		return biome.temperature;
+		return biome.getTemperature();
 	}
 
 	@Override
@@ -38,7 +38,7 @@ public class ClimateManager implements IClimateManager{
 		if(state != null){
 			return state.getExactHumidity();
 		}
-		return biome.rainfall;
+		return biome.getRainfall();
 	}
 
 }

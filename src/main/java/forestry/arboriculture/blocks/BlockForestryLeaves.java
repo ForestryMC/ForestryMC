@@ -23,7 +23,10 @@ import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -72,7 +75,7 @@ import forestry.core.tiles.TileUtil;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.ItemStackUtil;
 
-public class BlockForestryLeaves extends BlockLeaves implements ITileEntityProvider, IGrowable, IItemModelRegister {
+public class BlockForestryLeaves extends BlockLeaves implements ITileEntityProvider, IGrowable, IItemModelRegister, IBlockColor {
 
 	public BlockForestryLeaves() {
 		setCreativeTab(Tabs.tabArboriculture);
@@ -338,6 +341,21 @@ public class BlockForestryLeaves extends BlockLeaves implements ITileEntityProvi
 		TileLeaves leafTile = TileUtil.getTile(world, pos, TileLeaves.class);
 		if (leafTile != null) {
 			leafTile.addRipeness(0.5f);
+		}
+	}
+
+	@Override
+	public int colorMultiplier(IBlockState state, IBlockAccess worldIn, BlockPos pos, int tintIndex) {
+		TileLeaves leaves = TileUtil.getTile(worldIn, pos, TileLeaves.class);
+		if (leaves == null) {
+			return PluginArboriculture.proxy.getFoliageColorBasic();
+		}
+
+		if (tintIndex == 0) {
+			EntityPlayerSP thePlayer = Minecraft.getMinecraft().thePlayer;
+			return leaves.getFoliageColour(thePlayer);
+		} else {
+			return leaves.getFruitColour();
 		}
 	}
 }

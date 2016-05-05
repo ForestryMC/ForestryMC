@@ -73,7 +73,7 @@ public class SlotCrafter extends Slot {
 
 		this.amountCrafted = 0;
 
-		if (stack.getItem() == Item.getItemFromBlock(Blocks.crafting_table)) {
+		if (stack.getItem() == Item.getItemFromBlock(Blocks.CRAFTING_TABLE)) {
 			this.thePlayer.triggerAchievement(AchievementList.buildWorkBench);
 		}
 
@@ -81,7 +81,7 @@ public class SlotCrafter extends Slot {
 			this.thePlayer.triggerAchievement(AchievementList.buildPickaxe);
 		}
 
-		if (stack.getItem() == Item.getItemFromBlock(Blocks.furnace)) {
+		if (stack.getItem() == Item.getItemFromBlock(Blocks.FURNACE)) {
 			this.thePlayer.triggerAchievement(AchievementList.buildFurnace);
 		}
 
@@ -89,11 +89,11 @@ public class SlotCrafter extends Slot {
 			this.thePlayer.triggerAchievement(AchievementList.buildHoe);
 		}
 
-		if (stack.getItem() == Items.bread) {
+		if (stack.getItem() == Items.BREAD) {
 			this.thePlayer.triggerAchievement(AchievementList.makeBread);
 		}
 
-		if (stack.getItem() == Items.cake) {
+		if (stack.getItem() == Items.CAKE) {
 			this.thePlayer.triggerAchievement(AchievementList.bakeCake);
 		}
 
@@ -105,15 +105,15 @@ public class SlotCrafter extends Slot {
 			this.thePlayer.triggerAchievement(AchievementList.buildSword);
 		}
 
-		if (stack.getItem() == Item.getItemFromBlock(Blocks.enchanting_table)) {
+		if (stack.getItem() == Item.getItemFromBlock(Blocks.ENCHANTING_TABLE)) {
 			this.thePlayer.triggerAchievement(AchievementList.enchantments);
 		}
 
-		if (stack.getItem() == Item.getItemFromBlock(Blocks.bookshelf)) {
+		if (stack.getItem() == Item.getItemFromBlock(Blocks.BOOKSHELF)) {
 			this.thePlayer.triggerAchievement(AchievementList.bookcase);
 		}
 
-		if (stack.getItem() == Items.golden_apple && stack.getMetadata() == 1) {
+		if (stack.getItem() == Items.GOLDEN_APPLE && stack.getMetadata() == 1) {
 			this.thePlayer.triggerAchievement(AchievementList.overpowered);
 		}
 	}

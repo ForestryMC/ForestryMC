@@ -76,7 +76,7 @@ public abstract class EntityMinecartBeeHousingBase extends EntityMinecartContain
 
 	@Override
 	public EnumHumidity getHumidity() {
-		return EnumHumidity.getFromValue(getBiome().rainfall);
+		return EnumHumidity.getFromValue(getBiome().getRainfall());
 	}
 
 	@Override

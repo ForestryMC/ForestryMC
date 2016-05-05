@@ -137,7 +137,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 
 	@Override
 	public float getExactHumidity() {
-		return getBiome().rainfall + tempChange;
+		return getBiome().getRainfall() + tempChange;
 	}
 	
 	@Override
@@ -153,7 +153,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 
 	@Override
 	public void addHumidityChange(float change, float boundaryDown, float boundaryUp) {
-		float humidity = getBiome().rainfall;
+		float humidity = getBiome().getRainfall();
 
 		humidChange += change;
 		humidChange = Math.max(boundaryDown - humidity, humidChange);

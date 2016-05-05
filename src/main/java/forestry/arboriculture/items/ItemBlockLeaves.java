@@ -12,6 +12,7 @@ package forestry.arboriculture.items;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -25,7 +26,7 @@ import forestry.core.items.ItemBlockForestry;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Translator;
 
-public class ItemBlockLeaves extends ItemBlockForestry<BlockForestryLeaves> {
+public class ItemBlockLeaves extends ItemBlockForestry<BlockForestryLeaves> implements IItemColor {
 
 	public ItemBlockLeaves(Block block) {
 		super(block);
@@ -58,7 +59,7 @@ public class ItemBlockLeaves extends ItemBlockForestry<BlockForestryLeaves> {
 	}
 
 	@Override
-	public int getColorFromItemStack(ItemStack itemStack, int renderPass) {
+	public int getColorFromItemstack(ItemStack itemStack, int renderPass) {
 		if (!itemStack.hasTagCompound()) {
 			return PluginArboriculture.proxy.getFoliageColorBasic();
 		}

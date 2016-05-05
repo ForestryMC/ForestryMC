@@ -52,7 +52,7 @@ public class FarmLogicOrchard extends FarmLogic {
 
 		ImmutableList.Builder<Block> traversalBlocksBuilder = ImmutableList.builder();
 		//		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.AGRICRAFT) || ForestryAPI.enabledPlugins.contains(ForestryPluginUids.INDUSTRIALCRAFT)) {
-		//			traversalBlocksBuilder.add(Blocks.farmland);
+		//			traversalBlocksBuilder.add(Blocks.FARMLAND);
 		//		}
 		//		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.INDUSTRIALCRAFT)) {
 		//			traversalBlocksBuilder.add(Blocks.DIRT);

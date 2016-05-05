@@ -1,6 +1,7 @@
 package forestry.arboriculture.items;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.item.ItemStack;
 
 import forestry.api.arboriculture.IFruitProvider;
@@ -12,7 +13,7 @@ import forestry.core.items.ItemBlockForestry;
 import forestry.core.utils.ColourUtil;
 import forestry.core.utils.Translator;
 
-public class ItemBlockDecorativeLeaves extends ItemBlockForestry<BlockDecorativeLeaves> {
+public class ItemBlockDecorativeLeaves extends ItemBlockForestry<BlockDecorativeLeaves> implements IItemColor {
 	public ItemBlockDecorativeLeaves(Block block) {
 		super(block);
 	}
@@ -31,7 +32,7 @@ public class ItemBlockDecorativeLeaves extends ItemBlockForestry<BlockDecorative
 	}
 
 	@Override
-	public int getColorFromItemStack(ItemStack itemStack, int renderPass) {
+	public int getColorFromItemstack(ItemStack itemStack, int renderPass) {
 		int meta = itemStack.getMetadata();
 		BlockDecorativeLeaves block = getBlock();
 		TreeDefinition treeDefinition = block.getTreeType(meta);

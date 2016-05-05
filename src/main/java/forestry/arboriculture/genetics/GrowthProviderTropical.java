@@ -12,6 +12,7 @@ package forestry.arboriculture.genetics;
 
 import java.util.EnumSet;
 
+import net.minecraft.init.Biomes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
@@ -25,10 +26,10 @@ public class GrowthProviderTropical extends GrowthProvider {
 	@Override
 	public EnumGrowthConditions getGrowthConditions(ITreeGenome genome, World world, BlockPos pos) {
 		EnumGrowthConditions light = getConditionFromLight(world, pos);
-		EnumGrowthConditions moisture = getConditionsFromRainfall(world, pos, BiomeGenBase.jungle.rainfall, 2.0f);
+		EnumGrowthConditions moisture = getConditionsFromRainfall(world, pos, Biomes.JUNGLE.getRainfall(), 2.0f);
 
-		float jungleTemperature = BiomeGenBase.jungle.getFloatTemperature(pos);
-		float desertTemperature = BiomeGenBase.desert.getFloatTemperature(pos);
+		float jungleTemperature = Biomes.JUNGLE.getFloatTemperature(pos);
+		float desertTemperature = Biomes.DESERT.getFloatTemperature(pos);
 		EnumGrowthConditions temperature = getConditionsFromTemperature(world, pos, jungleTemperature, desertTemperature - 0.1f);
 
 		EnumSet<EnumGrowthConditions> conditions = EnumSet.of(light, moisture, temperature);

@@ -12,20 +12,17 @@ package forestry.arboriculture.items;
 
 import java.util.List;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -56,7 +53,7 @@ import forestry.core.utils.BlockUtil;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.Translator;
 
-public class ItemGermlingGE extends ItemGE implements IVariableFermentable {
+public class ItemGermlingGE extends ItemGE implements IVariableFermentable, IItemColor {
 
 	private final EnumGermlingType type;
 
@@ -115,8 +112,9 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable {
 		}
 	}
 
+	@Override
 	@SideOnly(Side.CLIENT)
-	public int getColorFromItemStack(ItemStack itemstack, int renderPass) {
+	public int getColorFromItemstack(ItemStack itemstack, int renderPass) {
 		return getSpeciesOrDefault(itemstack).getGermlingColour(type, renderPass);
 	}
 

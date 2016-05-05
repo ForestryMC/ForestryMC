@@ -26,8 +26,8 @@ public enum EnumStampDefinition implements ItemOverlay.IOverlayInfo {
 	P_10("10n", EnumPostage.P_10, "ingotGold", new Color(0x7bd1b8), new Color(0xffffff)),
 	P_20("20n", EnumPostage.P_20, "gemDiamond", new Color(0xff9031), new Color(0xfff7dd)),
 	P_50("50n", EnumPostage.P_50, "gemEmerald", new Color(0x6431d7), new Color(0xfff7dd)),
-	P_100("100n", EnumPostage.P_100, Items.nether_star, new Color(0xd731ba), new Color(0xfff7dd)),
-	//	P_200("200n", EnumPostage.P_200, Items.nether_star, new Color(0xcd9831), new Color(0xfff7dd)),
+	P_100("100n", EnumPostage.P_100, Items.NETHER_STAR, new Color(0xd731ba), new Color(0xfff7dd)),
+	//	P_200("200n", EnumPostage.P_200, Items.NETHER_STAR, new Color(0xcd9831), new Color(0xfff7dd)),
 	;
 
 	public static final EnumStampDefinition[] VALUES = values();

@@ -134,7 +134,7 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 			return 0f;
 		}
 
-		if (itemstack.getItem() == Items.glass_bottle) {
+		if (itemstack.getItem() == Items.GLASS_BOTTLE) {
 			return 0.9f;
 		}
 

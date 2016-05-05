@@ -42,7 +42,7 @@ public class FarmLogicGourd extends FarmLogic {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public Item getItem() {
-		return Items.melon;
+		return Items.MELON;
 	}
 
 	@Override

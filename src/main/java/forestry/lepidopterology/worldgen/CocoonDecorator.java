@@ -21,7 +21,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.chunk.IChunkGenerator;
 
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
@@ -40,7 +40,7 @@ public abstract class CocoonDecorator {
 
 	private static final EventType EVENT_TYPE = EnumHelper.addEnum(EventType.class, "FORESTRY_COCOONS", new Class[0], new Object[0]);
 
-	public static void decorateCocoons(IChunkProvider chunkProvider, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated) {
+	public static void decorateCocoons(IChunkGenerator chunkProvider, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated) {
 		if (!TerrainGen.populate(chunkProvider, world, rand, chunkX, chunkZ, hasVillageGenerated, EVENT_TYPE)) {
 			return;
 		}
@@ -130,30 +130,36 @@ public abstract class CocoonDecorator {
 		}
 
 		cocoonBlock.onBlockAdded(world, pos, state);
-		world.markBlockForUpdate(pos);
+		world.markBlockRangeForRenderUpdate(pos, pos);
 
 		return true;
 	}
 	
 	private static int getYForCocoon(World world, int x, int z) {
 		int y = world.getHeight(new BlockPos(x, 0, z)).getY() - 1;
-		if (!world.getBlockState(new BlockPos(x, y, z)).getBlock().isLeaves(world, new BlockPos(x, y, z))) {
+		BlockPos pos = new BlockPos(x, y, z);
+		IBlockState blockState = world.getBlockState(pos);
+		if (!blockState.getBlock().isLeaves(blockState, world, pos)) {
 			return -1;
 		}
 
 		do {
-			y--;
-		} while (world.getBlockState(new BlockPos(x, y, z)).getBlock().isLeaves(world, new BlockPos(x, y, z)));
+			pos.down();
+			blockState = world.getBlockState(pos);
+		} while (blockState.getBlock().isLeaves(blockState, world, pos));
 
 		return y;
 	}
 	
 	public static boolean isValidLocation(World world, BlockPos pos) {
-		Block blockAbove = world.getBlockState(pos.up()).getBlock();
-		if (!blockAbove.isLeaves(world, pos.up())) {
+		BlockPos posAbove = pos.up();
+		IBlockState blockStateAbove = world.getBlockState(posAbove);
+		Block blockAbove = blockStateAbove.getBlock();
+		if (!blockAbove.isLeaves(blockStateAbove, world, posAbove)) {
 			return false;
 		}
-
-		return BlockUtil.canReplace(world, pos.down());
+		BlockPos posBelow = pos.down();
+		IBlockState blockStateBelow = world.getBlockState(posBelow);
+		return BlockUtil.canReplace(blockStateBelow, world, posBelow);
 	}
 }

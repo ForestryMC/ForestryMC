@@ -31,11 +31,11 @@ import forestry.core.utils.vect.Vect;
 import forestry.core.utils.vect.VectUtil;
 
 public abstract class FarmLogicCrops extends FarmLogicWatered {
-	private static final ItemStack farmland = new ItemStack(Blocks.farmland, 1, OreDictionary.WILDCARD_VALUE);
+	private static final ItemStack farmland = new ItemStack(Blocks.FARMLAND, 1, OreDictionary.WILDCARD_VALUE);
 	private final Iterable<IFarmable> seeds;
 
 	protected FarmLogicCrops(IFarmHousing housing, Iterable<IFarmable> seeds) {
-		super(housing, new ItemStack(Blocks.DIRT), new ItemStack(Blocks.farmland));
+		super(housing, new ItemStack(Blocks.DIRT), new ItemStack(Blocks.FARMLAND));
 
 		this.seeds = seeds;
 	}

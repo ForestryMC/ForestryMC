@@ -12,11 +12,9 @@ package forestry.apiculture.items;
 
 import java.util.List;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.color.IItemColor;
-import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -41,7 +39,7 @@ import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
 import forestry.core.utils.Translator;
 
-public class ItemBeeGE extends ItemGE {
+public class ItemBeeGE extends ItemGE implements IItemColor {
 
 	private final EnumBeeType type;
 
@@ -118,9 +116,22 @@ public class ItemBeeGE extends ItemGE {
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
-	public void registerItemColors() {
+	@Override
+	public int getColorFromItemstack(ItemStack itemstack, int tintIndex) {
+		if (!itemstack.hasTagCompound()) {
+			if (tintIndex == 1) {
+				return 0xffdc16;
+			} else {
+				return 0xffffff;
+			}
+		}
 
+		IAlleleBeeSpecies species = BeeGenome.getSpecies(itemstack);
+		if (species instanceof IAlleleBeeSpecies) {
+			return species.getSpriteColour(tintIndex);
+		} else {
+			return 0xffffff;
+		}
 	}
 
 	/* MODELS */

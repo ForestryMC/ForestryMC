@@ -66,7 +66,7 @@ public class PluginEnergy extends BlankForestryPlugin {
 				'#', "ingotCopper",
 				'X', "blockGlass",
 				'Y', "gearCopper",
-				'V', Blocks.piston);
+				'V', Blocks.PISTON);
 
 		RecipeUtil.addRecipe(blocks.engine.get(BlockTypeEngine.BIOGAS),
 				"###",
@@ -75,7 +75,7 @@ public class PluginEnergy extends BlankForestryPlugin {
 				'#', "ingotBronze",
 				'X', "blockGlass",
 				'Y', "gearBronze",
-				'V', Blocks.piston);
+				'V', Blocks.PISTON);
 
 		if (ForestryAPI.activeMode.getBooleanSetting("energy.engine.clockwork")) {
 			RecipeUtil.addRecipe(blocks.engine.get(BlockTypeEngine.CLOCKWORK),
@@ -84,9 +84,9 @@ public class PluginEnergy extends BlankForestryPlugin {
 					"ZVY",
 					'#', "plankWood",
 					'X', "blockGlass",
-					'Y', Items.clock,
+					'Y', Items.CLOCK,
 					'Z', "gearCopper",
-					'V', Blocks.piston);
+					'V', Blocks.PISTON);
 		}
 	}
 }

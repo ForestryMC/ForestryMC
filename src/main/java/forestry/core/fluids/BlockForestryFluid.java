@@ -166,7 +166,7 @@ public class BlockForestryFluid extends BlockFluidClassic implements IItemModelR
 
 				if (block.getMaterial() == Material.air) {
 					if (isNeighborFlammable(world, x, y, z)) {
-						world.setBlockState(new BlockPos(x, y, z), Blocks.fire.getDefaultState());
+						world.setBlockState(new BlockPos(x, y, z), Blocks.FIRE.getDefaultState());
 						return;
 					}
 				} else if (block.getMaterial().blocksMovement()) {
@@ -183,7 +183,7 @@ public class BlockForestryFluid extends BlockFluidClassic implements IItemModelR
 					z = startZ + rand.nextInt(3) - 1;
 
 					if (world.isAirBlock(new BlockPos(pos.getX(), y + 1, z)) && isFlammable(world, new BlockPos(x, y, z))) {
-						world.setBlockState(new BlockPos(pos.getX(), y + 1, z), Blocks.fire.getDefaultState());
+						world.setBlockState(new BlockPos(pos.getX(), y + 1, z), Blocks.FIRE.getDefaultState());
 					}
 				}
 			}
@@ -195,7 +195,7 @@ public class BlockForestryFluid extends BlockFluidClassic implements IItemModelR
 			// Explosion size is determined by flammability, up to size 4.
 			float explosionSize = 4F * flammability / 300F;
 			if (explosionSize > 1.0 && isNearFire(world, pos.getX(), pos.getY(), pos.getZ())) {
-				world.setBlockState(pos, Blocks.fire.getDefaultState());
+				world.setBlockState(pos, Blocks.FIRE.getDefaultState());
 				world.newExplosion(null, pos.getX(), pos.getY(), pos.getZ(), explosionSize, true, true);
 			}
 		}

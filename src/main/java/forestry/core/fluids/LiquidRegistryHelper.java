@@ -41,7 +41,7 @@ public class LiquidRegistryHelper {
 		ItemStack empty = null;
 
 		if (item.getContainerItem() instanceof ItemBucket) {
-			empty = new ItemStack(Items.bucket);
+			empty = new ItemStack(Items.BUCKET);
 		} else if (item instanceof ItemLiquidContainer) {
 			ItemLiquidContainer liquidContainer = (ItemLiquidContainer) item;
 			EnumContainerType containerType = liquidContainer.getType();

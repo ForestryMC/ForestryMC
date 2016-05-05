@@ -297,7 +297,7 @@ public class ItemResearchNote extends ItemForestry {
 	}
 
 //	@Override
-//	public int getColorFromItemStack(ItemStack itemstack, int j) {
+//	public int getColorFromItemstack(ItemStack itemstack, int j) {
 //		return 0xffe8a5;
 //	}
 }

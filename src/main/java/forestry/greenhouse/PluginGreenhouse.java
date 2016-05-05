@@ -91,7 +91,7 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 				"TXT",
 				"#H#",
 				'X', blocks.getGreenhouseBlock(BlockGreenhouseType.PLAIN),
-				'H', Blocks.trapdoor,
+				'H', Blocks.TRAPDOOR,
 				'#', "gearTin",
 				'T', PluginCore.items.tubes.get(EnumElectronTube.BRONZE, 1));
 		
@@ -100,7 +100,7 @@ public class PluginGreenhouse extends BlankForestryPlugin {
 				"#H#",
 				"TXT",
 				'X', blocks.getGreenhouseBlock(BlockGreenhouseType.PLAIN),
-				'H', Blocks.trapdoor,
+				'H', Blocks.TRAPDOOR,
 				'#', "gearTin",
 				'T', PluginCore.items.tubes.get(EnumElectronTube.BRONZE, 1));
 		

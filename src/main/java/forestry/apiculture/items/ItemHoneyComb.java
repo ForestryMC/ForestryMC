@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -26,7 +27,7 @@ import forestry.api.core.Tabs;
 import forestry.core.config.Config;
 import forestry.core.items.ItemForestry;
 
-public class ItemHoneyComb extends ItemForestry {
+public class ItemHoneyComb extends ItemForestry implements IItemColor {
 	public ItemHoneyComb() {
 		setMaxDamage(0);
 		setHasSubtypes(true);
@@ -90,5 +91,15 @@ public class ItemHoneyComb extends ItemForestry {
 
 	public ItemStack get(EnumHoneyComb honeyComb, int amount) {
 		return new ItemStack(this, amount, honeyComb.ordinal());
+	}
+
+	@Override
+	public int getColorFromItemstack(ItemStack itemstack, int tintIndex) {
+		EnumHoneyComb honeyComb = EnumHoneyComb.VALUES[itemstack.getItemDamage()];
+		if (tintIndex == 1) {
+			return honeyComb.primaryColor;
+		} else {
+			return honeyComb.secondaryColor;
+		}
 	}
 }

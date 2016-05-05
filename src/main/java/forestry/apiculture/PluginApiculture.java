@@ -911,9 +911,9 @@ public class PluginApiculture extends BlankForestryPlugin {
 	}
 
 	@Override
-	public void populateChunk(IChunkGenerator chunkProvider, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated) {
+	public void populateChunk(IChunkGenerator chunkGenerator, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated) {
 		if (Config.getBeehivesAmount() > 0.0) {
-			HiveDecorator.decorateHives(chunkProvider, world, rand, chunkX, chunkZ, hasVillageGenerated);
+			HiveDecorator.decorateHives(chunkGenerator, world, rand, chunkX, chunkZ, hasVillageGenerated);
 		}
 	}
 

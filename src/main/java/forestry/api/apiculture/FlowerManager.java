@@ -9,7 +9,7 @@ import forestry.api.genetics.IFlowerRegistry;
 
 public class FlowerManager {
 	/**
-	 * <blockquote><pre>e.g. FlowerManager.flowerRegister.registerPlantableFlower(new ItemStack(Blocks.red_flower), 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);</pre></blockquote>
+	 * <blockquote><pre>e.g. FlowerManager.flowerRegister.registerPlantableFlower(new ItemStack(Blocks.RED_FLOWER), 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);</pre></blockquote>
 	 */
 	public static IFlowerRegistry flowerRegistry;
 

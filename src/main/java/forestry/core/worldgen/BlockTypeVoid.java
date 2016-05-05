@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 public class BlockTypeVoid extends BlockType {
 
 	public BlockTypeVoid() {
-		super(Blocks.air, 0);
+		super(Blocks.AIR, 0);
 	}
 
 	@Override

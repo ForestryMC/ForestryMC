@@ -26,14 +26,14 @@ public class VillageHandlerArboriculture /*implements IVillageTradeHandler*/ {
 		ITree randomTree = TreeManager.treeRoot.getTree(villager.worldObj, randomGenome);
 		ItemStack randomTreeStack = TreeManager.treeRoot.getMemberStack(randomTree, EnumGermlingType.SAPLING.ordinal());
 
-		recipeList.add(new MerchantRecipe(new ItemStack(Items.emerald, 8), randomTreeStack));
-		recipeList.add(new MerchantRecipe(new ItemStack(Items.emerald, 2), PluginArboriculture.items.grafterProven.getItemStack()));
+		recipeList.add(new MerchantRecipe(new ItemStack(Items.EMERALD, 8), randomTreeStack));
+		recipeList.add(new MerchantRecipe(new ItemStack(Items.EMERALD, 2), PluginArboriculture.items.grafterProven.getItemStack()));
 
 		EnumWoodType randomWoodType = EnumWoodType.getRandom(random);
 		ItemStack planks = TreeManager.woodItemAccess.getPlanks(randomWoodType, false);
 		planks.stackSize = 32;
 
-		recipeList.add(new MerchantRecipe(new ItemStack(Items.emerald, 1), planks));
+		recipeList.add(new MerchantRecipe(new ItemStack(Items.EMERALD, 1), planks));
 	}*/
 
 }

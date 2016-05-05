@@ -141,7 +141,7 @@ public class ItemLiquidContainer extends ItemForestry {
 
 	// TODO: liquid container coloring
 //	@Override
-//	public int getColorFromItemStack(ItemStack itemstack, int j) {
+//	public int getColorFromItemstack(ItemStack itemstack, int j) {
 //		if (j > 0) {
 //			return color;
 //		} else {

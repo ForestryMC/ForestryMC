@@ -62,7 +62,7 @@ public class AlleleEffectGlacial extends AlleleEffectThrottled {
 				continue;
 			}
 
-			world.setBlockState(posBlock, Blocks.ice.getDefaultState(), Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
+			world.setBlockState(posBlock, Blocks.ICE.getDefaultState(), Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
 		}
 
 		return storedData;

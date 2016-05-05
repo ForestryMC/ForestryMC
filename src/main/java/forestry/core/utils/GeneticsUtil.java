@@ -141,13 +141,13 @@ public class GeneticsUtil {
 
 		int meta = block.getMetaFromState(blockState);
 
-		if (Blocks.leaves == block || Blocks.leaves2 == block) {
+		if (Blocks.LEAVES == block || Blocks.LEAVES2 == block) {
 			if ((meta & 4) != 0) {
 				// no-decay vanilla leaves. http://minecraft.gamepedia.com/Data_values#Leaves
 				// Treat them as decorative and don't pollinate.
 				return null;
 			}
-			if (block == Blocks.leaves2) {
+			if (block == Blocks.LEAVES2) {
 				meta = meta + 4; //Dark Oak and Acacia are their own leaf block, but added on the end of sapling
 			}
 			block = Blocks.SAPLING;

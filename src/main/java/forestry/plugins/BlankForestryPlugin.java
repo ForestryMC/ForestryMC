@@ -102,7 +102,7 @@ public abstract class BlankForestryPlugin implements IForestryPlugin {
 	}
 
 	@Override
-	public void populateChunk(IChunkGenerator chunkProvider, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGeneratedZ) {
+	public void populateChunk(IChunkGenerator chunkGenerator, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated) {
 	}
 
 	@Override

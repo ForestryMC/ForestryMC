@@ -309,7 +309,7 @@ public class PluginIC2 extends BlankForestryPlugin {
 					'#', "ingotTin",
 					'X', "blockGlass",
 					'Y', "gearTin",
-					'V', Blocks.piston);
+					'V', Blocks.PISTON);
 		}
 	}
 }

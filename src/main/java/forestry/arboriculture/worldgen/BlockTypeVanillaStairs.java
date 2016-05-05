@@ -17,7 +17,7 @@ import forestry.core.worldgen.BlockType;
 
 public class BlockTypeVanillaStairs extends BlockType {
 	public BlockTypeVanillaStairs(int meta) {
-		super(Blocks.oak_stairs, meta);
+		super(Blocks.OAK_STAIRS, meta);
 	}
 
 	@Override
