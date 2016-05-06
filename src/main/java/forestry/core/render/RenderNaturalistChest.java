@@ -36,7 +36,7 @@ public class RenderNaturalistChest extends TileEntitySpecialRenderer<TileNatural
 		if (chest != null) {
 			render(chest.getOrientation(), chest.prevLidAngle, chest.lidAngle, x, y, z, partialTicks);
 		} else {
-			render(EnumFacing.WEST, 0, 0, x, y, z, 0);
+			render(EnumFacing.SOUTH, 0, 0, x, y, z, 0);
 		}
 	}
 
