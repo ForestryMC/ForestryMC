@@ -1,20 +1,8 @@
 {
-    "parent": "builtin/generated",
+    "parent": "forestry:item/mirror_hands",
     "textures": {
         "layer0": "forestry:items/bees/default/larvae.outline",
 		"layer1": "forestry:items/bees/default/larvae.body",
 		"layer2": "forestry:items/bees/default/larvae.body2"
-    },
-    "display": {
-        "thirdperson": {
-            "rotation": [ -90, 0, 0 ],
-            "translation": [ 0, 1, -3 ],
-            "scale": [ 0.55, 0.55, 0.55 ]
-        },
-        "firstperson": {
-            "rotation": [ 0, -135, 25 ],
-            "translation": [ 0, 4, 2 ],
-            "scale": [ 1.7, 1.7, 1.7 ]
-        }
     }
 }
