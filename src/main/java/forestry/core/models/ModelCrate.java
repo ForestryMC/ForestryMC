@@ -15,7 +15,6 @@ import com.google.common.collect.Maps;
 
 import org.apache.commons.io.IOUtils;
 
-import java.io.Closeable;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -66,8 +65,9 @@ public class ModelCrate extends BlankItemModel {
 	private static ModelBlock MODEL_GENERATED;
     private static ModelBlock MODEL_ENTITY;
 
-	
-	//Init the model
+	/**
+	 * Init the model with datas from the ModelBakeEvent.
+	 */
 	public static void initModel(ModelBakeEvent event){
 		try {
 			crateModel = ModelLoaderRegistry.getModel(new ResourceLocation("forestry:item/crate-filled"));
@@ -78,31 +78,8 @@ public class ModelCrate extends BlankItemModel {
 		}
 	}
 
-	
-	//Bake the crate content models
-	private List<IBakedModel> bakeContentModels(ItemCrated crateItem, IBakedModel crateModel) {
-		List<IBakedModel> models = new ArrayList();
-
-		IBakedModel containedModel = getModel(crateItem.getContained());
-
-		IdentityHashMap<Item, TIntObjectHashMap<ModelResourceLocation>> modelResourceLocations = ObfuscationReflectionHelper.getPrivateValue(ItemModelMesherForge.class, (ItemModelMesherForge) Minecraft.getMinecraft().getRenderItem().getItemModelMesher(), 0);
-
-		ModelResourceLocation modelResource = modelResourceLocations.get(crateItem.getContained().getItem()).get(crateItem.getContained().getItemDamage());
-		ResourceLocation location = getItemLocation(modelResource);
-
-		models.add(crateModel);
-		
-		if (hasItemModel(location)) {
-			models.add(new TRSRBakedModel(containedModel, -0.0625F, 0, 0.0625F, 0.5F));
-			models.add(new TRSRBakedModel(containedModel, -0.0625F, 0, -0.0625F, 0.5F));
-		} else {
-			models.add(new TRSRBakedModel(containedModel, -0.0625F, 0, 0, 0.5F));
-		}
-		return models;
-	}
-
 	/**
-	 * @return The item model {@link ResourceLocation} from a {@link ModelResourceLocation}
+	 * @return The item model ResourceLocation from a ModelResourceLocation
 	 */
 	private ResourceLocation getItemLocation(ModelResourceLocation modelResource) {
 		ResourceLocation resourcelocation = new ResourceLocation(modelResource.toString().replaceAll("#.*", ""));
@@ -110,7 +87,7 @@ public class ModelCrate extends BlankItemModel {
 	}
 
 	/**
-	 * @return Return true, when the model a item model is
+	 * @return Return true, when the model a item model is.
 	 */
 	private boolean hasItemModel(ResourceLocation location) {
 		try {
@@ -125,14 +102,15 @@ public class ModelCrate extends BlankItemModel {
 		}
 	}
 	
-    protected ModelBlock loadModel(ResourceLocation location) throws IOException
-    {
+	/**
+	 * @return Load a model from the location.
+	 */
+    private ModelBlock loadModel(ResourceLocation location) throws IOException{
         Reader reader = null;
         IResource iresource = null;
         ModelBlock model;
 
-        try
-        {
+        try{
             String s = location.getResourcePath();
 
             if (!"builtin/generated".equals(s)){
@@ -171,8 +149,7 @@ public class ModelCrate extends BlankItemModel {
 
             model = MODEL_GENERATED;
         }
-        finally
-        {
+        finally{
             IOUtils.closeQuietly(reader);
             IOUtils.closeQuietly(iresource);
         }
@@ -185,7 +162,7 @@ public class ModelCrate extends BlankItemModel {
 	}
 
 	/**
-	 * @return The baked model from the filled crate
+	 * @return The model from the item of the stack.
 	 */
 	private IBakedModel getModel(ItemStack stack) {
 		return Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getItemModel(stack);
@@ -194,6 +171,30 @@ public class ModelCrate extends BlankItemModel {
 	@Override
 	public ItemOverrideList createOverrides() {
 		return new CrateOverrideList();
+	}
+	
+	/**
+	 * Bake the crate model.
+	 */
+	private List<IBakedModel> bakeModel(ItemCrated crateItem, IBakedModel crateModel) {
+		List<IBakedModel> models = new ArrayList();
+
+		IBakedModel containedModel = getModel(crateItem.getContained());
+
+		IdentityHashMap<Item, TIntObjectHashMap<ModelResourceLocation>> modelResourceLocations = ObfuscationReflectionHelper.getPrivateValue(ItemModelMesherForge.class, (ItemModelMesherForge) Minecraft.getMinecraft().getRenderItem().getItemModelMesher(), 0);
+
+		ModelResourceLocation modelResource = modelResourceLocations.get(crateItem.getContained().getItem()).get(crateItem.getContained().getItemDamage());
+		ResourceLocation location = getItemLocation(modelResource);
+
+		models.add(crateModel);
+		
+		if (hasItemModel(location)) {
+			models.add(new TRSRBakedModel(containedModel, -0.0625F, 0, 0.0625F, 0.5F));
+			models.add(new TRSRBakedModel(containedModel, -0.0625F, 0, -0.0625F, 0.5F));
+		} else {
+			models.add(new TRSRBakedModel(containedModel, -0.0625F, 0, 0, 0.5F));
+		}
+		return models;
 	}
 	
 	private class CrateOverrideList extends ItemOverrideList{
@@ -216,14 +217,14 @@ public class ModelCrate extends BlankItemModel {
 					ObfuscationReflectionHelper.setPrivateValue(BakedQuad.class, quad, 100, 1);
 				}
 				
-				crates.put(crateUID, new IPerspectiveAwareModel.MapWrapper(new CrateBakedModel( bakeContentModels(crated, baseBaked)), ModelManager.getInstance().DEFAULT_ITEM));
+				crates.put(crateUID, new IPerspectiveAwareModel.MapWrapper(new CrateBakedModel( bakeModel(crated, baseBaked)), ModelManager.getInstance().DEFAULT_ITEM));
 			}
 			return crates.get(crateUID);
 		}
 		
 	}
 	
-	private static class CrateBakedModel extends BlankItemModel{
+	private class CrateBakedModel extends BlankItemModel{
 
 		public final List<IBakedModel> models;
 		

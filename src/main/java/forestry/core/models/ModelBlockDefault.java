@@ -36,13 +36,11 @@ import forestry.core.blocks.propertys.UnlistedBlockAccess;
 import forestry.core.blocks.propertys.UnlistedBlockPos;
 import forestry.core.models.baker.ModelBaker;
 
-/**
- * A overlay block model to make a block with 2 or more texture layers
- */
 public abstract class ModelBlockDefault<B extends Block> implements IBakedModel {
 	private ItemOverrideList overrideList;
 	@Nonnull
 	protected final Class<B> blockClass;
+	
 	protected IModelBakerModel blockModel;
 	protected IModelBakerModel itemModel;
 
@@ -83,6 +81,9 @@ public abstract class ModelBlockDefault<B extends Block> implements IBakedModel 
 
 	@Override
 	public boolean isGui3d() {
+		if(itemModel == null) {
+			return false;
+		}
 		return itemModel.isGui3d();
 	}
 
