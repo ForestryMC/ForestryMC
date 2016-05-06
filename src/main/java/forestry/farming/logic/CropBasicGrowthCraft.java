@@ -15,11 +15,11 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.vect.Vect;
 
 public class CropBasicGrowthCraft extends Crop {
 
@@ -28,7 +28,7 @@ public class CropBasicGrowthCraft extends Crop {
 	private final boolean isRice;
 	private final boolean isGrape;
 
-	public CropBasicGrowthCraft(World world, Block block, int meta, Vect position, boolean isRice, boolean isGrape) {
+	public CropBasicGrowthCraft(World world, Block block, int meta, BlockPos position, boolean isRice, boolean isGrape) {
 		super(world, position);
 		this.block = block;
 		this.meta = meta;
@@ -37,12 +37,12 @@ public class CropBasicGrowthCraft extends Crop {
 	}
 
 	@Override
-	protected boolean isCrop(Vect pos) {
+	protected boolean isCrop(BlockPos pos) {
 		return getBlock(pos) == block && getBlockMeta(pos) == meta;
 	}
 
 	@Override
-	protected Collection<ItemStack> harvestBlock(Vect pos) {
+	protected Collection<ItemStack> harvestBlock(BlockPos pos) {
 		List<ItemStack> harvest = block.getDrops(world, pos, block.getStateFromMeta(meta), 0);
 		if (harvest.size() > 1) {
 			harvest.remove(0); //Hops have rope as first drop.

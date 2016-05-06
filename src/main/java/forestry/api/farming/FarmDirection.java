@@ -19,7 +19,7 @@ public enum FarmDirection {
 		this.forgeDirection = forgeDirection;
 	}
 
-	public EnumFacing getForgeDirection() {
+	public EnumFacing getFacing() {
 		return forgeDirection;
 	}
 

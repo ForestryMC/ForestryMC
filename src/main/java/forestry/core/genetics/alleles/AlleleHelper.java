@@ -15,6 +15,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import net.minecraft.util.math.Vec3i;
+
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.core.ForestryAPI;
@@ -28,7 +30,6 @@ import forestry.api.genetics.IChromosomeType;
 import forestry.api.lepidopterology.EnumButterflyChromosome;
 import forestry.apiculture.flowers.FlowerProvider;
 import forestry.core.config.Constants;
-import forestry.core.utils.vect.IVect;
 import forestry.plugins.ForestryPluginUids;
 
 public class AlleleHelper implements IAlleleHelper {
@@ -180,9 +181,9 @@ public class AlleleHelper implements IAlleleHelper {
 			return AlleleManager.alleleFactory.createFloat(modId, category, name, (Float) value, isDominant, types);
 		} else if (Integer.class.isAssignableFrom(valueClass)) {
 			return AlleleManager.alleleFactory.createInteger(modId, category, name, (Integer) value, isDominant, types);
-		} else if (IVect.class.isAssignableFrom(valueClass)) {
-			IVect area = (IVect) value;
-			return AlleleManager.alleleFactory.createArea(modId, category, name, area.getX(), area.getY(), area.getZ(), isDominant, types);
+		} else if (Vec3i.class.isAssignableFrom(valueClass)) {
+			Vec3i area = (Vec3i) value;
+			return AlleleManager.alleleFactory.createArea(modId, category, name, area, isDominant, types);
 		} else if (Boolean.class.isAssignableFrom(valueClass)) {
 			return AlleleManager.alleleFactory.createBoolean(modId, category, (Boolean) value, isDominant, types);
 		} else if (EnumTolerance.class.isAssignableFrom(valueClass)) {

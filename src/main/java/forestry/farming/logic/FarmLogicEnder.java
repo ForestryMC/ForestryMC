@@ -13,6 +13,7 @@ package forestry.farming.logic;
 import java.util.Collection;
 import java.util.Stack;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -30,8 +31,6 @@ import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
 import forestry.core.utils.BlockUtil;
-import forestry.core.utils.vect.Vect;
-import forestry.core.utils.vect.VectUtil;
 
 public class FarmLogicEnder extends FarmLogicHomogeneous {
 
@@ -71,7 +70,7 @@ public class FarmLogicEnder extends FarmLogicHomogeneous {
 
 		Stack<ICrop> crops = new Stack<>();
 		for (int i = 0; i < extent; i++) {
-			Vect position = translateWithOffset(pos.add(0, 1, 0), direction, i);
+			BlockPos position = translateWithOffset(pos.up(), direction, i);
 			for (IFarmable farmable : germlings) {
 				ICrop crop = farmable.getCropAt(world, position);
 				if (crop != null) {
@@ -89,13 +88,16 @@ public class FarmLogicEnder extends FarmLogicHomogeneous {
 		World world = getWorld();
 
 		for (int i = 0; i < extent; i++) {
-			Vect position = translateWithOffset(pos, direction, i);
+			BlockPos position = translateWithOffset(pos, direction, i);
 			IBlockState state = world.getBlockState(position);
-			if (!VectUtil.isAirBlock(world, position) && !BlockUtil.isReplaceableBlock(state, world, position)) {
+			if (!world.isAirBlock(position) && !BlockUtil.isReplaceableBlock(state, world, position)) {
 				continue;
 			}
 
-			ItemStack below = VectUtil.getAsItemStack(world, position.down());
+			BlockPos soilPos = position.down();
+			IBlockState blockState = world.getBlockState(soilPos);
+			Block block = blockState.getBlock();
+			ItemStack below = block.getPickBlock(blockState, null, world, soilPos, null);
 			if (!isAcceptedSoil(below)) {
 				continue;
 			}
@@ -106,7 +108,7 @@ public class FarmLogicEnder extends FarmLogicHomogeneous {
 		return false;
 	}
 
-	private boolean trySetCrop(Vect position) {
+	private boolean trySetCrop(BlockPos position) {
 		World world = getWorld();
 
 		for (IFarmable candidate : germlings) {

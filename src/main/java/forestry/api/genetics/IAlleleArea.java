@@ -5,11 +5,13 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
+import net.minecraft.util.math.Vec3i;
+
 /**
  * Simple interface to allow adding additional alleles containing float values.
  */
 public interface IAlleleArea extends IAllele {
 
-	int[] getValue();
+	Vec3i getValue();
 
 }

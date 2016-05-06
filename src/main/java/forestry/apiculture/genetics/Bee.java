@@ -24,6 +24,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
@@ -68,7 +69,7 @@ import forestry.core.genetics.IndividualLiving;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.Translator;
-import forestry.core.utils.vect.Vect;
+import forestry.core.utils.VectUtil;
 
 public class Bee extends IndividualLiving implements IBee {
 
@@ -680,15 +681,15 @@ public class Bee extends IndividualLiving implements IBee {
 			return null;
 		}
 
-		Vect area = getArea(genome, beeModifier);
-		Vect offset = new Vect(-area.getX() / 2, -area.getY() / 4, -area.getZ() / 2);
-		Vect housingPos = new Vect(housing.getCoordinates());
+		Vec3i area = getArea(genome, beeModifier);
+		Vec3i offset = new Vec3i(-area.getX() / 2, -area.getY() / 4, -area.getZ() / 2);
+		BlockPos housingPos = housing.getCoordinates();
 
 		ITree pollen = null;
 
 		for (int i = 0; i < 20; i++) {
-			Vect randomPos = Vect.getRandomPositionInArea(random, area);
-			Vect blockPos = Vect.add(housingPos, randomPos, offset);
+			BlockPos randomPos = VectUtil.getRandomPositionInArea(random, area);
+			BlockPos blockPos = VectUtil.add(housingPos, randomPos, offset);
 			TileEntity tile = world.getTileEntity(blockPos);
 
 			if (tile instanceof IPollinatable) {
@@ -723,14 +724,14 @@ public class Bee extends IndividualLiving implements IBee {
 			return false;
 		}
 
-		Vect area = getArea(genome, beeModifier);
-		Vect offset = new Vect(-area.getX() / 2, -area.getY() / 4, -area.getZ() / 2);
-		Vect housingPos = new Vect(housing.getCoordinates());
+		Vec3i area = getArea(genome, beeModifier);
+		Vec3i offset = new Vec3i(-area.getX() / 2, -area.getY() / 4, -area.getZ() / 2);
+		BlockPos housingPos = housing.getCoordinates();
 
 		for (int i = 0; i < 30; i++) {
 
-			Vect randomPos = Vect.getRandomPositionInArea(random, area);
-			Vect posBlock = Vect.add(housingPos, randomPos, offset);
+			BlockPos randomPos = VectUtil.getRandomPositionInArea(random, area);
+			BlockPos posBlock = VectUtil.add(housingPos, randomPos, offset);
 
 			ICheckPollinatable checkPollinatable = GeneticsUtil.getCheckPollinatable(world, posBlock);
 			if (checkPollinatable == null) {
@@ -772,13 +773,13 @@ public class Bee extends IndividualLiving implements IBee {
 
 		// Gather required info
 		IFlowerProvider provider = genome.getFlowerProvider();
-		Vect area = getArea(genome, beeModifier);
-		Vect offset = new Vect(-area.getX() / 2, -area.getY() / 4, -area.getZ() / 2);
-		Vect housingPos = new Vect(housing.getCoordinates());
+		Vec3i area = getArea(genome, beeModifier);
+		Vec3i offset = new Vec3i(-area.getX() / 2, -area.getY() / 4, -area.getZ() / 2);
+		BlockPos housingPos = housing.getCoordinates();
 
 		for (int i = 0; i < 10; i++) {
-			Vect randomPos = Vect.getRandomPositionInArea(random, area);
-			Vect posBlock = Vect.add(housingPos, randomPos, offset);
+			BlockPos randomPos = VectUtil.getRandomPositionInArea(random, area);
+			BlockPos posBlock = VectUtil.add(housingPos, randomPos, offset);
 
 			if (FlowerManager.flowerRegistry.growFlower(provider.getFlowerType(), world, this, posBlock)) {
 				break;
@@ -786,9 +787,9 @@ public class Bee extends IndividualLiving implements IBee {
 		}
 	}
 
-	private static Vect getArea(IBeeGenome genome, IBeeModifier beeModifier) {
-		int[] genomeTerritory = genome.getTerritory();
+	private static Vec3i getArea(IBeeGenome genome, IBeeModifier beeModifier) {
+		Vec3i genomeTerritory = genome.getTerritory();
 		float housingModifier = beeModifier.getTerritoryModifier(genome, 1f);
-		return new Vect(genomeTerritory).multiply(housingModifier * 3.0f);
+		return VectUtil.scale(genomeTerritory, housingModifier * 3.0f);
 	}
 }

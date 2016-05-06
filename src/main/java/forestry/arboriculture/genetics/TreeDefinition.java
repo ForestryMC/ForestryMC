@@ -17,9 +17,9 @@ import java.util.Locale;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
@@ -91,7 +91,6 @@ import forestry.core.genetics.alleles.AlleleHelper;
 import forestry.core.genetics.alleles.AllelePlantType;
 import forestry.core.genetics.alleles.EnumAllele;
 import forestry.core.tiles.TileUtil;
-import forestry.core.utils.BlockUtil;
 
 public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSerializable {
 	Oak(TreeBranchDefinition.QUERCUS, "appleOak", "robur", false, EnumLeafType.DECIDUOUS, new Color(4764952), new Color(4764952).brighter(), 0, new ItemStack(Blocks.LOG, 1, 0)) {
@@ -1042,7 +1041,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			return;
 		}
 
-		Block block = BlockUtil.getBlock(world, pos);
+		Block block = world.getBlockState(pos).getBlock();
 		if (PluginArboriculture.blocks.leaves != block) {
 			world.setBlockToAir(pos);
 			return;

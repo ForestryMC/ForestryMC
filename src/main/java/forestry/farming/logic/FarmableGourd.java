@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -18,9 +20,7 @@ import net.minecraft.world.World;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
 import forestry.core.config.Constants;
-import forestry.core.utils.BlockUtil;
 import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.vect.Vect;
 
 public class FarmableGourd implements IFarmable {
 
@@ -40,7 +40,7 @@ public class FarmableGourd implements IFarmable {
 			return false;
 		}
 
-		return ItemStackUtil.equals(BlockUtil.getBlock(world, pos), stem);
+		return ItemStackUtil.equals(world.getBlockState(pos).getBlock(), stem);
 	}
 
 	@Override
@@ -49,15 +49,17 @@ public class FarmableGourd implements IFarmable {
 			return null;
 		}
 
-		if (!ItemStackUtil.equals(BlockUtil.getBlock(world, pos), fruit)) {
+		IBlockState blockState = world.getBlockState(pos);
+		Block block = blockState.getBlock();
+		if (!ItemStackUtil.equals(block, fruit)) {
 			return null;
 		}
 
-		if (BlockUtil.getBlockMetadata(world, pos) != fruit.getItemDamage()) {
+		if (block.getMetaFromState(blockState) != fruit.getItemDamage()) {
 			return null;
 		}
 
-		return new CropBlock(world, ItemStackUtil.getBlock(fruit), fruit.getItemDamage(), new Vect(pos));
+		return new CropBlock(world, ItemStackUtil.getBlock(fruit), fruit.getItemDamage(), pos);
 	}
 
 	@Override

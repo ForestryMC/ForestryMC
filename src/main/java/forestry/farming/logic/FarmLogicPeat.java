@@ -14,6 +14,7 @@ import java.util.Collection;
 import java.util.Stack;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -27,8 +28,6 @@ import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.core.PluginCore;
 import forestry.core.blocks.BlockSoil;
-import forestry.core.utils.vect.Vect;
-import forestry.core.utils.vect.VectUtil;
 
 public class FarmLogicPeat extends FarmLogicWatered {
 	private static final ItemStack bogEarth = PluginCore.blocks.soil.get(BlockSoil.SoilType.BOG_EARTH, 1);
@@ -82,20 +81,14 @@ public class FarmLogicPeat extends FarmLogicWatered {
 
 		Stack<ICrop> crops = new Stack<>();
 		for (int i = 0; i < extent; i++) {
-			Vect position = translateWithOffset(pos, direction, i);
-			ItemStack occupant = VectUtil.getAsItemStack(world, position);
-
-			if (occupant.getItem() == null) {
-				continue;
-			}
-
-			Block block = Block.getBlockFromItem(occupant.getItem());
+			BlockPos position = translateWithOffset(pos, direction, i);
+			IBlockState blockState = world.getBlockState(position);
+			Block block = blockState.getBlock();
 			if (!(block instanceof BlockSoil)) {
 				continue;
 			}
 
-			BlockSoil blockSoil = (BlockSoil) block;
-			BlockSoil.SoilType soilType = BlockSoil.getTypeFromMeta(occupant.getItemDamage());
+			BlockSoil.SoilType soilType = BlockSoil.getTypeFromState(blockState);
 
 			if (soilType == BlockSoil.SoilType.PEAT) {
 				crops.push(new CropPeat(world, position));

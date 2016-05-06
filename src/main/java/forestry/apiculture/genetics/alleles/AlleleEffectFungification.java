@@ -9,6 +9,7 @@ import net.minecraft.entity.passive.EntityMooshroom;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenBigMushroom;
 
@@ -16,7 +17,6 @@ import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.core.genetics.EffectData;
-import forestry.core.utils.vect.IVect;
 
 public class AlleleEffectFungification extends AlleleEffectThrottled {
 
@@ -56,7 +56,7 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 	private void doBlockEffect(IBeeGenome genome, IBeeHousing housing) {
 		World world = housing.getWorld();
 		BlockPos housingCoordinates = housing.getCoordinates();
-		IVect area = getModifiedArea(genome, housing);
+		Vec3i area = getModifiedArea(genome, housing);
 		
 		int blockX = getRandomOffset(world.rand, housingCoordinates.getX(), area.getX());
 		int blockY = getRandomOffset(world.rand, housingCoordinates.getY(), area.getY());

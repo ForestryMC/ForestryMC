@@ -28,8 +28,6 @@ import forestry.api.farming.IFarmHousing;
 import forestry.core.fluids.Fluids;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.vect.Vect;
-import forestry.core.utils.vect.VectUtil;
 import forestry.farming.FarmHelper;
 
 public abstract class FarmLogicWatered extends FarmLogic {
@@ -97,22 +95,23 @@ public abstract class FarmLogicWatered extends FarmLogic {
 		ItemStack[] resources = new ItemStack[]{resource};
 
 		for (int i = 0; i < extent; i++) {
-			Vect position = translateWithOffset(pos, direction, i);
+			BlockPos position = translateWithOffset(pos, direction, i);
 			IBlockState state = world.getBlockState(position);
 			Block soil = state.getBlock();
 
-			ItemStack soilStack = VectUtil.getAsItemStack(world, position);
+			ItemStack soilStack = soil.getPickBlock(state, null, world, position, null);
 			if (isAcceptedGround(soilStack) || !housing.getFarmInventory().hasResources(resources)) {
 				continue;
 			}
 
 			BlockPos platformPosition = position.down();
-			Block platformBlock = VectUtil.getBlock(world, platformPosition);
+			IBlockState blockState = world.getBlockState(platformPosition);
+			Block platformBlock = blockState.getBlock();
 			if (!FarmHelper.bricks.contains(platformBlock)) {
 				break;
 			}
 
-			if (!isAirBlock(soil, state, world, platformPosition) && !BlockUtil.isReplaceableBlock(state, world, platformPosition)) {
+			if (!soil.isAir(state, world, platformPosition) && !BlockUtil.isReplaceableBlock(state, world, platformPosition)) {
 				produce.addAll(BlockUtil.getBlockDrops(getWorld(), position));
 				world.setBlockToAir(position);
 				return trySetSoil(position);
@@ -136,10 +135,11 @@ public abstract class FarmLogicWatered extends FarmLogic {
 		// Still not done, check water then
 		World world = getWorld();
 		for (int i = 0; i < extent; i++) {
-			Vect position = translateWithOffset(pos, direction, i);
+			BlockPos position = translateWithOffset(pos, direction, i);
 
 			BlockPos platformPosition = position.down();
-			Block platformBlock = VectUtil.getBlock(world, platformPosition);
+			IBlockState blockState = world.getBlockState(platformPosition);
+			Block platformBlock = blockState.getBlock();
 			if (!FarmHelper.bricks.contains(platformBlock)) {
 				break;
 			}
@@ -156,7 +156,7 @@ public abstract class FarmLogicWatered extends FarmLogic {
 		return false;
 	}
 
-	private boolean trySetSoil(Vect position) {
+	private boolean trySetSoil(BlockPos position) {
 		ItemStack[] resources = new ItemStack[]{resource};
 		if (!housing.getFarmInventory().hasResources(resources)) {
 			return false;
@@ -166,7 +166,7 @@ public abstract class FarmLogicWatered extends FarmLogic {
 		return true;
 	}
 
-	private boolean trySetWater(World world, Vect position) {
+	private boolean trySetWater(World world, BlockPos position) {
 		if (isWaterSourceBlock(world, position) || !canPlaceWater(world, position)) {
 			return false;
 		}
@@ -181,11 +181,11 @@ public abstract class FarmLogicWatered extends FarmLogic {
 		return true;
 	}
 
-	private boolean canPlaceWater(World world, Vect position) {
+	private boolean canPlaceWater(World world, BlockPos position) {
 		// don't place water close to other water
 		for (int x = -2; x <= 2; x++) {
 			for (int z = -2; z <= 2; z++) {
-				Vect offsetPosition = position.add(x, 0, z);
+				BlockPos offsetPosition = position.add(x, 0, z);
 				if (isWaterSourceBlock(world, offsetPosition)) {
 					return false;
 				}
@@ -194,14 +194,14 @@ public abstract class FarmLogicWatered extends FarmLogic {
 
 		// don't place water if it can flow into blocks next to it
 		for (int x = -1; x <= 1; x++) {
-			Vect offsetPosition = position.add(x, 0, 0);
-			if (VectUtil.isAirBlock(world, offsetPosition)) {
+			BlockPos offsetPosition = position.add(x, 0, 0);
+			if (world.isAirBlock(offsetPosition)) {
 				return false;
 			}
 		}
 		for (int z = -1; z <= 1; z++) {
-			Vect offsetPosition = position.add(0, 0, z);
-			if (VectUtil.isAirBlock(world, offsetPosition)) {
+			BlockPos offsetPosition = position.add(0, 0, z);
+			if (world.isAirBlock(offsetPosition)) {
 				return false;
 			}
 		}

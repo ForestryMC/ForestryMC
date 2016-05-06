@@ -16,7 +16,9 @@ import java.util.List;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.MobEffects;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeChromosome;
@@ -29,8 +31,7 @@ import forestry.api.genetics.IEffectData;
 import forestry.core.config.Constants;
 import forestry.core.genetics.alleles.AlleleCategorized;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.vect.MutableVect;
-import forestry.core.utils.vect.Vect;
+import forestry.core.utils.VectUtil;
 
 public abstract class AlleleEffect extends AlleleCategorized implements IAlleleBeeEffect {
 
@@ -108,36 +109,37 @@ public abstract class AlleleEffect extends AlleleCategorized implements IAlleleB
 		return storedData;
 	}
 
-	protected Vect getModifiedArea(IBeeGenome genome, IBeeHousing housing) {
+	protected Vec3i getModifiedArea(IBeeGenome genome, IBeeHousing housing) {
 		IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(housing);
 		float territoryModifier = beeModifier.getTerritoryModifier(genome, 1f);
 
-		MutableVect area = new MutableVect(genome.getTerritory());
-		area.multiply(territoryModifier);
+		Vec3i area = VectUtil.scale(genome.getTerritory(), territoryModifier);
+		int x = area.getX();
+		int y = area.getY();
+		int z = area.getZ();
 
-		if (area.x < 1) {
-			area.x = 1;
+		if (x < 1) {
+			x = 1;
 		}
-		if (area.y < 1) {
-			area.y = 1;
+		if (y < 1) {
+			y = 1;
 		}
-		if (area.z < 1) {
-			area.z = 1;
+		if (z < 1) {
+			z = 1;
 		}
 
-		return new Vect(area);
+		return new Vec3i(x, y, z);
 	}
 
 	public static AxisAlignedBB getBounding(IBeeGenome genome, IBeeHousing housing) {
 		IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(housing);
 		float territoryModifier = beeModifier.getTerritoryModifier(genome, 1.0f);
 
-		MutableVect area = new MutableVect(genome.getTerritory());
-		area.multiply(territoryModifier);
-		Vect offset = new Vect(area).multiply(-1 / 2.0f);
+		Vec3i area = VectUtil.scale(genome.getTerritory(), territoryModifier);
+		Vec3i offset = VectUtil.scale(area, -1 / 2.0f);
 
-		Vect min = new Vect(housing.getCoordinates()).add(offset);
-		Vect max = min.add(area);
+		BlockPos min = housing.getCoordinates().add(offset);
+		BlockPos max = min.add(area);
 
 		return new AxisAlignedBB(min.getX(), min.getY(), min.getZ(), max.getX(), max.getY(), max.getZ());
 	}

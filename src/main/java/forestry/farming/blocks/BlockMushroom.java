@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockDirt;
 import net.minecraft.block.IGrowable;
@@ -39,7 +40,6 @@ import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.core.blocks.IBlockWithMeta;
 import forestry.core.config.Constants;
-import forestry.core.utils.BlockUtil;
 
 public class BlockMushroom extends BlockBush implements IItemModelRegister, IGrowable, IBlockWithMeta {
 
@@ -124,7 +124,9 @@ public class BlockMushroom extends BlockBush implements IItemModelRegister, IGro
 			return;
 		}
 
-		int meta = BlockUtil.getBlockMetadata(world, pos);
+		IBlockState blockState = world.getBlockState(pos);
+		Block block = blockState.getBlock();
+		int meta = block.getMetaFromState(blockState);
 		MushroomType type = getTypeFromMeta(meta);
 		int maturity = meta >> 2;
 
@@ -150,7 +152,7 @@ public class BlockMushroom extends BlockBush implements IItemModelRegister, IGro
 	}
 	
 	public void generateTree(World world, BlockPos pos, IBlockState state, Random rand) {
-		MushroomType type = getTypeFromMeta(BlockUtil.getBlockMetadata(world, pos));
+		MushroomType type = state.getValue(MUSHROOM);
 
 		world.setBlockToAir(pos);
 		if (!generators[type.ordinal()].generate(world, rand, pos)) {

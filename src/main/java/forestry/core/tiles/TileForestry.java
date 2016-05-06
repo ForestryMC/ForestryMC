@@ -48,7 +48,6 @@ import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
 import forestry.core.network.packets.PacketTileStream;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.BlockUtil;
 
 //@Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = "BuildCraftAPI|statements")
 public abstract class TileForestry extends TileEntity implements IStreamable, IErrorLogicSource, ISidedInventory, IFilterSlotDelegate, IRestrictedAccess, ITitled, ILocatable, IGuiHandlerTile, ITickable {
@@ -225,7 +224,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 		this.orientation = orientation;
 		this.setNeedsNetworkUpdate();
 		BlockPos pos = getPos();
-		worldObj.notifyBlockOfStateChange(pos, BlockUtil.getBlock(worldObj, pos));
+		worldObj.notifyBlockOfStateChange(pos, worldObj.getBlockState(pos).getBlock());
 		worldObj.markBlockRangeForRenderUpdate(pos, pos);
 	}
 

@@ -11,6 +11,7 @@
 package forestry.farming.logic;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -20,9 +21,7 @@ import net.minecraft.world.World;
 import forestry.api.farming.ICrop;
 import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.BlockUtil;
 import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.vect.Vect;
 import forestry.farming.PluginFarming;
 
 public class FarmableVanillaMushroom extends FarmableGenericSapling {
@@ -33,13 +32,14 @@ public class FarmableVanillaMushroom extends FarmableGenericSapling {
 
 	@Override
 	public ICrop getCropAt(World world, BlockPos pos) {
-		Block block = BlockUtil.getBlock(world, pos);
+		IBlockState blockState = world.getBlockState(pos);
+		Block block = blockState.getBlock();
 
 		if (block != Blocks.BROWN_MUSHROOM_BLOCK && block != Blocks.RED_MUSHROOM_BLOCK) {
 			return null;
 		}
 
-		return new CropBlock(world, block, BlockUtil.getBlockMetadata(world, pos), new Vect(pos));
+		return new CropBlock(world, block, block.getMetaFromState(blockState), pos);
 	}
 
 	@Override

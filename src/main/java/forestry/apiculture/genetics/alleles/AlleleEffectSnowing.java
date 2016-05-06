@@ -13,8 +13,9 @@ package forestry.apiculture.genetics.alleles;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
 import forestry.api.apiculture.IBeeGenome;
@@ -23,7 +24,7 @@ import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.IEffectData;
 import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.vect.Vect;
+import forestry.core.utils.VectUtil;
 
 public class AlleleEffectSnowing extends AlleleEffectThrottled {
 
@@ -46,14 +47,14 @@ public class AlleleEffectSnowing extends AlleleEffectThrottled {
 			default:
 		}
 
-		Vect area = getModifiedArea(genome, housing);
-		Vect offset = area.multiply(-1 / 2.0f);
+		Vec3i area = getModifiedArea(genome, housing);
+		Vec3i offset = VectUtil.scale(area, -1 / 2.0f);
 
 		for (int i = 0; i < 1; i++) {
 
-			Vect randomPos = Vect.getRandomPositionInArea(world.rand, area);
+			BlockPos randomPos = VectUtil.getRandomPositionInArea(world.rand, area);
 
-			Vect posBlock = randomPos.add(new Vect(housing.getCoordinates()));
+			BlockPos posBlock = randomPos.add(housing.getCoordinates());
 			posBlock = posBlock.add(offset);
 
 			// Put snow on the ground
@@ -80,13 +81,13 @@ public class AlleleEffectSnowing extends AlleleEffectThrottled {
 	@Override
 	public IEffectData doFX(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
 		if (housing.getWorld().rand.nextInt(3) == 0) {
-			Vect area = getModifiedArea(genome, housing);
-			Vect offset = area.multiply(-0.5F);
+			Vec3i area = getModifiedArea(genome, housing);
+			Vec3i offset = VectUtil.scale(area, -0.5F);
 
 			BlockPos coordinates = housing.getCoordinates();
 			World world = housing.getWorld();
 
-			Vect spawn = Vect.getRandomPositionInArea(world.rand, area).add(coordinates).add(offset);
+			BlockPos spawn = VectUtil.getRandomPositionInArea(world.rand, area).add(coordinates).add(offset);
 			Proxies.render.addEntitySnowFX(world, spawn.getX(), spawn.getY(), spawn.getZ());
 			return storedData;
 		} else {

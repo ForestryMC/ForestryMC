@@ -15,21 +15,21 @@ import java.util.Collection;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.genetics.IFruitBearer;
 import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.vect.Vect;
 
 public class CropFruit extends Crop {
 
-	public CropFruit(World world, Vect position) {
+	public CropFruit(World world, BlockPos position) {
 		super(world, position);
 	}
 
 	@Override
-	protected boolean isCrop(Vect pos) {
+	protected boolean isCrop(BlockPos pos) {
 		TileEntity tile = world.getTileEntity(pos);
 		if (!(tile instanceof IFruitBearer)) {
 			return false;
@@ -46,7 +46,7 @@ public class CropFruit extends Crop {
 	}
 
 	@Override
-	protected Collection<ItemStack> harvestBlock(Vect pos) {
+	protected Collection<ItemStack> harvestBlock(BlockPos pos) {
 		TileEntity tile = world.getTileEntity(pos);
 		if (!(tile instanceof IFruitBearer)) {
 			return new ArrayList<>();

@@ -15,6 +15,7 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.IPlantable;
@@ -22,7 +23,6 @@ import net.minecraftforge.common.IPlantable;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
-import forestry.core.utils.vect.IVect;
 
 public class AlleleEffectFertile extends AlleleEffectThrottled {
 	
@@ -37,7 +37,7 @@ public class AlleleEffectFertile extends AlleleEffectThrottled {
 		
 		World world = housing.getWorld();
 		BlockPos housingCoordinates = housing.getCoordinates();
-		IVect area = getModifiedArea(genome, housing);
+		Vec3i area = getModifiedArea(genome, housing);
 		
 		int blockX = getRandomOffset(world.rand, housingCoordinates.getX(), area.getX());
 		int blockZ = getRandomOffset(world.rand, housingCoordinates.getZ(), area.getZ());

@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.farming.multiblock;
 
+import javax.annotation.Nonnull;
+
 import forestry.api.multiblock.IFarmController;
 import forestry.core.access.IRestrictedAccess;
 import forestry.core.circuits.ISocketable;
@@ -25,5 +27,6 @@ public interface IFarmControllerInternal extends IFarmController, IMultiblockCon
 
 	IInventoryAdapter getInternalInventory();
 
+	@Nonnull
 	ITankManager getTankManager();
 }

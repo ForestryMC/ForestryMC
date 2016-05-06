@@ -16,47 +16,46 @@ import java.util.Collection;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
 import forestry.core.config.Constants;
-import forestry.core.utils.BlockUtil;
-import forestry.core.utils.vect.Vect;
 
 public abstract class Crop implements ICrop {
 
 	protected final World world;
-	protected final Vect position;
+	protected final BlockPos position;
 
-	protected Crop(World world, Vect position) {
+	protected Crop(World world, BlockPos position) {
 		this.world = world;
 		this.position = position;
 	}
 
-	protected final void setBlock(Vect position, IBlockState blockState) {
+	protected final void setBlock(BlockPos position, IBlockState blockState) {
 		world.setBlockState(position, blockState, Constants.FLAG_BLOCK_SYNCH);
 	}
 
 	@Deprecated
-	protected final void setBlock(Vect position, Block block, int meta) {
+	protected final void setBlock(BlockPos position, Block block, int meta) {
 		setBlock(position, block.getStateFromMeta(meta));
 	}
 
-	protected final Block getBlock(Vect position) {
+	protected final Block getBlock(BlockPos position) {
 		return getBlockState(position).getBlock();
 	}
 	
-	protected final IBlockState getBlockState(Vect position) {
-		return BlockUtil.getBlockState(world, position);
+	protected final IBlockState getBlockState(BlockPos position) {
+		return world.getBlockState(position);
 	}
 
-	protected final int getBlockMeta(Vect position) {
+	protected final int getBlockMeta(BlockPos position) {
 		return getBlock(position).getMetaFromState(getBlockState(position));
 	}
 
-	protected abstract boolean isCrop(Vect pos);
+	protected abstract boolean isCrop(BlockPos pos);
 
-	protected abstract Collection<ItemStack> harvestBlock(Vect pos);
+	protected abstract Collection<ItemStack> harvestBlock(BlockPos pos);
 
 	@Nullable
 	@Override

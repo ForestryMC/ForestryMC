@@ -15,13 +15,11 @@ import com.google.common.collect.ImmutableSet;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.farming.FarmDirection;
 import forestry.api.multiblock.IFarmComponent;
-import forestry.core.utils.vect.MutableVect;
-import forestry.core.utils.vect.Vect;
-import forestry.core.utils.vect.VectUtil;
 
 public class FarmHelper {
 
@@ -34,25 +32,26 @@ public class FarmHelper {
 	);
 
 	private static FarmDirection getOpposite(FarmDirection farmDirection) {
-		EnumFacing forgeDirection = farmDirection.getForgeDirection();
+		EnumFacing forgeDirection = farmDirection.getFacing();
 		EnumFacing forgeDirectionOpposite = forgeDirection.getOpposite();
 		return FarmDirection.getFarmDirection(forgeDirectionOpposite);
 	}
 
-	public static Vect getFarmMultiblockCorner(World world, Vect start, FarmDirection farmSide, FarmDirection layoutDirection) {
-		Vect edge = getFarmMultiblockEdge(world, start, farmSide);
+	public static BlockPos getFarmMultiblockCorner(World world, BlockPos start, FarmDirection farmSide, FarmDirection layoutDirection) {
+		BlockPos edge = getFarmMultiblockEdge(world, start, farmSide);
 		return getFarmMultiblockEdge(world, edge, getOpposite(layoutDirection));
 	}
 
-	private static Vect getFarmMultiblockEdge(World world, Vect start, FarmDirection direction) {
-		MutableVect edge = new MutableVect(start);
+	private static BlockPos getFarmMultiblockEdge(World world, BlockPos start, FarmDirection direction) {
+		BlockPos.MutableBlockPos edge = new BlockPos.MutableBlockPos(start);
 
-		while (VectUtil.getTile(world, edge) instanceof IFarmComponent) {
-			edge.add(direction);
+		while (world.getTileEntity(edge) instanceof IFarmComponent) {
+			edge.offsetMutable(direction.getFacing());
 		}
 
-		edge.add(getOpposite(direction));
-		return new Vect(edge);
+		FarmDirection oppositeDirection = getOpposite(direction);
+		edge.offsetMutable(oppositeDirection.getFacing());
+		return edge.toImmutable();
 	}
 
 }

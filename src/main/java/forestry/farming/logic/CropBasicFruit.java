@@ -14,30 +14,30 @@ import java.util.Collection;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.vect.Vect;
 
 public class CropBasicFruit extends Crop {
 
 	private final Block block;
 	private final int meta;
 
-	public CropBasicFruit(World world, Block block, int meta, Vect position) {
+	public CropBasicFruit(World world, Block block, int meta, BlockPos position) {
 		super(world, position);
 		this.block = block;
 		this.meta = meta;
 	}
 
 	@Override
-	protected boolean isCrop(Vect pos) {
+	protected boolean isCrop(BlockPos pos) {
 		return getBlock(pos) == block && getBlockMeta(pos) == meta;
 	}
 
 	@Override
-	protected Collection<ItemStack> harvestBlock(Vect pos) {
+	protected Collection<ItemStack> harvestBlock(BlockPos pos) {
 		Collection<ItemStack> harvested = block.getDrops(world, pos, block.getStateFromMeta(meta), 0);
 		Proxies.common.addBlockDestroyEffects(world, pos, block.getDefaultState());
 		world.setBlockState(pos, block.getDefaultState(), Constants.FLAG_BLOCK_SYNCH);

@@ -21,6 +21,7 @@ import java.util.Set;
 import java.util.Stack;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -37,13 +38,11 @@ import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
 import forestry.api.genetics.IFruitBearer;
 import forestry.core.PluginCore;
-import forestry.core.utils.vect.Vect;
-import forestry.core.utils.vect.VectUtil;
 
 public class FarmLogicOrchard extends FarmLogic {
 
 	private final Collection<IFarmable> farmables;
-	private final HashMap<Vect, Integer> lastExtents = new HashMap<>();
+	private final HashMap<BlockPos, Integer> lastExtents = new HashMap<>();
 	private final ImmutableList<Block> traversalBlocks;
 
 	public FarmLogicOrchard(IFarmHousing housing) {
@@ -110,20 +109,19 @@ public class FarmLogicOrchard extends FarmLogic {
 	@Override
 	public Collection<ICrop> harvest(BlockPos pos, FarmDirection direction, int extent) {
 
-		Vect start = new Vect(pos);
-		if (!lastExtents.containsKey(start)) {
-			lastExtents.put(start, 0);
+		if (!lastExtents.containsKey(pos)) {
+			lastExtents.put(pos, 0);
 		}
 
-		int lastExtent = lastExtents.get(start);
+		int lastExtent = lastExtents.get(pos);
 		if (lastExtent > extent) {
 			lastExtent = 0;
 		}
 
-		Vect position = translateWithOffset(pos.add(0, 1, 0), direction, lastExtent);
+		BlockPos position = translateWithOffset(pos.up(), direction, lastExtent);
 		Collection<ICrop> crops = getHarvestBlocks(position);
 		lastExtent++;
-		lastExtents.put(start, lastExtent);
+		lastExtents.put(pos, lastExtent);
 
 		return crops;
 	}
@@ -139,22 +137,24 @@ public class FarmLogicOrchard extends FarmLogic {
 		return "Orchard";
 	}
 
-	private Collection<ICrop> getHarvestBlocks(Vect position) {
+	private Collection<ICrop> getHarvestBlocks(BlockPos position) {
 
-		Set<Vect> seen = new HashSet<>();
+		Set<BlockPos> seen = new HashSet<>();
 		Stack<ICrop> crops = new Stack<>();
 
 		World world = getWorld();
 
 		// Determine what type we want to harvest.
-		if (!VectUtil.isWoodBlock(world, position) && !isBlockTraversable(world, position, traversalBlocks) && !isFruitBearer(world, position)) {
+		IBlockState blockState = world.getBlockState(position);
+		Block block = blockState.getBlock();
+		if (!block.isWood(world, position) && !isBlockTraversable(blockState, world, position, traversalBlocks) && !isFruitBearer(world, position)) {
 			return crops;
 		}
 
-		List<Vect> candidates = processHarvestBlock(crops, seen, position, position);
-		List<Vect> temp = new ArrayList<>();
+		List<BlockPos> candidates = processHarvestBlock(crops, seen, position, position);
+		List<BlockPos> temp = new ArrayList<>();
 		while (!candidates.isEmpty() && crops.size() < 20) {
-			for (Vect candidate : candidates) {
+			for (BlockPos candidate : candidates) {
 				temp.addAll(processHarvestBlock(crops, seen, position, candidate));
 			}
 			candidates.clear();
@@ -165,16 +165,16 @@ public class FarmLogicOrchard extends FarmLogic {
 		return crops;
 	}
 
-	private List<Vect> processHarvestBlock(Stack<ICrop> crops, Set<Vect> seen, Vect start, Vect position) {
+	private List<BlockPos> processHarvestBlock(Stack<ICrop> crops, Set<BlockPos> seen, BlockPos start, BlockPos position) {
 		World world = getWorld();
 
-		List<Vect> candidates = new ArrayList<>();
+		List<BlockPos> candidates = new ArrayList<>();
 
 		// Get additional candidates to return
 		for (int i = -2; i < 3; i++) {
 			for (int j = 0; j < 2; j++) {
 				for (int k = -1; k < 2; k++) {
-					Vect candidate = position.add(i, j, k);
+					BlockPos candidate = position.add(i, j, k);
 					if (Math.abs(candidate.getX() - start.getX()) > 5) {
 						continue;
 					}
@@ -186,10 +186,13 @@ public class FarmLogicOrchard extends FarmLogic {
 					if (seen.contains(candidate)) {
 						continue;
 					}
-					if (VectUtil.isAirBlock(world, candidate)) {
+					if (world.isAirBlock(candidate)) {
 						continue;
 					}
-					if (VectUtil.isWoodBlock(world, candidate) || isBlockTraversable(world, candidate, traversalBlocks)) {
+
+					IBlockState blockState = world.getBlockState(candidate);
+					Block block = blockState.getBlock();
+					if (block.isWood(world, candidate) || isBlockTraversable(blockState, world, candidate, traversalBlocks)) {
 						candidates.add(candidate);
 						seen.add(candidate);
 					} else if (isFruitBearer(world, candidate)) {
@@ -208,7 +211,7 @@ public class FarmLogicOrchard extends FarmLogic {
 		return candidates;
 	}
 
-	private boolean isFruitBearer(World world, Vect position) {
+	private boolean isFruitBearer(World world, BlockPos position) {
 
 		TileEntity tile = world.getTileEntity(position);
 		if (tile instanceof IFruitBearer) {
@@ -224,9 +227,8 @@ public class FarmLogicOrchard extends FarmLogic {
 		return false;
 	}
 
-	private static boolean isBlockTraversable(World world, Vect position, ImmutableList<Block> traversalBlocks) {
-
-		Block candidate = VectUtil.getBlock(world, position);
+	private static boolean isBlockTraversable(IBlockState blockState, World world, BlockPos position, ImmutableList<Block> traversalBlocks) {
+		Block candidate = blockState.getBlock();
 		for (Block block : traversalBlocks) {
 			if (block == candidate) {
 				return true;
@@ -235,7 +237,7 @@ public class FarmLogicOrchard extends FarmLogic {
 		return false;
 	}
 
-	private ICrop getCrop(World world, Vect position) {
+	private ICrop getCrop(World world, BlockPos position) {
 
 		TileEntity tile = world.getTileEntity(position);
 

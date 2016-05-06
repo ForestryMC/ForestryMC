@@ -17,7 +17,6 @@ import java.util.Collections;
 import java.util.Map.Entry;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -186,7 +185,7 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 			return false;
 		}
 
-		Block block = BlockUtil.getBlock(world, pos);
+		Block block = world.getBlockState(pos).getBlock();
 		if (PluginLepidopterology.blocks.cocoon != block) {
 			return false;
 		}

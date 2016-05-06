@@ -23,9 +23,9 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
@@ -34,8 +34,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.core.tiles.TileEngine;
-import forestry.core.utils.vect.Vect;
-import forestry.core.utils.vect.VectUtil;
 
 import cofh.api.energy.IEnergyConnection;
 import cofh.api.energy.IEnergyReceiver;
@@ -44,35 +42,13 @@ public abstract class BlockUtil {
 
 	private static final int slabWoodId = OreDictionary.getOreID("slabWood");
 
-	public static List<ItemStack> getBlockDrops(World world, Vect posBlock) {
-		IBlockState blockState = VectUtil.getBlockState(world, posBlock);
+	public static List<ItemStack> getBlockDrops(World world, BlockPos posBlock) {
+		IBlockState blockState = world.getBlockState(posBlock);
 
 		return blockState.getBlock().getDrops(world, posBlock, blockState, 0);
 
 	}
 	
-	/**
-	 * @return The block state from the pos
-	 */
-	public static IBlockState getBlockState(IBlockAccess world, BlockPos posBlock) {
-		return world.getBlockState(posBlock);
-	}
-	
-	/**
-	 * @return The block from the pos
-	 */
-	@Deprecated
-	public static Block getBlock(IBlockAccess world, BlockPos posBlock) {
-		return getBlockState(world, posBlock).getBlock();
-	}
-	
-	/**
-	 * @return The block metadata from the pos
-	 */
-	public static int getBlockMetadata(IBlockAccess world, BlockPos posBlock) {
-		return getBlock(world, posBlock).getMetaFromState(getBlockState(world, posBlock));
-	}
-
 	public static boolean isEnergyReceiverOrEngine(EnumFacing side, TileEntity tile) {
 		if (!(tile instanceof IEnergyReceiver) && !(tile instanceof TileEngine)) {
 			return false;

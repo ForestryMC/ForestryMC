@@ -11,29 +11,28 @@
 package forestry.farming;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.farming.FarmDirection;
-import forestry.core.utils.vect.MutableVect;
-import forestry.core.utils.vect.Vect;
-import forestry.core.utils.vect.VectUtil;
 
 public class FarmTarget {
 
-	private final Vect start;
+	private final BlockPos start;
 	private final FarmDirection direction;
 	private final int limit;
 
 	private int yOffset;
 	private int extent;
 
-	public FarmTarget(Vect start, FarmDirection direction, int limit) {
+	public FarmTarget(BlockPos start, FarmDirection direction, int limit) {
 		this.start = start;
 		this.direction = direction;
 		this.limit = limit;
 	}
 
-	public Vect getStart() {
+	public BlockPos getStart() {
 		return start;
 	}
 
@@ -49,19 +48,20 @@ public class FarmTarget {
 		return direction;
 	}
 
-	public void setExtentAndYOffset(World world, Vect platformPosition) {
+	public void setExtentAndYOffset(World world, BlockPos platformPosition) {
 		if (platformPosition == null) {
 			extent = 0;
 			return;
 		}
 
-		MutableVect position = new MutableVect(platformPosition);
+		BlockPos.MutableBlockPos position = new BlockPos.MutableBlockPos(platformPosition);
 		for (extent = 0; extent < limit; extent++) {
-			Block platform = VectUtil.getBlock(world, position);
+			IBlockState blockState = world.getBlockState(position);
+			Block platform = blockState.getBlock();
 			if (!FarmHelper.bricks.contains(platform)) {
 				break;
 			}
-			position.add(getDirection().getForgeDirection());
+			position.offsetMutable(getDirection().getFacing());
 		}
 
 		yOffset = platformPosition.getY() + 1 - getStart().getY();

@@ -14,10 +14,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -32,8 +35,6 @@ import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
-import forestry.core.utils.vect.Vect;
-import forestry.core.utils.vect.VectUtil;
 import forestry.plugins.compat.PluginIC2;
 
 public class FarmLogicRubber extends FarmLogic {
@@ -98,7 +99,7 @@ public class FarmLogicRubber extends FarmLogic {
 		return false;
 	}
 
-	private final HashMap<Vect, Integer> lastExtents = new HashMap<>();
+	private final Map<BlockPos, Integer> lastExtents = new HashMap<>();
 
 	@Override
 	public Collection<ICrop> harvest(BlockPos pos, FarmDirection direction, int extent) {
@@ -106,46 +107,46 @@ public class FarmLogicRubber extends FarmLogic {
 			return null;
 		}
 
-		Vect start = new Vect(pos);
-		if (!lastExtents.containsKey(start)) {
-			lastExtents.put(start, 0);
+		if (!lastExtents.containsKey(pos)) {
+			lastExtents.put(pos, 0);
 		}
 
-		int lastExtent = lastExtents.get(start);
+		int lastExtent = lastExtents.get(pos);
 		if (lastExtent > extent) {
 			lastExtent = 0;
 		}
 
-		Vect position = translateWithOffset(pos.add(0, 1, 0), direction, lastExtent);
+		BlockPos position = translateWithOffset(pos.add(0, 1, 0), direction, lastExtent);
 		Collection<ICrop> crops = getHarvestBlocks(position);
 		lastExtent++;
-		lastExtents.put(start, lastExtent);
+		lastExtents.put(pos, lastExtent);
 
 		return crops;
 	}
 
-	private Collection<ICrop> getHarvestBlocks(Vect position) {
+	private Collection<ICrop> getHarvestBlocks(BlockPos position) {
 
-		Set<Vect> seen = new HashSet<>();
+		Set<BlockPos> seen = new HashSet<>();
 		Stack<ICrop> crops = new Stack<>();
 
 		World world = getWorld();
 
 		// Determine what type we want to harvest.
-		Block block = VectUtil.getBlock(world, position);
+		IBlockState blockState = world.getBlockState(position);
+		Block block = blockState.getBlock();
 		if (!ItemStackUtil.equals(block, PluginIC2.rubberWood)) {
 			return crops;
 		}
 
-		int meta = VectUtil.getBlockMeta(world, position);
+		int meta = block.getMetaFromState(blockState);
 		if (meta >= 2 && meta <= 5) {
 			crops.push(new CropRubber(getWorld(), block, meta, position));
 		}
 
-		ArrayList<Vect> candidates = processHarvestBlock(crops, seen, position);
-		ArrayList<Vect> temp = new ArrayList<>();
+		List<BlockPos> candidates = processHarvestBlock(crops, seen, position);
+		List<BlockPos> temp = new ArrayList<>();
 		while (!candidates.isEmpty() && crops.size() < 100) {
-			for (Vect candidate : candidates) {
+			for (BlockPos candidate : candidates) {
 				temp.addAll(processHarvestBlock(crops, seen, candidate));
 			}
 			candidates.clear();
@@ -156,14 +157,14 @@ public class FarmLogicRubber extends FarmLogic {
 		return crops;
 	}
 
-	private ArrayList<Vect> processHarvestBlock(Stack<ICrop> crops, Set<Vect> seen, Vect position) {
+	private List<BlockPos> processHarvestBlock(Stack<ICrop> crops, Set<BlockPos> seen, BlockPos position) {
 		World world = getWorld();
 
-		ArrayList<Vect> candidates = new ArrayList<>();
+		List<BlockPos> candidates = new ArrayList<>();
 
 		// Get additional candidates to return
 		for (int j = 0; j < 2; j++) {
-			Vect candidate = new Vect(position.getX(), position.getY() + j, position.getZ());
+			BlockPos candidate = position.add(0, j, 0);
 			if (candidate.equals(position)) {
 				continue;
 			}
@@ -173,9 +174,10 @@ public class FarmLogicRubber extends FarmLogic {
 				continue;
 			}
 
-			Block block = VectUtil.getBlock(world, candidate);
+			IBlockState blockState = world.getBlockState(candidate);
+			Block block = blockState.getBlock();
 			if (ItemStackUtil.equals(block, PluginIC2.rubberWood)) {
-				int meta = VectUtil.getBlockMeta(world, candidate);
+				int meta = block.getMetaFromState(blockState);
 				if (meta >= 2 && meta <= 5) {
 					crops.push(new CropRubber(world, block, meta, candidate));
 				}

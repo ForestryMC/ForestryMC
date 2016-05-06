@@ -10,24 +10,25 @@
  ******************************************************************************/
 package forestry.core.genetics.alleles;
 
+import net.minecraft.util.math.Vec3i;
+
 import forestry.api.genetics.IAlleleArea;
-import forestry.core.utils.vect.Vect;
 
 public class AlleleArea extends AlleleCategorized implements IAlleleArea {
 
-	private final int[] area;
+	private final Vec3i area;
 
-	public AlleleArea(String modId, String category, String name, int[] value, boolean isDominant) {
+	public AlleleArea(String modId, String category, String name, Vec3i value, boolean isDominant) {
 		super(modId, category, name, isDominant);
 		this.area = value;
 	}
 	
 	@Override
-	public int[] getValue() {
+	public Vec3i getValue() {
 		return area;
 	}
 
-	public Vect getArea() {
-		return new Vect(area);
+	public Vec3i getArea() {
+		return area;
 	}
 }

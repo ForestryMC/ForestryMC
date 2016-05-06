@@ -173,8 +173,8 @@ public class InventoryAdapter implements IInventoryAdapter, IStreamable {
 			slots[i] = i;
 		}
 
-		for (int side : Constants.FACINGS) {
-			slotMap[side] = slots;
+		for (EnumFacing side : EnumFacing.VALUES) {
+			slotMap[side.getIndex()] = slots;
 		}
 	}
 

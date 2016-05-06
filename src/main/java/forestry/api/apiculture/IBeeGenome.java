@@ -5,6 +5,8 @@
  ******************************************************************************/
 package forestry.api.apiculture;
 
+import net.minecraft.util.math.Vec3i;
+
 import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IFlowerProvider;
 import forestry.api.genetics.IGenome;
@@ -43,7 +45,7 @@ public interface IBeeGenome extends IGenome {
 
 	int getFlowering();
 
-	int[] getTerritory();
+	Vec3i getTerritory();
 
 	IAlleleBeeEffect getEffect();
 

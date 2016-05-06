@@ -13,6 +13,7 @@ package forestry.farming.multiblock;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fluids.FluidStack;
@@ -30,8 +31,6 @@ import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.multiblock.FakeMultiblockController;
 import forestry.farming.gui.IFarmLedgerDelegate;
 
-import io.netty.util.internal.EmptyArrays;
-
 public class FakeFarmController extends FakeMultiblockController implements IFarmControllerInternal {
 	public static final FakeFarmController instance = new FakeFarmController();
 
@@ -40,18 +39,18 @@ public class FakeFarmController extends FakeMultiblockController implements IFar
 	}
 
 	@Override
-	public int[] getCoords() {
-		return EmptyArrays.EMPTY_INTS;
+	public BlockPos getCoords() {
+		return BlockPos.ORIGIN;
 	}
 
 	@Override
-	public int[] getArea() {
-		return EmptyArrays.EMPTY_INTS;
+	public Vec3i getArea() {
+		return Vec3i.NULL_VECTOR;
 	}
 
 	@Override
-	public int[] getOffset() {
-		return EmptyArrays.EMPTY_INTS;
+	public Vec3i getOffset() {
+		return Vec3i.NULL_VECTOR;
 	}
 
 	@Override

@@ -13,6 +13,7 @@ package forestry.farming.logic;
 import java.util.Collection;
 import java.util.Stack;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -27,9 +28,6 @@ import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.vect.IVect;
-import forestry.core.utils.vect.Vect;
-import forestry.core.utils.vect.VectUtil;
 
 public abstract class FarmLogicCrops extends FarmLogicWatered {
 	private static final ItemStack farmland = new ItemStack(Blocks.FARMLAND, 1, OreDictionary.WILDCARD_VALUE);
@@ -79,13 +77,16 @@ public abstract class FarmLogicCrops extends FarmLogicWatered {
 		World world = getWorld();
 
 		for (int i = 0; i < extent; i++) {
-			Vect position = translateWithOffset(pos, direction, i);
+			BlockPos position = translateWithOffset(pos, direction, i);
 			IBlockState state = world.getBlockState(position);
-			if (!VectUtil.isAirBlock(world, position) && !BlockUtil.isReplaceableBlock(state, world, position)) {
+			if (!world.isAirBlock(position) && !BlockUtil.isReplaceableBlock(state, world, position)) {
 				continue;
 			}
 
-			ItemStack below = VectUtil.getAsItemStack(world, position.down());
+			BlockPos soilPosition = position.down();
+			IBlockState blockState = world.getBlockState(soilPosition);
+			Block block = blockState.getBlock();
+			ItemStack below = block.getPickBlock(blockState, null, world, soilPosition, null);
 			if (ground.getItem() != below.getItem()) {
 				continue;
 			}
@@ -99,7 +100,7 @@ public abstract class FarmLogicCrops extends FarmLogicWatered {
 		return false;
 	}
 
-	private boolean trySetCrop(IVect position) {
+	private boolean trySetCrop(BlockPos position) {
 		World world = getWorld();
 
 		for (IFarmable candidate : seeds) {
@@ -117,7 +118,7 @@ public abstract class FarmLogicCrops extends FarmLogicWatered {
 
 		Stack<ICrop> crops = new Stack<>();
 		for (int i = 0; i < extent; i++) {
-			Vect position = translateWithOffset(pos.add(0, 1, 0), direction, i);
+			BlockPos position = translateWithOffset(pos.add(0, 1, 0), direction, i);
 			for (IFarmable seed : seeds) {
 				ICrop crop = seed.getCropAt(world, position);
 				if (crop != null) {

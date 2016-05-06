@@ -11,6 +11,7 @@
 package forestry.greenhouse.tiles;
 
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.greenhouse.DefaultGreenhouseListener;
@@ -18,7 +19,6 @@ import forestry.api.greenhouse.IGreenhouseHousing;
 import forestry.api.greenhouse.IGreenhouseListener;
 import forestry.api.multiblock.IGreenhouseComponent;
 import forestry.api.multiblock.IGreenhouseController;
-import forestry.core.utils.vect.Vect;
 
 public class TileGreenhouseControl extends TileGreenhouse implements IGreenhouseComponent.Listener {
 
@@ -47,7 +47,7 @@ public class TileGreenhouseControl extends TileGreenhouse implements IGreenhouse
 
 		private boolean hasRedstoneSignal() {
 			for (EnumFacing direction : EnumFacing.VALUES) {
-				Vect side = new Vect(tile).add(direction);
+				BlockPos side = tile.getPos().offset(direction);
 				EnumFacing dir = direction.getOpposite();
 				World world = tile.getWorld();
 				if (world.getRedstonePower(side, dir) > 0 || world.getStrongPower(side, dir) > 0) {

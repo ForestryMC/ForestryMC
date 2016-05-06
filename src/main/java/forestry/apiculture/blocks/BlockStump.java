@@ -13,6 +13,7 @@ package forestry.apiculture.blocks;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
@@ -34,7 +35,6 @@ import forestry.api.core.Tabs;
 import forestry.apiculture.PluginApiculture;
 import forestry.apiculture.tiles.TileCandle;
 import forestry.core.config.Constants;
-import forestry.core.utils.BlockUtil;
 
 public class BlockStump extends BlockTorch implements IItemModelRegister {
 
@@ -58,7 +58,10 @@ public class BlockStump extends BlockTorch implements IItemModelRegister {
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (heldItem != null && BlockCandle.lightingItems.contains(heldItem.getItem())) {
-			worldIn.setBlockState(pos, PluginApiculture.blocks.candle.getStateFromMeta(BlockUtil.getBlockMetadata(worldIn, pos) | 0x08), Constants.FLAG_BLOCK_SYNCH);
+			IBlockState blockState = worldIn.getBlockState(pos);
+			Block block = blockState.getBlock();
+			IBlockState activatedState = PluginApiculture.blocks.candle.getStateFromMeta(block.getMetaFromState(blockState) | 0x08);
+			worldIn.setBlockState(pos, activatedState, Constants.FLAG_BLOCK_SYNCH);
 			TileCandle tc = new TileCandle();
 			tc.setColour(0); // default to white
 			worldIn.setTileEntity(pos, tc);

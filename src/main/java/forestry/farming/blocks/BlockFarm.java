@@ -45,7 +45,6 @@ import forestry.api.core.Tabs;
 import forestry.core.blocks.BlockStructure;
 import forestry.core.blocks.propertys.UnlistedBlockAccess;
 import forestry.core.blocks.propertys.UnlistedBlockPos;
-import forestry.core.utils.BlockUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.farming.models.EnumFarmBlockTexture;
 import forestry.farming.tiles.TileFarm;
@@ -110,7 +109,7 @@ public class BlockFarm extends BlockStructure {
 
 	@Override
 	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
-		List<ItemStack> drops = getDrops(world, pos, BlockUtil.getBlockState(world, pos), 0);
+		List<ItemStack> drops = getDrops(world, pos, world.getBlockState(pos), 0);
 		if (drops.isEmpty()) {
 			return super.getPickBlock(state, target, world, pos, player);
 		}
@@ -132,7 +131,7 @@ public class BlockFarm extends BlockStructure {
 	@Override
 	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
 		if (!world.isRemote && canHarvestBlock(world, pos, player)) {
-			List<ItemStack> drops = getDrops(world, pos, BlockUtil.getBlockState(world, pos), 0);
+			List<ItemStack> drops = getDrops(world, pos, world.getBlockState(pos), 0);
 			for (ItemStack drop : drops) {
 				ItemStackUtil.dropItemStackAsEntity(drop, world, pos);
 			}

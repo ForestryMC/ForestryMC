@@ -13,6 +13,7 @@ package forestry.core.genetics.mutations;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -23,7 +24,6 @@ import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IMutationCondition;
-import forestry.core.utils.BlockUtil;
 import forestry.core.utils.Translator;
 
 public class MutationConditionRequiresResourceOreDict implements IMutationCondition {
@@ -49,8 +49,9 @@ public class MutationConditionRequiresResourceOreDict implements IMutationCondit
 		int i = 1;
 		do {
 			BlockPos blockPos = new BlockPos(pos.getX(), pos.getY() - i, pos.getY());
-			block = BlockUtil.getBlock(world, blockPos);
-			meta = BlockUtil.getBlockMetadata(world, blockPos);
+			IBlockState blockState = world.getBlockState(blockPos);
+			block = blockState.getBlock();
+			meta = block.getMetaFromState(blockState);
 			i++;
 		} while (block instanceof IBeeHousing);
 

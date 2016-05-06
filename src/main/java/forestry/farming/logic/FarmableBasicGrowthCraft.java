@@ -11,6 +11,7 @@
 package forestry.farming.logic;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -19,9 +20,7 @@ import net.minecraft.world.World;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
 import forestry.core.config.Constants;
-import forestry.core.utils.BlockUtil;
 import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.vect.Vect;
 
 public class FarmableBasicGrowthCraft implements IFarmable {
 
@@ -39,18 +38,20 @@ public class FarmableBasicGrowthCraft implements IFarmable {
 
 	@Override
 	public boolean isSaplingAt(World world, BlockPos pos) {
-		return BlockUtil.getBlock(world, pos) == block;
+		return world.getBlockState(pos).getBlock() == block;
 	}
 
 	@Override
 	public ICrop getCropAt(World world, BlockPos pos) {
-		if (BlockUtil.getBlock(world, pos) != block) {
+		IBlockState blockState = world.getBlockState(pos);
+		Block block = blockState.getBlock();
+		if (block != this.block) {
 			return null;
 		}
-		if (BlockUtil.getBlockMetadata(world, pos) != matureMeta) {
+		if (block.getMetaFromState(blockState) != matureMeta) {
 			return null;
 		}
-		return new CropBasicGrowthCraft(world, block, matureMeta, new Vect(pos), isRice, isGrape);
+		return new CropBasicGrowthCraft(world, this.block, matureMeta, pos, isRice, isGrape);
 	}
 
 	@Override

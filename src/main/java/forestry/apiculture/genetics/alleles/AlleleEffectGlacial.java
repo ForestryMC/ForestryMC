@@ -13,6 +13,7 @@ package forestry.apiculture.genetics.alleles;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
 import forestry.api.apiculture.IBeeGenome;
@@ -20,7 +21,7 @@ import forestry.api.apiculture.IBeeHousing;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.IEffectData;
 import forestry.core.config.Constants;
-import forestry.core.utils.vect.Vect;
+import forestry.core.utils.VectUtil;
 
 public class AlleleEffectGlacial extends AlleleEffectThrottled {
 
@@ -42,15 +43,14 @@ public class AlleleEffectGlacial extends AlleleEffectThrottled {
 			default:
 		}
 
-		int[] areaAr = genome.getTerritory();
-		Vect area = new Vect(areaAr);
-		Vect offset = area.multiply(-1 / 2.0f);
-		Vect housingCoords = new Vect(housing.getCoordinates());
+		Vec3i area = genome.getTerritory();
+		Vec3i offset = VectUtil.scale(area, -1 / 2.0f);
+		BlockPos housingCoords = housing.getCoordinates();
 
 		for (int i = 0; i < 10; i++) {
 
-			Vect randomPos = Vect.getRandomPositionInArea(world.rand, area);
-			Vect posBlock = Vect.add(randomPos, housingCoords, offset);
+			BlockPos randomPos = VectUtil.getRandomPositionInArea(world.rand, area);
+			BlockPos posBlock = VectUtil.add(randomPos, housingCoords, offset);
 
 			// Freeze water
 			Block block = world.getBlockState(posBlock).getBlock();

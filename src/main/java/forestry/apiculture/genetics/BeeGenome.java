@@ -19,6 +19,7 @@ import java.util.concurrent.TimeUnit;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.Vec3i;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeChromosome;
@@ -37,7 +38,6 @@ import forestry.core.genetics.Genome;
 import forestry.core.genetics.alleles.AlleleArea;
 import forestry.core.genetics.alleles.AlleleBoolean;
 import forestry.core.genetics.alleles.AlleleTolerance;
-import forestry.core.utils.vect.Vect;
 
 public class BeeGenome extends Genome implements IBeeGenome {
 	/**
@@ -160,9 +160,8 @@ public class BeeGenome extends Genome implements IBeeGenome {
 	}
 
 	@Override
-	public int[] getTerritory() {
-		Vect area = ((AlleleArea) getActiveAllele(EnumBeeChromosome.TERRITORY)).getArea();
-		return area.toArray();
+	public Vec3i getTerritory() {
+		return ((AlleleArea) getActiveAllele(EnumBeeChromosome.TERRITORY)).getArea();
 	}
 
 	@Override

@@ -27,7 +27,6 @@ import net.minecraftforge.common.BiomeDictionary;
 import forestry.api.apiculture.IBee;
 import forestry.apiculture.network.packets.PacketHabitatBiomePointer;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.vect.Vect;
 
 public class HabitatLocatorLogic {
 	private static final int maxChecksPerTick = 100;
@@ -53,7 +52,7 @@ public class HabitatLocatorLogic {
 	private boolean biomeFound = false;
 	private int searchRadiusIteration = 0;
 	private int searchAngleIteration = 0;
-	private Vect searchCenter;
+	private BlockPos searchCenter;
 
 	public boolean isBiomeFound() {
 		return biomeFound;
@@ -68,7 +67,7 @@ public class HabitatLocatorLogic {
 		this.searchAngleIteration = 0;
 		this.searchRadiusIteration = 0;
 		this.biomeFound = false;
-		this.searchCenter = new Vect(player);
+		this.searchCenter = player.getPosition();
 
 		BiomeGenBase currentBiome = player.worldObj.getBiomeGenForCoords(searchCenter);
 		removeInvalidBiomes(currentBiome, targetBiomes);
@@ -101,7 +100,7 @@ public class HabitatLocatorLogic {
 	}
 
 	private BlockPos findNearestBiome(Entity player, Collection<BiomeGenBase> biomesToSearch) {
-		Vect playerPos = new Vect(player);
+		BlockPos playerPos = player.getPosition();
 
 		// If we are in a valid spot, we point to ourselves.
 		BlockPos coordinates = getChunkCoordinates(playerPos, player.worldObj, biomesToSearch);
@@ -138,7 +137,7 @@ public class HabitatLocatorLogic {
 
 			int xOffset = Math.round((float) (radius * Math.cos(angle)));
 			int zOffset = Math.round((float) (radius * Math.sin(angle)));
-			Vect pos = searchCenter.add(xOffset, 0, zOffset);
+			BlockPos pos = searchCenter.add(xOffset, 0, zOffset);
 
 			coordinates = getChunkCoordinates(pos, player.worldObj, biomesToSearch);
 			if (coordinates != null) {
@@ -151,7 +150,7 @@ public class HabitatLocatorLogic {
 		return null;
 	}
 
-	private static BlockPos getChunkCoordinates(Vect pos, World world, Collection<BiomeGenBase> biomesToSearch) {
+	private static BlockPos getChunkCoordinates(BlockPos pos, World world, Collection<BiomeGenBase> biomesToSearch) {
 		BiomeGenBase biome;
 
 		biome = world.getBiomeGenForCoords(pos);

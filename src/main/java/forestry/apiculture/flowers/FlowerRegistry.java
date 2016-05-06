@@ -25,11 +25,13 @@ import java.util.TreeMap;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFlowerPot;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFlowerPot;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
 import net.minecraftforge.oredict.OreDictionary;
@@ -46,9 +48,7 @@ import forestry.api.genetics.IFlowerGrowthRule;
 import forestry.api.genetics.IFlowerRegistry;
 import forestry.api.genetics.IIndividual;
 import forestry.core.config.Constants;
-import forestry.core.utils.BlockUtil;
-import forestry.core.utils.vect.MutableVect;
-import forestry.core.utils.vect.Vect;
+import forestry.core.utils.VectUtil;
 
 public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelper {
 
@@ -133,10 +133,10 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 		}
 	}
 
-	private static Vect getArea(IBeeGenome genome, IBeeModifier beeModifier) {
-		int[] genomeTerritory = genome.getTerritory();
+	private static Vec3i getArea(IBeeGenome genome, IBeeModifier beeModifier) {
+		Vec3i genomeTerritory = genome.getTerritory();
 		float housingModifier = beeModifier.getTerritoryModifier(genome, 1f);
-		return new Vect(genomeTerritory).multiply(housingModifier * 3.0f);
+		return VectUtil.scale(genomeTerritory, housingModifier * 3.0f);
 	}
 
 	@Override
@@ -152,14 +152,11 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 
 		IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(beeHousing);
 
-		Vect area = getArea(bee.getGenome(), beeModifier);
-		Vect housingPos = new Vect(beeHousing.getCoordinates()).add(-area.getX() / 2, -area.getY() / 2, -area.getZ() / 2);
+		Vec3i area = getArea(bee.getGenome(), beeModifier);
+		BlockPos minPos = beeHousing.getCoordinates().add(-area.getX() / 2, -area.getY() / 2, -area.getZ() / 2);
+		BlockPos maxPos = minPos.add(area);
 
-		MutableVect posCurrent = new MutableVect(0, 0, 0);
-		while (posCurrent.advancePositionInArea(area)) {
-
-			Vect posBlock = Vect.add(housingPos, posCurrent);
-
+		for (BlockPos posBlock : BlockPos.getAllInBox(minPos, maxPos)) {
 			for (IFlowerAcceptableRule acceptableRule : acceptableRules) {
 				if (acceptableRule.isAcceptableFlower(flowerType, world, posBlock)) {
 					return posBlock;
@@ -194,7 +191,8 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 	}
 
 	private static boolean isAcceptedFlower(String flowerType, Set<Block> acceptedBlocks, Set<Flower> acceptedFlowers, World world, BlockPos pos) {
-		Block block = BlockUtil.getBlock(world, pos);
+		IBlockState blockState = world.getBlockState(pos);
+		Block block = blockState.getBlock();
 
 		final int meta;
 
@@ -208,7 +206,7 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 			if (!acceptedBlocks.contains(block)) {
 				return false;
 			}
-			meta = block.getMetaFromState(world.getBlockState(pos));
+			meta = block.getMetaFromState(blockState);
 		}
 
 		Flower flower = new Flower(block, meta, 0);

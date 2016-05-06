@@ -11,18 +11,17 @@
 package forestry.farming.logic;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
-import forestry.core.utils.BlockUtil;
-import forestry.core.utils.vect.Vect;
 
 public class FarmableGenericCrop implements IFarmable {
 
@@ -40,19 +39,21 @@ public class FarmableGenericCrop implements IFarmable {
 
 	@Override
 	public boolean isSaplingAt(World world, BlockPos pos) {
-		return BlockUtil.getBlock(world, pos) == block;
+		return world.getBlockState(pos).getBlock() == block;
 	}
 
 	@Override
 	public ICrop getCropAt(World world, BlockPos pos) {
-		if (BlockUtil.getBlock(world, pos) != block) {
+		IBlockState blockState = world.getBlockState(pos);
+		Block block = blockState.getBlock();
+		if (block != this.block) {
 			return null;
 		}
-		if (BlockUtil.getBlockMetadata(world, pos) != mature) {
+		if (block.getMetaFromState(blockState) != mature) {
 			return null;
 		}
 
-		return new CropBlock(world, block, mature, new Vect(pos));
+		return new CropBlock(world, this.block, mature, pos);
 	}
 
 	@Override

@@ -18,6 +18,8 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
 import forestry.api.apiculture.BeeManager;
@@ -26,7 +28,7 @@ import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.apiculture.blocks.BlockAlveary;
 import forestry.core.utils.DamageSourceForestry;
-import forestry.core.utils.vect.Vect;
+import forestry.core.utils.VectUtil;
 
 public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 
@@ -63,14 +65,13 @@ public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 		World world = housing.getWorld();
 		Random rand = world.rand;
 
-		int[] areaAr = genome.getTerritory();
-		Vect area = new Vect(areaAr).multiply(2);
-		Vect offset = area.multiply(-1 / 2.0f);
-		Vect posHousing = new Vect(housing.getCoordinates());
+		Vec3i area = VectUtil.scale(genome.getTerritory(), 2);
+		Vec3i offset = VectUtil.scale(area, -1 / 2.0f);
+		BlockPos posHousing = housing.getCoordinates();
 
 		for (int i = 0; i < 20; i++) {
-			Vect randomPos = Vect.getRandomPositionInArea(rand, area);
-			Vect posBlock = randomPos.add(posHousing);
+			BlockPos randomPos = VectUtil.getRandomPositionInArea(rand, area);
+			BlockPos posBlock = randomPos.add(posHousing);
 			posBlock = posBlock.add(offset);
 
 			if (posBlock.getY() <= 1 || posBlock.getY() >= housing.getWorld().getActualHeight()) {

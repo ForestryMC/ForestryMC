@@ -2,11 +2,11 @@ package forestry.core.genetics.alleles;
 
 import java.util.Locale;
 
+import net.minecraft.util.math.Vec3i;
+
 import forestry.api.apiculture.FlowerManager;
 import forestry.api.genetics.EnumTolerance;
 import forestry.apiculture.flowers.FlowerProvider;
-import forestry.core.utils.vect.IVect;
-import forestry.core.utils.vect.Vect;
 
 public class EnumAllele {
 	public enum Fertility implements IAlleleValue<Integer> {
@@ -360,13 +360,13 @@ public class EnumAllele {
 		}
 	}
 
-	public enum Territory implements IAlleleValue<IVect> {
+	public enum Territory implements IAlleleValue<Vec3i> {
 		AVERAGE(9, 6, 9),
 		LARGE(11, 8, 11),
 		LARGER(13, 12, 13),
 		LARGEST(15, 13, 15);
 
-		private final IVect area;
+		private final Vec3i area;
 		private final boolean dominant;
 
 		Territory(int x, int y, int z) {
@@ -374,12 +374,12 @@ public class EnumAllele {
 		}
 
 		Territory(int x, int y, int z, boolean dominant) {
-			this.area = new Vect(x, y, z);
+			this.area = new Vec3i(x, y, z);
 			this.dominant = dominant;
 		}
 
 		@Override
-		public IVect getValue() {
+		public Vec3i getValue() {
 			return area;
 		}
 

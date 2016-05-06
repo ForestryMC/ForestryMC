@@ -15,10 +15,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -35,8 +38,6 @@ import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
 import forestry.core.PluginCore;
 import forestry.core.blocks.BlockSoil;
-import forestry.core.utils.vect.Vect;
-import forestry.core.utils.vect.VectUtil;
 
 public class FarmLogicArboreal extends FarmLogicHomogeneous {
 	private static final int BRANCH_RANGE = 20;
@@ -91,34 +92,33 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 		return products;
 	}
 
-	private final HashMap<Vect, Integer> lastExtentsHarvest = new HashMap<>();
+	private final Map<BlockPos, Integer> lastExtentsHarvest = new HashMap<>();
 
 	@Override
 	public Collection<ICrop> harvest(BlockPos pos, FarmDirection direction, int extent) {
 
-		Vect start = new Vect(pos);
-		if (!lastExtentsHarvest.containsKey(start)) {
-			lastExtentsHarvest.put(start, 0);
+		if (!lastExtentsHarvest.containsKey(pos)) {
+			lastExtentsHarvest.put(pos, 0);
 		}
 
-		int lastExtent = lastExtentsHarvest.get(start);
+		int lastExtent = lastExtentsHarvest.get(pos);
 		if (lastExtent > extent) {
 			lastExtent = 0;
 		}
 
-		Vect position = translateWithOffset(pos.add(0, 1, 0), direction, lastExtent);
+		BlockPos position = translateWithOffset(pos.up(), direction, lastExtent);
 		Collection<ICrop> crops = getHarvestBlocks(position);
 		lastExtent++;
-		lastExtentsHarvest.put(start, lastExtent);
+		lastExtentsHarvest.put(pos, lastExtent);
 
 		return crops;
 	}
 
-	private Collection<ICrop> getHarvestBlocks(Vect position) {
+	private Collection<ICrop> getHarvestBlocks(BlockPos position) {
 
 		World world = getWorld();
 
-		Set<Vect> seen = new HashSet<>();
+		Set<BlockPos> seen = new HashSet<>();
 		Stack<ICrop> crops = new Stack<>();
 
 		// Determine what type we want to harvest.
@@ -139,10 +139,10 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 			return crops;
 		}
 
-		ArrayList<Vect> candidates = processHarvestBlock(germling, crops, seen, position, position);
-		ArrayList<Vect> temp = new ArrayList<>();
+		List<BlockPos> candidates = processHarvestBlock(germling, crops, seen, position, position);
+		List<BlockPos> temp = new ArrayList<>();
 		while (!candidates.isEmpty()) {
-			for (Vect candidate : candidates) {
+			for (BlockPos candidate : candidates) {
 				temp.addAll(processHarvestBlock(germling, crops, seen, position, candidate));
 			}
 			candidates.clear();
@@ -153,17 +153,17 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 		return crops;
 	}
 
-	private ArrayList<Vect> processHarvestBlock(IFarmable germling, Stack<ICrop> crops, Set<Vect> seen, Vect start, Vect position) {
+	private List<BlockPos> processHarvestBlock(IFarmable germling, Stack<ICrop> crops, Set<BlockPos> seen, BlockPos start, BlockPos position) {
 
 		World world = getWorld();
 
-		ArrayList<Vect> candidates = new ArrayList<>();
+		List<BlockPos> candidates = new ArrayList<>();
 
 		// Get additional candidates to return
 		for (int x = -1; x < 2; x++) {
 			for (int y = -1; y < 2; y++) {
 				for (int z = -1; z < 2; z++) {
-					Vect candidate = position.add(x, y, z);
+					BlockPos candidate = position.add(x, y, z);
 					if (candidate.equals(position)) {
 						continue;
 					}
@@ -198,11 +198,13 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 		World world = getWorld();
 
 		for (int i = 0; i < extent; i++) {
-			Vect position = translateWithOffset(pos, direction, i);
+			BlockPos position = translateWithOffset(pos, direction, i);
 
-			if (VectUtil.isAirBlock(world, position)) {
-				Vect soilBelowPosition = new Vect(position.getX(), position.getY() - 1, position.getZ());
-				ItemStack soilBelow = VectUtil.getAsItemStack(world, soilBelowPosition);
+			if (world.isAirBlock(position)) {
+				BlockPos soilPosition = position.down();
+				IBlockState soilState = world.getBlockState(soilPosition);
+				Block soilBlock = soilState.getBlock();
+				ItemStack soilBelow = soilBlock.getPickBlock(soilState, null, world, soilPosition, null);
 				if (isAcceptedSoil(soilBelow)) {
 					return plantSapling(position);
 				}
@@ -211,7 +213,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 		return false;
 	}
 
-	private boolean plantSapling(Vect position) {
+	private boolean plantSapling(BlockPos position) {
 		World world = getWorld();
 		Collections.shuffle(germlings);
 		for (IFarmable candidate : germlings) {

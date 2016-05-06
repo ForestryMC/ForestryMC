@@ -39,7 +39,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.core.entities.EntityFXColoredDripParticle;
-import forestry.core.utils.BlockUtil;
 
 public class BlockForestryFluid extends BlockFluidClassic implements IItemModelRegister {
 
@@ -156,7 +155,9 @@ public class BlockForestryFluid extends BlockFluidClassic implements IItemModelR
 	}
 
 	private static boolean isFlammable(IBlockAccess world, BlockPos pos) {
-		return BlockUtil.getBlock(world, pos).isFlammable(world, pos, null);
+		IBlockState blockState = world.getBlockState(pos);
+		Block block = blockState.getBlock();
+		return block.isFlammable(world, pos, null);
 	}
 
 	@Override
@@ -227,8 +228,9 @@ public class BlockForestryFluid extends BlockFluidClassic implements IItemModelR
 					x = startX + rand.nextInt(3) - 1;
 					z = startZ + rand.nextInt(3) - 1;
 
-					if (world.isAirBlock(new BlockPos(pos.getX(), y + 1, z)) && isFlammable(world, new BlockPos(x, y, z))) {
-						world.setBlockState(new BlockPos(pos.getX(), y + 1, z), Blocks.FIRE.getDefaultState());
+					BlockPos posAbove = new BlockPos(pos.getX(), y + 1, z);
+					if (world.isAirBlock(posAbove) && isFlammable(world, new BlockPos(x, y, z))) {
+						world.setBlockState(posAbove, Blocks.FIRE.getDefaultState());
 					}
 				}
 			}

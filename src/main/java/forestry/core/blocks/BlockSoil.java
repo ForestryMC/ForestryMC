@@ -44,7 +44,6 @@ import forestry.api.core.IModelManager;
 import forestry.core.CreativeTabForestry;
 import forestry.core.PluginCore;
 import forestry.core.config.Constants;
-import forestry.core.utils.BlockUtil;
 
 /**
  * Humus, bog earth, peat
@@ -165,13 +164,15 @@ public class BlockSoil extends Block implements IItemModelRegister, IBlockWithMe
 	/**
 	 * If a tree or sapling is in the vicinity, there is a chance, that the soil will degrade.
 	 */
-	private static void degradeSoil(World world, BlockPos pos) {
+	private static void degradeSoil(World world, final BlockPos pos) {
 
 		if (world.rand.nextInt(140) != 0) {
 			return;
 		}
 
-		int meta = BlockUtil.getBlockMetadata(world, pos);
+		IBlockState blockState = world.getBlockState(pos);
+		Block block = blockState.getBlock();
+		int meta = block.getMetaFromState(blockState);
 
 		// Unpack first
 		int type = meta & 0x03;
@@ -186,7 +187,7 @@ public class BlockSoil extends Block implements IItemModelRegister, IBlockWithMe
 		if (grade >= degradeDelimiter) {
 			world.setBlockState(pos, Blocks.SAND.getDefaultState(), Constants.FLAG_BLOCK_SYNCH);
 		} else {
-			world.setBlockState(pos, BlockUtil.getBlock(world, pos).getStateFromMeta(meta), Constants.FLAG_BLOCK_SYNCH);
+			world.setBlockState(pos, block.getStateFromMeta(meta), Constants.FLAG_BLOCK_SYNCH);
 		}
 		world.markBlockRangeForRenderUpdate(pos, pos);
 	}
@@ -205,13 +206,15 @@ public class BlockSoil extends Block implements IItemModelRegister, IBlockWithMe
 		return false;
 	}
 
-	private static void matureBog(World world, BlockPos pos) {
+	private static void matureBog(World world, final BlockPos pos) {
 
 		if (world.rand.nextInt(13) != 0) {
 			return;
 		}
 
-		int meta = BlockUtil.getBlockMetadata(world, pos);
+		IBlockState blockState = world.getBlockState(pos);
+		Block block = blockState.getBlock();
+		int meta = block.getMetaFromState(blockState);
 
 		// Unpack first
 
@@ -226,7 +229,6 @@ public class BlockSoil extends Block implements IItemModelRegister, IBlockWithMe
 		maturity++;
 
 		meta = maturity << 2 | type;
-		Block block = BlockUtil.getBlock(world, pos);
 		world.setBlockState(pos, block.getStateFromMeta(meta), Constants.FLAG_BLOCK_SYNCH);
 		world.markBlockRangeForRenderUpdate(pos, pos);
 	}
@@ -246,6 +248,10 @@ public class BlockSoil extends Block implements IItemModelRegister, IBlockWithMe
 	@Override
 	public boolean canSilkHarvest(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
 		return false;
+	}
+
+	public static SoilType getTypeFromState(IBlockState state) {
+		return state.getValue(SOIL);
 	}
 
 	public static SoilType getTypeFromMeta(int meta) {

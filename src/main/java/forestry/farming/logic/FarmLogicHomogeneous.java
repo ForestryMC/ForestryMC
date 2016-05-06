@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -23,8 +24,6 @@ import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.vect.Vect;
-import forestry.core.utils.vect.VectUtil;
 import forestry.farming.FarmHelper;
 
 public abstract class FarmLogicHomogeneous extends FarmLogic {
@@ -93,20 +92,24 @@ public abstract class FarmLogicHomogeneous extends FarmLogic {
 		World world = getWorld();
 
 		for (int i = 0; i < extent; i++) {
-			Vect position = translateWithOffset(pos, direction, i);
-			Block soil = VectUtil.getBlock(world, position);
+			BlockPos position = translateWithOffset(pos, direction, i);
+			IBlockState blockState1 = world.getBlockState(position);
+			Block soil = blockState1.getBlock();
 
 			if (FarmHelper.bricks.contains(soil)) {
 				break;
 			}
 
-			ItemStack soilStack = VectUtil.getAsItemStack(world, position);
+			IBlockState soilState = world.getBlockState(position);
+			Block soilBlock = soilState.getBlock();
+			ItemStack soilStack = soilBlock.getPickBlock(soilState, null, world, position, null);
 			if (isAcceptedSoil(soilStack)) {
 				continue;
 			}
 
 			BlockPos platformPosition = position.down();
-			Block platformBlock = VectUtil.getBlock(world, platformPosition);
+			IBlockState blockState = world.getBlockState(platformPosition);
+			Block platformBlock = blockState.getBlock();
 
 			if (!FarmHelper.bricks.contains(platformBlock)) {
 				break;
@@ -114,7 +117,7 @@ public abstract class FarmLogicHomogeneous extends FarmLogic {
 
 			produce.addAll(BlockUtil.getBlockDrops(world, position));
 
-			setBlock(position, ItemStackUtil.getBlock(soilBlock), soilBlock.getItemDamage());
+			setBlock(position, ItemStackUtil.getBlock(this.soilBlock), this.soilBlock.getItemDamage());
 			housing.getFarmInventory().removeResources(resources);
 			return true;
 		}

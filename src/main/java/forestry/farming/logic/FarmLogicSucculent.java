@@ -29,7 +29,6 @@ import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
 import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.vect.Vect;
 
 public class FarmLogicSucculent extends FarmLogic {
 
@@ -111,7 +110,7 @@ public class FarmLogicSucculent extends FarmLogic {
 
 		Stack<ICrop> crops = new Stack<>();
 		for (int i = 0; i < extent; i++) {
-			Vect position = translateWithOffset(pos.add(0, 1, 0), direction, i);
+			BlockPos position = translateWithOffset(pos.up(), direction, i);
 			for (IFarmable seed : germlings) {
 				ICrop crop = seed.getCropAt(world, position);
 				if (crop != null) {

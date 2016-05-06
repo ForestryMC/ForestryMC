@@ -1,5 +1,7 @@
 package forestry.api.genetics;
 
+import net.minecraft.util.math.Vec3i;
+
 /**
  * Creates new alleles with smart localization.
  *
@@ -41,15 +43,13 @@ public interface IAlleleFactory {
 	 * @param modId mod prefix for uid and localization (i.e. "forestry")
 	 * @param category allele category for uid and localization (i.e. "territory")
 	 * @param valueName allele value name for uid and localization (i.e. "large")
-	 * @param xDimValue allele area X Size
-	 * @param yDimValue allele area Y Size
-	 * @param zDimValue    allele area Z Size
+	 * @param value allele area x, y, z size
 	 * @param isDominant allele dominance
 	 * @param types allele chromosome type for registration (i.e. EnumBeeChromosome.TERRITORY)
 	 * @return a new IAlleleArea, registered with the allele registry.
 	 * @since Forestry 4.2
 	 */
-	IAlleleArea createArea(String modId, String category, String valueName, int xDimValue, int yDimValue, int zDimValue, boolean isDominant, IChromosomeType... types);
+	IAlleleArea createArea(String modId, String category, String valueName, Vec3i value, boolean isDominant, IChromosomeType... types);
 
 	/**
 	 * @param modId mod prefix for uid and localization (i.e. "forestry")

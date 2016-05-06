@@ -11,19 +11,18 @@
 package forestry.farming.logic;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
-import forestry.core.utils.BlockUtil;
 import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.vect.Vect;
 
 public class FarmableGenericSapling implements IFarmable {
 
@@ -44,12 +43,14 @@ public class FarmableGenericSapling implements IFarmable {
 			return false;
 		}
 
-		if (BlockUtil.getBlock(world, pos) == sapling) {
+		IBlockState blockState = world.getBlockState(pos);
+		Block block = blockState.getBlock();
+		if (block == sapling) {
 			return true;
 		}
 
 		if (saplingMeta >= 0) {
-			return BlockUtil.getBlockMetadata(world, pos) == saplingMeta;
+			return block.getMetaFromState(blockState) == saplingMeta;
 		} else {
 			return true;
 		}
@@ -58,12 +59,13 @@ public class FarmableGenericSapling implements IFarmable {
 
 	@Override
 	public ICrop getCropAt(World world, BlockPos pos) {
-		Block block = BlockUtil.getBlock(world, pos);
+		IBlockState blockState = world.getBlockState(pos);
+		Block block = blockState.getBlock();
 		if (!block.isWood(world, pos)) {
 			return null;
 		}
 
-		return new CropBlock(world, block, BlockUtil.getBlockMetadata(world, pos), new Vect(pos));
+		return new CropBlock(world, block, block.getMetaFromState(blockState), pos);
 	}
 
 	@Override

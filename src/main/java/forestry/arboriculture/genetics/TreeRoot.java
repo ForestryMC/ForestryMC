@@ -26,8 +26,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
@@ -212,7 +212,7 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 			return false;
 		}
 
-		Block block = BlockUtil.getBlock(world, pos);
+		Block block = world.getBlockState(pos).getBlock();
 		if (PluginArboriculture.blocks.saplingGE != block) {
 			return false;
 		}
@@ -249,7 +249,7 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 			return false;
 		}
 
-		Block block = BlockUtil.getBlock(world, pos);
+		Block block = world.getBlockState(pos).getBlock();
 		if (fruitPod != block) {
 			return false;
 		}

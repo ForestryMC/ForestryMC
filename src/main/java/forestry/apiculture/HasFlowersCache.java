@@ -14,6 +14,7 @@ import java.util.Random;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
 import forestry.api.apiculture.BeeManager;
@@ -24,7 +25,7 @@ import forestry.api.apiculture.IBeeModifier;
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
 import forestry.api.genetics.IFlowerProvider;
-import forestry.core.utils.vect.Vect;
+import forestry.core.utils.VectUtil;
 
 public class HasFlowersCache implements INbtWritable, INbtReadable {
 	private static final String nbtKey = "hasFlowerCache";
@@ -48,11 +49,11 @@ public class HasFlowersCache implements INbtWritable, INbtReadable {
 			IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(beeHousing);
 			BlockPos housingCoords = beeHousing.getCoordinates();
 
-			int[] genomeTerritory = queen.getGenome().getTerritory();
+			Vec3i genomeTerritory = queen.getGenome().getTerritory();
 			float housingModifier = beeModifier.getTerritoryModifier(queen.getGenome(), 1f);
-			Vect area = new Vect(genomeTerritory).multiply(housingModifier * 3.0f);
-			Vect min = new Vect(area).multiply(-0.5f).add(housingCoords);
-			Vect max = new Vect(area).multiply(0.5f).add(housingCoords);
+			Vec3i area = VectUtil.scale(genomeTerritory, housingModifier * 3.0f);
+			BlockPos min = VectUtil.scale(area, -0.5f).add(housingCoords);
+			BlockPos max = VectUtil.scale(area, 0.5f).add(housingCoords);
 
 			if (isFlowerValid(world, flowerType, min, max)) {
 				return true;
@@ -72,14 +73,14 @@ public class HasFlowersCache implements INbtWritable, INbtReadable {
 		return flowerCoords != null;
 	}
 
-	private boolean isFlowerValid(World world, String flowerType, Vect min, Vect max) {
+	private boolean isFlowerValid(World world, String flowerType, BlockPos min, BlockPos max) {
 		if (!isFlowerCoordInRange(flowerCoords, min, max)) {
 			return false;
 		}
 		return FlowerManager.flowerRegistry.isAcceptedFlower(flowerType, world, flowerCoords);
 	}
 
-	private static boolean isFlowerCoordInRange(BlockPos flowerCoords, Vect min, Vect max) {
+	private static boolean isFlowerCoordInRange(BlockPos flowerCoords, BlockPos min, BlockPos max) {
 		return flowerCoords.getX() >= min.getX() && flowerCoords.getX() <= max.getX() && flowerCoords.getY() >= min.getY() && flowerCoords.getY() <= max.getY() && flowerCoords.getZ() >= min.getZ() && flowerCoords.getZ() <= max.getZ();
 	}
 

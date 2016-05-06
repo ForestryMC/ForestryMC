@@ -24,11 +24,13 @@ import java.util.Set;
 import java.util.Stack;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
@@ -70,8 +72,6 @@ import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.Translator;
-import forestry.core.utils.vect.Vect;
-import forestry.core.utils.vect.VectUtil;
 import forestry.farming.FarmHelper;
 import forestry.farming.FarmTarget;
 import forestry.farming.gui.IFarmLedgerDelegate;
@@ -166,6 +166,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		}
 	}
 
+	@Nonnull
 	@Override
 	public TankManager getTankManager() {
 		return tankManager;
@@ -409,31 +410,27 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		return ForestryAPI.climateManager.getHumidity(getWorld(), coords);
 	}
 
-	private int[] coords;
-	private int[] offset;
-	private int[] area;
+	private Vec3i offset;
+	private Vec3i area;
 
 	@Override
-	public int[] getCoords() {
-		if (coords == null) {
-			BlockPos centerCoord = getCenterCoord();
-			coords = new int[]{centerCoord.getX(), centerCoord.getY(), centerCoord.getZ()};
-		}
-		return coords;
+	public BlockPos getCoords() {
+		return getCenterCoord();
 	}
 
 	@Override
-	public int[] getOffset() {
+	public Vec3i getOffset() {
 		if (offset == null) {
-			offset = new int[]{-getArea()[0] / 2, -2, -getArea()[2] / 2};
+			Vec3i area = getArea();
+			offset = new Vec3i(-area.getX() / 2, -2, -area.getZ() / 2);
 		}
 		return offset;
 	}
 
 	@Override
-	public int[] getArea() {
+	public Vec3i getArea() {
 		if (area == null) {
-			area = new int[]{7 + allowedExtent * 2, 13, 7 + allowedExtent * 2};
+			area = new Vec3i(7 + allowedExtent * 2, 13, 7 + allowedExtent * 2);
 		}
 		return area;
 	}
@@ -529,7 +526,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	}
 
 	private void setUpFarmlandTargets() {
-		Vect targetStart = new Vect(getCoords());
+		BlockPos targetStart = getCoords();
 
 		BlockPos max = getMaximumCoord();
 		BlockPos min = getMinimumCoord();
@@ -544,7 +541,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		setExtents(worldObj, targets);
 	}
 
-	private static void createTargets(World world, Map<FarmDirection, List<FarmTarget>> targets, Vect targetStart, final int allowedExtent, final int farmSizeNorthSouth, final int farmSizeEastWest) {
+	private static void createTargets(World world, Map<FarmDirection, List<FarmTarget>> targets, BlockPos targetStart, final int allowedExtent, final int farmSizeNorthSouth, final int farmSizeEastWest) {
 
 		for (FarmDirection farmSide : FarmDirection.values()) {
 
@@ -560,9 +557,9 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 			FarmDirection layoutDirection = getLayoutDirection(farmSide);
 
-			Vect targetLocation = FarmHelper.getFarmMultiblockCorner(world, targetStart, farmSide, layoutDirection);
-			Vect firstLocation = targetLocation.add(farmSide);
-			Vect firstGroundPosition = getGroundPosition(world, firstLocation);
+			BlockPos targetLocation = FarmHelper.getFarmMultiblockCorner(world, targetStart, farmSide, layoutDirection);
+			BlockPos firstLocation = targetLocation.offset(farmSide.getFacing());
+			BlockPos firstGroundPosition = getGroundPosition(world, firstLocation);
 			if (firstGroundPosition == null) {
 				continue;
 			}
@@ -570,15 +567,16 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 			List<FarmTarget> farmSideTargets = new ArrayList<>();
 			for (int i = 0; i < allowedExtent; i++) {
-				targetLocation = targetLocation.add(farmSide);
-				Vect groundLocation = new Vect(targetLocation.getX(), groundHeight, targetLocation.getZ());
+				targetLocation = targetLocation.offset(farmSide.getFacing());
+				BlockPos groundLocation = new BlockPos(targetLocation.getX(), groundHeight, targetLocation.getZ());
 
 				int targetLimit = targetMaxLimit;
 				if (!Config.squareFarms) {
 					targetLimit = targetMaxLimit - i - 1;
 				}
 
-				Block platform = VectUtil.getBlock(world, groundLocation);
+				IBlockState blockState = world.getBlockState(groundLocation);
+				Block platform = blockState.getBlock();
 				if (!FarmHelper.bricks.contains(platform)) {
 					break;
 				}
@@ -591,10 +589,11 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		}
 	}
 
-	private static Vect getGroundPosition(World world, Vect targetPosition) {
+	private static BlockPos getGroundPosition(World world, BlockPos targetPosition) {
 		for (int yOffset = 2; yOffset > -4; yOffset--) {
-			Vect position = targetPosition.add(0, yOffset, 0);
-			Block ground = VectUtil.getBlock(world, position);
+			BlockPos position = targetPosition.add(0, yOffset, 0);
+			IBlockState blockState = world.getBlockState(position);
+			Block ground = blockState.getBlock();
 			if (FarmHelper.bricks.contains(ground)) {
 				return position;
 			}
@@ -614,7 +613,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	private static void setExtents(World worldObj, Map<FarmDirection, List<FarmTarget>> targets) {
 		for (List<FarmTarget> targetsList : targets.values()) {
 			if (!targetsList.isEmpty()) {
-				Vect groundPosition = getGroundPosition(worldObj, targetsList.get(0).getStart());
+				BlockPos groundPosition = getGroundPosition(worldObj, targetsList.get(0).getStart());
 
 				for (FarmTarget target : targetsList) {
 					target.setExtentAndYOffset(worldObj, groundPosition);
@@ -671,7 +670,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	}
 
 	private static boolean cultivateTarget(FarmTarget target, IFarmLogic logic, Iterable<IFarmListener> farmListeners) {
-		Vect targetPosition = target.getStart().add(0, target.getYOffset(), 0);
+		BlockPos targetPosition = target.getStart().add(0, target.getYOffset(), 0);
 		if (logic.cultivate(targetPosition, target.getDirection(), target.getExtent())) {
 			for (IFarmListener listener : farmListeners) {
 				listener.hasCultivated(logic, targetPosition, target.getDirection(), target.getExtent());

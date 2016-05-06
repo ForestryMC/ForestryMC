@@ -39,8 +39,8 @@ public abstract class LeafDecayHelper {
 					for (int yOffset = -radius; yOffset <= radius; ++yOffset) {
 						for (int zOffset = -radius; zOffset <= radius; ++zOffset) {
 							BlockPos blockPos = pos.add(xOffset, yOffset, zOffset);
-							Block block = BlockUtil.getBlock(world, blockPos);
 							IBlockState blockState = world.getBlockState(blockPos);
+							Block block = blockState.getBlock();
 							if (!block.canSustainLeaves(blockState, world, blockPos)) {
 								if (block.isLeaves(blockState, world, blockPos)) {
 									leafDecayValues[(xOffset + arrayOffset) * xArrayMult + (yOffset + arrayOffset) * yArrayMult + zOffset + arrayOffset] = IS_LEAVES;

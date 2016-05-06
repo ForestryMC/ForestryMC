@@ -19,9 +19,7 @@ import net.minecraft.world.World;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
 import forestry.core.config.Constants;
-import forestry.core.utils.BlockUtil;
 import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.vect.Vect;
 
 public class FarmableStacked implements IFarmable {
 
@@ -37,15 +35,16 @@ public class FarmableStacked implements IFarmable {
 
 	@Override
 	public boolean isSaplingAt(World world, BlockPos pos) {
-		return BlockUtil.getBlock(world, pos) == block;
+		return world.getBlockState(pos).getBlock() == block;
 	}
 
 	@Override
 	public ICrop getCropAt(World world, BlockPos pos) {
-		if (BlockUtil.getBlock(world, new BlockPos(pos.getX(), pos.getY() + matureHeight - 1, pos.getZ())) != block) {
+		BlockPos cropPos = new BlockPos(pos.getX(), pos.getY() + matureHeight - 1, pos.getZ());
+		if (world.getBlockState(cropPos).getBlock() != block) {
 			return null;
 		}
-		return new CropBlock(world, block, matureMeta, new Vect(pos.getX(), pos.getY() + matureHeight - 1, pos.getZ()));
+		return new CropBlock(world, block, matureMeta, cropPos);
 	}
 
 	@Override

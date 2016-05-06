@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.genetics.alleles;
 
+import net.minecraft.util.math.Vec3i;
+
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleArea;
 import forestry.api.genetics.IAlleleBoolean;
@@ -31,8 +33,8 @@ public class AlleleFactory implements IAlleleFactory {
 	}
 
 	@Override
-	public IAlleleArea createArea(String modId, String category, String valueName, int xDimValue, int yDimValue, int zDimValue, boolean isDominant, IChromosomeType... types) {
-		IAlleleArea alleleArea = new AlleleArea(modId, category, valueName, new int[]{xDimValue, yDimValue, zDimValue}, isDominant);
+	public IAlleleArea createArea(String modId, String category, String valueName, Vec3i value, boolean isDominant, IChromosomeType... types) {
+		IAlleleArea alleleArea = new AlleleArea(modId, category, valueName, value, isDominant);
 		AlleleManager.alleleRegistry.registerAllele(alleleArea, types);
 		return alleleArea;
 	}

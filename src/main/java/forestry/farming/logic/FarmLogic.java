@@ -15,16 +15,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fml.relauncher.Side;
@@ -33,11 +33,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmLogic;
-import forestry.arboriculture.blocks.BlockFruitPod;
 import forestry.core.config.Constants;
 import forestry.core.entities.EntitySelector;
-import forestry.core.utils.BlockUtil;
-import forestry.core.utils.vect.Vect;
+import forestry.core.utils.VectUtil;
 
 public abstract class FarmLogic implements IFarmLogic {
 	private final EntitySelectorFarm entitySelectorFarm = new EntitySelectorFarm(this);
@@ -85,30 +83,27 @@ public abstract class FarmLogic implements IFarmLogic {
 		return block.isAir(blockState, world, blockPos);
 	}
 
-	protected final boolean isWaterSourceBlock(World world, Vect position) {
-		return BlockUtil.getBlock(world, position) == Blocks.WATER &&
-				BlockUtil.getBlockMetadata(world, position) == 0;
-	}
-
-	protected final Vect translateWithOffset(int x, int y, int z, FarmDirection farmDirection, int step) {
-		return new Vect(farmDirection.getForgeDirection()).multiply(step).add(x, y, z);
+	protected final boolean isWaterSourceBlock(World world, BlockPos position) {
+		IBlockState blockState = world.getBlockState(position);
+		Block block = blockState.getBlock();
+		return block == Blocks.WATER && block.getMetaFromState(blockState) == 0;
 	}
 	
-	protected final Vect translateWithOffset(BlockPos pos, FarmDirection farmDirection, int step) {
-		return new Vect(farmDirection.getForgeDirection()).multiply(step).add(pos);
+	protected final BlockPos translateWithOffset(BlockPos pos, FarmDirection farmDirection, int step) {
+		return VectUtil.scale(farmDirection.getFacing().getDirectionVec(), step).add(pos);
 	}
 
-	protected final void setBlock(Vect position, Block block, int meta) {
+	protected final void setBlock(BlockPos position, Block block, int meta) {
 		getWorld().setBlockState(position, block.getStateFromMeta(meta), Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
 	}
 
 	private AxisAlignedBB getHarvestBox(IFarmHousing farmHousing, boolean toWorldHeight) {
-		Vect coords = new Vect(farmHousing.getCoords());
-		Vect area = new Vect(farmHousing.getArea());
-		Vect offset = new Vect(farmHousing.getOffset());
+		BlockPos coords = farmHousing.getCoords();
+		Vec3i area = farmHousing.getArea();
+		Vec3i offset = farmHousing.getOffset();
 
-		Vect min = coords.add(offset);
-		Vect max = min.add(area);
+		BlockPos min = coords.add(offset);
+		BlockPos max = min.add(area);
 
 		int maxY = max.getY();
 		if (toWorldHeight) {
