@@ -164,8 +164,7 @@ public class ItemLiquidContainer extends ItemForestry {
 					return Translator.translateToLocal(exactTranslationKey);
 				} else {
 					String grammarKey = "item.for." + type.getName() + ".grammar";
-					String grammar = Translator.translateToLocal(grammarKey);
-					return Translator.translateToLocalFormatted(grammar, fluid.getLocalizedName());
+					return Translator.translateToLocalFormatted(grammarKey, fluid.getLocalizedName());
 				}
 			}
 		}
