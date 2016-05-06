@@ -1,20 +1,17 @@
 {
-    "variants": {
-        "east=false,north=false,south=false,west=false": { "model": "forestry:arboriculture/fences/wenge_post" },
-        "east=false,north=true,south=false,west=false": { "model": "forestry:arboriculture/fences/wenge_n", "uvlock": true },
-        "east=true,north=false,south=false,west=false": { "model": "forestry:arboriculture/fences/wenge_n", "y": 90, "uvlock": true },
-        "east=false,north=false,south=true,west=false": { "model": "forestry:arboriculture/fences/wenge_n", "y": 180, "uvlock": true },
-        "east=false,north=false,south=false,west=true": { "model": "forestry:arboriculture/fences/wenge_n", "y": 270, "uvlock": true },
-        "east=true,north=true,south=false,west=false": { "model": "forestry:arboriculture/fences/wenge_ne", "uvlock": true },
-        "east=true,north=false,south=true,west=false": { "model": "forestry:arboriculture/fences/wenge_ne", "y": 90, "uvlock": true },
-        "east=false,north=false,south=true,west=true": { "model": "forestry:arboriculture/fences/wenge_ne", "y": 180, "uvlock": true },
-        "east=false,north=true,south=false,west=true": { "model": "forestry:arboriculture/fences/wenge_ne", "y": 270, "uvlock": true },
-        "east=false,north=true,south=true,west=false": { "model": "forestry:arboriculture/fences/wenge_ns", "uvlock": true },
-        "east=true,north=false,south=false,west=true": { "model": "forestry:arboriculture/fences/wenge_ns", "y": 90, "uvlock": true },
-        "east=true,north=true,south=true,west=false": { "model": "forestry:arboriculture/fences/wenge_nse", "uvlock": true },
-        "east=true,north=false,south=true,west=true": { "model": "forestry:arboriculture/fences/wenge_nse", "y": 90, "uvlock": true },
-        "east=false,north=true,south=true,west=true": { "model": "forestry:arboriculture/fences/wenge_nse", "y": 180, "uvlock": true },
-        "east=true,north=true,south=false,west=true": { "model": "forestry:arboriculture/fences/wenge_nse", "y": 270, "uvlock": true },
-        "east=true,north=true,south=true,west=true": { "model": "forestry:arboriculture/fences/wenge_nsew", "uvlock": true }
-	}
+    "multipart": [
+        {   "apply": { "model": "forestry:arboriculture/fences/wenge_post" }},
+        {   "when": { "north": "true" },
+            "apply": { "model": "forestry:arboriculture/fences/wenge_side", "uvlock": true }
+        },
+        {   "when": { "east": "true" },
+            "apply": { "model": "forestry:arboriculture/fences/wenge_side", "y": 90, "uvlock": true }
+        },
+        {   "when": { "south": "true" },
+            "apply": { "model": "forestry:arboriculture/fences/wenge_side", "y": 180, "uvlock": true }
+        },
+        {   "when": { "west": "true" },
+            "apply": { "model": "forestry:arboriculture/fences/wenge_side", "y": 270, "uvlock": true }
+        }
+    ]
 }

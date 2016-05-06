@@ -110,12 +110,15 @@ public abstract class BlockArbFence extends BlockFence implements IWoodTyped, II
 	public boolean canConnectTo(IBlockAccess worldIn, BlockPos pos) {
 		IBlockState blockState = worldIn.getBlockState(pos);
 		Block block = blockState.getBlock();
-		if (PluginArboriculture.validFences.contains(block) || block instanceof BlockFence || block instanceof BlockFenceGate) {
+		if (PluginArboriculture.validFences.contains(block)) {
 			return true;
 		}
 
 		if (block != Blocks.BARRIER) {
 			Material blockMaterial = block.getMaterial(blockState);
+			if (block instanceof BlockFence || block instanceof BlockFenceGate) {
+				return blockMaterial == this.blockMaterial;
+			}
 			if (blockMaterial.isOpaque() && blockState.isFullCube() && blockMaterial != Material.GOURD) {
 				return true;
 			}
