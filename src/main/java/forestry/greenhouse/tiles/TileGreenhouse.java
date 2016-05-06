@@ -22,7 +22,7 @@ import net.minecraftforge.common.MinecraftForge;
 
 import forestry.api.core.EnumCamouflageType;
 import forestry.api.core.ICamouflageHandler;
-import forestry.api.core.ICamouflagedBlock;
+import forestry.api.core.ICamouflagedTile;
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.greenhouse.GreenhouseEvents.CamouflageChangeEvent;
@@ -47,7 +47,7 @@ import forestry.greenhouse.gui.GuiGreenhouse;
 import forestry.greenhouse.multiblock.MultiblockLogicGreenhouse;
 import forestry.greenhouse.network.packets.PacketCamouflageUpdate;
 
-public abstract class TileGreenhouse extends MultiblockTileEntityForestry<MultiblockLogicGreenhouse> implements IGreenhouseComponent, IHintSource, IStreamableGui, IErrorLogicSource, IRestrictedAccess, ITitled, ICamouflageHandler, ICamouflagedBlock {
+public abstract class TileGreenhouse extends MultiblockTileEntityForestry<MultiblockLogicGreenhouse> implements IGreenhouseComponent, IHintSource, IStreamableGui, IErrorLogicSource, IRestrictedAccess, ITitled, ICamouflageHandler, ICamouflagedTile {
 
 	private ItemStack camouflageBlock;
 

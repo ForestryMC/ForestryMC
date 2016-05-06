@@ -33,7 +33,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 
 import forestry.api.core.EnumCamouflageType;
 import forestry.api.core.ICamouflageHandler;
-import forestry.api.core.ICamouflagedBlock;
+import forestry.api.core.ICamouflagedTile;
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.greenhouse.GreenhouseEvents.CamouflageChangeEvent;
@@ -58,7 +58,7 @@ import cofh.api.energy.IEnergyHandler;
 import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
 
-public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogicGreenhouse> implements IGreenhouseComponent, IHintSource, IErrorLogicSource, IRestrictedAccess, ICamouflageHandler, ICamouflagedBlock, IFluidHandler, IEnergyProvider, IEnergyReceiver {
+public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogicGreenhouse> implements IGreenhouseComponent, IHintSource, IErrorLogicSource, IRestrictedAccess, ICamouflageHandler, ICamouflagedTile, IFluidHandler, IEnergyProvider, IEnergyReceiver {
 
 	EnumFacing outwards;
 	private ItemStack camouflageBlock;

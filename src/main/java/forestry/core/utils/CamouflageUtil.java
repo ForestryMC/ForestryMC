@@ -14,7 +14,7 @@ import java.io.IOException;
 
 import forestry.api.core.EnumCamouflageType;
 import forestry.api.core.ICamouflageHandler;
-import forestry.api.core.ICamouflagedBlock;
+import forestry.api.core.ICamouflagedTile;
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
@@ -79,8 +79,8 @@ public class CamouflageUtil {
 			return null;
 		}
 		TileEntity tile = world.getTileEntity(pos);
-		if(tile instanceof ICamouflagedBlock){
-			ICamouflagedBlock block = (ICamouflagedBlock) tile;
+		if(tile instanceof ICamouflagedTile){
+			ICamouflagedTile block = (ICamouflagedTile) tile;
 			
 			return handler.getCamouflageBlock(block.getCamouflageType());
 		}

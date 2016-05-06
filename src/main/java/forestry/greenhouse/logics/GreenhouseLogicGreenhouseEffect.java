@@ -15,7 +15,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
 import forestry.api.core.EnumCamouflageType;
-import forestry.api.core.ICamouflagedBlock;
+import forestry.api.core.ICamouflagedTile;
 import forestry.api.greenhouse.DefaultGreenhouseLogic;
 import forestry.api.greenhouse.EnumGreenhouseEventType;
 import forestry.api.greenhouse.GreenhouseManager;
@@ -70,8 +70,8 @@ public class GreenhouseLogicGreenhouseEffect extends DefaultGreenhouseLogic impl
 			
 			World world = controller.getWorld();
 			for (IMultiblockComponent component : controller.getComponents()) {
-				if (component instanceof ICamouflagedBlock) {
-					ICamouflagedBlock block = (ICamouflagedBlock) component;
+				if (component instanceof ICamouflagedTile) {
+					ICamouflagedTile block = (ICamouflagedTile) component;
 					if (block.getCamouflageType() == EnumCamouflageType.GLASS) {
 						if (world.canBlockSeeSky(component.getCoordinates())) {
 							ItemStack camouflageStack = CamouflageUtil.getCamouflageBlock(world, component.getCoordinates());

@@ -17,7 +17,7 @@ import net.minecraftforge.fml.common.eventhandler.Event;
 
 import forestry.api.core.EnumCamouflageType;
 import forestry.api.core.ICamouflageHandler;
-import forestry.api.core.ICamouflagedBlock;
+import forestry.api.core.ICamouflagedTile;
 
 public class GreenhouseEvents extends Event {
 	
@@ -31,13 +31,13 @@ public class GreenhouseEvents extends Event {
 	public static class CamouflageChangeEvent extends GreenhouseEvents{
 
 		@Nullable
-		public ICamouflagedBlock camouflagedBlock;
+		public ICamouflagedTile camouflagedBlock;
 		@Nonnull
 		public ICamouflageHandler camouflageHandler;
 		@Nonnull
 		public final EnumCamouflageType camouflageType;
 		
-		public CamouflageChangeEvent(IGreenhouseState state, @Nullable ICamouflagedBlock camouflagedBlock, @Nonnull ICamouflageHandler camouflageHandler, @Nonnull EnumCamouflageType camouflageType) {
+		public CamouflageChangeEvent(IGreenhouseState state, @Nullable ICamouflagedTile camouflagedBlock, @Nonnull ICamouflageHandler camouflageHandler, @Nonnull EnumCamouflageType camouflageType) {
 			super(state);
 			
 			this.camouflagedBlock = camouflagedBlock;

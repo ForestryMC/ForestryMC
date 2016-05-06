@@ -44,7 +44,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.core.ForestryAPI;
-import forestry.api.core.ICamouflagedBlock;
+import forestry.api.core.ICamouflagedTile;
 import forestry.api.core.IModelManager;
 import forestry.api.core.ISpriteRegister;
 import forestry.api.core.ITextureManager;

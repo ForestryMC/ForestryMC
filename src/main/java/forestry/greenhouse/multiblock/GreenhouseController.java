@@ -34,7 +34,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import forestry.api.core.EnumCamouflageType;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
-import forestry.api.core.ICamouflagedBlock;
+import forestry.api.core.ICamouflagedTile;
 import forestry.api.greenhouse.EnumGreenhouseEventType;
 import forestry.api.greenhouse.GreenhouseEvents.CamouflageChangeEvent;
 import forestry.api.greenhouse.GreenhouseEvents.CheckInternalBlockFaceEvent;
@@ -308,8 +308,8 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		if (worldObj != null) {
 			if (worldObj.isRemote) {
 				for (IMultiblockComponent comp : connectedParts) {
-					if (comp instanceof ICamouflagedBlock) {
-						ICamouflagedBlock camBlock = (ICamouflagedBlock) comp;
+					if (comp instanceof ICamouflagedTile) {
+						ICamouflagedTile camBlock = (ICamouflagedTile) comp;
 						if (camBlock.getCamouflageType() == type) {
 							worldObj.markBlockRangeForRenderUpdate(camBlock.getCoordinates(), camBlock.getCoordinates());
 						}
