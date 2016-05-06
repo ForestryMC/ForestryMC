@@ -11,12 +11,12 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.property.IExtendedBlockState;
 
 import forestry.api.core.IModelBaker;
-import forestry.core.models.ModelBlockOverlay;
+import forestry.core.models.ModelBlockDefault;
 import forestry.farming.blocks.BlockFarm;
 import forestry.farming.blocks.EnumFarmBlockType;
 import forestry.farming.tiles.TileFarm;
 
-public class ModelFarmBlock extends ModelBlockOverlay<BlockFarm> {
+public class ModelFarmBlock extends ModelBlockDefault<BlockFarm> {
 
 	public ModelFarmBlock() {
 		super(BlockFarm.class);

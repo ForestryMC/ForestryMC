@@ -16,7 +16,6 @@ import net.minecraft.block.properties.IProperty;
 
 import java.util.List;
 
-import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleProperty;

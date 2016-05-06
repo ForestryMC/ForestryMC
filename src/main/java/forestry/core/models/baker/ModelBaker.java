@@ -13,6 +13,8 @@ package forestry.core.models.baker;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.lwjgl.util.vector.Vector3f;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,14 +31,13 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-
+import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import org.lwjgl.util.vector.Vector3f;
-
 import forestry.api.core.IModelBaker;
 import forestry.api.core.IModelBakerModel;
+import forestry.core.models.ModelManager;
 import forestry.core.proxy.Proxies;
 
 /**
@@ -48,10 +49,10 @@ public class ModelBaker implements IModelBaker {
 	private static final float quadsUV[] = new float[]{0, 0, 1, 1, 0, 0, 1, 1};
 	private final List<ModelBakerFace> faces = new ArrayList<>();
 	private final List<IBakedModel> bakedModels = new ArrayList<>();
-
+	
 	protected AxisAlignedBB renderBounds;
 
-	protected ModelBakerModel currentModel = new ModelBakerModel();
+	protected ModelBakerModel currentModel = new ModelBakerModel(ModelManager.getInstance().DEFAULT_BLOCK);
 
 	protected final FaceBakery faceBakery = new FaceBakery();
 
@@ -233,6 +234,11 @@ public class ModelBaker implements IModelBaker {
 		}
 		
 		return currentModel;
+	}
+	
+	@Override
+	public void setModelState(IModelState modelState){
+		currentModel.setModelState(modelState);
 	}
 
 	@Override

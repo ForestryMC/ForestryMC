@@ -25,14 +25,23 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public abstract class BlankItemModel implements IBakedModel {
+	protected ItemOverrideList overrideList;
+	
 	@Override
 	public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
 		return Collections.emptyList();
 	}
 	
+	protected ItemOverrideList createOverrides(){
+		return new ItemOverrideList(Collections.emptyList());
+	}
+	
 	@Override
 	public ItemOverrideList getOverrides() {
-		return new ItemOverrideList(Collections.emptyList());
+		if(overrideList == null){
+			overrideList = createOverrides();
+		}
+		return overrideList;
 	}
 
 	@Override

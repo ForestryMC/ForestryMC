@@ -12,11 +12,7 @@ package forestry.lepidopterology.render;
 
 import com.google.common.collect.Lists;
 
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.data.AnimationMetadataSection;
 
 public class TextureAtlasButterfly extends TextureAtlasSprite {
 

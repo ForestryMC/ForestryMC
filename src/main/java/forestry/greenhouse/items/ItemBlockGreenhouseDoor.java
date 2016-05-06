@@ -48,7 +48,7 @@ public class ItemBlockGreenhouseDoor extends ItemBlockForestry<BlockGreenhouseDo
 			}
 
 			if (playerIn.canPlayerEdit(pos, facing, stack) && this.block.canPlaceBlockAt(worldIn, pos)) {
-				EnumFacing enumfacing = EnumFacing.fromAngle((double) playerIn.rotationYaw);
+				EnumFacing enumfacing = EnumFacing.fromAngle(playerIn.rotationYaw);
 				int i = enumfacing.getFrontOffsetX();
 				int j = enumfacing.getFrontOffsetZ();
 				boolean flag = i < 0 && hitZ < 0.5F || i > 0 && hitZ > 0.5F || j < 0 && hitX > 0.5F || j > 0 && hitX < 0.5F;

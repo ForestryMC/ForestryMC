@@ -25,12 +25,12 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.property.IExtendedBlockState;
 
 import forestry.api.core.IModelBaker;
-import forestry.core.models.ModelBlockOverlay;
+import forestry.core.models.ModelBlockDefault;
 import forestry.core.utils.CamouflageUtil;
 import forestry.greenhouse.blocks.BlockGreenhouse;
 import forestry.greenhouse.blocks.BlockGreenhouseType;
 
-public class ModelGreenhouse extends ModelBlockOverlay<BlockGreenhouse> {
+public class ModelGreenhouse extends ModelBlockDefault<BlockGreenhouse> {
 
 	public ModelGreenhouse() {
 		super(BlockGreenhouse.class);

@@ -18,7 +18,6 @@ import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.items.IItemHandler;
 
-import forestry.core.inventory.filters.IStackFilter;
 import forestry.core.inventory.iterators.IInvSlot;
 import forestry.core.inventory.iterators.InventoryIterator;
 

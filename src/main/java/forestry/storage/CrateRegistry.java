@@ -18,7 +18,6 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import forestry.api.storage.ICrateRegistry;
 import forestry.core.items.ItemCrated;
-import forestry.core.models.ModelManager;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
@@ -37,7 +36,6 @@ public class CrateRegistry implements ICrateRegistry {
 		crate.setUnlocalizedName(crateName);
 		GameRegistry.registerItem(crate, crateName);
 		Proxies.common.registerItem(crate);
-		Proxies.render.registerModelCrate(crate);
 		PluginStorage.registerCrate(crate);
 	}
 

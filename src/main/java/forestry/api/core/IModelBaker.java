@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -40,6 +41,8 @@ public interface IModelBaker {
 	void addBakedModel(@Nonnull IBakedModel model);
 	
 	void addFace(@Nonnull EnumFacing facing, @Nonnull TextureAtlasSprite sprite);
+	
+	void setModelState(@Nullable IModelState modelState);
 	
 	void setParticleSprite(@Nullable TextureAtlasSprite particleSprite);
 	

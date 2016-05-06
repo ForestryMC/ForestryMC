@@ -11,21 +11,26 @@
 package forestry.core.models.baker;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.vecmath.Matrix4f;
+
+import org.apache.commons.lang3.tuple.Pair;
+
+import com.google.common.collect.ImmutableMap;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
-
+import net.minecraftforge.common.model.IModelState;
+import net.minecraftforge.common.model.TRSRTransformation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -33,41 +38,45 @@ import forestry.api.core.IModelBakerModel;
 
 @SideOnly(Side.CLIENT)
 public class ModelBakerModel implements IModelBakerModel {
-	private final List<IBakedModel> models;
+	
 	private boolean isGui3d;
 	private boolean isAmbientOcclusion;
-	private VertexFormat format;
 	private TextureAtlasSprite particleSprite;
+	private IModelState modelState;
+    private ImmutableMap<TransformType, TRSRTransformation> transforms;
+	
 	private final Map<EnumFacing, List<BakedQuad>> faceQuads;
 	private final List<BakedQuad> generalQuads;
+	private final List<IBakedModel> models;
+	
 	private float[] rotation = getDefaultRotation();
 	private float[] translation = getDefaultTranslation();
 	private float[] scale = getDefaultScale();
 
-	public ModelBakerModel() {
+	public ModelBakerModel(IModelState modelState) {
 		models = new ArrayList<>();
 		faceQuads = new HashMap<>();
 		generalQuads = new ArrayList<>();
-		format = DefaultVertexFormats.BLOCK;
 		isGui3d = true;
 		isAmbientOcclusion = false;
+		setModelState(modelState);
 		
 		for(EnumFacing face : EnumFacing.VALUES){
 			faceQuads.put(face, new ArrayList());
 		}
 	}
 
-	private ModelBakerModel(List<IBakedModel> models, Map<EnumFacing, List<BakedQuad>> faceQuads, List<BakedQuad> generalQuads, boolean isGui3d, boolean isAmbientOcclusion, VertexFormat format, float[] rotation, float[] translation, float[] scale, TextureAtlasSprite particleSprite) {
+	private ModelBakerModel(List<IBakedModel> models, Map<EnumFacing, List<BakedQuad>> faceQuads, List<BakedQuad> generalQuads, boolean isGui3d, boolean isAmbientOcclusion, IModelState modelState, float[] rotation, float[] translation, float[] scale, TextureAtlasSprite particleSprite) {
 		this.models = models;
 		this.faceQuads = faceQuads;
 		this.generalQuads = generalQuads;
 		this.isGui3d = isGui3d;
 		this.isAmbientOcclusion = isAmbientOcclusion;
-		this.format = format;
 		this.rotation = rotation;
 		this.translation = translation;
 		this.scale = scale;
 		this.particleSprite = particleSprite;
+		setModelState(modelState);
 	}
 	
 	@Override
@@ -156,6 +165,16 @@ public class ModelBakerModel implements IModelBakerModel {
 	public float[] getScale() {
 		return scale;
 	}
+	
+	public void setModelState(IModelState modelState) {
+		this.modelState = modelState;
+		this.transforms = MapWrapper.getTransforms(modelState);
+	}
+	
+	@Override
+	public IModelState getModelState() {
+		return modelState;
+	}
 
 	public void addModelQuads(IBakedModel model) {
 		this.models.add(model);
@@ -184,6 +203,12 @@ public class ModelBakerModel implements IModelBakerModel {
 	}
 
 	public ModelBakerModel copy() {
-		return new ModelBakerModel(models, faceQuads, generalQuads, isGui3d, isAmbientOcclusion, format, rotation, translation, scale, particleSprite);
+		return new ModelBakerModel(models, faceQuads, generalQuads, isGui3d, isAmbientOcclusion, modelState, rotation, translation, scale, particleSprite);
 	}
+
+    @Override
+    public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType cameraTransformType)
+    {
+        return MapWrapper.handlePerspective(this, transforms, cameraTransformType);
+    }
 }

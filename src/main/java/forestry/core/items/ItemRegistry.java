@@ -16,7 +16,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
-import forestry.core.models.ModelManager;
 import forestry.core.proxy.Proxies;
 import forestry.plugins.PluginManager;
 

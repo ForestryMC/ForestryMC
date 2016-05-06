@@ -15,8 +15,6 @@ import java.util.EnumSet;
 import net.minecraft.init.Biomes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
-
 import forestry.api.arboriculture.EnumGrowthConditions;
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.core.utils.Translator;

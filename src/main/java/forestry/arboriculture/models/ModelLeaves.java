@@ -25,11 +25,11 @@ import forestry.arboriculture.blocks.BlockForestryLeaves;
 import forestry.arboriculture.genetics.TreeRoot;
 import forestry.arboriculture.items.ItemBlockLeaves;
 import forestry.arboriculture.tiles.TileLeaves;
-import forestry.core.models.ModelBlockOverlay;
+import forestry.core.models.ModelBlockDefault;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileUtil;
 
-public class ModelLeaves extends ModelBlockOverlay<BlockForestryLeaves> {
+public class ModelLeaves extends ModelBlockDefault<BlockForestryLeaves> {
 
 	public ModelLeaves() {
 		super(BlockForestryLeaves.class);

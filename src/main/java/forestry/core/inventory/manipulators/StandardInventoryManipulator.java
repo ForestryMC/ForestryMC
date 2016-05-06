@@ -17,7 +17,6 @@ import java.util.List;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
-import forestry.core.inventory.filters.IStackFilter;
 import forestry.core.inventory.iterators.IExtInvSlot;
 import forestry.core.inventory.iterators.InventoryIterator;
 import forestry.core.utils.InventoryUtil;

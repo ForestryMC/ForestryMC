@@ -25,7 +25,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fml.relauncher.Side;
@@ -49,31 +48,31 @@ public class ParticleHelper {
 			int z = pos.getZ();
 			float f = 0.1F;
 			AxisAlignedBB axisalignedbb = iblockstate.getBoundingBox(world, pos);
-			double px = (double)x + world.rand.nextDouble() * (axisalignedbb.maxX - axisalignedbb.minX - (double)(f * 2.0F)) + (double)f + axisalignedbb.minX;
-			double py = (double)y + world.rand.nextDouble() * (axisalignedbb.maxY - axisalignedbb.minY - (double)(f * 2.0F)) + (double)f + axisalignedbb.minY;
-			double pz = (double)z + world.rand.nextDouble() * (axisalignedbb.maxZ - axisalignedbb.minZ - (double)(f * 2.0F)) + (double)f + axisalignedbb.minZ;
+			double px = x + world.rand.nextDouble() * (axisalignedbb.maxX - axisalignedbb.minX - f * 2.0F) + f + axisalignedbb.minX;
+			double py = y + world.rand.nextDouble() * (axisalignedbb.maxY - axisalignedbb.minY - f * 2.0F) + f + axisalignedbb.minY;
+			double pz = z + world.rand.nextDouble() * (axisalignedbb.maxZ - axisalignedbb.minZ - f * 2.0F) + f + axisalignedbb.minZ;
 			if(side == EnumFacing.DOWN) {
-				py = (double)y + axisalignedbb.minY - (double)f;
+				py = y + axisalignedbb.minY - f;
 			}
 
 			if(side == EnumFacing.UP) {
-				py = (double)y + axisalignedbb.maxY + (double)f;
+				py = y + axisalignedbb.maxY + f;
 			}
 
 			if(side == EnumFacing.NORTH) {
-				pz = (double)z + axisalignedbb.minZ - (double)f;
+				pz = z + axisalignedbb.minZ - f;
 			}
 
 			if(side == EnumFacing.SOUTH) {
-				pz = (double)z + axisalignedbb.maxZ + (double)f;
+				pz = z + axisalignedbb.maxZ + f;
 			}
 
 			if(side == EnumFacing.WEST) {
-				px = (double)x + axisalignedbb.minX - (double)f;
+				px = x + axisalignedbb.minX - f;
 			}
 
 			if(side == EnumFacing.EAST) {
-				px = (double)x + axisalignedbb.maxX + (double)f;
+				px = x + axisalignedbb.maxX + f;
 			}
 
 			EntityDiggingFX fx = (EntityDiggingFX) effectRenderer.spawnEffectParticle(EnumParticleTypes.BLOCK_DUST.getParticleID(), px, py, pz, 0.0D, 0.0D, 0.0D, Block.getStateId(iblockstate));

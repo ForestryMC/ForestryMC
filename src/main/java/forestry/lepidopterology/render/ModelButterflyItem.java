@@ -40,21 +40,13 @@ import forestry.core.models.TRSRBakedModel;
 
 @SideOnly(Side.CLIENT)
 public class ModelButterflyItem extends BlankItemModel {
-	private ItemOverrideList overrideList;
 	private final Function<ResourceLocation, TextureAtlasSprite> textureGetter = new DefaultTextureGetter();
 	@SideOnly(Side.CLIENT)
 	private IRetexturableModel modelButterfly;
 
+	@Override
 	protected ItemOverrideList createOverrides() {
 		return new ButterflyItemOverrideList();
-	}
-
-	@Override
-	public ItemOverrideList getOverrides() {
-		if (overrideList == null) {
-			overrideList = createOverrides();
-		}
-		return overrideList;
 	}
 
 	private IBakedModel bakeModel(IButterfly butterfly) {

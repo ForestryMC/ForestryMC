@@ -5,35 +5,35 @@
  ******************************************************************************/
 package forestry.api.core;
 
-import java.util.List;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.SimpleBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
+import net.minecraftforge.client.model.IPerspectiveAwareModel;
+import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public interface IModelBakerModel extends IBakedModel {
+public interface IModelBakerModel extends IPerspectiveAwareModel {
 	
 	void setGui3d(boolean gui3d);
 	
 	void setAmbientOcclusion(boolean ambientOcclusion);
 	
-	void setParticleSprite(TextureAtlasSprite particleSprite);
+	void setParticleSprite(@Nullable TextureAtlasSprite particleSprite);
 	
-//	void setFormat(VertexFormat formate);
-	
-    void addQuad(EnumFacing facing, BakedQuad quad);
+    void addQuad(@Nullable EnumFacing facing, @Nonnull BakedQuad quad);
 	
 	void setRotation(float[] rotation);
 
 	void setTranslation(float[] translation);
 
 	void setScale(float[] scale);
+	
+	IModelState getModelState();
 	
 	float[] getRotation();
 

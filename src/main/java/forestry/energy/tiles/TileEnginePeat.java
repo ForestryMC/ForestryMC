@@ -10,9 +10,6 @@
  ******************************************************************************/
 package forestry.energy.tiles;
 
-import java.util.Collection;
-import java.util.LinkedList;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
@@ -21,11 +18,6 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-
-import net.minecraftforge.fml.common.Optional;
-
 import forestry.api.fuels.FuelManager;
 import forestry.core.PluginCore;
 import forestry.core.config.Constants;
@@ -40,7 +32,6 @@ import forestry.core.utils.ItemStackUtil;
 import forestry.energy.gui.ContainerEnginePeat;
 import forestry.energy.gui.GuiEnginePeat;
 import forestry.energy.inventory.InventoryEnginePeat;
-import forestry.factory.triggers.FactoryTriggers;
 
 public class TileEnginePeat extends TileEngine implements ISidedInventory {
 	private Item fuelItem;

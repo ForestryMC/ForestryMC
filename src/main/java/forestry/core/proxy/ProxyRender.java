@@ -27,7 +27,6 @@ import net.minecraftforge.common.animation.ITimeValue;
 import net.minecraftforge.common.model.animation.IAnimationStateMachine;
 
 import forestry.core.fluids.Fluids;
-import forestry.core.items.ItemCrated;
 import forestry.core.models.BlockModelIndex;
 import forestry.core.models.ModelIndex;
 import forestry.core.tiles.TileBase;
@@ -83,9 +82,6 @@ public class ProxyRender {
 	}
 	
 	public void registerModel(ModelIndex index) {
-	}
-
-	public void registerModelCrate(ItemCrated crated) {
 	}
 
 	public void registerStateMapper(Block block, IStateMapper mapper) {

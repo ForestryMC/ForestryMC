@@ -10,16 +10,23 @@
  ******************************************************************************/
 package forestry.arboriculture.models;
 
+import java.util.Collections;
+import java.util.List;
+
 import javax.annotation.Nonnull;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-
+import net.minecraft.world.World;
 import net.minecraftforge.common.property.IExtendedBlockState;
 
 import forestry.api.arboriculture.IAlleleTreeSpecies;
@@ -28,49 +35,63 @@ import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.core.IModelBaker;
 import forestry.arboriculture.blocks.BlockDecorativeLeaves;
 import forestry.arboriculture.genetics.TreeDefinition;
-import forestry.core.models.ModelBlockOverlay;
+import forestry.core.models.ModelBlockDefault;
 import forestry.core.models.baker.ModelBaker;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 
-public class ModelDecorativeLeaves extends ModelBlockOverlay<BlockDecorativeLeaves> {
+public class ModelDecorativeLeaves extends ModelBlockDefault<BlockDecorativeLeaves> {
 
 	public ModelDecorativeLeaves() {
 		super(BlockDecorativeLeaves.class);
 	}
+	
+	@Override
+	public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
+		IModelBaker baker = new ModelBaker();
 
-//	@Override
-//	public IBakedModel handleBlockState(IBlockState state) {
-//		IModelBaker baker = new ModelBaker();
-//
-//		Block block = state.getBlock();
-//		if (!blockClass.isInstance(block)) {
-//			return null;
-//		}
-//		BlockDecorativeLeaves bBlock = blockClass.cast(block);
-//		TreeDefinition tree = state.getValue(bBlock.getVariant());
-//
-//		baker.setRenderBoundsFromBlock(block);
-//		bakeBlock(bBlock, tree, baker);
-//
-//		return latestBlockModel = baker.bakeModel(false);
-//	}
-//
-//	@Override
-//	public IBakedModel handleItemState(ItemStack stack) {
-//		IModelBaker baker = new ModelBaker();
-//		Block block = Block.getBlockFromItem(stack.getItem());
-//		if (!blockClass.isInstance(block)) {
-//			return null;
-//		}
-//		BlockDecorativeLeaves bBlock = blockClass.cast(block);
-//		TreeDefinition tree = bBlock.getTreeType(stack.getMetadata());
-//
-//		baker.setRenderBoundsFromBlock(block);
-//		bakeBlock(bBlock, tree, baker);
-//
-//		return latestItemModel = baker.bakeModel(true);
-//	}
+		Block block = state.getBlock();
+		if (!blockClass.isInstance(block)) {
+			return null;
+		}
+		BlockDecorativeLeaves bBlock = blockClass.cast(block);
+		TreeDefinition tree = state.getValue(bBlock.getVariant());
+
+		baker.setRenderBounds(Block.FULL_BLOCK_AABB);
+		bakeBlock(bBlock, tree, baker);
+
+		blockModel = baker.bakeModel(false);
+		return blockModel.getQuads(state, side, rand);
+	}
+	
+	@Override
+	protected ItemOverrideList createOverrides() {
+		return new LeaveOverideList();
+	}
+	
+	private class LeaveOverideList extends ItemOverrideList{
+
+		public LeaveOverideList() {
+			super(Collections.emptyList());
+		}
+		
+		@Override
+		public IBakedModel handleItemState(IBakedModel originalModel, ItemStack stack, World world, EntityLivingBase entity) {
+			IModelBaker baker = new ModelBaker();
+			Block block = Block.getBlockFromItem(stack.getItem());
+			if (!blockClass.isInstance(block)) {
+				return null;
+			}
+			BlockDecorativeLeaves bBlock = blockClass.cast(block);
+			TreeDefinition tree = bBlock.getTreeType(stack.getMetadata());
+
+			baker.setRenderBounds(Block.FULL_BLOCK_AABB);
+			bakeBlock(bBlock, tree, baker);
+
+			return itemModel = baker.bakeModel(true);
+		}
+		
+	}
 
 	@Override
 	protected void bakeInventoryBlock(@Nonnull BlockDecorativeLeaves block, @Nonnull ItemStack item, @Nonnull IModelBaker baker) {

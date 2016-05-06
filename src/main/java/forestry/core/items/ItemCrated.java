@@ -82,8 +82,7 @@ public class ItemCrated extends ItemForestry implements IItemColor {
 			manager.registerItemModel(item, 0);
 			manager.registerItemModel(item, 1, "crate-filled");
 		} else {
-			String itemName = ItemStackUtil.getItemNameFromRegistry(item).getResourcePath();
-			ModelResourceLocation modelLocation = new ModelResourceLocation("forestry:crate-filled", itemName);
+			ModelResourceLocation modelLocation = new ModelResourceLocation("forestry:crate-filled", "crate-filled");
 			ModelLoader.setCustomModelResourceLocation(item, 0, modelLocation);
 			ModelBakery.registerItemVariants(item, modelLocation);
 		}

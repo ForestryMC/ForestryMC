@@ -14,7 +14,6 @@ import net.minecraft.entity.player.InventoryPlayer;
 
 import forestry.core.config.Constants;
 import forestry.core.gui.widgets.SocketWidget;
-import forestry.core.render.EnumTankLevel;
 import forestry.energy.tiles.TileEngineElectric;
 
 // TODO: IC2 for 1.9

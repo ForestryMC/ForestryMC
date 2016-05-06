@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.trigger;
 
-import forestry.core.triggers.Trigger;
-
 // TODO: Buildcraft for 1.9
 public class ApicultureTriggers {
 //	public static Trigger noFrames;

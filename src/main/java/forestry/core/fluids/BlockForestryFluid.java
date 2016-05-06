@@ -82,9 +82,9 @@ public class BlockForestryFluid extends BlockFluidClassic implements IItemModelR
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
-		double d0 = (double) pos.getX();
-		double d1 = (double) pos.getY();
-		double d2 = (double) pos.getZ();
+		double d0 = pos.getX();
+		double d1 = pos.getY();
+		double d2 = pos.getZ();
 
 		if (this.blockMaterial == Material.WATER) {
 			int i = stateIn.getValue(LEVEL);
@@ -94,15 +94,15 @@ public class BlockForestryFluid extends BlockFluidClassic implements IItemModelR
 					worldIn.playSound(d0 + 0.5D, d1 + 0.5D, d2 + 0.5D, SoundEvents.BLOCK_WATER_AMBIENT, SoundCategory.BLOCKS, rand.nextFloat() * 0.25F + 0.75F, rand.nextFloat() + 0.5F, false);
 				}
 			} else if (rand.nextInt(10) == 0) {
-				worldIn.spawnParticle(EnumParticleTypes.SUSPENDED, d0 + (double) rand.nextFloat(), d1 + (double) rand.nextFloat(), d2 + (double) rand.nextFloat(), 0.0D, 0.0D, 0.0D);
+				worldIn.spawnParticle(EnumParticleTypes.SUSPENDED, d0 + rand.nextFloat(), d1 + rand.nextFloat(), d2 + rand.nextFloat(), 0.0D, 0.0D, 0.0D);
 			}
 		}
 
 		if (this.blockMaterial == Material.LAVA && worldIn.getBlockState(pos.up()).getMaterial() == Material.AIR && !worldIn.getBlockState(pos.up()).isOpaqueCube()) {
 			if (rand.nextInt(100) == 0) {
-				double d8 = d0 + (double) rand.nextFloat();
+				double d8 = d0 + rand.nextFloat();
 				double d4 = d1 + stateIn.getBoundingBox(worldIn, pos).maxY;
-				double d6 = d2 + (double) rand.nextFloat();
+				double d6 = d2 + rand.nextFloat();
 				worldIn.spawnParticle(EnumParticleTypes.LAVA, d8, d4, d6, 0.0D, 0.0D, 0.0D);
 				worldIn.playSound(d8, d4, d6, SoundEvents.BLOCK_LAVA_POP, SoundCategory.BLOCKS, 0.2F + rand.nextFloat() * 0.2F, 0.9F + rand.nextFloat() * 0.15F, false);
 			}
@@ -116,9 +116,9 @@ public class BlockForestryFluid extends BlockFluidClassic implements IItemModelR
 			Material material = worldIn.getBlockState(pos.down(2)).getMaterial();
 
 			if (!material.blocksMovement() && !material.isLiquid()) {
-				double px = d0 + (double) rand.nextFloat();
+				double px = d0 + rand.nextFloat();
 				double py = d1 - 1.05D;
-				double pz = d2 + (double) rand.nextFloat();
+				double pz = d2 + rand.nextFloat();
 
 				EntityFX fx = new EntityFXColoredDripParticle(worldIn, px, py, pz, color.getRed(), color.getGreen(), color.getBlue());
 				FMLClientHandler.instance().getClient().effectRenderer.addEffect(fx);

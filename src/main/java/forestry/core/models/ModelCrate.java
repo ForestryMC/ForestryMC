@@ -11,12 +11,7 @@
 package forestry.core.models;
 
 import com.google.common.base.Charsets;
-import com.google.common.base.Optional;
-import com.google.common.base.Predicate;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-
-import javax.vecmath.Vector3f;
 
 import org.apache.commons.io.IOUtils;
 
@@ -28,7 +23,6 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,18 +31,12 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
-import net.minecraft.client.renderer.block.model.ItemOverride;
 import net.minecraft.client.renderer.block.model.ModelBlock;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.model.MultipartBakedModel;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -58,16 +46,10 @@ import net.minecraftforge.client.ItemModelMesherForge;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.IPerspectiveAwareModel;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
-import net.minecraftforge.client.model.MultiModel;
-import net.minecraftforge.client.model.SimpleModelState;
-import net.minecraftforge.common.model.IModelState;
-import net.minecraftforge.common.model.TRSRTransformation;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import forestry.api.core.IModelBaker;
 import forestry.core.items.ItemCrated;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
@@ -192,7 +174,7 @@ public class ModelCrate extends BlankItemModel {
         finally
         {
             IOUtils.closeQuietly(reader);
-            IOUtils.closeQuietly((Closeable)iresource);
+            IOUtils.closeQuietly(iresource);
         }
 
         return model;
@@ -210,12 +192,12 @@ public class ModelCrate extends BlankItemModel {
 	}
 	
 	@Override
-	public ItemOverrideList getOverrides() {
+	public ItemOverrideList createOverrides() {
 		return new CrateOverrideList();
 	}
 	
 	private class CrateOverrideList extends ItemOverrideList{
-
+		
 		public CrateOverrideList() {
 			super(Collections.emptyList());
 		}
@@ -234,7 +216,7 @@ public class ModelCrate extends BlankItemModel {
 					ObfuscationReflectionHelper.setPrivateValue(BakedQuad.class, quad, 100, 1);
 				}
 				
-				crates.put(crateUID, new IPerspectiveAwareModel.MapWrapper(new CrateBakedModel( bakeContentModels(crated, baseBaked)), getTransformations()));
+				crates.put(crateUID, new IPerspectiveAwareModel.MapWrapper(new CrateBakedModel( bakeContentModels(crated, baseBaked)), ModelManager.getInstance().DEFAULT_ITEM));
 			}
 			return crates.get(crateUID);
 		}
@@ -259,35 +241,6 @@ public class ModelCrate extends BlankItemModel {
 		}
 		
 	}
-
-	private static IModelState getTransformations() {
-        TRSRTransformation thirdperson = get(0, 3, 1, 0, 0, 0, 0.55f);
-        TRSRTransformation firstperson = get(1.13f, 3.2f, 1.13f, 0, -90, 25, 0.68f);
-        ImmutableMap.Builder<TransformType, TRSRTransformation> builder = ImmutableMap.builder();
-        builder.put(TransformType.GROUND,                  get(0, 2, 0, 0, 0, 0, 0.5f));
-        builder.put(TransformType.HEAD,                    get(0, 13, 7, 0, 180, 0, 1));
-        builder.put(TransformType.THIRD_PERSON_RIGHT_HAND, thirdperson);
-        builder.put(TransformType.THIRD_PERSON_LEFT_HAND, leftify(thirdperson));
-        builder.put(TransformType.FIRST_PERSON_RIGHT_HAND, firstperson);
-        builder.put(TransformType.FIRST_PERSON_LEFT_HAND, leftify(firstperson));
-        return new SimpleModelState(builder.build());
-	}
-	
-    private static TRSRTransformation get(float tx, float ty, float tz, float ax, float ay, float az, float s)
-    {
-        return TRSRTransformation.blockCenterToCorner(new TRSRTransformation(
-            new Vector3f(tx / 16, ty / 16, tz / 16),
-            TRSRTransformation.quatFromXYZDegrees(new Vector3f(ax, ay, az)),
-            new Vector3f(s, s, s),
-            null));
-    }
-
-    private static final TRSRTransformation flipX = new TRSRTransformation(null, null, new Vector3f(-1, 1, 1), null);
-
-    private static TRSRTransformation leftify(TRSRTransformation transform)
-    {
-        return TRSRTransformation.blockCenterToCorner(flipX.compose(TRSRTransformation.blockCornerToCenter(transform)).compose(flipX));
-    }
     
 	@Override
 	public boolean isGui3d() {

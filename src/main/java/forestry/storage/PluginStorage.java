@@ -32,6 +32,7 @@ import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -66,10 +67,14 @@ import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
 import forestry.storage.items.ItemRegistryStorage;
+import forestry.storage.proxy.ProxyStorage;
 
 @ForestryPlugin(pluginID = ForestryPluginUids.STORAGE, name = "Storage", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.storage.description")
 public class PluginStorage extends BlankForestryPlugin {
 
+	@SidedProxy(clientSide = "forestry.storage.proxy.ProxyStorageClient", serverSide = "forestry.storage.proxy.ProxyStorage")
+	public static ProxyStorage proxy;
+	
 	private static final List<ItemCrated> crates = new ArrayList<>();
 	private static final String CONFIG_CATEGORY = "backpacks";
 
@@ -115,6 +120,8 @@ public class PluginStorage extends BlankForestryPlugin {
 
 		definition = new BackpackDefinition(new Color(0xdd3a3a));
 		BackpackManager.backpackInterface.registerBackpack(BackpackManager.BUILDER_UID, definition);
+		
+		proxy.registerCrateModel();
 	}
 
 	@Override

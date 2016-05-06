@@ -35,7 +35,7 @@ public class ItemBlockWoodDoor extends ItemBlockWood<BlockArbDoor> {
 			}
 
 			if (playerIn.canPlayerEdit(pos, facing, stack) && this.block.canPlaceBlockAt(worldIn, pos)) {
-				EnumFacing enumfacing = EnumFacing.fromAngle((double) playerIn.rotationYaw);
+				EnumFacing enumfacing = EnumFacing.fromAngle(playerIn.rotationYaw);
 				int x = enumfacing.getFrontOffsetX();
 				int z = enumfacing.getFrontOffsetZ();
 				boolean isRightHinge = x < 0 && hitZ < 0.5F || x > 0 && hitZ > 0.5F || z < 0 && hitX > 0.5F || z > 0 && hitX < 0.5F;
