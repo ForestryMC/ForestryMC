@@ -12,6 +12,7 @@ package forestry.core.items;
 
 import java.util.List;
 
+import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -22,7 +23,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.core.IModelManager;
 import forestry.core.config.Config;
 
-public class ItemOverlay extends ItemForestry {
+public class ItemOverlay extends ItemForestry implements IItemColor {
+
 	public interface IOverlayInfo {
 		String getUid();
 
@@ -80,9 +82,15 @@ public class ItemOverlay extends ItemForestry {
 		return super.getUnlocalizedName(stack) + "." + overlays[stack.getItemDamage()].getUid();
 	}
 
-	public int getColorFromItemStack(ItemStack itemstack, int j) {
-		IOverlayInfo overlayInfo = overlays[itemstack.getItemDamage()];
-		if (j == 0 || overlayInfo.getSecondaryColor() == 0) {
+	@Override
+	public int getColorFromItemstack(ItemStack stack, int tintIndex) {
+		int meta = stack.getMetadata();
+		if (meta < 0 || meta >= overlays.length) {
+			return 0xffffff;
+		}
+
+		IOverlayInfo overlayInfo = overlays[meta];
+		if (tintIndex == 0 || overlayInfo.getSecondaryColor() == 0) {
 			return overlayInfo.getPrimaryColor();
 		} else {
 			return overlayInfo.getSecondaryColor();

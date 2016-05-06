@@ -13,6 +13,7 @@ package forestry.core.items;
 import java.util.Locale;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -36,7 +37,7 @@ import forestry.core.fluids.FluidHelper;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Translator;
 
-public class ItemLiquidContainer extends ItemForestry {
+public class ItemLiquidContainer extends ItemForestry implements IItemColor {
 	private final EnumContainerType type;
 	private final int color;
 
@@ -139,15 +140,14 @@ public class ItemLiquidContainer extends ItemForestry {
 		}
 	}
 
-	// TODO: liquid container coloring
-//	@Override
-//	public int getColorFromItemstack(ItemStack itemstack, int j) {
-//		if (j > 0) {
-//			return color;
-//		} else {
-//			return 0xffffff;
-//		}
-//	}
+	@Override
+	public int getColorFromItemstack(ItemStack itemstack, int j) {
+		if (j > 0) {
+			return color;
+		} else {
+			return 0xffffff;
+		}
+	}
 
 	public EnumContainerType getType() {
 		return type;

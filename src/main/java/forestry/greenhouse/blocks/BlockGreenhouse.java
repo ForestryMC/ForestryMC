@@ -23,6 +23,7 @@ import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -67,7 +68,7 @@ import forestry.greenhouse.tiles.TileGreenhouseSprinkler;
 import forestry.greenhouse.tiles.TileGreenhouseValve;
 import forestry.plugins.ForestryPluginUids;
 
-public abstract class BlockGreenhouse extends BlockStructure implements ISpriteRegister {
+public abstract class BlockGreenhouse extends BlockStructure implements ISpriteRegister, IBlockColor {
 	private static final AxisAlignedBB SPRINKLER_BOUNDS = new AxisAlignedBB(0.3125F, 0.25F, 0.3125F, 0.6875F, 1F, 0.6875F);
 	public static final PropertyEnum<State> STATE = PropertyEnum.create("state", State.class);
 	
@@ -211,22 +212,22 @@ public abstract class BlockGreenhouse extends BlockStructure implements ISpriteR
 		}
 	}
 
-	// TODO: greenhouse color
-//	@Override
-//	public int colorMultiplier(IBlockAccess world, BlockPos pos, int renderPass) {
-//		TileEntity tile = world.getTileEntity(pos);
-//		if (tile instanceof ICamouflagedBlock) {
-//			ItemStack camouflageStack = CamouflageUtil.getCamouflageBlock(world, pos);
-//
-//			if (renderPass < 100 && camouflageStack != null) {
-//				return Block.getBlockFromItem(camouflageStack.getItem()).colorMultiplier(world, pos, renderPass);
-//			}
-//
-//			return super.colorMultiplier(world, pos, renderPass);
-//		} else {
-//			return super.colorMultiplier(world, pos, renderPass);
-//		}
-//	}
+	@Override
+	public int colorMultiplier(IBlockState state, IBlockAccess worldIn, BlockPos pos, int tintIndex) {
+		TileEntity tile = worldIn.getTileEntity(pos);
+		if (tile instanceof ICamouflagedTile) {
+			ItemStack camouflageStack = CamouflageUtil.getCamouflageBlock(worldIn, pos);
+
+			if (tintIndex < 100 && camouflageStack != null) {
+				Block block = Block.getBlockFromItem(camouflageStack.getItem());
+				if (block instanceof IBlockColor) {
+					return ((IBlockColor) block).colorMultiplier(state, worldIn, pos, tintIndex);
+				}
+			}
+		}
+
+		return 0xffffff;
+	}
 
 	/* MODELS */
 	@Override
