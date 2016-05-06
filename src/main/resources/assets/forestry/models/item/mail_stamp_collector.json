@@ -1,5 +1,5 @@
 {
-    "parent": "forestry:block/apiculture_bee.house",
+    "parent": "forestry:block/mail_stamp_collector",
     "display": {
         "thirdperson": {
             "rotation": [ 10, -45, 170 ],

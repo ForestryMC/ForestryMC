@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "face=north": { "model": "forestry:apiculture_bee_house" },
+		"face=east": { "model": "forestry:apiculture_bee_house", "y": 90 },
+		"face=south": { "model": "forestry:apiculture_bee_house", "y": 180 },
+		"face=west": { "model": "forestry:apiculture_bee_house", "y": -90 }
+	}
+}
