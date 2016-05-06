@@ -17,6 +17,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.core.models.ModelManager;
+import forestry.core.proxy.Proxies;
 import forestry.plugins.PluginManager;
 
 public abstract class ItemRegistry {
@@ -26,7 +27,7 @@ public abstract class ItemRegistry {
 		}
 		item.setUnlocalizedName("for." + name);
 		GameRegistry.registerItem(item, name);
-		ModelManager.getInstance().registerItem(item);
+		Proxies.common.registerItem(item);
 		return item;
 	}
 

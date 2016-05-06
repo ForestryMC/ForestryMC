@@ -1,15 +1,11 @@
 {
-"textures": {
-    "butterfly": "forestry:items/butterflies/lepiAurora"
-},
 "elements": [ 
 {
-    "__comment": "wingRight",
     "from": [ 0.5, 13, 1 ],
     "to": [ 7.5, 14, 13.5 ],
     "faces": {
-        "down":  { "uv": [ 3.5, 0, 7, 6 ], "texture": "#butterfly" },
-        "up":    { "uv": [ 0, 0, 3.5, 6 ], "texture": "#butterfly" },
+        "down":  { "uv": [ 3.5, 0, 7, 6.5 ], "texture": "#butterfly" },
+        "up":    { "uv": [ 0, 0, 3.5, 6.5 ], "texture": "#butterfly" },
         "north": { "uv": [ 9, 15, 16, 16 ], "texture": "#butterfly" },
         "south": { "uv": [ 9, 15, 16, 16 ], "texture": "#butterfly" },
         "west":  { "uv": [ 3.5, 15, 16, 16 ], "texture": "#butterfly" },
@@ -17,12 +13,11 @@
     }
 },
 {
-    "__comment": "wingLeft",
     "from": [ 8.5, 13, 1 ],
     "to": [ 15.5, 14, 13.5 ],
     "faces": {
-        "down":  { "uv": [ 3.5, 7, 7, 13 ], "texture": "#butterfly" },
-        "up":    { "uv": [ 0, 7, 3.5, 13 ], "texture": "#butterfly" },
+        "down":  { "uv": [ 3.5, 7, 7, 13.5 ], "texture": "#butterfly" },
+        "up":    { "uv": [ 0, 7, 3.5, 13.5 ], "texture": "#butterfly" },
         "north": { "uv": [ 9, 15, 16, 16 ], "texture": "#butterfly" },
         "south": { "uv": [ 9, 15, 16, 16 ], "texture": "#butterfly" },
         "west":  { "uv": [ 3.5, 15, 16, 16 ], "texture": "#butterfly" },
@@ -30,10 +25,9 @@
     }
 },
 {
-    "__comment": "body",
-    "from": [ 8, 13.5, 3.5 ],
-    "to": [ 9, 14.5, 9.5 ],
-    "rotation": { "origin": [ 8, 14.5, 3.5 ], "axis": "z", "angle": -45 },
+    "from": [ 7.3125, 13, 3.5 ],
+    "to": [ 8.3125, 14, 9.5 ],
+    "rotation": { "origin": [ 7.3125, 14, 3.5 ], "axis": "z", "angle": 45 },
     "faces": {
         "down":  { "uv": [ 12, 0, 12.5, 3 ], "texture": "#butterfly" },
         "up":    { "uv": [ 11.5, 0, 12, 3 ], "texture": "#butterfly" },
@@ -44,7 +38,6 @@
     }
 },
 {
-    "__comment": "eyeRight",
     "from": [ 6.9, 14, 3 ],
     "to": [ 7.9, 15, 4 ],
     "faces": {
@@ -57,7 +50,6 @@
     }
 },
 {
-    "__comment": "eyeLeft",
     "from": [ 8.1, 14, 2.9375 ],
     "to": [ 9.1, 15, 3.9375 ],
     "faces": {
@@ -71,20 +63,40 @@
 }
 ],
 "display": {
-    "thirdperson": {
-        "rotation": [ 90, 0, 180 ],
-        "translation": [ 0, 0, -0.4 ],
+    "thirdperson_righthand": {
+        "rotation": [ 0, 0, 0 ],
+        "translation": [ 0, -2.65, 2.46 ],
         "scale": [ 0.5, 0.5, 0.5 ]
     },
-    "firstperson": {
-        "rotation": [ 26, -47, 3 ],
-        "translation": [ 0, 0, 0 ],
+    "thirdperson_lefthand": {
+        "rotation": [ 0, 0, 0 ],
+        "translation": [ 0, -2.65, 2.46 ],
+        "scale": [ 0.5, 0.5, 0.5 ]
+    },
+    "ground": {
+        "rotation": [ 0, 0, 0 ],
+        "translation": [ 0, -4, 0 ],
+        "scale": [ 0.5, 0.5, 0.5 ]
+    },
+    "fixed": {
+        "rotation": [ -90, 0, 0 ],
+        "translation": [ 0, 0.5, 4.91 ],
         "scale": [ 1, 1, 1 ]
     },
+    "firstperson_righthand": {
+        "rotation": [ 21, 0, 0 ],
+        "translation": [ -0.25, -0.76, 0.76 ],
+        "scale": [ 0.5, 0.5, 0.5 ]
+    },
+    "firstperson_lefthand": {
+        "rotation": [ 21, 0, 0 ],
+        "translation": [ -0.25, -0.76, 0.76 ],
+        "scale": [ 0.5, 0.5, 0.5 ]
+    },
     "gui": {
-        "rotation": [ 0, 0, 0 ],
-        "translation": [ 0, -3, 0.5 ],
-        "scale": [ 1.25, 1.25, 1.25 ]
+        "rotation": [ 90, 0, 0 ],
+        "translation": [ 0, 0, 0 ],
+        "scale": [ 1, 1, 1 ]
     }
 }
 }

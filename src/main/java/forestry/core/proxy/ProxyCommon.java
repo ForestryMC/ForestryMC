@@ -12,9 +12,11 @@ package forestry.core.proxy;
 
 import java.io.File;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.UserListOpsEntry;
@@ -37,6 +39,14 @@ public class ProxyCommon {
 
 	public String getMinecraftVersion() {
 		return Loader.instance().getMinecraftModContainer().getVersion();
+	}
+	
+	public void registerItem(Item item){
+		
+	}
+	
+	public void registerBlock(Block block){
+		
 	}
 
 	public void registerTickHandlers(WorldGenerator worldGenerator) {

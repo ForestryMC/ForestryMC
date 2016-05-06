@@ -387,6 +387,6 @@ public class PluginCore extends BlankForestryPlugin {
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public void registerSprites(TextureStitchEvent.Pre event) {
-		TextureManager.registerSprites();
+		TextureManager.getInstance().registerSprites();
 	}
 }

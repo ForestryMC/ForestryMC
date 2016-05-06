@@ -201,34 +201,10 @@ public class ModelBaker implements IModelBaker {
 			return;
 		}
 
-		/*boolean isEdge;
-		switch (facing) {
-			case WEST:
-				isEdge = renderBounds.minX < 0.0001;
-				break;
-			case DOWN:
-				isEdge = renderBounds.minY < 0.0001;
-				break;
-			case NORTH:
-				isEdge = renderBounds.minZ < 0.0001;
-				break;
-			case UP:
-				isEdge = renderBounds.maxY > 0.9999;
-				break;
-			case SOUTH:
-				isEdge = renderBounds.maxZ > 0.9999;
-				break;
-			case EAST:
-				isEdge = renderBounds.maxX > 0.9999;
-				break;
-			default:
-				return;
-		}*/
-
 		Vector3f to = new Vector3f((float) renderBounds.minX * 16.0f, (float) renderBounds.minY * 16.0f, (float) renderBounds.minZ * 16.0f);
 		Vector3f from = new Vector3f((float) renderBounds.maxX * 16.0f, (float) renderBounds.maxY * 16.0f, (float) renderBounds.maxZ * 16.0f);
 
-		faces.add(new ModelBakerFace(facing/*, isEdge*/, colorIndex, to, from, defUVs, sprite));
+		faces.add(new ModelBakerFace(facing, colorIndex, to, from, defUVs, sprite));
 	}
 
 	@Override
@@ -253,7 +229,6 @@ public class ModelBaker implements IModelBaker {
 
 			BakedQuad bf = faceBakery.makeBakedQuad(face.to, face.from, bpf, face.spite, myFace, mr, null, true, true);
 
-			//if (face.isEdge) {
 			currentModel.addQuad(myFace, bf);
 		}
 		

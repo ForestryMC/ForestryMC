@@ -12,6 +12,8 @@ package forestry.core.items;
 
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.color.IItemColor;
+import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -29,7 +31,7 @@ import forestry.core.proxy.Proxies;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Translator;
 
-public class ItemCrated extends ItemForestry {
+public class ItemCrated extends ItemForestry implements IItemColor {
 
 	private final ItemStack contained;
 	private final boolean usesOreDict;
@@ -87,13 +89,17 @@ public class ItemCrated extends ItemForestry {
 		}
 	}
 
-	// TODO: crate rendering
-//	@Override
-//	public int getColorFromItemstack(ItemStack stack, int renderPass) {
-//		if (getContained() == null || renderPass == 100) {
-//			return super.getColorFromItemstack(stack, renderPass);
-//		}
-//		return getContained().getItem().getColorFromItemstack(getContained(), renderPass);
-//	}
+	@Override
+	public int getColorFromItemstack(ItemStack stack, int renderPass) {
+		ItemColors colors = Proxies.common.getClientInstance().getItemColors();
+		if (getContained() == null || renderPass == 100) {
+			return -1;
+		}
+		int color = colors.getColorFromItemstack(contained, renderPass);
+		if(color != -1){
+			return color;
+		}
+		return -1;
+	}
 
 }

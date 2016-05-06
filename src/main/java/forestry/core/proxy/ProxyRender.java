@@ -110,9 +110,9 @@ public class ProxyRender {
 	public void registerItemAndBlockColors() {
 	}
 	
-//	public IAnimationStateMachine loadAnimationState(ResourceLocation location, ImmutableMap<String, ITimeValue> parameters){
-//		return null;
-//	}
+	public IAnimationStateMachine loadAnimationState(ResourceLocation location, ImmutableMap<String, ITimeValue> parameters){
+		return null;
+	}
 
 	/* FX */
 

@@ -17,6 +17,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
@@ -28,8 +29,10 @@ import net.minecraftforge.common.MinecraftForge;
 import org.lwjgl.input.Keyboard;
 
 import forestry.core.TickHandlerCoreClient;
+import forestry.core.models.ModelManager;
 import forestry.core.multiblock.MultiblockClientTickHandler;
 import forestry.core.network.packets.PacketFXSignal;
+import forestry.core.render.TextureManager;
 import forestry.core.worldgen.WorldGenerator;
 
 public class ProxyCommonClient extends ProxyCommon {
@@ -40,6 +43,18 @@ public class ProxyCommonClient extends ProxyCommon {
 
 		MinecraftForge.EVENT_BUS.register(new TickHandlerCoreClient());
 		MinecraftForge.EVENT_BUS.register(new MultiblockClientTickHandler());
+	}
+	
+	@Override
+	public void registerBlock(Block block) {
+		ModelManager.getInstance().registerBlock(block);
+		TextureManager.getInstance().registerBlock(block);
+	}
+	
+	@Override
+	public void registerItem(Item item) {
+		ModelManager.getInstance().registerItem(item);
+		TextureManager.getInstance().registerItem(item);
 	}
 
 	@Override

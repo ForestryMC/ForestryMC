@@ -77,7 +77,7 @@ public class ModelBakerModel implements IModelBakerModel {
 
 	@Override
 	public boolean isGui3d() {
-		return true;
+		return isGui3d;
 	}
 
 	@Override

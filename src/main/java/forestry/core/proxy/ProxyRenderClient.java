@@ -12,6 +12,8 @@ package forestry.core.proxy;
 
 import javax.annotation.Nonnull;
 
+import com.google.common.collect.ImmutableMap;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -33,7 +35,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import net.minecraftforge.client.model.ModelLoader;
-
+import net.minecraftforge.client.model.ModelLoaderRegistry;
+import net.minecraftforge.common.animation.ITimeValue;
+import net.minecraftforge.common.model.animation.IAnimationStateMachine;
 import forestry.apiculture.entities.EntityFXBee;
 import forestry.apiculture.render.ParticleRenderer;
 import forestry.apiculture.render.TextureHabitatLocator;
@@ -46,6 +50,7 @@ import forestry.core.entities.EntityFXSnow;
 import forestry.core.fluids.Fluids;
 import forestry.core.items.ItemCrated;
 import forestry.core.models.BlockModelIndex;
+import forestry.core.models.ModelCrate;
 import forestry.core.models.ModelIndex;
 import forestry.core.models.ModelManager;
 import forestry.core.render.RenderAnalyzer;
@@ -136,8 +141,7 @@ public class ProxyRenderClient extends ProxyRender {
 	public void registerModelCrate(ItemCrated crate) {
 		String cleanItemName = ItemStackUtil.getItemNameFromRegistry(crate).getResourcePath();
 		ModelResourceLocation modelLocation = new ModelResourceLocation("forestry:crate-filled", cleanItemName);
-		// TODO: fix crate rendering
-//		registerModel(new ModelIndex(modelLocation, new ModelCrate()));
+		registerModel(new ModelIndex(modelLocation, new ModelCrate()));
 	}
 
 	@Override
@@ -165,10 +169,10 @@ public class ProxyRenderClient extends ProxyRender {
 		ModelManager.getInstance().registerItemAndBlockColors();
 	}
 
-	//	@Override
-//    public IAnimationStateMachine loadAnimationState(ResourceLocation location, ImmutableMap<String, ITimeValue> parameters){
-//        return Animation.INSTANCE.load(location, parameters);
-//    }
+	@Override
+    public IAnimationStateMachine loadAnimationState(ResourceLocation location, ImmutableMap<String, ITimeValue> parameters){
+		return ModelLoaderRegistry.loadASM(location, parameters);
+    }
 
 	private static boolean shouldSpawnParticle(World world) {
 		if (!Config.enableParticleFX) {

@@ -27,7 +27,6 @@ import org.lwjgl.util.vector.Vector3f;
 public class ModelBakerFace {
 	@Nonnull
 	public final EnumFacing face;
-	//public final boolean isEdge;
 
 	public final Vector3f to;
 	public final Vector3f from;
@@ -38,10 +37,9 @@ public class ModelBakerFace {
 
 	public final int colorIndex;
 
-	public ModelBakerFace(@Nonnull EnumFacing face/*, boolean isEdge*/, int colorIndex, Vector3f to, Vector3f from, float[] defUVs2, TextureAtlasSprite sprite) {
+	public ModelBakerFace(@Nonnull EnumFacing face, int colorIndex, Vector3f to, Vector3f from, float[] defUVs2, TextureAtlasSprite sprite) {
 		this.colorIndex = colorIndex;
 		this.face = face;
-		//this.isEdge = isEdge;
 		this.to = to;
 		this.from = from;
 		this.uv = defUVs2;

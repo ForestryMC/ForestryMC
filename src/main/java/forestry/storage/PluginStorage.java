@@ -53,6 +53,7 @@ import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
 import forestry.core.fluids.Fluids;
 import forestry.core.items.ItemCrated;
+import forestry.core.models.ModelCrate;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.IMCUtil;
 import forestry.core.utils.ItemStackUtil;
@@ -501,6 +502,6 @@ public class PluginStorage extends BlankForestryPlugin {
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public void onBakeModel(ModelBakeEvent event) {
-//		ModelCrate.initModel(event);
+		ModelCrate.initModel(event);
 	}
 }

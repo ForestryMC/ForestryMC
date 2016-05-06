@@ -10,12 +10,14 @@
  ******************************************************************************/
 package forestry.core.models;
 
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.relauncher.Side;
@@ -25,7 +27,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public abstract class BlankItemModel implements IBakedModel {
 	@Override
 	public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
-		return null;
+		return Collections.emptyList();
+	}
+	
+	@Override
+	public ItemOverrideList getOverrides() {
+		return new ItemOverrideList(Collections.emptyList());
 	}
 
 	@Override
@@ -50,7 +57,7 @@ public abstract class BlankItemModel implements IBakedModel {
 
 	@Override
 	public ItemCameraTransforms getItemCameraTransforms() {
-		return null;
+		return ItemCameraTransforms.DEFAULT;
 	}
 
 }

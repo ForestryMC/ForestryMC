@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.color.IBlockColor;
+import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.Item;
@@ -26,8 +28,10 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.core.ForestryAPI;
+import forestry.api.core.IItemModelRegister;
 import forestry.api.core.ISpriteProvider;
 import forestry.api.core.ISpriteRegister;
+import forestry.api.core.IStateMapperRegister;
 import forestry.api.core.ITextureManager;
 import forestry.core.proxy.Proxies;
 
@@ -39,6 +43,8 @@ public class TextureManager implements ITextureManager {
 	private static final Map<String, TextureAtlasSprite> defaultIcons = new HashMap<>();
 	private static final DefaultSpriteProvider defaultIconProvider = new DefaultSpriteProvider();
 	private static final List<ISpriteProvider> iconProviders = new ArrayList<>();
+	
+	private final List<ISpriteRegister> spriteRegisters = new ArrayList<>();
 
 	static {
 		ForestryAPI.textureManager = instance;
@@ -130,17 +136,22 @@ public class TextureManager implements ITextureManager {
 		return null;
 	}
 	
-	@SideOnly(Side.CLIENT)
-	public static void registerSprites() {
-		for (Block block : GameData.getBlockRegistry()) {
-			if (block instanceof ISpriteRegister) {
-				((ISpriteRegister) block).registerSprites(getInstance());
-			}
+	public void registerBlock(Block block) {
+		if (block instanceof ISpriteRegister) {
+			spriteRegisters.add((ISpriteRegister) block);
 		}
-		for (Item item : GameData.getItemRegistry()) {
-			if (item instanceof ISpriteRegister) {
-				((ISpriteRegister) item).registerSprites(getInstance());
-			}
+	}
+
+	public void registerItem(Item item) {
+		if (item instanceof ISpriteRegister) {
+			spriteRegisters.add((ISpriteRegister) item);
+		}
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public void registerSprites() {
+		for (ISpriteRegister spriteRegister : spriteRegisters) {
+			spriteRegister.registerSprites(getInstance());
 		}
 	}
 

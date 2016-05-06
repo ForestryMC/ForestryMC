@@ -18,6 +18,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.core.models.ModelManager;
+import forestry.core.proxy.Proxies;
 import forestry.plugins.PluginManager;
 
 public abstract class BlockRegistry {
@@ -28,7 +29,7 @@ public abstract class BlockRegistry {
 		block.setUnlocalizedName("for." + name);
 		GameRegistry.registerBlock(block, null, name);
 		GameRegistry.registerItem(itemBlock, name);
-		ModelManager.getInstance().registerBlock(block);
+		Proxies.common.registerBlock(block);
 		return block;
 	}
 
@@ -42,7 +43,7 @@ public abstract class BlockRegistry {
 		}
 		block.setUnlocalizedName("for." + name);
 		GameRegistry.registerBlock(block, itemClass, name, itemCtorArgs);
-		ModelManager.getInstance().registerBlock(block);
+		Proxies.common.registerBlock(block);
 		return block;
 	}
 
