@@ -156,7 +156,7 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 		BlockPos minPos = beeHousing.getCoordinates().add(-area.getX() / 2, -area.getY() / 2, -area.getZ() / 2);
 		BlockPos maxPos = minPos.add(area);
 
-		for (BlockPos posBlock : BlockPos.getAllInBox(minPos, maxPos)) {
+		for (BlockPos posBlock : BlockPos.getAllInBoxMutable(minPos, maxPos)) {
 			for (IFlowerAcceptableRule acceptableRule : acceptableRules) {
 				if (acceptableRule.isAcceptableFlower(flowerType, world, posBlock)) {
 					return posBlock;

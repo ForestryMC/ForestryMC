@@ -5,6 +5,8 @@
  ******************************************************************************/
 package forestry.api.apiculture.hives;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -12,10 +14,11 @@ import net.minecraft.world.World;
 public interface IHiveGen {
 
 	/**
-	 * return a Y value that the hive should try to generate at.
-	 * returns negative if the hive can't be placed anywhere.
+	 * return a position that the hive should try to generate at.
+	 * returns null if the hive can't be placed anywhere.
 	 */
-	int getYForHive(World world, int x, int z);
+	@Nullable
+	BlockPos getPosForHive(World world, int x, int z);
 
 	/**
 	 * returns true if the hive can be generated at this location.

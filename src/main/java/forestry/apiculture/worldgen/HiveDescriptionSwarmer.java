@@ -13,7 +13,7 @@ package forestry.apiculture.worldgen;
 import java.util.Arrays;
 import java.util.List;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -23,6 +23,7 @@ import net.minecraft.world.biome.BiomeGenBase;
 
 import forestry.api.apiculture.hives.IHiveDescription;
 import forestry.api.apiculture.hives.IHiveGen;
+import forestry.api.apiculture.hives.IHiveRegistry;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.apiculture.PluginApiculture;
@@ -42,13 +43,8 @@ public class HiveDescriptionSwarmer implements IHiveDescription {
 	}
 
 	@Override
-	public Block getBlock() {
-		return PluginApiculture.blocks.beehives;
-	}
-
-	@Override
-	public int getMeta() {
-		return 7;
+	public IBlockState getBlockState() {
+		return PluginApiculture.blocks.beehives.getStateForType(IHiveRegistry.HiveType.SWARM);
 	}
 
 	@Override

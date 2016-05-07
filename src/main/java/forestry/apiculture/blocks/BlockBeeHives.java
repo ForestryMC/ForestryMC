@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.blocks;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -68,6 +69,10 @@ public class BlockBeeHives extends BlockContainer implements IItemModelRegister,
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		return getDefaultState().withProperty(HIVE_TYPES, HiveType.VALUES[meta]);
+	}
+
+	public IBlockState getStateForType(@Nonnull HiveType type) {
+		return getDefaultState().withProperty(HIVE_TYPES, type);
 	}
 
 	@Override

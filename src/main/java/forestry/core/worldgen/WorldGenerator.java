@@ -71,15 +71,15 @@ public class WorldGenerator implements IWorldGenerator {
 		}
 
 		// shift to world coordinates
-		chunkX = chunkX << 4;
-		chunkZ = chunkZ << 4;
+		int x = chunkX << 4;
+		int y = chunkZ << 4;
 
 		// / APATITE
 		if (Config.generateApatiteOre) {
 			if (random.nextFloat() < 0.8f) {
-				int randPosX = chunkX + random.nextInt(16);
+				int randPosX = x + random.nextInt(16);
 				int randPosY = random.nextInt(world.getActualHeight() - 72) + 56; // Does not generate below y = 64
-				int randPosZ = chunkZ + random.nextInt(16);
+				int randPosZ = y + random.nextInt(16);
 				apatiteGenerator.generate(world, random, new BlockPos(randPosX, randPosY, randPosZ));
 			}
 		}
@@ -87,9 +87,9 @@ public class WorldGenerator implements IWorldGenerator {
 		// / COPPER
 		if (Config.generateCopperOre) {
 			for (int i = 0; i < 20; i++) {
-				int randPosX = chunkX + random.nextInt(16);
+				int randPosX = x + random.nextInt(16);
 				int randPosY = random.nextInt(76) + 32;
-				int randPosZ = chunkZ + random.nextInt(16);
+				int randPosZ = y + random.nextInt(16);
 				copperGenerator.generate(world, random, new BlockPos(randPosX, randPosY, randPosZ));
 			}
 		}
@@ -97,9 +97,9 @@ public class WorldGenerator implements IWorldGenerator {
 		// / TIN
 		if (Config.generateTinOre) {
 			for (int i = 0; i < 18; i++) {
-				int randPosX = chunkX + random.nextInt(16);
+				int randPosX = x + random.nextInt(16);
 				int randPosY = random.nextInt(76) + 16;
-				int randPosZ = chunkZ + random.nextInt(16);
+				int randPosZ = y + random.nextInt(16);
 				tinGenerator.generate(world, random, new BlockPos(randPosX, randPosY, randPosZ));
 			}
 		}

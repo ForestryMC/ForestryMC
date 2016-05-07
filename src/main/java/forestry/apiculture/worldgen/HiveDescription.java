@@ -29,6 +29,7 @@ import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.hives.HiveManager;
 import forestry.api.apiculture.hives.IHiveDescription;
 import forestry.api.apiculture.hives.IHiveGen;
+import forestry.api.apiculture.hives.IHiveRegistry;
 import forestry.api.core.BiomeHelper;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -39,35 +40,35 @@ import forestry.apiculture.genetics.BeeDefinition;
 
 public enum HiveDescription implements IHiveDescription {
 
-	FOREST(0, 3.0f, BeeDefinition.FOREST, HiveManager.genHelper.tree()) {
+	FOREST(IHiveRegistry.HiveType.FOREST, 3.0f, BeeDefinition.FOREST, HiveManager.genHelper.tree()) {
 		@Override
 		public void postGen(World world, BlockPos pos) {
 			super.postGen(world, pos);
 			postGenFlowers(world, pos, flowerStates);
 		}
 	},
-	MEADOWS(1, 1.0f, BeeDefinition.MEADOWS, HiveManager.genHelper.ground(Blocks.DIRT, Blocks.GRASS)) {
+	MEADOWS(IHiveRegistry.HiveType.MEADOWS, 1.0f, BeeDefinition.MEADOWS, HiveManager.genHelper.ground(Blocks.DIRT, Blocks.GRASS)) {
 		@Override
 		public void postGen(World world, BlockPos pos) {
 			super.postGen(world, pos);
 			postGenFlowers(world, pos, flowerStates);
 		}
 	},
-	DESERT(2, 1.0f, BeeDefinition.MODEST, HiveManager.genHelper.ground(Blocks.DIRT, Blocks.GRASS, Blocks.SAND, Blocks.SANDSTONE)) {
+	DESERT(IHiveRegistry.HiveType.DESERT, 1.0f, BeeDefinition.MODEST, HiveManager.genHelper.ground(Blocks.DIRT, Blocks.GRASS, Blocks.SAND, Blocks.SANDSTONE)) {
 		@Override
 		public void postGen(World world, BlockPos pos) {
 			super.postGen(world, pos);
 			postGenFlowers(world, pos, cactusStates);
 		}
 	},
-	JUNGLE(3, 6.0f, BeeDefinition.TROPICAL, HiveManager.genHelper.tree()),
-	END(4, 6.0f, BeeDefinition.ENDED, HiveManager.genHelper.ground(Blocks.END_STONE, Blocks.END_BRICKS)) {
+	JUNGLE(IHiveRegistry.HiveType.JUNGLE, 6.0f, BeeDefinition.TROPICAL, HiveManager.genHelper.tree()),
+	END(IHiveRegistry.HiveType.END, 6.0f, BeeDefinition.ENDED, HiveManager.genHelper.ground(Blocks.END_STONE, Blocks.END_BRICKS)) {
 		@Override
 		public boolean isGoodBiome(BiomeGenBase biome) {
 			return BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.END);
 		}
 	},
-	SNOW(5, 2.0f, BeeDefinition.WINTRY, HiveManager.genHelper.ground(Blocks.DIRT, Blocks.GRASS, Blocks.SNOW)) {
+	SNOW(IHiveRegistry.HiveType.SNOW, 2.0f, BeeDefinition.WINTRY, HiveManager.genHelper.ground(Blocks.DIRT, Blocks.GRASS, Blocks.SNOW)) {
 		@Override
 		public void postGen(World world, BlockPos pos) {
 			if (world.isAirBlock(pos.add(0, 1, 0))) {
@@ -77,7 +78,7 @@ public enum HiveDescription implements IHiveDescription {
 			postGenFlowers(world, pos, flowerStates);
 		}
 	},
-	SWAMP(6, 2.0f, BeeDefinition.MARSHY, HiveManager.genHelper.ground(Blocks.DIRT, Blocks.GRASS)) {
+	SWAMP(IHiveRegistry.HiveType.SWAMP, 2.0f, BeeDefinition.MARSHY, HiveManager.genHelper.ground(Blocks.DIRT, Blocks.GRASS)) {
 		@Override
 		public void postGen(World world, BlockPos pos) {
 			super.postGen(world, pos);
@@ -98,13 +99,13 @@ public enum HiveDescription implements IHiveDescription {
 		mushroomStates.add(Blocks.BROWN_MUSHROOM.getDefaultState());
 	}
 
-	private final int meta;
+	private final IBlockState blockState;
 	private final float genChance;
 	private final IBeeGenome beeGenome;
 	private final IHiveGen hiveGen;
 
-	HiveDescription(int meta, float genChance, BeeDefinition beeTemplate, IHiveGen hiveGen) {
-		this.meta = meta;
+	HiveDescription(IHiveRegistry.HiveType hiveType, float genChance, BeeDefinition beeTemplate, IHiveGen hiveGen) {
+		this.blockState = PluginApiculture.blocks.beehives.getStateForType(hiveType);
 		this.genChance = genChance;
 		this.beeGenome = beeTemplate.getGenome();
 		this.hiveGen = hiveGen;
@@ -116,13 +117,8 @@ public enum HiveDescription implements IHiveDescription {
 	}
 
 	@Override
-	public Block getBlock() {
-		return PluginApiculture.blocks.beehives;
-	}
-
-	@Override
-	public int getMeta() {
-		return meta;
+	public IBlockState getBlockState() {
+		return blockState;
 	}
 
 	@Override
@@ -160,16 +156,15 @@ public enum HiveDescription implements IHiveDescription {
 			int xOffset = world.rand.nextInt(8) - 4;
 			int zOffset = world.rand.nextInt(8) - 4;
 			BlockPos blockPos = hivePos.add(xOffset, 0, zOffset);
-			if (!world.isBlockLoaded(blockPos) || xOffset == 0 && zOffset == 0) {
+			if ((xOffset == 0 && zOffset == 0) || !world.isBlockLoaded(blockPos)) {
 				continue;
 			}
 
-			int y = groundGen.getYForHive(world, blockPos.getX(), blockPos.getZ());
-			if (y <= 0) {
+			blockPos = groundGen.getPosForHive(world, blockPos.getX(), blockPos.getZ());
+			if (blockPos == null) {
 				continue;
 			}
 
-			blockPos = new BlockPos(blockPos.getX(), y, blockPos.getZ());
 			IBlockState state = flowerStates.get(world.rand.nextInt(flowerStates.size()));
 			Block block = state.getBlock();
 			if (!block.canPlaceBlockAt(world, blockPos)) {
@@ -178,18 +173,6 @@ public enum HiveDescription implements IHiveDescription {
 
 			world.setBlockState(blockPos, state);
 			plantedCount++;
-
-			if (block instanceof IPlantable) {
-				IPlantable plantable = (IPlantable) block;
-
-				BlockPos groundPos = blockPos.down();
-				IBlockState blockState = world.getBlockState(groundPos);
-				Block ground = blockState.getBlock();
-				if (!ground.canSustainPlant(blockState, world, groundPos, EnumFacing.UP, plantable)) {
-					world.setBlockToAir(blockPos);
-					plantedCount--;
-				}
-			}
 
 			if (plantedCount >= 3) {
 				break;

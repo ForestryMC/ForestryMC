@@ -135,10 +135,10 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, 
 		HiveDescriptionSwarmer hiveDescription = new HiveDescriptionSwarmer(toSpawn);
 		Hive hive = new Hive(hiveDescription);
 
-		int chunkX = (getPos().getX() + worldObj.rand.nextInt(40 * 2) - 40) / 16;
-		int chunkZ = (getPos().getZ() + worldObj.rand.nextInt(40 * 2) - 40) / 16;
+		int x = getPos().getX() + worldObj.rand.nextInt(40 * 2) - 40;
+		int z = getPos().getZ() + worldObj.rand.nextInt(40 * 2) - 40;
 
-		if (HiveDecorator.genHive(worldObj, worldObj.rand, chunkX, chunkZ, hive)) {
+		if (HiveDecorator.tryGenHive(worldObj, x, z, hive)) {
 			pendingSpawns.pop();
 		}
 	}

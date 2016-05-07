@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.worldgen;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -18,6 +19,11 @@ import forestry.api.apiculture.hives.IHiveGen;
 import forestry.core.utils.BlockUtil;
 
 public abstract class HiveGen implements IHiveGen {
+
+	public static boolean isTreeBlock(IBlockState blockState, World world, BlockPos pos) {
+		Block block = blockState.getBlock();
+		return block.isLeaves(blockState, world, pos) || block.isWood(world, pos);
+	}
 
 	@Override
 	public boolean canReplace(IBlockState blockState, World world, BlockPos pos) {

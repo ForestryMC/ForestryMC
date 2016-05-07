@@ -5,7 +5,7 @@
  ******************************************************************************/
 package forestry.api.apiculture.hives;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
@@ -23,9 +23,7 @@ public interface IHiveDescription {
 	/**
 	 * The hive block to be placed in the world.
 	 */
-	Block getBlock();
-
-	int getMeta();
+	IBlockState getBlockState();
 
 	/**
 	 * returns true if the hive can be generated in these conditions.

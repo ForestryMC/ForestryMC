@@ -10,10 +10,11 @@
  ******************************************************************************/
 package forestry.apiculture.worldgen;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -36,12 +37,8 @@ public final class Hive {
 		this.hiveDescription = hiveDescription;
 	}
 
-	public Block getHiveBlock() {
-		return hiveDescription.getBlock();
-	}
-
-	public int getHiveMeta() {
-		return hiveDescription.getMeta();
+	public IBlockState getHiveBlockState() {
+		return hiveDescription.getBlockState();
 	}
 
 	public void addDrops(List<IHiveDrop> drops) {
@@ -81,7 +78,13 @@ public final class Hive {
 		return hiveDescription.getHiveGen().canReplace(blockState, world, pos);
 	}
 
-	public int getYForHive(World world, int x, int z) {
-		return hiveDescription.getHiveGen().getYForHive(world, x, z);
+	@Nullable
+	public BlockPos getPosForHive(World world, int x, int z) {
+		return hiveDescription.getHiveGen().getPosForHive(world, x, z);
+	}
+
+	@Override
+	public String toString() {
+		return hiveDescription + " hive";
 	}
 }

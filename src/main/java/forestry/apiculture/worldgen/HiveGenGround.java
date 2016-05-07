@@ -16,6 +16,7 @@ import java.util.Set;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -40,18 +41,24 @@ public class HiveGenGround extends HiveGen {
 	}
 
 	@Override
-	public int getYForHive(World world, int x, int z) {
-
+	public BlockPos getPosForHive(World world, int x, int z) {
 		// get to the ground
-		BlockPos pos = world.getHeight(new BlockPos(x, 0, z));
-		IBlockState blockState = world.getBlockState(pos.down());
-		Block block = blockState.getBlock();
-		while (pos.getY() >= 0 && (block.isLeaves(blockState, world, pos.down()) || canReplace(blockState, world, pos.down()))) {
-			pos = pos.down();
-			blockState = world.getBlockState(pos);
-			block = blockState.getBlock();
+		final BlockPos topPos = world.getHeight(new BlockPos(x, 0, z));
+		if (topPos.getY() == 0) {
+			return null;
 		}
 
-		return pos.getY();
+		final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(topPos);
+
+		IBlockState blockState = world.getBlockState(pos);
+		while (isTreeBlock(blockState, world, pos) || canReplace(blockState, world, pos)) {
+			pos.offsetMutable(EnumFacing.DOWN);
+			if (pos.getY() <= 0) {
+				return null;
+			}
+			blockState = world.getBlockState(pos);
+		}
+
+   		return pos.up();
 	}
 }

@@ -29,6 +29,7 @@ import forestry.api.core.EnumTemperature;
 import forestry.apiculture.PluginApiculture;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
+import forestry.core.utils.Log;
 
 public abstract class HiveDecorator {
 
@@ -50,44 +51,38 @@ public abstract class HiveDecorator {
 			return;
 		}
 
+		int worldX = (chunkX << 4) + 8;
+		int worldZ = (chunkZ << 4) + 8;
+
 		Collections.shuffle(hives, rand);
-		for (Hive hive : hives) {
-			if (genHive(world, rand, chunkX, chunkZ, hive)) {
-				return;
-			}
-		}
-	}
-
-	public static boolean genHive(World world, Random rand, int chunkX, int chunkZ, Hive hive) {
-		if (hive.genChance() * Config.getBeehivesAmount() < rand.nextFloat() * 100.0f) {
-			return false;
-		}
-
-		int worldX = chunkX * 16;
-		int worldZ = chunkZ * 16;
-
-		BiomeGenBase biome = world.getBiomeGenForCoords(new BlockPos(worldX, 0, worldZ));
-		EnumHumidity humidity = EnumHumidity.getFromValue(biome.getRainfall());
-
-		if (!hive.isGoodBiome(biome) || !hive.isGoodHumidity(humidity)) {
-			return false;
-		}
 
 		for (int tries = 0; tries < 4; tries++) {
 			int x = worldX + rand.nextInt(16);
 			int z = worldZ + rand.nextInt(16);
 
-			if (tryGenHive(world, x, z, hive)) {
-				return true;
+			BlockPos pos = new BlockPos(x, 0, z);
+			if (!world.isBlockLoaded(pos)) {
+				Log.error("tried to generated a hive in an unloaded area.");
+				return;
+			}
+			BiomeGenBase biome = world.getBiomeGenForCoords(pos);
+			EnumHumidity humidity = EnumHumidity.getFromValue(biome.getRainfall());
+
+			for (Hive hive : hives) {
+				if (hive.genChance() * Config.getBeehivesAmount() >= rand.nextFloat() * 100.0f) {
+					if (hive.isGoodBiome(biome) && hive.isGoodHumidity(humidity)) {
+						if (tryGenHive(world, x, z, hive)) {
+							return;
+						}
+					}
+				}
 			}
 		}
-
-		return false;
 	}
 
 	private static void decorateHivesDebug(World world, int chunkX, int chunkZ, List<Hive> hives) {
-		int worldX = chunkX * 16;
-		int worldZ = chunkZ * 16;
+		int worldX = (chunkX << 4) + 8;
+		int worldZ = (chunkZ << 4) + 8;
 		BiomeGenBase biome = world.getBiomeGenForCoords(new BlockPos(chunkX, 0, chunkZ));
 		EnumHumidity humidity = EnumHumidity.getFromValue(biome.getRainfall());
 
@@ -105,34 +100,35 @@ public abstract class HiveDecorator {
 		}
 	}
 
-	private static boolean tryGenHive(World world, int x, int z, Hive hive) {
+	public static boolean tryGenHive(World world, int x, int z, Hive hive) {
 
-		int y = hive.getYForHive(world, x, z);
+		final BlockPos hivePos = hive.getPosForHive(world, x, z);
 
-		if (y < 0) {
+		if (hivePos == null) {
 			return false;
 		}
 
-		if (!hive.canReplace(world, new BlockPos(x, y, z))) {
+		if (!hive.canReplace(world, hivePos)) {
 			return false;
 		}
 
-		BiomeGenBase biome = world.getBiomeGenForCoords(new BlockPos(x, 0, z));
-		EnumTemperature temperature = EnumTemperature.getFromValue(biome.getFloatTemperature(new BlockPos(x, 0, z)));
+		BiomeGenBase biome = world.getBiomeGenForCoords(hivePos);
+		EnumTemperature temperature = EnumTemperature.getFromValue(biome.getFloatTemperature(hivePos));
 		if (!hive.isGoodTemperature(temperature)) {
 			return false;
 		}
 
-		if (!hive.isValidLocation(world, new BlockPos(x, y, z))) {
+		if (!hive.isValidLocation(world, hivePos)) {
 			return false;
 		}
 
-		return setHive(world, new BlockPos(x, y, z), hive);
+		return setHive(world, hivePos, hive);
 	}
 
 	private static boolean setHive(World world, BlockPos pos, Hive hive) {
-		Block hiveBlock = hive.getHiveBlock();
-		boolean placed = world.setBlockState(pos, hiveBlock.getStateFromMeta(hive.getHiveMeta()), Constants.FLAG_BLOCK_SYNCH);
+		IBlockState hiveState = hive.getHiveBlockState();
+		Block hiveBlock = hiveState.getBlock();
+		boolean placed = world.setBlockState(pos, hiveState, Constants.FLAG_BLOCK_SYNCH);
 		if (!placed) {
 			return false;
 		}
@@ -148,6 +144,11 @@ public abstract class HiveDecorator {
 		if (!Config.generateBeehivesDebug) {
 			hive.postGen(world, pos);
 		}
+
+		if (Config.logHivePlacement) {
+			Log.info("Placed {} at {}", hive, pos);
+		}
+
 		return true;
 	}
 }

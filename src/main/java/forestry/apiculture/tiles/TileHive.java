@@ -53,6 +53,7 @@ import forestry.apiculture.blocks.BlockBeeHives;
 import forestry.apiculture.genetics.BeeDefinition;
 import forestry.apiculture.genetics.alleles.AlleleEffect;
 import forestry.apiculture.network.packets.PacketActiveUpdate;
+import forestry.core.config.Config;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.IActivatable;
@@ -90,6 +91,10 @@ public class TileHive extends TileEntity implements ITickable, IHiveTile, IActiv
 
 	@Override
 	public void update() {
+		if (Config.generateBeehivesDebug) {
+			return;
+		}
+
 		if (worldObj.isRemote) {
 			if (!updatedLight && worldObj.getWorldTime() % 20 == 0) {
 				updatedLight = worldObj.checkLightFor(EnumSkyBlock.BLOCK, getPos());

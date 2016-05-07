@@ -274,8 +274,7 @@ public abstract class BlockUtil {
 	
 	public static boolean canReplace(IBlockState blockState, World world, BlockPos pos) {
 		Block block = blockState.getBlock();
-		Material material = block.getMaterial(blockState);
-		return material.isReplaceable() && block.isReplaceable(world, pos) && !material.isLiquid() || block.isAir(blockState, world, pos) || material == Material.PLANTS;
+		return block.isReplaceable(world, pos) && !block.getMaterial(blockState).isLiquid();
 	}
 	
 	public static boolean canPlaceTree(IBlockState blockState, World world, BlockPos pos){
