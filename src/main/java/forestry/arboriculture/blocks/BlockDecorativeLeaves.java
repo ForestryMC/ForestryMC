@@ -31,6 +31,8 @@ import net.minecraftforge.common.IShearable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import forestry.api.arboriculture.IFruitProvider;
+import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.api.core.Tabs;
@@ -202,17 +204,20 @@ public abstract class BlockDecorativeLeaves extends Block implements IShearable,
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public int colorMultiplier(IBlockState state, IBlockAccess worldIn, BlockPos pos, int tintIndex) {
-		TileLeaves leaves = TileUtil.getTile(worldIn, pos, TileLeaves.class);
-		if (leaves == null) {
+		TreeDefinition treeDefinition = state.getValue(getVariant());
+		if (treeDefinition == null) {
 			return PluginArboriculture.proxy.getFoliageColorBasic();
 		}
 
+		ITreeGenome genome = treeDefinition.getGenome();
+
 		if (tintIndex == 0) {
-			EntityPlayerSP thePlayer = Minecraft.getMinecraft().thePlayer;
-			return leaves.getFoliageColour(thePlayer);
+			return genome.getPrimary().getLeafSpriteProvider().getColor(false);
 		} else {
-			return leaves.getFruitColour();
+			IFruitProvider fruitProvider = genome.getFruitProvider();
+			return fruitProvider.getDecorativeColor();
 		}
 	}
 }

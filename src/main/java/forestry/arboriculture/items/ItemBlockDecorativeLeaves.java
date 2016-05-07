@@ -43,12 +43,10 @@ public class ItemBlockDecorativeLeaves extends ItemBlockForestry<BlockDecorative
 		ITreeGenome genome = treeDefinition.getGenome();
 
 		if (renderPass == 0) {
-			int rgb = genome.getPrimary().getLeafSpriteProvider().getColor(false);
-			return ColourUtil.rgbToBgr(rgb);
+			return genome.getPrimary().getLeafSpriteProvider().getColor(false);
 		} else {
 			IFruitProvider fruitProvider = genome.getFruitProvider();
-			int rgb = fruitProvider.getDecorativeColor();
-			return ColourUtil.rgbToBgr(rgb);
+			return fruitProvider.getDecorativeColor();
 		}
 	}
 }
