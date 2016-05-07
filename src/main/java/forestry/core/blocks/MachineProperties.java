@@ -75,7 +75,7 @@ public class MachineProperties<T extends TileForestry> implements IMachineProper
 	@Nonnull
 	@Override
 	public AxisAlignedBB getBoundingBox(@Nonnull BlockPos pos, @Nonnull IBlockState state) {
-		return boundingBox.offset(pos.getX(), pos.getY(), pos.getZ());
+		return boundingBox;
 	}
 
 	@Nonnull
