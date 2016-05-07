@@ -48,21 +48,21 @@ public class EntityFXColoredDripParticle extends EntityFX {
 		this.prevPosY = this.posY;
 		this.prevPosZ = this.posZ;
 
-		this.ySpeed -= this.particleGravity;
+		this.motionY -= this.particleGravity;
 
 		if (this.bobTimer-- > 0) {
-			this.xSpeed *= 0.02D;
-			this.ySpeed *= 0.02D;
-			this.zSpeed *= 0.02D;
+			this.motionX *= 0.02D;
+			this.motionY *= 0.02D;
+			this.motionZ *= 0.02D;
 			this.setParticleTextureIndex(113);
 		} else {
 			this.setParticleTextureIndex(112);
 		}
 
-		this.moveEntity(this.xSpeed, this.ySpeed, this.zSpeed);
-		this.xSpeed *= 0.9800000190734863D;
-		this.ySpeed *= 0.9800000190734863D;
-		this.zSpeed *= 0.9800000190734863D;
+		this.moveEntity(this.motionX, this.motionY, this.motionZ);
+		this.motionX *= 0.9800000190734863D;
+		this.motionY *= 0.9800000190734863D;
+		this.motionZ *= 0.9800000190734863D;
 
 		if (this.particleMaxAge-- <= 0) {
 			this.setExpired();
@@ -71,8 +71,8 @@ public class EntityFXColoredDripParticle extends EntityFX {
 		if (this.isCollided) {
 			this.setParticleTextureIndex(114);
 
-			this.xSpeed *= 0.699999988079071D;
-			this.zSpeed *= 0.699999988079071D;
+			this.motionX *= 0.699999988079071D;
+			this.motionZ *= 0.699999988079071D;
 		}
 
 		IBlockState state = this.worldObj.getBlockState(new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ)));

@@ -36,9 +36,9 @@ public class EntityFXBee extends EntityFX {
 		this.particleScale *= 0.2F;
 		this.particleMaxAge = (int) (80.0D / (Math.random() * 0.8D + 0.2D));
 
-		this.xSpeed *= 0.9D;
-		this.ySpeed *= 0.015D;
-		this.zSpeed *= 0.9D;
+		this.motionX *= 0.9D;
+		this.motionY *= 0.015D;
+		this.motionZ *= 0.9D;
 	}
 
 	/**
@@ -49,21 +49,21 @@ public class EntityFXBee extends EntityFX {
 		this.prevPosX = this.posX;
 		this.prevPosY = this.posY;
 		this.prevPosZ = this.posZ;
-		this.moveEntity(this.xSpeed, this.ySpeed, this.zSpeed);
+		this.moveEntity(this.motionX, this.motionY, this.motionZ);
 
 		if (this.particleAge == this.particleMaxAge / 2) {
-			this.xSpeed = (this.originX - this.posX) * 0.04;
-			this.zSpeed = (this.originZ - this.posZ) * 0.04;
+			this.motionX = (this.originX - this.posX) * 0.04;
+			this.motionZ = (this.originZ - this.posZ) * 0.04;
 		}
 
 		if (this.particleAge < this.particleMaxAge / 4 || this.particleAge > this.particleMaxAge * 3 / 4) {
-			this.xSpeed *= 0.92 + 0.2D * rand.nextFloat();
-			this.ySpeed = (this.ySpeed + 0.2 * (-0.5 + rand.nextFloat())) / 2;
-			this.zSpeed *= 0.92 + 0.2D * rand.nextFloat();
+			this.motionX *= 0.92 + 0.2D * rand.nextFloat();
+			this.motionY = (this.motionY + 0.2 * (-0.5 + rand.nextFloat())) / 2;
+			this.motionZ *= 0.92 + 0.2D * rand.nextFloat();
 		} else {
-			this.xSpeed *= 0.95;
-			this.ySpeed = (this.ySpeed + 0.2 * (-0.5 + rand.nextFloat())) / 2;
-			this.zSpeed *= 0.95;
+			this.motionX *= 0.95;
+			this.motionY = (this.motionY + 0.2 * (-0.5 + rand.nextFloat())) / 2;
+			this.motionZ *= 0.95;
 		}
 
 		if (this.particleAge++ >= this.particleMaxAge) {

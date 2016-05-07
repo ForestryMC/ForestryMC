@@ -27,9 +27,9 @@ public class EntityFXSnow extends EntityFX {
 		this.particleScale *= 0.5F;
 		this.particleMaxAge = (int) (40.0D / (Math.random() * 0.8D + 0.2D));
 
-		this.xSpeed *= 0.01D;
-		this.ySpeed *= -0.4D;
-		this.zSpeed *= 0.01D;
+		this.motionX *= 0.01D;
+		this.motionY *= -0.4D;
+		this.motionZ *= 0.01D;
 	}
 
 	@Override

@@ -25,10 +25,10 @@ public class EntityFXSmoke extends EntityFX {
 
 	public EntityFXSmoke(World world, double x, double y, double z) {
 		super(world, x, y, z, 0, 0, 0);
-		this.xSpeed *= 0.8;
-		this.xSpeed *= 0.8;
-		this.xSpeed *= 0.8;
-		this.xSpeed = this.rand.nextFloat() * 0.2F + 0.05F;
+		this.motionX *= 0.8;
+		this.motionY *= 0.8;
+		this.motionZ *= 0.8;
+		this.motionY = this.rand.nextFloat() * 0.2F + 0.05F;
 		this.particleRed = this.particleGreen = this.particleBlue = 1.0F;
 		this.particleScale *= this.rand.nextFloat() / 4;
 		this.ignitionParticleScale = this.particleScale;
@@ -66,18 +66,18 @@ public class EntityFXSmoke extends EntityFX {
 		float f = (float) this.particleAge / (float) this.particleMaxAge;
 
 		if (this.rand.nextFloat() > f * 2) {
-			this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX, this.posY, this.posZ, this.xSpeed, this.ySpeed, this.zSpeed);
+			this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX, this.posY, this.posZ, this.motionX, this.motionY, this.motionZ);
 		}
 
-		this.ySpeed -= 0.03D;
-		this.moveEntity(this.xSpeed, this.ySpeed, this.zSpeed);
-		this.xSpeed *= 0.999D;
-		this.ySpeed *= 0.999D;
-		this.zSpeed *= 0.999D;
+		this.motionY -= 0.03D;
+		this.moveEntity(this.motionX, this.motionY, this.motionZ);
+		this.motionX *= 0.999D;
+		this.motionY *= 0.999D;
+		this.motionZ *= 0.999D;
 
 		if (this.isCollided) {
-			this.xSpeed *= 0.7;
-			this.zSpeed *= 0.7;
+			this.motionX *= 0.7;
+			this.motionZ *= 0.7;
 		}
 	}
 }

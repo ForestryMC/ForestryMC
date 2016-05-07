@@ -79,6 +79,7 @@ public class BlockForestryLeaves extends BlockLeaves implements ITileEntityProvi
 
 	public BlockForestryLeaves() {
 		setCreativeTab(Tabs.tabArboriculture);
+        setDefaultState(this.blockState.getBaseState().withProperty(CHECK_DECAY, true).withProperty(DECAYABLE, true));
 	}
 	
 	@Override
@@ -89,8 +90,12 @@ public class BlockForestryLeaves extends BlockLeaves implements ITileEntityProvi
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new ExtendedBlockState(this, new IProperty[0], new IUnlistedProperty[]{UnlistedBlockPos.POS, UnlistedBlockAccess.BLOCKACCESS});
+		return new ExtendedBlockState(this, new IProperty[]{DECAYABLE, CHECK_DECAY}, new IUnlistedProperty[]{UnlistedBlockPos.POS, UnlistedBlockAccess.BLOCKACCESS});
 	}
+	
+    public int getMetaFromState(IBlockState state){
+    	return 0;
+    }
 
 	/* TILE ENTITY */
 	@Override
