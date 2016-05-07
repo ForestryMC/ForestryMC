@@ -10,6 +10,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.Vec3d;
@@ -23,8 +24,6 @@ import forestry.core.proxy.Proxies;
 import forestry.core.utils.Translator;
 
 public class ItemSmoker extends ItemForestry implements IArmorApiarist {
-	private static final int RANGE = 5;
-
 	public ItemSmoker() {
 		super(Tabs.tabApiculture);
 		setMaxStackSize(1);
@@ -34,7 +33,7 @@ public class ItemSmoker extends ItemForestry implements IArmorApiarist {
 	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
 		super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
 		if (worldIn.isRemote && isSelected && worldIn.rand.nextInt(40) == 0) {
-			addSmoke(worldIn, entityIn, 1);
+			addSmoke(stack, worldIn, entityIn, 1);
 		}
 	}
 
@@ -42,14 +41,40 @@ public class ItemSmoker extends ItemForestry implements IArmorApiarist {
 	public void onUsingTick(ItemStack stack, EntityLivingBase player, int count) {
 		super.onUsingTick(stack, player, count);
 		World worldObj = player.worldObj;
-		addSmoke(worldObj, player, count % RANGE);
+		addSmoke(stack, worldObj, player, (count % 5) + 1);
 	}
 
-	private static void addSmoke(World worldObj, Entity entity, int distance) {
+	private static EnumHandSide getHandSide(ItemStack stack, Entity entity) {
+		if (entity instanceof EntityLivingBase) {
+			EntityLivingBase entityLivingBase = (EntityLivingBase) entity;
+			EnumHand activeHand = entityLivingBase.getActiveHand();
+			EnumHandSide handSide = entityLivingBase.getPrimaryHand();
+			if (activeHand == EnumHand.OFF_HAND) {
+				handSide = handSide.opposite();
+			}
+			return handSide;
+		}
+		return EnumHandSide.RIGHT;
+	}
+
+	private static void addSmoke(ItemStack stack, World worldObj, Entity entity, int distance) {
+		if (distance <= 0) {
+			return;
+		}
 		Vec3d look = entity.getLookVec();
-		Vec3d handOffset = look.crossProduct(new Vec3d(0, 1, 0));
+		EnumHandSide handSide = getHandSide(stack, entity);
+
+		Vec3d handOffset;
+		if (handSide == EnumHandSide.RIGHT) {
+			handOffset = look.crossProduct(new Vec3d(0, 1, 0));
+		} else {
+			handOffset = look.crossProduct(new Vec3d(0, -1, 0));
+		}
+
 		Vec3d lookDistance = new Vec3d(look.xCoord * distance, look.yCoord * distance, look.zCoord * distance);
-		Vec3d smokePos = lookDistance.add(entity.getPositionVector()).add(handOffset);
+		Vec3d scaledOffset = handOffset.scale(1.0 / distance);
+		Vec3d smokePos = lookDistance.add(entity.getPositionVector()).add(scaledOffset);
+
 		Proxies.render.addEntitySmokeFX(worldObj, smokePos.xCoord, smokePos.yCoord + 1, smokePos.zCoord);
 		BlockPos blockPos = new BlockPos(smokePos.xCoord, smokePos.yCoord + 1, smokePos.zCoord);
 		TileEntity tileEntity = worldObj.getTileEntity(blockPos);
