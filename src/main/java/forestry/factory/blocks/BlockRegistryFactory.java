@@ -19,7 +19,10 @@ public class BlockRegistryFactory extends BlockRegistry {
 	public final BlockFactoryPlain factoryPlain;
 
 	public BlockRegistryFactory() {
-		factoryTESR = registerBlock(new BlockFactoryTESR(), ItemBlockForestry.class, "factory");
-		factoryPlain = registerBlock(new BlockFactoryPlain(), ItemBlockNBT.class, "factory2");
+		factoryTESR = new BlockFactoryTESR();
+		registerBlock(factoryTESR, new ItemBlockForestry(factoryTESR), "factory");
+
+		factoryPlain = new BlockFactoryPlain();
+		registerBlock(factoryPlain, new ItemBlockNBT(factoryPlain), "factory2");
 	}
 }

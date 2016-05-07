@@ -19,7 +19,10 @@ public class BlockRegistryFarming extends BlockRegistry {
 	public final BlockFarm farm;
 
 	public BlockRegistryFarming() {
-		mushroom = registerBlock(new BlockMushroom(), ItemBlockForestry.class, "mushroom");
-		farm = registerBlock(new BlockFarm(), ItemBlockFarm.class, "ffarm");
+		mushroom = new BlockMushroom();
+		registerBlock(mushroom, new ItemBlockForestry(mushroom), "mushroom");
+
+		farm = new BlockFarm();
+		registerBlock(farm, new ItemBlockFarm(farm), "ffarm");
 	}
 }

@@ -17,6 +17,7 @@ public class BlockRegistryEnergy extends BlockRegistry {
 	public final BlockEngine engine;
 
 	public BlockRegistryEnergy() {
-		engine = registerBlock(new BlockEngine(), ItemEngine.class, "engine");
+		engine = new BlockEngine();
+		registerBlock(engine, new ItemEngine(engine), "engine");
 	}
 }

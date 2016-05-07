@@ -20,9 +20,14 @@ public class BlockRegistryLepidopterology extends BlockRegistry {
 	public final BlockSolidCocoon solidCocoon;
 
 	public BlockRegistryLepidopterology() {
-		lepidopterology = registerBlock(new BlockLepidopterology(), ItemBlockForestry.class, "lepidopterology");
+		lepidopterology = new BlockLepidopterology();
+		registerBlock(lepidopterology, new ItemBlockForestry(lepidopterology), "lepidopterology");
+
 		AlleleButterflyCocoon.createAlleles();
-		cocoon = registerBlock(new BlockCocoon(), ItemBlockForestry.class, "cocoon");
-		solidCocoon = registerBlock(new BlockSolidCocoon(), ItemBlockForestry.class, "cocoon.solid");
+		cocoon = new BlockCocoon();
+		registerBlock(cocoon, new ItemBlockForestry(cocoon), "cocoon");
+
+		solidCocoon = new BlockSolidCocoon();
+		registerBlock(solidCocoon, new ItemBlockForestry(solidCocoon), "cocoon.solid");
 	}
 }

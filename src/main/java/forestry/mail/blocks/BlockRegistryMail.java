@@ -17,6 +17,7 @@ public class BlockRegistryMail extends BlockRegistry {
 	public final BlockMail mail;
 
 	public BlockRegistryMail() {
-		mail = registerBlock(new BlockMail(), ItemBlockForestry.class, "mail");
+		mail = new BlockMail();
+		registerBlock(mail, new ItemBlockForestry(mail), "mail");
 	}
 }

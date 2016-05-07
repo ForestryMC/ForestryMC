@@ -23,19 +23,23 @@ public class BlockRegistryCore extends BlockRegistry {
 	public final BlockResourceStorage resourceStorage;
 
 	public BlockRegistryCore() {
-		core = registerBlock(new BlockCore(), ItemBlockForestry.class, "core");
+		core = new BlockCore();
+		registerBlock(core, new ItemBlockForestry(core), "core");
 		
-		soil = registerBlock(new BlockSoil(), ItemBlockForestry.class, "soil");
+		soil = new BlockSoil();
+		registerBlock(soil, new ItemBlockForestry(soil), "soil");
 		soil.setHarvestLevel("shovel", 0, soil.getStateFromMeta(0));
 		soil.setHarvestLevel("shovel", 0, soil.getStateFromMeta(1));
 		
-		resources = registerBlock(new BlockResourceOre(), ItemBlockForestry.class, "resources");
+		resources = new BlockResourceOre();
+		registerBlock(resources, new ItemBlockForestry(resources), "resources");
 		resources.setHarvestLevel("pickaxe", 1);
 		OreDictionary.registerOre("oreApatite", resources.get(EnumResourceType.APATITE, 1));
 		OreDictionary.registerOre("oreCopper", resources.get(EnumResourceType.COPPER, 1));
 		OreDictionary.registerOre("oreTin", resources.get(EnumResourceType.TIN, 1));
 		
-		resourceStorage = registerBlock(new BlockResourceStorage(), ItemBlockForestry.class, "resourceStorage");
+		resourceStorage = new BlockResourceStorage();
+		registerBlock(resourceStorage, new ItemBlockForestry(resourceStorage), "resourceStorage");
 		resourceStorage.setHarvestLevel("pickaxe", 0);
 		OreDictionary.registerOre("blockApatite", resourceStorage.get(EnumResourceType.APATITE));
 		OreDictionary.registerOre("blockCopper", resourceStorage.get(EnumResourceType.COPPER));

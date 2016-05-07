@@ -29,16 +29,21 @@ public class BlockRegistryApiculture extends BlockRegistry {
 	private final Map<BlockAlvearyType, BlockAlveary> alvearyBlockMap;
 
 	public BlockRegistryApiculture() {
-		apiculture = registerBlock(new BlockApiculture(), ItemBlockForestry.class, "apiculture");
+		apiculture = new BlockApiculture();
+		registerBlock(apiculture, new ItemBlockForestry(apiculture), "apiculture");
 
-		apicultureChest = registerBlock(new BlockBase<>(BlockTypeApicultureTesr.class), ItemBlockForestry.class, "apicultureChest");
+		apicultureChest = new BlockBase<>(BlockTypeApicultureTesr.class);
+		registerBlock(apicultureChest, new ItemBlockForestry(apicultureChest), "apicultureChest");
 		apicultureChest.setCreativeTab(Tabs.tabApiculture);
 		apicultureChest.setHarvestLevel("axe", 0);
 
-		beehives = registerBlock(new BlockBeeHives(), ItemBlockForestry.class, "beehives");
+		beehives = new BlockBeeHives();
+		registerBlock(beehives, new ItemBlockForestry(beehives), "beehives");
 
-		candle = registerBlock(new BlockCandle(), ItemBlockCandle.class, "candle");
-		stump = registerBlock(new BlockStump(), ItemBlockForestry.class, "stump");
+		candle = new BlockCandle();
+		registerBlock(candle, new ItemBlockCandle(candle), "candle");
+		stump = new BlockStump();
+		registerBlock(stump, new ItemBlockForestry(stump), "stump");
 
 		alvearyBlockMap = BlockAlveary.create();
 		for (BlockAlveary block : alvearyBlockMap.values()) {

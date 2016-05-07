@@ -21,29 +21,24 @@ import forestry.core.proxy.Proxies;
 import forestry.plugins.PluginManager;
 
 public abstract class BlockRegistry {
-	protected <T extends Block> T registerBlock(T block, ItemBlock itemBlock, String name) {
+	protected <T extends Block> void registerBlock(T block, ItemBlock itemBlock, String name) {
 		if (PluginManager.getStage() != PluginManager.Stage.REGISTER) {
 			throw new RuntimeException("Tried to register Block outside of REGISTER");
 		}
 		block.setUnlocalizedName("for." + name);
-		GameRegistry.registerBlock(block, null, name);
-		GameRegistry.registerItem(itemBlock, name);
+		block.setRegistryName(name);
+		GameRegistry.register(block);
 		Proxies.common.registerBlock(block);
-		return block;
-	}
 
-	protected <T extends Block> T registerBlock(T block, String name) {
-		return registerBlock(block, (Class<? extends ItemBlock>) null, name);
-	}
-
-	protected <T extends Block> T registerBlock(T block, Class<? extends ItemBlock> itemClass, String name, Object... itemCtorArgs) {
-		if (PluginManager.getStage() != PluginManager.Stage.REGISTER) {
-			throw new RuntimeException("Tried to register Block outside of REGISTER");
+		if (itemBlock != null) {
+			itemBlock.setRegistryName(name);
+			GameRegistry.register(itemBlock);
+			Proxies.common.registerItem(itemBlock);
 		}
-		block.setUnlocalizedName("for." + name);
-		GameRegistry.registerBlock(block, itemClass, name, itemCtorArgs);
-		Proxies.common.registerBlock(block);
-		return block;
+	}
+
+	protected <T extends Block> void registerBlock(T block, String name) {
+		registerBlock(block, null, name);
 	}
 
 	protected static void registerOreDictWildcard(String oreDictName, Block block) {
