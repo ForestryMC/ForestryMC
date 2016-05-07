@@ -62,7 +62,7 @@ public abstract class HiveDecorator {
 
 			BlockPos pos = new BlockPos(x, 0, z);
 			if (!world.isBlockLoaded(pos)) {
-				Log.error("tried to generated a hive in an unloaded area.");
+				Log.error("tried to generate a hive in an unloaded area.");
 				return;
 			}
 			BiomeGenBase biome = world.getBiomeGenForCoords(pos);

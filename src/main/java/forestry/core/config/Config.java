@@ -66,9 +66,9 @@ public class Config {
 	public static boolean generateApatiteOre = true;
 	public static boolean generateCopperOre = true;
 	public static boolean generateTinOre = true;
-	private static float generateBeehivesAmount = 1.5f;
+	private static float generateBeehivesAmount = 1.0f;
 	public static boolean generateBeehivesDebug = false;
-	public static boolean logHivePlacement = true;
+	public static boolean logHivePlacement = false;
 	public static boolean enableVillagers = true;
 
 	// Retrogen
