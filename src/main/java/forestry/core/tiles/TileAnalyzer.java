@@ -37,8 +37,6 @@ import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.gui.ContainerAnalyzer;
 import forestry.core.gui.GuiAnalyzer;
 import forestry.core.inventory.InventoryAnalyzer;
-import forestry.core.inventory.iterators.IExtInvSlot;
-import forestry.core.inventory.iterators.InventoryIterator;
 import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
@@ -132,11 +130,11 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 		return true;
 	}
 
-	private IExtInvSlot getInputSlot() {
-		for (IExtInvSlot slot : InventoryIterator.getIterable(invInput)) {
-			ItemStack inputStack = slot.getStackInSlot();
+	private Integer getInputSlotIndex() {
+		for (int slotIndex = 0; slotIndex < invInput.getSizeInventory(); slotIndex++) {
+			ItemStack inputStack = invInput.getStackInSlot(slotIndex);
 			if (AlleleManager.alleleRegistry.isIndividual(inputStack)) {
-				return slot;
+				return slotIndex;
 			}
 		}
 		return null;
@@ -197,12 +195,12 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 			return;
 		}
 
-		IExtInvSlot slot = getInputSlot();
-		if (slot == null) {
+		Integer slotIndex = getInputSlotIndex();
+		if (slotIndex == null) {
 			return;
 		}
 
-		ItemStack inputStack = slot.getStackInSlot();
+		ItemStack inputStack = invInput.getStackInSlot(slotIndex);
 		if (inputStack == null) {
 			return;
 		}
@@ -220,7 +218,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 		}
 
 		setInventorySlotContents(InventoryAnalyzer.SLOT_ANALYZE, inputStack);
-		slot.setStackInSlot(null);
+		invInput.setInventorySlotContents(slotIndex, null);
 
 		if (specimenToAnalyze.isAnalyzed()) {
 			setTicksPerWorkCycle(1);

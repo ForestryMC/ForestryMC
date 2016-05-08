@@ -15,6 +15,9 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.wrapper.InvWrapper;
+
 import forestry.api.multiblock.IFarmComponent;
 import forestry.core.inventory.AdjacentInventoryCache;
 import forestry.core.tiles.AdjacentTileCache;
@@ -48,9 +51,10 @@ public class TileFarmHatch extends TileFarm implements ISidedInventory, IFarmCom
 	public void updateServer(int tickCount) {
 		if (tickCount % 40 == 0) {
 			IInventory productInventory = getMultiblockLogic().getController().getFarmInventory().getProductInventory();
+			IItemHandler productItemHandler = new InvWrapper(productInventory);
 
-			if (!InventoryUtil.moveOneItemToPipe(productInventory, tileCache, dumpDirections)) {
-				InventoryUtil.moveItemStack(productInventory, inventoryCache.getAdjacentInventories());
+			if (!InventoryUtil.moveOneItemToPipe(productItemHandler, tileCache, dumpDirections)) {
+				InventoryUtil.moveItemStack(productItemHandler, inventoryCache.getAdjacentInventories());
 			}
 		}
 	}

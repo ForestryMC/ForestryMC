@@ -14,12 +14,11 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 
 import com.mojang.authlib.GameProfile;
 
@@ -30,6 +29,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 
 import forestry.api.core.EnumCamouflageType;
 import forestry.api.core.ICamouflageHandler;
@@ -208,7 +208,7 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 		return EnumCamouflageType.DEFAULT;
 	}
 	
-	private IInventory getOutwardsInventory() {
+	private IItemHandler getOutwardsInventory() {
 		if (getOutwardsTile() == null) {
 			return null;
 		}

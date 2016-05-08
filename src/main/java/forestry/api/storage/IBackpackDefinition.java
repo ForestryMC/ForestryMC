@@ -6,10 +6,11 @@
 package forestry.api.storage;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 import net.minecraft.item.ItemStack;
 
-public interface IBackpackDefinition {
+public interface IBackpackDefinition extends Predicate<ItemStack> {
 
 	/**
 	 * @return Human-readable name of the backpack.
@@ -38,8 +39,9 @@ public interface IBackpackDefinition {
 	void addValidOreDictName(String oreDictName);
 
 	/**
-	 * Returns true if the itemstack is a valid item for this backpack type.
+	 * Returns true if the ItemStack is a valid item for this backpack type.
 	 */
-	boolean isValidItem(ItemStack itemstack);
+	@Override
+	boolean test(ItemStack itemstack);
 
 }

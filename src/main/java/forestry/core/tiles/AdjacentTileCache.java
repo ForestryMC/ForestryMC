@@ -15,8 +15,8 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
@@ -56,7 +56,7 @@ public final class AdjacentTileCache {
 	private TileEntity searchSide(EnumFacing side) {
 		World world = source.getWorld();
 		BlockPos pos = source.getPos().offset(side);
-		if (world.isBlockLoaded(pos) && world.isAirBlock(pos)) {
+		if (world.isBlockLoaded(pos) && !world.isAirBlock(pos)) {
 			return world.getTileEntity(pos);
 		}
 		return null;

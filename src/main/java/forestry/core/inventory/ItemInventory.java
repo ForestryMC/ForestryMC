@@ -34,7 +34,7 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 	private static final String KEY_UID = "UID";
 	private static final Random rand = new Random();
 
-	private final IItemHandler capabilityHandler = new InvWrapper(this);
+	private final IItemHandler itemHandler = new InvWrapper(this);
 	private final EntityPlayer player;
 	private final ItemStack parent;
 	private final ItemStack[] inventoryStacks;
@@ -302,8 +302,7 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-			//noinspection unchecked
-			return (T) capabilityHandler;
+			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(itemHandler);
 		}
 		return null;
 	}
@@ -311,5 +310,9 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
 		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
+	}
+
+	public IItemHandler getItemHandler() {
+		return itemHandler;
 	}
 }

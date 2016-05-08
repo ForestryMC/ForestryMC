@@ -105,16 +105,8 @@ public class BackpackDefinition implements IBackpackDefinition {
 		}
 	}
 
-	public Set<String> getValidItemStacks() {
-		return validItemStacks;
-	}
-
-	public Set<Integer> getValidOreIds() {
-		return validOreIds;
-	}
-
 	@Override
-	public boolean isValidItem(ItemStack itemStack) {
+	public boolean test(ItemStack itemStack) {
 		if (itemStack == null) {
 			return false;
 		}
@@ -158,7 +150,7 @@ public class BackpackDefinition implements IBackpackDefinition {
 		}
 
 		@Override
-		public boolean isValidItem(ItemStack itemStack) {
+		public boolean test(ItemStack itemStack) {
 			ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(speciesRootUid);
 			return speciesRoot.isMember(itemStack);
 		}

@@ -18,6 +18,10 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.wrapper.InvWrapper;
+
 import forestry.api.fuels.FuelManager;
 import forestry.core.PluginCore;
 import forestry.core.config.Constants;
@@ -223,8 +227,10 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 			return;
 		}
 
-		if (!InventoryUtil.moveOneItemToPipe(wasteInventory, getTileCache())) {
-			InventoryUtil.moveItemStack(wasteInventory, inventoryCache.getAdjacentInventories());
+		IItemHandler wasteItemHandler = new InvWrapper(wasteInventory);
+
+		if (!InventoryUtil.moveOneItemToPipe(wasteItemHandler, getTileCache())) {
+			InventoryUtil.moveItemStack(wasteItemHandler, inventoryCache.getAdjacentInventories());
 		}
 	}
 

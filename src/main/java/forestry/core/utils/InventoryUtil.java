@@ -15,7 +15,6 @@ import java.util.Collection;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -25,31 +24,17 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fml.common.Optional;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.api.core.ForestryAPI;
 import forestry.core.circuits.ISocketable;
-import forestry.core.inventory.filters.ArrayStackFilter;
-import forestry.core.inventory.filters.IStackFilter;
 import forestry.core.inventory.filters.StandardStackFilters;
-import forestry.core.inventory.iterators.IExtInvSlot;
-import forestry.core.inventory.iterators.InventoryIterator;
-import forestry.core.inventory.manipulators.InventoryManipulator;
-import forestry.core.inventory.wrappers.SidedInventoryMapper;
+import forestry.core.inventory.manipulators.ItemHandlerInventoryManipulator;
 import forestry.core.tiles.AdjacentTileCache;
 import forestry.plugins.ForestryPluginUids;
 
 public abstract class InventoryUtil {
-
-	public static IInventory getInventory(IInventory inv, EnumFacing side) {
-		if (inv == null) {
-			return null;
-		}
-		if (inv instanceof ISidedInventory) {
-			inv = new SidedInventoryMapper((ISidedInventory) inv, side);
-		}
-		return inv;
-	}
 
 	public static ItemStack depleteItem(ItemStack stack) {
 		if (stack.stackSize == 1) {
@@ -61,54 +46,7 @@ public abstract class InventoryUtil {
 	}
 
 	public static boolean isWildcard(ItemStack stack) {
-		return isWildcard(stack.getItemDamage());
-	}
-
-	public static boolean isWildcard(int damage) {
-		return damage == -1 || damage == OreDictionary.WILDCARD_VALUE;
-	}
-	
-	public static ItemStack makeSafe(ItemStack stack) {
-		if (stack.stackSize <= 0) {
-			return null;
-		}
-		return stack;
-	}
-
-	/**
-	 * A more robust item comparison function.
-	 *
-	 * Compares stackSize as well.
-	 *
-	 * Two null stacks will return true, unlike the other functions.
-	 *
-	 * This function is primarily intended to be used to track changes to an
-	 * ItemStack.
-	 *
-	 * @param a An ItemStack
-	 * @param b An ItemStack
-	 * @return True if equal
-	 */
-	public static boolean isItemEqualStrict(ItemStack a, ItemStack b) {
-		if (a == null && b == null) {
-			return true;
-		}
-		if (a == null || b == null) {
-			return false;
-		}
-		if (a.getItem() != b.getItem()) {
-			return false;
-		}
-		if (a.stackSize != b.stackSize) {
-			return false;
-		}
-		if (a.getItemDamage() != b.getItemDamage()) {
-			return false;
-		}
-		if (a.hasTagCompound() && !a.getTagCompound().equals(b.getTagCompound())) {
-			return false;
-		}
-		return true;
+		return stack.getItemDamage() == OreDictionary.WILDCARD_VALUE;
 	}
 
 	/**
@@ -171,20 +109,6 @@ public abstract class InventoryUtil {
 		}
 		return false;
 	}
-	
-	/**
-	 * Places an ItemStack in a destination IInventory. Will attempt to move as
-	 * much of the stack as possible, returning any remainder.
-	 *
-	 * @param stack The ItemStack to put in the inventory.
-	 * @param dest  The destination IInventory.
-	 * @return Null if itemStack was completely moved, a new itemStack with
-	 * remaining stackSize if part or none of the stack was moved.
-	 */
-	public static ItemStack moveItemStack(ItemStack stack, IInventory dest) {
-		InventoryManipulator im = InventoryManipulator.get(dest);
-		return im.addStack(stack);
-	}
 
 	/**
 	 * Attempts to move an ItemStack from one inventory to another.
@@ -193,17 +117,9 @@ public abstract class InventoryUtil {
 	 * @param dest   The destination IInventory.
 	 * @return true if any items were moved
 	 */
-	public static boolean moveItemStack(IInventory source, IInventory dest) {
-		InventoryManipulator im = InventoryManipulator.get(dest);
-		for (IExtInvSlot slot : InventoryIterator.getIterable(source)) {
-			ItemStack stack = slot.getStackInSlot();
-			if (stack != null) {
-				ItemStack remainder = im.addStack(stack);
-				slot.setStackInSlot(remainder);
-				return !isItemEqualStrict(stack, remainder);
-			}
-		}
-		return false;
+	public static boolean moveItemStack(IItemHandler source, IItemHandler dest) {
+		ItemHandlerInventoryManipulator manipulator = new ItemHandlerInventoryManipulator(source);
+		return manipulator.transferOneStack(dest, StandardStackFilters.ALL);
 	}
 
 	/**
@@ -213,48 +129,13 @@ public abstract class InventoryUtil {
 	 * @param destinations The destination IInventory.
 	 * @return true if any items were moved
 	 */
-	public static boolean moveItemStack(IInventory source, Iterable<IInventory> destinations) {
-		for (IInventory dest : destinations) {
+	public static boolean moveItemStack(IItemHandler source, Iterable<IItemHandler> destinations) {
+		for (IItemHandler dest : destinations) {
 			if (moveItemStack(source, dest)) {
 				return true;
 			}
 		}
 		return false;
-	}
-
-	/**
-	 * Removes and returns a single item from the inventory.
-	 *
-	 * @param inv The inventory
-	 * @return An ItemStack
-	 */
-	public static ItemStack removeOneItem(IInventory inv) {
-		return removeOneItem(inv, StandardStackFilters.ALL);
-	}
-
-	/**
-	 * Removes and returns a single item from the inventory that matches the
-	 * filter.
-	 *
-	 * @param inv    The inventory
-	 * @param filter ItemStack to match against
-	 * @return An ItemStack
-	 */
-	public static ItemStack removeOneItem(IInventory inv, ItemStack... filter) {
-		return removeOneItem(inv, new ArrayStackFilter(filter));
-	}
-
-	/**
-	 * Removes and returns a single item from the inventory that matches the
-	 * filter.
-	 *
-	 * @param inv    The inventory
-	 * @param filter EnumItemType to match against
-	 * @return An ItemStack
-	 */
-	public static ItemStack removeOneItem(IInventory inv, IStackFilter filter) {
-		InventoryManipulator im = InventoryManipulator.get(inv);
-		return im.removeItem(filter);
 	}
 
 	/**
@@ -265,11 +146,11 @@ public abstract class InventoryUtil {
 	 * @param tileCache The tile cache of the source block.
 	 * @return true if an item was inserted, otherwise false.
 	 */
-	public static boolean moveOneItemToPipe(IInventory source, AdjacentTileCache tileCache) {
+	public static boolean moveOneItemToPipe(IItemHandler source, AdjacentTileCache tileCache) {
 		return moveOneItemToPipe(source, tileCache, EnumFacing.values());
 	}
 
-	public static boolean moveOneItemToPipe(IInventory source, AdjacentTileCache tileCache, EnumFacing[] directions) {
+	public static boolean moveOneItemToPipe(IItemHandler source, AdjacentTileCache tileCache, EnumFacing[] directions) {
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.BUILDCRAFT_TRANSPORT)) {
 			return internal_moveOneItemToPipe(source, tileCache, directions);
 		}
@@ -279,7 +160,7 @@ public abstract class InventoryUtil {
 
 	//TODO Buildcraft for 1.9
 	@Optional.Method(modid = "BuildCraftAPI|transport")
-	private static boolean internal_moveOneItemToPipe(IInventory source, AdjacentTileCache tileCache, EnumFacing[] directions) {
+	private static boolean internal_moveOneItemToPipe(IItemHandler source, AdjacentTileCache tileCache, EnumFacing[] directions) {
 //		IInventory invClone = new InventoryCopy(source);
 //		ItemStack stackToMove = removeOneItem(invClone);
 //		if (stackToMove == null) {

@@ -17,9 +17,10 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
-import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+
+import net.minecraftforge.items.IItemHandler;
 
 import forestry.core.tiles.AdjacentTileCache;
 import forestry.core.tiles.TileUtil;
@@ -35,9 +36,9 @@ public final class AdjacentInventoryCache implements AdjacentTileCache.ICacheLis
 
 	private final AdjacentTileCache cache;
 	private boolean changed = true;
-	private final List<IInventory> invs = new LinkedList<>();
-	private final IInventory[] sides = new IInventory[6];
-	private final Comparator<IInventory> sorter;
+	private final List<IItemHandler> invs = new LinkedList<>();
+	private final IItemHandler[] sides = new IItemHandler[6];
+	private final Comparator<IItemHandler> sorter;
 	private final ITileFilter filter;
 
 	public AdjacentInventoryCache(TileEntity tile, AdjacentTileCache cache) {
@@ -48,19 +49,19 @@ public final class AdjacentInventoryCache implements AdjacentTileCache.ICacheLis
 		this(tile, cache, filter, null);
 	}
 
-	public AdjacentInventoryCache(TileEntity tile, AdjacentTileCache cache, ITileFilter filter, Comparator<IInventory> sorter) {
+	public AdjacentInventoryCache(TileEntity tile, AdjacentTileCache cache, ITileFilter filter, Comparator<IItemHandler> sorter) {
 		this.cache = cache;
 		this.filter = filter;
 		this.sorter = sorter;
 		cache.addListener(this);
 	}
 
-	public IInventory getAdjacentInventory(EnumFacing side) {
+	public IItemHandler getAdjacentInventory(EnumFacing side) {
 		checkChanged();
 		return sides[side.ordinal()];
 	}
 
-	public Collection<IInventory> getAdjacentInventories() {
+	public Collection<IItemHandler> getAdjacentInventories() {
 		checkChanged();
 		return invs;
 	}
@@ -84,7 +85,7 @@ public final class AdjacentInventoryCache implements AdjacentTileCache.ICacheLis
 			for (EnumFacing side : EnumFacing.values()) {
 				TileEntity tile = cache.getTileOnSide(side);
 				if (tile != null && (filter == null || filter.matches(tile))) {
-					IInventory inv = TileUtil.getInventoryFromTile(tile, side.getOpposite());
+					IItemHandler inv = TileUtil.getInventoryFromTile(tile, side.getOpposite());
 					if (inv != null) {
 						sides[side.ordinal()] = inv;
 						invs.add(inv);

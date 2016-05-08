@@ -10,17 +10,21 @@
  ******************************************************************************/
 package forestry.core.tiles;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityChest;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import forestry.core.inventory.wrappers.ChestWrapper;
-import forestry.core.utils.InventoryUtil;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.wrapper.InvWrapper;
+import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
 public abstract class TileUtil {
 
@@ -52,15 +56,23 @@ public abstract class TileUtil {
 		}
 	}
 
-	public static IInventory getInventoryFromTile(TileEntity tile, EnumFacing side) {
-		if (!(tile instanceof IInventory)) {
+	public static IItemHandler getInventoryFromTile(@Nullable TileEntity tile, @Nullable EnumFacing side) {
+		if (tile == null) {
 			return null;
 		}
 
-		if (tile instanceof TileEntityChest) {
-			TileEntityChest chest = (TileEntityChest) tile;
-			return new ChestWrapper(chest);
+		if (tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side)) {
+			return tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side);
 		}
-		return InventoryUtil.getInventory((IInventory) tile, side);
+
+		if (tile instanceof ISidedInventory) {
+			return new SidedInvWrapper((ISidedInventory) tile, side);
+		}
+
+		if (tile instanceof IInventory) {
+			return new InvWrapper((IInventory) tile);
+		}
+
+		return null;
 	}
 }

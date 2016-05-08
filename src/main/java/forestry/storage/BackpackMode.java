@@ -10,6 +10,23 @@
  ******************************************************************************/
 package forestry.storage;
 
+import javax.annotation.Nullable;
+
 public enum BackpackMode {
-	NORMAL, LOCKED, RECEIVE, RESUPPLY
+	NORMAL(null),
+	LOCKED("for.storage.backpack.mode.locked"),
+	RECEIVE("for.storage.backpack.mode.locked"),
+	RESUPPLY("for.storage.backpack.mode.locked");
+
+	@Nullable
+	private final String unlocalizedInfo;
+
+	BackpackMode(@Nullable String unlocalizedInfo) {
+		this.unlocalizedInfo = unlocalizedInfo;
+	}
+
+	@Nullable
+	public String getUnlocalizedInfo() {
+		return unlocalizedInfo;
+	}
 }
