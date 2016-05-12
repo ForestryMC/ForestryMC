@@ -5,7 +5,11 @@
  ******************************************************************************/
 package forestry.api.apiculture;
 
+import javax.annotation.Nonnull;
+import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.math.BlockPos;
 
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
@@ -60,4 +64,10 @@ public interface IBeekeepingLogic extends INbtWritable, INbtReadable {
 	 */
 	void doBeeFX();
 
+	/**
+	 * Used by bee fx to direct bees to nearby flowers.
+	 * These positions are synced to the client from the server.
+	 */
+	@Nonnull
+	List<BlockPos> getFlowerPositions();
 }

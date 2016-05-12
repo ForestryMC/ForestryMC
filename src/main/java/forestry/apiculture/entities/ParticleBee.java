@@ -14,19 +14,28 @@ import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntityFXBee extends EntityFX {
+public class ParticleBee extends EntityFX {
 	private final double originX;
+	private final double originY;
 	private final double originZ;
+	private final BlockPos destination;
 	
 	public static TextureAtlasSprite beeSprite;
 
-	public EntityFXBee(World world, double x, double y, double z, int color) {
+	public ParticleBee(World world, double x, double y, double z, int color, BlockPos destination) {
 		super(world, x, y, z, 0.0D, 0.0D, 0.0D);
 		setParticleTexture(beeSprite);
 		this.originX = x;
+		this.originY = y;
 		this.originZ = z;
+
+		this.destination = destination;
+		this.motionX = (destination.getX() + 0.5 - this.posX) * 0.015;
+		this.motionY = (destination.getY() + 0.5 - this.posY) * 0.015;
+		this.motionZ = (destination.getZ() + 0.5 - this.posZ) * 0.015;
 
 		particleRed = (color >> 16 & 255) / 255.0F;
 		particleGreen = (color >> 8 & 255) / 255.0F;
@@ -52,18 +61,34 @@ public class EntityFXBee extends EntityFX {
 		this.moveEntity(this.motionX, this.motionY, this.motionZ);
 
 		if (this.particleAge == this.particleMaxAge / 2) {
-			this.motionX = (this.originX - this.posX) * 0.04;
-			this.motionZ = (this.originZ - this.posZ) * 0.04;
+			this.motionX = (this.originX - this.posX) * 0.03;
+			this.motionY = (this.originY - this.posY) * 0.03;
+			this.motionZ = (this.originZ - this.posZ) * 0.03;
 		}
 
-		if (this.particleAge < this.particleMaxAge / 4 || this.particleAge > this.particleMaxAge * 3 / 4) {
+		if (this.particleAge < this.particleMaxAge * 0.25) {
+			// venture out
 			this.motionX *= 0.92 + 0.2D * rand.nextFloat();
 			this.motionY = (this.motionY + 0.2 * (-0.5 + rand.nextFloat())) / 2;
 			this.motionZ *= 0.92 + 0.2D * rand.nextFloat();
-		} else {
+		} else if (this.particleAge < this.particleMaxAge * 0.5) {
+			// get to flower destination
+			this.motionX = (destination.getX() + 0.5 - this.posX) * 0.03;
+			this.motionY = (destination.getY() + 0.5 - this.posY) * 0.03;
+			this.motionY = (this.motionY + 0.2 * (-0.5 + rand.nextFloat())) / 2;
+			this.motionZ = (destination.getZ() + 0.5 - this.posZ) * 0.03;
+		} else if (this.particleAge < this.particleMaxAge * 0.75) {
+			// venture back
 			this.motionX *= 0.95;
+			this.motionY = (this.originY - this.posY) * 0.03;
 			this.motionY = (this.motionY + 0.2 * (-0.5 + rand.nextFloat())) / 2;
 			this.motionZ *= 0.95;
+		} else {
+			// get to origin
+			this.motionX = (this.originX - this.posX) * 0.03;
+			this.motionY = (this.originY - this.posY) * 0.03;
+			this.motionY = (this.motionY + 0.2 * (-0.5 + rand.nextFloat())) / 2;
+			this.motionZ = (this.originZ - this.posZ) * 0.03;
 		}
 
 		if (this.particleAge++ >= this.particleMaxAge) {
@@ -97,6 +122,13 @@ public class EntityFXBee extends EntityFX {
 		worldRendererIn.pos(f11 - rotationX * f10 + rotationXY * f10, f12 + rotationZ * f10, f13 - rotationYZ * f10 + rotationXZ * f10).tex(maxU, minV).color(particleRed, particleGreen, particleBlue, 1.0F).lightmap(j, k).endVertex();
 		worldRendererIn.pos(f11 + rotationX * f10 + rotationXY * f10, f12 + rotationZ * f10, f13 + rotationYZ * f10 + rotationXZ * f10).tex(minU, minV).color(particleRed, particleGreen, particleBlue, 1.0F).lightmap(j, k).endVertex();
 		worldRendererIn.pos(f11 + rotationX * f10 - rotationXY * f10, f12 - rotationZ * f10, f13 + rotationYZ * f10 - rotationXZ * f10).tex(minU, maxV).color(particleRed, particleGreen, particleBlue, 1.0F).lightmap(j, k).endVertex();
+	}
+
+	// avoid calculating collisions for bees, it is too much processing
+	@Override
+	public void moveEntity(double x, double y, double z) {
+		this.setEntityBoundingBox(this.getEntityBoundingBox().offset(x, y, z));
+		this.resetPositionToBB();
 	}
 
 	@Override

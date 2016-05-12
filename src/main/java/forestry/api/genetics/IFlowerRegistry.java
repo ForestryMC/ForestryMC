@@ -5,6 +5,9 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
+import javax.annotation.Nonnull;
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -58,9 +61,14 @@ public interface IFlowerRegistry {
 	boolean growFlower(String flowerType, World world, IIndividual individual, BlockPos pos);
 
 	/**
-	 * @return the coordinates of a nearby accepted flower or null if there is none.
+	 * @param beeHousing The bee housing that will help determine the size of the area to check.
+	 * @param bee The bee that will help determine the size of the area to check.
+	 * @param flowerType See {@link forestry.api.apiculture.FlowerManager}.FlowerTypeXXX
+	 * @param maxFlowers the largest number of flowers to check for before returning. Use 1 if you only need 1.
+	 * @return the coordinates of nearby accepted flowers, with size from 0 to maxFlowers.
 	 */
-	BlockPos getAcceptedFlowerCoordinates(IBeeHousing beeHousing, IBee bee, String flowerType);
+	@Nonnull
+	List<BlockPos> getAcceptedFlowerCoordinates(IBeeHousing beeHousing, IBee bee, String flowerType, int maxFlowers);
 
 	/**
 	 * Checks a single coordinate to see if it is an accepted flower.

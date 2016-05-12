@@ -26,6 +26,7 @@ import forestry.api.apiculture.IAlleleBeeEffect;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeModifier;
+import forestry.api.apiculture.IBeekeepingLogic;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IEffectData;
 import forestry.core.config.Constants;
@@ -104,8 +105,12 @@ public abstract class AlleleEffect extends AlleleCategorized implements IAlleleB
 
 	@Override
 	public IEffectData doFX(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
-		Vec3d beeFXCoordinates = housing.getBeeFXCoordinates();
-		Proxies.render.addBeeHiveFX(housing.getWorldObj(), beeFXCoordinates.xCoord, beeFXCoordinates.yCoord, beeFXCoordinates.zCoord, genome.getPrimary().getSpriteColour(0));
+		Vec3d origin = housing.getBeeFXCoordinates();
+		IBeekeepingLogic beekeepingLogic = housing.getBeekeepingLogic();
+		List<BlockPos> flowerPositions = beekeepingLogic.getFlowerPositions();
+
+		int beeColor = genome.getPrimary().getSpriteColour(0);
+		Proxies.render.addBeeHiveFX(housing.getWorldObj(), origin.xCoord, origin.yCoord, origin.zCoord, beeColor, flowerPositions);
 		return storedData;
 	}
 

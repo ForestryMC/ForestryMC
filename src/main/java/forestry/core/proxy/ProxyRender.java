@@ -12,7 +12,9 @@ package forestry.core.proxy;
 
 import com.google.common.collect.ImmutableMap;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.statemap.IStateMapper;
@@ -112,7 +114,7 @@ public class ProxyRender {
 
 	/* FX */
 
-	public void addBeeHiveFX(World world, double x, double y, double z, int color) {
+	public void addBeeHiveFX(@Nonnull World world, double x, double y, double z, int color, @Nonnull List<BlockPos> flowerPositions) {
 	}
 
 	public void addEntityHoneyDustFX(World world, double x, double y, double z) {

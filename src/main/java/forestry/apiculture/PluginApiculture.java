@@ -31,6 +31,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.IChunkGenerator;
+
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.MinecraftForge;
@@ -65,9 +66,9 @@ import forestry.apiculture.blocks.BlockRegistryApiculture;
 import forestry.apiculture.blocks.BlockTypeApiculture;
 import forestry.apiculture.blocks.BlockTypeApicultureTesr;
 import forestry.apiculture.commands.CommandBee;
-import forestry.apiculture.entities.EntityFXBee;
 import forestry.apiculture.entities.EntityMinecartApiary;
 import forestry.apiculture.entities.EntityMinecartBeehouse;
+import forestry.apiculture.entities.ParticleBee;
 import forestry.apiculture.flowers.Flower;
 import forestry.apiculture.flowers.FlowerRegistry;
 import forestry.apiculture.genetics.BeeBranchDefinition;
@@ -948,7 +949,7 @@ public class PluginApiculture extends BlankForestryPlugin {
 		for (int i = 0; i < EntityFXSnow.sprites.length; i++) {
 			EntityFXSnow.sprites[i] = event.getMap().registerSprite(new ResourceLocation("forestry:entity/particles/snow." + (i + 1)));
 		}
-		EntityFXBee.beeSprite = event.getMap().registerSprite(new ResourceLocation("forestry:entity/particles/swarm_bee"));
+		ParticleBee.beeSprite = event.getMap().registerSprite(new ResourceLocation("forestry:entity/particles/swarm_bee"));
 	}
 
 	private static class EndFlowerAcceptableRule implements IFlowerAcceptableRule {

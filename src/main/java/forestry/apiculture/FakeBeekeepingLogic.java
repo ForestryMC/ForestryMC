@@ -10,8 +10,13 @@
  ******************************************************************************/
 package forestry.apiculture;
 
+import javax.annotation.Nonnull;
+import java.util.Collections;
+import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
 
 import forestry.api.apiculture.IBeekeepingLogic;
 
@@ -55,6 +60,12 @@ public class FakeBeekeepingLogic implements IBeekeepingLogic {
 	@Override
 	public void doBeeFX() {
 
+	}
+
+	@Nonnull
+	@Override
+	public List<BlockPos> getFlowerPositions() {
+		return Collections.emptyList();
 	}
 
 	@Override

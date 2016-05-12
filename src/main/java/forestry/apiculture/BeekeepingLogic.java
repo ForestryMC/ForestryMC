@@ -10,10 +10,12 @@
  ******************************************************************************/
 package forestry.apiculture;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 
@@ -23,6 +25,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.apiculture.BeeManager;
@@ -130,6 +133,7 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 		data.writeBoolean(active);
 		if (active) {
 			data.writeItemStack(queenStack);
+			hasFlowersCache.writeData(data);
 		}
 	}
 
@@ -140,6 +144,7 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 		if (active) {
 			queenStack = data.readItemStack();
 			queen = BeeManager.beeRoot.getMember(queenStack);
+			hasFlowersCache.readData(data);
 		}
 	}
 
@@ -205,10 +210,15 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 		}
 
 		boolean hasFlowers = hasFlowersCache.hasFlowers(queen, housing);
+		boolean flowerCacheNeedsSync = hasFlowersCache.needsSync();
 		errorLogic.setCondition(!hasFlowers, EnumErrorCode.NO_FLOWER);
 
 		boolean canWork = !errorLogic.hasErrors();
-		setActive(canWork);
+		if (active != canWork) {
+			setActive(canWork);
+		} else if (flowerCacheNeedsSync) {
+			syncToClient();
+		}
 		return canWork;
 	}
 
@@ -468,6 +478,12 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 		if (queen != null) {
 			queen.doFX(effectData, housing);
 		}
+	}
+
+	@Override
+	@Nonnull
+	public List<BlockPos> getFlowerPositions() {
+		return hasFlowersCache.getFlowerCoords();
 	}
 
 	private static class QueenCanWorkCache {

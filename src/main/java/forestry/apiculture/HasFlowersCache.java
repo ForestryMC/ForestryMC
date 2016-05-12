@@ -10,6 +10,11 @@
  ******************************************************************************/
 package forestry.apiculture;
 
+import javax.annotation.Nonnull;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.nbt.NBTTagCompound;
@@ -25,23 +30,32 @@ import forestry.api.apiculture.IBeeModifier;
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
 import forestry.api.genetics.IFlowerProvider;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.IStreamable;
 import forestry.core.utils.VectUtil;
 
-public class HasFlowersCache implements INbtWritable, INbtReadable {
+public class HasFlowersCache implements INbtWritable, INbtReadable, IStreamable {
 	private static final String nbtKey = "hasFlowerCache";
+	private static final String nbtKeyFlowers = "flowers";
+	private static final String nbtKeyCooldown = "cooldown";
+
 	private static final Random random = new Random();
 	private static final int flowerCheckInterval = 128;
 
 	private final int flowerCheckTime = random.nextInt(flowerCheckInterval);
-	private BlockPos flowerCoords = null;
+	@Nonnull
+	private List<BlockPos> flowerCoords = new ArrayList<>();
 	private int cooldown = 0;
+
+	private boolean needsSync = false;
 
 	public boolean hasFlowers(IBee queen, IBeeHousing beeHousing) {
 		IFlowerProvider flowerProvider = queen.getGenome().getFlowerProvider();
 		String flowerType = flowerProvider.getFlowerType();
 		World world = beeHousing.getWorldObj();
 
-		if (flowerCoords != null) {
+		if (!flowerCoords.isEmpty()) {
 			if (world.getTotalWorldTime() % flowerCheckInterval != flowerCheckTime) {
 				return true;
 			}
@@ -55,25 +69,40 @@ public class HasFlowersCache implements INbtWritable, INbtReadable {
 			BlockPos min = VectUtil.scale(area, -0.5f).add(housingCoords);
 			BlockPos max = VectUtil.scale(area, 0.5f).add(housingCoords);
 
-			if (isFlowerValid(world, flowerType, min, max)) {
-				return true;
-			} else {
-				flowerCoords = null;
-				cooldown = 0;
+			for (BlockPos flowerPos : flowerCoords) {
+				if (!isFlowerValid(world, flowerPos, flowerType, min, max)) {
+					cooldown = 0;
+					break;
+				}
 			}
 		}
 
 		if (cooldown <= 0) {
-			flowerCoords = FlowerManager.flowerRegistry.getAcceptedFlowerCoordinates(beeHousing, queen, flowerType);
+			List<BlockPos> newFlowerCoords = FlowerManager.flowerRegistry.getAcceptedFlowerCoordinates(beeHousing, queen, flowerType, 5);
 			cooldown = PluginApiculture.ticksPerBeeWorkCycle;
+			if (!flowerCoords.equals(newFlowerCoords)) {
+				flowerCoords = newFlowerCoords;
+				needsSync = true;
+			}
 		} else {
 			cooldown--;
 		}
 
-		return flowerCoords != null;
+		return !flowerCoords.isEmpty();
 	}
 
-	private boolean isFlowerValid(World world, String flowerType, BlockPos min, BlockPos max) {
+	public boolean needsSync() {
+		boolean returnVal = needsSync;
+		needsSync = false;
+		return returnVal;
+	}
+
+	@Nonnull
+	public List<BlockPos> getFlowerCoords() {
+		return Collections.unmodifiableList(flowerCoords);
+	}
+
+	private static boolean isFlowerValid(World world, BlockPos flowerCoords, String flowerType, BlockPos min, BlockPos max) {
 		if (!isFlowerCoordInRange(flowerCoords, min, max)) {
 			return false;
 		}
@@ -91,26 +120,65 @@ public class HasFlowersCache implements INbtWritable, INbtReadable {
 		}
 
 		NBTTagCompound hasFlowerCacheNBT = nbttagcompound.getCompoundTag(nbtKey);
-		if (hasFlowerCacheNBT.hasKey("flowerX")) {
-			int x = hasFlowerCacheNBT.getInteger("flowerX");
-			int y = hasFlowerCacheNBT.getInteger("flowerY");
-			int z = hasFlowerCacheNBT.getInteger("flowerZ");
-			flowerCoords = new BlockPos(x, y, z);
+
+		if (hasFlowerCacheNBT.hasKey(nbtKeyFlowers)) {
+			int[] flowersList = hasFlowerCacheNBT.getIntArray(nbtKeyFlowers);
+			if (flowersList != null && flowersList.length % 3 == 0) {
+				int flowerCount = flowersList.length / 3;
+				for (int i = 0; i < flowerCount; i++) {
+					BlockPos flowerPos = new BlockPos(flowersList[i], flowersList[i + 1], flowersList[i + 2]);
+					flowerCoords.add(flowerPos);
+				}
+			}
 		}
 
-		cooldown = hasFlowerCacheNBT.getInteger("cooldown");
+		cooldown = hasFlowerCacheNBT.getInteger(nbtKeyCooldown);
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 		NBTTagCompound hasFlowerCacheNBT = new NBTTagCompound();
-		if (flowerCoords != null) {
-			hasFlowerCacheNBT.setInteger("flowerX", flowerCoords.getX());
-			hasFlowerCacheNBT.setInteger("flowerY", flowerCoords.getY());
-			hasFlowerCacheNBT.setInteger("flowerZ", flowerCoords.getZ());
+
+		if (!flowerCoords.isEmpty()) {
+			int[] flowersList = new int[flowerCoords.size() * 3];
+			int i = 0;
+			for (BlockPos flowerPos : flowerCoords) {
+				flowersList[i] = flowerPos.getX();
+				flowersList[i + 1] = flowerPos.getY();
+				flowersList[i + 2] = flowerPos.getZ();
+				i++;
+			}
+
+			hasFlowerCacheNBT.setIntArray(nbtKeyFlowers, flowersList);
 		}
-		hasFlowerCacheNBT.setInteger("cooldown", cooldown);
+
+		hasFlowerCacheNBT.setInteger(nbtKeyCooldown, cooldown);
 
 		nbttagcompound.setTag(nbtKey, hasFlowerCacheNBT);
+	}
+
+	@Override
+	public void writeData(DataOutputStreamForestry data) throws IOException {
+		int size = flowerCoords.size();
+		data.writeVarInt(size);
+		if (size > 0) {
+			for (BlockPos pos : flowerCoords) {
+				data.writeVarInt(pos.getX());
+				data.writeVarInt(pos.getY());
+				data.writeVarInt(pos.getZ());
+			}
+		}
+	}
+
+	@Override
+	public void readData(DataInputStreamForestry data) throws IOException {
+		flowerCoords.clear();
+
+		int size = data.readVarInt();
+		while (size > 0) {
+			BlockPos pos = new BlockPos(data.readVarInt(), data.readVarInt(), data.readVarInt());
+			flowerCoords.add(pos);
+			size--;
+		}
 	}
 }

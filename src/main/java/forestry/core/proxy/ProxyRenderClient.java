@@ -10,9 +10,10 @@
  ******************************************************************************/
 package forestry.core.proxy;
 
-import javax.annotation.Nonnull;
-
 import com.google.common.collect.ImmutableMap;
+
+import javax.annotation.Nonnull;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -38,7 +39,8 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.animation.ITimeValue;
 import net.minecraftforge.common.model.animation.IAnimationStateMachine;
-import forestry.apiculture.entities.EntityFXBee;
+
+import forestry.apiculture.entities.ParticleBee;
 import forestry.apiculture.render.TextureHabitatLocator;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
@@ -186,14 +188,17 @@ public class ProxyRenderClient extends ProxyRender {
 	}
 
 	@Override
-	public void addBeeHiveFX(World world, double x, double y, double z, int color) {
+	public void addBeeHiveFX(@Nonnull World world, double x, double y, double z, int color, @Nonnull List<BlockPos> flowerPositions) {
 		if (!shouldSpawnParticle(world)) {
 			return;
 		}
 
-		EntityFX fx = new EntityFXBee(world, x, y, z, color);
-		EffectRenderer effectRenderer = Minecraft.getMinecraft().effectRenderer;
-		effectRenderer.addEffect(fx);
+		if (!flowerPositions.isEmpty()) {
+			BlockPos destination = flowerPositions.get(world.rand.nextInt(flowerPositions.size()));
+			EntityFX particle = new ParticleBee(world, x, y, z, color, destination);
+			EffectRenderer effectRenderer = Minecraft.getMinecraft().effectRenderer;
+			effectRenderer.addEffect(particle);
+		}
 	}
 
 	@Override

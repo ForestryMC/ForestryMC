@@ -15,9 +15,12 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -140,9 +143,10 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 	}
 
 	@Override
-	public BlockPos getAcceptedFlowerCoordinates(IBeeHousing beeHousing, IBee bee, String flowerType) {
+	@Nonnull
+	public List<BlockPos> getAcceptedFlowerCoordinates(IBeeHousing beeHousing, IBee bee, String flowerType, int maxFlowers) {
 		if (!this.registeredFlowers.containsKey(flowerType)) {
-			return null;
+			return Collections.emptyList();
 		}
 
 		Set<IFlowerAcceptableRule> acceptableRules = this.registeredRules.get(flowerType);
@@ -156,19 +160,26 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 		BlockPos minPos = beeHousing.getCoordinates().add(-area.getX() / 2, -area.getY() / 2, -area.getZ() / 2);
 		BlockPos maxPos = minPos.add(area);
 
-		for (BlockPos posBlock : BlockPos.getAllInBoxMutable(minPos, maxPos)) {
+		List<BlockPos> flowerCoords = new ArrayList<>();
+		for (BlockPos.MutableBlockPos posBlock : BlockPos.getAllInBoxMutable(minPos, maxPos)) {
 			for (IFlowerAcceptableRule acceptableRule : acceptableRules) {
 				if (acceptableRule.isAcceptableFlower(flowerType, world, posBlock)) {
-					return posBlock;
+					flowerCoords.add(posBlock.toImmutable());
+					if (flowerCoords.size() >= maxFlowers) {
+						return flowerCoords;
+					}
 				}
 			}
 
-			if (isAcceptedFlower(flowerType, acceptedBlocks, acceptedFlowers, world, posBlock)) {
-				return posBlock;
+			if (isAcceptedFlower(acceptedBlocks, acceptedFlowers, world, posBlock)) {
+				flowerCoords.add(posBlock.toImmutable());
+				if (flowerCoords.size() >= maxFlowers) {
+					return flowerCoords;
+				}
 			}
 		}
 
-		return null;
+		return flowerCoords;
 	}
 
 	@Override
@@ -187,10 +198,10 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 		Set<Block> acceptedBlocks = this.registeredBlocks.get(flowerType);
 		Set<Flower> acceptedFlowers = this.registeredFlowers.get(flowerType);
 
-		return isAcceptedFlower(flowerType, acceptedBlocks, acceptedFlowers, world, pos);
+		return isAcceptedFlower(acceptedBlocks, acceptedFlowers, world, pos);
 	}
 
-	private static boolean isAcceptedFlower(String flowerType, Set<Block> acceptedBlocks, Set<Flower> acceptedFlowers, World world, BlockPos pos) {
+	private static boolean isAcceptedFlower(Set<Block> acceptedBlocks, Set<Flower> acceptedFlowers, World world, BlockPos pos) {
 		IBlockState blockState = world.getBlockState(pos);
 		Block block = blockState.getBlock();
 
