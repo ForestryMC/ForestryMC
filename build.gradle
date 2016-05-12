@@ -112,19 +112,24 @@ jar {
 
 }
 
-task javadocJar(type: Jar, dependsOn: javadoc) {
-	from javadoc.destinationDir
-	classifier = 'javadoc'
-}
-
 task sourcesJar(type: Jar) {
 	from sourceSets.main.allJava
 	classifier = 'sources'
 }
 
+task apiJar(type: Jar) {
+	// TODO: when FG bug is fixed, remove allSource from the api jar.
+	// https://github.com/MinecraftForge/ForgeGradle/issues/369
+	// Gradle should be able to pull them from the -sources jar.
+	from sourceSets.main.allSource
+	from sourceSets.main.output
+	include 'forestry/api/**'
+	classifier = 'api'
+}
+
 artifacts {
-	archives javadocJar
 	archives sourcesJar
+	archives apiJar
 }
 
 task("uploadJars", dependsOn: "build") {
