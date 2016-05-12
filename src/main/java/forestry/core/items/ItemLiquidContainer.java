@@ -13,7 +13,6 @@ package forestry.core.items;
 import java.util.Locale;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -37,7 +36,7 @@ import forestry.core.fluids.FluidHelper;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Translator;
 
-public class ItemLiquidContainer extends ItemForestry implements IItemColor {
+public class ItemLiquidContainer extends ItemForestry implements IColoredItem {
 	private final EnumContainerType type;
 	private final int color;
 

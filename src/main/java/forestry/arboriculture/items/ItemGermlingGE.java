@@ -15,7 +15,6 @@ import java.util.List;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -47,13 +46,14 @@ import forestry.arboriculture.genetics.TreeGenome;
 import forestry.arboriculture.genetics.pollination.ICheckPollinatable;
 import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
+import forestry.core.items.IColoredItem;
 import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.Translator;
 
-public class ItemGermlingGE extends ItemGE implements IVariableFermentable, IItemColor {
+public class ItemGermlingGE extends ItemGE implements IVariableFermentable, IColoredItem {
 
 	private final EnumGermlingType type;
 

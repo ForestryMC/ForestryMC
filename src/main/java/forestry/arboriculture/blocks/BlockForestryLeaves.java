@@ -23,10 +23,7 @@ import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -68,6 +65,7 @@ import forestry.arboriculture.LeafDecayHelper;
 import forestry.arboriculture.PluginArboriculture;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.tiles.TileLeaves;
+import forestry.core.blocks.IColoredBlock;
 import forestry.core.blocks.propertys.UnlistedBlockAccess;
 import forestry.core.blocks.propertys.UnlistedBlockPos;
 import forestry.core.proxy.Proxies;
@@ -75,7 +73,7 @@ import forestry.core.tiles.TileUtil;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.ItemStackUtil;
 
-public class BlockForestryLeaves extends BlockLeaves implements ITileEntityProvider, IGrowable, IItemModelRegister, IBlockColor {
+public class BlockForestryLeaves extends BlockLeaves implements ITileEntityProvider, IGrowable, IItemModelRegister, IColoredBlock {
 
 	public BlockForestryLeaves() {
 		setCreativeTab(Tabs.tabArboriculture);
@@ -285,6 +283,7 @@ public class BlockForestryLeaves extends BlockLeaves implements ITileEntityProvi
 	
 	/* MODELS */
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void registerModel(Item item, IModelManager manager) {
 		ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation("forestry:leaves", "inventory"));
 	}
@@ -357,7 +356,7 @@ public class BlockForestryLeaves extends BlockLeaves implements ITileEntityProvi
 		}
 
 		if (tintIndex == 0) {
-			EntityPlayerSP thePlayer = Minecraft.getMinecraft().thePlayer;
+			EntityPlayer thePlayer = Proxies.common.getPlayer();
 			return leaves.getFoliageColour(thePlayer);
 		} else {
 			return leaves.getFruitColour();

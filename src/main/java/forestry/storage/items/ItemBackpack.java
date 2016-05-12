@@ -15,7 +15,6 @@ import java.util.Locale;
 
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -43,6 +42,7 @@ import forestry.core.gui.GuiHandler;
 import forestry.core.inventory.ItemInventory;
 import forestry.core.inventory.filters.StandardStackFilters;
 import forestry.core.inventory.manipulators.ItemHandlerInventoryManipulator;
+import forestry.core.items.IColoredItem;
 import forestry.core.items.ItemWithGui;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.Translator;
@@ -52,7 +52,7 @@ import forestry.storage.gui.GuiBackpack;
 import forestry.storage.gui.GuiBackpackT2;
 import forestry.storage.inventory.ItemInventoryBackpack;
 
-public class ItemBackpack extends ItemWithGui implements IItemColor {
+public class ItemBackpack extends ItemWithGui implements IColoredItem {
 	private final IBackpackDefinition definition;
 	private final EnumBackpackType type;
 

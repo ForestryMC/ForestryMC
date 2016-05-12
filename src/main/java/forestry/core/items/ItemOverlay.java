@@ -12,7 +12,6 @@ package forestry.core.items;
 
 import java.util.List;
 
-import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -23,7 +22,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.core.IModelManager;
 import forestry.core.config.Config;
 
-public class ItemOverlay extends ItemForestry implements IItemColor {
+public class ItemOverlay extends ItemForestry implements IColoredItem {
 
 	public interface IOverlayInfo {
 		String getUid();

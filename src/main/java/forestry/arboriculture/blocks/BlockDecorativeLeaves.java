@@ -10,10 +10,7 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -39,11 +36,10 @@ import forestry.api.core.Tabs;
 import forestry.arboriculture.PluginArboriculture;
 import forestry.arboriculture.blocks.property.PropertyTreeType;
 import forestry.arboriculture.genetics.TreeDefinition;
-import forestry.arboriculture.tiles.TileLeaves;
+import forestry.core.blocks.IColoredBlock;
 import forestry.core.proxy.Proxies;
-import forestry.core.tiles.TileUtil;
 
-public abstract class BlockDecorativeLeaves extends Block implements IShearable, IItemModelRegister, IBlockColor {
+public abstract class BlockDecorativeLeaves extends Block implements IShearable, IItemModelRegister, IColoredBlock {
 	private static final int VARIANTS_PER_BLOCK = 16;
 	private static final int VARIANTS_META_MASK = VARIANTS_PER_BLOCK - 1;
 
@@ -146,6 +142,7 @@ public abstract class BlockDecorativeLeaves extends Block implements IShearable,
 
 	/* MODELS */
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void registerModel(Item item, IModelManager manager) {
 		for (IBlockState state : blockState.getValidStates()) {
 			int meta = getMetaFromState(state);

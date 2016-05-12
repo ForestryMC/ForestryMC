@@ -47,13 +47,13 @@ public class ProxyCommonClient extends ProxyCommon {
 	
 	@Override
 	public void registerBlock(Block block) {
-		ModelManager.getInstance().registerBlock(block);
+		ModelManager.getInstance().registerBlockClient(block);
 		TextureManager.getInstance().registerBlock(block);
 	}
 	
 	@Override
 	public void registerItem(Item item) {
-		ModelManager.getInstance().registerItem(item);
+		ModelManager.getInstance().registerItemClient(item);
 		TextureManager.getInstance().registerItem(item);
 	}
 

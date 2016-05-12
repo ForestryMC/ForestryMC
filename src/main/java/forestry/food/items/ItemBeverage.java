@@ -12,7 +12,6 @@ package forestry.food.items;
 
 import java.util.List;
 
-import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -33,11 +32,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.core.IModelManager;
 import forestry.api.food.IBeverageEffect;
 import forestry.core.config.Config;
+import forestry.core.items.IColoredItem;
 import forestry.core.items.ItemForestryFood;
 import forestry.core.items.ItemOverlay;
 import forestry.food.BeverageEffect;
 
-public class ItemBeverage extends ItemForestryFood implements IItemColor {
+public class ItemBeverage extends ItemForestryFood implements IColoredItem {
 	public interface IBeverageInfo extends ItemOverlay.IOverlayInfo {
 		int getHeal();
 

@@ -11,7 +11,6 @@
 package forestry.apiculture.items;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -19,9 +18,10 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.apiculture.blocks.BlockCandle;
+import forestry.core.items.IColoredItem;
 import forestry.core.items.ItemBlockForestry;
 
-public class ItemBlockCandle extends ItemBlockForestry<BlockCandle> implements IItemColor {
+public class ItemBlockCandle extends ItemBlockForestry<BlockCandle> implements IColoredItem {
 
 	public ItemBlockCandle(Block block) {
 		super(block);

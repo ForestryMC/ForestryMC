@@ -30,6 +30,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IBee;
@@ -185,6 +188,7 @@ public class BlockBeeHives extends BlockContainer implements IItemModelRegister,
 
 	/* ITEM MODELS */
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void registerModel(Item item, IModelManager manager) {
 		for (HiveType hiveType : HiveType.VALUES)  {
 			manager.registerItemModel(item, hiveType.getMeta(), "beehives/" + hiveType.getName());

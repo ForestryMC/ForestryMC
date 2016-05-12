@@ -12,21 +12,21 @@ package forestry.arboriculture.items;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.arboriculture.PluginArboriculture;
 import forestry.arboriculture.blocks.BlockForestryLeaves;
 import forestry.arboriculture.tiles.TileLeaves;
+import forestry.core.items.IColoredItem;
 import forestry.core.items.ItemBlockForestry;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Translator;
 
-public class ItemBlockLeaves extends ItemBlockForestry<BlockForestryLeaves> implements IItemColor {
+public class ItemBlockLeaves extends ItemBlockForestry<BlockForestryLeaves> implements IColoredItem {
 
 	public ItemBlockLeaves(Block block) {
 		super(block);

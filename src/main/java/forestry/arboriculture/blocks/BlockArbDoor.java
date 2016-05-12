@@ -48,12 +48,14 @@ public class BlockArbDoor extends BlockDoor implements IWoodTyped, IItemModelReg
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void registerModel(Item item, IModelManager manager) {
 		manager.registerVariant(item, WoodHelper.getResourceLocations(this));
 		manager.registerItemModel(item, new WoodHelper.WoodMeshDefinition(this));
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void registerStateMapper() {
 		Proxies.render.registerStateMapper(this, new WoodTypeStateMapper(this, null).addPropertyToRemove(POWERED));
 	}

@@ -53,6 +53,7 @@ import forestry.api.core.Tabs;
 import forestry.api.multiblock.IGreenhouseComponent;
 import forestry.core.CreativeTabForestry;
 import forestry.core.blocks.BlockStructure;
+import forestry.core.blocks.IColoredBlock;
 import forestry.core.blocks.propertys.UnlistedBlockAccess;
 import forestry.core.blocks.propertys.UnlistedBlockPos;
 import forestry.core.utils.CamouflageUtil;
@@ -68,7 +69,7 @@ import forestry.greenhouse.tiles.TileGreenhouseSprinkler;
 import forestry.greenhouse.tiles.TileGreenhouseValve;
 import forestry.plugins.ForestryPluginUids;
 
-public abstract class BlockGreenhouse extends BlockStructure implements ISpriteRegister, IBlockColor {
+public abstract class BlockGreenhouse extends BlockStructure implements ISpriteRegister, IColoredBlock {
 	private static final AxisAlignedBB SPRINKLER_BOUNDS = new AxisAlignedBB(0.3125F, 0.25F, 0.3125F, 0.6875F, 1F, 0.6875F);
 	public static final PropertyEnum<State> STATE = PropertyEnum.create("state", State.class);
 	

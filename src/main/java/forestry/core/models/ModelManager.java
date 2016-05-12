@@ -10,28 +10,31 @@
  ******************************************************************************/
 package forestry.core.models;
 
-import javax.annotation.Nonnull;
-import javax.vecmath.Vector3f;
-
 import com.google.common.collect.ImmutableMap;
 
+import javax.annotation.Nonnull;
+import javax.vecmath.Vector3f;
 import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.color.BlockColors;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.IRegistry;
+import net.minecraft.world.IBlockAccess;
 
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.model.ModelLoader;
@@ -45,7 +48,9 @@ import forestry.api.core.ForestryAPI;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.api.core.IStateMapperRegister;
+import forestry.core.blocks.IColoredBlock;
 import forestry.core.config.Constants;
+import forestry.core.items.IColoredItem;
 import forestry.core.utils.ItemStackUtil;
 
 @SideOnly(Side.CLIENT)
@@ -58,8 +63,8 @@ public class ModelManager implements IModelManager {
 
 	private final List<IItemModelRegister> itemModelRegisters = new ArrayList<>();
 	private final List<IStateMapperRegister> stateMapperRegisters = new ArrayList<>();
-	private final List<IBlockColor> blockColorList = new ArrayList<>();
-	private final List<IItemColor> itemColorList = new ArrayList<>();
+	private final List<IColoredBlock> blockColorList = new ArrayList<>();
+	private final List<IColoredItem> itemColorList = new ArrayList<>();
 
 	private TRSRTransformation flipX = new TRSRTransformation(null, null, new Vector3f(-1, 1, 1), null);
 	public final IModelState DEFAULT_BLOCK;
@@ -160,24 +165,26 @@ public class ModelManager implements IModelManager {
 		return new ModelResourceLocation(modID + ":" + identifier, "inventory");
 	}
 
-	public void registerBlock(Block block) {
+	@SideOnly(Side.CLIENT)
+	public void registerBlockClient(Block block) {
 		if (block instanceof IItemModelRegister) {
 			itemModelRegisters.add((IItemModelRegister) block);
 		}
 		if (block instanceof IStateMapperRegister) {
 			stateMapperRegisters.add((IStateMapperRegister) block);
 		}
-		if (block instanceof IBlockColor) {
-			blockColorList.add((IBlockColor) block);
+		if (block instanceof IColoredBlock) {
+			blockColorList.add((IColoredBlock) block);
 		}
 	}
 
-	public void registerItem(Item item) {
+	@SideOnly(Side.CLIENT)
+	public void registerItemClient(Item item) {
 		if (item instanceof IItemModelRegister) {
 			itemModelRegisters.add((IItemModelRegister) item);
 		}
-		if (item instanceof IItemColor) {
-			itemColorList.add((IItemColor) item);
+		if (item instanceof IColoredItem) {
+			itemColorList.add((IColoredItem) item);
 		}
 	}
 
@@ -206,17 +213,53 @@ public class ModelManager implements IModelManager {
 		Minecraft minecraft = Minecraft.getMinecraft();
 		
 		BlockColors blockColors = minecraft.getBlockColors();
-		for (IBlockColor blockColor : blockColorList) {
+		for (IColoredBlock blockColor : blockColorList) {
 			if (blockColor instanceof Block) {
-				blockColors.registerBlockColorHandler(blockColor, (Block) blockColor);
+				blockColors.registerBlockColorHandler(ColoredBlockBlockColor.INSTANCE, (Block) blockColor);
 			}
 		}
 
 		ItemColors itemColors = minecraft.getItemColors();
-		for (IItemColor itemColor : itemColorList) {
+		for (IColoredItem itemColor : itemColorList) {
 			if (itemColor instanceof Item) {
-				itemColors.registerItemColorHandler(itemColor, (Item) itemColor);
+				itemColors.registerItemColorHandler(ColoredItemItemColor.INSTANCE, (Item) itemColor);
 			}
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	private static class ColoredItemItemColor implements IItemColor {
+		public static final ColoredItemItemColor INSTANCE = new ColoredItemItemColor();
+
+		private ColoredItemItemColor() {
+
+		}
+
+		@Override
+		public int getColorFromItemstack(ItemStack stack, int tintIndex) {
+			Item item = stack.getItem();
+			if (item instanceof IColoredItem) {
+				return ((IColoredItem) item).getColorFromItemstack(stack, tintIndex);
+			}
+			return 0xffffff;
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	private static class ColoredBlockBlockColor implements IBlockColor {
+		public static final ColoredBlockBlockColor INSTANCE = new ColoredBlockBlockColor();
+
+		private ColoredBlockBlockColor() {
+
+		}
+
+		@Override
+		public int colorMultiplier(IBlockState state, IBlockAccess worldIn, BlockPos pos, int tintIndex) {
+			Block block = state.getBlock();
+			if (block instanceof IColoredBlock) {
+				return ((IColoredBlock) block).colorMultiplier(state, worldIn, pos, tintIndex);
+			}
+			return 0xffffff;
 		}
 	}
 

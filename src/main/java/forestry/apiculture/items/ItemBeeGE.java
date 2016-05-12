@@ -14,7 +14,6 @@ import java.util.List;
 
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -37,9 +36,10 @@ import forestry.api.genetics.IAlleleSpecies;
 import forestry.apiculture.genetics.BeeGenome;
 import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
+import forestry.core.items.IColoredItem;
 import forestry.core.utils.Translator;
 
-public class ItemBeeGE extends ItemGE implements IItemColor {
+public class ItemBeeGE extends ItemGE implements IColoredItem {
 
 	private final EnumBeeType type;
 

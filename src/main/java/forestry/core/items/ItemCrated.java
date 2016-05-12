@@ -12,7 +12,6 @@ package forestry.core.items;
 
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -31,7 +30,7 @@ import forestry.core.proxy.Proxies;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Translator;
 
-public class ItemCrated extends ItemForestry implements IItemColor {
+public class ItemCrated extends ItemForestry implements IColoredItem {
 
 	private final ItemStack contained;
 	private final boolean usesOreDict;
