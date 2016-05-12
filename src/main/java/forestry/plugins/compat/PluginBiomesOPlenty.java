@@ -105,7 +105,9 @@ public class PluginBiomesOPlenty extends BlankForestryPlugin {
 		for (String key : saplingItemKeys) {
 			Item saplingItem = GameRegistry.findItem(BoP, key);
 			String saplingName = ItemStackUtil.getItemNameFromRegistryAsString(saplingItem);
-			FMLInterModComms.sendMessage(Constants.MOD_ID, "add-farmable-sapling", String.format("farmArboreal@%s.-1", saplingName));
+			if (saplingName != null) {
+				FMLInterModComms.sendMessage(Constants.MOD_ID, "add-farmable-sapling", String.format("farmArboreal@%s.-1", saplingName));
+			}
 		}
 
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FARMING) && saplings != null && persimmon != null) {

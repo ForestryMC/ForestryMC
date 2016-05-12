@@ -76,8 +76,13 @@ public abstract class ItemStackUtil {
 	 *
 	 * @return The registry name of the item as {@link String}
 	 */
+	@Nullable
 	public static String getItemNameFromRegistryAsString(Item item) {
-		return getItemNameFromRegistry(item).toString();
+		ResourceLocation itemNameFromRegistry = getItemNameFromRegistry(item);
+		if (itemNameFromRegistry == null) {
+			return null;
+		}
+		return itemNameFromRegistry.toString();
 	}
 
 	@Nullable
@@ -92,6 +97,9 @@ public abstract class ItemStackUtil {
 		}
 
 		String itemStackString = getItemNameFromRegistryAsString(item);
+		if (itemStackString == null) {
+			return null;
+		}
 
 		int meta = itemStack.getItemDamage();
 		if (meta != OreDictionary.WILDCARD_VALUE) {
