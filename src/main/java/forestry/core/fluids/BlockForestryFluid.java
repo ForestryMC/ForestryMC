@@ -112,7 +112,7 @@ public class BlockForestryFluid extends BlockFluidClassic implements IItemModelR
 			}
 		}
 
-		if (rand.nextInt(10) == 0 && worldIn.getBlockState(pos.down()).isFullyOpaque()) {
+		if (rand.nextInt(10) == 0 && worldIn.getBlockState(pos.down()).isSideSolid(worldIn, pos.down(), EnumFacing.DOWN)) {
 			Material material = worldIn.getBlockState(pos.down(2)).getMaterial();
 
 			if (!material.blocksMovement() && !material.isLiquid()) {
