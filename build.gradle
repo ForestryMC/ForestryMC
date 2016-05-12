@@ -101,106 +101,45 @@ processResources {
 	}
 }
 
-runClient {
-	if (project.hasProperty('mcUsername')) {
-		args "--username=" + project.mcUsername
-	}
-	if (project.hasProperty('mcPassword')) {
-		args "--password=" + project.mcPassword
+// prevent java 8's strict doclint for javadocs from failing builds
+allprojects {
+	tasks.withType(Javadoc) {
+		options.addStringOption('Xdoclint:none', '-quiet')
 	}
 }
 
 jar {
-	destinationDir = file("build/tmp")
-	archiveName = "main.jar"
 
-	// Copy various READMEs and Licensing files into the jar
-	into ('forestry/api') {
-		from project.apiForestry + "/LICENSE.txt"
-	}
-	into ('cofh/api') {
-		from project.apiRedstoneFlux + "/LICENSE - LGPLv3.txt"
-	}
-	into ('invtweaks/api') {
-		from "./src/api/java/invtweaks/LICENSE.txt"
-	}
-	
-	into ('buildcraft/api') {
-		from "./src/api/java/buildcraft/LICENSE"
-	}
 }
 
-task mainJar(type: Jar, dependsOn: 'reobf') {
-	from (zipTree(jar.getArchivePath())) {
-		include '**'
-	}
-
-	destinationDir = file(dirDest)
-	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-	includeEmptyDirs = false
+task javadocJar(type: Jar, dependsOn: javadoc) {
+	from javadoc.destinationDir
+	classifier = 'javadoc'
 }
 
-task devJar(type: Jar, dependsOn: 'classes') {
-	from sourceSets.main.output
-
-	destinationDir = file(dirDest)
-	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-	includeEmptyDirs = false
-
-	classifier = 'dev'
-}
-
-task apiJar(type: Jar, dependsOn: 'classes') {
-	from project.apiForestry
-	from(sourceSets.main.output) {
-		include 'forestry/api/**'
-	}
-
-	destinationDir = file(dirDest)
-	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-	includeEmptyDirs = false
-
-	classifier = 'api'
-}
-
-task srcJar(type: Jar, dependsOn: 'classes') {
-	from sourceSets.main.allSource
-
-	destinationDir = file(dirDest)
-	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-	includeEmptyDirs = false
-
+task sourcesJar(type: Jar) {
+	from sourceSets.main.allJava
 	classifier = 'sources'
 }
 
-task release (dependsOn: [mainJar, apiJar, devJar, srcJar]) {
-}
-
 artifacts {
-	archives apiJar
-	archives devJar
-	archives srcJar
+	archives javadocJar
+	archives sourcesJar
 }
 
-uploadArchives {
-	repositories {
-		if (project.hasProperty('mavenDir')) {
-			mavenDeployer {
-				repository(url: "file://"+mavenDir)
-				
-				addFilter('api') { artifact, file ->
-					file == apiJar.archivePath
-				}
-				addFilter('dev') { artifact, file ->
-					file == devJar.archivePath
-				}
-				addFilter('sources') { artifact, file ->
-					file == srcJar.archivePath
+task("uploadJars", dependsOn: "build") {
+	description = "uploads JARs"
+	if (project.hasProperty("mavenDir")) {
+		apply plugin: 'maven'
+		uploadArchives {
+			repositories {
+				mavenDeployer {
+					repository(url: "file://${mavenDir}")
 				}
 			}
-		} else {
-			println 'Archives upload disabled, gradle.properties is missing.'
 		}
+	} else {
+		println 'Archives upload disabled, mavenDir in gradle.properties is missing.'
 	}
 }
 
