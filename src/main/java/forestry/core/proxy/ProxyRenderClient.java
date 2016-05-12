@@ -39,7 +39,6 @@ import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.animation.ITimeValue;
 import net.minecraftforge.common.model.animation.IAnimationStateMachine;
 import forestry.apiculture.entities.EntityFXBee;
-import forestry.apiculture.render.ParticleRenderer;
 import forestry.apiculture.render.TextureHabitatLocator;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
@@ -193,7 +192,8 @@ public class ProxyRenderClient extends ProxyRender {
 		}
 
 		EntityFX fx = new EntityFXBee(world, x, y, z, color);
-		ParticleRenderer.getInstance().addEffect(fx);
+		EffectRenderer effectRenderer = Minecraft.getMinecraft().effectRenderer;
+		effectRenderer.addEffect(fx);
 	}
 
 	@Override
