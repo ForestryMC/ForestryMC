@@ -78,8 +78,6 @@ dependencies {
 configurations {
 	api
 	compile.extendsFrom api
-	shade
-	compile.extendsFrom shade
 }
 
 processResources {
@@ -130,12 +128,6 @@ jar {
 	into ('buildcraft/api') {
 		from "./src/api/java/buildcraft/LICENSE"
 	}
-
-	configurations.shade.each{ dep ->
-		from(project.zipTree(dep)){
-			exclude 'META-INF', 'META-INF/**', 'mcmod.info'
-		}
-	}
 }
 
 task mainJar(type: Jar, dependsOn: 'reobf') {
@@ -146,10 +138,6 @@ task mainJar(type: Jar, dependsOn: 'reobf') {
 	destinationDir = file(dirDest)
 	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 	includeEmptyDirs = false
-
-	manifest{
-		attributes 'TweakClass': 'forestry.shade.javacheck.Java7Checker'
-	}
 }
 
 task devJar(type: Jar, dependsOn: 'classes') {
