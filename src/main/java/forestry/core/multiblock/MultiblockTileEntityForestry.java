@@ -187,7 +187,7 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 
 	/* ILocatable */
 	@Override
-	public final World getWorld() {
+	public final World getWorldObj() {
 		return worldObj;
 	}
 

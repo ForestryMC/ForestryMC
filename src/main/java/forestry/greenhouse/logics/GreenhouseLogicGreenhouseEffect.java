@@ -39,7 +39,7 @@ public class GreenhouseLogicGreenhouseEffect extends DefaultGreenhouseLogic impl
 		if (controller == null || !controller.isAssembled()) {
 			return;
 		}
-		if (controller.getWorld().isDaytime()) {
+		if (controller.getWorldObj().isDaytime()) {
 			if (workTimer++ > 20) {
 				controller.addTemperatureChange(lightTransmittance / 100, 0F, 2.5F);
 				workTimer = 0;
@@ -68,7 +68,7 @@ public class GreenhouseLogicGreenhouseEffect extends DefaultGreenhouseLogic impl
 			float lightTransmittance = 0F;
 			int i = 0;
 			
-			World world = controller.getWorld();
+			World world = controller.getWorldObj();
 			for (IMultiblockComponent component : controller.getComponents()) {
 				if (component instanceof ICamouflagedTile) {
 					ICamouflagedTile block = (ICamouflagedTile) component;

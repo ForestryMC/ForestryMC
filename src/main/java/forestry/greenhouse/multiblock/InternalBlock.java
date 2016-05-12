@@ -16,9 +16,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.world.World;
+import net.minecraft.util.math.BlockPos;
 
 import forestry.api.greenhouse.IInternalBlock;
 import forestry.api.greenhouse.IInternalBlockFace;
@@ -27,14 +26,11 @@ public class InternalBlock implements IInternalBlock {
 	@Nonnull
 	private final BlockPos pos;
 	@Nonnull
-	private final World world;
-	@Nonnull
 	private final List<IInternalBlockFace> faces = new ArrayList<>(6);
 	@Nullable
 	private final IInternalBlock root;
 	
-	public InternalBlock(@Nonnull World world, @Nonnull BlockPos pos) {
-		this.world = world;
+	public InternalBlock(@Nonnull BlockPos pos) {
 		this.pos = pos;
 		this.root = null;
 		
@@ -43,20 +39,13 @@ public class InternalBlock implements IInternalBlock {
 		}
 	}
 	
-	public InternalBlock(@Nonnull World world, @Nonnull BlockPos pos, EnumFacing rootFace, @Nonnull IInternalBlock root) {
-		this.world = world;
+	public InternalBlock(@Nonnull BlockPos pos, EnumFacing rootFace, @Nonnull IInternalBlock root) {
 		this.pos = pos;
 		this.root = root;
 		
 		for (EnumFacing face : EnumFacing.VALUES) {
 			this.faces.add(new InternalBlockFace(face, getPos().offset(face), face == rootFace));
 		}
-	}
-	
-	@Nonnull
-	@Override
-	public World getWorld() {
-		return world;
 	}
 	
 	@Nonnull

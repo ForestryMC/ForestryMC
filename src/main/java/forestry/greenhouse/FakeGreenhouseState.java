@@ -14,8 +14,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import net.minecraft.world.World;
-
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.greenhouse.IGreenhouseState;
@@ -54,11 +52,6 @@ public class FakeGreenhouseState implements IGreenhouseState {
 	@Override
 	public Collection<IMultiblockComponent> getGreenhouseComponents() {
 		return Collections.emptyList();
-	}
-
-	@Override
-	public World getWorld() {
-		return null;
 	}
 
 }

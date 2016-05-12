@@ -11,7 +11,6 @@ import java.util.List;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.multiblock.IMultiblockComponent;
-import net.minecraft.world.World;
 
 public interface IGreenhouseState {
 	
@@ -26,10 +25,5 @@ public interface IGreenhouseState {
 	List<IInternalBlock> getInternalBlocks();
 	
 	Collection<IMultiblockComponent> getGreenhouseComponents();
-
-	/**
-	 * @return The world in that the greenhouse standing
-	 */
-	World getWorld();
 	
 }

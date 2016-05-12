@@ -401,13 +401,13 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	@Override
 	public float getExactTemperature() {
 		BlockPos coords = getReferenceCoord();
-		return ForestryAPI.climateManager.getTemperature(getWorld(), coords);
+		return ForestryAPI.climateManager.getTemperature(getWorldObj(), coords);
 	}
 
 	@Override
 	public float getExactHumidity() {
 		BlockPos coords = getReferenceCoord();
-		return ForestryAPI.climateManager.getHumidity(getWorld(), coords);
+		return ForestryAPI.climateManager.getHumidity(getWorldObj(), coords);
 	}
 
 	private Vec3i offset;
@@ -433,11 +433,6 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 			area = new Vec3i(7 + allowedExtent * 2, 13, 7 + allowedExtent * 2);
 		}
 		return area;
-	}
-
-	@Override
-	public World getWorld() {
-		return worldObj;
 	}
 
 	@Override

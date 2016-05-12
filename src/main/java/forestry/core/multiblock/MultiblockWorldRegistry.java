@@ -72,7 +72,7 @@ public class MultiblockWorldRegistry {
 	public void tickStart() {
 		if (!controllers.isEmpty()) {
 			for (IMultiblockControllerInternal controller : controllers) {
-				if (controller.getWorld() == worldObj && controller.getWorld().isRemote == worldObj.isRemote) {
+				if (controller.getWorldObj() == worldObj && controller.getWorldObj().isRemote == worldObj.isRemote) {
 					if (controller.isEmpty()) {
 						// This happens on the server when the user breaks the last block. It's fine.
 						// Mark 'er dead and move on.

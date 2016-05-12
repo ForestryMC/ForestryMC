@@ -103,7 +103,7 @@ public interface IMultiblockControllerInternal extends IMultiblockController, IN
 	 */
 	void decodeDescriptionPacket(NBTTagCompound data);
 
-	World getWorld();
+	World getWorldObj();
 
 	/**
 	 * @return True if this controller has no associated blocks, false otherwise

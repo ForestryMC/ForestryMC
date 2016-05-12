@@ -247,7 +247,7 @@ public class Bee extends IndividualLiving implements IBee {
 
 	@Override
 	public Set<IErrorState> getCanWork(IBeeHousing housing) {
-		World world = housing.getWorld();
+		World world = housing.getWorldObj();
 		BiomeGenBase biome = housing.getBiome();
 		BlockPos housingCoords = housing.getCoordinates();
 
@@ -481,7 +481,8 @@ public class Bee extends IndividualLiving implements IBee {
 			Log.warning("Failed to produce in an apiary because the beehousing was null.");
 			return null;
 		}
-		IBeekeepingMode mode = BeeManager.beeRoot.getBeekeepingMode(housing.getWorld());
+		World world = housing.getWorldObj();
+		IBeekeepingMode mode = BeeManager.beeRoot.getBeekeepingMode(world);
 		if (mode == null) {
 			Log.warning("Failed to produce in an apiary because the beekeeping mode was null.");
 			return null;
@@ -505,13 +506,13 @@ public class Bee extends IndividualLiving implements IBee {
 
 		// / Primary Products
 		for (Map.Entry<ItemStack, Float> entry : primary.getProductChances().entrySet()) {
-			if (housing.getWorld().rand.nextFloat() < entry.getValue() * speed) {
+			if (world.rand.nextFloat() < entry.getValue() * speed) {
 				products.add(entry.getKey().copy());
 			}
 		}
 		// / Secondary Products
 		for (Map.Entry<ItemStack, Float> entry : secondary.getProductChances().entrySet()) {
-			if (housing.getWorld().rand.nextFloat() < Math.round(entry.getValue() / 2) * speed) {
+			if (world.rand.nextFloat() < Math.round(entry.getValue() / 2) * speed) {
 				products.add(entry.getKey().copy());
 			}
 		}
@@ -519,7 +520,7 @@ public class Bee extends IndividualLiving implements IBee {
 		// / Specialty products
 		if (primary.isJubilant(genome, housing) && secondary.isJubilant(genome, housing)) {
 			for (Map.Entry<ItemStack, Float> entry : primary.getSpecialtyChances().entrySet()) {
-				if (housing.getWorld().rand.nextFloat() < entry.getValue() * speed) {
+				if (world.rand.nextFloat() < entry.getValue() * speed) {
 					products.add(entry.getKey().copy());
 				}
 			}
@@ -527,7 +528,7 @@ public class Bee extends IndividualLiving implements IBee {
 
 		ItemStack[] productsArray = products.toArray(new ItemStack[products.size()]);
 		BlockPos housingCoordinates = housing.getCoordinates();
-		return genome.getFlowerProvider().affectProducts(housing.getWorld(), this, housingCoordinates, productsArray);
+		return genome.getFlowerProvider().affectProducts(world, this, housingCoordinates, productsArray);
 	}
 
 	/* REPRODUCTION */
@@ -540,7 +541,7 @@ public class Bee extends IndividualLiving implements IBee {
 		}
 
 		// Fatigued queens do not produce princesses.
-		if (BeeManager.beeRoot.getBeekeepingMode(housing.getWorld()).isFatigued(this, housing)) {
+		if (BeeManager.beeRoot.getBeekeepingMode(housing.getWorldObj()).isFatigued(this, housing)) {
 			return null;
 		}
 
@@ -550,7 +551,7 @@ public class Bee extends IndividualLiving implements IBee {
 	@Override
 	public IBee[] spawnDrones(IBeeHousing housing) {
 
-		World world = housing.getWorld();
+		World world = housing.getWorldObj();
 
 		// We need a mated queen to produce offspring.
 		if (mate == null) {
@@ -583,7 +584,7 @@ public class Bee extends IndividualLiving implements IBee {
 
 	private IBee createOffspring(IBeeHousing housing, int generation) {
 
-		World world = housing.getWorld();
+		World world = housing.getWorldObj();
 
 		IChromosome[] chromosomes = new IChromosome[genome.getChromosomes().length];
 		IChromosome[] parent1 = genome.getChromosomes();
@@ -612,7 +613,7 @@ public class Bee extends IndividualLiving implements IBee {
 
 	private static IChromosome[] mutateSpecies(IBeeHousing housing, IBeeGenome genomeOne, IBeeGenome genomeTwo) {
 
-		World world = housing.getWorld();
+		World world = housing.getWorldObj();
 
 		IChromosome[] parent1 = genomeOne.getChromosomes();
 		IChromosome[] parent2 = genomeTwo.getChromosomes();
@@ -673,7 +674,7 @@ public class Bee extends IndividualLiving implements IBee {
 
 		int chance = Math.round(genome.getFlowering() * beeModifier.getFloweringModifier(getGenome(), 1f));
 
-		World world = housing.getWorld();
+		World world = housing.getWorldObj();
 		Random random = world.rand;
 
 		// Correct speed
@@ -716,7 +717,7 @@ public class Bee extends IndividualLiving implements IBee {
 
 		int chance = (int) (genome.getFlowering() * beeModifier.getFloweringModifier(getGenome(), 1f));
 
-		World world = housing.getWorld();
+		World world = housing.getWorldObj();
 		Random random = world.rand;
 
 		// Correct speed
@@ -763,7 +764,7 @@ public class Bee extends IndividualLiving implements IBee {
 
 		int chance = Math.round(genome.getFlowering() * beeModifier.getFloweringModifier(getGenome(), 1f));
 
-		World world = housing.getWorld();
+		World world = housing.getWorldObj();
 		Random random = world.rand;
 
 		// Correct speed

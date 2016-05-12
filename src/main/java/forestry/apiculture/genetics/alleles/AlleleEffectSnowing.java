@@ -35,7 +35,7 @@ public class AlleleEffectSnowing extends AlleleEffectThrottled {
 	@Override
 	public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
 
-		World world = housing.getWorld();
+		World world = housing.getWorldObj();
 
 		EnumTemperature temp = housing.getTemperature();
 
@@ -80,12 +80,12 @@ public class AlleleEffectSnowing extends AlleleEffectThrottled {
 
 	@Override
 	public IEffectData doFX(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
-		if (housing.getWorld().rand.nextInt(3) == 0) {
+		if (housing.getWorldObj().rand.nextInt(3) == 0) {
 			Vec3i area = getModifiedArea(genome, housing);
 			Vec3i offset = VectUtil.scale(area, -0.5F);
 
 			BlockPos coordinates = housing.getCoordinates();
-			World world = housing.getWorld();
+			World world = housing.getWorldObj();
 
 			BlockPos spawn = VectUtil.getRandomPositionInArea(world.rand, area).add(coordinates).add(offset);
 			Proxies.render.addEntitySnowFX(world, spawn.getX(), spawn.getY(), spawn.getZ());

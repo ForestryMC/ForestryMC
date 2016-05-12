@@ -171,12 +171,6 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		}
 		return change;
 	}
-	
-	/* LOCATION */
-	@Override
-	public World getWorld() {
-		return worldObj;
-	}
 
 	@Override
 	public String getUnlocalizedType() {
@@ -641,7 +635,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 		internalBlocks.clear();
 		
 		if (isNextRoof) {
-			checkInternalBlock(createInternalBlock(new InternalBlock(worldObj, getMinimumCoord().add(1, 1, 1))));
+			checkInternalBlock(createInternalBlock(new InternalBlock(getMinimumCoord().add(1, 1, 1))));
 		}
 		if (internalBlocks.isEmpty()) {
 			throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.space.closed"));
@@ -692,7 +686,7 @@ public class GreenhouseController extends RectangularMultiblockControllerBase im
 						faceToCheck.setTested(true);
 					}
 				} else {
-					IInternalBlock internalBlock = createInternalBlock(new InternalBlock(worldObj, posFacing, face.getOpposite(), blockToCheck));
+					IInternalBlock internalBlock = createInternalBlock(new InternalBlock(posFacing, face.getOpposite(), blockToCheck));
 					
 					// Check is the internal block in the list
 					if (internalBlocks.contains(internalBlock)) {

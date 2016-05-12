@@ -53,7 +53,7 @@ public abstract class FarmLogic implements IFarmLogic {
 	}
 
 	protected World getWorld() {
-		return housing.getWorld();
+		return housing.getWorldObj();
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -116,7 +116,7 @@ public abstract class FarmLogic implements IFarmLogic {
 	protected List<ItemStack> collectEntityItems(boolean toWorldHeight) {
 		AxisAlignedBB harvestBox = getHarvestBox(housing, toWorldHeight);
 
-		List<EntityItem> entityItems = housing.getWorld().getEntitiesWithinAABB(entitySelectorFarm.getEntityClass(), harvestBox, entitySelectorFarm);
+		List<EntityItem> entityItems = housing.getWorldObj().getEntitiesWithinAABB(entitySelectorFarm.getEntityClass(), harvestBox, entitySelectorFarm);
 		List<ItemStack> stacks = new ArrayList<>();
 		for (EntityItem entity : entityItems) {
 			ItemStack contained = entity.getEntityItem();

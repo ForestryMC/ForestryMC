@@ -22,10 +22,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
@@ -297,6 +297,11 @@ public class TileHive extends TileEntity implements ITickable, IHiveTile, IActiv
 	@Override
 	public boolean canBlockSeeTheSky() {
 		return true; // hives may have the sky obstructed but should still be active
+	}
+
+	@Override
+	public World getWorldObj() {
+		return worldObj;
 	}
 
 	@Override

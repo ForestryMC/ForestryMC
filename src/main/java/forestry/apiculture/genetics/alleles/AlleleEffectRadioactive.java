@@ -62,7 +62,7 @@ public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 	}
 
 	private static IEffectData destroyEnvironment(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
-		World world = housing.getWorld();
+		World world = housing.getWorldObj();
 		Random rand = world.rand;
 
 		Vec3i area = VectUtil.scale(genome.getTerritory(), 2);
@@ -74,7 +74,7 @@ public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 			BlockPos posBlock = randomPos.add(posHousing);
 			posBlock = posBlock.add(offset);
 
-			if (posBlock.getY() <= 1 || posBlock.getY() >= housing.getWorld().getActualHeight()) {
+			if (posBlock.getY() <= 1 || posBlock.getY() >= world.getActualHeight()) {
 				continue;
 			}
 

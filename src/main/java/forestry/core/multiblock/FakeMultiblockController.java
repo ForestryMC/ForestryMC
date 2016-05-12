@@ -88,7 +88,7 @@ public abstract class FakeMultiblockController implements IMultiblockControllerI
 	}
 
 	@Override
-	public World getWorld() {
+	public World getWorldObj() {
 		return null;
 	}
 

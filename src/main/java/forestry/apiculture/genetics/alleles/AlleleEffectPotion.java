@@ -51,7 +51,7 @@ public class AlleleEffectPotion extends AlleleEffectThrottled {
 
 	@Override
 	public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
-		World world = housing.getWorld();
+		World world = housing.getWorldObj();
 		List<EntityLivingBase> entities = getEntitiesInRange(genome, housing, EntityLivingBase.class);
 		for (EntityLivingBase entity : entities) {
 			if (world.rand.nextFloat() >= chance) {
@@ -86,11 +86,12 @@ public class AlleleEffectPotion extends AlleleEffectThrottled {
 
 	@Override
 	public IEffectData doFX(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
-		if (housing.getWorld().rand.nextBoolean()) {
+		World world = housing.getWorldObj();
+		if (world.rand.nextBoolean()) {
 			super.doFX(genome, storedData, housing);
 		} else {
 			Vec3d beeFXCoordinates = housing.getBeeFXCoordinates();
-			Proxies.render.addEntityPotionFX(housing.getWorld(), beeFXCoordinates.xCoord, beeFXCoordinates.yCoord + 0.5, beeFXCoordinates.zCoord, potionFXColor);
+			Proxies.render.addEntityPotionFX(world, beeFXCoordinates.xCoord, beeFXCoordinates.yCoord + 0.5, beeFXCoordinates.zCoord, potionFXColor);
 		}
 		return storedData;
 	}

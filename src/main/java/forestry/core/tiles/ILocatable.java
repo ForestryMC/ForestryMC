@@ -16,5 +16,6 @@ import net.minecraft.world.World;
 public interface ILocatable {
 	BlockPos getCoordinates();
 
-	World getWorld();
+	/** Must not be named "getWorld" to avoid SpecialSource issue https://github.com/md-5/SpecialSource/issues/12 */
+	World getWorldObj();
 }

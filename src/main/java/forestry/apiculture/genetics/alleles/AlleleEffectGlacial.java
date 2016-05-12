@@ -32,7 +32,7 @@ public class AlleleEffectGlacial extends AlleleEffectThrottled {
 	@Override
 	public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
 
-		World world = housing.getWorld();
+		World world = housing.getWorldObj();
 		EnumTemperature temp = housing.getTemperature();
 
 		switch (temp) {

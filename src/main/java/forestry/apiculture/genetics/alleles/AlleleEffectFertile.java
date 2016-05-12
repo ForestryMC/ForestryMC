@@ -35,7 +35,7 @@ public class AlleleEffectFertile extends AlleleEffectThrottled {
 	@Override
 	public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
 		
-		World world = housing.getWorld();
+		World world = housing.getWorldObj();
 		BlockPos housingCoordinates = housing.getCoordinates();
 		Vec3i area = getModifiedArea(genome, housing);
 		

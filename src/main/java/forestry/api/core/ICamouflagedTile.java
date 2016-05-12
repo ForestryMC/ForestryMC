@@ -6,14 +6,11 @@
 package forestry.api.core;
 
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 public interface ICamouflagedTile {
 
 	EnumCamouflageType getCamouflageType();
 	
 	BlockPos getCoordinates();
-
-	World getWorld();
 	
 }

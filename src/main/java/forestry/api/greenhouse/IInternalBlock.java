@@ -5,17 +5,13 @@
  ******************************************************************************/
 package forestry.api.greenhouse;
 
-import java.util.Collection;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Collection;
 
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 public interface IInternalBlock {
-	
-	@Nonnull
-	World getWorld();
 	
 	@Nonnull
 	BlockPos getPos();

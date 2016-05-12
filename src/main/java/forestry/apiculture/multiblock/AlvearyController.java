@@ -355,13 +355,13 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	@Override
 	public float getExactTemperature() {
 		BlockPos coords = getReferenceCoord();
-		return ForestryAPI.climateManager.getTemperature(getWorld(), coords) + tempChange;
+		return ForestryAPI.climateManager.getTemperature(getWorldObj(), coords) + tempChange;
 	}
 
 	@Override
 	public float getExactHumidity() {
 		BlockPos coords = getReferenceCoord();
-		return ForestryAPI.climateManager.getHumidity(getWorld(), coords) + humidChange;
+		return ForestryAPI.climateManager.getHumidity(getWorldObj(), coords) + humidChange;
 	}
 
 	@Override
@@ -382,11 +382,6 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	@Override
 	public GameProfile getOwner() {
 		return getAccessHandler().getOwner();
-	}
-
-	@Override
-	public World getWorld() {
-		return worldObj;
 	}
 
 	@Override
@@ -417,8 +412,6 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 
 	@Override
 	public void addTemperatureChange(float change, float boundaryDown, float boundaryUp) {
-		BlockPos coordinates = getCoordinates();
-
 		float temperature = ForestryAPI.climateManager.getTemperature(worldObj, getReferenceCoord());
 
 		tempChange += change;

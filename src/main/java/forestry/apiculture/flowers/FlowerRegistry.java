@@ -148,7 +148,7 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 		Set<IFlowerAcceptableRule> acceptableRules = this.registeredRules.get(flowerType);
 		Set<Block> acceptedBlocks = this.registeredBlocks.get(flowerType);
 		Set<Flower> acceptedFlowers = this.registeredFlowers.get(flowerType);
-		World world = beeHousing.getWorld();
+		World world = beeHousing.getWorldObj();
 
 		IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(beeHousing);
 

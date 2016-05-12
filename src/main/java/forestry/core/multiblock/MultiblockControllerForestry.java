@@ -58,6 +58,11 @@ public abstract class MultiblockControllerForestry extends MultiblockControllerB
 	}
 
 	@Override
+	public World getWorldObj() {
+		return worldObj;
+	}
+
+	@Override
 	protected void onMachineAssembled() {
 		super.onMachineAssembled();
 

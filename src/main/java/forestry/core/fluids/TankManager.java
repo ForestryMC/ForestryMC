@@ -244,7 +244,7 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 			tankLevels.set(tankIndex, tankLevel);
 			if (sendUpdate) {
 				PacketTankLevelUpdate tankLevelUpdate = new PacketTankLevelUpdate(tile, tankIndex, tank.getFluid());
-				Proxies.net.sendNetworkPacket(tankLevelUpdate, tile.getWorld());
+				Proxies.net.sendNetworkPacket(tankLevelUpdate, tile.getWorldObj());
 			}
 		}
 	}

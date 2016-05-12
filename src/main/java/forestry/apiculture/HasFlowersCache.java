@@ -39,7 +39,7 @@ public class HasFlowersCache implements INbtWritable, INbtReadable {
 	public boolean hasFlowers(IBee queen, IBeeHousing beeHousing) {
 		IFlowerProvider flowerProvider = queen.getGenome().getFlowerProvider();
 		String flowerType = flowerProvider.getFlowerType();
-		World world = beeHousing.getWorld();
+		World world = beeHousing.getWorldObj();
 
 		if (flowerCoords != null) {
 			if (world.getTotalWorldTime() % flowerCheckInterval != flowerCheckTime) {

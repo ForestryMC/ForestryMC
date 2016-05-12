@@ -243,7 +243,7 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 
 			// Age the queen
 			float lifespanModifier = beeModifier.getLifespanModifier(queen.getGenome(), queen.getMate(), 1.0f);
-			queen.age(housing.getWorld(), lifespanModifier);
+			queen.age(housing.getWorldObj(), lifespanModifier);
 
 			// Write the changed queen back into the item stack.
 			NBTTagCompound nbttagcompound = new NBTTagCompound();
@@ -335,7 +335,7 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 		beeInventory.setQueen(queenStack);
 
 		// Register the new queen with the breeding tracker
-		BeeManager.beeRoot.getBreedingTracker(housing.getWorld(), housing.getOwner()).registerQueen(princess);
+		BeeManager.beeRoot.getBreedingTracker(housing.getWorldObj(), housing.getOwner()).registerQueen(princess);
 
 		// Remove drone
 		beeInventory.getDrone().stackSize--;
@@ -383,7 +383,7 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 	 */
 	private static Collection<ItemStack> spawnOffspring(IBee queen, IBeeHousing beeHousing) {
 
-		World world = beeHousing.getWorld();
+		World world = beeHousing.getWorldObj();
 
 		Stack<ItemStack> offspring = new Stack<>();
 		IApiaristTracker breedingTracker = BeeManager.beeRoot.getBreedingTracker(world, beeHousing.getOwner());
@@ -427,7 +427,7 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 
 	@Override
 	public void syncToClient() {
-		World world = housing.getWorld();
+		World world = housing.getWorldObj();
 		if (world != null && !world.isRemote) {
 			if (housing instanceof Entity) {
 				Proxies.net.sendNetworkPacket(new PacketBeeLogicActiveEntity(housing, (Entity) housing), world);
@@ -439,7 +439,7 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 
 	@Override
 	public void syncToClient(EntityPlayerMP player) {
-		World world = housing.getWorld();
+		World world = housing.getWorldObj();
 		if (world != null && !world.isRemote) {
 			if (housing instanceof TileEntity) {
 				Proxies.net.sendToPlayer(new PacketBeeLogicActive(housing), player);

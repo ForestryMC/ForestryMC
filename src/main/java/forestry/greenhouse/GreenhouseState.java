@@ -39,7 +39,7 @@ public final class GreenhouseState implements IGreenhouseState {
 	}
 	
 	public GreenhouseState(GreenhouseController controller) {
-		this(controller.getWorld(), controller.getExactHumidity(), controller.getExactTemperature(), controller.getInternalBlocks(), controller.getComponents());
+		this(controller.getWorldObj(), controller.getExactHumidity(), controller.getExactTemperature(), controller.getInternalBlocks(), controller.getComponents());
 	}
 	
 	@Override
@@ -60,11 +60,6 @@ public final class GreenhouseState implements IGreenhouseState {
 	@Override
 	public float getExactHumidity() {
 		return humidity;
-	}
-
-	@Override
-	public World getWorld() {
-		return world;
 	}
 
 	@Override

@@ -16,8 +16,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 
 import net.minecraftforge.fluids.Fluid;
 
@@ -93,7 +93,7 @@ public class InventoryFarm extends InventoryAdapterRestricted implements IFarmIn
 
 	@Override
 	public void removeResources(ItemStack[] resources) {
-		EntityPlayer player = PlayerUtil.getPlayer(farmController.getWorld(), farmController.getAccessHandler().getOwner());
+		EntityPlayer player = PlayerUtil.getPlayer(farmController.getWorldObj(), farmController.getAccessHandler().getOwner());
 		InventoryUtil.removeSets(resourcesInventory, 1, resources, player, false, true, false, true);
 	}
 

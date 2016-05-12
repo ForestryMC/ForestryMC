@@ -105,7 +105,7 @@ public abstract class AlleleEffect extends AlleleCategorized implements IAlleleB
 	@Override
 	public IEffectData doFX(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
 		Vec3d beeFXCoordinates = housing.getBeeFXCoordinates();
-		Proxies.render.addBeeHiveFX(housing.getWorld(), beeFXCoordinates.xCoord, beeFXCoordinates.yCoord, beeFXCoordinates.zCoord, genome.getPrimary().getSpriteColour(0));
+		Proxies.render.addBeeHiveFX(housing.getWorldObj(), beeFXCoordinates.xCoord, beeFXCoordinates.yCoord, beeFXCoordinates.zCoord, genome.getPrimary().getSpriteColour(0));
 		return storedData;
 	}
 
@@ -146,6 +146,6 @@ public abstract class AlleleEffect extends AlleleCategorized implements IAlleleB
 
 	public static <T extends Entity> List<T> getEntitiesInRange(IBeeGenome genome, IBeeHousing housing, Class<T> entityClass) {
 		AxisAlignedBB boundingBox = getBounding(genome, housing);
-		return housing.getWorld().getEntitiesWithinAABB(entityClass, boundingBox);
+		return housing.getWorldObj().getEntitiesWithinAABB(entityClass, boundingBox);
 	}
 }

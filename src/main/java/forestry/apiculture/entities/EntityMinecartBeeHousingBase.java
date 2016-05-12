@@ -100,7 +100,7 @@ public abstract class EntityMinecartBeeHousingBase extends EntityMinecartContain
 	}
 
 	@Override
-	public World getWorld() {
+	public World getWorldObj() {
 		return worldObj;
 	}
 

@@ -186,7 +186,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	}
 
 	@Override
-	public World getWorld() {
+	public World getWorldObj() {
 		return worldObj;
 	}
 
