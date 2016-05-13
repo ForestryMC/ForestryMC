@@ -13,8 +13,12 @@ package forestry.core;
 import java.util.Collection;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.storage.loot.LootPool;
+import net.minecraft.world.storage.loot.LootTable;
 
 import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
@@ -26,7 +30,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.ISpeciesRoot;
+import forestry.core.config.Constants;
 import forestry.core.errors.ErrorStateRegistry;
+import forestry.core.loot.LootTableLoader;
 import forestry.core.render.TextureManager;
 import forestry.plugins.PluginManager;
 
@@ -90,4 +96,21 @@ public class EventHandlerCore {
 		TextureManager.initDefaultSprites();
 	}
 
+	@SubscribeEvent
+	public void lootLoad(LootTableLoadEvent event) {
+		if (!event.getName().getResourceDomain().equals("minecraft")) {
+			return;
+		}
+
+		ResourceLocation resourceLocation = new ResourceLocation(Constants.RESOURCE_ID, event.getName().getResourcePath());
+		LootTable forestryChestAdditions = LootTableLoader.loadBuiltinLootTable(resourceLocation);
+		if (forestryChestAdditions != null) {
+			for (String poolName : PluginManager.getLootPoolNames()) {
+				LootPool pool = forestryChestAdditions.getPool(poolName);
+				if (pool != null) {
+					event.getTable().addPool(pool);
+				}
+			}
+		}
+	}
 }

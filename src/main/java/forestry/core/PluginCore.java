@@ -21,6 +21,7 @@ import net.minecraft.command.ICommand;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.storage.loot.functions.LootFunctionManager;
 
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
@@ -54,6 +55,7 @@ import forestry.core.genetics.alleles.AlleleHelper;
 import forestry.core.genetics.alleles.AlleleRegistry;
 import forestry.core.items.EnumContainerType;
 import forestry.core.items.ItemRegistryCore;
+import forestry.core.loot.functions.SetSpeciesNBT;
 import forestry.core.models.ModelManager;
 import forestry.core.multiblock.MultiblockLogicFactory;
 import forestry.core.network.IPacketRegistry;
@@ -97,6 +99,8 @@ public class PluginCore extends BlankForestryPlugin {
 		alleleRegistry.initialize();
 
 		AlleleHelper.instance = new AlleleHelper();
+
+		LootFunctionManager.registerFunction(new SetSpeciesNBT.Serializer());
 
 		MultiblockManager.logicFactory = new MultiblockLogicFactory();
 		ForestryAPI.climateManager = new ClimateManager();

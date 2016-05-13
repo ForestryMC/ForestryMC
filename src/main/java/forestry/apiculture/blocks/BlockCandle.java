@@ -322,11 +322,19 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister, ITile
 	}
 
 	public ItemStack getUnlitCandle(int amount) {
-		return new ItemStack(this, amount, 0);
+		ItemStack itemStack = new ItemStack(this, amount, 0);
+		NBTTagCompound tag = new NBTTagCompound();
+		tag.setInteger(BlockCandle.colourTagName, 0xffffff);
+		itemStack.setTagCompound(tag);
+		return itemStack;
 	}
 
 	public ItemStack getLitCandle(int amount) {
-		return new ItemStack(this, amount, 1);
+		ItemStack itemStack = new ItemStack(this, amount, 1);
+		NBTTagCompound tag = new NBTTagCompound();
+		tag.setInteger(BlockCandle.colourTagName, 0xffffff);
+		itemStack.setTagCompound(tag);
+		return itemStack;
 	}
 
 	@Override

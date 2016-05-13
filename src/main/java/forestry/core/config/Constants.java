@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.config;
 
+import net.minecraft.util.ResourceLocation;
+
 import forestry.api.core.IForestryConstants;
 
 public class Constants implements IForestryConstants {
@@ -47,8 +49,8 @@ public class Constants implements IForestryConstants {
 	public static final int ID_VILLAGER_BEEKEEPER = 80;
 	public static final int ID_VILLAGER_LUMBERJACK = 81;
 
-	// Village Chest Gen hook
-	public static final String CHEST_GEN_HOOK_NATURALIST_CHEST = "naturalistChest";
+	// Village Loot Key
+	public static final ResourceLocation VILLAGE_NATURALIST_LOOT_KEY = new ResourceLocation(RESOURCE_ID, "village_naturalist");
 
 	// Item Ids
 
@@ -135,7 +137,7 @@ public class Constants implements IForestryConstants {
 	}
 
 	@Override
-	public String getVillagerChestGenKey() {
-		return CHEST_GEN_HOOK_NATURALIST_CHEST;
+	public ResourceLocation getVillagerChestLootKey() {
+		return VILLAGE_NATURALIST_LOOT_KEY;
 	}
 }

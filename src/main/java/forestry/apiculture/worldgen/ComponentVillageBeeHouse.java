@@ -222,7 +222,7 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 
 		// TODO: Chest loot
 //		generateChestContents(world, structBoundingBox, random, 7, 1, 4,
-//				ChestGenHooks.getItems(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, random),
+		//				ChestGenHooks.getItems(Constants.VILLAGE_NATURALIST_LOOT_KEY, random),
 //				random.nextInt(4) + random.nextInt(4) + 5);
 
 		spawnVillagers(world, boundingBox, 7, 1, 1, 2);

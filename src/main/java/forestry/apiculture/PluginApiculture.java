@@ -31,6 +31,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.IChunkGenerator;
+import net.minecraft.world.storage.loot.LootTableList;
 
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.BiomeDictionary;
@@ -804,34 +805,14 @@ public class PluginApiculture extends BlankForestryPlugin {
 	}
 
 	private static void registerDungeonLoot() {
-		int rarity;
-		if (Config.dungeonLootRare) {
-			rarity = 5;
-		} else {
-			rarity = 10;
-		}
+		LootTableList.register(Constants.VILLAGE_NATURALIST_LOOT_KEY);
+	}
 
-		//TODO: Chest Loot
-		/*
-		ChestGenHooks.addItem(ChestGenHooks.DUNGEON_CHEST, new WeightedRandomChestContent(BeeDefinition.STEADFAST.getMemberStack(EnumBeeType.DRONE), 1, 1, rarity));
-
-		ItemStack stack = blocks.candle.getUnlitCandle(1);
-		NBTTagCompound tag = new NBTTagCompound();
-		tag.setInteger(BlockCandle.colourTagName, 0xffffff);
-		stack.setTagCompound(tag);
-
-		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(stack, 7, 12, 12));
-		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(items.scoop.getItemStack(), 1, 1, 8));
-		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(items.smoker.getItemStack(), 1, 1, 8));
-		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(items.propolis.get(EnumPropolis.NORMAL, 1), 2, 4, 6));
-		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(items.beeComb.get(EnumHoneyComb.HONEY, 1), 4, 12, 7));
-		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(items.beeComb.get(EnumHoneyComb.FROZEN, 1), 2, 10, 7));
-		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(items.beeComb.get(EnumHoneyComb.SILKY, 1), 1, 6, 7));
-
-		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(BeeDefinition.FOREST.getRainResist().getMemberStack(EnumBeeType.PRINCESS), 1, 1, 5));
-		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(BeeDefinition.COMMON.getMemberStack(EnumBeeType.DRONE), 1, 2, 8));
-		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(BeeDefinition.MEADOWS.getMemberStack(EnumBeeType.PRINCESS), 1, 1, 5));
-		*/
+	@Override
+	public void addLootPoolNames(Set<String> lootPoolNames) {
+		super.addLootPoolNames(lootPoolNames);
+		lootPoolNames.add("forestry_apiculture_items");
+		lootPoolNames.add("forestry_apiculture_bees");
 	}
 
 	private static void createHives() {

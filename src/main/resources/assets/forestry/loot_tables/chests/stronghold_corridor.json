@@ -1,0 +1,25 @@
+{
+    "pools": [
+        {
+            "name": "forestry_apiculture_bees",
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "item",
+                    "name": "forestry:beeDroneGE",
+                    "functions": [
+                        {
+                            "function": "set_species_nbt",
+                            "speciesUid": "Forestry.speciesSteadfast"
+                        }
+                    ],
+                    "weight": 1
+                },
+                {
+                    "type": "empty",
+                    "weight": 9
+                }
+            ]
+        }
+    ]
+}

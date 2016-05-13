@@ -5,6 +5,10 @@
  ******************************************************************************/
 package forestry.api.core;
 
+import net.minecraft.util.ResourceLocation;
+
+import net.minecraftforge.event.LootTableLoadEvent;
+
 public interface IForestryConstants {
 
 	/**
@@ -18,7 +22,7 @@ public interface IForestryConstants {
 	int getArboricultureVillagerID();
 	
 	/**
-	 * @return The ChestGenHooks key for adding items to the Forestry Villager chest.
+	 * @return The {@link LootTableLoadEvent} key for adding items to the Forestry Villager chest.
 	 */
-	String getVillagerChestGenKey();
+	ResourceLocation getVillagerChestLootKey();
 }

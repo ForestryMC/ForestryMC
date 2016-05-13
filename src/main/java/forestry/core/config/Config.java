@@ -59,9 +59,6 @@ public class Config {
 	public static float researchMutationBoostMultiplier = 1.5f;
 	public static float maxResearchMutationBoostPercent = 5.0f;
 
-	// Dungeon loot
-	public static boolean dungeonLootRare = false;
-
 	// World generation
 	public static boolean generateApatiteOre = true;
 	public static boolean generateCopperOre = true;
@@ -211,8 +208,6 @@ public class Config {
 		pollinateVanillaTrees = configCommon.getBooleanLocalized("genetics", "pollinate.vanilla.trees", pollinateVanillaTrees);
 		researchMutationBoostMultiplier = configCommon.getFloatLocalized("genetics.research.boost", "multiplier", researchMutationBoostMultiplier, 1.0f, 1000.f);
 		maxResearchMutationBoostPercent = configCommon.getFloatLocalized("genetics.research.boost", "max.percent", maxResearchMutationBoostPercent, 0.0f, 100.0f);
-
-		dungeonLootRare = configCommon.getBooleanLocalized("difficulty", "loot.rare", dungeonLootRare);
 
 		enableBackpackResupply = configCommon.getBooleanLocalized("performance", "backpacks.resupply", enableBackpackResupply);
 

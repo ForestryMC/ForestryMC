@@ -1,0 +1,186 @@
+{
+    "pools": [
+        {
+            "name": "forestry_apiculture_items",
+            "rolls": 3,
+            "entries": [
+                {
+                    "type": "item",
+                    "name": "forestry:candle",
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 7,
+                                "max": 12
+                            }
+                        }
+                    ],
+                    "weight": 10
+                },
+                {
+                    "type": "item",
+                    "name": "forestry:beeCombs",
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 4
+                            }
+                        }
+                    ],
+                    "weight": 20
+                },
+                {
+                    "type": "item",
+                    "name": "forestry:scoop",
+                    "weight": 1
+                },
+                {
+                    "type": "item",
+                    "name": "forestry:smoker",
+                    "weight": 1
+                }
+            ]
+        },
+        {
+            "name": "forestry_apiculture_bees",
+            "rolls": 2,
+            "entries": [
+                {
+                    "type": "item",
+                    "name": "forestry:beePrincessGE",
+                    "functions": [
+                        {
+                            "function": "set_species_nbt",
+                            "speciesUid": "Forestry.speciesForest"
+                        }
+                    ],
+                    "weight": 6
+                },
+                {
+                    "type": "item",
+                    "name": "forestry:beeDroneGE",
+                    "functions": [
+                        {
+                            "function": "set_species_nbt",
+                            "speciesUid": "Forestry.speciesCommon"
+                        }
+                    ],
+                    "weight": 6
+                },
+                {
+                    "type": "item",
+                    "name": "forestry:beePrincessGE",
+                    "functions": [
+                        {
+                            "function": "set_species_nbt",
+                            "speciesUid": "Forestry.speciesMeadows"
+                        }
+                    ],
+                    "weight": 6
+                },
+                {
+                    "type": "empty",
+                    "weight": 3
+                }
+            ]
+        },
+        {
+            "name": "forestry_arboriculture_items",
+            "rolls": 2,
+            "entries": [
+                {
+                    "type": "item",
+                    "name": "forestry:grafter",
+                    "weight": 1
+                },
+                {
+                    "type": "item",
+                    "name": "forestry:sapling",
+                    "functions": [
+                        {
+                            "function": "set_species_nbt",
+                            "speciesUid": "Forestry.treeLime"
+                        },
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 3
+                            }
+                        }
+                    ],
+                    "weight": 1
+                },
+                {
+                    "type": "item",
+                    "name": "forestry:sapling",
+                    "functions": [
+                        {
+                            "function": "set_species_nbt",
+                            "speciesUid": "Forestry.treeCherry"
+                        },
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 3
+                            }
+                        }
+                    ],
+                    "weight": 1
+                },
+                {
+                    "type": "item",
+                    "name": "forestry:sapling",
+                    "functions": [
+                        {
+                            "function": "set_species_nbt",
+                            "speciesUid": "Forestry.treeLarch"
+                        },
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 3
+                            }
+                        }
+                    ],
+                    "weight": 1
+                },
+                {
+                    "type": "item",
+                    "name": "forestry:sapling",
+                    "functions": [
+                        {
+                            "function": "set_species_nbt",
+                            "speciesUid": "Forestry.treeTeak"
+                        },
+                        {
+                            "function": "set_count",
+                            "count": 1
+                        }
+                    ],
+                    "weight": 1
+                },
+                {
+                    "type": "item",
+                    "name": "forestry:sapling",
+                    "functions": [
+                        {
+                            "function": "set_species_nbt",
+                            "speciesUid": "Forestry.treePadauk"
+                        },
+                        {
+                            "function": "set_count",
+                            "count": 1
+                        }
+                    ],
+                    "weight": 1
+                }
+            ]
+        }
+    ]
+}

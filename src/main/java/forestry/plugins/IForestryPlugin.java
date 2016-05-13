@@ -50,6 +50,8 @@ public interface IForestryPlugin {
 
 	void registerRecipes();
 
+	void addLootPoolNames(Set<String> lootPoolNames);
+
 	void postInit();
 
 	boolean processIMCMessage(FMLInterModComms.IMCMessage message);

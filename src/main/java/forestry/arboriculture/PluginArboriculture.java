@@ -13,6 +13,7 @@ package forestry.arboriculture;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -143,6 +144,12 @@ public class PluginArboriculture extends BlankForestryPlugin {
 	}
 
 	@Override
+	public void addLootPoolNames(Set<String> lootPoolNames) {
+		super.addLootPoolNames(lootPoolNames);
+		lootPoolNames.add("forestry_arboriculture_items");
+	}
+
+	@Override
 	public void doInit() {
 		super.doInit();
 
@@ -163,12 +170,6 @@ public class PluginArboriculture extends BlankForestryPlugin {
 			Proxies.render.registerVillagerSkin(Constants.ID_VILLAGER_LUMBERJACK, Constants.TEXTURE_SKIN_LUMBERJACK);
 			VillagerRegistry.instance().registerVillageTradeHandler(Constants.ID_VILLAGER_LUMBERJACK, new VillageHandlerArboriculture());
 		}*/
-	}
-
-	@Override
-	public void postInit() {
-		super.postInit();
-		registerDungeonLoot();
 	}
 
 	@Override
@@ -414,27 +415,6 @@ public class PluginArboriculture extends BlankForestryPlugin {
 	public void getHiddenItems(List<ItemStack> hiddenItems) {
 		// sapling itemBlock is different from the normal item
 		hiddenItems.add(new ItemStack(blocks.saplingGE));
-	}
-
-	private static void registerDungeonLoot() {
-		// TODO: Fix chest loot
-		/*
-		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(items.grafter.getItemStack(), 1, 1, 8));
-
-		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Oak.getMemberStack(EnumGermlingType.SAPLING), 2, 3, 6));
-		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Spruce.getMemberStack(EnumGermlingType.SAPLING), 2, 3, 6));
-		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Birch.getMemberStack(EnumGermlingType.SAPLING), 2, 3, 6));
-		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Larch.getMemberStack(EnumGermlingType.SAPLING), 1, 2, 4));
-		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Lime.getMemberStack(EnumGermlingType.SAPLING), 1, 2, 4));
-
-		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.APICULTURE)) {
-			ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Oak.getMemberStack(EnumGermlingType.POLLEN), 2, 3, 4));
-			ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Spruce.getMemberStack(EnumGermlingType.POLLEN), 2, 3, 4));
-			ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Birch.getMemberStack(EnumGermlingType.POLLEN), 2, 3, 4));
-			ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Larch.getMemberStack(EnumGermlingType.POLLEN), 1, 2, 3));
-			ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Lime.getMemberStack(EnumGermlingType.POLLEN), 1, 2, 3));
-		}
-		*/
 	}
 
 	private static class FuelHandler implements IFuelHandler {

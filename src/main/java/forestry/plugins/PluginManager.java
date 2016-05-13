@@ -31,6 +31,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkGenerator;
+
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.common.IFuelHandler;
@@ -303,6 +304,15 @@ public class PluginManager {
 			plugin.getHiddenItems(hiddenItems);
 		}
 		return hiddenItems;
+	}
+
+	@Nonnull
+	public static Set<String> getLootPoolNames() {
+		Set<String> lootPoolNames = new HashSet<>();
+		for (IForestryPlugin plugin : loadedPlugins) {
+			plugin.addLootPoolNames(lootPoolNames);
+		}
+		return lootPoolNames;
 	}
 
 	private static boolean isEnabled(Configuration config, IForestryPlugin plugin) {

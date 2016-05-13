@@ -1,0 +1,88 @@
+{
+    "pools": [
+        {
+            "name": "forestry_arboriculture_items",
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "item",
+                    "name": "forestry:sapling",
+                    "functions": [
+                        {
+                            "function": "set_species_nbt",
+                            "speciesUid": "Forestry.treeAcacia"
+                        }
+                    ],
+                    "weight": 1
+                },
+                {
+                    "type": "empty",
+                    "weight": 3
+                }
+            ]
+        },
+        {
+            "name": "forestry_factory_items",
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "item",
+                    "name": "forestry:ash",
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 7,
+                                "max": 12
+                            }
+                        }
+                    ],
+                    "weight": 1
+                },
+                {
+                    "type": "empty",
+                    "weight": 1
+                }
+            ]
+        },
+        {
+            "name": "forestry_apiculture_bees",
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "item",
+                    "name": "forestry:beeDroneGE",
+                    "functions": [
+                        {
+                            "function": "set_species_nbt",
+                            "speciesUid": "Forestry.speciesSteadfast"
+                        }
+                    ],
+                    "weight": 1
+                },
+                {
+                    "type": "item",
+                    "name": "forestry:beeDroneGE",
+                    "functions": [
+                        {
+                            "function": "set_species_nbt",
+                            "speciesUid": "Forestry.speciesModest"
+                        },
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 3
+                            }
+                        }
+                    ],
+                    "weight": 3
+                },
+                {
+                    "type": "empty",
+                    "weight": 6
+                }
+            ]
+        }
+    ]
+}

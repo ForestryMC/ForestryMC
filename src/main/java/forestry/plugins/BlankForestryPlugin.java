@@ -21,6 +21,7 @@ import net.minecraft.command.ICommand;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkGenerator;
+
 import net.minecraftforge.fml.common.IFuelHandler;
 import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
 
@@ -88,6 +89,11 @@ public abstract class BlankForestryPlugin implements IForestryPlugin {
 
 	@Override
 	public void registerRecipes() {
+	}
+
+	@Override
+	public void addLootPoolNames(Set<String> lootPoolNames) {
+
 	}
 
 	@Override

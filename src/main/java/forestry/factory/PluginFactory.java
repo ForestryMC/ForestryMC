@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.factory;
 
+import java.util.Set;
+
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -183,6 +185,12 @@ public class PluginFactory extends BlankForestryPlugin {
 		ICircuitLayout layoutMachineUpgrade = new CircuitLayout("machine.upgrade", CircuitSocketType.MACHINE);
 		ChipsetManager.circuitRegistry.registerLayout(layoutMachineUpgrade);
 
+	}
+
+	@Override
+	public void addLootPoolNames(Set<String> lootPoolNames) {
+		super.addLootPoolNames(lootPoolNames);
+		lootPoolNames.add("forestry_factory_items");
 	}
 
 	@Override
