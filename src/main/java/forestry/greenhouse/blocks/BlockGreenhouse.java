@@ -270,18 +270,19 @@ public abstract class BlockGreenhouse extends BlockStructure implements ISpriteR
 		Block block = iblockstate.getBlock();
 
 		if (getGreenhouseType() == BlockGreenhouseType.GLASS) {
-			if (blockAccess.getBlockState(pos.offset(side.getOpposite())) != iblockstate) {
+			if (blockAccess.getBlockState(pos.offset(side)) != iblockstate) {
 				return true;
 			}
 
 			if (block == this) {
 				return false;
 			}
+			return block != this && super.shouldSideBeRendered(blockState, blockAccess, pos, side);
 		} else if (getGreenhouseType() == BlockGreenhouseType.DOOR) {
 			return super.shouldSideBeRendered(blockState, blockAccess, pos, side);
 		}
 
-		return block != this && super.shouldSideBeRendered(blockState, blockAccess, pos, side);
+		return super.shouldSideBeRendered(blockState, blockAccess, pos, side);
 	}
 	
 	@SideOnly(Side.CLIENT)
