@@ -59,7 +59,7 @@ import gnu.trove.map.hash.TIntObjectHashMap;
 @SideOnly(Side.CLIENT)
 public class ModelCrate extends BlankItemModel {
 
-	private final Map<String, IBakedModel> crates = Maps.newHashMap();
+	private static final Map<String, IBakedModel> crates = Maps.newHashMap();
 
 	private static IModel crateModel;
 	private static ModelBlock MODEL_GENERATED;
@@ -76,6 +76,7 @@ public class ModelCrate extends BlankItemModel {
 		} catch (Exception e) {
 			Log.error("Failed to init the crate model.", e);
 		}
+		ModelCrate.crates.clear();
 	}
 
 	/**
