@@ -59,6 +59,9 @@ public class CamouflageUtil {
 	}
 	
 	public static ICamouflageHandler getCamouflageHandler(IBlockAccess world, BlockPos pos){
+		if(pos == null){
+			return null;
+		}
 		TileEntity tile = world.getTileEntity(pos);
 		
 		if(tile instanceof IMultiblockComponent){
