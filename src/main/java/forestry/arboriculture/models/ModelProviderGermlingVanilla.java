@@ -46,10 +46,10 @@ public class ModelProviderGermlingVanilla implements IGermlingModelProvider {
 				model = manager.getModelLocation("minecraft", "jungle_sapling");
 				break;
 			case 4:
-				model = manager.getModelLocation("minecraft", "dark_oak_sapling");
+				model = manager.getModelLocation("minecraft", "acacia_sapling");
 				break;
 			case 5:
-				model = manager.getModelLocation("minecraft", "acacia_sapling");
+				model = manager.getModelLocation("minecraft", "dark_oak_sapling");
 				break;
 		}
 		pollenModel = manager.getModelLocation("pollen");

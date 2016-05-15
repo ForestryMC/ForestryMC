@@ -91,7 +91,8 @@ public class BlockForestryLeaves extends BlockLeaves implements ITileEntityProvi
 		return new ExtendedBlockState(this, new IProperty[]{DECAYABLE, CHECK_DECAY}, new IUnlistedProperty[]{UnlistedBlockPos.POS, UnlistedBlockAccess.BLOCKACCESS});
 	}
 	
-    public int getMetaFromState(IBlockState state){
+    @Override
+	public int getMetaFromState(IBlockState state){
     	return 0;
     }
 

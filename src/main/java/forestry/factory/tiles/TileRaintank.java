@@ -116,7 +116,7 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 		boolean hasSky = worldObj.canBlockSeeSky(getPos().add(0, 1, 0));
 		errorLogic.setCondition(!hasSky, EnumErrorCode.NO_SKY_RAIN_TANK);
 
-		errorLogic.setCondition(!worldObj.isRainingAt(getPos()), EnumErrorCode.NOT_RAINING);
+		errorLogic.setCondition(!worldObj.isRainingAt(getPos().add(0, 1, 0)), EnumErrorCode.NOT_RAINING);
 
 		if (!errorLogic.hasErrors()) {
 			resourceTank.fill(STACK_WATER, true);

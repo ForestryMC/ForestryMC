@@ -20,6 +20,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
+import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.core.ForestryAPI;
 import forestry.api.fuels.EngineBronzeFuel;
@@ -360,13 +361,13 @@ public class PluginFactory extends BlankForestryPlugin {
 
 		// / CHIPSETS
 		ItemCircuitBoard circuitBoard = PluginCore.items.circuitboards;
-		RecipeManagers.carpenterManager.addRecipe(20, Fluids.WATER.getFluid(1000), null, circuitBoard.get(EnumCircuitBoardType.BASIC),
+		RecipeManagers.carpenterManager.addRecipe(20, Fluids.WATER.getFluid(1000), null, ItemCircuitBoard.createCircuitboard(EnumCircuitBoardType.BASIC, null, new ICircuit[]{}),
 				"R R", "R#R", "R R", '#', "ingotTin", 'R', "dustRedstone");
-		RecipeManagers.carpenterManager.addRecipe(40, Fluids.WATER.getFluid(1000), null, circuitBoard.get(EnumCircuitBoardType.ENHANCED),
+		RecipeManagers.carpenterManager.addRecipe(40, Fluids.WATER.getFluid(1000), null, ItemCircuitBoard.createCircuitboard(EnumCircuitBoardType.ENHANCED, null, new ICircuit[]{}),
 				"R#R", "R#R", "R#R", '#', "ingotBronze", 'R', "dustRedstone");
-		RecipeManagers.carpenterManager.addRecipe(80, Fluids.WATER.getFluid(1000), null, circuitBoard.get(EnumCircuitBoardType.REFINED),
+		RecipeManagers.carpenterManager.addRecipe(80, Fluids.WATER.getFluid(1000), null, ItemCircuitBoard.createCircuitboard(EnumCircuitBoardType.REFINED, null, new ICircuit[]{}),
 				"R#R", "R#R", "R#R", '#', "ingotIron", 'R', "dustRedstone");
-		RecipeManagers.carpenterManager.addRecipe(80, Fluids.WATER.getFluid(1000), null, circuitBoard.get(EnumCircuitBoardType.INTRICATE),
+		RecipeManagers.carpenterManager.addRecipe(80, Fluids.WATER.getFluid(1000), null, ItemCircuitBoard.createCircuitboard(EnumCircuitBoardType.INTRICATE, null, new ICircuit[]{}),
 				"R#R", "R#R", "R#R", '#', "ingotGold", 'R', "dustRedstone");
 		RecipeManagers.carpenterManager.addRecipe(40, Fluids.WATER.getFluid(1000), null, PluginCore.items.solderingIron.getItemStack(),
 				" # ", "# #", "  B", '#', "ingotIron", 'B', "ingotBronze");

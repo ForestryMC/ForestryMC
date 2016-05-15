@@ -14,7 +14,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.common.MinecraftForge;
-
+import forestry.api.circuits.ICircuit;
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.PostManager;
 import forestry.api.recipes.RecipeManagers;
@@ -23,6 +23,7 @@ import forestry.apiculture.items.ItemRegistryApiculture;
 import forestry.core.ISaveEventHandler;
 import forestry.core.PluginCore;
 import forestry.core.circuits.EnumCircuitBoardType;
+import forestry.core.circuits.ItemCircuitBoard;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
@@ -151,7 +152,7 @@ public class PluginMail extends BlankForestryPlugin {
 				'X', "chestWood",
 				'Y', PluginCore.items.sturdyCasing,
 				'Z', PluginCore.items.tubes.get(EnumElectronTube.IRON, 1),
-				'W', PluginCore.items.circuitboards.get(EnumCircuitBoardType.REFINED));
+				'W', ItemCircuitBoard.createCircuitboard(EnumCircuitBoardType.REFINED, null, new ICircuit[]{}));
 	}
 
 	@Override
