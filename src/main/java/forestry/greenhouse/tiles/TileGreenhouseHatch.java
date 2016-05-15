@@ -291,7 +291,7 @@ public class TileGreenhouseHatch extends MultiblockTileEntityBase<MultiblockLogi
 			}
 		}
 		
-		if (((BlockGreenhouse) getBlockType()).getGreenhouseType() != BlockGreenhouseType.HATCH_OUTPUT) {
+		if (((BlockGreenhouse) getBlockType()).getGreenhouseType() != BlockGreenhouseType.HATCH_OUTPUT && outwards != null) {
 			outwards = outwards.getOpposite();
 		}
 	}

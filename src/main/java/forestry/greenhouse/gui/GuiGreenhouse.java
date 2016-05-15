@@ -32,7 +32,7 @@ public class GuiGreenhouse extends GuiForestryTitled<ContainerGreenhouse, TileGr
 		//Add the multiblock camouflage slots
 		widgetManager.add(new WidgetCamouflageSlot(widgetManager, 8, 16, inventory.getMultiblockLogic().getController(), EnumCamouflageType.DEFAULT));
 		widgetManager.add(new WidgetCamouflageSlot(widgetManager, 8, 37, inventory.getMultiblockLogic().getController(), EnumCamouflageType.GLASS));
-		widgetManager.add(new WidgetCamouflageSlot(widgetManager, 8, 58, inventory.getMultiblockLogic().getController(), EnumCamouflageType.DOOR));
+		//widgetManager.add(new WidgetCamouflageSlot(widgetManager, 8, 58, inventory.getMultiblockLogic().getController(), EnumCamouflageType.DOOR));
 		
 		//Add the tile camouflage slots
 		widgetManager.add(new WidgetCamouflageSlot(widgetManager, 35, 37, inventory, tile.getCamouflageType()));
