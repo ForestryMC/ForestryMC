@@ -123,7 +123,7 @@ public class BlockGreenhouseDoor extends BlockGreenhouse implements IStateMapper
 				state = iblockstate.cycleProperty(OPEN);
 				worldIn.setBlockState(blockpos, state, 2);
 				worldIn.markBlockRangeForRenderUpdate(blockpos, pos);
-				worldIn.playAuxSFXAtEntity(playerIn, state.getValue(OPEN) ? 1003 : 1006, pos, 0);
+				worldIn.playEvent(playerIn, state.getValue(OPEN) ? 1003 : 1006, pos, 0);
 				return true;
 			}
 		}
@@ -172,7 +172,7 @@ public class BlockGreenhouseDoor extends BlockGreenhouse implements IStateMapper
 					if (flag != state.getValue(OPEN)) {
 						worldIn.setBlockState(pos, state.withProperty(OPEN, flag), 2);
 						worldIn.markBlockRangeForRenderUpdate(pos, pos);
-						worldIn.playAuxSFXAtEntity((EntityPlayer) null, flag ? 1003 : 1006, pos, 0);
+						worldIn.playEvent((EntityPlayer) null, flag ? 1003 : 1006, pos, 0);
 					}
 				}
 			}

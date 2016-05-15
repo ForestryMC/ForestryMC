@@ -29,7 +29,7 @@ public class ItemFertilizer extends ItemForestry {
 
 		if (ItemDye.applyBonemeal(stack, worldIn, pos, playerIn)) {
 			if (!worldIn.isRemote) {
-				worldIn.playAuxSFX(2005, pos, 0);
+				worldIn.playEvent(2005, pos, 0);
 			}
 
 			return EnumActionResult.SUCCESS;
