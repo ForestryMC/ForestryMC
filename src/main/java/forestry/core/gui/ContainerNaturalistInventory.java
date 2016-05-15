@@ -50,8 +50,8 @@ public class ContainerNaturalistInventory extends ContainerTile<TileNaturalistCh
 	}
 	
 	@Override
-	public void onCraftGuiOpened(ICrafting listener) {
-		super.onCraftGuiOpened(listener);
+	public void addListener(ICrafting listener) {
+		super.addListener(listener);
 		
 		tile.increaseNumPlayersUsing();
 	}
