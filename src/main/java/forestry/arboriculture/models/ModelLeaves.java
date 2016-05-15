@@ -19,9 +19,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
 import net.minecraftforge.common.property.IExtendedBlockState;
-
+import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.core.IModelBaker;
 import forestry.arboriculture.blocks.BlockForestryLeaves;
+import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.genetics.TreeRoot;
 import forestry.arboriculture.items.ItemBlockLeaves;
 import forestry.arboriculture.tiles.TileLeaves;
@@ -71,6 +72,8 @@ public class ModelLeaves extends ModelBlockDefault<BlockForestryLeaves> {
 	public void bakeWorldBlock(@Nonnull BlockForestryLeaves block, @Nonnull IBlockAccess world, @Nonnull BlockPos pos, @Nonnull IExtendedBlockState stateExtended, @Nonnull IModelBaker baker) {
 		TileLeaves tile = TileUtil.getTile(world, pos, TileLeaves.class);
 		if (tile == null) {
+			IAlleleTreeSpecies oakSpecies = TreeDefinition.Oak.getIndividual().getGenome().getPrimary();
+			baker.setParticleSprite(oakSpecies.getLeafSpriteProvider().getSprite(false, Proxies.render.fancyGraphicsEnabled()));
 			return;
 		}
 

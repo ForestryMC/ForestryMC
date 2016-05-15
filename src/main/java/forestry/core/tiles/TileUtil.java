@@ -48,6 +48,9 @@ public abstract class TileUtil {
 	}
 
 	public static <T extends TileEntity> T getTile(IBlockAccess world, BlockPos pos, Class<T> tileClass) {
+		if(pos == null){
+			return null;
+		}
 		TileEntity tileEntity = world.getTileEntity(pos);
 		if (tileClass.isInstance(tileEntity)) {
 			return tileClass.cast(tileEntity);
