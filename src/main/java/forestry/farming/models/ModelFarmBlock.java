@@ -12,6 +12,7 @@ import net.minecraftforge.common.property.IExtendedBlockState;
 
 import forestry.api.core.IModelBaker;
 import forestry.core.models.ModelBlockDefault;
+import forestry.core.tiles.TileUtil;
 import forestry.farming.blocks.BlockFarm;
 import forestry.farming.blocks.EnumFarmBlockType;
 import forestry.farming.tiles.TileFarm;
@@ -39,9 +40,15 @@ public class ModelFarmBlock extends ModelBlockDefault<BlockFarm> {
 	@Override
 	public void bakeWorldBlock(@Nonnull BlockFarm blockFarm, @Nonnull IBlockAccess world, @Nonnull BlockPos pos, @Nonnull IExtendedBlockState stateExtended, @Nonnull IModelBaker baker) {
 
-		TileFarm farm = (TileFarm) world.getTileEntity(pos);
+		TileFarm farm = TileUtil.getTile(world, pos, TileFarm.class);
 
-		TextureAtlasSprite[] textures = getSprites(farm.getFarmBlockTexture());
+		EnumFarmBlockTexture texture = EnumFarmBlockTexture.BRICK;
+		
+		if(farm != null){
+			texture = farm.getFarmBlockTexture();
+		}
+		
+		TextureAtlasSprite[] textures = getSprites(texture);
 
 		// Add the plain block.
 		baker.addBlockModel(blockFarm, Block.FULL_BLOCK_AABB, pos, textures, 0);

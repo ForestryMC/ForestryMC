@@ -22,7 +22,9 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.color.BlockColors;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -215,14 +217,20 @@ public abstract class BlockGreenhouse extends BlockStructure implements ISpriteR
 
 	@Override
 	public int colorMultiplier(IBlockState state, IBlockAccess worldIn, BlockPos pos, int tintIndex) {
+		if(pos == null){
+			return 0xffffff;
+		}
 		TileEntity tile = worldIn.getTileEntity(pos);
 		if (tile instanceof ICamouflagedTile) {
 			ItemStack camouflageStack = CamouflageUtil.getCamouflageBlock(worldIn, pos);
 
 			if (tintIndex < 100 && camouflageStack != null) {
 				Block block = Block.getBlockFromItem(camouflageStack.getItem());
-				if (block instanceof IBlockColor) {
-					return ((IBlockColor) block).colorMultiplier(state, worldIn, pos, tintIndex);
+				IBlockState camouflageState = block.getStateFromMeta(camouflageStack.getItemDamage());
+				
+				int color = Minecraft.getMinecraft().getBlockColors().colorMultiplier(camouflageState, worldIn, pos, tintIndex);
+				if(color != -1){
+					return color;
 				}
 			}
 		}
