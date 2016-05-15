@@ -13,6 +13,8 @@ package forestry.arboriculture.inventory;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import forestry.api.arboriculture.TreeManager;
@@ -29,7 +31,7 @@ public class ItemInventoryTreealyzer extends ItemInventoryAlyzer implements IHin
 
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-		if (!TreeManager.treeRoot.isMember(itemStack)) {
+		if (!TreeManager.treeRoot.isMember(itemStack) || itemStack.getItem() == Item.getItemFromBlock(Blocks.SAPLING)) {
 			ItemStack ersatz = GeneticsUtil.convertSaplingToGeneticEquivalent(itemStack);
 			if (ersatz != null) {
 				return super.canSlotAccept(slotIndex, ersatz);
@@ -41,7 +43,7 @@ public class ItemInventoryTreealyzer extends ItemInventoryAlyzer implements IHin
 	@Override
 	public void onSlotClick(EntityPlayer player) {
 		ItemStack specimen = getStackInSlot(SLOT_SPECIMEN);
-		if (!TreeManager.treeRoot.isMember(specimen)) {
+		if (!TreeManager.treeRoot.isMember(specimen) || specimen.getItem() == Item.getItemFromBlock(Blocks.SAPLING)) {
 			ItemStack ersatz = GeneticsUtil.convertSaplingToGeneticEquivalent(specimen);
 			if (ersatz != null) {
 				setInventorySlotContents(SLOT_SPECIMEN, ersatz);

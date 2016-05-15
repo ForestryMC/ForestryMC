@@ -28,6 +28,7 @@ import forestry.arboriculture.WoodHelper.WoodMeshDefinition;
 import forestry.core.proxy.Proxies;
 import net.minecraft.block.BlockFenceGate;
 import net.minecraft.block.BlockPlanks.EnumType;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -35,6 +36,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -102,6 +104,13 @@ public class BlockArbFenceGate extends BlockFenceGate implements IWoodTyped, IIt
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
 		list.add(TreeManager.woodItemAccess.getFenceGate(woodType, fireproof));
+	}
+	
+	@Override
+	public float getBlockHardness(IBlockState blockState, World worldIn, BlockPos pos) {
+		int meta = getMetaFromState(blockState);
+		EnumWoodType woodType = getWoodType(meta);
+		return woodType.getHardness();
 	}
 	
 	@SideOnly(Side.CLIENT)

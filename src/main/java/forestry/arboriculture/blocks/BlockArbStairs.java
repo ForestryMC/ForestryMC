@@ -20,7 +20,7 @@ import net.minecraft.item.Item;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
-
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -81,6 +81,13 @@ public class BlockArbStairs extends BlockStairs implements IWoodTyped, IItemMode
 	@SideOnly(Side.CLIENT)
 	public void registerStateMapper() {
 		Proxies.render.registerStateMapper(this, new WoodTypeStateMapper(this, null));
+	}
+	
+	@Override
+	public float getBlockHardness(IBlockState blockState, World worldIn, BlockPos pos) {
+		int meta = getMetaFromState(blockState);
+		EnumWoodType woodType = getWoodType(meta);
+		return woodType.getHardness();
 	}
 
 	@Override
