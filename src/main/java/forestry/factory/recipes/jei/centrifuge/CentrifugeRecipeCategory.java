@@ -68,6 +68,7 @@ public class CentrifugeRecipeCategory extends ForestryRecipeCategory {
 		guiItemStacks.init(inputSlot, true, 4, 18);
 		guiItemStacks.setFromRecipe(inputSlot, recipeWrapper.getInputs());
 		CentrifugeRecipeWrapper centrifugeWrapper = (CentrifugeRecipeWrapper) recipeWrapper;
+		tooltip.clearTooltip();
 		setResults(centrifugeWrapper.getRecipe().getAllProducts(), (GuiItemStackGroup) guiItemStacks);
 		guiItemStacks.addTooltipCallback(tooltip);
 	}

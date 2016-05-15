@@ -36,6 +36,10 @@ public class ForestryTooltipCallback implements ITooltipCallback<ItemStack> {
 		}
 	}
 	
+	public void clearTooltip(){
+		tooltips.clear();
+	}
+	
 	public void addChanceTooltip(int index, float chance) {
 		if (chance <= 0.0F) {
 			tooltips.get(index).add(TextFormatting.GRAY + String.format(Translator.translateToLocal("forestry.jei.chance"), Translator.translateToLocal("forestry.jei.chance.never")));

@@ -70,6 +70,7 @@ public class SqueezerRecipeCategory extends ForestryRecipeCategory {
 
 		guiItemStacks.init(craftOutputSlot, false, 87, 43);
 		guiItemStacks.set(craftOutputSlot, wrapper.getOutputs());
+		tooltip.clearTooltip();
 		tooltip.addChanceTooltip(craftOutputSlot, chance);
 		setIngredients(guiItemStacks, wrapper.getInputs());
 

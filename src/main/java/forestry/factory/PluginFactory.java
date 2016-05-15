@@ -268,8 +268,6 @@ public class PluginFactory extends BlankForestryPlugin {
 		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Items.CARROT)}, Fluids.JUICE.getFluid(appleJuiceAmount),
 				PluginCore.items.mulch.getItemStack(), appleMulchAmount);
 
-		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Items.CARROT)}, Fluids.JUICE.getFluid(appleJuiceAmount),
-				PluginCore.items.mulch.getItemStack(), appleMulchAmount);
 		int seedOilAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed");
 		FluidStack seedOil = Fluids.SEED_OIL.getFluid(seedOilAmount);
 		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Items.WHEAT_SEEDS)}, seedOil);
