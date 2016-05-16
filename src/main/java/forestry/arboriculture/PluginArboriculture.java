@@ -62,7 +62,6 @@ import forestry.arboriculture.tiles.TileFruitPod;
 import forestry.arboriculture.tiles.TileLeaves;
 import forestry.arboriculture.tiles.TileSapling;
 import forestry.core.PluginCore;
-import forestry.core.blocks.BlockTypeCoreTesr;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
 import forestry.core.genetics.alleles.AllelePlantType;
@@ -312,12 +311,6 @@ public class PluginArboriculture extends BlankForestryPlugin {
 		}
 
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FACTORY)) {
-			// Treealyzer
-			RecipeManagers.carpenterManager.addRecipe(100, Fluids.WATER.getFluid(2000), null, items.treealyzer.getItemStack(), "X#X", "X#X", "RDR",
-					'#', "paneGlass",
-					'X', "ingotCopper",
-					'R', "dustRedstone",
-					'D', "gemDiamond");
 
 			// SQUEEZER RECIPES
 			int seedOilMultiplier = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed");
@@ -342,15 +335,6 @@ public class PluginArboriculture extends BlankForestryPlugin {
 				"#  ",
 				'B', "ingotBronze",
 				'#', "stickWood");
-
-		// ANALYZER
-		RecipeUtil.addRecipe(PluginCore.blocks.core.get(BlockTypeCoreTesr.ANALYZER),
-				"XTX",
-				" Y ",
-				"X X",
-				'Y', PluginCore.items.sturdyCasing,
-				'T', items.treealyzer,
-				'X', "ingotBronze");
 
 		RecipeUtil.addRecipe(blocks.arboriculture.get(BlockTypeArboricultureTesr.ARB_CHEST),
 				" # ",

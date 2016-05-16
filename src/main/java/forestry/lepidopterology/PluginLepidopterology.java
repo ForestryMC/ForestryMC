@@ -41,11 +41,9 @@ import forestry.api.genetics.IAllele;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.IAlleleButterflyCocoon;
 import forestry.api.lepidopterology.IAlleleButterflySpecies;
-import forestry.api.recipes.RecipeManagers;
 import forestry.core.PluginCore;
 import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
-import forestry.core.fluids.Fluids;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.EntityUtil;
 import forestry.core.utils.ItemStackUtil;
@@ -262,10 +260,6 @@ public class PluginLepidopterology extends BlankForestryPlugin {
 	@Override
 	public void registerRecipes() {
 		CraftingManager.getInstance().getRecipeList().add(new MatingRecipe());
-
-		RecipeManagers.carpenterManager.addRecipe(100, Fluids.WATER.getFluid(2000), null, items.flutterlyzer.getItemStack(),
-				"X#X", "X#X", "RDR", '#', "paneGlass", 'X', "ingotBronze", 'R',
-				"dustRedstone", 'D', "gemDiamond");
 
 		RecipeUtil.addRecipe(blocks.lepidopterology.get(BlockTypeLepidopterologyTesr.LEPICHEST),
 				" # ",

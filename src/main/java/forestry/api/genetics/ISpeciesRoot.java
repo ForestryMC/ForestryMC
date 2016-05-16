@@ -178,4 +178,6 @@ public interface ISpeciesRoot {
 	 * @return {@link IChromosomeType} which is the "key" for this species class, usually the species chromosome.
 	 */
 	IChromosomeType getKaryotypeKey();
+
+	IAlyzer getAlyzer();
 }

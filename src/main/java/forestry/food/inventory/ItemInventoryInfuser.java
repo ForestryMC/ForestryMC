@@ -28,7 +28,7 @@ public class ItemInventoryInfuser extends ItemInventory {
 	}
 
 	@Override
-	public void onSlotClick(EntityPlayer player) {
+	public void onSlotClick(int slotIndex, EntityPlayer player) {
 
 		// Need input
 		ItemStack input = getStackInSlot(inputSlot);

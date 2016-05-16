@@ -56,7 +56,7 @@ public class ItemInventoryHabitatLocator extends ItemInventory implements IError
 	}
 
 	@Override
-	public void onSlotClick(EntityPlayer player) {
+	public void onSlotClick(int slotIndex, EntityPlayer player) {
 
 		if (getStackInSlot(SLOT_ANALYZED) != null) {
 			if (locatorLogic.isBiomeFound()) {

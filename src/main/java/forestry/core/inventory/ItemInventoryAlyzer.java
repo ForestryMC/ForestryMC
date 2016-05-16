@@ -10,25 +10,23 @@
  ******************************************************************************/
 package forestry.core.inventory;
 
+import java.util.Collections;
+import java.util.List;
+
 import com.google.common.collect.ImmutableSet;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-
-import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorSource;
 import forestry.api.core.IErrorState;
-import forestry.api.genetics.IBreedingTracker;
-import forestry.api.genetics.IIndividual;
+import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.IAlyzer;
 import forestry.api.genetics.ISpeciesRoot;
-import forestry.apiculture.PluginApiculture;
-import forestry.apiculture.items.ItemRegistryApiculture;
 import forestry.core.errors.EnumErrorCode;
-import forestry.plugins.ForestryPluginUids;
+import forestry.core.gui.IHintSource;
+import forestry.core.utils.GeneticsUtil;
 
-public abstract class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
+public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource, IHintSource {
 	public static final int SLOT_SPECIMEN = 0;
 	public static final int SLOT_ANALYZE_1 = 1;
 	public static final int SLOT_ANALYZE_2 = 2;
@@ -37,77 +35,43 @@ public abstract class ItemInventoryAlyzer extends ItemInventory implements IErro
 	public static final int SLOT_ANALYZE_5 = 6;
 	public static final int SLOT_ENERGY = 5;
 
-	private final ISpeciesRoot speciesRoot;
-
-	public ItemInventoryAlyzer(ISpeciesRoot speciesRoot, EntityPlayer player, ItemStack itemstack) {
+	public IAlyzer alyzer;
+	
+	public ItemInventoryAlyzer(EntityPlayer player, ItemStack itemstack, IAlyzer alyzer) {
 		super(player, 7, itemstack);
-		this.speciesRoot = speciesRoot;
+		
+		this.alyzer = alyzer;
 	}
-
+	
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-		if (slotIndex == SLOT_ENERGY) {
-			return isEnergy(itemStack);
+		ISpeciesRoot speciesRoot;
+		if(!hasSpecimen() && slotIndex == SLOT_SPECIMEN){
+			ItemStack ersatz = GeneticsUtil.convertSaplingToGeneticEquivalent(itemStack);
+			speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(ersatz);
+		}else{
+			speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(getSpecimen());
 		}
-
-		if (!speciesRoot.isMember(itemStack)) {
-			return false;
+		if(speciesRoot != null){
+			return speciesRoot.getAlyzer().canSlotAccept(this, slotIndex, itemStack);
 		}
-
-		// only allow one slot to be used at a time
-		if (hasSpecimen() && getStackInSlot(slotIndex) == null) {
-			return false;
-		}
-
-		if (slotIndex == SLOT_SPECIMEN) {
-			return true;
-		}
-
-		IIndividual individual = speciesRoot.getMember(itemStack);
-		return individual.isAnalyzed();
+		return alyzer.canSlotAccept(this, slotIndex, itemStack);
 	}
-
+	
 	@Override
-	public void onSlotClick(EntityPlayer player) {
-		// Source slot to analyze empty
-		ItemStack specimen = getStackInSlot(SLOT_SPECIMEN);
-		if (specimen == null) {
-			return;
+	public void onSlotClick(int slotIndex, EntityPlayer player) {
+		ISpeciesRoot speciesRoot;
+		if(hasSpecimen() && AlleleManager.alleleRegistry.getSpeciesRoot(getSpecimen()) == null && slotIndex == SLOT_SPECIMEN){
+			ItemStack ersatz = GeneticsUtil.convertSaplingToGeneticEquivalent(getStackInSlot(slotIndex));
+			speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(ersatz);
+		}else{
+			speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(getSpecimen());
 		}
-
-		IIndividual individual = speciesRoot.getMember(specimen);
-		// No individual, abort
-		if (individual == null) {
-			return;
+		if(speciesRoot != null){
+			speciesRoot.getAlyzer().onSlotClick(this, slotIndex, player);
+		}else{
+			alyzer.onSlotClick(this, slotIndex, player);
 		}
-
-		// Analyze if necessary
-		if (!individual.isAnalyzed()) {
-
-			if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.APICULTURE)) {
-				// Requires energy
-				if (!isEnergy(getStackInSlot(SLOT_ENERGY))) {
-					return;
-				}
-			}
-
-			individual.analyze();
-			if (player != null) {
-				IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(player.worldObj, player.getGameProfile());
-				breedingTracker.registerSpecies(individual.getGenome().getPrimary());
-				breedingTracker.registerSpecies(individual.getGenome().getSecondary());
-			}
-
-			NBTTagCompound nbttagcompound = new NBTTagCompound();
-			individual.writeToNBT(nbttagcompound);
-			specimen.setTagCompound(nbttagcompound);
-
-			// Decrease energy
-			decrStackSize(SLOT_ENERGY, 1);
-		}
-
-		setInventorySlotContents(SLOT_ANALYZE_1, specimen);
-		setInventorySlotContents(SLOT_SPECIMEN, null);
 	}
 
 	@Override
@@ -116,30 +80,17 @@ public abstract class ItemInventoryAlyzer extends ItemInventory implements IErro
 
 		if (!hasSpecimen()) {
 			errorStates.add(EnumErrorCode.NO_SPECIMEN);
-		}
-
-		if (!isEnergy(getStackInSlot(SLOT_ENERGY))) {
-			errorStates.add(EnumErrorCode.NO_HONEY);
+		}else{
+			ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(getSpecimen());
+			if (speciesRoot != null && !speciesRoot.getAlyzer().isAlyzingFuel(getStackInSlot(SLOT_ENERGY))) {
+				errorStates.add(EnumErrorCode.NO_HONEY);
+			}
 		}
 
 		return errorStates.build();
 	}
-
-	private static boolean isEnergy(ItemStack itemstack) {
-		if (itemstack == null || itemstack.stackSize <= 0) {
-			return false;
-		}
-
-		ItemRegistryApiculture beeItems = PluginApiculture.items;
-		if (beeItems == null) {
-			return false;
-		}
-
-		Item item = itemstack.getItem();
-		return beeItems.honeyDrop == item || beeItems.honeydew == item;
-	}
-
-	private boolean hasSpecimen() {
+	
+	public ItemStack getSpecimen() {
 		for (int i = SLOT_SPECIMEN; i <= SLOT_ANALYZE_5; i++) {
 			if (i == SLOT_ENERGY) {
 				continue;
@@ -147,9 +98,26 @@ public abstract class ItemInventoryAlyzer extends ItemInventory implements IErro
 
 			ItemStack itemStack = getStackInSlot(i);
 			if (itemStack != null) {
-				return true;
+				return itemStack;
 			}
 		}
-		return false;
+		return null;
+	}
+
+	public boolean hasSpecimen() {
+		return getSpecimen() != null;
+	}
+	
+	/* IHintSource */
+	@Override
+	public List<String> getHints() {
+		if(hasSpecimen()){
+			ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(getSpecimen());
+			IAlyzer alyzer = speciesRoot.getAlyzer();
+			if(alyzer instanceof IHintSource){
+				return ((IHintSource)alyzer).getHints();
+			}
+		}
+		return Collections.emptyList();
 	}
 }

@@ -149,7 +149,7 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 		return Integer.toString(i, Character.MAX_RADIX);
 	}
 
-	public void onSlotClick(EntityPlayer player) {
+	public void onSlotClick(int slotIndex, EntityPlayer player) {
 	}
 
 	@Override

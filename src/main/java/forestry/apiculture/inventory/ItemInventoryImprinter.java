@@ -94,7 +94,7 @@ public class ItemInventoryImprinter extends ItemInventory {
 	}
 
 	@Override
-	public void onSlotClick(EntityPlayer player) {
+	public void onSlotClick(int slotIndex, EntityPlayer player) {
 		ItemStack specimen = getStackInSlot(specimenSlot);
 		if (specimen == null) {
 			return;

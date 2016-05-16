@@ -257,6 +257,35 @@ public class PluginCore extends BlankForestryPlugin {
 
 		// / WRENCH
 		RecipeUtil.addRecipe(items.wrench, "# #", " # ", " # ", '#', "ingotBronze");
+		
+		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FACTORY)) {
+			// / CARPENTER
+			RecipeManagers.carpenterManager.addRecipe(100, Fluids.WATER.getFluid(2000), null, PluginCore.items.portableAlyzer.getItemStack(),
+					"X#X", "X#X", "RDR",
+					'#', "paneGlass",
+					'X', "ingotTin",
+					'R', "dustRedstone",
+					'D', "gemDiamond");
+		}else{
+			// Portable ANALYZER
+			RecipeUtil.addRecipe(PluginCore.items.portableAlyzer.getItemStack(),
+					"X#X",
+					"X#X",
+					"RDR",
+					'#', "paneGlass",
+					'X', "ingotTin",
+					'R', "dustRedstone",
+					'D', "gemDiamond");
+		}
+		
+		// ANALYZER
+		RecipeUtil.addRecipe(PluginCore.blocks.core.get(BlockTypeCoreTesr.ANALYZER),
+				"XTX",
+				" Y ",
+				"X X",
+				'Y', PluginCore.items.sturdyCasing,
+				'T', PluginCore.items.portableAlyzer,
+				'X', "ingotBronze");
 
 		// Manure and Fertilizer
 		int compostWheatAmount = ForestryAPI.activeMode.getIntegerSetting("recipe.output.compost.wheat");

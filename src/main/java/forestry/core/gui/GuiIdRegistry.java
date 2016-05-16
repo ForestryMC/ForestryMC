@@ -17,7 +17,6 @@ import java.util.Map;
 
 import forestry.apiculture.entities.EntityMinecartApiary;
 import forestry.apiculture.entities.EntityMinecartBeehouse;
-import forestry.apiculture.items.ItemBeealyzer;
 import forestry.apiculture.items.ItemHabitatLocator;
 import forestry.apiculture.items.ItemImprinter;
 import forestry.apiculture.multiblock.TileAlveary;
@@ -25,7 +24,7 @@ import forestry.apiculture.multiblock.TileAlvearyHygroregulator;
 import forestry.apiculture.multiblock.TileAlvearySieve;
 import forestry.apiculture.tiles.TileApiary;
 import forestry.apiculture.tiles.TileBeeHouse;
-import forestry.arboriculture.items.ItemTreealyzer;
+import forestry.core.items.ItemAlyzer;
 import forestry.core.items.ItemSolderingIron;
 import forestry.core.tiles.TileAnalyzer;
 import forestry.core.tiles.TileEscritoire;
@@ -47,7 +46,6 @@ import forestry.factory.tiles.TileWorktable;
 import forestry.farming.tiles.TileFarm;
 import forestry.food.items.ItemInfuser;
 import forestry.greenhouse.tiles.TileGreenhouse;
-import forestry.lepidopterology.items.ItemFlutterlyzer;
 import forestry.mail.items.ItemCatalogue;
 import forestry.mail.items.ItemLetter;
 import forestry.mail.tiles.TileMailbox;
@@ -101,15 +99,13 @@ public class GuiIdRegistry {
 		registerGuiHandlers(GuiType.Item, Arrays.asList(
 				ItemBackpack.class,
 				ItemBackpackNaturalist.class,
-				ItemBeealyzer.class,
+				ItemAlyzer.class,
 				ItemCatalogue.class,
-				ItemFlutterlyzer.class,
 				ItemHabitatLocator.class,
 				ItemImprinter.class,
 				ItemInfuser.class,
 				ItemLetter.class,
-				ItemSolderingIron.class,
-				ItemTreealyzer.class
+				ItemSolderingIron.class
 		));
 
 		registerGuiHandlers(GuiType.Entity, Arrays.asList(

@@ -99,7 +99,7 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 	}
 
 	@Override
-	public void onSlotClick(EntityPlayer player) {
+	public void onSlotClick(int slotIndex, EntityPlayer player) {
 		if (layouts.getCurrent() == CircuitRegistry.DUMMY_LAYOUT) {
 			return;
 		}

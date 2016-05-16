@@ -103,7 +103,6 @@ import forestry.apiculture.worldgen.HiveRegistry;
 import forestry.core.ISaveEventHandler;
 import forestry.core.PluginCore;
 import forestry.core.PluginFluids;
-import forestry.core.blocks.BlockTypeCoreTesr;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
@@ -603,12 +602,6 @@ public class PluginApiculture extends BlankForestryPlugin {
 			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{phosphor, new ItemStack(Blocks.DIRT)}, Fluids.LAVA.getFluid(1600));
 
 			// / CARPENTER
-			RecipeManagers.carpenterManager.addRecipe(100, Fluids.WATER.getFluid(2000), null, items.beealyzer.getItemStack(),
-					"X#X", "X#X", "RDR",
-					'#', "paneGlass",
-					'X', "ingotTin",
-					'R', "dustRedstone",
-					'D', "gemDiamond");
 			RecipeManagers.carpenterManager.addRecipe(50, Fluids.FOR_HONEY.getFluid(500), null, PluginCore.items.craftingMaterial.getScentedPaneling(),
 					" J ", "###", "WPW",
 					'#', "plankWood",
@@ -726,15 +719,6 @@ public class PluginApiculture extends BlankForestryPlugin {
 			// / FERMENTER
 			RecipeManagers.fermenterManager.addRecipe(items.honeydew.getItemStack(), 500, 1.0f, Fluids.SHORT_MEAD.getFluid(1), Fluids.FOR_HONEY.getFluid(1));
 		}
-
-		// ANALYZER
-		RecipeUtil.addRecipe(PluginCore.blocks.core.get(BlockTypeCoreTesr.ANALYZER),
-				"XTX",
-				" Y ",
-				"X X",
-				'Y', PluginCore.items.sturdyCasing,
-				'T', items.beealyzer,
-				'X', "ingotBronze");
 
 		RecipeUtil.addRecipe(blocks.apiculture.get(BlockTypeApiculture.APIARY),
 				"XXX",

@@ -1,7 +1,7 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "forestry:items/beealyzer"
+        "layer0": "forestry:items/portablealyzer"
     },
     "display": {
         "thirdperson": {

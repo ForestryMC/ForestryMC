@@ -26,8 +26,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.util.ResourceLocation;
 
-import net.minecraftforge.fml.common.Optional;
-
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.core.IErrorSource;
 import forestry.core.access.IRestrictedAccess;
@@ -44,7 +42,6 @@ import forestry.core.render.ForestryResource;
 import forestry.core.tiles.IClimatised;
 import forestry.core.tiles.IPowerHandler;
 
-@Optional.Interface(iface = "codechicken.nei.api.INEIGuiHandler", modid = "NotEnoughItems")
 public abstract class GuiForestry<C extends Container, I extends IInventory> extends GuiContainer {
 	protected final I inventory;
 	protected final C container;

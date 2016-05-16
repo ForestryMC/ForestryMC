@@ -53,7 +53,9 @@ public abstract class ContainerItemInventory<I extends ItemInventory> extends Co
 	@Override
 	public ItemStack slotClick(int slotId, int dragType_or_button, ClickType clickTypeIn, EntityPlayer player) {
 		ItemStack result = super.slotClick(slotId, dragType_or_button, clickTypeIn, player);
-		inventory.onSlotClick(player);
+		if(slotId != -999){
+			inventory.onSlotClick(inventorySlots.get(slotId).getSlotIndex(), player);
+		}
 		return result;
 	}
 

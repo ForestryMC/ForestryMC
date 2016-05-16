@@ -11,7 +11,8 @@
 package forestry.core.items;
 
 import net.minecraft.item.ItemStack;
-
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.api.core.Tabs;
@@ -28,6 +29,9 @@ public class ItemRegistryCore extends ItemRegistry {
 
 	/* Research */
 	public final ItemResearchNote researchNote;
+	
+	/* Alyzer */
+	public final ItemAlyzer portableAlyzer;
 
 	/* Ingots */
 	public final ItemForestry ingotCopper;
@@ -93,6 +97,8 @@ public class ItemRegistryCore extends ItemRegistry {
 		OreDictionary.registerOre("gemApatite", apatite);
 
 		researchNote = registerItem(new ItemResearchNote(), "researchNote");
+		
+		portableAlyzer = registerItem(new ItemAlyzer(), "portableAlyzer");
 
 		ingotCopper = registerItem(new ItemForestry(), "ingotCopper");
 		OreDictionary.registerOre("ingotCopper", ingotCopper);

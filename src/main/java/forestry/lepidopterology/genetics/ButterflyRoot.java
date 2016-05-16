@@ -29,6 +29,7 @@ import com.mojang.authlib.GameProfile;
 
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
+import forestry.api.genetics.IAlyzer;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
@@ -319,4 +320,9 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 		return EnumButterflyChromosome.SPECIES;
 	}
 
+	@Override
+	public IAlyzer getAlyzer() {
+		return new Flutterlyzer();
+	}
+	
 }

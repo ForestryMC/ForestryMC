@@ -28,7 +28,6 @@ public class ItemRegistryApiculture extends ItemRegistry {
 	public final ItemBeeGE beeLarvaeGE;
 
 	public final ItemHabitatLocator habitatLocator;
-	public final ItemBeealyzer beealyzer;
 	public final ItemImprinter imprinter;
 
 	public final ItemMinecartBeehouse minecartBeehouse;
@@ -60,7 +59,6 @@ public class ItemRegistryApiculture extends ItemRegistry {
 		beePrincessGE = registerItem(new ItemBeeGE(EnumBeeType.PRINCESS), "beePrincessGE");
 		beeLarvaeGE = registerItem(new ItemBeeGE(EnumBeeType.LARVAE), "beeLarvaeGE");
 		
-		beealyzer = registerItem(new ItemBeealyzer(), "beealyzer");
 		habitatLocator = registerItem(new ItemHabitatLocator(), "habitatLocator");
 		imprinter = registerItem(new ItemImprinter(), "imprinter");
 		
