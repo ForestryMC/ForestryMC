@@ -59,6 +59,18 @@ public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource, 
 	}
 	
 	@Override
+	public void setInventorySlotContents(int slotIndex, ItemStack itemStack) {
+		if(!hasSpecimen() && slotIndex == SLOT_SPECIMEN){
+			ItemStack ersatz = GeneticsUtil.convertSaplingToGeneticEquivalent(itemStack);
+			if(ersatz != null){
+				super.setInventorySlotContents(slotIndex, ersatz);
+				return;
+			}
+		}
+		super.setInventorySlotContents(slotIndex, itemStack);
+	}
+	
+	@Override
 	public void onSlotClick(int slotIndex, EntityPlayer player) {
 		ISpeciesRoot speciesRoot;
 		if(hasSpecimen() && AlleleManager.alleleRegistry.getSpeciesRoot(getSpecimen()) == null && slotIndex == SLOT_SPECIMEN){

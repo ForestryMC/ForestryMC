@@ -43,9 +43,11 @@ public class ModelFarmBlock extends ModelBlockDefault<BlockFarm> {
 		TileFarm farm = TileUtil.getTile(world, pos, TileFarm.class);
 
 		EnumFarmBlockTexture texture = EnumFarmBlockTexture.BRICK;
+		TextureAtlasSprite[] overlayTextures = getOverlaySprites(EnumFarmBlockType.PLAIN);
 		
 		if(farm != null){
 			texture = farm.getFarmBlockTexture();
+			overlayTextures = getOverlaySprites(farm.getFarmBlockType());
 		}
 		
 		TextureAtlasSprite[] textures = getSprites(texture);
@@ -53,7 +55,7 @@ public class ModelFarmBlock extends ModelBlockDefault<BlockFarm> {
 		// Add the plain block.
 		baker.addBlockModel(blockFarm, Block.FULL_BLOCK_AABB, pos, textures, 0);
 		// Add the overlay block.
-		baker.addBlockModel(blockFarm, Block.FULL_BLOCK_AABB, pos, getOverlaySprites(farm.getFarmBlockType()), 0);
+		baker.addBlockModel(blockFarm, Block.FULL_BLOCK_AABB, pos, overlayTextures, 0);
 		
 		// Set the particle sprite
 		baker.setParticleSprite(textures[0]);
