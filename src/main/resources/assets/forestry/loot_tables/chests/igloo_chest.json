@@ -6,6 +6,7 @@
             "entries": [
                 {
                     "type": "item",
+                    "entryName": "bee_steadfast_drone",
                     "name": "forestry:beeDroneGE",
                     "functions": [
                         {
@@ -17,6 +18,7 @@
                 },
                 {
                     "type": "item",
+                    "entryName": "bee_wintry_drone",
                     "name": "forestry:beeDroneGE",
                     "functions": [
                         {

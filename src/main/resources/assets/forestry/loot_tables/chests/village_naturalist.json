@@ -2,7 +2,7 @@
     "pools": [
         {
             "name": "forestry_apiculture_items",
-            "rolls": 3,
+            "rolls": 4,
             "entries": [
                 {
                     "type": "item",
@@ -35,7 +35,7 @@
                 {
                     "type": "item",
                     "name": "forestry:scoop",
-                    "weight": 1
+                    "weight": 5
                 },
                 {
                     "type": "item",
@@ -46,10 +46,11 @@
         },
         {
             "name": "forestry_apiculture_bees",
-            "rolls": 2,
+            "rolls": 3,
             "entries": [
                 {
                     "type": "item",
+                    "entryName": "bee_forest_princess",
                     "name": "forestry:beePrincessGE",
                     "functions": [
                         {
@@ -61,6 +62,7 @@
                 },
                 {
                     "type": "item",
+                    "entryName": "bee_common_drone",
                     "name": "forestry:beeDroneGE",
                     "functions": [
                         {
@@ -72,6 +74,7 @@
                 },
                 {
                     "type": "item",
+                    "entryName": "bee_meadows_princess",
                     "name": "forestry:beePrincessGE",
                     "functions": [
                         {
@@ -89,7 +92,7 @@
         },
         {
             "name": "forestry_arboriculture_items",
-            "rolls": 2,
+            "rolls": 3,
             "entries": [
                 {
                     "type": "item",
@@ -98,6 +101,7 @@
                 },
                 {
                     "type": "item",
+                    "entryName": "sapling_lime",
                     "name": "forestry:sapling",
                     "functions": [
                         {
@@ -116,6 +120,7 @@
                 },
                 {
                     "type": "item",
+                    "entryName": "sapling_cherry",
                     "name": "forestry:sapling",
                     "functions": [
                         {
@@ -134,6 +139,7 @@
                 },
                 {
                     "type": "item",
+                    "entryName": "sapling_larch",
                     "name": "forestry:sapling",
                     "functions": [
                         {
@@ -152,6 +158,7 @@
                 },
                 {
                     "type": "item",
+                    "entryName": "sapling_teak",
                     "name": "forestry:sapling",
                     "functions": [
                         {
@@ -167,6 +174,7 @@
                 },
                 {
                     "type": "item",
+                    "entryName": "sapling_padauk",
                     "name": "forestry:sapling",
                     "functions": [
                         {

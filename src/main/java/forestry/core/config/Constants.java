@@ -50,7 +50,7 @@ public class Constants implements IForestryConstants {
 	public static final int ID_VILLAGER_LUMBERJACK = 81;
 
 	// Village Loot Key
-	public static final ResourceLocation VILLAGE_NATURALIST_LOOT_KEY = new ResourceLocation(RESOURCE_ID, "village_naturalist");
+	public static final ResourceLocation VILLAGE_NATURALIST_LOOT_KEY = new ResourceLocation(RESOURCE_ID, "chests/village_naturalist");
 
 	// Item Ids
 

@@ -51,6 +51,7 @@
             "entries": [
                 {
                     "type": "item",
+                    "entryName": "bee_steadfast_drone",
                     "name": "forestry:beeDroneGE",
                     "functions": [
                         {

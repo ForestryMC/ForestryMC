@@ -30,6 +30,7 @@
             "entries": [
                 {
                     "type": "item",
+                    "entryName": "bee_steadfast_drone",
                     "name": "forestry:beeDroneGE",
                     "functions": [
                         {
@@ -48,6 +49,7 @@
                 },
                 {
                     "type": "item",
+                    "entryName": "bee_steadfast_princess",
                     "name": "forestry:beePrincessGE",
                     "functions": [
                         {
@@ -59,6 +61,7 @@
                 },
                 {
                     "type": "item",
+                    "entryName": "bee_ended_drone",
                     "name": "forestry:beeDroneGE",
                     "functions": [
                         {
@@ -95,6 +98,6 @@
                     "weight": 1
                 }
             ]
-        },
+        }
     ]
 }
