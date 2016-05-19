@@ -195,12 +195,12 @@ public abstract class BlockArbSlab extends BlockSlab implements IWoodTyped, IIte
 
 	@Override
 	public int getFlammability(IBlockAccess world, BlockPos pos, EnumFacing face) {
-		return 20;
+		return fireproof ? 0 : 20;
 	}
 
 	@Override
 	public int getFireSpreadSpeed(IBlockAccess world, BlockPos pos, EnumFacing face) {
-		return 5;
+		return fireproof ? 0 : 5;
 	}
 
 	@Nonnull
