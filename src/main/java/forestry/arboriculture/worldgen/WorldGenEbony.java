@@ -39,7 +39,7 @@ public class WorldGenEbony extends WorldGenTree {
 					trunksgenerated++;
 				} else {
 					for (int i = 0; i < 1; i++) {
-						clearBlock(world, new BlockPos(x, i, z));
+						world.setBlockToAir(new BlockPos(x, i, z));
 					}
 				}
 			}

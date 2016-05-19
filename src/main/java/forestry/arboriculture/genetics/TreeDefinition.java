@@ -15,6 +15,8 @@ import java.util.Arrays;
 import java.util.Locale;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLog;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -49,7 +51,6 @@ import forestry.arboriculture.genetics.alleles.AlleleGrowth;
 import forestry.arboriculture.models.ModelProviderGermling;
 import forestry.arboriculture.models.ModelProviderGermlingVanilla;
 import forestry.arboriculture.tiles.TileLeaves;
-import forestry.arboriculture.worldgen.BlockTypeLog;
 import forestry.arboriculture.worldgen.WorldGenAcacia;
 import forestry.arboriculture.worldgen.WorldGenAcaciaVanilla;
 import forestry.arboriculture.worldgen.WorldGenBalsa;
@@ -1026,11 +1027,9 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 		} else {
 			AlleleBoolean fireproofAllele = (AlleleBoolean) genome.getActiveAllele(EnumTreeChromosome.FIREPROOF);
 			boolean fireproof = fireproofAllele.getValue();
-			ItemStack log = TreeManager.woodAccess.getLog(woodType, fireproof);
-
-			BlockTypeLog logBlock = new BlockTypeLog(log);
-			logBlock.setDirection(facing);
-			logBlock.setBlock(world, pos);
+			IBlockState logBlock = TreeManager.woodAccess.getLogBlock(woodType, fireproof);
+			logBlock.withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.fromFacingAxis(facing.getAxis()));
+			world.setBlockState(pos, logBlock);
 		}
 	}
 

@@ -17,8 +17,8 @@ import java.util.Random;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
@@ -27,8 +27,6 @@ import forestry.api.world.ITreeGenData;
 import forestry.arboriculture.tiles.TileTreeContainer;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.BlockUtil;
-import forestry.core.worldgen.BlockType;
-import forestry.core.worldgen.BlockTypeVoid;
 import forestry.core.worldgen.WorldGenBase;
 
 public abstract class WorldGenArboriculture extends WorldGenBase {
@@ -62,8 +60,6 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 	private static final ITreeBlockType vineWest = new TreeBlockType(Blocks.VINE, 8);
 	private static final ITreeBlockType vineEast = new TreeBlockType(Blocks.VINE, 2);
 	private static final int minPodHeight = 3;
-
-	private static final BlockType air = new BlockTypeVoid();
 
 	protected final ITreeGenData tree;
 	private BlockPos startPos;
@@ -320,10 +316,6 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 			return true;
 		}
 		return false;
-	}
-
-	protected final void clearBlock(World world, BlockPos pos) {
-		air.setBlock(world, startPos.add(pos));
 	}
 
 	protected final boolean addWood(World world, BlockPos pos, EnumReplaceMode replace) {
