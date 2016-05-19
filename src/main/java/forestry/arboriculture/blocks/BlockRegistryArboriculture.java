@@ -201,7 +201,11 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 	}
 
 	public ItemStack getDecorativeLeaves(String speciesUid) {
-		return speciesToLeavesDecorative.get(speciesUid);
+		ItemStack itemStack = speciesToLeavesDecorative.get(speciesUid);
+		if (itemStack == null) {
+			return null;
+		}
+		return itemStack.copy();
 	}
 
 	public BlockFruitPod getFruitPod(IAlleleFruit fruit) {
