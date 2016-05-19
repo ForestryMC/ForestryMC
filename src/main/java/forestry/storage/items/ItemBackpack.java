@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.storage.items;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Locale;
 
@@ -258,7 +259,12 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 		}
 	}
 
+	@Nullable
 	public static BackpackMode getMode(ItemStack backpack) {
+		if (!(backpack.getItem() instanceof ItemBackpack)) {
+			return null;
+		}
+
 		int meta = backpack.getItemDamage();
 
 		if (meta >= 3) {
@@ -274,7 +280,9 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 
 	@Override
 	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
-		return getMode(oldStack) != getMode(newStack);
+		Item oldItem = oldStack.getItem();
+		Item newItem = newStack.getItem();
+		return oldItem != newItem || getMode(oldStack) != getMode(newStack);
 	}
 
 	@SuppressWarnings("incomplete-switch")
