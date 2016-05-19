@@ -41,7 +41,7 @@ public class PacketGuiUpdateEntity extends PacketEntityUpdate implements IForest
 
 	@Override
 	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
-		Entity entity = getTarget(Proxies.common.getRenderWorld());
+		Entity entity = getTarget(player.getEntityWorld());
 		if (entity instanceof IStreamableGui) {
 			((IStreamableGui) entity).readGuiData(data);
 		}

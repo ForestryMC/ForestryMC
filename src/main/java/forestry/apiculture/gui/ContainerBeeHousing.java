@@ -24,7 +24,7 @@ public class ContainerBeeHousing extends ContainerTile<TileBeeHousingBase> imple
 		ContainerBeeHelper.addSlots(this, tile, hasFrames);
 	}
 
-	private int beeProgress = 0;
+	private int beeProgress = -1;
 
 	@Override
 	public void detectAndSendChanges() {

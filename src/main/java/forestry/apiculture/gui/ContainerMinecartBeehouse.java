@@ -23,7 +23,7 @@ public class ContainerMinecartBeehouse extends ContainerEntity<EntityMinecartBee
 		ContainerBeeHelper.addSlots(this, entity, hasFrames);
 	}
 
-	private int beeProgress = 0;
+	private int beeProgress = -1;
 
 	@Override
 	public void detectAndSendChanges() {
