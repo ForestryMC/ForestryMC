@@ -152,7 +152,7 @@ public abstract class BlockArbSlab extends BlockSlab implements IWoodTyped, IIte
 	@Override
 	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
 		EnumWoodType woodType = state.getValue(getVariant());
-		ItemStack slab = TreeManager.woodItemAccess.getSlab(woodType, isFireproof());
+		ItemStack slab = TreeManager.woodAccess.getSlab(woodType, isFireproof());
 		return slab.getItem();
 	}
 
@@ -160,7 +160,7 @@ public abstract class BlockArbSlab extends BlockSlab implements IWoodTyped, IIte
 	@Override
 	public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state) {
 		EnumWoodType woodType = state.getValue(getVariant());
-		ItemStack slab = TreeManager.woodItemAccess.getSlab(woodType, isFireproof());
+		ItemStack slab = TreeManager.woodAccess.getSlab(woodType, isFireproof());
 		return new ItemStack(slab.getItem(), 1, getMetaFromState(state));
 	}
 	
@@ -181,7 +181,7 @@ public abstract class BlockArbSlab extends BlockSlab implements IWoodTyped, IIte
 	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List<ItemStack> list) {
 		if (!isDouble()) {
 			for (EnumWoodType woodType : getVariant().getAllowedValues()) {
-				list.add(TreeManager.woodItemAccess.getSlab(woodType, fireproof));
+				list.add(TreeManager.woodAccess.getSlab(woodType, fireproof));
 			}
 		}
 	}

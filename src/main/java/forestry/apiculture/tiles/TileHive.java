@@ -150,7 +150,7 @@ public class TileHive extends TileEntity implements ITickable, IHiveTile, IActiv
 			if (beeGenome == null) {
 				beeGenome = BeeDefinition.FOREST.getGenome();
 			}
-			this.containedBee = BeeManager.beeRoot.getBee(worldObj, beeGenome);
+			this.containedBee = BeeManager.beeRoot.getBee(beeGenome);
 		}
 		return this.containedBee;
 	}

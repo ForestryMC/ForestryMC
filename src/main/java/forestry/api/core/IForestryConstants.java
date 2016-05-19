@@ -14,12 +14,12 @@ public interface IForestryConstants {
 	/**
 	 * @return The villager ID for the Apiarist Villager.
 	 */
-	int getApicultureVillagerID();
+	String getApicultureVillagerID();
 	
 	/**
 	 * @return The villager ID for the Arborist Villager.
 	 */
-	int getArboricultureVillagerID();
+	String getArboricultureVillagerID();
 	
 	/**
 	 * @return The {@link LootTableLoadEvent} key for adding items to the Forestry Villager chest.

@@ -123,6 +123,12 @@ public interface IAlleleRegistry {
 	 */
 	Collection<IAllele> getRegisteredAlleles(IChromosomeType type);
 
+	/**
+	 * @return unmodifiable collection of all the known chromosome types.
+	 * @since Forestry 5.0
+	 */
+	Collection<IChromosomeType> getChromosomeTypes(IAllele allele);
+
 	/* CLASSIFICATIONS */
 
 	/**

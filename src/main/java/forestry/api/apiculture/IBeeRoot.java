@@ -81,7 +81,7 @@ public interface IBeeRoot extends ISpeciesRoot {
 	 *            Valid {@link IBeeGenome}
 	 * @return {@link IBee} from the passed genome
 	 */
-	IBee getBee(World world, IBeeGenome genome);
+	IBee getBee(IBeeGenome genome);
 
 	/**
 	 * Creates an IBee suitable for a queen containing the necessary second genome for the mate.

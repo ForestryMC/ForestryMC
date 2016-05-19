@@ -23,4 +23,12 @@ public interface IAlleleSpeciesBuilder {
 
 	/** Uncounted species do not count toward total species discovered. */
 	IAlleleSpeciesBuilder setIsNotCounted();
+
+	/**
+	 * Manually the genetic complexity.
+	 * If this is not set, the complexity is based on the number of breeding steps to reach this species.
+	 *
+	 * @see forestry.api.genetics.IAlleleSpecies#getComplexity()
+	 */
+	void setComplexity(int complexity);
 }

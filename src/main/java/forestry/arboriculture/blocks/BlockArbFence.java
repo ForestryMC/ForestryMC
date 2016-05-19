@@ -206,7 +206,7 @@ public abstract class BlockArbFence extends BlockFence implements IWoodTyped, II
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
 		for (EnumWoodType woodType : getVariant().getAllowedValues()) {
-			list.add(TreeManager.woodItemAccess.getFence(woodType, fireproof));
+			list.add(TreeManager.woodAccess.getFence(woodType, fireproof));
 		}
 	}
 

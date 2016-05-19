@@ -138,7 +138,7 @@ public abstract class BlockArbPlanks extends Block implements IWoodTyped, IState
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
 		for (EnumWoodType woodType : getVariant().getAllowedValues()) {
-			list.add(TreeManager.woodItemAccess.getPlanks(woodType, fireproof));
+			list.add(TreeManager.woodAccess.getPlanks(woodType, fireproof));
 		}
 	}
 

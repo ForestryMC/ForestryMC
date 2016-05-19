@@ -201,7 +201,7 @@ public class BeeRoot extends SpeciesRoot implements IBeeRoot {
 	}
 
 	@Override
-	public IBee getBee(World world, IBeeGenome genome) {
+	public IBee getBee(IBeeGenome genome) {
 		return new Bee(genome);
 	}
 

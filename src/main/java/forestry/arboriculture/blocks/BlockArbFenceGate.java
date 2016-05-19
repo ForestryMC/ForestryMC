@@ -103,7 +103,7 @@ public class BlockArbFenceGate extends BlockFenceGate implements IWoodTyped, IIt
 	
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
-		list.add(TreeManager.woodItemAccess.getFenceGate(woodType, fireproof));
+		list.add(TreeManager.woodAccess.getFenceGate(woodType, fireproof));
 	}
 	
 	@Override

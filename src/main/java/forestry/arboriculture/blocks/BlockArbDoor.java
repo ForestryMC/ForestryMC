@@ -105,6 +105,6 @@ public class BlockArbDoor extends BlockDoor implements IWoodTyped, IItemModelReg
 	}
 
 	private Item getItem() {
-		return TreeManager.woodItemAccess.getDoor(woodType).getItem();
+		return TreeManager.woodAccess.getDoor(woodType).getItem();
 	}
 }

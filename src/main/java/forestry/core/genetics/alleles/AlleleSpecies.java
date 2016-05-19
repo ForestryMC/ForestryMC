@@ -45,6 +45,7 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesBuil
 	private boolean isCounted = true;
 	private EnumTemperature climate = EnumTemperature.NORMAL;
 	private EnumHumidity humidity = EnumHumidity.NORMAL;
+	private Integer complexityOverride = null;
 
 	protected AlleleSpecies(@Nonnull String uid,
 			@Nonnull String unlocalizedName,
@@ -99,7 +100,15 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesBuil
 
 	@Override
 	public int getComplexity() {
+		if (complexityOverride != null) {
+			return complexityOverride;
+		}
 		return GeneticsUtil.getResearchComplexity(this, getRoot().getKaryotypeKey());
+	}
+
+	@Override
+	public void setComplexity(int complexity) {
+		this.complexityOverride = complexity;
 	}
 
 	@Override

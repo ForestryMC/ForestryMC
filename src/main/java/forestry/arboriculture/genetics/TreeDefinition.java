@@ -447,7 +447,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 
 		@Override
 		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
-
+			treeSpecies.setComplexity(10);
 		}
 
 		@Override
@@ -1026,7 +1026,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 		} else {
 			AlleleBoolean fireproofAllele = (AlleleBoolean) genome.getActiveAllele(EnumTreeChromosome.FIREPROOF);
 			boolean fireproof = fireproofAllele.getValue();
-			ItemStack log = TreeManager.woodItemAccess.getLog(woodType, fireproof);
+			ItemStack log = TreeManager.woodAccess.getLog(woodType, fireproof);
 
 			BlockTypeLog logBlock = new BlockTypeLog(log);
 			logBlock.setDirection(facing);

@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Set;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -28,10 +29,12 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
+import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.EnumWoodType;
 import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.arboriculture.TreeManager;
@@ -62,6 +65,7 @@ import forestry.arboriculture.tiles.TileFruitPod;
 import forestry.arboriculture.tiles.TileLeaves;
 import forestry.arboriculture.tiles.TileSapling;
 import forestry.core.PluginCore;
+import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
 import forestry.core.genetics.alleles.AllelePlantType;
@@ -70,6 +74,7 @@ import forestry.core.network.IPacketRegistry;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.IMCUtil;
 import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.VillagerTradeLists;
 import forestry.factory.recipes.FabricatorRecipe;
 import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
@@ -87,12 +92,14 @@ public class PluginArboriculture extends BlankForestryPlugin {
 	public static ItemRegistryArboriculture items;
 	public static BlockRegistryArboriculture blocks;
 
+	public static VillagerRegistry.VillagerProfession villagerArborist;
+
 	@Override
 	public void setupAPI() {
 		TreeManager.treeFactory = new TreeFactory();
 		TreeManager.treeMutationFactory = new TreeMutationFactory();
 
-		TreeManager.woodItemAccess = new WoodItemAccess();
+		TreeManager.woodAccess = new WoodAccess();
 
 		// Init tree interface
 		TreeManager.treeRoot = new TreeRoot();
@@ -118,20 +125,20 @@ public class PluginArboriculture extends BlankForestryPlugin {
 
 		MinecraftForge.EVENT_BUS.register(this);
 
-		WoodItemAccess.registerLogs(blocks.logs);
-		WoodItemAccess.registerPlanks(blocks.planks);
-		WoodItemAccess.registerSlabs(blocks.slabs);
-		WoodItemAccess.registerFences(blocks.fences);
-		WoodItemAccess.registerFenceGates(blocks.fenceGates);
-		WoodItemAccess.registerStairs(blocks.stairs);
-		WoodItemAccess.registerDoors(blocks.doors);
+		WoodAccess.registerLogs(blocks.logs);
+		WoodAccess.registerPlanks(blocks.planks);
+		WoodAccess.registerSlabs(blocks.slabs);
+		WoodAccess.registerFences(blocks.fences);
+		WoodAccess.registerFenceGates(blocks.fenceGates);
+		WoodAccess.registerStairs(blocks.stairs);
+		WoodAccess.registerDoors(blocks.doors);
 
-		WoodItemAccess.registerLogs(blocks.logsFireproof);
-		WoodItemAccess.registerPlanks(blocks.planksFireproof);
-		WoodItemAccess.registerSlabs(blocks.slabsFireproof);
-		WoodItemAccess.registerFences(blocks.fencesFireproof);
-		WoodItemAccess.registerFenceGates(blocks.fenceGatesFireproof);
-		WoodItemAccess.registerStairs(blocks.stairsFireproof);
+		WoodAccess.registerLogs(blocks.logsFireproof);
+		WoodAccess.registerPlanks(blocks.planksFireproof);
+		WoodAccess.registerSlabs(blocks.slabsFireproof);
+		WoodAccess.registerFences(blocks.fencesFireproof);
+		WoodAccess.registerFenceGates(blocks.fenceGatesFireproof);
+		WoodAccess.registerStairs(blocks.stairsFireproof);
 
 		blocks.arboriculture.addDefinitions(BlockTypeArboricultureTesr.ARB_CHEST);
 
@@ -163,12 +170,29 @@ public class PluginArboriculture extends BlankForestryPlugin {
 
 		blocks.arboriculture.init();
 
-		// TODO bring back villagers
-		/*if (Config.enableVillagers) {
-			VillagerRegistry.instance().registerVillagerId(Constants.ID_VILLAGER_LUMBERJACK);
-			Proxies.render.registerVillagerSkin(Constants.ID_VILLAGER_LUMBERJACK, Constants.TEXTURE_SKIN_LUMBERJACK);
-			VillagerRegistry.instance().registerVillageTradeHandler(Constants.ID_VILLAGER_LUMBERJACK, new VillageHandlerArboriculture());
-		}*/
+		if (Config.enableVillagers) {
+			villagerArborist = new VillagerRegistry.VillagerProfession(Constants.ID_VILLAGER_ARBORIST, Constants.TEXTURE_SKIN_LUMBERJACK);
+			VillagerRegistry.instance().register(villagerArborist);
+
+			VillagerRegistry.VillagerCareer arboristCareer = new VillagerRegistry.VillagerCareer(villagerArborist, "arborist");
+			arboristCareer.addTrade(1,
+					new VillagerArboristTrades.GivePlanksForEmeralds(new EntityVillager.PriceInfo(1, 1), new EntityVillager.PriceInfo(10, 32)),
+					new VillagerArboristTrades.GivePollenForEmeralds(new EntityVillager.PriceInfo(1, 1), new EntityVillager.PriceInfo(1, 3), EnumGermlingType.SAPLING, 4)
+			);
+			arboristCareer.addTrade(2,
+					new VillagerArboristTrades.GivePlanksForEmeralds(new EntityVillager.PriceInfo(1, 1), new EntityVillager.PriceInfo(10, 32)),
+					new VillagerTradeLists.GiveItemForEmeralds(new EntityVillager.PriceInfo(1, 4), items.grafterProven.getItemStack(), new EntityVillager.PriceInfo(1, 1)),
+					new VillagerArboristTrades.GivePollenForEmeralds(new EntityVillager.PriceInfo(2, 3), new EntityVillager.PriceInfo(1, 1), EnumGermlingType.POLLEN, 6)
+			);
+			arboristCareer.addTrade(3,
+					new VillagerArboristTrades.GiveLogsForEmeralds(new EntityVillager.PriceInfo(2, 5), new EntityVillager.PriceInfo(6, 18)),
+					new VillagerArboristTrades.GiveLogsForEmeralds(new EntityVillager.PriceInfo(2, 5), new EntityVillager.PriceInfo(6, 18))
+			);
+			arboristCareer.addTrade(4,
+					new VillagerArboristTrades.GivePollenForEmeralds(new EntityVillager.PriceInfo(5, 20), new EntityVillager.PriceInfo(1, 1), EnumGermlingType.POLLEN, 10),
+					new VillagerArboristTrades.GivePollenForEmeralds(new EntityVillager.PriceInfo(5, 20), new EntityVillager.PriceInfo(1, 1), EnumGermlingType.SAPLING, 10)
+			);
+		}
 	}
 
 	@Override
@@ -193,20 +217,20 @@ public class PluginArboriculture extends BlankForestryPlugin {
 		}
 
 		for (EnumWoodType woodType : EnumWoodType.VALUES) {
-			ItemStack planks = TreeManager.woodItemAccess.getPlanks(woodType, false);
-			ItemStack logs = TreeManager.woodItemAccess.getLog(woodType, false);
-			ItemStack slabs = TreeManager.woodItemAccess.getSlab(woodType, false);
-			ItemStack fences = TreeManager.woodItemAccess.getFence(woodType, false);
-			ItemStack fenceGates = TreeManager.woodItemAccess.getFenceGate(woodType, false);
-			ItemStack stairs = TreeManager.woodItemAccess.getStairs(woodType, false);
-			ItemStack doors = TreeManager.woodItemAccess.getDoor(woodType);
+			ItemStack planks = TreeManager.woodAccess.getPlanks(woodType, false);
+			ItemStack logs = TreeManager.woodAccess.getLog(woodType, false);
+			ItemStack slabs = TreeManager.woodAccess.getSlab(woodType, false);
+			ItemStack fences = TreeManager.woodAccess.getFence(woodType, false);
+			ItemStack fenceGates = TreeManager.woodAccess.getFenceGate(woodType, false);
+			ItemStack stairs = TreeManager.woodAccess.getStairs(woodType, false);
+			ItemStack doors = TreeManager.woodAccess.getDoor(woodType);
 
-			ItemStack fireproofPlanks = TreeManager.woodItemAccess.getPlanks(woodType, true);
-			ItemStack fireproofLogs = TreeManager.woodItemAccess.getLog(woodType, true);
-			ItemStack fireproofSlabs = TreeManager.woodItemAccess.getSlab(woodType, true);
-			ItemStack fireproofFences = TreeManager.woodItemAccess.getFence(woodType, true);
-			ItemStack fireproofFenceGates = TreeManager.woodItemAccess.getFenceGate(woodType, true);
-			ItemStack fireproofStairs = TreeManager.woodItemAccess.getStairs(woodType, true);
+			ItemStack fireproofPlanks = TreeManager.woodAccess.getPlanks(woodType, true);
+			ItemStack fireproofLogs = TreeManager.woodAccess.getLog(woodType, true);
+			ItemStack fireproofSlabs = TreeManager.woodAccess.getSlab(woodType, true);
+			ItemStack fireproofFences = TreeManager.woodAccess.getFence(woodType, true);
+			ItemStack fireproofFenceGates = TreeManager.woodAccess.getFenceGate(woodType, true);
+			ItemStack fireproofStairs = TreeManager.woodAccess.getStairs(woodType, true);
 
 			planks.stackSize = 4;
 			logs.stackSize = 1;

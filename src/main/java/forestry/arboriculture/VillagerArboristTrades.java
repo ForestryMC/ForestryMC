@@ -1,0 +1,150 @@
+package forestry.arboriculture;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Random;
+
+import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.village.MerchantRecipe;
+import net.minecraft.village.MerchantRecipeList;
+
+import forestry.api.arboriculture.EnumGermlingType;
+import forestry.api.arboriculture.EnumWoodType;
+import forestry.api.arboriculture.TreeManager;
+import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.IAllele;
+import forestry.api.genetics.IAlleleSpecies;
+import forestry.api.genetics.IChromosomeType;
+import forestry.api.genetics.IIndividual;
+
+public class VillagerArboristTrades {
+
+	public static class GiveLogsForEmeralds implements EntityVillager.ITradeList {
+		@Nullable
+		public EntityVillager.PriceInfo emeraldPriceInfo;
+		@Nullable
+		public EntityVillager.PriceInfo sellInfo;
+
+		public GiveLogsForEmeralds(@Nullable EntityVillager.PriceInfo emeraldPriceInfo, @Nullable EntityVillager.PriceInfo sellInfo) {
+			this.emeraldPriceInfo = emeraldPriceInfo;
+			this.sellInfo = sellInfo;
+		}
+
+		@Override
+		public void modifyMerchantRecipeList(MerchantRecipeList recipeList, Random random) {
+			int i = 1;
+			if (this.sellInfo != null) {
+				i = this.sellInfo.getPrice(random);
+			}
+
+			int j = 1;
+			if (this.emeraldPriceInfo != null) {
+				j = this.emeraldPriceInfo.getPrice(random);
+			}
+
+			EnumWoodType woodType = EnumWoodType.getRandom(random);
+			ItemStack sellStack = TreeManager.woodAccess.getLog(woodType, false);
+			sellStack.stackSize = i;
+
+			ItemStack emeralds = new ItemStack(Items.EMERALD, j);
+
+			recipeList.add(new MerchantRecipe(emeralds, sellStack));
+		}
+	}
+
+	public static class GivePlanksForEmeralds implements EntityVillager.ITradeList {
+		@Nullable
+		public EntityVillager.PriceInfo emeraldPriceInfo;
+		@Nullable
+		public EntityVillager.PriceInfo sellInfo;
+
+		public GivePlanksForEmeralds(@Nullable EntityVillager.PriceInfo emeraldPriceInfo, @Nullable EntityVillager.PriceInfo sellInfo) {
+			this.emeraldPriceInfo = emeraldPriceInfo;
+			this.sellInfo = sellInfo;
+		}
+
+		@Override
+		public void modifyMerchantRecipeList(MerchantRecipeList recipeList, Random random) {
+			int i = 1;
+			if (this.sellInfo != null) {
+				i = this.sellInfo.getPrice(random);
+			}
+
+			int j = 1;
+			if (this.emeraldPriceInfo != null) {
+				j = this.emeraldPriceInfo.getPrice(random);
+			}
+
+			EnumWoodType woodType = EnumWoodType.getRandom(random);
+			ItemStack sellStack = TreeManager.woodAccess.getPlanks(woodType, false);
+			sellStack.stackSize = i;
+
+			ItemStack emeralds = new ItemStack(Items.EMERALD, j);
+
+			recipeList.add(new MerchantRecipe(emeralds, sellStack));
+		}
+	}
+
+	public static class GivePollenForEmeralds implements EntityVillager.ITradeList {
+		@Nullable
+		public EntityVillager.PriceInfo emeraldPriceInfo;
+		@Nullable
+		public EntityVillager.PriceInfo sellInfo;
+		@Nonnull
+		private final EnumGermlingType type;
+
+		private final int maxComplexity;
+
+		public GivePollenForEmeralds(@Nullable EntityVillager.PriceInfo emeraldPriceInfo, @Nullable EntityVillager.PriceInfo sellInfo, @Nonnull EnumGermlingType type, int maxComplexity) {
+			this.emeraldPriceInfo = emeraldPriceInfo;
+			this.sellInfo = sellInfo;
+			this.type = type;
+			this.maxComplexity = maxComplexity;
+		}
+
+		@Override
+		public void modifyMerchantRecipeList(MerchantRecipeList recipeList, Random random) {
+			int i = 1;
+			if (this.sellInfo != null) {
+				i = this.sellInfo.getPrice(random);
+			}
+
+			int j = 1;
+			if (this.emeraldPriceInfo != null) {
+				j = this.emeraldPriceInfo.getPrice(random);
+			}
+
+			IChromosomeType treeSpeciesType = TreeManager.treeRoot.getKaryotypeKey();
+			Collection<IAllele> registeredSpecies = AlleleManager.alleleRegistry.getRegisteredAlleles(treeSpeciesType);
+			List<IAlleleSpecies> potentialSpecies = new ArrayList<>();
+			for (IAllele allele : registeredSpecies) {
+				if (allele instanceof IAlleleSpecies) {
+					IAlleleSpecies species = (IAlleleSpecies) allele;
+					if (species.getComplexity() <= maxComplexity) {
+						potentialSpecies.add(species);
+					}
+				}
+			}
+
+			if (potentialSpecies.isEmpty()) {
+				return;
+			}
+
+			IAlleleSpecies chosenSpecies = potentialSpecies.get(random.nextInt(potentialSpecies.size()));
+			IAllele[] template = TreeManager.treeRoot.getTemplate(chosenSpecies.getUID());
+			IIndividual individual = TreeManager.treeRoot.templateAsIndividual(template);
+
+			ItemStack sellStack = TreeManager.treeRoot.getMemberStack(individual, type);
+			sellStack.stackSize = i;
+
+			ItemStack emeralds = new ItemStack(Items.EMERALD, j);
+
+			recipeList.add(new MerchantRecipe(emeralds, sellStack));
+		}
+	}
+}

@@ -15,7 +15,7 @@ public class TreeManager {
 	/**
 	 * Convenient access to wood items.
 	 */
-	public static IWoodItemAccess woodItemAccess;
+	public static IWoodAccess woodAccess;
 
 	/**
 	 * Used to create new trees.

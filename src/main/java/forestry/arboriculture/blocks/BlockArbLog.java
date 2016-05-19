@@ -173,7 +173,7 @@ public abstract class BlockArbLog extends BlockLog implements IWoodTyped, IState
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
 		for (EnumWoodType woodType : getVariant().getAllowedValues()) {
-			list.add(TreeManager.woodItemAccess.getLog(woodType, fireproof));
+			list.add(TreeManager.woodAccess.getLog(woodType, fireproof));
 		}
 	}
 

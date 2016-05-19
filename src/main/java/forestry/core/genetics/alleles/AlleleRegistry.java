@@ -192,7 +192,7 @@ public class AlleleRegistry implements IAlleleRegistry {
 		return Collections.unmodifiableSet(allelesByType.get(type));
 	}
 
-	// This method is not useful until all mod addon alleles are registered with their valid IChromosomeTypes
+	@Override
 	public Collection<IChromosomeType> getChromosomeTypes(IAllele allele) {
 		return Collections.unmodifiableSet(typesByAllele.get(allele));
 	}

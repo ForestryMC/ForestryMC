@@ -89,7 +89,7 @@ public class CommandBeeGive extends SubCommand {
 			return;
 		}
 
-		IBee bee = BeeManager.beeRoot.getBee(player.worldObj, beeGenome);
+		IBee bee = BeeManager.beeRoot.getBee(beeGenome);
 
 		if (beeType == EnumBeeType.QUEEN) {
 			bee.mate(bee);
