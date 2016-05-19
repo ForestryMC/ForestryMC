@@ -15,6 +15,7 @@ import java.util.EnumSet;
 import net.minecraftforge.common.EnumPlantType;
 
 import forestry.api.arboriculture.ITree;
+import forestry.api.genetics.ICheckPollinatable;
 
 public class CheckPollinatableTree implements ICheckPollinatable {
 

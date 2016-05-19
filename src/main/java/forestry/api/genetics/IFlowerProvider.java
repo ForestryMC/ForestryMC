@@ -11,7 +11,7 @@ import net.minecraft.world.World;
 
 public interface IFlowerProvider {
 
-	boolean isAcceptedPollinatable(World world, IPollinatable pollinatable);
+	boolean isAcceptedPollinatable(World world, ICheckPollinatable pollinatable);
 
 	/**
 	 * @return The unique type used for the IFlowerRegistry

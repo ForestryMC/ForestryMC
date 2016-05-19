@@ -32,15 +32,14 @@ import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.IArmorNaturalist;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleSpecies;
+import forestry.api.genetics.ICheckPollinatable;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.IPollinatable;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IButterflyNursery;
-import forestry.arboriculture.genetics.pollination.CheckPollinatable;
 import forestry.arboriculture.genetics.pollination.CheckPollinatableTree;
-import forestry.arboriculture.genetics.pollination.ICheckPollinatable;
 import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
 
@@ -103,7 +102,7 @@ public class GeneticsUtil {
 		TileEntity tile = world.getTileEntity(pos);
 
 		if (tile instanceof IPollinatable) {
-			return new CheckPollinatable((IPollinatable) tile);
+			return (IPollinatable) tile;
 		}
 
 		ITree pollen = getErsatzPollen(world, pos);
@@ -114,6 +113,9 @@ public class GeneticsUtil {
 		return null;
 	}
 
+	/**
+	 * Returns an IPollinatable that can be mated. This will convert vanilla leaves to Forestry leaves.
+	 */
 	public static IPollinatable getOrCreatePollinatable(GameProfile owner, World world, final BlockPos pos) {
 		TileEntity tile = world.getTileEntity(pos);
 

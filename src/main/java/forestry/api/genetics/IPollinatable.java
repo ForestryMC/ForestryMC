@@ -5,10 +5,6 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
-import java.util.EnumSet;
-
-import net.minecraftforge.common.EnumPlantType;
-
 import forestry.api.arboriculture.ITree;
 
 /**
@@ -16,28 +12,7 @@ import forestry.api.arboriculture.ITree;
  *
  * @author SirSengir
  */
-public interface IPollinatable {
-
-	/**
-	 * @return plant types this pollinatable is classified as. (Can be used by bees to determine whether to interact or not.
-	 */
-	EnumSet<EnumPlantType> getPlantType();
-
-	/**
-	 * @return IIndividual containing the genetic information of this IPollinatable
-	 */
-	ITree getPollen();
-
-	/**
-	 * Checks whether this {@link IPollinatable} can mate with the given pollen.
-	 *
-	 * Must be the one to check genetic equivalency.
-	 *
-	 * @param pollen
-	 *            IIndividual representing the pollen.
-	 * @return true if mating is possible, false otherwise.
-	 */
-	boolean canMateWith(ITree pollen);
+public interface IPollinatable extends ICheckPollinatable {
 
 	/**
 	 * Pollinates this entity.
@@ -46,10 +21,4 @@ public interface IPollinatable {
 	 *            IIndividual representing the pollen.
 	 */
 	void mateWith(ITree pollen);
-
-	/**
-	 * @return true if this IPollinatable has already been pollinated.
-	 * @since Forestry 4.1.0
-	 */
-	boolean isPollinated();
 }

@@ -19,9 +19,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
 
 import forestry.api.apiculture.FlowerManager;
+import forestry.api.genetics.ICheckPollinatable;
 import forestry.api.genetics.IFlowerProvider;
 import forestry.api.genetics.IIndividual;
-import forestry.api.genetics.IPollinatable;
 import forestry.core.utils.Translator;
 
 public class FlowerProvider implements IFlowerProvider {
@@ -40,7 +40,7 @@ public class FlowerProvider implements IFlowerProvider {
 	}
 
 	@Override
-	public boolean isAcceptedPollinatable(World world, IPollinatable pollinatable) {
+	public boolean isAcceptedPollinatable(World world, ICheckPollinatable pollinatable) {
 
 		EnumSet<EnumPlantType> plantTypes = pollinatable.getPlantType();
 

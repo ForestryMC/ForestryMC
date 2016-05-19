@@ -22,6 +22,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
+
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -282,7 +283,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	@Override
 	public void mateWith(ITree individual) {
 		ITree tree = getTree();
-		if (tree == null) {
+		if (tree == null || worldObj == null) {
 			return;
 		}
 
