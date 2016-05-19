@@ -67,8 +67,6 @@ import forestry.api.storage.StorageManager;
 import forestry.apiculture.blocks.BlockAlvearyType;
 import forestry.apiculture.blocks.BlockCandle;
 import forestry.apiculture.blocks.BlockRegistryApiculture;
-import forestry.apiculture.blocks.BlockTypeApiculture;
-import forestry.apiculture.blocks.BlockTypeApicultureTesr;
 import forestry.apiculture.commands.CommandBee;
 import forestry.apiculture.entities.EntityMinecartApiary;
 import forestry.apiculture.entities.EntityMinecartBeehouse;
@@ -191,9 +189,6 @@ public class PluginApiculture extends BlankForestryPlugin {
 
 		MinecraftForge.EVENT_BUS.register(this);
 
-		blocks.apiculture.addDefinitions(BlockTypeApiculture.VALUES);
-		blocks.apicultureChest.addDefinitions(BlockTypeApicultureTesr.APIARIST_CHEST);
-
 		if (Config.enableVillagers) {
 			// Register village components with the Structure registry.
 			VillageCreationApiculture.registerVillageComponents();
@@ -313,9 +308,9 @@ public class PluginApiculture extends BlankForestryPlugin {
 			villagerApiarist = new VillagerRegistry.VillagerProfession(Constants.ID_VILLAGER_APIARIST, Constants.TEXTURE_SKIN_BEEKPEEPER);
 			villagerRegistry.register(villagerApiarist);
 
-			ItemStack wildcardPrincess = new ItemStack(PluginApiculture.items.beePrincessGE, 1);
-			ItemStack apiary = PluginApiculture.blocks.apiculture.get(BlockTypeApiculture.APIARY);
-			ItemStack provenFrames = PluginApiculture.items.frameProven.getItemStack();
+			ItemStack wildcardPrincess = new ItemStack(items.beePrincessGE, 1);
+			ItemStack apiary = new ItemStack(blocks.apiary);
+			ItemStack provenFrames = items.frameProven.getItemStack();
 			ItemStack monasticDrone = BeeDefinition.MONASTIC.getMemberStack(EnumBeeType.DRONE);
 
 			VillagerRegistry.VillagerCareer apiaristCareer = new VillagerRegistry.VillagerCareer(villagerApiarist, "apiarist");
@@ -339,8 +334,9 @@ public class PluginApiculture extends BlankForestryPlugin {
 
 		proxy.initializeRendering();
 
-		blocks.apiculture.init();
-		blocks.apicultureChest.init();
+		blocks.apiary.init();
+		blocks.beeHouse.init();
+		blocks.beeChest.init();
 	}
 
 	@Override
@@ -500,12 +496,12 @@ public class PluginApiculture extends BlankForestryPlugin {
 		RecipeUtil.addRecipe(items.minecartBeehouse.getBeeHouseMinecart(),
 				"B",
 				"C",
-				'B', blocks.apiculture.get(BlockTypeApiculture.BEE_HOUSE),
+				'B', new ItemStack(blocks.beeHouse),
 				'C', Items.MINECART);
 		RecipeUtil.addRecipe(items.minecartBeehouse.getApiaryMinecart(),
 				"B",
 				"C",
-				'B', blocks.apiculture.get(BlockTypeApiculture.APIARY),
+				'B', new ItemStack(blocks.apiary),
 				'C', Items.MINECART);
 
 		// FOOD STUFF
@@ -750,7 +746,7 @@ public class PluginApiculture extends BlankForestryPlugin {
 			RecipeManagers.fermenterManager.addRecipe(items.honeydew.getItemStack(), 500, 1.0f, Fluids.SHORT_MEAD.getFluid(1), Fluids.FOR_HONEY.getFluid(1));
 		}
 
-		RecipeUtil.addRecipe(blocks.apiculture.get(BlockTypeApiculture.APIARY),
+		RecipeUtil.addRecipe(blocks.apiary,
 				"XXX",
 				"#C#",
 				"###",
@@ -758,7 +754,7 @@ public class PluginApiculture extends BlankForestryPlugin {
 				'#', "plankWood",
 				'C', PluginCore.items.impregnatedCasing);
 
-		RecipeUtil.addRecipe(new ItemStack(blocks.apicultureChest),
+		RecipeUtil.addRecipe(blocks.beeChest,
 				" # ",
 				"XYX",
 				"XXX",
@@ -766,7 +762,7 @@ public class PluginApiculture extends BlankForestryPlugin {
 				'X', "beeComb",
 				'Y', "chestWood");
 
-		RecipeUtil.addRecipe(blocks.apiculture.get(BlockTypeApiculture.BEE_HOUSE),
+		RecipeUtil.addRecipe(blocks.beeHouse,
 				"XXX",
 				"#C#",
 				"###",

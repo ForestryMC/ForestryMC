@@ -21,17 +21,17 @@ import forestry.mail.tiles.TileStampCollector;
 import forestry.mail.tiles.TileTrader;
 
 public enum BlockTypeMail implements IBlockType {
-	MAILBOX(0, TileMailbox.class, "mailbox"),
-	TRADE_STATION(1, TileTrader.class, "trade_station"),
-	PHILATELIST(2, TileStampCollector.class, "stamp_collector");
+	MAILBOX(TileMailbox.class, "mailbox"),
+	TRADE_STATION(TileTrader.class, "trade_station"),
+	PHILATELIST(TileStampCollector.class, "stamp_collector");
 
 	public static final BlockTypeMail[] VALUES = values();
 
 	@Nonnull
 	private final IMachineProperties machineProperties;
 
-	<T extends TileForestry> BlockTypeMail(int meta, @Nonnull Class<T> teClass, @Nonnull String name) {
-		this.machineProperties = new MachineProperties<>(meta, teClass, name);
+	<T extends TileForestry> BlockTypeMail(@Nonnull Class<T> teClass, @Nonnull String name) {
+		this.machineProperties = new MachineProperties<>(teClass, name);
 	}
 
 	@Nonnull

@@ -39,7 +39,7 @@ public class CarpenterRecipeCategory extends ForestryRecipeCategory {
 	private final IDrawable tankOverlay;
 	
 	public CarpenterRecipeCategory(IGuiHelper guiHelper) {
-		super(guiHelper.createDrawable(guiTexture, 9, 16, 158, 61), "tile.for.factory.carpenter.name");
+		super(guiHelper.createDrawable(guiTexture, 9, 16, 158, 61), "tile.for.carpenter.name");
 		
 		craftingGridHelper = guiHelper.createCraftingGridHelper(craftInputSlot, craftOutputSlot);
 		IDrawableStatic arrowDrawable = guiHelper.createDrawable(guiTexture, 176, 59, 4, 17);

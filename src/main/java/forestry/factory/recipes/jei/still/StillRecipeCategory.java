@@ -30,7 +30,7 @@ public class StillRecipeCategory extends ForestryRecipeCategory {
 	private final IDrawableAnimated progressBar;
 	
 	public StillRecipeCategory(IGuiHelper guiHelper) {
-		super(guiHelper.createDrawable(guiTexture, 34, 14, 108, 60), "tile.for.factory.still.name");
+		super(guiHelper.createDrawable(guiTexture, 34, 14, 108, 60), "tile.for.still.name");
 		this.tankOverlay = guiHelper.createDrawable(guiTexture, 176, 0, 16, 58);
 		
 		IDrawableStatic progressBarDrawable0 = guiHelper.createDrawable(guiTexture, 176, 74, 4, 18);

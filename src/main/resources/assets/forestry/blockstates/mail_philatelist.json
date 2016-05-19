@@ -1,8 +1,0 @@
-{
-    "variants": {
-        "face=north": { "model": "forestry:mail_philatelist" },
-		"face=east": { "model": "forestry:mail_philatelist", "y": 90 },
-		"face=south": { "model": "forestry:mail_philatelist", "y": 180 },
-		"face=west": { "model": "forestry:mail_philatelist", "y": -90 }
-	}
-}

@@ -18,6 +18,8 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoor;
+import net.minecraft.block.BlockFenceGate;
+import net.minecraft.block.BlockLog;
 import net.minecraft.block.BlockNewLog;
 import net.minecraft.block.BlockOldLog;
 import net.minecraft.block.BlockPlanks;
@@ -52,11 +54,9 @@ import forestry.api.core.EnumTemperature;
 import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
 import forestry.apiculture.PluginApiculture;
-import forestry.apiculture.blocks.BlockTypeApiculture;
 import forestry.apiculture.flowers.Flower;
 import forestry.apiculture.flowers.FlowerRegistry;
-import forestry.apiculture.inventory.InventoryApiary;
-import forestry.apiculture.tiles.TileApiary;
+import forestry.apiculture.tiles.TileBeeHouse;
 import forestry.arboriculture.PluginArboriculture;
 import forestry.core.PluginCore;
 import forestry.core.blocks.BlockCore;
@@ -98,7 +98,7 @@ public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 			EnumWoodType woodType = EnumWoodType.getRandom(random);
 
 			IWoodAccess woodAccess = TreeManager.woodAccess;
-			this.logs = woodAccess.getLogBlock(woodType, fireproof);
+			this.logs = woodAccess.getLogBlock(woodType, fireproof).withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.X);
 			this.planks = woodAccess.getPlanksBlock(woodType, fireproof);
 			this.stairs = woodAccess.getStairsBlock(woodType, fireproof);
 			this.fence = woodAccess.getFenceBlock(woodType, fireproof);
@@ -166,7 +166,9 @@ public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 		fillWithBlocks(world, structBoundingBox, 8, 1, 6, 8, 1, 10, fence, fence, false);
 		fillWithBlocks(world, structBoundingBox, 2, 1, 10, 7, 1, 10, fence, fence, false);
 
-		placeBlockAtCurrentPosition(world, fenceGate, 8, 1, 8, structBoundingBox);
+		setBlockState(world, fenceGate, 8, 1, 8, structBoundingBox);
+		setBlockState(world, fenceGate, 1, 1, 8, structBoundingBox);
+		setBlockState(world, fenceGate.withProperty(BlockFenceGate.FACING, EnumFacing.NORTH), 4, 1, 10, structBoundingBox);
 
 		// Flowers
 		plantFlowerGarden(world, structBoundingBox, 2, 1, 5, 7, 1, 9);
@@ -189,17 +191,17 @@ public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 		fillWithBlocks(world, structBoundingBox, 0, 4, 4, 8, 4, 4, planks, planks, false);
 		fillWithBlocks(world, structBoundingBox, 0, 5, 2, 8, 5, 3, planks, planks, false);
 
-		placeBlockAtCurrentPosition(world, planks, 0, 4, 2, structBoundingBox);
-		placeBlockAtCurrentPosition(world, planks, 0, 4, 3, structBoundingBox);
-		placeBlockAtCurrentPosition(world, planks, 8, 4, 2, structBoundingBox);
-		placeBlockAtCurrentPosition(world, planks, 8, 4, 3, structBoundingBox);
+		setBlockState(world, planks, 0, 4, 2, structBoundingBox);
+		setBlockState(world, planks, 0, 4, 3, structBoundingBox);
+		setBlockState(world, planks, 8, 4, 2, structBoundingBox);
+		setBlockState(world, planks, 8, 4, 3, structBoundingBox);
 
 		buildRoof(world, structBoundingBox);
 
-		placeBlockAtCurrentPosition(world, logs, 0, 2, 1, structBoundingBox);
-		placeBlockAtCurrentPosition(world, logs, 0, 2, 4, structBoundingBox);
-		placeBlockAtCurrentPosition(world, logs, 8, 2, 1, structBoundingBox);
-		placeBlockAtCurrentPosition(world, logs, 8, 2, 4, structBoundingBox);
+		setBlockState(world, logs, 0, 2, 1, structBoundingBox);
+		setBlockState(world, logs, 0, 2, 4, structBoundingBox);
+		setBlockState(world, logs, 8, 2, 1, structBoundingBox);
+		setBlockState(world, logs, 8, 2, 4, structBoundingBox);
 		
 		IBlockState glassPaneState = Blocks.GLASS_PANE.getDefaultState();
 		setBlockState(world, glassPaneState, 0, 2, 2, structBoundingBox);
@@ -218,14 +220,16 @@ public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 
 		// Escritoire
 		if (random.nextInt(2) == 0) {
-			IBlockState escritoireBlock = PluginCore.blocks.escritoire.getDefaultState().withProperty(BlockCore.FACING, EnumFacing.WEST);
-			placeBlockAtCurrentPosition(world, escritoireBlock, 1, 1, 3, structBoundingBox);
+			IBlockState escritoireBlock = PluginCore.blocks.escritoire.getDefaultState().withProperty(BlockCore.FACING, EnumFacing.EAST);
+			setBlockState(world, escritoireBlock, 1, 1, 3, structBoundingBox);
 		}
 
 		IBlockState airState = Blocks.AIR.getDefaultState();
 
 		this.setBlockState(world, this.door.withProperty(BlockDoor.FACING, EnumFacing.NORTH), 2, 1, 0, structBoundingBox);
 		this.setBlockState(world, this.door.withProperty(BlockDoor.FACING, EnumFacing.NORTH).withProperty(BlockDoor.HALF, BlockDoor.EnumDoorHalf.UPPER), 2, 2, 0, structBoundingBox);
+
+		this.setBlockState(world, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.NORTH), 2, 3, 1, structBoundingBox);
 
 		if (isAirBlockAtCurrentPosition(world, new BlockPos(2, 0, -1), structBoundingBox) && !isAirBlockAtCurrentPosition(world, new BlockPos(2, -1, -1), structBoundingBox)) {
 			setBlockState(world, Blocks.STONE_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.NORTH), 2, 0, -1, structBoundingBox);
@@ -234,8 +238,7 @@ public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 		setBlockState(world, airState, 6, 1, 5, structBoundingBox);
 		setBlockState(world, airState, 6, 2, 5, structBoundingBox);
 
-		// Candles / Lighting
-		this.setBlockState(world, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.NORTH), 2, 3, 1, structBoundingBox);
+		this.setBlockState(world, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.SOUTH), 6, 3, 4, structBoundingBox);
 
 		this.setBlockState(world, this.door.withProperty(BlockDoor.FACING, EnumFacing.SOUTH), 6, 1, 5, structBoundingBox);
 		this.setBlockState(world, this.door.withProperty(BlockDoor.FACING, EnumFacing.SOUTH).withProperty(BlockDoor.HALF, BlockDoor.EnumDoorHalf.UPPER), 6, 2, 5, structBoundingBox);
@@ -258,10 +261,10 @@ public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 		for (int i = -1; i <= 2; ++i) {
 			for (int j = 0; j <= 8; ++j) {
 				IBlockState northStairs = stairs.withProperty(BlockStairs.FACING, EnumFacing.NORTH);
-				placeBlockAtCurrentPosition(world, northStairs, j, 4 + i, i, structBoundingBox);
+				setBlockState(world, northStairs, j, 4 + i, i, structBoundingBox);
 
 				IBlockState southStairs = stairs.withProperty(BlockStairs.FACING, EnumFacing.SOUTH);
-				placeBlockAtCurrentPosition(world, southStairs, j, 4 + i, 5 - i, structBoundingBox);
+				setBlockState(world, southStairs, j, 4 + i, 5 - i, structBoundingBox);
 			}
 		}
 	}
@@ -326,41 +329,23 @@ public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 		}
 
 		IBlockState blockState = world.getBlockState(posNew);
-		if (PluginApiculture.blocks.apiculture == blockState.getBlock() || !world.isBlockLoaded(posNew.down())) {
+		if (PluginApiculture.blocks.beeHouse == blockState.getBlock() || !world.isBlockLoaded(posNew.down())) {
 			return;
 		}
 
-		world.setBlockState(posNew, PluginApiculture.blocks.apiculture.getStateFromMeta(BlockTypeApiculture.APIARY.ordinal()), Constants.FLAG_BLOCK_SYNCH);
-		PluginApiculture.blocks.apiculture.onBlockAdded(world, posNew, PluginApiculture.blocks.apiculture.getStateFromMeta(BlockTypeApiculture.APIARY.ordinal()));
+		IBlockState beeHouseDefaultState = PluginApiculture.blocks.beeHouse.getDefaultState();
+		world.setBlockState(posNew, beeHouseDefaultState, Constants.FLAG_BLOCK_SYNCH);
 
-		TileApiary apiary = TileUtil.getTile(world, posNew, TileApiary.class);
-		if (apiary == null) {
+		TileBeeHouse beeHouse = TileUtil.getTile(world, posNew, TileBeeHouse.class);
+		if (beeHouse == null) {
 			return;
 		}
 
 		ItemStack randomVillagePrincess = getRandomVillageBeeStack(world, posNew, EnumBeeType.PRINCESS);
-		apiary.getBeeInventory().setQueen(randomVillagePrincess);
+		beeHouse.getBeeInventory().setQueen(randomVillagePrincess);
 
 		ItemStack randomVillageDrone = getRandomVillageBeeStack(world, posNew, EnumBeeType.DRONE);
-		apiary.getBeeInventory().setDrone(randomVillageDrone);
-
-		for (int i = InventoryApiary.SLOT_FRAMES_1; i < InventoryApiary.SLOT_FRAMES_1 + InventoryApiary.SLOT_FRAMES_COUNT; i++) {
-			ItemStack randomFrame = getRandomFrame(world.rand);
-			apiary.setInventorySlotContents(i, randomFrame);
-		}
-	}
-
-	private static ItemStack getRandomFrame(Random random) {
-		float roll = random.nextFloat();
-		if (roll < 0.2f) {
-			return PluginApiculture.items.frameUntreated.getItemStack();
-		} else if (roll < 0.4f) {
-			return PluginApiculture.items.frameImpregnated.getItemStack();
-		} else if (roll < 0.6) {
-			return PluginApiculture.items.frameProven.getItemStack();
-		} else {
-			return null;
-		}
+		beeHouse.getBeeInventory().setDrone(randomVillageDrone);
 	}
 
 	private static ItemStack getRandomVillageBeeStack(World world, BlockPos pos, EnumBeeType beeType) {
@@ -408,10 +393,6 @@ public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 				species.getHumidity(), genome.getToleranceHumid());
 	}
 
-	private void placeBlockAtCurrentPosition(World world, IBlockState block, int x, int y, int z, StructureBoundingBox boundingboxIn) {
-		setBlockState(world, block, x, y, z, boundingboxIn);
-	}
-	
 	@Override
 	protected int chooseProfession(int villagerCount, int currentVillagerProfession) {
 		FMLControlledNamespacedRegistry<VillagerRegistry.VillagerProfession> registry = (FMLControlledNamespacedRegistry<VillagerRegistry.VillagerProfession>) VillagerRegistry.instance().getRegistry();

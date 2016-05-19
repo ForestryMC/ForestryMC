@@ -12,6 +12,7 @@ package forestry.energy.render;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -19,6 +20,7 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 
+import forestry.core.blocks.BlockBase;
 import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.ForestryResource;
@@ -92,10 +94,14 @@ public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
 	@Override
 	public void renderTileEntityAt(@Nullable TileEngine engine, double x, double y, double z, float partialTicks, int destroyStage) {
 		if (engine != null) {
-			render(engine.getTemperatureState(), engine.progress, engine.getOrientation(), x, y, z);
-		} else {
-			render(TemperatureState.COOL, 0.25F, EnumFacing.UP, x, y, z);
+			IBlockState blockState = engine.getWorldObj().getBlockState(engine.getPos());
+			if (blockState != null && blockState.getBlock() instanceof BlockBase) {
+				EnumFacing facing = blockState.getValue(BlockBase.FACING);
+				render(engine.getTemperatureState(), engine.progress, facing, x, y, z);
+				return;
+			}
 		}
+		render(TemperatureState.COOL, 0.25F, EnumFacing.UP, x, y, z);
 	}
 
 	private void render(TemperatureState state, float progress, EnumFacing orientation, double x, double y, double z) {

@@ -20,14 +20,14 @@ public class MachinePropertiesTesr<T extends TileForestry> extends MachineProper
 	@Nonnull
 	private final String particleTextureLocation;
 
-	public MachinePropertiesTesr(int meta, @Nonnull Class<T> teClass, @Nonnull String name, @Nullable TileEntitySpecialRenderer<? super T> renderer, @Nonnull String particleTextureLocation) {
-		super(meta, teClass, name);
+	public MachinePropertiesTesr(@Nonnull Class<T> teClass, @Nonnull String name, @Nullable TileEntitySpecialRenderer<? super T> renderer, @Nonnull String particleTextureLocation) {
+		super(teClass, name);
 		this.renderer = renderer;
 		this.particleTextureLocation = particleTextureLocation;
 	}
 
-	public MachinePropertiesTesr(int meta, @Nonnull Class<T> teClass, @Nonnull String name, @Nullable TileEntitySpecialRenderer<? super T> renderer, @Nonnull AxisAlignedBB boundingBox, @Nonnull String particleTextureLocation) {
-		super(meta, teClass, name, boundingBox);
+	public MachinePropertiesTesr(@Nonnull Class<T> teClass, @Nonnull String name, @Nullable TileEntitySpecialRenderer<? super T> renderer, @Nonnull AxisAlignedBB boundingBox, @Nonnull String particleTextureLocation) {
+		super(teClass, name, boundingBox);
 		this.renderer = renderer;
 		this.particleTextureLocation = particleTextureLocation;
 	}
@@ -45,7 +45,7 @@ public class MachinePropertiesTesr<T extends TileForestry> extends MachineProper
 			ClientRegistry.bindTileEntitySpecialRenderer(getTeClass(), renderer);
 			Item item = Item.getItemFromBlock(getBlock());
 			if (item != null) {
-				ForgeHooksClient.registerTESRItemStack(item, getMeta(), getTeClass());
+				ForgeHooksClient.registerTESRItemStack(item, 0, getTeClass());
 			}
 		}
 	}

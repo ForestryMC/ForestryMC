@@ -17,16 +17,18 @@ import java.util.List;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import forestry.core.blocks.BlockBase;
-import forestry.core.tiles.TileEngine;
-import forestry.core.tiles.TileUtil;
+import forestry.core.utils.BlockUtil;
 
 public class BlockEngine extends BlockBase<BlockTypeEngine> {
 	private static final EnumMap<EnumFacing, List<AxisAlignedBB>> boundingBoxesForDirections = new EnumMap<>(EnumFacing.class);
@@ -52,19 +54,13 @@ public class BlockEngine extends BlockBase<BlockTypeEngine> {
 		));
 	}
 
-	public BlockEngine() {
-		super(BlockTypeEngine.class);
+	public BlockEngine(BlockTypeEngine blockType) {
+		super(blockType);
 	}
 
 	@Override
 	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, Entity entityIn) {
-		TileEngine tile = TileUtil.getTile(worldIn, pos, TileEngine.class);
-		if (tile == null) {
-			super.addCollisionBoxToList(state, worldIn, pos, entityBox, collidingBoxes, entityIn);
-			return;
-		}
-
-		EnumFacing orientation = tile.getOrientation();
+		EnumFacing orientation = state.getValue(FACING);
 		List<AxisAlignedBB> boundingBoxes = boundingBoxesForDirections.get(orientation);
 		if (boundingBoxes == null) {
 			return;
@@ -80,12 +76,7 @@ public class BlockEngine extends BlockBase<BlockTypeEngine> {
 
 	@Override
 	public RayTraceResult collisionRayTrace(IBlockState blockState, World worldIn, BlockPos pos, Vec3d start, Vec3d end) {
-		TileEngine tile = TileUtil.getTile(worldIn, pos, TileEngine.class);
-		if (tile == null) {
-			return super.collisionRayTrace(blockState, worldIn, pos, start, end);
-		}
-
-		EnumFacing orientation = tile.getOrientation();
+		EnumFacing orientation = blockState.getValue(FACING);
 		List<AxisAlignedBB> boundingBoxes = boundingBoxesForDirections.get(orientation);
 		if (boundingBoxes == null) {
 			return super.collisionRayTrace(blockState, worldIn, pos, start, end);
@@ -111,5 +102,53 @@ public class BlockEngine extends BlockBase<BlockTypeEngine> {
 		}
 
 		return nearestIntersection;
+	}
+
+	@Override
+	public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis) {
+		if (rotate(world, pos)) {
+			return true;
+		}
+
+		return super.rotateBlock(world, pos, axis);
+	}
+
+	private static boolean isOrientedAtEnergyReciever(World world, BlockPos pos, EnumFacing orientation) {
+		TileEntity tile = world.getTileEntity(pos.offset(orientation));
+		return BlockUtil.isEnergyReceiverOrEngine(orientation.getOpposite(), tile);
+	}
+
+	private static boolean rotate(World world, BlockPos pos) {
+		IBlockState blockState = world.getBlockState(pos);
+		EnumFacing blockFacing = blockState.getValue(FACING);
+		for (int i = blockFacing.ordinal() + 1; i <= blockFacing.ordinal() + 6; ++i) {
+			EnumFacing orientation = EnumFacing.values()[i % 6];
+			if (isOrientedAtEnergyReciever(world, pos, orientation)) {
+				blockState = blockState.withProperty(FACING, orientation);
+				world.setBlockState(pos, blockState, 2);
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public void rotateAfterPlacement(EntityPlayer player, World world, BlockPos pos, EnumFacing side) {
+		EnumFacing orientation = side.getOpposite();
+		if (isOrientedAtEnergyReciever(world, pos, orientation)) {
+			IBlockState blockState = world.getBlockState(pos);
+			blockState = blockState.withProperty(FACING, orientation);
+			world.setBlockState(pos, blockState, 2);
+		} else {
+			super.rotateAfterPlacement(player, world, pos, side);
+			rotate(world, pos);
+		}
+	}
+
+	@Override
+	public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+		IBlockState blockState = world.getBlockState(pos);
+		EnumFacing facing = blockState.getValue(BlockBase.FACING);
+		return facing.getOpposite() == side;
 	}
 }

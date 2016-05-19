@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "forestry:worktable" },
+		"facing=east": { "model": "forestry:worktable", "y": 90 },
+		"facing=south": { "model": "forestry:worktable", "y": 180 },
+		"facing=west": { "model": "forestry:worktable", "y": -90 }
+	}
+}

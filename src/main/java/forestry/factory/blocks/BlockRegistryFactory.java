@@ -15,14 +15,51 @@ import forestry.core.items.ItemBlockForestry;
 import forestry.core.items.ItemBlockNBT;
 
 public class BlockRegistryFactory extends BlockRegistry {
-	public final BlockFactoryTESR factoryTESR;
-	public final BlockFactoryPlain factoryPlain;
+	public final BlockFactoryTESR bottler;
+	public final BlockFactoryTESR carpenter;
+	public final BlockFactoryTESR centrifuge;
+	public final BlockFactoryTESR fermenter;
+	public final BlockFactoryTESR moistener;
+	public final BlockFactoryTESR squeezer;
+	public final BlockFactoryTESR still;
+	public final BlockFactoryTESR rainmaker;
+
+	public final BlockFactoryPlain fabricator;
+	public final BlockFactoryPlain raintank;
+	public final BlockFactoryPlain worktable;
 
 	public BlockRegistryFactory() {
-		factoryTESR = new BlockFactoryTESR();
-		registerBlock(factoryTESR, new ItemBlockForestry(factoryTESR), "factory");
+		bottler = new BlockFactoryTESR(BlockTypeFactoryTesr.BOTTLER);
+		registerBlock(bottler, new ItemBlockForestry(bottler), "bottler");
 
-		factoryPlain = new BlockFactoryPlain();
-		registerBlock(factoryPlain, new ItemBlockNBT(factoryPlain), "factory2");
+		carpenter = new BlockFactoryTESR(BlockTypeFactoryTesr.CARPENTER);
+		registerBlock(carpenter, new ItemBlockForestry(carpenter), "carpenter");
+
+		centrifuge = new BlockFactoryTESR(BlockTypeFactoryTesr.CENTRIFUGE);
+		registerBlock(centrifuge, new ItemBlockForestry(centrifuge), "centrifuge");
+
+		fermenter = new BlockFactoryTESR(BlockTypeFactoryTesr.FERMENTER);
+		registerBlock(fermenter, new ItemBlockForestry(fermenter), "fermenter");
+
+		moistener = new BlockFactoryTESR(BlockTypeFactoryTesr.MOISTENER);
+		registerBlock(moistener, new ItemBlockForestry(moistener), "moistener");
+
+		squeezer = new BlockFactoryTESR(BlockTypeFactoryTesr.SQUEEZER);
+		registerBlock(squeezer, new ItemBlockForestry(squeezer), "squeezer");
+
+		still = new BlockFactoryTESR(BlockTypeFactoryTesr.STILL);
+		registerBlock(still, new ItemBlockForestry(still), "still");
+
+		rainmaker = new BlockFactoryTESR(BlockTypeFactoryTesr.RAINMAKER);
+		registerBlock(rainmaker, new ItemBlockForestry(rainmaker), "rainmaker");
+
+		fabricator = new BlockFactoryPlain(BlockTypeFactoryPlain.FABRICATOR);
+		registerBlock(fabricator, new ItemBlockNBT(fabricator), "fabricator");
+
+		raintank = new BlockFactoryPlain(BlockTypeFactoryPlain.RAINTANK);
+		registerBlock(raintank, new ItemBlockNBT(raintank), "raintank");
+
+		worktable = new BlockFactoryPlain(BlockTypeFactoryPlain.WORKTABLE);
+		registerBlock(worktable, new ItemBlockNBT(worktable), "worktable");
 	}
 }

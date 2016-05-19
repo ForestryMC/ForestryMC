@@ -14,6 +14,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+
 import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileAnalyzer;
@@ -21,16 +22,16 @@ import forestry.core.tiles.TileEscritoire;
 import forestry.core.tiles.TileForestry;
 
 public enum BlockTypeCoreTesr implements IBlockTypeTesr {
-	ANALYZER(0, TileAnalyzer.class, "analyzer", Proxies.render.getRendererAnalyzer()),
-	ESCRITOIRE(1, TileEscritoire.class, "escritoire", Proxies.render.getRenderEscritoire());
+	ANALYZER(TileAnalyzer.class, "analyzer", Proxies.render.getRendererAnalyzer()),
+	ESCRITOIRE(TileEscritoire.class, "escritoire", Proxies.render.getRenderEscritoire());
 
 	public static final BlockTypeCoreTesr[] VALUES = values();
 
 	@Nonnull
 	private final IMachinePropertiesTesr machineProperties;
 
-	<T extends TileForestry> BlockTypeCoreTesr(int meta, @Nonnull Class<T> teClass, @Nonnull String name, @Nullable TileEntitySpecialRenderer<T> renderer) {
-		this.machineProperties = new MachinePropertiesTesr<>(meta, teClass, name, renderer, Constants.RESOURCE_ID + ":blocks/" + name + ".0");
+	<T extends TileForestry> BlockTypeCoreTesr(@Nonnull Class<T> teClass, @Nonnull String name, @Nullable TileEntitySpecialRenderer<T> renderer) {
+		this.machineProperties = new MachinePropertiesTesr<>(teClass, name, renderer, Constants.RESOURCE_ID + ":blocks/" + name + ".0");
 	}
 
 	@Nonnull

@@ -1,5 +1,5 @@
 {
-    "parent": "forestry:block/mail_mailbox",
+    "parent": "forestry:block/apiary",
     "display": {
         "thirdperson": {
             "rotation": [ 10, -45, 170 ],

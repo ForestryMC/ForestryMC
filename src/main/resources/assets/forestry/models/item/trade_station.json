@@ -1,5 +1,5 @@
 {
-    "parent": "forestry:block/factory2_raintank",
+    "parent": "forestry:block/trade_station",
     "display": {
         "thirdperson": {
             "rotation": [ 10, -45, 170 ],

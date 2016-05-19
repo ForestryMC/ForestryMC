@@ -14,10 +14,18 @@ import forestry.core.blocks.BlockRegistry;
 import forestry.core.items.ItemBlockForestry;
 
 public class BlockRegistryMail extends BlockRegistry {
-	public final BlockMail mail;
+	public final BlockMail mailbox;
+	public final BlockMail tradeStation;
+	public final BlockMail stampCollector;
 
 	public BlockRegistryMail() {
-		mail = new BlockMail();
-		registerBlock(mail, new ItemBlockForestry(mail), "mail");
+		mailbox = new BlockMail(BlockTypeMail.MAILBOX);
+		registerBlock(mailbox, new ItemBlockForestry(mailbox), "mailbox");
+
+		tradeStation = new BlockMail(BlockTypeMail.TRADE_STATION);
+		registerBlock(tradeStation, new ItemBlockForestry(tradeStation), "trade_station");
+
+		stampCollector = new BlockMail(BlockTypeMail.PHILATELIST);
+		registerBlock(stampCollector, new ItemBlockForestry(stampCollector), "stamp_collector");
 	}
 }

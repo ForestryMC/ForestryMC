@@ -46,7 +46,6 @@ import forestry.api.storage.StorageManager;
 import forestry.arboriculture.blocks.BlockArbLog;
 import forestry.arboriculture.blocks.BlockArbSlab;
 import forestry.arboriculture.blocks.BlockRegistryArboriculture;
-import forestry.arboriculture.blocks.BlockTypeArboricultureTesr;
 import forestry.arboriculture.commands.CommandTree;
 import forestry.arboriculture.genetics.TreeBranchDefinition;
 import forestry.arboriculture.genetics.TreeDefinition;
@@ -140,8 +139,6 @@ public class PluginArboriculture extends BlankForestryPlugin {
 		WoodAccess.registerFenceGates(blocks.fenceGatesFireproof);
 		WoodAccess.registerStairs(blocks.stairsFireproof);
 
-		blocks.arboriculture.addDefinitions(BlockTypeArboricultureTesr.ARB_CHEST);
-
 		// Init rendering
 		proxy.initializeModels();
 
@@ -168,7 +165,7 @@ public class PluginArboriculture extends BlankForestryPlugin {
 		GameRegistry.registerTileEntity(TileLeaves.class, "forestry.Leaves");
 		GameRegistry.registerTileEntity(TileFruitPod.class, "forestry.Pods");
 
-		blocks.arboriculture.init();
+		blocks.treeChest.init();
 
 		if (Config.enableVillagers) {
 			villagerArborist = new VillagerRegistry.VillagerProfession(Constants.ID_VILLAGER_ARBORIST, Constants.TEXTURE_SKIN_LUMBERJACK);
@@ -360,7 +357,7 @@ public class PluginArboriculture extends BlankForestryPlugin {
 				'B', "ingotBronze",
 				'#', "stickWood");
 
-		RecipeUtil.addRecipe(blocks.arboriculture.get(BlockTypeArboricultureTesr.ARB_CHEST),
+		RecipeUtil.addRecipe(blocks.treeChest,
 				" # ",
 				"XYX",
 				"XXX",

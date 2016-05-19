@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "forestry:bee_house" },
+		"facing=east": { "model": "forestry:bee_house", "y": 90 },
+		"facing=south": { "model": "forestry:bee_house", "y": 180 },
+		"facing=west": { "model": "forestry:bee_house", "y": -90 }
+	}
+}

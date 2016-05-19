@@ -40,7 +40,7 @@ public class FermenterRecipeCategory extends ForestryRecipeCategory {
 	private final IDrawable tankOverlay;
 	
 	public FermenterRecipeCategory(IGuiHelper guiHelper) {
-		super(guiHelper.createDrawable(guiTexture, 34, 18, 108, 60), "tile.for.factory.fermenter.name");
+		super(guiHelper.createDrawable(guiTexture, 34, 18, 108, 60), "tile.for.fermenter.name");
 		
 		IDrawableStatic progressBarDrawable0 = guiHelper.createDrawable(guiTexture, 176, 60, 4, 18);
 		this.progressBar0 = guiHelper.createAnimatedDrawable(progressBarDrawable0, 40, IDrawableAnimated.StartDirection.BOTTOM, false);

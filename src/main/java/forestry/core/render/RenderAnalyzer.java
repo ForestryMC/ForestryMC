@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.render;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -19,6 +20,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 import forestry.apiculture.render.ModelAnalyzer;
+import forestry.core.blocks.BlockBase;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileAnalyzer;
 
@@ -38,10 +40,14 @@ public class RenderAnalyzer extends TileEntitySpecialRenderer<TileAnalyzer> {
 	@Override
 	public void renderTileEntityAt(TileAnalyzer analyzer, double x, double y, double z, float partialTicks, int destroyStage) {
 		if (analyzer != null) {
-			render(analyzer.getIndividualOnDisplay(), analyzer.getWorld(), analyzer.getOrientation(), x, y, z);
-		} else {
-			render(null, null, EnumFacing.WEST, x, y, z);
+			IBlockState blockState = analyzer.getWorldObj().getBlockState(analyzer.getPos());
+			if (blockState != null && blockState.getBlock() instanceof BlockBase) {
+				EnumFacing facing = blockState.getValue(BlockBase.FACING);
+				render(analyzer.getIndividualOnDisplay(), analyzer.getWorld(), facing, x, y, z);
+				return;
+			}
 		}
+		render(null, null, EnumFacing.WEST, x, y, z);
 	}
 
 	private void render(ItemStack itemstack, World world, EnumFacing orientation, double x, double y, double z) {

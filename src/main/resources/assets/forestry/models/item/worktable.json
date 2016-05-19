@@ -1,5 +1,5 @@
 {
-    "parent": "forestry:block/mail_trade_station",
+    "parent": "forestry:block/worktable",
     "display": {
         "thirdperson": {
             "rotation": [ 10, -45, 170 ],

@@ -5,11 +5,11 @@ import javax.annotation.Nullable;
 import java.awt.Rectangle;
 import java.util.List;
 
+import net.minecraft.item.ItemStack;
+
 import forestry.core.gui.GuiForestry;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
 import forestry.factory.PluginFactory;
-import forestry.factory.blocks.BlockTypeFactoryPlain;
-import forestry.factory.blocks.BlockTypeFactoryTesr;
 import forestry.factory.gui.GuiBottler;
 import forestry.factory.gui.GuiCarpenter;
 import forestry.factory.gui.GuiCentrifuge;
@@ -108,15 +108,15 @@ public class FactoryJeiPlugin extends BlankModPlugin {
 		registry.addRecipeClickArea(GuiSqueezer.class, 76, 41, 43, 16, ForestryRecipeCategoryUid.SQUEEZER);
 		registry.addRecipeClickArea(GuiStill.class, 73, 17, 33, 57, ForestryRecipeCategoryUid.STILL);
 
-		registry.addRecipeCategoryCraftingItem(PluginFactory.blocks.factoryTESR.get(BlockTypeFactoryTesr.BOTTLER), ForestryRecipeCategoryUid.BOTTLER);
-		registry.addRecipeCategoryCraftingItem(PluginFactory.blocks.factoryTESR.get(BlockTypeFactoryTesr.CARPENTER), ForestryRecipeCategoryUid.CARPENTER);
-		registry.addRecipeCategoryCraftingItem(PluginFactory.blocks.factoryTESR.get(BlockTypeFactoryTesr.CENTRIFUGE), ForestryRecipeCategoryUid.CENTRIFUGE);
-		registry.addRecipeCategoryCraftingItem(PluginFactory.blocks.factoryPlain.get(BlockTypeFactoryPlain.FABRICATOR), ForestryRecipeCategoryUid.FABRICATOR);
-		registry.addRecipeCategoryCraftingItem(PluginFactory.blocks.factoryTESR.get(BlockTypeFactoryTesr.FERMENTER), ForestryRecipeCategoryUid.FERMENTER);
-		registry.addRecipeCategoryCraftingItem(PluginFactory.blocks.factoryTESR.get(BlockTypeFactoryTesr.MOISTENER), ForestryRecipeCategoryUid.MOISTENER);
-		registry.addRecipeCategoryCraftingItem(PluginFactory.blocks.factoryTESR.get(BlockTypeFactoryTesr.RAINMAKER), ForestryRecipeCategoryUid.RAINMAKER);
-		registry.addRecipeCategoryCraftingItem(PluginFactory.blocks.factoryTESR.get(BlockTypeFactoryTesr.SQUEEZER), ForestryRecipeCategoryUid.SQUEEZER);
-		registry.addRecipeCategoryCraftingItem(PluginFactory.blocks.factoryTESR.get(BlockTypeFactoryTesr.STILL), ForestryRecipeCategoryUid.STILL);
+		registry.addRecipeCategoryCraftingItem(new ItemStack(PluginFactory.blocks.bottler), ForestryRecipeCategoryUid.BOTTLER);
+		registry.addRecipeCategoryCraftingItem(new ItemStack(PluginFactory.blocks.carpenter), ForestryRecipeCategoryUid.CARPENTER);
+		registry.addRecipeCategoryCraftingItem(new ItemStack(PluginFactory.blocks.centrifuge), ForestryRecipeCategoryUid.CENTRIFUGE);
+		registry.addRecipeCategoryCraftingItem(new ItemStack(PluginFactory.blocks.fabricator), ForestryRecipeCategoryUid.FABRICATOR);
+		registry.addRecipeCategoryCraftingItem(new ItemStack(PluginFactory.blocks.fermenter), ForestryRecipeCategoryUid.FERMENTER);
+		registry.addRecipeCategoryCraftingItem(new ItemStack(PluginFactory.blocks.moistener), ForestryRecipeCategoryUid.MOISTENER);
+		registry.addRecipeCategoryCraftingItem(new ItemStack(PluginFactory.blocks.rainmaker), ForestryRecipeCategoryUid.RAINMAKER);
+		registry.addRecipeCategoryCraftingItem(new ItemStack(PluginFactory.blocks.squeezer), ForestryRecipeCategoryUid.SQUEEZER);
+		registry.addRecipeCategoryCraftingItem(new ItemStack(PluginFactory.blocks.still), ForestryRecipeCategoryUid.STILL);
 
 		IRecipeTransferRegistry transferRegistry = registry.getRecipeTransferRegistry();
 		transferRegistry.addRecipeTransferHandler(new WorktableRecipeTransferHandler());

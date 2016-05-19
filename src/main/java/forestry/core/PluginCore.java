@@ -41,7 +41,6 @@ import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
 import forestry.core.blocks.BlockRegistryCore;
 import forestry.core.blocks.BlockSoil;
-import forestry.core.blocks.BlockTypeCoreTesr;
 import forestry.core.blocks.EnumResourceType;
 import forestry.core.circuits.CircuitRegistry;
 import forestry.core.circuits.SolderManager;
@@ -119,15 +118,14 @@ public class PluginCore extends BlankForestryPlugin {
 		MinecraftForge.EVENT_BUS.register(this);
 
 		rootCommand.addChildCommand(new CommandPlugins());
-
-		blocks.core.addDefinitions(BlockTypeCoreTesr.VALUES);
 	}
 
 	@Override
 	public void doInit() {
 		super.doInit();
 
-		blocks.core.init();
+		blocks.analyzer.init();
+		blocks.escritoire.init();
 
 		ForestryModEnvWarningCallable.register();
 
@@ -279,7 +277,7 @@ public class PluginCore extends BlankForestryPlugin {
 		}
 		
 		// ANALYZER
-		RecipeUtil.addRecipe(PluginCore.blocks.core.get(BlockTypeCoreTesr.ANALYZER),
+		RecipeUtil.addRecipe(PluginCore.blocks.analyzer,
 				"XTX",
 				" Y ",
 				"X X",

@@ -12,7 +12,7 @@ package forestry.core.tiles;
 
 import java.io.IOException;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.nbt.NBTTagCompound;
@@ -21,6 +21,7 @@ import net.minecraft.util.EnumFacing;
 
 import forestry.api.core.IErrorLogic;
 import forestry.apiculture.network.packets.PacketActiveUpdate;
+import forestry.core.blocks.BlockBase;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
@@ -65,16 +66,7 @@ public abstract class TileEngine extends TileBase implements IEnergyConnection, 
 		hints.addAll(Config.hints.get("engine"));
 	}
 
-	@Override
-	public void rotateAfterPlacement(EntityPlayer player, EnumFacing side) {
-		EnumFacing orientation = side.getOpposite();
-		if (isOrientedAtEnergyReciever(orientation)) {
-			setOrientation(orientation);
-		} else {
-			super.rotateAfterPlacement(player, side);
-			rotate();
-		}
-	}
+
 
 	protected void addHeat(int i) {
 		heat += i;
@@ -124,7 +116,9 @@ public abstract class TileEngine extends TileBase implements IEnergyConnection, 
 		errorLogic.setCondition(!enabledRedstone, EnumErrorCode.NO_REDSTONE);
 
 		// Determine targeted tile
-		TileEntity tile = worldObj.getTileEntity(getPos().offset(getOrientation()));
+		IBlockState blockState = worldObj.getBlockState(getPos());
+		EnumFacing facing = blockState.getValue(BlockBase.FACING);
+		TileEntity tile = worldObj.getTileEntity(getPos().offset(facing));
 
 		float newPistonSpeed = getPistonSpeed();
 		if (newPistonSpeed != pistonSpeedServer) {
@@ -136,7 +130,7 @@ public abstract class TileEngine extends TileBase implements IEnergyConnection, 
 
 			progress += pistonSpeedServer;
 
-			energyManager.sendEnergy(getOrientation(), tile);
+			energyManager.sendEnergy(facing, tile);
 
 			if (progress > 0.25 && stagePiston == 1) {
 				stagePiston = 2;
@@ -144,8 +138,8 @@ public abstract class TileEngine extends TileBase implements IEnergyConnection, 
 				progress = 0;
 				stagePiston = 0;
 			}
-		} else if (enabledRedstone && BlockUtil.isEnergyReceiverOrEngine(getOrientation().getOpposite(), tile)) {
-			if (energyManager.canSendEnergy(getOrientation(), tile)) {
+		} else if (enabledRedstone && BlockUtil.isEnergyReceiverOrEngine(facing.getOpposite(), tile)) {
+			if (energyManager.canSendEnergy(facing, tile)) {
 				stagePiston = 1; // If we can transfer energy, start running
 				setActive(true);
 				cantSendEnergyCountdown = CANT_SEND_ENERGY_TIME;
@@ -186,30 +180,6 @@ public abstract class TileEngine extends TileBase implements IEnergyConnection, 
 		if (!worldObj.isRemote) {
 			Proxies.net.sendNetworkPacket(new PacketActiveUpdate(this), worldObj);
 		}
-	}
-
-	/* INTERACTION */
-	@Override
-	public boolean rotate(EnumFacing axis) {
-		rotate();
-
-		// it would be irritating if the wrench opened the engine gui when it failed to rotate, so always return true
-		return true;
-	}
-
-	private void rotate() {
-		for (int i = getOrientation().ordinal() + 1; i <= getOrientation().ordinal() + 6; ++i) {
-			EnumFacing orientation = EnumFacing.values()[i % 6];
-			if (isOrientedAtEnergyReciever(orientation)) {
-				setOrientation(orientation);
-				return;
-			}
-		}
-	}
-
-	private boolean isOrientedAtEnergyReciever(EnumFacing orientation) {
-		TileEntity tile = worldObj.getTileEntity(getPos().offset(orientation));
-		return BlockUtil.isEnergyReceiverOrEngine(getOrientation().getOpposite(), tile);
 	}
 
 	// STATE INFORMATION

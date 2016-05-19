@@ -10,12 +10,14 @@
  ******************************************************************************/
 package forestry.core.render;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 
+import forestry.core.blocks.BlockBase;
 import forestry.core.config.Constants;
 import forestry.core.inventory.InventoryEscritoire;
 import forestry.core.models.ModelEscritoire;
@@ -38,10 +40,14 @@ public class RenderEscritoire extends TileEntitySpecialRenderer<TileEscritoire> 
 	@Override
 	public void renderTileEntityAt(TileEscritoire escritoire, double x, double y, double z, float partialTicks, int destroyStage) {
 		if (escritoire != null) {
-			render(escritoire.getStackInSlot(InventoryEscritoire.SLOT_ANALYZE), escritoire.getOrientation(), x, y, z);
-		} else {
-			render(null, EnumFacing.SOUTH, x, y, z);
+			IBlockState blockState = escritoire.getWorldObj().getBlockState(escritoire.getPos());
+			if (blockState != null && blockState.getBlock() instanceof BlockBase) {
+				EnumFacing facing = blockState.getValue(BlockBase.FACING);
+				render(escritoire.getStackInSlot(InventoryEscritoire.SLOT_ANALYZE), facing, x, y, z);
+				return;
+			}
 		}
+		render(null, EnumFacing.SOUTH, x, y, z);
 	}
 
 	private void render(ItemStack itemstack, EnumFacing orientation, double x, double y, double z) {

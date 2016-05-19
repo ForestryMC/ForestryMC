@@ -28,6 +28,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkGenerator;
+
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -50,7 +51,6 @@ import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.Translator;
 import forestry.lepidopterology.blocks.BlockRegistryLepidopterology;
-import forestry.lepidopterology.blocks.BlockTypeLepidopterologyTesr;
 import forestry.lepidopterology.commands.CommandButterfly;
 import forestry.lepidopterology.entities.EntityButterfly;
 import forestry.lepidopterology.genetics.ButterflyBranchDefinition;
@@ -111,8 +111,6 @@ public class PluginLepidopterology extends BlankForestryPlugin {
 		
 		GameRegistry.registerTileEntity(TileCocoon.class, "forestry.Cocoon");
 		proxy.preInitializeRendering();
-
-		blocks.lepidopterology.addDefinitions(BlockTypeLepidopterologyTesr.VALUES);
 	}
 
 	@Nonnull
@@ -133,7 +131,7 @@ public class PluginLepidopterology extends BlankForestryPlugin {
 		ButterflyDefinition.initButterflies();
 		AlleleButterflyCocoon.createLoot();
 
-		blocks.lepidopterology.init();
+		blocks.butterflyChest.init();
 
 		if(spawnButterflysFromLeaves){
 			TreeManager.treeRoot.registerLeafTickHandler(new ButterflySpawner());
@@ -261,7 +259,7 @@ public class PluginLepidopterology extends BlankForestryPlugin {
 	public void registerRecipes() {
 		CraftingManager.getInstance().getRecipeList().add(new MatingRecipe());
 
-		RecipeUtil.addRecipe(blocks.lepidopterology.get(BlockTypeLepidopterologyTesr.LEPICHEST),
+		RecipeUtil.addRecipe(blocks.butterflyChest,
 				" # ",
 				"XYX",
 				"XXX",

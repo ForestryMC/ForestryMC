@@ -20,16 +20,16 @@ import forestry.core.blocks.MachineProperties;
 import forestry.core.tiles.TileForestry;
 
 public enum BlockTypeApiculture implements IBlockType {
-	APIARY(0, TileApiary.class, "apiary"),
-	BEE_HOUSE(1, TileBeeHouse.class, "bee_house");
+	APIARY(TileApiary.class, "apiary"),
+	BEE_HOUSE(TileBeeHouse.class, "bee_house");
 
 	public static final BlockTypeApiculture[] VALUES = values();
 
 	@Nonnull
 	private final IMachineProperties machineProperties;
 
-	<T extends TileForestry> BlockTypeApiculture(int meta, @Nonnull Class<T> teClass, @Nonnull String name) {
-		this.machineProperties = new MachineProperties<>(meta, teClass, name);
+	<T extends TileForestry> BlockTypeApiculture(@Nonnull Class<T> teClass, @Nonnull String name) {
+		this.machineProperties = new MachineProperties<>(teClass, name);
 	}
 
 	@Nonnull

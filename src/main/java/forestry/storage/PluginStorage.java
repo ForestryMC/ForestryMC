@@ -62,7 +62,6 @@ import forestry.core.utils.Log;
 import forestry.core.utils.Translator;
 import forestry.lepidopterology.PluginLepidopterology;
 import forestry.lepidopterology.blocks.BlockRegistryLepidopterology;
-import forestry.lepidopterology.blocks.BlockTypeLepidopterologyTesr;
 import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
@@ -448,12 +447,12 @@ public class PluginStorage extends BlankForestryPlugin {
 	public void registerRecipes() {
 		BlockRegistryApiculture beeBlocks = PluginApiculture.blocks;
 		if (items.apiaristBackpack != null && beeBlocks != null) {
-			addBackpackRecipe(items.apiaristBackpack, "stickWood", beeBlocks.apicultureChest);
+			addBackpackRecipe(items.apiaristBackpack, "stickWood", beeBlocks.beeChest);
 		}
 
 		BlockRegistryLepidopterology butterflyBlocks = PluginLepidopterology.blocks;
 		if (items.lepidopteristBackpack != null && butterflyBlocks != null) {
-			ItemStack chest = butterflyBlocks.lepidopterology.get(BlockTypeLepidopterologyTesr.LEPICHEST);
+			ItemStack chest = new ItemStack(butterflyBlocks.butterflyChest);
 			addBackpackRecipe(items.lepidopteristBackpack, "stickWood", chest);
 		}
 

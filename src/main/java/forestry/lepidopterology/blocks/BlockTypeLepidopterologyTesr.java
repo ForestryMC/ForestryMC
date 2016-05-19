@@ -26,18 +26,18 @@ import forestry.core.tiles.TileNaturalistChest;
 import forestry.lepidopterology.tiles.TileLepidopteristChest;
 
 public enum BlockTypeLepidopterologyTesr implements IBlockTypeTesr {
-	LEPICHEST(0, TileLepidopteristChest.class, "lepi_chest", Proxies.render.getRenderChest("lepichest"), TileNaturalistChest.chestBoundingBox);
+	LEPICHEST(TileLepidopteristChest.class, "lepi_chest", Proxies.render.getRenderChest("lepichest"), TileNaturalistChest.chestBoundingBox);
 
 	public static final BlockTypeLepidopterologyTesr[] VALUES = values();
 
 	@Nonnull
 	private final IMachinePropertiesTesr<?> machineProperties;
 
-	<T extends TileForestry> BlockTypeLepidopterologyTesr(int meta, @Nonnull Class<T> teClass, @Nonnull String name, @Nullable TileEntitySpecialRenderer<? super T> renderer, @Nullable AxisAlignedBB boundingBox) {
+	<T extends TileForestry> BlockTypeLepidopterologyTesr(@Nonnull Class<T> teClass, @Nonnull String name, @Nullable TileEntitySpecialRenderer<? super T> renderer, @Nullable AxisAlignedBB boundingBox) {
 		if (boundingBox != null) {
-			this.machineProperties = new MachinePropertiesTesr<>(meta, teClass, name, renderer, boundingBox, Constants.RESOURCE_ID + ":blocks/" + name + ".0");
+			this.machineProperties = new MachinePropertiesTesr<>(teClass, name, renderer, boundingBox, Constants.RESOURCE_ID + ":blocks/" + name + ".0");
 		} else {
-			this.machineProperties = new MachinePropertiesTesr<>(meta, teClass, name, renderer, Constants.RESOURCE_ID + ":blocks/" + name + ".0");
+			this.machineProperties = new MachinePropertiesTesr<>(teClass, name, renderer, Constants.RESOURCE_ID + ":blocks/" + name + ".0");
 		}
 	}
 

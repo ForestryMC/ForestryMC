@@ -13,7 +13,7 @@ package forestry.mail.blocks;
 import forestry.core.blocks.BlockBase;
 
 public class BlockMail extends BlockBase<BlockTypeMail> {
-	public BlockMail() {
-		super(BlockTypeMail.class);
+	public BlockMail(BlockTypeMail blockType) {
+		super(blockType);
 	}
 }

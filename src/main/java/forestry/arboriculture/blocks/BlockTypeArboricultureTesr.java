@@ -26,18 +26,18 @@ import forestry.core.tiles.TileForestry;
 import forestry.core.tiles.TileNaturalistChest;
 
 public enum BlockTypeArboricultureTesr implements IBlockTypeTesr {
-	ARB_CHEST(0, TileArboristChest.class, "arb_chest", Proxies.render.getRenderChest("arbchest"), TileNaturalistChest.chestBoundingBox);
+	ARB_CHEST(TileArboristChest.class, "arb_chest", Proxies.render.getRenderChest("arbchest"), TileNaturalistChest.chestBoundingBox);
 
 	public static final BlockTypeArboricultureTesr[] VALUES = values();
 
 	@Nonnull
 	private final IMachinePropertiesTesr<?> machineProperties;
 
-	<T extends TileForestry> BlockTypeArboricultureTesr(int meta, @Nonnull Class<T> teClass, @Nonnull String name, @Nullable TileEntitySpecialRenderer<? super T> renderer, @Nullable AxisAlignedBB boundingBox) {
+	<T extends TileForestry> BlockTypeArboricultureTesr(@Nonnull Class<T> teClass, @Nonnull String name, @Nullable TileEntitySpecialRenderer<? super T> renderer, @Nullable AxisAlignedBB boundingBox) {
 		if (boundingBox != null) {
-			this.machineProperties = new MachinePropertiesTesr<>(meta, teClass, name, renderer, boundingBox, Constants.RESOURCE_ID + ":blocks/" + name + ".0");
+			this.machineProperties = new MachinePropertiesTesr<>(teClass, name, renderer, boundingBox, Constants.RESOURCE_ID + ":blocks/" + name + ".0");
 		} else {
-			this.machineProperties = new MachinePropertiesTesr<>(meta, teClass, name, renderer, Constants.RESOURCE_ID + ":blocks/" + name + ".0");
+			this.machineProperties = new MachinePropertiesTesr<>(teClass, name, renderer, Constants.RESOURCE_ID + ":blocks/" + name + ".0");
 		}
 	}
 

@@ -14,6 +14,7 @@ import java.awt.Color;
 import java.util.EnumMap;
 import java.util.Locale;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -21,6 +22,7 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 
+import forestry.core.blocks.BlockBase;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.IRenderableTile;
 import forestry.core.tiles.TileBase;
@@ -89,10 +91,14 @@ public class RenderMachine extends TileEntitySpecialRenderer<TileBase> {
 	public void renderTileEntityAt(TileBase tile, double x, double y, double z, float partialTicks, int destroyStage) {
 		if (tile != null) {
 			IRenderableTile generator = (IRenderableTile) tile;
-			render(generator.getResourceTankInfo(), generator.getProductTankInfo(), generator.getOrientation(), x, y, z, destroyStage);
-		} else {
-			render(TankRenderInfo.EMPTY, TankRenderInfo.EMPTY, EnumFacing.SOUTH, x, y, z, -1);
+			IBlockState blockState = tile.getWorldObj().getBlockState(tile.getPos());
+			if (blockState != null && blockState.getBlock() instanceof BlockBase) {
+				EnumFacing facing = blockState.getValue(BlockBase.FACING);
+				render(generator.getResourceTankInfo(), generator.getProductTankInfo(), facing, x, y, z, destroyStage);
+				return;
+			}
 		}
+		render(TankRenderInfo.EMPTY, TankRenderInfo.EMPTY, EnumFacing.SOUTH, x, y, z, -1);
 	}
 
 	private void render(TankRenderInfo resourceTankInfo, TankRenderInfo productTankInfo, EnumFacing orientation, double x, double y, double z, int destroyStage) {

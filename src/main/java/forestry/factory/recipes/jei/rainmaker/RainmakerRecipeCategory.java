@@ -20,7 +20,7 @@ public class RainmakerRecipeCategory extends ForestryRecipeCategory {
 	private final IDrawable slot;
 
 	public RainmakerRecipeCategory(@Nonnull IGuiHelper guiHelper) {
-		super(guiHelper.createBlankDrawable(150, 30), "tile.for.factory.rainmaker.name");
+		super(guiHelper.createBlankDrawable(150, 30), "tile.for.rainmaker.name");
 		this.slot = guiHelper.getSlotDrawable();
 	}
 

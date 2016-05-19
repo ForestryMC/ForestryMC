@@ -14,6 +14,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.common.MinecraftForge;
+
 import forestry.api.circuits.ICircuit;
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.PostManager;
@@ -31,7 +32,6 @@ import forestry.core.items.EnumElectronTube;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.recipes.RecipeUtil;
 import forestry.mail.blocks.BlockRegistryMail;
-import forestry.mail.blocks.BlockTypeMail;
 import forestry.mail.commands.CommandMail;
 import forestry.mail.items.EnumStampDefinition;
 import forestry.mail.items.ItemRegistryMail;
@@ -67,8 +67,6 @@ public class PluginMail extends BlankForestryPlugin {
 		if (Config.mailAlertEnabled) {
 			MinecraftForge.EVENT_BUS.register(new EventHandlerMailAlert());
 		}
-
-		blocks.mail.addDefinitions(BlockTypeMail.VALUES);
 	}
 
 	// TODO: Buildcraft for 1.9
@@ -81,7 +79,9 @@ public class PluginMail extends BlankForestryPlugin {
 	public void doInit() {
 		super.doInit();
 
-		blocks.mail.init();
+		blocks.mailbox.init();
+		blocks.tradeStation.init();
+		blocks.stampCollector.init();
 	}
 
 	@Override
@@ -136,7 +136,7 @@ public class PluginMail extends BlankForestryPlugin {
 
 		RecipeUtil.addShapelessRecipe(items.catalogue.getItemStack(), items.stamps.getWildcard(), new ItemStack(Items.BOOK));
 
-		RecipeUtil.addRecipe(blocks.mail.get(BlockTypeMail.MAILBOX),
+		RecipeUtil.addRecipe(new ItemStack(blocks.mailbox),
 				" # ",
 				"#Y#",
 				"XXX",
@@ -144,7 +144,7 @@ public class PluginMail extends BlankForestryPlugin {
 				'X', "chestWood",
 				'Y', PluginCore.items.sturdyCasing);
 
-		RecipeUtil.addRecipe(blocks.mail.get(BlockTypeMail.TRADE_STATION),
+		RecipeUtil.addRecipe(new ItemStack(blocks.tradeStation),
 				"Z#Z",
 				"#Y#",
 				"XWX",

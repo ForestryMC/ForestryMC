@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
@@ -206,6 +207,10 @@ public abstract class RecipeUtil {
 		}
 
 		return null;
+	}
+
+	public static void addRecipe(Block block, Object... obj) {
+		addRecipe(new ItemStack(block), obj);
 	}
 
 	public static void addRecipe(Item item, Object... obj) {

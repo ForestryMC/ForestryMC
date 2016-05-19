@@ -1,5 +1,5 @@
 {
-    "parent": "forestry:block/factory2_fabricator",
+    "parent": "forestry:block/bee_house",
     "display": {
         "thirdperson": {
             "rotation": [ 10, -45, 170 ],

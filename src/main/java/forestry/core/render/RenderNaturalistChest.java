@@ -10,12 +10,14 @@
  ******************************************************************************/
 package forestry.core.render;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.model.ModelChest;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 
+import forestry.core.blocks.BlockBase;
 import forestry.core.config.Constants;
 import forestry.core.tiles.TileNaturalistChest;
 
@@ -34,10 +36,14 @@ public class RenderNaturalistChest extends TileEntitySpecialRenderer<TileNatural
 	@Override
 	public void renderTileEntityAt(TileNaturalistChest chest, double x, double y, double z, float partialTicks, int destroyStage) {
 		if (chest != null) {
-			render(chest.getOrientation(), chest.prevLidAngle, chest.lidAngle, x, y, z, partialTicks);
-		} else {
-			render(EnumFacing.SOUTH, 0, 0, x, y, z, 0);
+			IBlockState blockState = chest.getWorldObj().getBlockState(chest.getPos());
+			if (blockState != null && blockState.getBlock() instanceof BlockBase) {
+				EnumFacing facing = blockState.getValue(BlockBase.FACING);
+				render(facing, chest.prevLidAngle, chest.lidAngle, x, y, z, partialTicks);
+				return;
+			}
 		}
+		render(EnumFacing.SOUTH, 0, 0, x, y, z, 0);
 	}
 
 	public void render(EnumFacing orientation, float prevLidAngle, float lidAngle, double x, double y, double z, float partialTick) {

@@ -28,7 +28,6 @@ import forestry.apiculture.ApiaryBeeListener;
 import forestry.apiculture.ApiaryBeeModifier;
 import forestry.apiculture.IApiary;
 import forestry.apiculture.PluginApiculture;
-import forestry.apiculture.blocks.BlockTypeApiculture;
 import forestry.apiculture.gui.ContainerMinecartBeehouse;
 import forestry.apiculture.gui.GuiBeeHousing;
 import forestry.apiculture.inventory.IApiaryInventory;
@@ -72,7 +71,7 @@ public class EntityMinecartApiary extends EntityMinecartBeeHousingBase implement
 	
 	@Override
 	public IBlockState getDisplayTile() {
-		return PluginApiculture.blocks.apiculture.getStateFromMeta(BlockTypeApiculture.APIARY.ordinal());
+		return PluginApiculture.blocks.apiary.getDefaultState();
 	}
 
 	@Override

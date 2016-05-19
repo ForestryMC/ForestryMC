@@ -10,17 +10,15 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.annotation.Nonnull;
 
+import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.EffectRenderer;
-import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
@@ -31,13 +29,15 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.Mirror;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fluids.IFluidHandler;
@@ -62,59 +62,36 @@ import forestry.core.tiles.TileUtil;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.PlayerUtil;
 
-import jline.internal.Log;
+public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> extends BlockForestry implements IItemModelRegister, ISpriteRegister, IStateMapperRegister {
+	/** use this instead of {@link BlockHorizontal#FACING} so the blocks rotate in a circle instead of NSWE order. */
+	public static final PropertyEnum<EnumFacing> FACING = PropertyEnum.create("facing", EnumFacing.class, EnumFacing.NORTH, EnumFacing.EAST, EnumFacing.SOUTH, EnumFacing.WEST);
 
-public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> extends BlockForestry implements IItemModelRegister, ISpriteRegister, IStateMapperRegister, IBlockWithMeta {
-	private final Map<P, IMachineProperties> properties = new HashMap<>();
 	private final boolean hasTESR;
 	private final boolean hasCustom;
-	private final Class<P> machinePropertiesClass;
-	
+	@Nonnull
+	public final P blockType;
+
 	/* PROPERTIES */
-	private final PropertyEnum<P> TYPE;
-	private final PropertyEnum<EnumFacing> FACE;
-	
+
 	private final ParticleHelper.Callback particleCallback;
 	
 	protected final BlockStateContainer blockState;
-	
-	private boolean canCreateProps = false;
 
-	public BlockBase(Class<P> machinePropertiesClass) {
+	public BlockBase(@Nonnull P blockType) {
 		super(Material.IRON);
 
-		this.hasTESR = IBlockTypeTesr.class.isAssignableFrom(machinePropertiesClass);
-		this.hasCustom = IBlockTypeCustom.class.isAssignableFrom(machinePropertiesClass);
+		this.blockType = blockType;
+		blockType.getMachineProperties().setBlock(this);
+
+		this.hasTESR = blockType instanceof IBlockTypeTesr;
+		this.hasCustom = blockType instanceof IBlockTypeCustom;
 		this.lightOpacity = (!hasTESR && !hasCustom) ? 255 : 0;
-		this.machinePropertiesClass = machinePropertiesClass;
-		
-		canCreateProps = true;
-		
-		TYPE = PropertyEnum.create("type", machinePropertiesClass);
-		FACE = PropertyEnum.create("face", EnumFacing.class);
-		
+
 		this.blockState = this.createBlockState();
-		IBlockState state = this.blockState.getBaseState().withProperty(FACE, EnumFacing.NORTH);
+		IBlockState state = this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH);
 		this.setDefaultState(state);
 		
-		particleCallback = new MachineParticleCallback<>(this, TYPE);
-	}
-
-	public PropertyEnum<P> getTypeProperty() {
-		return TYPE;
-	}
-
-	@SafeVarargs
-	public final void addDefinitions(P... blockTypes) {
-		for (P blockType : blockTypes) {
-			IMachineProperties<?> machineProperties = blockType.getMachineProperties();
-			if (machineProperties != null) {
-				machineProperties.setBlock(this);
-				this.properties.put(blockType, machineProperties);
-			} else {
-				Log.error("Null Definition found {}", Arrays.toString(blockTypes));
-			}
-		}
+		particleCallback = new MachineParticleCallback<>(this, blockType);
 	}
 
 	@Override
@@ -136,59 +113,30 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 		}
 	}
 
-	private IMachineProperties getDefinition(IBlockAccess world, BlockPos pos) {
-		IBlockState state = world.getBlockState(pos);
-		if (!(state.getBlock() instanceof BlockBase)) {
-			return null;
-		}
-		return state.getValue(TYPE).getMachineProperties();
+	@Nonnull
+	private IMachineProperties getDefinition() {
+		return blockType.getMachineProperties();
 	}
 
 	@Override
 	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
-		IMachineProperties definition = getDefinition(worldIn, pos);
-		if (definition == null) {
-			return super.getCollisionBoundingBox(blockState, worldIn, pos);
-		}
+		IMachineProperties definition = getDefinition();
 		return definition.getBoundingBox(pos, blockState);
 	}
 
 	@Override
 	public RayTraceResult collisionRayTrace(IBlockState blockState, World worldIn, BlockPos pos, Vec3d start, Vec3d end) {
-		IMachineProperties definition = getDefinition(worldIn, pos);
-		if (definition == null) {
-			return super.collisionRayTrace(blockState, worldIn, pos, start, end);
-		} else {
-			return definition.collisionRayTrace(worldIn, pos, start, end);
-		}
-	}
-
-	/* CREATIVE INVENTORY */
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
-		for (IMachineProperties definition : properties.values()) {
-			definition.getSubBlocks(item, tab, list);
-		}
+		IMachineProperties definition = getDefinition();
+		return definition.collisionRayTrace(worldIn, pos, start, end);
 	}
 
 	/* TILE ENTITY CREATION */
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
-		IMachineProperties definition = getStateFromMeta(meta).getValue(TYPE).getMachineProperties();
-		if (definition == null) {
-			return null;
-		}
-		return definition.createTileEntity();
+		return getDefinition().createTileEntity();
 	}
 
 	/* INTERACTION */
-	@Override
-	public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
-		IMachineProperties definition = getDefinition(world, pos);
-		return definition != null && definition.isSolidOnSide(world, pos, side);
-	}
-
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (playerIn.isSneaking()) {
@@ -224,13 +172,23 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 		return true;
 	}
 
-	@Override
-	public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis) {
-		IMachineProperties definition = getDefinition(world, pos);
-		if (definition == null) {
-			return super.rotateBlock(world, pos, axis);
+	public void rotateAfterPlacement(EntityPlayer player, World world, BlockPos pos, EnumFacing side) {
+		IBlockState state = world.getBlockState(pos);
+
+		int l = MathHelper.floor_double(player.rotationYaw * 4F / 360F + 0.5D) & 3;
+		if (l == 0) {
+			state = state.withProperty(FACING, EnumFacing.NORTH);
 		}
-		return definition.rotateBlock(world, pos, axis);
+		if (l == 1) {
+			state = state.withProperty(FACING, EnumFacing.EAST);
+		}
+		if (l == 2) {
+			state = state.withProperty(FACING, EnumFacing.SOUTH);
+		}
+		if (l == 3) {
+			state = state.withProperty(FACING, EnumFacing.WEST);
+		}
+		world.setBlockState(pos, state, 2);
 	}
 
 	@Override
@@ -260,74 +218,52 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 	}
 
 	public void init() {
-		for (IMachineProperties def : properties.values()) {
-			def.registerTileEntity();
-		}
+		blockType.getMachineProperties().registerTileEntity();
 	}
 
 	/* ITEM MODELS */
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		for (IMachineProperties def : properties.values()) {
-			def.registerModel(item, manager);
-		}
+		blockType.getMachineProperties().registerModel(item, manager);
 	}
 	
 	/* STATES */
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerStateMapper() {
-		Proxies.render.registerStateMapper(this, new MachineStateMapper<>(machinePropertiesClass, TYPE, FACE));
+		Proxies.render.registerStateMapper(this, new MachineStateMapper<>(blockType));
 	}
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		if (!canCreateProps) {
-			return super.createBlockState();
-		}
-		return new BlockStateContainer(this, TYPE, FACE);
-	}
-
-	@Override
-	public int getMetaFromState(IBlockState state) {
-		IBlockType blockType = (IBlockType) state.getProperties().get(this.TYPE);
-		IMachineProperties machineProperties = blockType.getMachineProperties();
-		return machineProperties.getMeta();
+		return new BlockStateContainer(this, FACING);
 	}
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		for (Map.Entry<P, IMachineProperties> entry : properties.entrySet()) {
-			IMachineProperties<?> machineProperties = entry.getValue();
-			if (machineProperties.getMeta() == meta) {
-				P blockType = entry.getKey();
-				return getDefaultState().withProperty(this.TYPE, blockType);
-			}
-		}
-		return getDefaultState();
+		return this.getDefaultState().withProperty(FACING, EnumFacing.getHorizontal(meta));
 	}
 
 	@Override
-	public String getNameFromMeta(int meta) {
-		IBlockState state = getStateFromMeta(meta);
-		IBlockType blockType = (IBlockType) state.getProperties().get(TYPE);
-		IMachineProperties machineProperties = blockType.getMachineProperties();
-		return machineProperties.getName();
-	}
-
-	@Override
-	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
-		TileForestry tile = TileUtil.getTile(world, pos, TileForestry.class);
-		if (tile != null) {
-			state = state.withProperty(FACE, tile.getOrientation());
-		}
-		return super.getActualState(state, world, pos);
+	public int getMetaFromState(IBlockState state) {
+		return state.getValue(FACING).getHorizontalIndex();
 	}
 	
 	@Override
 	public BlockStateContainer getBlockState() {
 		return this.blockState;
+	}
+
+	@Override
+	public IBlockState withMirror(IBlockState state, Mirror mirrorIn) {
+		return super.withMirror(state, mirrorIn);
+	}
+
+	@Override
+	public IBlockState withRotation(IBlockState state, Rotation rot) {
+		EnumFacing facing = state.getValue(FACING);
+		return state.withProperty(FACING, rot.rotate(facing));
 	}
 
 	@Override
@@ -339,8 +275,7 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 	@SideOnly(Side.CLIENT)
 	@Override
 	public boolean addHitEffects(IBlockState state, World worldObj, RayTraceResult target, EffectRenderer effectRenderer) {
-		P property = state.getValue(TYPE);
-		if(property.getMachineProperties() instanceof IMachinePropertiesTesr){
+		if (blockType.getMachineProperties() instanceof IMachinePropertiesTesr) {
 			return ParticleHelper.addBlockHitEffects(worldObj, target.getBlockPos(), target.sideHit, effectRenderer, particleCallback);
 		}
 		return false;
@@ -349,28 +284,21 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 	@SideOnly(Side.CLIENT)
 	@Override
 	public boolean addDestroyEffects(World world, BlockPos pos, EffectRenderer effectRenderer) {
-		IBlockState state = world.getBlockState(pos);
-		
-		P property = state.getValue(TYPE);
-		if(property.getMachineProperties() instanceof IMachinePropertiesTesr){
-			return ParticleHelper.addDestroyEffects(world, this, world.getBlockState(pos), pos, effectRenderer, particleCallback);
+		if (blockType.getMachineProperties() instanceof IMachinePropertiesTesr) {
+			IBlockState blockState = world.getBlockState(pos);
+			return ParticleHelper.addDestroyEffects(world, this, blockState, pos, effectRenderer, particleCallback);
 		}
 		return false;
-	}
-	
-	
-
-	public final ItemStack get(P type) {
-		return new ItemStack(this, 1, type.getMachineProperties().getMeta());
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerSprites(ITextureManager manager) {
-		for(P property : properties.keySet()){
-			if(property.getMachineProperties() instanceof IMachinePropertiesTesr){
-				Proxies.common.getClientInstance().getTextureMapBlocks().registerSprite(new ResourceLocation(((IMachinePropertiesTesr)property.getMachineProperties()).getParticleTextureLocation()));
-			}
+		IMachineProperties<?> machineProperties = blockType.getMachineProperties();
+		if (machineProperties instanceof IMachinePropertiesTesr) {
+			TextureMap textureMapBlocks = Proxies.common.getClientInstance().getTextureMapBlocks();
+			String particleTextureLocation = ((IMachinePropertiesTesr) machineProperties).getParticleTextureLocation();
+			textureMapBlocks.registerSprite(new ResourceLocation(particleTextureLocation));
 		}
 	}
 }

@@ -11,29 +11,22 @@
 package forestry.core.blocks;
 
 import javax.annotation.Nonnull;
-import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import forestry.api.core.IModelManager;
 import forestry.core.tiles.TileForestry;
 
 public interface IMachineProperties<T extends TileForestry> extends IStringSerializable {
-	int getMeta();
-
 	@Nonnull
 	String getTeIdent();
 
@@ -54,15 +47,9 @@ public interface IMachineProperties<T extends TileForestry> extends IStringSeria
 
 	Block getBlock();
 
-	void getSubBlocks(@Nonnull Item item, @Nonnull CreativeTabs tab, @Nonnull List<ItemStack> list);
-
 	@Nonnull
 	AxisAlignedBB getBoundingBox(@Nonnull BlockPos pos, @Nonnull IBlockState state);
 
 	@Nonnull
 	RayTraceResult collisionRayTrace(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull Vec3d startVec, @Nonnull Vec3d endVec);
-
-	boolean isSolidOnSide(@Nonnull IBlockAccess world, @Nonnull BlockPos pos, @Nonnull EnumFacing side);
-
-	boolean rotateBlock(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull EnumFacing axis);
 }

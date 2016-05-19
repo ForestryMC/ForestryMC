@@ -15,10 +15,11 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import forestry.core.blocks.BlockBase;
 import forestry.core.blocks.IBlockWithMeta;
 import forestry.core.tiles.TileForestry;
 import forestry.core.tiles.TileUtil;
@@ -58,16 +59,17 @@ public class ItemBlockForestry<B extends Block> extends ItemBlock {
 		boolean placed = super.placeBlockAt(stack, player, world, pos, side, hitX, hitY, hitZ, newState);
 
 		if (block.hasTileEntity(newState)) {
-			TileForestry tile = TileUtil.getTile(world, pos, TileForestry.class);
-
-			if (tile != null) {
-				if (stack.getItem() instanceof ItemBlockNBT && stack.hasTagCompound()) {
+			if (stack.getItem() instanceof ItemBlockNBT && stack.hasTagCompound()) {
+				TileForestry tile = TileUtil.getTile(world, pos, TileForestry.class);
+				if (tile != null) {
 					tile.readFromNBT(stack.getTagCompound());
 					tile.setPos(pos);
 				}
-
-				tile.rotateAfterPlacement(player, side);
 			}
+		}
+
+		if (block instanceof BlockBase) {
+			((BlockBase) block).rotateAfterPlacement(player, world, pos, side);
 		}
 
 		return placed;

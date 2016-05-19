@@ -17,14 +17,18 @@ import net.minecraftforge.oredict.OreDictionary;
 import forestry.core.items.ItemBlockForestry;
 
 public class BlockRegistryCore extends BlockRegistry {
-	public final BlockCore core;
+	public final BlockCore analyzer;
+	public final BlockCore escritoire;
 	public final BlockSoil soil;
 	public final BlockResourceOre resources;
 	public final BlockResourceStorage resourceStorage;
 
 	public BlockRegistryCore() {
-		core = new BlockCore();
-		registerBlock(core, new ItemBlockForestry(core), "core");
+		analyzer = new BlockCore(BlockTypeCoreTesr.ANALYZER);
+		registerBlock(analyzer, new ItemBlockForestry(analyzer), "analyzer");
+
+		escritoire = new BlockCore(BlockTypeCoreTesr.ESCRITOIRE);
+		registerBlock(escritoire, new ItemBlockForestry<>(escritoire), "escritoire");
 		
 		soil = new BlockSoil();
 		registerBlock(soil, new ItemBlockForestry(soil), "soil");

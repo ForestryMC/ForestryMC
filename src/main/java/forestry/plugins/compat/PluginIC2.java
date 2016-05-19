@@ -32,6 +32,8 @@ public class PluginIC2 extends BlankForestryPlugin {
 	public static ItemStack rubberWood;
 	public static ItemStack resin;
 
+	public BlockRegistryIC2 blocks;
+
 	public PluginIC2() {
 		if (PluginIC2.instance == null) {
 			PluginIC2.instance = this;
@@ -100,6 +102,9 @@ public class PluginIC2 extends BlankForestryPlugin {
 //		Circuit.energyElectricEfficiency1 = new CircuitElectricEfficiency("electric.efficiency.1");
 //		Circuit.energyElectricBoost1 = new CircuitElectricBoost("electric.boost.1", 2, 7, 20);
 //		Circuit.energyElectricBoost2 = new CircuitElectricBoost("electric.boost.2", 2, 15, 40);
+	//
+	//		blocks.electricalEngine.init();
+	//		blocks.generator.init();
 //	}
 //
 //	@Override
@@ -266,5 +271,11 @@ public class PluginIC2 extends BlankForestryPlugin {
 //					'Y', "gearTin",
 //					'V', Blocks.PISTON);
 //		}
+	//	}
+	//
+	//	@Override
+	//	public void registerItemsAndBlocks() {
+	//		super.registerItemsAndBlocks();
+	//		blocks = new BlockRegistryIC2();
 //	}
 }

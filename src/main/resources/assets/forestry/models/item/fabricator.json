@@ -1,5 +1,5 @@
 {
-    "parent": "forestry:block/mail_stamp_collector",
+    "parent": "forestry:block/fabricator",
     "display": {
         "thirdperson": {
             "rotation": [ 10, -45, 170 ],

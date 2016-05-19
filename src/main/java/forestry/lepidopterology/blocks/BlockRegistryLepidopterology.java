@@ -15,13 +15,13 @@ import forestry.core.items.ItemBlockForestry;
 import forestry.lepidopterology.genetics.alleles.AlleleButterflyCocoon;
 
 public class BlockRegistryLepidopterology extends BlockRegistry {
-	public final BlockLepidopterology lepidopterology;
+	public final BlockLepidopterology butterflyChest;
 	public final BlockCocoon cocoon;
 	public final BlockSolidCocoon solidCocoon;
 
 	public BlockRegistryLepidopterology() {
-		lepidopterology = new BlockLepidopterology();
-		registerBlock(lepidopterology, new ItemBlockForestry(lepidopterology), "lepidopterology");
+		butterflyChest = new BlockLepidopterology(BlockTypeLepidopterologyTesr.LEPICHEST);
+		registerBlock(butterflyChest, new ItemBlockForestry(butterflyChest), "butterfly_chest");
 
 		AlleleButterflyCocoon.createAlleles();
 		cocoon = new BlockCocoon();

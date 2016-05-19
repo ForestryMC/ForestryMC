@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "forestry:stamp_collector" },
+		"facing=east": { "model": "forestry:stamp_collector", "y": 90 },
+		"facing=south": { "model": "forestry:stamp_collector", "y": 180 },
+		"facing=west": { "model": "forestry:stamp_collector", "y": -90 }
+	}
+}

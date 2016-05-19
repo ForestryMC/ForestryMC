@@ -29,11 +29,11 @@ import forestry.energy.tiles.TileEnginePeat;
 import forestry.energy.tiles.TileEuGenerator;
 
 public enum BlockTypeEngine implements IBlockTypeTesr {
-	PEAT(createEngineProperties(0, TileEnginePeat.class, "peat", "/engine_copper")),
-	BIOGAS(createEngineProperties(1, TileEngineBiogas.class, "biogas", "/engine_bronze")),
-	CLOCKWORK(createEngineProperties(2, TileEngineClockwork.class, "clockwork", "/engine_clock")),
-	ELECTRICAL(createEngineProperties(3, TileEngineElectric.class, "electrical", "/engine_tin")),
-	GENERATOR(createMachineProperties(4, TileEuGenerator.class, "generator", "/generator"));
+	PEAT(createEngineProperties(TileEnginePeat.class, "peat", "/engine_copper")),
+	BIOGAS(createEngineProperties(TileEngineBiogas.class, "biogas", "/engine_bronze")),
+	CLOCKWORK(createEngineProperties(TileEngineClockwork.class, "clockwork", "/engine_clock")),
+	ELECTRICAL(createEngineProperties(TileEngineElectric.class, "electrical", "/engine_tin")),
+	GENERATOR(createMachineProperties(TileEuGenerator.class, "generator", "/generator"));
 
 	public static final BlockTypeEngine[] VALUES = values();
 
@@ -44,14 +44,14 @@ public enum BlockTypeEngine implements IBlockTypeTesr {
 		this.machineProperties = machineProperties;
 	}
 
-	protected static IMachinePropertiesTesr<?> createEngineProperties(int meta, @Nonnull Class<? extends TileEngine> teClass, @Nonnull String name, @Nonnull String textureName) {
+	protected static IMachinePropertiesTesr<?> createEngineProperties(@Nonnull Class<? extends TileEngine> teClass, @Nonnull String name, @Nonnull String textureName) {
 		TileEntitySpecialRenderer<TileEngine> renderer = PluginEnergy.proxy.getRenderDefaultEngine(Constants.TEXTURE_PATH_BLOCKS + textureName + "_");
-		return new MachinePropertiesEngine<>(meta, teClass, name, renderer, Constants.RESOURCE_ID + ":blocks" + textureName + ".0");
+		return new MachinePropertiesEngine<>(teClass, name, renderer, Constants.RESOURCE_ID + ":blocks" + textureName + ".0");
 	}
 
-	protected static IMachinePropertiesTesr<?> createMachineProperties(int meta, @Nonnull Class<? extends TileBase> teClass, @Nonnull String name, @Nonnull String textureName) {
+	protected static IMachinePropertiesTesr<?> createMachineProperties(@Nonnull Class<? extends TileBase> teClass, @Nonnull String name, @Nonnull String textureName) {
 		TileEntitySpecialRenderer<TileBase> renderer = Proxies.render.getRenderDefaultMachine(Constants.TEXTURE_PATH_BLOCKS + textureName + "_");
-		return new MachinePropertiesTesr<>(meta, teClass, name, renderer, Constants.RESOURCE_ID + ":blocks" + textureName + ".0");
+		return new MachinePropertiesTesr<>(teClass, name, renderer, Constants.RESOURCE_ID + ":blocks" + textureName + ".0");
 	}
 
 	@Nonnull

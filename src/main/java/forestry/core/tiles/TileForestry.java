@@ -24,7 +24,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
@@ -62,7 +61,6 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 
 	private int tickCount = rand.nextInt(256);
 	private boolean needsNetworkUpdate = false;
-	private EnumFacing orientation = EnumFacing.WEST;
 
 	protected AdjacentTileCache getTileCache() {
 		return tileCache;
@@ -82,31 +80,6 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	public void validate() {
 		tileCache.purge();
 		super.validate();
-	}
-
-	public void rotateAfterPlacement(EntityPlayer player, EnumFacing side) {
-		int l = MathHelper.floor_double(player.rotationYaw * 4F / 360F + 0.5D) & 3;
-		if (l == 0) {
-			setOrientation(EnumFacing.NORTH);
-		}
-		if (l == 1) {
-			setOrientation(EnumFacing.EAST);
-		}
-		if (l == 2) {
-			setOrientation(EnumFacing.SOUTH);
-		}
-		if (l == 3) {
-			setOrientation(EnumFacing.WEST);
-		}
-	}
-
-	public boolean rotate(EnumFacing axis) {
-		if (axis == EnumFacing.DOWN || axis == EnumFacing.UP) {
-			EnumFacing orientation = getOrientation().rotateAround(axis.getAxis());
-			setOrientation(orientation);
-			return true;
-		}
-		return false;
 	}
 
 	// / UPDATING
@@ -143,12 +116,6 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 
 		inventory.readFromNBT(data);
 		accessHandler.readFromNBT(data);
-
-		if (data.hasKey("Orientation")) {
-			orientation = EnumFacing.values()[data.getInteger("Orientation")];
-		} else {
-			orientation = EnumFacing.WEST;
-		}
 	}
 
 	@Override
@@ -156,7 +123,6 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 		super.writeToNBT(data);
 		inventory.writeToNBT(data);
 		accessHandler.writeToNBT(data);
-		data.setInteger("Orientation", orientation.ordinal());
 	}
 
 	@Override
@@ -174,12 +140,12 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	/* IStreamable */
 	@Override
 	public void writeData(DataOutputStreamForestry data) throws IOException {
-		data.writeEnum(orientation, forgeDirections);
+
 	}
 
 	@Override
 	public void readData(DataInputStreamForestry data) throws IOException {
-		orientation = data.readEnum(forgeDirections);
+
 	}
 
 	public void onRemoval() {
@@ -207,25 +173,6 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	// / REDSTONE INFO
 	protected boolean isRedstoneActivated() {
 		return worldObj.isBlockIndirectlyGettingPowered(getPos()) > 0;
-	}
-
-	// / ORIENTATION
-	public EnumFacing getOrientation() {
-		return this.orientation;
-	}
-
-	public void setOrientation(EnumFacing orientation) {
-		if (orientation == null) {
-			throw new NullPointerException("Orientation cannot be null");
-		}
-		if (this.orientation == orientation) {
-			return;
-		}
-		this.orientation = orientation;
-		this.setNeedsNetworkUpdate();
-		BlockPos pos = getPos();
-		worldObj.notifyBlockOfStateChange(pos, worldObj.getBlockState(pos).getBlock());
-		worldObj.markBlockRangeForRenderUpdate(pos, pos);
 	}
 
 	protected final void setNeedsNetworkUpdate() {

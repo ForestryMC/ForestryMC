@@ -21,17 +21,17 @@ import forestry.factory.tiles.TileRaintank;
 import forestry.factory.tiles.TileWorktable;
 
 public enum BlockTypeFactoryPlain implements IBlockType {
-	FABRICATOR(0, TileFabricator.class, "fabricator"),
-	RAINTANK(1, TileRaintank.class, "raintank"),
-	WORKTABLE(2, TileWorktable.class, "worktable");
+	FABRICATOR(TileFabricator.class, "fabricator"),
+	RAINTANK(TileRaintank.class, "raintank"),
+	WORKTABLE(TileWorktable.class, "worktable");
 
 	public static final BlockTypeFactoryPlain[] VALUES = values();
 
 	@Nonnull
 	private final IMachineProperties machineProperties;
 
-	<T extends TileForestry> BlockTypeFactoryPlain(int meta, @Nonnull Class<T> teClass, @Nonnull String name) {
-		this.machineProperties = new MachineProperties<>(meta, teClass, name);
+	<T extends TileForestry> BlockTypeFactoryPlain(@Nonnull Class<T> teClass, @Nonnull String name) {
+		this.machineProperties = new MachineProperties<>(teClass, name);
 	}
 
 	@Nonnull

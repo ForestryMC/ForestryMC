@@ -53,7 +53,7 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 	private final Map<String, ItemStack> speciesToLeavesDecorative;
 	public final Map<String, BlockFruitPod> podsMap;
 
-	public final BlockArboriculture arboriculture;
+	public final BlockArboriculture treeChest;
 
 	public BlockRegistryArboriculture() {
 		// Wood blocks
@@ -196,8 +196,8 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 		}
 
 		// Machines
-		arboriculture = new BlockArboriculture();
-		registerBlock(arboriculture, new ItemBlockForestry(arboriculture), "arboriculture");
+		treeChest = new BlockArboriculture(BlockTypeArboricultureTesr.ARB_CHEST);
+		registerBlock(treeChest, new ItemBlockForestry(treeChest), "tree_chest");
 	}
 
 	public ItemStack getDecorativeLeaves(String speciesUid) {

@@ -12,6 +12,7 @@ package forestry.energy;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.fml.common.SidedProxy;
 
@@ -19,7 +20,6 @@ import forestry.api.core.ForestryAPI;
 import forestry.core.config.Constants;
 import forestry.core.recipes.RecipeUtil;
 import forestry.energy.blocks.BlockRegistryEnergy;
-import forestry.energy.blocks.BlockTypeEngine;
 import forestry.energy.proxy.ProxyEnergy;
 import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
@@ -39,27 +39,20 @@ public class PluginEnergy extends BlankForestryPlugin {
 	}
 
 	@Override
-	public void preInit() {
-		blocks.engine.addDefinitions(
-				BlockTypeEngine.PEAT,
-				BlockTypeEngine.BIOGAS
-		);
+	public void doInit() {
+		blocks.peatEngine.init();
+		blocks.biogasEngine.init();
 
 		if (ForestryAPI.activeMode.getBooleanSetting("energy.engine.clockwork")) {
-			blocks.engine.addDefinitions(BlockTypeEngine.CLOCKWORK);
+			blocks.clockworkEngine.init();
 		}
-	}
-
-	@Override
-	public void doInit() {
-		blocks.engine.init();
 	}
 
 	@Override
 	public void registerRecipes() {
 		super.registerRecipes();
 
-		RecipeUtil.addRecipe(blocks.engine.get(BlockTypeEngine.PEAT),
+		RecipeUtil.addRecipe(new ItemStack(blocks.peatEngine),
 				"###",
 				" X ",
 				"YVY",
@@ -68,7 +61,7 @@ public class PluginEnergy extends BlankForestryPlugin {
 				'Y', "gearCopper",
 				'V', Blocks.PISTON);
 
-		RecipeUtil.addRecipe(blocks.engine.get(BlockTypeEngine.BIOGAS),
+		RecipeUtil.addRecipe(new ItemStack(blocks.biogasEngine),
 				"###",
 				" X ",
 				"YVY",
@@ -78,7 +71,7 @@ public class PluginEnergy extends BlankForestryPlugin {
 				'V', Blocks.PISTON);
 
 		if (ForestryAPI.activeMode.getBooleanSetting("energy.engine.clockwork")) {
-			RecipeUtil.addRecipe(blocks.engine.get(BlockTypeEngine.CLOCKWORK),
+			RecipeUtil.addRecipe(new ItemStack(blocks.clockworkEngine),
 					"###",
 					" X ",
 					"ZVY",

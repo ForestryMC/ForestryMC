@@ -50,9 +50,7 @@ public abstract class TileBase extends TileForestry implements IHintSource {
 	public String getUnlocalizedTitle() {
 		Block block = getBlockType();
 		if (block instanceof BlockBase) {
-			BlockBase blockBase = (BlockBase) block;
-			int meta = getBlockMetadata();
-			return block.getUnlocalizedName() + "." + blockBase.getNameFromMeta(meta) + ".name";
+			return block.getUnlocalizedName() + ".name";
 		}
 		return super.getUnlocalizedTitle();
 	}
@@ -61,12 +59,6 @@ public abstract class TileBase extends TileForestry implements IHintSource {
 	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
 		Block oldBlock = oldState.getBlock();
 		Block newBlock = newState.getBlock();
-		if (oldBlock != newBlock || !(oldBlock instanceof BlockBase) || !(newBlock instanceof BlockBase)) {
-			return true;
-		}
-
-		BlockBase oldBlockBase = (BlockBase) oldBlock;
-		BlockBase newBlockBase = (BlockBase) newBlock;
-		return oldState.getValue(oldBlockBase.getTypeProperty()) != newState.getValue(newBlockBase.getTypeProperty());
+		return oldBlock != newBlock || !(oldBlock instanceof BlockBase) || !(newBlock instanceof BlockBase);
 	}
 }
