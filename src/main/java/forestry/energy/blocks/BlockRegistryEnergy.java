@@ -20,12 +20,12 @@ public class BlockRegistryEnergy extends BlockRegistry {
 
 	public BlockRegistryEnergy() {
 		peatEngine = new BlockEngine(BlockTypeEngine.PEAT);
-		registerBlock(peatEngine, new ItemEngine(peatEngine), "engine.peat");
+		registerBlock(peatEngine, new ItemEngine(peatEngine), "engine_peat");
 
 		biogasEngine = new BlockEngine(BlockTypeEngine.BIOGAS);
-		registerBlock(biogasEngine, new ItemEngine(biogasEngine), "engine.biogas");
+		registerBlock(biogasEngine, new ItemEngine(biogasEngine), "engine_biogas");
 
 		clockworkEngine = new BlockEngine(BlockTypeEngine.CLOCKWORK);
-		registerBlock(clockworkEngine, new ItemEngine(clockworkEngine), "engine.clockwork");
+		registerBlock(clockworkEngine, new ItemEngine(clockworkEngine), "engine_clockwork");
 	}
 }
