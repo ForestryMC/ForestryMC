@@ -229,13 +229,15 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 		EnumBeeType beeType = BeeManager.beeRoot.getType(queenStack);
 		if (beeType == EnumBeeType.PRINCESS) {
 			tickBreed();
-		} else {
+		} else if (beeType == EnumBeeType.QUEEN) {
 			queenWorkTick(queen);
 		}
 	}
 
 	private void queenWorkTick(IBee queen) {
 		if (queen == null) {
+			beeProgress = 0;
+			beeProgressMax = 0;
 			return;
 		}
 

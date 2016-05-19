@@ -29,6 +29,7 @@ import forestry.core.gui.slots.SlotForestry;
 import forestry.core.gui.slots.SlotLocked;
 import forestry.core.network.IForestryPacketClient;
 import forestry.core.proxy.Proxies;
+import forestry.core.utils.Log;
 import forestry.core.utils.SlotUtil;
 
 import invtweaks.api.container.ContainerSection;
@@ -99,6 +100,8 @@ public abstract class ContainerForestry extends Container {
 		for (ICrafting listener : listeners) {
 			if (listener instanceof EntityPlayer) {
 				Proxies.net.sendToPlayer(packet, (EntityPlayer) listener);
+			} else {
+				Log.error("Unknown listener type: {}", listener);
 			}
 		}
 	}
