@@ -2,9 +2,10 @@ package forestry.core.recipes.jei;
 
 import javax.annotation.Nonnull;
 
+import forestry.core.utils.Translator;
+
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.recipe.BlankRecipeCategory;
-import mezz.jei.util.Translator;
 
 public abstract class ForestryRecipeCategory extends BlankRecipeCategory {
 	@Nonnull
