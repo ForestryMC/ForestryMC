@@ -212,11 +212,6 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 		super.breakBlock(world, pos, state);
 	}
 
-	@Override
-	public int damageDropped(IBlockState state) {
-		return getMetaFromState(state);
-	}
-
 	public void init() {
 		blockType.getMachineProperties().registerTileEntity();
 	}
