@@ -19,6 +19,8 @@ plugins {
     id "net.minecraftforge.gradle.forge" version "2.0.2"
 }
 
+apply plugin: 'maven'
+
 version = version_major + '.' + version_minor + '.' + version_patch + '.' + getBuildNumber()
 if (project.hasProperty('buildQualifier')) {
 	version = project.version + '-' + project.buildQualifier
