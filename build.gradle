@@ -132,19 +132,22 @@ artifacts {
 	archives apiJar
 }
 
-task("uploadJars", dependsOn: "build") {
-	description = "uploads JARs"
-	if (project.hasProperty("mavenDir")) {
-		apply plugin: 'maven'
-		uploadArchives {
-			repositories {
-				mavenDeployer {
-					repository(url: "file://${mavenDir}")
+uploadArchives {
+	repositories {
+		if (project.hasProperty('mavenDir')) {
+			mavenDeployer {
+				repository(url: "file://"+mavenDir)
+
+				addFilter('api') { artifact, file ->
+					file == apiJar.archivePath
+				}
+				addFilter('sources') { artifact, file ->
+					file == sourcesJar.archivePath
 				}
 			}
+		} else {
+			println 'Archives upload disabled, mavenDir in gradle.properties is missing.'
 		}
-	} else {
-		println 'Archives upload disabled, mavenDir in gradle.properties is missing.'
 	}
 }
 
