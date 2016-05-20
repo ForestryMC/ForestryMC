@@ -61,6 +61,7 @@ import forestry.api.core.Tabs;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.api.lepidopterology.IButterfly;
+import forestry.arboriculture.LeafDecayHelper;
 import forestry.arboriculture.PluginArboriculture;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.tiles.TileLeaves;
@@ -231,11 +232,11 @@ public class BlockForestryLeaves extends BlockLeaves implements ITileEntityProvi
 	
 	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
-		super.updateTick(world, pos, state, rand);
+		LeafDecayHelper.leafDecay(this, world, pos);
 
 		TileLeaves tileLeaves = TileUtil.getTile(world, pos, TileLeaves.class);
 
-		// check leaves tile because they can decay in super.updateTick
+		// check leaves tile because they might have decayed
 		if (tileLeaves != null && !tileLeaves.isInvalid() && world.rand.nextFloat() <= 0.1) {
 			tileLeaves.onBlockTick();
 		}
