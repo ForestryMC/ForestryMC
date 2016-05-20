@@ -46,6 +46,10 @@ public class WorldGenWenge extends WorldGenTree {
 			leafSpawn--;
 			branchSize += 0.5f;
 		}
+
+		if (hasPods()) {
+			generatePods(world, height, girth);
+		}
 	}
 
 }

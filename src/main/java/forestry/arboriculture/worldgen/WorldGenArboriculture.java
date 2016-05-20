@@ -15,6 +15,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
@@ -26,7 +27,6 @@ import com.mojang.authlib.GameProfile;
 import forestry.api.world.ITreeGenData;
 import forestry.arboriculture.tiles.TileTreeContainer;
 import forestry.core.tiles.TileUtil;
-import forestry.core.utils.BlockUtil;
 import forestry.core.worldgen.WorldGenBase;
 
 public abstract class WorldGenArboriculture extends WorldGenBase {
@@ -67,15 +67,12 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 	protected TreeBlockTypeLeaf leaf;
 	protected ITreeBlockType wood;
 
-	private boolean spawnPods = false;
-
 	protected WorldGenArboriculture(ITreeGenData tree) {
 		this.tree = tree;
 	}
 
 	@Override
 	public boolean generate(World world, BlockPos pos, boolean forced) {
-		this.spawnPods = tree.allowsFruitBlocks();
 		this.leaf = getLeaf(getOwner(world, pos));
 		this.wood = getWood();
 
@@ -169,11 +166,11 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 			}
 		}
 
-		if (spawnPods) {
-			generatePods(world, height, girth);
-		}
-
 		return treeTops;
+	}
+
+	public boolean hasPods() {
+		return tree.allowsFruitBlocks();
 	}
 
 	protected void generatePods(World world, int height, int girth) {
@@ -197,7 +194,8 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 	private void trySpawnFruitBlock(World world, BlockPos pos) {
 		pos = pos.add(startPos);
 		IBlockState blockState = world.getBlockState(pos);
-		if (BlockUtil.isReplaceableBlock(blockState, world, pos) || world.isAirBlock(pos)) {
+		Block block = blockState.getBlock();
+		if (block.isReplaceable(world, pos) && !block.isLeaves(blockState, world, pos)) {
 			tree.trySpawnFruitBlock(world, pos);
 		}
 	}
@@ -306,15 +304,18 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 	}
 
 	@Override
-	protected boolean addBlock(World world, BlockPos pos, ITreeBlockType type, EnumReplaceMode replace) {
+	protected boolean addBlock(World world, BlockPos pos, ITreeBlockType type, EnumReplaceMode replaceMode) {
 		pos = pos.add(startPos);
+		if (!world.isBlockLoaded(pos)) {
+			return false;
+		}
+
 		IBlockState blockState = world.getBlockState(pos);
-		if (replace == EnumReplaceMode.ALL
-				|| replace == EnumReplaceMode.SOFT && BlockUtil.isReplaceableBlock(blockState, world, pos)
-				|| world.isAirBlock(pos)) {
+		if (replaceMode.canReplace(blockState, world, pos)) {
 			type.setBlock(world, tree, pos);
 			return true;
 		}
+
 		return false;
 	}
 
@@ -327,7 +328,7 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 	}
 
 	protected final boolean addVine(World world, BlockPos pos, ITreeBlockType vine) {
-		return addBlock(world, pos, vine, EnumReplaceMode.NONE);
+		return addBlock(world, pos, vine, EnumReplaceMode.AIR);
 	}
 
 	protected final void addVines(World world, BlockPos pos, float chance) {

@@ -33,7 +33,7 @@ public class WorldGenPine extends WorldGenTree {
 			branchCoords.addAll(generateBranches(world, yBranch, 0, 0, 0.05f, 0.1f, Math.round((height - yBranch) * 0.25f), 1, 0.25f));
 		}
 		for (BlockPos branchEnd : branchCoords) {
-			generateAdjustedCylinder(world, branchEnd, 2, 1, leaf, EnumReplaceMode.NONE);
+			generateAdjustedCylinder(world, branchEnd, 2, 1, leaf, EnumReplaceMode.AIR);
 		}
 
 		int leafSpawn = height + 1;
@@ -49,6 +49,9 @@ public class WorldGenPine extends WorldGenTree {
 			leafSpawned += 2;
 		}
 
+		if (hasPods()) {
+			generatePods(world, height, girth);
+		}
 	}
 
 }

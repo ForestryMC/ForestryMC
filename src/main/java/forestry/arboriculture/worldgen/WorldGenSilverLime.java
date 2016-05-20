@@ -28,7 +28,7 @@ public class WorldGenSilverLime extends WorldGenTree {
 		generateTreeTrunk(world, height, girth);
 		List<BlockPos> branchCoords = generateBranches(world, 3 + world.rand.nextInt(1), 0, 0, 0.25f, 0.10f, Math.round(height * 0.25f), 2, 0.5f);
 		for (BlockPos branchEnd : branchCoords) {
-			generateAdjustedCylinder(world, branchEnd, 0, 1, leaf, EnumReplaceMode.NONE);
+			generateAdjustedCylinder(world, branchEnd, 0, 1, leaf, EnumReplaceMode.AIR);
 		}
 
 		int leafSpawn = height + 1;
@@ -38,6 +38,10 @@ public class WorldGenSilverLime extends WorldGenTree {
 		while (leafSpawn > 1) {
 			generateAdjustedCylinder(world, leafSpawn--, radius, 1, leaf);
 			radius += 0.25;
+		}
+
+		if (hasPods()) {
+			generatePods(world, height, girth);
 		}
 	}
 

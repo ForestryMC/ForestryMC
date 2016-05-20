@@ -47,9 +47,12 @@ public class WorldGenGreenheart extends WorldGenTree {
 			}
 			int x_off = -1 + world.rand.nextInt(3);
 			int y_off = -1 + world.rand.nextInt(3);
-			generateSphere(world, new Vector(x_off, h, y_off), 1 + world.rand.nextInt(1), leaf, EnumReplaceMode.NONE);
+			generateSphere(world, new Vector(x_off, h, y_off), 1 + world.rand.nextInt(1), leaf, EnumReplaceMode.AIR);
 		}
 
+		if (hasPods()) {
+			generatePods(world, height, girth);
+		}
 	}
 
 }

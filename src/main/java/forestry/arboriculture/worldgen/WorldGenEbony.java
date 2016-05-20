@@ -62,9 +62,12 @@ public class WorldGenEbony extends WorldGenTree {
 
 			Vector center = new Vector(x_off, h, y_off);
 			int radius = 1 + world.rand.nextInt(girth);
-			generateSphere(world, center, radius, leaf, EnumReplaceMode.NONE);
+			generateSphere(world, center, radius, leaf, EnumReplaceMode.AIR);
 		}
 
+		if (hasPods()) {
+			generatePods(world, height, girth);
+		}
 	}
 
 }

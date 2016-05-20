@@ -45,7 +45,7 @@ public class WorldGenKapok extends WorldGenTree {
 		}
 
 		for (BlockPos branchEnd : branchCoords) {
-			generateAdjustedCylinder(world, branchEnd.getY() + 1, branchEnd.getX(), branchEnd.getZ(), 2.0f, 2, leaf, EnumReplaceMode.NONE);
+			generateAdjustedCylinder(world, branchEnd.getY() + 1, branchEnd.getX(), branchEnd.getZ(), 2.0f, 2, leaf, EnumReplaceMode.AIR);
 		}
 
 		// Add some smaller twigs below for flavour
@@ -56,7 +56,11 @@ public class WorldGenKapok extends WorldGenTree {
 			}
 			int x_off = -1 + world.rand.nextInt(3);
 			int y_off = -1 + world.rand.nextInt(3);
-			generateSphere(world, new Vector(x_off, h, y_off), 1 + world.rand.nextInt(1), leaf, EnumReplaceMode.NONE);
+			generateSphere(world, new Vector(x_off, h, y_off), 1 + world.rand.nextInt(1), leaf, EnumReplaceMode.AIR);
+		}
+
+		if (hasPods()) {
+			generatePods(world, height, girth);
 		}
 	}
 

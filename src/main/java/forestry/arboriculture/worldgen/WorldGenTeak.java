@@ -34,7 +34,7 @@ public class WorldGenTeak extends WorldGenTree {
 		int branchWidth = height / 3;
 		List<BlockPos> branchCoords = generateBranches(world, height - 3, 0, 0, 0.2f, 0.5f, branchWidth, 1);
 		for (BlockPos branchEnd : branchCoords) {
-			generateAdjustedCircle(world, branchEnd, 2, Math.round(3 * leafMultiplier), 2, leaf, 1.0f, EnumReplaceMode.NONE);
+			generateAdjustedCircle(world, branchEnd, 2, Math.round(3 * leafMultiplier), 2, leaf, 1.0f, EnumReplaceMode.AIR);
 		}
 
 		int leafSpawn = height + 1;
@@ -50,6 +50,9 @@ public class WorldGenTeak extends WorldGenTree {
 
 		generateAdjustedCylinder(world, leafSpawn, 0.5f * leafMultiplier, 1, leaf);
 
+		if (hasPods()) {
+			generatePods(world, height, girth);
+		}
 	}
 
 }

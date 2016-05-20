@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.world.ITreeGenData;
@@ -19,5 +19,5 @@ import forestry.api.world.ITreeGenData;
 public interface ITreeBlockType {
 	void setDirection(EnumFacing facing);
 
-	void setBlock(World world, ITreeGenData tree, BlockPos pos);
+	boolean setBlock(World world, ITreeGenData tree, BlockPos pos);
 }

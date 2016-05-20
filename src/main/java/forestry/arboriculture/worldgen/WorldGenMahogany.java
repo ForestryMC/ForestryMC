@@ -34,7 +34,7 @@ public class WorldGenMahogany extends WorldGenTree {
 			branchCoords.addAll(generateBranches(world, yBranch, 0, 0, 0.15f, 0.25f, Math.round((height - yBranch) * 0.5f), 1, 0.25f));
 		}
 		for (BlockPos branchEnd : branchCoords) {
-			generateAdjustedCylinder(world, branchEnd, 2, 2, leaf, EnumReplaceMode.NONE);
+			generateAdjustedCylinder(world, branchEnd, 2, 2, leaf, EnumReplaceMode.AIR);
 		}
 
 		int leafSpawn = height + 1;
@@ -48,6 +48,9 @@ public class WorldGenMahogany extends WorldGenTree {
 		generateAdjustedCylinder(world, leafSpawn--, 3f, 1, leaf);
 		generateAdjustedCylinder(world, leafSpawn--, 2f, 1, leaf);
 
+		if (hasPods()) {
+			generatePods(world, height, girth);
+		}
 	}
 
 }

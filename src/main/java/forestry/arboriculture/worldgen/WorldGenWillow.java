@@ -38,12 +38,15 @@ public class WorldGenWillow extends WorldGenTree {
 			if ((leafSpawn - 3) % 6 == 0) {
 				generateBranches(world, leafSpawn, 0, 0, 0, 0, 2, 1);
 			}
-			generateCircle(world, new Vector(0f, leafSpawn--, 0f), 4f, 2, 1, leaf, EnumReplaceMode.NONE);
+			generateCircle(world, new Vector(0f, leafSpawn--, 0f), 4f, 2, 1, leaf, EnumReplaceMode.AIR);
 		}
-		generateCircle(world, new Vector(0f, leafSpawn--, 0f), 4f, 1, 1, leaf, EnumReplaceMode.NONE);
-		generateCircle(world, new Vector(0f, leafSpawn--, 0f), 4f, 1, 1, leaf, EnumReplaceMode.NONE);
-		generateCircle(world, new Vector(0f, leafSpawn, 0f), 4f, 1, 1, leaf, 0.4f, EnumReplaceMode.NONE);
+		generateCircle(world, new Vector(0f, leafSpawn--, 0f), 4f, 1, 1, leaf, EnumReplaceMode.AIR);
+		generateCircle(world, new Vector(0f, leafSpawn--, 0f), 4f, 1, 1, leaf, EnumReplaceMode.AIR);
+		generateCircle(world, new Vector(0f, leafSpawn, 0f), 4f, 1, 1, leaf, 0.4f, EnumReplaceMode.AIR);
 
+		if (hasPods()) {
+			generatePods(world, height, girth);
+		}
 	}
 
 }

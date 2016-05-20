@@ -32,6 +32,9 @@ public class WorldGenDate extends WorldGenTree {
 		generateAdjustedCylinder(world, leafSpawn--, radiusMultiplier * 0.5f, 1, leaf);
 		generateAdjustedCylinder(world, leafSpawn, 0, 1, leaf);
 
+		if (hasPods()) {
+			generatePods(world, height, girth);
+		}
 	}
 
 }

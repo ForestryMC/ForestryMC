@@ -46,7 +46,7 @@ public class WorldGenJungle extends WorldGenTreeVanilla {
 			}
 
 			for (BlockPos branchEnd : branchCoords) {
-				generateAdjustedCylinder(world, branchEnd, 0f, 1, leaf, EnumReplaceMode.NONE);
+				generateAdjustedCylinder(world, branchEnd, 0f, 1, leaf, EnumReplaceMode.AIR);
 			}
 		}
 
@@ -59,6 +59,9 @@ public class WorldGenJungle extends WorldGenTreeVanilla {
 		generateAdjustedCylinder(world, leafSpawn--, 1.9f * canopyRadiusMultiplier, 1, leaf);
 		generateAdjustedCylinder(world, leafSpawn, 1.9f * canopyRadiusMultiplier, 1, leaf);
 
+		if (hasPods()) {
+			generatePods(world, height, girth);
+		}
 	}
 
 }

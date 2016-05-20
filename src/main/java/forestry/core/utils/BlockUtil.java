@@ -15,7 +15,8 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockDirectional;
+import net.minecraft.block.BlockHorizontal;
+import net.minecraft.block.BlockOldLog;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -64,7 +65,7 @@ public abstract class BlockUtil {
 			return false;
 		}
 
-		IBlockState state = Blocks.COCOA.getDefaultState().withProperty(BlockDirectional.FACING, facing);
+		IBlockState state = Blocks.COCOA.getDefaultState().withProperty(BlockHorizontal.FACING, facing);
 		world.setBlockState(pos, state);
 		return true;
 	}
@@ -81,10 +82,13 @@ public abstract class BlockUtil {
 	
 	public static boolean isValidPodLocation(World world, BlockPos pos, EnumFacing direction) {
 		pos = pos.offset(direction);
+		if (!world.isBlockLoaded(pos)) {
+			return false;
+		}
 		IBlockState state = world.getBlockState(pos);
 		Block block = state.getBlock();
 		if (block == Blocks.LOG) {
-			return state.getValue(BlockPlanks.VARIANT) == BlockPlanks.EnumType.JUNGLE;
+			return state.getValue(BlockOldLog.VARIANT) == BlockPlanks.EnumType.JUNGLE;
 		} else {
 			return block.isWood(world, pos);
 		}
@@ -108,13 +112,7 @@ public abstract class BlockUtil {
 	}
 
 	public static boolean isReplaceableBlock(IBlockState blockState, World world, BlockPos pos) {
-		Block block = world.getBlockState(pos).getBlock();
-
-		return isReplaceableBlock(blockState, block);
-	}
-
-	public static boolean isReplaceableBlock(IBlockState blockState, Block block) {
-		return block.getMaterial(blockState).isReplaceable();
+		return blockState.getBlock().isReplaceable(world, pos);
 	}
 
 	public static RayTraceResult collisionRayTrace(@Nonnull BlockPos pos, @Nonnull Vec3d startVec, @Nonnull Vec3d endVec, @Nonnull AxisAlignedBB bounds) {

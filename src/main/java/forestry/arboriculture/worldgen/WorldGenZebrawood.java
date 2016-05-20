@@ -31,7 +31,7 @@ public class WorldGenZebrawood extends WorldGenTree {
 
 		List<BlockPos> branchCoords = generateBranches(world, height - 4, 0, 0, 0, 0.25f, 3, 2, 0.75f);
 		for (BlockPos branchEnd : branchCoords) {
-			generateAdjustedCylinder(world, branchEnd, 1.0f, 2, leaf, EnumReplaceMode.NONE);
+			generateAdjustedCylinder(world, branchEnd, 1.0f, 2, leaf, EnumReplaceMode.AIR);
 		}
 
 		int leafSpawn = height + 1;
@@ -54,9 +54,12 @@ public class WorldGenZebrawood extends WorldGenTree {
 			}
 			int x_off = -1 + world.rand.nextInt(3);
 			int y_off = -1 + world.rand.nextInt(3);
-			generateSphere(world, new Vector(x_off, h, y_off), 1 + world.rand.nextInt(1), leaf, EnumReplaceMode.NONE);
+			generateSphere(world, new Vector(x_off, h, y_off), 1 + world.rand.nextInt(1), leaf, EnumReplaceMode.AIR);
 		}
 
+		if (hasPods()) {
+			generatePods(world, height, girth);
+		}
 	}
 
 }

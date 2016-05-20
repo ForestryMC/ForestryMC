@@ -43,7 +43,11 @@ public class WorldGenIpe extends WorldGenTree {
 		}
 
 		for (BlockPos branchEnd : branchCoords) {
-			generateAdjustedCylinder(world, branchEnd, 2.0f, 2, leaf, EnumReplaceMode.NONE);
+			generateAdjustedCylinder(world, branchEnd, 2.0f, 2, leaf, EnumReplaceMode.AIR);
+		}
+
+		if (hasPods()) {
+			generatePods(world, height, girth);
 		}
 	}
 

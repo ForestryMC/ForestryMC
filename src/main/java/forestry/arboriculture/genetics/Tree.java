@@ -22,9 +22,9 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
@@ -216,13 +216,13 @@ public class Tree extends Individual implements ITree, IPlantable {
 	}
 
 	@Override
-	public void setLeaves(World world, GameProfile owner, BlockPos pos) {
-		genome.getPrimary().getGenerator().setLeaves(genome, world, owner, pos);
+	public boolean setLeaves(World world, GameProfile owner, BlockPos pos) {
+		return genome.getPrimary().getGenerator().setLeaves(genome, world, owner, pos);
 	}
 
 	@Override
-	public void setLogBlock(World world, BlockPos pos, EnumFacing facing) {
-		genome.getPrimary().getGenerator().setLogBlock(genome, world, pos, facing);
+	public boolean setLogBlock(World world, BlockPos pos, EnumFacing facing) {
+		return genome.getPrimary().getGenerator().setLogBlock(genome, world, pos, facing);
 	}
 
 	@Override

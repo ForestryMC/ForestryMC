@@ -49,7 +49,6 @@ import forestry.core.genetics.ItemGE;
 import forestry.core.items.IColoredItem;
 import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.BlockUtil;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.Translator;
 
@@ -153,7 +152,7 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 		if (type == EnumGermlingType.SAPLING) {
 			// x, y, z are the coordinates of the block "hit", can thus either be the soil or tall grass, etc.
 			IBlockState hitBlock = worldIn.getBlockState(pos);
-			if (!BlockUtil.isReplaceableBlock(hitBlock, hitBlock.getBlock())) {
+			if (!hitBlock.getBlock().isReplaceable(worldIn, pos)) {
 				if (!worldIn.isAirBlock(pos.up())) {
 					return EnumActionResult.FAIL;
 				}

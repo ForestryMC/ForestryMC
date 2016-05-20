@@ -1011,7 +1011,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 
 	@SuppressWarnings("incomplete-switch")
 	@Override
-	public void setLogBlock(ITreeGenome genome, World world, BlockPos pos, EnumFacing facing) {
+	public boolean setLogBlock(ITreeGenome genome, World world, BlockPos pos, EnumFacing facing) {
 		IBlockState logBlock;
 		if (woodType == null) {
 			logBlock = vanillaWood;
@@ -1021,32 +1021,33 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			logBlock = TreeManager.woodAccess.getLogBlock(woodType, fireproof);
 		}
 		BlockLog.EnumAxis axis = BlockLog.EnumAxis.fromFacingAxis(facing.getAxis());
-		world.setBlockState(pos, logBlock.withProperty(BlockLog.LOG_AXIS, axis));
+		return world.setBlockState(pos, logBlock.withProperty(BlockLog.LOG_AXIS, axis));
 	}
 
 	@Override
-	public void setLeaves(ITreeGenome genome, World world, GameProfile owner, BlockPos pos) {
+	public boolean setLeaves(ITreeGenome genome, World world, GameProfile owner, BlockPos pos) {
 		boolean placed = world.setBlockState(pos, PluginArboriculture.blocks.leaves.getDefaultState(), Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
 		if (!placed) {
-			return;
+			return false;
 		}
 
 		Block block = world.getBlockState(pos).getBlock();
 		if (PluginArboriculture.blocks.leaves != block) {
 			world.setBlockToAir(pos);
-			return;
+			return false;
 		}
 
 		TileLeaves tileLeaves = TileUtil.getTile(world, pos, TileLeaves.class);
 		if (tileLeaves == null) {
 			world.setBlockToAir(pos);
-			return;
+			return false;
 		}
 
 		tileLeaves.setOwner(owner);
 		tileLeaves.setTree(new Tree(genome));
 
 		world.markBlockRangeForRenderUpdate(pos, pos);
+		return true;
 	}
 
 	public static void initTrees() {

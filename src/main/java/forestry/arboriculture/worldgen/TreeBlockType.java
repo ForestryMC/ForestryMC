@@ -11,8 +11,8 @@
 package forestry.arboriculture.worldgen;
 
 import net.minecraft.block.Block;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.world.ITreeGenData;
@@ -34,8 +34,8 @@ public class TreeBlockType implements ITreeBlockType {
 	}
 
 	@Override
-	public void setBlock(World world, ITreeGenData tree, BlockPos pos) {
-		world.setBlockState(pos, block.getStateFromMeta(meta), Constants.FLAG_BLOCK_SYNCH);
+	public boolean setBlock(World world, ITreeGenData tree, BlockPos pos) {
+		return world.setBlockState(pos, block.getStateFromMeta(meta), Constants.FLAG_BLOCK_SYNCH);
 	}
 
 	public int getMeta() {

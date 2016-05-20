@@ -5,8 +5,8 @@
  ******************************************************************************/
 package forestry.api.world;
 
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
@@ -21,9 +21,9 @@ public interface ITreeGenData {
 
 	boolean canGrow(World world, BlockPos pos, int expectedGirth, int expectedHeight);
 
-	void setLeaves(World world, GameProfile owner, BlockPos pos);
+	boolean setLeaves(World world, GameProfile owner, BlockPos pos);
 
-	void setLogBlock(World world, BlockPos pos, EnumFacing facing);
+	boolean setLogBlock(World world, BlockPos pos, EnumFacing facing);
 
 	boolean allowsFruitBlocks();
 

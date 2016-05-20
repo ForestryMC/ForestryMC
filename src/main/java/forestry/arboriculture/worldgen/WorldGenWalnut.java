@@ -45,6 +45,10 @@ public class WorldGenWalnut extends WorldGenTree {
 			leafSpawn--;
 			branchSize += 0.25f;
 		}
+
+		if (hasPods()) {
+			generatePods(world, height, girth);
+		}
 	}
 
 }

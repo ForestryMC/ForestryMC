@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
@@ -32,7 +32,7 @@ public class TreeBlockTypeLeaf implements ITreeBlockType {
 	}
 
 	@Override
-	public void setBlock(World world, ITreeGenData tree, BlockPos pos) {
-		tree.setLeaves(world, owner, pos);
+	public boolean setBlock(World world, ITreeGenData tree, BlockPos pos) {
+		return tree.setLeaves(world, owner, pos);
 	}
 }

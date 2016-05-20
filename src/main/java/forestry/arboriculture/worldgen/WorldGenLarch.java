@@ -36,6 +36,9 @@ public class WorldGenLarch extends WorldGenTree {
 			generateAdjustedCylinder(world, leafSpawn--, sizeMultiplier, 1, leaf);
 		}
 
+		if (hasPods()) {
+			generatePods(world, height, girth);
+		}
 	}
 
 }

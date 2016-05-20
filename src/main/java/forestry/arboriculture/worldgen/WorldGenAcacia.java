@@ -45,7 +45,7 @@ public class WorldGenAcacia extends WorldGenTree {
 			float canopyMultiplier = (1.5f * height - yOffset + 2) / 4.0f;
 			int canopyThickness = Math.max(1, Math.round(yOffset / 10.0f));
 
-			generateAdjustedCylinder(world, yOffset--, xOffset, zOffset, canopyMultiplier, 1, leaf, EnumReplaceMode.NONE);
+			generateAdjustedCylinder(world, yOffset--, xOffset, zOffset, canopyMultiplier, 1, leaf, EnumReplaceMode.AIR);
 
 			float canopyWidth = world.rand.nextBoolean() ? 3.0f : 2.5f;
 			List<BlockPos> branches = generateBranches(world, yOffset - canopyThickness, xOffset, zOffset, 0.0f, 0.1f, Math.round(canopyMultiplier * canopyWidth - 4), 2);
@@ -57,7 +57,11 @@ public class WorldGenAcacia extends WorldGenTree {
 			int canopyThickness = Math.max(1, Math.round(leafSpawn / 10.0f));
 			float canopyMultiplier = (1.5f * height - leafSpawn + 2) / 4.0f;
 			float canopyWidth = world.rand.nextBoolean() ? 1.0f : 1.5f;
-			generateAdjustedCylinder(world, leafSpawn - canopyThickness + 1, branchLocation.getX(), branchLocation.getZ(), canopyMultiplier * canopyWidth, canopyThickness, leaf, EnumReplaceMode.NONE);
+			generateAdjustedCylinder(world, leafSpawn - canopyThickness + 1, branchLocation.getX(), branchLocation.getZ(), canopyMultiplier * canopyWidth, canopyThickness, leaf, EnumReplaceMode.AIR);
+		}
+
+		if (hasPods()) {
+			generatePods(world, height, girth);
 		}
 	}
 

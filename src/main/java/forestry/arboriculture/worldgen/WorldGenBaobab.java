@@ -29,7 +29,7 @@ public class WorldGenBaobab extends WorldGenTree {
 
 		List<BlockPos> branchCoords = generateBranches(world, height, 0, 0, 0, 0.5f, 4, 6);
 		for (BlockPos branchEnd : branchCoords) {
-			generateAdjustedCylinder(world, branchEnd, 0.0f, 2, leaf, EnumReplaceMode.NONE);
+			generateAdjustedCylinder(world, branchEnd, 0.0f, 2, leaf, EnumReplaceMode.AIR);
 		}
 
 		if (world.rand.nextFloat() < 0.3f) {
@@ -59,7 +59,7 @@ public class WorldGenBaobab extends WorldGenTree {
 			if (girth > 1) {
 				radius += world.rand.nextInt(girth - 1);
 			}
-			generateSphere(world, center, radius, leaf, EnumReplaceMode.NONE);
+			generateSphere(world, center, radius, leaf, EnumReplaceMode.AIR);
 		}
 
 		// Add some smaller twigs below for flavour
@@ -74,9 +74,12 @@ public class WorldGenBaobab extends WorldGenTree {
 
 			Vector center = new Vector(x_off, h, y_off);
 			int radius = 1 + world.rand.nextInt(2);
-			generateSphere(world, center, radius, leaf, EnumReplaceMode.NONE);
+			generateSphere(world, center, radius, leaf, EnumReplaceMode.AIR);
 		}
 
+		if (hasPods()) {
+			generatePods(world, height, girth);
+		}
 	}
 
 }

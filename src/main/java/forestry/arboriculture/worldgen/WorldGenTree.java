@@ -41,11 +41,15 @@ public abstract class WorldGenTree extends WorldGenArboriculture {
 
 		int leafSpawn = height + 1;
 
-		generateAdjustedCylinder(world, leafSpawn--, 0, 1, leaf, EnumReplaceMode.NONE);
-		generateAdjustedCylinder(world, leafSpawn--, 0.5f, 1, leaf, EnumReplaceMode.NONE);
+		generateAdjustedCylinder(world, leafSpawn--, 0, 1, leaf, EnumReplaceMode.AIR);
+		generateAdjustedCylinder(world, leafSpawn--, 0.5f, 1, leaf, EnumReplaceMode.AIR);
 
-		generateAdjustedCylinder(world, leafSpawn--, 1.9f, 1, leaf, EnumReplaceMode.NONE);
-		generateAdjustedCylinder(world, leafSpawn--, 1.9f, 1, leaf, EnumReplaceMode.NONE);
+		generateAdjustedCylinder(world, leafSpawn--, 1.9f, 1, leaf, EnumReplaceMode.AIR);
+		generateAdjustedCylinder(world, leafSpawn--, 1.9f, 1, leaf, EnumReplaceMode.AIR);
+
+		if (hasPods()) {
+			generatePods(world, height, girth);
+		}
 	}
 
 	protected Vector getCenteredAt(int yCenter, int xOffset, int zOffset) {

@@ -29,12 +29,16 @@ public class WorldGenPapaya extends WorldGenTree {
 
 		List<BlockPos> branchCoords = generateBranches(world, height, 0, 0, 0.15f, 0.25f, height / 4, 1, 0.25f);
 		for (BlockPos branchEnd : branchCoords) {
-			generateAdjustedCylinder(world, branchEnd, 1, 1, leaf, EnumReplaceMode.NONE);
+			generateAdjustedCylinder(world, branchEnd, 1, 1, leaf, EnumReplaceMode.AIR);
 		}
 
 		int yCenter = height - girth;
 		yCenter = yCenter > 3 ? yCenter : 4;
-		generateSphere(world, getCenteredAt(yCenter, 0, 0), Math.round((2 + world.rand.nextInt(girth)) * (height / 8.0f)), leaf, EnumReplaceMode.NONE);
+		generateSphere(world, getCenteredAt(yCenter, 0, 0), Math.round((2 + world.rand.nextInt(girth)) * (height / 8.0f)), leaf, EnumReplaceMode.AIR);
+
+		if (hasPods()) {
+			generatePods(world, height, girth);
+		}
 	}
 
 }

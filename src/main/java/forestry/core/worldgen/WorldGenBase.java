@@ -12,8 +12,9 @@ package forestry.core.worldgen;
 
 import java.util.Random;
 
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
@@ -22,8 +23,26 @@ import forestry.arboriculture.worldgen.ITreeBlockType;
 public abstract class WorldGenBase extends WorldGenerator {
 
 	protected enum EnumReplaceMode {
+		AIR {
+			@Override
+			public boolean canReplace(IBlockState blockState, World world, BlockPos pos) {
+				return world.isAirBlock(pos);
+			}
+		},
+		ALL {
+			@Override
+			public boolean canReplace(IBlockState blockState, World world, BlockPos pos) {
+				return true;
+			}
+		},
+		SOFT {
+			@Override
+			public boolean canReplace(IBlockState blockState, World world, BlockPos pos) {
+				return blockState.getBlock().isReplaceable(world, pos);
+			}
+		};
 
-		NONE, ALL, SOFT
+		public abstract boolean canReplace(IBlockState blockState, World world, BlockPos pos);
 	}
 
 	public static class Vector {

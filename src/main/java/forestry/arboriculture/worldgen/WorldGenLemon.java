@@ -30,7 +30,11 @@ public class WorldGenLemon extends WorldGenTree {
 		if (radius > 4) {
 			radius = 4;
 		}
-		generateSphere(world, getCenteredAt(yCenter, 0, 0), radius, leaf, EnumReplaceMode.NONE);
+		generateSphere(world, getCenteredAt(yCenter, 0, 0), radius, leaf, EnumReplaceMode.AIR);
+
+		if (hasPods()) {
+			generatePods(world, height, girth);
+		}
 	}
 
 }

@@ -36,12 +36,15 @@ public class WorldGenCherry extends WorldGenTree {
 			int leafRadius = Math.min(4, branchWidth);
 			List<BlockPos> branchCoords = generateBranches(world, leafSpawn, 0, 0, 0.2f, 0.5f, branchWidth, 1);
 			for (BlockPos branchEnd : branchCoords) {
-				generateAdjustedCircle(world, branchEnd, leafRadius, 3, 2, leaf, 1.0f, EnumReplaceMode.NONE);
+				generateAdjustedCircle(world, branchEnd, leafRadius, 3, 2, leaf, 1.0f, EnumReplaceMode.AIR);
 			}
 			leafSpawn -= 2;
 			branchWidth++;
 		}
 
+		if (hasPods()) {
+			generatePods(world, height, girth);
+		}
 	}
 
 }

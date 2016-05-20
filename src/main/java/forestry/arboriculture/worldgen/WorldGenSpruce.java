@@ -43,6 +43,10 @@ public class WorldGenSpruce extends WorldGenTree {
 			generateAdjustedCylinder(world, leafSpawn--, 1, 1, leaf);
 			branchWidth++;
 		}
+
+		if (hasPods()) {
+			generatePods(world, height, girth);
+		}
 	}
 
 }

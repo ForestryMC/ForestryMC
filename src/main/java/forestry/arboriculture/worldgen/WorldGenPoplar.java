@@ -31,6 +31,9 @@ public class WorldGenPoplar extends WorldGenTree {
 			generateAdjustedCylinder(world, leafSpawn--, leafRadius, 1, leaf);
 		}
 
+		if (hasPods()) {
+			generatePods(world, height, girth);
+		}
 	}
 
 }

@@ -22,7 +22,6 @@ import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.core.ForestryAPI;
 import forestry.arboriculture.tiles.TileSapling;
-import forestry.core.utils.BlockUtil;
 import forestry.core.utils.Translator;
 
 public class GrowthProvider implements IGrowthProvider {
@@ -107,7 +106,7 @@ public class GrowthProvider implements IGrowthProvider {
 				for (int z = start.getZ(); z < start.getZ() + area.getZ(); z++) {
 					BlockPos pos = new BlockPos(x, y, z);
 					IBlockState blockState = world.getBlockState(pos);
-					if (!world.isAirBlock(pos) && !BlockUtil.isReplaceableBlock(blockState, world, pos)) {
+					if (!blockState.getBlock().isReplaceable(world, pos)) {
 						return false;
 					}
 				}

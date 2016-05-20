@@ -30,7 +30,7 @@ public class WorldGenCocobolo extends WorldGenTree {
 		int leafSpawn = height;
 
 		for (BlockPos treeTop : treeTops) {
-			addLeaf(world, treeTop.add(0, 1, 0), EnumReplaceMode.NONE);
+			addLeaf(world, treeTop.add(0, 1, 0), EnumReplaceMode.AIR);
 		}
 		leafSpawn--;
 		generateAdjustedCylinder(world, leafSpawn--, 1, 1, leaf);
@@ -48,16 +48,19 @@ public class WorldGenCocobolo extends WorldGenTree {
 				if (world.rand.nextBoolean()) {
 					offset = -1;
 				}
-				generateAdjustedCylinder(world, leafSpawn, offset, offset, 2, 1, leaf, EnumReplaceMode.NONE);
+				generateAdjustedCylinder(world, leafSpawn, offset, offset, 2, 1, leaf, EnumReplaceMode.AIR);
 			} else {
 				if (world.rand.nextBoolean()) {
 					offset = -1;
 				}
-				generateAdjustedCylinder(world, leafSpawn, offset, offset, 0, 1, leaf, EnumReplaceMode.NONE);
+				generateAdjustedCylinder(world, leafSpawn, offset, offset, 0, 1, leaf, EnumReplaceMode.AIR);
 			}
 			leafSpawn--;
 		}
 
+		if (hasPods()) {
+			generatePods(world, height, girth);
+		}
 	}
 
 }

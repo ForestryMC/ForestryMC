@@ -43,11 +43,14 @@ public class WorldGenChestnut extends WorldGenTree {
 
 		List<BlockPos> branchCoords = generateBranches(world, leafSpawn, 0, 0, 0.5f, 0.5f, branchRadius, 2);
 		for (BlockPos branchEnd : branchCoords) {
-			generateAdjustedCylinder(world, branchEnd, 1.0f, 2, leaf, EnumReplaceMode.NONE);
+			generateAdjustedCylinder(world, branchEnd, 1.0f, 2, leaf, EnumReplaceMode.AIR);
 		}
 
 		generateAdjustedCylinder(world, leafSpawn, 1.5f, 1, leaf);
 
+		if (hasPods()) {
+			generatePods(world, height, girth);
+		}
 	}
 
 }

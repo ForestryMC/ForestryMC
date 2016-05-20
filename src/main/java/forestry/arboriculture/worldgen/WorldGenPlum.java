@@ -32,7 +32,11 @@ public class WorldGenPlum extends WorldGenTree {
 		if (radius > 4) {
 			radius = 4;
 		}
-		generateSphere(world, center, radius, leaf, EnumReplaceMode.NONE);
+		generateSphere(world, center, radius, leaf, EnumReplaceMode.AIR);
+
+		if (hasPods()) {
+			generatePods(world, height, girth);
+		}
 	}
 
 }

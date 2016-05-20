@@ -44,7 +44,7 @@ public class WorldGenSequoia extends WorldGenTree {
 			branchCoords.addAll(generateBranches(world, yBranch, 0, 0, 0.05f, 0.25f, branchLength, 1, 0.5f));
 		}
 		for (BlockPos branchEnd : branchCoords) {
-			generateAdjustedCylinder(world, branchEnd, 1.0f, 1, leaf, EnumReplaceMode.NONE);
+			generateAdjustedCylinder(world, branchEnd, 1.0f, 1, leaf, EnumReplaceMode.AIR);
 		}
 
 		int leafSpawn = height + 2;
@@ -58,6 +58,10 @@ public class WorldGenSequoia extends WorldGenTree {
 		}
 
 		generateAdjustedCylinder(world, leafSpawn, 0, 1, leaf);
+
+		if (hasPods()) {
+			generatePods(world, height, girth);
+		}
 	}
 
 }

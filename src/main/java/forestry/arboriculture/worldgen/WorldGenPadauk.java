@@ -12,8 +12,8 @@ package forestry.arboriculture.worldgen;
 
 import java.util.Random;
 
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.world.ITreeGenData;
@@ -68,6 +68,10 @@ public class WorldGenPadauk extends WorldGenTree {
 					}
 				}
 			}
+		}
+
+		if (hasPods()) {
+			generatePods(world, height, girth);
 		}
 	}
 

@@ -28,7 +28,7 @@ public class WorldGenBalsa extends WorldGenTree {
 		int leafSpawn = height;
 		float leafRadius = (girth - 1.0f) / 2.0f;
 
-		addLeaf(world, new BlockPos(0, leafSpawn--, 0), EnumReplaceMode.NONE);
+		addLeaf(world, new BlockPos(0, leafSpawn--, 0), EnumReplaceMode.AIR);
 		generateAdjustedCylinder(world, leafSpawn--, leafRadius, 1, leaf);
 
 		if (height > 10) {
@@ -42,6 +42,9 @@ public class WorldGenBalsa extends WorldGenTree {
 			leafSpawn--;
 		}
 
+		if (hasPods()) {
+			generatePods(world, height, girth);
+		}
 	}
 
 }

@@ -19,7 +19,7 @@ import java.util.Locale;
 import java.util.Map.Entry;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockDirectional;
+import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -244,7 +244,7 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 			return false;
 		}
 
-		IBlockState state = fruitPod.getDefaultState().withProperty(BlockDirectional.FACING, facing);
+		IBlockState state = fruitPod.getDefaultState().withProperty(BlockHorizontal.FACING, facing);
 		boolean placed = world.setBlockState(pos, state);
 		if (!placed) {
 			return false;

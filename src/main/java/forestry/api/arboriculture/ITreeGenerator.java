@@ -5,8 +5,8 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
@@ -20,7 +20,7 @@ import forestry.api.world.ITreeGenData;
 public interface ITreeGenerator {
 	WorldGenerator getWorldGenerator(ITreeGenData tree);
 
-	void setLogBlock(ITreeGenome genome, World world, BlockPos pos, EnumFacing facing);
+	boolean setLogBlock(ITreeGenome genome, World world, BlockPos pos, EnumFacing facing);
 
-	void setLeaves(ITreeGenome genome, World world, GameProfile owner, BlockPos pos);
+	boolean setLeaves(ITreeGenome genome, World world, GameProfile owner, BlockPos pos);
 }
