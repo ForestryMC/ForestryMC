@@ -1,22 +1,22 @@
 buildscript {
 	repositories {
-        jcenter()
-        maven {
-            name = "forge"
-            url = "http://files.minecraftforge.net/maven"
-        }
+		jcenter()
+		maven {
+			name = "forge"
+			url = "http://files.minecraftforge.net/maven"
+		}
 				maven {
 			name = "sonatype"
 			url = "https://oss.sonatype.org/content/repositories/snapshots/"
 		}
-    }
+	}
 	dependencies {
 		classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
 	}
 }
 
 plugins {
-    id "net.minecraftforge.gradle.forge" version "2.0.2"
+	id "net.minecraftforge.gradle.forge" version "2.0.2"
 }
 
 apply plugin: 'maven'
