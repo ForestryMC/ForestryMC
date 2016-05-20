@@ -31,9 +31,6 @@ archivesBaseName = "forestry_" + mcversion
 ext.dirDest = './build/dist'
 ext.dirLang = "./lang"
 
-ext.apiForestry = "./api/forestry"
-ext.apiRedstoneFlux = "./api/redstoneflux"
-
 // java version
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -51,9 +48,7 @@ minecraft {
 sourceSets {
 	main {
 		java {
-			srcDir project.apiForestry
-			srcDir project.apiRedstoneFlux
-			srcDir "./api/buildcraft"
+
 		}
 		resources {
 			srcDir project.dirLang
@@ -139,13 +134,6 @@ uploadArchives {
 		if (project.hasProperty('mavenDir')) {
 			mavenDeployer {
 				repository(url: "file://"+mavenDir)
-
-				addFilter('api') { artifact, file ->
-					file == apiJar.archivePath
-				}
-				addFilter('sources') { artifact, file ->
-					file == sourcesJar.archivePath
-				}
 			}
 		} else {
 			println 'Archives upload disabled, mavenDir in gradle.properties is missing.'
