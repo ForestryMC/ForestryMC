@@ -61,7 +61,6 @@ import forestry.api.core.Tabs;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.api.lepidopterology.IButterfly;
-import forestry.arboriculture.LeafDecayHelper;
 import forestry.arboriculture.PluginArboriculture;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.tiles.TileLeaves;
@@ -215,15 +214,6 @@ public class BlockForestryLeaves extends BlockLeaves implements ITileEntityProvi
 	}
 	
 	@Override
-	public void beginLeavesDecay(IBlockState state, World world, BlockPos pos) {
-		TileLeaves tile = TileUtil.getTile(world, pos, TileLeaves.class);
-		if (tile == null) {
-			return;
-		}
-		super.beginLeavesDecay(state, world, pos);
-	}
-	
-	@Override
 	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
 		TileLeaves tileLeaves = TileUtil.getTile(worldIn, pos, TileLeaves.class);
 		if (tileLeaves != null && TreeDefinition.Willow.getUID().equals(tileLeaves.getSpeciesUID())) {
@@ -241,22 +231,14 @@ public class BlockForestryLeaves extends BlockLeaves implements ITileEntityProvi
 	
 	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
+		super.updateTick(world, pos, state, rand);
+
 		TileLeaves tileLeaves = TileUtil.getTile(world, pos, TileLeaves.class);
-		if (tileLeaves == null) {
-			return;
-		}
 
-		LeafDecayHelper.leafDecay(this, world, pos);
-
-		// check leaves tile again because they can decay in super.updateTick
-		if (tileLeaves.isInvalid()) {
-			return;
+		// check leaves tile because they can decay in super.updateTick
+		if (tileLeaves != null && !tileLeaves.isInvalid() && world.rand.nextFloat() <= 0.1) {
+			tileLeaves.onBlockTick();
 		}
-
-		if (world.rand.nextFloat() > 0.1) {
-			return;
-		}
-		tileLeaves.onBlockTick();
 	}
 
 	/* RENDERING */
