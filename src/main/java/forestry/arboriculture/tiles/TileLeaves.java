@@ -16,12 +16,15 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Random;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.fml.relauncher.Side;
@@ -112,7 +115,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	}
 
 	@Override
-	public void onBlockTick() {
+	public void onBlockTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
 		ITree tree = getTree();
 		if (tree == null) {
 			return;
@@ -122,7 +125,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 		boolean isDestroyed = isDestroyed(tree, damage);
 		for (ILeafTickHandler tickHandler : genome.getPrimary().getRoot().getLeafTickHandlers()) {
-			if (tickHandler.onRandomLeafTick(tree, worldObj, getPos(), isDestroyed)) {
+			if (tickHandler.onRandomLeafTick(tree, worldObj, rand, getPos(), isDestroyed)) {
 				return;
 			}
 		}
@@ -140,7 +143,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 			float sappinessModifier = treekeepingMode.getSappinessModifier(genome, 1f);
 			float sappiness = genome.getSappiness() * sappinessModifier;
 
-			if (worldObj.rand.nextFloat() < sappiness) {
+			if (rand.nextFloat() < sappiness) {
 				ripeningTime++;
 				sendNetworkUpdateRipening();
 			}

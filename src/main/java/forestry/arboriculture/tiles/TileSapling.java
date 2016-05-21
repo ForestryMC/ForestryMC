@@ -10,7 +10,11 @@
  ******************************************************************************/
 package forestry.arboriculture.tiles;
 
+import java.util.Random;
+
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
@@ -41,10 +45,9 @@ public class TileSapling extends TileTreeContainer {
 	}
 
 	@Override
-	public void onBlockTick() {
-
+	public void onBlockTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
 		timesTicked++;
-		tryGrow(false);
+		tryGrow(rand, false);
 	}
 
 	private static int getRequiredMaturity(World world, ITree tree) {
@@ -53,7 +56,7 @@ public class TileSapling extends TileTreeContainer {
 		return Math.round(tree.getRequiredMaturity() * maturationModifier);
 	}
 
-	public boolean canAcceptBoneMeal() {
+	public boolean canAcceptBoneMeal(Random rand) {
 		ITree tree = getTree();
 
 		if (tree == null) {
@@ -68,14 +71,14 @@ public class TileSapling extends TileTreeContainer {
 		WorldGenerator generator = tree.getTreeGenerator(worldObj, getPos(), true);
 		if (generator instanceof WorldGenArboriculture) {
 			WorldGenArboriculture arboricultureGenerator = (WorldGenArboriculture) generator;
-			arboricultureGenerator.preGenerate(worldObj, getPos());
-			return arboricultureGenerator.canGrow(worldObj, getPos());
+			arboricultureGenerator.preGenerate(worldObj, rand, getPos());
+			return arboricultureGenerator.getValidGrowthPos(worldObj, getPos()) != null;
 		} else {
 			return true;
 		}
 	}
 
-	public void tryGrow(boolean bonemealed) {
+	public void tryGrow(Random random, boolean bonemealed) {
 
 		ITree tree = getTree();
 
@@ -94,9 +97,9 @@ public class TileSapling extends TileTreeContainer {
 		WorldGenerator generator = tree.getTreeGenerator(worldObj, getPos(), bonemealed);
 		final boolean generated;
 		if (generator instanceof WorldGenBase) {
-			generated = ((WorldGenBase) generator).generate(worldObj, getPos(), bonemealed);
+			generated = ((WorldGenBase) generator).generate(worldObj, random, getPos(), false);
 		} else {
-			generated = generator.generate(worldObj, worldObj.rand, getPos());
+			generated = generator.generate(worldObj, random, getPos());
 		}
 
 		if (generated) {

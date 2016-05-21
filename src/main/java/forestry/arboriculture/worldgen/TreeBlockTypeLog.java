@@ -17,10 +17,11 @@ import net.minecraft.world.World;
 import forestry.api.world.ITreeGenData;
 
 public class TreeBlockTypeLog implements ITreeBlockType {
+	private final ITreeGenData tree;
 	private EnumFacing facing = EnumFacing.UP;
 
-	public TreeBlockTypeLog() {
-
+	public TreeBlockTypeLog(ITreeGenData tree) {
+		this.tree = tree;
 	}
 
 	@Override
@@ -29,7 +30,7 @@ public class TreeBlockTypeLog implements ITreeBlockType {
 	}
 
 	@Override
-	public boolean setBlock(World world, ITreeGenData tree, BlockPos pos) {
+	public boolean setBlock(World world, BlockPos pos) {
 		return tree.setLogBlock(world, pos, facing);
 	}
 }

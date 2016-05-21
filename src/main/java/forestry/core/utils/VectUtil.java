@@ -12,6 +12,7 @@ package forestry.core.utils;
 
 import java.util.Random;
 
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 
@@ -37,5 +38,19 @@ public final class VectUtil {
 
 	public static BlockPos scale(Vec3i vect, float factor) {
 		return new BlockPos(vect.getX() * factor, vect.getY() * factor, vect.getZ() * factor);
+	}
+
+	public static EnumFacing direction(Vec3i a, Vec3i b) {
+		int x = Math.abs(a.getX() - b.getX());
+		int y = Math.abs(a.getY() - b.getY());
+		int z = Math.abs(a.getZ() - b.getZ());
+		int max = Math.max(x, Math.max(y, z));
+		if (max == x) {
+			return EnumFacing.EAST;
+		} else if (max == z) {
+			return EnumFacing.SOUTH;
+		} else {
+			return EnumFacing.UP;
+		}
 	}
 }

@@ -199,23 +199,26 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 	/* GROWNING */
 	@Override
 	public boolean canUseBonemeal(World world, Random rand, BlockPos pos, IBlockState state) {
+		if (world.rand.nextFloat() >= 0.45F) {
+			return false;
+		}
 		TileSapling saplingTile = getSaplingTile(world, pos);
 		if (saplingTile != null) {
-			return saplingTile.canAcceptBoneMeal();
+			return saplingTile.canAcceptBoneMeal(rand);
 		}
 		return true;
 	}
 	
 	@Override
 	public boolean canGrow(World world, BlockPos pos, IBlockState state, boolean isClient) {
-		return world.rand.nextFloat() < 0.45F;
+		return true;
 	}
 
 	@Override
 	public void grow(World world, Random rand, BlockPos pos, IBlockState state) {
 		TileSapling saplingTile = getSaplingTile(world, pos);
 		if (saplingTile != null) {
-			saplingTile.tryGrow(true);
+			saplingTile.tryGrow(rand, true);
 		}
 	}
 }

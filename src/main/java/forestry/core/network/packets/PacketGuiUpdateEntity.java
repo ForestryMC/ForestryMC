@@ -20,7 +20,6 @@ import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.IStreamableGui;
 import forestry.core.network.PacketIdClient;
-import forestry.core.proxy.Proxies;
 
 public class PacketGuiUpdateEntity extends PacketEntityUpdate implements IForestryPacketClient {
 	private IStreamableGui streamableGui;

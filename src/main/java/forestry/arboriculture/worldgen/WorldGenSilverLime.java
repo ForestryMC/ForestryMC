@@ -10,12 +10,15 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
-import java.util.List;
+import javax.annotation.Nonnull;
+import java.util.Random;
+import java.util.Set;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.world.ITreeGenData;
+import forestry.core.worldgen.WorldGenHelper;
 
 public class WorldGenSilverLime extends WorldGenTree {
 
@@ -23,26 +26,27 @@ public class WorldGenSilverLime extends WorldGenTree {
 		super(tree, 6, 4);
 	}
 
+	@Nonnull
 	@Override
-	public void generate(World world) {
-		generateTreeTrunk(world, height, girth);
-		List<BlockPos> branchCoords = generateBranches(world, 3 + world.rand.nextInt(1), 0, 0, 0.25f, 0.10f, Math.round(height * 0.25f), 2, 0.5f);
-		for (BlockPos branchEnd : branchCoords) {
-			generateAdjustedCylinder(world, branchEnd, 0, 1, leaf, EnumReplaceMode.AIR);
+	public Set<BlockPos> generateTrunk(World world, Random rand, TreeBlockTypeLog wood, BlockPos startPos) {
+		WorldGenHelper.generateTreeTrunk(world, rand, wood, startPos, height, girth, 0, 0, null, 0);
+		BlockPos pos = startPos.add(0, 3 + rand.nextInt(1), 0);
+		return WorldGenHelper.generateBranches(world, rand, wood, pos, girth, 0.25f, 0.10f, Math.round(height * 0.25f), 2, 0.5f);
+	}
+
+	@Override
+	protected void generateLeaves(World world, Random rand, TreeBlockTypeLeaf leaf, Set<BlockPos> branchEnds, BlockPos startPos) {
+		for (BlockPos branchEnd : branchEnds) {
+			WorldGenHelper.generateCylinderFromPos(world, leaf, branchEnd, girth, 1, WorldGenHelper.EnumReplaceMode.AIR);
 		}
 
 		int leafSpawn = height + 1;
 
-		generateAdjustedCylinder(world, leafSpawn--, 0, 1, leaf);
+		WorldGenHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, girth, 1, WorldGenHelper.EnumReplaceMode.SOFT);
 		float radius = 1;
 		while (leafSpawn > 1) {
-			generateAdjustedCylinder(world, leafSpawn--, radius, 1, leaf);
+			WorldGenHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, radius + girth, 1, WorldGenHelper.EnumReplaceMode.SOFT);
 			radius += 0.25;
 		}
-
-		if (hasPods()) {
-			generatePods(world, height, girth);
-		}
 	}
-
 }

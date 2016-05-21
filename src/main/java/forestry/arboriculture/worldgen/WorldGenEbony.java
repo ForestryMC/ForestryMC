@@ -10,10 +10,16 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
+import javax.annotation.Nonnull;
+import java.util.Collections;
+import java.util.Random;
+import java.util.Set;
+
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.world.ITreeGenData;
+import forestry.core.worldgen.WorldGenHelper;
 
 public class WorldGenEbony extends WorldGenTree {
 
@@ -21,22 +27,22 @@ public class WorldGenEbony extends WorldGenTree {
 		super(tree, 10, 4);
 	}
 
+	@Nonnull
 	@Override
-	public void generate(World world) {
-
+	public Set<BlockPos> generateTrunk(World world, Random rand, TreeBlockTypeLog wood, BlockPos startPos) {
 		int offset = (girth - 1) / 2;
-		int trunksgenerated = 0;
+		int trunksGenerated = 0;
 
 		for (int x = -offset; x < -offset + girth; x++) {
 			for (int z = -offset; z < -offset + girth; z++) {
-				if (world.rand.nextFloat() < 0.6f) {
-					for (int i = 0; i < height; i++) {
-						addWood(world, new BlockPos(x, i, z), EnumReplaceMode.ALL);
-						if (i > height / 2 && world.rand.nextFloat() < 0.1f * (10 / height)) {
+				if (rand.nextFloat() < 0.6f) {
+					for (int y = 0; y < height; y++) {
+						WorldGenHelper.addBlock(world, startPos.add(x, y, z), wood, WorldGenHelper.EnumReplaceMode.ALL);
+						if (y > height / 2 && rand.nextFloat() < 0.1f * (10 / height)) {
 							break;
 						}
 					}
-					trunksgenerated++;
+					trunksGenerated++;
 				} else {
 					for (int i = 0; i < 1; i++) {
 						world.setBlockToAir(new BlockPos(x, i, z));
@@ -46,28 +52,27 @@ public class WorldGenEbony extends WorldGenTree {
 		}
 
 		// Generate backup trunk, if we failed to generate any.
-		if (trunksgenerated <= 0) {
-			generateTreeTrunk(world, height, 1, 0.6f);
+		if (trunksGenerated <= 0) {
+			WorldGenHelper.generateTreeTrunk(world, rand, wood, startPos, height, 1, 0, 0.6f, null, 0);
 		}
 
-		// Add tree top
-		for (int times = 0; times < 2 * height; times++) {
-			int h = 2 * girth + world.rand.nextInt(height - girth);
-			if (world.rand.nextBoolean() && h < height / 2) {
-				h = height / 2 + world.rand.nextInt(height / 2);
-			}
-
-			int x_off = -girth + world.rand.nextInt(2 * girth);
-			int y_off = -girth + world.rand.nextInt(2 * girth);
-
-			Vector center = new Vector(x_off, h, y_off);
-			int radius = 1 + world.rand.nextInt(girth);
-			generateSphere(world, center, radius, leaf, EnumReplaceMode.AIR);
-		}
-
-		if (hasPods()) {
-			generatePods(world, height, girth);
-		}
+		return Collections.emptySet();
 	}
 
+	@Override
+	protected void generateLeaves(World world, Random rand, TreeBlockTypeLeaf leaf, Set<BlockPos> branchEnds, BlockPos startPos) {
+		for (int times = 0; times < 2 * height; times++) {
+			int h = 2 * girth + rand.nextInt(height - girth);
+			if (rand.nextBoolean() && h < height / 2) {
+				h = height / 2 + rand.nextInt(height / 2);
+			}
+
+			int x_off = -girth + rand.nextInt(2 * girth);
+			int y_off = -girth + rand.nextInt(2 * girth);
+
+			BlockPos center = new BlockPos(x_off, h, y_off);
+			int radius = 1 + rand.nextInt(girth);
+			WorldGenHelper.generateSphere(world, center, radius, leaf, WorldGenHelper.EnumReplaceMode.AIR);
+		}
+	}
 }

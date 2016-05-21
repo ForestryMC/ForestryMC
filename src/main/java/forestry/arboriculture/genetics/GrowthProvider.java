@@ -10,8 +10,11 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
+import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
+
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
@@ -22,21 +25,28 @@ import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.core.ForestryAPI;
 import forestry.arboriculture.tiles.TileSapling;
+import forestry.core.tiles.TileUtil;
 import forestry.core.utils.Translator;
 
 public class GrowthProvider implements IGrowthProvider {
 
 	@Override
-	public boolean canGrow(ITreeGenome genome, World world, BlockPos pos, int expectedGirth, int expectedHeight) {
-		if (!hasRoom(world, pos, expectedGirth, expectedHeight)) {
-			return false;
+	@Nullable
+	public BlockPos canGrow(ITreeGenome genome, World world, BlockPos pos, int expectedGirth, int expectedHeight) {
+		BlockPos growthPos = hasSufficientSaplingsAroundSapling(genome, world, pos, expectedGirth);
+		if (growthPos == null) {
+			return null;
 		}
 
-		if (getGrowthConditions(genome, world, pos) == EnumGrowthConditions.HOSTILE) {
-			return false;
+		if (!hasRoom(world, growthPos, expectedGirth, expectedHeight)) {
+			return null;
 		}
 
-		return hasSufficientSaplings(genome, world, pos, expectedGirth);
+		if (getGrowthConditions(genome, world, growthPos) == EnumGrowthConditions.HOSTILE) {
+			return null;
+		}
+
+		return growthPos;
 	}
 
 	@Override
@@ -74,15 +84,15 @@ public class GrowthProvider implements IGrowthProvider {
 	}
 
 	protected static EnumGrowthConditions getConditionFromLight(World world, BlockPos pos) {
-		int lightvalue = world.getLightFromNeighbors(pos.add(0, 1, 0));
+		int lightValue = world.getLightFromNeighbors(pos.add(0, 1, 0));
 
-		if (lightvalue > 13) {
+		if (lightValue > 13) {
 			return EnumGrowthConditions.EXCELLENT;
-		} else if (lightvalue > 11) {
+		} else if (lightValue > 11) {
 			return EnumGrowthConditions.GOOD;
-		} else if (lightvalue > 8) {
+		} else if (lightValue > 8) {
 			return EnumGrowthConditions.NORMAL;
-		} else if (lightvalue > 6) {
+		} else if (lightValue > 6) {
 			return EnumGrowthConditions.PALTRY;
 		} else {
 			return EnumGrowthConditions.HOSTILE;
@@ -90,21 +100,15 @@ public class GrowthProvider implements IGrowthProvider {
 	}
 
 	private static boolean hasRoom(World world, BlockPos pos, int expectedGirth, int expectedHeight) {
-
-		int offset = (expectedGirth - 1) / 2;
-		// if(offset <= 0)
-		// offset = 1;
-		BlockPos start = new BlockPos(pos.getX() - offset, pos.getY() + 1, pos.getZ() + offset);
-		Vec3i area = new Vec3i(-offset + expectedGirth, expectedHeight + 1, -offset + expectedGirth);
-
-		return checkArea(world, start, area);
+		Vec3i area = new Vec3i(expectedGirth, expectedHeight + 1, expectedGirth);
+		return checkArea(world, pos.up(), area);
 	}
 
 	private static boolean checkArea(World world, BlockPos start, Vec3i area) {
-		for (int x = start.getX(); x < start.getX() + area.getX(); x++) {
-			for (int y = start.getY(); y < start.getY() + area.getY(); y++) {
-				for (int z = start.getZ(); z < start.getZ() + area.getZ(); z++) {
-					BlockPos pos = new BlockPos(x, y, z);
+		for (int x = 0; x < area.getX(); x++) {
+			for (int y = 0; y < area.getY(); y++) {
+				for (int z = 0; z < area.getZ(); z++) {
+					BlockPos pos = start.add(x, y, z);
 					IBlockState blockState = world.getBlockState(pos);
 					if (!blockState.getBlock().isReplaceable(world, pos)) {
 						return false;
@@ -115,36 +119,62 @@ public class GrowthProvider implements IGrowthProvider {
 		return true;
 	}
 
-	private static boolean hasSufficientSaplings(ITreeGenome genome, World world, BlockPos pos, int expectedGirth) {
+	/**
+	 * Checks an area for saplings.
+	 * If saplings need to be 2x2, 3x3, etc, it will check all configurations in which pos is included in that area.
+	 * Uses a knownSaplings cache to avoid checking the same saplings multiple times.
+	 */
+	@Nullable
+	private static BlockPos hasSufficientSaplingsAroundSapling(ITreeGenome genome, World world, BlockPos saplingPos, int expectedGirth) {
+		final int checkSize = (expectedGirth * 2) - 1;
+		final int offset = expectedGirth - 1;
+		final Map<BlockPos, Boolean> knownSaplings = new HashMap<>(checkSize * checkSize);
 
-		if (expectedGirth == 1) {
-			return true;
-		}
-
-		int offset = (expectedGirth - 1) / 2;
-
-		for (int x = pos.getX() - offset; x < pos.getX() - offset + expectedGirth; x++) {
-			for (int z = pos.getZ() - offset; z < pos.getZ() - offset + expectedGirth; z++) {
-
-				BlockPos newPos = new BlockPos(x, pos.getY(), z);
-				
-				if (world.isAirBlock(newPos)) {
-					return false;
-				}
-
-				TileEntity tile = world.getTileEntity(newPos);
-				if (!(tile instanceof TileSapling)) {
-					return false;
-				}
-
-				ITree tree = ((TileSapling) tile).getTree();
-				if (tree == null || !tree.getGenome().getPrimary().getUID().equals(genome.getPrimary().getUID())) {
-					return false;
+		for (int x = -offset; x <= 0; x++) {
+			for (int z = -offset; z <= 0; z++) {
+				BlockPos startPos = saplingPos.add(x, 0, z);
+				if (checkForSaplings(genome, world, startPos, expectedGirth, knownSaplings)) {
+					return startPos;
 				}
 			}
 		}
 
+		return null;
+	}
+
+	private static boolean checkForSaplings(ITreeGenome genome, World world, BlockPos startPos, int girth, Map<BlockPos, Boolean> knownSaplings) {
+		for (int x = 0; x < girth; x++) {
+			for (int z = 0; z < girth; z++) {
+				BlockPos checkPos = startPos.add(x, 0, z);
+				Boolean knownSapling = knownSaplings.get(checkPos);
+				if (knownSapling == null) {
+					knownSapling = isSapling(genome, world, checkPos);
+					knownSaplings.put(checkPos, knownSapling);
+				}
+
+				if (!knownSapling) {
+					return false;
+				}
+			}
+		}
 		return true;
 	}
 
+	private static boolean isSapling(ITreeGenome genome, World world, BlockPos pos) {
+		if (!world.isBlockLoaded(pos)) {
+			return false;
+		}
+
+		if (world.isAirBlock(pos)) {
+			return false;
+		}
+
+		TileSapling sapling = TileUtil.getTile(world, pos, TileSapling.class);
+		if (sapling == null) {
+			return false;
+		}
+
+		ITree tree = sapling.getTree();
+		return tree != null && tree.getGenome().getPrimary().getUID().equals(genome.getPrimary().getUID());
+	}
 }

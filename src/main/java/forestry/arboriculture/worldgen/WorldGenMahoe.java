@@ -10,13 +10,16 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.annotation.Nonnull;
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.world.ITreeGenData;
+import forestry.core.worldgen.WorldGenHelper;
 
 public class WorldGenMahoe extends WorldGenTree {
 
@@ -24,25 +27,27 @@ public class WorldGenMahoe extends WorldGenTree {
 		super(tree, 6, 3);
 	}
 
+	@Nonnull
 	@Override
-	public void generate(World world) {
-		generateTreeTrunk(world, height, girth);
+	public Set<BlockPos> generateTrunk(World world, Random rand, TreeBlockTypeLog wood, BlockPos startPos) {
+		Set<BlockPos> branchCoords = new HashSet<>();
 
-		List<BlockPos> branchCoords = new ArrayList<>();
+		branchCoords.addAll(WorldGenHelper.generateTreeTrunk(world, rand, wood, startPos, height, girth, 0, 0, null, 0));
+
 		for (int yBranch = 2; yBranch < height - 1; yBranch++) {
-			branchCoords.addAll(generateBranches(world, yBranch, 0, 0, 0.15f, 0.25f, Math.round((height - yBranch) * 0.75f), 1, 0.25f));
+			branchCoords.addAll(WorldGenHelper.generateBranches(world, rand, wood, startPos.add(0, yBranch, 0), girth, 0.15f, 0.25f, Math.round((height - yBranch) * 0.75f), 1, 0.25f));
 		}
-		for (BlockPos branchEnd : branchCoords) {
-			generateAdjustedCylinder(world, branchEnd, 2, 2, leaf, EnumReplaceMode.AIR);
+		return branchCoords;
+	}
+
+	@Override
+	protected void generateLeaves(World world, Random rand, TreeBlockTypeLeaf leaf, Set<BlockPos> branchEnds, BlockPos startPos) {
+		for (BlockPos branchEnd : branchEnds) {
+			WorldGenHelper.generateCylinderFromPos(world, leaf, branchEnd, 2 + girth, 2, WorldGenHelper.EnumReplaceMode.AIR);
 		}
 
 		int yCenter = height - girth;
 		yCenter = yCenter > 3 ? yCenter : 4;
-		generateSphere(world, getCenteredAt(yCenter, 0, 0), 3 + world.rand.nextInt(girth), leaf, EnumReplaceMode.AIR);
-
-		if (hasPods()) {
-			generatePods(world, height, girth);
-		}
+		WorldGenHelper.generateSphereFromTreeStartPos(world, new BlockPos(0, yCenter, 0), girth, 3 + rand.nextInt(girth), leaf, WorldGenHelper.EnumReplaceMode.AIR);
 	}
-
 }

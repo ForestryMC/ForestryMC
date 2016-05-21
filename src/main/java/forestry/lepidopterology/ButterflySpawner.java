@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.lepidopterology;
 
+import java.util.Random;
+
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -23,13 +25,13 @@ import forestry.lepidopterology.entities.EntityButterfly;
 public class ButterflySpawner implements ILeafTickHandler {
 
 	@Override
-	public boolean onRandomLeafTick(ITree tree, World world, BlockPos pos, boolean isDestroyed) {
+	public boolean onRandomLeafTick(ITree tree, World world, Random rand, BlockPos pos, boolean isDestroyed) {
 		
-		if (world.rand.nextFloat() >= tree.getGenome().getSappiness() * tree.getGenome().getYield()) {
+		if (rand.nextFloat() >= tree.getGenome().getSappiness() * tree.getGenome().getYield()) {
 			return false;
 		}
 		
-		IButterfly spawn = ButterflyManager.butterflyRoot.getIndividualTemplates().get(world.rand.nextInt(ButterflyManager.butterflyRoot.getIndividualTemplates().size()));
+		IButterfly spawn = ButterflyManager.butterflyRoot.getIndividualTemplates().get(rand.nextInt(ButterflyManager.butterflyRoot.getIndividualTemplates().size()));
 		float rarity;
 		if(PluginLepidopterology.spawnRaritys.containsKey(spawn.getGenome().getPrimary().getUID())){
 			rarity = spawn.getGenome().getPrimary().getRarity();
@@ -37,7 +39,7 @@ public class ButterflySpawner implements ILeafTickHandler {
 			rarity = PluginLepidopterology.spawnRaritys.get(spawn.getGenome().getPrimary().getUID());
 		}
 		
-		if (world.rand.nextFloat() >= rarity * 0.5f) {
+		if (rand.nextFloat() >= rarity * 0.5f) {
 			return false;
 		}
 		

@@ -5,9 +5,11 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
+import java.util.Random;
+
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public interface ILeafTickHandler {
-	boolean onRandomLeafTick(ITree tree, World world, BlockPos pos, boolean isDestroyed);
+	boolean onRandomLeafTick(ITree tree, World world, Random rand, BlockPos pos, boolean isDestroyed);
 }

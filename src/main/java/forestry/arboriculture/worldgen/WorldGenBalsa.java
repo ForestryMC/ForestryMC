@@ -10,10 +10,17 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
+import javax.annotation.Nonnull;
+import java.util.Collections;
+import java.util.Random;
+import java.util.Set;
+
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.world.ITreeGenData;
+import forestry.core.worldgen.WorldGenHelper;
 
 public class WorldGenBalsa extends WorldGenTree {
 
@@ -21,30 +28,31 @@ public class WorldGenBalsa extends WorldGenTree {
 		super(tree, 6, 6);
 	}
 
+	@Nonnull
 	@Override
-	public void generate(World world) {
-		generateTreeTrunk(world, height, girth);
-
-		int leafSpawn = height;
-		float leafRadius = (girth - 1.0f) / 2.0f;
-
-		addLeaf(world, new BlockPos(0, leafSpawn--, 0), EnumReplaceMode.AIR);
-		generateAdjustedCylinder(world, leafSpawn--, leafRadius, 1, leaf);
-
-		if (height > 10) {
-			generateAdjustedCylinder(world, leafSpawn--, leafRadius, 1, leaf);
-		}
-
-		leafSpawn--;
-
-		while (leafSpawn > 6) {
-			generateAdjustedCylinder(world, leafSpawn, leafRadius, 1, leaf);
-			leafSpawn--;
-		}
-
-		if (hasPods()) {
-			generatePods(world, height, girth);
-		}
+	public Set<BlockPos> generateTrunk(World world, Random rand, TreeBlockTypeLog wood, BlockPos startPos) {
+		WorldGenHelper.generateTreeTrunk(world, rand, wood, startPos, height, girth, 0, 0, null, 0);
+		return Collections.emptySet();
 	}
 
+	@Override
+	protected void generateLeaves(World world, Random rand, TreeBlockTypeLeaf leaf, Set<BlockPos> branchEnds, BlockPos startPos) {
+		BlockPos.MutableBlockPos leafCenter = new BlockPos.MutableBlockPos(startPos.add(0, height, 0));
+		float leafRadius = (girth - 1.0f) / 2.0f;
+
+		WorldGenHelper.addBlock(world, leafCenter, leaf, WorldGenHelper.EnumReplaceMode.AIR);
+		leafCenter.offsetMutable(EnumFacing.DOWN);
+		WorldGenHelper.generateCylinderFromPos(world, leaf, leafCenter, leafRadius + girth, 1, WorldGenHelper.EnumReplaceMode.SOFT);
+		leafCenter.offsetMutable(EnumFacing.DOWN);
+
+		if (height > 10) {
+			WorldGenHelper.generateCylinderFromPos(world, leaf, leafCenter, leafRadius + girth, 1, WorldGenHelper.EnumReplaceMode.SOFT);
+			leafCenter.offsetMutable(EnumFacing.DOWN);
+		}
+
+		while (leafCenter.getY() > 6) {
+			WorldGenHelper.generateCylinderFromPos(world, leaf, leafCenter, leafRadius + girth, 1, WorldGenHelper.EnumReplaceMode.SOFT);
+			leafCenter.offsetMutable(EnumFacing.DOWN);
+		}
+	}
 }

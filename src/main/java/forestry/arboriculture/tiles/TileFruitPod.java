@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import net.minecraft.block.BlockCocoa;
 import net.minecraft.block.state.IBlockState;
@@ -84,8 +85,8 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 	}
 
 	/* UPDATING */
-	public void onBlockTick() {
-		if (canMature() && worldObj.rand.nextFloat() <= sappiness) {
+	public void onBlockTick(World world, BlockPos pos, IBlockState state, Random rand) {
+		if (canMature() && rand.nextFloat() <= sappiness) {
 			addRipeness(0.5f);
 		}
 	}

@@ -6,6 +6,7 @@
 package forestry.api.arboriculture;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
@@ -62,10 +63,12 @@ public interface ITree extends IIndividual, ITreeGenData {
 	boolean canStay(IBlockAccess world, BlockPos pos);
 
 	/**
-	 * @return Boolean indicating whether a sapling at the given position can grow into a tree.
+	 * @return Position that this tree can grow. May be different from pos if there are multiple saplings.
+	 * Returns null if a sapling at the given position can not grow into a tree.
 	 */
 	@Override
-	boolean canGrow(World world, BlockPos pos, int expectedGirth, int expectedHeight);
+	@Nullable
+	BlockPos canGrow(World world, BlockPos pos, int expectedGirth, int expectedHeight);
 
 	/**
 	 * @return Integer denoting the maturity (block ticks) required for a sapling to attempt to grow into a tree.

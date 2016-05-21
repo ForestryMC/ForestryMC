@@ -12,6 +12,7 @@ package forestry.arboriculture.tiles;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
+import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -143,7 +144,7 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 	/**
 	 * Leaves and saplings will implement their logic here.
 	 */
-	public abstract void onBlockTick();
+	public abstract void onBlockTick(World worldIn, BlockPos pos, IBlockState state, Random rand);
 
 	/**
 	 * Called from Chunk.setBlockIDWithMetadata, determines if this tile entity should be re-created when the ID, or Metadata changes.

@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.tiles;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -47,7 +48,8 @@ public abstract class TileUtil {
 
 	}
 
-	public static <T extends TileEntity> T getTile(IBlockAccess world, BlockPos pos, Class<T> tileClass) {
+	@Nullable
+	public static <T extends TileEntity> T getTile(@Nonnull IBlockAccess world, @Nonnull BlockPos pos, @Nonnull Class<T> tileClass) {
 		if(pos == null){
 			return null;
 		}

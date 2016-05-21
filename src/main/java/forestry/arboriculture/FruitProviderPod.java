@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Random;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -84,9 +85,9 @@ public class FruitProviderPod extends FruitProviderNone {
 	}
 
 	@Override
-	public boolean trySpawnFruitBlock(ITreeGenome genome, World world, BlockPos pos) {
+	public boolean trySpawnFruitBlock(ITreeGenome genome, World world, Random rand, BlockPos pos) {
 
-		if (world.rand.nextFloat() > genome.getSappiness()) {
+		if (rand.nextFloat() > genome.getSappiness()) {
 			return false;
 		}
 

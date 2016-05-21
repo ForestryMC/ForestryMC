@@ -10,9 +10,16 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
+import javax.annotation.Nonnull;
+import java.util.Collections;
+import java.util.Random;
+import java.util.Set;
+
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.world.ITreeGenData;
+import forestry.core.worldgen.WorldGenHelper;
 
 public class WorldGenPlum extends WorldGenTree {
 
@@ -20,23 +27,22 @@ public class WorldGenPlum extends WorldGenTree {
 		super(tree, 6, 3);
 	}
 
+	@Nonnull
 	@Override
-	public void generate(World world) {
-		generateTreeTrunk(world, height, girth);
+	public Set<BlockPos> generateTrunk(World world, Random rand, TreeBlockTypeLog wood, BlockPos startPos) {
+		WorldGenHelper.generateTreeTrunk(world, rand, wood, startPos, height, girth, 0, 0, null, 0);
+		return Collections.emptySet();
+	}
 
+	@Override
+	protected void generateLeaves(World world, Random rand, TreeBlockTypeLeaf leaf, Set<BlockPos> branchEnds, BlockPos startPos) {
 		int yCenter = height - girth;
 		yCenter = yCenter > 2 ? yCenter : 3;
 
-		Vector center = getCenteredAt(yCenter, 0, 0);
-		int radius = Math.round((2 + world.rand.nextInt(girth)) * (height / 4.0f));
+		int radius = Math.round((2 + rand.nextInt(girth)) * (height / 4.0f));
 		if (radius > 4) {
 			radius = 4;
 		}
-		generateSphere(world, center, radius, leaf, EnumReplaceMode.AIR);
-
-		if (hasPods()) {
-			generatePods(world, height, girth);
-		}
+		WorldGenHelper.generateSphereFromTreeStartPos(world, startPos.add(0, yCenter, 0), girth, radius, leaf, WorldGenHelper.EnumReplaceMode.AIR);
 	}
-
 }

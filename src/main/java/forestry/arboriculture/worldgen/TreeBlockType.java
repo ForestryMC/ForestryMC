@@ -10,22 +10,17 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import forestry.api.world.ITreeGenData;
-import forestry.core.config.Constants;
-
 public class TreeBlockType implements ITreeBlockType {
 
-	private final Block block;
-	private final int meta;
+	private final IBlockState blockState;
 
-	public TreeBlockType(Block block, int meta) {
-		this.block = block;
-		this.meta = meta;
+	public TreeBlockType(IBlockState blockState) {
+		this.blockState = blockState;
 	}
 
 	@Override
@@ -34,15 +29,11 @@ public class TreeBlockType implements ITreeBlockType {
 	}
 
 	@Override
-	public boolean setBlock(World world, ITreeGenData tree, BlockPos pos) {
-		return world.setBlockState(pos, block.getStateFromMeta(meta), Constants.FLAG_BLOCK_SYNCH);
+	public boolean setBlock(World world, BlockPos pos) {
+		return world.setBlockState(pos, blockState);
 	}
 
-	public int getMeta() {
-		return this.meta;
-	}
-
-	public Block getBlock() {
-		return this.block;
+	public IBlockState getBlockState() {
+		return blockState;
 	}
 }

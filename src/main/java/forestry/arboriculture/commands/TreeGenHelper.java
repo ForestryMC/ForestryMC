@@ -51,7 +51,7 @@ public final class TreeGenHelper {
 		IBlockState blockState = world.getBlockState(pos);
 		if (BlockUtil.canPlaceTree(blockState, world, pos)){
 			if (gen instanceof WorldGenBase) {
-				((WorldGenBase) gen).generate(world, pos, false);
+				((WorldGenBase) gen).generate(world, world.rand, pos, true);
 			} else {
 				gen.generate(world, world.rand, pos);
 			}

@@ -19,10 +19,11 @@ import com.mojang.authlib.GameProfile;
 import forestry.api.world.ITreeGenData;
 
 public class TreeBlockTypeLeaf implements ITreeBlockType {
-
+	private final ITreeGenData tree;
 	private final GameProfile owner;
 
-	public TreeBlockTypeLeaf(GameProfile owner) {
+	public TreeBlockTypeLeaf(ITreeGenData tree, GameProfile owner) {
+		this.tree = tree;
 		this.owner = owner;
 	}
 
@@ -32,7 +33,7 @@ public class TreeBlockTypeLeaf implements ITreeBlockType {
 	}
 
 	@Override
-	public boolean setBlock(World world, ITreeGenData tree, BlockPos pos) {
+	public boolean setBlock(World world, BlockPos pos) {
 		return tree.setLeaves(world, owner, pos);
 	}
 }

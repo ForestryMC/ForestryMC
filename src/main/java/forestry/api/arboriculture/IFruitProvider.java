@@ -9,6 +9,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -78,13 +79,11 @@ public interface IFruitProvider {
 
 	/**
 	 * Tries to spawn a fruit block at the potential position when the tree generates.
+	 * Spawning a fruit has a random chance of success based on {@link ITreeGenome#getSappiness()}
 	 *
-	 * @param genome
-	 * @param world
-	 * @param pos
 	 * @return true if a fruit block was spawned, false otherwise.
 	 */
-	boolean trySpawnFruitBlock(ITreeGenome genome, World world, BlockPos pos);
+	boolean trySpawnFruitBlock(ITreeGenome genome, World world, Random rand, BlockPos pos);
 
 	@SideOnly(Side.CLIENT)
 	void registerSprites();

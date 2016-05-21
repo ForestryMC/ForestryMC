@@ -12,8 +12,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
 
-import forestry.apiculture.PluginApiculture;
-
 public class VillagerTradeLists {
 	/**
 	 * Copy of {@link net.minecraft.entity.passive.EntityVillager.ItemAndEmeraldToItem}

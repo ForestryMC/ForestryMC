@@ -10,12 +10,15 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
-import java.util.List;
+import javax.annotation.Nonnull;
+import java.util.Random;
+import java.util.Set;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.world.ITreeGenData;
+import forestry.core.worldgen.WorldGenHelper;
 
 public class WorldGenTeak extends WorldGenTree {
 
@@ -23,36 +26,38 @@ public class WorldGenTeak extends WorldGenTree {
 		super(tree, 6, 3);
 	}
 
+	@Nonnull
 	@Override
-	public void generate(World world) {
-		generateTreeTrunk(world, height, girth);
+	public Set<BlockPos> generateTrunk(World world, Random rand, TreeBlockTypeLog wood, BlockPos startPos) {
+		WorldGenHelper.generateTreeTrunk(world, rand, wood, startPos, height, girth, 0, 0, null, 0);
 
+		int branchWidth = height / 3;
+
+		return WorldGenHelper.generateBranches(world, rand, wood, startPos.add(0, height - 3, 0), girth, 0.2f, 0.5f, branchWidth, 1, 1.0f);
+	}
+
+	@Override
+	protected void generateLeaves(World world, Random rand, TreeBlockTypeLeaf leaf, Set<BlockPos> branchEnds, BlockPos startPos) {
 		float leafMultiplier = height / 6.0f;
 		if (leafMultiplier > 2) {
 			leafMultiplier = 2;
 		}
-		int branchWidth = height / 3;
-		List<BlockPos> branchCoords = generateBranches(world, height - 3, 0, 0, 0.2f, 0.5f, branchWidth, 1);
-		for (BlockPos branchEnd : branchCoords) {
-			generateAdjustedCircle(world, branchEnd, 2, Math.round(3 * leafMultiplier), 2, leaf, 1.0f, EnumReplaceMode.AIR);
+
+		for (BlockPos branchEnd : branchEnds) {
+			WorldGenHelper.generateCircle(world, rand, branchEnd, 2, Math.round(3 * leafMultiplier), 2, leaf, 1.0f, WorldGenHelper.EnumReplaceMode.AIR);
 		}
 
 		int leafSpawn = height + 1;
 
-		generateAdjustedCylinder(world, leafSpawn--, 0, 1, leaf);
-		generateAdjustedCylinder(world, leafSpawn--, 0.5f * leafMultiplier, 1, leaf);
+		WorldGenHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, girth, 1, WorldGenHelper.EnumReplaceMode.SOFT);
+		WorldGenHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, 0.5f * leafMultiplier + girth, 1, WorldGenHelper.EnumReplaceMode.SOFT);
 
-		generateAdjustedCylinder(world, leafSpawn--, 1.9f * leafMultiplier, 1, leaf);
-		generateAdjustedCylinder(world, leafSpawn--, 1.9f * leafMultiplier, 1, leaf);
-		if (world.rand.nextBoolean()) {
-			generateAdjustedCylinder(world, leafSpawn--, 1.9f * leafMultiplier, 1, leaf);
+		WorldGenHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, 1.9f * leafMultiplier + girth, 1, WorldGenHelper.EnumReplaceMode.SOFT);
+		WorldGenHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, 1.9f * leafMultiplier + girth, 1, WorldGenHelper.EnumReplaceMode.SOFT);
+		if (rand.nextBoolean()) {
+			WorldGenHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, 1.9f * leafMultiplier + girth, 1, WorldGenHelper.EnumReplaceMode.SOFT);
 		}
 
-		generateAdjustedCylinder(world, leafSpawn, 0.5f * leafMultiplier, 1, leaf);
-
-		if (hasPods()) {
-			generatePods(world, height, girth);
-		}
+		WorldGenHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn, 0), girth, 0.5f * leafMultiplier + girth, 1, WorldGenHelper.EnumReplaceMode.SOFT);
 	}
-
 }

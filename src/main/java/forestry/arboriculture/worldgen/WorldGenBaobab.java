@@ -10,12 +10,15 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
-import java.util.List;
+import javax.annotation.Nonnull;
+import java.util.Random;
+import java.util.Set;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.world.ITreeGenData;
+import forestry.core.worldgen.WorldGenHelper;
 
 public class WorldGenBaobab extends WorldGenTree {
 
@@ -23,63 +26,63 @@ public class WorldGenBaobab extends WorldGenTree {
 		super(tree, 6, 6);
 	}
 
+	@Nonnull
 	@Override
-	public void generate(World world) {
-		generateTreeTrunk(world, height - 1, girth);
+	public Set<BlockPos> generateTrunk(World world, Random rand, TreeBlockTypeLog wood, BlockPos startPos) {
+		WorldGenHelper.generateTreeTrunk(world, rand, wood, startPos, height - 1, girth, 0, 0, null, 0);
 
-		List<BlockPos> branchCoords = generateBranches(world, height, 0, 0, 0, 0.5f, 4, 6);
-		for (BlockPos branchEnd : branchCoords) {
-			generateAdjustedCylinder(world, branchEnd, 0.0f, 2, leaf, EnumReplaceMode.AIR);
+		if (rand.nextFloat() < 0.3f) {
+			WorldGenHelper.generateCylinderFromTreeStartPos(world, wood, startPos.add(0, height - 1, 0), girth, girth, 1, WorldGenHelper.EnumReplaceMode.SOFT);
+		} else if (rand.nextBoolean()) {
+			WorldGenHelper.generateCylinderFromTreeStartPos(world, wood, startPos.add(0, height - 1, girth / 2), girth, girth - 1, 1, WorldGenHelper.EnumReplaceMode.SOFT);
 		}
 
-		if (world.rand.nextFloat() < 0.3f) {
-			generateCylinder(world, new Vector(0, height - 1, 0), girth, 1, wood, EnumReplaceMode.SOFT);
-		} else if (world.rand.nextBoolean()) {
-			generateCylinder(world, new Vector(0, height - 1, 0), girth - 1, 1, wood, EnumReplaceMode.SOFT);
+		return WorldGenHelper.generateBranches(world, rand, wood, startPos.add(0, height - 2, 0), girth, 0, 0.5f, 4, 6, 1.0f);
+	}
+
+	@Override
+	protected void generateLeaves(World world, Random rand, TreeBlockTypeLeaf leaf, Set<BlockPos> branchEnds, BlockPos startPos) {
+		for (BlockPos branchEnd : branchEnds) {
+			WorldGenHelper.generateCylinderFromPos(world, leaf, branchEnd, girth, 2, WorldGenHelper.EnumReplaceMode.AIR);
 		}
 
 		int leafSpawn = height + 1;
 
-		generateAdjustedCylinder(world, leafSpawn--, 2f, 1, leaf);
-		generateAdjustedCylinder(world, leafSpawn--, 1.5f, 1, leaf);
-		generateAdjustedCylinder(world, leafSpawn--, 1f, 1, leaf);
+		WorldGenHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, 2f + girth, 1, WorldGenHelper.EnumReplaceMode.SOFT);
+		WorldGenHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, 1.5f + girth, 1, WorldGenHelper.EnumReplaceMode.SOFT);
+		WorldGenHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn, 0), girth, 1f + girth, 1, WorldGenHelper.EnumReplaceMode.SOFT);
 
 		// Add tree top
 		for (int times = 0; times < height / 2; times++) {
-			int h = height - 1 + world.rand.nextInt(4);
-			if (world.rand.nextBoolean() && h < height / 2) {
-				h = height / 2 + world.rand.nextInt(height / 2);
+			int h = height - 1 + rand.nextInt(4);
+			if (rand.nextBoolean() && h < height / 2) {
+				h = height / 2 + rand.nextInt(height / 2);
 			}
 
-			int x_off = -girth + world.rand.nextInt(2 * girth);
-			int y_off = -girth + world.rand.nextInt(2 * girth);
+			int x_off = -girth + rand.nextInt(2 * girth);
+			int y_off = -girth + rand.nextInt(2 * girth);
 
-			Vector center = new Vector(x_off, h, y_off);
+			BlockPos center = new BlockPos(x_off, h, y_off);
 			int radius = 1;
 			if (girth > 1) {
-				radius += world.rand.nextInt(girth - 1);
+				radius += rand.nextInt(girth - 1);
 			}
-			generateSphere(world, center, radius, leaf, EnumReplaceMode.AIR);
+			WorldGenHelper.generateSphere(world, center, radius, leaf, WorldGenHelper.EnumReplaceMode.AIR);
 		}
 
 		// Add some smaller twigs below for flavour
 		for (int times = 0; times < height / 4; times++) {
 			int delim = modifyByHeight(world, 6, 0, height);
-			int h = delim + (delim < height ? world.rand.nextInt(height - delim) : 0);
-			if (world.rand.nextBoolean() && h < height / 2) {
-				h = height / 2 + world.rand.nextInt(height / 2);
+			int h = delim + (delim < height ? rand.nextInt(height - delim) : 0);
+			if (rand.nextBoolean() && h < height / 2) {
+				h = height / 2 + rand.nextInt(height / 2);
 			}
-			int x_off = -1 + world.rand.nextInt(3);
-			int y_off = -1 + world.rand.nextInt(3);
+			int x_off = -1 + rand.nextInt(3);
+			int y_off = -1 + rand.nextInt(3);
 
-			Vector center = new Vector(x_off, h, y_off);
-			int radius = 1 + world.rand.nextInt(2);
-			generateSphere(world, center, radius, leaf, EnumReplaceMode.AIR);
-		}
-
-		if (hasPods()) {
-			generatePods(world, height, girth);
+			BlockPos center = new BlockPos(x_off, h, y_off);
+			int radius = 1 + rand.nextInt(2);
+			WorldGenHelper.generateSphere(world, center, radius, leaf, WorldGenHelper.EnumReplaceMode.AIR);
 		}
 	}
-
 }

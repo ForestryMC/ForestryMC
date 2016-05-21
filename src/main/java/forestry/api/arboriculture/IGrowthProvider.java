@@ -5,6 +5,8 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -18,9 +20,10 @@ public interface IGrowthProvider {
 	 * @param pos Coordinates to attempt growth at.
 	 * @param expectedGirth Trunk size of the tree to generate.
 	 * @param expectedHeight Height of the tree to generate.
-	 * @return true if the tree can grow at the given coordinates, false otherwise.
+	 * @return position that the tree can grow, null otherwise.
 	 */
-	boolean canGrow(ITreeGenome genome, World world, BlockPos pos, int expectedGirth, int expectedHeight);
+	@Nullable
+	BlockPos canGrow(ITreeGenome genome, World world, BlockPos pos, int expectedGirth, int expectedHeight);
 
 	EnumGrowthConditions getGrowthConditions(ITreeGenome genome, World world, BlockPos pos);
 

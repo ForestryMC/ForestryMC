@@ -237,8 +237,8 @@ public class BlockForestryLeaves extends BlockLeaves implements ITileEntityProvi
 		TileLeaves tileLeaves = TileUtil.getTile(world, pos, TileLeaves.class);
 
 		// check leaves tile because they might have decayed
-		if (tileLeaves != null && !tileLeaves.isInvalid() && world.rand.nextFloat() <= 0.1) {
-			tileLeaves.onBlockTick();
+		if (tileLeaves != null && !tileLeaves.isInvalid() && rand.nextFloat() <= 0.1) {
+			tileLeaves.onBlockTick(world, pos, state, rand);
 		}
 	}
 

@@ -1009,7 +1009,6 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 
 	protected abstract void registerMutations();
 
-	@SuppressWarnings("incomplete-switch")
 	@Override
 	public boolean setLogBlock(ITreeGenome genome, World world, BlockPos pos, EnumFacing facing) {
 		IBlockState logBlock;

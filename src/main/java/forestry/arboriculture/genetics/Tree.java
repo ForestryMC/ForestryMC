@@ -17,6 +17,7 @@ import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -184,7 +185,8 @@ public class Tree extends Individual implements ITree, IPlantable {
 	}
 
 	@Override
-	public boolean canGrow(World world, BlockPos pos, int expectedGirth, int expectedHeight) {
+	@Nullable
+	public BlockPos canGrow(World world, BlockPos pos, int expectedGirth, int expectedHeight) {
 		IGrowthProvider growthProvider = genome.getGrowthProvider();
 		return growthProvider.canGrow(genome, world, pos, expectedGirth, expectedHeight);
 	}
@@ -237,14 +239,14 @@ public class Tree extends Individual implements ITree, IPlantable {
 	}
 
 	@Override
-	public boolean trySpawnFruitBlock(World world, BlockPos pos) {
+	public boolean trySpawnFruitBlock(World world, Random rand, BlockPos pos) {
 		IFruitProvider provider = getGenome().getFruitProvider();
 		Collection<IFruitFamily> suitable = genome.getPrimary().getSuitableFruit();
 		if (!suitable.contains(provider.getFamily())) {
 			return false;
 		}
 
-		return provider.trySpawnFruitBlock(getGenome(), world, pos);
+		return provider.trySpawnFruitBlock(getGenome(), world, rand, pos);
 	}
 
 	/* INFORMATION */

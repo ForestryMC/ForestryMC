@@ -15,14 +15,8 @@ import java.util.EnumMap;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockDoor;
-import net.minecraft.block.BlockFenceGate;
-import net.minecraft.block.BlockLog;
-import net.minecraft.block.BlockSlab;
-import net.minecraft.block.BlockStairs;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
 
 import forestry.api.arboriculture.EnumWoodType;
 import forestry.api.arboriculture.IWoodAccess;

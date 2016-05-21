@@ -10,13 +10,16 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.annotation.Nonnull;
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.world.ITreeGenData;
+import forestry.core.worldgen.WorldGenHelper;
 
 public class WorldGenAcacia extends WorldGenTree {
 
@@ -24,19 +27,20 @@ public class WorldGenAcacia extends WorldGenTree {
 		super(tree, 5, 2);
 	}
 
+	@Nonnull
 	@Override
-	public void generate(World world) {
-		Direction leanDirection = Direction.getRandom(world.rand);
+	public Set<BlockPos> generateTrunk(World world, Random rand, TreeBlockTypeLog wood, BlockPos startPos) {
+		WorldGenHelper.Direction leanDirection = WorldGenHelper.Direction.getRandom(rand);
 		float leanAmount = height / 4.0f;
 
-		List<BlockPos> treeTops = generateTreeTrunk(world, height, girth, 0, leanDirection.facing, leanAmount);
-		if (height > 5 && world.rand.nextBoolean()) {
-			Direction branchDirection = Direction.getRandomOther(world.rand, leanDirection);
-			List<BlockPos> treeTops2 = generateTreeTrunk(world, Math.round(height * 0.66f), girth, 0, branchDirection.facing, leanAmount);
+		Set<BlockPos> treeTops = WorldGenHelper.generateTreeTrunk(world, rand, wood, startPos, height, girth, 0, 0, leanDirection.facing, leanAmount);
+		if (height > 5 && rand.nextBoolean()) {
+			WorldGenHelper.Direction branchDirection = WorldGenHelper.Direction.getRandomOther(rand, leanDirection);
+			Set<BlockPos> treeTops2 = WorldGenHelper.generateTreeTrunk(world, rand, wood, startPos, Math.round(height * 0.66f), girth, 0, 0, branchDirection.facing, leanAmount);
 			treeTops.addAll(treeTops2);
 		}
 
-		List<BlockPos> branchLocations = new ArrayList<>();
+		Set<BlockPos> branchEnds = new HashSet<>(treeTops);
 
 		for (BlockPos treeTop : treeTops) {
 			int xOffset = treeTop.getX();
@@ -45,24 +49,27 @@ public class WorldGenAcacia extends WorldGenTree {
 			float canopyMultiplier = (1.5f * height - yOffset + 2) / 4.0f;
 			int canopyThickness = Math.max(1, Math.round(yOffset / 10.0f));
 
-			generateAdjustedCylinder(world, yOffset--, xOffset, zOffset, canopyMultiplier, 1, leaf, EnumReplaceMode.AIR);
+			yOffset--;
 
-			float canopyWidth = world.rand.nextBoolean() ? 3.0f : 2.5f;
-			List<BlockPos> branches = generateBranches(world, yOffset - canopyThickness, xOffset, zOffset, 0.0f, 0.1f, Math.round(canopyMultiplier * canopyWidth - 4), 2);
-			branchLocations.addAll(branches);
+			float canopyWidth = rand.nextBoolean() ? 3.0f : 2.5f;
+			int radius = Math.round(canopyMultiplier * canopyWidth - 4);
+			BlockPos pos = startPos.add(xOffset, yOffset - canopyThickness, zOffset);
+			branchEnds.addAll(WorldGenHelper.generateBranches(world, rand, wood, pos, girth, 0.0f, 0.1f, radius, 2, 1.0f));
 		}
 
-		for (BlockPos branchLocation : branchLocations) {
-			int leafSpawn = branchLocation.getY();
-			int canopyThickness = Math.max(1, Math.round(leafSpawn / 10.0f));
-			float canopyMultiplier = (1.5f * height - leafSpawn + 2) / 4.0f;
-			float canopyWidth = world.rand.nextBoolean() ? 1.0f : 1.5f;
-			generateAdjustedCylinder(world, leafSpawn - canopyThickness + 1, branchLocation.getX(), branchLocation.getZ(), canopyMultiplier * canopyWidth, canopyThickness, leaf, EnumReplaceMode.AIR);
-		}
-
-		if (hasPods()) {
-			generatePods(world, height, girth);
-		}
+		return branchEnds;
 	}
 
+	@Override
+	protected void generateLeaves(World world, Random rand, TreeBlockTypeLeaf leaf, Set<BlockPos> branchEnds, BlockPos startPos) {
+		for (BlockPos branchEnd : branchEnds) {
+			int leafSpawn = branchEnd.getY();
+			int canopyThickness = Math.max(1, Math.round(leafSpawn / 10.0f));
+			float canopyMultiplier = (1.5f * height - leafSpawn + 2) / 4.0f;
+			float canopyWidth = rand.nextBoolean() ? 2.0f : 4.5f;
+			BlockPos center = new BlockPos(branchEnd.getX(), leafSpawn - canopyThickness + 1, branchEnd.getZ());
+			float radius = Math.max(1, canopyMultiplier * canopyWidth + girth);
+			WorldGenHelper.generateCylinderFromPos(world, leaf, center, radius, canopyThickness, WorldGenHelper.EnumReplaceMode.AIR);
+		}
+	}
 }
