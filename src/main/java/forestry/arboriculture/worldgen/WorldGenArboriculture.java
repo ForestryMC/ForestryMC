@@ -12,6 +12,10 @@ package forestry.arboriculture.worldgen;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
@@ -57,7 +61,13 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 		}
 
 		if (genPos != null) {
-			Set<BlockPos> branchEnds = generateTrunk(world, rand, wood, genPos);
+			List<BlockPos> branchEnds = new ArrayList<>(generateTrunk(world, rand, wood, genPos));
+			Collections.sort(branchEnds, new Comparator<BlockPos>() {
+				@Override
+				public int compare(BlockPos o1, BlockPos o2) {
+					return Integer.compare(o2.getY(), o1.getY());
+				}
+			});
 			generateLeaves(world, rand, leaf, branchEnds, genPos);
 			generateExtras(world, rand, genPos);
 			return true;
@@ -84,7 +94,7 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 	@Nonnull
 	protected abstract Set<BlockPos> generateTrunk(World world, Random rand, TreeBlockTypeLog wood, BlockPos startPos);
 
-	protected abstract void generateLeaves(World world, Random rand, TreeBlockTypeLeaf leaf, Set<BlockPos> branchEnds, BlockPos startPos);
+	protected abstract void generateLeaves(World world, Random rand, TreeBlockTypeLeaf leaf, List<BlockPos> branchEnds, BlockPos startPos);
 
 	protected abstract void generateExtras(World world, Random rand, BlockPos startPos);
 

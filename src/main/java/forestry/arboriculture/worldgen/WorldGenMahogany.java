@@ -12,6 +12,7 @@ package forestry.arboriculture.worldgen;
 
 import javax.annotation.Nonnull;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
@@ -41,7 +42,7 @@ public class WorldGenMahogany extends WorldGenTree {
 	}
 
 	@Override
-	protected void generateLeaves(World world, Random rand, TreeBlockTypeLeaf leaf, Set<BlockPos> branchEnds, BlockPos startPos) {
+	protected void generateLeaves(World world, Random rand, TreeBlockTypeLeaf leaf, List<BlockPos> branchEnds, BlockPos startPos) {
 		for (BlockPos branchEnd : branchEnds) {
 			WorldGenHelper.generateCylinderFromPos(world, leaf, branchEnd, 2 + girth, 2, WorldGenHelper.EnumReplaceMode.AIR);
 		}

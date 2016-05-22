@@ -13,6 +13,7 @@ package forestry.arboriculture.worldgen;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
@@ -48,7 +49,7 @@ public abstract class WorldGenTree extends WorldGenArboriculture {
 	}
 
 	@Override
-	protected void generateLeaves(World world, Random rand, TreeBlockTypeLeaf leaf, Set<BlockPos> branchEnds, BlockPos startPos) {
+	protected void generateLeaves(World world, Random rand, TreeBlockTypeLeaf leaf, List<BlockPos> branchEnds, BlockPos startPos) {
 		int leafHeight = height + 1;
 		WorldGenHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafHeight--, 0), girth, girth, 1, WorldGenHelper.EnumReplaceMode.AIR);
 		WorldGenHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafHeight--, 0), girth, 0.5f + girth, 1, WorldGenHelper.EnumReplaceMode.AIR);

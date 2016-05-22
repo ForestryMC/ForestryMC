@@ -12,6 +12,7 @@ package forestry.arboriculture.worldgen;
 
 import javax.annotation.Nonnull;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
@@ -55,7 +56,7 @@ public class WorldGenJungle extends WorldGenTreeVanilla {
 	}
 
 	@Override
-	protected void generateLeaves(World world, Random rand, TreeBlockTypeLeaf leaf, Set<BlockPos> branchEnds, BlockPos startPos) {
+	protected void generateLeaves(World world, Random rand, TreeBlockTypeLeaf leaf, List<BlockPos> branchEnds, BlockPos startPos) {
 		int height = this.height;
 		if (girth >= 2) {
 			height *= 1.5f;

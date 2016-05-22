@@ -12,6 +12,7 @@ package forestry.arboriculture.worldgen;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
@@ -60,7 +61,7 @@ public class WorldGenEbony extends WorldGenTree {
 	}
 
 	@Override
-	protected void generateLeaves(World world, Random rand, TreeBlockTypeLeaf leaf, Set<BlockPos> branchEnds, BlockPos startPos) {
+	protected void generateLeaves(World world, Random rand, TreeBlockTypeLeaf leaf, List<BlockPos> branchEnds, BlockPos startPos) {
 		for (int times = 0; times < 2 * height; times++) {
 			int h = 2 * girth + rand.nextInt(height - girth);
 			if (rand.nextBoolean() && h < height / 2) {
