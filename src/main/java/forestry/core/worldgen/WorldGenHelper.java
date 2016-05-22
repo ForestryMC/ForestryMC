@@ -268,6 +268,7 @@ public class WorldGenHelper {
 				int x = 0;
 				int z = 0;
 
+				BlockPos branchEnd = null;
 				for (int r = 0; r < radius; r++) {
 					if (rand.nextFloat() < spreadY) {
 						// make branches only spread up, not down
@@ -299,10 +300,14 @@ public class WorldGenHelper {
 
 					BlockPos pos = branchStart.add(x, y, z);
 					if (addBlock(world, pos, wood, EnumReplaceMode.SOFT)) {
-						branchEnds.add(pos);
+						branchEnd = pos;
 					} else {
 						break;
 					}
+				}
+
+				if (branchEnd != null) {
+					branchEnds.add(branchEnd);
 				}
 			}
 		}
