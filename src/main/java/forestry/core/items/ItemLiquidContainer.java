@@ -94,6 +94,10 @@ public class ItemLiquidContainer extends ItemForestry implements IColoredItem {
 			}
 		}
 
+		if (fluid == null) {
+			return ActionResult.newResult(EnumActionResult.FAIL, itemStackIn);
+		}
+
 		ItemStack filledContainer = FluidHelper.getFilledContainer(fluid.getFluid(), itemStackIn);
 		if (filledContainer == null) {
 			return ActionResult.newResult(EnumActionResult.FAIL, itemStackIn);
