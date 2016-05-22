@@ -53,7 +53,7 @@ public abstract class BlockArbLog extends BlockLog implements IWoodTyped, IState
 			BlockArbLog log = new BlockArbLog(fireproof, blockNumber) {
 				@Nonnull
 				@Override
-				protected PropertyWoodType getVariant() {
+				public PropertyWoodType getVariant() {
 					return variant;
 				}
 			};
@@ -70,7 +70,7 @@ public abstract class BlockArbLog extends BlockLog implements IWoodTyped, IState
 		this.blockNumber = blockNumber;
 
 		PropertyWoodType variant = getVariant();
-		setDefaultState(this.blockState.getBaseState().withProperty(variant, variant.getFirstType()).withProperty(LOG_AXIS, EnumAxis.NONE));
+		setDefaultState(this.blockState.getBaseState().withProperty(variant, variant.getFirstType()).withProperty(LOG_AXIS, EnumAxis.Y));
 
 		setHarvestLevel("axe", 0);
 		setCreativeTab(Tabs.tabArboriculture);
@@ -88,7 +88,7 @@ public abstract class BlockArbLog extends BlockLog implements IWoodTyped, IState
 	}
 
 	@Nonnull
-	protected abstract PropertyWoodType getVariant();
+	public abstract PropertyWoodType getVariant();
 
 	public int getBlockNumber() {
 		return blockNumber;

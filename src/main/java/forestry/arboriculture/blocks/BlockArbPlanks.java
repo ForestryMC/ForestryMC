@@ -53,7 +53,7 @@ public abstract class BlockArbPlanks extends Block implements IWoodTyped, IState
 			BlockArbPlanks block = new BlockArbPlanks(fireproof, blockNumber) {
 				@Nonnull
 				@Override
-				protected PropertyWoodType getVariant() {
+				public PropertyWoodType getVariant() {
 					return variant;
 				}
 			};
@@ -83,7 +83,7 @@ public abstract class BlockArbPlanks extends Block implements IWoodTyped, IState
 	}
 
 	@Nonnull
-	protected abstract PropertyWoodType getVariant();
+	public abstract PropertyWoodType getVariant();
 
 	public int getBlockNumber() {
 		return blockNumber;

@@ -57,7 +57,7 @@ public abstract class BlockArbSlab extends BlockSlab implements IWoodTyped, IIte
 			BlockArbSlab block = new BlockArbSlab(fireproof, blockNumber) {
 				@Nonnull
 				@Override
-				protected PropertyWoodType getVariant() {
+				public PropertyWoodType getVariant() {
 					return variant;
 				}
 
@@ -102,7 +102,7 @@ public abstract class BlockArbSlab extends BlockSlab implements IWoodTyped, IIte
 	}
 
 	@Nonnull
-	protected abstract PropertyWoodType getVariant();
+	public abstract PropertyWoodType getVariant();
 
 	public int getBlockNumber() {
 		return blockNumber;

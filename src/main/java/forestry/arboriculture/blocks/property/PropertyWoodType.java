@@ -40,4 +40,9 @@ public class PropertyWoodType extends PropertyEnum<EnumWoodType> {
 	public EnumWoodType getFirstType() {
 		return getAllowedValues().iterator().next();
 	}
+
+	@Override
+	public Collection<EnumWoodType> getAllowedValues() {
+		return super.getAllowedValues();
+	}
 }

@@ -61,7 +61,7 @@ public abstract class BlockArbFence extends BlockFence implements IWoodTyped, II
 			BlockArbFence block = new BlockArbFence(fireproof, blockNumber) {
 				@Nonnull
 				@Override
-				protected PropertyWoodType getVariant() {
+				public PropertyWoodType getVariant() {
 					return variant;
 				}
 			};
@@ -95,7 +95,7 @@ public abstract class BlockArbFence extends BlockFence implements IWoodTyped, II
 	}
 
 	@Nonnull
-	protected abstract PropertyWoodType getVariant();
+	public abstract PropertyWoodType getVariant();
 
 	@Override
 	public boolean isFireproof() {

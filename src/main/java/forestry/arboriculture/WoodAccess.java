@@ -27,6 +27,7 @@ import forestry.arboriculture.blocks.BlockArbLog;
 import forestry.arboriculture.blocks.BlockArbPlanks;
 import forestry.arboriculture.blocks.BlockArbSlab;
 import forestry.arboriculture.blocks.BlockArbStairs;
+import forestry.arboriculture.blocks.property.PropertyWoodType;
 import forestry.core.utils.Log;
 
 public class WoodAccess implements IWoodAccess {
@@ -84,51 +85,52 @@ public class WoodAccess implements IWoodAccess {
 
 	public static void registerLogs(List<BlockArbLog> blocks) {
 		for (BlockArbLog block : blocks) {
-			register(block, logs);
+			registerWithVariants(block, logs, block.getVariant());
 		}
 	}
 
 	public static void registerPlanks(List<BlockArbPlanks> blocks) {
 		for (BlockArbPlanks block : blocks) {
-			register(block, planks);
+			registerWithVariants(block, planks, block.getVariant());
 		}
 	}
 
 	public static void registerSlabs(List<BlockArbSlab> blocks) {
 		for (BlockArbSlab block : blocks) {
-			register(block, slabs);
+			registerWithVariants(block, slabs, block.getVariant());
 		}
 	}
 
 	public static void registerFences(List<BlockArbFence> blocks) {
 		for (BlockArbFence block : blocks) {
-			register(block, fences);
+			registerWithVariants(block, fences, block.getVariant());
 		}
 	}
 	
 	public static void registerFenceGates(List<BlockArbFenceGate> blocks) {
 		for (BlockArbFenceGate block : blocks) {
-			register(block, fenceGates);
+			registerWithoutVariants(block, fenceGates);
 		}
 	}
 
 	public static void registerStairs(List<BlockArbStairs> blocks) {
 		for (BlockArbStairs block : blocks) {
-			register(block, stairs);
+			registerWithoutVariants(block, stairs);
 		}
 	}
 
 	public static void registerDoors(List<BlockArbDoor> blocks) {
 		for (BlockArbDoor block : blocks) {
-			register(block, doors);
+			registerWithoutVariants(block, doors);
 		}
 	}
 
-	private static <T extends Block & IWoodTyped> void register(T woodTyped, WoodMap woodMap) {
+	private static <T extends Block & IWoodTyped> void registerWithVariants(T woodTyped, WoodMap woodMap, PropertyWoodType property) {
 		boolean fireproof = woodTyped.isFireproof();
 		EnumMap<EnumWoodType, ItemStack> itemRegistryMap = woodMap.getItem(fireproof);
 		EnumMap<EnumWoodType, IBlockState> blockRegistryMap = woodMap.getBlock(fireproof);
-		for (IBlockState blockState : woodTyped.getBlockState().getValidStates()) {
+		for (EnumWoodType value : property.getAllowedValues()) {
+			IBlockState blockState = woodTyped.getDefaultState().withProperty(property, value);
 			int meta = woodTyped.getMetaFromState(blockState);
 			EnumWoodType woodType = woodTyped.getWoodType(meta);
 			ItemStack itemStack = new ItemStack(woodTyped, 1, meta);
@@ -136,6 +138,22 @@ public class WoodAccess implements IWoodAccess {
 			itemRegistryMap.put(woodType, itemStack);
 			blockRegistryMap.put(woodType, blockState);
 		}
+	}
+
+	/**
+	 * Register wood blocks that have no variant property
+	 */
+	private static <T extends Block & IWoodTyped, P extends Comparable<P>, V extends P> void registerWithoutVariants(T woodTyped, WoodMap woodMap) {
+		boolean fireproof = woodTyped.isFireproof();
+		EnumMap<EnumWoodType, ItemStack> itemRegistryMap = woodMap.getItem(fireproof);
+		EnumMap<EnumWoodType, IBlockState> blockRegistryMap = woodMap.getBlock(fireproof);
+
+		IBlockState blockState = woodTyped.getDefaultState();
+		EnumWoodType woodType = woodTyped.getWoodType(0);
+		ItemStack itemStack = new ItemStack(woodTyped);
+
+		itemRegistryMap.put(woodType, itemStack);
+		blockRegistryMap.put(woodType, blockState);
 	}
 
 	@Override
