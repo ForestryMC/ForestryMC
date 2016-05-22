@@ -36,6 +36,7 @@ import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.api.core.IStateMapperRegister;
+import forestry.api.core.Tabs;
 import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.WoodHelper;
 import forestry.arboriculture.blocks.property.PropertyWoodType;
@@ -75,6 +76,7 @@ public abstract class BlockArbPlanks extends Block implements IWoodTyped, IState
 
 		setResistance(5.0F);
 		setHarvestLevel("axe", 0);
+		setCreativeTab(Tabs.tabArboriculture);
 	}
 
 	@Override
