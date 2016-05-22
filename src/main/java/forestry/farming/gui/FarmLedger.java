@@ -49,14 +49,8 @@ public class FarmLedger extends Ledger {
 
 		// Draw icon
 		Minecraft minecraft = Proxies.common.getClientInstance();
-		RenderItem renderItem = minecraft.getRenderItem();
-		ItemModelMesher itemModelMesher = renderItem.getItemModelMesher();
-		IBakedModel iBakedModel = itemModelMesher.getItemModel(new ItemStack(Items.WATER_BUCKET));
-
 		TextureMap textureMapBlocks = minecraft.getTextureMapBlocks();
-		TextureAtlasSprite particleTexture = iBakedModel.getParticleTexture();
-		String particleTextureIconName = particleTexture.getIconName();
-		TextureAtlasSprite textureAtlasSprite = textureMapBlocks.getAtlasSprite(particleTextureIconName);
+		TextureAtlasSprite textureAtlasSprite = textureMapBlocks.getAtlasSprite("minecraft:items/bucket_water");
 
 		drawSprite(textureAtlasSprite, xIcon, y);
 		y += 4;
