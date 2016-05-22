@@ -77,7 +77,7 @@ public class BlockForestryLeaves extends BlockLeaves implements ITileEntityProvi
 
 	public BlockForestryLeaves() {
 		setCreativeTab(Tabs.tabArboriculture);
-        setDefaultState(this.blockState.getBaseState().withProperty(CHECK_DECAY, true).withProperty(DECAYABLE, true));
+        setDefaultState(this.blockState.getBaseState().withProperty(CHECK_DECAY, false).withProperty(DECAYABLE, true));
 	}
 	
 	@Override
