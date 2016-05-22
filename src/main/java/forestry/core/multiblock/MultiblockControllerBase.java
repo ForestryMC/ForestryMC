@@ -18,7 +18,6 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 
 import forestry.api.multiblock.IMultiblockComponent;
-import forestry.core.utils.BlockUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.Translator;
 
@@ -425,7 +424,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 			// If this returns true, the server has changed its internal data. 
 			// If our chunks are loaded (they should be), we must mark our chunks as dirty.
 			if (minimumCoord != null && maximumCoord != null &&
-					BlockUtil.checkChunksExist(worldObj, minimumCoord, maximumCoord)) {
+					worldObj.isAreaLoaded(minimumCoord, maximumCoord)) {
 				int minChunkX = minimumCoord.getX() >> 4;
 				int minChunkZ = minimumCoord.getZ() >> 4;
 				int maxChunkX = maximumCoord.getX() >> 4;

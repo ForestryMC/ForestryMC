@@ -238,37 +238,6 @@ public abstract class BlockUtil {
 	
 	/* CHUNKS */
 
-	/**
-	 * Checks if chunk exits.
-	 */
-	public static boolean checkChunksExist(World world, BlockPos minPos, BlockPos maxPos) {
-		return checkChunksExist(world, minPos.getX(), minPos.getY(), minPos.getZ(), maxPos.getX(), maxPos.getY(), maxPos.getZ());
-	}
-
-	/**
-	 * Checks if chunk exits.
-	 */
-	public static boolean checkChunksExist(World world, int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
-		if (maxY >= 0 && minY < 256) {
-			minX >>= 4;
-			minZ >>= 4;
-			maxX >>= 4;
-			maxZ >>= 4;
-
-			for (int k1 = minX; k1 <= maxX; ++k1) {
-				for (int l1 = minZ; l1 <= maxZ; ++l1) {
-					if (world.getChunkProvider().getLoadedChunk(k1, l1) == null) {
-						return false;
-					}
-				}
-			}
-
-			return true;
-		} else {
-			return false;
-		}
-	}
-	
 	public static boolean canReplace(IBlockState blockState, World world, BlockPos pos) {
 		Block block = blockState.getBlock();
 		return block.isReplaceable(world, pos) && !block.getMaterial(blockState).isLiquid();
