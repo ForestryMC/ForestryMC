@@ -92,9 +92,23 @@ public class BlockForestryLeaves extends BlockLeaves implements ITileEntityProvi
 	}
 	
     @Override
-	public int getMetaFromState(IBlockState state){
-    	return 0;
-    }
+	public int getMetaFromState(IBlockState state) {
+		int i = 0;
+		if (!state.getValue(DECAYABLE)) {
+			i |= 4;
+		}
+
+		if (state.getValue(CHECK_DECAY)) {
+			i |= 8;
+		}
+
+		return i;
+	}
+
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		return this.getDefaultState().withProperty(DECAYABLE, (meta & 4) == 0).withProperty(CHECK_DECAY, (meta & 8) > 0);
+	}
 
 	/* TILE ENTITY */
 	@Override
