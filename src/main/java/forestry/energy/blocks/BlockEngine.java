@@ -125,7 +125,7 @@ public class BlockEngine extends BlockBase<BlockTypeEngine> {
 			EnumFacing orientation = EnumFacing.values()[i % 6];
 			if (isOrientedAtEnergyReciever(world, pos, orientation)) {
 				blockState = blockState.withProperty(FACING, orientation);
-				world.setBlockState(pos, blockState, 2);
+				world.setBlockState(pos, blockState);
 				return true;
 			}
 		}
@@ -138,7 +138,7 @@ public class BlockEngine extends BlockBase<BlockTypeEngine> {
 		if (isOrientedAtEnergyReciever(world, pos, orientation)) {
 			IBlockState blockState = world.getBlockState(pos);
 			blockState = blockState.withProperty(FACING, orientation);
-			world.setBlockState(pos, blockState, 2);
+			world.setBlockState(pos, blockState);
 		} else {
 			super.rotateAfterPlacement(player, world, pos, side);
 			rotate(world, pos);

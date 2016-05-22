@@ -64,7 +64,7 @@ import forestry.core.utils.PlayerUtil;
 
 public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> extends BlockForestry implements IItemModelRegister, ISpriteRegister, IStateMapperRegister {
 	/** use this instead of {@link BlockHorizontal#FACING} so the blocks rotate in a circle instead of NSWE order. */
-	public static final PropertyEnum<EnumFacing> FACING = PropertyEnum.create("facing", EnumFacing.class, EnumFacing.NORTH, EnumFacing.EAST, EnumFacing.SOUTH, EnumFacing.WEST);
+	public static final PropertyEnum<EnumFacing> FACING = PropertyEnum.create("facing", EnumFacing.class, EnumFacing.NORTH, EnumFacing.EAST, EnumFacing.SOUTH, EnumFacing.WEST, EnumFacing.DOWN, EnumFacing.UP);
 
 	private final boolean hasTESR;
 	private final boolean hasCustom;
@@ -175,20 +175,22 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 	public void rotateAfterPlacement(EntityPlayer player, World world, BlockPos pos, EnumFacing side) {
 		IBlockState state = world.getBlockState(pos);
 
+		EnumFacing facing = getPlacementRotation(player, world, pos, side);
+		world.setBlockState(pos, state.withProperty(FACING, facing));
+	}
+
+	protected EnumFacing getPlacementRotation(EntityPlayer player, World world, BlockPos pos, EnumFacing side) {
 		int l = MathHelper.floor_double(player.rotationYaw * 4F / 360F + 0.5D) & 3;
-		if (l == 0) {
-			state = state.withProperty(FACING, EnumFacing.NORTH);
-		}
 		if (l == 1) {
-			state = state.withProperty(FACING, EnumFacing.EAST);
+			return EnumFacing.EAST;
 		}
 		if (l == 2) {
-			state = state.withProperty(FACING, EnumFacing.SOUTH);
+			return EnumFacing.SOUTH;
 		}
 		if (l == 3) {
-			state = state.withProperty(FACING, EnumFacing.WEST);
+			return EnumFacing.WEST;
 		}
-		world.setBlockState(pos, state, 2);
+		return EnumFacing.NORTH;
 	}
 
 	@Override
@@ -237,12 +239,12 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(FACING, EnumFacing.getHorizontal(meta));
+		return this.getDefaultState().withProperty(FACING, EnumFacing.getFront(meta));
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return state.getValue(FACING).getHorizontalIndex();
+		return state.getValue(FACING).getIndex();
 	}
 	
 	@Override
