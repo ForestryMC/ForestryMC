@@ -70,7 +70,7 @@ public class WorldGenEbony extends WorldGenTree {
 			int x_off = -girth + rand.nextInt(2 * girth);
 			int y_off = -girth + rand.nextInt(2 * girth);
 
-			BlockPos center = new BlockPos(x_off, h, y_off);
+			BlockPos center = startPos.add(x_off, h, y_off);
 			int radius = 1 + rand.nextInt(girth);
 			WorldGenHelper.generateSphere(world, center, radius, leaf, WorldGenHelper.EnumReplaceMode.AIR);
 		}
