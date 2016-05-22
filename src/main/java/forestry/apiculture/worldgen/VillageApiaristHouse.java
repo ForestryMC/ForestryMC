@@ -166,8 +166,8 @@ public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 		fillWithBlocks(world, structBoundingBox, 8, 1, 6, 8, 1, 10, fence, fence, false);
 		fillWithBlocks(world, structBoundingBox, 2, 1, 10, 7, 1, 10, fence, fence, false);
 
-		setBlockState(world, fenceGate, 8, 1, 8, structBoundingBox);
-		setBlockState(world, fenceGate, 1, 1, 8, structBoundingBox);
+		setBlockState(world, fenceGate.withProperty(BlockFenceGate.FACING, EnumFacing.EAST), 8, 1, 8, structBoundingBox);
+		setBlockState(world, fenceGate.withProperty(BlockFenceGate.FACING, EnumFacing.EAST), 1, 1, 8, structBoundingBox);
 		setBlockState(world, fenceGate.withProperty(BlockFenceGate.FACING, EnumFacing.NORTH), 4, 1, 10, structBoundingBox);
 
 		// Flowers
