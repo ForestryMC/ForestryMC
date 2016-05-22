@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.farming.multiblock;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -128,6 +130,7 @@ public class FakeFarmController extends FakeMultiblockController implements IFar
 		return FakeInventoryAdapter.instance();
 	}
 
+	@Nonnull
 	@Override
 	public ITankManager getTankManager() {
 		return FakeTankManager.instance;

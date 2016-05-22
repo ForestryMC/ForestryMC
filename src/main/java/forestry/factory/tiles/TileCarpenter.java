@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.factory.tiles;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
@@ -246,6 +247,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 		return tankManager.fill(direction, resource, doFill);
 	}
 
+	@Nonnull
 	@Override
 	public TankManager getTankManager() {
 		return tankManager;

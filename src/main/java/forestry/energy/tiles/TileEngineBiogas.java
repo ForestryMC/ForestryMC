@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.energy.tiles;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -65,6 +66,7 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 		this.tankManager = new TankManager(this, fuelTank, heatingTank, burnTank);
 	}
 
+	@Nonnull
 	@Override
 	public TankManager getTankManager() {
 		return tankManager;

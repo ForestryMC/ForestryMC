@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.factory.tiles;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -154,6 +155,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 	}
 
 	/* ILIQUIDCONTAINER */
+	@Nonnull
 	@Override
 	public TankManager getTankManager() {
 		return tankManager;

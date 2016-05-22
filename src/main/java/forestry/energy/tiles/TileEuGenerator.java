@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.energy.tiles;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -197,6 +198,7 @@ public class TileEuGenerator extends TileBase implements ISidedInventory, ILiqui
 		return tankManager.fill(from, resource, doFill);
 	}
 
+	@Nonnull
 	@Override
 	public TankManager getTankManager() {
 		return tankManager;

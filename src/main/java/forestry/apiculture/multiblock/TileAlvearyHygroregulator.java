@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.multiblock;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
@@ -139,6 +141,7 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 	}
 
 	/* ILIQUIDTANKCONTAINER */
+	@Nonnull
 	@Override
 	public TankManager getTankManager() {
 		return tankManager;

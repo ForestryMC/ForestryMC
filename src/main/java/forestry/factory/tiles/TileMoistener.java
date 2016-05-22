@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.factory.tiles;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -483,6 +484,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 		return tankManager.fill(from, resource, doFill);
 	}
 
+	@Nonnull
 	@Override
 	public TankManager getTankManager() {
 		return tankManager;

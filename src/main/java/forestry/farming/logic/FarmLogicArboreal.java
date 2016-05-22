@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -51,7 +52,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 	}
 
 	@Override
-	public boolean isAcceptedSoil(ItemStack soil) {
+	public boolean isAcceptedSoil(@Nonnull ItemStack soil) {
 		if (super.isAcceptedSoil(soil)) {
 			return true;
 		}

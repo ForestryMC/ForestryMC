@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nonnull;
 import javax.vecmath.Matrix4f;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -181,7 +182,7 @@ public class ModelBakerModel implements IModelBakerModel {
 	}
 	
 	@Override
-	public void addQuad(EnumFacing facing, BakedQuad quad) {
+	public void addQuad(EnumFacing facing, @Nonnull BakedQuad quad) {
 		if(facing != null){
 			faceQuads.get(facing).add(quad);
 		}else{

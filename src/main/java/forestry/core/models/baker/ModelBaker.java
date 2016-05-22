@@ -80,7 +80,7 @@ public class ModelBaker implements IModelBaker {
 	}
 	
 	@Override
-	public void addModel(AxisAlignedBB renderBounds, @Nonnull TextureAtlasSprite[] textures, int colorIndex) {
+	public void addModel(@Nonnull AxisAlignedBB renderBounds, @Nonnull TextureAtlasSprite[] textures, int colorIndex) {
 		setRenderBounds(renderBounds);
 		
 		setColorIndex(colorIndex);
@@ -93,12 +93,12 @@ public class ModelBaker implements IModelBaker {
 	}
 	
 	@Override
-	public void addModel(AxisAlignedBB renderBounds, @Nonnull TextureAtlasSprite texture, int colorIndex) {
+	public void addModel(@Nonnull AxisAlignedBB renderBounds, @Nonnull TextureAtlasSprite texture, int colorIndex) {
 		addModel(renderBounds, new TextureAtlasSprite[]{ texture, texture, texture, texture, texture, texture }, colorIndex);
 	}
 	
 	@Override
-	public void addBlockModel(@Nonnull Block block, AxisAlignedBB renderBounds, @Nullable BlockPos pos, @Nonnull TextureAtlasSprite[] textures, int colorIndex) {
+	public void addBlockModel(@Nonnull Block block, @Nonnull AxisAlignedBB renderBounds, @Nullable BlockPos pos, @Nonnull TextureAtlasSprite[] textures, int colorIndex) {
 		setRenderBounds(renderBounds);
 		
 		setColorIndex(colorIndex);

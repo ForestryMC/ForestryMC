@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.factory.tiles;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -206,6 +207,7 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 	}
 
 	/* ILIQUIDCONTAINER IMPLEMENTATION */
+	@Nonnull
 	@Override
 	public TankManager getTankManager() {
 		return tankManager;

@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.farming.tiles;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.util.EnumFacing;
 
 import net.minecraftforge.fluids.Fluid;
@@ -53,6 +55,7 @@ public class TileFarmValve extends TileFarm implements ILiquidTankTile, IFluidHa
 		return getTankManager().getTankInfo(from);
 	}
 
+	@Nonnull
 	@Override
 	public ITankManager getTankManager() {
 		return getMultiblockLogic().getController().getTankManager();

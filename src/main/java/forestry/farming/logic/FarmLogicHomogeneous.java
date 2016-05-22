@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +45,7 @@ public abstract class FarmLogicHomogeneous extends FarmLogic {
 		}
 	}
 
-	protected boolean isAcceptedSoil(ItemStack itemStack) {
+	protected boolean isAcceptedSoil(@Nonnull ItemStack itemStack) {
 		return ItemStackUtil.isIdenticalItem(soilBlock, itemStack);
 	}
 
