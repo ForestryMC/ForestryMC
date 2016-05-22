@@ -21,9 +21,6 @@ public interface IFarmHousing extends IErrorLogicSource {
 
 	Vec3i getOffset();
 
-	/** Must not be named "getWorld" to avoid SpecialSource issue https://github.com/md-5/SpecialSource/issues/12 */
-	World getWorldObj();
-
 	/**
 	 * @return true if any work was done, false otherwise.
 	 */

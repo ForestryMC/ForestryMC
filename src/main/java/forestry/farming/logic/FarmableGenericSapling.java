@@ -22,64 +22,42 @@ import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
-import forestry.core.utils.ItemStackUtil;
 
 public class FarmableGenericSapling implements IFarmable {
-
-	protected final Block sapling;
-	private final int saplingMeta;
+	protected final ItemStack germling;
+	protected final IBlockState plantedState;
+	private final boolean replant;
 	private final ItemStack[] windfall;
 
-	public FarmableGenericSapling(Block sapling, int saplingMeta, ItemStack... windfall) {
-		this.sapling = sapling;
-		this.saplingMeta = saplingMeta;
+	public FarmableGenericSapling(ItemStack germling, IBlockState plantedState, boolean replant, ItemStack... windfall) {
+		this.germling = germling;
+		this.plantedState = plantedState;
+		this.replant = replant;
 		this.windfall = windfall;
 	}
 
 	@Override
 	public boolean isSaplingAt(World world, BlockPos pos) {
-
-		if (world.isAirBlock(pos)) {
-			return false;
-		}
-
-		IBlockState blockState = world.getBlockState(pos);
-		Block block = blockState.getBlock();
-		if (block == sapling) {
-			return true;
-		}
-
-		if (saplingMeta >= 0) {
-			return block.getMetaFromState(blockState) == saplingMeta;
-		} else {
-			return true;
-		}
-
+		return world.getBlockState(pos).getBlock() == plantedState.getBlock();
 	}
 
 	@Override
-	public ICrop getCropAt(World world, BlockPos pos) {
-		IBlockState blockState = world.getBlockState(pos);
+	public ICrop getCropAt(World world, BlockPos pos, IBlockState blockState) {
 		Block block = blockState.getBlock();
 		if (!block.isWood(world, pos)) {
 			return null;
 		}
 
-		return new CropBlock(world, block, block.getMetaFromState(blockState), pos);
+		if (replant) {
+			return new CropDestroy(world, blockState, pos, plantedState);
+		} else {
+			return new CropDestroy(world, blockState, pos, null);
+		}
 	}
 
 	@Override
 	public boolean isGermling(ItemStack itemstack) {
-
-		if (!ItemStackUtil.equals(sapling, itemstack)) {
-			return false;
-		}
-
-		if (saplingMeta >= 0) {
-			return itemstack.getItemDamage() == saplingMeta;
-		} else {
-			return true;
-		}
+		return ItemStack.areItemsEqual(germling, itemstack);
 	}
 
 	@Override

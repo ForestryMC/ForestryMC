@@ -17,12 +17,11 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.farming.Farmables;
-import forestry.api.farming.IFarmHousing;
 
 public class FarmLogicCereal extends FarmLogicCrops {
 
-	public FarmLogicCereal(IFarmHousing housing) {
-		super(housing, Farmables.farmables.get("farmWheat"));
+	public FarmLogicCereal() {
+		super(Farmables.farmables.get("farmWheat"));
 	}
 
 	@Override

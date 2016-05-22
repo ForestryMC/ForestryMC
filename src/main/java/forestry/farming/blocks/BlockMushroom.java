@@ -10,24 +10,26 @@
  ******************************************************************************/
 package forestry.farming.blocks;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockDirt;
 import net.minecraft.block.IGrowable;
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenBigMushroom;
@@ -38,15 +40,28 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
-import forestry.core.blocks.IBlockWithMeta;
 import forestry.core.config.Constants;
 
-public class BlockMushroom extends BlockBush implements IItemModelRegister, IGrowable, IBlockWithMeta {
+public class BlockMushroom extends BlockBush implements IItemModelRegister, IGrowable {
 
-	public static final PropertyEnum<MushroomType> MUSHROOM = PropertyEnum.create("mushroom", MushroomType.class);
+	public static final PropertyEnum<MushroomType> VARIANT = PropertyEnum.create("mushroom", MushroomType.class);
+	public static final PropertyBool MATURE = PropertyBool.create("mature");
 	
 	public enum MushroomType implements IStringSerializable {
-		BROWN, RED;
+		BROWN {
+			@Override
+			public ItemStack getDrop() {
+				return new ItemStack(Blocks.BROWN_MUSHROOM);
+			}
+		},
+		RED {
+			@Override
+			public ItemStack getDrop() {
+				return new ItemStack(Blocks.RED_MUSHROOM);
+			}
+		};
+
+		public abstract ItemStack getDrop();
 		
 		@Override
 		public String getName() {
@@ -55,30 +70,28 @@ public class BlockMushroom extends BlockBush implements IItemModelRegister, IGro
 	}
 
 	private final WorldGenerator[] generators;
-	private final ItemStack[] drops;
 
 	public BlockMushroom() {
 		setHardness(0.0f);
 		this.generators = new WorldGenerator[]{new WorldGenBigMushroom(Blocks.BROWN_MUSHROOM_BLOCK), new WorldGenBigMushroom(Blocks.RED_MUSHROOM_BLOCK)};
-		this.drops = new ItemStack[]{new ItemStack(Blocks.BROWN_MUSHROOM), new ItemStack(Blocks.RED_MUSHROOM)};
 		setCreativeTab(null);
-		setDefaultState(this.blockState.getBaseState().withProperty(MUSHROOM, MushroomType.BROWN));
+		setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, MushroomType.BROWN).withProperty(MATURE, false));
 		setTickRandomly(true);
 	}
 	
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, MUSHROOM);
+		return new BlockStateContainer(this, VARIANT, MATURE);
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return state.getValue(MUSHROOM).ordinal();
+		return state.getValue(VARIANT).ordinal() | ((state.getValue(MATURE) ? 1 : 0) << 2);
 	}
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState().withProperty(MUSHROOM, MushroomType.values()[meta]);
+		return getDefaultState().withProperty(VARIANT, MushroomType.values()[meta % 2]).withProperty(MATURE, (meta >> 2) == 1);
 	}
 
 	@Override
@@ -89,13 +102,8 @@ public class BlockMushroom extends BlockBush implements IItemModelRegister, IGro
 	// / DROPS
 	@Override
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-		List<ItemStack> ret = new ArrayList<>();
-
-		MushroomType type = getTypeFromMeta(state.getBlock().getMetaFromState(state));
-
-		ret.add(drops[type.ordinal()]);
-
-		return ret;
+		MushroomType type = state.getValue(VARIANT);
+		return Collections.singletonList(type.getDrop());
 	}
 
 	@Override
@@ -120,39 +128,23 @@ public class BlockMushroom extends BlockBush implements IItemModelRegister, IGro
 	
 	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
-		if (world.isRemote) {
+		if (world.isRemote || rand.nextInt(2) != 0) {
 			return;
 		}
 
 		IBlockState blockState = world.getBlockState(pos);
-		Block block = blockState.getBlock();
-		int meta = block.getMetaFromState(blockState);
-		MushroomType type = getTypeFromMeta(meta);
-		int maturity = meta >> 2;
-
-		tickGermling(world, pos.getX(), pos.getY(), pos.getZ(), rand, type, maturity);
-	}
-
-	private void tickGermling(World world, int i, int j, int k, Random random, MushroomType type, int maturity) {
-
-		int lightvalue = world.getLight(new BlockPos(i, j + 1, k));
-
-		if (random.nextInt(2) != 0) {
-			return;
-		}
-
-		if (maturity != 3) {
-			maturity = 3;
-			int matX = maturity << 2;
-			int meta = matX | type.ordinal();
-			world.setBlockState(new BlockPos(i, j, k), world.getBlockState(new BlockPos(i, j, k)).getBlock().getStateFromMeta(meta), Constants.FLAG_BLOCK_SYNCH);
-		} else if (lightvalue <= 7) {
-			generateTree(world, new BlockPos(i, j, k), world.getBlockState(new BlockPos(i, j, k)), random);
+		if (!blockState.getValue(MATURE)) {
+			world.setBlockState(pos, blockState.withProperty(MATURE, true), Constants.FLAG_BLOCK_SYNCH);
+		} else {
+			int lightValue1 = world.getLightFromNeighbors(pos.up());
+			if (lightValue1 <= 7) {
+				generateGiantMushroom(world, pos, blockState, rand);
+			}
 		}
 	}
-	
-	public void generateTree(World world, BlockPos pos, IBlockState state, Random rand) {
-		MushroomType type = state.getValue(MUSHROOM);
+
+	public void generateGiantMushroom(World world, BlockPos pos, IBlockState state, Random rand) {
+		MushroomType type = state.getValue(VARIANT);
 
 		world.setBlockToAir(pos);
 		if (!generators[type.ordinal()].generate(world, rand, pos)) {
@@ -161,12 +153,7 @@ public class BlockMushroom extends BlockBush implements IItemModelRegister, IGro
 	}
 	
 	public void grow(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-		this.generateTree(worldIn, pos, state, rand);
-	}
-
-	public static MushroomType getTypeFromMeta(int meta) {
-		meta %= MushroomType.values().length;
-		return MushroomType.values()[meta];
+		this.generateGiantMushroom(worldIn, pos, state, rand);
 	}
 
 	/* ICONS */
@@ -200,8 +187,12 @@ public class BlockMushroom extends BlockBush implements IItemModelRegister, IGro
 	}
 
 	@Override
-	public String getNameFromMeta(int meta) {
-		MushroomType type = getTypeFromMeta(meta);
-		return type.getName();
+	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+		return state.getValue(VARIANT).getDrop();
+	}
+
+	@Override
+	public int damageDropped(IBlockState state) {
+		return state.getValue(VARIANT).ordinal();
 	}
 }

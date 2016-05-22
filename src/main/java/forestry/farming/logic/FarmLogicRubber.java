@@ -41,8 +41,7 @@ public class FarmLogicRubber extends FarmLogic {
 
 	private boolean inActive;
 
-	public FarmLogicRubber(IFarmHousing housing) {
-		super(housing);
+	public FarmLogicRubber() {
 		if (PluginIC2.rubberWood == null || PluginIC2.resin == null) {
 			Log.warning("Failed to init a farm logic %s since IC2 was not found", getClass().getName());
 			inActive = true;
@@ -90,19 +89,19 @@ public class FarmLogicRubber extends FarmLogic {
 	}
 
 	@Override
-	public Collection<ItemStack> collect() {
+	public Collection<ItemStack> collect(World world, IFarmHousing farmHousing) {
 		return null;
 	}
 
 	@Override
-	public boolean cultivate(BlockPos pos, FarmDirection direction, int extent) {
+	public boolean cultivate(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
 		return false;
 	}
 
 	private final Map<BlockPos, Integer> lastExtents = new HashMap<>();
 
 	@Override
-	public Collection<ICrop> harvest(BlockPos pos, FarmDirection direction, int extent) {
+	public Collection<ICrop> harvest(World world, BlockPos pos, FarmDirection direction, int extent) {
 		if (inActive) {
 			return null;
 		}
@@ -117,19 +116,16 @@ public class FarmLogicRubber extends FarmLogic {
 		}
 
 		BlockPos position = translateWithOffset(pos.add(0, 1, 0), direction, lastExtent);
-		Collection<ICrop> crops = getHarvestBlocks(position);
+		Collection<ICrop> crops = getHarvestBlocks(world, position);
 		lastExtent++;
 		lastExtents.put(pos, lastExtent);
 
 		return crops;
 	}
 
-	private Collection<ICrop> getHarvestBlocks(BlockPos position) {
-
+	private Collection<ICrop> getHarvestBlocks(World world, BlockPos position) {
 		Set<BlockPos> seen = new HashSet<>();
 		Stack<ICrop> crops = new Stack<>();
-
-		World world = getWorld();
 
 		// Determine what type we want to harvest.
 		IBlockState blockState = world.getBlockState(position);
@@ -140,14 +136,14 @@ public class FarmLogicRubber extends FarmLogic {
 
 		int meta = block.getMetaFromState(blockState);
 		if (meta >= 2 && meta <= 5) {
-			crops.push(new CropRubber(getWorld(), block, meta, position));
+			crops.push(new CropDestroy(world, blockState, position, null));
 		}
 
-		List<BlockPos> candidates = processHarvestBlock(crops, seen, position);
+		List<BlockPos> candidates = processHarvestBlock(world, crops, seen, position);
 		List<BlockPos> temp = new ArrayList<>();
 		while (!candidates.isEmpty() && crops.size() < 100) {
 			for (BlockPos candidate : candidates) {
-				temp.addAll(processHarvestBlock(crops, seen, candidate));
+				temp.addAll(processHarvestBlock(world, crops, seen, candidate));
 			}
 			candidates.clear();
 			candidates.addAll(temp);
@@ -157,9 +153,7 @@ public class FarmLogicRubber extends FarmLogic {
 		return crops;
 	}
 
-	private List<BlockPos> processHarvestBlock(Stack<ICrop> crops, Set<BlockPos> seen, BlockPos position) {
-		World world = getWorld();
-
+	private List<BlockPos> processHarvestBlock(World world, Stack<ICrop> crops, Set<BlockPos> seen, BlockPos position) {
 		List<BlockPos> candidates = new ArrayList<>();
 
 		// Get additional candidates to return
@@ -179,7 +173,7 @@ public class FarmLogicRubber extends FarmLogic {
 			if (ItemStackUtil.equals(block, PluginIC2.rubberWood)) {
 				int meta = block.getMetaFromState(blockState);
 				if (meta >= 2 && meta <= 5) {
-					crops.push(new CropRubber(world, block, meta, candidate));
+					crops.push(new CropRubber(world, blockState, candidate));
 				}
 				candidates.add(candidate);
 				seen.add(candidate);

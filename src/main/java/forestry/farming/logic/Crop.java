@@ -13,18 +13,15 @@ package forestry.farming.logic;
 import javax.annotation.Nullable;
 import java.util.Collection;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
-import forestry.core.config.Constants;
 
 public abstract class Crop implements ICrop {
 
-	protected final World world;
+	private final World world;
 	protected final BlockPos position;
 
 	protected Crop(World world, BlockPos position) {
@@ -32,39 +29,18 @@ public abstract class Crop implements ICrop {
 		this.position = position;
 	}
 
-	protected final void setBlock(BlockPos position, IBlockState blockState) {
-		world.setBlockState(position, blockState, Constants.FLAG_BLOCK_SYNCH);
-	}
+	protected abstract boolean isCrop(World world, BlockPos pos);
 
-	@Deprecated
-	protected final void setBlock(BlockPos position, Block block, int meta) {
-		setBlock(position, block.getStateFromMeta(meta));
-	}
-
-	protected final Block getBlock(BlockPos position) {
-		return getBlockState(position).getBlock();
-	}
-	
-	protected final IBlockState getBlockState(BlockPos position) {
-		return world.getBlockState(position);
-	}
-
-	protected final int getBlockMeta(BlockPos position) {
-		return getBlock(position).getMetaFromState(getBlockState(position));
-	}
-
-	protected abstract boolean isCrop(BlockPos pos);
-
-	protected abstract Collection<ItemStack> harvestBlock(BlockPos pos);
+	protected abstract Collection<ItemStack> harvestBlock(World world, BlockPos pos);
 
 	@Nullable
 	@Override
 	public Collection<ItemStack> harvest() {
-		if (!isCrop(position)) {
+		if (!isCrop(world, position)) {
 			return null;
 		}
 
-		return harvestBlock(position);
+		return harvestBlock(world, position);
 	}
 
 }

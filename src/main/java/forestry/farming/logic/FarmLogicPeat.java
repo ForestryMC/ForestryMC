@@ -25,30 +25,23 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
-import forestry.api.farming.IFarmHousing;
 import forestry.core.PluginCore;
-import forestry.core.blocks.BlockSoil;
+import forestry.core.blocks.BlockBogEarth;
 
 public class FarmLogicPeat extends FarmLogicWatered {
-	private static final ItemStack bogEarth = PluginCore.blocks.soil.get(BlockSoil.SoilType.BOG_EARTH, 1);
+	private static final ItemStack bogEarth = PluginCore.blocks.bogEarth.get(BlockBogEarth.SoilType.BOG_EARTH, 1);
 
-	public FarmLogicPeat(IFarmHousing housing) {
-		super(housing, bogEarth, bogEarth);
+	public FarmLogicPeat() {
+		super(bogEarth, PluginCore.blocks.bogEarth.getDefaultState());
 	}
 
 	@Override
-	public boolean isAcceptedGround(ItemStack itemStack) {
-		if (super.isAcceptedGround(itemStack)) {
+	public boolean isAcceptedGround(IBlockState blockState) {
+		if (super.isAcceptedGround(blockState)) {
 			return true;
 		}
 
-		Block block = Block.getBlockFromItem(itemStack.getItem());
-		if (!(block instanceof BlockSoil)) {
-			return false;
-		}
-		BlockSoil blockSoil = (BlockSoil) block;
-		BlockSoil.SoilType soilType = BlockSoil.getTypeFromMeta(itemStack.getItemDamage());
-		return soilType == BlockSoil.SoilType.BOG_EARTH || soilType == BlockSoil.SoilType.PEAT;
+		return blockState.getBlock() == PluginCore.blocks.bogEarth;
 	}
 
 	@Override
@@ -76,21 +69,19 @@ public class FarmLogicPeat extends FarmLogicWatered {
 	}
 
 	@Override
-	public Collection<ICrop> harvest(BlockPos pos, FarmDirection direction, int extent) {
-		World world = getWorld();
-
+	public Collection<ICrop> harvest(World world, BlockPos pos, FarmDirection direction, int extent) {
 		Stack<ICrop> crops = new Stack<>();
 		for (int i = 0; i < extent; i++) {
 			BlockPos position = translateWithOffset(pos, direction, i);
 			IBlockState blockState = world.getBlockState(position);
 			Block block = blockState.getBlock();
-			if (!(block instanceof BlockSoil)) {
+			if (!(block instanceof BlockBogEarth)) {
 				continue;
 			}
 
-			BlockSoil.SoilType soilType = BlockSoil.getTypeFromState(blockState);
+			BlockBogEarth.SoilType soilType = BlockBogEarth.getTypeFromState(blockState);
 
-			if (soilType == BlockSoil.SoilType.PEAT) {
+			if (soilType == BlockBogEarth.SoilType.PEAT) {
 				crops.push(new CropPeat(world, position));
 			}
 		}

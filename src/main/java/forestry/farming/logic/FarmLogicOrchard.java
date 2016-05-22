@@ -45,8 +45,7 @@ public class FarmLogicOrchard extends FarmLogic {
 	private final HashMap<BlockPos, Integer> lastExtents = new HashMap<>();
 	private final ImmutableList<Block> traversalBlocks;
 
-	public FarmLogicOrchard(IFarmHousing housing) {
-		super(housing);
+	public FarmLogicOrchard() {
 		this.farmables = Farmables.farmables.get("farmOrchard");
 
 		ImmutableList.Builder<Block> traversalBlocksBuilder = ImmutableList.builder();
@@ -97,17 +96,17 @@ public class FarmLogicOrchard extends FarmLogic {
 	}
 
 	@Override
-	public Collection<ItemStack> collect() {
+	public Collection<ItemStack> collect(World world, IFarmHousing farmHousing) {
 		return null;
 	}
 
 	@Override
-	public boolean cultivate(BlockPos pos, FarmDirection direction, int extent) {
+	public boolean cultivate(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
 		return false;
 	}
 
 	@Override
-	public Collection<ICrop> harvest(BlockPos pos, FarmDirection direction, int extent) {
+	public Collection<ICrop> harvest(World world, BlockPos pos, FarmDirection direction, int extent) {
 
 		if (!lastExtents.containsKey(pos)) {
 			lastExtents.put(pos, 0);
@@ -119,7 +118,7 @@ public class FarmLogicOrchard extends FarmLogic {
 		}
 
 		BlockPos position = translateWithOffset(pos.up(), direction, lastExtent);
-		Collection<ICrop> crops = getHarvestBlocks(position);
+		Collection<ICrop> crops = getHarvestBlocks(world, position);
 		lastExtent++;
 		lastExtents.put(pos, lastExtent);
 
@@ -137,12 +136,9 @@ public class FarmLogicOrchard extends FarmLogic {
 		return "Orchard";
 	}
 
-	private Collection<ICrop> getHarvestBlocks(BlockPos position) {
-
+	private Collection<ICrop> getHarvestBlocks(World world, BlockPos position) {
 		Set<BlockPos> seen = new HashSet<>();
 		Stack<ICrop> crops = new Stack<>();
-
-		World world = getWorld();
 
 		// Determine what type we want to harvest.
 		IBlockState blockState = world.getBlockState(position);
@@ -151,11 +147,11 @@ public class FarmLogicOrchard extends FarmLogic {
 			return crops;
 		}
 
-		List<BlockPos> candidates = processHarvestBlock(crops, seen, position, position);
+		List<BlockPos> candidates = processHarvestBlock(world, crops, seen, position, position);
 		List<BlockPos> temp = new ArrayList<>();
 		while (!candidates.isEmpty() && crops.size() < 20) {
 			for (BlockPos candidate : candidates) {
-				temp.addAll(processHarvestBlock(crops, seen, position, candidate));
+				temp.addAll(processHarvestBlock(world, crops, seen, position, candidate));
 			}
 			candidates.clear();
 			candidates.addAll(temp);
@@ -165,9 +161,7 @@ public class FarmLogicOrchard extends FarmLogic {
 		return crops;
 	}
 
-	private List<BlockPos> processHarvestBlock(Stack<ICrop> crops, Set<BlockPos> seen, BlockPos start, BlockPos position) {
-		World world = getWorld();
-
+	private List<BlockPos> processHarvestBlock(World world, Stack<ICrop> crops, Set<BlockPos> seen, BlockPos start, BlockPos position) {
 		List<BlockPos> candidates = new ArrayList<>();
 
 		// Get additional candidates to return
@@ -247,8 +241,9 @@ public class FarmLogicOrchard extends FarmLogic {
 				return new CropFruit(world, position);
 			}
 		} else {
+			IBlockState blockState = world.getBlockState(position);
 			for (IFarmable seed : farmables) {
-				ICrop crop = seed.getCropAt(world, position);
+				ICrop crop = seed.getCropAt(world, position, blockState);
 				if (crop != null) {
 					return crop;
 				}

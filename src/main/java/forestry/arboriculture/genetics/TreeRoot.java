@@ -63,6 +63,7 @@ import forestry.core.config.Constants;
 import forestry.core.genetics.SpeciesRoot;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.BlockUtil;
+import forestry.core.utils.GeneticsUtil;
 
 public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 
@@ -153,6 +154,7 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 
 	@Override
 	public ITree getMember(ItemStack itemstack) {
+		itemstack = GeneticsUtil.convertSaplingToGeneticEquivalent(itemstack);
 		if (!isMember(itemstack)) {
 			return null;
 		}

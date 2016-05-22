@@ -10,24 +10,23 @@
  ******************************************************************************/
 package forestry.farming;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.List;
-import java.util.regex.MatchResult;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.BlockBeetroot;
+import net.minecraft.block.BlockCarrot;
+import net.minecraft.block.BlockCrops;
+import net.minecraft.block.BlockNetherWart;
+import net.minecraft.block.BlockPotato;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -39,16 +38,13 @@ import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.core.ForestryAPI;
 import forestry.api.farming.Farmables;
-import forestry.api.farming.IFarmable;
 import forestry.core.PluginCore;
 import forestry.core.circuits.Circuit;
 import forestry.core.circuits.CircuitLayout;
 import forestry.core.config.Constants;
 import forestry.core.items.EnumElectronTube;
 import forestry.core.recipes.RecipeUtil;
-import forestry.core.utils.IMCUtil;
-import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.Log;
+import forestry.farming.blocks.BlockMushroom;
 import forestry.farming.blocks.BlockRegistryFarming;
 import forestry.farming.blocks.EnumFarmBlockType;
 import forestry.farming.circuits.CircuitFarmLogic;
@@ -57,16 +53,14 @@ import forestry.farming.logic.FarmLogicCereal;
 import forestry.farming.logic.FarmLogicCocoa;
 import forestry.farming.logic.FarmLogicGourd;
 import forestry.farming.logic.FarmLogicInfernal;
+import forestry.farming.logic.FarmLogicMushroom;
 import forestry.farming.logic.FarmLogicOrchard;
 import forestry.farming.logic.FarmLogicPeat;
 import forestry.farming.logic.FarmLogicReeds;
-import forestry.farming.logic.FarmLogicShroom;
 import forestry.farming.logic.FarmLogicSucculent;
 import forestry.farming.logic.FarmLogicVegetable;
-import forestry.farming.logic.FarmableBasicFruit;
+import forestry.farming.logic.FarmableAgingCrop;
 import forestry.farming.logic.FarmableGE;
-import forestry.farming.logic.FarmableGenericCrop;
-import forestry.farming.logic.FarmableGenericSapling;
 import forestry.farming.logic.FarmableGourd;
 import forestry.farming.logic.FarmableStacked;
 import forestry.farming.logic.FarmableVanillaMushroom;
@@ -101,41 +95,38 @@ public class PluginFarming extends BlankForestryPlugin {
 	public void preInit() {
 		MinecraftForge.EVENT_BUS.register(this);
 
-		Farmables.farmables.put("farmArboreal", new ArrayList<>());
-		Farmables.farmables.get("farmArboreal").add(new FarmableVanillaSapling());
+		Farmables.farmables.put("farmArboreal", new FarmableVanillaSapling());
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.ARBORICULTURE)) {
-			Farmables.farmables.get("farmArboreal").add(new FarmableGE());
+			Farmables.farmables.put("farmArboreal", new FarmableGE());
 		}
-		
-		Farmables.farmables.put("farmOrchard", new ArrayList<>());
-		Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(Blocks.WHEAT, 7));
-		Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(Blocks.POTATOES, 7));
-		Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(Blocks.CARROTS, 7));
 
-		Farmables.farmables.put("farmShroom", new ArrayList<>());
-		Farmables.farmables.get("farmShroom").add(new FarmableVanillaMushroom(Blocks.BROWN_MUSHROOM, 0));
-		Farmables.farmables.get("farmShroom").add(new FarmableVanillaMushroom(Blocks.RED_MUSHROOM, 0));
+		Farmables.farmables.putAll("farmOrchard", Arrays.asList(
+				new FarmableAgingCrop(new ItemStack(Items.WHEAT_SEEDS), Blocks.WHEAT, BlockCrops.AGE, 7),
+				new FarmableAgingCrop(new ItemStack(Items.POTATO), Blocks.POTATOES, BlockPotato.AGE, 7),
+				new FarmableAgingCrop(new ItemStack(Items.CARROT), Blocks.CARROTS, BlockCarrot.AGE, 7),
+				new FarmableAgingCrop(new ItemStack(Items.BEETROOT_SEEDS), Blocks.BEETROOTS, BlockBeetroot.BEETROOT_AGE, 3)
+		));
 
-		Farmables.farmables.put("farmWheat", new ArrayList<>());
-		Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(new ItemStack(Items.WHEAT_SEEDS), Blocks.WHEAT, 7));
+		IBlockState plantedBrownMushroom = blocks.mushroom.getDefaultState().withProperty(BlockMushroom.VARIANT, BlockMushroom.MushroomType.BROWN);
+		Farmables.farmables.put("farmShroom", new FarmableVanillaMushroom(new ItemStack(Blocks.BROWN_MUSHROOM), plantedBrownMushroom, Blocks.BROWN_MUSHROOM_BLOCK));
 
-		Farmables.farmables.put("farmGourd", new ArrayList<>());
-		Farmables.farmables.get("farmGourd").add(
-				new FarmableGourd(new ItemStack(Items.PUMPKIN_SEEDS), new ItemStack(Blocks.PUMPKIN_STEM), new ItemStack(Blocks.PUMPKIN)));
-		Farmables.farmables.get("farmGourd").add(new FarmableGourd(new ItemStack(Items.MELON_SEEDS), new ItemStack(Blocks.MELON_STEM), new ItemStack(Blocks.MELON_BLOCK)));
+		IBlockState plantedRedMushroom = blocks.mushroom.getDefaultState().withProperty(BlockMushroom.VARIANT, BlockMushroom.MushroomType.RED);
+		Farmables.farmables.put("farmShroom", new FarmableVanillaMushroom(new ItemStack(Blocks.RED_MUSHROOM), plantedRedMushroom, Blocks.RED_MUSHROOM_BLOCK));
 
-		Farmables.farmables.put("farmInfernal", new ArrayList<>());
-		Farmables.farmables.get("farmInfernal").add(new FarmableGenericCrop(new ItemStack(Items.NETHER_WART), Blocks.NETHER_WART, 3));
+		Farmables.farmables.put("farmWheat", new FarmableAgingCrop(new ItemStack(Items.WHEAT_SEEDS), Blocks.WHEAT, BlockCrops.AGE, 7));
 
-		Farmables.farmables.put("farmPoales", new ArrayList<>());
-		Farmables.farmables.get("farmPoales").add(new FarmableStacked(Blocks.REEDS, 3, 0));
+		Farmables.farmables.put("farmGourd", new FarmableGourd(new ItemStack(Items.PUMPKIN_SEEDS), Blocks.PUMPKIN_STEM, Blocks.PUMPKIN));
+		Farmables.farmables.put("farmGourd", new FarmableGourd(new ItemStack(Items.MELON_SEEDS), Blocks.MELON_STEM, Blocks.MELON_BLOCK));
 
-		Farmables.farmables.put("farmSucculentes", new ArrayList<>());
-		Farmables.farmables.get("farmSucculentes").add(new FarmableStacked(Blocks.CACTUS, 3, 0));
+		Farmables.farmables.put("farmInfernal", new FarmableAgingCrop(new ItemStack(Items.NETHER_WART), Blocks.NETHER_WART, BlockNetherWart.AGE, 3));
 
-		Farmables.farmables.put("farmVegetables", new ArrayList<>());
-		Farmables.farmables.get("farmVegetables").add(new FarmableGenericCrop(new ItemStack(Items.POTATO), Blocks.POTATOES, 7));
-		Farmables.farmables.get("farmVegetables").add(new FarmableGenericCrop(new ItemStack(Items.CARROT), Blocks.CARROTS, 7));
+		Farmables.farmables.put("farmPoales", new FarmableStacked(new ItemStack(Items.REEDS), Blocks.REEDS, 3));
+
+		Farmables.farmables.put("farmSucculentes", new FarmableStacked(new ItemStack(Blocks.CACTUS), Blocks.CACTUS, 3));
+
+		Farmables.farmables.put("farmVegetables", new FarmableAgingCrop(new ItemStack(Items.POTATO), Blocks.POTATOES, BlockPotato.AGE, 7));
+		Farmables.farmables.put("farmVegetables", new FarmableAgingCrop(new ItemStack(Items.CARROT), Blocks.CARROTS, BlockCarrot.AGE, 7));
+		Farmables.farmables.put("farmVegetables", new FarmableAgingCrop(new ItemStack(Items.BEETROOT_SEEDS), Blocks.BEETROOTS, BlockBeetroot.BEETROOT_AGE, 3));
 
 		proxy.initializeModels();
 
@@ -161,123 +152,23 @@ public class PluginFarming extends BlankForestryPlugin {
 		GameRegistry.registerTileEntity(TileFarmValve.class, "forestry.FarmValve");
 		GameRegistry.registerTileEntity(TileFarmControl.class, "forestry.FarmControl");
 
-		Circuit.farmArborealManaged = new CircuitFarmLogic("managedArboreal", FarmLogicArboreal.class);
-		Circuit.farmShroomManaged = new CircuitFarmLogic("managedShroom", FarmLogicShroom.class);
-		Circuit.farmPeatManaged = new CircuitFarmLogic("managedPeat", FarmLogicPeat.class);
-		Circuit.farmCerealManaged = new CircuitFarmLogic("managedCereal", FarmLogicCereal.class);
-		Circuit.farmVegetableManaged = new CircuitFarmLogic("managedVegetable", FarmLogicVegetable.class);
-		Circuit.farmInfernalManaged = new CircuitFarmLogic("managedInfernal", FarmLogicInfernal.class);
+		Circuit.farmArborealManaged = new CircuitFarmLogic("managedArboreal", new FarmLogicArboreal());
+		Circuit.farmShroomManaged = new CircuitFarmLogic("managedShroom", new FarmLogicMushroom());
+		Circuit.farmPeatManaged = new CircuitFarmLogic("managedPeat", new FarmLogicPeat());
+		Circuit.farmCerealManaged = new CircuitFarmLogic("managedCereal", new FarmLogicCereal());
+		Circuit.farmVegetableManaged = new CircuitFarmLogic("managedVegetable", new FarmLogicVegetable());
+		Circuit.farmInfernalManaged = new CircuitFarmLogic("managedInfernal", new FarmLogicInfernal());
 
-		Circuit.farmPeatManual = new CircuitFarmLogic("manualPeat", FarmLogicPeat.class).setManual();
-		Circuit.farmShroomManual = new CircuitFarmLogic("manualShroom", FarmLogicShroom.class).setManual();
-		Circuit.farmCerealManual = new CircuitFarmLogic("manualCereal", FarmLogicCereal.class).setManual();
-		Circuit.farmVegetableManual = new CircuitFarmLogic("manualVegetable", FarmLogicVegetable.class).setManual();
-		Circuit.farmSucculentManual = new CircuitFarmLogic("manualSucculent", FarmLogicSucculent.class).setManual();
-		Circuit.farmPoalesManual = new CircuitFarmLogic("manualPoales", FarmLogicReeds.class).setManual();
-		Circuit.farmGourdManual = new CircuitFarmLogic("manualGourd", FarmLogicGourd.class).setManual();
-		Circuit.farmCocoaManual = new CircuitFarmLogic("manualCocoa", FarmLogicCocoa.class).setManual();
+		Circuit.farmPeatManual = new CircuitFarmLogic("manualPeat", new FarmLogicPeat()).setManual();
+		Circuit.farmShroomManual = new CircuitFarmLogic("manualShroom", new FarmLogicMushroom()).setManual();
+		Circuit.farmCerealManual = new CircuitFarmLogic("manualCereal", new FarmLogicCereal()).setManual();
+		Circuit.farmVegetableManual = new CircuitFarmLogic("manualVegetable", new FarmLogicVegetable()).setManual();
+		Circuit.farmSucculentManual = new CircuitFarmLogic("manualSucculent", new FarmLogicSucculent()).setManual();
+		Circuit.farmPoalesManual = new CircuitFarmLogic("manualPoales", new FarmLogicReeds()).setManual();
+		Circuit.farmGourdManual = new CircuitFarmLogic("manualGourd", new FarmLogicGourd()).setManual();
+		Circuit.farmCocoaManual = new CircuitFarmLogic("manualCocoa", new FarmLogicCocoa()).setManual();
 
-		Circuit.farmOrchardManual = new CircuitFarmLogic("manualOrchard", FarmLogicOrchard.class);
-	}
-
-	@Override
-	public boolean processIMCMessage(IMCMessage message) {
-
-		if (message.key.equals("add-farmable-sapling")) {
-			String[] tokens = message.getStringValue().split("@");
-			String errormsg = IMCUtil.getInvalidIMCMessageText(message);
-			if (tokens.length != 2) {
-				Log.warning(errormsg);
-				return true;
-			}
-
-			if (!Farmables.farmables.containsKey(tokens[0])) {
-				Log.warning("%s For non-existent farm %s.", errormsg, tokens[0]);
-				return true;
-			}
-
-			Collection<IFarmable> farmables = Farmables.farmables.get(tokens[0]);
-
-			String itemString = tokens[1];
-
-			Matcher matcher = Pattern.compile("(.+?)\\.(-?[0-9][0-9]?)(?:\\.(.+?)\\.(-?[0-9][0-9]?))?").matcher(itemString);
-			if (!matcher.matches()) {
-				Log.warning("%s For farm '%s': unable to parse string.", errormsg, tokens[0]);
-				return true;
-			}
-
-			MatchResult matchResult = matcher.toMatchResult();
-			String saplingString = matchResult.group(1);
-			String saplingMetaString = matchResult.group(2);
-			String windfallString = matchResult.group(3);
-			String windfallMetaString = matchResult.group(4);
-
-			try {
-				Block sapling = ItemStackUtil.getBlockFromRegistry(saplingString);
-				if (sapling == null) {
-					throw new IllegalArgumentException("can't find block for " + saplingString);
-				}
-				int saplingMeta = Integer.parseInt(saplingMetaString);
-
-				if (windfallString == null) {
-					farmables.add(new FarmableGenericSapling(sapling, saplingMeta));
-				} else {
-					Item windfall = ItemStackUtil.getItemFromRegistry(windfallString);
-					if (windfall == null) {
-						throw new IllegalArgumentException("can't find item for " + windfallString);
-					}
-
-					ItemStack windfallStack = new ItemStack(windfall, 1, Integer.parseInt(windfallMetaString));
-
-					farmables.add(new FarmableGenericSapling(sapling, saplingMeta, windfallStack));
-				}
-			} catch (IllegalArgumentException e) {
-				Log.warning("%s for farm '%s'", errormsg, tokens[0], e.getMessage());
-			}
-			return true;
-
-		} else if (message.key.equals("add-farmable-crop")) {
-
-			String[] tokens = message.getStringValue().split("@");
-			String errormsg = IMCUtil.getInvalidIMCMessageText(message);
-			if (tokens.length != 2) {
-				Log.warning(errormsg);
-				return true;
-			}
-
-			if (!Farmables.farmables.containsKey(tokens[0])) {
-				Log.warning("%s For non-existent farm %s.", errormsg, tokens[0]);
-				return true;
-			}
-
-			String[] items = tokens[1].split("[\\.]+");
-			if (items.length != 4) {
-				Log.warning("%s For farm '%s': id definitions did not match.", errormsg, tokens[0]);
-				return true;
-			}
-
-			try {
-				Item seed = ItemStackUtil.getItemFromRegistry(items[0]);
-				if (seed == null) {
-					throw new IllegalArgumentException("can't find item for " + items[0]);
-				}
-				Block crop = ItemStackUtil.getBlockFromRegistry(items[2]);
-				if (crop == null) {
-					throw new IllegalArgumentException("can't find block for " + items[2]);
-				}
-
-				Farmables.farmables.get(tokens[0]).add(
-						new FarmableGenericCrop(new ItemStack(seed, 1, Integer.parseInt(items[1])),
-								crop,
-								Integer.parseInt(items[3])));
-			} catch (IllegalArgumentException e) {
-				Log.warning("%s for farm '%s': %s", errormsg, tokens[0], e.getMessage());
-			}
-
-			return true;
-		}
-
-		return false;
+		Circuit.farmOrchardManual = new CircuitFarmLogic("manualOrchard", new FarmLogicOrchard());
 	}
 
 	@Override

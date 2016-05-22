@@ -13,7 +13,6 @@ package forestry.farming.logic;
 import java.util.Collection;
 import java.util.Stack;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -34,8 +33,8 @@ import forestry.core.utils.BlockUtil;
 
 public class FarmLogicEnder extends FarmLogicHomogeneous {
 
-	public FarmLogicEnder(IFarmHousing housing) {
-		super(housing, new ItemStack(Blocks.END_STONE), new ItemStack(Blocks.END_STONE), Farmables.farmables.get("farmEnder"));
+	public FarmLogicEnder() {
+		super(new ItemStack(Blocks.END_STONE), Blocks.END_STONE.getDefaultState(), Farmables.farmables.get("farmEnder"));
 	}
 
 	@Override
@@ -60,21 +59,21 @@ public class FarmLogicEnder extends FarmLogicHomogeneous {
 	}
 
 	@Override
-	public Collection<ItemStack> collect() {
+	public Collection<ItemStack> collect(World world, IFarmHousing farmHousing) {
 		return null;
 	}
 
 	@Override
-	public Collection<ICrop> harvest(BlockPos pos, FarmDirection direction, int extent) {
-		World world = getWorld();
-
+	public Collection<ICrop> harvest(World world, BlockPos pos, FarmDirection direction, int extent) {
 		Stack<ICrop> crops = new Stack<>();
 		for (int i = 0; i < extent; i++) {
 			BlockPos position = translateWithOffset(pos.up(), direction, i);
-			for (IFarmable farmable : germlings) {
-				ICrop crop = farmable.getCropAt(world, position);
+			IBlockState blockState = world.getBlockState(position);
+			for (IFarmable farmable : farmables) {
+				ICrop crop = farmable.getCropAt(world, position, blockState);
 				if (crop != null) {
 					crops.push(crop);
+					break;
 				}
 			}
 
@@ -84,9 +83,7 @@ public class FarmLogicEnder extends FarmLogicHomogeneous {
 	}
 
 	@Override
-	protected boolean maintainGermlings(BlockPos pos, FarmDirection direction, int extent) {
-		World world = getWorld();
-
+	protected boolean maintainGermlings(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
 		for (int i = 0; i < extent; i++) {
 			BlockPos position = translateWithOffset(pos, direction, i);
 			IBlockState state = world.getBlockState(position);
@@ -96,23 +93,19 @@ public class FarmLogicEnder extends FarmLogicHomogeneous {
 
 			BlockPos soilPos = position.down();
 			IBlockState blockState = world.getBlockState(soilPos);
-			Block block = blockState.getBlock();
-			ItemStack below = block.getPickBlock(blockState, null, world, soilPos, null);
-			if (!isAcceptedSoil(below)) {
+			if (!isAcceptedSoil(blockState)) {
 				continue;
 			}
 
-			return trySetCrop(position);
+			return trySetCrop(world, farmHousing, position);
 		}
 
 		return false;
 	}
 
-	private boolean trySetCrop(BlockPos position) {
-		World world = getWorld();
-
-		for (IFarmable candidate : germlings) {
-			if (housing.plantGermling(candidate, world, position)) {
+	private boolean trySetCrop(World world, IFarmHousing farmHousing, BlockPos position) {
+		for (IFarmable candidate : farmables) {
+			if (farmHousing.plantGermling(candidate, world, position)) {
 				return true;
 			}
 		}

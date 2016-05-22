@@ -10,61 +10,23 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
-import forestry.api.farming.IFarmable;
-import forestry.core.config.Constants;
-import forestry.core.utils.ItemStackUtil;
 
-public class FarmableBasicAgricraft implements IFarmable {
-
-	private final Block block;
-	private final int matureMeta;
-
-	public FarmableBasicAgricraft(Block block, int matureMeta) {
-		this.block = block;
-		this.matureMeta = matureMeta;
+public class FarmableBasicAgricraft extends FarmableBase {
+	public FarmableBasicAgricraft(ItemStack germling, IBlockState plantedState, IBlockState matureState, boolean replant) {
+		super(germling, plantedState, matureState, replant);
 	}
 
 	@Override
-	public boolean isSaplingAt(World world, BlockPos pos) {
-		return world.getBlockState(pos).getBlock() == this.block;
-	}
-
-	@Override
-	public ICrop getCropAt(World world, BlockPos pos) {
-		IBlockState blockState = world.getBlockState(pos);
-		Block block = blockState.getBlock();
-		if (block != this.block) {
+	public ICrop getCropAt(World world, BlockPos pos, IBlockState blockState) {
+		if (blockState != matureState) {
 			return null;
 		}
-
-		int blockMetadata = block.getMetaFromState(blockState);
-		if (blockMetadata != matureMeta) {
-			return null;
-		}
-		return new CropBasicAgriCraft(world, this.block, matureMeta, pos);
+		return new CropBasicAgriCraft(world, blockState, pos);
 	}
-
-	@Override
-	public boolean isGermling(ItemStack itemstack) {
-		return ItemStackUtil.equals(block, itemstack);
-	}
-
-	@Override
-	public boolean isWindfall(ItemStack itemstack) {
-		return false;
-	}
-
-	@Override
-	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
-		return world.setBlockState(pos, block.getDefaultState(), Constants.FLAG_BLOCK_SYNCH);
-	}
-
 }

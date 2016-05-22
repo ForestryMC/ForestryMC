@@ -1,7 +1,0 @@
-{
-    "variants": {
-        "soil=humus": { "model": "forestry:soil/humus" },
-		"soil=bog_earth": { "model": "forestry:soil/bog" },
-		"soil=peat": { "model": "forestry:soil/peat" }
-	}
-}

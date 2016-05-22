@@ -19,7 +19,8 @@ import forestry.core.items.ItemBlockForestry;
 public class BlockRegistryCore extends BlockRegistry {
 	public final BlockCore analyzer;
 	public final BlockCore escritoire;
-	public final BlockSoil soil;
+	public final BlockBogEarth bogEarth;
+	public final BlockHumus humus;
 	public final BlockResourceOre resources;
 	public final BlockResourceStorage resourceStorage;
 
@@ -30,10 +31,13 @@ public class BlockRegistryCore extends BlockRegistry {
 		escritoire = new BlockCore(BlockTypeCoreTesr.ESCRITOIRE);
 		registerBlock(escritoire, new ItemBlockForestry<>(escritoire), "escritoire");
 		
-		soil = new BlockSoil();
-		registerBlock(soil, new ItemBlockForestry(soil), "soil");
-		soil.setHarvestLevel("shovel", 0, soil.getStateFromMeta(0));
-		soil.setHarvestLevel("shovel", 0, soil.getStateFromMeta(1));
+		bogEarth = new BlockBogEarth();
+		registerBlock(bogEarth, new ItemBlockForestry<>(bogEarth), "bogEarth");
+		bogEarth.setHarvestLevel("shovel", 0);
+
+		humus = new BlockHumus();
+		registerBlock(humus, new ItemBlockForestry<>(humus), "humus");
+		humus.setHarvestLevel("shovel", 0);
 		
 		resources = new BlockResourceOre();
 		registerBlock(resources, new ItemBlockForestry(resources), "resources");

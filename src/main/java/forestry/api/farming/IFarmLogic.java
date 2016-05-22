@@ -8,8 +8,9 @@ package forestry.api.farming;
 import java.util.Collection;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -24,11 +25,11 @@ public interface IFarmLogic {
 
 	boolean isAcceptedGermling(ItemStack itemstack);
 
-	Collection<ItemStack> collect();
+	Collection<ItemStack> collect(World world, IFarmHousing farmHousing);
 
-	boolean cultivate(BlockPos pos, FarmDirection direction, int extent);
+	boolean cultivate(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent);
 
-	Collection<ICrop> harvest(BlockPos pos, FarmDirection direction, int extent);
+	Collection<ICrop> harvest(World world, BlockPos pos, FarmDirection direction, int extent);
 
 	IFarmLogic setManual(boolean manual);
 	

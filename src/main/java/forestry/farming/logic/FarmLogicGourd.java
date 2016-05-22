@@ -13,6 +13,7 @@ package forestry.farming.logic;
 import java.util.Collection;
 import java.util.Stack;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -32,8 +33,7 @@ public class FarmLogicGourd extends FarmLogic {
 
 	private final IFarmable[] seeds;
 
-	public FarmLogicGourd(IFarmHousing housing) {
-		super(housing);
+	public FarmLogicGourd() {
 		Collection<IFarmable> farmables = Farmables.farmables.get("farmGourd");
 		seeds = farmables.toArray(new IFarmable[farmables.size()]);
 	}
@@ -75,26 +75,26 @@ public class FarmLogicGourd extends FarmLogic {
 	}
 
 	@Override
-	public Collection<ItemStack> collect() {
+	public Collection<ItemStack> collect(World world, IFarmHousing farmHousing) {
 		return null;
 	}
 
 	@Override
-	public boolean cultivate(BlockPos pos, FarmDirection direction, int extent) {
+	public boolean cultivate(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
 		return false;
 	}
 
 	@Override
-	public Collection<ICrop> harvest(BlockPos pos, FarmDirection direction, int extent) {
-		World world = getWorld();
-
+	public Collection<ICrop> harvest(World world, BlockPos pos, FarmDirection direction, int extent) {
 		Stack<ICrop> crops = new Stack<>();
 		for (int i = 0; i < extent; i++) {
 			BlockPos position = translateWithOffset(pos.add(0, 1, 0), direction, i);
+			IBlockState blockState = world.getBlockState(position);
 			for (IFarmable seed : seeds) {
-				ICrop crop = seed.getCropAt(world, position);
+				ICrop crop = seed.getCropAt(world, position, blockState);
 				if (crop != null) {
 					crops.push(crop);
+					break;
 				}
 			}
 		}

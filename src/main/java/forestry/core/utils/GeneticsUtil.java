@@ -185,6 +185,10 @@ public class GeneticsUtil {
 			return null;
 		}
 
+		if (TreeManager.treeRoot.isMember(foreign)) {
+			return foreign;
+		}
+
 		IIndividual tree = getGeneticEquivalent(foreign);
 		if (!(tree instanceof ITree)) {
 			return null;

@@ -23,7 +23,6 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.api.core.ForestryAPI;
-import forestry.api.farming.Farmables;
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.MoistenerFuel;
 import forestry.api.recipes.RecipeManagers;
@@ -35,7 +34,6 @@ import forestry.core.fluids.Fluids;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.ModUtil;
-import forestry.farming.logic.FarmableGenericCrop;
 import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
@@ -224,8 +222,9 @@ public class PluginNatura extends BlankForestryPlugin {
 
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FARMING)) {
 			Block cropBlock = GameRegistry.findBlock(NATURA, "N Crops");
-			Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(seedBarley, cropBlock, 3));
-			Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(seedCotton, cropBlock, 8));
+			//TODO: Natura for 1.9
+			//			Farmables.farmables.get("farmWheat").add(new FarmableHandPlanted(seedBarley, cropBlock, 3));
+			//			Farmables.farmables.get("farmWheat").add(new FarmableHandPlanted(seedCotton, cropBlock, 8));
 		}
 		
 		List<ItemStack> berries = new ArrayList<>();

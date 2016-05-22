@@ -23,7 +23,6 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.api.apiculture.FlowerManager;
 import forestry.api.core.ForestryAPI;
-import forestry.api.farming.Farmables;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.BackpackManager;
 import forestry.core.PluginCore;
@@ -33,9 +32,6 @@ import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.ModUtil;
-import forestry.farming.logic.FarmableBasicFruit;
-import forestry.farming.logic.FarmableGenericCrop;
-import forestry.farming.logic.FarmableGenericSapling;
 import forestry.plugins.BlankForestryPlugin;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.ForestryPluginUids;
@@ -111,7 +107,8 @@ public class PluginBiomesOPlenty extends BlankForestryPlugin {
 		}
 
 		if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FARMING) && saplings != null && persimmon != null) {
-			Farmables.farmables.get("farmArboreal").add(new FarmableGenericSapling(saplings, 15, persimmon));
+			//TODO BoP for 1.9: Add farmables
+			//			Farmables.farmables.put("farmArboreal", new FarmableGenericSapling(saplings, 15, persimmon));
 		}
 
 		Block boPTurnip = GameRegistry.findBlock(BoP, "turnip");
@@ -119,13 +116,15 @@ public class PluginBiomesOPlenty extends BlankForestryPlugin {
 			Item boPTurnipSeeds = GameRegistry.findItem(BoP, "turnipSeeds");
 			ItemStack boPTurnipSeedStack = new ItemStack(boPTurnipSeeds, 1, 0);
 			if (boPTurnipSeeds != null) {
-				Farmables.farmables.get("farmVegetables").add(new FarmableGenericCrop(boPTurnipSeedStack, boPTurnip, 7));
+				//TODO BoP for 1.9: Add farmable saplings
+				//				Farmables.farmables.get("farmVegetables").add(new FarmableHandPlanted(boPTurnipSeedStack, boPTurnip, 7));
 				if (ForestryAPI.enabledPlugins.contains(ForestryPluginUids.FACTORY)) {
 					RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{boPTurnipSeedStack}, Fluids.SEED_OIL.getFluid(amount));
 				}
 			}
 
-			Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(boPTurnip, 7));
+			//TODO BoP for 1.9: Add farmables
+			//			Farmables.farmables.get("farmOrchard").add(new FarmableBase(boPTurnip, 7));
 		}
 	}
 

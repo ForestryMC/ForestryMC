@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -20,53 +19,12 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import forestry.api.farming.ICrop;
-import forestry.api.farming.IFarmable;
-
-public class FarmableGenericCrop implements IFarmable {
-
-	private final ItemStack seed;
-	private final Block block;
-	private final int mature;
+public class FarmableHandPlanted extends FarmableBase {
 	private final ItemStack[] windfall;
 
-	public FarmableGenericCrop(ItemStack seed, Block block, int mature, ItemStack... windfall) {
-		this.seed = seed;
-		this.block = block;
-		this.mature = mature;
+	public FarmableHandPlanted(ItemStack seed, IBlockState plantedState, IBlockState matureState, boolean replant, ItemStack... windfall) {
+		super(seed, plantedState, matureState, replant);
 		this.windfall = windfall;
-	}
-
-	@Override
-	public boolean isSaplingAt(World world, BlockPos pos) {
-		return world.getBlockState(pos).getBlock() == block;
-	}
-
-	@Override
-	public ICrop getCropAt(World world, BlockPos pos) {
-		IBlockState blockState = world.getBlockState(pos);
-		Block block = blockState.getBlock();
-		if (block != this.block) {
-			return null;
-		}
-		if (block.getMetaFromState(blockState) != mature) {
-			return null;
-		}
-
-		return new CropBlock(world, this.block, mature, pos);
-	}
-
-	@Override
-	public boolean isGermling(ItemStack itemstack) {
-		if (seed.getItem() != itemstack.getItem()) {
-			return false;
-		}
-
-		if (seed.getItemDamage() >= 0) {
-			return seed.getItemDamage() == itemstack.getItemDamage();
-		} else {
-			return true;
-		}
 	}
 
 	@Override

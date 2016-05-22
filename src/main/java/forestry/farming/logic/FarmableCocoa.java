@@ -10,9 +10,7 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockCocoa;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -21,49 +19,19 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import forestry.api.farming.ICrop;
-import forestry.api.farming.IFarmable;
 import forestry.core.utils.BlockUtil;
 
-public class FarmableCocoa implements IFarmable {
+public class FarmableCocoa extends FarmableAgingCrop {
 
-	private static final Block COCOA_PLANT = Blocks.COCOA;
 	public static final Item COCOA_SEED = Items.DYE;
 	public static final int COCOA_META = 3;
 
-	@Override
-	public boolean isSaplingAt(World world, BlockPos pos) {
-		return world.getBlockState(pos).getBlock() == COCOA_PLANT;
-	}
-
-	@Override
-	public ICrop getCropAt(World world, BlockPos pos) {
-		IBlockState blockState = world.getBlockState(pos);
-		Block block = blockState.getBlock();
-		if (block != COCOA_PLANT) {
-			return null;
-		}
-		int meta = block.getMetaFromState(blockState);
-		if (blockState.getValue(BlockCocoa.AGE) < 2) {
-			return null;
-		}
-
-		return new CropBlock(world, block, meta, pos);
-	}
-
-	@Override
-	public boolean isGermling(ItemStack itemstack) {
-		return itemstack.getItem() == COCOA_SEED && itemstack.getItemDamage() == COCOA_META;
-	}
-
-	@Override
-	public boolean isWindfall(ItemStack itemstack) {
-		return false;
+	public FarmableCocoa() {
+		super(new ItemStack(COCOA_SEED, 1, COCOA_META), Blocks.COCOA, BlockCocoa.AGE, 2, 0);
 	}
 
 	@Override
 	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
 		return BlockUtil.tryPlantCocoaPod(world, pos);
 	}
-
 }

@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.farming;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -57,8 +56,7 @@ public class FarmTarget {
 		BlockPos.MutableBlockPos position = new BlockPos.MutableBlockPos(platformPosition);
 		for (extent = 0; extent < limit; extent++) {
 			IBlockState blockState = world.getBlockState(position);
-			Block platform = blockState.getBlock();
-			if (!FarmHelper.bricks.contains(platform)) {
+			if (!FarmHelper.bricks.contains(blockState.getBlock())) {
 				break;
 			}
 			position.offsetMutable(getDirection().getFacing());

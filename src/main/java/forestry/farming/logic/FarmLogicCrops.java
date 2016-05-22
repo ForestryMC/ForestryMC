@@ -10,38 +10,34 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Stack;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import net.minecraftforge.oredict.OreDictionary;
-
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
 import forestry.core.utils.BlockUtil;
-import forestry.core.utils.ItemStackUtil;
 
 public abstract class FarmLogicCrops extends FarmLogicWatered {
-	private static final ItemStack farmland = new ItemStack(Blocks.FARMLAND, 1, OreDictionary.WILDCARD_VALUE);
 	private final Iterable<IFarmable> seeds;
 
-	protected FarmLogicCrops(IFarmHousing housing, Iterable<IFarmable> seeds) {
-		super(housing, new ItemStack(Blocks.DIRT), new ItemStack(Blocks.FARMLAND));
+	protected FarmLogicCrops(Iterable<IFarmable> seeds) {
+		super(new ItemStack(Blocks.DIRT), Blocks.FARMLAND.getDefaultState());
 
 		this.seeds = seeds;
 	}
 
 	@Override
-	public boolean isAcceptedGround(ItemStack itemStack) {
-		return super.isAcceptedGround(itemStack) || ItemStackUtil.isIdenticalItem(farmland, itemStack);
+	public boolean isAcceptedGround(@Nonnull IBlockState blockState) {
+		return super.isAcceptedGround(blockState) || blockState.getBlock() == Blocks.FARMLAND;
 	}
 
 	@Override
@@ -65,17 +61,14 @@ public abstract class FarmLogicCrops extends FarmLogicWatered {
 	}
 
 	@Override
-	public Collection<ItemStack> collect() {
+	public Collection<ItemStack> collect(World world, IFarmHousing farmHousing) {
 		Collection<ItemStack> products = produce;
-		produce = collectEntityItems(false);
+		produce = collectEntityItems(world, farmHousing, false);
 		return products;
 	}
 
 	@Override
-	protected boolean maintainCrops(BlockPos pos, FarmDirection direction, int extent) {
-
-		World world = getWorld();
-
+	protected boolean maintainCrops(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
 		for (int i = 0; i < extent; i++) {
 			BlockPos position = translateWithOffset(pos, direction, i);
 			IBlockState state = world.getBlockState(position);
@@ -83,28 +76,18 @@ public abstract class FarmLogicCrops extends FarmLogicWatered {
 				continue;
 			}
 
-			BlockPos soilPosition = position.down();
-			IBlockState blockState = world.getBlockState(soilPosition);
-			Block block = blockState.getBlock();
-			ItemStack below = block.getPickBlock(blockState, null, world, soilPosition, null);
-			if (ground.getItem() != below.getItem()) {
-				continue;
+			IBlockState groundState = world.getBlockState(position.down());
+			if (isAcceptedGround(groundState)) {
+				return trySetCrop(world, farmHousing, position);
 			}
-			if (below.getItemDamage() <= 0) {
-				continue;
-			}
-
-			return trySetCrop(position);
 		}
 
 		return false;
 	}
 
-	private boolean trySetCrop(BlockPos position) {
-		World world = getWorld();
-
+	private boolean trySetCrop(World world, IFarmHousing farmHousing, BlockPos position) {
 		for (IFarmable candidate : seeds) {
-			if (housing.plantGermling(candidate, world, position)) {
+			if (farmHousing.plantGermling(candidate, world, position)) {
 				return true;
 			}
 		}
@@ -113,16 +96,16 @@ public abstract class FarmLogicCrops extends FarmLogicWatered {
 	}
 
 	@Override
-	public Collection<ICrop> harvest(BlockPos pos, FarmDirection direction, int extent) {
-		World world = getWorld();
-
+	public Collection<ICrop> harvest(World world, BlockPos pos, FarmDirection direction, int extent) {
 		Stack<ICrop> crops = new Stack<>();
 		for (int i = 0; i < extent; i++) {
 			BlockPos position = translateWithOffset(pos.add(0, 1, 0), direction, i);
+			IBlockState blockState = world.getBlockState(position);
 			for (IFarmable seed : seeds) {
-				ICrop crop = seed.getCropAt(world, position);
+				ICrop crop = seed.getCropAt(world, position, blockState);
 				if (crop != null) {
 					crops.push(crop);
+					break;
 				}
 			}
 		}

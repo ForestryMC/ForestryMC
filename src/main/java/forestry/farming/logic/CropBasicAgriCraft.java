@@ -14,6 +14,7 @@ import java.util.Collection;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -24,34 +25,33 @@ import forestry.core.proxy.Proxies;
 
 public class CropBasicAgriCraft extends Crop {
 
-	private final Block block;
-	private final int meta;
+	private final IBlockState blockState;
 
-	public CropBasicAgriCraft(World world, Block block, int meta, BlockPos position) {
+	public CropBasicAgriCraft(World world, IBlockState blockState, BlockPos position) {
 		super(world, position);
-		this.block = block;
-		this.meta = meta;
+		this.blockState = blockState;
 	}
 
 	@Override
-	protected boolean isCrop(BlockPos pos) {
-		return getBlock(pos) == block && getBlockMeta(pos) == meta;
+	protected boolean isCrop(World world, BlockPos pos) {
+		return world.getBlockState(pos) == blockState;
 	}
 
 	@Override
-	protected Collection<ItemStack> harvestBlock(BlockPos pos) {
-		List<ItemStack> harvest = block.getDrops(world, pos, block.getStateFromMeta(meta), 0);
+	protected Collection<ItemStack> harvestBlock(World world, BlockPos pos) {
+		Block block = blockState.getBlock();
+		List<ItemStack> harvest = block.getDrops(world, pos, blockState, 0);
 		if (harvest.size() > 1) {
 			harvest.remove(1); //AgriCraft returns cropsticks in 0, seeds in 1 in getDrops, removing since harvesting doesn't return them.
 		}
 		harvest.remove(0);
 		Proxies.common.addBlockDestroyEffects(world, pos, Blocks.MELON_BLOCK.getDefaultState());
-		world.setBlockState(pos, getBlock(pos).getDefaultState(), Constants.FLAG_BLOCK_SYNCH);
+		world.setBlockState(pos, block.getDefaultState(), Constants.FLAG_BLOCK_SYNCH);
 		return harvest;
 	}
 
 	@Override
 	public String toString() {
-		return String.format("CropBasicAgriCraft [ position: [ %s ]; block: %s; meta: %s ]", position.toString(), block.getUnlocalizedName(), meta);
+		return String.format("CropBasicAgriCraft [ position: [ %s ]; block: %s ]", position.toString(), blockState);
 	}
 }

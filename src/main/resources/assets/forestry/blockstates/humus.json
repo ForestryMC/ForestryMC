@@ -1,0 +1,8 @@
+{
+	"variants": {
+		"degrade=0": { "model": "forestry:soil/humus" },
+		"degrade=1": { "model": "forestry:soil/humus" },
+		"degrade=2": { "model": "forestry:soil/humus" },
+		"degrade=3": { "model": "forestry:soil/humus" }
+	}
+}

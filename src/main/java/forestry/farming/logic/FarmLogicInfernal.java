@@ -13,7 +13,6 @@ package forestry.farming.logic;
 import java.util.Collection;
 import java.util.Stack;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -34,8 +33,8 @@ import forestry.core.utils.BlockUtil;
 
 public class FarmLogicInfernal extends FarmLogicHomogeneous {
 
-	public FarmLogicInfernal(IFarmHousing housing) {
-		super(housing, new ItemStack(Blocks.SOUL_SAND), new ItemStack(Blocks.SOUL_SAND), Farmables.farmables.get("farmInfernal"));
+	public FarmLogicInfernal() {
+		super(new ItemStack(Blocks.SOUL_SAND), Blocks.SOUL_SAND.getDefaultState(), Farmables.farmables.get("farmInfernal"));
 	}
 
 	@Override
@@ -60,21 +59,21 @@ public class FarmLogicInfernal extends FarmLogicHomogeneous {
 	}
 
 	@Override
-	public Collection<ItemStack> collect() {
+	public Collection<ItemStack> collect(World world, IFarmHousing farmHousing) {
 		return null;
 	}
 
 	@Override
-	public Collection<ICrop> harvest(BlockPos pos, FarmDirection direction, int extent) {
-		World world = getWorld();
-
+	public Collection<ICrop> harvest(World world, BlockPos pos, FarmDirection direction, int extent) {
 		Stack<ICrop> crops = new Stack<>();
 		for (int i = 0; i < extent; i++) {
 			BlockPos position = translateWithOffset(pos.add(0, 1, 0), direction, i);
-			for (IFarmable farmable : germlings) {
-				ICrop crop = farmable.getCropAt(world, position);
+			IBlockState blockState = world.getBlockState(position);
+			for (IFarmable farmable : farmables) {
+				ICrop crop = farmable.getCropAt(world, position, blockState);
 				if (crop != null) {
 					crops.push(crop);
+					break;
 				}
 			}
 
@@ -84,9 +83,7 @@ public class FarmLogicInfernal extends FarmLogicHomogeneous {
 	}
 
 	@Override
-	protected boolean maintainGermlings(BlockPos pos, FarmDirection direction, int extent) {
-		World world = getWorld();
-
+	protected boolean maintainGermlings(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
 		for (int i = 0; i < extent; i++) {
 			BlockPos position = translateWithOffset(pos, direction, i);
 			IBlockState blockState = world.getBlockState(position);
@@ -96,23 +93,17 @@ public class FarmLogicInfernal extends FarmLogicHomogeneous {
 
 			BlockPos soilPosition = position.down();
 			IBlockState soilState = world.getBlockState(soilPosition);
-			Block soilBlock = soilState.getBlock();
-			ItemStack soilStack = soilBlock.getPickBlock(soilState, null, world, soilPosition, null);
-			if (!isAcceptedSoil(soilStack)) {
-				continue;
+			if (isAcceptedSoil(soilState)) {
+				return trySetCrop(world, farmHousing, position);
 			}
-
-			return trySetCrop(position);
 		}
 
 		return false;
 	}
 
-	private boolean trySetCrop(BlockPos position) {
-		World world = getWorld();
-
-		for (IFarmable candidate : germlings) {
-			if (housing.plantGermling(candidate, world, position)) {
+	private boolean trySetCrop(World world, IFarmHousing farmHousing, BlockPos position) {
+		for (IFarmable candidate : farmables) {
+			if (farmHousing.plantGermling(candidate, world, position)) {
 				return true;
 			}
 		}

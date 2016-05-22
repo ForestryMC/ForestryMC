@@ -14,6 +14,7 @@ import java.util.Collection;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -23,39 +24,38 @@ import forestry.core.proxy.Proxies;
 
 public class CropBasicGrowthCraft extends Crop {
 
-	private final Block block;
-	private final int meta;
+	private final IBlockState blockState;
 	private final boolean isRice;
 	private final boolean isGrape;
 
-	public CropBasicGrowthCraft(World world, Block block, int meta, BlockPos position, boolean isRice, boolean isGrape) {
+	public CropBasicGrowthCraft(World world, IBlockState blockState, BlockPos position, boolean isRice, boolean isGrape) {
 		super(world, position);
-		this.block = block;
-		this.meta = meta;
+		this.blockState = blockState;
 		this.isRice = isRice;
 		this.isGrape = isGrape;
 	}
 
 	@Override
-	protected boolean isCrop(BlockPos pos) {
-		return getBlock(pos) == block && getBlockMeta(pos) == meta;
+	protected boolean isCrop(World world, BlockPos pos) {
+		return world.getBlockState(pos) == blockState;
 	}
 
 	@Override
-	protected Collection<ItemStack> harvestBlock(BlockPos pos) {
-		List<ItemStack> harvest = block.getDrops(world, pos, block.getStateFromMeta(meta), 0);
+	protected Collection<ItemStack> harvestBlock(World world, BlockPos pos) {
+		Block block = blockState.getBlock();
+		List<ItemStack> harvest = block.getDrops(world, pos, blockState, 0);
 		if (harvest.size() > 1) {
 			harvest.remove(0); //Hops have rope as first drop.
 		}
-		Proxies.common.addBlockDestroyEffects(world, pos, block.getDefaultState());
+		Proxies.common.addBlockDestroyEffects(world, pos, blockState);
 		if (isGrape) {
 			world.setBlockToAir(pos);
-
 		} else {
 			world.setBlockState(pos, block.getDefaultState(), Constants.FLAG_BLOCK_SYNCH);
 		}
 
 		if (isRice) {
+			// TODO: GrowthCraft for MC 1.9. Don't use meta, get the actual block state.
 			world.setBlockState(pos.down(), block.getStateFromMeta(7), Constants.FLAG_BLOCK_SYNCH);
 		}
 
@@ -64,6 +64,6 @@ public class CropBasicGrowthCraft extends Crop {
 
 	@Override
 	public String toString() {
-		return String.format("CropBasicGrowthCraft [ position: [ %s ]; block: %s; meta: %s ]", position.toString(), block.getUnlocalizedName(), meta);
+		return String.format("CropBasicGrowthCraft [ position: [ %s ]; block: %s ]", position.toString(), blockState);
 	}
 }

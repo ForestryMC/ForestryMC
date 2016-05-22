@@ -33,18 +33,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmLogic;
-import forestry.core.config.Constants;
 import forestry.core.entities.EntitySelector;
 import forestry.core.utils.VectUtil;
 
 public abstract class FarmLogic implements IFarmLogic {
 	private final EntitySelectorFarm entitySelectorFarm = new EntitySelectorFarm(this);
-	protected final IFarmHousing housing;
 	protected boolean isManual;
-
-	protected FarmLogic(IFarmHousing housing) {
-		this.housing = housing;
-	}
 
 	@Override
 	public FarmLogic setManual(boolean flag) {
@@ -52,10 +46,6 @@ public abstract class FarmLogic implements IFarmLogic {
 		return this;
 	}
 
-	protected World getWorld() {
-		return housing.getWorldObj();
-	}
-	
 	@SideOnly(Side.CLIENT)
 	@Override
 	public ResourceLocation getTextureMap() {
@@ -86,18 +76,14 @@ public abstract class FarmLogic implements IFarmLogic {
 	protected final boolean isWaterSourceBlock(World world, BlockPos position) {
 		IBlockState blockState = world.getBlockState(position);
 		Block block = blockState.getBlock();
-		return block == Blocks.WATER && block.getMetaFromState(blockState) == 0;
+		return block == Blocks.WATER;
 	}
 	
 	protected final BlockPos translateWithOffset(BlockPos pos, FarmDirection farmDirection, int step) {
 		return VectUtil.scale(farmDirection.getFacing().getDirectionVec(), step).add(pos);
 	}
 
-	protected final void setBlock(BlockPos position, Block block, int meta) {
-		getWorld().setBlockState(position, block.getStateFromMeta(meta), Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
-	}
-
-	private AxisAlignedBB getHarvestBox(IFarmHousing farmHousing, boolean toWorldHeight) {
+	private static AxisAlignedBB getHarvestBox(World world, IFarmHousing farmHousing, boolean toWorldHeight) {
 		BlockPos coords = farmHousing.getCoords();
 		Vec3i area = farmHousing.getArea();
 		Vec3i offset = farmHousing.getOffset();
@@ -107,16 +93,16 @@ public abstract class FarmLogic implements IFarmLogic {
 
 		int maxY = max.getY();
 		if (toWorldHeight) {
-			maxY = getWorld().getHeight();
+			maxY = world.getHeight();
 		}
 
 		return new AxisAlignedBB(min.getX(), min.getY(), min.getZ(), max.getX(), maxY, max.getZ());
 	}
 
-	protected List<ItemStack> collectEntityItems(boolean toWorldHeight) {
-		AxisAlignedBB harvestBox = getHarvestBox(housing, toWorldHeight);
+	protected List<ItemStack> collectEntityItems(World world, IFarmHousing farmHousing, boolean toWorldHeight) {
+		AxisAlignedBB harvestBox = getHarvestBox(world, farmHousing, toWorldHeight);
 
-		List<EntityItem> entityItems = housing.getWorldObj().getEntitiesWithinAABB(entitySelectorFarm.getEntityClass(), harvestBox, entitySelectorFarm);
+		List<EntityItem> entityItems = world.getEntitiesWithinAABB(entitySelectorFarm.getEntityClass(), harvestBox, entitySelectorFarm);
 		List<ItemStack> stacks = new ArrayList<>();
 		for (EntityItem entity : entityItems) {
 			ItemStack contained = entity.getEntityItem();

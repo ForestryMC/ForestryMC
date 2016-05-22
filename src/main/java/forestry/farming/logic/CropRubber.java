@@ -13,7 +13,7 @@ package forestry.farming.logic;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -22,18 +22,19 @@ import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
 import forestry.plugins.compat.PluginIC2;
 
-public class CropRubber extends CropBlock {
+public class CropRubber extends CropDestroy {
 
-	public CropRubber(World world, Block block, int meta, BlockPos position) {
-		super(world, block, meta, position);
+	public CropRubber(World world, IBlockState blockState, BlockPos position) {
+		//TODO IC2 for 1.9: check that this is setting the right state for replanting.
+		super(world, blockState, position, blockState.getBlock().getDefaultState());
 	}
 
 	@Override
-	protected Collection<ItemStack> harvestBlock(BlockPos pos) {
+	protected Collection<ItemStack> harvestBlock(World world, BlockPos pos) {
 		Collection<ItemStack> harvested = new ArrayList<>();
 		harvested.add(PluginIC2.resin.copy());
-		Proxies.common.addBlockDestroyEffects(world, pos, block.getDefaultState());
-		world.setBlockState(pos, block.getStateFromMeta(meta + 6), Constants.FLAG_BLOCK_SYNCH);
+		Proxies.common.addBlockDestroyEffects(world, pos, blockState);
+		world.setBlockState(pos, replantState, Constants.FLAG_BLOCK_SYNCH);
 		return harvested;
 	}
 

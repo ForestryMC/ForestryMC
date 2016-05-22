@@ -15,9 +15,9 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 import forestry.api.arboriculture.ITree;
@@ -30,7 +30,7 @@ import forestry.plugins.ForestryPluginUids;
 public class FarmableVanillaSapling extends FarmableGenericSapling {
 
 	public FarmableVanillaSapling() {
-		super(Blocks.SAPLING, -1, new ItemStack(Items.APPLE), new ItemStack(FarmableCocoa.COCOA_SEED, 1, FarmableCocoa.COCOA_META));
+		super(new ItemStack(Blocks.SAPLING), Blocks.SAPLING.getDefaultState(), false, new ItemStack(Items.APPLE), new ItemStack(FarmableCocoa.COCOA_SEED, 1, FarmableCocoa.COCOA_META));
 	}
 
 	@Override

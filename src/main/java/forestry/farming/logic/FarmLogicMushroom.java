@@ -16,6 +16,7 @@ import java.util.Collection;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -23,10 +24,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.farming.Farmables;
 import forestry.api.farming.IFarmHousing;
 
-public class FarmLogicShroom extends FarmLogicArboreal {
+public class FarmLogicMushroom extends FarmLogicArboreal {
 
-	public FarmLogicShroom(IFarmHousing housing) {
-		super(housing, new ItemStack(Blocks.MYCELIUM), new ItemStack(Blocks.MYCELIUM), Farmables.farmables.get("farmShroom"));
+	public FarmLogicMushroom() {
+		super(new ItemStack(Blocks.MYCELIUM), Blocks.MYCELIUM.getDefaultState(), Farmables.farmables.get("farmShroom"));
 	}
 
 	@Override
@@ -55,7 +56,7 @@ public class FarmLogicShroom extends FarmLogicArboreal {
 	}
 
 	@Override
-	public Collection<ItemStack> collect() {
+	public Collection<ItemStack> collect(World world, IFarmHousing farmHousing) {
 		Collection<ItemStack> products = produce;
 		produce = new ArrayList<>();
 		return products;

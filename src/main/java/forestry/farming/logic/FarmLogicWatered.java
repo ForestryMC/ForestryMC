@@ -10,11 +10,11 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -27,20 +27,18 @@ import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmHousing;
 import forestry.core.fluids.Fluids;
 import forestry.core.utils.BlockUtil;
-import forestry.core.utils.ItemStackUtil;
 import forestry.farming.FarmHelper;
 
 public abstract class FarmLogicWatered extends FarmLogic {
 
-	protected final ItemStack ground;
+	protected final IBlockState ground;
 	private final ItemStack resource;
 
 	private static final FluidStack STACK_WATER = Fluids.WATER.getFluid(1000);
 
-	List<ItemStack> produce = new ArrayList<>();
+	protected List<ItemStack> produce = new ArrayList<>();
 
-	protected FarmLogicWatered(IFarmHousing housing, ItemStack resource, ItemStack ground) {
-		super(housing);
+	protected FarmLogicWatered(ItemStack resource, @Nonnull IBlockState ground) {
 		this.ground = ground;
 		this.resource = resource;
 	}
@@ -55,8 +53,8 @@ public abstract class FarmLogicWatered extends FarmLogic {
 		return (int) (20 * hydrationModifier);
 	}
 
-	protected boolean isAcceptedGround(ItemStack ground) {
-		return ItemStackUtil.isIdenticalItem(this.ground, ground);
+	protected boolean isAcceptedGround(IBlockState ground) {
+		return this.ground.getBlock() == ground.getBlock();
 	}
 
 	@Override
@@ -65,86 +63,76 @@ public abstract class FarmLogicWatered extends FarmLogic {
 	}
 
 	@Override
-	public Collection<ItemStack> collect() {
+	public Collection<ItemStack> collect(World world, IFarmHousing farmHousing) {
 		Collection<ItemStack> products = produce;
 		produce = new ArrayList<>();
 		return products;
 	}
 
 	@Override
-	public boolean cultivate(BlockPos pos, FarmDirection direction, int extent) {
+	public boolean cultivate(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
 
-		if (maintainSoil(pos, direction, extent)) {
+		if (maintainSoil(world, farmHousing, pos, direction, extent)) {
 			return true;
 		}
 
-		if (!isManual && maintainWater(pos, direction, extent)) {
+		if (!isManual && maintainWater(world, farmHousing, pos, direction, extent)) {
 			return true;
 		}
 
-		if (maintainCrops(pos.add(0, 1, 0), direction, extent)) {
+		if (maintainCrops(world, farmHousing, pos.add(0, 1, 0), direction, extent)) {
 			return true;
 		}
 
 		return false;
 	}
 
-	private boolean maintainSoil(BlockPos pos, FarmDirection direction, int extent) {
-
-		World world = getWorld();
+	private boolean maintainSoil(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
 		ItemStack[] resources = new ItemStack[]{resource};
 
 		for (int i = 0; i < extent; i++) {
 			BlockPos position = translateWithOffset(pos, direction, i);
 			IBlockState state = world.getBlockState(position);
-			Block soil = state.getBlock();
-
-			ItemStack soilStack = soil.getPickBlock(state, null, world, position, null);
-			if (isAcceptedGround(soilStack) || !housing.getFarmInventory().hasResources(resources)) {
+			if (isAcceptedGround(state) || isWaterSourceBlock(world, position) || !farmHousing.getFarmInventory().hasResources(resources)) {
 				continue;
 			}
 
 			BlockPos platformPosition = position.down();
 			IBlockState blockState = world.getBlockState(platformPosition);
-			Block platformBlock = blockState.getBlock();
-			if (!FarmHelper.bricks.contains(platformBlock)) {
+			if (!FarmHelper.bricks.contains(blockState.getBlock())) {
 				break;
 			}
 
-			if (!soil.isAir(state, world, platformPosition) && !BlockUtil.isReplaceableBlock(state, world, platformPosition)) {
-				produce.addAll(BlockUtil.getBlockDrops(getWorld(), position));
+			if (!BlockUtil.isReplaceableBlock(state, world, platformPosition)) {
+				produce.addAll(BlockUtil.getBlockDrops(world, position));
 				world.setBlockToAir(position);
-				return trySetSoil(position);
+				return trySetSoil(world, farmHousing, position);
 			}
 
-			if (isManual || isWaterSourceBlock(world, position)) {
-				continue;
-			}
+			if (!isManual) {
+				if (trySetWater(world, farmHousing, position)) {
+					return true;
+				}
 
-			if (trySetWater(world, position)) {
-				return true;
+				return trySetSoil(world, farmHousing, position);
 			}
-
-			return trySetSoil(position);
 		}
 
 		return false;
 	}
 
-	private boolean maintainWater(BlockPos pos, FarmDirection direction, int extent) {
+	private boolean maintainWater(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
 		// Still not done, check water then
-		World world = getWorld();
 		for (int i = 0; i < extent; i++) {
 			BlockPos position = translateWithOffset(pos, direction, i);
 
 			BlockPos platformPosition = position.down();
 			IBlockState blockState = world.getBlockState(platformPosition);
-			Block platformBlock = blockState.getBlock();
-			if (!FarmHelper.bricks.contains(platformBlock)) {
+			if (!FarmHelper.bricks.contains(blockState.getBlock())) {
 				break;
 			}
 
-			if (trySetWater(world, position)) {
+			if (trySetWater(world, farmHousing, position)) {
 				return true;
 			}
 		}
@@ -152,32 +140,32 @@ public abstract class FarmLogicWatered extends FarmLogic {
 		return false;
 	}
 
-	protected boolean maintainCrops(BlockPos pos, FarmDirection direction, int extent) {
+	protected boolean maintainCrops(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
 		return false;
 	}
 
-	private boolean trySetSoil(BlockPos position) {
+	private boolean trySetSoil(World world, IFarmHousing farmHousing, BlockPos position) {
 		ItemStack[] resources = new ItemStack[]{resource};
-		if (!housing.getFarmInventory().hasResources(resources)) {
+		if (!farmHousing.getFarmInventory().hasResources(resources)) {
 			return false;
 		}
-		setBlock(position, ItemStackUtil.getBlock(ground), ground.getItemDamage());
-		housing.getFarmInventory().removeResources(resources);
+		world.setBlockState(position, ground);
+		farmHousing.getFarmInventory().removeResources(resources);
 		return true;
 	}
 
-	private boolean trySetWater(World world, BlockPos position) {
+	private boolean trySetWater(World world, IFarmHousing farmHousing, BlockPos position) {
 		if (isWaterSourceBlock(world, position) || !canPlaceWater(world, position)) {
 			return false;
 		}
 
-		if (!housing.hasLiquid(STACK_WATER)) {
+		if (!farmHousing.hasLiquid(STACK_WATER)) {
 			return false;
 		}
 
 		produce.addAll(BlockUtil.getBlockDrops(world, position));
-		setBlock(position, Blocks.WATER, 0);
-		housing.removeLiquid(STACK_WATER);
+		world.setBlockState(position, Blocks.WATER.getDefaultState());
+		farmHousing.removeLiquid(STACK_WATER);
 		return true;
 	}
 

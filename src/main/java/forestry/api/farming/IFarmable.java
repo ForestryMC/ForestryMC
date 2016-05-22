@@ -5,6 +5,9 @@
  ******************************************************************************/
 package forestry.api.farming;
 
+import javax.annotation.Nullable;
+
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -23,7 +26,8 @@ public interface IFarmable {
 	/**
 	 * @return {@link ICrop} if the block at the given location is a harvestable and mature crop, null otherwise.
 	 */
-	ICrop getCropAt(World world, BlockPos pos);
+	@Nullable
+	ICrop getCropAt(World world, BlockPos pos, IBlockState blockState);
 
 	/**
 	 * @return true if the item is a valid germling (plantable sapling, seed, etc.) for this type.

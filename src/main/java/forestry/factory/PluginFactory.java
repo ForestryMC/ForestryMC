@@ -34,7 +34,7 @@ import forestry.apiculture.PluginApiculture;
 import forestry.apiculture.items.ItemRegistryApiculture;
 import forestry.core.PluginCore;
 import forestry.core.PluginFluids;
-import forestry.core.blocks.BlockSoil;
+import forestry.core.blocks.BlockBogEarth;
 import forestry.core.circuits.Circuit;
 import forestry.core.circuits.CircuitLayout;
 import forestry.core.circuits.EnumCircuitBoardType;
@@ -332,14 +332,14 @@ public class PluginFactory extends BlankForestryPlugin {
 				"#",
 				'#', "pulpWood");
 		RecipeManagers.carpenterManager.addRecipe(5, Fluids.WATER.getFluid(1000), null,
-				PluginCore.blocks.soil.get(BlockSoil.SoilType.HUMUS, 9),
+				new ItemStack(PluginCore.blocks.humus, 9),
 				"###",
 				"#X#",
 				"###",
 				'#', Blocks.DIRT,
 				'X', PluginCore.items.mulch);
 		RecipeManagers.carpenterManager.addRecipe(5, Fluids.WATER.getFluid(1000), null,
-				PluginCore.blocks.soil.get(BlockSoil.SoilType.BOG_EARTH, 8),
+				PluginCore.blocks.bogEarth.get(BlockBogEarth.SoilType.BOG_EARTH, 8),
 				"#X#",
 				"XYX", "#X#",
 				'#', Blocks.DIRT,

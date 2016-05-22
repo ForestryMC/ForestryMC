@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -21,7 +20,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -38,31 +36,16 @@ import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
 import forestry.core.PluginCore;
-import forestry.core.blocks.BlockSoil;
 
 public class FarmLogicArboreal extends FarmLogicHomogeneous {
 	private static final int BRANCH_RANGE = 20;
 
-	public FarmLogicArboreal(IFarmHousing housing, ItemStack resource, ItemStack ground, Iterable<IFarmable> germlings) {
-		super(housing, resource, ground, germlings);
+	public FarmLogicArboreal(ItemStack resource, IBlockState ground, Collection<IFarmable> germlings) {
+		super(resource, ground, germlings);
 	}
 
-	public FarmLogicArboreal(IFarmHousing housing) {
-		super(housing, new ItemStack(Blocks.DIRT), PluginCore.blocks.soil.get(BlockSoil.SoilType.HUMUS, 1), Farmables.farmables.get("farmArboreal"));
-	}
-
-	@Override
-	public boolean isAcceptedSoil(@Nonnull ItemStack soil) {
-		if (super.isAcceptedSoil(soil)) {
-			return true;
-		}
-
-		Block block = Block.getBlockFromItem(soil.getItem());
-		if (!(block instanceof BlockSoil)) {
-			return false;
-		}
-		BlockSoil blockSoil = (BlockSoil) block;
-		return BlockSoil.getTypeFromMeta(soil.getItemDamage()) == BlockSoil.SoilType.HUMUS;
+	public FarmLogicArboreal() {
+		super(new ItemStack(Blocks.DIRT), PluginCore.blocks.humus.getDefaultState(), Farmables.farmables.get("farmArboreal"));
 	}
 
 	@Override
@@ -87,16 +70,16 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 	}
 
 	@Override
-	public Collection<ItemStack> collect() {
+	public Collection<ItemStack> collect(World world, IFarmHousing farmHousing) {
 		Collection<ItemStack> products = produce;
-		produce = collectEntityItems(true);
+		produce = collectEntityItems(world, farmHousing, true);
 		return products;
 	}
 
 	private final Map<BlockPos, Integer> lastExtentsHarvest = new HashMap<>();
 
 	@Override
-	public Collection<ICrop> harvest(BlockPos pos, FarmDirection direction, int extent) {
+	public Collection<ICrop> harvest(World world, BlockPos pos, FarmDirection direction, int extent) {
 
 		if (!lastExtentsHarvest.containsKey(pos)) {
 			lastExtentsHarvest.put(pos, 0);
@@ -108,43 +91,39 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 		}
 
 		BlockPos position = translateWithOffset(pos.up(), direction, lastExtent);
-		Collection<ICrop> crops = getHarvestBlocks(position);
+		Collection<ICrop> crops = getHarvestBlocks(world, position);
 		lastExtent++;
 		lastExtentsHarvest.put(pos, lastExtent);
 
 		return crops;
 	}
 
-	private Collection<ICrop> getHarvestBlocks(BlockPos position) {
-
-		World world = getWorld();
-
+	private Collection<ICrop> getHarvestBlocks(World world, BlockPos position) {
 		Set<BlockPos> seen = new HashSet<>();
 		Stack<ICrop> crops = new Stack<>();
 
+		IBlockState blockState = world.getBlockState(position);
 		// Determine what type we want to harvest.
 		IFarmable germling = null;
-		for (IFarmable germl : germlings) {
-			ICrop crop = germl.getCropAt(world, position);
-			if (crop == null) {
-				continue;
+		for (IFarmable germl : farmables) {
+			ICrop crop = germl.getCropAt(world, position, blockState);
+			if (crop != null) {
+				crops.push(crop);
+				seen.add(position);
+				germling = germl;
+				break;
 			}
-
-			crops.push(crop);
-			seen.add(position);
-			germling = germl;
-			break;
 		}
 
 		if (germling == null) {
 			return crops;
 		}
 
-		List<BlockPos> candidates = processHarvestBlock(germling, crops, seen, position, position);
+		List<BlockPos> candidates = processHarvestBlock(world, germling, crops, seen, position, position);
 		List<BlockPos> temp = new ArrayList<>();
 		while (!candidates.isEmpty()) {
 			for (BlockPos candidate : candidates) {
-				temp.addAll(processHarvestBlock(germling, crops, seen, position, candidate));
+				temp.addAll(processHarvestBlock(world, germling, crops, seen, position, candidate));
 			}
 			candidates.clear();
 			candidates.addAll(temp);
@@ -154,10 +133,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 		return crops;
 	}
 
-	private List<BlockPos> processHarvestBlock(IFarmable germling, Stack<ICrop> crops, Set<BlockPos> seen, BlockPos start, BlockPos position) {
-
-		World world = getWorld();
-
+	private static List<BlockPos> processHarvestBlock(World world, IFarmable germling, Stack<ICrop> crops, Set<BlockPos> seen, BlockPos start, BlockPos position) {
 		List<BlockPos> candidates = new ArrayList<>();
 
 		// Get additional candidates to return
@@ -180,7 +156,8 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 						continue;
 					}
 
-					ICrop crop = germling.getCropAt(world, candidate);
+					IBlockState blockState = world.getBlockState(position);
+					ICrop crop = germling.getCropAt(world, candidate, blockState);
 					if (crop != null) {
 						crops.push(crop);
 						candidates.add(candidate);
@@ -194,31 +171,25 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 	}
 
 	@Override
-	protected boolean maintainGermlings(BlockPos pos, FarmDirection direction, int extent) {
-
-		World world = getWorld();
-
+	protected boolean maintainGermlings(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
 		for (int i = 0; i < extent; i++) {
 			BlockPos position = translateWithOffset(pos, direction, i);
 
 			if (world.isAirBlock(position)) {
 				BlockPos soilPosition = position.down();
 				IBlockState soilState = world.getBlockState(soilPosition);
-				Block soilBlock = soilState.getBlock();
-				ItemStack soilBelow = soilBlock.getPickBlock(soilState, null, world, soilPosition, null);
-				if (isAcceptedSoil(soilBelow)) {
-					return plantSapling(position);
+				if (isAcceptedSoil(soilState)) {
+					return plantSapling(world, farmHousing, position);
 				}
 			}
 		}
 		return false;
 	}
 
-	private boolean plantSapling(BlockPos position) {
-		World world = getWorld();
-		Collections.shuffle(germlings);
-		for (IFarmable candidate : germlings) {
-			if (housing.plantGermling(candidate, world, position)) {
+	private boolean plantSapling(World world, IFarmHousing farmHousing, BlockPos position) {
+		Collections.shuffle(farmables);
+		for (IFarmable candidate : farmables) {
+			if (farmHousing.plantGermling(candidate, world, position)) {
 				return true;
 			}
 		}

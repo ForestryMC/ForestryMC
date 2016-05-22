@@ -10,49 +10,52 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import java.util.ArrayList;
+import javax.annotation.Nullable;
 import java.util.Collection;
-import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import forestry.core.PluginCore;
-import forestry.core.blocks.BlockBogEarth;
 import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
 
-public class CropPeat extends Crop {
+public class CropDestroy extends Crop {
 
-	public CropPeat(World world, BlockPos position) {
+	protected final IBlockState blockState;
+	@Nullable
+	protected final IBlockState replantState;
+
+	public CropDestroy(World world, IBlockState blockState, BlockPos position, @Nullable IBlockState replantState) {
 		super(world, position);
+		this.blockState = blockState;
+		this.replantState = replantState;
 	}
 
 	@Override
 	protected boolean isCrop(World world, BlockPos pos) {
-		Block block = world.getBlockState(pos).getBlock();
-		if (!(block instanceof BlockBogEarth)) {
-			return false;
-		}
-
-		IBlockState blockState = world.getBlockState(pos);
-		BlockBogEarth.SoilType soilType = BlockBogEarth.getTypeFromState(blockState);
-		return soilType == BlockBogEarth.SoilType.PEAT;
+		return world.getBlockState(pos) == blockState;
 	}
 
 	@Override
 	protected Collection<ItemStack> harvestBlock(World world, BlockPos pos) {
-		List<ItemStack> drops = new ArrayList<>();
-		drops.add(PluginCore.items.peat.getItemStack());
-
-		IBlockState blockState = world.getBlockState(pos);
+		Block block = blockState.getBlock();
+		Collection<ItemStack> harvested = block.getDrops(world, pos, blockState, 0);
 		Proxies.common.addBlockDestroyEffects(world, pos, blockState);
-		world.setBlockState(pos, Blocks.DIRT.getDefaultState(), Constants.FLAG_BLOCK_SYNCH);
-		return drops;
+
+		if (replantState != null) {
+			world.setBlockState(pos, replantState, Constants.FLAG_BLOCK_SYNCH);
+		} else {
+			world.setBlockToAir(pos);
+		}
+
+		return harvested;
 	}
 
+	@Override
+	public String toString() {
+		return String.format("CropDestroy [ position: [ %s ]; block: %s ]", position.toString(), blockState);
+	}
 }

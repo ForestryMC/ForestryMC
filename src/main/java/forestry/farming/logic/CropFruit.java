@@ -10,9 +10,10 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -29,7 +30,7 @@ public class CropFruit extends Crop {
 	}
 
 	@Override
-	protected boolean isCrop(BlockPos pos) {
+	protected boolean isCrop(World world, BlockPos pos) {
 		TileEntity tile = world.getTileEntity(pos);
 		if (!(tile instanceof IFruitBearer)) {
 			return false;
@@ -46,14 +47,14 @@ public class CropFruit extends Crop {
 	}
 
 	@Override
-	protected Collection<ItemStack> harvestBlock(BlockPos pos) {
+	protected Collection<ItemStack> harvestBlock(World world, BlockPos pos) {
 		TileEntity tile = world.getTileEntity(pos);
 		if (!(tile instanceof IFruitBearer)) {
-			return new ArrayList<>();
+			return Collections.emptySet();
 		}
 
-		Proxies.common.sendFXSignal(PacketFXSignal.VisualFXType.BLOCK_DESTROY, PacketFXSignal.SoundFXType.LEAF, world, pos,
-				getBlock(pos).getDefaultState());
+		IBlockState blockState = world.getBlockState(pos);
+		Proxies.common.sendFXSignal(PacketFXSignal.VisualFXType.BLOCK_DESTROY, PacketFXSignal.SoundFXType.LEAF, world, pos, blockState);
 		return ((IFruitBearer) tile).pickFruit(null);
 	}
 

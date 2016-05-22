@@ -14,17 +14,15 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import forestry.api.arboriculture.IAlleleTreeSpecies;
+import forestry.api.arboriculture.ITree;
+import forestry.api.arboriculture.TreeManager;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
 import forestry.arboriculture.PluginArboriculture;
-import forestry.arboriculture.genetics.TreeGenome;
+import forestry.core.utils.GeneticsUtil;
 
 public class FarmableGE implements IFarmable {
 
@@ -40,26 +38,29 @@ public class FarmableGE implements IFarmable {
 	}
 
 	@Override
-	public ICrop getCropAt(World world, BlockPos pos) {
-		IBlockState blockState = world.getBlockState(pos);
+	public ICrop getCropAt(World world, BlockPos pos, IBlockState blockState) {
 		Block block = blockState.getBlock();
 
 		if (!block.isWood(world, pos)) {
 			return null;
 		}
 
-		return new CropBlock(world, block, block.getMetaFromState(blockState), pos);
+		return new CropDestroy(world, blockState, pos, null);
 	}
 
 	@Override
 	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
-		return germling.copy().onItemUse(player, world, pos.down(), EnumHand.MAIN_HAND, EnumFacing.UP, 0, 0, 0) == EnumActionResult.SUCCESS;
+		ITree tree = TreeManager.treeRoot.getMember(germling);
+		if (tree == null) {
+			return false;
+		}
+		return TreeManager.treeRoot.plantSapling(world, tree, player.getGameProfile(), pos);
 	}
 
 	@Override
 	public boolean isGermling(ItemStack itemstack) {
-		IAlleleTreeSpecies tree = TreeGenome.getSpecies(itemstack);
-		return tree != null;
+		itemstack = GeneticsUtil.convertSaplingToGeneticEquivalent(itemstack);
+		return TreeManager.treeRoot.isMember(itemstack);
 	}
 
 	@Override

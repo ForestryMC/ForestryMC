@@ -5,8 +5,10 @@
  ******************************************************************************/
 package forestry.api.farming;
 
-import java.util.Collection;
-import java.util.HashMap;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+
+import javax.annotation.Nonnull;
 
 public class Farmables {
 	/**
@@ -14,6 +16,7 @@ public class Farmables {
 	 *
 	 * Identifiers: farmArboreal farmWheat farmGourd farmInfernal farmPoales farmSucculentes farmVegetables farmShroom
 	 */
-	public static HashMap<String, Collection<IFarmable>> farmables = new HashMap<>();
+	@Nonnull
+	public static final Multimap<String, IFarmable> farmables = HashMultimap.create();
 
 }

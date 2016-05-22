@@ -23,7 +23,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -47,6 +46,7 @@ import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorLogic;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
+import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmInventory;
 import forestry.api.farming.IFarmListener;
 import forestry.api.farming.IFarmLogic;
@@ -493,7 +493,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 			List<FarmTarget> farmTargets = targets.get(farmSide);
 
 			if (stage == Stage.HARVEST) {
-				Collection<ICrop> harvested = harvestTargets(farmTargets, logic, farmListeners);
+				Collection<ICrop> harvested = harvestTargets(worldObj, farmTargets, logic, farmListeners);
 				farmWorkStatus.didWork = !harvested.isEmpty();
 				if (!harvested.isEmpty()) {
 					pendingCrops.addAll(harvested);
@@ -571,8 +571,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 				}
 
 				IBlockState blockState = world.getBlockState(groundLocation);
-				Block platform = blockState.getBlock();
-				if (!FarmHelper.bricks.contains(platform)) {
+				if (!FarmHelper.bricks.contains(blockState.getBlock())) {
 					break;
 				}
 
@@ -588,8 +587,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		for (int yOffset = 2; yOffset > -4; yOffset--) {
 			BlockPos position = targetPosition.add(0, yOffset, 0);
 			IBlockState blockState = world.getBlockState(position);
-			Block ground = blockState.getBlock();
-			if (FarmHelper.bricks.contains(ground)) {
+			if (FarmHelper.bricks.contains(blockState.getBlock())) {
 				return position;
 			}
 		}
@@ -648,7 +646,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 					continue;
 				}
 
-				if (cultivateTarget(target, logic, farmListeners)) {
+				if (cultivateTarget(worldObj, this, target, logic, farmListeners)) {
 					// Remove fertilizer and water
 					fertilizerManager.removeFertilizer(fertilizerConsumption);
 					removeLiquid(liquid);
@@ -664,9 +662,9 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		return farmWorkStatus;
 	}
 
-	private static boolean cultivateTarget(FarmTarget target, IFarmLogic logic, Iterable<IFarmListener> farmListeners) {
+	private static boolean cultivateTarget(World world, IFarmHousing farmHousing, FarmTarget target, IFarmLogic logic, Iterable<IFarmListener> farmListeners) {
 		BlockPos targetPosition = target.getStart().add(0, target.getYOffset(), 0);
-		if (logic.cultivate(targetPosition, target.getDirection(), target.getExtent())) {
+		if (logic.cultivate(world, farmHousing, targetPosition, target.getDirection(), target.getExtent())) {
 			for (IFarmListener listener : farmListeners) {
 				listener.hasCultivated(logic, targetPosition, target.getDirection(), target.getExtent());
 			}
@@ -676,10 +674,10 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		return false;
 	}
 
-	private static Collection<ICrop> harvestTargets(List<FarmTarget> farmTargets, IFarmLogic logic, Iterable<IFarmListener> farmListeners) {
+	private static Collection<ICrop> harvestTargets(World world, List<FarmTarget> farmTargets, IFarmLogic logic, Iterable<IFarmListener> farmListeners) {
 		if (farmTargets != null) {
 			for (FarmTarget target : farmTargets) {
-				Collection<ICrop> harvested = harvestTarget(target, logic, farmListeners);
+				Collection<ICrop> harvested = harvestTarget(world, target, logic, farmListeners);
 				if (!harvested.isEmpty()) {
 					return harvested;
 				}
@@ -689,9 +687,9 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		return Collections.emptyList();
 	}
 
-	private static Collection<ICrop> harvestTarget(FarmTarget target, IFarmLogic logic, Iterable<IFarmListener> farmListeners) {
-		BlockPos pos = new BlockPos(target.getStart().getX(), target.getStart().getX() + target.getYOffset(), target.getStart().getZ());
-		Collection<ICrop> harvested = logic.harvest(pos, target.getDirection(), target.getExtent());
+	private static Collection<ICrop> harvestTarget(World world, FarmTarget target, IFarmLogic logic, Iterable<IFarmListener> farmListeners) {
+		BlockPos pos = target.getStart().add(0, target.getYOffset(), 0);
+		Collection<ICrop> harvested = logic.harvest(world, pos, target.getDirection(), target.getExtent());
 		if (harvested == null || harvested.isEmpty()) {
 			return Collections.emptyList();
 		}
@@ -705,8 +703,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	}
 
 	private boolean collectWindfall(IFarmLogic logic) {
-
-		Collection<ItemStack> collected = logic.collect();
+		Collection<ItemStack> collected = logic.collect(worldObj, this);
 		if (collected == null || collected.size() <= 0) {
 			return false;
 		}
@@ -808,7 +805,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 	@Override
 	public void resetFarmLogic(FarmDirection direction) {
-		setFarmLogic(direction, new FarmLogicArboreal(this));
+		setFarmLogic(direction, new FarmLogicArboreal());
 	}
 
 	@Override

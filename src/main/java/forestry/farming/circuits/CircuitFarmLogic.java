@@ -17,12 +17,12 @@ import forestry.core.circuits.Circuit;
 
 public class CircuitFarmLogic extends Circuit {
 
-	private final Class<? extends IFarmLogic> logicClass;
+	private final IFarmLogic logic;
 	private boolean isManual = false;
 
-	public CircuitFarmLogic(String uid, Class<? extends IFarmLogic> logicClass) {
+	public CircuitFarmLogic(String uid, IFarmLogic logic) {
 		super(uid, false);
-		this.logicClass = logicClass;
+		this.logic = logic;
 		setLimit(4);
 	}
 
@@ -48,13 +48,6 @@ public class CircuitFarmLogic extends Circuit {
 		IFarmHousing housing = getCircuitable(tile);
 		if (housing == null) {
 			return;
-		}
-
-		IFarmLogic logic;
-		try {
-			logic = logicClass.getConstructor(IFarmHousing.class).newInstance(housing);
-		} catch (ReflectiveOperationException ex) {
-			throw new RuntimeException("Failed to instantiate logic of class " + logicClass.getName() + ": " + ex.getMessage(), ex);
 		}
 
 		logic.setManual(isManual);

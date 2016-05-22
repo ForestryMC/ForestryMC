@@ -11,6 +11,7 @@
 package forestry.farming.logic;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -18,48 +19,48 @@ import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
-import forestry.core.config.Constants;
-import forestry.core.utils.ItemStackUtil;
 
 public class FarmableStacked implements IFarmable {
+	protected final ItemStack germling;
+	protected final Block cropBlock;
+	protected final int matureHeight;
 
-	private final Block block;
-	private final int matureHeight;
-	private final int matureMeta;
-
-	public FarmableStacked(Block block, int matureHeight, int matureMeta) {
-		this.block = block;
+	public FarmableStacked(ItemStack germling, Block cropBlock, int matureHeight) {
+		this.germling = germling;
+		this.cropBlock = cropBlock;
 		this.matureHeight = matureHeight;
-		this.matureMeta = matureMeta;
 	}
 
 	@Override
 	public boolean isSaplingAt(World world, BlockPos pos) {
-		return world.getBlockState(pos).getBlock() == block;
+		IBlockState blockState = world.getBlockState(pos);
+		return blockState.getBlock() == cropBlock;
 	}
 
 	@Override
-	public ICrop getCropAt(World world, BlockPos pos) {
-		BlockPos cropPos = new BlockPos(pos.getX(), pos.getY() + matureHeight - 1, pos.getZ());
-		if (world.getBlockState(cropPos).getBlock() != block) {
+	public ICrop getCropAt(World world, BlockPos pos, IBlockState blockState) {
+		BlockPos cropPos = pos.add(0, matureHeight - 1, 0);
+		blockState = world.getBlockState(cropPos);
+		if (blockState.getBlock() != cropBlock) {
 			return null;
 		}
-		return new CropBlock(world, block, matureMeta, cropPos);
+
+		return new CropDestroy(world, blockState, cropPos, null);
 	}
 
 	@Override
 	public boolean isGermling(ItemStack itemstack) {
-		return ItemStackUtil.equals(block, itemstack);
+		return ItemStack.areItemsEqual(germling, itemstack);
 	}
 
 	@Override
 	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
-		return world.setBlockState(pos, block.getDefaultState(), Constants.FLAG_BLOCK_SYNCH);
+		IBlockState plantedState = cropBlock.getDefaultState();
+		return world.setBlockState(pos, plantedState);
 	}
 
 	@Override
 	public boolean isWindfall(ItemStack itemstack) {
 		return false;
 	}
-
 }

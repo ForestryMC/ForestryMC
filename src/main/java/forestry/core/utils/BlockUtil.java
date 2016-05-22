@@ -18,6 +18,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.BlockOldLog;
 import net.minecraft.block.BlockPlanks;
+import net.minecraft.block.BlockStaticLiquid;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -112,7 +113,8 @@ public abstract class BlockUtil {
 	}
 
 	public static boolean isReplaceableBlock(IBlockState blockState, World world, BlockPos pos) {
-		return blockState.getBlock().isReplaceable(world, pos);
+		Block block = blockState.getBlock();
+		return block.isReplaceable(world, pos) && !(block instanceof BlockStaticLiquid);
 	}
 
 	public static RayTraceResult collisionRayTrace(@Nonnull BlockPos pos, @Nonnull Vec3d startVec, @Nonnull Vec3d endVec, @Nonnull AxisAlignedBB bounds) {

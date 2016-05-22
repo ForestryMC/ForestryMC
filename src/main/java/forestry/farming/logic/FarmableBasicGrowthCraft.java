@@ -10,19 +10,9 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
-import forestry.api.farming.ICrop;
-import forestry.api.farming.IFarmable;
-import forestry.core.config.Constants;
-import forestry.core.utils.ItemStackUtil;
-
-public class FarmableBasicGrowthCraft implements IFarmable {
+//TODO GrowthCraft for 1.9
+public class FarmableBasicGrowthCraft {
+} /*implements IFarmable {
 
 	private final Block block;
 	private final int matureMeta;
@@ -34,11 +24,6 @@ public class FarmableBasicGrowthCraft implements IFarmable {
 		this.matureMeta = matureMeta;
 		this.isRice = isRice;
 		this.isGrape = isGrape;
-	}
-
-	@Override
-	public boolean isSaplingAt(World world, BlockPos pos) {
-		return world.getBlockState(pos).getBlock() == block;
 	}
 
 	@Override
@@ -70,3 +55,4 @@ public class FarmableBasicGrowthCraft implements IFarmable {
 	}
 
 }
+*/
