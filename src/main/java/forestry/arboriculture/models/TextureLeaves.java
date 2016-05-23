@@ -10,14 +10,18 @@
  ******************************************************************************/
 package forestry.arboriculture.models;
 
+import javax.annotation.Nonnull;
 import java.util.EnumMap;
 import java.util.Locale;
 import java.util.Map;
 
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.util.ResourceLocation;
 
 import forestry.api.arboriculture.EnumLeafType;
-import forestry.core.render.TextureManager;
+import forestry.core.config.Constants;
+import forestry.core.proxy.Proxies;
 
 public class TextureLeaves {
 	private static final Map<EnumLeafType, TextureLeaves> leafTextures = new EnumMap<>(EnumLeafType.class);
@@ -41,8 +45,9 @@ public class TextureLeaves {
 	private final EnumLeafType leafType;
 
 	private TextureAtlasSprite plain;
-	private TextureAtlasSprite pollinated;
 	private TextureAtlasSprite fancy;
+	private TextureAtlasSprite pollinatedPlain;
+	private TextureAtlasSprite pollinatedFancy;
 
 	private TextureLeaves(EnumLeafType enumLeafType) {
 		this.leafType = enumLeafType;
@@ -51,20 +56,27 @@ public class TextureLeaves {
 	private void registerSprites() {
 		String ident = leafType.toString().toLowerCase(Locale.ENGLISH);
 
-		plain = TextureManager.registerSprite("blocks/leaves/" + ident + ".plain");
-		pollinated = TextureManager.registerSprite("blocks/leaves/" + ident + ".changed");
-		fancy = TextureManager.registerSprite("blocks/leaves/" + ident + ".fancy");
+		TextureMap textureMapBlocks = Proxies.common.getClientInstance().getTextureMapBlocks();
+		plain = textureMapBlocks.registerSprite(new ResourceLocation(Constants.RESOURCE_ID, "blocks/leaves/" + ident + ".plain"));
+		fancy = textureMapBlocks.registerSprite(new ResourceLocation(Constants.RESOURCE_ID, "blocks/leaves/" + ident + ".fancy"));
+		pollinatedPlain = textureMapBlocks.registerSprite(new ResourceLocation(Constants.RESOURCE_ID, "blocks/leaves/" + ident + ".changed.plain"));
+		pollinatedFancy = textureMapBlocks.registerSprite(new ResourceLocation(Constants.RESOURCE_ID, "blocks/leaves/" + ident + ".changed"));
 	}
 
-	public TextureAtlasSprite getPlain() {
-		return plain;
-	}
-
-	public TextureAtlasSprite getPollinated() {
-		return pollinated;
-	}
-
-	public TextureAtlasSprite getFancy() {
-		return fancy;
+	@Nonnull
+	public TextureAtlasSprite getSprite(boolean pollinated, boolean fancy) {
+		if (pollinated) {
+			if (fancy) {
+				return this.pollinatedFancy;
+			} else {
+				return this.pollinatedPlain;
+			}
+		} else {
+			if (fancy) {
+				return this.fancy;
+			} else {
+				return this.plain;
+			}
+		}
 	}
 }

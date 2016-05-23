@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.arboriculture.models;
 
+import javax.annotation.Nonnull;
 import java.awt.Color;
 
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -39,14 +40,9 @@ public class SpriteProviderLeaves implements ILeafSpriteProvider {
 	}
 
 	@Override
+	@Nonnull
 	public TextureAtlasSprite getSprite(boolean pollinated, boolean fancy) {
-		if (pollinated) {
-			return leafTexture.getPollinated();
-		} else if (fancy) {
-			return leafTexture.getFancy();
-		} else {
-			return leafTexture.getPlain();
-		}
+		return leafTexture.getSprite(pollinated, fancy);
 	}
 
 }

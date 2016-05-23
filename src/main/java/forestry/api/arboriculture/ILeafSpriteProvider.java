@@ -5,6 +5,8 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 
 /**
@@ -15,6 +17,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
  * Icon registration is not done here because these icons are heavily reused.
  */
 public interface ILeafSpriteProvider {
+	@Nonnull
 	TextureAtlasSprite getSprite(boolean pollinated, boolean fancy);
 
 	int getColor(boolean pollinated);
