@@ -16,6 +16,7 @@ import java.io.IOException;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
 import forestry.core.network.DataInputStreamForestry;
@@ -39,7 +40,7 @@ public class FarmHydrationManager implements IFarmLedgerDelegate, INbtWritable, 
 	}
 
 	public void updateServer(World world, BlockPos coordinates) {
-		if (world.isRainingAt(coordinates)) {
+		if (world.isRainingAt(coordinates.up())) {
 			if (hydrationDelay > 0) {
 				hydrationDelay--;
 			} else {

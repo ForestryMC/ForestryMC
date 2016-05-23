@@ -49,7 +49,6 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 
 	private final FilteredTank resourceTank;
 	private final TankManager tankManager;
-	private boolean isValidBiome = true;
 	private int fillingTime;
 	private ItemStack usedEmpty;
 
@@ -62,32 +61,14 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 	}
 
 	@Override
-	public void validate() {
-		// Raintanks in desert biomes are useless
-		if (worldObj != null) {
-			BiomeGenBase biome = worldObj.getBiomeGenForCoordsBody(getPos());
-			isValidBiome = biome.canRain();
-			getErrorLogic().setCondition(!isValidBiome, EnumErrorCode.NO_RAIN_BIOME);
-		}
-
-		super.validate();
-	}
-
-	@Override
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 		super.writeToNBT(nbttagcompound);
-
-		nbttagcompound.setBoolean("IsValidBiome", isValidBiome);
-
 		tankManager.writeToNBT(nbttagcompound);
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		super.readFromNBT(nbttagcompound);
-
-		isValidBiome = nbttagcompound.getBoolean("IsValidBiome");
-
 		tankManager.readFromNBT(nbttagcompound);
 	}
 
@@ -112,7 +93,8 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 
 		IErrorLogic errorLogic = getErrorLogic();
 
-		errorLogic.setCondition(!isValidBiome, EnumErrorCode.NO_RAIN_BIOME);
+		BiomeGenBase biome = worldObj.getBiomeGenForCoordsBody(getPos());
+		errorLogic.setCondition(!biome.canRain(), EnumErrorCode.NO_RAIN_BIOME);
 
 		boolean hasSky = worldObj.canBlockSeeSky(getPos().add(0, 1, 0));
 		errorLogic.setCondition(!hasSky, EnumErrorCode.NO_SKY_RAIN_TANK);
