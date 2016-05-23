@@ -692,13 +692,13 @@ public class Bee extends IndividualLiving implements IBee {
 			BlockPos blockPos = VectUtil.add(housingPos, randomPos, offset);
 			TileEntity tile = world.getTileEntity(blockPos);
 
-			if (tile instanceof IPollinatable) {
-				IPollinatable pitcher = (IPollinatable) tile;
+			if (tile instanceof ICheckPollinatable) {
+				ICheckPollinatable pitcher = (ICheckPollinatable) tile;
 				if (genome.getFlowerProvider().isAcceptedPollinatable(world, pitcher)) {
 					pollen = pitcher.getPollen();
 				}
 			} else {
-				pollen = GeneticsUtil.getErsatzPollen(world, blockPos);
+				pollen = GeneticsUtil.getPollen(world, blockPos);
 			}
 
 			if (pollen != null) {

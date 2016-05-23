@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.arboriculture.items;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 import net.minecraft.block.state.IBlockState;
@@ -17,13 +18,13 @@ import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fml.relauncher.Side;
@@ -144,65 +145,72 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 	}
 
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		ITree tree = TreeManager.treeRoot.getMember(stack);
-		if (tree == null) {
-			return EnumActionResult.PASS;
+	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+		RayTraceResult raytraceresult = this.rayTrace(worldIn, playerIn, true);
+
+		if (raytraceresult != null && raytraceresult.typeOfHit == RayTraceResult.Type.BLOCK) {
+			BlockPos pos = raytraceresult.getBlockPos();
+
+			ITree tree = TreeManager.treeRoot.getMember(itemStackIn);
+			if (tree != null) {
+				if (type == EnumGermlingType.SAPLING) {
+					return onItemRightClickSapling(itemStackIn, worldIn, playerIn, pos, tree);
+				} else if (type == EnumGermlingType.POLLEN) {
+					return onItemRightClickPollen(itemStackIn, worldIn, playerIn, pos, tree);
+				}
+			}
+		}
+		return new ActionResult<>(EnumActionResult.PASS, itemStackIn);
+	}
+
+	@Nonnull
+	private static ActionResult<ItemStack> onItemRightClickPollen(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, BlockPos pos, ITree tree) {
+		ICheckPollinatable checkPollinatable = GeneticsUtil.getCheckPollinatable(worldIn, pos);
+		if (checkPollinatable == null || !checkPollinatable.canMateWith(tree)) {
+			return new ActionResult<>(EnumActionResult.FAIL, itemStackIn);
 		}
 
-		if (type == EnumGermlingType.SAPLING) {
-			// x, y, z are the coordinates of the block "hit", can thus either be the soil or tall grass, etc.
-			IBlockState hitBlock = worldIn.getBlockState(pos);
-			if (!hitBlock.getBlock().isReplaceable(worldIn, pos)) {
-				if (!worldIn.isAirBlock(pos.up())) {
-					return EnumActionResult.FAIL;
-				}
-				pos = pos.up();
-			}
-
-			if (!tree.canStay(worldIn, pos)) {
-				return EnumActionResult.FAIL;
-			}
-
-			if (TreeManager.treeRoot.plantSapling(worldIn, tree, playerIn.getGameProfile(), pos)) {
-				if (!playerIn.capabilities.isCreativeMode) {
-					stack.stackSize--;
-				}
-				return EnumActionResult.SUCCESS;
-			} else {
-				return EnumActionResult.FAIL;
-			}
-		} else if (type == EnumGermlingType.POLLEN) {
-
-			ICheckPollinatable checkPollinatable = GeneticsUtil.getCheckPollinatable(worldIn, pos);
-
-			if (checkPollinatable == null) {
-				return EnumActionResult.PASS;
-			}
-
-			if (!checkPollinatable.canMateWith(tree)) {
-				return EnumActionResult.FAIL;
-			}
-
-			IPollinatable pollinatable = GeneticsUtil.getOrCreatePollinatable(playerIn.getGameProfile(), worldIn, pos);
-
-			if (!pollinatable.canMateWith(tree)) {
-				return EnumActionResult.FAIL;
-			}
-
+		IPollinatable pollinatable = GeneticsUtil.getOrCreatePollinatable(playerIn.getGameProfile(), worldIn, pos);
+		if (pollinatable == null || !pollinatable.canMateWith(tree)) {
+			return new ActionResult<>(EnumActionResult.FAIL, itemStackIn);
+		}
+		
+		if (worldIn.isRemote) {
+			return new ActionResult<>(EnumActionResult.SUCCESS, itemStackIn);
+		} else {
 			pollinatable.mateWith(tree);
 
-			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, Blocks.LEAVES.getDefaultState());
+			IBlockState blockState = worldIn.getBlockState(pos);
+			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState);
 			Proxies.net.sendNetworkPacket(packet, worldIn);
 
 			if (!playerIn.capabilities.isCreativeMode) {
-				stack.stackSize--;
+				itemStackIn.stackSize--;
 			}
-			return EnumActionResult.SUCCESS;
-
-		} else {
-			return EnumActionResult.PASS;
+			return new ActionResult<>(EnumActionResult.SUCCESS, itemStackIn);
 		}
+	}
+
+	@Nonnull
+	private static ActionResult<ItemStack> onItemRightClickSapling(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, BlockPos pos, ITree tree) {
+		// x, y, z are the coordinates of the block "hit", can thus either be the soil or tall grass, etc.
+		IBlockState hitBlock = worldIn.getBlockState(pos);
+		if (!hitBlock.getBlock().isReplaceable(worldIn, pos)) {
+			if (!worldIn.isAirBlock(pos.up())) {
+				return new ActionResult<>(EnumActionResult.FAIL, itemStackIn);
+			}
+			pos = pos.up();
+		}
+
+		if (tree.canStay(worldIn, pos)) {
+			if (TreeManager.treeRoot.plantSapling(worldIn, tree, playerIn.getGameProfile(), pos)) {
+				if (!playerIn.capabilities.isCreativeMode) {
+					itemStackIn.stackSize--;
+				}
+				return new ActionResult<>(EnumActionResult.SUCCESS, itemStackIn);
+			}
+		}
+		return new ActionResult<>(EnumActionResult.FAIL, itemStackIn);
 	}
 
 	@Override

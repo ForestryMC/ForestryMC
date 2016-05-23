@@ -16,6 +16,9 @@ import java.util.List;
 import java.util.Set;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockNewLeaf;
+import net.minecraft.block.BlockOldLeaf;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -37,9 +40,11 @@ import net.minecraftforge.oredict.OreDictionary;
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.EnumWoodType;
 import forestry.api.arboriculture.IAlleleFruit;
+import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.ILeafTranslator;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
@@ -376,19 +381,47 @@ public class PluginArboriculture extends BlankForestryPlugin {
 	}
 
 	private static void registerErsatzGenomes() {
-		AlleleManager.ersatzSpecimen.put(new ItemStack(Blocks.LEAVES, 1, 0), TreeDefinition.Oak.getIndividual());
-		AlleleManager.ersatzSpecimen.put(new ItemStack(Blocks.LEAVES, 1, 1), TreeDefinition.Spruce.getIndividual());
-		AlleleManager.ersatzSpecimen.put(new ItemStack(Blocks.LEAVES, 1, 2), TreeDefinition.Birch.getIndividual());
-		AlleleManager.ersatzSpecimen.put(new ItemStack(Blocks.LEAVES, 1, 3), TreeDefinition.Jungle.getIndividual());
-		AlleleManager.ersatzSpecimen.put(new ItemStack(Blocks.LEAVES2, 1, 0), TreeDefinition.AcaciaVanilla.getIndividual());
-		AlleleManager.ersatzSpecimen.put(new ItemStack(Blocks.LEAVES2, 1, 1), TreeDefinition.DarkOak.getIndividual());
+		AlleleManager.leafTranslators.put(Blocks.LEAVES, new ILeafTranslator() {
+			@Override
+			public ITree getTreeFromLeaf(IBlockState leafBlockState) {
+				if (!leafBlockState.getValue(BlockOldLeaf.DECAYABLE)) {
+					return null;
+				}
+				switch (leafBlockState.getValue(BlockOldLeaf.VARIANT)) {
+					case OAK:
+						return TreeDefinition.Oak.getIndividual();
+					case SPRUCE:
+						return TreeDefinition.Spruce.getIndividual();
+					case BIRCH:
+						return TreeDefinition.Birch.getIndividual();
+					case JUNGLE:
+						return TreeDefinition.Jungle.getIndividual();
+				}
+				return null;
+			}
+		});
+		AlleleManager.leafTranslators.put(Blocks.LEAVES2, new ILeafTranslator() {
+			@Override
+			public ITree getTreeFromLeaf(IBlockState leafBlockState) {
+				if (!leafBlockState.getValue(BlockNewLeaf.DECAYABLE)) {
+					return null;
+				}
+				switch (leafBlockState.getValue(BlockNewLeaf.VARIANT)) {
+					case ACACIA:
+						return TreeDefinition.AcaciaVanilla.getIndividual();
+					case DARK_OAK:
+						return TreeDefinition.DarkOak.getIndividual();
+				}
+				return null;
+			}
+		});
 
-		AlleleManager.ersatzSaplings.put(new ItemStack(Blocks.SAPLING, 1, 0), TreeDefinition.Oak.getIndividual());
-		AlleleManager.ersatzSaplings.put(new ItemStack(Blocks.SAPLING, 1, 1), TreeDefinition.Spruce.getIndividual());
-		AlleleManager.ersatzSaplings.put(new ItemStack(Blocks.SAPLING, 1, 2), TreeDefinition.Birch.getIndividual());
-		AlleleManager.ersatzSaplings.put(new ItemStack(Blocks.SAPLING, 1, 3), TreeDefinition.Jungle.getIndividual());
-		AlleleManager.ersatzSaplings.put(new ItemStack(Blocks.SAPLING, 1, 4), TreeDefinition.AcaciaVanilla.getIndividual());
-		AlleleManager.ersatzSaplings.put(new ItemStack(Blocks.SAPLING, 1, 5), TreeDefinition.DarkOak.getIndividual());
+		AlleleManager.saplingTranslation.put(new ItemStack(Blocks.SAPLING, 1, 0), TreeDefinition.Oak.getIndividual());
+		AlleleManager.saplingTranslation.put(new ItemStack(Blocks.SAPLING, 1, 1), TreeDefinition.Spruce.getIndividual());
+		AlleleManager.saplingTranslation.put(new ItemStack(Blocks.SAPLING, 1, 2), TreeDefinition.Birch.getIndividual());
+		AlleleManager.saplingTranslation.put(new ItemStack(Blocks.SAPLING, 1, 3), TreeDefinition.Jungle.getIndividual());
+		AlleleManager.saplingTranslation.put(new ItemStack(Blocks.SAPLING, 1, 4), TreeDefinition.AcaciaVanilla.getIndividual());
+		AlleleManager.saplingTranslation.put(new ItemStack(Blocks.SAPLING, 1, 5), TreeDefinition.DarkOak.getIndividual());
 	}
 
 	@Override

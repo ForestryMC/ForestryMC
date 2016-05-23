@@ -6,7 +6,9 @@
 package forestry.api.genetics;
 
 import java.util.HashMap;
+import java.util.Map;
 
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -17,18 +19,22 @@ public class AlleleManager {
 	 * Main access point for all things related to genetics. See {@link IAlleleRegistry} for details.
 	 */
 	public static IAlleleRegistry alleleRegistry;
+
 	/**
 	 * Translates plain leaf blocks into genetic data. Used by bees and butterflies to convert and pollinate foreign leaf blocks.
 	 */
-	public static HashMap<ItemStack, IIndividual> ersatzSpecimen = new HashMap<>();
+	public static Map<Block, ILeafTranslator> leafTranslators = new HashMap<>();
+
 	/**
 	 * Translates plain saplings into genetic data. Used by the treealyzer and the farm to convert foreign saplings.
 	 */
-	public static HashMap<ItemStack, IIndividual> ersatzSaplings = new HashMap<>();
+	public static Map<ItemStack, IIndividual> saplingTranslation = new HashMap<>();
+
 	/**
 	 * Queryable instance of an {@link IClimateHelper} for easier implementation.
 	 */
 	public static IClimateHelper climateHelper;
+
 	/**
 	 * Creates Forestry alleles.
 	 */

@@ -235,7 +235,7 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 			if(tileEntity instanceof IButterflyNursery){
 				nursery = (IButterflyNursery) tileEntity;
 			}else{
-				ITree treeLeave = GeneticsUtil.getErsatzPollen(worldIn, pos);
+				ITree treeLeave = GeneticsUtil.getPollen(worldIn, pos);
 				
 				if(treeLeave != null){
 					treeLeave.setLeaves(worldIn, playerIn.getGameProfile(), pos);

@@ -291,7 +291,9 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		}
 
 		tree.mate(individual);
-		worldObj.markBlockRangeForRenderUpdate(getPos(), getPos());
+		if (!worldObj.isRemote) {
+			sendNetworkUpdate();
+		}
 	}
 
 	@Override
