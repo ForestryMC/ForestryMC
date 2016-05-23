@@ -367,6 +367,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		tankManager.writeData(data);
 		hydrationManager.writeData(data);
 		fertilizerManager.writeData(data);
+		sockets.writeData(data);
 	}
 
 	@Override
@@ -374,6 +375,9 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		tankManager.readData(data);
 		hydrationManager.readData(data);
 		fertilizerManager.readData(data);
+		sockets.readData(data);
+
+		refreshFarmLogics();
 	}
 
 	private void refreshFarmLogics() {
