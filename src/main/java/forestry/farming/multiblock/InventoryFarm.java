@@ -201,22 +201,10 @@ public class InventoryFarm extends InventoryAdapterRestricted implements IFarmIn
 
 	public void stowHarvest(Iterable<ItemStack> harvested, Stack<ItemStack> pendingProduce) {
 		for (ItemStack harvest : harvested) {
-
-			if (acceptsAsGermling(harvest)) {
-				harvest.stackSize -= InventoryUtil.addStack(germlingsInventory, harvest, true);
-			}
-
-			if (harvest.stackSize <= 0) {
-				continue;
-			}
-
 			harvest.stackSize -= InventoryUtil.addStack(productInventory, harvest, true);
-
-			if (harvest.stackSize <= 0) {
-				continue;
+			if (harvest.stackSize > 0) {
+				pendingProduce.push(harvest);
 			}
-
-			pendingProduce.push(harvest);
 		}
 	}
 
